@@ -5,10 +5,11 @@
 // Konto: test-user@lumeos.local (0 Stacks, 0 Einnahmen, 0 Preferences).
 // Fuer Trefferzahlen ist das egal — `p_user_id` ist hier nicht gesetzt.
 import { chromium } from '@playwright/test'
+import { wortFuer } from './konten.mjs'
 
 const BASIS = process.env.LUMEOS_BASIS ?? 'http://127.0.0.1:3200'
 const KONTO = process.env.LUMEOS_KONTO ?? 'test-user@lumeos.local'
-const WORT = process.env.LUMEOS_WORT ?? 'LumeosTestUser2026'
+const WORT = wortFuer('test-user@lumeos.local')
 
 // ANGESAGT, bevor gemessen wird (aus SQL abgeleitet):
 const ANSAGE = [

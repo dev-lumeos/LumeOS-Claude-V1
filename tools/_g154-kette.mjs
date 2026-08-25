@@ -8,10 +8,11 @@
 //   dev mit Suchwort 'milch'      261 -> mit prefs=1          168
 //     `strong` wird bei expliziter Suche sichtbar (ADR), `hard` nicht.
 import { chromium } from '@playwright/test'
+import { wortFuer } from './konten.mjs'
 
 const BASIS = process.env.LUMEOS_BASIS ?? 'http://127.0.0.1:3200'
 const KONTEN = [
-  ['test-user@lumeos.local', 'LumeosTestUser2026', 7140, 7140, 261, 261],
+  ['test-user@lumeos.local', wortFuer('test-user@lumeos.local'), 7140, 7140, 261, 261],
   ['dev@lumeos.app', 'LumeosDev2026', 7140, 5292, 261, 168],
 ]
 

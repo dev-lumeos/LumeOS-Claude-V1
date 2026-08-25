@@ -276,9 +276,7 @@ wenn er erzeugt und geprüft wird.
 | **C-261** Der Abgleich aus C-260 ist ungefiltert nicht benutzbar | offen | 5867 |
 | **C-262** Der Import — vier Wellen | offen | 5914 |
 | **C-263** Deutsche Beschreibungen aus Kimis Fachdaten ableiten | offen | 5944 |
-| **C-265** Die Kette erzeugt nicht mehr denselben Stand wie die | offen | 5970 |
-| **C-267** Falsche PubChem-Kennungen bei Caffeine — und vermutlich | offen | 5997 |
-| **G-183** Die Rechtslage bleibt Fliesstext, obwohl die Schwelle | offen | 6030 |
-| **G-184** Die WADA-Kachel nennt keinen Geltungsbereich | offen | 6061 |
-| **C-268** Beim Einladen gibt es keine Namensaufloesung | offen | 6088 |
-| **G-185** Zwei Wege zum Einladen, einer davon Attrappe | offen | 6106 |
+| **G-184** Die WADA-Kachel nennt keinen Geltungsbereich | offen | 5970 |
+| **C-268** Beim Einladen gibt es keine Namensaufloesung | offen | 5997 |
+| **C-269** Eine Einladung laesst sich nicht zuruecknehmen | offen | 6015 |
+| **G-186** Der Katalog zeigt noch nicht alles, was drinsteht | offen | 6040 |

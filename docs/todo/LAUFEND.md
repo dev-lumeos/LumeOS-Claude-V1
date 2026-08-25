@@ -20,20 +20,27 @@ mehr im Griff zu wissen, welcher Agent noch laeuft."*
 
 ---
 
-## Der Faden: Supplements-Neuaufbau
+## Der Faden: Supplements-Neuaufbau — DURCH
 
 | Schritt | Stand |
 |---|---|
-| 1 · Anlegen | **durch** (C-232) — 33 Tabellen, live |
-| 2 · Befuellen | **durch** (C-235) — live, nachgemessen |
-| 3 · Umhaengen | **durch** (C-243 + C-245) — `im_katalog` 290/276, FK auf `supplements.supplements` |
-| 4A · Stack-Pfad | **durch** (C-250) — `git grep supplement_catalog` findet nur noch zwei Kommentare |
-| 4B · Substanz-Pfad | **durch** (C-252) — Liste 290 mit Filter, 566 ohne |
-| **5 · Alte weg** | **jetzt moeglich.** `supplement_catalog` (44) und `substance_catalog` (566) werden von keinem Lesepfad mehr gebraucht. **Vorher C-253 und C-254**, sonst faellt beim Loeschen auf, was vorher haette auffallen muessen |
+| 1 · Anlegen | **durch** (C-232) |
+| 2 · Befuellen | **durch** (C-235) |
+| 3 · Umhaengen | **durch** (C-243 + C-245) |
+| 4A · Stack-Pfad | **durch** (C-250) |
+| 4B · Substanz-Pfad | **durch** (C-252) |
+| 5 · Alte weg | **durch** (C-255) — `supplement_catalog` und `substance_catalog` existieren nicht mehr, 0 Anhaengsel, 0 Sichten |
 
-`[cmd]` **Stand 2026-08-23 nach C-250 und C-252:** `git grep
-supplement_catalog` findet in `lib/supplements/`, `v2/medical/` und
-`v2/supplements/` **nur noch zwei Kommentare, keinen Lesezugriff.**
+`[cmd]` **Stand 2026-08-25:** 318 sichtbare Substanzen, **318 mit
+Nutzertext, 318 mit FAQ, 1.421 FAQ-Zeilen** — **0 sichtbare Eintraege
+ohne Text.**
+
+`[cmd]` **Dazu importiert (C-262):** `entity_transporters` 4.617 ·
+`entity_cyp` 3.001 · `medical.medication_active_substances` **498** ·
+`biomarker_explanations` 66 · `symptom_biomarker_map` 102 Kanten.
+
+`[read]` **Was jetzt noch fehlt, ist Anzeige, nicht Inhalt** — G-186.
+
 
 ## Kimi
 
@@ -60,21 +67,53 @@ forscht dort nicht weiter, sondern wartet auf uns. `[cmd]` **249 Holds,
 davon 66 `REPO_DEPENDENCY`**, und ein Backlog von 17 Punkten, alle mit
 `blocked_until_repo_access=true`.
 
+### Was Kimi am 2026-08-25 liefert
+
+`[cmd]` **Block D ist durch und geprueft:** 27 der 28 Sammeltexte,
+27/27 verschieden nach Herausrechnen des Namens, 137 FAQ mit 137
+verschiedenen Antworten, hoechste Aehnlichkeit gegen die Form-Texte
+**0,43**. **NAC fehlt** — vermutlich unter anderem Namen gefuehrt,
+nachgefordert.
+
+`[cmd]` **Laufend: 158 Substanzen ueber drei Gruppen** — supplement 84,
+enhanced 59, peptide 15. Reihenfolge A1 (Testosteron + 9 Ester,
+Sustanon) · A2 (7 Insuline) · A3 PCT · A4 Diuretika/Schilddruese ·
+A5 Rest · B1 Wachstumshormon · B2 · C1 Racetame · C2 Grundstoffe ·
+C3 Pflanzenstoffe.
+
+`[read]` **Testosteron fehlte vollstaendig** — weder Wirkstoff noch ein
+einziger Ester. **HGH ebenso.** Deca, Tren und Methandienone waren da.
+
+**Dazu in denselben Lauf gegeben:** der PubChem-Konflikt als
+Konflikt-Record, ein Durchlauf ueber alle Kennungen, und je
+WADA-Kategorie ein Satz zum Geltungsbereich (G-184).
+
+
 
 ## Wartet auf einen freien Agenten
 
-**Sofort, weil eine Lehre sonst nur notiert bleibt**
+**Aus abgeschlossenen Auftraegen entstanden**
 
 | Auftrag | Bereich |
 |---|---|
-| **G-175** Nachweiskonto ohne bekanntes Passwort — blockiert Browser-Nachweise | `supabase/` |
+| **G-184** WADA-Kachel nennt keinen Geltungsbereich — `note_de` 0/290, bei Kimi angefordert | `apps/web` |
+| **C-244** Substanz oder Form — Kimi fuehrt sieben Magnesiumsalze, der Katalog den Sammelnamen | Entscheidung Tom |
+
+`[cmd]` **G-175 ist erledigt** (2026-08-23, Fable) — neun Skripte
+entdrahtet, `test-user@lumeos.local` ohne Kopierschritt anmeldbar.
 
 `[cmd]` **C-253 und C-254 sind durch** (2026-08-23). Beide haben eine
 Gate-Pruefung hinterlassen statt eines Merksatzes:
 `tools/kataloganker-pruefen.mjs` (3 Ankerstellen, 0 typfalsch) und
 `tools/sprachrueckfall-pruefen.mjs` (11 Abfragen auf 14 riskante
-Tabellen, 0 ohne Rueckfall). **Damit sind es fuenf Gate-Pruefungen, die
-aus einem Fehler entstanden sind.**
+Tabellen, 0 ohne Rueckfall).
+
+`[cmd]` **Dazu seit dem 2026-08-25:**
+`tools/supplement-kennungen-pruefen.mjs` (C-267) — meldet
+widerspruechliche Kennungen, drei bekannte Konflikte als Ausnahme, ein
+vierter macht rot. **Damit sind es sechs Gate-Pruefungen, die aus einem
+Fehler entstanden sind.**
+
 
 **Klein und blockierend**
 
@@ -114,19 +153,24 @@ laufen als ein Auftrag.
 
 **Entscheidungen fuer Tom**
 
-*Supplements — blockieren den Faden*
+*Supplements*
 
 | | |
 |---|---|
-| **C-244** | `[cmd]` **Substanz oder Form?** Kimi fuehrt sieben Magnesiumsalze und `Vitamin D3 (cholecalciferol)`, der alte Katalog den Sammelnamen. **28 von 28 Eintraegen ohne Gegenpart.** Waehlt der Nutzer *„Magnesium"* oder *„Magnesiumglycinat"*? |
-| **C-241** | `[cmd]` Nachweiskonto ohne `meal_plans` und `user_medications`. Soll das so bleiben? |
+| **G-184** | `[cmd]` **Fuer wen gilt die WADA-Sperre?** `note_de` **0 von 290** — der Geltungsbereich steht nirgends. Die Kachel sagt seit G-182 *„im getesteten Wettkampf"*; **welche Verbaende testen, ist bei Kimi angefordert.** `[wahrscheinlich]` IFBB Professional League und NPC sind keine Unterzeichner. |
+| **C-171** | Medical: Symptome, Termine, Dokumente — **34 Symptome liegen seit C-262 vor**, die Tabelle steht |
 | Taxonomie | 59 feine Kategorien neben 23 Filtern — Abnahme offen |
-| **C-223** | `dose_ceiling` als Freitext — wird ueber `supplement_regulatory` loesbar |
+
+`[cmd]` **Beantwortet und erledigt:** **C-244** (*„c244 magnesium"* —
+Sammelname gewinnt, 29 Unterformen ueber `parent_id`) · **C-242**
+(Ursache war der Benennungsschnitt, nicht die Dubletten) · **C-241**
+(Nachweiskonto hat seit C-251 eine Einkaufsliste mit 6 echten Posten).
 
 *Anzeige und Daten*
 
 | | |
 |---|---|
+| **C-223** | `dose_ceiling` als Freitext — wird ueber `supplement_regulatory` loesbar |
 | **GO-23** | Deckungsgrenze unter 50 % — Vorschlag: dimmen |
 | **G-134** | die vier Filtergruppen gibt es in den Daten nicht |
 | **G-136** | Ballaststoffe unter Kohlenhydrate, Wasser unter Sonstige |

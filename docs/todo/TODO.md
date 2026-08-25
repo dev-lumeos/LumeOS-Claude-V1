@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-25.** 238 offen, 0 in Arbeit.
+**Stand: 2026-08-25.** 236 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -5967,97 +5967,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` **Laeuft parallel zu C-262**, weil Claude Code die
   JSONL-Dateien direkt liest und nicht die Datenbank.
 
-- [ ] **C-265: Die Kette erzeugt nicht mehr denselben Stand wie die
-  laufende Instanz** (neu 2026-08-25). Zweimal gemeldet, aus C-262 und
-  C-264.
-
-  `[cmd]` **Live ist die Schemapruefung gruen, ein frischer Kettenlauf
-  auf der Wegwerf-Datenbank nicht.** Abweichungen:
-  `biomarker_spec_enrichment` · `biomarker_aliases` · **zwei
-  Funktionen** · **LOINC-Slug-Eindeutigkeit**.
-
-  `[read]` **Codex hat es bei C-262 und C-264 gemeldet**, beide Male
-  korrekt als nicht-eigene Ursache. **Zweimal derselbe Befund ist ein
-  eigener Punkt.**
-
-  `[read]` **Warum das mehr ist als ein roter Waechter:** die Kette ist
-  laut `supabase/README.md` die Quelle des Datenbankzustands. Wenn sie
-  einen anderen Stand erzeugt als die laufende Instanz, ist der
-  Live-Bestand nicht mehr reproduzierbar — und ein Neuaufbau verliert
-  genau die Stellen, die auseinanderlaufen.
-
-  `[cmd]` **Die LOINC-Slug-Eindeutigkeit ist besonders heikel:** C-248
-  hat sie live repariert und einen Waechter gebaut. Wenn die Kette sie
-  nicht erzeugt, kommt der Fehler beim naechsten Neuaufbau zurueck.
-
-  **Zu tun:** je Abweichung feststellen, ob die Kette einen Schritt
-  nicht hat oder ob live etwas ausserhalb der Kette eingespielt wurde.
-  **Erst messen, dann entscheiden, welcher Stand der richtige ist.**
-
-- [ ] **C-267: Falsche PubChem-Kennungen bei Caffeine — und vermutlich
-  nicht nur dort** (neu 2026-08-25). Von Kimi gemeldet, vom
-  Orchestrator live bestaetigt.
-
-  `[cmd]` **`Caffeine (anhydrous)` traegt drei falsche Kennungen:**
-  PubChem-CID `6435808` · Formel `C10H12FN3O4` · InChIKey
-  `GFFXZLZWLOBBLO-ASKVSEFXSA-N`.
-
-  `[cmd]` **Der Nachbareintrag `Caffeine (fat-loss context cross-ref)`
-  hat dieselben Felder richtig:** CID `2519` · `C8H10N4O2` ·
-  `RYYVLZVUVIJVGH-UHFFFAOYSA-N`.
-
-  `[read]` **Die Formel schliesst es aus: `C10H12FN3O4` enthaelt
-  Fluor, Koffein nicht.** Der InChIKey mit `-ASKVSEFXSA-` weist
-  zusaetzlich auf ein Stereozentrum — Koffein hat keines. **Das ist ein
-  fluoriertes Nukleosid.**
-
-  `[cmd]` **Live in der Datenbank**, importiert am 2026-08-23 aus
-  `kimi_supplement`, `evidence_class B`, Quelle
-  `src_pubchem_6435808`. Vermutlich aus einem `crawl_022`-Enrichment.
-
-  `[read]` **Kimi hat es gefunden und nicht angefasst** — kein Silent
-  Overwrite. Richtig. **Der Konflikt gehoert als Record nach
-  `data/evidence/`, nicht als stille Korrektur.**
-
-  **Die groessere Frage stellt Kimi nicht:** `[cmd]`
-  `supplement_identifiers` hat **1.226 Zeilen**. Wenn eine Kennung
-  falsch ist, sind es vermutlich mehrere. **Formel, InChIKey und CID
-  muessen zueinander passen — das ist pruefbar, kein Rateverfahren.**
-
-  **Zu tun:** eine Gate-Pruefung, die die drei gegeneinander haelt.
-  Wo sie auseinanderlaufen: melden, nicht korrigieren.
-
-- [ ] **G-183: Die Rechtslage bleibt Fliesstext, obwohl die Schwelle
-  erfuellt war** (neu 2026-08-25). Nachtrag zu G-182, Punkt 6.
-
-  **Tom, 2026-08-25, zur Rechtslage von 6-OXO:** *„so schreibt und
-  liest kein mensch. wieso schluesselt man das nicht als aufzaehlung
-  auf?"*
-
-  `[cmd]` **54 von 290 `rechtslage_klartext_de` tragen einen
-  Doppelpunkt** — Claude Codes eigene Messung ergibt **40 %**, also
-  **innerhalb** der von mir gesetzten Spanne von 30 bis 90 Prozent.
-
-  `[read]` **Sein Grund war, dass 82 von 136 Zeilen unveraendert
-  blieben. Das ist kein Gegenargument, sondern das erwartete
-  Verhalten** — der Auftrag sagt woertlich: *wo sie nicht greift,
-  bleibt der Absatz stehen, nicht zerhackt.*
-
-  `[cmd]` **Was dort steht, ist bereits gegliedert:**
-
-      Nirgendwo zugelassen (Datenstand: August 2026).
-      In den USA ist der Verkauf fuer die Anwendung am Menschen
-      illegal; in Thailand traegt der Import von Forschungsware
-      Zollrisiko.
-      Die WADA verbietet Retatrutid als nicht zugelassene Substanz (S0).
-
-  **Drei Aussagen, durch Punkt und Semikolon getrennt** — genau die
-  Struktur, die sichtbar werden soll.
-
-  `[read]` **Und es war Toms ausdrueckliches Beispiel**, der Anlass des
-  ganzen Punktes. **Die Schwelle war erfuellt; die unveraenderten
-  Zeilen sind Absicht.**
-
 - [ ] **G-184: Die WADA-Kachel nennt keinen Geltungsbereich** (neu
   2026-08-25). Aus G-182, Punkt 7.
 
@@ -6103,16 +6012,56 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   **Zu tun:** erst entscheiden, woher der Name kommt — dann die
   Funktion. Gehoert zu Codex.
 
-- [ ] **G-185: Zwei Wege zum Einladen, einer davon Attrappe** (neu
-  2026-08-25). Aus C-225.
+- [ ] **C-269: Eine Einladung laesst sich nicht zuruecknehmen** (neu
+  2026-08-25). Aus G-185, von Claude Code beim eigenen Rueckbau
+  gefunden.
 
-  `[cmd]` **Der Kopf-Knopf *„Invite coach"* oeffnet weiterhin das
-  Entwurfsmodal.** Das echte Formular sitzt im Overview-Tab und
-  schreibt seit C-225 in `coach.relationships`.
+  `[cmd]` **Der AFTER-DELETE-Trigger `relationships_change_log`
+  schreibt die `relationship_id` ins Log, und der Fremdschluessel
+  dorthin verbietet genau das Loeschen.**
 
-  `[read]` **Zwei Wege zur selben Sache, und der sichtbarere ist der
-  falsche.** Wer oben klickt, landet in einer Attrappe — ohne zu
-  merken, dass daneben der echte Weg liegt.
+  `[cmd]` **Zwei Agenten sind unabhaengig darauf gestossen** — Fable in
+  C-225, Claude Code in G-185. **Beide haben den Trigger kontrolliert
+  abgeschaltet statt ihn zu umgehen.**
 
-  **Zu tun:** der Kopf-Knopf fuehrt auf das echte Formular, oder er
-  verschwindet.
+  `[read]` **Die Folge ist konkret:** die Oberflaeche kann eine
+  Einladung nicht zuruecknehmen. Claude Code hat deshalb **keinen
+  solchen Knopf gebaut — statt einen zu bauen, der scheitert.**
+
+  `[cmd]` Heute zwei Zeilen mit `status='invited'`, beide bei
+  `sarah.seed@example.com`.
+
+  `[read]` **Drei Wege, und der dritte ist vermutlich richtig:**
+  `ON DELETE SET NULL` · `ON DELETE CASCADE` · **Statuswechsel statt
+  Loeschen.** Ein Aenderungsprotokoll, das beim Loeschen verschwindet,
+  ist kein Protokoll — und eine zurueckgenommene Einladung ist ein
+  Vorgang, kein Nichts.
+
+- [ ] **G-186: Der Katalog zeigt noch nicht alles, was drinsteht** (neu
+  2026-08-25).
+
+  `[cmd]` **Inhaltlich fertig:** 318 sichtbar, 318 mit Nutzertext, 318
+  mit FAQ, 1.421 FAQ-Zeilen, **0 sichtbare Eintraege ohne Text.**
+
+  `[cmd]` **Die Reiter Dosierung und Sicherheit sind duenn** — bei
+  BPC-157 zwei Zeilen, seit der Enhanced-Kasten dort nicht mehr steht
+  (G-182). `[read]` **Ein Reiter mit zwei Zeilen ist schlechter als
+  kein Reiter.**
+
+  `[cmd]` **Wechselwirkungen und Laborwirkung fehlen ganz**, obwohl
+  seit C-262 vorhanden: `entity_transporters` **4.617** ·
+  `entity_cyp` **3.001** · `supplement_lab_effects` 222 ·
+  `supplement_interactions` 78.
+
+  `[read]` **Das ist die Ebene, die aus einem Katalog ein System macht,
+  das warnen kann.** `[cmd]` Digoxin ist P-gp-Substrat mit enger
+  therapeutischer Breite, Biotin verfaelscht Laborwerte.
+
+  `[read]` **`role = 'not_relevant'` ist ein Ergebnis, kein fehlender
+  Wert** — *„geprueft, kein Effekt"* unterscheidet sich von *„nie
+  geprueft"*.
+
+  `[cmd]` **`wofuer_de` liegt bei 318/318 als Array vor, aber man kann
+  nicht danach filtern.** `[read]` Der Katalog filtert nach dem, **was
+  ein Stoff ist** — nicht **wofuer er da ist.** Wer *„Schlaf"* sucht,
+  muss wissen, dass Magnesium ein Mineralstoff ist.

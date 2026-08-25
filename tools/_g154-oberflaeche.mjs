@@ -3,12 +3,13 @@
 //   - tragen die acht Pillen Zahlen?      (soll: ja, aus den Facetten)
 //   - erscheint der Unvertraeglichkeits-Hinweis nur bei dev?
 import { chromium } from '@playwright/test'
+import { wortFuer } from './konten.mjs'
 
 const BASIS = process.env.LUMEOS_BASIS ?? 'http://127.0.0.1:3200'
 const browser = await chromium.launch()
 
 for (const [konto, wort, datei] of [
-  ['test-user@lumeos.local', 'LumeosTestUser2026', 'backup/g154-testuser.png'],
+  ['test-user@lumeos.local', wortFuer('test-user@lumeos.local'), 'backup/g154-testuser.png'],
   ['dev@lumeos.app', 'LumeosDev2026', 'backup/g154-dev.png'],
 ]) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 1100 } })

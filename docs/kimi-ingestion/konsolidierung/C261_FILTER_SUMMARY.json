@@ -1,0 +1,54 @@
+{
+  "before_rows": 330397,
+  "after_rows": 51391,
+  "removed_rows": 279006,
+  "removed_by_rule": {
+    "ohne_entitaetszuordnung": 94525,
+    "feld_textzeile": 294,
+    "feld_rauschen_notes": 1449,
+    "feld_rauschen_queries": 138,
+    "feld_source": 444,
+    "kein_sachfeld_hint": 49666,
+    "duplikat_gefiltert": 1502,
+    "feld_rauschen_evidence": 8083,
+    "feld_source_ids": 9148,
+    "pfad_backup_pre_merge": 15073,
+    "entitaet_laufartefakt": 7982,
+    "feld_generated_at": 1007,
+    "feld_source_relationship_ids": 1100,
+    "pfad_apps": 13167,
+    "pfad_stage": 13091,
+    "feld_mismatch_dimensions": 819,
+    "feld_high_value_context": 890,
+    "feld_domain": 1723,
+    "feld_optional_context": 1022,
+    "feld_enthaelt__hashes": 4,
+    "pfad_baseline": 5735,
+    "feld_enthaelt_.source_ids": 1844,
+    "feld_entity_id": 6088,
+    "pfad_ckpt": 7080,
+    "pfad_cache": 34910,
+    "feld_source_threshold": 532,
+    "feld_sections_used": 1690
+  },
+  "states_after": {
+    "ABWEICHEND": 12110,
+    "UEBERNOMMEN": 1395,
+    "FEHLT": 37886
+  },
+  "abweichend_classes": {
+    "SACHKONFLIKT": 10010,
+    "FORMAT": 3,
+    "ZEITSTEMPEL": 2097
+  },
+  "bpc_cas_uebernommen_rows": 3,
+  "negative_cache_probe_reason": "pfad_cache",
+  "sachkonflikte": 10010,
+  "entities_with_missing_values": 955,
+  "output_files": {
+    "filtered": "D:\\GitHub\\LumeOS-Claude-V1\\docs\\kimi-ingestion\\konsolidierung\\ABGLEICH_GEFILTERT.jsonl",
+    "nachzutragen": "D:\\GitHub\\LumeOS-Claude-V1\\docs\\kimi-ingestion\\konsolidierung\\NACHZUTRAGEN.md",
+    "sachkonflikte": "D:\\GitHub\\LumeOS-Claude-V1\\docs\\kimi-ingestion\\konsolidierung\\SACHKONFLIKTE.md",
+    "filter_protocol": "D:\\GitHub\\LumeOS-Claude-V1\\docs\\kimi-ingestion\\konsolidierung\\FILTER_PROTOKOLL.md"
+  }
+}

@@ -51,6 +51,8 @@
 import { chromium } from '@playwright/test'
 import { mkdirSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
+// G-175: die Nachweiskonten und ihre Woerter — eine Stelle.
+import { wortFuer } from './konten.mjs'
 
 const args = process.argv.slice(2)
 const pfad = args[0] ?? '/v2/nutrition'
@@ -75,7 +77,10 @@ const selektoren = alle('--zaehleSel').map(([s]) => s).filter(Boolean)
 
 const BASIS = process.env.LUMEOS_BASIS ?? 'http://127.0.0.1:3200'
 const KONTO = process.env.LUMEOS_KONTO ?? 'dev@lumeos.app'
-const WORT = process.env.LUMEOS_WORT ?? 'LumeosDev2026'
+// G-175: das Wort kommt je Konto aus tools/konten.mjs — vorher stand
+// hier fest das dev-Wort, und jeder test-user-Lauf klopfte mit dem
+// falschen an. LUMEOS_WORT schlaegt weiter alles.
+const WORT = wortFuer(KONTO)
 
 const browser = await chromium.launch({ headless: true })
 const kontext = await browser.newContext({

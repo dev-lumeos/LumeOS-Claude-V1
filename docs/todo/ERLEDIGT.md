@@ -12602,3 +12602,167 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
   `nutrition.nutrient_details` sind de und en identisch gefuellt —
   **0 Zeilen, wo ein Rueckfall etwas rettete.** Meine Regel *„jedes
   Textfeld"* war zu weit.
+
+- [x] **G-183: Die Rechtslage als Aufzaehlung** — **erledigt
+  2026-08-25 (Claude Code), Bericht
+  `docs/berichte/g-183-claude-code.md`.**
+
+  `[read]` **Er hat den Widerspruch angenommen und dabei einen
+  eigenen Rechenfehler gefunden**, der die ganze Ablehnung getragen
+  hatte: `[cmd]` **die 40 % waren gegen alle 290 Zeilen gerechnet
+  statt gegen die 136 gefuellten.** Richtig sind **99 %**.
+
+  `[read]` **Ein leeres Feld kann eine Regel weder treffen noch
+  verfehlen.** 40 % klang grenzwertig, 99 % ist eindeutig — **und er
+  hat es selbst gefunden, nicht der Orchestrator.**
+
+  `[cmd]` **Alle fuenf Felder gemessen, alle ueber der Schwelle:**
+  `rechtslage_klartext_de` **135/136 = 99 %** · `reinheit_de` 116/134
+  = 87 % · `irreversibel_de` 89/112 = 79 % · `ueberwachung_de` 63/96
+  = 66 % · `nicht_im_blut_de` 67/134 = 50 %.
+
+  `[cmd]` Vom Orchestrator nachgemessen: 136 gefuellt, 135
+  mehrsaetzig. **Bestaetigt.**
+
+  `[read]` **Die 90-Prozent-Obergrenze bewusst ueberschritten, mit
+  Begruendung:** sie sollte verhindern, dass eine Regel Absaetze
+  zerhackt. **Hier zerfaellt kein Feld in mehr als fuenf Teile, und
+  jeder Teil ist eine vollstaendige Aussage.** Gebaut und die Zahl
+  gemeldet, statt sich hinter der Schwelle zu verstecken.
+
+  `[cmd]` **Der Negativfall steht als Test:**
+  *„WADA-Kategorie S2: jederzeit verboten."* bleibt **eine** Zeile.
+  Stanozolol ist der schaerfste Fall — Semikolon und Doppelpunkt,
+  bleibt trotzdem ein Absatz.
+
+  ### Zwei Funde unterwegs
+
+  `[read]` **Sein eigener Test fand, dass *„z. B."* in *„z."* und
+  *„B. 5 mg"* zerfiel** — kommt einmal im Bestand vor,
+  Abkuerzungsliste ergaenzt.
+
+  `[read]` **Und auf dem Bild ein Fehler aus G-182:** doppelte
+  Anfuehrungszeichen, weil die Texte ihre eigenen bereits tragen.
+  **Nicht beauftragt, trotzdem behoben und bewacht.**
+
+  `[read]` **Toten Code entfernt, statt einen Test dafuer zu
+  erfinden:** `teile.length > 1 ? teile : [roh]` war ein
+  unerreichbarer Zweig aus der alten `split()`-Fassung. **Die fuenfte
+  Negativprobe blieb gruen, und das war richtig.**
+
+  `[read]` **Zwei Negativproben blieben zuerst gruen**, weil er *„die
+  Verdrahtung nicht bewacht hatte, nur die Funktion"* — **derselbe
+  blinde Fleck wie bei der Hoehenbremse in G-180.** Beide Male selbst
+  gefunden.
+
+- [x] **C-265: Die Kette erzeugt nicht mehr den Live-Stand** —
+  **erledigt 2026-08-25 (Codex), Bericht
+  `docs/berichte/c-265-codex.md`.**
+
+  `[cmd]` **Die Ursache war KETTE UNVOLLSTAENDIG, nicht ein
+  Live-Only-Einspielvorgang:** die Schritte `14_medical/142`, `143`
+  und `144` **existierten, waren aber nicht in `kette.json`
+  eingetragen.**
+
+  `[read]` **Damit ist der Live-Stand entlastet** — es wurde nichts an
+  der Kette vorbeigeschmuggelt, es fehlte nur die Verkettung.
+
+  `[cmd]` **Nach dem Eintrag erzeugt die Wegwerf-Kette die
+  Medical-Objekte:** `biomarker_spec_enrichment` 51 ·
+  `biomarker_aliases` 292 · `biomarker_reference_ranges` **560** ·
+  beide Funktionen vorhanden.
+
+  ### Der zweite Blocker, gemeldet statt passend gemacht
+
+  `[cmd]` Der volle Lauf brach danach bei C-264 ab:
+  `substance_user_texts` **318, erwartet 290** — die 28 neuen
+  `entity_id` trafen keine Zeile.
+
+  `[read]` **Der Grund: Kimi vergibt fuer die Sammelnamen neue
+  `sub_*`-IDs** (`Magnesium` = `sub_5322010791`), waehrend derselbe
+  Eintrag bei uns den Slug `magnesium` aus
+  `lumeos_supplement_catalog` traegt. **Die Bruecke ist der Name,
+  nicht die ID.**
+
+  `[cmd]` **Zuordnung jetzt viergliedrig:** exakter Slug →
+  normalisierter Slug gegen `canonical_name` → `name_en` → Alias.
+
+  `[cmd]` **Der letzte Blocker war ein Namenswechsel:** live hiess der
+  Eintrag bereits `Ashwagandha (KSM-66)`, im frischen Kettenaufbau noch
+  `Ashwagandha (KSM-66/Sensoril)`. **Genau die Sorte Abweichung, die
+  C-265 sichtbar gemacht hat.** Jetzt deterministisch ueber den
+  normalisierten Slug.
+
+  `[cmd]` **Vom Orchestrator nachgemessen:** `supplement_user_texts`
+  **318**, `supplement_faq` **1.421**, **sichtbare Eintraege ohne Text
+  = 0.** Kettenlauf **99 Schritte, `KETTE OK`**, `pnpm gate` gruen.
+
+- [x] **C-267: Falsche PubChem-Kennungen** — **erledigt 2026-08-25
+  (Codex), Bericht `docs/berichte/c-265-codex.md`.**
+
+  `[cmd]` **Neuer Waechter `tools/supplement-kennungen-pruefen.mjs`**,
+  in `pnpm gate` eingehaengt. **Er korrigiert nichts, er meldet.**
+
+  `[cmd]` **Koffein wird gefunden** — `Caffeine (anhydrous)` mit CID
+  6435808, Formel `C10H12FN3O4`, InChIKey
+  `GFFXZLZWLOBBLO-ASKVSEFXSA-N`. **Das war die Pflichtgegenprobe.**
+
+  `[cmd]` **Zwei weitere Gruppen, die Kimi nicht gemeldet hatte:**
+  Vitamin K2 MK-7/MK-4 und Chromium/Chromium picolinat.
+
+  ### Der Waechter blockierte zuerst alles
+
+  `[read]` **`pnpm gate` war rot** — und damit **jeder Commit im Repo,
+  auch fuer Claude Code.** `[read]` Im Repo steht: *eine dauerhaft rote
+  Pruefung ist gefaehrlicher als keine, weil sie umgangen statt
+  repariert wird.*
+
+  `[cmd]` **Geloest ueber eine Ausnahmeliste:** die drei bekannten
+  C-267-Konflikte sind gelb, **ein vierter macht die Pruefung rot** —
+  Negativprobe belegt. **Der Waechter bleibt scharf, ohne zu
+  blockieren.**
+
+- [x] **G-185: Zwei Wege zum Einladen, einer davon Attrappe** —
+  **erledigt 2026-08-25 (Claude Code), Bericht
+  `docs/berichte/g-185-claude-code.md`.**
+
+  `[cmd]` **Der Befund war groesser als der eine Knopf:** ein ganzer
+  Reiter *„Invites"* lief auf `PENDING_INVITES`, einer
+  Entwurfskonstante mit erfundenen Namen und Ablaufdaten — **waehrend
+  seit C-225 die echte Tabelle danebenlag.**
+
+  `[read]` **Der Kopf-Knopf bleibt und springt auf den Reiter.** Ihn zu
+  entfernen hiesse, den Weg zum Einladen nur noch im Fliesstext zu
+  haben. `[read]` Meine Warnung, ein Reitersprung koenne schlechter
+  sein als kein Knopf, **gilt wenn das Ziel unklar ist** — hier ist es
+  das Formular selbst, der Wechsel ist sichtbar (`?tab=invites`), und
+  der Reiter heisst wie der Knopf. `[cmd]` 0 Dialoge im DOM.
+
+  `[cmd]` **Die Zahl ist die der Zeilenrechte:** beide
+  `invited`-Zeilen gehoeren `sarah.seed@example.com`, **`test-user`
+  sieht 0.** Vom Orchestrator bestaetigt. **Genau die Falle aus
+  C-241.**
+
+  `[read]` **Der Leerzustand traegt das Formular** — ausserhalb des
+  Ternaers, in beiden Zweigen, mit einem Waechter darauf. **Das war
+  Fables Fund in C-225**, und er ist diesmal von vornherein
+  beruecksichtigt.
+
+  `[cmd]` **Kein zweiter Schreibweg:** `InviteFormular` aus C-225 wird
+  nur exportiert, und ein Test prueft, dass die Datei nicht selbst
+  `from('relationships')` aufruft.
+
+  `[cmd]` `PENDING_INVITES` **ist raus, samt Deklaration** — vom
+  Orchestrator geprueft: alle verbliebenen Treffer stehen in
+  Kommentaren, die festhalten, was der Reiter vorher zeigte.
+  **`COACHES` (12) und `COACH_NOTES` (7) bleiben** — `tab-rechte.tsx`
+  und `modale.tsx` haengen daran, **gemeldet statt mitgerissen.**
+  Attrappen-Waechter 9 → 7.
+
+  `[cmd]` **Gegenprobe:** 6/2 → 7/3 → 6/2, Reste 0, alle Trigger
+  wieder aktiv.
+
+  `[read]` **Und der Fund, der zu C-269 wurde:** eine Beziehung laesst
+  sich nicht loeschen, solange `relationships_change_log` laeuft.
+  **Deshalb hat er keinen Knopf zum Zuruecknehmen gebaut — statt einen
+  zu bauen, der scheitert.**

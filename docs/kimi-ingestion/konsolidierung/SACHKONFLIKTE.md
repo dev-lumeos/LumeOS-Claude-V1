@@ -1,0 +1,6005 @@
+# Sachkonflikte
+
+[cmd] Nur `ABWEICHEND`-Zeilen der Klasse `SACHKONFLIKT`. Zeitstempel und reine Formatabweichungen sind herausgetrennt.
+
+- `AOD-9604` / `identity_ws.synonyms[]` / `crawl_027_profiles/AOD_9604.json`
+  - Report: Tyr-hGH(176-191)
+  - Data: ["lipotropin fragment 176-191", "AOD-9604"]
+- `AOD-9604` / `identity_ws.synonyms[]` / `crawl_027_profiles/AOD_9604.json`
+  - Report: Anti-Obesity Drug 9604
+  - Data: ["lipotropin fragment 176-191", "AOD-9604"]
+- `AOD-9604` / `identity_ws.research_names[]` / `crawl_027_profiles/AOD_9604.json`
+  - Report: AOD9604
+  - Data: ["lipotropin fragment 176-191", "AOD-9604"]
+- `AOD-9604` / `identity_ws.identity.sequence` / `crawl_027_profiles/AOD_9604.json`
+  - Report: Tyr-Leu-Arg-Ile-Val-Gln-Cys-Arg-Ser-Val-Glu-Gly-Ser-Cys-Gly-Phe
+  - Data: ["Tyr-Leu-Arg-Ile-Val-Gln-Cys-Arg-Ser-Val-Glu-Gly-Ser-Cys-Gly-Phe (Tyr-hGH176-191)"]
+- `AOD-9604` / `identity.sequence` / `crawl_027_profiles/AOD_9604.json`
+  - Report: Tyr-Leu-Arg-Ile-Val-Gln-Cys-Arg-Ser-Val-Glu-Gly-Ser-Cys-Gly-Phe
+  - Data: ["Tyr-Leu-Arg-Ile-Val-Gln-Cys-Arg-Ser-Val-Glu-Gly-Ser-Cys-Gly-Phe (Tyr-hGH176-191)"]
+- `AOD-9604` / `synonyms[]` / `crawl_027_profiles/AOD_9604.json`
+  - Report: Tyr-hGH(176-191)
+  - Data: ["lipotropin fragment 176-191", "AOD-9604"]
+- `AOD-9604` / `synonyms[]` / `crawl_027_profiles/AOD_9604.json`
+  - Report: Anti-Obesity Drug 9604
+  - Data: ["lipotropin fragment 176-191", "AOD-9604"]
+- `AOD-9604` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/AOD_9604.json`
+  - Report: hGH fragment 177-191; lipolytic/fat-oxidation domain without full hGH activity (demonstrated in model)
+  - Data: ["—"]
+- `AOD-9604` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/AOD_9604.json`
+  - Report: increased fat oxidation (demonstrated in model)
+  - Data: ["—"]
+- `AOD-9604` / `animal_studies[].mechanism` / `crawl_027_profiles/AOD_9604.json`
+  - Report: hGH fragment 177-191; lipolytic/fat-oxidation domain without full hGH activity (demonstrated in model)
+  - Data: ["—"]
+- `AOD-9604` / `animal_studies[].mechanism` / `crawl_027_profiles/AOD_9604.json`
+  - Report: increased fat oxidation (demonstrated in model)
+  - Data: ["—"]
+- `AOD-9604` / `animal_studies[].evidence_class` / `crawl_027_profiles/AOD_9604.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `AOD-9604` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/AOD_9604.json`
+  - Report: human_clinical_trial_limited
+  - Data: ["B", "A", "C"]
+- `AOD-9604` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/AOD_9604.json`
+  - Report: Stier et al. 2013 (J Endocrinol Metab) safety/PK trial; published PK detail sparse
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `AOD-9604` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/AOD_9604.json`
+  - Report: human_clinical_trial_limited
+  - Data: ["B", "A", "C"]
+- `AOD-9604` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/AOD_9604.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `AOD-9604` / `pk_ws.cyp.status` / `crawl_027_profiles/AOD_9604.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `AOD-9604` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/AOD_9604.json`
+  - Report: human_clinical_trial_limited
+  - Data: ["B", "A", "C"]
+- `AOD-9604` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/AOD_9604.json`
+  - Report: Stier et al. 2013 (J Endocrinol Metab) safety/PK trial; published PK detail sparse
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `AOD-9604` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/AOD_9604.json`
+  - Report: human_clinical_trial_limited
+  - Data: ["B", "A", "C"]
+- `AOD-9604` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/AOD_9604.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `AOD-9604` / `cyp.status` / `crawl_027_profiles/AOD_9604.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `AOD-9604` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/AOD_9604.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `AOD-9604` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/AOD_9604.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `AOD-9604` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/AOD_9604.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `AOD-9604` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/AOD_9604.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `AOD-9604` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/AOD_9604.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `AOD-9604` / `regulatory.US.status` / `crawl_027_profiles/AOD_9604.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `AOD-9604` / `regulatory.EU.status` / `crawl_027_profiles/AOD_9604.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `AOD-9604` / `regulatory.UK.status` / `crawl_027_profiles/AOD_9604.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `AOD-9604` / `regulatory.CA.status` / `crawl_027_profiles/AOD_9604.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `AOD-9604` / `regulatory.AU.status` / `crawl_027_profiles/AOD_9604.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `AOD-9604` / `wada_ws.wada.source` / `crawl_027_profiles/AOD_9604.json`
+  - Report: WADA/ASADA 2013 clarification; Cox et al. Drug Test Anal 2015 (WADA-banned status, urinary metabolite)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `AOD-9604` / `wada.source` / `crawl_027_profiles/AOD_9604.json`
+  - Report: WADA/ASADA 2013 clarification; Cox et al. Drug Test Anal 2015 (WADA-banned status, urinary metabolite)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `AOD-9604` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/AOD_9604.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `AOD-9604` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/AOD_9604.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `AOD-9604` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/AOD_9604.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `AOD-9604` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/AOD_9604.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `AOD-9604` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/AOD_9604.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `AOD-9604` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/AOD_9604.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `AOD-9604` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/AOD_9604.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `AOD-9604` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/AOD_9604.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `AOD-9604` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/AOD_9604.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `AOD-9604` / `quality_evidence[].url` / `crawl_027_profiles/AOD_9604.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `AOD-9604` / `quality_evidence[].url` / `crawl_027_profiles/AOD_9604.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `AOD-9604` / `quality_evidence[].url` / `crawl_027_profiles/AOD_9604.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `AOD-9604` / `market_ws.community_names[]` / `crawl_027_profiles/AOD_9604.json`
+  - Report: AOD
+  - Data: ["lipotropin fragment 176-191", "AOD-9604"]
+- `AOD-9604` / `market_ws.community_names[]` / `crawl_027_profiles/AOD_9604.json`
+  - Report: fat-burning peptide fragment
+  - Data: ["lipotropin fragment 176-191", "AOD-9604"]
+- `AOD-9604` / `community_names[]` / `crawl_027_profiles/AOD_9604.json`
+  - Report: AOD
+  - Data: ["lipotropin fragment 176-191", "AOD-9604"]
+- `AOD-9604` / `community_names[]` / `crawl_027_profiles/AOD_9604.json`
+  - Report: fat-burning peptide fragment
+  - Data: ["lipotropin fragment 176-191", "AOD-9604"]
+- `BPC-157` / `identity_ws.synonyms[]` / `crawl_027_profiles/BPC_157.json`
+  - Report: Body Protection Compound-157
+  - Data: ["Body Protection Compound", "PL-10", "PLD-116", "BPC-157"]
+- `BPC-157` / `identity_ws.synonyms[]` / `crawl_027_profiles/BPC_157.json`
+  - Report: bepecin
+  - Data: ["Body Protection Compound", "PL-10", "PLD-116", "BPC-157"]
+- `BPC-157` / `identity_ws.community_names[]` / `crawl_027_profiles/BPC_157.json`
+  - Report: BPC
+  - Data: ["Body Protection Compound", "PL-10", "PLD-116", "BPC-157"]
+- `BPC-157` / `synonyms[]` / `crawl_027_profiles/BPC_157.json`
+  - Report: Body Protection Compound-157
+  - Data: ["Body Protection Compound", "PL-10", "PLD-116", "BPC-157"]
+- `BPC-157` / `synonyms[]` / `crawl_027_profiles/BPC_157.json`
+  - Report: bepecin
+  - Data: ["Body Protection Compound", "PL-10", "PLD-116", "BPC-157"]
+- `BPC-157` / `human_ws.human_studies[].evidence_class` / `crawl_027_profiles/BPC_157.json`
+  - Report: E
+  - Data: ["B", "A", "C"]
+- `BPC-157` / `human_studies[].evidence_class` / `crawl_027_profiles/BPC_157.json`
+  - Report: E
+  - Data: ["B", "A", "C"]
+- `BPC-157` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/BPC_157.json`
+  - Report: enhanced tendon outgrowth, cell survival and migration; FAK-paxillin/angiogenesis (demonstrated in model)
+  - Data: ["—"]
+- `BPC-157` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/BPC_157.json`
+  - Report: proposed: angiogenesis, growth-factor modulation
+  - Data: ["—"]
+- `BPC-157` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/BPC_157.json`
+  - Report: upregulation of growth hormone receptor expression (demonstrated)
+  - Data: ["—"]
+- `BPC-157` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/BPC_157.json`
+  - Report: proposed: cytoprotection, vascular/NO-system modulation
+  - Data: ["—"]
+- `BPC-157` / `animal_studies[].mechanism` / `crawl_027_profiles/BPC_157.json`
+  - Report: enhanced tendon outgrowth, cell survival and migration; FAK-paxillin/angiogenesis (demonstrated in model)
+  - Data: ["—"]
+- `BPC-157` / `animal_studies[].mechanism` / `crawl_027_profiles/BPC_157.json`
+  - Report: proposed: angiogenesis, growth-factor modulation
+  - Data: ["—"]
+- `BPC-157` / `animal_studies[].mechanism` / `crawl_027_profiles/BPC_157.json`
+  - Report: upregulation of growth hormone receptor expression (demonstrated)
+  - Data: ["—"]
+- `BPC-157` / `animal_studies[].mechanism` / `crawl_027_profiles/BPC_157.json`
+  - Report: proposed: cytoprotection, vascular/NO-system modulation
+  - Data: ["—"]
+- `BPC-157` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/BPC_157.json`
+  - Report: No human PK study exists. Preclinical (rat/dog) data only; no peer-reviewed, route-specified plasma half-life with adequate assay validation identified. Forum/vendor half-lives excluded per STRICT_MODE.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "ChEMBL exact-name match"]
+- `BPC-157` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/BPC_157.json`
+  - Report: No validated human bioavailability. Rodent data suggest detectable systemic exposure after oral and i.p./i.m. dosing (preclinical, unverified assay); oral stability in gastric juice reported in preclinical studies.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "ChEMBL exact-name match"]
+- `BPC-157` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/BPC_157.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `BPC-157` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/BPC_157.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `BPC-157` / `pk_ws.pk.clearance.evidence_class` / `crawl_027_profiles/BPC_157.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `BPC-157` / `pk_ws.cyp.status` / `crawl_027_profiles/BPC_157.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/BPC_157.json`
+  - Report: No human PK study exists. Preclinical (rat/dog) data only; no peer-reviewed, route-specified plasma half-life with adequate assay validation identified. Forum/vendor half-lives excluded per STRICT_MODE.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "ChEMBL exact-name match"]
+- `BPC-157` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/BPC_157.json`
+  - Report: No validated human bioavailability. Rodent data suggest detectable systemic exposure after oral and i.p./i.m. dosing (preclinical, unverified assay); oral stability in gastric juice reported in preclinical studies.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "ChEMBL exact-name match"]
+- `BPC-157` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/BPC_157.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `BPC-157` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/BPC_157.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `BPC-157` / `pharmacokinetics.clearance.evidence_class` / `crawl_027_profiles/BPC_157.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `BPC-157` / `cyp.status` / `crawl_027_profiles/BPC_157.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/BPC_157.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/BPC_157.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/BPC_157.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/BPC_157.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/BPC_157.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `regulatory.US.status` / `crawl_027_profiles/BPC_157.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `regulatory.EU.status` / `crawl_027_profiles/BPC_157.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `regulatory.UK.status` / `crawl_027_profiles/BPC_157.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `regulatory.CA.status` / `crawl_027_profiles/BPC_157.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `regulatory.AU.status` / `crawl_027_profiles/BPC_157.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `wada_ws.wada.source` / `crawl_027_profiles/BPC_157.json`
+  - Report: WADA 2026 Prohibited List S0; USADA advisory (added 2022 List)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `BPC-157` / `wada.source` / `crawl_027_profiles/BPC_157.json`
+  - Report: WADA 2026 Prohibited List S0; USADA advisory (added 2022 List)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `BPC-157` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/BPC_157.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `BPC-157` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/BPC_157.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `BPC-157` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/BPC_157.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `BPC-157` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/BPC_157.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `BPC-157` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/BPC_157.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `BPC-157` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/BPC_157.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `BPC-157` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/BPC_157.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `BPC-157` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/BPC_157.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `BPC-157` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/BPC_157.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `BPC-157` / `quality_evidence[].url` / `crawl_027_profiles/BPC_157.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `BPC-157` / `quality_evidence[].url` / `crawl_027_profiles/BPC_157.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `BPC-157` / `quality_evidence[].url` / `crawl_027_profiles/BPC_157.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `BPC-157` / `market_ws.community_names[]` / `crawl_027_profiles/BPC_157.json`
+  - Report: BPC
+  - Data: ["Body Protection Compound", "PL-10", "PLD-116", "BPC-157"]
+- `BPC-157` / `market_ws.community_names[]` / `crawl_027_profiles/BPC_157.json`
+  - Report: Wolverine peptide/stack (with TB-500)
+  - Data: ["Body Protection Compound", "PL-10", "PLD-116", "BPC-157"]
+- `BPC-157` / `community_names[]` / `crawl_027_profiles/BPC_157.json`
+  - Report: BPC
+  - Data: ["Body Protection Compound", "PL-10", "PLD-116", "BPC-157"]
+- `BPC-157` / `community_names[]` / `crawl_027_profiles/BPC_157.json`
+  - Report: Wolverine peptide/stack (with TB-500)
+  - Data: ["Body Protection Compound", "PL-10", "PLD-116", "BPC-157"]
+- `Bremelanotide` / `identity_ws.synonyms[]` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: rekysande
+  - Data: ["PT-141", "Vyleesi", "Bremelanotide"]
+- `Bremelanotide` / `synonyms[]` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: rekysande
+  - Data: ["PT-141", "Vyleesi", "Bremelanotide"]
+- `Bremelanotide` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: MC4R-mediated central effects on sexual response (demonstrated in preclinical models)
+  - Data: ["melanocortin"]
+- `Bremelanotide` / `animal_studies[].mechanism` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: MC4R-mediated central effects on sexual response (demonstrated in preclinical models)
+  - Data: ["melanocortin"]
+- `Bremelanotide` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Bremelanotide` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: Vyleesi USPI (DailyMed), Section 12.3
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `pk_ws.pk.bioavailability.value` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: ~100% absolute s.c.; median Tmax ~1.0 h (0.5-1.0 h); Cmax 72.8 ng/mL, AUC 276 hr*ng/mL at label dose.
+  - Data: ["Per label (Vyleesi 1.75 mg SC prn, max 1/24h, 8/month)"]
+- `Bremelanotide` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Bremelanotide` / `pk_ws.pk.bioavailability.source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: Vyleesi USPI 12.3
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `pk_ws.pk.metabolism.value` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: 7-aa cyclic peptide; primary metabolism = multiple hydrolyses of amide bonds (label). 21% serum protein binding; Vd 25.0 L; CL/F 6.5 L/h.
+  - Data: ["Per label (Vyleesi 1.75 mg SC prn, max 1/24h, 8/month)"]
+- `Bremelanotide` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Bremelanotide` / `pk_ws.pk.clearance.evidence_class` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Bremelanotide` / `pk_ws.cyp.status` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Bremelanotide` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Bremelanotide` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: Vyleesi USPI (DailyMed), Section 12.3
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `pharmacokinetics.bioavailability.value` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: ~100% absolute s.c.; median Tmax ~1.0 h (0.5-1.0 h); Cmax 72.8 ng/mL, AUC 276 hr*ng/mL at label dose.
+  - Data: ["Per label (Vyleesi 1.75 mg SC prn, max 1/24h, 8/month)"]
+- `Bremelanotide` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Bremelanotide` / `pharmacokinetics.bioavailability.source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: Vyleesi USPI 12.3
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `pharmacokinetics.metabolism.value` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: 7-aa cyclic peptide; primary metabolism = multiple hydrolyses of amide bonds (label). 21% serum protein binding; Vd 25.0 L; CL/F 6.5 L/h.
+  - Data: ["Per label (Vyleesi 1.75 mg SC prn, max 1/24h, 8/month)"]
+- `Bremelanotide` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Bremelanotide` / `pharmacokinetics.clearance.evidence_class` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Bremelanotide` / `cyp.status` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Bremelanotide` / `labs_ws.lab_effects[].direction` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: increase
+  - Data: ["transient + (label: ~6 mmHg)", "transient drop"]
+- `Bremelanotide` / `labs_ws.lab_effects[].effect_type` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: monitoring_requirement
+  - Data: ["physiological_lab_effect"]
+- `Bremelanotide` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: Vyleesi FDA label: transient BP increase after dosing; contraindicated in uncontrolled hypertension
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `labs_ws.lab_effects[].direction` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: decrease
+  - Data: ["transient + (label: ~6 mmHg)", "transient drop"]
+- `Bremelanotide` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: Vyleesi FDA label: transient HR decrease (class melanocortin effect)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `labs_ws.interactions.data[].note` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: Vyleesi label: bremelanotide significantly reduces oral naltrexone exposure - avoid concomitant use.
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Bremelanotide"]
+- `Bremelanotide` / `lab_effects[].direction` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: increase
+  - Data: ["transient + (label: ~6 mmHg)", "transient drop"]
+- `Bremelanotide` / `lab_effects[].effect_type` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: monitoring_requirement
+  - Data: ["physiological_lab_effect"]
+- `Bremelanotide` / `lab_effects[].source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: Vyleesi FDA label: transient BP increase after dosing; contraindicated in uncontrolled hypertension
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `lab_effects[].direction` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: decrease
+  - Data: ["transient + (label: ~6 mmHg)", "transient drop"]
+- `Bremelanotide` / `lab_effects[].source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: Vyleesi FDA label: transient HR decrease (class melanocortin effect)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `interactions.data[].note` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: Vyleesi label: bremelanotide significantly reduces oral naltrexone exposure - avoid concomitant use.
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Bremelanotide"]
+- `Bremelanotide` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: approved
+  - Data: ["avoid_or_rx_only"]
+- `Bremelanotide` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: not approved (no EMA authorisation identified)
+  - Data: ["avoid_or_rx_only"]
+- `Bremelanotide` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Bremelanotide` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: not approved (no authorisation identified)
+  - Data: ["avoid_or_rx_only"]
+- `Bremelanotide` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: not approved (no ARTG entry identified)
+  - Data: ["avoid_or_rx_only"]
+- `Bremelanotide` / `regulatory.US.status` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: approved
+  - Data: ["avoid_or_rx_only"]
+- `Bremelanotide` / `regulatory.EU.status` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: not approved (no EMA authorisation identified)
+  - Data: ["avoid_or_rx_only"]
+- `Bremelanotide` / `regulatory.UK.status` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Bremelanotide` / `regulatory.CA.status` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: not approved (no authorisation identified)
+  - Data: ["avoid_or_rx_only"]
+- `Bremelanotide` / `regulatory.AU.status` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: not approved (no ARTG entry identified)
+  - Data: ["avoid_or_rx_only"]
+- `Bremelanotide` / `wada_ws.wada.source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: WADA 2026 List (absence)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `wada.source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: WADA 2026 List (absence)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026", "https://dailymed.nlm.nih.gov/dailymed/search.cfm?query=VYLEESI"]
+- `Bremelanotide` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026", "https://dailymed.nlm.nih.gov/dailymed/search.cfm?query=VYLEESI"]
+- `Bremelanotide` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026", "https://dailymed.nlm.nih.gov/dailymed/search.cfm?query=VYLEESI"]
+- `Bremelanotide` / `quality_evidence[].url` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026", "https://dailymed.nlm.nih.gov/dailymed/search.cfm?query=VYLEESI"]
+- `Bremelanotide` / `quality_evidence[].url` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026", "https://dailymed.nlm.nih.gov/dailymed/search.cfm?query=VYLEESI"]
+- `Bremelanotide` / `quality_evidence[].url` / `crawl_027_profiles/Bremelanotide.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026", "https://dailymed.nlm.nih.gov/dailymed/search.cfm?query=VYLEESI"]
+- `CJC-1295 (no DAC)` / `identity_ws.community_names[]` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: CJC no DAC
+  - Data: ["Mod GRF(1-29) analog", "CJC-1295 w/o DAC", "CJC-1295 (no DAC)"]
+- `CJC-1295 (no DAC)` / `identity_ws.research_names[]` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: CJC-1295 without DAC
+  - Data: ["Mod GRF(1-29) analog", "CJC-1295 w/o DAC", "CJC-1295 (no DAC)"]
+- `CJC-1295 (no DAC)` / `identity_ws.identity.molecular_formula` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: C165H269N47O46
+  - Data: ["C152H252N44O42"]
+- `CJC-1295 (no DAC)` / `identity_ws.identity.molecular_weight` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: 3647.2
+  - Data: [3368.0]
+- `CJC-1295 (no DAC)` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: tetrasubstituted GHRH(1-29) analog, GHRHR agonist with improved stability vs native GRF (demonstrated for class)
+  - Data: ["increased GH pulsatility raises IGF-1"]
+- `CJC-1295 (no DAC)` / `animal_studies[].mechanism` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: tetrasubstituted GHRH(1-29) analog, GHRHR agonist with improved stability vs native GRF (demonstrated for class)
+  - Data: ["increased GH pulsatility raises IGF-1"]
+- `CJC-1295 (no DAC)` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: inference_from_class
+  - Data: ["B", "A", "C"]
+- `CJC-1295 (no DAC)` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: No dedicated human PK study of 'CJC-1295 no DAC' identified; class data: hGRF(1-29) analogs t1/2 7-30 min (Frohman et al.; PMID 7962295 D-Ala2 GHRH(1-29)NH2 study)
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `CJC-1295 (no DAC)` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: No dedicated study; s.c. absorption expected, short systemic persistence.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "traits derived from curated substance group membership only"]
+- `CJC-1295 (no DAC)` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `CJC-1295 (no DAC)` / `pk_ws.cyp.status` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 (no DAC)` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: inference_from_class
+  - Data: ["B", "A", "C"]
+- `CJC-1295 (no DAC)` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: No dedicated human PK study of 'CJC-1295 no DAC' identified; class data: hGRF(1-29) analogs t1/2 7-30 min (Frohman et al.; PMID 7962295 D-Ala2 GHRH(1-29)NH2 study)
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `CJC-1295 (no DAC)` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: No dedicated study; s.c. absorption expected, short systemic persistence.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "traits derived from curated substance group membership only"]
+- `CJC-1295 (no DAC)` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `CJC-1295 (no DAC)` / `cyp.status` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 (no DAC)` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 (no DAC)` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 (no DAC)` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 (no DAC)` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 (no DAC)` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 (no DAC)` / `regulatory.US.status` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 (no DAC)` / `regulatory.EU.status` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 (no DAC)` / `regulatory.UK.status` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 (no DAC)` / `regulatory.CA.status` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 (no DAC)` / `regulatory.AU.status` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 (no DAC)` / `wada_ws.wada.source` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: WADA 2026 Prohibited List S2.2.4
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `CJC-1295 (no DAC)` / `wada.source` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: WADA 2026 Prohibited List S2.2.4
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `CJC-1295 (no DAC)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `CJC-1295 (no DAC)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `CJC-1295 (no DAC)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `CJC-1295 (no DAC)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `CJC-1295 (no DAC)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `CJC-1295 (no DAC)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `CJC-1295 (no DAC)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `CJC-1295 (no DAC)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `CJC-1295 (no DAC)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `CJC-1295 (no DAC)` / `quality_evidence[].url` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `CJC-1295 (no DAC)` / `quality_evidence[].url` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `CJC-1295 (no DAC)` / `quality_evidence[].url` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `CJC-1295 (no DAC)` / `market_ws.community_names[]` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: CJC no DAC
+  - Data: ["Mod GRF(1-29) analog", "CJC-1295 w/o DAC", "CJC-1295 (no DAC)"]
+- `CJC-1295 (no DAC)` / `market_ws.community_names[]` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: Mod GRF (equated by vendors)
+  - Data: ["Mod GRF(1-29) analog", "CJC-1295 w/o DAC", "CJC-1295 (no DAC)"]
+- `CJC-1295 (no DAC)` / `community_names[]` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: CJC no DAC
+  - Data: ["Mod GRF(1-29) analog", "CJC-1295 w/o DAC", "CJC-1295 (no DAC)"]
+- `CJC-1295 (no DAC)` / `community_names[]` / `crawl_027_profiles/CJC_1295_no_DAC.json`
+  - Report: Mod GRF (equated by vendors)
+  - Data: ["Mod GRF(1-29) analog", "CJC-1295 w/o DAC", "CJC-1295 (no DAC)"]
+- `CJC-1295 with DAC` / `identity_ws.synonyms[]` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: CJC-1295 with Drug Affinity Complex
+  - Data: ["CJC-1295 DAC", "CJC-1295 with DAC"]
+- `CJC-1295 with DAC` / `identity_ws.synonyms[]` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: DAC:GRF
+  - Data: ["CJC-1295 DAC", "CJC-1295 with DAC"]
+- `CJC-1295 with DAC` / `identity_ws.community_names[]` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: CJC w/ DAC
+  - Data: ["CJC-1295 DAC", "CJC-1295 with DAC"]
+- `CJC-1295 with DAC` / `identity_ws.research_names[]` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: CJC-1295 (ConjuChem)
+  - Data: ["CJC-1295 DAC", "CJC-1295 with DAC"]
+- `CJC-1295 with DAC` / `identity_ws.identity.molecular_formula` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: C168H271N47O46 (approx.; DAC adds maleimidopropionyl)
+  - Data: ["C165H269N47O46"]
+- `CJC-1295 with DAC` / `identity_ws.identity.molecular_weight` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: 3648.2
+  - Data: [3647.2]
+- `CJC-1295 with DAC` / `synonyms[]` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: CJC-1295 with Drug Affinity Complex
+  - Data: ["CJC-1295 DAC", "CJC-1295 with DAC"]
+- `CJC-1295 with DAC` / `synonyms[]` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: DAC:GRF
+  - Data: ["CJC-1295 DAC", "CJC-1295 with DAC"]
+- `CJC-1295 with DAC` / `human_ws.human_studies[].evidence_class` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: E
+  - Data: ["A", "B", "C"]
+- `CJC-1295 with DAC` / `human_studies[].evidence_class` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: E
+  - Data: ["A", "B", "C"]
+- `CJC-1295 with DAC` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: hGRF(1-29)-albumin bioconjugates activate the GRF receptor on anterior pituitary (demonstrated); DAC extends half-life via albumin binding
+  - Data: ["DAC prolongation", "GH axis"]
+- `CJC-1295 with DAC` / `animal_studies[].mechanism` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: hGRF(1-29)-albumin bioconjugates activate the GRF receptor on anterior pituitary (demonstrated); DAC extends half-life via albumin binding
+  - Data: ["DAC prolongation", "GH axis"]
+- `CJC-1295 with DAC` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: human_phase1_peer_reviewed
+  - Data: ["A", "B", "C"]
+- `CJC-1295 with DAC` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: Teichman SL et al., J Clin Endocrinol Metab 2006;91:799-805. PMID 16352683. NOTE: lead-provided anchor PMID 16368755 is INCORRECT (that PMID is an unrelated CD95/adipocyte paper, Fischer-Posovszky et al.).
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: human_phase1_peer_reviewed
+  - Data: ["A", "B", "C"]
+- `CJC-1295 with DAC` / `pk_ws.pk.bioavailability.source` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: PMID 16352683
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: human_phase1+mechanistic
+  - Data: ["A", "B", "C"]
+- `CJC-1295 with DAC` / `pk_ws.pk.clearance.evidence_class` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: human_phase1
+  - Data: ["A", "B", "C"]
+- `CJC-1295 with DAC` / `pk_ws.cyp.status` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 with DAC` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: human_phase1_peer_reviewed
+  - Data: ["A", "B", "C"]
+- `CJC-1295 with DAC` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: Teichman SL et al., J Clin Endocrinol Metab 2006;91:799-805. PMID 16352683. NOTE: lead-provided anchor PMID 16368755 is INCORRECT (that PMID is an unrelated CD95/adipocyte paper, Fischer-Posovszky et al.).
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: human_phase1_peer_reviewed
+  - Data: ["A", "B", "C"]
+- `CJC-1295 with DAC` / `pharmacokinetics.bioavailability.source` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: PMID 16352683
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: human_phase1+mechanistic
+  - Data: ["A", "B", "C"]
+- `CJC-1295 with DAC` / `pharmacokinetics.clearance.evidence_class` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: human_phase1
+  - Data: ["A", "B", "C"]
+- `CJC-1295 with DAC` / `cyp.status` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 with DAC` / `labs_ws.lab_effects[].direction` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: increase
+  - Data: ["sustained elevation (PK studies)", "watch"]
+- `CJC-1295 with DAC` / `labs_ws.lab_effects[].effect_type` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: study_observed_change
+  - Data: ["physiological_lab_effect", "monitoring_requirement"]
+- `CJC-1295 with DAC` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: Teichman et al., J Clin Endocrinol Metab 2006;91:799-805 (PMID 16352683): CJC-1295 dose-dependent IGF-1 increase in healthy adults
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `lab_effects[].direction` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: increase
+  - Data: ["sustained elevation (PK studies)", "watch"]
+- `CJC-1295 with DAC` / `lab_effects[].effect_type` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: study_observed_change
+  - Data: ["physiological_lab_effect", "monitoring_requirement"]
+- `CJC-1295 with DAC` / `lab_effects[].source` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: Teichman et al., J Clin Endocrinol Metab 2006;91:799-805 (PMID 16352683): CJC-1295 dose-dependent IGF-1 increase in healthy adults
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 with DAC` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 with DAC` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 with DAC` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 with DAC` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 with DAC` / `regulatory.US.status` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 with DAC` / `regulatory.EU.status` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 with DAC` / `regulatory.UK.status` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 with DAC` / `regulatory.CA.status` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 with DAC` / `regulatory.AU.status` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 with DAC` / `wada_ws.wada.source` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: WADA 2026 Prohibited List S2.2.4; BSCG blog
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `wada.source` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: WADA 2026 Prohibited List S2.2.4; BSCG blog
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `CJC-1295 with DAC` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `CJC-1295 with DAC` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `CJC-1295 with DAC` / `quality_evidence[].url` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `CJC-1295 with DAC` / `quality_evidence[].url` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `CJC-1295 with DAC` / `quality_evidence[].url` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `CJC-1295 with DAC` / `market_ws.community_names[]` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: CJC DAC
+  - Data: ["CJC-1295 DAC", "CJC-1295 with DAC"]
+- `CJC-1295 with DAC` / `market_ws.community_names[]` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: long-acting CJC
+  - Data: ["CJC-1295 DAC", "CJC-1295 with DAC"]
+- `CJC-1295 with DAC` / `community_names[]` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: CJC DAC
+  - Data: ["CJC-1295 DAC", "CJC-1295 with DAC"]
+- `CJC-1295 with DAC` / `community_names[]` / `crawl_027_profiles/CJC_1295_with_DAC.json`
+  - Report: long-acting CJC
+  - Data: ["CJC-1295 DAC", "CJC-1295 with DAC"]
+- `Cortagen` / `identity_ws.synonyms[]` / `crawl_027_profiles/Cortagen.json`
+  - Report: AEDP peptide
+  - Data: ["Ala-Glu-Asp-Pro", "Cortagen"]
+- `Cortagen` / `identity_ws.research_names[]` / `crawl_027_profiles/Cortagen.json`
+  - Report: AEDP
+  - Data: ["Ala-Glu-Asp-Pro", "Cortagen"]
+- `Cortagen` / `synonyms[]` / `crawl_027_profiles/Cortagen.json`
+  - Report: AEDP peptide
+  - Data: ["Ala-Glu-Asp-Pro", "Cortagen"]
+- `Cortagen` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/Cortagen.json`
+  - Report: No human PK. Tetrapeptide (Ala-Glu-Asp-Pro) bioregulator; none published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Cortagen` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/Cortagen.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Cortagen` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Cortagen.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Cortagen` / `pk_ws.cyp.status` / `crawl_027_profiles/Cortagen.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Cortagen` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/Cortagen.json`
+  - Report: No human PK. Tetrapeptide (Ala-Glu-Asp-Pro) bioregulator; none published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Cortagen` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/Cortagen.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Cortagen` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Cortagen.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Cortagen` / `cyp.status` / `crawl_027_profiles/Cortagen.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Cortagen` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Cortagen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Cortagen` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Cortagen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Cortagen` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Cortagen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Cortagen` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Cortagen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Cortagen` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Cortagen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Cortagen` / `regulatory.US.status` / `crawl_027_profiles/Cortagen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Cortagen` / `regulatory.EU.status` / `crawl_027_profiles/Cortagen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Cortagen` / `regulatory.UK.status` / `crawl_027_profiles/Cortagen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Cortagen` / `regulatory.CA.status` / `crawl_027_profiles/Cortagen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Cortagen` / `regulatory.AU.status` / `crawl_027_profiles/Cortagen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Cortagen` / `wada_ws.wada.source` / `crawl_027_profiles/Cortagen.json`
+  - Report: WADA S0 rationale
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Cortagen` / `wada.source` / `crawl_027_profiles/Cortagen.json`
+  - Report: WADA S0 rationale
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Cortagen` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Cortagen.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Cortagen` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Cortagen.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Cortagen` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Cortagen.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Cortagen` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Cortagen.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Cortagen` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Cortagen.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Cortagen` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Cortagen.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Cortagen` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Cortagen.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Cortagen` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Cortagen.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Cortagen` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Cortagen.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Cortagen` / `quality_evidence[].url` / `crawl_027_profiles/Cortagen.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Cortagen` / `quality_evidence[].url` / `crawl_027_profiles/Cortagen.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Cortagen` / `quality_evidence[].url` / `crawl_027_profiles/Cortagen.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Cortagen` / `market_ws.community_names[]` / `crawl_027_profiles/Cortagen.json`
+  - Report: Cortagen (AEDP tetrapeptide)
+  - Data: ["Ala-Glu-Asp-Pro", "Cortagen"]
+- `Cortagen` / `community_names[]` / `crawl_027_profiles/Cortagen.json`
+  - Report: Cortagen (AEDP tetrapeptide)
+  - Data: ["Ala-Glu-Asp-Pro", "Cortagen"]
+- `Dihexa` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/Dihexa.json`
+  - Report: No human PK (no clinical trials). Dihexa (N-hexanoic-Tyr-Ile-(6) aminohexanoic amide; small-molecule HGF/c-Met potentiator) — rodent data only; orally active in rats per preclinical reports, but no route-specified half-life published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Dihexa` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/Dihexa.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `Dihexa` / `pk_ws.pk.bioavailability.source` / `crawl_027_profiles/Dihexa.json`
+  - Report: Benoist et al. 2014 (J Pharmacol Exp Ther) — preclinical
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: normalize to taxonomy enum", "crawl_017 H6"]
+- `Dihexa` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Dihexa.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `Dihexa` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/Dihexa.json`
+  - Report: No human PK (no clinical trials). Dihexa (N-hexanoic-Tyr-Ile-(6) aminohexanoic amide; small-molecule HGF/c-Met potentiator) — rodent data only; orally active in rats per preclinical reports, but no route-specified half-life published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Dihexa` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/Dihexa.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `Dihexa` / `pharmacokinetics.bioavailability.source` / `crawl_027_profiles/Dihexa.json`
+  - Report: Benoist et al. 2014 (J Pharmacol Exp Ther) — preclinical
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: normalize to taxonomy enum", "crawl_017 H6"]
+- `Dihexa` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Dihexa.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `Dihexa` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Dihexa.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Dihexa` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Dihexa.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Dihexa` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Dihexa.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Dihexa` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Dihexa.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Dihexa` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Dihexa.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Dihexa` / `regulatory.US.status` / `crawl_027_profiles/Dihexa.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Dihexa` / `regulatory.EU.status` / `crawl_027_profiles/Dihexa.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Dihexa` / `regulatory.UK.status` / `crawl_027_profiles/Dihexa.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Dihexa` / `regulatory.CA.status` / `crawl_027_profiles/Dihexa.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Dihexa` / `regulatory.AU.status` / `crawl_027_profiles/Dihexa.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Dihexa` / `wada_ws.wada.source` / `crawl_027_profiles/Dihexa.json`
+  - Report: WADA S0 catch-all
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: normalize to taxonomy enum", "crawl_017 H6"]
+- `Dihexa` / `wada.source` / `crawl_027_profiles/Dihexa.json`
+  - Report: WADA S0 catch-all
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: normalize to taxonomy enum", "crawl_017 H6"]
+- `Dihexa` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Dihexa.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: normalize to taxonomy enum", "crawl_017 H6"]
+- `Dihexa` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Dihexa.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Dihexa` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Dihexa.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: normalize to taxonomy enum", "crawl_017 H6"]
+- `Dihexa` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Dihexa.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: normalize to taxonomy enum", "crawl_017 H6"]
+- `Dihexa` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Dihexa.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: normalize to taxonomy enum", "crawl_017 H6"]
+- `Dihexa` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Dihexa.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: normalize to taxonomy enum", "crawl_017 H6"]
+- `Dihexa` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Dihexa.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Dihexa` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Dihexa.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: normalize to taxonomy enum", "crawl_017 H6"]
+- `Dihexa` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Dihexa.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Dihexa` / `quality_evidence[].url` / `crawl_027_profiles/Dihexa.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Dihexa` / `quality_evidence[].url` / `crawl_027_profiles/Dihexa.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Dihexa` / `quality_evidence[].url` / `crawl_027_profiles/Dihexa.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Emideltide (DSIP)` / `identity_ws.synonyms[]` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: DSIP
+  - Data: ["Delta sleep-inducing peptide", "Emideltide (DSIP)"]
+- `Emideltide (DSIP)` / `identity_ws.community_names[]` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: DSIP
+  - Data: ["Delta sleep-inducing peptide", "Emideltide (DSIP)"]
+- `Emideltide (DSIP)` / `identity_ws.research_names[]` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: emideltide
+  - Data: ["Delta sleep-inducing peptide", "Emideltide (DSIP)"]
+- `Emideltide (DSIP)` / `synonyms[]` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: DSIP
+  - Data: ["Delta sleep-inducing peptide", "Emideltide (DSIP)"]
+- `Emideltide (DSIP)` / `human_ws.human_studies[].evidence_class` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `Emideltide (DSIP)` / `human_studies[].evidence_class` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `Emideltide (DSIP)` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: No validated human half-life. DSIP (Trp-Ala-Gly-Gly-Asp-Ala-Ser-Gly-Glu) human studies report very short plasma presence (minutes) in older literature without modern validated PK; set null per STRICT_MODE.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "ChEMBL exact-name match"]
+- `Emideltide (DSIP)` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: Not characterized; i.v./intranasal studied.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "ChEMBL exact-name match"]
+- `Emideltide (DSIP)` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: limited_human_literature
+  - Data: ["B", "A", "C"]
+- `Emideltide (DSIP)` / `pk_ws.cyp.status` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Emideltide (DSIP)` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: No validated human half-life. DSIP (Trp-Ala-Gly-Gly-Asp-Ala-Ser-Gly-Glu) human studies report very short plasma presence (minutes) in older literature without modern validated PK; set null per STRICT_MODE.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "ChEMBL exact-name match"]
+- `Emideltide (DSIP)` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: Not characterized; i.v./intranasal studied.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "ChEMBL exact-name match"]
+- `Emideltide (DSIP)` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: limited_human_literature
+  - Data: ["B", "A", "C"]
+- `Emideltide (DSIP)` / `cyp.status` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Emideltide (DSIP)` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Emideltide (DSIP)` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Emideltide (DSIP)` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Emideltide (DSIP)` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Emideltide (DSIP)` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Emideltide (DSIP)` / `regulatory.US.status` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Emideltide (DSIP)` / `regulatory.EU.status` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Emideltide (DSIP)` / `regulatory.UK.status` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Emideltide (DSIP)` / `regulatory.CA.status` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Emideltide (DSIP)` / `regulatory.AU.status` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Emideltide (DSIP)` / `wada_ws.wada.source` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: WADA S0 rationale
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Emideltide (DSIP)` / `wada.source` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: WADA S0 rationale
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Emideltide (DSIP)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Emideltide (DSIP)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Emideltide (DSIP)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Emideltide (DSIP)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Emideltide (DSIP)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Emideltide (DSIP)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Emideltide (DSIP)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Emideltide (DSIP)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Emideltide (DSIP)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Emideltide (DSIP)` / `quality_evidence[].url` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Emideltide (DSIP)` / `quality_evidence[].url` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Emideltide (DSIP)` / `quality_evidence[].url` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Emideltide (DSIP)` / `market_ws.community_names[]` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: DSIP
+  - Data: ["Delta sleep-inducing peptide", "Emideltide (DSIP)"]
+- `Emideltide (DSIP)` / `market_ws.community_names[]` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: delta sleep peptide
+  - Data: ["Delta sleep-inducing peptide", "Emideltide (DSIP)"]
+- `Emideltide (DSIP)` / `community_names[]` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: DSIP
+  - Data: ["Delta sleep-inducing peptide", "Emideltide (DSIP)"]
+- `Emideltide (DSIP)` / `community_names[]` / `crawl_027_profiles/Emideltide_DSIP.json`
+  - Report: delta sleep peptide
+  - Data: ["Delta sleep-inducing peptide", "Emideltide (DSIP)"]
+- `Epitalon` / `identity_ws.synonyms[]` / `crawl_027_profiles/Epitalon.json`
+  - Report: AEDG
+  - Data: ["Epithalon", "Ala-Glu-Asp-Gly", "Epitalon"]
+- `Epitalon` / `identity_ws.research_names[]` / `crawl_027_profiles/Epitalon.json`
+  - Report: AEDG
+  - Data: ["Epithalon", "Ala-Glu-Asp-Gly", "Epitalon"]
+- `Epitalon` / `synonyms[]` / `crawl_027_profiles/Epitalon.json`
+  - Report: AEDG
+  - Data: ["Epithalon", "Ala-Glu-Asp-Gly", "Epitalon"]
+- `Epitalon` / `human_ws.human_studies[].evidence_class` / `crawl_027_profiles/Epitalon.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `Epitalon` / `human_studies[].evidence_class` / `crawl_027_profiles/Epitalon.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `Epitalon` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/Epitalon.json`
+  - Report: No human PK with route+validated assay. Tetrapeptide (Ala-Glu-Asp-Gly); Russian clinical literature lacks formal PK.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Epitalon` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/Epitalon.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Epitalon` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Epitalon.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Epitalon` / `pk_ws.cyp.status` / `crawl_027_profiles/Epitalon.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Epitalon` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/Epitalon.json`
+  - Report: No human PK with route+validated assay. Tetrapeptide (Ala-Glu-Asp-Gly); Russian clinical literature lacks formal PK.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Epitalon` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/Epitalon.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Epitalon` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Epitalon.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Epitalon` / `cyp.status` / `crawl_027_profiles/Epitalon.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Epitalon` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Epitalon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Epitalon` / `regulatory_ws.regulatory.US.note` / `crawl_027_profiles/Epitalon.json`
+  - Report: Russian bioregulator (Ala-Glu-Asp-Gly); no Western approval
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Epitalon"]
+- `Epitalon` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Epitalon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Epitalon` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Epitalon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Epitalon` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Epitalon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Epitalon` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Epitalon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Epitalon` / `regulatory.US.status` / `crawl_027_profiles/Epitalon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Epitalon` / `regulatory.US.note` / `crawl_027_profiles/Epitalon.json`
+  - Report: Russian bioregulator (Ala-Glu-Asp-Gly); no Western approval
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Epitalon"]
+- `Epitalon` / `regulatory.EU.status` / `crawl_027_profiles/Epitalon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Epitalon` / `regulatory.UK.status` / `crawl_027_profiles/Epitalon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Epitalon` / `regulatory.CA.status` / `crawl_027_profiles/Epitalon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Epitalon` / `regulatory.AU.status` / `crawl_027_profiles/Epitalon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Epitalon` / `wada_ws.wada.source` / `crawl_027_profiles/Epitalon.json`
+  - Report: WADA S0 rationale
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Epitalon` / `wada.source` / `crawl_027_profiles/Epitalon.json`
+  - Report: WADA S0 rationale
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Epitalon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Epitalon.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Epitalon` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Epitalon.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Epitalon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Epitalon.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Epitalon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Epitalon.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Epitalon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Epitalon.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Epitalon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Epitalon.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Epitalon` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Epitalon.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Epitalon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Epitalon.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Epitalon` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Epitalon.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Epitalon` / `quality_evidence[].url` / `crawl_027_profiles/Epitalon.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Epitalon` / `quality_evidence[].url` / `crawl_027_profiles/Epitalon.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Epitalon` / `quality_evidence[].url` / `crawl_027_profiles/Epitalon.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Epitalon` / `market_ws.community_names[]` / `crawl_027_profiles/Epitalon.json`
+  - Report: AEDG
+  - Data: ["Epithalon", "Ala-Glu-Asp-Gly", "Epitalon"]
+- `Epitalon` / `community_names[]` / `crawl_027_profiles/Epitalon.json`
+  - Report: AEDG
+  - Data: ["Epithalon", "Ala-Glu-Asp-Gly", "Epitalon"]
+- `GHK-Cu` / `identity_ws.synonyms[]` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: glycyl-L-histidyl-L-lysine copper complex
+  - Data: ["copper tripeptide-1", "GHK-Cu"]
+- `GHK-Cu` / `identity_ws.community_names[]` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: copper peptide
+  - Data: ["copper tripeptide-1", "GHK-Cu"]
+- `GHK-Cu` / `identity_ws.identity.molecular_weight` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: 400.90
+  - Data: [403.9]
+- `GHK-Cu` / `identity.molecular_weight` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: 400.90
+  - Data: [403.9]
+- `GHK-Cu` / `synonyms[]` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: glycyl-L-histidyl-L-lysine copper complex
+  - Data: ["copper tripeptide-1", "GHK-Cu"]
+- `GHK-Cu` / `human_ws.human_studies[].evidence_class` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: E
+  - Data: ["B", "A", "C"]
+- `GHK-Cu` / `human_studies[].evidence_class` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: E
+  - Data: ["B", "A", "C"]
+- `GHK-Cu` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: limited_human_literature
+  - Data: ["B", "A", "C"]
+- `GHK-Cu` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: Pickart & Margolina 2018 (Int J Mol Sci 19:1987)
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHK-Cu` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: Route+Formulierung nicht spezifiziert → null per STRICT_MODE (QA2 T2). Freie GHK-Plasma-t1/2 (~Minuten) aus älterer Human-Literatur nur als Kontext, nicht als Wert.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `GHK-Cu` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: No validated human bioavailability by route; topical/injectable cosmetic use only.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `GHK-Cu` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: limited_human_literature
+  - Data: ["B", "A", "C"]
+- `GHK-Cu` / `pk_ws.cyp.status` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `GHK-Cu` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: limited_human_literature
+  - Data: ["B", "A", "C"]
+- `GHK-Cu` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: Pickart & Margolina 2018 (Int J Mol Sci 19:1987)
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHK-Cu` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: Route+Formulierung nicht spezifiziert → null per STRICT_MODE (QA2 T2). Freie GHK-Plasma-t1/2 (~Minuten) aus älterer Human-Literatur nur als Kontext, nicht als Wert.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `GHK-Cu` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: No validated human bioavailability by route; topical/injectable cosmetic use only.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `GHK-Cu` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: limited_human_literature
+  - Data: ["B", "A", "C"]
+- `GHK-Cu` / `cyp.status` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `GHK-Cu` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHK-Cu` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHK-Cu` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHK-Cu` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHK-Cu` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHK-Cu` / `regulatory.US.status` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHK-Cu` / `regulatory.EU.status` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHK-Cu` / `regulatory.UK.status` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHK-Cu` / `regulatory.CA.status` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHK-Cu` / `regulatory.AU.status` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHK-Cu` / `wada_ws.wada.source` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: WADA 2026 Prohibited List (wada-ama.org): nicht namentlich gelistet; S0-Anwendbarkeit unklar — Status UNKNOWN per STRICT_MODE (vorherige Vendor-Belegung entfernt, QA3)
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHK-Cu` / `wada.source` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: WADA 2026 Prohibited List (wada-ama.org): nicht namentlich gelistet; S0-Anwendbarkeit unklar — Status UNKNOWN per STRICT_MODE (vorherige Vendor-Belegung entfernt, QA3)
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHK-Cu` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHK-Cu` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `GHK-Cu` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHK-Cu` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHK-Cu` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHK-Cu` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHK-Cu` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `GHK-Cu` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHK-Cu` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `GHK-Cu` / `quality_evidence[].url` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `GHK-Cu` / `quality_evidence[].url` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `GHK-Cu` / `quality_evidence[].url` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `GHK-Cu` / `market_ws.community_names[]` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: Glow peptide/Glow stack
+  - Data: ["copper tripeptide-1", "GHK-Cu"]
+- `GHK-Cu` / `market_ws.community_names[]` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: copper peptide
+  - Data: ["copper tripeptide-1", "GHK-Cu"]
+- `GHK-Cu` / `community_names[]` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: Glow peptide/Glow stack
+  - Data: ["copper tripeptide-1", "GHK-Cu"]
+- `GHK-Cu` / `community_names[]` / `crawl_027_profiles/GHK_Cu.json`
+  - Report: copper peptide
+  - Data: ["copper tripeptide-1", "GHK-Cu"]
+- `GHRP-2` / `identity_ws.synonyms[]` / `crawl_027_profiles/GHRP_2.json`
+  - Report: KP-102
+  - Data: ["pralmorelin", "GHRP-2"]
+- `GHRP-2` / `identity_ws.research_names[]` / `crawl_027_profiles/GHRP_2.json`
+  - Report: KP-102
+  - Data: ["pralmorelin", "GHRP-2"]
+- `GHRP-2` / `identity_ws.research_names[]` / `crawl_027_profiles/GHRP_2.json`
+  - Report: KP102D
+  - Data: ["pralmorelin", "GHRP-2"]
+- `GHRP-2` / `identity_ws.identity.molecular_weight` / `crawl_027_profiles/GHRP_2.json`
+  - Report: 818.0
+  - Data: [817.97]
+- `GHRP-2` / `identity.molecular_weight` / `crawl_027_profiles/GHRP_2.json`
+  - Report: 818.0
+  - Data: [817.97]
+- `GHRP-2` / `synonyms[]` / `crawl_027_profiles/GHRP_2.json`
+  - Report: KP-102
+  - Data: ["pralmorelin", "GHRP-2"]
+- `GHRP-2` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/GHRP_2.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `GHRP-2` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: Multiple human studies (e.g., Bowers CY et al. GHS clinical program); no single definitive modern PK paper; values vary by study — reported as range, not averaged
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/GHRP_2.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `GHRP-2` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/GHRP_2.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `GHRP-2` / `pk_ws.pk.clearance.evidence_class` / `crawl_027_profiles/GHRP_2.json`
+  - Report: limited
+  - Data: ["B", "A", "C"]
+- `GHRP-2` / `pk_ws.cyp.status` / `crawl_027_profiles/GHRP_2.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-2` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/GHRP_2.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `GHRP-2` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: Multiple human studies (e.g., Bowers CY et al. GHS clinical program); no single definitive modern PK paper; values vary by study — reported as range, not averaged
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/GHRP_2.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `GHRP-2` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/GHRP_2.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `GHRP-2` / `pharmacokinetics.clearance.evidence_class` / `crawl_027_profiles/GHRP_2.json`
+  - Report: limited
+  - Data: ["B", "A", "C"]
+- `GHRP-2` / `cyp.status` / `crawl_027_profiles/GHRP_2.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-2` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: Arvat et al., J Clin Endocrinol Metab 1999 (PMID 10195374): GHRP-2 raises GH, IGF-1
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: Arvat et al. 1999 (PMID 10195374): GHRP-2 increases ACTH/cortisol (HPA-axis activity)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: Arvat et al. 1999 (PMID 10195374): GHRP-2 increases prolactin
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `lab_effects[].source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: Arvat et al., J Clin Endocrinol Metab 1999 (PMID 10195374): GHRP-2 raises GH, IGF-1
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `lab_effects[].source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: Arvat et al. 1999 (PMID 10195374): GHRP-2 increases ACTH/cortisol (HPA-axis activity)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `lab_effects[].source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: Arvat et al. 1999 (PMID 10195374): GHRP-2 increases prolactin
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/GHRP_2.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-2` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/GHRP_2.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-2` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/GHRP_2.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-2` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/GHRP_2.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-2` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/GHRP_2.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-2` / `regulatory.US.status` / `crawl_027_profiles/GHRP_2.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-2` / `regulatory.EU.status` / `crawl_027_profiles/GHRP_2.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-2` / `regulatory.UK.status` / `crawl_027_profiles/GHRP_2.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-2` / `regulatory.CA.status` / `crawl_027_profiles/GHRP_2.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-2` / `regulatory.AU.status` / `crawl_027_profiles/GHRP_2.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-2` / `wada_ws.wada.source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: WADA 2026 Prohibited List S2.2.4
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `wada.source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: WADA 2026 Prohibited List S2.2.4
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/GHRP_2.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `GHRP-2` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/GHRP_2.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `GHRP-2` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHRP_2.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/GHRP_2.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `GHRP-2` / `quality_evidence[].url` / `crawl_027_profiles/GHRP_2.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `GHRP-2` / `quality_evidence[].url` / `crawl_027_profiles/GHRP_2.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `GHRP-2` / `quality_evidence[].url` / `crawl_027_profiles/GHRP_2.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `GHRP-6` / `identity_ws.synonyms[]` / `crawl_027_profiles/GHRP_6.json`
+  - Report: Growth Hormone Releasing Peptide-6
+  - Data: ["GHRP-6"]
+- `GHRP-6` / `identity_ws.synonyms[]` / `crawl_027_profiles/GHRP_6.json`
+  - Report: SKF-110679
+  - Data: ["GHRP-6"]
+- `GHRP-6` / `identity_ws.research_names[]` / `crawl_027_profiles/GHRP_6.json`
+  - Report: SKF-110679
+  - Data: ["GHRP-6"]
+- `GHRP-6` / `synonyms[]` / `crawl_027_profiles/GHRP_6.json`
+  - Report: Growth Hormone Releasing Peptide-6
+  - Data: ["GHRP-6"]
+- `GHRP-6` / `synonyms[]` / `crawl_027_profiles/GHRP_6.json`
+  - Report: SKF-110679
+  - Data: ["GHRP-6"]
+- `GHRP-6` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/GHRP_6.json`
+  - Report: human_clinical_limited
+  - Data: ["B", "A", "C"]
+- `GHRP-6` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: Human GH-stimulation studies (Bowers CY et al.; Peñalva et al. 1993); short plasma persistence consistent across studies
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/GHRP_6.json`
+  - Report: human_clinical_limited
+  - Data: ["B", "A", "C"]
+- `GHRP-6` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/GHRP_6.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `GHRP-6` / `pk_ws.cyp.status` / `crawl_027_profiles/GHRP_6.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-6` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/GHRP_6.json`
+  - Report: human_clinical_limited
+  - Data: ["B", "A", "C"]
+- `GHRP-6` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: Human GH-stimulation studies (Bowers CY et al.; Peñalva et al. 1993); short plasma persistence consistent across studies
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/GHRP_6.json`
+  - Report: human_clinical_limited
+  - Data: ["B", "A", "C"]
+- `GHRP-6` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/GHRP_6.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `GHRP-6` / `cyp.status` / `crawl_027_profiles/GHRP_6.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-6` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: Class data: GHRP-6 elevates GH/IGF-1 (human studies, ghrelin-mimetic GHS)
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: GHRP-6 human studies: ACTH/cortisol elevation (shared GHS class effect)
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: GHRP-6 human studies: prolactin elevation
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `lab_effects[].source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: Class data: GHRP-6 elevates GH/IGF-1 (human studies, ghrelin-mimetic GHS)
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `lab_effects[].source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: GHRP-6 human studies: ACTH/cortisol elevation (shared GHS class effect)
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `lab_effects[].source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: GHRP-6 human studies: prolactin elevation
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/GHRP_6.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-6` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/GHRP_6.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-6` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/GHRP_6.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-6` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/GHRP_6.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-6` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/GHRP_6.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-6` / `regulatory.US.status` / `crawl_027_profiles/GHRP_6.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-6` / `regulatory.EU.status` / `crawl_027_profiles/GHRP_6.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-6` / `regulatory.UK.status` / `crawl_027_profiles/GHRP_6.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-6` / `regulatory.CA.status` / `crawl_027_profiles/GHRP_6.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-6` / `regulatory.AU.status` / `crawl_027_profiles/GHRP_6.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-6` / `wada_ws.wada.source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: WADA 2026 Prohibited List S2.2.4
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `wada.source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: WADA 2026 Prohibited List S2.2.4
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/GHRP_6.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `GHRP-6` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/GHRP_6.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `GHRP-6` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/GHRP_6.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/GHRP_6.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `GHRP-6` / `quality_evidence[].url` / `crawl_027_profiles/GHRP_6.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `GHRP-6` / `quality_evidence[].url` / `crawl_027_profiles/GHRP_6.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `GHRP-6` / `quality_evidence[].url` / `crawl_027_profiles/GHRP_6.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Hexarelin` / `identity_ws.synonyms[]` / `crawl_027_profiles/Hexarelin.json`
+  - Report: EP-23905
+  - Data: ["Examorelin", "Hexarelin"]
+- `Hexarelin` / `identity_ws.synonyms[]` / `crawl_027_profiles/Hexarelin.json`
+  - Report: MF-6003
+  - Data: ["Examorelin", "Hexarelin"]
+- `Hexarelin` / `identity_ws.community_names[]` / `crawl_027_profiles/Hexarelin.json`
+  - Report: Hex
+  - Data: ["Examorelin", "Hexarelin"]
+- `Hexarelin` / `identity_ws.research_names[]` / `crawl_027_profiles/Hexarelin.json`
+  - Report: EP-23905
+  - Data: ["Examorelin", "Hexarelin"]
+- `Hexarelin` / `synonyms[]` / `crawl_027_profiles/Hexarelin.json`
+  - Report: EP-23905
+  - Data: ["Examorelin", "Hexarelin"]
+- `Hexarelin` / `synonyms[]` / `crawl_027_profiles/Hexarelin.json`
+  - Report: MF-6003
+  - Data: ["Examorelin", "Hexarelin"]
+- `Hexarelin` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/Hexarelin.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `Hexarelin` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: Human PK/GH-release studies (e.g., Ghigo E et al., 1990s); study-to-study variation — reported as range
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/Hexarelin.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `Hexarelin` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Hexarelin.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `Hexarelin` / `pk_ws.cyp.status` / `crawl_027_profiles/Hexarelin.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Hexarelin` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/Hexarelin.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `Hexarelin` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: Human PK/GH-release studies (e.g., Ghigo E et al., 1990s); study-to-study variation — reported as range
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/Hexarelin.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `Hexarelin` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Hexarelin.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `Hexarelin` / `cyp.status` / `crawl_027_profiles/Hexarelin.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Hexarelin` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: Arvat et al., JCEM 2001 (PMID 11238504): hexarelin elevates GH; IGF-1 with repeated dosing
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: Arvat et al., JCEM 1999 (PMID 10404825): hexarelin stimulates HPA axis (ACTH/cortisol) via AVP
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: Arvat et al. 2001 (PMID 11238504): hexarelin elevates prolactin - strongest among peptidyl GHS
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `lab_effects[].source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: Arvat et al., JCEM 2001 (PMID 11238504): hexarelin elevates GH; IGF-1 with repeated dosing
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `lab_effects[].source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: Arvat et al., JCEM 1999 (PMID 10404825): hexarelin stimulates HPA axis (ACTH/cortisol) via AVP
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `lab_effects[].source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: Arvat et al. 2001 (PMID 11238504): hexarelin elevates prolactin - strongest among peptidyl GHS
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Hexarelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Hexarelin` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Hexarelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Hexarelin` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Hexarelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Hexarelin` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Hexarelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Hexarelin` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Hexarelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Hexarelin` / `regulatory.US.status` / `crawl_027_profiles/Hexarelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Hexarelin` / `regulatory.EU.status` / `crawl_027_profiles/Hexarelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Hexarelin` / `regulatory.UK.status` / `crawl_027_profiles/Hexarelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Hexarelin` / `regulatory.CA.status` / `crawl_027_profiles/Hexarelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Hexarelin` / `regulatory.AU.status` / `crawl_027_profiles/Hexarelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Hexarelin` / `wada_ws.wada.source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: WADA 2026 Prohibited List S2.2.4
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `wada.source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: WADA 2026 Prohibited List S2.2.4
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Hexarelin.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Hexarelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Hexarelin.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Hexarelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Hexarelin.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Hexarelin.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Hexarelin` / `quality_evidence[].url` / `crawl_027_profiles/Hexarelin.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Hexarelin` / `quality_evidence[].url` / `crawl_027_profiles/Hexarelin.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Hexarelin` / `quality_evidence[].url` / `crawl_027_profiles/Hexarelin.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Hexarelin` / `market_ws.community_names[]` / `crawl_027_profiles/Hexarelin.json`
+  - Report: Hexa
+  - Data: ["Examorelin", "Hexarelin"]
+- `Hexarelin` / `community_names[]` / `crawl_027_profiles/Hexarelin.json`
+  - Report: Hexa
+  - Data: ["Examorelin", "Hexarelin"]
+- `Ibutamoren (MK-677)` / `identity_ws.synonyms[]` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: MK-0677
+  - Data: ["MK-677", "nutrobal", "Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `identity_ws.synonyms[]` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: L-163,191
+  - Data: ["MK-677", "nutrobal", "Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `identity_ws.community_names[]` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: ibutamoren
+  - Data: ["MK-677", "nutrobal", "Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `identity_ws.research_names[]` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: L-163,191
+  - Data: ["MK-677", "nutrobal", "Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `synonyms[]` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: MK-0677
+  - Data: ["MK-677", "nutrobal", "Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `synonyms[]` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: L-163,191
+  - Data: ["MK-677", "nutrobal", "Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `human_ws.human_studies[].evidence_class` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: C
+  - Data: ["B", "A"]
+- `Ibutamoren (MK-677)` / `human_studies[].evidence_class` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: C
+  - Data: ["B", "A"]
+- `Ibutamoren (MK-677)` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: oral GHSR agonism raises circulating IGF-I (demonstrated)
+  - Data: ["GH-mediated insulin resistance", "GHS effect", "GHS axis", "GH secretagogue raises IGF-1"]
+- `Ibutamoren (MK-677)` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: maintained IGF-I elevation on repeat dosing (demonstrated)
+  - Data: ["GH-mediated insulin resistance", "GHS effect", "GHS axis", "GH secretagogue raises IGF-1"]
+- `Ibutamoren (MK-677)` / `animal_studies[].mechanism` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: oral GHSR agonism raises circulating IGF-I (demonstrated)
+  - Data: ["GH-mediated insulin resistance", "GHS effect", "GHS axis", "GH secretagogue raises IGF-1"]
+- `Ibutamoren (MK-677)` / `animal_studies[].mechanism` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: maintained IGF-I elevation on repeat dosing (demonstrated)
+  - Data: ["GH-mediated insulin resistance", "GHS effect", "GHS axis", "GH secretagogue raises IGF-1"]
+- `Ibutamoren (MK-677)` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: human_clinical
+  - Data: ["B", "A"]
+- `Ibutamoren (MK-677)` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Chapman IM et al., J Clin Endocrinol Metab 1996 (PMID 8954022/8707253 era studies); once-daily dosing supported by ~24h t1/2
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: human_clinical
+  - Data: ["B", "A"]
+- `Ibutamoren (MK-677)` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: human_clinical+secondary
+  - Data: ["B", "A"]
+- `Ibutamoren (MK-677)` / `pk_ws.pk.clearance.evidence_class` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: secondary
+  - Data: ["B", "A"]
+- `Ibutamoren (MK-677)` / `pk_ws.cyp.status` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: RELEVANT
+  - Data: ["avoid"]
+- `Ibutamoren (MK-677)` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: human_clinical
+  - Data: ["B", "A"]
+- `Ibutamoren (MK-677)` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Chapman IM et al., J Clin Endocrinol Metab 1996 (PMID 8954022/8707253 era studies); once-daily dosing supported by ~24h t1/2
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: human_clinical
+  - Data: ["B", "A"]
+- `Ibutamoren (MK-677)` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: human_clinical+secondary
+  - Data: ["B", "A"]
+- `Ibutamoren (MK-677)` / `pharmacokinetics.clearance.evidence_class` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: secondary
+  - Data: ["B", "A"]
+- `Ibutamoren (MK-677)` / `cyp.status` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: RELEVANT
+  - Data: ["avoid"]
+- `Ibutamoren (MK-677)` / `labs_ws.lab_effects[].direction` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: increase
+  - Data: ["ELEVATED (trial-documented)", "elevated", "minor changes", "increases with chronic administration"]
+- `Ibutamoren (MK-677)` / `labs_ws.lab_effects[].effect_type` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: study_observed_change
+  - Data: ["monitoring_requirement", "physiological_lab_effect"]
+- `Ibutamoren (MK-677)` / `labs_ws.lab_effects[].monitoring_link` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: CLINICAL_STUDY_MONITORED
+  - Data: ["SAFETY_CONTEXT"]
+- `Ibutamoren (MK-677)` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Chapman et al., JCEM 1997 (PMID 9329386); Nass et al., Ann Intern Med 2008 (PMID 18981485): sustained IGF-1 increase
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `labs_ws.lab_effects[].analyte` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Fasting glucose
+  - Data: ["Fasting glucose/HbA1c", "IGF-1", "Cortisol (mild)/prolactin"]
+- `Ibutamoren (MK-677)` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Nass 2008 (PMID 18981485): fasting glucose increase; Svensson 1998 (PMID 9467534): glucose/insulin up in obese men
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `labs_ws.lab_effects[].analyte` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: HbA1c
+  - Data: ["Fasting glucose/HbA1c", "IGF-1", "Cortisol (mild)/prolactin"]
+- `Ibutamoren (MK-677)` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Nass et al. 2008 (PMID 18981485): small HbA1c increase over 12 months in older adults
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `labs_ws.lab_effects[].analyte` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Insulin (fasting)
+  - Data: ["Fasting glucose/HbA1c", "IGF-1", "Cortisol (mild)/prolactin"]
+- `Ibutamoren (MK-677)` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Svensson 1998 (PMID 9467534): fasting insulin increase during MK-677 treatment
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `labs_ws.interactions.data[].note` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Documented insulin-sensitivity reduction in RCTs; additive hyperglycemic burden plausible - no formal interaction studies.
+  - Data: ["Leistungs-/Graumarkt-Substanzen: in Schwangerschaft absolut vermeiden; Arztverweis", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `labs_ws.interactions.data[].note` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Shared GH/IGF-1 elevation endpoint; additive IGF-1 rise plausible, unstudied.
+  - Data: ["Leistungs-/Graumarkt-Substanzen: in Schwangerschaft absolut vermeiden; Arztverweis", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `lab_effects[].direction` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: increase
+  - Data: ["ELEVATED (trial-documented)", "elevated", "minor changes", "increases with chronic administration"]
+- `Ibutamoren (MK-677)` / `lab_effects[].effect_type` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: study_observed_change
+  - Data: ["monitoring_requirement", "physiological_lab_effect"]
+- `Ibutamoren (MK-677)` / `lab_effects[].monitoring_link` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: CLINICAL_STUDY_MONITORED
+  - Data: ["SAFETY_CONTEXT"]
+- `Ibutamoren (MK-677)` / `lab_effects[].source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Chapman et al., JCEM 1997 (PMID 9329386); Nass et al., Ann Intern Med 2008 (PMID 18981485): sustained IGF-1 increase
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ibutamoren (MK-677)` / `lab_effects[].analyte` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Fasting glucose
+  - Data: ["Fasting glucose/HbA1c", "IGF-1", "Cortisol (mild)/prolactin"]
+- `Ibutamoren (MK-677)` / `lab_effects[].source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Nass 2008 (PMID 18981485): fasting glucose increase; Svensson 1998 (PMID 9467534): glucose/insulin up in obese men
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ibutamoren (MK-677)` / `lab_effects[].analyte` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: HbA1c
+  - Data: ["Fasting glucose/HbA1c", "IGF-1", "Cortisol (mild)/prolactin"]
+- `Ibutamoren (MK-677)` / `lab_effects[].source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Nass et al. 2008 (PMID 18981485): small HbA1c increase over 12 months in older adults
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ibutamoren (MK-677)` / `lab_effects[].analyte` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Insulin (fasting)
+  - Data: ["Fasting glucose/HbA1c", "IGF-1", "Cortisol (mild)/prolactin"]
+- `Ibutamoren (MK-677)` / `lab_effects[].source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Svensson 1998 (PMID 9467534): fasting insulin increase during MK-677 treatment
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ibutamoren (MK-677)` / `interactions.data[].note` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Documented insulin-sensitivity reduction in RCTs; additive hyperglycemic burden plausible - no formal interaction studies.
+  - Data: ["Leistungs-/Graumarkt-Substanzen: in Schwangerschaft absolut vermeiden; Arztverweis", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `interactions.data[].note` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Shared GH/IGF-1 elevation endpoint; additive IGF-1 rise plausible, unstudied.
+  - Data: ["Leistungs-/Graumarkt-Substanzen: in Schwangerschaft absolut vermeiden; Arztverweis", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: not approved
+  - Data: ["avoid"]
+- `Ibutamoren (MK-677)` / `regulatory_ws.regulatory.US.note` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: investigational; never approved anywhere identified
+  - Data: ["Leistungs-/Graumarkt-Substanzen: in Schwangerschaft absolut vermeiden; Arztverweis", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: not approved
+  - Data: ["avoid"]
+- `Ibutamoren (MK-677)` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: not approved
+  - Data: ["avoid"]
+- `Ibutamoren (MK-677)` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: not approved
+  - Data: ["avoid"]
+- `Ibutamoren (MK-677)` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: not approved
+  - Data: ["avoid"]
+- `Ibutamoren (MK-677)` / `regulatory.US.status` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: not approved
+  - Data: ["avoid"]
+- `Ibutamoren (MK-677)` / `regulatory.US.note` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: investigational; never approved anywhere identified
+  - Data: ["Leistungs-/Graumarkt-Substanzen: in Schwangerschaft absolut vermeiden; Arztverweis", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `regulatory.EU.status` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: not approved
+  - Data: ["avoid"]
+- `Ibutamoren (MK-677)` / `regulatory.UK.status` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: not approved
+  - Data: ["avoid"]
+- `Ibutamoren (MK-677)` / `regulatory.CA.status` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: not approved
+  - Data: ["avoid"]
+- `Ibutamoren (MK-677)` / `regulatory.AU.status` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: not approved
+  - Data: ["avoid"]
+- `Ibutamoren (MK-677)` / `wada_ws.wada.source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: WADA 2026 List S2.2.4; SIA ibutamoren page
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `wada.source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: WADA 2026 List S2.2.4; SIA ibutamoren page
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.usada.org/spirit-of-sport/2026-wada-prohibited-list/", "https://www.fda.gov/food/dietary-supplements"]
+- `Ibutamoren (MK-677)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.usada.org/spirit-of-sport/2026-wada-prohibited-list/", "https://www.fda.gov/food/dietary-supplements"]
+- `Ibutamoren (MK-677)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.usada.org/spirit-of-sport/2026-wada-prohibited-list/", "https://www.fda.gov/food/dietary-supplements"]
+- `Ibutamoren (MK-677)` / `quality_evidence[].url` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.usada.org/spirit-of-sport/2026-wada-prohibited-list/", "https://www.fda.gov/food/dietary-supplements"]
+- `Ibutamoren (MK-677)` / `quality_evidence[].url` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.usada.org/spirit-of-sport/2026-wada-prohibited-list/", "https://www.fda.gov/food/dietary-supplements"]
+- `Ibutamoren (MK-677)` / `quality_evidence[].url` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.usada.org/spirit-of-sport/2026-wada-prohibited-list/", "https://www.fda.gov/food/dietary-supplements"]
+- `Ibutamoren (MK-677)` / `market_ws.community_names[]` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Ibutamoren
+  - Data: ["MK-677", "nutrobal", "Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `market_ws.community_names[]` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: oral GH
+  - Data: ["MK-677", "nutrobal", "Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `community_names[]` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: Ibutamoren
+  - Data: ["MK-677", "nutrobal", "Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `community_names[]` / `crawl_027_profiles/Ibutamoren_MK_677.json`
+  - Report: oral GH
+  - Data: ["MK-677", "nutrobal", "Ibutamoren (MK-677)"]
+- `IGF-1 DES` / `identity_ws.synonyms[]` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: des(1-3)-IGF-I
+  - Data: ["DES(1-3)IGF-1", "IGF-1 DES"]
+- `IGF-1 DES` / `identity_ws.community_names[]` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: DES
+  - Data: ["DES(1-3)IGF-1", "IGF-1 DES"]
+- `IGF-1 DES` / `synonyms[]` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: des(1-3)-IGF-I
+  - Data: ["DES(1-3)IGF-1", "IGF-1 DES"]
+- `IGF-1 DES` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: des-(1-3)IGF-I (reduced IGFBP binding) enhances growth (demonstrated)
+  - Data: ["direct receptor agonism"]
+- `IGF-1 DES` / `animal_studies[].mechanism` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: des-(1-3)IGF-I (reduced IGFBP binding) enhances growth (demonstrated)
+  - Data: ["direct receptor agonism"]
+- `IGF-1 DES` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: No human PK. Des(1-3)IGF-1 (67 aa) preclinical only; expected shorter persistence than native due to reduced IGFBP binding; no validated route-specified half-life.
+  - Data: ["UNII via FDA GSRS"]
+- `IGF-1 DES` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: None.
+  - Data: ["UNII via FDA GSRS"]
+- `IGF-1 DES` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: preclinical/inference
+  - Data: ["A", "B", "C"]
+- `IGF-1 DES` / `pk_ws.cyp.status` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 DES` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: No human PK. Des(1-3)IGF-1 (67 aa) preclinical only; expected shorter persistence than native due to reduced IGFBP binding; no validated route-specified half-life.
+  - Data: ["UNII via FDA GSRS"]
+- `IGF-1 DES` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: None.
+  - Data: ["UNII via FDA GSRS"]
+- `IGF-1 DES` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: preclinical/inference
+  - Data: ["A", "B", "C"]
+- `IGF-1 DES` / `cyp.status` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 DES` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 DES` / `regulatory_ws.regulatory.US.note` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: analogue, not the approved mecasermin API
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: IGF-1 (mecasermin)"]
+- `IGF-1 DES` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 DES` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 DES` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 DES` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 DES` / `regulatory.US.status` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 DES` / `regulatory.US.note` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: analogue, not the approved mecasermin API
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: IGF-1 (mecasermin)"]
+- `IGF-1 DES` / `regulatory.EU.status` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 DES` / `regulatory.UK.status` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 DES` / `regulatory.CA.status` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 DES` / `regulatory.AU.status` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 DES` / `wada_ws.wada.source` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: WADA S2.2.2 analogue coverage
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 DES` / `wada.source` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: WADA S2.2.2 analogue coverage
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 DES` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 DES` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 DES` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 DES` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 DES` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 DES` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 DES` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 DES` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 DES` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 DES` / `quality_evidence[].url` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 DES` / `quality_evidence[].url` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 DES` / `quality_evidence[].url` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 DES` / `market_ws.community_names[]` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: DES
+  - Data: ["DES(1-3)IGF-1", "IGF-1 DES"]
+- `IGF-1 DES` / `community_names[]` / `crawl_027_profiles/IGF_1_DES.json`
+  - Report: DES
+  - Data: ["DES(1-3)IGF-1", "IGF-1 DES"]
+- `IGF-1 LR3` / `identity_ws.synonyms[]` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: LR3IGF-I
+  - Data: ["Long R3 IGF-1", "IGF-1 LR3"]
+- `IGF-1 LR3` / `identity_ws.community_names[]` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: LR3
+  - Data: ["Long R3 IGF-1", "IGF-1 LR3"]
+- `IGF-1 LR3` / `synonyms[]` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: LR3IGF-I
+  - Data: ["Long R3 IGF-1", "IGF-1 LR3"]
+- `IGF-1 LR3` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: Arg3 substitution + N-terminal extension markedly reduce IGFBP binding -> prolonged free half-life (demonstrated in vitro/animals for class)
+  - Data: ["direct receptor agonism"]
+- `IGF-1 LR3` / `animal_studies[].mechanism` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: Arg3 substitution + N-terminal extension markedly reduce IGFBP binding -> prolonged free half-life (demonstrated in vitro/animals for class)
+  - Data: ["direct receptor agonism"]
+- `IGF-1 LR3` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: No human PK. LR3 analog (83 aa, Arg3 + 13-aa N-extension) designed for reduced IGFBP binding; rodent/cell data only. Vendor ~20-30 h claims are unverified and excluded.
+  - Data: ["UNII via FDA GSRS"]
+- `IGF-1 LR3` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: No human data.
+  - Data: ["UNII via FDA GSRS"]
+- `IGF-1 LR3` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: preclinical
+  - Data: ["A", "B", "C"]
+- `IGF-1 LR3` / `pk_ws.cyp.status` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 LR3` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: No human PK. LR3 analog (83 aa, Arg3 + 13-aa N-extension) designed for reduced IGFBP binding; rodent/cell data only. Vendor ~20-30 h claims are unverified and excluded.
+  - Data: ["UNII via FDA GSRS"]
+- `IGF-1 LR3` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: No human data.
+  - Data: ["UNII via FDA GSRS"]
+- `IGF-1 LR3` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: preclinical
+  - Data: ["A", "B", "C"]
+- `IGF-1 LR3` / `cyp.status` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 LR3` / `labs_ws.interactions.data[].note` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: IGF-1 analog with insulin-like activity; hypoglycemia risk inferred from parent compound label (Increlex), no direct studies.
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: IGF-1 (mecasermin)"]
+- `IGF-1 LR3` / `interactions.data[].note` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: IGF-1 analog with insulin-like activity; hypoglycemia risk inferred from parent compound label (Increlex), no direct studies.
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: IGF-1 (mecasermin)"]
+- `IGF-1 LR3` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 LR3` / `regulatory_ws.regulatory.US.note` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: analogue, not the approved mecasermin API
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: IGF-1 (mecasermin)"]
+- `IGF-1 LR3` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 LR3` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 LR3` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 LR3` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 LR3` / `regulatory.US.status` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 LR3` / `regulatory.US.note` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: analogue, not the approved mecasermin API
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: IGF-1 (mecasermin)"]
+- `IGF-1 LR3` / `regulatory.EU.status` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 LR3` / `regulatory.UK.status` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 LR3` / `regulatory.CA.status` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 LR3` / `regulatory.AU.status` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 LR3` / `wada_ws.wada.source` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: WADA S2.2.2 analogue coverage
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 LR3` / `wada.source` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: WADA S2.2.2 analogue coverage
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 LR3` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 LR3` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 LR3` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 LR3` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 LR3` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 LR3` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 LR3` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 LR3` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 LR3` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 LR3` / `quality_evidence[].url` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 LR3` / `quality_evidence[].url` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 LR3` / `quality_evidence[].url` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 LR3` / `market_ws.community_names[]` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: LR3
+  - Data: ["Long R3 IGF-1", "IGF-1 LR3"]
+- `IGF-1 LR3` / `community_names[]` / `crawl_027_profiles/IGF_1_LR3.json`
+  - Report: LR3
+  - Data: ["Long R3 IGF-1", "IGF-1 LR3"]
+- `IGF-1 (mecasermin)` / `identity_ws.synonyms[]` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: IGF-1
+  - Data: ["Increlex", "IGF-1 (mecasermin)"]
+- `IGF-1 (mecasermin)` / `identity_ws.synonyms[]` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: somatomedin C
+  - Data: ["Increlex", "IGF-1 (mecasermin)"]
+- `IGF-1 (mecasermin)` / `identity_ws.community_names[]` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: IGF-1
+  - Data: ["Increlex", "IGF-1 (mecasermin)"]
+- `IGF-1 (mecasermin)` / `identity_ws.community_names[]` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: mecasermin
+  - Data: ["Increlex", "IGF-1 (mecasermin)"]
+- `IGF-1 (mecasermin)` / `identity_ws.research_names[]` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: rhIGF-1
+  - Data: ["Increlex", "IGF-1 (mecasermin)"]
+- `IGF-1 (mecasermin)` / `synonyms[]` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: IGF-1
+  - Data: ["Increlex", "IGF-1 (mecasermin)"]
+- `IGF-1 (mecasermin)` / `synonyms[]` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: somatomedin C
+  - Data: ["Increlex", "IGF-1 (mecasermin)"]
+- `IGF-1 (mecasermin)` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `IGF-1 (mecasermin)` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: Increlex USPI (FDA label), Clinical Pharmacology
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `IGF-1 (mecasermin)` / `pk_ws.pk.bioavailability.source` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: Increlex USPI
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: human_label+human_clinical
+  - Data: ["A", "B", "C"]
+- `IGF-1 (mecasermin)` / `pk_ws.pk.clearance.evidence_class` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `IGF-1 (mecasermin)` / `pk_ws.cyp.status` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 (mecasermin)` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `IGF-1 (mecasermin)` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: Increlex USPI (FDA label), Clinical Pharmacology
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `IGF-1 (mecasermin)` / `pharmacokinetics.bioavailability.source` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: Increlex USPI
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: human_label+human_clinical
+  - Data: ["A", "B", "C"]
+- `IGF-1 (mecasermin)` / `pharmacokinetics.clearance.evidence_class` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `IGF-1 (mecasermin)` / `cyp.status` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 (mecasermin)` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: Increlex (mecasermin) FDA label: hypoglycemia warning - administer with meal/snack; preprandial glucose monitoring recommended at initiation
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `labs_ws.interactions.data[].note` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: Increlex label: co-administration with insulin/antidiabetics increases hypoglycemia risk.
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "§8 peptide CYP handling", "CRAWL_027-Profil verknüpft: IGF-1 (mecasermin)", "class-level peptide metabolism assessment"]
+- `IGF-1 (mecasermin)` / `lab_effects[].source` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: Increlex (mecasermin) FDA label: hypoglycemia warning - administer with meal/snack; preprandial glucose monitoring recommended at initiation
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `interactions.data[].note` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: Increlex label: co-administration with insulin/antidiabetics increases hypoglycemia risk.
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "§8 peptide CYP handling", "CRAWL_027-Profil verknüpft: IGF-1 (mecasermin)", "class-level peptide metabolism assessment"]
+- `IGF-1 (mecasermin)` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 (mecasermin)` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: approved — Increlex, EMA centralised authorisation 2007
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 (mecasermin)` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: approved (via former EU authorisation; Increlex marketed)
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 (mecasermin)` / `regulatory.US.status` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: approved
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 (mecasermin)` / `regulatory.EU.status` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: approved — Increlex, EMA centralised authorisation 2007
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 (mecasermin)` / `regulatory.UK.status` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: approved (via former EU authorisation; Increlex marketed)
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 (mecasermin)` / `wada_ws.wada.source` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: WADA Prohibited List S2.2.2
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `wada.source` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: WADA Prohibited List S2.2.2
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 (mecasermin)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 (mecasermin)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 (mecasermin)` / `quality_evidence[].url` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 (mecasermin)` / `quality_evidence[].url` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 (mecasermin)` / `quality_evidence[].url` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `IGF-1 (mecasermin)` / `market_ws.community_names[]` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: IGF-1
+  - Data: ["Increlex", "IGF-1 (mecasermin)"]
+- `IGF-1 (mecasermin)` / `community_names[]` / `crawl_027_profiles/IGF_1_mecasermin.json`
+  - Report: IGF-1
+  - Data: ["Increlex", "IGF-1 (mecasermin)"]
+- `Ipamorelin` / `identity_ws.synonyms[]` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: NNC 26-0161
+  - Data: ["Ipamorelin"]
+- `Ipamorelin` / `identity_ws.community_names[]` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: Ipa
+  - Data: ["Ipamorelin"]
+- `Ipamorelin` / `identity_ws.research_names[]` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: NNC 26-0161
+  - Data: ["Ipamorelin"]
+- `Ipamorelin` / `synonyms[]` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: NNC 26-0161
+  - Data: ["Ipamorelin"]
+- `Ipamorelin` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: human_phase1
+  - Data: ["B", "A", "C"]
+- `Ipamorelin` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: Gobburu JV et al., Pharm Res 1999 (PMID 10497474, ipamorelin PK in humans; verify)
+  - Data: ["research-chem/bodybuilding communities", "FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ipamorelin` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: human_phase1_limited
+  - Data: ["B", "A", "C"]
+- `Ipamorelin` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: preclinical+limited_human
+  - Data: ["B", "A", "C"]
+- `Ipamorelin` / `pk_ws.pk.clearance.evidence_class` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: limited
+  - Data: ["B", "A", "C"]
+- `Ipamorelin` / `pk_ws.cyp.status` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Ipamorelin` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: human_phase1
+  - Data: ["B", "A", "C"]
+- `Ipamorelin` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: Gobburu JV et al., Pharm Res 1999 (PMID 10497474, ipamorelin PK in humans; verify)
+  - Data: ["research-chem/bodybuilding communities", "FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ipamorelin` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: human_phase1_limited
+  - Data: ["B", "A", "C"]
+- `Ipamorelin` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: preclinical+limited_human
+  - Data: ["B", "A", "C"]
+- `Ipamorelin` / `pharmacokinetics.clearance.evidence_class` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: limited
+  - Data: ["B", "A", "C"]
+- `Ipamorelin` / `cyp.status` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Ipamorelin` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: Gobburu et al., Pharm Res 1999 (PK/PD ipamorelin, GH release); selective secretagogue - no significant cortisol/prolactin elevation reported
+  - Data: ["research-chem/bodybuilding communities", "FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ipamorelin` / `lab_effects[].source` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: Gobburu et al., Pharm Res 1999 (PK/PD ipamorelin, GH release); selective secretagogue - no significant cortisol/prolactin elevation reported
+  - Data: ["research-chem/bodybuilding communities", "FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ipamorelin` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Ipamorelin` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Ipamorelin` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Ipamorelin` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Ipamorelin` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Ipamorelin` / `regulatory.US.status` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Ipamorelin` / `regulatory.EU.status` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Ipamorelin` / `regulatory.UK.status` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Ipamorelin` / `regulatory.CA.status` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Ipamorelin` / `regulatory.AU.status` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Ipamorelin` / `wada_ws.wada.source` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: WADA 2026 List; Sport Integrity Australia substance page
+  - Data: ["research-chem/bodybuilding communities", "FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ipamorelin` / `wada.source` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: WADA 2026 List; Sport Integrity Australia substance page
+  - Data: ["research-chem/bodybuilding communities", "FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ipamorelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ipamorelin` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Ipamorelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ipamorelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ipamorelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ipamorelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ipamorelin` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Ipamorelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ipamorelin` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Ipamorelin` / `quality_evidence[].url` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Ipamorelin` / `quality_evidence[].url` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Ipamorelin` / `quality_evidence[].url` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Ipamorelin` / `market_ws.community_names[]` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: Ipa
+  - Data: ["Ipamorelin"]
+- `Ipamorelin` / `market_ws.community_names[]` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: CJC/Ipa stack
+  - Data: ["Ipamorelin"]
+- `Ipamorelin` / `community_names[]` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: Ipa
+  - Data: ["Ipamorelin"]
+- `Ipamorelin` / `community_names[]` / `crawl_027_profiles/Ipamorelin.json`
+  - Report: CJC/Ipa stack
+  - Data: ["Ipamorelin"]
+- `KPV` / `identity_ws.synonyms[]` / `crawl_027_profiles/KPV.json`
+  - Report: Lys-Pro-Val
+  - Data: ["alpha-MSH(11-13)", "KPV"]
+- `KPV` / `identity_ws.research_names[]` / `crawl_027_profiles/KPV.json`
+  - Report: α-MSH 11-13 fragment
+  - Data: ["alpha-MSH(11-13)", "KPV"]
+- `KPV` / `identity_ws.identity.molecular_weight` / `crawl_027_profiles/KPV.json`
+  - Report: 342.43
+  - Data: [342.4]
+- `KPV` / `identity.molecular_weight` / `crawl_027_profiles/KPV.json`
+  - Report: 342.43
+  - Data: [342.4]
+- `KPV` / `synonyms[]` / `crawl_027_profiles/KPV.json`
+  - Report: Lys-Pro-Val
+  - Data: ["alpha-MSH(11-13)", "KPV"]
+- `KPV` / `human_ws.human_studies[].evidence_class` / `crawl_027_profiles/KPV.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `KPV` / `human_studies[].evidence_class` / `crawl_027_profiles/KPV.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `KPV` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/KPV.json`
+  - Report: No human PK study. Tripeptide (Lys-Pro-Val) with no published route-specified half-life in any species with validated assay.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `KPV` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/KPV.json`
+  - Report: None published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `KPV` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/KPV.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `KPV` / `pk_ws.cyp.status` / `crawl_027_profiles/KPV.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/KPV.json`
+  - Report: No human PK study. Tripeptide (Lys-Pro-Val) with no published route-specified half-life in any species with validated assay.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `KPV` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/KPV.json`
+  - Report: None published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `KPV` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/KPV.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `KPV` / `cyp.status` / `crawl_027_profiles/KPV.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/KPV.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/KPV.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/KPV.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/KPV.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/KPV.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory.US.status` / `crawl_027_profiles/KPV.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory.EU.status` / `crawl_027_profiles/KPV.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory.UK.status` / `crawl_027_profiles/KPV.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory.CA.status` / `crawl_027_profiles/KPV.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory.AU.status` / `crawl_027_profiles/KPV.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `wada_ws.wada.source` / `crawl_027_profiles/KPV.json`
+  - Report: WADA S0 rationale; no governmental approval anywhere
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `KPV` / `wada.source` / `crawl_027_profiles/KPV.json`
+  - Report: WADA S0 rationale; no governmental approval anywhere
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `KPV` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/KPV.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `KPV` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/KPV.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `KPV` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/KPV.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `KPV` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/KPV.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `KPV` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/KPV.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `KPV` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/KPV.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `KPV` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/KPV.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `KPV` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/KPV.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `KPV` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/KPV.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `KPV` / `quality_evidence[].url` / `crawl_027_profiles/KPV.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `KPV` / `quality_evidence[].url` / `crawl_027_profiles/KPV.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `KPV` / `quality_evidence[].url` / `crawl_027_profiles/KPV.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `KPV` / `market_ws.community_names[]` / `crawl_027_profiles/KPV.json`
+  - Report: KPV tripeptide
+  - Data: ["alpha-MSH(11-13)", "KPV"]
+- `KPV` / `community_names[]` / `crawl_027_profiles/KPV.json`
+  - Report: KPV tripeptide
+  - Data: ["alpha-MSH(11-13)", "KPV"]
+- `LL-37` / `identity_ws.synonyms[]` / `crawl_027_profiles/LL_37.json`
+  - Report: hCAP18(134-170)
+  - Data: ["hCAP-18 fragment", "LL-37"]
+- `LL-37` / `identity_ws.synonyms[]` / `crawl_027_profiles/LL_37.json`
+  - Report: human cathelicidin LL-37
+  - Data: ["hCAP-18 fragment", "LL-37"]
+- `LL-37` / `identity_ws.identity.sequence` / `crawl_027_profiles/LL_37.json`
+  - Report: Leu-Leu-Gly-Asp-Phe-Phe-Arg-Lys-Ser-Lys-Glu-Lys-Ile-Gly-Lys-Glu-Phe-Lys-Arg-Ile-Val-Gln-Arg-Ile-Lys-Asp-Phe-Leu-Arg-Asn-Leu-Val-Pro-Arg-Thr-Glu-Ser
+  - Data: ["(37 aa human cathelicidin, hCAP18 C-terminus)"]
+- `LL-37` / `identity_ws.identity.molecular_weight` / `crawl_027_profiles/LL_37.json`
+  - Report: 4493
+  - Data: [4493.3]
+- `LL-37` / `identity.sequence` / `crawl_027_profiles/LL_37.json`
+  - Report: Leu-Leu-Gly-Asp-Phe-Phe-Arg-Lys-Ser-Lys-Glu-Lys-Ile-Gly-Lys-Glu-Phe-Lys-Arg-Ile-Val-Gln-Arg-Ile-Lys-Asp-Phe-Leu-Arg-Asn-Leu-Val-Pro-Arg-Thr-Glu-Ser
+  - Data: ["(37 aa human cathelicidin, hCAP18 C-terminus)"]
+- `LL-37` / `identity.molecular_weight` / `crawl_027_profiles/LL_37.json`
+  - Report: 4493
+  - Data: [4493.3]
+- `LL-37` / `synonyms[]` / `crawl_027_profiles/LL_37.json`
+  - Report: hCAP18(134-170)
+  - Data: ["hCAP-18 fragment", "LL-37"]
+- `LL-37` / `synonyms[]` / `crawl_027_profiles/LL_37.json`
+  - Report: human cathelicidin LL-37
+  - Data: ["hCAP-18 fragment", "LL-37"]
+- `LL-37` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/LL_37.json`
+  - Report: No human PK study of exogenous LL-37. Endogenous cathelicidin only; rapidly degraded by proteases (e.g., in wound fluid).
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class B"]
+- `LL-37` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/LL_37.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class B"]
+- `LL-37` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/LL_37.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `LL-37` / `pk_ws.cyp.status` / `crawl_027_profiles/LL_37.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `LL-37` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/LL_37.json`
+  - Report: No human PK study of exogenous LL-37. Endogenous cathelicidin only; rapidly degraded by proteases (e.g., in wound fluid).
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class B"]
+- `LL-37` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/LL_37.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class B"]
+- `LL-37` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/LL_37.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `LL-37` / `cyp.status` / `crawl_027_profiles/LL_37.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `LL-37` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/LL_37.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `LL-37` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/LL_37.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `LL-37` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/LL_37.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `LL-37` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/LL_37.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `LL-37` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/LL_37.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `LL-37` / `regulatory.US.status` / `crawl_027_profiles/LL_37.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `LL-37` / `regulatory.EU.status` / `crawl_027_profiles/LL_37.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `LL-37` / `regulatory.UK.status` / `crawl_027_profiles/LL_37.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `LL-37` / `regulatory.CA.status` / `crawl_027_profiles/LL_37.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `LL-37` / `regulatory.AU.status` / `crawl_027_profiles/LL_37.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `LL-37` / `wada_ws.wada.source` / `crawl_027_profiles/LL_37.json`
+  - Report: WADA S0 catch-all
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `LL-37` / `wada.source` / `crawl_027_profiles/LL_37.json`
+  - Report: WADA S0 catch-all
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `LL-37` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/LL_37.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `LL-37` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/LL_37.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `LL-37` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/LL_37.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `LL-37` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/LL_37.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `LL-37` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/LL_37.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `LL-37` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/LL_37.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `LL-37` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/LL_37.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `LL-37` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/LL_37.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `LL-37` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/LL_37.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `LL-37` / `quality_evidence[].url` / `crawl_027_profiles/LL_37.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `LL-37` / `quality_evidence[].url` / `crawl_027_profiles/LL_37.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `LL-37` / `quality_evidence[].url` / `crawl_027_profiles/LL_37.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `LL-37` / `market_ws.community_names[]` / `crawl_027_profiles/LL_37.json`
+  - Report: LL-37 cathelicidin
+  - Data: ["hCAP-18 fragment", "LL-37"]
+- `LL-37` / `community_names[]` / `crawl_027_profiles/LL_37.json`
+  - Report: LL-37 cathelicidin
+  - Data: ["hCAP-18 fragment", "LL-37"]
+- `Melanotan I (afamelanotide)` / `identity_ws.synonyms[]` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: [Nle4, D-Phe7]-alpha-MSH
+  - Data: ["MT-1", "MT-I", "Melanotan I", "Scenesse", "afamelanotide", "afamelanotide (related)", "Melanotan I (afamelanotide)"]
+- `Melanotan I (afamelanotide)` / `identity_ws.synonyms[]` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: NDP-MSH
+  - Data: ["MT-1", "MT-I", "Melanotan I", "Scenesse", "afamelanotide", "afamelanotide (related)", "Melanotan I (afamelanotide)"]
+- `Melanotan I (afamelanotide)` / `identity_ws.research_names[]` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: NDP-α-MSH
+  - Data: ["MT-1", "MT-I", "Melanotan I", "Scenesse", "afamelanotide", "afamelanotide (related)", "Melanotan I (afamelanotide)"]
+- `Melanotan I (afamelanotide)` / `synonyms[]` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: [Nle4, D-Phe7]-alpha-MSH
+  - Data: ["MT-1", "MT-I", "Melanotan I", "Scenesse", "afamelanotide", "afamelanotide (related)", "Melanotan I (afamelanotide)"]
+- `Melanotan I (afamelanotide)` / `synonyms[]` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: NDP-MSH
+  - Data: ["MT-1", "MT-I", "Melanotan I", "Scenesse", "afamelanotide", "afamelanotide (related)", "Melanotan I (afamelanotide)"]
+- `Melanotan I (afamelanotide)` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: human_label
+  - Data: ["B", "A", "C"]
+- `Melanotan I (afamelanotide)` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: Scenesse EPAR/USPI (FDA 2019/EMA); PK module reports t1/2 ~15 h
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: classify records added in crawl_003", "crawl_017 H6"]
+- `Melanotan I (afamelanotide)` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: human_label
+  - Data: ["B", "A", "C"]
+- `Melanotan I (afamelanotide)` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: human_label/inference
+  - Data: ["B", "A", "C"]
+- `Melanotan I (afamelanotide)` / `pk_ws.pk.clearance.evidence_class` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: human_label_limited
+  - Data: ["B", "A", "C"]
+- `Melanotan I (afamelanotide)` / `pk_ws.cyp.status` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan I (afamelanotide)` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: human_label
+  - Data: ["B", "A", "C"]
+- `Melanotan I (afamelanotide)` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: Scenesse EPAR/USPI (FDA 2019/EMA); PK module reports t1/2 ~15 h
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: classify records added in crawl_003", "crawl_017 H6"]
+- `Melanotan I (afamelanotide)` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: human_label
+  - Data: ["B", "A", "C"]
+- `Melanotan I (afamelanotide)` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: human_label/inference
+  - Data: ["B", "A", "C"]
+- `Melanotan I (afamelanotide)` / `pharmacokinetics.clearance.evidence_class` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: human_label_limited
+  - Data: ["B", "A", "C"]
+- `Melanotan I (afamelanotide)` / `cyp.status` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan I (afamelanotide)` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: Scenesse (afamelanotide) EMA/FDA label: full-body skin exams twice yearly; blood pressure monitoring at implant administration
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: classify records added in crawl_003", "crawl_017 H6"]
+- `Melanotan I (afamelanotide)` / `lab_effects[].source` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: Scenesse (afamelanotide) EMA/FDA label: full-body skin exams twice yearly; blood pressure monitoring at implant administration
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: classify records added in crawl_003", "crawl_017 H6"]
+- `Melanotan I (afamelanotide)` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: approved
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan I (afamelanotide)` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: approved — Scenesse, EMA 2014-12-22 (exceptional circumstances), renewed 2019
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan I (afamelanotide)` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: approved/recognised via EU mutual recognition; post-Brexit status maintained
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan I (afamelanotide)` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: not approved (no Health Canada authorisation identified)
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan I (afamelanotide)` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: approved — Scenesse, TGA decision 2020-10-22/26, ARTG registered 2020-11-18
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan I (afamelanotide)` / `regulatory.US.status` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: approved
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan I (afamelanotide)` / `regulatory.EU.status` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: approved — Scenesse, EMA 2014-12-22 (exceptional circumstances), renewed 2019
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan I (afamelanotide)` / `regulatory.UK.status` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: approved/recognised via EU mutual recognition; post-Brexit status maintained
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan I (afamelanotide)` / `regulatory.CA.status` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: not approved (no Health Canada authorisation identified)
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan I (afamelanotide)` / `regulatory.AU.status` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: approved — Scenesse, TGA decision 2020-10-22/26, ARTG registered 2020-11-18
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan I (afamelanotide)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: classify records added in crawl_003", "crawl_017 H6"]
+- `Melanotan I (afamelanotide)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Melanotan I (afamelanotide)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: classify records added in crawl_003", "crawl_017 H6"]
+- `Melanotan I (afamelanotide)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: classify records added in crawl_003", "crawl_017 H6"]
+- `Melanotan I (afamelanotide)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: classify records added in crawl_003", "crawl_017 H6"]
+- `Melanotan I (afamelanotide)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: classify records added in crawl_003", "crawl_017 H6"]
+- `Melanotan I (afamelanotide)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Melanotan I (afamelanotide)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: classify records added in crawl_003", "crawl_017 H6"]
+- `Melanotan I (afamelanotide)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Melanotan I (afamelanotide)` / `quality_evidence[].url` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Melanotan I (afamelanotide)` / `quality_evidence[].url` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Melanotan I (afamelanotide)` / `quality_evidence[].url` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Melanotan I (afamelanotide)` / `market_ws.community_names[]` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: MT1
+  - Data: ["MT-1", "MT-I", "Melanotan I", "Scenesse", "afamelanotide", "afamelanotide (related)", "Melanotan I (afamelanotide)"]
+- `Melanotan I (afamelanotide)` / `community_names[]` / `crawl_027_profiles/Melanotan_I_afamelanotide.json`
+  - Report: MT1
+  - Data: ["MT-1", "MT-I", "Melanotan I", "Scenesse", "afamelanotide", "afamelanotide (related)", "Melanotan I (afamelanotide)"]
+- `Melanotan II` / `identity_ws.synonyms[]` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: MT-II
+  - Data: ["MT-2", "Melanotan II"]
+- `Melanotan II` / `identity_ws.synonyms[]` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: melanotan 2
+  - Data: ["MT-2", "Melanotan II"]
+- `Melanotan II` / `identity_ws.research_names[]` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: MT-II
+  - Data: ["MT-2", "Melanotan II"]
+- `Melanotan II` / `synonyms[]` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: MT-II
+  - Data: ["MT-2", "Melanotan II"]
+- `Melanotan II` / `synonyms[]` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: melanotan 2
+  - Data: ["MT-2", "Melanotan II"]
+- `Melanotan II` / `human_ws.human_studies[].evidence_class` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: E
+  - Data: ["B", "A", "C"]
+- `Melanotan II` / `human_studies[].evidence_class` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: E
+  - Data: ["B", "A", "C"]
+- `Melanotan II` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: non-selective melanocortin agonism (MC3R/MC4R) persistently reduces body/fat mass (demonstrated)
+  - Data: ["—"]
+- `Melanotan II` / `animal_studies[].mechanism` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: non-selective melanocortin agonism (MC3R/MC4R) persistently reduces body/fat mass (demonstrated)
+  - Data: ["—"]
+- `Melanotan II` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: No formal human PK publication with validated assay. Early Phase 1 (Dorr et al. 1996, Life Sciences) established tolerability and pigmentation after s.c. dosing but not a definitive half-life; bremelanotide (closely related cyclic heptapeptide) label t1/2 ~2.7 h is the class reference, not transferable per STRICT_MODE.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Melanotan II` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: Not characterized; s.c. use only in studies.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Melanotan II` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: inference_from_bremelanotide_label
+  - Data: ["B", "A", "C"]
+- `Melanotan II` / `pk_ws.cyp.status` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan II` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: No formal human PK publication with validated assay. Early Phase 1 (Dorr et al. 1996, Life Sciences) established tolerability and pigmentation after s.c. dosing but not a definitive half-life; bremelanotide (closely related cyclic heptapeptide) label t1/2 ~2.7 h is the class reference, not transferable per STRICT_MODE.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Melanotan II` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: Not characterized; s.c. use only in studies.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Melanotan II` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: inference_from_bremelanotide_label
+  - Data: ["B", "A", "C"]
+- `Melanotan II` / `cyp.status` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan II` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan II` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan II` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: not approved — MHRA has warned Melanotan is unlicensed and its sale/supply in the UK is illegal
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan II` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan II` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: not approved — TGA safety warnings against unregistered Melanotan products
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan II` / `regulatory.US.status` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan II` / `regulatory.EU.status` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan II` / `regulatory.UK.status` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: not approved — MHRA has warned Melanotan is unlicensed and its sale/supply in the UK is illegal
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan II` / `regulatory.CA.status` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan II` / `regulatory.AU.status` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: not approved — TGA safety warnings against unregistered Melanotan products
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan II` / `wada.source` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: WADA 2026 Prohibited List (wada-ama.org) S0 catch-all (unapproved substance; nicht namentlich) — Vendor-Beleg entfernt (QA3)
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Melanotan II` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Melanotan II` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Melanotan II` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Melanotan II` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Melanotan II` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Melanotan II` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Melanotan II` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Melanotan II` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Melanotan II` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Melanotan II` / `quality_evidence[].url` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Melanotan II` / `quality_evidence[].url` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Melanotan II` / `quality_evidence[].url` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Melanotan II` / `market_ws.community_names[]` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: MT2
+  - Data: ["MT-2", "Melanotan II"]
+- `Melanotan II` / `market_ws.community_names[]` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: Melanotan
+  - Data: ["MT-2", "Melanotan II"]
+- `Melanotan II` / `market_ws.community_names[]` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: Barbie drug
+  - Data: ["MT-2", "Melanotan II"]
+- `Melanotan II` / `community_names[]` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: MT2
+  - Data: ["MT-2", "Melanotan II"]
+- `Melanotan II` / `community_names[]` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: Melanotan
+  - Data: ["MT-2", "Melanotan II"]
+- `Melanotan II` / `community_names[]` / `crawl_027_profiles/Melanotan_II.json`
+  - Report: Barbie drug
+  - Data: ["MT-2", "Melanotan II"]
+- `MGF (mechano growth factor)` / `identity_ws.synonyms[]` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: mechano growth factor
+  - Data: ["IGF-1Ec", "MGF (mechano growth factor)"]
+- `MGF (mechano growth factor)` / `identity_ws.community_names[]` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: MGF
+  - Data: ["IGF-1Ec", "MGF (mechano growth factor)"]
+- `MGF (mechano growth factor)` / `identity_ws.research_names[]` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: IGF-1Ec E-domain peptide
+  - Data: ["IGF-1Ec", "MGF (mechano growth factor)"]
+- `MGF (mechano growth factor)` / `synonyms[]` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: mechano growth factor
+  - Data: ["IGF-1Ec", "MGF (mechano growth factor)"]
+- `MGF (mechano growth factor)` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: No human PK. MGF (IGF-1Ec splice variant 24-aa E-domain peptide) has no published route-specified human half-life; endogenous/local tissue factor.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "UNII via FDA GSRS"]
+- `MGF (mechano growth factor)` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "UNII via FDA GSRS"]
+- `MGF (mechano growth factor)` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `MGF (mechano growth factor)` / `pk_ws.cyp.status` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `MGF (mechano growth factor)` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: No human PK. MGF (IGF-1Ec splice variant 24-aa E-domain peptide) has no published route-specified human half-life; endogenous/local tissue factor.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "UNII via FDA GSRS"]
+- `MGF (mechano growth factor)` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "UNII via FDA GSRS"]
+- `MGF (mechano growth factor)` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `MGF (mechano growth factor)` / `cyp.status` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `MGF (mechano growth factor)` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MGF (mechano growth factor)` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MGF (mechano growth factor)` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MGF (mechano growth factor)` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MGF (mechano growth factor)` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MGF (mechano growth factor)` / `regulatory.US.status` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MGF (mechano growth factor)` / `regulatory.EU.status` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MGF (mechano growth factor)` / `regulatory.UK.status` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MGF (mechano growth factor)` / `regulatory.CA.status` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MGF (mechano growth factor)` / `regulatory.AU.status` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MGF (mechano growth factor)` / `wada_ws.wada.source` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: WADA Prohibited List S2
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MGF (mechano growth factor)` / `wada.source` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: WADA Prohibited List S2
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MGF (mechano growth factor)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MGF (mechano growth factor)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `MGF (mechano growth factor)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MGF (mechano growth factor)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MGF (mechano growth factor)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MGF (mechano growth factor)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MGF (mechano growth factor)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `MGF (mechano growth factor)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MGF (mechano growth factor)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `MGF (mechano growth factor)` / `quality_evidence[].url` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `MGF (mechano growth factor)` / `quality_evidence[].url` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `MGF (mechano growth factor)` / `quality_evidence[].url` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `MGF (mechano growth factor)` / `market_ws.community_names[]` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: MGF
+  - Data: ["IGF-1Ec", "MGF (mechano growth factor)"]
+- `MGF (mechano growth factor)` / `community_names[]` / `crawl_027_profiles/MGF_mechano_growth_factor.json`
+  - Report: MGF
+  - Data: ["IGF-1Ec", "MGF (mechano growth factor)"]
+- `Mod GRF 1-29` / `identity_ws.synonyms[]` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: modGRF(1-29)
+  - Data: ["CJC-1293", "tetrasubstituted GRF 1-29", "Mod GRF 1-29"]
+- `Mod GRF 1-29` / `identity_ws.identity.molecular_weight` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: 3357.9
+  - Data: [3637.2]
+- `Mod GRF 1-29` / `synonyms[]` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: modGRF(1-29)
+  - Data: ["CJC-1293", "tetrasubstituted GRF 1-29", "Mod GRF 1-29"]
+- `Mod GRF 1-29` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: inference_from_class
+  - Data: ["B", "A", "C"]
+- `Mod GRF 1-29` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: Frohman LA et al., J Clin Endocrinol Metab 1994 (PMID 7962295): D-Ala2 incorporation increases half-life vs native GHRH(1-29)NH2 (t1/2 ~7 min native)
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Mod GRF 1-29` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: No compound-specific human study.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "traits derived from curated substance group membership only", "curated MoA at evidence class B"]
+- `Mod GRF 1-29` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `Mod GRF 1-29` / `pk_ws.pk.metabolism.source` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: PMID 7962295
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Mod GRF 1-29` / `pk_ws.pk.clearance.evidence_class` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `Mod GRF 1-29` / `pk_ws.cyp.status` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Mod GRF 1-29` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: inference_from_class
+  - Data: ["B", "A", "C"]
+- `Mod GRF 1-29` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: Frohman LA et al., J Clin Endocrinol Metab 1994 (PMID 7962295): D-Ala2 incorporation increases half-life vs native GHRH(1-29)NH2 (t1/2 ~7 min native)
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Mod GRF 1-29` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: No compound-specific human study.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "traits derived from curated substance group membership only", "curated MoA at evidence class B"]
+- `Mod GRF 1-29` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `Mod GRF 1-29` / `pharmacokinetics.metabolism.source` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: PMID 7962295
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Mod GRF 1-29` / `pharmacokinetics.clearance.evidence_class` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `Mod GRF 1-29` / `cyp.status` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Mod GRF 1-29` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Mod GRF 1-29` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Mod GRF 1-29` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Mod GRF 1-29` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Mod GRF 1-29` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Mod GRF 1-29` / `regulatory.US.status` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Mod GRF 1-29` / `regulatory.EU.status` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Mod GRF 1-29` / `regulatory.UK.status` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Mod GRF 1-29` / `regulatory.CA.status` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Mod GRF 1-29` / `regulatory.AU.status` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Mod GRF 1-29` / `wada_ws.wada.source` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: WADA 2026 Prohibited List S2.2.4
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Mod GRF 1-29` / `wada.source` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: WADA 2026 Prohibited List S2.2.4
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Mod GRF 1-29` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Mod GRF 1-29` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Mod GRF 1-29` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Mod GRF 1-29` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Mod GRF 1-29` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Mod GRF 1-29` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Mod GRF 1-29` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Mod GRF 1-29` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Mod GRF 1-29` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Mod GRF 1-29` / `quality_evidence[].url` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Mod GRF 1-29` / `quality_evidence[].url` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Mod GRF 1-29` / `quality_evidence[].url` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Mod GRF 1-29` / `market_ws.community_names[]` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: Mod GRF
+  - Data: ["CJC-1293", "tetrasubstituted GRF 1-29", "Mod GRF 1-29"]
+- `Mod GRF 1-29` / `market_ws.community_names[]` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: CJC no DAC
+  - Data: ["CJC-1293", "tetrasubstituted GRF 1-29", "Mod GRF 1-29"]
+- `Mod GRF 1-29` / `community_names[]` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: Mod GRF
+  - Data: ["CJC-1293", "tetrasubstituted GRF 1-29", "Mod GRF 1-29"]
+- `Mod GRF 1-29` / `community_names[]` / `crawl_027_profiles/Mod_GRF_1_29.json`
+  - Report: CJC no DAC
+  - Data: ["CJC-1293", "tetrasubstituted GRF 1-29", "Mod GRF 1-29"]
+- `MOTS-c` / `identity_ws.synonyms[]` / `crawl_027_profiles/MOTS_c.json`
+  - Report: mitochondrial open-reading-frame of the 12S rRNA-c
+  - Data: ["MOTS-c"]
+- `MOTS-c` / `synonyms[]` / `crawl_027_profiles/MOTS_c.json`
+  - Report: mitochondrial open-reading-frame of the 12S rRNA-c
+  - Data: ["MOTS-c"]
+- `MOTS-c` / `human_ws.human_studies[].evidence_class` / `crawl_027_profiles/MOTS_c.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `MOTS-c` / `human_ws.human_studies[].evidence_class` / `crawl_027_profiles/MOTS_c.json`
+  - Report: E
+  - Data: ["B", "A", "C"]
+- `MOTS-c` / `human_studies[].evidence_class` / `crawl_027_profiles/MOTS_c.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `MOTS-c` / `human_studies[].evidence_class` / `crawl_027_profiles/MOTS_c.json`
+  - Report: E
+  - Data: ["B", "A", "C"]
+- `MOTS-c` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/MOTS_c.json`
+  - Report: No published route-specified human plasma half-life. Human exercise studies measured endogenous MOTS-c; exogenous dosing PK (rodent: short plasma half-life, minutes) only preclinical.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `MOTS-c` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/MOTS_c.json`
+  - Report: Rodent i.p. data only; no human.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `MOTS-c` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/MOTS_c.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `MOTS-c` / `pk_ws.pk.metabolism.source` / `crawl_027_profiles/MOTS_c.json`
+  - Report: Lee et al. 2015 Cell Metab (PMID 25738459)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MOTS-c` / `pk_ws.cyp.status` / `crawl_027_profiles/MOTS_c.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `MOTS-c` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/MOTS_c.json`
+  - Report: No published route-specified human plasma half-life. Human exercise studies measured endogenous MOTS-c; exogenous dosing PK (rodent: short plasma half-life, minutes) only preclinical.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `MOTS-c` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/MOTS_c.json`
+  - Report: Rodent i.p. data only; no human.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `MOTS-c` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/MOTS_c.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `MOTS-c` / `pharmacokinetics.metabolism.source` / `crawl_027_profiles/MOTS_c.json`
+  - Report: Lee et al. 2015 Cell Metab (PMID 25738459)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MOTS-c` / `cyp.status` / `crawl_027_profiles/MOTS_c.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `MOTS-c` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/MOTS_c.json`
+  - Report: Preclinical (mouse) studies: improved glucose homeostasis; human data limited (CB4211 phase 1, safety-focused)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MOTS-c` / `lab_effects[].source` / `crawl_027_profiles/MOTS_c.json`
+  - Report: Preclinical (mouse) studies: improved glucose homeostasis; human data limited (CB4211 phase 1, safety-focused)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MOTS-c` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/MOTS_c.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MOTS-c` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/MOTS_c.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MOTS-c` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/MOTS_c.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MOTS-c` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/MOTS_c.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MOTS-c` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/MOTS_c.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MOTS-c` / `regulatory.US.status` / `crawl_027_profiles/MOTS_c.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MOTS-c` / `regulatory.EU.status` / `crawl_027_profiles/MOTS_c.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MOTS-c` / `regulatory.UK.status` / `crawl_027_profiles/MOTS_c.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MOTS-c` / `regulatory.CA.status` / `crawl_027_profiles/MOTS_c.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MOTS-c` / `regulatory.AU.status` / `crawl_027_profiles/MOTS_c.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `MOTS-c` / `wada_ws.wada.source` / `crawl_027_profiles/MOTS_c.json`
+  - Report: WADA S0 catch-all
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MOTS-c` / `wada.source` / `crawl_027_profiles/MOTS_c.json`
+  - Report: WADA S0 catch-all
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MOTS-c` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/MOTS_c.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MOTS-c` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/MOTS_c.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `MOTS-c` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/MOTS_c.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MOTS-c` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/MOTS_c.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MOTS-c` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/MOTS_c.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MOTS-c` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/MOTS_c.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MOTS-c` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/MOTS_c.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `MOTS-c` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/MOTS_c.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MOTS-c` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/MOTS_c.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `MOTS-c` / `quality_evidence[].url` / `crawl_027_profiles/MOTS_c.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `MOTS-c` / `quality_evidence[].url` / `crawl_027_profiles/MOTS_c.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `MOTS-c` / `quality_evidence[].url` / `crawl_027_profiles/MOTS_c.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `MOTS-c` / `market_ws.community_names[]` / `crawl_027_profiles/MOTS_c.json`
+  - Report: mitochondrial peptide
+  - Data: ["MOTS-c"]
+- `MOTS-c` / `community_names[]` / `crawl_027_profiles/MOTS_c.json`
+  - Report: mitochondrial peptide
+  - Data: ["MOTS-c"]
+- `PEG-MGF` / `identity_ws.synonyms[]` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: pegylated mechano growth factor
+  - Data: ["PEG-MGF"]
+- `PEG-MGF` / `synonyms[]` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: pegylated mechano growth factor
+  - Data: ["PEG-MGF"]
+- `PEG-MGF` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: No human or validated preclinical PK with route+assay. PEGylation expected to prolong half-life (mechanistic inference only); vendor hour-claims excluded.
+  - Data: ["UNII via FDA GSRS"]
+- `PEG-MGF` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: None.
+  - Data: ["UNII via FDA GSRS"]
+- `PEG-MGF` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: inference
+  - Data: ["A", "C"]
+- `PEG-MGF` / `pk_ws.cyp.status` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `PEG-MGF` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: No human or validated preclinical PK with route+assay. PEGylation expected to prolong half-life (mechanistic inference only); vendor hour-claims excluded.
+  - Data: ["UNII via FDA GSRS"]
+- `PEG-MGF` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: None.
+  - Data: ["UNII via FDA GSRS"]
+- `PEG-MGF` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: inference
+  - Data: ["A", "C"]
+- `PEG-MGF` / `cyp.status` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `PEG-MGF` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `PEG-MGF` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `PEG-MGF` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `PEG-MGF` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `PEG-MGF` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `PEG-MGF` / `regulatory.US.status` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `PEG-MGF` / `regulatory.EU.status` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `PEG-MGF` / `regulatory.UK.status` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `PEG-MGF` / `regulatory.CA.status` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `PEG-MGF` / `regulatory.AU.status` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `PEG-MGF` / `wada_ws.wada.source` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: WADA S2 class coverage
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `PEG-MGF` / `wada.source` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: WADA S2 class coverage
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `PEG-MGF` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `PEG-MGF` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `PEG-MGF` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `PEG-MGF` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `PEG-MGF` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `PEG-MGF` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `PEG-MGF` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `PEG-MGF` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `PEG-MGF` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `PEG-MGF` / `quality_evidence[].url` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `PEG-MGF` / `quality_evidence[].url` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `PEG-MGF` / `quality_evidence[].url` / `crawl_027_profiles/PEG_MGF.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Pinealon` / `identity_ws.synonyms[]` / `crawl_027_profiles/Pinealon.json`
+  - Report: EDR peptide
+  - Data: ["Glu-Asp-Arg", "Pinealon"]
+- `Pinealon` / `identity_ws.research_names[]` / `crawl_027_profiles/Pinealon.json`
+  - Report: EDR
+  - Data: ["Glu-Asp-Arg", "Pinealon"]
+- `Pinealon` / `synonyms[]` / `crawl_027_profiles/Pinealon.json`
+  - Report: EDR peptide
+  - Data: ["Glu-Asp-Arg", "Pinealon"]
+- `Pinealon` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/Pinealon.json`
+  - Report: No human PK. Tripeptide (Glu-Asp-Arg) bioregulator; no route-specified half-life in any accessible literature.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Pinealon` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/Pinealon.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Pinealon` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Pinealon.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Pinealon` / `pk_ws.cyp.status` / `crawl_027_profiles/Pinealon.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Pinealon` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/Pinealon.json`
+  - Report: No human PK. Tripeptide (Glu-Asp-Arg) bioregulator; no route-specified half-life in any accessible literature.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Pinealon` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/Pinealon.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Pinealon` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Pinealon.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Pinealon` / `cyp.status` / `crawl_027_profiles/Pinealon.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Pinealon` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Pinealon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Pinealon` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Pinealon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Pinealon` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Pinealon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Pinealon` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Pinealon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Pinealon` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Pinealon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Pinealon` / `regulatory.US.status` / `crawl_027_profiles/Pinealon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Pinealon` / `regulatory.EU.status` / `crawl_027_profiles/Pinealon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Pinealon` / `regulatory.UK.status` / `crawl_027_profiles/Pinealon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Pinealon` / `regulatory.CA.status` / `crawl_027_profiles/Pinealon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Pinealon` / `regulatory.AU.status` / `crawl_027_profiles/Pinealon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Pinealon` / `wada_ws.wada.source` / `crawl_027_profiles/Pinealon.json`
+  - Report: WADA S0 rationale
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Pinealon` / `wada.source` / `crawl_027_profiles/Pinealon.json`
+  - Report: WADA S0 rationale
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Pinealon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Pinealon.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Pinealon` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Pinealon.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Pinealon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Pinealon.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Pinealon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Pinealon.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Pinealon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Pinealon.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Pinealon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Pinealon.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Pinealon` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Pinealon.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Pinealon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Pinealon.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Pinealon` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Pinealon.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Pinealon` / `quality_evidence[].url` / `crawl_027_profiles/Pinealon.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Pinealon` / `quality_evidence[].url` / `crawl_027_profiles/Pinealon.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Pinealon` / `quality_evidence[].url` / `crawl_027_profiles/Pinealon.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Pinealon` / `market_ws.community_names[]` / `crawl_027_profiles/Pinealon.json`
+  - Report: Pinealon (EDR tripeptide)
+  - Data: ["Glu-Asp-Arg", "Pinealon"]
+- `Pinealon` / `community_names[]` / `crawl_027_profiles/Pinealon.json`
+  - Report: Pinealon (EDR tripeptide)
+  - Data: ["Glu-Asp-Arg", "Pinealon"]
+- `Selank` / `identity_ws.synonyms[]` / `crawl_027_profiles/Selank.json`
+  - Report: TP-7
+  - Data: ["Thr-Lys-Pro-Arg-Pro-Gly-Pro", "Selank"]
+- `Selank` / `synonyms[]` / `crawl_027_profiles/Selank.json`
+  - Report: TP-7
+  - Data: ["Thr-Lys-Pro-Arg-Pro-Gly-Pro", "Selank"]
+- `Selank` / `human_ws.human_studies[].evidence_class` / `crawl_027_profiles/Selank.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `Selank` / `human_studies[].evidence_class` / `crawl_027_profiles/Selank.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `Selank` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/Selank.json`
+  - Report: No formal human PK. Intranasal tuftsin analog (Thr-Lys-Pro-Arg-Pro-Gly-Pro); Russian clinical use without published route-specified half-life.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Selank` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/Selank.json`
+  - Report: Intranasal use; bioavailability not characterized.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Selank` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Selank.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Selank` / `pk_ws.cyp.status` / `crawl_027_profiles/Selank.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Selank` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/Selank.json`
+  - Report: No formal human PK. Intranasal tuftsin analog (Thr-Lys-Pro-Arg-Pro-Gly-Pro); Russian clinical use without published route-specified half-life.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Selank` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/Selank.json`
+  - Report: Intranasal use; bioavailability not characterized.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Selank` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Selank.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Selank` / `cyp.status` / `crawl_027_profiles/Selank.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Selank` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Selank.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Selank` / `regulatory_ws.regulatory.US.note` / `crawl_027_profiles/Selank.json`
+  - Report: registered as medicine in Russia (Selank intranasal); not approved in US/EU/UK/CA/AU
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Selank"]
+- `Selank` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Selank.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Selank` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Selank.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Selank` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Selank.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Selank` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Selank.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Selank` / `regulatory.US.status` / `crawl_027_profiles/Selank.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Selank` / `regulatory.US.note` / `crawl_027_profiles/Selank.json`
+  - Report: registered as medicine in Russia (Selank intranasal); not approved in US/EU/UK/CA/AU
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Selank"]
+- `Selank` / `regulatory.EU.status` / `crawl_027_profiles/Selank.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Selank` / `regulatory.UK.status` / `crawl_027_profiles/Selank.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Selank` / `regulatory.CA.status` / `crawl_027_profiles/Selank.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Selank` / `regulatory.AU.status` / `crawl_027_profiles/Selank.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Selank` / `wada_ws.wada.source` / `crawl_027_profiles/Selank.json`
+  - Report: WADA S0 definition analysis
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Selank` / `wada.source` / `crawl_027_profiles/Selank.json`
+  - Report: WADA S0 definition analysis
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Selank` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Selank.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Selank` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Selank.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Selank` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Selank.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Selank` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Selank.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Selank` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Selank.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Selank` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Selank.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Selank` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Selank.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Selank` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Selank.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Selank` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Selank.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Selank` / `quality_evidence[].url` / `crawl_027_profiles/Selank.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Selank` / `quality_evidence[].url` / `crawl_027_profiles/Selank.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Selank` / `quality_evidence[].url` / `crawl_027_profiles/Selank.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Semax` / `identity_ws.synonyms[]` / `crawl_027_profiles/Semax.json`
+  - Report: ACTH(4-7) analog + Pro-Gly-Pro
+  - Data: ["Met-Glu-His-Phe-Pro-Gly-Pro", "Semax"]
+- `Semax` / `synonyms[]` / `crawl_027_profiles/Semax.json`
+  - Report: ACTH(4-7) analog + Pro-Gly-Pro
+  - Data: ["Met-Glu-His-Phe-Pro-Gly-Pro", "Semax"]
+- `Semax` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/Semax.json`
+  - Report: No peer-reviewed route-specified human plasma half-life with validated assay. Russian clinical literature (intranasal) reports rapid onset/short duration but no formal PK; half_life=null per STRICT_MODE.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Semax` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/Semax.json`
+  - Report: limited_clinical_non_PK
+  - Data: ["B", "A", "C"]
+- `Semax` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Semax.json`
+  - Report: preclinical/inference
+  - Data: ["B", "A", "C"]
+- `Semax` / `pk_ws.cyp.status` / `crawl_027_profiles/Semax.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Semax` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/Semax.json`
+  - Report: No peer-reviewed route-specified human plasma half-life with validated assay. Russian clinical literature (intranasal) reports rapid onset/short duration but no formal PK; half_life=null per STRICT_MODE.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Semax` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/Semax.json`
+  - Report: limited_clinical_non_PK
+  - Data: ["B", "A", "C"]
+- `Semax` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Semax.json`
+  - Report: preclinical/inference
+  - Data: ["B", "A", "C"]
+- `Semax` / `cyp.status` / `crawl_027_profiles/Semax.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Semax` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Semax.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Semax` / `regulatory_ws.regulatory.US.note` / `crawl_027_profiles/Semax.json`
+  - Report: registered as medicine in Russia (Semax 0.1% intranasal); not approved in US/EU/UK/CA/AU
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Semax"]
+- `Semax` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Semax.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Semax` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Semax.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Semax` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Semax.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Semax` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Semax.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Semax` / `regulatory.US.status` / `crawl_027_profiles/Semax.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Semax` / `regulatory.US.note` / `crawl_027_profiles/Semax.json`
+  - Report: registered as medicine in Russia (Semax 0.1% intranasal); not approved in US/EU/UK/CA/AU
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Semax"]
+- `Semax` / `regulatory.EU.status` / `crawl_027_profiles/Semax.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Semax` / `regulatory.UK.status` / `crawl_027_profiles/Semax.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Semax` / `regulatory.CA.status` / `crawl_027_profiles/Semax.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Semax` / `regulatory.AU.status` / `crawl_027_profiles/Semax.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Semax` / `wada_ws.wada.source` / `crawl_027_profiles/Semax.json`
+  - Report: WADA S0 definition analysis
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Semax` / `wada.source` / `crawl_027_profiles/Semax.json`
+  - Report: WADA S0 definition analysis
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Semax` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Semax.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Semax` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Semax.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Semax` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Semax.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Semax` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Semax.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Semax` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Semax.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Semax` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Semax.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Semax` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Semax.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Semax` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Semax.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Semax` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Semax.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Semax` / `quality_evidence[].url` / `crawl_027_profiles/Semax.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Semax` / `quality_evidence[].url` / `crawl_027_profiles/Semax.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Semax` / `quality_evidence[].url` / `crawl_027_profiles/Semax.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Semax` / `market_ws.community_names[]` / `crawl_027_profiles/Semax.json`
+  - Report: NAS Semax
+  - Data: ["Met-Glu-His-Phe-Pro-Gly-Pro", "Semax"]
+- `Semax` / `community_names[]` / `crawl_027_profiles/Semax.json`
+  - Report: NAS Semax
+  - Data: ["Met-Glu-His-Phe-Pro-Gly-Pro", "Semax"]
+- `Sermorelin` / `identity_ws.synonyms[]` / `crawl_027_profiles/Sermorelin.json`
+  - Report: Geref
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `identity_ws.synonyms[]` / `crawl_027_profiles/Sermorelin.json`
+  - Report: GHRH(1-29)NH2
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `identity_ws.synonyms[]` / `crawl_027_profiles/Sermorelin.json`
+  - Report: somatorelin (1-29) amide
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `identity_ws.community_names[]` / `crawl_027_profiles/Sermorelin.json`
+  - Report: Serm
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `identity_ws.research_names[]` / `crawl_027_profiles/Sermorelin.json`
+  - Report: Geref
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `synonyms[]` / `crawl_027_profiles/Sermorelin.json`
+  - Report: Geref
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `synonyms[]` / `crawl_027_profiles/Sermorelin.json`
+  - Report: GHRH(1-29)NH2
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `synonyms[]` / `crawl_027_profiles/Sermorelin.json`
+  - Report: somatorelin (1-29) amide
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/Sermorelin.json`
+  - Report: human_label+human_clinical
+  - Data: ["A"]
+- `Sermorelin` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/Sermorelin.json`
+  - Report: human_label
+  - Data: ["A"]
+- `Sermorelin` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Sermorelin.json`
+  - Report: human_clinical
+  - Data: ["A"]
+- `Sermorelin` / `pk_ws.pk.clearance.evidence_class` / `crawl_027_profiles/Sermorelin.json`
+  - Report: human_clinical
+  - Data: ["A"]
+- `Sermorelin` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/Sermorelin.json`
+  - Report: human_label+human_clinical
+  - Data: ["A"]
+- `Sermorelin` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/Sermorelin.json`
+  - Report: human_label
+  - Data: ["A"]
+- `Sermorelin` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Sermorelin.json`
+  - Report: human_clinical
+  - Data: ["A"]
+- `Sermorelin` / `pharmacokinetics.clearance.evidence_class` / `crawl_027_profiles/Sermorelin.json`
+  - Report: human_clinical
+  - Data: ["A"]
+- `Sermorelin` / `regulatory_ws.regulatory.US.note` / `crawl_027_profiles/Sermorelin.json`
+  - Report: compounding possible as component of an FDA-approved drug subject to clinical-difference rules
+  - Data: ["no US label product_type resolved in crawl_021"]
+- `Sermorelin` / `regulatory.US.note` / `crawl_027_profiles/Sermorelin.json`
+  - Report: compounding possible as component of an FDA-approved drug subject to clinical-difference rules
+  - Data: ["no US label product_type resolved in crawl_021"]
+- `Sermorelin` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Sermorelin.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://rxnav.nlm.nih.gov/REST/rxcui/56188/properties.json"]
+- `Sermorelin` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Sermorelin.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://rxnav.nlm.nih.gov/REST/rxcui/56188/properties.json"]
+- `Sermorelin` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Sermorelin.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://rxnav.nlm.nih.gov/REST/rxcui/56188/properties.json"]
+- `Sermorelin` / `quality_evidence[].url` / `crawl_027_profiles/Sermorelin.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://rxnav.nlm.nih.gov/REST/rxcui/56188/properties.json"]
+- `Sermorelin` / `quality_evidence[].url` / `crawl_027_profiles/Sermorelin.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://rxnav.nlm.nih.gov/REST/rxcui/56188/properties.json"]
+- `Sermorelin` / `quality_evidence[].url` / `crawl_027_profiles/Sermorelin.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://rxnav.nlm.nih.gov/REST/rxcui/56188/properties.json"]
+- `Sermorelin` / `market_ws.community_names[]` / `crawl_027_profiles/Sermorelin.json`
+  - Report: Sermorelin acetate
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `market_ws.community_names[]` / `crawl_027_profiles/Sermorelin.json`
+  - Report: GRF 1-29
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `community_names[]` / `crawl_027_profiles/Sermorelin.json`
+  - Report: Sermorelin acetate
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `community_names[]` / `crawl_027_profiles/Sermorelin.json`
+  - Report: GRF 1-29
+  - Data: ["sermorelin", "Sermorelin"]
+- `TB-500 (Thymosin beta-4 fragment)` / `identity_ws.synonyms[]` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: Thymosin beta-4 fragment (17-23, Ac-LKKTETQ)
+  - Data: ["TB500", "Tβ4 fragment", "TB-500 (Thymosin beta-4 fragment)"]
+- `TB-500 (Thymosin beta-4 fragment)` / `identity_ws.community_names[]` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: TB-500
+  - Data: ["TB500", "Tβ4 fragment", "TB-500 (Thymosin beta-4 fragment)"]
+- `TB-500 (Thymosin beta-4 fragment)` / `identity_ws.research_names[]` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: Ac-LKKTETQ (Tβ4 17-23)
+  - Data: ["TB500", "Tβ4 fragment", "TB-500 (Thymosin beta-4 fragment)"]
+- `TB-500 (Thymosin beta-4 fragment)` / `identity_ws.identity.sequence` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: Ac-Leu-Lys-Lys-Thr-Glu-Thr-Gln
+  - Data: ["Ac-Leu-Lys-Lys-Thr-Glu-Thr-Gln (fragment)"]
+- `TB-500 (Thymosin beta-4 fragment)` / `identity.sequence` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: Ac-Leu-Lys-Lys-Thr-Glu-Thr-Gln
+  - Data: ["Ac-Leu-Lys-Lys-Thr-Glu-Thr-Gln (fragment)"]
+- `TB-500 (Thymosin beta-4 fragment)` / `synonyms[]` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: Thymosin beta-4 fragment (17-23, Ac-LKKTETQ)
+  - Data: ["TB500", "Tβ4 fragment", "TB-500 (Thymosin beta-4 fragment)"]
+- `TB-500 (Thymosin beta-4 fragment)` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: No human PK. TB-500 (Ac-LKKTETQ-type fragment, typically Ac-SDKP-related fragment) has no published route-specified human half-life.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS"]
+- `TB-500 (Thymosin beta-4 fragment)` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: No human data; not orally bioavailable as peptide (expected).
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS"]
+- `TB-500 (Thymosin beta-4 fragment)` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `TB-500 (Thymosin beta-4 fragment)` / `pk_ws.cyp.status` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: No human PK. TB-500 (Ac-LKKTETQ-type fragment, typically Ac-SDKP-related fragment) has no published route-specified human half-life.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS"]
+- `TB-500 (Thymosin beta-4 fragment)` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: No human data; not orally bioavailable as peptide (expected).
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS"]
+- `TB-500 (Thymosin beta-4 fragment)` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `TB-500 (Thymosin beta-4 fragment)` / `cyp.status` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory.US.status` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory.EU.status` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory.UK.status` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory.CA.status` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory.AU.status` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `wada_ws.wada.source` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: WADA 2026 Prohibited List S2.3
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `TB-500 (Thymosin beta-4 fragment)` / `wada.source` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: WADA 2026 Prohibited List S2.3
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `TB-500 (Thymosin beta-4 fragment)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `TB-500 (Thymosin beta-4 fragment)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `TB-500 (Thymosin beta-4 fragment)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `TB-500 (Thymosin beta-4 fragment)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `TB-500 (Thymosin beta-4 fragment)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `TB-500 (Thymosin beta-4 fragment)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `TB-500 (Thymosin beta-4 fragment)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `TB-500 (Thymosin beta-4 fragment)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `TB-500 (Thymosin beta-4 fragment)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `TB-500 (Thymosin beta-4 fragment)` / `quality_evidence[].url` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `TB-500 (Thymosin beta-4 fragment)` / `quality_evidence[].url` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `TB-500 (Thymosin beta-4 fragment)` / `quality_evidence[].url` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `TB-500 (Thymosin beta-4 fragment)` / `market_ws.community_names[]` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: TB-500
+  - Data: ["TB500", "Tβ4 fragment", "TB-500 (Thymosin beta-4 fragment)"]
+- `TB-500 (Thymosin beta-4 fragment)` / `market_ws.community_names[]` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: Wolverine stack (with BPC-157)
+  - Data: ["TB500", "Tβ4 fragment", "TB-500 (Thymosin beta-4 fragment)"]
+- `TB-500 (Thymosin beta-4 fragment)` / `community_names[]` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: TB-500
+  - Data: ["TB500", "Tβ4 fragment", "TB-500 (Thymosin beta-4 fragment)"]
+- `TB-500 (Thymosin beta-4 fragment)` / `community_names[]` / `crawl_027_profiles/TB_500_Thymosin_beta_4_fragment.json`
+  - Report: Wolverine stack (with BPC-157)
+  - Data: ["TB500", "Tβ4 fragment", "TB-500 (Thymosin beta-4 fragment)"]
+- `Tesamorelin` / `identity_ws.synonyms[]` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: Egrifta SV/WR
+  - Data: ["Egrifta", "Egrifta SV", "Egrifta WR", "TH9507", "Tesamorelin"]
+- `Tesamorelin` / `identity_ws.community_names[]` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: Tesa
+  - Data: ["Egrifta", "Egrifta SV", "Egrifta WR", "TH9507", "Tesamorelin"]
+- `Tesamorelin` / `identity_ws.identity.molecular_weight` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: 5136
+  - Data: [5135.9]
+- `Tesamorelin` / `identity.molecular_weight` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: 5136
+  - Data: [5135.9]
+- `Tesamorelin` / `synonyms[]` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: Egrifta SV/WR
+  - Data: ["Egrifta", "Egrifta SV", "Egrifta WR", "TH9507", "Tesamorelin"]
+- `Tesamorelin` / `animal_ws.animal_studies[].mechanism` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: stabilized GHRH(1-44) analog; GHRHR agonism (demonstrated)
+  - Data: ["GHRH→GH→IGF-1", "GH antagonizes insulin"]
+- `Tesamorelin` / `animal_studies[].mechanism` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: stabilized GHRH(1-44) analog; GHRHR agonism (demonstrated)
+  - Data: ["GHRH→GH→IGF-1", "GH antagonizes insulin"]
+- `Tesamorelin` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Tesamorelin` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: DailyMed EGRIFTA SV/WR USPI, Section 12.3
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `pk_ws.pk.bioavailability.value` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: <4% absolute (2 mg s.c., healthy adults); median Tmax 0.15 h both populations; AUC 34% higher in HIV patients.
+  - Data: ["Per label (Egrifta WR 1.28 mg SC daily)"]
+- `Tesamorelin` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Tesamorelin` / `pk_ws.pk.bioavailability.source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: EGRIFTA USPI 12.3
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `pk_ws.pk.metabolism.value` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: No formal metabolism studies in humans (label statement); expected proteolytic degradation of GHRH analog.
+  - Data: ["Per label (Egrifta WR 1.28 mg SC daily)"]
+- `Tesamorelin` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Tesamorelin` / `pk_ws.pk.clearance.evidence_class` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Tesamorelin` / `pk_ws.cyp.status` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Tesamorelin` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Tesamorelin` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: DailyMed EGRIFTA SV/WR USPI, Section 12.3
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `pharmacokinetics.bioavailability.value` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: <4% absolute (2 mg s.c., healthy adults); median Tmax 0.15 h both populations; AUC 34% higher in HIV patients.
+  - Data: ["Per label (Egrifta WR 1.28 mg SC daily)"]
+- `Tesamorelin` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Tesamorelin` / `pharmacokinetics.bioavailability.source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: EGRIFTA USPI 12.3
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `pharmacokinetics.metabolism.value` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: No formal metabolism studies in humans (label statement); expected proteolytic degradation of GHRH analog.
+  - Data: ["Per label (Egrifta WR 1.28 mg SC daily)"]
+- `Tesamorelin` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Tesamorelin` / `pharmacokinetics.clearance.evidence_class` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Tesamorelin` / `cyp.status` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Tesamorelin` / `labs_ws.lab_effects[].direction` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: increase
+  - Data: ["elevated (monitored per label)", "can worsen"]
+- `Tesamorelin` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: Egrifta SV prescribing information (FDA label): monitor IGF-1; consider discontinuation if sustained elevation (e.g. >3 SDS)
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `labs_ws.lab_effects[].analyte` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: Fasting glucose
+  - Data: ["IGF-1", "Fasting glucose/HbA1c"]
+- `Tesamorelin` / `labs_ws.lab_effects[].source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: Egrifta label: glucose intolerance/diabetes risk - monitor glucose status; Phase 3 (Stanley/Falutz) showed small glucose increases
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `labs_ws.interactions.data[].note` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: GH-mediated insulin resistance may counteract glucose-lowering therapy; flagged in label context (glucose intolerance warning), no dedicated interaction studies.
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Tesamorelin"]
+- `Tesamorelin` / `lab_effects[].direction` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: increase
+  - Data: ["elevated (monitored per label)", "can worsen"]
+- `Tesamorelin` / `lab_effects[].source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: Egrifta SV prescribing information (FDA label): monitor IGF-1; consider discontinuation if sustained elevation (e.g. >3 SDS)
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `lab_effects[].analyte` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: Fasting glucose
+  - Data: ["IGF-1", "Fasting glucose/HbA1c"]
+- `Tesamorelin` / `lab_effects[].source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: Egrifta label: glucose intolerance/diabetes risk - monitor glucose status; Phase 3 (Stanley/Falutz) showed small glucose increases
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `interactions.data[].note` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: GH-mediated insulin resistance may counteract glucose-lowering therapy; flagged in label context (glucose intolerance warning), no dedicated interaction studies.
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Tesamorelin"]
+- `Tesamorelin` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: approved
+  - Data: ["avoid_or_rx_only"]
+- `Tesamorelin` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: not approved — EMA MAA for Egrifta WITHDRAWN 2012-06-21 after CHMP concerns (never authorized in EU)
+  - Data: ["avoid_or_rx_only"]
+- `Tesamorelin` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: not approved (no MHRA marketing authorisation; unlicensed-specials import only)
+  - Data: ["avoid_or_rx_only"]
+- `Tesamorelin` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: approved (Health Canada, Egrifta — per manufacturer/secondary sources)
+  - Data: ["avoid_or_rx_only"]
+- `Tesamorelin` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: not approved (no ARTG entry identified)
+  - Data: ["avoid_or_rx_only"]
+- `Tesamorelin` / `regulatory.US.status` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: approved
+  - Data: ["avoid_or_rx_only"]
+- `Tesamorelin` / `regulatory.EU.status` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: not approved — EMA MAA for Egrifta WITHDRAWN 2012-06-21 after CHMP concerns (never authorized in EU)
+  - Data: ["avoid_or_rx_only"]
+- `Tesamorelin` / `regulatory.UK.status` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: not approved (no MHRA marketing authorisation; unlicensed-specials import only)
+  - Data: ["avoid_or_rx_only"]
+- `Tesamorelin` / `regulatory.CA.status` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: approved (Health Canada, Egrifta — per manufacturer/secondary sources)
+  - Data: ["avoid_or_rx_only"]
+- `Tesamorelin` / `regulatory.AU.status` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: not approved (no ARTG entry identified)
+  - Data: ["avoid_or_rx_only"]
+- `Tesamorelin` / `wada_ws.wada.source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: WADA 2026 Prohibited List S2.2.4
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `wada.source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: WADA 2026 Prohibited List S2.2.4
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.accessdata.fda.gov/ (Drugs@FDA NDA 022505)", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://dailymed.nlm.nih.gov/dailymed/search.cfm?query=EGRIFTA"]
+- `Tesamorelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.accessdata.fda.gov/ (Drugs@FDA NDA 022505)", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://dailymed.nlm.nih.gov/dailymed/search.cfm?query=EGRIFTA"]
+- `Tesamorelin` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.accessdata.fda.gov/ (Drugs@FDA NDA 022505)", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://dailymed.nlm.nih.gov/dailymed/search.cfm?query=EGRIFTA"]
+- `Tesamorelin` / `quality_evidence[].url` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.accessdata.fda.gov/ (Drugs@FDA NDA 022505)", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://dailymed.nlm.nih.gov/dailymed/search.cfm?query=EGRIFTA"]
+- `Tesamorelin` / `quality_evidence[].url` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.accessdata.fda.gov/ (Drugs@FDA NDA 022505)", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://dailymed.nlm.nih.gov/dailymed/search.cfm?query=EGRIFTA"]
+- `Tesamorelin` / `quality_evidence[].url` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.accessdata.fda.gov/ (Drugs@FDA NDA 022505)", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://dailymed.nlm.nih.gov/dailymed/search.cfm?query=EGRIFTA"]
+- `Tesamorelin` / `market_ws.community_names[]` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: Tesa
+  - Data: ["Egrifta", "Egrifta SV", "Egrifta WR", "TH9507", "Tesamorelin"]
+- `Tesamorelin` / `community_names[]` / `crawl_027_profiles/Tesamorelin.json`
+  - Report: Tesa
+  - Data: ["Egrifta", "Egrifta SV", "Egrifta WR", "TH9507", "Tesamorelin"]
+- `Thymosin alpha-1` / `identity_ws.synonyms[]` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: thymalfasin
+  - Data: ["Zadaxin", "Ta1", "Thymosin alpha-1"]
+- `Thymosin alpha-1` / `identity_ws.synonyms[]` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: Tα1
+  - Data: ["Zadaxin", "Ta1", "Thymosin alpha-1"]
+- `Thymosin alpha-1` / `identity_ws.research_names[]` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: thymalfasin
+  - Data: ["Zadaxin", "Ta1", "Thymosin alpha-1"]
+- `Thymosin alpha-1` / `synonyms[]` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: thymalfasin
+  - Data: ["Zadaxin", "Ta1", "Thymosin alpha-1"]
+- `Thymosin alpha-1` / `synonyms[]` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: Tα1
+  - Data: ["Zadaxin", "Ta1", "Thymosin alpha-1"]
+- `Thymosin alpha-1` / `pk_ws.pk.half_life.evidence_class` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: human_clinical/approved_nonUS_label
+  - Data: ["B", "A", "C"]
+- `Thymosin alpha-1` / `pk_ws.pk.half_life.source` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: Zadaxin product information (SciClone); Tuthill et al. PK studies; approved outside US
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin alpha-1` / `pk_ws.pk.bioavailability.evidence_class` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `Thymosin alpha-1` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `Thymosin alpha-1` / `pk_ws.pk.clearance.evidence_class` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `Thymosin alpha-1` / `pk_ws.cyp.status` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `pharmacokinetics.half_life.evidence_class` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: human_clinical/approved_nonUS_label
+  - Data: ["B", "A", "C"]
+- `Thymosin alpha-1` / `pharmacokinetics.half_life.source` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: Zadaxin product information (SciClone); Tuthill et al. PK studies; approved outside US
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin alpha-1` / `pharmacokinetics.bioavailability.evidence_class` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `Thymosin alpha-1` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `Thymosin alpha-1` / `pharmacokinetics.clearance.evidence_class` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `Thymosin alpha-1` / `cyp.status` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `safety_ws.tumor_growth_context.note` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: In onkologischen Kombinationsstudien keine erhoehten schweren Toxizitaeten
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "§8 peptide CYP handling", "STRICT_MODE fix: UNII 549LM7U24W war Duplikat von Tβ4 → null (Agent A).", "CRAWL_027-Profil verknüpft: Thymosin alpha-1", "QA1-Fix: UNII → W0B22ISQ1C (Thymalfasin, GSRS) (QA1).", "class-level peptide metabolism assessment"]
+- `Thymosin alpha-1` / `safety.tumor_growth_context.note` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: In onkologischen Kombinationsstudien keine erhoehten schweren Toxizitaeten
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "§8 peptide CYP handling", "STRICT_MODE fix: UNII 549LM7U24W war Duplikat von Tβ4 → null (Agent A).", "CRAWL_027-Profil verknüpft: Thymosin alpha-1", "QA1-Fix: UNII → W0B22ISQ1C (Thymalfasin, GSRS) (QA1).", "class-level peptide metabolism assessment"]
+- `Thymosin alpha-1` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `regulatory_ws.regulatory.US.note` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: orphan designations exist but no FDA approval
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "§8 peptide CYP handling", "STRICT_MODE fix: UNII 549LM7U24W war Duplikat von Tβ4 → null (Agent A).", "CRAWL_027-Profil verknüpft: Thymosin alpha-1", "QA1-Fix: UNII → W0B22ISQ1C (Thymalfasin, GSRS) (QA1).", "class-level peptide metabolism assessment"]
+- `Thymosin alpha-1` / `regulatory_ws.regulatory.TH.status.status` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: approved (reported)
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `regulatory_ws.regulatory.TH.status.note` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: Zadaxin (thymalfasin) registered in Thailand among ~35 countries incl. CN; confidence medium — verify against Thai FDA database
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "§8 peptide CYP handling", "STRICT_MODE fix: UNII 549LM7U24W war Duplikat von Tβ4 → null (Agent A).", "CRAWL_027-Profil verknüpft: Thymosin alpha-1", "QA1-Fix: UNII → W0B22ISQ1C (Thymalfasin, GSRS) (QA1).", "class-level peptide metabolism assessment"]
+- `Thymosin alpha-1` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: not approved (no EMA centralised authorisation; some national use reported — UNKNOWN per member state)
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: not approved (no authorisation identified)
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: not approved (no ARTG entry identified)
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `regulatory.US.status` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `regulatory.US.note` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: orphan designations exist but no FDA approval
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "§8 peptide CYP handling", "STRICT_MODE fix: UNII 549LM7U24W war Duplikat von Tβ4 → null (Agent A).", "CRAWL_027-Profil verknüpft: Thymosin alpha-1", "QA1-Fix: UNII → W0B22ISQ1C (Thymalfasin, GSRS) (QA1).", "class-level peptide metabolism assessment"]
+- `Thymosin alpha-1` / `regulatory.TH.status.status` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: approved (reported)
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `regulatory.TH.status.note` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: Zadaxin (thymalfasin) registered in Thailand among ~35 countries incl. CN; confidence medium — verify against Thai FDA database
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "§8 peptide CYP handling", "STRICT_MODE fix: UNII 549LM7U24W war Duplikat von Tβ4 → null (Agent A).", "CRAWL_027-Profil verknüpft: Thymosin alpha-1", "QA1-Fix: UNII → W0B22ISQ1C (Thymalfasin, GSRS) (QA1).", "class-level peptide metabolism assessment"]
+- `Thymosin alpha-1` / `regulatory.EU.status` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: not approved (no EMA centralised authorisation; some national use reported — UNKNOWN per member state)
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `regulatory.UK.status` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `regulatory.CA.status` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: not approved (no authorisation identified)
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `regulatory.AU.status` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: not approved (no ARTG entry identified)
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `wada_ws.wada.source` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: WADA 2026 List (absence)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin alpha-1` / `wada.source` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: WADA 2026 List (absence)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin alpha-1` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin alpha-1` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Thymosin alpha-1` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin alpha-1` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin alpha-1` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin alpha-1` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin alpha-1` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Thymosin alpha-1` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin alpha-1` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Thymosin alpha-1` / `quality_evidence[].url` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Thymosin alpha-1` / `quality_evidence[].url` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Thymosin alpha-1` / `quality_evidence[].url` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026"]
+- `Thymosin alpha-1` / `market_ws.community_names[]` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: Thymosin a1
+  - Data: ["Zadaxin", "Ta1", "Thymosin alpha-1"]
+- `Thymosin alpha-1` / `community_names[]` / `crawl_027_profiles/Thymosin_alpha_1.json`
+  - Report: Thymosin a1
+  - Data: ["Zadaxin", "Ta1", "Thymosin alpha-1"]
+- `Thymosin beta-4 (full)` / `identity_ws.synonyms[]` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: TMSB4X product
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `identity_ws.synonyms[]` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: RGN-259 (ophthalmic drug form)
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `identity_ws.community_names[]` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: TB4
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `identity_ws.community_names[]` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: thymosin beta 4
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `identity_ws.research_names[]` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: timbetasin
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `identity_ws.identity.sequence` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: Ac-Ser-Asp-Lys-Pro-Asp-Met-Ala-Glu-Ile-Glu-Lys-Phe-Asp-Lys-Ser-Lys-Leu-Lys-Lys-Thr-Glu-Thr-Gln-Glu-Lys-Asn-Pro-Leu-Pro-Ser-Lys-Glu-Thr-Ile-Glu-Gln-Glu-Lys-Gln-Ala-Gly-Glu-Ser-OH
+  - Data: ["(43 aa, Ac-SDKPDMAEIEKFDKSK...)"]
+- `Thymosin beta-4 (full)` / `identity_ws.identity.molecular_formula` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: C212H350N56O78S
+  - Data: ["C214H354N56O80S"]
+- `Thymosin beta-4 (full)` / `identity_ws.identity.molecular_weight` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: 4963
+  - Data: [4963.5]
+- `Thymosin beta-4 (full)` / `identity_ws.identity.PubChem_CID` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: 45382195
+  - Data: [155387671]
+- `Thymosin beta-4 (full)` / `identity_ws.identity.InChIKey` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: UGPMCIBIHRSCBV-UHFFFAOYSA-N
+  - Data: ["SDININHGNOTFOY-UHFFFAOYSA-N"]
+- `Thymosin beta-4 (full)` / `identity.sequence` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: Ac-Ser-Asp-Lys-Pro-Asp-Met-Ala-Glu-Ile-Glu-Lys-Phe-Asp-Lys-Ser-Lys-Leu-Lys-Lys-Thr-Glu-Thr-Gln-Glu-Lys-Asn-Pro-Leu-Pro-Ser-Lys-Glu-Thr-Ile-Glu-Gln-Glu-Lys-Gln-Ala-Gly-Glu-Ser-OH
+  - Data: ["(43 aa, Ac-SDKPDMAEIEKFDKSK...)"]
+- `Thymosin beta-4 (full)` / `identity.molecular_formula` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: C212H350N56O78S
+  - Data: ["C214H354N56O80S"]
+- `Thymosin beta-4 (full)` / `identity.molecular_weight` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: 4963
+  - Data: [4963.5]
+- `Thymosin beta-4 (full)` / `identity.PubChem_CID` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: 45382195
+  - Data: [155387671]
+- `Thymosin beta-4 (full)` / `identity.InChIKey` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: UGPMCIBIHRSCBV-UHFFFAOYSA-N
+  - Data: ["SDININHGNOTFOY-UHFFFAOYSA-N"]
+- `Thymosin beta-4 (full)` / `synonyms[]` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: TMSB4X product
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `synonyms[]` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: RGN-259 (ophthalmic drug form)
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: No route-specified human half-life published. In human pharmacokinetic context only fragment Ac-SDKP characterized (plasma t1/2 ~95-130 min via ACE degradation, Azizi et al.); full-length Tβ4 (4.9 kDa) human PK not reported.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Thymosin beta-4 (full)` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: No human bioavailability data.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Thymosin beta-4 (full)` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: preclinical/inference
+  - Data: ["B", "A", "C"]
+- `Thymosin beta-4 (full)` / `pk_ws.cyp.status` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: No route-specified human half-life published. In human pharmacokinetic context only fragment Ac-SDKP characterized (plasma t1/2 ~95-130 min via ACE degradation, Azizi et al.); full-length Tβ4 (4.9 kDa) human PK not reported.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Thymosin beta-4 (full)` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: No human bioavailability data.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Thymosin beta-4 (full)` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: preclinical/inference
+  - Data: ["B", "A", "C"]
+- `Thymosin beta-4 (full)` / `cyp.status` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory.US.status` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory.EU.status` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory.UK.status` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory.CA.status` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory.AU.status` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `wada_ws.wada.source` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: WADA 2026 Prohibited List S2.3
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin beta-4 (full)` / `wada.source` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: WADA 2026 Prohibited List S2.3
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin beta-4 (full)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin beta-4 (full)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Thymosin beta-4 (full)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin beta-4 (full)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin beta-4 (full)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin beta-4 (full)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin beta-4 (full)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Thymosin beta-4 (full)` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin beta-4 (full)` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Thymosin beta-4 (full)` / `quality_evidence[].url` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Thymosin beta-4 (full)` / `quality_evidence[].url` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Thymosin beta-4 (full)` / `quality_evidence[].url` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Thymosin beta-4 (full)` / `market_ws.community_names[]` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: TB4
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `market_ws.community_names[]` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: Tb4 full length
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `community_names[]` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: TB4
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `community_names[]` / `crawl_027_profiles/Thymosin_beta_4_full.json`
+  - Report: Tb4 full length
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Vesugen` / `identity_ws.synonyms[]` / `crawl_027_profiles/Vesugen.json`
+  - Report: KED peptide
+  - Data: ["Lys-Glu-Asp", "Vesugen"]
+- `Vesugen` / `identity_ws.research_names[]` / `crawl_027_profiles/Vesugen.json`
+  - Report: KED
+  - Data: ["Lys-Glu-Asp", "Vesugen"]
+- `Vesugen` / `synonyms[]` / `crawl_027_profiles/Vesugen.json`
+  - Report: KED peptide
+  - Data: ["Lys-Glu-Asp", "Vesugen"]
+- `Vesugen` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/Vesugen.json`
+  - Report: No human PK. Tripeptide (Lys-Glu-Asp) bioregulator; none published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Vesugen` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/Vesugen.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Vesugen` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Vesugen.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Vesugen` / `pk_ws.cyp.status` / `crawl_027_profiles/Vesugen.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Vesugen` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/Vesugen.json`
+  - Report: No human PK. Tripeptide (Lys-Glu-Asp) bioregulator; none published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Vesugen` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/Vesugen.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Vesugen` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Vesugen.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Vesugen` / `cyp.status` / `crawl_027_profiles/Vesugen.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Vesugen` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Vesugen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vesugen` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Vesugen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vesugen` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Vesugen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vesugen` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Vesugen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vesugen` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Vesugen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vesugen` / `regulatory.US.status` / `crawl_027_profiles/Vesugen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vesugen` / `regulatory.EU.status` / `crawl_027_profiles/Vesugen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vesugen` / `regulatory.UK.status` / `crawl_027_profiles/Vesugen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vesugen` / `regulatory.CA.status` / `crawl_027_profiles/Vesugen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vesugen` / `regulatory.AU.status` / `crawl_027_profiles/Vesugen.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vesugen` / `wada_ws.wada.source` / `crawl_027_profiles/Vesugen.json`
+  - Report: WADA S0 rationale
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vesugen` / `wada.source` / `crawl_027_profiles/Vesugen.json`
+  - Report: WADA S0 rationale
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vesugen` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Vesugen.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vesugen` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Vesugen.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Vesugen` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Vesugen.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vesugen` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Vesugen.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vesugen` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Vesugen.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vesugen` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Vesugen.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vesugen` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Vesugen.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Vesugen` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Vesugen.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vesugen` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Vesugen.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Vesugen` / `quality_evidence[].url` / `crawl_027_profiles/Vesugen.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Vesugen` / `quality_evidence[].url` / `crawl_027_profiles/Vesugen.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Vesugen` / `quality_evidence[].url` / `crawl_027_profiles/Vesugen.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Vesugen` / `market_ws.community_names[]` / `crawl_027_profiles/Vesugen.json`
+  - Report: Vesugen (KED tripeptide)
+  - Data: ["Lys-Glu-Asp", "Vesugen"]
+- `Vesugen` / `community_names[]` / `crawl_027_profiles/Vesugen.json`
+  - Report: Vesugen (KED tripeptide)
+  - Data: ["Lys-Glu-Asp", "Vesugen"]
+- `Vilon` / `identity_ws.synonyms[]` / `crawl_027_profiles/Vilon.json`
+  - Report: KE peptide
+  - Data: ["Lys-Glu", "Vilon"]
+- `Vilon` / `identity_ws.synonyms[]` / `crawl_027_profiles/Vilon.json`
+  - Report: L-lysyl-L-glutamic acid
+  - Data: ["Lys-Glu", "Vilon"]
+- `Vilon` / `identity_ws.research_names[]` / `crawl_027_profiles/Vilon.json`
+  - Report: KE
+  - Data: ["Lys-Glu", "Vilon"]
+- `Vilon` / `synonyms[]` / `crawl_027_profiles/Vilon.json`
+  - Report: KE peptide
+  - Data: ["Lys-Glu", "Vilon"]
+- `Vilon` / `synonyms[]` / `crawl_027_profiles/Vilon.json`
+  - Report: L-lysyl-L-glutamic acid
+  - Data: ["Lys-Glu", "Vilon"]
+- `Vilon` / `human_ws.human_studies[].evidence_class` / `crawl_027_profiles/Vilon.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `Vilon` / `human_studies[].evidence_class` / `crawl_027_profiles/Vilon.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `Vilon` / `pk_ws.pk.half_life.reason` / `crawl_027_profiles/Vilon.json`
+  - Report: No human PK. Dipeptide (Lys-Glu) bioregulator; none published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Vilon` / `pk_ws.pk.bioavailability.reason` / `crawl_027_profiles/Vilon.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Vilon` / `pk_ws.pk.metabolism.evidence_class` / `crawl_027_profiles/Vilon.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Vilon` / `pk_ws.cyp.status` / `crawl_027_profiles/Vilon.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Vilon` / `pharmacokinetics.half_life.reason` / `crawl_027_profiles/Vilon.json`
+  - Report: No human PK. Dipeptide (Lys-Glu) bioregulator; none published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Vilon` / `pharmacokinetics.bioavailability.reason` / `crawl_027_profiles/Vilon.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Vilon` / `pharmacokinetics.metabolism.evidence_class` / `crawl_027_profiles/Vilon.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Vilon` / `cyp.status` / `crawl_027_profiles/Vilon.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Vilon` / `regulatory_ws.regulatory.US.status` / `crawl_027_profiles/Vilon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vilon` / `regulatory_ws.regulatory.EU.status` / `crawl_027_profiles/Vilon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vilon` / `regulatory_ws.regulatory.UK.status` / `crawl_027_profiles/Vilon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vilon` / `regulatory_ws.regulatory.CA.status` / `crawl_027_profiles/Vilon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vilon` / `regulatory_ws.regulatory.AU.status` / `crawl_027_profiles/Vilon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vilon` / `regulatory.US.status` / `crawl_027_profiles/Vilon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vilon` / `regulatory.EU.status` / `crawl_027_profiles/Vilon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vilon` / `regulatory.UK.status` / `crawl_027_profiles/Vilon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vilon` / `regulatory.CA.status` / `crawl_027_profiles/Vilon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vilon` / `regulatory.AU.status` / `crawl_027_profiles/Vilon.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Vilon` / `wada_ws.wada.source` / `crawl_027_profiles/Vilon.json`
+  - Report: WADA S0 rationale
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vilon` / `wada.source` / `crawl_027_profiles/Vilon.json`
+  - Report: WADA S0 rationale
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vilon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Vilon.json`
+  - Report: Ashraf et al., J Med Internet Res 2024 (JMIR 2024;26:e65440) & JAMA Netw Open 2024 research letter
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vilon` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Vilon.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Vilon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Vilon.json`
+  - Report: Janvier et al., Talanta 2018 (Belgian customs/lab analysis of seized peptides)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vilon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Vilon.json`
+  - Report: De Spiegeleer et al. 2008 (commercial peptide quality survey)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vilon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Vilon.json`
+  - Report: Vanhee et al. 2015
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vilon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Vilon.json`
+  - Report: FDA Warning Letters MARCS-CMS 696885 / 721806 / 729447
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vilon` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Vilon.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Vilon` / `storage_ws.quality_evidence[].source` / `crawl_027_profiles/Vilon.json`
+  - Report: FDA 503A/503B Bulk Drug Substances interim policy; FDA Ta1 bulk drug substance review (fda.gov/media/183892)
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: explicit evidence-gap provenance instead of empty array", "crawl_017 H6"]
+- `Vilon` / `storage_ws.quality_evidence[].url` / `crawl_027_profiles/Vilon.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Vilon` / `quality_evidence[].url` / `crawl_027_profiles/Vilon.json`
+  - Report: https://www.jmir.org/2024/1/e65440/PDF
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Vilon` / `quality_evidence[].url` / `crawl_027_profiles/Vilon.json`
+  - Report: https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/usapeptidecom-696885-02262025
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Vilon` / `quality_evidence[].url` / `crawl_027_profiles/Vilon.json`
+  - Report: https://www.fda.gov/media/183892/download
+  - Data: ["https://pubmed.ncbi.nlm.nih.gov/ (Khavinson bioregulator research line)"]
+- `Vilon` / `market_ws.community_names[]` / `crawl_027_profiles/Vilon.json`
+  - Report: Vilon (KE dipeptide)
+  - Data: ["Lys-Glu", "Vilon"]
+- `Vilon` / `community_names[]` / `crawl_027_profiles/Vilon.json`
+  - Report: Vilon (KE dipeptide)
+  - Data: ["Lys-Glu", "Vilon"]
+- `BPC-157` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: Body Protection Compound-157
+  - Data: ["Body Protection Compound", "PL-10", "PLD-116", "BPC-157"]
+- `BPC-157` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: bepecin
+  - Data: ["Body Protection Compound", "PL-10", "PLD-116", "BPC-157"]
+- `BPC-157` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: BPC
+  - Data: ["Body Protection Compound", "PL-10", "PLD-116", "BPC-157"]
+- `TB-500 (Thymosin beta-4 fragment)` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: Thymosin beta-4 fragment (17-23, Ac-LKKTETQ)
+  - Data: ["TB500", "Tβ4 fragment", "TB-500 (Thymosin beta-4 fragment)"]
+- `TB-500 (Thymosin beta-4 fragment)` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: TB-500
+  - Data: ["TB500", "Tβ4 fragment", "TB-500 (Thymosin beta-4 fragment)"]
+- `TB-500 (Thymosin beta-4 fragment)` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: Ac-LKKTETQ (Tβ4 17-23)
+  - Data: ["TB500", "Tβ4 fragment", "TB-500 (Thymosin beta-4 fragment)"]
+- `TB-500 (Thymosin beta-4 fragment)` / `identity.sequence` / `crawl_027_ws/A.json`
+  - Report: Ac-Leu-Lys-Lys-Thr-Glu-Thr-Gln
+  - Data: ["Ac-Leu-Lys-Lys-Thr-Glu-Thr-Gln (fragment)"]
+- `Thymosin beta-4 (full)` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: TMSB4X product
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: RGN-259 (ophthalmic drug form)
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: TB4
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: thymosin beta 4
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: timbetasin
+  - Data: ["Tβ4", "RGN-259", "Thymosin beta-4 (full)"]
+- `Thymosin beta-4 (full)` / `identity.sequence` / `crawl_027_ws/A.json`
+  - Report: Ac-Ser-Asp-Lys-Pro-Asp-Met-Ala-Glu-Ile-Glu-Lys-Phe-Asp-Lys-Ser-Lys-Leu-Lys-Lys-Thr-Glu-Thr-Gln-Glu-Lys-Asn-Pro-Leu-Pro-Ser-Lys-Glu-Thr-Ile-Glu-Gln-Glu-Lys-Gln-Ala-Gly-Glu-Ser-OH
+  - Data: ["(43 aa, Ac-SDKPDMAEIEKFDKSK...)"]
+- `Thymosin beta-4 (full)` / `identity.molecular_formula` / `crawl_027_ws/A.json`
+  - Report: C212H350N56O78S
+  - Data: ["C214H354N56O80S"]
+- `Thymosin beta-4 (full)` / `identity.molecular_weight` / `crawl_027_ws/A.json`
+  - Report: 4963
+  - Data: [4963.5]
+- `Thymosin beta-4 (full)` / `identity.PubChem_CID` / `crawl_027_ws/A.json`
+  - Report: 45382195
+  - Data: [155387671]
+- `Thymosin beta-4 (full)` / `identity.InChIKey` / `crawl_027_ws/A.json`
+  - Report: UGPMCIBIHRSCBV-UHFFFAOYSA-N
+  - Data: ["SDININHGNOTFOY-UHFFFAOYSA-N"]
+- `KPV` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: Lys-Pro-Val
+  - Data: ["alpha-MSH(11-13)", "KPV"]
+- `KPV` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: α-MSH 11-13 fragment
+  - Data: ["alpha-MSH(11-13)", "KPV"]
+- `KPV` / `identity.molecular_weight` / `crawl_027_ws/A.json`
+  - Report: 342.43
+  - Data: [342.4]
+- `GHK-Cu` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: glycyl-L-histidyl-L-lysine copper complex
+  - Data: ["copper tripeptide-1", "GHK-Cu"]
+- `GHK-Cu` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: copper peptide
+  - Data: ["copper tripeptide-1", "GHK-Cu"]
+- `GHK-Cu` / `identity.molecular_weight` / `crawl_027_ws/A.json`
+  - Report: 400.90
+  - Data: [403.9]
+- `LL-37` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: hCAP18(134-170)
+  - Data: ["hCAP-18 fragment", "LL-37"]
+- `LL-37` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: human cathelicidin LL-37
+  - Data: ["hCAP-18 fragment", "LL-37"]
+- `LL-37` / `identity.sequence` / `crawl_027_ws/A.json`
+  - Report: Leu-Leu-Gly-Asp-Phe-Phe-Arg-Lys-Ser-Lys-Glu-Lys-Ile-Gly-Lys-Glu-Phe-Lys-Arg-Ile-Val-Gln-Arg-Ile-Lys-Asp-Phe-Leu-Arg-Asn-Leu-Val-Pro-Arg-Thr-Glu-Ser
+  - Data: ["(37 aa human cathelicidin, hCAP18 C-terminus)"]
+- `LL-37` / `identity.molecular_weight` / `crawl_027_ws/A.json`
+  - Report: 4493
+  - Data: [4493.3]
+- `MOTS-c` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: mitochondrial open-reading-frame of the 12S rRNA-c
+  - Data: ["MOTS-c"]
+- `AOD-9604` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: Tyr-hGH(176-191)
+  - Data: ["lipotropin fragment 176-191", "AOD-9604"]
+- `AOD-9604` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: Anti-Obesity Drug 9604
+  - Data: ["lipotropin fragment 176-191", "AOD-9604"]
+- `AOD-9604` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: AOD9604
+  - Data: ["lipotropin fragment 176-191", "AOD-9604"]
+- `AOD-9604` / `identity.sequence` / `crawl_027_ws/A.json`
+  - Report: Tyr-Leu-Arg-Ile-Val-Gln-Cys-Arg-Ser-Val-Glu-Gly-Ser-Cys-Gly-Phe
+  - Data: ["Tyr-Leu-Arg-Ile-Val-Gln-Cys-Arg-Ser-Val-Glu-Gly-Ser-Cys-Gly-Phe (Tyr-hGH176-191)"]
+- `CJC-1295 with DAC` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: CJC-1295 with Drug Affinity Complex
+  - Data: ["CJC-1295 DAC", "CJC-1295 with DAC"]
+- `CJC-1295 with DAC` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: DAC:GRF
+  - Data: ["CJC-1295 DAC", "CJC-1295 with DAC"]
+- `CJC-1295 with DAC` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: CJC w/ DAC
+  - Data: ["CJC-1295 DAC", "CJC-1295 with DAC"]
+- `CJC-1295 with DAC` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: CJC-1295 (ConjuChem)
+  - Data: ["CJC-1295 DAC", "CJC-1295 with DAC"]
+- `CJC-1295 with DAC` / `identity.molecular_formula` / `crawl_027_ws/A.json`
+  - Report: C168H271N47O46 (approx.; DAC adds maleimidopropionyl)
+  - Data: ["C165H269N47O46"]
+- `CJC-1295 with DAC` / `identity.molecular_weight` / `crawl_027_ws/A.json`
+  - Report: 3648.2
+  - Data: [3647.2]
+- `CJC-1295 (no DAC)` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: CJC no DAC
+  - Data: ["Mod GRF(1-29) analog", "CJC-1295 w/o DAC", "CJC-1295 (no DAC)"]
+- `CJC-1295 (no DAC)` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: CJC-1295 without DAC
+  - Data: ["Mod GRF(1-29) analog", "CJC-1295 w/o DAC", "CJC-1295 (no DAC)"]
+- `CJC-1295 (no DAC)` / `identity.molecular_formula` / `crawl_027_ws/A.json`
+  - Report: C165H269N47O46
+  - Data: ["C152H252N44O42"]
+- `CJC-1295 (no DAC)` / `identity.molecular_weight` / `crawl_027_ws/A.json`
+  - Report: 3647.2
+  - Data: [3368.0]
+- `Mod GRF 1-29` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: modGRF(1-29)
+  - Data: ["CJC-1293", "tetrasubstituted GRF 1-29", "Mod GRF 1-29"]
+- `Mod GRF 1-29` / `identity.molecular_weight` / `crawl_027_ws/A.json`
+  - Report: 3357.9
+  - Data: [3637.2]
+- `Ipamorelin` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: NNC 26-0161
+  - Data: ["Ipamorelin"]
+- `Ipamorelin` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: Ipa
+  - Data: ["Ipamorelin"]
+- `Ipamorelin` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: NNC 26-0161
+  - Data: ["Ipamorelin"]
+- `GHRP-2` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: KP-102
+  - Data: ["pralmorelin", "GHRP-2"]
+- `GHRP-2` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: KP-102
+  - Data: ["pralmorelin", "GHRP-2"]
+- `GHRP-2` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: KP102D
+  - Data: ["pralmorelin", "GHRP-2"]
+- `GHRP-2` / `identity.molecular_weight` / `crawl_027_ws/A.json`
+  - Report: 818.0
+  - Data: [817.97]
+- `GHRP-6` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: Growth Hormone Releasing Peptide-6
+  - Data: ["GHRP-6"]
+- `GHRP-6` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: SKF-110679
+  - Data: ["GHRP-6"]
+- `GHRP-6` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: SKF-110679
+  - Data: ["GHRP-6"]
+- `Hexarelin` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: EP-23905
+  - Data: ["Examorelin", "Hexarelin"]
+- `Hexarelin` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: MF-6003
+  - Data: ["Examorelin", "Hexarelin"]
+- `Hexarelin` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: Hex
+  - Data: ["Examorelin", "Hexarelin"]
+- `Hexarelin` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: EP-23905
+  - Data: ["Examorelin", "Hexarelin"]
+- `Sermorelin` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: Geref
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: GHRH(1-29)NH2
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: somatorelin (1-29) amide
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: Serm
+  - Data: ["sermorelin", "Sermorelin"]
+- `Sermorelin` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: Geref
+  - Data: ["sermorelin", "Sermorelin"]
+- `Tesamorelin` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: Egrifta SV/WR
+  - Data: ["Egrifta", "Egrifta SV", "Egrifta WR", "TH9507", "Tesamorelin"]
+- `Tesamorelin` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: Tesa
+  - Data: ["Egrifta", "Egrifta SV", "Egrifta WR", "TH9507", "Tesamorelin"]
+- `Tesamorelin` / `identity.molecular_weight` / `crawl_027_ws/A.json`
+  - Report: 5136
+  - Data: [5135.9]
+- `Ibutamoren (MK-677)` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: MK-0677
+  - Data: ["MK-677", "nutrobal", "Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: L-163,191
+  - Data: ["MK-677", "nutrobal", "Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: ibutamoren
+  - Data: ["MK-677", "nutrobal", "Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: L-163,191
+  - Data: ["MK-677", "nutrobal", "Ibutamoren (MK-677)"]
+- `MGF (mechano growth factor)` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: mechano growth factor
+  - Data: ["IGF-1Ec", "MGF (mechano growth factor)"]
+- `MGF (mechano growth factor)` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: MGF
+  - Data: ["IGF-1Ec", "MGF (mechano growth factor)"]
+- `MGF (mechano growth factor)` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: IGF-1Ec E-domain peptide
+  - Data: ["IGF-1Ec", "MGF (mechano growth factor)"]
+- `PEG-MGF` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: pegylated mechano growth factor
+  - Data: ["PEG-MGF"]
+- `IGF-1 (mecasermin)` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: IGF-1
+  - Data: ["Increlex", "IGF-1 (mecasermin)"]
+- `IGF-1 (mecasermin)` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: somatomedin C
+  - Data: ["Increlex", "IGF-1 (mecasermin)"]
+- `IGF-1 (mecasermin)` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: IGF-1
+  - Data: ["Increlex", "IGF-1 (mecasermin)"]
+- `IGF-1 (mecasermin)` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: mecasermin
+  - Data: ["Increlex", "IGF-1 (mecasermin)"]
+- `IGF-1 (mecasermin)` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: rhIGF-1
+  - Data: ["Increlex", "IGF-1 (mecasermin)"]
+- `IGF-1 LR3` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: LR3IGF-I
+  - Data: ["Long R3 IGF-1", "IGF-1 LR3"]
+- `IGF-1 LR3` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: LR3
+  - Data: ["Long R3 IGF-1", "IGF-1 LR3"]
+- `IGF-1 DES` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: des(1-3)-IGF-I
+  - Data: ["DES(1-3)IGF-1", "IGF-1 DES"]
+- `IGF-1 DES` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: DES
+  - Data: ["DES(1-3)IGF-1", "IGF-1 DES"]
+- `Semax` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: ACTH(4-7) analog + Pro-Gly-Pro
+  - Data: ["Met-Glu-His-Phe-Pro-Gly-Pro", "Semax"]
+- `Selank` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: TP-7
+  - Data: ["Thr-Lys-Pro-Arg-Pro-Gly-Pro", "Selank"]
+- `Emideltide (DSIP)` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: DSIP
+  - Data: ["Delta sleep-inducing peptide", "Emideltide (DSIP)"]
+- `Emideltide (DSIP)` / `community_names[]` / `crawl_027_ws/A.json`
+  - Report: DSIP
+  - Data: ["Delta sleep-inducing peptide", "Emideltide (DSIP)"]
+- `Emideltide (DSIP)` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: emideltide
+  - Data: ["Delta sleep-inducing peptide", "Emideltide (DSIP)"]
+- `Pinealon` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: EDR peptide
+  - Data: ["Glu-Asp-Arg", "Pinealon"]
+- `Pinealon` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: EDR
+  - Data: ["Glu-Asp-Arg", "Pinealon"]
+- `Vesugen` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: KED peptide
+  - Data: ["Lys-Glu-Asp", "Vesugen"]
+- `Vesugen` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: KED
+  - Data: ["Lys-Glu-Asp", "Vesugen"]
+- `Vilon` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: KE peptide
+  - Data: ["Lys-Glu", "Vilon"]
+- `Vilon` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: L-lysyl-L-glutamic acid
+  - Data: ["Lys-Glu", "Vilon"]
+- `Vilon` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: KE
+  - Data: ["Lys-Glu", "Vilon"]
+- `Cortagen` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: AEDP peptide
+  - Data: ["Ala-Glu-Asp-Pro", "Cortagen"]
+- `Cortagen` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: AEDP
+  - Data: ["Ala-Glu-Asp-Pro", "Cortagen"]
+- `Epitalon` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: AEDG
+  - Data: ["Epithalon", "Ala-Glu-Asp-Gly", "Epitalon"]
+- `Epitalon` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: AEDG
+  - Data: ["Epithalon", "Ala-Glu-Asp-Gly", "Epitalon"]
+- `Melanotan I (afamelanotide)` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: [Nle4, D-Phe7]-alpha-MSH
+  - Data: ["MT-1", "MT-I", "Melanotan I", "Scenesse", "afamelanotide", "afamelanotide (related)", "Melanotan I (afamelanotide)"]
+- `Melanotan I (afamelanotide)` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: NDP-MSH
+  - Data: ["MT-1", "MT-I", "Melanotan I", "Scenesse", "afamelanotide", "afamelanotide (related)", "Melanotan I (afamelanotide)"]
+- `Melanotan I (afamelanotide)` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: NDP-α-MSH
+  - Data: ["MT-1", "MT-I", "Melanotan I", "Scenesse", "afamelanotide", "afamelanotide (related)", "Melanotan I (afamelanotide)"]
+- `Melanotan II` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: MT-II
+  - Data: ["MT-2", "Melanotan II"]
+- `Melanotan II` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: melanotan 2
+  - Data: ["MT-2", "Melanotan II"]
+- `Melanotan II` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: MT-II
+  - Data: ["MT-2", "Melanotan II"]
+- `Bremelanotide` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: rekysande
+  - Data: ["PT-141", "Vyleesi", "Bremelanotide"]
+- `Thymosin alpha-1` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: thymalfasin
+  - Data: ["Zadaxin", "Ta1", "Thymosin alpha-1"]
+- `Thymosin alpha-1` / `synonyms[]` / `crawl_027_ws/A.json`
+  - Report: Tα1
+  - Data: ["Zadaxin", "Ta1", "Thymosin alpha-1"]
+- `Thymosin alpha-1` / `research_names[]` / `crawl_027_ws/A.json`
+  - Report: thymalfasin
+  - Data: ["Zadaxin", "Ta1", "Thymosin alpha-1"]
+- `BPC-157` / `human_studies[].evidence_class` / `crawl_027_ws/B.json`
+  - Report: E
+  - Data: ["B", "A", "C"]
+- `KPV` / `human_studies[].evidence_class` / `crawl_027_ws/B.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `GHK-Cu` / `human_studies[].evidence_class` / `crawl_027_ws/B.json`
+  - Report: E
+  - Data: ["B", "A", "C"]
+- `MOTS-c` / `human_studies[].evidence_class` / `crawl_027_ws/B.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `MOTS-c` / `human_studies[].evidence_class` / `crawl_027_ws/B.json`
+  - Report: E
+  - Data: ["B", "A", "C"]
+- `AOD-9604` / `human_studies[].evidence_class` / `crawl_027_ws/B.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `CJC-1295 with DAC` / `human_studies[].evidence_class` / `crawl_027_ws/B.json`
+  - Report: E
+  - Data: ["A", "B", "C"]
+- `Ibutamoren (MK-677)` / `human_studies[].evidence_class` / `crawl_027_ws/B.json`
+  - Report: C
+  - Data: ["B", "A"]
+- `Selank` / `human_studies[].evidence_class` / `crawl_027_ws/B.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `Emideltide (DSIP)` / `human_studies[].evidence_class` / `crawl_027_ws/B.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `Vilon` / `human_studies[].evidence_class` / `crawl_027_ws/B.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `Epitalon` / `human_studies[].evidence_class` / `crawl_027_ws/B.json`
+  - Report: D
+  - Data: ["B", "A", "C"]
+- `Melanotan II` / `human_studies[].evidence_class` / `crawl_027_ws/B.json`
+  - Report: E
+  - Data: ["B", "A", "C"]
+- `BPC-157` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: enhanced tendon outgrowth, cell survival and migration; FAK-paxillin/angiogenesis (demonstrated in model)
+  - Data: ["—"]
+- `BPC-157` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: proposed: angiogenesis, growth-factor modulation
+  - Data: ["—"]
+- `BPC-157` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: upregulation of growth hormone receptor expression (demonstrated)
+  - Data: ["—"]
+- `BPC-157` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: proposed: cytoprotection, vascular/NO-system modulation
+  - Data: ["—"]
+- `AOD-9604` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: hGH fragment 177-191; lipolytic/fat-oxidation domain without full hGH activity (demonstrated in model)
+  - Data: ["—"]
+- `AOD-9604` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: increased fat oxidation (demonstrated in model)
+  - Data: ["—"]
+- `CJC-1295 with DAC` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: hGRF(1-29)-albumin bioconjugates activate the GRF receptor on anterior pituitary (demonstrated); DAC extends half-life via albumin binding
+  - Data: ["DAC prolongation", "GH axis"]
+- `CJC-1295 (no DAC)` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: tetrasubstituted GHRH(1-29) analog, GHRHR agonist with improved stability vs native GRF (demonstrated for class)
+  - Data: ["increased GH pulsatility raises IGF-1"]
+- `Tesamorelin` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: stabilized GHRH(1-44) analog; GHRHR agonism (demonstrated)
+  - Data: ["GHRH→GH→IGF-1", "GH antagonizes insulin"]
+- `Ibutamoren (MK-677)` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: oral GHSR agonism raises circulating IGF-I (demonstrated)
+  - Data: ["GH-mediated insulin resistance", "GHS effect", "GHS axis", "GH secretagogue raises IGF-1"]
+- `Ibutamoren (MK-677)` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: maintained IGF-I elevation on repeat dosing (demonstrated)
+  - Data: ["GH-mediated insulin resistance", "GHS effect", "GHS axis", "GH secretagogue raises IGF-1"]
+- `IGF-1 LR3` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: Arg3 substitution + N-terminal extension markedly reduce IGFBP binding -> prolonged free half-life (demonstrated in vitro/animals for class)
+  - Data: ["direct receptor agonism"]
+- `IGF-1 DES` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: des-(1-3)IGF-I (reduced IGFBP binding) enhances growth (demonstrated)
+  - Data: ["direct receptor agonism"]
+- `Melanotan II` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: non-selective melanocortin agonism (MC3R/MC4R) persistently reduces body/fat mass (demonstrated)
+  - Data: ["—"]
+- `Bremelanotide` / `animal_studies[].mechanism` / `crawl_027_ws/C.json`
+  - Report: MC4R-mediated central effects on sexual response (demonstrated in preclinical models)
+  - Data: ["melanocortin"]
+- `BPC-157` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No human PK study exists. Preclinical (rat/dog) data only; no peer-reviewed, route-specified plasma half-life with adequate assay validation identified. Forum/vendor half-lives excluded per STRICT_MODE.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "ChEMBL exact-name match"]
+- `BPC-157` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: No validated human bioavailability. Rodent data suggest detectable systemic exposure after oral and i.p./i.m. dosing (preclinical, unverified assay); oral stability in gastric juice reported in preclinical studies.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "ChEMBL exact-name match"]
+- `BPC-157` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `BPC-157` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `BPC-157` / `pk.clearance.evidence_class` / `crawl_027_ws/D.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `BPC-157` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No human PK. TB-500 (Ac-LKKTETQ-type fragment, typically Ac-SDKP-related fragment) has no published route-specified human half-life.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS"]
+- `TB-500 (Thymosin beta-4 fragment)` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: No human data; not orally bioavailable as peptide (expected).
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS"]
+- `TB-500 (Thymosin beta-4 fragment)` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `TB-500 (Thymosin beta-4 fragment)` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No route-specified human half-life published. In human pharmacokinetic context only fragment Ac-SDKP characterized (plasma t1/2 ~95-130 min via ACE degradation, Azizi et al.); full-length Tβ4 (4.9 kDa) human PK not reported.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Thymosin beta-4 (full)` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: No human bioavailability data.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Thymosin beta-4 (full)` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: preclinical/inference
+  - Data: ["B", "A", "C"]
+- `Thymosin beta-4 (full)` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No human PK study. Tripeptide (Lys-Pro-Val) with no published route-specified half-life in any species with validated assay.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `KPV` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: None published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `KPV` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `KPV` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `GHK-Cu` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: limited_human_literature
+  - Data: ["B", "A", "C"]
+- `GHK-Cu` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: Pickart & Margolina 2018 review (Int J Mol Sci 19:1987) summarizing older human plasma data; no modern PK study.
+  - Data: ["FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHK-Cu` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: No validated human bioavailability by route; topical/injectable cosmetic use only.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `GHK-Cu` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: limited_human_literature
+  - Data: ["B", "A", "C"]
+- `GHK-Cu` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `LL-37` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No human PK study of exogenous LL-37. Endogenous cathelicidin only; rapidly degraded by proteases (e.g., in wound fluid).
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class B"]
+- `LL-37` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class B"]
+- `LL-37` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `LL-37` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `MOTS-c` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No published route-specified human plasma half-life. Human exercise studies measured endogenous MOTS-c; exogenous dosing PK (rodent: short plasma half-life, minutes) only preclinical.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `MOTS-c` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: Rodent i.p. data only; no human.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `MOTS-c` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `MOTS-c` / `pk.metabolism.source` / `crawl_027_ws/D.json`
+  - Report: Lee et al. 2015 Cell Metab (PMID 25738459)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `MOTS-c` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `AOD-9604` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical_trial_limited
+  - Data: ["B", "A", "C"]
+- `AOD-9604` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: Stier et al. 2013 (J Endocrinol Metab) safety/PK trial; published PK detail sparse
+  - Data: ["research-chem/bodybuilding communities", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `AOD-9604` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical_trial_limited
+  - Data: ["B", "A", "C"]
+- `AOD-9604` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `AOD-9604` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 with DAC` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_phase1_peer_reviewed
+  - Data: ["A", "B", "C"]
+- `CJC-1295 with DAC` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: Teichman SL et al., J Clin Endocrinol Metab 2006;91:799-805. PMID 16352683. NOTE: lead-provided anchor PMID 16368755 is INCORRECT (that PMID is an unrelated CD95/adipocyte paper, Fischer-Posovszky et al.).
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_phase1_peer_reviewed
+  - Data: ["A", "B", "C"]
+- `CJC-1295 with DAC` / `pk.bioavailability.source` / `crawl_027_ws/D.json`
+  - Report: PMID 16352683
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_phase1+mechanistic
+  - Data: ["A", "B", "C"]
+- `CJC-1295 with DAC` / `pk.clearance.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_phase1
+  - Data: ["A", "B", "C"]
+- `CJC-1295 with DAC` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `CJC-1295 (no DAC)` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference_from_class
+  - Data: ["B", "A", "C"]
+- `CJC-1295 (no DAC)` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: No dedicated human PK study of 'CJC-1295 no DAC' identified; class data: hGRF(1-29) analogs t1/2 7-30 min (Frohman et al.; PMID 7962295 D-Ala2 GHRH(1-29)NH2 study)
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `CJC-1295 (no DAC)` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: No dedicated study; s.c. absorption expected, short systemic persistence.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "traits derived from curated substance group membership only"]
+- `CJC-1295 (no DAC)` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `CJC-1295 (no DAC)` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Mod GRF 1-29` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference_from_class
+  - Data: ["B", "A", "C"]
+- `Mod GRF 1-29` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: Frohman LA et al., J Clin Endocrinol Metab 1994 (PMID 7962295): D-Ala2 incorporation increases half-life vs native GHRH(1-29)NH2 (t1/2 ~7 min native)
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Mod GRF 1-29` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: No compound-specific human study.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "traits derived from curated substance group membership only", "curated MoA at evidence class B"]
+- `Mod GRF 1-29` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `Mod GRF 1-29` / `pk.metabolism.source` / `crawl_027_ws/D.json`
+  - Report: PMID 7962295
+  - Data: ["research-chem/bodybuilding communities", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Mod GRF 1-29` / `pk.clearance.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `Mod GRF 1-29` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Ipamorelin` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_phase1
+  - Data: ["B", "A", "C"]
+- `Ipamorelin` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: Gobburu JV et al., Pharm Res 1999 (PMID 10497474, ipamorelin PK in humans; verify)
+  - Data: ["research-chem/bodybuilding communities", "FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ipamorelin` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_phase1_limited
+  - Data: ["B", "A", "C"]
+- `Ipamorelin` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: preclinical+limited_human
+  - Data: ["B", "A", "C"]
+- `Ipamorelin` / `pk.clearance.evidence_class` / `crawl_027_ws/D.json`
+  - Report: limited
+  - Data: ["B", "A", "C"]
+- `Ipamorelin` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-2` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `GHRP-2` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: Multiple human studies (e.g., Bowers CY et al. GHS clinical program); no single definitive modern PK paper; values vary by study — reported as range, not averaged
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `GHRP-2` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `GHRP-2` / `pk.clearance.evidence_class` / `crawl_027_ws/D.json`
+  - Report: limited
+  - Data: ["B", "A", "C"]
+- `GHRP-2` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `GHRP-6` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical_limited
+  - Data: ["B", "A", "C"]
+- `GHRP-6` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: Human GH-stimulation studies (Bowers CY et al.; Peñalva et al. 1993); short plasma persistence consistent across studies
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical_limited
+  - Data: ["B", "A", "C"]
+- `GHRP-6` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `GHRP-6` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Hexarelin` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `Hexarelin` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: Human PK/GH-release studies (e.g., Ghigo E et al., 1990s); study-to-study variation — reported as range
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `Hexarelin` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `Hexarelin` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Sermorelin` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label+human_clinical
+  - Data: ["A"]
+- `Sermorelin` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label
+  - Data: ["A"]
+- `Sermorelin` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical
+  - Data: ["A"]
+- `Sermorelin` / `pk.clearance.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical
+  - Data: ["A"]
+- `Tesamorelin` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Tesamorelin` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: DailyMed EGRIFTA SV/WR USPI, Section 12.3
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `pk.bioavailability.value` / `crawl_027_ws/D.json`
+  - Report: <4% absolute (2 mg s.c., healthy adults); median Tmax 0.15 h both populations; AUC 34% higher in HIV patients.
+  - Data: ["Per label (Egrifta WR 1.28 mg SC daily)"]
+- `Tesamorelin` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Tesamorelin` / `pk.bioavailability.source` / `crawl_027_ws/D.json`
+  - Report: EGRIFTA USPI 12.3
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `pk.metabolism.value` / `crawl_027_ws/D.json`
+  - Report: No formal metabolism studies in humans (label statement); expected proteolytic degradation of GHRH analog.
+  - Data: ["Per label (Egrifta WR 1.28 mg SC daily)"]
+- `Tesamorelin` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Tesamorelin` / `pk.clearance.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Tesamorelin` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Ibutamoren (MK-677)` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical
+  - Data: ["B", "A"]
+- `Ibutamoren (MK-677)` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: Chapman IM et al., J Clin Endocrinol Metab 1996 (PMID 8954022/8707253 era studies); once-daily dosing supported by ~24h t1/2
+  - Data: ["bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6", "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf"]
+- `Ibutamoren (MK-677)` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical
+  - Data: ["B", "A"]
+- `Ibutamoren (MK-677)` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical+secondary
+  - Data: ["B", "A"]
+- `Ibutamoren (MK-677)` / `pk.clearance.evidence_class` / `crawl_027_ws/D.json`
+  - Report: secondary
+  - Data: ["B", "A"]
+- `Ibutamoren (MK-677)` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: RELEVANT
+  - Data: ["avoid"]
+- `MGF (mechano growth factor)` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No human PK. MGF (IGF-1Ec splice variant 24-aa E-domain peptide) has no published route-specified human half-life; endogenous/local tissue factor.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "UNII via FDA GSRS"]
+- `MGF (mechano growth factor)` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "UNII via FDA GSRS"]
+- `MGF (mechano growth factor)` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `MGF (mechano growth factor)` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `PEG-MGF` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No human or validated preclinical PK with route+assay. PEGylation expected to prolong half-life (mechanistic inference only); vendor hour-claims excluded.
+  - Data: ["UNII via FDA GSRS"]
+- `PEG-MGF` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: None.
+  - Data: ["UNII via FDA GSRS"]
+- `PEG-MGF` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference
+  - Data: ["A", "C"]
+- `PEG-MGF` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 (mecasermin)` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `IGF-1 (mecasermin)` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: Increlex USPI (FDA label), Clinical Pharmacology
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `IGF-1 (mecasermin)` / `pk.bioavailability.source` / `crawl_027_ws/D.json`
+  - Report: Increlex USPI
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label+human_clinical
+  - Data: ["A", "B", "C"]
+- `IGF-1 (mecasermin)` / `pk.clearance.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `IGF-1 (mecasermin)` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 LR3` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No human PK. LR3 analog (83 aa, Arg3 + 13-aa N-extension) designed for reduced IGFBP binding; rodent/cell data only. Vendor ~20-30 h claims are unverified and excluded.
+  - Data: ["UNII via FDA GSRS"]
+- `IGF-1 LR3` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: No human data.
+  - Data: ["UNII via FDA GSRS"]
+- `IGF-1 LR3` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: preclinical
+  - Data: ["A", "B", "C"]
+- `IGF-1 LR3` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `IGF-1 DES` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No human PK. Des(1-3)IGF-1 (67 aa) preclinical only; expected shorter persistence than native due to reduced IGFBP binding; no validated route-specified half-life.
+  - Data: ["UNII via FDA GSRS"]
+- `IGF-1 DES` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: None.
+  - Data: ["UNII via FDA GSRS"]
+- `IGF-1 DES` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: preclinical/inference
+  - Data: ["A", "B", "C"]
+- `IGF-1 DES` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Semax` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No peer-reviewed route-specified human plasma half-life with validated assay. Russian clinical literature (intranasal) reports rapid onset/short duration but no formal PK; half_life=null per STRICT_MODE.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Semax` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: limited_clinical_non_PK
+  - Data: ["B", "A", "C"]
+- `Semax` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: preclinical/inference
+  - Data: ["B", "A", "C"]
+- `Semax` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Selank` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No formal human PK. Intranasal tuftsin analog (Thr-Lys-Pro-Arg-Pro-Gly-Pro); Russian clinical use without published route-specified half-life.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Selank` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: Intranasal use; bioavailability not characterized.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Selank` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Selank` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Emideltide (DSIP)` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No validated human half-life. DSIP (Trp-Ala-Gly-Gly-Asp-Ala-Ser-Gly-Glu) human studies report very short plasma presence (minutes) in older literature without modern validated PK; set null per STRICT_MODE.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "ChEMBL exact-name match"]
+- `Emideltide (DSIP)` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: Not characterized; i.v./intranasal studied.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS", "ChEMBL exact-name match"]
+- `Emideltide (DSIP)` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: limited_human_literature
+  - Data: ["B", "A", "C"]
+- `Emideltide (DSIP)` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Dihexa` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No human PK (no clinical trials). Dihexa (N-hexanoic-Tyr-Ile-(6) aminohexanoic amide; small-molecule HGF/c-Met potentiator) — rodent data only; orally active in rats per preclinical reports, but no route-specified half-life published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Dihexa` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `Dihexa` / `pk.bioavailability.source` / `crawl_027_ws/D.json`
+  - Report: Benoist et al. 2014 (J Pharmacol Exp Ther) — preclinical
+  - Data: ["research-chem/bodybuilding communities", "FDA 2026-04-15 update", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: normalize to taxonomy enum", "crawl_017 H6"]
+- `Dihexa` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: preclinical
+  - Data: ["B", "A", "C"]
+- `Pinealon` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No human PK. Tripeptide (Glu-Asp-Arg) bioregulator; no route-specified half-life in any accessible literature.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Pinealon` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Pinealon` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Pinealon` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Vesugen` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No human PK. Tripeptide (Lys-Glu-Asp) bioregulator; none published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Vesugen` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Vesugen` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Vesugen` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Vilon` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No human PK. Dipeptide (Lys-Glu) bioregulator; none published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Vilon` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Vilon` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Vilon` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Cortagen` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No human PK. Tetrapeptide (Ala-Glu-Asp-Pro) bioregulator; none published.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Cortagen` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "PubChem molecular weight", "single CAS candidate in PubChem synonyms", "UNII via FDA GSRS", "curated MoA at evidence class C"]
+- `Cortagen` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Cortagen` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Epitalon` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No human PK with route+validated assay. Tetrapeptide (Ala-Glu-Asp-Gly); Russian clinical literature lacks formal PK.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Epitalon` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: None.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Epitalon` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference
+  - Data: ["B", "A", "C"]
+- `Epitalon` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan I (afamelanotide)` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label
+  - Data: ["B", "A", "C"]
+- `Melanotan I (afamelanotide)` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: Scenesse EPAR/USPI (FDA 2019/EMA); PK module reports t1/2 ~15 h
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: classify records added in crawl_003", "crawl_017 H6"]
+- `Melanotan I (afamelanotide)` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label
+  - Data: ["B", "A", "C"]
+- `Melanotan I (afamelanotide)` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label/inference
+  - Data: ["B", "A", "C"]
+- `Melanotan I (afamelanotide)` / `pk.clearance.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label_limited
+  - Data: ["B", "A", "C"]
+- `Melanotan I (afamelanotide)` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Melanotan II` / `pk.half_life.reason` / `crawl_027_ws/D.json`
+  - Report: No formal human PK publication with validated assay. Early Phase 1 (Dorr et al. 1996, Life Sciences) established tolerability and pigmentation after s.c. dosing but not a definitive half-life; bremelanotide (closely related cyclic heptapeptide) label t1/2 ~2.7 h is the class reference, not transferable per STRICT_MODE.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Melanotan II` / `pk.bioavailability.reason` / `crawl_027_ws/D.json`
+  - Report: Not characterized; s.c. use only in studies.
+  - Data: ["identity enrichment via PubChem PUG-REST (synonym-verified)", "UNII via FDA GSRS"]
+- `Melanotan II` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: inference_from_bremelanotide_label
+  - Data: ["B", "A", "C"]
+- `Melanotan II` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Bremelanotide` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Bremelanotide` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: Vyleesi USPI (DailyMed), Section 12.3
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `pk.bioavailability.value` / `crawl_027_ws/D.json`
+  - Report: ~100% absolute s.c.; median Tmax ~1.0 h (0.5-1.0 h); Cmax 72.8 ng/mL, AUC 276 hr*ng/mL at label dose.
+  - Data: ["Per label (Vyleesi 1.75 mg SC prn, max 1/24h, 8/month)"]
+- `Bremelanotide` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Bremelanotide` / `pk.bioavailability.source` / `crawl_027_ws/D.json`
+  - Report: Vyleesi USPI 12.3
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `pk.metabolism.value` / `crawl_027_ws/D.json`
+  - Report: 7-aa cyclic peptide; primary metabolism = multiple hydrolyses of amide bonds (label). 21% serum protein binding; Vd 25.0 L; CL/F 6.5 L/h.
+  - Data: ["Per label (Vyleesi 1.75 mg SC prn, max 1/24h, 8/month)"]
+- `Bremelanotide` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Bremelanotide` / `pk.clearance.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_label
+  - Data: ["A", "B", "C"]
+- `Bremelanotide` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin alpha-1` / `pk.half_life.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical/approved_nonUS_label
+  - Data: ["B", "A", "C"]
+- `Thymosin alpha-1` / `pk.half_life.source` / `crawl_027_ws/D.json`
+  - Report: Zadaxin product information (SciClone); Tuthill et al. PK studies; approved outside US
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Thymosin alpha-1` / `pk.bioavailability.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `Thymosin alpha-1` / `pk.metabolism.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_class_data
+  - Data: ["B", "A", "C"]
+- `Thymosin alpha-1` / `pk.clearance.evidence_class` / `crawl_027_ws/D.json`
+  - Report: human_clinical
+  - Data: ["B", "A", "C"]
+- `Thymosin alpha-1` / `cyp.status` / `crawl_027_ws/D.json`
+  - Report: NOT_EXPECTED
+  - Data: ["avoid_or_rx_only"]
+- `MOTS-c` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Preclinical (mouse) studies: improved glucose homeostasis; human data limited (CB4211 phase 1, safety-focused)
+  - Data: ["research-chem/bodybuilding communities", "FDA Federal Register 2026-04-16", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `CJC-1295 with DAC` / `lab_effects[].direction` / `crawl_027_ws/F.json`
+  - Report: increase
+  - Data: ["sustained elevation (PK studies)", "watch"]
+- `CJC-1295 with DAC` / `lab_effects[].effect_type` / `crawl_027_ws/F.json`
+  - Report: study_observed_change
+  - Data: ["physiological_lab_effect", "monitoring_requirement"]
+- `CJC-1295 with DAC` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Teichman et al., J Clin Endocrinol Metab 2006;91:799-805 (PMID 16352683): CJC-1295 dose-dependent IGF-1 increase in healthy adults
+  - Data: ["research-chem/bodybuilding communities", "FDA notice Sept 2024 / Reed Smith summary", "PubChem", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ipamorelin` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Gobburu et al., Pharm Res 1999 (PK/PD ipamorelin, GH release); selective secretagogue - no significant cortisol/prolactin elevation reported
+  - Data: ["research-chem/bodybuilding communities", "FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Arvat et al., J Clin Endocrinol Metab 1999 (PMID 10195374): GHRP-2 raises GH, IGF-1
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Arvat et al. 1999 (PMID 10195374): GHRP-2 increases ACTH/cortisol (HPA-axis activity)
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-2` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Arvat et al. 1999 (PMID 10195374): GHRP-2 increases prolactin
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Class data: GHRP-6 elevates GH/IGF-1 (human studies, ghrelin-mimetic GHS)
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: GHRP-6 human studies: ACTH/cortisol elevation (shared GHS class effect)
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `GHRP-6` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: GHRP-6 human studies: prolactin elevation
+  - Data: ["research-chem/bodybuilding communities", "PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Arvat et al., JCEM 2001 (PMID 11238504): hexarelin elevates GH; IGF-1 with repeated dosing
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Arvat et al., JCEM 1999 (PMID 10404825): hexarelin stimulates HPA axis (ACTH/cortisol) via AVP
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Hexarelin` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Arvat et al. 2001 (PMID 11238504): hexarelin elevates prolactin - strongest among peptidyl GHS
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `lab_effects[].direction` / `crawl_027_ws/F.json`
+  - Report: increase
+  - Data: ["elevated (monitored per label)", "can worsen"]
+- `Tesamorelin` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Egrifta SV prescribing information (FDA label): monitor IGF-1; consider discontinuation if sustained elevation (e.g. >3 SDS)
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `lab_effects[].analyte` / `crawl_027_ws/F.json`
+  - Report: Fasting glucose
+  - Data: ["IGF-1", "Fasting glucose/HbA1c"]
+- `Tesamorelin` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Egrifta label: glucose intolerance/diabetes risk - monitor glucose status; Phase 3 (Stanley/Falutz) showed small glucose increases
+  - Data: ["PubChem", "Drugs@FDA", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Tesamorelin` / `interactions.data[].note` / `crawl_027_ws/F.json`
+  - Report: GH-mediated insulin resistance may counteract glucose-lowering therapy; flagged in label context (glucose intolerance warning), no dedicated interaction studies.
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Tesamorelin"]
+- `Ibutamoren (MK-677)` / `lab_effects[].direction` / `crawl_027_ws/F.json`
+  - Report: increase
+  - Data: ["ELEVATED (trial-documented)", "elevated", "minor changes", "increases with chronic administration"]
+- `Ibutamoren (MK-677)` / `lab_effects[].effect_type` / `crawl_027_ws/F.json`
+  - Report: study_observed_change
+  - Data: ["monitoring_requirement", "physiological_lab_effect"]
+- `Ibutamoren (MK-677)` / `lab_effects[].monitoring_link` / `crawl_027_ws/F.json`
+  - Report: CLINICAL_STUDY_MONITORED
+  - Data: ["SAFETY_CONTEXT"]
+- `Ibutamoren (MK-677)` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Chapman et al., JCEM 1997 (PMID 9329386); Nass et al., Ann Intern Med 2008 (PMID 18981485): sustained IGF-1 increase
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ibutamoren (MK-677)` / `lab_effects[].analyte` / `crawl_027_ws/F.json`
+  - Report: Fasting glucose
+  - Data: ["Fasting glucose/HbA1c", "IGF-1", "Cortisol (mild)/prolactin"]
+- `Ibutamoren (MK-677)` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Nass 2008 (PMID 18981485): fasting glucose increase; Svensson 1998 (PMID 9467534): glucose/insulin up in obese men
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ibutamoren (MK-677)` / `lab_effects[].analyte` / `crawl_027_ws/F.json`
+  - Report: HbA1c
+  - Data: ["Fasting glucose/HbA1c", "IGF-1", "Cortisol (mild)/prolactin"]
+- `Ibutamoren (MK-677)` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Nass et al. 2008 (PMID 18981485): small HbA1c increase over 12 months in older adults
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ibutamoren (MK-677)` / `lab_effects[].analyte` / `crawl_027_ws/F.json`
+  - Report: Insulin (fasting)
+  - Data: ["Fasting glucose/HbA1c", "IGF-1", "Cortisol (mild)/prolactin"]
+- `Ibutamoren (MK-677)` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Svensson 1998 (PMID 9467534): fasting insulin increase during MK-677 treatment
+  - Data: ["https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf", "bodybuilding communities", "crawl_002 (verified web)", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Ibutamoren (MK-677)` / `interactions.data[].note` / `crawl_027_ws/F.json`
+  - Report: Documented insulin-sensitivity reduction in RCTs; additive hyperglycemic burden plausible - no formal interaction studies.
+  - Data: ["Leistungs-/Graumarkt-Substanzen: in Schwangerschaft absolut vermeiden; Arztverweis", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Ibutamoren (MK-677)"]
+- `Ibutamoren (MK-677)` / `interactions.data[].note` / `crawl_027_ws/F.json`
+  - Report: Shared GH/IGF-1 elevation endpoint; additive IGF-1 rise plausible, unstudied.
+  - Data: ["Leistungs-/Graumarkt-Substanzen: in Schwangerschaft absolut vermeiden; Arztverweis", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Ibutamoren (MK-677)"]
+- `IGF-1 (mecasermin)` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Increlex (mecasermin) FDA label: hypoglycemia warning - administer with meal/snack; preprandial glucose monitoring recommended at initiation
+  - Data: ["PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "crawl_017 H6"]
+- `IGF-1 (mecasermin)` / `interactions.data[].note` / `crawl_027_ws/F.json`
+  - Report: Increlex label: co-administration with insulin/antidiabetics increases hypoglycemia risk.
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "§8 peptide CYP handling", "CRAWL_027-Profil verknüpft: IGF-1 (mecasermin)", "class-level peptide metabolism assessment"]
+- `IGF-1 LR3` / `interactions.data[].note` / `crawl_027_ws/F.json`
+  - Report: IGF-1 analog with insulin-like activity; hypoglycemia risk inferred from parent compound label (Increlex), no direct studies.
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: IGF-1 (mecasermin)"]
+- `Melanotan I (afamelanotide)` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Scenesse (afamelanotide) EMA/FDA label: full-body skin exams twice yearly; blood pressure monitoring at implant administration
+  - Data: ["PubChem/DrugBank (stable identifiers)", "PubChem", "crawl_010 coverage fill (honest nulls)", "crawl_011 platform layer", "hardening: classify records added in crawl_003", "crawl_017 H6"]
+- `Bremelanotide` / `lab_effects[].direction` / `crawl_027_ws/F.json`
+  - Report: increase
+  - Data: ["transient + (label: ~6 mmHg)", "transient drop"]
+- `Bremelanotide` / `lab_effects[].effect_type` / `crawl_027_ws/F.json`
+  - Report: monitoring_requirement
+  - Data: ["physiological_lab_effect"]
+- `Bremelanotide` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Vyleesi FDA label: transient BP increase after dosing; contraindicated in uncontrolled hypertension
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `lab_effects[].direction` / `crawl_027_ws/F.json`
+  - Report: decrease
+  - Data: ["transient + (label: ~6 mmHg)", "transient drop"]
+- `Bremelanotide` / `lab_effects[].source` / `crawl_027_ws/F.json`
+  - Report: Vyleesi FDA label: transient HR decrease (class melanocortin effect)
+  - Data: ["FDA 503A bulk list status (2026)", "PubChem/DrugBank (stable identifiers)", "PubChem", "FDA label", "crawl_010 trigger layer (ULs: NIH ODS/EFSA/labels)", "crawl_010 trigger layer", "crawl_011 platform layer", "crawl_017 H6"]
+- `Bremelanotide` / `interactions.data[].note` / `crawl_027_ws/F.json`
+  - Report: Vyleesi label: bremelanotide significantly reduces oral naltrexone exposure - avoid concomitant use.
+  - Data: ["Peptide/Hormone: in Schwangerschaft grundsätzlich nur ärztlich; GLP-1-RAs vor geplanter Schwangerschaft absetzen (Label); experimentelle Peptide: vermeiden", "lab_marker_ids + effect_type + direction_enum added; free-text analyte preserved", "Priority-1 rule-referenced deepening; STRICT_MODE", "CRAWL_027-Profil verknüpft: Bremelanotide"]
+- `BPC-157` / `regulatory.US.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `regulatory.EU.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `regulatory.UK.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `regulatory.CA.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `BPC-157` / `regulatory.AU.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory.US.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory.EU.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory.UK.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory.CA.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `TB-500 (Thymosin beta-4 fragment)` / `regulatory.AU.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory.US.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory.EU.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory.UK.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory.CA.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `Thymosin beta-4 (full)` / `regulatory.AU.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory.US.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory.EU.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory.UK.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory.CA.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- `KPV` / `regulatory.AU.status` / `crawl_027_ws/G.json`
+  - Report: not approved
+  - Data: ["avoid_or_rx_only"]
+- ... 8010 weitere Sachkonflikte in `ABGLEICH_GEFILTERT.jsonl`.

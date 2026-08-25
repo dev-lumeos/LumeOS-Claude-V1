@@ -4,6 +4,7 @@
 // Konto: test-user@lumeos.local. Gemessen wird der Wert, den die Seite
 // NACH einem Neuladen zeigt — nicht der, den sie gerade gesetzt hat.
 import { chromium } from '@playwright/test'
+import { wortFuer } from './konten.mjs'
 
 const BASIS = process.env.LUMEOS_BASIS ?? 'http://127.0.0.1:3200'
 const STUFEN = ['beginner', 'advanced', 'pro', 'elite']
@@ -16,7 +17,7 @@ const seite = await (await browser.newContext({
 await seite.goto(`${BASIS}/login`, { waitUntil: 'networkidle', timeout: 60_000 })
 if (await seite.locator('input[type=email]').count()) {
   await seite.fill('input[type=email]', 'test-user@lumeos.local')
-  await seite.fill('input[type=password]', 'LumeosTestUser2026')
+  await seite.fill('input[type=password]', wortFuer('test-user@lumeos.local'))
   await Promise.all([
     seite.waitForURL(u => !u.pathname.includes('login'), { timeout: 60_000 }),
     seite.click('button[type=submit]'),
