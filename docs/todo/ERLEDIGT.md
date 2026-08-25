@@ -12893,3 +12893,55 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
 
   `[read]` **Die Kette laeuft wieder auseinander** — 416 gegen 447.
   **C-265 in neuer Form**, von Codex selbst gemeldet.
+
+- [x] **C-276: Der Katalog zeigt denselben Stoff mehrfach** —
+  **erledigt 2026-08-25 (Codex), Bericht
+  `docs/berichte/c-276-codex.md`.**
+
+  `[cmd]` **Vom Orchestrator live nachgemessen:** Unterformen **29 →
+  101** · sichtbare Kerndubletten **18 Gruppen → 0** · 66 Huellen an
+  sichtbare Gegenstuecke gehaengt · NAC-Sonderfall bereinigt.
+
+  `[cmd]` **Neuer Gate-Waechter
+  `tools/supplement-kern-dubletten-pruefen.mjs`** — prueft ueber den
+  Namenskern, nicht ueber `name_en`. `[read]` **Genau das Loch, das
+  meine Pruefvorgabe hatte.**
+
+  ### Der Fund aus der Nachpruefung
+
+  `[cmd]` **Die Bedingung `parent_id IS NULL` war aus dem generierten
+  Ausdruck von `im_katalog` verschwunden.** Sie stand dort seit C-257.
+
+  `[cmd]` **Folge: 33 Unterformen waren wieder in der obersten Ebene
+  sichtbar** — Magnesium citrate, Magnesium chloride, Iron (as ferrous
+  sulfate), Calcium carbonate, Caffeine (anhydrous). **Genau die, die
+  C-276 gerade untergehaengt hatte.**
+
+  `[read]` **Aufgefallen ist es nur, weil zwei Zahlen sich
+  widersprachen:** `im_katalog` 447, Top-Level 414. **Ohne diesen
+  Vergleich waere es unbemerkt geblieben — zum zweiten Mal.**
+
+  `[cmd]` **Ursache benannt statt nur repariert:**
+  `144_kimi_wave3_name_bridge.ts` hatte die Spalte zuletzt falsch neu
+  definiert und trug **den falschen Kommentar**, `parent_id` duerfe
+  nicht ausschliessen.
+
+  `[cmd]` **Live nachher: 412 sichtbar, 0 sichtbare Unterformen** —
+  und der Waechter prueft jetzt auch diesen Fall.
+
+- [x] **C-277: Die Kette laeuft wieder auseinander — 416 gegen 447** —
+  **erledigt 2026-08-25 (Codex), Bericht
+  `docs/berichte/c-276-codex.md`.**
+
+  `[read]` **Es war kein Datenproblem, sondern dasselbe wie C-276:**
+  die Kette erzeugte die **richtige** Definition von `im_katalog`,
+  live stand die falsche. **Die Drift war das Symptom, die fehlende
+  `parent_id`-Bedingung die Ursache.**
+
+  `[cmd]` **Nachher erzeugen beide dieselbe Zahl: 412 sichtbar, 0
+  sichtbare Unterformen.** Kettenlauf 103 Schritte, Exit 0,
+  Schemapruefung vollstaendig, `pnpm gate` gruen.
+
+  `[read]` **C-265 war derselbe Mechanismus mit anderer Ursache** —
+  dort fehlten drei Medical-Schritte in `kette.json`. **Zweimal
+  dieselbe Klasse Fehler an verschiedenen Stellen.**

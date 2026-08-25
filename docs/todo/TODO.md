@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-25.** 244 offen, 0 in Arbeit.
+**Stand: 2026-08-25.** 242 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6235,65 +6235,3 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
 
   `[read]` **Keine Rechercheaufgabe mehr** — Zuordnung ueber die
   Klammerinhalte plus eine kleine Nachforderung an Kimi.
-
-- [ ] **C-276: Der Katalog zeigt denselben Stoff mehrfach** (neu
-  2026-08-25). Aus der Nachpruefung von C-275.
-
-  `[cmd]` **18 Dublettengruppen im sichtbaren Katalog**, gemessen ueber
-  den Namenskern (Klammern entfernt, Kleinschreibung, nur
-  Alphanumerisches):
-
-      Vitamin C                      lumeos_supplement_catalog
-      Vitamin C (ascorbic acid)      kimi_supplement
-
-      Iron                           lumeos_supplement_catalog
-      Iron (as ferrous bisglycinate) kimi_supplement
-      Iron (as ferrous sulfate)      kimi_supplement
-
-      NAC                            kimi_supplement  (Slug f05_nac)
-      NAC (N-Acetyl Cysteine)        lumeos_supplement_catalog
-      NAC (N-acetylcysteine)         kimi_supplement
-
-  `[cmd]` Betroffen: Ashwagandha · Boron · Caffeine · Calcium · Iron ·
-  Lion's Mane · NAC · Panax ginseng · Tongkat Ali · Vitamin A · B12 ·
-  B3 · B6 · C · D3 · E · K2 · Zinc.
-
-  `[read]` **Das ist C-244 zur Haelfte umgesetzt.** Bei Magnesium
-  haengen sieben Salze an `parent_id`; bei diesen 18 nicht — **weil
-  C-244 lief, bevor Kimi die Formen geliefert hat.**
-
-  `[read]` **Meine Pruefvorgabe war schuld, dass es durchging:**
-  `count(*) > 1` auf `name_en`, und *„Vitamin C"* ist nicht
-  *„Vitamin C (ascorbic acid)"*. **Codex' Probe war korrekt
-  ausgefuehrt — sie mass das Falsche.**
-
-  `[read]` **Zwei Sorten, verschiedene Behandlung.** Sammelname plus
-  Formen → `parent_id`. **Zwei Formen ohne Sammelnamen → nicht
-  zusammenlegen:** `Vitamin B3 (nicotinic acid)` und `(nicotinamide)`
-  sind pharmakologisch verschieden — die eine senkt Blutfette und
-  loest Flush aus, die andere nicht.
-
-  `[cmd]` **66 der 149 unsichtbaren haben ein sichtbares
-  Gegenstueck** — Anastrozole (Arimidex), Cabergoline (Dostinex),
-  Bacopa Monnieri, Cardarine (GW-501516), Ashwagandha (Sensoril).
-
-- [ ] **C-277: Die Kette laeuft wieder auseinander — 416 gegen 447**
-  (neu 2026-08-25). Von Codex in C-275 gemeldet.
-
-  `[cmd]` **Die frische Kette erzeugt 416 sichtbare Eintraege, live
-  sind es 447.** Sein Grund: live waren es vor C-275 bereits 318, die
-  frische Kette erzeugt 290.
-
-  `[read]` **Das ist C-265 in neuer Form** — und derselbe Mechanismus:
-  entweder fehlt ein Schritt in der Kette, oder live steht etwas, das
-  nie verkettet wurde. **Diesmal um 31 Eintraege.**
-
-  `[read]` **C-265 wurde am selben Tag geschlossen**, weil drei
-  Medical-Schritte nicht in `kette.json` eingetragen waren. **Dass es
-  Stunden spaeter erneut auseinanderlaeuft, heisst: die Ursache war
-  nicht die einzige.**
-
-  `[read]` **Warum das wiegt:** `supabase/README.md` sagt, der
-  Datenbankzustand entsteht aus der Kette. Laeuft sie auseinander, ist
-  der Live-Bestand nicht reproduzierbar — **und jeder Neuaufbau
-  verliert genau die Stellen, die abweichen.**
