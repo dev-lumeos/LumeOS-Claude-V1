@@ -280,3 +280,5 @@ wenn er erzeugt und geprüft wird.
 | **C-261** Der Abgleich aus C-260 ist ungefiltert nicht benutzbar | offen | 5970 |
 | **C-262** Der Import — vier Wellen | offen | 6017 |
 | **C-263** Deutsche Beschreibungen aus Kimis Fachdaten ableiten | offen | 6047 |
+| **C-265** Die Kette erzeugt nicht mehr denselben Stand wie die | offen | 6073 |
+| **G-179** Das Substanzdetail — Tom will es sehen | offen | 6100 |

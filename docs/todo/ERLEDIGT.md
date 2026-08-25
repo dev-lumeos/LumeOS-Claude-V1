@@ -12328,3 +12328,43 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
   Rueckfall brauchen, ist nicht entscheidbar, solange keine Zeile
   drinsteht. **Nicht in die Pruefliste aufgenommen.** Wer die Tabellen
   fuellt, misst sie und traegt sie nach.
+
+- [x] **C-264: Kimis Nutzertexte importiert — die Schablonen sind weg**
+  — **erledigt 2026-08-25 (Codex), Bericht
+  `docs/berichte/c-264-codex.md`.**
+
+  `[cmd]` **Vom Orchestrator direkt aus der Datenbank nachgemessen, mit
+  der Pruefung, die den Substanznamen herausrechnet:**
+
+  | | vorher | nachher |
+  |---|---:|---:|
+  | `supplement_user_texts` | 289 | **290** |
+  | verschiedene Formulierungen | **11** | **290** |
+  | haeufigste 5-Wort-Folge | **103x** | **3x** |
+  | `supplement_faq` | 867 | **1.279** |
+  | verschiedene Antworten | **3** | **1.279** |
+  | `sources` | — | **290/290 und 1.279/1.279** |
+
+  `[read]` **Damit ist C-257 endgueltig behoben.** Der Nachtlauf vom
+  2026-08-23 hatte 289 Texte mit sechs Schablonen erzeugt, weil mein
+  Auftragstext *„nichts erfinden"* als Verbot gelesen wurde, ueberhaupt
+  Fachwissen hinzuschreiben.
+
+  `[cmd]` **Neu: `sources` als `jsonb` an beiden Tabellen.** Der
+  Unterschied zwischen diesem Bestand und dem vorigen ist nicht die
+  Laenge, sondern dass jede Aussage einen Beleg traegt.
+
+  `[cmd]` Kettenschritt `141a_supplement_kimi_nutzertexte.ts`, live
+  eingespielt, Vollsicherung
+  `backup/c264/20260825_065311_before_live.dump`.
+  `tools/texte-pruefen.mjs` gruen, Negativprobe mit zehn gleichen
+  Texten rot.
+
+  `[read]` **Die Quelle kam von Kimi, nicht von einem Agenten.**
+  290 Records dreisprachig, 1.279 FAQ-Zeilen mit 1.276 verschiedenen
+  Fragen — geschrieben von acht Agenten mit verschiedenen Registern als
+  ausdrueckliche Anti-Schablonen-Massnahme.
+
+  `[read]` **Offen und als C-265 angelegt:** die Wegwerf-Kette bleibt
+  am Schluss-Waechter rot (Medical-Abweichungen), waehrend live gruen
+  ist. **Nicht Ursache von C-264** — aber zum zweiten Mal gemeldet.

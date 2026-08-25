@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-24.** 236 offen, 0 in Arbeit.
+**Stand: 2026-08-25.** 238 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6069,3 +6069,68 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
 
   `[read]` **Laeuft parallel zu C-262**, weil Claude Code die
   JSONL-Dateien direkt liest und nicht die Datenbank.
+
+- [ ] **C-265: Die Kette erzeugt nicht mehr denselben Stand wie die
+  laufende Instanz** (neu 2026-08-25). Zweimal gemeldet, aus C-262 und
+  C-264.
+
+  `[cmd]` **Live ist die Schemapruefung gruen, ein frischer Kettenlauf
+  auf der Wegwerf-Datenbank nicht.** Abweichungen:
+  `biomarker_spec_enrichment` · `biomarker_aliases` · **zwei
+  Funktionen** · **LOINC-Slug-Eindeutigkeit**.
+
+  `[read]` **Codex hat es bei C-262 und C-264 gemeldet**, beide Male
+  korrekt als nicht-eigene Ursache. **Zweimal derselbe Befund ist ein
+  eigener Punkt.**
+
+  `[read]` **Warum das mehr ist als ein roter Waechter:** die Kette ist
+  laut `supabase/README.md` die Quelle des Datenbankzustands. Wenn sie
+  einen anderen Stand erzeugt als die laufende Instanz, ist der
+  Live-Bestand nicht mehr reproduzierbar — und ein Neuaufbau verliert
+  genau die Stellen, die auseinanderlaufen.
+
+  `[cmd]` **Die LOINC-Slug-Eindeutigkeit ist besonders heikel:** C-248
+  hat sie live repariert und einen Waechter gebaut. Wenn die Kette sie
+  nicht erzeugt, kommt der Fehler beim naechsten Neuaufbau zurueck.
+
+  **Zu tun:** je Abweichung feststellen, ob die Kette einen Schritt
+  nicht hat oder ob live etwas ausserhalb der Kette eingespielt wurde.
+  **Erst messen, dann entscheiden, welcher Stand der richtige ist.**
+
+- [ ] **G-179: Das Substanzdetail — Tom will es sehen** (neu
+  2026-08-25). Buendelt G-176, G-177 und den Anzeigeteil von C-107.
+
+  **Tom, 2026-08-25:** *„ok machen wir endlich vorwaerts ich will das
+  in der ui sehen."*
+
+  `[cmd]` **Die Daten stehen seit C-264:** `supplement_user_texts` 290
+  mit **290 verschiedenen Formulierungen**, `supplement_faq` 1.279 mit
+  1.279 verschiedenen Antworten, `sources` durchgehend gefuellt.
+  **Jetzt fehlt nur noch das Fenster, das es zeigt.**
+
+  **Enthalten:**
+
+  `[cmd]` **G-176** — `substanz-detail.tsx:314` begrenzt die Liste mit
+  `menge.slice(0, 50)`. Tom sieht *„50 von 290 Treffern — Suche
+  verfeinern fuer mehr."* `[read]` **Widerspricht G-172:** der
+  Scroll-Container wurde gebaut, weil unten alles unerreichbar war —
+  und dann auf 50 begrenzt.
+
+  `[cmd]` **G-177** — das Detail zeigt fuenf zugeklappte Bloecke und
+  darunter aufgeklappt den Abschnitt *„OHNE QUELLE IM NEUEN KATALOG"*
+  mit Saetzen wie *„Die alte Breittabelle fuehrte `cyp` als jsonb."*
+  **Ein Bericht, kein Produkt.**
+
+  **Layout entschieden:**
+  `docs/spezifikation/substanz-katalog-nutzertexte.md` §9, von Tom am
+  2026-08-23 bestaetigt.
+
+  `[read]` **Die tragende Regel: kein Block ohne Inhalt.** `[cmd]`
+  `zu_wenig_de` ist bei **241 von 290** leer, `mythen_de` bei 30 — das
+  ist der Normalfall und richtig so. **Ein leerer Abschnitt entfaellt,
+  er wird nicht mit einem Platzhalter gefuellt.**
+
+  `[read]` **Bei Enhanced und Peptiden dreht sich die Reihenfolge:**
+  `irreversibel` ganz oben, `ueberwachung` statt der Dosiskacheln,
+  `reinheit` **direkt neben** der Mengenangabe — getrennt gelesen wirkt
+  eine Dosiszahl verlaesslicher, als sie ist.

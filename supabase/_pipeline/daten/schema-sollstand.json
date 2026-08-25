@@ -1288,6 +1288,12 @@
       "schritt": "075"
     },
     {
+      "name": "supplements_parent_id_fkey",
+      "tabelle": "supplements",
+      "zeigt_auf": "supplements",
+      "schritt": "140s"
+    },
+    {
       "name": "supplement_aliases_supplement_id_fkey",
       "tabelle": "supplement_aliases",
       "zeigt_auf": "supplements",
@@ -1304,6 +1310,18 @@
       "tabelle": "supplement_portions",
       "zeigt_auf": "supplements",
       "schritt": "136"
+    },
+    {
+      "name": "supplement_user_texts_supplement_id_fkey",
+      "tabelle": "supplement_user_texts",
+      "zeigt_auf": "supplements",
+      "schritt": "140s"
+    },
+    {
+      "name": "supplement_faq_supplement_id_fkey",
+      "tabelle": "supplement_faq",
+      "zeigt_auf": "supplements",
+      "schritt": "140s"
     },
     {
       "name": "supplement_dosing_supplement_id_fkey",
@@ -1634,12 +1652,7 @@
     "training.equipment": 58,
     "training.exercise_muscles": 6588,
     "training.exercise_catalog_enrichment": 1407,
-    "supplements.supplement_catalog": 44,
     "supplements.substance_aliases": 1132,
-    "supplements.substance_catalog": 566,
-    "supplements.substance_catalog_sources": 668,
-    "supplements.supplement_nutrient_mappings": 17,
-    "supplements.substance_lab_effects": 222,
     "supplements.rule_catalog": 64,
     "medical.biomarker_catalog": 11676,
     "medical.biomarker_reference_ranges": 560,
@@ -1652,9 +1665,13 @@
     "supplements.supplement_groups": 3,
     "supplements.supplement_categories": 23,
     "supplements.supplements": 566,
-    "supplements.supplement_aliases": 1541,
+    "supplements.supplement_aliases": 951,
     "supplements.supplement_lab_effects": 222,
     "supplements.supplement_nutrients": 17,
+    "supplements.supplement_user_texts": 290,
+    "supplements.supplement_faq": 1279,
+    "supplements.supplement_tags": 425,
+    "supplements.supplement_portions": 79,
     "supplements.supplement_safety": 290,
     "supplements.supplement_warnings": 290,
     "supplements.supplement_wada": 290,
@@ -1666,7 +1683,7 @@
     "supplements.supplement_organ_risks": 1450,
     "supplements.supplement_identifiers": 1226,
     "supplements.supplement_regulatory": 1119,
-    "supplements.supplement_field_sources": 2147,
+    "supplements.supplement_field_sources": 2815,
     "supplements.supplement_interactions": 78
   },
   "mindestzeilen_belege": {
@@ -1690,12 +1707,7 @@
     "training.equipment": "[cmd] Ist-Stand nach 100-105: 58 Geraete.",
     "training.exercise_muscles": "[cmd] Ist-Stand nach 100-108: 6.588 Zuordnungen. 6.624 nach C-73 minus 35 Primary/Secondary-Doppelrollen und minus 1 Achilles-Tendon-Sehnenzuordnung.",
     "training.exercise_catalog_enrichment": "[cmd] C-83: 1.416 Training-Uebungen gegen media/exercises/katalog/1500+ exercise data.xlsx gematcht; 1.407 sicher anreicherbar, 8 mehrdeutig, 1 fehlend.",
-    "supplements.supplement_catalog": "[cmd] referenz/lumeos-2026/supabase/seed.disabled/seed_supplements.sql enthaelt 44 Standard-Supplements; 131_supplements_katalog.ts spielt diese 44 ein.",
     "supplements.substance_aliases": "[cmd] C-188: 132_substance_alias_bridge.ts liest crawl_027 mit 290 Kimi-Substanzen. Untergrenze bleibt 1.132, weil zusaetzliche Aliaszeilen Quellenwachstum sind.",
-    "supplements.substance_catalog": "[cmd] C-188: 134_substance_catalog.ts erzeugt konservativ 566 Substanzen: 290 Kimi-Entitaeten, 28 nicht gemappte LumeOS-Eintraege und 248 nicht gemappte F-05-Kandidaten.",
-    "supplements.substance_catalog_sources": "[cmd] C-188: 134_substance_catalog.ts erzeugt 668 Herkunftszeilen: 290 Kimi, 44 LumeOS, 320 F-05 und 14 Cross-Domain-Links mit Substanz-ID.",
-    "supplements.supplement_nutrient_mappings": "[cmd] C-158: supplement-naehrstoffcodes.json fuehrt 17 belegte Standard-Supplement-zu-Naehrstoff-Zuordnungen. Offene IU/DFE-Faelle bleiben dokumentiert und werden nicht geraten.",
-    "supplements.substance_lab_effects": "[cmd] C-162: Kimi crawl_024 liefert 156 lab_effects. Auf Marker expandiert entstehen 222 Zeilen: 203 Markerlinks und 19 Effekte ohne Markerliste.",
     "supplements.rule_catalog": "[cmd] C-133: 133_kimi_rules.ts importiert 29 warning_rules, 15 nutrient_gap_rules und 20 medication_rules aus backup/kimi-research/.../data/platform; Summe 64.",
     "medical.biomarker_catalog": "[cmd] C-70b: biomarker-loinc/index.json fuehrt 11.676 LOINC-Records in acht Split-Dateien; 141_biomarker_katalog.ts bricht bei abweichender Summe ab.",
     "medical.biomarker_reference_ranges": "[cmd] C-70: biomarker-katalog.json fuehrt 122 kuratierte Kandidaten mit 464 Referenzbereich-Zeilen. C-84 ergaenzte 96 Spec-basierte Bereichszeilen; C-140 spiegelt zwei belastbare LOINC-Abweichungen mit Bereich (LDL 13457-7, Haematokrit 4544-3) und ergaenzt dadurch 4 Zeilen. C-191 spiegelt ApoB auf den belegten Code 1884-6 und ergaenzt 2 Zeilen. C-248 entfernt sechs falsche ApoB-Zeilen auf 1869-7 und normalisiert Slug-Dubletten je LOINC. Summe 560.",
@@ -1708,9 +1720,13 @@
     "supplements.supplement_groups": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_groups aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 3.",
     "supplements.supplement_categories": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_categories aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 23.",
     "supplements.supplements": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplements aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 566.",
-    "supplements.supplement_aliases": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_aliases aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 1541.",
+    "supplements.supplement_aliases": "[cmd] C-257: 140_supplement_nutzertexte.sql faltet 598 gefoldete Alias-Dubletten. C-258 ergaenzt 8 belegte Handels-/Trivialnamen-Aliase. Erwartung mindestens 951.",
     "supplements.supplement_lab_effects": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_lab_effects aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 222.",
     "supplements.supplement_nutrients": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_nutrients aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 17.",
+    "supplements.supplement_user_texts": "C-264: Kimi substance_user_texts.jsonl ersetzt C-257-Schablonen, 290 Records.",
+    "supplements.supplement_faq": "C-264: Kimi substance_faq.jsonl ersetzt C-257-Schablonen, 1.279 Records.",
+    "supplements.supplement_tags": "[cmd] C-257: 140_supplement_nutzertexte.sql schreibt 289 Zweck-Tags plus 136 Recht/WADA-Tags fuer Peptide und Enhanced.",
+    "supplements.supplement_portions": "[cmd] C-257: 140_supplement_nutzertexte.sql hebt maschinenlesbar belegte Studiengroessen aus studied_dose_ranges; 79 von 83 Bereichen liefern direkt Menge+Einheit.",
     "supplements.supplement_safety": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_safety aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 290.",
     "supplements.supplement_warnings": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_warnings aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 290.",
     "supplements.supplement_wada": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_wada aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 290.",
@@ -1722,7 +1738,7 @@
     "supplements.supplement_organ_risks": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_organ_risks aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 1450.",
     "supplements.supplement_identifiers": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_identifiers aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 1226.",
     "supplements.supplement_regulatory": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_regulatory aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 1119.",
-    "supplements.supplement_field_sources": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_field_sources aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 2147.",
+    "supplements.supplement_field_sources": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql erzeugt 2.147 Feld-Provenance-Zeilen. C-255 uebernimmt vor dem Entfernen von substance_catalog_sources die 668 alten Katalog-Herkunftszeilen als catalog_source.* in supplement_field_sources. Erwartung mindestens 2.815.",
     "supplements.supplement_interactions": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_interactions aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 78."
   },
   "datenqualitaet": {
@@ -1745,7 +1761,13 @@
     "_kommentar": "Was bewusst NICHT im Schema steht, damit niemand es faelschlich als Luecke meldet.",
     "nutrition_targets": "gehoert zu Goals (C-06), von keinem Kettenschritt angelegt. [cmd] 055_water_logs.sql haelt das ausdruecklich fest.",
     "_sortweight_neu": "Hilfstabelle der C-38-Messung, bewusst entfallen",
-    "foods_custom_zeilen": "Die Tabelle bleibt vorerst leer - es gibt noch keine Oberflaeche, ueber die ein Nutzer einen Eintrag anlegen koennte. Keine Mindestzeilenzahl."
+    "foods_custom_zeilen": "Die Tabelle bleibt vorerst leer - es gibt noch keine Oberflaeche, ueber die ein Nutzer einen Eintrag anlegen koennte. Keine Mindestzeilenzahl.",
+    "supplements.supplement_catalog": "[cmd] C-255: alter Supplements-Katalog nach Umhaengung auf supplements.supplements entfernt.",
+    "supplements.substance_catalog": "[cmd] C-255: alter Substanzkatalog nach Uebernahme in supplements.supplements entfernt.",
+    "supplements.substance_catalog_sources": "[cmd] C-255: alte Herkunftszeilen nach Uebernahme in supplement_field_sources entfernt.",
+    "supplements.supplement_nutrient_mappings": "[cmd] C-255: alte Naehrstoffbruecke nach Uebernahme in supplement_nutrients entfernt.",
+    "supplements.substance_lab_effects": "[cmd] C-255: alte Laboreffekt-Tabelle nach Uebernahme in supplement_lab_effects entfernt.",
+    "supplements.stack_item_substance_matches": "[cmd] C-255: alte Sicht entfernt; Regelpfade lesen stack_items direkt ueber supplements.supplements."
   },
   "_grants": "Rechte je Rolle, aus den SQL-Dateien abgeleitet. GEPRUEFT WIRD EXAKT, nicht \"mindestens\": ein zusaetzliches Recht (GRANT ALL) ist der gefaehrlichere Fall und muss anschlagen. postgres steht NICHT in der Liste — es ist Eigentuemer, seine Rechte sind Eigentum, keine Grants.",
   "_zeilenschutzart": "Fachliche Aussage je Tabelle, nachgeschlagen in 060/052/055: oeffentlich = USING (true) ist richtig (Stammdaten); eigene_zeilen = die Bedingung MUSS auth.uid() nennen, sonst Datenleck; admin = die Bedingung MUSS public.is_admin() nennen.",
@@ -2630,31 +2652,6 @@
     },
     {
       "schema": "supplements",
-      "name": "supplement_catalog",
-      "schritt": "130/131",
-      "rls": true,
-      "policies": [
-        "SELECT"
-      ],
-      "grants": {
-        "authenticated": [
-          "SELECT"
-        ],
-        "service_role": [
-          "SELECT",
-          "INSERT",
-          "UPDATE",
-          "DELETE",
-          "REFERENCES",
-          "TRIGGER",
-          "TRUNCATE"
-        ]
-      },
-      "grants_herkunft": "130_supplements_schema.sql vergibt SELECT an authenticated und service_role ALL; 131_supplements_katalog.ts fuellt den Katalog.",
-      "zeilenschutzart": "oeffentlich"
-    },
-    {
-      "schema": "supplements",
       "name": "substance_aliases",
       "schritt": "132",
       "rls": true,
@@ -2676,177 +2673,6 @@
         ]
       },
       "grants_herkunft": "132_substance_alias_bridge.ts vergibt SELECT an authenticated und service_role ALL explizit.",
-      "zeilenschutzart": "oeffentlich"
-    },
-    {
-      "schema": "supplements",
-      "name": "substance_catalog",
-      "schritt": "134",
-      "rls": true,
-      "policies": [
-        "SELECT"
-      ],
-      "grants": {
-        "authenticated": [
-          "SELECT"
-        ],
-        "service_role": [
-          "SELECT",
-          "INSERT",
-          "UPDATE",
-          "DELETE",
-          "REFERENCES",
-          "TRIGGER",
-          "TRUNCATE"
-        ]
-      },
-      "grants_herkunft": "134_substance_catalog.ts vergibt SELECT an authenticated und service_role ALL explizit; Substanzen sind Katalogdaten.",
-      "zeilenschutzart": "oeffentlich",
-      "spalten": [
-        "id",
-        "canonical_name",
-        "domain",
-        "compound_type",
-        "category",
-        "subcategory",
-        "chemical_form",
-        "aliases",
-        "cas_number",
-        "external_ids",
-        "platform_classes",
-        "platform",
-        "evidence",
-        "official_label_dose",
-        "guideline_dose",
-        "tolerable_upper_intake_level",
-        "studied_dose_ranges",
-        "anecdotal_dose_ranges",
-        "dosing",
-        "pharmacology",
-        "half_life",
-        "half_life_status",
-        "cyp",
-        "lab_effects",
-        "nutrients_provided",
-        "nutrient_mapping_status",
-        "source_primary",
-        "raw",
-        "is_active",
-        "created_at",
-        "updated_at",
-        "safety",
-        "canonical_category",
-        "canonical_compound_type",
-        "canonical_routes",
-        "interactions",
-        "regulatory",
-        "quality",
-        "warning_triggers",
-        "evidence_provenance",
-        "wada_status",
-        "prescription_required",
-        "dose_ceiling_value",
-        "dose_ceiling_unit",
-        "recommendable",
-        "warning_only",
-        "physician_referral",
-        "athlete_flag",
-        "missing_fields",
-        "missing_reason",
-        "last_verified",
-        "needs_review",
-        "confidence",
-        "source_count",
-        "primary_source_count",
-        "unii",
-        "pubchem_cid",
-        "chembl_id",
-        "inchikey",
-        "molecular_formula",
-        "cas_candidates",
-        "molecular_weight",
-        "peptide_sequence",
-        "gruppe",
-        "kategorie",
-        "description",
-        "monitoring",
-        "filter"
-      ],
-      "spalten_herkunft": "[cmd] C-195: 134_substance_catalog.ts erweitert den Substanzkatalog schema-only von 31 auf 60 Spalten. [cmd] C-197: drei kanonische Taxonomiespalten daneben: canonical_category, canonical_compound_type und canonical_routes; Rohspalten bleiben erhalten. [cmd] C-228: gruppe, kategorie, description und monitoring fuer Katalogfilter und Details. [cmd] C-230: filter buendelt kategorie je gruppe fuer bedienbare Katalogleisten."
-    },
-    {
-      "schema": "supplements",
-      "name": "substance_catalog_sources",
-      "schritt": "134",
-      "rls": true,
-      "policies": [
-        "SELECT"
-      ],
-      "grants": {
-        "authenticated": [
-          "SELECT"
-        ],
-        "service_role": [
-          "SELECT",
-          "INSERT",
-          "UPDATE",
-          "DELETE",
-          "REFERENCES",
-          "TRIGGER",
-          "TRUNCATE"
-        ]
-      },
-      "grants_herkunft": "134_substance_catalog.ts vergibt SELECT an authenticated und service_role ALL explizit; Herkunftszeilen sind Katalogdaten.",
-      "zeilenschutzart": "oeffentlich"
-    },
-    {
-      "schema": "supplements",
-      "name": "supplement_nutrient_mappings",
-      "schritt": "135",
-      "rls": true,
-      "policies": [
-        "SELECT"
-      ],
-      "grants": {
-        "authenticated": [
-          "SELECT"
-        ],
-        "service_role": [
-          "SELECT",
-          "INSERT",
-          "UPDATE",
-          "DELETE",
-          "REFERENCES",
-          "TRIGGER",
-          "TRUNCATE"
-        ]
-      },
-      "grants_herkunft": "135_supplement_nutrients.ts vergibt SELECT an authenticated und service_role ALL explizit; Zuordnungen sind Katalogdaten.",
-      "zeilenschutzart": "oeffentlich"
-    },
-    {
-      "schema": "supplements",
-      "name": "substance_lab_effects",
-      "schritt": "147",
-      "rls": true,
-      "policies": [
-        "SELECT"
-      ],
-      "grants": {
-        "authenticated": [
-          "SELECT"
-        ],
-        "service_role": [
-          "SELECT",
-          "INSERT",
-          "UPDATE",
-          "DELETE",
-          "REFERENCES",
-          "TRIGGER",
-          "TRUNCATE"
-        ]
-      },
-      "grants_herkunft": "147_substance_lab_markers.ts vergibt SELECT an authenticated und service_role ALL explizit; Laboreffekte sind Katalogdaten.",
       "zeilenschutzart": "oeffentlich"
     },
     {
@@ -3119,7 +2945,7 @@
     {
       "schema": "medical",
       "name": "lab_reports",
-      "schritt": "140",
+      "schritt": "140s",
       "rls": true,
       "policies": [
         "SELECT",
@@ -3150,7 +2976,7 @@
     {
       "schema": "medical",
       "name": "lab_result_values",
-      "schritt": "140",
+      "schritt": "140s",
       "rls": true,
       "policies": [
         "SELECT",
@@ -3457,6 +3283,10 @@
         "is_active",
         "created_at",
         "updated_at",
+        "parent_id",
+        "form_note_de",
+        "form_note_en",
+        "form_note_th",
         "im_katalog"
       ]
     },
@@ -3508,7 +3338,15 @@
         ]
       },
       "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
-      "zeilenschutzart": "oeffentlich"
+      "zeilenschutzart": "oeffentlich",
+      "spalten": [
+        "supplement_id",
+        "tag_code",
+        "confidence",
+        "source",
+        "created_at",
+        "evidence_grade"
+      ]
     },
     {
       "schema": "supplements",
@@ -3534,6 +3372,121 @@
       },
       "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
       "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_user_texts",
+      "schritt": "140s",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "140_supplement_nutzertexte.sql vergibt SELECT an authenticated und service_role ALL; Katalogtexte, keine Nutzerdaten.",
+      "zeilenschutzart": "oeffentlich",
+      "spalten": [
+        "supplement_id",
+        "status",
+        "kurz_was_de",
+        "kurz_was_en",
+        "kurz_was_th",
+        "wofuer_de",
+        "wofuer_en",
+        "wofuer_th",
+        "wie_wirkt_de",
+        "wie_wirkt_en",
+        "wie_wirkt_th",
+        "was_bringt_es_de",
+        "was_bringt_es_en",
+        "was_bringt_es_th",
+        "zu_viel_de",
+        "zu_viel_en",
+        "zu_viel_th",
+        "zu_wenig_de",
+        "zu_wenig_en",
+        "zu_wenig_th",
+        "wann_wie_de",
+        "wann_wie_en",
+        "wann_wie_th",
+        "wer_nicht_de",
+        "wer_nicht_en",
+        "wer_nicht_th",
+        "mythen_de",
+        "mythen_en",
+        "mythen_th",
+        "irreversibel_de",
+        "irreversibel_en",
+        "irreversibel_th",
+        "ueberwachung_de",
+        "ueberwachung_en",
+        "ueberwachung_th",
+        "nicht_im_blut_de",
+        "nicht_im_blut_en",
+        "nicht_im_blut_th",
+        "reinheit_de",
+        "reinheit_en",
+        "reinheit_th",
+        "rechtslage_klartext_de",
+        "rechtslage_klartext_en",
+        "rechtslage_klartext_th",
+        "source",
+        "created_at",
+        "updated_at",
+        "sources"
+      ]
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_faq",
+      "schritt": "140s",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "140_supplement_nutzertexte.sql vergibt SELECT an authenticated und service_role ALL; Katalog-FAQ, keine Nutzerdaten.",
+      "zeilenschutzart": "oeffentlich",
+      "spalten": [
+        "id",
+        "supplement_id",
+        "frage_de",
+        "frage_en",
+        "frage_th",
+        "antwort_de",
+        "antwort_en",
+        "antwort_th",
+        "sort_order",
+        "source",
+        "created_at",
+        "updated_at",
+        "sources"
+      ]
     },
     {
       "schema": "supplements",
@@ -4245,6 +4198,181 @@
       },
       "grants_herkunft": "136_supplements_neuaufbau.sql vergibt authenticated DML und service_role ALL explizit; RLS prueft user_id oder den besitzenden Parent.",
       "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "supplements",
+      "name": "entity_cyp",
+      "schritt": "142",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "142_kimi_wave1_pharmacology.ts: authenticated SELECT, service_role ALL; Kimi-CYP-Katalogwissen.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "entity_transporters",
+      "schritt": "142",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "142_kimi_wave1_pharmacology.ts: authenticated SELECT, service_role ALL; Kimi-Transporter-Katalogwissen.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "entity_pk",
+      "schritt": "142",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "142_kimi_wave1_pharmacology.ts: authenticated SELECT, service_role ALL; Kimi-PK-Katalogwissen.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "entity_renal_hepatic",
+      "schritt": "142",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "142_kimi_wave1_pharmacology.ts: authenticated SELECT, service_role ALL; Kimi-Renal/Hepatic/Reproductive-Katalogwissen.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "biomarker_explanations",
+      "schritt": "143",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "143_kimi_wave2_biomarker_symptoms.ts: authenticated SELECT, service_role ALL; Marker-Erklaerungen sind Katalogdaten.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "symptoms",
+      "schritt": "143",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "143_kimi_wave2_biomarker_symptoms.ts: authenticated SELECT, service_role ALL; Symptomkatalog ist Katalogdaten.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "symptom_biomarker_map",
+      "schritt": "143",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "143_kimi_wave2_biomarker_symptoms.ts: authenticated SELECT, service_role ALL; Symptom-Marker-Kanten sind Katalogdaten.",
+      "zeilenschutzart": "oeffentlich"
     }
   ],
   "_fremde_funktionen": "GO-04: Funktionen ausserhalb nutrition. Dieselbe Luecke wie oben.",

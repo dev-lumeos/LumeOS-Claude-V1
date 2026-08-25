@@ -142,7 +142,7 @@ const medicationFormulations = numberScalar(`SELECT count(*) FROM medical.medica
 const medicationProducts = numberScalar(`SELECT count(*) FROM medical.medication_products;`)
 const userMedications = numberScalar(`SELECT count(*) FROM medical.user_medications WHERE user_id IN (${IDS_SQL});`)
 const userConditions = numberScalar(`SELECT count(*) FROM medical.user_conditions WHERE user_id IN (${IDS_SQL});`)
-const supplementCatalog = numberScalar(`SELECT count(*) FROM supplements.supplement_catalog WHERE is_active;`)
+const supplementCatalog = numberScalar(`SELECT count(*) FROM supplements.supplements WHERE is_active;`)
 const substanceAliases = numberScalar(`SELECT count(*) FROM supplements.substance_aliases;`)
 const substanceLocalKimiMatches = numberScalar(`
   SELECT count(*)
@@ -257,7 +257,7 @@ if (MODE === 'clean') {
   if (coachCheckins !== 0) errors.push(`coach.checkins: ${coachCheckins}, erwartet 0`)
   if (coachMessages !== 0) errors.push(`coach.messages: ${coachMessages}, erwartet 0`)
   if (coachAlerts !== 0) errors.push(`coach.alerts: ${coachAlerts}, erwartet 0`)
-  if (supplementCatalog < 44) errors.push(`supplements.supplement_catalog: ${supplementCatalog}, erwartet mindestens 44`)
+  if (supplementCatalog < 566) errors.push(`supplements.supplements: ${supplementCatalog}, erwartet mindestens 566`)
   if (substanceAliases < 1100) errors.push(`supplements.substance_aliases: ${substanceAliases}, erwartet mindestens 1100`)
   if (substanceLocalKimiMatches < 16) errors.push(`supplements.substance_alias_matches LumeOS-Kimi: ${substanceLocalKimiMatches}, erwartet mindestens 16`)
   if (ruleCatalog !== 64) errors.push(`supplements.rule_catalog: ${ruleCatalog}, erwartet 64`)
@@ -377,7 +377,7 @@ if (MODE === 'clean') {
   if (medicationProducts < 124) errors.push(`medical.medication_products: ${medicationProducts}, erwartet mindestens 124`)
   if (userMedications !== 1) errors.push(`medical.user_medications: ${userMedications}, erwartet 1`)
   if (userConditions !== 1) errors.push(`medical.user_conditions: ${userConditions}, erwartet 1`)
-  if (supplementCatalog < 44) errors.push(`supplements.supplement_catalog: ${supplementCatalog}, erwartet mindestens 44`)
+  if (supplementCatalog < 566) errors.push(`supplements.supplements: ${supplementCatalog}, erwartet mindestens 566`)
   if (substanceAliases < 1100) errors.push(`supplements.substance_aliases: ${substanceAliases}, erwartet mindestens 1100`)
   if (substanceLocalKimiMatches < 16) errors.push(`supplements.substance_alias_matches LumeOS-Kimi: ${substanceLocalKimiMatches}, erwartet mindestens 16`)
   if (ruleWarning !== 29) errors.push(`supplements.rule_catalog warning: ${ruleWarning}, erwartet 29`)
@@ -1251,10 +1251,11 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM supplements.stack_item_substance_matches m
-    JOIN supplements.user_stacks us ON us.user_id = m.user_id
-    WHERE m.user_id = '${tom}'::uuid
-      AND m.kimi_substance_id = 'sub_9f9bb8c160'
+    FROM supplements.user_stacks us
+    JOIN supplements.stack_items si ON si.stack_id = us.id
+    JOIN supplements.supplements s ON s.id = si.supplement_id
+    WHERE us.user_id = '${tom}'::uuid
+      AND s.slug = 'sub_9f9bb8c160'
       AND us.is_active;`)) {
     errors.push('Fall Supplements Substanzbruecke: Kreatin-Stack-Item trifft Kimi-Substanz nicht')
   }

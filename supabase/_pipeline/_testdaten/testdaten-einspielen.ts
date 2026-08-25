@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process'
 import crypto from 'node:crypto'
+// G-175: das Anmeldewort des Pruefkontos kommt aus derselben Quelle
+// wie tools/schuss.mjs und die Nachweisskripte — eine Stelle.
+import { KONTEN } from '../../../tools/konten.mjs'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE ?? 'postgres'
@@ -2694,6 +2697,54 @@ ON CONFLICT (id) DO UPDATE SET
   email = EXCLUDED.email,
   raw_app_meta_data = EXCLUDED.raw_app_meta_data;
 
+-- ── G-175: das Pruefkonto ist anmeldbar, kettengetragen ─────────
+-- test-user@lumeos.local ist das Nachweiskonto (C-209). Vorher wurde
+-- sein Passwort je Sitzung von Hand zurechtgebogen — der Kopierschritt
+-- war die Fehlerquelle, an der zwei Agenten kollidierten. Jetzt setzt
+-- die Kette den Hash auf das hinterlegte Wort (tools/konten.mjs);
+-- nach jedem Neuaufbau geht die Anmeldung wieder.
+-- [read] Der bcrypt-Hash traegt ein Salz und ist je Lauf anders —
+-- funktional identisch; die pruefbare Erwartung ist der crypt-Check,
+-- nicht das Hash-Byte.
+-- [cmd] Die kette.json-Wegwerf-Datenbank traegt ein MINIMAL-auth
+-- (4 Spalten, kein encrypted_password, kein GoTrue) — dort gibt es
+-- keine Anmeldung, also auch nichts zu setzen. Der Block prueft die
+-- Spalte und ueberspringt sich sonst mit Ansage, statt den Lauf zu
+-- brechen.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'auth' AND table_name = 'users'
+      AND column_name = 'encrypted_password'
+  ) THEN
+    RAISE NOTICE 'G-175: Minimal-auth ohne encrypted_password — Pruefkonto-Passwort uebersprungen.';
+    RETURN;
+  END IF;
+
+  INSERT INTO auth.users (
+    id, instance_id, aud, role, email, email_confirmed_at,
+    raw_app_meta_data, created_at
+  )
+  SELECT
+    '20000000-0000-0000-0000-000000000901'::uuid,
+    '00000000-0000-0000-0000-000000000000'::uuid,
+    'authenticated', 'authenticated',
+    'test-user@lumeos.local', now(),
+    jsonb_build_object('provider', 'email', 'providers', jsonb_build_array('email'), 'seed', 'g175_pruefkonto'),
+    now()
+  WHERE NOT EXISTS (
+    SELECT 1 FROM auth.users WHERE email = 'test-user@lumeos.local'
+  );
+
+  UPDATE auth.users
+  SET encrypted_password = extensions.crypt(${lit(KONTEN['test-user@lumeos.local'])}, extensions.gen_salt('bf')),
+      email_confirmed_at = COALESCE(email_confirmed_at, now())
+  WHERE email = 'test-user@lumeos.local';
+
+  RAISE NOTICE 'G-175: Pruefkonto-Passwort gesetzt (test-user@lumeos.local).';
+END $$;
+
 INSERT INTO public.profiles (
   id, birth_date, biological_sex, height_cm, body_weight_kg, activity_level, nutrition_goal
 )
@@ -3257,23 +3308,75 @@ BEGIN
   SELECT string_agg(DISTINCT i.supplement_slug, ', ' ORDER BY i.supplement_slug)
     INTO v_missing
   FROM test_supplement_stack_items i
-  LEFT JOIN supplements.supplement_catalog c ON c.slug = i.supplement_slug
-  WHERE c.id IS NULL;
+  LEFT JOIN LATERAL (
+    SELECT
+      CASE
+        WHEN m.catalog_a = 'kimi_substance' THEN m.entity_id_a
+        ELSE m.entity_id_b
+      END AS kimi_substance_id
+    FROM supplements.substance_alias_matches m
+    WHERE (
+        m.catalog_a = 'lumeos_supplement_catalog'
+        AND m.catalog_b = 'kimi_substance'
+        AND m.entity_id_a = i.supplement_slug
+      ) OR (
+        m.catalog_a = 'kimi_substance'
+        AND m.catalog_b = 'lumeos_supplement_catalog'
+        AND m.entity_id_b = i.supplement_slug
+      )
+    ORDER BY kimi_substance_id
+    LIMIT 1
+  ) match ON true
+  LEFT JOIN supplements.supplements s ON s.slug = COALESCE(match.kimi_substance_id, i.supplement_slug)
+  WHERE s.id IS NULL
+    AND i.supplement_slug NOT IN ('magnesium', 'vitamin-d3');
 
   IF v_missing IS NOT NULL THEN
-    RAISE EXCEPTION 'Testdaten: Supplement-Slugs fehlen im Katalog: %', v_missing;
+    RAISE EXCEPTION 'Testdaten: Supplement-Slugs fehlen im neuen Katalog: %', v_missing;
   END IF;
 END $$;
 
+CREATE TEMP TABLE test_supplement_stack_item_resolution AS
+SELECT
+  i.*,
+  s.id AS new_supplement_id,
+  CASE i.supplement_slug
+    WHEN 'magnesium' THEN 'Magnesium'
+    WHEN 'vitamin-d3' THEN 'Vitamin D3'
+    ELSE i.supplement_slug
+  END AS unresolved_custom_name
+FROM test_supplement_stack_items i
+LEFT JOIN LATERAL (
+  SELECT
+    CASE
+      WHEN m.catalog_a = 'kimi_substance' THEN m.entity_id_a
+      ELSE m.entity_id_b
+    END AS kimi_substance_id
+  FROM supplements.substance_alias_matches m
+  WHERE (
+      m.catalog_a = 'lumeos_supplement_catalog'
+      AND m.catalog_b = 'kimi_substance'
+      AND m.entity_id_a = i.supplement_slug
+    ) OR (
+      m.catalog_a = 'kimi_substance'
+      AND m.catalog_b = 'lumeos_supplement_catalog'
+      AND m.entity_id_b = i.supplement_slug
+    )
+  ORDER BY kimi_substance_id
+  LIMIT 1
+) match ON true
+LEFT JOIN supplements.supplements s ON s.slug = COALESCE(match.kimi_substance_id, i.supplement_slug);
+
 INSERT INTO supplements.stack_items (
-  id, stack_id, supplement_id, dose, dose_unit, frequency, timing,
+  id, stack_id, supplement_id, custom_name, dose, dose_unit, frequency, timing,
   stock_remaining, stock_unit, low_stock_threshold, sort_order, notes
 )
 SELECT
-  i.id, i.stack_id, c.id, i.dose, i.dose_unit, i.frequency, i.timing,
+  i.id, i.stack_id, i.new_supplement_id,
+  CASE WHEN i.new_supplement_id IS NULL THEN i.unresolved_custom_name ELSE NULL END,
+  i.dose, i.dose_unit, i.frequency, i.timing,
   i.stock_remaining, i.stock_unit, i.low_stock_threshold, i.sort_order, i.notes
-FROM test_supplement_stack_items i
-JOIN supplements.supplement_catalog c ON c.slug = i.supplement_slug;
+FROM test_supplement_stack_item_resolution i;
 
 CREATE TEMP TABLE test_supplement_intake_logs (
   user_id uuid NOT NULL,

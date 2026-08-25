@@ -412,11 +412,14 @@ BEGIN
     AND us.is_active
     AND si.is_active;
 
-  SELECT COALESCE(array_agg(DISTINCT kimi_substance_id), '{}') INTO v_stack_substances
-  FROM supplements.stack_item_substance_matches
-  WHERE user_id = p_user_id
-    AND is_active
-    AND kimi_substance_id IS NOT NULL;
+  SELECT COALESCE(array_agg(DISTINCT s.slug), '{}') INTO v_stack_substances
+  FROM supplements.user_stacks us
+  JOIN supplements.stack_items si ON si.stack_id = us.id
+  JOIN supplements.supplements s ON s.id = si.supplement_id
+  WHERE us.user_id = p_user_id
+    AND us.is_active
+    AND si.is_active
+    AND s.slug LIKE 'sub\_%' ESCAPE '\';
 
   SELECT COALESCE(array_agg(DISTINCT lower(v.marker_name_snapshot)), '{}') INTO v_lab_names
   FROM medical.lab_reports r

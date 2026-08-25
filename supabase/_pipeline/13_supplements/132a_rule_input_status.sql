@@ -45,10 +45,14 @@ BEGIN
     AND us.is_active
     AND si.is_active;
 
-  SELECT count(DISTINCT stack_item_id) INTO v_stack_matches
-  FROM supplements.stack_item_substance_matches
-  WHERE user_id = p_user_id
-    AND is_active;
+  SELECT count(DISTINCT si.id) INTO v_stack_matches
+  FROM supplements.user_stacks us
+  JOIN supplements.stack_items si ON si.stack_id = us.id
+  JOIN supplements.supplements s ON s.id = si.supplement_id
+  WHERE us.user_id = p_user_id
+    AND us.is_active
+    AND si.is_active
+    AND s.slug LIKE 'sub\_%' ESCAPE '\';
 
   SELECT count(*) INTO v_medications
   FROM medical.user_medications

@@ -639,41 +639,12 @@
       ]
     },
     {
-      "id": "142",
-      "path": "supabase/_pipeline/14_medical/142_laborimport_matching.sql",
-      "kind": "sql",
-      "creates": "Medical-Laborimport-Zuordnung: Biomarker-Aliase, nullable LOINC fuer unbekannte Werte und Importfunktionen",
-      "depends_on": [
-        "141",
-        "072"
-      ]
-    },
-    {
-      "id": "143",
-      "path": "supabase/_pipeline/14_medical/143_biomarker_aliases.ts",
-      "kind": "tsx",
-      "creates": "Kuratierte Biomarker-Aliase aus Vorgaengerrepo und mehrdeutige Glukose-Zuordnungen",
-      "depends_on": [
-        "142"
-      ]
-    },
-    {
-      "id": "144",
-      "path": "supabase/_pipeline/14_medical/144_biomarker_spec_enrichment.ts",
-      "kind": "tsx",
-      "creates": "Medical-Spec-Anreicherung: Panels, deutsche Namen, Kurznamen und belastbar zuordenbare Spec-Referenzbereiche",
-      "depends_on": [
-        "143"
-      ]
-    },
-    {
-      "id": "145",
+      "id": "145_medical",
       "path": "supabase/_pipeline/14_medical/145_medications_schema.sql",
       "kind": "sql",
-      "creates": "Medical-Medikamente und Conditions: Katalogtabellen, user_medications und user_conditions mit RLS",
+      "creates": "Medical-Medikationsschema: Wirkstoffe, Formulierungen, Produkte, User-Medikationen und Conditions",
       "depends_on": [
-        "140",
-        "auth_stub"
+        "140"
       ]
     },
     {
@@ -682,7 +653,7 @@
       "kind": "tsx",
       "creates": "Kimi-Medikamentenkatalog: 56 Wirkstoffe, 119 Formulierungen und 124 Produkte",
       "depends_on": [
-        "145"
+        "145_medical"
       ]
     },
     {
@@ -692,7 +663,7 @@
       "creates": "Substanz-Labormarker-Bruecke: Kimi lab_effects gegen LOINC-Katalog und Referenzbereiche validiert",
       "depends_on": [
         "134",
-        "144"
+        "146"
       ]
     },
     {
@@ -707,6 +678,34 @@
       ]
     },
     {
+      "id": "142",
+      "path": "supabase/_pipeline/13_supplements/142_kimi_wave1_pharmacology.ts",
+      "kind": "tsx",
+      "creates": "C-262 Welle 1: Pharmakologie-Enrichment aus Kimi, CYP/Transporter zeilenfoermig",
+      "depends_on": [
+        "137",
+        "147"
+      ]
+    },
+    {
+      "id": "143",
+      "path": "supabase/_pipeline/13_supplements/143_kimi_wave2_biomarker_symptoms.ts",
+      "kind": "tsx",
+      "creates": "C-262 Welle 2: Biomarker-Erklaerungen, Symptome und Symptom-Biomarker-Kanten",
+      "depends_on": [
+        "142"
+      ]
+    },
+    {
+      "id": "144",
+      "path": "supabase/_pipeline/13_supplements/144_kimi_wave3_name_bridge.ts",
+      "kind": "tsx",
+      "creates": "C-262 Welle 3: Kimi-Namensbruecke und Sichtbarkeit von Unterformen",
+      "depends_on": [
+        "143"
+      ]
+    },
+    {
       "id": "138",
       "path": "supabase/_pipeline/13_supplements/138_supplements_stack_umhaengen.sql",
       "kind": "sql",
@@ -717,12 +716,50 @@
       ]
     },
     {
+      "id": "139",
+      "path": "supabase/_pipeline/13_supplements/139_supplements_altkataloge_entfernen.sql",
+      "kind": "sql",
+      "creates": "Supplements-Neuaufbau Schritt 5: alte Kataloge und Anhaengsel nach belegter Uebernahme entfernen",
+      "depends_on": [
+        "138",
+        "137"
+      ]
+    },
+    {
+      "id": "140s",
+      "path": "supabase/_pipeline/13_supplements/140_supplement_nutzertexte.sql",
+      "kind": "sql",
+      "creates": "Supplements-Nutzertexte: Sammelnamen/Unterformen, FAQ, Zweck-Tags, belegte Portionen und Alias-Deduplikation",
+      "depends_on": [
+        "139",
+        "137"
+      ]
+    },
+    {
+      "id": "141s",
+      "path": "supabase/_pipeline/13_supplements/141_supplement_textkorrektur.sql",
+      "kind": "sql",
+      "creates": "Supplements-Textkorrektur: Handelsnamen an Wirkstoffe, unterschiedliche Nutzertexte und Unterformen-Lesepfad",
+      "depends_on": [
+        "140s"
+      ]
+    },
+    {
+      "id": "141t",
+      "path": "supabase/_pipeline/13_supplements/141a_supplement_kimi_nutzertexte.ts",
+      "kind": "tsx",
+      "creates": "C-264: Kimi-Nutzertexte und FAQ ersetzen die alten Schablonen, inklusive sources",
+      "depends_on": [
+        "141s"
+      ]
+    },
+    {
       "id": "146a",
       "path": "supabase/_pipeline/13_supplements/132a_rule_input_status.sql",
       "kind": "sql",
       "creates": "Regel-Eingangsdiagnose: fehlende Kimi-Regelpfade als missing_input statt stilles false",
       "depends_on": [
-        "134",
+        "141t",
         "053",
         "106",
         "121",
@@ -737,6 +774,16 @@
       "creates": "Kimi-Warn-, Gap- und Medikamentenregeln als Katalogdaten plus dreistufige Regelauswertung",
       "depends_on": [
         "146a"
+      ]
+    },
+    {
+      "id": "145",
+      "path": "supabase/_pipeline/13_supplements/145_kimi_wave4_medications_rules.ts",
+      "kind": "tsx",
+      "creates": "C-262 Welle 4: Medikamentenkatalog und Medikamentenregeln",
+      "depends_on": [
+        "133",
+        "146"
       ]
     },
     {
