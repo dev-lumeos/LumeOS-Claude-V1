@@ -12510,3 +12510,95 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
   zusammengebaut**, sondern begruendet an Kimi gegeben — von drei
   angebotenen Wegen der richtige. `[cmd]` 15 der 28 haben Kinder mit
   Text, 13 nicht.
+
+- [x] **C-255: Schritt 5 — die alten Kataloge weg** — **erledigt
+  2026-08-23 (Codex), Bericht `docs/berichte/c-255-codex.md`.**
+
+  `[cmd]` **Vom Orchestrator live nachgemessen:**
+  `supplement_catalog` und `substance_catalog` **existieren nicht
+  mehr** · Anhaengsel (`substance_catalog_sources`,
+  `substance_lab_effects`, `supplement_nutrient_mappings`) **0** ·
+  Sichten, die auf sie lesen, **0** · Schema `supplements` bei 47
+  Tabellen.
+
+  `[cmd]` **Die Gegenstuecke stehen unveraendert:**
+  `supplement_lab_effects` **222**, `supplement_nutrients` **17** —
+  dieselben Zahlen wie vor dem Loeschen.
+
+  `[cmd]` `stack_items` **11**, Verteilung dev 4 / test-user 3 /
+  tom.seed 4, je 2 mit `supplement_id`. **Der Nachweis-Stack ist
+  intakt.**
+
+  ### Mein Blocker war falsch
+
+  `[read]` **C-256 hat den Loeschvorgang als blockiert gemeldet** —
+  `testdaten-einspielen.ts` verweise auf `supplement_catalog`.
+  `[cmd]` **Nachgesehen: die vier Treffer sind Zeichenketten**,
+  `catalog_a = 'lumeos_supplement_catalog'` als Herkunftsmerkmal in
+  `substance_alias_matches`. **Kein Tabellenzugriff.**
+
+  `[read]` **Codex hat richtig gehandelt, indem er trotzdem
+  geloescht hat.** Ich hatte `git grep` gelesen und nicht geprueft,
+  ob der Treffer ein `FROM` ist. **Damit ist C-256 hinfaellig.**
+
+- [x] **C-256: Der Testdaten-Schritt insertet gegen den alten Katalog**
+  — **hinfaellig 2026-08-25, Befund war falsch.**
+
+  `[read]` Siehe C-255. Die vier Treffer in `testdaten-einspielen.ts`
+  sind Zeichenketten, kein Tabellenzugriff. **Der Punkt beruhte auf
+  einem ungepruueften `git grep` des Orchestrators.**
+
+- [x] **C-225: Vier Schreibwege fehlen in coach** — **erledigt
+  2026-08-23 (Fable), Bericht `docs/berichte/c-225-fable.md`.**
+  Zusammen mit **G-169**.
+
+  `[cmd]` **Drei Schreibwege, je mit Vorher/Nachher in der RLS-Sicht
+  von `test-user@lumeos.local`:** Einladen (`relationships` 0 → 1,
+  `status='invited'`) · Antworten (`messages` 0 → 1) · Als-gelesen
+  (`read_at` gesetzt).
+
+  `[cmd]` **Der Rueckbau ist gezaehlt** — 2 Nachrichten, 1 Logzeile, 1
+  Beziehung, Trigger `relationships_change_log` kontrolliert
+  abgeschaltet. `[cmd]` Vom Orchestrator nachgemessen: test-user 0
+  Beziehungen, `messages` 6 gesamt mit 2 gelesen. **Genau der
+  erwartete Endzustand.**
+
+  `[cmd]` **G-169:** der Check-ins-Tab liest `coach.checkins` (6) und
+  `checkin_templates` (2) statt des 105-Zeilen-Entwurfs.
+
+  ### Zwei Fehler beim Nachweis gefunden, nicht im Bau
+
+  `[read]` **Das Einladen-Formular fehlte ausgerechnet im
+  Leerzustand** — bei 0 Beziehungen rendete nur der Empty-Zweig.
+  **Genau dort entsteht die erste Beziehung.**
+
+  `[cmd]` **`checkin_templates.fields` ist eine jsonb-OBJEKTLISTE**
+  (`{key, typ, label}`), kein `string[]`. Der geratene Typ liess die
+  Seite mit *„Objects are not valid as a React child"* abstuerzen.
+  `[read]` **Dasselbe Muster wie bei `mythen_de`** — geratene Typen
+  bei `jsonb` brechen erst am echten Datensatz.
+
+  `[read]` **Die Namensaufloesung wurde gemeldet, nicht gebaut:**
+  `auth.users` ist fuer Clients bewusst nicht lesbar, es braeuchte
+  eine SECURITY-DEFINER-Funktion. **Als eigener Punkt an Codex.**
+
+- [x] **C-107: Der Supplement-Katalog und was ihm fehlt** — **erledigt
+  2026-08-23 (Claude Code), Bericht
+  `docs/berichte/c-107-claude-code.md`.** Zusammen mit **C-195**,
+  **G-176** und **G-177**.
+
+  `[cmd]` **G-176:** `substanz-detail.tsx:314` trug
+  `menge.slice(0, 50)` — **aus `d019b79`, also aus G-172 selbst.**
+  Erst gemessen (DOM-Knoten, Ladezeit, letzte Zeile ueber drei Laeufe
+  je Stand), dann entschieden: **keine Virtualisierung noetig.**
+
+  `[read]` **G-177 war seine eigene Baustelle** — die Luecken-Kachel
+  stammte aus C-252. *„Die Kritik trifft zu."* **Ohne Ausweichen
+  gemeldet.**
+
+  `[read]` **Und er widerspricht meinem Auftrag zu C-254, zu Recht:**
+  `[cmd]` von 66 `*_de`-Textspalten tragen **21 immer Deutsch**
+  (`nutrition.foods.name_de` 7.140/7.140), und bei
+  `nutrition.nutrient_details` sind de und en identisch gefuellt —
+  **0 Zeilen, wo ein Rueckfall etwas rettete.** Meine Regel *„jedes
+  Textfeld"* war zu weit.

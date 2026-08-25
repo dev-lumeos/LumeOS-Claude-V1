@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-25.** 240 offen, 0 in Arbeit.
+**Stand: 2026-08-25.** 238 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -1770,31 +1770,6 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   zeigt, dann gibt man auch die Moeglichkeit, die alle anzuschauen."*
 
 
-
-- [ ] **C-107: Der Supplement-Katalog und was ihm fehlt** (neu
-  2026-08-19). Befund aus der F-02-Bestandsaufnahme
-  (`docs/ssot/121-supplements-bestandsaufnahme.md`).
-
-  ### Die gedachte Importquelle existiert nicht
-
-  `[cmd]` **`SPEC_08_IMPORT_PIPELINE` (17 KB) sagt selbst *„kuratiert,
-  keine automatisierte Uebernahme"*** — und ist Seed-SQL fuer **nur 18
-  Praeparate.**
-
-  `[cmd]` **Die echte Kandidatenliste ist die Mini-PC-CSV: 702
-  Datensaetze** — **nicht 1.302, wie der Kommentar im Importskript
-  behauptet.** Davon **200 Enhanced/PED** (Steroide, SARMs, Peptide), 40
-  unkuratierte Kategorien, **0 mit Quellenangabe.**
-
-  ### Konkreter als die Stueckzahl
-
-  `[cmd]` **Dem 44er-Katalog fehlen `nutrients_provided` auf 33
-  Eintraegen** und **vier Gap-Analysis-Codes** — darunter `FAPUN3`:
-  *„Omega-3 ist da, traegt aber den Code nicht."*
-
-  `[read]` **Damit ist der Gap-Score der Spec heute nicht rechenbar.**
-  **Das wiegt schwerer als die Katalogzahl** — 44 Eintraege ohne
-  Naehrstoffbezug tragen weniger als 20 mit.
 
 - [ ] **C-108: Wechselwirkungen — nennen ja, bewerten nein** (neu
   2026-08-19). Befund aus F-02.
@@ -4914,24 +4889,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[cmd]` `checkins` 6, `checkin_templates` 2 — nach G-158 der
   billigste Treffer im Modul.
 
-- [ ] **C-225: Vier Schreibwege fehlen in coach** (neu 2026-08-22).
-  Aus G-158.
-
-  `[cmd]` **Bestand 2026-08-23:** `relationships` 6 · `messages` 6 ·
-  `checkins` 6 · `checkin_templates` 2. Zwoelf Tabellen im Schema.
-
-  `[cmd]` Antworten (`messages` INSERT), Einladen (`relationships`
-  INSERT mit `status='invited'`), Als-gelesen (`messages` UPDATE
-  `read_at`), und **`coach_profiles`** als Namensquelle —
-  `[cmd]` `to_regclass('coach.coach_profiles')` ist `null`.
-
-  `[read]` **Es gibt heute keine Namensquelle:** `public.profiles`
-  fuehrt kein Namensfeld. Die Kachel zeigt Rolle und Kurzkennung und
-  sagt das sichtbar dazu, statt einen Namen zu erfinden — richtig so.
-
-  `[read]` Der ADR *„Coach schreibt nie direkt"* ist davon unberuehrt:
-  hier schreibt der Klient.
-
 - [ ] **G-170: `medical/tab-tracking` behauptet ein fehlendes Schema**
   (neu 2026-08-22). Aus G-156. **Neunter Fall desselben Musters.**
 
@@ -5503,66 +5460,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   gleichen Namens mit unvergleichbarem Typ. **Zu tun:** eine
   Gate-Pruefung, die Anker- und Verweisfelder gegen den Typ der
   Zielspalte haelt. Ohne sie ist die Lehre wieder nur notiert.
-
-- [ ] **C-255: Schritt 5 — die alten Kataloge weg** (neu 2026-08-23).
-  Letzter Schritt des Supplements-Neuaufbaus.
-
-  `[cmd]` **Kein Lesepfad braucht sie mehr.** Nach C-250 und C-252
-  findet `git grep supplement_catalog` in `lib/supplements/`,
-  `v2/medical/` und `v2/supplements/` nur noch zwei Kommentare.
-
-  `[cmd]` **Was noch dranhaengt, live gemessen:** 4 Fremdschluessel
-  (`substance_catalog_sources`, `substance_lab_effects`,
-  `supplement_nutrient_mappings` zweimal), 2 Policies, 2 Trigger, eine
-  Sicht (`stack_item_substance_matches`).
-
-  `[cmd]` **Zwei der drei Anhaengsel haben deckungsgleiche
-  Gegenstuecke:** `substance_lab_effects` 222 →
-  `supplement_lab_effects` **222** · `supplement_nutrient_mappings` 17
-  → `supplement_nutrients` **17**.
-
-  `[read]` **Die dritte nicht:** `substance_catalog_sources` 668 gegen
-  `supplement_field_sources` 2147. **Ob die 668 vollstaendig enthalten
-  sind, ist ungeprueft** — das ist der erste Schritt des Auftrags, keine
-  Annahme.
-
-  `[read]` **Nicht loeschen, bevor das belegt ist.** Eine Tabelle mit
-  566 Zeilen ist in einer Sekunde weg und in einer Woche nicht
-  rekonstruierbar.
-
-- [ ] **C-256: Der Testdaten-Schritt insertet gegen den alten Katalog
-  und bricht live** (neu 2026-08-23). Aus G-175, von Fable gemeldet.
-
-  `[cmd]` `supabase/_pipeline/_testdaten/testdaten-einspielen.ts`
-  Zeile **3311** und **3327** joinen auf
-  `supplements.supplement_catalog` und schreiben dessen UUIDs nach
-  `supplements.stack_items`.
-
-  `[cmd]` **Der Fremdschluessel zeigt seit C-243 woandershin:**
-  `stack_items_supplement_id_fkey FOREIGN KEY (supplement_id)
-  REFERENCES supplements.supplements(id) ON DELETE RESTRICT`.
-
-  `[cmd]` **Der Lauf bricht deshalb live mit FK-Fehler**
-  (`5c2b2577-…` not present) und rollt zurueck. Fable hat es beim
-  G-175-Lauf getroffen; der Bestand blieb unversehrt, weil der
-  G-175-Block in einem frueheren Transaktionsabschnitt sitzt.
-
-  `[read]` **Ein blosser Tabellentausch reicht nicht.** `[cmd]` Der
-  Join `supplement_catalog.slug = supplements.slug` trifft **0
-  Zeilen**: der alte Katalog fuehrt sprechende Slugs
-  (`creatine-monohydrate`, `alpha-gpc`, `bcaas`), der neue traegt die
-  alte `substance_catalog`-ID (`sub_9f9bb8c160`, `sub_4480fcfa86`).
-
-  `[read]` **Damit haengt der Seed an derselben offenen Frage wie
-  C-244** — Substanz gegen Form. Fuer Creatine und Omega-3 loest die
-  Aliasbruecke; fuer Magnesium und Vitamin D3 nicht, weil Kimi dort nur
-  Salzformen fuehrt.
-
-  **BLOCKIERT C-255.** `[read]` Wird `supplement_catalog` entfernt,
-  bevor der Seed umgestellt ist, bricht der Testdaten-Schritt nicht
-  mehr am Fremdschluessel, sondern an einer Tabelle, die es nicht mehr
-  gibt. **Der Neuaufbau des Nachweiskontos waere dann gar nicht mehr
-  moeglich.**
 
 - [ ] **G-176: Der Katalog zeigt 50 von 290 und laesst den Rest nicht
   erreichen** (neu 2026-08-23). Von Tom am Bildschirm gefunden.
@@ -6187,3 +6084,35 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   **Zu tun:** an Kimi geben — je Substanz oder wenigstens je
   WADA-Kategorie ein Satz, fuer wen die Sperre praktisch gilt.
   **Mit Beleg.**
+
+- [ ] **C-268: Beim Einladen gibt es keine Namensaufloesung** (neu
+  2026-08-25). Aus C-225, von Fable gemeldet.
+
+  `[cmd]` Eingeladen wird heute **per UUID**. Die Kachel zeigt Rolle
+  und Kurzkennung — kein Name, keine E-Mail.
+
+  `[read]` **Fable hat es gemeldet statt danebengebaut:**
+  `auth.users` ist fuer Clients bewusst nicht lesbar. Eine Aufloesung
+  braucht eine **SECURITY-DEFINER-Funktion** in der Datenbank.
+
+  `[read]` **Und es haengt an einer aelteren Frage:** `[cmd]`
+  `coach_profiles` existiert nicht (`to_regclass` ist `null`), und
+  `public.profiles` fuehrt kein Namensfeld. **Solange keine
+  Namensquelle existiert, loest auch eine Funktion nichts auf.**
+
+  **Zu tun:** erst entscheiden, woher der Name kommt — dann die
+  Funktion. Gehoert zu Codex.
+
+- [ ] **G-185: Zwei Wege zum Einladen, einer davon Attrappe** (neu
+  2026-08-25). Aus C-225.
+
+  `[cmd]` **Der Kopf-Knopf *„Invite coach"* oeffnet weiterhin das
+  Entwurfsmodal.** Das echte Formular sitzt im Overview-Tab und
+  schreibt seit C-225 in `coach.relationships`.
+
+  `[read]` **Zwei Wege zur selben Sache, und der sichtbarere ist der
+  falsche.** Wer oben klickt, landet in einer Attrappe — ohne zu
+  merken, dass daneben der echte Weg liegt.
+
+  **Zu tun:** der Kopf-Knopf fuehrt auf das echte Formular, oder er
+  verschwindet.
