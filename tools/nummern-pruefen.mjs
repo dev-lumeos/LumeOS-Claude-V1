@@ -80,17 +80,31 @@ const LAUFEND_NR = /\*\*([A-Z]+-\d+[a-z]?)\*\*/g
 function punkte (text) {
   const aus = []
   let sektion = '(ohne Sektion)'
-  text.split('\n').forEach((z, i) => {
+  const zeilen = text.split('\n')
+  zeilen.forEach((z, i) => {
     if (z.startsWith('## ')) sektion = z.slice(3).trim()
     const m = z.match(ZEILE)
     if (m) {
       // Der Titel steht zwischen `**NR:` und dem schliessenden `**`.
       const t = z.match(/\*\*[A-Z]+-\d+[a-z]?:\s*([^*]+)/)
+      // `braucht: C-275, C-276` steht im Rumpf, vor dem naechsten
+      // Punkt. Gesucht wird bis zur naechsten Punktzeile, damit die
+      // Zeile nicht am Einzug haengt.
+      const vor = []
+      for (let j = i + 1; j < zeilen.length; j++) {
+        if (zeilen[j].match(ZEILE)) break
+        const b = zeilen[j].match(/^\s*braucht:\s*(.+)$/)
+        if (b) {
+          for (const n of b[1].match(/[A-Z]+-\d+[a-z]?/g) || []) vor.push(n)
+          break
+        }
+      }
       aus.push({
         zustand: m[1],
         nr: m[2],
         zeile: i + 1,
         sektion,
+        braucht: vor,
         kurz: (t ? t[1] : '').trim().replace(/\s+/g, ' ').slice(0, 90),
         titel: z.trim().slice(0, 90)
       })
@@ -185,6 +199,11 @@ function pruefe (texte) {
   // nicht gibt, oder ein Auftrag, der laengst in ERLEDIGT.md liegt, dann
   // schickt die Datei jemanden auf eine Arbeit, die keine mehr ist.
   const angelegt = new Set([...offen, ...fertig].map(p => p.nr))
+  const braucht = new Map(
+    [...offen, ...fertig]
+      .filter(p => p.braucht && p.braucht.length)
+      .map(p => [p.nr, p.braucht])
+  )
   const offenNr = new Set(offen.map(p => p.nr))
   for (const nr of new Set([...texte.laufend.matchAll(LAUFEND_NR)].map(m => m[1]))) {
     if (!angelegt.has(nr)) {
@@ -220,6 +239,38 @@ function pruefe (texte) {
         pruefung: 'auftrag-ohne-bericht',
         text: `${a.nr} ist erledigt, aber docs/berichte/ traegt keinen Bericht dazu (Auftrag: ${a.datei}).`
       })
+    }
+  }
+
+  // Ein Auftrag darf nicht rausgehen, solange eine Vorbedingung offen
+  // ist. Am 2026-08-25 ging C-272 raus -- Anreicherung des Katalogs --,
+  // waehrend dem Katalog 128 Substanzen fehlten, darunter Testosteron
+  // mit allen Estern. Nichts hat es verhindert, weil die Reihenfolge
+  // nur im Kopf des Orchestrators stand.
+  //
+  // `braucht: C-275, C-276` in der ersten Zeile des Punktrumpfes.
+  for (const a of texte.auftraege) {
+    const vor = braucht.get(a.nr)
+    if (!vor) continue
+    const offeneVor = vor.filter(nr => offenNr.has(nr))
+    if (offeneVor.length) {
+      fehler.push({
+        pruefung: 'auftrag-vor-vorbedingung',
+        text: `docs/auftraege/${a.datei} traegt ${a.nr}, aber ${offeneVor.join(', ')} ist noch offen. Eine Reihenfolge, die nirgends steht, ist keine.`
+      })
+    }
+  }
+
+  // Eine Vorbedingung, die es nicht gibt, ist ein Tippfehler -- und
+  // waere sonst eine Pruefung, die stillschweigend nichts tut.
+  for (const [nr, vor] of braucht) {
+    for (const v of vor) {
+      if (!angelegt.has(v)) {
+        fehler.push({
+          pruefung: 'vorbedingung-unbekannt',
+          text: `${nr} braucht ${v} -- diese Nummer ist weder in TODO.md noch in ERLEDIGT.md angelegt.`
+        })
+      }
     }
   }
 

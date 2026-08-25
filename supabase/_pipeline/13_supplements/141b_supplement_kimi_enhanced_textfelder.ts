@@ -28,11 +28,11 @@ const fields = [
 ] as const
 
 const expected = {
-  irreversibel_de: 112,
-  ueberwachung_de: 96,
-  reinheit_de: 134,
-  nicht_im_blut_de: 134,
-  rechtslage_klartext_de: 136,
+  irreversibel_de: 174,
+  ueberwachung_de: 159,
+  reinheit_de: 201,
+  nicht_im_blut_de: 201,
+  rechtslage_klartext_de: 203,
 }
 
 function readJsonl(rel: string): Json[] {
@@ -68,7 +68,7 @@ function run(sql: string): void {
 }
 
 const texts = readJsonl('substance_user_texts.jsonl')
-if (texts.length !== 318) throw new Error(`substance_user_texts: ${texts.length}, erwartet 318`)
+if (texts.length !== 446) throw new Error(`substance_user_texts: ${texts.length}, erwartet 446`)
 
 for (const [field, count] of Object.entries(expected)) {
   const actual = texts.filter((row) => present(row[field])).length
@@ -101,11 +101,22 @@ WITH rows AS (
       row_number() OVER (
         PARTITION BY rows.r->>'entity_id'
         ORDER BY
-          CASE WHEN s.slug = rows.r->>'entity_id' THEN 0 ELSE 1 END,
           CASE
+            WHEN s.slug = rows.r->>'entity_id' THEN 0
+            WHEN EXISTS (
+              SELECT 1 FROM supplements.supplement_aliases a
+              WHERE a.supplement_id = s.id
+                AND lower(a.alias) = lower(rows.r->>'entity_id')
+            ) THEN 1
             WHEN regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g')
-               = regexp_replace(lower(rows.r->>'canonical_name'), '[^a-z0-9]+', '', 'g')
-            THEN 0 ELSE 1
+               = regexp_replace(lower(rows.r->>'canonical_name'), '[^a-z0-9]+', '', 'g') THEN 2
+            WHEN lower(s.name_en) = lower(rows.r->>'canonical_name') THEN 3
+            WHEN EXISTS (
+              SELECT 1 FROM supplements.supplement_aliases a
+              WHERE a.supplement_id = s.id
+                AND lower(a.alias) = lower(rows.r->>'canonical_name')
+            ) THEN 4
+            ELSE 9
           END,
           CASE WHEN s.im_katalog THEN 0 ELSE 1 END,
           s.slug
@@ -113,6 +124,11 @@ WITH rows AS (
     FROM rows
     LEFT JOIN supplements.supplements s
       ON s.slug = rows.r->>'entity_id'
+      OR EXISTS (
+        SELECT 1 FROM supplements.supplement_aliases a
+        WHERE a.supplement_id = s.id
+          AND lower(a.alias) = lower(rows.r->>'entity_id')
+      )
       OR regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g')
        = regexp_replace(lower(rows.r->>'canonical_name'), '[^a-z0-9]+', '', 'g')
       OR lower(s.name_en) = lower(rows.r->>'canonical_name')
@@ -172,11 +188,22 @@ BEGIN
           row_number() OVER (
             PARTITION BY rows.r->>'entity_id'
             ORDER BY
-              CASE WHEN s.slug = rows.r->>'entity_id' THEN 0 ELSE 1 END,
               CASE
+                WHEN s.slug = rows.r->>'entity_id' THEN 0
+                WHEN EXISTS (
+                  SELECT 1 FROM supplements.supplement_aliases a
+                  WHERE a.supplement_id = s.id
+                    AND lower(a.alias) = lower(rows.r->>'entity_id')
+                ) THEN 1
                 WHEN regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g')
-                   = regexp_replace(lower(rows.r->>'canonical_name'), '[^a-z0-9]+', '', 'g')
-                THEN 0 ELSE 1
+                   = regexp_replace(lower(rows.r->>'canonical_name'), '[^a-z0-9]+', '', 'g') THEN 2
+                WHEN lower(s.name_en) = lower(rows.r->>'canonical_name') THEN 3
+                WHEN EXISTS (
+                  SELECT 1 FROM supplements.supplement_aliases a
+                  WHERE a.supplement_id = s.id
+                    AND lower(a.alias) = lower(rows.r->>'canonical_name')
+                ) THEN 4
+                ELSE 9
               END,
               CASE WHEN s.im_katalog THEN 0 ELSE 1 END,
               s.slug
@@ -184,6 +211,11 @@ BEGIN
         FROM rows
         LEFT JOIN supplements.supplements s
           ON s.slug = rows.r->>'entity_id'
+          OR EXISTS (
+            SELECT 1 FROM supplements.supplement_aliases a
+            WHERE a.supplement_id = s.id
+              AND lower(a.alias) = lower(rows.r->>'entity_id')
+          )
           OR regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g')
            = regexp_replace(lower(rows.r->>'canonical_name'), '[^a-z0-9]+', '', 'g')
           OR lower(s.name_en) = lower(rows.r->>'canonical_name')
@@ -216,11 +248,11 @@ BEGIN
   IF v_missing <> 0 THEN
     RAISE EXCEPTION 'C-266: % Text-entity_id nicht in supplements.supplements', v_missing;
   END IF;
-  IF v_rows <> 318 THEN
-    RAISE EXCEPTION 'C-266/C-265 Nachtrag: supplement_user_texts %, erwartet 318', v_rows;
+  IF v_rows <> 446 THEN
+    RAISE EXCEPTION 'C-266/C-275: supplement_user_texts %, erwartet 446', v_rows;
   END IF;
-  IF v_irreversibel <> 112 OR v_ueberwachung <> 96 OR v_reinheit <> 134
-     OR v_nicht_im_blut <> 134 OR v_rechtslage <> 136 THEN
+  IF v_irreversibel <> 174 OR v_ueberwachung <> 159 OR v_reinheit <> 201
+     OR v_nicht_im_blut <> 201 OR v_rechtslage <> 203 THEN
     RAISE EXCEPTION 'C-266: Enhanced-Zaehler abweichend: irreversibel %, ueberwachung %, reinheit %, nicht_im_blut %, rechtslage %',
       v_irreversibel, v_ueberwachung, v_reinheit, v_nicht_im_blut, v_rechtslage;
   END IF;

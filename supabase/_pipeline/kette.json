@@ -773,29 +773,47 @@
     },
     {
       "id": "141t",
-      "path": "supabase/_pipeline/13_supplements/141a_supplement_kimi_nutzertexte.ts",
+      "path": "supabase/_pipeline/13_supplements/141aa_supplement_kimi_stammdaten_446.ts",
       "kind": "tsx",
-      "creates": "C-264: Kimi-Nutzertexte und FAQ ersetzen die alten Schablonen, inklusive sources",
+      "creates": "C-275: Kimi-Stammdaten 446 auf sichtbare Eintraege, unsichtbare Huelsen und neue Supplements abbilden",
       "depends_on": [
         "141s"
       ]
     },
     {
       "id": "141u",
-      "path": "supabase/_pipeline/13_supplements/141b_supplement_kimi_enhanced_textfelder.ts",
+      "path": "supabase/_pipeline/13_supplements/141a_supplement_kimi_nutzertexte.ts",
       "kind": "tsx",
-      "creates": "supplements.supplement_user_texts enhanced fields",
+      "creates": "C-264: Kimi-Nutzertexte und FAQ ersetzen die alten Schablonen, inklusive sources",
       "depends_on": [
         "141t"
       ]
     },
     {
       "id": "141v",
+      "path": "supabase/_pipeline/13_supplements/141b_supplement_kimi_enhanced_textfelder.ts",
+      "kind": "tsx",
+      "creates": "supplements.supplement_user_texts enhanced fields",
+      "depends_on": [
+        "141u"
+      ]
+    },
+    {
+      "id": "141w",
       "path": "supabase/_pipeline/13_supplements/141c_supplement_dosing_enrichment.ts",
       "kind": "tsx",
       "creates": "C-270: Kimi-Dosis-Enrichment mit guideline, upper_limit, studied ranges, frequency, duration und Provenienz",
       "depends_on": [
-        "141u"
+        "141v"
+      ]
+    },
+    {
+      "id": "141x",
+      "path": "supabase/_pipeline/13_supplements/141e_supplement_kern_dubletten.sql",
+      "kind": "sql",
+      "creates": "C-276: Katalog-Kerndubletten per parent_id in Unterformen ziehen und erlaubte fachliche Varianten pruefen",
+      "depends_on": [
+        "141w"
       ]
     },
     {
@@ -804,7 +822,7 @@
       "kind": "sql",
       "creates": "Regel-Eingangsdiagnose: fehlende Kimi-Regelpfade als missing_input statt stilles false",
       "depends_on": [
-        "141v",
+        "141x",
         "053",
         "106",
         "121",

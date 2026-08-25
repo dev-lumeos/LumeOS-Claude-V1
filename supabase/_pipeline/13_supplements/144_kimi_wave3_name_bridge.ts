@@ -84,13 +84,18 @@ FROM resolved
 WHERE alias IS NOT NULL AND alias <> ''
 ON CONFLICT DO NOTHING;
 
--- C-262: Unterformen sind fachlicher Inhalt. Sie bleiben Kinder, aber
--- im_katalog darf parent_id nicht als Sichtbarkeits-Ausschluss nutzen.
+-- C-277: Unterformen sind fachlicher Inhalt. Sie bleiben Kinder, aber
+-- nicht oberste Katalogeintraege. im_katalog muss parent_id
+-- ausschliessen, sonst erscheinen Formen wie Magnesium citrate oder
+-- Caffeine (anhydrous) wieder neben dem Sammelnamen.
 ALTER TABLE supplements.supplements DROP COLUMN IF EXISTS im_katalog;
 ALTER TABLE supplements.supplements ADD COLUMN im_katalog boolean GENERATED ALWAYS AS (
-  coalesce(description_en,'') <> ''
-  OR coalesce(description_de,'') <> ''
-  OR evidence_grade IS NOT NULL
+  parent_id IS NULL
+  AND (
+    NULLIF(btrim(coalesce(description_en,'')), '') IS NOT NULL
+    OR NULLIF(btrim(coalesce(description_de,'')), '') IS NOT NULL
+    OR evidence_grade IS NOT NULL
+  )
 ) STORED;
 
 COMMIT;
