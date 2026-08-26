@@ -12945,3 +12945,185 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
   `[read]` **C-265 war derselbe Mechanismus mit anderer Ursache** —
   dort fehlten drei Medical-Schritte in `kette.json`. **Zweimal
   dieselbe Klasse Fehler an verschiedenen Stellen.**
+
+- [x] **C-273: Welle 2 — Schema `wissen`** — **erledigt 2026-08-26
+  (Codex), Bericht `docs/berichte/c-273-codex.md`.**
+
+  `[cmd]` **Vom Orchestrator live nachgemessen:**
+
+  | Tabelle | Zeilen |
+  |---|---:|
+  | `rule_engine_rules` | **64** |
+  | `rule_engine_field_specs` | 22 |
+  | `rule_trait_mappings` | 43 |
+  | `evidence_register_entries` | **265** |
+  | `knowledge_gap_records` | **407** |
+  | `product_entities` | 353 |
+  | `vision_contract_records` | 15 |
+  | `travel_medication_records` | 27 |
+  | `buddy_knowledge_records` | **2.861** |
+  | `community_records` | **1.033** |
+
+  `[cmd]` **Die Marken sind vollstaendig mitgekommen: 1.033 von 1.033
+  tragen `admin_only`, `not_medical_recommendation` und
+  `evidence_class = 'E'`.** `[read]` **Das war die Bedingung, unter
+  der das Material ueberhaupt importiert werden durfte** — eine
+  verlorene Marke waere schlimmer gewesen als eine fehlende Zeile.
+
+  `[cmd]` **`im_katalog` bei Kette und Live 412, sichtbare Unterformen
+  0.** `[read]` **Der Import hat nicht beruehrt, was er nicht sollte**
+  — genau die Kontrollfrage, nachdem das in C-276 und C-277 zweimal
+  schiefgegangen war.
+
+  `[cmd]` Sicherung nach **jedem der acht Bloecke**, bis
+  `20260826_091907_c273_8_community.dump`. Negativprobe rot bei
+  Erwartung 65 statt 64.
+
+  `[read]` **Damit ist Kimis Bestand gesichert.** Er lag bis heute
+  ausschliesslich in `docs/kimi_research/`, das in `.gitignore` steht
+  — nicht versioniert, nicht gemessen. **In vier Tagen dreimal
+  belegt, dass Dateien dort vergessen werden.**
+
+- [x] **G-190: Sieben sequenzielle `await` in
+  `v2/supplements/page.tsx`** — **erledigt 2026-08-26 (Claude Code),
+  Bericht `docs/berichte/g-190-claude-code.md`.**
+
+  `[cmd]` **Beide Laeufe schneller, in beiden Konten:**
+
+  | Konto | Fassung | kalt | warm |
+  |---|---|---:|---:|
+  | dev | sequenziell | 1.123 ms | 1.087 ms |
+  | dev | **parallel** | **998 ms** | **999 ms** |
+  | test-user | sequenziell | 253 ms | 265 ms |
+  | test-user | **parallel** | **199 ms** | **224 ms** |
+
+  `[read]` **Die sequenzielle Fassung wurde fuer die Messung kurz
+  wiederhergestellt und byteidentisch zurueckgebaut** — kein Neustart,
+  Server durchgehend PID 351936.
+
+  ### Die Korrektur wiegt mehr als die Optimierung
+
+  `[cmd]` **`ladeRegeln` ist die Untergrenze: 853–926 ms auf dev, 88 %
+  der Gesamtzeit.** Die Seite liefert in 999 ms — **das passt
+  zusammen, und damit ist belegt, dass nichts anderes im Weg steht.**
+
+  `[cmd]` **Seine erste Meldung nannte 880 ms; bei der Nachmessung
+  standen dort 58 ms.** Fuenf Hypothesen einzeln geprueft und
+  verworfen — Reihenfolge, Wiederholung, Messhuelle, Thunk-Liste,
+  Importliste. **Es war das Konto.**
+
+  `[cmd]` **dev 926 ms gegen test-user 62 ms**, Ursache im
+  Ausfuehrungsplan: `temp read=9457 written=9457` gegen kein temp,
+  **360 Einnahmen gegen 24.** `[read]` **Das Kreuzprodukt skaliert mit
+  `intake_logs`, nicht mit der Stackgroesse** — als **C-279**
+  angelegt.
+
+  `[cmd]` **Und ein zweiter Posten, genannt statt verschwiegen:**
+  zwischen Datenbank und Anwendung liegen **~700 ms** (172 ms in der
+  DB, 880 ms ueber PostgREST). **Der groessere Anteil** — als
+  **C-278** angelegt.
+
+  ### Der Waechter
+
+  `[cmd]` **Schwelle 3**, abgeleitet aus der Luecke in den Daten: acht
+  Seiten bei 0–2, dann Sprung auf 5 und 10. **Zwei begruendete
+  Ausnahmen** — Identitaetsabfragen sind echte Vorgaenger, fuenf
+  Seiten brauchen die UUID vorher; `nutrition` und `training` stehen
+  auf einer Uebergangsliste, **deren Zahl nur sinken darf.** Drei
+  Sabotagen, alle rot.
+
+  `[read]` **Das ist der eigentliche Ertrag.** `[cmd]` **C-189 hat
+  dieselbe Lehre hinterlassen** — fuenf Auftraege, eine Datei, keiner
+  hat gemessen, 7.641 ms auf 144 ms — **als Merksatz in `CLAUDE.md`.
+  Er hat nicht getragen.**
+
+  `[cmd]` **Punkt 3 gemessen statt behauptet:** `ladeSubstanzListe`
+  sabotiert → HTTP 200, Seite steht, Stack da, **nur die Katalogzahl
+  faellt aus (412 → null)**. Kein Fehlerbild.
+
+  `[read]` **Zur Zurechnung:** die fuenf Auftraege, die die Kette
+  wachsen liessen, waren meine — keiner sagte *„miss die Summe"*.
+  **Seine Gegenrede traegt trotzdem:** *„Ein Auftrag, der ‚haeng zwei
+  Abfragen an' sagt, verbietet nicht, beim Anhaengen nach links und
+  rechts zu sehen. Das macht die Kette erklaerbar, nicht richtig."*
+
+- [x] **G-191: Die Mengen-Kachel zeigt eine Begruendung statt einer
+  Menge** — **erledigt 2026-08-25 (Claude Code), Bericht
+  `docs/berichte/g-191-claude-code.md`.**
+
+  **Tom, 2026-08-25**, nach dem Durchklicken von Astaxanthin, GHK-Cu
+  und Drostanolon: *„woher kommen diese unterschiedlichen
+  darstellungen?"*
+
+  `[cmd]` **Es waren nicht drei Darstellungen, sondern ein Fehler in
+  drei Auspraegungen.** `guideline_dose` ist ein Objekt:
+
+      {"value": null,
+       "missing_reason": "No validated clinical guideline dose (...)",
+       "provenance_type": "CLINICAL_GUIDELINE"}
+
+  **Die Kachel rendert das Objekt als Zeichenkette** — daher
+  *„NO_RELIABLE_EVIDENCE"* und *„TRIAL_EXPOSURE"* dort, wo eine Menge
+  stehen soll.
+
+  `[cmd]` **Das Ergebnis, gemessen ueber alle 412 Katalogzeilen:**
+
+  | | vorher | nachher |
+  |---|---:|---:|
+  | Menge · Statuscode | 250 | **0** |
+  | Menge · echter Wert | 8 | **107** |
+  | Obergrenze · Statuscode | 241 | **0** |
+  | Obergrenze · echter Wert | **0** | 1 |
+
+  ### Zwei eigene Funde
+
+  `[read]` **Die Obergrenze-Kachel hat nie einen richtigen Wert
+  gezeigt — 0 von 412.** Das stand in keinem Auftrag.
+
+  `[cmd]` **Die Menge stieg von 8 auf 107, weil ein zweiter Fehler
+  danebenlag:** `value` ist bei `studied_dose_ranges` ein **Array
+  strukturierter Spannen** (`min`, `max`, `units`, `duration`), und die
+  alte Funktion flachte auch das ein — **Beta-Carotin wurde zu
+  „50 · 15 · mg/day · years (ATBC 20 mg; …)".** `[read]` **Die 99
+  Werte waren immer da, nur unlesbar.**
+
+  ### Drei Korrekturen an meinen Auftragszahlen
+
+  `[cmd]` **`upper_limit`: 13 Werte und 249 Gruende**, nicht 3 und
+  287. `[read]` **Ich hatte gegen die 290 Zeilen mit `guideline_dose`
+  gefiltert statt gegen alle 412** — zum dritten Mal an einem Tag misst
+  meine Vorgabe am falschen Ausschnitt.
+
+  `[cmd]` **`frequency` und `duration_studied` sind keine Objekte** —
+  die Spalten heissen `frequency_de/_en/_th` und sind Text.
+
+  `[cmd]` **`studied_dose_ranges`: 276 der 482 sind leere Arrays** —
+  die waren nie das Problem.
+
+  ### Die Abbildung, mit Messung statt Schaetzung
+
+  `[cmd]` **857 belegte Gruende, nur 16 verschiedene — die acht
+  haeufigsten decken 97,6 %.** Deshalb Abbildung in der Anzeige statt
+  Nachforderung bei Kimi.
+
+  `[read]` **Aber fuenf bleiben bewusst englisch, und das ist die
+  richtige Entscheidung:** Beta-Carotin (Lungenkrebs bei Rauchern,
+  ATBC/CARET), L-Tryptophan (EMS-Ausbruch 1989), Natrium, Chrom.
+  **Das sind substanzeigene Sicherheitsinformationen — eine Abbildung
+  auf „Keine Obergrenze festgelegt" wuerde sie loeschen.** Als
+  Kimi-Nachforderung gemeldet.
+
+  ### Zwei eigene Fehler unterwegs
+
+  `[read]` **Der erste Entwurf setzte einen Strich in die
+  Zahlenkachel.** Falsch — `substanz-kacheln.ts:30` sagt seit G-181:
+  *„Was nicht drinsteht, bekommt keine Kachel."* Zurueckgebaut.
+
+  `[read]` **Und die automatische Pruefung meldete gruen, waehrend das
+  Bild abgeschnittenen Text zeigte.** `scrollWidth > clientWidth` misst
+  nur den eigenen Kasten — der Text brach darin um, **erst die Tafel
+  beschnitt ihn.** `[read]` **Vierter Fall derselben Klasse an einem
+  Tag: die Pruefung misst etwas anderes als das, worauf es ankommt.**
+
+  `[cmd]` 625 Tests gruen, Build 31/31, beide Breiten ohne Ueberlauf,
+  **Testosterone Enanthate unveraendert.**

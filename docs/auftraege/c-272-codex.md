@@ -3,14 +3,37 @@
 Bericht: `docs/berichte/c-272-codex.md`
 
 **Welle 1: Der Katalog wird inhaltlich fertig.** Alles, was in Kimis
-Bestand zu den 318 sichtbaren Substanzen liegt und noch nicht bei uns
-ist.
+Bestand zu den sichtbaren Substanzen liegt und noch nicht bei uns ist.
 
 Grundlage: `docs/ssot/96-kimi-inhalt.md` — dort ist jede Datei
 geoeffnet und beschrieben.
 
 Quelle:
 `docs/kimi_research/supplement_performance_database/data/evidence/`
+
+---
+
+## Stand am 2026-08-25, nach C-275 bis C-277
+
+`[cmd]` **Der Auftrag wurde am selben Tag einmal gestoppt** — er ging
+raus, waehrend dem Katalog **128 Substanzen fehlten**, darunter
+Testosteron mit allen Estern. **Das ist behoben:**
+
+    supplements.supplements       596
+    im_katalog                    412   (vorher 318)
+    davon sichtbare Unterformen     0
+    Unterformen mit parent_id     101
+    supplement_user_texts         446
+    supplement_faq              1.970
+
+`[cmd]` **Und die Ausgangszahlen fuer diesen Auftrag, frisch
+gemessen:** `supplement_wada.note_de` **0** ·
+`supplement_lab_effects` **222** ·
+`entity_transporters` mit `entity_type='supplement'` **135**.
+
+`[read]` **Der Entwurf `141d_kimi_wada_scope.ts` liegt bereits im
+Baum**, nicht verkettet und nicht ausgefuehrt — aus dem gestoppten
+Lauf. **Pruef ihn, statt neu anzufangen.**
 
 ---
 
@@ -133,6 +156,12 @@ Nicht committen, nicht stagen, nicht pushen.
     Thailand-Records               neu, Erwartung ~1060
     entity_transporters          135 -> Zahl nennen
     Konflikt-Records               neu, Erwartung 20
+
+`[read]` **Und weil es zweimal an genau dieser Stelle schiefging:
+nenn nach dem Lauf `im_katalog` fuer Kette UND Live.** `[cmd]` Beide
+stehen heute bei **412**, sichtbare Unterformen **0**. **Weichen sie
+danach ab, ist der Import die Ursache** — C-276 und C-277 waren beide
+von dieser Sorte.
 
 **Gegenprobe an drei namentlich genannten Substanzen:** eine mit WADA-
 Verbot, eine ohne, und **Biotin** — `[cmd]` dessen Laborwirkung auf

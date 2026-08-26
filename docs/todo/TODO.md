@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-25.** 243 offen, 0 in Arbeit.
+**Stand: 2026-08-26.** 245 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6161,52 +6161,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   Blutungsrisiko — **wer das verwechselt, behandelt einen
   Messfehler.**
 
-- [ ] **C-273: Welle 2 — Schema `wissen` fuer das, was noch nicht
-  angezeigt wird** (neu 2026-08-25).
-
-  braucht: C-272
-
-  `[read]` **Nicht in `supplements`.** Was dort liegt, gehoert in den
-  Katalog; alles andere macht ihn unuebersichtlich und verleitet dazu,
-  es anzuzeigen, bevor es durchdacht ist.
-
-  **Die Regel-Engine** — `[cmd]` 64 Regeln mit ausfuehrbaren
-  Bedingungen, `module_field_spec.json` (kanonische Feldpfade je
-  Modul), `rule_trait_mapping.json` (157 Klassen). `[read]` **Die
-  Bruecke zwischen Supplements und Medical**, gebraucht sobald der
-  Medikamentenkatalog steht.
-
-  **Die Register** — `[cmd]` 265 Konstanten mit `current_value: null`:
-  `constant_evidence` 181 · `formula_evidence` 22 ·
-  `recovery_modality` 32 · `fatigue_signal` 17 ·
-  `training_structure` 13. `[read]` **Sie sagen, was wir NICHT bauen
-  sollen:** `acwr_decision: implement: no`, vier synthetische
-  Seed-Werte in Recovery. **Heute wertvoll, nicht spaeter.**
-
-  **Die Lueckenkarten** — `[cmd]` 56 aufgeloeste, 46 Abhaengigkeiten,
-  **305 Holds** (67 `REPO_DEPENDENCY`). `[read]` Sie beantworten
-  *„warum ist das leer"* **dauerhaft**, statt dass in sechs Wochen
-  jemand recherchieren laesst, was `NOT_APPLICABLE` ist.
-
-  **Die Buddy-Ebene** — `[cmd]` 2.817 Zeilen Populationsevidenz plus
-  `observation_comparison_semantics` mit **14 Zustaenden, je mit
-  `allowed_buddy_language` und `forbidden_buddy_language`.**
-  **Importieren, nicht anzeigen.**
-
-  **Die Produktebene** — `[cmd]` 50 Produkte, deren Zutaten **unsere
-  `sub_*`-IDs tragen**, mit Menge, Einheit, Zertifikaten, **Preis je
-  Portion** und Thailand-Verfuegbarkeit. 120 Marken, 63 Hersteller.
-  `[read]` **Genau die Ebene, fuer die die Kosten-Kachel seit C-250
-  markiert ist.**
-
-  **Das Scan-Konzept** — vier Vertraege mit Regeln wie *„never match
-  by name alone"*, sicherheitskritischen Feldern, QR-Vertrauensmodell,
-  Medienrechte-Register mit acht Zustaenden.
-
-  **Reise mit Medikamenten** — Schema plus sieben Laender:
-  Verschreibungspflicht, Arztbrief, Mengengrenze, Zolldeklaration,
-  Kuehlkette. `[read]` **Fuer Nutzer in Thailand kein Nebenthema.**
-
 - [ ] **C-274: Die 248 unsichtbaren zuordnen** (neu 2026-08-25).
 
   braucht: C-276
@@ -6236,69 +6190,112 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` **Keine Rechercheaufgabe mehr** — Zuordnung ueber die
   Klammerinhalte plus eine kleine Nachforderung an Kimi.
 
-- [ ] **G-190: Sieben sequenzielle `await` in
-  `v2/supplements/page.tsx`** (neu 2026-08-25). Von Claude Code beim
-  Design gefunden.
+- [ ] **C-278: Zwischen Datenbank und Anwendung liegen 700 ms** (neu
+  2026-08-26). Von Claude Code in G-190 gemessen und gemeldet.
 
-  `[cmd]` **Sieben `await` nacheinander, keiner baut auf dem vorigen
-  auf.** Ladezeit **1,8–2,9 s**. `Promise.all` wuerde sie auf die
-  langsamste Einzelabfrage druecken.
+  `[cmd]` **`ladeRegeln` auf dev: 172 ms in der Datenbank, 880 ms bis
+  in die Anwendung.** Der Rest — rund **700 ms** — entsteht in
+  PostgREST und im Transport.
 
-  `[cmd]` **`Promise.all` steht in sechs von sieben Modulen** —
-  training, goals, recovery, nutrition, medical. **Nur Supplements
-  nicht.** Es lag im Nachbarordner und wurde **fuenfmal nicht
-  angewandt.**
+  `[read]` **Das ist der groessere Posten.** G-190 hat die
+  Ladezeit von 1.123 auf 998 ms gedrueckt, indem sieben Abfragen
+  parallel laufen. **Die Untergrenze bleibt die langsamste — und die
+  besteht zu 80 Prozent aus Ueberbau, nicht aus Abfragezeit.**
 
-  ### Wie es gewachsen ist
+  `[read]` **Nicht Teil von G-190, ausdruecklich genannt statt
+  verschwiegen.** Zu messen: liegt es an der Zeilenzahl, an der
+  Antwortgroesse, an fehlender Kompression, oder an der Zahl der
+  Rundreisen.
 
-  | Commit | Datum | `await` |
-  |---|---|---:|
-  | `6700f94` Attrappe | 17.8. | 0 |
-  | `5a67903` vier Reiter angebunden | 18.8. | 2 |
-  | `08803ce` inventory, compliance, cost | 20.8. | 2 |
-  | `3d3f7c9` interactions + gate | 20.8. | 4 |
-  | `fd0936b` Katalog mit Herkunft | 22.8. | 6 |
+- [ ] **C-279: Das Kreuzprodukt in `rule_assessment` skaliert mit den
+  Einnahmen** (neu 2026-08-26). Aus G-190.
 
-  `[read]` **Nie ein Sprung, immer zwei dazu.** Jeder Auftrag war fuer
-  sich vertretbar — zwei Abfragen an eine bestehende Kette anhaengen,
-  im selben Stil, mit eigenem `try/catch` wie die vorhandenen.
-  **Keiner der fuenf hat gefragt, was die Kette insgesamt kostet.**
+  `[cmd]` **`ladeRegeln` braucht auf `dev@lumeos.app` 926 ms, auf
+  `test-user@lumeos.local` 62 ms** — Faktor 15.
 
-  ### Dieselbe Lehre wie C-189, ein zweites Mal
+  `[cmd]` **Der Ausfuehrungsplan zeigt die Ursache:**
 
-  `[cmd]` **C-189 haelt in `CLAUDE.md` fest:** *„Fuenf Auftraege haben
-  ihn angefasst, keiner hat es gemessen."* Dort war es der Aufruf in
-  der Schleife, **7.641 ms → 144 ms.**
+      dev:        temp read=9457 written=9457 · 172 ms
+      test-user:  (kein temp)                 ·  20 ms
 
-  `[read]` **Dasselbe Muster, dieselbe Datei-Nachbarschaft.** Der
-  Unterschied: C-189 hinterliess einen **Merksatz**, keine Pruefung.
-  **Ein Merksatz hat nicht getragen.**
+  `[cmd]` **360 Einnahmen gegen 24.** `[read]` **Das Kreuzprodukt
+  entsteht erst mit Einnahmehistorie — es skaliert mit `intake_logs`,
+  nicht mit der Stackgroesse.**
 
-  ### Die Zurechnung
+  `[read]` **Damit waechst die Ladezeit mit der Nutzungsdauer.** Ein
+  Konto, das ein Jahr protokolliert, traegt ein Vielfaches von 360
+  Zeilen. **Das ist kein Ausreisser, das ist eine Kurve.**
 
-  `[read]` **Die fuenf Auftraege waren meine.** Jeder sagte *„haeng
-  zwei Abfragen an"*, keiner sagte *„miss die Summe"*. Dass
-  `Promise.all` nebenan steht, haette **mir** auffallen muessen, als
-  ich zum fuenften Mal denselben Auftragstyp schrieb.
+- [ ] **G-193: Jede Leistungszahl nennt das Konto** (neu 2026-08-26).
+  Aus G-190, von Claude Code selbst formuliert.
 
-  `[read]` **Claude Codes Gegenrede, und sie traegt:** *„Ein Auftrag,
-  der ‚haeng zwei Abfragen an' sagt, verbietet nicht, beim Anhaengen
-  nach links und rechts zu sehen. Das war fuenfmal meine Gelegenheit.
-  Dass die Auftraege es nicht erzwungen haben, macht die Kette
-  erklaerbar, nicht richtig."*
+  `[read]` **Seine Lehre, woertlich:** *„In jede Zahl gehoert, welches
+  Konto gemessen wurde — so wie seit dem 18.8. der Stichtag zu jeder
+  Zahl gehoert. Meine erste Messung war auf dev richtig und auf
+  test-user um Faktor 15 daneben."*
 
-  ### Was daraus wird
+  `[cmd]` **Der Anlass:** die erste G-190-Meldung nannte 880 ms fuer
+  `ladeRegeln`. Bei der Nachmessung standen dort **58 ms**. Fuenf
+  Hypothesen einzeln geprueft und verworfen — Reihenfolge,
+  Wiederholung, Messhuelle, Thunk-Liste, Importliste. **Es war das
+  Konto.**
 
-  **Der Waechter ist der wichtigere Teil**, nicht die Umstellung.
-  `[read]` Er zaehlt sequenzielle `await` in einer `page.tsx` und wird
-  ab einer Schwelle rot. **Die Schwelle kommt aus den sechs anderen
-  Modulen, nicht aus dem Bauch.**
+  `[read]` **Warum das eine Regel wird und keine Anekdote:** eine
+  Leistungszahl ohne Konto ist so wenig wert wie eine Bestandszahl
+  ohne Stichtag. **Beide sehen aus wie Fakten und sind
+  Momentaufnahmen.**
 
-  `[read]` **Das Fehlerverhalten bleibt erhalten**, wenn jede Abfrage
-  ihr eigenes `.catch()` behaelt statt eines gemeinsamen `try` — dann
-  faellt weiterhin nur die einzelne Abfrage aus, nicht die Seite.
+  **Zu tun:** in `docs/auftraege/00-LIESMICH.md` neben die
+  `[cmd]`-Regel. `[read]` **Und pruefen, ob ein Waechter moeglich
+  ist** — Berichte mit `ms` oder `s` ohne Kontoangabe. Wenn nicht:
+  in die Auftragsvorlage.
 
-  **Nachweis:** langsamste Einzelabfrage als Untergrenze, dazu zwei
-  Laeufe. `[read]` Liegt das Ergebnis deutlich ueber der Untergrenze,
-  ist noch etwas anderes im Weg — **und das gehoert genannt, nicht
-  weggerundet.**
+- [ ] **G-192: Ein Community-Reiter im Substanzdetail** (neu
+  2026-08-26).
+
+  braucht: C-273
+
+  **Tom, 2026-08-25:** *„was ich bisher sehe sind allgemeine infos
+  aber nicht was der bodybuilder in diesen stoffen sieht."* Und zur
+  Grenze: *„kombinationen der szene von denen abgeraten wird im sinne
+  von solltest du nicht tun, das waere nicht eine empfehlung etwas zu
+  tun."*
+
+  `[read]` **Die Regel, die alles entscheidet: was etwas KOSTET, darf
+  gezeigt werden. Was etwas ERREICHT, nicht.**
+
+  `[cmd]` **Fuenf Bloecke aus `data/admin/`:**
+
+  **37 Nebenwirkungsmuster** ueber 19 Substanzklassen — 9
+  `WIDESPREAD`, 20 `COMMON`. Beispiel *„Deca dick"* mit
+  `attribution_confidence: MODERATE` und den Grenzen benannt.
+  **NICHT `reported_mitigations`** — 36 von 37 tragen es, und
+  *„Cabergolin gegen Prolaktin"* ist eine Anweisung.
+
+  **24 von 31 Stacks mit `expected_tradeoff`** — ausnahmslos
+  Nachteile. `[read]` **Der wertvollste:** der Organschutz-Stack
+  traegt *„false security risk if used to justify heavier orals"* —
+  **die Szene warnt selbst davor, dass Leberschutz als Freibrief
+  missverstanden wird.**
+
+  **Drei `CONTRADICTED`-Narrative**, darunter *„SARMs sind selektiv =
+  AAS-Ergebnisse ohne AAS-Nebenwirkungen"*, benannt als
+  Einstiegstreiber. **Gehoert in `mythen_de`.**
+
+  **40 Produktqualitaetssignale.** `[cmd]` Das erste ist die
+  JAMA-Studie 2017: von 44 SARM-Produkten enthielten **nur 52 % den
+  angegebenen Wirkstoff, 9 % gar keinen.** `[read]` **Keine
+  Community-Meinung, eine begutachtete Studie** — und sie gehoert
+  neben die Mengenangabe, aus demselben Grund wie `reinheit_de`.
+
+  **71 Szene-Begriffe** plus *Blast and Cruise* mit
+  `physiological_implications`.
+
+  `[cmd]` **Nicht angezeigt:** 86 Dosierungsmuster, 43 fremde
+  Blutbilder mit `attribution_confidence: VERY_LOW`, 20 Hypothesen,
+  und die vier Anleitungsfelder.
+
+  `[read]` **Die Negativprobe ist der Teil, der den Auftrag
+  ueberdauert:** `reported_mitigations` in den Lesepfad einbauen, ein
+  Waechter muss rot werden. **Ohne ihn steht die Grenze nur in einer
+  Markdown-Datei.**

@@ -284,6 +284,8 @@ wenn er erzeugt und geprüft wird.
 | **G-189** Der tote Rueckfallzweig `SuppInteractions` fliegt | offen | 6098 |
 | **C-271** `rule_catalog` laedt immer — jeder Rueckfallzweig daran | offen | 6111 |
 | **C-272** Welle 1 — der Katalog wird inhaltlich fertig | offen | 6129 |
-| **C-273** Welle 2 — Schema `wissen` fuer das, was noch nicht | offen | 6164 |
-| **C-274** Die 248 unsichtbaren zuordnen | offen | 6210 |
-| **G-190** Sieben sequenzielle `await` in | offen | 6239 |
+| **C-274** Die 248 unsichtbaren zuordnen | offen | 6164 |
+| **C-278** Zwischen Datenbank und Anwendung liegen 700 ms | offen | 6193 |
+| **C-279** Das Kreuzprodukt in `rule_assessment` skaliert mit den | offen | 6210 |
+| **G-193** Jede Leistungszahl nennt das Konto | offen | 6229 |
+| **G-192** Ein Community-Reiter im Substanzdetail | offen | 6253 |
