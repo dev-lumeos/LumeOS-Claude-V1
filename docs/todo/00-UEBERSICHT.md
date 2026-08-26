@@ -294,3 +294,4 @@ wenn er erzeugt und geprüft wird.
 | **C-290** Migrationen sind eine undokumentierte Ausnahme | offen | 6378 |
 | **G-200** Zwei bekannte Faelle bleiben gruen — Ursache | offen | 6402 |
 | **G-201** Teilstring-Vergleiche brauchen Wortgrenzen — als | offen | 6428 |
+| **C-287** 148 Community-Zeilen ohne Substanzbindung | offen | 6456 |

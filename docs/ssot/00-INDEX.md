@@ -134,7 +134,7 @@ Ein `[annahme]`-Marker hätte das verhindert.
 | `90-datum-und-mahlzeiten.md` | Datumsnavigation `‹ Heute ›` und eine Karte je Mahlzeit. **Drei Stellen rechneten ueber Mitternacht** und waeren an Zeitumstellungstagen gekippt. |
 | `93-trainingssitzungen.md` | `workout_sessions`, `workout_exercises`, `workout_sets` — **9 Sitzungen, 60 Saetze live.** Der Uebungsname wird eingefroren. |
 | `95-kimi-bestand.md` | **Was in Kimis Rechercheverzeichnis tatsaechlich drinsteht** — `[cmd]` 189,4 MB, 38 Crawls, 442 Berichte, 76 Dateien allein unter `data/evidence/`. Der Orchestrator hatte `RESEARCH_STATUS.md` dreimal zitiert und **nie geoeffnet**; darauf gestuetzt entstand ein ganzer Nachtlauf mit Schablonentexten fuer Felder, deren Inhalt seit Wochen vorlag. Kimi hat die Uebergabe selbst sortiert: `DATA_READY` (66 Biomarker-Erklaerungen auf Deutsch, 8 Enrichment-Layer, 290 Dosisanreicherungen), `SCHEMA_CHANGE_REQUIRED` (Symptomtabelle, 102 Kanten), `REPO_DEPENDENCY` (LOINC-Mapping auf HOLD, weil Kimi unser Repo nicht kennt). **Die Arbeit ist Import und Zuordnung, nicht Recherche.** |
-| `96-kimi-inhalt.md` | **Was in Kimis Bestand tatsaechlich drinsteht** — jede Datei geoeffnet, nicht gezaehlt. Tom, 2026-08-25: *„das ist wahres gold."* Die Regel-Engine ist fertig spezifiziert (64 Regeln mit ausfuehrbaren Bedingungen plus `module_field_spec` als Schnittstelle). Der WADA-Geltungsbereich ist zweifach beantwortet (446 + 318 Records, fuenf verifizierte Quellen) und genauer als vermutet — Natural-Ligen fuehren **eigene, weitergehende** Sperrlisten. `effect_class` trennt *„der Wert aendert sich"* von *„der Wert wird falsch gemessen"*. 56 aufgeloeste Wissensluecken sagen, **warum** ein Feld leer ist. 265 Trainings-Konstanten sagen, was **nicht** gebaut werden soll (ACWR `implement: no`). Die Produktebene traegt **unsere** `sub_*`-IDs samt Preis je Portion. Dazu ein Scan-Konzept, ein Reise-Schema und 2.817 Zeilen Buddy-Material. |
+| `96-kimi-inhalt.md` | **Was in Kimis Bestand tatsaechlich drinsteht** — jede Datei geoeffnet, nicht gezaehlt. Tom, 2026-08-25: *„das ist wahres gold."* Die Regel-Engine ist fertig spezifiziert (64 Regeln mit ausfuehrbaren Bedingungen plus `module_field_spec` als Schnittstelle). Der WADA-Geltungsbereich ist zweifach beantwortet und genauer als vermutet — Natural-Ligen fuehren **eigene, weitergehende** Sperrlisten. `effect_class` trennt *„der Wert aendert sich"* von *„der Wert wird falsch gemessen"*. 56 aufgeloeste Wissensluecken sagen, **warum** ein Feld leer ist. 265 Trainings-Konstanten sagen, was **nicht** gebaut werden soll (ACWR `implement: no`). Die Produktebene traegt **unsere** `sub_*`-IDs samt Preis je Portion. **Stand 2026-08-26: vier Auftraege daraus durch** — C-272, C-273, C-275, C-288. Die Regel-Engine feuert trotzdem nicht, weil `user_medications` im Klartext speichert (C-285). |
 | `96-recovery-checkins.md` | `recovery.checkins` — **36 Eintraege, davon 27 ohne HRV.** Der `manual`-Modus ist der Normalfall, nicht die Ausnahme. |
 | `97-ziele-und-phasen.md` | `user_goals` und `goal_phases`. **Vier Zielvokabulare aufeinander abgebildet** — als Datendatei, ohne offene Begriffe still zu fuellen. |
 | `98-supplements-schema.md` | Fuenf Tabellen, eine Sicht — **44 Katalogeintraege live.** Keine Wechselwirkungsbewertung: das waere eine medizinische Aussage. |
@@ -223,6 +223,15 @@ Ein `[annahme]`-Marker hätte das verhindert.
 (D-06, 2026-08-06: `docs/decisions/` war nie befüllt — `[cmd]` einzige
 getrackte Datei dort ist `.gitkeep`. Der Ort ist aufgelöst.)
 **Sitzungsübergaben:** `docs/sessions/`
+
+`[cmd]` **Zuletzt: `2026-08-26-katalog.md`** — zwei Tage, 31 Aufträge,
+drei Agenten parallel. Der Substanzkatalog von 290 Fachnotizen auf
+**412 sichtbare Substanzen** mit 446 Nutzertexten und 1.970 FAQ-Zeilen;
+Schema `wissen` angelegt; der Medikamentenkatalog begonnen. **Und die
+drei Fehler des Orchestrators, die den Weg bestimmt haben** — Kimis
+Bestand dreimal zitiert und nie gelesen, achtmal am falschen
+Ausschnitt gemessen, die Reihenfolge verkehrt. **Aus allen dreien sind
+Gate-Prüfungen geworden.**
 
 ---
 

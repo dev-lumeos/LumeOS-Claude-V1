@@ -13568,9 +13568,9 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
   `[cmd]` **Nebenbei:** `Zahlenkasten` hatte nach dem Umbau null
   Aufrufer und ist **geloescht, nicht auskommentiert.**
 
-- [x] **C-286: Migration neben der Kette · C-287: Community-Zuordnung ·
-  C-288: der Medikamenten-Enrichment-Layer** — **erledigt 2026-08-26
-  (Codex), Bericht `docs/berichte/c-286-codex.md`.**
+- [x] **C-286: Migration neben der Kette · C-288: der
+  Medikamenten-Enrichment-Layer** — **erledigt 2026-08-26 (Codex),
+  Bericht `docs/berichte/c-286-codex.md`.**
 
   ### Der ganze Enrichment-Layer ist drin
 
