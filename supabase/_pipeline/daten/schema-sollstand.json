@@ -1691,7 +1691,17 @@
     "supplements.supplement_identifiers": 1226,
     "supplements.supplement_regulatory": 1119,
     "supplements.supplement_field_sources": 2815,
-    "supplements.supplement_interactions": 78
+    "supplements.supplement_interactions": 78,
+    "supplements.wada_conflict_records": 6,
+    "supplements.lab_effect_enrichment_records": 47,
+    "supplements.supplement_human_evidence_flags": 293,
+    "supplements.thailand_regulatory_records": 1061,
+    "supplements.supplement_studies": 43,
+    "supplements.supplement_study_subjects": 47,
+    "supplements.alias_resolution_candidates": 64,
+    "supplements.pubchem_conflict_records": 20,
+    "supplements.entity_cyp": 3001,
+    "supplements.entity_transporters": 4617
   },
   "mindestzeilen_belege": {
     "_kommentar": "Herkunft je Untergrenze. Gerundete Werte sind absichtlich als gerundet markiert; sie sind Warnschwellen, keine exakten Sollwerte.",
@@ -4424,6 +4434,206 @@
       },
       "grants_herkunft": "143_kimi_wave2_biomarker_symptoms.ts: authenticated SELECT, service_role ALL; Symptom-Marker-Kanten sind Katalogdaten.",
       "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "schritt": "141d",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "141d_kimi_wada_scope.ts vergibt SELECT an authenticated und service_role ALL; C-272 importiert Kimi-Evidence-Katalogwissen, keine Nutzerdaten.",
+      "zeilenschutzart": "oeffentlich",
+      "name": "wada_conflict_records"
+    },
+    {
+      "schema": "supplements",
+      "schritt": "141d",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "141d_kimi_wada_scope.ts vergibt SELECT an authenticated und service_role ALL; C-272 importiert Kimi-Evidence-Katalogwissen, keine Nutzerdaten.",
+      "zeilenschutzart": "oeffentlich",
+      "name": "lab_effect_enrichment_records"
+    },
+    {
+      "schema": "supplements",
+      "schritt": "141d",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "141d_kimi_wada_scope.ts vergibt SELECT an authenticated und service_role ALL; C-272 importiert Kimi-Evidence-Katalogwissen, keine Nutzerdaten.",
+      "zeilenschutzart": "oeffentlich",
+      "name": "supplement_human_evidence_flags"
+    },
+    {
+      "schema": "supplements",
+      "schritt": "141d",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "141d_kimi_wada_scope.ts vergibt SELECT an authenticated und service_role ALL; C-272 importiert Kimi-Evidence-Katalogwissen, keine Nutzerdaten.",
+      "zeilenschutzart": "oeffentlich",
+      "name": "thailand_regulatory_records"
+    },
+    {
+      "schema": "supplements",
+      "schritt": "141d",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "141d_kimi_wada_scope.ts vergibt SELECT an authenticated und service_role ALL; C-272 importiert Kimi-Evidence-Katalogwissen, keine Nutzerdaten.",
+      "zeilenschutzart": "oeffentlich",
+      "name": "supplement_studies"
+    },
+    {
+      "schema": "supplements",
+      "schritt": "141d",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "141d_kimi_wada_scope.ts vergibt SELECT an authenticated und service_role ALL; C-272 importiert Kimi-Evidence-Katalogwissen, keine Nutzerdaten.",
+      "zeilenschutzart": "oeffentlich",
+      "name": "supplement_study_subjects"
+    },
+    {
+      "schema": "supplements",
+      "schritt": "141d",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "141d_kimi_wada_scope.ts vergibt SELECT an authenticated und service_role ALL; C-272 importiert Kimi-Evidence-Katalogwissen, keine Nutzerdaten.",
+      "zeilenschutzart": "oeffentlich",
+      "name": "alias_resolution_candidates"
+    },
+    {
+      "schema": "supplements",
+      "schritt": "141d",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "141d_kimi_wada_scope.ts vergibt SELECT an authenticated und service_role ALL; C-272 importiert Kimi-Evidence-Katalogwissen, keine Nutzerdaten.",
+      "zeilenschutzart": "oeffentlich",
+      "name": "pubchem_conflict_records"
     }
   ],
   "_fremde_funktionen": "GO-04: Funktionen ausserhalb nutrition. Dieselbe Luecke wie oben.",

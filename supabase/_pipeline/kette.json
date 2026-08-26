@@ -808,12 +808,21 @@
       ]
     },
     {
+      "id": "141d",
+      "path": "supabase/_pipeline/13_supplements/141d_kimi_wada_scope.ts",
+      "kind": "tsx",
+      "creates": "C-272: Kimi-Evidence-Welle 1 mit WADA-Geltungsbereich, Lab-Effect-Class, Human-Evidence, Thailand, CYP/Transporter, Studien, Alias-Kandidaten und PubChem-Konflikten",
+      "depends_on": [
+        "141w"
+      ]
+    },
+    {
       "id": "141x",
       "path": "supabase/_pipeline/13_supplements/141e_supplement_kern_dubletten.sql",
       "kind": "sql",
       "creates": "C-276: Katalog-Kerndubletten per parent_id in Unterformen ziehen und erlaubte fachliche Varianten pruefen",
       "depends_on": [
-        "141w"
+        "141d"
       ]
     },
     {

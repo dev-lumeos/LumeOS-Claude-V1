@@ -7,18 +7,6 @@ const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-
 const DB = process.env.PGDATABASE ?? 'postgres'
 const OUTPUT = process.env.KENNUNGEN_REPORT ?? 'backup/c267/supplement-kennungen-konflikte.json'
 
-const knownConflictKeys = new Set([
-  // C-267: bewusst nicht korrigiert. Caffeine anhydrous traegt die
-  // fluorierte PubChem-Triade 6435808; der Cross-Ref hat Koffein korrekt.
-  'sub_2c308411e9|sub_98d523f968',
-  // C-267: bewusst nicht korrigiert. MK-4 und MK-7 teilen eine UNII,
-  // tragen aber unterschiedliche CID/Formel/InChIKey-Triaden.
-  'sub_0b5c620106|sub_6764c8891c',
-  // C-267: bewusst nicht korrigiert. Chromium und Chromium picolinate
-  // laufen ueber dieselbe UNII mit unterschiedlichen Triaden.
-  'sub_03e86b16d2|sub_b7423d9551',
-])
-
 function runPsql(sql) {
   const result = spawnSync('docker', [
     'exec', CONTAINER,
@@ -42,6 +30,11 @@ function rows(sql) {
   const out = runPsql(sql)
   if (!out) return []
   return out.split(/\r?\n/).map(line => JSON.parse(line))
+}
+
+function scalar(sql) {
+  const out = runPsql(sql)
+  return out.split(/\r?\n/).find(Boolean) ?? ''
 }
 
 function norm(value) {
@@ -86,6 +79,28 @@ WHERE pubchem_cid IS NOT NULL
   AND molecular_formula IS NOT NULL
   AND inchikey IS NOT NULL;
 `)
+
+const pubchemConflictTableExists = scalar(`
+SELECT CASE WHEN to_regclass('supplements.pubchem_conflict_records') IS NULL THEN '0' ELSE '1' END;
+`) === '1'
+
+const pubchemConflictRecords = pubchemConflictTableExists
+  ? rows(`
+SELECT jsonb_build_object('entity_id', entity_id, 'resolution_status', resolution_status)::text
+FROM supplements.pubchem_conflict_records
+WHERE entity_id IS NOT NULL;
+`)
+  : []
+const knownConflictEntityIds = new Set(pubchemConflictRecords.map(row => row.entity_id))
+const truePubchemConflictCount = pubchemConflictRecords
+  .filter(row => row.resolution_status === 'OPEN_TRUE_CONFLICT')
+  .length
+const legacyC267KnownConflictKeys = new Set([
+  // C-267: Chromium und Chromium picolinate laufen ueber dieselbe UNII
+  // mit unterschiedlichen Triaden. Kimis PubChem-Records aus C-272
+  // enthalten diesen Altfund nicht, daher bleibt er explizit belegt.
+  'sub_03e86b16d2|sub_b7423d9551',
+])
 
 if (process.env.KENNUNGEN_NEGATIVPROBE === '1') {
   const byStableUnii = new Map()
@@ -147,7 +162,9 @@ function conflictKey(conflict) {
 const classified = conflicts.map(conflict => ({
   ...conflict,
   key: conflictKey(conflict),
-  known: knownConflictKeys.has(conflictKey(conflict)),
+  known: legacyC267KnownConflictKeys.has(conflictKey(conflict)) || conflict.groups
+    .flatMap(group => group.members.map(row => row.slug))
+    .some(slug => knownConflictEntityIds.has(slug)),
 }))
 const unknownConflicts = classified.filter(conflict => !conflict.known)
 
@@ -159,6 +176,7 @@ fs.writeFileSync(OUTPUT, JSON.stringify({
 }, null, 2) + '\n', 'utf8')
 
 console.log(`[kennungen] ${substances.length} Substanzen mit CID/Formel/InChIKey geprueft`)
+console.log(`[kennungen] ${knownConflictEntityIds.size} bekannte PubChem-Konflikt-Entity(s) aus supplements.pubchem_conflict_records, davon ${truePubchemConflictCount} echte Konflikte`)
 console.log(`[kennungen] ${conflicts.length} Konfliktgruppe(n)`)
 for (const conflict of classified) {
   const names = conflict.groups.flatMap(group => group.members.map(row => `${row.slug} ${row.name}`)).join(' | ')
