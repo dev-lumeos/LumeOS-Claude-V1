@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-26.** 249 offen, 0 in Arbeit.
+**Stand: 2026-08-26.** 250 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6447,3 +6447,41 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   Projektvorgabe verschluesselt abzulegen und brauchen
   Coach-Berechtigung. **Wie `user_medications` das heute handhabt, ist
   ungemessen.**
+
+- [ ] **G-199: Der Community-Reiter, WADA aus der Dosierung, Kacheln
+  statt Zeilen** (neu 2026-08-26). Aus Toms Durchsicht.
+
+  `[cmd]` **Der Community-Reiter haengt seit C-280.** Claude Code hat
+  ihn in G-192 gebaut, konnte ihn nicht befuellen — `wissen` war nicht
+  erreichbar. Seit C-280 gibt es `supplements.community_anzeige`,
+  **212 Zeilen, 28 Spalten**, im Fachschema.
+
+  `[read]` **Mein Fehler:** ich habe C-280 im Register als *„damit ist
+  G-192 entblockt"* vermerkt und **nie einen Anschlussauftrag
+  gegeben.** Die Arbeit lag fertig da.
+
+  `[cmd]` **WADA steht noch in der Dosierung** — G-195 hat den
+  Textblock in die Rechtslage verschoben, **die Kachel nicht.**
+
+  `[cmd]` **„Weitere Angaben" sind graue Zeilen mit Begruendungstext**
+  — der Rest von G-191: dort flog der Statuscode aus der Kachel, **die
+  Zeile blieb als Notloesung.**
+
+  ### Zwei Entscheidungen von Tom
+
+  **Immer alle Kacheln, aber drei Zustaende.** `[read]` Seine
+  Begruendung: wer drei Substanzen durchklickt, will die Zahlen an
+  derselben Stelle finden. **Das aendert §9 fuer Zahlenkacheln** — fuer
+  Textbloecke gilt *„kein Block ohne Inhalt"* weiter.
+
+  `[read]` **Der dritte Zustand ist sicherheitsrelevant:** *„gibt es
+  nicht"* mit Grund ist eine Aussage, *„nicht erhoben"* nicht. **„Nie
+  untersucht" darf nicht aussehen wie „unbedenklich."**
+
+  **Acht Reiter statt Deckel.** **Tom:** *„lieber acht thematische
+  reiter und das im ueberblick dass der user auf die schnelle sehen
+  will als 10 kacheln in einem reiter die niemand liest."*
+
+  `[read]` **Damit ist meine Faustregel „ab sieben sucht man"
+  ueberholt** — **ein Reitername sagt, was drin ist. Zehn Kacheln in
+  einem Reiter sagen nichts, bis man sie liest.**

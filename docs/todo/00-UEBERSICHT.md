@@ -293,3 +293,4 @@ wenn er erzeugt und geprüft wird.
 | **G-198** Zwei Farbsysteme im selben Bauteil | offen | 6350 |
 | **C-284** Der Medikamentenkatalog ist duenner als er aussieht | offen | 6370 |
 | **C-283** Sechs Spalten leer, obwohl die Daten da sind — und der | offen | 6414 |
+| **G-199** Der Community-Reiter, WADA aus der Dosierung, Kacheln | offen | 6451 |
