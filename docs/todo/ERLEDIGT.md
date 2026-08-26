@@ -13410,3 +13410,160 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
   `[cmd]` **Und die Rueckrichtung ist geprueft: `not_prohibited` mit
   einer Verbotskategorie ergibt 0.** `[read]` **Das war der
   gefaehrlichere Fall** — ich hatte ihn nur vorsichtshalber verlangt.
+
+- [x] **C-283: Sechs Spalten leer, obwohl die Daten da sind — und der
+  Erfassungsweg** — **erledigt 2026-08-26 (Codex), Bericht
+  `docs/berichte/c-283-codex.md`.**
+
+  ### Punkt 1 sitzt, und meine Zahlen waren zu pessimistisch
+
+  `[cmd]` **Vom Orchestrator live nachgemessen:**
+
+  | Feld | vorher | nachher | mein Auftrag |
+  |---|---:|---:|---|
+  | `atc_code` | 0 | **56** | 56 vermutet ✓ |
+  | `cas_number` | 0 | **56** | 56 vermutet ✓ |
+  | `rxnorm_code` | 0 | **113** | nicht genannt |
+  | `unii_code` | 0 | **420** | nicht genannt |
+  | `routes` | 0 | **498** | 334 vermutet ✗ |
+  | `raw_drug_class` | 0 | **498** | nicht genannt |
+
+  `[read]` **UNII bei 420 und Routen bei 498** — deutlich mehr, als
+  ich aus `raw` gelesen hatte. **Die Kennungen lagen in
+  `external_ids`, nicht auf der obersten Ebene.**
+
+  `[cmd]` **Schwangerschaft, Stillzeit, Fertilitaet bleiben bei
+  1 / 0 / 0** — er hat es gemeldet, statt etwas zu erfinden. **Sie
+  stehen im Kimi-Auftrag als Block A.**
+
+  ### Punkt 2 wurde bewusst NICHT gebaut — und das ist die wichtigste
+  ### Meldung des Tages
+
+  `[cmd]` **`user_medications` traegt `name`, `indication`, `notes`,
+  `dose_amount` im Klartext.**
+
+  `[read]` **Seine Begruendung:** *„Anlegen, Aendern und Absetzen
+  wuerden die Sicherheitsvorgabe verletzen."*
+
+  `[read]` **Das ist die richtige Entscheidung, und sie war nicht die
+  naheliegende.** Der Auftrag verlangte den Schreibweg; die uebliche
+  Reaktion waere gewesen, ihn zu bauen und die Verschluesselung als
+  Folgepunkt zu notieren. **Dann haetten wir Klartextdaten und einen
+  offenen Punkt.**
+
+  `[cmd]` **Was steht:** Wirkstoff-FK, Eigentuemer-RLS,
+  Coach-Lesepolicy. `test-user@lumeos.local` sieht per echter RLS 0
+  Zeilen. **Der Zugriff ist geregelt, die Ablage nicht.**
+
+  **Als C-285 angelegt**, mit der Reihenfolge:
+  Schluesselverwaltung → Leseweg → Schreibweg.
+
+  ### Zwei offene Enden
+
+  `[cmd]` **Der Schema-Pruefer lief nach 184 Sekunden ins Timeout** —
+  `[read]` das ist neu und gehoert gemessen, bevor es zur Gewohnheit
+  wird.
+
+  `[cmd]` **Und eine Migration liegt neben dem Kettenschritt** — als
+  **C-286** angelegt.
+
+- [x] **G-195: Ein eigener Reiter „Rechtslage"** — **erledigt
+  2026-08-26 (Claude Code), Bericht
+  `docs/berichte/g-195-claude-code.md`.**
+
+  ### Die neue Zahlenregel hat beim ersten Einsatz drei Abweichungen
+  ### gefunden
+
+  | | mein Auftrag | gemessen | |
+  |---|---:|---:|---|
+  | `note_de` | 320 von 412 | **305** | falsch |
+  | `rechtslage_klartext_de` | 136 | **201** | falsch |
+  | `wada_category` | 145 | 145 | richtig |
+  | Median / max | 387 / 818 | 387 / 818 | richtig |
+  | geerbte Zeilen | 17 | **32** | falsch |
+
+  `[read]` **Die wichtigste Abweichung ging GEGEN meine Erwartung:**
+  `rechtslage_klartext_de` war **zu niedrig** geschaetzt — die Zahl
+  stammte aus G-183 und war seither gewachsen. `[read]` **Mit 136
+  waere der Reiter ein Randfall gewesen, mit 201 ist er bei jeder
+  zweiten Substanz gefuellt.**
+
+  `[cmd]` **Die entscheidende Zahl: 345 von 412 bekommen den Reiter.**
+  Gegengeprobt: 305 + 201 − 161 = 345.
+
+  ### Zwei Befunde nebenbei
+
+  `[cmd]` **`rechtslage_klartext_de` hing an `heikel`** — ein Feld, das
+  bei 201 von 412 gefuellt ist, war **nur fuer Enhanced und Peptide
+  sichtbar.** `[read]` Bei rund der Haelfte lag Inhalt da und wurde nie
+  gezeigt. **Derselbe Fehlertyp wie bei den unsichtbaren Unterformen:
+  Daten vorhanden, Anzeige verengt.**
+
+  `[cmd]` **Der Umzug bringt messbar Platz:** der WADA-Block nahm
+  155–235 px von 580 — **27 bis 41 % des Ueberblicks.** Kreatin
+  580 → 444 px, AC-262356 580 → 523 px.
+
+  `[cmd]` **G-197 faellt nicht weg** — er hat es nachgemessen statt zu
+  hoffen: `.v2-supp-tafel` traegt in **beiden** Reitern denselben rosa
+  Boden.
+
+  `[read]` **Und er hat die Reiterzahl gemeldet, ohne zu deckeln:**
+  7 Reiter bei 63 Substanzen, 6 bei 272, 5 bei 76. *„Das waere eine
+  Entscheidung ueber die Navigation, nicht ueber diesen Reiter."*
+  **Richtig — und Tom hat sie in G-199 getroffen.**
+
+- [x] **G-199: Community-Reiter, WADA aus der Dosierung, Kacheln statt
+  Zeilen** — **erledigt 2026-08-26 (Claude Code), Bericht
+  `docs/berichte/g-199-claude-code.md`.**
+
+  `[cmd]` **Der Community-Reiter fuellt sich:** Trenbolone acetate
+  zeigt *„Aus der Community 7"*, LGD-4033 *„4"*, **Vitamin D3 korrekt
+  keinen.**
+
+  `[cmd]` **Neun von neun Zahlen bestaetigt** — 212 Zeilen, 28
+  Spalten, 37/31/40/71/30/3, `substance_ids` 64.
+
+  `[read]` **Die Regel hat trotzdem gelohnt, aber anders: nicht durch
+  eine Abweichung, sondern durch die Zahl, die im Auftrag fehlte.**
+
+  `[cmd]` **Der Reiter erscheint bei 49 der 412**, nicht bei 212 —
+  **drei Ursachen, alle gemessen:**
+
+  `[cmd]` `substance_ids` traegt **Slugs**, keine UUIDs: 0 Treffer
+  ueber UUID, 49 ueber Slug.
+
+  `[cmd]` `substance_class` greift **gar nicht** — das Vokabular
+  (`aas_19nor`, `sarms`) hat 0 Treffer gegen `supplement_groups`.
+  `[read]` **Damit existiert der Klassen-Rueckfall nicht, den ich in
+  C-280 als Sicherheitsnetz angenommen hatte.**
+
+  `[cmd]` **146 der 212 Zeilen haben weder Kennung noch Klasse** —
+  darunter **alle 30 Mythen und alle 3 Konzepte.** Als **C-287**
+  angelegt.
+
+  ### Punkt 4: meine Bedingung war richtig gestellt und ist nicht
+  ### eingetreten
+
+  `[read]` Ich hatte geschrieben: *„wenn Zustand drei fast nie
+  vorkommt, braucht er keine eigene Form."*
+
+  `[cmd]` **Er ist die zweitgroesste Gruppe:** `upper_limit` **157**,
+  `guideline_dose` **137** von 412 — bei `studied_dose_ranges` mit
+  **229 sogar die groesste.**
+
+  `[cmd]` **Und ein echter Wert ist die Ausnahme: 9 bis 98 von 412.**
+  `[read]` **Wer nur „Wert oder nichts" baut, zeigt bei neun von zehn
+  Substanzen eine leere Kachel** — genau das, was Tom beanstandet hat.
+
+  ### Der fuenfte blinde Fleck — und er waere teuer gewesen
+
+  `[cmd]` **Fuenf Sabotagen, vier rot, die fuenfte gruen:**
+  `.from('community_anzeige')` auf `…X` geaendert, **kein Test fiel
+  um.** Derselbe Fehler wie G-184, G-186, G-187, G-191, G-196.
+
+  `[read]` **Und genau so ist G-192 haengen geblieben:** der Lesepfad
+  gab still `null` zurueck, **und niemand merkte es, bis Tom fragte,
+  wo das Community-Zeug bleibt.** Als **G-198** verallgemeinert.
+
+  `[cmd]` **Nebenbei:** `Zahlenkasten` hatte nach dem Umbau null
+  Aufrufer und ist **geloescht, nicht auskommentiert.**

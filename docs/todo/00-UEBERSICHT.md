@@ -288,9 +288,10 @@ wenn er erzeugt und geprüft wird.
 | **C-279** Das Kreuzprodukt in `rule_assessment` skaliert mit den | offen | 6183 |
 | **G-193** Jede Leistungszahl nennt das Konto | offen | 6202 |
 | **G-192** Ein Community-Reiter im Substanzdetail | offen | 6226 |
-| **G-195** Ein eigener Reiter „Rechtslage" statt zweier halber | offen | 6276 |
-| **G-197** Die Tafel ist im Hellmodus rosa getoent | offen | 6332 |
-| **G-198** Zwei Farbsysteme im selben Bauteil | offen | 6350 |
-| **C-284** Der Medikamentenkatalog ist duenner als er aussieht | offen | 6370 |
-| **C-283** Sechs Spalten leer, obwohl die Daten da sind — und der | offen | 6414 |
-| **G-199** Der Community-Reiter, WADA aus der Dosierung, Kacheln | offen | 6451 |
+| **G-197** Die Tafel ist im Hellmodus rosa getoent | offen | 6276 |
+| **G-198** Zwei Farbsysteme im selben Bauteil | offen | 6294 |
+| **C-284** Der Medikamentenkatalog ist duenner als er aussieht | offen | 6314 |
+| **C-285** `user_medications` speichert Medikamente im Klartext | offen | 6358 |
+| **C-286** Codex hat eine Migration neben dem Kettenschritt | offen | 6393 |
+| **C-287** 148 Community-Zeilen erreichen niemanden | offen | 6415 |
+| **C-288** Der Medikamenten-Enrichment-Layer ist nie importiert | offen | 6439 |

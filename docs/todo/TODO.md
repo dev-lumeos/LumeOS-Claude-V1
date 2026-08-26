@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-26.** 250 offen, 0 in Arbeit.
+**Stand: 2026-08-26.** 251 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6273,62 +6273,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   Waechter muss rot werden. **Ohne ihn steht die Grenze nur in einer
   Markdown-Datei.**
 
-- [ ] **G-195: Ein eigener Reiter „Rechtslage" statt zweier halber
-  Bloecke** (neu 2026-08-26).
-
-  braucht: G-194
-
-  **Tom, 2026-08-26:** *„wuerde es nicht sinn machen wada als eigenen
-  reiter zu haben anstatt das ganze bild zu zerstoeren?"* Und zur
-  Position: *„am ende reiter vor quellen, das ist alles nice to have
-  aber wird kaum einen interessieren, deswegen macht ein eigener
-  reiter sinn anstatt halbherzig was in ueberblick und was in
-  dosierung."*
-
-  `[read]` **Die Begruendung ist nicht Platzmangel, sondern Zweck:**
-  wer wissen will, **ob** ein Stoff im Wettkampf erlaubt ist, sieht die
-  Kachel. Wer die Ligen und Paragraphen liest, **sucht sie gezielt.**
-  **Halb im Ueberblick, halb in der Dosierung heisst: fuer beide am
-  falschen Ort.**
-
-  ### Die Zahlen stuetzen es
-
-  `[cmd]` **`note_de`: Median 387 Zeichen, Maximum 818, 143 von 320
-  ueber 200.** Kreatin fuellt 6 Zeilen, 1-Testosteron 10 — **ein Block
-  dieser Laenge verdraengt im Ueberblick, was dort hingehoert.**
-
-  `[cmd]` **320 von 412 haben eine WADA-Zeile, 136 eine Rechtslage.**
-  `[read]` **Umgekehrt zu G-186:** dort hat Claude Code die
-  Lab-Effects als Block in die Sicherheit gelegt statt als Reiter,
-  **weil sie bei 197 Substanzen leer waeren.** Hier waere der Reiter
-  bei drei Vierteln gefuellt.
-
-  ### Was hineingehoert
-
-  `[cmd]` `note_de` (320) · `wada_category` (145 bei den verbotenen) ·
-  `rechtslage_klartext_de` (136).
-
-  `[read]` **Ein Thema, nicht drei Felder:** WADA ist eine Rechtsfrage,
-  keine Wirkungsfrage. Sie steht neben *Rechtslage*, nicht neben *Wie
-  es wirkt*.
-
-  ### Was bleibt
-
-  `[read]` **Die WADA-Kachel bleibt im Ueberblick** — sie sagt in drei
-  Worten, ob erlaubt oder verboten. **Der Satz dahinter wandert.**
-
-  `[cmd]` **Position: vor *Quellen*.** `[read]` Die selteneren Reiter
-  nach hinten — der Ueberblick ist bei allen 412 gefuellt, die
-  Rechtslage bei 136.
-
-  `[read]` **Und die Farben kommen aus G-194**, nicht neu erfunden:
-  dort wird entschieden, welche Farbe *verboten*, *erlaubt* und
-  *beobachtet* bekommen. **Der Reiter erbt sie.**
-
-  `[read]` **Nachher sind es sechs Reiter** — Ueberblick, Dosierung,
-  Sicherheit, Community (G-192), Rechtslage, Quellen. **Ab sieben
-  sucht man.**
-
 - [ ] **G-197: Die Tafel ist im Hellmodus rosa getoent** (neu
   2026-08-26). Aus G-196.
 
@@ -6411,77 +6355,114 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   Wirkweisen, dann die Nutzertexte. `[read]` **Ohne Halt zur Abnahme
   — der Massstab ist beim Substanzkatalog bestaetigt.**
 
-- [ ] **C-283: Sechs Spalten leer, obwohl die Daten da sind — und der
-  Erfassungsweg fehlt** (neu 2026-08-26).
+- [ ] **C-285: `user_medications` speichert Medikamente im Klartext**
+  (neu 2026-08-26). Aus C-283, von Codex gemeldet — **und der Grund,
+  warum er den Schreibweg nicht gebaut hat.**
 
-  `[cmd]` **In `medical.medication_active_substances` stehen
-  `atc_code`, `cas_number`, `rxnorm_code`, `unii_code`, `routes` und
-  `raw_drug_class` bei 0 von 498** — waehrend `raw->'ATC'` und
-  `raw->'CAS'` Werte tragen. `[read]` **Der Import erwartete
-  kleingeschriebene Namen; in `raw` heissen sie gross.** Kein
-  Datenverlust, ein Abbildungsfehler.
+  `[cmd]` **Die Tabelle traegt `name`, `indication`, `notes`,
+  `dose_amount`, `route`, `start_date` als Klartext.**
 
-  `[cmd]` **Weitere Bloecke liegen ungenutzt in `raw`:**
-  `pharmacology`, `dosage_models`, `food_interactions`,
-  `off_label_contexts`, `salt_or_ester`, `transporters`,
-  `evidence_provenance`.
+  `[read]` **Das ist die sensibelste Tabelle im Repo.** Was jemand
+  einnimmt, sagt mehr ueber seine Diagnosen aus als die meisten
+  Laborwerte — ein Antipsychotikum, ein HIV-Medikament, ein
+  Zytostatikum steht dort im Klartext.
 
-  ### Der Erfassungsweg ist das Groessere
+  `[cmd]` **Die Projektvorgabe lautet: medizinische Daten
+  verschluesselt at rest, Coach-Zugriff nur mit Berechtigung.**
 
-  `[cmd]` **`medical.user_medications` traegt 2 Zeilen.**
+  `[read]` **Codex hat den Schreibweg deshalb nicht gebaut, sondern
+  gemeldet:** *„Anlegen, Aendern und Absetzen wuerden die
+  Sicherheitsvorgabe verletzen."* **Das war richtig** — die
+  naheliegende Reaktion waere gewesen, ihn zu bauen und die
+  Verschluesselung als Folgepunkt zu notieren. **Dann haetten wir
+  Klartextdaten und einen offenen Punkt.**
 
-  `[read]` **Damit ist alles andere Vorrat:** 498 Wirkstoffe, 4.482
-  Transporterzeilen, 1.890 CYP-Zeilen, 31 Medikamentenregeln — **und
-  niemand kann sagen, was er nimmt.** Keine Regel feuert, keine
-  Warnung entsteht.
+  `[cmd]` **Was steht: Wirkstoff-FK, Eigentuemer-RLS,
+  Coach-Lesepolicy.** `test-user@lumeos.local` sieht per echter RLS 0
+  Zeilen. **Der Zugriff ist geregelt, die Ablage nicht.**
 
-  `[cmd]` **Zum Vergleich:** bei den Supplements traegt `stack_items`
-  11 Zeilen, und die Regel-Engine liefert Treffer.
+  **Zu tun, in dieser Reihenfolge:** Schluesselverwaltung entscheiden ·
+  Entschluesselungs-Leseweg · **dann** der Schreibweg.
 
-  `[read]` **Die erste Frage ist, ob die Tabelle ueberhaupt auf
-  `medication_active_substances` zeigt oder auf Freitext.** Wenn nicht,
-  ist das der eigentliche Auftrag — **und ein Schreibweg auf eine
-  Struktur, die nicht traegt, waere Arbeit fuer den Papierkorb.**
+  `[read]` **Und die Frage gilt breiter als diese Tabelle** — `[cmd]`
+  `medical.biomarker_reference_ranges` und die Laborwerte sind
+  vermutlich ebenso im Klartext. **Vor der Entscheidung messen, wie
+  viele Tabellen betroffen sind** — eine Loesung fuer eine Tabelle ist
+  keine.
 
-  `[read]` **Dazu die Sicherheitsfrage:** medizinische Daten sind laut
-  Projektvorgabe verschluesselt abzulegen und brauchen
-  Coach-Berechtigung. **Wie `user_medications` das heute handhabt, ist
+- [ ] **C-286: Codex hat eine Migration neben dem Kettenschritt
+  angelegt** (neu 2026-08-26). Aus C-283.
+
+  `[cmd]` **Beides existiert:**
+  `_pipeline/14_medical/283_medication_catalog_mapping.sql` **und**
+  `migrations/20260826180000_c283_medication_catalog_mapping.sql`
+  (3.237 Bytes).
+
+  `[read]` **Die Projektanweisung sagt:** *„Der Zustand entsteht aus
+  der Kette in `supabase/_pipeline/`, nicht aus
+  `supabase/migrations/`."*
+
+  `[read]` **Zwei Quellen fuer denselben Zustand sind genau der
+  Mechanismus, der uns zweimal Kette gegen Live auseinanderlaufen
+  liess** — C-265 (drei unverkettete Medical-Schritte) und C-277
+  (`im_katalog` ohne `parent_id`-Bedingung).
+
+  **Zu klaeren:** Absicht oder Rest? `[read]` **Wenn Absicht — etwa
+  weil eine Strukturaenderung anders nicht greift — gehoert die
+  Begruendung in den Bericht und die Ausnahme in `supabase/README.md`.
+  Wenn nicht: raus.**
+
+- [ ] **C-287: 148 Community-Zeilen erreichen niemanden** (neu
+  2026-08-26). Aus G-199, mit C-286 an Codex gegeben.
+
+  `[cmd]` **Der Community-Reiter erscheint bei 49 der 412 Substanzen.**
+  148 von 212 Zeilen haben keine Zuordnung:
+
+      community_science_delta            30 von 30   ALLE
+      community_usage_concepts            3 von 3    ALLE
+      community_terminology_terms        57 von 71
+      community_product_quality_signals  32 von 40
+      community_stack_patterns           24 von 31
+      community_side_effect_patterns      2 von 37
+
+  `[read]` **Die Verteilung ist kein Zufall.** Nebenwirkungen betreffen
+  einen Stoff und sind fast vollstaendig zugeordnet. **Mythen und
+  Konzepte betreffen eine Praxis** — *„SARMs sind selektiv"* gehoert zu
+  keiner einzelnen Substanz.
+
+  `[cmd]` **Drei Ursachen, von Claude Code gemessen:**
+  `substance_ids` traegt **Slugs, keine UUIDs** · `substance_class`
+  hat **0 Treffer** gegen `supplement_groups` · **der Klassen-Rueckfall
+  aus C-280 existiert nicht** — ich hatte ihn als Sicherheitsnetz
+  angenommen.
+
+- [ ] **C-288: Der Medikamenten-Enrichment-Layer ist nie importiert
+  worden** (neu 2026-08-26). Von Kimi gemeldet, vom Orchestrator
+  bestaetigt.
+
+  `[cmd]` **`medication_reproductive_enrichment.jsonl` liegt seit
+  CRAWL_038 vor: 417 von 498 Wirkstoffen**, davon 270 mit
+  `pregnancy`-Daten, 270 `lactation`, 274 `fertility` — **der Rest mit
+  dokumentiertem `missing_reason`.**
+
+  `[read]` **Ich hatte 1/0/0 gemeldet, weil ich die kanonische Datei
+  gemessen und den Enrichment-Layer uebersehen habe.** `[cmd]`
+  **Derselbe Fehler wie bei den Supplements**, wo er C-262 und C-270
+  gekostet hat.
+
+  `[cmd]` **Und ATC ist ebenfalls da:** `external_ids.ATC_all` **419
+  von 498**, `ATC_level3` **377** — das Top-Level-Feld `ATC` traegt nur
+  56, und C-283 hat genau das gelesen.
+
+  `[read]` **Die groessere Frage:** `medication_pk` (407),
+  `medication_renal_hepatic` (391), `medication_clinical_context`
+  (107), `thailand_medication_regulatory` (477) liegen ebenfalls in
+  `data/evidence/`. **Ob ihr Inhalt in der Datenbank ankommt, ist
   ungemessen.**
 
-- [ ] **G-199: Der Community-Reiter, WADA aus der Dosierung, Kacheln
-  statt Zeilen** (neu 2026-08-26). Aus Toms Durchsicht.
-
-  `[cmd]` **Der Community-Reiter haengt seit C-280.** Claude Code hat
-  ihn in G-192 gebaut, konnte ihn nicht befuellen — `wissen` war nicht
-  erreichbar. Seit C-280 gibt es `supplements.community_anzeige`,
-  **212 Zeilen, 28 Spalten**, im Fachschema.
-
-  `[read]` **Mein Fehler:** ich habe C-280 im Register als *„damit ist
-  G-192 entblockt"* vermerkt und **nie einen Anschlussauftrag
-  gegeben.** Die Arbeit lag fertig da.
-
-  `[cmd]` **WADA steht noch in der Dosierung** — G-195 hat den
-  Textblock in die Rechtslage verschoben, **die Kachel nicht.**
-
-  `[cmd]` **„Weitere Angaben" sind graue Zeilen mit Begruendungstext**
-  — der Rest von G-191: dort flog der Statuscode aus der Kachel, **die
-  Zeile blieb als Notloesung.**
-
-  ### Zwei Entscheidungen von Tom
-
-  **Immer alle Kacheln, aber drei Zustaende.** `[read]` Seine
-  Begruendung: wer drei Substanzen durchklickt, will die Zahlen an
-  derselben Stelle finden. **Das aendert §9 fuer Zahlenkacheln** — fuer
-  Textbloecke gilt *„kein Block ohne Inhalt"* weiter.
-
-  `[read]` **Der dritte Zustand ist sicherheitsrelevant:** *„gibt es
-  nicht"* mit Grund ist eine Aussage, *„nicht erhoben"* nicht. **„Nie
-  untersucht" darf nicht aussehen wie „unbedenklich."**
-
-  **Acht Reiter statt Deckel.** **Tom:** *„lieber acht thematische
-  reiter und das im ueberblick dass der user auf die schnelle sehen
-  will als 10 kacheln in einem reiter die niemand liest."*
-
-  `[read]` **Damit ist meine Faustregel „ab sieben sucht man"
-  ueberholt** — **ein Reitername sagt, was drin ist. Zehn Kacheln in
-  einem Reiter sagen nichts, bis man sie liest.**
+  `[read]` **Zur Architekturfrage entschieden:** Kimi hat angeboten,
+  eine gebuendelte Exportdatei zu liefern. **Abgelehnt** — das additive
+  Prinzip ist richtig, und zwei Bestaende zusammenzufuehren wuerde
+  genau die Trennung aufloesen, die den Vorteil ausmacht. **Wir lesen
+  die Evidence-Dateien; bei den Supplements haben wir das auch
+  getan.**
