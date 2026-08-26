@@ -288,10 +288,9 @@ wenn er erzeugt und geprüft wird.
 | **C-279** Das Kreuzprodukt in `rule_assessment` skaliert mit den | offen | 6183 |
 | **G-193** Jede Leistungszahl nennt das Konto | offen | 6202 |
 | **G-192** Ein Community-Reiter im Substanzdetail | offen | 6226 |
-| **G-197** Die Tafel ist im Hellmodus rosa getoent | offen | 6276 |
-| **G-198** Zwei Farbsysteme im selben Bauteil | offen | 6294 |
-| **C-284** Der Medikamentenkatalog ist duenner als er aussieht | offen | 6314 |
-| **C-285** `user_medications` speichert Medikamente im Klartext | offen | 6358 |
-| **C-286** Codex hat eine Migration neben dem Kettenschritt | offen | 6393 |
-| **C-287** 148 Community-Zeilen erreichen niemanden | offen | 6415 |
-| **C-288** Der Medikamenten-Enrichment-Layer ist nie importiert | offen | 6439 |
+| **C-284** Der Medikamentenkatalog ist duenner als er aussieht | offen | 6276 |
+| **C-285** `user_medications` speichert Medikamente im Klartext | offen | 6320 |
+| **C-289** Die Kette laesst sich nicht mehr frisch pruefen | offen | 6355 |
+| **C-290** Migrationen sind eine undokumentierte Ausnahme | offen | 6378 |
+| **G-200** Zwei bekannte Faelle bleiben gruen — Ursache | offen | 6402 |
+| **G-201** Teilstring-Vergleiche brauchen Wortgrenzen — als | offen | 6428 |

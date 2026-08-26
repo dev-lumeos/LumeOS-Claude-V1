@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-26.** 251 offen, 0 in Arbeit.
+**Stand: 2026-08-26.** 250 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6273,44 +6273,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   Waechter muss rot werden. **Ohne ihn steht die Grenze nur in einer
   Markdown-Datei.**
 
-- [ ] **G-197: Die Tafel ist im Hellmodus rosa getoent** (neu
-  2026-08-26). Aus G-196.
-
-  `[cmd]` **`.v2-supp-tafel` traegt im Hellmodus `[253,247,249]`,
-  nicht Weiss.** Der WADA-Block liegt deshalb bei **4.32** — unter
-  4.5, **obwohl die Toenung schon auf 5 % steht.**
-
-  `[read]` **Die Toenung ist nicht das Problem, der Grund ist es.**
-  Ein rosa Grundton unter einem Warntext zieht den Kontrast, und keine
-  Senkung der Blocktoenung holt das zurueck.
-
-  `[read]` **Vermutlich der Supplements-Modulakzent, der durchschlaegt**
-  — `[cmd]` aus der Uebergabe: elf Modul-Akzenttoken bei Luminositaet
-  0.74–0.80. **Zu messen: ist der Ton Absicht oder ein Rest?**
-
-  `[cmd]` **Nicht angefasst in G-196**, weil der WADA-Block mit G-195
-  in einen eigenen Reiter umzieht. **Danach faellig.**
-
-- [ ] **G-198: Zwei Farbsysteme im selben Bauteil** (neu 2026-08-26).
-  Aus G-196.
-
-  `[cmd]` **Textkacheln und `UeberwachungUndReinheit` faerbten von
-  Hand** (`ton: 'acc'`, `warn: true/false`), **nicht ueber `tonFuer`.**
-
-  `[read]` **Das erklaert, warum G-194 unvollstaendig blieb:** im
-  selben Bauteil war *„Was nicht zurueckkommt"* richtig gefaerbt und
-  *„Ueberwachung"* grau — **nicht aus Nachlaessigkeit, sondern weil
-  zwei Wege nebeneinander existierten.**
-
-  `[cmd]` **In G-196 umgestellt** — aber `[read]` **die Frage bleibt,
-  ob es weitere Stellen gibt, die von Hand faerben.** Ein Waechter,
-  der Farbzuweisungen ausserhalb von `tonFuer` findet, waere die
-  Antwort. **Sonst entsteht das dritte System beim naechsten Block.**
-
-  `[cmd]` **Nebenbefund aus derselben Umstellung:** *„Was es bringt"*
-  trug `pos` — **was in der neuen Ordnung Entwarnung hiesse.** Es ist
-  eine Wirkungsaussage. **Korrigiert.**
-
 - [ ] **C-284: Der Medikamentenkatalog ist duenner als er aussieht**
   (neu 2026-08-26). Grundlage des Kimi-Auftrags.
 
@@ -6390,79 +6352,103 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   viele Tabellen betroffen sind** — eine Loesung fuer eine Tabelle ist
   keine.
 
-- [ ] **C-286: Codex hat eine Migration neben dem Kettenschritt
-  angelegt** (neu 2026-08-26). Aus C-283.
+- [ ] **C-289: Die Kette laesst sich nicht mehr frisch pruefen** (neu
+  2026-08-26). Aus C-286.
 
-  `[cmd]` **Beides existiert:**
-  `_pipeline/14_medical/283_medication_catalog_mapping.sql` **und**
-  `migrations/20260826180000_c283_medication_catalog_mapping.sql`
-  (3.237 Bytes).
+  `[cmd]` **Codex meldet: der frische Kettennachweis war wegen lokaler
+  Datenbank-Klon/Restore-Fehler nicht moeglich.** `[cmd]` **Und der
+  Schema-Pruefer lief nach 204 Sekunden ins Timeout** — in C-283 waren
+  es 184.
 
-  `[read]` **Die Projektanweisung sagt:** *„Der Zustand entsteht aus
-  der Kette in `supabase/_pipeline/`, nicht aus
-  `supabase/migrations/`."*
+  `[read]` **Das ist der Nachweis, der uns bisher jedes Mal gerettet
+  hat.** `[cmd]` C-265, C-276 und C-277 wurden **ausschliesslich**
+  dadurch gefunden, dass Kette und Live verglichen wurden. **Faellt
+  der Vergleich aus, faellt die Sicherung aus.**
 
-  `[read]` **Zwei Quellen fuer denselben Zustand sind genau der
-  Mechanismus, der uns zweimal Kette gegen Live auseinanderlaufen
-  liess** — C-265 (drei unverkettete Medical-Schritte) und C-277
-  (`im_katalog` ohne `parent_id`-Bedingung).
+  `[read]` **Und der Trend ist eindeutig:** 184 Sekunden, dann 204.
+  **Der Pruefer wird langsamer, waehrend die Datenbank waechst** —
+  irgendwann ist er nicht mehr ausfuehrbar, und dann ist das Verfahren
+  tot, nicht nur der Lauf.
 
-  **Zu klaeren:** Absicht oder Rest? `[read]` **Wenn Absicht — etwa
-  weil eine Strukturaenderung anders nicht greift — gehoert die
-  Begruendung in den Bericht und die Ausnahme in `supabase/README.md`.
-  Wenn nicht: raus.**
+  **Zu tun:** erst den Klon-Fehler, dann die Laufzeit. `[read]`
+  **Beides messen, nicht raten** — der Pruefer kann an einer einzelnen
+  Abfrage haengen oder gleichmaessig langsam sein, und das fuehrt zu
+  verschiedenen Reparaturen.
 
-- [ ] **C-287: 148 Community-Zeilen erreichen niemanden** (neu
-  2026-08-26). Aus G-199, mit C-286 an Codex gegeben.
+- [ ] **C-290: Migrationen sind eine undokumentierte Ausnahme** (neu
+  2026-08-26). Aus C-286.
 
-  `[cmd]` **Der Community-Reiter erscheint bei 49 der 412 Substanzen.**
-  148 von 212 Zeilen haben keine Zuordnung:
+  `[cmd]` **Zwei Migrationen liegen im Baum:**
+  `20260826180000_c283_medication_catalog_mapping.sql` und
+  `20260826190000_c286_medication_enrichments.sql`.
 
-      community_science_delta            30 von 30   ALLE
-      community_usage_concepts            3 von 3    ALLE
-      community_terminology_terms        57 von 71
-      community_product_quality_signals  32 von 40
-      community_stack_patterns           24 von 31
-      community_side_effect_patterns      2 von 37
+  `[cmd]` **Vom Orchestrator geprueft: die erste enthaelt reines
+  Schema** — `ADD COLUMN`, `CHECK`-Bedingungen, **keine Daten.**
 
-  `[read]` **Die Verteilung ist kein Zufall.** Nebenwirkungen betreffen
-  einen Stoff und sind fast vollstaendig zugeordnet. **Mythen und
-  Konzepte betreffen eine Praxis** — *„SARMs sind selektiv"* gehoert zu
-  keiner einzelnen Substanz.
+  `[read]` **Damit ist die Trennung sachlich richtig:** die Migration
+  aendert die Struktur, die Kette fuellt sie. **Das sind zwei
+  Zustaendigkeiten, keine zwei Quellen fuer denselben Zustand** — und
+  Codex hat die Datenlogik ausdruecklich herausgenommen.
 
-  `[cmd]` **Drei Ursachen, von Claude Code gemessen:**
-  `substance_ids` traegt **Slugs, keine UUIDs** · `substance_class`
-  hat **0 Treffer** gegen `supplement_groups` · **der Klassen-Rueckfall
-  aus C-280 existiert nicht** — ich hatte ihn als Sicherheitsnetz
-  angenommen.
+  `[read]` **Aber die Projektanweisung sieht `migrations/` gar nicht
+  vor:** *„Der Zustand entsteht aus der Kette in `_pipeline/`, nicht
+  aus `supabase/migrations/`."*
 
-- [ ] **C-288: Der Medikamenten-Enrichment-Layer ist nie importiert
-  worden** (neu 2026-08-26). Von Kimi gemeldet, vom Orchestrator
-  bestaetigt.
+  **Zu tun:** die Ausnahme in `supabase/README.md` festhalten — **wann
+  eine Migration richtig ist und wann nicht.** `[read]` **Sonst ist
+  sie beim naechsten Mal wieder eine Ueberraschung**, und dann steht
+  vielleicht doch Datenlogik darin.
 
-  `[cmd]` **`medication_reproductive_enrichment.jsonl` liegt seit
-  CRAWL_038 vor: 417 von 498 Wirkstoffen**, davon 270 mit
-  `pregnancy`-Daten, 270 `lactation`, 274 `fertility` — **der Rest mit
-  dokumentiertem `missing_reason`.**
+- [ ] **G-200: Zwei bekannte Faelle bleiben gruen — Ursache
+  unbekannt** (neu 2026-08-26). Aus G-197, Punkt 3.
 
-  `[read]` **Ich hatte 1/0/0 gemeldet, weil ich die kanonische Datei
-  gemessen und den Enrichment-Layer uebersehen habe.** `[cmd]`
-  **Derselbe Fehler wie bei den Supplements**, wo er C-262 und C-270
-  gekostet hat.
+  `[cmd]` **`tools/verdrahtung-pruefen.mjs` steht** — 89 verdrahtete
+  Namen gemessen, **54 in keinem Test.** Die Kernforderung ist
+  erfuellt: **die sechste, im Waechter nicht genannte Stelle
+  (`exercises` in Training) wird gefunden.**
 
-  `[cmd]` **Und ATC ist ebenfalls da:** `external_ids.ATC_all` **419
-  von 498**, `ATC_level3` **377** — das Top-Level-Feld `ATC` traegt nur
-  56, und C-283 hat genau das gelesen.
+  `[cmd]` **Aber zwei der fuenf bekannten Faelle bleiben gruen.** Der
+  Waechter erkennt beide Namen einzeln korrekt, die Sabotage erzeugt
+  einen unbekannten Namen — **er faellt trotzdem nicht.**
 
-  `[read]` **Die groessere Frage:** `medication_pk` (407),
-  `medication_renal_hepatic` (391), `medication_clinical_context`
-  (107), `thailand_medication_regulatory` (477) liegen ebenfalls in
-  `data/evidence/`. **Ob ihr Inhalt in der Datenbank ankommt, ist
-  ungemessen.**
+  `[read]` **Claude Code hat nach rund zehn Anlaeufen abgebrochen,
+  statt weiter zu raten.** `[read]` **Das war richtig.** Ein Waechter,
+  dessen Luecke niemand erklaeren kann, ist gefaehrlicher als keiner —
+  **er erzeugt Vertrauen, das er nicht deckt.**
 
-  `[read]` **Zur Architekturfrage entschieden:** Kimi hat angeboten,
-  eine gebuendelte Exportdatei zu liefern. **Abgelehnt** — das additive
-  Prinzip ist richtig, und zwei Bestaende zusammenzufuehren wuerde
-  genau die Trennung aufloesen, die den Vorteil ausmacht. **Wir lesen
-  die Evidence-Dateien; bei den Supplements haben wir das auch
-  getan.**
+  `[cmd]` **Folge: die Einzelwaechter aus G-184, G-187, G-191, G-196
+  und G-199 bleiben stehen.** Sie sind **nicht** ueberfluessig
+  geworden.
+
+  **Zu tun:** die Ursache finden, bevor der neue Waechter als Ersatz
+  gilt. `[read]` **Nicht mehr Anlaeufe derselben Art** — zehn haben
+  nichts ergeben. **Die Frage ist, was die beiden Faelle von den
+  anderen 87 unterscheidet.**
+
+- [ ] **G-201: Teilstring-Vergleiche brauchen Wortgrenzen — als
+  Regel, nicht als Vorsatz** (neu 2026-08-26). Aus G-197.
+
+  `[read]` **Der Befund ist der wertvollste des Tages, und er kommt
+  von Claude Code selbst:**
+
+  `[cmd]` **Der Teilstring-Fehler aus G-187 ist ihm im Waechter GEGEN
+  diesen Fehler unterlaufen** — `includes` traf `community_anzeige`
+  in `community_anzeigeX`.
+
+  `[cmd]` **Derselbe Fehler zweimal:** in G-187 traf
+  `/daten\?\.wechselwirkungen/` auch `…wechselwirkungenX`.
+
+  `[read]` **Seine Einordnung:** *„Das sagt, dass diese Klasse nicht
+  durch Aufmerksamkeit vermeidbar ist."*
+
+  `[read]` **Damit ist es keine Ermahnung mehr, sondern eine
+  Bauvorschrift.** Wer einen Namen in einem Waechter sucht, sucht ihn
+  **mit Wortgrenze** — `\b`, Zeichenklasse oder exakter Vergleich, nie
+  `includes` und nie ein unverankertes Muster.
+
+  **Zu tun:** in `CLAUDE.md` neben die uebrigen Werkzeugregeln.
+  `[read]` **Und pruefen, ob es eine Pruefung dafuer gibt** — ein
+  Waechter, der `includes` und unverankerte Muster in
+  `tools/*-pruefen.mjs` findet. `[read]` **Wenn nicht, bleibt es eine
+  Regel — aber eine, die aus zwei belegten Faellen stammt und nicht
+  aus einer Vermutung.**

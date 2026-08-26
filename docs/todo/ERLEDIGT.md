@@ -13567,3 +13567,123 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
 
   `[cmd]` **Nebenbei:** `Zahlenkasten` hatte nach dem Umbau null
   Aufrufer und ist **geloescht, nicht auskommentiert.**
+
+- [x] **C-286: Migration neben der Kette · C-287: Community-Zuordnung ·
+  C-288: der Medikamenten-Enrichment-Layer** — **erledigt 2026-08-26
+  (Codex), Bericht `docs/berichte/c-286-codex.md`.**
+
+  ### Der ganze Enrichment-Layer ist drin
+
+  `[cmd]` **Vom Orchestrator live nachgemessen, fuenf neue Tabellen,
+  alle exakt wie Kimis Dateien:**
+
+      medication_reproductive_evidence        417
+      medication_pk_evidence                  407
+      medication_renal_hepatic_evidence       391
+      medication_thailand_regulatory_evidence 477
+      medication_clinical_context_evidence    107
+
+  `[read]` **Ich hatte nur die Reproduktionsdaten beauftragt und die
+  Frage nach den uebrigen als Punkt c angehaengt** — er hat sie
+  mitgemacht. **Zusammen 1.799 Zeilen, die vorher niemanden
+  erreichten.**
+
+  `[cmd]` **ATC bei 490 von 498** — mehr als Kimis 419, weil beide
+  Quellen kombiniert wurden. **Nicht 475/23, wie ich vermutet hatte.**
+
+  ### C-287 wurde bewusst NICHT gebaut
+
+  `[read]` **Seine Begruendung:** *„Datenbasis traegt keine sichere
+  automatische Bindung."* `[cmd]` **Genau die Vorgabe aus dem
+  Auftrag** — *eine falsch zugeordnete Nebenwirkung ist schlimmer als
+  eine fehlende.*
+
+  `[read]` **Damit bleiben 148 Community-Zeilen unerreichbar** — und
+  das ist der richtige Zustand, solange die Zuordnung geraten waere.
+  **Der Punkt bleibt offen, nicht scheinbar geloest.**
+
+  ### Die Migration ist bereinigt
+
+  `[cmd]` **Vom Orchestrator geprueft: reines Schema** — `ADD COLUMN`,
+  `CHECK`-Bedingungen, **keine Daten.** *„Der Backfill bleibt
+  ausschliesslich in der Kette."*
+
+  `[read]` **Damit ist die Trennung sachlich richtig:** Migration
+  aendert die Struktur, Kette fuellt sie. **Zwei Zustaendigkeiten, nicht
+  zwei Quellen.** Als **C-290** bleibt, die Ausnahme zu dokumentieren.
+
+  ### Zwei offene Enden, beide gemeldet
+
+  `[cmd]` **Der frische Kettennachweis war nicht moeglich** —
+  Klon/Restore-Fehler. `[cmd]` **Der Schema-Pruefer lief nach 204
+  Sekunden ins Timeout**, in C-283 waren es 184.
+
+  `[read]` **Das ist der Nachweis, der uns dreimal gerettet hat** —
+  C-265, C-276, C-277 wurden ausschliesslich durch den Vergleich
+  Kette gegen Live gefunden. **Als C-289 angelegt.**
+
+- [x] **G-197: Der rosa Boden · G-198: zwei Farbsysteme** —
+  **erledigt 2026-08-26 (Claude Code), Bericht
+  `docs/berichte/g-197-claude-code.md`.**
+
+  ### Mein bevorzugter Weg trug nicht — er hat gemessen statt zu
+  ### folgen
+
+  `[cmd]` **Der Ton kommt aus `.v2-supp-tafel`:**
+  `color-mix(var(--acc) 4%, --bg-elev)`, und `--acc` ist dort der
+  Supplements-Akzent. **Meine Vermutung war richtig.**
+
+  `[cmd]` **Mein Vorschlag „abschwaechen" nicht:** 3 % → 4.41,
+  2 % → 4.45, **1 % → 4.51, und dort ist die Toenung unsichtbar.**
+
+  `[cmd]` **Die tatsaechliche Ursache war klein:** die drei
+  Ton-Varianten mischten auf **`transparent`** statt `--surface` —
+  **dadurch schlug der Tafelboden durch.** Jetzt deckend, **die Tafel
+  selbst unangetastet.** Kontrast **4.32 → 4.58.**
+
+  ### Ein eigener Messfehler, der fast ein falscher Befund geworden
+  ### waere
+
+  `[read]` **Sein erster Lauf verglich acht Module und meldete ueberall
+  Dashboard-Blau** — er hatte an `documentElement` gelesen, **der
+  Modulakzent haengt aber tiefer.** Im Panel gemessen ist es der
+  Supplements-Ton.
+
+  `[read]` **Ohne die Nachmessung waere daraus ein Systemproblem
+  geworden** — und wir haetten elf Module umgebaut, um einen Fehler in
+  einer Tafel zu beheben.
+
+  ### G-198: es war ein drittes System
+
+  `[cmd]` **`substanz-kacheln.ts` fuehrte `'pos' | 'warn' | 'acc'`** —
+  neben den zwei aus G-196. **Farbzuweisungen ausserhalb `tonFuer`:
+  3 → 0.**
+
+  `[read]` **Und eine Zuordnung war unter der neuen Ordnung falsch:**
+  Grad C trug die **Wirkungsfarbe** — *„dabei sagt der Evidenzgrad
+  nichts ueber die Wirkung."* **C bekommt jetzt keine.**
+
+  ### Punkt 3: die Form gibt es, der Nachweis ist unvollstaendig
+
+  `[cmd]` **89 verdrahtete Namen gemessen, 54 in keinem Test.**
+  `tools/verdrahtung-pruefen.mjs` steht, **Bestandsliste statt
+  Verbot.** Die sechste, nicht genannte Stelle wird gefunden.
+
+  `[cmd]` **Aber zwei bekannte Faelle bleiben gruen, Ursache
+  unbekannt.** `[read]` **Nach zehn Anlaeufen abgebrochen statt weiter
+  zu raten** — als **G-200** angelegt, **und die Einzelwaechter
+  bleiben stehen.**
+
+  ### Der Befund, der bleibt
+
+  `[cmd]` **Der Teilstring-Fehler aus G-187 ist ihm im Waechter GEGEN
+  diesen Fehler unterlaufen** — `includes` traf `community_anzeige`
+  in `community_anzeigeX`.
+
+  `[read]` **Seine Einordnung:** *„Das sagt, dass diese Klasse nicht
+  durch Aufmerksamkeit vermeidbar ist."* **Damit ist es keine
+  Ermahnung mehr, sondern eine Bauvorschrift** — als **G-201**
+  angelegt.
+
+  `[read]` **Und zwei Tests mussten mit:** *„auf die vier Bedeutungen
+  gezogen, nicht abgeschwaecht."*

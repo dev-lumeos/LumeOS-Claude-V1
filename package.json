@@ -9,7 +9,8 @@
     "typecheck": "turbo run typecheck",
     "gate": "node tools/encoding-pruefen.mjs && node tools/gruppenlabel-pruefen.mjs && node tools/schemafreigabe-pruefen.mjs && node tools/nummern-pruefen.mjs && node tools/i18n-pruefen.mjs && node tools/svgpfade-pruefen.mjs && node tools/kataloganker-pruefen.mjs && node tools/sprachrueckfall-pruefen.mjs && node tools/supplement-kern-dubletten-pruefen.mjs && node tools/supplement-kennungen-pruefen.mjs && turbo run typecheck test build && node tools/serverimport-pruefen.mjs",
     "encoding": "node tools/encoding-pruefen.mjs",
-    "ladekette": "node tools/ladekette-pruefen.mjs"
+    "ladekette": "node tools/ladekette-pruefen.mjs",
+    "verdrahtung": "node tools/verdrahtung-pruefen.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.41.2",

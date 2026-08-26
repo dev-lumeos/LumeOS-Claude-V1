@@ -217,6 +217,17 @@ skua.config.json
 backup/schema/*_c43_vor_kettenlauf.sql
 backup/schema/schema-before-*.sql
 
+# Schemasicherungen vor Live-Eingriffen. Rund 30.000 Zeilen je Datei
+# und bei jedem Auftrag neu -- sie tauchten am 2026-08-26 zweimal im
+# selben Commit-Lauf auf, weil die zwei Muster darueber nur die alten
+# Faelle trafen.
+#
+# Sie sind ein Rueckfallpunkt, kein Sollwert: was das Schema sein
+# soll, steht in supabase/_pipeline/daten/schema-sollstand.json und
+# ist versioniert.
+backup/schema/*_vor_schema.sql
+backup/schema/*_vor_live.sql
+
 # Hilfsskripte des Orchestrators. Werden geschrieben, ausgefuehrt und
 # geloescht; was liegen bleibt, ist Versehen.
 backup/_*.py

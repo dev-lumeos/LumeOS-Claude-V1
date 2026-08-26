@@ -101,8 +101,13 @@ bei 320 von 320.
 | **C-274** die 149 unsichtbaren zuordnen — 66 mit sichtbarem Gegenstueck | `supabase/` |
 | **C-278** 700 ms zwischen Datenbank und Anwendung | messen |
 | **C-279** Kreuzprodukt in `rule_assessment` skaliert mit `intake_logs` | `supabase/` |
-| **G-197** die Tafel ist im Hellmodus rosa getoent — WADA-Block bei 4.32 | `apps/web` |
-| **G-198** zwei Farbsysteme im selben Bauteil | `apps/web` |
+| **C-285** `user_medications` speichert im Klartext — blockiert den Erfassungsweg | `supabase/` |
+| **C-289** die Kette laesst sich nicht mehr frisch pruefen | `supabase/` |
+| **G-200** zwei bekannte Faelle bleiben gruen, Ursache unbekannt | `tools/` |
+
+`[cmd]` **G-197 und G-198 sind erledigt** (2026-08-26, Claude Code) —
+Kontrast 4.32 → 4.58, Farbzuweisungen ausserhalb `tonFuer` 3 → 0.
+
 
 `[cmd]` **C-281 und C-282 sind erledigt** (2026-08-26, Codex) — 22
 Dosis-, 46 Labor- und 17 WADA-Angaben hochgereicht, **Koffein hat
