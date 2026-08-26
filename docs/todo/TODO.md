@@ -6309,43 +6309,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   **und** Trenbolon. **Bildet die Sicht das nicht ab, erscheint der
   Reiter bei keiner oder bei jeder Substanz.**
 
-- [ ] **G-194: Der Quellen-Chip und farbige Ueberschriften** (neu
-  2026-08-26). Aus Toms Durchsicht.
-
-  braucht: G-184
-
-  `[cmd]` **Der Chip unten links zeigt „Quellen · 1", der Reiter oben
-  „Quellen 4"** — dieselbe Sache, zwei Zahlen, **und die untere ist
-  falsch.** `[read]` Der Chip stammt aus der Zeit vor dem
-  Quellen-Reiter (G-182). **Ein zweiter Weg zur selben Sache mit
-  falscher Zahl ist schlechter als keiner.**
-
-  **Tom, 2026-08-26:** *„fuer ueberwachung und reinheit waeren
-  passende headerfarben noch machbar dass es zu den anderen 3 ins
-  konzept passt, auch die anderen reiter sollen die headertitel
-  farben kriegen."*
-
-  `[cmd]` **Heute farbig:** *Was nicht zurueckkommt* (Warnfarbe),
-  *Wie es wirkt*, *Was es bringt* (Akzent). **Grau:** *Ueberwachung*,
-  *Reinheit*, *Bei zu viel*, *Wer es nicht nehmen sollte*, *Mythen*,
-  *Nicht im Blut nachweisbar*, *Rechtslage*, *Wann und wie*, *Fragen*.
-
-  `[read]` **Die Farbe muss etwas bedeuten, sonst ist es Dekoration.**
-  Zwei Gruppen sind die Frage: *Ueberwachung* ist keine Warnung — sie
-  sagt, **was gemessen gehoert.** *Reinheit* ist keine Wirkung — sie
-  sagt, **dass der Inhalt unsicher ist.**
-
-  `[read]` **Zwei Bedingungen:** vier Farben sind eine Ordnung, sieben
-  ein Regenbogen. Und **dieselbe Bedeutung bekommt ueberall dieselbe
-  Farbe** — *Reinheit* im Ueberblick und *Nicht im Blut* in der
-  Sicherheit sagen dasselbe.
-
-  `[read]` **Der WADA-Block aus G-184 ist der Pruefstein:** drei
-  Zustaende, und *erlaubt* ist eine **Entwarnung** — Entwarnung in
-  Warnfarbe waere falsch. **Die meisten Farbordnungen koennen warnen,
-  aber nicht entwarnen.** Wenn die Regel hier traegt, traegt sie
-  ueberall.
-
 - [ ] **C-281: 216 Angaben haengen an unsichtbaren Unterformen** (neu
   2026-08-26). Aus G-184, angestossen durch einen Koffein-Fund.
 
@@ -6470,3 +6433,39 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` **Nachher sind es sechs Reiter** — Ueberblick, Dosierung,
   Sicherheit, Community (G-192), Rechtslage, Quellen. **Ab sieben
   sucht man.**
+
+- [ ] **G-196: Die Farbordnung gilt erst an drei von acht Stellen**
+  (neu 2026-08-26). Nachtrag zu G-194.
+
+  `[cmd]` **Tom am Bild von `AC-262356`:** Reiter *Fragen* ohne Farbe ·
+  *Wechselwirkung* ohne Farbe · *Labor* ohne Farbe · *Dosierung*
+  ueberall ohne Farbe · und im Ueberblick **`UEBERWACHUNG` und
+  `REINHEIT` weiterhin grau** — **die beiden, wegen denen G-194
+  entstand.**
+
+  `[read]` **Die Ordnung selbst ist richtig und bleibt.** Es fehlt die
+  Anwendung, nicht die Regel.
+
+  **Zwei Faelle waren nicht zugeordnet:** `[read]` *Fragen* passt in
+  keine der vier — eine Frage ist weder Gefahr noch Wirkung.
+  *Wechselwirkung* ist `--warn`: **ein Risiko, kein Hinweis.**
+
+  `[cmd]` **Der WADA-Block wird nicht angefasst** — er wandert mit
+  G-195 in einen eigenen Reiter. **Zweimal umbauen ist einmal zu
+  viel.**
+
+  ### Der Kontrast-Entscheid
+
+  `[cmd]` **`--warn` liegt im Hellmodus bei 4.44 auf getoentem Grund**,
+  unter 4.5.
+
+  `[read]` **Entscheidung des Orchestrators: die Toenung senken, nicht
+  den Farbwert aendern.** Der Farbton ist im Designsystem verankert
+  und gilt modulweit — **wer ihn hier dunkler macht, hat elf Module
+  mit zwei Warntoenen.** `[cmd]` Alle elf Akzenttoken liegen bei
+  Luminositaet 0.74–0.80.
+
+  `[read]` **Und zum Messproblem:** `data-mode` wird von einem
+  Startskript aus `prefers-color-scheme` gesetzt. **Nicht dagegen
+  arbeiten, sondern zweimal messen** — je ein Lauf mit erzwungenem
+  Thema, der Browsersitzung mitgegeben.

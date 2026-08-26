@@ -13193,3 +13193,66 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
   `[cmd]` 635 Tests gruen, Build 31/31, Encoding sauber (20.014), vier
   Gegenproben am Bild, Negativprobe dreifach rot mit SHA-identischem
   Rueckbau. Server durchgehend PID 351936.
+
+- [x] **G-194: Der Quellen-Chip und farbige Ueberschriften** —
+  **erledigt 2026-08-26 (Claude Code), Bericht
+  `docs/berichte/g-194-claude-code.md`.** Nachgezogen in **G-196**.
+
+  ### Der Chip-Befund ist groesser als vermutet
+
+  `[cmd]` **Es waren zwei verschiedene Quellen, nicht zwei
+  Zaehlweisen:**
+
+  | | Herkunft | max |
+  |---|---|---:|
+  | Chip | `supplement_field_sources` — ein Herkunftsvermerk je Feld | 17 |
+  | Reiter | `supplement_user_texts.sources` — die Quellenliste | 6 |
+
+  `[cmd]` **393 von 412 zeigten verschiedene Zahlen, nur 19 stimmten
+  ueberein.** Kreatin: Chip 13, Reiter 2.
+
+  `[read]` **Die Chip-Zahl war nie falsch gezaehlt — sie war falsch
+  beschriftet.** Chip und die tote Rechnung dahinter sind geloescht.
+
+  ### Vier Bedeutungen, WADA ohne fuenfte Farbe
+
+  | Bedeutung | Token | Bloecke |
+  |---|---|---|
+  | gefahr | `--warn` | Bei zu viel · Was nicht zurueckkommt · Wer es nicht nehmen sollte · Nebenwirkungen · Was Kombinationen kosten |
+  | wirkung | `--acc` | Wie es wirkt · Was es bringt · Im Labor |
+  | pruefen | `--acc-suppl` | Ueberwachung · Reinheit · Produktqualitaet · Nicht im Blut · Rechtslage · Zu wenig |
+  | entwarnung | `--pos` | Mythen |
+
+  `[read]` **Der WADA-Block hat den Pruefstein bestanden** — und dabei
+  hat er **zwei eigene G-184-Fehler korrigiert:** `not_prohibited`
+  hatte **gar keine Farbe** (*„in keinem Verband verboten"* ist eine
+  Aussage, 172 von 320), und `monitored` trug `--acc`, **die
+  Wirkungsfarbe** — falsch, das Beobachtungsprogramm sagt nichts ueber
+  Wirkung.
+
+  ### Der Kontrastnachweis blieb offen — und das war richtig
+
+  `[cmd]` **Token gegen `--surface`: alle vier bestehen** (dunkel
+  7.46–11.06, hell 4.56–6.49). `[cmd]` **Auf getoentem Grund
+  gerechnet wird `gefahr` im Hellmodus knapp: 4.44**, unter 4.5.
+
+  `[read]` **Die Messung an der gerenderten Seite war unbrauchbar:**
+  das Skript schaltet das Thema nicht um — `data-mode` wird von einem
+  Startskript aus `prefers-color-scheme` neu gesetzt. **Es meldete
+  1.09 fuer ungefaerbte Ueberschriften auf dunklem Grund — unmoeglich.**
+
+  `[read]` **Er hat die Tabelle nicht geliefert, statt Zahlen zu
+  liefern, die er selbst nicht glaubt.** `[cmd]` **Vierter Fall an zwei
+  Tagen, in dem eine Pruefung etwas anderes misst als gemeint — und
+  der erste, bei dem es vor der Meldung auffiel.**
+
+  ### Was offenblieb, und warum G-196 folgte
+
+  `[cmd]` **Die Ordnung galt nur an drei von acht Stellen.** Tom sah am
+  Bild: *Fragen*, *Wechselwirkung*, *Labor*, die ganze *Dosierung* —
+  und **`UEBERWACHUNG` und `REINHEIT` weiterhin grau**, die beiden,
+  wegen denen der Auftrag entstand.
+
+  `[read]` **Und ein Fehler von mir:** ich habe ihm den Prompt gegeben,
+  waehrend die Auftragsdatei noch in `docs/auftraege/wartend/` lag.
+  **Er hat korrekt gemeldet, dass sie fehlt.**

@@ -289,7 +289,7 @@ wenn er erzeugt und geprüft wird.
 | **G-193** Jede Leistungszahl nennt das Konto | offen | 6202 |
 | **G-192** Ein Community-Reiter im Substanzdetail | offen | 6226 |
 | **C-280** Eine Sicht, die nur zeigt, was gezeigt werden darf | offen | 6276 |
-| **G-194** Der Quellen-Chip und farbige Ueberschriften | offen | 6312 |
-| **C-281** 216 Angaben haengen an unsichtbaren Unterformen | offen | 6349 |
-| **C-282** Phenibut und Tianeptin widersprechen sich in derselben | offen | 6391 |
-| **G-195** Ein eigener Reiter „Rechtslage" statt zweier halber | offen | 6418 |
+| **C-281** 216 Angaben haengen an unsichtbaren Unterformen | offen | 6312 |
+| **C-282** Phenibut und Tianeptin widersprechen sich in derselben | offen | 6354 |
+| **G-195** Ein eigener Reiter „Rechtslage" statt zweier halber | offen | 6381 |
+| **G-196** Die Farbordnung gilt erst an drei von acht Stellen | offen | 6437 |
