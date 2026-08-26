@@ -64,10 +64,10 @@ SELECT
   r->>'canonical_name',
   coalesce(ARRAY(SELECT jsonb_array_elements_text(r->'generic_names')), '{}'),
   coalesce(ARRAY(SELECT jsonb_array_elements_text(r->'synonyms')), '{}'),
-  coalesce(r->>'atc_code', r->'external_ids'->>'ATC'),
-  coalesce(r->>'cas_number', r->'external_ids'->>'CAS'),
-  coalesce(r->>'rxnorm_code', r->'external_ids'->>'RxNorm'),
-  coalesce(r->>'unii_code', r->'external_ids'->>'UNII'),
+  coalesce(nullif(btrim(r->>'ATC'), ''), r->>'atc_code', r->'external_ids'->>'ATC'),
+  coalesce(nullif(btrim(r->>'CAS'), ''), r->>'cas_number', r->'external_ids'->>'CAS'),
+  coalesce(nullif(btrim(r->>'RxNorm_salt_rxcui'), ''), r->'external_ids'->>'RxNorm_salt_rxcui', r->>'rxnorm_code', r->'external_ids'->>'RxNorm'),
+  coalesce(nullif(btrim(r->>'UNII'), ''), r->'external_ids'->>'UNII', r->>'unii_code'),
   coalesce(ARRAY(
     SELECT DISTINCT x
     FROM (
@@ -94,7 +94,7 @@ SELECT
     ) traits
     WHERE x IS NOT NULL AND x <> ''
   ), '{}'),
-  coalesce(ARRAY(SELECT jsonb_array_elements_text(r->'raw_drug_class')), '{}'),
+  coalesce(ARRAY(SELECT jsonb_array_elements_text(coalesce(r->'drug_class', r->'raw_drug_class', '[]'::jsonb))), '{}'),
   coalesce(ARRAY(
     SELECT DISTINCT x
     FROM (
@@ -115,7 +115,7 @@ SELECT
     WHERE x IS NOT NULL AND x <> ''
   ), '{}'),
   coalesce(r->'cyp', r->'cyp_raw', '{}'::jsonb),
-  coalesce(ARRAY(SELECT jsonb_array_elements_text(r->'routes')), '{}'),
+  coalesce(ARRAY(SELECT jsonb_array_elements_text(coalesce(r->'routes_of_administration', r->'routes', '[]'::jsonb))), '{}'),
   coalesce(ARRAY(SELECT jsonb_array_elements_text(r->'dosage_forms')), '{}'),
   coalesce(r->'risk_flags', '{}'::jsonb),
   coalesce(r->'lab_effects', '[]'::jsonb),

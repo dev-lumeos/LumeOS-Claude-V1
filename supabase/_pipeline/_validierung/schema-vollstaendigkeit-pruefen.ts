@@ -54,6 +54,14 @@ console.log('')
 const fehler: string[] = []
 const warnung: string[] = []
 
+function lit(v: string): string {
+  return `'${v.replace(/'/g, "''")}'`
+}
+
+function ident(v: string): string {
+  return `"${v.replace(/"/g, '""')}"`
+}
+
 function pruefe(art: string, soll: Array<{ name: string; schritt: string }>, ist: Set<string>) {
   const fehlend = soll.filter(s => !ist.has(s.name))
   const zuviel = [...ist].filter(n => !soll.some(s => s.name === n))
@@ -208,8 +216,15 @@ const fremdeSpaltenGeprueft = Array.isArray(SOLL.fremde_schemata)
     new Set(SOLL.fremde_schemata.map((s: any) => `${s.schema}.${s.name}`)),
   )
   : 0
+const fremdeSichtSpaltenGeprueft = Array.isArray(SOLL.fremde_sichten)
+  ? pruefeSpalten(
+    'Sicht',
+    SOLL.fremde_sichten,
+    new Set(SOLL.fremde_sichten.map((s: any) => `${s.schema}.${s.name}`)),
+  )
+  : 0
 console.log(`Tabellensp.  ${tabellenSpaltenGeprueft + fremdeSpaltenGeprueft} Tabelle(n) mit Spaltenliste geprueft`)
-console.log(`Sichtspalten ${sichtSpaltenGeprueft} Sicht(en) mit Spaltenliste geprueft`)
+console.log(`Sichtspalten ${sichtSpaltenGeprueft + fremdeSichtSpaltenGeprueft} Sicht(en) mit Spaltenliste geprueft`)
 
 // --- 4. Trigger namentlich ---
 const trigIst = new Set(sql(
@@ -583,6 +598,114 @@ if (Array.isArray(SOLL.fremde_schemata) && SOLL.fremde_schemata.length) {
     if (grOk) fremdOk++
   }
   console.log(`Fremde Tab. ${fremdOk}/${SOLL.fremde_schemata.length} vollstaendig`)
+}
+
+if (Array.isArray(SOLL.fremde_sichten) && SOLL.fremde_sichten.length) {
+  let fremdeSichtenOk = 0
+  for (const v of SOLL.fremde_sichten) {
+    const voll = `${v.schema}.${v.name}`
+    let sauber = true
+
+    const daIst = sql(
+      `SELECT EXISTS (SELECT 1 FROM information_schema.tables
+         WHERE table_schema=${lit(v.schema)}
+           AND table_name=${lit(v.name)}
+           AND table_type='VIEW')::text;`)[0]?.[0] === 'true'
+    if (!daIst) {
+      fehler.push(`Sicht: ${voll} FEHLT - erzeugt von Schritt ${v.schritt}`)
+      continue
+    }
+
+    const reloptions = sql(
+      `SELECT COALESCE(array_to_string(c.reloptions, ','), '')
+       FROM pg_class c
+       JOIN pg_namespace n ON n.oid = c.relnamespace
+       WHERE n.nspname=${lit(v.schema)}
+         AND c.relname=${lit(v.name)}
+         AND c.relkind='v';`)[0]?.[0] ?? ''
+    const hatInvoker = reloptions.includes('security_invoker=true')
+    const hatBarrier = reloptions.includes('security_barrier=true')
+    if (hatInvoker !== (v.security_invoker === true)) {
+      fehler.push(`Sicht ${voll}: security_invoker=${hatInvoker}, erwartet ${v.security_invoker} - Schritt ${v.schritt}`)
+      sauber = false
+    }
+    if (hatBarrier !== (v.security_barrier === true)) {
+      fehler.push(`Sicht ${voll}: security_barrier=${hatBarrier}, erwartet ${v.security_barrier} - Schritt ${v.schritt}`)
+      sauber = false
+    }
+
+    const grIst = new Map<string, Set<string>>()
+    for (const [rolle, recht] of sql(
+      `SELECT grantee, privilege_type
+       FROM information_schema.role_table_grants
+       WHERE table_schema=${lit(v.schema)}
+         AND table_name=${lit(v.name)}
+         AND grantee <> 'postgres';`)) {
+      if (!grIst.has(rolle)) grIst.set(rolle, new Set())
+      grIst.get(rolle)!.add(recht)
+    }
+    for (const [rolle, soll] of Object.entries(v.grants as Record<string, string[]>)) {
+      const ist = grIst.get(rolle) ?? new Set<string>()
+      const fehlt = soll.filter(r => !ist.has(r))
+      const zuviel = [...ist].filter(r => !soll.includes(r))
+      if (fehlt.length) {
+        fehler.push(`GRANT: Sicht ${voll} fehlt ${rolle} ${fehlt.join(', ')} - Schritt ${v.schritt}`)
+        sauber = false
+      }
+      if (zuviel.length) {
+        fehler.push(`GRANT: Sicht ${voll} hat ${rolle} ZU VIEL: ${zuviel.join(', ')} - Schritt ${v.schritt}`)
+        sauber = false
+      }
+    }
+    for (const rolle of grIst.keys()) {
+      if (!(rolle in (v.grants as Record<string, string[]>))) {
+        fehler.push(`GRANT: Sicht ${voll} traegt Rechte fuer die nicht vorgesehene Rolle ${rolle}`)
+        sauber = false
+      }
+    }
+
+    const spalten = sql(
+      `SELECT column_name
+       FROM information_schema.columns
+       WHERE table_schema=${lit(v.schema)}
+         AND table_name=${lit(v.name)}
+       ORDER BY ordinal_position;`).map(r => r[0])
+    const verboten = (v.verbotene_spalten ?? []).filter((c: string) => spalten.includes(c))
+    if (verboten.length) {
+      fehler.push(`Sicht ${voll}: verbotene Spalten ${verboten.join(', ')} - Schritt ${v.schritt}`)
+      sauber = false
+    }
+
+    const definition = sql(
+      `SELECT pg_get_viewdef(c.oid)
+       FROM pg_class c
+       JOIN pg_namespace n ON n.oid = c.relnamespace
+       WHERE n.nspname=${lit(v.schema)}
+         AND c.relname=${lit(v.name)}
+         AND c.relkind='v';`)[0]?.[0] ?? ''
+    const verboteneDefinition = (v.verbotene_viewdef ?? [])
+      .filter((token: string) => definition.includes(token))
+    if (verboteneDefinition.length) {
+      fehler.push(`Sicht ${voll}: View-Definition liest verbotene Felder ${verboteneDefinition.join(', ')} - Schritt ${v.schritt}`)
+      sauber = false
+    }
+
+    if (Number.isFinite(v.zeilen_min) || Number.isFinite(v.zeilen_max)) {
+      const count = Number(sql(
+        `SELECT count(*) FROM ${ident(v.schema)}.${ident(v.name)};`)[0]?.[0] ?? '0')
+      if (Number.isFinite(v.zeilen_min) && count < v.zeilen_min) {
+        fehler.push(`Sicht ${voll}: ${count} Zeilen, erwartet mindestens ${v.zeilen_min} - Schritt ${v.schritt}`)
+        sauber = false
+      }
+      if (Number.isFinite(v.zeilen_max) && count > v.zeilen_max) {
+        fehler.push(`Sicht ${voll}: ${count} Zeilen, erwartet hoechstens ${v.zeilen_max} - Schritt ${v.schritt}`)
+        sauber = false
+      }
+    }
+
+    if (sauber) fremdeSichtenOk++
+  }
+  console.log(`Fremde Sicht ${fremdeSichtenOk}/${SOLL.fremde_sichten.length} vollstaendig`)
 }
 
 if (Array.isArray(SOLL.fremde_funktionen) && SOLL.fremde_funktionen.length) {

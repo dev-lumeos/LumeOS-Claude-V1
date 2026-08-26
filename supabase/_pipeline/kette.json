@@ -940,6 +940,51 @@
       ]
     },
     {
+      "id": "280",
+      "path": "supabase/_pipeline/16_wissen/280_community_anzeige.sql",
+      "kind": "sql",
+      "creates": "C-280: Community-Anzeige-Sicht im Fachschema supplements ohne raw und ohne Anleitungsfelder",
+      "depends_on": [
+        "273h"
+      ]
+    },
+    {
+      "id": "281",
+      "path": "supabase/_pipeline/13_supplements/281_supplement_wissen_hochreichen.sql",
+      "kind": "sql",
+      "creates": "C-281: Einheitliche Kind-Angaben fuer Dosis, Laborwirkung und WADA mit Herkunft zum Sammelnamen hochreichen",
+      "depends_on": [
+        "280"
+      ]
+    },
+    {
+      "id": "282",
+      "path": "supabase/_pipeline/13_supplements/282_wada_status_kategorie_konflikte.sql",
+      "kind": "sql",
+      "creates": "C-282: WADA status/category-Selbstwidersprueche als Konflikt-Records festhalten",
+      "depends_on": [
+        "281"
+      ]
+    },
+    {
+      "id": "283",
+      "path": "supabase/_pipeline/14_medical/283_medication_catalog_mapping.sql",
+      "kind": "sql",
+      "creates": "C-283: Wirkstoff-Metadaten aus dem Kimi-Rohbestand in typisierte Katalogfelder abbilden",
+      "depends_on": [
+        "282"
+      ]
+    },
+    {
+      "id": "286",
+      "path": "supabase/_pipeline/14_medical/286_medication_enrichments.ts",
+      "kind": "tsx",
+      "creates": "C-286: ATC-Prioritaet und additive Medikamenten-Enrichments fuer PK, Organfunktion, Reproduktion, klinischen Kontext und Thailand",
+      "depends_on": [
+        "283"
+      ]
+    },
+    {
       "id": "110",
       "path": "supabase/_pipeline/11_goals/110_goals_zielwerte.sql",
       "kind": "sql",

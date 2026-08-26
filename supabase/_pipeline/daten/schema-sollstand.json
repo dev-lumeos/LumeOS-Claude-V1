@@ -1650,7 +1650,10 @@
     "preparation_kinds": 11,
     "food_groups": 19,
     "foods_portions": 23000,
-    "micronutrient_overview_items": 8
+    "micronutrient_overview_items": 8,
+    "supplements.supplement_lab_effects": 271,
+    "supplements.supplement_wada": 337,
+    "supplements.wada_conflict_records": 8
   },
   "mindestzeilen_schema": {
     "_kommentar": "Untergrenzen ausserhalb nutrition. C-43: Die Schritte 100-105 muessen im Kettenlauf sichtbar werden; sonst koennte Training komplett fehlen und die Nutrition-Pruefung waere trotzdem gruen.",
@@ -1667,6 +1670,11 @@
     "medical.lab_marker_catalog": 66,
     "medical.biomarker_aliases": 292,
     "medical.medication_active_substances": 56,
+    "medical.medication_reproductive_evidence": 417,
+    "medical.medication_pk_evidence": 407,
+    "medical.medication_renal_hepatic_evidence": 391,
+    "medical.medication_clinical_context_evidence": 107,
+    "medical.medication_thailand_regulatory_evidence": 477,
     "medical.medication_formulations": 119,
     "medical.medication_products": 124,
     "supplements.supplement_groups": 3,
@@ -1726,7 +1734,10 @@
     "preparation_kinds": "[read] 023_zubereitung_ableitung.sql: 11 Zubereitungsarten.",
     "food_groups": "[read] 023_zubereitung_ableitung.sql: 19 Warengruppen.",
     "foods_portions": "029_portionen-einspielen.ts, gemessen 2026-08-15: 23.402 Zeilen ueber 7.048 Lebensmittel. Gerundet, weil die Zahl mit jeder Kategoriezuordnung wandert.",
-    "micronutrient_overview_items": "[read] supabase/_pipeline/daten/mikro-uebersicht.json: exakt 8 kuratierte Eintraege fuer die Vorlage."
+    "micronutrient_overview_items": "[read] supabase/_pipeline/daten/mikro-uebersicht.json: exakt 8 kuratierte Eintraege fuer die Vorlage.",
+    "supplements.supplement_lab_effects": "C-281: 225 bestehende Laboreffekt-Zeilen plus 46 einheitliche Kind-Effekte auf Sammelnamen hochgereicht; Magnesium:Serum Mg bleibt wegen Abweichung unten.",
+    "supplements.supplement_wada": "C-281: 320 bestehende WADA-Zeilen plus 17 einheitliche Kind-Status auf Sammelnamen hochgereicht; Caffeine bleibt wegen monitored/not_prohibited unten.",
+    "supplements.wada_conflict_records": "C-272: 6 WADA-Korrekturkonflikte; C-282: 2 Selbstwidersprueche wada_status vs wada_category fuer Phenibut und Tianeptine."
   },
   "mindestzeilen_schema_belege": {
     "training.exercises": "[cmd] Ist-Stand nach 100-105: 1.416 Uebungen.",
@@ -1742,6 +1753,11 @@
     "medical.lab_marker_catalog": "[cmd] C-162: Kimi crawl_024 lab_markers.json liefert 66 Marker, alle needs_repo_validation. 46 Kimi-Kandidaten plus 18 repo-only Aufloesungen treffen den Katalog, 2 bleiben offen.",
     "medical.biomarker_aliases": "[cmd] C-72: daten/biomarker-aliases.json fuehrt 304 eindeutige importierbare Legacy-Aliaszeilen plus 6 kuratierte Mehrdeutigkeitszeilen; 143 importiert zusammen 310. Die 18 Thai-Aliase bleiben offen, weil die aktuelle Faltung sie nicht traegt.",
     "medical.medication_active_substances": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 56 Wirkstoffe; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist.",
+    "medical.medication_reproductive_evidence": "[cmd] C-286: 417 CRAWL_038-Reproduktions-Enrichments werden per drug_* importiert; pregnancy/lactation/fertility und dokumentierte missing_reasons bleiben strukturiert.",
+    "medical.medication_pk_evidence": "[cmd] C-286: 407 PK-Enrichments werden per drug_* importiert.",
+    "medical.medication_renal_hepatic_evidence": "[cmd] C-286: 391 Nieren-/Leber-Enrichments werden per drug_* importiert.",
+    "medical.medication_clinical_context_evidence": "[cmd] C-286: 107 Clinical-Context-Enrichments werden per drug_* importiert.",
+    "medical.medication_thailand_regulatory_evidence": "[cmd] C-286: 477 Thailand-Regulatorik-Records (476 Wirkstoffe plus Quellenregister) werden additiv importiert.",
     "medical.medication_formulations": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 119 Formulierungen; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist.",
     "medical.medication_products": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 124 Produkte; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist.",
     "supplements.supplement_groups": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_groups aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 3.",
@@ -3111,6 +3127,56 @@
         ]
       },
       "grants_herkunft": "145_medications_schema.sql vergibt SELECT an authenticated und service_role ALL; 146_medications_katalog.ts fuellt den Wirkstoffkatalog.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "medication_reproductive_evidence",
+      "schritt": "286",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260826190000_c286_medication_enrichments.sql vergibt Katalog-Leserechte und service_role ALL.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "medication_pk_evidence",
+      "schritt": "286",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260826190000_c286_medication_enrichments.sql vergibt Katalog-Leserechte und service_role ALL.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "medication_renal_hepatic_evidence",
+      "schritt": "286",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260826190000_c286_medication_enrichments.sql vergibt Katalog-Leserechte und service_role ALL.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "medication_clinical_context_evidence",
+      "schritt": "286",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260826190000_c286_medication_enrichments.sql vergibt Katalog-Leserechte und service_role ALL.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "medication_thailand_regulatory_evidence",
+      "schritt": "286",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260826190000_c286_medication_enrichments.sql vergibt Katalog-Leserechte und service_role ALL.",
       "zeilenschutzart": "oeffentlich"
     },
     {
@@ -5051,6 +5117,76 @@
       "schema": "coach",
       "name": "withdraw_relationship_invite",
       "schritt": "155"
+    }
+  ],
+  "fremde_sichten": [
+    {
+      "schema": "supplements",
+      "name": "community_anzeige",
+      "schritt": "280",
+      "security_invoker": false,
+      "security_barrier": true,
+      "zeilen_min": 212,
+      "zeilen_max": 212,
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "280_community_anzeige.sql: authenticated SELECT, service_role ALL; Sicht schneidet wissen.community_records auf erlaubte Anzeigefelder zu, wissen selbst bleibt nicht ueber API freigegeben.",
+      "verbotene_spalten": [
+        "raw",
+        "reported_mitigations",
+        "components",
+        "reported_reason_for_combination",
+        "why_these_doses"
+      ],
+      "verbotene_viewdef": [
+        "reported_mitigations",
+        "components",
+        "reported_reason_for_combination",
+        "why_these_doses"
+      ],
+      "spalten": [
+        "dataset",
+        "record_key",
+        "anzeige_typ",
+        "evidence_class",
+        "substance_ids",
+        "substance_class",
+        "product_class",
+        "side_effect",
+        "community_attribution_note",
+        "prevalence",
+        "onset_context",
+        "attribution_confidence",
+        "community_consistency",
+        "scientific_alignment",
+        "limitations",
+        "community_evidence_grade",
+        "name",
+        "expected_tradeoff",
+        "quality_signal",
+        "quality_claim",
+        "independent_testing",
+        "quality_sources",
+        "term",
+        "community_definition",
+        "community_claim",
+        "community_resolution",
+        "concept",
+        "physiological_implications"
+      ],
+      "spalten_herkunft": "C-280: nur erlaubte Felder aus sechs Community-Datasets; keine raw-Spalte und keine Anleitungsfelder. substance_ids ist berechnet und enthaelt nur sub_*-IDs."
     }
   ]
 }
