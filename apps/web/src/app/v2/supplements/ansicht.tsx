@@ -284,7 +284,17 @@ export function SupplementsAnsicht({
             active={tab} onChange={setTab} />
 
       <SuppCtx.Provider value={ctx}>
-        <div style={{ marginTop: 16 }}>
+        {/*
+          `[read]` **`key={tab}` haengt den Inhalt beim Wechsel neu ein**
+          — erst dadurch greift `@starting-style` in `.v2-tabinhalt`
+          bei JEDEM Wechsel, nicht nur beim ersten Aufbau.
+
+          **Nur Deckkraft, kein Verschieben.** Ein Reiter, den man oft
+          klickt, darf nicht wandern; Bewegung waere hier Zierde und
+          wuerde beim zehnten Klick stoeren. 120 ms sind kurz genug,
+          dass niemand wartet, und lang genug, dass es nicht springt.
+        */}
+        <div className="v2-tabinhalt" key={tab} style={{ marginTop: 16 }}>
           {tab === 'today' && <SuppToday />}
           {tab === 'stack' && <SuppStack />}
           {tab === 'extended' && (

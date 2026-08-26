@@ -13,10 +13,11 @@
 // alle 15 Sammeleintraege; dort bleiben nur „Formen" oder nichts.
 import type {
   Nutzertexte, Unterform, Frage, Quelle, Laborwirkung, Wechselwirkung,
+  CommunityHinweise,
 } from './substanz-read'
 
 export type ReiterId = 'ueberblick' | 'dosierung' | 'sicherheit' | 'formen'
-  | 'fragen' | 'quellen'
+  | 'community' | 'rechtslage' | 'fragen' | 'quellen'
 
 export type Reiter = {
   id: ReiterId
@@ -31,6 +32,17 @@ export type Zahlen = {
   obergrenze: string | null
   einnahme: string | null
   mitEssen: string | null
+  /**
+   * Warum es keine Menge gibt — G-191.
+   *
+   * `[read]` **Getrennt vom Wert, nicht statt seiner.** Die alte
+   * Fassung schrieb den Grund in dasselbe Feld wie die Menge; dadurch
+   * stand *„No validated clinical guideline dose"* dort, wo eine Zahl
+   * hingehoert. Zwei Felder koennen nicht verwechselt werden.
+   */
+  mengeGrund?: string | null
+  /** Warum es keine Obergrenze gibt — G-191. */
+  obergrenzeGrund?: string | null
 }
 
 function da(v: string | null | undefined): v is string {
@@ -55,6 +67,16 @@ export function reiterFuer(
   quellen?: Quelle[] | null,
   laborwirkungen?: Laborwirkung[] | null,
   wechselwirkungen?: Wechselwirkung[] | null,
+  community?: CommunityHinweise | null,
+  /**
+   * G-195: die zwei Felder des Rechtslage-Reiters.
+   *
+   * `[cmd]` **Gemessen 2026-08-26 ueber die 412 sichtbaren:**
+   * `note_de` bei **305**, `rechtslage_klartext_de` bei **201** —
+   * zusammen **345 mit Reiter, 67 ohne.**
+   */
+  wadaNote?: string | null,
+  rechtslage?: string | null,
 ): Reiter[] {
   const t = texte ?? null
   const aus: Reiter[] = []
@@ -82,8 +104,39 @@ export function reiterFuer(
   if (formen && formen.length > 0) {
     aus.push({ id: 'formen', titel: 'Formen', zahl: formen.length })
   }
+  const communityZahl = (community?.nebenwirkungen.length ?? 0)
+    + (community?.tradeoffs.length ?? 0)
+    + (community?.mythen.length ?? 0)
+    + (community?.qualitaet.length ?? 0)
+    + (community?.begriffe.length ?? 0)
+  if (communityZahl > 0) {
+    aus.push({ id: 'community', titel: 'Aus der Community', zahl: communityZahl })
+  }
   if (fragen && fragen.length > 0) {
     aus.push({ id: 'fragen', titel: 'Fragen', zahl: fragen.length })
+  }
+  // ══ G-195: der Reiter „Rechtslage" ═══════════════════════════════
+  //
+  // **Tom, 2026-08-26:** *„wuerde es nicht sinn machen wada als
+  // eigenen reiter zu haben anstatt das ganze bild zu zerstoeren?"*
+  // Und zur Stelle: *„am ende reiter vor quellen, das ist alles nice
+  // to have aber wird kaum einen interessieren."*
+  //
+  // `[cmd]` **Gemessen 2026-08-26, warum es das Bild zerstoerte:** der
+  // WADA-Block nahm im Ueberblick **155–235 px** von 580 sichtbaren —
+  // **27 bis 41 Prozent**, fuer eine Angabe, die die Kachel darueber
+  // in drei Worten macht.
+  //
+  // `[read]` **Ein Thema, nicht drei Felder:** WADA ist eine
+  // Rechtsfrage. Sie steht neben der Rechtslage je Land, nicht neben
+  // *„Wie es wirkt"*.
+  //
+  // `[read]` **Vor „Quellen", nach „Fragen"** — beides sind
+  // Nachschlagereiter. Wer wissen will, OB ein Stoff erlaubt ist,
+  // liest die Kachel im Ueberblick; wer die Ligen und Paragraphen
+  // braucht, sucht gezielt.
+  if (da(wadaNote) || da(rechtslage)) {
+    aus.push({ id: 'rechtslage', titel: 'Rechtslage', zahl: null })
   }
   // G-182 Punkt 4: die Quellen bekommen einen eigenen Reiter.
   //

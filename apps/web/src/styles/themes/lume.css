@@ -34,6 +34,22 @@
   --radius: 8px;
   --radius-sm: 6px;
   --radius-lg: 12px;
+  /* ══ BEWEGUNG ═══════════════════════════════════════════════════
+   *
+   * `[cmd]` **Gemessen 2026-08-25:** im gesamten Frontend standen
+   * **3 `transition`, 0 `cubic-bezier`, 0 `:active`** — bei 28
+   * klickbaren Flaechen. Die Kurven stehen hier, damit nicht jede
+   * Datei ihre eigene erfindet.
+   *
+   * `[read]` **Die eingebauten CSS-Kurven sind zu schwach.**
+   * `ease-out` startet schnell und wirkt deshalb antwortbereit;
+   * `ease-in` startet langsam und fuehlt sich bei gleicher Dauer
+   * traeger an — genau im Moment, in dem der Nutzer hinsieht.
+   * `--kurve-aus` ist die verstaerkte Fassung.
+   *
+   * **Keine Dauer ueber 300 ms fuer Bedienelemente.** */
+  --kurve-aus: cubic-bezier(0.23, 1, 0.32, 1);
+  --kurve-beides: cubic-bezier(0.77, 0, 0.175, 1);
   /* G-18: `--font-sans` FEHLTE. `[cmd]` `v2.css` benutzt sie seit G-01
      als `font-family` des Koerpers, definiert war sie
      nie — die Seite fiel damit auf die Browservorgabe zurueck, unter

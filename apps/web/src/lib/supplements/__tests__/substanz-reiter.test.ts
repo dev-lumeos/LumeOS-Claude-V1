@@ -16,7 +16,7 @@ import path from 'node:path'
 
 import { reiterFuer, ersterReiter } from '../substanz-reiter'
 import type { Zahlen } from '../substanz-reiter'
-import type { Nutzertexte, Unterform, Frage } from '../substanz-read'
+import type { CommunityHinweise, Nutzertexte, Unterform, Frage } from '../substanz-read'
 
 const TAFEL = path.join(process.cwd(), 'src/app/v2/supplements/substanz-tafel.tsx')
 
@@ -37,6 +37,23 @@ const FORM: Unterform = {
   hinweis: 'Citrat; gut löslich.', grad: 'B',
 }
 const FRAGE: Frage = { frage: 'Muss ich laden?', antwort: 'Nötig ist es nicht.' }
+const COMMUNITY: CommunityHinweise = {
+  nebenwirkungen: [{
+    id: 'se1',
+    effekt: 'Deca dick',
+    attribution: '19-nor-AAS werden in der Szene so zugeordnet.',
+    onset: 'subakut',
+    verbreitung: 'COMMON',
+    vertrauen: 'MODERATE',
+    abgleich: 'PARTIALLY_SUPPORTED',
+    evidenz: 'E',
+    grenzen: ['nicht substanzspezifisch beweisend'],
+  }],
+  tradeoffs: [],
+  mythen: [],
+  qualitaet: [],
+  begriffe: [],
+}
 
 test('ohne alles gibt es keinen einzigen Reiter', () => {
   // `[cmd]` Der Fall der 28 ohne Nutzertextzeile und ohne Formen.
@@ -206,6 +223,31 @@ test('G-186: der Wechselwirkungsblock haengt in der Sicherheit', () => {
     'Die Laborwirkungen werden nicht geladen (G-186).')
   assert.match(read, /function alleLaborwirkungen/,
     'Die Entdoppelung fehlt — 222 Zeilen sind nur 156 verschiedene.')
+})
+
+test('G-192: Community erscheint nur mit erlaubtem Inhalt', () => {
+  const ohne = reiterFuer(null, LEER, [], [], null, null, null, null, null)
+  assert.equal(ohne.some(r => r.id === 'community'), false)
+
+  const mit = reiterFuer(null, LEER, [], [], null, null, null, null, COMMUNITY)
+  assert.deepEqual(mit.map(r => r.id), ['community'])
+  assert.equal(mit[0].titel, 'Aus der Community')
+  assert.equal(mit[0].zahl, 1)
+})
+
+test('G-192: Anleitungsfelder bleiben aus dem Community-Lesepfad draussen', () => {
+  const read = fs.readFileSync(
+    path.join(process.cwd(), 'src/lib/supplements/substanz-read.ts'), 'utf8')
+  const verboten = [
+    'reported_mitigations',
+    'components',
+    'reported_reason_for_combination',
+    'why_these_doses',
+  ]
+  for (const feld of verboten) {
+    assert.equal(read.includes(feld), false,
+      `${feld} ist wieder im Lesepfad. G-192 zeigt Kosten, keine Anleitung.`)
+  }
 })
 
 test('die Reihenfolge steht fest', () => {

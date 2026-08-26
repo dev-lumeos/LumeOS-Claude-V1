@@ -180,6 +180,20 @@ export function kachelnFuer(
       hinweis: teile.length > 1 ? teile.slice(1).join(' ').replace(/\)$/, '') : null,
     })
   }
+  // ── G-191: der Grund bekommt KEINE Zahlenkachel ────────────────
+  //
+  // `[cmd]` **Hier stand der Statuscode**, weil die alte Lesefunktion
+  // das Objekt verkettete: *„No validated clinical guideline dose ·
+  // CLINICAL_GUIDELINE"* bei **250 von 412**.
+  //
+  // `[read]` **Der erste Entwurf setzte hier einen Strich mit dem
+  // Grund als Hinweis — das war falsch.** Zeile 30 dieser Datei sagt
+  // es seit G-181: *„Was nicht drinsteht, bekommt keine Kachel"*, und
+  // ein Strich in einer Kachel, die auf eine Zahl hin gelesen wird,
+  // sieht aus wie eine Angabe.
+  //
+  // **Der Grund steht im Zahlenkasten darunter** (`Zahlenkasten` in
+  // `substanz-tafel.tsx`) — dort, wo Text ohnehin zu Hause ist.
 
   const w = slug ? WIRKUNG[slug] : undefined
   if (w) {

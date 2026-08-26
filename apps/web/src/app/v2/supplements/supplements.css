@@ -595,6 +595,9 @@
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
   cursor: pointer;
+  /* Der Farbwechsel sprang hart um; die Unterkante wandert beim
+   * Umschalten mit. */
+  transition: color 120ms ease, border-bottom-color 160ms var(--kurve-aus);
 }
 
 .v2-supp-reiter-knopf:hover { color: var(--fg); }
@@ -632,7 +635,7 @@
 }
 
 .v2-supp-kasten-warn {
-  background: color-mix(in oklch, var(--warn) 7%, var(--surface));
+  background: color-mix(in oklch, var(--warn) 5%, var(--surface));
   border-color: color-mix(in oklch, var(--warn) 34%, var(--border));
 }
 
@@ -661,6 +664,225 @@
   color: var(--fg);
 }
 
+/* --- G-194: die Farbordnung der Blockueberschriften -------------- */
+/*
+ * **Tom, 2026-08-26:** *„Die Farbe muss etwas BEDEUTEN, sonst ist es
+ * Dekoration."*
+ *
+ * `[read]` **Vier Bedeutungen, vier Farben.** Die Zuordnung
+ * Ueberschrift → Bedeutung steht in
+ * `lib/supplements/block-ton.ts`; hier steht nur, welche Farbe eine
+ * Bedeutung traegt. **Wer eine Ueberschrift hinzufuegt, traegt sie
+ * dort ein — oder sie bleibt farblos.**
+ *
+ *     gefahr      was schaden kann                --warn
+ *     wirkung     was der Stoff bewirkt           --acc
+ *     pruefen     was geprueft gehoert            --acc-suppl
+ *     entwarnung  dass etwas NICHT zutrifft       --pos
+ *
+ * ══ DER KONTRAST IST GEMESSEN ══════════════════════════════════════
+ *
+ * `[cmd]` **2026-08-26 im Browser gemessen** (Canvas → sRGB, WCAG-2),
+ * gegen `--surface`, `--bg-elev`, `--bg` und `--surface-2`:
+ *
+ *                   dunkel        hell
+ *     --warn        9.42–11.06    4.56–4.89
+ *     --acc         8.35–9.81     6.05–6.49
+ *     --acc-suppl   7.46–8.76     4.88–5.23
+ *     --pos         8.78–10.31     4.83–5.18
+ *
+ * **Alle vier ueber 4.5:1 in beiden Themen.** `[cmd]` `--fg-dim`
+ * faellt durch (2.12 / 2.88) und traegt deshalb keine Ueberschrift.
+ *
+ * `[read]` **4.5 gilt, nicht 3.0** — die Ueberschriften sind 10 px
+ * und in Grossbuchstaben, das ist kein Grosstext im Sinne der Norm.
+ */
+.v2-eyebrow[data-ton="gefahr"] { color: var(--warn); }
+.v2-eyebrow[data-ton="wirkung"] { color: var(--acc); }
+.v2-eyebrow[data-ton="pruefen"] { color: var(--acc-suppl); }
+.v2-eyebrow[data-ton="entwarnung"] { color: var(--pos); }
+
+/* --- G-184: die WADA-Lage als Block ----------------------------- */
+/*
+ * `[cmd]` **Gemessen 2026-08-26, VOR dem Bau:** `note_de` ist
+ * **min 253 · Median 387 · p90 697 · max 818** Zeichen lang,
+ * **143 von 320 ueber 200.**
+ *
+ * `[read]` **Deshalb ein Block und keine Kachel.** Der Median fuellt
+ * fuenf Zeilen, das Maximum elf — eine 196-px-Zahlenkachel traegt
+ * das nicht, und G-191 hat gezeigt, was dann passiert: der Text wird
+ * beschnitten, und die Pruefung merkt es nicht.
+ *
+ * `[read]` **Die Zeilenlaenge ist die Zusage** (G-181): gemessen wird
+ * in Zeichen, nicht in Pixeln. Ohne Grenze wird der Satz auf 1920 px
+ * eine Zeile ueber die halbe Wand.
+ *
+ * `[cmd]` **`64ch`, nicht `78ch` — am Bild nachgemessen.** Mit `78ch`
+ * (590 px) standen **97 Zeichen** in der Zeile, also ueber der
+ * 90-Zeichen-Schwelle: `ch` ist die Breite der Null, und die
+ * Proportionalschrift bringt mehr Zeichen auf dieselbe Strecke.
+ * **Der Fehler faellt nur auf, wenn man die gesetzten Zeilen zaehlt**
+ * — die erste Messung schaetzte ueber den Schriftgrad und lag daneben.
+ */
+.v2-supp-wada-block {
+  max-width: 64ch;
+  margin: 10px 0 14px;
+  padding: 9px 11px;
+  border-radius: 7px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+/* G-194: die drei WADA-Zustaende tragen drei der vier Bedeutungen —
+ * `gefahr`, `entwarnung`, `pruefen`. Keine fuenfte Farbe noetig.
+ * `[read]` Die Flaeche bleibt zurueckhaltend (6–7 %), damit ein
+ * ganzer Katalog voll „erlaubt" nicht gruen leuchtet. */
+.v2-supp-wada-block[data-ton="gefahr"] {
+  background: color-mix(in oklch, var(--warn) 5%, transparent);
+  border-color: color-mix(in oklch, var(--warn) 34%, var(--border));
+}
+
+.v2-supp-wada-block[data-ton="entwarnung"] {
+  background: color-mix(in oklch, var(--pos) 5%, transparent);
+  border-color: color-mix(in oklch, var(--pos) 26%, var(--border));
+}
+
+.v2-supp-wada-block[data-ton="pruefen"] {
+  background: color-mix(in oklch, var(--acc-suppl) 6%, transparent);
+  border-color: color-mix(in oklch, var(--acc-suppl) 28%, var(--border));
+}
+
+.v2-supp-wada-kopf {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+  color: var(--fg-muted);
+}
+
+/* Der Kopf traegt die Farbe der Bedeutung — dieselbe Tabelle wie
+ * jede andere Blockueberschrift, siehe `.v2-eyebrow[data-ton]`. */
+.v2-supp-wada-kopf[data-ton] { color: inherit; }
+
+/* Die Klasse als Marke, nicht als Fliesstext — `S1.1` ist eine
+ * Kennung und wird als solche gelesen. */
+.v2-supp-wada-klasse {
+  margin-left: auto;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.v2-supp-wada-text {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+/* --- G-191: der Grund statt eines Werts ------------------------- */
+/*
+ * `[cmd]` **Gemessen 2026-08-26:** die Menge-Kachel zeigte bei **250
+ * von 412** Substanzen einen englischen Statuscode, die Obergrenze bei
+ * **241** — und die Obergrenze **nie** einen richtigen Wert (0 von
+ * 412). Ursache: `guideline_dose` und `upper_limit` sind Objekte, die
+ * alte Lesefunktion verkettete sie zu Text.
+ *
+ * `[read]` **`.v2-supp-kasten-wert` war fuer ZAHLEN gebaut** —
+ * rechtsbuendig, fett, `tabular-nums`. Genau richtig fuer
+ * „200–400 mg“, genau falsch fuer einen Satz. Der Grund bekommt
+ * deshalb eine eigene Klasse: linksbuendig, normale Staerke,
+ * gedaempft — **er soll nicht wie eine Angabe aussehen.**
+ *
+ * `[read]` **Und eine Obergrenze fuer die Breite** (Punkt 3 des
+ * Auftrags): `NO_RELIABLE_EVI…` lief ueber den Rand und drueckte das
+ * Raster auseinander. Das ist die G-181-Regel, die fuer Zahlenkacheln
+ * nie galt — weil dort nie Text stand.
+ */
+.v2-supp-kasten-grund {
+  /* `[cmd]` **Am Bild gefunden, nicht im Test:** mit `flex: 0 1 auto`
+   * und `text-align: right` wurde der Satz am rechten Rand
+   * abgeschnitten — *„…für Nährstoffe — für di…"*. Die Pruefung auf
+   * `scrollWidth > clientWidth` schlug NICHT an, weil der Text im
+   * eigenen Kasten umbricht und erst die Tafel ihn beschneidet.
+   *
+   * `[read]` **Rechtsbuendig war fuer Zahlen gedacht.** Ein Satz
+   * gehoert nach links und braucht Grundbreite: `flex: 1 1 auto`
+   * nimmt den Platz, den die Beschriftung uebriglaesst. */
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 46ch;
+  text-align: left;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--fg-dim);
+  overflow-wrap: anywhere;
+}
+
+/* `[cmd]` **Am Bild nachgebessert, zweiter Durchgang:** mit
+ * `flex: 1 1 auto` brach der Satz zwar um, begann aber weit rechts
+ * und lief bis an den Tafelrand — `max-width: 46ch` griff nicht, weil
+ * die Flexzeile ihm den Restplatz zuwies.
+ *
+ * `[read]` **Beschriftung links, Wert rechts ist eine ZAHLENzeile.**
+ * Ein Satz braucht die Beschriftung DARUEBER: `flex-direction:
+ * column` stellt die Zeile fuer diesen einen Fall um, und der Satz
+ * beginnt links wie jeder andere Text. */
+.v2-supp-kasten-zeile:has(.v2-supp-kasten-grund) {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+}
+
+/* Der Hinweis unter einer Zahlenkachel traegt seit G-191 ganze Saetze
+ * — ohne Grenze laeuft er aus der 196-px-Kachel heraus. */
+.v2-supp-zahl-hinweis {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* --- G-191: die Dosis-Kacheln (DreiKacheln) ---------------------- */
+/*
+ * `[read]` **Feste Breite statt `1fr`** — vorher
+ * `repeat(n, minmax(0, 1fr))`, also drei Kacheln ueber die volle
+ * Wand. Tom in G-181: *„nicht dass sich ploetzlich eine kachel
+ * dynamisch auf 1600 pixel vergroessert."*
+ */
+.v2-supp-dosis-kacheln {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.v2-supp-dosis-kachel {
+  flex: 0 0 auto;
+  width: 196px;
+  max-width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+}
+
+.v2-supp-dosis-wert {
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.v2-supp-dosis-grund {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--fg-dim);
+  overflow-wrap: anywhere;
+}
+
 /* --- Die Formen als Karten im Raster ----------------------------- */
 
 .v2-supp-formen-raster {
@@ -680,11 +902,17 @@
   border: 1px solid var(--border);
   border-radius: 7px;
   cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease,
+              transform 120ms ease;
 }
 
 .v2-supp-form-karte:hover {
   border-color: color-mix(in oklch, var(--acc) 45%, var(--border));
 }
+
+/* Eine ganze Karte ist eine Schaltflaeche — sie darf auf den Druck
+ * antworten wie ein Knopf. */
+.v2-supp-form-karte:active { transform: scale(0.995); }
 
 .v2-supp-form-name {
   display: block;
@@ -861,8 +1089,12 @@
   text-transform: uppercase;
 }
 
-.v2-supp-textkachel-kopf[data-ton="acc"]  { color: var(--acc); }
-.v2-supp-textkachel-kopf[data-ton="pos"]  { color: var(--pos); }
+/* G-196: dieselben vier Namen wie bei jeder Ueberschrift. Vorher
+ * standen hier  und  — ein zweites Vokabular neben der
+ * Ordnung, und  haette hier *Entwarnung* geheissen. */
+.v2-supp-textkachel-kopf[data-ton="wirkung"]    { color: var(--acc); }
+.v2-supp-textkachel-kopf[data-ton="pruefen"]    { color: var(--acc-suppl); }
+.v2-supp-textkachel-kopf[data-ton="entwarnung"] { color: var(--pos); }
 
 .v2-supp-textkachel p {
   margin: 0;
@@ -888,10 +1120,64 @@
 
 /* G-182 Punkt 3: die Warnvariante der Textkachel. */
 .v2-supp-textkachel-warn {
-  background: color-mix(in oklch, var(--warn) 7%, var(--surface));
+  background: color-mix(in oklch, var(--warn) 5%, var(--surface));
   border-color: color-mix(in oklch, var(--warn) 34%, var(--border));
 }
-.v2-supp-textkachel-kopf[data-ton="warn"] { color: var(--warn); }
+.v2-supp-textkachel-kopf[data-ton="gefahr"] { color: var(--warn); }
+
+/* --- G-192: Community-Reiter ------------------------------------
+ *
+ * [read] Die Einschraenkung steht in derselben Karte wie die
+ * Beobachtung. Sonst liest sich der erste Satz wie eine Tatsache und
+ * der Vorbehalt wie Kleingedrucktes. */
+.v2-supp-community-raster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.v2-supp-community-card {
+  flex: 0 1 360px;
+  max-width: 520px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.v2-supp-community-card h4 {
+  margin: 7px 0 5px;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+.v2-supp-community-card p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.v2-supp-community-card p + p {
+  margin-top: 5px;
+}
+
+.v2-supp-community-marken {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.v2-supp-community-grenzen {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  color: var(--fg-dim);
+  font-size: 10.5px;
+  line-height: 1.45;
+}
 
 /* --- G-183: der Absatz in seine Aussagen zerlegt -----------------
  *
@@ -1004,12 +1290,16 @@
   border: none;
   border-radius: 999px;
   cursor: pointer;
+  transition: color 120ms ease, background-color 120ms ease,
+              transform 120ms ease;
 }
 
 .v2-supp-suche-x:hover {
   color: var(--fg);
   background: var(--bg-elev);
 }
+
+.v2-supp-suche-x:active { transform: translateY(-50%) scale(0.9); }
 
 /* --- G-187: die Wechselwirkungen des Stacks ---------------------- */
 /*

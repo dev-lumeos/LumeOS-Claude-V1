@@ -40,6 +40,10 @@
 // ist — es ist kein Datenfehler und wird nicht als Luecke gemeldet.
 //
 // Laeuft ausschliesslich serverseitig.
+import fs from 'node:fs'
+import path from 'node:path'
+
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { createSessionClient } from '@lumeos/shared/session'
 
 // `[read]` **`text()` steht seit C-254 in `substanz-luecken.ts`** — es
@@ -111,6 +115,8 @@ export type SubstanzSatz = {
   laborwirkungen?: Laborwirkung[]
   /** G-186: Wechselwirkungen — 78 der 318 haben welche. */
   wechselwirkungen?: Wechselwirkung[]
+  /** G-192: Community-Beobachtungen aus `wissen`, ohne Anleitungsfelder. */
+  community?: CommunityHinweise | null
   /** G-179: die Unterformen, wenn dies ein Sammeleintrag ist. */
   formen?: Unterform[]
   canonical_name: string
@@ -142,6 +148,18 @@ export type SubstanzSatz = {
   warning_triggers?: Record<string, unknown> | null
   evidence_provenance?: Record<string, Herkunft> | null
   wada_status?: string | null
+  /**
+   * Der Satz zur WADA-Lage — G-184.
+   *
+   * `[cmd]` **Seit C-272 bei 320 von 320 gefuellt, vorher 0.** Er
+   * beantwortet Toms Frage vom 2026-08-25 (*„gilt das auch fuer
+   * bodybuilding?"*) mit den Ligen namentlich: NADOs, IPF, IFBB,
+   * INBA/PNBA, WNBF, OCB, IFBB Professional League, NPC.
+   *
+   * `[read]` **Er wird ungekuerzt gezeigt.** Die Saetze tragen ihre
+   * Quellen; wer sie strafft, loest die Belegkette.
+   */
+  wada_note?: string | null
   prescription_required?: boolean | null
   dose_ceiling_value?: number | null
   dose_ceiling_unit?: string | null
@@ -216,6 +234,57 @@ export type Wechselwirkung = {
   partner: string
   schwere: string | null
   beschreibung: string | null
+}
+
+export type CommunityMarken = {
+  verbreitung: string | null
+  vertrauen: string | null
+  abgleich: string | null
+  evidenz: string
+  grenzen: string[]
+}
+
+export type CommunityNebenwirkung = CommunityMarken & {
+  id: string
+  effekt: string
+  attribution: string | null
+  onset: string | null
+}
+
+export type CommunityTradeoff = CommunityMarken & {
+  id: string
+  name: string
+  tradeoff: string
+}
+
+export type CommunityMythos = CommunityMarken & {
+  id: string
+  mythos: string
+  korrektur: string
+}
+
+export type CommunityQualitaet = CommunityMarken & {
+  id: string
+  signal: string
+  anspruch: string | null
+  studie: string | null
+}
+
+export type CommunityBegriff = {
+  id: string
+  begriff: string
+  definition: string
+  kontext: string | null
+  grenzen: string[]
+  evidenz: string
+}
+
+export type CommunityHinweise = {
+  nebenwirkungen: CommunityNebenwirkung[]
+  tradeoffs: CommunityTradeoff[]
+  mythen: CommunityMythos[]
+  qualitaet: CommunityQualitaet[]
+  begriffe: CommunityBegriff[]
 }
 
 /**
@@ -419,8 +488,12 @@ export async function ladeSubstanz(id: string): Promise<SubstanzSatz | null> {
     fragen: alleFragen(x.supplement_faq),
     quellen: alleQuellen(ersteZeile(x.supplement_user_texts)?.sources),
     wada_kategorie: text(null, wad?.wada_category),
+    // G-184: `note_de` wurde seit jeher mitgelesen (Zeile 431), aber
+    // nie hier durchgereicht — die Anzeige konnte sie gar nicht sehen.
+    wada_note: text(wad?.note_de, wad?.note_en),
     laborwirkungen: alleLaborwirkungen(x.supplement_lab_effects),
     wechselwirkungen: alleWechselwirkungen(x.supplement_interactions),
+    community: await ladeCommunityHinweise(String(x.slug ?? '')),
     formen: alleFormen(x.formen),
     canonical_name: text(x.name_de, x.name_en) ?? String(x.slug ?? ''),
     domain: String(x.source ?? ''),
@@ -475,6 +548,202 @@ export async function ladeSubstanz(id: string): Promise<SubstanzSatz | null> {
     chembl_id: kennung(x.supplement_identifiers, 'chembl'),
     inchikey: kennung(x.supplement_identifiers, 'inchikey'),
   } as SubstanzSatz
+}
+
+type CommunityRecord = {
+  dataset: string
+  record_key: string
+  admin_only: boolean
+  not_medical_recommendation: boolean
+  evidence_class: string | null
+  raw: Record<string, unknown>
+}
+
+const COMMUNITY_DATASETS = [
+  'community_side_effect_patterns',
+  'community_stack_patterns',
+  'community_intelligence_patterns',
+  'community_product_quality_signals',
+  'community_terminology_terms',
+] as const
+
+async function ladeCommunityHinweise(slug: string): Promise<CommunityHinweise | null> {
+  if (!slug) return null
+  const service = wissenService()
+  if (!service) return null
+  const client = service.schema('wissen')
+  const { data, error } = await client
+    .from('community_records')
+    .select('dataset, record_key, admin_only, not_medical_recommendation, evidence_class, raw')
+    .in('dataset', [...COMMUNITY_DATASETS])
+  if (error) {
+    if (error.message.includes('Invalid schema: wissen')) return null
+    throw new Error(error.message)
+  }
+
+  const zeilen = ((data ?? []) as CommunityRecord[])
+    .filter(r => r.admin_only === true && r.not_medical_recommendation === true)
+    .filter(r => communityTrifftSubstanz(r, slug))
+
+  const nebenwirkungen = zeilen
+    .filter(r => r.dataset === 'community_side_effect_patterns')
+    .map(nebenwirkung)
+    .filter(Boolean) as CommunityNebenwirkung[]
+  const tradeoffs = zeilen
+    .filter(r => r.dataset === 'community_stack_patterns')
+    .map(tradeoff)
+    .filter(Boolean) as CommunityTradeoff[]
+  const mythen = zeilen
+    .filter(r => r.dataset === 'community_intelligence_patterns'
+      && r.raw?.scientific_alignment === 'CONTRADICTED')
+    .map(mythos)
+    .filter(Boolean) as CommunityMythos[]
+  const qualitaet = zeilen
+    .filter(r => r.dataset === 'community_product_quality_signals')
+    .map(qualitaetsSignal)
+    .filter(Boolean) as CommunityQualitaet[]
+  const begriffListe = zeilen
+    .filter(r => r.dataset === 'community_terminology_terms')
+    .map(begriff)
+    .filter(Boolean) as CommunityBegriff[]
+
+  if (nebenwirkungen.length + tradeoffs.length + mythen.length + qualitaet.length === 0) {
+    return null
+  }
+  return {
+    nebenwirkungen: sortCommunity(nebenwirkungen),
+    tradeoffs: sortCommunity(tradeoffs),
+    mythen: sortCommunity(mythen),
+    qualitaet: sortCommunity(qualitaet),
+    begriffe: begriffListe.sort((a, b) => a.begriff.localeCompare(b.begriff, 'de')),
+  }
+}
+
+function communityTrifftSubstanz(r: CommunityRecord, slug: string): boolean {
+  return arrayText(r.raw.substance_ids).includes(slug)
+    || text(null, r.raw.maps_to_substance_id) === slug
+}
+
+function wissenService() {
+  const env = envMitRootFallback()
+  const url = env.NEXT_PUBLIC_SUPABASE_URL ?? env.SUPABASE_URL
+  const key = env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) return null
+  return createSupabaseClient(url, key, { auth: { persistSession: false } })
+}
+
+function envMitRootFallback(): Record<string, string | undefined> {
+  const env: Record<string, string | undefined> = { ...process.env }
+  if (env.SUPABASE_SERVICE_ROLE_KEY && (env.NEXT_PUBLIC_SUPABASE_URL || env.SUPABASE_URL)) {
+    return env
+  }
+  for (const rel of ['.env', path.join('..', '..', '.env')]) {
+    const datei = path.resolve(process.cwd(), rel)
+    if (!fs.existsSync(datei)) continue
+    for (const zeile of fs.readFileSync(datei, 'utf8').split(/\r?\n/)) {
+      const rein = zeile.trim()
+      if (!rein || rein.startsWith('#') || !rein.includes('=')) continue
+      const [k, ...rest] = rein.split('=')
+      if (!env[k]) env[k] = rest.join('=').trim().replace(/^['"]|['"]$/g, '')
+    }
+  }
+  return env
+}
+
+function marken(r: CommunityRecord): CommunityMarken {
+  return {
+    verbreitung: text(null, r.raw.prevalence),
+    vertrauen: text(null, r.raw.attribution_confidence)
+      ?? text(null, r.raw.community_consistency)
+      ?? text(null, r.raw.community_evidence_grade),
+    abgleich: text(null, r.raw.scientific_alignment),
+    evidenz: text(null, r.evidence_class) ?? text(null, r.raw.evidence_class) ?? 'E',
+    grenzen: arrayText(r.raw.limitations),
+  }
+}
+
+function nebenwirkung(r: CommunityRecord): CommunityNebenwirkung | null {
+  const effekt = text(null, r.raw.side_effect)
+  if (!effekt) return null
+  return {
+    id: String(r.raw.side_effect_id ?? r.record_key),
+    effekt,
+    attribution: text(null, r.raw.community_attribution_note),
+    onset: text(null, r.raw.onset_context),
+    ...marken(r),
+  }
+}
+
+function tradeoff(r: CommunityRecord): CommunityTradeoff | null {
+  const wert = text(null, r.raw.expected_tradeoff)
+  if (!wert) return null
+  return {
+    id: String(r.raw.stack_id ?? r.record_key),
+    name: text(null, r.raw.name)
+      ?? text(null, r.raw.observed_combination_pattern)
+      ?? 'Community-Kombination',
+    tradeoff: wert,
+    ...marken(r),
+  }
+}
+
+function mythos(r: CommunityRecord): CommunityMythos | null {
+  const beobachtung = text(null, r.raw.observed_practice)
+  const korrektur = text(null, r.raw.scientific_crosscheck)
+    ?? text(null, r.raw.scientific_alignment)
+  if (!beobachtung || !korrektur) return null
+  return {
+    id: String(r.raw.pattern_id ?? r.record_key),
+    mythos: beobachtung,
+    korrektur,
+    ...marken(r),
+  }
+}
+
+function qualitaetsSignal(r: CommunityRecord): CommunityQualitaet | null {
+  const signal = text(null, r.raw.community_quality_signal)
+    ?? text(null, r.raw.reported_signal)
+    ?? text(null, r.raw.complaint_pattern)
+  if (!signal) return null
+  return {
+    id: String(r.raw.signal_id ?? r.record_key),
+    signal,
+    anspruch: text(null, r.raw.claim),
+    studie: text(null, r.raw.independent_testing),
+    ...marken(r),
+  }
+}
+
+function begriff(r: CommunityRecord): CommunityBegriff | null {
+  const term = text(null, r.raw.term)
+  const definition = text(null, r.raw.community_definition)
+  if (!term || !definition) return null
+  return {
+    id: String(r.raw.term ?? r.record_key),
+    begriff: term,
+    definition,
+    kontext: text(null, r.raw.usage_context),
+    grenzen: arrayText(r.raw.source_refs),
+    evidenz: text(null, r.evidence_class) ?? 'E',
+  }
+}
+
+function sortCommunity<T extends CommunityMarken>(items: T[]): T[] {
+  const rang = new Map([
+    ['WIDESPREAD', 0],
+    ['COMMON', 1],
+    ['RECURRING', 2],
+    ['OCCASIONAL', 3],
+    ['RARE', 4],
+  ])
+  return [...items].sort((a, b) => (rang.get(a.verbreitung ?? '') ?? 9)
+    - (rang.get(b.verbreitung ?? '') ?? 9))
+}
+
+function arrayText(v: unknown): string[] {
+  return Array.isArray(v)
+    ? v.map(e => String(e ?? '').trim()).filter(Boolean)
+    : []
 }
 
 /**

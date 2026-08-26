@@ -876,11 +876,19 @@
     transition: background-color 120ms ease, border-color 120ms ease, transform 120ms ease;
   }
 
-  .lume-module-card:hover {
-    border-color: color-mix(in oklch, var(--card-acc) 52%, var(--border-strong));
-    background: color-mix(in oklch, var(--card-acc) 8%, var(--surface-hover));
-    transform: translateY(-1px);
+  /* `[read]` **Auf Beruehrungsgeraeten loest Tippen `:hover` aus** — die
+   * Karte bliebe nach dem Antippen um 1 px angehoben stehen, bis
+   * woanders hingetippt wird. Die Abfrage schliesst genau das aus,
+   * ohne der Maus etwas zu nehmen. */
+  @media (hover: hover) and (pointer: fine) {
+    .lume-module-card:hover {
+      border-color: color-mix(in oklch, var(--card-acc) 52%, var(--border-strong));
+      background: color-mix(in oklch, var(--card-acc) 8%, var(--surface-hover));
+      transform: translateY(-1px);
+    }
   }
+
+  .lume-module-card:active { transform: translateY(0) scale(0.995); }
 
   .lume-module-card::before {
     content: '';

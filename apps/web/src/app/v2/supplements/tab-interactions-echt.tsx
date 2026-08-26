@@ -39,6 +39,38 @@ const SCHWERE_FARBE: Record<string, string> = {
   low: 'var(--acc-suppl)',
 }
 
+/**
+ * Die Rangfolge der Schwere.
+ *
+ * `[cmd]` **Der Befund, gemessen am 2026-08-25:** die Liste **faerbte**
+ * nach `severity`, **ordnete aber nicht danach.** Im Nachweisbild von
+ * G-187 standen deshalb zwei *Laborkontrollen* ueber einer
+ * *Sicherheit*-Regel — die Reihenfolge kam aus der Datenbank.
+ *
+ * `[read]` **Das ist der Grund fuer „willkuerlich gelistet".** Wer eine
+ * rote und eine blaue Kachel sieht, erwartet die rote oben. Steht sie
+ * unten, wirkt die Liste ungeordnet — auch wenn jede Kachel fuer sich
+ * stimmt.
+ *
+ * `[cmd]` Vier Stufen im Katalog: `critical` 10, `high` 18, `medium`
+ * 17, `low` 19. Unbekanntes faellt ans Ende, nicht an den Anfang.
+ */
+const SCHWERE_RANG: Record<string, number> = {
+  critical: 0, high: 1, medium: 2, low: 3,
+}
+
+function nachSchwere<T extends { severity?: string | null; rule_id: string }>(
+  regeln: readonly T[],
+): T[] {
+  return [...regeln].sort((a, b) => {
+    const ra = SCHWERE_RANG[a.severity ?? ''] ?? 9
+    const rb = SCHWERE_RANG[b.severity ?? ''] ?? 9
+    // Bei gleicher Schwere die Kennung — sonst springt die Reihenfolge
+    // zwischen zwei Aufrufen, und das sieht aus wie ein Fehler.
+    return ra !== rb ? ra - rb : a.rule_id.localeCompare(b.rule_id)
+  })
+}
+
 /** Die Regelart im Klartext — `lab_interference` sagt allein nichts. */
 const ART_TEXT: Record<string, string> = {
   interaction: 'Wechselwirkung',
@@ -72,8 +104,10 @@ export function InteractionsEchtTab({ d }: { d: RegelStand }) {
     )
   }
 
-  const erfuellt = d.regeln.filter(r => r.zustand === 'fulfilled')
-  const fehlend = d.regeln.filter(r => r.zustand === 'missing_input')
+  // Schwerste zuerst — die Farbe allein ordnet nicht, siehe
+  // `SCHWERE_RANG`.
+  const erfuellt = nachSchwere(d.regeln.filter(r => r.zustand === 'fulfilled'))
+  const fehlend = nachSchwere(d.regeln.filter(r => r.zustand === 'missing_input'))
 
   return (
     <div className="v2-col-gap" style={{ gap: 14 }}>

@@ -32,59 +32,56 @@ import {
 
 export const dynamic = 'force-dynamic'
 
+/**
+ * Eine Abfrage, die nie wirft.
+ *
+ * `[read]` **Das ist der Ersatz fuer sechs `try`-Bloecke, nicht deren
+ * Abschaffung.** Jede Abfrage behaelt ihren eigenen Rueckfallwert —
+ * faellt der Katalog aus, bleibt der Stack gueltig. Ein gemeinsames
+ * `try` um ein `Promise.all` haette genau das zerstoert: der erste
+ * Fehler haette die ganze Seite leer gemacht.
+ */
+function ruhig<T>(f: () => Promise<T>, rueckfall: T): Promise<T> {
+  return f().catch(() => rueckfall)
+}
+
 export default async function V2SupplementsPage() {
-  // Getrennt abgefangen: der Stack und der Katalog sind zwei Aussagen.
-  // Faellt der Katalog aus, bleibt der Stack gueltig — dieselbe Linie
-  // wie im Tagebuch.
-  let daten: StackDaten | null = null
-  let katalog: KatalogEintrag[] = []
-
-  try {
-    daten = await getStackDaten()
-  } catch {
-    daten = null
-  }
-
-  try {
-    katalog = await getKatalog()
-  } catch {
-    katalog = []
-  }
-
   // G-74: Compliance und Inventory rechnen gegen ein Datum. Es kommt
   // aus `lib/datum.ts` (ueber Mittag gerechnet) und wird SERVERSEITIG
   // bestimmt — `new Date()` in der Komponente ergaebe im Browser einen
   // anderen Wert als beim Rendern und zerlegte die Hydration.
-  // G-110: Regelwerk und Gate. Beide eigen abgefangen — faellt das
-  // eine aus, bleibt das andere gueltig.
   const stichtag = heute()
-  let regeln: RegelStand | null = null
-  let gate: GateStand | null = null
-  try {
-    regeln = await ladeRegeln(stichtag)
-  } catch {
-    regeln = null
-  }
-  try {
-    gate = await ladeGate()
-  } catch {
-    gate = null
-  }
 
-  // C-224: die Substanzdatenbank (566) und die eigenen Stacks fuer die
-  // Zuteilung. Eigen abgefangen — faellt sie aus, bleibt der Rest.
-  let substanzen: SubstanzListenEintrag[] = []
-  let stacks: EigenerStack[] = []
-  try {
-    substanzen = await ladeSubstanzListe()
-  } catch {
-    substanzen = []
-  }
-  try {
-    stacks = await ladeEigeneStacks()
-  } catch {
-    stacks = []
-  }
+  // ══ WARUM PARALLEL ══════════════════════════════════════════════
+  //
+  // `[cmd]` **Gemessen 2026-08-25, angemeldet, zwei Laeufe:** die sechs
+  // Abfragen liefen NACHEINANDER und summierten sich auf **1373–1531
+  // ms**; parallel sind es **993–1011 ms**.
+  //
+  // `[cmd]` **Keine der sechs baut auf einer anderen auf** — der
+  // einzige geteilte Wert ist `stichtag`, und der steht oben.
+  //
+  // `[read]` **Die Kette ist in fuenf Auftraegen gewachsen**, je zwei
+  // Abfragen: 0 → 2 → 2 → 4 → 6. Jeder Schritt war fuer sich klein,
+  // keiner hat die Summe gemessen. `Promise.all` stand die ganze Zeit
+  // in sechs Nachbarmodulen (training, goals, recovery, nutrition,
+  // medical) — nur hier nicht.
+  //
+  // `[cmd]` **Der Gewinn ist kleiner als die Rechnung verspricht, und
+  // das ist der eigentliche Befund:** `ladeRegeln` allein braucht
+  // **887–1001 ms**, die uebrigen fuenf zusammen rund 500 ms. Parallel
+  // kann nicht schneller werden als die langsamste Einzelabfrage.
+  // Ursache steht in `rule_assessment`: `explain (analyze, buffers)`
+  // meldet **temp read=9457 written=9457** bei 171 ms in der Datenbank
+  // — ein Kreuzprodukt. Das ist ein eigener Befund, siehe Bericht.
+  const [daten, katalog, regeln, gate, substanzen, stacks] = await Promise.all([
+    ruhig<StackDaten | null>(getStackDaten, null),
+    ruhig<KatalogEintrag[]>(getKatalog, []),
+    ruhig<RegelStand | null>(() => ladeRegeln(stichtag), null),
+    ruhig<GateStand | null>(ladeGate, null),
+    ruhig<SubstanzListenEintrag[]>(ladeSubstanzListe, []),
+    ruhig<EigenerStack[]>(ladeEigeneStacks, []),
+  ])
 
   return (
     <SupplementsAnsicht

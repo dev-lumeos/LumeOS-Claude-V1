@@ -40,12 +40,17 @@ import { Pill, Icon } from '@lumeos/ui'
 
 import type {
   Nutzertexte, Unterform, Frage, Quelle, Laborwirkung, Wechselwirkung,
+  CommunityHinweise, CommunityMarken,
 } from '../../../lib/supplements/substanz-read'
 import type { ReiterId, Zahlen } from '../../../lib/supplements/substanz-reiter'
+import { dosisFelder } from '../../../lib/supplements/dosis-feld'
+import { wadaLage } from '../../../lib/supplements/wada-lage'
+import { tonFuer } from '../../../lib/supplements/block-ton'
 import { reiterFuer, ersterReiter } from '../../../lib/supplements/substanz-reiter'
 import { kachelnFuer, type Kachel } from '../../../lib/supplements/substanz-kacheln'
 import {
   Abschnitt, AufgeteilterAbschnitt, Aussagen, Stichpunkte, Formen, Fragen,
+  BlockTitel,
 } from './substanz-abschnitte'
 
 function da(v: string | null | undefined): v is string {
@@ -63,19 +68,44 @@ function da(v: string | null | undefined): v is string {
  * Menge **83**, Obergrenze **38**, Einnahme **19**.
  */
 export function Zahlenkasten({ zahlen }: { zahlen: Zahlen }) {
-  const zeilen = [
-    ['Obergrenze', zahlen.obergrenze],
-    ['Einnahme', zahlen.einnahme],
-    ['Mit Essen', zahlen.mitEssen],
-  ].filter(([, w]) => da(w as string)) as Array<[string, string]>
+  const zeilen: Array<[string, string, boolean]> = []
+  const nimm = (label: string, wert: string | null | undefined,
+                grund?: string | null) => {
+    if (da(wert)) zeilen.push([label, wert, false])
+    else if (da(grund)) zeilen.push([label, grund, true])
+  }
+  // ══ G-191 ═══════════════════════════════════════════════════════
+  //
+  // `[cmd]` **Die Obergrenze-Zeile zeigte bei 241 von 412 einen
+  // englischen Statuscode** — *„UL concept applies to nutrients
+  // (IOM/EFSA DRI framework) · REGULATORY_UL"*. Ursache: das Feld ist
+  // ein Objekt, und die alte Lesefunktion verkettete es.
+  //
+  // `[cmd]` **Und sie zeigte NIE einen richtigen Wert: 0 von 412.**
+  //
+  // `[read]` **Der Grund bleibt, aber als Grund.** *„Fuer Peptide gibt
+  // es keine Obergrenze"* ist eine Aussage ueber den Stoff — sie
+  // steht gedaempft und in normaler Schrift, damit sie nicht mit
+  // einer Menge verwechselt wird.
+  nimm('Obergrenze', zahlen.obergrenze, zahlen.obergrenzeGrund)
+  nimm('Einnahme', zahlen.einnahme)
+  nimm('Mit Essen', zahlen.mitEssen)
+  // Die Menge steht als Kachel darueber; ihr Grund hat dort keinen
+  // Platz (siehe `substanz-kacheln.ts`) und kommt deshalb hierher.
+  if (!da(zahlen.menge)) nimm('Übliche Menge', null, zahlen.mengeGrund)
   if (zeilen.length === 0) return null
   return (
     <div className="v2-supp-kasten">
-      <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Weitere Angaben</div>
-      {zeilen.map(([label, wert]) => (
+      {/* G-196: bleibt grau — ein Sammelkasten (Obergrenze, Einnahme,
+          Mit Essen) hat keine gemeinsame Aussage. Begruendung im
+          Kopf von `block-ton.ts`. */}
+      <BlockTitel titel="Weitere Angaben" stil={{ marginBottom: 6 }} />
+      {zeilen.map(([label, wert, istGrund]) => (
         <div key={label} className="v2-supp-kasten-zeile">
           <span className="v2-muted">{label}</span>
-          <span className="v2-supp-kasten-wert">{wert}</span>
+          <span className={istGrund ? 'v2-supp-kasten-grund' : 'v2-supp-kasten-wert'}>
+            {wert}
+          </span>
         </div>
       ))}
     </div>
@@ -128,16 +158,22 @@ export function Textkacheln(
   { wieWirkt, wasBringtEs }:
   { wieWirkt: string | null | undefined; wasBringtEs: string | null | undefined },
 ) {
+  // ── G-196: auch hier aus der EINEN Tabelle ─────────────────────
+  //
+  // `[cmd]` **Vorher `ton: 'acc'` und `ton: 'pos'` von Hand.** Das
+  // `pos` war unter der neuen Ordnung sogar falsch: es hiesse
+  // *Entwarnung*, dabei ist *„Was es bringt"* eine Wirkungsaussage.
+  // Beide Kacheln tragen jetzt `wirkung`.
   const kacheln = [
-    { id: 'wirkt', kopf: 'Wie es wirkt', ton: 'acc', text: wieWirkt },
-    { id: 'bringt', kopf: 'Was es bringt', ton: 'pos', text: wasBringtEs },
-  ].filter(k => da(k.text))
+    { id: 'wirkt', kopf: 'Wie es wirkt', text: wieWirkt },
+    { id: 'bringt', kopf: 'Was es bringt', text: wasBringtEs },
+  ].filter(k => da(k.text)).map(k => ({ ...k, ton: tonFuer(k.kopf) }))
   if (kacheln.length === 0) return null
   return (
     <div className="v2-supp-textkacheln">
       {kacheln.map(k => (
         <div key={k.id} className="v2-supp-textkachel">
-          <div className="v2-supp-textkachel-kopf" data-ton={k.ton}>
+          <div className="v2-supp-textkachel-kopf" data-ton={k.ton ?? undefined}>
             <Icon name={k.id === 'wirkt' ? 'zap' : 'trend_up'}
                   className="v2-ic v2-ic-sm" />
             {k.kopf}
@@ -184,19 +220,31 @@ export function WarnKasten(
   // `[read]` **Jetzt drei eigene Kacheln nebeneinander**, je mit
   // Ueberschrift und linksbuendigem Text — dieselbe Bauform wie die
   // Textkacheln im Ueberblick.
+  // ── G-196: die Bedeutung kommt aus der EINEN Tabelle ───────────
+  //
+  // `[cmd]` **Hier stand `warn: true/false`** — ein zweites System
+  // neben den vier Bedeutungen. Es faerbte *„Was nicht zurueckkommt"*
+  // richtig und liess *„Ueberwachung"* und *„Reinheit"* grau; genau
+  // die beiden, wegen denen G-194 entstand.
+  //
+  // `[read]` **Zwei Systeme laufen immer auseinander.** Jetzt
+  // entscheidet `tonFuer` auch hier, und wer einen Titel aendert,
+  // bekommt die Farbe mit — oder keine, wenn er nicht eingetragen
+  // ist.
   const kacheln = [
-    { id: 'irr', kopf: 'Was nicht zurückkommt', text: t?.irreversibel, warn: true },
-    { id: 'ueb', kopf: 'Überwachung', text: t?.ueberwachung, warn: false },
-    { id: 'rein', kopf: 'Reinheit', text: t?.reinheit, warn: false },
-  ].filter(k => da(k.text))
+    { id: 'irr', kopf: 'Was nicht zurückkommt', text: t?.irreversibel },
+    { id: 'ueb', kopf: 'Überwachung', text: t?.ueberwachung },
+    { id: 'rein', kopf: 'Reinheit', text: t?.reinheit },
+  ].filter(k => da(k.text)).map(k => ({ ...k, ton: tonFuer(k.kopf) }))
   if (kacheln.length === 0) return null
   return (
     <div className="v2-supp-textkacheln">
       {kacheln.map(k => (
         <div key={k.id}
-             className={`v2-supp-textkachel${k.warn ? ' v2-supp-textkachel-warn' : ''}`}>
-          <div className="v2-supp-textkachel-kopf" data-ton={k.warn ? 'warn' : undefined}>
-            {k.warn && <Icon name="alert" className="v2-ic v2-ic-sm" />}
+             className={'v2-supp-textkachel'
+               + (k.ton === 'gefahr' ? ' v2-supp-textkachel-warn' : '')}>
+          <div className="v2-supp-textkachel-kopf" data-ton={k.ton ?? undefined}>
+            {k.ton === 'gefahr' && <Icon name="alert" className="v2-ic v2-ic-sm" />}
             {k.kopf}
           </div>
           {/* G-183: auch hier zerfaellt der Absatz in seine Aussagen,
@@ -210,14 +258,67 @@ export function WarnKasten(
   )
 }
 
+/**
+ * Der Satz zur WADA-Lage — G-184.
+ *
+ * ══ WARUM EIN BLOCK UND NICHT DIE KACHEL ═══════════════════════════
+ *
+ * `[cmd]` **Gemessen 2026-08-26, vor dem Bau:** `note_de` ist
+ * **min 253 · Median 387 · p90 697 · max 818** Zeichen lang; **143
+ * von 320 ueber 200.**
+ *
+ * `[read]` **In eine 196-px-Kachel passt das nicht** — und G-191 hat
+ * gerade gezeigt, was dann geschieht: der Text wird abgeschnitten,
+ * und die automatische Pruefung merkt es nicht.
+ *
+ * `[read]` **Und kein Aufklapper:** was man aufklappen muss, liest
+ * niemand. Der Auftrag entstand, WEIL die Antwort fehlte — sie
+ * hinter einen Klick zu legen, waere derselbe Zustand mit mehr
+ * Arbeit. Bei einem gesperrten Stoff ist es ausserdem eine
+ * Rechtsauskunft.
+ *
+ * `[read]` **`max-width: 78ch`** — die Regel aus G-181: eine
+ * Zeilenlaenge ueber 90 Zeichen ist der Messwert, nicht die
+ * Pixelbreite.
+ */
+export function WadaLageBlock(
+  { status, note, kategorie }:
+  { status?: string | null; note?: string | null; kategorie?: string | null },
+) {
+  const lage = wadaLage(status, note, kategorie)
+  if (!lage) return null
+  return (
+    <div className="v2-supp-wada-block" data-ton={lage.ton ?? undefined}>
+      <div className="v2-supp-wada-kopf">
+        {/* G-194: Das Warndreieck nur, wo gewarnt wird. `[read]` Bei
+            einer Entwarnung waere es ein Widerspruch zwischen Zeichen
+            und Aussage — und das Zeichen liest man zuerst.
+            `[cmd]` `shield` statt `info`: ein `info`-Zeichen gibt es
+            im Satz nicht (nachgesehen in `packages/ui/src/icons.tsx`). */}
+        <Icon name={lage.ton === 'gefahr' ? 'alert' : 'shield'}
+              className="v2-ic v2-ic-sm" />
+        {/* Die Farbe kommt aus derselben Tabelle wie jede andere
+            Blockueberschrift — `.v2-eyebrow[data-ton]`. */}
+        <span className="v2-eyebrow" data-ton={lage.ton ?? undefined}>
+          {lage.titel}
+        </span>
+        {/* `[cmd]` Die Klasse steht bei allen 145 verbotenen, bei
+            `not_prohibited` nur bei 3 von 172 — dort entfaellt sie. */}
+        {lage.kategorie && (
+          <span className="v2-supp-wada-klasse">{lage.kategorie}</span>
+        )}
+      </div>
+      <p className="v2-supp-wada-text">{lage.text}</p>
+    </div>
+  )
+}
+
 /** „Bei zu viel" — eigener Kasten in Warnfarbe, kein Absatz. */
 export function ZuVielKasten({ text }: { text: string | null | undefined }) {
   if (!da(text)) return null
   return (
     <div className="v2-supp-kasten v2-supp-kasten-warn">
-      <div className="v2-eyebrow" style={{ marginBottom: 4, color: 'var(--warn)' }}>
-        Bei zu viel
-      </div>
+      <BlockTitel titel="Bei zu viel" />
       <p style={{ fontSize: 12.5, lineHeight: 1.6, margin: 0 }}>{text}</p>
     </div>
   )
@@ -234,7 +335,7 @@ export function Laborbezug({ text }: { text: string | null | undefined }) {
   if (!da(text)) return null
   return (
     <div className="v2-supp-kasten">
-      <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Im Labor</div>
+      <BlockTitel titel="Im Labor" />
       <p style={{ fontSize: 12, lineHeight: 1.55, margin: 0 }}>{text}</p>
     </div>
   )
@@ -320,9 +421,7 @@ export function Wechselwirkungsblock(
   if (l.length === 0 && w.length === 0 && geprueft === 0) return null
   return (
     <div className="v2-supp-kasten" style={{ marginBottom: 12 }}>
-      <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
-        Wechselwirkung und Labor
-      </div>
+      <BlockTitel titel="Wechselwirkung und Labor" stil={{ marginBottom: 6 }} />
 
       {w.length > 0 && (
         <div className="v2-col-gap" style={{ gap: 5, marginBottom: l.length ? 10 : 0 }}>
@@ -385,6 +484,129 @@ export function Wechselwirkungsblock(
   )
 }
 
+function CommunityMarkenZeile({ eintrag }: { eintrag: CommunityMarken }) {
+  return (
+    <div className="v2-supp-community-marken">
+      {eintrag.verbreitung && <Pill style={{ fontSize: 8.5 }}>{eintrag.verbreitung}</Pill>}
+      {eintrag.vertrauen && <Pill style={{ fontSize: 8.5 }}>{eintrag.vertrauen}</Pill>}
+      {eintrag.abgleich && <Pill style={{ fontSize: 8.5 }}>{eintrag.abgleich}</Pill>}
+      <Pill variant="warn" style={{ fontSize: 8.5 }}>Evidenz {eintrag.evidenz}</Pill>
+    </div>
+  )
+}
+
+function CommunityGrenzen({ grenzen }: { grenzen: string[] }) {
+  if (grenzen.length === 0) return null
+  return (
+    <div className="v2-supp-community-grenzen">
+      {grenzen.slice(0, 3).map(g => <span key={g}>{g}</span>)}
+    </div>
+  )
+}
+
+function CommunityBlock({ community }: { community: CommunityHinweise | null | undefined }) {
+  if (!community) return null
+  const gesamt = community.nebenwirkungen.length + community.tradeoffs.length
+    + community.mythen.length + community.qualitaet.length + community.begriffe.length
+  if (gesamt === 0) return null
+  return (
+    <div className="v2-col-gap" style={{ gap: 12 }}>
+      <div className="v2-supp-kasten">
+        <BlockTitel titel="Aus der Community" stil={{ marginBottom: 5 }} />
+        <p className="v2-muted" style={{ fontSize: 12, lineHeight: 1.55, margin: 0 }}>
+          Erfahrungsberichte und Szene-Sprache. Gezeigt wird, welche Kosten und
+          Unsicherheiten berichtet werden; keine Protokolle, keine Gegenmassnahmen.
+        </p>
+      </div>
+
+      {community.nebenwirkungen.length > 0 && (
+        <section>
+          <BlockTitel titel="Berichtete Nebenwirkungen" stil={{ marginBottom: 6 }} />
+          <div className="v2-supp-community-raster">
+            {community.nebenwirkungen.map(e => (
+              <article key={e.id} className="v2-supp-community-card">
+                <CommunityMarkenZeile eintrag={e} />
+                <h4>{e.effekt}</h4>
+                {e.attribution && <p>{e.attribution}</p>}
+                {e.onset && <p className="v2-muted">{e.onset}</p>}
+                <CommunityGrenzen grenzen={e.grenzen} />
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {community.tradeoffs.length > 0 && (
+        <section>
+          <BlockTitel titel="Was Kombinationen kosten" stil={{ marginBottom: 6 }} />
+          <div className="v2-supp-community-raster">
+            {community.tradeoffs.map(e => (
+              <article key={e.id} className="v2-supp-community-card">
+                <CommunityMarkenZeile eintrag={e} />
+                <h4>{e.name}</h4>
+                <p>{e.tradeoff}</p>
+                <CommunityGrenzen grenzen={e.grenzen} />
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {community.mythen.length > 0 && (
+        <section>
+          <BlockTitel titel="Mythen" stil={{ marginBottom: 6 }} />
+          <div className="v2-supp-community-raster">
+            {community.mythen.map(e => (
+              <article key={e.id} className="v2-supp-community-card">
+                <CommunityMarkenZeile eintrag={e} />
+                <h4>{e.mythos}</h4>
+                <p>{e.korrektur}</p>
+                <CommunityGrenzen grenzen={e.grenzen} />
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {community.qualitaet.length > 0 && (
+        <section>
+          <BlockTitel titel="Produktqualitaet" stil={{ marginBottom: 6 }} />
+          <div className="v2-supp-community-raster">
+            {community.qualitaet.map(e => (
+              <article key={e.id} className="v2-supp-community-card">
+                <CommunityMarkenZeile eintrag={e} />
+                <h4>{e.signal}</h4>
+                {e.anspruch && <p>{e.anspruch}</p>}
+                {e.studie && <p className="v2-muted">{e.studie}</p>}
+                <CommunityGrenzen grenzen={e.grenzen} />
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {community.begriffe.length > 0 && (
+        <section>
+          <BlockTitel titel="Szene-Begriffe" stil={{ marginBottom: 6 }} />
+          <div className="v2-supp-community-raster">
+            {community.begriffe.map(e => (
+              <article key={e.id} className="v2-supp-community-card">
+                <div className="v2-supp-community-marken">
+                  <Pill variant="warn" style={{ fontSize: 8.5 }}>Evidenz {e.evidenz}</Pill>
+                </div>
+                <h4>{e.begriff}</h4>
+                <p>{e.definition}</p>
+                {e.kontext && <p className="v2-muted">{e.kontext}</p>}
+                <CommunityGrenzen grenzen={e.grenzen} />
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  )
+}
+
 /**
  * Der Inhalt eines Reiters.
  *
@@ -394,17 +616,23 @@ export function Wechselwirkungsblock(
  */
 export function ReiterInhalt(
   { reiter, texte, zahlen, kacheln, formen, fragen, quellen, labor,
-    laborwirkungen, wechselwirkungen, geprueft, heikel, onOeffnen }: {
+    laborwirkungen, wechselwirkungen, community, geprueft, heikel, onOeffnen,
+    wadaStatus, wadaNote, wadaKategorie }: {
     reiter: ReiterId
     texte: Nutzertexte | null | undefined
     zahlen: Zahlen
     kacheln: Kachel[]
+    /** G-184: die drei Felder aus `supplement_wada` fuer den Block. */
+    wadaStatus?: string | null
+    wadaNote?: string | null
+    wadaKategorie?: string | null
     formen: Unterform[] | null | undefined
     fragen: Frage[] | null | undefined
     quellen: Quelle[] | null | undefined
     labor: string | null
     laborwirkungen: Laborwirkung[] | null | undefined
     wechselwirkungen: Wechselwirkung[] | null | undefined
+    community: CommunityHinweise | null | undefined
     geprueft: number
     heikel: boolean
     onOeffnen: (id: string) => void
@@ -423,6 +651,13 @@ export function ReiterInhalt(
         )}
         {/* G-181: die Zahlen als Kacheln, nicht als Tabellenzeile. */}
         <Zahlenkacheln kacheln={kacheln} />
+        {/* G-195: **Der WADA-Block steht nicht mehr hier.**
+            `[cmd]` Er nahm 155–235 px von 580 sichtbaren — 27 bis 41
+            Prozent des Ueberblicks fuer eine Angabe, die die Kachel
+            darueber in drei Worten macht. Er steht jetzt im Reiter
+            „Rechtslage", zusammen mit `rechtslage_klartext_de`.
+            **Die Kachel bleibt** — sie sagt, OB erlaubt oder
+            verboten; der Satz dahinter ist der Nachschlagteil. */}
         {/* G-181 Punkt 4: als Kacheln nebeneinander, nicht als
             Absaetze mit Mini-Ueberschrift. */}
         <Textkacheln wieWirkt={t?.wie_wirkt} wasBringtEs={t?.was_bringt_es} />
@@ -472,14 +707,41 @@ export function ReiterInhalt(
             Absatz stehen. */}
         {heikel && <AufgeteilterAbschnitt titel="Nicht im Blut nachweisbar"
                                           text={t?.nicht_im_blut} />}
-        {heikel && <AufgeteilterAbschnitt titel="Rechtslage"
-                                          text={t?.rechtslage_klartext} />}
+        {/* G-195: „Rechtslage" stand hier — und nur bei `heikel`.
+            `[cmd]` Damit war sie fuer 201 von 412 gefuellt, aber nur
+            fuer Enhanced und Peptide sichtbar. Sie hat jetzt einen
+            eigenen Reiter, und dort ohne diese Bedingung. */}
+      </>
+    )
+  }
+
+  // ══ G-195: der Reiter „Rechtslage" ═══════════════════════════════
+  //
+  // `[read]` **Drei Angaben, ein Thema:** wo das Verbot gilt
+  // (`note_de`), welche Klasse (`wada_category`), und was national
+  // gilt (`rechtslage_klartext_de`).
+  //
+  // `[cmd]` **Gemessen 2026-08-26:** 345 der 412 sichtbaren
+  // Substanzen bekommen den Reiter, 67 nicht.
+  if (reiter === 'rechtslage') {
+    return (
+      <>
+        <WadaLageBlock status={wadaStatus} note={wadaNote}
+                       kategorie={wadaKategorie} />
+        {/* G-183: der Absatz zerfaellt an Satzgrenzen in seine
+            Aussagen, wo er es hergibt. */}
+        <AufgeteilterAbschnitt titel="Rechtslage"
+                               text={t?.rechtslage_klartext} />
       </>
     )
   }
 
   if (reiter === 'formen') {
     return <Formen formen={formen} onOeffnen={onOeffnen} raster />
+  }
+
+  if (reiter === 'community') {
+    return <CommunityBlock community={community} />
   }
 
   if (reiter === 'quellen') {
@@ -520,13 +782,37 @@ export function Reiterleiste(
   )
 }
 
-/** Der Fusszeilen-Knopf „Quellen · N", wo es Herkunftsvermerke gibt. */
-export function Quellenknopf({ anzahl }: { anzahl: number }) {
-  if (anzahl <= 0) return null
-  return (
-    <Pill style={{ fontSize: 9 }}>Quellen · {anzahl}</Pill>
-  )
-}
+/*
+ * `Quellenknopf` stand hier bis G-194 und ist GELOESCHT.
+ *
+ * ══ ER ZAEHLTE ETWAS ANDERES, ALS ER SAGTE ═════════════════════════
+ *
+ * **Tom, 2026-08-26:** *„Er zeigt ‚Quellen · 1', der Reiter oben
+ * ‚Quellen 4' — dieselbe Sache, zwei Zahlen, und die untere ist
+ * falsch."*
+ *
+ * `[cmd]` **Gemessen 2026-08-26 — es sind zwei verschiedene
+ * Quellen, nicht zwei Zaehlweisen derselben:**
+ *
+ *   Chip    `supplement_field_sources` — ein Herkunftsvermerk JE
+ *           FELD (max 17)
+ *   Reiter  `supplement_user_texts.sources` — die Quellenliste
+ *           selbst (max 6)
+ *
+ * `[cmd]` **393 von 412 sichtbaren Substanzen zeigen verschiedene
+ * Zahlen, nur 19 stimmen ueberein.** Kreatin: Chip **13**, Reiter
+ * **2**. 1-Testosteron: **10** gegen **3**.
+ *
+ * `[read]` **Die Zahl des Chips war nie falsch gezaehlt — sie war
+ * falsch beschriftet.** *„Quellen"* stand darueber, gezaehlt wurden
+ * Feld-Herkunftsvermerke. Ein Nutzer, der zwei Zahlen fuer dieselbe
+ * Sache sieht, glaubt keiner von beiden.
+ *
+ * `[read]` **Der Chip stammt aus der Zeit vor dem Quellen-Reiter**
+ * (G-182 Punkt 4) und war schon damals ohne Funktion — Tom:
+ * *„quellen haben keine funktion."* Jetzt hat der Reiter die
+ * Zustaendigkeit; zwei Anzeigen fuer eine Sache sind eine zu viel.
+ */
 
 /**
  * Die ganze aufgeklappte Tafel: Reiterleiste, Inhalt, Fusszeile.
@@ -552,8 +838,11 @@ export function SubstanzTafel(
       wada_kategorie?: string | null
       laborwirkungen?: Laborwirkung[]
       wechselwirkungen?: Wechselwirkung[]
+      community?: CommunityHinweise | null
       geprueft_ohne_befund?: number
       wada_status?: string | null
+      /** G-184: der Satz zur Lage — `wada_kategorie` steht schon oben. */
+      wada_note?: string | null
       evidence?: Record<string, unknown> | null
       evidence_provenance?: Record<string, unknown> | null
       dosing?: Record<string, unknown> | null
@@ -580,13 +869,18 @@ export function SubstanzTafel(
   // wenn sie dort einmal gefuehrt wird; heute 0.
   const geprueft = satz.geprueft_ohne_befund ?? 0
   const reiter = reiterFuer(satz.texte, zahlen, satz.formen, satz.fragen, labor, satz.quellen,
-    satz.laborwirkungen, satz.wechselwirkungen)
+    satz.laborwirkungen, satz.wechselwirkungen, satz.community,
+    // G-195: der Rechtslage-Reiter erscheint, wenn eines der beiden
+    // Felder etwas hergibt.
+    satz.wada_note, satz.texte?.rechtslage_klartext)
   const aktiv = (offenerReiter && reiter.some(r => r.id === offenerReiter))
     ? offenerReiter
     : ersterReiter(reiter)
 
-  const quellen = satz.evidence_provenance
-    ? Object.keys(satz.evidence_provenance).length : 0
+  // G-194: `const quellen = Object.keys(evidence_provenance).length`
+  // stand hier und speiste den geloeschten Chip. **Mitgeloescht** —
+  // eine stehengebliebene Rechnung laedt dazu ein, die falsche Zahl
+  // wieder anzuzeigen.
 
   return (
     <div className="v2-supp-tafel">
@@ -600,7 +894,10 @@ export function SubstanzTafel(
               quellen={satz.quellen} labor={labor}
               laborwirkungen={satz.laborwirkungen}
               wechselwirkungen={satz.wechselwirkungen}
+              community={satz.community}
               geprueft={geprueft}
+              wadaStatus={satz.wada_status} wadaNote={satz.wada_note}
+              wadaKategorie={satz.wada_kategorie}
               heikel={heikel} onOeffnen={onOeffnen} />
           : (
             // `[read]` Kein Platzhalter: 28 der 318 Eintraege haben
@@ -615,7 +912,6 @@ export function SubstanzTafel(
         marginTop: 12, paddingTop: 10, borderTop: '1px solid var(--border)',
       }}>
         {imStack && <Pill variant="pos" style={{ fontSize: 9 }}>Im Stack</Pill>}
-        <Quellenknopf anzahl={quellen} />
         <button type="button" className="v2-btn v2-btn-primary v2-btn-sm"
                 style={{ marginLeft: 'auto' }}
                 onClick={e => { e.stopPropagation(); onAdd() }}>
@@ -631,14 +927,32 @@ export function SubstanzTafel(
  *
  * `[cmd]` **Die JSON-null-Falle, gemessen in C-107:** `dose_ceiling`
  * ist bei 290 von 290 `is not null`, aber **258 tragen das Literal
- * `null`**. `jsonWert` faengt das ab — sonst stuende „null" im
- * Zahlenkasten, und eine hingeschriebene Null sieht aus wie eine
- * gemessene.
+ * `null`**. Sonst stuende „null" im Zahlenkasten, und eine
+ * hingeschriebene Null sieht aus wie eine gemessene.
+ *
+ * `[cmd]` **G-191 hat die zweite Haelfte derselben Falle gefunden:**
+ * die Felder sind Objekte, und ein Objekt mit `value: null` ist
+ * technisch gefuellt. `dosisFelder` faengt beides ab.
  */
 export function zahlenAus(d: Record<string, unknown> | null | undefined): Zahlen {
+  // ══ G-191 ═══════════════════════════════════════════════════════
+  //
+  // `[cmd]` **Hier stand `jsonWert` fuer beide Felder** — und die fiel
+  // bei `value: null` auf `Object.values(o).join(' · ')` zurueck.
+  // Ergebnis in der Kachel: *„No validated clinical guideline dose ·
+  // CLINICAL_GUIDELINE"*, wo eine Menge stehen sollte.
+  //
+  // `[cmd]` **Gemessen ueber die 412 Katalogzeilen:** Menge **250**
+  // Statuscodes gegen 8 echte Werte, Obergrenze **241** gegen **0**.
+  //
+  // `dosisFelder` trennt Wert und Grund. Begruendung und Zahlen im
+  // Kopf von `lib/supplements/dosis-feld.ts`.
+  const { menge, obergrenze } = dosisFelder(d)
   return {
-    menge: jsonWert(d?.studied_dose_ranges) ?? jsonWert(d?.guideline_dose),
-    obergrenze: jsonWert(d?.upper_limit),
+    menge: menge.wert,
+    obergrenze: obergrenze.wert,
+    mengeGrund: menge.grund,
+    obergrenzeGrund: obergrenze.grund,
     einnahme: textWert(d?.usage_hint_de) ?? textWert(d?.usage_hint_en),
     mitEssen: textWert(d?.dose_unit),
   }
@@ -648,30 +962,17 @@ function textWert(v: unknown): string | null {
   return typeof v === 'string' && v.trim() ? v.trim() : null
 }
 
-function jsonWert(v: unknown): string | null {
-  if (v === null || v === undefined) return null
-  if (typeof v === 'string') {
-    const s = v.trim()
-      // `[cmd]` Das Quellenpraefix gehoert nicht in die Kachel: Kreatin
-      // traegt „guideline/ISSN position stand: 3-5 g/day …" — die
-      // Quelle steht im Satz unter „Wann und wie".
-      .replace(/^(guideline|official|label)?[\s/]*(ISSN|EFSA|NIH|DGE|WHO)?\s*position stand:\s*/i, '')
-      .replace(/^(guideline|official label|label)\s*[:/]\s*/i, '')
-      .trim()
-    return s && s !== 'null' && s !== '[]' && s !== '{}' ? s : null
-  }
-  if (typeof v === 'number') return String(v)
-  if (Array.isArray(v)) {
-    const teile = v.map(jsonWert).filter(Boolean) as string[]
-    return teile.length ? teile.join(' · ') : null
-  }
-  if (typeof v === 'object') {
-    const o = v as Record<string, unknown>
-    const wert = jsonWert(o.value)
-    const basis = jsonWert(o.basis)
-    if (wert) return basis ? `${wert} (${basis})` : wert
-    const teile = Object.values(o).map(jsonWert).filter(Boolean) as string[]
-    return teile.length ? teile.join(' · ') : null
-  }
-  return null
-}
+/*
+ * `jsonWert` stand hier bis G-191 und ist GELOESCHT, nicht
+ * auskommentiert.
+ *
+ * `[cmd]` **Sie war die Ursache:** bei `value: null` fiel sie auf
+ * `Object.values(o)` zurueck und verkettete alles — damit standen
+ * `missing_reason` und `provenance_type` in der Kachel. **250 Mal bei
+ * der Menge, 241 Mal bei der Obergrenze**, gemessen ueber 412 Zeilen.
+ *
+ * `[read]` **Sie bleibt nicht als Rueckfall stehen** (G-163): eine
+ * Funktion, die falsche Werte erzeugt, ist als Notloesung schlechter
+ * als keine. Wer ein Dosisfeld liest, nimmt `dosisFelder` aus
+ * `lib/supplements/dosis-feld.ts`.
+ */

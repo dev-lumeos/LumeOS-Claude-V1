@@ -348,8 +348,21 @@ a { color: inherit; text-decoration: none; }
   font-size: 12px;
   font-weight: 500;
   color: var(--fg);
+  /* `[cmd]` **Gemessen 2026-08-25: `:active` kam im gesamten Frontend
+   * null Mal vor** — 28 `cursor: pointer`, 28 `:hover`, 0 Druckzustand.
+   * Ein Knopf ohne Rueckmeldung beim Druecken fuehlt sich tot an; das
+   * ist keine Zierde, sondern die Antwort des Programms auf den Klick.
+   *
+   * `[read]` Nur `background-color` und `transform` — `all` wuerde
+   * auch Layouteigenschaften mitziehen und Bilder kosten. */
+  transition: background-color 120ms ease, border-color 120ms ease,
+              transform 120ms ease;
 }
 .v2-btn:hover { background: var(--surface-hover); }
+/* 0.97 statt kleiner: der Knopf ist 26 px hoch, darunter wird das
+ * Zusammenziehen zum Zucken. */
+.v2-btn:active { transform: scale(0.97); }
+.v2-btn:disabled:active { transform: none; }
 .v2-btn-primary {
   background: var(--fg);
   color: var(--bg);
@@ -555,7 +568,10 @@ a { color: inherit; text-decoration: none; }
   height: 100%;
   background: var(--acc);
   border-radius: 999px;
-  transition: width 0.4s ease;
+  /* `[cmd]` Stand 0.4s ease — **die einzige Animation im Produkt war
+   * zugleich die langsamste.** 400 ms liegt ueber der 300-ms-Grenze
+   * fuer Bedienelemente; der Balken lief dem Wert sichtbar hinterher. */
+  transition: width 240ms var(--kurve-aus);
 }
 .v2-meter-tall { height: 6px; }
 
@@ -2075,4 +2091,95 @@ select.v2-feld { cursor: pointer; }
 .v2-module-actions {
   flex-wrap: wrap;
   justify-content: flex-end;
+}
+
+/* ══ REITERWECHSEL ════════════════════════════════════
+ *
+ * `[cmd]` Bis 2026-08-25 tauschte `setTab` den Inhalt hart aus — der
+ * alte Reiter verschwand im selben Bild, in dem der neue erschien.
+ *
+ * `[read]` **Nur `opacity`, kein Verschieben.** Die Reiter werden oft
+ * geklickt; Bewegung waere hier Zierde und stoert beim zehnten Mal.
+ * `@starting-style` ersetzt das sonst uebliche `useEffect` mit
+ * `mounted`-Zustand — kein JavaScript, laeuft ausserhalb des
+ * Hauptthreads.
+ */
+.v2-tabinhalt {
+  opacity: 1;
+  transition: opacity 120ms var(--kurve-aus);
+}
+
+@starting-style {
+  .v2-tabinhalt { opacity: 0; }
+}
+
+/* ══ LADEFLAECHEN ═════════════════════════════════════
+ *
+ * `[cmd]` **Gemessen 2026-08-25: 1,9–2,9 s bis `networkidle`, und
+ * kein einziger Ladezustand im Produkt.** Siehe `loading.tsx`.
+ *
+ * `[read]` **Kein Schimmern.** Eine dauernd laufende Animation kostet
+ * Bilder und ist bei zwei Sekunden eher Unruhe als Information — und
+ * sie wuerde bei abgestellter Bewegung ohnehin entfallen. Die Flaechen
+ * stehen still und geben nur die Form.
+ */
+.v2-skel-seite {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.v2-skel {
+  background: var(--surface-2, var(--surface));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+/* Die Hoehen folgen dem echten Aufbau — sonst springt der Inhalt beim
+ * Eintreffen, und das ist schlimmer als gar kein Platzhalter. */
+.v2-skel-hero { height: 104px; border-radius: 12px; }
+
+.v2-skel-reihe { display: flex; gap: 8px; flex-wrap: wrap; }
+.v2-skel-reiter { width: 96px; height: 30px; border-radius: var(--radius-sm); }
+
+.v2-skel-karte { height: 168px; }
+.v2-skel-karte-kurz { height: 96px; }
+
+/* Nur fuer Screenreader — gab es im Repo noch nicht. */
+.v2-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ══ BEWEGUNG ABSTELLEN ═══════════════════════════════════════════
+ *
+ * `[read]` **Bewegung kann Uebelkeit ausloesen.** Wer sie im
+ * Betriebssystem abgestellt hat, meint es ernst — und bekam bis
+ * 2026-08-25 trotzdem alles zu sehen, weil es nur im Buddy-Orb
+ * beachtet wurde (per JavaScript, nicht per CSS).
+ *
+ * **Abgestellt heisst weniger und sanfter, nicht null.** Farb- und
+ * Deckkraftwechsel bleiben — sie helfen beim Verstehen und bewegen
+ * nichts. Was verschoben, gedreht oder skaliert wird, entfaellt.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .v2-btn:active,
+  .v2-supp-form-karte:active,
+  .lume-module-card:active,
+  .lume-module-card:hover {
+    transform: none;
+  }
+
+  /* Das X haelt seine Zentrierung — ohne den Druckzustand. */
+  .v2-supp-suche-x:active { transform: translateY(-50%); }
+
+  /* Der Balken springt auf den Wert, statt hinzulaufen. */
+  .v2-meter > i { transition: none; }
 }

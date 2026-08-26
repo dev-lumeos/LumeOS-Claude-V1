@@ -17,6 +17,7 @@
 // beim Aufrufer.** Wer einen Abschnitt einbaut, bekommt das Verhalten
 // mit; wer es beim Aufrufer prueft, vergisst es beim naechsten.
 import * as React from 'react'
+import { tonFuer } from '../../../lib/supplements/block-ton'
 import { Card, Pill } from '@lumeos/ui'
 
 import type { Nutzertexte, Unterform, Frage } from '../../../lib/supplements/substanz-read'
@@ -221,6 +222,37 @@ export function inAussagen(text: string): string[] {
  * `[read]` Der Rueckgabewert `null` ist der ganze Sinn: React rendert
  * dann gar nichts, und im Fenster entsteht keine Luecke.
  */
+/**
+ * Eine Blockueberschrift — G-194.
+ *
+ * ══ WARUM SIE AN EINER STELLE STEHT ════════════════════════════════
+ *
+ * **Tom, 2026-08-26:** *„Die Farbe muss etwas BEDEUTEN, sonst ist es
+ * Dekoration."* Und: *„dieselbe Bedeutung bekommt ueberall dieselbe
+ * Farbe."*
+ *
+ * `[read]` **Genau das geht nur, wenn die Zuordnung EINMAL steht.**
+ * Vorher setzte jeder Block seine Farbe selbst — `style={{ color:
+ * 'var(--warn)' }}` an zwei Stellen, sonst gar nichts. So laufen
+ * *„Reinheit"* im Ueberblick und *„Nicht im Blut nachweisbar"* in der
+ * Sicherheit auseinander, obwohl sie dasselbe sagen.
+ *
+ * `[cmd]` **Die Bedeutung kommt aus `lib/supplements/block-ton.ts`,
+ * das Token aus derselben Tabelle.** Wer eine Ueberschrift hinzufuegt,
+ * traegt sie dort ein oder bekommt keine Farbe — geraten wird nicht.
+ */
+export function BlockTitel(
+  { titel, stil }: { titel: string; stil?: React.CSSProperties },
+) {
+  const ton = tonFuer(titel)
+  return (
+    <div className="v2-eyebrow" data-ton={ton ?? undefined}
+         style={{ marginBottom: 4, ...stil }}>
+      {titel}
+    </div>
+  )
+}
+
 export function Abschnitt(
   { titel, text, ton }: { titel: string; text: string | null | undefined; ton?: 'warn' },
 ) {
@@ -228,7 +260,7 @@ export function Abschnitt(
   if (absaetze.length === 0) return null
   return (
     <section style={{ marginBottom: 14 }}>
-      <div className="v2-eyebrow" style={{ marginBottom: 4 }}>{titel}</div>
+      <BlockTitel titel={titel} />
       {absaetze.map((a, i) => (
         <div key={a.text} style={{ marginTop: i === 0 ? 0 : 8 }}>
           <p style={{
@@ -294,7 +326,7 @@ export function AufgeteilterAbschnitt(
   }
   return (
     <section style={{ marginBottom: 14 }}>
-      <div className="v2-eyebrow" style={{ marginBottom: 4 }}>{titel}</div>
+      <BlockTitel titel={titel} />
       <ul className="v2-supp-aussagen">
         {teile.map(t => (
           <li key={t} style={{ color: ton === 'warn' ? 'var(--warn)' : undefined }}>
@@ -314,7 +346,7 @@ export function Stichpunkte(
   if (rein.length === 0) return null
   return (
     <section style={{ marginBottom: 14 }}>
-      <div className="v2-eyebrow" style={{ marginBottom: 4 }}>{titel}</div>
+      <BlockTitel titel={titel} />
       <ul style={{ margin: 0, paddingLeft: 18 }}>
         {rein.map(p => (
           <li key={p} style={{ fontSize: 12.5, lineHeight: 1.6 }}>{p}</li>
@@ -347,27 +379,44 @@ export function Zwecke({ punkte }: { punkte: string[] | null | undefined }) {
  * ganze Zeile.
  */
 export function DreiKacheln(
-  { menge, obergrenze, einnahme }:
-  { menge: string | null; obergrenze: string | null; einnahme: string | null },
+  { menge, obergrenze, einnahme, mengeGrund, obergrenzeGrund }:
+  {
+    menge: string | null; obergrenze: string | null; einnahme: string | null
+    /** G-191: warum es keine Menge gibt — statt einer Menge. */
+    mengeGrund?: string | null
+    obergrenzeGrund?: string | null
+  },
 ) {
+  // ══ G-191 ═══════════════════════════════════════════════════════
+  //
+  // `[cmd]` **Hier stand der Statuscode.** Weil `guideline_dose` ein
+  // Objekt ist und die alte Lesefunktion bei `value: null` alle
+  // Objektwerte verkettete, stand in dieser Kachel *„No validated
+  // clinical guideline dose · CLINICAL_GUIDELINE"* — bei **250 von
+  // 412** Substanzen.
+  //
+  // `[read]` **Wert und Grund sind jetzt zwei Dinge.** Eine Kachel
+  // ohne Wert entfaellt (§9) — **ausser sie kann sagen, warum.**
+  // *„Keine Leitlinie nennt eine Dosis"* ist eine Aussage, kein
+  // fehlender Wert: **es gibt keine, nicht wir wissen es nicht.**
+  // Genau die Unterscheidung, an der der Katalog haengt.
   const felder = [
-    ['Übliche Menge', menge],
-    ['Obergrenze', obergrenze],
-    ['Einnahme', einnahme],
-  ].filter(([, w]) => da(w as string)) as Array<[string, string]>
+    { label: 'Übliche Menge', wert: menge, grund: mengeGrund },
+    { label: 'Obergrenze', wert: obergrenze, grund: obergrenzeGrund },
+    { label: 'Einnahme', wert: einnahme, grund: null },
+  ].filter(f => da(f.wert) || da(f.grund))
   if (felder.length === 0) return null
   return (
-    <div className="v2-grid" style={{
-      display: 'grid', gap: 8, marginBottom: 14,
-      gridTemplateColumns: `repeat(${Math.min(felder.length, 3)}, minmax(0, 1fr))`,
-    }}>
-      {felder.map(([label, wert]) => (
-        <div key={label} style={{
-          padding: '8px 10px', borderRadius: 6,
-          background: 'var(--bg-elev)', border: '1px solid var(--border)',
-        }}>
-          <div className="v2-eyebrow" style={{ marginBottom: 3 }}>{label}</div>
-          <div style={{ fontSize: 12, lineHeight: 1.5 }}>{wert}</div>
+    <div className="v2-supp-dosis-kacheln">
+      {felder.map(f => (
+        <div key={f.label} className="v2-supp-dosis-kachel">
+          <div className="v2-eyebrow" style={{ marginBottom: 3 }}>{f.label}</div>
+          {da(f.wert)
+            ? <div className="v2-supp-dosis-wert">{f.wert}</div>
+            // `[read]` **Klein und gedaempft, nicht als grosse Zahl.**
+            // Der Grund darf nicht aussehen wie eine Angabe — sonst
+            // waere er nur ein anderer Statuscode.
+            : <div className="v2-supp-dosis-grund">{f.grund}</div>}
         </div>
       ))}
     </div>
@@ -385,12 +434,12 @@ export function Irreversibel({ text }: { text: string | null | undefined }) {
   return (
     <div style={{
       padding: '9px 11px', borderRadius: 6, marginBottom: 14,
-      background: 'color-mix(in oklch, var(--warn) 9%, transparent)',
+      // G-196: 9 % -> 5 %. Gemessen: auf 7 % liegt `--warn` im
+      // Hellmodus bei 4.44, auf 5 % bei 4.58. Der Farbwert bleibt.
+      background: 'color-mix(in oklch, var(--warn) 5%, transparent)',
       border: '1px solid color-mix(in oklch, var(--warn) 38%, var(--border))',
     }}>
-      <div className="v2-eyebrow" style={{ marginBottom: 4, color: 'var(--warn)' }}>
-        Was nicht zurückkommt
-      </div>
+      <BlockTitel titel="Was nicht zurückkommt" />
       <p style={{ fontSize: 12.5, lineHeight: 1.62, margin: 0 }}>{text}</p>
     </div>
   )
@@ -422,7 +471,10 @@ export function UeberwachungUndReinheit(
           padding: '8px 10px', borderRadius: 6,
           background: 'var(--bg-elev)', border: '1px solid var(--border)',
         }}>
-          <div className="v2-eyebrow" style={{ marginBottom: 3 }}>{label}</div>
+          {/* G-194: „Überwachung" und „Reinheit" waren die zwei
+              Gruppen, nach denen der Auftrag fragte — beide sagen
+              *pruef das*, keine ist Warnung oder Wirkung. */}
+          <BlockTitel titel={label} stil={{ marginBottom: 3 }} />
           <div style={{ fontSize: 11.5, lineHeight: 1.55 }}>{wert}</div>
         </div>
       ))}
@@ -522,7 +574,7 @@ export function Fragen({ fragen }: { fragen: Frage[] | null | undefined }) {
   if (rein.length === 0) return null
   return (
     <section style={{ marginBottom: 14 }}>
-      <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Fragen</div>
+      <BlockTitel titel="Fragen" stil={{ marginBottom: 6 }} />
       <div className="v2-col-gap" style={{ gap: 8 }}>
         {rein.map(f => (
           <div key={f.frage}>
