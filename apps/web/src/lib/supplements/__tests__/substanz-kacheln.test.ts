@@ -76,17 +76,30 @@ test('die Wirkungsliste bleibt klein und belegt', () => {
   }
 })
 
-test('der Evidenzgrad bekommt Farbe und Klartext', () => {
-  assert.equal(kachelnFuer(null, 'A', null, null)[0].ton, 'pos')
-  assert.equal(kachelnFuer(null, 'D', null, null)[0].ton, 'warn')
-  assert.equal(kachelnFuer(null, 'C', null, null)[0].ton, 'acc')
+test('der Evidenzgrad bekommt Bedeutung und Klartext', () => {
+  // `[cmd]` **G-198 hat die Namen umgestellt.** Hier stand
+  // `'pos'`/`'warn'`/`'acc'` — ein DRITTES Vokabular neben den vier
+  // Bedeutungen aus G-196. `[read]` Die Zuordnung selbst aendert sich
+  // nicht: A ist eine Entwarnung, D eine Gefahr.
+  assert.equal(kachelnFuer(null, 'A', null, null)[0].ton, 'entwarnung')
+  assert.equal(kachelnFuer(null, 'D', null, null)[0].ton, 'gefahr')
+  // `[read]` **C bekommt KEINE Farbe mehr.** Vorher trug es `acc`,
+  // also die Wirkungsfarbe — dabei sagt der Grad nichts ueber die
+  // Wirkung. *„Gemischt belegt"* ist keine der vier Aussagen.
+  assert.equal(kachelnFuer(null, 'C', null, null)[0].ton, undefined)
   assert.match(kachelnFuer(null, 'A', null, null)[0].hinweis ?? '', /belegt/)
 })
 
-test('WADA verboten wird als Warnung gezeigt', () => {
-  const k = kachelnFuer(null, null, null, 'prohibited')
-  assert.equal(k[0].wert, 'verboten')
-  assert.equal(k[0].ton, 'warn')
+test('WADA: jeder Zustand traegt seine eigene Bedeutung', () => {
+  // `[cmd]` **G-198:** dieselbe Zuordnung wie im Rechtslage-Block
+  // (G-194) — verboten ist eine Gefahr, erlaubt eine Entwarnung,
+  // beobachtet ein Pruefauftrag.
+  const verboten = kachelnFuer(null, null, null, 'prohibited')
+  assert.equal(verboten[0].wert, 'verboten')
+  assert.equal(verboten[0].ton, 'gefahr')
+  assert.equal(kachelnFuer(null, null, null, 'not_prohibited')[0].ton,
+    'entwarnung')
+  assert.equal(kachelnFuer(null, null, null, 'monitored')[0].ton, 'pruefen')
 })
 
 test('die Mengenkachel traegt die kurze Form, nicht den Satz', () => {

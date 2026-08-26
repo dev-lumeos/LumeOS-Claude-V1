@@ -46,6 +46,7 @@ import type { ReiterId, Zahlen } from '../../../lib/supplements/substanz-reiter'
 import { dosisFelder } from '../../../lib/supplements/dosis-feld'
 import { wadaLage } from '../../../lib/supplements/wada-lage'
 import { tonFuer } from '../../../lib/supplements/block-ton'
+import { dosisKacheln, NICHT_ERHOBEN } from '../../../lib/supplements/dosis-zustand'
 import { reiterFuer, ersterReiter } from '../../../lib/supplements/substanz-reiter'
 import { kachelnFuer, type Kachel } from '../../../lib/supplements/substanz-kacheln'
 import {
@@ -57,55 +58,67 @@ function da(v: string | null | undefined): v is string {
   return typeof v === 'string' && v.trim().length > 0
 }
 
-/**
- * Der Zahlenkasten — „Auf einen Blick".
+/*
+ * `Zahlenkasten` stand hier bis G-199 und ist GELOESCHT.
  *
- * `[read]` **Zeile je Angabe, Wert rechtsbuendig.** Das ist der
- * Unterschied zur Aufzaehlung: Wer nur die Menge sucht, findet sie an
- * derselben Stelle wie bei jeder anderen Substanz.
+ * `[cmd]` **Er war der Rest von G-191:** dort flog der Statuscode aus
+ * der Kachel, **die graue Zeile blieb als Notloesung.** Tom,
+ * 2026-08-26: *„koennen wir eher schoene kacheln machen in
+ * dosierung, als komische zeilen."*
  *
- * `[cmd]` **Jede Zeile einzeln entfallend** — gemessen ueber die 318:
- * Menge **83**, Obergrenze **38**, Einnahme **19**.
+ * `[read]` **Nicht auskommentiert, sondern weg** (G-163): eine
+ * Notloesung, die niemand mehr aufruft, wird beim naechsten Umbau
+ * versehentlich wiederbelebt. Wer Dosisangaben zeigt, nimmt
+ * `DosisKacheln`.
  */
-export function Zahlenkasten({ zahlen }: { zahlen: Zahlen }) {
-  const zeilen: Array<[string, string, boolean]> = []
-  const nimm = (label: string, wert: string | null | undefined,
-                grund?: string | null) => {
-    if (da(wert)) zeilen.push([label, wert, false])
-    else if (da(grund)) zeilen.push([label, grund, true])
-  }
-  // ══ G-191 ═══════════════════════════════════════════════════════
-  //
-  // `[cmd]` **Die Obergrenze-Zeile zeigte bei 241 von 412 einen
-  // englischen Statuscode** — *„UL concept applies to nutrients
-  // (IOM/EFSA DRI framework) · REGULATORY_UL"*. Ursache: das Feld ist
-  // ein Objekt, und die alte Lesefunktion verkettete es.
-  //
-  // `[cmd]` **Und sie zeigte NIE einen richtigen Wert: 0 von 412.**
-  //
-  // `[read]` **Der Grund bleibt, aber als Grund.** *„Fuer Peptide gibt
-  // es keine Obergrenze"* ist eine Aussage ueber den Stoff — sie
-  // steht gedaempft und in normaler Schrift, damit sie nicht mit
-  // einer Menge verwechselt wird.
-  nimm('Obergrenze', zahlen.obergrenze, zahlen.obergrenzeGrund)
-  nimm('Einnahme', zahlen.einnahme)
-  nimm('Mit Essen', zahlen.mitEssen)
-  // Die Menge steht als Kachel darueber; ihr Grund hat dort keinen
-  // Platz (siehe `substanz-kacheln.ts`) und kommt deshalb hierher.
-  if (!da(zahlen.menge)) nimm('Übliche Menge', null, zahlen.mengeGrund)
-  if (zeilen.length === 0) return null
+
+/**
+ * Die Dosiskacheln — G-199, Punkte 3 und 4.
+ *
+ * ══ WAS HIER VORHER STAND ══════════════════════════════════════════
+ *
+ * **Tom, 2026-08-26:** *„weitere angaben obergrenze/untergrenze/etc
+ * koennen wir eher schoene kacheln machen in dosierung, als komische
+ * zeilen."*
+ *
+ * `[cmd]` **Es war der Rest von G-191:** dort flog der Statuscode aus
+ * der Kachel, **die graue Zeile blieb als Notloesung** — Beschriftung
+ * links, Begruendungssatz rechts, in einer Zeilenform, die fuer Zahlen
+ * gebaut war.
+ *
+ * ══ IMMER ALLE VIER, MIT DREI ZUSTAENDEN ═══════════════════════════
+ *
+ * `[cmd]` **Gemessen 2026-08-26 (412 sichtbare):** ein echter Wert ist
+ * die Ausnahme — `upper_limit` **9**, `guideline_dose` **14**. **Ein
+ * Grund steht bei 246 bzw. 261, gar nichts bei 157 bzw. 137.**
+ *
+ * `[read]` **Deshalb drei Formen, nicht zwei.** Begruendung und
+ * Zahlen im Kopf von `lib/supplements/dosis-zustand.ts`.
+ *
+ * `[cmd]` **Feste Breite wie G-181** — `width: 196px`, kein `1fr`.
+ */
+export function DosisKacheln({ zahlen }: { zahlen: Zahlen }) {
+  const kacheln = dosisKacheln(zahlen)
   return (
-    <div className="v2-supp-kasten">
-      {/* G-196: bleibt grau — ein Sammelkasten (Obergrenze, Einnahme,
-          Mit Essen) hat keine gemeinsame Aussage. Begruendung im
-          Kopf von `block-ton.ts`. */}
-      <BlockTitel titel="Weitere Angaben" stil={{ marginBottom: 6 }} />
-      {zeilen.map(([label, wert, istGrund]) => (
-        <div key={label} className="v2-supp-kasten-zeile">
-          <span className="v2-muted">{label}</span>
-          <span className={istGrund ? 'v2-supp-kasten-grund' : 'v2-supp-kasten-wert'}>
-            {wert}
-          </span>
+    <div className="v2-supp-zahlen" style={{ marginBottom: 14 }}>
+      {kacheln.map(k => (
+        <div key={k.id} className="v2-supp-zahl-kachel"
+             data-zustand={k.zustand}>
+          <span className="v2-supp-zahl-label">{k.label}</span>
+          {k.zustand === 'wert' && (
+            <span className="v2-supp-zahl-wert">{k.wert}</span>
+          )}
+          {/* `[read]` Der Grund steht in normaler Schrift, nicht als
+              grosse Zahl — er ist eine Aussage, keine Menge (G-191). */}
+          {k.zustand === 'gibt_es_nicht' && (
+            <span className="v2-supp-zahl-grund">{k.grund}</span>
+          )}
+          {/* `[read]` **Der dritte Zustand traegt kein Zeichen, das
+              nach Wert aussieht.** Ein Strich waere eine Angabe; „nie
+              untersucht" darf nicht wie „unbedenklich" wirken. */}
+          {k.zustand === 'nicht_erhoben' && (
+            <span className="v2-supp-zahl-leer">{NICHT_ERHOBEN}</span>
+          )}
         </div>
       ))}
     </div>
@@ -512,10 +525,23 @@ function CommunityBlock({ community }: { community: CommunityHinweise | null | u
   return (
     <div className="v2-col-gap" style={{ gap: 12 }}>
       <div className="v2-supp-kasten">
-        <BlockTitel titel="Aus der Community" stil={{ marginBottom: 5 }} />
-        <p className="v2-muted" style={{ fontSize: 12, lineHeight: 1.55, margin: 0 }}>
-          Erfahrungsberichte und Szene-Sprache. Gezeigt wird, welche Kosten und
-          Unsicherheiten berichtet werden; keine Protokolle, keine Gegenmassnahmen.
+        {/* ══ G-199 Punkt 1 ═══════════════════════════════════════
+            **Auftrag: *„`evidence_class` gehoert sichtbar hinein —
+            das muss man sehen, ohne zu suchen."***
+            `[cmd]` Bei allen 212 Zeilen der Sicht steht `E`. */}
+        <div className="v2-supp-community-kopf">
+          <BlockTitel titel="Aus der Community" stil={{ marginBottom: 0 }} />
+          <span className="v2-supp-evidenz-marke">
+            <Icon name="alert" className="v2-ic v2-ic-sm" />
+            Evidenzklasse {community.evidenzklasse} · Erfahrungsberichte,
+            keine Studien
+          </span>
+        </div>
+        <p className="v2-muted" style={{
+          fontSize: 12, lineHeight: 1.55, margin: '6px 0 0',
+        }}>
+          Gezeigt wird, welche Kosten und Unsicherheiten berichtet werden;
+          keine Protokolle, keine Gegenmassnahmen.
         </p>
       </div>
 
@@ -672,10 +698,17 @@ export function ReiterInhalt(
             vier Reitern — dreimal derselbe Text, jedes Mal die halbe
             Tafel. `[read]` Tom: *„es gibt keinen grund oben ueberall
             dasselbe zu zeigen."* Er steht einmal im Ueberblick. */}
-        <Zahlenkacheln kacheln={kacheln.filter(k => k.id !== 'beleglage')} />
-        {/* Was nicht in eine Kachel passt — Obergrenze, Einnahme —
-            steht darunter als Zeilenkasten. */}
-        <Zahlenkasten zahlen={zahlen} />
+        {/* ══ G-199 Punkt 2 ═══════════════════════════════════════
+            **Auch die WADA-Kachel gehoert hier nicht hin.** `[cmd]`
+            G-195 hat den Textblock in die Rechtslage verschoben, die
+            Kachel blieb stehen — auf Toms Bild von
+            Desoxymethyltestosterone stand sie unter *Dosierung*.
+            **Sie sagt, OB erlaubt; das ist eine Ueberblicksfrage.** */}
+        <Zahlenkacheln kacheln={kacheln.filter(
+          k => k.id !== 'beleglage' && k.id !== 'wada')} />
+        {/* G-199 Punkt 3+4: aus den grauen Zeilen werden Kacheln, und
+            sie erscheinen IMMER — mit drei Zustaenden. */}
+        <DosisKacheln zahlen={zahlen} />
         {/* G-186 Punkt 1: `wann_wie_de` ist das EINZIGE Feld, das bei
             allen 318 gefuellt ist (Menge 83, Obergrenze 38, Einnahme
             19). `[read]` Deshalb bekommt es die Zerlegung aus G-183 —

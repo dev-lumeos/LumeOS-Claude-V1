@@ -280,6 +280,14 @@ export type CommunityBegriff = {
 }
 
 export type CommunityHinweise = {
+  /**
+   * G-199: die Evidenzklasse, sichtbar im Reiter.
+   *
+   * **Auftrag: *„`evidence_class` gehoert sichtbar hinein — dass es
+   * Erfahrungsberichte sind und keine Studien, muss man sehen, ohne zu
+   * suchen."*** `[cmd]` Bei allen 212 Zeilen `E`.
+   */
+  evidenzklasse: string
   nebenwirkungen: CommunityNebenwirkung[]
   tradeoffs: CommunityTradeoff[]
   mythen: CommunityMythos[]
@@ -550,67 +558,113 @@ export async function ladeSubstanz(id: string): Promise<SubstanzSatz | null> {
   } as SubstanzSatz
 }
 
-type CommunityRecord = {
-  dataset: string
+/**
+ * Eine Zeile der Sicht `supplements.community_anzeige` (C-280).
+ *
+ * `[cmd]` **28 Spalten, flach** — nicht mehr `raw` als JSON. Die
+ * Sicht traegt je Zeile nur die Felder ihrer Art; die uebrigen sind
+ * `null`.
+ */
+type CommunityZeile = {
+  anzeige_typ: string
   record_key: string
-  admin_only: boolean
-  not_medical_recommendation: boolean
   evidence_class: string | null
-  raw: Record<string, unknown>
+  substance_ids: string[] | null
+  side_effect: string | null
+  community_attribution_note: string | null
+  prevalence: string | null
+  onset_context: string | null
+  attribution_confidence: string | null
+  community_consistency: string | null
+  scientific_alignment: string | null
+  limitations: string | null
+  community_evidence_grade: string | null
+  name: string | null
+  expected_tradeoff: string | null
+  quality_signal: string | null
+  quality_claim: string | null
+  independent_testing: string | null
+  quality_sources: string | null
+  term: string | null
+  community_definition: string | null
+  community_claim: string | null
+  community_resolution: string | null
 }
 
-const COMMUNITY_DATASETS = [
-  'community_side_effect_patterns',
-  'community_stack_patterns',
-  'community_intelligence_patterns',
-  'community_product_quality_signals',
-  'community_terminology_terms',
-] as const
-
+/**
+ * Die Community-Hinweise einer Substanz — G-199.
+ *
+ * ══ WARUM DIESE FUNKTION NEU GESCHRIEBEN IST ═══════════════════════
+ *
+ * `[cmd]` **G-192 hat den Reiter gebaut, aber nie befuellt.** Sie las
+ * `wissen.community_records` ueber einen Service-Role-Client — und
+ * gab `null` zurueck, sobald PostgREST das Schema `wissen` nicht
+ * kennt. **Genau das war der Fall**, also blieb der Reiter leer.
+ *
+ * `[cmd]` **Seit C-280 gibt es `supplements.community_anzeige`** —
+ * 212 Zeilen, 28 Spalten, im Fachschema. `authenticated` hat SELECT,
+ * **sie kommt ueber den normalen Sitzungsclient an.** Kein
+ * Service-Role-Umweg, keine zweite Verbindung.
+ *
+ * ══ WAS ANKOMMT, GEMESSEN ══════════════════════════════════════════
+ *
+ * `[cmd]` **Gemessen 2026-08-26:** `substance_ids` traegt **Slugs**
+ * (`sub_xxxx`), nicht UUIDs — 64 der 212 Zeilen sind gefuellt.
+ * **Sie treffen 49 der 412 sichtbaren Substanzen.**
+ *
+ * `[cmd]` **Der Klassen-Rueckfall greift nicht:** `substance_class`
+ * (37 Zeilen) benutzt ein eigenes Vokabular (`aas_19nor`, `sarms`,
+ * `gh_igf`) — **0 Treffer** gegen `supplement_groups.code`, wo nur
+ * `supplement`, `enhanced` und `peptide` stehen. **146 der 212 Zeilen
+ * tragen weder Kennung noch Klasse.**
+ *
+ * `[read]` **Deshalb nur ueber `substance_ids`.** Eine Zuordnung ueber
+ * eine Klasse, die es im Katalog nicht gibt, waere geraten.
+ */
 async function ladeCommunityHinweise(slug: string): Promise<CommunityHinweise | null> {
   if (!slug) return null
-  const service = wissenService()
-  if (!service) return null
-  const client = service.schema('wissen')
+  const client = createSessionClient()
   const { data, error } = await client
-    .from('community_records')
-    .select('dataset, record_key, admin_only, not_medical_recommendation, evidence_class, raw')
-    .in('dataset', [...COMMUNITY_DATASETS])
-  if (error) {
-    if (error.message.includes('Invalid schema: wissen')) return null
-    throw new Error(error.message)
-  }
+    .schema('supplements')
+    .from('community_anzeige')
+    // `[read]` **Die vier Anleitungsfelder sind nicht in der Sicht**
+    // — sie koennen gar nicht ankommen (C-280). Der Waechter aus
+    // G-192 bleibt trotzdem stehen.
+    .select('anzeige_typ, record_key, evidence_class, substance_ids,'
+      + ' side_effect, community_attribution_note, prevalence, onset_context,'
+      + ' attribution_confidence, community_consistency, scientific_alignment,'
+      + ' limitations, community_evidence_grade,'
+      + ' name, expected_tradeoff,'
+      + ' quality_signal, quality_claim, independent_testing, quality_sources,'
+      + ' term, community_definition,'
+      + ' community_claim, community_resolution')
+    .contains('substance_ids', [slug])
+  if (error) throw new Error(error.message)
 
-  const zeilen = ((data ?? []) as CommunityRecord[])
-    .filter(r => r.admin_only === true && r.not_medical_recommendation === true)
-    .filter(r => communityTrifftSubstanz(r, slug))
+  const zeilen = (data ?? []) as unknown as CommunityZeile[]
+  const je = (typ: string) => zeilen.filter(z => z.anzeige_typ === typ)
 
-  const nebenwirkungen = zeilen
-    .filter(r => r.dataset === 'community_side_effect_patterns')
-    .map(nebenwirkung)
+  const nebenwirkungen = je('nebenwirkung').map(nebenwirkung)
     .filter(Boolean) as CommunityNebenwirkung[]
-  const tradeoffs = zeilen
-    .filter(r => r.dataset === 'community_stack_patterns')
-    .map(tradeoff)
+  const tradeoffs = je('stack_tradeoff').map(tradeoff)
     .filter(Boolean) as CommunityTradeoff[]
-  const mythen = zeilen
-    .filter(r => r.dataset === 'community_intelligence_patterns'
-      && r.raw?.scientific_alignment === 'CONTRADICTED')
-    .map(mythos)
+  const mythen = je('mythos').map(mythos)
     .filter(Boolean) as CommunityMythos[]
-  const qualitaet = zeilen
-    .filter(r => r.dataset === 'community_product_quality_signals')
-    .map(qualitaetsSignal)
+  const qualitaet = je('produktqualitaet').map(qualitaetsSignal)
     .filter(Boolean) as CommunityQualitaet[]
-  const begriffListe = zeilen
-    .filter(r => r.dataset === 'community_terminology_terms')
-    .map(begriff)
+  const begriffListe = je('begriff').map(begriff)
     .filter(Boolean) as CommunityBegriff[]
 
-  if (nebenwirkungen.length + tradeoffs.length + mythen.length + qualitaet.length === 0) {
+  // `[read]` **Begriffe allein tragen keinen Reiter.** Ein
+  // Woerterbuch ohne Befund ist kein Erfahrungsbericht — dieselbe
+  // Linie wie in G-192.
+  if (nebenwirkungen.length + tradeoffs.length + mythen.length
+      + qualitaet.length === 0) {
     return null
   }
   return {
+    // `[cmd]` **`evidence_class` ist bei allen 212 Zeilen `E`.**
+    evidenzklasse: text(null, zeilen[0]?.evidence_class) ?? 'E',
     nebenwirkungen: sortCommunity(nebenwirkungen),
     tradeoffs: sortCommunity(tradeoffs),
     mythen: sortCommunity(mythen),
@@ -619,9 +673,75 @@ async function ladeCommunityHinweise(slug: string): Promise<CommunityHinweise | 
   }
 }
 
-function communityTrifftSubstanz(r: CommunityRecord, slug: string): boolean {
-  return arrayText(r.raw.substance_ids).includes(slug)
-    || text(null, r.raw.maps_to_substance_id) === slug
+/** `limitations` ist in der Sicht EIN Text, im Typ eine Liste. */
+function alsListe(v: string | null): string[] {
+  const t = text(null, v)
+  return t ? [t] : []
+}
+
+function nebenwirkung(r: CommunityZeile): CommunityNebenwirkung | null {
+  const effekt = text(null, r.side_effect)
+  if (!effekt) return null
+  return {
+    id: r.record_key,
+    effekt,
+    attribution: text(null, r.community_attribution_note),
+    onset: text(null, r.onset_context),
+    ...marken(r),
+  }
+}
+
+function tradeoff(r: CommunityZeile): CommunityTradeoff | null {
+  const wert = text(null, r.expected_tradeoff)
+  if (!wert) return null
+  return {
+    id: r.record_key,
+    name: text(null, r.name) ?? 'Community-Kombination',
+    tradeoff: wert,
+    ...marken(r),
+  }
+}
+
+function mythos(r: CommunityZeile): CommunityMythos | null {
+  const beobachtung = text(null, r.community_claim)
+  const korrektur = text(null, r.community_resolution)
+  if (!beobachtung || !korrektur) return null
+  return { id: r.record_key, mythos: beobachtung, korrektur, ...marken(r) }
+}
+
+function qualitaetsSignal(r: CommunityZeile): CommunityQualitaet | null {
+  const signal = text(null, r.quality_signal)
+  if (!signal) return null
+  return {
+    id: r.record_key,
+    signal,
+    anspruch: text(null, r.quality_claim),
+    studie: text(null, r.independent_testing),
+    ...marken(r),
+  }
+}
+
+function begriff(r: CommunityZeile): CommunityBegriff | null {
+  const term = text(null, r.term)
+  const definition = text(null, r.community_definition)
+  if (!term || !definition) return null
+  return {
+    id: r.record_key, begriff: term, definition,
+    kontext: null, grenzen: alsListe(r.limitations),
+    evidenz: text(null, r.evidence_class) ?? 'E',
+  }
+}
+
+function marken(r: CommunityZeile): CommunityMarken {
+  return {
+    verbreitung: text(null, r.prevalence),
+    vertrauen: text(null, r.attribution_confidence)
+      ?? text(null, r.community_consistency)
+      ?? text(null, r.community_evidence_grade),
+    abgleich: text(null, r.scientific_alignment),
+    evidenz: text(null, r.evidence_class) ?? 'E',
+    grenzen: alsListe(r.limitations),
+  }
 }
 
 function wissenService() {
@@ -648,84 +768,6 @@ function envMitRootFallback(): Record<string, string | undefined> {
     }
   }
   return env
-}
-
-function marken(r: CommunityRecord): CommunityMarken {
-  return {
-    verbreitung: text(null, r.raw.prevalence),
-    vertrauen: text(null, r.raw.attribution_confidence)
-      ?? text(null, r.raw.community_consistency)
-      ?? text(null, r.raw.community_evidence_grade),
-    abgleich: text(null, r.raw.scientific_alignment),
-    evidenz: text(null, r.evidence_class) ?? text(null, r.raw.evidence_class) ?? 'E',
-    grenzen: arrayText(r.raw.limitations),
-  }
-}
-
-function nebenwirkung(r: CommunityRecord): CommunityNebenwirkung | null {
-  const effekt = text(null, r.raw.side_effect)
-  if (!effekt) return null
-  return {
-    id: String(r.raw.side_effect_id ?? r.record_key),
-    effekt,
-    attribution: text(null, r.raw.community_attribution_note),
-    onset: text(null, r.raw.onset_context),
-    ...marken(r),
-  }
-}
-
-function tradeoff(r: CommunityRecord): CommunityTradeoff | null {
-  const wert = text(null, r.raw.expected_tradeoff)
-  if (!wert) return null
-  return {
-    id: String(r.raw.stack_id ?? r.record_key),
-    name: text(null, r.raw.name)
-      ?? text(null, r.raw.observed_combination_pattern)
-      ?? 'Community-Kombination',
-    tradeoff: wert,
-    ...marken(r),
-  }
-}
-
-function mythos(r: CommunityRecord): CommunityMythos | null {
-  const beobachtung = text(null, r.raw.observed_practice)
-  const korrektur = text(null, r.raw.scientific_crosscheck)
-    ?? text(null, r.raw.scientific_alignment)
-  if (!beobachtung || !korrektur) return null
-  return {
-    id: String(r.raw.pattern_id ?? r.record_key),
-    mythos: beobachtung,
-    korrektur,
-    ...marken(r),
-  }
-}
-
-function qualitaetsSignal(r: CommunityRecord): CommunityQualitaet | null {
-  const signal = text(null, r.raw.community_quality_signal)
-    ?? text(null, r.raw.reported_signal)
-    ?? text(null, r.raw.complaint_pattern)
-  if (!signal) return null
-  return {
-    id: String(r.raw.signal_id ?? r.record_key),
-    signal,
-    anspruch: text(null, r.raw.claim),
-    studie: text(null, r.raw.independent_testing),
-    ...marken(r),
-  }
-}
-
-function begriff(r: CommunityRecord): CommunityBegriff | null {
-  const term = text(null, r.raw.term)
-  const definition = text(null, r.raw.community_definition)
-  if (!term || !definition) return null
-  return {
-    id: String(r.raw.term ?? r.record_key),
-    begriff: term,
-    definition,
-    kontext: text(null, r.raw.usage_context),
-    grenzen: arrayText(r.raw.source_refs),
-    evidenz: text(null, r.evidence_class) ?? 'E',
-  }
 }
 
 function sortCommunity<T extends CommunityMarken>(items: T[]): T[] {

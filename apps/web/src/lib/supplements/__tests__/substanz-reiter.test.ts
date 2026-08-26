@@ -38,6 +38,8 @@ const FORM: Unterform = {
 }
 const FRAGE: Frage = { frage: 'Muss ich laden?', antwort: 'Nötig ist es nicht.' }
 const COMMUNITY: CommunityHinweise = {
+  // G-199: die Evidenzklasse steht sichtbar im Reiter.
+  evidenzklasse: 'E',
   nebenwirkungen: [{
     id: 'se1',
     effekt: 'Deca dick',

@@ -738,17 +738,21 @@
  * `[read]` Die Flaeche bleibt zurueckhaltend (6–7 %), damit ein
  * ganzer Katalog voll „erlaubt" nicht gruen leuchtet. */
 .v2-supp-wada-block[data-ton="gefahr"] {
-  background: color-mix(in oklch, var(--warn) 5%, transparent);
+  /* G-197: auf `--surface` gemischt, nicht auf `transparent`.
+   * `[cmd]` **Gemessen 2026-08-26:** durch `transparent` schlug der
+   * Tafelboden durch — `oklch(0.982 0.006 1)`, also 4 % Modulakzent
+   * auf Weiss. Der Warntext lag dadurch bei **4.35** statt 4.58. */
+  background: color-mix(in oklch, var(--warn) 5%, var(--surface));
   border-color: color-mix(in oklch, var(--warn) 34%, var(--border));
 }
 
 .v2-supp-wada-block[data-ton="entwarnung"] {
-  background: color-mix(in oklch, var(--pos) 5%, transparent);
+  background: color-mix(in oklch, var(--pos) 5%, var(--surface));
   border-color: color-mix(in oklch, var(--pos) 26%, var(--border));
 }
 
 .v2-supp-wada-block[data-ton="pruefen"] {
-  background: color-mix(in oklch, var(--acc-suppl) 6%, transparent);
+  background: color-mix(in oklch, var(--acc-suppl) 6%, var(--surface));
   border-color: color-mix(in oklch, var(--acc-suppl) 28%, var(--border));
 }
 
@@ -1044,9 +1048,13 @@
   color: var(--fg);
 }
 
-.v2-supp-zahl-wert[data-ton="pos"]  { color: var(--pos); }
-.v2-supp-zahl-wert[data-ton="warn"] { color: var(--warn); }
-.v2-supp-zahl-wert[data-ton="acc"]  { color: var(--acc); }
+/* G-198: dieselben vier Namen wie ueberall. `[cmd]` Hier stand das
+ * DRITTE Vokabular (`pos`/`warn`/`acc`) — gefunden erst, als G-198
+ * danach suchte. */
+.v2-supp-zahl-wert[data-ton="entwarnung"] { color: var(--pos); }
+.v2-supp-zahl-wert[data-ton="gefahr"]     { color: var(--warn); }
+.v2-supp-zahl-wert[data-ton="pruefen"]    { color: var(--acc-suppl); }
+.v2-supp-zahl-wert[data-ton="wirkung"]    { color: var(--acc); }
 
 .v2-supp-zahl-hinweis {
   display: block;
@@ -1087,6 +1095,75 @@
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+/* --- G-199: die drei Zustaende einer Dosiskachel ----------------- */
+/*
+ * `[cmd]` **Gemessen 2026-08-26 ueber die 412 sichtbaren:** ein
+ * echter Wert ist die Ausnahme (`upper_limit` 9, `guideline_dose`
+ * 14). **Ein Grund steht bei 246 bzw. 261, gar nichts bei 157 bzw.
+ * 137.**
+ *
+ * `[read]` **Der dritte Zustand ist sicherheitsrelevant:** *„nie
+ * untersucht"* darf nicht aussehen wie *„unbedenklich"*. Deshalb
+ * traegt er WORTE („Nicht erhoben"), keinen Strich — ein Strich
+ * sieht aus wie eine Angabe.
+ *
+ * `[read]` **Keine eigene Farbe.** Die Ordnung aus G-196 gilt: Farbe
+ * bedeutet etwas, und „nicht erhoben" ist keine der vier
+ * Bedeutungen. Der Unterschied liegt in Schrift und Staerke.
+ */
+.v2-supp-zahl-grund {
+  display: block;
+  margin-top: 2px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--fg-muted);
+  overflow-wrap: anywhere;
+}
+
+.v2-supp-zahl-leer {
+  display: block;
+  margin-top: 2px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  font-style: italic;
+  color: var(--fg-dim);
+}
+
+/* Eine Kachel ohne Erhebung tritt zurueck — sie steht da, damit die
+ * Reihe vollstaendig bleibt, nicht um gelesen zu werden. */
+.v2-supp-zahl-kachel[data-zustand="nicht_erhoben"] {
+  border-style: dashed;
+}
+
+/* --- G-199: die Evidenzmarke des Community-Reiters ---------------- */
+/*
+ * **Auftrag: *„`evidence_class` gehoert sichtbar hinein — dass es
+ * Erfahrungsberichte sind und keine Studien, muss man sehen, ohne zu
+ * suchen."***
+ *
+ * `[cmd]` **Bei allen 212 Zeilen der Sicht steht `E`.**
+ */
+.v2-supp-evidenz-marke {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklch, var(--acc-suppl) 34%, var(--border));
+  background: color-mix(in oklch, var(--acc-suppl) 6%, transparent);
+  font-size: 10px;
+  color: var(--acc-suppl);
+  white-space: nowrap;
+}
+
+.v2-supp-community-kopf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 /* G-196: dieselben vier Namen wie bei jeder Ueberschrift. Vorher

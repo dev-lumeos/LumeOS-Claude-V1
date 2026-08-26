@@ -29,13 +29,26 @@
 // Sie ist kurz, sie ist nachlesbar, und wer sie erweitert, hat die
 // Zahl gelesen. **Was nicht drinsteht, bekommt keine Kachel.**
 
+import type { BlockTon } from './block-ton'
+
 /** Eine Zahlenkachel: Beschriftung, grosse Zahl, eine Zeile Erklaerung. */
 export type Kachel = {
   id: 'beleglage' | 'menge' | 'wirkung' | 'wada'
   label: string
   wert: string
   hinweis: string | null
-  ton?: 'pos' | 'warn' | 'acc'
+  /**
+   * G-198: die Bedeutung, nicht die Farbe.
+   *
+   * `[cmd]` **Hier stand `'pos' | 'warn' | 'acc'`** — ein DRITTES
+   * Vokabular neben den vier Bedeutungen aus G-196 und neben den
+   * Textkacheln, die G-196 schon umgestellt hatte. **Gefunden erst,
+   * als G-198 danach suchte.**
+   *
+   * `[read]` **Drei Systeme laufen dreifach auseinander.** Jetzt
+   * kommt auch dieses aus `block-ton.ts`.
+   */
+  ton?: BlockTon
 }
 
 /**
@@ -65,9 +78,20 @@ export const WIRKUNG: Record<string, { wert: string; hinweis: string }> = {
   sub_4260ee932f: { wert: '2–3 %', hinweis: 'bei 1–10 Minuten Belastung' },
 }
 
-/** Der Farbton des Evidenzgrades — A/B gruen, C neutral, D-F warnend. */
-const GRAD_TON: Record<string, 'pos' | 'warn' | 'acc'> = {
-  A: 'pos', B: 'pos', C: 'acc', D: 'warn', E: 'warn', F: 'warn',
+/**
+ * Die Bedeutung des Evidenzgrades — G-198.
+ *
+ * `[read]` **Die Zuordnung aendert sich nicht, nur ihre Sprache.**
+ * A und B sind eine **Entwarnung** („das ist belegt"), D bis F eine
+ * **Gefahr** („darauf ist kein Verlass"). **C bekommt keine** —
+ * „gemischt belegt" ist keine der vier Aussagen, und eine Farbe
+ * ohne Bedeutung ist Dekoration.
+ *
+ * `[cmd]` Vorher trug C `acc`, also die WIRKUNGSfarbe — dabei sagt
+ * der Grad nichts ueber die Wirkung, sondern ueber die Beleglage.
+ */
+const GRAD_TON: Record<string, BlockTon> = {
+  A: 'entwarnung', B: 'entwarnung', D: 'gefahr', E: 'gefahr', F: 'gefahr',
 }
 
 const GRAD_TEXT: Record<string, string> = {
@@ -211,7 +235,10 @@ export function kachelnFuer(
       id: 'wada', label: 'WADA',
       wert: WADA_TEXT[wadaStatus] ?? wadaStatus,
       hinweis: [grund, klasse].filter(Boolean).join(' · ') || null,
-      ton: wadaStatus === 'prohibited' ? 'warn' : undefined,
+      // G-198: dieselbe Bedeutung wie im Rechtslage-Block (G-194).
+      ton: wadaStatus === 'prohibited' ? 'gefahr'
+        : wadaStatus === 'not_prohibited' ? 'entwarnung'
+          : wadaStatus === 'monitored' ? 'pruefen' : undefined,
     })
   }
 
