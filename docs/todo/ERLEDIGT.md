@@ -13127,3 +13127,69 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
 
   `[cmd]` 625 Tests gruen, Build 31/31, beide Breiten ohne Ueberlauf,
   **Testosterone Enanthate unveraendert.**
+
+- [x] **G-184: Die WADA-Kachel nennt keinen Geltungsbereich** —
+  **erledigt 2026-08-26 (Claude Code), Bericht
+  `docs/berichte/g-184-claude-code.md`.**
+
+  **Toms Frage vom 2026-08-25 — *„WADA verboten gilt das auch fuer
+  bodybuilding?"* — ist beantwortet, mit den Ligen namentlich.**
+
+  ### Die Messung entschied die Darstellung, nicht der Geschmack
+
+  `[cmd]` **`note_de`: min 253 · Median 387 · p90 697 · max 818
+  Zeichen, 143 von 320 ueber 200.**
+
+  `[read]` Der Auftrag nannte die Bedingung: *„wenn der laengste Text
+  drei Zeilen fuellt, ist ein Block richtiger."* `[cmd]` **Am Bild
+  nachgezaehlt: Kreatin 6 Zeilen, 1-Testosteron 10** — nicht knapp
+  erfuellt, sondern um das Doppelte bis Dreifache.
+
+  `[read]` **Und sein Zusatzargument traegt:** *„was man aufklappen
+  muss, liest niemand — der Auftrag entstand ja, weil die Antwort
+  fehlte."*
+
+  ### Drei Auftragszahlen von mir stimmten nicht
+
+  `[cmd]` **Die Kategorie ist kein Code.** Ich nannte *S1.1, S2,
+  S4.1*; gemessen sind es **41 verschiedene Werte bis 91 Zeichen** —
+  *„S1.1 Anabolic agents (exogene AAS: Testosteron und seine Ester) —
+  jederzeit verboten"*. **Angezeigt wird der Code am Anfang, der Rest
+  steht ohnehin im Satz.**
+
+  `[cmd]` **`monitored` fiel nicht unter *„erlaubt"***.
+  `substanz-kacheln.ts` fuehrt seit G-182 alle drei Zustaende korrekt —
+  **dem Zustand fehlte nur der Satz.**
+
+  `[cmd]` **124 Substanzen ohne WADA-Zeile, nicht 92.** Der Katalog ist
+  seit meiner Messung gewachsen.
+
+  ### Zwei Datenfunde
+
+  `[cmd]` **Phenibut und Tianeptin tragen `prohibited`, waehrend
+  `wada_category` woertlich *„not prohibited"* sagt.** Die Anzeige
+  unterdrueckt die widerspruechliche Klasse — **als C-282 angelegt.**
+
+  `[cmd]` **Koffein ist `monitored` und `im_katalog = false`** — eine
+  der drei beobachteten Substanzen ist unsichtbar. `[read]`
+  **Aufgefallen, weil die Bildsuche sie nicht fand.** Die Ursache ist
+  groesser als der Fall: **216 Angaben haengen an unsichtbaren
+  Unterformen** — als **C-281** angelegt.
+
+  ### Zwei eigene Fehler, beide von der Pruefung gefunden
+
+  `[read]` **Der Verdrahtungswaechter war zu schwach:**
+  `wadaNote={undefined}` kam durch, **weil der Name in der
+  Typdeklaration weiterlebt.** Er prueft jetzt die Bindung, nicht das
+  Vorkommen. `[cmd]` **Vierter Fall desselben blinden Flecks** —
+  G-186, G-187, G-191.
+
+  `[read]` **Und `78ch` ergab 97 Zeichen je Zeile**, ueber der
+  G-181-Schwelle. `ch` ist die Breite der Null; **die
+  Proportionalschrift bringt mehr unter.** Mit `64ch` sind es 80, bei
+  1280 wie bei 1920 identisch. `[read]` **Aufgefallen erst, als die
+  Pruefung die gesetzten Zeilen zaehlte statt sie zu schaetzen.**
+
+  `[cmd]` 635 Tests gruen, Build 31/31, Encoding sauber (20.014), vier
+  Gegenproben am Bild, Negativprobe dreifach rot mit SHA-identischem
+  Rueckbau. Server durchgehend PID 351936.

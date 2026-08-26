@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-26.** 247 offen, 0 in Arbeit.
+**Stand: 2026-08-26.** 248 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -5978,33 +5978,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` **Laeuft parallel zu C-262**, weil Claude Code die
   JSONL-Dateien direkt liest und nicht die Datenbank.
 
-- [ ] **G-184: Die WADA-Kachel nennt keinen Geltungsbereich** (neu
-  2026-08-25). Aus G-182, Punkt 7.
-
-  **Tom, 2026-08-25:** *„WADA verboten gilt das auch fuer
-  bodybuilding?"*
-
-  `[cmd]` **Der Bestand:** 124 `prohibited`, 163 `not_prohibited`, 3
-  `monitored`; `wada_category` bei 129 — **aber `note_de` bei 0 von
-  290.** Der Geltungsbereich steht nirgends.
-
-  `[cmd]` **Die Kachel sagt seit G-182 *„im getesteten Wettkampf"***
-  — das war die Sofortmassnahme und ist richtig.
-
-  `[wahrscheinlich]` **Offen bleibt die Sache selbst:** die WADA-Liste
-  bindet nur Verbaende, die den Code unterzeichnet haben. Im
-  Bodybuilding waeren das IFBB Elite/Amateur und die Natural-Ligen —
-  **nicht** IFBB Professional League und NPC.
-
-  `[read]` **Das ist `[wahrscheinlich]`, nicht `[cmd]`.** Es steht in
-  keinem Datensatz und darf deshalb **nicht** in die Oberflaeche
-  geschrieben werden. Claude Code hat das im Auftrag untersagt bekommen
-  und sich daran gehalten.
-
-  **Zu tun:** an Kimi geben — je Substanz oder wenigstens je
-  WADA-Kategorie ein Satz, fuer wen die Sperre praktisch gilt.
-  **Mit Beleg.**
-
 - [ ] **C-268: Beim Einladen gibt es keine Namensaufloesung** (neu
   2026-08-25). Aus C-225, von Fable gemeldet.
 
@@ -6372,3 +6345,72 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   Warnfarbe waere falsch. **Die meisten Farbordnungen koennen warnen,
   aber nicht entwarnen.** Wenn die Regel hier traegt, traegt sie
   ueberall.
+
+- [ ] **C-281: 216 Angaben haengen an unsichtbaren Unterformen** (neu
+  2026-08-26). Aus G-184, angestossen durch einen Koffein-Fund.
+
+  `[cmd]` **Claude Code fiel auf, dass Koffein `monitored` ist und
+  `im_katalog = false`** — eine der drei beobachteten Substanzen ist
+  fuer den Nutzer unsichtbar. `[read]` **Die Ursache ist groesser als
+  der Fall.**
+
+  `[cmd]` **Vom Orchestrator gemessen, Angaben an Zeilen mit
+  `parent_id`:**
+
+      supplement_dosing        101
+      supplement_lab_effects    48
+      supplement_user_texts     35
+      supplement_wada           32
+
+  `[cmd]` **Und bei allen 32 WADA-Zeilen hat der Sammelname keine
+  eigene** — das Wissen liegt durchgehend unter dem unsichtbaren
+  Eintrag, nicht daneben.
+
+  `[read]` **Das ist die Folge von C-244 und C-276.** Die Entscheidung
+  *„der Sammelname gewinnt"* hat die **Anzeige** geordnet — 101 Formen
+  haengen jetzt richtig unter ihren Sammelnamen. **Aber das Wissen ist
+  mitgewandert, statt hochzurutschen.**
+
+  `[read]` **Konkret:** Magnesiumcitrat traegt seine Dosisangabe,
+  *„Magnesium"* zeigt sie nicht. Koffein-anhydrous traegt den
+  WADA-Status, *„Caffeine"* zeigt ihn nicht.
+
+  **Zwei Wege, und die Wahl ist je Feld verschieden:**
+
+  `[read]` **Erben, wo die Aussage fuer alle Formen gilt** — der
+  WADA-Status von Koffein haengt nicht am Kristallwasser. **Nicht
+  erben, wo sie sich unterscheidet** — Magnesiumoxid und -glycinat
+  haben verschiedene Vertraeglichkeit, und C-266 hat genau deshalb
+  entschieden, keine Texte zu vererben.
+
+  `[read]` **Miss je Feld, wie stark die Formen auseinandergehen**,
+  bevor du entscheidest. **Ein Feld, das bei allen Kindern gleich ist,
+  darf hochrutschen. Eines, das sich unterscheidet, gehoert an die
+  Form — und dann muss die Form erreichbar sein.**
+
+- [ ] **C-282: Phenibut und Tianeptin widersprechen sich in derselben
+  Zeile** (neu 2026-08-26). Aus G-184.
+
+  `[cmd]` **`wada_status = 'prohibited'`, waehrend `wada_category`
+  woertlich sagt:**
+
+      Phenibut     "not on WADA list (not prohibited)"
+      Tianeptine   "not prohibited"
+
+  `[read]` **Kimi hat den Widerspruch selbst vermerkt** — er stammt aus
+  dem Altbestand, nicht aus der Anreicherung.
+
+  `[cmd]` **Claude Code unterdrueckt die widerspruechliche Klasse in
+  der Anzeige**, sonst staende *„verboten · not prohibited"*
+  nebeneinander. `[read]` **Richtig als Sofortmassnahme — aber die
+  Anzeige repariert einen Datensatz, und das gehoert nicht dorthin.**
+
+  **Zu tun:** den Widerspruch aufloesen. `[read]` **Nicht raten:**
+  `wada_scope_enrichment` und `wada_status_enrichment` tragen beide
+  Quellen. **Wo sie sich unterscheiden, ist das ein Konflikt-Record**,
+  wie bei den sechs WADA-Korrekturen aus C-272.
+
+  `[cmd]` **Und pruefen, ob es mehr sind:** die Abfrage ist
+  `wada_status = 'prohibited' AND wada_category ILIKE '%not
+  prohibited%'` — heute zwei Treffer, **aber der umgekehrte Fall ist
+  ungeprueft.**

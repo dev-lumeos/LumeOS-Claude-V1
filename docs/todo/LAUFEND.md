@@ -86,7 +86,9 @@ einziger Ester. **HGH ebenso.** Deca, Tren und Methandienone waren da.
 
 **Dazu in denselben Lauf gegeben:** der PubChem-Konflikt als
 Konflikt-Record, ein Durchlauf ueber alle Kennungen, und je
-WADA-Kategorie ein Satz zum Geltungsbereich (G-184).
+WADA-Kategorie ein Satz zum Geltungsbereich. `[cmd]` **Beides
+geliefert und importiert** — 20 Konflikt-Records (C-272), `note_de`
+bei 320 von 320.
 
 
 
@@ -96,8 +98,19 @@ WADA-Kategorie ein Satz zum Geltungsbereich (G-184).
 
 | Auftrag | Bereich |
 |---|---|
-| **G-184** WADA-Kachel nennt keinen Geltungsbereich — `note_de` 0/290, bei Kimi angefordert | `apps/web` |
-| **C-244** Substanz oder Form — Kimi fuehrt sieben Magnesiumsalze, der Katalog den Sammelnamen | Entscheidung Tom |
+| **C-281** 216 Angaben haengen an unsichtbaren Unterformen | `supabase/` |
+| **C-282** Phenibut und Tianeptin widersprechen sich in derselben Zeile | `supabase/` |
+| **C-274** die 149 unsichtbaren zuordnen — 66 mit sichtbarem Gegenstueck | `supabase/` |
+| **C-278** 700 ms zwischen Datenbank und Anwendung | messen |
+| **C-279** Kreuzprodukt in `rule_assessment` skaliert mit `intake_logs` | `supabase/` |
+
+`[cmd]` **G-184 ist erledigt** (2026-08-26, Claude Code) — `note_de`
+bei 320 von 320, als Block statt Aufklapper, weil der laengste Text
+zehn Zeilen fuellt.
+
+`[cmd]` **C-244 ist entschieden** (2026-08-23, Tom): *„c244
+magnesium"* — der Sammelname gewinnt, 101 Formen haengen ueber
+`parent_id`.
 
 `[cmd]` **G-175 ist erledigt** (2026-08-23, Fable) — neun Skripte
 entdrahtet, `test-user@lumeos.local` ohne Kopierschritt anmeldbar.
@@ -109,10 +122,12 @@ Gate-Pruefung hinterlassen statt eines Merksatzes:
 Tabellen, 0 ohne Rueckfall).
 
 `[cmd]` **Dazu seit dem 2026-08-25:**
-`tools/supplement-kennungen-pruefen.mjs` (C-267) — meldet
-widerspruechliche Kennungen, drei bekannte Konflikte als Ausnahme, ein
-vierter macht rot. **Damit sind es sechs Gate-Pruefungen, die aus einem
-Fehler entstanden sind.**
+`tools/supplement-kennungen-pruefen.mjs` (C-267),
+`tools/supplement-kern-dubletten-pruefen.mjs` (C-276),
+`tools/ladekette-pruefen.mjs` (G-190) und die
+Abhaengigkeitspruefung in `tools/nummern-pruefen.mjs`. **Damit sind es
+zehn Gate-Pruefungen, die aus einem Fehler entstanden sind.**
+
 
 
 **Klein und blockierend**
@@ -157,12 +172,18 @@ laufen als ein Auftrag.
 
 | | |
 |---|---|
-| **G-184** | `[cmd]` **Fuer wen gilt die WADA-Sperre?** `note_de` **0 von 290** — der Geltungsbereich steht nirgends. Die Kachel sagt seit G-182 *„im getesteten Wettkampf"*; **welche Verbaende testen, ist bei Kimi angefordert.** `[wahrscheinlich]` IFBB Professional League und NPC sind keine Unterzeichner. |
 | **C-171** | Medical: Symptome, Termine, Dokumente — **34 Symptome liegen seit C-262 vor**, die Tabelle steht |
 | Taxonomie | 59 feine Kategorien neben 23 Filtern — Abnahme offen |
 
+`[cmd]` **G-184 ist beantwortet und gebaut** (2026-08-26): `note_de`
+bei **320 von 320**, mit den Ligen namentlich und verifizierten
+Quellen. **Und genauer als meine Vermutung** — die Natural-Ligen
+fuehren eigene, weitergehende Sperrlisten (DHEA, Ephedrin, 7-Keto)
+mit Sperrfristen bis zehn Jahre; NPC und IFBB Pro testen **bei
+ausgewiesenen Natural-Wettkaempfen**, sonst nicht.
+
 `[cmd]` **Beantwortet und erledigt:** **C-244** (*„c244 magnesium"* —
-Sammelname gewinnt, 29 Unterformen ueber `parent_id`) · **C-242**
+Sammelname gewinnt, 101 Unterformen ueber `parent_id`) · **C-242**
 (Ursache war der Benennungsschnitt, nicht die Dubletten) · **C-241**
 (Nachweiskonto hat seit C-251 eine Einkaufsliste mit 6 echten Posten).
 

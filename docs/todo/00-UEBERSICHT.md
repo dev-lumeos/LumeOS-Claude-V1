@@ -276,18 +276,19 @@ wenn er erzeugt und geprüft wird.
 | **C-261** Der Abgleich aus C-260 ist ungefiltert nicht benutzbar | offen | 5878 |
 | **C-262** Der Import — vier Wellen | offen | 5925 |
 | **C-263** Deutsche Beschreibungen aus Kimis Fachdaten ableiten | offen | 5955 |
-| **G-184** Die WADA-Kachel nennt keinen Geltungsbereich | offen | 5981 |
-| **C-268** Beim Einladen gibt es keine Namensaufloesung | offen | 6008 |
-| **C-269** Eine Einladung laesst sich nicht zuruecknehmen | offen | 6026 |
-| **G-186** Der Katalog zeigt noch nicht alles, was drinsteht | offen | 6051 |
-| **G-188** Der Wechselwirkungs-Reiter heisst nicht, was er zeigt | offen | 6080 |
-| **G-189** Der tote Rueckfallzweig `SuppInteractions` fliegt | offen | 6098 |
-| **C-271** `rule_catalog` laedt immer — jeder Rueckfallzweig daran | offen | 6111 |
-| **C-272** Welle 1 — der Katalog wird inhaltlich fertig | offen | 6129 |
-| **C-274** Die 248 unsichtbaren zuordnen | offen | 6164 |
-| **C-278** Zwischen Datenbank und Anwendung liegen 700 ms | offen | 6193 |
-| **C-279** Das Kreuzprodukt in `rule_assessment` skaliert mit den | offen | 6210 |
-| **G-193** Jede Leistungszahl nennt das Konto | offen | 6229 |
-| **G-192** Ein Community-Reiter im Substanzdetail | offen | 6253 |
-| **C-280** Eine Sicht, die nur zeigt, was gezeigt werden darf | offen | 6303 |
-| **G-194** Der Quellen-Chip und farbige Ueberschriften | offen | 6339 |
+| **C-268** Beim Einladen gibt es keine Namensaufloesung | offen | 5981 |
+| **C-269** Eine Einladung laesst sich nicht zuruecknehmen | offen | 5999 |
+| **G-186** Der Katalog zeigt noch nicht alles, was drinsteht | offen | 6024 |
+| **G-188** Der Wechselwirkungs-Reiter heisst nicht, was er zeigt | offen | 6053 |
+| **G-189** Der tote Rueckfallzweig `SuppInteractions` fliegt | offen | 6071 |
+| **C-271** `rule_catalog` laedt immer — jeder Rueckfallzweig daran | offen | 6084 |
+| **C-272** Welle 1 — der Katalog wird inhaltlich fertig | offen | 6102 |
+| **C-274** Die 248 unsichtbaren zuordnen | offen | 6137 |
+| **C-278** Zwischen Datenbank und Anwendung liegen 700 ms | offen | 6166 |
+| **C-279** Das Kreuzprodukt in `rule_assessment` skaliert mit den | offen | 6183 |
+| **G-193** Jede Leistungszahl nennt das Konto | offen | 6202 |
+| **G-192** Ein Community-Reiter im Substanzdetail | offen | 6226 |
+| **C-280** Eine Sicht, die nur zeigt, was gezeigt werden darf | offen | 6276 |
+| **G-194** Der Quellen-Chip und farbige Ueberschriften | offen | 6312 |
+| **C-281** 216 Angaben haengen an unsichtbaren Unterformen | offen | 6349 |
+| **C-282** Phenibut und Tianeptin widersprechen sich in derselben | offen | 6391 |
