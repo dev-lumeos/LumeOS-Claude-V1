@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-26.** 248 offen, 0 in Arbeit.
+**Stand: 2026-08-26.** 249 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6414,3 +6414,59 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `wada_status = 'prohibited' AND wada_category ILIKE '%not
   prohibited%'` — heute zwei Treffer, **aber der umgekehrte Fall ist
   ungeprueft.**
+
+- [ ] **G-195: Ein eigener Reiter „Rechtslage" statt zweier halber
+  Bloecke** (neu 2026-08-26).
+
+  braucht: G-194
+
+  **Tom, 2026-08-26:** *„wuerde es nicht sinn machen wada als eigenen
+  reiter zu haben anstatt das ganze bild zu zerstoeren?"* Und zur
+  Position: *„am ende reiter vor quellen, das ist alles nice to have
+  aber wird kaum einen interessieren, deswegen macht ein eigener
+  reiter sinn anstatt halbherzig was in ueberblick und was in
+  dosierung."*
+
+  `[read]` **Die Begruendung ist nicht Platzmangel, sondern Zweck:**
+  wer wissen will, **ob** ein Stoff im Wettkampf erlaubt ist, sieht die
+  Kachel. Wer die Ligen und Paragraphen liest, **sucht sie gezielt.**
+  **Halb im Ueberblick, halb in der Dosierung heisst: fuer beide am
+  falschen Ort.**
+
+  ### Die Zahlen stuetzen es
+
+  `[cmd]` **`note_de`: Median 387 Zeichen, Maximum 818, 143 von 320
+  ueber 200.** Kreatin fuellt 6 Zeilen, 1-Testosteron 10 — **ein Block
+  dieser Laenge verdraengt im Ueberblick, was dort hingehoert.**
+
+  `[cmd]` **320 von 412 haben eine WADA-Zeile, 136 eine Rechtslage.**
+  `[read]` **Umgekehrt zu G-186:** dort hat Claude Code die
+  Lab-Effects als Block in die Sicherheit gelegt statt als Reiter,
+  **weil sie bei 197 Substanzen leer waeren.** Hier waere der Reiter
+  bei drei Vierteln gefuellt.
+
+  ### Was hineingehoert
+
+  `[cmd]` `note_de` (320) · `wada_category` (145 bei den verbotenen) ·
+  `rechtslage_klartext_de` (136).
+
+  `[read]` **Ein Thema, nicht drei Felder:** WADA ist eine Rechtsfrage,
+  keine Wirkungsfrage. Sie steht neben *Rechtslage*, nicht neben *Wie
+  es wirkt*.
+
+  ### Was bleibt
+
+  `[read]` **Die WADA-Kachel bleibt im Ueberblick** — sie sagt in drei
+  Worten, ob erlaubt oder verboten. **Der Satz dahinter wandert.**
+
+  `[cmd]` **Position: vor *Quellen*.** `[read]` Die selteneren Reiter
+  nach hinten — der Ueberblick ist bei allen 412 gefuellt, die
+  Rechtslage bei 136.
+
+  `[read]` **Und die Farben kommen aus G-194**, nicht neu erfunden:
+  dort wird entschieden, welche Farbe *verboten*, *erlaubt* und
+  *beobachtet* bekommen. **Der Reiter erbt sie.**
+
+  `[read]` **Nachher sind es sechs Reiter** — Ueberblick, Dosierung,
+  Sicherheit, Community (G-192), Rechtslage, Quellen. **Ab sieben
+  sucht man.**

@@ -292,3 +292,4 @@ wenn er erzeugt und geprüft wird.
 | **G-194** Der Quellen-Chip und farbige Ueberschriften | offen | 6312 |
 | **C-281** 216 Angaben haengen an unsichtbaren Unterformen | offen | 6349 |
 | **C-282** Phenibut und Tianeptin widersprechen sich in derselben | offen | 6391 |
+| **G-195** Ein eigener Reiter „Rechtslage" statt zweier halber | offen | 6418 |
