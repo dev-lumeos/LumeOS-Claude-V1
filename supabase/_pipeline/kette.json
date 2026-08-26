@@ -859,6 +859,87 @@
       ]
     },
     {
+      "id": "273",
+      "path": "supabase/_pipeline/16_wissen/273_wissen_schema.sql",
+      "kind": "sql",
+      "creates": "C-273: Schema wissen fuer Kimi-Wissen ohne Anzeige",
+      "depends_on": [
+        "145"
+      ]
+    },
+    {
+      "id": "273a",
+      "path": "supabase/_pipeline/16_wissen/273a_wissen_rule_engine.ts",
+      "kind": "tsx",
+      "creates": "C-273 Block 1: Regel-Engine, Feldvertrag und Trait-Mapping in wissen",
+      "depends_on": [
+        "273"
+      ]
+    },
+    {
+      "id": "273b",
+      "path": "supabase/_pipeline/16_wissen/273b_wissen_register.ts",
+      "kind": "tsx",
+      "creates": "C-273 Block 2: Evidenzregister und current_value-null Punkte in wissen",
+      "depends_on": [
+        "273a"
+      ]
+    },
+    {
+      "id": "273c",
+      "path": "supabase/_pipeline/16_wissen/273c_wissen_lueckenkarten.ts",
+      "kind": "tsx",
+      "creates": "C-273 Block 3: Lueckenkarten, Abhaengigkeiten und Holds in wissen",
+      "depends_on": [
+        "273b"
+      ]
+    },
+    {
+      "id": "273d",
+      "path": "supabase/_pipeline/16_wissen/273d_wissen_produkte.ts",
+      "kind": "tsx",
+      "creates": "C-273 Block 4: Produkte, Marken, Hersteller und Brand-Index in wissen",
+      "depends_on": [
+        "273c"
+      ]
+    },
+    {
+      "id": "273e",
+      "path": "supabase/_pipeline/16_wissen/273e_wissen_scan_konzept.ts",
+      "kind": "tsx",
+      "creates": "C-273 Block 5: Scan- und Vision-Vertraege in wissen",
+      "depends_on": [
+        "273d"
+      ]
+    },
+    {
+      "id": "273f",
+      "path": "supabase/_pipeline/16_wissen/273f_wissen_reise_medikamente.ts",
+      "kind": "tsx",
+      "creates": "C-273 Block 6: Reise mit Medikamenten und Thai-Rechtsglossar in wissen",
+      "depends_on": [
+        "273e"
+      ]
+    },
+    {
+      "id": "273g",
+      "path": "supabase/_pipeline/16_wissen/273g_wissen_buddy.ts",
+      "kind": "tsx",
+      "creates": "C-273 Block 7: Buddy- und Populationsevidenz in wissen",
+      "depends_on": [
+        "273f"
+      ]
+    },
+    {
+      "id": "273h",
+      "path": "supabase/_pipeline/16_wissen/273h_wissen_community.ts",
+      "kind": "tsx",
+      "creates": "C-273 Block 8: Community-Intelligence admin_only in wissen",
+      "depends_on": [
+        "273g"
+      ]
+    },
+    {
       "id": "110",
       "path": "supabase/_pipeline/11_goals/110_goals_zielwerte.sql",
       "kind": "sql",
