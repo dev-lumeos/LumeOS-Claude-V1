@@ -288,8 +288,8 @@ wenn er erzeugt und geprüft wird.
 | **C-279** Das Kreuzprodukt in `rule_assessment` skaliert mit den | offen | 6183 |
 | **G-193** Jede Leistungszahl nennt das Konto | offen | 6202 |
 | **G-192** Ein Community-Reiter im Substanzdetail | offen | 6226 |
-| **C-280** Eine Sicht, die nur zeigt, was gezeigt werden darf | offen | 6276 |
-| **C-281** 216 Angaben haengen an unsichtbaren Unterformen | offen | 6312 |
-| **C-282** Phenibut und Tianeptin widersprechen sich in derselben | offen | 6354 |
-| **G-195** Ein eigener Reiter „Rechtslage" statt zweier halber | offen | 6381 |
-| **G-196** Die Farbordnung gilt erst an drei von acht Stellen | offen | 6437 |
+| **G-195** Ein eigener Reiter „Rechtslage" statt zweier halber | offen | 6276 |
+| **G-197** Die Tafel ist im Hellmodus rosa getoent | offen | 6332 |
+| **G-198** Zwei Farbsysteme im selben Bauteil | offen | 6350 |
+| **C-284** Der Medikamentenkatalog ist duenner als er aussieht | offen | 6370 |
+| **C-283** Sechs Spalten leer, obwohl die Daten da sind — und der | offen | 6414 |

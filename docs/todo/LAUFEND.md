@@ -98,11 +98,16 @@ bei 320 von 320.
 
 | Auftrag | Bereich |
 |---|---|
-| **C-281** 216 Angaben haengen an unsichtbaren Unterformen | `supabase/` |
-| **C-282** Phenibut und Tianeptin widersprechen sich in derselben Zeile | `supabase/` |
 | **C-274** die 149 unsichtbaren zuordnen — 66 mit sichtbarem Gegenstueck | `supabase/` |
 | **C-278** 700 ms zwischen Datenbank und Anwendung | messen |
 | **C-279** Kreuzprodukt in `rule_assessment` skaliert mit `intake_logs` | `supabase/` |
+| **G-197** die Tafel ist im Hellmodus rosa getoent — WADA-Block bei 4.32 | `apps/web` |
+| **G-198** zwei Farbsysteme im selben Bauteil | `apps/web` |
+
+`[cmd]` **C-281 und C-282 sind erledigt** (2026-08-26, Codex) — 22
+Dosis-, 46 Labor- und 17 WADA-Angaben hochgereicht, **Koffein hat
+nichts geerbt**, beide Widersprueche als `VALUE_CONFLICT` registriert.
+
 
 `[cmd]` **G-184 ist erledigt** (2026-08-26, Claude Code) — `note_de`
 bei 320 von 320, als Block statt Aufklapper, weil der laengste Text

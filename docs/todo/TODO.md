@@ -6273,111 +6273,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   Waechter muss rot werden. **Ohne ihn steht die Grenze nur in einer
   Markdown-Datei.**
 
-- [ ] **C-280: Eine Sicht, die nur zeigt, was gezeigt werden darf**
-  (neu 2026-08-26). Aus G-192.
-
-  braucht: C-273
-
-  `[cmd]` **Claude Code hat den Community-Reiter gebaut, kann ihn aber
-  nicht befuellen** — `wissen` ist bewusst nicht ueber PostgREST
-  erreichbar (C-273: Policies auf `service_role`, `nicht_ueber_api` im
-  Sollstand).
-
-  `[cmd]` **In `wissen.community_records` liegen 1.033 Zeilen in
-  derselben Tabelle. 212 duerfen angezeigt werden:** 37
-  Nebenwirkungen · 31 Stacks · 40 Qualitaetssignale · 71 Begriffe ·
-  30 Deltas · 3 Konzepte.
-
-  `[cmd]` **821 nicht:** 315 Quellen · 179 Aliase · 123
-  Nutzungsmuster · 86 Dosierungsmuster · 43 fremde Blutbilder · 20
-  Hypothesen.
-
-  `[read]` **Gibt man `wissen` frei, ist alles davon erreichbar.** Die
-  Trennung laege dann nur in der Abfrage, nicht in der Berechtigung.
-  **Ein Filter im Lesepfad ist eine Vereinbarung. Eine Sicht ist eine
-  Grenze.**
-
-  `[cmd]` **Entscheidend:** `reported_mitigations` steht **bei allen 37**
-  Nebenwirkungsmustern im `raw`-JSON. `[read]` *„Cabergolin gegen
-  Prolaktin, PDE5-Hemmer"* ist eine Anweisung, egal wie das Feld
-  heisst — **die Sicht schneidet es weg, statt sich darauf zu
-  verlassen, dass niemand danach fragt.**
-
-  `[read]` **Und die Zuordnung ist die eigentliche Arbeit:** `[cmd]` die
-  Nebenwirkungen tragen `substance_class` (19 Klassen), **nicht
-  `substance_id`**. Ein Muster zu *19-nor-AAS* gilt fuer Nandrolon
-  **und** Trenbolon. **Bildet die Sicht das nicht ab, erscheint der
-  Reiter bei keiner oder bei jeder Substanz.**
-
-- [ ] **C-281: 216 Angaben haengen an unsichtbaren Unterformen** (neu
-  2026-08-26). Aus G-184, angestossen durch einen Koffein-Fund.
-
-  `[cmd]` **Claude Code fiel auf, dass Koffein `monitored` ist und
-  `im_katalog = false`** — eine der drei beobachteten Substanzen ist
-  fuer den Nutzer unsichtbar. `[read]` **Die Ursache ist groesser als
-  der Fall.**
-
-  `[cmd]` **Vom Orchestrator gemessen, Angaben an Zeilen mit
-  `parent_id`:**
-
-      supplement_dosing        101
-      supplement_lab_effects    48
-      supplement_user_texts     35
-      supplement_wada           32
-
-  `[cmd]` **Und bei allen 32 WADA-Zeilen hat der Sammelname keine
-  eigene** — das Wissen liegt durchgehend unter dem unsichtbaren
-  Eintrag, nicht daneben.
-
-  `[read]` **Das ist die Folge von C-244 und C-276.** Die Entscheidung
-  *„der Sammelname gewinnt"* hat die **Anzeige** geordnet — 101 Formen
-  haengen jetzt richtig unter ihren Sammelnamen. **Aber das Wissen ist
-  mitgewandert, statt hochzurutschen.**
-
-  `[read]` **Konkret:** Magnesiumcitrat traegt seine Dosisangabe,
-  *„Magnesium"* zeigt sie nicht. Koffein-anhydrous traegt den
-  WADA-Status, *„Caffeine"* zeigt ihn nicht.
-
-  **Zwei Wege, und die Wahl ist je Feld verschieden:**
-
-  `[read]` **Erben, wo die Aussage fuer alle Formen gilt** — der
-  WADA-Status von Koffein haengt nicht am Kristallwasser. **Nicht
-  erben, wo sie sich unterscheidet** — Magnesiumoxid und -glycinat
-  haben verschiedene Vertraeglichkeit, und C-266 hat genau deshalb
-  entschieden, keine Texte zu vererben.
-
-  `[read]` **Miss je Feld, wie stark die Formen auseinandergehen**,
-  bevor du entscheidest. **Ein Feld, das bei allen Kindern gleich ist,
-  darf hochrutschen. Eines, das sich unterscheidet, gehoert an die
-  Form — und dann muss die Form erreichbar sein.**
-
-- [ ] **C-282: Phenibut und Tianeptin widersprechen sich in derselben
-  Zeile** (neu 2026-08-26). Aus G-184.
-
-  `[cmd]` **`wada_status = 'prohibited'`, waehrend `wada_category`
-  woertlich sagt:**
-
-      Phenibut     "not on WADA list (not prohibited)"
-      Tianeptine   "not prohibited"
-
-  `[read]` **Kimi hat den Widerspruch selbst vermerkt** — er stammt aus
-  dem Altbestand, nicht aus der Anreicherung.
-
-  `[cmd]` **Claude Code unterdrueckt die widerspruechliche Klasse in
-  der Anzeige**, sonst staende *„verboten · not prohibited"*
-  nebeneinander. `[read]` **Richtig als Sofortmassnahme — aber die
-  Anzeige repariert einen Datensatz, und das gehoert nicht dorthin.**
-
-  **Zu tun:** den Widerspruch aufloesen. `[read]` **Nicht raten:**
-  `wada_scope_enrichment` und `wada_status_enrichment` tragen beide
-  Quellen. **Wo sie sich unterscheiden, ist das ein Konflikt-Record**,
-  wie bei den sechs WADA-Korrekturen aus C-272.
-
-  `[cmd]` **Und pruefen, ob es mehr sind:** die Abfrage ist
-  `wada_status = 'prohibited' AND wada_category ILIKE '%not
-  prohibited%'` — heute zwei Treffer, **aber der umgekehrte Fall ist
-  ungeprueft.**
-
 - [ ] **G-195: Ein eigener Reiter „Rechtslage" statt zweier halber
   Bloecke** (neu 2026-08-26).
 
@@ -6434,38 +6329,121 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   Sicherheit, Community (G-192), Rechtslage, Quellen. **Ab sieben
   sucht man.**
 
-- [ ] **G-196: Die Farbordnung gilt erst an drei von acht Stellen**
-  (neu 2026-08-26). Nachtrag zu G-194.
+- [ ] **G-197: Die Tafel ist im Hellmodus rosa getoent** (neu
+  2026-08-26). Aus G-196.
 
-  `[cmd]` **Tom am Bild von `AC-262356`:** Reiter *Fragen* ohne Farbe ·
-  *Wechselwirkung* ohne Farbe · *Labor* ohne Farbe · *Dosierung*
-  ueberall ohne Farbe · und im Ueberblick **`UEBERWACHUNG` und
-  `REINHEIT` weiterhin grau** — **die beiden, wegen denen G-194
-  entstand.**
+  `[cmd]` **`.v2-supp-tafel` traegt im Hellmodus `[253,247,249]`,
+  nicht Weiss.** Der WADA-Block liegt deshalb bei **4.32** — unter
+  4.5, **obwohl die Toenung schon auf 5 % steht.**
 
-  `[read]` **Die Ordnung selbst ist richtig und bleibt.** Es fehlt die
-  Anwendung, nicht die Regel.
+  `[read]` **Die Toenung ist nicht das Problem, der Grund ist es.**
+  Ein rosa Grundton unter einem Warntext zieht den Kontrast, und keine
+  Senkung der Blocktoenung holt das zurueck.
 
-  **Zwei Faelle waren nicht zugeordnet:** `[read]` *Fragen* passt in
-  keine der vier — eine Frage ist weder Gefahr noch Wirkung.
-  *Wechselwirkung* ist `--warn`: **ein Risiko, kein Hinweis.**
+  `[read]` **Vermutlich der Supplements-Modulakzent, der durchschlaegt**
+  — `[cmd]` aus der Uebergabe: elf Modul-Akzenttoken bei Luminositaet
+  0.74–0.80. **Zu messen: ist der Ton Absicht oder ein Rest?**
 
-  `[cmd]` **Der WADA-Block wird nicht angefasst** — er wandert mit
-  G-195 in einen eigenen Reiter. **Zweimal umbauen ist einmal zu
-  viel.**
+  `[cmd]` **Nicht angefasst in G-196**, weil der WADA-Block mit G-195
+  in einen eigenen Reiter umzieht. **Danach faellig.**
 
-  ### Der Kontrast-Entscheid
+- [ ] **G-198: Zwei Farbsysteme im selben Bauteil** (neu 2026-08-26).
+  Aus G-196.
 
-  `[cmd]` **`--warn` liegt im Hellmodus bei 4.44 auf getoentem Grund**,
-  unter 4.5.
+  `[cmd]` **Textkacheln und `UeberwachungUndReinheit` faerbten von
+  Hand** (`ton: 'acc'`, `warn: true/false`), **nicht ueber `tonFuer`.**
 
-  `[read]` **Entscheidung des Orchestrators: die Toenung senken, nicht
-  den Farbwert aendern.** Der Farbton ist im Designsystem verankert
-  und gilt modulweit — **wer ihn hier dunkler macht, hat elf Module
-  mit zwei Warntoenen.** `[cmd]` Alle elf Akzenttoken liegen bei
-  Luminositaet 0.74–0.80.
+  `[read]` **Das erklaert, warum G-194 unvollstaendig blieb:** im
+  selben Bauteil war *„Was nicht zurueckkommt"* richtig gefaerbt und
+  *„Ueberwachung"* grau — **nicht aus Nachlaessigkeit, sondern weil
+  zwei Wege nebeneinander existierten.**
 
-  `[read]` **Und zum Messproblem:** `data-mode` wird von einem
-  Startskript aus `prefers-color-scheme` gesetzt. **Nicht dagegen
-  arbeiten, sondern zweimal messen** — je ein Lauf mit erzwungenem
-  Thema, der Browsersitzung mitgegeben.
+  `[cmd]` **In G-196 umgestellt** — aber `[read]` **die Frage bleibt,
+  ob es weitere Stellen gibt, die von Hand faerben.** Ein Waechter,
+  der Farbzuweisungen ausserhalb von `tonFuer` findet, waere die
+  Antwort. **Sonst entsteht das dritte System beim naechsten Block.**
+
+  `[cmd]` **Nebenbefund aus derselben Umstellung:** *„Was es bringt"*
+  trug `pos` — **was in der neuen Ordnung Entwarnung hiesse.** Es ist
+  eine Wirkungsaussage. **Korrigiert.**
+
+- [ ] **C-284: Der Medikamentenkatalog ist duenner als er aussieht**
+  (neu 2026-08-26). Grundlage des Kimi-Auftrags.
+
+  `[read]` **Meine erste Messung war falsch, und zwar auf die Art, vor
+  der die neue Regel warnt:** ich habe auf **Anwesenheit des
+  Schluessels** geprueft, nicht auf Inhalt. `raw->'pregnancy' is not
+  null` traf bei 498 — **tatsaechlich sind 497 Werte JSON-`null`.**
+
+  `[cmd]` **Richtig gemessen, ueber alle 498 Wirkstoffe:**
+
+  | vollstaendig | teilweise | fast leer |
+  |---|---|---|
+  | `external_ids` 498 | `contraindications` 433 | `ATC` **56** |
+  | `pharmacology` 498 | `routes_of_administration` 334 | `CAS` **56** |
+  | `risk_flags` 498 | `dosage_forms` 334 | `dosage_models` **56** |
+  | `cyp` 498 | `mechanism_of_action` **196** | `precautions` **12** |
+  | `transporters` 498 | | `food_interactions` **11** |
+  | `regulatory_state` 498 | | `salt_or_ester` **2** |
+  | `evidence_provenance` 498 | | **`pregnancy` 1** |
+  | | | **`lactation` 0** |
+  | | | **`fertility` 0** |
+  | | | `off_label_contexts` **0** |
+
+  `[read]` **Die drei Sicherheitsfelder sind die schwerwiegendsten.**
+  `pregnancy`, `lactation`, `fertility` sind der Grund, warum ein
+  Medikamentenkatalog ueberhaupt sicherheitsrelevant ist — **und sie
+  sind praktisch leer.** Eine Frau, die wissen will, ob sie ein Mittel
+  in der Schwangerschaft nehmen kann, findet heute nichts.
+
+  `[cmd]` **`mechanism_of_action` liegt eine Ebene tiefer**, unter
+  `pharmacology`, und ist bei **196** gefuellt — nicht 0, wie ich
+  zuerst meldete. Bei Warfarin steht dort: *„Vitamin K epoxide
+  reductase (VKORC1) inhibitor; depletes functional vitamin-K-dependent
+  clotting factors II, VII, IX, X."*
+
+  `[read]` **Was fehlt, ist dieselbe Uebersetzungsebene wie beim
+  Substanzkatalog** — keine `description`, keine deutsche Ebene,
+  keine FAQ.
+
+  **An Kimi gegeben am 2026-08-26**, in vier Bloecken: die drei
+  Sicherheitsfelder zuerst, dann Kennungen, dann die fehlenden 302
+  Wirkweisen, dann die Nutzertexte. `[read]` **Ohne Halt zur Abnahme
+  — der Massstab ist beim Substanzkatalog bestaetigt.**
+
+- [ ] **C-283: Sechs Spalten leer, obwohl die Daten da sind — und der
+  Erfassungsweg fehlt** (neu 2026-08-26).
+
+  `[cmd]` **In `medical.medication_active_substances` stehen
+  `atc_code`, `cas_number`, `rxnorm_code`, `unii_code`, `routes` und
+  `raw_drug_class` bei 0 von 498** — waehrend `raw->'ATC'` und
+  `raw->'CAS'` Werte tragen. `[read]` **Der Import erwartete
+  kleingeschriebene Namen; in `raw` heissen sie gross.** Kein
+  Datenverlust, ein Abbildungsfehler.
+
+  `[cmd]` **Weitere Bloecke liegen ungenutzt in `raw`:**
+  `pharmacology`, `dosage_models`, `food_interactions`,
+  `off_label_contexts`, `salt_or_ester`, `transporters`,
+  `evidence_provenance`.
+
+  ### Der Erfassungsweg ist das Groessere
+
+  `[cmd]` **`medical.user_medications` traegt 2 Zeilen.**
+
+  `[read]` **Damit ist alles andere Vorrat:** 498 Wirkstoffe, 4.482
+  Transporterzeilen, 1.890 CYP-Zeilen, 31 Medikamentenregeln — **und
+  niemand kann sagen, was er nimmt.** Keine Regel feuert, keine
+  Warnung entsteht.
+
+  `[cmd]` **Zum Vergleich:** bei den Supplements traegt `stack_items`
+  11 Zeilen, und die Regel-Engine liefert Treffer.
+
+  `[read]` **Die erste Frage ist, ob die Tabelle ueberhaupt auf
+  `medication_active_substances` zeigt oder auf Freitext.** Wenn nicht,
+  ist das der eigentliche Auftrag — **und ein Schreibweg auf eine
+  Struktur, die nicht traegt, waere Arbeit fuer den Papierkorb.**
+
+  `[read]` **Dazu die Sicherheitsfrage:** medizinische Daten sind laut
+  Projektvorgabe verschluesselt abzulegen und brauchen
+  Coach-Berechtigung. **Wie `user_medications` das heute handhabt, ist
+  ungemessen.**

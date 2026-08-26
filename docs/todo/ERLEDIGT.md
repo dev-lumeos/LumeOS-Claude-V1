@@ -13256,3 +13256,157 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
   `[read]` **Und ein Fehler von mir:** ich habe ihm den Prompt gegeben,
   waehrend die Auftragsdatei noch in `docs/auftraege/wartend/` lag.
   **Er hat korrekt gemeldet, dass sie fehlt.**
+
+- [x] **C-280: Eine Sicht, die nur zeigt, was gezeigt werden darf** —
+  **erledigt 2026-08-26 (Codex), Bericht
+  `docs/berichte/c-280-codex.md`.**
+
+  `[cmd]` **Vom Orchestrator live nachgemessen:**
+  `supplements.community_anzeige` **212 Zeilen, 28 Spalten** — 37
+  Nebenwirkungen · 31 Stacks · 40 Qualitaetssignale · 71 Begriffe ·
+  30 Science-Delta · 3 Konzepte.
+
+  `[cmd]` **Kein `raw`, keine der vier Anleitungsspalten**
+  (`reported_mitigations`, `components`,
+  `reported_reason_for_combination`, `why_these_doses`). Negativprobe
+  rot. `wissen` **nicht** in `config.toml`, Schemafreigabe gruen.
+
+  `[cmd]` `im_katalog` bei Kette und Live **412**, sichtbare
+  Unterformen **0**.
+
+  ### Sein Befund korrigiert meine Auftragsannahme
+
+  `[read]` **Ich hatte geschrieben, die Nebenwirkungen truegen nur
+  `substance_class`.** `[cmd]` **Sie tragen auch konkrete
+  `substance_ids`** — die Sicht nutzt diese und gibt die Klasse als
+  Kontext dazu. **64 von 212 Zeilen haben IDs.**
+
+  `[read]` **Damit greift die Zuordnung praezise, wo sie kann, und
+  ueber die Klasse, wo nicht — besser als das, was ich vorgegeben
+  hatte.**
+
+  `[cmd]` **Und `drug_*`-IDs werden nicht als Supplement-Substanzen
+  durchgereicht.** `[read]` Das haette niemand gefordert — **es faellt
+  nur auf, wenn man die IDs tatsaechlich ansieht.**
+
+  ### Eine Stichprobe des Orchestrators, die richtig durchkam
+
+  `[cmd]` **Eine Zeile nennt Cabergolin** — in
+  `community_attribution_note` zu *„Deca dick"*: *„fast immer im
+  Stack-Kontext (Test, Cabergolin)."*
+
+  `[read]` **Das ist eine Beschreibung, keine Anweisung** — sie sagt,
+  **worin die Beobachtung entstand.** **Und es ist richtig, dass sie
+  durchkommt:** die Angabe ist eine Einschraenkung der Aussagekraft.
+  **Wer sie streicht, macht aus einer Beobachtung unter Polypharmazie
+  eine Aussage ueber Nandrolon allein.**
+
+  `[read]` **Damit ist G-192 entblockt** — Claude Codes
+  Community-Reiter kann lesen.
+
+- [x] **G-196: Die Farbordnung gilt erst an drei von acht Stellen** —
+  **erledigt 2026-08-26 (Claude Code), Bericht
+  `docs/berichte/g-196-claude-code.md`.**
+
+  `[cmd]` **Toms Fall ist behoben:** an `AC-262356` tragen
+  `UEBERWACHUNG` und `REINHEIT` die Pruefen-Farbe, `WAS NICHT
+  ZURUECKKOMMT` die Warnfarbe. **Vorher 3 von 16 gefaerbt, jetzt 14
+  von 21** — die sieben grauen einzeln entschieden.
+
+  ### Die G-194-Zahlen waren nicht unsicher, sie waren falsch
+
+  `[read]` **Das ist der wichtigste Teil des Berichts.** In G-194 hiess
+  es, die Messung sei unbrauchbar. `[cmd]` **Sie war falsch — und zwar
+  zugunsten eines Problems, das es nicht gab.**
+
+  `[cmd]` **`colorScheme` je Browserkontext hat es geloest:**
+  Grundhelligkeit **0.004 gegen 0.955**, das Thema schaltet wirklich
+  um. **Dabei kamen zwei weitere Fehler in seiner eigenen Pruefung
+  heraus:**
+
+  `[read]` **Der Hintergrund wurde von Weiss aus komponiert** — im
+  Dunkelmodus ergab das einen hellen Grund.
+
+  `[read]` **Und `getComputedStyle().backgroundColor` liefert
+  `oklch(…)` woertlich** — die Regex las `0.78, 0.13, 150` als RGB.
+
+  `[cmd]` **Im Dunkelmodus liegen alle gefaerbten Ueberschriften bei
+  7.94–10.13.** Es gab dort nie ein Kontrastproblem.
+
+  ### Die Toenungsentscheidung, gemessen statt geglaubt
+
+  `[cmd]` **7 % → 4.44, 5 % → 4.58.** Umgesetzt an vier Stellen.
+  *„Bei zu viel"* steigt von 4.28 auf 4.58. **Kein Farbwert
+  angefasst** — genau wie entschieden.
+
+  `[cmd]` **Eine Stelle bleibt bei 4.32: der WADA-Block.** `[read]`
+  **Nicht wegen der Toenung** — die ist schon auf 5 % — **sondern weil
+  `.v2-supp-tafel` im Hellmodus rosa getoent ist** (`[253,247,249]`,
+  nicht weiss). **Nicht angefasst, er zieht mit G-195 um.**
+
+  ### Die zwei offenen Faelle, beide begruendet
+
+  `[read]` **`Fragen` bleibt grau, und die Begruendung traegt:**
+  gemessen an den echten Fragen — *„in der Schwangerschaft
+  untersucht?"* (Gefahr), *„Wie schnell wirkt…?"* (Wirkung), *„Wie
+  lange im Dopingtest nachweisbar?"* (Pruefen). **Der Block traegt
+  alle vier Bedeutungen gleichzeitig — eine Farbe waere fuer drei
+  Viertel falsch.**
+
+  `[cmd]` **`Wechselwirkungen`: `--warn`**, 10.13 dunkel, 4.89 hell.
+
+  `[read]` **`Beleglage` braucht keine Farbe** — die Beschriftung sagt
+  nur, was dort steht; **der Wert darunter ist bereits gefaerbt.**
+
+  ### Der Befund, der G-194 erklaert
+
+  `[cmd]` **Es gab zwei Farbsysteme.** Textkacheln und
+  `UeberwachungUndReinheit` faerbten **von Hand** (`ton: 'acc'`,
+  `warn: true/false`), **nicht ueber `tonFuer`.**
+
+  `[read]` **Deshalb blieb G-194 unvollstaendig:** im selben Bauteil
+  war *„Was nicht zurueckkommt"* richtig gefaerbt und *„Ueberwachung"*
+  grau. `[cmd]` **Und *„Was es bringt"* trug `pos`** — was jetzt
+  Entwarnung hiesse; **es ist eine Wirkungsaussage.**
+
+  `[cmd]` 646 Tests gruen, Build 31/31, Encoding sauber (20.032), vier
+  Sabotagen rot mit SHA-identischem Rueckbau.
+
+- [x] **C-281: 216 Angaben haengen an unsichtbaren Unterformen** —
+  **erledigt 2026-08-26 (Codex), Bericht
+  `docs/berichte/c-281-codex.md`.**
+
+  `[cmd]` **Vom Orchestrator live nachgemessen:**
+  `supplement_dosing` **596**, davon **22 geerbt** ·
+  `supplement_lab_effects` **271**, davon **46 geerbt** ·
+  `supplement_wada` **337**, davon **17 geerbt**.
+
+  ### Der Gegenfall hat gehalten
+
+  `[cmd]` **Koffein hat nichts geerbt.** Beide Formen behalten ihren
+  Status — `monitored` und `not_prohibited` —, der Sammelname bleibt
+  leer.
+
+  `[read]` **Das war der Sinn des Auftrags.** Ein einzelner Gegenfall
+  verwirft die einfache Regel; ohne die Messung haette C-281
+  stillschweigend `monitored` auf `not_prohibited` ueberschrieben —
+  oder umgekehrt.
+
+  `[cmd]` **Magnesium hat geerbt**, weil dort alle Kinder
+  uebereinstimmen, **und die Dosisform-Felder wurden nicht blind
+  zusammengezogen.**
+
+  `[cmd]` **Negativprobe:** ein verstellter Calcium-Kindwert machte den
+  Waechter rot — WADA-Vererbung fiel von 17 auf 16, der Schritt brach
+  ab.
+
+- [x] **C-282: Phenibut und Tianeptin widersprechen sich in derselben
+  Zeile** — **erledigt 2026-08-26 (Codex), Bericht
+  `docs/berichte/c-281-codex.md`.**
+
+  `[cmd]` **Beide als `VALUE_CONFLICT` registriert**, nicht still
+  korrigiert. `wada_conflict_records` **8**, davon 2 aus C-282.
+
+  `[cmd]` **Und die Rueckrichtung ist geprueft: `not_prohibited` mit
+  einer Verbotskategorie ergibt 0.** `[read]` **Das war der
+  gefaehrlichere Fall** — ich hatte ihn nur vorsichtshalber verlangt.

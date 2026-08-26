@@ -26,6 +26,55 @@ Reihenfolge nur im Kopf des Orchestrators stand.**
 zu fuehren, wenn das sauber machen wuerdest wuerde sowas nicht
 passieren."*
 
+## Zahlen im Auftrag sind Ausgangsvermutungen, keine Vorgaben
+
+**Tom, 2026-08-26:** *„mittlerweile in jedem bericht lese ich dass du
+fehler machst, loese das oder sag im auftrag er soll selber messen wenn
+du nicht faehig bist."*
+
+`[read]` **Er hat recht, und die Loesung ist nicht mehr Sorgfalt,
+sondern eine andere Formulierung.**
+
+`[cmd]` **Jede Zahl im Auftrag traegt kuenftig, woher sie stammt und
+dass sie zu pruefen ist:**
+
+    NICHT   "Erwartung: 292 Zeilen"
+    SONDERN "Meine Messung ergab 292 -- pruef sie zuerst.
+             Weicht deine ab, gilt deine, und du nennst beide."
+
+`[read]` **Der Unterschied ist nicht hoeflich, sondern
+verfahrenstechnisch.** Eine Erwartungszahl im Auftrag wird zum
+Sollwert: der Agent baut, bis sie erreicht ist. **Eine
+Ausgangsvermutung wird geprueft — und wenn sie faellt, ist das ein
+Befund und kein Streit.**
+
+### Die Faelle, die dazu gefuehrt haben
+
+`[cmd]` **In vier Tagen sechsmal:**
+
+    C-275   im_katalog::text gegen 't' statt 'true'
+            -> meldete "0 sichtbare Treffer" bei 317
+    C-276   Dublettenprobe auf name_en statt auf den Kern
+            -> 18 Gruppen kamen durch
+    G-191   upper_limit gegen 290 statt 412 Zeilen gefiltert
+            -> "3 Werte" statt 13
+    G-184   Kategorie als Code angenommen
+            -> tatsaechlich 41 Werte bis 91 Zeichen
+    C-280   substance_class als einzige Zuordnung angenommen
+            -> es gibt auch konkrete substance_ids
+    G-196   Kontrastzahlen aus einer kaputten Messung uebernommen
+            -> das Problem gab es im Dunkelmodus nie
+
+`[read]` **In allen sechs Faellen hat der Agent korrekt ausgefuehrt,
+was dastand.** Der Fehler lag im Auftrag — **und in fuenf von sechs
+Faellen hat der Agent ihn gefunden, nicht der Orchestrator.**
+
+`[read]` **Was daraus folgt, ist keine Ermahnung an mich, sondern eine
+Umkehr der Beweislast:** wer die Zahl nennt, nennt auch die Abfrage,
+mit der sie entstand. **Dann ist nachpruefbar, ob sie den richtigen
+Ausschnitt getroffen hat** — genau das war in allen sechs Faellen das
+Problem, nicht die Rechnung.
+
 ## Wozu
 
 `docs/berichte/` sagt, was der Agent gemeldet hat.
