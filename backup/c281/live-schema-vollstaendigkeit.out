@@ -1,0 +1,2 @@
+TIMEOUT after 180s
+Command '['C:\\Users\\User\\AppData\\Roaming\\npm\\pnpm.CMD', 'exec', 'tsx', 'supabase/_pipeline/_validierung/schema-vollstaendigkeit-pruefen.ts']' timed out after 180 seconds

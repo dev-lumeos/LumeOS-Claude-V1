@@ -1,0 +1,54 @@
+table_counts
+supplement_dosing	596
+supplement_lab_effects	271
+supplement_wada	337
+wada_conflict_records	8
+
+---
+
+inherited_counts
+dosing	22
+lab	46
+wada	17
+wada_conflicts_c282	2
+
+---
+
+caffeine
+Caffeine	Caffeine (anhydrous)	monitored	
+Caffeine	Caffeine (fat-loss context cross-ref)	not_prohibited
+
+---
+
+caffeine_parent_inherited
+0
+
+---
+
+magnesium_parent
+Magnesium	{"value": null, "source_ids": [], "missing_reason": "No validated clinical guideline dose (no position stand/clinical practice guideline with a specific supplemental dose)", "provenance_type": "CLINICAL_GUIDELINE"}	{"unit": "mg/day", "basis": "per_day (supplemental only)", "value": 250}		once daily (typical trial regimen; acute ergogenic doses pre-exercise)		["Magnesium", "Magnesium chloride", "Magnesium citrate", "Magnesium glycinate/bisglycinate", "Magnesium L-threonate", "Magnesium malate", "Magnesium oxide", "Magnesium taurate"]
+
+---
+
+single_form_example
+Collagen	["Collagen peptides (hydrolyzed collagen)"]
+Copper (as copper gluconate)	["Copper"]
+Iodine (as potassium iodide)	["Iodine"]
+Lion's Mane	["Lion's Mane (Hericium erinaceus)"]
+Potassium (supplemental)	["Potassium"]
+
+---
+
+wada_conflicts
+Phenibut	{"wada_status": "prohibited", "wada_category": "not on WADA list (not prohibited)"}	VALUE_CONFLICT
+Tianeptine ('gas station heroin')	{"wada_status": "prohibited", "wada_category": "not prohibited"}	VALUE_CONFLICT
+
+---
+
+reverse
+0
+
+---
+
+im_katalog
+412	0

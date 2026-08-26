@@ -1,0 +1,11 @@
+Error: supabaseUrl is required.
+    at validateSupabaseUrl (D:\GitHub\LumeOS-Claude-V1\node_modules\.pnpm\@supabase+supabase-js@2.104.0\node_modules\@supabase\supabase-js\src\lib\helpers.ts:86:11)
+    at new SupabaseClient (D:\GitHub\LumeOS-Claude-V1\node_modules\.pnpm\@supabase+supabase-js@2.104.0\node_modules\@supabase\supabase-js\src\SupabaseClient.ts:284:21)
+    at createClient (D:\GitHub\LumeOS-Claude-V1\node_modules\.pnpm\@supabase+supabase-js@2.104.0\node_modules\@supabase\supabase-js\src\index.ts:65:10)
+    at createServiceClient (D:\GitHub\LumeOS-Claude-V1\packages\shared\src\supabase\server.ts:7:10)
+    at main (D:\GitHub\LumeOS-Claude-V1\scratchpad\g192_probe.ts:4:13)
+    at <anonymous> (D:\GitHub\LumeOS-Claude-V1\scratchpad\g192_probe.ts:18:1)
+    at Object.<anonymous> (D:\GitHub\LumeOS-Claude-V1\scratchpad\g192_probe.ts:18:56)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object.transformer (D:\GitHub\LumeOS-Claude-V1\node_modules\.pnpm\tsx@4.21.0\node_modules\tsx\dist\register-D46fvsV_.cjs:3:1104)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)

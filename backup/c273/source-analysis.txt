@@ -1,0 +1,83 @@
+BLOCK1
+warning_rules.jsonl: 29
+medication_rules.jsonl: 20
+nutrient_gap_rules.jsonl: 15
+module_field_spec keys ['generated', 'localization', 'modules', 'purpose', 'rule_condition_examples', 'version']
+rule_trait_mapping type dict len 7
+BLOCK2
+constant_evidence_registry.json: 181
+  current_null 181
+formula_evidence_registry.json: 22
+  current_null 22
+recovery_modality_evidence.json: 32
+  current_null 32
+fatigue_signal_evidence.json: 17
+  current_null 17
+training_structure_registry.json: 13
+  current_null 13
+BLOCK3
+knowledge_gap_resolution.jsonl: 56
+knowledge_gap_dependency_map.jsonl: 46
+research_hold_registry.json: 305
+  hold types {'None'}
+BLOCK4
+products.jsonl: 50
+brands.jsonl: 120
+manufacturers.jsonl: 63
+brand_index keys ['brd_00da5bd1', 'brd_0425be8f', 'brd_04f1fd98', 'brd_06a457b4', 'brd_08f5b7f0', 'brd_0bb6281f', 'brd_0bbcfea1', 'brd_0ce0e5e9', 'brd_0d6c983c', 'brd_0f1e29d3'] len 120
+BLOCK5
+supplement_cam_contract.json dict 11
+medication_cam_contract.json dict 20
+peptide_cam_contract.json dict 12
+prescription_vision_contract.json dict 16
+vision_learning_example_schema.json dict 20
+vision_product_match_signals.json dict 13
+product_media_rights_registry.json dict 7
+BLOCK6
+travel keys ['description', 'example_records', 'fields', 'last_verified_policy', 'schema_name', 'schema_version']
+thai glossary type dict len 10
+BLOCK7
+population_response_atlas.jsonl: 425
+population_response_synthesis.jsonl: 277
+population_applicability_atlas.jsonl: 277
+response_confounder_graph.jsonl: 799
+response_modifier_graph.jsonl: 453
+response_resolver_index.json dict 6
+observation_comparison_semantics.json dict 7
+observation_comparison_synthetic_examples.json list 46
+buddy_capability_map.json dict 5
+buddy_dependency_graph.json dict 6
+personal_response_readiness_model.json dict 8
+BLOCK8
+_canonical_id_lookup.json: 1
+  admin_only 0 not_med 0 E 0
+community_exposure_patterns.jsonl: 86
+  admin_only 86 not_med 86 E 86
+community_hold_registry.json: 11
+  admin_only 11 not_med 0 E 0
+community_intelligence_core_schema.json: 4
+  admin_only 2 not_med 2 E 2
+community_intelligence_index.json: 1
+  admin_only 0 not_med 0 E 0
+community_intelligence_patterns.jsonl: 123
+  admin_only 123 not_med 123 E 123
+community_lab_patterns.jsonl: 43
+  admin_only 43 not_med 43 E 43
+community_longitudinal_logs.json: 13
+  admin_only 13 not_med 13 E 13
+community_product_quality_signals.json: 40
+  admin_only 40 not_med 40 E 40
+community_research_hypotheses.jsonl: 20
+  admin_only 20 not_med 20 E 20
+community_science_delta.jsonl: 30
+  admin_only 30 not_med 30 E 30
+community_side_effect_patterns.jsonl: 37
+  admin_only 37 not_med 37 E 37
+community_sources.json: 315
+  admin_only 0 not_med 0 E 0
+community_stack_patterns.jsonl: 31
+  admin_only 31 not_med 31 E 31
+community_terminology.json: 1
+  admin_only 1 not_med 0 E 1
+community_usage_contexts.json: 1
+  admin_only 1 not_med 0 E 1

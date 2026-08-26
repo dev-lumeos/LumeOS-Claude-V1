@@ -1,0 +1,3 @@
+ERROR:  relation "supplements.substance_catalog_sources" does not exist
+LINE 7: ...stance_catalog_sources' || E'\t' || count(*) FROM supplement...
+                                                             ^

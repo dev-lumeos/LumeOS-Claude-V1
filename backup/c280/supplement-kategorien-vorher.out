@@ -1,0 +1,26 @@
+gruppe   |   category_slug   | name_de | substances 
+------------+-------------------+---------+------------
+ enhanced   | injizierbare_aas  |         |         27
+ enhanced   | begleitmedikation |         |         21
+ enhanced   | sonstige          |         |         20
+ enhanced   | prohormone        |         |         16
+ enhanced   | fatburner         |         |         15
+ enhanced   | sarm              |         |         13
+ enhanced   | orale_aas         |         |         10
+ peptide    | hormone           |         |         14
+ peptide    | wachstumshormon   |         |         14
+ peptide    | longevity_immun   |         |         11
+ peptide    | ohne_zuordnung    |         |         11
+ peptide    | muskel_gewebe     |         |         10
+ peptide    | stoffwechsel      |         |         10
+ peptide    | neuro             |         |          9
+ supplement | botanicals        |         |         66
+ supplement | uebrige           |         |         38
+ supplement | sportnahrung      |         |         24
+ supplement | vitamine          |         |         21
+ supplement | protein_aminos    |         |         16
+ supplement | mineralstoffe     |         |         15
+ supplement | nootropika        |         |         14
+ supplement | longevity         |         |         13
+ supplement | adaptogene        |         |          4
+(23 rows)

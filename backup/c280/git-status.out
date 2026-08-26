@@ -1,0 +1,55 @@
+M apps/web/src/app/globals.css
+ M apps/web/src/app/v2/supplements/ansicht.tsx
+ M apps/web/src/app/v2/supplements/page.tsx
+ M apps/web/src/app/v2/supplements/substanz-abschnitte.tsx
+ M apps/web/src/app/v2/supplements/substanz-tafel.tsx
+ M apps/web/src/app/v2/supplements/supplements.css
+ M apps/web/src/app/v2/supplements/tab-interactions-echt.tsx
+ M apps/web/src/lib/supplements/__tests__/substanz-reiter.test.ts
+ M apps/web/src/lib/supplements/substanz-kacheln.ts
+ M apps/web/src/lib/supplements/substanz-read.ts
+ M apps/web/src/lib/supplements/substanz-reiter.ts
+ M apps/web/src/styles/themes/lume.css
+ M package.json
+ M packages/ui/src/styles/v2.css
+ M supabase/_pipeline/_validierung/schema-vollstaendigkeit-pruefen.ts
+ M supabase/_pipeline/daten/schema-sollstand.json
+ M supabase/_pipeline/kette.json
+?? apps/web/src/app/v2/supplements/loading.tsx
+?? apps/web/src/lib/supplements/__tests__/block-ton.test.ts
+?? apps/web/src/lib/supplements/__tests__/dosis-feld.test.ts
+?? apps/web/src/lib/supplements/__tests__/wada-lage.test.ts
+?? apps/web/src/lib/supplements/block-ton.ts
+?? apps/web/src/lib/supplements/dosis-feld.ts
+?? apps/web/src/lib/supplements/wada-lage.ts
+?? backup/c273/
+?? backup/c276/
+?? backup/c280/
+?? backup/g184-aas-1280.png
+?? backup/g184-kreatin-1280.png
+?? backup/g184-kreatin-1920.png
+?? backup/g184-monitored-1280.png
+?? backup/g184-ohne-1280.png
+?? backup/g184-schuss.mjs
+?? backup/g187-ww-testuser.png
+?? backup/g187-ww.png
+?? backup/g190-kalt-warm.mjs
+?? backup/g191-1280.png
+?? backup/g191-1920.png
+?? backup/g191-schuss.mjs
+?? backup/g192/
+?? backup/g194-diag.mjs
+?? backup/g194-grund.mjs
+?? backup/g194-kontrast.mjs
+?? backup/g194-tabelle.mjs
+?? backup/g196-diag.mjs
+?? backup/g196-tabelle.mjs
+?? backup/pep-abfragen-messen.mjs
+?? backup/pep-aktiv-messen.mjs
+?? backup/pep-nachher.png
+?? backup/pep-parallel.png
+?? backup/schema/20260826_141509_c280_vor_schema.sql
+?? docs/berichte/c-280-codex.md
+?? scratchpad/
+?? supabase/_pipeline/16_wissen/280_community_anzeige.sql
+?? tools/ladekette-pruefen.mjs

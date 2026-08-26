@@ -1,0 +1,84 @@
+sicht_zeilen
+212
+
+---
+
+datasets
+community_product_quality_signals	40
+community_science_delta	30
+community_side_effect_patterns	37
+community_stack_patterns	31
+community_terminology_terms	71
+community_usage_concepts	3
+
+---
+
+columns
+dataset
+record_key
+anzeige_typ
+evidence_class
+substance_ids
+substance_class
+product_class
+side_effect
+community_attribution_note
+prevalence
+onset_context
+attribution_confidence
+community_consistency
+scientific_alignment
+limitations
+community_evidence_grade
+name
+expected_tradeoff
+quality_signal
+quality_claim
+independent_testing
+quality_sources
+term
+community_definition
+community_claim
+community_resolution
+concept
+physiological_implications
+
+---
+
+raw_column
+0
+
+---
+
+forbidden_columns
+0
+
+---
+
+forbidden_viewdef
+0
+
+---
+
+nandrolone_deca
+1
+
+---
+
+sarm_jama
+1
+
+---
+
+vitamin_d3
+0
+
+---
+
+im_katalog
+412	0
+
+---
+
+wissen_config
+1

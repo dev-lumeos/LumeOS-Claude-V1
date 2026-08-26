@@ -1,0 +1,8 @@
+BEGIN
+CREATE TABLE
+COPY 1
+DELETE 0
+INSERT 0 1033
+DO
+COMMIT
+psql:<stdin>:79: NOTICE:  OK C-273 Block8 Community: total 1033, usage 123, exposure 86, lab 43, quality 40, side 37, stack 31, delta 30, aliases 179, sources 315, alle admin_only/not_medical/E

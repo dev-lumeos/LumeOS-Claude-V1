@@ -1,0 +1,24 @@
+M apps/web/src/app/globals.css
+ M apps/web/src/app/v2/supplements/ansicht.tsx
+ M apps/web/src/app/v2/supplements/page.tsx
+ M apps/web/src/app/v2/supplements/supplements.css
+ M apps/web/src/app/v2/supplements/tab-interactions-echt.tsx
+ M apps/web/src/styles/themes/lume.css
+ M docs/auftraege/c-272-codex.md
+ M package.json
+ M packages/ui/src/styles/v2.css
+ M supabase/_pipeline/13_supplements/141d_kimi_wada_scope.ts
+ M supabase/_pipeline/daten/schema-sollstand.json
+ M supabase/_pipeline/kette.json
+ M tools/supplement-kennungen-pruefen.mjs
+?? apps/web/src/app/v2/supplements/loading.tsx
+?? backup/c276/
+?? backup/g187-ww-testuser.png
+?? backup/g187-ww.png
+?? backup/pep-abfragen-messen.mjs
+?? backup/pep-aktiv-messen.mjs
+?? backup/pep-nachher.png
+?? backup/pep-parallel.png
+?? docs/berichte/c-272-codex.md
+?? scratchpad/
+?? tools/ladekette-pruefen.mjs

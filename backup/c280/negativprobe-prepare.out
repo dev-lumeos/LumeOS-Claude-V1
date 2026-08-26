@@ -1,0 +1,36 @@
+select pg_terminate_backend(pid) from pg_stat_activity where datname='lumeos_c280_neg' and pid <> pg_backend_pid();
+ pg_terminate_backend 
+----------------------
+(0 rows)
+
+
+
+---
+
+DROP VIEW IF EXISTS supplements.community_anzeige CASCADE;
+DROP VIEW
+
+
+---
+
+CREATE VIEW supplements.community_anzeige WITH (security_barrier = true) AS SELECT 'community_side_effect_patterns'::text AS dataset, gs::text AS record_key, 'broken'::text AS anzeige_typ, 'E'::text AS evidence_class, ARRAY[]::text[] AS substance_ids, NULL::text AS substance_class, NULL::text AS product_class, NULL::text AS side_effect, NULL::text AS community_attribution_note, NULL::text AS prevalence, NULL::text AS onset_context, NULL::text AS attribution_confidence, NULL::text AS community_consistency, NULL::text AS scientific_alignment, NULL::text AS limitations, NULL::text AS community_evidence_grade, NULL::text AS name, NULL::text AS expected_tradeoff, NULL::text AS quality_signal, NULL::text AS quality_claim, NULL::text AS independent_testing, NULL::text AS quality_sources, NULL::text AS term, NULL::text AS community_definition, NULL::text AS community_claim, NULL::text AS community_resolution, NULL::text AS concept, NULL::text AS physiological_implications, NULL::text AS reported_mitigations FROM generate_series(1, 212) AS gs;
+CREATE VIEW
+
+
+---
+
+REVOKE ALL ON supplements.community_anzeige FROM anon, authenticated, service_role; GRANT SELECT ON supplements.community_anzeige TO authenticated; GRANT ALL ON supplements.community_anzeige TO service_role;
+REVOKE
+GRANT
+GRANT
+
+
+---
+
+SELECT count(*) AS rows, count(*) FILTER (WHERE column_name='reported_mitigations') AS forbidden_column FROM information_schema.columns WHERE table_schema='supplements' AND table_name='community_anzeige';
+ rows | forbidden_column 
+------+------------------
+   29 |                1
+(1 row)
+
+

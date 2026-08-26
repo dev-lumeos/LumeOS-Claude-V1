@@ -1,0 +1,72 @@
+M apps/web/src/app/globals.css
+ M apps/web/src/app/v2/supplements/ansicht.tsx
+ M apps/web/src/app/v2/supplements/page.tsx
+ M apps/web/src/app/v2/supplements/substanz-abschnitte.tsx
+ M apps/web/src/app/v2/supplements/substanz-tafel.tsx
+ M apps/web/src/app/v2/supplements/supplements.css
+ M apps/web/src/app/v2/supplements/tab-interactions-echt.tsx
+ M apps/web/src/lib/supplements/__tests__/substanz-reiter.test.ts
+ M apps/web/src/lib/supplements/substanz-kacheln.ts
+ M apps/web/src/lib/supplements/substanz-read.ts
+ M apps/web/src/lib/supplements/substanz-reiter.ts
+ M apps/web/src/styles/themes/lume.css
+A  docs/auftraege/c-281-codex.md
+A  docs/berichte/c-280-codex.md
+M  docs/todo/00-UEBERSICHT.md
+M  docs/todo/ERLEDIGT.md
+M  docs/todo/TODO.md
+ M package.json
+ M packages/ui/src/styles/v2.css
+A  supabase/_pipeline/16_wissen/280_community_anzeige.sql
+ M supabase/_pipeline/_validierung/schema-vollstaendigkeit-pruefen.ts
+ M supabase/_pipeline/daten/schema-sollstand.json
+ M supabase/_pipeline/kette.json
+?? apps/web/src/app/v2/supplements/loading.tsx
+?? apps/web/src/lib/supplements/__tests__/block-ton.test.ts
+?? apps/web/src/lib/supplements/__tests__/dosis-feld.test.ts
+?? apps/web/src/lib/supplements/__tests__/wada-lage.test.ts
+?? apps/web/src/lib/supplements/block-ton.ts
+?? apps/web/src/lib/supplements/dosis-feld.ts
+?? apps/web/src/lib/supplements/wada-lage.ts
+?? backup/c273/
+?? backup/c276/
+?? backup/c280/
+?? backup/c281/
+?? backup/g184-aas-1280.png
+?? backup/g184-kreatin-1280.png
+?? backup/g184-kreatin-1920.png
+?? backup/g184-monitored-1280.png
+?? backup/g184-ohne-1280.png
+?? backup/g184-schuss.mjs
+?? backup/g187-ww-testuser.png
+?? backup/g187-ww.png
+?? backup/g190-kalt-warm.mjs
+?? backup/g191-1280.png
+?? backup/g191-1920.png
+?? backup/g191-schuss.mjs
+?? backup/g192/
+?? backup/g194-diag.mjs
+?? backup/g194-grund.mjs
+?? backup/g194-kontrast.mjs
+?? backup/g194-tabelle.mjs
+?? backup/g196-ac262356-dunkel.png
+?? backup/g196-ac262356-hell.png
+?? backup/g196-diag.mjs
+?? backup/g196-schuss.mjs
+?? backup/g196-tabelle.mjs
+?? backup/g196-toenung.mjs
+?? backup/pep-abfragen-messen.mjs
+?? backup/pep-aktiv-messen.mjs
+?? backup/pep-nachher.png
+?? backup/pep-parallel.png
+?? backup/schema/20260826_141509_c280_vor_schema.sql
+?? backup/schema/20260826_151034_c281_vor_schema.sql
+?? backup/schema/20260826_151236_c281_vor_schema.sql
+?? backup/schema/20260826_151430_c281_vor_schema.sql
+?? backup/schema/20260826_151658_c281_vor_schema.sql
+?? docs/berichte/c-281-codex.md
+?? docs/berichte/g-196-claude-code.md
+?? scratchpad/
+?? supabase/_pipeline/13_supplements/281_supplement_wissen_hochreichen.sql
+?? supabase/_pipeline/13_supplements/282_wada_status_kategorie_konflikte.sql
+?? tools/ladekette-pruefen.mjs

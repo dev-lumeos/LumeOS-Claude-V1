@@ -1,0 +1,205 @@
+--- supplements_counts ---
+596 |        412 |                0
+--- supplements_tables ---
+daily_intake_summary
+ entity_cyp
+ entity_pk
+ entity_renal_hepatic
+ entity_transporters
+ intake_logs
+ intake_schedule
+ rule_catalog
+ stack_items
+ stack_template_items
+ stack_templates
+ substance_alias_matches
+ substance_aliases
+ supplement_aas_ratings
+ supplement_aliases
+ supplement_categories
+ supplement_cycle_events
+ supplement_dosing
+ supplement_evidence
+ supplement_faq
+ supplement_field_sources
+ supplement_groups
+ supplement_identifiers
+ supplement_interactions
+ supplement_lab_effects
+ supplement_monitoring
+ supplement_nutrients
+ supplement_organ_risks
+ supplement_pharmacology
+ supplement_portions
+ supplement_protocol_items
+ supplement_protocol_requirements
+ supplement_protocols
+ supplement_quality
+ supplement_regulatory
+ supplement_reminders
+ supplement_safety
+ supplement_tag_definitions
+ supplement_tags
+ supplement_user_texts
+ supplement_wada
+ supplement_warnings
+ supplements
+ user_inventory
+ user_stacks
+ user_supplement_cycles
+ user_supplement_settings
+--- supplement_columns ---
+entity_cyp             | id                             | uuid                     | NO
+ entity_cyp             | entity_id                      | text                     | NO
+ entity_cyp             | entity_type                    | text                     | YES
+ entity_cyp             | supplement_id                  | uuid                     | YES
+ entity_cyp             | canonical_name                 | text                     | YES
+ entity_cyp             | enzyme                         | text                     | NO
+ entity_cyp             | role                           | text                     | NO
+ entity_cyp             | evidence                       | text                     | YES
+ entity_cyp             | note                           | text                     | YES
+ entity_cyp             | source_ids                     | ARRAY                    | NO
+ entity_cyp             | status                         | text                     | NO
+ entity_cyp             | source                         | text                     | NO
+ entity_cyp             | raw                            | jsonb                    | NO
+ entity_cyp             | created_at                     | timestamp with time zone | NO
+ entity_cyp             | updated_at                     | timestamp with time zone | NO
+ entity_pk              | id                             | uuid                     | NO
+ entity_pk              | entity_id                      | text                     | NO
+ entity_pk              | entity_type                    | text                     | YES
+ entity_pk              | supplement_id                  | uuid                     | YES
+ entity_pk              | canonical_name                 | text                     | YES
+ entity_pk              | pk_field                       | text                     | NO
+ entity_pk              | value                          | text                     | YES
+ entity_pk              | evidence_scope                 | text                     | YES
+ entity_pk              | source_detail                  | jsonb                    | NO
+ entity_pk              | status                         | text                     | NO
+ entity_pk              | source                         | text                     | NO
+ entity_pk              | raw                            | jsonb                    | NO
+ entity_pk              | created_at                     | timestamp with time zone | NO
+ entity_pk              | updated_at                     | timestamp with time zone | NO
+ entity_renal_hepatic   | id                             | uuid                     | NO
+ entity_renal_hepatic   | entity_id                      | text                     | NO
+ entity_renal_hepatic   | entity_type                    | text                     | YES
+ entity_renal_hepatic   | supplement_id                  | uuid                     | YES
+ entity_renal_hepatic   | canonical_name                 | text                     | YES
+ entity_renal_hepatic   | organ                          | text                     | NO
+ entity_renal_hepatic   | field_name                     | text                     | NO
+ entity_renal_hepatic   | value                          | jsonb                    | YES
+ entity_renal_hepatic   | status                         | text                     | NO
+ entity_renal_hepatic   | source                         | text                     | NO
+ entity_renal_hepatic   | raw                            | jsonb                    | NO
+ entity_renal_hepatic   | created_at                     | timestamp with time zone | NO
+ entity_renal_hepatic   | updated_at                     | timestamp with time zone | NO
+ entity_transporters    | id                             | uuid                     | NO
+ entity_transporters    | entity_id                      | text                     | NO
+ entity_transporters    | entity_type                    | text                     | YES
+ entity_transporters    | supplement_id                  | uuid                     | YES
+ entity_transporters    | canonical_name                 | text                     | YES
+ entity_transporters    | transporter                    | text                     | NO
+ entity_transporters    | role                           | text                     | NO
+ entity_transporters    | evidence                       | text                     | YES
+ entity_transporters    | note                           | text                     | YES
+ entity_transporters    | source_ids                     | ARRAY                    | NO
+ entity_transporters    | status                         | text                     | NO
+ entity_transporters    | source                         | text                     | NO
+ entity_transporters    | raw                            | jsonb                    | NO
+ entity_transporters    | created_at                     | timestamp with time zone | NO
+ entity_transporters    | updated_at                     | timestamp with time zone | NO
+ supplement_dosing      | id                             | uuid                     | NO
+ supplement_dosing      | supplement_id                  | uuid                     | NO
+ supplement_dosing      | status                         | text                     | NO
+ supplement_dosing      | official_label_dose            | jsonb                    | YES
+ supplement_dosing      | guideline_dose                 | jsonb                    | YES
+ supplement_dosing      | studied_dose_ranges            | jsonb                    | YES
+ supplement_dosing      | anecdotal_dose_ranges          | jsonb                    | YES
+ supplement_dosing      | upper_limit                    | jsonb                    | YES
+ supplement_dosing      | dose_unit                      | text                     | YES
+ supplement_dosing      | usage_hint_de                  | text                     | YES
+ supplement_dosing      | usage_hint_en                  | text                     | YES
+ supplement_dosing      | usage_hint_th                  | text                     | YES
+ supplement_dosing      | source                         | text                     | NO
+ supplement_dosing      | created_at                     | timestamp with time zone | NO
+ supplement_dosing      | updated_at                     | timestamp with time zone | NO
+ supplement_dosing      | frequency_de                   | text                     | YES
+ supplement_dosing      | frequency_en                   | text                     | YES
+ supplement_dosing      | frequency_th                   | text                     | YES
+ supplement_dosing      | duration_studied_de            | text                     | YES
+ supplement_dosing      | duration_studied_en            | text                     | YES
+ supplement_dosing      | duration_studied_th            | text                     | YES
+ supplement_dosing      | provenance_note                | text                     | YES
+ supplement_dosing      | integration_note               | text                     | YES
+ supplement_dosing      | sources                        | jsonb                    | NO
+ supplement_evidence    | id                             | uuid                     | NO
+ supplement_evidence    | supplement_id                  | uuid                     | NO
+ supplement_evidence    | status                         | text                     | NO
+ supplement_evidence    | overall_grade                  | text                     | YES
+ supplement_evidence    | summary_de                     | text                     | YES
+ supplement_evidence    | summary_en                     | text                     | YES
+ supplement_evidence    | summary_th                     | text                     | YES
+ supplement_evidence    | human_trials                   | integer                  | YES
+ supplement_evidence    | randomized_trials              | integer                  | YES
+ supplement_evidence    | meta_analyses                  | integer                  | YES
+ supplement_evidence    | animal_only                    | boolean                  | YES
+ supplement_evidence    | in_vitro_only                  | boolean                  | YES
+ supplement_evidence    | source                         | text                     | NO
+ supplement_evidence    | created_at                     | timestamp with time zone | NO
+ supplement_evidence    | updated_at                     | timestamp with time zone | NO
+ supplement_identifiers | id                             | uuid                     | NO
+ supplement_identifiers | supplement_id                  | uuid                     | NO
+ supplement_identifiers | status                         | text                     | NO
+ supplement_identifiers | identifier_type                | text                     | NO
+ supplement_identifiers | identifier_value               | text                     | NO
+ supplement_identifiers | evidence_provenance            | jsonb                    | YES
+ supplement_identifiers | source                         | text                     | NO
+ supplement_identifiers | created_at                     | timestamp with time zone | NO
+ supplement_identifiers | updated_at                     | timestamp with time zone | NO
+ supplement_lab_effects | id                             | uuid                     | NO
+ supplement_lab_effects | supplement_id                  | uuid                     | NO
+ supplement_lab_effects | status                         | text                     | NO
+ supplement_lab_effects | lab_marker_id                  | text                     | YES
+ supplement_lab_effects | loinc_code                     | text                     | YES
+ supplement_lab_effects | effect_type                    | text                     | YES
+ supplement_lab_effects | analyte_de                     | text                     | YES
+ supplement_lab_effects | analyte_en                     | text                     | YES
+ supplement_lab_effects | analyte_th                     | text                     | YES
+ supplement_lab_effects | direction                      | text                     | YES
+ supplement_lab_effects | mechanism_de                   | text                     | YES
+ supplement_lab_effects | mechanism_en                   | text                     | YES
+ supplement_lab_effects | mechanism_th                   | text                     | YES
+ supplement_lab_effects | clinical_consequence_de        | text                     | YES
+ supplement_lab_effects | clinical_consequence_en        | text                     | YES
+ supplement_lab_effects | clinical_consequence_th        | text                     | YES
+ supplement_lab_effects | evidence                       | text                     | YES
+ supplement_lab_effects | monitoring_link                | text                     | YES
+ supplement_lab_effects | source                         | text                     | NO
+ supplement_lab_effects | created_at                     | timestamp with time zone | NO
+ supplement_lab_effects | updated_at                     | timestamp with time zone | NO
+ supplement_regulatory  | id                             | uuid                     | NO
+ supplement_regulatory  | supplement_id                  | uuid                     | NO
+ supplement_regulatory  | status                         | text                     | NO
+ supplement_regulatory  | jurisdiction                   | text                     | NO
+ supplement_regulatory  | legal_status                   | text                     | YES
+ supplement_regulatory  | prescription_required          | boolean                  | YES
+ supplement_regulatory  | approved_drug                  | boolean                  | YES
+ supplement_regulatory  | approved_supplement_ingredient | boolean                  | YES
+ supplement_regulatory  | note_de                        | text                     | YES
+ supplement_regulatory  | note_en                        | text                     | YES
+ supplement_regulatory  | note_th                        | text                     | YES
+ supplement_regulatory  | source                         | text                     | NO
+ supplement_regulatory  | created_at                     | timestamp with time zone | NO
+ supplement_regulatory  | updated_at                     | timestamp with time zone | NO
+ supplement_wada        | id                             | uuid                     | NO
+ supplement_wada        | supplement_id                  | uuid                     | NO
+ supplement_wada        | status                         | text                     | NO
+ supplement_wada        | wada_status                    | text                     | YES
+ supplement_wada        | wada_category                  | text                     | YES
+ supplement_wada        | detection_time_days            | numeric                  | YES
+ supplement_wada        | note_de                        | text                     | YES
+ supplement_wada        | note_en                        | text                     | YES
+ supplement_wada        | note_th                        | text                     | YES
+ supplement_wada        | source                         | text                     | NO
+ supplement_wada        | created_at                     | timestamp with time zone | NO
+ supplement_wada        | updated_at                     | timestamp with time zone | NO
+--- baseline_counts ---
+0 |         222 |                            0 |                     135

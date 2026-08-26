@@ -1,0 +1,66 @@
+BACKUP_DUMP
+
+
+---
+
+BACKUP_SQL
+
+
+---
+
+COPY_DUMP
+
+
+---
+
+COPY_SQL
+
+
+---
+
+COPY 281_supplement_wissen_hochreichen.sql
+
+
+---
+
+APPLY 281_supplement_wissen_hochreichen.sql
+BEGIN
+CREATE SCHEMA
+CREATE FUNCTION
+DROP TABLE
+SELECT 68
+UPDATE 22
+INSERT 0 0
+DROP TABLE
+SELECT 47
+DELETE 0
+INSERT 0 46
+DROP TABLE
+SELECT 18
+DELETE 0
+INSERT 0 17
+DO
+COMMIT
+psql:/tmp/281_supplement_wissen_hochreichen.sql:3: NOTICE:  schema "supplements" already exists, skipping
+psql:/tmp/281_supplement_wissen_hochreichen.sql:19: NOTICE:  table "tmp_c281_dosing_inherit" does not exist, skipping
+psql:/tmp/281_supplement_wissen_hochreichen.sql:155: NOTICE:  table "tmp_c281_lab_inherit" does not exist, skipping
+psql:/tmp/281_supplement_wissen_hochreichen.sql:259: NOTICE:  table "tmp_c281_wada_inherit" does not exist, skipping
+psql:/tmp/281_supplement_wissen_hochreichen.sql:423: NOTICE:  OK C-281: Dosis 22 Eltern/109 Felder, Lab 46 geerbt/1 gemeldet, WADA 17 geerbt/1 gemeldet; Koffein und Magnesium nicht blind vererbt
+
+---
+
+COPY 282_wada_status_kategorie_konflikte.sql
+
+
+---
+
+APPLY 282_wada_status_kategorie_konflikte.sql
+BEGIN
+CREATE SCHEMA
+CREATE FUNCTION
+DELETE 0
+INSERT 0 2
+DO
+COMMIT
+psql:/tmp/282_wada_status_kategorie_konflikte.sql:3: NOTICE:  schema "supplements" already exists, skipping
+psql:/tmp/282_wada_status_kategorie_konflikte.sql:128: NOTICE:  OK C-282: WADA-Selbstwidersprueche 2 als Konflikt-Records, Rueckrichtung 0, Namen Phenibut, Tianeptine ('gas station heroin')

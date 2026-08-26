@@ -1,0 +1,8 @@
+BEGIN
+CREATE TABLE
+COPY 1
+DELETE 0
+INSERT 0 27
+DO
+COMMIT
+psql:<stdin>:48: NOTICE:  OK C-273 Block6 Reise mit Medikamenten: Laenderbeispiele 7, Thai-Glossar 19

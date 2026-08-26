@@ -1,0 +1,11 @@
+BEGIN
+CREATE TABLE
+COPY 1
+DELETE 64
+DELETE 22
+DELETE 43
+INSERT 0 64
+INSERT 0 22
+INSERT 0 43
+psql:<stdin>:91: ERROR:  C-273 Block1 Regeln 64, erwartet 65
+CONTEXT:  PL/pgSQL function inline_code_block line 29 at RAISE

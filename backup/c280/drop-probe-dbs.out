@@ -1,0 +1,13 @@
+lumeos_c280_probe
+DROP DATABASE
+
+---
+
+lumeos_c280_probe2
+DROP DATABASE
+NOTICE:  database "lumeos_c280_probe2" does not exist, skipping
+
+---
+
+lumeos_c280_neg
+DROP DATABASE

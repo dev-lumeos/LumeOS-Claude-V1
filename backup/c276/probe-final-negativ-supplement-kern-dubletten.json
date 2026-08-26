@@ -1,0 +1,77 @@
+{
+  "checked_at": "2026-08-25T10:49:39.818Z",
+  "top_level_rows": 413,
+  "duplicate_groups": 5,
+  "allowed_duplicate_groups": 4,
+  "unknown_duplicate_groups": 1,
+  "negative_probe": true,
+  "allowed": [
+    {
+      "core": "panaxginseng",
+      "count": 2,
+      "slugs": [
+        "sub_026ab84197",
+        "sub_c0d2ce1e64"
+      ],
+      "names": [
+        "Panax ginseng (American, P. quinquefolius)",
+        "Panax ginseng (Korean red ginseng)"
+      ],
+      "reason": "American und Korean red ginseng bleiben getrennte botanische Formen ohne Sammelnamen."
+    },
+    {
+      "core": "boron",
+      "count": 2,
+      "slugs": [
+        "sub_057f2c3be5",
+        "sub_0d4c636691"
+      ],
+      "names": [
+        "Boron",
+        "Boron (hormonal cross-ref)"
+      ],
+      "reason": "Boron und hormonal cross-ref sind getrennte sichtbare Eintraege, keine Salzformen."
+    },
+    {
+      "core": "vitamink2",
+      "count": 2,
+      "slugs": [
+        "sub_0b5c620106",
+        "vitamin-k2-mk7"
+      ],
+      "names": [
+        "Vitamin K2 (MK-7)",
+        "Vitamin K2 (menaquinone-4)"
+      ],
+      "reason": "MK-4 und MK-7 bleiben getrennt; die Kimi-MK-7-Dublette ist Unterform."
+    },
+    {
+      "core": "vitaminb3",
+      "count": 2,
+      "slugs": [
+        "sub_2baf990d69",
+        "sub_7dc88a93db"
+      ],
+      "names": [
+        "Vitamin B3 (nicotinamide/niacinamide)",
+        "Vitamin B3 (nicotinic acid)"
+      ],
+      "reason": "Nicotinic acid und nicotinamide unterscheiden sich pharmakologisch."
+    }
+  ],
+  "unknown": [
+    {
+      "core": "vitaminc",
+      "count": 2,
+      "slugs": [
+        "c276_negativprobe_vitamin_c",
+        "vitamin-c"
+      ],
+      "names": [
+        "Vitamin C",
+        "Vitamin C (Negativprobe)"
+      ],
+      "reason": null
+    }
+  ]
+}

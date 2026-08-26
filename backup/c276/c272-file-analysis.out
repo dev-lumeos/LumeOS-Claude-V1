@@ -1,0 +1,116 @@
+=== wada_scope_enrichment.jsonl ===
+records=446 mapped_slug=320 duplicate_ids=0
+top_keys=sources[].url:1079, sources[].verified:1079, crawl_id:446, layer:446, generated_at:446, generated_by:446, entity_id:446, canonical_name:446, wada_status:446, wada_category:446, note_de:446, scope_class:446, sources[]:446
+enum entity_id: sub_d370f8f2d6:1, sub_f14e403589:1, sub_d938783ce5:1, sub_67c3861fce:1, sub_7dc88a93db:1, sub_2baf990d69:1, sub_b40347f995:1, sub_df4b1c61d9:1, sub_f335fda43d:1, sub_f9ab6095e2:1
+enum canonical_name: Vitamin A (retinol):1, Beta-carotene (provitamin A):1, Vitamin B1 (thiamine):1, Vitamin B2 (riboflavin):1, Vitamin B3 (nicotinic acid):1, Vitamin B3 (nicotinamide/niacinamide):1, Vitamin B5 (pantothenic acid):1, Vitamin B6 (pyridoxine):1, Vitamin B7 (biotin):1, Vitamin B9 (folic acid):1
+enum wada_status: not_prohibited:257, prohibited:184, monitored:4, restricted:1
+enum scope_class: NOT_LISTED:259, CODE_SIGNATORIES_ONLY:175, IN_COMPETITION_ONLY:8, MONITORED_NOT_PROHIBITED:4
+enum wada_category: S2/S0:35, S1.1:31, S1.1 Anabolic androgenic steroids (exogenous), substance named on list:8, unknown:7, S4.1:7, S4.4.2 Insulins and insulin-mimetics:7, S1 Anabolic agents:6, S1/S0:5, S4 Hormone and metabolic modulators:4, S1:4
+
+=== wada_scope_notes_enrichment.jsonl ===
+records=318 mapped_slug=290 duplicate_ids=0
+top_keys=sources[].ref:954, sources[].url:954, sources[].verified:954, entity_id:318, canonical_name:318, wada_status:318, wada_category:318, scope_note_de:318, sources[]:318, crawl_id:318, generated_by:318, last_verified:318
+enum entity_id: sub_d370f8f2d6:1, sub_f14e403589:1, sub_d938783ce5:1, sub_67c3861fce:1, sub_7dc88a93db:1, sub_2baf990d69:1, sub_b40347f995:1, sub_df4b1c61d9:1, sub_f335fda43d:1, sub_f9ab6095e2:1
+enum canonical_name: Vitamin A (retinol):1, Beta-carotene (provitamin A):1, Vitamin B1 (thiamine):1, Vitamin B2 (riboflavin):1, Vitamin B3 (nicotinic acid):1, Vitamin B3 (nicotinamide/niacinamide):1, Vitamin B5 (pantothenic acid):1, Vitamin B6 (pyridoxine):1, Vitamin B7 (biotin):1, Vitamin B9 (folic acid):1
+enum wada_status: not_prohibited:190, prohibited:124, monitored:4
+enum wada_category: S2/S0:35, S1.1:31, unknown:7, S4.1:7, S1 Anabolic agents:6, S1/S0:5, S4 Hormone and metabolic modulators:4, S1:4, S2:3, 2026 Monitoring Program (markers):2
+
+=== wada_status_enrichment.jsonl ===
+records=448 mapped_slug=0 duplicate_ids=0
+top_keys=drug_class[]:908, crawl_id:448, layer:448, generated_at:448, strict_mode:448, integration_note:448, generated_by:448, entity_id:448, canonical_name:448, wada.status:442, wada.category:442, wada.sports_scope:442, wada.tue_relevance:442, wada.list_year:442, wada.last_verified:442, wada.source_url:442, note:43, record_type:6, field:6, current_value:6, corrected_value:6, category:6, reason:6, list_year:6, last_verified:6, source_url:6, application_note:6
+enum entity_id: drug_6eb71223e1:1, drug_6c4676d32f:1, drug_860cb065ed:1, drug_6c48ce0a41:1, drug_0c9e6c673a:1, drug_52b1ce26b4:1, drug_8d701e4538:1, drug_82908d531f:1, drug_6449e2faa8:1, drug_22e915f376:1
+enum canonical_name: Enalapril Maleate:1, Ramipril:1, Perindopril:1, Valsartan:1, Irbesartan:1, Olmesartan:1, Telmisartan:1, Candesartan:1, Nifedipine:1, Diltiazem Hydrochloride:1
+enum note: Diuretika jederzeit verboten; TUE z.B. bei Hypertonie möglich.:9, Nicht verboten.:3, Ophthalmische Anwendung ausdrücklich erlaubt.:2, P1: nur in bestimmten Sportarten.:1, Nicht verboten; 2026 in- und out-of-competition überwacht.:1, TUE bei Diabetes mellitus Standard.:1, TUE bei ADHS.:1, 2026: Analoga Flmodafinil/Fladrafinil ergänzt.:1, 2026 Monitoring in-competition; Verbot gilt nicht.:1, 2026 Monitoring in-competition.:1
+enum corrected_value: prohibited_at_all_times:3, prohibited_in_competition:2, prohibited_in_specific_sports:1
+enum category: S5 diuretics and masking agents:2, S7 narcotics:1, S9 glucocorticoids:1, S4.4 metabolic modulators (insulins):1, P1 beta-blockers:1
+enum reason: Thiazid-Diuretikum, jederzeit verboten (S5).:1, Schleifendiuretikum, jederzeit verboten (S5).:1, Seit 2024 in-competition verboten (S7); 2026 zusätzlich out-of-comp Monitoring.:1, Systemische Glukokortikoide in-competition verboten (S9).:1, Insuline jederzeit verboten (S4.4); TUE bei Diabetes.:1
+
+=== lab_effects_enrichment.jsonl ===
+records=47 mapped_slug=3 duplicate_ids=9
+top_keys=source_ids[]:133, crawl_id:47, layer:47, generated_at:47, strict_mode:47, integration_note:47, generated_by:47, substance_id:47, substance_name:47, domain:47, marker_id:47, marker_name:47, direction:47, effect_class:47, magnitude_context:47, clinical_relevance:47, qa_42:47, new_id_proposal:17, missing_reason:17, marker_id_original:9, id_correction:9, notes:1
+enum substance_id: drug_42cacb2353:3, drug_183c27c406:3, drug_7fc285c6f2:2, drug_f9db4716a8:2, drug_11412561f3:2, drug_35d4cdebb4:2, drug_68d26dc47f:2, drug_839a589ddb:2, drug_47e609a755:2, drug_08bd329957:1
+enum substance_name: Lithium:3, Phenytoin:3, Quetiapine:2, Efavirenz:2, Pantoprazole:2, Fenofibrate:2, Isotretinoin:2, Cyclosporine:2, Dapagliflozin:2, Daptomycin:1
+enum domain: medication:44, performance_compound:2, supplement:1
+enum marker_id: lab_uds_thc:4, lab_creatinine_serum:4, lab_wbc:3, lab_uds_benzodiazepine:2, lab_uds_amphetamine:2, lab_psa:2, lab_uric_acid:2, lab_triglycerides:2, lab_alt:2, lab_potassium:2
+enum marker_name: Serumkreatinin / eGFR:3, Urin-Drogenscreen: Benzodiazepine (Immunoassay):2, Urin-Drogenscreen: Amphetamine (Immunoassay):2, Urin-Drogenscreen: Cannabinoide (aeltere Immunoassays):2, PSA (gesamt):2, Harnsaeure (Serum):2, Triglyzeride:2, ALT / Transaminasen:2, Kalium:2, HDL-Cholesterin:2
+enum direction: increase:21, interference_falsely_high:13, decrease:13
+enum effect_class: physiological_lab_change:34, analytical_assay_interference:13
+enum marker_id_original: lab_creatinine:4, lab_hdl_c:2, lab_pt_inr:1, lab_t4:1, lab_glucose:1
+enum magnitude_context: qualitativ positiv (Kreuzreaktivitaet in Enzym-Immunoassays):1, qualitativ positiv (Literaturberichte im FDA-Label):1, qualitativ positiv (Metaboliten-Kreuzreaktivitaet):1, qualitativ positiv (gut dokumentierte Kreuzreaktivitaet):1, qualitativ positiv (Metabolit mCPP kreuzreagiert):1, qualitativ positiv (Berichte im FDA-Label; PPI-Klasseneffekt dokumentiert):1, qualitativ positiv (NSAID-Kreuzreaktivitaet in aelteren Assays):1, ca. -50% innerhalb von 3-6 Monaten; frei/gesamt-PSA-Ratio bleibt unveraendert:1, ca. -19% Serum-Urat nach 3 Wochen (urikosurisch, reversibel nach Absetzen):1, Transaminasen-Erhoehung bei ~10-15% der Patienten, meist mild und transient:1
+enum clinical_relevance: false_interpretation: falsch-positiver Benzodiazepin-Screen:1, false_interpretation: falsch-positiver Amphetamin-Screen:1, false_interpretation: falsch-positiver PCP-Screen; GC-MS-Bestaetigung noetig:1, false_interpretation: falsch-positiver THC-Screen (DailyMed Warnings 5.11/5.12):1, false_interpretation: historisch falsch-positive Cannabinoid-Screens:1, false_interpretation: falsch-positiver Cannabinoid-Screen:1, monitoring/population-response: relevant bei Gicht-Patienten unter Allopurinol:1, false_interpretation: Schein-Niereninsuffizienz ohne Nierenschaden:1, false_interpretation: kein Hinweis auf Nierenfunktionsverschlechterung:1, monitoring: TSH/F4 regelmaessig unter Lithium kontrollieren:1
+
+=== human_evidence_flags.jsonl ===
+records=293 mapped_slug=290 duplicate_ids=0
+top_keys=linked_files[]:407, source_ids[]:386, crawl_id:293, layer:293, generated_at:293, strict_mode:293, integration_note:293, generated_by:293, entity_id:290, entity_type:290, canonical_name:290, human_evidence_available:290, rct_evidence_available:290, meta_analysis_available:290, model_note:290, missing_reason:290, record_type:3, deprecation.field:3, deprecation.aktion:3, status:3, note:3, deprecation.grund:2, deprecation.befund:1
+enum entity_id: sub_d370f8f2d6:1, sub_f14e403589:1, sub_d938783ce5:1, sub_67c3861fce:1, sub_7dc88a93db:1, sub_2baf990d69:1, sub_b40347f995:1, sub_df4b1c61d9:1, sub_f335fda43d:1, sub_f9ab6095e2:1
+enum entity_type: supplement:154, performance_compound:75, peptide:61
+enum canonical_name: Vitamin A (retinol):1, Beta-carotene (provitamin A):1, Vitamin B1 (thiamine):1, Vitamin B2 (riboflavin):1, Vitamin B3 (nicotinic acid):1, Vitamin B3 (nicotinamide/niacinamide):1, Vitamin B5 (pantothenic acid):1, Vitamin B6 (pyridoxine):1, Vitamin B7 (biotin):1, Vitamin B9 (folic acid):1
+
+=== thailand_regulatory_enrichment.jsonl ===
+records=85 mapped_slug=0 duplicate_ids=0
+top_keys=thailand.source_ids[]:288, kgap_status[]:177, crawl_id:85, layer:85, generated_at:85, strict_mode:85, generated_by:85, integration_note:84, entity_ref:84, entity_domain_hint:84, thailand.jurisdiction:84, thailand.registration_status:84, thailand.classification:84, thailand.controlled_status:84, thailand.last_verified:84, qa_79:84, thailand.details.registration_number:74, thailand.details.missing_reason:48, thailand.details.import_rules:32, thailand.details.product_status:28, thailand.details.thai_product_name:20, thailand.details.manufacturer_importer:20, thailand.details.dosage_form:20, thailand.details.strength:20, thailand.note:8, record_type:1, sources.S1.id:1, sources.S1.title:1, sources.S1.publisher:1, sources.S1.url:1
+enum entity_ref: med:lorazepam:1, med:diazepam:1, med:clonazepam:1, med:clobazam:1, med:phenobarbital:1, med:alprazolam:1, med:temazepam:1, med:zolpidem:1, med:zaleplon:1, med:midazolam:1
+enum entity_domain_hint: performance_compound:46, medication:31, peptide:7
+
+=== thailand_product_regulatory_enrichment.jsonl ===
+records=499 mapped_slug=0 duplicate_ids=0
+top_keys=thailand.source_ids[]:1129, crawl_id:499, layer:499, generated_at:499, strict_mode:499, generated_by:499, integration_note:499, record_type:499, product_domain:498, product_id:498, product_name:498, thailand.registration_number:498, thailand.status:498, thailand.last_verified:498, active_substance:448, formulation.strength.value:448, formulation.strength.unit:448, formulation.dosage_form:448, thailand.missing_reason:398, thailand.thai_label_name:140, thailand.english_label_name:140, thailand.manufacturer_importer:140, thailand.status_th:140, thailand.drug_category_th:134, thailand.dosage_form_th_registry:94, thailand.match_confidence:94, thailand.registration_candidate:40, thailand.detail_urls[]:13, thailand.additional_notification_numbers[]:7, thailand.product_type_th:6
+enum record_type: thailand_medication_product:448, thailand_supplement_product:50, source_registry:1
+enum product_domain: medication_product:448, supplement_product:50
+enum product_id: medprod_76e023e213:1, medprod_bb8565a79f:1, medprod_d9e1ae8145:1, medprod_f4f6eeba23:1, medprod_97960fdc27:1, medprod_db83fdc8a4:1, medprod_a62d9eaf57:1, medprod_57d2a5b32d:1, medprod_63663eca89:1, medprod_3c411894c2:1
+enum product_name: Optimum Nutrition Gold Standard 100% Whey:4, Zestril:2, Cozaar:2, Norvasc:2, Lipitor:2, Zocor:2, Eliquis:2, Plavix:2, Glucophage:2, Lantus:2
+enum active_substance: Atorvastatin:6, Metformin:6, Amlodipine:3, Tramadol:3, Omeprazole:3, Amoxicillin:3, Lisinopril:2, Losartan:2, Metoprolol:2, Simvastatin:2
+
+=== thailand_medication_regulatory_enrichment.jsonl ===
+records=477 mapped_slug=0 duplicate_ids=0
+top_keys=thailand.source_ids[]:1435, crawl_id:477, layer:477, generated_at:477, strict_mode:477, generated_by:477, integration_note:477, record_type:477, entity_id:476, entity_ref:476, thailand.jurisdiction:476, thailand.last_verified:476, thailand.narcotic_psychotropic_status:476, thailand.controlled_status:476, thailand.classification.original_text:476, thailand.classification.normalized_translation:476, thailand.classification.translation_confidence:476, thailand.details.import_context:476, thailand.details.note:476, thailand.registration_status:476, qa_79:476, thailand.details.check_method:469, thailand.details.matched_list_entries[]:14, thailand.prescription_status:7, thailand.details.list:7, sources.S1.name:1, sources.S1.publisher:1, sources.S1.url:1, sources.S1.version:1, sources.S1.accessed:1
+enum record_type: thailand_medication_regulatory:476, source_registry:1
+enum entity_id: drug_b41cbfc805:1, drug_7600fa75fb:1, drug_3023567a6f:1, drug_6130755644:1, drug_9a05646d46:1, drug_6c3578f2cd:1, drug_f4bbe608e9:1, drug_656032a84c:1, drug_90ea1eeaf3:1, drug_ee49834873:1
+enum entity_ref: med:lisinopril:1, med:losartan:1, med:metoprolol:1, med:amlodipine:1, med:atorvastatin:1, med:simvastatin:1, med:warfarin:1, med:apixaban:1, med:aspirin:1, med:clopidogrel:1
+
+=== cyp_enrichment.jsonl ===
+records=666 mapped_slug=190 duplicate_ids=0
+top_keys=cyp.CYP3A4.source_ids[]:1247, cyp.CYP2D6.source_ids[]:959, cyp.CYP2C9.source_ids[]:918, cyp.CYP1A2.source_ids[]:879, cyp.CYP2C19.source_ids[]:867, cyp.CYP2B6.source_ids[]:826, crawl_id:666, layer:666, generated_at:666, strict_mode:666, integration_note:666, generated_by:666, entity_id:666, canonical_name:666, entity_type:666, provenance_note:666, cyp.CYP3A4.role:611, cyp.CYP3A4.evidence:611, cyp.CYP2D6.role:502, cyp.CYP2D6.evidence:502, cyp.CYP3A4.note:489, cyp.CYP2C9.role:487, cyp.CYP2C9.evidence:487, cyp.CYP1A2.role:473, cyp.CYP1A2.evidence:473, cyp.CYP2C19.role:472, cyp.CYP2C19.evidence:472, cyp.CYP2D6.note:459, cyp.CYP2B6.role:456, cyp.CYP2B6.evidence:456
+enum entity_id: drug_b41cbfc805:1, drug_6eb71223e1:1, drug_6c4676d32f:1, drug_860cb065ed:1, drug_7600fa75fb:1, drug_6c48ce0a41:1, drug_0c9e6c673a:1, drug_52b1ce26b4:1, drug_8d701e4538:1, drug_82908d531f:1
+enum canonical_name: Lisinopril:1, Enalapril Maleate:1, Ramipril:1, Perindopril:1, Losartan:1, Valsartan:1, Irbesartan:1, Olmesartan:1, Telmisartan:1, Candesartan:1
+enum entity_type: medication:476, supplement:136, performance_compound:54
+
+=== transporter_enrichment.jsonl ===
+records=513 mapped_slug=15 duplicate_ids=0
+top_keys=transporters.P-gp.source_ids[]:611, transporters.OATP1B1.source_ids[]:552, transporters.BCRP.source_ids[]:551, transporters.OCT2.source_ids[]:535, transporters.OAT3.source_ids[]:535, transporters.OAT1.source_ids[]:528, transporters.OATP1B3.source_ids[]:527, transporters.MATE1.source_ids[]:523, transporters.MATE2-K.source_ids[]:521, crawl_id:513, layer:513, generated_at:513, strict_mode:513, integration_note:513, generated_by:513, entity_id:513, canonical_name:513, domain:513, transporters.P-gp.role:513, transporters.P-gp.evidence:513, transporters.BCRP.role:513, transporters.BCRP.evidence:513, transporters.OATP1B1.role:513, transporters.OATP1B1.evidence:513, transporters.OATP1B3.role:513, transporters.OATP1B3.evidence:513, transporters.OCT2.role:513, transporters.OCT2.evidence:513, transporters.MATE1.role:513, transporters.MATE1.evidence:513
+enum entity_id: drug_3d0b6459bf:1, drug_98870ff403:1, drug_6b32c3323d:1, drug_74ba892c89:1, drug_ef3ed14123:1, drug_35da037e76:1, drug_9321661b46:1, drug_e50528a9d8:1, drug_c0aa2c82df:1, drug_2e8a8b1c91:1
+enum canonical_name: 6-aminocaproic Acid:1, Abacavir:1, Abemaciclib:1, Acamprosate:1, Acarbose:1, Acenocoumarol:1, Acetaminophen:1, Acetazolamide:1, Acyclovir:1, Adalimumab:1
+enum domain: medication:498, supplement:15
+enum note: OCTN2-abhaengige Aufnahme; ausserhalb Scope — not_relevant:1, TauT-vermittelt — not_relevant:1, SMVT-vermittelt — not_relevant:1, Aufnahme via RFC/PCFT, nicht via Ziel-Transporter — not_relevant:1, SVCT1/2-vermittelt — not_relevant:1
+
+=== studies.jsonl ===
+records=43 mapped_slug=0 duplicate_ids=0
+top_keys=subjects[]:90, study_id:43, title:43, type:43, evidence_level:43, url:43, pmid:14, change_history[]:12, change_history[].field:12, change_history[].previous:12, change_history[].new:12, change_history[].changed_at:12, change_history[].crawl:12, change_history[].source:12, notes:3, citation:1
+enum study_id: sty_vital_d:1, sty_issn_creatine:1, sty_select:1, sty_ontrac:1, sty_step1:1, sty_surmount1:1, sty_retatrutide_p2:1, sty_tesamorelin_p3:1, sty_beta_alanine_meta:1, sty_nitrate_meta:1
+enum type: meta-analysis:6, RCT:4, RCT Phase 3:2, Cochrane review:2, regulator warning:2, RCT (small):2, RCT (n=25,871):1, position stand (society):1, RCT (n=35,533):1, RCT Phase 2:1
+enum evidence_level: tier2:35, tier1:7, tier2-derived:1
+enum url: https://pubmed.ncbi.nlm.nih.gov/31733345/:1, https://pubmed.ncbi.nlm.nih.gov/28615996/:1, https://pubmed.ncbi.nlm.nih.gov/21990298/:1, https://pubmed.ncbi.nlm.nih.gov/26488693/:1, https://pubmed.ncbi.nlm.nih.gov/33567185/:1, https://pubmed.ncbi.nlm.nih.gov/35658024/:1, https://pubmed.ncbi.nlm.nih.gov/37326315/:1, https://pubmed.ncbi.nlm.nih.gov/20566680/:1, https://pubmed.ncbi.nlm.nih.gov/22270875/:1, https://pubmed.ncbi.nlm.nih.gov/29083256/:1
+enum pmid: NEJM 2019;380:33-44 (design PMID 21986389; principal PMID 31733345):1, 28615996:1, 21990298:1, 26488693:1, 33567185:1, 35658024:1, 22270875:1, 23440782:1, 31991029:1, 37289866:1
+enum title: ISSN position stand: creatine supplementation and exercise:1, SELECT: vitamin E increased prostate cancer risk; selenium no benefit:1, STEP 1: semaglutide 2.4 mg — 14.9% weight loss at 68 wk:1, SURMOUNT-1: tirzepatide up to 20.9% weight loss:1, Retatrutide Phase 2 (NEJM 2023): ~24% weight loss at 48 wk:1, Meta-analysis: beta-alanine improves high-intensity exercise capacity:1, Meta-analyses: dietary nitrate improves exercise efficiency ~2-3%:1, Caffeine ergogenic meta-analyses (endurance/strength):1, Meta-analyses: zinc lozenges shorten colds if started early:1, Cochrane: vitamin C and the common cold (duration −8% adults, no prevention):1
+
+=== alias_resolution_candidates.jsonl ===
+records=64 mapped_slug=3 duplicate_ids=2
+top_keys=crawl_id:64, layer:64, generated_at:64, strict_mode:64, integration_note:64, generated_by:64, resolution_state:64, alias:59, missing_reason:56, source_ids[]:12, canonical_id[]:11, entity_id:5, term:5, category:5, source:5, resolution_type:3, evidence:3
+enum resolution_state: UNRESOLVED:56, THAI_TERM:5, RESOLVABLE_CANDIDATE:3
+enum alias: Wolverine stack:1, GLOW stack:1, KLOW stack:1, NASA (N-Acetyl Semax Amidate):1, base:1, blast:1, cruise:1, cruise-dose:1, TRT-plus:1, blast-and-cruise:1
+enum missing_reason: no_substance_referent (phase_term).:14, practice_term (Statusbegriff); kein Substanz-Referent.:2, practice_term (Sammelbegriff); kein Einzel-Referent.:2, quality_term (Label-Disclaimer); kein Substanz-Referent.:2, no_substance_referent (phase_term): Praxisphase, keine Substanz.:1, practice_term (Protokoll, mehrere moegliche Substanzen); kein Einzel-Mapping.:1, practice_term (Kombinations-Protokoll); kein Einzel-Referent.:1, class_term (Strukturklasse, z. B. Nandrolone/Trenbolone); kein Einzel-Referent.:1, class_term (Strukturklasse); kein Einzel-Referent.:1, class_term (17-alpha-alkylierte orale Wirkstoffe); kein Einzel-Referent.:1
+enum entity_id: sub_43b1e64b52:2, drug_e8fd0bad76:2, sub_bed5ac227a:1
+enum term: เวย์โปรตีนเข้มข้น:1, เวย์โปรตีนไอโซเลต:1, เวย์โปรตีน:1, ยาเม็ดเล็ทโทรโซล 2.5 มิลลิกรัม (เลขทะเบียน 1C 39/61(NG), TMT 908418):1
+enum category: official_thai_regulatory_name:4, consumer_common_thai_term:1
+
+=== conflict_records_gap_fill_pubchem.jsonl ===
+records=20 mapped_slug=20 duplicate_ids=1
+top_keys=crawl_id:20, layer:20, generated_at:20, strict_mode:20, generated_by:20, record_type:20, conflict_id:20, domain:20, entity_id:20, field_conflict:20, old_value:20, new_value:20, old_source:20, new_source:20, resolution_status:20, detail:20
+enum conflict_id: gap_fill_pubchem_001:1, gap_fill_pubchem_002:1, gap_fill_pubchem_003:1, gap_fill_pubchem_004:1, gap_fill_pubchem_005:1, gap_fill_pubchem_006:1, gap_fill_pubchem_007:1, gap_fill_pubchem_008:1, gap_fill_pubchem_009:1, gap_fill_pubchem_010:1
+enum entity_id: sub_271e0f2373:2, sub_df4b1c61d9:1, sub_72b40a8c12:1, sub_471f5dcf68:1, sub_6764c8891c:1, sub_7f400b189e:1, sub_1b98d69c9a:1, sub_4e2f06871f:1, sub_3701d02096:1, sub_2c308411e9:1
+enum field_conflict: external_ids.pubchem (CID/Formula/InChIKey Kohaerenz):18, external_ids.pubchem.inchikey:2
+enum old_value: {"cid": 1054, "formula": "C8H11NO3", "inchikey": "LXNHXLLTXMVWPM-UHFFFAOYSA-N"}:1, {"cid": 10112, "formula": "CCaO3", "inchikey": "VTYYLEPIZMXCLO-UHFFFAOYSA-L"}:1, {"cid": 24393, "formula": "FeO4S", "inchikey": "BAUYGSIQEAFULO-UHFFFAOYSA-L"}:1, {"cid": 4875, "formula": "IK", "inchikey": "NLKNQRATVPKPDG-UHFFFAOYSA-M"}:1, {"cid": 313, "formula": "ClH", "inchikey": "VEXZGXHMUGYJMC-UHFFFAOYSA-N"}:1, {"cid": 125672, "formula": "C16H30N4O4", "inchikey": null}:1, {"cid": 5235, "formula": "FNa", "inchikey": "PUZPDOWCWNUUKD-UHFFFAOYSA-M"}:1, {"cid": 91971820, "inchikey": null}:1, {"cid": 125672, "inchikey": null}:1
+enum new_value: keine Korrektur (Name-Lookup-Artefakt); Bestandswerte plausibel:13, correct_cid=134732:1, correct_cid=2519:1, correct_cid=439924:1, correct_cid=16133831:1, correct_cid=9824562:1
+enum old_source: data/substances Stammdatensatz (external_ids):18, data/substances Stammdatensatz:2
+enum new_source: PubChem PUG-REST Live-Check 2026-08-25 (property + name lookup):18, PubChem PUG-REST Live-Check 2026-08-25:2
+enum resolution_status: REVIEWED_LOOKUP_ARTIFACT:12, OPEN_TRUE_CONFLICT:6, OPEN_INCHIKEY_MISMATCH:2

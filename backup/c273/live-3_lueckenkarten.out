@@ -1,0 +1,8 @@
+BEGIN
+CREATE TABLE
+COPY 1
+DELETE 0
+INSERT 0 407
+DO
+COMMIT
+psql:<stdin>:56: NOTICE:  OK C-273 Block3 Lueckenkarten: resolved 56, dependencies 46, holds 305, kgap_852572baac vorhanden

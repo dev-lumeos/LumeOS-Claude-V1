@@ -1,0 +1,1142 @@
+=== lab_effects_enrichment.jsonl ===
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_K",
+  "substance_id": "drug_08bd329957",
+  "substance_name": "Daptomycin",
+  "domain": "medication",
+  "marker_id": "lab_inr",
+  "marker_name": "PT / INR (assays mit rekombinantem Thromboplastin-Reagenz)",
+  "direction": "interference_falsely_high",
+  "effect_class": "analytical_assay_interference",
+  "magnitude_context": "dosisabhaengig; INR bis +43% zwischen Peak und Trough bei empfaenglichen rekombinanten Thromboplastin-Reagenzien",
+  "clinical_relevance": "false_interpretation: Schein-Antikoagulation ohne Blutungsrisiko; kann zu Fehlanpassung von Warfarin fuehren",
+  "source_ids": [
+    "PMID:29472508",
+    "PMID:29179737",
+    "PMID:18180613",
+    "DailyMed daptomycin label (Laboratory Test Interference)"
+  ],
+  "qa_42": "effect_class strikt: physiological_lab_change vs analytical_assay_interference; keine Vermischung.",
+  "marker_id_original": "lab_pt_inr",
+  "id_correction": "QA_3/F1: Katalog-ID-Mapping"
+}
+shown=1 total_match=1
+=== wada_status_enrichment.jsonl ===
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_F",
+  "record_type": "correction_record",
+  "entity_id": "drug_cc84b4cd60",
+  "canonical_name": "Hydrochlorothiazide",
+  "field": "wada.status",
+  "current_value": "not_prohibited",
+  "corrected_value": "prohibited_at_all_times",
+  "category": "S5 diuretics and masking agents",
+  "reason": "Thiazid-Diuretikum, jederzeit verboten (S5).",
+  "list_year": "2026",
+  "last_verified": "2026-08-22",
+  "source_url": "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf",
+  "application_note": "Korrektur NICHT silent in kanonischem Record angewendet; Anwendung erst nach Review (Paragraph 64)."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_F",
+  "record_type": "correction_record",
+  "entity_id": "drug_b3a7c2fc99",
+  "canonical_name": "Furosemide",
+  "field": "wada.status",
+  "current_value": "not_prohibited",
+  "corrected_value": "prohibited_at_all_times",
+  "category": "S5 diuretics and masking agents",
+  "reason": "Schleifendiuretikum, jederzeit verboten (S5).",
+  "list_year": "2026",
+  "last_verified": "2026-08-22",
+  "source_url": "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf",
+  "application_note": "Korrektur NICHT silent in kanonischem Record angewendet; Anwendung erst nach Review (Paragraph 64)."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_F",
+  "record_type": "correction_record",
+  "entity_id": "drug_1a920d7057",
+  "canonical_name": "Tramadol",
+  "field": "wada.status",
+  "current_value": "not_prohibited",
+  "corrected_value": "prohibited_in_competition",
+  "category": "S7 narcotics",
+  "reason": "Seit 2024 in-competition verboten (S7); 2026 zusätzlich out-of-comp Monitoring.",
+  "list_year": "2026",
+  "last_verified": "2026-08-22",
+  "source_url": "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf",
+  "application_note": "Korrektur NICHT silent in kanonischem Record angewendet; Anwendung erst nach Review (Paragraph 64)."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_F",
+  "record_type": "correction_record",
+  "entity_id": "drug_f549fe6806",
+  "canonical_name": "Prednisone",
+  "field": "wada.status",
+  "current_value": "not_prohibited",
+  "corrected_value": "prohibited_in_competition",
+  "category": "S9 glucocorticoids",
+  "reason": "Systemische Glukokortikoide in-competition verboten (S9).",
+  "list_year": "2026",
+  "last_verified": "2026-08-22",
+  "source_url": "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf",
+  "application_note": "Korrektur NICHT silent in kanonischem Record angewendet; Anwendung erst nach Review (Paragraph 64)."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_F",
+  "record_type": "correction_record",
+  "entity_id": "drug_0b984e590d",
+  "canonical_name": "Insulin glargine",
+  "field": "wada.status",
+  "current_value": "not_prohibited",
+  "corrected_value": "prohibited_at_all_times",
+  "category": "S4.4 metabolic modulators (insulins)",
+  "reason": "Insuline jederzeit verboten (S4.4); TUE bei Diabetes.",
+  "list_year": "2026",
+  "last_verified": "2026-08-22",
+  "source_url": "https://www.wada-ama.org/sites/default/files/2025-09/2026list_en_final_clean_september_2025.pdf",
+  "application_note": "Korrektur NICHT silent in kanonischem Record angewendet; Anwendung erst nach Review (Paragraph 64)."
+}
+shown=5 total_match=6
+=== thailand_regulatory_enrichment.jsonl ===
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "record_type": "source_registry",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "generated_by": "SWARM_G",
+  "sources": {
+    "S1": {
+      "id": "S1",
+      "title": "NARCO list — Table of Controlled Narcotic Drugs in Thailand (update 15.09.2025)",
+      "publisher": "Thai FDA, Narcotics Control Division",
+      "url": "https://permitfortraveler.fda.moph.go.th/nct_permit_main/Upload/NARCO_list_update_15_09_2025_NEW.pdf",
+      "version": "2025-09-15",
+      "tier": "official_regulator"
+    },
+    "S2": {
+      "id": "S2",
+      "title": "PHYCHO list — Table of Controlled Psychotropic Substances in Thailand (update 25.07.2025)",
+      "publisher": "Thai FDA, Narcotics Control Division",
+      "url": "https://permitfortraveler.fda.moph.go.th/nct_permit_main/Upload/PHYCHO_list_update_25_07_2025.pdf",
+      "version": "2025-07-25",
+      "tier": "official_regulator"
+    },
+    "S3": {
+      "id": "S3",
+      "title": "Guidance for Travelers under Treatment Carrying Personal Medications Containing Narcotic Drugs and Psychotropic Substances into/out of Thailand",
+      "publisher": "Thai FDA (en.fda.moph.go.th)",
+      "url": "https://en.fda.moph.go.th/entrepreneurs-narcotic-drugs-and-psychotropic-substances/category/guidance-for-travelers-under-treatment-carrying-personal-medications-containing-narcotic-drugs-into-/",
+      "version": "Narcotics Code; Ministerial Regulation B.E. 2567 (2024), in force 2024-09-21",
+      "tier": "official_regulator"
+    },
+    "S4": {
+      "id": "S4",
+      "title": "Thai FDA Health Product Search Center (ระบบสืบค้น)",
+      "publisher": "Thai FDA",
+      "url": "https://porta.fda.moph.go.th/fda_search_center_new/",
+      "version": "live database, retrieved 2026-08-22",
+      "tier": "official_registry"
+    },
+    "S5": {
+      "id": "S5",
+      "title": "Bringing of health products into the Kingdom of Thailand",
+      "publisher": "Thai FDA (en.fda.moph.go.th)",
+      "url": "https://en.fda.moph.go.th/consumer/consumer-bringing-of-health-products-into-the-kingdom-of-thailand",
+      "version": "retrieved 2026-08-22",
+      "tier": "official_regulator"
+    },
+    "S6": {
+      "id": "S6",
+      "title": "Knowledge on Narcotics in Thailand in Terms of Import for Personal Use",
+      "publisher": "Thai FDA permit-for-traveler portal",
+      "url": "https://permitfortraveler.fda.moph.go.th/nct_permit_main/Main/FRM_knowledge",
+      "version": "retrieved 2026-08-22",
+      "tier": "official_regulator"
+    },
+    "S7": {
+      "id": "S7",
+      "title": "Thai FDA FAQs — drug importation for personal use (Drug Act B.E. 2510 §12/§13(4))",
+      "publisher": "Thai FDA (en.fda.moph.go.th)",
+      "url": "https://en.fda.moph.go.th/entrepreneurs-medicines/category/faqs-medicines/",
+      "version": "retrieved 2026-08-22",
+      "tier": "official_regulator"
+    }
+  },
+  "note": "Referenzen S1..Sn der thailand.source_ids-Felder; alle Quellen offizielle Thai-Regula
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_G",
+  "entity_ref": "med:lorazepam",
+  "entity_domain_hint": "medication",
+  "thailand": {
+    "jurisdiction": "TH",
+    "registration_status": "not_checked_individually",
+    "classification": "psychotropic_substance_category_IV (Psychotropic Substances Act / Narcotics Code)",
+    "controlled_status": "CONTROLLED — Psychotropic Category IV per official Thai FDA PHYCHO list 25.07.2025",
+    "details": {
+      "import_rules": "Import: psychotropic Sch. II-IV ≤30-day supply with physician certificate, no permit; 31-90 days requires Thai FDA permit (MR B.E. 2567); Sch. I prohibited [S3,S6]",
+      "thai_product_name": null,
+      "registration_number": null,
+      "manufacturer_importer": null,
+      "dosage_form": null,
+      "strength": null,
+      "product_status": null
+    },
+    "source_ids": [
+      "S2",
+      "S3",
+      "S6"
+    ],
+    "last_verified": "2026-08-22"
+  },
+  "kgap_status": [
+    "kgap_955d5ee1f7"
+  ],
+  "qa_79": "Thai-Status ausschliesslich aus offiziellen Thai-FDA-Quellen (S1-S7); keine US/EU-Ableitung."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_G",
+  "entity_ref": "med:diazepam",
+  "entity_domain_hint": "medication",
+  "thailand": {
+    "jurisdiction": "TH",
+    "registration_status": "not_checked_individually",
+    "classification": "psychotropic_substance_category_IV (Psychotropic Substances Act / Narcotics Code)",
+    "controlled_status": "CONTROLLED — Psychotropic Category IV per official Thai FDA PHYCHO list 25.07.2025",
+    "details": {
+      "import_rules": "Import: psychotropic Sch. II-IV ≤30-day supply with physician certificate, no permit; 31-90 days requires Thai FDA permit (MR B.E. 2567); Sch. I prohibited [S3,S6]",
+      "thai_product_name": null,
+      "registration_number": null,
+      "manufacturer_importer": null,
+      "dosage_form": null,
+      "strength": null,
+      "product_status": null
+    },
+    "source_ids": [
+      "S2",
+      "S3",
+      "S6"
+    ],
+    "last_verified": "2026-08-22"
+  },
+  "kgap_status": [
+    "kgap_955d5ee1f7"
+  ],
+  "qa_79": "Thai-Status ausschliesslich aus offiziellen Thai-FDA-Quellen (S1-S7); keine US/EU-Ableitung."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_G",
+  "entity_ref": "med:clonazepam",
+  "entity_domain_hint": "medication",
+  "thailand": {
+    "jurisdiction": "TH",
+    "registration_status": "not_checked_individually",
+    "classification": "psychotropic_substance_category_IV (Psychotropic Substances Act / Narcotics Code)",
+    "controlled_status": "CONTROLLED — Psychotropic Category IV per official Thai FDA PHYCHO list 25.07.2025",
+    "details": {
+      "import_rules": "Import: psychotropic Sch. II-IV ≤30-day supply with physician certificate, no permit; 31-90 days requires Thai FDA permit (MR B.E. 2567); Sch. I prohibited [S3,S6]",
+      "thai_product_name": null,
+      "registration_number": null,
+      "manufacturer_importer": null,
+      "dosage_form": null,
+      "strength": null,
+      "product_status": null
+    },
+    "source_ids": [
+      "S2",
+      "S3",
+      "S6"
+    ],
+    "last_verified": "2026-08-22"
+  },
+  "kgap_status": [
+    "kgap_955d5ee1f7"
+  ],
+  "qa_79": "Thai-Status ausschliesslich aus offiziellen Thai-FDA-Quellen (S1-S7); keine US/EU-Ableitung."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_G",
+  "entity_ref": "med:clobazam",
+  "entity_domain_hint": "medication",
+  "thailand": {
+    "jurisdiction": "TH",
+    "registration_status": "not_checked_individually",
+    "classification": "psychotropic_substance_category_IV (Psychotropic Substances Act / Narcotics Code)",
+    "controlled_status": "CONTROLLED — Psychotropic Category IV per official Thai FDA PHYCHO list 25.07.2025",
+    "details": {
+      "import_rules": "Import: psychotropic Sch. II-IV ≤30-day supply with physician certificate, no permit; 31-90 days requires Thai FDA permit (MR B.E. 2567); Sch. I prohibited [S3,S6]",
+      "thai_product_name": null,
+      "registration_number": null,
+      "manufacturer_importer": null,
+      "dosage_form": null,
+      "strength": null,
+      "product_status": null
+    },
+    "source_ids": [
+      "S2",
+      "S3",
+      "S6"
+    ],
+    "last_verified": "2026-08-22"
+  },
+  "kgap_status": [
+    "kgap_955d5ee1f7"
+  ],
+  "qa_79": "Thai-Status ausschliesslich aus offiziellen Thai-FDA-Quellen (S1-S7); keine US/EU-Ableitung."
+}
+shown=5 total_match=85
+=== human_evidence_flags.jsonl ===
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_L",
+  "entity_id": "sub_f335fda43d",
+  "entity_type": "supplement",
+  "canonical_name": "Vitamin B7 (biotin)",
+  "human_evidence_available": true,
+  "rct_evidence_available": null,
+  "meta_analysis_available": null,
+  "source_ids": [
+    "27362288",
+    "28222020",
+    "28534685",
+    "28875734",
+    "28973622",
+    "29072950",
+    "29395091",
+    "30429682",
+    "32118725",
+    "35849629"
+  ],
+  "linked_files": [
+    "population_response_atlas",
+    "response_confounder_graph",
+    "response_modifier_graph"
+  ],
+  "missing_reason": "Kein typisierter Studien-Metadaten-Cache fuer verlinkte PMIDs; Design (RCT/Meta-Analyse) nicht eindeutig klassifizierbar (§44).",
+  "model_note": "Boolean/source-basiertes Modell gemaess Paragraph 44: human_evidence_available / rct_evidence_available / meta_analysis_available + source_ids (PMIDs, dedupliziert; KEINE Trial-Zaehlung, Paragraph 82)."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_L",
+  "entity_id": "sub_9f9bb8c160",
+  "entity_type": "supplement",
+  "canonical_name": "Creatine monohydrate",
+  "human_evidence_available": true,
+  "rct_evidence_available": null,
+  "meta_analysis_available": null,
+  "source_ids": [
+    "10449011",
+    "10999421",
+    "12945830",
+    "15795816",
+    "18188581",
+    "18235143",
+    "19228401",
+    "20976468",
+    "28615996",
+    "41199218",
+    "9404870"
+  ],
+  "linked_files": [
+    "population_response_atlas",
+    "response_confounder_graph",
+    "response_modifier_graph",
+    "studies"
+  ],
+  "missing_reason": "Kein typisierter Studien-Metadaten-Cache fuer verlinkte PMIDs; Design (RCT/Meta-Analyse) nicht eindeutig klassifizierbar (§44).",
+  "model_note": "Boolean/source-basiertes Modell gemaess Paragraph 44: human_evidence_available / rct_evidence_available / meta_analysis_available + source_ids (PMIDs, dedupliziert; KEINE Trial-Zaehlung, Paragraph 82)."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_L",
+  "entity_id": "sub_bed5ac227a",
+  "entity_type": "supplement",
+  "canonical_name": "Whey protein concentrate (WPC80)",
+  "human_evidence_available": false,
+  "rct_evidence_available": false,
+  "meta_analysis_available": false,
+  "source_ids": [],
+  "linked_files": [],
+  "model_note": "Boolean/source-basiertes Modell gemaess Paragraph 44: human_evidence_available / rct_evidence_available / meta_analysis_available + source_ids (PMIDs, dedupliziert; KEINE Trial-Zaehlung, Paragraph 82).",
+  "missing_reason": "keine humane Studien-Verlinkung im Bestand gefunden (deterministische Ableitung CRAWL_037/SWARM_L)"
+}
+shown=3 total_match=3
+=== cyp_enrichment.jsonl ===
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_C",
+  "entity_id": "sub_28b365f4e1",
+  "canonical_name": "Zinc (as zinc gluconate)",
+  "entity_type": "supplement",
+  "cyp": {
+    "CYP3A4": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2D6": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2C9": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2C19": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP1A2": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2B6": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    }
+  },
+  "provenance_note": "evidence je Enzym: clinically_established/in_vitro_only/weak_uncertain/not_studied. in_vitro_only niemals als klinische DDI gewertet (Paragraph 76). Teils Quellen ohne Live-Verifizierung (verified=false)."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_C",
+  "entity_id": "sub_7eec2628a4",
+  "canonical_name": "Zinc (as zinc picolinate)",
+  "entity_type": "supplement",
+  "cyp": {
+    "CYP3A4": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2D6": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2C9": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2C19": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP1A2": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2B6": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    }
+  },
+  "provenance_note": "evidence je Enzym: clinically_established/in_vitro_only/weak_uncertain/not_studied. in_vitro_only niemals als klinische DDI gewertet (Paragraph 76). Teils Quellen ohne Live-Verifizierung (verified=false)."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_C",
+  "entity_id": "sub_7f400b189e",
+  "canonical_name": "Calcium (as calcium carbonate)",
+  "entity_type": "supplement",
+  "cyp": {
+    "CYP3A4": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2D6": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2C9": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2C19": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP1A2": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2B6": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    }
+  },
+  "provenance_note": "evidence je Enzym: clinically_established/in_vitro_only/weak_uncertain/not_studied. in_vitro_only niemals als klinische DDI gewertet (Paragraph 76). Teils Quellen ohne Live-Verifizierung (verified=false)."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_C",
+  "entity_id": "sub_4aff89287a",
+  "canonical_name": "Calcium (as calcium citrate)",
+  "entity_type": "supplement",
+  "cyp": {
+    "CYP3A4": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2D6": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2C9": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2C19": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP1A2": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2B6": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    }
+  },
+  "provenance_note": "evidence je Enzym: clinically_established/in_vitro_only/weak_uncertain/not_studied. in_vitro_only niemals als klinische DDI gewertet (Paragraph 76). Teils Quellen ohne Live-Verifizierung (verified=false)."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_C",
+  "entity_id": "sub_1b98d69c9a",
+  "canonical_name": "Iron (as ferrous sulfate)",
+  "entity_type": "supplement",
+  "cyp": {
+    "CYP3A4": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2D6": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2C9": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2C19": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP1A2": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    },
+    "CYP2B6": {
+      "role": "not_relevant",
+      "evidence": "clinically_established",
+      "source_ids": [
+        "src_fda_label_ddi_section"
+      ],
+      "note": "Anorganisches Mineral/Elektrolyt: keine CYP-Metabolisierung; vorhandene in-vitro-Hemm-Flags ohne klinische Relevanz (§76)."
+    }
+  },
+  "provenance_note": "evidence je Enzym: clinically_established/in_vitro_only/weak_uncertain/not_studied. in_vitro_only niemals als klinische DDI gewertet (Paragraph 76). Teils Quellen ohne Live-Verifizierung (verified=false)."
+}
+shown=5 total_match=190
+=== transporter_enrichment.jsonl ===
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_D",
+  "entity_id": "sub_b3777be16d",
+  "canonical_name": "Acetyl-L-carnitine (ALCAR)",
+  "domain": "supplement",
+  "transporters": {
+    "P-gp": {
+      "role": "not_relevant",
+      "evidence": "not_relevant",
+      "source_ids": []
+    },
+    "BCRP": {
+      "role": "not_relevant",
+      "evidence": "not_relevant",
+      "source_ids": []
+    },
+    "OATP1B1": {
+      "role": "not_relevant",
+      "evidence": "not_relevant",
+      "source_ids": []
+    },
+    "OATP1B3": {
+      "role": "not_relevant",
+      "evidence": "not_relevant",
+      "source_ids": []
+    },
+    "OCT2": {
+      "role": "not_relevant",
+      "evidence": "not_relevant",
+      "source_ids": []
+    },
+    "MATE1": {
+      "role": "not_relevant",
+      "evidence": "not_relevant",
+      "source_ids": []
+    },
+    "MATE2-K": {
+      "role": "not_relevant",
+      "evidence": "not_relevant",
+      "source_ids": []
+    },
+    "OAT1": {
+      "role": "not_relevant",
+      "evidence": "not_relevant",
+      "source_ids": []
+    },
+    "OAT3": {
+      "role": "not_relevant",
+      "evidence": "not_relevant",
+      "source_ids": []
+    }
+  },
+  "note": "OCTN2-abhaengige Aufnahme; ausserhalb Scope — not_relevant",
+  "boundary_note": "in_vitro_only wird niemals automatisch als klinische DDI gewertet (§12/§13 analog). Rollen: substrate/inhibitor/inducer/substrate_and_inhibitor/unknown/not_relevant."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_D",
+  "entity_id": "sub_ba827fc312",
+  "canonical_name": "Berberine",
+  "domain": "supplement",
+  "transporters": {
+    "P-gp": {
+      "role": "inhibitor",
+      "evidence": "weak_uncertain",
+      "source_ids": [
+        "src_berberine_review"
+      ],
+      "note": "kleine Humanstudie Digoxin; in vitro auch OCT1/OATP — nicht klinisch hochstufen"
+    },
+    "BCRP": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OATP1B1": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OATP1B3": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OCT2": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "MATE1": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "MATE2-K": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OAT1": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OAT3": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    }
+  },
+  "boundary_note": "in_vitro_only wird niemals automatisch als klinische DDI gewertet (§12/§13 analog). Rollen: substrate/inhibitor/inducer/substrate_and_inhibitor/unknown/not_relevant."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_D",
+  "entity_id": "sub_5e98551cfd",
+  "canonical_name": "Cranberry extract (Vaccinium macrocarpon)",
+  "domain": "supplement",
+  "transporters": {
+    "P-gp": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "BCRP": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OATP1B1": {
+      "role": "inhibitor",
+      "evidence": "weak_uncertain",
+      "source_ids": [
+        "src_cranberry_review"
+      ],
+      "note": "schwache Evidenz; klinische DDIs nicht etabliert"
+    },
+    "OATP1B3": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OCT2": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "MATE1": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "MATE2-K": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OAT1": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OAT3": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    }
+  },
+  "boundary_note": "in_vitro_only wird niemals automatisch als klinische DDI gewertet (§12/§13 analog). Rollen: substrate/inhibitor/inducer/substrate_and_inhibitor/unknown/not_relevant."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_D",
+  "entity_id": "sub_cc94b06fea",
+  "canonical_name": "Curcumin (standardized 95% curcuminoids)",
+  "domain": "supplement",
+  "transporters": {
+    "P-gp": {
+      "role": "inhibitor",
+      "evidence": "in_vitro_only",
+      "source_ids": [
+        "src_curcumin_transporter"
+      ],
+      "note": "in vitro Hemmung P-gp/BCRP; klinische Studien inkonsistent — keine klinische DDI-Aussage"
+    },
+    "BCRP": {
+      "role": "inhibitor",
+      "evidence": "in_vitro_only",
+      "source_ids": [
+        "src_curcumin_transporter"
+      ]
+    },
+    "OATP1B1": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OATP1B3": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OCT2": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "MATE1": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "MATE2-K": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OAT1": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OAT3": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    }
+  },
+  "boundary_note": "in_vitro_only wird niemals automatisch als klinische DDI gewertet (§12/§13 analog). Rollen: substrate/inhibitor/inducer/substrate_and_inhibitor/unknown/not_relevant."
+}
+{
+  "crawl_id": "crawl_037",
+  "layer": "enrichment",
+  "generated_at": "2026-08-22",
+  "strict_mode": true,
+  "integration_note": "Additiver Enrichment-Layer (CRAWL_037); kanonische Entity-Files wurden nicht ueberschrieben. Aufloesung per entity_id.",
+  "generated_by": "SWARM_D",
+  "entity_id": "sub_7567ca120d",
+  "canonical_name": "Echinacea purpurea",
+  "domain": "supplement",
+  "transporters": {
+    "P-gp": {
+      "role": "inhibitor",
+      "evidence": "weak_uncertain",
+      "source_ids": [
+        "src_echinacea_ddi"
+      ],
+      "note": "schwache/inkonsistente Human-DDI-Daten"
+    },
+    "BCRP": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OATP1B1": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OATP1B3": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OCT2": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "MATE1": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "MATE2-K": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OAT1": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    },
+    "OAT3": {
+      "role": "unknown",
+      "evidence": "not_studied",
+      "source_ids": []
+    }
+  },
+  "boundary_note": "in_vitro_only wird niemals automatisch als klinische DDI gewertet (§12/§13 analog). Rollen: substrate/inhibitor/inducer/substrate_and_inhibitor/unknown/not_relevant."
+}
+shown=5 total_match=15
+=== conflict_records_gap_fill_pubchem.jsonl ===
+{
+  "crawl_id": "gap_fill_2026_08",
+  "layer": "enrichment",
+  "generated_at": "2026-08-25",
+  "strict_mode": true,
+  "generated_by": "ORCHESTRATOR_PUBCHEM_COHERENCE_SWEEP",
+  "record_type": "CONFLICT",
+  "conflict_id": "gap_fill_pubchem_001",
+  "domain": "substance_identity/external_ids",
+  "entity_id": "sub_df4b1c61d9",
+  "field_conflict": "external_ids.pubchem (CID/Formula/InChIKey Kohaerenz)",
+  "old_value": "{\"cid\": 1054, \"formula\": \"C8H11NO3\", \"inchikey\": \"LXNHXLLTXMVWPM-UHFFFAOYSA-N\"}",
+  "new_value": "keine Korrektur (Name-Lookup-Artefakt); Bestandswerte plausibel",
+  "old_source": "data/substances Stammdatensatz (external_ids)",
+  "new_source": "PubChem PUG-REST Live-Check 2026-08-25 (property + name lookup)",
+  "resolution_status": "REVIEWED_LOOKUP_ARTIFACT",
+  "detail": "Verdict NAME_LOOKUP_ARTIFACT. stored_cid=1054; Name-Lookup liefert andere CID als gespeichert, gespeicherte Werte aber intern konsistent (Artefakt des Namens-Lookups, z. B. Salz-/Ion-Form)."
+}
+{
+  "crawl_id": "gap_fill_2026_08",
+  "layer": "enrichment",
+  "generated_at": "2026-08-25",
+  "strict_mode": true,
+  "generated_by": "ORCHESTRATOR_PUBCHEM_COHERENCE_SWEEP",
+  "record_type": "CONFLICT",
+  "conflict_id": "gap_fill_pubchem_002",
+  "domain": "substance_identity/external_ids",
+  "entity_id": "sub_72b40a8c12",
+  "field_conflict": "external_ids.pubchem (CID/Formula/InChIKey Kohaerenz)",
+  "old_value": "{\"cid\": 166596686, \"formula\": \"C63H88CoN14O14P\", \"inchikey\": \"RMRCNWBMXRMIRW-WZHZPDAFSA-L\"}",
+  "new_value": "keine Korrektur (Name-Lookup-Artefakt); Bestandswerte plausibel",
+  "old_source": "data/substances Stammdatensatz (external_ids)",
+  "new_source": "PubChem PUG-REST Live-Check 2026-08-25 (property + name lookup)",
+  "resolution_status": "REVIEWED_LOOKUP_ARTIFACT",
+  "detail": "Verdict NAME_LOOKUP_ARTIFACT. stored_cid=166596686; Name-Lookup liefert andere CID als gespeichert, gespeicherte Werte aber intern konsistent (Artefakt des Namens-Lookups, z. B. Salz-/Ion-Form)."
+}
+{
+  "crawl_id": "gap_fill_2026_08",
+  "layer": "enrichment",
+  "generated_at": "2026-08-25",
+  "strict_mode": true,
+  "generated_by": "ORCHESTRATOR_PUBCHEM_COHERENCE_SWEEP",
+  "record_type": "CONFLICT",
+  "conflict_id": "gap_fill_pubchem_003",
+  "domain": "substance_identity/external_ids",
+  "entity_id": "sub_471f5dcf68",
+  "field_conflict": "external_ids.pubchem (CID/Formula/InChIKey Kohaerenz)",
+  "old_value": "{\"cid\": 10898559, \"formula\": \"C63H91CoN13O14P\", \"inchikey\": \"ZFLASALABLFSNM-WYVZQNDMSA-L\"}",
+  "new_value": "keine Korrektur (Name-Lookup-Artefakt); Bestandswerte plausibel",
+  "old_source": "data/substances Stammdatensatz (external_ids)",
+  "new_source": "PubChem PUG-REST Live-Check 2026-08-25 (property + name lookup)",
+  "resolution_status": "REVIEWED_LOOKUP_ARTIFACT",
+  "detail": "Verdict NAME_LOOKUP_ARTIFACT. stored_cid=10898559; Name-Lookup liefert andere CID als gespeichert, gespeicherte Werte aber intern konsistent (Artefakt des Namens-Lookups, z. B. Salz-/Ion-Form)."
+}
+{
+  "crawl_id": "gap_fill_2026_08",
+  "layer": "enrichment",
+  "generated_at": "2026-08-25",
+  "strict_mode": true,
+  "generated_by": "ORCHESTRATOR_PUBCHEM_COHERENCE_SWEEP",
+  "record_type": "CONFLICT",
+  "conflict_id": "gap_fill_pubchem_004",
+  "domain": "substance_identity/external_ids",
+  "entity_id": "sub_6764c8891c",
+  "field_conflict": "external_ids.pubchem (CID/Formula/InChIKey Kohaerenz)",
+  "old_value": "{\"cid\": 5287554, \"formula\": \"C46H64O2\", \"inchikey\": \"RAKQPZMEYJZGPI-LJWNYQGCSA-N\"}",
+  "new_value": "keine Korrektur (Name-Lookup-Artefakt); Bestandswerte plausibel",
+  "old_source": "data/substances Stammdatensatz (external_ids)",
+  "new_source": "PubChem PUG-REST Live-Check 2026-08-25 (property + name lookup)",
+  "resolution_status": "REVIEWED_LOOKUP_ARTIFACT",
+  "detail": "Verdict NAME_LOOKUP_ARTIFACT. stored_cid=5287554; Name-Lookup liefert andere CID als gespeichert, gespeicherte Werte aber intern konsistent (Artefakt des Namens-Lookups, z. B. Salz-/Ion-Form)."
+}
+{
+  "crawl_id": "gap_fill_2026_08",
+  "layer": "enrichment",
+  "generated_at": "2026-08-25",
+  "strict_mode": true,
+  "generated_by": "ORCHESTRATOR_PUBCHEM_COHERENCE_SWEEP",
+  "record_type": "CONFLICT",
+  "conflict_id": "gap_fill_pubchem_005",
+  "domain": "substance_identity/external_ids",
+  "entity_id": "sub_7f400b189e",
+  "field_conflict": "external_ids.pubchem (CID/Formula/InChIKey Kohaerenz)",
+  "old_value": "{\"cid\": 10112, \"formula\": \"CCaO3\", \"inchikey\": \"VTYYLEPIZMXCLO-UHFFFAOYSA-L\"}",
+  "new_value": "keine Korrektur (Name-Lookup-Artefakt); Bestandswerte plausibel",
+  "old_source": "data/substances Stammdatensatz (external_ids)",
+  "new_source": "PubChem PUG-REST Live-Check 2026-08-25 (property + name lookup)",
+  "resolution_status": "REVIEWED_LOOKUP_ARTIFACT",
+  "detail": "Verdict NAME_LOOKUP_ARTIFACT. stored_cid=10112; Name-Lookup liefert andere CID als gespeichert, gespeicherte Werte aber intern konsistent (Artefakt des Namens-Lookups, z. B. Salz-/Ion-Form)."
+}
+shown=5 total_match=20

@@ -1,0 +1,8 @@
+BEGIN
+CREATE TABLE
+COPY 1
+DELETE 0
+INSERT 0 265
+DO
+COMMIT
+psql:<stdin>:42: NOTICE:  OK C-273 Block2 Register: 265 Eintraege, 265 current_value null

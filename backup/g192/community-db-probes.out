@@ -1,0 +1,10 @@
+slug      | side_effects | tradeoffs | narratives | quality | terms 
+----------------+--------------+-----------+------------+---------+-------
+ sub_77b68a4df6 |            2 |         0 |          5 |       0 |     0
+ sub_a407e3597e |            1 |         2 |          4 |       1 |     0
+(2 rows)
+
+ substances_with_visible_community_block 
+-----------------------------------------
+                                      94
+(1 row)

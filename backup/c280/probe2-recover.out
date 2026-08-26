@@ -1,0 +1,22 @@
+select pid, state, wait_event_type, wait_event, left(query, 200) from pg_stat_activity where datname='lumeos_c280_probe2';
+ pid | state | wait_event_type | wait_event | left 
+-----+-------+-----------------+------------+------
+(0 rows)
+
+
+
+---
+
+select pg_terminate_backend(pid) from pg_stat_activity where datname='lumeos_c280_probe2' and pid <> pg_backend_pid();
+ pg_terminate_backend 
+----------------------
+(0 rows)
+
+
+
+---
+
+DROP DATABASE IF EXISTS lumeos_c280_probe2 WITH (FORCE);
+DROP DATABASE
+NOTICE:  database "lumeos_c280_probe2" does not exist, skipping
+

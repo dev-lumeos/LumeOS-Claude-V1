@@ -1,0 +1,3727 @@
+> @lumeos/web@0.1.0 test D:\GitHub\LumeOS-Claude-V1\apps\web
+> tsx --test "src/**/__tests__/*.test.ts" "src/lib/supplements/__tests__/substanz-reiter.test.ts"
+
+TAP version 13
+# Subtest: doppelte Kodierung wird erkannt
+ok 1 - doppelte Kodierung wird erkannt
+  ---
+  duration_ms: 104.7476
+  type: 'test'
+  ...
+# Subtest: ein doppelt kodiertes Dreibyte-Zeichen wird erkannt
+ok 2 - ein doppelt kodiertes Dreibyte-Zeichen wird erkannt
+  ---
+  duration_ms: 1014.9557
+  type: 'test'
+  ...
+# Subtest: ein echtes a-Zirkumflex schlaegt nicht an
+ok 3 - ein echtes a-Zirkumflex schlaegt nicht an
+  ---
+  duration_ms: 148.499
+  type: 'test'
+  ...
+# Subtest: UTF-16 wird erkannt, nicht nur der UTF-8-BOM
+ok 4 - UTF-16 wird erkannt, nicht nur der UTF-8-BOM
+  ---
+  duration_ms: 796.6041
+  type: 'test'
+  ...
+# Subtest: UTF-8-BOM wird gemeldet, bricht aber nicht ab
+ok 5 - UTF-8-BOM wird gemeldet, bricht aber nicht ab
+  ---
+  duration_ms: 314.0068
+  type: 'test'
+  ...
+# Subtest: ein BOM verdeckt keinen echten Fehler in derselben Datei
+ok 6 - ein BOM verdeckt keinen echten Fehler in derselben Datei
+  ---
+  duration_ms: 72.7384
+  type: 'test'
+  ...
+# Subtest: ungueltiges UTF-8 wird erkannt
+ok 7 - ungueltiges UTF-8 wird erkannt
+  ---
+  duration_ms: 73.1482
+  type: 'test'
+  ...
+# Subtest: das Ersetzungszeichen wird erkannt
+ok 8 - das Ersetzungszeichen wird erkannt
+  ---
+  duration_ms: 73.0514
+  type: 'test'
+  ...
+# Subtest: echte Umlaute schlagen NICHT an
+ok 9 - echte Umlaute schlagen NICHT an
+  ---
+  duration_ms: 72.4739
+  type: 'test'
+  ...
+# Subtest: ein echtes A-Tilde ohne Folgezeichen schlaegt nicht an
+ok 10 - ein echtes A-Tilde ohne Folgezeichen schlaegt nicht an
+  ---
+  duration_ms: 74.4606
+  type: 'test'
+  ...
+# Subtest: leeres Verzeichnis ist sauber
+ok 11 - leeres Verzeichnis ist sauber
+  ---
+  duration_ms: 71.7481
+  type: 'test'
+  ...
+# Subtest: Woche 1 ist die erste — Tag 0 zählt nicht als Woche 0
+ok 12 - Woche 1 ist die erste — Tag 0 zählt nicht als Woche 0
+  ---
+  duration_ms: 0.7926
+  type: 'test'
+  ...
+# Subtest: der Wochenwechsel liegt nach sieben Tagen
+ok 13 - der Wochenwechsel liegt nach sieben Tagen
+  ---
+  duration_ms: 0.1229
+  type: 'test'
+  ...
+# Subtest: die echte Phase am Stichtag 2026-08-20
+ok 14 - die echte Phase am Stichtag 2026-08-20
+  ---
+  duration_ms: 0.0873
+  type: 'test'
+  ...
+# Subtest: das tatsächliche Ende schlägt das geplante
+ok 15 - das tatsächliche Ende schlägt das geplante
+  ---
+  duration_ms: 0.0575
+  type: 'test'
+  ...
+# Subtest: ohne Enddatum gibt es keine Restdauer — und keine erfundene
+ok 16 - ohne Enddatum gibt es keine Restdauer — und keine erfundene
+  ---
+  duration_ms: 0.0499
+  type: 'test'
+  ...
+# Subtest: ohne Startdatum bleibt alles leer
+ok 17 - ohne Startdatum bleibt alles leer
+  ---
+  duration_ms: 0.051
+  type: 'test'
+  ...
+# Subtest: eine künftig beginnende Phase ergibt keine Woche
+ok 18 - eine künftig beginnende Phase ergibt keine Woche
+  ---
+  duration_ms: 0.0424
+  type: 'test'
+  ...
+# Subtest: der Monatswechsel wird nicht verzählt
+ok 19 - der Monatswechsel wird nicht verzählt
+  ---
+  duration_ms: 0.1334
+  type: 'test'
+  ...
+# Subtest: die Zaehlung geht ueber alle vier Ebenen
+ok 20 - die Zaehlung geht ueber alle vier Ebenen
+  ---
+  duration_ms: 0.6743
+  type: 'test'
+  ...
+# Subtest: der Stand von dev: 3 Wochen, 21 Tage — nicht 6 und 42
+ok 21 - der Stand von dev: 3 Wochen, 21 Tage — nicht 6 und 42
+  ---
+  duration_ms: 0.1861
+  type: 'test'
+  ...
+# Subtest: ohne Wochen zaehlt nichts — und wirft nicht
+ok 22 - ohne Wochen zaehlt nichts — und wirft nicht
+  ---
+  duration_ms: 0.4575
+  type: 'test'
+  ...
+# Subtest: ungleich gefuellte Tage werden einzeln gezaehlt
+ok 23 - ungleich gefuellte Tage werden einzeln gezaehlt
+  ---
+  duration_ms: 0.0864
+  type: 'test'
+  ...
+# Subtest: die Zahl je Flaeche stimmt mit dem Bericht ueberein
+ok 24 - die Zahl je Flaeche stimmt mit dem Bericht ueberein
+  ---
+  duration_ms: 1.6176
+  type: 'test'
+  ...
+# Subtest: die Summe je Flaeche ergibt genau 96
+ok 25 - die Summe je Flaeche ergibt genau 96
+  ---
+  duration_ms: 0.1967
+  type: 'test'
+  ...
+# Subtest: jede ID der Karte ist eingeordnet
+ok 26 - jede ID der Karte ist eingeordnet
+  ---
+  duration_ms: 1.4886
+  type: 'test'
+  ...
+# Subtest: die Einordnung erfindet keine IDs
+ok 27 - die Einordnung erfindet keine IDs
+  ---
+  duration_ms: 0.2001
+  type: 'test'
+  ...
+# Subtest: jede Recovery-Zuordnung zeigt auf eine Gruppe, kein Teilstueck
+ok 28 - jede Recovery-Zuordnung zeigt auf eine Gruppe, kein Teilstueck
+  ---
+  duration_ms: 0.3303
+  type: 'test'
+  ...
+# Subtest: C-73 fuehrt 96 Namen und 89 Beziehungen
+ok 29 - C-73 fuehrt 96 Namen und 89 Beziehungen
+  ---
+  duration_ms: 1.1476
+  type: 'test'
+  ...
+# Subtest: jede der 96 Gruppen hat eine Flaeche
+ok 30 - jede der 96 Gruppen hat eine Flaeche
+  ---
+  duration_ms: 0.6838
+  type: 'test'
+  ...
+# Subtest: jedes Flaechenziel gibt es in der Karte wirklich
+ok 31 - jedes Flaechenziel gibt es in der Karte wirklich
+  ---
+  duration_ms: 0.353
+  type: 'test'
+  ...
+# Subtest: die Zuordnung erfindet keine Muskelnamen
+ok 32 - die Zuordnung erfindet keine Muskelnamen
+  ---
+  duration_ms: 0.2665
+  type: 'test'
+  ...
+# Subtest: sechs Formen bekommen nie Farbe
+ok 33 - sechs Formen bekommen nie Farbe
+  ---
+  duration_ms: 0.1953
+  type: 'test'
+  ...
+# Subtest: verdichtet wird gemittelt, nicht maximiert
+ok 34 - verdichtet wird gemittelt, nicht maximiert
+  ---
+  duration_ms: 0.1659
+  type: 'test'
+  ...
+# Subtest: unbekannte Namen fallen weg statt falsch zu landen
+ok 35 - unbekannte Namen fallen weg statt falsch zu landen
+  ---
+  duration_ms: 0.0568
+  type: 'test'
+  ...
+# Subtest: der Klick trennt Flaeche in Gruppen und Muskeln auf
+ok 36 - der Klick trennt Flaeche in Gruppen und Muskeln auf
+  ---
+  duration_ms: 0.1872
+  type: 'test'
+  ...
+# Subtest: jede faerbbare Flaeche traegt mindestens einen Muskel
+ok 37 - jede faerbbare Flaeche traegt mindestens einen Muskel
+  ---
+  duration_ms: 0.3305
+  type: 'test'
+  ...
+# Subtest: jedes Recovery-Kuerzel steht in der Zuordnung
+ok 38 - jedes Recovery-Kuerzel steht in der Zuordnung
+  ---
+  duration_ms: 0.7743
+  type: 'test'
+  ...
+# Subtest: jede zugeordnete ID gibt es in der Karte wirklich
+ok 39 - jede zugeordnete ID gibt es in der Karte wirklich
+  ---
+  duration_ms: 0.1771
+  type: 'test'
+  ...
+# Subtest: die Rueckrichtung trifft wieder ein gueltiges Kuerzel
+ok 40 - die Rueckrichtung trifft wieder ein gueltiges Kuerzel
+  ---
+  duration_ms: 0.1444
+  type: 'test'
+  ...
+# Subtest: die Luecken sind benannt, nicht stillschweigend
+ok 41 - die Luecken sind benannt, nicht stillschweigend
+  ---
+  duration_ms: 0.4462
+  type: 'test'
+  ...
+# Subtest: alle 18 Recovery-Kuerzel bis auf die benannte Luecke landen auf der Karte
+ok 42 - alle 18 Recovery-Kuerzel bis auf die benannte Luecke landen auf der Karte
+  ---
+  duration_ms: 0.322
+  type: 'test'
+  ...
+# Subtest: Bereitschaft wird zu Ermuedung umgedreht
+ok 43 - Bereitschaft wird zu Ermuedung umgedreht
+  ---
+  duration_ms: 0.1355
+  type: 'test'
+  ...
+# Subtest: beide Deltoid-Kuerzel treffen dieselbe Gruppe, der schlechtere Wert gewinnt
+ok 44 - beide Deltoid-Kuerzel treffen dieselbe Gruppe, der schlechtere Wert gewinnt
+  ---
+  duration_ms: 0.125
+  type: 'test'
+  ...
+# Subtest: nicht darstellbare Kuerzel fallen weg statt falsch zu landen
+ok 45 - nicht darstellbare Kuerzel fallen weg statt falsch zu landen
+  ---
+  duration_ms: 0.0816
+  type: 'test'
+  ...
+# Subtest: der Ruecken landet auf den Bindestrich-Gruppen der Karte
+ok 46 - der Ruecken landet auf den Bindestrich-Gruppen der Karte
+  ---
+  duration_ms: 0.2759
+  type: 'test'
+  ...
+# Subtest: der Muskelkater behaelt seine Richtung
+ok 47 - der Muskelkater behaelt seine Richtung
+  ---
+  duration_ms: 0.3629
+  type: 'test'
+  ...
+# Subtest: die Aufteilung der 39 IDs steht fest
+ok 48 - die Aufteilung der 39 IDs steht fest
+  ---
+  duration_ms: 0.6698
+  type: 'test'
+  ...
+# Subtest: so viele Gruppen faerbt die Karte tatsaechlich ein
+ok 49 - so viele Gruppen faerbt die Karte tatsaechlich ein
+  ---
+  duration_ms: 0.193
+  type: 'test'
+  ...
+# Subtest: nur tibialis ist eine Gruppe ohne Recovery-Kuerzel
+ok 50 - nur tibialis ist eine Gruppe ohne Recovery-Kuerzel
+  ---
+  duration_ms: 0.5859
+  type: 'test'
+  ...
+# Subtest: jeder v2-wahl-Knopf traegt data-on — sonst bleibt der Punkt leer
+ok 51 - jeder v2-wahl-Knopf traegt data-on — sonst bleibt der Punkt leer
+  ---
+  duration_ms: 1.4203
+  type: 'test'
+  ...
+# Subtest: der Erfahrungsgrad faerbt nicht mehr per Inline-Stil
+ok 52 - der Erfahrungsgrad faerbt nicht mehr per Inline-Stil
+  ---
+  duration_ms: 0.504
+  type: 'test'
+  ...
+# Subtest: der Kommentar behauptet die Spalte nicht mehr als fehlend
+ok 53 - der Kommentar behauptet die Spalte nicht mehr als fehlend
+  ---
+  duration_ms: 0.4153
+  type: 'test'
+  ...
+# Subtest: keine englischen Sichttexte mehr fest im Quelltext
+ok 54 - keine englischen Sichttexte mehr fest im Quelltext
+  ---
+  duration_ms: 2.4836
+  type: 'test'
+  ...
+# Subtest: die Tab-Beschriftungen kommen aus messages, nicht aus Zeichenketten
+ok 55 - die Tab-Beschriftungen kommen aus messages, nicht aus Zeichenketten
+  ---
+  duration_ms: 0.5414
+  type: 'test'
+  ...
+# Subtest: die Substanzliste hat einen senkrechten Scroll-Container
+ok 56 - die Substanzliste hat einen senkrechten Scroll-Container
+  ---
+  duration_ms: 1.2291
+  type: 'test'
+  ...
+# Subtest: die Liste wird nicht abgeschnitten — kein slice auf der Trefferliste
+ok 57 - die Liste wird nicht abgeschnitten — kein slice auf der Trefferliste
+  ---
+  duration_ms: 0.5498
+  type: 'test'
+  ...
+# Subtest: das Detail zeigt kein Schemaprotokoll und keine Kennung
+ok 58 - das Detail zeigt kein Schemaprotokoll und keine Kennung
+  ---
+  duration_ms: 0.476
+  type: 'test'
+  ...
+# Subtest: die Klappen reissen Inhalt an, nicht die Feldzahl
+ok 59 - die Klappen reissen Inhalt an, nicht die Feldzahl
+  ---
+  duration_ms: 0.5807
+  type: 'test'
+  ...
+# Subtest: die aufgeklappte Zeile hat eine Hoehenbremse
+ok 60 - die aufgeklappte Zeile hat eine Hoehenbremse
+  ---
+  duration_ms: 0.5781
+  type: 'test'
+  ...
+# Subtest: nur EIN Bereich ist offen — die Reiter begrenzen die Hoehe
+ok 61 - nur EIN Bereich ist offen — die Reiter begrenzen die Hoehe
+  ---
+  duration_ms: 0.4877
+  type: 'test'
+  ...
+# Subtest: die Kacheln haben feste Breiten — kein Bandwurm
+ok 62 - die Kacheln haben feste Breiten — kein Bandwurm
+  ---
+  duration_ms: 0.7108
+  type: 'test'
+  ...
+# Subtest: Liste und Hoehenbremse leiten sich vom Fenster ab
+ok 63 - Liste und Hoehenbremse leiten sich vom Fenster ab
+  ---
+  duration_ms: 0.7367
+  type: 'test'
+  ...
+# Subtest: der Spaltenkopf bleibt beim Scrollen stehen
+ok 64 - der Spaltenkopf bleibt beim Scrollen stehen
+  ---
+  duration_ms: 0.3975
+  type: 'test'
+  ...
+# Subtest: der Katalog-Tab zeigt die echte Datenbank, nicht den Entwurf
+ok 65 - der Katalog-Tab zeigt die echte Datenbank, nicht den Entwurf
+  ---
+  duration_ms: 0.446
+  type: 'test'
+  ...
+# Subtest: der Katalog der Vorlage ist vollstaendig uebernommen
+ok 66 - der Katalog der Vorlage ist vollstaendig uebernommen
+  ---
+  duration_ms: 0.7722
+  type: 'test'
+  ...
+# Subtest: beide Modi sind im Katalog vertreten
+ok 67 - beide Modi sind im Katalog vertreten
+  ---
+  duration_ms: 0.1683
+  type: 'test'
+  ...
+# Subtest: die sechs Evidenzstufen und ihre Gewichte
+ok 68 - die sechs Evidenzstufen und ihre Gewichte
+  ---
+  duration_ms: 0.6734
+  type: 'test'
+  ...
+# Subtest: jede Katalogstufe gibt es auch in der Stufenliste
+ok 69 - jede Katalogstufe gibt es auch in der Stufenliste
+  ---
+  duration_ms: 0.203
+  type: 'test'
+  ...
+# Subtest: die uebrigen Datenbloecke sind da
+ok 70 - die uebrigen Datenbloecke sind da
+  ---
+  duration_ms: 0.1663
+  type: 'test'
+  ...
+# Subtest: jeder Tab der Leiste hat eine Weiche
+ok 71 - jeder Tab der Leiste hat eine Weiche
+  ---
+  duration_ms: 1.1975
+  type: 'test'
+  ...
+# Subtest: die Platzhalter-Tabelle ist weg
+ok 72 - die Platzhalter-Tabelle ist weg
+  ---
+  duration_ms: 0.3626
+  type: 'test'
+  ...
+# Subtest: der Injections-Tab bringt seine Rotationskarte mit
+ok 73 - der Injections-Tab bringt seine Rotationskarte mit
+  ---
+  duration_ms: 0.4817
+  type: 'test'
+  ...
+# Subtest: die drei verbliebenen Spec-Tabs sind da
+ok 74 - die drei verbliebenen Spec-Tabs sind da
+  ---
+  duration_ms: 0.4627
+  type: 'test'
+  ...
+# Subtest: SuppCost fuehrt alle fuenf Kacheln der Vorlage
+ok 75 - SuppCost fuehrt alle fuenf Kacheln der Vorlage
+  ---
+  duration_ms: 0.5324
+  type: 'test'
+  ...
+# Subtest: die neuen Tabs kennzeichnen jede Kachel
+ok 76 - die neuen Tabs kennzeichnen jede Kachel
+  ---
+  duration_ms: 0.6193
+  type: 'test'
+  ...
+# Subtest: die beiden Akzentlisten stimmen ueberein
+ok 77 - die beiden Akzentlisten stimmen ueberein
+  ---
+  duration_ms: 2.0902
+  type: 'test'
+  ...
+# Subtest: jeder Akzent hat einen Token im Thema
+ok 78 - jeder Akzent hat einen Token im Thema
+  ---
+  duration_ms: 0.5838
+  type: 'test'
+  ...
+# Subtest: Attrappen-Gruende behaupten kein fehlendes Schema, wenn das Schema steht
+ok 79 - Attrappen-Gruende behaupten kein fehlendes Schema, wenn das Schema steht
+  ---
+  duration_ms: 4.9394
+  type: 'test'
+  ...
+# Subtest: alle Kacheln der Vorlage stehen im Dashboard
+ok 80 - alle Kacheln der Vorlage stehen im Dashboard
+  ---
+  duration_ms: 0.3149
+  type: 'test'
+  ...
+# Subtest: das Dashboard kennzeichnet so viele Kacheln, wie Quellen fehlen
+ok 81 - das Dashboard kennzeichnet so viele Kacheln, wie Quellen fehlen
+  ---
+  duration_ms: 0.3159
+  type: 'test'
+  ...
+# Subtest: die sieben Tabs der Vorlage stehen im Nutrition-Modul
+ok 82 - die sieben Tabs der Vorlage stehen im Nutrition-Modul
+  ---
+  duration_ms: 0.2416
+  type: 'test'
+  ...
+# Subtest: die sieben Begleitkarten des Diary stehen da
+ok 83 - die sieben Begleitkarten des Diary stehen da
+  ---
+  duration_ms: 0.1884
+  type: 'test'
+  ...
+# Subtest: der Nutrition score rechnet mit der Formel der Vorlage
+ok 84 - der Nutrition score rechnet mit der Formel der Vorlage
+  ---
+  duration_ms: 0.1533
+  type: 'test'
+  ...
+# Subtest: die zehn Tabs der Vorlage stehen im Training-Modul
+ok 85 - die zehn Tabs der Vorlage stehen im Training-Modul
+  ---
+  duration_ms: 1.1424
+  type: 'test'
+  ...
+# Subtest: das Training-Modul kennzeichnet jede Kachel
+ok 86 - das Training-Modul kennzeichnet jede Kachel
+  ---
+  duration_ms: 0.8436
+  type: 'test'
+  ...
+# Subtest: G-160: HRV und Sleep zeigen erfasste Werte, Entwurf nur als Rueckfall
+ok 87 - G-160: HRV und Sleep zeigen erfasste Werte, Entwurf nur als Rueckfall
+  ---
+  duration_ms: 0.7843
+  type: 'test'
+  ...
+# Subtest: G-159: die fuenf Today/History-Weichen lesen echt, Entwurf nur als Rueckfall
+ok 88 - G-159: die fuenf Today/History-Weichen lesen echt, Entwurf nur als Rueckfall
+  ---
+  duration_ms: 0.6047
+  type: 'test'
+  ...
+# Subtest: fuenf Training-Tabs zeigen echte Sitzungen
+ok 89 - fuenf Training-Tabs zeigen echte Sitzungen
+  ---
+  duration_ms: 0.6223
+  type: 'test'
+  ...
+# Subtest: Training trennt absolviert von geplant — und nicht ueber status
+ok 90 - Training trennt absolviert von geplant — und nicht ueber status
+  ---
+  duration_ms: 0.5
+  type: 'test'
+  ...
+# Subtest: Training erfindet keine Schwellen
+ok 91 - Training erfindet keine Schwellen
+  ---
+  duration_ms: 0.7813
+  type: 'test'
+  ...
+# Subtest: Training umgeht die zwei PostgREST-Fallen aus G-64
+ok 92 - Training umgeht die zwei PostgREST-Fallen aus G-64
+  ---
+  duration_ms: 0.2249
+  type: 'test'
+  ...
+# Subtest: Training rechnet das Koerpergewicht mit Stichtag
+ok 93 - Training rechnet das Koerpergewicht mit Stichtag
+  ---
+  duration_ms: 0.26
+  type: 'test'
+  ...
+# Subtest: die vier Ansichten der Spec-Vorlage stehen da
+ok 94 - die vier Ansichten der Spec-Vorlage stehen da
+  ---
+  duration_ms: 0.2265
+  type: 'test'
+  ...
+# Subtest: die Volume landmarks fuehren die zehn Muskelgruppen der Vorlage
+ok 95 - die Volume landmarks fuehren die zehn Muskelgruppen der Vorlage
+  ---
+  duration_ms: 0.2831
+  type: 'test'
+  ...
+# Subtest: die Formeln der Spec-Vorlage sind uebernommen, nicht erfunden
+ok 96 - die Formeln der Spec-Vorlage sind uebernommen, nicht erfunden
+  ---
+  duration_ms: 0.2757
+  type: 'test'
+  ...
+# Subtest: die neun Tabs der Vorlage stehen im Recovery-Modul
+ok 97 - die neun Tabs der Vorlage stehen im Recovery-Modul
+  ---
+  duration_ms: 0.2431
+  type: 'test'
+  ...
+# Subtest: das Recovery-Modul kennzeichnet jede Kachel
+ok 98 - das Recovery-Modul kennzeichnet jede Kachel
+  ---
+  duration_ms: 0.7703
+  type: 'test'
+  ...
+# Subtest: die Koerperkarte fuehrt alle 18 Muskelgruppen der Vorlage
+ok 99 - die Koerperkarte fuehrt alle 18 Muskelgruppen der Vorlage
+  ---
+  duration_ms: 0.4536
+  type: 'test'
+  ...
+# Subtest: die Formeln der Recovery-Vorlage sind uebernommen, nicht erfunden
+ok 100 - die Formeln der Recovery-Vorlage sind uebernommen, nicht erfunden
+  ---
+  duration_ms: 0.4451
+  type: 'test'
+  ...
+# Subtest: der Erholungswert kennt beide Modi mit den Gewichten der Vorlage
+ok 101 - der Erholungswert kennt beide Modi mit den Gewichten der Vorlage
+  ---
+  duration_ms: 0.2246
+  type: 'test'
+  ...
+# Subtest: die zehn Tabs der Vorlage stehen im Goals-Modul
+ok 102 - die zehn Tabs der Vorlage stehen im Goals-Modul
+  ---
+  duration_ms: 0.1717
+  type: 'test'
+  ...
+# Subtest: das Goals-Modul kennzeichnet jede Kachel
+ok 103 - das Goals-Modul kennzeichnet jede Kachel
+  ---
+  duration_ms: 0.4726
+  type: 'test'
+  ...
+# Subtest: die fuenf Ansichten aus -pro.jsx stehen da
+ok 104 - die fuenf Ansichten aus -pro.jsx stehen da
+  ---
+  duration_ms: 0.3597
+  type: 'test'
+  ...
+# Subtest: Goals fuehrt die sieben Phasen und 13 Umfaenge der Vorlage
+ok 105 - Goals fuehrt die sieben Phasen und 13 Umfaenge der Vorlage
+  ---
+  duration_ms: 0.2975
+  type: 'test'
+  ...
+# Subtest: die Formeln der Goals-Vorlage sind uebernommen, nicht erfunden
+ok 106 - die Formeln der Goals-Vorlage sind uebernommen, nicht erfunden
+  ---
+  duration_ms: 0.6045
+  type: 'test'
+  ...
+# Subtest: Goals wuerfelt seine Verlaufsdaten nicht
+ok 107 - Goals wuerfelt seine Verlaufsdaten nicht
+  ---
+  duration_ms: 0.6087
+  type: 'test'
+  ...
+# Subtest: die angebundenen Goals-Kacheln tragen keine Marke mehr
+ok 108 - die angebundenen Goals-Kacheln tragen keine Marke mehr
+  ---
+  duration_ms: 0.8094
+  type: 'test'
+  ...
+# Subtest: Goals rechnet gegen das echte Heute, nicht gegen 2026-05-16
+ok 109 - Goals rechnet gegen das echte Heute, nicht gegen 2026-05-16
+  ---
+  duration_ms: 1.3139
+  type: 'test'
+  ...
+# Subtest: Goals zeigt die Spanne am Koerperfettwert, nicht in einer Fussnote
+ok 110 - Goals zeigt die Spanne am Koerperfettwert, nicht in einer Fussnote
+  ---
+  duration_ms: 1.1375
+  type: 'test'
+  ...
+# Subtest: der adaptive TDEE zeigt seine Herkunft und verschleiert alpha nicht
+ok 111 - der adaptive TDEE zeigt seine Herkunft und verschleiert alpha nicht
+  ---
+  duration_ms: 0.3027
+  type: 'test'
+  ...
+# Subtest: Goals bewertet nicht, es zeigt
+ok 112 - Goals bewertet nicht, es zeigt
+  ---
+  duration_ms: 0.8258
+  type: 'test'
+  ...
+# Subtest: Goals erfasst nicht — die Uebersicht zeigt nur
+ok 113 - Goals erfasst nicht — die Uebersicht zeigt nur
+  ---
+  duration_ms: 0.8455
+  type: 'test'
+  ...
+# Subtest: Goals zeichnet keine Messungen, die es noch nicht gibt
+ok 114 - Goals zeichnet keine Messungen, die es noch nicht gibt
+  ---
+  duration_ms: 0.4844
+  type: 'test'
+  ...
+# Subtest: die fuenf Tabs der Vorlage stehen im Medical-Modul
+ok 115 - die fuenf Tabs der Vorlage stehen im Medical-Modul
+  ---
+  duration_ms: 0.2279
+  type: 'test'
+  ...
+# Subtest: das Medical-Modul kennzeichnet jede Kachel
+ok 116 - das Medical-Modul kennzeichnet jede Kachel
+  ---
+  duration_ms: 0.5107
+  type: 'test'
+  ...
+# Subtest: der Biomarker-Katalog ist vollstaendig uebernommen
+ok 117 - der Biomarker-Katalog ist vollstaendig uebernommen
+  ---
+  duration_ms: 0.4323
+  type: 'test'
+  ...
+# Subtest: die Formeln der Medical-Vorlage sind uebernommen, nicht erfunden
+ok 118 - die Formeln der Medical-Vorlage sind uebernommen, nicht erfunden
+  ---
+  duration_ms: 0.2925
+  type: 'test'
+  ...
+# Subtest: Medical uebernimmt den arr_r-Tippfehler der Vorlage nicht
+ok 119 - Medical uebernimmt den arr_r-Tippfehler der Vorlage nicht
+  ---
+  duration_ms: 1.431
+  type: 'test'
+  ...
+# Subtest: der Naehrstoffbaum ist vollstaendig uebernommen
+ok 120 - der Naehrstoffbaum ist vollstaendig uebernommen
+  ---
+  duration_ms: 0.3599
+  type: 'test'
+  ...
+# Subtest: die elf Tabs der Vorlage stehen im Supplements-Modul
+ok 121 - die elf Tabs der Vorlage stehen im Supplements-Modul
+  ---
+  duration_ms: 0.2669
+  type: 'test'
+  ...
+# Subtest: das Supplements-Modul kennzeichnet jede Kachel
+ok 122 - das Supplements-Modul kennzeichnet jede Kachel
+  ---
+  duration_ms: 0.768
+  type: 'test'
+  ...
+# Subtest: die Rueckfallmarke sitzt an den abgeloesten Fassungen
+ok 123 - die Rueckfallmarke sitzt an den abgeloesten Fassungen
+  ---
+  duration_ms: 0.668
+  type: 'test'
+  ...
+# Subtest: die angebundenen Supplements-Fassungen tragen keine Marke
+ok 124 - die angebundenen Supplements-Fassungen tragen keine Marke
+  ---
+  duration_ms: 0.6613
+  type: 'test'
+  ...
+# Subtest: die Unterkomponenten der Vorlage sind alle da
+ok 125 - die Unterkomponenten der Vorlage sind alle da
+  ---
+  duration_ms: 1.3093
+  type: 'test'
+  ...
+# Subtest: der Stack der Vorlage ist vollstaendig uebernommen
+ok 126 - der Stack der Vorlage ist vollstaendig uebernommen
+  ---
+  duration_ms: 0.2937
+  type: 'test'
+  ...
+# Subtest: die nachgezogenen Nutrition-Tabs kennzeichnen jede Kachel
+ok 127 - die nachgezogenen Nutrition-Tabs kennzeichnen jede Kachel
+  ---
+  duration_ms: 0.8653
+  type: 'test'
+  ...
+# Subtest: die Nutrition-Entwuerfe kommen nicht zurueck
+ok 128 - die Nutrition-Entwuerfe kommen nicht zurueck
+  ---
+  duration_ms: 0.5811
+  type: 'test'
+  ...
+# Subtest: die vier Modale der Nutrition-Vorlage sind da
+ok 129 - die vier Modale der Nutrition-Vorlage sind da
+  ---
+  duration_ms: 0.4364
+  type: 'test'
+  ...
+# Subtest: kein Math.random in den v2-Modulen
+ok 130 - kein Math.random in den v2-Modulen
+  ---
+  duration_ms: 20.5314
+  type: 'test'
+  ...
+# Subtest: berechnete Stilwerte sind auf Engine-Genauigkeit gerundet
+ok 131 - berechnete Stilwerte sind auf Engine-Genauigkeit gerundet
+  ---
+  duration_ms: 18.9768
+  type: 'test'
+  ...
+# Subtest: die zehn Tabs der Vorlage stehen im Coach-Modul
+ok 132 - die zehn Tabs der Vorlage stehen im Coach-Modul
+  ---
+  duration_ms: 0.2411
+  type: 'test'
+  ...
+# Subtest: das Coach-Modul kennzeichnet jede Kachel
+ok 133 - das Coach-Modul kennzeichnet jede Kachel
+  ---
+  duration_ms: 0.4281
+  type: 'test'
+  ...
+# Subtest: jede Karte des Coach-Moduls traegt eine Marke
+ok 134 - jede Karte des Coach-Moduls traegt eine Marke
+  ---
+  duration_ms: 0.1761
+  type: 'test'
+  ...
+# Subtest: G-149: der Einnahme-Haken bucht auf den angesehenen Tag
+ok 135 - G-149: der Einnahme-Haken bucht auf den angesehenen Tag
+  ---
+  duration_ms: 0.1807
+  type: 'test'
+  ...
+# Subtest: G-158: der Coach-Kopf zaehlt aus dem Stand, nicht aus COACHES
+ok 136 - G-158: der Coach-Kopf zaehlt aus dem Stand, nicht aus COACHES
+  ---
+  duration_ms: 0.1545
+  type: 'test'
+  ...
+# Subtest: G-185: der Invites-Reiter liest relationships, nicht PENDING_INVITES
+ok 137 - G-185: der Invites-Reiter liest relationships, nicht PENDING_INVITES
+  ---
+  duration_ms: 0.2966
+  type: 'test'
+  ...
+# Subtest: G-185: der Leerzustand traegt das Einladeformular
+ok 138 - G-185: der Leerzustand traegt das Einladeformular
+  ---
+  duration_ms: 0.194
+  type: 'test'
+  ...
+# Subtest: C-225/G-169: die drei Schreibwege und der Check-in-Lesepfad stehen
+ok 139 - C-225/G-169: die drei Schreibwege und der Check-in-Lesepfad stehen
+  ---
+  duration_ms: 0.3941
+  type: 'test'
+  ...
+# Subtest: G-163: die Rueckfallfassungen bleiben geloescht
+ok 140 - G-163: die Rueckfallfassungen bleiben geloescht
+  ---
+  duration_ms: 0.6795
+  type: 'test'
+  ...
+# Subtest: G-158: Beziehungen und Nachrichten lesen echt, mit Rueckfall
+ok 141 - G-158: Beziehungen und Nachrichten lesen echt, mit Rueckfall
+  ---
+  duration_ms: 0.3127
+  type: 'test'
+  ...
+# Subtest: die fuenf Ansichten der Coach-Zulieferer stehen da
+ok 142 - die fuenf Ansichten der Coach-Zulieferer stehen da
+  ---
+  duration_ms: 0.2295
+  type: 'test'
+  ...
+# Subtest: die Coach-Daten kommen aus der Vorlage, nicht aus dem Gedaechtnis
+ok 143 - die Coach-Daten kommen aus der Vorlage, nicht aus dem Gedaechtnis
+  ---
+  duration_ms: 0.1583
+  type: 'test'
+  ...
+# Subtest: die sieben Module der Rechtematrix sind vollzaehlig
+ok 144 - die sieben Module der Rechtematrix sind vollzaehlig
+  ---
+  duration_ms: 0.1684
+  type: 'test'
+  ...
+# Subtest: das Coach-Modul uebernimmt den Tippfehler arr_r nicht
+ok 145 - das Coach-Modul uebernimmt den Tippfehler arr_r nicht
+  ---
+  duration_ms: 0.7636
+  type: 'test'
+  ...
+# Subtest: das QR-Muster ist fest, nicht zufaellig
+ok 146 - das QR-Muster ist fest, nicht zufaellig
+  ---
+  duration_ms: 0.3634
+  type: 'test'
+  ...
+# Subtest: die AI-Coach-Seite zeigt das Modul, nicht mehr den Platzhalter
+ok 147 - die AI-Coach-Seite zeigt das Modul, nicht mehr den Platzhalter
+  ---
+  duration_ms: 0.1731
+  type: 'test'
+  ...
+# Subtest: die zwanzig Tabs der Vorlage stehen im AI-Coach-Modul
+ok 148 - die zwanzig Tabs der Vorlage stehen im AI-Coach-Modul
+  ---
+  duration_ms: 0.2031
+  type: 'test'
+  ...
+# Subtest: jede Karte des AI-Coach-Moduls traegt eine Marke
+ok 149 - jede Karte des AI-Coach-Moduls traegt eine Marke
+  ---
+  duration_ms: 0.5611
+  type: 'test'
+  ...
+# Subtest: die fuenfzehn Zulieferer des Buddy-Rahmens stehen da
+ok 150 - die fuenfzehn Zulieferer des Buddy-Rahmens stehen da
+  ---
+  duration_ms: 0.7043
+  type: 'test'
+  ...
+# Subtest: die Buddy-Daten kommen aus der Vorlage, nicht aus dem Gedaechtnis
+ok 151 - die Buddy-Daten kommen aus der Vorlage, nicht aus dem Gedaechtnis
+  ---
+  duration_ms: 0.2242
+  type: 'test'
+  ...
+# Subtest: die elf Motoren und die neun Sicherheitsregeln sind vollzaehlig
+ok 152 - die elf Motoren und die neun Sicherheitsregeln sind vollzaehlig
+  ---
+  duration_ms: 0.303
+  type: 'test'
+  ...
+# Subtest: das AI-Coach-Modul uebernimmt den Tippfehler arr_r nicht
+ok 153 - das AI-Coach-Modul uebernimmt den Tippfehler arr_r nicht
+  ---
+  duration_ms: 1.2908
+  type: 'test'
+  ...
+# Subtest: der Buddy-Orb vergibt eigene SVG-Kennungen
+ok 154 - der Buddy-Orb vergibt eigene SVG-Kennungen
+  ---
+  duration_ms: 0.1536
+  type: 'test'
+  ...
+# Subtest: im AI-Coach-Modul steht kein unberechenbarer Wert
+ok 155 - im AI-Coach-Modul steht kein unberechenbarer Wert
+  ---
+  duration_ms: 1.4176
+  type: 'test'
+  ...
+# Subtest: der Befehlsparser der Sprachsitzung erkennt die Vorlagenbeispiele
+ok 156 - der Befehlsparser der Sprachsitzung erkennt die Vorlagenbeispiele
+  ---
+  duration_ms: 0.909
+  type: 'test'
+  ...
+# Subtest: die angebundenen Medical-Kacheln tragen keine Marke mehr
+ok 157 - die angebundenen Medical-Kacheln tragen keine Marke mehr
+  ---
+  duration_ms: 0.4657
+  type: 'test'
+  ...
+# Subtest: die Medical-Anzeige bewertet nicht, sie verortet
+ok 158 - die Medical-Anzeige bewertet nicht, sie verortet
+  ---
+  duration_ms: 0.8125
+  type: 'test'
+  ...
+# Subtest: der Befundbereich schlaegt den Katalogbereich
+ok 159 - der Befundbereich schlaegt den Katalogbereich
+  ---
+  duration_ms: 0.2564
+  type: 'test'
+  ...
+# Subtest: der Katalog wird durchsucht, nicht geladen
+ok 160 - der Katalog wird durchsucht, nicht geladen
+  ---
+  duration_ms: 0.172
+  type: 'test'
+  ...
+# Subtest: ein unbekannter Marker verschwindet nicht
+ok 161 - ein unbekannter Marker verschwindet nicht
+  ---
+  duration_ms: 0.5869
+  type: 'test'
+  ...
+# Subtest: Medical zeigt EINE Liste, nicht drei
+ok 162 - Medical zeigt EINE Liste, nicht drei
+  ---
+  duration_ms: 0.2499
+  type: 'test'
+  ...
+# Subtest: die Marker-Liste traegt die Form der Attrappe
+ok 163 - die Marker-Liste traegt die Form der Attrappe
+  ---
+  duration_ms: 0.4391
+  type: 'test'
+  ...
+# Subtest: der Verlauf rechnet ueber gemessene Punkte, nicht ueber erfundene
+ok 164 - der Verlauf rechnet ueber gemessene Punkte, nicht ueber erfundene
+  ---
+  duration_ms: 0.295
+  type: 'test'
+  ...
+# Subtest: die Lagerechnung stimmt an den Raendern
+ok 165 - die Lagerechnung stimmt an den Raendern
+  ---
+  duration_ms: 0.1932
+  type: 'test'
+  ...
+# Subtest: die drei gemeldeten Symbole stehen in icons.tsx
+ok 166 - die drei gemeldeten Symbole stehen in icons.tsx
+  ---
+  duration_ms: 1.0993
+  type: 'test'
+  ...
+# Subtest: arr_r bleibt draussen
+ok 167 - arr_r bleibt draussen
+  ---
+  duration_ms: 0.2965
+  type: 'test'
+  ...
+# Subtest: Pill kennt dot, Empty gibt es
+ok 168 - Pill kennt dot, Empty gibt es
+  ---
+  duration_ms: 0.2321
+  type: 'test'
+  ...
+# Subtest: die modul-lokalen Nachbauten sind weg
+ok 169 - die modul-lokalen Nachbauten sind weg
+  ---
+  duration_ms: 22.4673
+  type: 'test'
+  ...
+# Subtest: InEntwicklungKnopf kann sperren
+ok 170 - InEntwicklungKnopf kann sperren
+  ---
+  duration_ms: 0.3209
+  type: 'test'
+  ...
+# Subtest: v2-g-cols-5 und v2-grid-13 stehen zentral
+ok 171 - v2-g-cols-5 und v2-grid-13 stehen zentral
+  ---
+  duration_ms: 0.4428
+  type: 'test'
+  ...
+# Subtest: die Ergaenzungen stehen im Erzeuger, nicht nur in v2.css
+ok 172 - die Ergaenzungen stehen im Erzeuger, nicht nur in v2.css
+  ---
+  duration_ms: 0.3532
+  type: 'test'
+  ...
+# Subtest: Knopfbeschriftungen brechen nicht innerhalb des Knopfes
+ok 173 - Knopfbeschriftungen brechen nicht innerhalb des Knopfes
+  ---
+  duration_ms: 0.333
+  type: 'test'
+  ...
+# Subtest: der Kartentitel schrumpft nicht vor dem Untertitel
+ok 174 - der Kartentitel schrumpft nicht vor dem Untertitel
+  ---
+  duration_ms: 0.3921
+  type: 'test'
+  ...
+# Subtest: JetBrains Mono wird geladen, nicht nur genannt
+ok 175 - JetBrains Mono wird geladen, nicht nur genannt
+  ---
+  duration_ms: 0.4871
+  type: 'test'
+  ...
+# Subtest: der Durchgriff steht ueberhaupt noch in app-shell.tsx
+ok 176 - der Durchgriff steht ueberhaupt noch in app-shell.tsx
+  ---
+  duration_ms: 1.0515
+  type: 'test'
+  ...
+# Subtest: keine bestehende Route faellt in den v2-Durchgriff
+ok 177 - keine bestehende Route faellt in den v2-Durchgriff
+  ---
+  duration_ms: 0.2866
+  type: 'test'
+  ...
+# Subtest: /v2 und seine Unterseiten greifen durch
+ok 178 - /v2 und seine Unterseiten greifen durch
+  ---
+  duration_ms: 0.1117
+  type: 'test'
+  ...
+# Subtest: aehnlich benannte Routen greifen NICHT durch
+ok 179 - aehnlich benannte Routen greifen NICHT durch
+  ---
+  duration_ms: 0.0877
+  type: 'test'
+  ...
+# Subtest: v2.css definiert keine Tokens
+ok 180 - v2.css definiert keine Tokens
+  ---
+  duration_ms: 0.7728
+  type: 'test'
+  ...
+# Subtest: v2.css nutzt die geteilten Tokens
+ok 181 - v2.css nutzt die geteilten Tokens
+  ---
+  duration_ms: 0.2081
+  type: 'test'
+  ...
+# Subtest: jede Klasse in v2.css traegt das Praefix
+ok 182 - jede Klasse in v2.css traegt das Praefix
+  ---
+  duration_ms: 0.772
+  type: 'test'
+  ...
+# Subtest: v2.css laedt nichts von fremden Hosts
+ok 183 - v2.css laedt nichts von fremden Hosts
+  ---
+  duration_ms: 0.8289
+  type: 'test'
+  ...
+# Subtest: v2.css bringt keine Hex-Farben mit
+ok 184 - v2.css bringt keine Hex-Farben mit
+  ---
+  duration_ms: 0.3013
+  type: 'test'
+  ...
+# Subtest: v2.css bringt keine NEUEN rgba-Werte mit
+ok 185 - v2.css bringt keine NEUEN rgba-Werte mit
+  ---
+  duration_ms: 0.3994
+  type: 'test'
+  ...
+# Subtest: die helle Flaeche laeuft ueber einen Token
+ok 186 - die helle Flaeche laeuft ueber einen Token
+  ---
+  duration_ms: 0.2113
+  type: 'test'
+  ...
+# Subtest: jede Route der Seitenleiste loest auf sich selbst auf
+ok 187 - jede Route der Seitenleiste loest auf sich selbst auf
+  ---
+  duration_ms: 0.6686
+  type: 'test'
+  ...
+# Subtest: Settings loest auf Settings auf, nicht auf das Dashboard
+ok 188 - Settings loest auf Settings auf, nicht auf das Dashboard
+  ---
+  duration_ms: 0.112
+  type: 'test'
+  ...
+# Subtest: Unterseiten von Settings loesen ebenfalls auf Settings auf
+ok 189 - Unterseiten von Settings loesen ebenfalls auf Settings auf
+  ---
+  duration_ms: 0.0547
+  type: 'test'
+  ...
+# Subtest: ein unbekannter Pfad faellt auf das Dashboard zurueck
+ok 190 - ein unbekannter Pfad faellt auf das Dashboard zurueck
+  ---
+  duration_ms: 0.0451
+  type: 'test'
+  ...
+# Subtest: der laengere Pfad gewinnt
+ok 191 - der laengere Pfad gewinnt
+  ---
+  duration_ms: 0.0481
+  type: 'test'
+  ...
+# Subtest: Nutrition fuehrt keine Untereintraege mehr
+ok 192 - Nutrition fuehrt keine Untereintraege mehr
+  ---
+  duration_ms: 0.0978
+  type: 'test'
+  ...
+# Subtest: internal targets pass through unchanged
+ok 193 - internal targets pass through unchanged
+  ---
+  duration_ms: 0.8179
+  type: 'test'
+  ...
+# Subtest: protocol-relative targets are rejected — this was a real open redirect
+ok 194 - protocol-relative targets are rejected — this was a real open redirect
+  ---
+  duration_ms: 0.1862
+  type: 'test'
+  ...
+# Subtest: backslash variants are rejected too
+ok 195 - backslash variants are rejected too
+  ---
+  duration_ms: 0.1092
+  type: 'test'
+  ...
+# Subtest: absolute urls are rejected
+ok 196 - absolute urls are rejected
+  ---
+  duration_ms: 0.0979
+  type: 'test'
+  ...
+# Subtest: empty and non-string input falls back to the default
+ok 197 - empty and non-string input falls back to the default
+  ---
+  duration_ms: 0.1184
+  type: 'test'
+  ...
+# Subtest: a path that merely looks external stays internal
+ok 198 - a path that merely looks external stays internal
+  ---
+  duration_ms: 0.0826
+  type: 'test'
+  ...
+# Subtest: die 181er-Zaehlung je Einstufung stimmt mit der Quelle ueberein
+ok 199 - die 181er-Zaehlung je Einstufung stimmt mit der Quelle ueberein
+  ---
+  duration_ms: 1.5741
+  type: 'test'
+  ...
+# Subtest: die 32 Recovery-Records sind alle REMOVE_NUMERIC_VALUE
+ok 200 - die 32 Recovery-Records sind alle REMOVE_NUMERIC_VALUE
+  ---
+  duration_ms: 0.2437
+  type: 'test'
+  ...
+# Subtest: wertNutzbar ist genau die Umkehrung der drei Sperr-Einstufungen
+ok 201 - wertNutzbar ist genau die Umkehrung der drei Sperr-Einstufungen
+  ---
+  duration_ms: 0.3046
+  type: 'test'
+  ...
+# Subtest: eine unbekannte Konstante kracht statt undefined zu liefern
+ok 202 - eine unbekannte Konstante kracht statt undefined zu liefern
+  ---
+  duration_ms: 0.4738
+  type: 'test'
+  ...
+# Subtest: das Register traegt bewusst keine Zahlenwerte
+ok 203 - das Register traegt bewusst keine Zahlenwerte
+  ---
+  duration_ms: 0.7521
+  type: 'test'
+  ...
+# Subtest: GO-21: die WHO-Grenzwerte sind KEEP_NUMERIC mit Grad A
+ok 204 - GO-21: die WHO-Grenzwerte sind KEEP_NUMERIC mit Grad A
+  ---
+  duration_ms: 0.224
+  type: 'test'
+  ...
+# Subtest: G-89: die vier Traditionen sind LABEL_HEURISTIC, FFMI ist gesperrt
+ok 205 - G-89: die vier Traditionen sind LABEL_HEURISTIC, FFMI ist gesperrt
+  ---
+  duration_ms: 0.1761
+  type: 'test'
+  ...
+# Subtest: C-105: MAV ist DO_NOT_IMPLEMENT, das RP-Rahmenwerk Heuristik
+ok 206 - C-105: MAV ist DO_NOT_IMPLEMENT, das RP-Rahmenwerk Heuristik
+  ---
+  duration_ms: 0.1236
+  type: 'test'
+  ...
+# Subtest: C-124: die Modalitaets-IDs des Motors stehen im Register, ohne nutzbaren Wert
+ok 207 - C-124: die Modalitaets-IDs des Motors stehen im Register, ohne nutzbaren Wert
+  ---
+  duration_ms: 0.2708
+  type: 'test'
+  ...
+# Subtest: C-181: die ACWR-Entscheidungen stehen im Register wie beauftragt
+ok 208 - C-181: die ACWR-Entscheidungen stehen im Register wie beauftragt
+  ---
+  duration_ms: 0.3817
+  type: 'test'
+  ...
+# Subtest: die gemeldeten Sperr-Records sind genau die erwarteten
+ok 209 - die gemeldeten Sperr-Records sind genau die erwarteten
+  ---
+  duration_ms: 0.7185
+  type: 'test'
+  ...
+# Subtest: das Erzeugnis ist mit der JSON-Quelle synchron (falls sie liegt)
+ok 210 - das Erzeugnis ist mit der JSON-Quelle synchron (falls sie liegt)
+  ---
+  duration_ms: 2.4424
+  type: 'test'
+  ...
+# Subtest: das Alter kippt am Geburtstag, nicht am Jahreswechsel
+ok 211 - das Alter kippt am Geburtstag, nicht am Jahreswechsel
+  ---
+  duration_ms: 1.1023
+  type: 'test'
+  ...
+# Subtest: ohne Geburtsdatum kommt keine erfundene Zahl
+ok 212 - ohne Geburtsdatum kommt keine erfundene Zahl
+  ---
+  duration_ms: 0.1035
+  type: 'test'
+  ...
+# Subtest: ein Stichtag vor der Geburt ergibt kein negatives Alter
+ok 213 - ein Stichtag vor der Geburt ergibt kein negatives Alter
+  ---
+  duration_ms: 0.0522
+  type: 'test'
+  ...
+# Subtest: der 29. Februar kippt am 1. Maerz eines Nicht-Schaltjahres
+ok 214 - der 29. Februar kippt am 1. Maerz eines Nicht-Schaltjahres
+  ---
+  duration_ms: 0.1081
+  type: 'test'
+  ...
+# Subtest: die fuenf Status sind die der CHECK-Bedingung
+ok 215 - die fuenf Status sind die der CHECK-Bedingung
+  ---
+  duration_ms: 1.278
+  type: 'test'
+  ...
+# Subtest: erreicht und abgebrochen gelten als abgeschlossen
+ok 216 - erreicht und abgebrochen gelten als abgeschlossen
+  ---
+  duration_ms: 0.1741
+  type: 'test'
+  ...
+# Subtest: ein aktives Ziel traegt Prioritaet 1 bis 3
+ok 217 - ein aktives Ziel traegt Prioritaet 1 bis 3
+  ---
+  duration_ms: 0.1537
+  type: 'test'
+  ...
+# Subtest: ein abgeschlossenes Ziel darf bis 10 tragen
+ok 218 - ein abgeschlossenes Ziel darf bis 10 tragen
+  ---
+  duration_ms: 0.0872
+  type: 'test'
+  ...
+# Subtest: die Prioritaetsgrenzen stimmen mit der Tabelle ueberein
+ok 219 - die Prioritaetsgrenzen stimmen mit der Tabelle ueberein
+  ---
+  duration_ms: 0.0739
+  type: 'test'
+  ...
+# Subtest: ein leerer Titel wird abgelehnt
+ok 220 - ein leerer Titel wird abgelehnt
+  ---
+  duration_ms: 0.0666
+  type: 'test'
+  ...
+# Subtest: eine gebrochene Prioritaet wird abgelehnt
+ok 221 - eine gebrochene Prioritaet wird abgelehnt
+  ---
+  duration_ms: 0.1208
+  type: 'test'
+  ...
+# Subtest: ein unbekannter Status wird abgelehnt
+ok 222 - ein unbekannter Status wird abgelehnt
+  ---
+  duration_ms: 0.0705
+  type: 'test'
+  ...
+# Subtest: ein Zielwert muss eine Zahl sein — null ist erlaubt
+ok 223 - ein Zielwert muss eine Zahl sein — null ist erlaubt
+  ---
+  duration_ms: 0.194
+  type: 'test'
+  ...
+# Subtest: eine leere Aenderung ist gueltig
+ok 224 - eine leere Aenderung ist gueltig
+  ---
+  duration_ms: 0.2914
+  type: 'test'
+  ...
+# Subtest: die Quotienten stimmen mit der SQL-Gegenrechnung überein
+ok 225 - die Quotienten stimmen mit der SQL-Gegenrechnung überein
+  ---
+  duration_ms: 0.9929
+  type: 'test'
+  ...
+# Subtest: die Zutaten stehen mit im Ergebnis — der Quotient bleibt nachrechenbar
+ok 226 - die Zutaten stehen mit im Ergebnis — der Quotient bleibt nachrechenbar
+  ---
+  duration_ms: 0.1138
+  type: 'test'
+  ...
+# Subtest: die Symmetrie ist die kleinere Seite am Mittel, mit Vorzeichen
+ok 227 - die Symmetrie ist die kleinere Seite am Mittel, mit Vorzeichen
+  ---
+  duration_ms: 0.139
+  type: 'test'
+  ...
+# Subtest: gleich lange Seiten ergeben genau 100 Prozent
+ok 228 - gleich lange Seiten ergeben genau 100 Prozent
+  ---
+  duration_ms: 0.1028
+  type: 'test'
+  ...
+# Subtest: eine fehlende Stelle ergibt null, nicht null Komma null
+ok 229 - eine fehlende Stelle ergibt null, nicht null Komma null
+  ---
+  duration_ms: 0.0881
+  type: 'test'
+  ...
+# Subtest: gerechnet wird über den jüngsten Satz, nicht über den ersten
+ok 230 - gerechnet wird über den jüngsten Satz, nicht über den ersten
+  ---
+  duration_ms: 0.1023
+  type: 'test'
+  ...
+# Subtest: ohne Satz gibt es kein Ergebnis — und keine erfundene Null
+ok 231 - ohne Satz gibt es kein Ergebnis — und keine erfundene Null
+  ---
+  duration_ms: 0.5362
+  type: 'test'
+  ...
+# Subtest: der Stellenvergleich nimmt die zwei jüngsten Sätze
+ok 232 - der Stellenvergleich nimmt die zwei jüngsten Sätze
+  ---
+  duration_ms: 0.2748
+  type: 'test'
+  ...
+# Subtest: ohne Vorwert bleibt die Differenz leer, statt auf den Wert zu fallen
+ok 233 - ohne Vorwert bleibt die Differenz leer, statt auf den Wert zu fallen
+  ---
+  duration_ms: 0.1769
+  type: 'test'
+  ...
+# Subtest: alle 13 Stellen stehen in der Tabelle, auch die ungemessenen
+ok 234 - alle 13 Stellen stehen in der Tabelle, auch die ungemessenen
+  ---
+  duration_ms: 0.3511
+  type: 'test'
+  ...
+# Subtest: die zwei Zahlen bleiben getrennt und ergeben zusammen den Filter
+ok 235 - die zwei Zahlen bleiben getrennt und ergeben zusammen den Filter
+  ---
+  duration_ms: 0.6259
+  type: 'test'
+  ...
+# Subtest: wer schon ausserhalb des Laborbereichs liegt, wird nicht zweimal gezaehlt
+ok 236 - wer schon ausserhalb des Laborbereichs liegt, wird nicht zweimal gezaehlt
+  ---
+  duration_ms: 0.1311
+  type: 'test'
+  ...
+# Subtest: darunter zaehlt so wie darueber — beides ist ausserhalb
+ok 237 - darunter zaehlt so wie darueber — beides ist ausserhalb
+  ---
+  duration_ms: 0.0662
+  type: 'test'
+  ...
+# Subtest: ohne Marker bleibt jede Zahl null — kein Kopf ohne Daten
+ok 238 - ohne Marker bleibt jede Zahl null — kein Kopf ohne Daten
+  ---
+  duration_ms: 0.0441
+  type: 'test'
+  ...
+# Subtest: die Gruppierbarkeit zaehlt, was der Katalog traegt
+ok 239 - die Gruppierbarkeit zaehlt, was der Katalog traegt
+  ---
+  duration_ms: 0.7264
+  type: 'test'
+  ...
+# Subtest: vier Messungen eines Markers werden EINE Reihe
+ok 240 - vier Messungen eines Markers werden EINE Reihe
+  ---
+  duration_ms: 10.8343
+  type: 'test'
+  ...
+# Subtest: ein Marker ohne LOINC faellt nicht mit einem anderen zusammen
+ok 241 - ein Marker ohne LOINC faellt nicht mit einem anderen zusammen
+  ---
+  duration_ms: 0.3452
+  type: 'test'
+  ...
+# Subtest: der Trend rechnet erste gegen letzte Messung
+ok 242 - der Trend rechnet erste gegen letzte Messung
+  ---
+  duration_ms: 0.1433
+  type: 'test'
+  ...
+# Subtest: der Bereichsbalken schliesst den eigenen Wert immer ein
+ok 243 - der Bereichsbalken schliesst den eigenen Wert immer ein
+  ---
+  duration_ms: 0.3561
+  type: 'test'
+  ...
+# Subtest: eine offene Grenze laeuft bis an den Rand, nicht bis 0
+ok 244 - eine offene Grenze laeuft bis an den Rand, nicht bis 0
+  ---
+  duration_ms: 0.3
+  type: 'test'
+  ...
+# Subtest: die Gewichte der Spec ergeben 1,00
+ok 245 - die Gewichte der Spec ergeben 1,00
+  ---
+  duration_ms: 0.9994
+  type: 'test'
+  ...
+# Subtest: ausserhalb des Laborbereichs wiegt schwerer als ausserhalb des Optimalbands
+ok 246 - ausserhalb des Laborbereichs wiegt schwerer als ausserhalb des Optimalbands
+  ---
+  duration_ms: 0.2028
+  type: 'test'
+  ...
+# Subtest: ohne Laborbereich gibt es keinen Punktwert — er wird nicht erfunden
+ok 247 - ohne Laborbereich gibt es keinen Punktwert — er wird nicht erfunden
+  ---
+  duration_ms: 0.0618
+  type: 'test'
+  ...
+# Subtest: ein Marker ohne Optimalband ist normal, nicht optimal
+ok 248 - ein Marker ohne Optimalband ist normal, nicht optimal
+  ---
+  duration_ms: 0.0555
+  type: 'test'
+  ...
+# Subtest: cardiovascular ergibt 90 — die gemessenen fuenf Marker
+ok 249 - cardiovascular ergibt 90 — die gemessenen fuenf Marker
+  ---
+  duration_ms: 0.1629
+  type: 'test'
+  ...
+# Subtest: liver ergibt 92 — der Schnitt wird gerundet, nicht abgeschnitten
+ok 250 - liver ergibt 92 — der Schnitt wird gerundet, nicht abgeschnitten
+  ---
+  duration_ms: 0.0664
+  type: 'test'
+  ...
+# Subtest: ein System ohne Marker liefert null, nicht null Punkte
+ok 251 - ein System ohne Marker liefert null, nicht null Punkte
+  ---
+  duration_ms: 0.045
+  type: 'test'
+  ...
+# Subtest: Marker ohne Bereich zaehlen als fehlend, nicht als schlecht
+ok 252 - Marker ohne Bereich zaehlen als fehlend, nicht als schlecht
+  ---
+  duration_ms: 0.0585
+  type: 'test'
+  ...
+# Subtest: eine Substanz mit zwei LOINC-Codes zaehlt einmal
+ok 253 - eine Substanz mit zwei LOINC-Codes zaehlt einmal
+  ---
+  duration_ms: 0.1665
+  type: 'test'
+  ...
+# Subtest: der Gesamtwert ist 88 bei allen fuenf Systemen
+ok 254 - der Gesamtwert ist 88 bei allen fuenf Systemen
+  ---
+  duration_ms: 0.2874
+  type: 'test'
+  ...
+# Subtest: fehlt ein System, verteilt sich sein Gewicht auf die uebrigen
+ok 255 - fehlt ein System, verteilt sich sein Gewicht auf die uebrigen
+  ---
+  duration_ms: 0.0898
+  type: 'test'
+  ...
+# Subtest: ohne jeden Wert bleibt der Gesamtwert null
+ok 256 - ohne jeden Wert bleibt der Gesamtwert null
+  ---
+  duration_ms: 0.0607
+  type: 'test'
+  ...
+# Subtest: ein Marker in zwei Systemen zaehlt in beiden
+ok 257 - ein Marker in zwei Systemen zaehlt in beiden
+  ---
+  duration_ms: 0.1483
+  type: 'test'
+  ...
+# Subtest: Reihen ohne LOINC gehen in kein System ein
+ok 258 - Reihen ohne LOINC gehen in kein System ein
+  ---
+  duration_ms: 0.0593
+  type: 'test'
+  ...
+# Subtest: der Zyklus ist neutral -> like -> dislike -> neutral
+ok 259 - der Zyklus ist neutral -> like -> dislike -> neutral
+  ---
+  duration_ms: 0.5476
+  type: 'test'
+  ...
+# Subtest: drei Klicks fuehren zurueck an den Anfang
+ok 260 - drei Klicks fuehren zurueck an den Anfang
+  ---
+  duration_ms: 0.0857
+  type: 'test'
+  ...
+# Subtest: die Stufen liegen unter denen des Assistenten
+ok 261 - die Stufen liegen unter denen des Assistenten
+  ---
+  duration_ms: 0.0808
+  type: 'test'
+  ...
+# Subtest: die Stufen sind in der CHECK-Bedingung erlaubt
+ok 262 - die Stufen sind in der CHECK-Bedingung erlaubt
+  ---
+  duration_ms: 0.0772
+  type: 'test'
+  ...
+# Subtest: die Richtungen sind in der CHECK-Bedingung erlaubt
+ok 263 - die Richtungen sind in der CHECK-Bedingung erlaubt
+  ---
+  duration_ms: 0.0497
+  type: 'test'
+  ...
+# Subtest: die Herkunft trennt den Daumen vom Assistenten
+ok 264 - die Herkunft trennt den Daumen vom Assistenten
+  ---
+  duration_ms: 0.0491
+  type: 'test'
+  ...
+# Subtest: reference base is 100 g — the rule every diary calculation rests on
+ok 265 - reference base is 100 g — the rule every diary calculation rests on
+  ---
+  duration_ms: 0.6007
+  type: 'test'
+  ...
+# Subtest: freezing scales every nutrient by amount / 100
+ok 266 - freezing scales every nutrient by amount / 100
+  ---
+  duration_ms: 0.169
+  type: 'test'
+  ...
+# Subtest: a missing nutrient stays absent instead of becoming zero
+ok 267 - a missing nutrient stays absent instead of becoming zero
+  ---
+  duration_ms: 0.1219
+  type: 'test'
+  ...
+# Subtest: freezing rounds to the numeric(12,5) precision of food_nutrients
+ok 268 - freezing rounds to the numeric(12,5) precision of food_nutrients
+  ---
+  duration_ms: 0.1047
+  type: 'test'
+  ...
+# Subtest: freezing ignores malformed nutrient rows
+ok 269 - freezing ignores malformed nutrient rows
+  ---
+  duration_ms: 0.054
+  type: 'test'
+  ...
+# Subtest: quick macro columns map to codes that exist in nutrient_defs
+ok 270 - quick macro columns map to codes that exist in nutrient_defs
+  ---
+  duration_ms: 0.5057
+  type: 'test'
+  ...
+# Subtest: meal schema accepts only ISO dates and known meal types
+ok 271 - meal schema accepts only ISO dates and known meal types
+  ---
+  duration_ms: 1.0464
+  type: 'test'
+  ...
+# Subtest: meal item schema rejects non-positive and non-finite amounts
+ok 272 - meal item schema rejects non-positive and non-finite amounts
+  ---
+  duration_ms: 0.8601
+  type: 'test'
+  ...
+# Subtest: meal insert payload carries the user id and normalizes notes
+ok 273 - meal insert payload carries the user id and normalizes notes
+  ---
+  duration_ms: 0.1694
+  type: 'test'
+  ...
+# Subtest: meal item insert freezes the macros and leaves frozen_at to the database
+ok 274 - meal item insert freezes the macros and leaves frozen_at to the database
+  ---
+  duration_ms: 0.281
+  type: 'test'
+  ...
+# Subtest: amount update refreezes the values and stamps frozen_at
+ok 275 - amount update refreezes the values and stamps frozen_at
+  ---
+  duration_ms: 0.6278
+  type: 'test'
+  ...
+# Subtest: stored row parsers drop malformed rows instead of failing
+ok 276 - stored row parsers drop malformed rows instead of failing
+  ---
+  duration_ms: 0.2196
+  type: 'test'
+  ...
+# Subtest: meal totals keep missing values honest instead of counting them as zero
+ok 277 - meal totals keep missing values honest instead of counting them as zero
+  ---
+  duration_ms: 0.1582
+  type: 'test'
+  ...
+# Subtest: error codes map to stable http status values
+ok 278 - error codes map to stable http status values
+  ---
+  duration_ms: 0.054
+  type: 'test'
+  ...
+# Subtest: daily summary covers the nine macros that 052 stores as columns
+ok 279 - daily summary covers the nine macros that 052 stores as columns
+  ---
+  duration_ms: 0.9428
+  type: 'test'
+  ...
+# Subtest: numeric strings from PostgREST arrive as numbers
+ok 280 - numeric strings from PostgREST arrive as numbers
+  ---
+  duration_ms: 0.2393
+  type: 'test'
+  ...
+# Subtest: a nutrient nobody measured stays null and is flagged, never zero
+ok 281 - a nutrient nobody measured stays null and is flagged, never zero
+  ---
+  duration_ms: 0.1451
+  type: 'test'
+  ...
+# Subtest: a macro measured on every position counts as complete
+ok 282 - a macro measured on every position counts as complete
+  ---
+  duration_ms: 0.0773
+  type: 'test'
+  ...
+# Subtest: a partially measured macro is a lower bound, not a truth
+ok 283 - a partially measured macro is a lower bound, not a truth
+  ---
+  duration_ms: 0.0676
+  type: 'test'
+  ...
+# Subtest: incomplete macros are reported so the surface can show the gap
+ok 284 - incomplete macros are reported so the surface can show the gap
+  ---
+  duration_ms: 0.1119
+  type: 'test'
+  ...
+# Subtest: a day with meals but no items reports zero items and no totals
+ok 285 - a day with meals but no items reports zero items and no totals
+  ---
+  duration_ms: 0.1114
+  type: 'test'
+  ...
+# Subtest: an empty day is null everywhere, not a row of zeros
+ok 286 - an empty day is null everywhere, not a row of zeros
+  ---
+  duration_ms: 0.0906
+  type: 'test'
+  ...
+# Subtest: malformed rows drop out instead of failing the whole read
+ok 287 - malformed rows drop out instead of failing the whole read
+  ---
+  duration_ms: 0.1364
+  type: 'test'
+  ...
+# Subtest: local Nutrition food search helpers
+    # Subtest: normalizes German umlauts for practical BLS source-label search
+    ok 1 - normalizes German umlauts for practical BLS source-label search
+      ---
+      duration_ms: 0.7657
+      type: 'test'
+      ...
+    # Subtest: tokenizes queries for the rpc food_search parameters without invented synonyms
+    ok 2 - tokenizes queries for the rpc food_search parameters without invented synonyms
+      ---
+      duration_ms: 0.4658
+      type: 'test'
+      ...
+    # Subtest: builds rpc arguments with normalized slug, tag and clamped paging
+    ok 3 - builds rpc arguments with normalized slug, tag and clamped paging
+      ---
+      duration_ms: 0.469
+      type: 'test'
+      ...
+    # Subtest: laesst p_filters bei leerer Auswahl null — nicht {}
+    ok 4 - laesst p_filters bei leerer Auswahl null — nicht {}
+      ---
+      duration_ms: 0.091
+      type: 'test'
+      ...
+    # Subtest: setzt exclude_tag_codes, entdoppelt und sortiert
+    ok 5 - setzt exclude_tag_codes, entdoppelt und sortiert
+      ---
+      duration_ms: 0.1396
+      type: 'test'
+      ...
+    # Subtest: reicht excludeTags bis in die rpc-Argumente durch
+    ok 6 - reicht excludeTags bis in die rpc-Argumente durch
+      ---
+      duration_ms: 0.075
+      type: 'test'
+      ...
+    # Subtest: builds stable filter hrefs for category and tag chips
+    ok 7 - builds stable filter hrefs for category and tag chips
+      ---
+      duration_ms: 0.2522
+      type: 'test'
+      ...
+    # Subtest: traegt Zubereitung und Warengruppe als wiederholte Parameter in die Adresse
+    ok 8 - traegt Zubereitung und Warengruppe als wiederholte Parameter in die Adresse
+      ---
+      duration_ms: 0.1032
+      type: 'test'
+      ...
+    # Subtest: schaltet einen gesetzten Filter beim zweiten Klick wieder ab
+    ok 9 - schaltet einen gesetzten Filter beim zweiten Klick wieder ab
+      ---
+      duration_ms: 0.1278
+      type: 'test'
+      ...
+    # Subtest: reicht die neuen Filter als Felder an die Datenbankfunktion
+    ok 10 - reicht die neuen Filter als Felder an die Datenbankfunktion
+      ---
+      duration_ms: 0.2266
+      type: 'test'
+      ...
+    # Subtest: laesst die neuen Filter weg, wenn nichts gesetzt ist
+    ok 11 - laesst die neuen Filter weg, wenn nichts gesetzt ist
+      ---
+      duration_ms: 0.1954
+      type: 'test'
+      ...
+    # Subtest: normalizes pagination and sort inputs to the SPEC_07 local subset
+    ok 12 - normalizes pagination and sort inputs to the SPEC_07 local subset
+      ---
+      duration_ms: 0.0597
+      type: 'test'
+      ...
+    # Subtest: parses food search payload with technical BLS label and Human Layer metadata
+    ok 13 - parses food search payload with technical BLS label and Human Layer metadata
+      ---
+      duration_ms: 0.8657
+      type: 'test'
+      ...
+    # Subtest: parses the rpc payload also when it arrives as an object (supabase-js path)
+    ok 14 - parses the rpc payload also when it arrives as an object (supabase-js path)
+      ---
+      duration_ms: 0.079
+      type: 'test'
+      ...
+    1..14
+ok 288 - local Nutrition food search helpers
+  ---
+  duration_ms: 4.6641
+  type: 'suite'
+  ...
+# Subtest: builds read-only category coverage analysis SQL
+ok 289 - builds read-only category coverage analysis SQL
+  ---
+  duration_ms: 0.5866
+  type: 'test'
+  ...
+# Subtest: builds read-only alias coverage analysis SQL
+ok 290 - builds read-only alias coverage analysis SQL
+  ---
+  duration_ms: 0.1356
+  type: 'test'
+  ...
+# Subtest: marks category rules as candidates instead of applying ambiguous mappings
+ok 291 - marks category rules as candidates instead of applying ambiguous mappings
+  ---
+  duration_ms: 0.1213
+  type: 'test'
+  ...
+# Subtest: does not recommend alias expansion when baseline coverage is complete
+ok 292 - does not recommend alias expansion when baseline coverage is complete
+  ---
+  duration_ms: 0.1184
+  type: 'test'
+  ...
+# Subtest: die drei Anteile ergeben zusammen 100 %
+ok 293 - die drei Anteile ergeben zusammen 100 %
+  ---
+  duration_ms: 0.7415
+  type: 'test'
+  ...
+# Subtest: die Atwater-Faktoren stimmen
+ok 294 - die Atwater-Faktoren stimmen
+  ---
+  duration_ms: 0.131
+  type: 'test'
+  ...
+# Subtest: der gemessene 14-Tage-Schnitt von dev
+ok 295 - der gemessene 14-Tage-Schnitt von dev
+  ---
+  duration_ms: 0.0539
+  type: 'test'
+  ...
+# Subtest: ohne Werte gibt es keine Anteile
+ok 296 - ohne Werte gibt es keine Anteile
+  ---
+  duration_ms: 0.4419
+  type: 'test'
+  ...
+# Subtest: ein Nulltag ergibt keine Anteile statt einer Division durch null
+ok 297 - ein Nulltag ergibt keine Anteile statt einer Division durch null
+  ---
+  duration_ms: 0.0563
+  type: 'test'
+  ...
+# Subtest: parseNutritionSchemaDebug
+    # Subtest: parses a valid local schema payload
+    ok 1 - parses a valid local schema payload
+      ---
+      duration_ms: 1.3326
+      type: 'test'
+      ...
+    # Subtest: normalizes missing arrays to empty lists
+    ok 2 - normalizes missing arrays to empty lists
+      ---
+      duration_ms: 0.4786
+      type: 'test'
+      ...
+    # Subtest: throws for empty output
+    ok 3 - throws for empty output
+      ---
+      duration_ms: 0.2524
+      type: 'test'
+      ...
+    # Subtest: throws for non-json output
+    ok 4 - throws for non-json output
+      ---
+      duration_ms: 0.0849
+      type: 'test'
+      ...
+    1..4
+ok 298 - parseNutritionSchemaDebug
+  ---
+  duration_ms: 2.7405
+  type: 'suite'
+  ...
+# Subtest: ein Elternteil im Bereich bleibt sichtbar, wenn ein Enkel auffaellig ist
+ok 299 - ein Elternteil im Bereich bleibt sichtbar, wenn ein Enkel auffaellig ist
+  ---
+  duration_ms: 1.0876
+  type: 'test'
+  ...
+# Subtest: ohne auffaellige Nachkommen verschwindet die Zeile aus dem Filter
+ok 300 - ohne auffaellige Nachkommen verschwindet die Zeile aus dem Filter
+  ---
+  duration_ms: 0.1874
+  type: 'test'
+  ...
+# Subtest: status null ist unbewertet, nicht auffaellig
+ok 301 - status null ist unbewertet, nicht auffaellig
+  ---
+  duration_ms: 0.177
+  type: 'test'
+  ...
+# Subtest: „ueber" zaehlt als auffaellig, aber nicht als „unter Ziel"
+ok 302 - „ueber" zaehlt als auffaellig, aber nicht als „unter Ziel"
+  ---
+  duration_ms: 0.1001
+  type: 'test'
+  ...
+# Subtest: zaehleSichtbare zaehlt Eltern und getroffene Kinder mit
+ok 303 - zaehleSichtbare zaehlt Eltern und getroffene Kinder mit
+  ---
+  duration_ms: 0.2091
+  type: 'test'
+  ...
+# Subtest: pruefeAnsicht nimmt nur die vollstaendige, saubere Form an
+ok 304 - pruefeAnsicht nimmt nur die vollstaendige, saubere Form an
+  ---
+  duration_ms: 0.9041
+  type: 'test'
+  ...
+# Subtest: normalisiere macht „Omega 3", „Omega-3" und „OMEGA_3" gleich
+ok 305 - normalisiere macht „Omega 3", „Omega-3" und „OMEGA_3" gleich
+  ---
+  duration_ms: 0.2638
+  type: 'test'
+  ...
+# Subtest: trifftSuche: 2 Zeichen nur Code/Alias, 3 auch Name, ab 4 auch Erklaertext
+ok 306 - trifftSuche: 2 Zeichen nur Code/Alias, 3 auch Name, ab 4 auch Erklaertext
+  ---
+  duration_ms: 0.3333
+  type: 'test'
+  ...
+# Subtest: trifftSuche: Aliase (G-142) — exakte Kurz-Token und Teiltreffer ab 3
+ok 307 - trifftSuche: Aliase (G-142) — exakte Kurz-Token und Teiltreffer ab 3
+  ---
+  duration_ms: 0.2581
+  type: 'test'
+  ...
+# Subtest: spektrumLage: Skala UL x 1,1 bzw. Ziel x 2, Wert wird gekappt
+ok 308 - spektrumLage: Skala UL x 1,1 bzw. Ziel x 2, Wert wird gekappt
+  ---
+  duration_ms: 0.4449
+  type: 'test'
+  ...
+# Subtest: zeigeKind: unter einem selbst auffaelligen Knoten erscheinen die Kinder mit Wert
+ok 309 - zeigeKind: unter einem selbst auffaelligen Knoten erscheinen die Kinder mit Wert
+  ---
+  duration_ms: 0.2476
+  type: 'test'
+  ...
+# Subtest: karteFuerWurzel: acht Karten, die Makro-Aeste getrennt
+ok 310 - karteFuerWurzel: acht Karten, die Makro-Aeste getrennt
+  ---
+  duration_ms: 0.127
+  type: 'test'
+  ...
+# Subtest: fensterOderTag klammert auf Toms Liste
+ok 311 - fensterOderTag klammert auf Toms Liste
+  ---
+  duration_ms: 0.1134
+  type: 'test'
+  ...
+# Subtest: vier Ebenen haengen richtig: CHO → SUGAR → MNSAC → GLUS
+ok 312 - vier Ebenen haengen richtig: CHO → SUGAR → MNSAC → GLUS
+  ---
+  duration_ms: 0.6124
+  type: 'test'
+  ...
+# Subtest: die Reihenfolge der Eingabe ist egal — das Kind darf vor dem Elternteil stehen
+ok 313 - die Reihenfolge der Eingabe ist egal — das Kind darf vor dem Elternteil stehen
+  ---
+  duration_ms: 0.1364
+  type: 'test'
+  ...
+# Subtest: Geschwister stehen nach sort_index
+ok 314 - Geschwister stehen nach sort_index
+  ---
+  duration_ms: 0.4823
+  type: 'test'
+  ...
+# Subtest: ein Eintrag mit unbekanntem Elterncode wird Wurzel, nicht verschluckt
+ok 315 - ein Eintrag mit unbekanntem Elterncode wird Wurzel, nicht verschluckt
+  ---
+  duration_ms: 0.1096
+  type: 'test'
+  ...
+# Subtest: mehrere Wurzeln bleiben nebeneinander, nach sort_index
+ok 316 - mehrere Wurzeln bleiben nebeneinander, nach sort_index
+  ---
+  duration_ms: 0.0966
+  type: 'test'
+  ...
+# Subtest: eine leere Liste ergibt einen leeren Wald
+ok 317 - eine leere Liste ergibt einen leeren Wald
+  ---
+  duration_ms: 0.0695
+  type: 'test'
+  ...
+# Subtest: buildNutrientDetailLink
+    # Subtest: builds a local schema deep link for the selected nutrient
+    ok 1 - builds a local schema deep link for the selected nutrient
+      ---
+      duration_ms: 0.7505
+      type: 'test'
+      ...
+    # Subtest: includes a valid pinned nutrient in the exposed link
+    ok 2 - includes a valid pinned nutrient in the exposed link
+      ---
+      duration_ms: 0.2177
+      type: 'test'
+      ...
+    # Subtest: preserves unrelated query state while replacing nutrient and stale pinned state
+    ok 3 - preserves unrelated query state while replacing nutrient and stale pinned state
+      ---
+      duration_ms: 0.1662
+      type: 'test'
+      ...
+    1..3
+ok 318 - buildNutrientDetailLink
+  ---
+  duration_ms: 2.0263
+  type: 'suite'
+  ...
+# Subtest: selectNutrientDetailRow
+    # Subtest: selects a matching nutrient row by code
+    ok 1 - selects a matching nutrient row by code
+      ---
+      duration_ms: 0.6694
+      type: 'test'
+      ...
+    # Subtest: falls back to the first row when the selected code is not visible
+    ok 2 - falls back to the first row when the selected code is not visible
+      ---
+      duration_ms: 0.1411
+      type: 'test'
+      ...
+    # Subtest: returns null for an empty row set
+    ok 3 - returns null for an empty row set
+      ---
+      duration_ms: 0.0903
+      type: 'test'
+      ...
+    1..3
+ok 319 - selectNutrientDetailRow
+  ---
+  duration_ms: 1.6451
+  type: 'suite'
+  ...
+# Subtest: resolveNutrientDetailCode
+    # Subtest: uses a valid requested code
+    ok 1 - uses a valid requested code
+      ---
+      duration_ms: 0.2153
+      type: 'test'
+      ...
+    # Subtest: falls back to the first row for invalid codes
+    ok 2 - falls back to the first row for invalid codes
+      ---
+      duration_ms: 0.0831
+      type: 'test'
+      ...
+    # Subtest: falls back to an empty string when no rows exist
+    ok 3 - falls back to an empty string when no rows exist
+      ---
+      duration_ms: 0.0682
+      type: 'test'
+      ...
+    1..3
+ok 320 - resolveNutrientDetailCode
+  ---
+  duration_ms: 0.5741
+  type: 'suite'
+  ...
+# Subtest: buildNutrientDetailUrl
+    # Subtest: sets the nutrient query parameter while preserving other query state
+    ok 1 - sets the nutrient query parameter while preserving other query state
+      ---
+      duration_ms: 0.312
+      type: 'test'
+      ...
+    # Subtest: replaces an existing nutrient query parameter
+    ok 2 - replaces an existing nutrient query parameter
+      ---
+      duration_ms: 0.1399
+      type: 'test'
+      ...
+    1..2
+ok 321 - buildNutrientDetailUrl
+  ---
+  duration_ms: 0.7137
+  type: 'suite'
+  ...
+# Subtest: formatNutrientDetailValue
+    # Subtest: formats empty and nullable values explicitly
+    ok 1 - formats empty and nullable values explicitly
+      ---
+      duration_ms: 0.219
+      type: 'test'
+      ...
+    # Subtest: formats scalar detail values for display
+    ok 2 - formats scalar detail values for display
+      ---
+      duration_ms: 0.2138
+      type: 'test'
+      ...
+    1..2
+ok 322 - formatNutrientDetailValue
+  ---
+  duration_ms: 0.5455
+  type: 'suite'
+  ...
+# Subtest: formatNutrientPinCompareValue
+    # Subtest: keeps empty strings and nullable values explicit
+    ok 1 - keeps empty strings and nullable values explicit
+      ---
+      duration_ms: 0.5699
+      type: 'test'
+      ...
+    # Subtest: formats scalar values without inference
+    ok 2 - formats scalar values without inference
+      ---
+      duration_ms: 0.144
+      type: 'test'
+      ...
+    1..2
+ok 323 - formatNutrientPinCompareValue
+  ---
+  duration_ms: 1.5205
+  type: 'suite'
+  ...
+# Subtest: resolvePinnedNutrientRow
+    # Subtest: resolves a pinned nutrient by code from the visible rows
+    ok 1 - resolves a pinned nutrient by code from the visible rows
+      ---
+      duration_ms: 0.2119
+      type: 'test'
+      ...
+    # Subtest: returns null when the pinned nutrient is missing or unset
+    ok 2 - returns null when the pinned nutrient is missing or unset
+      ---
+      duration_ms: 0.0878
+      type: 'test'
+      ...
+    1..2
+ok 324 - resolvePinnedNutrientRow
+  ---
+  duration_ms: 0.4203
+  type: 'suite'
+  ...
+# Subtest: nutrient pin URLs
+    # Subtest: sets the pinned nutrient while preserving the selected nutrient
+    ok 1 - sets the pinned nutrient while preserving the selected nutrient
+      ---
+      duration_ms: 0.3157
+      type: 'test'
+      ...
+    # Subtest: clears the pinned nutrient without dropping other filters
+    ok 2 - clears the pinned nutrient without dropping other filters
+      ---
+      duration_ms: 0.178
+      type: 'test'
+      ...
+    1..2
+ok 325 - nutrient pin URLs
+  ---
+  duration_ms: 0.7384
+  type: 'suite'
+  ...
+# Subtest: buildNutrientPinCompareRows
+    # Subtest: compares selected and pinned nutrient fields with explicit display values
+    ok 1 - compares selected and pinned nutrient fields with explicit display values
+      ---
+      duration_ms: 0.7272
+      type: 'test'
+      ...
+    # Subtest: returns an empty compare set when either side is unavailable
+    ok 2 - returns an empty compare set when either side is unavailable
+      ---
+      duration_ms: 0.0673
+      type: 'test'
+      ...
+    1..2
+ok 326 - buildNutrientPinCompareRows
+  ---
+  duration_ms: 0.9081
+  type: 'suite'
+  ...
+# Subtest: filterNutrientPreviewRows
+    # Subtest: filters by code, name, group, and unit text
+    ok 1 - filters by code, name, group, and unit text
+      ---
+      duration_ms: 1.3321
+      type: 'test'
+      ...
+    # Subtest: filters by exact German and English group pair
+    ok 2 - filters by exact German and English group pair
+      ---
+      duration_ms: 0.1918
+      type: 'test'
+      ...
+    # Subtest: combines text and group filters
+    ok 3 - combines text and group filters
+      ---
+      duration_ms: 0.2095
+      type: 'test'
+      ...
+    1..3
+ok 327 - filterNutrientPreviewRows
+  ---
+  duration_ms: 2.8264
+  type: 'suite'
+  ...
+# Subtest: RDA availability filter
+    # Subtest: treats a row as RDA-available when male or female RDA has a non-empty value
+    ok 1 - treats a row as RDA-available when male or female RDA has a non-empty value
+      ---
+      duration_ms: 0.7564
+      type: 'test'
+      ...
+    # Subtest: returns all nutrients when the availability mode is all
+    ok 2 - returns all nutrients when the availability mode is all
+      ---
+      duration_ms: 0.6158
+      type: 'test'
+      ...
+    # Subtest: filters nutrients with any male or female RDA value
+    ok 3 - filters nutrients with any male or female RDA value
+      ---
+      duration_ms: 0.0978
+      type: 'test'
+      ...
+    # Subtest: filters nutrients without male or female RDA values
+    ok 4 - filters nutrients without male or female RDA values
+      ---
+      duration_ms: 0.0697
+      type: 'test'
+      ...
+    # Subtest: combines RDA availability with search and group filters
+    ok 5 - combines RDA availability with search and group filters
+      ---
+      duration_ms: 0.191
+      type: 'test'
+      ...
+    1..5
+ok 328 - RDA availability filter
+  ---
+  duration_ms: 2.7855
+  type: 'suite'
+  ...
+# Subtest: die Vorgabe der Datenbank ergibt vier Reihen
+ok 329 - die Vorgabe der Datenbank ergibt vier Reihen
+  ---
+  duration_ms: 1.5887
+  type: 'test'
+  ...
+# Subtest: dev@lumeos.app: 4 Mahlzeiten, 1 Snack — drei Reihen plus Snacks
+ok 330 - dev@lumeos.app: 4 Mahlzeiten, 1 Snack — drei Reihen plus Snacks
+  ---
+  duration_ms: 0.2931
+  type: 'test'
+  ...
+# Subtest: ohne Snacks faellt die Snackreihe weg
+ok 331 - ohne Snacks faellt die Snackreihe weg
+  ---
+  duration_ms: 0.2338
+  type: 'test'
+  ...
+# Subtest: zwei Mahlzeiten ergeben zwei Reihen
+ok 332 - zwei Mahlzeiten ergeben zwei Reihen
+  ---
+  duration_ms: 0.1764
+  type: 'test'
+  ...
+# Subtest: ohne Angabe bleiben die vier Reihen des Entwurfs
+ok 333 - ohne Angabe bleiben die vier Reihen des Entwurfs
+  ---
+  duration_ms: 0.1628
+  type: 'test'
+  ...
+# Subtest: die Snackreihe kommt auch ohne Hauptmahlzeitangabe nicht allein
+ok 334 - die Snackreihe kommt auch ohne Hauptmahlzeitangabe nicht allein
+  ---
+  duration_ms: 0.0813
+  type: 'test'
+  ...
+# Subtest: resolves only deterministic general exclusion mappings
+ok 335 - resolves only deterministic general exclusion mappings
+  ---
+  duration_ms: 0.8849
+  type: 'test'
+  ...
+# Subtest: builds read-only preference preview rpc arguments
+ok 336 - builds read-only preference preview rpc arguments
+  ---
+  duration_ms: 0.5353
+  type: 'test'
+  ...
+# Subtest: normalizes tag codes and clamps paging in preview rpc arguments
+ok 337 - normalizes tag codes and clamps paging in preview rpc arguments
+  ---
+  duration_ms: 0.1546
+  type: 'test'
+  ...
+# Subtest: exposes unresolved exclusion options for UI transparency
+ok 338 - exposes unresolved exclusion options for UI transparency
+  ---
+  duration_ms: 0.1043
+  type: 'test'
+  ...
+# Subtest: preference catalog covers old-platform visible option groups without write behavior
+ok 339 - preference catalog covers old-platform visible option groups without write behavior
+  ---
+  duration_ms: 1.8063
+  type: 'test'
+  ...
+# Subtest: general exclusion presets are hard constraints and unresolved mappings remain explicit
+ok 340 - general exclusion presets are hard constraints and unresolved mappings remain explicit
+  ---
+  duration_ms: 0.567
+  type: 'test'
+  ...
+# Subtest: smart search boundary keeps preferences separate from diary writes
+ok 341 - smart search boundary keeps preferences separate from diary writes
+  ---
+  duration_ms: 0.2624
+  type: 'test'
+  ...
+# Subtest: write schema accepts only uuid food ids and known preference kinds
+ok 342 - write schema accepts only uuid food ids and known preference kinds
+  ---
+  duration_ms: 1.9731
+  type: 'test'
+  ...
+# Subtest: strength derivation matches the 050 check constraint values
+ok 343 - strength derivation matches the 050 check constraint values
+  ---
+  duration_ms: 0.1428
+  type: 'test'
+  ...
+# Subtest: insert payload targets exactly one food and carries the user id
+ok 344 - insert payload targets exactly one food and carries the user id
+  ---
+  duration_ms: 0.5496
+  type: 'test'
+  ...
+# Subtest: write decision separates insert, restage and duplicate
+ok 345 - write decision separates insert, restage and duplicate
+  ---
+  duration_ms: 0.0967
+  type: 'test'
+  ...
+# Subtest: summarize groups stored items into preview argument buckets
+ok 346 - summarize groups stored items into preview argument buckets
+  ---
+  duration_ms: 0.1293
+  type: 'test'
+  ...
+# Subtest: stored item parser drops malformed rows instead of failing
+ok 347 - stored item parser drops malformed rows instead of failing
+  ---
+  duration_ms: 0.1711
+  type: 'test'
+  ...
+# Subtest: error codes map to stable http status values
+ok 348 - error codes map to stable http status values
+  ---
+  duration_ms: 0.082
+  type: 'test'
+  ...
+# Subtest: ein fehlender Prozentwert bleibt null und wird nicht 0
+ok 349 - ein fehlender Prozentwert bleibt null und wird nicht 0
+  ---
+  duration_ms: 0.803
+  type: 'test'
+  ...
+# Subtest: actual_value null bleibt null
+ok 350 - actual_value null bleibt null
+  ---
+  duration_ms: 0.1202
+  type: 'test'
+  ...
+# Subtest: numeric als String kommt als Zahl an
+ok 351 - numeric als String kommt als Zahl an
+  ---
+  duration_ms: 0.1065
+  type: 'test'
+  ...
+# Subtest: 80 % eines Ziels ist zu wenig, 80 % einer Obergrenze ist gut
+ok 352 - 80 % eines Ziels ist zu wenig, 80 % einer Obergrenze ist gut
+  ---
+  duration_ms: 0.1157
+  type: 'test'
+  ...
+# Subtest: ueber der Obergrenze ist ein Warnzeichen, ueber dem Ziel nicht
+ok 353 - ueber der Obergrenze ist ein Warnzeichen, ueber dem Ziel nicht
+  ---
+  duration_ms: 0.0455
+  type: 'test'
+  ...
+# Subtest: ohne Prozentwert gibt es keine Bewertung
+ok 354 - ohne Prozentwert gibt es keine Bewertung
+  ---
+  duration_ms: 0.0504
+  type: 'test'
+  ...
+# Subtest: not_applicable wird nie eingefaerbt
+ok 355 - not_applicable wird nie eingefaerbt
+  ---
+  duration_ms: 0.0777
+  type: 'test'
+  ...
+# Subtest: unbekannte Status kommen nicht als leerer String durch
+ok 356 - unbekannte Status kommen nicht als leerer String durch
+  ---
+  duration_ms: 0.0556
+  type: 'test'
+  ...
+# Subtest: Zeilen ohne Naehrstoffcode fallen raus
+ok 357 - Zeilen ohne Naehrstoffcode fallen raus
+  ---
+  duration_ms: 0.1304
+  type: 'test'
+  ...
+# Subtest: gemessene Zeilen aus lumeos_g03 werden richtig gelesen
+ok 358 - gemessene Zeilen aus lumeos_g03 werden richtig gelesen
+  ---
+  duration_ms: 0.2513
+  type: 'test'
+  ...
+# Subtest: ein Wert je Kilogramm liefert einen absoluten Referenzwert
+ok 359 - ein Wert je Kilogramm liefert einen absoluten Referenzwert
+  ---
+  duration_ms: 0.0852
+  type: 'test'
+  ...
+# Subtest: ohne Gewicht gibt es keinen Prozentwert und keinen Ersatz
+ok 360 - ohne Gewicht gibt es keinen Prozentwert und keinen Ersatz
+  ---
+  duration_ms: 0.0558
+  type: 'test'
+  ...
+# Subtest: ein Energieanteil wird nicht als Deckungsgrad gezeigt
+ok 361 - ein Energieanteil wird nicht als Deckungsgrad gezeigt
+  ---
+  duration_ms: 0.0696
+  type: 'test'
+  ...
+# Subtest: eine Naehrstoffdichte wird nicht als Deckungsgrad gezeigt
+ok 362 - eine Naehrstoffdichte wird nicht als Deckungsgrad gezeigt
+  ---
+  duration_ms: 0.0339
+  type: 'test'
+  ...
+# Subtest: die drei neuen Zustaende faerben nichts ein
+ok 363 - die drei neuen Zustaende faerben nichts ein
+  ---
+  duration_ms: 0.0502
+  type: 'test'
+  ...
+# Subtest: Zerlegung deutscher Komposita
+    # Subtest: zerlegt Komposita in Kopf und Rest
+    ok 1 - zerlegt Komposita in Kopf und Rest
+      ---
+      duration_ms: 0.9367
+      type: 'test'
+      ...
+    # Subtest: erkennt Fugenelemente
+    ok 2 - erkennt Fugenelemente
+      ---
+      duration_ms: 0.1508
+      type: 'test'
+      ...
+    # Subtest: laesst echte Einzelwoerter unangetastet
+    ok 3 - laesst echte Einzelwoerter unangetastet
+      ---
+      duration_ms: 0.4052
+      type: 'test'
+      ...
+    # Subtest: haelt das ganze Wort vorn, wenn es selbst im Bestand steht
+    ok 4 - haelt das ganze Wort vorn, wenn es selbst im Bestand steht
+      ---
+      duration_ms: 0.0868
+      type: 'test'
+      ...
+    # Subtest: erreicht die Rohform eines Bestandsworts ueber die Zerlegung
+    ok 5 - erreicht die Rohform eines Bestandsworts ueber die Zerlegung
+      ---
+      duration_ms: 0.0688
+      type: 'test'
+      ...
+    # Subtest: bindet die Teile eines Kompositums mit UND, nicht mit ODER
+    ok 6 - bindet die Teile eines Kompositums mit UND, nicht mit ODER
+      ---
+      duration_ms: 0.0591
+      type: 'test'
+      ...
+    1..6
+ok 364 - Zerlegung deutscher Komposita
+  ---
+  duration_ms: 2.2896
+  type: 'suite'
+  ...
+# Subtest: Plural: der Bestand steht im Singular
+    # Subtest: ergaenzt die Singularform
+    ok 1 - ergaenzt die Singularform
+      ---
+      duration_ms: 0.1581
+      type: 'test'
+      ...
+    # Subtest: erfindet keine Formen — der Kandidat muss belegt sein
+    ok 2 - erfindet keine Formen — der Kandidat muss belegt sein
+      ---
+      duration_ms: 0.1384
+      type: 'test'
+      ...
+    # Subtest: laesst das getippte Wort an erster Stelle
+    ok 3 - laesst das getippte Wort an erster Stelle
+      ---
+      duration_ms: 0.0869
+      type: 'test'
+      ...
+    1..3
+ok 365 - Plural: der Bestand steht im Singular
+  ---
+  duration_ms: 0.5578
+  type: 'suite'
+  ...
+# Subtest: Synonyme in den Suchgruppen
+    # Subtest: bruecken aus der Handliste stehen in der Gruppe
+    ok 1 - bruecken aus der Handliste stehen in der Gruppe
+      ---
+      duration_ms: 0.106
+      type: 'test'
+      ...
+    # Subtest: uebernimmt Mundart aus dem Thesaurus
+    ok 2 - uebernimmt Mundart aus dem Thesaurus
+      ---
+      duration_ms: 0.0616
+      type: 'test'
+      ...
+    # Subtest: das getippte Wort steht immer an erster Stelle
+    ok 3 - das getippte Wort steht immer an erster Stelle
+      ---
+      duration_ms: 0.0327
+      type: 'test'
+      ...
+    1..3
+ok 366 - Synonyme in den Suchgruppen
+  ---
+  duration_ms: 0.2528
+  type: 'suite'
+  ...
+# Subtest: Umlaute: gefaltet wird vor dem Zerlegen
+    # Subtest: echte Umlaute und Umschrift ergeben dieselben Gruppen
+    ok 1 - echte Umlaute und Umschrift ergeben dieselben Gruppen
+      ---
+      duration_ms: 0.2998
+      type: 'test'
+      ...
+    # Subtest: faltet vor der Zerlegung, nicht danach
+    ok 2 - faltet vor der Zerlegung, nicht danach
+      ---
+      duration_ms: 0.0913
+      type: 'test'
+      ...
+    1..2
+ok 367 - Umlaute: gefaltet wird vor dem Zerlegen
+  ---
+  duration_ms: 0.4758
+  type: 'suite'
+  ...
+# Subtest: Suchgruppen als Ganzes
+    # Subtest: eine leere Anfrage ergibt keine Gruppen
+    ok 1 - eine leere Anfrage ergibt keine Gruppen
+      ---
+      duration_ms: 0.0704
+      type: 'test'
+      ...
+    # Subtest: getrennt geschriebene Anfragen ergeben je Wort eine Gruppe
+    ok 2 - getrennt geschriebene Anfragen ergeben je Wort eine Gruppe
+      ---
+      duration_ms: 0.0848
+      type: 'test'
+      ...
+    # Subtest: deckelt die Zahl der Gruppen
+    ok 3 - deckelt die Zahl der Gruppen
+      ---
+      duration_ms: 0.0595
+      type: 'test'
+      ...
+    1..3
+ok 368 - Suchgruppen als Ganzes
+  ---
+  duration_ms: 0.2646
+  type: 'suite'
+  ...
+# Subtest: die Allergiekachel fuehrt 20 Eintraege in drei Stufen
+ok 369 - die Allergiekachel fuehrt 20 Eintraege in drei Stufen
+  ---
+  duration_ms: 1.3265
+  type: 'test'
+  ...
+# Subtest: gesetzte Unterkategorien bleiben sichtbar
+ok 370 - gesetzte Unterkategorien bleiben sichtbar
+  ---
+  duration_ms: 0.4013
+  type: 'test'
+  ...
+# Subtest: die Vorlieben werden immer vollstaendig geschrieben
+ok 371 - die Vorlieben werden immer vollstaendig geschrieben
+  ---
+  duration_ms: 0.7803
+  type: 'test'
+  ...
+# Subtest: Daumen-Zeilen laufen ueber den Daumen-Weg
+ok 372 - Daumen-Zeilen laufen ueber den Daumen-Weg
+  ---
+  duration_ms: 0.3349
+  type: 'test'
+  ...
+# Subtest: ein Klickmuster: tippen schaltet weiter, der Wert steht am Element
+ok 373 - ein Klickmuster: tippen schaltet weiter, der Wert steht am Element
+  ---
+  duration_ms: 0.4102
+  type: 'test'
+  ...
+# Subtest: der Lesepfad baut die Funktion nicht nach
+ok 374 - der Lesepfad baut die Funktion nicht nach
+  ---
+  duration_ms: 0.2927
+  type: 'test'
+  ...
+# Subtest: die Rangfolge sagt, wo sie wirkt — und wo bewusst nicht
+ok 375 - die Rangfolge sagt, wo sie wirkt — und wo bewusst nicht
+  ---
+  duration_ms: 0.4907
+  type: 'test'
+  ...
+# Subtest: der Schlachtungs-Vorbehalt steht in der Anzeige
+ok 376 - der Schlachtungs-Vorbehalt steht in der Anzeige
+  ---
+  duration_ms: 0.3015
+  type: 'test'
+  ...
+# Subtest: die Ausschlusskachel erfindet keinen Katalog
+ok 377 - die Ausschlusskachel erfindet keinen Katalog
+  ---
+  duration_ms: 0.7872
+  type: 'test'
+  ...
+# Subtest: die angebundene Kachel traegt keine Attrappenmarke
+ok 378 - die angebundene Kachel traegt keine Attrappenmarke
+  ---
+  duration_ms: 0.5701
+  type: 'test'
+  ...
+# Subtest: the unit is millilitres, fixed — no per-row unit column
+ok 379 - the unit is millilitres, fixed — no per-row unit column
+  ---
+  duration_ms: 0.563
+  type: 'test'
+  ...
+# Subtest: quick add amounts match SPEC_04 feature 8
+ok 380 - quick add amounts match SPEC_04 feature 8
+  ---
+  duration_ms: 0.4418
+  type: 'test'
+  ...
+# Subtest: create schema rejects non-positive, non-finite and unknown sources
+ok 381 - create schema rejects non-positive, non-finite and unknown sources
+  ---
+  duration_ms: 1.4979
+  type: 'test'
+  ...
+# Subtest: source defaults to manual when not given
+ok 382 - source defaults to manual when not given
+  ---
+  duration_ms: 0.1034
+  type: 'test'
+  ...
+# Subtest: insert payload carries the user id and nothing invented
+ok 383 - insert payload carries the user id and nothing invented
+  ---
+  duration_ms: 0.1157
+  type: 'test'
+  ...
+# Subtest: numeric strings from PostgREST arrive as numbers
+ok 384 - numeric strings from PostgREST arrive as numbers
+  ---
+  duration_ms: 0.2049
+  type: 'test'
+  ...
+# Subtest: malformed log rows drop out instead of failing the whole read
+ok 385 - malformed log rows drop out instead of failing the whole read
+  ---
+  duration_ms: 0.0789
+  type: 'test'
+  ...
+# Subtest: hydration adds both sources and reports completeness
+ok 386 - hydration adds both sources and reports completeness
+  ---
+  duration_ms: 0.1217
+  type: 'test'
+  ...
+# Subtest: a missing food water value makes the total a lower bound, not a truth
+ok 387 - a missing food water value makes the total a lower bound, not a truth
+  ---
+  duration_ms: 0.1591
+  type: 'test'
+  ...
+# Subtest: a claimed complete flag does not survive a missing counter
+ok 388 - a claimed complete flag does not survive a missing counter
+  ---
+  duration_ms: 0.1919
+  type: 'test'
+  ...
+# Subtest: a day with nothing logged is null everywhere, not a row of zeros
+ok 389 - a day with nothing logged is null everywhere, not a row of zeros
+  ---
+  duration_ms: 0.0673
+  type: 'test'
+  ...
+# Subtest: percent needs a target and never invents one
+ok 390 - percent needs a target and never invents one
+  ---
+  duration_ms: 0.0729
+  type: 'test'
+  ...
+# Subtest: ein komplett leeres Formular ist gueltig
+ok 391 - ein komplett leeres Formular ist gueltig
+  ---
+  duration_ms: 1.1958
+  type: 'test'
+  ...
+# Subtest: leere Zahl wird null und nicht 0
+ok 392 - leere Zahl wird null und nicht 0
+  ---
+  duration_ms: 0.2464
+  type: 'test'
+  ...
+# Subtest: Groesse und Gewicht halten sich an die CHECK-Grenzen
+ok 393 - Groesse und Gewicht halten sich an die CHECK-Grenzen
+  ---
+  duration_ms: 0.557
+  type: 'test'
+  ...
+# Subtest: ein Geburtsdatum in der Zukunft wird abgelehnt
+ok 394 - ein Geburtsdatum in der Zukunft wird abgelehnt
+  ---
+  duration_ms: 1.0467
+  type: 'test'
+  ...
+# Subtest: nur die erlaubten Listenwerte gehen durch
+ok 395 - nur die erlaubten Listenwerte gehen durch
+  ---
+  duration_ms: 0.6157
+  type: 'test'
+  ...
+# Subtest: ein Zeitraum darf nicht rueckwaerts laufen
+ok 396 - ein Zeitraum darf nicht rueckwaerts laufen
+  ---
+  duration_ms: 0.0944
+  type: 'test'
+  ...
+# Subtest: ein offener Zeitraum ist gueltig
+ok 397 - ein offener Zeitraum ist gueltig
+  ---
+  duration_ms: 0.1565
+  type: 'test'
+  ...
+# Subtest: ein Ende ohne Beginn wird abgelehnt
+ok 398 - ein Ende ohne Beginn wird abgelehnt
+  ---
+  duration_ms: 0.0828
+  type: 'test'
+  ...
+# Subtest: numeric als String kommt als Zahl an
+ok 399 - numeric als String kommt als Zahl an
+  ---
+  duration_ms: 0.1889
+  type: 'test'
+  ...
+# Subtest: unbekannte Listenwerte aus der Datenbank werden zu null
+ok 400 - unbekannte Listenwerte aus der Datenbank werden zu null
+  ---
+  duration_ms: 0.2232
+  type: 'test'
+  ...
+# Subtest: eine fehlende Zeile ergibt ein leeres Profil
+ok 401 - eine fehlende Zeile ergibt ein leeres Profil
+  ---
+  duration_ms: 0.2394
+  type: 'test'
+  ...
+# Subtest: die Zeitraeume zaehlen nicht zur Vollstaendigkeit
+ok 402 - die Zeitraeume zaehlen nicht zur Vollstaendigkeit
+  ---
+  duration_ms: 0.0794
+  type: 'test'
+  ...
+# Subtest: Referenzwerte brauchen Geburtsdatum und Geschlecht
+ok 403 - Referenzwerte brauchen Geburtsdatum und Geschlecht
+  ---
+  duration_ms: 0.0462
+  type: 'test'
+  ...
+# Subtest: die TDEE-Formel braucht fuenf Angaben
+ok 404 - die TDEE-Formel braucht fuenf Angaben
+  ---
+  duration_ms: 0.0428
+  type: 'test'
+  ...
+# Subtest: jede Aktivitaetsstufe hat einen Faktor aus der Spec
+ok 405 - jede Aktivitaetsstufe hat einen Faktor aus der Spec
+  ---
+  duration_ms: 0.0507
+  type: 'test'
+  ...
+# Subtest: die Gewichte sind der stabile Kern 30/15/15/10/15/10/5
+ok 406 - die Gewichte sind der stabile Kern 30/15/15/10/15/10/5
+  ---
+  duration_ms: 1.2689
+  type: 'test'
+  ...
+# Subtest: der Score rechnet OHNE HRV
+ok 407 - der Score rechnet OHNE HRV
+  ---
+  duration_ms: 0.5172
+  type: 'test'
+  ...
+# Subtest: ein Beispieltag ohne HRV ergibt eine nachvollziehbare Zahl
+ok 408 - ein Beispieltag ohne HRV ergibt eine nachvollziehbare Zahl
+  ---
+  duration_ms: 0.2696
+  type: 'test'
+  ...
+# Subtest: fehlende Anteile zaehlen NICHT als null Punkte
+ok 409 - fehlende Anteile zaehlen NICHT als null Punkte
+  ---
+  duration_ms: 0.1566
+  type: 'test'
+  ...
+# Subtest: eine leere Spalte senkt den Score nicht
+ok 410 - eine leere Spalte senkt den Score nicht
+  ---
+  duration_ms: 0.1594
+  type: 'test'
+  ...
+# Subtest: Soreness mittelt nur ueber GEMELDETE Muskeln (E2)
+ok 411 - Soreness mittelt nur ueber GEMELDETE Muskeln (E2)
+  ---
+  duration_ms: 0.2029
+  type: 'test'
+  ...
+# Subtest: kein gemeldeter Kater ist voller Anteil, nicht unbekannt
+ok 412 - kein gemeldeter Kater ist voller Anteil, nicht unbekannt
+  ---
+  duration_ms: 0.0992
+  type: 'test'
+  ...
+# Subtest: die drei fehlerhaften Quellformeln sind NICHT gebaut
+ok 413 - die drei fehlerhaften Quellformeln sind NICHT gebaut
+  ---
+  duration_ms: 0.1579
+  type: 'test'
+  ...
+# Subtest: kein Anteil kann ueber sein Gewicht steigen
+ok 414 - kein Anteil kann ueber sein Gewicht steigen
+  ---
+  duration_ms: 0.2859
+  type: 'test'
+  ...
+# Subtest: ohne Check-in gibt es keinen Score, nicht null Punkte
+ok 415 - ohne Check-in gibt es keinen Score, nicht null Punkte
+  ---
+  duration_ms: 0.359
+  type: 'test'
+  ...
+# Subtest: ein unbekannter mood-Wert erfindet keine Punkte
+ok 416 - ein unbekannter mood-Wert erfindet keine Punkte
+  ---
+  duration_ms: 0.1838
+  type: 'test'
+  ...
+# Subtest: ein kurzer Wert schlaegt seinen Feldnamen
+ok 417 - ein kurzer Wert schlaegt seinen Feldnamen
+  ---
+  duration_ms: 1.0261
+  type: 'test'
+  ...
+# Subtest: unbekannt zaehlt NICHT als Inhalt — der Fall Bromocriptine
+ok 418 - unbekannt zaehlt NICHT als Inhalt — der Fall Bromocriptine
+  ---
+  duration_ms: 0.2245
+  type: 'test'
+  ...
+# Subtest: true, false und blosse Zahlen sagen ohne ihr Feld nichts
+ok 419 - true, false und blosse Zahlen sagen ohne ihr Feld nichts
+  ---
+  duration_ms: 0.3047
+  type: 'test'
+  ...
+# Subtest: leere Sammlungen zaehlen nicht — der Fall Qualitaet
+ok 420 - leere Sammlungen zaehlen nicht — der Fall Qualitaet
+  ---
+  duration_ms: 0.1033
+  type: 'test'
+  ...
+# Subtest: nichts drin heisst „keine Angaben", nicht „0 Felder"
+ok 421 - nichts drin heisst „keine Angaben", nicht „0 Felder"
+  ---
+  duration_ms: 0.1336
+  type: 'test'
+  ...
+# Subtest: lange Werte werden am Trenner gekuerzt, nicht im Wort
+ok 422 - lange Werte werden am Trenner gekuerzt, nicht im Wort
+  ---
+  duration_ms: 0.1955
+  type: 'test'
+  ...
+# Subtest: die Reichweite folgt der Einheit — Kreatin reicht 6 Tage, nicht 30
+ok 423 - die Reichweite folgt der Einheit — Kreatin reicht 6 Tage, nicht 30
+  ---
+  duration_ms: 0.8193
+  type: 'test'
+  ...
+# Subtest: ohne Einheiten bleibt die alte Lesart — Bestand als Portionen
+ok 424 - ohne Einheiten bleibt die alte Lesart — Bestand als Portionen
+  ---
+  duration_ms: 0.1047
+  type: 'test'
+  ...
+# Subtest: die drei Nachfuellstufen greifen an ihren Grenzen
+ok 425 - die drei Nachfuellstufen greifen an ihren Grenzen
+  ---
+  duration_ms: 0.1565
+  type: 'test'
+  ...
+# Subtest: die Nachfuellliste sortiert knappste zuerst, Unbekanntes ans Ende
+ok 426 - die Nachfuellliste sortiert knappste zuerst, Unbekanntes ans Ende
+  ---
+  duration_ms: 0.7054
+  type: 'test'
+  ...
+# Subtest: der Nachkaufwert bleibt null, wenn ein Preis fehlt
+ok 427 - der Nachkaufwert bleibt null, wenn ein Preis fehlt
+  ---
+  duration_ms: 0.1573
+  type: 'test'
+  ...
+# Subtest: minusTage rechnet ueber Monatsgrenzen
+ok 428 - minusTage rechnet ueber Monatsgrenzen
+  ---
+  duration_ms: 0.671
+  type: 'test'
+  ...
+# Subtest: die Gesamtquote zaehlt genommen gegen erfasst
+ok 429 - die Gesamtquote zaehlt genommen gegen erfasst
+  ---
+  duration_ms: 0.2222
+  type: 'test'
+  ...
+# Subtest: ein leeres Fenster ergibt keine Quote von 0 %
+ok 430 - ein leeres Fenster ergibt keine Quote von 0 %
+  ---
+  duration_ms: 0.0692
+  type: 'test'
+  ...
+# Subtest: die Compliance gruppiert nach Namen, nicht nach stack_item_id
+ok 431 - die Compliance gruppiert nach Namen, nicht nach stack_item_id
+  ---
+  duration_ms: 0.4629
+  type: 'test'
+  ...
+# Subtest: der Streifen ist immer so lang wie das Fenster
+ok 432 - der Streifen ist immer so lang wie das Fenster
+  ---
+  duration_ms: 0.3467
+  type: 'test'
+  ...
+# Subtest: Tage ohne Eintrag erscheinen nicht als 0 Prozent
+ok 433 - Tage ohne Eintrag erscheinen nicht als 0 Prozent
+  ---
+  duration_ms: 0.178
+  type: 'test'
+  ...
+# Subtest: der Kostenverlauf rechnet aus genommenen Einnahmen
+ok 434 - der Kostenverlauf rechnet aus genommenen Einnahmen
+  ---
+  duration_ms: 0.1968
+  type: 'test'
+  ...
+# Subtest: angeschnittene Monate sind als solche gekennzeichnet
+ok 435 - angeschnittene Monate sind als solche gekennzeichnet
+  ---
+  duration_ms: 0.0919
+  type: 'test'
+  ...
+# Subtest: ein Praeparat ohne Preis faellt aus dem Verlauf, nicht auf null
+ok 436 - ein Praeparat ohne Preis faellt aus dem Verlauf, nicht auf null
+  ---
+  duration_ms: 0.0503
+  type: 'test'
+  ...
+# Subtest: „ohne dieses Praeparat" ist reine Subtraktion
+ok 437 - „ohne dieses Praeparat" ist reine Subtraktion
+  ---
+  duration_ms: 0.1851
+  type: 'test'
+  ...
+# Subtest: G-191: value null ergibt KEINEN Wert, sondern den Grund
+ok 438 - G-191: value null ergibt KEINEN Wert, sondern den Grund
+  ---
+  duration_ms: 0.77
+  type: 'test'
+  ...
+# Subtest: G-191: der Statuscode taucht nirgends auf
+ok 439 - G-191: der Statuscode taucht nirgends auf
+  ---
+  duration_ms: 0.1965
+  type: 'test'
+  ...
+# Subtest: G-191: ein echter Wert kommt durch
+ok 440 - G-191: ein echter Wert kommt durch
+  ---
+  duration_ms: 0.137
+  type: 'test'
+  ...
+# Subtest: G-191: strukturierte Spannen werden nicht flachgeklopft
+ok 441 - G-191: strukturierte Spannen werden nicht flachgeklopft
+  ---
+  duration_ms: 0.248
+  type: 'test'
+  ...
+# Subtest: G-191: min gleich max ergibt eine Zahl, keine Spanne
+ok 442 - G-191: min gleich max ergibt eine Zahl, keine Spanne
+  ---
+  duration_ms: 0.0923
+  type: 'test'
+  ...
+# Subtest: G-191: hoechstens zwei Spannen
+ok 443 - G-191: hoechstens zwei Spannen
+  ---
+  duration_ms: 0.0635
+  type: 'test'
+  ...
+# Subtest: G-191: ein leeres Array ergibt nichts
+ok 444 - G-191: ein leeres Array ergibt nichts
+  ---
+  duration_ms: 0.5674
+  type: 'test'
+  ...
+# Subtest: G-191: substanzeigene Gruende bleiben stehen
+ok 445 - G-191: substanzeigene Gruende bleiben stehen
+  ---
+  duration_ms: 0.2948
+  type: 'test'
+  ...
+# Subtest: G-191: studiert schlaegt Leitlinie, Grund nur ohne jeden Wert
+ok 446 - G-191: studiert schlaegt Leitlinie, Grund nur ohne jeden Wert
+  ---
+  duration_ms: 0.2463
+  type: 'test'
+  ...
+# Subtest: G-191: Testosterone Enanthate bleibt leer
+ok 447 - G-191: Testosterone Enanthate bleibt leer
+  ---
+  duration_ms: 0.2266
+  type: 'test'
+  ...
+# Subtest: G-191: die Anzeige ist mit der Lesefunktion verdrahtet
+ok 448 - G-191: die Anzeige ist mit der Lesefunktion verdrahtet
+  ---
+  duration_ms: 0.6638
+  type: 'test'
+  ...
+# Subtest: offen sind genau pro und elite
+ok 449 - offen sind genau pro und elite
+  ---
+  duration_ms: 0.7454
+  type: 'test'
+  ...
+# Subtest: ohne gesetzten Grad bleibt es zu
+ok 450 - ohne gesetzten Grad bleibt es zu
+  ---
+  duration_ms: 0.1559
+  type: 'test'
+  ...
+# Subtest: ein unbekannter Wert oeffnet nichts
+ok 451 - ein unbekannter Wert oeffnet nichts
+  ---
+  duration_ms: 0.0713
+  type: 'test'
+  ...
+# Subtest: die Grenze steht auf pro — nicht mehr auf advanced
+ok 452 - die Grenze steht auf pro — nicht mehr auf advanced
+  ---
+  duration_ms: 0.0784
+  type: 'test'
+  ...
+# Subtest: der Provisoriums-Satz traegt seine drei Aussagen
+ok 453 - der Provisoriums-Satz traegt seine drei Aussagen
+  ---
+  duration_ms: 0.2284
+  type: 'test'
+  ...
+# Subtest: ohne Angabe kommt niemand durch
+ok 454 - ohne Angabe kommt niemand durch
+  ---
+  duration_ms: 0.4929
+  type: 'test'
+  ...
+# Subtest: Anfaenger reicht nicht
+ok 455 - Anfaenger reicht nicht
+  ---
+  duration_ms: 0.0798
+  type: 'test'
+  ...
+# Subtest: ab der gesetzten Stufe ist offen
+ok 456 - ab der gesetzten Stufe ist offen
+  ---
+  duration_ms: 0.0531
+  type: 'test'
+  ...
+# Subtest: advanced reicht seit G-167 nicht mehr
+ok 457 - advanced reicht seit G-167 nicht mehr
+  ---
+  duration_ms: 0.0378
+  type: 'test'
+  ...
+# Subtest: hoehere Stufen reichen auch
+ok 458 - hoehere Stufen reichen auch
+  ---
+  duration_ms: 0.0373
+  type: 'test'
+  ...
+# Subtest: ein unbekannter Wert reicht nicht
+ok 459 - ein unbekannter Wert reicht nicht
+  ---
+  duration_ms: 0.0429
+  type: 'test'
+  ...
+# Subtest: deutsch fehlt, englisch traegt — der Fall aller 566 Substanzen
+ok 460 - deutsch fehlt, englisch traegt — der Fall aller 566 Substanzen
+  ---
+  duration_ms: 0.6198
+  type: 'test'
+  ...
+# Subtest: deutsch da — es gewinnt, auch wenn englisch danebensteht
+ok 461 - deutsch da — es gewinnt, auch wenn englisch danebensteht
+  ---
+  duration_ms: 0.1028
+  type: 'test'
+  ...
+# Subtest: NULL und Leerstring zaehlen beide als fehlend
+ok 462 - NULL und Leerstring zaehlen beide als fehlend
+  ---
+  duration_ms: 0.0709
+  type: 'test'
+  ...
+# Subtest: beides leer ergibt null — kein Strich, keine Leerstelle
+ok 463 - beides leer ergibt null — kein Strich, keine Leerstelle
+  ---
+  duration_ms: 0.0557
+  type: 'test'
+  ...
+# Subtest: Nicht-Zeichenketten gelten als fehlend, nicht als Wert
+ok 464 - Nicht-Zeichenketten gelten als fehlend, nicht als Wert
+  ---
+  duration_ms: 0.3682
+  type: 'test'
+  ...
+# Subtest: Kosten und Reichweite aus Dosis, Portion und Preis
+ok 465 - Kosten und Reichweite aus Dosis, Portion und Preis
+  ---
+  duration_ms: 0.8058
+  type: 'test'
+  ...
+# Subtest: unter der Schwelle wird als solches erkannt
+ok 466 - unter der Schwelle wird als solches erkannt
+  ---
+  duration_ms: 0.173
+  type: 'test'
+  ...
+# Subtest: ohne Preis bleibt die Kostenzahl leer statt null zu werden
+ok 467 - ohne Preis bleibt die Kostenzahl leer statt null zu werden
+  ---
+  duration_ms: 0.0661
+  type: 'test'
+  ...
+# Subtest: ohne Portionsgroesse ist weder Kosten noch Reichweite ableitbar
+ok 468 - ohne Portionsgroesse ist weder Kosten noch Reichweite ableitbar
+  ---
+  duration_ms: 0.048
+  type: 'test'
+  ...
+# Subtest: ohne Bestand gibt es keine Schwellenaussage
+ok 469 - ohne Bestand gibt es keine Schwellenaussage
+  ---
+  duration_ms: 0.042
+  type: 'test'
+  ...
+# Subtest: Portionsgroesse 0 fuehrt nicht zu Unendlich
+ok 470 - Portionsgroesse 0 fuehrt nicht zu Unendlich
+  ---
+  duration_ms: 0.0442
+  type: 'test'
+  ...
+# Subtest: die Monatssumme der vier gemessenen Positionen ergibt 20,40
+ok 471 - die Monatssumme der vier gemessenen Positionen ergibt 20,40
+  ---
+  duration_ms: 0.1424
+  type: 'test'
+  ...
+# Subtest: G-187: die Wechselwirkung wird der richtigen Position zugeordnet
+ok 472 - G-187: die Wechselwirkung wird der richtigen Position zugeordnet
+  ---
+  duration_ms: 0.7392
+  type: 'test'
+  ...
+# Subtest: G-187: eine Zeile ohne Position im Stack zaehlt nicht
+ok 473 - G-187: eine Zeile ohne Position im Stack zaehlt nicht
+  ---
+  duration_ms: 0.4374
+  type: 'test'
+  ...
+# Subtest: G-187: eine Position ohne Katalogbezug kann nicht treffen
+ok 474 - G-187: eine Position ohne Katalogbezug kann nicht treffen
+  ---
+  duration_ms: 0.0874
+  type: 'test'
+  ...
+# Subtest: G-187: die Beschreibung entfaellt, wenn sie der Partner ist
+ok 475 - G-187: die Beschreibung entfaellt, wenn sie der Partner ist
+  ---
+  duration_ms: 0.0656
+  type: 'test'
+  ...
+# Subtest: G-187: doppelte Zeilen werden entdoppelt
+ok 476 - G-187: doppelte Zeilen werden entdoppelt
+  ---
+  duration_ms: 0.114
+  type: 'test'
+  ...
+# Subtest: G-187: ohne Zeilen entsteht nichts — kein erfundenes Paar
+ok 477 - G-187: ohne Zeilen entsteht nichts — kein erfundenes Paar
+  ---
+  duration_ms: 0.0673
+  type: 'test'
+  ...
+# Subtest: G-187: der Reiter ist mit dem Lesepfad verdrahtet
+ok 478 - G-187: der Reiter ist mit dem Lesepfad verdrahtet
+  ---
+  duration_ms: 1.1956
+  type: 'test'
+  ...
+# Subtest: G-187: die Ueberschrift sagt, dass es MEDIKAMENTE sind
+ok 479 - G-187: die Ueberschrift sagt, dass es MEDIKAMENTE sind
+  ---
+  duration_ms: 0.9327
+  type: 'test'
+  ...
+# Subtest: jedes angezeigte Feld traegt seinen Herkunftsvermerk
+ok 480 - jedes angezeigte Feld traegt seinen Herkunftsvermerk
+  ---
+  duration_ms: 2.1456
+  type: 'test'
+  ...
+# Subtest: ein Wert ohne Herkunft wird gemeldet, nicht still gezeigt
+ok 481 - ein Wert ohne Herkunft wird gemeldet, nicht still gezeigt
+  ---
+  duration_ms: 0.4375
+  type: 'test'
+  ...
+# Subtest: Leeres erzeugt kein Feld — kein Platzhalter, kein Strich
+ok 482 - Leeres erzeugt kein Feld — kein Platzhalter, kein Strich
+  ---
+  duration_ms: 0.287
+  type: 'test'
+  ...
+# Subtest: fehlt der ganze Block (31-Spalten-Stand), entsteht er nicht
+ok 483 - fehlt der ganze Block (31-Spalten-Stand), entsteht er nicht
+  ---
+  duration_ms: 0.2006
+  type: 'test'
+  ...
+# Subtest: dose_ceiling bleibt Freitext, wie er dasteht
+ok 484 - dose_ceiling bleibt Freitext, wie er dasteht
+  ---
+  duration_ms: 0.3026
+  type: 'test'
+  ...
+# Subtest: missing_reason wird als benannte Luecke gefuehrt
+ok 485 - missing_reason wird als benannte Luecke gefuehrt
+  ---
+  duration_ms: 0.2029
+  type: 'test'
+  ...
+# Subtest: die Blocksuche findet erst den Pfad, dann den Block, sonst nichts
+ok 486 - die Blocksuche findet erst den Pfad, dann den Block, sonst nichts
+  ---
+  duration_ms: 0.1279
+  type: 'test'
+  ...
+# Subtest: C-229-Nachtrag: source_ref allein ist KEINE Herkunft
+ok 487 - C-229-Nachtrag: source_ref allein ist KEINE Herkunft
+  ---
+  duration_ms: 0.1122
+  type: 'test'
+  ...
+# Subtest: Kreatin bekommt alle vier Kacheln
+ok 488 - Kreatin bekommt alle vier Kacheln
+  ---
+  duration_ms: 2.1875
+  type: 'test'
+  ...
+# Subtest: ohne Menge und ohne Wirkungszahl bleiben zwei Kacheln
+ok 489 - ohne Menge und ohne Wirkungszahl bleiben zwei Kacheln
+  ---
+  duration_ms: 0.2203
+  type: 'test'
+  ...
+# Subtest: ohne alles entsteht keine einzige Kachel
+ok 490 - ohne alles entsteht keine einzige Kachel
+  ---
+  duration_ms: 0.0983
+  type: 'test'
+  ...
+# Subtest: die irrefuehrenden Prozentzahlen sind NICHT in der Liste
+ok 491 - die irrefuehrenden Prozentzahlen sind NICHT in der Liste
+  ---
+  duration_ms: 0.153
+  type: 'test'
+  ...
+# Subtest: die Wirkungsliste bleibt klein und belegt
+ok 492 - die Wirkungsliste bleibt klein und belegt
+  ---
+  duration_ms: 0.3835
+  type: 'test'
+  ...
+# Subtest: der Evidenzgrad bekommt Farbe und Klartext
+ok 493 - der Evidenzgrad bekommt Farbe und Klartext
+  ---
+  duration_ms: 0.194
+  type: 'test'
+  ...
+# Subtest: WADA verboten wird als Warnung gezeigt
+ok 494 - WADA verboten wird als Warnung gezeigt
+  ---
+  duration_ms: 0.1136
+  type: 'test'
+  ...
+# Subtest: die Mengenkachel traegt die kurze Form, nicht den Satz
+ok 495 - die Mengenkachel traegt die kurze Form, nicht den Satz
+  ---
+  duration_ms: 0.2778
+  type: 'test'
+  ...
+# Subtest: Leerraum zaehlt nicht als Wert
+ok 496 - Leerraum zaehlt nicht als Wert
+  ---
+  duration_ms: 0.2026
+  type: 'test'
+  ...
+# Subtest: die Zaehler sind gezaehlt: gross zuerst, unzugeordnet am Ende
+ok 497 - die Zaehler sind gezaehlt: gross zuerst, unzugeordnet am Ende
+  ---
+  duration_ms: 1.0752
+  type: 'test'
+  ...
+# Subtest: Mehrfachauswahl vereinigt: Peptide UND SARMs zugleich
+ok 498 - Mehrfachauswahl vereinigt: Peptide UND SARMs zugleich
+  ---
+  duration_ms: 0.344
+  type: 'test'
+  ...
+# Subtest: null ist unzugeordnet — ein eigener Zustand, keine Restklasse
+ok 499 - null ist unzugeordnet — ein eigener Zustand, keine Restklasse
+  ---
+  duration_ms: 0.3281
+  type: 'test'
+  ...
+# Subtest: jede Farbe ist eine CSS-Variable, keine ist hartkodiert
+ok 500 - jede Farbe ist eine CSS-Variable, keine ist hartkodiert
+  ---
+  duration_ms: 0.2858
+  type: 'test'
+  ...
+# Subtest: jede benutzte Variable steht in supplements.css — hell UND dunkel
+ok 501 - jede benutzte Variable steht in supplements.css — hell UND dunkel
+  ---
+  duration_ms: 2.1824
+  type: 'test'
+  ...
+# Subtest: die Komponente traegt keine hartkodierte Kategoriefarbe und immer Text
+ok 502 - die Komponente traegt keine hartkodierte Kategoriefarbe und immer Text
+  ---
+  duration_ms: 0.4462
+  type: 'test'
+  ...
+# Subtest: C-229: die drei Gruppen zaehlen und filtern, das Gate sperrt
+ok 503 - C-229: die drei Gruppen zaehlen und filtern, das Gate sperrt
+  ---
+  duration_ms: 0.2691
+  type: 'test'
+  ...
+# Subtest: G-186: die Suche findet auch ueber die Zwecke
+ok 504 - G-186: die Suche findet auch ueber die Zwecke
+  ---
+  duration_ms: 0.1139
+  type: 'test'
+  ...
+# Subtest: G-186: die Liste ist mit `trifftSuche` verdrahtet
+ok 505 - G-186: die Liste ist mit `trifftSuche` verdrahtet
+  ---
+  duration_ms: 0.5924
+  type: 'test'
+  ...
+# Subtest: G-182: der Gruppenwechsel setzt die Kategorie zurueck
+ok 506 - G-182: der Gruppenwechsel setzt die Kategorie zurueck
+  ---
+  duration_ms: 0.2765
+  type: 'test'
+  ...
+# Subtest: G-182: dieselbe Gruppe nochmal aendert nichts
+ok 507 - G-182: dieselbe Gruppe nochmal aendert nichts
+  ---
+  duration_ms: 0.0682
+  type: 'test'
+  ...
+# Subtest: G-182: das Detail benutzt nachGruppenwechsel, nicht setGruppe roh
+ok 508 - G-182: das Detail benutzt nachGruppenwechsel, nicht setGruppe roh
+  ---
+  duration_ms: 0.5964
+  type: 'test'
+  ...
+# Subtest: C-229/G-180: das Detail ist zu, bis jemand es aufklappt
+ok 509 - C-229/G-180: das Detail ist zu, bis jemand es aufklappt
+  ---
+  duration_ms: 0.239
+  type: 'test'
+  ...
+# Subtest: G-180: immer nur EINE Zeile offen
+ok 510 - G-180: immer nur EINE Zeile offen
+  ---
+  duration_ms: 0.1814
+  type: 'test'
+  ...
+# Subtest: C-229: der Add-Dialog sendet stack_id und zeigt die Stackwahl
+ok 511 - C-229: der Add-Dialog sendet stack_id und zeigt die Stackwahl
+  ---
+  duration_ms: 0.2257
+  type: 'test'
+  ...
+# Subtest: die Erwartung der grossen Kategorien traegt eigene Farben
+ok 512 - die Erwartung der grossen Kategorien traegt eigene Farben
+  ---
+  duration_ms: 0.0699
+  type: 'test'
+  ...
+# Subtest: ohne alles gibt es keinen einzigen Reiter
+ok 513 - ohne alles gibt es keinen einzigen Reiter
+  ---
+  duration_ms: 1.4521
+  type: 'test'
+  ...
+# Subtest: nur Formen: nur der Formen-Reiter — der Fall Magnesium
+ok 514 - nur Formen: nur der Formen-Reiter — der Fall Magnesium
+  ---
+  duration_ms: 0.2002
+  type: 'test'
+  ...
+# Subtest: die Zahl steht nur, wo es eine gibt
+ok 515 - die Zahl steht nur, wo es eine gibt
+  ---
+  duration_ms: 0.1418
+  type: 'test'
+  ...
+# Subtest: Dosierung erscheint schon bei EINER Zahl
+ok 516 - Dosierung erscheint schon bei EINER Zahl
+  ---
+  duration_ms: 0.0833
+  type: 'test'
+  ...
+# Subtest: Dosierung erscheint auch, wenn nur `wann_wie` dasteht
+ok 517 - Dosierung erscheint auch, wenn nur `wann_wie` dasteht
+  ---
+  duration_ms: 0.0586
+  type: 'test'
+  ...
+# Subtest: Sicherheit erscheint bei jedem einzelnen ihrer Felder
+ok 518 - Sicherheit erscheint bei jedem einzelnen ihrer Felder
+  ---
+  duration_ms: 0.1944
+  type: 'test'
+  ...
+# Subtest: die Enhanced-Felder zaehlen zur Sicherheit
+ok 519 - die Enhanced-Felder zaehlen zur Sicherheit
+  ---
+  duration_ms: 0.1371
+  type: 'test'
+  ...
+# Subtest: der Laborbezug allein traegt den Sicherheits-Reiter
+ok 520 - der Laborbezug allein traegt den Sicherheits-Reiter
+  ---
+  duration_ms: 0.1086
+  type: 'test'
+  ...
+# Subtest: G-182: der Quellen-Reiter erscheint, wo Quellen liegen
+ok 521 - G-182: der Quellen-Reiter erscheint, wo Quellen liegen
+  ---
+  duration_ms: 0.1811
+  type: 'test'
+  ...
+# Subtest: G-182: der Warnkasten steht NUR im Ueberblick
+ok 522 - G-182: der Warnkasten steht NUR im Ueberblick
+  ---
+  duration_ms: 0.5991
+  type: 'test'
+  ...
+# Subtest: G-182: Ueberwachung und Reinheit stehen NICHT rechtsbuendig
+ok 523 - G-182: Ueberwachung und Reinheit stehen NICHT rechtsbuendig
+  ---
+  duration_ms: 0.4588
+  type: 'test'
+  ...
+# Subtest: G-186: Labor- und Wechselwirkung tragen den Sicherheits-Reiter
+ok 524 - G-186: Labor- und Wechselwirkung tragen den Sicherheits-Reiter
+  ---
+  duration_ms: 0.1117
+  type: 'test'
+  ...
+# Subtest: G-186: der Wechselwirkungsblock haengt in der Sicherheit
+ok 525 - G-186: der Wechselwirkungsblock haengt in der Sicherheit
+  ---
+  duration_ms: 1.3108
+  type: 'test'
+  ...
+# Subtest: G-192: Community erscheint nur mit erlaubtem Inhalt
+ok 526 - G-192: Community erscheint nur mit erlaubtem Inhalt
+  ---
+  duration_ms: 0.1509
+  type: 'test'
+  ...
+# Subtest: G-192: Anleitungsfelder bleiben aus dem Community-Lesepfad draussen
+ok 527 - G-192: Anleitungsfelder bleiben aus dem Community-Lesepfad draussen
+  ---
+  duration_ms: 0.2812
+  type: 'test'
+  ...
+# Subtest: die Reihenfolge steht fest
+ok 528 - die Reihenfolge steht fest
+  ---
+  duration_ms: 0.1101
+  type: 'test'
+  ...
+# Subtest: Leerraum zaehlt nicht als Inhalt
+ok 529 - Leerraum zaehlt nicht als Inhalt
+  ---
+  duration_ms: 0.0508
+  type: 'test'
+  ...
+# Subtest: das JSON-Literal null faellt weg, der echte Wert bleibt
+ok 530 - das JSON-Literal null faellt weg, der echte Wert bleibt
+  ---
+  duration_ms: 1.0027
+  type: 'test'
+  ...
+# Subtest: dose_ceiling als JSON-null zaehlt NICHT als Obergrenze
+ok 531 - dose_ceiling als JSON-null zaehlt NICHT als Obergrenze
+  ---
+  duration_ms: 0.1963
+  type: 'test'
+  ...
+# Subtest: ist alles null, entsteht gar keine Kachel
+ok 532 - ist alles null, entsteht gar keine Kachel
+  ---
+  duration_ms: 0.1144
+  type: 'test'
+  ...
+# Subtest: leeres Objekt und leeres Array sagen auch nichts
+ok 533 - leeres Objekt und leeres Array sagen auch nichts
+  ---
+  duration_ms: 0.7205
+  type: 'test'
+  ...
+# Subtest: die Null selbst bleibt, wo sie ein Messwert ist
+ok 534 - die Null selbst bleibt, wo sie ein Messwert ist
+  ---
+  duration_ms: 0.1805
+  type: 'test'
+  ...
+# Subtest: geplante Sitzungen zaehlen nicht als Leistung — trotz status completed
+ok 535 - geplante Sitzungen zaehlen nicht als Leistung — trotz status completed
+  ---
+  duration_ms: 1.2651
+  type: 'test'
+  ...
+# Subtest: Volumen je Muskel zaehlt eine Uebung jeder Gruppe voll zu
+ok 536 - Volumen je Muskel zaehlt eine Uebung jeder Gruppe voll zu
+  ---
+  duration_ms: 0.3627
+  type: 'test'
+  ...
+# Subtest: Volumen je Muskel laesst geplante Sitzungen aus
+ok 537 - Volumen je Muskel laesst geplante Sitzungen aus
+  ---
+  duration_ms: 0.1565
+  type: 'test'
+  ...
+# Subtest: die Woche faengt am Montag an
+ok 538 - die Woche faengt am Montag an
+  ---
+  duration_ms: 1.0702
+  type: 'test'
+  ...
+# Subtest: die Serie zaehlt Wochen, und geplante zaehlen nicht mit
+ok 539 - die Serie zaehlt Wochen, und geplante zaehlen nicht mit
+  ---
+  duration_ms: 0.4379
+  type: 'test'
+  ...
+# Subtest: eine Luecke setzt die Serie zurueck
+ok 540 - eine Luecke setzt die Serie zurueck
+  ---
+  duration_ms: 0.349
+  type: 'test'
+  ...
+# Subtest: der Kraftverlauf zeigt nur Uebungen mit absolvierten Saetzen
+ok 541 - der Kraftverlauf zeigt nur Uebungen mit absolvierten Saetzen
+  ---
+  duration_ms: 10.9588
+  type: 'test'
+  ...
+# Subtest: ein einzelner Punkt ergibt keinen Trend
+ok 542 - ein einzelner Punkt ergibt keinen Trend
+  ---
+  duration_ms: 0.4285
+  type: 'test'
+  ...
+# Subtest: das Kraftverhaeltnis faengt fehlende Werte ab
+ok 543 - das Kraftverhaeltnis faengt fehlende Werte ab
+  ---
+  duration_ms: 0.3387
+  type: 'test'
+  ...
+# Subtest: die Seitengroesse liegt bei der PostgREST-Grenze
+ok 544 - die Seitengroesse liegt bei der PostgREST-Grenze
+  ---
+  duration_ms: 0.4776
+  type: 'test'
+  ...
+# Subtest: 6.588 Zuordnungen ergeben sieben Seiten
+ok 545 - 6.588 Zuordnungen ergeben sieben Seiten
+  ---
+  duration_ms: 0.4793
+  type: 'test'
+  ...
+# Subtest: genau 1.000 Zeilen brauchen zwei Seiten, nicht eine
+ok 546 - genau 1.000 Zeilen brauchen zwei Seiten, nicht eine
+  ---
+  duration_ms: 0.0685
+  type: 'test'
+  ...
+# Subtest: leer bleibt leer
+ok 547 - leer bleibt leer
+  ---
+  duration_ms: 0.0438
+  type: 'test'
+  ...
+# Subtest: die ID-Grenze fuer .in() liegt unter 252
+ok 548 - die ID-Grenze fuer .in() liegt unter 252
+  ---
+  duration_ms: 0.0792
+  type: 'test'
+  ...
+# Subtest: 95 Muskelgruppen bleiben unter der ID-Grenze
+ok 549 - 95 Muskelgruppen bleiben unter der ID-Grenze
+  ---
+  duration_ms: 0.0433
+  type: 'test'
+  ...
+# Subtest: registry, css imports and css files match exactly
+ok 550 - registry, css imports and css files match exactly
+  ---
+  duration_ms: 0.8657
+  type: 'test'
+  ...
+# Subtest: theme 'lume' fulfils the token contract in both modes
+ok 551 - theme 'lume' fulfils the token contract in both modes
+  ---
+  duration_ms: 0.8169
+  type: 'test'
+  ...
+# Subtest: globals.css stays free of hardcoded colors
+ok 552 - globals.css stays free of hardcoded colors
+  ---
+  duration_ms: 0.3687
+  type: 'test'
+  ...
+1..552
+# tests 598
+# suites 18
+# pass 598
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3085.2824

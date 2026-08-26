@@ -1,0 +1,13 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 15000ms exceeded.
+Call log:
+  [2m- waiting for locator('text=Aus der Community').first()[22m
+
+    at D:\GitHub\LumeOS-Claude-V1\tools\schuss.mjs:200:38 {
+  name: 'TimeoutError'
+}
+
+Node.js v22.16.0

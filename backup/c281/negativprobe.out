@@ -1,0 +1,28 @@
+MUTATION
+UPDATE 1
+
+COPY
+
+
+RERUN
+BEGIN
+CREATE SCHEMA
+CREATE FUNCTION
+DROP TABLE
+SELECT 71
+UPDATE 22
+INSERT 0 0
+DROP TABLE
+SELECT 47
+DELETE 46
+INSERT 0 46
+DROP TABLE
+SELECT 18
+DELETE 17
+INSERT 0 16
+psql:/tmp/281_supplement_wissen_hochreichen.sql:3: NOTICE:  schema "supplements" already exists, skipping
+psql:/tmp/281_supplement_wissen_hochreichen.sql:19: NOTICE:  table "tmp_c281_dosing_inherit" does not exist, skipping
+psql:/tmp/281_supplement_wissen_hochreichen.sql:155: NOTICE:  table "tmp_c281_lab_inherit" does not exist, skipping
+psql:/tmp/281_supplement_wissen_hochreichen.sql:259: NOTICE:  table "tmp_c281_wada_inherit" does not exist, skipping
+psql:/tmp/281_supplement_wissen_hochreichen.sql:423: ERROR:  C-281 WADA-Erwartung verletzt: uniform 16, uneinheitlich 2, eingefuegt 16 statt 17/1/17
+CONTEXT:  PL/pgSQL function inline_code_block line 58 at RAISE

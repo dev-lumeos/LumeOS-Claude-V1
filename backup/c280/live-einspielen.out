@@ -1,0 +1,35 @@
+BACKUP_DUMP
+
+
+---
+
+BACKUP_SQL
+
+
+---
+
+COPY_DUMP
+
+
+---
+
+COPY_SQL
+
+
+---
+
+COPY_STEP
+
+
+---
+
+APPLY_STEP
+BEGIN
+CREATE VIEW
+COMMENT
+REVOKE
+GRANT
+GRANT
+DO
+COMMIT
+psql:/tmp/280_community_anzeige.sql:224: NOTICE:  OK C-280 community_anzeige: 212 Zeilen, 37 Nebenwirkungen, keine raw-/Anleitungsfelder

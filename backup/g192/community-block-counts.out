@@ -1,0 +1,10 @@
+metric             | value 
+-------------------------------+-------
+ side_effect_total             | 37
+ side_effect_with_mitigations  | 36
+ stacks_total                  | 31
+ stacks_with_expected_tradeoff | 24
+ contradicted_narratives       | 3
+ quality_signals               | 40
+ terms                         | 71
+(7 rows)

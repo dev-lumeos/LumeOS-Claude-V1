@@ -1,0 +1,78 @@
+BEGIN
+CREATE EXTENSION
+CREATE FUNCTION
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+DO
+DROP TABLE
+CREATE TABLE
+COPY 1
+DELETE 6
+DELETE 47
+DELETE 293
+DELETE 1061
+DELETE 47
+DELETE 43
+DELETE 64
+DELETE 20
+DELETE 3001
+DELETE 4617
+DELETE 3
+UPDATE 320
+INSERT 0 0
+UPDATE 290
+INSERT 0 6
+INSERT 0 47
+INSERT 0 3
+INSERT 0 293
+INSERT 0 1061
+INSERT 0 3001
+INSERT 0 4617
+INSERT 0 43
+INSERT 0 47
+INSERT 0 64
+INSERT 0 20
+psql:<stdin>:4: NOTICE:  extension "pgcrypto" already exists, skipping
+psql:<stdin>:30: NOTICE:  column "scope_class" of relation "supplement_wada" already exists, skipping
+psql:<stdin>:30: NOTICE:  column "scope_note_de" of relation "supplement_wada" already exists, skipping
+psql:<stdin>:30: NOTICE:  column "scope_note_en" of relation "supplement_wada" already exists, skipping
+psql:<stdin>:30: NOTICE:  column "scope_note_th" of relation "supplement_wada" already exists, skipping
+psql:<stdin>:30: NOTICE:  column "sports_scope" of relation "supplement_wada" already exists, skipping
+psql:<stdin>:30: NOTICE:  column "tue_relevance" of relation "supplement_wada" already exists, skipping
+psql:<stdin>:30: NOTICE:  column "list_year" of relation "supplement_wada" already exists, skipping
+psql:<stdin>:30: NOTICE:  column "last_verified" of relation "supplement_wada" already exists, skipping
+psql:<stdin>:30: NOTICE:  column "sources" of relation "supplement_wada" already exists, skipping
+psql:<stdin>:30: NOTICE:  column "raw" of relation "supplement_wada" already exists, skipping
+psql:<stdin>:37: NOTICE:  column "effect_class" of relation "supplement_lab_effects" already exists, skipping
+psql:<stdin>:37: NOTICE:  column "magnitude_context" of relation "supplement_lab_effects" already exists, skipping
+psql:<stdin>:37: NOTICE:  column "clinical_relevance" of relation "supplement_lab_effects" already exists, skipping
+psql:<stdin>:37: NOTICE:  column "source_ids" of relation "supplement_lab_effects" already exists, skipping
+psql:<stdin>:37: NOTICE:  column "enrichment_raw" of relation "supplement_lab_effects" already exists, skipping
+psql:<stdin>:47: NOTICE:  column "human_evidence_available" of relation "supplement_evidence" already exists, skipping
+psql:<stdin>:47: NOTICE:  column "rct_evidence_available" of relation "supplement_evidence" already exists, skipping
+psql:<stdin>:47: NOTICE:  column "meta_analysis_available" of relation "supplement_evidence" already exists, skipping
+psql:<stdin>:47: NOTICE:  column "model_note" of relation "supplement_evidence" already exists, skipping
+psql:<stdin>:47: NOTICE:  column "missing_reason" of relation "supplement_evidence" already exists, skipping
+psql:<stdin>:47: NOTICE:  column "evidence_source_ids" of relation "supplement_evidence" already exists, skipping
+psql:<stdin>:47: NOTICE:  column "evidence_linked_files" of relation "supplement_evidence" already exists, skipping
+psql:<stdin>:47: NOTICE:  column "human_evidence_raw" of relation "supplement_evidence" already exists, skipping
+psql:<stdin>:67: NOTICE:  relation "wada_conflict_records" already exists, skipping
+psql:<stdin>:87: NOTICE:  relation "lab_effect_enrichment_records" already exists, skipping
+psql:<stdin>:107: NOTICE:  relation "supplement_human_evidence_flags" already exists, skipping
+psql:<stdin>:128: NOTICE:  relation "thailand_regulatory_records" already exists, skipping
+psql:<stdin>:144: NOTICE:  relation "supplement_studies" already exists, skipping
+psql:<stdin>:154: NOTICE:  relation "supplement_study_subjects" already exists, skipping
+psql:<stdin>:172: NOTICE:  relation "alias_resolution_candidates" already exists, skipping
+psql:<stdin>:191: NOTICE:  relation "pubchem_conflict_records" already exists, skipping
+psql:<stdin>:215: NOTICE:  table "tmp_c272_payload" does not exist, skipping
+psql:<stdin>:665: ERROR:  C-272 CYP rows 3001 statt 3002
+CONTEXT:  PL/pgSQL function inline_code_block line 79 at RAISE

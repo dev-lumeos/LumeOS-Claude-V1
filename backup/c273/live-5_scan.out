@@ -1,0 +1,8 @@
+BEGIN
+CREATE TABLE
+COPY 1
+DELETE 0
+INSERT 0 15
+DO
+COMMIT
+psql:<stdin>:53: NOTICE:  OK C-273 Block5 Scan-Konzept: Roots 7, schema_only 4, Records 15, Medienrechte-Stati 8

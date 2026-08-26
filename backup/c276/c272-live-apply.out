@@ -1,0 +1,56 @@
+BEGIN
+CREATE EXTENSION
+CREATE FUNCTION
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+DO
+DROP TABLE
+CREATE TABLE
+COPY 1
+DELETE 0
+DELETE 0
+DELETE 0
+DELETE 0
+DELETE 0
+DELETE 0
+DELETE 0
+DELETE 0
+DELETE 3001
+DELETE 4617
+DELETE 0
+UPDATE 290
+INSERT 0 30
+UPDATE 290
+INSERT 0 6
+INSERT 0 47
+INSERT 0 3
+INSERT 0 293
+INSERT 0 1061
+INSERT 0 3001
+INSERT 0 4617
+INSERT 0 43
+INSERT 0 47
+INSERT 0 64
+INSERT 0 20
+DO
+COMMIT
+psql:<stdin>:4: NOTICE:  extension "pgcrypto" already exists, skipping
+psql:<stdin>:213: NOTICE:  policy "wada_conflict_records_read" for relation "supplements.wada_conflict_records" does not exist, skipping
+psql:<stdin>:213: NOTICE:  policy "lab_effect_enrichment_records_read" for relation "supplements.lab_effect_enrichment_records" does not exist, skipping
+psql:<stdin>:213: NOTICE:  policy "supplement_human_evidence_flags_read" for relation "supplements.supplement_human_evidence_flags" does not exist, skipping
+psql:<stdin>:213: NOTICE:  policy "thailand_regulatory_records_read" for relation "supplements.thailand_regulatory_records" does not exist, skipping
+psql:<stdin>:213: NOTICE:  policy "supplement_studies_read" for relation "supplements.supplement_studies" does not exist, skipping
+psql:<stdin>:213: NOTICE:  policy "supplement_study_subjects_read" for relation "supplements.supplement_study_subjects" does not exist, skipping
+psql:<stdin>:213: NOTICE:  policy "alias_resolution_candidates_read" for relation "supplements.alias_resolution_candidates" does not exist, skipping
+psql:<stdin>:213: NOTICE:  policy "pubchem_conflict_records_read" for relation "supplements.pubchem_conflict_records" does not exist, skipping
+psql:<stdin>:215: NOTICE:  table "tmp_c272_payload" does not exist, skipping
+psql:<stdin>:665: NOTICE:  OK C-272: WADA note_de 320, scope_note 290, conflicts 6, lab 47/3 mapped, human 293/290 mapped, thailand 1061, cyp 3001, transporters 4617 (not_relevant 4189), studies 43/47 subjects, aliases 64, pubchem 20 true 6

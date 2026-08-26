@@ -1,0 +1,8 @@
+BEGIN
+CREATE TABLE
+COPY 1
+DELETE 0
+INSERT 0 353
+DO
+COMMIT
+psql:<stdin>:80: NOTICE:  OK C-273 Block4 Produktebene: Produkte 50, Marken 120, Hersteller 63, Brand-Index 120, prd_882416d5 Zutaten verknuepft

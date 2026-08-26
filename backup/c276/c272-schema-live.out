@@ -1,0 +1,91 @@
+Schema-Vollstaendigkeit — Datenbank: postgres
+Sollliste: supabase/_pipeline/daten/schema-sollstand.json (von Hand gepflegt)
+
+Tabellen     33/33 vorhanden
+Sichten      4/4 vorhanden
+Funktionen   34/34 vorhanden
+Zeilenschutz 33/33 wie erwartet
+Policies    33/33 Tabellen vollstaendig
+Sichten     4/4 mit security_invoker
+Tabellensp.  10 Tabelle(n) mit Spaltenliste geprueft
+Sichtspalten 1 Sicht(en) mit Spaltenliste geprueft
+Trigger     11/11 vorhanden
+GRANTs      37/37 Objekte wie erwartet
+Policy-Bed. 33/33 Tabellen wie erwartet
+Fremdschl.  58/58 vorhanden
+
+Mindestzeilen:
+  foods                   7140 /    7140  ok
+  food_nutrients        869501 /  869501  ok
+  food_aliases           32845 /   32817  ok
+  food_tags              30797 /   30797  ok
+  nutrient_defs            138 /     138  ok
+  nutrient_reference_values     165 /     138  ok
+  food_categories          518 /     500  ok
+  search_synonyms         4877 /    4800  ok
+  preparation_kinds         11 /      11  ok
+  food_groups               19 /      19  ok
+  foods_portions         23402 /   23000  ok
+  micronutrient_overview_items       8 /       8  ok
+  training.exercises      1416 /    1416  ok
+  training.muscle_groups      95 /      95  ok
+  training.equipment        58 /      58  ok
+  training.exercise_muscles    6588 /    6588  ok
+  training.exercise_catalog_enrichment    1407 /    1407  ok
+  supplements.substance_aliases    1541 /    1132  ok
+  supplements.rule_catalog      64 /      64  ok
+  medical.biomarker_catalog   11676 /   11676  ok
+  medical.biomarker_reference_ranges     560 /     560  ok
+  medical.biomarker_spec_enrichment      51 /      51  ok
+  medical.lab_marker_catalog      66 /      66  ok
+  medical.biomarker_aliases     292 /     292  ok
+  medical.medication_active_substances     498 /      56  ok
+  medical.medication_formulations     453 /     119  ok
+  medical.medication_products     448 /     124  ok
+  supplements.supplement_groups       3 /       3  ok
+  supplements.supplement_categories      23 /      23  ok
+  supplements.supplements     596 /     596  ok
+  supplements.supplement_aliases    2843 /    2413  ok
+  supplements.supplement_lab_effects     225 /     222  ok
+  supplements.supplement_nutrients      17 /      17  ok
+  supplements.supplement_user_texts     446 /     446  ok
+  supplements.supplement_faq    1970 /    1970  ok
+  supplements.supplement_tags     425 /     425  ok
+  supplements.supplement_portions      79 /      79  ok
+  supplements.supplement_safety     290 /     290  ok
+  supplements.supplement_warnings     290 /     290  ok
+  supplements.supplement_wada     320 /     290  ok
+  supplements.supplement_quality     237 /     237  ok
+  supplements.supplement_pharmacology     566 /     566  ok
+  supplements.supplement_dosing     596 /     596  ok
+  supplements.supplement_evidence     596 /     596  ok
+  supplements.supplement_monitoring      46 /      46  ok
+  supplements.supplement_organ_risks    1450 /    1450  ok
+  supplements.supplement_identifiers    1226 /    1226  ok
+  supplements.supplement_regulatory    1119 /    1119  ok
+  supplements.supplement_field_sources    2815 /    2815  ok
+  supplements.supplement_interactions      78 /      78  ok
+  supplements.wada_conflict_records       6 /       6  ok
+  supplements.lab_effect_enrichment_records      47 /      47  ok
+  supplements.supplement_human_evidence_flags     293 /     293  ok
+  supplements.thailand_regulatory_records    1061 /    1061  ok
+  supplements.supplement_studies      43 /      43  ok
+  supplements.supplement_study_subjects      47 /      47  ok
+  supplements.alias_resolution_candidates      64 /      64  ok
+  supplements.pubchem_conflict_records      20 /      20  ok
+  supplements.entity_cyp    3001 /    3001  ok
+  supplements.entity_transporters    4617 /    4617  ok
+  food_nutrients.codes     138 /     138  ok
+  food_nutrients.sources       2 /       2  ok
+  reference_units            0 unpassend
+Fremde Tab. 97/97 vollstaendig
+Fremde Fkt. 34/34 vorhanden
+Medical LOINC-Slug-Eindeutigkeit 0 Abweichungen
+
+Hinweise:
+  · Tabellen: exclusion_presets steht da, aber NICHT in der Sollliste — Liste veraltet oder Ausschuss
+  · Tabellen: exclusion_preset_rules steht da, aber NICHT in der Sollliste — Liste veraltet oder Ausschuss
+  · Tabellen: _sortweight_neu steht da und ist als "nicht erwartet" vermerkt (Hilfstabelle der C-38-Messung, bewusst entfallen)
+  · Sichten: exclusion_preset_matches steht da, aber NICHT in der Sollliste — Liste veraltet oder Ausschuss
+
+SCHEMA VOLLSTAENDIG

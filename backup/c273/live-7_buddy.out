@@ -1,0 +1,8 @@
+BEGIN
+CREATE TABLE
+COPY 1
+DELETE 0
+INSERT 0 2861
+DO
+COMMIT
+psql:<stdin>:66: NOTICE:  OK C-273 Block7 Buddy: Population-Dateien 2508, Semantik 14, Beispiele 46, Capabilities 23, Graph 64/140 und Readiness 66

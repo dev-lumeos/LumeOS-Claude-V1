@@ -1,0 +1,7 @@
+[kennungen] 239 Substanzen mit CID/Formel/InChIKey geprueft
+[kennungen] 19 bekannte PubChem-Konflikt-Entity(s) aus supplements.pubchem_conflict_records, davon 6 echte Konflikte
+[kennungen] 3 Konfliktgruppe(n)
+  GELB SAME_UNII_DIFFERENT_CID_FORMULA_INCHIKEY: sub_2c308411e9 Caffeine (anhydrous) | sub_98d523f968 Caffeine (fat-loss context cross-ref)
+  GELB SAME_UNII_DIFFERENT_CID_FORMULA_INCHIKEY: sub_6764c8891c Vitamin K2 (menaquinone-7) | sub_0b5c620106 Vitamin K2 (menaquinone-4)
+  GELB SAME_UNII_DIFFERENT_CID_FORMULA_INCHIKEY: sub_b7423d9551 Chromium (as chromium picolinate) | sub_03e86b16d2 Chromium picolinate (metabolic cross-ref)
+[kennungen] 3 bekannte C-267-Konfliktgruppe(n), 0 neue.

@@ -1,0 +1,39 @@
+BEGIN
+CREATE SCHEMA
+CREATE EXTENSION
+CREATE FUNCTION
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+DO
+DO
+COMMIT
+psql:/tmp/273_wissen_schema.sql:7: NOTICE:  extension "pgcrypto" already exists, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  policy "rule_engine_rules_service_role_all" for relation "wissen.rule_engine_rules" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  trigger "rule_engine_rules_touch_updated_at" for relation "wissen.rule_engine_rules" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  policy "rule_engine_field_specs_service_role_all" for relation "wissen.rule_engine_field_specs" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  trigger "rule_engine_field_specs_touch_updated_at" for relation "wissen.rule_engine_field_specs" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  policy "rule_trait_mappings_service_role_all" for relation "wissen.rule_trait_mappings" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  trigger "rule_trait_mappings_touch_updated_at" for relation "wissen.rule_trait_mappings" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  policy "evidence_register_entries_service_role_all" for relation "wissen.evidence_register_entries" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  trigger "evidence_register_entries_touch_updated_at" for relation "wissen.evidence_register_entries" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  policy "knowledge_gap_records_service_role_all" for relation "wissen.knowledge_gap_records" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  trigger "knowledge_gap_records_touch_updated_at" for relation "wissen.knowledge_gap_records" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  policy "product_entities_service_role_all" for relation "wissen.product_entities" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  trigger "product_entities_touch_updated_at" for relation "wissen.product_entities" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  policy "vision_contract_records_service_role_all" for relation "wissen.vision_contract_records" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  trigger "vision_contract_records_touch_updated_at" for relation "wissen.vision_contract_records" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  policy "travel_medication_records_service_role_all" for relation "wissen.travel_medication_records" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  trigger "travel_medication_records_touch_updated_at" for relation "wissen.travel_medication_records" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  policy "buddy_knowledge_records_service_role_all" for relation "wissen.buddy_knowledge_records" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  trigger "buddy_knowledge_records_touch_updated_at" for relation "wissen.buddy_knowledge_records" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  policy "community_records_service_role_all" for relation "wissen.community_records" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:195: NOTICE:  trigger "community_records_touch_updated_at" for relation "wissen.community_records" does not exist, skipping
+psql:/tmp/273_wissen_schema.sql:220: NOTICE:  OK C-273 Schema wissen: 10 Tabellen, service_role-only, keine anon/authenticated Grants

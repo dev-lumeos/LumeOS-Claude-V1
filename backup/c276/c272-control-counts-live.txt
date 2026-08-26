@@ -1,0 +1,23 @@
+CREATE FUNCTION
+              table_name               | row_count 
+---------------------------------------+-----------
+ goals.body_measurements               | 362
+ medical.lab_result_values             | 280
+ medical.medication_active_substances  | 498
+ medical.medication_formulations       | 453
+ medical.medication_products           | 448
+ nutrition.foods                       | 7140
+ nutrition.meal_items                  | 9051
+ nutrition.meals                       | 2895
+ nutrition.nutrient_defs               | 138
+ nutrition.water_logs                  | 1263
+ recovery.checkins                     | 370
+ recovery.modality_log                 | 178
+ recovery.scores                       | 370
+ supplements.intake_logs               | 744
+ supplements.substance_aliases         | 1541
+ supplements.substance_catalog         | ABSENT
+ supplements.substance_catalog_sources | ABSENT
+ supplements.substance_lab_effects     | ABSENT
+ training.workout_sets                 | 238
+(19 rows)

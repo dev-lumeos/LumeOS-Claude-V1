@@ -1,0 +1,14 @@
+--- postgres ---
+slug           |        name_en         |      source      | has_parent | im_katalog | has_description | has_grade | parent_slug |                                   description                                    
+-------------------------+------------------------+------------------+------------+------------+-----------------+-----------+-------------+----------------------------------------------------------------------------------
+ f05_boldenone_acetate   | Boldenone Acetate      | kimi_performance | f          | t          | t               | t         |             | Boldenone (Δ1-testosterone) with the short acetate ester. Same parent steroid as
+ f05_boldenone_cypionate | Boldenone Cypionate    | kimi_performance | f          | t          | t               | t         |             | Boldenone with the cypionate (cyclopentylpropionate) ester — the same ester as i
+ sub_af6dd9482e          | Boldenone undecylenate | kimi_performance | f          | t          | t               | t         |             | Boldenone undecylenate is a performance- or hormone-related substance; the catal
+(3 rows)
+--- lumeos_c277_probe ---
+slug           |        name_en         |      source      | has_parent | im_katalog | has_description | has_grade |  parent_slug   |                                   description                                    
+-------------------------+------------------------+------------------+------------+------------+-----------------+-----------+----------------+----------------------------------------------------------------------------------
+ f05_boldenone_acetate   | Boldenone Acetate      | kimi_performance | t          | f          | t               | t         | sub_af6dd9482e | Boldenone (Δ1-testosterone) with the short acetate ester. Same parent steroid as
+ f05_boldenone_cypionate | Boldenone Cypionate    | kimi_performance | t          | f          | t               | t         | sub_af6dd9482e | Boldenone with the cypionate (cyclopentylpropionate) ester — the same ester as i
+ sub_af6dd9482e          | Boldenone undecylenate | kimi_performance | f          | t          | t               | t         |                | Boldenone undecylenate is a hormone-, performance- or metabolism-related substan
+(3 rows)

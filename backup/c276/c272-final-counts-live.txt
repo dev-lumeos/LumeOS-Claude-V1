@@ -1,0 +1,22 @@
+metric              | value 
+----------------------------------+-------
+ alias_resolution_candidates      | 64
+ entity_cyp                       | 3001
+ entity_transporters              | 4617
+ entity_transporters_not_relevant | 4189
+ human_evidence_mapped            | 290
+ im_katalog_true                  | 412
+ lab_effect_enrichment_records    | 47
+ lab_effect_mapped                | 3
+ pubchem_conflict_records         | 20
+ pubchem_true_conflicts           | 6
+ supplement_human_evidence_flags  | 293
+ supplement_studies               | 43
+ supplement_study_subjects        | 47
+ supplement_wada_note_de          | 320
+ supplement_wada_scope_note_de    | 290
+ supplements                      | 596
+ thailand_regulatory_records      | 1061
+ visible_children                 | 0
+ wada_conflict_records            | 6
+(19 rows)

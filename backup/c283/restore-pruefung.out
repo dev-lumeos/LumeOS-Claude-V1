@@ -1,0 +1,9 @@
+RESTORE
+pg_restore -U postgres --role=supabase_admin --no-owner --no-privileges
+20260826_172417_c283_vor_live.dump -> lumeos_c283_restore_check
+
+RESTORE_PRUEFUNG
+auth_users=7
+medication_active_substances=498
+user_medications=2
+medical_policies=31

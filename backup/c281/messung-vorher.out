@@ -1,0 +1,165 @@
+columns_dosing
+id	uuid
+supplement_id	uuid
+status	text
+official_label_dose	jsonb
+guideline_dose	jsonb
+studied_dose_ranges	jsonb
+anecdotal_dose_ranges	jsonb
+upper_limit	jsonb
+dose_unit	text
+usage_hint_de	text
+usage_hint_en	text
+usage_hint_th	text
+source	text
+created_at	timestamp with time zone
+updated_at	timestamp with time zone
+frequency_de	text
+frequency_en	text
+frequency_th	text
+duration_studied_de	text
+duration_studied_en	text
+duration_studied_th	text
+provenance_note	text
+integration_note	text
+sources	jsonb
+
+---
+
+columns_lab
+id	uuid
+supplement_id	uuid
+status	text
+lab_marker_id	text
+loinc_code	text
+effect_type	text
+analyte_de	text
+analyte_en	text
+analyte_th	text
+direction	text
+mechanism_de	text
+mechanism_en	text
+mechanism_th	text
+clinical_consequence_de	text
+clinical_consequence_en	text
+clinical_consequence_th	text
+evidence	text
+monitoring_link	text
+source	text
+created_at	timestamp with time zone
+updated_at	timestamp with time zone
+effect_class	text
+magnitude_context	text
+clinical_relevance	text
+source_ids	ARRAY
+enrichment_raw	jsonb
+
+---
+
+columns_wada
+id	uuid
+supplement_id	uuid
+status	text
+wada_status	text
+wada_category	text
+detection_time_days	numeric
+note_de	text
+note_en	text
+note_th	text
+source	text
+created_at	timestamp with time zone
+updated_at	timestamp with time zone
+scope_class	text
+scope_note_de	text
+scope_note_en	text
+scope_note_th	text
+sports_scope	text
+tue_relevance	text
+list_year	text
+last_verified	date
+sources	jsonb
+raw	jsonb
+
+---
+
+columns_conflicts
+id	uuid
+conflict_id	text
+entity_id	text
+canonical_name	text
+field_name	text
+current_value	text
+corrected_value	text
+category	text
+reason	text
+list_year	text
+last_verified	date
+source_url	text
+application_note	text
+raw	jsonb
+source	text
+created_at	timestamp with time zone
+updated_at	timestamp with time zone
+
+---
+
+child_rows
+supplement_dosing	101
+supplement_lab_effects	48
+supplement_user_texts	35
+supplement_wada	32
+
+---
+
+wada_parent_own
+0	18
+
+---
+
+wada_uniform
+1	17	Ashwagandha (KSM-66) [not_prohibited:NULL]; Calcium [not_prohibited:NULL]; Collagen [not_prohibited:NULL]; Iron [not_prohibited:NULL]; Lion's Mane [not_prohibited:NULL]; Magnesium [not_prohibited:NULL]; NAC (N-Acetyl Cysteine) [not_prohibited:NULL]; Tongkat Ali [not_prohibited:NULL]; Vitamin A [not_prohibited:NULL]; Vitamin B12 [not_prohibited:NULL]; Vitamin B6 [not_prohibited:NULL]; Vitamin C [not_prohibited:NULL]; Vitamin D3 [not_prohibited:NULL]; Vitamin E [not_prohibited:NULL]; Vitamin K2 (MK-7) [not_prohibited:NULL]; Whey Protein [not_prohibited:NULL]; Zinc [not_prohibited:NULL]
+2	1	Caffeine [monitored:NULL | not_prohibited:NULL]
+
+---
+
+dosing_uniform
+1	53	Anastrozole (PCT/estrogen control), Apigenin, ATD, Bacopa monnieri (standardized bacosides), Boldenone undecylenate, Cabergoline, Cardarine (GW501516), Clomiphene citrate, Collagen, Copper (as copper gluconate), Dandelion Root, DGL Licorice, DHEA, Epistane (Havoc), Exemestane, Furosemide, Ginkgo biloba (EGb 761), Glycerol (hyperhydration), Grape Seed Extract (OPC), Humatrope (somatropin), Hydrochlorothiazide, Insulin Aspart, Insulin Degludec, Insulin Detemir, Insulin Glargine, Insulin Glulisine, Insulin Lispro, Iodine (as potassium iodide), Letrozole, Lion's Mane, Melatonin, NADH, Omnitrope (somatropin), Ostarine (MK-2866, enobosarm), Panax ginseng (Korean red ginseng), Potassium (supplemental), PQQ, Pramipexole, R-Lipoic Acid (R-alpha-lipoic acid), Regular Insulin (short-acting human insulin), Rhodiola rosea (3% rosavins/1% salidroside), S-23, S1 (SARM), Saizen (somatropin), Selenium (as selenomethionine), Shilajit, St. John's Wort, Superdrol (methasterone), Tamoxifen citrate, Taurine, TB-500 (Thymosin beta-4 fragment), Vitamin A, Winstrol Depot (Stanozolol injectable)
+2	8	Calcium, NAC (N-Acetyl Cysteine), Tongkat Ali, Vitamin B6, Vitamin D3, Vitamin E, Vitamin K2 (MK-7), Whey Protein
+3	5	Ashwagandha (KSM-66), Iron, Vitamin B12, Vitamin C, Zinc
+4	1	Caffeine
+8	1	Magnesium
+
+---
+
+lab_uniform
+1	46	Ashwagandha (KSM-66):TSH, Ashwagandha (KSM-66):ALT/AST, Ashwagandha (KSM-66):ALT/AST, Caffeine:Cortisol, Caffeine:Blood pressure/HR, Caffeine:Blood pressure/HR, Calcium:Urinary calcium, Calcium:PTH, Calcium:Serum/urinary calcium, Calcium:Serum calcium, Collagen:(none), Iron:CBC/MCV, Iron:Ferritin/TSAT/CBC, Iron:Ferritin, Iron:Fecal occult blood (guaiac), Iron:Ferritin/TSAT/CBC, Iron:CBC/MCV, Iron:Ferritin/TSAT/CBC, Iron:Ferritin/TSAT/CBC, Iron:TSAT, Magnesium:eGFR, Magnesium:Serum Mg, NAC (N-Acetyl Cysteine):Gesamt-Homocystein (Plasma), NAC (N-Acetyl Cysteine):(none routine), Tongkat Ali:Total/free testosterone, Tongkat Ali:Heavy metals (product), Tongkat Ali:Total/free testosterone, Vitamin A:LFTs, Vitamin A:Serum retinol, Vitamin A:LFTs, Vitamin B6:PLP (vitamin B6 status), Vitamin B6:ALT/AST (some assays), Vitamin B6:ALT/AST (some assays), Vitamin C:Urinary oxalate, Vitamin C:Blood glucose (point-of-care meters), Vitamin C:Fecal occult blood (guaiac), Vitamin D3:PTH, Vitamin D3:Serum calcium / calciumuria, Vitamin D3:25(OH)D, Vitamin E:INR, Vitamin E:(bleeding time), Vitamin K2 (MK-7):INR (warfarin), Vitamin K2 (MK-7):INR, Zinc:Serum zinc, Zinc:Serum copper, Zinc:Serum copper / ceruloplasmin
+2	1	Magnesium:Serum Mg
+
+---
+
+caffeine_wada
+Caffeine	Caffeine (anhydrous)	monitored	
+Caffeine	Caffeine (fat-loss context cross-ref)	not_prohibited
+
+---
+
+magnesium_dosing
+Magnesium	Magnesium		{"unit": "mg/day", "basis": "per_day (supplemental only)", "value": 250}			
+Magnesium	Magnesium chloride	{"value": null, "source_ids": [], "missing_reason": "No validated clinical guideline dose (no position stand/clinical practice guideline with a specific supplemental dose)", "provenance_type": "CLINICAL_GUIDELINE"}		mg/day elemental Mg	once daily (typical trial regimen; acute ergogenic doses pre-exercise)	weeks-months
+Magnesium	Magnesium citrate	{"value": null, "source_ids": [], "missing_reason": "No validated clinical guideline dose (no position stand/clinical practice guideline with a specific supplemental dose)", "provenance_type": "CLINICAL_GUIDELINE"}		mg/day elemental Mg	once daily (typical trial regimen; acute ergogenic doses pre-exercise)	weeks-months
+Magnesium	Magnesium glycinate/bisglycinate	{"value": null, "source_ids": [], "missing_reason": "No validated clinical guideline dose (no position stand/clinical practice guideline with a specific supplemental dose)", "provenance_type": "CLINICAL_GUIDELINE"}		mg/day elemental Mg	once daily (typical trial regimen; acute ergogenic doses pre-exercise)	weeks-months
+Magnesium	Magnesium L-threonate	{"value": null, "source_ids": [], "missing_reason": "No validated clinical guideline dose (no position stand/clinical practice guideline with a specific supplemental dose)", "provenance_type": "CLINICAL_GUIDELINE"}		mg/day compound (~118-176 mg elemental Mg)	once daily (typical trial regimen; acute ergogenic doses pre-exercise)	6-12 weeks
+Magnesium	Magnesium malate	{"value": null, "source_ids": [], "missing_reason": "No validated clinical guideline dose (no position stand/clinical practice guideline with a specific supplemental dose)", "provenance_type": "CLINICAL_GUIDELINE"}		mg/day elemental Mg	once daily (typical trial regimen; acute ergogenic doses pre-exercise)	weeks-months
+Magnesium	Magnesium oxide	{"value": null, "source_ids": [], "missing_reason": "No validated clinical guideline dose (no position stand/clinical practice guideline with a specific supplemental dose)", "provenance_type": "CLINICAL_GUIDELINE"}		mg/day elemental Mg	once daily (typical trial regimen; acute ergogenic doses pre-exercise)	weeks-months
+Magnesium	Magnesium taurate	{"value": null, "source_ids": [], "missing_reason": "No validated clinical guideline dose (no position stand/clinical practice guideline with a specific supplemental dose)", "provenance_type": "CLINICAL_GUIDELINE"}		mg/day elemental Mg	once daily (typical trial regimen; acute ergogenic doses pre-exercise)	weeks-months
+
+---
+
+wada_contradictions
+Phenibut	prohibited	not on WADA list (not prohibited)	kimi:wada_scope_enrichment
+Tianeptine ('gas station heroin')	prohibited	not prohibited	kimi:wada_scope_enrichment
+
+---
+
+im_katalog
+412	0

@@ -1,0 +1,3976 @@
+> lumeos-claude-v1@ gate D:\GitHub\LumeOS-Claude-V1
+> node tools/encoding-pruefen.mjs && node tools/gruppenlabel-pruefen.mjs && node tools/schemafreigabe-pruefen.mjs && node tools/nummern-pruefen.mjs && node tools/i18n-pruefen.mjs && node tools/svgpfade-pruefen.mjs && node tools/kataloganker-pruefen.mjs && node tools/sprachrueckfall-pruefen.mjs && node tools/supplement-kern-dubletten-pruefen.mjs && node tools/supplement-kennungen-pruefen.mjs && turbo run typecheck test build && node tools/serverimport-pruefen.mjs
+
+[encoding] 19973 Dateien geprueft, sauber. (15 mit Marke "encoding-pruefung:absicht" freigestellt)
+[encoding] Hinweis: 16 UTF-8-BOM in 16 Datei(en) —
+[encoding] unerwuenscht, aber kein Schaden. Kein Abbruch.
+             .skua/cache/validate-claude-final.mjs
+             .skua/cache/validate-claude-fixed.mjs
+             .skua/cache/validate-claude.mjs
+             .skua/cache/validate-terminal.mjs
+             .skua/cache/validate-terminal2.mjs
+             .skua-install-audit/changes.md
+             apps/web/src/app/nutrition/foods/page.tsx
+             backup/rescue/2026-08-01_verwaiste_tabellen.sql
+             docs/BrainstormDocs/Supplements/supplements_DATA.md
+             docs/BrainstormDocs/Supplements/supplements_DOD.md
+             docs/BrainstormDocs/Supplements/supplements_PROTOCOLS.md
+             docs/BrainstormDocs/Supplements/supplements_RISKS.md
+             … und 4 weitere
+[gruppenlabel] 118 Labels in 10 Gruppen/Faltungen geprueft, sauber.
+[schemafreigabe] 9 config-Schemata geprueft; 7 Anwendungsschemata freigegeben.
+[nummern] TODO.md: 244 offen, 0 in Arbeit (244 Punkte). ERLEDIGT.md: 322. Keine Dublette.
+[nummern] Hoechste vergebene Nummer je Reihe: A-50 · B-30 · C-277 · D-20 · E-19 · F-9 · G-189 · GO-24
+[i18n] 132 Schluessel je Pflichtsprache (de, en), vollstaendig.
+[i18n] 103 Verwendungen im Code geprueft, alle vorhanden.
+[i18n] th: 0 von 132 belegt — 132 offen (vorgesehen, nicht erzwungen).
+Pfade insgesamt: 160
+vom Browser bemaengelt: 0
+[kataloganker] 3 Ankerstellen geprueft, 0 typfalsche Verweise.
+[sprachrueckfall] 12 Abfragen auf 14 riskante Tabellen geprueft, 0 ohne Rueckfall.
+[supplement-kern] 412 Top-Level-Eintraege geprueft
+[supplement-kern] 0 sichtbare Unterformen
+[supplement-kern] 4 Kerndubletten-Gruppe(n), davon 4 erlaubt, 0 unbekannt
+[supplement-kern] sauber, Bericht: backup\c276\supplement-kern-dubletten.json
+[kennungen] 239 Substanzen mit CID/Formel/InChIKey geprueft
+[kennungen] 3 Konfliktgruppe(n)
+  GELB SAME_UNII_DIFFERENT_CID_FORMULA_INCHIKEY: sub_2c308411e9 Caffeine (anhydrous) | sub_98d523f968 Caffeine (fat-loss context cross-ref)
+  GELB SAME_UNII_DIFFERENT_CID_FORMULA_INCHIKEY: sub_6764c8891c Vitamin K2 (menaquinone-7) | sub_0b5c620106 Vitamin K2 (menaquinone-4)
+  GELB SAME_UNII_DIFFERENT_CID_FORMULA_INCHIKEY: sub_b7423d9551 Chromium (as chromium picolinate) | sub_03e86b16d2 Chromium picolinate (metabolic cross-ref)
+[kennungen] 3 bekannte C-267-Konfliktgruppe(n), 0 neue.
+
+   • Packages in scope: @lumeos/admin, @lumeos/coach, @lumeos/nutrition-api, @lumeos/shared, @lumeos/ui, @lumeos/web
+   • Running typecheck, test, build in 6 packages
+   • Remote caching disabled
+
+@lumeos/admin:test: cache hit, replaying logs 6103b480f5e04422
+@lumeos/admin:test: 
+@lumeos/admin:test: > @lumeos/admin@0.1.0 test D:\GitHub\LumeOS-Claude-V1\apps\admin
+@lumeos/web:test: cache hit, replaying logs 507957d24d7c5fd6
+@lumeos/admin:test: > tsx --test "src/**/__tests__/*.test.ts"
+@lumeos/admin:test: 
+@lumeos/web:test: 
+@lumeos/admin:test: TAP version 13
+@lumeos/web:test: > @lumeos/web@0.1.0 test D:\GitHub\LumeOS-Claude-V1\apps\web
+@lumeos/admin:test: # Subtest: admin role value matches what 061 checks in the database
+@lumeos/web:test: > tsx --test "src/**/__tests__/*.test.ts"
+@lumeos/admin:test: ok 1 - admin role value matches what 061 checks in the database
+@lumeos/web:test: 
+@lumeos/web:test: TAP version 13
+@lumeos/web:test: # Subtest: doppelte Kodierung wird erkannt
+@lumeos/web:test: ok 1 - doppelte Kodierung wird erkannt
+@lumeos/web:test:   ---
+@lumeos/admin:test:   ---
+@lumeos/admin:test:   duration_ms: 0.7622
+@lumeos/admin:test:   type: 'test'
+@lumeos/admin:test:   ...
+@lumeos/admin:test: # Subtest: app_metadata with role admin is the only way in
+@lumeos/admin:test: ok 2 - app_metadata with role admin is the only way in
+@lumeos/admin:test:   ---
+@lumeos/web:test:   duration_ms: 980.2273
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein doppelt kodiertes Dreibyte-Zeichen wird erkannt
+@lumeos/admin:test:   duration_ms: 0.1992
+@lumeos/admin:test:   type: 'test'
+@lumeos/admin:test:   ...
+@lumeos/web:test: ok 2 - ein doppelt kodiertes Dreibyte-Zeichen wird erkannt
+@lumeos/web:test:   ---
+@lumeos/admin:test: # Subtest: default is not admin — unknown never becomes allowed
+@lumeos/admin:test: ok 3 - default is not admin — unknown never becomes allowed
+@lumeos/admin:test:   ---
+@lumeos/web:test:   duration_ms: 154.7309
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/admin:test:   duration_ms: 0.1397
+@lumeos/admin:test:   type: 'test'
+@lumeos/admin:test:   ...
+@lumeos/web:test: # Subtest: ein echtes a-Zirkumflex schlaegt nicht an
+@lumeos/web:test: ok 3 - ein echtes a-Zirkumflex schlaegt nicht an
+@lumeos/web:test:   ---
+@lumeos/admin:test: # Subtest: a non-string role never grants admin
+@lumeos/admin:test: ok 4 - a non-string role never grants admin
+@lumeos/admin:test:   ---
+@lumeos/web:test:   duration_ms: 104.8162
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/admin:test:   duration_ms: 0.091
+@lumeos/admin:test:   type: 'test'
+@lumeos/admin:test:   ...
+@lumeos/admin:test: # Subtest: user_metadata style payloads are not accepted as app_metadata
+@lumeos/admin:test: ok 5 - user_metadata style payloads are not accepted as app_metadata
+@lumeos/admin:test:   ---
+@lumeos/web:test: # Subtest: UTF-16 wird erkannt, nicht nur der UTF-8-BOM
+@lumeos/web:test: ok 4 - UTF-16 wird erkannt, nicht nur der UTF-8-BOM
+@lumeos/admin:test:   duration_ms: 0.1738
+@lumeos/admin:test:   type: 'test'
+@lumeos/web:test:   ---
+@lumeos/admin:test:   ...
+@lumeos/admin:test: # Subtest: builds read-only curation rpc arguments with normalized defaults
+@lumeos/admin:test: ok 6 - builds read-only curation rpc arguments with normalized defaults
+@lumeos/admin:test:   ---
+@lumeos/web:test:   duration_ms: 704.4807
+@lumeos/web:test:   type: 'test'
+@lumeos/admin:test:   duration_ms: 0.7783
+@lumeos/admin:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: UTF-8-BOM wird gemeldet, bricht aber nicht ab
+@lumeos/admin:test:   ...
+@lumeos/admin:test: # Subtest: builds local-only curation persistence tables without mutating foods
+@lumeos/admin:test: ok 7 - builds local-only curation persistence tables without mutating foods
+@lumeos/admin:test:   ---
+@lumeos/web:test: ok 5 - UTF-8-BOM wird gemeldet, bricht aber nicht ab
+@lumeos/web:test:   ---
+@lumeos/admin:test:   duration_ms: 0.3694
+@lumeos/web:test:   duration_ms: 320.8474
+@lumeos/web:test:   type: 'test'
+@lumeos/admin:test:   type: 'test'
+@lumeos/admin:test:   ...
+@lumeos/admin:test: 1..7
+@lumeos/admin:test: # tests 7
+@lumeos/admin:test: # suites 0
+@lumeos/admin:test: # pass 7
+@lumeos/admin:test: # fail 0
+@lumeos/admin:test: # cancelled 0
+@lumeos/admin:test: # skipped 0
+@lumeos/admin:test: # todo 0
+@lumeos/admin:test: # duration_ms 614.8331
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein BOM verdeckt keinen echten Fehler in derselben Datei
+@lumeos/web:test: ok 6 - ein BOM verdeckt keinen echten Fehler in derselben Datei
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 72.569
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ungueltiges UTF-8 wird erkannt
+@lumeos/web:test: ok 7 - ungueltiges UTF-8 wird erkannt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 74.389
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das Ersetzungszeichen wird erkannt
+@lumeos/web:test: ok 8 - das Ersetzungszeichen wird erkannt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 79.3204
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: echte Umlaute schlagen NICHT an
+@lumeos/web:test: ok 9 - echte Umlaute schlagen NICHT an
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 73.0124
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein echtes A-Tilde ohne Folgezeichen schlaegt nicht an
+@lumeos/web:test: ok 10 - ein echtes A-Tilde ohne Folgezeichen schlaegt nicht an
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 74.1545
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: leeres Verzeichnis ist sauber
+@lumeos/web:test: ok 11 - leeres Verzeichnis ist sauber
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 76.2623
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Woche 1 ist die erste — Tag 0 zählt nicht als Woche 0
+@lumeos/web:test: ok 12 - Woche 1 ist die erste — Tag 0 zählt nicht als Woche 0
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.1156
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Wochenwechsel liegt nach sieben Tagen
+@lumeos/web:test: ok 13 - der Wochenwechsel liegt nach sieben Tagen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2594
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die echte Phase am Stichtag 2026-08-20
+@lumeos/web:test: ok 14 - die echte Phase am Stichtag 2026-08-20
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1736
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das tatsächliche Ende schlägt das geplante
+@lumeos/web:test: ok 15 - das tatsächliche Ende schlägt das geplante
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1258
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Enddatum gibt es keine Restdauer — und keine erfundene
+@lumeos/web:test: ok 16 - ohne Enddatum gibt es keine Restdauer — und keine erfundene
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1002
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Startdatum bleibt alles leer
+@lumeos/web:test: ok 17 - ohne Startdatum bleibt alles leer
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1028
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: eine künftig beginnende Phase ergibt keine Woche
+@lumeos/web:test: ok 18 - eine künftig beginnende Phase ergibt keine Woche
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0956
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Monatswechsel wird nicht verzählt
+@lumeos/web:test: ok 19 - der Monatswechsel wird nicht verzählt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2258
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Zaehlung geht ueber alle vier Ebenen
+@lumeos/web:test: ok 20 - die Zaehlung geht ueber alle vier Ebenen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7521
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Stand von dev: 3 Wochen, 21 Tage — nicht 6 und 42
+@lumeos/web:test: ok 21 - der Stand von dev: 3 Wochen, 21 Tage — nicht 6 und 42
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1417
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Wochen zaehlt nichts — und wirft nicht
+@lumeos/web:test: ok 22 - ohne Wochen zaehlt nichts — und wirft nicht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4424
+@lumeos/web:test:   type: 'test'
+@lumeos/nutrition-api:build: cache hit, replaying logs f8e981441648a590
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ungleich gefuellte Tage werden einzeln gezaehlt
+@lumeos/web:test: ok 23 - ungleich gefuellte Tage werden einzeln gezaehlt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0847
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Zahl je Flaeche stimmt mit dem Bericht ueberein
+@lumeos/web:test: ok 24 - die Zahl je Flaeche stimmt mit dem Bericht ueberein
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.7282
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/nutrition-api:build: 
+@lumeos/nutrition-api:build: > @lumeos/nutrition-api@0.1.0 build D:\GitHub\LumeOS-Claude-V1\services\nutrition-api
+@lumeos/web:test: # Subtest: die Summe je Flaeche ergibt genau 96
+@lumeos/web:test: ok 25 - die Summe je Flaeche ergibt genau 96
+@lumeos/web:test:   ---
+@lumeos/nutrition-api:build: > tsc
+@lumeos/nutrition-api:build: 
+@lumeos/web:test:   duration_ms: 0.1812
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jede ID der Karte ist eingeordnet
+@lumeos/web:test: ok 26 - jede ID der Karte ist eingeordnet
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.6983
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Einordnung erfindet keine IDs
+@lumeos/coach:test: cache hit, replaying logs 71755ae969632ee9
+@lumeos/web:test: ok 27 - die Einordnung erfindet keine IDs
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3106
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jede Recovery-Zuordnung zeigt auf eine Gruppe, kein Teilstueck
+@lumeos/web:test: ok 28 - jede Recovery-Zuordnung zeigt auf eine Gruppe, kein Teilstueck
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4618
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: C-73 fuehrt 96 Namen und 89 Beziehungen
+@lumeos/web:test: ok 29 - C-73 fuehrt 96 Namen und 89 Beziehungen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.1657
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jede der 96 Gruppen hat eine Flaeche
+@lumeos/web:test: ok 30 - jede der 96 Gruppen hat eine Flaeche
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7142
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jedes Flaechenziel gibt es in der Karte wirklich
+@lumeos/web:test: ok 31 - jedes Flaechenziel gibt es in der Karte wirklich
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3842
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Zuordnung erfindet keine Muskelnamen
+@lumeos/web:test: ok 32 - die Zuordnung erfindet keine Muskelnamen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.284
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: sechs Formen bekommen nie Farbe
+@lumeos/web:test: ok 33 - sechs Formen bekommen nie Farbe
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2053
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: verdichtet wird gemittelt, nicht maximiert
+@lumeos/web:test: ok 34 - verdichtet wird gemittelt, nicht maximiert
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1585
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: unbekannte Namen fallen weg statt falsch zu landen
+@lumeos/web:test: ok 35 - unbekannte Namen fallen weg statt falsch zu landen
+@lumeos/web:test:   ---
+@lumeos/coach:test: 
+@lumeos/coach:test: > @lumeos/coach@0.1.0 test D:\GitHub\LumeOS-Claude-V1\apps\coach
+@lumeos/web:test:   duration_ms: 0.057
+@lumeos/web:test:   type: 'test'
+@lumeos/coach:test: > tsx --test "src/**/__tests__/*.test.ts"
+@lumeos/coach:test: 
+@lumeos/coach:test: TAP version 13
+@lumeos/coach:test: # Subtest: unauffaelliger Check-in liefert keine Befunde
+@lumeos/coach:test: ok 1 - unauffaelliger Check-in liefert keine Befunde
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Klick trennt Flaeche in Gruppen und Muskeln auf
+@lumeos/web:test: ok 36 - der Klick trennt Flaeche in Gruppen und Muskeln auf
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1894
+@lumeos/coach:test:   ---
+@lumeos/coach:test:   duration_ms: 0.743
+@lumeos/web:test:   type: 'test'
+@lumeos/coach:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/coach:test:   ...
+@lumeos/coach:test: # Subtest: Gewichtsdelta ueber 1,5 kg wird als Zahl benannt, nicht bewertet
+@lumeos/web:test: # Subtest: jede faerbbare Flaeche traegt mindestens einen Muskel
+@lumeos/web:test: ok 37 - jede faerbbare Flaeche traegt mindestens einen Muskel
+@lumeos/coach:test: ok 2 - Gewichtsdelta ueber 1,5 kg wird als Zahl benannt, nicht bewertet
+@lumeos/coach:test:   ---
+@lumeos/web:test:   ---
+@lumeos/coach:test:   duration_ms: 0.3196
+@lumeos/coach:test:   type: 'test'
+@lumeos/coach:test:   ...
+@lumeos/coach:test: # Subtest: Energie und Schlaf an der Schwelle werden gemeldet
+@lumeos/web:test:   duration_ms: 0.3573
+@lumeos/web:test:   type: 'test'
+@lumeos/coach:test: ok 3 - Energie und Schlaf an der Schwelle werden gemeldet
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jedes Recovery-Kuerzel steht in der Zuordnung
+@lumeos/web:test: ok 38 - jedes Recovery-Kuerzel steht in der Zuordnung
+@lumeos/coach:test:   ---
+@lumeos/coach:test:   duration_ms: 0.6309
+@lumeos/coach:test:   type: 'test'
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.9218
+@lumeos/coach:test:   ...
+@lumeos/coach:test: # Subtest: fehlende Werte erzeugen keine Befunde — fehlend ist nicht 0
+@lumeos/coach:test: ok 4 - fehlende Werte erzeugen keine Befunde — fehlend ist nicht 0
+@lumeos/coach:test:   ---
+@lumeos/coach:test:   duration_ms: 0.1087
+@lumeos/web:test:   type: 'test'
+@lumeos/coach:test:   type: 'test'
+@lumeos/coach:test:   ...
+@lumeos/coach:test: 1..4
+@lumeos/coach:test: # tests 4
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jede zugeordnete ID gibt es in der Karte wirklich
+@lumeos/coach:test: # suites 0
+@lumeos/web:test: ok 39 - jede zugeordnete ID gibt es in der Karte wirklich
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1823
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Rueckrichtung trifft wieder ein gueltiges Kuerzel
+@lumeos/coach:test: # pass 4
+@lumeos/coach:test: # fail 0
+@lumeos/coach:test: # cancelled 0
+@lumeos/web:test: ok 40 - die Rueckrichtung trifft wieder ein gueltiges Kuerzel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1515
+@lumeos/coach:test: # skipped 0
+@lumeos/coach:test: # todo 0
+@lumeos/coach:test: # duration_ms 215.4804
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Luecken sind benannt, nicht stillschweigend
+@lumeos/web:test: ok 41 - die Luecken sind benannt, nicht stillschweigend
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4518
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: alle 18 Recovery-Kuerzel bis auf die benannte Luecke landen auf der Karte
+@lumeos/web:test: ok 42 - alle 18 Recovery-Kuerzel bis auf die benannte Luecke landen auf der Karte
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2728
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Bereitschaft wird zu Ermuedung umgedreht
+@lumeos/web:test: ok 43 - Bereitschaft wird zu Ermuedung umgedreht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0743
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: beide Deltoid-Kuerzel treffen dieselbe Gruppe, der schlechtere Wert gewinnt
+@lumeos/web:test: ok 44 - beide Deltoid-Kuerzel treffen dieselbe Gruppe, der schlechtere Wert gewinnt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0611
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: nicht darstellbare Kuerzel fallen weg statt falsch zu landen
+@lumeos/web:test: ok 45 - nicht darstellbare Kuerzel fallen weg statt falsch zu landen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0634
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Ruecken landet auf den Bindestrich-Gruppen der Karte
+@lumeos/web:test: ok 46 - der Ruecken landet auf den Bindestrich-Gruppen der Karte
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1758
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Muskelkater behaelt seine Richtung
+@lumeos/web:test: ok 47 - der Muskelkater behaelt seine Richtung
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3455
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Aufteilung der 39 IDs steht fest
+@lumeos/web:test: ok 48 - die Aufteilung der 39 IDs steht fest
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7281
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: so viele Gruppen faerbt die Karte tatsaechlich ein
+@lumeos/web:test: ok 49 - so viele Gruppen faerbt die Karte tatsaechlich ein
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1486
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: nur tibialis ist eine Gruppe ohne Recovery-Kuerzel
+@lumeos/web:test: ok 50 - nur tibialis ist eine Gruppe ohne Recovery-Kuerzel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5084
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jeder v2-wahl-Knopf traegt data-on — sonst bleibt der Punkt leer
+@lumeos/web:test: ok 51 - jeder v2-wahl-Knopf traegt data-on — sonst bleibt der Punkt leer
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.1506
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Erfahrungsgrad faerbt nicht mehr per Inline-Stil
+@lumeos/web:test: ok 52 - der Erfahrungsgrad faerbt nicht mehr per Inline-Stil
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4736
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Kommentar behauptet die Spalte nicht mehr als fehlend
+@lumeos/web:test: ok 53 - der Kommentar behauptet die Spalte nicht mehr als fehlend
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3168
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: keine englischen Sichttexte mehr fest im Quelltext
+@lumeos/web:test: ok 54 - keine englischen Sichttexte mehr fest im Quelltext
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 2.396
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Tab-Beschriftungen kommen aus messages, nicht aus Zeichenketten
+@lumeos/web:test: ok 55 - die Tab-Beschriftungen kommen aus messages, nicht aus Zeichenketten
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5032
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Substanzliste hat einen senkrechten Scroll-Container
+@lumeos/web:test: ok 56 - die Substanzliste hat einen senkrechten Scroll-Container
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.0517
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Liste wird nicht abgeschnitten — kein slice auf der Trefferliste
+@lumeos/web:test: ok 57 - die Liste wird nicht abgeschnitten — kein slice auf der Trefferliste
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5232
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das Detail zeigt kein Schemaprotokoll und keine Kennung
+@lumeos/web:test: ok 58 - das Detail zeigt kein Schemaprotokoll und keine Kennung
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4482
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Klappen reissen Inhalt an, nicht die Feldzahl
+@lumeos/web:test: ok 59 - die Klappen reissen Inhalt an, nicht die Feldzahl
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4893
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die aufgeklappte Zeile hat eine Hoehenbremse
+@lumeos/web:test: ok 60 - die aufgeklappte Zeile hat eine Hoehenbremse
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4434
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: nur EIN Bereich ist offen — die Reiter begrenzen die Hoehe
+@lumeos/web:test: ok 61 - nur EIN Bereich ist offen — die Reiter begrenzen die Hoehe
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3816
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Kacheln haben feste Breiten — kein Bandwurm
+@lumeos/web:test: ok 62 - die Kacheln haben feste Breiten — kein Bandwurm
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5738
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Liste und Hoehenbremse leiten sich vom Fenster ab
+@lumeos/web:test: ok 63 - Liste und Hoehenbremse leiten sich vom Fenster ab
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.574
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Spaltenkopf bleibt beim Scrollen stehen
+@lumeos/web:test: ok 64 - der Spaltenkopf bleibt beim Scrollen stehen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3351
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Katalog-Tab zeigt die echte Datenbank, nicht den Entwurf
+@lumeos/web:test: ok 65 - der Katalog-Tab zeigt die echte Datenbank, nicht den Entwurf
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6365
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Katalog der Vorlage ist vollstaendig uebernommen
+@lumeos/web:test: ok 66 - der Katalog der Vorlage ist vollstaendig uebernommen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.8747
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: beide Modi sind im Katalog vertreten
+@lumeos/web:test: ok 67 - beide Modi sind im Katalog vertreten
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1791
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die sechs Evidenzstufen und ihre Gewichte
+@lumeos/web:test: ok 68 - die sechs Evidenzstufen und ihre Gewichte
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6694
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jede Katalogstufe gibt es auch in der Stufenliste
+@lumeos/web:test: ok 69 - jede Katalogstufe gibt es auch in der Stufenliste
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1513
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die uebrigen Datenbloecke sind da
+@lumeos/web:test: ok 70 - die uebrigen Datenbloecke sind da
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.12
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jeder Tab der Leiste hat eine Weiche
+@lumeos/web:test: ok 71 - jeder Tab der Leiste hat eine Weiche
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.006
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Platzhalter-Tabelle ist weg
+@lumeos/web:test: ok 72 - die Platzhalter-Tabelle ist weg
+@lumeos/nutrition-api:typecheck: cache hit, replaying logs ef32e44b93407fdd
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3002
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Injections-Tab bringt seine Rotationskarte mit
+@lumeos/web:test: ok 73 - der Injections-Tab bringt seine Rotationskarte mit
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7073
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die drei verbliebenen Spec-Tabs sind da
+@lumeos/web:test: ok 74 - die drei verbliebenen Spec-Tabs sind da
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5713
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: SuppCost fuehrt alle fuenf Kacheln der Vorlage
+@lumeos/web:test: ok 75 - SuppCost fuehrt alle fuenf Kacheln der Vorlage
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5822
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/nutrition-api:typecheck: 
+@lumeos/web:test: # Subtest: die neuen Tabs kennzeichnen jede Kachel
+@lumeos/nutrition-api:typecheck: > @lumeos/nutrition-api@0.1.0 typecheck D:\GitHub\LumeOS-Claude-V1\services\nutrition-api
+@lumeos/nutrition-api:typecheck: > tsc --noEmit
+@lumeos/nutrition-api:typecheck: 
+@lumeos/web:test: ok 76 - die neuen Tabs kennzeichnen jede Kachel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5723
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die beiden Akzentlisten stimmen ueberein
+@lumeos/web:test: ok 77 - die beiden Akzentlisten stimmen ueberein
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.9845
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jeder Akzent hat einen Token im Thema
+@lumeos/web:test: ok 78 - jeder Akzent hat einen Token im Thema
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5784
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Attrappen-Gruende behaupten kein fehlendes Schema, wenn das Schema steht
+@lumeos/web:test: ok 79 - Attrappen-Gruende behaupten kein fehlendes Schema, wenn das Schema steht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 2.9765
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: alle Kacheln der Vorlage stehen im Dashboard
+@lumeos/web:test: ok 80 - alle Kacheln der Vorlage stehen im Dashboard
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2673
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das Dashboard kennzeichnet so viele Kacheln, wie Quellen fehlen
+@lumeos/web:test: ok 81 - das Dashboard kennzeichnet so viele Kacheln, wie Quellen fehlen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3219
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die sieben Tabs der Vorlage stehen im Nutrition-Modul
+@lumeos/web:test: ok 82 - die sieben Tabs der Vorlage stehen im Nutrition-Modul
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2495
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die sieben Begleitkarten des Diary stehen da
+@lumeos/web:test: ok 83 - die sieben Begleitkarten des Diary stehen da
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2186
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Nutrition score rechnet mit der Formel der Vorlage
+@lumeos/web:test: ok 84 - der Nutrition score rechnet mit der Formel der Vorlage
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1503
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die zehn Tabs der Vorlage stehen im Training-Modul
+@lumeos/web:test: ok 85 - die zehn Tabs der Vorlage stehen im Training-Modul
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.182
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das Training-Modul kennzeichnet jede Kachel
+@lumeos/web:test: ok 86 - das Training-Modul kennzeichnet jede Kachel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7498
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-160: HRV und Sleep zeigen erfasste Werte, Entwurf nur als Rueckfall
+@lumeos/web:test: ok 87 - G-160: HRV und Sleep zeigen erfasste Werte, Entwurf nur als Rueckfall
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6197
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-159: die fuenf Today/History-Weichen lesen echt, Entwurf nur als Rueckfall
+@lumeos/web:test: ok 88 - G-159: die fuenf Today/History-Weichen lesen echt, Entwurf nur als Rueckfall
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4617
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: fuenf Training-Tabs zeigen echte Sitzungen
+@lumeos/web:test: ok 89 - fuenf Training-Tabs zeigen echte Sitzungen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.488
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Training trennt absolviert von geplant — und nicht ueber status
+@lumeos/web:test: ok 90 - Training trennt absolviert von geplant — und nicht ueber status
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4494
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Training erfindet keine Schwellen
+@lumeos/web:test: ok 91 - Training erfindet keine Schwellen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7395
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Training umgeht die zwei PostgREST-Fallen aus G-64
+@lumeos/web:test: ok 92 - Training umgeht die zwei PostgREST-Fallen aus G-64
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.204
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Training rechnet das Koerpergewicht mit Stichtag
+@lumeos/web:test: ok 93 - Training rechnet das Koerpergewicht mit Stichtag
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1896
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die vier Ansichten der Spec-Vorlage stehen da
+@lumeos/web:test: ok 94 - die vier Ansichten der Spec-Vorlage stehen da
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2329
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Volume landmarks fuehren die zehn Muskelgruppen der Vorlage
+@lumeos/web:test: ok 95 - die Volume landmarks fuehren die zehn Muskelgruppen der Vorlage
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2638
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Formeln der Spec-Vorlage sind uebernommen, nicht erfunden
+@lumeos/web:test: ok 96 - die Formeln der Spec-Vorlage sind uebernommen, nicht erfunden
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2366
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die neun Tabs der Vorlage stehen im Recovery-Modul
+@lumeos/web:test: ok 97 - die neun Tabs der Vorlage stehen im Recovery-Modul
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1735
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das Recovery-Modul kennzeichnet jede Kachel
+@lumeos/web:test: ok 98 - das Recovery-Modul kennzeichnet jede Kachel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5092
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Koerperkarte fuehrt alle 18 Muskelgruppen der Vorlage
+@lumeos/web:test: ok 99 - die Koerperkarte fuehrt alle 18 Muskelgruppen der Vorlage
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4169
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Formeln der Recovery-Vorlage sind uebernommen, nicht erfunden
+@lumeos/web:test: ok 100 - die Formeln der Recovery-Vorlage sind uebernommen, nicht erfunden
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3797
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Erholungswert kennt beide Modi mit den Gewichten der Vorlage
+@lumeos/web:test: ok 101 - der Erholungswert kennt beide Modi mit den Gewichten der Vorlage
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2107
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die zehn Tabs der Vorlage stehen im Goals-Modul
+@lumeos/web:test: ok 102 - die zehn Tabs der Vorlage stehen im Goals-Modul
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.165
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das Goals-Modul kennzeichnet jede Kachel
+@lumeos/web:test: ok 103 - das Goals-Modul kennzeichnet jede Kachel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4266
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die fuenf Ansichten aus -pro.jsx stehen da
+@lumeos/web:test: ok 104 - die fuenf Ansichten aus -pro.jsx stehen da
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6193
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Goals fuehrt die sieben Phasen und 13 Umfaenge der Vorlage
+@lumeos/web:test: ok 105 - Goals fuehrt die sieben Phasen und 13 Umfaenge der Vorlage
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4244
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Formeln der Goals-Vorlage sind uebernommen, nicht erfunden
+@lumeos/web:test: ok 106 - die Formeln der Goals-Vorlage sind uebernommen, nicht erfunden
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2748
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Goals wuerfelt seine Verlaufsdaten nicht
+@lumeos/web:test: ok 107 - Goals wuerfelt seine Verlaufsdaten nicht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5113
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die angebundenen Goals-Kacheln tragen keine Marke mehr
+@lumeos/web:test: ok 108 - die angebundenen Goals-Kacheln tragen keine Marke mehr
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6821
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Goals rechnet gegen das echte Heute, nicht gegen 2026-05-16
+@lumeos/web:test: ok 109 - Goals rechnet gegen das echte Heute, nicht gegen 2026-05-16
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.0885
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Goals zeigt die Spanne am Koerperfettwert, nicht in einer Fussnote
+@lumeos/web:test: ok 110 - Goals zeigt die Spanne am Koerperfettwert, nicht in einer Fussnote
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.9303
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der adaptive TDEE zeigt seine Herkunft und verschleiert alpha nicht
+@lumeos/web:test: ok 111 - der adaptive TDEE zeigt seine Herkunft und verschleiert alpha nicht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2646
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Goals bewertet nicht, es zeigt
+@lumeos/web:test: ok 112 - Goals bewertet nicht, es zeigt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7502
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Goals erfasst nicht — die Uebersicht zeigt nur
+@lumeos/web:test: ok 113 - Goals erfasst nicht — die Uebersicht zeigt nur
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7151
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Goals zeichnet keine Messungen, die es noch nicht gibt
+@lumeos/web:test: ok 114 - Goals zeichnet keine Messungen, die es noch nicht gibt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.311
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die fuenf Tabs der Vorlage stehen im Medical-Modul
+@lumeos/web:test: ok 115 - die fuenf Tabs der Vorlage stehen im Medical-Modul
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2085
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das Medical-Modul kennzeichnet jede Kachel
+@lumeos/web:test: ok 116 - das Medical-Modul kennzeichnet jede Kachel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4334
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Biomarker-Katalog ist vollstaendig uebernommen
+@lumeos/web:test: ok 117 - der Biomarker-Katalog ist vollstaendig uebernommen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3673
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Formeln der Medical-Vorlage sind uebernommen, nicht erfunden
+@lumeos/web:test: ok 118 - die Formeln der Medical-Vorlage sind uebernommen, nicht erfunden
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.6268
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Medical uebernimmt den arr_r-Tippfehler der Vorlage nicht
+@lumeos/web:test: ok 119 - Medical uebernimmt den arr_r-Tippfehler der Vorlage nicht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.8043
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Naehrstoffbaum ist vollstaendig uebernommen
+@lumeos/web:test: ok 120 - der Naehrstoffbaum ist vollstaendig uebernommen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4562
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die elf Tabs der Vorlage stehen im Supplements-Modul
+@lumeos/web:test: ok 121 - die elf Tabs der Vorlage stehen im Supplements-Modul
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3269
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das Supplements-Modul kennzeichnet jede Kachel
+@lumeos/web:test: ok 122 - das Supplements-Modul kennzeichnet jede Kachel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.9201
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Rueckfallmarke sitzt an den abgeloesten Fassungen
+@lumeos/web:test: ok 123 - die Rueckfallmarke sitzt an den abgeloesten Fassungen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6723
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die angebundenen Supplements-Fassungen tragen keine Marke
+@lumeos/web:test: ok 124 - die angebundenen Supplements-Fassungen tragen keine Marke
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6383
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Unterkomponenten der Vorlage sind alle da
+@lumeos/web:test: ok 125 - die Unterkomponenten der Vorlage sind alle da
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.4839
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Stack der Vorlage ist vollstaendig uebernommen
+@lumeos/web:test: ok 126 - der Stack der Vorlage ist vollstaendig uebernommen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3294
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die nachgezogenen Nutrition-Tabs kennzeichnen jede Kachel
+@lumeos/web:test: ok 127 - die nachgezogenen Nutrition-Tabs kennzeichnen jede Kachel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5643
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Nutrition-Entwuerfe kommen nicht zurueck
+@lumeos/web:test: ok 128 - die Nutrition-Entwuerfe kommen nicht zurueck
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3769
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die vier Modale der Nutrition-Vorlage sind da
+@lumeos/web:test: ok 129 - die vier Modale der Nutrition-Vorlage sind da
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.303
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: kein Math.random in den v2-Modulen
+@lumeos/web:test: ok 130 - kein Math.random in den v2-Modulen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 19.6456
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: berechnete Stilwerte sind auf Engine-Genauigkeit gerundet
+@lumeos/web:test: ok 131 - berechnete Stilwerte sind auf Engine-Genauigkeit gerundet
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 15.8291
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die zehn Tabs der Vorlage stehen im Coach-Modul
+@lumeos/web:test: ok 132 - die zehn Tabs der Vorlage stehen im Coach-Modul
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2384
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das Coach-Modul kennzeichnet jede Kachel
+@lumeos/web:test: ok 133 - das Coach-Modul kennzeichnet jede Kachel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4452
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jede Karte des Coach-Moduls traegt eine Marke
+@lumeos/web:test: ok 134 - jede Karte des Coach-Moduls traegt eine Marke
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1701
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-149: der Einnahme-Haken bucht auf den angesehenen Tag
+@lumeos/web:test: ok 135 - G-149: der Einnahme-Haken bucht auf den angesehenen Tag
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1713
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-158: der Coach-Kopf zaehlt aus dem Stand, nicht aus COACHES
+@lumeos/web:test: ok 136 - G-158: der Coach-Kopf zaehlt aus dem Stand, nicht aus COACHES
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1584
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-185: der Invites-Reiter liest relationships, nicht PENDING_INVITES
+@lumeos/web:test: ok 137 - G-185: der Invites-Reiter liest relationships, nicht PENDING_INVITES
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3024
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-185: der Leerzustand traegt das Einladeformular
+@lumeos/web:test: ok 138 - G-185: der Leerzustand traegt das Einladeformular
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1919
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: C-225/G-169: die drei Schreibwege und der Check-in-Lesepfad stehen
+@lumeos/web:test: ok 139 - C-225/G-169: die drei Schreibwege und der Check-in-Lesepfad stehen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.381
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-163: die Rueckfallfassungen bleiben geloescht
+@lumeos/web:test: ok 140 - G-163: die Rueckfallfassungen bleiben geloescht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6572
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-158: Beziehungen und Nachrichten lesen echt, mit Rueckfall
+@lumeos/web:test: ok 141 - G-158: Beziehungen und Nachrichten lesen echt, mit Rueckfall
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2897
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die fuenf Ansichten der Coach-Zulieferer stehen da
+@lumeos/web:test: ok 142 - die fuenf Ansichten der Coach-Zulieferer stehen da
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2601
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Coach-Daten kommen aus der Vorlage, nicht aus dem Gedaechtnis
+@lumeos/web:test: ok 143 - die Coach-Daten kommen aus der Vorlage, nicht aus dem Gedaechtnis
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1528
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die sieben Module der Rechtematrix sind vollzaehlig
+@lumeos/web:test: ok 144 - die sieben Module der Rechtematrix sind vollzaehlig
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.165
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das Coach-Modul uebernimmt den Tippfehler arr_r nicht
+@lumeos/web:test: ok 145 - das Coach-Modul uebernimmt den Tippfehler arr_r nicht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.722
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das QR-Muster ist fest, nicht zufaellig
+@lumeos/web:test: ok 146 - das QR-Muster ist fest, nicht zufaellig
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4191
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die AI-Coach-Seite zeigt das Modul, nicht mehr den Platzhalter
+@lumeos/web:test: ok 147 - die AI-Coach-Seite zeigt das Modul, nicht mehr den Platzhalter
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1979
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die zwanzig Tabs der Vorlage stehen im AI-Coach-Modul
+@lumeos/web:test: ok 148 - die zwanzig Tabs der Vorlage stehen im AI-Coach-Modul
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2166
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jede Karte des AI-Coach-Moduls traegt eine Marke
+@lumeos/web:test: ok 149 - jede Karte des AI-Coach-Moduls traegt eine Marke
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.696
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die fuenfzehn Zulieferer des Buddy-Rahmens stehen da
+@lumeos/web:test: ok 150 - die fuenfzehn Zulieferer des Buddy-Rahmens stehen da
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7065
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Buddy-Daten kommen aus der Vorlage, nicht aus dem Gedaechtnis
+@lumeos/web:test: ok 151 - die Buddy-Daten kommen aus der Vorlage, nicht aus dem Gedaechtnis
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2244
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die elf Motoren und die neun Sicherheitsregeln sind vollzaehlig
+@lumeos/web:test: ok 152 - die elf Motoren und die neun Sicherheitsregeln sind vollzaehlig
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2485
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das AI-Coach-Modul uebernimmt den Tippfehler arr_r nicht
+@lumeos/web:test: ok 153 - das AI-Coach-Modul uebernimmt den Tippfehler arr_r nicht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.7456
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Buddy-Orb vergibt eigene SVG-Kennungen
+@lumeos/web:test: ok 154 - der Buddy-Orb vergibt eigene SVG-Kennungen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2398
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: im AI-Coach-Modul steht kein unberechenbarer Wert
+@lumeos/web:test: ok 155 - im AI-Coach-Modul steht kein unberechenbarer Wert
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.6973
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Befehlsparser der Sprachsitzung erkennt die Vorlagenbeispiele
+@lumeos/web:test: ok 156 - der Befehlsparser der Sprachsitzung erkennt die Vorlagenbeispiele
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.769
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die angebundenen Medical-Kacheln tragen keine Marke mehr
+@lumeos/web:test: ok 157 - die angebundenen Medical-Kacheln tragen keine Marke mehr
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4317
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Medical-Anzeige bewertet nicht, sie verortet
+@lumeos/web:test: ok 158 - die Medical-Anzeige bewertet nicht, sie verortet
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7585
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Befundbereich schlaegt den Katalogbereich
+@lumeos/web:test: ok 159 - der Befundbereich schlaegt den Katalogbereich
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2453
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Katalog wird durchsucht, nicht geladen
+@lumeos/web:test: ok 160 - der Katalog wird durchsucht, nicht geladen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1714
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein unbekannter Marker verschwindet nicht
+@lumeos/web:test: ok 161 - ein unbekannter Marker verschwindet nicht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2813
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Medical zeigt EINE Liste, nicht drei
+@lumeos/web:test: ok 162 - Medical zeigt EINE Liste, nicht drei
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2649
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Marker-Liste traegt die Form der Attrappe
+@lumeos/web:test: ok 163 - die Marker-Liste traegt die Form der Attrappe
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4947
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Verlauf rechnet ueber gemessene Punkte, nicht ueber erfundene
+@lumeos/web:test: ok 164 - der Verlauf rechnet ueber gemessene Punkte, nicht ueber erfundene
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7837
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Lagerechnung stimmt an den Raendern
+@lumeos/web:test: ok 165 - die Lagerechnung stimmt an den Raendern
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.263
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die drei gemeldeten Symbole stehen in icons.tsx
+@lumeos/web:test: ok 166 - die drei gemeldeten Symbole stehen in icons.tsx
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.9703
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: arr_r bleibt draussen
+@lumeos/web:test: ok 167 - arr_r bleibt draussen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2941
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Pill kennt dot, Empty gibt es
+@lumeos/web:test: ok 168 - Pill kennt dot, Empty gibt es
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2198
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die modul-lokalen Nachbauten sind weg
+@lumeos/web:test: ok 169 - die modul-lokalen Nachbauten sind weg
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 17.5456
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: InEntwicklungKnopf kann sperren
+@lumeos/web:test: ok 170 - InEntwicklungKnopf kann sperren
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.219
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: v2-g-cols-5 und v2-grid-13 stehen zentral
+@lumeos/web:test: ok 171 - v2-g-cols-5 und v2-grid-13 stehen zentral
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3664
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Ergaenzungen stehen im Erzeuger, nicht nur in v2.css
+@lumeos/web:test: ok 172 - die Ergaenzungen stehen im Erzeuger, nicht nur in v2.css
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2916
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Knopfbeschriftungen brechen nicht innerhalb des Knopfes
+@lumeos/web:test: ok 173 - Knopfbeschriftungen brechen nicht innerhalb des Knopfes
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.254
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Kartentitel schrumpft nicht vor dem Untertitel
+@lumeos/web:test: ok 174 - der Kartentitel schrumpft nicht vor dem Untertitel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7267
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: JetBrains Mono wird geladen, nicht nur genannt
+@lumeos/web:test: ok 175 - JetBrains Mono wird geladen, nicht nur genannt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7109
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Durchgriff steht ueberhaupt noch in app-shell.tsx
+@lumeos/web:test: ok 176 - der Durchgriff steht ueberhaupt noch in app-shell.tsx
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6598
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: keine bestehende Route faellt in den v2-Durchgriff
+@lumeos/web:test: ok 177 - keine bestehende Route faellt in den v2-Durchgriff
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3012
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: /v2 und seine Unterseiten greifen durch
+@lumeos/web:test: ok 178 - /v2 und seine Unterseiten greifen durch
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.095
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: aehnlich benannte Routen greifen NICHT durch
+@lumeos/web:test: ok 179 - aehnlich benannte Routen greifen NICHT durch
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0478
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: v2.css definiert keine Tokens
+@lumeos/web:test: ok 180 - v2.css definiert keine Tokens
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6384
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: v2.css nutzt die geteilten Tokens
+@lumeos/web:test: ok 181 - v2.css nutzt die geteilten Tokens
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2086
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jede Klasse in v2.css traegt das Praefix
+@lumeos/web:test: ok 182 - jede Klasse in v2.css traegt das Praefix
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.6797
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: v2.css laedt nichts von fremden Hosts
+@lumeos/web:test: ok 183 - v2.css laedt nichts von fremden Hosts
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1565
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: v2.css bringt keine Hex-Farben mit
+@lumeos/web:test: ok 184 - v2.css bringt keine Hex-Farben mit
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1928
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: v2.css bringt keine NEUEN rgba-Werte mit
+@lumeos/web:test: ok 185 - v2.css bringt keine NEUEN rgba-Werte mit
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2852
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die helle Flaeche laeuft ueber einen Token
+@lumeos/web:test: ok 186 - die helle Flaeche laeuft ueber einen Token
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0995
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jede Route der Seitenleiste loest auf sich selbst auf
+@lumeos/web:test: ok 187 - jede Route der Seitenleiste loest auf sich selbst auf
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7479
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Settings loest auf Settings auf, nicht auf das Dashboard
+@lumeos/web:test: ok 188 - Settings loest auf Settings auf, nicht auf das Dashboard
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1807
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Unterseiten von Settings loesen ebenfalls auf Settings auf
+@lumeos/web:test: ok 189 - Unterseiten von Settings loesen ebenfalls auf Settings auf
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0691
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein unbekannter Pfad faellt auf das Dashboard zurueck
+@lumeos/web:test: ok 190 - ein unbekannter Pfad faellt auf das Dashboard zurueck
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0506
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der laengere Pfad gewinnt
+@lumeos/web:test: ok 191 - der laengere Pfad gewinnt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0485
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Nutrition fuehrt keine Untereintraege mehr
+@lumeos/web:test: ok 192 - Nutrition fuehrt keine Untereintraege mehr
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1546
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: internal targets pass through unchanged
+@lumeos/web:test: ok 193 - internal targets pass through unchanged
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7724
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: protocol-relative targets are rejected — this was a real open redirect
+@lumeos/web:test: ok 194 - protocol-relative targets are rejected — this was a real open redirect
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1714
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: backslash variants are rejected too
+@lumeos/web:test: ok 195 - backslash variants are rejected too
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0961
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: absolute urls are rejected
+@lumeos/web:test: ok 196 - absolute urls are rejected
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1317
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: empty and non-string input falls back to the default
+@lumeos/web:test: ok 197 - empty and non-string input falls back to the default
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1082
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: a path that merely looks external stays internal
+@lumeos/web:test: ok 198 - a path that merely looks external stays internal
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1171
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die 181er-Zaehlung je Einstufung stimmt mit der Quelle ueberein
+@lumeos/web:test: ok 199 - die 181er-Zaehlung je Einstufung stimmt mit der Quelle ueberein
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.1078
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die 32 Recovery-Records sind alle REMOVE_NUMERIC_VALUE
+@lumeos/web:test: ok 200 - die 32 Recovery-Records sind alle REMOVE_NUMERIC_VALUE
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2007
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: wertNutzbar ist genau die Umkehrung der drei Sperr-Einstufungen
+@lumeos/web:test: ok 201 - wertNutzbar ist genau die Umkehrung der drei Sperr-Einstufungen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2056
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: eine unbekannte Konstante kracht statt undefined zu liefern
+@lumeos/web:test: ok 202 - eine unbekannte Konstante kracht statt undefined zu liefern
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3619
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das Register traegt bewusst keine Zahlenwerte
+@lumeos/web:test: ok 203 - das Register traegt bewusst keine Zahlenwerte
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6171
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: GO-21: die WHO-Grenzwerte sind KEEP_NUMERIC mit Grad A
+@lumeos/web:test: ok 204 - GO-21: die WHO-Grenzwerte sind KEEP_NUMERIC mit Grad A
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1715
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-89: die vier Traditionen sind LABEL_HEURISTIC, FFMI ist gesperrt
+@lumeos/web:test: ok 205 - G-89: die vier Traditionen sind LABEL_HEURISTIC, FFMI ist gesperrt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0742
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: C-105: MAV ist DO_NOT_IMPLEMENT, das RP-Rahmenwerk Heuristik
+@lumeos/web:test: ok 206 - C-105: MAV ist DO_NOT_IMPLEMENT, das RP-Rahmenwerk Heuristik
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0952
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: C-124: die Modalitaets-IDs des Motors stehen im Register, ohne nutzbaren Wert
+@lumeos/web:test: ok 207 - C-124: die Modalitaets-IDs des Motors stehen im Register, ohne nutzbaren Wert
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2372
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: C-181: die ACWR-Entscheidungen stehen im Register wie beauftragt
+@lumeos/web:test: ok 208 - C-181: die ACWR-Entscheidungen stehen im Register wie beauftragt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2947
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die gemeldeten Sperr-Records sind genau die erwarteten
+@lumeos/web:test: ok 209 - die gemeldeten Sperr-Records sind genau die erwarteten
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.2986
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das Erzeugnis ist mit der JSON-Quelle synchron (falls sie liegt)
+@lumeos/web:test: ok 210 - das Erzeugnis ist mit der JSON-Quelle synchron (falls sie liegt)
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.1942
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das Alter kippt am Geburtstag, nicht am Jahreswechsel
+@lumeos/web:test: ok 211 - das Alter kippt am Geburtstag, nicht am Jahreswechsel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.175
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Geburtsdatum kommt keine erfundene Zahl
+@lumeos/web:test: ok 212 - ohne Geburtsdatum kommt keine erfundene Zahl
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1065
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Stichtag vor der Geburt ergibt kein negatives Alter
+@lumeos/web:test: ok 213 - ein Stichtag vor der Geburt ergibt kein negatives Alter
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0525
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der 29. Februar kippt am 1. Maerz eines Nicht-Schaltjahres
+@lumeos/web:test: ok 214 - der 29. Februar kippt am 1. Maerz eines Nicht-Schaltjahres
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0891
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die fuenf Status sind die der CHECK-Bedingung
+@lumeos/web:test: ok 215 - die fuenf Status sind die der CHECK-Bedingung
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.4247
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: erreicht und abgebrochen gelten als abgeschlossen
+@lumeos/web:test: ok 216 - erreicht und abgebrochen gelten als abgeschlossen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1928
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein aktives Ziel traegt Prioritaet 1 bis 3
+@lumeos/web:test: ok 217 - ein aktives Ziel traegt Prioritaet 1 bis 3
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.18
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein abgeschlossenes Ziel darf bis 10 tragen
+@lumeos/web:test: ok 218 - ein abgeschlossenes Ziel darf bis 10 tragen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1144
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Prioritaetsgrenzen stimmen mit der Tabelle ueberein
+@lumeos/web:test: ok 219 - die Prioritaetsgrenzen stimmen mit der Tabelle ueberein
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0797
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein leerer Titel wird abgelehnt
+@lumeos/web:test: ok 220 - ein leerer Titel wird abgelehnt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0578
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: eine gebrochene Prioritaet wird abgelehnt
+@lumeos/web:test: ok 221 - eine gebrochene Prioritaet wird abgelehnt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1251
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein unbekannter Status wird abgelehnt
+@lumeos/web:test: ok 222 - ein unbekannter Status wird abgelehnt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0909
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Zielwert muss eine Zahl sein — null ist erlaubt
+@lumeos/web:test: ok 223 - ein Zielwert muss eine Zahl sein — null ist erlaubt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2253
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: eine leere Aenderung ist gueltig
+@lumeos/web:test: ok 224 - eine leere Aenderung ist gueltig
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3043
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Quotienten stimmen mit der SQL-Gegenrechnung überein
+@lumeos/web:test: ok 225 - die Quotienten stimmen mit der SQL-Gegenrechnung überein
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7455
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Zutaten stehen mit im Ergebnis — der Quotient bleibt nachrechenbar
+@lumeos/web:test: ok 226 - die Zutaten stehen mit im Ergebnis — der Quotient bleibt nachrechenbar
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1295
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Symmetrie ist die kleinere Seite am Mittel, mit Vorzeichen
+@lumeos/web:test: ok 227 - die Symmetrie ist die kleinere Seite am Mittel, mit Vorzeichen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1117
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: gleich lange Seiten ergeben genau 100 Prozent
+@lumeos/web:test: ok 228 - gleich lange Seiten ergeben genau 100 Prozent
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0679
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: eine fehlende Stelle ergibt null, nicht null Komma null
+@lumeos/web:test: ok 229 - eine fehlende Stelle ergibt null, nicht null Komma null
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0528
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: gerechnet wird über den jüngsten Satz, nicht über den ersten
+@lumeos/web:test: ok 230 - gerechnet wird über den jüngsten Satz, nicht über den ersten
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0582
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Satz gibt es kein Ergebnis — und keine erfundene Null
+@lumeos/web:test: ok 231 - ohne Satz gibt es kein Ergebnis — und keine erfundene Null
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4236
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Stellenvergleich nimmt die zwei jüngsten Sätze
+@lumeos/web:test: ok 232 - der Stellenvergleich nimmt die zwei jüngsten Sätze
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.9834
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Vorwert bleibt die Differenz leer, statt auf den Wert zu fallen
+@lumeos/web:test: ok 233 - ohne Vorwert bleibt die Differenz leer, statt auf den Wert zu fallen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2956
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: alle 13 Stellen stehen in der Tabelle, auch die ungemessenen
+@lumeos/web:test: ok 234 - alle 13 Stellen stehen in der Tabelle, auch die ungemessenen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2501
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die zwei Zahlen bleiben getrennt und ergeben zusammen den Filter
+@lumeos/web:test: ok 235 - die zwei Zahlen bleiben getrennt und ergeben zusammen den Filter
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.8075
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: wer schon ausserhalb des Laborbereichs liegt, wird nicht zweimal gezaehlt
+@lumeos/web:test: ok 236 - wer schon ausserhalb des Laborbereichs liegt, wird nicht zweimal gezaehlt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1469
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: darunter zaehlt so wie darueber — beides ist ausserhalb
+@lumeos/web:test: ok 237 - darunter zaehlt so wie darueber — beides ist ausserhalb
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1007
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Marker bleibt jede Zahl null — kein Kopf ohne Daten
+@lumeos/web:test: ok 238 - ohne Marker bleibt jede Zahl null — kein Kopf ohne Daten
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0604
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Gruppierbarkeit zaehlt, was der Katalog traegt
+@lumeos/web:test: ok 239 - die Gruppierbarkeit zaehlt, was der Katalog traegt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7522
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: vier Messungen eines Markers werden EINE Reihe
+@lumeos/web:test: ok 240 - vier Messungen eines Markers werden EINE Reihe
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 8.8708
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Marker ohne LOINC faellt nicht mit einem anderen zusammen
+@lumeos/web:test: ok 241 - ein Marker ohne LOINC faellt nicht mit einem anderen zusammen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3483
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Trend rechnet erste gegen letzte Messung
+@lumeos/web:test: ok 242 - der Trend rechnet erste gegen letzte Messung
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2073
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Bereichsbalken schliesst den eigenen Wert immer ein
+@lumeos/web:test: ok 243 - der Bereichsbalken schliesst den eigenen Wert immer ein
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3932
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: eine offene Grenze laeuft bis an den Rand, nicht bis 0
+@lumeos/web:test: ok 244 - eine offene Grenze laeuft bis an den Rand, nicht bis 0
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3099
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Gewichte der Spec ergeben 1,00
+@lumeos/web:test: ok 245 - die Gewichte der Spec ergeben 1,00
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.8095
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ausserhalb des Laborbereichs wiegt schwerer als ausserhalb des Optimalbands
+@lumeos/web:test: ok 246 - ausserhalb des Laborbereichs wiegt schwerer als ausserhalb des Optimalbands
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1714
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Laborbereich gibt es keinen Punktwert — er wird nicht erfunden
+@lumeos/web:test: ok 247 - ohne Laborbereich gibt es keinen Punktwert — er wird nicht erfunden
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0662
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Marker ohne Optimalband ist normal, nicht optimal
+@lumeos/web:test: ok 248 - ein Marker ohne Optimalband ist normal, nicht optimal
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0501
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: cardiovascular ergibt 90 — die gemessenen fuenf Marker
+@lumeos/web:test: ok 249 - cardiovascular ergibt 90 — die gemessenen fuenf Marker
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1575
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: liver ergibt 92 — der Schnitt wird gerundet, nicht abgeschnitten
+@lumeos/web:test: ok 250 - liver ergibt 92 — der Schnitt wird gerundet, nicht abgeschnitten
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0831
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein System ohne Marker liefert null, nicht null Punkte
+@lumeos/web:test: ok 251 - ein System ohne Marker liefert null, nicht null Punkte
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0608
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Marker ohne Bereich zaehlen als fehlend, nicht als schlecht
+@lumeos/web:test: ok 252 - Marker ohne Bereich zaehlen als fehlend, nicht als schlecht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1393
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: eine Substanz mit zwei LOINC-Codes zaehlt einmal
+@lumeos/web:test: ok 253 - eine Substanz mit zwei LOINC-Codes zaehlt einmal
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2439
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Gesamtwert ist 88 bei allen fuenf Systemen
+@lumeos/web:test: ok 254 - der Gesamtwert ist 88 bei allen fuenf Systemen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.418
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: fehlt ein System, verteilt sich sein Gewicht auf die uebrigen
+@lumeos/web:test: ok 255 - fehlt ein System, verteilt sich sein Gewicht auf die uebrigen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1601
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne jeden Wert bleibt der Gesamtwert null
+@lumeos/web:test: ok 256 - ohne jeden Wert bleibt der Gesamtwert null
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.098
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Marker in zwei Systemen zaehlt in beiden
+@lumeos/web:test: ok 257 - ein Marker in zwei Systemen zaehlt in beiden
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1695
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Reihen ohne LOINC gehen in kein System ein
+@lumeos/web:test: ok 258 - Reihen ohne LOINC gehen in kein System ein
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.06
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Zyklus ist neutral -> like -> dislike -> neutral
+@lumeos/web:test: ok 259 - der Zyklus ist neutral -> like -> dislike -> neutral
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6034
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: drei Klicks fuehren zurueck an den Anfang
+@lumeos/web:test: ok 260 - drei Klicks fuehren zurueck an den Anfang
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0852
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Stufen liegen unter denen des Assistenten
+@lumeos/web:test: ok 261 - die Stufen liegen unter denen des Assistenten
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0872
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Stufen sind in der CHECK-Bedingung erlaubt
+@lumeos/web:test: ok 262 - die Stufen sind in der CHECK-Bedingung erlaubt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0806
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Richtungen sind in der CHECK-Bedingung erlaubt
+@lumeos/web:test: ok 263 - die Richtungen sind in der CHECK-Bedingung erlaubt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0458
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Herkunft trennt den Daumen vom Assistenten
+@lumeos/web:test: ok 264 - die Herkunft trennt den Daumen vom Assistenten
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0477
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: reference base is 100 g — the rule every diary calculation rests on
+@lumeos/web:test: ok 265 - reference base is 100 g — the rule every diary calculation rests on
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5778
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: freezing scales every nutrient by amount / 100
+@lumeos/web:test: ok 266 - freezing scales every nutrient by amount / 100
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1491
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: a missing nutrient stays absent instead of becoming zero
+@lumeos/web:test: ok 267 - a missing nutrient stays absent instead of becoming zero
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1239
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: freezing rounds to the numeric(12,5) precision of food_nutrients
+@lumeos/web:test: ok 268 - freezing rounds to the numeric(12,5) precision of food_nutrients
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0889
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: freezing ignores malformed nutrient rows
+@lumeos/web:test: ok 269 - freezing ignores malformed nutrient rows
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0535
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: quick macro columns map to codes that exist in nutrient_defs
+@lumeos/web:test: ok 270 - quick macro columns map to codes that exist in nutrient_defs
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4043
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: meal schema accepts only ISO dates and known meal types
+@lumeos/web:test: ok 271 - meal schema accepts only ISO dates and known meal types
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.952
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: meal item schema rejects non-positive and non-finite amounts
+@lumeos/web:test: ok 272 - meal item schema rejects non-positive and non-finite amounts
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.843
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: meal insert payload carries the user id and normalizes notes
+@lumeos/web:test: ok 273 - meal insert payload carries the user id and normalizes notes
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.167
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: meal item insert freezes the macros and leaves frozen_at to the database
+@lumeos/web:test: ok 274 - meal item insert freezes the macros and leaves frozen_at to the database
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2691
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: amount update refreezes the values and stamps frozen_at
+@lumeos/web:test: ok 275 - amount update refreezes the values and stamps frozen_at
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6147
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: stored row parsers drop malformed rows instead of failing
+@lumeos/web:test: ok 276 - stored row parsers drop malformed rows instead of failing
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2117
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: meal totals keep missing values honest instead of counting them as zero
+@lumeos/web:test: ok 277 - meal totals keep missing values honest instead of counting them as zero
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2092
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: error codes map to stable http status values
+@lumeos/web:test: ok 278 - error codes map to stable http status values
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0656
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: daily summary covers the nine macros that 052 stores as columns
+@lumeos/web:test: ok 279 - daily summary covers the nine macros that 052 stores as columns
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.9605
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: numeric strings from PostgREST arrive as numbers
+@lumeos/web:test: ok 280 - numeric strings from PostgREST arrive as numbers
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2514
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: a nutrient nobody measured stays null and is flagged, never zero
+@lumeos/web:test: ok 281 - a nutrient nobody measured stays null and is flagged, never zero
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1491
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: a macro measured on every position counts as complete
+@lumeos/web:test: ok 282 - a macro measured on every position counts as complete
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0808
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: a partially measured macro is a lower bound, not a truth
+@lumeos/web:test: ok 283 - a partially measured macro is a lower bound, not a truth
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0703
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: incomplete macros are reported so the surface can show the gap
+@lumeos/web:test: ok 284 - incomplete macros are reported so the surface can show the gap
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1165
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: a day with meals but no items reports zero items and no totals
+@lumeos/web:test: ok 285 - a day with meals but no items reports zero items and no totals
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1193
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: an empty day is null everywhere, not a row of zeros
+@lumeos/web:test: ok 286 - an empty day is null everywhere, not a row of zeros
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0948
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: malformed rows drop out instead of failing the whole read
+@lumeos/web:test: ok 287 - malformed rows drop out instead of failing the whole read
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1401
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: local Nutrition food search helpers
+@lumeos/web:test:     # Subtest: normalizes German umlauts for practical BLS source-label search
+@lumeos/web:test:     ok 1 - normalizes German umlauts for practical BLS source-label search
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.7423
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: tokenizes queries for the rpc food_search parameters without invented synonyms
+@lumeos/web:test:     ok 2 - tokenizes queries for the rpc food_search parameters without invented synonyms
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.462
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: builds rpc arguments with normalized slug, tag and clamped paging
+@lumeos/web:test:     ok 3 - builds rpc arguments with normalized slug, tag and clamped paging
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.4752
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: laesst p_filters bei leerer Auswahl null — nicht {}
+@lumeos/web:test:     ok 4 - laesst p_filters bei leerer Auswahl null — nicht {}
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.0907
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: setzt exclude_tag_codes, entdoppelt und sortiert
+@lumeos/web:test:     ok 5 - setzt exclude_tag_codes, entdoppelt und sortiert
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1348
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: reicht excludeTags bis in die rpc-Argumente durch
+@lumeos/web:test:     ok 6 - reicht excludeTags bis in die rpc-Argumente durch
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.0873
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: builds stable filter hrefs for category and tag chips
+@lumeos/web:test:     ok 7 - builds stable filter hrefs for category and tag chips
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.2512
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: traegt Zubereitung und Warengruppe als wiederholte Parameter in die Adresse
+@lumeos/web:test:     ok 8 - traegt Zubereitung und Warengruppe als wiederholte Parameter in die Adresse
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1026
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: schaltet einen gesetzten Filter beim zweiten Klick wieder ab
+@lumeos/web:test:     ok 9 - schaltet einen gesetzten Filter beim zweiten Klick wieder ab
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1252
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: reicht die neuen Filter als Felder an die Datenbankfunktion
+@lumeos/web:test:     ok 10 - reicht die neuen Filter als Felder an die Datenbankfunktion
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.2253
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: laesst die neuen Filter weg, wenn nichts gesetzt ist
+@lumeos/web:test:     ok 11 - laesst die neuen Filter weg, wenn nichts gesetzt ist
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1925
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: normalizes pagination and sort inputs to the SPEC_07 local subset
+@lumeos/web:test:     ok 12 - normalizes pagination and sort inputs to the SPEC_07 local subset
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.0572
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: parses food search payload with technical BLS label and Human Layer metadata
+@lumeos/web:test:     ok 13 - parses food search payload with technical BLS label and Human Layer metadata
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.9018
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: parses the rpc payload also when it arrives as an object (supabase-js path)
+@lumeos/web:test:     ok 14 - parses the rpc payload also when it arrives as an object (supabase-js path)
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.0813
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..14
+@lumeos/web:test: ok 288 - local Nutrition food search helpers
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 4.6646
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: builds read-only category coverage analysis SQL
+@lumeos/web:test: ok 289 - builds read-only category coverage analysis SQL
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6246
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: builds read-only alias coverage analysis SQL
+@lumeos/web:test: ok 290 - builds read-only alias coverage analysis SQL
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.123
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: marks category rules as candidates instead of applying ambiguous mappings
+@lumeos/web:test: ok 291 - marks category rules as candidates instead of applying ambiguous mappings
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1215
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: does not recommend alias expansion when baseline coverage is complete
+@lumeos/web:test: ok 292 - does not recommend alias expansion when baseline coverage is complete
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1142
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die drei Anteile ergeben zusammen 100 %
+@lumeos/web:test: ok 293 - die drei Anteile ergeben zusammen 100 %
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.8438
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Atwater-Faktoren stimmen
+@lumeos/web:test: ok 294 - die Atwater-Faktoren stimmen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1258
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der gemessene 14-Tage-Schnitt von dev
+@lumeos/web:test: ok 295 - der gemessene 14-Tage-Schnitt von dev
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0569
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Werte gibt es keine Anteile
+@lumeos/web:test: ok 296 - ohne Werte gibt es keine Anteile
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.443
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Nulltag ergibt keine Anteile statt einer Division durch null
+@lumeos/web:test: ok 297 - ein Nulltag ergibt keine Anteile statt einer Division durch null
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0573
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: parseNutritionSchemaDebug
+@lumeos/web:test:     # Subtest: parses a valid local schema payload
+@lumeos/web:test:     ok 1 - parses a valid local schema payload
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 1.6152
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: normalizes missing arrays to empty lists
+@lumeos/web:test:     ok 2 - normalizes missing arrays to empty lists
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.5638
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: throws for empty output
+@lumeos/web:test:     ok 3 - throws for empty output
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.2582
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: throws for non-json output
+@lumeos/web:test:     ok 4 - throws for non-json output
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.0922
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..4
+@lumeos/web:test: ok 298 - parseNutritionSchemaDebug
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 3.2832
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Elternteil im Bereich bleibt sichtbar, wenn ein Enkel auffaellig ist
+@lumeos/web:test: ok 299 - ein Elternteil im Bereich bleibt sichtbar, wenn ein Enkel auffaellig ist
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.029
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne auffaellige Nachkommen verschwindet die Zeile aus dem Filter
+@lumeos/web:test: ok 300 - ohne auffaellige Nachkommen verschwindet die Zeile aus dem Filter
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1906
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: status null ist unbewertet, nicht auffaellig
+@lumeos/web:test: ok 301 - status null ist unbewertet, nicht auffaellig
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1873
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: „ueber" zaehlt als auffaellig, aber nicht als „unter Ziel"
+@lumeos/web:test: ok 302 - „ueber" zaehlt als auffaellig, aber nicht als „unter Ziel"
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1053
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: zaehleSichtbare zaehlt Eltern und getroffene Kinder mit
+@lumeos/web:test: ok 303 - zaehleSichtbare zaehlt Eltern und getroffene Kinder mit
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2016
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: pruefeAnsicht nimmt nur die vollstaendige, saubere Form an
+@lumeos/web:test: ok 304 - pruefeAnsicht nimmt nur die vollstaendige, saubere Form an
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7339
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: normalisiere macht „Omega 3", „Omega-3" und „OMEGA_3" gleich
+@lumeos/web:test: ok 305 - normalisiere macht „Omega 3", „Omega-3" und „OMEGA_3" gleich
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3213
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: trifftSuche: 2 Zeichen nur Code/Alias, 3 auch Name, ab 4 auch Erklaertext
+@lumeos/web:test: ok 306 - trifftSuche: 2 Zeichen nur Code/Alias, 3 auch Name, ab 4 auch Erklaertext
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4758
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: trifftSuche: Aliase (G-142) — exakte Kurz-Token und Teiltreffer ab 3
+@lumeos/web:test: ok 307 - trifftSuche: Aliase (G-142) — exakte Kurz-Token und Teiltreffer ab 3
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2846
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: spektrumLage: Skala UL x 1,1 bzw. Ziel x 2, Wert wird gekappt
+@lumeos/web:test: ok 308 - spektrumLage: Skala UL x 1,1 bzw. Ziel x 2, Wert wird gekappt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4417
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: zeigeKind: unter einem selbst auffaelligen Knoten erscheinen die Kinder mit Wert
+@lumeos/web:test: ok 309 - zeigeKind: unter einem selbst auffaelligen Knoten erscheinen die Kinder mit Wert
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1549
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: karteFuerWurzel: acht Karten, die Makro-Aeste getrennt
+@lumeos/web:test: ok 310 - karteFuerWurzel: acht Karten, die Makro-Aeste getrennt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.098
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: fensterOderTag klammert auf Toms Liste
+@lumeos/web:test: ok 311 - fensterOderTag klammert auf Toms Liste
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0747
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: vier Ebenen haengen richtig: CHO → SUGAR → MNSAC → GLUS
+@lumeos/web:test: ok 312 - vier Ebenen haengen richtig: CHO → SUGAR → MNSAC → GLUS
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6353
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Reihenfolge der Eingabe ist egal — das Kind darf vor dem Elternteil stehen
+@lumeos/web:test: ok 313 - die Reihenfolge der Eingabe ist egal — das Kind darf vor dem Elternteil stehen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1225
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Geschwister stehen nach sort_index
+@lumeos/web:test: ok 314 - Geschwister stehen nach sort_index
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4571
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Eintrag mit unbekanntem Elterncode wird Wurzel, nicht verschluckt
+@lumeos/web:test: ok 315 - ein Eintrag mit unbekanntem Elterncode wird Wurzel, nicht verschluckt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0817
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: mehrere Wurzeln bleiben nebeneinander, nach sort_index
+@lumeos/web:test: ok 316 - mehrere Wurzeln bleiben nebeneinander, nach sort_index
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0592
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: eine leere Liste ergibt einen leeren Wald
+@lumeos/web:test: ok 317 - eine leere Liste ergibt einen leeren Wald
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0364
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: buildNutrientDetailLink
+@lumeos/web:test:     # Subtest: builds a local schema deep link for the selected nutrient
+@lumeos/web:test:     ok 1 - builds a local schema deep link for the selected nutrient
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.6731
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: includes a valid pinned nutrient in the exposed link
+@lumeos/web:test:     ok 2 - includes a valid pinned nutrient in the exposed link
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1902
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: preserves unrelated query state while replacing nutrient and stale pinned state
+@lumeos/web:test:     ok 3 - preserves unrelated query state while replacing nutrient and stale pinned state
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1581
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..3
+@lumeos/web:test: ok 318 - buildNutrientDetailLink
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.9034
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: selectNutrientDetailRow
+@lumeos/web:test:     # Subtest: selects a matching nutrient row by code
+@lumeos/web:test:     ok 1 - selects a matching nutrient row by code
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.7783
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: falls back to the first row when the selected code is not visible
+@lumeos/web:test:     ok 2 - falls back to the first row when the selected code is not visible
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1431
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: returns null for an empty row set
+@lumeos/web:test:     ok 3 - returns null for an empty row set
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.0888
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..3
+@lumeos/web:test: ok 319 - selectNutrientDetailRow
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.8754
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: resolveNutrientDetailCode
+@lumeos/web:test:     # Subtest: uses a valid requested code
+@lumeos/web:test:     ok 1 - uses a valid requested code
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.2786
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: falls back to the first row for invalid codes
+@lumeos/web:test:     ok 2 - falls back to the first row for invalid codes
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.0944
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: falls back to an empty string when no rows exist
+@lumeos/web:test:     ok 3 - falls back to an empty string when no rows exist
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.0997
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..3
+@lumeos/web:test: ok 320 - resolveNutrientDetailCode
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6847
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: buildNutrientDetailUrl
+@lumeos/web:test:     # Subtest: sets the nutrient query parameter while preserving other query state
+@lumeos/web:test:     ok 1 - sets the nutrient query parameter while preserving other query state
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.3339
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: replaces an existing nutrient query parameter
+@lumeos/web:test:     ok 2 - replaces an existing nutrient query parameter
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1358
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..2
+@lumeos/web:test: ok 321 - buildNutrientDetailUrl
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7629
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: formatNutrientDetailValue
+@lumeos/web:test:     # Subtest: formats empty and nullable values explicitly
+@lumeos/web:test:     ok 1 - formats empty and nullable values explicitly
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.2536
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: formats scalar detail values for display
+@lumeos/web:test:     ok 2 - formats scalar detail values for display
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.2438
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..2
+@lumeos/web:test: ok 322 - formatNutrientDetailValue
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6171
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: formatNutrientPinCompareValue
+@lumeos/web:test:     # Subtest: keeps empty strings and nullable values explicit
+@lumeos/web:test:     ok 1 - keeps empty strings and nullable values explicit
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.8078
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: formats scalar values without inference
+@lumeos/web:test:     ok 2 - formats scalar values without inference
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.2299
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..2
+@lumeos/web:test: ok 323 - formatNutrientPinCompareValue
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 2.067
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: resolvePinnedNutrientRow
+@lumeos/web:test:     # Subtest: resolves a pinned nutrient by code from the visible rows
+@lumeos/web:test:     ok 1 - resolves a pinned nutrient by code from the visible rows
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.2107
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: returns null when the pinned nutrient is missing or unset
+@lumeos/web:test:     ok 2 - returns null when the pinned nutrient is missing or unset
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.101
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..2
+@lumeos/web:test: ok 324 - resolvePinnedNutrientRow
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4335
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: nutrient pin URLs
+@lumeos/web:test:     # Subtest: sets the pinned nutrient while preserving the selected nutrient
+@lumeos/web:test:     ok 1 - sets the pinned nutrient while preserving the selected nutrient
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.3659
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: clears the pinned nutrient without dropping other filters
+@lumeos/web:test:     ok 2 - clears the pinned nutrient without dropping other filters
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1693
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..2
+@lumeos/web:test: ok 325 - nutrient pin URLs
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7583
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: buildNutrientPinCompareRows
+@lumeos/web:test:     # Subtest: compares selected and pinned nutrient fields with explicit display values
+@lumeos/web:test:     ok 1 - compares selected and pinned nutrient fields with explicit display values
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 1.0196
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: returns an empty compare set when either side is unavailable
+@lumeos/web:test:     ok 2 - returns an empty compare set when either side is unavailable
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1047
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..2
+@lumeos/web:test: ok 326 - buildNutrientPinCompareRows
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.2813
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: filterNutrientPreviewRows
+@lumeos/web:test:     # Subtest: filters by code, name, group, and unit text
+@lumeos/web:test:     ok 1 - filters by code, name, group, and unit text
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 1.2753
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: filters by exact German and English group pair
+@lumeos/web:test:     ok 2 - filters by exact German and English group pair
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1541
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: combines text and group filters
+@lumeos/web:test:     ok 3 - combines text and group filters
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1648
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..3
+@lumeos/web:test: ok 327 - filterNutrientPreviewRows
+@lumeos/web:test:   ---
+@lumeos/admin:build: cache hit, replaying logs 244311335efb3e2b
+@lumeos/web:test:   duration_ms: 2.3418
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: RDA availability filter
+@lumeos/web:test:     # Subtest: treats a row as RDA-available when male or female RDA has a non-empty value
+@lumeos/web:test:     ok 1 - treats a row as RDA-available when male or female RDA has a non-empty value
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.6997
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: returns all nutrients when the availability mode is all
+@lumeos/web:test:     ok 2 - returns all nutrients when the availability mode is all
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.8106
+@lumeos/web:test:       type: 'test'
+@lumeos/admin:build: 
+@lumeos/admin:build: > @lumeos/admin@0.1.0 build D:\GitHub\LumeOS-Claude-V1\apps\admin
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: filters nutrients with any male or female RDA value
+@lumeos/admin:build: > node scripts/gate-build.js
+@lumeos/web:test:     ok 3 - filters nutrients with any male or female RDA value
+@lumeos/web:test:       ---
+@lumeos/admin:build: 
+@lumeos/admin:build:   ▲ Next.js 14.2.35
+@lumeos/admin:build:   - Environments: .env.local
+@lumeos/web:test:       duration_ms: 0.1504
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/admin:build:   - Experiments (use with caution):
+@lumeos/admin:build:     · typedRoutes
+@lumeos/web:test:     # Subtest: filters nutrients without male or female RDA values
+@lumeos/web:test:     ok 4 - filters nutrients without male or female RDA values
+@lumeos/admin:build: 
+@lumeos/admin:build:    Creating an optimized production build ...
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1128
+@lumeos/admin:build:  ✓ Compiled successfully
+@lumeos/admin:build:    Linting and checking validity of types ...
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/admin:build:    Collecting page data ...
+@lumeos/admin:build:    Generating static pages (0/6) ...
+@lumeos/admin:build:    Generating static pages (1/6) 
+@lumeos/web:test:     # Subtest: combines RDA availability with search and group filters
+@lumeos/web:test:     ok 5 - combines RDA availability with search and group filters
+@lumeos/admin:build:    Generating static pages (2/6) 
+@lumeos/admin:build:    Generating static pages (4/6) 
+@lumeos/admin:build:  ✓ Generating static pages (6/6)
+@lumeos/admin:build:    Finalizing page optimization ...
+@lumeos/admin:build:    Collecting build traces ...
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1827
+@lumeos/admin:build: 
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..5
+@lumeos/web:test: ok 328 - RDA availability filter
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 2.9251
+@lumeos/admin:build: Route (app)                              Size     First Load JS
+@lumeos/admin:build: ┌ ƒ /                                    138 B          87.4 kB
+@lumeos/admin:build: ├ ○ /_not-found                          872 B          88.2 kB
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Vorgabe der Datenbank ergibt vier Reihen
+@lumeos/admin:build: ├ ƒ /api/curation                        0 B                0 B
+@lumeos/admin:build: ├ ƒ /auth/callback                       0 B                0 B
+@lumeos/admin:build: ├ ƒ /curation                            8.88 kB        96.2 kB
+@lumeos/admin:build: └ ƒ /login                               61.8 kB         149 kB
+@lumeos/admin:build: + First Load JS shared by all            87.3 kB
+@lumeos/web:test: ok 329 - die Vorgabe der Datenbank ergibt vier Reihen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.8409
+@lumeos/admin:build:   ├ chunks/4b5ceeaa-ae0005818a6c225c.js  53.6 kB
+@lumeos/admin:build:   ├ chunks/789-87893c94da9024ed.js       31.7 kB
+@lumeos/admin:build:   └ other shared chunks (total)          1.95 kB
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: dev@lumeos.app: 4 Mahlzeiten, 1 Snack — drei Reihen plus Snacks
+@lumeos/admin:build: 
+@lumeos/web:test: ok 330 - dev@lumeos.app: 4 Mahlzeiten, 1 Snack — drei Reihen plus Snacks
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2448
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Snacks faellt die Snackreihe weg
+@lumeos/admin:build: 
+@lumeos/admin:build: ƒ Middleware                             77.4 kB
+@lumeos/admin:build: 
+@lumeos/web:test: ok 331 - ohne Snacks faellt die Snackreihe weg
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1275
+@lumeos/admin:build: ○  (Static)   prerendered as static content
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: zwei Mahlzeiten ergeben zwei Reihen
+@lumeos/admin:build: ƒ  (Dynamic)  server-rendered on demand
+@lumeos/admin:build: 
+@lumeos/web:test: ok 332 - zwei Mahlzeiten ergeben zwei Reihen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0801
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Angabe bleiben die vier Reihen des Entwurfs
+@lumeos/web:test: ok 333 - ohne Angabe bleiben die vier Reihen des Entwurfs
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1234
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Snackreihe kommt auch ohne Hauptmahlzeitangabe nicht allein
+@lumeos/web:test: ok 334 - die Snackreihe kommt auch ohne Hauptmahlzeitangabe nicht allein
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0714
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: resolves only deterministic general exclusion mappings
+@lumeos/web:test: ok 335 - resolves only deterministic general exclusion mappings
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.0379
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: builds read-only preference preview rpc arguments
+@lumeos/web:test: ok 336 - builds read-only preference preview rpc arguments
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6779
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: normalizes tag codes and clamps paging in preview rpc arguments
+@lumeos/web:test: ok 337 - normalizes tag codes and clamps paging in preview rpc arguments
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1611
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: exposes unresolved exclusion options for UI transparency
+@lumeos/web:test: ok 338 - exposes unresolved exclusion options for UI transparency
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1119
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: preference catalog covers old-platform visible option groups without write behavior
+@lumeos/web:test: ok 339 - preference catalog covers old-platform visible option groups without write behavior
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.5159
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: general exclusion presets are hard constraints and unresolved mappings remain explicit
+@lumeos/web:test: ok 340 - general exclusion presets are hard constraints and unresolved mappings remain explicit
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2502
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: smart search boundary keeps preferences separate from diary writes
+@lumeos/web:test: ok 341 - smart search boundary keeps preferences separate from diary writes
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1856
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: write schema accepts only uuid food ids and known preference kinds
+@lumeos/web:test: ok 342 - write schema accepts only uuid food ids and known preference kinds
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 2.7903
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: strength derivation matches the 050 check constraint values
+@lumeos/web:test: ok 343 - strength derivation matches the 050 check constraint values
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1896
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: insert payload targets exactly one food and carries the user id
+@lumeos/web:test: ok 344 - insert payload targets exactly one food and carries the user id
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7464
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: write decision separates insert, restage and duplicate
+@lumeos/web:test: ok 345 - write decision separates insert, restage and duplicate
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.135
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: summarize groups stored items into preview argument buckets
+@lumeos/web:test: ok 346 - summarize groups stored items into preview argument buckets
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1593
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: stored item parser drops malformed rows instead of failing
+@lumeos/web:test: ok 347 - stored item parser drops malformed rows instead of failing
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2215
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: error codes map to stable http status values
+@lumeos/web:test: ok 348 - error codes map to stable http status values
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1084
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein fehlender Prozentwert bleibt null und wird nicht 0
+@lumeos/web:test: ok 349 - ein fehlender Prozentwert bleibt null und wird nicht 0
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6699
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: actual_value null bleibt null
+@lumeos/web:test: ok 350 - actual_value null bleibt null
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0979
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: numeric als String kommt als Zahl an
+@lumeos/web:test: ok 351 - numeric als String kommt als Zahl an
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1007
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: 80 % eines Ziels ist zu wenig, 80 % einer Obergrenze ist gut
+@lumeos/web:test: ok 352 - 80 % eines Ziels ist zu wenig, 80 % einer Obergrenze ist gut
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1092
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ueber der Obergrenze ist ein Warnzeichen, ueber dem Ziel nicht
+@lumeos/web:test: ok 353 - ueber der Obergrenze ist ein Warnzeichen, ueber dem Ziel nicht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0444
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Prozentwert gibt es keine Bewertung
+@lumeos/web:test: ok 354 - ohne Prozentwert gibt es keine Bewertung
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0499
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: not_applicable wird nie eingefaerbt
+@lumeos/web:test: ok 355 - not_applicable wird nie eingefaerbt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0732
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: unbekannte Status kommen nicht als leerer String durch
+@lumeos/web:test: ok 356 - unbekannte Status kommen nicht als leerer String durch
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0542
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Zeilen ohne Naehrstoffcode fallen raus
+@lumeos/web:test: ok 357 - Zeilen ohne Naehrstoffcode fallen raus
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.15
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: gemessene Zeilen aus lumeos_g03 werden richtig gelesen
+@lumeos/web:test: ok 358 - gemessene Zeilen aus lumeos_g03 werden richtig gelesen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2582
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Wert je Kilogramm liefert einen absoluten Referenzwert
+@lumeos/web:test: ok 359 - ein Wert je Kilogramm liefert einen absoluten Referenzwert
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.088
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Gewicht gibt es keinen Prozentwert und keinen Ersatz
+@lumeos/web:test: ok 360 - ohne Gewicht gibt es keinen Prozentwert und keinen Ersatz
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0589
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Energieanteil wird nicht als Deckungsgrad gezeigt
+@lumeos/web:test: ok 361 - ein Energieanteil wird nicht als Deckungsgrad gezeigt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0724
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: eine Naehrstoffdichte wird nicht als Deckungsgrad gezeigt
+@lumeos/web:test: ok 362 - eine Naehrstoffdichte wird nicht als Deckungsgrad gezeigt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0359
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die drei neuen Zustaende faerben nichts ein
+@lumeos/web:test: ok 363 - die drei neuen Zustaende faerben nichts ein
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0524
+@lumeos/web:test:   type: 'test'
+@lumeos/admin:typecheck: cache hit, replaying logs 16d0950ad6801586
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Zerlegung deutscher Komposita
+@lumeos/web:test:     # Subtest: zerlegt Komposita in Kopf und Rest
+@lumeos/web:test:     ok 1 - zerlegt Komposita in Kopf und Rest
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.9413
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: erkennt Fugenelemente
+@lumeos/web:test:     ok 2 - erkennt Fugenelemente
+@lumeos/web:test:       ---
+@lumeos/admin:typecheck: 
+@lumeos/web:test:       duration_ms: 0.1939
+@lumeos/admin:typecheck: > @lumeos/admin@0.1.0 typecheck D:\GitHub\LumeOS-Claude-V1\apps\admin
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: laesst echte Einzelwoerter unangetastet
+@lumeos/web:test:     ok 3 - laesst echte Einzelwoerter unangetastet
+@lumeos/admin:typecheck: > tsc --noEmit
+@lumeos/admin:typecheck: 
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.4009
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: haelt das ganze Wort vorn, wenn es selbst im Bestand steht
+@lumeos/web:test:     ok 4 - haelt das ganze Wort vorn, wenn es selbst im Bestand steht
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.0851
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: erreicht die Rohform eines Bestandsworts ueber die Zerlegung
+@lumeos/web:test:     ok 5 - erreicht die Rohform eines Bestandsworts ueber die Zerlegung
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.0812
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: bindet die Teile eines Kompositums mit UND, nicht mit ODER
+@lumeos/web:test:     ok 6 - bindet die Teile eines Kompositums mit UND, nicht mit ODER
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.0588
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..6
+@lumeos/web:test: ok 364 - Zerlegung deutscher Komposita
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 2.3583
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Plural: der Bestand steht im Singular
+@lumeos/web:test:     # Subtest: ergaenzt die Singularform
+@lumeos/web:test:     ok 1 - ergaenzt die Singularform
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1573
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: erfindet keine Formen — der Kandidat muss belegt sein
+@lumeos/web:test:     ok 2 - erfindet keine Formen — der Kandidat muss belegt sein
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1383
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: laesst das getippte Wort an erster Stelle
+@lumeos/web:test:     ok 3 - laesst das getippte Wort an erster Stelle
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.1021
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..3
+@lumeos/web:test: ok 365 - Plural: der Bestand steht im Singular
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5805
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Synonyme in den Suchgruppen
+@lumeos/web:test:     # Subtest: bruecken aus der Handliste stehen in der Gruppe
+@lumeos/web:test:     ok 1 - bruecken aus der Handliste stehen in der Gruppe
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.0965
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: uebernimmt Mundart aus dem Thesaurus
+@lumeos/web:test:     ok 2 - uebernimmt Mundart aus dem Thesaurus
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.06
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: das getippte Wort steht immer an erster Stelle
+@lumeos/web:test:     ok 3 - das getippte Wort steht immer an erster Stelle
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.0333
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..3
+@lumeos/web:test: ok 366 - Synonyme in den Suchgruppen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2419
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/coach:build: cache hit, replaying logs 1834253861de4ab4
+@lumeos/web:test: # Subtest: Umlaute: gefaltet wird vor dem Zerlegen
+@lumeos/web:test:     # Subtest: echte Umlaute und Umschrift ergeben dieselben Gruppen
+@lumeos/web:test:     ok 1 - echte Umlaute und Umschrift ergeben dieselben Gruppen
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.326
+@lumeos/coach:build: 
+@lumeos/web:test:       type: 'test'
+@lumeos/coach:build: > @lumeos/coach@0.1.0 build D:\GitHub\LumeOS-Claude-V1\apps\coach
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: faltet vor der Zerlegung, nicht danach
+@lumeos/coach:build: > node scripts/gate-build.js
+@lumeos/web:test:     ok 2 - faltet vor der Zerlegung, nicht danach
+@lumeos/coach:build: 
+@lumeos/coach:build:   ▲ Next.js 14.2.35
+@lumeos/web:test:       ---
+@lumeos/coach:build: 
+@lumeos/coach:build:    Creating an optimized production build ...
+@lumeos/web:test:       duration_ms: 0.0996
+@lumeos/coach:build:  ✓ Compiled successfully
+@lumeos/web:test:       type: 'test'
+@lumeos/coach:build:    Linting and checking validity of types ...
+@lumeos/coach:build:    Collecting page data ...
+@lumeos/coach:build:    Generating static pages (0/5) ...
+@lumeos/web:test:       ...
+@lumeos/web:test:     1..2
+@lumeos/web:test: ok 367 - Umlaute: gefaltet wird vor dem Zerlegen
+@lumeos/web:test:   ---
+@lumeos/coach:build:    Generating static pages (1/5) 
+@lumeos/coach:build:    Generating static pages (2/5) 
+@lumeos/coach:build:    Generating static pages (3/5) 
+@lumeos/coach:build:  ✓ Generating static pages (5/5)
+@lumeos/web:test:   duration_ms: 0.5078
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Suchgruppen als Ganzes
+@lumeos/coach:build:    Finalizing page optimization ...
+@lumeos/coach:build:    Collecting build traces ...
+@lumeos/coach:build: 
+@lumeos/web:test:     # Subtest: eine leere Anfrage ergibt keine Gruppen
+@lumeos/web:test:     ok 1 - eine leere Anfrage ergibt keine Gruppen
+@lumeos/web:test:       ---
+@lumeos/coach:build: Route (app)                              Size     First Load JS
+@lumeos/coach:build: ┌ ƒ /                                    135 B           126 kB
+@lumeos/web:test:       duration_ms: 0.0712
+@lumeos/coach:build: ├ ○ /_not-found                          872 B          88.2 kB
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/web:test:     # Subtest: getrennt geschriebene Anfragen ergeben je Wort eine Gruppe
+@lumeos/web:test:     ok 2 - getrennt geschriebene Anfragen ergeben je Wort eine Gruppe
+@lumeos/coach:build: ├ ƒ /athlet/[id]                         135 B           126 kB
+@lumeos/coach:build: ├ ƒ /auth/callback                       0 B                0 B
+@lumeos/web:test:       ---
+@lumeos/coach:build: └ ƒ /login                               61.9 kB         149 kB
+@lumeos/coach:build: + First Load JS shared by all            87.3 kB
+@lumeos/web:test:       duration_ms: 0.0849
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/coach:build:   ├ chunks/4b5ceeaa-9031e862282029f1.js  53.6 kB
+@lumeos/coach:build:   ├ chunks/789-9371c928edaa345f.js       31.7 kB
+@lumeos/coach:build:   └ other shared chunks (total)          1.95 kB
+@lumeos/coach:build: 
+@lumeos/coach:build: 
+@lumeos/coach:build: ƒ Middleware                             77.3 kB
+@lumeos/coach:build: 
+@lumeos/coach:build: ○  (Static)   prerendered as static content
+@lumeos/web:test:     # Subtest: deckelt die Zahl der Gruppen
+@lumeos/web:test:     ok 3 - deckelt die Zahl der Gruppen
+@lumeos/web:test:       ---
+@lumeos/web:test:       duration_ms: 0.0692
+@lumeos/web:test:       type: 'test'
+@lumeos/web:test:       ...
+@lumeos/coach:build: ƒ  (Dynamic)  server-rendered on demand
+@lumeos/coach:build: 
+@lumeos/web:test:     1..3
+@lumeos/web:test: ok 368 - Suchgruppen als Ganzes
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2776
+@lumeos/web:test:   type: 'suite'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Allergiekachel fuehrt 20 Eintraege in drei Stufen
+@lumeos/web:test: ok 369 - die Allergiekachel fuehrt 20 Eintraege in drei Stufen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.5756
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: gesetzte Unterkategorien bleiben sichtbar
+@lumeos/web:test: ok 370 - gesetzte Unterkategorien bleiben sichtbar
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3726
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Vorlieben werden immer vollstaendig geschrieben
+@lumeos/web:test: ok 371 - die Vorlieben werden immer vollstaendig geschrieben
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6029
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Daumen-Zeilen laufen ueber den Daumen-Weg
+@lumeos/web:test: ok 372 - Daumen-Zeilen laufen ueber den Daumen-Weg
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2302
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Klickmuster: tippen schaltet weiter, der Wert steht am Element
+@lumeos/web:test: ok 373 - ein Klickmuster: tippen schaltet weiter, der Wert steht am Element
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3126
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Lesepfad baut die Funktion nicht nach
+@lumeos/web:test: ok 374 - der Lesepfad baut die Funktion nicht nach
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.959
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Rangfolge sagt, wo sie wirkt — und wo bewusst nicht
+@lumeos/web:test: ok 375 - die Rangfolge sagt, wo sie wirkt — und wo bewusst nicht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.366
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Schlachtungs-Vorbehalt steht in der Anzeige
+@lumeos/web:test: ok 376 - der Schlachtungs-Vorbehalt steht in der Anzeige
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2139
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Ausschlusskachel erfindet keinen Katalog
+@lumeos/web:test: ok 377 - die Ausschlusskachel erfindet keinen Katalog
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5508
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die angebundene Kachel traegt keine Attrappenmarke
+@lumeos/web:test: ok 378 - die angebundene Kachel traegt keine Attrappenmarke
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.823
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: the unit is millilitres, fixed — no per-row unit column
+@lumeos/web:test: ok 379 - the unit is millilitres, fixed — no per-row unit column
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6798
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: quick add amounts match SPEC_04 feature 8
+@lumeos/web:test: ok 380 - quick add amounts match SPEC_04 feature 8
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5592
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: create schema rejects non-positive, non-finite and unknown sources
+@lumeos/web:test: ok 381 - create schema rejects non-positive, non-finite and unknown sources
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 2.1172
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: source defaults to manual when not given
+@lumeos/web:test: ok 382 - source defaults to manual when not given
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1419
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: insert payload carries the user id and nothing invented
+@lumeos/web:test: ok 383 - insert payload carries the user id and nothing invented
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1322
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: numeric strings from PostgREST arrive as numbers
+@lumeos/web:test: ok 384 - numeric strings from PostgREST arrive as numbers
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2477
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: malformed log rows drop out instead of failing the whole read
+@lumeos/web:test: ok 385 - malformed log rows drop out instead of failing the whole read
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1457
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: hydration adds both sources and reports completeness
+@lumeos/web:test: ok 386 - hydration adds both sources and reports completeness
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1563
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: a missing food water value makes the total a lower bound, not a truth
+@lumeos/web:test: ok 387 - a missing food water value makes the total a lower bound, not a truth
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1868
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: a claimed complete flag does not survive a missing counter
+@lumeos/web:test: ok 388 - a claimed complete flag does not survive a missing counter
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2871
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: a day with nothing logged is null everywhere, not a row of zeros
+@lumeos/web:test: ok 389 - a day with nothing logged is null everywhere, not a row of zeros
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0904
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: percent needs a target and never invents one
+@lumeos/web:test: ok 390 - percent needs a target and never invents one
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1287
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein komplett leeres Formular ist gueltig
+@lumeos/web:test: ok 391 - ein komplett leeres Formular ist gueltig
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.2162
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: leere Zahl wird null und nicht 0
+@lumeos/web:test: ok 392 - leere Zahl wird null und nicht 0
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2443
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Groesse und Gewicht halten sich an die CHECK-Grenzen
+@lumeos/web:test: ok 393 - Groesse und Gewicht halten sich an die CHECK-Grenzen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5774
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Geburtsdatum in der Zukunft wird abgelehnt
+@lumeos/web:test: ok 394 - ein Geburtsdatum in der Zukunft wird abgelehnt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.1561
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: nur die erlaubten Listenwerte gehen durch
+@lumeos/web:test: ok 395 - nur die erlaubten Listenwerte gehen durch
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6591
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Zeitraum darf nicht rueckwaerts laufen
+@lumeos/web:test: ok 396 - ein Zeitraum darf nicht rueckwaerts laufen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1184
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein offener Zeitraum ist gueltig
+@lumeos/web:test: ok 397 - ein offener Zeitraum ist gueltig
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1655
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Ende ohne Beginn wird abgelehnt
+@lumeos/web:test: ok 398 - ein Ende ohne Beginn wird abgelehnt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0851
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: numeric als String kommt als Zahl an
+@lumeos/web:test: ok 399 - numeric als String kommt als Zahl an
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1851
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: unbekannte Listenwerte aus der Datenbank werden zu null
+@lumeos/web:test: ok 400 - unbekannte Listenwerte aus der Datenbank werden zu null
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2436
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: eine fehlende Zeile ergibt ein leeres Profil
+@lumeos/web:test: ok 401 - eine fehlende Zeile ergibt ein leeres Profil
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2448
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Zeitraeume zaehlen nicht zur Vollstaendigkeit
+@lumeos/web:test: ok 402 - die Zeitraeume zaehlen nicht zur Vollstaendigkeit
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.081
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Referenzwerte brauchen Geburtsdatum und Geschlecht
+@lumeos/web:test: ok 403 - Referenzwerte brauchen Geburtsdatum und Geschlecht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0511
+@lumeos/coach:typecheck: cache hit, replaying logs b1cfc36988d11f0b
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die TDEE-Formel braucht fuenf Angaben
+@lumeos/web:test: ok 404 - die TDEE-Formel braucht fuenf Angaben
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0429
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jede Aktivitaetsstufe hat einen Faktor aus der Spec
+@lumeos/web:test: ok 405 - jede Aktivitaetsstufe hat einen Faktor aus der Spec
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.055
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Gewichte sind der stabile Kern 30/15/15/10/15/10/5
+@lumeos/web:test: ok 406 - die Gewichte sind der stabile Kern 30/15/15/10/15/10/5
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.8732
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Score rechnet OHNE HRV
+@lumeos/web:test: ok 407 - der Score rechnet OHNE HRV
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4039
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Beispieltag ohne HRV ergibt eine nachvollziehbare Zahl
+@lumeos/web:test: ok 408 - ein Beispieltag ohne HRV ergibt eine nachvollziehbare Zahl
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2366
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: fehlende Anteile zaehlen NICHT als null Punkte
+@lumeos/web:test: ok 409 - fehlende Anteile zaehlen NICHT als null Punkte
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1169
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: eine leere Spalte senkt den Score nicht
+@lumeos/web:test: ok 410 - eine leere Spalte senkt den Score nicht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1273
+@lumeos/web:test:   type: 'test'
+@lumeos/coach:typecheck: 
+@lumeos/coach:typecheck: > @lumeos/coach@0.1.0 typecheck D:\GitHub\LumeOS-Claude-V1\apps\coach
+@lumeos/coach:typecheck: > tsc --noEmit
+@lumeos/coach:typecheck: 
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Soreness mittelt nur ueber GEMELDETE Muskeln (E2)
+@lumeos/web:test: ok 411 - Soreness mittelt nur ueber GEMELDETE Muskeln (E2)
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1635
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: kein gemeldeter Kater ist voller Anteil, nicht unbekannt
+@lumeos/web:test: ok 412 - kein gemeldeter Kater ist voller Anteil, nicht unbekannt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0773
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die drei fehlerhaften Quellformeln sind NICHT gebaut
+@lumeos/web:test: ok 413 - die drei fehlerhaften Quellformeln sind NICHT gebaut
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1334
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: kein Anteil kann ueber sein Gewicht steigen
+@lumeos/web:test: ok 414 - kein Anteil kann ueber sein Gewicht steigen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2515
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Check-in gibt es keinen Score, nicht null Punkte
+@lumeos/web:test: ok 415 - ohne Check-in gibt es keinen Score, nicht null Punkte
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.303
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein unbekannter mood-Wert erfindet keine Punkte
+@lumeos/web:test: ok 416 - ein unbekannter mood-Wert erfindet keine Punkte
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1696
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein kurzer Wert schlaegt seinen Feldnamen
+@lumeos/web:test: ok 417 - ein kurzer Wert schlaegt seinen Feldnamen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.9817
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: unbekannt zaehlt NICHT als Inhalt — der Fall Bromocriptine
+@lumeos/web:test: ok 418 - unbekannt zaehlt NICHT als Inhalt — der Fall Bromocriptine
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1865
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: true, false und blosse Zahlen sagen ohne ihr Feld nichts
+@lumeos/web:test: ok 419 - true, false und blosse Zahlen sagen ohne ihr Feld nichts
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.272
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: leere Sammlungen zaehlen nicht — der Fall Qualitaet
+@lumeos/web:test: ok 420 - leere Sammlungen zaehlen nicht — der Fall Qualitaet
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1019
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: nichts drin heisst „keine Angaben", nicht „0 Felder"
+@lumeos/web:test: ok 421 - nichts drin heisst „keine Angaben", nicht „0 Felder"
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1655
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: lange Werte werden am Trenner gekuerzt, nicht im Wort
+@lumeos/web:test: ok 422 - lange Werte werden am Trenner gekuerzt, nicht im Wort
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1779
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Reichweite folgt der Einheit — Kreatin reicht 6 Tage, nicht 30
+@lumeos/web:test: ok 423 - die Reichweite folgt der Einheit — Kreatin reicht 6 Tage, nicht 30
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6489
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Einheiten bleibt die alte Lesart — Bestand als Portionen
+@lumeos/web:test: ok 424 - ohne Einheiten bleibt die alte Lesart — Bestand als Portionen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0819
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die drei Nachfuellstufen greifen an ihren Grenzen
+@lumeos/web:test: ok 425 - die drei Nachfuellstufen greifen an ihren Grenzen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1127
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Nachfuellliste sortiert knappste zuerst, Unbekanntes ans Ende
+@lumeos/web:test: ok 426 - die Nachfuellliste sortiert knappste zuerst, Unbekanntes ans Ende
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5332
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Nachkaufwert bleibt null, wenn ein Preis fehlt
+@lumeos/web:test: ok 427 - der Nachkaufwert bleibt null, wenn ein Preis fehlt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1179
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: minusTage rechnet ueber Monatsgrenzen
+@lumeos/web:test: ok 428 - minusTage rechnet ueber Monatsgrenzen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6052
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Gesamtquote zaehlt genommen gegen erfasst
+@lumeos/web:test: ok 429 - die Gesamtquote zaehlt genommen gegen erfasst
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2156
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein leeres Fenster ergibt keine Quote von 0 %
+@lumeos/web:test: ok 430 - ein leeres Fenster ergibt keine Quote von 0 %
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.066
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Compliance gruppiert nach Namen, nicht nach stack_item_id
+@lumeos/web:test: ok 431 - die Compliance gruppiert nach Namen, nicht nach stack_item_id
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4453
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Streifen ist immer so lang wie das Fenster
+@lumeos/web:test: ok 432 - der Streifen ist immer so lang wie das Fenster
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3124
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Tage ohne Eintrag erscheinen nicht als 0 Prozent
+@lumeos/web:test: ok 433 - Tage ohne Eintrag erscheinen nicht als 0 Prozent
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1729
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Kostenverlauf rechnet aus genommenen Einnahmen
+@lumeos/web:test: ok 434 - der Kostenverlauf rechnet aus genommenen Einnahmen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2011
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: angeschnittene Monate sind als solche gekennzeichnet
+@lumeos/web:test: ok 435 - angeschnittene Monate sind als solche gekennzeichnet
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0978
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Praeparat ohne Preis faellt aus dem Verlauf, nicht auf null
+@lumeos/web:test: ok 436 - ein Praeparat ohne Preis faellt aus dem Verlauf, nicht auf null
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0502
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: „ohne dieses Praeparat" ist reine Subtraktion
+@lumeos/web:test: ok 437 - „ohne dieses Praeparat" ist reine Subtraktion
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1964
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: offen sind genau pro und elite
+@lumeos/web:test: ok 438 - offen sind genau pro und elite
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7884
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne gesetzten Grad bleibt es zu
+@lumeos/web:test: ok 439 - ohne gesetzten Grad bleibt es zu
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1947
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein unbekannter Wert oeffnet nichts
+@lumeos/web:test: ok 440 - ein unbekannter Wert oeffnet nichts
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0983
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Grenze steht auf pro — nicht mehr auf advanced
+@lumeos/web:test: ok 441 - die Grenze steht auf pro — nicht mehr auf advanced
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0974
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Provisoriums-Satz traegt seine drei Aussagen
+@lumeos/web:test: ok 442 - der Provisoriums-Satz traegt seine drei Aussagen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2569
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Angabe kommt niemand durch
+@lumeos/web:test: ok 443 - ohne Angabe kommt niemand durch
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4818
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Anfaenger reicht nicht
+@lumeos/web:test: ok 444 - Anfaenger reicht nicht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0743
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ab der gesetzten Stufe ist offen
+@lumeos/web:test: ok 445 - ab der gesetzten Stufe ist offen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0532
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: advanced reicht seit G-167 nicht mehr
+@lumeos/web:test: ok 446 - advanced reicht seit G-167 nicht mehr
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0339
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: hoehere Stufen reichen auch
+@lumeos/web:test: ok 447 - hoehere Stufen reichen auch
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0341
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein unbekannter Wert reicht nicht
+@lumeos/web:test: ok 448 - ein unbekannter Wert reicht nicht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0401
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: deutsch fehlt, englisch traegt — der Fall aller 566 Substanzen
+@lumeos/web:test: ok 449 - deutsch fehlt, englisch traegt — der Fall aller 566 Substanzen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.8369
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: deutsch da — es gewinnt, auch wenn englisch danebensteht
+@lumeos/web:test: ok 450 - deutsch da — es gewinnt, auch wenn englisch danebensteht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1489
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: NULL und Leerstring zaehlen beide als fehlend
+@lumeos/web:test: ok 451 - NULL und Leerstring zaehlen beide als fehlend
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1025
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: beides leer ergibt null — kein Strich, keine Leerstelle
+@lumeos/web:test: ok 452 - beides leer ergibt null — kein Strich, keine Leerstelle
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0733
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Nicht-Zeichenketten gelten als fehlend, nicht als Wert
+@lumeos/web:test: ok 453 - Nicht-Zeichenketten gelten als fehlend, nicht als Wert
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1318
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Kosten und Reichweite aus Dosis, Portion und Preis
+@lumeos/web:test: ok 454 - Kosten und Reichweite aus Dosis, Portion und Preis
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7128
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: unter der Schwelle wird als solches erkannt
+@lumeos/web:test: ok 455 - unter der Schwelle wird als solches erkannt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0967
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Preis bleibt die Kostenzahl leer statt null zu werden
+@lumeos/web:test: ok 456 - ohne Preis bleibt die Kostenzahl leer statt null zu werden
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0566
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Portionsgroesse ist weder Kosten noch Reichweite ableitbar
+@lumeos/web:test: ok 457 - ohne Portionsgroesse ist weder Kosten noch Reichweite ableitbar
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0456
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Bestand gibt es keine Schwellenaussage
+@lumeos/web:test: ok 458 - ohne Bestand gibt es keine Schwellenaussage
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0454
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Portionsgroesse 0 fuehrt nicht zu Unendlich
+@lumeos/web:test: ok 459 - Portionsgroesse 0 fuehrt nicht zu Unendlich
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0476
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Monatssumme der vier gemessenen Positionen ergibt 20,40
+@lumeos/web:test: ok 460 - die Monatssumme der vier gemessenen Positionen ergibt 20,40
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1451
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-187: die Wechselwirkung wird der richtigen Position zugeordnet
+@lumeos/web:test: ok 461 - G-187: die Wechselwirkung wird der richtigen Position zugeordnet
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7407
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-187: eine Zeile ohne Position im Stack zaehlt nicht
+@lumeos/web:test: ok 462 - G-187: eine Zeile ohne Position im Stack zaehlt nicht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.4536
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-187: eine Position ohne Katalogbezug kann nicht treffen
+@lumeos/web:test: ok 463 - G-187: eine Position ohne Katalogbezug kann nicht treffen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0713
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-187: die Beschreibung entfaellt, wenn sie der Partner ist
+@lumeos/web:test: ok 464 - G-187: die Beschreibung entfaellt, wenn sie der Partner ist
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0588
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-187: doppelte Zeilen werden entdoppelt
+@lumeos/web:test: ok 465 - G-187: doppelte Zeilen werden entdoppelt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1138
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-187: ohne Zeilen entsteht nichts — kein erfundenes Paar
+@lumeos/web:test: ok 466 - G-187: ohne Zeilen entsteht nichts — kein erfundenes Paar
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0635
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-187: der Reiter ist mit dem Lesepfad verdrahtet
+@lumeos/web:test: ok 467 - G-187: der Reiter ist mit dem Lesepfad verdrahtet
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.8781
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-187: die Ueberschrift sagt, dass es MEDIKAMENTE sind
+@lumeos/web:test: ok 468 - G-187: die Ueberschrift sagt, dass es MEDIKAMENTE sind
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.9746
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jedes angezeigte Feld traegt seinen Herkunftsvermerk
+@lumeos/web:test: ok 469 - jedes angezeigte Feld traegt seinen Herkunftsvermerk
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.8518
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein Wert ohne Herkunft wird gemeldet, nicht still gezeigt
+@lumeos/web:test: ok 470 - ein Wert ohne Herkunft wird gemeldet, nicht still gezeigt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3204
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Leeres erzeugt kein Feld — kein Platzhalter, kein Strich
+@lumeos/web:test: ok 471 - Leeres erzeugt kein Feld — kein Platzhalter, kein Strich
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.172
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: fehlt der ganze Block (31-Spalten-Stand), entsteht er nicht
+@lumeos/web:test: ok 472 - fehlt der ganze Block (31-Spalten-Stand), entsteht er nicht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1025
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: dose_ceiling bleibt Freitext, wie er dasteht
+@lumeos/web:test: ok 473 - dose_ceiling bleibt Freitext, wie er dasteht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1782
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: missing_reason wird als benannte Luecke gefuehrt
+@lumeos/web:test: ok 474 - missing_reason wird als benannte Luecke gefuehrt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1581
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Blocksuche findet erst den Pfad, dann den Block, sonst nichts
+@lumeos/web:test: ok 475 - die Blocksuche findet erst den Pfad, dann den Block, sonst nichts
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0794
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: C-229-Nachtrag: source_ref allein ist KEINE Herkunft
+@lumeos/web:test: ok 476 - C-229-Nachtrag: source_ref allein ist KEINE Herkunft
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0584
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Kreatin bekommt alle vier Kacheln
+@lumeos/web:test: ok 477 - Kreatin bekommt alle vier Kacheln
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.8579
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne Menge und ohne Wirkungszahl bleiben zwei Kacheln
+@lumeos/web:test: ok 478 - ohne Menge und ohne Wirkungszahl bleiben zwei Kacheln
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.216
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne alles entsteht keine einzige Kachel
+@lumeos/web:test: ok 479 - ohne alles entsteht keine einzige Kachel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.102
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die irrefuehrenden Prozentzahlen sind NICHT in der Liste
+@lumeos/web:test: ok 480 - die irrefuehrenden Prozentzahlen sind NICHT in der Liste
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1604
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Wirkungsliste bleibt klein und belegt
+@lumeos/web:test: ok 481 - die Wirkungsliste bleibt klein und belegt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.358
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Evidenzgrad bekommt Farbe und Klartext
+@lumeos/web:test: ok 482 - der Evidenzgrad bekommt Farbe und Klartext
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1857
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: WADA verboten wird als Warnung gezeigt
+@lumeos/web:test: ok 483 - WADA verboten wird als Warnung gezeigt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0958
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Mengenkachel traegt die kurze Form, nicht den Satz
+@lumeos/web:test: ok 484 - die Mengenkachel traegt die kurze Form, nicht den Satz
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2602
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Leerraum zaehlt nicht als Wert
+@lumeos/web:test: ok 485 - Leerraum zaehlt nicht als Wert
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2041
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Zaehler sind gezaehlt: gross zuerst, unzugeordnet am Ende
+@lumeos/web:test: ok 486 - die Zaehler sind gezaehlt: gross zuerst, unzugeordnet am Ende
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.8961
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Mehrfachauswahl vereinigt: Peptide UND SARMs zugleich
+@lumeos/web:test: ok 487 - Mehrfachauswahl vereinigt: Peptide UND SARMs zugleich
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2277
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: null ist unzugeordnet — ein eigener Zustand, keine Restklasse
+@lumeos/web:test: ok 488 - null ist unzugeordnet — ein eigener Zustand, keine Restklasse
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2164
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jede Farbe ist eine CSS-Variable, keine ist hartkodiert
+@lumeos/web:test: ok 489 - jede Farbe ist eine CSS-Variable, keine ist hartkodiert
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3087
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: jede benutzte Variable steht in supplements.css — hell UND dunkel
+@lumeos/web:test: ok 490 - jede benutzte Variable steht in supplements.css — hell UND dunkel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 2.7575
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Komponente traegt keine hartkodierte Kategoriefarbe und immer Text
+@lumeos/web:test: ok 491 - die Komponente traegt keine hartkodierte Kategoriefarbe und immer Text
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6114
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: C-229: die drei Gruppen zaehlen und filtern, das Gate sperrt
+@lumeos/web:test: ok 492 - C-229: die drei Gruppen zaehlen und filtern, das Gate sperrt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3402
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-186: die Suche findet auch ueber die Zwecke
+@lumeos/web:test: ok 493 - G-186: die Suche findet auch ueber die Zwecke
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1625
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-186: die Liste ist mit `trifftSuche` verdrahtet
+@lumeos/web:test: ok 494 - G-186: die Liste ist mit `trifftSuche` verdrahtet
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7613
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-182: der Gruppenwechsel setzt die Kategorie zurueck
+@lumeos/web:test: ok 495 - G-182: der Gruppenwechsel setzt die Kategorie zurueck
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3492
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-182: dieselbe Gruppe nochmal aendert nichts
+@lumeos/web:test: ok 496 - G-182: dieselbe Gruppe nochmal aendert nichts
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0948
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-182: das Detail benutzt nachGruppenwechsel, nicht setGruppe roh
+@lumeos/web:test: ok 497 - G-182: das Detail benutzt nachGruppenwechsel, nicht setGruppe roh
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3118
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: C-229/G-180: das Detail ist zu, bis jemand es aufklappt
+@lumeos/web:test: ok 498 - C-229/G-180: das Detail ist zu, bis jemand es aufklappt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.276
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-180: immer nur EINE Zeile offen
+@lumeos/web:test: ok 499 - G-180: immer nur EINE Zeile offen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2343
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: C-229: der Add-Dialog sendet stack_id und zeigt die Stackwahl
+@lumeos/web:test: ok 500 - C-229: der Add-Dialog sendet stack_id und zeigt die Stackwahl
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3392
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Erwartung der grossen Kategorien traegt eigene Farben
+@lumeos/web:test: ok 501 - die Erwartung der grossen Kategorien traegt eigene Farben
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1069
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ohne alles gibt es keinen einzigen Reiter
+@lumeos/web:test: ok 502 - ohne alles gibt es keinen einzigen Reiter
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.4069
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: nur Formen: nur der Formen-Reiter — der Fall Magnesium
+@lumeos/web:test: ok 503 - nur Formen: nur der Formen-Reiter — der Fall Magnesium
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3258
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Zahl steht nur, wo es eine gibt
+@lumeos/web:test: ok 504 - die Zahl steht nur, wo es eine gibt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1533
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Dosierung erscheint schon bei EINER Zahl
+@lumeos/web:test: ok 505 - Dosierung erscheint schon bei EINER Zahl
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1071
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Dosierung erscheint auch, wenn nur `wann_wie` dasteht
+@lumeos/web:test: ok 506 - Dosierung erscheint auch, wenn nur `wann_wie` dasteht
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.085
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Sicherheit erscheint bei jedem einzelnen ihrer Felder
+@lumeos/web:test: ok 507 - Sicherheit erscheint bei jedem einzelnen ihrer Felder
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2431
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Enhanced-Felder zaehlen zur Sicherheit
+@lumeos/web:test: ok 508 - die Enhanced-Felder zaehlen zur Sicherheit
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.172
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Laborbezug allein traegt den Sicherheits-Reiter
+@lumeos/web:test: ok 509 - der Laborbezug allein traegt den Sicherheits-Reiter
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1306
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-182: der Quellen-Reiter erscheint, wo Quellen liegen
+@lumeos/web:test: ok 510 - G-182: der Quellen-Reiter erscheint, wo Quellen liegen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2322
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-182: der Warnkasten steht NUR im Ueberblick
+@lumeos/web:test: ok 511 - G-182: der Warnkasten steht NUR im Ueberblick
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6918
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-182: Ueberwachung und Reinheit stehen NICHT rechtsbuendig
+@lumeos/web:test: ok 512 - G-182: Ueberwachung und Reinheit stehen NICHT rechtsbuendig
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3678
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-186: Labor- und Wechselwirkung tragen den Sicherheits-Reiter
+@lumeos/web:test: ok 513 - G-186: Labor- und Wechselwirkung tragen den Sicherheits-Reiter
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1166
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: G-186: der Wechselwirkungsblock haengt in der Sicherheit
+@lumeos/web:test: ok 514 - G-186: der Wechselwirkungsblock haengt in der Sicherheit
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.3326
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Reihenfolge steht fest
+@lumeos/web:test: ok 515 - die Reihenfolge steht fest
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1615
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Leerraum zaehlt nicht als Inhalt
+@lumeos/web:test: ok 516 - Leerraum zaehlt nicht als Inhalt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0617
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das JSON-Literal null faellt weg, der echte Wert bleibt
+@lumeos/web:test: ok 517 - das JSON-Literal null faellt weg, der echte Wert bleibt
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.0354
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: dose_ceiling als JSON-null zaehlt NICHT als Obergrenze
+@lumeos/web:test: ok 518 - dose_ceiling als JSON-null zaehlt NICHT als Obergrenze
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1881
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ist alles null, entsteht gar keine Kachel
+@lumeos/web:test: ok 519 - ist alles null, entsteht gar keine Kachel
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1079
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: leeres Objekt und leeres Array sagen auch nichts
+@lumeos/web:test: ok 520 - leeres Objekt und leeres Array sagen auch nichts
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.7315
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Null selbst bleibt, wo sie ein Messwert ist
+@lumeos/web:test: ok 521 - die Null selbst bleibt, wo sie ein Messwert ist
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1238
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: geplante Sitzungen zaehlen nicht als Leistung — trotz status completed
+@lumeos/web:test: ok 522 - geplante Sitzungen zaehlen nicht als Leistung — trotz status completed
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.2553
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Volumen je Muskel zaehlt eine Uebung jeder Gruppe voll zu
+@lumeos/web:test: ok 523 - Volumen je Muskel zaehlt eine Uebung jeder Gruppe voll zu
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2882
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: Volumen je Muskel laesst geplante Sitzungen aus
+@lumeos/web:test: ok 524 - Volumen je Muskel laesst geplante Sitzungen aus
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.1134
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Woche faengt am Montag an
+@lumeos/web:test: ok 525 - die Woche faengt am Montag an
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.8452
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Serie zaehlt Wochen, und geplante zaehlen nicht mit
+@lumeos/web:test: ok 526 - die Serie zaehlt Wochen, und geplante zaehlen nicht mit
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3452
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: eine Luecke setzt die Serie zurueck
+@lumeos/web:test: ok 527 - eine Luecke setzt die Serie zurueck
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3041
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: der Kraftverlauf zeigt nur Uebungen mit absolvierten Saetzen
+@lumeos/web:test: ok 528 - der Kraftverlauf zeigt nur Uebungen mit absolvierten Saetzen
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 9.9379
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: ein einzelner Punkt ergibt keinen Trend
+@lumeos/web:test: ok 529 - ein einzelner Punkt ergibt keinen Trend
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.169
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: das Kraftverhaeltnis faengt fehlende Werte ab
+@lumeos/web:test: ok 530 - das Kraftverhaeltnis faengt fehlende Werte ab
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.2112
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die Seitengroesse liegt bei der PostgREST-Grenze
+@lumeos/web:test: ok 531 - die Seitengroesse liegt bei der PostgREST-Grenze
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5371
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: 6.588 Zuordnungen ergeben sieben Seiten
+@lumeos/web:test: ok 532 - 6.588 Zuordnungen ergeben sieben Seiten
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.5579
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: genau 1.000 Zeilen brauchen zwei Seiten, nicht eine
+@lumeos/web:test: ok 533 - genau 1.000 Zeilen brauchen zwei Seiten, nicht eine
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0856
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: leer bleibt leer
+@lumeos/web:test: ok 534 - leer bleibt leer
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0487
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: die ID-Grenze fuer .in() liegt unter 252
+@lumeos/web:test: ok 535 - die ID-Grenze fuer .in() liegt unter 252
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0937
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: 95 Muskelgruppen bleiben unter der ID-Grenze
+@lumeos/web:test: ok 536 - 95 Muskelgruppen bleiben unter der ID-Grenze
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.0494
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: registry, css imports and css files match exactly
+@lumeos/web:test: ok 537 - registry, css imports and css files match exactly
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 1.0641
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: theme 'lume' fulfils the token contract in both modes
+@lumeos/web:test: ok 538 - theme 'lume' fulfils the token contract in both modes
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.6724
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: # Subtest: globals.css stays free of hardcoded colors
+@lumeos/web:test: ok 539 - globals.css stays free of hardcoded colors
+@lumeos/web:test:   ---
+@lumeos/web:test:   duration_ms: 0.3607
+@lumeos/web:test:   type: 'test'
+@lumeos/web:test:   ...
+@lumeos/web:test: 1..539
+@lumeos/web:test: # tests 585
+@lumeos/web:test: # suites 18
+@lumeos/web:test: # pass 585
+@lumeos/web:test: # fail 0
+@lumeos/web:test: # cancelled 0
+@lumeos/web:test: # skipped 0
+@lumeos/web:test: # todo 0
+@lumeos/web:test: # duration_ms 2976.6983
+@lumeos/web:build: cache hit, replaying logs c93034e416effa3f
+@lumeos/web:build: 
+@lumeos/web:build: > @lumeos/web@0.1.0 build D:\GitHub\LumeOS-Claude-V1\apps\web
+@lumeos/web:build: > node scripts/gate-build.js
+@lumeos/web:build: 
+@lumeos/web:build:   ▲ Next.js 14.2.35
+@lumeos/web:build:   - Environments: .env.local
+@lumeos/web:build:   - Experiments (use with caution):
+@lumeos/web:build:     · typedRoutes
+@lumeos/web:build: 
+@lumeos/web:build:    Creating an optimized production build ...
+@lumeos/web:build:  ✓ Compiled successfully
+@lumeos/web:build:    Linting and checking validity of types ...
+@lumeos/web:build:    Collecting page data ...
+@lumeos/web:build:    Generating static pages (0/31) ...
+@lumeos/web:build:    Generating static pages (7/31) 
+@lumeos/web:build:    Generating static pages (15/31) 
+@lumeos/web:build:    Generating static pages (23/31) 
+@lumeos/web:build:  ✓ Generating static pages (31/31)
+@lumeos/web:build:    Finalizing page optimization ...
+@lumeos/web:build:    Collecting build traces ...
+@lumeos/web:build: 
+@lumeos/web:build: Route (app)                              Size     First Load JS
+@lumeos/web:build: ┌ ƒ /                                    211 B          96.3 kB
+@lumeos/web:build: ├ ƒ /_not-found                          875 B          88.3 kB
+@lumeos/web:build: ├ ƒ /api/nutrition/ansicht               0 B                0 B
+@lumeos/web:build: ├ ƒ /api/nutrition/diary                 0 B                0 B
+@lumeos/web:build: ├ ƒ /api/nutrition/foods                 0 B                0 B
+@lumeos/web:build: ├ ƒ /api/nutrition/foods/categories      0 B                0 B
+@lumeos/web:build: ├ ƒ /api/nutrition/foods/smart-preview   0 B                0 B
+@lumeos/web:build: ├ ƒ /api/nutrition/local-schema          0 B                0 B
+@lumeos/web:build: ├ ƒ /api/nutrition/naehrstoff            0 B                0 B
+@lumeos/web:build: ├ ƒ /api/nutrition/preferences           0 B                0 B
+@lumeos/web:build: ├ ƒ /api/nutrition/preferences/catalog   0 B                0 B
+@lumeos/web:build: ├ ƒ /api/nutrition/water                 0 B                0 B
+@lumeos/web:build: ├ ƒ /api/profile                         0 B                0 B
+@lumeos/web:build: ├ ƒ /api/profile/ziele                   0 B                0 B
+@lumeos/web:build: ├ ƒ /api/supplements/intake              0 B                0 B
+@lumeos/web:build: ├ ƒ /api/supplements/substanz            0 B                0 B
+@lumeos/web:build: ├ ƒ /auth/callback                       0 B                0 B
+@lumeos/web:build: ├ ƒ /coach                               211 B          96.3 kB
+@lumeos/web:build: ├ ƒ /dashboard                           211 B          96.3 kB
+@lumeos/web:build: ├ ƒ /goals                               211 B          96.3 kB
+@lumeos/web:build: ├ ƒ /login                               1.95 kB         173 kB
+@lumeos/web:build: ├ ƒ /medical                             211 B          96.3 kB
+@lumeos/web:build: ├ ƒ /nutrition                           211 B          96.3 kB
+@lumeos/web:build: ├ ƒ /nutrition/foods                     5.24 kB         131 kB
+@lumeos/web:build: ├ ƒ /nutrition/local-schema              3.51 kB        90.9 kB
+@lumeos/web:build: ├ ƒ /nutrition/preferences               152 B          87.6 kB
+@lumeos/web:build: ├ ƒ /recovery                            211 B          96.3 kB
+@lumeos/web:build: ├ ƒ /settings                            211 B          96.3 kB
+@lumeos/web:build: ├ ƒ /supplements                         211 B          96.3 kB
+@lumeos/web:build: ├ ƒ /training                            211 B          96.3 kB
+@lumeos/web:build: ├ ƒ /v2                                  152 B          87.6 kB
+@lumeos/web:build: ├ ƒ /v2/coach                            152 B          87.6 kB
+@lumeos/web:build: ├ ƒ /v2/coach/ai                         23.9 kB         155 kB
+@lumeos/web:build: ├ ƒ /v2/coach/human                      12.4 kB         143 kB
+@lumeos/web:build: ├ ƒ /v2/dashboard                        4.44 kB         141 kB
+@lumeos/web:build: ├ ƒ /v2/goals                            36.9 kB         176 kB
+@lumeos/web:build: ├ ƒ /v2/medical                          30.2 kB         158 kB
+@lumeos/web:build: ├ ƒ /v2/nutrition                        40.1 kB         201 kB
+@lumeos/web:build: ├ ƒ /v2/nutrition/suche                  3.75 kB         131 kB
+@lumeos/web:build: ├ ƒ /v2/recovery                         26.5 kB         166 kB
+@lumeos/web:build: ├ ƒ /v2/settings                         4.37 kB         157 kB
+@lumeos/web:build: ├ ƒ /v2/supplements                      48.7 kB         210 kB
+@lumeos/web:build: └ ƒ /v2/training                         29.9 kB         169 kB
+@lumeos/web:build: + First Load JS shared by all            87.4 kB
+@lumeos/web:build:   ├ chunks/3789-20977891ac9ba4f7.js      31.7 kB
+@lumeos/web:build:   ├ chunks/4b5ceeaa-d27e84dbb08663dc.js  53.6 kB
+@lumeos/web:build:   └ other shared chunks (total)          2.05 kB
+@lumeos/web:build: 
+@lumeos/web:build: 
+@lumeos/web:build: ƒ Middleware                             77.6 kB
+@lumeos/web:build: 
+@lumeos/web:build: ƒ  (Dynamic)  server-rendered on demand
+@lumeos/web:build: 
+@lumeos/web:typecheck: cache hit, replaying logs 29355112c05cad71
+@lumeos/web:typecheck: 
+@lumeos/web:typecheck: > @lumeos/web@0.1.0 typecheck D:\GitHub\LumeOS-Claude-V1\apps\web
+@lumeos/web:typecheck: > tsc --noEmit
+@lumeos/web:typecheck: 
+
+ Tasks:    11 successful, 11 total
+Cached:    11 cached, 11 total
+  Time:    135ms >>> FULL TURBO
+
+[serverimport] 50 Client-Chunks geprueft, 0 Treffer; Gegenprobe: createServerClient 3x Server, cookies() 4x Server.
+• turbo 2.9.6

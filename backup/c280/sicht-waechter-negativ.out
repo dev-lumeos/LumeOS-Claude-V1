@@ -1,0 +1,5 @@
+EXIT 1
+FORBIDDEN_COLUMNS:
+reported_mitigations
+FORBIDDEN_VIEWDEF:
+reported_mitigations
