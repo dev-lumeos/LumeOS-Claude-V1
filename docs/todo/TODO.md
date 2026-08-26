@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-26.** 245 offen, 0 in Arbeit.
+**Stand: 2026-08-26.** 247 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6299,3 +6299,76 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   ueberdauert:** `reported_mitigations` in den Lesepfad einbauen, ein
   Waechter muss rot werden. **Ohne ihn steht die Grenze nur in einer
   Markdown-Datei.**
+
+- [ ] **C-280: Eine Sicht, die nur zeigt, was gezeigt werden darf**
+  (neu 2026-08-26). Aus G-192.
+
+  braucht: C-273
+
+  `[cmd]` **Claude Code hat den Community-Reiter gebaut, kann ihn aber
+  nicht befuellen** — `wissen` ist bewusst nicht ueber PostgREST
+  erreichbar (C-273: Policies auf `service_role`, `nicht_ueber_api` im
+  Sollstand).
+
+  `[cmd]` **In `wissen.community_records` liegen 1.033 Zeilen in
+  derselben Tabelle. 212 duerfen angezeigt werden:** 37
+  Nebenwirkungen · 31 Stacks · 40 Qualitaetssignale · 71 Begriffe ·
+  30 Deltas · 3 Konzepte.
+
+  `[cmd]` **821 nicht:** 315 Quellen · 179 Aliase · 123
+  Nutzungsmuster · 86 Dosierungsmuster · 43 fremde Blutbilder · 20
+  Hypothesen.
+
+  `[read]` **Gibt man `wissen` frei, ist alles davon erreichbar.** Die
+  Trennung laege dann nur in der Abfrage, nicht in der Berechtigung.
+  **Ein Filter im Lesepfad ist eine Vereinbarung. Eine Sicht ist eine
+  Grenze.**
+
+  `[cmd]` **Entscheidend:** `reported_mitigations` steht **bei allen 37**
+  Nebenwirkungsmustern im `raw`-JSON. `[read]` *„Cabergolin gegen
+  Prolaktin, PDE5-Hemmer"* ist eine Anweisung, egal wie das Feld
+  heisst — **die Sicht schneidet es weg, statt sich darauf zu
+  verlassen, dass niemand danach fragt.**
+
+  `[read]` **Und die Zuordnung ist die eigentliche Arbeit:** `[cmd]` die
+  Nebenwirkungen tragen `substance_class` (19 Klassen), **nicht
+  `substance_id`**. Ein Muster zu *19-nor-AAS* gilt fuer Nandrolon
+  **und** Trenbolon. **Bildet die Sicht das nicht ab, erscheint der
+  Reiter bei keiner oder bei jeder Substanz.**
+
+- [ ] **G-194: Der Quellen-Chip und farbige Ueberschriften** (neu
+  2026-08-26). Aus Toms Durchsicht.
+
+  braucht: G-184
+
+  `[cmd]` **Der Chip unten links zeigt „Quellen · 1", der Reiter oben
+  „Quellen 4"** — dieselbe Sache, zwei Zahlen, **und die untere ist
+  falsch.** `[read]` Der Chip stammt aus der Zeit vor dem
+  Quellen-Reiter (G-182). **Ein zweiter Weg zur selben Sache mit
+  falscher Zahl ist schlechter als keiner.**
+
+  **Tom, 2026-08-26:** *„fuer ueberwachung und reinheit waeren
+  passende headerfarben noch machbar dass es zu den anderen 3 ins
+  konzept passt, auch die anderen reiter sollen die headertitel
+  farben kriegen."*
+
+  `[cmd]` **Heute farbig:** *Was nicht zurueckkommt* (Warnfarbe),
+  *Wie es wirkt*, *Was es bringt* (Akzent). **Grau:** *Ueberwachung*,
+  *Reinheit*, *Bei zu viel*, *Wer es nicht nehmen sollte*, *Mythen*,
+  *Nicht im Blut nachweisbar*, *Rechtslage*, *Wann und wie*, *Fragen*.
+
+  `[read]` **Die Farbe muss etwas bedeuten, sonst ist es Dekoration.**
+  Zwei Gruppen sind die Frage: *Ueberwachung* ist keine Warnung — sie
+  sagt, **was gemessen gehoert.** *Reinheit* ist keine Wirkung — sie
+  sagt, **dass der Inhalt unsicher ist.**
+
+  `[read]` **Zwei Bedingungen:** vier Farben sind eine Ordnung, sieben
+  ein Regenbogen. Und **dieselbe Bedeutung bekommt ueberall dieselbe
+  Farbe** — *Reinheit* im Ueberblick und *Nicht im Blut* in der
+  Sicherheit sagen dasselbe.
+
+  `[read]` **Der WADA-Block aus G-184 ist der Pruefstein:** drei
+  Zustaende, und *erlaubt* ist eine **Entwarnung** — Entwarnung in
+  Warnfarbe waere falsch. **Die meisten Farbordnungen koennen warnen,
+  aber nicht entwarnen.** Wenn die Regel hier traegt, traegt sie
+  ueberall.

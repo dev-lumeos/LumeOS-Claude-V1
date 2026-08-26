@@ -289,3 +289,5 @@ wenn er erzeugt und geprüft wird.
 | **C-279** Das Kreuzprodukt in `rule_assessment` skaliert mit den | offen | 6210 |
 | **G-193** Jede Leistungszahl nennt das Konto | offen | 6229 |
 | **G-192** Ein Community-Reiter im Substanzdetail | offen | 6253 |
+| **C-280** Eine Sicht, die nur zeigt, was gezeigt werden darf | offen | 6303 |
+| **G-194** Der Quellen-Chip und farbige Ueberschriften | offen | 6339 |
