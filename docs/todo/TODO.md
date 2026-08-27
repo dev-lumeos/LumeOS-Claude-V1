@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-27.** 254 offen, 0 in Arbeit.
+**Stand: 2026-08-27.** 255 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6535,3 +6535,22 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
 
   **Zu tun:** entweder nur bei Aenderung schreiben, oder nur mit
   ausdruecklichem Schalter — nicht bei jedem Gate.
+
+- [ ] **G-203: Woraus die 700 ms zwischen Datenbank und Anwendung
+  bestehen** (neu 2026-08-27). Messauftrag zu C-278.
+
+  `[cmd]` **`ladeRegeln` auf `dev@lumeos.app`: 172 ms in der
+  Datenbank, 880 ms bis in die Anwendung** (von Claude Code in G-190
+  gemessen). Die Differenz entsteht in PostgREST und im Transport.
+
+  `[cmd]` **Der Code:** `regeln-read.ts:74`, zwei Aufrufe in
+  `Promise.allSettled` — `rpc('rule_assessment')` und
+  `from('rule_catalog')` (64 Zeilen), davor `auth.getUser()`.
+
+  `[read]` **Zu messen, nicht zu reparieren:** Zeilenzahl,
+  Antwortgroesse, Kompression, Zahl der Rundreisen — und ob
+  `getUser()` eine eigene kostet. **Auf beiden Konten**, damit C-278
+  (Ueberbau) und C-279 (Kreuzprodukt) sauber getrennt sind.
+
+  `[read]` **Die Summe der Abschnitte muss die Gesamtzeit ergeben.**
+  Bleibt ein Rest, ist der Rest der Befund.

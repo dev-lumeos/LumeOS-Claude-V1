@@ -298,3 +298,4 @@ wenn er erzeugt und geprüft wird.
 | **C-295** die Kette liest aus zwei Kimi-Pfaden | offen | 6489 |
 | **C-296** zehn falsche `drug_class`-Tags im Medikamentenbestand | offen | 6511 |
 | **G-202** der Dublettenpruefer schreibt bei jedem Gate-Lauf | offen | 6523 |
+| **G-203** Woraus die 700 ms zwischen Datenbank und Anwendung | offen | 6539 |
