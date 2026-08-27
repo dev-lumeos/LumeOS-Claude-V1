@@ -20,6 +20,19 @@ Künftige Strukturänderungen entstehen als neue Migration in `migrations/`
 **und** — wo sie zur Kette gehören — als Pipeline-Schritt; Stammdaten und
 Seeds bleiben ausschliesslich in `_pipeline/`.
 
+### Harte Grenze: Struktur ja, Daten nein
+
+Eine Migration darf Tabellen, Spalten, Constraints, Indizes, Funktionen,
+Trigger, RLS, Policies und Grants definieren. Sie darf **keine** Katalogdaten
+oder Ableitungen schreiben: `INSERT`, `UPDATE` und `COPY` gehoeren in einen
+nummerierten Schritt unter `_pipeline/`. Das gilt auch fuer Backfills. Die
+Migrationsdatei macht eine Umgebung strukturell lauffaehig; der Kettenschritt
+stellt erst den lokalen Datenzustand her.
+
+`node tools/migration-datenlogik-pruefen.mjs` prueft diese Grenze. Der
+Waechter ignoriert Funktionskoerper und Kommentare, meldet aber jeden
+ausfuehrbaren `INSERT`-, `UPDATE`- oder `COPY`-Befehl in `migrations/`.
+
 ---
 
 ## Warum es diesen Ordner in dieser Form gibt

@@ -26,12 +26,21 @@ const C = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE ?? 'postgres'
 const SOLL_PATH = process.argv[2] ?? 'supabase/_pipeline/daten/schema-sollstand.json'
 const SEP = ''
+const PROFILE = process.env.SCHEMA_CHECK_PROFILE === '1'
+let sqlCall = 0
 
 function sql(text: string): string[][] {
-  return execFileSync('docker',
+  const call = ++sqlCall
+  const started = Date.now()
+  const output = execFileSync('docker',
     ['exec', C, 'psql', '-U', 'postgres', '-d', DB, '-t', '-A', '-F', SEP, '-c', text],
     { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
-    .split('\n').map(z => z.trimEnd()).filter(Boolean).map(z => z.split(SEP))
+  const elapsed = Date.now() - started
+  if (PROFILE) {
+    const label = text.replace(/\s+/g, ' ').trim().slice(0, 120)
+    console.error(`PROFILE sql#${call} ${elapsed}ms ${label}`)
+  }
+  return output.split('\n').map(z => z.trimEnd()).filter(Boolean).map(z => z.split(SEP))
 }
 
 const SOLL = JSON.parse(
@@ -395,29 +404,34 @@ for (const [tab, min] of Object.entries(SOLL.mindestzeilen)) {
 // Schritte 100-105 erzeugen Training-Daten; ohne diese Zaehler koennte ein
 // Kettenlauf die komplette Trainingsschicht verlieren und trotzdem gruen sein.
 if (SOLL.mindestzeilen_schema) {
-  for (const [qualified, min] of Object.entries(SOLL.mindestzeilen_schema)) {
+  const mindestzeilenSchema = Object.entries(SOLL.mindestzeilen_schema)
+  const vorhandeneSchemaTabellen = new Set(sql(
+    `SELECT table_schema||'.'||table_name
+     FROM information_schema.tables
+     WHERE table_type='BASE TABLE';`
+  ).map(r => r[0]))
+  const zaehlbareSchemaTabellen = mindestzeilenSchema.filter(([qualified]) => vorhandeneSchemaTabellen.has(qualified))
+  const schemaZeilen = new Map<string, number>()
+  if (zaehlbareSchemaTabellen.length) {
+    const counts = zaehlbareSchemaTabellen.map(([qualified]) => {
+      const [schema, table] = qualified.split('.')
+      return `SELECT ${lit(qualified)} AS key, count(*)::text AS value FROM ${ident(schema)}.${ident(table)}`
+    }).join(' UNION ALL ')
+    for (const [qualified, count] of sql(counts)) schemaZeilen.set(qualified, Number(count))
+  }
+  for (const [qualified, min] of mindestzeilenSchema) {
     if (qualified.startsWith('_')) continue
     const [schema, table] = qualified.split('.')
     if (!schema || !table) {
       fehler.push(`Sollliste: mindestzeilen_schema enthaelt ungueltigen Namen ${qualified}`)
       continue
     }
-    const exists = sql(
-      `SELECT EXISTS (
-         SELECT 1 FROM information_schema.tables
-         WHERE table_schema='${schema.replace(/'/g, "''")}'
-           AND table_name='${table.replace(/'/g, "''")}'
-           AND table_type='BASE TABLE'
-       )::text;`
-    )[0]?.[0] === 'true'
-    if (!exists) {
+    if (!vorhandeneSchemaTabellen.has(qualified)) {
       console.log(`  ${qualified.padEnd(20)} ${String(0).padStart(7)} / ${String(min).padStart(7)}  FEHLT`)
       fehler.push(`Tabelle: ${qualified} FEHLT`)
       continue
     }
-    const n = Number(sql(
-      `SELECT count(*) FROM "${schema.replace(/"/g, '""')}"."${table.replace(/"/g, '""')}";`
-    )[0][0])
+    const n = schemaZeilen.get(qualified) ?? 0
     const ok = n >= (min as number)
     console.log(`  ${qualified.padEnd(20)} ${String(n).padStart(7)} / ${String(min).padStart(7)}  ${ok ? 'ok' : 'ZU WENIG'}`)
     if (!ok) fehler.push(`Zeilen: ${qualified} hat ${n}, erwartet mindestens ${min}`)
@@ -513,14 +527,39 @@ if (Array.isArray(SOLL.fremde_schemata) && SOLL.fremde_schemata.length) {
     fremdeSchemaNamen.add(t.schema)
   }
 
+  const schemaSql = [...fremdeSchemaNamen].map(s => lit(s)).join(',')
+  const fremdeTabellenIst = new Set(sql(
+    `SELECT table_schema||'.'||table_name
+     FROM information_schema.tables
+     WHERE table_type='BASE TABLE' AND table_schema IN (${schemaSql});`
+  ).map(r => r[0]))
+  const fremdeRlsIst = new Map(sql(
+    `SELECT n.nspname||'.'||c.relname, c.relrowsecurity::text
+     FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+     WHERE c.relkind='r' AND n.nspname IN (${schemaSql});`
+  ))
+  const fremdePoliciesIst = new Map<string, Set<string>>()
+  for (const [voll, cmd] of sql(
+    `SELECT schemaname||'.'||tablename, cmd
+     FROM pg_policies WHERE schemaname IN (${schemaSql});`
+  )) {
+    if (!fremdePoliciesIst.has(voll)) fremdePoliciesIst.set(voll, new Set())
+    fremdePoliciesIst.get(voll)!.add(cmd)
+  }
+  const fremdeGrantsIst = new Map<string, Map<string, Set<string>>>()
+  for (const [voll, rolle, recht] of sql(
+    `SELECT table_schema||'.'||table_name, grantee, privilege_type
+     FROM information_schema.role_table_grants
+     WHERE table_schema IN (${schemaSql}) AND grantee <> 'postgres';`
+  )) {
+    if (!fremdeGrantsIst.has(voll)) fremdeGrantsIst.set(voll, new Map())
+    const proTabelle = fremdeGrantsIst.get(voll)!
+    if (!proTabelle.has(rolle)) proTabelle.set(rolle, new Set())
+    proTabelle.get(rolle)!.add(recht)
+  }
+
   if (fremdeSchemaNamen.size) {
-    const schemaSql = [...fremdeSchemaNamen].map(s => `'${s}'`).join(',')
-    for (const [voll] of sql(
-      `SELECT table_schema||'.'||table_name
-       FROM information_schema.tables
-       WHERE table_type='BASE TABLE'
-         AND table_schema IN (${schemaSql})
-       ORDER BY 1;`)) {
+    for (const voll of fremdeTabellenIst) {
       const name = voll.split('.').pop() ?? voll
       const bekannt =
         erwarteteFremdeTabellen.has(voll) ||
@@ -536,20 +575,13 @@ if (Array.isArray(SOLL.fremde_schemata) && SOLL.fremde_schemata.length) {
   for (const t of SOLL.fremde_schemata) {
     const voll = `${t.schema}.${t.name}`
 
-    const daIst = sql(
-      `SELECT EXISTS (SELECT 1 FROM information_schema.tables
-         WHERE table_schema='${t.schema}' AND table_name='${t.name}'
-           AND table_type='BASE TABLE')::text;`)[0]?.[0] === 'true'
-    if (!daIst) {
+    if (!fremdeTabellenIst.has(voll)) {
       fehler.push(`Tabelle: ${voll} FEHLT — erzeugt von Schritt ${t.schritt}`)
       continue
     }
 
     // Zeilenschutz
-    const rls = sql(
-      `SELECT c.relrowsecurity::text FROM pg_class c
-       JOIN pg_namespace n ON n.oid=c.relnamespace
-       WHERE n.nspname='${t.schema}' AND c.relname='${t.name}';`)[0]?.[0]
+    const rls = fremdeRlsIst.get(voll)
     const rlsAn = rls === 'true' || rls === 't'
     if (rlsAn !== (t.rls === true)) {
       fehler.push(`Zeilenschutz: ${voll} hat rowsecurity=${rlsAn}, erwartet ${t.rls}` +
@@ -558,9 +590,7 @@ if (Array.isArray(SOLL.fremde_schemata) && SOLL.fremde_schemata.length) {
     }
 
     // Policies je Operation — derselbe Massstab wie fuer nutrition.
-    const polIst2 = new Set(sql(
-      `SELECT cmd FROM pg_policies
-       WHERE schemaname='${t.schema}' AND tablename='${t.name}';`).map(r => r[0]))
+    const polIst2 = fremdePoliciesIst.get(voll) ?? new Set<string>()
     if (t.rls && polIst2.size === 0) {
       fehler.push(`Policies: ${voll} hat Zeilenschutz, aber KEINE Policy` +
         ` — Tabelle ist gesperrt (ADR-0003) — Schritt ${t.schritt}`)
@@ -573,13 +603,7 @@ if (Array.isArray(SOLL.fremde_schemata) && SOLL.fremde_schemata.length) {
     }
 
     // Grants, exakt wie bei nutrition.
-    const grIst = new Map<string, Set<string>>()
-    for (const [rolle, recht] of sql(
-      `SELECT grantee, privilege_type FROM information_schema.role_table_grants
-       WHERE table_schema='${t.schema}' AND table_name='${t.name}';`)) {
-      if (!grIst.has(rolle)) grIst.set(rolle, new Set())
-      grIst.get(rolle)!.add(recht)
-    }
+    const grIst = fremdeGrantsIst.get(voll) ?? new Map<string, Set<string>>()
     let grOk = true
     for (const [rolle, soll] of Object.entries(t.grants as Record<string, string[]>)) {
       const ist = grIst.get(rolle) ?? new Set<string>()
@@ -709,11 +733,15 @@ if (Array.isArray(SOLL.fremde_sichten) && SOLL.fremde_sichten.length) {
 }
 
 if (Array.isArray(SOLL.fremde_funktionen) && SOLL.fremde_funktionen.length) {
+  const funktionsSchemata = [...new Set(SOLL.fremde_funktionen.map((f: any) => f.schema))]
+  const fremdeFunktionenIst = new Set(sql(
+    `SELECT n.nspname||'.'||p.proname
+     FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+     WHERE n.nspname IN (${funktionsSchemata.map(lit).join(',')});`
+  ).map(r => r[0]))
   let fnOk = 0
   for (const f of SOLL.fremde_funktionen) {
-    const da = sql(
-      `SELECT EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
-         WHERE n.nspname='${f.schema}' AND p.proname='${f.name}')::text;`)[0]?.[0] === 'true'
+    const da = fremdeFunktionenIst.has(`${f.schema}.${f.name}`)
     if (da) fnOk++
     else fehler.push(`Funktion: ${f.schema}.${f.name} FEHLT — Schritt ${f.schritt}`)
   }

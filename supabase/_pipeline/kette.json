@@ -977,11 +977,20 @@
     },
     {
       "id": "286",
+      "path": "supabase/_pipeline/14_medical/286_medication_enrichments.sql",
+      "kind": "sql",
+      "creates": "C-286: Struktur fuer additive Medikamenten-Enrichments",
+      "depends_on": [
+        "283"
+      ]
+    },
+    {
+      "id": "286a",
       "path": "supabase/_pipeline/14_medical/286_medication_enrichments.ts",
       "kind": "tsx",
       "creates": "C-286: ATC-Prioritaet und additive Medikamenten-Enrichments fuer PK, Organfunktion, Reproduktion, klinischen Kontext und Thailand",
       "depends_on": [
-        "283"
+        "286"
       ]
     },
     {
