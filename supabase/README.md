@@ -24,14 +24,18 @@ Seeds bleiben ausschliesslich in `_pipeline/`.
 
 Eine Migration darf Tabellen, Spalten, Constraints, Indizes, Funktionen,
 Trigger, RLS, Policies und Grants definieren. Sie darf **keine** Katalogdaten
-oder Ableitungen schreiben: `INSERT`, `UPDATE` und `COPY` gehoeren in einen
-nummerierten Schritt unter `_pipeline/`. Das gilt auch fuer Backfills. Die
-Migrationsdatei macht eine Umgebung strukturell lauffaehig; der Kettenschritt
-stellt erst den lokalen Datenzustand her.
+oder Ableitungen schreiben: `INSERT`, `UPDATE`, `COPY`, `DELETE`, `TRUNCATE`
+und `MERGE` gehoeren in einen nummerierten Schritt unter `_pipeline/`. Das gilt
+auch fuer Backfills. Die Migrationsdatei macht eine Umgebung strukturell
+lauffaehig; der Kettenschritt stellt erst den lokalen Datenzustand her.
 
-`node tools/migration-datenlogik-pruefen.mjs` prueft diese Grenze. Der
-Waechter ignoriert Funktionskoerper und Kommentare, meldet aber jeden
-ausfuehrbaren `INSERT`-, `UPDATE`- oder `COPY`-Befehl in `migrations/`.
+`node tools/migration-datenlogik-pruefen.mjs` prueft diese Grenze und laeuft
+in `pnpm gate`. Der Waechter ignoriert Kommentare und Zeichenketten, prueft
+aber auch Dollar-quotierte Funktionskoerper. Einzige benannte Ausnahme ist
+`public.handle_new_user()` in `20260805120000_baseline_structure.sql`: dessen
+`INSERT INTO public.profiles (id)` erzeugt beim Auth-Trigger das Profil zum
+neuen Benutzer und ist kein Katalog-Backfill. Jede weitere ausfuehrbare
+Datenoperation in `migrations/` ist ein Fehler.
 
 ---
 
