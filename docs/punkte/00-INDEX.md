@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 250 |
+| `todos` | 247 |
 | `laufend_codex` | 1 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 5 |
 | **gesamt** | **256** |
 
@@ -151,9 +152,9 @@
 | `G-118` | befund | mittel | [Der Extended-Code liegt im Buendel](todos/supplements-g-0118-der-extended-code-liegt-im-buendel.md) | offen | — |
 | `G-150` | entscheidung | mittel | [Die Volltextsuche findet ueber Erklaertexte](todos/supplements-g-0150-die-volltextsuche-findet-ueber-erklaertexte.md) | offen | — |
 | `G-162` | befund | mittel | [supplements Compliance und medical Tracking](todos/supplements-g-0162-supplements-compliance-und-medical-tracking.md) | offen | — |
-| `G-186` | befund | mittel | [Der Katalog zeigt noch nicht alles, was drinsteht](todos/supplements-g-0186-der-katalog-zeigt-noch-nicht-alles-was-drinsteht.md) | offen | — |
-| `G-188` | feature | mittel | [Der Wechselwirkungs-Reiter heisst nicht, was er zeigt](todos/supplements-g-0188-der-wechselwirkungs-reiter-heisst-nicht-was-er-zeigt.md) | offen | — |
-| `G-189` | feature | mittel | [Der tote Rueckfallzweig `SuppInteractions` fliegt](todos/supplements-g-0189-der-tote-rueckfallzweig-suppinteractions-fliegt.md) | offen | — |
+| `G-186` | befund | mittel | [Der Katalog zeigt noch nicht alles, was drinsteht](laufend_claudecode/supplements-g-0186-der-katalog-zeigt-noch-nicht-alles-was-drinsteht.md) | laeuft (claudecode) | — |
+| `G-188` | feature | mittel | [Der Wechselwirkungs-Reiter heisst nicht, was er zeigt](laufend_claudecode/supplements-g-0188-der-wechselwirkungs-reiter-heisst-nicht-was-er-zeigt.md) | laeuft (claudecode) | — |
+| `G-189` | feature | mittel | [Der tote Rueckfallzweig `SuppInteractions` fliegt](laufend_claudecode/supplements-g-0189-der-tote-rueckfallzweig-suppinteractions-fliegt.md) | laeuft (claudecode) | — |
 | `G-202` | feature | mittel | [der Dublettenpruefer schreibt bei jedem Gate-Lauf](todos/supplements-g-0202-der-dublettenpruefer-schreibt-bei-jedem-gate-lauf.md) | offen | — |
 | `G-205` | messung | mittel | [Der Dev-Server beendet sich selbst](todos/supplements-g-0205-der-dev-server-beendet-sich-selbst.md) | offen | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — |

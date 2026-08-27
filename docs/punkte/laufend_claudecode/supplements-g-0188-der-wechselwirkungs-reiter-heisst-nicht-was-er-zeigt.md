@@ -7,6 +7,8 @@ angelegt: 2026-08-25
 braucht: []
 kind_von: G-187
 kinder: []
+agent: claudecode
+beauftragt: 2026-08-27
 entscheidung: null
 beruehrt:
   tabellen: ["medical.medication_active_substances", "medical.user_medications"]
@@ -34,3 +36,14 @@ zahlen: null
   treffen je Stack 2 Zeilen, beide Medikamente, die im Bestand des
   Nutzers gar nicht erfasst sind. `[cmd]` `medical.user_medications`
   traegt **2 Zeilen**.
+
+## Auftrag
+
+**Zusammen mit G-186 beauftragt** — die drei Punkte betreffen
+dieselbe Ansicht. **Der Auftragstext steht in
+`supplements-g-0186-der-katalog-zeigt-noch-nicht-alles-was-drinsteht.md`,
+der Bericht ebenfalls.**
+
+## Abnahme
+
+_(vom Orchestrator)_

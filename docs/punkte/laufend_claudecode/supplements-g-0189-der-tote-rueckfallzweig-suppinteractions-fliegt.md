@@ -7,6 +7,8 @@ angelegt: 2026-08-25
 braucht: []
 kind_von: G-187
 kinder: []
+agent: claudecode
+beauftragt: 2026-08-27
 entscheidung: null
 beruehrt:
   tabellen: []
@@ -30,3 +32,14 @@ zahlen: null
   bleiben nicht als Notfallanzeige stehen. **Ein Zweig, der nur bei
   einem Datenbankfehler erscheint und dann eine erfundene Bewertung
   zeigt, ist genau der Fall, fuer den die Regel geschrieben wurde.**
+
+## Auftrag
+
+**Zusammen mit G-186 beauftragt** — die drei Punkte betreffen
+dieselbe Ansicht. **Der Auftragstext steht in
+`supplements-g-0186-der-katalog-zeigt-noch-nicht-alles-was-drinsteht.md`,
+der Bericht ebenfalls.**
+
+## Abnahme
+
+_(vom Orchestrator)_
