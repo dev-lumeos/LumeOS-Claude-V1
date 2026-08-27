@@ -9,7 +9,7 @@ kind_von: C-207
 kinder: []
 entscheidung: E-19
 erledigt: 2026-08-27
-commit: OFFEN
+commit: d24332e2
 beruehrt:
   dateien: [docs/entscheidungen/E-19-cam-objektspeicher-und-modellnaht.md]
 zahlen: null
