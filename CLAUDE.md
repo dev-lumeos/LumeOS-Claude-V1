@@ -167,6 +167,43 @@ zu verschwinden.
 
 `docs/todo/` und `docs/ssot/` bleiben beim Orchestrator.
 
+## Der Orchestrator zaehlt nicht
+
+**Tom, 2026-08-27:** *,,11 von 12 falsch sagt mir du kannst es einfach
+nicht also lass es die tun die es koennen"*.
+
+**Ein Auftrag traegt die Frage und die Messanweisung — keine Zahlen
+vom Orchestrator.**
+
+`[cmd]` **Am 27.08. lagen meine Zaehlungen elfmal daneben, jedes Mal
+beim Abgrenzen einer Kategorie** — 27 statt 18 Attrappen (`git grep
+-c` zaehlt Zeilen), 5 statt 7 Tabellen (ein Regex loest keine View
+auf), 124 statt 380 Wirkstoffe, 31 statt 20 Regeln (Textsuchtreffer
+fuer eine Kategorie gehalten), 3 statt 1 Schreibstelle, 47 statt 43
+Punkte, 244 statt 221 Datumsangaben (`null` ist ein Zeichen).
+
+`[read]` **Der Befund, der es entscheidet:** in jedem Fall haette der
+Agent dieselbe Zahl gemessen, auch ohne meine. **Meine Zahl hat nie
+etwas beigetragen — nur einen Umweg erzeugt.**
+
+**Was der Orchestrator weiter prueft: ob das Ziel existiert und nicht
+schon erledigt ist.** `[cmd]` Viermal hat das einen Auftrag gerettet
+— G-207, G-211, G-138, G-176. `[read]` **Das ist eine Ja/Nein-Frage,
+keine Zaehlung.**
+
+**Formulierung:**
+
+    frueher   ,,Es sind 31 Regeln, pruef das."
+    jetzt     ,,Miss, wie viele Regeln ueber `drug_class` gehen -
+               und sag mir, wie du abgegrenzt hast."
+
+`[read]` **Die Abgrenzung mitzuverlangen ist der Kern** — genau dort
+ging es bei mir jedes Mal schief.
+
+**Die alte Regel bleibt gueltig, wo Zahlen unvermeidbar im Auftrag
+stehen** (etwa aus einem fremden Bericht): dann sind sie
+Ausgangsvermutungen, und die gemessene gilt.
+
 ## Zahlen im Auftrag sind Ausgangsvermutungen
 
 **Tom, 2026-08-26:** *„mittlerweile in jedem bericht lese ich dass du

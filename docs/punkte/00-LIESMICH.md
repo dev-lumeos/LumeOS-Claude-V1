@@ -185,6 +185,64 @@ erledigten Punkte nach `erledigt/` gewandert sind. **Dann kann
     ## Abnahme        <- vom Orchestrator
     Was unabhaengig nachgemessen wurde, mit [cmd].
 
+## Der Orchestrator zaehlt nicht
+
+**Seit 2026-08-27, auf Toms Anweisung.**
+
+`[read]` **Ein Auftrag traegt die Frage und die Messanweisung — keine
+Zahlen vom Orchestrator.**
+
+### Warum
+
+`[cmd]` **Am 27.08. lagen meine Zaehlungen elfmal daneben, jedes Mal
+beim Abgrenzen einer Kategorie:**
+
+    27 statt 18 Attrappen      `git grep -c` zaehlt Zeilen, nicht Treffer
+    5 statt 7 Tabellen         ein Regex loest keine View auf
+    124 statt 380 Wirkstoffe   ueber Formulierungen statt bis zum Produkt
+    31 statt 20 Regeln         Textsuchtreffer fuer eine Kategorie gehalten
+    3 statt 1 Schreibstelle    Fundstellen statt schreibende Aufrufe
+    47 statt 43 Punkte         A-, F-, GO-Reihen nicht abgezogen
+    244 statt 221 Datumsangaben  `null` ist ein Zeichen
+    105 kaputte Dateien        113 waren Namen ohne Pfad
+    6.600 statt 6.084 Zeilen   Zahl aus einer aelteren Messung
+
+`[cmd]` **Und derselbe Fehler auf 25 Punkte gleichzeitig angewandt:**
+eine Textheuristik ueber Berichte statt einer Messung je Punkt.
+**Mindestens einer davon war falsch** (C-274), gefunden von Codex,
+**weil er eine Anweisung verweigert und stattdessen gemessen hat.**
+
+`[read]` **Der Befund, der es entscheidet:** in jedem Fall haette der
+Agent dieselbe Zahl gemessen, auch ohne meine. **Meine Zahl hat nie
+etwas beigetragen — sie hat nur einen Umweg erzeugt.**
+
+`[read]` **Die Regel *,,die Zahlen sind Ausgangsvermutungen"* war eine
+Kruecke fuer ein Problem, das ich selbst erzeuge.** Sie hat gewirkt —
+sechsmal hat ein Agent berichtigt — **aber sie hat ein Risiko
+verwaltet, statt es zu beseitigen.**
+
+### Was der Orchestrator weiter prueft
+
+**Ob das Ziel existiert und nicht schon erledigt ist.** `[cmd]`
+**Viermal hat das einen Auftrag gerettet:** G-207 (die Tabellen gab
+es schon), G-211 (`active_substance_id` wird von keiner Regel
+gelesen), G-138 (der Schreibweg existierte seit G-148), G-176 (die
+Grenze war entfernt und ein Test hielt sie draussen).
+
+`[read]` **Das ist eine Ja/Nein-Frage, keine Zaehlung.** *,,Gibt es
+die Tabelle?"* geht. *,,Wie viele Zeilen hat sie unter welcher
+Bedingung?"* nicht.
+
+### Wie ein Auftrag stattdessen formuliert wird
+
+    frueher   ,,Es sind 31 Regeln, pruef das."
+
+    jetzt     ,,Miss, wie viele Regeln ueber `drug_class` gehen -
+               und sag mir, wie du abgegrenzt hast."
+
+`[read]` **Die zweite Form erzeugt dieselbe Zahl ohne den Umweg —
+und verlangt die Abgrenzung mit, die bei mir jedes Mal schiefging.**
+
 ## Der Waechter arbeitet mit Sollstand je Art
 
 `[cmd]` **Muster wie C-313b:** der Waechter zaehlt Befunde gegen einen
