@@ -290,8 +290,11 @@ wenn er erzeugt und geprüft wird.
 | **G-192** Ein Community-Reiter im Substanzdetail | offen | 6226 |
 | **C-284** Der Medikamentenkatalog ist duenner als er aussieht | offen | 6276 |
 | **C-285** `user_medications` speichert Medikamente im Klartext | offen | 6320 |
-| **C-289** Die Kette laesst sich nicht mehr frisch pruefen | offen | 6355 |
-| **C-290** Migrationen sind eine undokumentierte Ausnahme | offen | 6378 |
-| **G-200** Zwei bekannte Faelle bleiben gruen — Ursache | offen | 6402 |
-| **G-201** Teilstring-Vergleiche brauchen Wortgrenzen — als | offen | 6428 |
-| **C-287** 148 Community-Zeilen ohne Substanzbindung | offen | 6456 |
+| **C-287** 148 Community-Zeilen ohne Substanzbindung | offen | 6355 |
+| **C-291** der Migrationswaechter findet einen von fuenf Faellen | offen | 6391 |
+| **C-292** Kimis Welle 1 importieren | offen | 6425 |
+| **C-293** Kimis Block D — 498 Nutzertexte und 2.313 FAQ | offen | 6457 |
+| **C-294** 101 Wirkstoffe ohne `precautions` | offen | 6477 |
+| **C-295** die Kette liest aus zwei Kimi-Pfaden | offen | 6489 |
+| **C-296** zehn falsche `drug_class`-Tags im Medikamentenbestand | offen | 6511 |
+| **G-202** der Dublettenpruefer schreibt bei jedem Gate-Lauf | offen | 6523 |

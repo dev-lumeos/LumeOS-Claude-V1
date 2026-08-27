@@ -13687,3 +13687,126 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
 
   `[read]` **Und zwei Tests mussten mit:** *„auf die vier Bedeutungen
   gezogen, nicht abgeschwaecht."*
+
+
+## 2026-08-27 — die drei Nachtlaeufe
+
+- [x] **C-289: Der Kettenvergleich funktioniert wieder** (2026-08-27)
+- [x] **C-290: Migrationsgrenze dokumentiert, Waechter unvollstaendig** (2026-08-27)
+- [x] **G-200: Der Unterschied war ein Zeichenbereich** (2026-08-27)
+- [x] **G-201: Eine Stelle, kein Waechter** (2026-08-27)
+
+**Drei Auftraege liefen ueber Nacht, alle drei Berichte lagen morgens
+vor.** `[read]` **Geprueft wurde gegen die Datenbank, nicht gegen den
+Bericht** — und an zwei Stellen kam etwas anderes heraus.
+
+### C-289 — der Kettenvergleich steht wieder
+
+`[cmd]` **Eigener Frischlauf `lumeos_pruef_20260827`: 119 Schritte,
+`SCHEMA VOLLSTAENDIG`, exit 0.** Der Vergleich, der C-265, C-276 und
+C-277 gefunden hat, funktioniert wieder.
+
+`[cmd]` **Live gegen frische Kette:** `im_katalog` **412** auf beiden
+Seiten, **0 sichtbare Unterformen**, 596 Zeilen, 101 Formen, 446
+Nutzertexte, 1.970 FAQ.
+
+`[cmd]` **Die Ursache war nicht die Datenmenge**, wie ich vermutet
+hatte. Codex hat gemessen: 333 MB Datenbank, 816 GB frei. **Der
+Kettenausfuehrer klont gar nicht** — er baut eine leere Wegwerf-
+Datenbank aus Baseline und Kette auf. Der frueher gescheiterte
+Klonversuch scheiterte an aktiven Sessions und an einer
+`net`-Funktionsdefinition mit `SET log_min_messages`.
+
+`[cmd]` **Dabei fiel ein echter C-286-Fehler auf:** die Datenstufe
+setzte ihre Tabellen voraus, erzeugte sie in der frischen Kette aber
+nicht. Struktur liegt jetzt als Kettenschritt `286`, die Daten
+getrennt als `286a`.
+
+**Der Abschlusspruefer — hier lag ich zweimal daneben:**
+
+`[cmd]` **Gemessen mit `SCHEMA_CHECK_PROFILE=1`, isoliert, lesend
+gegen live: 18,7 s bei 51 SQL-Aufrufen.** Codex meldete 24,1 s bei 51.
+**Die Aufrufzahl stimmt exakt.** Ausgangslage waren 215 s bei 653
+`docker exec psql`-Aufrufen — **Faktor ~10, und keine Pruefung wurde
+gestrichen.**
+
+`[read]` **Mein erster Einwand war falsch:** ich hatte die
+Gesamtlaufzeit der Kette (167,8 s) gegen die Laufzeit des Pruefers
+gestellt und daraus *„Faktor 1,3"* geschlossen. **Zwei verschiedene
+Dinge.** Der Fehler gehoert hierher, weil er dieselbe Klasse ist wie
+die neun Auftragszahlen: **die Abfrage traf den falschen Ausschnitt.**
+
+`[cmd]` **Offen bleibt nur die Kettengesamtzeit:** 167,8 s bei mir
+gegen 134,6 s im Bericht. `[Vermutung]` Maschinenlast. **Beide Zahlen
+stehen hier nebeneinander, keine gilt als die richtige.**
+
+### C-290 — die Migrationsgrenze steht, der Waechter nicht
+
+`[cmd]` **`supabase/README.md` haelt die Grenze fest:** Migrationen
+duerfen Struktur definieren, keine Katalogdaten oder Backfills
+schreiben.
+
+`[cmd]` **`tools/migration-datenlogik-pruefen.mjs` findet einen von
+fuenf Faellen.** Fuenf echte Probemigrationen gelegt und wieder
+entfernt: `INSERT` rot, aber `DO $$ BEGIN INSERT`, `DELETE`,
+`TRUNCATE` und `MERGE` alle gruen. **Und er laeuft in keinem Gate.**
+
+`[read]` **Die eingebaute Negativprobe prueft eine Zeichenkette, keine
+Datei** — sie belegt, dass die Funktion ein `INSERT` erkennt, nicht
+dass der Waechter eine Migration findet. **Als C-291 angelegt.**
+
+### G-200 — der Unterschied war ein Zeichenbereich
+
+`[cmd]` **Das Suchmuster hiess `[a-z_][a-z0-9_]*`, nur
+Kleinbuchstaben.** Bei `.from('community_anzeigeX')` bricht die
+Zeichenklasse am `X` ab, das schliessende `'` passt nicht mehr, **der
+ganze Treffer entfaellt.** Dieselbe Luecke stand an drei Stellen:
+Muster `.from`, Muster `.rpc`, Wortgrenze in `alsGanzes`.
+
+`[read]` **Der Name wurde nicht als unbekannt gemeldet — er wurde nie
+gesehen.** Ein Waechter, der seinen Gegenstand nicht findet, meldet
+*„alles in Ordnung"* ueber etwas, das er nie angesehen hat.
+
+`[cmd]` **Eigene Gegenprobe:** Ausgangslage gruen, 89 verdrahtete
+Namen. Sabotage `community_anzeige` → `community_anzeigeX` in
+`substanz-read.ts`: **exit 1, Name namentlich gemeldet.** Rueckbau
+sha256-identisch, danach wieder gruen. **Der Fall, der vorher blind
+blieb, ist der Fall, der jetzt rot wird.**
+
+`[read]` **Keine benannte Ausnahme noetig** — es war ein
+Zeichenbereich, keine strukturelle Grenze. Die fuenf Einzelwaechter
+bleiben stehen: der Sammelwaechter deckt Tabellen, Sichten und RPC,
+**nicht** eine Eigenschaft an `undefined` (G-184) oder eine Funktion
+ohne Aufrufer (G-191).
+
+### G-201 — eine Stelle, kein Waechter
+
+`[cmd]` **Ueber alle 15 `tools/*-pruefen.mjs` gemessen:** 12
+`includes`, 12 `indexOf`, 0 unverankerte `new RegExp`. **Elf davon
+harmlos** — auf einem Feld vergleicht `includes` Elemente, nicht
+Teilstrings.
+
+`[cmd]` **Genau eine Stelle war betroffen:**
+`sprachrueckfall-pruefen.mjs:116` — `auswahl.includes(en)` haette
+`note_en_alt` als `note_en` gelesen. Behoben mit Wortgrenze, Urteil
+unveraendert: 12 Abfragen, 0 ohne Rueckfall.
+
+`[read]` **Kein Waechter, und die Begruendung traegt:** ein Waechter
+gegen unverankerte Muster, der selbst eines benutzt, waere die dritte
+Auflage desselben Fehlers. **Die Regel steht stattdessen in
+`CLAUDE.md`.**
+
+### Was nebenbei auffiel
+
+`[cmd]` **Elf Kettenschritte lesen aus `backup/kimi-research/`, sieben
+aus `docs/kimi_research/`** — beide in `.gitignore`. **Als C-295
+angelegt**, samt der Messung, dass die 1.831 nur im alten Pfad
+liegenden Dateien saemtlich `metadata/` sind.
+
+`[cmd]` **Der Dublettenpruefer schreibt bei jedem Gate-Lauf seine
+Nachweisdatei neu**, nur der Stichtag aendert sich. **Als G-202
+angelegt.**
+
+`[cmd]` **Die Doppelkodierung `backup/c289_kette_ohne_286a.json` aus
+der Uebergabe ist verschwunden** — sie war Codex' Negativprobe. **Alle
+vier Commits liefen mit gruenem Gate, ohne `--no-verify`.**

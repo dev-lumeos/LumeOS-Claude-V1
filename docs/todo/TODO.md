@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-26.** 251 offen, 0 in Arbeit.
+**Stand: 2026-08-27.** 254 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6352,107 +6352,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   viele Tabellen betroffen sind** — eine Loesung fuer eine Tabelle ist
   keine.
 
-- [ ] **C-289: Die Kette laesst sich nicht mehr frisch pruefen** (neu
-  2026-08-26). Aus C-286.
-
-  `[cmd]` **Codex meldet: der frische Kettennachweis war wegen lokaler
-  Datenbank-Klon/Restore-Fehler nicht moeglich.** `[cmd]` **Und der
-  Schema-Pruefer lief nach 204 Sekunden ins Timeout** — in C-283 waren
-  es 184.
-
-  `[read]` **Das ist der Nachweis, der uns bisher jedes Mal gerettet
-  hat.** `[cmd]` C-265, C-276 und C-277 wurden **ausschliesslich**
-  dadurch gefunden, dass Kette und Live verglichen wurden. **Faellt
-  der Vergleich aus, faellt die Sicherung aus.**
-
-  `[read]` **Und der Trend ist eindeutig:** 184 Sekunden, dann 204.
-  **Der Pruefer wird langsamer, waehrend die Datenbank waechst** —
-  irgendwann ist er nicht mehr ausfuehrbar, und dann ist das Verfahren
-  tot, nicht nur der Lauf.
-
-  **Zu tun:** erst den Klon-Fehler, dann die Laufzeit. `[read]`
-  **Beides messen, nicht raten** — der Pruefer kann an einer einzelnen
-  Abfrage haengen oder gleichmaessig langsam sein, und das fuehrt zu
-  verschiedenen Reparaturen.
-
-- [ ] **C-290: Migrationen sind eine undokumentierte Ausnahme** (neu
-  2026-08-26). Aus C-286.
-
-  `[cmd]` **Zwei Migrationen liegen im Baum:**
-  `20260826180000_c283_medication_catalog_mapping.sql` und
-  `20260826190000_c286_medication_enrichments.sql`.
-
-  `[cmd]` **Vom Orchestrator geprueft: die erste enthaelt reines
-  Schema** — `ADD COLUMN`, `CHECK`-Bedingungen, **keine Daten.**
-
-  `[read]` **Damit ist die Trennung sachlich richtig:** die Migration
-  aendert die Struktur, die Kette fuellt sie. **Das sind zwei
-  Zustaendigkeiten, keine zwei Quellen fuer denselben Zustand** — und
-  Codex hat die Datenlogik ausdruecklich herausgenommen.
-
-  `[read]` **Aber die Projektanweisung sieht `migrations/` gar nicht
-  vor:** *„Der Zustand entsteht aus der Kette in `_pipeline/`, nicht
-  aus `supabase/migrations/`."*
-
-  **Zu tun:** die Ausnahme in `supabase/README.md` festhalten — **wann
-  eine Migration richtig ist und wann nicht.** `[read]` **Sonst ist
-  sie beim naechsten Mal wieder eine Ueberraschung**, und dann steht
-  vielleicht doch Datenlogik darin.
-
-- [ ] **G-200: Zwei bekannte Faelle bleiben gruen — Ursache
-  unbekannt** (neu 2026-08-26). Aus G-197, Punkt 3.
-
-  `[cmd]` **`tools/verdrahtung-pruefen.mjs` steht** — 89 verdrahtete
-  Namen gemessen, **54 in keinem Test.** Die Kernforderung ist
-  erfuellt: **die sechste, im Waechter nicht genannte Stelle
-  (`exercises` in Training) wird gefunden.**
-
-  `[cmd]` **Aber zwei der fuenf bekannten Faelle bleiben gruen.** Der
-  Waechter erkennt beide Namen einzeln korrekt, die Sabotage erzeugt
-  einen unbekannten Namen — **er faellt trotzdem nicht.**
-
-  `[read]` **Claude Code hat nach rund zehn Anlaeufen abgebrochen,
-  statt weiter zu raten.** `[read]` **Das war richtig.** Ein Waechter,
-  dessen Luecke niemand erklaeren kann, ist gefaehrlicher als keiner —
-  **er erzeugt Vertrauen, das er nicht deckt.**
-
-  `[cmd]` **Folge: die Einzelwaechter aus G-184, G-187, G-191, G-196
-  und G-199 bleiben stehen.** Sie sind **nicht** ueberfluessig
-  geworden.
-
-  **Zu tun:** die Ursache finden, bevor der neue Waechter als Ersatz
-  gilt. `[read]` **Nicht mehr Anlaeufe derselben Art** — zehn haben
-  nichts ergeben. **Die Frage ist, was die beiden Faelle von den
-  anderen 87 unterscheidet.**
-
-- [ ] **G-201: Teilstring-Vergleiche brauchen Wortgrenzen — als
-  Regel, nicht als Vorsatz** (neu 2026-08-26). Aus G-197.
-
-  `[read]` **Der Befund ist der wertvollste des Tages, und er kommt
-  von Claude Code selbst:**
-
-  `[cmd]` **Der Teilstring-Fehler aus G-187 ist ihm im Waechter GEGEN
-  diesen Fehler unterlaufen** — `includes` traf `community_anzeige`
-  in `community_anzeigeX`.
-
-  `[cmd]` **Derselbe Fehler zweimal:** in G-187 traf
-  `/daten\?\.wechselwirkungen/` auch `…wechselwirkungenX`.
-
-  `[read]` **Seine Einordnung:** *„Das sagt, dass diese Klasse nicht
-  durch Aufmerksamkeit vermeidbar ist."*
-
-  `[read]` **Damit ist es keine Ermahnung mehr, sondern eine
-  Bauvorschrift.** Wer einen Namen in einem Waechter sucht, sucht ihn
-  **mit Wortgrenze** — `\b`, Zeichenklasse oder exakter Vergleich, nie
-  `includes` und nie ein unverankertes Muster.
-
-  **Zu tun:** in `CLAUDE.md` neben die uebrigen Werkzeugregeln.
-  `[read]` **Und pruefen, ob es eine Pruefung dafuer gibt** — ein
-  Waechter, der `includes` und unverankerte Muster in
-  `tools/*-pruefen.mjs` findet. `[read]` **Wenn nicht, bleibt es eine
-  Regel — aber eine, die aus zwei belegten Faellen stammt und nicht
-  aus einer Vermutung.**
-
 - [ ] **C-287: 148 Community-Zeilen ohne Substanzbindung** (neu
   2026-08-26). Aus G-199, in C-286 **bewusst nicht geloest.**
 
@@ -6488,3 +6387,151 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   Substanzen · **und pruefen, ob die 71 Begriffe ueberhaupt
   substanzgebunden sind** — *„blast"* und *„pin"* gelten allgemein und
   gehoeren vermutlich in ein eigenes Glossar.
+
+- [ ] **C-291: der Migrationswaechter findet einen von fuenf Faellen**
+  (neu 2026-08-27). Aus der Pruefung von C-290.
+
+  `[cmd]` **Fuenf echte Probemigrationen nach `supabase/migrations/`
+  gelegt, `tools/migration-datenlogik-pruefen.mjs` laufen lassen,
+  wieder entfernt:**
+
+      INSERT INTO ...                        rot    richtig
+      DO $$ BEGIN INSERT ... END $$;         gruen  FALSCH
+      DELETE FROM ...                        gruen  FALSCH
+      TRUNCATE ...                           gruen  FALSCH
+      MERGE INTO ... INSERT                  gruen  FALSCH
+      ALTER TABLE ... ADD COLUMN             gruen  richtig
+
+  `[cmd]` **Ursache beim `DO`-Block:** `ohneKommentareUndStrings()`
+  verwirft Dollar-Quoting vollstaendig — bewusst, damit der `INSERT`
+  im Triggerkoerper der Baseline kein Fehlalarm ist. **Damit ist der
+  natuerlichste Weg, einen Backfill zu schreiben, genau der, den der
+  Waechter nicht sieht.**
+
+  `[cmd]` **Und er laeuft in keinem Gate** — `scripts.gate` in
+  `package.json` enthaelt ihn nicht.
+
+  `[cmd]` **Die eingebaute Negativprobe `--negative` prueft eine
+  Zeichenkette, keine Datei.** Sie belegt, dass `datenbefehle()` ein
+  `INSERT` erkennt — nicht, dass der Waechter eine echte Migration
+  findet. `[read]` **Eine Pruefung, die ihren Gegenstand umgeht, misst
+  nichts.**
+
+  **Zu tun:** `DELETE`, `TRUNCATE`, `MERGE` aufnehmen · Dollar-Bloecke
+  getrennt beurteilen mit **benannter** Baseline-Ausnahme nach dem
+  Muster aus C-267 · Negativprobe auf echte Dateien, je Befehlsart
+  eine · in `pnpm gate` aufnehmen.
+
+- [ ] **C-292: Kimis Welle 1 importieren** (neu 2026-08-27).
+
+  `[cmd]` **Aus den Dateien gezaehlt, nicht aus Kimis Bericht
+  uebernommen** — `docs/kimi_research/.../data/evidence/`:
+
+      medication_identifiers_enrichment.jsonl    465 Zeilen
+                                                 442 CAS, 23 ATC
+      medication_moa_enrichment.jsonl            302 mechanism_of_action
+      medication_precautions_enrichment.jsonl    385 precautions
+      medication_reproductive_enrichment_rest    81 Reproduktion
+
+  `[cmd]` **465 Zeilen, aber 442 eindeutige `entity_id`** — 23
+  Wirkstoffe tragen zwei Records. Wer nach Zeilen zaehlt, irrt.
+
+  `[cmd]` **Alle `entity_id` in `medical.medication_active_substances`
+  aufloesbar, 0 unbekannt.** Ueberschneidung mit dem Bestand:
+
+      cas_number             56 + 442, 0 doppelt   -> 498 / 498
+      atc_code              490 +  23, 15 doppelt  -> 498 / 498
+      mechanism_of_action   196 + 302, 0 doppelt   -> 498 / 498
+      Reproduktion          417 +  81, 0 doppelt   -> 498 / 498
+      precautions            12 + 385, 0 doppelt   -> 397 / 498
+
+  `[read]` **Kimi hat die Luecke geliefert, nicht den Bestand.** Das
+  Nachfordern von Vorhandenem, das bei den Supplements drei
+  Durchlaeufe gekostet hat, ist hier nicht passiert.
+
+  `[cmd]` **Der Fallstrick:** `sex_specific` ist bei **allen 81** ein
+  leeres Objekt; die Aussage steht in `missing_fertility_sex`. **Wer
+  auf Schluesselanwesenheit prueft, importiert 81 leere Objekte** —
+  derselbe Fehler wie bei `pregnancy` in C-286, eine Ebene tiefer.
+
+- [ ] **C-293: Kimis Block D — 498 Nutzertexte und 2.313 FAQ** (neu
+  2026-08-27). braucht: C-292
+
+  `[cmd]` **`reports/med_texts_ws/master_de_meds.jsonl`: 498 Zeilen,
+  2,7 MB, alle 498 `entity_id` aufloesbar, 0 unbekannt.** Sechzehn
+  Felder je Record, Medianlaengen 127 bis 326 Zeichen, FAQ 3 bis 6 je
+  Wirkstoff.
+
+  `[cmd]` **Zwei Felder sind nicht durchgaengig belegt:**
+  `zu_wenig_de` bei 40 `null` (Sumatriptan, Nitroglycerin, Melatonin,
+  Modafinil), `mythen_de` bei 115 `null`. `[Wahrscheinlich]`
+  Bedarfsmedikamente haben kein *„zu wenig"* — **das ist eine
+  Vermutung und gehoert in die Pruefung, nicht in die Annahme.**
+
+  `[read]` **Kimis Content-QA faellt aus** (Kontingent erschoepft, Tom
+  2026-08-27). **Wir machen sie selbst** — Politik-Scan, Faktik-
+  Stichprobe, Kontaminations-Scan sind messbare Pruefungen, keine
+  Rechercheleistung. `[read]` **Kimis eigene Zahlen haetten wir
+  ohnehin nachgemessen statt geglaubt.**
+
+- [ ] **C-294: 101 Wirkstoffe ohne `precautions`** (neu 2026-08-27).
+  braucht: C-292
+
+  `[cmd]` **12 im Bestand plus 385 von Kimi ergibt 397 von 498.**
+  `[cmd]` **Kimi nennt vier davon namentlich offen** — Gliclazide,
+  Domperidone, Melatonin, Chlorine. **Die uebrigen 97 sind nicht
+  begruendet leer, sondern nicht bearbeitet.**
+
+  **Zu tun:** nachfordern, sobald Kimis Kontingent zurueck ist. Vorher
+  die 101 einzeln benennen, damit die Nachforderung die Luecke trifft
+  und nicht den Bestand.
+
+- [ ] **C-295: die Kette liest aus zwei Kimi-Pfaden** (neu
+  2026-08-27).
+
+  `[cmd]` **Elf Kettenschritte lesen aus
+  `backup/kimi-research/Kimi_Agent/...`, sieben aus
+  `docs/kimi_research/...`.** Beide Verzeichnisse existieren, beide
+  stehen in `.gitignore`.
+
+  `[cmd]` **Gemessen:** 2.892 gemeinsame Dateien, davon drei
+  verschieden — die Substanzdateien, im neuen Pfad groesser (das ist
+  C-275). **1.831 Dateien gibt es nur im alten Pfad, alle unter
+  `metadata/`**, also Crawl-Protokolle, keine Nutzdaten.
+
+  `[read]` **Die Uebergabe nennt den alten Pfad „ueberholt".** Fuer
+  die Nutzdaten stimmt das. **Fuer die Kette nicht** — wer das
+  Verzeichnis loescht, bricht elf Schritte. **Kein untracked
+  Verzeichnis wird dem Namen nach geloescht.**
+
+  **Zu tun:** die elf Schritte auf den neuen Pfad umstellen, je Schritt
+  mit gemessenem Vorher/Nachher der Zeilenzahl. **Nicht in einem
+  Zug mit einem Import** — ein logischer Change.
+
+- [ ] **C-296: zehn falsche `drug_class`-Tags im Medikamentenbestand**
+  (neu 2026-08-27). braucht: C-292
+
+  `[cmd]` **Kimi meldet sie als Notes in
+  `medication_moa_enrichment.jsonl`**, Beispiel: Olmesartan ist als
+  Thiazid getaggt und ist keines.
+
+  `[read]` **Nicht stillschweigend im Import mitkorrigieren** —
+  `drug_class` speist die Regel-Engine. Eine falsche Klasse aendert,
+  welche der 31 Medikamentenregeln feuert. **Erst zaehlen und
+  auflisten, dann entscheiden.**
+
+- [ ] **G-202: der Dublettenpruefer schreibt bei jedem Gate-Lauf**
+  (neu 2026-08-27).
+
+  `[cmd]` **`tools/supplement-kern-dubletten-pruefen.mjs` schreibt
+  `backup/c276/supplement-kern-dubletten.json` bei jedem Lauf neu** —
+  nur `checked_at` aendert sich, der Inhalt bleibt (412 / 0 / 4
+  Gruppen). **Damit erzeugt jeder Commit eine geaenderte Datei im
+  Arbeitsverzeichnis**, weil der Pre-Commit-Hook das Gate faehrt.
+
+  `[read]` **Das ist Rauschen, das jeden `git status` verunreinigt** —
+  und ein Nachweis, der bei jedem Lauf einen neuen Stichtag traegt,
+  belegt nicht mehr, wann er erhoben wurde.
+
+  **Zu tun:** entweder nur bei Aenderung schreiben, oder nur mit
+  ausdruecklichem Schalter — nicht bei jedem Gate.

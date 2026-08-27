@@ -53,8 +53,9 @@ Fragen, Quellen.
 
 `[cmd]` **C-274** die 149 unsichtbaren zuordnen, 66 mit sichtbarem
 Gegenstueck · **C-287** 148 Community-Zeilen ohne Bindung, **bewusst
-nicht geraten** · **G-200** offen — zwei Waechterluecken, Ursache
-unbekannt.
+nicht geraten**. `[cmd]` **G-200 und G-201 sind seit 2026-08-27
+geschlossen** — der Unterschied war ein Zeichenbereich, die fuenf
+Einzelwaechter bleiben trotzdem stehen.
 
 ---
 
@@ -142,7 +143,6 @@ Evidence-Dateien.**
 | **C-287** 148 Community-Zeilen ohne Bindung | `supabase/` | **bewusst nicht geraten** (C-286) — braucht eine Entscheidung, keine Automatik |
 | **C-279** Kreuzprodukt in `rule_assessment` | `supabase/` | skaliert mit `intake_logs`, also mit der Nutzungsdauer |
 | **C-278** 700 ms zwischen Datenbank und Anwendung | messen | der groessere Posten gegenueber G-190 |
-| **G-200** zwei bekannte Faelle bleiben gruen | `tools/` | die fuenf Einzelwaechter bleiben, bis das geklaert ist |
 | **C-171** Medical: Symptome, Termine, Dokumente | `apps/web` | **34 Symptome liegen seit C-262 vor** |
 
 `[cmd]` **G-197 und G-198 sind erledigt** (2026-08-26, Claude Code) —
