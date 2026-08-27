@@ -1061,28 +1061,25 @@ test('die Rueckfallmarke sitzt an den abgeloesten Fassungen', () => {
       `"${name}" traegt noch die alte Marke — der Zaehler kann dann nicht trennen.`)
   }
 
-  // ── G-187: `SuppInteractions` ist angebunden ────────────────────
+  // ── G-189: `SuppInteractions` ist ENTFERNT ────────────────
   //
-  // `[cmd]` Der Block trug bis G-187 `INTERACTIONS` aus `daten.ts` —
-  // **eine erfundene Paarung** (*Caffeine + Ashwagandha*) mit dem Satz
-  // *„your current schedule is fine"*. Die Marke sagte dabei seit
-  // C-68, es gebe kein `supplements`-Schema; **seit C-232 gibt es
-  // das.**
+  // `[cmd]` **Der Block war nicht erreichbar:** `ansicht.tsx` rief ihn
+  // nur bei `regeln.length === 0`, und `supplements.rule_catalog`
+  // traegt 64 Zeilen mit einer `{authenticated}`-Policy ohne
+  // Nutzerfilter (`qual: true`, gemessen 2026-08-28).
   //
-  // `[cmd]` **Jetzt liest er `supplement_interactions` ueber den
-  // Stack** — und zeigt, was dort steht: Wechselwirkungen mit
-  // **Medikamenten**, denn Substanz-gegen-Substanz-Paare fuehrt die
-  // Tabelle nicht (0 von 78, gemessen 2026-08-25).
-  const inter = block('SuppInteractions')
-  assert.equal(zaehl(inter, /attrappe=\{ATTRAPPE\}/g), 0,
-    'SuppInteractions traegt wieder die Attrappenmarke — er liest seit '
-    + 'G-187 `supplement_interactions` ueber den Stack.')
-  assert.equal(/INTERACTIONS/.test(inter), false,
+  // `[read]` **G-163-Beschluss:** Rueckfallfassungen bleiben nicht als
+  // Notanzeige stehen. **Er war keine Attrappe** — er las echte
+  // Zeilen; genau das machte ihn gefaehrlich, denn niemand pflegt
+  // eine zweite Fassung, die niemand sieht.
+  //
+  // `[read]` **Die Zusage aus G-187 ist nicht verschwunden**, sie
+  // steht jetzt in `tab-interactions-echt.tsx` — geprueft in
+  // `stack-wechselwirkungen.test.ts`.
+  assert.equal(/export function SuppInteractions\(/.test(quelle), false,
+    'Der Rueckfallzweig `SuppInteractions` ist zurueck (G-189).')
+  assert.equal(/INTERACTIONS/.test(quelle), false,
     'Die Entwurfskonstante `INTERACTIONS` ist zurueck (G-163-Beschluss).')
-  assert.ok(/daten\?\.wechselwirkungen/.test(inter),
-    'Der Block muss die Wechselwirkungen aus dem Stack lesen (G-187).')
-  assert.equal(zaehl(inter, /attrappe=\{RUECKFALL\}/g), 0,
-    'SuppInteractions hat keine angebundene Fassung — die Rueckfallmarke waere falsch.')
 
   // Und die Marke sagt, was sie bedeutet.
   assert.ok(/const RUECKFALL = /.test(quelle), 'Die Rueckfallmarke ist nicht definiert.')

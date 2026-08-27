@@ -51,6 +51,10 @@ import { createSessionClient } from '@lumeos/shared/session'
 // zieht `next/headers` und laesst sich in einem Test nicht laden
 // (gegengeprobt 2026-08-23, `require() ES Module ... in a cycle`).
 import { text, jsonNull } from './substanz-luecken'
+// G-186: die dreiwertige Rollenlage. `[read]` **Nur Rechnung, kein
+// I/O** — serverfrei, damit die Anzeige sie als Wert importieren darf
+// (A-30).
+import { lageAus, LEERE_LAGE, type RollenLage } from './rollen-lage'
 
 
 /** Ein Herkunftsvermerk aus `evidence_provenance` — je Feldpfad. */
@@ -115,6 +119,20 @@ export type SubstanzSatz = {
   laborwirkungen?: Laborwirkung[]
   /** G-186: Wechselwirkungen — 78 der 318 haben welche. */
   wechselwirkungen?: Wechselwirkung[]
+  /**
+   * G-186: die Transporter- und Enzymlage, dreiwertig.
+   *
+   * `[cmd]` **Der Rest von G-186, den G-212 gemeldet hat:**
+   * `geprueft_ohne_befund` wurde vom Lesepfad nie gesetzt und war
+   * immer 0 — die Zeile *„N weitere geprueft, ohne Befund"* erschien
+   * nie.
+   *
+   * `[cmd]` **Gemessen 2026-08-28 ueber die Katalogzeilen:**
+   * `entity_cyp` 816 (565 ohne Befund · 190 ungeprueft · 61 Rollen),
+   * `entity_transporters` 135 (54 · 64 · 17). **111 sichtbare
+   * Substanzen haben CYP-Daten, 14 Transporterdaten.**
+   */
+  rollen?: RollenLage
   /** G-192: Community-Beobachtungen aus `wissen`, ohne Anleitungsfelder. */
   community?: CommunityHinweise | null
   /** G-179: die Unterformen, wenn dies ein Sammeleintrag ist. */
@@ -440,9 +458,21 @@ export async function ladeSubstanz(id: string): Promise<SubstanzSatz | null> {
       + ' supplement_safety(*), supplement_evidence(*),'
       + ' supplement_regulatory(*), supplement_quality(*),'
       + ' supplement_interactions(*), supplement_monitoring(*),'
-      // G-186: die Laborwirkungen — 222 Zeilen ueber 90 Substanzen.
+      // G-186: die Laborwirkungen — 271 Zeilen ueber 107 Substanzen
+      // (gemessen 2026-08-28; der Punkt nennt 222).
       + ' supplement_lab_effects(analyte_de, analyte_en, direction,'
       + ' clinical_consequence_de, clinical_consequence_en),'
+      // ══ G-186: Enzyme und Transporter ═════════════════════════════
+      //
+      // `[cmd]` **Beide haengen ueber `supplement_id` am Katalog** —
+      // bei allen 951 Katalogzeilen gefuellt (gemessen 2026-08-28).
+      //
+      // `[read]` **`role` wird MITGELESEN, nicht gefiltert.** Genau
+      // darum geht es: `not_relevant` und `unknown` sind Ergebnisse,
+      // keine fehlenden Werte. Wer sie in der Abfrage wegwirft, kann
+      // den Unterschied nachher nicht mehr zeigen.
+      + ' entity_cyp(enzyme, role, evidence, note),'
+      + ' entity_transporters(transporter, role, evidence, note),'
       + ' supplement_identifiers(*), supplement_aliases(alias),'
       // C-107: WADA und die Warnschwellen. **Nicht `supplement_organ_risks`** —
       // 1.446 seiner 1.450 Zeilen sagen `unknown` (gemessen 2026-08-23),
@@ -501,6 +531,7 @@ export async function ladeSubstanz(id: string): Promise<SubstanzSatz | null> {
     wada_note: text(wad?.note_de, wad?.note_en),
     laborwirkungen: alleLaborwirkungen(x.supplement_lab_effects),
     wechselwirkungen: alleWechselwirkungen(x.supplement_interactions),
+    rollen: rollenAus(x.entity_cyp, x.entity_transporters),
     community: await ladeCommunityHinweise(String(x.slug ?? '')),
     formen: alleFormen(x.formen),
     canonical_name: text(x.name_de, x.name_en) ?? String(x.slug ?? ''),
@@ -885,6 +916,43 @@ function alleLaborwirkungen(v: unknown): Laborwirkung[] {
     aus.push({ analyt, richtung, folge })
   }
   return aus
+}
+
+/**
+ * Enzyme und Transporter zu einer Lage zusammenfassen (G-186).
+ *
+ * `[read]` **Die zwei Tabellen haben dieselbe Form mit verschiedenen
+ * Spaltennamen** — `enzyme` gegen `transporter`. Hier werden sie
+ * vereinheitlicht, damit die Anzeige eine Liste bekommt und nicht
+ * zwei.
+ *
+ * `[read]` **Gezaehlt wird in `lageAus`, nicht hier** — dort ist es
+ * ohne Datenbank pruefbar.
+ */
+function rollenAus(cyp: unknown, trans: unknown): RollenLage {
+  const zeilen: Array<{
+    art: 'enzym' | 'transporter'
+    name: unknown; rolle: unknown; evidenz: unknown; hinweis: unknown
+  }> = []
+  if (Array.isArray(cyp)) {
+    for (const r of cyp) {
+      const z = r as Record<string, unknown>
+      zeilen.push({
+        art: 'enzym', name: z.enzyme, rolle: z.role,
+        evidenz: z.evidence, hinweis: z.note,
+      })
+    }
+  }
+  if (Array.isArray(trans)) {
+    for (const r of trans) {
+      const z = r as Record<string, unknown>
+      zeilen.push({
+        art: 'transporter', name: z.transporter, rolle: z.role,
+        evidenz: z.evidence, hinweis: z.note,
+      })
+    }
+  }
+  return zeilen.length === 0 ? LEERE_LAGE : lageAus(zeilen)
 }
 
 /**

@@ -874,102 +874,28 @@ function DatabaseAttrappe() {
   )
 }
 
-// ── INTERACTIONS ───────────────────────────────────
-//
-// ══ G-187: DIE LETZTE MARKIERTE KACHEL ═══════════════════════
-//
-// `[cmd]` Hier stand `INTERACTIONS` aus `daten.ts` — eine
-// Entwurfskonstante mit **einer erfundenen Paarung** (*Caffeine +
-// Ashwagandha*) und dem Satz *„your current schedule is fine"*. Das
-// ist genau die Bewertung, die C-108 ausgeschlossen hat.
-//
-// `[cmd]` **Die alte Marke war ausserdem falsch:** sie sagte seit
-// C-68, es gebe kein `supplements`-Schema — seit C-232 gibt es das.
-//
-// ══ WARUM KEINE PAARE GEZEIGT WERDEN ══════════════════════
-//
-// `[cmd]` **Gemessen 2026-08-25:** `supplement_interactions` traegt
-// 78 Zeilen — **77 gegen Medikamente, 1 gegen Alkohol, 0 zwischen
-// zwei Katalogsubstanzen.** Treffende Paare bei den drei vorhandenen
-// Staenden: **0.**
-//
-// `[read]` **Der Reiter, wie er gedacht war, ist mit diesen Daten
-// nicht baubar** — nicht weil sie fehlen, sondern weil sie eine
-// andere Frage beantworten: womit beisst sich diese Substanz.
-//
-// **Das wird gezeigt**, und die Ueberschrift sagt, dass es
-// Medikamente sind. Nichts erfunden.
-export function SuppInteractions() {
-  const { daten } = useSupp()
-  const ww = daten?.wechselwirkungen ?? []
+/*
+ * `SuppInteractions` stand hier bis G-189 und ist GELOESCHT.
+ *
+ * ══ ER WAR NICHT ERREICHBAR ════════════════════════════════════════
+ *
+ * `[cmd]` **`ansicht.tsx` rief ihn nur bei `regeln.length === 0`** —
+ * und `supplements.rule_catalog` traegt **64 Zeilen mit einer
+ * `{authenticated}`-Policy ohne Nutzerfilter** (`qual: true`,
+ * gemessen 2026-08-28). **Die Bedingung konnte nicht eintreten.**
+ *
+ * `[read]` **Er war keine Attrappe** — er las `daten.wechselwirkungen`
+ * und zeigte echte Zeilen. **Genau das machte ihn gefaehrlich:** eine
+ * zweite, schlechtere Fassung derselben Ansicht, die niemand pflegt,
+ * weil niemand sie sieht.
+ *
+ * `[read]` **G-163-Beschluss:** Rueckfallfassungen bleiben nicht als
+ * Notanzeige stehen. **Faellt `rule_catalog` aus, wirft der
+ * Lesepfad** — ein Fehler ist ehrlicher als ein Ersatzinhalt.
+ *
+ * Wer die Wechselwirkungen zeigt, nimmt `InteractionsEchtTab`.
+ */
 
-  if (!daten) {
-    return (
-      <Card title="Wechselwirkungen">
-        {/* `[read]` Ohne Sitzung ist kein Stack geladen — dann steht
-            hier der Grund, keine leere Liste. */}
-        <p className="v2-muted" style={{ fontSize: 12, margin: 0 }}>
-          Ohne geladenen Stack ist nicht bekannt, welche Substanzen zu
-          prüfen wären.
-        </p>
-      </Card>
-    )
-  }
-
-  if (ww.length === 0) {
-    return (
-      <Card title="Wechselwirkungen">
-        <p className="v2-muted" style={{ fontSize: 12.5, lineHeight: 1.6, margin: 0 }}>
-          Für die Positionen dieses Stacks ist keine Wechselwirkung
-          hinterlegt.
-        </p>
-        <p className="v2-dim" style={{ fontSize: 11, lineHeight: 1.55, marginTop: 8, marginBottom: 0 }}>
-          Der Katalog führt 78 Wechselwirkungen — alle gegen
-          Medikamente oder Alkohol, keine zwischen zwei Supplements.
-        </p>
-      </Card>
-    )
-  }
-
-  return (
-    <Card
-      title="Wechselwirkungen"
-      sub={`${ww.length} · mit Medikamenten, nicht untereinander`}
-    >
-      <div className="v2-col-gap" style={{ gap: 8 }}>
-        {ww.map(w => (
-          <div key={`${w.position}|${w.partner}`} className="v2-supp-ww-zeile">
-            <span className="v2-supp-ww-position">{w.position}</span>
-            <span className="v2-supp-ww-partner">{w.partner}</span>
-            {w.schwere && (
-              <Pill variant={/high|avoid|major/i.test(w.schwere) ? 'warn' : undefined}
-                    style={{ fontSize: 8.5 }}>
-                {w.schwere}
-              </Pill>
-            )}
-            {w.hinweis && (
-              <span className="v2-muted" style={{ fontSize: 11, lineHeight: 1.5 }}>
-                {w.hinweis}
-              </span>
-            )}
-          </div>
-        ))}
-      </div>
-      {/* `[read]` Der Satz sagt, WORAUF sich die Liste bezieht — ohne
-          ihn liest man Medikamentenhinweise als Stack-Paarungen. */}
-      <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.55, marginTop: 10 }}>
-        Bezieht sich auf Medikamente und Alkohol. Paarungen zwischen zwei
-        Supplements führt der Katalog nicht.
-      </div>
-    </Card>
-  )
-}
-
-// ── COST ───────────────────────────────────────────────────────
-// G-45: NACHGEZOGEN. `[cmd]` Die Vorlage fuehrt hier **fuenf**
-// Kacheln (module-supplements.jsx:936-1046), G-33 hatte **zwei**
-// gebaut — dieselbe Klasse Luecke wie bei `SuppExtended`: der Tab
-// sieht beim Klicken vollstaendig aus, ist es aber nicht.
 export function SuppCost() {
   const { daten } = useSupp()
   // C-250: Der Stack liest jetzt `supplements.supplements`. Dort gibt

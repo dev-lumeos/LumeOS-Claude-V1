@@ -1423,3 +1423,48 @@
 @media (max-width: 620px) {
   .v2-supp-ww-zeile { grid-template-columns: 1fr; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+ * G-186 · ENZYME UND TRANSPORTER, DREIWERTIG
+ *
+ * [cmd] Gemessen 2026-08-28 ueber die KATALOGZEILEN
+ * (entity_type = 'supplement'):
+ *
+ *   entity_cyp            816   not_relevant 565 · unknown 190
+ *                               inhibitor 57 · substrate 2 · inducer 2
+ *   entity_transporters   135   unknown 64 · not_relevant 54
+ *                               inhibitor 16 · inducer 1
+ *
+ * [read] Der Punkt nennt 4.617 und 3.001 — das sind ALLE Zeilen,
+ * ueberwiegend Medikamente. Der Katalog sieht 951 davon.
+ *
+ * [read] Keine eigene Farbe fuer die Zustaende. Die Ordnung aus G-196
+ * gilt: Farbe bedeutet Gefahr, Wirkung, Pruefen oder Entwarnung. Ein
+ * Befund ist keins davon — er ist eine Angabe.
+ * ════════════════════════════════════════════════════════════════ */
+
+.v2-supp-rollen {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.v2-supp-rollen-zeile {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  flex-wrap: wrap;
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.v2-supp-rollen-name {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+.v2-supp-rollen-rolle {
+  color: var(--fg-muted);
+}

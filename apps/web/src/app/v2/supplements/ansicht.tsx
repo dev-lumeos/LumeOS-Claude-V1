@@ -26,7 +26,7 @@ import { STACK, EXTENDED_STACK } from './daten'
 import { SuppCtx, type ModalZustand, type ModalTyp } from './kontext'
 import type { StackDaten, KatalogEintrag } from '../../../lib/supplements/stack-read'
 import {
-  SuppToday, SuppStack, SuppDatabase, SuppInteractions, SuppCost,
+  SuppToday, SuppStack, SuppDatabase, SuppCost,
 } from './tabs'
 // G-33: die beiden Tabs mit den meisten Unterkomponenten stehen in
 // eigenen Dateien — `tabs.tsx` waere sonst ueber 1.200 Zeilen lang.
@@ -316,10 +316,25 @@ export function SupplementsAnsicht({
               ? <ComplianceEcht d={daten} heute={stichtag} />
               : <SuppCompliance />
           )}
-          {tab === 'interactions' && (
-            regeln && regeln.regeln.length > 0
-              ? <><InteractionsEchtTab d={regeln} /><RegelHinweis /></>
-              : <SuppInteractions />
+          {/* ══ G-189: der Rueckfallzweig ist ENTFERNT ═══════════
+              `[cmd]` **Hier stand `: <SuppInteractions />`.** Der
+              Zweig griff nur bei `regeln.length === 0` — und
+              `rule_catalog` traegt **64 Zeilen mit einer
+              `{authenticated}`-Policy ohne Nutzerfilter (`qual:
+              true`)**, gemessen 2026-08-28. **Er war nicht
+              erreichbar.**
+
+              `[read]` **G-163-Beschluss:** eine Rueckfallfassung
+              bleibt nicht als Notanzeige stehen. **Ein Zweig, der nur
+              bei einem Datenbankfehler erscheint, ist genau der Fall,
+              fuer den die Regel geschrieben wurde** — er wird beim
+              naechsten Umbau versehentlich wiederbelebt.
+
+              `[read]` **Faellt `rule_catalog` wirklich aus, wirft der
+              Lesepfad** — dann steht ein Fehler da, kein
+              Ersatzinhalt. Das ist ehrlicher. */}
+          {tab === 'interactions' && regeln && (
+            <><InteractionsEchtTab d={regeln} /><RegelHinweis /></>
           )}
           {tab === 'cost' && <SuppCost />}
           {tab === 'injection' && <SuppInjections />}

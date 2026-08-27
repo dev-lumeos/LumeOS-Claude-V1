@@ -131,11 +131,14 @@ test('G-187: der Reiter ist mit dem Lesepfad verdrahtet', () => {
   // der Zugriff zum Typ passt.** Das prueft `tsc`, nicht ein Regex.
   // Hier wird deshalb nur festgehalten, DASS der Reiter aus `daten`
   // liest und nicht aus einer Konstanten.
-  const zugriff = quelle.match(/daten\?\.(\w+)\s*\?\?\s*\[\]/)
-  assert.ok(zugriff, 'Der Reiter liest keine Liste aus dem Stand (G-187).')
-  assert.equal(zugriff![1], 'wechselwirkungen',
-    'Der Reiter liest ein anderes Feld als `wechselwirkungen` — wenn das '
-    + 'Absicht ist, gehoert der Waechter mitgezogen (G-187).')
+  // `[cmd]` **G-189 hat den lesenden Block aus `tabs.tsx` entfernt** —
+  // `SuppInteractions` war nicht erreichbar. **Der Zugriffstest kann
+  // dort nichts mehr finden**, und ihn auf eine geloeschte Fassung
+  // zeigen zu lassen waere ein gruener Test ohne Gegenstand.
+  //
+  // `[read]` **Was bleibt, ist die haertere Haelfte:** dass der
+  // LESEPFAD die Wechselwirkungen rechnet (unten). Ob eine Komponente
+  // sie anzeigt, prueft der Attrappenzaehler.
   assert.equal(/INTERACTIONS/.test(quelle), false,
     'Die Entwurfskonstante ist zurueck (G-163-Beschluss).')
 
@@ -155,10 +158,12 @@ test('G-187: die Ueberschrift sagt, dass es MEDIKAMENTE sind', () => {
   // `[read]` **Ohne diesen Satz liest man Medikamentenhinweise als
   // Stack-Paarungen** — und das waere eine Aussage, die die Daten
   // nicht hergeben.
-  const quelle = fs.readFileSync(TABS, 'utf8')
-  const a = quelle.indexOf('export function SuppInteractions(')
-  const b = quelle.indexOf('// ── COST', a)
-  const block = quelle.slice(a, b > 0 ? b : undefined)
+  // `[cmd]` **G-189 hat `SuppInteractions` entfernt** — er war nicht
+  // erreichbar (`rule_catalog` traegt 64 Zeilen mit `qual: true`).
+  // **Die Zusage aus G-187 ist damit in den erreichbaren Reiter
+  // gewandert**, nicht verschwunden: `tab-interactions-echt.tsx`.
+  const block = fs.readFileSync(path.join(process.cwd(),
+    'src/app/v2/supplements/tab-interactions-echt.tsx'), 'utf8')
   assert.match(block, /Medikamente/,
     'Der Reiter muss sagen, worauf sich die Liste bezieht (G-187).')
   assert.match(block, /nicht untereinander|zwischen zwei Supplements/,

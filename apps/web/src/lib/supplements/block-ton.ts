@@ -77,7 +77,14 @@ export const BLOCK_TON: Record<string, BlockTon> = {
   // G-196: **Tom:** *„Eine Wechselwirkung ist ein Risiko, kein
   // Hinweis."* `[cmd]` Der Block traegt seit G-187
   // Medikamenten-Interaktionen — Blutverduennung, Schilddruese.
-  'Wechselwirkung und Labor': 'gefahr',
+  //
+  // `[cmd]` **G-188 hat die Ueberschrift praezisiert:** aus
+  // *„Wechselwirkung und Labor"* wurde *„Wechselwirkung mit
+  // Medikamenten und Labor"*, weil die alte Paare zwischen
+  // Supplements versprach, die es nicht gibt (0 von 78).
+  // `[read]` **Der Ton bleibt `gefahr`** — die Sache hat sich nicht
+  // geaendert, nur ihr Name.
+  'Wechselwirkung mit Medikamenten und Labor': 'gefahr',
 
   // ── Was der Stoff bewirkt ─────────────────────────────────────
   'Wie es wirkt': 'wirkung',

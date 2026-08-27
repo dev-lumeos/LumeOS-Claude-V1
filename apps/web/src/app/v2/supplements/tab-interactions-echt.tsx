@@ -129,6 +129,24 @@ export function InteractionsEchtTab({ d }: { d: RegelStand }) {
           Bewertung</strong> — LumeOS gibt keine Dosierung vor, sperrt
           nichts und rechnet daraus keine Note.
         </p>
+        {/* ══ G-188/189: die Zusage aus G-187 lebt hier weiter ══════
+            `[cmd]` **Sie stand bis G-189 in `SuppInteractions`** —
+            dem Rueckfallzweig, der entfernt wurde, weil er nicht
+            erreichbar war. **Damit waere sie ersatzlos verschwunden.**
+
+            `[read]` **Ohne diesen Satz liest man Medikamentenhinweise
+            als Stack-Paarungen** — und das waere eine Aussage, die die
+            Daten nicht hergeben. `[cmd]` `supplement_interactions`
+            fuehrt **77 gegen Medikamente, 1 gegen Alkohol, 0 zwischen
+            zwei Supplements** (gemessen 2026-08-28). */}
+        <p className="v2-dim" style={{
+          fontSize: 11, lineHeight: 1.55, marginTop: 8, marginBottom: 0,
+        }}>
+          Der Katalog führt <strong>78 Wechselwirkungen — alle gegen
+          Medikamente oder Alkohol</strong>, keine zwischen zwei
+          Supplements. Paarungen zwischen zwei Supplements werden hier
+          also nicht geprüft.
+        </p>
       </Card>
 
       {erfuellt.length > 0 && (

@@ -47,6 +47,11 @@ import { dosisFelder } from '../../../lib/supplements/dosis-feld'
 import { wadaLage } from '../../../lib/supplements/wada-lage'
 import { tonFuer } from '../../../lib/supplements/block-ton'
 import { dosisKacheln, NICHT_ERHOBEN } from '../../../lib/supplements/dosis-zustand'
+// G-186: die dreiwertige Rollenlage. `[read]` **Werte nur aus der
+// serverfreien Datei** — `substanz-read` zieht `next/headers` (A-30).
+import {
+  lageSatz, rolleText, LEERE_LAGE, KEINE_LAGE, type RollenLage,
+} from '../../../lib/supplements/rollen-lage'
 import { reiterFuer, ersterReiter } from '../../../lib/supplements/substanz-reiter'
 import { kachelnFuer, type Kachel } from '../../../lib/supplements/substanz-kacheln'
 import {
@@ -422,19 +427,35 @@ export function Quellenliste({ quellen }: { quellen: Quelle[] | null | undefined
  * zehn leere Zeilen.
  */
 export function Wechselwirkungsblock(
-  { labor, wechsel, geprueft }: {
+  { labor, wechsel, rollen }: {
     labor: Laborwirkung[] | null | undefined
     wechsel: Wechselwirkung[] | null | undefined
-    /** Zahl der Transporter/Enzyme, die geprueft und ohne Befund sind. */
-    geprueft: number
+    /**
+     * G-186: die dreiwertige Transporter- und Enzymlage.
+     *
+     * `[cmd]` **Sie ersetzt `geprueft: number`.** Die alte Zahl wurde
+     * vom Lesepfad nie gesetzt und war immer 0 — gemeldet in G-212,
+     * die Zeile erschien nie.
+     */
+    rollen: RollenLage | null | undefined
   },
 ) {
   const l = labor ?? []
   const w = wechsel ?? []
-  if (l.length === 0 && w.length === 0 && geprueft === 0) return null
+  const r = rollen ?? LEERE_LAGE
+  const hatRollen = r.befunde.length > 0 || r.ohne_befund > 0 || r.ungeprueft > 0
+  if (l.length === 0 && w.length === 0 && !hatRollen) return null
   return (
     <div className="v2-supp-kasten" style={{ marginBottom: 12 }}>
-      <BlockTitel titel="Wechselwirkung und Labor" stil={{ marginBottom: 6 }} />
+      {/* ══ G-188: der Block heisst, was er zeigt ═══════════════════
+          `[cmd]` **`supplement_interactions`: 77 gegen `drug`, 1 gegen
+          `alcohol`, 0 zwischen zwei Katalogsubstanzen** (gemessen
+          2026-08-28, unveraendert gegenueber dem Punkt).
+          `[read]` **„Wechselwirkung" allein verspricht Paare zwischen
+          Supplements, die es nicht gibt.** Was hier steht, sind
+          Medikamente, Alkohol, Enzyme und Laborwerte. */}
+      <BlockTitel titel="Wechselwirkung mit Medikamenten und Labor"
+                  stil={{ marginBottom: 6 }} />
 
       {w.length > 0 && (
         <div className="v2-col-gap" style={{ gap: 5, marginBottom: l.length ? 10 : 0 }}>
@@ -485,12 +506,50 @@ export function Wechselwirkungsblock(
         </div>
       )}
 
-      {/* `[read]` Der Unterschied zwischen „geprueft, kein Effekt" und
-          „nie geprueft" gehoert benannt — als EINE Zeile, nicht als
-          zehn leere. */}
-      {geprueft > 0 && (
+      {/* ══ G-186: die Enzyme und Transporter, dreiwertig ═══════════
+          `[read]` **Der Unterschied zwischen „geprueft, kein Effekt"
+          und „nie geprueft" gehoert benannt** — und zwar getrennt.
+          Eine gemeinsame Zahl waere wieder zweiwertig. */}
+      {r.befunde.length > 0 && (
+        <div className="v2-supp-rollen">
+          {r.befunde.map(b => (
+            <div key={`${b.art}|${b.name}|${b.rolle}`} className="v2-supp-rollen-zeile">
+              <span className="v2-supp-rollen-name">{b.name}</span>
+              <Pill style={{ fontSize: 8.5 }}>
+                {b.art === 'enzym' ? 'Enzym' : 'Transporter'}
+              </Pill>
+              <span className="v2-supp-rollen-rolle">{rolleText(b.rolle)}</span>
+              {b.evidenz && (
+                <span className="v2-dim" style={{ fontSize: 9.5 }}>{b.evidenz}</span>
+              )}
+              {b.hinweis && (
+                <span className="v2-muted" style={{
+                  fontSize: 11, flex: 1, minWidth: 0, lineHeight: 1.5,
+                }}>{b.hinweis}</span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* `[read]` **Zwei Zahlen, getrennt genannt** — „geprueft, ohne
+          Befund" ist eine Aussage ueber die Welt, „nicht geprueft"
+          eine ueber die Arbeit. */}
+      {lageSatz(r) && (
         <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 8 }}>
-          {geprueft} weitere Transporter und Enzyme geprüft, ohne Befund.
+          {lageSatz(r)}
+        </div>
+      )}
+
+      {/* `[read]` **Und wenn es GAR NICHTS gibt, steht auch das da.**
+          `[cmd]` 111 der 412 sichtbaren Substanzen haben CYP-Daten,
+          14 Transporterdaten — bei den uebrigen fehlt die
+          Untersuchung, und das heisst nicht „unbedenklich". */}
+      {!hatRollen && (l.length > 0 || w.length > 0) && (
+        <div className="v2-dim" style={{
+          fontSize: 10.5, marginTop: 8, lineHeight: 1.5,
+        }}>
+          {KEINE_LAGE}
         </div>
       )}
     </div>
@@ -642,7 +701,7 @@ function CommunityBlock({ community }: { community: CommunityHinweise | null | u
  */
 export function ReiterInhalt(
   { reiter, texte, zahlen, kacheln, formen, fragen, quellen, labor,
-    laborwirkungen, wechselwirkungen, community, geprueft, heikel, onOeffnen,
+    laborwirkungen, wechselwirkungen, community, rollen, heikel, onOeffnen,
     wadaStatus, wadaNote, wadaKategorie }: {
     reiter: ReiterId
     texte: Nutzertexte | null | undefined
@@ -659,7 +718,8 @@ export function ReiterInhalt(
     laborwirkungen: Laborwirkung[] | null | undefined
     wechselwirkungen: Wechselwirkung[] | null | undefined
     community: CommunityHinweise | null | undefined
-    geprueft: number
+    /** G-186: die dreiwertige Transporter- und Enzymlage. */
+    rollen: RollenLage | null | undefined
     heikel: boolean
     onOeffnen: (id: string) => void
   },
@@ -729,7 +789,7 @@ export function ReiterInhalt(
             Biotin einen Troponinwert faelscht, ist genau dann wichtig,
             wenn jemand einen Befund in der Hand haelt. */}
         <Wechselwirkungsblock
-          labor={laborwirkungen} wechsel={wechselwirkungen} geprueft={geprueft} />
+          labor={laborwirkungen} wechsel={wechselwirkungen} rollen={rollen} />
         <Laborbezug text={labor} />
         <Abschnitt titel="Zu wenig" text={t?.zu_wenig} />
         <Stichpunkte titel="Wer es nicht nehmen sollte" punkte={t?.wer_nicht} />
@@ -872,7 +932,8 @@ export function SubstanzTafel(
       laborwirkungen?: Laborwirkung[]
       wechselwirkungen?: Wechselwirkung[]
       community?: CommunityHinweise | null
-      geprueft_ohne_befund?: number
+      /** G-186: die Rollenlage aus dem Lesepfad. */
+      rollen?: RollenLage
       wada_status?: string | null
       /** G-184: der Satz zur Lage — `wada_kategorie` steht schon oben. */
       wada_note?: string | null
@@ -898,9 +959,13 @@ export function SubstanzTafel(
     ?? (typeof satz.evidence?.overall_grade === 'string'
       ? satz.evidence.overall_grade : null)
   const kacheln = kachelnFuer(satz.slug, grad, zahlen.menge, satz.wada_status, satz.wada_kategorie)
-  // G-186: „geprueft, ohne Befund" — die Zahl kommt aus dem Lesepfad,
-  // wenn sie dort einmal gefuehrt wird; heute 0.
-  const geprueft = satz.geprueft_ohne_befund ?? 0
+  // ══ G-186: die Rollenlage ═══════════════════════════════════════
+  //
+  // `[cmd]` **Hier stand `satz.geprueft_ohne_befund ?? 0`** — ein
+  // Feld, das der Lesepfad nie setzte. **G-212 hat es gemeldet: immer
+  // 0, die Zeile erschien nie.** Jetzt kommt die Lage aus
+  // `entity_cyp` und `entity_transporters`, dreiwertig.
+  const rollen = satz.rollen ?? LEERE_LAGE
   const reiter = reiterFuer(satz.texte, zahlen, satz.formen, satz.fragen, labor, satz.quellen,
     satz.laborwirkungen, satz.wechselwirkungen, satz.community,
     // G-195: der Rechtslage-Reiter erscheint, wenn eines der beiden
@@ -928,7 +993,7 @@ export function SubstanzTafel(
               laborwirkungen={satz.laborwirkungen}
               wechselwirkungen={satz.wechselwirkungen}
               community={satz.community}
-              geprueft={geprueft}
+              rollen={rollen}
               wadaStatus={satz.wada_status} wadaNote={satz.wada_note}
               wadaKategorie={satz.wada_kategorie}
               heikel={heikel} onOeffnen={onOeffnen} />
