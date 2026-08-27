@@ -303,3 +303,5 @@ wenn er erzeugt und geprüft wird.
 | **C-300** 270-360 ms zwischen Datenbank und Anwendung bleiben | offen | 6633 |
 | **C-301** `intake_logs` traegt zwei SELECT-Policies, eine mit | offen | 6653 |
 | **G-206** PostgREST antwortet ohne Kompression | offen | 6669 |
+| **G-207** Symptome bekommen eine Tabelle | offen | 6680 |
+| **C-302** der Medikamenten-Tab wartet auf C-285 | offen | 6704 |

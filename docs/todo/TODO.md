@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-27.** 259 offen, 0 in Arbeit.
+**Stand: 2026-08-27.** 261 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6676,3 +6676,41 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` **Nicht die Ursache der 700 ms** — die Zeit fehlt auch bei
   fast gleicher Groesse auf test-user. **Aber ein eigener kleiner
   Posten**, weil je Seitenaufbau mehrere solcher Antworten laufen.
+
+- [ ] **G-207: Symptome bekommen eine Tabelle** (neu 2026-08-27).
+  Erster Teilschritt aus C-171, bewusst eng geschnitten.
+
+  `[cmd]` **`SYMPTOMS` und `SYMPTOM_BIOMARKER_MAP` stehen als
+  Konstanten in `apps/web/src/app/v2/medical/daten.ts`** und werden an
+  drei Stellen benutzt: `ansicht.tsx:75` (Tab-Zaehler),
+  `tab-tracking.tsx:74` und `:112`.
+
+  `[cmd]` **Das Modul hat 16 Dateien, fuenf Tabs und 27
+  Attrappen-Marker**, allein je neun in `tab-biomarker.tsx` und
+  `tab-tracking.tsx`. **Es ist halb angeschlossen**, nicht leer:
+  Biomarker kommen aus `echtdaten.ts`, Symptome aus der Konstante.
+
+  `[read]` **Die Zuordnung ist der eigentliche Wert** — sie verbindet,
+  was jemand spuert, mit dem, was messbar ist. **Und sie birgt den
+  einzigen echten Fallstrick:** eine Zuordnung auf einen Biomarker,
+  den der Katalog nicht kennt, faellt in einer Konstante nie auf und
+  bricht beim Umzug den Fremdschluessel.
+
+  **Ausdruecklich nicht in diesem Auftrag:** die vier fehlenden Tabs
+  (`MedMedications`, `MedHistory`, `MedDocuments`, `MedAppointments`)
+  und die sieben weiteren Konstanten. `[read]` **Sie stehen in
+  derselben Datei und sehen aus wie dieselbe Arbeit.**
+
+- [ ] **C-302: der Medikamenten-Tab wartet auf C-285** (neu
+  2026-08-27). braucht: C-285
+
+  `[cmd]` **`medical.user_medications` speichert `name`, `indication`
+  und `notes` im Klartext.** `[read]` **Solange die Verschluesselung
+  nicht entschieden ist, waere ein Erfassungs-Tab eine Oberflaeche
+  fuer einen Speicher, den wir noch aendern** — er muesste zweimal
+  umgebaut werden, und die erste Fassung wuerde Nutzer einladen,
+  unverschluesselte Medikamente einzugeben.
+
+  `[read]` **Der Punkt steht getrennt, damit die Abhaengigkeit
+  sichtbar ist** und nicht in C-171 verschwindet. **C-171 bleibt der
+  Sammelpunkt fuer den Rest.**
