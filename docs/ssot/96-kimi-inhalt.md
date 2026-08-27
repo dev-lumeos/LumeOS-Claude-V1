@@ -11,7 +11,39 @@ wir einbauen koennen.
 
 ---
 
+## Was davon inzwischen importiert ist — Stand 2026-08-26
+
+`[cmd]` **Aus diesem Bericht sind vier Auftraege entstanden, alle
+durch:**
+
+    C-272   WADA-Geltungsbereich 320 - Thailand 1.061 -
+            Human-Evidenz 293 - Studien 43 - PubChem-Konflikte 20
+    C-273   Schema `wissen`: 64 Regeln - 265 Register -
+            407 Lueckenkarten - 353 Produkte - 2.861 Buddy -
+            1.033 Community, alle mit `admin_only`
+    C-275   die 128 fehlenden Substanzen, darunter Testosteron
+            mit acht Estern, sieben Insuline, die HGH-Klasse
+    C-288   der Medikamenten-Enrichment-Layer: 1.799 Zeilen in
+            fuenf Tabellen
+
+`[read]` **Der wichtigste Einzelbefund dieses Berichts hat sich
+bestaetigt:** `[cmd]` **die Regel-Engine ist eine Schnittstelle, keine
+Textsammlung** — 64 Regeln liegen in `wissen.rule_engine_rules`, dazu
+`module_field_spec` und `rule_trait_mapping`.
+
+`[read]` **Sie feuert trotzdem nicht**, weil `medical.user_medications`
+im Klartext speichert und deshalb kein Erfassungsweg existiert
+(**C-285**). **31 Medikamentenregeln warten auf eine
+Schluesselverwaltung.**
+
+`[cmd]` **Nicht importiert und bewusst so:** die 148 Community-Zeilen
+ohne Substanzbindung (**C-287**) — Codex hat sie **nicht geraten**,
+weil *„die Datenbasis keine sichere automatische Bindung traegt."*
+
+---
+
 ## Warum es diesen Bericht gibt
+
 
 **Tom, 2026-08-25:** *„das ist alles was du findest? schau das genau
 an auch die genannten dateien das ist wahres gold."*
