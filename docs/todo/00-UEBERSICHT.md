@@ -291,11 +291,12 @@ wenn er erzeugt und geprüft wird.
 | **C-284** Der Medikamentenkatalog ist duenner als er aussieht | offen | 6276 |
 | **C-285** `user_medications` speichert Medikamente im Klartext | offen | 6320 |
 | **C-287** 148 Community-Zeilen ohne Substanzbindung | offen | 6355 |
-| **C-291** der Migrationswaechter findet einen von fuenf Faellen | offen | 6391 |
-| **C-292** Kimis Welle 1 importieren | offen | 6425 |
-| **C-293** Kimis Block D — 498 Nutzertexte und 2.313 FAQ | offen | 6457 |
-| **C-294** 101 Wirkstoffe ohne `precautions` | offen | 6477 |
-| **C-295** die Kette liest aus zwei Kimi-Pfaden | offen | 6489 |
-| **C-296** zehn falsche `drug_class`-Tags im Medikamentenbestand | offen | 6511 |
-| **G-202** der Dublettenpruefer schreibt bei jedem Gate-Lauf | offen | 6523 |
-| **G-203** Woraus die 700 ms zwischen Datenbank und Anwendung | offen | 6539 |
+| **C-292** Kimis Welle 1 importieren | offen | 6391 |
+| **C-293** Kimis Block D — 498 Nutzertexte und 2.313 FAQ | offen | 6423 |
+| **C-294** 101 Wirkstoffe ohne `precautions` | offen | 6443 |
+| **C-295** die Kette liest aus zwei Kimi-Pfaden | offen | 6455 |
+| **C-296** zehn falsche `drug_class`-Tags im Medikamentenbestand | offen | 6477 |
+| **G-202** der Dublettenpruefer schreibt bei jedem Gate-Lauf | offen | 6489 |
+| **G-203** Woraus die 700 ms zwischen Datenbank und Anwendung | offen | 6505 |
+| **C-297** drei Wege, an dem Datenlogik-Waechter vorbei | offen | 6524 |
+| **C-298** der Datenlogik-Waechter meldet zwei harmlose Muster | offen | 6545 |

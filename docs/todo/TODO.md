@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-27.** 255 offen, 0 in Arbeit.
+**Stand: 2026-08-27.** 256 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6388,40 +6388,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   substanzgebunden sind** — *„blast"* und *„pin"* gelten allgemein und
   gehoeren vermutlich in ein eigenes Glossar.
 
-- [ ] **C-291: der Migrationswaechter findet einen von fuenf Faellen**
-  (neu 2026-08-27). Aus der Pruefung von C-290.
-
-  `[cmd]` **Fuenf echte Probemigrationen nach `supabase/migrations/`
-  gelegt, `tools/migration-datenlogik-pruefen.mjs` laufen lassen,
-  wieder entfernt:**
-
-      INSERT INTO ...                        rot    richtig
-      DO $$ BEGIN INSERT ... END $$;         gruen  FALSCH
-      DELETE FROM ...                        gruen  FALSCH
-      TRUNCATE ...                           gruen  FALSCH
-      MERGE INTO ... INSERT                  gruen  FALSCH
-      ALTER TABLE ... ADD COLUMN             gruen  richtig
-
-  `[cmd]` **Ursache beim `DO`-Block:** `ohneKommentareUndStrings()`
-  verwirft Dollar-Quoting vollstaendig — bewusst, damit der `INSERT`
-  im Triggerkoerper der Baseline kein Fehlalarm ist. **Damit ist der
-  natuerlichste Weg, einen Backfill zu schreiben, genau der, den der
-  Waechter nicht sieht.**
-
-  `[cmd]` **Und er laeuft in keinem Gate** — `scripts.gate` in
-  `package.json` enthaelt ihn nicht.
-
-  `[cmd]` **Die eingebaute Negativprobe `--negative` prueft eine
-  Zeichenkette, keine Datei.** Sie belegt, dass `datenbefehle()` ein
-  `INSERT` erkennt — nicht, dass der Waechter eine echte Migration
-  findet. `[read]` **Eine Pruefung, die ihren Gegenstand umgeht, misst
-  nichts.**
-
-  **Zu tun:** `DELETE`, `TRUNCATE`, `MERGE` aufnehmen · Dollar-Bloecke
-  getrennt beurteilen mit **benannter** Baseline-Ausnahme nach dem
-  Muster aus C-267 · Negativprobe auf echte Dateien, je Befehlsart
-  eine · in `pnpm gate` aufnehmen.
-
 - [ ] **C-292: Kimis Welle 1 importieren** (neu 2026-08-27).
 
   `[cmd]` **Aus den Dateien gezaehlt, nicht aus Kimis Bericht
@@ -6554,3 +6520,49 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
 
   `[read]` **Die Summe der Abschnitte muss die Gesamtzeit ergeben.**
   Bleibt ein Rest, ist der Rest der Befund.
+
+- [ ] **C-297: drei Wege, an dem Datenlogik-Waechter vorbei** (neu
+  2026-08-27). Aus der Pruefung von C-291.
+
+  `[cmd]` **Dreizehn echte Probemigrationen gelegt und wieder
+  entfernt. Zehn urteilen richtig, drei nicht:**
+
+      DO $outer$ EXECUTE $q$INSERT ...$q$ $outer$   gruen  FALSCH
+      CREATE TABLE x AS SELECT * FROM y             gruen  FALSCH
+      SELECT * INTO x FROM y                        gruen  FALSCH
+
+  `[read]` **Der geschachtelte Dollar-Block** entsteht, weil
+  `ohneKommentareUndStrings()` den inneren `$q$`-Block entfernt, bevor
+  der aeussere geprueft wird. **`CREATE TABLE AS` und `SELECT INTO`
+  schreiben Daten, ohne einen der sechs Befehle zu nennen.**
+
+  `[read]` **Alle drei sind exotischer als die vier aus C-291** — ein
+  Backfill ueber `EXECUTE` ist unwahrscheinlich, `CTAS` in einer
+  Migration nicht. **Aber die Aufzaehlung ist jetzt eine
+  Aufzaehlung**, und wer eine Aufzaehlung umgeht, tut es an ihrem
+  Rand.
+
+- [ ] **C-298: der Datenlogik-Waechter meldet zwei harmlose Muster
+  rot** (neu 2026-08-27). Aus der Pruefung von C-291.
+
+  `[cmd]` **Gemessen mit echten Probemigrationen:**
+
+      DO $$ CREATE POLICY p ON x FOR UPDATE ... $$      rot
+      DO $$ CREATE TABLE x (... ON DELETE CASCADE) $$   rot
+
+  `[cmd]` **Ursache:** in Dollar-Bloecken sucht der Waechter die sechs
+  Befehle als **freie Woerter** (`\b(insert|update|…)\b`), nicht am
+  Anfang eines Statements wie auf oberster Ebene. `FOR UPDATE` und
+  `ON DELETE CASCADE` treffen dieses Muster.
+
+  `[read]` **Beides ist gewoehnliche Struktur-SQL** — eine idempotente
+  Policy im `DO`-Block ist das uebliche Muster. `[read]` **Und aus der
+  Uebergabe:** *„wenn eine Pruefung dauerhaft rot ist, wird sie
+  umgangen statt repariert."* **Ein Fehlalarm auf einem normalen
+  Konstrukt ist deshalb kein Schoenheitsfehler.**
+
+  **Zu tun:** in Dollar-Bloecken ebenfalls am Statement-Anfang
+  verankern, statt frei im Text zu suchen — **und die Gegenprobe
+  behalten**, dass `DO $$ BEGIN INSERT ... END $$` weiter rot wird.
+  `[read]` **Beide Richtungen, sonst tauscht die Reparatur nur die
+  eine Luecke gegen die andere.**

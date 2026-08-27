@@ -13810,3 +13810,51 @@ angelegt.**
 `[cmd]` **Die Doppelkodierung `backup/c289_kette_ohne_286a.json` aus
 der Uebergabe ist verschwunden** — sie war Codex' Negativprobe. **Alle
 vier Commits liefen mit gruenem Gate, ohne `--no-verify`.**
+
+
+## 2026-08-27 — C-291
+
+- [x] **C-291: Der Datenlogik-Waechter erkennt sechs Befehle und
+  Dollar-Bloecke** (2026-08-27, Codex)
+
+`[cmd]` **Ausgangslage bestaetigt, von Codex selbst nachgemessen:**
+1 von 5 echten Datenlogik-Proben erkannt, Pruefer in keinem Gate, die
+Negativprobe pruefte eine Zeichenkette statt einer Datei.
+
+`[cmd]` **Vom Orchestrator nachgemessen mit dreizehn echten
+Probemigrationen**, je einzeln gelegt und wieder entfernt:
+
+    INSERT / UPDATE / COPY               rot, je 1 Meldung
+    DELETE / TRUNCATE / MERGE            rot, je 1 Meldung
+    DO $$ BEGIN INSERT ... END $$        rot, 1 Meldung
+    WITH ... INSERT                      rot, 1 Meldung
+    CREATE FUNCTION ... $$ INSERT $$     rot, 1 Meldung
+    ALTER TABLE ... ADD COLUMN           gruen
+
+`[read]` **Die letzten beiden standen nicht im Auftrag** — ein
+Backfill in einem Funktionskoerper und eine CTE davor sind die zwei
+Formen, in denen ein `INSERT` nicht am Zeilenanfang steht. **Beide
+werden gefunden.**
+
+`[cmd]` **Die benannte Ausnahme ist in beide Richtungen geprueft.**
+`public.handle_new_user()` in der Baseline darf genau
+`INSERT INTO public.profiles (id)` enthalten:
+
+    Ausnahme unveraendert                gruen
+    ein DELETE im selben Koerper         rot, beide Befehle gemeldet
+    anderes Zielobjekt im INSERT         rot
+
+`[cmd]` **Rueckbau der Baseline je sha256-identisch.** `[read]` **Die
+Ausnahme ist damit an Datei, Funktion, Befehlszahl und SQL-Inhalt
+gebunden** — nicht am Namen allein, und Namensmimikry in einer neuen
+Migration greift nicht.
+
+`[cmd]` **Im Gate an Position 5 von 13**, vor `i18n-pruefen`.
+`--self-test` schreibt echte temporaere Migrationen und entfernt sie
+im `finally`-Block; acht Proben, jede mit genau der erwarteten Zahl
+Meldungen.
+
+`[read]` **Drei Restluecken und zwei Fehlalarme gefunden** — als
+**C-297** und **C-298** angelegt. **Sie entwerten den Auftrag nicht:**
+die vier Loecher, die C-291 schliessen sollte, sind zu. **Was bleibt,
+ist der Rand der Aufzaehlung**, und der ist schmaler als vorher.
