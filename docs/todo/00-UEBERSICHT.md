@@ -294,15 +294,19 @@ wenn er erzeugt und geprüft wird.
 | **C-303** erfasste Symptome haben keine Tabelle | offen | 6403 |
 | **C-304** 51 Zuordnungen zeigen ins Leere | offen | 6426 |
 | **C-295** die Kette liest aus zwei Kimi-Pfaden | offen | 6450 |
-| **C-296** zehn falsche `drug_class`-Tags in 17 Wirkstoffen | offen | 6472 |
-| **G-202** der Dublettenpruefer schreibt bei jedem Gate-Lauf | offen | 6509 |
-| **C-297** drei Wege, an dem Datenlogik-Waechter vorbei | offen | 6525 |
-| **C-298** der Datenlogik-Waechter meldet zwei harmlose Muster | offen | 6546 |
-| **G-204** Admin und Coach laufen mit sichtbarer Konsole | offen | 6571 |
-| **G-205** Der Dev-Server beendet sich selbst | offen | 6606 |
-| **C-299** `rule_assessment` ist SECURITY INVOKER und zahlt RLS | offen | 6645 |
-| **C-300** 270-360 ms zwischen Datenbank und Anwendung bleiben | offen | 6677 |
-| **C-301** `intake_logs` traegt zwei SELECT-Policies, eine mit | offen | 6697 |
-| **G-206** PostgREST antwortet ohne Kompression | offen | 6713 |
-| **C-302** der Schreibweg fuer `user_medications` | offen | 6724 |
-| **G-208** der Medikamentenkatalog ist unsichtbar | offen | 6745 |
+| **G-202** der Dublettenpruefer schreibt bei jedem Gate-Lauf | offen | 6472 |
+| **C-297** drei Wege, an dem Datenlogik-Waechter vorbei | offen | 6488 |
+| **C-298** der Datenlogik-Waechter meldet zwei harmlose Muster | offen | 6509 |
+| **G-204** Admin und Coach laufen mit sichtbarer Konsole | offen | 6534 |
+| **G-205** Der Dev-Server beendet sich selbst | offen | 6569 |
+| **C-301** `intake_logs` traegt zwei SELECT-Policies, eine mit | offen | 6608 |
+| **G-206** PostgREST antwortet ohne Kompression | offen | 6624 |
+| **C-306** `atc_code` traegt JSON in einer `text`-Spalte | offen | 6635 |
+| **C-307** `mythen_de` hat drei Gestalten in einer Spalte | offen | 6646 |
+| **C-308** keine Produktdaten fuer den deutschen Markt | offen | 6657 |
+| **G-209** der Wirkstoffkatalog laedt in 1.483 ms warm | offen | 6689 |
+| **C-309** der Wirkmechanismus ist bei allen 494 englisch | offen | 6701 |
+| **C-311** US-Freinamen ohne europaeisches Gegenstueck | offen | 6720 |
+| **C-312** Barcode einlesen — was jetzt schon ins Schema gehoert | offen | 6734 |
+| **C-313** 25 Regeln koennen nicht feuern | offen | 6756 |
+| **C-314** die drei Wirkstoff-Dubletten zusammenfuehren | offen | 6805 |

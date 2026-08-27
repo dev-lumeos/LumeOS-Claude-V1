@@ -14102,3 +14102,197 @@ steht als **C-303**.
 
 `[cmd]` **Der Verdrahtungswaechter aus G-200 greift zum ersten Mal bei
 etwas Neuem:** die drei neuen Tabellen stehen im Test.
+
+## 2026-08-27 — C-299, C-300, C-305, G-208 und G-210
+
+- [x] **C-299: `rule_assessment` zahlt RLS je Innenscan** (2026-08-27,
+  Codex)
+- [x] **C-300: 270-360 ms zwischen Datenbank und Anwendung**
+  (2026-08-27, Codex)
+- [x] **C-305: dreizehn Policies rufen `hat_sicht` je Zeile auf**
+  (2026-08-27, Codex)
+- [x] **G-208: der Medikamentenkatalog ist unsichtbar** (2026-08-27,
+  Claude Code)
+- [x] **G-210: die Suche findet keine Handelsnamen** (2026-08-27,
+  Claude Code)
+
+### Der RLS-Bogen ist zu
+
+`[cmd]` **Vom Orchestrator gemessen, je drei Laeufe, ueber alle drei
+Schritte:**
+
+    vor C-299     authenticated 551-553 ms   shared hit 128.655
+    nach C-299    authenticated 560-582 ms   shared hit 128.666
+    nach C-305    authenticated 147-155 ms   shared hit  22-25.000
+                  service_role  173-186 ms
+
+`[cmd]` **`authenticated` ist jetzt schneller als `service_role`.**
+`[read]` **Kein Widerspruch:** unter RLS sind weniger Zeilen zu
+verarbeiten — der Nutzer sieht 725 seiner 2.895 Mahlzeiten,
+`service_role` alle. **Die Zeilenschutzpruefung kostet weniger, als
+sie an Arbeit erspart.**
+
+`[cmd]` **14 Policies umgestellt, nicht 13.** `[cmd]` **Drei tragen
+noch `hat_sicht`** — `stack_items`, `workout_exercises`,
+`workout_sets`, alle drei `EXISTS`-Formen, die einmalig
+materialisieren. **Bestaetigt.**
+
+`[read]` **Und der Umweg gehoert dazu:** C-299 stellte die falschen
+fuenf Tabellen um, weil ich die gelesenen Tabellen mit einem Regex
+ueber `prosrc` erhoben hatte. **Der findet `nutrition.daily_summary`,
+aber nicht was hinter der View liegt** — sie ist
+`{security_invoker=true}`, die Policies der Basistabellen greifen beim
+Aufrufer. `[cmd]` Dort sassen **62.461 Aufrufe**.
+
+`[read]` **Die praezise Lehre:** meine Hypothese war richtig, meine
+Erhebung nicht — **und ich habe die Hypothese nach C-299 zu schnell
+ganz verworfen, statt zu fragen, ob sie nur am falschen Ort gesucht
+hat.** Ausgangspunkt war G-190, wo Claude Code 172 gegen 880 ms als
+Nebenbefund meldete, den er nicht dazugehoerig fand. **Ergebnis: 553
+auf 150 ms, Faktor 3,7, ohne dass eine Rechtepruefung aus der
+Datenbank verschwunden ist.**
+
+`[cmd]` **Codex hat einen eigenen Regelverstoss gemeldet** — ein
+falsch parametrisierter Prueferaufruf, nach 11 Sekunden ohne Ausgabe
+abgebrochen. `[read]` **Er waere spurlos verschwunden. Er hat ihn
+aufgeschrieben.**
+
+### G-208 und G-210 — der Katalog steht und ist auffindbar
+
+`[cmd]` **498 Wirkstoffe, 2.313 FAQ, 428 Marken durchsuchbar.**
+Scemblix findet Asciminib mit Begruendungszeile, Asciminib findet
+sich weiter, Concor bleibt leer **mit Erklaerungsblock**.
+
+`[cmd]` **Zwei meiner Auftragszahlen waren falsch, beide nach oben:**
+**380 statt 124** Wirkstoffe mit Produkt (Gegenprobe 380 + 118 = 498),
+und **0 statt einiger** unaufloesbarer Produkte — `formulation_id` ist
+`NOT NULL` mit Fremdschluessel, **belegt durch zwei Eingriffsversuche,
+die die Datenbank abgewiesen hat.**
+
+`[read]` **Die erste Korrektur dreht die Einschaetzung, nicht nur die
+Zahl:** bei 124 waere die Markensuche eine Randfunktion, bei 380 von
+498 ist sie der Normalfall.
+
+`[cmd]` **Der Concor-Fall ist praeziser falsch, als ich ihn
+geschrieben hatte:** Bisoprolol *hat* ein Produkt —
+`Bisoprolol fumarate {US}`. **Nicht der Wirkstoff und nicht das
+Produkt fehlen, nur der europaeische Handelsname.**
+
+`[cmd]` **Der Mehrwert, ungefragt gemessen:** von 428 Marken
+wiederholen 264 den Wirkstoffnamen, **164 sind echte Handelsnamen** —
+149 Wirkstoffe waren vorher nur unter ihrem Freinamen erreichbar.
+
+### Die Negativprobe, und was daraus wurde
+
+`[read]` **Claude Code hat gefragt statt gemacht.** Der Fall war am
+laufenden System nur herstellbar, wenn ein Fremdschluessel kurz
+faellt — **eine strukturelle Aenderung an der laufenden Datenbank.**
+Entschieden wurde: nicht anfassen, den Waechter auf der Ebene
+belegen, auf der er wohnt.
+
+`[cmd]` **Das hat den Bau verbessert:** die Aufloesung wurde nach
+`wirkstoff-marke.ts` herausgeloest, serverfrei und ohne I/O, mit vier
+Tests — darunter *,,sie faellt NICHT auf einen fremden Wirkstoff"*.
+Sabotage mit genau dem verbotenen Rueckfall macht zwei Tests rot,
+Rueckbau SHA-256-identisch.
+
+`[read]` **Und die ehrlichste Zeile des Tages steht in seinem
+Bericht:** *,,Die Tests belegen sein Verhalten, nicht seine
+Notwendigkeit. Bleiben die Constraints, ist es tote Vorsorge im
+Umfang von vier Zeilen."* **Er hat den Waechter stehen lassen und den
+Zweifel danebengeschrieben, statt ihn wegzuargumentieren.**
+
+`[cmd]` **Gates:** 692 Tests / 0 Fehler, Build 31/31,
+Verdrahtungswaechter 42 → 44 ohne unbewachten Zuwachs, Encoding
+20.190 Dateien.
+
+
+## 2026-08-27 — C-296, C-310 und G-211
+
+- [x] **C-296: `drug_class` ist unbrauchbar, nicht fehlerbehaftet**
+  (2026-08-27, Codex — erhoben, Bereinigung offen als C-310)
+- [x] **C-310: derselbe Wirkstoff steht zweimal im Katalog**
+  (2026-08-27, Codex — erhoben, Richtung entschieden)
+- [x] **G-211: der Erfassungsweg fuer Medikamente** (2026-08-27,
+  Claude Code)
+- [x] **C-302: der Schreibweg fuer `user_medications`** (2026-08-27,
+  in G-211 aufgegangen)
+
+### C-296 — und ein Befund, der groesser ist als der Auftrag
+
+`[cmd]` **183 exakte Klassentags, fuenf vollstaendige
+Case-Dublettgruppen, 163 Tags ohne eine der zehn direkten
+Klassenregeln.** `[cmd]` **`wr_serotonergic` hat 26 Katalogtraeger,
+davon neun mit falscher MAOI-Zuordnung** — die Regel ist nicht stumm,
+**sie ist unzuverlaessig**, und das ist bei `critical` die
+unangenehmere Variante.
+
+`[read]` **Die Praezisierung bei `thyroid` ist der Kern des
+Berichts:** die Regel hat keine Traeger, ist aber nur ein
+`any_of`-Arm neben TSH — **also nicht datenbedingt tot.** `[cmd]`
+**Sondern evaluatorbedingt: `any_of` wird nicht unterstuetzt.**
+
+`[read]` **Ich hatte nach toten Regeln gefragt und datenbedingt
+gemeint.** Ohne diese Unterscheidung haette ich `thyroid` als
+fehlende Traeger nachgefordert und die Ursache nie gefunden. **Daraus
+wurde C-313.**
+
+### C-310 — die Richtung steht
+
+`[cmd]` **Drei CAS-Dublettgruppen bestaetigt.** `[cmd]` **Keine Regel
+nennt einen der Namen** — die Regeln greifen ueber Eigenschaften: 10
+ueber `drug_class`, 4 ueber CYP3A4, 1 ueber `cyp_profile`.
+
+`[cmd]` **Codex hat meine Zahl berichtigt: 20 `medication`-Regeln,
+nicht 31.** `rule_type='medication'` ergibt 20, das Wort in
+`conditions` 31, `modules_involved` mit `medical` 48. `[read]` **Ich
+hatte einen Textsuchtreffer fuer eine Kategorie gehalten** — und die
+falsche Zahl in vier Auftraege geschrieben.
+
+`[cmd]` **Entscheidung Tom: die INN-Form fuehrt.** Gemessen stuetzt
+das — Paracetamol 2 Produkte gegen 1, Ciclosporin traegt als einziger
+das CYP3A4-Profil, an dem vier Regeln haengen, und der
+Acetaminophen-Eintrag traegt `opioid`.
+
+### G-211 — der Fund, der den Auftrag gerettet hat
+
+`[cmd]` **`active_substance_id` wurde nirgends gelesen** — weder im
+Typ noch in der Abfrage. **Das Feld existiert seit C-130 und kam nie
+in der Oberflaeche an.**
+
+`[read]` **Und meine Auftragsvorgabe war falsch:** ich schrieb *,,ohne
+`active_substance_id` feuert keine der 31 Regeln"*. `[cmd]` **Keine
+Regel liest das Feld.** Sie lesen `drug_class` (9) und `cyp_profile`
+(1) — **Spalten auf `user_medications` selbst.**
+
+`[read]` **Die Zuordnung wirkt mittelbar: sie holt die beiden Arrays
+aus dem Katalog auf die Zeile.** Ohne das waere das Setzen der ID rein
+dekorativ. **Ich hatte die richtige Messung** — in C-310 selbst
+gezaehlt, 0 Treffer fuer `active_substance_id` — **und die falsche
+Folgerung.** Genau das tut jetzt `katalogFelder()`, per Test bewacht:
+**Scemblix fuenf Tags, Concor `{}`.**
+
+`[cmd]` **Zweite Berichtigung: 1 Schreibstelle, nicht 3 — und sie
+liest nur.** `[read]` *,,Es gab nichts zu buendeln, sondern etwas zu
+verhindern."* Die Naht ist als Sperre gebaut und sabotage-geprueft:
+eine zweite Schreibdatei macht den Test rot, Rueckbau byteidentisch.
+
+`[cmd]` **Der dritte Zustand sagt die Folge, nicht den Zustand:**
+*,,Dieser Eintrag wird von keiner Wechselwirkungsregel geprueft. Er
+bleibt in deiner Liste"* — dazu *,,Das heisst nicht, dass du etwas
+falsch gemacht hast: der Katalog fuehrt keine deutschen
+Handelsnamen."* Warnfarbe, kein Vorwurf.
+
+`[cmd]` **Negativprobe strukturell ausgeschlossen** — der
+Fremdschluessel weist Einfuegen und Aendern ab, 0 Eintraege zeigen auf
+einen nicht existierenden Wirkstoff. **Kein Constraint geloest.**
+Zweiter Fall an einem Tag, in dem die Antwort *,,geht nicht, und das
+ist das Ergebnis"* lautet.
+
+`[cmd]` **`drug_class` war entgegen meiner Annahme bereits
+angezeigt** — eine Pill-Reihe im Tracking. Entfernt, im Bild
+gegengezaehlt, **aber weiter geschrieben, weil 9 Regeln sie lesen.**
+
+`[cmd]` **Gates:** 715 Tests / 0 Fehler, Build 31/31, Encoding 20.201
+Dateien, 0 Attrappen im neuen Code. Nachweise auf
+`test-user@lumeos.local`, Rueckbau 4 → 2 gezaehlt, `dev` unberuehrt.

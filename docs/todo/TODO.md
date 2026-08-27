@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-27.** 262 offen, 0 in Arbeit.
+**Stand: 2026-08-27.** 266 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6469,43 +6469,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   mit gemessenem Vorher/Nachher der Zeilenzahl. **Nicht in einem
   Zug mit einem Import** — ein logischer Change.
 
-- [ ] **C-296: zehn falsche `drug_class`-Tags in 17 Wirkstoffen** (neu
-  2026-08-27, **erweitert nach C-292**). Aus Kimis MoA-Notes.
-
-  `[cmd]` **Codex hat meine Zahl berichtigt:** es sind nicht zehn
-  betroffene Records, sondern **zehn verschiedene falsche Tags in 17
-  Records.** Die Notes liegen jetzt in
-  `evidence_provenance.c292_mechanism_of_action`, unveraendert.
-
-  | falscher Tag | Wirkstoffe |
-  |---|---|
-  | `maoi` | Escitalopram, Citalopram, Paroxetin, Fluvoxamin, Mirtazapin, Bupropion, Trazodon, Vilazodon, Vortioxetin |
-  | `ssri` | Bupropion, Trazodon |
-  | `snri` | Atomoxetin |
-  | `diuretic_thiazide` | Olmesartan |
-  | `insulin` | Pioglitazon |
-  | `opioid` | Acetaminophen |
-  | `anticholinergic` | Phenobarbital |
-  | `antineoplastic_misc` | Griseofulvin |
-  | `antiviral_nucleoside` | Mercaptopurin |
-  | `vitamin_c` | Chlorine |
-
-  `[read]` **Das ist der schwerste Nebenbefund des Tages.**
-  `drug_class` speist die Regel-Engine. **Neun Antidepressiva sind als
-  MAO-Hemmer gefuehrt** — dort feuern Interaktionswarnungen, die nicht
-  gelten, und die richtigen bleiben aus. `[cmd]` Acetaminophen als
-  `opioid` und Phenobarbital als `anticholinergic` wirken in dieselbe
-  Richtung.
-
-  `[read]` **Nicht stillschweigend im Import mitkorrigieren war
-  richtig.** Eine Klassenaenderung verschiebt, welche der 31
-  Medikamentenregeln feuern — das gehoert gemessen, nicht nebenbei.
-
-  **Zu tun:** je Tag pruefen, gegen welche Regeln er wirkt, dann
-  korrigieren und **vorher/nachher zaehlen, welche Regeln bei welchen
-  Wirkstoffen feuern.** `[read]` **Eine Korrektur ohne diese Zaehlung
-  waere nicht nachweisbar.**
-
 - [ ] **G-202: der Dublettenpruefer schreibt bei jedem Gate-Lauf**
   (neu 2026-08-27).
 
@@ -6642,58 +6605,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   brauchen einen warmen Server; der erste Lauf je Route wird
   verworfen.** Gehoert nach `docs/auftraege/00-LIESMICH.md`.
 
-- [ ] **C-299: `rule_assessment` ist SECURITY INVOKER und zahlt RLS
-  je Innenscan** (neu 2026-08-27). Aus G-203. **Entscheidung fuer
-  Tom.**
-
-  `[cmd]` **Vom Orchestrator nachgemessen, dieselbe Funktion, nur die
-  Rolle getauscht, je drei Laeufe:**
-
-      dev  service_role    158,7 / 174,5 / 166,9 ms   shared hit  25.022
-      dev  authenticated   553,3 / 551,5 / 553,3 ms   shared hit 128.655
-      test service_role     19,6 /  19,3 /  20,0 ms   shared hit   4.215
-      test authenticated    21,6 /  23,9 /  22,0 ms   shared hit   4.206
-
-  `[cmd]` **+387 ms auf dev, +2 ms auf test-user. Pufferzugriffe mal
-  5,1 fuer dieselben 64 Ergebniszeilen.**
-
-  `[cmd]` `prosecdef = f` — SECURITY INVOKER. `[cmd]` **Die Funktion
-  liest 14 Tabellen, nicht fuenf** (Claude Codes Zahl); **davon
-  tragen alle RLS ausser `nutrition.daily_summary`.** Neben den fuenf
-  genannten auch `medical.user_medications`, `medical.user_conditions`,
-  `medical.lab_reports`, `medical.lab_result_values`,
-  `training.workout_sessions`, `public.profiles`.
-
-  `[read]` **Das schwaecht den Befund nicht, es verstaerkt ihn** — die
-  Policy wird in mehr Scans ausgewertet als angenommen.
-
-  **Die Entscheidung:** ein Umbau auf SECURITY DEFINER mit eigener
-  Zugangspruefung waere der naheliegende Weg. `[read]` **Das ist eine
-  Sicherheitsentscheidung, kein Nebenbei** — die Funktion liest
-  Medikamente und Laborwerte. Wer RLS umgeht, muss den Zugang selbst
-  pruefen, und dann liegt die Richtigkeit im Funktionsrumpf statt in
-  der Policy.
-
-- [ ] **C-300: 270-360 ms zwischen Datenbank und Anwendung bleiben
-  unerklaert** (neu 2026-08-27). Aus G-203, Rest von C-278.
-
-  `[cmd]` **Die Rechnung fuer `dev`, warm:** Datenbank mit RLS 560 ms
-  plus Transport ~10 ms ergibt 570 — **gemessen in der Anwendung
-  838-929 ms.**
-
-  `[cmd]` **Fuer `test-user` geht dieselbe Rechnung glatt auf:** 24 +
-  2 = 26 erwartet, 17-26 gemessen. **Der Rest existiert nur dort, wo
-  Daten liegen.**
-
-  `[annahme]` **Claude Codes Vermutung, ausdruecklich als solche
-  gemeldet:** dieselbe RLS-Auswertung im PostgREST-Kontext, wo
-  JWT-Pruefung und ein eigener `set role` dazukommen. **Nicht
-  gemessen.**
-
-  **Zu tun:** in PostgREST messen, nicht in der Anwendung. `[read]`
-  **Nicht weggerundet** — bei 838 ms Gesamtzeit ist ein Drittel kein
-  Rundungsfehler.
-
 - [ ] **C-301: `intake_logs` traegt zwei SELECT-Policies, eine mit
   Funktionsaufruf** (neu 2026-08-27). Aus G-203.
 
@@ -6721,44 +6632,208 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   fast gleicher Groesse auf test-user. **Aber ein eigener kleiner
   Posten**, weil je Seitenaufbau mehrere solcher Antworten laufen.
 
-- [ ] **C-302: der Schreibweg fuer `user_medications`** (neu
-  2026-08-27, **entblockt 2026-08-27**).
+- [ ] **C-306: `atc_code` traegt JSON in einer `text`-Spalte** (neu
+  2026-08-27). Aus G-208.
 
-  `[read]` **Die Abhaengigkeit auf C-285 ist aufgehoben** — Klartext
-  ist fuer die Entwicklungsphase entschieden (`SICHERHEIT.md`).
-  **Anlegen, Aendern und Absetzen koennen gebaut werden.**
+  `[cmd]` **419 von 497 gefuellten Werten sind JSON-Literale** —
+  ungefiltert steht `["B02AA"]` woertlich in der Oberflaeche.
 
-  `[read]` **Eine Vorleistung ist trotzdem faellig, und sie ist
-  billig:** **alle Schreibzugriffe durch genau eine Stelle fuehren**,
-  nicht verstreut ueber Formular, Import und Regel-Engine. `[cmd]`
-  Heute gibt es 32 Fundstellen im Schema und 3 in `apps/web`.
+  `[read]` **In G-208 abgefangen, aber die naechste Anzeige faellt
+  wieder darauf herein** — dieselbe Falle wie G-191. **`text[]` oder
+  `jsonb` waere ehrlich; `text` mit JSON darin ist eine Falle, die
+  jeder Leseweg neu entdecken muss.**
 
-  `[read]` **Der Grund:** wenn `name`, `indication` und `notes` spaeter
-  verschluesselt werden, ist eine gebuendelte Schreibstelle ein Umbau
-  von Stunden — verstreute Zugriffe sind einer von Tagen. **Das ist
-  keine Verschluesselung auf Vorrat, sondern eine Naht an der
-  richtigen Stelle.**
+- [ ] **C-307: `mythen_de` hat drei Gestalten in einer Spalte** (neu
+  2026-08-27). Aus G-208.
 
-  **Zu tun:** Schreibweg bauen, gebuendelt, mit einem Kommentarblock
-  am Bundelungspunkt, der auf `SICHERHEIT.md` verweist.
+  `[cmd]` **Gemessen:** Zeichenkette **260**, Array **123** (120 mit
+  einem Eintrag, 3 mit zweien), null **115**.
 
-- [ ] **G-208: der Medikamentenkatalog ist unsichtbar** (neu
-  2026-08-27). Auftrag raus an Claude Code.
+  `[read]` **Wer nur `Array.isArray` prueft, verliert 260 von 383;
+  wer nur `String(v)` nimmt, zeigt bei 123 das Literal
+  `["Mythos: …"]`.** Die Anzeige faengt beides ab — **sauberer waere
+  eine Gestalt in der Pipeline.**
 
-  `[cmd]` **Seit heute stehen 498 Wirkstoffe mit deutschen Texten und
-  2.313 FAQ-Antworten in der Datenbank** — dazu CAS 489, ATC 497,
-  `mechanism_of_action` 494, `precautions` 393, Reproduktion 498.
-  **Es gibt keine Seite, auf der man das sehen kann.**
+- [ ] **C-308: keine Produktdaten fuer den deutschen Markt** (neu
+  2026-08-27). **Braucht zuerst eine Quellenentscheidung von Tom.**
 
-  `[read]` **Die eigentliche Anforderung kommt aus G-207:** der
-  Unterschied zwischen *begruendet leer* und *nicht bearbeitet* muss
-  in der Oberflaeche sichtbar sein. `[cmd]` 9 Wirkstoffe ohne CAS sind
-  Mischpraeparate und vollstaendig; 101 ohne `precautions` sind es
-  nicht. **Beides als leeres Feld zu zeigen waere dieselbe Luege wie
-  `b?.abbr ?? m`.**
+  `[cmd]` **Toms Fund:** Suche nach *Concor* bleibt leer. `[cmd]`
+  **Gemessen:** 448 Produkte, davon `US` **324**, `CA` 56,
+  `TH,US,EU,UK,CA,AU` 56, `TH` 6, `UK` 4, `AU` 2 — **`DE` null.**
+  `[cmd]` **Und nur 124 von 498 Wirkstoffen haben ueberhaupt ein
+  Produkt.**
 
-  `[cmd]` `null_context` und `evidence_provenance` tragen die
-  Unterscheidung bereits — sie sind genau dafuer gebaut.
+  `[read]` **Es ist keine Sprachfrage, sondern eine Marktfrage.**
+  Recherchiert: Bisoprolol heisst in den USA **Zebeta**, in
+  Grossbritannien **Cardicor**/**Emcor**, in Oesterreich, Brasilien
+  und China **Concor**, dazu **Bicor**, **Biso**, **BisoABZ**,
+  **Bisomerck**, **Bisobloc**, **Cardensiel**, **Monocor**,
+  **Soprol** — **ein Wirkstoff, mindestens fuenfzehn Marktnamen.**
+  `[cmd]` **Scemblix ist der Gegenfall:** weltweit derselbe Name, USA
+  2021, EU 2022.
 
-  **Nicht in diesem Auftrag:** der Erfassungsweg (C-302) und
-  `drug_class` als Wahrheit (C-296).
+  `[read]` **Die Struktur traegt bereits** — `jurisdictions` steht je
+  Produkt. **Es fehlt keine Spalte, es fehlen Zeilen.**
+
+  **Die offene Frage:** woher? `[read]` Rote Liste, ABDA-Datenbank
+  und Gelbe Liste sind lizenzpflichtig; das EMA-Register fuehrt nur
+  zentral zugelassene Praeparate, und Bisoprolol ist national
+  zugelassen. **Kimi nachzufordern hat nur Sinn, wenn es eine offene
+  Quelle gibt** — sonst produziert er geratene Markennamen, und **ein
+  falscher Handelsname fuehrt zum falschen Medikament.**
+
+  `[read]` **Und die Generika gehoeren mit:** wer *Bisomerck*
+  eintippt, meint Bisoprolol. Eine Marke-zu-Wirkstoff-Zuordnung darf
+  nicht nur Originalpraeparate fuehren.
+
+- [ ] **G-209: der Wirkstoffkatalog laedt in 1.483 ms warm** (neu
+  2026-08-27). Aus G-208.
+
+  `[cmd]` **1.874 ms kalt, 1.483 ms warm**, Server war warm.
+  `[read]` **Zum Vergleich:** die Supplement-Liste kommt mit der
+  Seite, das Medikamenten-Detail nicht. **Der Unterschied zwischen
+  kalt und warm ist hier klein — das spricht gegen Uebersetzung und
+  fuer die Abfrage.**
+
+  `[read]` **Nicht messen, bevor C-305 durch ist** — wenn dieselben
+  Policies wirken, verschiebt sich die Zahl ohne Zutun.
+
+- [ ] **C-309: der Wirkmechanismus ist bei allen 494 englisch** (neu
+  2026-08-27). Aus G-208.
+
+  `[cmd]` `pharmacology->>'mechanism_of_action'` hat kein deutsches
+  Gegenstueck. `[read]` **Er steht in der Kachel, weil er mehr sagt
+  als nichts — aber er ist der einzige englische Text auf einem sonst
+  durchgaengig deutschen Reiter.**
+
+  `[cmd]` **Dasselbe gilt fuer
+  `medication_reproductive_evidence`:** `pregnancy_human_data` und
+  `clinical_considerations` liegen ungenutzt, **weil sie englisch
+  sind.** `[cmd]` `pregnancy` ist bei 351 von 498 gefuellt,
+  `missing_pregnancy_lactation` bei **496** — **der Bestand sagt
+  selbst, was das Etikett nicht berichtet.**
+
+  **Zu tun:** mit C-294 zusammen nachfordern, oder uebersetzen lassen
+  — aber **nicht maschinell und unbesehen**, es sind pharmakologische
+  Aussagen.
+
+- [ ] **C-311: US-Freinamen ohne europaeisches Gegenstueck** (neu
+  2026-08-27). Gehoert in die Nachforderung mit C-294.
+
+  `[cmd]` **Geprueft, jeweils nur die US-Form im Katalog:**
+  `Glyburide` ohne `Glibenclamide`, `Rifampin` ohne `Rifampicin`.
+  `[cmd]` **Und beide Formen fehlen ganz bei**
+  `Epinephrine`/`Adrenaline` und `Meperidine`/`Pethidine`.
+
+  `[read]` **Das ist keine Dublette, sondern eine Datenluecke** — und
+  sie trifft genau die Namen, unter denen ein deutscher Nutzer
+  sucht. `[read]` **Die WHO fuehrt INN**, also `Paracetamol`,
+  `Salbutamol`, `Glibenclamid` — **der Katalog fuehrt ueberwiegend die
+  US-Formen**, weil die Quellen FDA-nah sind.
+
+- [ ] **C-312: Barcode einlesen — was jetzt schon ins Schema gehoert**
+  (neu 2026-08-27). Aus Toms Hinweis.
+
+  `[read]` **Noch kein Auftrag, aber zwei Regeln, die spaeter teuer
+  werden**, wenn sie fehlen:
+
+  **Fuehrende Nullen gehoeren zur PZN — sie muss als Text gespeichert
+  werden, nie als Zahl.**
+
+  **Eine geloeschte PZN wird nie neu vergeben, veraltet in Systemen
+  aber ohne harten Fehler.** `[read]` **Das ist der gefaehrliche
+  Teil:** ein gescannter alter Karton liefert einen Treffer, der nicht
+  mehr gilt. **Ohne Gueltigkeitsdatum je PZN zeigt die Anwendung
+  stillschweigend Veraltetes** — dieselbe Klasse wie `b?.abbr ?? m`.
+
+  `[cmd]` **Die PZN vergibt die IFA GmbH, nicht eine
+  Zulassungsbehoerde** — eine PZN belegt keine Zulassung. **Die
+  Zuordnung PZN zu Produkt ist kommerziell**, der ABDA-Artikelstamm
+  wird 14-taegig gepflegt.
+
+  `[read]` **Erst wenn C-308 eine Quelle hat, wird das ein Auftrag.**
+
+- [ ] **C-313: 25 Regeln koennen nicht feuern** (neu 2026-08-27,
+  **erhoben**). Aus C-296.
+
+  `[cmd]` **Codex hat gemessen:** von 27 Operatoren in
+  `rule_catalog.conditions` haben **12 echte Pfade** im Evaluator,
+  **14 fehlen vollstaendig**, und `dsl` ist fuer **3 von 15** Regeln
+  individuell behandelt. **25 Regeln sind damit unbehandelt** — vier
+  `high`, **keine `critical`**.
+
+  `[cmd]` **Die vier `high`:** `wr_drug_hyperkalemia_lab` und
+  `wr_drug_testosterone_hct` (`lab_above`), `wr_lab_biotin` (`lte`,
+  `substance_gte`), `wr_lab_vitc_glucose` (`eq`). `[read]` **Alle vier
+  verknuepfen Medikamente oder Supplements mit Laborwerten.**
+  `wr_lab_biotin` ist die Regel gegen Biotin-Interferenz bei
+  Troponin- und TSH-Messungen.
+
+  `[cmd]` **Die Klonprobe entscheidet:** ein erfundener Operator
+  `c313_unknown_operator` endet **lautlos mit `not_fulfilled`, ohne
+  Fehler.**
+
+  `[read]` **Die Regeln sind nicht defekt — sie sind unsichtbar, und
+  das System meldet Vollzug.** Wer die 64 Zeilen im Katalog zaehlt,
+  zaehlt 64 wirksame Regeln.
+
+  `[cmd]` **Ursache: unvollstaendige C-133-Implementierung**, kein
+  Verlust durch Schritt 145. `[read]` **Also eine offene Baustelle,
+  kein Defekt** — die Regeln wurden eingespielt, bevor der Evaluator
+  sie auswerten konnte.
+
+  `[read]` **Meine Ausgangsmessung war zweimal falsch gemessen:** die
+  Suche nach dem Operatornamen als Zeichenkette war zu weit (15
+  fehlend), die Suche nach `WHEN '<op>'` zu eng (0 Treffer fuer alle
+  27, auch die funktionierenden). **Der Evaluator ist nicht als
+  `CASE`-Kaskade gebaut.**
+
+  ### Die Entscheidung, die ansteht
+
+  **1 · Alle 14 nachbauen** — vollstaendig, Wochen, und
+  `wr_lab_biotin` wirkt erst am Ende.
+  **2 · Die vier `high` zuerst** — `lab_above`, `lte`,
+  `substance_gte`, `eq`: vier Operatoren fuer vier Regeln.
+  **3 · Erst laut scheitern lassen** — ein unbekannter Operator
+  wirft, statt still nicht zu erfuellen.
+
+  `[read]` **Vorschlag: 3, dann 2.** Solange ein unbekannter Operator
+  schweigt, entsteht derselbe Fehler mit der naechsten Kimi-Welle
+  wieder — und niemand merkt es. **Erst den Melder, dann die
+  Regeln.**
+
+- [ ] **C-314: die drei Wirkstoff-Dubletten zusammenfuehren** (neu
+  2026-08-27). braucht: C-296
+
+  `[cmd]` **Erhoben in C-310:** `Acetaminophen`/`Paracetamol` (CAS
+  103-90-2), `Ciclosporin`/`Cyclosporine` (59865-13-3), zwei
+  Schreibweisen von Sulfamethoxazol/Trimethoprim.
+
+  ### Entscheidung Tom, 2026-08-27: die INN-Form fuehrt
+
+  `[cmd]` **Die Messung stuetzt sie:**
+
+      Paracetamol         2 Produkte   analgesic_antipyretic
+      Acetaminophen       1 Produkt    opioid
+      Ciclosporin         2 Produkte   immunosuppressant,
+                                       CYP3A4_inhibitor, CYP3A4_substrate
+      Cyclosporine        1 Produkt    immunosuppressant
+
+  `[read]` **Die INN-Form ist in allen drei Paaren die reichere** — es
+  kostet keine Arbeit, in diese Richtung zu gehen, es spart welche.
+  **DE und TH benutzen INN; die USA sind der Ausreisser.**
+
+  ### Zwei Vorgaben
+
+  **Die US-Form wird Synonym, nicht geloescht** — sonst findet niemand
+  mehr etwas, der `Acetaminophen` eintippt.
+
+  **Die Zusammenfuehrung nimmt die reichere Eigenschaftsmenge, nicht
+  die des fuehrenden Eintrags.** `[read]` *,,Der fuehrende gewinnt"*
+  waere die naheliegende Regel gewesen und **haette Ciclosporins
+  CYP3A4-Profil vernichtet — und mit ihm vier Regeln.**
+
+  `[cmd]` **Der Acetaminophen-Eintrag traegt `opioid`** — einer der
+  falschen Tags aus C-296. **Deshalb erst C-296, dann dieser Punkt:**
+  eine Zusammenfuehrung, die `drug_class` vereinigt, wuerde die
+  Fallverdopplung in den neuen Eintrag hineinschreiben.
