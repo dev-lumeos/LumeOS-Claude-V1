@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-27.** 261 offen, 0 in Arbeit.
+**Stand: 2026-08-27.** 262 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6301,39 +6301,36 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   — der Massstab ist beim Substanzkatalog bestaetigt.**
 
 - [ ] **C-285: `user_medications` speichert Medikamente im Klartext**
-  (neu 2026-08-26). Aus C-283, von Codex gemeldet — **und der Grund,
-  warum er den Schreibweg nicht gebaut hat.**
+  (neu 2026-08-26, **entschieden 2026-08-27**).
 
-  `[cmd]` **Die Tabelle traegt `name`, `indication`, `notes`,
-  `dose_amount`, `route`, `start_date` als Klartext.**
+  `[read]` **Entscheidung: in der Entwicklungsphase bleibt es
+  Klartext.** Die Begruendung und die Bedingungen, unter denen sie
+  faellt, stehen in **`docs/todo/SICHERHEIT.md`**. **Dieser Punkt
+  blockiert nichts mehr.**
 
-  `[read]` **Das ist die sensibelste Tabelle im Repo.** Was jemand
-  einnimmt, sagt mehr ueber seine Diagnosen aus als die meisten
-  Laborwerte — ein Antipsychotikum, ein HIV-Medikament, ein
-  Zytostatikum steht dort im Klartext.
+  `[cmd]` **Die Lage:** alles laeuft lokal auf einem Rechner, 7 Konten,
+  davon 2 mit Seed-Daten. Kein Netz, kein Kunde. `[read]` **Ein
+  Schemawechsel kostet bei zwei Zeilen nichts und bei tausend Nutzern
+  eine Migration mit Ausfallzeit** — verschieben ist hier billiger als
+  bauen.
 
-  `[cmd]` **Die Projektvorgabe lautet: medizinische Daten
-  verschluesselt at rest, Coach-Zugriff nur mit Berechtigung.**
+  `[cmd]` **Was bleibt, wenn es soweit ist:** von 21 Spalten sind genau
+  drei Freitext — `name`, `indication`, `notes`. Der Rest ist
+  strukturiert und **muss lesbar bleiben**, damit `rule_assessment`
+  weiter funktioniert. `[cmd]` `pgcrypto` und `supabase_vault` sind
+  installiert.
 
-  `[read]` **Codex hat den Schreibweg deshalb nicht gebaut, sondern
-  gemeldet:** *„Anlegen, Aendern und Absetzen wuerden die
-  Sicherheitsvorgabe verletzen."* **Das war richtig** — die
-  naheliegende Reaktion waere gewesen, ihn zu bauen und die
-  Verschluesselung als Folgepunkt zu notieren. **Dann haetten wir
-  Klartextdaten und einen offenen Punkt.**
+  `[read]` **Der Zuschnitt steht damit fest, die Schluesselverwaltung
+  nicht.** Die offene Frage ist nicht *,,wie verschluesseln"*, sondern
+  *,,vor wem"* — Schluessel im Vault schuetzt gegen einen gestohlenen
+  Abzug, nicht gegen einen geleakten Service-Role-Key.
 
-  `[cmd]` **Was steht: Wirkstoff-FK, Eigentuemer-RLS,
-  Coach-Lesepolicy.** `test-user@lumeos.local` sieht per echter RLS 0
-  Zeilen. **Der Zugriff ist geregelt, die Ablage nicht.**
+  **Zu tun jetzt:** nichts. **Zu tun bei einer der vier
+  Kippbedingungen in `SICHERHEIT.md`:** dort steht es.
 
-  **Zu tun, in dieser Reihenfolge:** Schluesselverwaltung entscheiden ·
-  Entschluesselungs-Leseweg · **dann** der Schreibweg.
-
-  `[read]` **Und die Frage gilt breiter als diese Tabelle** — `[cmd]`
-  `medical.biomarker_reference_ranges` und die Laborwerte sind
-  vermutlich ebenso im Klartext. **Vor der Entscheidung messen, wie
-  viele Tabellen betroffen sind** — eine Loesung fuer eine Tabelle ist
-  keine.
+  `[cmd]` **Drei weitere Tabellen sind betroffen** —
+  `medical.user_conditions`, `lab_result_values`, `lab_reports`.
+  `[read]` **Eine Loesung fuer eine Tabelle ist keine.**
 
 - [ ] **C-287: 148 Community-Zeilen ohne Substanzbindung** (neu
   2026-08-26). Aus G-199, in C-286 **bewusst nicht geloest.**
@@ -6371,37 +6368,84 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   substanzgebunden sind** — *„blast"* und *„pin"* gelten allgemein und
   gehoeren vermutlich in ein eigenes Glossar.
 
-- [ ] **C-293: Kimis Block D — 498 Nutzertexte und 2.313 FAQ** (neu
-  2026-08-27). braucht: C-292
+- [ ] **C-294: was Kimi nachliefern muss** (neu 2026-08-27,
+  **erweitert nach C-293**). Eine Nachforderung, sobald Kontingent da
+  ist.
 
-  `[cmd]` **`reports/med_texts_ws/master_de_meds.jsonl`: 498 Zeilen,
-  2,7 MB, alle 498 `entity_id` aufloesbar, 0 unbekannt.** Sechzehn
-  Felder je Record, Medianlaengen 127 bis 326 Zeichen, FAQ 3 bis 6 je
-  Wirkstoff.
+  `[cmd]` **101 Wirkstoffe ohne `precautions`.** 12 standen im
+  Bestand, 385 kamen von Kimi, das ergibt 393 von 498. **Vier davon
+  nennt Kimi namentlich offen** — Gliclazide, Domperidone, Melatonin,
+  Chlorine. **Die uebrigen 97 sind nicht begruendet leer, sondern
+  nicht bearbeitet.**
 
-  `[cmd]` **Zwei Felder sind nicht durchgaengig belegt:**
-  `zu_wenig_de` bei 40 `null` (Sumatriptan, Nitroglycerin, Melatonin,
-  Modafinil), `mythen_de` bei 115 `null`. `[Wahrscheinlich]`
-  Bedarfsmedikamente haben kein *„zu wenig"* — **das ist eine
-  Vermutung und gehoert in die Pruefung, nicht in die Annahme.**
+  `[cmd]` **40 Wirkstoffe ohne `zu_wenig_de`, 115 ohne `mythen_de`**,
+  11 davon ohne beides — zusammen 144 Zeilen mit `null_context`.
 
-  `[read]` **Kimis Content-QA faellt aus** (Kontingent erschoepft, Tom
-  2026-08-27). **Wir machen sie selbst** — Politik-Scan, Faktik-
-  Stichprobe, Kontaminations-Scan sind messbare Pruefungen, keine
-  Rechercheleistung. `[read]` **Kimis eigene Zahlen haetten wir
-  ohnehin nachgemessen statt geglaubt.**
+  `[read]` **Und hier liegt der Befund, der wichtiger ist als die
+  Zahl:** ich hatte im Auftrag vermutet, Bedarfsmedikamente haetten
+  kein *,,zu wenig"*, und die Pruefung solle das bestaetigen. **Codex
+  hat geprueft, und es haelt nicht durchgaengig.**
 
-- [ ] **C-294: 101 Wirkstoffe ohne `precautions`** (neu 2026-08-27).
-  braucht: C-292
+  `[cmd]` Der Eintrag lautet deshalb `reason_status: "not_supplied"`
+  mit der Begruendung *,,master_de_meds.jsonl has no missing_reason
+  field; no safe clinical inference"*.
 
-  `[cmd]` **12 im Bestand plus 385 von Kimi ergibt 397 von 498.**
-  `[cmd]` **Kimi nennt vier davon namentlich offen** — Gliclazide,
-  Domperidone, Melatonin, Chlorine. **Die uebrigen 97 sind nicht
-  begruendet leer, sondern nicht bearbeitet.**
+  `[read]` **Der naheliegende Weg waere gewesen, meine Vermutung als
+  `BEDARFSMEDIKATION` in die Datenbank zu schreiben** — sie klingt
+  plausibel, sie kam vom Orchestrator, und niemand haette es je
+  gemerkt. **Das waere eine erfundene fachliche Aussage in einer
+  Medikamententabelle gewesen.**
 
-  **Zu tun:** nachfordern, sobald Kimis Kontingent zurueck ist. Vorher
-  die 101 einzeln benennen, damit die Nachforderung die Luecke trifft
-  und nicht den Bestand.
+  **Zu tun:** die 101, die 40 und die 115 je als Wirkstoffliste
+  ausgeben und gemeinsam nachfordern. `[read]` **Benannte Luecken
+  lassen sich nachfordern, erklaerte nicht.**
+
+- [ ] **C-303: erfasste Symptome haben keine Tabelle** (neu
+  2026-08-27). Aus G-207, Entwurf steht in
+  `docs/berichte/g-207-claude-code.md`.
+
+  `[cmd]` **`medical.symptoms` ist ein Katalog von 34 Symptomarten**
+  — `symptom_id`, `slug`, `name_de/_en/_th`. **Es gibt keine Tabelle
+  fuer erfasste Symptome:** kein `severity`, `onset`, `impact`,
+  `triggers`.
+
+  `[read]` **Die Unterscheidung stammt von Claude Code und ist die
+  richtige** — ich hatte im Auftrag *,,SYMPTOMS bekommt eine
+  Tabelle"* geschrieben und dabei Katalog und Tagebuchzeile
+  verwechselt. **Die vier Eintraege in der Konstante sind
+  Tagebuchzeilen, kein Katalog.**
+
+  `[cmd]` **Die Konstante war ausserdem in sich widerspruechlich:**
+  7 Symptome in der Karte, nur 4 in der Liste — `low_libido`,
+  `poor_recovery` und `weight_gain` erschienen nie.
+
+  **Zu tun:** `user_symptom_logs` nach dem Entwurf, **mit
+  Fremdschluessel auf `symptoms`.** `[read]` **Dann kann genau der
+  Fehler aus G-207 strukturell nicht wiederkehren.**
+
+- [ ] **C-304: 51 Zuordnungen zeigen ins Leere** (neu 2026-08-27).
+  Aus G-207.
+
+  `[cmd]` **`medical.symptom_biomarker_map` hat 102 Zeilen. Die
+  Tabelle weiss selbst, dass sie luecken hat** — sie fuehrt
+  `symptom_match_status` und `marker_match_status`:
+
+      symptom_not_in_catalog        49 von 102
+      marker_not_in_explanations     2 von 102
+
+  `[cmd]` **Die zwei Marker sind `lab_bnp` bei `sym_edema` (HIGH) und
+  `lab_crp` bei `sym_abdominal_pain` (MODERATE).** `[read]` **`lab_bnp`
+  ist die schlechteste Kombination von beidem** — hoechste
+  Aussagekraft in der Tabelle, und der Marker existiert nicht.
+
+  `[cmd]` **Die 49 sind 48 Prozent der Tabelle.** Entweder fehlen 49
+  Symptomarten im Katalog, oder die Zuordnungen sind Altlast.
+  `[read]` **Das ist eine Frage an die Datenquelle, keine ans UI** —
+  und sie wird gestellt, bevor jemand die Zuordnungen loescht.
+
+  `[cmd]` **Nicht dringend, weil es sichtbar ist:** seit G-207 zeigt
+  die Oberflaeche `lab_bnp - unbekannt - hoch` in Warnfarbe, statt es
+  mit `.filter(Boolean)` wegzuwerfen.
 
 - [ ] **C-295: die Kette liest aus zwei Kimi-Pfaden** (neu
   2026-08-27).
@@ -6677,40 +6721,44 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   fast gleicher Groesse auf test-user. **Aber ein eigener kleiner
   Posten**, weil je Seitenaufbau mehrere solcher Antworten laufen.
 
-- [ ] **G-207: Symptome bekommen eine Tabelle** (neu 2026-08-27).
-  Erster Teilschritt aus C-171, bewusst eng geschnitten.
+- [ ] **C-302: der Schreibweg fuer `user_medications`** (neu
+  2026-08-27, **entblockt 2026-08-27**).
 
-  `[cmd]` **`SYMPTOMS` und `SYMPTOM_BIOMARKER_MAP` stehen als
-  Konstanten in `apps/web/src/app/v2/medical/daten.ts`** und werden an
-  drei Stellen benutzt: `ansicht.tsx:75` (Tab-Zaehler),
-  `tab-tracking.tsx:74` und `:112`.
+  `[read]` **Die Abhaengigkeit auf C-285 ist aufgehoben** — Klartext
+  ist fuer die Entwicklungsphase entschieden (`SICHERHEIT.md`).
+  **Anlegen, Aendern und Absetzen koennen gebaut werden.**
 
-  `[cmd]` **Das Modul hat 16 Dateien, fuenf Tabs und 27
-  Attrappen-Marker**, allein je neun in `tab-biomarker.tsx` und
-  `tab-tracking.tsx`. **Es ist halb angeschlossen**, nicht leer:
-  Biomarker kommen aus `echtdaten.ts`, Symptome aus der Konstante.
+  `[read]` **Eine Vorleistung ist trotzdem faellig, und sie ist
+  billig:** **alle Schreibzugriffe durch genau eine Stelle fuehren**,
+  nicht verstreut ueber Formular, Import und Regel-Engine. `[cmd]`
+  Heute gibt es 32 Fundstellen im Schema und 3 in `apps/web`.
 
-  `[read]` **Die Zuordnung ist der eigentliche Wert** — sie verbindet,
-  was jemand spuert, mit dem, was messbar ist. **Und sie birgt den
-  einzigen echten Fallstrick:** eine Zuordnung auf einen Biomarker,
-  den der Katalog nicht kennt, faellt in einer Konstante nie auf und
-  bricht beim Umzug den Fremdschluessel.
+  `[read]` **Der Grund:** wenn `name`, `indication` und `notes` spaeter
+  verschluesselt werden, ist eine gebuendelte Schreibstelle ein Umbau
+  von Stunden — verstreute Zugriffe sind einer von Tagen. **Das ist
+  keine Verschluesselung auf Vorrat, sondern eine Naht an der
+  richtigen Stelle.**
 
-  **Ausdruecklich nicht in diesem Auftrag:** die vier fehlenden Tabs
-  (`MedMedications`, `MedHistory`, `MedDocuments`, `MedAppointments`)
-  und die sieben weiteren Konstanten. `[read]` **Sie stehen in
-  derselben Datei und sehen aus wie dieselbe Arbeit.**
+  **Zu tun:** Schreibweg bauen, gebuendelt, mit einem Kommentarblock
+  am Bundelungspunkt, der auf `SICHERHEIT.md` verweist.
 
-- [ ] **C-302: der Medikamenten-Tab wartet auf C-285** (neu
-  2026-08-27). braucht: C-285
+- [ ] **G-208: der Medikamentenkatalog ist unsichtbar** (neu
+  2026-08-27). Auftrag raus an Claude Code.
 
-  `[cmd]` **`medical.user_medications` speichert `name`, `indication`
-  und `notes` im Klartext.** `[read]` **Solange die Verschluesselung
-  nicht entschieden ist, waere ein Erfassungs-Tab eine Oberflaeche
-  fuer einen Speicher, den wir noch aendern** — er muesste zweimal
-  umgebaut werden, und die erste Fassung wuerde Nutzer einladen,
-  unverschluesselte Medikamente einzugeben.
+  `[cmd]` **Seit heute stehen 498 Wirkstoffe mit deutschen Texten und
+  2.313 FAQ-Antworten in der Datenbank** — dazu CAS 489, ATC 497,
+  `mechanism_of_action` 494, `precautions` 393, Reproduktion 498.
+  **Es gibt keine Seite, auf der man das sehen kann.**
 
-  `[read]` **Der Punkt steht getrennt, damit die Abhaengigkeit
-  sichtbar ist** und nicht in C-171 verschwindet. **C-171 bleibt der
-  Sammelpunkt fuer den Rest.**
+  `[read]` **Die eigentliche Anforderung kommt aus G-207:** der
+  Unterschied zwischen *begruendet leer* und *nicht bearbeitet* muss
+  in der Oberflaeche sichtbar sein. `[cmd]` 9 Wirkstoffe ohne CAS sind
+  Mischpraeparate und vollstaendig; 101 ohne `precautions` sind es
+  nicht. **Beides als leeres Feld zu zeigen waere dieselbe Luege wie
+  `b?.abbr ?? m`.**
+
+  `[cmd]` `null_context` und `evidence_provenance` tragen die
+  Unterscheidung bereits — sie sind genau dafuer gebaut.
+
+  **Nicht in diesem Auftrag:** der Erfassungsweg (C-302) und
+  `drug_class` als Wahrheit (C-296).

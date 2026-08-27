@@ -289,19 +289,20 @@ wenn er erzeugt und geprüft wird.
 | **G-192** Ein Community-Reiter im Substanzdetail | offen | 6209 |
 | **C-284** Der Medikamentenkatalog ist duenner als er aussieht | offen | 6259 |
 | **C-285** `user_medications` speichert Medikamente im Klartext | offen | 6303 |
-| **C-287** 148 Community-Zeilen ohne Substanzbindung | offen | 6338 |
-| **C-293** Kimis Block D — 498 Nutzertexte und 2.313 FAQ | offen | 6374 |
-| **C-294** 101 Wirkstoffe ohne `precautions` | offen | 6394 |
-| **C-295** die Kette liest aus zwei Kimi-Pfaden | offen | 6406 |
-| **C-296** zehn falsche `drug_class`-Tags in 17 Wirkstoffen | offen | 6428 |
-| **G-202** der Dublettenpruefer schreibt bei jedem Gate-Lauf | offen | 6465 |
-| **C-297** drei Wege, an dem Datenlogik-Waechter vorbei | offen | 6481 |
-| **C-298** der Datenlogik-Waechter meldet zwei harmlose Muster | offen | 6502 |
-| **G-204** Admin und Coach laufen mit sichtbarer Konsole | offen | 6527 |
-| **G-205** Der Dev-Server beendet sich selbst | offen | 6562 |
-| **C-299** `rule_assessment` ist SECURITY INVOKER und zahlt RLS | offen | 6601 |
-| **C-300** 270-360 ms zwischen Datenbank und Anwendung bleiben | offen | 6633 |
-| **C-301** `intake_logs` traegt zwei SELECT-Policies, eine mit | offen | 6653 |
-| **G-206** PostgREST antwortet ohne Kompression | offen | 6669 |
-| **G-207** Symptome bekommen eine Tabelle | offen | 6680 |
-| **C-302** der Medikamenten-Tab wartet auf C-285 | offen | 6704 |
+| **C-287** 148 Community-Zeilen ohne Substanzbindung | offen | 6335 |
+| **C-294** was Kimi nachliefern muss | offen | 6371 |
+| **C-303** erfasste Symptome haben keine Tabelle | offen | 6403 |
+| **C-304** 51 Zuordnungen zeigen ins Leere | offen | 6426 |
+| **C-295** die Kette liest aus zwei Kimi-Pfaden | offen | 6450 |
+| **C-296** zehn falsche `drug_class`-Tags in 17 Wirkstoffen | offen | 6472 |
+| **G-202** der Dublettenpruefer schreibt bei jedem Gate-Lauf | offen | 6509 |
+| **C-297** drei Wege, an dem Datenlogik-Waechter vorbei | offen | 6525 |
+| **C-298** der Datenlogik-Waechter meldet zwei harmlose Muster | offen | 6546 |
+| **G-204** Admin und Coach laufen mit sichtbarer Konsole | offen | 6571 |
+| **G-205** Der Dev-Server beendet sich selbst | offen | 6606 |
+| **C-299** `rule_assessment` ist SECURITY INVOKER und zahlt RLS | offen | 6645 |
+| **C-300** 270-360 ms zwischen Datenbank und Anwendung bleiben | offen | 6677 |
+| **C-301** `intake_logs` traegt zwei SELECT-Policies, eine mit | offen | 6697 |
+| **G-206** PostgREST antwortet ohne Kompression | offen | 6713 |
+| **C-302** der Schreibweg fuer `user_medications` | offen | 6724 |
+| **G-208** der Medikamentenkatalog ist unsichtbar | offen | 6745 |

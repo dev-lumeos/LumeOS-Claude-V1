@@ -14012,3 +14012,93 @@ fuenf Doppelkodierungen in `TODO.md` waren meine, aus der
 interaktiven Python-Sitzung. Repariert und committet, bevor sein
 Bericht kam. **Er hat richtig gehandelt, die fremde Datei nicht
 anzufassen.**
+
+
+## 2026-08-27 — C-293 und G-207
+
+- [x] **C-293: Kimis Block D — 498 Nutzertexte und 2.313 FAQ**
+  (2026-08-27, Codex)
+- [x] **G-207: Symptome bekommen eine Tabelle** (2026-08-27, Claude
+  Code)
+
+### C-293 — die Texte sind da, und eine Vermutung von mir ist gefallen
+
+`[cmd]` **Live nachgemessen:** `medical.medication_user_texts` **498
+Zeilen auf 498 Wirkstoffe**, `medical.medication_faq` **2.313 Zeilen
+auf 498 Wirkstoffe.**
+
+`[cmd]` **Kimis Variety-QA ist damit gemessen statt geglaubt:**
+`kurz_was_de` **498 verschiedene von 498**, `antwort_de` **2.313
+verschiedene von 2.313.**
+
+`[cmd]` **Struktur sauber:** zwoelf Textfelder je `_de`/`_en`/`_th`,
+**0 gefuellt bei `en` und `th`** — die Sprachspalten stehen bereit und
+behaupten nichts. Der Datenlogik-Waechter aus C-291 ist gruen, die
+Migration traegt also nur Struktur.
+
+**Der Befund, der wichtiger ist als die Zeilenzahl:**
+
+`[cmd]` **40 Wirkstoffe ohne `zu_wenig_de`, 115 ohne `mythen_de`, 11
+ohne beides** — 144 Zeilen mit `null_context`. Der Eintrag lautet
+`reason_status: "not_supplied"`, begruendet mit
+*,,master_de_meds.jsonl has no missing_reason field; no safe clinical
+inference"*.
+
+`[read]` **Damit ist meine Vermutung aus dem Auftrag widerlegt.** Ich
+hatte `[annahme]` geschrieben, Bedarfsmedikamente haetten kein
+*,,zu wenig"*, und die Pruefung solle das bestaetigen. **Codex hat
+geprueft, und es haelt nicht durchgaengig.**
+
+`[read]` **Der naheliegende Weg waere gewesen, meine Vermutung als
+`BEDARFSMEDIKATION` in die Datenbank zu schreiben** — sie klingt
+plausibel, sie kam vom Orchestrator, und niemand haette es je
+gemerkt. **Das waere eine erfundene fachliche Aussage in einer
+Medikamententabelle gewesen.** Als **C-294** nachgefordert.
+
+### G-207 — der Zuschnitt hielt, die Ausgangslage nicht
+
+`[cmd]` **Die Tabellen gab es schon:** `medical.symptoms` **34
+Zeilen**, `medical.symptom_biomarker_map` **102 Zeilen**, beide fuer
+`authenticated` lesbar. **Die C-159-Meldung *,,keine Symptomtabelle im
+ganzen Schema"* gilt nicht mehr.**
+
+`[cmd]` **Und sie sind reicher als die Konstante:** LOINC-Kennung,
+Aussagekraft (**HIGH 10 / MODERATE 48 / LOW 44**), deutscher Grund bei
+**allen 102**, `is_diagnosis_claim` bei **0** gesetzt.
+
+`[cmd]` **Die entscheidende Frage — zeigt jede Zuordnung auf einen
+Biomarker, den es gibt — lautet nein**, und die Tabelle weiss es
+selbst: `symptom_not_in_catalog` bei **49**,
+`marker_not_in_explanations` bei **2** (`lab_bnp` bei `sym_edema`
+HIGH, `lab_crp` bei `sym_abdominal_pain` MODERATE). Als **C-304**
+angelegt.
+
+`[cmd]` **Und es waere nie aufgefallen:** `tab-tracking.tsx:114` warf
+Unbekanntes mit `.filter(Boolean)` weg, Zeile 218 schrieb
+`b?.abbr ?? m` — **ein unbekannter Marker sah aus wie ein bekannter.**
+Jetzt steht dort `lab_bnp - unbekannt - hoch` in Warnfarbe.
+
+`[read]` **Zwei Berichtigungen an meinem Auftrag, beide von Claude
+Code:**
+
+`[cmd]` **Die 27 Attrappen waren falsch gemessen.** Ich hatte
+`git grep -c` benutzt — das zaehlt **Zeilen je Datei**, nicht
+Vorkommen, und zaehlt `// ALLES IST ATTRAPPE` und
+`import { ATTRAPPE }` mit. **18 ist richtig, nachher 17.** `[read]`
+**Derselbe Fehlertyp wie bei Toms neun Auftragszahlen: die Abfrage traf
+den falschen Ausschnitt.**
+
+`[read]` **Und der Zuschnitt war zu grob.** Ich hatte
+*,,`SYMPTOMS` bekommt eine Tabelle"* geschrieben und dabei **Katalog
+und Tagebuchzeile verwechselt.** `medical.symptoms` ist ein Katalog
+von 34 Symptomarten; die vier Eintraege in der Konstante sind
+Tagebuchzeilen mit `severity`, `onset`, `impact`, `triggers`. **Eine
+Anbindung waere falsch gewesen.** Der Entwurf fuer `user_symptom_logs`
+steht als **C-303**.
+
+`[cmd]` **Nebenbefund:** die Konstante war in sich widerspruechlich —
+7 Symptome in der Karte, nur 4 in der Liste. `low_libido`,
+`poor_recovery` und `weight_gain` erschienen nie.
+
+`[cmd]` **Der Verdrahtungswaechter aus G-200 greift zum ersten Mal bei
+etwas Neuem:** die drei neuen Tabellen stehen im Test.
