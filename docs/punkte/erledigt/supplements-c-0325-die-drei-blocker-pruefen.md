@@ -17,7 +17,7 @@ zahlen:
 agent: codex
 beauftragt: 2026-08-27
 erledigt: 2026-08-27
-commit: OFFEN
+commit: ef8b0677
 ---
 
 # C-325 — die drei Supplements-Blocker gegen den heutigen Stand pruefen
