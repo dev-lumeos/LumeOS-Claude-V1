@@ -322,7 +322,9 @@ console.log(`GRANTs      ${grantOk}/${grantGeprueft} Objekte wie erwartet`)
 //   admin         -> die Bedingung MUSS public.is_admin() nennen
 const bedIst = new Map<string, string[]>()
 for (const [tab, pol, using, check] of sql(
-  `SELECT tablename, policyname, COALESCE(qual,''), COALESCE(with_check,'')
+  `SELECT tablename, policyname,
+          regexp_replace(COALESCE(qual,''), '[[:space:]]+', ' ', 'g'),
+          regexp_replace(COALESCE(with_check,''), '[[:space:]]+', ' ', 'g')
    FROM pg_policies WHERE schemaname='nutrition';`)) {
   if (!bedIst.has(tab)) bedIst.set(tab, [])
   bedIst.get(tab)!.push(`${pol}${using}${check}`)

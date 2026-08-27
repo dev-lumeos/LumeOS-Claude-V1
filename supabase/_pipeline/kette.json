@@ -1175,6 +1175,24 @@
       "depends_on": [
         "150"
       ]
+    },
+    {
+      "id": "299",
+      "path": "supabase/_pipeline/15_coach/299_coach_read_policy_initplan.sql",
+      "kind": "sql",
+      "creates": "Fuenf Coach-Lesepolicies mit einmaliger client_permissions-Unterabfrage statt Zeilenaufruf von hat_sicht()",
+      "depends_on": [
+        "152"
+      ]
+    },
+    {
+      "id": "305",
+      "path": "supabase/_pipeline/15_coach/305_coach_read_policy_rest_initplan.sql",
+      "kind": "sql",
+      "creates": "Vierzehn direkte Coach-Lesepolicies fuer nutrition, medical, training, goals und recovery mit einmaliger client_permissions-Unterabfrage",
+      "depends_on": [
+        "299"
+      ]
     }
   ]
 }
