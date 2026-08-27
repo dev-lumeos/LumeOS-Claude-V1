@@ -284,19 +284,23 @@ wenn er erzeugt und geprüft wird.
 | **C-271** `rule_catalog` laedt immer — jeder Rueckfallzweig daran | offen | 6084 |
 | **C-272** Welle 1 — der Katalog wird inhaltlich fertig | offen | 6102 |
 | **C-274** Die 248 unsichtbaren zuordnen | offen | 6137 |
-| **C-278** Zwischen Datenbank und Anwendung liegen 700 ms | offen | 6166 |
-| **C-279** Das Kreuzprodukt in `rule_assessment` skaliert mit den | offen | 6183 |
-| **G-193** Jede Leistungszahl nennt das Konto | offen | 6202 |
-| **G-192** Ein Community-Reiter im Substanzdetail | offen | 6226 |
-| **C-284** Der Medikamentenkatalog ist duenner als er aussieht | offen | 6276 |
-| **C-285** `user_medications` speichert Medikamente im Klartext | offen | 6320 |
-| **C-287** 148 Community-Zeilen ohne Substanzbindung | offen | 6355 |
-| **C-292** Kimis Welle 1 importieren | offen | 6391 |
-| **C-293** Kimis Block D — 498 Nutzertexte und 2.313 FAQ | offen | 6423 |
-| **C-294** 101 Wirkstoffe ohne `precautions` | offen | 6443 |
-| **C-295** die Kette liest aus zwei Kimi-Pfaden | offen | 6455 |
-| **C-296** zehn falsche `drug_class`-Tags im Medikamentenbestand | offen | 6477 |
-| **G-202** der Dublettenpruefer schreibt bei jedem Gate-Lauf | offen | 6489 |
-| **G-203** Woraus die 700 ms zwischen Datenbank und Anwendung | offen | 6505 |
-| **C-297** drei Wege, an dem Datenlogik-Waechter vorbei | offen | 6524 |
-| **C-298** der Datenlogik-Waechter meldet zwei harmlose Muster | offen | 6545 |
+| **C-279** Das Kreuzprodukt in `rule_assessment` skaliert mit den | offen | 6166 |
+| **G-193** Jede Leistungszahl nennt das Konto | offen | 6185 |
+| **G-192** Ein Community-Reiter im Substanzdetail | offen | 6209 |
+| **C-284** Der Medikamentenkatalog ist duenner als er aussieht | offen | 6259 |
+| **C-285** `user_medications` speichert Medikamente im Klartext | offen | 6303 |
+| **C-287** 148 Community-Zeilen ohne Substanzbindung | offen | 6338 |
+| **C-292** Kimis Welle 1 importieren | offen | 6374 |
+| **C-293** Kimis Block D — 498 Nutzertexte und 2.313 FAQ | offen | 6406 |
+| **C-294** 101 Wirkstoffe ohne `precautions` | offen | 6426 |
+| **C-295** die Kette liest aus zwei Kimi-Pfaden | offen | 6438 |
+| **C-296** zehn falsche `drug_class`-Tags im Medikamentenbestand | offen | 6460 |
+| **G-202** der Dublettenpruefer schreibt bei jedem Gate-Lauf | offen | 6472 |
+| **C-297** drei Wege, an dem Datenlogik-Waechter vorbei | offen | 6488 |
+| **C-298** der Datenlogik-Waechter meldet zwei harmlose Muster | offen | 6509 |
+| **G-204** Admin und Coach laufen mit sichtbarer Konsole | offen | 6534 |
+| **G-205** Der Dev-Server beendet sich selbst | offen | 6569 |
+| **C-299** `rule_assessment` ist SECURITY INVOKER und zahlt RLS | offen | 6608 |
+| **C-300** 270-360 ms zwischen Datenbank und Anwendung bleiben | offen | 6640 |
+| **C-301** `intake_logs` traegt zwei SELECT-Policies, eine mit | offen | 6660 |
+| **G-206** PostgREST antwortet ohne Kompression | offen | 6676 |

@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-27.** 256 offen, 0 in Arbeit.
+**Stand: 2026-08-27.** 260 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6163,23 +6163,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` **Keine Rechercheaufgabe mehr** — Zuordnung ueber die
   Klammerinhalte plus eine kleine Nachforderung an Kimi.
 
-- [ ] **C-278: Zwischen Datenbank und Anwendung liegen 700 ms** (neu
-  2026-08-26). Von Claude Code in G-190 gemessen und gemeldet.
-
-  `[cmd]` **`ladeRegeln` auf dev: 172 ms in der Datenbank, 880 ms bis
-  in die Anwendung.** Der Rest — rund **700 ms** — entsteht in
-  PostgREST und im Transport.
-
-  `[read]` **Das ist der groessere Posten.** G-190 hat die
-  Ladezeit von 1.123 auf 998 ms gedrueckt, indem sieben Abfragen
-  parallel laufen. **Die Untergrenze bleibt die langsamste — und die
-  besteht zu 80 Prozent aus Ueberbau, nicht aus Abfragezeit.**
-
-  `[read]` **Nicht Teil von G-190, ausdruecklich genannt statt
-  verschwiegen.** Zu messen: liegt es an der Zeilenzahl, an der
-  Antwortgroesse, an fehlender Kompression, oder an der Zahl der
-  Rundreisen.
-
 - [ ] **C-279: Das Kreuzprodukt in `rule_assessment` skaliert mit den
   Einnahmen** (neu 2026-08-26). Aus G-190.
 
@@ -6502,25 +6485,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   **Zu tun:** entweder nur bei Aenderung schreiben, oder nur mit
   ausdruecklichem Schalter — nicht bei jedem Gate.
 
-- [ ] **G-203: Woraus die 700 ms zwischen Datenbank und Anwendung
-  bestehen** (neu 2026-08-27). Messauftrag zu C-278.
-
-  `[cmd]` **`ladeRegeln` auf `dev@lumeos.app`: 172 ms in der
-  Datenbank, 880 ms bis in die Anwendung** (von Claude Code in G-190
-  gemessen). Die Differenz entsteht in PostgREST und im Transport.
-
-  `[cmd]` **Der Code:** `regeln-read.ts:74`, zwei Aufrufe in
-  `Promise.allSettled` — `rpc('rule_assessment')` und
-  `from('rule_catalog')` (64 Zeilen), davor `auth.getUser()`.
-
-  `[read]` **Zu messen, nicht zu reparieren:** Zeilenzahl,
-  Antwortgroesse, Kompression, Zahl der Rundreisen — und ob
-  `getUser()` eine eigene kostet. **Auf beiden Konten**, damit C-278
-  (Ueberbau) und C-279 (Kreuzprodukt) sauber getrennt sind.
-
-  `[read]` **Die Summe der Abschnitte muss die Gesamtzeit ergeben.**
-  Bleibt ein Rest, ist der Rest der Befund.
-
 - [ ] **C-297: drei Wege, an dem Datenlogik-Waechter vorbei** (neu
   2026-08-27). Aus der Pruefung von C-291.
 
@@ -6566,3 +6530,156 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   behalten**, dass `DO $$ BEGIN INSERT ... END $$` weiter rot wird.
   `[read]` **Beide Richtungen, sonst tauscht die Reparatur nur die
   eine Luecke gegen die andere.**
+
+- [ ] **G-204: Admin und Coach laufen mit sichtbarer Konsole** (neu
+  2026-08-27). Aus Toms Meldung *„es kommen wieder next-server
+  terminalfenster."*
+
+  `[cmd]` **Gemessen ueber `Win32_Process`, drei Dev-Server laufen:**
+
+      3200  web    node .../next dev -p 3200   fensterlos, 27.08. 07:35
+      3210  admin  cmd.exe /d /s /c next dev   FENSTER,    14.08. 08:32
+      3220  coach  bash -c ... pnpm dev        FENSTER,    20.08. 17:02
+
+  `[cmd]` **Der Web-Server ist sauber:** Elternprozess verschwunden,
+  Startform identisch mit `tools/server.py start`
+  (`DETACHED_PROCESS | CREATE_NO_WINDOW`). **Von ihm kommt kein
+  Fenster.**
+
+  `[read]` **Die Luecke ist die Zustaendigkeit:** `server.py` nennt
+  3210 und 3220 `GESCHUETZT` und fasst sie **nie** an. Damit gilt die
+  Fensterfreiheit nur fuer `apps/web` — **Admin und Coach wurden nie
+  umgestellt** und laufen seit dem 14. bzw. 20.08. mit einer offenen
+  Konsole je Server.
+
+  `[cmd]` **Beide Fenster tragen den Titel `next-server (v14.2.35)`**,
+  weil Next den Konsolentitel setzt. **Das ist der Titel aus Toms
+  Bildschirmfoto.**
+
+  `[read]` **Der Anlass steht schon einmal in `server.py`:** fuenf
+  parallele `next dev` am 2026-08-22. **Die Loesung wurde damals nur
+  fuer einen der drei Server gebaut.**
+
+  **Zu tun:** `server.py` auf `apps/admin` und `apps/coach`
+  erweitern — eigener Befehl je App oder ein Schalter, aber
+  **dieselbe fensterlose Startform**. `[read]` **Die beiden laufenden
+  Prozesse dabei nicht blind abschiessen** — es koennen fremde
+  Sitzungen daranhaengen.
+
+- [ ] **G-205: Der Dev-Server beendet sich selbst** (neu 2026-08-27,
+  **korrigiert**). Aus G-203, und aus G-200.
+
+  `[read]` **Berichtigung meiner ersten Fassung.** Ich hatte die fuenf
+  Starts am 27.08. als *,,Wiederholung"* gelesen und Claude Code
+  unterstellt, er starte ohne Not neu. `[cmd]` **Das war falsch** —
+  der Server geht von selbst aus, die Starts waren die Antwort
+  darauf.
+
+  `[cmd]` **Belegt am Log:** fuenf Starts (07:23, 07:25, 07:29, 07:33,
+  07:35), **und nach dem letzten kein sechster** — trotzdem lauscht
+  auf 3200 nichts mehr. **Das Log endet ohne Fehler**, letzte Zeile
+  eine gewoehnliche Neuuebersetzung, dann `[?25h`: die Terminalfolge,
+  die ein Prozess beim **Beenden** schreibt. Kein Absturz.
+
+  `[cmd]` **Dieselbe Beobachtung in G-200** — PID 351936 verschwand
+  ebenso spurlos. **Zweimal an zwei Tagen.**
+
+  `[cmd]` **Claude Codes Messung dazu:** Tod nach 30-60 Sekunden,
+  90 Sekunden ohne jeden Zugriff ueberlebt er; die Todesfaelle fallen
+  mit `server.py status` und mit Neuuebersetzungen zusammen.
+
+  `[annahme]` **Ein Ansatz, der zu pruefen waere:** `server.py start`
+  setzt `DETACHED_PROCESS | CREATE_NO_WINDOW |
+  CREATE_NEW_PROCESS_GROUP`, **aber nicht `CREATE_BREAKAWAY_FROM_JOB`.**
+  Windows-Job-Objects reissen alle Prozesse mit, wenn der Job
+  geschlossen wird — **`DETACHED_PROCESS` schuetzt davor nicht.** Wenn
+  die Sitzung des Agenten in einem Job laeuft, erklaert das den Tod
+  kurz nach Rueckkehr des Startbefehls. **Gemessen ist das nicht, es
+  ist ein Pruefvorschlag.**
+
+  `[read]` **Und die Messhygiene, die davon uebrig bleibt:** ein
+  Neustart wirft den Uebersetzungsstand weg. `[cmd]`
+  `/api/messung-g203` lief kalt dreimal mit 4.205 / 4.406 / 4.045 ms
+  und warm dreimal mit **298 / 292 / 297** — **Faktor 14.**
+  `/v2/supplements` brauchte kalt 8.050 ms. **Laufzeitmessungen
+  brauchen einen warmen Server; der erste Lauf je Route wird
+  verworfen.** Gehoert nach `docs/auftraege/00-LIESMICH.md`.
+
+- [ ] **C-299: `rule_assessment` ist SECURITY INVOKER und zahlt RLS
+  je Innenscan** (neu 2026-08-27). Aus G-203. **Entscheidung fuer
+  Tom.**
+
+  `[cmd]` **Vom Orchestrator nachgemessen, dieselbe Funktion, nur die
+  Rolle getauscht, je drei Laeufe:**
+
+      dev  service_role    158,7 / 174,5 / 166,9 ms   shared hit  25.022
+      dev  authenticated   553,3 / 551,5 / 553,3 ms   shared hit 128.655
+      test service_role     19,6 /  19,3 /  20,0 ms   shared hit   4.215
+      test authenticated    21,6 /  23,9 /  22,0 ms   shared hit   4.206
+
+  `[cmd]` **+387 ms auf dev, +2 ms auf test-user. Pufferzugriffe mal
+  5,1 fuer dieselben 64 Ergebniszeilen.**
+
+  `[cmd]` `prosecdef = f` — SECURITY INVOKER. `[cmd]` **Die Funktion
+  liest 14 Tabellen, nicht fuenf** (Claude Codes Zahl); **davon
+  tragen alle RLS ausser `nutrition.daily_summary`.** Neben den fuenf
+  genannten auch `medical.user_medications`, `medical.user_conditions`,
+  `medical.lab_reports`, `medical.lab_result_values`,
+  `training.workout_sessions`, `public.profiles`.
+
+  `[read]` **Das schwaecht den Befund nicht, es verstaerkt ihn** — die
+  Policy wird in mehr Scans ausgewertet als angenommen.
+
+  **Die Entscheidung:** ein Umbau auf SECURITY DEFINER mit eigener
+  Zugangspruefung waere der naheliegende Weg. `[read]` **Das ist eine
+  Sicherheitsentscheidung, kein Nebenbei** — die Funktion liest
+  Medikamente und Laborwerte. Wer RLS umgeht, muss den Zugang selbst
+  pruefen, und dann liegt die Richtigkeit im Funktionsrumpf statt in
+  der Policy.
+
+- [ ] **C-300: 270-360 ms zwischen Datenbank und Anwendung bleiben
+  unerklaert** (neu 2026-08-27). Aus G-203, Rest von C-278.
+
+  `[cmd]` **Die Rechnung fuer `dev`, warm:** Datenbank mit RLS 560 ms
+  plus Transport ~10 ms ergibt 570 — **gemessen in der Anwendung
+  838-929 ms.**
+
+  `[cmd]` **Fuer `test-user` geht dieselbe Rechnung glatt auf:** 24 +
+  2 = 26 erwartet, 17-26 gemessen. **Der Rest existiert nur dort, wo
+  Daten liegen.**
+
+  `[annahme]` **Claude Codes Vermutung, ausdruecklich als solche
+  gemeldet:** dieselbe RLS-Auswertung im PostgREST-Kontext, wo
+  JWT-Pruefung und ein eigener `set role` dazukommen. **Nicht
+  gemessen.**
+
+  **Zu tun:** in PostgREST messen, nicht in der Anwendung. `[read]`
+  **Nicht weggerundet** — bei 838 ms Gesamtzeit ist ein Drittel kein
+  Rundungsfehler.
+
+- [ ] **C-301: `intake_logs` traegt zwei SELECT-Policies, eine mit
+  Funktionsaufruf** (neu 2026-08-27). Aus G-203.
+
+  `[cmd]` **`intake_logs_select`** prueft `auth.uid() = user_id` ·
+  **`intake_logs_coach_read`** ruft `coach.hat_sicht(user_id,
+  'supplements', 'full')`, eine SQL-Funktion, die in
+  `coach.client_permissions` nachschlaegt.
+
+  `[cmd]` **Allein gemessen ist die Policy billig** — ein `count(*)`
+  unter RLS kostet 3,7-6,3 ms. **Teuer wird sie erst in den
+  wiederholten Scans von `rule_assessment`.**
+
+  `[read]` **Der Punkt steht getrennt von C-299**, weil er auch dann
+  gilt, wenn `rule_assessment` auf SECURITY DEFINER umgestellt wird:
+  **jede andere Abfrage auf `intake_logs` zahlt ihn weiter.**
+
+- [ ] **G-206: PostgREST antwortet ohne Kompression** (neu
+  2026-08-27). Aus G-203.
+
+  `[cmd]` **Kein `content-encoding`, auch mit `Accept-Encoding:
+  gzip`.** Die Antwort von `rule_assessment` ist **40.828 B** auf dev,
+  36.698 B auf test-user.
+
+  `[read]` **Nicht die Ursache der 700 ms** — die Zeit fehlt auch bei
+  fast gleicher Groesse auf test-user. **Aber ein eigener kleiner
+  Posten**, weil je Seitenaufbau mehrere solcher Antworten laufen.

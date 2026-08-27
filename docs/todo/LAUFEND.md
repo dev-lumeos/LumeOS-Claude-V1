@@ -142,7 +142,7 @@ Evidence-Dateien.**
 | **C-274** die 149 unsichtbaren zuordnen | `supabase/` | 66 haben ein sichtbares Gegenstueck |
 | **C-287** 148 Community-Zeilen ohne Bindung | `supabase/` | **bewusst nicht geraten** (C-286) — braucht eine Entscheidung, keine Automatik |
 | **C-279** Kreuzprodukt in `rule_assessment` | `supabase/` | skaliert mit `intake_logs`, also mit der Nutzungsdauer |
-| **C-278** 700 ms zwischen Datenbank und Anwendung | messen | der groessere Posten gegenueber G-190 |
+| **C-299** `rule_assessment` zahlt RLS je Innenscan | `supabase/` | **+387 ms auf dev, +2 auf test-user** (G-203) — Entscheidung: SECURITY DEFINER? |
 | **C-171** Medical: Symptome, Termine, Dokumente | `apps/web` | **34 Symptome liegen seit C-262 vor** |
 
 `[cmd]` **G-197 und G-198 sind erledigt** (2026-08-26, Claude Code) —

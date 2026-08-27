@@ -13858,3 +13858,84 @@ Meldungen.
 **C-297** und **C-298** angelegt. **Sie entwerten den Auftrag nicht:**
 die vier Loecher, die C-291 schliessen sollte, sind zu. **Was bleibt,
 ist der Rand der Aufzaehlung**, und der ist schmaler als vorher.
+
+
+## 2026-08-27 — C-278 und G-203: die 700 ms sind RLS
+
+- [x] **C-278: Zwischen Datenbank und Anwendung liegen 700 ms**
+  (2026-08-27, gemessen in G-203)
+- [x] **G-203: Woraus die 700 ms bestehen** (2026-08-27, Claude Code)
+
+`[cmd]` **Es ist keine der vier Vermutungen aus dem Auftrag, sondern
+eine fuenfte: die Zeilenschutzpruefung (RLS) innerhalb der
+Datenbankfunktion.**
+
+### Die Gegenprobe, die es trennt
+
+`[cmd]` Dieselbe RPC, derselbe Serverprozess, einmal ueber den
+Supabase-Client (Nutzer-Token) und einmal als nacktes `fetch`
+(Dienstschluessel):
+
+    dev         Client 838-929 ms    fetch 152-186 ms
+    test-user   Client  17-26 ms     fetch  14-18 ms
+
+`[read]` **Der Dienstschluessel umgeht RLS, das Nutzer-Token nicht.**
+Genau darin unterscheiden sich die beiden Wege.
+
+### Vom Orchestrator nachgemessen
+
+`[cmd]` **Rollentausch direkt in der Datenbank, je drei Laeufe,
+`EXPLAIN (ANALYZE, BUFFERS)`:**
+
+    dev  service_role    158,7 / 174,5 / 166,9 ms   shared hit  25.022
+    dev  authenticated   553,3 / 551,5 / 553,3 ms   shared hit 128.655
+    test service_role     19,6 /  19,3 /  20,0 ms   shared hit   4.215
+    test authenticated    21,6 /  23,9 /  22,0 ms   shared hit   4.206
+
+`[cmd]` **+387 ms auf dev, +2 ms auf test-user** — Claude Code mass
++394 und +2. **Pufferzugriffe mal 5,1 fuer dieselben 64
+Ergebniszeilen.** `[cmd]` `prosecdef = f`: SECURITY INVOKER.
+
+### Der Befund, den der Auftrag verlangt hat
+
+`[read]` **Es ist kein Ueberbau.** `[cmd]` Auf `test-user` kostet der
+Client 3 ms, auf `dev` 700. **Ein Aufschlag, der bei gleicher
+Zeilenzahl (64/64) und fast gleicher Groesse (41 gegen 37 kB) einmal
+3 und einmal 700 ms betraegt, ist keiner.** Er waechst mit den Daten
+und kaeme mit jedem Nutzungsmonat zurueck.
+
+`[cmd]` **Die anderen vier fallen aus:** Zeilenzahl gleich, Groesse
+10 % auseinander bei Faktor 40 in der Zeit, Kompression auf beiden
+Konten aus, Rundreisen auf beiden drei.
+
+### Zwei Praezisierungen des Orchestrators
+
+`[cmd]` **Die Funktion liest 14 Tabellen, nicht fuenf.** Neben
+`intake_logs`, `stack_items`, `user_stacks`, `supplements` und
+`rule_catalog` auch `medical.user_medications`, `user_conditions`,
+`lab_reports`, `lab_result_values`, `training.workout_sessions`,
+`public.profiles` und drei weitere; **alle mit RLS ausser
+`nutrition.daily_summary`.** `[read]` **Das verstaerkt den Befund.**
+
+`[read]` **,,Es ist C-279" ist zu grob.** `[cmd]` Das Kreuzprodukt aus
+C-279 (temp read 9.457) tritt **unter `service_role` auf, also ohne
+RLS**; unter `authenticated` sind es 2.387. **Zwei verschiedene
+Posten mit derselben Skalierungseigenschaft und verschiedenen
+Reparaturen** — der RLS-Aufschlag ist als **C-299** angelegt, C-279
+bleibt offen.
+
+### Was offen bleibt
+
+`[cmd]` **270-360 ms sind nicht erklaert:** 560 ms Datenbank mit RLS
+plus ~10 ms Transport ergeben 570, gemessen wurden 838-929. **Fuer
+`test-user` geht die Rechnung glatt auf.** `[read]` **Nicht
+weggerundet, sondern als C-300 angelegt** — bei 838 ms ist ein
+Drittel kein Rundungsfehler.
+
+**Weitere Punkte aus diesem Auftrag:** **C-301** (zwei
+SELECT-Policies auf `intake_logs`), **G-206** (Kompression aus),
+**G-205** (der Dev-Server beendet sich selbst).
+
+`[cmd]` **Die Messroute wurde entfernt**, samt Typrest — gezielt
+`.next/types`, nicht `.next`. **Kein Produktcode geaendert, nichts auf
+`dev@lumeos.app` gespeichert.**
