@@ -4,7 +4,7 @@ typ: befund
 modul: supplements
 schwere: mittel
 angelegt: 2026-08-25
-braucht: ["C-275", "C-276"]
+braucht: []
 kind_von: null
 kinder: []
 entscheidung: null

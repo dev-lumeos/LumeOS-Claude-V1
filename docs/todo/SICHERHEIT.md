@@ -115,6 +115,50 @@ Anwendungspfad.**
 20.08. dauerhaft mit offener Konsole.** Lokal unbedenklich, produktiv
 nicht.
 
+### 3b · Cam-Bilder
+
+`[read]` **Beschlossen am 2026-08-27** (E-19, E-20): Objektspeicher,
+Bild und Analyse getrennt, zwei Zwecke mit zwei Einwilligungen.
+**Gebaut wird davon jetzt nur das Schema, nicht der Ablauf.**
+
+`[read]` **Ein Foto einer Mahlzeit traegt mehr als Essen** — Kueche,
+Wohnung, Gesichter im Hintergrund, Medikamentenpackungen auf dem
+Tisch. **Das ist nicht dieselbe Datenklasse wie ein
+Gewichtseintrag.**
+
+**Vor Produktiv faellig:**
+
+    Einwilligungsdialog und Textfassung je Zweck
+    Loeschfristen je Rechtsraum (Thai PDPA gegen DSGVO)
+    Widerruf von Zweck 2 muss Bilder aus dem Trainingsbestand
+      entfernen - Filter auf der Einwilligung, kein Trainingsordner
+    Bucket-Policies pruefen: privat, kein oeffentlicher Lesezugriff
+
+### 3c · Schluessel in der Historie
+
+`[cmd]` **Ein Anthropic-Schluessel steht im Klartext in einer
+getrackten und gepushten Datei** —
+`docs/_archive/.../coach_MIGRATION.md`. **Als A-56 angelegt.**
+
+`[read]` **Rotieren zuerst, bereinigen danach.** Ein Nachtrag im
+Arbeitsbaum reicht nicht; der Schluessel bleibt ueber `git log -p`
+lesbar.
+
+`[read]` **Und ein Waechter fehlt:** `pnpm gate` prueft Encoding,
+Nummern, Verdrahtung, Migrationen und Punkte — **aber nichts sucht
+nach `sk-ant-`, `sk-`, `eyJ` oder `SUPABASE_SERVICE_ROLE`.**
+
+### 5 · Export und Loeschung
+
+`[read]` **Aus E-18:** ein Nutzer muss seine Daten vollstaendig
+mitnehmen koennen, und wir muessen sie vollstaendig loeschen koennen.
+
+`[cmd]` **39 Tabellen tragen `user_id`, verteilt auf sieben
+Schemas.** `[cmd]` **Und zwei davon haben keinen Fremdschluessel auf
+`auth.users`** — `recovery.checkins` und `recovery.modality_log`
+(gefunden in G-122). **Damit fehlt auch `ON DELETE CASCADE`: ein
+geloeschter Nutzer hinterlaesst dort Waisen.**
+
 ### 4 · Nachvollziehbarkeit des Coach-Zugriffs
 
 `[cmd]` **`coach.hat_sicht` regelt, wer was sehen darf** — ueber

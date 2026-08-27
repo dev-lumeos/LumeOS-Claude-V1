@@ -113,7 +113,90 @@ Liste von selbst.**
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Stand: 2026-08-28.** Ausgangszahlen wurden gegengeprueft: 412 von 596
+Katalogeintraegen sind sichtbar. 446 Textzeilen und 1.970 FAQ-Zeilen
+liegen vor, aber nur 411 der 412 sichtbaren Eintraege haben einen
+nichtleeren deutschen Kurztext und FAQ. Die Annahme "446 mit Nutzertext
+und FAQ" verwechselt somit Gesamt- und sichtbaren Bestand.
+
+### C-129 - teilweise
+
+`[cmd]` Live: 596 Supplements (412 sichtbar), 498 Wirkstoffe, 448
+Medikamenteprodukte und exakt 29 Warn-, 15 Gap- und 20
+Medikamentenregeln. Gegenueber der Ausgangslage 237 / 56 / 124 ist der
+Bestand importiert. Alle 20 Medikamentenregeln sind `auswertbar`;
+`user_medications` und `user_conditions` existieren mit je 2
+referenzierbaren Zeilen. Es gibt 2.843 `supplement_aliases` fuer alle
+596 Eintraege und 1.541 `substance_aliases` fuer 654 Entitaeten.
+
+`[cmd]` Von 64 Regeln sind 44 `auswertbar`, 14 `blockiert` und 6
+`teilweise`: **20/64 Regeln** haben keine volle Eingabedeckung. Der
+sichere Nutzer-Schreibweg fuer Medikamente bleibt C-285. Der Befund ist
+kein historischer Importblocker mehr, aber nicht erledigt.
+
+### C-260 - teilweise
+
+`[cmd]` `crawl_027_ws/A.json` hat 37 Eintraege, aber nicht die alten
+Feldzahlen: 34 nichtleere CAS- und UNII-Eintraege (je 33 unterschiedliche
+Werte), 31 PubChem_CID, 31 InChIKey, 13 ChEMBL und 35 Sequenzen. In
+`supplement_identifiers` liegen 30/33 UNII, 29/31 PubChem_CID, 27/31
+InChIKey und 13/13 ChEMBL, jedoch **0/33 CAS**.
+
+`[cmd]` Von 89 unterschiedlichen Report-Aliasen sind 41 vorhanden,
+davon 39 mit Quelle `kimi_crawl_027`: **48/89 fehlen**. Eine fachliche
+Sequenzspalte oder -tabelle fehlt in `supplements`/`medical`; damit
+bleiben **35/35 Sequenzen** ohne Zielstruktur. Der Report ist teilweise
+eingeflossen, blockiert aber nicht mehr pauschal jeden Import.
+
+### C-262 - teilweise
+
+`[cmd]` Welle 2 und 4 treffen die Ausgangszahlen: 66
+`biomarker_explanations`, 34 `symptoms`, 102 `symptom_biomarker_map`,
+498 Wirkstoffe, 453 Formulierungen, 448 Produkte und 20
+Medikamentenregeln.
+
+`[cmd]` Welle 1 ist nicht vollstaendig: `entity_cyp` hat 3.001 und
+`entity_transporters` 4.617 Zeilen, aber `entity_pk` und
+`entity_renal_hepatic` stehen bei **0**; WADA hat **337** statt 448.
+Welle 3 hat 1.541 Namensbruecken, aber **0 sichtbare Unterformen** bei
+101 Unterformen insgesamt, nicht 29 sichtbar. Diese zwei leeren
+Zieltabellen und die 29 erwarteten sichtbaren Unterformen bleiben offen.
+
+### C-202 - teilweise
+
+`[cmd]` `medical.medication_products` hat **448 Produkte**, **428
+Marken**, 244 Hersteller und 443 referenzierte Formulierungen. Die
+Ausgangszahlen 448/428 stimmen. Die Verteilung weicht ab: US 380, CA
+112, TH 62, UK 60, AU 58, EU 56, **DE 0** statt 324/56/6/4/2.
+
+`[cmd]` Der Punkt meint mehr als DE: Verpackung ist **0/448** nichtleer;
+GTIN, EAN, UPC, nationaler Produktcode und Herstellerproduktcode sind
+je **0** nichtleer. Befuellt sind NDC 355/448, canada_din 56/392,
+EU-Kennung 7/448, Thailand 6/448, UK-PL 4/4 und AU-ARTG 2/2. Nur
+31/448 Zeilen haben nichtleere Identifier-Provenienz. Tabellen fuer
+`product_media`, `packaging_versions`, `batch_coa` und
+`vision_learning_examples` gibt es in `medical` und `supplements`
+jeweils **0**. Die vorhandene Produktebene liegt ausserdem unter
+`medical`, nicht als Supplements-Produktschema.
+
+### Formale Abhaengigkeiten
+
+`[cmd]` C-272 verwies auf C-275 und C-276; deren Abschlussberichte
+liegen vor. Sein `braucht`-Feld wurde von zwei Eintraegen auf leer
+bereinigt.
+
+`[cmd]` Die zweite geforderte Bereinigung geht nicht auf: C-315 bewertet
+C-274 als `teilweise`, und die heutige Messung ergibt weiter 0 sichtbare
+Unterformen. C-317 behaelt deshalb `braucht: ["C-274"]`. Es wurden **1
+statt 2** braucht-Felder bereinigt; eine Entfernung waere eine falsche
+Entblockierung.
+
+**Ergebnis:** C-129, C-260 und C-202 bleiben `teilweise`, also **3/3**
+der hoch gefuehrten Blocker. C-262 ist ebenfalls `teilweise`.
+
+`[cmd]` Nach der Aenderung: `node tools/punkte-index.mjs --schreiben`.
+Der Waechterlauf und sein Sollstand stehen im Nachweis.
+
 
 ## Abnahme
 
