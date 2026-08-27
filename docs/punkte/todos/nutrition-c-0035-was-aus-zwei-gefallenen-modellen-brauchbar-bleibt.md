@@ -7,7 +7,7 @@ angelegt: 2026-08-14
 braucht: []
 kind_von: C-28
 kinder: []
-entscheidung: null
+entscheidung: E-13
 beruehrt:
   tabellen: []
   dateien: ["supabase/_pipeline/07_lesefunktionen/073_suchfilter.sql"]

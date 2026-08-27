@@ -7,7 +7,7 @@ angelegt: 2026-08-27
 braucht: []
 kind_von: C-296
 kinder: []
-entscheidung: null
+entscheidung: E-15
 beruehrt:
   tabellen: []
   dateien: []

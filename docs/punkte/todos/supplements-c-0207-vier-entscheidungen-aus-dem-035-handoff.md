@@ -1,12 +1,12 @@
 ---
 nr: C-207
-typ: entscheidung
+typ: befund
 modul: supplements
 schwere: hoch
 angelegt: 2026-08-22
 braucht: []
 kind_von: null
-kinder: ["C-202"]
+kinder: [C-319, C-320, C-321, C-322]
 entscheidung: null
 beruehrt:
   tabellen: []

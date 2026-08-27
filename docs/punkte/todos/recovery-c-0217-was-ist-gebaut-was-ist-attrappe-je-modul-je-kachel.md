@@ -1,6 +1,6 @@
 ---
 nr: C-217
-typ: entscheidung
+typ: befund
 modul: recovery
 schwere: mittel
 angelegt: 2026-08-22

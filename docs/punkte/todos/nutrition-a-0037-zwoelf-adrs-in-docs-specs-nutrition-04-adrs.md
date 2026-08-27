@@ -1,12 +1,12 @@
 ---
 nr: A-37
-typ: entscheidung
+typ: befund
 modul: nutrition
 schwere: mittel
 angelegt: 2026-08-20
 braucht: []
 kind_von: null
-kinder: []
+kinder: [C-318]
 entscheidung: null
 beruehrt:
   tabellen: []

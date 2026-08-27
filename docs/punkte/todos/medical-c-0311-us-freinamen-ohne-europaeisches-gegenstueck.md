@@ -7,7 +7,7 @@ angelegt: 2026-08-27
 braucht: []
 kind_von: null
 kinder: []
-entscheidung: null
+entscheidung: E-01
 beruehrt:
   tabellen: []
   dateien: []

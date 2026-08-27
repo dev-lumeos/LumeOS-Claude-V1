@@ -214,6 +214,22 @@ INN-Entscheidung vom 27.08. steckt heute als Prosa in C-314. **Wer in
 sechs Monaten fragt, warum Paracetamol fuehrt, findet sie dort
 nicht.**
 
+### Ein ADR ist das Ergebnis, nicht die Frage
+
+`[read]` **`docs/entscheidungen/` enthaelt getroffene Entscheidungen.**
+Ein offener Entscheidungsbedarf ist noch kein ADR — er bleibt ein
+Punkt mit `typ: entscheidung` in `todos/`.
+
+`[cmd]` **Heute stehen dort 43 solche Punkte.** `[read]` **Sie warten
+nicht auf einen Agenten, sondern auf Tom.**
+
+**Wenn Tom entscheidet:** ADR anlegen, und der Punkt bekommt
+`entscheidung: E-xx` — damit ist er beauftragbar.
+
+`[read]` **Das war eine Praezisierung meines eigenen Vorschlags:** ich
+hatte gesagt, die 43 gehoerten *nach* `docs/entscheidungen/`. **Falsch
+— dorthin gehoert nur, was entschieden ist.**
+
 ## Reihen
 
 `C` Daten und Schema · `G` Oberflaeche · `A` Arbeitsweise ·

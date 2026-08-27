@@ -1,6 +1,6 @@
 ---
 nr: G-07
-typ: entscheidung
+typ: befund
 modul: quer
 schwere: mittel
 angelegt: 2026-08-15

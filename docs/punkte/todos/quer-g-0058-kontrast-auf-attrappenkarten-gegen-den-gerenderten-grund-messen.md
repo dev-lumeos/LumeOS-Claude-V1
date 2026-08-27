@@ -1,6 +1,6 @@
 ---
 nr: G-58
-typ: entscheidung
+typ: befund
 modul: quer
 schwere: niedrig
 angelegt: 2026-08-18

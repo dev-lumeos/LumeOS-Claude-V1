@@ -1,13 +1,13 @@
 ---
 nr: C-174
-typ: entscheidung
+typ: befund
 modul: nutrition
 schwere: mittel
 angelegt: 2026-08-20
 braucht: []
 kind_von: null
 kinder: []
-entscheidung: null
+entscheidung: E-16
 beruehrt:
   tabellen: []
   dateien: []

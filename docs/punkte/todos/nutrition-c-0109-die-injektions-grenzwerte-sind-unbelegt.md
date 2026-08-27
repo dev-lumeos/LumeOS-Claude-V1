@@ -7,7 +7,7 @@ angelegt: 2026-08-19
 braucht: []
 kind_von: F-02
 kinder: []
-entscheidung: null
+entscheidung: E-14
 beruehrt:
   tabellen: []
   dateien: ["apps/web/public/mockup/components/MuscleBodyMap_test.html"]

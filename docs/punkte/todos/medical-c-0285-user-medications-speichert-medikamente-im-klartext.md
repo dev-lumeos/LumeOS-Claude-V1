@@ -7,7 +7,7 @@ angelegt: 2026-08-26
 braucht: []
 kind_von: null
 kinder: []
-entscheidung: null
+entscheidung: E-12
 beruehrt:
   tabellen: ["medical.user_conditions"]
   dateien: ["docs/todo/SICHERHEIT.md"]

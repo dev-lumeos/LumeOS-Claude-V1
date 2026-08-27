@@ -1,12 +1,12 @@
 ---
 nr: C-49
-typ: entscheidung
+typ: befund
 modul: nutrition
 schwere: hoch
 angelegt: 2026-08-15
 braucht: []
 kind_von: G-122
-kinder: []
+kinder: [C-323, C-324]
 entscheidung: null
 beruehrt:
   tabellen: ["nutrition.nutrient_search_aliases"]

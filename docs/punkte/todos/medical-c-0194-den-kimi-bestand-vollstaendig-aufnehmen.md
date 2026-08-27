@@ -1,6 +1,6 @@
 ---
 nr: C-194
-typ: entscheidung
+typ: befund
 modul: medical
 schwere: mittel
 angelegt: 2026-08-22

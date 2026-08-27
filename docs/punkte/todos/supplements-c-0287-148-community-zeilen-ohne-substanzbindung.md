@@ -1,6 +1,6 @@
 ---
 nr: C-287
-typ: entscheidung
+typ: befund
 modul: supplements
 schwere: mittel
 angelegt: 2026-08-26

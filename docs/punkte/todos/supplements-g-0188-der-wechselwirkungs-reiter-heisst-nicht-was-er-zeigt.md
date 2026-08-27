@@ -1,6 +1,6 @@
 ---
 nr: G-188
-typ: entscheidung
+typ: feature
 modul: supplements
 schwere: mittel
 angelegt: 2026-08-25

@@ -1,6 +1,6 @@
 ---
 nr: C-08
-typ: entscheidung
+typ: befund
 modul: nutrition
 schwere: mittel
 angelegt: 2026-08-19
