@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 244 |
+| `todos` | 245 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 9 |
-| **gesamt** | **257** |
+| `erledigt` | 10 |
+| **gesamt** | **259** |
 
 ## medical — 32
 
@@ -111,7 +111,9 @@
 | `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — |
 
-## supplements — 43
+## supplements — 44
+
+### beauftragbar — 43
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker |
 |---|---|---|---|---|---|
@@ -138,14 +140,14 @@
 | `C-262` | feature | mittel | [Der Import — vier Wellen](todos/supplements-c-0262-der-import-vier-wellen.md) | offen | — |
 | `C-263` | messung | mittel | [Deutsche Beschreibungen aus Kimis Fachdaten ableiten](todos/supplements-c-0263-deutsche-beschreibungen-aus-kimis-fachdaten-ableiten.md) | offen | — |
 | `C-272` | befund | mittel | [Welle 1 — der Katalog wird inhaltlich fertig](todos/supplements-c-0272-welle-1-der-katalog-wird-inhaltlich-fertig.md) | offen | — |
+| `C-274` | befund | mittel | [die unsichtbaren Substanzen zuordnen](todos/supplements-c-0274-die-unsichtbaren-substanzen-zuordnen.md) | offen | — |
 | `C-287` | befund | mittel | [148 Community-Zeilen ohne Substanzbindung](todos/supplements-c-0287-148-community-zeilen-ohne-substanzbindung.md) | offen | — |
 | `C-316` | feature | mittel | [NAC steht im Katalog ohne deutschen Namen](todos/supplements-c-0316-nac-steht-im-katalog-ohne-deutschen-namen.md) | offen | — |
-| `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | — |
 | `C-319` | entscheidung | hoch | [Cam-Speicherweg festlegen](erledigt/supplements-c-0319-cam-speicherweg-festlegen.md) | erledigt | — |
 | `C-320` | entscheidung | hoch | [Cam-Datenschutz und Aufbewahrung je Rechtsraum festlegen](erledigt/supplements-c-0320-cam-datenschutz-und-aufbewahrung-je-rechtsraum-festlegen.md) | erledigt | — |
 | `C-321` | entscheidung | hoch | [Cam-Einwilligungsfuehrung festlegen](erledigt/supplements-c-0321-cam-einwilligungsfuehrung-festlegen.md) | erledigt | — |
 | `C-322` | entscheidung | mittel | [Cam-Vision-Modell festlegen](erledigt/supplements-c-0322-cam-vision-modell-festlegen.md) | erledigt | — |
-| `C-325` | messung | hoch | [die drei Supplements-Blocker gegen den heutigen Stand pruefen](laufend_codex/supplements-c-0325-die-drei-blocker-pruefen.md) | laeuft (codex) | — |
+| `C-325` | messung | hoch | [die drei Supplements-Blocker gegen den heutigen Stand pruefen](erledigt/supplements-c-0325-die-drei-blocker-pruefen.md) | erledigt | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — |
@@ -158,6 +160,12 @@
 | `G-202` | feature | mittel | [der Dublettenpruefer schreibt bei jedem Gate-Lauf](todos/supplements-g-0202-der-dublettenpruefer-schreibt-bei-jedem-gate-lauf.md) | offen | — |
 | `G-205` | messung | mittel | [Der Dev-Server beendet sich selbst](todos/supplements-g-0205-der-dev-server-beendet-sich-selbst.md) | offen | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker |
+|---|---|---|---|---|---|
+| `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 |
 
 ## training — 14
 
@@ -238,7 +246,7 @@
 | `G-168` | befund | mittel | [Die coach-Kopfzeile widerspricht dem eigenen Tab](todos/coach-g-0168-die-coach-kopfzeile-widerspricht-dem-eigenen-tab.md) | offen | — |
 | `G-169` | befund | mittel | [`coach.checkins` und `checkin_templates` liegen ungelesen](todos/coach-g-0169-coach-checkins-und-checkin-templates-liegen-ungelesen.md) | offen | — |
 
-## quer — 65
+## quer — 66
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker |
 |---|---|---|---|---|---|
@@ -265,6 +273,7 @@
 | `A-54` | feature | hoch | [die Punkte modulfaehig machen](erledigt/quer-a-0054-punkte-modulfaehig-machen.md) | erledigt | — |
 | `A-55` | feature | hoch | [die 43 Entscheidungspunkte sortieren](erledigt/quer-a-0055-entscheidungspunkte-sortieren.md) | erledigt | — |
 | `A-56` | blocker | hoch | [ein Anthropic-Schluessel steht im Klartext in der Historie](todos/quer-a-0056-anthropic-schluessel-in-der-historie.md) | offen | — |
+| `A-57` | blocker | hoch | [24 Punkte wurden per Textheuristik geschlossen und sind ungeprueft](laufend_codex/quer-a-0057-heuristisch-geschlossene-punkte-nachpruefen.md) | laeuft (codex) | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](todos/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | offen | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — |
@@ -310,6 +319,6 @@
 
 ## Verweise ausserhalb von `docs/punkte/`
 
-62 Nummern werden genannt, liegen aber in keinem Punktordner — erledigte Punkte sind noch nicht migriert:
+61 Nummern werden genannt, liegen aber in keinem Punktordner — erledigte Punkte sind noch nicht migriert:
 
-`A-14` · `A-28` · `B-12` · `C-100` · `C-124` · `C-128` · `C-130` · `C-157` · `C-158` · `C-164` · `C-165` · `C-225` · `C-235` · `C-25` · `C-252` · `C-274` · `C-28` · `C-291` · `C-296` · `C-315` · `C-83` · `C-84` · `G-100` · `G-101` · `G-110` · `G-123` · `G-129` · `G-13` · `G-135` · `G-14` · `G-147` · `G-148` · `G-154` · `G-157` · `G-158` · `G-16` · `G-160` · `G-161` · `G-185` · `G-187` · `G-190` · `G-203` · `G-207` · `G-208` · `G-212` · `G-42` · `G-45` · `G-57` · `G-60` · `G-64` · `G-65` · `G-73` · `G-74` · `G-76` · `G-82` · `G-84` · `G-85` · `G-86` · `G-87` · `G-90` · `G-91` · `G-97`
+`A-14` · `A-28` · `B-12` · `C-100` · `C-124` · `C-128` · `C-130` · `C-157` · `C-158` · `C-164` · `C-165` · `C-225` · `C-235` · `C-25` · `C-252` · `C-28` · `C-291` · `C-296` · `C-315` · `C-83` · `C-84` · `G-100` · `G-101` · `G-110` · `G-123` · `G-129` · `G-13` · `G-135` · `G-14` · `G-147` · `G-148` · `G-154` · `G-157` · `G-158` · `G-16` · `G-160` · `G-161` · `G-185` · `G-187` · `G-190` · `G-203` · `G-207` · `G-208` · `G-212` · `G-42` · `G-45` · `G-57` · `G-60` · `G-64` · `G-65` · `G-73` · `G-74` · `G-76` · `G-82` · `G-84` · `G-85` · `G-86` · `G-87` · `G-90` · `G-91` · `G-97`

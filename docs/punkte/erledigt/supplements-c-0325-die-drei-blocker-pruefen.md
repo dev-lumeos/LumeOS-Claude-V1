@@ -16,6 +16,8 @@ zahlen:
   blocker: 3
 agent: codex
 beauftragt: 2026-08-27
+erledigt: 2026-08-27
+commit: OFFEN
 ---
 
 # C-325 — die drei Supplements-Blocker gegen den heutigen Stand pruefen
@@ -200,4 +202,37 @@ Der Waechterlauf und sein Sollstand stehen im Nachweis.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-27, Orchestrator.**
+
+`[cmd]` **Alle vier `teilweise`, die drei `hoch`-Blocker bleiben 3/3.**
+
+`[read]` **Ich hatte vermutet, C-129 und C-260 seien durch** — der
+Katalog ist seit einer Woche fertig. **Sie sind es nicht**, und die
+Restluecken stehen jetzt in Zahlen statt in einer Vermutung:
+
+    20/64 Regeln ohne volle Eingabedeckung
+    0/33 CAS aus crawl_027
+    48/89 fehlende Report-Aliase
+    PK- und Renal-Hepatic-Tabellen leer
+    Produktverpackung offen, DE bei 0/448
+
+### Die verweigerte Entkopplung ist der wertvollste Teil
+
+`[read]` **Ich hatte angewiesen, `C-317` von `braucht: C-274` zu
+entkoppeln, weil ich behauptet hatte, alle Vorbedingungen seien
+geschlossen.** `[cmd]` **Codex hat gemessen statt zu folgen:** 184
+unsichtbare Substanzen, **83 davon ohne `parent_id`** — C-274 ist
+nicht erledigt.
+
+`[cmd]` **Ich hatte ihn am selben Tag per Textheuristik als
+*ueberholt* geschlossen**, zusammen mit 24 weiteren. **Er ist
+wiederhergestellt, die uebrigen 24 gehen als A-57 zurueck an
+Codex.**
+
+`[read]` **`C-272` wurde korrekt entkoppelt** — dort waren die
+Vorbedingungen wirklich geschlossen. **Die Unterscheidung zwischen
+beiden Faellen ist genau das, was eine Anweisung nicht leisten kann
+und eine Messung schon.**
+
+**Abgenommen.**
+

@@ -14409,6 +14409,6 @@ Rest.
 - [x] **C-116: Der Substanzkatalog — 320 Zeilen als Kandidat** (2026-08-27, ueberholt — belegt in C-315/G-212)
 - [x] **C-196: Die 290 Substanzen in die neue Tiefe importieren** (2026-08-27, ueberholt — belegt in C-315/G-212)
 - [x] **C-221: `supplement_interactions` ist eine tote Spec-Tabelle** (2026-08-27, ueberholt — belegt in C-315/G-212)
-- [x] **C-274: Die 248 unsichtbaren zuordnen** (2026-08-27, ueberholt — belegt in C-315/G-212)
+- [~] **C-274: Die 248 unsichtbaren zuordnen** — **2026-08-27 FALSCH GESCHLOSSEN, wiederhergestellt.** Per Textheuristik geschlossen, von Codex in C-325 widerlegt: 83 von 184 unsichtbaren Substanzen ohne `parent_id`. Siehe A-57.
 - [x] **G-178: Reiter und Fussleiste nennen verschiedene Zahlen — 298 gegen 290** (2026-08-27, ueberholt — belegt in C-315/G-212)
 - [x] **G-209: der Wirkstoffkatalog laedt in 1.483 ms warm** (2026-08-27, ueberholt — belegt in C-315/G-212)
