@@ -32,6 +32,12 @@ import {
   type BefundWert, type KatalogTreffer,
 } from '../../../lib/medical/lesen'
 import { zuReihen, type MarkerReihe } from '../../../lib/medical/reihe'
+// G-208: der Wirkstoffkatalog — 498 Zeilen, 83 kB (gemessen
+// 2026-08-27). `[read]` **Die Liste kommt mit der Seite, das Detail
+// nicht** — die Nutzertexte wiegen 1.145 kB, die FAQ 700 kB.
+import {
+  ladeWirkstoffListe, type WirkstoffZeile,
+} from '../../../lib/medical/wirkstoff-read'
 import {
   istSystem, rechneScores, type Gesamtwert, type System,
 } from '../../../lib/medical/systemscore'
@@ -50,6 +56,8 @@ export const dynamic = 'force-dynamic'
 type MedikationZeile = {
   id: string
   name: string
+  /** G-211: die Katalogbindung — `null` ist der dritte Zustand. */
+  active_substance_id: string | null
   drug_class: string[] | null
   cyp_profile: string[] | null
   dose_amount: number | null
@@ -97,7 +105,8 @@ async function ladeMedikationen(userId: string): Promise<MedikationEcht[]> {
     .schema('medical')
     .from('user_medications')
     .select(`
-      id, name, drug_class, cyp_profile, dose_amount, dose_unit,
+      id, name, active_substance_id,
+      drug_class, cyp_profile, dose_amount, dose_unit,
       doses_per_day, route, start_date, end_date, is_active,
       indication, notes, measurement_source, source_detail
     `)
@@ -110,6 +119,7 @@ async function ladeMedikationen(userId: string): Promise<MedikationEcht[]> {
   return ((data ?? []) as MedikationZeile[]).map(row => ({
     id: row.id,
     name: row.name,
+    active_substance_id: row.active_substance_id,
     drug_class: arrayOderLeer(row.drug_class),
     cyp_profile: arrayOderLeer(row.cyp_profile),
     dose_amount: row.dose_amount,
@@ -203,12 +213,14 @@ export default async function V2MedicalPage() {
   let scores: Gesamtwert | null = null
   // G-207: Symptome und ihre Biomarker-Zuordnung.
   let symptome: SymptomStand = LEERER_STAND
+  // G-208: der Wirkstoffkatalog.
+  let wirkstoffe: WirkstoffZeile[] = []
   let ladefehler: string | null = null
 
   try {
     const userId = await angemeldeteNutzerin()
     ;[werte, katalogStart, katalogGesamt, medikationen, labEffekte,
-      symptome] = await Promise.all([
+      symptome, wirkstoffe] = await Promise.all([
       ladeBefundwerte(userId),
       sucheKatalog(''),
       zaehleKatalog(),
@@ -216,6 +228,10 @@ export default async function V2MedicalPage() {
       ladeLabEffekte(userId),
       // G-207: haengt an keiner der uebrigen — laeuft mit.
       ladeSymptome(),
+      // G-208: ebenso. `[read]` **Nicht sequenziell angehaengt** —
+      // die Lehre aus G-190: fuenf Auftraege haben je „haeng zwei
+      // Abfragen an" gesagt, keiner hat die Summe gemessen.
+      ladeWirkstoffListe(),
     ])
 
     // Kurzname und Klasse je Code — ein Zugriff fuer alle, erst wenn
@@ -244,6 +260,7 @@ export default async function V2MedicalPage() {
       echt={{
         reihen, befunde, werte, katalogStart, katalogGesamt,
         medikationen, labEffekte, scores, ladefehler, symptome,
+        wirkstoffe,
       }}
     />
   )

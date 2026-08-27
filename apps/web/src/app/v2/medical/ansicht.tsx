@@ -52,6 +52,8 @@ import { MedicalKontext, useMedical, type ModalZustand } from './kontext'
 import { MedicalModale } from './modale'
 import { MedBiomarkers, MedImport } from './tab-biomarker'
 import { MedTracking, MedInsights } from './tab-tracking'
+// G-208: der Wirkstoffkatalog.
+import { MedWirkstoffe } from './tab-wirkstoffe'
 import type { EchteDaten } from './echtdaten'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
@@ -65,7 +67,9 @@ export const ATTRAPPE =
 // angemeldeten Nutzerin statt der 48 erfundenen der Vorlage. Die
 // uebrigen drei Zaehler stehen weiter auf Attrappendaten, weil ihre
 // Tabs es sind.
-function tabs(markerZahl: number, medikationen: number): TabItem[] {
+function tabs(
+  markerZahl: number, medikationen: number, wirkstoffe: number,
+): TabItem[] {
   return [
     { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
     { id: 'biomarkers', label: 'Biomarkers', icon: 'trend_up', count: markerZahl },
@@ -75,6 +79,16 @@ function tabs(markerZahl: number, medikationen: number): TabItem[] {
       count: SYMPTOMS.filter(s => !s.resolved).length
         + medikationen,
     },
+    // ══ G-208 · DER WIRKSTOFFKATALOG ═══════════════════════════════
+    //
+    // `[cmd]` **498 Wirkstoffe, 2.313 FAQ-Antworten** — seit dem
+    // 2026-08-27 in der Datenbank, bis hierher ohne Seite.
+    //
+    // `[read]` **Die Stelle ist gewaehlt, nicht angehaengt:** hinter
+    // *Tracking*, wo die EIGENE Medikation steht, und vor *Insights*.
+    // **Ein Nachschlagewerk kommt nach dem eigenen Bestand** — wer
+    // etwas nachschlaegt, hat meist gerade dort hineingesehen.
+    { id: 'wirkstoffe', label: 'Wirkstoffe', icon: 'search', count: wirkstoffe },
     { id: 'insights', label: 'Insights', icon: 'sparkles', count: CORRELATIONS.length },
   ]
 }
@@ -197,13 +211,17 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
         </div>
       </div>
 
-      <Tabs items={tabs(echt.reihen.length, echt.medikationen.filter(m => m.is_active).length)}
+      <Tabs items={tabs(echt.reihen.length,
+                        echt.medikationen.filter(m => m.is_active).length,
+                        echt.wirkstoffe.length)}
             active={tab} onChange={setTab} />
 
       {tab === 'dashboard' && <MedDashboard echt={echt} />}
       {tab === 'biomarkers' && <MedBiomarkers echt={echt} />}
       {tab === 'import' && <MedImport echt={echt} />}
       {tab === 'tracking' && <MedTracking echt={echt} />}
+      {/* G-208: lesend. `[read]` Kein Erfassungsweg — das ist C-302. */}
+      {tab === 'wirkstoffe' && <MedWirkstoffe liste={echt.wirkstoffe} />}
       {tab === 'insights' && <MedInsights />}
 
       <MedicalModale modal={modal} onClose={kontext.close} />

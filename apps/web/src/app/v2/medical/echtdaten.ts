@@ -5,6 +5,20 @@ import type { Gesamtwert } from '../../../lib/medical/systemscore'
 export type MedikationEcht = {
   id: string
   name: string
+  /**
+   * Die Bindung an den Wirkstoffkatalog — G-211.
+   *
+   * `[read]` **`null` ist ein gueltiger Zustand, nicht ein fehlender
+   * Wert.** Der Katalog kennt keine deutschen Handelsnamen (`DE` bei
+   * 0 von 448 Produkten, G-210); wer Concor nimmt, traegt Freitext
+   * ein.
+   *
+   * `[cmd]` **Und `null` hat eine Folge:** ohne Zuordnung bleiben
+   * `drug_class` und `cyp_profile` leer, und **30 der 64 Regeln lesen
+   * genau diese beiden Felder** (gemessen 2026-08-27). Der Eintrag
+   * wird dann von keiner Regel geprueft.
+   */
+  active_substance_id: string | null
   drug_class: string[]
   cyp_profile: string[]
   dose_amount: number | null
@@ -38,6 +52,7 @@ export type LabMarkerEffekt = {
 }
 
 import type { SymptomStand } from '../../../lib/medical/symptome'
+import type { WirkstoffZeile } from '../../../lib/medical/wirkstoff-read'
 
 export type EchteDaten = {
   reihen: MarkerReihe[]
@@ -66,5 +81,20 @@ export type EchteDaten = {
    * mehr still, wie es die Konstante tat.
    */
   symptome: SymptomStand
+  /**
+   * Der Wirkstoffkatalog — G-208.
+   *
+   * `[cmd]` **498 Zeilen aus `medical.medication_active_substances`**,
+   * mit `kurz_was_de` und `wofuer_de` aus `medication_user_texts`
+   * (gemessen 2026-08-27, beide bei allen 498 gefuellt).
+   *
+   * `[read]` **Nur die Liste, nicht die Texte.** 83 kB gegen 1.145 kB
+   * Nutzertexte plus 700 kB FAQ — das Detail laedt die aufgeklappte
+   * Zeile ueber `/api/medical/wirkstoff` nach.
+   *
+   * `[read]` **Nicht nutzergebunden.** Das ist ein Nachschlagewerk;
+   * die eigene Medikation steht in `medikationen`.
+   */
+  wirkstoffe: WirkstoffZeile[]
   ladefehler: string | null
 }

@@ -12,6 +12,7 @@
 //
 // `[cmd]` ALLES IST ATTRAPPE.
 import * as React from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, Pill, Icon, Sparkline, InEntwicklungKnopf } from '@lumeos/ui'
 
 import {
@@ -23,6 +24,19 @@ import { FlagPill } from './bausteine'
 import { useMedical } from './kontext'
 import { ATTRAPPE } from './ansicht'
 import type { EchteDaten, MedikationEcht } from './echtdaten'
+// ── G-211: der Erfassungsweg ────────────────────────────────────────
+//
+// `[read]` **Werte nur aus serverfreien Dateien** (A-30). Der
+// Schreibweg selbst laeuft ueber die Serveraktionen; von
+// `medikament-write` kommt hier nichts.
+import { MedikamentFormular, OhneBindungHinweis } from './medikament-formular'
+import {
+  bindungVon, zaehleOhneBindung, LEERE_EINGABE,
+  type MedikamentEingabe, type EingabeFehler,
+} from '../../../lib/medical/medikament-eingabe'
+import {
+  anlegenAktion, aendernAktion, absetzenAktion, fortsetzenAktion,
+} from './medikament-aktionen'
 
 const FELD_MONO: React.CSSProperties = {
   width: '100%', height: 30, background: 'var(--surface)',
@@ -85,7 +99,79 @@ export function MedTracking({ echt }: { echt: EchteDaten }) {
     }, new Map<string, typeof zuordnungen>()),
   ).sort((x, y) => (nameJeSymptom.get(x[0]) ?? x[0])
     .localeCompare(nameJeSymptom.get(y[0]) ?? y[0], 'de'))
+
+  // ══ G-211: der Erfassungsweg ══════════════════════════════════════
+  //
+  // `[read]` **Die Liste kommt serverseitig und wird nach jedem
+  // Schreiben neu geladen** — `router.refresh()` statt einer zweiten
+  // Wahrheit im Browser. **Zwei Bestandslisten, die auseinanderlaufen
+  // koennen, sind schlimmer als ein Neuladen.**
+  const router = useRouter()
+  const [formular, setFormular] = React.useState<
+    { art: 'neu' } | { art: 'aendern'; id: string } | null>(null)
+  const [vorgabe, setVorgabe] = React.useState<MedikamentEingabe>(LEERE_EINGABE)
+  const [laeuft, setLaeuft] = React.useState(false)
+  const [fehler, setFehler] = React.useState<EingabeFehler[]>([])
+  const [absetzen, setAbsetzen] = React.useState<string | null>(null)
+  const [absetzDatum, setAbsetzDatum] = React.useState('')
+
   const medikationen = echt.medikationen
+  // `[cmd]` **Die Zahl gehoert sichtbar** — dieselbe Linie wie die
+  // Bilanzzeile aus G-208. Wer fuenf Medikamente fuehrt und drei als
+  // Freitext, soll das sehen, ohne jede Zeile zu pruefen.
+  const ohneBindung = zaehleOhneBindung(medikationen)
+
+  function alsEingabe(m: MedikationEcht): MedikamentEingabe {
+    return {
+      name: m.name,
+      active_substance_id: m.active_substance_id ?? null,
+      dose_amount: m.dose_amount == null ? '' : String(m.dose_amount),
+      dose_unit: m.dose_unit ?? '',
+      doses_per_day: m.doses_per_day == null ? '' : String(m.doses_per_day),
+      route: m.route ?? '',
+      start_date: m.start_date ?? '',
+      indication: m.indication ?? '',
+      notes: m.notes ?? '',
+    }
+  }
+
+  async function speichern(e: MedikamentEingabe) {
+    setLaeuft(true)
+    setFehler([])
+    const ergebnis = formular?.art === 'aendern'
+      ? await aendernAktion(formular.id, e)
+      : await anlegenAktion(e)
+    setLaeuft(false)
+    if (!ergebnis.ok) {
+      setFehler(ergebnis.felder.length > 0
+        ? ergebnis.felder
+        : [{ feld: '', text: ergebnis.text }])
+      return
+    }
+    setFormular(null)
+    router.refresh()
+  }
+
+  async function absetzenAusfuehren(m: MedikationEcht) {
+    setLaeuft(true)
+    const ergebnis = await absetzenAktion(m.id, m.start_date ?? '', absetzDatum)
+    setLaeuft(false)
+    if (!ergebnis.ok) {
+      setFehler(ergebnis.felder.length > 0
+        ? ergebnis.felder : [{ feld: '', text: ergebnis.text }])
+      return
+    }
+    setAbsetzen(null)
+    setAbsetzDatum('')
+    router.refresh()
+  }
+
+  async function fortsetzen(id: string) {
+    setLaeuft(true)
+    const ergebnis = await fortsetzenAktion(id)
+    setLaeuft(false)
+    if (ergebnis.ok) router.refresh()
+  }
 
   return (
     <div>
@@ -109,11 +195,27 @@ export function MedTracking({ echt }: { echt: EchteDaten }) {
             <Icon name="plus" className="v2-ic v2-ic-sm" />Log symptom
           </button>
         )}
+        {/* ══ G-211: der Knopf ist frei ═══════════════════════════════
+            `[cmd]` **Hier stand `InEntwicklungKnopf` mit der
+            Begruendung, die Ueberwachungsspalten fehlten.** Sie
+            fehlen weiter — `monitoring`, `next_due`,
+            `monitoring_overdue` und sieben weitere stehen nicht in
+            der Tabelle.
+
+            `[read]` **Aber das war nie ein Grund gegen die
+            Erfassung.** Es ist ein Grund gegen die
+            Ueberwachungs-KACHEL, und die traegt ihre Marke selbst.
+            **Wer ein Medikament eintragen will, wartet sonst auf
+            zehn Spalten, die er nicht braucht.** */}
         {sub === 'medications' && (
-          <InEntwicklungKnopf titel="Add medication" className="v2-btn v2-btn-primary"
-                              grund={MEDIKAMENT_GRUND}>
-            <Icon name="plus" className="v2-ic v2-ic-sm" />Add medication
-          </InEntwicklungKnopf>
+          <button type="button" className="v2-btn v2-btn-primary"
+                  onClick={() => {
+                    setVorgabe(LEERE_EINGABE)
+                    setFehler([])
+                    setFormular({ art: 'neu' })
+                  }}>
+            <Icon name="plus" className="v2-ic v2-ic-sm" />Medikament eintragen
+          </button>
         )}
       </div>
 
@@ -286,6 +388,34 @@ export function MedTracking({ echt }: { echt: EchteDaten }) {
 
       {sub === 'medications' && (
         <div>
+          {/* G-211: anlegen und aendern durch dasselbe Formular. */}
+          {formular && (
+            <div style={{ marginBottom: 12 }}>
+              <MedikamentFormular
+                katalog={echt.wirkstoffe}
+                vorgabe={vorgabe}
+                titel={formular.art === 'neu'
+                  ? 'Medikament eintragen' : 'Medikament ändern'}
+                knopf={formular.art === 'neu' ? 'Eintragen' : 'Speichern'}
+                laeuft={laeuft}
+                fehlerVonAussen={fehler}
+                onSpeichern={e => void speichern(e)}
+                onAbbrechen={() => { setFormular(null); setFehler([]) }} />
+            </div>
+          )}
+
+          {/* `[read]` **Die Zahl der unzugeordneten Eintraege steht
+              ueber der Liste**, nicht nur je Zeile — dieselbe Linie
+              wie die Bilanzzeile aus G-208. */}
+          {ohneBindung > 0 && (
+            <div className="v2-dim" style={{ fontSize: 10.5, marginBottom: 10 }}>
+              {ohneBindung} von {medikationen.length} Einträgen
+              {ohneBindung === 1 ? ' ist' : ' sind'} keinem Wirkstoff
+              zugeordnet und {ohneBindung === 1 ? 'wird' : 'werden'} von
+              den Wechselwirkungsregeln übergangen.
+            </div>
+          )}
+
           <div className="v2-col-gap" style={{ gap: 12 }}>
             {medikationen.length === 0 && (
               <Card title="Medications">
@@ -333,12 +463,22 @@ export function MedTracking({ echt }: { echt: EchteDaten }) {
                         <div className="v2-num">{m.start_date ?? '?'}</div>
                       </div>
                     </div>
-                    {m.drug_class.length > 0 && (
-                      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 8, alignItems: 'center' }}>
-                        <span className="v2-eyebrow" style={{ marginRight: 2 }}>Classes</span>
-                        {m.drug_class.map(c => <Pill key={c} style={{ fontSize: 9.5 }}>{c}</Pill>)}
-                      </div>
-                    )}
+                    {/* ══ G-211: `drug_class` WIRD NICHT GEZEIGT ═════
+                        **Auftrag: *„`drug_class` nicht anzeigen —
+                        C-296."***
+
+                        `[cmd]` **Hier stand eine Pill-Reihe „Classes".**
+                        `[cmd]` In G-208 gemessen und schlimmer als
+                        C-296 sagt: die Spalte fuehrt fallverdoppelte
+                        Tags — `MAOI` (15) UND `maoi` (15), `SSRI` (10)
+                        UND `ssri` (10) — und **sechs SSRI tragen
+                        gleichzeitig `MAOI`**: Escitalopram, Citalopram,
+                        Paroxetin, Fluvoxamin, Vilazodon, Vortioxetin.
+
+                        `[read]` **Die Spalte bleibt gefuellt und wird
+                        weiter geschrieben** — 9 der 30 Regeln lesen
+                        sie, und ohne sie feuert nichts. **Sie wird nur
+                        nicht mehr als Auskunft angezeigt.** */}
                     {m.cyp_profile.length > 0 && (
                       <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 6, alignItems: 'center' }}>
                         <span className="v2-eyebrow" style={{ marginRight: 2 }}>CYP</span>
@@ -365,6 +505,75 @@ export function MedTracking({ echt }: { echt: EchteDaten }) {
                         fontSize: 10.5, color: 'var(--fg-muted)',
                       }}>
                         {m.notes}
+                      </div>
+                    )}
+
+                    {/* ══ G-211: der dritte Zustand, je Zeile ═════════
+                        `[read]` **Er hat eine Folge, keine nur eine
+                        Anzeige** — der Eintrag steht in der Liste und
+                        ist fuer die Auswertung unsichtbar. */}
+                    {bindungVon(m.active_substance_id) === 'nicht_zugeordnet' && (
+                      <div style={{ marginTop: 8 }}>
+                        <OhneBindungHinweis />
+                      </div>
+                    )}
+
+                    {/* ══ Absetzen ist kein Loeschen ═════════════════ */}
+                    {absetzen === m.id ? (
+                      <div className="v2-med-absetzen">
+                        <span className="v2-eyebrow">Abgesetzt am</span>
+                        <input className="v2-feld" type="date" value={absetzDatum}
+                               aria-label="Absetzdatum"
+                               onChange={ev => setAbsetzDatum(ev.target.value)}
+                               style={{ width: 150 }} />
+                        <button type="button" className="v2-btn v2-btn-sm"
+                                onClick={() => { setAbsetzen(null); setFehler([]) }}>
+                          Abbrechen
+                        </button>
+                        <button type="button" className="v2-btn v2-btn-primary v2-btn-sm"
+                                disabled={laeuft}
+                                onClick={() => void absetzenAusfuehren(m)}>
+                          Absetzen
+                        </button>
+                        {/* `[read]` Die Zeile bleibt — das steht da,
+                            bevor jemand klickt, nicht danach. */}
+                        <span className="v2-dim" style={{ fontSize: 10, width: '100%' }}>
+                          Der Eintrag bleibt in deiner Liste. Was du genommen
+                          hast, erklärt spätere Laborwerte.
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="v2-med-zeilenknoepfe">
+                        <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                                onClick={() => {
+                                  setVorgabe(alsEingabe(m))
+                                  setFehler([])
+                                  setFormular({ art: 'aendern', id: m.id })
+                                }}>
+                          <Icon name="edit" className="v2-ic v2-ic-sm" />Ändern
+                        </button>
+                        {m.is_active
+                          ? (
+                            <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                                    onClick={() => {
+                                      setAbsetzen(m.id)
+                                      setAbsetzDatum(new Date().toISOString().slice(0, 10))
+                                    }}>
+                              Absetzen
+                            </button>
+                            )
+                          : (
+                            <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                                    disabled={laeuft}
+                                    onClick={() => void fortsetzen(m.id)}>
+                              Wieder aufnehmen
+                            </button>
+                            )}
+                        {m.end_date && (
+                          <span className="v2-dim v2-mono" style={{ fontSize: 10 }}>
+                            abgesetzt {m.end_date}
+                          </span>
+                        )}
                       </div>
                     )}
                   </div>

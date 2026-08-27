@@ -111,3 +111,675 @@
 @media (max-width: 520px) {
   .v2-med-tier-detail { grid-template-columns: 1fr; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+ * G-208 · DER WIRKSTOFFKATALOG
+ *
+ * [read] Die Bauform kommt aus `supplements.css` (G-180/181/199) —
+ * aufklappende Zeile, Kachelraster fester Breite, Reiterleiste.
+ * EIGENE KLASSEN, weil `supplements.css` nur von der
+ * Supplements-Seite geladen wird; ein modulfremder Import waere ein
+ * verstecktes Band zwischen zwei Modulen.
+ *
+ * [read] Die vier Bedeutungsfarben aus G-196 gelten unveraendert:
+ * gefahr -> --warn, wirkung -> --acc, pruefen -> --acc-suppl,
+ * entwarnung -> --pos. Sie stehen hier noch einmal, weil die Regel
+ * fuer `.v2-eyebrow[data-ton]` bisher nur in `supplements.css` steht.
+ * ════════════════════════════════════════════════════════════════ */
+
+.v2-eyebrow[data-ton="gefahr"] { color: var(--warn); }
+.v2-eyebrow[data-ton="wirkung"] { color: var(--acc); }
+.v2-eyebrow[data-ton="pruefen"] { color: var(--acc-suppl); }
+.v2-eyebrow[data-ton="entwarnung"] { color: var(--pos); }
+
+/* --- Der Hinweis ueber der Liste -------------------------------- */
+/* [read] Wer eine Medikamentenliste sieht, nimmt an, dass es die
+ * eigene ist. Der Satz steht deshalb oben und nicht klein. */
+.v2-med-wirk-hinweis {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--fg-muted);
+  background: color-mix(in oklch, var(--acc-medic) 5%, var(--surface));
+  border: 1px solid color-mix(in oklch, var(--acc-medic) 24%, var(--border));
+  border-radius: 8px;
+}
+.v2-med-wirk-hinweis strong { color: var(--fg); }
+
+/* --- Die Suche -------------------------------------------------- */
+.v2-med-wirk-suche { position: relative; margin-bottom: 12px; }
+.v2-med-wirk-suchsymbol {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--fg-dim);
+  pointer-events: none;
+}
+.v2-med-wirk-suche-x {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--fg-dim);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.v2-med-wirk-suche-x:hover { color: var(--fg); }
+
+/* --- Die Liste -------------------------------------------------- */
+/* [cmd] 498 Zeilen. Im Substanzkatalog waren 290 Zeilen 4.713
+ * DOM-Knoten ohne messbaren Ladeaufschlag (G-176); ein Rollbehaelter
+ * mit fester Hoehe haelt die Seite trotzdem beieinander. */
+.v2-med-wirk-tbl-wrap {
+  max-height: 62vh;
+  overflow-y: auto;
+}
+
+.v2-med-wirk-atc { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+
+/* [read] Solange eine Tafel offen ist, treten die Nachbarzeilen
+ * zurueck — man soll auf einen Blick sehen, was offen ist. */
+.v2-tbl.hat-offene tbody tr:not([aria-expanded="true"]):not(.v2-med-wirk-tafel-zeile) {
+  opacity: 0.5;
+}
+
+/* --- Die aufgeklappte Tafel ------------------------------------- */
+.v2-med-wirk-tafel {
+  padding: 12px 14px 14px;
+  background: color-mix(in oklch, var(--acc-medic) 3%, var(--bg-elev));
+  border-top: 1px solid var(--border);
+}
+
+.v2-med-wirk-tafel-inhalt {
+  max-height: 58vh;
+  overflow-y: auto;
+}
+
+/* --- Die Reiterleiste ------------------------------------------- */
+.v2-med-wirk-reiter {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.v2-med-wirk-reiter-knopf {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 11px;
+  font: inherit;
+  font-size: 11.5px;
+  color: var(--fg-muted);
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+}
+.v2-med-wirk-reiter-knopf:hover { color: var(--fg); }
+.v2-med-wirk-reiter-knopf.ist-offen {
+  color: var(--fg);
+  font-weight: 600;
+  border-bottom-color: var(--acc-medic);
+}
+
+.v2-med-wirk-reiter-zahl {
+  padding: 1px 5px;
+  font-size: 9.5px;
+  color: var(--fg-dim);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+.v2-med-wirk-reiter-knopf.ist-offen .v2-med-wirk-reiter-zahl {
+  color: var(--acc-medic);
+  border-color: color-mix(in oklch, var(--acc-medic) 40%, var(--border));
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * DIE DREI ZUSTAENDE EINER KACHEL — der Kern von G-208
+ *
+ * [cmd] Gemessen 2026-08-27 ueber die 498 Wirkstoffe:
+ *
+ *                    Wert   begruendet leer   nicht bearbeitet
+ *   cas_number        489                 9                  0
+ *   mechanism         494                 4                  0
+ *   precautions       393                 4                101
+ *   zu_wenig_de       458                40                  0
+ *   mythen_de         383               115                  0
+ *
+ * [read] Bei VIER von fuenf Feldern ist jede Luecke begruendet — nur
+ * `precautions` hat 101 unbearbeitete. Genau diese 101 sind der Grund
+ * fuer den dritten Zustand: als leeres Feld saehen sie aus wie die 9
+ * Mischpraeparate, die vollstaendig sind.
+ *
+ * [read] KEINE eigene Farbe fuer die Zustaende. Die Ordnung aus G-196
+ * gilt: Farbe bedeutet Gefahr, Wirkung, Pruefen oder Entwarnung, und
+ * "nicht recherchiert" ist keine der vier. Der Unterschied liegt in
+ * Rahmen, Schrift und Wortlaut — nicht im Farbwert.
+ * ════════════════════════════════════════════════════════════════ */
+
+.v2-med-wirk-kacheln {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.v2-med-wirk-kachel {
+  flex: 0 0 auto;
+  width: 216px;
+  min-height: 84px;
+  padding: 9px 11px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+@media (max-width: 520px) { .v2-med-wirk-kachel { width: 100%; } }
+
+.v2-med-wirk-label {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  margin-bottom: 4px;
+}
+
+.v2-med-wirk-wert {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+/* Zustand zwei: begruendet leer.
+ * [read] Die Marke sagt "geprueft", weil das die Auskunft ist — es
+ * fehlt nichts, es GIBT nichts. Bei einem Mischpraeparat existiert
+ * keine einzelne CAS-Nummer; der Datensatz ist vollstaendig. */
+.v2-med-wirk-kachel[data-zustand="begruendet_leer"] {
+  border-color: color-mix(in oklch, var(--pos) 30%, var(--border));
+}
+
+/* Ein langer Wert ist ein Satz, keine Zahl.
+ * [cmd] Beim ersten Bildschirmfoto stand der englische
+ * Wirkmechanismus (Median 151, max 300 Zeichen) in 18px Fett und
+ * sprengte die Kachel. [read] Dieselbe Falle wie G-191, eine Ebene
+ * hoeher. Die Grenze steht in `wirkstoff-luecke.ts` (KURZ_GRENZE 40)
+ * und ist dort gemessen begruendet.
+ *
+ * [read] Eine Kachel mit langem Text darf breiter werden — sonst
+ * waechst sie in die Hoehe und reisst die Reihe auseinander. */
+.v2-med-wirk-kachel:has(.v2-med-wirk-wert-lang) { width: 340px; }
+@media (max-width: 520px) {
+  .v2-med-wirk-kachel:has(.v2-med-wirk-wert-lang) { width: 100%; }
+}
+
+.v2-med-wirk-wert-lang {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  overflow-wrap: anywhere;
+}
+
+.v2-med-wirk-grundmarke {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--pos);
+  margin-bottom: 3px;
+}
+
+.v2-med-wirk-grund {
+  display: block;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--fg-muted);
+  overflow-wrap: anywhere;
+}
+
+/* Zustand drei: nicht bearbeitet.
+ * [read] Gestrichelt und kursiv — sichtbar anders als eine gefuellte
+ * und anders als eine begruendet leere Kachel. Und mit WORTEN, nicht
+ * mit einem Strich: ein Strich sieht aus wie eine Angabe. */
+.v2-med-wirk-kachel[data-zustand="nicht_bearbeitet"] {
+  border-style: dashed;
+  border-color: color-mix(in oklch, var(--warn) 28%, var(--border));
+}
+
+.v2-med-wirk-leer {
+  display: block;
+  font-size: 11.5px;
+  line-height: 1.45;
+  font-style: italic;
+  color: var(--fg-dim);
+}
+
+/* --- Die Bilanzzeile unter den Kacheln -------------------------- */
+.v2-med-wirk-bilanz {
+  font-size: 10.5px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+/* --- Textkacheln und Abschnitte --------------------------------- */
+.v2-med-wirk-erster {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0 0 12px;
+  color: var(--fg);
+}
+
+.v2-med-wirk-textkacheln {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+/* [read] `max-width` ist die eigentliche Zusage — ohne sie wird aus
+ * einer Textkachel auf einem breiten Monitor eine Zeile ueber die
+ * halbe Wand. Gemessen wird die Zeilenlaenge in Zeichen. */
+.v2-med-wirk-textkachel {
+  flex: 1 1 300px;
+  max-width: 540px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.v2-med-wirk-textkachel p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+
+.v2-med-wirk-textkopf {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.v2-med-wirk-textkopf[data-ton="gefahr"] { color: var(--warn); }
+.v2-med-wirk-textkopf[data-ton="wirkung"] { color: var(--acc); }
+.v2-med-wirk-textkopf[data-ton="pruefen"] { color: var(--acc-suppl); }
+.v2-med-wirk-textkopf[data-ton="entwarnung"] { color: var(--pos); }
+
+.v2-med-wirk-abschnitt { margin-bottom: 12px; }
+
+.v2-med-wirk-satz {
+  max-width: 78ch;
+  margin: 5px 0 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+
+/* [read] Der Satz, der sagt, dass nichts recherchiert wurde, steht in
+ * Warnfarbe — nicht weil der Wirkstoff gefaehrlich ist, sondern weil
+ * die Leerstelle es sein kann. */
+.v2-med-wirk-warnsatz {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 9px 11px;
+  color: var(--fg);
+  background: color-mix(in oklch, var(--warn) 6%, var(--surface));
+  border: 1px solid color-mix(in oklch, var(--warn) 30%, var(--border));
+  border-radius: 7px;
+}
+
+.v2-med-wirk-liste {
+  max-width: 78ch;
+  margin: 5px 0 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+.v2-med-wirk-liste li { margin-bottom: 3px; }
+
+.v2-med-wirk-marken {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.v2-med-wirk-standkopf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.v2-med-wirk-mythos {
+  padding: 9px 11px;
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+}
+
+/* --- Die Fragen ------------------------------------------------- */
+.v2-med-wirk-frage {
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+}
+.v2-med-wirk-fragetext {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+/* --- Die Fusszeile mit den Quellen ------------------------------ */
+.v2-med-wirk-fuss {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.v2-med-wirk-quellen {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 5px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--fg-dim);
+  overflow-wrap: anywhere;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * G-210 · HANDELSNAMEN
+ *
+ * Tom hat nach "Scemblix" gesucht und nichts gefunden. Scemblix stand
+ * die ganze Zeit da — in medication_products, eine Ebene unter der
+ * Suche aus G-208.
+ * ════════════════════════════════════════════════════════════════ */
+
+/* Die Zeile, die sagt WARUM etwas ein Treffer ist.
+ * [read] Wer "Scemblix" eingibt und "Asciminib" bekommt, muss sehen,
+ * dass das dasselbe ist — sonst wirkt es wie ein Fehler. Deshalb
+ * gruen wie die "geprueft"-Marke aus G-208: es ist eine Bestaetigung,
+ * keine Warnung. */
+.v2-med-wirk-markentreffer {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 3px 0;
+  padding: 3px 7px;
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  background: color-mix(in oklch, var(--pos) 7%, transparent);
+  border-left: 2px solid var(--pos);
+  border-radius: 3px;
+}
+.v2-med-wirk-markentreffer strong { color: var(--pos); font-weight: 700; }
+
+/* Das Leerergebnis, das nicht schweigt.
+ * [cmd] Concor ist Bisoprolol, und Bisoprolol steht im Katalog — mit
+ * einem Produkt namens "Bisoprolol fumarate", jurisdictions {US}.
+ * Nicht der Wirkstoff fehlt, sondern der europaeische Handelsname.
+ * [read] Ein leeres Ergebnis ohne Erklaerung sieht aus wie "gibt es
+ * nicht", und das waere hier falsch. */
+.v2-med-wirk-leerergebnis {
+  max-width: 78ch;
+  margin: 0 auto;
+  padding: 20px 16px 22px;
+  text-align: left;
+}
+
+.v2-med-wirk-leer-kopf {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.v2-med-wirk-leer-satz {
+  margin: 0 0 10px;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--fg-muted);
+}
+.v2-med-wirk-leer-satz strong { color: var(--fg); }
+.v2-med-wirk-leer-satz em { font-style: italic; color: var(--fg); }
+
+.v2-med-wirk-maerkte {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin: 0 0 12px;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * G-211 · DER ERFASSUNGSWEG
+ *
+ * Der Kern ist die Verknuepfung, nicht das Formular: wer "Scemblix"
+ * eintraegt, muss auf drug_0642bd1e2f landen — sonst bleiben
+ * drug_class und cyp_profile leer, und 30 der 64 Regeln lesen genau
+ * diese beiden Felder.
+ * ════════════════════════════════════════════════════════════════ */
+
+.v2-med-eingabe {
+  padding: 14px 16px 16px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+
+.v2-med-eingabe-kopf {
+  margin-bottom: 12px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--border);
+}
+
+.v2-med-eingabe-abschnitt { margin-bottom: 10px; }
+
+.v2-med-eingabe-zeile {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.v2-med-eingabe-feld {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1 1 200px;
+  min-width: 90px;
+}
+
+.v2-med-eingabe-fehler {
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: var(--warn);
+  margin: 0;
+}
+
+.v2-med-eingabe-knoepfe {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+/* --- Die Wirkstoffwahl ------------------------------------------- */
+/* [read] Sie steht OBEN, das Namensfeld darunter: wer zuerst
+ * zuordnet, bekommt die Regeln dazu. Die Reihenfolge ist die
+ * Empfehlung. */
+
+.v2-med-eingabe-vorschlaege {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 5px;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 4px;
+  background: var(--surface);
+}
+
+.v2-med-eingabe-vorschlag {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 9px;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.v2-med-eingabe-vorschlag:hover { background: var(--bg-elev); }
+
+.v2-med-eingabe-vorschlag-name { font-size: 12.5px; font-weight: 600; }
+
+/* G-210: warum dieser Vorschlag passt — gruen wie die
+ * "geprueft"-Marke, weil es eine Bestaetigung ist. */
+.v2-med-eingabe-vorschlag-marke {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  color: var(--pos);
+}
+
+.v2-med-eingabe-vorschlag-kurz {
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: var(--fg-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.v2-med-eingabe-kein-treffer {
+  margin: 7px 0 0;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+.v2-med-eingabe-kein-treffer strong { color: var(--fg); }
+
+/* Die getroffene Wahl — sie sagt, was sie bewirkt. */
+.v2-med-eingabe-gewaehlt {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 9px 11px;
+  margin-top: 5px;
+  font-size: 12px;
+  background: color-mix(in oklch, var(--pos) 7%, var(--surface));
+  border: 1px solid color-mix(in oklch, var(--pos) 30%, var(--border));
+  border-radius: 7px;
+  color: var(--fg);
+}
+.v2-med-eingabe-gewaehlt-satz {
+  margin-top: 2px;
+  font-size: 10.5px;
+  color: var(--pos);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * DER DRITTE ZUSTAND — nicht zugeordnet
+ *
+ * [read] In G-208 unterschied die Form "begruendet leer" von "nicht
+ * bearbeitet"; beides waren Aussagen ueber den Datenbestand. Hier ist
+ * es eine Aussage ueber die WIRKUNG: der Eintrag ist richtig,
+ * vollstaendig — und wird von keiner Regel geprueft.
+ *
+ * [read] Warnfarbe, nicht Fehlerfarbe. Der Mensch hat nichts falsch
+ * gemacht: der Katalog fuehrt keine deutschen Handelsnamen (DE bei 0
+ * von 448 Produkten, G-210).
+ * ════════════════════════════════════════════════════════════════ */
+
+.v2-med-eingabe-hinweis {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  margin: 4px 0 10px;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+  background: color-mix(in oklch, var(--warn) 6%, var(--surface));
+  border: 1px solid color-mix(in oklch, var(--warn) 30%, var(--border));
+  border-left-width: 3px;
+  border-radius: 7px;
+}
+.v2-med-eingabe-hinweis strong { color: var(--fg); }
+
+.v2-med-eingabe-hinweis-grund {
+  margin-top: 4px;
+  font-size: 10.5px;
+  color: var(--fg-dim);
+}
+
+/* --- Zeilenknoepfe und Absetzen ---------------------------------- */
+
+.v2-med-zeilenknoepfe {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px solid var(--border);
+}
+
+.v2-med-absetzen {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 9px;
+  padding: 10px 11px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+}
