@@ -101,11 +101,28 @@ for (const p of alle) {
   // `[read]` **Ein Waechter, der seinen Gegenstand nicht findet, ist
   // schlimmer als keiner** — er sagt „alles in Ordnung" ueber etwas,
   // das er nie angesehen hat. Deshalb ohne schliessende Klammer.
-  for (const m of s.matchAll(/\.from\(\s*'([a-z_][a-z0-9_]*)'/g)) {
+  // ══ G-200: warum das Muster GROSSBUCHSTABEN kennt ═══════════════
+  //
+  // `[cmd]` **Zwei der sechs bekannten Faelle blieben gruen**, und der
+  // Grund lag hier: das Muster hiess `[a-z_][a-z0-9_]*`, also **nur
+  // Kleinbuchstaben.** Ein Name wie `community_anzeigeX` passte
+  // deshalb **gar nicht** — er wurde nicht als unbekannt gemeldet,
+  // sondern **ueberhaupt nicht gesehen.**
+  //
+  // `[cmd]` **Gemessen 2026-08-26, vier Proben:** `exercises_neu` und
+  // `community_anzeige_neu` wurden gefunden, `exercisesX` und
+  // `community_anzeigeX` nicht — **unabhaengig von der Datei.** Es ist
+  // die Namensform, nicht der Ort.
+  //
+  // `[read]` **Ein Waechter, der seinen Gegenstand nicht sieht, meldet
+  // „alles in Ordnung" ueber etwas, das er nie angesehen hat.** Das
+  // ist schlimmer als kein Waechter. Deshalb nimmt das Muster jeden
+  // Bezeichner und urteilt danach.
+  for (const m of s.matchAll(/\.from\(\s*'([A-Za-z_][A-Za-z0-9_]*)'/g)) {
     merke('tabelle', m[1], p)
   }
   // Datenbankfunktionen.
-  for (const m of s.matchAll(/\.rpc\('([a-z_][a-z0-9_]*)'/g)) {
+  for (const m of s.matchAll(/\.rpc\('([A-Za-z_][A-Za-z0-9_]*)'/g)) {
     merke('rpc', m[1], p)
   }
 }
@@ -152,8 +169,12 @@ const GEDULDET = new Set([
 // Sabotage `community_anzeigeX` gruen, weil `includes` auf dem
 // **Teilstring** `community_anzeige` anschlug, der im Test steht.
 // **Genau der Fehler aus G-187**, diesmal in meinem eigenen Waechter.
+// `[cmd]` **G-200: die Zeichenklasse deckt auch Grossbuchstaben.**
+// Mit `[a-z0-9_]` haette `community_anzeige` als Ganzes gegolten,
+// obwohl im Test `community_anzeigeX` steht — dieselbe Luecke wie im
+// Muster oben, nur an der zweiten Stelle.
 const alsGanzes = (name) =>
-  new RegExp(`(?<![a-z0-9_])${name}(?![a-z0-9_])`).test(tests)
+  new RegExp(`(?<![A-Za-z0-9_])${name}(?![A-Za-z0-9_])`).test(tests)
 
 const unbewacht = []
 for (const [key, e] of gefunden) {

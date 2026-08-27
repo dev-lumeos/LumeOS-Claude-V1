@@ -113,7 +113,18 @@ for (const datei of dateien(WURZEL)) {
       const spalte = s[1]
       if (!rettbar.includes(spalte)) continue
       const en = `${spalte.slice(0, -3)}_en`
-      if (auswahl.includes(en)) continue
+      // ── G-201: mit Wortgrenze, nicht mit `includes` ──────────────
+      //
+      // `[cmd]` **`auswahl` ist eine Zeichenkette**, kein Feld — ein
+      // `includes('note_en')` traefe auch `note_en_alt` und meldete
+      // einen Rueckfall, den es nicht gibt.
+      //
+      // `[read]` **Derselbe Fehler ist zweimal teuer geworden:** in
+      // G-187 traf `/daten\?\.wechselwirkungen/` auch
+      // `…wechselwirkungenX`, in G-197 traf `includes('community_-
+      // anzeige')` den Namen `community_anzeigeX` — **im Waechter
+      // gegen genau diesen Fehler.** Die Regel steht in `CLAUDE.md`.
+      if (new RegExp(`(?<![a-z0-9_])${en}(?![a-z0-9_])`).test(auswahl)) continue
       funde.push({
         datei: path.relative(process.cwd(), datei),
         zeile: quelle.slice(0, m.index).split('\n').length,
