@@ -1670,6 +1670,8 @@
     "medical.lab_marker_catalog": 66,
     "medical.biomarker_aliases": 292,
     "medical.medication_active_substances": 56,
+    "medical.medication_user_texts": 498,
+    "medical.medication_faq": 2313,
     "medical.medication_reproductive_evidence": 498,
     "medical.medication_pk_evidence": 407,
     "medical.medication_renal_hepatic_evidence": 391,
@@ -1753,6 +1755,8 @@
     "medical.lab_marker_catalog": "[cmd] C-162: Kimi crawl_024 lab_markers.json liefert 66 Marker, alle needs_repo_validation. 46 Kimi-Kandidaten plus 18 repo-only Aufloesungen treffen den Katalog, 2 bleiben offen.",
     "medical.biomarker_aliases": "[cmd] C-72: daten/biomarker-aliases.json fuehrt 304 eindeutige importierbare Legacy-Aliaszeilen plus 6 kuratierte Mehrdeutigkeitszeilen; 143 importiert zusammen 310. Die 18 Thai-Aliase bleiben offen, weil die aktuelle Faltung sie nicht traegt.",
     "medical.medication_active_substances": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 56 Wirkstoffe; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist.",
+    "medical.medication_user_texts": "[cmd] C-293: master_de_meds.jsonl traeget 498 Wirkstoff-Records mit vollstaendigen Pflichttexten; fehlende zu_wenig_de/mythen_de bleiben als dokumentierte Quellnulls erhalten.",
+    "medical.medication_faq": "[cmd] C-293: master_de_meds.jsonl traeget 2.313 nichtleere deutsche FAQ-Eintraege ueber 498 Wirkstoffe.",
     "medical.medication_reproductive_evidence": "[cmd] C-286: 417 CRAWL_038-Reproduktions-Enrichments; C-292: 81 additive Restluecken per drug_*. Pregnancy/lactation/fertility und dokumentierte missing_reasons bleiben strukturiert. Summe mindestens 498.",
     "medical.medication_pk_evidence": "[cmd] C-286: 407 PK-Enrichments werden per drug_* importiert.",
     "medical.medication_renal_hepatic_evidence": "[cmd] C-286: 391 Nieren-/Leber-Enrichments werden per drug_* importiert.",
@@ -3136,6 +3140,26 @@
         ]
       },
       "grants_herkunft": "145_medications_schema.sql vergibt SELECT an authenticated und service_role ALL; 146_medications_katalog.ts fuellt den Wirkstoffkatalog.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "medication_user_texts",
+      "schritt": "293",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260827024026_c293_medication_user_texts.sql vergibt Katalog-Leserechte und service_role ALL; 293_medication_user_texts.ts fuellt die deutschen Nutzertexte.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "medication_faq",
+      "schritt": "293",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260827024026_c293_medication_user_texts.sql vergibt Katalog-Leserechte und service_role ALL; 293_medication_user_texts.ts fuellt die deutschen FAQ.",
       "zeilenschutzart": "oeffentlich"
     },
     {

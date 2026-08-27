@@ -1003,6 +1003,24 @@
       ]
     },
     {
+      "id": "293",
+      "path": "supabase/_pipeline/14_medical/293_medication_user_texts.sql",
+      "kind": "sql",
+      "creates": "C-293: Struktur fuer Medikamenten-Nutzertexte und FAQ",
+      "depends_on": [
+        "292"
+      ]
+    },
+    {
+      "id": "293a",
+      "path": "supabase/_pipeline/14_medical/293_medication_user_texts.ts",
+      "kind": "tsx",
+      "creates": "C-293: Deutsche Medikamenten-Nutzertexte, FAQ und Quellenprovenienz aus Kimi Block D",
+      "depends_on": [
+        "293"
+      ]
+    },
+    {
       "id": "110",
       "path": "supabase/_pipeline/11_goals/110_goals_zielwerte.sql",
       "kind": "sql",
