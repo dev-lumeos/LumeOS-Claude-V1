@@ -1,0 +1,36 @@
+---
+nr: C-271
+typ: entscheidung
+modul: quer
+schwere: mittel
+angelegt: 2026-08-25
+braucht: []
+kind_von: G-187
+kinder: []
+entscheidung: null
+beruehrt:
+  tabellen: []
+  dateien: []
+zahlen: null
+---
+
+# C-271 - `rule_catalog` laedt immer — jeder Rueckfallzweig daran ist tot
+
+## Befund
+
+(neu 2026-08-25). Aus G-187, vom Orchestrator ergaenzt.
+
+  `[cmd]` **64 Zeilen, `{authenticated}`-Policy, kein Nutzerfilter.**
+
+  `[read]` **Das ist bei einem Regelkatalog vermutlich richtig** —
+  Regeln sind nicht nutzerspezifisch. **Aber es heisst, dass
+  `regeln.length` nie 0 wird**, und jeder Zweig, der darauf wartet,
+  erscheint nie.
+
+  `[read]` **Claude Code ist in G-187 darauf gestossen**, ohne dass es
+  im Auftrag stand. **Bevor jemand einen weiteren solchen Zweig baut,
+  gehoert gemessen, wie viele es schon gibt.**
+
+  **Zu tun:** alle Stellen finden, die auf `regeln.length === 0` oder
+  Vergleichbares warten. **Wo der Zweig tot ist: melden.** `[read]`
+  Ob er weg soll, ist je Fall zu entscheiden — **die Zahl zuerst.**

@@ -91,8 +91,7 @@ Entwurf, bewusst und hier begruendet.**
     angelegt: 2026-08-27
 
     braucht: []          # blockiert von diesen Nummern
-    kind_von: null
-    kinder: [C-314]
+    kind_von: null       # aus welchem Punkt ist dieser entstanden
     entscheidung: E-01   # welche Entscheidung haengt dran
 
     beruehrt:
@@ -138,6 +137,34 @@ Dateisystem, jede Zahl mit ihrem Stichtag.
 selbst** — genau wie der Regelkatalog 64 Regeln meldet, von denen 25
 nicht feuern.
 
+### Es gibt kein Feld `kinder`
+
+`[cmd]` **Es gab eins, und es hat sich nicht bewaehrt:** nach der
+Migration standen **121 `kind_von` gegen 1 `kinder`.**
+
+`[read]` **Das war zwangslaeufig, nicht nachlaessig.** Wer ein Kind
+anlegt, traegt `kind_von` ein — **niemand geht zum Elternteil zurueck
+und pflegt die Gegenrichtung.** Zwei Felder fuer dieselbe Beziehung
+sind eine Driftquelle, und das Modell soll Drift verhindern, nicht
+erzeugen.
+
+**Die Kinder stehen im Index**, abgeleitet aus `kind_von`.
+
+### `kind_von` darf auf erledigte Punkte zeigen
+
+`[read]` **Der Normalfall, nicht die Ausnahme:** C-303 ist aus G-207
+entstanden, C-306 aus G-208 — **die Eltern sind laengst
+geschlossen.**
+
+`[cmd]` **Der Waechter loest deshalb auch gegen `ERLEDIGT.md` auf.**
+Ohne das haette er **93-mal etwas Richtiges als falsch gemeldet.**
+
+`[cmd]` **Und er nennt bei jedem Lauf, wie viele Verweise nur so
+aufloesbar sind — heute 72.** `[read]` **Diese Zahl ist der
+Fortschrittsbalken der Migration:** sie sinkt auf null, wenn die 385
+erledigten Punkte nach `erledigt/` gewandert sind. **Dann kann
+`ERLEDIGT.md` weg.**
+
 ## Aufbau der Datei
 
     ---
@@ -157,6 +184,21 @@ nicht feuern.
 
     ## Abnahme        <- vom Orchestrator
     Was unabhaengig nachgemessen wurde, mit [cmd].
+
+## Der Waechter arbeitet mit Sollstand je Art
+
+`[cmd]` **Muster wie C-313b:** der Waechter zaehlt Befunde gegen einen
+erwarteten Stand. **Mehr ist rot. Weniger ist auch rot** — mit dem
+Hinweis, den Sollstand nachzuziehen.
+
+`[read]` **Je Art, nicht als Summe.** Ein Sollstand ueber alle Arten
+ist zu grob: **54 `kind_von`-Befunde koennten verschwinden und 54
+Tabellenfehler entstehen — die Summe bliebe gleich, das Gate gruen.**
+
+`[read]` **Die Ratsche wirkt nachweislich.** `[cmd]` Am 27.08. stieg
+der Stand binnen Minuten von 225 auf 226, **weil ich A-54 mit
+`kind_von: A-52` angelegt habe, ohne die Gegenrichtung zu pflegen** —
+gefangen, waehrend der Fehler entstand.
 
 ## Entscheidungen
 
