@@ -167,7 +167,95 @@ zu verschwinden.
 
 `docs/todo/` und `docs/ssot/` bleiben beim Orchestrator.
 
+## Zahlen im Auftrag sind Ausgangsvermutungen
+
+**Tom, 2026-08-26:** *„mittlerweile in jedem bericht lese ich dass du
+fehler machst, loese das oder sag im auftrag er soll selber messen wenn
+du nicht faehig bist."*
+
+`[read]` **Die Loesung ist nicht mehr Sorgfalt, sondern eine andere
+Formulierung:**
+
+    NICHT   "Erwartung: 292 Zeilen"
+    SONDERN "Meine Messung ergab 292 -- pruef sie zuerst.
+             Weicht deine ab, gilt deine, und du nennst beide."
+
+`[read]` **Der Unterschied ist verfahrenstechnisch.** Eine
+Erwartungszahl wird zum Sollwert: der Agent baut, bis sie erreicht ist.
+**Eine Ausgangsvermutung wird geprueft — und wenn sie faellt, ist das
+ein Befund und kein Streit.**
+
+`[cmd]` **Neun Faelle in fuenf Tagen, alle derselben Art: die Abfrage
+traf den falschen Ausschnitt.**
+
+    C-275   im_katalog::text gegen 't' statt 'true'   -> 0 statt 317
+    C-276   Dublettenprobe auf name_en statt Kern     -> 18 durch
+    G-184   Kategorie als Code angenommen             -> 41 Werte
+    G-191   upper_limit gegen 290 statt 412 Zeilen    -> 3 statt 13
+    C-280   substance_class als einzige Zuordnung     -> auch IDs
+    G-195   note_de 320 / rechtslage 136              -> 305 / 201
+    G-196   Kontrast aus kaputter Messung             -> gab es nie
+    C-284   raw->'pregnancy' is not null              -> 1 statt 498
+    C-288   kanonische Datei statt Enrichment-Layer   -> ATC 56/419
+
+`[read]` **In sieben von neun Faellen hat der Agent es gefunden, nicht
+der Orchestrator.**
+
+`[read]` **Wer eine Zahl nennt, nennt auch die Abfrage, mit der sie
+entstand.** Dann ist nachpruefbar, ob sie den richtigen Ausschnitt
+getroffen hat — **das war in allen neun Faellen das Problem, nicht die
+Rechnung.**
+
+**Und die Schwester dieser Regel, aus G-190:** `[read]` **jede
+Leistungszahl nennt das Konto**, so wie jede Bestandszahl den Stichtag
+nennt. `[cmd]` `ladeRegeln` braucht auf dev 926 ms, auf test-user
+62 ms — **Faktor 15, weil dort 360 Einnahmen gegen 24 stehen.**
+
+## Teilstring-Vergleiche brauchen Wortgrenzen
+
+`[cmd]` **Zweimal derselbe Fehler, und beim zweiten Mal im Waechter
+gegen ihn:**
+
+    G-187   /daten\?\.wechselwirkungen/  traf ...wechselwirkungenX
+    G-197   includes('community_anzeige') traf ...anzeigeX
+
+`[read]` **Claude Codes Einordnung:** *„Das sagt, dass diese Klasse
+nicht durch Aufmerksamkeit vermeidbar ist."*
+
+**Wer einen Namen in einem Waechter sucht, sucht ihn mit Wortgrenze** —
+`\b`, Zeichenklasse oder exakter Vergleich. **Nie `includes`, nie ein
+unverankertes Muster.**
+
+`[read]` **Und die Pointe:** ein Waechter gegen unverankerte Muster,
+der selbst eines benutzt, ist die dritte Auflage desselben Fehlers.
+
+## Eine Pruefung misst oft etwas anderes als gemeint
+
+`[cmd]` **Sechs Faelle in drei Tagen**, alle nach demselben Muster: die
+Pruefung war gruen, das Ergebnis falsch.
+
+    G-186   der Waechter fand wofuer_de erst in der Abfrage,
+            dann in der Abbildung, dann im eigenen Kommentar
+    G-187   /daten\?\.wechselwirkungen/ traf auch ...X
+    G-191   scrollWidth > clientWidth misst nur den eigenen Kasten --
+            der Text brach darin um, erst die Tafel beschnitt ihn
+    G-184   wadaNote={undefined} kam durch, weil der Name in der
+            Typdeklaration weiterlebt
+    G-196   Hintergrund von Weiss aus komponiert, oklch als RGB
+            gelesen -- die Zahlen waren nicht unsicher, sondern falsch
+    G-199   .from('community_anzeige') auf ...X, kein Test fiel um
+
+`[read]` **Der letzte war teuer:** genau so ist G-192 haengen
+geblieben — der Lesepfad gab still `null` zurueck, **und niemand
+merkte es, bis Tom fragte, wo das Community-Zeug bleibt.**
+
+**Die Lehre: bewach die Verdrahtung, nicht nur die Funktion.** `[cmd]`
+`tools/verdrahtung-pruefen.mjs` (G-197) misst 89 verdrahtete Namen, 54
+in keinem Test — **aber zwei bekannte Faelle fallen nicht, Ursache
+offen (G-200). Die fuenf Einzelwaechter bleiben stehen.**
+
 ## Wegwerf-Datenbank zum Pruefen, laufende Instanz zum Abschliessen
+
 
 `[cmd]` **Am 2026-08-22 lagen sechs Auftraege committet und nicht
 eingespielt:** C-191, C-192, C-195, C-196, C-197, C-215. Live 31
@@ -593,6 +681,49 @@ Fenster auf — seltener als vorher, aber genauso stoerend.
 **Und die eigenen Werkzeuge nutzen:** `read_file` statt `Get-Content`,
 `list_directory` statt `Get-ChildItem`, `edit_block` statt einer
 Ersetzung per Skript.
+
+## Wer einen Namen sucht, sucht ihn mit Wortgrenze
+
+`[cmd]` **Dreimal in fuenf Tagen hat derselbe Fehler eine Pruefung
+gruen gehalten, die haette fallen muessen:**
+
+    G-187  /daten\?\.wechselwirkungen/   traf auch ...wechselwirkungenX
+    G-197  includes('community_anzeige')  traf auch community_anzeigeX
+    G-201  includes(en)                   traefe auch note_en_alt
+
+`[read]` **Der dritte Fall ist der, auf den es ankommt:** er stand im
+Waechter **gegen** den ersten. Wer den Fehler kennt, macht ihn beim
+naechsten Mal trotzdem — **das ist keine Frage der Aufmerksamkeit,
+sondern eine Bauvorschrift.**
+
+**Deshalb, ohne Ausnahme:**
+
+- **Nie `includes` auf einer Zeichenkette**, wenn ein NAME gesucht
+  wird. `[read]` Auf einem Feld ist es richtig (dort vergleicht es
+  Elemente), auf einem Text luegt jeder laengere Name.
+- **Nie ein unverankertes Muster** aus einem Namen bauen.
+- **Stattdessen** eine der drei Formen:
+
+```js
+// 1. Zeichenklassen um den Namen (wirkt auch bei _ und Ziffern)
+new RegExp(`(?<![a-z0-9_])${name}(?![a-z0-9_])`).test(text)
+
+// 2. \b, wo der Name keine Unterstriche traegt
+new RegExp(`\\b${name}\\b`).test(text)
+
+// 3. exakter Vergleich, wo eine Liste vorliegt
+liste.includes(name)   // Feld, nicht Zeichenkette — das ist in Ordnung
+```
+
+`[cmd]` **Gemessen am 2026-08-26 ueber alle 15 `tools/*-pruefen.mjs`:**
+12 `includes`, davon **elf harmlos** (Schalter wie `--schreiben`,
+Pfadteile wie `__tests__`, echte Felder) und **eines betroffen**
+(`sprachrueckfall-pruefen.mjs:116`, behoben).
+
+`[read]` **Ein Waechter dafuer waere Ueberbau** — bei einer Stelle
+kostet er mehr, als er findet. **Die Regel steht hier, weil der
+naechste Fall nicht in `tools/` entstehen wird, sondern in einem
+Test.**
 
 ## Pruefungen als Skript, nicht als Shell-Einzeiler
 
