@@ -23,8 +23,11 @@
 import type { Metadata } from 'next'
 import { createSessionClient } from '@lumeos/shared/session'
 
+import { LEERER_STAND, type SymptomStand } from '../../../lib/medical/symptome'
+
 import {
   angemeldeteNutzerin, ladeBefundwerte, ladeMarkerStamm, ladeSystemgruppen,
+  ladeSymptome,
   sucheKatalog, zaehleKatalog,
   type BefundWert, type KatalogTreffer,
 } from '../../../lib/medical/lesen'
@@ -198,16 +201,21 @@ export default async function V2MedicalPage() {
   let medikationen: MedikationEcht[] = []
   let labEffekte: LabMarkerEffekt[] = []
   let scores: Gesamtwert | null = null
+  // G-207: Symptome und ihre Biomarker-Zuordnung.
+  let symptome: SymptomStand = LEERER_STAND
   let ladefehler: string | null = null
 
   try {
     const userId = await angemeldeteNutzerin()
-    ;[werte, katalogStart, katalogGesamt, medikationen, labEffekte] = await Promise.all([
+    ;[werte, katalogStart, katalogGesamt, medikationen, labEffekte,
+      symptome] = await Promise.all([
       ladeBefundwerte(userId),
       sucheKatalog(''),
       zaehleKatalog(),
       ladeMedikationen(userId),
       ladeLabEffekte(userId),
+      // G-207: haengt an keiner der uebrigen — laeuft mit.
+      ladeSymptome(),
     ])
 
     // Kurzname und Klasse je Code — ein Zugriff fuer alle, erst wenn
@@ -235,7 +243,7 @@ export default async function V2MedicalPage() {
     <MedicalAnsicht
       echt={{
         reihen, befunde, werte, katalogStart, katalogGesamt,
-        medikationen, labEffekte, scores, ladefehler,
+        medikationen, labEffekte, scores, ladefehler, symptome,
       }}
     />
   )

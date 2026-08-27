@@ -26,6 +26,8 @@
 
 import { createSessionClient } from '@lumeos/shared/session'
 
+import { zuordnungenAus, LEERER_STAND, type SymptomStand } from './symptome'
+
 /** PostgREST-Client, auf `medical` gerichtet. */
 function medicalDb() {
   return createSessionClient().schema('medical')
@@ -389,4 +391,85 @@ export async function zaehleKatalog(): Promise<number> {
     .select('loinc_code', { count: 'exact', head: true })
   if (error) return 0
   return count ?? 0
+}
+
+/**
+ * Symptome und ihre Biomarker-Zuordnung — G-207.
+ *
+ * ══ WAS HIER ANGESCHLOSSEN WIRD ════════════════════════════════════
+ *
+ * `[cmd]` **Der Tracking-Tab lief auf zwei Konstanten** aus
+ * `app/v2/medical/daten.ts`: `SYMPTOMS` (4 Eintraege) und
+ * `SYMPTOM_BIOMARKER_MAP` (7 Symptome, 28 Zuordnungen, 17
+ * verschiedene Biomarker).
+ *
+ * `[cmd]` **Die Tabellen gibt es seit C-293-Vorarbeiten:**
+ * `medical.symptoms` **34 Zeilen**, `medical.symptom_biomarker_map`
+ * **102 Zeilen** — mit LOINC-Code, `specificity`, deutschem Grund
+ * und einer Marke `is_diagnosis_claim` (bei allen 102 `false`).
+ *
+ * `[read]` **Der Auftrag ging von „keine Symptomtabelle" aus** (C-159).
+ * **Das gilt nicht mehr** — es war kein Tabellenentwurf noetig,
+ * sondern nur der Weg dorthin.
+ *
+ * ══ DIE INTEGRITAETSFRAGE ══════════════════════════════════════════
+ *
+ * **Auftrag: *„Zeigt jede Zuordnung auf einen Biomarker, den es
+ * gibt?"*** `[cmd]` **Nein — gemessen 2026-08-27:**
+ *
+ *     Marker nicht im Katalog     2   `lab_bnp`, `lab_crp`
+ *     Symptom nicht im Katalog   49
+ *     ohne LOINC-Code             6
+ *
+ * `[read]` **Die Tabelle weiss es selbst** — sie fuehrt
+ * `marker_match_status` und `symptom_match_status`. **Der Leseweg
+ * verschweigt die Luecken nicht, er zaehlt sie** (`befunde`).
+ */
+export async function ladeSymptome(): Promise<SymptomStand> {
+  const db = medicalDb()
+  const [sym, karte, marker] = await Promise.all([
+    db.from('symptoms').select('symptom_id, slug, name_de, name_en'),
+    db.from('symptom_biomarker_map')
+      .select('symptom_id, marker_id, biomarker_loinc_code, relation_type,'
+        + ' specificity, reason_de'),
+    db.from('lab_marker_catalog').select('marker_id, analyte, category'),
+  ])
+
+  const fehler = sym.error?.message ?? karte.error?.message
+    ?? marker.error?.message ?? null
+  if (fehler) return { ...LEERER_STAND, fehler }
+
+  // `[cmd]` **`name_de` ist bei 0 von 34 gefuellt** — dieselbe Lage
+  // wie im Supplements-Katalog (C-252). Deshalb der Rueckfall auf
+  // `name_en`, und wo auch der fehlt, auf den Slug.
+  const symptome = ((sym.data ?? []) as unknown as Array<Record<string, unknown>>)
+    .map(r => ({
+      symptom_id: String(r.symptom_id ?? ''),
+      slug: String(r.slug ?? ''),
+      name: (typeof r.name_de === 'string' && r.name_de.trim())
+        ? r.name_de.trim()
+        : (typeof r.name_en === 'string' && r.name_en.trim())
+            ? r.name_en.trim()
+            : String(r.slug ?? ''),
+    }))
+    .filter(s2 => s2.symptom_id)
+
+  const markerNachId = new Map<string,
+    { analyte: string | null; kategorie: string | null }>()
+  for (const m of (marker.data ?? []) as unknown as Array<Record<string, unknown>>) {
+    const id = typeof m.marker_id === 'string' ? m.marker_id : null
+    if (!id) continue
+    markerNachId.set(id, {
+      analyte: typeof m.analyte === 'string' ? m.analyte : null,
+      kategorie: typeof m.category === 'string' ? m.category : null,
+    })
+  }
+
+  const { zuordnungen, befunde } = zuordnungenAus(
+    (karte.data ?? []) as unknown as Array<Record<string, unknown>>,
+    markerNachId,
+    new Set(symptome.map(s2 => s2.symptom_id)),
+  )
+
+  return { symptome, zuordnungen, befunde, fehler: null }
 }

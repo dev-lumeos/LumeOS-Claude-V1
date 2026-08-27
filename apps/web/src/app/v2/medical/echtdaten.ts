@@ -37,6 +37,8 @@ export type LabMarkerEffekt = {
   source: string | null
 }
 
+import type { SymptomStand } from '../../../lib/medical/symptome'
+
 export type EchteDaten = {
   reihen: MarkerReihe[]
   befunde: number
@@ -52,5 +54,17 @@ export type EchteDaten = {
    * dann bleibt die Karte Attrappe, statt eine halbe Zahl zu zeigen.
    */
   scores: Gesamtwert | null
+  /**
+   * Symptome und ihre Biomarker-Zuordnung — G-207.
+   *
+   * `[cmd]` **Aus `medical.symptoms` (34) und
+   * `medical.symptom_biomarker_map` (102)**, nicht mehr aus den
+   * Konstanten `SYMPTOMS` (4) und `SYMPTOM_BIOMARKER_MAP` (7/28).
+   *
+   * `[read]` **`befunde` traegt, was beim Lesen aufgefallen ist** —
+   * eine Zuordnung auf einen unbekannten Marker verschwindet nicht
+   * mehr still, wie es die Konstante tat.
+   */
+  symptome: SymptomStand
   ladefehler: string | null
 }

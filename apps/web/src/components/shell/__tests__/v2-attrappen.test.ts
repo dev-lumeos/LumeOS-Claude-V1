@@ -857,7 +857,18 @@ test('das Medical-Modul kennzeichnet jede Kachel', () => {
     // Marke mehr; sie liest `user_medications`. Die Aenderung lag
     // beim G-135-Lauf bereits unversioniert im Arbeitsbaum und
     // stammt nicht aus diesem Auftrag.
-    [path.join(process.cwd(), 'src/app/v2/medical/tab-tracking.tsx'), 7],
+    // `[cmd]` **G-207: von 7 auf 6.** Die Karte
+    // „Symptom → Biomarker" traegt keine Marke mehr — sie liest
+    // `medical.symptom_biomarker_map` (**102 Zuordnungen auf 32
+    // Symptome**) statt der Konstante `SYMPTOM_BIOMARKER_MAP`
+    // (7 Symptome, 28 Zuordnungen).
+    //
+    // `[read]` **Die Symptomkarten daneben bleiben markiert**, und das
+    // ist kein Versaeumnis: `medical.symptoms` ist ein KATALOG von 34
+    // Symptomarten. **Eine Tabelle fuer ERFASSTE Symptome gibt es
+    // nicht** — `severity`, `onset`, `triggers` und `impact` haben
+    // nirgends eine Spalte. Siehe Bericht G-207.
+    [path.join(process.cwd(), 'src/app/v2/medical/tab-tracking.tsx'), 6],
   ]
   for (const [datei, erwartet] of dateien) {
     const quelle = fs.readFileSync(datei, 'utf8')

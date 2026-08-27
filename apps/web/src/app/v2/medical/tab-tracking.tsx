@@ -72,6 +72,19 @@ export function MedTracking({ echt }: { echt: EchteDaten }) {
   const { open } = useMedical()
   const [sub, setSub] = React.useState<string>('symptoms')
   const active = SYMPTOMS.filter(s => !s.resolved)
+  // ── G-207: die Zuordnung aus der Datenbank ──────────────────────
+  const stand = echt.symptome
+  const zuordnungen = stand.zuordnungen
+  const nameJeSymptom = new Map(stand.symptome.map(s2 => [s2.symptom_id, s2.name]))
+  const gruppiert = Array.from(
+    zuordnungen.reduce((m, z) => {
+      const liste = m.get(z.symptom_id) ?? []
+      liste.push(z)
+      m.set(z.symptom_id, liste)
+      return m
+    }, new Map<string, typeof zuordnungen>()),
+  ).sort((x, y) => (nameJeSymptom.get(x[0]) ?? x[0])
+    .localeCompare(nameJeSymptom.get(y[0]) ?? y[0], 'de'))
   const medikationen = echt.medikationen
 
   return (
@@ -195,33 +208,78 @@ export function MedTracking({ echt }: { echt: EchteDaten }) {
             })}
           </div>
 
-          <Card title="Symptom → biomarker map" sub="which markers to check per symptom" attrappe={ATTRAPPE}>
+          {/* ══ G-207: die Zuordnung kommt aus der Datenbank ═════
+              `[cmd]` **Vorher `SYMPTOM_BIOMARKER_MAP`** — 7 Symptome,
+              28 Zuordnungen, aufgeloest gegen die Konstante
+              `BIOMARKERS`. **Jetzt `medical.symptom_biomarker_map`:
+              102 Zuordnungen auf 32 Symptome**, mit LOINC-Kennung,
+              Aussagekraft und deutschem Grund.
+
+              `[read]` **Und die Luecken stehen da, statt zu
+              verschwinden.** Die alte Zeile schrieb `b?.abbr ?? m` —
+              ein unbekannter Marker sah aus wie ein bekannter. */}
+          <Card title="Symptom → Biomarker"
+                sub={`${zuordnungen.length} Zuordnungen aus dem Katalog`}>
+            {stand.fehler && (
+              <p className="v2-muted" style={{ fontSize: 12, margin: 0 }}>
+                Zuordnungen nicht gelesen: {stand.fehler}
+              </p>
+            )}
+            {!stand.fehler && zuordnungen.length === 0 && (
+              <p className="v2-muted" style={{ fontSize: 12, margin: 0 }}>
+                Keine Zuordnungen hinterlegt.
+              </p>
+            )}
             <div className="v2-col-gap" style={{ gap: 8 }}>
-              {Object.entries(SYMPTOM_BIOMARKER_MAP).map(([sym, markers]) => (
-                <div key={sym} style={{
+              {gruppiert.map(([symptomId, liste]) => (
+                <div key={symptomId} style={{
                   padding: 10, background: 'var(--surface)',
                   border: '1px solid var(--border)', borderRadius: 6,
                 }}>
-                  <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 5, textTransform: 'capitalize' }}>
-                    {sym.replace(/_/g, ' ')}
+                  <div style={{
+                    display: 'flex', alignItems: 'baseline', gap: 8,
+                    marginBottom: 5, flexWrap: 'wrap',
+                  }}>
+                    <span style={{ fontSize: 12, fontWeight: 600 }}>
+                      {nameJeSymptom.get(symptomId) ?? symptomId}
+                    </span>
+                    {/* `[cmd]` **49 der 102 Zuordnungen** zeigen auf ein
+                        Symptom, das der Katalog nicht fuehrt — die
+                        Tabelle vermerkt es selbst. */}
+                    {liste[0]?.symptomUnbekannt && (
+                      <Pill style={{ fontSize: 9 }}>nicht im Katalog</Pill>
+                    )}
                   </div>
                   <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
-                    {markers.map(m => {
-                      const b = BIOMARKERS.find(x => x.name === m)
-                      const flag = b ? calcBiomarkerFlag(b.value, b) : null
-                      return (
-                        <Pill key={m} style={flag && flag !== 'optimal'
-                          ? {
-                            borderColor: `color-mix(in oklch, ${FLAG_META[flag].c} 35%, var(--border))`,
-                            color: FLAG_META[flag].c, fontSize: 9.5,
-                          }
-                          : { fontSize: 9.5 }}>{b?.abbr ?? m}</Pill>
-                      )
-                    })}
+                    {/* `[cmd]` `Pill` kennt kein `title` — der Grund
+                        (bei allen 102 gefuellt) gehoert in eine eigene
+                        Zeile, nicht in einen Tooltip. Eigener Punkt,
+                        siehe Bericht. */}
+                    {liste.map(z => (
+                      <Pill key={z.marker_id}
+                            variant={z.markerUnbekannt ? 'warn' : undefined}
+                            style={{ fontSize: 9.5 }}>
+                        {z.analyte ?? z.marker_id}
+                        {z.markerUnbekannt ? ' · unbekannt' : ''}
+                        {z.spezifitaet === 'HIGH' ? ' · hoch' : ''}
+                      </Pill>
+                    ))}
                   </div>
                 </div>
               ))}
             </div>
+            {/* `[read]` **Was beim Lesen auffiel, steht darunter** —
+                nicht im Verborgenen. */}
+            {stand.befunde.length > 0 && (
+              <div className="v2-dim" style={{
+                fontSize: 10, marginTop: 8, lineHeight: 1.5,
+              }}>
+                {stand.befunde.filter(x => x.art === 'marker_unbekannt').length} Zuordnung(en)
+                zeigen auf einen Biomarker ausserhalb des Katalogs,
+                {' '}{stand.befunde.filter(x => x.art === 'ohne_loinc').length} ohne
+                LOINC-Kennung.
+              </div>
+            )}
           </Card>
         </div>
       )}
