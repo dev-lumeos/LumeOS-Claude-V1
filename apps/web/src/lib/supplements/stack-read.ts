@@ -370,6 +370,28 @@ export async function getStackDaten(): Promise<StackDaten | null> {
         supplement_id
       `)
       .eq('stack_id', stack.id)
+      // ══ G-138: warum inaktive Positionen hier herausfallen ═════════
+      //
+      // `[read]` **Das ist zugleich die Antwort auf den dritten
+      // Zustand.** Der Auftrag fragte, was geschieht, wenn jemand eine
+      // Einnahme auf eine Position bucht, die inzwischen
+      // `is_active = false` ist.
+      //
+      // `[cmd]` **Gemessen 2026-08-27: die Datenbank erlaubt es** —
+      // ein Insert auf eine inaktive Position geht durch, es gibt
+      // keinen Check dagegen. **Ueber die Oberflaeche ist es aber
+      // nicht erreichbar:** dieser Filter haelt die Position aus
+      // `daten.positionen`, und beide Fenster (`LogDose`, `Skip`)
+      // waehlen ausschliesslich daraus.
+      //
+      // `[cmd]` **Und es ist nie vorgekommen:** 11 von 11 Positionen
+      // sind aktiv, 0 Einnahmen haengen an einer inaktiven.
+      //
+      // `[read]` **Deshalb steht der Hinweis hier und nicht in der
+      // Oberflaeche.** Ein Zustand, den kein Weg erzeugen kann, waere
+      // dort tote Anzeige — anders als bei G-211, wo der Freitextfall
+      // taeglich vorkommt. **Wer den Filter loest, hebt diese Zusage
+      // auf und braucht dann eine Anzeige dafuer.**
       .eq('is_active', true)
       .order('sort_order')
 

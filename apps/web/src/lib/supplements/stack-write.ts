@@ -117,6 +117,24 @@ export async function erfasseEinnahme(
 ): Promise<GeschriebeneEinnahme> {
   const { userId } = await sitzung()
 
+  // ══ G-138: eine unbrauchbare Id ist ein Eingabefehler ══════════════
+  //
+  // `[cmd]` **Gemessen 2026-08-27:** ein `stack_item_id` von `"x"`
+  // ergab **HTTP 500** mit `WRITE_FAILED` und der rohen
+  // Postgres-Meldung *„invalid input syntax for type uuid"*.
+  //
+  // `[read]` **Falscher Code und ein Leck.** 500 heisst *„der Server
+  // hat einen Fehler"* — hier hat der Aufrufer einen. Und die
+  // durchgereichte Datenbankmeldung verraet Typ und Spaltennamen an
+  // eine Stelle, die sie nichts angehen.
+  //
+  // `[read]` **Die Pruefung steht neben der Datumspruefung**, nicht
+  // stattdessen: dieselbe Sorte Eingabe, dieselbe Sorte Antwort.
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    .test(eingabe.stack_item_id.trim())) {
+    throw new SupplementSchreibFehler(
+      'VALIDATION_FAILED', 'stack_item_id muss eine UUID sein.')
+  }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(eingabe.intake_date)) {
     throw new SupplementSchreibFehler('VALIDATION_FAILED', 'intake_date muss YYYY-MM-DD sein.')
   }

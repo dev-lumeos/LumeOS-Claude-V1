@@ -210,6 +210,22 @@ function TodayEcht() {
                           : ''}
                       </div>
                     </div>
+                    {/* ══ G-138: die zwei Wege, eine Einnahme zu buchen ══
+                        `[read]` **„Mark taken" bucht sofort** — ein
+                        Klick, ohne Zeit, ohne abweichende Menge, ohne
+                        Notiz. Das ist der haeufige Fall und soll
+                        schnell bleiben.
+
+                        `[cmd]` **„Log dose" fehlte hier.** Das Fenster
+                        (`LogDoseModal`) existiert seit G-148 und war
+                        **nur ueber den Extended-Tab erreichbar** —
+                        also erst ab Erfahrungsgrad pro/elite (G-167).
+                        **Wer Uhrzeit oder eine abweichende Menge
+                        erfassen wollte, kam nicht hin.**
+
+                        `[read]` **Beide nebeneinander, nicht statt
+                        einander:** der schnelle Weg bleibt der erste,
+                        der genaue steht daneben. */}
                     {isTaken
                       ? <span className="v2-num" style={{ fontSize: 10, color: 'var(--pos)' }}>✓ logged</span>
                       : (
@@ -217,7 +233,18 @@ function TodayEcht() {
                           <button type="button" className="v2-btn v2-btn-sm"
                                   onClick={() => toggleTaken(p.id)}>Mark taken</button>
                           <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
-                                  onClick={() => open('skip', { name: p.name })}>Skip</button>
+                                  onClick={() => open('logDose', {
+                                    id: p.id, name: p.name,
+                                  })}>Log dose</button>
+                          {/* `[cmd]` **Hier stand `{ name: p.name }`** —
+                              ohne `id`. Das Fenster faellt dann auf
+                              seine Auswahlliste zurueck, und der
+                              Nutzer muss die Position noch einmal
+                              suchen, die er gerade angeklickt hat. */}
+                          <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                                  onClick={() => open('skip', {
+                                    id: p.id, name: p.name,
+                                  })}>Skip</button>
                         </>
                       )}
                   </div>
