@@ -467,6 +467,51 @@ if (SOLL.datenqualitaet?.food_nutrients && istTabellen.has('food_nutrients')) {
   }
 }
 
+// C-292: Die Medikamenten-Zeilenzahl belegt weder CAS/ATC noch die drei
+// additiven Evidenzfelder. Die Mindestwerte stehen ausserhalb der Datenbank,
+// damit ein uebersprungener Enrichment-Schritt im Abschlusspruefer auffaellt.
+if (SOLL.datenqualitaet?.medical_medication_wave1) {
+  const soll = SOLL.datenqualitaet.medical_medication_wave1
+  const [cas, atc, mechanism, precautions, identifiers, mechanismRecords, precautionRecords] = sql(`
+    SELECT
+      count(*) FILTER (WHERE NULLIF(btrim(cas_number), '') IS NOT NULL),
+      count(*) FILTER (WHERE NULLIF(btrim(atc_code), '') IS NOT NULL),
+      count(*) FILTER (WHERE NULLIF(btrim(pharmacology->>'mechanism_of_action'), '') IS NOT NULL),
+      count(*) FILTER (WHERE precautions <> '{}'::jsonb AND precautions <> '[]'::jsonb AND precautions <> 'null'::jsonb),
+      COALESCE(sum(jsonb_array_length(COALESCE(evidence_provenance->'c292_identifiers', '[]'::jsonb))), 0),
+      count(*) FILTER (WHERE evidence_provenance ? 'c292_mechanism_of_action'),
+      count(*) FILTER (WHERE evidence_provenance ? 'c292_precautions')
+    FROM medical.medication_active_substances;
+  `)[0].map(Number)
+  const checks: [string, number, number][] = [
+    ['medical.cas_number', cas, Number(soll.cas_number)],
+    ['medical.atc_code', atc, Number(soll.atc_code)],
+    ['medical.mechanism_of_action', mechanism, Number(soll.mechanism_of_action)],
+    ['medical.precautions', precautions, Number(soll.precautions)],
+    ['medical.identifier_records', identifiers, Number(soll.identifier_records)],
+    ['medical.mechanism_records', mechanismRecords, Number(soll.mechanism_records)],
+    ['medical.precaution_records', precautionRecords, Number(soll.precaution_records)],
+  ]
+  for (const [name, actual, minimum] of checks) {
+    const ok = actual >= minimum
+    console.log(`  ${name.padEnd(31)} ${String(actual).padStart(7)} / ${String(minimum).padStart(7)}  ${ok ? 'ok' : 'ZU WENIG'}`)
+    if (!ok) fehler.push(`Datenqualitaet: ${name} hat ${actual}, erwartet mindestens ${minimum}`)
+  }
+
+  const missingReasonErrors = Number(sql(`
+    SELECT count(*)
+    FROM medical.medication_active_substances substance
+    CROSS JOIN LATERAL jsonb_array_elements(COALESCE(substance.evidence_provenance->'c292_identifiers', '[]'::jsonb)) AS identifier(record)
+    WHERE NULLIF(btrim(identifier.record->>'cas'), '') IS NULL
+      AND NULLIF(btrim(identifier.record->>'atc'), '') IS NULL
+      AND NULLIF(btrim(identifier.record->>'missing_reason'), '') IS NULL;
+  `)[0][0])
+  console.log(`  ${'medical.identifier_missing_reason'.padEnd(31)} ${String(missingReasonErrors).padStart(7)} /       0  ${missingReasonErrors === 0 ? 'ok' : 'FALSCH'}`)
+  if (missingReasonErrors !== 0) {
+    fehler.push(`Datenqualitaet: ${missingReasonErrors} leere C-292-Identifier ohne missing_reason`)
+  }
+}
+
 // GO-00: Referenzwerte duerfen nur dann in Prozent umgerechnet werden,
 // wenn ihre Einheit zur Bestandseinheit passt. C-45 pruefte Quelle und
 // Codeabdeckung, aber nicht diese Vergleichbarkeit; Calcium-UL wurde

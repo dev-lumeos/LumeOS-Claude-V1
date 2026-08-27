@@ -1670,7 +1670,7 @@
     "medical.lab_marker_catalog": 66,
     "medical.biomarker_aliases": 292,
     "medical.medication_active_substances": 56,
-    "medical.medication_reproductive_evidence": 417,
+    "medical.medication_reproductive_evidence": 498,
     "medical.medication_pk_evidence": 407,
     "medical.medication_renal_hepatic_evidence": 391,
     "medical.medication_clinical_context_evidence": 107,
@@ -1753,7 +1753,7 @@
     "medical.lab_marker_catalog": "[cmd] C-162: Kimi crawl_024 lab_markers.json liefert 66 Marker, alle needs_repo_validation. 46 Kimi-Kandidaten plus 18 repo-only Aufloesungen treffen den Katalog, 2 bleiben offen.",
     "medical.biomarker_aliases": "[cmd] C-72: daten/biomarker-aliases.json fuehrt 304 eindeutige importierbare Legacy-Aliaszeilen plus 6 kuratierte Mehrdeutigkeitszeilen; 143 importiert zusammen 310. Die 18 Thai-Aliase bleiben offen, weil die aktuelle Faltung sie nicht traegt.",
     "medical.medication_active_substances": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 56 Wirkstoffe; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist.",
-    "medical.medication_reproductive_evidence": "[cmd] C-286: 417 CRAWL_038-Reproduktions-Enrichments werden per drug_* importiert; pregnancy/lactation/fertility und dokumentierte missing_reasons bleiben strukturiert.",
+    "medical.medication_reproductive_evidence": "[cmd] C-286: 417 CRAWL_038-Reproduktions-Enrichments; C-292: 81 additive Restluecken per drug_*. Pregnancy/lactation/fertility und dokumentierte missing_reasons bleiben strukturiert. Summe mindestens 498.",
     "medical.medication_pk_evidence": "[cmd] C-286: 407 PK-Enrichments werden per drug_* importiert.",
     "medical.medication_renal_hepatic_evidence": "[cmd] C-286: 391 Nieren-/Leber-Enrichments werden per drug_* importiert.",
     "medical.medication_clinical_context_evidence": "[cmd] C-286: 107 Clinical-Context-Enrichments werden per drug_* importiert.",
@@ -1803,6 +1803,15 @@
         "bls_4_0_xlsx_nachtrag"
       ],
       "beleg": "[cmd] v031_fettsaeuren.sql nach 031: 138 Codes, zwei data_source-Werte; Nachtrag 171.409 Werte nur fuer 30 Doppelpunkt-Codes."
+    },
+    "medical_medication_wave1": {
+      "cas_number": 489,
+      "atc_code": 497,
+      "mechanism_of_action": 494,
+      "precautions": 393,
+      "identifier_records": 465,
+      "mechanism_records": 302,
+      "precaution_records": 385
     }
   },
   "_bewusst_nicht_geprueft": {

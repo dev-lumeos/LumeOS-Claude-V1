@@ -994,6 +994,15 @@
       ]
     },
     {
+      "id": "292",
+      "path": "supabase/_pipeline/14_medical/292_medication_wave1_enrichments.ts",
+      "kind": "tsx",
+      "creates": "C-292: Kimi Welle 1 fuer CAS, ATC, Wirkmechanismus, Vorsichtsmassnahmen und Reproduktion",
+      "depends_on": [
+        "286a"
+      ]
+    },
+    {
       "id": "110",
       "path": "supabase/_pipeline/11_goals/110_goals_zielwerte.sql",
       "kind": "sql",
