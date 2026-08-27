@@ -51,9 +51,9 @@ Fragen, Quellen.
 
 ### Was am Katalog noch offen ist
 
-`[cmd]` **C-274** die 149 unsichtbaren zuordnen, 66 mit sichtbarem
-Gegenstueck · **C-287** 148 Community-Zeilen ohne Bindung, **bewusst
-nicht geraten**. `[cmd]` **G-200 und G-201 sind seit 2026-08-27
+`[cmd]` **C-287** 148 Community-Zeilen ohne Bindung, **bewusst nicht
+geraten**. `[cmd]` **C-274 ist seit der Bestandsaufnahme C-315
+ueberholt** — die Zuordnung ist erfolgt. `[cmd]` **G-200 und G-201 sind seit 2026-08-27
 geschlossen** — der Unterschied war ein Zeichenbereich, die fuenf
 Einzelwaechter bleiben trotzdem stehen.
 
@@ -139,10 +139,9 @@ Evidence-Dateien.**
 | Auftrag | Bereich | warum |
 |---|---|---|
 | **C-285** `user_medications` speichert im Klartext | `supabase/` | **blockiert den ganzen Medikamentenstrang** — ohne Erfassung feuert keine der 31 Regeln |
-| **C-274** die 149 unsichtbaren zuordnen | `supabase/` | 66 haben ein sichtbares Gegenstueck |
 | **C-287** 148 Community-Zeilen ohne Bindung | `supabase/` | **bewusst nicht geraten** (C-286) — braucht eine Entscheidung, keine Automatik |
 | **C-279** Kreuzprodukt in `rule_assessment` | `supabase/` | skaliert mit `intake_logs`, also mit der Nutzungsdauer |
-| **C-313** 25 Regeln koennen nicht feuern | `supabase/` | **14 Operatoren fehlen im Evaluator** — unbekannter Operator endet lautlos mit `not_fulfilled` |
+| **C-313** vier Operatoren fuer die vier `high`-Regeln | `supabase/` | Weg 3 ist gebaut (C-313b), **Weg 2 steht aus** — `lab_above`, `lte`, `substance_gte`, `eq` |
 | **C-171** Medical: Symptome, Termine, Dokumente | `apps/web` | **34 Symptome liegen seit C-262 vor** |
 
 `[cmd]` **G-197 und G-198 sind erledigt** (2026-08-26, Claude Code) —
@@ -243,8 +242,8 @@ dass der user auf die schnelle sehen will als 10 kacheln in einem
 reiter die niemand liest."*
 
 
-`[cmd]` **Beantwortet und erledigt:** **C-244** (*„c244 magnesium"* —
-Sammelname gewinnt, 101 Unterformen ueber `parent_id`) · **C-242**
+`[cmd]` **Beantwortet und geschlossen (C-315):** C-244 (*„c244 magnesium"* —
+Sammelname gewinnt, 101 Unterformen ueber `parent_id`) · C-242
 (Ursache war der Benennungsschnitt, nicht die Dubletten) · **C-241**
 (Nachweiskonto hat seit C-251 eine Einkaufsliste mit 6 echten Posten).
 
@@ -252,7 +251,6 @@ Sammelname gewinnt, 101 Unterformen ueber `parent_id`) · **C-242**
 
 | | |
 |---|---|
-| **C-223** | `dose_ceiling` als Freitext — wird ueber `supplement_regulatory` loesbar |
 | **GO-23** | Deckungsgrenze unter 50 % — Vorschlag: dimmen |
 | **G-134** | die vier Filtergruppen gibt es in den Daten nicht |
 | **G-136** | Ballaststoffe unter Kohlenhydrate, Wasser unter Sonstige |

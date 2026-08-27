@@ -14296,3 +14296,119 @@ gegengezaehlt, **aber weiter geschrieben, weil 9 Regeln sie lesen.**
 `[cmd]` **Gates:** 715 Tests / 0 Fehler, Build 31/31, Encoding 20.201
 Dateien, 0 Attrappen im neuen Code. Nachweise auf
 `test-user@lumeos.local`, Rueckbau 4 → 2 gezaehlt, `dev` unberuehrt.
+
+
+## 2026-08-27 — C-315 und G-212: die Bestandsaufnahme
+
+- [x] **C-315: 43 offene C-Punkte gegen den heutigen Code pruefen**
+  (2026-08-27, Codex)
+- [x] **G-212: 19 offene G-Punkte gegen den heutigen Code pruefen**
+  (2026-08-27, Claude Code)
+- [x] **C-313b: der Melder fuer unbekannte Operatoren** (2026-08-27,
+  Codex)
+
+### Warum es diese beiden Auftraege gab
+
+`[cmd]` **Vier Punkte sind an ihrer eigenen Praemisse gescheitert** —
+G-207 (die Symptomtabellen existierten), G-211 (keine Regel liest
+`active_substance_id`), G-138 (der Schreibweg existiert seit G-148),
+G-176 (die 50er-Grenze ist entfernt, ein Test haelt es fest).
+
+`[read]` **Claude Codes Diagnose in G-138:** *,,Der Punkt zaehlte
+Namen, nicht Faehigkeiten."* `LogDoseModal` heisst im Code
+`LogDoseFenster` — **ein Vergleich englischer Vorlagennamen gegen
+deutschen Code findet systematisch nichts.**
+
+### Das Ergebnis
+
+`[cmd]` **62 Punkte geprueft, je mit `[cmd]`-Beleg. 25 geschlossen** —
+21 erledigt, 4 ueberholt.
+
+`[read]` **Zwoelf davon betrafen den Katalogaufbau vom 22. und 23.
+August**, der seit einer Woche fertig ist. **Sie standen offen, weil
+niemand sie geschlossen hat, nicht weil Arbeit fehlte.**
+
+### Beide Agenten haben meine Zahlen berichtigt
+
+`[cmd]` **Ich hatte 47 C-Punkte und 18 G-Punkte im Auftrag genannt.**
+Richtig sind **43 und 19** — die 69 Zeilen teilen sich auf C 43, G 19,
+A 5, F 1, GO 1. `[read]` **Ich hatte die A-, F- und GO-Punkte nicht
+abgezogen.** Beide Agenten haben nachgezaehlt statt der Zahl im
+Auftrag zu glauben.
+
+### Die schaerfsten Einzelbefunde
+
+`[cmd]` **G-178 ist durch Messung ueberholt.** Am Bildschirm
+nachgemessen: Reiter 412, Fussleiste *,,412 von 412"*, Chips
+211+122+79 = 412, und **412 tatsaechlich gerenderte Zeilen.** Die 298
+aus dem Bildschirmfoto sind nicht reproduzierbar. `[read]` **Der
+Punkt verlangte das seit dem 23. August: am Bildschirm nachmessen,
+nicht im Code weiterraten.**
+
+`[cmd]` **G-186 nennt einen Ort, den es nicht gibt:**
+`wissen.entity_transporters` — die Tabellen liegen in
+`supplements.`. Die Zahlen 4.617 und 3.001 stimmen, **der Ort nicht.**
+`[read]` **Dieselbe Klasse wie `medical.medications` in G-170** — ein
+Punkt, der einen falschen Ort nennt, schickt jeden Auftrag ins Leere,
+der ihn woertlich nimmt.
+
+`[cmd]` **Neun Punkte tragen tote Zahlen, teils um das Dreifache:**
+`meals` 725 → 2.895, `intake_logs` 360 → 744, FAQ 1.421 → 1.970,
+`lab_effects` 222 → 271. `[cmd]` **Und die Gruppenverteilung hat sich
+verschoben, nicht nur vergroessert:** 154/61/75 → **211/79/122**,
+Enhanced hat sich mehr als verdoppelt.
+
+`[cmd]` **411 von 412 haben Nutzertext, nicht 412.** `[read]` **Der
+eine ist NAC:** `slug = nac`, **`name_de` ist NULL.** Deshalb blieb
+meine erste Abfrage leer — `string_agg` ueber NULL liefert nichts.
+**Eine Substanz, die im Katalog erscheint und keinen anzeigbaren
+Namen hat.** Als **C-316** angelegt.
+
+`[cmd]` **`supplement_user_texts` und `supplement_faq` fuehren je 446
+Substanzen — 35 davon sind nicht im Katalog sichtbar.** Als **C-317**
+angelegt.
+
+### C-313b — der Melder
+
+`[cmd]` **`unsupported_operator` wird gesetzt, ohne die Auswertung
+abzubrechen.** Nachgemessen: `rule_assessment` liefert 64 Zeilen,
+**25 davon mit `unsupported_operator`**, die anderen 39 unberuehrt.
+`[cmd]` Gate-Waechter verlangt exakt 25 einschliesslich der vier
+`high`. **Beide Negativproben im Klon rot, Normalzustand gruen**,
+volle Kette 125 Schritte in 145 s.
+
+`[read]` **Weg 2 — die vier Operatoren fuer die vier `high`-Regeln —
+steht noch aus.** C-313 bleibt offen und traegt jetzt nur noch diesen
+Rest.
+
+### Die 25 geschlossenen Punkte aus C-315 und G-212
+
+`[read]` **Je Punkt ein `[cmd]`-Beleg im Bericht** —
+`docs/berichte/c-315-codex.md` und
+`docs/berichte/g-212-claude-code.md`.
+
+- [x] **C-108: Wechselwirkungen — nennen ja, bewerten nein** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **C-195: `substance_catalog` auf die Kimi-Tiefe bringen** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **C-208: C-129 neu fassen — der Import ist laengst passiert** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **C-222: `monitoring` fehlt als siebter Block** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **C-223: `dose_ceiling_value numeric` ist die falsche Form** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **C-228: Drei Gruppen, saubere Kategorien, Beschreibung** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **C-232: Schritt 1 des Neuaufbaus — die 26 Tabellen anlegen** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **C-234: `marketplace_product_id` — zeigt auf ein Modul, das es nicht gibt** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **C-242: Die 13 Namensdubletten blockieren Schritt 3 des Supplements-Neuaufbaus** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **C-244: Der alte Katalog und Kimi schneiden verschieden — 28 von 28 ohne Gegenpart** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **C-284: Der Medikamentenkatalog ist duenner als er aussieht** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **C-301: `intake_logs` traegt zwei SELECT-Policies, eine mit Funktionsaufruf** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **G-78: Ein Fehler, den nur der Browser zeigte** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **G-138: Supplements zeigt, nimmt aber nichts auf** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **G-170: `medical/tab-tracking` behauptet ein fehlendes Schema** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **G-172: Deutsch, scrollbar, ein Katalog auf dem Catalog-Tab** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **G-176: Der Katalog zeigt 50 von 290 und laesst den Rest nicht erreichen** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **G-177: Das Substanzdetail erklaert, was fehlt, statt zu zeigen, was da ist** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **G-192: Ein Community-Reiter im Substanzdetail** (2026-08-27, erledigt — belegt in C-315/G-212)
+- [x] **C-116: Der Substanzkatalog — 320 Zeilen als Kandidat** (2026-08-27, ueberholt — belegt in C-315/G-212)
+- [x] **C-196: Die 290 Substanzen in die neue Tiefe importieren** (2026-08-27, ueberholt — belegt in C-315/G-212)
+- [x] **C-221: `supplement_interactions` ist eine tote Spec-Tabelle** (2026-08-27, ueberholt — belegt in C-315/G-212)
+- [x] **C-274: Die 248 unsichtbaren zuordnen** (2026-08-27, ueberholt — belegt in C-315/G-212)
+- [x] **G-178: Reiter und Fussleiste nennen verschiedene Zahlen — 298 gegen 290** (2026-08-27, ueberholt — belegt in C-315/G-212)
+- [x] **G-209: der Wirkstoffkatalog laedt in 1.483 ms warm** (2026-08-27, ueberholt — belegt in C-315/G-212)

@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-27.** 266 offen, 0 in Arbeit.
+**Stand: 2026-08-27.** 244 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -1782,28 +1782,6 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
 
 
 
-- [ ] **C-108: Wechselwirkungen — nennen ja, bewerten nein** (neu
-  2026-08-19). Befund aus F-02.
-
-  `[cmd]` **Die Tabelle ist voll ausgestaltet** (Severity, Timing,
-  `blocks_intake`) **und bewusst leer** (C-68).
-
-  `[cmd]` **Zum Befuellen liegen bereit:** 28 CSV-Zeilen (alle
-  Supplement×Supplement, plausibel, **aber unbelegt**) und 12
-  Spec-Zeilen — **6 davon Supplement×Medikament** (Warfarin, SSRIs,
-  Pille) **und brauchen ein Medikationsmodell, das Medical nicht
-  fuehrt.**
-
-  `[read]` **Die Grenze, wie F-02 sie zieht:** *„Nennen = kuratierte
-  Zeile zeigen, wenn beide Seiten im Stack — genau so tat es der
-  Vorgaenger in `intelligence.ts`. Bewerten (Score, Blockade,
-  Zeitplan-Urteile wie im Mockup: „your current schedule is fine")
-  bleibt draussen."*
-
-  `[cmd]` **Warnschuss:** `SPEC_05` fuehrt eine **Severity `high`, die es
-  im Schema gar nicht gibt.** `[read]` Dritter Beleg dafuer, dass die
-  Specs nicht stimmen (nach C-84 und C-92).
-
 - [ ] **C-109: Die Injektions-Grenzwerte sind unbelegt** (neu
   2026-08-19). Befund aus F-02. **Entscheidung fuer Tom.**
 
@@ -2137,100 +2115,6 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   erreichbar, keine PSD2-Rechtspruefung, Apps nicht selbst bedient.
   **Widersprueche ebenfalls** — TrueCoach 107 gegen 137 $, My PT Hub 105
   gegen 59 $.
-
-- [ ] **C-116: Der Substanzkatalog — 320 Zeilen als Kandidat** (neu
-  2026-08-19). Aus F-05
-  (`docs/spezifikation/substanz-katalog-recherche.md`,
-  `supabase/_pipeline/daten/substanz-katalog.json`).
-
-  `[cmd]` **320 Substanzen, 207 KB, ein Stueck.** Status
-  **`curation_candidate_not_import_ready`**, `sources`-Register mit
-  Pruefdatum, **je Zeile eine Quellenkennung.**
-
-  | Klasse | |
-  |---|---|
-  | injizierbare AAS | **35** |
-  | orale 17aa-Steroide | 25 |
-  | Peptide | **26** |
-  | SARMs | 19 |
-  | GH und Sekretagoga | 15 |
-  | dazu | SERM, AI, Insulin, Diuretika, Schilddruese |
-
-  `[cmd]` **Vitamine und Mineralstoffe mit belegten EFSA/DRI-Obergrenzen**
-  — **Vitamin B6 auf 12 mg gesenkt, Selen auf 255 µg.**
-
-  `[read]` **Botanicals, Nootropika und Anti-Aging (124 Zeilen) bewusst
-  nur als Namensbestand** — *„Kuratierung lohnt erst, wenn das Modul sie
-  zeigt."*
-
-  ### Neun Ueberwachungsprofile docken an Medical an
-
-  `[cmd]` **Ihre Marker treffen Medicals 560 Referenzbereiche.**
-
-  `[read]` **Der Kreatinin-Hinweis ist explizit drin:** *„Kreatin und
-  Muskelmasse heben Serum-Kreatinin ohne Nierenschaden, eGFR wirkt
-  faelschlich niedrig, **Cystatin C ist der muskelunabhaengige
-  Marker**."* — Genau die Fehldeutung, die im Auftrag stand.
-
-  ### Rechtslage laenderweise, mit zwei Wackelstellen
-
-  `[cmd]` **DE, US und TH je `legal_framework`.** **Schaerfster
-  Kontrast:** anabole Steroide sind **in Thailand ueber die
-  *„dangerous drug"*-Kategorie in der Apotheke**, in DE und US
-  kontrolliert.
-
-  `[cmd]` **Zwei Wackelstellen vermerkt statt geglaettet:** der
-  US-Peptid-Status ist **seit Februar 2026 im Umbruch**
-  (HHS-Ankuendigung, noch nicht formal), und **die
-  AntiDopG-Mengenschwellen stehen je Stoff in der DmMV** — Rahmenwerk
-  genannt, nicht jede Einzelschwelle recherchiert.
-
-  ### Was unbelegt bleibt
-
-  `[cmd]` **Alle 151 Halbwertszeiten stammen unbelegt aus dem
-  Vorgaenger-Export** — sie tragen `half_life_source: "minipc_csv"` plus
-  Vermerk.
-
-  `[cmd]` **PED- und Peptid-Dosen bleiben leer** — nie am Menschen
-  belegt, und eine Angabe waere eine medizinische Aussage. `[read]`
-  **Leeres Feld plus Grund, keine Forenzahl.**
-
-  ### Der Uebertrag ist ein eigener Auftrag
-
-  `[cmd]` **Die 44er-Naehrstoffluecke aus F-02 ist im Sammelbestand
-  geschlossen** — 16 Eintraege mit `nutrients_provided`. **Aber das ist
-  die Recherche-Datei, nicht der Live-Katalog.**
-
-  `[read]` **Zurueckgestellt (Tom, 2026-08-19):** *„onhold. Kimi3 macht im
-  Moment nichts anderes als Daten sammeln, du kriegst bald eine
-  komplette Supplementliste detailliert und eine Medikamentenliste
-  detailliert."*
-
-  `[read]` **Die Medikamentenliste ist der interessantere Teil** —
-  C-108 hat gemessen, dass **6 der 12 Spec-Wechselwirkungen
-  Supplement×Medikament sind** (Warfarin, SSRIs, Pille) **und ein
-  Medikationsmodell brauchen, das Medical nicht fuehrt.**
-
-  **Alt:** Wie viel des Bestands wird
-  uebernommen? **320 Zeilen ohne Kuration sind kein Katalog** — und
-  200 davon sind PED, was C-113 beruehrt.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 - [ ] **C-71: Permissions und Autonomy sind zwei verschiedene Sachen**
   (neu gefasst 2026-08-19). **Toms Klarstellung.**
@@ -3127,24 +3011,6 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   `MedHistory`, `MedDocuments`, `MedAppointments`, **mit acht
   Modalen.**
 
-- [ ] **G-138: Supplements zeigt, nimmt aber nichts auf** (neu
-  2026-08-20). Aus SSOT 173.
-
-  `[cmd]` **16 von 68 Komponenten fehlen — fast alle sind
-  Schreibwege:**
-
-  `AddSupplementModal` · `AddCompoundModal` · **`LogDoseModal`** ·
-  **`LogSkipModal`** · `AddSideEffectModal` · `AddLabResultModal` ·
-  `ReorderModal` · `PlanCycleModal` · `PermissionsModal` ·
-  `ProductDetailDrawer`.
-
-  `[read]` **Das Modul liest 360 Einnahmen und rechnet 93,1 %
-  Compliance** — **aber niemand kann eine Einnahme eintragen.**
-
-  `[cmd]` **Ohne Gegenstueck im Schema:** `INJ_SITES`, `INJ_SCHEDULE`,
-  `INJ_LOG`, `STACK_TEMPLATES`, `PRODUCT_DETAILS`, `EXTENDED_LABS`,
-  `BLOODWORK_PANEL`.
-
 - [ ] **G-139: Goals — Fortschrittsfotos mit Posen-Sets** (neu
   2026-08-20). Aus SSOT 173.
 
@@ -3915,23 +3781,6 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   faellt sie weg? `[read]` **Eine Serie, die staendig reisst, motiviert
   nicht — sie beschaemt.**
 
-- [ ] **G-78: Ein Fehler, den nur der Browser zeigte** (neu
-  2026-08-19). **Merkposten, kein Auftrag.**
-
-  `[cmd]` **HTTP 500:** *„Ein Wert-Import aus `stack-read.ts` (das
-  `next/headers` laedt) zog das Server-I/O ins Browserbuendel. **Der
-  Typecheck war gruen.**"*
-
-  `[read]` **Dritter Fall derselben Klasse:** In G-69 standen die
-  Uebungsnamen im DOM und waren unsichtbar (*„ein Test auf „Name steht
-  im DOM" waere gruen gewesen"*), in G-64 kippte `.in()` ueber 200 IDs
-  **und schwieg.**
-
-  `[cmd]` **Was daraus folgt:** Das Bildschirmfoto ist kein Beiwerk —
-  **es ist die einzige Pruefung, die diese Klasse findet.** Steht schon
-  als Nachweis in jedem Auftrag; **hier ist der dritte Beleg.**
-
-
 - [ ] **A-27: Zwei Agenten, zwei Attrappen-Erwartungen** (neu
   2026-08-20). **Das Gate ist rot.**
 
@@ -4256,53 +4105,6 @@ Codex; nichts davon ist Oberflaechenarbeit, solange die Daten fehlen.
 
 ### Substanzen — die dichteste Luecke
 
-- [ ] **C-195: `substance_catalog` auf die Kimi-Tiefe bringen**
-  (neu 2026-08-22). **Blockiert C-196.**
-
-  `[cmd]` **130 von 146 Kimi-Feldern fehlen als Spalte.** Darunter
-  vollstaendig: `safety` (Kontraindikationen, Nebenwirkungen, Toxizitaet,
-  Niere/Leber/Herz/Endokrin/Neuro, Schwangerschaft mit Stillzeit),
-  `interactions` (Arzneimittel, Supplement, Nahrung, Alkohol,
-  Krankheit), `regulatory` (USA, EU, UK, Thailand, Australien,
-  `wada_status`, `wada_category`, `prescription_required`),
-  `warning_triggers` (`dose_ceiling` mit Wert/Basis/Quelle,
-  `doctor_consult_flags`), `quality` (Verunreinigung, Faelschung,
-  Lagerung, Licht, Temperatur), `evidence_provenance` je Feld mit
-  `source_id`/`as_of`/`evidence_class`, `external_ids` (UNII, PubChem,
-  ChEMBL, InChIKey, Summenformel), `platform` (`recommendable`,
-  `warning_only`, `physician_referral`, `athlete_flag`, `modules`).
-
-  **Vorschlag des Orchestrators, zu entscheiden:** Bloecke als `jsonb`
-  (`safety`, `interactions`, `regulatory`, `quality`, `pharmacology`,
-  `warning_triggers`), flach nur was gefiltert oder gewarnt wird —
-  `wada_status`, `prescription_required`, `dose_ceiling.value`,
-  `recommendable`, `warning_only`, `physician_referral`.
-  `[read]` **130 flache Spalten waeren abfragbar und unpflegbar**;
-  reines `jsonb` kostet bei jeder Abfrage — C-192 zeigt gerade, was
-  CTEs auf dem heissen Pfad kosten.
-
-  `[cmd]` **`evidence_provenance` muss mitwandern.** Sonst entstehen
-  wieder Zahlen ohne Beleg — genau das Muster von C-185 (fabriziertes
-  UNII bei BPC-157).
-
-- [ ] **C-196: Die 290 Substanzen in die neue Tiefe importieren**
-  (neu 2026-08-22). **Haengt an C-195.**
-
-  `[cmd]` Quellen: `supplements.jsonl` 154 · `performance_compounds`
-  75 · `peptides` 61. Repo heute 566 Zeilen (konsolidiert inkl.
-  LumeOS/F-05).
-
-  `[cmd]` **Die vorhandenen Spalten sind duenn:** `guideline_dose`
-  **0 %**, `official_label_dose` **0,2 %**, `tolerable_upper_intake_level`
-  **8,5 %**, `half_life` **9,4 %**, `cas_number` 29,2 %,
-  `chemical_form` 19,3 %.
-
-  `[read]` **Wo Kimi nichts hat, wird nichts erfunden.**
-  `missing_fields` und `missing_reason` wandern mit — sie sagen, warum
-  eine Zahl fehlt.
-
-### Medikamente — Zeilen da, Spalten leer
-
 - [ ] **C-198: ATC, CAS und CYP der 498 Wirkstoffe nachziehen**
   (neu 2026-08-22).
 
@@ -4435,18 +4237,6 @@ Codex; nichts davon ist Oberflaechenarbeit, solange die Daten fehlen.
   (8 Rechte-Zustaende). **Spezifiziert bis zu den OCR-Grenzen.**
 
 ### Widerlegt oder ueberholt
-
-- [ ] **C-208: C-129 neu fassen — der Import ist laengst passiert**
-  (neu 2026-08-22).
-
-  `[cmd]` C-129 heisst *„brauchbar, aber nicht importiert"* und ist
-  gegen **237 Substanzen und 56 Wirkstoffe** geschrieben. Heute:
-  **290 Substanzen, 498 Wirkstoffe** — und `medication_active_substances`
-  498, `_formulations` 453, `_products` 448 stehen **1:1 im Repo**.
-
-  `[read]` **Der Punkt beschreibt einen Zustand, den es nicht mehr
-  gibt.** Er ist neu zu schreiben — die Luecke ist nicht der Import,
-  sondern die Tiefe (C-195).
 
 - [ ] **C-209: Die laufende Instanz wird nach einem Kettenschritt nicht
   nachgezogen** (neu 2026-08-22).
@@ -4795,13 +4585,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   unangebunden"* — `tab-interactions-echt.tsx` existiert inzwischen.
   Ungeprueft, ob der Test noch die Rueckfall-Lage meint.
 
-- [ ] **C-221: `supplement_interactions` ist eine tote Spec-Tabelle**
-  (neu 2026-08-22).
-
-  `[cmd]` **0 Zeilen, und niemand liest sie.** Die echte
-  Interactions-Kachel laeuft ueber `rule_catalog` (64). Kein
-  Oberflaechenwiderspruch — aber eine Tabelle, die es ohne Grund gibt.
-
 - [ ] **G-165: `nutrition-foods` zahlt die Preference-Kosten zweimal**
   (neu 2026-08-22). Gehoert zu C-192.
 
@@ -4817,77 +4600,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   ueber alle elf Tabs — kein Ausreisser, aber der langsamste
   Modulrahmen.
 
-- [ ] **C-222: `monitoring` fehlt als siebter Block** (neu 2026-08-22).
-  Aus C-196. **Auslassung des Orchestrators in C-195.**
-
-  `[cmd]` **Kein `ADD COLUMN monitoring`** unter den 60 Spalten. Die
-  Quelle traegt es bei **46 Saetzen**: 39 Supplements, 2 Performance
-  Compounds, 5 Peptide. Die Daten liegen weiter nur in `raw`.
-
-  `[read]` **Der Orchestrator hat `monitoring` in C-195 in der
-  Fuellgrad-Tabelle aufgefuehrt und dann nicht in die Liste der sechs
-  Bloecke aufgenommen.** Kein Fehler von Codex — der Auftrag hat es
-  nicht verlangt.
-
-  `[read]` **Und es ist kein Randfeld:** `monitoring` fuehrt
-  `relevant_blood_tests` und `relevant_biomarkers` je Substanz. **Das
-  ist die Bruecke zwischen Supplements und
-  `medical.lab_marker_catalog`** — dieselbe Verbindung, an der C-183
-  (Symptom-Ontologie) und die Symptom-Biomarker-Frage aus C-171
-  haengen.
-
-  **Zu tun:** Spalte aufnehmen wie die sechs anderen, Sollstand
-  nachziehen, die 46 Saetze heben. Erwartung: `monitoring` 46/46,
-  Spaltenzahl 60 → 61, Zeilenzahl unveraendert 566.
-
-- [ ] **C-223: `dose_ceiling_value numeric` ist die falsche Form** (neu
-  2026-08-22). Aus C-196. **Entscheidung Tom.**
-
-  `[cmd]` **32 von 32 Eintraegen tragen einen Freitext, keinen
-  Zahlwert:**
-
-  | Substanz | `dose_ceiling.value` |
-  |---|---|
-  | Vitamin A | `UL 3000 mcg RAE/day adults` |
-  | Magnesium citrate | `UL 350 mg/day supplemental` |
-  | Coffein | `EFSA: single doses <=200 mg, daily <=400 mg (adults)` |
-  | Vitamin B6 | `US UL 100 mg/d — EFSA UL 12 mg/d (2023); DB stores BOTH (conflict record)` |
-  | hCG | `Per label (fertility indications)` |
-  | Insulin | `Per prescription only` |
-
-  `[read]` **Die Erwartung „dose_ceiling_value 32" war falsch
-  gebaut** — der Orchestrator hat eine `numeric`-Spalte fuer ein Feld
-  spezifiziert, das die Quelle als Satz fuehrt: mit Einheit,
-  Rechtsraum, Begruendung und teils zwei widersprechenden Werten in
-  einem String.
-
-  `[cmd]` Codex hat 29 gefuellt, indem es die Zahl aus dem Text zog,
-  und die drei ohne Zahl gemeldet. **Das ist mehr Interpretation, als
-  „heben, nicht interpretieren" erlaubt** — die richtige Reaktion auf
-  einen Auftrag, der so nicht erfuellbar war.
-
-  `[read]` **Vitamin B6 zeigt, warum die Form grundsaetzlich nicht
-  traegt:** US 100 mg/d gegen EFSA 12 mg/d, und die Quelle sagt
-  ausdruecklich, sie speichere **beide**. Ein `numeric`-Feld kann das
-  nicht, egal welche Zahl man waehlt.
-
-  **Drei Wege, einer zu waehlen:**
-
-  **A** — `dose_ceiling_text` daneben, `numeric` nur wo eindeutig.
-  Filterbar bleibt, was eine Zahl hat; der Rest ist lesbar.
-
-  **B** — Wert, Einheit und Rechtsraum getrennt, mit einer Zeile je
-  Jurisdiktion. Sauber, aber eine eigene Tabelle.
-
-  **C** — das flache Feld streichen, nur der `jsonb`-Block bleibt.
-  Dann gibt es keinen Dosisfilter.
-
-  `[read]` **Der Grund fuer die flache Spalte war ein Filter** — „zeig
-  mir alles ueber der Obergrenze". **Der funktioniert in keiner der drei
-  Varianten so, wie gedacht**, solange die Obergrenze vom Rechtsraum
-  abhaengt. Das ist die eigentliche Frage: **gilt fuer einen Nutzer in
-  Thailand die US-Zahl oder die EFSA-Zahl?**
-
 - [ ] **G-168: Die coach-Kopfzeile widerspricht dem eigenen Tab** (neu
   2026-08-22). Aus G-158.
 
@@ -4899,54 +4611,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
 
   `[cmd]` `checkins` 6, `checkin_templates` 2 — nach G-158 der
   billigste Treffer im Modul.
-
-- [ ] **G-170: `medical/tab-tracking` behauptet ein fehlendes Schema**
-  (neu 2026-08-22). Aus G-156. **Neunter Fall desselben Musters.**
-
-  `[cmd]` `tab-tracking.tsx:39` sagt *„`medical.medications` — das
-  Schema gibt es noch nicht."* **Der Tabellenname stimmt nicht, die
-  Sache schon:** `medication_active_substances` **498**,
-  `_formulations` **453**, `_products` **448**.
-
-  `[read]` Dieselbe Klasse wie `training.sessions` gegen
-  `workout_sessions`. **Und es gehoert zum Substanz-Strang** —
-  genau diese Medikamente sollen sichtbar werden.
-
-- [ ] **C-228: Drei Gruppen, saubere Kategorien, Beschreibung** (neu
-  2026-08-22). **Laeuft bei Codex.** Korrigiert C-197.
-
-  **Tom, 2026-08-22:** *„wir haben normale supplements … wir haben
-  peptides … wir haben enhanced supplement — das ist je eine Gruppe
-  mit ihren Filtern."*
-
-  `[cmd]` **C-197 hat 276 Zeilen als „ohne kanonische Kategorie"
-  gelassen. Von diesen 276 haben 276 eine `category` und 248 einen
-  `compound_type`. Wirklich leer: null.**
-
-  `[read]` **Der Fehler war der des Orchestrators:** im Auftrag stand
-  *„wo nicht aus `raw` ableitbar, bleibt leer"* — die vorhandene
-  `category`-Spalte kam darin nicht vor. **Und er hat es abgenommen**
-  mit dem Satz *„276 leer ist der korrekte Zustand"*. Tom hat es an der
-  Oberflaeche gesehen.
-
-  `[cmd]` **Die Gruppen sind aus `domain` und `category` ableitbar:**
-  supplement 307 · peptide 82 · enhanced 177 = 566.
-
-  `[cmd]` **Kategorien stehen zweimal da, deutsch und englisch:**
-  `Herbal/botanical` 28 gegen `herbal` 40 · `Minerals` 23 gegen
-  `Mineral` 8 · `Nootropics` 6 gegen `nootropic` 25 gegen
-  `Nootropikum` 25. **Deshalb sind sie nie zusammengekommen.**
-
-  `[cmd]` **Die Untergliederung liegt in `subcategory`:** enhanced hat
-  `Injectable AAS` 10, `Oral AAS` 10, `Ancillaries` 10, `SARM` 8 …;
-  peptide hat `Growth hormone axis` 5+4+2, `Neuro/cognitive` 6,
-  `Muscle/growth axis` 5, `Metabolic/incretin` 3+3+2+1+1 …
-
-  `[cmd]` **`description` liegt in `raw` bei 290 von 290**, Median 97
-  Zeichen — **und `substance_catalog` hat keine Spalte dafuer.**
-  Dieselbe Auslassung wie `monitoring` (C-222); geht im selben Lauf mit.
-
-  **Einspielen live ist Teil des Auftrags**, seit C-226.
 
 - [ ] **C-229: Ein Katalog aus `DatabaseEcht`, Detail und Add
   getrennt** (neu 2026-08-22). **Laeuft bei Fable.** Haengt an C-228.
@@ -4988,74 +4652,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   falschen Banner.** Was generisch ist, gehoert nach `packages/ui`,
   sonst wird es ein drittes Mal neu erfunden.
 
-- [ ] **C-232: Schritt 1 des Neuaufbaus — die 26 Tabellen anlegen**
-  (neu 2026-08-23). **Laeuft bei Codex.**
-
-  **Vorlage:** `docs/specs/Supplements/SCHEMA_NEUAUFBAU.md`, 375
-  Zeilen, gegen vier Quellen geprueft, von Tom abgenommen.
-
-  `[read]` **Anlass, Tom am 2026-08-22:** *„wieso haben wir
-  supplement_catalog und substance_catalog? … jetzt wird zuerst
-  aufgeraeumt und definiert bevor wir nur eine zeile mehr code
-  machen."*
-
-  `[cmd]` **Woher die zwei kommen:** `a02e838` legt
-  `supplement_catalog` an (44 Zeilen), `022f2ce` — Titel *„one
-  catalogue from three sources"* — legt `substance_catalog` daneben.
-  Danach vier Commits, die nur den zweiten ausbauen: 31→60→63→68
-  Spalten. **Beide werden bis heute gelesen.**
-
-  `[read]` **Der Orchestrator hat die Doppelung zementiert:** in C-224
-  stand *„`supplement_catalog` nicht anfassen — die Abloesung ist ein
-  eigener Punkt"*. Diesen Punkt hat er nie angelegt.
-
-  **Nur anlegen, leer.** Kein Umhaengen, kein Loeschen. Neuer
-  Kettenschritt `136`, nach 135.
-
-  **Drei Regeln je Tabelle:** Fremdschluessel auf
-  `supplements.supplements` · `status` mit
-  `bekannt | unbekannt | nicht_zutreffend` · `_de`/`_en`/`_th` bei
-  jedem Anzeigetext.
-
-  `[read]` **Warum `status`:** Buddy wird ein deterministischer Layer.
-  `[cmd]` `interactions` ist bei 78 von 290 gefuellt — bei 212 wissen
-  wir es **nicht**. Ohne diesen Zustand macht Buddy daraus *„keine
-  Wechselwirkung"*.
-
-  **Abgelehnt und begruendet:** `enhanced_substances` (SPEC) waere eine
-  dritte Substanztabelle — `enhanced` ist ein Wert in
-  `supplement_groups`, kein Katalog. `supplement_knowledge` (ALT)
-  mischt vier Informationsarten.
-
-  **Offen fuer Tom:** zwei Wege zum Enhanced-Gate —
-  `user_supplement_settings.enhanced_mode` mit Altersprueferung (SPEC,
-  Flow 9) gegen `experience_level` (G-167, Provisorium).
-
-- [ ] **G-172: Deutsch, scrollbar, ein Katalog auf dem Catalog-Tab**
-  (neu 2026-08-23).
-
-  `[cmd]` **22 englische Sichttexte** in `supplements`, waehrend
-  `apps/web/messages/de.json`, `en.json` und `th.json` existieren und
-  Nutrition sie ueber `next-intl` nutzt. **Supplements nirgends.**
-
-  `[read]` Der Orchestrator hatte gemeldet, es gebe keine
-  i18n-Schicht — er hatte nach `useTranslation` gesucht. Es ist
-  `next-intl`. **Nach dem falschen Namen gesucht, zum wiederholten
-  Mal.**
-
-  **Tom, 2026-08-22:** *„i18n ist fuer die UI und auch da gilt: wir
-  entwickeln immer de plus en, thai machen wir spaeter."*
-
-  `[cmd]` **Kein `overflow`, kein `maxHeight` an einer Liste im ganzen
-  Modul** — nur an den Modals. Bei 566 Zeilen ist unten alles
-  unerreichbar.
-
-  `[cmd]` **Und `Catalog` zeigt weiter eine Attrappe**, waehrend die
-  echte Substanzdatenbank am `Database`-Knopf im Kopf haengt. Zwei
-  Einstiege, einer davon Vorlage. Der Orchestrator hatte geschrieben
-  *„welcher Tab ihn traegt, entscheidet die Navigation spaeter"* —
-  das war falsch.
-
 - [ ] **C-233: `user_supplement_settings` — die Spec sieht es vor, wir
   bauen es nicht** (neu 2026-08-23). **Wartet auf Subscription und
   Tiers.**
@@ -5081,23 +4677,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   **Die Erinnerungszeiten sind davon unberuehrt** und koennten frueher
   kommen — sie haengen an keiner Tarifentscheidung. Wenn der
   Einnahme-Plan (`intake_schedule`) gebaut wird, gehoeren sie dazu.
-
-- [ ] **C-234: `marketplace_product_id` — zeigt auf ein Modul, das es
-  nicht gibt** (neu 2026-08-23).
-
-  `[cmd]` `user_supplement_cycles` im Vorgaengerrepo
-  (`047_coach_planning_system.sql`) traegt `marketplace_product_id` und
-  `suggestion_source: marketplace_product`. **Der Vorgaenger hatte eine
-  Marketplace-Anbindung.**
-
-  `[cmd]` **Hier gibt es kein Marketplace-Modul** — G-164:
-  `referenz/lumeos-2026/src/modules/marketplace` hat 10 Dateien, in
-  `apps/web` existiert nichts davon. Die Seitenleiste fuehrt Marketplace
-  als eigenen Arbeitsbereich.
-
-  `[read]` **Die Spalte wird nicht angelegt.** Ein Fremdschluessel auf
-  eine Tabelle, die es nicht gibt, ist entweder kaputt oder eine Luege.
-  Der Textblock im Kettenschritt sagt, dass sie vorgesehen war.
 
 - [ ] **A-50: Ein `DROP COLUMN` prueft die Lesepfade nicht** (neu
   2026-08-23). Aus G-160.
@@ -5282,148 +4861,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   bleiben"* — und wenn ja, wie ein Agent dort etwas belegen soll.
   Seeds gehoeren in die Kette, also zu Codex.
 
-- [ ] **C-242: Die 13 Namensdubletten blockieren Schritt 3 des
-  Supplements-Neuaufbaus** (neu 2026-08-23). Aus der Vorbereitung von
-  Schritt 3.
-
-  `[cmd]` `supplements.supplements` hat 566 Zeilen, aber nur **553
-  verschiedene `name_en`**. Die 13 Paare sind **ausnahmslos**
-  `f05_substance_candidate` + `lumeos_supplement_catalog` — also genau
-  die beiden Quellen ohne Beschreibung und ohne Evidenzgrad:
-  Caffeine · Calcium · Iron · Magnesium · Tongkat Ali · Vitamin B12 ·
-  Vitamin B6 · Vitamin C · Vitamin D3 · Vitamin E · Vitamin K2 (MK-7) ·
-  Whey Protein · Zinc.
-
-  `[cmd]` **Warum das Schritt 3 aufhaelt:** `stack_items` traegt 10
-  Zeilen, 8 mit `supplement_id` auf `supplement_catalog` (44), 2 mit
-  `custom_name`. Die 8 zeigen auf nur **4** verschiedene
-  Katalogeintraege — Creatine Monohydrate, Magnesium, Omega-3
-  (EPA/DHA), Vitamin D3. **Zwei davon, Magnesium und Vitamin D3,
-  treffen je zwei Zeilen in `supplements`.**
-
-  `[cmd]` **Die vorhandene Bruecke loest sie nicht auf:** die Sicht
-  `supplements.stack_item_substance_matches` liefert 8 Zeilen, aber nur
-  fuer **Creatine Monohydrate** (`sub_9f9bb8c160`) und **Omega-3
-  (EPA/DHA)** (`sub_4480fcfa86`). **Magnesium und Vitamin D3 kommen
-  darin nicht vor.** 50 % der Zuordnungen fehlen also genau dort, wo
-  der Name doppelt ist.
-
-  `[read]` **Damit ist die Dublettenfrage keine Kosmetik, sondern der
-  Blocker vor dem Umhaengen.** Und sie haengt an der groesseren Frage:
-  **276 von 566 Zeilen (48,8 %) haben weder Beschreibung noch
-  Evidenzgrad.** Gehoeren sie in den Katalog, oder erst wenn Kimi
-  liefert? Beide Seiten jedes Dublettenpaars sind leer — es gibt also
-  keine *„gewinnende"* Zeile zu waehlen.
-
-  **Entscheidung liegt bei Tom.** Solange sie offen ist, kann Schritt 3
-  nur fuer Creatine und Omega-3 sauber laufen.
-
-  ---
-
-  **KORREKTUR 2026-08-23, noch am selben Tag: die Ursache steht oben
-  falsch.**
-
-  `[cmd]` **Magnesium und Vitamin D3 haben sehr wohl einen
-  Alias-Treffer** — nur gegen `f05_substance_candidate`, nicht gegen
-  `kimi_substance`. Die Sicht filtert auf `catalog_b = 'kimi_substance'`,
-  deshalb fallen sie heraus.
-
-  `[cmd]` **Der Grund ist ein Benennungsschnitt, keine Dublette.** Kimi
-  fuehrt keine Zeile *„Magnesium"*, sondern **sieben Salzformen**:
-  citrate · glycinate/bisglycinate · L-threonate · malate · oxide ·
-  taurate · chloride. Und keine Zeile *„Vitamin D3"*, sondern
-  `Vitamin D3 (cholecalciferol)` neben `Vitamin D2 (ergocalciferol)`.
-
-  `[cmd]` **Deshalb treffen genau Creatine Monohydrate und Omega-3
-  (EPA/DHA):** die beiden sind im alten Katalog schon formspezifisch
-  benannt. `[cmd]` **Von den 28 Eintraegen des alten Katalogs hat
-  KEINER einen Kimi-Gegenpart** ueber die Aliasbruecke — nicht 26 von
-  28, sondern null.
-
-  `[read]` **Die Frage ist damit Substanz gegen Form:** der alte Katalog
-  schneidet nach Substanz (der Nutzer waehlt *„Magnesium"*), Kimi nach
-  Form (weil sich Bioverfuegbarkeit, Dosis und Vertraeglichkeit je Salz
-  unterscheiden — genau das war die Recherche).
-
-  **Beantwortet in C-243.** Dieser Punkt bleibt offen fuer die
-  Zuordnung selbst: `[cmd]` **zwei Positionen (Magnesium, Vitamin D3)
-  brauchen eine Zuordnung von Hand**, weil es keinen automatischen
-  Treffer gibt und die Wahl der Salzform eine fachliche ist.
-
-- [ ] **C-244: Der alte Katalog und Kimi schneiden verschieden — 28 von
-  28 ohne Gegenpart** (neu 2026-08-23). Aus C-242.
-
-  `[cmd]` **Keiner der 28 Eintraege aus `lumeos_supplement_catalog` hat
-  einen Kimi-Gegenpart** ueber `substance_alias_matches`. Betroffen sind
-  Grundstoffe, die jeder Stack fuehrt: Magnesium, Zink, Vitamin C,
-  Vitamin D3, Vitamin B12, Eisen, Kalzium, Whey Protein, BCAAs,
-  Kollagen, Probiotika.
-
-  `[cmd]` **Der Grund ist nicht ein fehlender Crawl.** Kimi hat die
-  Stoffe — unter der **Salzform**: sieben Magnesiumeintraege, drei
-  Zinkeintraege (`as zinc gluconate`, `as zinc picolinate`,
-  `T cross-ref`), `Vitamin D3 (cholecalciferol)`. Der alte Katalog
-  fuehrt den **Sammelnamen**.
-
-  `[read]` **Das ist eine offene Produktfrage, kein Datenfehler:** waehlt
-  der Nutzer *„Magnesium"* und traegt eine Dosis ein, oder waehlt er
-  *„Magnesiumglycinat"*? `[read]` Fuer die Frage spricht Kimis Arbeit —
-  die Formen unterscheiden sich in Bioverfuegbarkeit und
-  Vertraeglichkeit, und genau das war recherchiert worden. Dagegen
-  spricht, dass die meisten Nutzer die Form ihres Praeparats nicht
-  kennen.
-
-  `[read]` **Bis das entschieden ist, ist die Aliasbruecke der Ort** —
-  ein Alias *„magnesium"* auf eine gewaehlte Vorzugsform loest die Suche,
-  ohne den Katalogschnitt festzulegen. **Nicht vorbauen, aber sichtbar
-  auslassen.**
-
-  ---
-
-  **ENTSCHIEDEN 2026-08-23 (Tom): „c244 magnesium" — der Sammelname
-  gewinnt.**
-
-  Der Nutzer waehlt **Magnesium**, nicht Magnesiumglycinat. Die
-  Salzformen werden Unterformen, keine eigenen Katalogeintraege.
-
-  ### Was das kostet — gemessen
-
-  `[cmd]` **Die Eltern-Kind-Beziehung gibt es nicht:**
-  `supplements.supplements` hat **0 Spalten** namens `parent_id` oder
-  `parent_supplement_id`. Sie muss angelegt werden.
-
-  `[cmd]` **Die 28 Sammelnamen aus `lumeos_supplement_catalog`, nach
-  Zahl der Kimi-Formen darunter:**
-
-  | Formen | Sammelnamen |
-  |---:|---|
-  | 7 | Magnesium |
-  | 3 | Whey Protein · Zinc |
-  | 2 | Caffeine · Calcium · Iron · Vitamin B12 |
-  | 1 | Collagen · Lion's Mane · Tongkat Ali · Vitamin A · Vitamin B6 · Vitamin C · Vitamin D3 · Vitamin E |
-  | **0** | **Ashwagandha (KSM-66) · BCAAs · Biotin · Curcumin/Turmeric · Electrolytes · Fiber/Psyllium Husk · Folate (B9) · Glucosamine · NAC · Probiotics · Spirulina · Turkesterone · Vitamin K2 (MK-7)** |
-
-  `[read]` **13 der 28 Sammelnamen haben gar keine Kimi-Form
-  darunter.** Fuer sie ist die Entscheidung folgenlos — sie bleiben
-  einzelne Eintraege und brauchen nur Inhalt (C-257).
-
-  `[read]` **Bei den 15 mit Formen dreht sich die Sichtbarkeit um:** der
-  Sammelname wird sichtbar, die Formen ruecken darunter. **Heute ist es
-  umgekehrt** — die Kimi-Formen tragen den Inhalt, die Sammelnamen sind
-  leer und deshalb ueber `im_katalog` verborgen.
-
-  `[read]` **Damit haengt an dieser Entscheidung mehr als eine Spalte:**
-  woher bekommt *„Magnesium"* seinen Text, seinen Evidenzgrad und
-  seinen Dosisbereich, wenn die sieben Salze sich unterscheiden? **Das
-  ist keine Datenfrage, sondern eine redaktionelle** — und sie gehoert
-  in C-257, wo die Texte ohnehin geschrieben werden.
-
-  **Loest zugleich C-256:** `testdaten-einspielen` joint auf
-  `supplement_catalog.slug` — mit einer Sammelnamen-Ebene, die dieselben
-  sprechenden Slugs traegt (`magnesium`, `creatine-monohydrate`), geht
-  der Join wieder auf.
-
-
 - [ ] **G-175: Das Nachweiskonto hat kein bekanntes Passwort** (neu
   2026-08-23). Aus G-157 und G-163.
 
@@ -5471,105 +4908,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   gleichen Namens mit unvergleichbarem Typ. **Zu tun:** eine
   Gate-Pruefung, die Anker- und Verweisfelder gegen den Typ der
   Zielspalte haelt. Ohne sie ist die Lehre wieder nur notiert.
-
-- [ ] **G-176: Der Katalog zeigt 50 von 290 und laesst den Rest nicht
-  erreichen** (neu 2026-08-23). Von Tom am Bildschirm gefunden.
-
-  **Tom, 2026-08-23:** *„supplement zeigt nur ‚50 von 290 Treffern —
-  Suche verfeinern fuer mehr.'"*
-
-  `[cmd]` `apps/web/src/app/v2/supplements/substanz-detail.tsx:314`:
-
-      return { gezeigt: menge.slice(0, 50), gesamt: menge.length }
-
-  `[cmd]` **Ein hartes Limit im Client**, nicht in der Datenbank — der
-  Lesepfad holt alle 290. Eingebracht von `d019b79` (C-229/G-172,
-  2026-08-23).
-
-  `[read]` **Es widerspricht dem Punkt, aus dem es stammt.** G-172
-  verlangte einen Scroll-Container, **weil bei 566 Zeilen unten alles
-  unerreichbar war.** Der Container ist gebaut — und dann auf 50
-  begrenzt. **Damit ist die Liste wieder unerreichbar, nur an anderer
-  Stelle.**
-
-  `[read]` **Und die Aufforderung geht ins Leere:** wer nicht weiss,
-  wie die Substanz heisst, kann die Suche nicht verfeinern. Genau dafuer
-  ist ein Katalog da — zum Blaettern, nicht zum Nachschlagen eines
-  bekannten Namens.
-
-  `[read]` **Warum das Limit vermutlich da ist:** 290 Zeilen auf einmal
-  im DOM. Das ist ein echter Grund, aber *„Suche verfeinern"* ist die
-  falsche Antwort darauf. **Wie es geloest wird — Nachladen beim
-  Scrollen, Blaettern, oder alle 290 mit virtualisierter Liste — ist
-  eine Entscheidung, keine Vorgabe.** Erst messen, was 290 Zeilen im
-  DOM tatsaechlich kosten.
-
-- [ ] **G-177: Das Substanzdetail erklaert, was fehlt, statt zu zeigen,
-  was da ist** (neu 2026-08-23). Von Tom am Bildschirm gefunden.
-
-  `[read]` **Das Fenster zu Bromocriptine zeigt:** einen Satz
-  Beschreibung, zwei Alias-Chips, **fuenf zugeklappte Bloecke** —
-  *Sicherheit 2 Felder · Rechtslage 5 Felder · Warnschwellen 2 Felder ·
-  Kennungen 5 Felder · Evidenz 7 Felder* — und darunter, **aufgeklappt
-  und laenger als alles andere zusammen**, den Abschnitt *„OHNE QUELLE
-  IM NEUEN KATALOG"*.
-
-  `[read]` **Der Nutzer liest dort Saetze wie:** *„Die alte
-  Breittabelle fuehrte `cyp` als jsonb. Im neuen Schema gibt es dafuer
-  keine Spalte"* und *„`supplement_lab_effects` existiert als Tabelle;
-  die Zuordnung zu den 290 ist nicht gemessen und wird deshalb nicht
-  gezeigt."*
-
-  **Das ist ein Bericht, kein Produkt.** Er gehoert nach
-  `docs/berichte/`, nicht in die Oberflaeche. Die Begruendung, warum
-  ein Feld fehlt, interessiert den Orchestrator — **nicht den, der
-  wissen will, was Bromocriptine ist.**
-
-  `[read]` **Die Gewichtung ist genau verkehrt:** was da ist, ist
-  zugeklappt und auf Feldzahlen reduziert; was fehlt, ist ausgeklappt
-  und ausfuehrlich begruendet. **Es ist dieselbe Kritik wie damals** —
-  *„hat keine informationen wie was ist das ueberhaupt, tonnen
-  eintraege aber keine beschreibung"* (Tom zu C-229).
-
-  `[cmd]` **Der Inhalt ist da:** `supplement_dosing` 566 ·
-  `pharmacology` 566 · `safety` 290 · `warnings` 290 · `wada` 290 ·
-  `quality` 237 · `regulatory` 1119 · `identifiers` 1226 ·
-  `organ_risks` 1450. **Er wird nur nicht gezeigt.**
-
-  **Zu tun:** die Bloecke mit Inhalt aufgeklappt oder wenigstens mit
-  ihrem Inhalt angerissen, statt mit *„N Felder"*. Der
-  Luecken-Abschnitt zugeklappt, gekuerzt, oder ganz raus.
-
-  `[read]` **Was von den Luecken sichtbar bleiben soll, ist eine
-  Entscheidung** — dass eine Angabe fehlt, ist fuer den Nutzer
-  relevant; **warum sie im Schema fehlt, nicht.**
-
-  `[read]` **Nebenbefund:** unter dem Namen steht `sub_b38d752d32`. Das
-  ist die technische Kennung. Ob sie dorthin gehoert, ist zu
-  entscheiden — im Katalog eines Nutzers vermutlich nicht.
-
-- [ ] **G-178: Reiter und Fussleiste nennen verschiedene Zahlen — 298
-  gegen 290** (neu 2026-08-23). Von Tom am Bildschirm gefunden.
-
-  `[cmd]` Im Bild: Reiter *„Katalog 298"*, Fussleiste *„50 von 290
-  Treffern"*, Gruppen-Chips **154 + 61 + 75 = 290**.
-
-  `[cmd]` **Die Datenbank sagt 290:** `im_katalog` true = 290, davon
-  `supplement` 154, `enhanced` 75, `peptide` 61. **0 ohne Gruppe, 0
-  ohne Kategorie.**
-
-  `[cmd]` **Der Code erklaert die 298 nicht.** `ansicht.tsx:91` setzt
-  `count: substanzAnzahl` aus `substanzen.length`; die Fussleiste
-  zaehlt dieselbe Liste nach `filtereGruppe` und `filtereKategorien`.
-  Bei offenem Gate und ohne Kategorienwahl geben beide dieselbe Zahl.
-
-  `[annahme]` **Drei Moeglichkeiten, keine gemessen:** der Screenshot
-  zeigt einen aelteren Build · ein RSC-Zwischenstand haelt eine alte
-  Liste · es gibt einen dritten Zaehlweg, den `git grep` nicht
-  gefunden hat.
-
-  **Zu tun: am Bildschirm nachmessen**, nicht im Code weiterraten.
-  `apps/web` war zum Zeitpunkt des Funds von zwei Agenten belegt.
 
 - [ ] **C-257: Nutzertexte fuer den Substanzkatalog — Schema und
   Befuellung** (neu 2026-08-23). Aus der Anforderung
@@ -6134,35 +5472,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   Blutungsrisiko — **wer das verwechselt, behandelt einen
   Messfehler.**
 
-- [ ] **C-274: Die 248 unsichtbaren zuordnen** (neu 2026-08-25).
-
-  braucht: C-276
-
-  `[cmd]` **Stand nach C-275: noch 149**, davon **66 mit sichtbarem
-  Gegenstueck.**
-
-  `[cmd]` **122 der 248 sind bei Kimi bekannt, 123 haben einen
-  Nutzertext.** Die uebrigen 126 zerfallen in drei Sorten:
-
-  `[read]` **Handelsnamen zu beschriebenen Stoffen** — `Anavar
-  (Oxandrolone)`, `Dianabol (Methandrostenolone)`, `Clomiphene Citrate
-  (Clomid)`, `Furosemide (Lasix)`. **Kimi hat sie unter dem
-  Wirkstoffnamen geschrieben; der Klammerinhalt ist der Schluessel.**
-
-  `[read]` **Kombinationen** — `Bulk Mix (Test E + Deca + EQ)`,
-  `Cut Mix`, `Dbol + Anavar Stack Oral`, `Choline Stack`. Keine
-  Substanzen.
-
-  `[read]` **Dubletten mit Zusatz** — `Ashwagandha` und `Ashwagandha
-  (Sensoril)` neben dem Sammelrecord, `CoQ10 Ubiquinol`/`Ubiquinone`,
-  `Caffeine (Diuretic)`.
-
-  `[cmd]` **Echter Rest:** 7-Keto DHEA, Copper, Ginkgo Biloba,
-  F-Phenibut, Epithalon, DSIP, DNP, Enclomiphene, Epistane.
-
-  `[read]` **Keine Rechercheaufgabe mehr** — Zuordnung ueber die
-  Klammerinhalte plus eine kleine Nachforderung an Kimi.
-
 - [ ] **C-279: Das Kreuzprodukt in `rule_assessment` skaliert mit den
   Einnahmen** (neu 2026-08-26). Aus G-190.
 
@@ -6205,100 +5514,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[cmd]`-Regel. `[read]` **Und pruefen, ob ein Waechter moeglich
   ist** — Berichte mit `ms` oder `s` ohne Kontoangabe. Wenn nicht:
   in die Auftragsvorlage.
-
-- [ ] **G-192: Ein Community-Reiter im Substanzdetail** (neu
-  2026-08-26).
-
-  braucht: C-273
-
-  **Tom, 2026-08-25:** *„was ich bisher sehe sind allgemeine infos
-  aber nicht was der bodybuilder in diesen stoffen sieht."* Und zur
-  Grenze: *„kombinationen der szene von denen abgeraten wird im sinne
-  von solltest du nicht tun, das waere nicht eine empfehlung etwas zu
-  tun."*
-
-  `[read]` **Die Regel, die alles entscheidet: was etwas KOSTET, darf
-  gezeigt werden. Was etwas ERREICHT, nicht.**
-
-  `[cmd]` **Fuenf Bloecke aus `data/admin/`:**
-
-  **37 Nebenwirkungsmuster** ueber 19 Substanzklassen — 9
-  `WIDESPREAD`, 20 `COMMON`. Beispiel *„Deca dick"* mit
-  `attribution_confidence: MODERATE` und den Grenzen benannt.
-  **NICHT `reported_mitigations`** — 36 von 37 tragen es, und
-  *„Cabergolin gegen Prolaktin"* ist eine Anweisung.
-
-  **24 von 31 Stacks mit `expected_tradeoff`** — ausnahmslos
-  Nachteile. `[read]` **Der wertvollste:** der Organschutz-Stack
-  traegt *„false security risk if used to justify heavier orals"* —
-  **die Szene warnt selbst davor, dass Leberschutz als Freibrief
-  missverstanden wird.**
-
-  **Drei `CONTRADICTED`-Narrative**, darunter *„SARMs sind selektiv =
-  AAS-Ergebnisse ohne AAS-Nebenwirkungen"*, benannt als
-  Einstiegstreiber. **Gehoert in `mythen_de`.**
-
-  **40 Produktqualitaetssignale.** `[cmd]` Das erste ist die
-  JAMA-Studie 2017: von 44 SARM-Produkten enthielten **nur 52 % den
-  angegebenen Wirkstoff, 9 % gar keinen.** `[read]` **Keine
-  Community-Meinung, eine begutachtete Studie** — und sie gehoert
-  neben die Mengenangabe, aus demselben Grund wie `reinheit_de`.
-
-  **71 Szene-Begriffe** plus *Blast and Cruise* mit
-  `physiological_implications`.
-
-  `[cmd]` **Nicht angezeigt:** 86 Dosierungsmuster, 43 fremde
-  Blutbilder mit `attribution_confidence: VERY_LOW`, 20 Hypothesen,
-  und die vier Anleitungsfelder.
-
-  `[read]` **Die Negativprobe ist der Teil, der den Auftrag
-  ueberdauert:** `reported_mitigations` in den Lesepfad einbauen, ein
-  Waechter muss rot werden. **Ohne ihn steht die Grenze nur in einer
-  Markdown-Datei.**
-
-- [ ] **C-284: Der Medikamentenkatalog ist duenner als er aussieht**
-  (neu 2026-08-26). Grundlage des Kimi-Auftrags.
-
-  `[read]` **Meine erste Messung war falsch, und zwar auf die Art, vor
-  der die neue Regel warnt:** ich habe auf **Anwesenheit des
-  Schluessels** geprueft, nicht auf Inhalt. `raw->'pregnancy' is not
-  null` traf bei 498 — **tatsaechlich sind 497 Werte JSON-`null`.**
-
-  `[cmd]` **Richtig gemessen, ueber alle 498 Wirkstoffe:**
-
-  | vollstaendig | teilweise | fast leer |
-  |---|---|---|
-  | `external_ids` 498 | `contraindications` 433 | `ATC` **56** |
-  | `pharmacology` 498 | `routes_of_administration` 334 | `CAS` **56** |
-  | `risk_flags` 498 | `dosage_forms` 334 | `dosage_models` **56** |
-  | `cyp` 498 | `mechanism_of_action` **196** | `precautions` **12** |
-  | `transporters` 498 | | `food_interactions` **11** |
-  | `regulatory_state` 498 | | `salt_or_ester` **2** |
-  | `evidence_provenance` 498 | | **`pregnancy` 1** |
-  | | | **`lactation` 0** |
-  | | | **`fertility` 0** |
-  | | | `off_label_contexts` **0** |
-
-  `[read]` **Die drei Sicherheitsfelder sind die schwerwiegendsten.**
-  `pregnancy`, `lactation`, `fertility` sind der Grund, warum ein
-  Medikamentenkatalog ueberhaupt sicherheitsrelevant ist — **und sie
-  sind praktisch leer.** Eine Frau, die wissen will, ob sie ein Mittel
-  in der Schwangerschaft nehmen kann, findet heute nichts.
-
-  `[cmd]` **`mechanism_of_action` liegt eine Ebene tiefer**, unter
-  `pharmacology`, und ist bei **196** gefuellt — nicht 0, wie ich
-  zuerst meldete. Bei Warfarin steht dort: *„Vitamin K epoxide
-  reductase (VKORC1) inhibitor; depletes functional vitamin-K-dependent
-  clotting factors II, VII, IX, X."*
-
-  `[read]` **Was fehlt, ist dieselbe Uebersetzungsebene wie beim
-  Substanzkatalog** — keine `description`, keine deutsche Ebene,
-  keine FAQ.
-
-  **An Kimi gegeben am 2026-08-26**, in vier Bloecken: die drei
-  Sicherheitsfelder zuerst, dann Kennungen, dann die fehlenden 302
-  Wirkweisen, dann die Nutzertexte. `[read]` **Ohne Halt zur Abnahme
-  — der Massstab ist beim Substanzkatalog bestaetigt.**
 
 - [ ] **C-285: `user_medications` speichert Medikamente im Klartext**
   (neu 2026-08-26, **entschieden 2026-08-27**).
@@ -6605,22 +5820,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   brauchen einen warmen Server; der erste Lauf je Route wird
   verworfen.** Gehoert nach `docs/auftraege/00-LIESMICH.md`.
 
-- [ ] **C-301: `intake_logs` traegt zwei SELECT-Policies, eine mit
-  Funktionsaufruf** (neu 2026-08-27). Aus G-203.
-
-  `[cmd]` **`intake_logs_select`** prueft `auth.uid() = user_id` ·
-  **`intake_logs_coach_read`** ruft `coach.hat_sicht(user_id,
-  'supplements', 'full')`, eine SQL-Funktion, die in
-  `coach.client_permissions` nachschlaegt.
-
-  `[cmd]` **Allein gemessen ist die Policy billig** — ein `count(*)`
-  unter RLS kostet 3,7-6,3 ms. **Teuer wird sie erst in den
-  wiederholten Scans von `rule_assessment`.**
-
-  `[read]` **Der Punkt steht getrennt von C-299**, weil er auch dann
-  gilt, wenn `rule_assessment` auf SECURITY DEFINER umgestellt wird:
-  **jede andere Abfrage auf `intake_logs` zahlt ihn weiter.**
-
 - [ ] **G-206: PostgREST antwortet ohne Kompression** (neu
   2026-08-27). Aus G-203.
 
@@ -6685,18 +5884,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` **Und die Generika gehoeren mit:** wer *Bisomerck*
   eintippt, meint Bisoprolol. Eine Marke-zu-Wirkstoff-Zuordnung darf
   nicht nur Originalpraeparate fuehren.
-
-- [ ] **G-209: der Wirkstoffkatalog laedt in 1.483 ms warm** (neu
-  2026-08-27). Aus G-208.
-
-  `[cmd]` **1.874 ms kalt, 1.483 ms warm**, Server war warm.
-  `[read]` **Zum Vergleich:** die Supplement-Liste kommt mit der
-  Seite, das Medikamenten-Detail nicht. **Der Unterschied zwischen
-  kalt und warm ist hier klein — das spricht gegen Uebersetzung und
-  fuer die Abfrage.**
-
-  `[read]` **Nicht messen, bevor C-305 durch ist** — wenn dieselben
-  Policies wirken, verschiebt sich die Zahl ohne Zutun.
 
 - [ ] **C-309: der Wirkmechanismus ist bei allen 494 englisch** (neu
   2026-08-27). Aus G-208.
@@ -6837,3 +6024,60 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   falschen Tags aus C-296. **Deshalb erst C-296, dann dieser Punkt:**
   eine Zusammenfuehrung, die `drug_class` vereinigt, wuerde die
   Fallverdopplung in den neuen Eintrag hineinschreiben.
+
+- [ ] **C-316: NAC steht im Katalog ohne deutschen Namen** (neu
+  2026-08-27). Aus C-315.
+
+  `[cmd]` **412 sichtbar, 411 mit Nutzertext.** Der eine ist
+  `slug = nac`, id `bf39e459-7e2e-dc9c-09d5-b14c65902284`, **`name_de`
+  ist NULL.**
+
+  `[read]` **Kein Zaehlfehler, sondern eine sichtbare Luecke:** eine
+  Substanz, die im Katalog erscheint und keinen Namen hat, den man
+  anzeigen kann. `[read]` **Sie ist durch alle bisherigen Pruefungen
+  gefallen, weil `im_katalog` sie durchlaesst und niemand auf
+  `name_de IS NULL` geprueft hat.**
+
+  `[cmd]` **Und sie versteckt sich beim Messen:** `string_agg` ueber
+  `name_de` liefert bei NULL nichts — meine erste Abfrage meldete
+  *keine* Substanz ohne Text, obwohl die Zaehlung 411 gegen 412 sagte.
+
+  **Zu tun:** Namen setzen — und einen Waechter, der
+  `im_katalog AND name_de IS NULL` verbietet.
+
+- [ ] **C-317: 35 Substanzen mit Text, aber unsichtbar** (neu
+  2026-08-27). Aus C-315.
+
+  `[cmd]` **`supplement_user_texts` und `supplement_faq` fuehren je
+  446 Substanzen. 412 sind im Katalog sichtbar — 35 nicht** (die
+  Differenz zu 446 ist NAC aus C-316 plus Unterformen).
+
+  `[read]` **Wir haben Texte fuer Substanzen geschrieben, die niemand
+  sieht.** Entweder gehoeren sie in den Katalog, oder die Texte sind
+  Vorrat. **Beides ist vertretbar — unentschieden ist es nicht.**
+
+  **braucht: C-274** — die Zuordnung der unsichtbaren Substanzen ist
+  dort erhoben.
+
+- [ ] **A-51: Zahlen in `TODO.md` brauchen einen Stichtag** (neu
+  2026-08-27). Vorschlag von Claude Code aus G-212.
+
+  `[cmd]` **Neun gepruefte Punkte tragen tote Zahlen, teils um das
+  Dreifache:** `meals` 725 → 2.895, `intake_logs` 360 → 744, FAQ
+  1.421 → 1.970, `lab_effects` 222 → 271, sichtbare Substanzen 290 →
+  412.
+
+  `[cmd]` **Und die Verteilung hat sich nicht nur vergroessert,
+  sondern verschoben:** 154/61/75 → 211/79/122.
+
+  `[read]` **`CLAUDE.md` verlangt einen Stichtag fuer Auftragszahlen
+  seit heute Morgen. Die Punkte, aus denen Auftraege entstehen, tragen
+  ihn nicht** — und genau dadurch sind heute vier Auftraege auf
+  falschen Praemissen gebaut worden.
+
+  `[read]` **Der zweite Teil des Vorschlags ist der wichtigere:** ein
+  Punkt, der einen Ort oder eine Zahl nennt, sollte **maschinell
+  gegen die Wirklichkeit pruefbar** sein. `[cmd]` G-186 nannte
+  `wissen.entity_transporters`, die Tabellen liegen in
+  `supplements.` — **ein Waechter, der Schema- und Tabellennamen in
+  `TODO.md` gegen `information_schema` haelt, haette das gefunden.**
