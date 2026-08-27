@@ -13939,3 +13939,76 @@ SELECT-Policies auf `intake_logs`), **G-206** (Kompression aus),
 `[cmd]` **Die Messroute wurde entfernt**, samt Typrest — gezielt
 `.next/types`, nicht `.next`. **Kein Produktcode geaendert, nichts auf
 `dev@lumeos.app` gespeichert.**
+
+
+## 2026-08-27 — C-292: Kimis Welle 1 ist drin
+
+- [x] **C-292: Kimis Welle 1 importieren** (2026-08-27, Codex)
+
+`[cmd]` **Live nachgemessen, alle sechs Zahlen decken sich mit dem
+Bericht:**
+
+    Wirkstoffe             498
+    cas_number             489
+    atc_code               497
+    mechanism_of_action    494
+    precautions            393
+    Reproduktion           498
+
+`[read]` **Und die Abweichung von meinen Auftragszahlen ist die
+richtige.** Meine waren Bruttozahlen — die Zeilen, die Kimi liefert.
+Codex hat die Werte gezaehlt, die Inhalt tragen:
+
+    CAS    498 - 9 leere = 489
+    ATC    498 - 1       = 497
+    MoA    498 - 4 leere = 494
+    Prec   397 - 4 leere = 393
+    Repro  498 - 0       = 498
+
+`[cmd]` **Die zwei leeren ATC-Records sind Sacubitril und Chlorine.**
+Sacubitril trug bereits `C09CA` und wurde **nicht ueberschrieben**;
+Chlorine bleibt leer. **498 minus 1 ergibt 497** — meine Erwartung von
+496 war falsch gerechnet.
+
+### Die Provenienz haelt
+
+`[cmd]` `evidence_provenance` traegt bei **442** Wirkstoffen
+`c292_identifiers` mit **465 Rohzeilen** — die getrennten CAS- und
+ATC-Records bleiben erhalten statt auf 442 zusammengefaltet. Dazu 302
+MoA- und 385 Precaution-Rohrecords.
+
+`[cmd]` **Der `sex_specific`-Fallstrick ist umschifft:** alle 81 neuen
+Reproduktionszeilen haben ein leeres `sex_specific` in `raw` **und**
+ein gefuelltes `missing_fertility_sex`. **Kein leeres Objekt wurde als
+Inhalt gezaehlt.**
+
+`[cmd]` **Keine Luecke ohne Begruendung:** 4 Wirkstoffe ohne
+`mechanism_of_action`, alle 4 mit Provenienzeintrag. `source` trennt
+sauber: 417 aus `..._enrichment`, 81 aus `..._enrichment_rest`.
+
+### Kette und Pfad
+
+`[cmd]` **Der neue Schritt liest aus `docs/kimi_research/…`**, kein
+`backup/kimi-research` darin; die elf alten Schritte sind unangetastet
+(C-295 bleibt offen). `[cmd]` **Abschlusspruefer gegen Live vom
+Orchestrator nachgefahren: 18,4 s, `SCHEMA VOLLSTAENDIG`** mit den
+neuen Mindestwerten im Sollstand.
+
+`[cmd]` **Negativprobe von Codex:** Manifest ohne Schritt `292`, der
+119-Schritte-Lauf wurde erst in der Abschlusspruefung rot — Reproduktion
+417 statt 498, CAS 56 statt 489, MoA 196 statt 494, Precautions 12
+statt 393. **Vollsicherung vor dem Live-Eingriff:**
+`backup/c292/20260827_074611_vor_live.dump`.
+
+### Zwei Berichtigungen an meinem Auftrag
+
+`[cmd]` **ATC:** ich schrieb 15 vorbelegte Werte, es sind **14**.
+`[cmd]` **`drug_class`:** ich schrieb zehn falsche Tags, es sind
+**zehn verschiedene Tags in 17 Records** — C-296 ist entsprechend
+erweitert und traegt jetzt die Liste.
+
+`[read]` **Codex' Gate-Meldung war korrekt und ist ueberholt:** die
+fuenf Doppelkodierungen in `TODO.md` waren meine, aus der
+interaktiven Python-Sitzung. Repariert und committet, bevor sein
+Bericht kam. **Er hat richtig gehandelt, die fremde Datei nicht
+anzufassen.**

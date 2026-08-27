@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-27.** 260 offen, 0 in Arbeit.
+**Stand: 2026-08-27.** 259 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6371,38 +6371,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   substanzgebunden sind** — *„blast"* und *„pin"* gelten allgemein und
   gehoeren vermutlich in ein eigenes Glossar.
 
-- [ ] **C-292: Kimis Welle 1 importieren** (neu 2026-08-27).
-
-  `[cmd]` **Aus den Dateien gezaehlt, nicht aus Kimis Bericht
-  uebernommen** — `docs/kimi_research/.../data/evidence/`:
-
-      medication_identifiers_enrichment.jsonl    465 Zeilen
-                                                 442 CAS, 23 ATC
-      medication_moa_enrichment.jsonl            302 mechanism_of_action
-      medication_precautions_enrichment.jsonl    385 precautions
-      medication_reproductive_enrichment_rest    81 Reproduktion
-
-  `[cmd]` **465 Zeilen, aber 442 eindeutige `entity_id`** — 23
-  Wirkstoffe tragen zwei Records. Wer nach Zeilen zaehlt, irrt.
-
-  `[cmd]` **Alle `entity_id` in `medical.medication_active_substances`
-  aufloesbar, 0 unbekannt.** Ueberschneidung mit dem Bestand:
-
-      cas_number             56 + 442, 0 doppelt   -> 498 / 498
-      atc_code              490 +  23, 15 doppelt  -> 498 / 498
-      mechanism_of_action   196 + 302, 0 doppelt   -> 498 / 498
-      Reproduktion          417 +  81, 0 doppelt   -> 498 / 498
-      precautions            12 + 385, 0 doppelt   -> 397 / 498
-
-  `[read]` **Kimi hat die Luecke geliefert, nicht den Bestand.** Das
-  Nachfordern von Vorhandenem, das bei den Supplements drei
-  Durchlaeufe gekostet hat, ist hier nicht passiert.
-
-  `[cmd]` **Der Fallstrick:** `sex_specific` ist bei **allen 81** ein
-  leeres Objekt; die Aussage steht in `missing_fertility_sex`. **Wer
-  auf Schluesselanwesenheit prueft, importiert 81 leere Objekte** —
-  derselbe Fehler wie bei `pregnancy` in C-286, eine Ebene tiefer.
-
 - [ ] **C-293: Kimis Block D — 498 Nutzertexte und 2.313 FAQ** (neu
   2026-08-27). braucht: C-292
 
@@ -6457,17 +6425,42 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   mit gemessenem Vorher/Nachher der Zeilenzahl. **Nicht in einem
   Zug mit einem Import** — ein logischer Change.
 
-- [ ] **C-296: zehn falsche `drug_class`-Tags im Medikamentenbestand**
-  (neu 2026-08-27). braucht: C-292
+- [ ] **C-296: zehn falsche `drug_class`-Tags in 17 Wirkstoffen** (neu
+  2026-08-27, **erweitert nach C-292**). Aus Kimis MoA-Notes.
 
-  `[cmd]` **Kimi meldet sie als Notes in
-  `medication_moa_enrichment.jsonl`**, Beispiel: Olmesartan ist als
-  Thiazid getaggt und ist keines.
+  `[cmd]` **Codex hat meine Zahl berichtigt:** es sind nicht zehn
+  betroffene Records, sondern **zehn verschiedene falsche Tags in 17
+  Records.** Die Notes liegen jetzt in
+  `evidence_provenance.c292_mechanism_of_action`, unveraendert.
 
-  `[read]` **Nicht stillschweigend im Import mitkorrigieren** —
-  `drug_class` speist die Regel-Engine. Eine falsche Klasse aendert,
-  welche der 31 Medikamentenregeln feuert. **Erst zaehlen und
-  auflisten, dann entscheiden.**
+  | falscher Tag | Wirkstoffe |
+  |---|---|
+  | `maoi` | Escitalopram, Citalopram, Paroxetin, Fluvoxamin, Mirtazapin, Bupropion, Trazodon, Vilazodon, Vortioxetin |
+  | `ssri` | Bupropion, Trazodon |
+  | `snri` | Atomoxetin |
+  | `diuretic_thiazide` | Olmesartan |
+  | `insulin` | Pioglitazon |
+  | `opioid` | Acetaminophen |
+  | `anticholinergic` | Phenobarbital |
+  | `antineoplastic_misc` | Griseofulvin |
+  | `antiviral_nucleoside` | Mercaptopurin |
+  | `vitamin_c` | Chlorine |
+
+  `[read]` **Das ist der schwerste Nebenbefund des Tages.**
+  `drug_class` speist die Regel-Engine. **Neun Antidepressiva sind als
+  MAO-Hemmer gefuehrt** — dort feuern Interaktionswarnungen, die nicht
+  gelten, und die richtigen bleiben aus. `[cmd]` Acetaminophen als
+  `opioid` und Phenobarbital als `anticholinergic` wirken in dieselbe
+  Richtung.
+
+  `[read]` **Nicht stillschweigend im Import mitkorrigieren war
+  richtig.** Eine Klassenaenderung verschiebt, welche der 31
+  Medikamentenregeln feuern — das gehoert gemessen, nicht nebenbei.
+
+  **Zu tun:** je Tag pruefen, gegen welche Regeln er wirkt, dann
+  korrigieren und **vorher/nachher zaehlen, welche Regeln bei welchen
+  Wirkstoffen feuern.** `[read]` **Eine Korrektur ohne diese Zaehlung
+  waere nicht nachweisbar.**
 
 - [ ] **G-202: der Dublettenpruefer schreibt bei jedem Gate-Lauf**
   (neu 2026-08-27).
