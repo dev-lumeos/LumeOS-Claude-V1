@@ -9,10 +9,12 @@ kind_von: G-187
 kinder: []
 agent: claudecode
 beauftragt: 2026-08-27
+erledigt: 2026-08-27
+commit: 4899dc5d
 entscheidung: null
 beruehrt:
+  dateien: [docs/punkte/erledigt/supplements-g-0186-der-katalog-zeigt-noch-nicht-alles-was-drinsteht.md]
   tabellen: ["medical.medication_active_substances", "medical.user_medications"]
-  dateien: []
 zahlen: null
 ---
 
@@ -47,3 +49,5 @@ der Bericht ebenfalls.**
 ## Abnahme
 
 _(vom Orchestrator)_
+
+**2026-08-27 abgenommen** — Reiter und Blocktitel umbenannt, G-196-Farbtabelle mitgezogen. Messung und Begruendung in der G-186-Datei.

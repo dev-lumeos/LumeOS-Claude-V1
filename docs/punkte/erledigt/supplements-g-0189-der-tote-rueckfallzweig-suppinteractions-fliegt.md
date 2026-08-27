@@ -9,10 +9,11 @@ kind_von: G-187
 kinder: []
 agent: claudecode
 beauftragt: 2026-08-27
+erledigt: 2026-08-27
+commit: 4899dc5d
 entscheidung: null
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien: [docs/punkte/erledigt/supplements-g-0186-der-katalog-zeigt-noch-nicht-alles-was-drinsteht.md]
 zahlen: null
 ---
 
@@ -43,3 +44,5 @@ der Bericht ebenfalls.**
 ## Abnahme
 
 _(vom Orchestrator)_
+
+**2026-08-27 abgenommen** — toter Zweig entfernt, der G-187-Satz in den erreichbaren Reiter geholt. Messung und Begruendung in der G-186-Datei.

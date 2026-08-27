@@ -117,7 +117,57 @@ mit falschen Daten gestartet.**
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Stand: 2026-08-28.** Die Ausgangsannahme war 25 heuristisch
+Geschlossene mit einem bereits gefundenen Fehler. Meine Direktmessung
+prueft alle 25: **23 zu Recht geschlossen, 2 falsch geschlossen,
+0 unklar.** C-274 war bereits wiederhergestellt; A-57 stellt C-208
+wieder her. Die Belege unten stammen aus Live-Datenbank, Quellcode oder
+ausgefuehrten Tests, nicht aus den beiden Hinweisberichten.
+
+| Punkt | Urteil | Direktmessung |
+|---|---|---|
+| C-108 | zu Recht erledigt | `[cmd]` `supplement_interactions`: 78 Zeilen, 0 mit anderem Schweregrad als `caution`. |
+| C-195 | zu Recht erledigt | `[cmd]` 53 Tabellen im Schema `supplements`; `supplement_safety` 290, `supplement_pharmacology` 566, `supplement_dosing` 596 und `supplement_identifiers` 1.226 Zeilen. Die eigene Zahl 53 gilt, nicht die 56 aus dem Hinweisbericht. |
+| C-208 | **falsch erledigt** | `[cmd]` 596 Supplements (412 sichtbar), 498 Wirkstoffe, 453 Formulierungen und 448 Produkte widerlegen die alte Importpraemisse; die noch offene C-129-Punktdatei traegt trotzdem unveraendert 237 / 56 / 124. Wiederhergestellt. |
+| C-222 | zu Recht erledigt | `[cmd]` `supplement_monitoring` existiert mit 46 Zeilen. |
+| C-223 | zu Recht erledigt | `[cmd]` `dose_ceiling` ist `jsonb`, nicht `numeric`; 290 Warnungen, 32 JSON-Objekte mit Schluessel `value`. |
+| C-228 | zu Recht erledigt | `[cmd]` 3 Gruppen und 23 Kategorien; 0/412 sichtbare Eintraege ohne Gruppe oder Kategorie. |
+| C-232 | zu Recht erledigt | `[cmd]` Das Schema `supplements` hat 53 Basistabellen und damit mehr als die geforderten 26. |
+| C-234 | zu Recht erledigt | `[cmd]` `user_supplement_cycles.marketplace_product_id` hat 0 Spalten und `apps/web/src/app/v2/marketplace` 0 Verzeichnisse. Der verbleibende `TODO(C-234)`-Kommentar ist keine existierende Fremdreferenz. |
+| C-242 | zu Recht erledigt | `[cmd]` 0 sichtbare Gruppen mit doppeltem nichtleerem `name_en`; 101 Eintraege sind ueber `parent_id` Unterformen. |
+| C-244 | zu Recht erledigt | `[cmd]` Die 28 `lumeos_supplement_catalog`-Eintraege sind sichtbar; 33 Kimi-Substanzen haengen inzwischen mit `parent_id` an ihnen. Der fruehere 28-gegen-28-Schnitt ist damit nicht mehr unverbunden. |
+| C-284 | zu Recht erledigt | `[cmd]` 498 Wirkstoffe, ATC 497, CAS 489, UNII 420, Pharmakologie und Vorsicht je 498, 498 Nutzertexte, 2.313 FAQs und 498 Reproduktionszeilen. |
+| C-301 | zu Recht erledigt | `[cmd]` `intake_logs_coach_read` nutzt `user_id IN (SELECT client_id FROM coach.client_permissions ...)` mit Ablauf und `full`, kein `coach.hat_sicht()` im Policy-Ausdruck. |
+| C-116 | zu Recht ueberholt | `[cmd]` Der Katalog hat 596 statt 320 Zeilen, 412 sichtbar. |
+| C-196 | zu Recht ueberholt | `[cmd]` Der alte 290er-Importausschnitt ist durch 596 Katalogzeilen und die normalisierten Faktenbloecke `safety` 290, `pharmacology` 566, `dosing` 596, `identifiers` 1.226 ersetzt. |
+| C-221 | zu Recht ueberholt | `[cmd]` `supplement_interactions` hat 78 Zeilen statt einer leeren toten Spec-Tabelle. |
+| C-274 | **falsch ueberholt** | `[cmd]` 184 unsichtbare Eintraege, 101 mit `parent_id`, **83 ohne**. Bereits vor A-57 als Punktdatei wiederhergestellt. |
+| G-78 | zu Recht erledigt | `[cmd]` `node tools/serverimport-pruefen.mjs`: 62 Client-Chunks, 0 Treffer; Gegenprobe 3 Server-Clients und 4 `cookies()`-Aufrufe. |
+| G-138 | zu Recht erledigt | `[cmd]` Der fokussierte Testlauf pruefte die 11 G-138-Schreibwegstests: alle gruen, genau eine Datei schreibt `intake_logs`. |
+| G-170 | zu Recht erledigt | `[cmd]` `medical.user_medications` existiert mit 2 Zeilen; `tab-tracking.tsx` kennzeichnet die Behauptung zu `medical.medications` explizit als alte falsche Begruendung. |
+| G-172 | zu Recht erledigt | `[cmd]` Der fokussierte Testlauf bestaetigt deutsche Sichttexte, Message-basierte Tabnamen und den senkrechten Scroll-Container. |
+| G-176 | zu Recht erledigt | `[cmd]` Der fokussierte Testlauf bestaetigt: kein `slice` auf der Trefferliste. |
+| G-177 | zu Recht erledigt | `[cmd]` Der fokussierte Testlauf bestaetigt: Detail zeigt kein Schemaprotokoll und keine Kennung. |
+| G-192 | zu Recht erledigt | `[cmd]` Der fokussierte Testlauf bestaetigt den Community-Reiter nur mit erlaubtem Inhalt und ohne Anleitungsfelder. |
+| G-178 | zu Recht ueberholt | `[cmd]` Live: 412 sichtbare Eintraege, nicht 290/298; Gruppenverteilung `supplement` 211, `enhanced` 122, `peptide` 79. |
+| G-209 | zu Recht ueberholt | `[cmd]` `rg` findet 0 Codevorkommen von `1.483`/`1483`; die isolierte alte Laufzeit hat weder Schwelle noch heutige Codebindung. |
+
+### Wiederherstellung
+
+`[cmd]` **1 neue Punktdatei:**
+`docs/punkte/todos/supplements-c-0208-c-129-neu-fassen-der-import-ist-laengst-passiert.md`.
+Sie folgt dem C-274-Muster, hat `zahlen.gemessen: 2026-08-28` und die
+heutigen Werte 596 / 412 / 498 / 453 / 448. C-274 bleibt als die zweite
+falsch geschlossene Datei bereits wiederhergestellt. `ERLEDIGT.md`
+blieb unveraendert.
+
+**Ergebnis:** Die Ausgangszahl "1 falsch" ist falsch; es sind **2/25**.
+Davon wurde **1/2** bereits vor diesem Auftrag wiederhergestellt und
+**1/2** in A-57. Keine Code-, Daten- oder Anwendungsdatei wurde geaendert.
+
+`[cmd]` Nach der Wiederherstellung lief `node tools/punkte-index.mjs
+--schreiben`; der Punkte-Waechter mit Sollstand steht im Nachweis.
+
 
 ## Abnahme
 
