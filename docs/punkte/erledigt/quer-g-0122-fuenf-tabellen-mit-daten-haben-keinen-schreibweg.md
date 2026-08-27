@@ -15,7 +15,7 @@ beruehrt:
   dateien: []
 zahlen: null
 erledigt: 2026-08-27
-commit: OFFEN
+commit: b294fdaf
 ---
 
 # G-122 - Fuenf Tabellen mit Daten haben keinen Schreibweg
