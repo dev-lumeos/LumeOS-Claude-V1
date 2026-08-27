@@ -7,9 +7,8 @@
 |---|---|
 | `todos` | 250 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 3 |
-| **gesamt** | **255** |
+| `erledigt` | 5 |
+| **gesamt** | **256** |
 
 ## medical — 32
 
@@ -111,7 +110,7 @@
 | `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — |
 
-## supplements — 42
+## supplements — 43
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker |
 |---|---|---|---|---|---|
@@ -145,6 +144,7 @@
 | `C-320` | entscheidung | hoch | [Cam-Datenschutz und Aufbewahrung je Rechtsraum festlegen](todos/supplements-c-0320-cam-datenschutz-und-aufbewahrung-je-rechtsraum-festlegen.md) | offen | — |
 | `C-321` | entscheidung | hoch | [Cam-Einwilligungsfuehrung festlegen](todos/supplements-c-0321-cam-einwilligungsfuehrung-festlegen.md) | offen | — |
 | `C-322` | entscheidung | mittel | [Cam-Vision-Modell festlegen](todos/supplements-c-0322-cam-vision-modell-festlegen.md) | offen | — |
+| `C-325` | messung | hoch | [die drei Supplements-Blocker gegen den heutigen Stand pruefen](laufend_codex/supplements-c-0325-die-drei-blocker-pruefen.md) | laeuft (codex) | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — |
@@ -262,7 +262,7 @@
 | `A-52` | feature | hoch | [die 244 offenen Punkte in das neue Modell ueberfuehren](erledigt/quer-a-0052-punkte-migration.md) | erledigt | — |
 | `A-53` | feature | hoch | [Index und Waechter fuer die Punktverwaltung](erledigt/quer-a-0053-index-und-waechter.md) | erledigt | — |
 | `A-54` | feature | hoch | [die Punkte modulfaehig machen](erledigt/quer-a-0054-punkte-modulfaehig-machen.md) | erledigt | — |
-| `A-55` | feature | hoch | [die 43 Entscheidungspunkte sortieren](laufend_codex/quer-a-0055-entscheidungspunkte-sortieren.md) | laeuft (codex) | — |
+| `A-55` | feature | hoch | [die 43 Entscheidungspunkte sortieren](erledigt/quer-a-0055-entscheidungspunkte-sortieren.md) | erledigt | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](todos/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | offen | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — |
@@ -298,7 +298,7 @@
 | `G-07` | befund | mittel | [Umschalten](todos/quer-g-0007-umschalten.md) | offen | — |
 | `G-58` | befund | niedrig | [Kontrast auf Attrappenkarten gegen den gerenderten Grund messen](todos/quer-g-0058-kontrast-auf-attrappenkarten-gegen-den-gerenderten-grund-messen.md) | offen | — |
 | `G-109` | befund | mittel | [Der Dev-Server kompiliert geaenderte Routen wiederholt nicht neu](todos/quer-g-0109-der-dev-server-kompiliert-geaenderte-routen-wiederholt-nicht-neu.md) | offen | — |
-| `G-122` | feature | mittel | [Fuenf Tabellen mit Daten haben keinen Schreibweg](laufend_claudecode/quer-g-0122-fuenf-tabellen-mit-daten-haben-keinen-schreibweg.md) | laeuft (claudecode) | — |
+| `G-122` | feature | mittel | [Fuenf Tabellen mit Daten haben keinen Schreibweg](erledigt/quer-g-0122-fuenf-tabellen-mit-daten-haben-keinen-schreibweg.md) | erledigt | — |
 | `G-141` | befund | mittel | [Das Onboarding ist als ADR final entschieden](todos/quer-g-0141-das-onboarding-ist-als-adr-final-entschieden.md) | offen | — |
 | `G-155` | befund | mittel | [Jede Kachel jedes Moduls als Bild](todos/quer-g-0155-jede-kachel-jedes-moduls-als-bild.md) | offen | — |
 | `G-175` | feature | mittel | [Das Nachweiskonto hat kein bekanntes Passwort](todos/quer-g-0175-das-nachweiskonto-hat-kein-bekanntes-passwort.md) | offen | — |

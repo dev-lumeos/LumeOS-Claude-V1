@@ -17,6 +17,8 @@ zahlen:
   davon_blockierend: 2
 agent: codex
 beauftragt: 2026-08-27
+erledigt: 2026-08-27
+commit: 931c7ba5
 ---
 
 # A-55 — die 43 Entscheidungspunkte sortieren
@@ -192,4 +194,40 @@ gestaged oder committed.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-27, Orchestrator.**
+
+`[cmd]` **18 ADRs in `docs/entscheidungen/`, keine Nummerndublette**
+(nach Bereinigung), Waechter gruen mit 55/55, Index 255 Punkte.
+
+`[cmd]` **43 Ausgangspunkte, danach 32 `typ: entscheidung` und 24
+echte offene Fragen an Tom.**
+
+### Meine Annahme war wieder halb falsch
+
+`[read]` Ich hatte C-207 als einzigen echten Buendelpunkt genannt.
+`[cmd]` **C-49 war ebenfalls gebuendelt** — Nutrition, `schwere:
+hoch`, mit Deckungsgrad, Warnungen und Tages-Score. **Ich hatte ihn
+als eine Frage gelesen.**
+
+`[cmd]` **Fuenfzehn ADRs fuer Entscheidungen, die laengst getroffen
+waren** — neun davon Toms Recovery-Entscheidungen vom 19.08., die als
+Tabelle in einem Befundtext standen. `[read]` **Jetzt einzeln
+auffindbar.**
+
+### Zwei Fehler von mir waehrend dieses Auftrags
+
+`[cmd]` **Nummernkollision:** ich habe E-02 und E-03 angelegt,
+**waehrend A-55 lief** — in einem Auftrag, den ich selbst mit
+*,,fortlaufend ab E-02"* geschrieben hatte. `[read]` **Genau die
+Kollision, die die Regel verhindern soll.** Meine zwei sind jetzt
+E-17 und E-18.
+
+`[cmd]` **Und der Reparaturversuch hat beide Dateien geloescht:**
+`name.replace('e-02', 'e-17')` traf nicht, weil der Dateiname mit
+grossem `E-02` beginnt — der neue Name blieb identisch, `unlink()`
+loeschte danach die eben geschriebene Datei. `[read]` **Aus dem
+Gedaechtnis neu geschrieben; sie waren zehn Minuten alt und von mir.
+Waeren es Codex' fuenfzehn gewesen, waere die Arbeit weg.**
+
+**Abgenommen.**
+
