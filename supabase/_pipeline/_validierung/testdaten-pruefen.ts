@@ -1286,9 +1286,9 @@ if (MODE === 'clean') {
     SELECT 1
     FROM supplements.rule_assessment('${tom}'::uuid, DATE '${TODAY_DATE}')
     WHERE rule_id = 'wr_lab_biotin'
-      AND evaluation_state = 'missing_input'
-      AND 'medical.lab_draw_scheduled_within_days' = ANY(missing_inputs);`)) {
-    errors.push('Fall Regeln: wr_lab_biotin meldet fehlenden Laborabnahme-Eingang nicht')
+      AND evaluation_state = 'unsupported_operator'
+      AND matched_context->'unsupported_operators' @> '["lte", "substance_gte"]'::jsonb;`)) {
+    errors.push('Fall Regeln: wr_lab_biotin meldet den unsupported_operator-Zustand nicht')
   }
   if (!hasRows(`
     SELECT 1

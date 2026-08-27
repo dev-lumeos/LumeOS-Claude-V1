@@ -1193,6 +1193,15 @@
       "depends_on": [
         "299"
       ]
+    },
+    {
+      "id": "313",
+      "path": "supabase/_pipeline/13_supplements/313_rule_operator_melder.sql",
+      "kind": "sql",
+      "creates": "C-313b: unsupported_operator-Ergebnis fuer nicht implementierte Regeloperatoren und zentraler Operatorvertrag",
+      "depends_on": [
+        "133"
+      ]
     }
   ]
 }
