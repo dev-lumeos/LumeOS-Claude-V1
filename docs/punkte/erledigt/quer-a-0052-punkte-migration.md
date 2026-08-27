@@ -21,7 +21,7 @@ zahlen:
 agent: codex
 beauftragt: 2026-08-27
 erledigt: 2026-08-27
-commit: OFFEN
+commit: e272343b
 ---
 
 # A-52 — die 244 offenen Punkte in das neue Modell ueberfuehren

@@ -20,7 +20,7 @@ zahlen:
 agent: codex
 beauftragt: 2026-08-27
 erledigt: 2026-08-27
-commit: OFFEN
+commit: e272343b
 ---
 
 # A-54 — die Punkte modulfaehig machen
