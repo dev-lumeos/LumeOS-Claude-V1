@@ -6,10 +6,12 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 248 |
-| `erledigt` | 17 |
-| **gesamt** | **265** |
+| `laufend_codex` | 2 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 18 |
+| **gesamt** | **269** |
 
-## medical — 33
+## medical — 34
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -41,9 +43,10 @@
 | `C-309` | feature | mittel | [der Wirkmechanismus ist bei allen 494 englisch](todos/medical-c-0309-der-wirkmechanismus-ist-bei-allen-494-englisch.md) | offen | — | — |
 | `C-311` | befund | mittel | [US-Freinamen ohne europaeisches Gegenstueck](todos/medical-c-0311-us-freinamen-ohne-europaeisches-gegenstueck.md) | offen | — | — |
 | `C-312` | befund | mittel | [Barcode einlesen — was jetzt schon ins Schema gehoert](todos/medical-c-0312-barcode-einlesen-was-jetzt-schon-ins-schema-gehoert.md) | offen | — | — |
-| `C-313` | entscheidung | mittel | [25 Regeln koennen nicht feuern](todos/medical-c-0313-25-regeln-koennen-nicht-feuern.md) | offen | — | — |
+| `C-313` | entscheidung | mittel | [25 Regeln koennen nicht feuern](laufend_codex/medical-c-0313-25-regeln-koennen-nicht-feuern.md) | laeuft (codex) | — | — |
 | `C-314` | entscheidung | mittel | [die drei Wirkstoff-Dubletten zusammenfuehren](todos/medical-c-0314-die-drei-wirkstoff-dubletten-zusammenfuehren.md) | offen | — | — |
 | `C-327` | blocker | hoch | [Die Chelationsregel kennt keine Gruppenmitgliedschaft](todos/medical-c-0327-chelation-rule-fehlt-gruppenmitgliedschaft.md) | offen | — | — |
+| `C-328` | blocker | hoch | [`count_risk_flag_gte` zaehlt Schluessel statt Werte](laufend_codex/medical-c-0328-count-risk-flag-zaehlt-schluessel-statt-werte.md) | laeuft (codex) | — | — |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 
@@ -110,9 +113,9 @@
 | `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 48
+## supplements — 49
 
-### beauftragbar — 47
+### beauftragbar — 48
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -149,6 +152,7 @@
 | `C-322` | entscheidung | mittel | [Cam-Vision-Modell festlegen](erledigt/supplements-c-0322-cam-vision-modell-festlegen.md) | erledigt | — | — |
 | `C-325` | messung | hoch | [die drei Supplements-Blocker gegen den heutigen Stand pruefen](erledigt/supplements-c-0325-die-drei-blocker-pruefen.md) | erledigt | — | — |
 | `C-326` | messung | hoch | [C-129 auf die verbleibende Luecke neu fassen](erledigt/supplements-c-0326-c-129-neu-fassen.md) | erledigt | — | — |
+| `C-329` | befund | mittel | [`input_coverage_status` ist eine Selbsteinschaetzung, keine Zusage](todos/supplements-c-0329-input-coverage-status-ist-keine-zusage.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -170,7 +174,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 14
+## training — 15
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -188,6 +192,7 @@
 | `G-88` | entscheidung | mittel | [Die Sitzungskarte auf `Today`](todos/training-g-0088-die-sitzungskarte-auf-today.md) | offen | — | — |
 | `G-131` | befund | mittel | [`module-completeness.jsx` ist die Settings-Seite](todos/training-g-0131-module-completeness-jsx-ist-die-settings-seite.md) | offen | — | — |
 | `G-173` | befund | mittel | [Ein falscher Punktverweis in `scores-read.ts`](todos/training-g-0173-ein-falscher-punktverweis-in-scores-read-ts.md) | offen | — | — |
+| `G-216` | feature | hoch | [Training hat Daten und keinen Schreibweg](laufend_claudecode/training-g-0216-training-hat-keinen-schreibweg.md) | laeuft (claudecode) | — | — |
 
 ## recovery — 20
 
@@ -249,7 +254,7 @@
 | `G-168` | befund | mittel | [Die coach-Kopfzeile widerspricht dem eigenen Tab](todos/coach-g-0168-die-coach-kopfzeile-widerspricht-dem-eigenen-tab.md) | offen | — | — |
 | `G-169` | befund | mittel | [`coach.checkins` und `checkin_templates` liegen ungelesen](todos/coach-g-0169-coach-checkins-und-checkin-templates-liegen-ungelesen.md) | offen | — | — |
 
-## quer — 67
+## quer — 68
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -320,6 +325,7 @@
 | `G-193` | feature | mittel | [Jede Leistungszahl nennt das Konto](todos/quer-g-0193-jede-leistungszahl-nennt-das-konto.md) | offen | — | — |
 | `G-204` | feature | mittel | [Admin und Coach laufen mit sichtbarer Konsole](todos/quer-g-0204-admin-und-coach-laufen-mit-sichtbarer-konsole.md) | offen | — | — |
 | `G-206` | befund | mittel | [PostgREST antwortet ohne Kompression](todos/quer-g-0206-postgrest-antwortet-ohne-kompression.md) | offen | — | — |
+| `G-215` | messung | hoch | [der Durchstich: kommt eine Warnung beim Nutzer an?](erledigt/quer-g-0215-durchstich-kommt-eine-warnung-an.md) | erledigt | — | C-328, C-329 |
 
 ## Verweise ausserhalb von `docs/punkte/`
 
