@@ -133,6 +133,59 @@ export async function ladeSitzungen(userId: string, stichtag: string): Promise<S
   })
 }
 
+/**
+ * Die offene Sitzung, falls es eine gibt — G-217.
+ *
+ * `[cmd]` **`active` mit `ended_time IS NULL` ist der offene
+ * Zustand** (`workout_sessions_status_check`, gemessen in G-216).
+ * `[cmd]` Im Bestand war er unbenutzt, 0 von 66 — **er entsteht erst
+ * durch das Erfassungsformular.**
+ *
+ * `[read]` **Warum das Datum hier NICHT filtert:** wer abends um elf
+ * anfaengt und um Mitternacht weitermacht, hat dieselbe Sitzung.
+ * Ein Schnitt auf `session_date = heute` wuerde sie verlieren, und
+ * das Formular boete das Fortsetzen genau dann nicht an, wenn es am
+ * meisten gebraucht wird.
+ *
+ * `[read]` **Die juengste gewinnt.** Mehr als eine offene Sitzung
+ * soll es nicht geben — das Formular verhindert es, indem es eine
+ * vorhandene fortsetzt statt eine zweite anzulegen. **Sollten doch
+ * zwei existieren, ist die juengste die gemeinte**, und die aeltere
+ * bleibt sichtbar, statt still zu verschwinden.
+ */
+export async function ladeOffeneSitzung(userId: string): Promise<Sitzung | null> {
+  const { data, error } = await trainingDb()
+    .from('workout_sessions')
+    .select('id, session_date, name, status, location, duration_minutes, '
+      + 'total_volume_kg, total_sets, total_reps, started_time, ended_time')
+    .eq('user_id', userId)
+    .eq('status', 'active')
+    .is('ended_time', null)
+    .order('session_date', { ascending: false })
+    .order('started_time', { ascending: false })
+    .limit(1)
+  if (error) throw new TrainingLeseFehler('READ_FAILED', `workout_sessions: ${error.message}`)
+
+  const z = ((data ?? []) as unknown as Array<Record<string, unknown>>)[0]
+  if (!z) return null
+  const datum = text(z.session_date) ?? ''
+  return {
+    id: String(z.id),
+    session_date: datum,
+    name: text(z.name),
+    status: text(z.status),
+    // `[read]` Eine offene Sitzung ist nie „absolviert" — sie laeuft.
+    absolviert: false,
+    location: text(z.location),
+    duration_minutes: zahl(z.duration_minutes),
+    total_volume_kg: zahl(z.total_volume_kg),
+    total_sets: zahl(z.total_sets),
+    total_reps: zahl(z.total_reps),
+    started_time: text(z.started_time),
+    ended_time: text(z.ended_time),
+  }
+}
+
 // ── Uebungen einer Sitzung ──────────────────────────────────────
 
 export type SitzungsUebung = {
@@ -179,6 +232,80 @@ export async function ladeSitzungsUebungen(userId: string): Promise<SitzungsUebu
     max_weight_kg: zahl(z.max_weight_kg),
     total_reps: zahl(z.total_reps),
     best_estimated_1rm: zahl(z.best_estimated_1rm),
+  }))
+}
+
+/**
+ * Die Uebungen EINER Sitzung, mit ihren Saetzen — G-217.
+ *
+ * `[read]` **Warum eine eigene Funktion neben
+ * `ladeSitzungsUebungen`:** die laedt alles fuer die Auswertung. Das
+ * Erfassungsformular braucht genau eine Sitzung, und zwar nach jedem
+ * eingetragenen Satz erneut. **Alles zu laden, um eines anzuzeigen,
+ * waere die teure Variante derselben Antwort.**
+ */
+export async function ladeSitzungsInhalt(sitzungId: string): Promise<Array<
+  SitzungsUebung & { saetze: Satz[] }
+>> {
+  const t = trainingDb()
+  const { data: uebungen, error } = await t
+    .from('workout_exercises')
+    .select('id, workout_session_id, exercise_id, exercise_name, exercise_order, '
+      + 'actual_sets, actual_volume_kg, max_weight_kg, total_reps, best_estimated_1rm')
+    .eq('workout_session_id', sitzungId)
+    .order('exercise_order', { ascending: true })
+    .limit(SEITE)
+  if (error) throw new TrainingLeseFehler('READ_FAILED', `workout_exercises: ${error.message}`)
+
+  const zeilen = (uebungen ?? []) as unknown as Array<Record<string, unknown>>
+  if (zeilen.length === 0) return []
+
+  // `[cmd]` Verbund statt ID-Liste — dieselbe Falle aus G-64. Hier
+  // waeren es zwar wenige IDs, aber der Verbund kostet nichts.
+  const { data: saetze, error: sFehler } = await t
+    .from('workout_sets')
+    .select('id, workout_exercise_id, set_number, reps, weight_kg, volume_kg, '
+      + 'estimated_1rm, is_pr, set_type, rpe, rir, rest_seconds, logged_via, '
+      + 'workout_exercises!inner(workout_session_id)')
+    .eq('workout_exercises.workout_session_id', sitzungId)
+    .order('set_number', { ascending: true })
+    .limit(SEITE)
+  if (sFehler) throw new TrainingLeseFehler('READ_FAILED', `workout_sets: ${sFehler.message}`)
+
+  const jeUebung = new Map<string, Satz[]>()
+  for (const z of (saetze ?? []) as unknown as Array<Record<string, unknown>>) {
+    const k = String(z.workout_exercise_id)
+    const liste = jeUebung.get(k) ?? []
+    liste.push({
+      id: String(z.id),
+      workout_exercise_id: k,
+      set_number: zahl(z.set_number),
+      reps: zahl(z.reps),
+      weight_kg: zahl(z.weight_kg),
+      volume_kg: zahl(z.volume_kg),
+      estimated_1rm: zahl(z.estimated_1rm),
+      is_pr: z.is_pr === true,
+      set_type: text(z.set_type),
+      rpe: zahl(z.rpe),
+      rir: zahl(z.rir),
+      rest_seconds: zahl(z.rest_seconds),
+      logged_via: text(z.logged_via),
+    })
+    jeUebung.set(k, liste)
+  }
+
+  return zeilen.map(z => ({
+    id: String(z.id),
+    workout_session_id: String(z.workout_session_id),
+    exercise_id: text(z.exercise_id),
+    exercise_name: text(z.exercise_name) ?? '—',
+    exercise_order: zahl(z.exercise_order),
+    actual_sets: zahl(z.actual_sets),
+    actual_volume_kg: zahl(z.actual_volume_kg),
+    max_weight_kg: zahl(z.max_weight_kg),
+    total_reps: zahl(z.total_reps),
+    best_estimated_1rm: zahl(z.best_estimated_1rm),
+    saetze: jeUebung.get(String(z.id)) ?? [],
   }))
 }
 

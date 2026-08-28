@@ -47,6 +47,8 @@ import { TrainingOfflineView, TrainingHRAnalysis } from './tabs-offline-hr'
 import { TrainingBodyStatsCorrelation } from './tabs-extras'
 // G-64: der Exercises-Tab.
 import { TrainingUebungen } from './tab-uebungen'
+// G-217: die Erfassung, auf der Naht aus G-216.
+import { SitzungFormular } from './sitzung-formular'
 // G-69: History, Progression, Standards, Kalender, Serie.
 import {
   TrainingVerlauf, TrainingKraftverlauf, TrainingStandards,
@@ -150,8 +152,11 @@ export function TrainingAnsicht({
           <InEntwicklungKnopf titel="Progress" className="v2-btn">
             <Icon name="trend_up" className="v2-ic v2-ic-sm" /> Progress
           </InEntwicklungKnopf>
+          {/* `[read]` G-217: hiess „Start Push B" und versprach eine
+              Vorlage, die es nicht gibt (Vorlagen sind ausgeschlossen).
+              Der Knopf oeffnet die Erfassung — der Name sagt das jetzt. */}
           <button type="button" className="v2-btn v2-btn-primary" onClick={() => setLiveOpen(true)}>
-            <Icon name="play" className="v2-ic v2-ic-sm" /> Start Push B
+            <Icon name="play" className="v2-ic v2-ic-sm" /> Training erfassen
           </button>
         </div>
       </div>
@@ -203,7 +208,20 @@ export function TrainingAnsicht({
       {tab === 'hrzones' && <TrainingHRAnalysis />}
       {tab === 'offline' && <TrainingOfflineView />}
 
-      {liveOpen && <LiveWorkout onClose={() => setLiveOpen(false)} />}
+      {/* ══ G-217: hier stand `LiveWorkout`, der Entwurf ════════════
+          `[read]` **Der Entwurf zeigte fuenf fest verdrahtete Saetze
+          an einer erfundenen Uebung** — nichts davon wurde
+          gespeichert. `SitzungFormular` erfasst dieselbe Sache
+          echt, ueber die Naht aus G-216.
+          `[cmd]` **`LiveWorkout` hat damit KEINEN Aufrufer mehr.**
+          Er bleibt als Vorlage stehen, weil er die Zielgestalt
+          zeigt, die das Formular noch nicht hat — Pausenuhr,
+          PR-Marke, Zielvorgabe je Satz. **Das ist ein toter Zweig
+          mit Absicht, und er ist hier benannt**, damit ihn niemand
+          fuer erreichbar haelt (G-186: ein entfernter Zweig darf
+          nichts still mitnehmen, ein bleibender nichts still
+          vortaeuschen). */}
+      {liveOpen && <SitzungFormular onClose={() => setLiveOpen(false)} />}
       <TrainingModale modal={modal} onClose={kontext.close} />
     </TrainingKontext.Provider>
   )
