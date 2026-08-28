@@ -5,9 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 269 |
+| `todos` | 268 |
+| `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 25 |
-| **gesamt** | **294** |
+| **gesamt** | **295** |
 
 ## medical — 37
 
@@ -51,7 +53,7 @@
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
 
-## nutrition — 77
+## nutrition — 78
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -69,7 +71,7 @@
 | `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](todos/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | offen | — | — |
 | `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](todos/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | offen | — | — |
 | `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — | — |
-| `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](todos/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | offen | — | — |
+| `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](todos/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | offen | — | G-239 |
 | `C-49` | befund | hoch | [Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach](todos/nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md) | offen | — | C-323, C-324 |
 | `C-102` | feature | mittel | [`milch` findet Joghurt statt Milch](todos/nutrition-c-0102-milch-findet-joghurt-statt-milch.md) | offen | — | — |
 | `C-109` | entscheidung | mittel | [Die Injektions-Grenzwerte sind unbelegt](todos/nutrition-c-0109-die-injektions-grenzwerte-sind-unbelegt.md) | offen | — | — |
@@ -113,7 +115,7 @@
 | `G-152` | entscheidung | mittel | [Der Aktivitaetsstrom des Dashboards](todos/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | offen | — | — |
 | `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — | — |
 | `G-220` | entscheidung | hoch | [MealCam Auto-Accept widerspricht ADR_MEALCAM_V1](todos/nutrition-g-0220-mealcam-auto-accept-widerspricht-adr-mealcam-v1.md) | offen | — | — |
-| `G-221` | entscheidung | hoch | [Food-Tag-Set V1 widersprüchlich definiert](todos/nutrition-g-0221-food-tag-set-v1-widerspruechlich-definiert.md) | offen | — | — |
+| `G-221` | entscheidung | hoch | [Food-Tag-Set V1 widersprüchlich definiert](laufend_codex/nutrition-g-0221-food-tag-set-v1-widerspruechlich-definiert.md) | laeuft (codex) | — | — |
 | `G-222` | befund | hoch | [Onboarding Flow für Nutrition Preferences fehlt in SPEC_03](todos/nutrition-g-0222-onboarding-flow-fuer-nutrition-preferences-fehlt-in-spec-0.md) | offen | — | — |
 | `G-223` | befund | mittel | [Recalculate-UI in SPEC_10 fehlt (bekanntes Open Item)](todos/nutrition-g-0223-recalculate-ui-in-spec-10-fehlt-bekanntes-open-item.md) | offen | — | — |
 | `G-224` | befund | mittel | [MealCam Consent-Widerruf in Nutrition Settings nicht beschrieben](todos/nutrition-g-0224-mealcam-consent-widerruf-in-nutrition-settings-nicht-besch.md) | offen | — | — |
@@ -131,6 +133,7 @@
 | `G-236` | befund | niedrig | [`SmartSuggestions` Component und `useSmartSearchSuggestions` Hook ohne klaren V1-Trigger](todos/nutrition-g-0236-smartsuggestions-component-und-usesmartsearchsuggestions-h.md) | offen | — | — |
 | `G-237` | befund | niedrig | [`data/nutrientDetails.ts` als statisches Array — `food_sources` Array veraltet (per Review 1 ADR_IMPROVEMENTS_PACKAGE #20)](todos/nutrition-g-0237-data-nutrientdetails-ts-als-statisches-array-food-sources-.md) | offen | — | — |
 | `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | — | — |
+| `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](laufend_claudecode/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 49
