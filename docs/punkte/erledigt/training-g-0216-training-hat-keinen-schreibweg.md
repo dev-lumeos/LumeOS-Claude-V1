@@ -22,7 +22,7 @@ zahlen:
 agent: claudecode
 beauftragt: 2026-08-28
 erledigt: 2026-08-28
-commit: OFFEN
+commit: 53560696
 ---
 
 # G-216 — Training hat Daten und keinen Schreibweg

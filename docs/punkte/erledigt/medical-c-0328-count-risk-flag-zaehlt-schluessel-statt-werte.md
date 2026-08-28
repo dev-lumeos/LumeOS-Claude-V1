@@ -9,7 +9,7 @@ kind_von: G-215
 agent: codex
 beauftragt: 2026-08-28
 erledigt: 2026-08-28
-commit: OFFEN
+commit: 53560696
 entscheidung: null
 beruehrt:
   tabellen: [medical.medication_active_substances, supplements.rule_catalog]
