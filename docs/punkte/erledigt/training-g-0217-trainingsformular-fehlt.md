@@ -9,7 +9,7 @@ kind_von: G-216
 agent: claudecode
 beauftragt: 2026-08-28
 erledigt: 2026-08-28
-commit: OFFEN
+commit: 942e9259
 entscheidung: null
 beruehrt:
   dateien:

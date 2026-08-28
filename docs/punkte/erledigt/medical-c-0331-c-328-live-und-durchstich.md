@@ -14,7 +14,7 @@ zahlen: null
 agent: codex
 beauftragt: 2026-08-28
 erledigt: 2026-08-28
-commit: OFFEN
+commit: 942e9259
 ---
 
 # C-331 — C-328 live einspielen und den Durchstich wiederholen
