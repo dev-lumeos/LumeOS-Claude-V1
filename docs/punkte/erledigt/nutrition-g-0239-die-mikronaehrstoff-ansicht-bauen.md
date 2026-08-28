@@ -16,7 +16,7 @@ zahlen: null
 agent: claudecode
 beauftragt: 2026-08-28
 erledigt: 2026-08-28
-commit: OFFEN
+commit: 3a87eb62
 ---
 
 # G-239 — die Mikronaehrstoff-Ansicht bauen
