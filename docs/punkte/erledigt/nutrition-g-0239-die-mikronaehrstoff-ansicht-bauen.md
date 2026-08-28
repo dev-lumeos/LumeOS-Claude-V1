@@ -15,6 +15,8 @@ beruehrt:
 zahlen: null
 agent: claudecode
 beauftragt: 2026-08-28
+erledigt: 2026-08-28
+commit: OFFEN
 ---
 
 # G-239 — die Mikronaehrstoff-Ansicht bauen
@@ -401,4 +403,65 @@ ein eigener Punkt.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-28, Orchestrator. Selbst gemessen.**
+
+`[cmd]` **Die Struktur stimmt:** 154 Zeilen, 138 verschiedene
+Naehrstoffe, Gegenprobe geht auf.
+
+`[cmd]` **Die Doppelzeilen sind alle `<etwas>+UL`:**
+
+    PRI+UL      CA · FE · VITA · VITB6 · VITC · ZN
+    AI+UL       CU · FD · ID · MG · MN · MO · P · VITD · VITE
+    NO_STANDALONE_REFERENCE+UL   NIA
+
+`[read]` **Es sind 16, nicht 12** — die Rechnung 154 − 138 geht nur so
+auf. `[read]` **Vermutlich wurden nur die sechs `PRI+UL`-Paare und
+einige `AI+UL` gezaehlt.** Eine Abgrenzungsfrage, keine falsche
+Arbeit — **aber die Zahl im Bericht stimmt nicht.**
+
+### Die Prozentwerte haben sich unter uns verschoben
+
+`[cmd]` **Ich messe VITA `PRI 689 % / UL 172 %`, der Bericht nennt
+`654 % / 164 %`** — **beide um denselben Faktor 1,05.** `[cmd]`
+Ebenso MG 173 gegen 160,2 und NIA 178 gegen 130,7. `[cmd]` **Und `MN`
+mit `UL 105 %` fehlt im Bericht ganz.**
+
+`[read]` **Kein Rundungs- oder Zaehlfehler, sondern ein anderer
+Datenstand.** `[cmd]` **Zwischen beiden Messungen liefen zwei
+vollstaendige Kettenlaeufe** — C-149 mit 128 Schritten und G-221 mit
+129.
+
+`[read]` **Meine Werte sind ueber drei Laeufe stabil.** **Als C-334
+angelegt** — nicht als Vorwurf, sondern weil eine Bewertung, die sich
+zwischen zwei Messungen verschiebt, geklaert gehoert.
+
+### Was unabhaengig davon traegt
+
+`[read]` **Regel 2 ist am schaerfsten belegt:** Vitamin A zeigt
+gleichzeitig ueber sechshundert Prozent des Zielwerts und ueber
+hundert der Obergrenze — **ein Naehrstoff, zwei entgegengesetzte
+Lesarten, bei jeder Zahl die Bezugsgroesse.**
+
+`[read]` **Die bewusste Abweichung vom Mockup ist richtig:** dessen
+Farblogik `pct >= 80 gruen` faerbt eine Ueberschreitung gruen.
+*,,Der Mockup ist nicht falsch, er kannte nur keine
+`upper_limit`-Zeilen, weil seine Daten fest verdrahtet waren."*
+
+`[cmd]` **Die Code-Uebersetzung ist die Vorsicht, um die ich gebeten
+hatte:** `CLD` statt `CL`, `F20:5CN3` statt `F20D5N3` — **zwei
+Codesysteme, nicht Erfindung.** `[read]` **Und Selen fehlt auf dev —
+gemeldet, nicht ergaenzt** (C-333).
+
+`[cmd]` **100 von 154 Zeilen fallen in keine Mockup-Gruppe** und
+stehen unter *,,Weitere"* — **mit einem Waechter, der faellt, wenn sie
+still wegfallen.**
+
+`[cmd]` **Der Leseweg liess vier Felder fallen, die die RPC immer
+geliefert hat.** Nachgetragen.
+
+`[cmd]` 19 neue Tests, 197 gruen, acht Sabotagen fallen, nichts
+geschrieben. **Ladezeit kalt 4.431 ms, warm 3.183 ms** — ohne
+Vergleichswert, weil der Reiter die Bewertung bisher nicht zeigte.
+
+**Abgenommen.**
+

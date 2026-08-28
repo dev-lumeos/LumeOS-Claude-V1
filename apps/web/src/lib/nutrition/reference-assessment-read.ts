@@ -33,10 +33,31 @@ export type ReferenceAssessmentRow = {
   reference_unit: string | null
   /** `null`, sobald ein Fehlzaehler > 0 ist — NICHT 0. */
   reference_pct: number | null
+  /**
+   * Bei `RI`-Bereichen die beiden Enden — G-239.
+   *
+   * `[cmd]` Auf dev tragen sie genau die drei `energy_share`-Zeilen
+   * (Fett, Kohlenhydrate, gesaettigte Fettsaeuren, gemessen
+   * 2026-08-28). Ohne sie liesse sich ein Bereich nicht als Bereich
+   * zeigen.
+   */
+  reference_pct_min: number | null
+  reference_pct_max: number | null
   reference_status: string
   profile_age_years: number | null
   profile_biological_sex: string | null
+  /**
+   * G-239, Regel 4: die Referenzwerte gelten fuer gesunde Erwachsene.
+   * `[read]` Schwangerschaft und Stillzeit verschieben sie — deshalb
+   * kommen sie mit, statt still zu fehlen.
+   */
+  profile_is_pregnant: boolean
+  profile_is_lactating: boolean
+  /** Worauf sich der Wert bezieht (z. B. je kg Koerpergewicht). */
+  reference_basis: string | null
   source: string | null
+  /** Die Fundstelle in der Quelle — macht den Beleg nachschlagbar. */
+  source_locator: string | null
   notes: string | null
 }
 
@@ -76,10 +97,16 @@ export function parseAssessmentRows(rows: unknown): ReferenceAssessmentRow[] {
       reference_value_max: asNumberOrNull(r.reference_value_max),
       reference_unit: asText(r.reference_unit) || null,
       reference_pct: asNumberOrNull(r.reference_pct),
+      reference_pct_min: asNumberOrNull(r.reference_pct_min),
+      reference_pct_max: asNumberOrNull(r.reference_pct_max),
       reference_status: asText(r.reference_status) || 'no_applicable_reference',
       profile_age_years: asNumberOrNull(r.profile_age_years),
       profile_biological_sex: asText(r.profile_biological_sex) || null,
+      profile_is_pregnant: r.profile_is_pregnant === true,
+      profile_is_lactating: r.profile_is_lactating === true,
+      reference_basis: asText(r.reference_basis) || null,
       source: asText(r.source) || null,
+      source_locator: asText(r.source_locator) || null,
       notes: asText(r.notes) || null,
     })
   }

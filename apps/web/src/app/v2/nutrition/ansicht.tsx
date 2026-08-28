@@ -30,6 +30,8 @@ import type { MikroStand } from '../../../lib/nutrition/mikro-read'
 // (C-161), nicht aus `display_tier`. `[cmd]` G-140: hier stand
 // *„aus display_tier"*, und genau dieses Missverstaendnis hat G-101
 // die Einrueckung falsch bauen lassen.
+// G-239: die Mikronaehrstoff-Ansicht.
+import { MikroAnsicht } from './mikro-ansicht'
 import { NaehrstoffOrdnungTab } from './naehrstoff-ordnung-tab'
 import type { NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnung'
 // G-101: zwei Insights-Kacheln mit echten Zahlen.
@@ -215,7 +217,7 @@ export async function TagebuchAnsicht({
       <Zukunftshinweis datum={datum} />
 
       {tab !== 'diary' && (
-        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} unvertraeglichkeiten={unvertraeglichkeiten} />
+        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} bewertung={bewertung} unvertraeglichkeiten={unvertraeglichkeiten} />
       )}
       {tab === 'diary' && (
       <>
@@ -484,9 +486,12 @@ export async function TagebuchAnsicht({
  * eingebaut.
  */
 function AndererTab({
-  tab, foodsStart, vorlieben, plan, ordnung, einsichten, unvertraeglichkeiten = [],
+  tab, foodsStart, vorlieben, plan, ordnung, einsichten, bewertung = [],
+  unvertraeglichkeiten = [],
 }: {
   tab: string
+  /** G-239: die Referenzbewertung des Tages, fuer die Mikro-Ansicht. */
+  bewertung?: ReferenceAssessmentRow[]
   /** G-154: die gesetzten Unvertraeglichkeiten (`strong`). */
   unvertraeglichkeiten?: string[]
   /** G-66: die erste Trefferseite, serverseitig geladen. */
@@ -528,6 +533,13 @@ function AndererTab({
     // („aber mit Marke"). Beides ist weg.
     return (
       <div style={{ marginTop: 16 }}>
+        {/* ══ G-239: die Mikronaehrstoff-Ansicht ═════════════════
+            `[read]` Sie steht VOR der Ordnung: die Ordnung zeigt den
+            Katalog, die Bewertung zeigt den Tag. Wer den Reiter
+            oeffnet, will zuerst wissen, wie er heute steht. */}
+        <div style={{ marginBottom: 16 }}>
+          <MikroAnsicht zeilen={bewertung} />
+        </div>
         {ordnung && ordnung.gruppen.length > 0
           ? <NaehrstoffOrdnungTab d={ordnung} />
           : <LeerHinweis
