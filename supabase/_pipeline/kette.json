@@ -1230,6 +1230,16 @@
         "328",
         "139"
       ]
+    },
+    {
+      "id": "221",
+      "path": "supabase/_pipeline/_ableitung/221_food_tag_set_v1.sql",
+      "kind": "sql",
+      "creates": "G-221: belegte E-22-V1-Tags high_fat und gluten_free; unbelegte oder widerspruechliche Tags bleiben offen",
+      "depends_on": [
+        "149",
+        "032"
+      ]
     }
   ]
 }

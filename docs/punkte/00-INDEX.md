@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 273 |
-| `laufend_codex` | 1 |
+| `todos` | 277 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 25 |
-| **gesamt** | **300** |
+| `erledigt` | 26 |
+| **gesamt** | **304** |
 
 ## medical — 38
 
@@ -54,7 +53,7 @@
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
 | `G-241` | entscheidung | hoch | [zwei Reiterschnitte im Medical-Mockup](todos/medical-g-0241-zwei-reiterschnitte-im-medical-mockup.md) | offen | — | — |
 
-## nutrition — 78
+## nutrition — 82
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -95,6 +94,7 @@
 | `C-239` | befund | mittel | [`meal_plans` kennt keinen Lebenszyklus](todos/nutrition-c-0239-meal-plans-kennt-keinen-lebenszyklus.md) | offen | — | — |
 | `C-323` | entscheidung | hoch | [Micro-Flags Warnschwelle und Formulierung festlegen](todos/nutrition-c-0323-micro-flags-warnschwelle-und-formulierung-festlegen.md) | offen | — | — |
 | `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](todos/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | offen | — | — |
+| `C-333` | befund | niedrig | [Selen fehlt in der Bewertung auf dev](todos/nutrition-c-0333-selen-fehlt-in-der-bewertung-auf-dev.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](todos/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | offen | — | — |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -116,7 +116,7 @@
 | `G-152` | entscheidung | mittel | [Der Aktivitaetsstrom des Dashboards](todos/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | offen | — | — |
 | `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — | — |
 | `G-220` | entscheidung | hoch | [MealCam Auto-Accept widerspricht ADR_MEALCAM_V1](todos/nutrition-g-0220-mealcam-auto-accept-widerspricht-adr-mealcam-v1.md) | offen | — | — |
-| `G-221` | entscheidung | hoch | [Food-Tag-Set V1 widersprüchlich definiert](laufend_codex/nutrition-g-0221-food-tag-set-v1-widerspruechlich-definiert.md) | laeuft (codex) | — | — |
+| `G-221` | entscheidung | hoch | [Food-Tag-Set V1 widersprüchlich definiert](erledigt/nutrition-g-0221-food-tag-set-v1-widerspruechlich-definiert.md) | erledigt | — | G-245 |
 | `G-222` | befund | hoch | [Onboarding Flow für Nutrition Preferences fehlt in SPEC_03](todos/nutrition-g-0222-onboarding-flow-fuer-nutrition-preferences-fehlt-in-spec-0.md) | offen | — | — |
 | `G-223` | befund | mittel | [Recalculate-UI in SPEC_10 fehlt (bekanntes Open Item)](todos/nutrition-g-0223-recalculate-ui-in-spec-10-fehlt-bekanntes-open-item.md) | offen | — | — |
 | `G-224` | befund | mittel | [MealCam Consent-Widerruf in Nutrition Settings nicht beschrieben](todos/nutrition-g-0224-mealcam-consent-widerruf-in-nutrition-settings-nicht-besch.md) | offen | — | — |
@@ -134,7 +134,10 @@
 | `G-236` | befund | niedrig | [`SmartSuggestions` Component und `useSmartSearchSuggestions` Hook ohne klaren V1-Trigger](todos/nutrition-g-0236-smartsuggestions-component-und-usesmartsearchsuggestions-h.md) | offen | — | — |
 | `G-237` | befund | niedrig | [`data/nutrientDetails.ts` als statisches Array — `food_sources` Array veraltet (per Review 1 ADR_IMPROVEMENTS_PACKAGE #20)](todos/nutrition-g-0237-data-nutrientdetails-ts-als-statisches-array-food-sources-.md) | offen | — | — |
 | `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | — | — |
-| `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](laufend_claudecode/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | laeuft (claudecode) | — | — |
+| `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](laufend_claudecode/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | laeuft (claudecode) | — | C-333, G-246, G-247 |
+| `G-245` | entscheidung | mittel | [drei Makro-Schwellen brauchen eine Entscheidung](todos/nutrition-g-0245-drei-makro-schwellen-brauchen-eine-entscheidung.md) | offen | — | — |
+| `G-246` | feature | mittel | [die Mikronaehrstoff-Detailtexte brauchen eine Tabelle](todos/nutrition-g-0246-mikronaehrstoff-detailtexte-brauchen-eine-tabelle.md) | offen | — | — |
+| `G-247` | feature | niedrig | [der Zeitraumwechsel braucht eine eigene Funktion](todos/nutrition-g-0247-zeitraumwechsel-braucht-eine-eigene-funktion.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 50

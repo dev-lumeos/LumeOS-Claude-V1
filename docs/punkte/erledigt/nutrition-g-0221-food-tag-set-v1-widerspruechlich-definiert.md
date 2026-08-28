@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-22
 agent: codex
 beauftragt: 2026-08-28
+erledigt: 2026-08-28
+commit: OFFEN
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -225,4 +227,36 @@ nicht committet und apps/ nicht angefasst.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-28, Orchestrator. Selbst gemessen.**
+
+`[cmd]` **Live unveraendert bei 14 Tags** — der Klonlauf wurde
+verworfen, wie vorgesehen. `high_fat` (1.233 Zuordnungen, FAT >
+17,5 g/100 g) und `gluten_free` (38) stehen in der Kette, nicht live.
+
+`[cmd]` **Quellen benannt:** UK FoP guidance fuer die Fettschwelle,
+VO (EG) 1924/2006.
+
+### Die Zurueckhaltung ist der wertvolle Teil
+
+`[read]` **`low_protein`, `high_carb` und `low_fiber` bleiben offen,
+weil keine belastbare Schwelle gefunden wurde.** `[read]` **Das ist
+die Antwort, um die der Auftrag gebeten hat:** *,,Wenn du keine
+findest, sag es — dann ist es eine Entscheidung fuer Tom und keine
+Recherche."*
+
+`[cmd]` **`lactose_free` nicht vergeben, weil 11 von 12 ausdruecklich
+laktosefreien BLS-Namen gleichzeitig `contains_lactose` tragen.**
+`[read]` **Eine Vergabe waere hier eine Behauptung gewesen, keine
+Aussage.**
+
+`[cmd]` **6.480 Lebensmittel haben weder eine Glutenfrei- noch eine
+Gluten-Aussage** — die Zahl, um die der Auftrag gebeten hatte, **im
+Bericht statt versteckt.**
+
+`[read]` **Und `gluten_free` mit nur 38 Zuordnungen ist ehrlicher als
+6.480 geratene.**
+
+**Abgenommen als teilweise umgesetzt.** Die drei offenen Schwellen
+gehen als **G-245** an Tom — sie brauchen eine Entscheidung, keine
+Recherche mehr.
+

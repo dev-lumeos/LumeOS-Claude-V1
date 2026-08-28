@@ -174,15 +174,23 @@ Human coach"*.
 §2–3, SPEC_02, SPEC_05, SPEC_09, SPEC_11** — sie sind gegen die Spec
 gebaut, nicht daneben.
 
-**Gebaut, zwei Orte:**
+**Gebaut — zwei Orte fuer zwei Nutzergruppen:**
 
-    apps/coach              22 Dateien, eigene App, Port 3220
-                            Athletenseite 10 KB, Checkins, Autonomie,
-                            Consent, Alerts
-    v2/coach/human          10 Reiter: Overview · Coaches ·
+    v2/coach/human          DIE ARBEITSFLAECHE
+                            http://127.0.0.1:3200/v2/coach/human
+                            10 Reiter: Overview · Coaches ·
                             Permissions · Proposals · Autonomy ·
                             Check-ins · Messages · Notes · Invites ·
                             Onboarding
+                            Was der Athlet von seinen Coaches sieht.
+
+    apps/coach              Die Coachingplattform, Port 3220,
+                            22 Dateien. Fuer die Coaches selbst,
+                            nicht fuer den Athleten.
+
+`[read]` **Tom, 2026-08-28:** *,,wir arbeiten in v2"*. **UI-Auftraege
+gehen nach `apps/web/src/app/v2/`**, nicht nach `apps/coach` —
+letzteres ist eine eigene Anwendung fuer eine andere Nutzergruppe.
 
 **Daten (`coach`-Schema):** `relationships` 6 · `client_permissions` 5
 · `client_autonomy` 5 · `checkins` 6 · `messages` 6 · `alerts` 6 ·

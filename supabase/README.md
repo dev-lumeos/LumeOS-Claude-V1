@@ -144,6 +144,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 134 | `13_supplements/134_substance_catalog.ts` | Konsolidierter Substanzkatalog aus Kimi, LumeOS und F-05 mit Herkunft je Zeile | 567 Substanzen, 667 Herkunftszeilen |
 | 135 | `13_supplements/135_supplement_nutrients.ts` | Supplement-Naehrstoffbruecke aus `daten/supplement-naehrstoffcodes.json` | 17 Zuordnungen, 1 Tagesfunktion |
 | 149 | `13_supplements/149_folate_unit_guard.sql` | C-149: Folat ohne belegte DFE-Umrechnung aus der bekannten Naehrstoffbilanz ausschliessen | 1 Folat-Zeile `unbekannt`; keine Referenzwerte geaendert |
+| 221 | `_ableitung/221_food_tag_set_v1.sql` | G-221: E-22-V1 nur fuer belegte, konfliktfreie Tags: `high_fat` aus amtlicher 100-g-Schwelle und `gluten_free` aus expliziten BLS-Namen | `FAT > 17,5 g/100 g`; keine Negationsableitung; `lactose_free` und drei Makro-Schwellen bleiben offen |
 | 140 | `14_medical/140_medical_schema.sql` | Medical-Schema: `biomarker_catalog`, `biomarker_reference_ranges`, `lab_reports`, `lab_result_values`, `lab_result_values_read()` | 4 Tabellen, 1 Funktion, RLS je Operation |
 | 141 | `14_medical/141_biomarker_katalog.ts` | LOINC-Masterkatalog aus `daten/biomarker-loinc/` und kuratierte Referenzbereich-Kandidaten aus `biomarker-katalog.json` | 11.676 LOINC-Codes, 464 Referenzbereich-Zeilen |
 | 142 | `14_medical/142_laborimport_matching.sql` | Laborimport-Zuordnung: `biomarker_aliases`, Importfunktionen und Match-Status an Messwerten | 1 Tabelle, 2 Funktionen, unbekannte Marker bleiben speicherbar |
@@ -251,11 +252,15 @@ Kategorie. 49 der 4.903 Kategoriezuweisungen stammen aus `021`.
 | `low_carb` | `CHO <= 10` | 4.659 |
 | `low_fat` | `FAT <= 3` | 2.648 |
 | `high_fiber` | `FIBT >= 6` | 558 |
+| `high_fat` | `FAT > 17,5` | 1.233 |
 
-Die übrigen 12 Tag-Definitionen (`vegan`, `gluten_free`, `lactose_free` …)
-sind angelegt, aber nie angewendet — sie bräuchten eine Namens-Heuristik.
+`gluten_free` wird ausschliesslich bei explizitem `glutenfrei`/`gluten-free`
+im kanonischen BLS-Namen gesetzt; fehlendes `contains_gluten` ist keine
+Gegenprobe. `lactose_free` bleibt offen: 11 von 12 explizit laktosefreien
+Namen tragen noch `contains_lactose`.
 
-**Diese Regeln existieren nur an einer Stelle: in `020`.** Nicht kopieren.
+**Diese Regeln existieren nur an einer Stelle: in `020` beziehungsweise fuer
+die belegten E-22-Ergaenzungen in `221`.** Nicht kopieren.
 Die archivierte Migration `20240522_002` beschreibt einen abweichenden Weg
 über denormalisierte Makro-Spalten und einen Trigger — `[cmd]` beides
 existiert im Container nicht und ist nicht der reale Weg.
