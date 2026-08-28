@@ -18,7 +18,7 @@ zahlen: null
 agent: claudecode
 beauftragt: 2026-08-28
 erledigt: 2026-08-28
-commit: OFFEN
+commit: aa04c004
 ---
 
 # G-215 — der Durchstich: kommt eine Warnung beim Nutzer an?
