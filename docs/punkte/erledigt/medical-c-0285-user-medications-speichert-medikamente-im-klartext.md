@@ -9,7 +9,7 @@ kind_von: null
 kinder: []
 entscheidung: E-12
 erledigt: 2026-08-28
-commit: OFFEN
+commit: 3c632b05
 durch: E-12
 beruehrt:
   tabellen: ["medical.user_conditions"]

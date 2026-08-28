@@ -8,7 +8,7 @@ braucht: []
 kind_von: null
 entscheidung: null
 erledigt: 2026-08-28
-commit: OFFEN
+commit: 3c632b05
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
