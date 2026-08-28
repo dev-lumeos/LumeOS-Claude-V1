@@ -9,7 +9,7 @@ kind_von: C-331
 agent: claudecode
 beauftragt: 2026-08-28
 erledigt: 2026-08-28
-commit: OFFEN
+commit: c24b6642
 entscheidung: null
 beruehrt:
   dateien:
