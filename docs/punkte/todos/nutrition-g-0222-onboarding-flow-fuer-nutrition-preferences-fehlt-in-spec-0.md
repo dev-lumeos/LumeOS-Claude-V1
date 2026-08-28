@@ -1,0 +1,55 @@
+---
+nr: G-222
+typ: befund
+modul: nutrition
+schwere: hoch
+angelegt: 2026-08-28
+braucht: []
+kind_von: null
+entscheidung: null
+beruehrt:
+  dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
+zahlen: null
+---
+
+# G-222 — Onboarding Flow für Nutrition Preferences fehlt in SPEC_03
+
+## Befund
+
+**Aus `OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`, CRIT-3.**
+`[read]` **Wortlaut der Review, nicht vom Orchestrator formuliert.**
+
+`NUTRITION_NEXT_SPEC_DECISIONS.md §6` und `ADR_NUTRITION_PREFERENCES_V1.md` fordern einen Onboarding-Flow für:
+- Allergien (Hard)
+- Unverträglichkeiten (Strong)
+- Ernährungsform / Diät-Stil
+- Religiöse/kulturelle Einschränkungen (Hard wenn User so setzt)
+- No-Go-Lebensmittel
+- Likes / Dislikes
+- Bevorzugte Küchen
+- Meal-Slots
+- Zielrichtung
+
+`SPEC_10_PASS2_PATCH.md` definiert dafür:
+- 9 Components (`OnboardingPreferencesStep`, `DietTypeSelector`, `AllergenSelector`, `IntoleranceSelector`, `ReligiousDietarySelector`, `FoodLikesInput`, `FoodDislikesInput`, `MealSlotEditor`, `CuisinePreferenceSelector`)
+- 4 Onboarding-Steps (Diät+Allergien+Unverträglichkeiten → Religiös → Likes/Dislikes → Meal-Slots+Ziel)
+
+`SPEC_03_USER_FLOWS.md` enthält **keinen** dedizierten Onboarding-Flow:
+- Flow 9 "Food Preferences setzen" beschreibt **Settings-Pflege**, nicht erstmaliges Onboarding.
+- Kein Trigger-Event spezifiziert (z. B. "nach Sign-up", "vor erstem Diary-Tag").
+- Kein Abbruch-/Skip-Verhalten dokumentiert.
+- Kein Übergang spezifiziert (Onboarding → Diary, oder Onboarding → Goals → Diary?).
+- Validierung pro Step (Pflicht- vs. Optional-Felder) nicht dokumentiert.
+- Wiederaufnahme bei Abbruch (`onboarding_complete = false`) nicht beschrieben.
+
+**Konsequenz:** Workorders für Onboarding-Components sind ohne Flow nicht klar abgrenzbar. UX-Entscheidungen (Step-Reihenfolge, Skippability, Wiederaufnahme) sind offen.
+
+---
+
+## Stand
+
+`[read]` **Die Review stammt aus der Spec-Phase und ist nicht gegen
+den heutigen Stand geprueft.** `[cmd]` **Sie kennt die Entscheidungen
+vom 27./28.08. nicht** — was sie fordert, kann inzwischen entschieden
+oder erledigt sein.
+

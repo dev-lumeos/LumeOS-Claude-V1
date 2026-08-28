@@ -11,9 +11,15 @@ agent: codex
 beauftragt: 2026-08-28
 entscheidung: null
 beruehrt:
-  tabellen: []
-  dateien: []
-zahlen: null
+  tabellen: [supplements.supplement_nutrients]
+  dateien: [supabase/_pipeline/13_supplements/149_folate_unit_guard.sql, supabase/_pipeline/kette.json, supabase/README.md]
+zahlen:
+  gemessen: 2026-08-28
+  supplement_nutrients_zeilen: 17
+  biologische_umrechnungen: 1
+  codes_mit_zwei_kanonischen_einheiten: 0
+  bekannte_zeilen_nach_guard: 16
+  unbekannte_zeilen_nach_guard: 1
 ---
 
 # C-149 - Vitamin D in IU gegen µg
@@ -117,7 +123,87 @@ auf, wenn jemand seine Bilanz vergleicht.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### Urteil: teilweise
+
+Die behauptete IU/ug-Addition ist im heutigen Tagesbilanzcode nicht mehr
+vorhanden: `nutrition.daily_reference_assessment()` liest ausschliesslich
+`daily_nutrient_summary_long` aus Mahlzeiten. Supplemente werden dort noch
+nicht mitgerechnet. Der C-158-Katalogpfad normalisiert Vitamin D bereits vor
+einer moeglichen Bilanzierung; eine Anzeige rechnet nichts um.
+
+`[cmd]` Ausgangsvermutung vom 2026-08-20: eine von 11 Zeilen mit Faktor,
+33.430 % statt rund 930 %. Heute vor dem Guard: 17
+`supplements.supplement_nutrients`-Zeilen, davon eine biologische
+Einheitenumrechnung (Vitamin D; daneben eine reine mg/ug-Umrechnung bei B6),
+und 0 Naehrstoffcodes mit zwei gespeicherten kanonischen Einheiten. Die drei
+offenen Kollisionen sind Vitamin A, Vitamin E und Folat. Nach dem Guard sind
+16 Zeilen `bekannt`, eine (Folat) `unbekannt`; die Zeilenzahl bleibt 17.
+
+### Quellen und Entscheidung
+
+`[read]` Vitamin D: Das NIH Office of Dietary Supplements belegt 1 ug =
+40 IU. Der Katalog speichert 5.000 IU als 125 ug mit Faktor 0,025 in
+`supplement_nutrients`; Quelle:
+https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/.
+
+`[read]` Vitamin A: kein pauschaler Faktor. NIH ODS nennt je nach Form
+0,3 ug RAE/IU (Retinol oder Beta-Carotin-Supplement), 0,05 ug RAE/IU
+(Beta-Carotin aus Nahrung) und 0,025 ug RAE/IU (Alpha-Carotin oder
+Beta-Cryptoxanthin aus Nahrung). Die Form des 5.000-IU-Katalogeintrags fehlt,
+daher bleibt er ohne Naehrstoffzuordnung. Quelle:
+https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/.
+
+`[read]` Vitamin E: ebenfalls kein pauschaler Faktor. 1 IU entspricht
+0,67 mg bei natuerlichem und 0,45 mg Alpha-Tocopherol bei synthetischem
+Vitamin E. Die Form der 400-IU-Katalogportion fehlt; sie bleibt ohne
+Naehrstoffzuordnung. Quelle:
+https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/.
+
+`[read]` Folat: 1 ug DFE entspricht 1 ug Nahrungsfolat, 0,6 ug Folsaeure
+mit Nahrung oder 0,5 ug Folsaeure nuechtern; fuer 5-MTHF besteht kein
+festgelegter Faktor. Form und Einnahmebezug fehlen. Der vorher trotzdem als
+`bekannt` gefuehrte 400-ug-Eintrag wurde deshalb durch den neuen Kettenschritt
+`149_folate_unit_guard.sql` auf `unbekannt` gesetzt und von
+`supplement_nutrient_intake_for_day()` ausgeschlossen. Quelle:
+https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/.
+
+### Nachweis
+
+`[cmd]` Wegwerf-Datenbank `lumeos_c149`: Bei 15 ug aus einer Mahlzeit und
+5.000 IU Vitamin D ergibt die alte hypothetische Rohaddition 33.433,333 %;
+die quellenbelegte Rechnung mit 125 ug ergibt 933,333 %. Das weicht von der
+Auftragszahl 33.430 % bzw. rund 930 % nur durch deren Rundung ab. Die beiden
+Eingaben 5.000 IU und 125 ug lieferten jeweils 125 ug aus
+`supplement_nutrient_intake_for_day()`.
+
+`[cmd]` Gegenprobe: Vor dem Guard gab derselbe Test fuer Folat 400 ug
+zurueck. Danach gab er nur Vitamin D (125 ug) zurueck; die Folat-Zeile steht
+als `unbekannt` mit leerer Menge, Einheit und Faktor. Die Mahlzeitenwerte
+blieben in beiden Vitamin-D-Faellen unveraendert: Vitamin A 100 ug,
+Vitamin E 10 mg und Folat 330 ug. Die Tagesbewertung blieb erwartungsgemaess
+bei 100 %, weil ihr Vertrag derzeit Mahlzeiten, nicht Supplemente, umfasst.
+
+`[cmd]` Vollstaendige Kette: `pnpm exec tsx
+supabase/_pipeline/kette-ausfuehren.ts --database lumeos_c149_final
+--keep-database` lief mit 128 Schritten in 155 s durch. Kein Live-Eingriff,
+keine Sicherung und keine Aenderung an Referenzwerten; getestet wurde nur in
+Wegwerf-Datenbanken.
+
+`[cmd]` `node tools/migration-datenlogik-pruefen.mjs` ist gruen.
+`kette-readme-pruefen.ts` bleibt bei 41 bereits bekannten Dokumentationsluecken;
+der neue Schritt ist dokumentiert und hat keine weitere Abweichung erzeugt.
+`node tools/punkte-pruefen.mjs` ist rot bei 26 statt Soll 25, ausschliesslich
+wegen des gleichzeitig neu angelegten Punkts G-219; C-149 fuegt keinen
+Waecherbefund hinzu.
+
+### Rest
+
+Eine Gesamtbilanz aus Mahlzeiten und Supplementen ist nicht Teil dieses
+Punkts: Sie muss den bestehenden Supplement-Lesepfad verwenden und darf weder
+Roh-IU noch eine Anzeige-Umrechnung einfuehren. Bis diese Verbindung explizit
+gebaut ist, bleibt `daily_reference_assessment()` eine reine
+Mahlzeitenbilanz. Der Einheitenfehler ist damit am kanonischen
+Supplement-Eingang abgesichert; die fachliche Gesamtbilanz ist separat offen.
 
 ## Abnahme
 
