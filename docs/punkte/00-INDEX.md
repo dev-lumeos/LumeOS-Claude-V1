@@ -5,13 +5,13 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 268 |
+| `todos` | 273 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 25 |
-| **gesamt** | **295** |
+| **gesamt** | **300** |
 
-## medical — 37
+## medical — 38
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -52,6 +52,7 @@
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
+| `G-241` | entscheidung | hoch | [zwei Reiterschnitte im Medical-Mockup](todos/medical-g-0241-zwei-reiterschnitte-im-medical-mockup.md) | offen | — | — |
 
 ## nutrition — 78
 
@@ -136,9 +137,9 @@
 | `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](laufend_claudecode/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 49
+## supplements — 50
 
-### beauftragbar — 48
+### beauftragbar — 49
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -189,6 +190,7 @@
 | `G-205` | messung | mittel | [Der Dev-Server beendet sich selbst](todos/supplements-g-0205-der-dev-server-beendet-sich-selbst.md) | offen | — | — |
 | `G-213` | entscheidung | mittel | [soll `in_vitro_only` eine Warnung abschwaechen?](todos/supplements-g-0213-in-vitro-only-abschwaechen.md) | offen | — | — |
 | `G-214` | befund | mittel | [die Katalogsuche sagt nicht, warum ein Treffer passt](todos/supplements-g-0214-suche-sagt-nicht-warum-ein-treffer-passt.md) | offen | — | — |
+| `G-240` | befund | hoch | [der massgebliche Supplements-Mockup ist ungelesen](todos/supplements-g-0240-der-massgebliche-supplements-mockup-ist-ungelesen.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -220,7 +222,7 @@
 | `G-217` | feature | mittel | [der Trainings-Schreibweg hat keine Oberflaeche](erledigt/training-g-0217-trainingsformular-fehlt.md) | erledigt | — | G-219 |
 | `G-219` | entscheidung | niedrig | [`LiveWorkout` hat keinen Aufrufer mehr](todos/training-g-0219-liveworkout-ohne-aufrufer.md) | offen | — | — |
 
-## recovery — 20
+## recovery — 21
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -244,8 +246,9 @@
 | `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](todos/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | offen | — | — |
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
+| `G-243` | befund | mittel | [die Recovery-Schwellen stehen im Mockup, nicht im Punkt](todos/recovery-g-0243-die-recovery-schwellen-stehen-im-mockup-nicht-im-punkt.md) | offen | — | — |
 
-## goals — 5
+## goals — 6
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -254,8 +257,9 @@
 | `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](todos/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | offen | — | — |
 | `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — | — |
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
+| `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 20
+## coach — 21
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -279,6 +283,7 @@
 | `G-164` | befund | mittel | [Drei Module des Vorgaengers haben hier kein Gegenstueck](todos/coach-g-0164-drei-module-des-vorgaengers-haben-hier-kein-gegenstueck.md) | offen | — | — |
 | `G-168` | befund | mittel | [Die coach-Kopfzeile widerspricht dem eigenen Tab](todos/coach-g-0168-die-coach-kopfzeile-widerspricht-dem-eigenen-tab.md) | offen | — | — |
 | `G-169` | befund | mittel | [`coach.checkins` und `checkin_templates` liegen ungelesen](todos/coach-g-0169-coach-checkins-und-checkin-templates-liegen-ungelesen.md) | offen | — | — |
+| `G-244` | befund | mittel | [die rechten Kacheln im Human-Coach-Reiter sind Attrappe](todos/coach-g-0244-die-rechten-kacheln-im-human-coach-reiter-sind-attrappe.md) | offen | — | — |
 
 ## quer — 68
 

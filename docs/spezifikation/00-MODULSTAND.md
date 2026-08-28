@@ -1,0 +1,239 @@
+# Modulstand — was jedes Modul hat, was gebaut ist
+
+**Erhoben 2026-08-28.** `[read]` **Zweck: das nicht taeglich neu
+recherchieren muessen.** Ergaenzt `00-QUELLEN.md`, die sagt *was zu
+lesen ist*; diese Datei sagt *wie der Stand ist*.
+
+---
+
+## Vorweg: es gibt zwei Mockup-Bestaende
+
+`[cmd]` **Der massgebliche:**
+`docs/spezifikation/10-plattform/design-system/theme-v1/` —
+**53 `.jsx`-Dateien, 1.801 KB.** `[read]` **Sie tragen `Ref:`-Zeilen
+auf konkrete Spec-Paragraphen** und sind die Zielgestalt.
+
+`[cmd]` **Der zweite:** `apps/web/public/mockup/features/` —
+**94 `.js`-Dateien.** `[read]` **Gemischt:** Nutrition und Training
+sind daraus neu gebaut (`NEW`, `REBUILD`, `DEEP REBUILD`),
+**Supplements, Medical und Goals sind 1:1-Spiegel des alten Repos**
+mit hartkodierten Beispieldaten. **Fuer diese drei ist er nicht die
+Zielgestalt.**
+
+`[read]` **Am 28.08. habe ich drei Stunden im zweiten Bestand
+gesucht** und Befunde gemeldet, die keine waren. **`00-QUELLEN.md`
+haette es gesagt — sie nennt seit dem 20.08. die `.jsx`-Dateien.**
+
+---
+
+## Supplements
+
+**Mockup — 226 KB in vier Dateien:**
+
+    module-supplements.jsx          1.606 Z  6 Reiter: Today · Stack ·
+                                             Database · Compliance ·
+                                             Interactions · Cost
+    module-supplements-spec.jsx     1.082 Z  Evidence S–F, vereinter
+                                             Katalog, Stacks, Intake,
+                                             Intelligence, Inventory
+    module-supplements-modals.jsx     704 Z  Modale, Kalender,
+                                             Interaktionen erweitert
+    module-supplements-injection.jsx  524 Z  Injektionsplaner:
+                                             Rotation, Volumengrenzen
+
+**Spec** — `docs/specs/Supplements/`, 13 Dateien, SPEC_01–10 plus
+`SCHEMA_NEUAUFBAU.md` und `Injection Planner – Spec Change Request`.
+**43 Komponenten in 8 Gruppen, 18 Hooks, 2 Stores.**
+
+**Gebaut** — `v2/supplements/`, 24 Dateien:
+`tabs.tsx` 55 KB · `substanz-tafel.tsx` 44 KB · `supplements.css`
+44 KB · `modale.tsx` 40 KB · `tab-injektionen.tsx` 27 KB
+
+**Daten:** `entity_transporters` 4.617 · `entity_cyp` 3.001 ·
+`supplement_field_sources` 2.815 · `supplement_aliases` 2.755 ·
+`supplement_faq` 1.970 · `intake_logs` 744 · `supplements` 596
+(412 sichtbar)
+
+---
+
+## Medical
+
+**Mockup — 174 KB in vier Dateien:**
+
+    module-medical.jsx        810 Z  6 Reiter: Overview · Labs ·
+                                     Medications · History · Documents ·
+                                     Appointments
+    module-medical-v2.jsx     819 Z  5 Spec-Reiter: Dashboard ·
+                                     Biomarkers · Import · Tracking ·
+                                     Insights
+    module-medical-data.jsx   299 Z  Dual-Range, 6 Flags, 5
+                                     Systemscores, OCR, Symptome,
+                                     Korrelation, Arzt-Export
+    module-medical-modals.jsx 454 Z  Biomarker-Detail, Symptom,
+                                     Medikament, OCR-Pruefung, Export
+
+`[read]` **Zwei Reiterschnitte nebeneinander** — die alte
+Sechserteilung und die Spec-Fuenferteilung. **Welche gilt, ist eine
+Frage.**
+
+**Spec** — 11 Dateien, SPEC_01–10 plus `SPEC_05_BIOMARKER_CATALOG`.
+**34 Komponenten in 5 Gruppen, 16 Hooks.**
+
+**Gebaut** — `v2/medical/`, 19 Dateien: `modale.tsx` 48 KB ·
+`tab-tracking.tsx` 46 KB · `daten.ts` 39 KB · `medical.css` 24 KB
+
+**Daten:** `biomarker_catalog` 11.676 · `medication_faq` 2.313 ·
+`biomarker_reference_ranges` 566 · `medication_active_substances` 498
+· `medication_products` 448
+
+---
+
+## Goals
+
+**Mockup — 134 KB in drei Dateien:**
+
+    module-goals.jsx         904 Z  Goals · Timeline · Body Metrics ·
+                                    Measurements · Composition
+    module-goals-pro.jsx     906 Z  Phase State Machine, Adaptive TDEE,
+                                    Cross-Module Contributions,
+                                    Bottleneck, Achievement Probability,
+                                    Ratios, IFBB Poses, Weekly Report
+    module-goals-editor.jsx  570 Z  Phase-Editor: Parameter, Guards,
+                                    Zyklus
+
+**Spec** — 10 Dateien, darunter `PHASE_MODELS.md`, `SCORING.md`,
+`OPEN_ITEMS.md`. **38 Komponenten in 6 Gruppen, 18 Hooks.**
+
+**Gebaut** — `v2/goals/`, 20 Dateien: `phase-editor.tsx` 45 KB ·
+`tab-phase.tsx` 36 KB · `modale.tsx` 23 KB · `daten.ts` 20 KB
+
+**Daten:** `body_measurements` 362 · `body_circumferences` 54 ·
+`goal_milestones` 13 · `user_goals` 11 · `goal_phases` 5
+
+`[read]` **`module-goals-pro.jsx` traegt Rechenwerke** — Phasenmodelle
+nach `PHASE_MODELS.md`. **Wer nur `module-goals.jsx` liest, findet sie
+nicht.**
+
+---
+
+## Recovery
+
+**Mockup — 156 KB in fuenf Dateien:**
+
+    module-recovery-v2.jsx      900 Z  Today · Check-in · Muscle map ·
+                                       HRV · Sleep · Modalities ·
+                                       Overtraining · Protokolle
+    module-recovery-modals.jsx  568 Z
+    module-recovery.jsx         546 Z
+    module-recovery-engine.jsx  395 Z  3 Score-Modi, 18-Muskel-Karte,
+                                       HRV PPG, Uebertrainingssignale
+    module-recovery-modals2.jsx 267 Z
+
+**Spec** — 11 Dateien. **39 Komponenten in 9 Gruppen, 16 Hooks.**
+
+**Gebaut** — `v2/recovery/`, 21 Dateien: `motor.ts` 34 KB ·
+`tab-protokolle.tsx` 29 KB · `modale.tsx` 28 KB ·
+`tab-messwerte.tsx` 22 KB
+
+**Daten:** `checkins` 370 · `scores` 370 · `modality_log` 178
+
+`[read]` **Deckt sich am besten von allen Modulen** — Namen anders,
+Struktur gleich. `[cmd]` `module-recovery-engine.jsx` traegt
+`MODALITY_BONUS` (elf Modalitaeten) und `OVERTRAINING_SIGNALS` (vier
+Schwellen); **mehrere offene Punkte fuehren diese Werte als
+*unbelegt*.**
+
+---
+
+## Coach — zwei Seiten derselben Sache
+
+**Tom, 2026-08-28:** *,,coach hat eine subnav mit human coach
+(verbindung zu seinen coaches welche mit der coachingplattform
+arbeiten) und AI coach"* — und *,,wir werden am ende eine komplette
+coachingplattform haben und der spiegel als pendant dazu im user
+Human coach"*.
+
+**Mockup Human Coach — 238 KB in acht Dateien:**
+
+    module-coach.jsx                 971 Z  Athlet- und Portalsicht
+                                            mit Rollenwechsel
+    module-coach-extras.jsx          753 Z  Analytics, Rule Builder,
+                                            Autonomie, Adherence,
+                                            Rollen, Audit Log
+    module-coach-athlete.jsx         566 Z  Rechtemodell, Consent-Log,
+                                            Proposals, Autonomie aus
+                                            Klientensicht
+    module-coach-gaps.jsx            456 Z
+    module-coach-portal-v2.jsx       388 Z  Klienten-Dashboard,
+                                            10 Regelvorlagen, Risiko
+    module-coach-portal-workflows.jsx 315 Z Gefuehrte Ablaeufe
+    module-coach-programs.jsx        205 Z  Program Builder
+    module-coach-meta.jsx            201 Z  Beziehungsdaten, Bewertung
+
+`[read]` **Diese Dateien tragen `Ref:`-Zeilen auf HumanCoach SPEC_01
+§2–3, SPEC_02, SPEC_05, SPEC_09, SPEC_11** — sie sind gegen die Spec
+gebaut, nicht daneben.
+
+**Gebaut, zwei Orte:**
+
+    apps/coach              22 Dateien, eigene App, Port 3220
+                            Athletenseite 10 KB, Checkins, Autonomie,
+                            Consent, Alerts
+    v2/coach/human          10 Reiter: Overview · Coaches ·
+                            Permissions · Proposals · Autonomy ·
+                            Check-ins · Messages · Notes · Invites ·
+                            Onboarding
+
+**Daten (`coach`-Schema):** `relationships` 6 · `client_permissions` 5
+· `client_autonomy` 5 · `checkins` 6 · `messages` 6 · `alerts` 6 ·
+`pending_actions` 3 · **drei Aenderungsprotokolle mit je 7–8 Zeilen**
+
+`[read]` **Die Protokolle sind Punkt 4 aus `SICHERHEIT.md`** —
+Rechte-, Autonomie- und Beziehungsaenderungen werden bereits
+nachvollziehbar gefuehrt.
+
+`[cmd]` **Elf Attrappen-Vorkommen in fuenf Dateien** — die rechten
+Kacheln (Coaching balance, Trust circle, Coach activity) und *,,Latest
+from your coaches"*. **Die Reiter selbst sind angebunden.**
+
+---
+
+## Buddy und AI Coach
+
+**Tom, 2026-08-28:** *,,buddy ist der ueberbegriff, am ende wird buddy
+eine app fuer ios und android sein und nur dein sprechender freund
+sein wird der alles weiss. ai coach ist die abbildung von buddy in der
+webplattform"*.
+
+**Mockup — 108 KB in vier Dateien:**
+
+    module-buddy-engines.jsx    848 Z  Motorenoberflaechen,
+                                       Feature-Gate, Tiers, Cron,
+                                       Safety
+    module-buddy.jsx            415 Z  Chat, 5-Zustands-Avatar,
+                                       Insights, Memory, Decisions
+    module-buddy-knowledge.jsx  280 Z  RAG, Regelmaschine, AI Clone,
+                                       Gym Finder
+    module-buddy-voice.jsx      207 Z  Sprache, Live-Workout-Automat
+
+**Spec** — `docs/specs/BuddyandAICoach/`, 12 Dateien inkl.
+`SPEC_05_ENGINES.md` und `SPEC_11_UI_DESIGN.md`. **46 Komponenten.**
+
+**Gebaut** — `v2/coach/ai/`: `tab-motoren.tsx` 53 KB ·
+`tab-wissen.tsx` 30 KB · `daten.ts` 26 KB · `tab-stimme.tsx` 21 KB ·
+`ansicht.tsx` 25 KB
+
+`[read]` **`apps/buddy` wird die mobile App** — nicht eine weitere
+Weboberflaeche.
+
+---
+
+## Was daraus folgt
+
+`[read]` **Kein Modul ist leer, und keines ist fertig.** Die Datenseite
+traegt ueberall; die Oberflaeche ist ueberall angelegt und an
+verschiedenen Stellen Attrappe.
+
+`[read]` **Der naechste Schritt je Modul ist nicht *bauen*, sondern
+*den Mockup gegen den gebauten Stand halten*** — und zwar den
+`.jsx`-Bestand, nicht den `.js`-Ordner.

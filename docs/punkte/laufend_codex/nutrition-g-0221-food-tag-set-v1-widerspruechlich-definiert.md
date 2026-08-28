@@ -145,7 +145,83 @@ einordnen? **Diese Zahl gehoert in den Bericht, nicht versteckt.**
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+Stand: teilweise erledigt. E-22 entscheidet die sechs Tags, aber nur zwei
+haben heute eine positive, reproduzierbare und konfliktfreie Grundlage. Die
+Kette ergaenzt daher high_fat und gluten_free; sie erfindet weder drei
+Makro-Schwellen noch eine Laktosefrei-Aussage bei widerspruechlichem Bestand.
+
+### Messung
+
+| Messung | Annahme aus E-22/Auftrag | Gemessen vor dem Lauf | Ergebnis im Klon |
+|---|---:|---:|---:|
+| Tag-Definitionen | 14 | 14 | 16 |
+| Tag-Zuordnungen | 30.797 | 30.797 | 32.068 |
+| contains_gluten | 622 | 622 | 622 |
+| high_protein / low_carb / low_fat / high_fiber | 1.400 / 4.659 / 2.648 / 558 | 1.400 / 4.659 / 2.648 / 558 | unveraendert |
+
+Die Abgrenzung ist nutrition.tag_definitions und nutrition.food_tags fuer
+den vollstaendigen BLS-Bestand mit 7.140 Lebensmitteln. Die Annahmen stimmten
+hier; die Nachher-Differenz von 1.271 ist ausschliesslich high_fat (1.233)
+und gluten_free (38).
+
+### Tags und Quellen
+
+| Tag | Urteil | Regel oder Grundlage | Quelle |
+|---|---|---|---|
+| high_fat | umgesetzt, 1.233 | FAT > 17,5 g je 100 g | [UK Department of Health and Social Care, Front of Pack nutrition labelling guidance, Tabelle 2](https://www.gov.uk/government/publications/front-of-pack-nutrition-labelling-guidance) |
+| gluten_free | umgesetzt, 38 | kanonischer BLS-Name enthaelt explizit glutenfrei oder gluten-free; nie aus NOT contains_gluten | nutrition.foods.name_de/name_en |
+| low_protein | offen | Die EU-Quelle kennt source of protein ab 12 Prozent Energie, aber keine low-protein-Schwelle und keine passende g-je-100-g-Regel. | [Verordnung (EG) Nr. 1924/2006, Anhang](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32006R1924) |
+| high_carb | offen | Die EU-Quelle definiert keine high-carb-Schwelle. Eine g-je-100-g-Grenze waere eine neue Entscheidung. | [Verordnung (EG) Nr. 1924/2006, Anhang](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32006R1924) |
+| low_fiber | offen | Die EU-Quelle definiert source of fibre ab 3 g/100 g und high fibre ab 6 g/100 g, aber kein low_fiber. Das Gegenteil von source of fibre ist keine belastbare positive Klasse. | [Verordnung (EG) Nr. 1924/2006, Anhang](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32006R1924) |
+| lactose_free | offen | 12 BLS-Namen sagen explizit laktosefrei/lactose-free; 11 derselben Lebensmittel tragen zugleich contains_lactose. | nutrition.foods.name_de/name_en und nutrition.food_tags |
+
+high_fat nutzt die amtliche Schwelle strikt groesser als 17,5 g/100 g; der
+Bereich von mehr als 3 bis einschliesslich 17,5 g bleibt weder low_fat noch
+high_fat. Die drei offenen Makro-Tags wurden nicht als leere Definitionen
+angelegt, weil ein Filter ohne belegte Regel einen falschen Vollstaendigkeits-
+eindruck erzeugen wuerde. Tom muss die drei Schwellen entscheiden oder eine
+andere belastbare Quelle vorgeben.
+
+### Sicherheits- und Konsistenznachweis
+
+- [cmd] Der volle Kettenlauf gegen lumeos_g221 lief mit 129 von 129
+  Schritten durch, 152,8 s. Die Live-Datenbank blieb unveraendert.
+- [cmd] high_fat und low_fat ueberlappen bei 0 Lebensmitteln.
+- [cmd] gluten_free und contains_gluten ueberlappen bei 0 Lebensmitteln.
+  38 Lebensmittel haben den positiven Glutenfrei-Hinweis, 622 den
+  Gluten-Hinweis und 6.480 haben weder eine Glutenfrei- noch eine
+  Gluten-Aussage. Diese 6.480 werden nicht geraten.
+- [cmd] high_carb ist wegen fehlender Schwelle nicht angelegt; daher sind
+  high_carb-Zuordnungen und die verlangte Ueberschneidung mit low_carb beide
+  0. Das ist kein Ersatz fuer die ausstehende Gegenprobe nach einer
+  Entscheidung.
+- [cmd] lactose_free ist nicht angelegt. Die 11 von 12 widerspruechlichen
+  positiven BLS-Namen verhindern eine sichere Vergabe; der eine konfliktfreie
+  Name rechtfertigt keine unvollstaendige Klasse.
+- [cmd] Der Schritt sichert vor der Aenderung die Anzahl jeder bestehenden
+  Tag-Zuordnung und bricht bei jeder Differenz ab. Im Klon blieben
+  contains_gluten 622, contains_lactose 1.021, contains_nuts 120, halal
+  6.379, high_fiber 558, high_protein 1.400, kosher 6.451, low_carb 4.659,
+  low_fat 2.648, ultra_processed 927, vegan 1.377, vegetarian 1.751 und
+  whole_food 2.884 unveraendert. thai_food blieb bei 0.
+- [cmd] pnpm exec tsx supabase/_pipeline/_validierung/lebensmittel-tags-pruefen.ts:
+  OK. git diff --check: OK.
+
+is_exclusion_relevant ist fuer high_fat und gluten_free false. Beide
+beschreiben eine Eigenschaft des Lebensmittels; die Entscheidung, ob eine
+positive Eigenschaft als Nutzer-Ausschluss funktionieren soll, ist getrennt
+von dieser Ableitung. halal, kosher und thai_food wurden nicht angefasst;
+mediterranean und Profi-Tags wurden nicht angelegt.
+
+### Geaenderte Dateien
+
+- supabase/_pipeline/_ableitung/221_food_tag_set_v1.sql
+- supabase/_pipeline/kette.json
+- supabase/README.md
+
+Kein Live-Eingriff, daher keine Vollsicherung erforderlich. [cmd] lumeos_g221
+wurde nach der Messung geloescht (0 Datenbanken dieses Namens). Nicht gestagt,
+nicht committet und apps/ nicht angefasst.
 
 ## Abnahme
 
