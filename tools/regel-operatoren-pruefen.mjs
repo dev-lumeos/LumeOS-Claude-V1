@@ -2,10 +2,8 @@ import { spawnSync } from 'node:child_process'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE ?? 'postgres'
-const EXPECTED_UNSUPPORTED_RULES = 25
+const EXPECTED_UNSUPPORTED_RULES = 23
 const EXPECTED_HIGH_RULES = [
-  'wr_drug_hyperkalemia_lab',
-  'wr_drug_testosterone_hct',
   'wr_lab_biotin',
   'wr_lab_vitc_glucose',
 ]
@@ -71,4 +69,4 @@ if (errors.length) {
   process.exit(1)
 }
 
-console.log('[regel-operatoren] gruen: Sollstand und vier High-Regeln stimmen.')
+console.log('[regel-operatoren] gruen: Sollstand und zwei High-Regeln stimmen.')

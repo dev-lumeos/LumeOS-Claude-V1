@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 248 |
-| `laufend_codex` | 2 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 18 |
-| **gesamt** | **269** |
+| `todos` | 250 |
+| `laufend_codex` | 1 |
+| `erledigt` | 20 |
+| **gesamt** | **271** |
 
 ## medical — 34
 
@@ -46,7 +45,7 @@
 | `C-313` | entscheidung | mittel | [25 Regeln koennen nicht feuern](laufend_codex/medical-c-0313-25-regeln-koennen-nicht-feuern.md) | laeuft (codex) | — | — |
 | `C-314` | entscheidung | mittel | [die drei Wirkstoff-Dubletten zusammenfuehren](todos/medical-c-0314-die-drei-wirkstoff-dubletten-zusammenfuehren.md) | offen | — | — |
 | `C-327` | blocker | hoch | [Die Chelationsregel kennt keine Gruppenmitgliedschaft](todos/medical-c-0327-chelation-rule-fehlt-gruppenmitgliedschaft.md) | offen | — | — |
-| `C-328` | blocker | hoch | [`count_risk_flag_gte` zaehlt Schluessel statt Werte](laufend_codex/medical-c-0328-count-risk-flag-zaehlt-schluessel-statt-werte.md) | laeuft (codex) | — | — |
+| `C-328` | blocker | hoch | [`count_risk_flag_gte` zaehlt Schluessel statt Werte](erledigt/medical-c-0328-count-risk-flag-zaehlt-schluessel-statt-werte.md) | erledigt | — | — |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 
@@ -174,7 +173,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 15
+## training — 17
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -184,6 +183,7 @@
 | `C-126` | befund | mittel | [E2 braucht Toms Bestaetigung](todos/training-c-0126-e2-braucht-toms-bestaetigung.md) | offen | — | — |
 | `C-145` | befund | mittel | [`Plan` braucht ein Schema, keine Anzeige](todos/training-c-0145-plan-braucht-ein-schema-keine-anzeige.md) | offen | — | — |
 | `C-169` | befund | mittel | [Das Trainingsplan-Schema steht im Entwurf](todos/training-c-0169-das-trainingsplan-schema-steht-im-entwurf.md) | offen | — | — |
+| `C-330` | befund | niedrig | [geplante Sitzungen tragen eine Endzeit](todos/training-c-0330-planned-sitzungen-mit-endzeit.md) | offen | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
@@ -192,7 +192,8 @@
 | `G-88` | entscheidung | mittel | [Die Sitzungskarte auf `Today`](todos/training-g-0088-die-sitzungskarte-auf-today.md) | offen | — | — |
 | `G-131` | befund | mittel | [`module-completeness.jsx` ist die Settings-Seite](todos/training-g-0131-module-completeness-jsx-ist-die-settings-seite.md) | offen | — | — |
 | `G-173` | befund | mittel | [Ein falscher Punktverweis in `scores-read.ts`](todos/training-g-0173-ein-falscher-punktverweis-in-scores-read-ts.md) | offen | — | — |
-| `G-216` | feature | hoch | [Training hat Daten und keinen Schreibweg](laufend_claudecode/training-g-0216-training-hat-keinen-schreibweg.md) | laeuft (claudecode) | — | — |
+| `G-216` | feature | hoch | [Training hat Daten und keinen Schreibweg](erledigt/training-g-0216-training-hat-keinen-schreibweg.md) | erledigt | — | C-330, G-217 |
+| `G-217` | feature | mittel | [der Trainings-Schreibweg hat keine Oberflaeche](todos/training-g-0217-trainingsformular-fehlt.md) | offen | — | — |
 
 ## recovery — 20
 

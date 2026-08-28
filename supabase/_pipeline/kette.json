@@ -1202,6 +1202,24 @@
       "depends_on": [
         "133"
       ]
+    },
+    {
+      "id": "313c",
+      "path": "supabase/_pipeline/13_supplements/313c_rule_high_operators.sql",
+      "kind": "sql",
+      "creates": "C-313 Weg 2: lab_above fuer die zwei auswertbaren High-Regeln mit sicherer Einheiten-Normalisierung",
+      "depends_on": [
+        "313"
+      ]
+    },
+    {
+      "id": "328",
+      "path": "supabase/_pipeline/13_supplements/328_count_risk_flag_values.sql",
+      "kind": "sql",
+      "creates": "C-328: count_risk_flag_gte zaehlt true risk_flags je unterschiedlichem aktivem Wirkstoff",
+      "depends_on": [
+        "313c"
+      ]
     }
   ]
 }
