@@ -236,6 +236,19 @@ Weboberflaeche.
 
 ---
 
+## Attrappenzahlen: Quelltext gegen Bildschirm
+
+`[cmd]` **Nachgetragen 2026-08-28 (A-59):** in `v2/supplements/`
+stehen **89 Attrappenmarken im Quelltext, auf dem Schirm sind es 24.**
+
+`[read]` **Grund ist das Rueckfallmuster** `daten ? <Echt /> :
+<Attrappe />` — **die Marke steht fuer den Fall, dass nichts laedt.**
+
+`[read]` **Die Zahl *,,elf Attrappen-Vorkommen in fuenf Dateien"* fuer
+`v2/coach` weiter oben ist eine Quelltextzaehlung** und
+ueberschaetzt damit vermutlich. `[cmd]` **`tools/schuss.mjs` zaehlt
+am gerenderten Bildschirm und ist die belastbare Quelle.**
+
 ## Was daraus folgt
 
 `[read]` **Kein Modul ist leer, und keines ist fertig.** Die Datenseite

@@ -9,6 +9,8 @@ kind_von: G-239
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-28
+erledigt: 2026-08-28
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.nutrient_reference_values]
 zahlen:
@@ -231,4 +233,58 @@ nichts gestagt und nicht committet.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-28, Orchestrator. Selbst nachgemessen — und der Punkt loest
+sich anders auf, als er gestellt war.**
+
+`[cmd]` **Es hat sich nichts geaendert.** `meal_items.updated_at`
+steht seit dem 23.08. still, `meals` unveraendert bei 2.895.
+
+`[cmd]` **Die Seed-Daten reichen bis 2026-11-16**, drei Monate in die
+Zukunft, und Niacin schwankt taeglich zwischen 20 und 80 mg:
+
+    2026-08-28   62,22 mg    current_date
+    2026-08-27   64,36
+    2026-08-26   41,56
+    2026-08-25   44,98
+
+`[cmd]` **Codex misst 45,73 mg** — das ist keiner dieser Tage.
+`[read]` **Wir haben also nicht denselben Gegenstand gemessen:**
+anderer Nutzer, anderer Tag oder andere Aggregation. **Aber nichts
+war in Bewegung.**
+
+### Der eigentliche Befund ist ein anderer
+
+`[read]` **Drei Beteiligte haben heute dieselbe Funktion aufgerufen
+und drei Ergebnisse gemeldet, ohne anzugeben, fuer wen und wann.**
+`[read]` **Eine Messung ohne genannten Nutzer und Tag ist nicht
+vergleichbar** — und ich habe daraus einen Datenverschiebungs-Verdacht
+gemacht, statt zuerst die Parameter zu vergleichen.
+
+`[read]` **Derselbe Fehler wie den ganzen Tag, in neuer Gestalt:**
+nicht falsch gezaehlt, sondern **Verschiedenes verglichen und fuer
+dasselbe gehalten.**
+
+### Und ein Befund, der bleibt
+
+`[cmd]` **Nutrition fuehrt keine Aenderungs-Historie fuer
+`meal_items` oder Referenzwerte** — es gibt `water_logs`, sonst
+nichts.
+
+`[read]` **Waere wirklich etwas geaendert worden, koennte es niemand
+nachweisen.** Diesmal liess es sich ueber `updated_at` ausschliessen;
+bei einem `UPDATE` ohne Zeitstempelpflege nicht mehr. **Als C-335
+angelegt.**
+
+### Was Codex richtig gemacht hat
+
+`[read]` **Er hat C-149 und G-221 als Ursache ausgeschlossen, statt
+sie zu bestaetigen** — obwohl mein Auftrag sie als Verdacht nannte.
+*,,Sie schreiben weder Tagesmengen noch Referenzwerte, und es gibt
+keine Triggerkette dorthin."*
+
+`[read]` **Und die Unsicherheit steht im Bericht statt einer
+plausiblen Erklaerung:** *,,Der genaue historische Schreibweg bleibt
+unklar."* **Das war die Vorgabe, und sie wurde eingehalten.**
+
+**Abgenommen.**
+
