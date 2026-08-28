@@ -5,317 +5,322 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 246 |
+| `todos` | 249 |
 | `laufend_codex` | 1 |
-| `erledigt` | 13 |
-| **gesamt** | **260** |
+| `erledigt` | 15 |
+| **gesamt** | **265** |
 
-## medical — 32
+## medical — 33
 
-| Nr | Typ | Schwere | Titel | Zustand | Blocker |
-|---|---|---|---|---|---|
-| `A-21` | befund | mittel | [Kimi-K3-Schwarm als Rechercheweg](todos/medical-a-0021-kimi-k3-schwarm-als-rechercheweg.md) | offen | — |
-| `A-33` | blocker | hoch | [Der Medical-Abgleich, den der Orchestrator nachgeholt hat](todos/medical-a-0033-der-medical-abgleich-den-der-orchestrator-nachgeholt-hat.md) | offen | — |
-| `C-85` | befund | mittel | [Kurznamen fehlen bei 11 von 35](todos/medical-c-0085-kurznamen-fehlen-bei-11-von-35.md) | offen | — |
-| `C-91` | feature | mittel | [Die Spec nennt LOINC-Codes, die nicht die ueblichen sind](todos/medical-c-0091-die-spec-nennt-loinc-codes-die-nicht-die-ueblichen-sind.md) | offen | — |
-| `C-92` | befund | mittel | [Die Spec verwechselt Marker](todos/medical-c-0092-die-spec-verwechselt-marker.md) | offen | — |
-| `C-136` | befund | mittel | [Medikamente und Conditions brauchen die Coach-Freigabeschicht](todos/medical-c-0136-medikamente-und-conditions-brauchen-die-coach-freigabeschicht.md) | offen | — |
-| `C-171` | befund | mittel | [Medical — neun Konstanten ohne Tabelle](todos/medical-c-0171-medical-neun-konstanten-ohne-tabelle.md) | offen | — |
-| `C-176` | befund | mittel | [`biomarkerDetails.ts` im Vorgaengerrepo — 121 KB](todos/medical-c-0176-biomarkerdetails-ts-im-vorgaengerrepo-121-kb.md) | offen | — |
-| `C-178` | messung | mittel | [Prolactin und ApoB fehlen dem Health score](todos/medical-c-0178-prolactin-und-apob-fehlen-dem-health-score.md) | offen | — |
-| `C-180` | befund | mittel | [`crawl_025` liefert die Evidenzeinstufung fuer 181 Konstanten](todos/medical-c-0180-crawl-025-liefert-die-evidenzeinstufung-fuer-181-konstanten.md) | offen | — |
-| `C-183` | befund | mittel | [Die Symptom-Ontologie ist geliefert](todos/medical-c-0183-die-symptom-ontologie-ist-geliefert.md) | offen | — |
-| `C-184` | feature | mittel | [66 LOINC-Handoff-Items, 20 noch offen](todos/medical-c-0184-66-loinc-handoff-items-20-noch-offen.md) | offen | — |
-| `C-194` | befund | mittel | [Den Kimi-Bestand vollstaendig aufnehmen](todos/medical-c-0194-den-kimi-bestand-vollstaendig-aufnehmen.md) | offen | — |
-| `C-198` | feature | mittel | [ATC, CAS und CYP der 498 Wirkstoffe nachziehen](todos/medical-c-0198-atc-cas-und-cyp-der-498-wirkstoffe-nachziehen.md) | offen | — |
-| `C-200` | feature | mittel | [Symptomtabelle anlegen und fuellen](todos/medical-c-0200-symptomtabelle-anlegen-und-fuellen.md) | offen | — |
-| `C-204` | befund | mittel | [`lab_trigger_index` — 77 Analyte](todos/medical-c-0204-lab-trigger-index-77-analyte.md) | offen | — |
-| `C-209` | blocker | hoch | [Die laufende Instanz wird nach einem Kettenschritt nicht nachgezogen](todos/medical-c-0209-die-laufende-instanz-wird-nach-einem-kettenschritt-nicht-nachgezogen.md) | offen | — |
-| `C-213` | befund | mittel | [C-124-E8 — die Arzt-Hinweis-Schwelle ist offen](todos/medical-c-0213-c-124-e8-die-arzt-hinweis-schwelle-ist-offen.md) | offen | — |
-| `C-285` | entscheidung | hoch | [`user_medications` speichert Medikamente im Klartext](todos/medical-c-0285-user-medications-speichert-medikamente-im-klartext.md) | offen | — |
-| `C-294` | feature | mittel | [was Kimi nachliefern muss](todos/medical-c-0294-was-kimi-nachliefern-muss.md) | offen | — |
-| `C-303` | feature | mittel | [erfasste Symptome haben keine Tabelle](todos/medical-c-0303-erfasste-symptome-haben-keine-tabelle.md) | offen | — |
-| `C-304` | befund | mittel | [51 Zuordnungen zeigen ins Leere](todos/medical-c-0304-51-zuordnungen-zeigen-ins-leere.md) | offen | — |
-| `C-306` | befund | mittel | [`atc_code` traegt JSON in einer `text`-Spalte](todos/medical-c-0306-atc-code-traegt-json-in-einer-text-spalte.md) | offen | — |
-| `C-307` | befund | mittel | [`mythen_de` hat drei Gestalten in einer Spalte](todos/medical-c-0307-mythen-de-hat-drei-gestalten-in-einer-spalte.md) | offen | — |
-| `C-308` | befund | mittel | [keine Produktdaten fuer den deutschen Markt](todos/medical-c-0308-keine-produktdaten-fuer-den-deutschen-markt.md) | offen | — |
-| `C-309` | feature | mittel | [der Wirkmechanismus ist bei allen 494 englisch](todos/medical-c-0309-der-wirkmechanismus-ist-bei-allen-494-englisch.md) | offen | — |
-| `C-311` | befund | mittel | [US-Freinamen ohne europaeisches Gegenstueck](todos/medical-c-0311-us-freinamen-ohne-europaeisches-gegenstueck.md) | offen | — |
-| `C-312` | befund | mittel | [Barcode einlesen — was jetzt schon ins Schema gehoert](todos/medical-c-0312-barcode-einlesen-was-jetzt-schon-ins-schema-gehoert.md) | offen | — |
-| `C-313` | entscheidung | mittel | [25 Regeln koennen nicht feuern](todos/medical-c-0313-25-regeln-koennen-nicht-feuern.md) | offen | — |
-| `C-314` | entscheidung | mittel | [die drei Wirkstoff-Dubletten zusammenfuehren](todos/medical-c-0314-die-drei-wirkstoff-dubletten-zusammenfuehren.md) | offen | — |
-| `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — |
-| `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — |
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `A-21` | befund | mittel | [Kimi-K3-Schwarm als Rechercheweg](todos/medical-a-0021-kimi-k3-schwarm-als-rechercheweg.md) | offen | — | — |
+| `A-33` | blocker | hoch | [Der Medical-Abgleich, den der Orchestrator nachgeholt hat](todos/medical-a-0033-der-medical-abgleich-den-der-orchestrator-nachgeholt-hat.md) | offen | — | — |
+| `C-85` | befund | mittel | [Kurznamen fehlen bei 11 von 35](todos/medical-c-0085-kurznamen-fehlen-bei-11-von-35.md) | offen | — | — |
+| `C-91` | feature | mittel | [Die Spec nennt LOINC-Codes, die nicht die ueblichen sind](todos/medical-c-0091-die-spec-nennt-loinc-codes-die-nicht-die-ueblichen-sind.md) | offen | — | — |
+| `C-92` | befund | mittel | [Die Spec verwechselt Marker](todos/medical-c-0092-die-spec-verwechselt-marker.md) | offen | — | — |
+| `C-136` | befund | mittel | [Medikamente und Conditions brauchen die Coach-Freigabeschicht](todos/medical-c-0136-medikamente-und-conditions-brauchen-die-coach-freigabeschicht.md) | offen | — | — |
+| `C-171` | befund | mittel | [Medical — neun Konstanten ohne Tabelle](todos/medical-c-0171-medical-neun-konstanten-ohne-tabelle.md) | offen | — | — |
+| `C-176` | befund | mittel | [`biomarkerDetails.ts` im Vorgaengerrepo — 121 KB](todos/medical-c-0176-biomarkerdetails-ts-im-vorgaengerrepo-121-kb.md) | offen | — | — |
+| `C-178` | messung | mittel | [Prolactin und ApoB fehlen dem Health score](todos/medical-c-0178-prolactin-und-apob-fehlen-dem-health-score.md) | offen | — | — |
+| `C-180` | befund | mittel | [`crawl_025` liefert die Evidenzeinstufung fuer 181 Konstanten](todos/medical-c-0180-crawl-025-liefert-die-evidenzeinstufung-fuer-181-konstanten.md) | offen | — | C-182, C-183 |
+| `C-183` | befund | mittel | [Die Symptom-Ontologie ist geliefert](todos/medical-c-0183-die-symptom-ontologie-ist-geliefert.md) | offen | — | — |
+| `C-184` | feature | mittel | [66 LOINC-Handoff-Items, 20 noch offen](todos/medical-c-0184-66-loinc-handoff-items-20-noch-offen.md) | offen | — | — |
+| `C-194` | befund | mittel | [Den Kimi-Bestand vollstaendig aufnehmen](todos/medical-c-0194-den-kimi-bestand-vollstaendig-aufnehmen.md) | offen | — | — |
+| `C-198` | feature | mittel | [ATC, CAS und CYP der 498 Wirkstoffe nachziehen](todos/medical-c-0198-atc-cas-und-cyp-der-498-wirkstoffe-nachziehen.md) | offen | — | — |
+| `C-200` | feature | mittel | [Symptomtabelle anlegen und fuellen](todos/medical-c-0200-symptomtabelle-anlegen-und-fuellen.md) | offen | — | — |
+| `C-204` | befund | mittel | [`lab_trigger_index` — 77 Analyte](todos/medical-c-0204-lab-trigger-index-77-analyte.md) | offen | — | — |
+| `C-209` | blocker | hoch | [Die laufende Instanz wird nach einem Kettenschritt nicht nachgezogen](todos/medical-c-0209-die-laufende-instanz-wird-nach-einem-kettenschritt-nicht-nachgezogen.md) | offen | — | — |
+| `C-213` | befund | mittel | [C-124-E8 — die Arzt-Hinweis-Schwelle ist offen](todos/medical-c-0213-c-124-e8-die-arzt-hinweis-schwelle-ist-offen.md) | offen | — | — |
+| `C-285` | entscheidung | hoch | [`user_medications` speichert Medikamente im Klartext](todos/medical-c-0285-user-medications-speichert-medikamente-im-klartext.md) | offen | — | — |
+| `C-294` | feature | mittel | [was Kimi nachliefern muss](todos/medical-c-0294-was-kimi-nachliefern-muss.md) | offen | — | — |
+| `C-303` | feature | mittel | [erfasste Symptome haben keine Tabelle](todos/medical-c-0303-erfasste-symptome-haben-keine-tabelle.md) | offen | — | — |
+| `C-304` | befund | mittel | [51 Zuordnungen zeigen ins Leere](todos/medical-c-0304-51-zuordnungen-zeigen-ins-leere.md) | offen | — | — |
+| `C-306` | befund | mittel | [`atc_code` traegt JSON in einer `text`-Spalte](todos/medical-c-0306-atc-code-traegt-json-in-einer-text-spalte.md) | offen | — | — |
+| `C-307` | befund | mittel | [`mythen_de` hat drei Gestalten in einer Spalte](todos/medical-c-0307-mythen-de-hat-drei-gestalten-in-einer-spalte.md) | offen | — | — |
+| `C-308` | befund | mittel | [keine Produktdaten fuer den deutschen Markt](todos/medical-c-0308-keine-produktdaten-fuer-den-deutschen-markt.md) | offen | — | — |
+| `C-309` | feature | mittel | [der Wirkmechanismus ist bei allen 494 englisch](todos/medical-c-0309-der-wirkmechanismus-ist-bei-allen-494-englisch.md) | offen | — | — |
+| `C-311` | befund | mittel | [US-Freinamen ohne europaeisches Gegenstueck](todos/medical-c-0311-us-freinamen-ohne-europaeisches-gegenstueck.md) | offen | — | — |
+| `C-312` | befund | mittel | [Barcode einlesen — was jetzt schon ins Schema gehoert](todos/medical-c-0312-barcode-einlesen-was-jetzt-schon-ins-schema-gehoert.md) | offen | — | — |
+| `C-313` | entscheidung | mittel | [25 Regeln koennen nicht feuern](todos/medical-c-0313-25-regeln-koennen-nicht-feuern.md) | offen | — | — |
+| `C-314` | entscheidung | mittel | [die drei Wirkstoff-Dubletten zusammenfuehren](todos/medical-c-0314-die-drei-wirkstoff-dubletten-zusammenfuehren.md) | offen | — | — |
+| `C-327` | blocker | hoch | [Die Chelationsregel kennt keine Gruppenmitgliedschaft](todos/medical-c-0327-chelation-rule-fehlt-gruppenmitgliedschaft.md) | offen | — | — |
+| `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
+| `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 
 ## nutrition — 58
 
-| Nr | Typ | Schwere | Titel | Zustand | Blocker |
-|---|---|---|---|---|---|
-| `A-13` | befund | mittel | [Das Konsolidierungsregister abarbeiten](todos/nutrition-a-0013-das-konsolidierungsregister-abarbeiten.md) | offen | — |
-| `A-32` | befund | mittel | [Die Nummer G-124 war doppelt vergeben](todos/nutrition-a-0032-die-nummer-g-124-war-doppelt-vergeben.md) | offen | — |
-| `A-37` | befund | mittel | [Zwoelf ADRs in `docs/specs/Nutrition/04_adrs/`](todos/nutrition-a-0037-zwoelf-adrs-in-docs-specs-nutrition-04-adrs.md) | offen | — |
-| `A-41` | befund | mittel | [Berichtsnummern kollidieren](todos/nutrition-a-0041-berichtsnummern-kollidieren.md) | offen | — |
-| `A-47` | feature | mittel | [Der ADR widerspricht sich bei `hard`](todos/nutrition-a-0047-der-adr-widerspricht-sich-bei-hard.md) | offen | — |
-| `C-08` | befund | mittel | [`services/nutrition-api` — der ADR gilt](todos/nutrition-c-0008-services-nutrition-api-der-adr-gilt.md) | offen | — |
-| `C-20` | feature | mittel | [Treffer am Wortanfang schlägt Treffer in der Wortmitte](todos/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md) | offen | — |
-| `C-24` | befund | niedrig | [Halbfertigprodukte ranken als Grundzutat](todos/nutrition-c-0024-halbfertigprodukte-ranken-als-grundzutat.md) | offen | — |
-| `C-27` | messung | mittel | [Alltagswörter ohne Treffer — noch zwei](todos/nutrition-c-0027-alltagsworter-ohne-treffer-noch-zwei.md) | offen | — |
-| `C-29` | entscheidung | mittel | [Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt](todos/nutrition-c-0029-drei-namensschichten-und-eine-kuration-die-den-kettenlauf-uberlebt.md) | offen | — |
-| `C-30` | befund | mittel | [Suche und Trefferliste auf Arten umstellen](todos/nutrition-c-0030-suche-und-trefferliste-auf-arten-umstellen.md) | offen | — |
-| `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](todos/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | offen | — |
-| `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](todos/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | offen | — |
-| `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — |
-| `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](todos/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | offen | — |
-| `C-49` | befund | hoch | [Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach](todos/nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md) | offen | — |
-| `C-102` | feature | mittel | [`milch` findet Joghurt statt Milch](todos/nutrition-c-0102-milch-findet-joghurt-statt-milch.md) | offen | — |
-| `C-109` | entscheidung | mittel | [Die Injektions-Grenzwerte sind unbelegt](todos/nutrition-c-0109-die-injektions-grenzwerte-sind-unbelegt.md) | offen | — |
-| `C-117` | befund | mittel | [`milch` traegt auch mit Vorlieben nicht](todos/nutrition-c-0117-milch-traegt-auch-mit-vorlieben-nicht.md) | offen | — |
-| `C-120` | befund | mittel | [Drei Sperren in `food_search`](todos/nutrition-c-0120-drei-sperren-in-food-search.md) | offen | — |
-| `C-121` | befund | mittel | [Die Suche ist langsamer geworden](todos/nutrition-c-0121-die-suche-ist-langsamer-geworden.md) | offen | — |
-| `C-149` | blocker | mittel | [Vitamin D in IU gegen µg](todos/nutrition-c-0149-vitamin-d-in-iu-gegen-g.md) | offen | — |
-| `C-160` | befund | mittel | [Der Bewertungshorizont je Naehrstoff ist leer](todos/nutrition-c-0160-der-bewertungshorizont-je-naehrstoff-ist-leer.md) | offen | — |
-| `C-163` | befund | mittel | [94 Substanzen ohne maschinenlesbare Naehrstoffmenge](todos/nutrition-c-0163-94-substanzen-ohne-maschinenlesbare-naehrstoffmenge.md) | offen | — |
-| `C-174` | befund | mittel | [`ADR_NUTRITION_PREFERENCES_V1` kennt drei Constraint-Stufen](todos/nutrition-c-0174-adr-nutrition-preferences-v1-kennt-drei-constraint-stufen.md) | offen | — |
-| `C-175` | feature | mittel | [`shopping_lists` fehlt](todos/nutrition-c-0175-shopping-lists-fehlt.md) | offen | — |
-| `C-177` | messung | mittel | [Thai-Aliase fehlen bewusst](todos/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | offen | — |
-| `C-191` | messung | mittel | [`p_user_id` kostet das Dreifache](todos/nutrition-c-0191-p-user-id-kostet-das-dreifache.md) | offen | — |
-| `C-192` | befund | mittel | [`p_user_id` kostet in `food_search` das Dreifache](todos/nutrition-c-0192-p-user-id-kostet-in-food-search-das-dreifache.md) | offen | — |
-| `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](todos/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | offen | — |
-| `C-210` | befund | mittel | [Die 28 fehlenden Naehrstofftexte — was ist gemeint?](todos/nutrition-c-0210-die-28-fehlenden-naehrstofftexte-was-ist-gemeint.md) | offen | — |
-| `C-211` | befund | mittel | [Selen fehlt im BLS-Katalog](todos/nutrition-c-0211-selen-fehlt-im-bls-katalog.md) | offen | — |
-| `C-212` | befund | mittel | [`CHORL` haengt nicht im Naehrstoffbaum](todos/nutrition-c-0212-chorl-haengt-nicht-im-naehrstoffbaum.md) | offen | — |
-| `C-229` | befund | mittel | [Ein Katalog aus `DatabaseEcht`, Detail und Add getrennt](todos/nutrition-c-0229-ein-katalog-aus-databaseecht-detail-und-add-getrennt.md) | offen | — |
-| `C-239` | befund | mittel | [`meal_plans` kennt keinen Lebenszyklus](todos/nutrition-c-0239-meal-plans-kennt-keinen-lebenszyklus.md) | offen | — |
-| `C-323` | entscheidung | hoch | [Micro-Flags Warnschwelle und Formulierung festlegen](todos/nutrition-c-0323-micro-flags-warnschwelle-und-formulierung-festlegen.md) | offen | — |
-| `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](todos/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | offen | — |
-| `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — |
-| `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](todos/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | offen | — |
-| `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — |
-| `G-70` | feature | mittel | [Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab](todos/nutrition-g-0070-sortierbare-spalten-und-herkunfts-filter-im-food-db-tab.md) | offen | — |
-| `G-72` | entscheidung | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](todos/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | offen | — |
-| `G-75` | befund | mittel | [Die alte Oberflaeche nennt den BLS ebenfalls](todos/nutrition-g-0075-die-alte-oberflaeche-nennt-den-bls-ebenfalls.md) | offen | — |
-| `G-93` | befund | mittel | [Der Anzeigename fehlt im laufenden Erfassungsdialog](todos/nutrition-g-0093-der-anzeigename-fehlt-im-laufenden-erfassungsdialog.md) | offen | — |
-| `G-98` | befund | mittel | [Meal plans braucht einen Zustand und eine Herkunft](todos/nutrition-g-0098-meal-plans-braucht-einen-zustand-und-eine-herkunft.md) | offen | — |
-| `G-99` | befund | mittel | [Drei der acht Planner-Spalten bleiben wirkungslos](todos/nutrition-g-0099-drei-der-acht-planner-spalten-bleiben-wirkungslos.md) | offen | — |
-| `G-107` | befund | mittel | [Der Mikronaehrstoff-Trend braucht eine Referenz je Tag](todos/nutrition-g-0107-der-mikronaehrstoff-trend-braucht-eine-referenz-je-tag.md) | offen | — |
-| `G-108` | befund | mittel | [Die Filter des Nutrients-Tabs](todos/nutrition-g-0108-die-filter-des-nutrients-tabs.md) | offen | — |
-| `G-112` | befund | mittel | [Der Food-DB-Filter laesst nur einen Wert zu](todos/nutrition-g-0112-der-food-db-filter-laesst-nur-einen-wert-zu.md) | offen | — |
-| `G-116` | entscheidung | mittel | [Generelle Ausschluesse bewerten mit 0, statt zu filtern](todos/nutrition-g-0116-generelle-ausschluesse-bewerten-mit-0-statt-zu-filtern.md) | offen | — |
-| `G-126` | befund | mittel | [Drei Reste aus G-122](todos/nutrition-g-0126-drei-reste-aus-g-122.md) | offen | — |
-| `G-134` | entscheidung | mittel | [Die vier Filtergruppen gibt es in den Daten nicht](todos/nutrition-g-0134-die-vier-filtergruppen-gibt-es-in-den-daten-nicht.md) | offen | — |
-| `G-136` | entscheidung | mittel | [Zwei Kartenzuordnungen sind Auslegung](todos/nutrition-g-0136-zwei-kartenzuordnungen-sind-auslegung.md) | offen | — |
-| `G-137` | befund | mittel | [Acht Karten — die alten Ansichtsschluessel verfallen](todos/nutrition-g-0137-acht-karten-die-alten-ansichtsschluessel-verfallen.md) | offen | — |
-| `G-140` | feature | mittel | [`display_tier` ist ein Abo-Tier, keine Baumebene](todos/nutrition-g-0140-display-tier-ist-ein-abo-tier-keine-baumebene.md) | offen | — |
-| `G-152` | entscheidung | mittel | [Der Aktivitaetsstrom des Dashboards](todos/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | offen | — |
-| `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — |
-| `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — |
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `A-13` | befund | mittel | [Das Konsolidierungsregister abarbeiten](todos/nutrition-a-0013-das-konsolidierungsregister-abarbeiten.md) | offen | — | — |
+| `A-32` | befund | mittel | [Die Nummer G-124 war doppelt vergeben](todos/nutrition-a-0032-die-nummer-g-124-war-doppelt-vergeben.md) | offen | — | — |
+| `A-37` | befund | mittel | [Zwoelf ADRs in `docs/specs/Nutrition/04_adrs/`](todos/nutrition-a-0037-zwoelf-adrs-in-docs-specs-nutrition-04-adrs.md) | offen | — | C-175, C-318 |
+| `A-41` | befund | mittel | [Berichtsnummern kollidieren](todos/nutrition-a-0041-berichtsnummern-kollidieren.md) | offen | — | — |
+| `A-47` | feature | mittel | [Der ADR widerspricht sich bei `hard`](todos/nutrition-a-0047-der-adr-widerspricht-sich-bei-hard.md) | offen | — | — |
+| `C-08` | befund | mittel | [`services/nutrition-api` — der ADR gilt](todos/nutrition-c-0008-services-nutrition-api-der-adr-gilt.md) | offen | — | — |
+| `C-20` | feature | mittel | [Treffer am Wortanfang schlägt Treffer in der Wortmitte](todos/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md) | offen | — | — |
+| `C-24` | befund | niedrig | [Halbfertigprodukte ranken als Grundzutat](todos/nutrition-c-0024-halbfertigprodukte-ranken-als-grundzutat.md) | offen | — | — |
+| `C-27` | messung | mittel | [Alltagswörter ohne Treffer — noch zwei](todos/nutrition-c-0027-alltagsworter-ohne-treffer-noch-zwei.md) | offen | — | — |
+| `C-29` | entscheidung | mittel | [Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt](todos/nutrition-c-0029-drei-namensschichten-und-eine-kuration-die-den-kettenlauf-uberlebt.md) | offen | — | — |
+| `C-30` | befund | mittel | [Suche und Trefferliste auf Arten umstellen](todos/nutrition-c-0030-suche-und-trefferliste-auf-arten-umstellen.md) | offen | — | — |
+| `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](todos/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | offen | — | — |
+| `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](todos/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | offen | — | — |
+| `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — | — |
+| `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](todos/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | offen | — | — |
+| `C-49` | befund | hoch | [Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach](todos/nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md) | offen | — | C-323, C-324 |
+| `C-102` | feature | mittel | [`milch` findet Joghurt statt Milch](todos/nutrition-c-0102-milch-findet-joghurt-statt-milch.md) | offen | — | — |
+| `C-109` | entscheidung | mittel | [Die Injektions-Grenzwerte sind unbelegt](todos/nutrition-c-0109-die-injektions-grenzwerte-sind-unbelegt.md) | offen | — | — |
+| `C-117` | befund | mittel | [`milch` traegt auch mit Vorlieben nicht](todos/nutrition-c-0117-milch-traegt-auch-mit-vorlieben-nicht.md) | offen | — | — |
+| `C-120` | befund | mittel | [Drei Sperren in `food_search`](todos/nutrition-c-0120-drei-sperren-in-food-search.md) | offen | — | — |
+| `C-121` | befund | mittel | [Die Suche ist langsamer geworden](todos/nutrition-c-0121-die-suche-ist-langsamer-geworden.md) | offen | — | — |
+| `C-149` | blocker | mittel | [Vitamin D in IU gegen µg](todos/nutrition-c-0149-vitamin-d-in-iu-gegen-g.md) | offen | — | — |
+| `C-160` | befund | mittel | [Der Bewertungshorizont je Naehrstoff ist leer](todos/nutrition-c-0160-der-bewertungshorizont-je-naehrstoff-ist-leer.md) | offen | — | — |
+| `C-163` | befund | mittel | [94 Substanzen ohne maschinenlesbare Naehrstoffmenge](todos/nutrition-c-0163-94-substanzen-ohne-maschinenlesbare-naehrstoffmenge.md) | offen | — | — |
+| `C-174` | befund | mittel | [`ADR_NUTRITION_PREFERENCES_V1` kennt drei Constraint-Stufen](todos/nutrition-c-0174-adr-nutrition-preferences-v1-kennt-drei-constraint-stufen.md) | offen | — | — |
+| `C-175` | feature | mittel | [`shopping_lists` fehlt](todos/nutrition-c-0175-shopping-lists-fehlt.md) | offen | — | — |
+| `C-177` | messung | mittel | [Thai-Aliase fehlen bewusst](todos/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | offen | — | — |
+| `C-191` | messung | mittel | [`p_user_id` kostet das Dreifache](todos/nutrition-c-0191-p-user-id-kostet-das-dreifache.md) | offen | — | — |
+| `C-192` | befund | mittel | [`p_user_id` kostet in `food_search` das Dreifache](todos/nutrition-c-0192-p-user-id-kostet-in-food-search-das-dreifache.md) | offen | — | — |
+| `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](todos/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | offen | — | — |
+| `C-210` | befund | mittel | [Die 28 fehlenden Naehrstofftexte — was ist gemeint?](todos/nutrition-c-0210-die-28-fehlenden-naehrstofftexte-was-ist-gemeint.md) | offen | — | — |
+| `C-211` | befund | mittel | [Selen fehlt im BLS-Katalog](todos/nutrition-c-0211-selen-fehlt-im-bls-katalog.md) | offen | — | — |
+| `C-212` | befund | mittel | [`CHORL` haengt nicht im Naehrstoffbaum](todos/nutrition-c-0212-chorl-haengt-nicht-im-naehrstoffbaum.md) | offen | — | — |
+| `C-229` | befund | mittel | [Ein Katalog aus `DatabaseEcht`, Detail und Add getrennt](todos/nutrition-c-0229-ein-katalog-aus-databaseecht-detail-und-add-getrennt.md) | offen | — | — |
+| `C-239` | befund | mittel | [`meal_plans` kennt keinen Lebenszyklus](todos/nutrition-c-0239-meal-plans-kennt-keinen-lebenszyklus.md) | offen | — | — |
+| `C-323` | entscheidung | hoch | [Micro-Flags Warnschwelle und Formulierung festlegen](todos/nutrition-c-0323-micro-flags-warnschwelle-und-formulierung-festlegen.md) | offen | — | — |
+| `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](todos/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | offen | — | — |
+| `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
+| `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](todos/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | offen | — | — |
+| `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
+| `G-70` | feature | mittel | [Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab](todos/nutrition-g-0070-sortierbare-spalten-und-herkunfts-filter-im-food-db-tab.md) | offen | — | — |
+| `G-72` | entscheidung | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](todos/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | offen | — | — |
+| `G-75` | befund | mittel | [Die alte Oberflaeche nennt den BLS ebenfalls](todos/nutrition-g-0075-die-alte-oberflaeche-nennt-den-bls-ebenfalls.md) | offen | — | — |
+| `G-93` | befund | mittel | [Der Anzeigename fehlt im laufenden Erfassungsdialog](todos/nutrition-g-0093-der-anzeigename-fehlt-im-laufenden-erfassungsdialog.md) | offen | — | — |
+| `G-98` | befund | mittel | [Meal plans braucht einen Zustand und eine Herkunft](todos/nutrition-g-0098-meal-plans-braucht-einen-zustand-und-eine-herkunft.md) | offen | — | — |
+| `G-99` | befund | mittel | [Drei der acht Planner-Spalten bleiben wirkungslos](todos/nutrition-g-0099-drei-der-acht-planner-spalten-bleiben-wirkungslos.md) | offen | — | — |
+| `G-107` | befund | mittel | [Der Mikronaehrstoff-Trend braucht eine Referenz je Tag](todos/nutrition-g-0107-der-mikronaehrstoff-trend-braucht-eine-referenz-je-tag.md) | offen | — | — |
+| `G-108` | befund | mittel | [Die Filter des Nutrients-Tabs](todos/nutrition-g-0108-die-filter-des-nutrients-tabs.md) | offen | — | — |
+| `G-112` | befund | mittel | [Der Food-DB-Filter laesst nur einen Wert zu](todos/nutrition-g-0112-der-food-db-filter-laesst-nur-einen-wert-zu.md) | offen | — | — |
+| `G-116` | entscheidung | mittel | [Generelle Ausschluesse bewerten mit 0, statt zu filtern](todos/nutrition-g-0116-generelle-ausschluesse-bewerten-mit-0-statt-zu-filtern.md) | offen | — | — |
+| `G-126` | befund | mittel | [Drei Reste aus G-122](todos/nutrition-g-0126-drei-reste-aus-g-122.md) | offen | — | C-210, C-211, C-212 |
+| `G-134` | entscheidung | mittel | [Die vier Filtergruppen gibt es in den Daten nicht](todos/nutrition-g-0134-die-vier-filtergruppen-gibt-es-in-den-daten-nicht.md) | offen | — | — |
+| `G-136` | entscheidung | mittel | [Zwei Kartenzuordnungen sind Auslegung](todos/nutrition-g-0136-zwei-kartenzuordnungen-sind-auslegung.md) | offen | — | — |
+| `G-137` | befund | mittel | [Acht Karten — die alten Ansichtsschluessel verfallen](todos/nutrition-g-0137-acht-karten-die-alten-ansichtsschluessel-verfallen.md) | offen | — | — |
+| `G-140` | feature | mittel | [`display_tier` ist ein Abo-Tier, keine Baumebene](todos/nutrition-g-0140-display-tier-ist-ein-abo-tier-keine-baumebene.md) | offen | — | — |
+| `G-152` | entscheidung | mittel | [Der Aktivitaetsstrom des Dashboards](todos/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | offen | — | — |
+| `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — | — |
+| `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 45
+## supplements — 48
 
-### beauftragbar — 44
+### beauftragbar — 47
 
-| Nr | Typ | Schwere | Titel | Zustand | Blocker |
-|---|---|---|---|---|---|
-| `A-27` | feature | mittel | [Zwei Agenten, zwei Attrappen-Erwartungen](todos/supplements-a-0027-zwei-agenten-zwei-attrappen-erwartungen.md) | offen | — |
-| `A-49` | befund | mittel | [Der Attrappen-Waechter traegt eine veraltete Behauptung](todos/supplements-a-0049-der-attrappen-waechter-traegt-eine-veraltete-behauptung.md) | offen | — |
-| `C-01` | befund | mittel | [Frontend-Stack-Lücke schliessen](todos/supplements-c-0001-frontend-stack-lucke-schliessen.md) | offen | — |
-| `C-113` | feature | mittel | [Enhanced Mode — entschieden](todos/supplements-c-0113-enhanced-mode-entschieden.md) | offen | — |
-| `C-129` | blocker | hoch | [Der Kimi-Bestand — brauchbar, aber nicht importierbar](todos/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md) | offen | — |
-| `C-146` | befund | mittel | [`phase_am()` liefert 8 von 14 Spalten](todos/supplements-c-0146-phase-am-liefert-8-von-14-spalten.md) | offen | — |
-| `C-179` | befund | mittel | [`EAA` zeigt auf den Summenwert, nicht auf die neun](todos/supplements-c-0179-eaa-zeigt-auf-den-summenwert-nicht-auf-die-neun.md) | offen | — |
-| `C-186` | befund | mittel | [Nebenwirkungen und Zyklen haben keine Tabelle](todos/supplements-c-0186-nebenwirkungen-und-zyklen-haben-keine-tabelle.md) | offen | — |
-| `C-199` | entscheidung | mittel | [`medication_regulatory` als eigene Entitaet](todos/supplements-c-0199-medication-regulatory-als-eigene-entitaet.md) | offen | — |
-| `C-202` | blocker | hoch | [Produkte, Marken, Hersteller, Kennungen](todos/supplements-c-0202-produkte-marken-hersteller-kennungen.md) | offen | — |
-| `C-203` | befund | mittel | [Beobachtung gegen Erwartung (crawl_033)](todos/supplements-c-0203-beobachtung-gegen-erwartung-crawl-033.md) | offen | — |
-| `C-206` | entscheidung | mittel | [Die Community-Schicht — nur Admin, oder nie?](todos/supplements-c-0206-die-community-schicht-nur-admin-oder-nie.md) | offen | — |
-| `C-207` | befund | hoch | [Vier Entscheidungen aus dem 035-Handoff](todos/supplements-c-0207-vier-entscheidungen-aus-dem-035-handoff.md) | offen | — |
-| `C-208` | befund | mittel | [C-129 neu fassen: der Import ist laengst passiert](todos/supplements-c-0208-c-129-neu-fassen-der-import-ist-laengst-passiert.md) | offen | — |
-| `C-233` | feature | mittel | [`user_supplement_settings` — die Spec sieht es vor, wir bauen es nicht](todos/supplements-c-0233-user-supplement-settings-die-spec-sieht-es-vor-wir-bauen-es-nicht.md) | offen | — |
-| `C-237` | befund | mittel | [Die Kimi-Quelle fuehrt leere Strings statt `unknown`](todos/supplements-c-0237-die-kimi-quelle-fuehrt-leere-strings-statt-unknown.md) | offen | — |
-| `C-253` | feature | mittel | [Die IDs der beiden Kataloge sind nicht vergleichbar — drei Stellen haetten stumm nie mehr getroffen](todos/supplements-c-0253-die-ids-der-beiden-kataloge-sind-nicht-vergleichbar-drei-stellen-haetten.md) | offen | — |
-| `C-257` | befund | niedrig | [Nutzertexte fuer den Substanzkatalog — Schema und Befuellung](todos/supplements-c-0257-nutzertexte-fuer-den-substanzkatalog-schema-und-befuellung.md) | offen | — |
-| `C-258` | messung | mittel | [Die Nutzertexte sind Schablonen — und 248 Substanzen fehlen ganz](todos/supplements-c-0258-die-nutzertexte-sind-schablonen-und-248-substanzen-fehlen-ganz.md) | offen | — |
-| `C-260` | blocker | hoch | [Die Arbeitsberichte sind nicht in die Daten zurueckgeflossen](todos/supplements-c-0260-die-arbeitsberichte-sind-nicht-in-die-daten-zurueckgeflossen.md) | offen | — |
-| `C-261` | befund | mittel | [Der Abgleich aus C-260 ist ungefiltert nicht benutzbar](todos/supplements-c-0261-der-abgleich-aus-c-260-ist-ungefiltert-nicht-benutzbar.md) | offen | — |
-| `C-262` | feature | mittel | [Der Import — vier Wellen](todos/supplements-c-0262-der-import-vier-wellen.md) | offen | — |
-| `C-263` | messung | mittel | [Deutsche Beschreibungen aus Kimis Fachdaten ableiten](todos/supplements-c-0263-deutsche-beschreibungen-aus-kimis-fachdaten-ableiten.md) | offen | — |
-| `C-272` | befund | mittel | [Welle 1 — der Katalog wird inhaltlich fertig](todos/supplements-c-0272-welle-1-der-katalog-wird-inhaltlich-fertig.md) | offen | — |
-| `C-274` | befund | mittel | [die unsichtbaren Substanzen zuordnen](todos/supplements-c-0274-die-unsichtbaren-substanzen-zuordnen.md) | offen | — |
-| `C-287` | befund | mittel | [148 Community-Zeilen ohne Substanzbindung](todos/supplements-c-0287-148-community-zeilen-ohne-substanzbindung.md) | offen | — |
-| `C-316` | feature | mittel | [NAC steht im Katalog ohne deutschen Namen](todos/supplements-c-0316-nac-steht-im-katalog-ohne-deutschen-namen.md) | offen | — |
-| `C-319` | entscheidung | hoch | [Cam-Speicherweg festlegen](erledigt/supplements-c-0319-cam-speicherweg-festlegen.md) | erledigt | — |
-| `C-320` | entscheidung | hoch | [Cam-Datenschutz und Aufbewahrung je Rechtsraum festlegen](erledigt/supplements-c-0320-cam-datenschutz-und-aufbewahrung-je-rechtsraum-festlegen.md) | erledigt | — |
-| `C-321` | entscheidung | hoch | [Cam-Einwilligungsfuehrung festlegen](erledigt/supplements-c-0321-cam-einwilligungsfuehrung-festlegen.md) | erledigt | — |
-| `C-322` | entscheidung | mittel | [Cam-Vision-Modell festlegen](erledigt/supplements-c-0322-cam-vision-modell-festlegen.md) | erledigt | — |
-| `C-325` | messung | hoch | [die drei Supplements-Blocker gegen den heutigen Stand pruefen](erledigt/supplements-c-0325-die-drei-blocker-pruefen.md) | erledigt | — |
-| `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — |
-| `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — |
-| `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — |
-| `G-118` | befund | mittel | [Der Extended-Code liegt im Buendel](todos/supplements-g-0118-der-extended-code-liegt-im-buendel.md) | offen | — |
-| `G-150` | entscheidung | mittel | [Die Volltextsuche findet ueber Erklaertexte](todos/supplements-g-0150-die-volltextsuche-findet-ueber-erklaertexte.md) | offen | — |
-| `G-162` | befund | mittel | [supplements Compliance und medical Tracking](todos/supplements-g-0162-supplements-compliance-und-medical-tracking.md) | offen | — |
-| `G-186` | befund | mittel | [Der Katalog zeigt noch nicht alles, was drinsteht](erledigt/supplements-g-0186-der-katalog-zeigt-noch-nicht-alles-was-drinsteht.md) | erledigt | — |
-| `G-188` | feature | mittel | [Der Wechselwirkungs-Reiter heisst nicht, was er zeigt](erledigt/supplements-g-0188-der-wechselwirkungs-reiter-heisst-nicht-was-er-zeigt.md) | erledigt | — |
-| `G-189` | feature | mittel | [Der tote Rueckfallzweig `SuppInteractions` fliegt](erledigt/supplements-g-0189-der-tote-rueckfallzweig-suppinteractions-fliegt.md) | erledigt | — |
-| `G-202` | feature | mittel | [der Dublettenpruefer schreibt bei jedem Gate-Lauf](todos/supplements-g-0202-der-dublettenpruefer-schreibt-bei-jedem-gate-lauf.md) | offen | — |
-| `G-205` | messung | mittel | [Der Dev-Server beendet sich selbst](todos/supplements-g-0205-der-dev-server-beendet-sich-selbst.md) | offen | — |
-| `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — |
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `A-27` | feature | mittel | [Zwei Agenten, zwei Attrappen-Erwartungen](todos/supplements-a-0027-zwei-agenten-zwei-attrappen-erwartungen.md) | offen | — | — |
+| `A-49` | befund | mittel | [Der Attrappen-Waechter traegt eine veraltete Behauptung](todos/supplements-a-0049-der-attrappen-waechter-traegt-eine-veraltete-behauptung.md) | offen | — | — |
+| `C-01` | befund | mittel | [Frontend-Stack-Lücke schliessen](todos/supplements-c-0001-frontend-stack-lucke-schliessen.md) | offen | — | — |
+| `C-113` | feature | mittel | [Enhanced Mode — entschieden](todos/supplements-c-0113-enhanced-mode-entschieden.md) | offen | — | — |
+| `C-129` | befund | mittel | [Der Kimi-Import ist da; die Restluecken sind getrennt](todos/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md) | offen | — | C-327 |
+| `C-146` | befund | mittel | [`phase_am()` liefert 8 von 14 Spalten](todos/supplements-c-0146-phase-am-liefert-8-von-14-spalten.md) | offen | — | — |
+| `C-179` | befund | mittel | [`EAA` zeigt auf den Summenwert, nicht auf die neun](todos/supplements-c-0179-eaa-zeigt-auf-den-summenwert-nicht-auf-die-neun.md) | offen | — | — |
+| `C-186` | befund | mittel | [Nebenwirkungen und Zyklen haben keine Tabelle](todos/supplements-c-0186-nebenwirkungen-und-zyklen-haben-keine-tabelle.md) | offen | — | — |
+| `C-199` | entscheidung | mittel | [`medication_regulatory` als eigene Entitaet](todos/supplements-c-0199-medication-regulatory-als-eigene-entitaet.md) | offen | — | — |
+| `C-202` | blocker | hoch | [Produkte, Marken, Hersteller, Kennungen](todos/supplements-c-0202-produkte-marken-hersteller-kennungen.md) | offen | — | — |
+| `C-203` | befund | mittel | [Beobachtung gegen Erwartung (crawl_033)](todos/supplements-c-0203-beobachtung-gegen-erwartung-crawl-033.md) | offen | — | — |
+| `C-206` | entscheidung | mittel | [Die Community-Schicht — nur Admin, oder nie?](todos/supplements-c-0206-die-community-schicht-nur-admin-oder-nie.md) | offen | — | — |
+| `C-207` | befund | hoch | [Vier Entscheidungen aus dem 035-Handoff](todos/supplements-c-0207-vier-entscheidungen-aus-dem-035-handoff.md) | offen | — | C-319, C-320, C-321, C-322 |
+| `C-208` | befund | mittel | [C-129 neu fassen: der Import ist laengst passiert](todos/supplements-c-0208-c-129-neu-fassen-der-import-ist-laengst-passiert.md) | offen | — | C-326 |
+| `C-233` | feature | mittel | [`user_supplement_settings` — die Spec sieht es vor, wir bauen es nicht](todos/supplements-c-0233-user-supplement-settings-die-spec-sieht-es-vor-wir-bauen-es-nicht.md) | offen | — | — |
+| `C-237` | befund | mittel | [Die Kimi-Quelle fuehrt leere Strings statt `unknown`](todos/supplements-c-0237-die-kimi-quelle-fuehrt-leere-strings-statt-unknown.md) | offen | — | — |
+| `C-253` | feature | mittel | [Die IDs der beiden Kataloge sind nicht vergleichbar — drei Stellen haetten stumm nie mehr getroffen](todos/supplements-c-0253-die-ids-der-beiden-kataloge-sind-nicht-vergleichbar-drei-stellen-haetten.md) | offen | — | — |
+| `C-257` | befund | niedrig | [Nutzertexte fuer den Substanzkatalog — Schema und Befuellung](todos/supplements-c-0257-nutzertexte-fuer-den-substanzkatalog-schema-und-befuellung.md) | offen | — | — |
+| `C-258` | messung | mittel | [Die Nutzertexte sind Schablonen — und 248 Substanzen fehlen ganz](todos/supplements-c-0258-die-nutzertexte-sind-schablonen-und-248-substanzen-fehlen-ganz.md) | offen | — | C-259, C-263 |
+| `C-260` | blocker | hoch | [Die Arbeitsberichte sind nicht in die Daten zurueckgeflossen](todos/supplements-c-0260-die-arbeitsberichte-sind-nicht-in-die-daten-zurueckgeflossen.md) | offen | — | C-261 |
+| `C-261` | befund | mittel | [Der Abgleich aus C-260 ist ungefiltert nicht benutzbar](todos/supplements-c-0261-der-abgleich-aus-c-260-ist-ungefiltert-nicht-benutzbar.md) | offen | — | — |
+| `C-262` | feature | mittel | [Der Import — vier Wellen](todos/supplements-c-0262-der-import-vier-wellen.md) | offen | — | — |
+| `C-263` | messung | mittel | [Deutsche Beschreibungen aus Kimis Fachdaten ableiten](todos/supplements-c-0263-deutsche-beschreibungen-aus-kimis-fachdaten-ableiten.md) | offen | — | — |
+| `C-272` | befund | mittel | [Welle 1 — der Katalog wird inhaltlich fertig](todos/supplements-c-0272-welle-1-der-katalog-wird-inhaltlich-fertig.md) | offen | — | — |
+| `C-274` | befund | mittel | [die unsichtbaren Substanzen zuordnen](todos/supplements-c-0274-die-unsichtbaren-substanzen-zuordnen.md) | offen | — | — |
+| `C-287` | befund | mittel | [148 Community-Zeilen ohne Substanzbindung](todos/supplements-c-0287-148-community-zeilen-ohne-substanzbindung.md) | offen | — | — |
+| `C-316` | feature | mittel | [NAC steht im Katalog ohne deutschen Namen](todos/supplements-c-0316-nac-steht-im-katalog-ohne-deutschen-namen.md) | offen | — | — |
+| `C-319` | entscheidung | hoch | [Cam-Speicherweg festlegen](erledigt/supplements-c-0319-cam-speicherweg-festlegen.md) | erledigt | — | — |
+| `C-320` | entscheidung | hoch | [Cam-Datenschutz und Aufbewahrung je Rechtsraum festlegen](erledigt/supplements-c-0320-cam-datenschutz-und-aufbewahrung-je-rechtsraum-festlegen.md) | erledigt | — | — |
+| `C-321` | entscheidung | hoch | [Cam-Einwilligungsfuehrung festlegen](erledigt/supplements-c-0321-cam-einwilligungsfuehrung-festlegen.md) | erledigt | — | — |
+| `C-322` | entscheidung | mittel | [Cam-Vision-Modell festlegen](erledigt/supplements-c-0322-cam-vision-modell-festlegen.md) | erledigt | — | — |
+| `C-325` | messung | hoch | [die drei Supplements-Blocker gegen den heutigen Stand pruefen](erledigt/supplements-c-0325-die-drei-blocker-pruefen.md) | erledigt | — | — |
+| `C-326` | messung | hoch | [C-129 auf die verbleibende Luecke neu fassen](laufend_codex/supplements-c-0326-c-129-neu-fassen.md) | laeuft (codex) | — | — |
+| `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
+| `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — | — |
+| `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
+| `G-118` | befund | mittel | [Der Extended-Code liegt im Buendel](todos/supplements-g-0118-der-extended-code-liegt-im-buendel.md) | offen | — | — |
+| `G-150` | entscheidung | mittel | [Die Volltextsuche findet ueber Erklaertexte](todos/supplements-g-0150-die-volltextsuche-findet-ueber-erklaertexte.md) | offen | — | — |
+| `G-162` | befund | mittel | [supplements Compliance und medical Tracking](todos/supplements-g-0162-supplements-compliance-und-medical-tracking.md) | offen | — | — |
+| `G-186` | befund | mittel | [Der Katalog zeigt noch nicht alles, was drinsteht](erledigt/supplements-g-0186-der-katalog-zeigt-noch-nicht-alles-was-drinsteht.md) | erledigt | — | G-213, G-214 |
+| `G-188` | feature | mittel | [Der Wechselwirkungs-Reiter heisst nicht, was er zeigt](erledigt/supplements-g-0188-der-wechselwirkungs-reiter-heisst-nicht-was-er-zeigt.md) | erledigt | — | — |
+| `G-189` | feature | mittel | [Der tote Rueckfallzweig `SuppInteractions` fliegt](erledigt/supplements-g-0189-der-tote-rueckfallzweig-suppinteractions-fliegt.md) | erledigt | — | — |
+| `G-202` | feature | mittel | [der Dublettenpruefer schreibt bei jedem Gate-Lauf](todos/supplements-g-0202-der-dublettenpruefer-schreibt-bei-jedem-gate-lauf.md) | offen | — | — |
+| `G-205` | messung | mittel | [Der Dev-Server beendet sich selbst](todos/supplements-g-0205-der-dev-server-beendet-sich-selbst.md) | offen | — | — |
+| `G-213` | entscheidung | mittel | [soll `in_vitro_only` eine Warnung abschwaechen?](todos/supplements-g-0213-in-vitro-only-abschwaechen.md) | offen | — | — |
+| `G-214` | befund | mittel | [die Katalogsuche sagt nicht, warum ein Treffer passt](todos/supplements-g-0214-suche-sagt-nicht-warum-ein-treffer-passt.md) | offen | — | — |
+| `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
 
-| Nr | Typ | Schwere | Titel | Zustand | Blocker |
-|---|---|---|---|---|---|
-| `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 |
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
 ## training — 14
 
-| Nr | Typ | Schwere | Titel | Zustand | Blocker |
-|---|---|---|---|---|---|
-| `A-08` | befund | mittel | [ADR Medienort](todos/training-a-0008-adr-medienort.md) | offen | — |
-| `C-86` | feature | mittel | [8 mehrdeutige Uebungen und 1 ohne DB-Namen](todos/training-c-0086-8-mehrdeutige-uebungen-und-1-ohne-db-namen.md) | offen | — |
-| `C-87` | befund | mittel | [`exercises_select` war aus der Datenbank verschwunden](todos/training-c-0087-exercises-select-war-aus-der-datenbank-verschwunden.md) | offen | — |
-| `C-126` | befund | mittel | [E2 braucht Toms Bestaetigung](todos/training-c-0126-e2-braucht-toms-bestaetigung.md) | offen | — |
-| `C-145` | befund | mittel | [`Plan` braucht ein Schema, keine Anzeige](todos/training-c-0145-plan-braucht-ein-schema-keine-anzeige.md) | offen | — |
-| `C-169` | befund | mittel | [Das Trainingsplan-Schema steht im Entwurf](todos/training-c-0169-das-trainingsplan-schema-steht-im-entwurf.md) | offen | — |
-| `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — |
-| `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — |
-| `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — |
-| `G-68` | befund | mittel | [`e1RM` deckt 6 von 1.416](todos/training-g-0068-e1rm-deckt-6-von-1-416.md) | offen | — |
-| `G-77` | befund | mittel | [Streaks bei 32 Auslassern](todos/training-g-0077-streaks-bei-32-auslassern.md) | offen | — |
-| `G-88` | entscheidung | mittel | [Die Sitzungskarte auf `Today`](todos/training-g-0088-die-sitzungskarte-auf-today.md) | offen | — |
-| `G-131` | befund | mittel | [`module-completeness.jsx` ist die Settings-Seite](todos/training-g-0131-module-completeness-jsx-ist-die-settings-seite.md) | offen | — |
-| `G-173` | befund | mittel | [Ein falscher Punktverweis in `scores-read.ts`](todos/training-g-0173-ein-falscher-punktverweis-in-scores-read-ts.md) | offen | — |
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `A-08` | befund | mittel | [ADR Medienort](todos/training-a-0008-adr-medienort.md) | offen | — | — |
+| `C-86` | feature | mittel | [8 mehrdeutige Uebungen und 1 ohne DB-Namen](todos/training-c-0086-8-mehrdeutige-uebungen-und-1-ohne-db-namen.md) | offen | — | — |
+| `C-87` | befund | mittel | [`exercises_select` war aus der Datenbank verschwunden](todos/training-c-0087-exercises-select-war-aus-der-datenbank-verschwunden.md) | offen | — | — |
+| `C-126` | befund | mittel | [E2 braucht Toms Bestaetigung](todos/training-c-0126-e2-braucht-toms-bestaetigung.md) | offen | — | — |
+| `C-145` | befund | mittel | [`Plan` braucht ein Schema, keine Anzeige](todos/training-c-0145-plan-braucht-ein-schema-keine-anzeige.md) | offen | — | — |
+| `C-169` | befund | mittel | [Das Trainingsplan-Schema steht im Entwurf](todos/training-c-0169-das-trainingsplan-schema-steht-im-entwurf.md) | offen | — | — |
+| `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
+| `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
+| `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
+| `G-68` | befund | mittel | [`e1RM` deckt 6 von 1.416](todos/training-g-0068-e1rm-deckt-6-von-1-416.md) | offen | — | — |
+| `G-77` | befund | mittel | [Streaks bei 32 Auslassern](todos/training-g-0077-streaks-bei-32-auslassern.md) | offen | — | — |
+| `G-88` | entscheidung | mittel | [Die Sitzungskarte auf `Today`](todos/training-g-0088-die-sitzungskarte-auf-today.md) | offen | — | — |
+| `G-131` | befund | mittel | [`module-completeness.jsx` ist die Settings-Seite](todos/training-g-0131-module-completeness-jsx-ist-die-settings-seite.md) | offen | — | — |
+| `G-173` | befund | mittel | [Ein falscher Punktverweis in `scores-read.ts`](todos/training-g-0173-ein-falscher-punktverweis-in-scores-read-ts.md) | offen | — | — |
 
 ## recovery — 20
 
-| Nr | Typ | Schwere | Titel | Zustand | Blocker |
-|---|---|---|---|---|---|
-| `A-50` | feature | mittel | [Ein `DROP COLUMN` prueft die Lesepfade nicht](todos/recovery-a-0050-ein-drop-column-prueft-die-lesepfade-nicht.md) | offen | — |
-| `C-111` | feature | mittel | [Recovery — neun Entscheidungen und drei Formelfehler](todos/recovery-c-0111-recovery-neun-entscheidungen-und-drei-formelfehler.md) | offen | — |
-| `C-123` | entscheidung | mittel | [Recovery — die neun Entscheidungen](todos/recovery-c-0123-recovery-die-neun-entscheidungen.md) | offen | — |
-| `C-127` | messung | mittel | [Drei Wearable-Spalten sind leer](todos/recovery-c-0127-drei-wearable-spalten-sind-leer.md) | offen | — |
-| `C-143` | messung | mittel | [Die zwei Erholungsrechnungen weichen ab](todos/recovery-c-0143-die-zwei-erholungsrechnungen-weichen-ab.md) | offen | — |
-| `C-166` | befund | mittel | [Recovery hat 3 Tabellen, der Entwurf 25 Konstanten](todos/recovery-c-0166-recovery-hat-3-tabellen-der-entwurf-25-konstanten.md) | offen | — |
-| `C-167` | entscheidung | mittel | [`MODALITY_BONUS` hat elf Modalitaeten, wir kennen vier](todos/recovery-c-0167-modality-bonus-hat-elf-modalitaeten-wir-kennen-vier.md) | offen | — |
-| `C-168` | befund | mittel | [Die Uebertrainings-Schwellen stehen im Entwurf](todos/recovery-c-0168-die-uebertrainings-schwellen-stehen-im-entwurf.md) | offen | — |
-| `C-172` | feature | mittel | [Der Stress-Tab steht im Entwurf](todos/recovery-c-0172-der-stress-tab-steht-im-entwurf.md) | offen | — |
-| `C-181` | feature | mittel | [ACWR wird gerechnet und muss raus](todos/recovery-c-0181-acwr-wird-gerechnet-und-muss-raus.md) | offen | — |
-| `C-182` | befund | mittel | [Kein numerischer OTS-Schwellenwert](todos/recovery-c-0182-kein-numerischer-ots-schwellenwert.md) | offen | — |
-| `C-214` | befund | mittel | [Fuenf Modalitaeten ohne Registerzeile](todos/recovery-c-0214-fuenf-modalitaeten-ohne-registerzeile.md) | offen | — |
-| `C-215` | feature | mittel | [ACWR rechnet in der Datenbank weiter](todos/recovery-c-0215-acwr-rechnet-in-der-datenbank-weiter.md) | offen | — |
-| `C-217` | befund | mittel | [Was ist gebaut, was ist Attrappe — je Modul, je Kachel](todos/recovery-c-0217-was-ist-gebaut-was-ist-attrappe-je-modul-je-kachel.md) | offen | — |
-| `C-218` | entscheidung | mittel | [Frontend und Datenbank normieren den Recovery-Score verschieden](todos/recovery-c-0218-frontend-und-datenbank-normieren-den-recovery-score-verschieden.md) | offen | — |
-| `C-236` | feature | mittel | [Die Recovery-Seeds sind Zaehlreihen, keine Messwerte](todos/recovery-c-0236-die-recovery-seeds-sind-zaehlreihen-keine-messwerte.md) | offen | — |
-| `C-238` | blocker | hoch | [`meal_plan_entries` hat keinen Status](todos/recovery-c-0238-meal-plan-entries-hat-keinen-status.md) | offen | — |
-| `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](todos/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | offen | — |
-| `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — |
-| `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — |
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `A-50` | feature | mittel | [Ein `DROP COLUMN` prueft die Lesepfade nicht](todos/recovery-a-0050-ein-drop-column-prueft-die-lesepfade-nicht.md) | offen | — | — |
+| `C-111` | feature | mittel | [Recovery — neun Entscheidungen und drei Formelfehler](todos/recovery-c-0111-recovery-neun-entscheidungen-und-drei-formelfehler.md) | offen | — | — |
+| `C-123` | entscheidung | mittel | [Recovery — die neun Entscheidungen](todos/recovery-c-0123-recovery-die-neun-entscheidungen.md) | offen | — | — |
+| `C-127` | messung | mittel | [Drei Wearable-Spalten sind leer](todos/recovery-c-0127-drei-wearable-spalten-sind-leer.md) | offen | — | — |
+| `C-143` | messung | mittel | [Die zwei Erholungsrechnungen weichen ab](todos/recovery-c-0143-die-zwei-erholungsrechnungen-weichen-ab.md) | offen | — | — |
+| `C-166` | befund | mittel | [Recovery hat 3 Tabellen, der Entwurf 25 Konstanten](todos/recovery-c-0166-recovery-hat-3-tabellen-der-entwurf-25-konstanten.md) | offen | — | — |
+| `C-167` | entscheidung | mittel | [`MODALITY_BONUS` hat elf Modalitaeten, wir kennen vier](todos/recovery-c-0167-modality-bonus-hat-elf-modalitaeten-wir-kennen-vier.md) | offen | — | — |
+| `C-168` | befund | mittel | [Die Uebertrainings-Schwellen stehen im Entwurf](todos/recovery-c-0168-die-uebertrainings-schwellen-stehen-im-entwurf.md) | offen | — | — |
+| `C-172` | feature | mittel | [Der Stress-Tab steht im Entwurf](todos/recovery-c-0172-der-stress-tab-steht-im-entwurf.md) | offen | — | — |
+| `C-181` | feature | mittel | [ACWR wird gerechnet und muss raus](todos/recovery-c-0181-acwr-wird-gerechnet-und-muss-raus.md) | offen | — | C-218 |
+| `C-182` | befund | mittel | [Kein numerischer OTS-Schwellenwert](todos/recovery-c-0182-kein-numerischer-ots-schwellenwert.md) | offen | — | — |
+| `C-214` | befund | mittel | [Fuenf Modalitaeten ohne Registerzeile](todos/recovery-c-0214-fuenf-modalitaeten-ohne-registerzeile.md) | offen | — | — |
+| `C-215` | feature | mittel | [ACWR rechnet in der Datenbank weiter](todos/recovery-c-0215-acwr-rechnet-in-der-datenbank-weiter.md) | offen | — | C-209 |
+| `C-217` | befund | mittel | [Was ist gebaut, was ist Attrappe — je Modul, je Kachel](todos/recovery-c-0217-was-ist-gebaut-was-ist-attrappe-je-modul-je-kachel.md) | offen | — | — |
+| `C-218` | entscheidung | mittel | [Frontend und Datenbank normieren den Recovery-Score verschieden](todos/recovery-c-0218-frontend-und-datenbank-normieren-den-recovery-score-verschieden.md) | offen | — | — |
+| `C-236` | feature | mittel | [Die Recovery-Seeds sind Zaehlreihen, keine Messwerte](todos/recovery-c-0236-die-recovery-seeds-sind-zaehlreihen-keine-messwerte.md) | offen | — | B-29, B-30, G-174 |
+| `C-238` | blocker | hoch | [`meal_plan_entries` hat keinen Status](todos/recovery-c-0238-meal-plan-entries-hat-keinen-status.md) | offen | — | — |
+| `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](todos/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | offen | — | — |
+| `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
+| `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
 
 ## goals — 5
 
-| Nr | Typ | Schwere | Titel | Zustand | Blocker |
-|---|---|---|---|---|---|
-| `C-06` | befund | mittel | [WP-05 erstes Mock-Modul echt machen](todos/goals-c-0006-wp-05-erstes-mock-modul-echt-machen.md) | offen | — |
-| `E-04` | blocker | hoch | [Alte `public`-Tabellen nach `legacy` verschieben](todos/goals-e-0004-alte-public-tabellen-nach-legacy-verschieben.md) | offen | — |
-| `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](todos/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | offen | — |
-| `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — |
-| `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — |
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `C-06` | befund | mittel | [WP-05 erstes Mock-Modul echt machen](todos/goals-c-0006-wp-05-erstes-mock-modul-echt-machen.md) | offen | — | — |
+| `E-04` | blocker | hoch | [Alte `public`-Tabellen nach `legacy` verschieben](todos/goals-e-0004-alte-public-tabellen-nach-legacy-verschieben.md) | offen | — | — |
+| `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](todos/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | offen | — | — |
+| `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — | — |
+| `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 
 ## coach — 20
 
-| Nr | Typ | Schwere | Titel | Zustand | Blocker |
-|---|---|---|---|---|---|
-| `A-35` | messung | mittel | [Sieben Module haben keine Seite](todos/coach-a-0035-sieben-module-haben-keine-seite.md) | offen | — |
-| `A-36` | befund | mittel | [`module-stubs-replacement.jsx` traegt drei ganze Module](todos/coach-a-0036-module-stubs-replacement-jsx-traegt-drei-ganze-module.md) | offen | — |
-| `A-43` | entscheidung | mittel | [Coach-Permissions pro Subfunktion](todos/coach-a-0043-coach-permissions-pro-subfunktion.md) | offen | — |
-| `B-25` | befund | mittel | [Geteilte Sitzung im Produktbereich prüfen](todos/coach-b-0025-geteilte-sitzung-im-produktbereich-prufen.md) | offen | — |
-| `C-71` | entscheidung | mittel | [Permissions und Autonomy sind zwei verschiedene Sachen](todos/coach-c-0071-permissions-und-autonomy-sind-zwei-verschiedene-sachen.md) | offen | — |
-| `C-75` | befund | mittel | [BSS und Voice sind Neubau](todos/coach-c-0075-bss-und-voice-sind-neubau.md) | offen | — |
-| `C-112` | blocker | hoch | [Buddy, Coach und Marketplace — elf Entscheidungen](todos/coach-c-0112-buddy-coach-und-marketplace-elf-entscheidungen.md) | offen | — |
-| `C-114` | befund | mittel | [Was das Vorgaengerrepo beim Coach falsch machte](todos/coach-c-0114-was-das-vorgaengerrepo-beim-coach-falsch-machte.md) | offen | — |
-| `C-115` | befund | mittel | [Was der Markt kann und was LumeOS eigen ist](todos/coach-c-0115-was-der-markt-kann-und-was-lumeos-eigen-ist.md) | offen | — |
-| `C-173` | befund | mittel | [`MARKETPLACE_PRODUCTS` traegt `inStack` und `evidence`](todos/coach-c-0173-marketplace-products-traegt-instack-und-evidence.md) | offen | — |
-| `C-220` | befund | mittel | [`buddy` — 0 von 16 Tabellen](todos/coach-c-0220-buddy-0-von-16-tabellen.md) | offen | — |
-| `C-268` | feature | mittel | [Beim Einladen gibt es keine Namensaufloesung](todos/coach-c-0268-beim-einladen-gibt-es-keine-namensaufloesung.md) | offen | — |
-| `C-269` | feature | mittel | [Eine Einladung laesst sich nicht zuruecknehmen](todos/coach-c-0269-eine-einladung-laesst-sich-nicht-zuruecknehmen.md) | offen | — |
-| `C-318` | befund | hoch | [ADR-Coach-Permissions weicht von der Umsetzung ab](todos/coach-c-0318-adr-coach-permissions-weicht-von-der-umsetzung-ab.md) | offen | — |
-| `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — |
-| `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — |
-| `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](todos/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | offen | — |
-| `G-164` | befund | mittel | [Drei Module des Vorgaengers haben hier kein Gegenstueck](todos/coach-g-0164-drei-module-des-vorgaengers-haben-hier-kein-gegenstueck.md) | offen | — |
-| `G-168` | befund | mittel | [Die coach-Kopfzeile widerspricht dem eigenen Tab](todos/coach-g-0168-die-coach-kopfzeile-widerspricht-dem-eigenen-tab.md) | offen | — |
-| `G-169` | befund | mittel | [`coach.checkins` und `checkin_templates` liegen ungelesen](todos/coach-g-0169-coach-checkins-und-checkin-templates-liegen-ungelesen.md) | offen | — |
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `A-35` | messung | mittel | [Sieben Module haben keine Seite](todos/coach-a-0035-sieben-module-haben-keine-seite.md) | offen | — | — |
+| `A-36` | befund | mittel | [`module-stubs-replacement.jsx` traegt drei ganze Module](todos/coach-a-0036-module-stubs-replacement-jsx-traegt-drei-ganze-module.md) | offen | — | — |
+| `A-43` | entscheidung | mittel | [Coach-Permissions pro Subfunktion](todos/coach-a-0043-coach-permissions-pro-subfunktion.md) | offen | — | — |
+| `B-25` | befund | mittel | [Geteilte Sitzung im Produktbereich prüfen](todos/coach-b-0025-geteilte-sitzung-im-produktbereich-prufen.md) | offen | — | — |
+| `C-71` | entscheidung | mittel | [Permissions und Autonomy sind zwei verschiedene Sachen](todos/coach-c-0071-permissions-und-autonomy-sind-zwei-verschiedene-sachen.md) | offen | — | — |
+| `C-75` | befund | mittel | [BSS und Voice sind Neubau](todos/coach-c-0075-bss-und-voice-sind-neubau.md) | offen | — | — |
+| `C-112` | blocker | hoch | [Buddy, Coach und Marketplace — elf Entscheidungen](todos/coach-c-0112-buddy-coach-und-marketplace-elf-entscheidungen.md) | offen | — | — |
+| `C-114` | befund | mittel | [Was das Vorgaengerrepo beim Coach falsch machte](todos/coach-c-0114-was-das-vorgaengerrepo-beim-coach-falsch-machte.md) | offen | — | — |
+| `C-115` | befund | mittel | [Was der Markt kann und was LumeOS eigen ist](todos/coach-c-0115-was-der-markt-kann-und-was-lumeos-eigen-ist.md) | offen | — | — |
+| `C-173` | befund | mittel | [`MARKETPLACE_PRODUCTS` traegt `inStack` und `evidence`](todos/coach-c-0173-marketplace-products-traegt-instack-und-evidence.md) | offen | — | — |
+| `C-220` | befund | mittel | [`buddy` — 0 von 16 Tabellen](todos/coach-c-0220-buddy-0-von-16-tabellen.md) | offen | — | — |
+| `C-268` | feature | mittel | [Beim Einladen gibt es keine Namensaufloesung](todos/coach-c-0268-beim-einladen-gibt-es-keine-namensaufloesung.md) | offen | — | — |
+| `C-269` | feature | mittel | [Eine Einladung laesst sich nicht zuruecknehmen](todos/coach-c-0269-eine-einladung-laesst-sich-nicht-zuruecknehmen.md) | offen | — | — |
+| `C-318` | befund | hoch | [ADR-Coach-Permissions weicht von der Umsetzung ab](todos/coach-c-0318-adr-coach-permissions-weicht-von-der-umsetzung-ab.md) | offen | — | — |
+| `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
+| `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
+| `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](todos/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | offen | — | — |
+| `G-164` | befund | mittel | [Drei Module des Vorgaengers haben hier kein Gegenstueck](todos/coach-g-0164-drei-module-des-vorgaengers-haben-hier-kein-gegenstueck.md) | offen | — | — |
+| `G-168` | befund | mittel | [Die coach-Kopfzeile widerspricht dem eigenen Tab](todos/coach-g-0168-die-coach-kopfzeile-widerspricht-dem-eigenen-tab.md) | offen | — | — |
+| `G-169` | befund | mittel | [`coach.checkins` und `checkin_templates` liegen ungelesen](todos/coach-g-0169-coach-checkins-und-checkin-templates-liegen-ungelesen.md) | offen | — | — |
 
-## quer — 66
+## quer — 67
 
-| Nr | Typ | Schwere | Titel | Zustand | Blocker |
-|---|---|---|---|---|---|
-| `A-06` | befund | mittel | [Design-System spezifizieren](todos/quer-a-0006-design-system-spezifizieren.md) | offen | — |
-| `A-15` | messung | mittel | [Sprachpflege als laufende Regel](todos/quer-a-0015-sprachpflege-als-laufende-regel.md) | offen | — |
-| `A-16` | befund | mittel | [`public/mockup/` als dritten Fundus auswerten](todos/quer-a-0016-public-mockup-als-dritten-fundus-auswerten.md) | offen | — |
-| `A-18` | feature | mittel | [`theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf](todos/quer-a-0018-theme-v1-uploads-die-bruecke-zwischen-spec-und-entwurf.md) | offen | — |
-| `A-19` | messung | mittel | [Zwei README-Abweichungen in der Kette](todos/quer-a-0019-zwei-readme-abweichungen-in-der-kette.md) | offen | — |
-| `A-20` | befund | mittel | [Die Spec-Fehlerliste](todos/quer-a-0020-die-spec-fehlerliste.md) | offen | — |
-| `A-22` | blocker | hoch | [Was an Kimi gehen kann — klassifiziert](todos/quer-a-0022-was-an-kimi-gehen-kann-klassifiziert.md) | offen | — |
-| `A-23` | befund | mittel | [`lint` bricht repoweit ab](todos/quer-a-0023-lint-bricht-repoweit-ab.md) | offen | — |
-| `A-24` | messung | mittel | [Attrappenmarken sind kein brauchbares Mass](todos/quer-a-0024-attrappenmarken-sind-kein-brauchbares-mass.md) | offen | — |
-| `A-29` | messung | mittel | [Der Attrappen-Test koennte die gerenderte Seite zaehlen](todos/quer-a-0029-der-attrappen-test-koennte-die-gerenderte-seite-zaehlen.md) | offen | — |
-| `A-34` | befund | mittel | [Nachweislaeufe ueberschreiben Toms gespeicherte Ansicht](todos/quer-a-0034-nachweislaeufe-ueberschreiben-toms-gespeicherte-ansicht.md) | offen | — |
-| `A-38` | befund | mittel | [Drei Core-ADRs](todos/quer-a-0038-drei-core-adrs.md) | offen | — |
-| `A-39` | befund | mittel | [`backup/` wird nicht geraeumt, solange Agenten laufen](todos/quer-a-0039-backup-wird-nicht-geraeumt-solange-agenten-laufen.md) | offen | — |
-| `A-40` | befund | mittel | [Nachweise ohne Stichtag belegen nichts](todos/quer-a-0040-nachweise-ohne-stichtag-belegen-nichts.md) | offen | — |
-| `A-42` | befund | mittel | [`schuss.mjs` und die Git-Bash-Pfadumwandlung](todos/quer-a-0042-schuss-mjs-und-die-git-bash-pfadumwandlung.md) | offen | — |
-| `A-44` | messung | mittel | [Eine Nummernpruefung fuers Gate](todos/quer-a-0044-eine-nummernpruefung-fuers-gate.md) | offen | — |
-| `A-48` | feature | mittel | [Der Index wird vor dem `git add` nicht geleert](todos/quer-a-0048-der-index-wird-vor-dem-git-add-nicht-geleert.md) | offen | — |
-| `A-51` | befund | mittel | [Zahlen in `TODO.md` brauchen einen Stichtag](todos/quer-a-0051-zahlen-in-todo-md-brauchen-einen-stichtag.md) | offen | — |
-| `A-52` | feature | hoch | [die 244 offenen Punkte in das neue Modell ueberfuehren](erledigt/quer-a-0052-punkte-migration.md) | erledigt | — |
-| `A-53` | feature | hoch | [Index und Waechter fuer die Punktverwaltung](erledigt/quer-a-0053-index-und-waechter.md) | erledigt | — |
-| `A-54` | feature | hoch | [die Punkte modulfaehig machen](erledigt/quer-a-0054-punkte-modulfaehig-machen.md) | erledigt | — |
-| `A-55` | feature | hoch | [die 43 Entscheidungspunkte sortieren](erledigt/quer-a-0055-entscheidungspunkte-sortieren.md) | erledigt | — |
-| `A-56` | blocker | hoch | [ein Anthropic-Schluessel steht im Klartext in der Historie](todos/quer-a-0056-anthropic-schluessel-in-der-historie.md) | offen | — |
-| `A-57` | blocker | hoch | [24 Punkte wurden per Textheuristik geschlossen und sind ungeprueft](laufend_codex/quer-a-0057-heuristisch-geschlossene-punkte-nachpruefen.md) | laeuft (codex) | — |
-| `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](todos/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | offen | — |
-| `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — |
-| `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — |
-| `C-64` | feature | mittel | [942 Schluessel und Thai aus dem Vorgaengerrepo uebertragen](todos/quer-c-0064-942-schluessel-und-thai-aus-dem-vorgaengerrepo-uebertragen.md) | offen | — |
-| `C-110` | befund | mittel | [Cost-Rest und Compliance-Notizen](todos/quer-c-0110-cost-rest-und-compliance-notizen.md) | offen | — |
-| `C-155` | befund | mittel | [Zwei Befunde in `@supabase/ssr` 0.1.0](todos/quer-c-0155-zwei-befunde-in-supabase-ssr-0-1-0.md) | offen | — |
-| `C-159` | feature | mittel | [Sieben Regelpfade zeigen auf Schemata, die es nicht gibt](todos/quer-c-0159-sieben-regelpfade-zeigen-auf-schemata-die-es-nicht-gibt.md) | offen | — |
-| `C-170` | befund | mittel | [Der Offline-Betrieb steht im Entwurf](todos/quer-c-0170-der-offline-betrieb-steht-im-entwurf.md) | offen | — |
-| `C-187` | befund | mittel | [Fuenf kleine Datenluecken — als ein Auftrag](todos/quer-c-0187-fuenf-kleine-datenluecken-als-ein-auftrag.md) | offen | — |
-| `C-201` | befund | mittel | [Der Populations-Atlas hat kein Schema](todos/quer-c-0201-der-populations-atlas-hat-kein-schema.md) | offen | — |
-| `C-205` | befund | mittel | [`research_hold_registry` — 305 Saetze](todos/quer-c-0205-research-hold-registry-305-saetze.md) | offen | — |
-| `C-216` | blocker | hoch | [Nachweisdateien blockieren das ganze Repo](todos/quer-c-0216-nachweisdateien-blockieren-das-ganze-repo.md) | offen | — |
-| `C-219` | befund | mittel | [Tabellen, die die Spec kennt und die es nicht gibt](todos/quer-c-0219-tabellen-die-die-spec-kennt-und-die-es-nicht-gibt.md) | offen | — |
-| `C-241` | entscheidung | mittel | [Das Nachweiskonto traegt weder Essensplaene noch Medikamente](todos/quer-c-0241-das-nachweiskonto-traegt-weder-essensplaene-noch-medikamente.md) | offen | — |
-| `C-259` | feature | mittel | [Kimis Bestand ist weit groesser als angenommen — und der Orchestrator hat den Statusbericht nie gelesen](todos/quer-c-0259-kimis-bestand-ist-weit-groesser-als-angenommen-und-der-orchestrator-hat-.md) | offen | — |
-| `C-271` | befund | mittel | [`rule_catalog` laedt immer — jeder Rueckfallzweig daran ist tot](todos/quer-c-0271-rule-catalog-laedt-immer-jeder-rueckfallzweig-daran-ist-tot.md) | offen | — |
-| `C-279` | befund | mittel | [Das Kreuzprodukt in `rule_assessment` skaliert mit den Einnahmen](todos/quer-c-0279-das-kreuzprodukt-in-rule-assessment-skaliert-mit-den-einnahmen.md) | offen | — |
-| `C-295` | feature | mittel | [die Kette liest aus zwei Kimi-Pfaden](todos/quer-c-0295-die-kette-liest-aus-zwei-kimi-pfaden.md) | offen | — |
-| `C-297` | messung | mittel | [drei Wege, an dem Datenlogik-Waechter vorbei](todos/quer-c-0297-drei-wege-an-dem-datenlogik-waechter-vorbei.md) | offen | — |
-| `C-298` | feature | mittel | [der Datenlogik-Waechter meldet zwei harmlose Muster rot](todos/quer-c-0298-der-datenlogik-waechter-meldet-zwei-harmlose-muster-rot.md) | offen | — |
-| `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — |
-| `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — |
-| `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — |
-| `F-01` | befund | mittel | [Schnittstellenvertrag zuerst](todos/quer-f-0001-schnittstellenvertrag-zuerst.md) | offen | — |
-| `F-02` | befund | mittel | [Ablageort festlegen](todos/quer-f-0002-ablageort-festlegen.md) | offen | — |
-| `F-03` | befund | mittel | [obsidian-skills einbinden](todos/quer-f-0003-obsidian-skills-einbinden.md) | offen | — |
-| `F-04` | befund | mittel | [Sitzungsextraktor](todos/quer-f-0004-sitzungsextraktor.md) | offen | — |
-| `F-05` | befund | mittel | [Suche über das Extrahierte](todos/quer-f-0005-suche-uber-das-extrahierte.md) | offen | — |
-| `F-06` | messung | mittel | [Backend erst nach zwei Wochen Gebrauch wählen](todos/quer-f-0006-backend-erst-nach-zwei-wochen-gebrauch-wahlen.md) | offen | — |
-| `F-07` | befund | mittel | [Berechtigungen](todos/quer-f-0007-berechtigungen.md) | offen | — |
-| `F-09` | befund | mittel | [Wenn AMF steht — die Blueprint-Regeln prüfen](todos/quer-f-0009-wenn-amf-steht-die-blueprint-regeln-prufen.md) | offen | — |
-| `G-06` | feature | mittel | [Die übrigen Module nach Datenlage](todos/quer-g-0006-die-ubrigen-module-nach-datenlage.md) | offen | — |
-| `G-07` | befund | mittel | [Umschalten](todos/quer-g-0007-umschalten.md) | offen | — |
-| `G-58` | befund | niedrig | [Kontrast auf Attrappenkarten gegen den gerenderten Grund messen](todos/quer-g-0058-kontrast-auf-attrappenkarten-gegen-den-gerenderten-grund-messen.md) | offen | — |
-| `G-109` | befund | mittel | [Der Dev-Server kompiliert geaenderte Routen wiederholt nicht neu](todos/quer-g-0109-der-dev-server-kompiliert-geaenderte-routen-wiederholt-nicht-neu.md) | offen | — |
-| `G-122` | feature | mittel | [Fuenf Tabellen mit Daten haben keinen Schreibweg](erledigt/quer-g-0122-fuenf-tabellen-mit-daten-haben-keinen-schreibweg.md) | erledigt | — |
-| `G-141` | befund | mittel | [Das Onboarding ist als ADR final entschieden](todos/quer-g-0141-das-onboarding-ist-als-adr-final-entschieden.md) | offen | — |
-| `G-155` | befund | mittel | [Jede Kachel jedes Moduls als Bild](todos/quer-g-0155-jede-kachel-jedes-moduls-als-bild.md) | offen | — |
-| `G-175` | feature | mittel | [Das Nachweiskonto hat kein bekanntes Passwort](todos/quer-g-0175-das-nachweiskonto-hat-kein-bekanntes-passwort.md) | offen | — |
-| `G-193` | feature | mittel | [Jede Leistungszahl nennt das Konto](todos/quer-g-0193-jede-leistungszahl-nennt-das-konto.md) | offen | — |
-| `G-204` | feature | mittel | [Admin und Coach laufen mit sichtbarer Konsole](todos/quer-g-0204-admin-und-coach-laufen-mit-sichtbarer-konsole.md) | offen | — |
-| `G-206` | befund | mittel | [PostgREST antwortet ohne Kompression](todos/quer-g-0206-postgrest-antwortet-ohne-kompression.md) | offen | — |
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `A-06` | befund | mittel | [Design-System spezifizieren](todos/quer-a-0006-design-system-spezifizieren.md) | offen | — | — |
+| `A-15` | messung | mittel | [Sprachpflege als laufende Regel](todos/quer-a-0015-sprachpflege-als-laufende-regel.md) | offen | — | — |
+| `A-16` | befund | mittel | [`public/mockup/` als dritten Fundus auswerten](todos/quer-a-0016-public-mockup-als-dritten-fundus-auswerten.md) | offen | — | — |
+| `A-18` | feature | mittel | [`theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf](todos/quer-a-0018-theme-v1-uploads-die-bruecke-zwischen-spec-und-entwurf.md) | offen | — | — |
+| `A-19` | messung | mittel | [Zwei README-Abweichungen in der Kette](todos/quer-a-0019-zwei-readme-abweichungen-in-der-kette.md) | offen | — | — |
+| `A-20` | befund | mittel | [Die Spec-Fehlerliste](todos/quer-a-0020-die-spec-fehlerliste.md) | offen | — | — |
+| `A-22` | blocker | hoch | [Was an Kimi gehen kann — klassifiziert](todos/quer-a-0022-was-an-kimi-gehen-kann-klassifiziert.md) | offen | — | — |
+| `A-23` | befund | mittel | [`lint` bricht repoweit ab](todos/quer-a-0023-lint-bricht-repoweit-ab.md) | offen | — | — |
+| `A-24` | messung | mittel | [Attrappenmarken sind kein brauchbares Mass](todos/quer-a-0024-attrappenmarken-sind-kein-brauchbares-mass.md) | offen | — | — |
+| `A-29` | messung | mittel | [Der Attrappen-Test koennte die gerenderte Seite zaehlen](todos/quer-a-0029-der-attrappen-test-koennte-die-gerenderte-seite-zaehlen.md) | offen | — | — |
+| `A-34` | befund | mittel | [Nachweislaeufe ueberschreiben Toms gespeicherte Ansicht](todos/quer-a-0034-nachweislaeufe-ueberschreiben-toms-gespeicherte-ansicht.md) | offen | — | — |
+| `A-38` | befund | mittel | [Drei Core-ADRs](todos/quer-a-0038-drei-core-adrs.md) | offen | — | — |
+| `A-39` | befund | mittel | [`backup/` wird nicht geraeumt, solange Agenten laufen](todos/quer-a-0039-backup-wird-nicht-geraeumt-solange-agenten-laufen.md) | offen | — | — |
+| `A-40` | befund | mittel | [Nachweise ohne Stichtag belegen nichts](todos/quer-a-0040-nachweise-ohne-stichtag-belegen-nichts.md) | offen | — | — |
+| `A-42` | befund | mittel | [`schuss.mjs` und die Git-Bash-Pfadumwandlung](todos/quer-a-0042-schuss-mjs-und-die-git-bash-pfadumwandlung.md) | offen | — | — |
+| `A-44` | messung | mittel | [Eine Nummernpruefung fuers Gate](todos/quer-a-0044-eine-nummernpruefung-fuers-gate.md) | offen | — | — |
+| `A-48` | feature | mittel | [Der Index wird vor dem `git add` nicht geleert](todos/quer-a-0048-der-index-wird-vor-dem-git-add-nicht-geleert.md) | offen | — | — |
+| `A-51` | befund | mittel | [Zahlen in `TODO.md` brauchen einen Stichtag](todos/quer-a-0051-zahlen-in-todo-md-brauchen-einen-stichtag.md) | offen | — | — |
+| `A-52` | feature | hoch | [die 244 offenen Punkte in das neue Modell ueberfuehren](erledigt/quer-a-0052-punkte-migration.md) | erledigt | — | A-54 |
+| `A-53` | feature | hoch | [Index und Waechter fuer die Punktverwaltung](erledigt/quer-a-0053-index-und-waechter.md) | erledigt | — | — |
+| `A-54` | feature | hoch | [die Punkte modulfaehig machen](erledigt/quer-a-0054-punkte-modulfaehig-machen.md) | erledigt | — | A-55 |
+| `A-55` | feature | hoch | [die 43 Entscheidungspunkte sortieren](erledigt/quer-a-0055-entscheidungspunkte-sortieren.md) | erledigt | — | — |
+| `A-56` | blocker | hoch | [ein Anthropic-Schluessel steht im Klartext in der Historie](todos/quer-a-0056-anthropic-schluessel-in-der-historie.md) | offen | — | — |
+| `A-57` | blocker | hoch | [24 Punkte wurden per Textheuristik geschlossen und sind ungeprueft](erledigt/quer-a-0057-heuristisch-geschlossene-punkte-nachpruefen.md) | erledigt | — | — |
+| `A-58` | blocker | hoch | [der Waechter verlangt ein Feld, das es nicht mehr gibt](erledigt/quer-a-0058-waechter-verlangt-gestrichenes-feld.md) | erledigt | — | — |
+| `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](todos/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | offen | — | — |
+| `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
+| `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
+| `C-64` | feature | mittel | [942 Schluessel und Thai aus dem Vorgaengerrepo uebertragen](todos/quer-c-0064-942-schluessel-und-thai-aus-dem-vorgaengerrepo-uebertragen.md) | offen | — | — |
+| `C-110` | befund | mittel | [Cost-Rest und Compliance-Notizen](todos/quer-c-0110-cost-rest-und-compliance-notizen.md) | offen | — | — |
+| `C-155` | befund | mittel | [Zwei Befunde in `@supabase/ssr` 0.1.0](todos/quer-c-0155-zwei-befunde-in-supabase-ssr-0-1-0.md) | offen | — | — |
+| `C-159` | feature | mittel | [Sieben Regelpfade zeigen auf Schemata, die es nicht gibt](todos/quer-c-0159-sieben-regelpfade-zeigen-auf-schemata-die-es-nicht-gibt.md) | offen | — | — |
+| `C-170` | befund | mittel | [Der Offline-Betrieb steht im Entwurf](todos/quer-c-0170-der-offline-betrieb-steht-im-entwurf.md) | offen | — | — |
+| `C-187` | befund | mittel | [Fuenf kleine Datenluecken — als ein Auftrag](todos/quer-c-0187-fuenf-kleine-datenluecken-als-ein-auftrag.md) | offen | — | — |
+| `C-201` | befund | mittel | [Der Populations-Atlas hat kein Schema](todos/quer-c-0201-der-populations-atlas-hat-kein-schema.md) | offen | — | — |
+| `C-205` | befund | mittel | [`research_hold_registry` — 305 Saetze](todos/quer-c-0205-research-hold-registry-305-saetze.md) | offen | — | — |
+| `C-216` | blocker | hoch | [Nachweisdateien blockieren das ganze Repo](todos/quer-c-0216-nachweisdateien-blockieren-das-ganze-repo.md) | offen | — | — |
+| `C-219` | befund | mittel | [Tabellen, die die Spec kennt und die es nicht gibt](todos/quer-c-0219-tabellen-die-die-spec-kennt-und-die-es-nicht-gibt.md) | offen | — | — |
+| `C-241` | entscheidung | mittel | [Das Nachweiskonto traegt weder Essensplaene noch Medikamente](todos/quer-c-0241-das-nachweiskonto-traegt-weder-essensplaene-noch-medikamente.md) | offen | — | — |
+| `C-259` | feature | mittel | [Kimis Bestand ist weit groesser als angenommen — und der Orchestrator hat den Statusbericht nie gelesen](todos/quer-c-0259-kimis-bestand-ist-weit-groesser-als-angenommen-und-der-orchestrator-hat-.md) | offen | — | C-262 |
+| `C-271` | befund | mittel | [`rule_catalog` laedt immer — jeder Rueckfallzweig daran ist tot](todos/quer-c-0271-rule-catalog-laedt-immer-jeder-rueckfallzweig-daran-ist-tot.md) | offen | — | — |
+| `C-279` | befund | mittel | [Das Kreuzprodukt in `rule_assessment` skaliert mit den Einnahmen](todos/quer-c-0279-das-kreuzprodukt-in-rule-assessment-skaliert-mit-den-einnahmen.md) | offen | — | — |
+| `C-295` | feature | mittel | [die Kette liest aus zwei Kimi-Pfaden](todos/quer-c-0295-die-kette-liest-aus-zwei-kimi-pfaden.md) | offen | — | — |
+| `C-297` | messung | mittel | [drei Wege, an dem Datenlogik-Waechter vorbei](todos/quer-c-0297-drei-wege-an-dem-datenlogik-waechter-vorbei.md) | offen | — | — |
+| `C-298` | feature | mittel | [der Datenlogik-Waechter meldet zwei harmlose Muster rot](todos/quer-c-0298-der-datenlogik-waechter-meldet-zwei-harmlose-muster-rot.md) | offen | — | — |
+| `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
+| `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
+| `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
+| `F-01` | befund | mittel | [Schnittstellenvertrag zuerst](todos/quer-f-0001-schnittstellenvertrag-zuerst.md) | offen | — | C-111 |
+| `F-02` | befund | mittel | [Ablageort festlegen](todos/quer-f-0002-ablageort-festlegen.md) | offen | — | C-109, C-110 |
+| `F-03` | befund | mittel | [obsidian-skills einbinden](todos/quer-f-0003-obsidian-skills-einbinden.md) | offen | — | C-112 |
+| `F-04` | befund | mittel | [Sitzungsextraktor](todos/quer-f-0004-sitzungsextraktor.md) | offen | — | C-114, C-115, C-71 |
+| `F-05` | befund | mittel | [Suche über das Extrahierte](todos/quer-f-0005-suche-uber-das-extrahierte.md) | offen | — | — |
+| `F-06` | messung | mittel | [Backend erst nach zwei Wochen Gebrauch wählen](todos/quer-f-0006-backend-erst-nach-zwei-wochen-gebrauch-wahlen.md) | offen | — | — |
+| `F-07` | befund | mittel | [Berechtigungen](todos/quer-f-0007-berechtigungen.md) | offen | — | C-155, G-151 |
+| `F-09` | befund | mittel | [Wenn AMF steht — die Blueprint-Regeln prüfen](todos/quer-f-0009-wenn-amf-steht-die-blueprint-regeln-prufen.md) | offen | — | — |
+| `G-06` | feature | mittel | [Die übrigen Module nach Datenlage](todos/quer-g-0006-die-ubrigen-module-nach-datenlage.md) | offen | — | — |
+| `G-07` | befund | mittel | [Umschalten](todos/quer-g-0007-umschalten.md) | offen | — | — |
+| `G-58` | befund | niedrig | [Kontrast auf Attrappenkarten gegen den gerenderten Grund messen](todos/quer-g-0058-kontrast-auf-attrappenkarten-gegen-den-gerenderten-grund-messen.md) | offen | — | — |
+| `G-109` | befund | mittel | [Der Dev-Server kompiliert geaenderte Routen wiederholt nicht neu](todos/quer-g-0109-der-dev-server-kompiliert-geaenderte-routen-wiederholt-nicht-neu.md) | offen | — | — |
+| `G-122` | feature | mittel | [Fuenf Tabellen mit Daten haben keinen Schreibweg](erledigt/quer-g-0122-fuenf-tabellen-mit-daten-haben-keinen-schreibweg.md) | erledigt | — | C-49, G-126, GO-23 |
+| `G-141` | befund | mittel | [Das Onboarding ist als ADR final entschieden](todos/quer-g-0141-das-onboarding-ist-als-adr-final-entschieden.md) | offen | — | — |
+| `G-155` | befund | mittel | [Jede Kachel jedes Moduls als Bild](todos/quer-g-0155-jede-kachel-jedes-moduls-als-bild.md) | offen | — | — |
+| `G-175` | feature | mittel | [Das Nachweiskonto hat kein bekanntes Passwort](todos/quer-g-0175-das-nachweiskonto-hat-kein-bekanntes-passwort.md) | offen | — | — |
+| `G-193` | feature | mittel | [Jede Leistungszahl nennt das Konto](todos/quer-g-0193-jede-leistungszahl-nennt-das-konto.md) | offen | — | — |
+| `G-204` | feature | mittel | [Admin und Coach laufen mit sichtbarer Konsole](todos/quer-g-0204-admin-und-coach-laufen-mit-sichtbarer-konsole.md) | offen | — | — |
+| `G-206` | befund | mittel | [PostgREST antwortet ohne Kompression](todos/quer-g-0206-postgrest-antwortet-ohne-kompression.md) | offen | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

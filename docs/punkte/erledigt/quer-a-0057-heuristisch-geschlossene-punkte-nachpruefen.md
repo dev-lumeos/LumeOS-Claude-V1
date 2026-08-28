@@ -17,6 +17,8 @@ zahlen:
   davon_geprueft_falsch: 1
 agent: codex
 beauftragt: 2026-08-27
+erledigt: 2026-08-28
+commit: ce10df59
 ---
 
 # A-57 — 24 Punkte wurden per Textheuristik geschlossen und sind ungeprueft
@@ -171,4 +173,36 @@ Davon wurde **1/2** bereits vor diesem Auftrag wiederhergestellt und
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-28, Orchestrator.**
+
+`[cmd]` **23 von 25 Schliessungen waren korrekt, 2 falsch.**
+
+    C-274   bereits wiederhergestellt (in C-325 gefunden)
+    C-208   neu angelegt, mit Messdatum und heutigen Zahlen
+
+`[cmd]` **C-208 nachgeprueft:** liegt in `todos/`, Frontmatter
+vollstaendig, `gemessen: 2026-08-28`, vier Tabellen unter
+`beruehrt`. **Sauber.**
+
+`[cmd]` **C-234 bewusst geschlossen gelassen, und das stimmt:**
+`marketplace_product_id` kommt in **0** Spalten vor, es gibt **0**
+Marketplace-Schemata und **0** Marketplace-Tabellen. **Der
+urspruengliche Befund verlangte genau das.**
+
+### Was die Zahl bedeutet
+
+`[read]` **Zwei von 25 klingt nach wenig.** `[cmd]` **Auf die 385
+erledigten Punkte hochgerechnet waeren es rund 30** — und die
+Punktverwaltung waere mit dreissig falschen Zustaenden gestartet.
+
+`[read]` **Der Fehler war nicht die Trefferquote, sondern das
+Verfahren:** ich habe einen Regex ueber Berichte laufen lassen und
+das Ergebnis als Messung ausgegeben. **Eine Heuristik, die zu 92
+Prozent stimmt, ist als Heuristik brauchbar und als Abnahme
+wertlos.**
+
+`[read]` **Und gefunden hat es keiner meiner Waechter**, sondern ein
+Agent, der eine ausdrueckliche Anweisung verweigert hat.
+
+**Abgenommen.**
+

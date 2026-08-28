@@ -34,7 +34,7 @@
 //       gemessen:
 //     nr                  genau einmal ueber ALLE Ordner
 //     braucht             zeigt auf eine Nummer, die es gibt
-//     kind_von / kinder   beide Richtungen stimmen ueberein
+//     kind_von            zeigt auf eine Nummer, die es gibt
 //     Dateiname           passt zu `nr` und `modul`
 //     erledigt/           Pflicht: erledigt, commit, beruehrt
 //
@@ -104,29 +104,35 @@ const OHNE_DB = process.argv.includes('--ohne-db')
 // Auftrag nennt eine Zahl, und eine Bauform zu erweitern, die noch
 // keinen Tag alt ist, waere geraten. **Gemeldet im Bericht.**
 //
-// ══ DIESE ZAHL IST VORLAEUFIG ═══════════════════════════════════════
+// ══ NACHGEZOGEN — A-58, 2026-08-28 ══════════════════════════════════
 //
-// **Tom, 2026-08-27:** *„Setz den Sollstand NICHT auf 202. Lass ihn
-// auf dem Wert, den du beim Fertigstellen misst. Ich ziehe ihn nach,
-// sobald Codex' Bericht da ist — er nennt die Zahl darin."*
+// `[cmd]` **Von 55 auf 25**, weil die `kinder`-Gegenprobe entfernt
+// ist (siehe unten bei Abschnitt 3). **Gemessen dreimal
+// hintereinander gleich, gegen 263 Punkte.**
 //
-// `[cmd]` **55 ist der Stand am Ende von A-53**, gemessen gegen 247
-// Punkte, dreimal hintereinander gleich.
+// `[cmd]` **Die Aufteilung vorher, gegen 263 Punkte:**
 //
-// `[cmd]` **Er ist waehrend dieses Auftrags zweimal gewandert:**
+//     57  kind_von  — davon
+//                     32  Gegenprobe „fuehrt X nicht in kinder"
+//                     25  Nummer gibt es nicht
 //
-//     225  erste Messung nach der Altbestands-Ausnahme
-//     226  Codex legt A-54 an (kind_von ohne Gegenstueck)
-//      55  Codex behebt in A-54 die Pfade und Schemata — 171 weg
+// `[read]` **Die 32 waren keine Befunde, sondern ein Waechterfehler:**
+// sie verlangten ein Feld, das das Modell gestrichen hat. **Mehr als
+// die Haelfte des Sollstands war Rauschen aus meiner eigenen
+// Nachlaessigkeit.**
 //
-// `[read]` **Was ueberlebt hat, ist genau die Art, die Codex nicht
-// beheben konnte:** 54 `kind_von` auf Nummern, die kein Punkt sind
-// (darunter 15 Auftragsnummern), und 1 Widerspruch zwischen `kinder`
-// und `kind_von`. **Die 125 Dateipfade und 23 Tabellen sind
-// erledigt.**
+// `[cmd]` **Was bleibt, sind 25 Verweise auf 15 verschiedene
+// Nummern** — alle 15 kommen in `TODO.md` und `ERLEDIGT.md`
+// ausschliesslich als Fliesstext vor, nie als Punktueberschrift.
+// **Es sind Auftragsnummern (`G-90`, `G-135`, `C-128`), keine
+// Punkte** — derselbe Befund wie in G-212.
+//
+// `[read]` **Sie bleiben rot und gehoeren so.** Ein `kind_von`, das
+// auf einen Agentenauftrag zeigt, ist eine Behauptung ueber etwas,
+// das die Punktverwaltung nicht kennt.
 //
 // **HIER nachziehen, nirgends sonst — mit Datum und Anlass.**
-const SOLLSTAND = 55
+const SOLLSTAND = 25
 
 const meldungen = []
 function rot(pfad, text) { meldungen.push({ pfad, text }) }
@@ -189,7 +195,7 @@ for (const p of gueltig) {
   }
 }
 
-// ── 3 · braucht / kind_von / kinder ─────────────────────────────────
+// ── 3 · braucht / kind_von ──────────────────────────────────────────
 const bekannt = new Set(gueltig.map(p => String(p.daten.nr)))
 const alsListe = v => (Array.isArray(v) ? v : (v == null ? [] : [v]))
   .map(x => String(x).trim()).filter(Boolean)
@@ -232,48 +238,32 @@ for (const p of gueltig) {
   if (el != null && String(el).trim() && !kennt(String(el).trim())) {
     rot(p.relativ, `kind_von: ${el} — diese Nummer gibt es nicht`)
   }
-  for (const k of alsListe(p.daten.kinder)) {
-    if (!kennt(k)) rot(p.relativ, `kinder: ${k} — diese Nummer gibt es nicht`)
-  }
 }
 
-// Beide Richtungen — `kinder` und `kind_von` muessen sich decken.
+// ══ DIE `kinder`-GEGENPROBE IST ENTFERNT — A-58 ═════════════════════
 //
-// `[read]` **Nur wo BEIDE Punkte existieren.** Ein Verweis auf eine
-// unbekannte Nummer ist oben schon gemeldet; ihn hier ein zweites Mal
-// zu melden hiesse, eine Sabotage erzeugt zwei Meldungen.
+// `[cmd]` **Hier stand eine Pruefung beider Richtungen:** ob das Kind
+// seinen Elternteil kennt UND ob der Elternteil sein Kind fuehrt.
 //
-// ══ EINE AUSNAHME, BEWUSST ══════════════════════════════════════════
+// `[read]` **Das Modell fuehrt `kinder` nicht mehr.**
+// `docs/punkte/00-LIESMICH.md`, Abschnitt *„Es gibt kein Feld
+// `kinder`"*: **nach der Migration standen 121 `kind_von` gegen 1
+// `kinder`** — wer ein Kind anlegt, traegt `kind_von` ein; **niemand
+// geht zum Elternteil zurueck und pflegt die Gegenrichtung.**
 //
-// `[cmd]` **Ein umgehaengtes `kind_von` erzeugt ZWEI Meldungen** —
-// gemessen an der Probe: `C-901` von `C-900` auf `C-902` umgebogen
-// meldet einmal bei `C-900` (*„mein Kind kennt mich nicht"*) und
-// einmal bei `C-901` (*„mein Elternteil fuehrt mich nicht"*).
+// `[cmd]` **Der Waechter hat das nicht mitbekommen und jeden neuen
+// Kindpunkt rot gemacht** — zwei Punkte mit `kind_von: G-186`
+// blockierten jeden Commit, weil G-186 ein Feld nicht fuehrt, das
+// seine Datei gar nicht mehr hat.
 //
-// `[read]` **Das ist keine Doppelmeldung, sondern zwei Befunde.**
-// Beide Dateien sind falsch, beide muessen angefasst werden — wer nur
-// eine meldet, versteckt die Haelfte der Arbeit. **Der Auftrag
-// verlangt eine Meldung je Sabotage; hier sind es zwei Sabotagen in
-// einer Zeile.**
-const nachNummer = new Map(gueltig.map(p => [String(p.daten.nr), p]))
-for (const p of gueltig) {
-  const nr = String(p.daten.nr)
-  for (const k of alsListe(p.daten.kinder)) {
-    const kind = nachNummer.get(k)
-    if (!kind) continue
-    if (String(kind.daten.kind_von ?? '').trim() !== nr) {
-      rot(p.relativ, `kinder: ${k}, aber ${k} traegt kind_von: `
-        + `${kind.daten.kind_von ?? '(leer)'}`)
-    }
-  }
-  const el = String(p.daten.kind_von ?? '').trim()
-  if (el && nachNummer.has(el)) {
-    const eltern = nachNummer.get(el)
-    if (!alsListe(eltern.daten.kinder).includes(nr)) {
-      rot(p.relativ, `kind_von: ${el}, aber ${el} fuehrt ${nr} nicht in kinder`)
-    }
-  }
-}
+// `[cmd]` **Gemessen 2026-08-28, was dadurch gemeldet wurde:**
+// **32 der 57 Befunde waren diese Gegenprobe** — mehr als die
+// Haelfte, und alle 32 verlangten etwas, das das Modell verbietet.
+//
+// `[read]` **Was bleibt, ist die Existenzpruefung von `kind_von`**
+// (oben) — sie prueft eine Behauptung ueber die Welt, nicht die
+// Buchhaltung gegen sich selbst. **Die Kinder leitet der Index aus
+// `kind_von` ab; gepflegt wird nichts.**
 
 // ── 4 · zahlen ohne gemessen ────────────────────────────────────────
 //

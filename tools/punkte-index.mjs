@@ -94,6 +94,28 @@ const module = [...new Set(punkte.map(p => String(p.daten.modul ?? '?')))]
     return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || a.localeCompare(b)
   })
 
+// ══ DIE KINDER WERDEN ABGELEITET, NICHT GEPFLEGT — A-58 ═════════════
+//
+// `[read]` **Das Modell fuehrt kein Feld `kinder`** — nachzulesen in
+// `00-LIESMICH.md`: *„Die Kinder stehen im Index, abgeleitet aus
+// `kind_von`."*
+//
+// `[cmd]` **Der Grund, gemessen:** nach der Migration standen **121
+// `kind_von` gegen 1 `kinder`.** Wer ein Kind anlegt, traegt
+// `kind_von` ein; **niemand geht zum Elternteil zurueck.** Zwei
+// Felder fuer dieselbe Beziehung sind eine Driftquelle.
+//
+// `[read]` **Abgeleitet kann nichts driften.** Die Richtung, die
+// gepflegt wird, ist die einzige, die zaehlt.
+const kinderVon = new Map()
+for (const p of punkte) {
+  const el = String(p.daten.kind_von ?? '').trim()
+  if (!el) continue
+  if (!kinderVon.has(el)) kinderVon.set(el, [])
+  kinderVon.get(el).push(String(p.daten.nr))
+}
+for (const liste of kinderVon.values()) liste.sort()
+
 for (const modul of module) {
   const eigene = punkte.filter(p => String(p.daten.modul ?? '?') === modul)
     .sort((a, b) => sortSchluessel(a).localeCompare(sortSchluessel(b)))
@@ -111,15 +133,16 @@ for (const modul of module) {
       zeilen.push(`### ${ueberschrift} — ${liste.length}`)
       zeilen.push('')
     }
-    zeilen.push('| Nr | Typ | Schwere | Titel | Zustand | Blocker |')
-    zeilen.push('|---|---|---|---|---|---|')
+    zeilen.push('| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |')
+    zeilen.push('|---|---|---|---|---|---|---|')
     for (const p of liste) {
       const b = blocker(p)
       zeilen.push(`| \`${p.daten.nr}\` | ${p.daten.typ ?? '?'} `
         + `| ${p.daten.schwere ?? '?'} `
         + `| [${titelVon(p).replace(/\|/g, '\\|')}](${p.ordner}/${p.name}) `
         + `| ${p.zustand} `
-        + `| ${b.length ? b.join(', ') : '—'} |`)
+        + `| ${b.length ? b.join(', ') : '—'} `
+        + `| ${(kinderVon.get(String(p.daten.nr)) ?? []).join(', ') || '—'} |`)
     }
     zeilen.push('')
   }
@@ -139,8 +162,8 @@ for (const modul of module) {
 // Verweise auf Nummern, die es unter `docs/punkte/` nicht gibt.
 const offeneVerweise = new Set()
 for (const p of punkte) {
+  // A-58: `kinder` faellt weg — das Feld gibt es nicht mehr.
   for (const b of [...alsListe(p.daten.braucht),
-    ...alsListe(p.daten.kinder),
     ...(p.daten.kind_von ? [String(p.daten.kind_von)] : [])]) {
     if (!nummern.has(b)) offeneVerweise.add(b)
   }
