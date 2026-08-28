@@ -8,6 +8,8 @@ braucht: []
 kind_von: C-331
 agent: claudecode
 beauftragt: 2026-08-28
+erledigt: 2026-08-28
+commit: OFFEN
 entscheidung: null
 beruehrt:
   dateien:
@@ -402,4 +404,61 @@ false)` (filtert auf `true`). **Beide G-215-Fehler sind weg.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-28, Orchestrator. Selbst gemessen.**
+
+`[cmd]` **Die Achsenmessung stimmt exakt:**
+
+    Katalog              low 19 · high 18 · medium 17 · critical 10
+    physician_referral   high 17 · critical 10 · medium 6
+    critical             10 von 10 mit physician_referral
+    medium               5 verschiedene Handlungsarten
+
+`[read]` **Die Schlussfolgerung traegt in beide Richtungen:** innerhalb
+`critical` ist die zweite Achse redundant, ueber den Katalog nicht.
+**17 `high` und 6 `medium` schicken ebenfalls zum Arzt** — wer die
+Handlungsart an die Schwere haengt, verliert 23 Regeln.
+
+### Meine Praemisse war falsch, und der Unterschied zaehlt
+
+`[read]` Ich hatte geschrieben: *,,beide Achsen sind heute
+unsichtbar"*. `[cmd]` **Sie waren sichtbar, aber nicht
+unterscheidbar** — `AKTION_TEXT` uebersetzte alle sieben
+Handlungsarten, seit G-187 wurde nach Schwere sortiert.
+
+`[cmd]` **Was fehlte:** `critical` und `high` rendern in derselben
+Farbe, *,,aerztlich abklaeren"* stand grau wie sieben Kontextmarken,
+und die Stufen standen englisch in einer deutschen Oberflaeche.
+
+`[read]` **,,Sichtbar machen" und ,,unterscheidbar machen" sind zwei
+verschiedene Auftraege.** Ich haette das Erste bestellt und das
+Zweite gebraucht.
+
+### Die Gestaltung ist begruendet, nicht gewaehlt
+
+`[read]` **Flaeche statt einer dritten Rotnuance** — *,,zwei
+benachbarte Rots unterscheidet niemand"*. **Und nur `critical`**,
+weil `high` dazu 28 von 64 waeren und nichts mehr hervorhoebe.
+
+`[read]` **Die Handlungsart haengt an der Handlung, nicht an der
+Schwere** — sonst fallen die 23 `high`/`medium`-Regeln weg, die
+ebenfalls zum Arzt schicken.
+
+### Die zwei Agenten haben sich gegenseitig bestaetigt
+
+`[cmd]` **`wr_drug_bleeding_stack` feuert jetzt** — die Regel, von der
+Claude Code in G-215 belegt hatte, dass sie nie feuern kann. **Codex
+hat den Operator in C-328/C-331 behoben, Claude Code hat beide eigenen
+G-215-Befunde nachgemessen und sie sind weg** — ohne voneinander zu
+wissen.
+
+`[cmd]` **Eine zweite Stufentabelle in der Anzeige ist entfernt**
+(`SCHWERE_FARBE`, `SCHWERE_RANG`, `AKTION_TEXT` lokal), ein Waechter
+verbietet sie — **dieselbe Begruendung wie bei der Naht.**
+
+`[cmd]` **Gegenprobe gezielt:** nur die serotonergen abgesetzt, die
+Antikoagulanzien blieben — Kopfzeile von *,,1x kritisch · 1x hoch · 1x
+mittel"* auf *,,1x hoch · 1x mittel"*. **Rueckbau 4/4/0, Katalog
+unveraendert bei 10/18/17/19, keine `severity` angepasst.**
+
+**Abgenommen.**
+

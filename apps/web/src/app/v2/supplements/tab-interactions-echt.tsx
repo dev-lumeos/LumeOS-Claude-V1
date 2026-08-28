@@ -23,53 +23,13 @@ import * as React from 'react'
 import { Card, Pill, Icon } from '@lumeos/ui'
 
 import type { Regel, RegelStand } from '../../../lib/supplements/regeln-read'
-
-/**
- * Die Farbe der Schwere.
- *
- * `[read]` **Farbe ist hier keine Bewertung, sondern die Schwere der
- * Regel selbst** — sie steht so im Katalog (`critical`, `high`,
- * `medium`, `low`). Was die Oberflaeche NICHT tut: daraus eine
- * Gesamtnote bilden.
- */
-const SCHWERE_FARBE: Record<string, string> = {
-  critical: 'var(--neg)',
-  high: 'var(--neg)',
-  medium: 'var(--warn)',
-  low: 'var(--acc-suppl)',
-}
-
-/**
- * Die Rangfolge der Schwere.
- *
- * `[cmd]` **Der Befund, gemessen am 2026-08-25:** die Liste **faerbte**
- * nach `severity`, **ordnete aber nicht danach.** Im Nachweisbild von
- * G-187 standen deshalb zwei *Laborkontrollen* ueber einer
- * *Sicherheit*-Regel — die Reihenfolge kam aus der Datenbank.
- *
- * `[read]` **Das ist der Grund fuer „willkuerlich gelistet".** Wer eine
- * rote und eine blaue Kachel sieht, erwartet die rote oben. Steht sie
- * unten, wirkt die Liste ungeordnet — auch wenn jede Kachel fuer sich
- * stimmt.
- *
- * `[cmd]` Vier Stufen im Katalog: `critical` 10, `high` 18, `medium`
- * 17, `low` 19. Unbekanntes faellt ans Ende, nicht an den Anfang.
- */
-const SCHWERE_RANG: Record<string, number> = {
-  critical: 0, high: 1, medium: 2, low: 3,
-}
-
-function nachSchwere<T extends { severity?: string | null; rule_id: string }>(
-  regeln: readonly T[],
-): T[] {
-  return [...regeln].sort((a, b) => {
-    const ra = SCHWERE_RANG[a.severity ?? ''] ?? 9
-    const rb = SCHWERE_RANG[b.severity ?? ''] ?? 9
-    // Bei gleicher Schwere die Kennung — sonst springt die Reihenfolge
-    // zwischen zwei Aufrufen, und das sieht aus wie ein Fehler.
-    return ra !== rb ? ra - rb : a.rule_id.localeCompare(b.rule_id)
-  })
-}
+// G-218: die feinstufige Bewertung. Farben, Rangfolge, Klartext und
+// die Messung dahinter stehen dort — serverfrei, deshalb hier nur
+// Werte und keine Datenbanknaehe (A-30).
+import {
+  STUFEN_FARBE, STUFEN_TEXT, HANDLUNG_TEXT,
+  istHervorgehoben, istArztsache, nachStufe, verteilung,
+} from '../../../lib/supplements/regel-stufen'
 
 /** Die Regelart im Klartext — `lab_interference` sagt allein nichts. */
 const ART_TEXT: Record<string, string> = {
@@ -80,17 +40,6 @@ const ART_TEXT: Record<string, string> = {
   information: 'Information',
   lab_interference: 'Laborstoerung',
   lab_monitoring: 'Laborkontrolle',
-}
-
-/** Was die Regel empfiehlt — ebenfalls im Klartext. */
-const AKTION_TEXT: Record<string, string> = {
-  physician_referral: 'aerztlich abklaeren',
-  information: 'zur Kenntnis',
-  lab_context: 'beim Labortermin nennen',
-  warning: 'Hinweis',
-  schedule_adjustment: 'zeitlicher Abstand',
-  general_information: 'allgemeine Information',
-  verify_prescription: 'Verordnung pruefen',
 }
 
 export function InteractionsEchtTab({ d }: { d: RegelStand }) {
@@ -106,8 +55,10 @@ export function InteractionsEchtTab({ d }: { d: RegelStand }) {
 
   // Schwerste zuerst — die Farbe allein ordnet nicht, siehe
   // `SCHWERE_RANG`.
-  const erfuellt = nachSchwere(d.regeln.filter(r => r.zustand === 'fulfilled'))
-  const fehlend = nachSchwere(d.regeln.filter(r => r.zustand === 'missing_input'))
+  const erfuellt = nachStufe(d.regeln.filter(r => r.zustand === 'fulfilled'))
+  const fehlend = nachStufe(d.regeln.filter(r => r.zustand === 'missing_input'))
+  // G-218: die Verteilung der ZUTREFFENDEN Regeln, nicht des Katalogs.
+  const stufen = verteilung(erfuellt)
 
   return (
     <div className="v2-col-gap" style={{ gap: 14 }}>
@@ -117,6 +68,26 @@ export function InteractionsEchtTab({ d }: { d: RegelStand }) {
           <Zaehler label="Nicht zutreffend" wert={d.nichtErfuellt} farbe="var(--fg-dim)" />
           <Zaehler label="Daten fehlen" wert={d.fehlend} farbe="var(--warn)" />
         </div>
+        {/* ══ G-218: die Verteilung der zutreffenden Regeln ═════════
+            `[read]` **Gezaehlt wird, was ZUTRIFFT, nicht der
+            Katalog.** Eine Kopfzeile „10 kritisch" waere eine
+            Falschmeldung, solange keine davon feuert. */}
+        {stufen.length > 0 && (
+          <div style={{
+            display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10,
+          }}>
+            {stufen.map(({ stufe, anzahl }) => (
+              <Pill key={stufe} style={stufe === 'critical'
+                ? {
+                    color: 'var(--bg)', background: 'var(--neg)',
+                    borderColor: 'var(--neg)', fontWeight: 600,
+                  }
+                : { color: STUFEN_FARBE[stufe] }}>
+                {anzahl}× {STUFEN_TEXT[stufe]}
+              </Pill>
+            ))}
+          </div>
+        )}
         {/*
           `[read]` DER SATZ MUSS DASTEHEN. Ohne ihn liest sich eine
           zutreffende Regel wie ein Befund ueber den Nutzer. Sie ist
@@ -203,10 +174,22 @@ function Zaehler({ label, wert, farbe }: { label: string; wert: number; farbe: s
 }
 
 function RegelKarte({ r }: { r: Regel }) {
-  const farbe = SCHWERE_FARBE[r.severity ?? ''] ?? 'var(--acc-suppl)'
+  const farbe = STUFEN_FARBE[r.severity ?? ''] ?? 'var(--acc-suppl)'
   const fehlt = r.zustand === 'missing_input'
+  // ══ G-218: die zwei Achsen, getrennt ausgezeichnet ═════════════
+  // `[cmd]` **`critical` und `high` rendern beide in `--neg`**
+  // (`oklch(0.50 0.16 22)`, gemessen 2026-08-28). Ein zweiter Rotton
+  // daneben waere nicht unterscheidbar — **`critical` bekommt
+  // deshalb Flaeche statt Farbe.**
+  const hervor = !fehlt && istHervorgehoben(r.severity)
+  const arzt = !fehlt && istArztsache(r.aktion)
   return (
-    <Card>
+    <Card style={hervor
+      ? {
+          borderColor: 'color-mix(in oklch, var(--neg) 55%, var(--border))',
+          background: 'color-mix(in oklch, var(--neg) 7%, transparent)',
+        }
+      : undefined}>
       <div style={{
         display: 'flex', alignItems: 'center', gap: 8,
         marginBottom: 6, flexWrap: 'wrap',
@@ -216,10 +199,30 @@ function RegelKarte({ r }: { r: Regel }) {
           {r.rule_kind ? ART_TEXT[r.rule_kind] ?? r.rule_kind : r.rule_type}
         </span>
         {r.severity && !fehlt && (
-          <Pill style={{ color: farbe }}>{r.severity}</Pill>
+          <Pill style={hervor
+            ? {
+                color: 'var(--bg)', background: 'var(--neg)',
+                borderColor: 'var(--neg)', fontWeight: 600,
+              }
+            : { color: farbe }}>
+            {STUFEN_TEXT[r.severity] ?? r.severity}
+          </Pill>
         )}
+        {/* `[read]` **Die Handlungsart, nicht die Schwere, sagt was zu
+            tun ist.** `[cmd]` `physician_referral` steht bei 33 von 64
+            Regeln und bei DREI Schweregraden — sie darf deshalb nicht
+            aussehen wie eine Kontextmarke. */}
         {r.aktion && !fehlt && (
-          <Pill>{AKTION_TEXT[r.aktion] ?? r.aktion}</Pill>
+          <Pill style={arzt
+            ? {
+                color: 'var(--neg)',
+                borderColor: 'color-mix(in oklch, var(--neg) 55%, var(--border))',
+                fontWeight: 600,
+              }
+            : undefined}>
+            {arzt && <Icon name="alert" className="v2-ic v2-ic-sm" />}
+            {HANDLUNG_TEXT[r.aktion] ?? r.aktion}
+          </Pill>
         )}
         {/* Die Kennung steht dabei — ohne sie laesst sich eine Regel
             nicht nachschlagen. */}

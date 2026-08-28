@@ -143,6 +143,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 132 | `13_supplements/132_substance_alias_bridge.ts` | Substanz-Aliasbrücke zwischen LumeOS-Supplements, F-05-Kandidaten und Kimi-Substanzen | `crawl_022`: 291 Kimi-Substanzen, mindestens 16 LumeOS↔Kimi-Treffer |
 | 134 | `13_supplements/134_substance_catalog.ts` | Konsolidierter Substanzkatalog aus Kimi, LumeOS und F-05 mit Herkunft je Zeile | 567 Substanzen, 667 Herkunftszeilen |
 | 135 | `13_supplements/135_supplement_nutrients.ts` | Supplement-Naehrstoffbruecke aus `daten/supplement-naehrstoffcodes.json` | 17 Zuordnungen, 1 Tagesfunktion |
+| 149 | `13_supplements/149_folate_unit_guard.sql` | C-149: Folat ohne belegte DFE-Umrechnung aus der bekannten Naehrstoffbilanz ausschliessen | 1 Folat-Zeile `unbekannt`; keine Referenzwerte geaendert |
 | 140 | `14_medical/140_medical_schema.sql` | Medical-Schema: `biomarker_catalog`, `biomarker_reference_ranges`, `lab_reports`, `lab_result_values`, `lab_result_values_read()` | 4 Tabellen, 1 Funktion, RLS je Operation |
 | 141 | `14_medical/141_biomarker_katalog.ts` | LOINC-Masterkatalog aus `daten/biomarker-loinc/` und kuratierte Referenzbereich-Kandidaten aus `biomarker-katalog.json` | 11.676 LOINC-Codes, 464 Referenzbereich-Zeilen |
 | 142 | `14_medical/142_laborimport_matching.sql` | Laborimport-Zuordnung: `biomarker_aliases`, Importfunktionen und Match-Status an Messwerten | 1 Tabelle, 2 Funktionen, unbekannte Marker bleiben speicherbar |

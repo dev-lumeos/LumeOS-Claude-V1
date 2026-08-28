@@ -1220,6 +1220,16 @@
       "depends_on": [
         "313c"
       ]
+    },
+    {
+      "id": "149",
+      "path": "supabase/_pipeline/13_supplements/149_folate_unit_guard.sql",
+      "kind": "sql",
+      "creates": "C-149: Folat ohne belegte DFE-Umrechnung als unbekannt markieren",
+      "depends_on": [
+        "328",
+        "139"
+      ]
     }
   ]
 }

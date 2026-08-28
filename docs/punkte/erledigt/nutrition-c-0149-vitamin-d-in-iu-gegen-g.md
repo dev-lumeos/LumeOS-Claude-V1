@@ -9,6 +9,8 @@ kind_von: G-91
 kinder: []
 agent: codex
 beauftragt: 2026-08-28
+erledigt: 2026-08-28
+commit: OFFEN
 entscheidung: null
 beruehrt:
   tabellen: [supplements.supplement_nutrients]
@@ -207,4 +209,38 @@ Supplement-Eingang abgesichert; die fachliche Gesamtbilanz ist separat offen.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-28, Orchestrator. Selbst gemessen.**
+
+### Meine Auftragspraemisse war falsch
+
+`[cmd]` **Vitamin D war bereits normalisiert** — im C-158-Katalogpfad,
+quellenbasiert, 5.000 IU → 125 µg. `[cmd]` **Die
+Gleichwertigkeitsprobe belegt es:** beide Eingaben ergeben 125 µg,
+kombiniert **933,333 %** statt naiv 33.433,333 %.
+
+`[read]` **Der Befund war vom 20.08. und seither behoben worden, ohne
+dass der Punkt geschlossen wurde.** Dasselbe Muster wie bei den 25
+heuristisch geschlossenen Punkten aus A-57 — **nur in die andere
+Richtung.**
+
+### Was stattdessen entstand, ist besser als der Auftrag
+
+`[cmd]` **`149_folate_unit_guard.sql`:** Folat bleibt ohne Form und
+Einnahmebezug **unbekannt**, statt einen nicht belegbaren DFE-Wert zu
+liefern. `[cmd]` **Vitamin A und E ebenso**, weil ihre Faktoren
+formabhaengig sind.
+
+`[read]` **Das ist genau die Haltung, die der Auftrag verlangt hat:
+keinen Faktor aus dem Gedaechtnis setzen, auch keinen richtigen.**
+`[read]` **Und *unbekannt* ist hier die ehrlichere Aussage als eine
+Zahl** — dieselbe Unterscheidung wie *begruendet leer* gegen *nicht
+bearbeitet* aus G-208.
+
+`[cmd]` **Vier Quellen benannt**, alle NIH Office of Dietary
+Supplements: Vitamin D, Vitamin A, Vitamin E, Folat.
+
+`[cmd]` **Vollstaendige Kette 128 Schritte in 155 s**,
+Migrationswaechter gruen, Folat-Schritt im Manifest.
+
+**Abgenommen.**
+

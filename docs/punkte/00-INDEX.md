@@ -6,9 +6,7 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 269 |
-| `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 23 |
+| `erledigt` | 25 |
 | **gesamt** | **294** |
 
 ## medical — 37
@@ -51,7 +49,7 @@
 | `C-332` | befund | mittel | [23 Regeln koennen weiterhin nicht feuern](todos/medical-c-0332-23-regeln-koennen-weiterhin-nicht-feuern.md) | offen | — | — |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
-| `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](laufend_claudecode/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | laeuft (claudecode) | — | — |
+| `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
 
 ## nutrition — 77
 
@@ -78,7 +76,7 @@
 | `C-117` | befund | mittel | [`milch` traegt auch mit Vorlieben nicht](todos/nutrition-c-0117-milch-traegt-auch-mit-vorlieben-nicht.md) | offen | — | — |
 | `C-120` | befund | mittel | [Drei Sperren in `food_search`](todos/nutrition-c-0120-drei-sperren-in-food-search.md) | offen | — | — |
 | `C-121` | befund | mittel | [Die Suche ist langsamer geworden](todos/nutrition-c-0121-die-suche-ist-langsamer-geworden.md) | offen | — | — |
-| `C-149` | blocker | mittel | [Vitamin D in IU gegen µg](laufend_codex/nutrition-c-0149-vitamin-d-in-iu-gegen-g.md) | laeuft (codex) | — | — |
+| `C-149` | blocker | mittel | [Vitamin D in IU gegen µg](erledigt/nutrition-c-0149-vitamin-d-in-iu-gegen-g.md) | erledigt | — | — |
 | `C-160` | befund | mittel | [Der Bewertungshorizont je Naehrstoff ist leer](todos/nutrition-c-0160-der-bewertungshorizont-je-naehrstoff-ist-leer.md) | offen | — | — |
 | `C-163` | befund | mittel | [94 Substanzen ohne maschinenlesbare Naehrstoffmenge](todos/nutrition-c-0163-94-substanzen-ohne-maschinenlesbare-naehrstoffmenge.md) | offen | — | — |
 | `C-174` | befund | mittel | [`ADR_NUTRITION_PREFERENCES_V1` kennt drei Constraint-Stufen](todos/nutrition-c-0174-adr-nutrition-preferences-v1-kennt-drei-constraint-stufen.md) | offen | — | — |
