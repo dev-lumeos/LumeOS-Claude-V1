@@ -15,7 +15,7 @@ zahlen: null
 agent: codex
 beauftragt: 2026-08-28
 erledigt: 2026-08-28
-commit: OFFEN
+commit: 6c78603c
 ---
 
 # C-326 — C-129 auf die verbleibende Luecke neu fassen

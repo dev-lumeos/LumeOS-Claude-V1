@@ -8,7 +8,7 @@ braucht: []
 kind_von: null
 entscheidung: null
 erledigt: 2026-08-28
-commit: OFFEN
+commit: 6c78603c
 durch: C-326
 beruehrt:
   tabellen:
