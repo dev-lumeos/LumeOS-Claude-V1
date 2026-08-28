@@ -120,7 +120,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 072 | `07_lesefunktionen/072_normalisierung.sql` | `search_fold`, Ausdrucksindex | — |
 | 073 | `07_lesefunktionen/073_suchfilter.sql` | `food_search` samt Rangfunktionen | 1 Signatur |
 | 074 | `07_lesefunktionen/074_preferences_api.sql` | `food_preferences_read()` und `food_preferences_write()` fuer Nutrition-Preferences, ohne `food_search` zu veraendern | 2 Funktionen |
-| 075 | `07_lesefunktionen/075_preference_search_application.sql` | `food_search` mit optionaler Nutzer-Praeferenzanwendung; `p_user_id = NULL` bleibt ungefiltert | 1 Signatur, hard/strong/soft/boost wirksam |
+| 075 | `07_lesefunktionen/075_preference_search_application.sql` | `food_search` mit optionaler Nutzer-Praeferenzanwendung und zehn Sortierwerten; `p_user_id = NULL` bleibt ungefiltert | 1 Signatur, hard/strong/soft/boost wirksam; unbekannter Sortierwert wird als `unsupported_sort` gemeldet |
 | 080 | `08_bereinigung/080_public_bereinigen.sql` | Bereinigung alter Governance-Objekte in `public` | idempotent |
 | 090 | `09_identitaet/090_profile.sql` | `public.profiles` + Trigger auf `auth.users`, C-47-Profilachsen, C-63 `locale` und C-140 `experience_level` | v090: 18 Prüfungen |
 | 091 | `09_identitaet/091_user_display_preferences.sql` | Allgemeine gespeicherte Anzeigeeinstellungen je Nutzer | 1 Public-Tabelle, RLS je Operation |

@@ -552,7 +552,53 @@ WITH RECURSIVE params AS (
   SELECT
     LEAST(GREATEST(COALESCE(p_limit, 25), 1), 100) AS lim,
     GREATEST(COALESCE(p_offset, 0), 0) AS off,
-    CASE WHEN p_sort IN ('relevance','protein_desc','kcal_asc','name_asc') THEN p_sort ELSE 'relevance' END AS sort
+    CASE
+      WHEN p_sort IN (
+        'relevance',
+        'protein_desc',
+        'protein_asc',
+        'kcal_desc',
+        'kcal_asc',
+        'carbs_desc',
+        'carbs_asc',
+        'fat_desc',
+        'fat_asc',
+        'name_asc'
+      ) THEN p_sort
+      ELSE 'relevance'
+    END AS sort,
+    CASE
+      WHEN p_sort IS NOT NULL
+       AND p_sort <> ''
+       AND p_sort NOT IN (
+         'relevance',
+         'protein_desc',
+         'protein_asc',
+         'kcal_desc',
+         'kcal_asc',
+         'carbs_desc',
+         'carbs_asc',
+         'fat_desc',
+         'fat_asc',
+         'name_asc'
+       )
+      THEN json_build_object(
+        'code', 'unsupported_sort',
+        'requested_sort', p_sort,
+        'supported_sorts', json_build_array(
+          'relevance',
+          'protein_desc',
+          'protein_asc',
+          'kcal_desc',
+          'kcal_asc',
+          'carbs_desc',
+          'carbs_asc',
+          'fat_desc',
+          'fat_asc',
+          'name_asc'
+        )
+      )
+    END AS unsupported_sort
 ),
 filter_tag_groups AS MATERIALIZED (
   SELECT g.gruppe, g.nr
@@ -1138,6 +1184,12 @@ matching_foods AS (
   ORDER BY
     CASE WHEN (SELECT sort FROM params) = 'protein_desc' THEN COALESCE(m.prot625, 0) END DESC,
     CASE WHEN (SELECT sort FROM params) = 'kcal_asc' THEN COALESCE(m.enercc, 999999) END ASC,
+    CASE WHEN (SELECT sort FROM params) = 'protein_asc' THEN COALESCE(m.prot625, 999999) END ASC,
+    CASE WHEN (SELECT sort FROM params) = 'kcal_desc' THEN COALESCE(m.enercc, -1) END DESC,
+    CASE WHEN (SELECT sort FROM params) = 'carbs_desc' THEN COALESCE(m.cho, -1) END DESC,
+    CASE WHEN (SELECT sort FROM params) = 'carbs_asc' THEN COALESCE(m.cho, 999999) END ASC,
+    CASE WHEN (SELECT sort FROM params) = 'fat_desc' THEN COALESCE(m.fat, -1) END DESC,
+    CASE WHEN (SELECT sort FROM params) = 'fat_asc' THEN COALESCE(m.fat, 999999) END ASC,
     CASE WHEN (SELECT sort FROM params) = 'relevance' THEN
       CASE
         WHEN p_tokens IS NULL OR cardinality(p_tokens) = 0 THEN 0.5
@@ -1546,6 +1598,7 @@ SELECT json_build_object(
   'basics_only', COALESCE(p_basics_only, false),
   'filters', COALESCE(p_filters, '{}'::jsonb),
   'sort', (SELECT sort FROM params),
+  'unsupported_sort', (SELECT unsupported_sort FROM params),
   'limit', (SELECT lim FROM params),
   'offset', (SELECT off FROM params),
   'total', (SELECT COUNT(*)::int FROM all_matching_food_ids),
@@ -1594,7 +1647,9 @@ COMMENT ON FUNCTION nutrition.food_search(
   'C-94: Lebensmittelsuche mit optionaler Preference-Anwendung. '
   'p_user_id NULL behaelt die ungefilterte Suche; mit Nutzer greifen '
   'hard/strong/soft/boost aus food_preferences_read(). C-164: p_filters '
-  'ergaenzt Mehrfach-Tags, Ausschluesse und processing_level.';
+  'ergaenzt Mehrfach-Tags, Ausschluesse und processing_level. C-245: '
+  'zehn Sortierwerte; unbekannte Werte werden als unsupported_sort '
+  'im Ergebnis gemeldet und fallen sichtbar auf relevance zurueck.';
 
 REVOKE ALL ON FUNCTION nutrition.food_search(
   text, text, text[], uuid, text, uuid, text, text, integer, integer,

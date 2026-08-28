@@ -6,9 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 277 |
-| `laufend_codex` | 1 |
-| `erledigt` | 27 |
-| **gesamt** | **305** |
+| `erledigt` | 29 |
+| **gesamt** | **306** |
 
 ## medical — 38
 
@@ -53,7 +52,7 @@
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
 | `G-241` | entscheidung | hoch | [zwei Reiterschnitte im Medical-Mockup](todos/medical-g-0241-zwei-reiterschnitte-im-medical-mockup.md) | offen | — | — |
 
-## nutrition — 83
+## nutrition — 84
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -71,7 +70,7 @@
 | `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](todos/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | offen | — | — |
 | `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](todos/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | offen | — | — |
 | `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — | — |
-| `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](todos/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | offen | — | G-239 |
+| `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](erledigt/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | erledigt | — | G-239, G-248 |
 | `C-49` | befund | hoch | [Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach](todos/nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md) | offen | — | C-323, C-324 |
 | `C-102` | feature | mittel | [`milch` findet Joghurt statt Milch](todos/nutrition-c-0102-milch-findet-joghurt-statt-milch.md) | offen | — | — |
 | `C-109` | entscheidung | mittel | [Die Injektions-Grenzwerte sind unbelegt](todos/nutrition-c-0109-die-injektions-grenzwerte-sind-unbelegt.md) | offen | — | — |
@@ -136,9 +135,10 @@
 | `G-237` | befund | niedrig | [`data/nutrientDetails.ts` als statisches Array — `food_sources` Array veraltet (per Review 1 ADR_IMPROVEMENTS_PACKAGE #20)](todos/nutrition-g-0237-data-nutrientdetails-ts-als-statisches-array-food-sources-.md) | offen | — | — |
 | `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | — | — |
 | `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](erledigt/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | erledigt | — | C-333, C-334, G-246, G-247 |
-| `G-245` | feature | mittel | [die Sortier-Tags bauen](laufend_codex/nutrition-g-0245-die-sortier-tags-bauen.md) | laeuft (codex) | — | — |
+| `G-245` | feature | mittel | [die Sortier-Tags bauen](erledigt/nutrition-g-0245-die-sortier-tags-bauen.md) | erledigt | — | — |
 | `G-246` | feature | mittel | [die Mikronaehrstoff-Detailtexte brauchen eine Tabelle](todos/nutrition-g-0246-mikronaehrstoff-detailtexte-brauchen-eine-tabelle.md) | offen | — | — |
 | `G-247` | feature | niedrig | [der Zeitraumwechsel braucht eine eigene Funktion](todos/nutrition-g-0247-zeitraumwechsel-braucht-eine-eigene-funktion.md) | offen | — | — |
+| `G-248` | befund | mittel | [der Leseweg laedt neun von 35 Fehlzaehlern](todos/nutrition-g-0248-der-leseweg-laedt-neun-von-35-fehlzaehlern.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 50

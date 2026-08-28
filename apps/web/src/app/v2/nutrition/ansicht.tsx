@@ -32,6 +32,10 @@ import type { MikroStand } from '../../../lib/nutrition/mikro-read'
 // die Einrueckung falsch bauen lassen.
 // G-239: die Mikronaehrstoff-Ansicht.
 import { MikroAnsicht } from './mikro-ansicht'
+// C-48: die Lage des Tages und die Fehlzaehler (Regel 1).
+import {
+  tageslageVon, lageSatz, lueckenVon, lueckenSatz, LAGE_TITEL,
+} from '../../../lib/nutrition/tageslage'
 import { NaehrstoffOrdnungTab } from './naehrstoff-ordnung-tab'
 import type { NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnung'
 // G-101: zwei Insights-Kacheln mit echten Zahlen.
@@ -147,7 +151,20 @@ export async function TagebuchAnsicht({
   // A-14: Serverkomponente — `getTranslations`, nicht `useTranslations`.
   const t = await getTranslations('Nutrition')
   const tA = await getTranslations('Allgemein')
-  const leer = !summe || summe.item_count === 0
+  // ══ C-48: die Lage des Tages, nicht ein Ja/Nein ═════════════════
+  // `[cmd]` Hier stand `!summe || summe.item_count === 0` — **eine
+  // Bedingung fuer zwei verschiedene Lagen.** Auf dem Schirm
+  // gemessen (2026-08-28): 2026-01-15 (nie etwas angelegt) und
+  // 2026-05-29 (4 Mahlzeiten, 0 Positionen) zeigten denselben Satz.
+  // `[read]` **Ein leerer Tag und ein unfertiger Tag sind nicht
+  // dasselbe** — dieselbe Klasse wie G-208 und G-239.
+  const lage = tageslageVon(summe)
+  const leer = lage === 'nichts_angelegt' || lage === 'ohne_positionen'
+  // Regel 1: die Fehlzaehler der angezeigten Makros. `label` ist der
+  // SCHLUESSEL (A-14) — hier wird er zum Text, sonst stuende
+  // „kalorien" im Satz.
+  const luecken = lueckenVon(summe,
+    HAUPTMAKROS.map(m => ({ code: m.code, label: t(m.label) })))
 
   // Der Profilzustand steht in jeder Zeile gleich — eine reicht.
   const profilFehlt = bewertung.length > 0 &&
@@ -234,19 +251,30 @@ export async function TagebuchAnsicht({
 
       {/* Bis C-03 stand hier, dass es keinen Weg zum Erfassen gibt.
           Es gibt jetzt einen — direkt darunter. */}
+      {/* ══ C-48: zwei Leerlagen, zwei Saetze ═══════════════════════
+          `[read]` **Wer vier Mahlzeiten angelegt und nichts
+          eingetragen hat, hat NICHT „nichts erfasst"** — er ist auf
+          halbem Weg. Der falsche Satz schickt ihn zum Anlegen einer
+          fuenften Mahlzeit statt zum Fuellen der vier vorhandenen. */}
       {!fehler && leer && (
         <div className="v2-empty" style={{ marginTop: 16 }}>
           <Icon name="nutrition" />
           <div>
-            <strong>Nichts erfasst an diesem Tag.</strong>
+            <strong>{LAGE_TITEL[lage]}</strong>
             <p style={{ marginTop: 6 }}>
-              Mahlzeit anlegen, Lebensmittel suchen, Menge angeben — die
-              Naehrwerte werden dabei <strong>eingefroren</strong>. Eine
-              spaetere Korrektur am Lebensmittel aendert diesen Tag nicht
-              mehr.
+              {lageSatz(lage, summe?.meal_count ?? 0)}
             </p>
             <p style={{ marginTop: 6 }}>
-              Nur stoebern?{' '}
+              {lage === 'ohne_positionen'
+                ? <>Öffne eine der Mahlzeiten unten und trag ein, was drin war
+                    — die Nährwerte werden dabei <strong>eingefroren</strong>.</>
+                : <>Mahlzeit anlegen, Lebensmittel suchen, Menge angeben — die
+                    Nährwerte werden dabei <strong>eingefroren</strong>. Eine
+                    spätere Korrektur am Lebensmittel ändert diesen Tag nicht
+                    mehr.</>}
+            </p>
+            <p style={{ marginTop: 6 }}>
+              Nur stöbern?{' '}
               <Link href={'/v2/nutrition/suche' as Route} className="v2-link">
                 Lebensmittel suchen
               </Link>
@@ -322,6 +350,29 @@ export async function TagebuchAnsicht({
               })}
             </div>
           </div>
+
+          {/* ══ C-48, Regel 1: die Fehlzaehler ══════════════════════
+              `[cmd]` `daily_summary` traegt 35 `_missing`-Spalten.
+              Steht eine ueber null, ist die Summe unvollstaendig —
+              **und zwar zu niedrig, nicht bloss ungenau.** Der Ring
+              trug das schon als Markierung (`incomplete`), aber
+              ohne Zahl und ohne Satz.
+              `[cmd]` Auf dev feuert bei den vier Hauptmakros kein
+              einziger Zaehler (0 von 181 Tagen) — `vitc_missing`
+              dagegen an 180 von 181. **Die Regel ist nicht tot, sie
+              trifft nur andere Naehrstoffe.** */}
+          {luecken.length > 0 && (
+            <div style={{
+              marginTop: 12, padding: 10, borderRadius: 6, fontSize: 11.5,
+              lineHeight: 1.55,
+              background: 'color-mix(in oklch, var(--warn) 10%, transparent)',
+              border: '1px solid color-mix(in oklch, var(--warn) 35%, var(--border))',
+            }}>
+              <Icon name="alert" className="v2-ic v2-ic-sm"
+                    style={{ display: 'inline', verticalAlign: 'middle', marginRight: 5 }} />
+              {lueckenSatz(luecken)}
+            </div>
+          )}
 
           {/* Warum kein Ring gefuellt ist — und was dagegen zu tun ist.
               Bis GO-03 stand hier „es gibt keine Zieltabelle". Die gibt
