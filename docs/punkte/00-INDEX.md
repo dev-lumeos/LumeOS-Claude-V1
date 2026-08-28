@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 277 |
+| `todos` | 276 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 26 |
 | **gesamt** | **304** |
@@ -135,7 +136,7 @@
 | `G-237` | befund | niedrig | [`data/nutrientDetails.ts` als statisches Array — `food_sources` Array veraltet (per Review 1 ADR_IMPROVEMENTS_PACKAGE #20)](todos/nutrition-g-0237-data-nutrientdetails-ts-als-statisches-array-food-sources-.md) | offen | — | — |
 | `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | — | — |
 | `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](laufend_claudecode/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | laeuft (claudecode) | — | C-333, G-246, G-247 |
-| `G-245` | feature | mittel | [die Sortier-Tags bauen](todos/nutrition-g-0245-die-sortier-tags-bauen.md) | offen | — | — |
+| `G-245` | feature | mittel | [die Sortier-Tags bauen](laufend_codex/nutrition-g-0245-die-sortier-tags-bauen.md) | laeuft (codex) | — | — |
 | `G-246` | feature | mittel | [die Mikronaehrstoff-Detailtexte brauchen eine Tabelle](todos/nutrition-g-0246-mikronaehrstoff-detailtexte-brauchen-eine-tabelle.md) | offen | — | — |
 | `G-247` | feature | niedrig | [der Zeitraumwechsel braucht eine eigene Funktion](todos/nutrition-g-0247-zeitraumwechsel-braucht-eine-eigene-funktion.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |

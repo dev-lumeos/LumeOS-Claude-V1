@@ -29,6 +29,44 @@ Sortierrichtung.**
     Filter    grob, ueber die vorhandene Suche
     Tag       sortiert das Ergebnis - high_carb absteigend nach CHO
 
+## Praezisierung, 2026-08-28
+
+Tom: *,,das gilt fuer high und low sprich
+kalorien/protein/carbs/fat und darf nicht global verwendet werden es
+muss auf alle anderen filter ontop kommen"*.
+
+**Acht Sortierachsen, vier Naehrstoffe in zwei Richtungen:**
+
+    Kalorien        hoch / niedrig
+    Protein         hoch / niedrig
+    Kohlenhydrate   hoch / niedrig
+    Fett            hoch / niedrig
+
+`[read]` **Kalorien sind neu** — es gibt heute keinen Kalorien-Tag.
+`[read]` **Ballaststoffe sind nicht dabei.** Ich hatte `low_fiber`
+angenommen; es steht nicht in der Liste.
+
+### Nicht global, sondern obenauf
+
+`[read]` **Die Sortierung ersetzt keinen Filter, sie ordnet dessen
+Ergebnis.** Wer *vegan* filtert und dann nach Protein absteigend
+sortiert, bekommt **vegane Lebensmittel nach Protein geordnet** —
+nicht alle proteinreichen.
+
+`[read]` **,,Darf nicht global verwendet werden"** heisst: die
+Sortierung wirkt nie auf den ganzen Katalog anstelle einer Suche,
+sondern immer auf das, was die Suche und die Filter uebrig lassen.
+
+### Was das fuer `high_protein` bedeutet
+
+`[cmd]` **`high_protein` gibt es bereits als Filter-Tag** mit 1.400
+Zuordnungen und der Regel `>= 20 g PROT625`.
+
+`[read]` **Damit traegt der Begriff zwei Bedeutungen:** eine
+Auslobung, die filtert, und eine Sortierrichtung, die ordnet.
+**Ob sie denselben Namen tragen duerfen, ist eine Bauentscheidung**
+— und wenn nicht, braucht die Sortierung eigene Bezeichner.
+
 ## Warum meine Frage falsch war
 
 `[read]` **Die vier bestehenden Tags sind Auslobungen.** *,,Fettarm"*
