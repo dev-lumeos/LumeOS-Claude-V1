@@ -9,10 +9,12 @@ kind_von: C-296
 kinder: []
 agent: codex
 beauftragt: 2026-08-28
+erledigt: 2026-08-28
+commit: 53560696
 entscheidung: E-15
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [supplements.rule_catalog]
+  dateien: [supabase/_pipeline/13_supplements/313c_rule_high_operators.sql, tools/regel-operatoren-pruefen.mjs]
 zahlen: null
 ---
 
@@ -260,6 +262,50 @@ nicht partiell umgeschrieben.
 Keine Katalogregel, keine Datei unter `apps/` und keine Migration
 wurde geaendert. Nichts wurde gestaged, committet oder gepusht.
 
-## Abnahme
+## Abnahme — Weg 2
 
-_(vom Orchestrator)_
+**2026-08-28, Orchestrator. Selbst gemessen.**
+
+`[cmd]` **Bestaetigt:**
+
+    unsupported_operator    23   (vorher 25)
+    davon high               2   (vorher 4)
+    not_fulfilled           39
+    fulfilled                1
+
+`[cmd]` **Freigeschaltet ueber `lab_above`:**
+`wr_drug_hyperkalemia_lab` und `wr_drug_testosterone_hct`. `[cmd]`
+**Verblieben:** `wr_lab_biotin` und `wr_lab_vitc_glucose`. `[cmd]`
+Waechter bei 23 gruen, bei 22 und 24 rot — **beide Richtungen
+belegt.**
+
+### Die Begrenzung ist die richtige Entscheidung
+
+`[read]` **`lab_above` haette breiter gebaut werden koennen.** Codex
+hat es nicht getan, **weil die anderen Regeln Eingabemodelle
+brauchen, die es nicht gibt.**
+
+`[read]` **Und Biotin und Vitamin C bleiben *sichtbar* blockiert** —
+sie fallen nicht mehr still aus, sie stehen als
+`unsupported_operator` im Ergebnis. **Wer wissen will, warum die
+Biotin-Warnung nicht kommt, findet die Antwort, statt anzunehmen, es
+gebe nichts zu warnen.**
+
+`[read]` **Eine Implementierung, die vier Regeln freischalten wollte
+und zwei freischaltet, weil die anderen zwei Daten brauchen, die
+fehlen, ist kein halbes Ergebnis. Sie ist ein vollstaendiges mit
+einem benannten Rest.**
+
+### Zu spaet abgenommen
+
+`[read]` **Der Bericht lag vor, ich hatte nachgemessen — und den
+Punkt trotzdem liegen lassen** mit der Begruendung, C-331 koenne das
+Ergebnis noch verschieben. `[cmd]` **Von Tom bemerkt.**
+
+`[read]` **Die Begruendung traegt nicht:** C-328 hat einen anderen
+Defekt gefunden, nicht diesen. **Der Ordner behauptete, Codex arbeite
+an zwei Dingen — er arbeitete an einem.**
+
+**Abgenommen.** Der Rest — 23 Operatoren, davon `wr_lab_biotin` und
+`wr_lab_vitc_glucose` mit `high` — bleibt als eigener Punkt offen.
+

@@ -7,10 +7,11 @@
 |---|---|
 | `todos` | 250 |
 | `laufend_codex` | 1 |
-| `erledigt` | 20 |
-| **gesamt** | **271** |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 21 |
+| **gesamt** | **273** |
 
-## medical — 34
+## medical — 36
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -42,10 +43,12 @@
 | `C-309` | feature | mittel | [der Wirkmechanismus ist bei allen 494 englisch](todos/medical-c-0309-der-wirkmechanismus-ist-bei-allen-494-englisch.md) | offen | — | — |
 | `C-311` | befund | mittel | [US-Freinamen ohne europaeisches Gegenstueck](todos/medical-c-0311-us-freinamen-ohne-europaeisches-gegenstueck.md) | offen | — | — |
 | `C-312` | befund | mittel | [Barcode einlesen — was jetzt schon ins Schema gehoert](todos/medical-c-0312-barcode-einlesen-was-jetzt-schon-ins-schema-gehoert.md) | offen | — | — |
-| `C-313` | entscheidung | mittel | [25 Regeln koennen nicht feuern](laufend_codex/medical-c-0313-25-regeln-koennen-nicht-feuern.md) | laeuft (codex) | — | — |
+| `C-313` | entscheidung | mittel | [25 Regeln koennen nicht feuern](erledigt/medical-c-0313-25-regeln-koennen-nicht-feuern.md) | erledigt | — | C-332 |
 | `C-314` | entscheidung | mittel | [die drei Wirkstoff-Dubletten zusammenfuehren](todos/medical-c-0314-die-drei-wirkstoff-dubletten-zusammenfuehren.md) | offen | — | — |
 | `C-327` | blocker | hoch | [Die Chelationsregel kennt keine Gruppenmitgliedschaft](todos/medical-c-0327-chelation-rule-fehlt-gruppenmitgliedschaft.md) | offen | — | — |
-| `C-328` | blocker | hoch | [`count_risk_flag_gte` zaehlt Schluessel statt Werte](erledigt/medical-c-0328-count-risk-flag-zaehlt-schluessel-statt-werte.md) | erledigt | — | — |
+| `C-328` | blocker | hoch | [`count_risk_flag_gte` zaehlt Schluessel statt Werte](erledigt/medical-c-0328-count-risk-flag-zaehlt-schluessel-statt-werte.md) | erledigt | — | C-331 |
+| `C-331` | messung | hoch | [C-328 live einspielen und den Durchstich wiederholen](laufend_codex/medical-c-0331-c-328-live-und-durchstich.md) | laeuft (codex) | — | — |
+| `C-332` | befund | mittel | [23 Regeln koennen weiterhin nicht feuern](todos/medical-c-0332-23-regeln-koennen-weiterhin-nicht-feuern.md) | offen | — | — |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 
@@ -193,7 +196,7 @@
 | `G-131` | befund | mittel | [`module-completeness.jsx` ist die Settings-Seite](todos/training-g-0131-module-completeness-jsx-ist-die-settings-seite.md) | offen | — | — |
 | `G-173` | befund | mittel | [Ein falscher Punktverweis in `scores-read.ts`](todos/training-g-0173-ein-falscher-punktverweis-in-scores-read-ts.md) | offen | — | — |
 | `G-216` | feature | hoch | [Training hat Daten und keinen Schreibweg](erledigt/training-g-0216-training-hat-keinen-schreibweg.md) | erledigt | — | C-330, G-217 |
-| `G-217` | feature | mittel | [der Trainings-Schreibweg hat keine Oberflaeche](todos/training-g-0217-trainingsformular-fehlt.md) | offen | — | — |
+| `G-217` | feature | mittel | [der Trainings-Schreibweg hat keine Oberflaeche](laufend_claudecode/training-g-0217-trainingsformular-fehlt.md) | laeuft (claudecode) | — | — |
 
 ## recovery — 20
 
