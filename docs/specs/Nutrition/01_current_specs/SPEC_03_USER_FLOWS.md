@@ -96,10 +96,11 @@ Sortierung:     [Relevanz ✓] [Protein ↓] [Kalorien ↑] [Name A-Z]
 2. Kamera öffnet sich (oder Foto-Upload aus Galerie)
 3. Foto → Claude Vision API
 
-4. Confidence ≥ 0.85 (AUTO_ACCEPT):
-   → Erkannte Foods direkt als Vorschlag
+4. Confidence ≥ 0.85 (HIGH):
+   → Erkannte Foods direkt als Vorschlag, vorausgewählt
    → User kann Mengen anpassen
    → "Hinzufügen" → MealItems erstellt
+   → KEIN Auto-Accept: der Klick ist Pflicht
 
    Confidence 0.50–0.84 (SUGGEST):
    → Kandidaten-Liste mit %-Confidence
@@ -113,6 +114,17 @@ Sortierung:     [Relevanz ✓] [Protein ↓] [Kalorien ↑] [Name A-Z]
    Confidence < 0.30 (REJECT):
    → "Nicht erkannt"
    → Weiter zur manuellen Food Search (Flow 1)
+
+> **Berichtigt 2026-08-28 (G-220).** Diese Stelle nannte die
+> Stufe `AUTO_ACCEPT` und war damit im Widerspruch zu
+> `ADR_MEALCAM_V1`: *"MealCam darf NIE automatisch finale Meal Items
+> schreiben."* `SPEC_04` Feature 9 war bereits berichtigt
+> ("AUTO_ACCEPT existiert nicht in V1"), `SPEC_10_PASS2` ebenfalls
+> konsistent — nur diese Stelle stand noch.
+>
+> Die Stufe heisst jetzt `HIGH` und beschreibt, was sie tut:
+> vorauswählen, nicht schreiben. Der Ablauf selbst war bereits
+> richtig — "Hinzufügen" ist ein Klick.
 
 5. User kann einzelne erkannte Items korrigieren/ergänzen
 6. Unbekannte Foods → Custom Food erstellen (Flow 7)

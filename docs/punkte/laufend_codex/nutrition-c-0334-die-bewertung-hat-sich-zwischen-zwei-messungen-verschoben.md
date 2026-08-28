@@ -130,7 +130,104 @@ besser als eine plausible Erklaerung ohne Beleg.**
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+Stand: Ursache der Abweichung eingegrenzt, historischer Schreiber unklar.
+Die heutige Bewertung ist deterministisch. Die beiden Messreihen koennen
+nicht dieselben Tagesmengen und dieselben Referenzwerte verwendet haben;
+die Abweichung liegt vor der Bewertung in einem anderen Datenstand oder
+einem anderen Messweg, nicht in Rundung, Uhrzeit, Reihenfolge oder Cache.
+
+### Heutiger Stand und Wiederholung
+
+Abgrenzung: dev@lumeos.app, 2026-06-01,
+nutrition.daily_reference_assessment gegen die laufende Datenbank.
+
+| Naehrstoff | Wert aus G-239 | heutiger Lauf 1 | Lauf 2 | Lauf 3 | Orchestrator |
+|---|---:|---:|---:|---:|---:|
+| VITA PRI | 654,0 % | 654,0 % | 654,0 % | 654,0 % | 689 % |
+| VITA UL | 163,5 % | 163,5 % | 163,5 % | 163,5 % | 172 % |
+| MG UL | 160,2 % | 160,2 % | 160,2 % | 160,2 % | 173 % |
+| NIA UL | 130,7 % | 130,7 % | 130,7 % | 130,7 % | 178 % |
+| MN UL | 82,0 % | 82,0 % | 82,0 % | 82,0 % | 105 % |
+
+[cmd] Die drei getrennten Leseaufrufe waren fuer Istwert,
+Referenzwert und Prozentwert vollstaendig gleich. Die Annahme einer
+nichtdeterministischen Funktion ist damit fuer den heutigen Stand widerlegt.
+Der Ausgangswert 164 fuer VITA UL war eine Anzeige-Rundung; die Datenbank
+liefert 163,5, nicht 164,0.
+
+### Wo die Abweichung entsteht
+
+[cmd] Die direkte Summe der 15 gespeicherten meal_items am Tag, die lange
+Tagesbilanz und die Bewertung stimmen je Code exakt ueberein:
+
+| Code | direkte meal_items-Summe | daily_nutrient_summary_long | Bewertung |
+|---|---:|---:|---:|
+| VITA | 4.905,02500 ug | 4.905,02500 ug | 654,0 % PRI / 163,5 % UL |
+| MG | 560,73715 mg | 560,73715 mg | 160,2 % UL |
+| NIA | 45,73065 mg | 45,73065 mg | 130,7 % UL |
+| MN | 9.016,82655 ug | 9.016,82655 ug | 82,0 % UL |
+
+[cmd] Die Orchestrator-Prozente wuerden dagegen ungefaehr diese
+Tagesmengen voraussetzen: VITA 5.160 bis 5.167,5 ug, MG 605,5 mg,
+NIA 62,3 mg und MN 11.550 ug. Die Referenzen sind heute VITA
+750/3.000 ug, MG 350 mg, NIA 35 mg und MN 11.000 ug. Insbesondere kann
+NIA 178 % nicht aus dem heutigen Istwert oder einer anderen Auswahl der
+vorhandenen Referenz entstehen.
+
+Die Werte unterscheiden sich nicht um einen einheitlichen Faktor. Das
+spricht gegen eine gemeinsame Umrechnung und fuer andere gespeicherte
+Naehrstoffmengen oder einen anderen Messweg zur Zeit der Orchestratorprobe.
+
+### C-149 und G-221
+
+[cmd] C-149 schreibt ausschliesslich supplements.supplement_nutrients.
+G-221 schreibt nutrition.tag_definitions und nutrition.food_tags. Keiner
+der beiden Schritte schreibt food_nutrients, nutrient_reference_values,
+meals oder meal_items.
+
+[cmd] Auf den beruehrten Tabellen gibt es keine Triggerkette zu
+meal_items oder nutrient_reference_values. Die einzige FK von food_tags
+zeigt auf foods beziehungsweise tag_definitions. daily_nutrient_summary_long
+liest meal_items, nicht food_nutrients oder food_tags. Der Verdacht gegen
+die zwei Kettenlaeufe ist damit widerlegt.
+
+[cmd] Die aktuellen meal_items und meals haben ihren letzten updated_at am
+2026-08-23; die heute passenden Referenzzeilen wurden am 2026-08-16
+angelegt. Das ist vor C-149 und G-221 am 2026-08-28. Es gibt in nutrition
+keine Audit- oder History-Tabelle fuer meal_items oder
+nutrient_reference_values. Daher ist nicht mehr messbar, wann oder durch
+welchen Weg die hoehere Orchestrator-Menge vorlag.
+
+### Niacin und Mangan
+
+[cmd] NIA hat getrennte Zeilen NO_STANDALONE_REFERENCE und UL. Die erste
+hat reference_pct NULL und reference_status not_applicable; die UL-Zeile
+hat unabhaengig davon 35 mg und 130,7 %. Sie werden im SQL nach
+nutrient_code und reference_kind getrennt ausgewaehlt. Die
+NO_STANDALONE_REFERENCE-Zeile kann den UL-Wert weder erhoehen noch
+unterdruecken.
+
+[cmd] MN fehlte nicht in der Datenbank oder in der Bewertung: heute sind
+300,6 % AI und 82,0 % UL vorhanden. G-239 nannte nur drei ueber dem UL;
+MN gehoerte mit 82,0 % nicht dazu. Die Orchestrator-Angabe 105 % setzt
+wiederum eine andere Tagesmenge voraus.
+
+### Ergebnis
+
+Keine Reparatur vorgenommen. Der belegt ausgeschlossene Teil ist
+Nichtdeterminismus sowie C-149/G-221 als Ursache. Der belegte positive
+Teil ist ein abweichender Tagesmengenstand oder Messweg. Der genaue
+historische Schreiber bleibt wegen fehlender Nutrition-Aenderungshistorie
+unklar.
+
+Um ihn kuenftig nachweisbar zu machen, braeuchte eine Folgemessung eine
+zeitgestempelte, lesbare Momentaufnahme aus meal_items.nutrients, Profil
+und nutrient_reference_values gemeinsam mit dem Funktionsresultat; erst
+dann laesst sich eine spaetere Verschiebung einer Schicht zuordnen. Das
+ist keine Umsetzung in diesem Auftrag.
+
+Nur lesend gegen dev gemessen. Keine Datenbank- oder App-Aenderung,
+nichts gestagt und nicht committet.
 
 ## Abnahme
 

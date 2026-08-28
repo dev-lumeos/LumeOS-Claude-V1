@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 275 |
+| `todos` | 273 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 29 |
+| `erledigt` | 31 |
 | **gesamt** | **306** |
 
 ## medical — 38
@@ -33,7 +33,7 @@
 | `C-204` | befund | mittel | [`lab_trigger_index` — 77 Analyte](todos/medical-c-0204-lab-trigger-index-77-analyte.md) | offen | — | — |
 | `C-209` | blocker | hoch | [Die laufende Instanz wird nach einem Kettenschritt nicht nachgezogen](todos/medical-c-0209-die-laufende-instanz-wird-nach-einem-kettenschritt-nicht-nachgezogen.md) | offen | — | — |
 | `C-213` | befund | mittel | [C-124-E8 — die Arzt-Hinweis-Schwelle ist offen](todos/medical-c-0213-c-124-e8-die-arzt-hinweis-schwelle-ist-offen.md) | offen | — | — |
-| `C-285` | entscheidung | hoch | [`user_medications` speichert Medikamente im Klartext](todos/medical-c-0285-user-medications-speichert-medikamente-im-klartext.md) | offen | — | — |
+| `C-285` | entscheidung | hoch | [`user_medications` speichert Medikamente im Klartext](erledigt/medical-c-0285-user-medications-speichert-medikamente-im-klartext.md) | erledigt | — | — |
 | `C-294` | feature | mittel | [was Kimi nachliefern muss](todos/medical-c-0294-was-kimi-nachliefern-muss.md) | offen | — | — |
 | `C-303` | feature | mittel | [erfasste Symptome haben keine Tabelle](todos/medical-c-0303-erfasste-symptome-haben-keine-tabelle.md) | offen | — | — |
 | `C-304` | befund | mittel | [51 Zuordnungen zeigen ins Leere](todos/medical-c-0304-51-zuordnungen-zeigen-ins-leere.md) | offen | — | — |
@@ -117,7 +117,7 @@
 | `G-140` | feature | mittel | [`display_tier` ist ein Abo-Tier, keine Baumebene](todos/nutrition-g-0140-display-tier-ist-ein-abo-tier-keine-baumebene.md) | offen | — | — |
 | `G-152` | entscheidung | mittel | [Der Aktivitaetsstrom des Dashboards](todos/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | offen | — | — |
 | `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — | — |
-| `G-220` | entscheidung | hoch | [MealCam Auto-Accept widerspricht ADR_MEALCAM_V1](todos/nutrition-g-0220-mealcam-auto-accept-widerspricht-adr-mealcam-v1.md) | offen | — | — |
+| `G-220` | entscheidung | hoch | [MealCam Auto-Accept widerspricht ADR_MEALCAM_V1](erledigt/nutrition-g-0220-mealcam-auto-accept-widerspricht-adr-mealcam-v1.md) | erledigt | — | — |
 | `G-221` | entscheidung | hoch | [Food-Tag-Set V1 widersprüchlich definiert](erledigt/nutrition-g-0221-food-tag-set-v1-widerspruechlich-definiert.md) | erledigt | — | G-245 |
 | `G-222` | befund | hoch | [Onboarding Flow für Nutrition Preferences fehlt in SPEC_03](todos/nutrition-g-0222-onboarding-flow-fuer-nutrition-preferences-fehlt-in-spec-0.md) | offen | — | — |
 | `G-223` | befund | mittel | [Recalculate-UI in SPEC_10 fehlt (bekanntes Open Item)](todos/nutrition-g-0223-recalculate-ui-in-spec-10-fehlt-bekanntes-open-item.md) | offen | — | — |
@@ -331,7 +331,7 @@
 | `C-187` | befund | mittel | [Fuenf kleine Datenluecken — als ein Auftrag](todos/quer-c-0187-fuenf-kleine-datenluecken-als-ein-auftrag.md) | offen | — | — |
 | `C-201` | befund | mittel | [Der Populations-Atlas hat kein Schema](todos/quer-c-0201-der-populations-atlas-hat-kein-schema.md) | offen | — | — |
 | `C-205` | befund | mittel | [`research_hold_registry` — 305 Saetze](todos/quer-c-0205-research-hold-registry-305-saetze.md) | offen | — | — |
-| `C-216` | blocker | hoch | [Nachweisdateien blockieren das ganze Repo](todos/quer-c-0216-nachweisdateien-blockieren-das-ganze-repo.md) | offen | — | — |
+| `C-216` | befund | mittel | [`backup/` waechst ungebremst](todos/quer-c-0216-backup-waechst-ungebremst.md) | offen | — | — |
 | `C-219` | befund | mittel | [Tabellen, die die Spec kennt und die es nicht gibt](todos/quer-c-0219-tabellen-die-die-spec-kennt-und-die-es-nicht-gibt.md) | offen | — | — |
 | `C-241` | entscheidung | mittel | [Das Nachweiskonto traegt weder Essensplaene noch Medikamente](todos/quer-c-0241-das-nachweiskonto-traegt-weder-essensplaene-noch-medikamente.md) | offen | — | — |
 | `C-259` | feature | mittel | [Kimis Bestand ist weit groesser als angenommen — und der Orchestrator hat den Statusbericht nie gelesen](todos/quer-c-0259-kimis-bestand-ist-weit-groesser-als-angenommen-und-der-orchestrator-hat-.md) | offen | — | C-262 |

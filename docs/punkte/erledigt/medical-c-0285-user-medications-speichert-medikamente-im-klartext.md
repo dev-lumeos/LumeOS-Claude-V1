@@ -8,6 +8,9 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: E-12
+erledigt: 2026-08-28
+commit: OFFEN
+durch: E-12
 beruehrt:
   tabellen: ["medical.user_conditions"]
   dateien: ["docs/todo/SICHERHEIT.md"]
@@ -48,3 +51,24 @@ zahlen: null
   `[cmd]` **Drei weitere Tabellen sind betroffen** —
   `medical.user_conditions`, `lab_result_values`, `lab_reports`.
   `[read]` **Eine Loesung fuer eine Tabelle ist keine.**
+
+## Abnahme
+
+**2026-08-28, Orchestrator.**
+
+`[read]` **Der Punkt sagt es selbst:** *,,Dieser Punkt blockiert
+nichts mehr"* und *,,Zu tun jetzt: nichts."*
+
+`[cmd]` **Entschieden am 27.08. als E-12** — Medical-Daten bleiben in
+der Entwicklungsphase Klartext. **Die vier Kippbedingungen stehen in
+`docs/todo/SICHERHEIT.md`.**
+
+`[read]` **Er stand als `schwere: hoch` in der Liste, obwohl nichts zu
+tun war** — genau die Sorte Eintrag, die eine Liste unlesbar macht.
+
+`[cmd]` **Was bleibt, steht dort und nicht hier:** drei Freitextspalten
+(`name`, `indication`, `notes`), drei weitere betroffene Tabellen
+(`user_conditions`, `lab_result_values`, `lab_reports`), und die
+offene Frage ist nicht *,,wie verschluesseln"*, sondern *,,vor wem"*.
+
+**Abgenommen.**

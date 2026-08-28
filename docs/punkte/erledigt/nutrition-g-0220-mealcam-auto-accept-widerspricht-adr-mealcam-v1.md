@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: null
 entscheidung: null
+erledigt: 2026-08-28
+commit: OFFEN
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -56,3 +58,34 @@ oder erledigt sein.
 
 **Verwandter Punkt:** E-19 / E-20 (Cam-Entscheidungen vom 27.08.). `[read]` **Nicht zusammengelegt** — ob es
 derselbe Befund ist, gehoert geprueft, nicht angenommen.
+
+## Abnahme
+
+**2026-08-28, Orchestrator. Selbst gemessen und berichtigt.**
+
+`[cmd]` **Die Review ist zur Haelfte ueberholt.** `SPEC_04` Feature 9
+sagt heute: *,,AUTO_ACCEPT existiert nicht in V1. Auch bei HIGH
+Confidence wird ..."* — **es wurde seit der Review korrigiert.**
+`SPEC_10_PASS2` war ohnehin konsistent.
+
+`[cmd]` **Nur `SPEC_03` Flow 2 stand noch**, Zeile 99:
+*,,Confidence >= 0.85 (AUTO_ACCEPT)"*.
+
+`[read]` **Und der Ablauf darunter war bereits richtig** —
+*,,Hinzufuegen"* ist ein Klick. **Falsch war nur der Name der Stufe.**
+
+### Berichtigt
+
+    vorher   Confidence >= 0.85 (AUTO_ACCEPT)
+    nachher  Confidence >= 0.85 (HIGH)
+             ... vorausgewaehlt
+             KEIN Auto-Accept: der Klick ist Pflicht
+
+**Mit Vermerk im Dokument**, der `ADR_MEALCAM_V1` als Grundlage nennt.
+
+`[read]` **Gedeckt durch Toms Regel vom 28.08.:** *,,ja wenn es aus
+einem brainstorm mit mir abgeleitet wird und ein adr fuer die
+entscheidung hat. es ist nicht alles gold oder endzustand in den
+specs."* **Der ADR ist eindeutig, die Spec-Stelle widersprach ihm.**
+
+**Abgenommen.**
