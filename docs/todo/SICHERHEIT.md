@@ -134,19 +134,24 @@ Gewichtseintrag.**
       entfernen - Filter auf der Einwilligung, kein Trainingsordner
     Bucket-Policies pruefen: privat, kein oeffentlicher Lesezugriff
 
-### 3c · Schluessel in der Historie
+### 3c · Kein Waechter sucht nach Schluesselmustern
 
-`[cmd]` **Ein Anthropic-Schluessel steht im Klartext in einer
-getrackten und gepushten Datei** —
-`docs/_archive/.../coach_MIGRATION.md`. **Als A-56 angelegt.**
+`[read]` **Berichtigung, 2026-08-28.** Ich hatte hier gemeldet, ein
+Anthropic-Schluessel stehe im Klartext in einer getrackten und
+gepushten Datei. `[cmd]` **Das war falsch** — es ist ein
+Platzhalter in einem Beispiel-`.env`-Block
+(`ANTHROPIC_API_KEY=sk-ant-api03-...`, abgeschnitten). **Ich hatte
+den Treffer gefunden und den Kontext nicht gelesen.**
 
-`[read]` **Rotieren zuerst, bereinigen danach.** Ein Nachtrag im
-Arbeitsbaum reicht nicht; der Schluessel bleibt ueber `git log -p`
-lesbar.
+`[cmd]` **Ein vollstaendiger Schluessel liegt in
+`referenz/lumeos-2026/src/api/shared/claude-vision.ts`** — per
+`.gitignore:175` ausgeschlossen, nie im Repo. **Nicht oeffentlich,
+aber im Klartext auf der Platte.**
 
-`[read]` **Und ein Waechter fehlt:** `pnpm gate` prueft Encoding,
-Nummern, Verdrahtung, Migrationen und Punkte — **aber nichts sucht
-nach `sk-ant-`, `sk-`, `eyJ` oder `SUPABASE_SERVICE_ROLE`.**
+`[cmd]` **Der eigentliche Befund:** `pnpm gate` prueft zehn Dinge und
+**sucht nichts davon nach Schluesselmustern.** `[read]` Ein Waechter
+haette beide Faelle sofort unterschieden — der eine endet auf
+`...`, der andere ist 108 Zeichen lang. **Als A-56 angelegt.**
 
 ### 5 · Export und Loeschung
 

@@ -5,9 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 249 |
-| `laufend_codex` | 1 |
-| `erledigt` | 15 |
+| `todos` | 248 |
+| `erledigt` | 17 |
 | **gesamt** | **265** |
 
 ## medical — 33
@@ -130,7 +129,7 @@
 | `C-203` | befund | mittel | [Beobachtung gegen Erwartung (crawl_033)](todos/supplements-c-0203-beobachtung-gegen-erwartung-crawl-033.md) | offen | — | — |
 | `C-206` | entscheidung | mittel | [Die Community-Schicht — nur Admin, oder nie?](todos/supplements-c-0206-die-community-schicht-nur-admin-oder-nie.md) | offen | — | — |
 | `C-207` | befund | hoch | [Vier Entscheidungen aus dem 035-Handoff](todos/supplements-c-0207-vier-entscheidungen-aus-dem-035-handoff.md) | offen | — | C-319, C-320, C-321, C-322 |
-| `C-208` | befund | mittel | [C-129 neu fassen: der Import ist laengst passiert](todos/supplements-c-0208-c-129-neu-fassen-der-import-ist-laengst-passiert.md) | offen | — | C-326 |
+| `C-208` | befund | mittel | [C-129 neu fassen: der Import ist laengst passiert](erledigt/supplements-c-0208-c-129-neu-fassen-der-import-ist-laengst-passiert.md) | erledigt | — | C-326 |
 | `C-233` | feature | mittel | [`user_supplement_settings` — die Spec sieht es vor, wir bauen es nicht](todos/supplements-c-0233-user-supplement-settings-die-spec-sieht-es-vor-wir-bauen-es-nicht.md) | offen | — | — |
 | `C-237` | befund | mittel | [Die Kimi-Quelle fuehrt leere Strings statt `unknown`](todos/supplements-c-0237-die-kimi-quelle-fuehrt-leere-strings-statt-unknown.md) | offen | — | — |
 | `C-253` | feature | mittel | [Die IDs der beiden Kataloge sind nicht vergleichbar — drei Stellen haetten stumm nie mehr getroffen](todos/supplements-c-0253-die-ids-der-beiden-kataloge-sind-nicht-vergleichbar-drei-stellen-haetten.md) | offen | — | — |
@@ -149,7 +148,7 @@
 | `C-321` | entscheidung | hoch | [Cam-Einwilligungsfuehrung festlegen](erledigt/supplements-c-0321-cam-einwilligungsfuehrung-festlegen.md) | erledigt | — | — |
 | `C-322` | entscheidung | mittel | [Cam-Vision-Modell festlegen](erledigt/supplements-c-0322-cam-vision-modell-festlegen.md) | erledigt | — | — |
 | `C-325` | messung | hoch | [die drei Supplements-Blocker gegen den heutigen Stand pruefen](erledigt/supplements-c-0325-die-drei-blocker-pruefen.md) | erledigt | — | — |
-| `C-326` | messung | hoch | [C-129 auf die verbleibende Luecke neu fassen](laufend_codex/supplements-c-0326-c-129-neu-fassen.md) | laeuft (codex) | — | — |
+| `C-326` | messung | hoch | [C-129 auf die verbleibende Luecke neu fassen](erledigt/supplements-c-0326-c-129-neu-fassen.md) | erledigt | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -276,7 +275,7 @@
 | `A-53` | feature | hoch | [Index und Waechter fuer die Punktverwaltung](erledigt/quer-a-0053-index-und-waechter.md) | erledigt | — | — |
 | `A-54` | feature | hoch | [die Punkte modulfaehig machen](erledigt/quer-a-0054-punkte-modulfaehig-machen.md) | erledigt | — | A-55 |
 | `A-55` | feature | hoch | [die 43 Entscheidungspunkte sortieren](erledigt/quer-a-0055-entscheidungspunkte-sortieren.md) | erledigt | — | — |
-| `A-56` | blocker | hoch | [ein Anthropic-Schluessel steht im Klartext in der Historie](todos/quer-a-0056-anthropic-schluessel-in-der-historie.md) | offen | — | — |
+| `A-56` | befund | mittel | [kein Waechter sucht nach Schluesselmustern](todos/quer-a-0056-kein-waechter-sucht-nach-schluesselmustern.md) | offen | — | — |
 | `A-57` | blocker | hoch | [24 Punkte wurden per Textheuristik geschlossen und sind ungeprueft](erledigt/quer-a-0057-heuristisch-geschlossene-punkte-nachpruefen.md) | erledigt | — | — |
 | `A-58` | blocker | hoch | [der Waechter verlangt ein Feld, das es nicht mehr gibt](erledigt/quer-a-0058-waechter-verlangt-gestrichenes-feld.md) | erledigt | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](todos/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | offen | — | — |

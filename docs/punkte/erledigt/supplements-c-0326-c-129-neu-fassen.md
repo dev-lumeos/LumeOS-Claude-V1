@@ -10,10 +10,12 @@ entscheidung: null
 beruehrt:
   dateien:
     - docs/punkte/todos/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md
-    - docs/punkte/todos/supplements-c-0208-c-129-neu-fassen-der-import-ist-laengst-passiert.md
+    - docs/punkte/erledigt/supplements-c-0208-c-129-neu-fassen-der-import-ist-laengst-passiert.md
 zahlen: null
 agent: codex
 beauftragt: 2026-08-28
+erledigt: 2026-08-28
+commit: OFFEN
 ---
 
 # C-326 — C-129 auf die verbleibende Luecke neu fassen
@@ -164,4 +166,46 @@ mehr zu; es wurde nichts am Waechter umgangen oder angepasst.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-28, Orchestrator. Selbst gemessen.**
+
+`[cmd]` **Alle drei Zahlen bestaetigt:**
+
+    medication-Regeln im Katalog        20
+    davon not_fulfilled                 12
+    davon unsupported_operator           7
+    davon missing_input                  1
+    medical.medications                  existiert nicht (0 Treffer)
+
+`[read]` **Damit ist die Blockade aus C-129 vom 19.08. widerlegt.**
+Der Punkt behauptete neun Tage lang, alle 20 Regeln seien durch eine
+fehlende Tabelle blockiert. **Sie fehlt nicht — sie hat nie
+existiert**, der Bestand liegt in
+`medical.medication_active_substances`. **Blockiert sind heute 8, aus
+zwei verschiedenen Gruenden.**
+
+### Die Trennung ist die wichtigere Haelfte
+
+`[read]` **,,Statische Regeldeckung gegen Laufzeit-Ergebnis"** —
+C-129 sagte *,,0 von 20 laufen"*. `[cmd]` Heute laufen **12 durch und
+treffen nicht zu.** **Das ist ein Ergebnis, keine Blockade.**
+
+`[read]` **Wer beides in einer Zahl fuehrt, kann nicht sagen, ob eine
+Regel schweigt oder nichts zu sagen hat.**
+
+`[cmd]` **Im Gesamtbild, 64 Regeln:** 37 `not_fulfilled`, **25
+`unsupported_operator`** (das ist C-313, Weg 2 steht aus), 1
+`missing_input`, **1 `fulfilled`**.
+
+`[read]` **Dass genau eine Regel zutrifft**, ist auf `dev` mit 360
+Einnahmen und 2 Medikamenten plausibel — **aber es ist eine Zahl, die
+im Blick bleiben sollte.**
+
+`[cmd]` **C-327 angelegt** fuer `wr_drug_chelation_timing`, den einen
+`missing_input`.
+
+`[read]` **Und C-208 wurde nicht selbst geschlossen, obwohl fachlich
+erfuellt** — richtig nach dem Modell. **Das Verschieben gehoert dem
+Orchestrator.**
+
+**Abgenommen.**
+

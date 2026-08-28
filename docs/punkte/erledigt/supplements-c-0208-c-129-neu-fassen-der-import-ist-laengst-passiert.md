@@ -7,6 +7,9 @@ angelegt: 2026-08-22
 braucht: []
 kind_von: null
 entscheidung: null
+erledigt: 2026-08-28
+commit: OFFEN
+durch: C-326
 beruehrt:
   tabellen:
     - supplements.supplements
@@ -51,3 +54,15 @@ geforderten Dokumentationsschritt zu messen.
 **C-129 mit dem heutigen Bestand neu fassen.** Der Import selbst ist
 nicht als offene Arbeit zu beschreiben; verbleibende Deckungs- und
 Erfassungsluecken brauchen eigene, messbare Aussagen.
+
+## Abnahme
+
+**2026-08-28, Orchestrator.** `[cmd]` **Durch C-326 erfuellt:** C-129
+traegt jetzt den heutigen Bestand und trennt statische Regeldeckung
+von Laufzeit-Ergebnis.
+
+`[read]` **Codex hat ihn nicht selbst geschlossen, obwohl er ihn
+erfuellt hat** — nach dem Modell verschiebt nur der Orchestrator.
+**Richtig.**
+
+**Abgenommen.**
