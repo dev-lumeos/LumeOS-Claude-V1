@@ -14,7 +14,7 @@ zahlen: null
 agent: claudecode
 beauftragt: 2026-08-29
 erledigt: 2026-08-29
-commit: OFFEN
+commit: 618fa72a
 ---
 
 # G-253 — Stacks und Compliance anbinden
