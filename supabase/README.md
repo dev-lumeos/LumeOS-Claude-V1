@@ -162,6 +162,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 112 | `11_goals/112_body_measurements.sql` | Goals-Koerperdaten: `body_measurements`, `body_circumferences` und Profilgewicht-Sync | 2 Tabellen, 3 Funktionen, RLS je Operation |
 | 113 | `11_goals/113_goal_milestones_adaptive_tdee.sql` | Goals-Meilensteine, adaptive TDEE mit `alpha = 1` und Fortschritts-Trigger fuer Koerper- und Trainingswerte | 1 Tabelle, 5 Funktionen, 2 Trigger, RLS je Operation |
 | 059 | `05_user_tabellen/059_daily_reference_assessment.sql` | Funktion `daily_reference_assessment()` fuer lange Tageswerte gegen Profil, Referenzwerte und Goals-Fettsaeureziele | 1 Funktion |
+| 059c | `05_user_tabellen/059c_reference_assessment_window.sql` | G-107: `reference_assessment_window()` fuer 1/7/14/30/45/60/90 Tage mit geordneter Tagesreihe; mittelt Tagesmengen und die je Tag aufgeloeste Referenz getrennt und bewertet erst danach | 1 Funktion |
 | 059a | `_ableitung/030_mikro-uebersicht.ts` | Kuratierte Mikro-Overview-Auswahl, `micronutrient_snapshot()` und `micronutrient_below_threshold()` | 8 Auswahlzeilen, 2 Funktionen |
 | 017 | `00_querschnitt/017_datenherkunft.sql` | A-17 Herkunftsspalten fuer User-Messdaten vor Geraeteanbindungen | 7 Tabellen ergaenzt, Bestandsdaten `manual` |
 | 058b | `05_user_tabellen/058b_recipes_meal_plans.sql` | Rezepte, Rezeptzutaten, Wochenplaene und Uebernahmefunktionen; Naehrwerte bleiben aus Zutaten berechnet und werden erst in `meal_items` eingefroren | 6 Tabellen, 4 Funktionen, RLS je Operation |

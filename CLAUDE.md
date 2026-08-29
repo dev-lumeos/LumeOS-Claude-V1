@@ -223,6 +223,59 @@ Seed-Konten mit je 180 Tagen, und `test-user@lumeos.local` mit einem.
 **Sonst ist sie nicht nachpruefbar — und eine Abweichung sieht aus
 wie ein Defekt.**
 
+## Der Auftrag beschreibt den Job, der Agent misst
+
+**Tom, 2026-08-28:** *,,beschreib den job und lass die agents
+messen"*.
+
+`[read]` **Ein Auftrag traegt die Frage und die Messanweisung — keine
+Zahl, keine Diagnose, keine Ursache vom Orchestrator.**
+
+    falsch   "food_search kennt zehn Sortierwerte, bau sie ein"
+    richtig  "miss, welche Sortierwerte die laufende Funktion kennt,
+              und bring sie in die Oberflaeche"
+
+    falsch   "die 6,4 Sekunden kommen von einer RPC-Schleife"
+    richtig  "der Reiter laedt in 6,4 s - miss, woran es liegt"
+
+### Warum
+
+`[cmd]` **Am 28.08. sind fuenf Auftragspraemissen gefallen**, und die
+Ursache war jedes Mal dieselbe: **gemessen und dann etwas anderes
+behauptet.**
+
+`[cmd]` **Der klarste Fall, G-245/G-70:** ich hatte beide Zahlen
+gemessen — **live vier Sortierwerte, im Kettenschritt zehn** — und in
+den Auftrag die falsche geschrieben. **Nicht falsch gemessen. Falsch
+verwendet.**
+
+`[cmd]` **Bei G-107:** die Ladezeit einer RPC-Schleife zugeschrieben,
+**die ich nie gesucht habe.** Codex hat gemessen: **es gibt keine.**
+
+`[read]` **Ein Kettenschritt ist nicht live.** Zweimal an einem Tag
+verwechselt — bei C-331 in die andere Richtung.
+
+## Die Abnahme misst nach, was der Bericht behauptet
+
+`[read]` **Nicht was der Orchestrator vermutet.** **Der Bericht sagt,
+was zu pruefen ist** — jede tragende Zahl darin wird gegen die
+Datenbank oder den Code gehalten.
+
+`[cmd]` **Das hat am 28.08. zweimal etwas gefunden, das sonst
+durchgegangen waere:** 16 statt 12 Doppelzeilen in G-239, und
+`nutrition_targets` liegt in `goals`, nicht in `nutrition`.
+
+`[read]` **Der Unterschied zum Auftrag:** in der Abnahme wird eine
+Zahl **verglichen**, im Auftrag wird eine **gesetzt.** **Das Setzen
+geht schief, das Vergleichen nicht.**
+
+`[cmd]` **Und ohne eigene Messung entsteht A-57:** 25 Punkte per
+Textheuristik geschlossen, **mindestens zwei falsch** — gefunden von
+einem Agenten, der eine Anweisung verweigert und selbst gemessen hat.
+
+**Weicht die Zahl des Orchestrators ab, gilt die des Agenten**, bis
+eine dritte Messung entscheidet.
+
 ## Der Orchestrator zaehlt nicht
 
 **Tom, 2026-08-27:** *,,11 von 12 falsch sagt mir du kannst es einfach

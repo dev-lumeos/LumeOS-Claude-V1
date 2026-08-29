@@ -1087,6 +1087,16 @@
       ]
     },
     {
+      "id": "059c",
+      "path": "supabase/_pipeline/05_user_tabellen/059c_reference_assessment_window.sql",
+      "kind": "sql",
+      "creates": "reference_assessment_window mit geordneter Tagesreihe: Tagesmengen und tagesaktuelle Referenzen getrennt mitteln, erst danach bewerten",
+      "depends_on": [
+        "059",
+        "059b"
+      ]
+    },
+    {
       "id": "017",
       "path": "supabase/_pipeline/00_querschnitt/017_datenherkunft.sql",
       "kind": "sql",

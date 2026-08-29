@@ -373,6 +373,8 @@ export function buildFoodSearchRpcArgs(
     userId?: string | null
     /** G-133: die Tag-Codes, die ausgeschlossen werden sollen. */
     excludeTags?: string[]
+    /** G-112: die gewaehlten Filter-Tags (UND zwischen ihnen). */
+    tags?: string[]
   } = {},
 ): FoodSearchRpcArgs {
   return {
@@ -399,7 +401,7 @@ export function buildFoodSearchRpcArgs(
     // Die Codes werden nur getrimmt: die Datenbank vergleicht sie gegen
     // `tag_definitions.code`, ein unbekannter Code schliesst nichts aus
     // (gemessen, `contains_laktose` -> 7.140).
-    p_filters: buildFoodSearchFilters(options.excludeTags),
+    p_filters: buildFoodSearchFilters(options.excludeTags, options.tags),
   }
 }
 
@@ -411,11 +413,33 @@ export function buildFoodSearchRpcArgs(
  */
 export function buildFoodSearchFilters(
   excludeTags?: string[],
+  /**
+   * G-112: die gewaehlten Filter-Tags.
+   *
+   * `[read]` **Eine Gruppe je Tag heisst UND zwischen ihnen** — wer
+   * *vegan* und *proteinreich* waehlt, will beides, nicht eines von
+   * beiden. `[cmd]` Gemessen am 2026-08-29: `vegan` 1.377,
+   * `high_protein` 1.400, **ODER 2.712, UND 65.**
+   *
+   * `[read]` **Die Funktion kann auch ODER** (mehrere Codes in einer
+   * Gruppe) — das braucht aber eine Gruppierung der Tags, die es im
+   * Bestand nicht gibt: alle acht liegen flach nebeneinander. **Bis
+   * es Gruppen gibt, ist UND die ehrlichere Lesart.**
+   */
+  tags?: string[],
 ): FoodSearchFilters | null {
   const codes = (excludeTags ?? []).map(c => c.trim()).filter(Boolean)
-  if (codes.length === 0) return null
+  const gewaehlt = Array.from(new Set(
+    (tags ?? []).map(c => c.trim()).filter(Boolean),
+  )).sort()
+
+  const aus: FoodSearchFilters = {}
   // Doppelte Codes wuerden dieselbe Bedingung zweimal erzeugen.
-  return { exclude_tag_codes: Array.from(new Set(codes)).sort() }
+  if (codes.length > 0) aus.exclude_tag_codes = Array.from(new Set(codes)).sort()
+  if (gewaehlt.length > 0) aus.tag_groups = gewaehlt.map(c => [c])
+
+  // G-133: `null` statt `{}` bei leerer Auswahl.
+  return Object.keys(aus).length === 0 ? null : aus
 }
 
 function normalizeText(value: unknown): string {
@@ -665,6 +689,8 @@ export async function getLocalFoodSearch(
     preparations?: string[]
     groups?: string[]
     basicsOnly?: boolean
+    /** G-112: die gewaehlten Filter-Tags (UND zwischen ihnen). */
+    tags?: string[]
     /**
      * Vorlieben anwenden (C-94). Vorgabe: NEIN.
      *

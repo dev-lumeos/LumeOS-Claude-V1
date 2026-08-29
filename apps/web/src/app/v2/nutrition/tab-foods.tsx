@@ -24,6 +24,12 @@ import Link from 'next/link'
 import type { Route } from 'next'
 import { Card, Pill, Icon, InEntwicklungKnopf } from '@lumeos/ui'
 
+// G-70 / G-112: die acht Achsen und der Mehrfachfilter — serverfrei.
+import {
+  ALLE_SORTIERUNGEN, SORT_TEXT, SORTIERT_SEITE,
+  serverKann, serverSort, sortiereSeite, naechsteSortierung,
+  type Sortierung,
+} from '../../../lib/nutrition/food-sortierung'
 import type {
   NutritionFoodSearchPayload, NutritionFoodSearchRow,
 } from '../../../lib/nutrition/food-search'
@@ -64,8 +70,10 @@ const PILLEN: Array<{ label: string; slug: string | null }> = [
 /** Zeilen je Seite. `[read]` 50 wie bisher — nur jetzt blaetterbar. */
 const SEITE_GROESSE = 50
 
-/** Die Sortierungen, die `nutrition.food_search` kennt. */
-type Sortierung = 'relevance' | 'protein_desc' | 'kcal_asc' | 'name_asc'
+// G-70: die Sortierlogik steht serverfrei in `food-sortierung.ts`.
+// `[cmd]` **Hier stand eine zweite Liste mit vier Werten** — sie hielt
+// fest, was die Datenbank kann, und liess die uebrigen sechs Achsen
+// aus E-23 unter den Tisch fallen.
 
 /**
  * Die Filtergruppen (G-73).
@@ -249,20 +257,27 @@ const UNVERTRAEGLICH_LABEL: Record<string, string> = {
  * Datenbank nicht liefert, waere schlimmer als keiner.
  */
 function SortKopf({
-  label, wert, aktiv, setzen,
+  label, spalte, aktiv, setzen,
 }: {
   label: string
-  wert: Sortierung
+  spalte: 'protein' | 'kcal' | 'carbs' | 'fat'
   aktiv: Sortierung
   setzen: (s: Sortierung) => void
 }) {
-  const an = aktiv === wert
+  const ab = aktiv === `${spalte}_desc`
+  const auf = aktiv === `${spalte}_asc`
+  const an = ab || auf
+  const titel = ab
+    ? `${label}: absteigend — klicken fuer aufsteigend`
+    : auf
+      ? `${label}: aufsteigend — klicken zum Aufheben`
+      : `Nach ${label} sortieren, hoechste zuerst`
   return (
     <button
       type="button"
       aria-pressed={an}
-      title={an ? 'Sortierung aufheben' : `Nach ${label} sortieren`}
-      onClick={() => setzen(an ? 'relevance' : wert)}
+      title={titel}
+      onClick={() => setzen(naechsteSortierung(aktiv, spalte))}
       style={{
         background: 'none', border: 0, padding: 0, cursor: 'pointer',
         font: 'inherit', color: an ? 'var(--acc-nutri)' : 'inherit',
@@ -270,7 +285,7 @@ function SortKopf({
       }}
     >
       {label}
-      {an && <Icon name={wert === 'kcal_asc' ? 'arrow_up' : 'arrow_down'}
+      {an && <Icon name={ab ? 'arrow_down' : 'arrow_up'}
                    className="v2-ic v2-ic-sm" />}
     </button>
   )
@@ -312,7 +327,13 @@ export function NutritionFoodsTab({
 
   // G-73: Filterleiste, Blaettern und Sortierung.
   const [filterOffen, setFilterOffen] = React.useState(false)
-  const [tag, setTag] = React.useState<string | null>(null)
+  // ══ G-112: mehrere Filter-Tags ═════════════════════════════════
+  // `[cmd]` Hier stand `useState<string | null>` — **ein Tag, oder
+  // keiner.** `food_search` kann seit C-164 mehr: `p_filters.tag_groups`
+  // nimmt eine Liste von Gruppen, ODER innerhalb, UND zwischen.
+  // **Gemessen 2026-08-29: vegan 1.377, high_protein 1.400, ODER 2.712,
+  // UND 65.**
+  const [tags, setTags] = React.useState<Set<string>>(new Set())
   const [seite, setSeite] = React.useState(0)
   const [sortierung, setSortierung] = React.useState<Sortierung>('relevance')
   /**
@@ -398,7 +419,9 @@ export function NutritionFoodsTab({
         q: suche,
         limit: String(SEITE_GROESSE),
         offset: String(seite * SEITE_GROESSE),
-        sort: sortierung,
+        // G-70: nur was die Datenbank kann; der Rest wird auf der
+        // Seite sortiert (`sortiereSeite`).
+        sort: serverSort(sortierung),
         // G-154: Preferences sind die Konfiguration dieses Katalogs.
         // `[read]` Tom, 2026-08-22: *„Preferences ist exakt die Konfig
         // fuer den Food-DB-Zugriff des Kunden, dass er das sieht was
@@ -407,7 +430,8 @@ export function NutritionFoodsTab({
         prefs: '1',
       })
       if (kategorie) params.set('category', kategorie)
-      if (tag) params.set('tag', tag)
+      // G-112: alle gewaehlten Tags, kommagetrennt.
+      if (tags.size > 0) params.set('tags', Array.from(tags).sort().join(','))
       // G-133: der Ausschluss geht an die Suchfunktion, nicht mehr an
       // einen Filter auf der geladenen Seite.
       if (ohne.size > 0) params.set('ohne', Array.from(ohne).sort().join(','))
@@ -430,11 +454,11 @@ export function NutritionFoodsTab({
     // G-133: `ohne` gehoert in die Abhaengigkeiten. `[cmd]` Vorher
     // fehlte es — der Ausschluss wirkte nur clientseitig und brauchte
     // kein neues Laden. Jetzt entscheidet er die Trefferzahl.
-  }, [suche, kategorie, tag, seite, sortierung, ohne])
+  }, [suche, kategorie, tags, seite, sortierung, ohne])
 
   // Jede Filteraenderung beginnt wieder auf Seite 1 — sonst stuende
   // man nach dem Filtern auf einer Seite, die es nicht mehr gibt.
-  React.useEffect(() => { setSeite(0) }, [suche, kategorie, tag, sortierung, ohne])
+  React.useEffect(() => { setSeite(0) }, [suche, kategorie, tags, sortierung, ohne])
 
   const alleZeilen: NutritionFoodSearchRow[] = payload?.foods ?? []
   // Abgewertete Zeilen verschwinden aus der Liste — aber erst nach dem
@@ -464,8 +488,16 @@ export function NutritionFoodsTab({
   //
   // `[cmd]` **Die Daumen-Ausblendung unten bleibt davon unberuehrt** —
   // sie ist eine Geste in dieser Sitzung, keine Konfiguration.
-  const zeilen = alleZeilen
-    .filter(f => !ausgeblendet.has(f.id))
+  // ══ G-70: die sechs Achsen, die die Datenbank nicht kann ═══════
+  // `[cmd]` Sie kennt `relevance`, `name_asc`, `protein_desc`,
+  // `kcal_asc` — die uebrigen sechs fielen bisher STILL auf
+  // `relevance` zurueck (gemessen 2026-08-29). `[read]` **Jeder
+  // Treffer traegt alle vier Makros mit**, also wird hier sortiert,
+  // ohne `food_search` anzufassen (Codex' Bereich, G-107).
+  const zeilen = sortiereSeite(
+    alleZeilen.filter(f => !ausgeblendet.has(f.id)),
+    sortierung,
+  )
   // G-133: Der Allergenfilter der geladenen Seite ist WEG. `[cmd]` Er
   // stand hier seit G-73 und blendete nur aus, was gerade geladen war
   // — bei 143 Seiten standen die Treffer auf Seite 2 wieder da. Seit
@@ -477,10 +509,20 @@ export function NutritionFoodsTab({
   // Laden. `gesamt` aendert sich beim Tippen und taugt nicht fuer den
   // Platzhalter.
   const katalogGroesse = start?.total ?? 0
-  const aktiveFilter = (tag ? 1 : 0) + ohne.size
+  const aktiveFilter = tags.size + ohne.size
   const filterZuruecksetzen = React.useCallback(() => {
-    setTag(null)
+    setTags(new Set())
     setOhne(new Set())
+  }, [])
+
+  /** G-112: einen Tag an- oder abwaehlen, ohne die anderen zu verlieren. */
+  const tagUmschalten = React.useCallback((code: string) => {
+    setTags(alt => {
+      const neu = new Set(alt)
+      if (neu.has(code)) neu.delete(code)
+      else neu.add(code)
+      return neu
+    })
   }, [])
 
   // G-67: den Daumenstand zu den sichtbaren Treffern nachladen.
@@ -585,7 +627,7 @@ export function NutritionFoodsTab({
                 <div className="v2-eyebrow" style={{ marginBottom: 6 }}>{g.titel}</div>
                 <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
                   {g.optionen.map(o => {
-                    const aktiv = tag === o.code
+                    const aktiv = tags.has(o.code)
                     return (
                       <button
                         key={o.code} type="button"
@@ -601,7 +643,7 @@ export function NutritionFoodsTab({
                             ? 'color-mix(in oklch, var(--acc-nutri) 10%, transparent)'
                             : 'var(--surface)',
                         }}
-                        onClick={() => setTag(aktiv ? null : o.code)}
+                        onClick={() => tagUmschalten(o.code)}
                       >
                         {o.label}
                         {/* G-153: die Zahl kommt aus dem `tags`-Block der
@@ -700,12 +742,13 @@ export function NutritionFoodsTab({
           marginBottom: 12, flexWrap: 'wrap',
         }}>
           <span className="v2-eyebrow">Gefiltert nach</span>
-          {tag && (
+          {Array.from(tags).sort().map(code => (
             <FilterChip
-              label={filterLabel(tag)}
-              onWeg={() => setTag(null)}
+              key={code}
+              label={filterLabel(code)}
+              onWeg={() => tagUmschalten(code)}
             />
-          )}
+          ))}
           {Array.from(ohne).map(code => (
             <FilterChip
               key={code}
@@ -746,22 +789,33 @@ export function NutritionFoodsTab({
                 <th style={{ width: 58 }} />
                 <th>Food</th>
                 <th style={{ width: 70 }}>Source</th>
-                {/* G-73: kcal und P sortieren. `[cmd]` Die Suchfunktion
-                    kennt vier Sortierungen — `relevance`, `kcal_asc`,
-                    `protein_desc`, `name_asc`. **C und F haben keine**,
-                    deshalb bleiben sie unsortierbare Ueberschriften;
-                    eine Sortierung im Browser waere nur die geladene
-                    Seite und damit eine Falschaussage. */}
+                {/* ══ G-70: alle vier Spalten sortieren ═══════════
+                    `[cmd]` Hier stand: *„C und F haben keine
+                    Sortierung, eine im Browser waere nur die geladene
+                    Seite und damit eine Falschaussage."* **Der
+                    Einwand stimmt und ist geloest, nicht umgangen:**
+                    die Grenze steht jetzt als Satz unter der Tabelle
+                    (`SORTIERT_SEITE`), statt die Achsen wegzulassen.
+                    `[cmd]` **Gemessen 2026-08-29: die Datenbank kennt
+                    vier Werte, nicht zehn** — `protein_desc`,
+                    `kcal_asc`, `name_asc`, `relevance`. Die uebrigen
+                    sechs fielen STILL auf `relevance` zurueck. */}
                 <th style={{ width: 90, textAlign: 'right' }}>
-                  <SortKopf label="kcal/100g" wert="kcal_asc"
+                  <SortKopf label="kcal/100g" spalte="kcal"
                             aktiv={sortierung} setzen={setSortierung} />
                 </th>
                 <th style={{ width: 60, textAlign: 'right' }}>
-                  <SortKopf label="P" wert="protein_desc"
+                  <SortKopf label="P" spalte="protein"
                             aktiv={sortierung} setzen={setSortierung} />
                 </th>
-                <th style={{ width: 60, textAlign: 'right' }}>C</th>
-                <th style={{ width: 60, textAlign: 'right' }}>F</th>
+                <th style={{ width: 60, textAlign: 'right' }}>
+                  <SortKopf label="C" spalte="carbs"
+                            aktiv={sortierung} setzen={setSortierung} />
+                </th>
+                <th style={{ width: 60, textAlign: 'right' }}>
+                  <SortKopf label="F" spalte="fat"
+                            aktiv={sortierung} setzen={setSortierung} />
+                </th>
                 <th style={{ width: 80, textAlign: 'right' }}>Action</th>
               </tr>
             </thead>
@@ -813,6 +867,22 @@ export function NutritionFoodsTab({
         {zeilen.length === 0 && !laeuft && !fehler && (
           <div className="v2-muted" style={{ fontSize: 12, padding: '14px 0', textAlign: 'center' }}>
             Kein Lebensmittel passt zu dieser Auswahl.
+          </div>
+        )}
+
+        {/* ══ G-70: die Grenze der Seitensortierung ═══════════════
+            `[read]` **Sie steht da, statt die Achsen wegzulassen.**
+            `[cmd]` Die Datenbank sortiert vier Werte ueber alle 7.140
+            Treffer; die uebrigen sechs ordnen die geladene Seite.
+            **Ohne diesen Satz haelt jemand die Seitenspitze fuer die
+            Gesamtspitze.** */}
+        {!serverKann(sortierung) && zeilen.length > 0 && (
+          <div className="v2-dim" style={{
+            fontSize: 11, padding: '8px 0', lineHeight: 1.5,
+          }}>
+            <Icon name="alert" className="v2-ic v2-ic-sm"
+                  style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />
+            {SORTIERT_SEITE}
           </div>
         )}
 

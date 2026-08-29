@@ -8,9 +8,11 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+erledigt: 2026-08-28
+commit: daf4f7a1
+durch: G-70
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien: [apps/web/src/app/v2/nutrition/tab-foods.tsx]
 zahlen: null
 ---
 
@@ -35,3 +37,18 @@ zahlen: null
   `[cmd]` **Und der Ausschluss fehlt ganz** — C-120: *„kein
   Ausschluss-Parameter, die Allergen-Schalter wirken nur auf der
   angezeigten Seite."*
+
+## Abnahme
+
+**2026-08-28, Orchestrator. Durch G-70 erledigt.**
+
+`[read]` **Der Punkt sagte *,,das ist eine Schemafrage"* — er war
+keine.** `[cmd]` `p_filters.tag_groups` nimmt seit C-164 mehrere Tags
+entgegen, ODER innerhalb, UND zwischen. **Der Typ fuehrte das Feld
+bereits, mit dem Vermerk *,,wird hier noch nicht gesetzt"*.**
+
+`[cmd]` **Gemessen:** vegan 1.377, high_protein 1.400, ODER 2.712,
+UND 65 — **ueber die echte Route durchgestochen, `food_search`
+unangetastet.**
+
+**Abgenommen.**

@@ -44,10 +44,23 @@ export async function GET(request: NextRequest) {
   const ohne = (request.nextUrl.searchParams.get('ohne') ?? '')
     .split(',').map(c => c.trim()).filter(Boolean)
 
+  // G-112: die gewaehlten Filter-Tags — `tags=a,b`.
+  //
+  // `[cmd]` **`p_tag_code` ist Singular** (C-120), aber `p_filters`
+  // traegt `tag_groups`: eine Liste von Gruppen, **ODER innerhalb,
+  // UND zwischen**. `[cmd]` Gemessen 2026-08-29: `vegan` 1.377,
+  // `high_protein` 1.400 — ODER 2.712, UND 65.
+  //
+  // `[read]` **`tag` bleibt fuer den Einzelfall** (Verweise von
+  // aussen). Kommt beides, gewinnt die Liste.
+  const tagListe = (request.nextUrl.searchParams.get('tags') ?? '')
+    .split(',').map(c => c.trim()).filter(Boolean)
+
   try {
     const payload = await getLocalFoodSearch(query, foodId, {
       category, categoryId, tag, limit, offset, sort, applyPreferences,
       excludeTags: ohne,
+      tags: tagListe,
     })
     const selectedIndex = foodId
       ? payload.foods.findIndex(food => food.id === foodId)
