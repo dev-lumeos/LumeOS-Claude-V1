@@ -57,3 +57,10 @@ Mikroansicht — **statt neun einzelne.**
 
 **Mitbeauftragt mit G-11 am 2026-08-28.** Der Auftragstext
 und der Bericht stehen dort.
+
+`[cmd]` **Beantwortet und gebaut** — der Bericht steht in G-11.
+**Gemessen 2026-08-29:** von 35 Zaehlern feuern neun, der Leseweg
+laedt neun andere, Schnittmenge `fibt`. **Gebaut ist der
+Sammelhinweis** aus `daily_nutrient_summary_long` — 76 von 138
+Naehrstoffen unvollstaendig, in einer Abfrage.
+

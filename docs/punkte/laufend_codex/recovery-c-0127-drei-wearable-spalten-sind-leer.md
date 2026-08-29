@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-76
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-29
 beruehrt:
   tabellen: []
   dateien: []
@@ -35,3 +37,8 @@ zahlen: null
   `[read]` **Richtig so** — fehlende Anteile zaehlen weder als null noch
   als voll. **Aber die Zahl 82 bedeutet dann etwas anderes als 82 von
   100.** Zu klaeren, ob die Anzeige das deutlich genug sagt.
+
+## Auftrag
+
+**Mitbeauftragt mit C-143 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.

@@ -38,3 +38,10 @@ zahlen: null
 
 **Mitbeauftragt mit G-11 am 2026-08-28.** Der Auftragstext
 und der Bericht stehen dort.
+
+`[cmd]` **Nachgemessen 2026-08-29, der Bericht steht in G-11.**
+Die Zeitpunkte liegen unveraendert vollstaendig vor (725/725,
+360/360, 30), und es gibt weiterhin keine gemeinsame
+Ereignissicht. `[read]` **Es fehlt eine Entscheidung, keine
+Spalte** — unveraendert offen.
+

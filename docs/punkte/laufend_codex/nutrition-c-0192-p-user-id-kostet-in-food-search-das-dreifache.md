@@ -36,3 +36,7 @@ zahlen: null
 
 **Mitbeauftragt mit C-20 am 2026-08-28.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Bericht
+
+Ueberholt gemessen am 2026-08-29. `p_user_id = dev@lumeos.app` kostet im Live-Snapshot +3,3 %, nicht das Dreifache. Vollstaendige Messreihe in C-20, `docs/punkte/laufend_codex/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md`.

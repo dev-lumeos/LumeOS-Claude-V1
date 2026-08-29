@@ -161,7 +161,278 @@ Tom: *,,da laeuft ein anderes template und das soll bleiben"*.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Der Punkt ist zu zwei Dritteln ueberholt.** `[cmd]` **Von vier
+genannten Attrappen-Tabs sind zwei gebaut** — und im Insights-Reiter
+stand dieselbe Doppelung, die G-249 im Nutrients-Reiter entfernt hat.
+**Sie ist weg.**
+
+`[cmd]` **Alle Zahlen gemessen am 2026-08-29, `dev@lumeos.app`,
+Stichtag heute. Am Bildschirm gezaehlt (A-59), nicht im Quelltext.**
+
+### 1 · Welche Tabs sind heute Attrappe?
+
+`[cmd]` **Sieben Reiter, vorher gemessen:**
+
+    reiter      attrappen  karten  kalt   warm
+    diary               4      18  3.705  3.219
+    insights            3       6  3.396  2.746
+    nutrients           0      10  4.460  3.808
+    foods               0       2  4.896  4.143
+    plans               3       6  3.466  2.867
+    prefs               0       8  3.317  2.687
+    planner             0       3  3.511  2.898
+
+`[read]` **Der Punkt nennt vier: Insights, Meal plans, Preferences,
+Planner.** `[cmd]` **Preferences und Planner tragen null Attrappen** —
+sie sind gebaut. **Der Punkt ist hier ueberholt.**
+
+`[cmd]` **Und `meal_plans` existiert, entgegen dem Befundtext:**
+
+    nutrition.meal_plans          2 Zeilen, davon dev 1
+    nutrition.meal_plan_weeks     6              dev 3
+    nutrition.meal_plan_days     42              dev 21
+    nutrition.meal_plan_entries 112              dev 56
+
+`[read]` **Toms Bildschirmfoto hatte recht.** Der Plans-Reiter liest
+seit G-161 drei von acht Kacheln echt.
+
+**Woran haengt jede der zehn Attrappen — gemessen, nicht vermutet:**
+
+    Reiter     Kachel                    haengt an
+    diary      Smart suggestions         ENTSCHEIDUNG — was ist ein
+                                         Vorschlag, woraus entsteht er
+    diary      Nutrition score           ENTSCHEIDUNG + Tabelle;
+                                         `[cmd]` 0 Tabellen mit „score"
+                                         im Schema
+    diary      Pending actions           TABELLE liegt woanders:
+                                         `[cmd]` `coach.pending_actions`
+                                         existiert, gehoert dem Coach
+    diary      Pre-workout window        ENTSCHEIDUNG — braucht die
+                                         Trainingsplanung
+    insights   Calorie balance           **war DOPPELT, jetzt weg**
+    insights   Macro split · 14d avg     **war DOPPELT, jetzt weg**
+    insights   Micronutrient trend       ANBINDUNG — Daten da,
+                                         siehe unten
+    plans      Today's ghost entries     ENTSCHEIDUNG — was ist ein
+                                         „ghost entry"
+    plans      Lifecycle types           ENTSCHEIDUNG
+    plans      7-day compliance          ANBINDUNG — `meal_plan_entries`
+                                         traegt 56 Zeilen fuer dev
+
+### 2 · Was ohne Entscheidung ging — und was gebaut wurde
+
+**Der Punkt schlaegt `Preferences` vor.** `[cmd]` **Nicht noetig: der
+Reiter traegt null Attrappen und liest `food_preference_items`
+(3 Zeilen fuer dev).**
+
+**Gebaut ist stattdessen das, was die Messung als Fehler zeigte:**
+
+`[cmd]` **Der Insights-Reiter zeigte „Calorie balance" und „Macro
+split · 14d avg" JE ZWEIMAL** — oben echt aus `insights-echt.tsx`
+mit Werten aus `daily_summary`, darunter als Attrappe mit den Zahlen
+der Vorlage.
+
+    vorher   ["Calorie balance", "Macro split", "Calorie balance",
+              "Macro split", "Micronutrient trend"]
+             echt · echt · ATTRAPPE · ATTRAPPE · ATTRAPPE
+    nachher  ["Calorie balance", "Macro split", "Micronutrient trend"]
+             echt · echt · ATTRAPPE
+
+`[read]` **Dieselbe Klasse wie G-249** — ein Entwurf, der neben dem
+gebauten Stand stehen blieb. **Der Entwurf bleibt vollstaendig
+aufrufbar:** ohne das Flag zeigt er alle drei Kacheln und ist damit
+weiter der Rueckfall, wenn die echten Daten fehlen.
+
+`[cmd]` **Insights: 3 Attrappen → 1.**
+
+**Was ich NICHT gebaut habe, mit Grund:**
+
+`[read]` **„Micronutrient trend" haette ich anbinden koennen** — die
+Daten liegen seit G-247 vor (`daily_nutrient_summary_long`, Sparkline
+und Trendrichtung sind gebaut). `[read]` **Aber der Nutrients-Reiter
+zeigt genau das bereits, je Naehrstoff.** **Dieselbe Auswertung ein
+zweites Mal danebenzustellen waere die Doppelung, die ich gerade
+entfernt habe.** `[read]` **Die Frage ist eine Entscheidung: soll der
+Insights-Reiter eine Zusammenfassung ueber ALLE Naehrstoffe zeigen —
+und wenn ja, welche?** Das ist keine Anbindung.
+
+`[read]` **Die vier Diary-Kacheln und zwei der drei Plans-Kacheln
+brauchen Entscheidungen** — was ein Vorschlag ist, was ein Score
+misst, was ein „ghost entry" ist. **Geraten haette ich Zahlen ohne
+Quelle.**
+
+`[read]` **„7-day compliance" im Plans-Reiter waere anbindbar** (56
+Einträge fuer dev) — **aber `plan-lesen` gehoert zum Planner, und der
+Reiter liest bereits drei Kacheln daraus.** **Ein eigener Punkt, kein
+Nebenbei.**
+
+### 3 · G-248 — der Sammelhinweis
+
+**Die Frage: reicht ein Sammelhinweis statt neun einzelner?**
+
+`[cmd]` **Ja — und er ist ehrlicher als das, was heute dasteht.**
+
+`[cmd]` **Gemessen ueber 14 Tage bis heute: von 35 Fehlzaehlern
+feuern NEUN:**
+
+    vitc     an 14 von 14 Tagen      fibt     an 2
+    iodid    an 12                   na       an 2
+    vitk     an  6                   ribf     an 2
+    nia      an  3                   vite     an 2
+    vitb12   an  3
+
+`[cmd]` **Der Diary-Leseweg laedt neun ANDERE** — `enercc, prot625,
+fat, cho, fibt, sugar, fasat, nacl, water_g`. **Die Schnittmenge ist
+eine einzige: `fibt`.**
+
+`[read]` **Der Hinweis aus C-48 nennt heute also einen Naehrstoff und
+schweigt ueber acht.** `[read]` **Das ist schlimmer als kein Hinweis**
+— wer „eine Position ohne Wert bei Ballaststoffen" liest, haelt den
+Rest fuer vollstaendig.
+
+`[cmd]` **Gebaut: der Sammelsatz, in EINER Abfrage.**
+`daily_nutrient_summary_long` zaehlt es direkt — **am 2026-08-29:
+76 von 138 Naehrstoffen unvollstaendig.** Am Schirm:
+
+    „Bei 76 von 138 Nährstoffen fehlen einzelne Positionen. Diese
+     Summen sind eher zu niedrig als zu hoch — welche es betrifft,
+     steht im Reiter Nährstoffe."
+
+`[read]` **35 Spalten in das Tagebuch zu laden waere teurer und nicht
+genauer.** `[cmd]` Zwei Abfragen mit `count: 'exact', head: true` —
+es kommen keine Zeilen zurueck, nur die Zahl.
+
+`[read]` **Der Einzelhinweis bleibt daneben stehen**, wo er zutrifft:
+„welcher" ist konkreter als „wie viele". **Beide zusammen sagen mehr
+als jeder allein.**
+
+### 4 · G-137 — gilt es noch?
+
+`[cmd]` **Teilweise. Gemessen gegen die gespeicherte Ansicht von
+`dev@lumeos.app`:**
+
+    gespeichert            gibt es heute?
+    g:Makronährstoffe      ja
+    g:Kohlenhydrate        ja
+    g:Fettlösliche Vitamine ja
+    g:Fette                NEIN  (heute „Fettsäuren")
+    g:Protein              NEIN
+
+`[read]` **Drei von fuenf Schluesseln greifen** — der Nutzer startet
+also NICHT mit allem zugeklappt, sondern mit zwei Karten weniger als
+gespeichert.
+
+`[cmd]` **Und `pruefeAnsicht` verwirft nur STRUKTURELL kaputte
+Werte** (kein Array, zu lang, unbekanntes Fenster) — **ein unbekannter
+Gruppenschluessel kommt durch und trifft dann nichts.** `[read]` **Das
+ist richtig so:** ein Schluessel, der heute nichts trifft, kann morgen
+wieder passen. **Wer ihn verwirft, verliert ihn endgueltig.**
+
+`[read]` **G-249 hat daran nichts geaendert** — der Klappzustand
+gehoert zur Ordnung, und die ist geblieben. **Der Punkt kann
+geschlossen werden:** die Nebenwirkung ist einmalig, heilt beim
+naechsten Speichern, und die Verwerfung arbeitet wie beschrieben.
+**Was bleibt: zwei tote Schluessel in einer Nutzerzeile — kein
+Fehler, kein Auftrag.**
+
+### 5 · G-152 — der Aktivitaetsstrom
+
+`[cmd]` **Die Zahlen des Punktes stimmen unveraendert** (dev,
+2026-08-29): `meals.meal_time` **725 von 725**,
+`intake_logs.intake_time` **360 von 360**,
+`training.workout_sessions` **30**.
+
+`[cmd]` **Und es gibt weiterhin keine gemeinsame Ereignissicht** —
+gesucht nach `%event%`, `%activity%`, `%aktivit%`: nur
+`nutrition.search_events` und `supplements.supplement_cycle_events`,
+beide modulgebunden.
+
+`[read]` **Der Punkt sagt es selbst: *„Was fehlt, ist eine
+Entscheidung, keine Spalte."*** **Sechs Abfragen je Seitenaufruf oder
+eine Sicht in der Datenbank** — und die Sicht waere Codex' Bereich.
+**Nicht gebaut, unveraendert offen.**
+
+### Nachweisliste
+
+    Attrappen-Tabs      [cmd] vorher 3 Reiter (10 Karten),
+                              nachher 3 Reiter (8 Karten)
+    je Tab              [cmd] Tabelle / Entscheidung / Anbindung,
+                              Tabelle oben
+    angebunden          [cmd] Insights entdoppelt (2 Karten weg);
+                              Sammelhinweis aus
+                              daily_nutrient_summary_long
+    gemeldet statt      [cmd] 4 Diary-Kacheln, 2 Plans-Kacheln
+    gebaut                    (Entscheidung), Micronutrient trend
+                              (Doppelung vermeiden), 7-day
+                              compliance (eigener Punkt)
+    G-248               [cmd] Sammelhinweis, 76 von 138
+    G-137               [cmd] gilt teilweise, schliessbar
+    Ladezeit je Tab     [cmd] Tabelle oben, kalt und warm
+    Bildschirmfoto      [cmd] sieben Bilder, `backup/g11-*.png`
+
+### Waechter: acht Sabotagen, acht Ausfaelle
+
+`[cmd]` Jede einzeln, Dateien danach byte-identisch (SHA-256):
+
+    der Sammelsatz nennt nur eine Zahl              faellt
+    die Richtung des Fehlers faellt weg             faellt
+    der Verweis auf den Reiter faellt weg           faellt
+    ohne Luecke kommt doch ein Satz                 faellt
+    die Zahl wird geladen statt gezaehlt            faellt
+    der Sammelhinweis wird nicht gerendert          faellt
+    der Entwurf zeigt die Kacheln wieder doppelt    faellt
+    das Flag ist nicht mehr abschaltbar             faellt
+
+`[read]` **Drei hielten beim ersten Versuch nicht** — dieselbe Klasse
+wie in G-247, G-246 und G-70:
+
+    Verweis auf den Reiter   suchte „Nährstoffe" — das steht ohnehin
+                             im Satz. Jetzt: „Reiter Nährstoffe".
+    Sammelhinweis gerendert  suchte den Aufruf — `{false && (` liess
+                             ihn stehen. Jetzt: der Bedingungskopf.
+    Zahl gezaehlt            fand das erste `count: 'exact'` und war
+                             zufrieden, obwohl die zweite Abfrage
+                             Zeilen lud. Jetzt: beide gezaehlt.
+
+`[cmd]` **7 neue Tests, 256 im Nutrition-Modul gruen**, Typecheck
+sauber, `serverimport-pruefen.mjs` 0 Treffer (A-30),
+`encoding-pruefen.mjs` 20.598 Dateien sauber.
+
+### Abgrenzung der Zahlen
+
+`[read]` **Abgrenzung bei „Attrappen":** `.v2-attrappe` im
+gerenderten DOM, je Reiter einzeln, angemeldet (A-59). **Im Quelltext
+stehen mehr Marken** — Rueckfallzweige rendern mit Daten nie.
+
+`[read]` **Abgrenzung bei „9 von 35":** Fenster
+`entry_date BETWEEN current_date - 13 AND current_date`, also 14
+Tage. `[cmd]` **Eine erste Messung mit `> current_date - 14` ergab
+93 Tage** — die Seed-Daten reichen bis 2026-11-16 in die Zukunft, und
+die offene Bedingung fing alles danach mit. **Korrigiert, bevor die
+Zahl in den Bericht kam.**
+
+`[read]` **Abgrenzung bei „76 von 138":** an EINEM Tag (2026-08-29),
+nicht ueber das Fenster. Der Hinweis steht im Tagebuch und gilt fuer
+den gezeigten Tag.
+
+### Was offen bleibt
+
+`[read]` **Sechs Kacheln brauchen eine Entscheidung** — vier im
+Diary (Smart suggestions, Nutrition score, Pending actions,
+Pre-workout window), zwei in Plans (Today's ghost entries, Lifecycle
+types). **Je Kachel: woraus soll die Zahl entstehen?**
+
+`[read]` **„Pending actions" ist der naechstliegende Fall:** `[cmd]`
+`coach.pending_actions` existiert. **Aber die Tabelle gehoert dem
+Coach-Modul**, und ob das Tagebuch daraus liest, ist eine
+Modulgrenze — keine Anbindung.
+
+`[read]` **„7-day compliance" im Plans-Reiter ist anbindbar** und
+gehoert in einen eigenen Punkt, zusammen mit den uebrigen fuenf
+Plans-Kacheln.
+
+**Nichts erfunden, nichts auf `dev` geschrieben, `/nutrition` nicht
+angefasst, nicht committet.**
 
 ## Abnahme
 

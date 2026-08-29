@@ -40,3 +40,7 @@ zahlen: null
 
 **Mitbeauftragt mit C-20 am 2026-08-28.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Bericht
+
+Ueberholt gemessen am 2026-08-29. Die historische Laufzeitspanne ist im Live-Snapshot nicht reproduzierbar; die Messreihe vor und nach C-338 steht in C-20, `docs/punkte/laufend_codex/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md`.

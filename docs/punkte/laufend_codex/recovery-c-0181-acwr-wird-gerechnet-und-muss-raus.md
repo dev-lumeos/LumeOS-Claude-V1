@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-29
 beruehrt:
   tabellen: []
   dateien: []
@@ -50,3 +52,8 @@ zahlen: null
   `[read]` **Das ist dieselbe Klasse wie die Modalitaets-Boni aus
   C-124:** eine unbelegte Zahl, die in einen Score einfliesst und
   angezeigt wird. C-124 ist erledigt, das hier nicht.
+
+## Auftrag
+
+**Mitbeauftragt mit C-143 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.

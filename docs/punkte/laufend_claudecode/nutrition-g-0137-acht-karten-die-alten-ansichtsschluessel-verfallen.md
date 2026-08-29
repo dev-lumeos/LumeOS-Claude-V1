@@ -36,3 +36,9 @@ zahlen: null
 
 **Mitbeauftragt mit G-11 am 2026-08-28.** Der Auftragstext
 und der Bericht stehen dort.
+
+`[cmd]` **Geprueft, der Bericht steht in G-11.** Von fuenf
+gespeicherten Gruppenschluesseln greifen heute drei; `g:Fette` und
+`g:Protein` treffen nichts. `[read]` **Kein Fehler, einmalig,
+heilt beim naechsten Speichern** — schliessbar.
+

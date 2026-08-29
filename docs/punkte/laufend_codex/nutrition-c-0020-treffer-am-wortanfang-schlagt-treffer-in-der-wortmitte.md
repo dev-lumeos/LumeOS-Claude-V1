@@ -169,7 +169,40 @@ Tom: *,,da laeuft ein anderes template und das soll bleiben"*.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+Stand 2026-08-29. `[cmd]` Alle SQL-Messungen liefen im Wegwerfbestand `lumeos_c20_live`, einer Vollsicherung von `postgres`; der vollstaendige Kettenlauf `lumeos_c20` lief mit 132 Schritten durch. Vor dem Live-Eingriff liegt `backup/c20/20260829_c338_vor_live.dump` (25.280.672 Bytes).
+
+### Urteile
+
+| Punkt | Urteil | Messung |
+|---|---|---|
+| C-338 | erledigt | `[cmd]` Vorher kannte die laufende `nutrition.food_search` vier Sortierwerte (`relevance`, `protein_desc`, `kcal_asc`, `name_asc`) und kein `unsupported_sort`. Nach Schritt 075 sind es zehn: zusaetzlich `protein_asc`, `kcal_desc`, `carbs_desc`, `carbs_asc`, `fat_desc`, `fat_asc`. `not_a_sort` liefert jetzt `sort = relevance` und `unsupported_sort.code = unsupported_sort`. |
+| C-20 | gebaut | `[cmd]` `such_rang_wortgrenze` ist bereits vorhanden: ganzes Namenswort = 3, Wortgrenze = 2, Wortmitte = 0. Heute steht bei `lachs` `Lachs roh`, bei `huhn` ein Treffer mit eigenem Wort `Huhn`, bei `butter` `Buttermilch`; keiner dieser drei Faelle hat Wortmitte vor Wortgrenze. `kuerbis` liefert weiter `Kuerbiskern`, aber auch das ist Wortgrenze, kein Verstoss gegen die Regel. Keine Rangregel wurde hier gesetzt oder geaendert. |
+| C-102 | ueberholt | `[cmd]` Die aktuelle App-Anfrage `milch` liefert 261 Treffer; Rang 1 ist `M111100 Milch entrahmt ...` aus `trinkmilch-sahne`, Joghurt `M141100` liegt auf Rang 66. Die alte Ausgangslage "Joghurt vor Milch" ist nicht mehr reproduzierbar. |
+| C-117 | ueberholt | `[cmd]` Auch mit `p_user_id = dev@lumeos.app` bleiben die ersten zwoelf Treffer Milch bzw. Milchprodukte, nicht Joghurt. |
+| C-121 | ueberholt | `[cmd]` Median aus je fuenf Laeufen im Live-Snapshot: leer 246,8 ms, `spinat` 123,5 ms, `reis` 129,2 ms, `huhn` 213,8 ms, `huehnerbrust` 211,4 ms, `haehnchen brust roh` 215,6 ms. Die historische Spanne 330--492 ms ist nicht reproduzierbar. |
+| C-192 | ueberholt | `[cmd]` `milch`, Limit 25, je fuenf Laeufe im Live-Snapshot: ohne `p_user_id` Median 136,176 ms, mit `dev@lumeos.app` 140,705 ms (+4,529 ms, +3,3 %). Der behauptete Dreifach-Effekt besteht heute nicht; der Vermerk "Laeuft bei Codex" ist abgeschlossen. |
+
+### C-338: Kette und Live
+
+`[cmd]` Den vorhandenen Schritt `supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql` habe ich zuerst im Live-Snapshot ausgefuehrt. Dort wurden alle zehn Werte angenommen; die acht Naehrstoffachsen waren richtig sortiert, beispielsweise `carbs_desc` 100,00000 g am Anfang und 20,70000 g am Ende, `carbs_asc` 0,00000 g am Anfang und 9,80000 g am Ende der serverseitig auf 100 begrenzten Ergebnismenge.
+
+`[cmd]` Die sechs neuen Achsen lagen bei `milch` mit Medianen von 115,390 bis 116,923 ms; `relevance` lag bei 129,288 ms. Der gesamte Suchlauf nach dem Schritt blieb im Snapshot in derselben Groessenordnung: leer 234,8 ms, `spinat` 122,1 ms, `reis` 128,9 ms, `huhn` 217,1 ms, `huehnerbrust` 218,8 ms, `haehnchen brust roh` 216,6 ms. Gegenueber vorher: -12,0 bis +7,4 ms, kein Faktorwechsel.
+
+`[cmd]` Nach der Vollsicherung wurde exakt derselbe Kettenschritt live eingespielt und in einer `READ ONLY`-Transaktion geprueft. Alle zehn Sortierwerte und die Negativprobe `not_a_sort` stimmen mit dem Snapshot ueberein. Der Schritt enthaelt keine neue Rangregel; die vier C-20-Anfragen haben live vor und nach dem Einspielen dieselben ersten Treffer.
+
+### C-102 und C-117: keine Entscheidung
+
+`[cmd]` Eine Trinkform-vor-Pulver-Regel haette bei der heutigen Anfrage fuer Rang 1 einen Effekt von 0 Plaetzen: dieser Rang ist bereits Trinkmilch. Unter den ersten 100 serverseitig gelieferten Treffern sind 33 aus `trinkmilch-sahne` und drei Namen mit `pulver`. Die Tabelle `foods` hat keine eigene physische Formspalte; eine spaetere Regel muesste deshalb eine Kategorienzuordnung begruenden, nicht Namen raten.
+
+`[cmd]` Eine Haeufigkeitssortierung existiert im Rumpf von `food_search` nicht; `meal_items` wird dort nicht gelesen. Fuer `dev@lumeos.app` hat `M111100` 0, die alte Vollmilch `M111300` 35 und der alte Joghurt `M141100` 36 Meal-Items. Eine reine Haeufigkeitsregel wuerde den alten Joghurt also um einen Eintrag vor die alte Vollmilch setzen. Das ist keine Empfehlung fuer einen Weg, sondern die Messung ihrer heutigen Wirkung.
+
+Als dritter, sichtbarer Weg bleibt eine fachlich gepflegte Zuordnung zur Produktform. Sie ist im heutigen Schema nicht vorhanden und wurde weder angelegt noch entschieden.
+
+### Nachweise und Grenzen
+
+`[cmd]` Die Lesevalidierung `v070_lesefunktionen.sql` bestand die `food_search`-Pruefungen. Sie meldet separat vier statt null anonyme EXECUTE-Rechte auf den fuenf Lesefunktionen; das ist keine durch C-338 verursachte Sortierabweichung und wurde nicht veraendert.
+
+`[cmd]` Beim Aufbau des Messbestands zeigte sich: `tools/lauf.py::psql()` bindet die Datenbank fest an `postgres` und ignoriert `PGDATABASE`. Fuer alle hier dokumentierten Klonmessungen habe ich deshalb ausnahmslos `docker exec ... psql -d lumeos_c20_live` verwendet. C-338 wurde nur nach der genannten Vollsicherung gegen live geschrieben.
 
 ## Abnahme
 

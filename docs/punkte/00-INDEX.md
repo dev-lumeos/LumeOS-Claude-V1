@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 266 |
-| `laufend_codex` | 6 |
-| `laufend_claudecode` | 4 |
+| `todos` | 261 |
+| `laufend_codex` | 11 |
+| `laufend_claudecode` | 5 |
 | `erledigt` | 40 |
-| **gesamt** | **316** |
+| **gesamt** | **317** |
 
 ## medical — 39
 
@@ -151,9 +151,9 @@
 | `G-252` | messung | mittel | [die Ladezeit hat eine andere Ursache](todos/nutrition-g-0252-die-ladezeit-hat-eine-andere-ursache.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 50
+## supplements — 51
 
-### beauftragbar — 49
+### beauftragbar — 50
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -204,7 +204,8 @@
 | `G-205` | messung | mittel | [Der Dev-Server beendet sich selbst](todos/supplements-g-0205-der-dev-server-beendet-sich-selbst.md) | offen | — | — |
 | `G-213` | entscheidung | mittel | [soll `in_vitro_only` eine Warnung abschwaechen?](todos/supplements-g-0213-in-vitro-only-abschwaechen.md) | offen | — | — |
 | `G-214` | befund | mittel | [die Katalogsuche sagt nicht, warum ein Treffer passt](todos/supplements-g-0214-suche-sagt-nicht-warum-ein-treffer-passt.md) | offen | — | — |
-| `G-240` | befund | hoch | [der massgebliche Supplements-Mockup ist ungelesen](erledigt/supplements-g-0240-der-massgebliche-supplements-mockup-ist-ungelesen.md) | erledigt | — | A-59 |
+| `G-240` | befund | hoch | [der massgebliche Supplements-Mockup ist ungelesen](erledigt/supplements-g-0240-der-massgebliche-supplements-mockup-ist-ungelesen.md) | erledigt | — | A-59, G-253 |
+| `G-253` | feature | hoch | [Stacks und Compliance anbinden](laufend_claudecode/supplements-g-0253-stacks-und-compliance-anbinden.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -243,13 +244,13 @@
 | `A-50` | feature | mittel | [Ein `DROP COLUMN` prueft die Lesepfade nicht](todos/recovery-a-0050-ein-drop-column-prueft-die-lesepfade-nicht.md) | offen | — | — |
 | `C-111` | feature | mittel | [Recovery — neun Entscheidungen und drei Formelfehler](todos/recovery-c-0111-recovery-neun-entscheidungen-und-drei-formelfehler.md) | offen | — | — |
 | `C-123` | entscheidung | mittel | [Recovery — die neun Entscheidungen](todos/recovery-c-0123-recovery-die-neun-entscheidungen.md) | offen | — | — |
-| `C-127` | messung | mittel | [Drei Wearable-Spalten sind leer](todos/recovery-c-0127-drei-wearable-spalten-sind-leer.md) | offen | — | — |
-| `C-143` | messung | mittel | [Die zwei Erholungsrechnungen weichen ab](todos/recovery-c-0143-die-zwei-erholungsrechnungen-weichen-ab.md) | offen | — | — |
-| `C-166` | befund | mittel | [Recovery hat 3 Tabellen, der Entwurf 25 Konstanten](todos/recovery-c-0166-recovery-hat-3-tabellen-der-entwurf-25-konstanten.md) | offen | — | — |
+| `C-127` | messung | mittel | [Drei Wearable-Spalten sind leer](laufend_codex/recovery-c-0127-drei-wearable-spalten-sind-leer.md) | laeuft (codex) | — | — |
+| `C-143` | messung | mittel | [Die zwei Erholungsrechnungen weichen ab](laufend_codex/recovery-c-0143-die-zwei-erholungsrechnungen-weichen-ab.md) | laeuft (codex) | — | — |
+| `C-166` | befund | mittel | [Recovery hat 3 Tabellen, der Entwurf 25 Konstanten](laufend_codex/recovery-c-0166-recovery-hat-3-tabellen-der-entwurf-25-konstanten.md) | laeuft (codex) | — | — |
 | `C-167` | entscheidung | mittel | [`MODALITY_BONUS` hat elf Modalitaeten, wir kennen vier](todos/recovery-c-0167-modality-bonus-hat-elf-modalitaeten-wir-kennen-vier.md) | offen | — | — |
-| `C-168` | befund | mittel | [Die Uebertrainings-Schwellen stehen im Entwurf](todos/recovery-c-0168-die-uebertrainings-schwellen-stehen-im-entwurf.md) | offen | — | — |
+| `C-168` | befund | mittel | [Die Uebertrainings-Schwellen stehen im Entwurf](laufend_codex/recovery-c-0168-die-uebertrainings-schwellen-stehen-im-entwurf.md) | laeuft (codex) | — | — |
 | `C-172` | feature | mittel | [Der Stress-Tab steht im Entwurf](todos/recovery-c-0172-der-stress-tab-steht-im-entwurf.md) | offen | — | — |
-| `C-181` | feature | mittel | [ACWR wird gerechnet und muss raus](todos/recovery-c-0181-acwr-wird-gerechnet-und-muss-raus.md) | offen | — | C-218 |
+| `C-181` | feature | mittel | [ACWR wird gerechnet und muss raus](laufend_codex/recovery-c-0181-acwr-wird-gerechnet-und-muss-raus.md) | laeuft (codex) | — | C-218 |
 | `C-182` | befund | mittel | [Kein numerischer OTS-Schwellenwert](todos/recovery-c-0182-kein-numerischer-ots-schwellenwert.md) | offen | — | — |
 | `C-214` | befund | mittel | [Fuenf Modalitaeten ohne Registerzeile](todos/recovery-c-0214-fuenf-modalitaeten-ohne-registerzeile.md) | offen | — | — |
 | `C-215` | feature | mittel | [ACWR rechnet in der Datenbank weiter](todos/recovery-c-0215-acwr-rechnet-in-der-datenbank-weiter.md) | offen | — | C-209 |

@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-29
 beruehrt:
   tabellen: []
   dateien: []
@@ -38,3 +40,8 @@ zahlen: null
   `[cmd]` **Und drei der vier Eingaenge fehlen im Bestand:** HRV auf 127
   von 170 Tagen leer, `resting_hr` 0 von 340. **Nur die Schlafqualitaet
   ist da.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-143 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.
