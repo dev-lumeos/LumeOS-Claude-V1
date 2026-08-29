@@ -7,8 +7,6 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: G-267
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-08-29
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
 zahlen: null
@@ -36,3 +34,8 @@ einen aktiven Plan mit 3 Wochen, 21 Tagen, 56 Eintraegen.
 
 **Mitbeauftragt mit G-271 am 2026-08-29.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Zwischenstand, 2026-08-29
+
+**Aus G-271 gemessen:** wartet auf dasselbe Schema wie G-267.
+**Die Messung steht dort.**

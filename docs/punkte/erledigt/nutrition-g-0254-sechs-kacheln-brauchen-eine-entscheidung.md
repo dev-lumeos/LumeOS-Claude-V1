@@ -8,7 +8,7 @@ braucht: []
 kind_von: G-11
 entscheidung: null
 erledigt: 2026-08-29
-commit: OFFEN
+commit: 1a2032b0
 beruehrt:
   tabellen: [coach.pending_actions]
   dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]

@@ -1097,6 +1097,15 @@
       ]
     },
     {
+      "id": "059d",
+      "path": "supabase/_pipeline/05_user_tabellen/059d_reference_assessment_window_flags.sql",
+      "kind": "sql",
+      "creates": "reference_assessment_window_flags mit Flag-Kandidaten ohne daily_assessments-jsonb in der Antwort",
+      "depends_on": [
+        "059c"
+      ]
+    },
+    {
       "id": "017",
       "path": "supabase/_pipeline/00_querschnitt/017_datenherkunft.sql",
       "kind": "sql",

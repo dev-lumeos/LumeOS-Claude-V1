@@ -366,7 +366,7 @@ derselbe Befund ist, gehoert geprueft, nicht angenommen.
 
 ## G-266 — Detailsuche mit Naehrwerten oeffnet eine eigene Seite
 
-**Modul:** nutrition · **angelegt:** 2026-08-29 · **Datei:** `laufend_claudecode/nutrition-g-0266-detailsuche-mit-naehrwerten-oeffnet-eine-eigene-seite.md`
+**Modul:** nutrition · **angelegt:** 2026-08-29 · **Datei:** `todos/nutrition-g-0266-detailsuche-mit-naehrwerten-oeffnet-eine-eigene-seite.md`
 
 ## Befund
 

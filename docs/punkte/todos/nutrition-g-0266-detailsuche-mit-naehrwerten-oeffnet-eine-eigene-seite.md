@@ -7,8 +7,6 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: null
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-08-29
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
 zahlen: null
@@ -47,3 +45,8 @@ findet es dort wieder.
 
 **Mitbeauftragt mit G-271 am 2026-08-29.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Zwischenstand, 2026-08-29
+
+**Aus G-271 gemessen:** drei Wege gemessen, Weg C bevorzugt (Seite behalten, Zustand mitnehmen) — Toms Entscheidung.
+**Die Messung steht dort.**

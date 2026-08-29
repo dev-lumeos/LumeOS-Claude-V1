@@ -123,13 +123,101 @@ CREATE TABLE IF NOT EXISTS nutrition.meal_plans (
   target_protein_g   NUMERIC(10,2) CHECK (target_protein_g IS NULL OR target_protein_g >= 0),
   target_carbs_g     NUMERIC(10,2) CHECK (target_carbs_g IS NULL OR target_carbs_g >= 0),
   target_fat_g       NUMERIC(10,2) CHECK (target_fat_g IS NULL OR target_fat_g >= 0),
-  is_active          BOOLEAN NOT NULL DEFAULT true,
+  is_active          BOOLEAN NOT NULL DEFAULT false,
+  lifecycle_type     TEXT DEFAULT 'once'
+    CHECK (lifecycle_type IN ('once','rollover','sequence')),
+  start_date         DATE,
+  days_count         INTEGER DEFAULT 7 CHECK (days_count > 0),
+  next_plan_id       UUID REFERENCES nutrition.meal_plans(id) ON DELETE SET NULL,
+  rollover_count     INTEGER DEFAULT 0 CHECK (rollover_count >= 0),
+  status             TEXT NOT NULL DEFAULT 'assigned'
+    CHECK (status IN ('assigned','active','completed','paused','archived')),
   measurement_source TEXT NOT NULL DEFAULT 'manual'
     CHECK (measurement_source IN ('manual','device','import','admin','seed')),
   source_detail      TEXT,
   created_at         TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at         TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- C-239: Die bestehenden Wochenplaene haben keinen belegten Start und
+-- keine belegte Laufzeit. Die neuen Spalten bleiben dort NULL; nur der
+-- bereits vorhandene boolesche Zustand wird verlustfrei nach active/paused
+-- ueberfuehrt. Neue Plaene erhalten die Defaults beim Anlegen.
+ALTER TABLE nutrition.meal_plans
+  ADD COLUMN IF NOT EXISTS lifecycle_type TEXT,
+  ADD COLUMN IF NOT EXISTS start_date DATE,
+  ADD COLUMN IF NOT EXISTS days_count INTEGER,
+  ADD COLUMN IF NOT EXISTS next_plan_id UUID REFERENCES nutrition.meal_plans(id) ON DELETE SET NULL,
+  ADD COLUMN IF NOT EXISTS rollover_count INTEGER,
+  ADD COLUMN IF NOT EXISTS status TEXT;
+
+ALTER TABLE nutrition.meal_plans
+  ALTER COLUMN lifecycle_type SET DEFAULT 'once',
+  ALTER COLUMN days_count SET DEFAULT 7,
+  ALTER COLUMN rollover_count SET DEFAULT 0,
+  ALTER COLUMN status SET DEFAULT 'assigned',
+  ALTER COLUMN is_active SET DEFAULT false;
+
+UPDATE nutrition.meal_plans
+SET status = CASE WHEN is_active THEN 'active' ELSE 'paused' END
+WHERE status IS NULL;
+
+ALTER TABLE nutrition.meal_plans
+  ALTER COLUMN status SET NOT NULL;
+
+ALTER TABLE nutrition.meal_plans
+  DROP CONSTRAINT IF EXISTS meal_plans_lifecycle_type_check,
+  DROP CONSTRAINT IF EXISTS meal_plans_days_count_check,
+  DROP CONSTRAINT IF EXISTS meal_plans_rollover_count_check,
+  DROP CONSTRAINT IF EXISTS meal_plans_status_check,
+  DROP CONSTRAINT IF EXISTS meal_plans_sequence_target_check,
+  DROP CONSTRAINT IF EXISTS meal_plans_sequence_not_self_check;
+ALTER TABLE nutrition.meal_plans
+  ADD CONSTRAINT meal_plans_lifecycle_type_check
+    CHECK (lifecycle_type IS NULL OR lifecycle_type IN ('once','rollover','sequence')),
+  ADD CONSTRAINT meal_plans_days_count_check
+    CHECK (days_count IS NULL OR days_count > 0),
+  ADD CONSTRAINT meal_plans_rollover_count_check
+    CHECK (rollover_count IS NULL OR rollover_count >= 0),
+  ADD CONSTRAINT meal_plans_status_check
+    CHECK (status IN ('assigned','active','completed','paused','archived')),
+  ADD CONSTRAINT meal_plans_sequence_target_check
+    CHECK (
+      lifecycle_type IS NULL
+      OR (lifecycle_type = 'sequence' AND next_plan_id IS NOT NULL)
+      OR (lifecycle_type <> 'sequence' AND next_plan_id IS NULL)
+    ),
+  ADD CONSTRAINT meal_plans_sequence_not_self_check
+    CHECK (next_plan_id IS NULL OR next_plan_id <> id);
+
+-- is_active ist ein bestehender Lesevertrag. Der neue Status ist die einzige
+-- Wahrheit; der Trigger haelt den booleschen Rueckwaertskompatibilitaetswert
+-- synchron und uebernimmt noch alte Schreiber, die nur is_active setzen.
+CREATE OR REPLACE FUNCTION nutrition.meal_plans_status_compatibility()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = ''
+AS $status_compatibility$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    IF NEW.status = 'assigned' AND NEW.is_active THEN
+      NEW.status := 'active';
+    END IF;
+  ELSIF NEW.status IS NOT DISTINCT FROM OLD.status
+        AND NEW.is_active IS DISTINCT FROM OLD.is_active THEN
+    NEW.status := CASE WHEN NEW.is_active THEN 'active' ELSE 'paused' END;
+  END IF;
+
+  NEW.is_active := (NEW.status = 'active');
+  RETURN NEW;
+END;
+$status_compatibility$;
+
+DROP TRIGGER IF EXISTS meal_plans_status_compatibility_trg ON nutrition.meal_plans;
+CREATE TRIGGER meal_plans_status_compatibility_trg
+  BEFORE INSERT OR UPDATE ON nutrition.meal_plans
+  FOR EACH ROW EXECUTE FUNCTION nutrition.meal_plans_status_compatibility();
 
 CREATE INDEX IF NOT EXISTS idx_meal_plans_user
   ON nutrition.meal_plans(user_id, is_active DESC, created_at DESC);
@@ -240,6 +328,58 @@ CREATE INDEX IF NOT EXISTS idx_meal_plan_entries_user
 DROP TRIGGER IF EXISTS meal_plan_entries_touch_updated_at ON nutrition.meal_plan_entries;
 CREATE TRIGGER meal_plan_entries_touch_updated_at
   BEFORE UPDATE ON nutrition.meal_plan_entries
+  FOR EACH ROW EXECUTE FUNCTION nutrition.touch_updated_at();
+
+-- C-238: Ein Plan-Entry ist die Vorlage. Bei rollover oder einer
+-- rueckwirkenden Bestaetigung kann dieselbe Vorlage mehrfach ausgefuehrt
+-- werden; der Status gehoert deshalb an die Ausfuehrung, nicht an die
+-- Vorlage. Fehlende Zeilen bedeuten nicht "uebersprungen"; pending wird
+-- beim Erzeugen der Ghost-Entry-Ausfuehrung geschrieben und hat kein Expiry.
+CREATE TABLE IF NOT EXISTS nutrition.meal_plan_logs (
+  id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  plan_id           UUID NOT NULL REFERENCES nutrition.meal_plans(id) ON DELETE RESTRICT,
+  plan_entry_id     UUID NOT NULL REFERENCES nutrition.meal_plan_entries(id) ON DELETE RESTRICT,
+  user_id           UUID NOT NULL,
+  execution_date    DATE NOT NULL,
+  status            TEXT NOT NULL DEFAULT 'pending',
+  actual_meal_id    UUID REFERENCES nutrition.meals(id) ON DELETE RESTRICT,
+  confirmation_mode TEXT,
+  deviation_kcal    NUMERIC(10,2),
+  deviation_pct     NUMERIC(7,2),
+  confirmed_at      TIMESTAMPTZ,
+  skipped_at        TIMESTAMPTZ,
+  created_at        TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at        TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CONSTRAINT uq_meal_plan_logs_entry_execution UNIQUE (plan_entry_id, execution_date),
+  CONSTRAINT meal_plan_logs_status_check
+    CHECK (status IN ('pending','confirmed','deviated','skipped')),
+  CONSTRAINT meal_plan_logs_confirmation_mode_check
+    CHECK (confirmation_mode IS NULL OR confirmation_mode IN ('mealcam','manual')),
+  CONSTRAINT meal_plan_logs_resolution_check CHECK (
+    (status = 'pending'
+      AND actual_meal_id IS NULL AND confirmation_mode IS NULL
+      AND confirmed_at IS NULL AND skipped_at IS NULL)
+    OR (status = 'confirmed'
+      AND actual_meal_id IS NOT NULL AND confirmation_mode IS NOT NULL
+      AND confirmed_at IS NOT NULL AND skipped_at IS NULL)
+    OR (status = 'deviated'
+      AND actual_meal_id IS NOT NULL AND confirmation_mode IS NOT NULL
+      AND confirmed_at IS NOT NULL AND skipped_at IS NULL
+      AND deviation_kcal IS NOT NULL AND deviation_pct IS NOT NULL)
+    OR (status = 'skipped'
+      AND actual_meal_id IS NULL AND confirmation_mode IS NULL
+      AND confirmed_at IS NULL AND skipped_at IS NOT NULL)
+  )
+);
+
+CREATE INDEX IF NOT EXISTS idx_meal_plan_logs_user_execution
+  ON nutrition.meal_plan_logs(user_id, execution_date, status);
+CREATE INDEX IF NOT EXISTS idx_meal_plan_logs_plan_execution
+  ON nutrition.meal_plan_logs(plan_id, execution_date, status);
+
+DROP TRIGGER IF EXISTS meal_plan_logs_touch_updated_at ON nutrition.meal_plan_logs;
+CREATE TRIGGER meal_plan_logs_touch_updated_at
+  BEFORE UPDATE ON nutrition.meal_plan_logs
   FOR EACH ROW EXECUTE FUNCTION nutrition.touch_updated_at();
 
 -- -------------------------------------------------------------
@@ -481,6 +621,57 @@ CREATE TRIGGER meal_plan_entries_owner_guard_trg
   BEFORE INSERT OR UPDATE OF day_id, user_id, recipe_id, custom_food_id
   ON nutrition.meal_plan_entries
   FOR EACH ROW EXECUTE FUNCTION nutrition.meal_plan_entries_owner_guard();
+
+CREATE OR REPLACE FUNCTION nutrition.meal_plan_logs_owner_guard()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = ''
+AS $guard$
+DECLARE
+  v_plan_id UUID;
+  v_entry_owner UUID;
+  v_meal_owner UUID;
+BEGIN
+  SELECT w.plan_id, e.user_id
+  INTO v_plan_id, v_entry_owner
+  FROM nutrition.meal_plan_entries e
+  JOIN nutrition.meal_plan_days d ON d.id = e.day_id
+  JOIN nutrition.meal_plan_weeks w ON w.id = d.week_id
+  WHERE e.id = NEW.plan_entry_id;
+
+  IF v_plan_id IS NULL THEN
+    RAISE EXCEPTION 'meal_plan_logs.plan_entry_id % existiert nicht', NEW.plan_entry_id
+      USING ERRCODE = '23503';
+  END IF;
+  IF NEW.plan_id <> v_plan_id THEN
+    RAISE EXCEPTION 'meal_plan_logs.plan_id gehoert nicht zum plan_entry_id'
+      USING ERRCODE = '23514';
+  END IF;
+  IF NEW.user_id <> v_entry_owner THEN
+    RAISE EXCEPTION 'meal_plan_logs.user_id gehoert nicht zum plan_entry_id'
+      USING ERRCODE = '23514';
+  END IF;
+
+  IF NEW.actual_meal_id IS NOT NULL THEN
+    SELECT m.user_id INTO v_meal_owner
+    FROM nutrition.meals m
+    WHERE m.id = NEW.actual_meal_id;
+    IF v_meal_owner IS NULL OR v_meal_owner <> NEW.user_id THEN
+      RAISE EXCEPTION 'meal_plan_logs.actual_meal_id gehoert nicht der Nutzerin'
+        USING ERRCODE = '23514';
+    END IF;
+  END IF;
+
+  RETURN NEW;
+END;
+$guard$;
+
+DROP TRIGGER IF EXISTS meal_plan_logs_owner_guard_trg ON nutrition.meal_plan_logs;
+CREATE TRIGGER meal_plan_logs_owner_guard_trg
+  BEFORE INSERT OR UPDATE OF plan_id, plan_entry_id, user_id, actual_meal_id
+  ON nutrition.meal_plan_logs
+  FOR EACH ROW EXECUTE FUNCTION nutrition.meal_plan_logs_owner_guard();
 
 CREATE OR REPLACE FUNCTION nutrition.shopping_lists_owner_guard()
 RETURNS TRIGGER
@@ -1018,6 +1209,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON
   nutrition.meal_plan_weeks,
   nutrition.meal_plan_days,
   nutrition.meal_plan_entries,
+  nutrition.meal_plan_logs,
   nutrition.shopping_lists,
   nutrition.shopping_list_items
 TO authenticated;
@@ -1029,6 +1221,7 @@ GRANT ALL ON
   nutrition.meal_plan_weeks,
   nutrition.meal_plan_days,
   nutrition.meal_plan_entries,
+  nutrition.meal_plan_logs,
   nutrition.shopping_lists,
   nutrition.shopping_list_items
 TO service_role;
@@ -1053,6 +1246,7 @@ ALTER TABLE nutrition.meal_plans ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nutrition.meal_plan_weeks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nutrition.meal_plan_days ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nutrition.meal_plan_entries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE nutrition.meal_plan_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nutrition.shopping_lists ENABLE ROW LEVEL SECURITY;
 ALTER TABLE nutrition.shopping_list_items ENABLE ROW LEVEL SECURITY;
 
@@ -1134,6 +1328,19 @@ CREATE POLICY meal_plan_entries_update ON nutrition.meal_plan_entries
 CREATE POLICY meal_plan_entries_delete ON nutrition.meal_plan_entries
   FOR DELETE TO authenticated USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS meal_plan_logs_select ON nutrition.meal_plan_logs;
+DROP POLICY IF EXISTS meal_plan_logs_insert ON nutrition.meal_plan_logs;
+DROP POLICY IF EXISTS meal_plan_logs_update ON nutrition.meal_plan_logs;
+DROP POLICY IF EXISTS meal_plan_logs_delete ON nutrition.meal_plan_logs;
+CREATE POLICY meal_plan_logs_select ON nutrition.meal_plan_logs
+  FOR SELECT TO authenticated USING (auth.uid() = user_id);
+CREATE POLICY meal_plan_logs_insert ON nutrition.meal_plan_logs
+  FOR INSERT TO authenticated WITH CHECK (auth.uid() = user_id);
+CREATE POLICY meal_plan_logs_update ON nutrition.meal_plan_logs
+  FOR UPDATE TO authenticated USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+CREATE POLICY meal_plan_logs_delete ON nutrition.meal_plan_logs
+  FOR DELETE TO authenticated USING (auth.uid() = user_id);
+
 DROP POLICY IF EXISTS shopping_lists_select ON nutrition.shopping_lists;
 DROP POLICY IF EXISTS shopping_lists_insert ON nutrition.shopping_lists;
 DROP POLICY IF EXISTS shopping_lists_update ON nutrition.shopping_lists;
@@ -1164,6 +1371,8 @@ COMMENT ON TABLE nutrition.recipes IS
   'C-150: user-private Rezepte; Naehrwerte werden aus Zutaten berechnet, nicht als zweite Wahrheit gespeichert.';
 COMMENT ON TABLE nutrition.meal_plan_weeks IS
   'C-150: Wocheninstanz eines Meal Plans. copied_from_week_id dokumentiert Copy week.';
+COMMENT ON TABLE nutrition.meal_plan_logs IS
+  'C-238: Ausfuehrung eines Plan-Entries an einem Kalendertag. pending bleibt offen, bis der User auch rueckwirkend bestaetigt oder ueberspringt; die Vorlage meal_plan_entries bleibt unveraendert.';
 COMMENT ON FUNCTION nutrition.meal_plan_day_to_diary(uuid, date) IS
   'C-150: uebernimmt einen geplanten Tag als normale meals/meal_items und friert Naehrwerte erst dort ein.';
 COMMENT ON TABLE nutrition.shopping_lists IS

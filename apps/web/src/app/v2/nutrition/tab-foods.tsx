@@ -848,11 +848,27 @@ export function NutritionFoodsTab({
                     <td className="v2-num" style={{ textAlign: 'right' }}>{makro(f.cho)}</td>
                     <td className="v2-num" style={{ textAlign: 'right' }}>{makro(f.fat)}</td>
                     <td style={{ textAlign: 'right' }}>
-                      {/* `[read]` `Add` schreibt ins Tagebuch — das ist
-                          der Erfassungspfad und ein eigener Auftrag.
-                          Der Knopf fuehrt auf die Detailsuche, wo das
-                          Erfassen gebaut ist. */}
-                      <Link href={`/v2/nutrition/suche?food=${f.id}` as Route}
+                      {/* G-265, Tom: „food db +add falsches modal".
+                          `[cmd]` **Gemessen am 2026-08-29:** der Knopf
+                          ist ein Link auf die Detailsuche — und dort
+                          wurde `?food=` NIE gelesen. Die Zielseite kam
+                          leer an: null Treffer, das Lebensmittel
+                          nirgends genannt.
+                          `[cmd]` **Der Name geht jetzt als `q` mit**,
+                          damit die Suche etwas zu suchen hat; die
+                          Kennung waehlt den Treffer aus.
+                          `[read]` **Was der Knopf sein sollte** — ein
+                          Erfassungsmodal, das ins Tagebuch schreibt —
+                          **ist gemeldet, nicht gebaut:** der Weg vom
+                          Lebensmittel in `diary_entries` existiert an
+                          dieser Stelle nicht. */}
+                      {/* `[cmd]` **`name_de`, nicht `name_display_de`:**
+                          der Anzeigename traegt Klammerzusaetze
+                          („Weisser Reis (roh)"), die die Volltextsuche
+                          nicht findet — gemessen: 0 Treffer. Der
+                          Katalogname („Reis poliert, roh") trifft. */}
+                      <Link href={`/v2/nutrition/suche?food=${f.id}`
+                        + `&q=${encodeURIComponent(f.name_de)}` as Route}
                             className="v2-btn"
                             style={{ height: 22, fontSize: 11, padding: '0 8px' }}>
                         <Icon name="plus" className="v2-ic v2-ic-sm" />Add

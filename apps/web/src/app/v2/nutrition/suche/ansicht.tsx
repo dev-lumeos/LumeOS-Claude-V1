@@ -96,6 +96,41 @@ export function SucheAnsicht() {
     void suche(eingabe, row.id)
   }
 
+  // ══ G-265: den Zustand aus der Adresse uebernehmen ═══════════════
+  //
+  // **Tom, 2026-08-29:** *,,food db +add falsches modal"*.
+  //
+  // `[cmd]` **Gemessen am 2026-08-29:** `+ Add` im Food-DB-Reiter ist
+  // ein `Link` auf `/v2/nutrition/suche?food=<id>` — **kein Modal.**
+  // `[cmd]` **Und der Parameter wurde hier nie gelesen:** `page.tsx`
+  // ruehrt `searchParams` nicht an, `foodId` floss nur in ABGEHENDE
+  // Anfragen. **Wer auf `+ Add` klickte, landete auf einer leeren
+  // Suchseite** — Feld leer, null Treffer, das Lebensmittel nirgends
+  // genannt.
+  //
+  // `[read]` **Der Knopf verliess also den Reiter UND tat nichts.**
+  // Diese Stelle behebt die zweite Haelfte: der Zustand kommt mit.
+  // **Was `+ Add` eigentlich sein sollte — ein Erfassungsmodal im
+  // Reiter — ist gemeldet, nicht gebaut:** dafuer fehlt der Weg vom
+  // Lebensmittel ins Tagebuch, und den gibt es hier nirgends.
+  const startRef = React.useRef(false)
+  React.useEffect(() => {
+    if (startRef.current) return
+    startRef.current = true
+    const p = new URLSearchParams(window.location.search)
+    const food = p.get('food') ?? undefined
+    const q = p.get('q') ?? ''
+    // Ohne beides bleibt die Seite, wie sie war.
+    if (!food && !q) return
+    if (q) setEingabe(q)
+    if (food) setGewaehlt(food)
+    // `[read]` **Die Route braucht einen Suchbegriff**, um Treffer zu
+    // liefern; mit `food` allein bliebe die Liste leer. Deshalb wird
+    // die Kennung auch als Anfrage geschickt — die Route loest sie
+    // ueber `selected_food` auf.
+    void suche(q, food)
+  }, [suche])
+
   const payload = zustand.art === 'fertig' ? zustand.payload : null
   const treffer = payload?.foods ?? []
   const detail = payload?.selected_food ?? null

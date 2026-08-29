@@ -9,8 +9,11 @@ kind_von: null
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-29
+erledigt: 2026-08-29
+commit: 1a2032b0
 beruehrt:
-  dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
+  dateien:
+    - apps/web/src/app/v2/nutrition/tab-foods.tsx
 zahlen: null
 ---
 # G-265 — Add im Food DB oeffnet das falsche Modal
@@ -34,3 +37,15 @@ Ort.**
 
 **Mitbeauftragt mit G-271 am 2026-08-29.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-29, mit G-271 abgenommen.**
+
+`[cmd]` **Es war kein falsches Modal, sondern gar keins** — ein
+`Link`, dessen Ziel `?food=` nie gelesen hat.
+
+`[cmd]` **Behoben und nachgemessen: 3 Treffer, Lebensmittel
+ausgewaehlt, 101 Naehrstoffe.**
+
+`[read]` **Was `+ Add` sein muesste, steht als G-272 offen.**
