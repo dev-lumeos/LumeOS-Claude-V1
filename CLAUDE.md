@@ -167,6 +167,29 @@ zu verschwinden.
 
 `docs/todo/` und `docs/ssot/` bleiben beim Orchestrator.
 
+## Ein Waechter prueft die Wirkung, nicht das Wort
+
+`[cmd]` **Dreimal in Folge derselbe Fehler** — G-216, G-247, G-246:
+ein Waechter suchte den Feldnamen im Quelltext, statt zu pruefen, ob
+die Wirkung eintritt.
+
+    G-216   verglich die Anzahl `.select(` mit der Anzahl
+            Schreibzugriffe - ein Zugriff mit zwei `.select()` glich
+            den Verlust bei einem anderen aus
+    G-247   prueft, ob `setFilter` im Text steht, statt ob die Liste
+            geschnitten wird
+    G-246   sucht den Feldnamen, statt den Aufruf
+
+`[read]` **Alle drei fielen erst durch die Sabotageprobe auf** — der
+Waechter selbst blieb gruen, waehrend die Sache kaputt war.
+
+`[read]` **Also: ein Waechter misst das Ergebnis.** Steht der Wert im
+DOM? Ist die Liste kuerzer? Fehlt die Zeile in der Datenbank?
+**Nicht: kommt das Wort im Quelltext vor.**
+
+`[cmd]` **Und A-59 ist derselbe Fehler beim Zaehlen:** 89
+Attrappenmarken im Quelltext gegen 24 auf dem Schirm.
+
 ## Jede Messung nennt Nutzer und Zeitraum
 
 `[cmd]` **Am 28.08. haben zweimal zwei Beteiligte verschiedene Zahlen

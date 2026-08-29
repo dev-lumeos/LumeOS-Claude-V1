@@ -5,13 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 272 |
-| `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 34 |
-| **gesamt** | **308** |
+| `todos` | 275 |
+| `erledigt` | 36 |
+| **gesamt** | **311** |
 
-## medical — 38
+## medical — 39
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -45,16 +43,17 @@
 | `C-312` | befund | mittel | [Barcode einlesen — was jetzt schon ins Schema gehoert](todos/medical-c-0312-barcode-einlesen-was-jetzt-schon-ins-schema-gehoert.md) | offen | — | — |
 | `C-313` | entscheidung | mittel | [25 Regeln koennen nicht feuern](erledigt/medical-c-0313-25-regeln-koennen-nicht-feuern.md) | erledigt | — | C-332 |
 | `C-314` | entscheidung | mittel | [die drei Wirkstoff-Dubletten zusammenfuehren](todos/medical-c-0314-die-drei-wirkstoff-dubletten-zusammenfuehren.md) | offen | — | — |
-| `C-327` | blocker | hoch | [Die Chelationsregel kennt keine Gruppenmitgliedschaft](laufend_codex/medical-c-0327-chelation-rule-fehlt-gruppenmitgliedschaft.md) | laeuft (codex) | — | — |
+| `C-327` | blocker | hoch | [Die Chelationsregel kennt keine Gruppenmitgliedschaft](erledigt/medical-c-0327-chelation-rule-fehlt-gruppenmitgliedschaft.md) | erledigt | — | C-337 |
 | `C-328` | blocker | hoch | [`count_risk_flag_gte` zaehlt Schluessel statt Werte](erledigt/medical-c-0328-count-risk-flag-zaehlt-schluessel-statt-werte.md) | erledigt | — | C-331 |
 | `C-331` | messung | hoch | [C-328 live einspielen und den Durchstich wiederholen](erledigt/medical-c-0331-c-328-live-und-durchstich.md) | erledigt | — | G-218 |
 | `C-332` | befund | mittel | [23 Regeln koennen weiterhin nicht feuern](todos/medical-c-0332-23-regeln-koennen-weiterhin-nicht-feuern.md) | offen | — | — |
+| `C-337` | befund | mittel | [die Medikamenten-Einnahmezeit fehlt](todos/medical-c-0337-die-medikamenten-einnahmezeit-fehlt.md) | offen | — | — |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
 | `G-241` | entscheidung | hoch | [zwei Reiterschnitte im Medical-Mockup](todos/medical-g-0241-zwei-reiterschnitte-im-medical-mockup.md) | offen | — | — |
 
-## nutrition — 85
+## nutrition — 86
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -98,6 +97,7 @@
 | `C-333` | befund | niedrig | [Selen fehlt in der Bewertung auf dev](todos/nutrition-c-0333-selen-fehlt-in-der-bewertung-auf-dev.md) | offen | — | — |
 | `C-334` | befund | hoch | [die Tagesbewertung hat sich zwischen zwei Messungen verschoben](erledigt/nutrition-c-0334-die-bewertung-hat-sich-zwischen-zwei-messungen-verschoben.md) | erledigt | — | C-335 |
 | `C-335` | befund | mittel | [keine Aenderungshistorie fuer Mahlzeiten und Referenzwerte](todos/nutrition-c-0335-keine-aenderungshistorie-fuer-mahlzeiten.md) | offen | — | — |
+| `C-336` | befund | hoch | [FD traegt den Text eines anderen Naehrstoffs](todos/nutrition-c-0336-fd-traegt-den-text-eines-anderen-naehrstoffs.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](todos/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | offen | — | — |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -139,7 +139,7 @@
 | `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | — | — |
 | `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](erledigt/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | erledigt | — | C-333, C-334, G-246, G-247 |
 | `G-245` | feature | mittel | [die Sortier-Tags bauen](erledigt/nutrition-g-0245-die-sortier-tags-bauen.md) | erledigt | — | — |
-| `G-246` | feature | hoch | [die Detailtexte liegen in der Datenbank und werden nicht gelesen](laufend_claudecode/nutrition-g-0246-die-detailtexte-werden-nicht-gelesen.md) | laeuft (claudecode) | — | — |
+| `G-246` | feature | hoch | [die Detailtexte liegen in der Datenbank und werden nicht gelesen](erledigt/nutrition-g-0246-die-detailtexte-werden-nicht-gelesen.md) | erledigt | — | A-60, C-336 |
 | `G-247` | feature | mittel | [der Zeitraumwechsel braucht eine eigene Funktion](erledigt/nutrition-g-0247-zeitraumwechsel-braucht-eine-eigene-funktion.md) | erledigt | — | — |
 | `G-248` | befund | mittel | [der Leseweg laedt neun von 35 Fehlzaehlern](todos/nutrition-g-0248-der-leseweg-laedt-neun-von-35-fehlzaehlern.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
@@ -292,7 +292,7 @@
 | `G-169` | befund | mittel | [`coach.checkins` und `checkin_templates` liegen ungelesen](todos/coach-g-0169-coach-checkins-und-checkin-templates-liegen-ungelesen.md) | offen | — | — |
 | `G-244` | befund | mittel | [die rechten Kacheln im Human-Coach-Reiter sind Attrappe](todos/coach-g-0244-die-rechten-kacheln-im-human-coach-reiter-sind-attrappe.md) | offen | — | — |
 
-## quer — 69
+## quer — 70
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -322,6 +322,7 @@
 | `A-57` | blocker | hoch | [24 Punkte wurden per Textheuristik geschlossen und sind ungeprueft](erledigt/quer-a-0057-heuristisch-geschlossene-punkte-nachpruefen.md) | erledigt | — | — |
 | `A-58` | blocker | hoch | [der Waechter verlangt ein Feld, das es nicht mehr gibt](erledigt/quer-a-0058-waechter-verlangt-gestrichenes-feld.md) | erledigt | — | — |
 | `A-59` | befund | mittel | [Attrappen im Quelltext zaehlen ueberschaetzt dreifach](todos/quer-a-0059-attrappen-im-quelltext-zaehlen-ueberschaetzt-dreifach.md) | offen | — | — |
+| `A-60` | befund | mittel | [eine `Map` ueber die Client-Grenze kommt leer an](todos/quer-a-0060-eine-map-ueber-die-client-grenze-kommt-leer-an.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](todos/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | offen | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

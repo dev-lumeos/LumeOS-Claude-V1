@@ -1680,6 +1680,7 @@
     "medical.medication_formulations": 119,
     "medical.medication_products": 124,
     "supplements.supplement_groups": 3,
+    "supplements.substance_group_memberships": 8,
     "supplements.supplement_categories": 23,
     "supplements.supplements": 596,
     "supplements.supplement_aliases": 2413,
@@ -1765,6 +1766,7 @@
     "medical.medication_formulations": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 119 Formulierungen; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist.",
     "medical.medication_products": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 124 Produkte; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist.",
     "supplements.supplement_groups": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_groups aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 3.",
+    "supplements.substance_group_memberships": "[cmd] C-327: acht Kimi-belegte Mitgliedschaften aus wr_chelation_timing fuer grp_chelating_minerals; Produktgruppen bleiben davon getrennt.",
     "supplements.supplement_categories": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_categories aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 23.",
     "supplements.supplements": "[cmd] C-275: 141aa_supplement_kimi_stammdaten_446.ts hebt Kimis 446 Stammdatensaetze in den Katalog; 99 f05-Huelsen werden gefuellt, 30 neu angelegt. Erwartung mindestens 596.",
     "supplements.supplement_aliases": "[cmd] C-275: 141aa_supplement_kimi_stammdaten_446.ts ergaenzt Kimi-Entity-ID-Aliase und Quellenaliase fuer 446 Datensaetze. Erwartung mindestens 2413.",
@@ -2786,6 +2788,16 @@
         ]
       },
       "grants_herkunft": "133_kimi_rules.ts vergibt SELECT an authenticated und service_role ALL explizit; Regeln sind Katalogdaten, keine Nutzerdaten.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "substance_group_memberships",
+      "schritt": "327/327a",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260829003109_c327_substance_group_membership.sql vergibt Katalog-Leserechte und service_role ALL; 327a_chelation_mineral_membership.sql leitet die acht Zeilen aus der Kimi-Regel ab.",
       "zeilenschutzart": "oeffentlich"
     },
     {

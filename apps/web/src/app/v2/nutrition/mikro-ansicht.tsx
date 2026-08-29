@@ -34,8 +34,13 @@ import {
   type Lage, type Naehrstoff, type ZeileMitLage,
 } from '../../../lib/nutrition/mikro-lage'
 import type {
-  ReferenceAssessmentRow, NaehrstoffTag,
+  ReferenceAssessmentRow, NaehrstoffTag, Erklaertext,
 } from '../../../lib/nutrition/reference-assessment-read'
+// G-246: die Erklaertexte und ihre drei Zustaende — serverfrei.
+import {
+  erklaerlageVon, ohneEintragSatz, ueberdosisLageVon,
+  athletWertEigen, ATHLET_GLEICH_SATZ, UEBERDOSIS_SATZ,
+} from '../../../lib/nutrition/erklaertext-lage'
 // G-247 / E-24: Zeitraum, Spanne und Verlauf — serverfrei.
 import {
   ZEITRAEUME, ZEITRAUM_TEXT, ZEITRAUM_STANDARD,
@@ -53,13 +58,26 @@ function zahl(n: number | null, einheit: string): string {
   return `${gerundet.toLocaleString('de-DE')} ${einheit}`
 }
 
-export function MikroAnsicht({ zeilen, tageswerte = [], datum }: {
+export function MikroAnsicht({ zeilen, tageswerte = [], texte, datum }: {
   zeilen: ReferenceAssessmentRow[]
+  /**
+   * G-246: die Erklaertexte.
+   *
+   * `[cmd]` **Ein Feld, keine `Map`.** React serialisiert Props nach
+   * JSON — eine `Map` kaeme hier LEER an, ohne Fehler. Die
+   * Nachschlagetabelle entsteht deshalb im Client.
+   */
+  texte?: Erklaertext[]
   /** G-247: Tageswerte je Naehrstoff fuer Zeitraum und Verlauf. */
   tageswerte?: NaehrstoffTag[]
   datum?: string
 }) {
   const [offen, setOffen] = React.useState<string | null>(null)
+  const textJeCode = React.useMemo(() => {
+    const m = new Map<string, Erklaertext>()
+    for (const t of texte ?? []) m.set(t.nutrient_code, t)
+    return m
+  }, [texte])
   // ══ G-247: Zeitraum und Filter ═══════════════════════════════════
   // `[read]` Der Standard bleibt der Tag (E-24, Mockup:461).
   const [zeitraum, setZeitraum] = React.useState<Zeitraum>(ZEITRAUM_STANDARD)
@@ -216,6 +234,7 @@ export function MikroAnsicht({ zeilen, tageswerte = [], datum }: {
           <div className="v2-col-gap" style={{ gap: 0 }}>
             {g.stoffe.map(s => (
               <Zeile key={s.code} s={s}
+                     text={textJeCode.get(s.code)}
                      spanne={s.spanne ?? null}
                      tage={jeCode.get(s.code) ?? []}
                      zeitraum={zeitraum}
@@ -229,8 +248,9 @@ export function MikroAnsicht({ zeilen, tageswerte = [], datum }: {
   )
 }
 
-function Zeile({ s, spanne, tage, zeitraum, offen, aufklappen }: {
+function Zeile({ s, text, spanne, tage, zeitraum, offen, aufklappen }: {
   s: Naehrstoff
+  text: Erklaertext | undefined
   spanne: Spanne | null
   tage: readonly Tageswert[]
   zeitraum: Zeitraum
@@ -284,13 +304,14 @@ function Zeile({ s, spanne, tage, zeitraum, offen, aufklappen }: {
               className="v2-ic v2-ic-sm" />
       </button>
 
-      {offen && <Aufgeklappt s={s} spanne={spanne} tage={tage} zeitraum={zeitraum} />}
+      {offen && <Aufgeklappt s={s} text={text} spanne={spanne} tage={tage} zeitraum={zeitraum} />}
     </div>
   )
 }
 
-function Aufgeklappt({ s, spanne, tage, zeitraum }: {
+function Aufgeklappt({ s, text, spanne, tage, zeitraum }: {
   s: Naehrstoff
+  text: Erklaertext | undefined
   spanne: Spanne | null
   tage: readonly Tageswert[]
   zeitraum: Zeitraum
@@ -373,6 +394,177 @@ function Aufgeklappt({ s, spanne, tage, zeitraum }: {
       {z.notes && (
         <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 4 }}>
           {z.notes}
+        </div>
+      )}
+
+      {/* ══ G-246: die Erklaerkacheln ═══════════════════════════ */}
+      <Erklaerung s={s} text={text} />
+    </div>
+  )
+}
+
+// ══ G-246: die Erklaertexte aus `nutrition.nutrient_details` ═════
+//
+// `[cmd]` **110 Zeilen, 31 Spalten, dreisprachig** — gelesen wird
+// nur `_de`.
+//
+// `[cmd]` **Gestalt aus dem Mockup uebernommen**
+// (`module-nutrition-nutrients.jsx:780-800`): zwei Karten „zu wenig"
+// und „zu viel" nebeneinander, darunter die Quellen als nummerierte
+// Liste. **Die Feldnamen unterscheiden sich, die Sache nicht:**
+// `what` ist `function_de`, `def` ist `deficiency_de`, `tox` ist
+// `excess_de`.
+function Erklaerung({ s, text }: { s: Naehrstoff; text: Erklaertext | undefined }) {
+  // `[read]` **Kein Eintrag ist ein Zustand, keine leere Kachel**
+  // (G-208). `[cmd]` 28 von 138 betroffen — 27 Einzelfettsaeuren
+  // und OLSAC.
+  if (erklaerlageVon(text) === 'kein_eintrag' || !text) {
+    return (
+      <div className="v2-dim" style={{
+        marginTop: 10, padding: 9, borderRadius: 5, fontSize: 11,
+        background: 'var(--surface)', border: '1px solid var(--border)',
+      }}>
+        {ohneEintragSatz(s.code)}
+      </div>
+    )
+  }
+
+  const hatObergrenze = s.grenze !== null
+    || s.ziel.reference_direction === 'upper_limit'
+    || text.obergrenze !== null
+  const ueber = ueberdosisLageVon(text.beiUeberschuss, hatObergrenze)
+  const athletEigen = athletWertEigen(text.rdaAthlet, text.rdaStandard)
+
+  return (
+    <div style={{ marginTop: 12 }}>
+      {text.funktion && (
+        <div style={{ marginBottom: 10 }}>
+          <div className="v2-eyebrow" style={{ marginBottom: 3 }}>Wofür</div>
+          <div style={{ color: 'var(--fg)' }}>{text.funktion}</div>
+        </div>
+      )}
+
+      {/* ══ Zwei Karten nebeneinander, wie im Mockup ══════════ */}
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        gap: 10, marginBottom: 10,
+      }}>
+        {text.beiMangel && (
+          <div style={{
+            padding: 10, borderRadius: 5,
+            background: 'color-mix(in oklch, var(--warn) 5%, var(--surface))',
+            border: '1px solid color-mix(in oklch, var(--warn) 22%, var(--border))',
+          }}>
+            <div className="v2-eyebrow" style={{ color: 'var(--warn)', marginBottom: 4 }}>
+              Bei zu wenig
+            </div>
+            <div style={{ color: 'var(--fg)' }}>{text.beiMangel}</div>
+          </div>
+        )}
+        <div style={{
+          padding: 10, borderRadius: 5,
+          background: ueber === 'text_da'
+            ? 'color-mix(in oklch, var(--neg) 5%, var(--surface))'
+            : 'var(--surface)',
+          border: ueber === 'text_da'
+            ? '1px solid color-mix(in oklch, var(--neg) 22%, var(--border))'
+            : '1px solid var(--border)',
+        }}>
+          <div className="v2-eyebrow" style={{
+            color: ueber === 'text_da' ? 'var(--neg)' : 'var(--fg-dim)', marginBottom: 4,
+          }}>
+            Bei zu viel
+          </div>
+          {/* `[read]` **Drei Zustaende, nicht zwei:** Text da, keine
+              Obergrenze gefuehrt, oder Obergrenze ohne Text. `[cmd]`
+              Der dritte trifft FD und FOLAC. */}
+          <div style={{ color: ueber === 'text_da' ? 'var(--fg)' : 'var(--fg-dim)' }}>
+            {ueber === 'text_da' ? text.beiUeberschuss : UEBERDOSIS_SATZ[ueber]}
+          </div>
+        </div>
+      </div>
+
+      {/* ══ Tagesdosis: Standard UND Sportler ════════════════ */}
+      {(text.rdaStandard || text.obergrenze) && (
+        <div style={{
+          display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 10,
+        }}>
+          {text.rdaStandard && (
+            <span>
+              <span className="v2-eyebrow">Tagesdosis</span>{' '}
+              <span style={{ color: 'var(--fg)' }}>{text.rdaStandard}</span>
+            </span>
+          )}
+          {/* `[read]` **Der Teil, den ein Sportler sucht** — aber nur,
+              wenn er eine eigene Aussage traegt. `[cmd]` Steht dort
+              „Standard", ist es kein zweiter Wert. */}
+          {athletEigen
+            ? (
+              <span>
+                <span className="v2-eyebrow" style={{ color: 'var(--acc-train)' }}>
+                  Sportler
+                </span>{' '}
+                <span style={{ color: 'var(--acc-train)', fontWeight: 600 }}>
+                  {text.rdaAthlet}
+                </span>
+              </span>
+              )
+            : text.rdaAthlet && (
+              <span className="v2-dim">{ATHLET_GLEICH_SATZ}</span>
+            )}
+          {text.obergrenze && (
+            <span>
+              <span className="v2-eyebrow">Obergrenze</span>{' '}
+              <span style={{ color: 'var(--neg)' }}>{text.obergrenze}</span>
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* ══ Quellen, nummeriert wie im Mockup ════════════════ */}
+      {text.quellen.length > 0 && (
+        <div style={{ marginBottom: 10 }}>
+          <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Beste Quellen</div>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            {text.quellen.map((q, i) => (
+              <span key={q} style={{
+                padding: '5px 10px', background: 'var(--surface)',
+                border: '1px solid var(--border)', borderRadius: 5,
+              }}>
+                <span className="v2-dim v2-mono" style={{ fontSize: 9.5, marginRight: 5 }}>
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                {q}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {text.wechselwirkungen && (
+        <div style={{ marginBottom: 8 }}>
+          <span className="v2-eyebrow">Wechselwirkungen</span>{' '}
+          {text.wechselwirkungen}
+        </div>
+      )}
+      {text.detail && (
+        <div style={{ marginBottom: 8 }}>{text.detail}</div>
+      )}
+      {text.tipp && (
+        <div style={{
+          padding: 8, borderRadius: 5, marginBottom: 8,
+          background: 'color-mix(in oklch, var(--acc-nutri) 8%, transparent)',
+          color: 'var(--fg)',
+        }}>
+          {text.tipp}
+        </div>
+      )}
+
+      {/* `[read]` **Der Beleg zuletzt** — er gehoert an den Text,
+          damit nachschlagbar bleibt, woher er stammt. */}
+      {text.quelle && (
+        <div className="v2-dim" style={{ fontSize: 10 }}>
+          Erklärtext: {text.quelle}
         </div>
       )}
     </div>

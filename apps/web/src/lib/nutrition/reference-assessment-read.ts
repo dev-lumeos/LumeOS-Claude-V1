@@ -213,3 +213,81 @@ export async function getNaehrstoffZeitraum(
   }
   return aus
 }
+
+// ── Die Erklaertexte — G-246 ─────────────────────────────────────
+
+/**
+ * Ein Erklaertext je Naehrstoff, aus `nutrition.nutrient_details`.
+ *
+ * `[read]` **Nur `_de`.** Die Tabelle ist dreisprachig; `_en` und
+ * `_th` bleiben liegen, bis es eine Sprachumschaltung gibt — sie hier
+ * mitzuladen waere Vorrat ohne Abnehmer.
+ */
+export type Erklaertext = {
+  nutrient_code: string
+  funktion: string | null
+  beiMangel: string | null
+  beiUeberschuss: string | null
+  quellen: string[]
+  rdaStandard: string | null
+  rdaAthlet: string | null
+  obergrenze: string | null
+  wechselwirkungen: string | null
+  tipp: string | null
+  detail: string | null
+  /** Herkunft der Zeile — der Beleg gehoert an den Text. */
+  quelle: string | null
+}
+
+/**
+ * Alle Erklaertexte auf einmal.
+ *
+ * `[cmd]` **110 Zeilen, 33.697 Zeichen** — `naehrstoff-ordnung.ts`
+ * haelt fest, dass das ohne Alias-Schema traegt. `[read]` **Deshalb
+ * eine Abfrage statt einer je aufgeklapptem Naehrstoff:** wer eine
+ * Zeile aufklappt, klappt meist die naechste auch auf.
+ *
+ * `[cmd]` **Die Verknuepfung geht ueber zwei verschiedene
+ * Spaltennamen:** `nutrient_defs.code` gegen
+ * `nutrient_details.nutrient_code`. Dieselbe Sache, andere
+ * Bezeichner.
+ */
+export async function getErklaertexte(): Promise<Erklaertext[]> {
+  const supabase = createSessionClient()
+  const { data, error } = await supabase
+    .schema('nutrition')
+    .from('nutrient_details')
+    .select('nutrient_code, function_de, deficiency_de, excess_de, '
+      + 'top_sources_de, rda_standard_text, rda_athlete_text, '
+      + 'upper_limit_text, interactions_de, tip_de, detail_de, source')
+    .limit(1000)
+
+  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+
+  // `[cmd]` **Ein Feld, keine `Map`.** Die Anzeige ist eine
+  // Client-Komponente, und React serialisiert Props nach JSON — eine
+  // `Map` kaeme dort LEER an, ohne Fehler. Gemessen am 2026-08-29:
+  // die Kacheln blieben stumm, nur der Rueckfallzweig rendete.
+  const aus: Erklaertext[] = []
+  for (const raw of (data ?? []) as unknown as Array<Record<string, unknown>>) {
+    const code = asText(raw.nutrient_code)
+    if (!code) continue
+    aus.push({
+      nutrient_code: code,
+      funktion: asText(raw.function_de) || null,
+      beiMangel: asText(raw.deficiency_de) || null,
+      beiUeberschuss: asText(raw.excess_de) || null,
+      quellen: Array.isArray(raw.top_sources_de)
+        ? raw.top_sources_de.filter((x): x is string => typeof x === 'string')
+        : [],
+      rdaStandard: asText(raw.rda_standard_text) || null,
+      rdaAthlet: asText(raw.rda_athlete_text) || null,
+      obergrenze: asText(raw.upper_limit_text) || null,
+      wechselwirkungen: asText(raw.interactions_de) || null,
+      tipp: asText(raw.tip_de) || null,
+      detail: asText(raw.detail_de) || null,
+      quelle: asText(raw.source) || null,
+    })
+  }
+  return aus
+}

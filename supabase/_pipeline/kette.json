@@ -1240,6 +1240,25 @@
         "149",
         "032"
       ]
+    },
+    {
+      "id": "327",
+      "path": "supabase/_pipeline/13_supplements/327_substance_group_membership.sql",
+      "kind": "sql",
+      "creates": "C-327: Substanzgruppen-Mitgliedschaften mit RLS sowie gruppenbasierte Regelauswertung",
+      "depends_on": [
+        "328"
+      ]
+    },
+    {
+      "id": "327a",
+      "path": "supabase/_pipeline/13_supplements/327a_chelation_mineral_membership.sql",
+      "kind": "sql",
+      "creates": "C-327: acht belegte Zuordnungen der chelatierenden Mineralstoffe aus wr_chelation_timing",
+      "depends_on": [
+        "327",
+        "145"
+      ]
     }
   ]
 }
