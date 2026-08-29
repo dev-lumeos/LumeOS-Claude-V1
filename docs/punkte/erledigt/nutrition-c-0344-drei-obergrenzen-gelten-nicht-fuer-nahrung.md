@@ -17,7 +17,7 @@ zahlen:
 agent: codex
 beauftragt: 2026-08-29
 erledigt: 2026-08-29
-commit: OFFEN
+commit: 101053b9
 ---
 
 # C-344 — drei Obergrenzen gelten nicht fuer Nahrung

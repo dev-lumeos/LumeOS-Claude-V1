@@ -8,7 +8,7 @@ braucht: []
 kind_von: C-324
 entscheidung: null
 erledigt: 2026-08-29
-commit: OFFEN
+commit: 101053b9
 beruehrt:
   tabellen: [nutrition.nutrient_defs, nutrition.food_nutrients]
 zahlen:

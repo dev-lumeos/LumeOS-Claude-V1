@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-29
 erledigt: 2026-08-29
-commit: OFFEN
+commit: 101053b9
 beruehrt:
   dateien: [apps/web/src/app/v2/supplements/tabs.tsx]
 zahlen: null
