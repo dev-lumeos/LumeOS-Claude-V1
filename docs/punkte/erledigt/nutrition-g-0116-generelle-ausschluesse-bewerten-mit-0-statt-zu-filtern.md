@@ -11,7 +11,7 @@ entscheidung: E-16
 agent: claudecode
 beauftragt: 2026-08-29
 erledigt: 2026-08-29
-commit: OFFEN
+commit: 7017e5e3
 beruehrt:
   dateien:
     - supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql

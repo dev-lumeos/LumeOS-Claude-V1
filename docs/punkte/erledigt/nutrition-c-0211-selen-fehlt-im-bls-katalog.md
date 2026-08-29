@@ -11,7 +11,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-08-29
 erledigt: 2026-08-29
-commit: 7c268da4
+commit: 7017e5e3
 beruehrt:
   tabellen: [nutrition.nutrient_defs]
 zahlen: null

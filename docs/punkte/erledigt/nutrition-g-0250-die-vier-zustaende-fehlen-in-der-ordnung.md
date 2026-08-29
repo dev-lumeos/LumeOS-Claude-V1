@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-29
 erledigt: 2026-08-29
-commit: OFFEN
+commit: 7017e5e3
 beruehrt:
   tabellen: [goals.nutrition_targets]
 zahlen: null
