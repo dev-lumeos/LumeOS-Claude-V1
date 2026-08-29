@@ -6,7 +6,7 @@ schwere: mittel
 angelegt: 2026-08-29
 braucht: []
 kind_von: G-11
-entscheidung: E-29
+entscheidung: null
 beruehrt:
   tabellen: [coach.pending_actions]
   dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
@@ -26,7 +26,22 @@ Kachel dieselbe Frage: woraus soll die Zahl entstehen?**
 keine Bauentscheidung ist:** *,,was ist ein Vorschlag, was misst ein
 Score, was ist ein *ghost entry*."*
 
-## Der naheliegendste Fall zuerst
+## Berichtigung, 2026-08-29
+
+`[read]` **Ich hatte Tom diesen Punkt vorgelegt, aber nur den einen
+Fall beschrieben, der darin steht.** Seine Antwort *,,funktion die
+liefert"* **galt Pending actions, nicht den sechs Kacheln.**
+
+`[cmd]` **Pending actions ist als G-258 herausgeloest und mit E-29
+entschieden.** **Dieser Punkt bleibt offen fuer die fuenf
+uebrigen** — vier im Diary, eine in Plans, **und keine davon hat Tom
+je gesehen.**
+
+`[read]` **Vor der naechsten Vorlage: je Kachel benennen, welche es
+ist und woraus die Zahl entstehen soll.** **Eine Sammelfrage ist
+keine Frage.**
+
+## Der Fall, der herausgeloest wurde
 
 `[cmd]` ***,,Pending actions"* — `coach.pending_actions` existiert
 und traegt Zeilen.**
@@ -45,7 +60,3 @@ gilt die Frage in beide Richtungen.**
 nicht offen** — der Nutrients-Reiter zeigt dasselbe je Naehrstoff,
 und eine zweite Fassung waere die Doppelung, die aus G-249 und G-11
 gerade zweimal entfernt wurde.
-
-## Entschieden
-
-**E-29, 2026-08-29.** Die Begruendung steht dort.

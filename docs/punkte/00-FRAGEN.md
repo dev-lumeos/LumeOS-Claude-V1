@@ -1,22 +1,25 @@
 # Offene Fragen an Tom
 
-**Stand 2026-08-29.** `[cmd]` **30 Punkte tragen `typ: entscheidung`
+**Stand 2026-08-29.** `[cmd]` **31 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
-`[read]` **Der Text je Frage kommt aus der Punktdatei selbst** —
-nicht vom Orchestrator neu formuliert.
+`[read]` **Der Text je Frage kommt aus der Punktdatei selbst.**
 
 **Wenn eine Frage entschieden ist:** ein ADR in
 `docs/entscheidungen/`, und der Punkt bekommt `entscheidung: E-xx`.
-**Dann faellt er aus dieser Liste.**
 
-## Am 2026-08-29 entschieden und ausgeschieden
+## Am 2026-08-29 entschieden
 
     G-241   E-26   Documents und Appointments bleiben
     C-324   E-25   Nutrition-Score nach NRF9.3
     G-213   E-27   in vitro kennzeichnen, nicht abschwaechen
     C-206   E-28   die Community wird nicht eingeschraenkt
-    G-254   E-29   Modulzugriffe auf coach ueber eine Funktion
+    G-258   E-29   Pending actions ueber eine Funktion
+
+`[read]` **G-254 wurde faelschlich als entschieden gefuehrt.** Ich
+hatte Tom nur eine der sechs Kacheln vorgelegt und seine Antwort auf
+den ganzen Punkt geschrieben. **Der eine Fall ist als G-258
+herausgeloest; G-254 steht wieder in dieser Liste.**
 
 ---
 
@@ -375,6 +378,21 @@ sie meint.**
 `[cmd]` **Und die Datenlage traegt es:** 60 Naehrstoffe haben ein
 persoenliches Ziel, die uebrigen 78 nur die Referenz. **Bei diesen 78
 gibt es gar keinen Widerspruch.**
+
+## G-254 — sechs Kacheln brauchen eine Entscheidung
+
+**Modul:** nutrition · **angelegt:** 2026-08-29 · **Datei:** `todos/nutrition-g-0254-sechs-kacheln-brauchen-eine-entscheidung.md`
+
+## Befund
+
+Aus G-11, Claude Code, 2026-08-29. **Bewusst nicht gebaut.**
+
+`[read]` **Vier Kacheln im Diary, zwei in Plans.** `[read]` **Je
+Kachel dieselbe Frage: woraus soll die Zahl entstehen?**
+
+`[read]` **Der Bericht nennt drei Beispiele, und sie zeigen, dass es
+keine Bauentscheidung ist:** *,,was ist ein Vorschlag, was misst ein
+Score, was ist ein *ghost entry*."*
 
 ## G-72 — Acht Spalten ohne Wirkung und ohne Kachel
 

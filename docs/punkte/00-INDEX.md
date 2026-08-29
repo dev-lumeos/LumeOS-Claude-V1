@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 267 |
+| `todos` | 268 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 55 |
-| **gesamt** | **324** |
+| **gesamt** | **325** |
 
 ## medical — 41
 
@@ -57,7 +57,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 92
+## nutrition — 93
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -151,7 +151,8 @@
 | `G-250` | entscheidung | mittel | [die vier Zustaende fehlen in der Ordnung](todos/nutrition-g-0250-die-vier-zustaende-fehlen-in-der-ordnung.md) | offen | — | — |
 | `G-251` | feature | niedrig | [die Herkunfts-Filter im Food-DB-Reiter](todos/nutrition-g-0251-herkunfts-filter-im-food-db-tab.md) | offen | — | — |
 | `G-252` | messung | mittel | [die Ladezeit hat eine andere Ursache](todos/nutrition-g-0252-die-ladezeit-hat-eine-andere-ursache.md) | offen | — | — |
-| `G-254` | entscheidung | mittel | [sechs Kacheln brauchen eine Entscheidung](todos/nutrition-g-0254-sechs-kacheln-brauchen-eine-entscheidung.md) | offen | — | — |
+| `G-254` | entscheidung | mittel | [sechs Kacheln brauchen eine Entscheidung](todos/nutrition-g-0254-sechs-kacheln-brauchen-eine-entscheidung.md) | offen | — | G-258 |
+| `G-258` | feature | mittel | [Pending actions im Tagebuch](todos/nutrition-g-0258-pending-actions-im-tagebuch.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 53

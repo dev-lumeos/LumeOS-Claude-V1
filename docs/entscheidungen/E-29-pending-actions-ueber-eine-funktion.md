@@ -5,11 +5,25 @@ von: Tom
 status: gueltig
 loest_ab: null
 abgeloest_durch: null
-betrifft: [G-254]
+betrifft: [G-258]
 modul: quer
 ---
 
 # E-29 — Modulzugriffe auf `coach` gehen ueber eine Funktion
+
+## Geltungsbereich — berichtigt 2026-08-29
+
+`[read]` **Diese Entscheidung gilt fuer einen einzelnen Fall:
+*Pending actions* im Tagebuch.**
+
+`[read]` **Ich hatte sie Tom als *,,G-254"* vorgelegt** — aber G-254
+fuehrt **sechs** Kacheln, und *Pending actions* ist nur eine davon.
+**Die anderen fuenf waeren damit stillschweigend miterledigt worden,
+ohne dass Tom sie gesehen hat.**
+
+`[cmd]` **Berichtigt:** dieser ADR gilt fuer **G-258**, den
+herausgeloesten Punkt. **G-254 bleibt offen fuer die fuenf
+uebrigen.**
 
 ## Frage
 
