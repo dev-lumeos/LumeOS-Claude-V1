@@ -5,7 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 274 |
+| `todos` | 272 |
+| `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 34 |
 | **gesamt** | **308** |
 
@@ -43,7 +45,7 @@
 | `C-312` | befund | mittel | [Barcode einlesen — was jetzt schon ins Schema gehoert](todos/medical-c-0312-barcode-einlesen-was-jetzt-schon-ins-schema-gehoert.md) | offen | — | — |
 | `C-313` | entscheidung | mittel | [25 Regeln koennen nicht feuern](erledigt/medical-c-0313-25-regeln-koennen-nicht-feuern.md) | erledigt | — | C-332 |
 | `C-314` | entscheidung | mittel | [die drei Wirkstoff-Dubletten zusammenfuehren](todos/medical-c-0314-die-drei-wirkstoff-dubletten-zusammenfuehren.md) | offen | — | — |
-| `C-327` | blocker | hoch | [Die Chelationsregel kennt keine Gruppenmitgliedschaft](todos/medical-c-0327-chelation-rule-fehlt-gruppenmitgliedschaft.md) | offen | — | — |
+| `C-327` | blocker | hoch | [Die Chelationsregel kennt keine Gruppenmitgliedschaft](laufend_codex/medical-c-0327-chelation-rule-fehlt-gruppenmitgliedschaft.md) | laeuft (codex) | — | — |
 | `C-328` | blocker | hoch | [`count_risk_flag_gte` zaehlt Schluessel statt Werte](erledigt/medical-c-0328-count-risk-flag-zaehlt-schluessel-statt-werte.md) | erledigt | — | C-331 |
 | `C-331` | messung | hoch | [C-328 live einspielen und den Durchstich wiederholen](erledigt/medical-c-0331-c-328-live-und-durchstich.md) | erledigt | — | G-218 |
 | `C-332` | befund | mittel | [23 Regeln koennen weiterhin nicht feuern](todos/medical-c-0332-23-regeln-koennen-weiterhin-nicht-feuern.md) | offen | — | — |
@@ -137,7 +139,7 @@
 | `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | — | — |
 | `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](erledigt/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | erledigt | — | C-333, C-334, G-246, G-247 |
 | `G-245` | feature | mittel | [die Sortier-Tags bauen](erledigt/nutrition-g-0245-die-sortier-tags-bauen.md) | erledigt | — | — |
-| `G-246` | feature | hoch | [die Detailtexte liegen in der Datenbank und werden nicht gelesen](todos/nutrition-g-0246-die-detailtexte-werden-nicht-gelesen.md) | offen | — | — |
+| `G-246` | feature | hoch | [die Detailtexte liegen in der Datenbank und werden nicht gelesen](laufend_claudecode/nutrition-g-0246-die-detailtexte-werden-nicht-gelesen.md) | laeuft (claudecode) | — | — |
 | `G-247` | feature | mittel | [der Zeitraumwechsel braucht eine eigene Funktion](erledigt/nutrition-g-0247-zeitraumwechsel-braucht-eine-eigene-funktion.md) | erledigt | — | — |
 | `G-248` | befund | mittel | [der Leseweg laedt neun von 35 Fehlzaehlern](todos/nutrition-g-0248-der-leseweg-laedt-neun-von-35-fehlzaehlern.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
