@@ -11,7 +11,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-08-28
 erledigt: 2026-08-29
-commit: OFFEN
+commit: 5f8414b0
 beruehrt:
   dateien: [supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql]
 zahlen: null
