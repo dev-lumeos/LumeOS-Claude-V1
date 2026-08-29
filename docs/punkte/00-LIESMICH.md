@@ -304,3 +304,20 @@ mit Nummer, Modul, Typ, Schwere, Titel, Zustand und Blockern.
 
 `[read]` **Nie von Hand pflegen.** Ein handgefuehrter Index driftet —
 so wie meine Zahlen gedriftet sind.
+
+## Ein Punkt traegt eine Frage
+
+**Ergaenzt 2026-08-29.**
+
+`[read]` **Ein `typ: entscheidung` mit mehreren Fragen im Text ist
+kein Punkt, sondern mehrere.** `[read]` **Das Aufteilen gehoert vor
+die Vorlage.**
+
+`[cmd]` **Warum:** G-254 fuehrte sechs Kacheln. Der Orchestrator legte
+Tom eine davon vor und schrieb dessen Antwort auf den ganzen Punkt.
+**Fuenf Entscheidungen waeren getroffen worden, ohne dass Tom sie
+gesehen hat.**
+
+`[read]` **Und beim Vorlegen wird zitiert, nicht referiert.** Die
+Datei ist die Wahrheit — **nicht die Zusammenfassung im Kontext des
+Orchestrators.**

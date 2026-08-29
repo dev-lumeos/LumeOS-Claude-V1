@@ -223,6 +223,46 @@ Seed-Konten mit je 180 Tagen, und `test-user@lumeos.local` mit einem.
 **Sonst ist sie nicht nachpruefbar — und eine Abweichung sieht aus
 wie ein Defekt.**
 
+## Die Datei ist die Wahrheit, nicht ihre Zusammenfassung
+
+**Tom, 2026-08-29:** *,,wir arbeiten mit lokalen md dateien und nicht
+mit deinen erinnerungen, deswegen bauen wir diese strukturen und
+ssot"*.
+
+`[read]` **Wer eine Frage vorlegt, einen Auftrag schreibt oder einen
+Stand meldet, liest die Datei zuerst.** **Nicht: aus dem Kontext
+rekonstruieren, was darin stand.**
+
+### Was am 2026-08-29 daran haengengeblieben ist
+
+`[cmd]` **G-254 heisst *,,sechs Kacheln brauchen eine
+Entscheidung"*.** Ich habe Tom **eine** davon vorgelegt und seine
+Antwort auf den ganzen Punkt geschrieben. **Fuenf Kacheln waeren
+stillschweigend entschieden gewesen** — als seine Entscheidung, im
+ADR. **Berichtigt: der eine Fall ist G-258, G-254 blieb offen.**
+
+`[cmd]` **G-245/G-70:** beide Zahlen gemessen — live vier
+Sortierwerte, im Kettenschritt zehn — **und die falsche in den
+Auftrag geschrieben.**
+
+`[cmd]` **Der Mockup-Massstab:** drei Stunden im falschen Ordner
+gesucht. **`00-QUELLEN.md` nannte den richtigen seit dem 20.08.**
+
+`[read]` **Alle drei entstanden beim Umformulieren, nicht beim
+Messen.** **Die Datei lag jedes Mal daneben.**
+
+### Was daraus folgt
+
+**Eine Frage wird aus der Datei zitiert, nicht referiert.**
+**Ein Punkt mit mehreren Fragen wird aufgeteilt, bevor er vorgelegt
+wird** — eine Sammelfrage ist keine Frage.
+**Ein Auftrag nennt die Punktdatei, und der Agent liest sie** — die
+Chatnachricht ist der Anstoss, nicht die Vorgabe.
+
+`[read]` **Und wenn Datei und Gedaechtnis auseinandergehen, gilt die
+Datei** — ohne Nachdenken darueber, welche Fassung plausibler
+klingt.
+
 ## Der gebaute /v2/-Stand ist der Massstab
 
 **Tom, 2026-08-28:** *,,theme-v1 ist das claude design von welchem wir
