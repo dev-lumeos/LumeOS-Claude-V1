@@ -145,6 +145,52 @@ export function lueckenSatz(luecken: readonly Luecke[]): string {
     + 'Die Summe ist damit unvollständig und eher zu niedrig als zu hoch.'
 }
 
+// ══ G-248: der Sammelhinweis ═══════════════════════════════════════
+//
+// **Die Frage des Auftrags: reicht ein Sammelhinweis statt neun
+// einzelner?**
+//
+// `[cmd]` **Gemessen am 2026-08-29, `dev@lumeos.app`, 14 Tage bis
+// heute: von 35 Fehlzaehlern feuern NEUN** — `vitc` an 14 von 14
+// Tagen, `iodid` an 12, `vitk` an 6, dann `nia`, `vitb12`, `fibt`,
+// `na`, `ribf`, `vite` an je 2 bis 3.
+//
+// `[cmd]` **Der Diary-Leseweg laedt neun andere.** Die Schnittmenge
+// ist **eine einzige**: `fibt`. `[read]` **Der Hinweis aus C-48 nennt
+// also heute einen Naehrstoff und schweigt ueber acht.**
+//
+// `[read]` **Ja, ein Sammelhinweis reicht — und er ist ehrlicher.**
+// `[cmd]` `daily_nutrient_summary_long` zaehlt es in EINER Abfrage:
+// am 2026-08-29 sind **76 von 138 Naehrstoffen** unvollstaendig.
+// **35 Spalten in das Tagebuch zu laden, um dieselbe Zahl zu bilden,
+// waere teurer und nicht genauer.**
+//
+// `[read]` **Die Einzelnennung bleibt daneben stehen**, wo sie
+// zutrifft: „welcher" ist konkreter als „wie viele", und der
+// Nutrients-Reiter zeigt es je Naehrstoff.
+
+export type Gesamtluecke = {
+  /** Naehrstoffe mit mindestens einer Position ohne Wert. */
+  unvollstaendig: number
+  /** Naehrstoffe insgesamt an diesem Tag. */
+  gesamt: number
+}
+
+/**
+ * Der Sammelsatz.
+ *
+ * `[read]` **Er verweist auf den Nutrients-Reiter**, statt die Namen
+ * aufzuzaehlen — bei 76 von 138 waere eine Liste unlesbar, und die
+ * Frage „welcher" beantwortet der andere Reiter besser.
+ */
+export function gesamtLueckenSatz(g: Gesamtluecke | null): string {
+  if (!g || g.unvollstaendig === 0) return ''
+  const n = g.unvollstaendig
+  return `Bei ${n} von ${g.gesamt} Nährstoffen fehlen einzelne Positionen. `
+    + 'Diese Summen sind eher zu niedrig als zu hoch — welche es betrifft, '
+    + 'steht im Reiter Nährstoffe.'
+}
+
 /** Ob eine Zahl als vollstaendig gelten darf. */
 export function istVollstaendig(
   summe: DailySummaryRow | null, code: SummaryMacro,

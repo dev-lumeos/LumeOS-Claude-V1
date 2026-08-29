@@ -110,9 +110,26 @@ function NutrientHeatmap() {
   )
 }
 
-export function NutritionInsightsTab() {
+export function NutritionInsightsTab({ ohneEchte = false }: {
+  /**
+   * G-11: die zwei Kacheln weglassen, die daneben schon echt stehen.
+   *
+   * `[cmd]` **Gemessen am 2026-08-29:** der Reiter zeigte „Calorie
+   * balance" und „Macro split · 14d avg" **je zweimal** — einmal aus
+   * `insights-echt.tsx` mit Werten aus `daily_summary`, einmal hier
+   * mit denen der Vorlage. **Dieselbe Doppelung, die G-249 im
+   * Nutrients-Reiter entfernt hat.**
+   *
+   * `[read]` **Der Entwurf bleibt vollstaendig aufrufbar** — ohne
+   * dieses Flag zeigt er alle drei Kacheln, wie bisher. Er ist die
+   * Vorlage, und eine Vorlage mit Luecken ist keine mehr.
+   */
+  ohneEchte?: boolean
+} = {}) {
   return (
     <div className="v2-grid v2-g-cols-2" style={{ gap: 16 }}>
+      {!ohneEchte && (
+        <>
       <Card
         title="Calorie balance"
         sub="14 days"
@@ -153,6 +170,9 @@ export function NutritionInsightsTab() {
         <Row label="Lowest day" value="Wed · 2,410" />
         <Row label="Days at target ±100" value="9 of 14" />
       </Card>
+
+        </>
+      )}
 
       <Card
         title="Micronutrient trend"

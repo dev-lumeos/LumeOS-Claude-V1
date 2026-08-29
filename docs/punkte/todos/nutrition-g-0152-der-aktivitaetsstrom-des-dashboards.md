@@ -8,8 +8,6 @@ braucht: []
 kind_von: G-100
 kinder: []
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-08-28
 beruehrt:
   tabellen: []
   dateien: []
@@ -45,3 +43,11 @@ Die Zeitpunkte liegen unveraendert vollstaendig vor (725/725,
 Ereignissicht. `[read]` **Es fehlt eine Entscheidung, keine
 Spalte** — unveraendert offen.
 
+## Zwischenstand, 2026-08-29
+
+`[cmd]` **In G-11 geprueft und unveraendert offen.** Die Zeitpunkte
+sind vollstaendig (725/725, 360/360, 30), **aber es gibt weiterhin
+keine gemeinsame Ereignissicht.**
+
+`[read]` **Das ist Codex' Bereich** — eine Sicht ueber mehrere
+Module braucht eine Funktion, keine Oberflaeche.

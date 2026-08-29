@@ -10,9 +10,10 @@ kinder: []
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-28
+erledigt: 2026-08-29
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
 zahlen: null
 ---
 
@@ -436,4 +437,59 @@ angefasst, nicht committet.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-29, Orchestrator. Nachgemessen, was der Bericht behauptet.**
+
+`[cmd]` **`nutrition.meal_plans` traegt Zeilen** — der Punkt
+behauptete, die Tabelle existiere nicht. `[cmd]`
+**`daily_nutrient_summary_long` existiert** und traegt den
+Sammelhinweis.
+
+`[read]` **Der Punkt war zu zwei Dritteln ueberholt:** Preferences und
+Planner sind gebaut, null Attrappen am Schirm.
+
+### Der Fund ist mein Fehlermuster, zum dritten Mal
+
+`[cmd]` **Der Insights-Reiter zeigte *,,Calorie balance"* und
+*,,Macro split"* je zweimal** — oben echt aus `daily_summary`,
+darunter als Attrappe mit den Zahlen der Vorlage.
+
+`[read]` **Dieselbe Doppelung, die G-249 im Nutrients-Reiter entfernt
+hat, eine Ebene weiter.** `[read]` **Beide Male entstanden, weil ich
+den Entwurf fuer den Massstab hielt.** **Jetzt weg: 5 Karten auf 3,
+Attrappen 3 auf 1** — und der Entwurf bleibt der Rueckfall, wenn Daten
+fehlen.
+
+### G-248 ist besser beantwortet als gefragt
+
+`[cmd]` **Von 35 Zaehlern feuern neun, der Diary-Leseweg laedt neun
+andere — Schnittmenge ist `fibt` allein.**
+
+`[read]` **Der bestehende Hinweis nannte einen Naehrstoff und schwieg
+ueber acht.** `[read]` **Der Sammelhinweis ist nicht kuerzer, sondern
+ehrlicher:** *,,Bei 76 von 138 Naehrstoffen fehlen einzelne
+Positionen… welche es betrifft, steht im Reiter Naehrstoffe."*
+
+### Was nicht gebaut wurde, und warum es richtig ist
+
+`[read]` ***,,Micronutrient trend"* haette angebunden werden koennen**
+— **aber der Nutrients-Reiter zeigt genau das schon je Naehrstoff,
+und eine zweite Fassung daneben waere die Doppelung, die gerade
+entfernt wurde.**
+
+`[read]` **Das ist die Nachweiszeile, die ich dreimal uebersehen
+habe, angewandt bevor der Fehler entsteht.**
+
+`[cmd]` **Sechs Kacheln brauchen Entscheidungen** — als **G-254**
+angelegt. `[cmd]` **G-137 gilt teilweise und heilt beim naechsten
+Speichern** — geschlossen. `[cmd]` **G-152 unveraendert offen**,
+Codex' Bereich.
+
+### Eine Fehlmessung, vor dem Bericht korrigiert
+
+`[cmd]` **`> current_date - 14` ergab 93 Tage statt 14** — die
+Seed-Daten reichen bis November 2026. `[read]` **Eine offene
+Datumsgrenze faengt alles Zukuenftige mit.** **Selbst gefunden,
+bevor es ein Befund wurde.**
+
+**Abgenommen.**
+

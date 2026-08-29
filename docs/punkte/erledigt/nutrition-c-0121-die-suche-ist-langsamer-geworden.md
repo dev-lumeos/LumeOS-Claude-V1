@@ -10,9 +10,10 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-28
+erledigt: 2026-08-29
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien: [supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql]
 zahlen: null
 ---
 
@@ -44,3 +45,8 @@ und der Bericht stehen dort.
 ## Bericht
 
 Ueberholt gemessen am 2026-08-29. Die historische Laufzeitspanne ist im Live-Snapshot nicht reproduzierbar; die Messreihe vor und nach C-338 steht in C-20, `docs/punkte/laufend_codex/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md`.
+
+## Abnahme
+
+**2026-08-29, mit C-20 abgenommen.** Messung und Begruendung
+stehen dort.

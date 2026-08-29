@@ -13,7 +13,7 @@ import type { Metadata } from 'next'
 
 import { getDailySummary } from '../../../lib/nutrition/diary-summary-read'
 import {
-  getReferenceAssessment,
+  getReferenceAssessment, getLueckenZahl,
 } from '../../../lib/nutrition/reference-assessment-read'
 import type { DailySummaryRow } from '../../../lib/nutrition/diary-summary'
 import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-assessment-read'
@@ -100,6 +100,18 @@ export default async function V2NutritionPage({
     bewertung = await getReferenceAssessment(datum)
   } catch (e) {
     bewertungFehler = e instanceof Error ? e.message : String(e)
+  }
+
+  // G-248: die Gesamtzahl der Naehrstoffe mit Luecken. `[read]`
+  // Getrennt abgefangen — ohne sie bleibt das Tagebuch nutzbar,
+  // nur der Sammelhinweis fehlt.
+  let luecken: { unvollstaendig: number; gesamt: number } | null = null
+  if (tab === 'diary') {
+    try {
+      luecken = await getLueckenZahl(datum)
+    } catch {
+      luecken = null
+    }
   }
 
   // G-247/E-24: die Tageswerte fuer Zeitraum und Verlauf. `[read]`
@@ -255,6 +267,7 @@ export default async function V2NutritionPage({
       wasser={wasser}
       summe={summe}
       bewertung={bewertung}
+      lueckenGesamt={luecken}
       fehler={fehler}
       bewertungFehler={bewertungFehler}
       ziele={ziele}

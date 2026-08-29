@@ -10,9 +10,10 @@ kinder: []
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-28
+erledigt: 2026-08-29
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
 zahlen: null
 ---
 
@@ -42,3 +43,7 @@ gespeicherten Gruppenschluesseln greifen heute drei; `g:Fette` und
 `g:Protein` treffen nichts. `[read]` **Kein Fehler, einmalig,
 heilt beim naechsten Speichern** — schliessbar.
 
+## Abnahme
+
+**2026-08-29, mit G-11 abgenommen.** Messung und Begruendung
+stehen dort.

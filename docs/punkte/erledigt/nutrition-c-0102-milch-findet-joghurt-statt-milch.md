@@ -10,6 +10,8 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-28
+erledigt: 2026-08-29
+commit: OFFEN
 beruehrt:
   tabellen: []
   dateien: ["docs/ssot/51-sortweight-formel.md"]
@@ -56,3 +58,8 @@ und der Bericht stehen dort.
 ## Bericht
 
 Ueberholt gemessen am 2026-08-29. Die aktuelle `milch`-Anfrage liefert Trinkmilch auf Rang 1 und Joghurt auf Rang 66; die Messung und die beiden nicht entschiedenen Rangwege stehen in C-20, `docs/punkte/laufend_codex/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md`.
+
+## Abnahme
+
+**2026-08-29, mit C-20 abgenommen.** Messung und Begruendung
+stehen dort.

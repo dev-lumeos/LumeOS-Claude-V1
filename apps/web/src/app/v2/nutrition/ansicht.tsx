@@ -32,7 +32,8 @@ import type { MikroStand } from '../../../lib/nutrition/mikro-read'
 // die Einrueckung falsch bauen lassen.
 // C-48: die Lage des Tages und die Fehlzaehler (Regel 1).
 import {
-  tageslageVon, lageSatz, lueckenVon, lueckenSatz, LAGE_TITEL,
+  tageslageVon, lageSatz, lueckenVon, lueckenSatz, gesamtLueckenSatz,
+  LAGE_TITEL,
 } from '../../../lib/nutrition/tageslage'
 import { NaehrstoffOrdnungTab } from './naehrstoff-ordnung-tab'
 import type { NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnung'
@@ -115,7 +116,7 @@ function tabs(mahlzeiten: number | null): TabItem[] {
 }
 
 export async function TagebuchAnsicht({
-  datum, tab, summe, bewertung, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
+  datum, tab, summe, bewertung, lueckenGesamt = null, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
   istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null,
   unvertraeglichkeiten = [],
 }: {
@@ -127,6 +128,8 @@ export async function TagebuchAnsicht({
   istAdmin?: boolean
   summe: DailySummaryRow | null
   bewertung: ReferenceAssessmentRow[]
+  /** G-248: Naehrstoffe mit Luecken, gesamt. */
+  lueckenGesamt?: { unvollstaendig: number; gesamt: number } | null
   fehler: string | null
   bewertungFehler?: string | null
   ziele?: Zielwerte | null
@@ -369,6 +372,23 @@ export async function TagebuchAnsicht({
               <Icon name="alert" className="v2-ic v2-ic-sm"
                     style={{ display: 'inline', verticalAlign: 'middle', marginRight: 5 }} />
               {lueckenSatz(luecken)}
+            </div>
+          )}
+
+          {/* ══ G-248: der Sammelhinweis ═══════════════════════════
+              `[cmd]` **Gemessen 2026-08-29, dev, 14 Tage:** von 35
+              Fehlzaehlern feuern NEUN — der Diary-Leseweg laedt neun
+              ANDERE, Schnittmenge `fibt`. **Der Hinweis darueber
+              nennt heute einen Naehrstoff und schweigt ueber acht.**
+              `[read]` **Die Gesamtzahl kommt aus
+              `daily_nutrient_summary_long`, in einer Abfrage** — 35
+              Spalten zu laden waere teurer und nicht genauer. Welche
+              es betrifft, zeigt der Nutrients-Reiter. */}
+          {gesamtLueckenSatz(lueckenGesamt) && (
+            <div className="v2-dim" style={{
+              marginTop: 8, fontSize: 11, lineHeight: 1.5,
+            }}>
+              {gesamtLueckenSatz(lueckenGesamt)}
             </div>
           )}
 
@@ -616,7 +636,17 @@ function AndererTab({
             <MakroschnittKachel d={einsichten} />
           </div>
         )}
-        <NutritionInsightsTab />
+        {/* ══ G-11: nicht zweimal dieselbe Kachel ═══════════════════
+            `[cmd]` Gemessen 2026-08-29: „Calorie balance" und „Macro
+            split · 14d avg" standen **je zweimal** auf dem Schirm —
+            oben echt, darunter als Attrappe mit den Zahlen der
+            Vorlage. **Dieselbe Doppelung, die G-249 im
+            Nutrients-Reiter entfernt hat.**
+            `[read]` Der Entwurf zeigt sie nur noch, wenn die echten
+            NICHT stehen — dann ist er der Rueckfall und kein
+            Duplikat. */}
+        <NutritionInsightsTab
+          ohneEchte={Boolean(einsichten && (einsichten.bilanz || einsichten.makros))} />
       </div>
     )
   }

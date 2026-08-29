@@ -291,3 +291,37 @@ export async function getErklaertexte(): Promise<Erklaertext[]> {
   }
   return aus
 }
+
+/**
+ * Wie viele Naehrstoffe an einem Tag Luecken tragen — G-248.
+ *
+ * `[cmd]` **Eine Abfrage statt 35 Spalten.** `daily_summary` fuehrt
+ * 35 `_missing`-Zaehler; der Diary-Leseweg laedt neun, und davon
+ * feuert genau einer (`fibt`, gemessen 2026-08-29). **Die
+ * Gesamtzahl steht in `daily_nutrient_summary_long`:** am selben Tag
+ * 76 von 138 Naehrstoffen unvollstaendig.
+ *
+ * `[read]` **`head: true` mit `count: 'exact'`** — es kommen keine
+ * Zeilen zurueck, nur die Zahl. Bei 138 Zeilen je Tag waere alles
+ * andere Verschwendung.
+ */
+export async function getLueckenZahl(
+  entryDate: string,
+): Promise<{ unvollstaendig: number; gesamt: number } | null> {
+  const supabase = createSessionClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return null
+
+  const db = supabase.schema('nutrition')
+  const [alle, offen] = await Promise.all([
+    db.from('daily_nutrient_summary_long')
+      .select('nutrient_code', { count: 'exact', head: true })
+      .eq('user_id', user.id).eq('entry_date', entryDate),
+    db.from('daily_nutrient_summary_long')
+      .select('nutrient_code', { count: 'exact', head: true })
+      .eq('user_id', user.id).eq('entry_date', entryDate)
+      .eq('value_complete', false),
+  ])
+  if (alle.error || offen.error) return null
+  return { unvollstaendig: offen.count ?? 0, gesamt: alle.count ?? 0 }
+}

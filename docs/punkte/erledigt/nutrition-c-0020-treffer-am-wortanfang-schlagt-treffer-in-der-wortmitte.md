@@ -10,9 +10,10 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-28
+erledigt: 2026-08-29
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien: [supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql]
 zahlen: null
 ---
 
@@ -206,4 +207,41 @@ Als dritter, sichtbarer Weg bleibt eine fachlich gepflegte Zuordnung zur Produkt
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-29, Orchestrator. Nachgemessen, was der Bericht behauptet.**
+
+`[cmd]` **`food_search` live: zehn Sortierwerte, `unsupported_sort`
+wirkt.**
+
+    'relevance' · 'protein_desc' · 'protein_asc'
+    'kcal_desc' · 'kcal_asc' · 'carbs_desc' · 'carbs_asc'
+    'fat_desc' · 'fat_asc' · 'name_asc'
+
+`[cmd]` **Vollsicherung unter `backup/c20/20260829_c338_vor_live.dump`.**
+`[cmd]` **115,4 bis 116,9 ms Median im Klon, kein Laufzeitaufschlag.**
+
+### Vier von sechs Punkten waren ueberholt
+
+    C-20    gebaut
+    C-338   erledigt
+    C-102 · C-117 · C-121 · C-192   ueberholt
+
+`[cmd]` **`milch` liefert heute Trinkmilch auf Rang 1, Joghurt auf
+66.** `[read]` **Der Befund, der C-102 und C-117 traegt, gilt nicht
+mehr.**
+
+### Die Rangfrage wurde gemessen und nicht entschieden
+
+`[cmd]` **Eine Haeufigkeitssortierung existiert nicht** — und sie
+wuerde bei den alten Vergleichskandidaten **Joghurt (36) vor Vollmilch
+(35)** legen.
+
+`[read]` **Also genau das Gegenteil dessen, was der Punkt erreichen
+wollte.** `[read]` **Gemessen, vorgelegt, nicht gebaut** — das war
+die Vorgabe, und sie wurde eingehalten.
+
+`[read]` **Damit ist die Entscheidung, die C-102 seit dem 18.08.
+offenhielt, gegenstandslos:** der Weg, der als Alternative
+vorgeschlagen war, macht es schlechter.
+
+**Abgenommen.**
+

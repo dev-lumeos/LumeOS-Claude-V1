@@ -9,6 +9,8 @@ kind_von: C-48
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-28
+erledigt: 2026-08-29
+commit: OFFEN
 beruehrt:
   dateien: [apps/web/src/lib/nutrition]
 zahlen:
@@ -64,3 +66,7 @@ laedt neun andere, Schnittmenge `fibt`. **Gebaut ist der
 Sammelhinweis** aus `daily_nutrient_summary_long` — 76 von 138
 Naehrstoffen unvollstaendig, in einer Abfrage.
 
+## Abnahme
+
+**2026-08-29, mit G-11 abgenommen.** Messung und Begruendung
+stehen dort.
