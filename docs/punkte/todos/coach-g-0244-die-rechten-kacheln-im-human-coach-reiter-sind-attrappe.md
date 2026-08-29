@@ -36,3 +36,23 @@ gibt es im Schema nicht.**
 `[cmd]` **Mockup dazu:** `module-coach-athlete.jsx` (566 Zeilen),
 `module-coach-meta.jsx` (201) — **Beziehungsdaten und Bewertung, mit
 `Ref:` auf HumanCoach SPEC_02 §1/§2 und SPEC_05 §1.**
+
+## Berichtigung, 2026-08-28
+
+**Der gebaute `/v2/`-Stand ist der Massstab, nicht der Mockup.**
+
+**Tom:** *,,theme-v1 ist das claude design von welchem wir v2
+abgeleitet haben ... also ist theme-v1 nur noch eine ideen struktur
+falls uns in v2 was fehlt."*
+
+`[read]` **Dieser Punkt entstand aus der Modulstand-Erhebung, die den
+Mockup fuer den Sollzustand hielt.** `[read]` **Ein Unterschied
+zwischen Mockup und `/v2/` ist damit kein Befund mehr** — er ist
+hoechstens eine Frage, ob in v2 etwas fehlt.
+
+`[cmd]` **In G-249 hat die falsche Richtung 1.009 Zeilen gekostet:**
+eine zweite Ansicht wurde neben eine bestehende gebaut, weil ich den
+Entwurf fuer den Massstab hielt.
+
+`[read]` **Vor einem Auftrag zu klaeren:** ist hier wirklich etwas
+offen, oder war nur die Blickrichtung falsch?
