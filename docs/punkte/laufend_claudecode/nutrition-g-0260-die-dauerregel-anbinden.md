@@ -7,6 +7,8 @@ angelegt: 2026-08-29
 braucht: [G-259]
 kind_von: G-108
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-29
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
 zahlen:
@@ -41,3 +43,8 @@ Zahlen, nicht die Auswahl** — genau das behebt die Dauerregel.
 
 **G-259** — die Fensterlaufzeit. `[read]` **Solange der Reiter
 5.906 ms braucht, ist jede Ergaenzung zu teuer.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-259 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.

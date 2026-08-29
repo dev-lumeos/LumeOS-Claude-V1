@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: G-107
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-29
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
 zahlen:
@@ -43,3 +45,8 @@ diesen Punkt erzeugt hat.
 `[cmd]` **`nutrition.reference_assessment_window()` existiert seit
 G-107** und koennte die Antwort sein, sobald der Leseweg sie nutzt.
 **Ob er es tut, ist Teil der Messung.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-259 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.

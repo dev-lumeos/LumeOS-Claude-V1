@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 265 |
+| `todos` | 262 |
 | `laufend_codex` | 1 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 68 |
 | **gesamt** | **334** |
 
@@ -157,10 +158,10 @@
 | `G-249` | feature | hoch | [zwei Ansichten zusammenfuehren und den Verlauf als Trend zeigen](erledigt/nutrition-g-0249-zwei-ansichten-zusammenfuehren-und-trend-zeigen.md) | erledigt | — | G-250 |
 | `G-250` | entscheidung | mittel | [die vier Zustaende fehlen in der Ordnung](erledigt/nutrition-g-0250-die-vier-zustaende-fehlen-in-der-ordnung.md) | erledigt | — | G-261 |
 | `G-251` | feature | niedrig | [die Herkunfts-Filter im Food-DB-Reiter](todos/nutrition-g-0251-herkunfts-filter-im-food-db-tab.md) | offen | — | — |
-| `G-252` | messung | mittel | [die Ladezeit hat eine andere Ursache](todos/nutrition-g-0252-die-ladezeit-hat-eine-andere-ursache.md) | offen | — | — |
+| `G-252` | messung | mittel | [die Ladezeit hat eine andere Ursache](laufend_claudecode/nutrition-g-0252-die-ladezeit-hat-eine-andere-ursache.md) | laeuft (claudecode) | — | — |
 | `G-254` | entscheidung | mittel | [sechs Kacheln brauchen eine Entscheidung](todos/nutrition-g-0254-sechs-kacheln-brauchen-eine-entscheidung.md) | offen | — | G-258 |
 | `G-258` | feature | mittel | [Pending actions im Tagebuch](todos/nutrition-g-0258-pending-actions-im-tagebuch.md) | offen | — | — |
-| `G-259` | befund | mittel | [toter Leseweg und die Fensterlaufzeit](todos/nutrition-g-0259-toter-leseweg-und-die-fensterlaufzeit.md) | offen | — | — |
+| `G-259` | befund | mittel | [toter Leseweg und die Fensterlaufzeit](laufend_claudecode/nutrition-g-0259-toter-leseweg-und-die-fensterlaufzeit.md) | laeuft (claudecode) | — | — |
 | `G-261` | entscheidung | niedrig | [die Vergleichsfunktionen anbinden](todos/nutrition-g-0261-die-vergleichsfunktionen-anbinden.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
@@ -168,7 +169,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-260` | feature | mittel | [die Dauerregel anbinden](todos/nutrition-g-0260-die-dauerregel-anbinden.md) | offen | G-259 | — |
+| `G-260` | feature | mittel | [die Dauerregel anbinden](laufend_claudecode/nutrition-g-0260-die-dauerregel-anbinden.md) | laeuft (claudecode) | G-259 | — |
 
 ## supplements — 53
 
