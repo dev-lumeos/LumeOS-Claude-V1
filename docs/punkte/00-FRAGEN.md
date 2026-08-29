@@ -364,20 +364,37 @@ oder erledigt sein.
 **Verwandter Punkt:** C-31 (Admin-Oberflaeche fuer die Kuration). `[read]` **Nicht zusammengelegt** — ob es
 derselbe Befund ist, gehoert geprueft, nicht angenommen.
 
-## G-254 — sechs Kacheln brauchen eine Entscheidung
+## G-266 — Detailsuche mit Naehrwerten oeffnet eine eigene Seite
 
-**Modul:** nutrition · **angelegt:** 2026-08-29 · **Datei:** `todos/nutrition-g-0254-sechs-kacheln-brauchen-eine-entscheidung.md`
+**Modul:** nutrition · **angelegt:** 2026-08-29 · **Datei:** `laufend_claudecode/nutrition-g-0266-detailsuche-mit-naehrwerten-oeffnet-eine-eigene-seite.md`
 
 ## Befund
 
-Aus G-11, Claude Code, 2026-08-29. **Bewusst nicht gebaut.**
+**Tom, 2026-08-29:** *,,Detailsuche mit naehrwerten koennen wir
+drinlassen, aber dann mit einen anstaendigen clickhandler, denn es
+oeffnet eine eigene seite -> koennte man direkt da als pulldown
+einbinden unter filters oder mach andere vorschlaege"*.
 
-`[read]` **Vier Kacheln im Diary, zwei in Plans.** `[read]` **Je
-Kachel dieselbe Frage: woraus soll die Zahl entstehen?**
+`[cmd]` **Der Verweis steht rechts ueber der Trefferliste im
+Food-DB-Reiter** und fuehrt auf `/v2/nutrition/suche`.
 
-`[read]` **Der Bericht nennt drei Beispiele, und sie zeigen, dass es
-keine Bauentscheidung ist:** *,,was ist ein Vorschlag, was misst ein
-Score, was ist ein *ghost entry*."*
+## Die Entscheidung
+
+**Bleibt es eine eigene Seite, oder wird es ein Ausklappbereich unter
+den Filtern?**
+
+`[read]` **Fuer den Ausklappbereich spricht:** der Nutzer verliert
+seine Trefferliste nicht. `[cmd]` **Die Filterzeile traegt bereits
+elf Kategorien und einen Filter-Knopf** — die Stelle ist da.
+
+`[read]` **Dagegen spricht:** eine Detailsuche ueber 138 Naehrstoffe
+ist keine Verfeinerung, sondern eine andere Suche. **Ein
+Ausklappbereich, der eine halbe Seite fuellt, ist eine Seite mit
+schlechterem Rahmen.**
+
+`[read]` **Ein dritter Weg:** die eigene Seite behalten, **aber den
+Zustand mitnehmen** — wer mit *,,reis"* im Feld hinueberwechselt,
+findet es dort wieder.
 
 ## G-72 — Acht Spalten ohne Wirkung und ohne Kachel
 

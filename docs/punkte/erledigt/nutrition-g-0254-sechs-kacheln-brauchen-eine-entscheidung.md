@@ -7,6 +7,8 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: G-11
 entscheidung: null
+erledigt: 2026-08-29
+commit: OFFEN
 beruehrt:
   tabellen: [coach.pending_actions]
   dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
@@ -60,3 +62,28 @@ gilt die Frage in beide Richtungen.**
 nicht offen** — der Nutrients-Reiter zeigt dasselbe je Naehrstoff,
 und eine zweite Fassung waere die Doppelung, die aus G-249 und G-11
 gerade zweimal entfernt wurde.
+
+## Abnahme
+
+**2026-08-29, aufgeloest.**
+
+**Tom hat die Kacheln beim Durchgehen des Moduls benannt** — und
+damit ist die Sammelfrage, die am 28.08. beinahe fuenf Entscheidungen
+stillschweigend erledigt haette, in einzelne Punkte zerfallen:
+
+    G-258   Pending actions        E-29 entschieden
+    G-262   Pre-workout window
+    G-263   Smart suggestions
+    G-264   Micronutrient trend
+    C-324   Nutrition score        blockiert, C-342
+
+`[read]` **Und einer der Punkte war falsch gefuehrt:** G-254 nannte
+den Micronutrient trend *,,gestrichen, nicht offen"*. `[cmd]` **Die
+Attrappe steht weiter im Insights-Reiter** — **nicht angebunden ist
+nicht dasselbe wie entfernt.**
+
+`[read]` **Die Kacheln im Meal-plans-Reiter stehen als G-270**, weil
+sie nicht Anzeigefragen sind, sondern **eine Datenluecke mit drei
+Symptomen.**
+
+**Geschlossen.**

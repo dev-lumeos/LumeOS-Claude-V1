@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-161
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-29
 beruehrt:
   tabellen: []
   dateien: []
@@ -35,3 +37,8 @@ zahlen: null
   statt eine Zahl zu zeigen, die niemand rechnen kann — richtig. Eine
   erfundene Prozentzahl waere dasselbe wie die Modalitaets-Boni, ACWR
   und die Evidenzgewichte.
+
+## Auftrag
+
+**Mitbeauftragt mit C-239 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.

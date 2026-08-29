@@ -7,6 +7,8 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: G-260
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-29
 beruehrt:
   tabellen: [nutrition.nutrient_reference_values]
 zahlen:
@@ -49,3 +51,8 @@ Tagen dieselben zwoelf Codes.**
 
 `[read]` **Tom hat sich fuer die Flags entschieden.** **Diese Funktion
 macht die Entscheidung billig.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-239 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.

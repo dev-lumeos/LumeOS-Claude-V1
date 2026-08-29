@@ -1,0 +1,39 @@
+---
+nr: G-269
+typ: feature
+modul: nutrition
+schwere: mittel
+angelegt: 2026-08-29
+braucht: []
+kind_von: G-267
+entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-29
+beruehrt:
+  dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
+zahlen: null
+---
+# G-269 — Plaene von Coach und Marketplace
+
+## Befund
+
+**Tom, 2026-08-29:** *,,da muss noch eine komponente sein fuer
+plaene des coaches oder marketplace"*.
+
+`[read]` **Ein Plan kann von drei Stellen kommen:** selbst erstellt,
+vom Coach zugewiesen, aus dem Marktplatz bezogen. **Die Oberflaeche
+kennt heute nur den ersten Fall.**
+
+`[cmd]` **G-238 fuehrt denselben Befund aus der Spec-Sicht:**
+`Plan.source = 'buddy'` steht in `SPEC_10` ohne Ausloeser in der
+Oberflaeche.
+
+`[read]` **Und die Herkunft ist mehr als ein Etikett:** ein
+Coach-Plan darf vermutlich nicht frei bearbeitet werden, ein
+gekaufter auch nicht. `[cmd]` **Das beruehrt `coach.client_autonomy`
+und E-29.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-271 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.

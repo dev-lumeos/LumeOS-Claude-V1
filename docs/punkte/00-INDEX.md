@@ -5,9 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 263 |
-| `erledigt` | 72 |
-| **gesamt** | **335** |
+| `todos` | 262 |
+| `laufend_codex` | 3 |
+| `laufend_claudecode` | 7 |
+| `erledigt` | 73 |
+| **gesamt** | **345** |
 
 ## medical — 41
 
@@ -55,7 +57,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 103
+## nutrition — 113
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -93,7 +95,7 @@
 | `C-211` | befund | mittel | [Selen fehlt im BLS-Katalog](erledigt/nutrition-c-0211-selen-fehlt-im-bls-katalog.md) | erledigt | — | — |
 | `C-212` | befund | mittel | [`CHORL` haengt nicht im Naehrstoffbaum](erledigt/nutrition-c-0212-chorl-haengt-nicht-im-naehrstoffbaum.md) | erledigt | — | — |
 | `C-229` | befund | mittel | [Ein Katalog aus `DatabaseEcht`, Detail und Add getrennt](todos/nutrition-c-0229-ein-katalog-aus-databaseecht-detail-und-add-getrennt.md) | offen | — | — |
-| `C-239` | befund | mittel | [`meal_plans` kennt keinen Lebenszyklus](todos/nutrition-c-0239-meal-plans-kennt-keinen-lebenszyklus.md) | offen | — | — |
+| `C-239` | befund | mittel | [`meal_plans` kennt keinen Lebenszyklus](laufend_codex/nutrition-c-0239-meal-plans-kennt-keinen-lebenszyklus.md) | laeuft (codex) | — | — |
 | `C-323` | entscheidung | hoch | [Micro-Flags Warnschwelle und Formulierung festlegen](erledigt/nutrition-c-0323-micro-flags-warnschwelle-und-formulierung-festlegen.md) | erledigt | — | C-344, G-259 |
 | `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](erledigt/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | erledigt | — | C-342, C-343 |
 | `C-333` | befund | niedrig | [Selen fehlt in der Bewertung auf dev](erledigt/nutrition-c-0333-selen-fehlt-in-der-bewertung-auf-dev.md) | erledigt | — | — |
@@ -107,7 +109,7 @@
 | `C-345` | befund | niedrig | [Spurenwerte im Lebensmittelimport](todos/nutrition-c-0345-spurenwerte-im-lebensmittelimport.md) | offen | — | — |
 | `C-346` | befund | hoch | [zwei Detailtexte neu verknuepfen](erledigt/nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md) | erledigt | — | — |
 | `C-347` | entscheidung | hoch | [generelle Ausschluesse in \`food_search\`](erledigt/nutrition-c-0347-generelle-ausschluesse-in-food-search.md) | erledigt | — | — |
-| `C-348` | feature | mittel | [eine zaehlende Funktion fuer die Flags](todos/nutrition-c-0348-eine-zaehlende-funktion-fuer-die-flags.md) | offen | — | — |
+| `C-348` | feature | mittel | [eine zaehlende Funktion fuer die Flags](laufend_codex/nutrition-c-0348-eine-zaehlende-funktion-fuer-die-flags.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -156,11 +158,21 @@
 | `G-250` | entscheidung | mittel | [die vier Zustaende fehlen in der Ordnung](erledigt/nutrition-g-0250-die-vier-zustaende-fehlen-in-der-ordnung.md) | erledigt | — | G-261 |
 | `G-251` | feature | niedrig | [die Herkunfts-Filter im Food-DB-Reiter](todos/nutrition-g-0251-herkunfts-filter-im-food-db-tab.md) | offen | — | — |
 | `G-252` | messung | mittel | [die Ladezeit hat eine andere Ursache](erledigt/nutrition-g-0252-die-ladezeit-hat-eine-andere-ursache.md) | erledigt | — | — |
-| `G-254` | entscheidung | mittel | [sechs Kacheln brauchen eine Entscheidung](todos/nutrition-g-0254-sechs-kacheln-brauchen-eine-entscheidung.md) | offen | — | G-258 |
+| `G-254` | entscheidung | mittel | [sechs Kacheln brauchen eine Entscheidung](erledigt/nutrition-g-0254-sechs-kacheln-brauchen-eine-entscheidung.md) | erledigt | — | G-258, G-262, G-263, G-264 |
 | `G-258` | feature | mittel | [Pending actions im Tagebuch](todos/nutrition-g-0258-pending-actions-im-tagebuch.md) | offen | — | — |
 | `G-259` | befund | mittel | [toter Leseweg und die Fensterlaufzeit](erledigt/nutrition-g-0259-toter-leseweg-und-die-fensterlaufzeit.md) | erledigt | — | — |
 | `G-260` | feature | mittel | [die Dauerregel anbinden](erledigt/nutrition-g-0260-die-dauerregel-anbinden.md) | erledigt | — | C-348 |
 | `G-261` | entscheidung | niedrig | [die Vergleichsfunktionen anbinden](todos/nutrition-g-0261-die-vergleichsfunktionen-anbinden.md) | offen | — | — |
+| `G-262` | befund | mittel | [Pre-workout window ist Attrappe](todos/nutrition-g-0262-pre-workout-window-ist-attrappe.md) | offen | — | — |
+| `G-263` | befund | mittel | [Smart suggestions ist Attrappe](todos/nutrition-g-0263-smart-suggestions-ist-attrappe.md) | offen | — | — |
+| `G-264` | befund | niedrig | [Micronutrient trend steht noch als Attrappe](todos/nutrition-g-0264-micronutrient-trend-steht-noch-als-attrappe.md) | offen | — | — |
+| `G-265` | befund | hoch | [Add im Food DB oeffnet das falsche Modal](laufend_claudecode/nutrition-g-0265-add-im-food-db-oeffnet-das-falsche-modal.md) | laeuft (claudecode) | — | — |
+| `G-266` | entscheidung | mittel | [Detailsuche mit Naehrwerten oeffnet eine eigene Seite](laufend_claudecode/nutrition-g-0266-detailsuche-mit-naehrwerten-oeffnet-eine-eigene-seite.md) | laeuft (claudecode) | — | — |
+| `G-267` | befund | hoch | [*New plan* tut nichts](laufend_claudecode/nutrition-g-0267-new-plan-tut-nichts.md) | laeuft (claudecode) | — | G-268, G-269 |
+| `G-268` | feature | hoch | [Plaene bearbeiten fehlt](laufend_claudecode/nutrition-g-0268-plaene-bearbeiten-fehlt.md) | laeuft (claudecode) | — | — |
+| `G-269` | feature | mittel | [Plaene von Coach und Marketplace](laufend_claudecode/nutrition-g-0269-plaene-von-coach-und-marketplace.md) | laeuft (claudecode) | — | — |
+| `G-270` | befund | mittel | [Drei Attrappen im Meal-plans-Reiter](laufend_claudecode/nutrition-g-0270-drei-attrappen-im-meal-plans-reiter.md) | laeuft (claudecode) | — | — |
+| `G-271` | messung | hoch | [Meal plans und Planner gegen die Quellen halten](laufend_claudecode/nutrition-g-0271-meal-plans-und-planner-gegen-die-quellen-halten.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 53
@@ -272,7 +284,7 @@
 | `C-217` | befund | mittel | [Was ist gebaut, was ist Attrappe — je Modul, je Kachel](todos/recovery-c-0217-was-ist-gebaut-was-ist-attrappe-je-modul-je-kachel.md) | offen | — | — |
 | `C-218` | entscheidung | mittel | [Frontend und Datenbank normieren den Recovery-Score verschieden](todos/recovery-c-0218-frontend-und-datenbank-normieren-den-recovery-score-verschieden.md) | offen | — | — |
 | `C-236` | feature | mittel | [Die Recovery-Seeds sind Zaehlreihen, keine Messwerte](todos/recovery-c-0236-die-recovery-seeds-sind-zaehlreihen-keine-messwerte.md) | offen | — | B-29, B-30, G-174 |
-| `C-238` | blocker | hoch | [`meal_plan_entries` hat keinen Status](todos/recovery-c-0238-meal-plan-entries-hat-keinen-status.md) | offen | — | — |
+| `C-238` | blocker | hoch | [`meal_plan_entries` hat keinen Status](laufend_codex/recovery-c-0238-meal-plan-entries-hat-keinen-status.md) | laeuft (codex) | — | — |
 | `C-339` | feature | niedrig | [ein Recovery-Gesamtscore, vorgesehen](todos/recovery-c-0339-ein-Recovery-Gesamtscore-vorgesehen.md) | offen | — | — |
 | `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](todos/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | offen | — | — |
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
