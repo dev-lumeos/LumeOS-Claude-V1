@@ -9,8 +9,11 @@ kind_von: G-107
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-29
+erledigt: 2026-08-29
+commit: OFFEN
 beruehrt:
-  dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
+  dateien:
+    - apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx
 zahlen:
   gemessen: 2026-08-28
   kalt_ms: 6400
@@ -50,3 +53,8 @@ G-107** und koennte die Antwort sein, sobald der Leseweg sie nutzt.
 
 **Mitbeauftragt mit G-259 am 2026-08-29.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-29, mit G-259 abgenommen.** Messung und Urteil stehen
+dort.

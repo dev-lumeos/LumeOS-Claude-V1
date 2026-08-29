@@ -43,7 +43,9 @@
 // Laeuft ausschliesslich serverseitig.
 import { createSessionClient } from '@lumeos/shared/session'
 
-import { getReferenceAssessment } from './reference-assessment-read'
+import { getReferenceAssessment, getNaehrstoffDauer } from './reference-assessment-read'
+import { flagVon, sortiere, type Flag } from './mikro-flags'
+import { GEDECKT_AB } from './mikro-lage'
 import { getZielwerteAm, type Zielwerte } from '../profile/zielwerte-read'
 import {
   ANSICHT_SCHLUESSEL, KARTEN_REIHENFOLGE, karteFuerWurzel, normalisiere,
@@ -173,6 +175,22 @@ export type NaehrstoffOrdnung = {
   stichtag: string
   /** Tage mit Protokoll im Fenster (Maximum ueber alle Zeilen). */
   tageErfasst: number
+  /**
+   * Die Dauer-Flags aus C-323 — G-260.
+   *
+   * `[read]` **Die Antwort auf die Frage, die der `Auffaellig`-Filter
+   * nicht beantworten kann:** er liest den Mittelwert und liefert bei
+   * 7, 30 und 90 Tagen dieselben zwoelf Codes (G-108). **Ein Flag
+   * zaehlt Tage.**
+   *
+   * `[cmd]` **Leer im Tagesmodus** — ein Tag hat keine Dauer — **und
+   * leer, wenn die Fensterfunktion nicht antwortet.** Beides ist
+   * etwas anderes als „nichts gefunden"; der Zaehler daneben sagt es.
+   */
+  flags: Flag[]
+  /** Wie viele Tage die Flag-Rechnung bewertet hat. `null` heisst:
+   *  nicht gerechnet (Tagesmodus oder Fehler). */
+  flagTage: number | null
   /** Die gespeicherte Ansicht des Nutzers — `null` heisst: noch nie
    *  gespeichert, es gilt „alles zu". */
   gespeichert: GespeicherteAnsicht | null
@@ -186,9 +204,29 @@ export type NaehrstoffOrdnung = {
  * unabhaengig von `.limit()`. Bei 90 Tagen und 138 Naehrstoffen
  * braucht es deshalb dreizehn Seiten.
  *
- * `[read]` **Abbruch, sobald eine Seite kuerzer als die Seitengroesse
- * ist** — dann gibt es nichts mehr. Und eine harte Obergrenze, damit
- * ein Fehler in der Bedingung nicht endlos blaettert.
+ * ══ WARUM GLEICHZEITIG UND NICHT NACHEINANDER — G-252 ══════════════
+ *
+ * `[cmd]` **Gemessen am 2026-08-29, `dev@lumeos.app`, mit
+ * `explain (analyze)`:** jede der dreizehn Seiten kostet **dieselben
+ * ~238 ms** — Seite 0 bei 249 ms, Seite 12 bei 238 ms. **Der
+ * `OFFSET` spart nichts**, weil die Sortierung ueber alle 12.420
+ * Zeilen jedes Mal neu laeuft.
+ *
+ *     13 Seiten nacheinander     3.093 ms
+ *     dieselben Daten, ein Zug     238 ms      Faktor 13
+ *
+ * `[read]` **Die Wiederholung liegt in der Datenbank und laesst sich
+ * hier nicht wegnehmen** — wohl aber die Wartezeit: **die Seiten
+ * haengen nicht voneinander ab.** Sie werden deshalb gleichzeitig
+ * geholt, nicht der Reihe nach.
+ *
+ * `[cmd]` **Die Zeilenzahl steht vorher fest** (`count: 'exact'`,
+ * `head: true` — eine Anfrage ohne Nutzlast), damit die Seitenzahl
+ * bekannt ist, statt sie durch eine kurze Seite zu erraten.
+ *
+ * `[read]` **Kein Wort an der Referenzlogik.** Es aendert sich nur,
+ * WIE dieselben Zeilen geholt werden, nicht welche — die Regel aus
+ * G-259, und der Kopf dieser Datei verlangt es.
  */
 const SEITE = 1000
 const MAX_SEITEN = 20
@@ -197,21 +235,36 @@ async function ladeReihen(
   db: ReturnType<ReturnType<typeof createSessionClient>['schema']>,
   userId: string, stichtag: string, fenster: number,
 ): Promise<Array<Record<string, unknown>>> {
-  const aus: Array<Record<string, unknown>> = []
-  for (let seite = 0; seite < MAX_SEITEN; seite++) {
-    const { data, error } = await db
-      .from('daily_nutrient_summary_long')
-      .select('nutrient_code, entry_date, total_value')
-      .eq('user_id', userId)
-      .gte('entry_date', vonDatum(stichtag, fenster))
-      .lte('entry_date', stichtag)
+  const von = vonDatum(stichtag, fenster)
+  const anfrage = () => db
+    .from('daily_nutrient_summary_long')
+    .select('nutrient_code, entry_date, total_value')
+    .eq('user_id', userId)
+    .gte('entry_date', von)
+    .lte('entry_date', stichtag)
+
+  // Wie viele Zeilen es sind — ohne sie zu holen.
+  const { count, error: zaehlFehler } = await db
+    .from('daily_nutrient_summary_long')
+    .select('nutrient_code', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .gte('entry_date', von)
+    .lte('entry_date', stichtag)
+  if (zaehlFehler || count === null) return []
+
+  const seiten = Math.min(Math.ceil(count / SEITE), MAX_SEITEN)
+  if (seiten <= 0) return []
+
+  const teile = await Promise.all(
+    Array.from({ length: seiten }, (_, seite) => anfrage()
       .order('entry_date', { ascending: true })
       .order('nutrient_code', { ascending: true })
-      .range(seite * SEITE, seite * SEITE + SEITE - 1)
-    if (error) break
-    const zeilen = (data ?? []) as unknown as Array<Record<string, unknown>>
-    aus.push(...zeilen)
-    if (zeilen.length < SEITE) break
+      .range(seite * SEITE, seite * SEITE + SEITE - 1)))
+
+  const aus: Array<Record<string, unknown>> = []
+  for (const { data, error } of teile) {
+    if (error) continue
+    aus.push(...((data ?? []) as unknown as Array<Record<string, unknown>>))
   }
   return aus
 }
@@ -279,7 +332,8 @@ export async function ladeOrdnung(
   const leer: NaehrstoffOrdnung = {
     gruppen: [], gesamt: 0, messbar: 0, mitReferenz: 0, unterZiel: 0,
     ueberObergrenze: 0, fenster: fensterWunsch ?? 1, stichtag,
-    tageErfasst: 0, gespeichert: null, fehler: null,
+    tageErfasst: 0, gespeichert: null, flags: [], flagTage: null,
+    fehler: null,
   }
   try {
     const client = createSessionClient()
@@ -307,7 +361,8 @@ export async function ladeOrdnung(
     // liefert nur Zeilen, wenn der Nutzer im Fenster protokolliert
     // hat, und ein leerer Tab waere die falsche Antwort auf einen
     // leeren Tag: die Ordnung existiert auch ohne Werte.
-    const [defsR, fensterR, reiheR, refsR, texteR, aliaseR, zieleR] = await Promise.allSettled([
+    const [defsR, fensterR, reiheR, refsR, texteR, aliaseR, zieleR,
+      dauerR] = await Promise.allSettled([
       db.from('nutrient_defs')
         // G-140: `display_tier` faellt weg — es wurde nur noch in ein
         // Feld geschrieben, das niemand las.
@@ -346,6 +401,20 @@ export async function ladeOrdnung(
       // G-143: die persoenlichen Makroziele aus goals.nutrition_targets
       // (zielwerte_am) — sie treiben Balken, Prozent und Status.
       getZielwerteAm(stichtag).catch(() => null),
+      // G-260: die Dauerregel aus C-323.
+      //
+      // `[cmd]` **Gemessen am 2026-08-29, Median aus fuenf Laeufen:**
+      // 154 ms (7 Tage), 628 ms (30), **1.844 ms (90)** — die Zahl
+      // aus C-323 hat sich bestaetigt.
+      //
+      // `[read]` **Sie laeuft NEBEN den uebrigen Aufrufen, nicht
+      // danach** — deshalb kostet sie keine eigene Wartezeit,
+      // solange sie unter der langsamsten der anderen bleibt.
+      //
+      // `[read]` **Im Tagesmodus gar nicht:** ein Tag hat keine Dauer.
+      fenster === 1
+        ? Promise.resolve([])
+        : getNaehrstoffDauer(stichtag, fenster).catch(() => null),
     ])
 
     if (defsR.status !== 'fulfilled' || defsR.value.error) {
@@ -535,9 +604,30 @@ export async function ladeOrdnung(
     }
     gruppen.sort((a, b) => rang(a.name) - rang(b.name))
 
+    // G-260: aus den Tageswerten die Flags — die eine Stelle, an der
+    // aus Werten Dauer wird. `[read]` Die Regel steht in
+    // `mikro-flags.ts` (C-323) und wird hier nur angewandt; nichts
+    // wird nachgerechnet.
+    let flags: Flag[] = []
+    let flagTage: number | null = null
+    const dauer = dauerR.status === 'fulfilled' ? dauerR.value : null
+    if (dauer !== null && Array.isArray(dauer) && dauer.length > 0) {
+      const gefunden: Flag[] = []
+      let bewertet = 0
+      for (const z of dauer) {
+        bewertet = Math.max(bewertet, z.tage.length)
+        const f = flagVon(z.nutrient_code, z.nutrient_name_de,
+          z.reference_direction, z.tage, GEDECKT_AB)
+        if (f) gefunden.push(f)
+      }
+      flags = sortiere(gefunden)
+      flagTage = bewertet
+    }
+
     return {
       gruppen, gesamt: defs.length, messbar, mitReferenz, unterZiel,
       ueberObergrenze, fenster, stichtag, tageErfasst, gespeichert,
+      flags, flagTage,
       fehler: null,
     }
   } catch (e) {

@@ -39,6 +39,7 @@ import {
 import {
   mittelwertSatz, zeigtMittelwertHinweis,
 } from '../../../lib/nutrition/fenster-aussage'
+import { dauerSatz, FLAG_FARBE } from '../../../lib/nutrition/mikro-flags'
 import { NaehrstoffModal } from './naehrstoff-modal'
 
 /** Gruppennamen und Codes teilen sich die `offen`-Menge; das Praefix
@@ -266,6 +267,42 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
         {zeigtMittelwertHinweis(d.fenster) && (
           <p className="v2-muted" style={{ fontSize: 11.5, marginTop: 8, lineHeight: 1.55 }}>
             {mittelwertSatz(d.fenster)}
+          </p>
+        )}
+
+        {/*
+          G-260: die Dauerregel aus C-323, angebunden.
+          `[read]` **Sie beantwortet, was der Satz darueber nur
+          benennt:** welche Naehrstoffe ueber den Zeitraum ein Muster
+          bilden, statt nur im Schnitt aufzufallen. `[cmd]` Der
+          `Auffaellig`-Filter liefert bei 7, 30 und 90 Tagen
+          dieselben zwoelf Codes — die Dauer unterscheidet.
+          **Keine zweite Ansicht:** dieselbe Karte, ein Absatz mehr.
+        */}
+        {d.flagTage !== null && (
+          <p style={{ fontSize: 11.5, marginTop: 8, lineHeight: 1.55 }}>
+            {d.flags.length === 0 ? (
+              <span className="v2-muted">
+                Über {d.flagTage} bewertete Tage bildet kein Nährstoff ein
+                dauerhaftes Muster.
+              </span>
+            ) : (
+              <>
+                <strong>{d.flags.length}</strong>{' '}
+                {d.flags.length === 1 ? 'Nährstoff fällt' : 'Nährstoffe fallen'}{' '}
+                über den Zeitraum dauerhaft auf — nicht nur im Schnitt:{' '}
+                {d.flags.map((f, i) => (
+                  <span key={f.code}>
+                    {i > 0 && ', '}
+                    <span style={{ color: FLAG_FARBE[f.art] }}>{f.name}</span>{' '}
+                    <span className="v2-mono v2-muted" style={{ fontSize: 10.5 }}>
+                      {dauerSatz(f)}
+                    </span>
+                  </span>
+                ))}
+                .
+              </>
+            )}
           </p>
         )}
       </Card>

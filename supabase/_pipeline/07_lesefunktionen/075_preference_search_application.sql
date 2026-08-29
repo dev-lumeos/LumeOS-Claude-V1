@@ -418,7 +418,7 @@ BEGIN
       'general_tag'::text,
       0,
       80,
-      'profile_general_exclusion'::text
+      'profile_general_exclusion:' || td.code
     FROM user_preference up
     JOIN nutrition.tag_definitions td ON td.code = ANY(up.general_exclusions)
     JOIN nutrition.food_tags ft ON ft.tag_code = td.code
@@ -431,7 +431,7 @@ BEGIN
       'general_preset'::text,
       0,
       80,
-      'profile_general_exclusion'::text
+      'profile_general_exclusion:' || ep.code
     FROM user_preference up
     JOIN nutrition.exclusion_presets ep ON ep.code = ANY(up.general_exclusions)
     JOIN nutrition.exclusion_preset_matches epm ON epm.preset_code = ep.code
@@ -520,6 +520,13 @@ CREATE TRIGGER food_preferences_search_targets_refresh
 CREATE TRIGGER food_preference_items_search_targets_refresh
   AFTER INSERT OR UPDATE OR DELETE ON nutrition.food_preference_items
   FOR EACH ROW EXECUTE FUNCTION nutrition.refresh_food_preference_search_targets_trigger();
+
+-- C-347: Die materialisierte Wirkung trug bisher nur eine gemeinsame
+-- Herkunft fuer alle generellen Ausschluesse. Bestehende Profile einmal
+-- neu ableiten, damit die Ausschlusstiefe auch ohne nachtraegliches
+-- Speichern der Vorlieben sichtbar wird.
+SELECT nutrition.refresh_food_preference_search_targets(user_id)
+FROM nutrition.food_preferences;
 
 COMMENT ON TABLE nutrition.food_preference_search_targets IS
   'C-192: materialisierte Suchwirkung der Nutzerpraeferenzen. '
@@ -900,9 +907,24 @@ preference_targets AS MATERIALIZED (
 preference_scores AS NOT MATERIALIZED (
   SELECT
     food_id,
-    bool_or(constraint_level = 'hard')
-      OR (bool_or(constraint_level = 'strong')
+    bool_or(
+      constraint_level = 'hard'
+      AND source <> 'profile_general_exclusion'
+      AND source NOT LIKE 'profile_general_exclusion:%'
+    )
+      OR ((bool_or(constraint_level = 'strong')
+           OR bool_or(
+             source = 'profile_general_exclusion'
+             OR source LIKE 'profile_general_exclusion:%'
+           ))
           AND COALESCE(p_normalized_query, '') = '') AS preference_excluded,
+    -- Ein Code kann sowohl Tag als auch Preset sein (z. B. halal).
+    -- Die Tiefe ist die Zahl der gewaelhlten Regeln, nicht die Zahl
+    -- ihrer materialisierten Trefferwege.
+    count(DISTINCT source) FILTER (
+      WHERE source = 'profile_general_exclusion'
+         OR source LIKE 'profile_general_exclusion:%'
+    )::integer AS general_exclusion_depth,
     COALESCE((array_agg(score ORDER BY specificity DESC, abs(score) DESC))[1], 0) AS preference_score,
     (array_agg(constraint_level ORDER BY specificity DESC, abs(score) DESC))[1] AS preference_level,
     (array_agg(match_type ORDER BY specificity DESC, abs(score) DESC))[1] AS preference_match_type,
@@ -964,6 +986,7 @@ matching_foods AS (
     m.fat,
     m.cho,
     COALESCE(tags.tags, ARRAY[]::text[]) AS tags,
+    COALESCE(ps.general_exclusion_depth, 0) AS general_exclusion_depth,
     COALESCE(ps.preference_score, 0) AS preference_score,
     COALESCE(ps.preference_level, 'neutral') AS preference_level,
     COALESCE(ps.preference_match_type, '') AS preference_match_type,
@@ -1190,6 +1213,13 @@ matching_foods AS (
     CASE WHEN (SELECT sort FROM params) = 'carbs_asc' THEN COALESCE(m.cho, 999999) END ASC,
     CASE WHEN (SELECT sort FROM params) = 'fat_desc' THEN COALESCE(m.fat, -1) END DESC,
     CASE WHEN (SELECT sort FROM params) = 'fat_asc' THEN COALESCE(m.fat, 999999) END ASC,
+    -- C-347 / E-30: Bei einer ausdruecklichen Suche kommen Lebensmittel
+    -- mit weniger generellen Ausschluessen zuerst. Liegen alle in derselben
+    -- Tiefe (z. B. alle Schokoladen bei ultra_processed), bleibt die
+    -- bewahrte Textrelevanz als Stichentscheid erhalten.
+    CASE WHEN (SELECT sort FROM params) = 'relevance'
+           AND COALESCE(p_normalized_query, '') <> ''
+         THEN COALESCE(ps.general_exclusion_depth, 0) END ASC,
     CASE WHEN (SELECT sort FROM params) = 'relevance' THEN
       CASE
         WHEN p_tokens IS NULL OR cardinality(p_tokens) = 0 THEN 0.5
@@ -1463,6 +1493,7 @@ selected_food AS (
     m.fat,
     m.cho,
     COALESCE(tags.tags, ARRAY[]::text[]) AS tags,
+    COALESCE(ps.general_exclusion_depth, 0) AS general_exclusion_depth,
     COALESCE(ps.preference_score, 0) AS preference_score,
     COALESCE(ps.preference_level, 'neutral') AS preference_level,
     COALESCE(ps.preference_match_type, '') AS preference_match_type,

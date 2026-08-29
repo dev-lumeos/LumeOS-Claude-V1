@@ -9,8 +9,11 @@ kind_von: G-108
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-29
+erledigt: 2026-08-29
+commit: OFFEN
 beruehrt:
-  dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
+  dateien:
+    - apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx
 zahlen:
   gemessen: 2026-08-29
   flagvon_ms_90d: 1786
@@ -48,3 +51,8 @@ Zahlen, nicht die Auswahl** — genau das behebt die Dauerregel.
 
 **Mitbeauftragt mit G-259 am 2026-08-29.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-29, mit G-259 abgenommen.** Messung und Urteil stehen
+dort.
