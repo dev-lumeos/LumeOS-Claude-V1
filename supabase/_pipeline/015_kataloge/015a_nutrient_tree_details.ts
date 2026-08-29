@@ -186,6 +186,9 @@ const PARENT: Record<string, string | null> = {
 }
 
 const LEGACY_KEY_MAP: Record<string, string> = {
+  // Die Quelle verwendet FD/CHORL spaeter fuer andere Begriffe. Diese
+  // beiden aelteren Schluessel sind deshalb vor einer Exaktzuordnung
+  // aufzuloesen; sonst gewinnt der gleichnamige, aber falsche Text.
   CHOL: 'CHORL',
   F: 'FD',
   F18D2N6: 'F18:2CN6',
@@ -193,6 +196,8 @@ const LEGACY_KEY_MAP: Record<string, string> = {
   F22D6N3: 'F22:6CN3',
   FIBTG: 'FIBT',
 }
+
+const PREFERRED_LEGACY_SOURCE_KEYS = ['CHOL', 'F'] as const
 
 function fail(message: string): never {
   console.error(message)
@@ -258,8 +263,19 @@ function buildSql(details: Record<string, Detail>, defCodes: string[]): string {
   const defs = new Set(defCodes)
   const detailRows: Array<{ sourceKey: string; nutrientCode: string; detail: Detail }> = []
   const seenTargets = new Set<string>()
+
+  for (const sourceKey of PREFERRED_LEGACY_SOURCE_KEYS) {
+    const nutrientCode = LEGACY_KEY_MAP[sourceKey]
+    const detail = details[sourceKey]
+    if (!nutrientCode || !defs.has(nutrientCode) || !detail) {
+      fail(`Bevorzugtes Legacy-Mapping fehlt oder ist ungueltig: ${sourceKey} -> ${nutrientCode ?? '(ohne Ziel)'}`)
+    }
+    detailRows.push({ sourceKey, nutrientCode, detail })
+    seenTargets.add(nutrientCode)
+  }
+
   for (const [sourceKey, detail] of Object.entries(details)) {
-    if (defs.has(sourceKey)) {
+    if (defs.has(sourceKey) && !seenTargets.has(sourceKey)) {
       detailRows.push({ sourceKey, nutrientCode: sourceKey, detail })
       seenTargets.add(sourceKey)
     }
@@ -459,11 +475,13 @@ async function main(): Promise<void> {
   const detailKeys = Object.keys(details).sort()
   const exact = detailKeys.filter(key => defCodes.includes(key))
   const mapped = detailKeys.filter(key => LEGACY_KEY_MAP[key] && defCodes.includes(LEGACY_KEY_MAP[key]))
-  const mappedShadowed = mapped.filter(key => exact.includes(LEGACY_KEY_MAP[key]))
+  const mappedShadowed = mapped.filter(key =>
+    !PREFERRED_LEGACY_SOURCE_KEYS.includes(key as typeof PREFERRED_LEGACY_SOURCE_KEYS[number])
+    && exact.includes(LEGACY_KEY_MAP[key]))
   const unmatched = detailKeys.filter(key => !defCodes.includes(key) && !LEGACY_KEY_MAP[key])
   console.log(
     `nutrientDetails: ${detailKeys.length} Schluessel, ${exact.length} exakt, ` +
-    `${mapped.length} ueber Legacy-Map (${mappedShadowed.length} durch exakte Zielcodes ersetzt), ` +
+    `${mapped.length} ueber Legacy-Map (${PREFERRED_LEGACY_SOURCE_KEYS.length} bevorzugt, ${mappedShadowed.length} durch exakte Zielcodes ersetzt), ` +
     `${unmatched.length} ohne Zielcode`
   )
   if (unmatched.join(',') !== 'SE') fail(`Unerwartete nutrientDetails-Schluessel ohne Zielcode: ${unmatched.join(', ')}`)

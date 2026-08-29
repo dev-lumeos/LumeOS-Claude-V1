@@ -10,9 +10,11 @@ kinder: []
 entscheidung: E-16
 agent: claudecode
 beauftragt: 2026-08-29
+erledigt: 2026-08-29
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien:
+    - supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql
 zahlen: null
 ---
 
@@ -60,3 +62,8 @@ zahlen: null
 
 **Mitbeauftragt mit G-108 am 2026-08-29.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-29, mit G-108 abgenommen.** Messung und Urteil stehen
+dort.

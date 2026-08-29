@@ -9,9 +9,10 @@ kind_von: G-249
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-29
+erledigt: 2026-08-29
+commit: OFFEN
 beruehrt:
   tabellen: [goals.nutrition_targets]
-  dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
 zahlen: null
 ---
 
@@ -58,3 +59,8 @@ gibt es gar keinen Widerspruch.**
 
 **Mitbeauftragt mit G-108 am 2026-08-29.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-29, mit G-108 abgenommen.** Messung und Urteil stehen
+dort.

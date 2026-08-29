@@ -36,6 +36,9 @@ import {
   fensterbreite, gleitend, richtungVon, sparklinePfad, bezugsY,
   zeigtTrend, RICHTUNG_TEXT, RICHTUNG_ZEICHEN,
 } from '../../../lib/nutrition/trend'
+import {
+  mittelwertSatz, zeigtMittelwertHinweis,
+} from '../../../lib/nutrition/fenster-aussage'
 import { NaehrstoffModal } from './naehrstoff-modal'
 
 /** Gruppennamen und Codes teilen sich die `offen`-Menge; das Praefix
@@ -252,6 +255,19 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
           gemessen, aber ohne Zielwert — dort steht ein Strich, kein
           Urteil. Klick auf eine Zeile oeffnet die Erklaerung.
         </p>
+        {/*
+          G-108: was die Auswahl NICHT zeigt. `[cmd]` Gemessen am
+          2026-08-29 auf dev: `Alle` 37, `Auffaellig` 42, `Unter Ziel`
+          34 Zeilen — in allen drei Fenstern 7/30/90 dieselben Zahlen
+          und dieselben zwoelf Codes. `[read]` Der Fensterwaehler
+          aendert die Werte, nicht die Auswahl; das gehoert dazu-
+          gesagt, statt es den Nutzer selbst herausfinden zu lassen.
+        */}
+        {zeigtMittelwertHinweis(d.fenster) && (
+          <p className="v2-muted" style={{ fontSize: 11.5, marginTop: 8, lineHeight: 1.55 }}>
+            {mittelwertSatz(d.fenster)}
+          </p>
+        )}
       </Card>
 
       {d.gruppen.map(g => {
