@@ -9,6 +9,8 @@ kind_von: G-253
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-29
+erledigt: 2026-08-29
+commit: OFFEN
 beruehrt:
   dateien: [apps/web/src/app/v2/supplements/tabs.tsx]
 zahlen: null
@@ -45,3 +47,8 @@ Aufrufer wird beim naechsten Auftrag fuer gebaut gehalten. `[cmd]`
 ## Auftrag
 
 **Mitbeauftragt mit C-336 am 2026-08-29.**
+
+## Abnahme
+
+**2026-08-29, mit C-336 abgenommen.** Geloescht, Attrappen am
+Schirm unveraendert bei 6, Stacks-Reiter 0.

@@ -5,11 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 269 |
-| `laufend_codex` | 1 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 57 |
-| **gesamt** | **329** |
+| `todos` | 270 |
+| `erledigt` | 61 |
+| **gesamt** | **331** |
 
 ## medical — 41
 
@@ -57,7 +55,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 97
+## nutrition — 99
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -101,11 +99,13 @@
 | `C-333` | befund | niedrig | [Selen fehlt in der Bewertung auf dev](todos/nutrition-c-0333-selen-fehlt-in-der-bewertung-auf-dev.md) | offen | — | — |
 | `C-334` | befund | hoch | [die Tagesbewertung hat sich zwischen zwei Messungen verschoben](erledigt/nutrition-c-0334-die-bewertung-hat-sich-zwischen-zwei-messungen-verschoben.md) | erledigt | — | C-335 |
 | `C-335` | befund | mittel | [keine Aenderungshistorie fuer Mahlzeiten und Referenzwerte](todos/nutrition-c-0335-keine-aenderungshistorie-fuer-mahlzeiten.md) | offen | — | — |
-| `C-336` | befund | hoch | [FD traegt den Text eines anderen Naehrstoffs](laufend_claudecode/nutrition-c-0336-fd-traegt-den-text-eines-anderen-naehrstoffs.md) | laeuft (claudecode) | — | — |
+| `C-336` | befund | hoch | [FD traegt den Text eines anderen Naehrstoffs](erledigt/nutrition-c-0336-fd-traegt-den-text-eines-anderen-naehrstoffs.md) | erledigt | — | C-346 |
 | `C-338` | befund | mittel | [sechs Sortierwerte fehlen live](erledigt/nutrition-c-0338-sechs-sortierwerte-fehlen-live.md) | erledigt | — | — |
 | `C-342` | entscheidung | hoch | [Vitamin A in IE gegen Mikrogramm](todos/nutrition-c-0342-vitamin-a-in-ie-gegen-mikrogramm.md) | offen | — | — |
-| `C-343` | befund | hoch | [zwei Schreibweisen fuer *,,kein Vitamin C"*](todos/nutrition-c-0343-vitamin-c-fehlt-an-180-von-181-tagen.md) | offen | — | — |
-| `C-344` | befund | hoch | [drei Obergrenzen gelten nicht fuer Nahrung](laufend_codex/nutrition-c-0344-drei-obergrenzen-gelten-nicht-fuer-nahrung.md) | laeuft (codex) | — | — |
+| `C-343` | befund | hoch | [zwei Schreibweisen fuer *,,kein Vitamin C"*](erledigt/nutrition-c-0343-vitamin-c-fehlt-an-180-von-181-tagen.md) | erledigt | — | C-345 |
+| `C-344` | befund | hoch | [drei Obergrenzen gelten nicht fuer Nahrung](erledigt/nutrition-c-0344-drei-obergrenzen-gelten-nicht-fuer-nahrung.md) | erledigt | — | — |
+| `C-345` | befund | niedrig | [Spurenwerte im Lebensmittelimport](todos/nutrition-c-0345-spurenwerte-im-lebensmittelimport.md) | offen | — | — |
+| `C-346` | befund | hoch | [zwei Detailtexte neu verknuepfen](todos/nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -215,7 +215,7 @@
 | `G-214` | befund | mittel | [die Katalogsuche sagt nicht, warum ein Treffer passt](todos/supplements-g-0214-suche-sagt-nicht-warum-ein-treffer-passt.md) | offen | — | — |
 | `G-240` | befund | hoch | [der massgebliche Supplements-Mockup ist ungelesen](erledigt/supplements-g-0240-der-massgebliche-supplements-mockup-ist-ungelesen.md) | erledigt | — | A-59, G-253 |
 | `G-253` | feature | hoch | [Stacks und Compliance anbinden](erledigt/supplements-g-0253-stacks-und-compliance-anbinden.md) | erledigt | — | G-255 |
-| `G-255` | entscheidung | niedrig | [drei Attrappen-Konstanten ohne Aufrufer](laufend_claudecode/supplements-g-0255-drei-attrappen-konstanten-ohne-aufrufer.md) | laeuft (claudecode) | — | — |
+| `G-255` | entscheidung | niedrig | [drei Attrappen-Konstanten ohne Aufrufer](erledigt/supplements-g-0255-drei-attrappen-konstanten-ohne-aufrufer.md) | erledigt | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1

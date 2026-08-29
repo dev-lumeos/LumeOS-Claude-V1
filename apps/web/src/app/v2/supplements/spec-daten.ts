@@ -1,13 +1,17 @@
 // Die Daten der vier Spec-Tabs (G-45).
 //
+// `[cmd]` **G-255, 2026-08-29: `STACK_TEMPLATES`, `USER_STACKS` und
+// `FREQUENCY_OPTIONS` sind geloescht.** Sie hatten seit G-253 keinen
+// Renderer mehr — der Stacks-Reiter liest `user_stacks` und
+// `stack_items`. `[read]` **Beispieldaten ohne Anzeige werden beim
+// naechsten Lesen fuer gebaut gehalten** (A-59); git holt sie zurueck,
+// falls sie doch jemand braucht.
+//
 // QUELLE: theme-v1/module-supplements-spec.jsx
 //   EVIDENCE_GRADES       Zeile   5-12   (sechs Evidenzstufen S-F)
 //   CATALOG               Zeile  17-174  (44 Katalogeintraege)
 //   ENHANCED_CATEGORIES   Zeile 176
 //   BLOODWORK_PANEL       Zeile 179-188
-//   STACK_TEMPLATES       Zeile 191-197
-//   USER_STACKS           Zeile 199-204
-//   FREQUENCY_OPTIONS     Zeile 206-212
 //   INTERACTION_DB        Zeile 215-223
 //   SEVERITY_META         Zeile 224-229
 //   TIMING_LABEL          Zeile 230-233
@@ -217,29 +221,6 @@ export const BLOODWORK_PANEL = [
   { grp: "Prostate", m: ["PSA"] },
   { grp: "Metabolic",m: ["Fasting Glucose","HbA1c"] },
   { grp: "Inflammation", m: ["hs-CRP"] },
-];
-
-export const STACK_TEMPLATES = [
-  { id: "tpl1", name: "Muscle Building Starter", items: ["Creatine","Vitamin D3","Omega-3","Magnesium"], goal: "hypertrophy" },
-  { id: "tpl2", name: "Daily Health Basics",     items: ["Vitamin D3","Omega-3","Magnesium","K2"],       goal: "health" },
-  { id: "tpl3", name: "Fat Loss Stack",          items: ["Caffeine","Creatine","Omega-3","Vitamin D3"],  goal: "fat loss" },
-  { id: "tpl4", name: "Recovery & Sleep",        items: ["Magnesium","Omega-3","Melatonin","Glycine"],   goal: "recovery" },
-  { id: "tpl5", name: "Longevity",               items: ["Vitamin D3","K2","Omega-3","Magnesium","CoQ10","NAC"], goal: "longevity" },
-];
-
-export const USER_STACKS = [
-  { id: "s1", name: "Stack v3.2 · current", source: "user",        items: 10, active: true,  since: "Mar 2026" },
-  { id: "s2", name: "Cut phase stack",      source: "coach",       items: 8,  active: false, since: "Jan 2026" },
-  { id: "s3", name: "Travel minimal",       source: "user",        items: 4,  active: false, since: "Nov 2025" },
-  { id: "s4", name: "Longevity (template)", source: "template",    items: 6,  active: false, since: "—" },
-];
-
-export const FREQUENCY_OPTIONS = [
-  { id: "daily",         label: "Daily",          days: 30 },
-  { id: "weekdays",      label: "Weekdays",       days: 22 },
-  { id: "training_days", label: "Training days",  days: 21 },
-  { id: "custom",        label: "Custom",         days: 15 },
-  { id: "cycling",       label: "Cycling",        days: 20 },
 ];
 
 export const INTERACTION_DB = [

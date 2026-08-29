@@ -323,6 +323,35 @@ if (MODE === 'clean') {
     SELECT count(*)
     FROM nutrition.daily_reference_assessment('${IDS[0]}'::uuid, DATE '${relDate('2026-08-16')}')
     WHERE reference_pct IS NOT NULL;`)
+  const referenceScopeColumn = numberScalar(`
+    SELECT count(*)
+    FROM information_schema.columns
+    WHERE table_schema = 'nutrition'
+      AND table_name = 'nutrient_reference_values'
+      AND column_name = 'applies_to_intake_sources';`)
+  const restrictedUpperLimitRows = numberScalar(`
+    SELECT count(*)
+    FROM nutrition.nutrient_reference_values r
+    WHERE r.reference_kind = 'UL'
+      AND (
+        (r.nutrient_code = 'MG'
+          AND to_jsonb(r)->'applies_to_intake_sources' @> '["supplements", "pharmacological"]'::jsonb
+          AND jsonb_array_length(to_jsonb(r)->'applies_to_intake_sources') = 2)
+        OR (r.nutrient_code = 'NIA'
+          AND to_jsonb(r)->'applies_to_intake_sources' @> '["supplements", "fortified_foods"]'::jsonb
+          AND jsonb_array_length(to_jsonb(r)->'applies_to_intake_sources') = 2)
+        OR (r.nutrient_code = 'FOLAC'
+          AND to_jsonb(r)->'applies_to_intake_sources' @> '["supplements"]'::jsonb
+          AND jsonb_array_length(to_jsonb(r)->'applies_to_intake_sources') = 1)
+      );`)
+  const assessmentScopeRows = numberScalar(`
+    SELECT count(*)
+    FROM nutrition.daily_reference_assessment('${IDS[0]}'::uuid, DATE '${relDate('2026-08-16')}') a
+    WHERE a.nutrient_code = 'MG'
+      AND a.reference_kind = 'UL'
+      AND to_jsonb(a)->'reference_applies_to_intake_sources'
+        @> '["supplements", "pharmacological"]'::jsonb
+      AND jsonb_array_length(to_jsonb(a)->'reference_applies_to_intake_sources') = 2;`)
   const missingCounters = sql(`
     SELECT
       COALESCE(sum(enercc_missing), 0)::text,
@@ -412,6 +441,9 @@ if (MODE === 'clean') {
   if (tomDistinctDailyItemCounts < 4) errors.push(`Tom Positionszahl-Varianten: ${tomDistinctDailyItemCounts}, erwartet mindestens 4`)
   if (assessmentRows === 0) errors.push('daily_reference_assessment liefert keine Zeilen')
   if (assessmentPctRows === 0) errors.push('daily_reference_assessment liefert keinen Deckungsgrad')
+  if (referenceScopeColumn !== 1) errors.push('C-344: nutrient_reference_values.applies_to_intake_sources fehlt')
+  if (restrictedUpperLimitRows !== 3) errors.push(`C-344: Quellengeltung fuer MG/NIA/FOLAC: ${restrictedUpperLimitRows}, erwartet 3`)
+  if (assessmentScopeRows !== 1) errors.push(`C-344: daily_reference_assessment gibt die Magnesium-Quellengeltung nicht aus: ${assessmentScopeRows}`)
 
   const tom = IDS[0]
   const max = IDS[1]

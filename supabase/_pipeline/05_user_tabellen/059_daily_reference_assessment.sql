@@ -64,6 +64,7 @@ RETURNS TABLE (
   reference_value_max NUMERIC,
   reference_unit TEXT,
   reference_basis TEXT,
+  reference_applies_to_intake_sources TEXT[],
   reference_pct NUMERIC,
   reference_pct_min NUMERIC,
   reference_pct_max NUMERIC,
@@ -139,6 +140,7 @@ reference_candidates AS (
     r.value_max,
     r.unit,
     r.basis,
+    r.applies_to_intake_sources,
     r.source,
     r.source_locator,
     r.notes,
@@ -304,6 +306,7 @@ SELECT
       THEN 'goals_target_from_energy_percent'
     ELSE sr.basis
   END AS reference_basis,
+  sr.applies_to_intake_sources AS reference_applies_to_intake_sources,
   -- GO-00 Teil 2: gerechnet wird gegen den AUFGELOESTEN Wert
   -- (abs_value_*), nicht gegen die rohe Zahl aus der Tabelle.
   -- Steht ein basis_hindernis, gibt es keinen Prozentwert.
@@ -361,6 +364,7 @@ COMMENT ON FUNCTION nutrition.daily_reference_assessment(UUID, DATE) IS
   'Fuehrt reference_kind und reference_direction mit; keine Ampel, kein Score, keine Wortbewertung. '
   'C-54: Fuehrt nutrient_display_tier aus nutrient_defs mit, damit die Anzeige Haupt- und Nebenwerte ordnen kann. '
   'C-52: Bewertet Linolsaeure und Alpha-Linolensaeure gegen die Goals-Grammziele aus EFSA-Energieprozent. '
+  'C-344: Gibt die zulassigen Aufnahmequellen eines Referenzwerts strukturiert aus, ohne aus einer unaufgeloesten Tagesmenge eine Quellenbehauptung abzuleiten. '
   'Bei *_missing > 0 bleibt reference_pct NULL, damit eine unvollstaendige Summe nicht als Deckung erscheint.';
 
 GRANT EXECUTE ON FUNCTION nutrition.daily_reference_assessment(UUID, DATE)

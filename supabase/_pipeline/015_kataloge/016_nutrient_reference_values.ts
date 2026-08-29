@@ -23,6 +23,7 @@ type ReferenceRow = {
   unit: string
   basis: string
   target_applies_to?: string[]
+  applies_to_intake_sources?: Array<'foods' | 'fortified_foods' | 'supplements' | 'pharmacological'>
   source: string
   source_version: string
   source_locator: string
@@ -73,6 +74,7 @@ function ref(row: ReferenceRow): ReferenceRow {
     value_min: null,
     value_max: null,
     target_applies_to: [row.nutrient_code],
+    applies_to_intake_sources: ['foods', 'fortified_foods', 'supplements', 'pharmacological'],
     ...row,
   }
 }
@@ -258,15 +260,15 @@ const references: ReferenceRow[] = [
   ref({ nutrient_code: 'VITA', reference_kind: 'UL', value_min: 3000, value_max: 3000, unit: 'ug RE/day', basis: 'per_day', ...EFSA_TOPIC, source_locator: '2024 preformed vitamin A UL opinion summary: retain adult UL 3000 ug RE/day', notes: 'Applies to preformed vitamin A; teratogenicity risk in pregnancy.' }),
   ref({ nutrient_code: 'VITC', reference_kind: 'UL', value_min: 2000, value_max: 2000, unit: 'mg/day', basis: 'per_day', ...NAM_DRI, source_locator: 'Table C-6: adults 19-70 y and >70 y, vitamin C UL 2000 mg/day', notes: 'NAM DRI UL; EFSA has no numeric vitamin C UL in the 2017 summary table.' }),
   ref({ nutrient_code: 'VITE', reference_kind: 'UL', value_min: 300, value_max: 300, unit: 'mg/day', basis: 'per_day', source: 'EFSA tolerable upper intake level for vitamin E', source_version: 'EFSA Journal 2024;22(8):8953', source_url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2024.8953', source_locator: 'Abstract: adult UL 300 mg/day including pregnancy and lactation', notes: 'Upper limit from all dietary sources; differs from NAM DRI 1000 mg/day and EFSA is primary for LumeOS.' }),
-  ref({ nutrient_code: 'NIA', reference_kind: 'UL', value_min: 35, value_max: 35, unit: 'mg/day', basis: 'per_day', ...NAM_DRI, source_locator: 'Table C-6: adults 19-70 y and >70 y, niacin UL 35 mg/day', notes: 'Applies to synthetic niacin from supplements or fortified foods.' }),
+  ref({ nutrient_code: 'NIA', reference_kind: 'UL', value_min: 35, value_max: 35, unit: 'mg/day', basis: 'per_day', applies_to_intake_sources: ['fortified_foods', 'supplements'], ...NAM_DRI, source_locator: 'Table C-6: adults 19-70 y and >70 y, niacin UL 35 mg/day', notes: 'Applies to synthetic niacin from supplements or fortified foods.' }),
   ref({ nutrient_code: 'VITB6', reference_kind: 'UL', value_min: 12, value_max: 12, unit: 'mg/day', basis: 'per_day', source: 'EFSA tolerable upper intake level for vitamin B6', source_version: 'EFSA Journal 2023;21(5):8006', source_url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2023.8006', source_locator: 'Abstract: adult UL 12 mg/day including pregnancy and lactation', notes: 'EFSA updated UL; differs materially from NAM DRI 100 mg/day.' }),
-  ref({ nutrient_code: 'FOLAC', reference_kind: 'UL', value_min: 1000, value_max: 1000, unit: 'ug/day', basis: 'per_day', ...EFSA_TOPIC, source_locator: 'Topic page: existing folate ULs remain unchanged, adults 1000 ug/day', notes: 'Applies to supplemental folic acid and related synthetic forms, not food folate.' }),
+  ref({ nutrient_code: 'FOLAC', reference_kind: 'UL', value_min: 1000, value_max: 1000, unit: 'ug/day', basis: 'per_day', applies_to_intake_sources: ['supplements'], ...EFSA_TOPIC, source_locator: 'Topic page: existing folate ULs remain unchanged, adults 1000 ug/day', notes: 'Applies to supplemental folic acid and related synthetic forms, not food folate.' }),
   ref({ nutrient_code: 'CA', reference_kind: 'UL', age_min: 18, age_max: 70, value_min: 2.5, value_max: 2.5, unit: 'g/day', basis: 'per_day', ...NAM_DRI, source_locator: 'Table C-7: adults 19-70 y, calcium UL 2.5 g/day', notes: 'NAM DRI UL.' }),
   ref({ nutrient_code: 'CA', reference_kind: 'UL', age_min: 71, age_max: null, value_min: 2.0, value_max: 2.0, unit: 'g/day', basis: 'per_day', ...NAM_DRI, source_locator: 'Table C-7: adults >70 y, calcium UL 2.0 g/day', notes: 'NAM DRI UL.' }),
   ref({ nutrient_code: 'CU', reference_kind: 'UL', value_min: 5000, value_max: 5000, unit: 'ug/day', basis: 'per_day', source: 'EFSA re-evaluation of copper health-based guidance values', source_version: 'EFSA Journal 2023;21(1):7728', source_url: 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2023.7728', source_locator: 'EFSA news/opinion summary: no copper retention expected up to 5 mg/day', notes: 'EFSA safe level; differs from NAM DRI 10000 ug/day and EFSA is primary for LumeOS.' }),
   ref({ nutrient_code: 'ID', reference_kind: 'UL', value_min: 1100, value_max: 1100, unit: 'ug/day', basis: 'per_day', ...NAM_DRI, source_locator: 'Table C-7: adults 19-70 y and >70 y, iodine UL 1100 ug/day', notes: 'NAM DRI UL.' }),
   ref({ nutrient_code: 'FE', reference_kind: 'UL', value_min: 45, value_max: 45, unit: 'mg/day', basis: 'per_day', ...NAM_DRI, source_locator: 'Table C-7: adults 19-70 y and >70 y, iron UL 45 mg/day', notes: 'UL does not diagnose iron status; ferritin belongs to biomarkers.' }),
-  ref({ nutrient_code: 'MG', reference_kind: 'UL', value_min: 350, value_max: 350, unit: 'mg/day', basis: 'per_day', ...NAM_DRI, source_locator: 'Table C-7: adults 19-70 y and >70 y, magnesium UL 350 mg/day', notes: 'Applies to pharmacological/supplemental magnesium only, not magnesium naturally present in foods.' }),
+  ref({ nutrient_code: 'MG', reference_kind: 'UL', value_min: 350, value_max: 350, unit: 'mg/day', basis: 'per_day', applies_to_intake_sources: ['supplements', 'pharmacological'], ...NAM_DRI, source_locator: 'Table C-7: adults 19-70 y and >70 y, magnesium UL 350 mg/day', notes: 'Applies to pharmacological/supplemental magnesium only, not magnesium naturally present in foods.' }),
   ref({ nutrient_code: 'MN', reference_kind: 'UL', value_min: 11, value_max: 11, unit: 'mg/day', basis: 'per_day', ...NAM_DRI, source_locator: 'Table C-7: adults 19-70 y and >70 y, manganese UL 11 mg/day', notes: 'NAM DRI UL.' }),
   ref({ nutrient_code: 'MO', reference_kind: 'UL', value_min: 2000, value_max: 2000, unit: 'ug/day', basis: 'per_day', ...NAM_DRI, source_locator: 'Table C-7: adults 19-70 y and >70 y, molybdenum UL 2000 ug/day', notes: 'NAM DRI UL.' }),
   ref({ nutrient_code: 'P', reference_kind: 'UL', age_min: 18, age_max: 70, value_min: 4, value_max: 4, unit: 'g/day', basis: 'per_day', ...NAM_DRI, source_locator: 'Table C-7: adults 19-70 y, phosphorus UL 4 g/day', notes: 'NAM DRI UL.' }),
@@ -564,6 +566,7 @@ CREATE TABLE IF NOT EXISTS nutrition.nutrient_reference_values (
     'profile_calculated','as_low_as_possible','not_applicable'
   )),
   target_applies_to text[] NOT NULL DEFAULT '{}',
+  applies_to_intake_sources text[] NOT NULL DEFAULT ARRAY['foods', 'fortified_foods', 'supplements', 'pharmacological'],
   source text NOT NULL,
   source_version text NOT NULL,
   source_locator text NOT NULL,
@@ -576,8 +579,33 @@ CREATE TABLE IF NOT EXISTS nutrition.nutrient_reference_values (
     reference_kind IN ('NO_REFERENCE','NO_STANDALONE_REFERENCE','FORMULA','ALAP')
     OR (value_min IS NOT NULL AND value_max IS NOT NULL)
   ),
+  CHECK (
+    cardinality(applies_to_intake_sources) > 0
+    AND applies_to_intake_sources <@ ARRAY['foods', 'fortified_foods', 'supplements', 'pharmacological']
+  ),
   CHECK (value_max IS NULL OR value_min IS NULL OR value_min <= value_max)
 );
+
+ALTER TABLE nutrition.nutrient_reference_values
+  ADD COLUMN IF NOT EXISTS applies_to_intake_sources text[] NOT NULL
+    DEFAULT ARRAY['foods', 'fortified_foods', 'supplements', 'pharmacological'];
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = 'nutrition.nutrient_reference_values'::regclass
+      AND conname = 'nutrient_reference_values_applies_to_intake_sources_check'
+  ) THEN
+    ALTER TABLE nutrition.nutrient_reference_values
+      ADD CONSTRAINT nutrient_reference_values_applies_to_intake_sources_check
+      CHECK (
+        cardinality(applies_to_intake_sources) > 0
+        AND applies_to_intake_sources <@ ARRAY['foods', 'fortified_foods', 'supplements', 'pharmacological']
+      );
+  END IF;
+END $$;
 
 CREATE UNIQUE INDEX IF NOT EXISTS uq_nutrient_reference_values_scope
   ON nutrition.nutrient_reference_values (
@@ -617,6 +645,7 @@ INSERT INTO nutrition.nutrient_reference_values (
   unit,
   basis,
   target_applies_to,
+  applies_to_intake_sources,
   source,
   source_version,
   source_locator,
@@ -638,6 +667,7 @@ SELECT
   payload->>'unit',
   payload->>'basis',
   ARRAY(SELECT jsonb_array_elements_text(COALESCE(payload->'target_applies_to', '[]'::jsonb))),
+  ARRAY(SELECT jsonb_array_elements_text(COALESCE(payload->'applies_to_intake_sources', '["foods", "fortified_foods", "supplements", "pharmacological"]'::jsonb))),
   payload->>'source',
   payload->>'source_version',
   payload->>'source_locator',
@@ -658,6 +688,8 @@ COMMENT ON TABLE nutrition.nutrient_reference_values IS
   'C-45: Referenzwert-Antworten fuer alle BLS-Naehrstoffcodes. NO_REFERENCE ist ein kuratiertes Ergebnis, keine Leerstelle.';
 COMMENT ON COLUMN nutrition.nutrient_reference_values.reference_kind IS
   'Wertart: AR, PRI, AI, RI, UL, ALAP, FORMULA oder ausdruecklich NO_REFERENCE/NO_STANDALONE_REFERENCE.';
+COMMENT ON COLUMN nutrition.nutrient_reference_values.applies_to_intake_sources IS
+  'C-344: Zulaessige Quellen der aufgenommenen Naehrstoffmenge fuer diesen Referenzwert. foods meint natuerlich vorkommende Lebensmittelnaehrstoffe; fortified_foods, supplements und pharmacological sind getrennt, damit eine quellbeschraenkte UL nicht aus Freitext erraten werden muss.';
 COMMENT ON COLUMN nutrition.nutrient_reference_values.source_locator IS
   'Fundstelle innerhalb der Quelle; jede Zahl und jede NO_REFERENCE-Antwort muss eine Fundstelle tragen.';
 

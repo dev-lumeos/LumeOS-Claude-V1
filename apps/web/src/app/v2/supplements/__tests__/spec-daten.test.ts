@@ -10,8 +10,7 @@ import assert from 'node:assert/strict'
 
 import {
   CATALOG, EVIDENCE_GRADES, EVIDENCE_WEIGHT, gradeMeta,
-  INTERACTION_DB, INVENTORY, BLOODWORK_PANEL, STACK_TEMPLATES,
-  USER_STACKS, FREQUENCY_OPTIONS, ENHANCED_CATEGORIES,
+  INTERACTION_DB, INVENTORY, BLOODWORK_PANEL, ENHANCED_CATEGORIES,
 } from '../spec-daten'
 
 test('der Katalog der Vorlage ist vollstaendig uebernommen', () => {
@@ -71,8 +70,5 @@ test('die uebrigen Datenbloecke sind da', () => {
   assert.ok(INTERACTION_DB.length > 0, 'INTERACTION_DB leer')
   assert.ok(INVENTORY.length > 0, 'INVENTORY leer')
   assert.ok(BLOODWORK_PANEL.length > 0, 'BLOODWORK_PANEL leer')
-  assert.ok(STACK_TEMPLATES.length > 0, 'STACK_TEMPLATES leer')
-  assert.ok(USER_STACKS.length > 0, 'USER_STACKS leer')
-  assert.ok(FREQUENCY_OPTIONS.length > 0, 'FREQUENCY_OPTIONS leer')
   assert.ok(ENHANCED_CATEGORIES.length > 0, 'ENHANCED_CATEGORIES leer')
 })

@@ -7,8 +7,10 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: C-324
 entscheidung: null
+erledigt: 2026-08-29
+commit: OFFEN
 beruehrt:
-  tabellen: [nutrition.food_nutrients, nutrition.foods]
+  tabellen: [nutrition.nutrient_defs, nutrition.food_nutrients]
 zahlen:
   gemessen: 2026-08-29
   ohne_vitc_zeile: 420
@@ -77,3 +79,35 @@ unterscheidbar.**
 `[read]` **Wenn nein: entscheiden, wie fehlende Zeilen zu lesen
 sind** — und die Entscheidung aufschreiben, statt sie im Zaehler zu
 verstecken.
+
+## Abnahme
+
+**2026-08-29, geschlossen ohne Auftrag.**
+
+`[cmd]` **`nutrition.nutrient_defs` traegt alle 138 BLS-Codes mit
+Name, Einheit, Gruppe, Formel, `is_always_computed`,
+`is_partly_computed` und `parent_code`** — vollstaendig und korrekt
+importiert.
+
+`[read]` **Damit war die Frage beantwortet, bevor ich sie gestellt
+habe.**
+
+`[cmd]` **Und die Luecke ist keine:** `FOLAC` ist an 7.059 von 7.086
+Lebensmitteln null, weil synthetische Folsaeure nur in angereicherten
+vorkommt. **Dasselbe gilt fuer Vitamin C in Butterschmalz** — Toms
+Einwand traegt.
+
+`[read]` **Was ich stattdessen getan habe:** eine 14-MB-Quelltabelle
+durchgerechnet, um zu bestaetigen, was mit einer Abfrage auf
+`nutrient_defs` zu haben war.
+
+### Was offen bleibt und wo es hingehoert
+
+`[cmd]` **Die Quelle traegt 871.311 Zahlen, `food_nutrients` 869.501
+Zeilen** — und die Quelle fuehrt genau 1.800 Werte mit der
+Datenherkunft *Spuren*.
+
+`[read]` **Ob das ein Befund ist, ist offen.** **Als C-345 abgelegt,
+`schwere: niedrig`, ohne Auftrag.**
+
+**Geschlossen.**
