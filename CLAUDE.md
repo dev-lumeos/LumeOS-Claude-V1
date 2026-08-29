@@ -223,6 +223,31 @@ Seed-Konten mit je 180 Tagen, und `test-user@lumeos.local` mit einem.
 **Sonst ist sie nicht nachpruefbar — und eine Abweichung sieht aus
 wie ein Defekt.**
 
+## Der gebaute /v2/-Stand ist der Massstab
+
+**Tom, 2026-08-28:** *,,theme-v1 ist das claude design von welchem wir
+v2 abgeleitet haben. ssot findest selber im code, also ist theme-v1
+nur noch eine ideen struktur falls uns in v2 was fehlt."*
+
+`[read]` **Nicht: den Mockup gegen den gebauten Stand halten.**
+**Sondern: den gebauten Stand messen.** `theme-v1` nachschlagen, wenn
+etwas fehlt und die Frage ist, wie es gemeint war.
+
+`[cmd]` **In G-249 hat die falsche Richtung Schaden angerichtet:**
+eine zweite Ansicht wurde neben eine bestehende gebaut, **weil ich
+den Entwurf fuer den Massstab hielt.** 1.009 Zeilen wieder entfernt.
+
+### Zwei Routenbaeume, beide gewollt
+
+`[cmd]` **`/v2/nutrition` und `/nutrition` existieren nebeneinander.**
+Der alte traegt ein eigenes Template — Boundary-Karten, *,,TABS LAUT
+SPEC"*, *,,READ-ONLY MOCK"*.
+
+**Tom:** *,,da laeuft ein anderes template und das soll bleiben"*.
+
+`[read]` **`/v2/` ist der Arbeitsort. Der alte Baum bleibt
+unberuehrt.**
+
 ## Der Auftrag beschreibt den Job, der Agent misst
 
 **Tom, 2026-08-28:** *,,beschreib den job und lass die agents

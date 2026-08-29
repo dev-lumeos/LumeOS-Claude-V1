@@ -138,6 +138,27 @@ wirkungslos. **Zweimal am 28.08. war es das Zweite.**
 
 **Wenn eine Vorgabe nicht aufgeht: melden, nicht passend machen.**
 
+## Nachtrag vom Orchestrator, 2026-08-28
+
+**Der gebaute `/v2/`-Stand ist der Massstab, nicht der Mockup.**
+
+**Tom:** *,,theme-v1 ist das claude design von welchem wir v2
+abgeleitet haben ... also ist theme-v1 nur noch eine ideen struktur
+falls uns in v2 was fehlt."*
+
+`[read]` **Also nicht: den Mockup gegen den gebauten Stand halten.**
+**Sondern: den gebauten Stand messen.** `theme-v1` **nur
+nachschlagen, wenn etwas fehlt und die Frage ist, wie es gemeint
+war.**
+
+`[cmd]` **Und es gibt zwei Routenbaeume:** `/v2/nutrition` und
+`/nutrition`. **Der alte traegt ein eigenes Template und bleibt** —
+Tom: *,,da laeuft ein anderes template und das soll bleiben"*.
+**Nicht anfassen.**
+
+`[read]` **Mein Fehler in diesem Auftrag:** ich habe `theme-v1` als
+*,,massgeblich"* bezeichnet. **Das war falsch.**
+
 ## Bericht
 
 _(vom Agenten anzuhaengen)_

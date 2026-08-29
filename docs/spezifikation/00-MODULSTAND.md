@@ -255,6 +255,44 @@ am gerenderten Bildschirm und ist die belastbare Quelle.**
 traegt ueberall; die Oberflaeche ist ueberall angelegt und an
 verschiedenen Stellen Attrappe.
 
-`[read]` **Der naechste Schritt je Modul ist nicht *bauen*, sondern
-*den Mockup gegen den gebauten Stand halten*** — und zwar den
-`.jsx`-Bestand, nicht den `.js`-Ordner.
+## Berichtigung 2026-08-28: v2 ist die Wahrheit, nicht der Mockup
+
+**Tom:** *,,theme-v1 ist das claude design von welchem wir v2
+abgeleitet haben. ssot findest selber im code, also ist theme-v1 nur
+noch eine ideen struktur falls uns in v2 was fehlt."*
+
+`[read]` **Der gebaute `/v2/`-Stand ist der Massstab.** `theme-v1` ist
+die Ableitungsquelle — **eine Ideensammlung fuer den Fall, dass in v2
+etwas fehlt, kein Sollzustand.**
+
+`[read]` **Diese Datei sagte bis eben das Gegenteil** (*,,den Mockup
+gegen den gebauten Stand halten"*). `[cmd]` **Und in G-249 hat genau
+das Schaden angerichtet:** ich liess eine zweite Ansicht neben eine
+bestehende bauen, **weil ich den Entwurf fuer den Massstab hielt.**
+
+    richtig   Miss den gebauten /v2/-Stand. Was er kann, ist der
+              Stand. theme-v1 nachschlagen, wenn etwas fehlt und die
+              Frage ist, wie es gemeint war.
+
+## Zwei Routenbaeume, beide gewollt
+
+`[cmd]` **Gemessen 2026-08-28:**
+
+    /v2/nutrition · /v2/training · /v2/goals · /v2/medical
+    /v2/recovery · /v2/supplements · /v2/coach/ai · /v2/coach/human
+    /v2/dashboard · /v2/settings
+
+    /nutrition · /nutrition/foods · /nutrition/preferences
+    /training · /goals · /medical · /recovery · /supplements
+    /coach · /dashboard · /settings
+
+**Tom, 2026-08-28:** *,,da laeuft ein anderes template und das soll
+bleiben"*.
+
+`[read]` **Der Baum ohne `/v2/` traegt ein eigenes Template** —
+andere Schale, Boundary-Karten (*BLS-only*, *Candidate*,
+*Blockiert*), *,,TABS LAUT SPEC"*, *,,READ-ONLY MOCK"*. **Er ist
+nicht tot und wird nicht angefasst.**
+
+`[read]` **Fuer Auftraege heisst das: `/v2/` ist der Arbeitsort, der
+alte Baum bleibt unberuehrt.**
