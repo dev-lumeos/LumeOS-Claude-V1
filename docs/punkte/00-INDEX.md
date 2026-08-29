@@ -6,8 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 275 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 36 |
-| **gesamt** | **311** |
+| **gesamt** | **312** |
 
 ## medical — 39
 
@@ -53,7 +54,7 @@
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
 | `G-241` | entscheidung | hoch | [zwei Reiterschnitte im Medical-Mockup](todos/medical-g-0241-zwei-reiterschnitte-im-medical-mockup.md) | offen | — | — |
 
-## nutrition — 86
+## nutrition — 87
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -137,11 +138,12 @@
 | `G-236` | befund | niedrig | [`SmartSuggestions` Component und `useSmartSearchSuggestions` Hook ohne klaren V1-Trigger](todos/nutrition-g-0236-smartsuggestions-component-und-usesmartsearchsuggestions-h.md) | offen | — | — |
 | `G-237` | befund | niedrig | [`data/nutrientDetails.ts` als statisches Array — `food_sources` Array veraltet (per Review 1 ADR_IMPROVEMENTS_PACKAGE #20)](todos/nutrition-g-0237-data-nutrientdetails-ts-als-statisches-array-food-sources-.md) | offen | — | — |
 | `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | — | — |
-| `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](erledigt/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | erledigt | — | C-333, C-334, G-246, G-247 |
+| `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](erledigt/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | erledigt | — | C-333, C-334, G-246, G-247, G-249 |
 | `G-245` | feature | mittel | [die Sortier-Tags bauen](erledigt/nutrition-g-0245-die-sortier-tags-bauen.md) | erledigt | — | — |
 | `G-246` | feature | hoch | [die Detailtexte liegen in der Datenbank und werden nicht gelesen](erledigt/nutrition-g-0246-die-detailtexte-werden-nicht-gelesen.md) | erledigt | — | A-60, C-336 |
 | `G-247` | feature | mittel | [der Zeitraumwechsel braucht eine eigene Funktion](erledigt/nutrition-g-0247-zeitraumwechsel-braucht-eine-eigene-funktion.md) | erledigt | — | — |
 | `G-248` | befund | mittel | [der Leseweg laedt neun von 35 Fehlzaehlern](todos/nutrition-g-0248-der-leseweg-laedt-neun-von-35-fehlzaehlern.md) | offen | — | — |
+| `G-249` | feature | hoch | [zwei Ansichten zusammenfuehren und den Verlauf als Trend zeigen](laufend_claudecode/nutrition-g-0249-zwei-ansichten-zusammenfuehren-und-trend-zeigen.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 50
