@@ -8,6 +8,8 @@ braucht: []
 kind_von: C-100
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-28
 beruehrt:
   tabellen: []
   dateien: ["docs/ssot/51-sortweight-formel.md"]
@@ -45,3 +47,8 @@ zahlen: null
   `[read]` **Und G-65 loest es womoeglich von selbst:** Wer `Joghurt`
   abwertet, sieht ihn nicht mehr oben. **Erst Preferences bauen, dann
   neu messen.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-20 am 2026-08-28.** Der Auftragstext
+und der Bericht stehen dort.

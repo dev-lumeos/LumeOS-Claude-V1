@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-100
 kinder: []
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-28
 beruehrt:
   tabellen: []
   dateien: []
@@ -31,3 +33,8 @@ zahlen: null
   keine gemeinsame Ereignistabelle. Sechs Abfragen je Seitenaufruf,
   nach Zeit gemischt — **oder** eine Sicht in der Datenbank, die das
   einmal tut. Das Zweite waere die Loesung, das Erste die Abkuerzung.
+
+## Auftrag
+
+**Mitbeauftragt mit G-11 am 2026-08-28.** Der Auftragstext
+und der Bericht stehen dort.

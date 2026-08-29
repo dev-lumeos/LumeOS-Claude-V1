@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: C-48
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-28
 beruehrt:
   dateien: [apps/web/src/lib/nutrition]
 zahlen:
@@ -50,3 +52,8 @@ ohnehin je Naehrstoff.
 `[read]` **Die Frage ist eher, ob das Tagebuch einen Sammelhinweis
 braucht** — *,,drei Naehrstoffe unvollstaendig"* mit Verweis auf die
 Mikroansicht — **statt neun einzelne.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-11 am 2026-08-28.** Der Auftragstext
+und der Bericht stehen dort.

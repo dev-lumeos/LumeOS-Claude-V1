@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-73
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-28
 beruehrt:
   tabellen: []
   dateien: []
@@ -33,3 +35,8 @@ zahlen: null
   der Hinweis:** Die Arbeit faellt vor dem Begrenzen an. **Zum
   Vergleich:** Uebungen 142–172 ms ueber 1.416, Biomarker 130–160 ms
   ueber 11.676.
+
+## Auftrag
+
+**Mitbeauftragt mit C-20 am 2026-08-28.** Der Auftragstext
+und der Bericht stehen dort.

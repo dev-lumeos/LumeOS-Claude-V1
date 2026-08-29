@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-28
 beruehrt:
   tabellen: []
   dateien: []
@@ -29,3 +31,8 @@ zahlen: null
   `[read]` **Seit G-154 laedt der Katalog immer mit `prefs=1`**, weil
   der ADR es verlangt. Aus dem Randfall ist der Normalfall geworden.
   **Die Regel bleibt, nur ihre Kosten sind zu senken.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-20 am 2026-08-28.** Der Auftragstext
+und der Bericht stehen dort.

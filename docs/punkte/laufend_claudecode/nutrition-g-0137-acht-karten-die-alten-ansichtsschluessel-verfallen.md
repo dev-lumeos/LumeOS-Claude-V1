@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-129
 kinder: []
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-28
 beruehrt:
   tabellen: []
   dateien: []
@@ -29,3 +31,8 @@ zahlen: null
 
   `[cmd]` **Und die Speicherung verwirft kaputte Werte** (G-122) — sie
   faellt sauber auf *„alles zu"* zurueck.
+
+## Auftrag
+
+**Mitbeauftragt mit G-11 am 2026-08-28.** Der Auftragstext
+und der Bericht stehen dort.

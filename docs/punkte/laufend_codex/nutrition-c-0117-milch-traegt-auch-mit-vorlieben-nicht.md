@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-28
 beruehrt:
   tabellen: []
   dateien: []
@@ -37,3 +39,8 @@ zahlen: null
   `[read]` **Die zwei Wege aus C-102 stehen weiter offen:** *Trinkform
   vor Pulverform* als Regel, **oder Haeufigkeit statt Dichte** —
   `meal_items` protokolliert, was gegessen wird.
+
+## Auftrag
+
+**Mitbeauftragt mit C-20 am 2026-08-28.** Der Auftragstext
+und der Bericht stehen dort.

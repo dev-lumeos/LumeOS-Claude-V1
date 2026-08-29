@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: G-70
 entscheidung: E-23
+agent: codex
+beauftragt: 2026-08-28
 beruehrt:
   dateien: [supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql]
 zahlen: null
@@ -42,3 +44,8 @@ Satz. **Das ist eine gute Rueckfallebene, kein Ersatz.**
 `[read]` **Und `unsupported_sort` ist heute wirkungslos:** die
 Oberflaeche schickt bewusst nur Werte, die die Datenbank kennt.
 **Sobald sie zehn kennt, wird die Rueckmeldung nuetzlich.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-20 am 2026-08-28.** Der Auftragstext
+und der Bericht stehen dort.
