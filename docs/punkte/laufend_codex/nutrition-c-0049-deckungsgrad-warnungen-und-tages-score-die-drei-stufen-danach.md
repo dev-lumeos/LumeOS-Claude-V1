@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-122
 kinder: [C-323, C-324]
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-29
 beruehrt:
   tabellen: ["nutrition.nutrient_search_aliases"]
   dateien: ["docs/ssot/146-coach-portal.md", "apps/coach/src/lib/browser-client.ts", "supabase/_pipeline/_testdaten/testdaten-einspielen.ts", "supabase/_pipeline/kette-ausfuehren.ts", "apps/coach/src/app/tokens.css", "docs/ssot/158-tab-zustand.md", "apps/web/src/lib/tab-url.ts", "tools/schuss.mjs", "docs/ssot/172-naehrstoff-aliase.md", "docs/ssot/168-naehrstoff-suche.md", "docs/ssot/166-naehrstoffbaum-anzeige.md", "docs/ssot/161-naehrstoffanzeige.md", "docs/ssot/154-preferences.md", "supabase/_pipeline/_testdaten/coach-portal-fuellen.sql"]
@@ -199,3 +201,8 @@ Quelle und Belege: `docs/ssot/154-preferences.md`.
   Portal zeigt dann 1 statt 3 Athleten (die `dev`-Beziehung überlebt
   seit dem Fix vom 2026-08-20). Entweder `coach-portal-fuellen.sql` an
   den Auffrisch-Ablauf anhängen oder in den Seed-Erzeuger ziehen.
+
+## Auftrag
+
+**Mitbeauftragt mit C-346 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.

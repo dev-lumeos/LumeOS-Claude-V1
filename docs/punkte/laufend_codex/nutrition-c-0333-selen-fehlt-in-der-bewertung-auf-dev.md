@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: G-239
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-29
 beruehrt:
   tabellen: [nutrition.nutrient_reference_values]
 zahlen: null
@@ -27,3 +29,8 @@ also auch keine Bewertung. **Zusammenlegen oder abgrenzen.**
 
 `[read]` **Und die Meldung ist richtig gelaufen:** der Agent hat
 nicht ergaenzt, was fehlt, sondern gesagt, dass es fehlt.
+
+## Auftrag
+
+**Mitbeauftragt mit C-346 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.

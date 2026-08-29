@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: E-16
+agent: claudecode
+beauftragt: 2026-08-29
 beruehrt:
   tabellen: []
   dateien: []
@@ -53,3 +55,8 @@ zahlen: null
 
   `[read]` **Die Allergene bleiben hart** — G-67 hat es begruendet:
   *„`hard_exclude` ist die Stufe, die auch fuer Allergene gilt."*
+
+## Auftrag
+
+**Mitbeauftragt mit G-108 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.

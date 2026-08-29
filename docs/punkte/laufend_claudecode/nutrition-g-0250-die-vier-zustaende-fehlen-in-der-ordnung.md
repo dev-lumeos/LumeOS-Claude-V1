@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: G-249
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-29
 beruehrt:
   tabellen: [goals.nutrition_targets]
   dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
@@ -51,3 +53,8 @@ sie meint.**
 `[cmd]` **Und die Datenlage traegt es:** 60 Naehrstoffe haben ein
 persoenliches Ziel, die uebrigen 78 nur die Referenz. **Bei diesen 78
 gibt es gar keinen Widerspruch.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-108 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.

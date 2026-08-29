@@ -5,7 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 270 |
+| `todos` | 262 |
+| `laufend_codex` | 5 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 61 |
 | **gesamt** | **331** |
 
@@ -74,7 +76,7 @@
 | `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](todos/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | offen | — | — |
 | `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — | — |
 | `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](erledigt/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | erledigt | — | G-239, G-248 |
-| `C-49` | befund | hoch | [Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach](todos/nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md) | offen | — | C-323, C-324 |
+| `C-49` | befund | hoch | [Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach](laufend_codex/nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md) | laeuft (codex) | — | C-323, C-324 |
 | `C-102` | feature | mittel | [`milch` findet Joghurt statt Milch](erledigt/nutrition-c-0102-milch-findet-joghurt-statt-milch.md) | erledigt | — | — |
 | `C-109` | entscheidung | mittel | [Die Injektions-Grenzwerte sind unbelegt](todos/nutrition-c-0109-die-injektions-grenzwerte-sind-unbelegt.md) | offen | — | — |
 | `C-117` | befund | mittel | [`milch` traegt auch mit Vorlieben nicht](erledigt/nutrition-c-0117-milch-traegt-auch-mit-vorlieben-nicht.md) | erledigt | — | — |
@@ -90,13 +92,13 @@
 | `C-192` | befund | mittel | [`p_user_id` kostet in `food_search` das Dreifache](erledigt/nutrition-c-0192-p-user-id-kostet-in-food-search-das-dreifache.md) | erledigt | — | — |
 | `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](todos/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | offen | — | — |
 | `C-210` | befund | mittel | [Die 28 fehlenden Naehrstofftexte — was ist gemeint?](todos/nutrition-c-0210-die-28-fehlenden-naehrstofftexte-was-ist-gemeint.md) | offen | — | — |
-| `C-211` | befund | mittel | [Selen fehlt im BLS-Katalog](todos/nutrition-c-0211-selen-fehlt-im-bls-katalog.md) | offen | — | — |
-| `C-212` | befund | mittel | [`CHORL` haengt nicht im Naehrstoffbaum](todos/nutrition-c-0212-chorl-haengt-nicht-im-naehrstoffbaum.md) | offen | — | — |
+| `C-211` | befund | mittel | [Selen fehlt im BLS-Katalog](laufend_codex/nutrition-c-0211-selen-fehlt-im-bls-katalog.md) | laeuft (codex) | — | — |
+| `C-212` | befund | mittel | [`CHORL` haengt nicht im Naehrstoffbaum](laufend_codex/nutrition-c-0212-chorl-haengt-nicht-im-naehrstoffbaum.md) | laeuft (codex) | — | — |
 | `C-229` | befund | mittel | [Ein Katalog aus `DatabaseEcht`, Detail und Add getrennt](todos/nutrition-c-0229-ein-katalog-aus-databaseecht-detail-und-add-getrennt.md) | offen | — | — |
 | `C-239` | befund | mittel | [`meal_plans` kennt keinen Lebenszyklus](todos/nutrition-c-0239-meal-plans-kennt-keinen-lebenszyklus.md) | offen | — | — |
 | `C-323` | entscheidung | hoch | [Micro-Flags Warnschwelle und Formulierung festlegen](erledigt/nutrition-c-0323-micro-flags-warnschwelle-und-formulierung-festlegen.md) | erledigt | — | C-344, G-259 |
 | `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](erledigt/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | erledigt | — | C-342, C-343 |
-| `C-333` | befund | niedrig | [Selen fehlt in der Bewertung auf dev](todos/nutrition-c-0333-selen-fehlt-in-der-bewertung-auf-dev.md) | offen | — | — |
+| `C-333` | befund | niedrig | [Selen fehlt in der Bewertung auf dev](laufend_codex/nutrition-c-0333-selen-fehlt-in-der-bewertung-auf-dev.md) | laeuft (codex) | — | — |
 | `C-334` | befund | hoch | [die Tagesbewertung hat sich zwischen zwei Messungen verschoben](erledigt/nutrition-c-0334-die-bewertung-hat-sich-zwischen-zwei-messungen-verschoben.md) | erledigt | — | C-335 |
 | `C-335` | befund | mittel | [keine Aenderungshistorie fuer Mahlzeiten und Referenzwerte](todos/nutrition-c-0335-keine-aenderungshistorie-fuer-mahlzeiten.md) | offen | — | — |
 | `C-336` | befund | hoch | [FD traegt den Text eines anderen Naehrstoffs](erledigt/nutrition-c-0336-fd-traegt-den-text-eines-anderen-naehrstoffs.md) | erledigt | — | C-346 |
@@ -105,7 +107,7 @@
 | `C-343` | befund | hoch | [zwei Schreibweisen fuer *,,kein Vitamin C"*](erledigt/nutrition-c-0343-vitamin-c-fehlt-an-180-von-181-tagen.md) | erledigt | — | C-345 |
 | `C-344` | befund | hoch | [drei Obergrenzen gelten nicht fuer Nahrung](erledigt/nutrition-c-0344-drei-obergrenzen-gelten-nicht-fuer-nahrung.md) | erledigt | — | — |
 | `C-345` | befund | niedrig | [Spurenwerte im Lebensmittelimport](todos/nutrition-c-0345-spurenwerte-im-lebensmittelimport.md) | offen | — | — |
-| `C-346` | befund | hoch | [zwei Detailtexte neu verknuepfen](todos/nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md) | offen | — | — |
+| `C-346` | befund | hoch | [zwei Detailtexte neu verknuepfen](laufend_codex/nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -116,9 +118,9 @@
 | `G-98` | befund | mittel | [Meal plans braucht einen Zustand und eine Herkunft](todos/nutrition-g-0098-meal-plans-braucht-einen-zustand-und-eine-herkunft.md) | offen | — | — |
 | `G-99` | befund | mittel | [Drei der acht Planner-Spalten bleiben wirkungslos](todos/nutrition-g-0099-drei-der-acht-planner-spalten-bleiben-wirkungslos.md) | offen | — | — |
 | `G-107` | befund | mittel | [Der Mikronaehrstoff-Trend braucht eine Referenz je Tag](erledigt/nutrition-g-0107-der-mikronaehrstoff-trend-braucht-eine-referenz-je-tag.md) | erledigt | — | G-252 |
-| `G-108` | befund | mittel | [Die Filter des Nutrients-Tabs](todos/nutrition-g-0108-die-filter-des-nutrients-tabs.md) | offen | — | — |
+| `G-108` | befund | mittel | [Die Filter des Nutrients-Tabs](laufend_claudecode/nutrition-g-0108-die-filter-des-nutrients-tabs.md) | laeuft (claudecode) | — | — |
 | `G-112` | befund | mittel | [Der Food-DB-Filter laesst nur einen Wert zu](erledigt/nutrition-g-0112-der-food-db-filter-laesst-nur-einen-wert-zu.md) | erledigt | — | — |
-| `G-116` | entscheidung | mittel | [Generelle Ausschluesse bewerten mit 0, statt zu filtern](todos/nutrition-g-0116-generelle-ausschluesse-bewerten-mit-0-statt-zu-filtern.md) | offen | — | — |
+| `G-116` | entscheidung | mittel | [Generelle Ausschluesse bewerten mit 0, statt zu filtern](laufend_claudecode/nutrition-g-0116-generelle-ausschluesse-bewerten-mit-0-statt-zu-filtern.md) | laeuft (claudecode) | — | — |
 | `G-126` | befund | mittel | [Drei Reste aus G-122](todos/nutrition-g-0126-drei-reste-aus-g-122.md) | offen | — | C-210, C-211, C-212 |
 | `G-134` | entscheidung | mittel | [Die vier Filtergruppen gibt es in den Daten nicht](todos/nutrition-g-0134-die-vier-filtergruppen-gibt-es-in-den-daten-nicht.md) | offen | — | — |
 | `G-136` | entscheidung | mittel | [Zwei Kartenzuordnungen sind Auslegung](todos/nutrition-g-0136-zwei-kartenzuordnungen-sind-auslegung.md) | offen | — | — |
@@ -151,7 +153,7 @@
 | `G-247` | feature | mittel | [der Zeitraumwechsel braucht eine eigene Funktion](erledigt/nutrition-g-0247-zeitraumwechsel-braucht-eine-eigene-funktion.md) | erledigt | — | — |
 | `G-248` | befund | mittel | [der Leseweg laedt neun von 35 Fehlzaehlern](erledigt/nutrition-g-0248-der-leseweg-laedt-neun-von-35-fehlzaehlern.md) | erledigt | — | — |
 | `G-249` | feature | hoch | [zwei Ansichten zusammenfuehren und den Verlauf als Trend zeigen](erledigt/nutrition-g-0249-zwei-ansichten-zusammenfuehren-und-trend-zeigen.md) | erledigt | — | G-250 |
-| `G-250` | entscheidung | mittel | [die vier Zustaende fehlen in der Ordnung](todos/nutrition-g-0250-die-vier-zustaende-fehlen-in-der-ordnung.md) | offen | — | — |
+| `G-250` | entscheidung | mittel | [die vier Zustaende fehlen in der Ordnung](laufend_claudecode/nutrition-g-0250-die-vier-zustaende-fehlen-in-der-ordnung.md) | laeuft (claudecode) | — | — |
 | `G-251` | feature | niedrig | [die Herkunfts-Filter im Food-DB-Reiter](todos/nutrition-g-0251-herkunfts-filter-im-food-db-tab.md) | offen | — | — |
 | `G-252` | messung | mittel | [die Ladezeit hat eine andere Ursache](todos/nutrition-g-0252-die-ladezeit-hat-eine-andere-ursache.md) | offen | — | — |
 | `G-254` | entscheidung | mittel | [sechs Kacheln brauchen eine Entscheidung](todos/nutrition-g-0254-sechs-kacheln-brauchen-eine-entscheidung.md) | offen | — | G-258 |

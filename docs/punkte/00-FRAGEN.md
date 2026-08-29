@@ -366,7 +366,7 @@ derselbe Befund ist, gehoert geprueft, nicht angenommen.
 
 ## G-250 — die vier Zustaende fehlen in der Ordnung
 
-**Modul:** nutrition · **angelegt:** 2026-08-28 · **Datei:** `todos/nutrition-g-0250-die-vier-zustaende-fehlen-in-der-ordnung.md`
+**Modul:** nutrition · **angelegt:** 2026-08-28 · **Datei:** `laufend_claudecode/nutrition-g-0250-die-vier-zustaende-fehlen-in-der-ordnung.md`
 
 ## Befund
 

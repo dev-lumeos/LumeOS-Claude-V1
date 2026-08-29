@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-126
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-29
 beruehrt:
   tabellen: []
   dateien: []
@@ -27,3 +29,8 @@ zahlen: null
 
   `[read]` **BLS 4.0 ist die einzige zulaessige Quelle.** Fuehrt BLS
   Selen nicht, wird nichts angelegt und der Punkt geschlossen.
+
+## Auftrag
+
+**Mitbeauftragt mit C-346 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.
