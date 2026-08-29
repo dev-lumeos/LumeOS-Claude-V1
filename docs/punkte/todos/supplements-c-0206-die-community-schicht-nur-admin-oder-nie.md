@@ -7,7 +7,7 @@ angelegt: 2026-08-22
 braucht: []
 kind_von: null
 kinder: []
-entscheidung: null
+entscheidung: E-28
 beruehrt:
   tabellen: []
   dateien: []
@@ -33,3 +33,7 @@ zahlen: null
   wird.**
 
 ### Was Tom entscheiden muss, bevor Codex anfaengt
+
+## Entschieden
+
+**E-28, 2026-08-29.** Die Begruendung steht dort.

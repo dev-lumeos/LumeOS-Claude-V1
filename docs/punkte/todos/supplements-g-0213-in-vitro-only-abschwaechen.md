@@ -6,7 +6,7 @@ schwere: mittel
 angelegt: 2026-08-28
 braucht: []
 kind_von: G-186
-entscheidung: null
+entscheidung: E-27
 beruehrt:
   tabellen: [supplements.entity_cyp, supplements.entity_transporters]
   dateien: [apps/web/src/lib/supplements/rollen-lage.ts]
@@ -42,3 +42,7 @@ viele auf belastbareren Stufen? **Ohne diese Verteilung ist jede
 Antwort geraten** — wenn es zwei Befunde betrifft, ist es ein Detail;
 wenn es die Mehrheit betrifft, aendert es den Charakter des ganzen
 Blocks.
+
+## Entschieden
+
+**E-27, 2026-08-29.** Die Begruendung steht dort.

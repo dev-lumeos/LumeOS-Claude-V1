@@ -6,7 +6,7 @@ schwere: hoch
 angelegt: 2026-08-28
 braucht: []
 kind_von: null
-entscheidung: null
+entscheidung: E-26
 beruehrt:
   dateien: [docs/spezifikation/00-MODULSTAND.md]
 zahlen: null
@@ -52,3 +52,7 @@ Entwurf fuer den Massstab hielt.
 
 `[read]` **Vor einem Auftrag zu klaeren:** ist hier wirklich etwas
 offen, oder war nur die Blickrichtung falsch?
+
+## Entschieden
+
+**E-26, 2026-08-29.** Die Begruendung steht dort.

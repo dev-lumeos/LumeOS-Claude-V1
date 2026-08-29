@@ -1,157 +1,36 @@
 # Offene Fragen an Tom
 
-**Stand 2026-08-29.** `[cmd]` **33 Punkte tragen `typ: entscheidung`
-und sind noch keiner Entscheidung zugeordnet.**
+**Stand 2026-08-29.** `[cmd]` **30 Punkte tragen `typ: entscheidung`
+und sind keiner Entscheidung zugeordnet.**
 
-`[read]` **Diese Datei buendelt sie an einem Ort**, damit nicht 33
-Dateien geoeffnet werden muessen. **Der Text je Frage kommt aus der
-Punktdatei selbst** — nicht vom Orchestrator neu formuliert.
+`[read]` **Der Text je Frage kommt aus der Punktdatei selbst** —
+nicht vom Orchestrator neu formuliert.
 
 **Wenn eine Frage entschieden ist:** ein ADR in
 `docs/entscheidungen/`, und der Punkt bekommt `entscheidung: E-xx`.
 **Dann faellt er aus dieser Liste.**
 
----
+## Am 2026-08-29 entschieden und ausgeschieden
 
-## So liest sich die Liste
-
-    hoch      blockiert etwas Konkretes
-    mittel    haelt einen Punkt offen, blockiert aber nichts
-    niedrig   kann warten, gehoert aber notiert
-
-`[read]` **Nur zwei der 33 werden von anderen Punkten als Blocker
-gefuehrt** — die uebrigen stehen fuer sich. `[read]` **Das heisst
-nicht, dass sie unwichtig sind; es heisst, dass niemand daran
-weitergearbeitet hat.**
-
+    G-241   E-26   Documents und Appointments bleiben
+    C-324   E-25   Nutrition-Score nach NRF9.3
+    G-213   E-27   in vitro kennzeichnen, nicht abschwaechen
+    C-206   E-28   die Community wird nicht eingeschraenkt
+    G-254   E-29   Modulzugriffe auf coach ueber eine Funktion
 
 ---
-
-# Die drei dringenden, aufbereitet
-
-`[read]` **Fuer diese drei habe ich zusaetzlich gemessen**, damit die
-Entscheidung nicht am Nachschlagen haengt.
-
----
-
-## G-241 — welcher Medical-Reiterschnitt gilt?
-
-`[cmd]` **Der gebaute Stand hat sechs Reiter:**
-
-    dashboard · biomarkers · import · tracking · wirkstoffe · insights
-
-`[cmd]` **Der Entwurf `module-medical.jsx` hat andere sechs:**
-
-    Overview · Labs · Medications · History · Documents · Appointments
-
-`[cmd]` **Und `module-medical-v2.jsx` nennt fuenf mit dem Vermerk
-*,,5 spec tabs"*:**
-
-    Dashboard · Biomarkers · Import · Tracking · Insights
-
-`[read]` **Der gebaute Stand ist der Spec-Schnitt plus `wirkstoffe`**
-— dem Wirkstoffkatalog aus G-208/G-210, den es beim Entwurf noch nicht
-gab.
-
-**Die Frage ist damit enger als der Punkt sie stellt:** `[read]`
-**fehlen `History`, `Documents` und `Appointments`, oder sind sie
-bewusst entfallen?**
-
-    History        koennte in `tracking` aufgegangen sein
-    Documents      Laborberichte gibt es (`lab_reports`), eine
-                   Ansicht dafuer nicht
-    Appointments   kein Gegenstueck im Schema
-
-`[read]` **Meine Lesart, ungeprueft:** `Appointments` war eine Idee
-aus dem alten Repo ohne Datengrundlage. **`Documents` ist der einzige
-der drei, der Daten haette.**
-
----
-
-## C-323 — Micro-Flags: Warnschwelle und Formulierung
-
-`[cmd]` **Es gibt keine `micro_flags`-Tabelle.** Die einzige
-Flag-Tabelle im Bestand ist
-`supplements.supplement_human_evidence_flags`.
-
-`[read]` **Damit ist die Frage nicht *,,welche Schwelle"*, sondern
-*,,woraus entsteht ein Flag ueberhaupt"*.**
-
-`[cmd]` **Was es gibt:** `daily_reference_assessment` liefert je
-Naehrstoff `reference_pct`, `reference_kind`, `reference_status` —
-**und seit G-249 die vier Zustaende in der Oberflaeche:** gedeckt · zu
-wenig · ueber der Obergrenze · kein Richtwert.
-
-`[read]` **Ein Flag waere die Verdichtung davon zu einer Aussage.**
-**Die Entscheidung ist, ab wann eine Abweichung erwaehnenswert ist**
-— und in welcher Sprache. **80 Prozent eines Zielwerts sind zu wenig,
-80 Prozent einer Obergrenze sind unbedenklich** (C-48 Regel 2); **ein
-Flag muss diese Richtung mitfuehren, sonst warnt es falschherum.**
-
----
-
-## C-324 — Tages-Score: Gewichtung
-
-`[cmd]` **Einen Nutrition-Score gibt es nicht.** `[cmd]` Score-Funktionen
-existieren nur in `recovery`: `recalculate_score`,
-`refresh_scores_for_user`, Tabelle `recovery.scores`.
-
-`[read]` **Und dort ist gerade der Befund offen, dass zwei Rechnungen
-verschieden ergeben** (C-143, heute: 36 gegen 35,3).
-
-`[read]` **Das ist der Grund, diese Frage nicht isoliert zu
-entscheiden:** ein zweiter Gesamtwert neben einem, der schon
-uneindeutig ist, verdoppelt das Problem. `[cmd]` **G-106 fuehrt
-denselben Einwand fuer Recovery:** *,,der Readiness-Komposit waere ein
-zweiter Gesamtwert"*.
-
-**Die Vorfrage ist: soll es einen Nutrition-Gesamtwert geben?**
-`[read]` **Wenn ja, ist die Gewichtung die zweite Frage. Wenn nein,
-faellt C-324 weg.**
-
 
 ---
 
 # Hoch
 
-## G-241 — zwei Reiterschnitte im Medical-Mockup
-
-**Modul:** medical · **angelegt:** 2026-08-28 · **Datei:** `todos/medical-g-0241-zwei-reiterschnitte-im-medical-mockup.md`
-
-## Befund
-
-**Aus der Modulstand-Erhebung vom 2026-08-28**,
-`docs/spezifikation/00-MODULSTAND.md`.
-
-`[cmd]` **`module-medical.jsx` (810 Zeilen) fuehrt sechs Reiter:**
-Overview · Labs · Medications · History · Documents · Appointments.
-
-`[cmd]` **`module-medical-v2.jsx` (819 Zeilen) fuehrt fuenf:**
-Dashboard · Biomarkers · Import · Tracking · Insights — **mit dem
-Vermerk *,,5 spec tabs"*.**
-
-`[read]` **Beide liegen nebeneinander im selben Ordner.** `[cmd]` Der
-gebaute Stand hat `tab-biomarker`, `tab-tracking`, `tab-wirkstoffe`.
-
-**Welcher Schnitt gilt?** `[read]` `History`, `Documents` und
-`Appointments` gibt es im v2-Schnitt nicht — **sind sie entfallen oder
-verschoben?**
-
 ## C-323 — Micro-Flags Warnschwelle und Formulierung festlegen
 
-**Modul:** nutrition · **angelegt:** 2026-08-27 · **Datei:** `todos/nutrition-c-0323-micro-flags-warnschwelle-und-formulierung-festlegen.md`
+**Modul:** nutrition · **angelegt:** 2026-08-27 · **Datei:** `laufend_claudecode/nutrition-c-0323-micro-flags-warnschwelle-und-formulierung-festlegen.md`
 
 ## Befund
 
 Offene Frage aus C-49: ab wann Unterversorgung gewarnt wird und mit welcher Formulierung.
-
-## C-324 — Tages-Score Gewichtung festlegen
-
-**Modul:** nutrition · **angelegt:** 2026-08-27 · **Datei:** `todos/nutrition-c-0324-tages-score-gewichtung-festlegen.md`
-
-## Befund
-
-Offene Frage aus C-49: welcher Naehrstoff wie stark in einen Tages-Score eingeht.
 
 ---
 
@@ -497,41 +376,6 @@ sie meint.**
 persoenliches Ziel, die uebrigen 78 nur die Referenz. **Bei diesen 78
 gibt es gar keinen Widerspruch.**
 
-## G-254 — sechs Kacheln brauchen eine Entscheidung
-
-**Modul:** nutrition · **angelegt:** 2026-08-29 · **Datei:** `todos/nutrition-g-0254-sechs-kacheln-brauchen-eine-entscheidung.md`
-
-## Befund
-
-Aus G-11, Claude Code, 2026-08-29. **Bewusst nicht gebaut.**
-
-`[read]` **Vier Kacheln im Diary, zwei in Plans.** `[read]` **Je
-Kachel dieselbe Frage: woraus soll die Zahl entstehen?**
-
-`[read]` **Der Bericht nennt drei Beispiele, und sie zeigen, dass es
-keine Bauentscheidung ist:** *,,was ist ein Vorschlag, was misst ein
-Score, was ist ein *ghost entry*."*
-
-## Der naheliegendste Fall zuerst
-
-`[cmd]` ***,,Pending actions"* — `coach.pending_actions` existiert
-und traegt Zeilen.**
-
-`[read]` **Die Frage ist keine Datenfrage, sondern eine
-Modulgrenze:** darf das Tagebuch aus dem Coach-Modul lesen?
-
-`[read]` **Und sie hat eine Vorgeschichte:** `SICHERHEIT.md` fuehrt
-die Nachvollziehbarkeit des Coach-Zugriffs als offenen Punkt, und
-`coach` hat drei Aenderungsprotokolle. **Wenn Nutrition dort liest,
-gilt die Frage in beide Richtungen.**
-
-## Was nicht entschieden werden muss
-
-`[read]` ***,,Micronutrient trend"* im Insights-Reiter ist gestrichen,
-nicht offen** — der Nutrients-Reiter zeigt dasselbe je Naehrstoff,
-und eine zweite Fassung waere die Doppelung, die aus G-249 und G-11
-gerade zweimal entfernt wurde.
-
 ## G-72 — Acht Spalten ohne Wirkung und ohne Kachel
 
 **Modul:** nutrition · **angelegt:** 2026-08-19 · **Datei:** `todos/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md`
@@ -771,27 +615,28 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
 
 ### Was gar kein Schema hat
 
-## C-206 — Die Community-Schicht — nur Admin, oder nie?
+## C-341 — was passiert mit gemeldeten Community-Beitraegen?
 
-**Modul:** supplements · **angelegt:** 2026-08-22 · **Datei:** `todos/supplements-c-0206-die-community-schicht-nur-admin-oder-nie.md`
+**Modul:** supplements · **angelegt:** 2026-08-29 · **Datei:** `todos/supplements-c-0341-was-passiert-mit-gemeldeten-community-beitraegen.md`
 
 ## Befund
 
-(neu 2026-08-22). **Entscheidung Tom.**
+**Aus E-28:** die Community wird nicht kuratiert, Nutzer schreiben.
 
-  `[cmd]` 16 Dateien aus crawl_034, ausdruecklich `admin_only` und
-  E-Klasse: `community_intelligence_patterns` 123 ·
-  `exposure_patterns` 86 · `lab_patterns` 43 · `side_effect_patterns`
-  37 · `stack_patterns` 31 · `science_delta` 30 ·
-  `product_quality_signals` 40 · `terminology` (71 Begriffe, 179
-  Aliase) · `_canonical_id_lookup` 1.131 Namen.
+`[read]` **Ohne Vorabpruefung braucht es einen Umgang mit dem, was
+schiefgeht** — nicht Kuratierung, sondern das Uebliche: melden,
+verbergen, sperren.
 
-  `[read]` **Deskriptiv, keine Empfehlungen, keine Praevalenzen.**
-  Taugt als Coach-Werkzeug (*„was die Szene glaubt vs. was belegt
-  ist"*), nie als Empfehlung. **Zu entscheiden, ob es je nutzersichtbar
-  wird.**
+`[read]` **Und die inhaltliche Grenze aus E-28 muss durchsetzbar
+sein:** Nebenwirkungen und Erfahrungen duerfen stehen,
+**Dosierungsprotokolle nicht.** `[read]` **Wer entfernt einen Beitrag,
+der ein Protokoll enthaelt, und wie faellt er auf?**
 
-### Was Tom entscheiden muss, bevor Codex anfaengt
+## Offen
+
+`[read]` **Wer meldet, wer entscheidet, wie schnell.** `[read]` **Und
+was mit dem Beitrag geschieht** — verborgen oder geloescht. **Bei
+einem Gesundheitsprodukt ist das nicht dasselbe.**
 
 ## G-150 — Die Volltextsuche findet ueber Erklaertexte
 
@@ -826,38 +671,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   **Vorschlag:** Alias-Treffer und Texttreffer unterscheidbar zeigen.
   `[read]` **Wer *„Skorbut"* sucht, will den Texttreffer. Wer *„BCAA"*
   sucht, will die drei.**
-
-## G-213 — soll `in_vitro_only` eine Warnung abschwaechen?
-
-**Modul:** supplements · **angelegt:** 2026-08-28 · **Datei:** `todos/supplements-g-0213-in-vitro-only-abschwaechen.md`
-
-## Befund
-
-Aus G-186, Claude Code, 2026-08-28.
-
-`[read]` **Alle Resveratrol-Befunde stehen auf `in_vitro_only`.** Der
-Block zeigt sie heute wie jeden anderen Befund.
-
-`[read]` **Die Frage ist fachlich, nicht gestalterisch:** eine
-Hemmung, die nur in der Zellkultur gezeigt wurde, ist etwas anderes
-als eine am Menschen belegte. **Beides gleich darzustellen behauptet
-mehr, als die Daten hergeben.**
-
-`[read]` **Und die Gegenrichtung ist genauso ernst:** wer
-`in_vitro_only` optisch abschwaecht, macht aus einem Hinweis eine
-Randnotiz — **bei einem Stoff, den jemand taeglich nimmt.**
-
-**Das ist eine Entscheidung fuer Tom.** Der Waechter kann sie nicht
-treffen, und der Agent soll sie nicht raten.
-
----
-
-`[read]` **Die Messung, die vor der Entscheidung fehlt:** wie viele
-Befunde im Katalog stehen ueberhaupt auf `in_vitro_only`, und wie
-viele auf belastbareren Stufen? **Ohne diese Verteilung ist jede
-Antwort geraten** — wenn es zwei Befunde betrifft, ist es ein Detail;
-wenn es die Mehrheit betrifft, aendert es den Charakter des ganzen
-Blocks.
 
 ## G-53 — `InjektionsKarte` in `packages/ui` hat keinen Aufrufer
 
@@ -1051,6 +864,36 @@ oder erledigt sein.
 
 **Verwandter Punkt:** G-98 (Meal plans braucht einen Zustand und eine Herkunft). `[read]` **Nicht zusammengelegt** — ob es
 derselbe Befund ist, gehoert geprueft, nicht angenommen.
+
+## G-255 — drei Attrappen-Konstanten ohne Aufrufer
+
+**Modul:** supplements · **angelegt:** 2026-08-29 · **Datei:** `todos/supplements-g-0255-drei-attrappen-konstanten-ohne-aufrufer.md`
+
+## Befund
+
+Aus G-253, Claude Code, 2026-08-29.
+
+`[cmd]` **`USER_STACKS`, `STACK_TEMPLATES` und `FREQUENCY_OPTIONS`
+haben keinen Renderer mehr** — nur einen Test, der prueft, dass sie
+nicht leer sind.
+
+`[read]` **A-59 sagt loeschen.** `[read]` **Er hat sie stehen lassen,
+weil das Stehenlassen in G-249 eine ausdrueckliche Entscheidung von
+Tom war und kein Versehen.**
+
+## Die Frage
+
+`[read]` **In G-249 galt: erst belegen, dass alles Wichtige im neuen
+Weg ankommt, dann loeschen.** `[cmd]` **Hier ist das belegt** — die
+Attrappenzahl steht auf 0, die drei Karten lesen echte Daten.
+
+`[read]` **Der Unterschied zu G-249:** dort steckte bestellte Arbeit
+in den geloeschten Dateien. **Hier sind es Beispieldaten aus dem
+Entwurf.**
+
+`[read]` **Und der Grund gegen das Aufheben ist A-59:** Code ohne
+Aufrufer wird beim naechsten Auftrag fuer gebaut gehalten. `[cmd]`
+**Genau das ist am 28.08. dreimal passiert.**
 
 ## G-219 — `LiveWorkout` hat keinen Aufrufer mehr
 

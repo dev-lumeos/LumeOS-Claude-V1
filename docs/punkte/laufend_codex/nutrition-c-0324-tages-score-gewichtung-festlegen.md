@@ -20,86 +20,78 @@ zahlen: null
 
 ## Befund
 
-Offene Frage aus C-49: welcher Naehrstoff wie stark in einen Tages-Score eingeht.
+E-25 entscheidet den Nutrition-Tagesscore: **NRF9.3 in der Originalfassung**, neun gefoerderte minus drei begrenzte Naehrstoffe, mit Deckel bei 100 Prozent je gefoerdertem Naehrstoff. Die Formel und ihre US-Referenzwerte sind damit entschieden; EFSA-Referenzen duerfen sie nicht ersetzen.
 
-## Auftrag — den Score nach NRF9.3 bauen
+**Der Bau ist trotzdem blockiert.** Die Eingangsmenge fuer Vitamin A ist nicht dieselbe Bezugsgroesse wie die Originalformel:
 
-**Entschieden in `docs/entscheidungen/E-25`.** `[read]` **Lies sie
-zuerst; sie traegt die Formel und die drei Einschraenkungen.**
+| NRF9.3-Originalwert | `daily_summary` | Lage |
+|---|---|---|
+| Vitamin A: **5.000 IU** | `vita`: **µg Retinol-Aequivalent (RE)** | Nicht gleichartig. Der BLS-Wert enthaelt Retinol und Carotinoid-Aequivalente; eine IU-Umrechnung haengt von der Vitamin-A-Form ab. Im Repo existiert keine freigegebene Umrechnung. |
+| Vitamin E: **30 IU**, in der Originaltabelle auch als etwa **20 mg Alpha-Tocopherol** gefuehrt | `vite`: mg Alpha-Tocopherol | Der Wert ist in der vorhandenen Einheit ausdrueckbar. |
+| die uebrigen zehn Werte | g bzw. mg in passender Einheit | direkt verwendbar |
 
-### Vorweg
+`[read]` Eine still gesetzte Umrechnung von `vita` nach IU wuerde weder die Originalformel bewahren noch eine EFSA-Abweichung vermeiden; sie waere eine neue, unbelegte Formelentscheidung. Deshalb keine Funktion und keine Referenzwert-Aenderung.
 
-`[read]` **Dieser Auftrag traegt keine Zahlen vom Orchestrator.**
-**Nenn Nutzer und Zeitraum bei jeder Messung.**
+### Originalformel und sichtbare Abweichung
 
-### Zu tun
+NRF9.3 bleibt nach E-25:
 
-**NRF9.3 als Funktion, je Tag und je Zeitraum.**
+    (Protein/50 g + Ballaststoffe/25 g + VitA/5.000 IU
+     + VitC/60 mg + VitE/30 IU + Calcium/1.000 mg + Eisen/18 mg
+     + Magnesium/400 mg + Kalium/3.500 mg
+     - gesaettigte Fette/20 g - Zucker/50 g - Natrium/2.400 mg) x 100
 
-`[read]` **Die Deckelung bei 100 Prozent je Naehrstoff ist der Kern
-der Formel** — ohne sie zieht ein einzelnes Uebermass den Score hoch.
-`[read]` **Miss, was das bei einem Sportler bewirkt:** bei hoher
-Proteinzufuhr ist Protein dauerhaft gedeckelt und traegt nichts mehr
-zur Unterscheidung bei.
+`[read]` Zwei Abweichungen muessen bei einer spaeteren Ausgabe sichtbar bleiben:
 
-**Die Originalreferenzen verwenden, nicht die EFSA-Werte.** `[read]`
-**Sonst ist es nicht mehr die validierte Fassung.** `[cmd]` Und die
-Abweichung zu unseren sonstigen Referenzen gehoert sichtbar
-gemacht — **zwei Bezugsgroessen im selben Modul sind sonst eine
-Falle.**
+1. **NRF9.3-Originalreferenzen, nicht EFSA.** Der Score hat US-Daily-Values; die uebrigen Nutrition-Ansichten rechnen gegen individuelle EFSA/PRI/AI/UL-Referenzen. Beide Prozentwerte duerfen nicht gleich bezeichnet oder gegeneinander ausgetauscht werden.
+2. **Gesamtzucker statt added sugar.** `daily_summary.sugar` ist Gesamtzucker. E-25 erlaubt diese von den Autoren untersuchte Variante, aber der Score muss sie als `total_sugar` ausweisen; sie ist nicht die strengere Originaleingabe `added_sugar`.
 
-**Gesamtzucker statt *added sugars*** — die Autoren haben die
-Variante getestet, **aber der Score muss sagen, dass er so rechnet.**
+## Vormessung -- Wegwerf-Datenbank
 
-`[read]` **Und die Leserichtung aus C-48 Regel 2 gilt weiter:** die
-drei begrenzten Naehrstoffe zaehlen negativ, **ein hoher Wert dort ist
-kein Erfolg.**
+Gemessen in `lumeos_c276_probe`, nicht gegen die laufende Datenbank. Zeitraum je Seed-Konto: **2026-05-20 bis 2026-11-16**. Die offenen Datumsgrenzen der Sicht schliessen damit die Zukunftszeilen bewusst ein.
 
-### Was zu messen ist, bevor gebaut wird
+| Konto | Tage | Protein >= 50 g und vollstaendig | Protein-Min/Max/Schnitt | `vitc_missing > 0` | mindestens ein NRF-Eingang unvollstaendig |
+|---|---:|---:|---|---:|---:|
+| `max.seed@example.com` | 180 | 177 | 0,8 / 224,6 / 173,0 g | 179 | 180 |
+| `sarah.seed@example.com` | 181 | 181 | 69,3 / 154,1 / 106,5 g | 181 | 181 |
+| `tom.seed@example.com` | 181 | 177 | 9,8 / 242,6 / 162,9 g | 180 | 180 |
 
-    Spannweite auf echten Tagen   welche Werte kommen vor?
-    Protein gedeckelt             an wie vielen Tagen?
-    fehlende Naehrstoffe          was passiert an Tagen mit
-                                  `_missing > 0`?
+### Deckelung
 
-`[read]` **Die letzte Zeile ist die wichtigste.** `[cmd]` **`vitc`
-feuert an 180 von 181 Tagen** — ein Score, der unvollstaendige Summen
-wie vollstaendige behandelt, **rechnet einen zu niedrigen Wert und
-nennt ihn Ergebnis.** **Dieselbe Regel wie C-48 Regel 1: kein
-Fehlzaehler wird zur Null.**
+`[cmd]` Die Deckelung greift genau wie E-25 verlangt: an den genannten Tagen ist der Proteinterm `least(prot625 / 50, 1)` gleich **1,0**. Mehr Protein erhoeht den NRF9.3-Score dort nicht. Bei Sarah ist Protein an allen 181 Tagen gedeckelt; bei Max und Tom an 177 von jeweils 180 bzw. 181 Tagen. Das ist die belegte Konsequenz der Allgemeinbevoelkerungsformel fuer die Seed-Sportler, **kein Anlass fuer eine Sportler-Variante**.
 
-### Was nicht zu tun ist
+### Fehlende Nährstoffe
 
-**Keine Sportler-Variante.** `[read]` **Sie waere unsere Formel, nicht
-die belegte** — sie kommt danach und traegt einen anderen Namen.
-**Keinen Recovery- oder Training-Score** — vorgesehen, nicht gebaut.
-**Keine Referenzwerte aendern.**
-`apps/` nicht anfassen — Claude Code arbeitet dort an C-323.
-Nicht committen, nicht stagen, nicht pushen.
+`[cmd]` `vitc_missing` ist nicht die einzige Luecke, aber die dominante:
 
-### Nachweis
+| Konto | Faser | VitA | VitC | VitE | Ca | Fe | Mg | K | ges. Fett | Zucker | Na |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Max | 36 | 0 | 179 | 31 | 1 | 2 | 4 | 1 | 1 | 0 | 39 |
+| Sarah | 0 | 0 | 181 | 32 | 0 | 0 | 0 | 0 | 0 | 0 | 38 |
+| Tom | 37 | 0 | 180 | 31 | 0 | 1 | 3 | 0 | 0 | 0 | 38 |
 
-    Score je Tag                 Spannweite ueber echte Tage
-    Score je Zeitraum            7 / 30 / 90, mit E-24-Regel:
-                                 erst mitteln, dann rechnen
-    Deckelung                    greift sie, wo?
-    unvollstaendige Tage         wie behandelt, belegt
-    Gegenprobe                   ein Tag mit viel Natrium muss
-                                 schlechter stehen als derselbe
-                                 Tag ohne
-    Laufzeit                     ms je Zeitraum
+Die Zahlen sind Tage mit einem positiven `_missing`-Zaehler. Ein Sonderfall hatte zwar alle Zähler 0, aber keine Nährwertwerte und keinen Item-Inhalt; er ist ebenfalls kein scorefaehiger Tag.
 
-### Regeln
+**Erforderliches Verhalten fuer die noch zu bauende Funktion:**
 
-`tools/lauf.py` fuer jeden Befehl, keine Konsolenfenster.
-**Wegwerf-Datenbank, nie gegen die laufende testen.**
-**Vollsicherung vor jedem Live-Eingriff nach `backup/`.**
+- Ein Tag liefert nur dann einen `score`, wenn **alle zwoelf** NRF-Eingaenge einen Wert und `*_missing = 0` haben sowie `item_count > 0` ist.
+- Sonst liefert er `score = NULL` und den Status `incomplete` bzw. `no_data`, mit den fehlenden NRF-Codes. Fehlende Werte duerfen niemals als 0 in die Formel eingehen.
+- Ein Zeitraum nach E-24 mittelt erst die Tagesmengen und rechnet danach. Enthält er unvollständige oder leere Tage, darf er keinen vollständigen Zeitraumscore vortäuschen; der Status und die Zahl unvollständiger Tage gehören zur Antwort.
 
-**Wenn eine Vorgabe nicht aufgeht: melden, nicht passend machen.**
+`[read]` Das ist C-48 Regel 1 in Score-Form. Mit dem gegenwärtigen Seedbestand wäre ein ehrlicher NRF9.3-Score für alle drei Konten fast immer `incomplete`; eine numerische Spannweite oder Laufzeit wäre daher keine Messung des Scores, sondern der Fehler, den C-48 verbietet.
 
-## Bericht
+## Entscheidung
 
-_(vom Agenten anzuhaengen)_
+**C-324 ist teilweise entschieden, technisch offen.**
+
+- **entschieden:** NRF9.3, Originalreferenzen, 100-Prozent-Deckelung, Gesamtzucker mit Herkunftsmarkierung, keine Sportler-Variante.
+- **offen und blockierend:** eine belegte, explizit freigegebene Zuordnung von BLS-`vita` (µg RE) zur NRF9.3-Referenz in IU.
+- **nicht gebaut:** keine Funktion, kein Schema, kein UI. Das vermeidet eine nicht belegte Umrechnung und einen Score, der unvollständige Tagessummen als Ergebnisse ausgibt.
+
+## Quellen
+
+- E-25: Drewnowski, *Defining Nutrient Density: Development and Validation of the Nutrient Rich Foods Index*, J Am Coll Nutr. DOI: 10.1080/07315724.2009.10718106.
+- Fulgoni, Keast, Drewnowski, *Development and Validation of the Nutrient-Rich Foods Index*, J Nutr 2009. DOI: 10.3945/jn.108.101360.
 
 ## Abnahme
 

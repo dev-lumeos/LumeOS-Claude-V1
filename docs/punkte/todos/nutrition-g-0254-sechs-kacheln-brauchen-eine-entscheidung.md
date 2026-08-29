@@ -6,7 +6,7 @@ schwere: mittel
 angelegt: 2026-08-29
 braucht: []
 kind_von: G-11
-entscheidung: null
+entscheidung: E-29
 beruehrt:
   tabellen: [coach.pending_actions]
   dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
@@ -45,3 +45,7 @@ gilt die Frage in beide Richtungen.**
 nicht offen** — der Nutrients-Reiter zeigt dasselbe je Naehrstoff,
 und eine zweite Fassung waere die Doppelung, die aus G-249 und G-11
 gerade zweimal entfernt wurde.
+
+## Entschieden
+
+**E-29, 2026-08-29.** Die Begruendung steht dort.
