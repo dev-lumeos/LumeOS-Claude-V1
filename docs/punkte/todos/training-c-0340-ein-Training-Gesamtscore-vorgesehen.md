@@ -38,3 +38,23 @@ offen und nicht beantwortet.**
 
 `[read]` **Vor dem Bauen zu klaeren:** misst der Score die Belastung
 oder den Fortschritt? **Das sind zwei Scores, nicht einer.**
+
+## Recherche, 2026-08-29
+
+**`docs/spezifikation/00-SCORES.md`** — wie Whoop, Oura, Garmin und
+Coros rechnen.
+
+`[read]` **Der Kernbefund kehrt die Frage um:** von 14
+zusammengesetzten Scores bei 10 Herstellern **hat keiner eine
+rigorose unabhaengige Validierung.** **Scores sind in dieser Branche
+Produktentscheidungen, keine wissenschaftlichen.**
+
+`[read]` **Damit ist die Vorfrage in diesem Punkt beantwortet:** eine
+belegte Formel wie NRF9.3 gibt es fuer Erholung nicht. **Was es gibt,
+sind belegte Eingaenge** — HRV bei 86 Prozent der Geraete als
+Primaersignal, dazu Ruhepuls und Schlaf.
+
+`[read]` **Und zwei Dinge, die uebernommen gehoeren:** die
+Normierung gegen die eigene Basislinie (Whoop 60 Tage, Oura drei
+Monate), **und die Offenlegung der Gewichtung — die niemand sonst
+tut.**

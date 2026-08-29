@@ -10,9 +10,11 @@ kinder: []
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-29
+erledigt: 2026-08-29
+commit: 370abf3e
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [nutrition.nutrient_reference_values]
+  dateien: [apps/web/src/lib/nutrition]
 zahlen: null
 ---
 
@@ -389,4 +391,71 @@ davon 18 neue. **Encoding: 20.618 Dateien, sauber, Exit 0.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-29, Orchestrator. Nachgemessen, was der Bericht behauptet.**
+
+### Der Zuschnitt ist klueger beantwortet als gefragt
+
+`[read]` **Ich hatte nach einer Liste gefragt** — *,,wenn dieselben
+fuenf immer auffallen, ist eine Liste von fuenf nuetzlicher als eine
+Regel ueber 138"*.
+
+`[read]` **Seine Antwort:** die Reihenfolge stimmt ueber beide
+Konten, **eine feste Liste waere moeglich gewesen — aber sie kaeme
+aus Toms Essgewohnheiten, nicht aus einer Eigenschaft von
+Bodybuildern.** **Die Regel zaehlt ueber alle Naehrstoffe, die Daten
+entscheiden.**
+
+### Der Befund ist groesser als die Flags
+
+`[cmd]` **Drei von 17 Obergrenzen gelten nicht fuer Lebensmittel** —
+`MG`, `NIA`, `FOLAC`, jede sagt es in ihren eigenen `notes`.
+
+`[cmd]` **Zwei davon sind die lautesten Warnungen:** Magnesium an 87
+von 88 Tagen, Niacin an 51 von 73 — **zusammen 138 von 185
+Ueberschreitungen.**
+
+`[cmd]` **Und die Mikronaehrstoff-Ansicht zeigt heute `MG 131 %` als
+Ueberschreitung.** `[read]` **Das ist kein Flag-Problem, das ist ein
+Anzeigefehler, der seit G-239 live ist.**
+
+`[cmd]` **`target_applies_to` haelt Naehrstoffcodes, keine
+Quellenunterscheidung** — die Einschraenkung existiert nur als
+Freitext. **Als C-344 an Codex.**
+
+### Die Supplementfrage ist beantwortet
+
+`[cmd]` **Nein, und die Kette ist gebaut und leer.**
+`supplement_nutrients` hat 17 Zeilen, **aber
+`daily_reference_assessment` erwaehnt Supplemente nicht.** `[cmd]`
+**2 von 4 Stack-Positionen auf `dev` haben kein `supplement_id`** —
+ausgerechnet Magnesium und Vitamin D3. **Von 360 Einnahmen erreichen
+90 einen Naehrstoffcode, alle denselben.**
+
+`[read]` **Damit steht beides falsch herum:** wer Magnesium als
+Praeparat nimmt, taucht in der Bilanz nicht auf — **aber die Grenze,
+die genau fuer Praeparate gilt, wird gegen sein Essen gerechnet.**
+
+`[read]` **Nicht gebaut, sondern gemeldet.** Richtig.
+
+### Warum es keine Doppelung ist
+
+`[cmd]` **Der bestehende `Auffaellig`-Filter liest
+`avg_per_logged_day` — einen Mittelwert.** `[read]` **Konstant 79
+Prozent und 45 Tage bei 40 neben 45 bei 118 sind heute nicht
+unterscheidbar.** `[cmd]` Ueber 30 Tage meldet der Reiter 16
+auffaellige Naehrstoffe, die Dauerregel findet 12.
+
+### Zwei Sabotagen ueberlebten und fanden etwas Echtes
+
+`[read]` **Seine Tests gaben unvollstaendigen Tagen `pct: null`** —
+die Statuspruefung wurde nie durchlaufen. `[read]` **Und der
+Sortiertest nutzte nur verschiedene Flag-Arten** — der
+Dauer-Stichentscheid wurde nie erreicht.
+
+`[read]` **Beide Male war die Luecke im Test, nicht im Waechter.**
+**Und dabei fiel ein wirkungsloses `continue` im eigenen Code auf,
+jetzt entfernt** — dieselbe Klasse wie das tote `Math.min` in G-249.
+
+**Abgenommen.** `getNaehrstoffZeitraum` ohne Aufrufer und die
+1.786 ms Laufzeit gehen als **G-259**.
+

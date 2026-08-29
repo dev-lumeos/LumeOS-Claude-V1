@@ -325,3 +325,90 @@ export async function getLueckenZahl(
   if (alle.error || offen.error) return null
   return { unvollstaendig: offen.count ?? 0, gesamt: alle.count ?? 0 }
 }
+
+
+// ── Die Dauer je Naehrstoff — C-323 ──────────────────────────────
+//
+// `[cmd]` **Gemessen am 2026-08-29, `explain (analyze, buffers)` auf
+// `dev@lumeos.app`:**
+//
+//     reference_assessment_window(dev, 2026-08-29,  7)    149 ms
+//                                              30)    642 ms
+//                                              90)  1.786 ms
+//
+// `[cmd]` **Die Zeit ist die Rechnung selbst, nicht die Auslieferung:**
+// ein blosses `count(*)` ueber dieselbe Funktion braucht **1.895 ms**,
+// serverseitiges Zaehlen **1.864 ms**. **Ein Filter spart nichts.**
+// `temp read/written` liegt bei 124.792 Bloecken.
+//
+// `[read]` **Deshalb wird die Fensterfunktion NICHT bei jedem
+// Seitenaufruf gerufen.** Der Aufrufer entscheidet, wann er die Dauer
+// braucht; **90 Tage kosten knapp zwei Sekunden, und das gehoert
+// gewusst, bevor es jemand in einen Seitenaufbau haengt.**
+//
+// `[read]` **Warum trotzdem diese Funktion und nicht der billigere
+// Weg:** `daily_nutrient_summary_long` liefert die Tagesmengen in
+// 195 ms, aber **ohne Bewertung** — wer daraus Prozentwerte bildet,
+// rechnet die Referenzlogik ein zweites Mal nach. **Das ist genau die
+// zweite Wahrheit, die der Kopf dieser Datei ausschliesst.**
+// **Gemeldet als Befund, nicht umgangen.**
+
+/** Ein Naehrstoff mit seinen Tageswerten im Zeitraum. */
+export type NaehrstoffDauer = {
+  nutrient_code: string
+  nutrient_name_de: string
+  reference_direction: string | null
+  tage: Array<{ tag: string; pct: number | null; status: string }>
+}
+
+/**
+ * Die Tagesbewertungen im Zeitraum, je Naehrstoff.
+ *
+ * `[cmd]` **`reference_assessment_window` liefert je Naehrstoff EINE
+ * Zeile** mit `daily_assessments` als jsonb — auf dev 154 Zeilen mit
+ * zusammen 13.860 Tageseintraegen (8,3 MB) fuer 90 Tage.
+ *
+ * `[read]` **Kein PostgREST-Deckel-Problem** (G-249): 154 Zeilen
+ * liegen weit unter 1.000. **Die Tageswerte stecken im jsonb, nicht in
+ * eigenen Zeilen** — genau deshalb.
+ */
+export async function getNaehrstoffDauer(
+  bisDatum: string, tage: number,
+): Promise<NaehrstoffDauer[]> {
+  const supabase = createSessionClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new DiaryWriteError('NO_SESSION', 'Keine angemeldete Session.')
+
+  const { data, error } = await supabase
+    .schema('nutrition')
+    .rpc('reference_assessment_window', {
+      p_user_id: user.id,
+      p_end_date: bisDatum,
+      p_days: tage,
+    })
+  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+
+  const aus: NaehrstoffDauer[] = []
+  for (const raw of (data ?? []) as unknown as Array<Record<string, unknown>>) {
+    const code = asText(raw.nutrient_code)
+    if (!code) continue
+    const roh = Array.isArray(raw.daily_assessments) ? raw.daily_assessments : []
+    const tagesliste: NaehrstoffDauer['tage'] = []
+    for (const d of roh as Array<Record<string, unknown>>) {
+      const tag = asText(d.entry_date)
+      if (!tag) continue
+      tagesliste.push({
+        tag,
+        pct: asNumberOrNull(d.reference_pct),
+        status: asText(d.reference_status),
+      })
+    }
+    aus.push({
+      nutrient_code: code,
+      nutrient_name_de: asText(raw.nutrient_name_de) || code,
+      reference_direction: asText(raw.reference_direction) || null,
+      tage: tagesliste,
+    })
+  }
+  return aus
+}

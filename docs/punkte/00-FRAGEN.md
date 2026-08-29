@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **32 Punkte tragen `typ: entscheidung`
+`[cmd]` **31 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -19,14 +19,6 @@ nicht in diese Uebersicht.
 ---
 
 # Hoch
-
-## C-323 — Micro-Flags Warnschwelle und Formulierung festlegen
-
-**Modul:** nutrition · **angelegt:** 2026-08-27 · **Datei:** `laufend_claudecode/nutrition-c-0323-micro-flags-warnschwelle-und-formulierung-festlegen.md`
-
-## Befund
-
-Offene Frage aus C-49: ab wann Unterversorgung gewarnt wird und mit welcher Formulierung.
 
 ## C-342 — Vitamin A in IE gegen Mikrogramm
 
@@ -919,7 +911,7 @@ derselbe Befund ist, gehoert geprueft, nicht angenommen.
 
 ## G-255 — drei Attrappen-Konstanten ohne Aufrufer
 
-**Modul:** supplements · **angelegt:** 2026-08-29 · **Datei:** `todos/supplements-g-0255-drei-attrappen-konstanten-ohne-aufrufer.md`
+**Modul:** supplements · **angelegt:** 2026-08-29 · **Datei:** `laufend_claudecode/supplements-g-0255-drei-attrappen-konstanten-ohne-aufrufer.md`
 
 ## Befund
 

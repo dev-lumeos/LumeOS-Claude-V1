@@ -7,6 +7,8 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: G-253
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-29
 beruehrt:
   dateien: [apps/web/src/app/v2/supplements/tabs.tsx]
 zahlen: null
@@ -39,3 +41,7 @@ Entwurf.**
 `[read]` **Und der Grund gegen das Aufheben ist A-59:** Code ohne
 Aufrufer wird beim naechsten Auftrag fuer gebaut gehalten. `[cmd]`
 **Genau das ist am 28.08. dreimal passiert.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-336 am 2026-08-29.**

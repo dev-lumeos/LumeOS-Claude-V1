@@ -11,48 +11,69 @@ beruehrt:
   tabellen: [nutrition.food_nutrients, nutrition.foods]
 zahlen:
   gemessen: 2026-08-29
-  lebensmittel_ohne_vitc: 420
+  ohne_vitc_zeile: 420
+  vitc_gleich_null: 1797
+  vitc_groesser_null: 4923
+  vitc_null_wert: 0
   lebensmittel_gesamt: 7140
-  betroffene_positionen: 2398
-  tage_unvollstaendig: 180
-  tage_gesamt: 181
 ---
 
-# C-343 — Vitamin C fehlt an 180 von 181 Tagen
+# C-343 — zwei Schreibweisen fuer *,,kein Vitamin C"*
 
-## Befund
+## Berichtigung des urspruenglichen Befunds
 
-Aus C-324, Codex, 2026-08-29. **Vom Orchestrator nachgemessen.**
+`[read]` **Dieser Punkt hiess *,,Vitamin C fehlt an 180 von 181
+Tagen"* und behandelte das als Datenluecke.** **Tom, 2026-08-29:**
+*,,schonmal in betracht gezogen dass nicht jedes lebensmittel vitamin
+c drin hat?"*
 
-`[cmd]` **420 von 7.140 Lebensmitteln haben keinen
-Vitamin-C-Wert** — sechs Prozent.
+`[cmd]` **Er hat recht, und ich hatte es nicht geprueft.** Unter den
+420 ohne Wert stehen **Butterschmalz, Backpulver, Balsamicoessig,
+Cashewkerne** — dort ist null der richtige Wert.
 
-`[cmd]` **Aber 2.398 erfasste Positionen betreffen sie**, und das
-reicht, um **180 von 181 Tagen** unvollstaendig zu machen.
+## Der eigentliche Befund
 
-`[read]` **Sechs Prozent Luecke im Katalog werden zu
-neunundneunzig Prozent Luecke in der Auswertung** — weil die
-fehlenden Lebensmittel haeufig gegessen werden.
+`[cmd]` **Gemessen 2026-08-29, alle aus `bls_4_0_local_import`:**
+
+    VITC = 0        1.797 Lebensmittel
+    VITC > 0        4.923
+    VITC NULL           0
+    keine Zeile       420
+
+`[read]` **Zwei Schreibweisen fuer dieselbe Aussage:** 1.797
+Lebensmittel tragen eine Zeile mit null, 420 tragen gar keine.
+**Und `NULL` gibt es nirgends** — wo eine Zeile steht, steht ein
+Wert.
+
+## Warum das nicht nur Kosmetik ist
+
+`[cmd]` **Apfelsaft hat 119 Naehrstoffwerte — aber keinen fuer
+Vitamin C.** `[read]` **Apfelsaft ohne Vitamin C ist unplausibel.**
+
+`[read]` **Also bedeutet *,,keine Zeile"* nicht durchgaengig
+*,,nicht enthalten"*.** **Butterschmalz ist der eine Fall, Apfelsaft
+der andere — und wir koennen sie heute nicht unterscheiden.**
+
+`[cmd]` **Der Durchschnitt liegt bei 121,8 Naehrstoffen je
+Lebensmittel.** `[cmd]` Apfelpektin hat 31, Backpulver 47 — **dort
+ist die duenne Belegung plausibel.** Apfelsaft mit 119 ist es nicht.
 
 ## Was daran haengt
 
-`[read]` **Der Nutrition-Score aus E-25 ist deshalb nicht gebaut
-worden.** Codex: *,,Sie muesste derzeit fast immer `incomplete`
-liefern, nicht einen kuenstlich niedrigen Zahlenwert."*
+`[cmd]` **`vitc_missing` feuert an 180 von 181 Tagen** und hat
+deshalb C-324 blockiert.
 
-`[cmd]` **Und G-248 zeigt dasselbe von der anderen Seite:** der
-Sammelhinweis im Tagebuch nennt 76 von 138 Naehrstoffen mit fehlenden
-Positionen.
+`[read]` **Wenn *,,keine Zeile"* meist *,,nicht enthalten"* heisst,
+ist der Zaehler ein Fehlalarm** — und der Score nicht blockiert.
+**Wenn nicht, ist er richtig.** **Beides ist heute nicht
+unterscheidbar.**
 
-## Zu klaeren
+## Zu messen
 
-**Welche 420 sind es, und warum fehlt der Wert?**
+**Fuehrt BLS 4.0 eine Kennzeichnung fuer *nicht bestimmt* gegen
+*nicht enthalten*, und hat der Import sie mitgenommen?**
 
-`[read]` **BLS 4.0 ist die einzige Quelle** (E-03, keine
-OpenFoodFacts, kein USDA). `[read]` **Wenn der Wert dort nicht steht,
-ist er nicht zu beschaffen** — dann ist die Frage, ob ein Score
-Naehrstoffe ueberspringen darf, deren Wert im Katalog fehlt.
-
-`[read]` **Und das ist eine andere Frage als *,,der Nutzer hat es
-nicht erfasst"*.** **Zwei Luecken, die gleich aussehen und
-verschiedenes bedeuten** — dieselbe Unterscheidung wie in C-48.
+`[read]` **Wenn ja: nachtragen, und der Zaehler wird ehrlich.**
+`[read]` **Wenn nein: entscheiden, wie fehlende Zeilen zu lesen
+sind** — und die Entscheidung aufschreiben, statt sie im Zaehler zu
+verstecken.
