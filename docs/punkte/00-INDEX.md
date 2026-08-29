@@ -5,7 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 276 |
+| `todos` | 274 |
+| `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 37 |
 | **gesamt** | **313** |
 
@@ -101,13 +103,13 @@
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](todos/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | offen | — | — |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
-| `G-70` | feature | mittel | [Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab](todos/nutrition-g-0070-sortierbare-spalten-und-herkunfts-filter-im-food-db-tab.md) | offen | — | — |
+| `G-70` | feature | mittel | [Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab](laufend_claudecode/nutrition-g-0070-sortierbare-spalten-und-herkunfts-filter-im-food-db-tab.md) | laeuft (claudecode) | — | — |
 | `G-72` | entscheidung | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](todos/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | offen | — | — |
 | `G-75` | befund | mittel | [Die alte Oberflaeche nennt den BLS ebenfalls](todos/nutrition-g-0075-die-alte-oberflaeche-nennt-den-bls-ebenfalls.md) | offen | — | — |
 | `G-93` | befund | mittel | [Der Anzeigename fehlt im laufenden Erfassungsdialog](todos/nutrition-g-0093-der-anzeigename-fehlt-im-laufenden-erfassungsdialog.md) | offen | — | — |
 | `G-98` | befund | mittel | [Meal plans braucht einen Zustand und eine Herkunft](todos/nutrition-g-0098-meal-plans-braucht-einen-zustand-und-eine-herkunft.md) | offen | — | — |
 | `G-99` | befund | mittel | [Drei der acht Planner-Spalten bleiben wirkungslos](todos/nutrition-g-0099-drei-der-acht-planner-spalten-bleiben-wirkungslos.md) | offen | — | — |
-| `G-107` | befund | mittel | [Der Mikronaehrstoff-Trend braucht eine Referenz je Tag](todos/nutrition-g-0107-der-mikronaehrstoff-trend-braucht-eine-referenz-je-tag.md) | offen | — | — |
+| `G-107` | befund | mittel | [Der Mikronaehrstoff-Trend braucht eine Referenz je Tag](laufend_codex/nutrition-g-0107-der-mikronaehrstoff-trend-braucht-eine-referenz-je-tag.md) | laeuft (codex) | — | — |
 | `G-108` | befund | mittel | [Die Filter des Nutrients-Tabs](todos/nutrition-g-0108-die-filter-des-nutrients-tabs.md) | offen | — | — |
 | `G-112` | befund | mittel | [Der Food-DB-Filter laesst nur einen Wert zu](todos/nutrition-g-0112-der-food-db-filter-laesst-nur-einen-wert-zu.md) | offen | — | — |
 | `G-116` | entscheidung | mittel | [Generelle Ausschluesse bewerten mit 0, statt zu filtern](todos/nutrition-g-0116-generelle-ausschluesse-bewerten-mit-0-statt-zu-filtern.md) | offen | — | — |
