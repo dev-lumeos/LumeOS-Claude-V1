@@ -167,6 +167,21 @@ zu verschwinden.
 
 `docs/todo/` und `docs/ssot/` bleiben beim Orchestrator.
 
+## `.limit()` hebt den PostgREST-Deckel nicht auf
+
+`[cmd]` **G-249, 2026-08-28:** eine Sparkline zeigte 8 Punkte statt
+90, kerzengerade. **Ursache: PostgREST deckelt serverseitig bei 1.000
+Zeilen; `.limit(20000)` aendert daran nichts.** Bei 12.420
+angefragten Zeilen kamen die ersten acht Tage fuer alle 138
+Naehrstoffe.
+
+`[read]` **Kein Fehler, keine Warnung — nur weniger Zeilen.**
+**Behoben durch seitenweises Laden.**
+
+`[read]` **Und der Kommentar an der Stelle zitierte bereits G-64,
+waehrend der Code in dieselbe Falle lief.** **Eine Warnung im
+Kommentar ist kein Waechter.**
+
 ## Ein Waechter prueft die Wirkung, nicht das Wort
 
 `[cmd]` **Dreimal in Folge derselbe Fehler** — G-216, G-247, G-246:

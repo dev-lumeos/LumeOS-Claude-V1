@@ -139,6 +139,14 @@ export type NaehrstoffKnoten = {
   /** wert / ziel in Prozent, falls beides da ist. */
   prozent: number | null
   status: NaehrstoffStatus | null
+  /**
+   * G-249: die Tageswerte im Fenster, aeltester zuerst — fuer die
+   * Sparkline. `[read]` **Leer im Tagesmodus**: ein Tag hat keinen
+   * Trend. Ein Tag ohne Erfassung steht als `null` drin, nicht als
+   * Null — die Luecke ueberbrueckt der gleitende Mittelwert, sie
+   * wird nicht erfunden.
+   */
+  reihe: Array<{ tag: string; wert: number | null }>
   kinder: NaehrstoffKnoten[]
 }
 
@@ -169,6 +177,50 @@ export type NaehrstoffOrdnung = {
    *  gespeichert, es gilt „alles zu". */
   gespeichert: GespeicherteAnsicht | null
   fehler: string | null
+}
+
+/**
+ * Die Tageswerte aller Naehrstoffe, seitenweise geholt — G-249.
+ *
+ * `[cmd]` **PostgREST liefert hoechstens 1.000 Zeilen je Anfrage**,
+ * unabhaengig von `.limit()`. Bei 90 Tagen und 138 Naehrstoffen
+ * braucht es deshalb dreizehn Seiten.
+ *
+ * `[read]` **Abbruch, sobald eine Seite kuerzer als die Seitengroesse
+ * ist** — dann gibt es nichts mehr. Und eine harte Obergrenze, damit
+ * ein Fehler in der Bedingung nicht endlos blaettert.
+ */
+const SEITE = 1000
+const MAX_SEITEN = 20
+
+async function ladeReihen(
+  db: ReturnType<ReturnType<typeof createSessionClient>['schema']>,
+  userId: string, stichtag: string, fenster: number,
+): Promise<Array<Record<string, unknown>>> {
+  const aus: Array<Record<string, unknown>> = []
+  for (let seite = 0; seite < MAX_SEITEN; seite++) {
+    const { data, error } = await db
+      .from('daily_nutrient_summary_long')
+      .select('nutrient_code, entry_date, total_value')
+      .eq('user_id', userId)
+      .gte('entry_date', vonDatum(stichtag, fenster))
+      .lte('entry_date', stichtag)
+      .order('entry_date', { ascending: true })
+      .order('nutrient_code', { ascending: true })
+      .range(seite * SEITE, seite * SEITE + SEITE - 1)
+    if (error) break
+    const zeilen = (data ?? []) as unknown as Array<Record<string, unknown>>
+    aus.push(...zeilen)
+    if (zeilen.length < SEITE) break
+  }
+  return aus
+}
+
+/** Der erste Tag des Fensters — `fenster` Tage inklusive Stichtag. */
+function vonDatum(stichtag: string, fenster: number): string {
+  const d = new Date(`${stichtag}T00:00:00Z`)
+  d.setUTCDate(d.getUTCDate() - (fenster - 1))
+  return d.toISOString().slice(0, 10)
 }
 
 function zaehle(k: NaehrstoffKnoten): number {
@@ -255,7 +307,7 @@ export async function ladeOrdnung(
     // liefert nur Zeilen, wenn der Nutzer im Fenster protokolliert
     // hat, und ein leerer Tab waere die falsche Antwort auf einen
     // leeren Tag: die Ordnung existiert auch ohne Werte.
-    const [defsR, fensterR, refsR, texteR, aliaseR, zieleR] = await Promise.allSettled([
+    const [defsR, fensterR, reiheR, refsR, texteR, aliaseR, zieleR] = await Promise.allSettled([
       db.from('nutrient_defs')
         // G-140: `display_tier` faellt weg — es wurde nur noch in ein
         // Feld geschrieben, das niemand las.
@@ -264,6 +316,22 @@ export async function ladeOrdnung(
       db.rpc('nutrient_summary_window', {
         p_user_id: user.id, p_end_date: stichtag, p_days: fenster,
       }),
+      // G-249: die Tageswerte je Naehrstoff fuer die Sparkline.
+      //
+      // `[read]` **`nutrient_summary_window` liefert Aggregate, keine
+      // Reihe** — den Verlauf gibt es nur hier. Im Tagesmodus wird
+      // sie nicht gebraucht und nicht geladen.
+      //
+      // `[cmd]` **`.limit()` hilft hier NICHT.** 138 Naehrstoffe x 90
+      // Tage sind 12.420 Zeilen; PostgREST deckelt bei **1.000**, und
+      // zwar serverseitig — `.limit(20000)` aendert daran nichts.
+      // **Gemessen am 2026-08-29: 1.000 Zeilen zurueck, davon 8 fuer
+      // `VITA`, 8 verschiedene Tage.** Die Sparkline war dadurch ein
+      // Strich aus acht Punkten, nicht aus neunzig.
+      //
+      // `[read]` **Deshalb seitenweise**, nach `entry_date`
+      // aufsteigend — dieselbe Falle wie G-64, dort mit `.in()`.
+      fenster === 1 ? Promise.resolve([]) : ladeReihen(db, user.id, stichtag, fenster),
       getReferenceAssessment(stichtag),
       // G-127: die Erklaertexte fuettern die Suche — „Skorbut" soll
       // Vitamin C finden, „Lachs" Omega-3. `[cmd]` 110 Zeilen,
@@ -351,6 +419,19 @@ export async function ladeOrdnung(
       }
     }
 
+    // G-249: die Tagesreihen je Code, aeltester zuerst.
+    const reihen = new Map<string, Array<{ tag: string; wert: number | null }>>()
+    if (reiheR.status === 'fulfilled') {
+      for (const r of reiheR.value) {
+        const code = text(r.nutrient_code)
+        const tag = text(r.entry_date)
+        if (!code || !tag) continue
+        const liste = reihen.get(code) ?? []
+        liste.push({ tag, wert: zahl(r.total_value) })
+        reihen.set(code, liste)
+      }
+    }
+
     const zielwerte = zieleR.status === 'fulfilled' ? zieleR.value : null
 
     const flach: NaehrstoffKnoten[] = []
@@ -421,6 +502,7 @@ export async function ladeOrdnung(
         prozent: wert !== null && ziel?.min != null && ziel.min > 0
           ? (wert / ziel.min) * 100 : null,
         status,
+        reihe: reihen.get(code) ?? [],
         kinder: [],
       })
     }

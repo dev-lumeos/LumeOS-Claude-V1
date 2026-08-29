@@ -8,7 +8,7 @@ braucht: []
 kind_von: G-246
 entscheidung: null
 beruehrt:
-  dateien: [apps/web/src/app/v2/nutrition/mikro-ansicht.tsx]
+  dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
 zahlen: null
 ---
 
@@ -17,6 +17,11 @@ zahlen: null
 ## Befund
 
 Aus G-246, Claude Code, 2026-08-28.
+
+`[read]` **Die Datei, in der es auftrat, gibt es nicht mehr** —
+`mikro-ansicht.tsx` ist in G-249 mit der Zusammenfuehrung entfallen.
+**Der Befund bleibt**, weil er nicht an der Datei haengt, sondern am
+Muster: **eine `Map` ueberlebt die Server-Client-Grenze nicht.**
 
 `[cmd]` **`getErklaertexte` gab eine `Map` zurueck, die Ansicht ist
 `'use client'`.** `[read]` **React serialisiert Props nach JSON — eine

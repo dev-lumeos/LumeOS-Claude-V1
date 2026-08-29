@@ -32,6 +32,10 @@ import {
   STATUS_TEXT, STATUS_FARBE,
   zahlMitEinheit as zahl, type Scope, type GespeicherteAnsicht,
 } from '../../../lib/nutrition/naehrstoff-anzeige'
+import {
+  fensterbreite, gleitend, richtungVon, sparklinePfad, bezugsY,
+  zeigtTrend, RICHTUNG_TEXT, RICHTUNG_ZEICHEN,
+} from '../../../lib/nutrition/trend'
 import { NaehrstoffModal } from './naehrstoff-modal'
 
 /** Gruppennamen und Codes teilen sich die `offen`-Menge; das Praefix
@@ -260,6 +264,7 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
             sicht={sicht}
             treffer={treffer}
             istTag={istTag}
+            fenster={d.fenster}
             offen={sicht.erzwungenOffen || offen.has(GRUPPE + g.name)}
             knotenOffen={knotenOffen}
             umschalten={umschalten}
@@ -281,8 +286,8 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
   )
 }
 
-function GruppenKarte({ g, sicht, treffer, istTag, offen, knotenOffen, umschalten, waehlen }: {
-  g: NaehrstoffGruppe; sicht: Sicht; treffer: number; istTag: boolean
+function GruppenKarte({ g, sicht, treffer, istTag, fenster, offen, knotenOffen, umschalten, waehlen }: {
+  g: NaehrstoffGruppe; sicht: Sicht; treffer: number; istTag: boolean; fenster: number
   offen: boolean; knotenOffen: (code: string) => boolean
   umschalten: (schluessel: string) => void
   waehlen: (k: NaehrstoffKnoten, elternName: string | null) => void
@@ -335,6 +340,7 @@ function GruppenKarte({ g, sicht, treffer, istTag, offen, knotenOffen, umschalte
                   elternName={null}
                   sicht={sicht}
                   istTag={istTag}
+                  fenster={fenster}
                   knotenOffen={knotenOffen}
                   umschalten={umschalten}
                   waehlen={waehlen}
@@ -355,6 +361,54 @@ function GruppenKarte({ g, sicht, treffer, istTag, offen, knotenOffen, umschalte
  * liegt — bei Vitamin A mit 411 % jenseits der UL-Zone, wo der alte
  * 100-%-Balken nur „voll" sagte. Skala: UL x 1,1 oder Ziel x 2.
  */
+/**
+ * Die Sparkline — G-249.
+ *
+ * **Tom, 2026-08-28:** *,,es geht um trends und nicht einzelne
+ * tagesbalken. selbst wenn mal tage fehlen kann man einen trend
+ * darstellen."*
+ *
+ * `[read]` **Linie statt Balken** (Balken vergleichen Kategorien),
+ * **nicht bei Null beginnend** (eine Nullbasis drueckt echte
+ * Schwankungen flach), und **Luecken ueberbrueckt der gleitende
+ * Mittelwert** — er erfindet keinen Tageswert, er sagt etwas ueber
+ * den Zeitraum.
+ *
+ * `[read]` **Die Ziellinie liegt im selben Bild**, sonst zeigt die
+ * Linie eine Bewegung ohne Bezug.
+ */
+function Sparkline({ k, fenster, farbe }: {
+  k: NaehrstoffKnoten; fenster: number; farbe: string
+}) {
+  if (!zeigtTrend(fenster) || k.reihe.length < 2) return null
+  const B = 64
+  const H = 18
+  const glatt = gleitend(k.reihe, fensterbreite(fenster))
+  const pfad = sparklinePfad(glatt, B, H, k.ziel)
+  if (!pfad) return null
+  const zielY = bezugsY(glatt, H, k.ziel)
+  const richtung = richtungVon(k.reihe)
+  const mitWert = k.reihe.filter(r => r.wert !== null).length
+  return (
+    <span
+      title={`${RICHTUNG_TEXT[richtung]} · ${mitWert} von ${k.reihe.length} Tagen mit Wert`}
+      style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}
+    >
+      <svg width={B} height={H} aria-hidden style={{ display: 'block', overflow: 'visible' }}>
+        {zielY !== null && (
+          <line x1={0} y1={zielY} x2={B} y2={zielY}
+                stroke="var(--fg-dim)" strokeWidth={1} strokeDasharray="2 2" opacity={0.6} />
+        )}
+        <path d={pfad} fill="none" stroke={farbe} strokeWidth={1.5}
+              strokeLinejoin="round" strokeLinecap="round" />
+      </svg>
+      <span className="v2-dim" style={{ fontSize: 11 }} aria-label={RICHTUNG_TEXT[richtung]}>
+        {RICHTUNG_ZEICHEN[richtung]}
+      </span>
+    </span>
+  )
+}
+
 function Spektrum({ k, farbe }: { k: NaehrstoffKnoten; farbe: string }) {
   const lage = spektrumLage(k.wert, k.ziel, k.obergrenze)
   if (!lage) return null
@@ -399,9 +453,10 @@ function Spektrum({ k, farbe }: { k: NaehrstoffKnoten; farbe: string }) {
  * das Modal. Bei aktivem Filter zaehlt der Klappzustand nicht: die
  * Treffer stehen ausgeklappt da.
  */
-function Zeilen({ k, tiefe, elternName, sicht, istTag, knotenOffen, umschalten, waehlen }: {
+function Zeilen({ k, tiefe, elternName, sicht, istTag, fenster, knotenOffen, umschalten, waehlen }: {
   k: NaehrstoffKnoten; tiefe: number; elternName: string | null
-  sicht: Sicht; istTag: boolean; knotenOffen: (code: string) => boolean
+  sicht: Sicht; istTag: boolean; fenster: number
+  knotenOffen: (code: string) => boolean
   umschalten: (schluessel: string) => void
   waehlen: (k: NaehrstoffKnoten, elternName: string | null) => void
 }): React.ReactElement {
@@ -486,7 +541,13 @@ function Zeilen({ k, tiefe, elternName, sicht, istTag, knotenOffen, umschalten, 
           )}
         </td>
         <td>
-          <Spektrum k={k} farbe={farbe} />
+          {/* G-249: Trendform daneben, Bullet darunter — die
+              Fachliteratur nennt beide Formen zusammen. `[cmd]` Der
+              Bullet existierte schon als `Spektrum` (G-122). */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ flex: 1, minWidth: 60 }}><Spektrum k={k} farbe={farbe} /></div>
+            <Sparkline k={k} fenster={fenster} farbe={farbe} />
+          </div>
         </td>
         <td className="v2-num" style={{ color: k.prozent !== null ? farbe : undefined }}>
           {k.prozent === null ? '—' : `${Math.round(k.prozent)}%`}
@@ -507,6 +568,7 @@ function Zeilen({ k, tiefe, elternName, sicht, istTag, knotenOffen, umschalten, 
           elternName={k.name}
           sicht={sicht}
           istTag={istTag}
+          fenster={fenster}
           knotenOffen={knotenOffen}
           umschalten={umschalten}
           waehlen={waehlen}

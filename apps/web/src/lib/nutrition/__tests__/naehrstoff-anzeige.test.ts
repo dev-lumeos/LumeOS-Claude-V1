@@ -24,7 +24,7 @@ function k(
     wert: 1, summe: 1, positionen: 1, positionenMitWert: 1,
     positionenOhneWert: 0, tageErfasst: 1, tageVollstaendig: 1,
     ziel: null, zielMax: null, zielArt: null, obergrenze: null,
-    prozent: null, status, kinder,
+    prozent: null, status, reihe: [], kinder,
   }
 }
 

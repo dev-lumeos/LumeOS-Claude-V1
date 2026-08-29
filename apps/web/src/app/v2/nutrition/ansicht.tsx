@@ -30,8 +30,6 @@ import type { MikroStand } from '../../../lib/nutrition/mikro-read'
 // (C-161), nicht aus `display_tier`. `[cmd]` G-140: hier stand
 // *„aus display_tier"*, und genau dieses Missverstaendnis hat G-101
 // die Einrueckung falsch bauen lassen.
-// G-239: die Mikronaehrstoff-Ansicht.
-import { MikroAnsicht } from './mikro-ansicht'
 // C-48: die Lage des Tages und die Fehlzaehler (Regel 1).
 import {
   tageslageVon, lageSatz, lueckenVon, lueckenSatz, LAGE_TITEL,
@@ -44,9 +42,7 @@ import type { InsightsStand } from '../../../lib/nutrition/insights-read'
 import type { HydrationDay } from '../../../lib/nutrition/hydration-day-read'
 import { LeerHinweis } from './leer-hinweis'
 import type { DailySummaryRow, SummaryMacro } from '../../../lib/nutrition/diary-summary'
-import type {
-  ReferenceAssessmentRow, NaehrstoffTag, Erklaertext,
-} from '../../../lib/nutrition/reference-assessment-read'
+import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-assessment-read'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 import { Zielhinweis } from './zielhinweis'
 import { Mahlzeiten } from './mahlzeiten'
@@ -119,7 +115,7 @@ function tabs(mahlzeiten: number | null): TabItem[] {
 }
 
 export async function TagebuchAnsicht({
-  datum, tab, summe, bewertung, tageswerte = [], texte, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
+  datum, tab, summe, bewertung, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
   istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null,
   unvertraeglichkeiten = [],
 }: {
@@ -131,10 +127,6 @@ export async function TagebuchAnsicht({
   istAdmin?: boolean
   summe: DailySummaryRow | null
   bewertung: ReferenceAssessmentRow[]
-  /** G-247: Tageswerte je Naehrstoff, fuer Zeitraum und Verlauf. */
-  tageswerte?: NaehrstoffTag[]
-  /** G-246: die Erklaertexte. Feld, keine Map — Client-Grenze. */
-  texte?: Erklaertext[]
   fehler: string | null
   bewertungFehler?: string | null
   ziele?: Zielwerte | null
@@ -240,7 +232,7 @@ export async function TagebuchAnsicht({
       <Zukunftshinweis datum={datum} />
 
       {tab !== 'diary' && (
-        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} bewertung={bewertung} tageswerte={tageswerte} texte={texte} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} />
+        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} />
       )}
       {tab === 'diary' && (
       <>
@@ -544,16 +536,12 @@ export async function TagebuchAnsicht({
  */
 function AndererTab({
   tab, foodsStart, vorlieben, plan, ordnung, einsichten, bewertung = [],
-  tageswerte = [], texte, datum,
+  datum,
   unvertraeglichkeiten = [],
 }: {
   tab: string
   /** G-239: die Referenzbewertung des Tages, fuer die Mikro-Ansicht. */
   bewertung?: ReferenceAssessmentRow[]
-  /** G-247: Tageswerte fuer Zeitraum und Verlauf. */
-  tageswerte?: NaehrstoffTag[]
-  /** G-246: die Erklaertexte. */
-  texte?: Erklaertext[]
   datum?: string
   /** G-154: die gesetzten Unvertraeglichkeiten (`strong`). */
   unvertraeglichkeiten?: string[]
@@ -596,13 +584,14 @@ function AndererTab({
     // („aber mit Marke"). Beides ist weg.
     return (
       <div style={{ marginTop: 16 }}>
-        {/* ══ G-239: die Mikronaehrstoff-Ansicht ═════════════════
-            `[read]` Sie steht VOR der Ordnung: die Ordnung zeigt den
-            Katalog, die Bewertung zeigt den Tag. Wer den Reiter
-            oeffnet, will zuerst wissen, wie er heute steht. */}
-        <div style={{ marginBottom: 16 }}>
-          <MikroAnsicht zeilen={bewertung} tageswerte={tageswerte} texte={texte} datum={datum} />
-        </div>
+        {/* ══ G-249: EINE Ansicht, nicht zwei ═══════════════════════
+            `[cmd]` Hier stand `MikroAnsicht` (G-239/246/247) UEBER der
+            Ordnung — **zwei Ansichten derselben Sache, mit eigenen
+            Zeitfiltern, die nicht ineinander wirkten.**
+            `[read]` **Die Ordnung bleibt, weil sie mehr kann:** Baum,
+            Suche, gespeicherter Klappzustand, `nutrition_targets`,
+            Modal. **Was die andere konnte, ist eingegangen** — die
+            Erklaertexte, die vier Zustaende und der Trend. */}
         {ordnung && ordnung.gruppen.length > 0
           ? <NaehrstoffOrdnungTab d={ordnung} />
           : <LeerHinweis
