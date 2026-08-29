@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **31 Punkte tragen `typ: entscheidung`
+`[cmd]` **29 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -60,46 +60,6 @@ Originalwerte gilt.
 `[read]` **Der dritte Weg ist der ehrlichste, wenn er benannt wird:**
 *,,NRF9.3 mit europaeischen Referenzwerten"* ist eine eigene Formel,
 **aber sie waere durchgehend eine.** Die anderen beiden mischen.
-
-## C-347 — generelle Ausschluesse in `food_search`
-
-**Modul:** nutrition · **angelegt:** 2026-08-29 · **Datei:** `todos/nutrition-c-0347-generelle-ausschluesse-in-food-search.md`
-
-## Befund
-
-Aus G-116, Claude Code, 2026-08-29. **Vom Orchestrator ueber die Tags
-nachgemessen.**
-
-`[cmd]` **`schokolade` 162 → 0. `cola` 243 → 42. `wurst` 206 → 42.**
-
-`[cmd]` **Und die Ursache ist der generelle Ausschluss, nicht die
-Allergie:** 162 Schokoladen-Treffer tragen `ultra_processed`, nur 10
-tragen `contains_nuts`.
-
-`[read]` **Was hier passiert, ist eine dritte Art von Null:** der
-Treffer existiert, wird bewertet, **und wird nicht gezeigt.** **Kein
-gemessener Wert, keine fehlende Aussage — eine unterdrueckte.**
-
-## Die Stufe existiert bereits
-
-`[cmd]` **Starke Filter wirken nur ohne Suchbegriff und ranken sonst
-ab.** `[cmd]` **Generelle Ausschluesse sind hart zugewiesen.**
-
-`[read]` **Wer *schokolade* eintippt, hat eine Absicht** — und
-bekommt nichts, weil er einmal *ultra_processed* abgewaehlt hat.
-
-## Die Entscheidung
-
-**Sollen generelle Ausschluesse dieselbe Stufe bekommen wie starke
-Filter?**
-
-`[read]` **Dann wirken sie ohne Suchbegriff und ranken mit Suchbegriff
-nur ab.** `[cmd]` **Laut G-116 ein einzeiliger Eingriff in
-`food_search`** — Codex' Bereich.
-
-`[read]` **Dagegen spricht: wer *ultra_processed* ausschliesst, will
-es vielleicht wirklich nie sehen.** **Dafuer spricht: eine leere
-Trefferliste erklaert sich nicht selbst.**
 
 ---
 
@@ -907,36 +867,6 @@ oder erledigt sein.
 
 **Verwandter Punkt:** G-98 (Meal plans braucht einen Zustand und eine Herkunft). `[read]` **Nicht zusammengelegt** — ob es
 derselbe Befund ist, gehoert geprueft, nicht angenommen.
-
-## G-261 — die Vergleichsfunktionen anbinden
-
-**Modul:** nutrition · **angelegt:** 2026-08-29 · **Datei:** `todos/nutrition-g-0261-die-vergleichsfunktionen-anbinden.md`
-
-## Befund
-
-Aus G-250, Claude Code, 2026-08-29.
-
-`[cmd]` **`goals.nutrition_targets` hat sechs Naehrstoffspalten**,
-nicht sechzig. `[cmd]` **Drei davon tragen beide Achsen, und genau
-eine geht auseinander:** `F18:3CN3` ist gegen das persoenliche Ziel
-gedeckt (85,7 %) und gegen EFSA zu wenig (51,6 %).
-
-`[read]` **Nach dem G-218-Massstab ist das *selten*** — eine Achse
-mit Vermerk genuegt, **und der Vermerk steht bereits in der
-Kopfzeile.**
-
-`[cmd]` **Die Vergleichsfunktionen sind gebaut, getestet und
-absichtlich an nichts gehaengt.**
-
-## Die Frage
-
-**Sollen sie angebunden werden, obwohl heute nur ein Fall
-abweicht?**
-
-`[read]` **Dagegen: eine zweite Achse fuer einen einzigen Fall macht
-jede Zeile schwerer zu lesen.** `[read]` **Dafuer: sobald mehr
-persoenliche Ziele gesetzt werden, waechst die Zahl** — und dann
-faellt es auf, ohne dass jemand hinsieht.
 
 ## G-219 — `LiveWorkout` hat keinen Aufrufer mehr
 

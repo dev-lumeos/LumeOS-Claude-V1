@@ -6,7 +6,7 @@ schwere: niedrig
 angelegt: 2026-08-29
 braucht: []
 kind_von: G-250
-entscheidung: null
+entscheidung: E-31
 beruehrt:
   tabellen: [goals.nutrition_targets]
 zahlen:
@@ -43,3 +43,14 @@ abweicht?**
 jede Zeile schwerer zu lesen.** `[read]` **Dafuer: sobald mehr
 persoenliche Ziele gesetzt werden, waechst die Zahl** — und dann
 faellt es auf, ohne dass jemand hinsieht.
+
+## Entschieden: E-31
+
+**Nicht anbinden, aber messbar halten.**
+
+`[cmd]` **`tools/zwei-wahrheiten-pruefen.mjs` steht im Gate**,
+Sollstand 6 Naehrstoffspalten. **Kommt eine dazu, faellt das Gate**
+und dieser Punkt wird von selbst wieder zur Frage.
+
+`[read]` **Die Zurueckstellung hat damit ein Ablaufdatum, das sich
+selbst meldet.**
