@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-29
 erledigt: 2026-08-29
-commit: OFFEN
+commit: 53670f2b
 beruehrt:
   dateien:
     - apps/web/src/lib/nutrition/reference-assessment-read.ts

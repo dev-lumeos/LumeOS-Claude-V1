@@ -10,7 +10,7 @@ entscheidung: E-30
 agent: codex
 beauftragt: 2026-08-29
 erledigt: 2026-08-29
-commit: OFFEN
+commit: 53670f2b
 beruehrt:
   dateien:
     - supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql
