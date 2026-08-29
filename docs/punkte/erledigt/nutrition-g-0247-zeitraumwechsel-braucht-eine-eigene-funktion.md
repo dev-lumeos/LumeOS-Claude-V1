@@ -10,7 +10,7 @@ entscheidung: E-24
 agent: claudecode
 beauftragt: 2026-08-28
 erledigt: 2026-08-28
-commit: OFFEN
+commit: b3f54031
 beruehrt:
   dateien: [apps/web/public/mockup/features/nutrition/MacroDetail.js]
 zahlen: null
