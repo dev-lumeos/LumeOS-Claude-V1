@@ -10,7 +10,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-08-28
 erledigt: 2026-08-28
-commit: OFFEN
+commit: 8003800e
 beruehrt:
   tabellen:
     - supplements.rule_catalog
