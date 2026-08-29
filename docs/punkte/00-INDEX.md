@@ -5,10 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 262 |
-| `laufend_codex` | 5 |
+| `todos` | 263 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 61 |
+| `erledigt` | 65 |
 | **gesamt** | **331** |
 
 ## medical — 41
@@ -76,7 +75,7 @@
 | `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](todos/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | offen | — | — |
 | `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — | — |
 | `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](erledigt/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | erledigt | — | G-239, G-248 |
-| `C-49` | befund | hoch | [Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach](laufend_codex/nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md) | laeuft (codex) | — | C-323, C-324 |
+| `C-49` | befund | hoch | [Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach](todos/nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md) | offen | — | C-323, C-324 |
 | `C-102` | feature | mittel | [`milch` findet Joghurt statt Milch](erledigt/nutrition-c-0102-milch-findet-joghurt-statt-milch.md) | erledigt | — | — |
 | `C-109` | entscheidung | mittel | [Die Injektions-Grenzwerte sind unbelegt](todos/nutrition-c-0109-die-injektions-grenzwerte-sind-unbelegt.md) | offen | — | — |
 | `C-117` | befund | mittel | [`milch` traegt auch mit Vorlieben nicht](erledigt/nutrition-c-0117-milch-traegt-auch-mit-vorlieben-nicht.md) | erledigt | — | — |
@@ -92,13 +91,13 @@
 | `C-192` | befund | mittel | [`p_user_id` kostet in `food_search` das Dreifache](erledigt/nutrition-c-0192-p-user-id-kostet-in-food-search-das-dreifache.md) | erledigt | — | — |
 | `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](todos/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | offen | — | — |
 | `C-210` | befund | mittel | [Die 28 fehlenden Naehrstofftexte — was ist gemeint?](todos/nutrition-c-0210-die-28-fehlenden-naehrstofftexte-was-ist-gemeint.md) | offen | — | — |
-| `C-211` | befund | mittel | [Selen fehlt im BLS-Katalog](laufend_codex/nutrition-c-0211-selen-fehlt-im-bls-katalog.md) | laeuft (codex) | — | — |
-| `C-212` | befund | mittel | [`CHORL` haengt nicht im Naehrstoffbaum](laufend_codex/nutrition-c-0212-chorl-haengt-nicht-im-naehrstoffbaum.md) | laeuft (codex) | — | — |
+| `C-211` | befund | mittel | [Selen fehlt im BLS-Katalog](erledigt/nutrition-c-0211-selen-fehlt-im-bls-katalog.md) | erledigt | — | — |
+| `C-212` | befund | mittel | [`CHORL` haengt nicht im Naehrstoffbaum](erledigt/nutrition-c-0212-chorl-haengt-nicht-im-naehrstoffbaum.md) | erledigt | — | — |
 | `C-229` | befund | mittel | [Ein Katalog aus `DatabaseEcht`, Detail und Add getrennt](todos/nutrition-c-0229-ein-katalog-aus-databaseecht-detail-und-add-getrennt.md) | offen | — | — |
 | `C-239` | befund | mittel | [`meal_plans` kennt keinen Lebenszyklus](todos/nutrition-c-0239-meal-plans-kennt-keinen-lebenszyklus.md) | offen | — | — |
 | `C-323` | entscheidung | hoch | [Micro-Flags Warnschwelle und Formulierung festlegen](erledigt/nutrition-c-0323-micro-flags-warnschwelle-und-formulierung-festlegen.md) | erledigt | — | C-344, G-259 |
 | `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](erledigt/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | erledigt | — | C-342, C-343 |
-| `C-333` | befund | niedrig | [Selen fehlt in der Bewertung auf dev](laufend_codex/nutrition-c-0333-selen-fehlt-in-der-bewertung-auf-dev.md) | laeuft (codex) | — | — |
+| `C-333` | befund | niedrig | [Selen fehlt in der Bewertung auf dev](erledigt/nutrition-c-0333-selen-fehlt-in-der-bewertung-auf-dev.md) | erledigt | — | — |
 | `C-334` | befund | hoch | [die Tagesbewertung hat sich zwischen zwei Messungen verschoben](erledigt/nutrition-c-0334-die-bewertung-hat-sich-zwischen-zwei-messungen-verschoben.md) | erledigt | — | C-335 |
 | `C-335` | befund | mittel | [keine Aenderungshistorie fuer Mahlzeiten und Referenzwerte](todos/nutrition-c-0335-keine-aenderungshistorie-fuer-mahlzeiten.md) | offen | — | — |
 | `C-336` | befund | hoch | [FD traegt den Text eines anderen Naehrstoffs](erledigt/nutrition-c-0336-fd-traegt-den-text-eines-anderen-naehrstoffs.md) | erledigt | — | C-346 |
@@ -107,7 +106,7 @@
 | `C-343` | befund | hoch | [zwei Schreibweisen fuer *,,kein Vitamin C"*](erledigt/nutrition-c-0343-vitamin-c-fehlt-an-180-von-181-tagen.md) | erledigt | — | C-345 |
 | `C-344` | befund | hoch | [drei Obergrenzen gelten nicht fuer Nahrung](erledigt/nutrition-c-0344-drei-obergrenzen-gelten-nicht-fuer-nahrung.md) | erledigt | — | — |
 | `C-345` | befund | niedrig | [Spurenwerte im Lebensmittelimport](todos/nutrition-c-0345-spurenwerte-im-lebensmittelimport.md) | offen | — | — |
-| `C-346` | befund | hoch | [zwei Detailtexte neu verknuepfen](laufend_codex/nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md) | laeuft (codex) | — | — |
+| `C-346` | befund | hoch | [zwei Detailtexte neu verknuepfen](erledigt/nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md) | erledigt | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |

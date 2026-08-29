@@ -10,9 +10,10 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-29
+erledigt: 2026-08-29
+commit: 7c268da4
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [nutrition.nutrient_defs]
 zahlen: null
 ---
 
@@ -31,3 +32,14 @@ zahlen: null
 
 **Mitbeauftragt mit C-346 am 2026-08-29.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Verweis
+
+Ergebnis: [C-346 — zwei Detailtexte neu verknuepfen](nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md).
+
+## Abnahme
+
+**2026-08-29, mit C-346 abgenommen: ueberholt.**
+
+`[cmd]` CHORL ist Wurzel mit `parent_code = NULL`, Gruppe
+*Sonstige Naehrstoffe* — genau wie die BLS-Komponententabelle.

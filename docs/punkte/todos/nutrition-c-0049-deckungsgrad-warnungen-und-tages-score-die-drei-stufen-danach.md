@@ -8,8 +8,6 @@ braucht: []
 kind_von: G-122
 kinder: [C-323, C-324]
 entscheidung: null
-agent: codex
-beauftragt: 2026-08-29
 beruehrt:
   tabellen: ["nutrition.nutrient_search_aliases"]
   dateien: ["docs/ssot/146-coach-portal.md", "apps/coach/src/lib/browser-client.ts", "supabase/_pipeline/_testdaten/testdaten-einspielen.ts", "supabase/_pipeline/kette-ausfuehren.ts", "apps/coach/src/app/tokens.css", "docs/ssot/158-tab-zustand.md", "apps/web/src/lib/tab-url.ts", "tools/schuss.mjs", "docs/ssot/172-naehrstoff-aliase.md", "docs/ssot/168-naehrstoff-suche.md", "docs/ssot/166-naehrstoffbaum-anzeige.md", "docs/ssot/161-naehrstoffanzeige.md", "docs/ssot/154-preferences.md", "supabase/_pipeline/_testdaten/coach-portal-fuellen.sql"]
@@ -206,3 +204,21 @@ Quelle und Belege: `docs/ssot/154-preferences.md`.
 
 **Mitbeauftragt mit C-346 am 2026-08-29.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Verweis
+
+Status der drei Stufen: [C-346 — zwei Detailtexte neu verknuepfen](nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md).
+
+## Zwischenstand, 2026-08-29
+
+**Aus C-346 geprueft.**
+
+`[cmd]` **C-323 ist erledigt** — die Dauerregel steht.
+`[cmd]` **C-324 ist blockiert** — NRF9.3 verlangt Vitamin A in IE.
+
+`[read]` **Damit haengt diese Klammer an einer einzigen offenen
+Frage: C-342, die Vitamin-A-Einheit.** `[cmd]` **C-343 ist
+geschlossen** — die vermutete Vitamin-C-Luecke war keine.
+
+`[read]` **Der Punkt bleibt offen, aber er ist kein Sammelpunkt
+mehr.**

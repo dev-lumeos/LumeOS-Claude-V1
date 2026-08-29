@@ -9,8 +9,10 @@ kind_von: G-239
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-29
+erledigt: 2026-08-29
+commit: 7c268da4
 beruehrt:
-  tabellen: [nutrition.nutrient_reference_values]
+  tabellen: [nutrition.nutrient_defs]
 zahlen: null
 ---
 
@@ -34,3 +36,14 @@ nicht ergaenzt, was fehlt, sondern gesagt, dass es fehlt.
 
 **Mitbeauftragt mit C-346 am 2026-08-29.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Verweis
+
+Ergebnis: [C-346 — zwei Detailtexte neu verknuepfen](nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md).
+
+## Abnahme
+
+**2026-08-29, mit C-346 abgenommen: gegenstandslos.**
+
+`[cmd]` Derselbe Befund wie C-211 von der anderen Seite:
+was es im Katalog nicht gibt, kann die Bewertung nicht zeigen.
