@@ -76,6 +76,24 @@ gegen einen unabhaengigen Massstab neu validieren.**
 belegte.** Sie ist moeglich, aber sie kommt danach und traegt einen
 anderen Namen.
 
+## Nachtrag 2026-08-29: technisch blockiert
+
+`[cmd]` **Der Bau ist nicht moeglich, ohne eine der drei
+Einschraenkungen oben zu brechen.** Zwei Blocker, gemessen in C-324:
+
+**Vitamin A steht in Mikrogramm Retinol-Aequivalent, NRF9.3 rechnet
+gegen 5.000 IU.** `[read]` **Die Umrechnung ist formabhaengig** —
+C-149 hat sie deshalb ausdruecklich offengelassen. **Als C-342
+angelegt.**
+
+`[cmd]` **Die Eingaenge sind an 180 von 181 Tagen unvollstaendig**,
+Vitamin C ist die dominante Luecke. `[read]` **Ein Score, der eine
+Datenluecke als Mangel ausgibt, ist schlimmer als keiner** — C-48
+Regel 1, angewandt auf eine Formel. **Als C-343 angelegt.**
+
+`[read]` **Die Entscheidung fuer NRF9.3 bleibt gueltig.** **Was fehlt,
+ist die Datengrundlage** — nicht die Formel.
+
 ## Recovery und Training
 
 `[read]` **Vorgesehen, nicht gebaut.** `[cmd]` **Bei Recovery liefern

@@ -10,9 +10,10 @@ kinder: []
 entscheidung: E-25
 agent: codex
 beauftragt: 2026-08-29
+erledigt: 2026-08-29
+commit: b16ea855
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [nutrition.daily_summary, nutrition.nutrient_defs]
 zahlen: null
 ---
 
@@ -95,4 +96,51 @@ Die Zahlen sind Tage mit einem positiven `_missing`-Zaehler. Ein Sonderfall hatt
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-29, Orchestrator. Nachgemessen, was der Bericht behauptet.**
+
+**Nicht gebaut, und das ist richtig.**
+
+### Blocker 1: Vitamin A in der falschen Einheit
+
+`[cmd]` **`nutrient_defs.VITA` fuehrt Mikrogramm Retinol-Aequivalent,
+die Referenzwerte ebenfalls Mikrogramm.** **NRF9.3 rechnet gegen
+5.000 IU.**
+
+`[read]` **Die Umrechnung ist genau die, die C-149 bewusst
+offengelassen hat** — dort blieben Vitamin A und E *,,ohne Zuordnung,
+da ihre Faktoren formabhaengig sind"*. **Retinol und Beta-Carotin
+rechnen verschieden.**
+
+`[read]` **Wer hier einen Faktor setzt, setzt ihn zweimal falsch:**
+einmal in der Umrechnung, **einmal in einer Formel, die dadurch nicht
+mehr die validierte ist.**
+
+### Blocker 2: die Eingaenge sind fast immer unvollstaendig
+
+`[cmd]` **Gemessen ueber drei Konten:** NRF-Eingaenge unvollstaendig
+an 180/180, 181/181 und 180/181 Tagen. **Vitamin C ist die dominante
+Luecke.**
+
+`[cmd]` **Nachgemessen:** `vitc` fehlt bei 420 von 7.140
+Lebensmitteln — **sechs Prozent.** `[cmd]` **Aber 2.398 erfasste
+Positionen betreffen sie**, und das reicht fuer 180 von 181 Tagen.
+
+`[read]` **Seine Schlussfolgerung ist die richtige:** *,,keine
+Score-Funktion, sie muesste derzeit fast immer `incomplete` liefern,
+nicht einen kuenstlich niedrigen Zahlenwert."*
+
+`[read]` **Ein Score, der eine Datenluecke als Mangel ausgibt, ist
+schlimmer als keiner** — **das ist C-48 Regel 1, angewandt auf eine
+Formel statt auf eine Anzeige.**
+
+### Was er bestaetigt hat
+
+`[cmd]` **Die Deckelung bei 100 Prozent ist Teil der
+Originalkonstruktion** — gegen die Originalstudie geprueft.
+`[cmd]` **Und Protein ist an 177 bis 181 von 181 Tagen gedeckelt** —
+**meine Vermutung im Auftrag, jetzt gemessen: bei einem Sportler
+traegt Protein nichts zur Unterscheidung bei.**
+
+**Abgenommen als blockiert.** Zwei Punkte gehen daraus hervor:
+**C-342** (Vitamin A) und **C-343** (die Vitamin-C-Luecke).
+

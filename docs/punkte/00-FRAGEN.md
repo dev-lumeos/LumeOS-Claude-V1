@@ -1,27 +1,20 @@
 # Offene Fragen an Tom
 
-**Stand 2026-08-29.** `[cmd]` **31 Punkte tragen `typ: entscheidung`
+**Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
+
+`[cmd]` **32 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
-`[read]` **Der Text je Frage kommt aus der Punktdatei selbst.**
+`[read]` **Jeder Satz unten steht woertlich in der genannten
+Punktdatei.** Das Gate prueft es bei jedem Lauf — wer hier
+hineinschreibt, macht es rot.
 
 **Wenn eine Frage entschieden ist:** ein ADR in
 `docs/entscheidungen/`, und der Punkt bekommt `entscheidung: E-xx`.
+Dann faellt er hier heraus.
 
-## Am 2026-08-29 entschieden
-
-    G-241   E-26   Documents und Appointments bleiben
-    C-324   E-25   Nutrition-Score nach NRF9.3
-    G-213   E-27   in vitro kennzeichnen, nicht abschwaechen
-    C-206   E-28   die Community wird nicht eingeschraenkt
-    G-258   E-29   Pending actions ueber eine Funktion
-
-`[read]` **G-254 wurde faelschlich als entschieden gefuehrt.** Ich
-hatte Tom nur eine der sechs Kacheln vorgelegt und seine Antwort auf
-den ganzen Punkt geschrieben. **Der eine Fall ist als G-258
-herausgeloest; G-254 steht wieder in dieser Liste.**
-
----
+`[read]` **Was aufbereitet gehoert, gehoert in die Punktdatei** —
+nicht in diese Uebersicht.
 
 ---
 
@@ -34,6 +27,47 @@ herausgeloest; G-254 steht wieder in dieser Liste.**
 ## Befund
 
 Offene Frage aus C-49: ab wann Unterversorgung gewarnt wird und mit welcher Formulierung.
+
+## C-342 — Vitamin A in IE gegen Mikrogramm
+
+**Modul:** nutrition · **angelegt:** 2026-08-29 · **Datei:** `todos/nutrition-c-0342-vitamin-a-in-ie-gegen-mikrogramm.md`
+
+## Befund
+
+Aus C-324, Codex, 2026-08-29. **Vom Orchestrator nachgemessen.**
+
+`[cmd]` **Der Bestand fuehrt Vitamin A in Mikrogramm
+Retinol-Aequivalent** — `nutrient_defs` und
+`nutrient_reference_values` beide.
+
+`[cmd]` **NRF9.3 rechnet gegen 5.000 IU.**
+
+`[read]` **Und die Umrechnung ist formabhaengig:** Retinol und
+Beta-Carotin haben verschiedene Faktoren. `[cmd]` **C-149 hat Vitamin
+A und E deshalb ausdruecklich ohne Zuordnung gelassen.**
+
+## Die Frage
+
+**Wie soll NRF9.3 mit Vitamin A umgehen?**
+
+`[read]` **Drei Wege, alle mit Kosten:**
+
+**Faktor setzen und begruenden.** `[read]` Ein pauschaler Faktor waere
+eine Annahme ueber die Zusammensetzung — **genau das, was C-149
+verweigert hat.**
+
+**Vitamin A weglassen.** `[read]` Dann ist es NRF8.3, **und die
+Validierungsstudien gelten nicht mehr** — sie sind fuer die
+Neunerfassung gerechnet.
+
+**Gegen einen Mikrogramm-Richtwert rechnen.** `[read]` Der
+EFSA-Zielwert steht im Bestand. **Dann ist es nicht mehr die
+Originalfassung** — E-25 haelt fest, dass die Studienlage fuer die
+Originalwerte gilt.
+
+`[read]` **Der dritte Weg ist der ehrlichste, wenn er benannt wird:**
+*,,NRF9.3 mit europaeischen Referenzwerten"* ist eine eigene Formel,
+**aber sie waere durchgehend eine.** Die anderen beiden mischen.
 
 ---
 

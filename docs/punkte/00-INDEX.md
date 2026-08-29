@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 268 |
-| `laufend_codex` | 1 |
+| `todos` | 270 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 55 |
-| **gesamt** | **325** |
+| `erledigt` | 56 |
+| **gesamt** | **327** |
 
 ## medical — 41
 
@@ -57,7 +56,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 93
+## nutrition — 95
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -97,12 +96,14 @@
 | `C-229` | befund | mittel | [Ein Katalog aus `DatabaseEcht`, Detail und Add getrennt](todos/nutrition-c-0229-ein-katalog-aus-databaseecht-detail-und-add-getrennt.md) | offen | — | — |
 | `C-239` | befund | mittel | [`meal_plans` kennt keinen Lebenszyklus](todos/nutrition-c-0239-meal-plans-kennt-keinen-lebenszyklus.md) | offen | — | — |
 | `C-323` | entscheidung | hoch | [Micro-Flags Warnschwelle und Formulierung festlegen](laufend_claudecode/nutrition-c-0323-micro-flags-warnschwelle-und-formulierung-festlegen.md) | laeuft (claudecode) | — | — |
-| `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](laufend_codex/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | laeuft (codex) | — | — |
+| `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](erledigt/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | erledigt | — | C-342, C-343 |
 | `C-333` | befund | niedrig | [Selen fehlt in der Bewertung auf dev](todos/nutrition-c-0333-selen-fehlt-in-der-bewertung-auf-dev.md) | offen | — | — |
 | `C-334` | befund | hoch | [die Tagesbewertung hat sich zwischen zwei Messungen verschoben](erledigt/nutrition-c-0334-die-bewertung-hat-sich-zwischen-zwei-messungen-verschoben.md) | erledigt | — | C-335 |
 | `C-335` | befund | mittel | [keine Aenderungshistorie fuer Mahlzeiten und Referenzwerte](todos/nutrition-c-0335-keine-aenderungshistorie-fuer-mahlzeiten.md) | offen | — | — |
 | `C-336` | befund | hoch | [FD traegt den Text eines anderen Naehrstoffs](todos/nutrition-c-0336-fd-traegt-den-text-eines-anderen-naehrstoffs.md) | offen | — | — |
 | `C-338` | befund | mittel | [sechs Sortierwerte fehlen live](erledigt/nutrition-c-0338-sechs-sortierwerte-fehlen-live.md) | erledigt | — | — |
+| `C-342` | entscheidung | hoch | [Vitamin A in IE gegen Mikrogramm](todos/nutrition-c-0342-vitamin-a-in-ie-gegen-mikrogramm.md) | offen | — | — |
+| `C-343` | befund | hoch | [Vitamin C fehlt an 180 von 181 Tagen](todos/nutrition-c-0343-vitamin-c-fehlt-an-180-von-181-tagen.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
