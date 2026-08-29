@@ -10,7 +10,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-08-28
 erledigt: 2026-08-28
-commit: OFFEN
+commit: 0a027544
 beruehrt:
   tabellen: [nutrition.nutrient_reference_values]
 zahlen:

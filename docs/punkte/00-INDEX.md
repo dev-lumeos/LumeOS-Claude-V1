@@ -6,8 +6,7 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 274 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 33 |
+| `erledigt` | 34 |
 | **gesamt** | **308** |
 
 ## medical — 38
@@ -138,8 +137,8 @@
 | `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | — | — |
 | `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](erledigt/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | erledigt | — | C-333, C-334, G-246, G-247 |
 | `G-245` | feature | mittel | [die Sortier-Tags bauen](erledigt/nutrition-g-0245-die-sortier-tags-bauen.md) | erledigt | — | — |
-| `G-246` | feature | mittel | [die Mikronaehrstoff-Detailtexte brauchen eine Tabelle](todos/nutrition-g-0246-mikronaehrstoff-detailtexte-brauchen-eine-tabelle.md) | offen | — | — |
-| `G-247` | feature | mittel | [der Zeitraumwechsel braucht eine eigene Funktion](laufend_claudecode/nutrition-g-0247-zeitraumwechsel-braucht-eine-eigene-funktion.md) | laeuft (claudecode) | — | — |
+| `G-246` | feature | hoch | [die Detailtexte liegen in der Datenbank und werden nicht gelesen](todos/nutrition-g-0246-die-detailtexte-werden-nicht-gelesen.md) | offen | — | — |
+| `G-247` | feature | mittel | [der Zeitraumwechsel braucht eine eigene Funktion](erledigt/nutrition-g-0247-zeitraumwechsel-braucht-eine-eigene-funktion.md) | erledigt | — | — |
 | `G-248` | befund | mittel | [der Leseweg laedt neun von 35 Fehlzaehlern](todos/nutrition-g-0248-der-leseweg-laedt-neun-von-35-fehlzaehlern.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 

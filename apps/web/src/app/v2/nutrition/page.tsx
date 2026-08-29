@@ -12,7 +12,10 @@
 import type { Metadata } from 'next'
 
 import { getDailySummary } from '../../../lib/nutrition/diary-summary-read'
-import { getReferenceAssessment } from '../../../lib/nutrition/reference-assessment-read'
+import {
+  getReferenceAssessment, getNaehrstoffZeitraum,
+  type NaehrstoffTag,
+} from '../../../lib/nutrition/reference-assessment-read'
 import type { DailySummaryRow } from '../../../lib/nutrition/diary-summary'
 import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-assessment-read'
 import { getZielwerteAm, getZielwertVorschlag } from '../../../lib/profile/zielwerte-read'
@@ -98,6 +101,19 @@ export default async function V2NutritionPage({
     bewertung = await getReferenceAssessment(datum)
   } catch (e) {
     bewertungFehler = e instanceof Error ? e.message : String(e)
+  }
+
+  // G-247/E-24: die Tageswerte fuer Zeitraum und Verlauf. `[read]`
+  // **Getrennt abgefangen** — ohne sie bleibt der Tagesmodus
+  // vollstaendig nutzbar, nur 7/30/90 zeigen dann nichts.
+  // `[cmd]` 90 Tage, alle Naehrstoffe: 222 ms (explain analyze).
+  let tageswerte: NaehrstoffTag[] = []
+  if (tab === 'nutrients') {
+    try {
+      tageswerte = await getNaehrstoffZeitraum(datum, 90)
+    } catch {
+      tageswerte = []
+    }
   }
 
   // GO-03/GO-04: Was gilt, und was gelten koennte. Getrennt gelesen —
@@ -248,6 +264,7 @@ export default async function V2NutritionPage({
       wasser={wasser}
       summe={summe}
       bewertung={bewertung}
+      tageswerte={tageswerte}
       fehler={fehler}
       bewertungFehler={bewertungFehler}
       ziele={ziele}

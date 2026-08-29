@@ -146,3 +146,70 @@ export async function getReferenceAssessment(
   }
   return parseAssessmentRows(data)
 }
+
+// ── Der Zeitraum — G-247 / E-24 ──────────────────────────────────
+
+/** Ein Tageswert je Naehrstoff, aus `daily_nutrient_summary_long`. */
+export type NaehrstoffTag = {
+  nutrient_code: string
+  entry_date: string
+  total_value: number | null
+  value_complete: boolean
+}
+
+/**
+ * Die Tageswerte aller Naehrstoffe im Zeitraum.
+ *
+ * `[read]` **Warum diese View und keine Schleife ueber
+ * `daily_reference_assessment`:** die Bewertungsfunktion rechnet je
+ * Tag die Referenzen mit — bei 90 Tagen waeren das 90 Aufrufe fuer
+ * Referenzwerte, die sich nicht aendern. `[cmd]`
+ * `daily_nutrient_summary_long` liefert dieselben Tagesmengen in
+ * **einer** Abfrage; gemessen 222 ms fuer 90 Tage ueber alle 138
+ * Naehrstoffe (`explain analyze`, 2026-08-28).
+ *
+ * `[read]` **Die Referenzen kommen weiter aus
+ * `daily_reference_assessment` fuer den Stichtag** — sie gelten fuer
+ * die Person, nicht fuer den Tag. **Gemittelt werden die Mengen,
+ * bewertet wird danach** (G-247).
+ *
+ * `[cmd]` `value_complete` kommt mit, weil Regel 1 im Zeitraum zur
+ * Regel wird: 973 von 1.794 Tageszeilen sind auf dev unvollstaendig.
+ */
+export async function getNaehrstoffZeitraum(
+  bisDatum: string, tage: number,
+): Promise<NaehrstoffTag[]> {
+  const supabase = createSessionClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new DiaryWriteError('NO_SESSION', 'Keine angemeldete Session.')
+
+  const von = new Date(`${bisDatum}T00:00:00Z`)
+  von.setUTCDate(von.getUTCDate() - (tage - 1))
+
+  const { data, error } = await supabase
+    .schema('nutrition')
+    .from('daily_nutrient_summary_long')
+    .select('nutrient_code, entry_date, total_value, value_complete')
+    .eq('user_id', user.id)
+    .gte('entry_date', von.toISOString().slice(0, 10))
+    .lte('entry_date', bisDatum)
+    .order('entry_date', { ascending: true })
+    // `[cmd]` 138 Naehrstoffe x 90 Tage = 12.420 Zeilen — PostgREST
+    // deckelt bei 1.000, deshalb ausdruecklich hochgesetzt (G-64).
+    .limit(20000)
+
+  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+
+  const aus: NaehrstoffTag[] = []
+  for (const raw of (data ?? []) as unknown as Array<Record<string, unknown>>) {
+    const code = asText(raw.nutrient_code)
+    if (!code) continue
+    aus.push({
+      nutrient_code: code,
+      entry_date: asText(raw.entry_date),
+      total_value: asNumberOrNull(raw.total_value),
+      value_complete: raw.value_complete === true,
+    })
+  }
+  return aus
+}

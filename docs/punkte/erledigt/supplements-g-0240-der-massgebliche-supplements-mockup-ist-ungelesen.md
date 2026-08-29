@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-28
 erledigt: 2026-08-28
-commit: OFFEN
+commit: 0a027544
 beruehrt:
   dateien: [docs/spezifikation/00-MODULSTAND.md]
 zahlen: null

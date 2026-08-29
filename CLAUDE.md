@@ -167,6 +167,24 @@ zu verschwinden.
 
 `docs/todo/` und `docs/ssot/` bleiben beim Orchestrator.
 
+## Jede Messung nennt Nutzer und Zeitraum
+
+`[cmd]` **Am 28.08. haben zweimal zwei Beteiligte verschiedene Zahlen
+fuer dieselbe Sache gemeldet** — Vitamin A bei 164 gegen 172 Prozent
+(C-334), und 1.794 gegen 724 Tageszeilen (G-247).
+
+`[read]` **Beide Male lag es nicht an den Daten**, sondern daran, dass
+niemand angegeben hat, fuer wen und ueber welchen Zeitraum gemessen
+wurde.
+
+`[cmd]` **Fuenf Nutzer haben Tagesdaten** — `dev@lumeos.app`, drei
+Seed-Konten mit je 180 Tagen, und `test-user@lumeos.local` mit einem.
+**Eine Zahl ohne Nutzerangabe kann alles bedeuten.**
+
+**Also: jede gemeldete Zahl nennt Nutzer und Zeitraum.** `[read]`
+**Sonst ist sie nicht nachpruefbar — und eine Abweichung sieht aus
+wie ein Defekt.**
+
 ## Der Orchestrator zaehlt nicht
 
 **Tom, 2026-08-27:** *,,11 von 12 falsch sagt mir du kannst es einfach

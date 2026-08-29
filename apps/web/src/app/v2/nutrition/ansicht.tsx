@@ -44,7 +44,9 @@ import type { InsightsStand } from '../../../lib/nutrition/insights-read'
 import type { HydrationDay } from '../../../lib/nutrition/hydration-day-read'
 import { LeerHinweis } from './leer-hinweis'
 import type { DailySummaryRow, SummaryMacro } from '../../../lib/nutrition/diary-summary'
-import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-assessment-read'
+import type {
+  ReferenceAssessmentRow, NaehrstoffTag,
+} from '../../../lib/nutrition/reference-assessment-read'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 import { Zielhinweis } from './zielhinweis'
 import { Mahlzeiten } from './mahlzeiten'
@@ -117,7 +119,7 @@ function tabs(mahlzeiten: number | null): TabItem[] {
 }
 
 export async function TagebuchAnsicht({
-  datum, tab, summe, bewertung, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
+  datum, tab, summe, bewertung, tageswerte = [], fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
   istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null,
   unvertraeglichkeiten = [],
 }: {
@@ -129,6 +131,8 @@ export async function TagebuchAnsicht({
   istAdmin?: boolean
   summe: DailySummaryRow | null
   bewertung: ReferenceAssessmentRow[]
+  /** G-247: Tageswerte je Naehrstoff, fuer Zeitraum und Verlauf. */
+  tageswerte?: NaehrstoffTag[]
   fehler: string | null
   bewertungFehler?: string | null
   ziele?: Zielwerte | null
@@ -234,7 +238,7 @@ export async function TagebuchAnsicht({
       <Zukunftshinweis datum={datum} />
 
       {tab !== 'diary' && (
-        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} bewertung={bewertung} unvertraeglichkeiten={unvertraeglichkeiten} />
+        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} bewertung={bewertung} tageswerte={tageswerte} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} />
       )}
       {tab === 'diary' && (
       <>
@@ -538,11 +542,15 @@ export async function TagebuchAnsicht({
  */
 function AndererTab({
   tab, foodsStart, vorlieben, plan, ordnung, einsichten, bewertung = [],
+  tageswerte = [], datum,
   unvertraeglichkeiten = [],
 }: {
   tab: string
   /** G-239: die Referenzbewertung des Tages, fuer die Mikro-Ansicht. */
   bewertung?: ReferenceAssessmentRow[]
+  /** G-247: Tageswerte fuer Zeitraum und Verlauf. */
+  tageswerte?: NaehrstoffTag[]
+  datum?: string
   /** G-154: die gesetzten Unvertraeglichkeiten (`strong`). */
   unvertraeglichkeiten?: string[]
   /** G-66: die erste Trefferseite, serverseitig geladen. */
@@ -589,7 +597,7 @@ function AndererTab({
             Katalog, die Bewertung zeigt den Tag. Wer den Reiter
             oeffnet, will zuerst wissen, wie er heute steht. */}
         <div style={{ marginBottom: 16 }}>
-          <MikroAnsicht zeilen={bewertung} />
+          <MikroAnsicht zeilen={bewertung} tageswerte={tageswerte} datum={datum} />
         </div>
         {ordnung && ordnung.gruppen.length > 0
           ? <NaehrstoffOrdnungTab d={ordnung} />

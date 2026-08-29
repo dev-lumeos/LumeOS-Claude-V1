@@ -308,10 +308,12 @@ export function faelleZusammen(zeilen: readonly ZeileMitLage[]): Naehrstoff[] {
  * landet unter „Weitere". Eine stumm weggelassene Zeile waere
  * derselbe Fehler wie eine Null statt eines Fehlzaehlers.
  */
-export function gruppiere(stoffe: readonly Naehrstoff[]): Array<{
+export function gruppiere<T extends { code: string }>(
+  stoffe: readonly T[],
+): Array<{
   key: string
   titel: string
-  stoffe: Naehrstoff[]
+  stoffe: T[]
 }> {
   const vergeben = new Set<string>()
   const aus = GRUPPEN.map(g => {
