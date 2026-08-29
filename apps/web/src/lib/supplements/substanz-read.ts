@@ -347,7 +347,16 @@ export type Unterform = {
   grad: string | null
 }
 
-export type EigenerStack = { id: string; name: string; is_active: boolean }
+export type EigenerStack = {
+  id: string; name: string; is_active: boolean
+  /** G-253: Posten in diesem Stack — die Kachel zeigt „N Einträge". */
+  posten: number
+  goal: string | null
+  /** Seit wann er besteht, als Datum. */
+  seit: string | null
+  /** Woher er stammt (`custom`, Vorlage …). */
+  quelle: string | null
+}
 
 // C-252: die Luecken stehen serverfrei in `substanz-luecken.ts` —
 // `substanz-detail.tsx` ist ein Client und darf aus dieser Datei nur
@@ -1124,24 +1133,53 @@ function feldQuellen(v: unknown): Record<string, Herkunft> | null {
 }
 
 /**
- * Die eigenen Stacks — fuer die Zuteilung „zu gewaehltem Stack".
+ * Die eigenen Stacks — fuer die Zuteilung „zu gewaehltem Stack"
+ * UND fuer die Kachel „My stacks" (G-253).
+ *
  * `[cmd]` Die Zeilenrechte begrenzen auf `user_id = auth.uid()`.
+ *
+ * `[read]` **G-253 wollte hier zuerst einen zweiten Leser bauen** —
+ * `getStackDaten` laedt nur den AKTIVEN Stack, und die Kachel braucht
+ * die Liste. **Aber diese Funktion laedt sie bereits**; ihr fehlten
+ * nur Postenzahl, Ziel und Datum. **Erweitert statt danebengebaut** —
+ * genau die Doppelung, die G-249 und G-11 wieder ausbauen mussten.
  */
 export async function ladeEigeneStacks(): Promise<EigenerStack[]> {
   const client = createSessionClient()
   const { data: { user } } = await client.auth.getUser()
   if (!user) return []
-  const { data, error } = await client.schema('supplements')
+  const s = client.schema('supplements')
+  const { data, error } = await s
     .from('user_stacks')
-    .select('id, name, is_active')
+    .select('id, name, goal, source, is_active, created_at')
     .order('is_active', { ascending: false })
   if (error) return []
-  return (data ?? []).map(r => {
-    const x = r as unknown as Record<string, unknown>
-    return {
-      id: String(x.id),
-      name: String(x.name),
-      is_active: x.is_active === true,
-    }
-  })
+
+  const zeilen = (data ?? []) as unknown as Array<Record<string, unknown>>
+  if (zeilen.length === 0) return []
+
+  // Die Postenzahl je Stack in EINER Abfrage, nicht einer je Stack.
+  const { data: posten } = await s
+    .from('stack_items')
+    .select('stack_id')
+    .in('stack_id', zeilen.map(z => String(z.id)))
+    .limit(1000)
+  const jeStack = new Map<string, number>()
+  for (const p of (posten ?? []) as unknown as Array<Record<string, unknown>>) {
+    const k = String(p.stack_id)
+    jeStack.set(k, (jeStack.get(k) ?? 0) + 1)
+  }
+
+  const txt = (v: unknown) =>
+    typeof v === 'string' && v.trim() !== '' ? v : null
+
+  return zeilen.map(x => ({
+    id: String(x.id),
+    name: String(x.name),
+    is_active: x.is_active === true,
+    goal: txt(x.goal),
+    posten: jeStack.get(String(x.id)) ?? 0,
+    seit: txt(x.created_at)?.slice(0, 10) ?? null,
+    quelle: txt(x.source),
+  }))
 }

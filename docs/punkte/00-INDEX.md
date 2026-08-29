@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 263 |
-| `laufend_codex` | 5 |
+| `todos` | 264 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 49 |
-| **gesamt** | **318** |
+| `erledigt` | 55 |
+| **gesamt** | **321** |
 
 ## medical — 39
 
@@ -94,8 +94,8 @@
 | `C-212` | befund | mittel | [`CHORL` haengt nicht im Naehrstoffbaum](todos/nutrition-c-0212-chorl-haengt-nicht-im-naehrstoffbaum.md) | offen | — | — |
 | `C-229` | befund | mittel | [Ein Katalog aus `DatabaseEcht`, Detail und Add getrennt](todos/nutrition-c-0229-ein-katalog-aus-databaseecht-detail-und-add-getrennt.md) | offen | — | — |
 | `C-239` | befund | mittel | [`meal_plans` kennt keinen Lebenszyklus](todos/nutrition-c-0239-meal-plans-kennt-keinen-lebenszyklus.md) | offen | — | — |
-| `C-323` | entscheidung | hoch | [Micro-Flags Warnschwelle und Formulierung festlegen](todos/nutrition-c-0323-micro-flags-warnschwelle-und-formulierung-festlegen.md) | offen | — | — |
-| `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](todos/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | offen | — | — |
+| `C-323` | entscheidung | hoch | [Micro-Flags Warnschwelle und Formulierung festlegen](laufend_claudecode/nutrition-c-0323-micro-flags-warnschwelle-und-formulierung-festlegen.md) | laeuft (claudecode) | — | — |
+| `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](laufend_codex/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | laeuft (codex) | — | — |
 | `C-333` | befund | niedrig | [Selen fehlt in der Bewertung auf dev](todos/nutrition-c-0333-selen-fehlt-in-der-bewertung-auf-dev.md) | offen | — | — |
 | `C-334` | befund | hoch | [die Tagesbewertung hat sich zwischen zwei Messungen verschoben](erledigt/nutrition-c-0334-die-bewertung-hat-sich-zwischen-zwei-messungen-verschoben.md) | erledigt | — | C-335 |
 | `C-335` | befund | mittel | [keine Aenderungshistorie fuer Mahlzeiten und Referenzwerte](todos/nutrition-c-0335-keine-aenderungshistorie-fuer-mahlzeiten.md) | offen | — | — |
@@ -152,9 +152,9 @@
 | `G-254` | entscheidung | mittel | [sechs Kacheln brauchen eine Entscheidung](todos/nutrition-g-0254-sechs-kacheln-brauchen-eine-entscheidung.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 51
+## supplements — 52
 
-### beauftragbar — 50
+### beauftragbar — 51
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -206,7 +206,8 @@
 | `G-213` | entscheidung | mittel | [soll `in_vitro_only` eine Warnung abschwaechen?](todos/supplements-g-0213-in-vitro-only-abschwaechen.md) | offen | — | — |
 | `G-214` | befund | mittel | [die Katalogsuche sagt nicht, warum ein Treffer passt](todos/supplements-g-0214-suche-sagt-nicht-warum-ein-treffer-passt.md) | offen | — | — |
 | `G-240` | befund | hoch | [der massgebliche Supplements-Mockup ist ungelesen](erledigt/supplements-g-0240-der-massgebliche-supplements-mockup-ist-ungelesen.md) | erledigt | — | A-59, G-253 |
-| `G-253` | feature | hoch | [Stacks und Compliance anbinden](laufend_claudecode/supplements-g-0253-stacks-und-compliance-anbinden.md) | laeuft (claudecode) | — | — |
+| `G-253` | feature | hoch | [Stacks und Compliance anbinden](erledigt/supplements-g-0253-stacks-und-compliance-anbinden.md) | erledigt | — | G-255 |
+| `G-255` | entscheidung | niedrig | [drei Attrappen-Konstanten ohne Aufrufer](todos/supplements-g-0255-drei-attrappen-konstanten-ohne-aufrufer.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -215,7 +216,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 18
+## training — 19
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -226,6 +227,7 @@
 | `C-145` | befund | mittel | [`Plan` braucht ein Schema, keine Anzeige](todos/training-c-0145-plan-braucht-ein-schema-keine-anzeige.md) | offen | — | — |
 | `C-169` | befund | mittel | [Das Trainingsplan-Schema steht im Entwurf](todos/training-c-0169-das-trainingsplan-schema-steht-im-entwurf.md) | offen | — | — |
 | `C-330` | befund | niedrig | [geplante Sitzungen tragen eine Endzeit](todos/training-c-0330-planned-sitzungen-mit-endzeit.md) | offen | — | — |
+| `C-340` | feature | niedrig | [ein Training-Gesamtscore, vorgesehen](todos/training-c-0340-ein-Training-Gesamtscore-vorgesehen.md) | offen | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
@@ -238,20 +240,20 @@
 | `G-217` | feature | mittel | [der Trainings-Schreibweg hat keine Oberflaeche](erledigt/training-g-0217-trainingsformular-fehlt.md) | erledigt | — | G-219 |
 | `G-219` | entscheidung | niedrig | [`LiveWorkout` hat keinen Aufrufer mehr](todos/training-g-0219-liveworkout-ohne-aufrufer.md) | offen | — | — |
 
-## recovery — 21
+## recovery — 22
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-50` | feature | mittel | [Ein `DROP COLUMN` prueft die Lesepfade nicht](todos/recovery-a-0050-ein-drop-column-prueft-die-lesepfade-nicht.md) | offen | — | — |
 | `C-111` | feature | mittel | [Recovery — neun Entscheidungen und drei Formelfehler](todos/recovery-c-0111-recovery-neun-entscheidungen-und-drei-formelfehler.md) | offen | — | — |
 | `C-123` | entscheidung | mittel | [Recovery — die neun Entscheidungen](todos/recovery-c-0123-recovery-die-neun-entscheidungen.md) | offen | — | — |
-| `C-127` | messung | mittel | [Drei Wearable-Spalten sind leer](laufend_codex/recovery-c-0127-drei-wearable-spalten-sind-leer.md) | laeuft (codex) | — | — |
-| `C-143` | messung | mittel | [Die zwei Erholungsrechnungen weichen ab](laufend_codex/recovery-c-0143-die-zwei-erholungsrechnungen-weichen-ab.md) | laeuft (codex) | — | — |
-| `C-166` | befund | mittel | [Recovery hat 3 Tabellen, der Entwurf 25 Konstanten](laufend_codex/recovery-c-0166-recovery-hat-3-tabellen-der-entwurf-25-konstanten.md) | laeuft (codex) | — | — |
+| `C-127` | messung | mittel | [Drei Wearable-Spalten sind leer](erledigt/recovery-c-0127-drei-wearable-spalten-sind-leer.md) | erledigt | — | — |
+| `C-143` | messung | mittel | [Die zwei Erholungsrechnungen weichen ab](erledigt/recovery-c-0143-die-zwei-erholungsrechnungen-weichen-ab.md) | erledigt | — | — |
+| `C-166` | befund | mittel | [Recovery hat 3 Tabellen, der Entwurf 25 Konstanten](erledigt/recovery-c-0166-recovery-hat-3-tabellen-der-entwurf-25-konstanten.md) | erledigt | — | — |
 | `C-167` | entscheidung | mittel | [`MODALITY_BONUS` hat elf Modalitaeten, wir kennen vier](todos/recovery-c-0167-modality-bonus-hat-elf-modalitaeten-wir-kennen-vier.md) | offen | — | — |
-| `C-168` | befund | mittel | [Die Uebertrainings-Schwellen stehen im Entwurf](laufend_codex/recovery-c-0168-die-uebertrainings-schwellen-stehen-im-entwurf.md) | laeuft (codex) | — | — |
+| `C-168` | befund | mittel | [Die Uebertrainings-Schwellen stehen im Entwurf](erledigt/recovery-c-0168-die-uebertrainings-schwellen-stehen-im-entwurf.md) | erledigt | — | — |
 | `C-172` | feature | mittel | [Der Stress-Tab steht im Entwurf](todos/recovery-c-0172-der-stress-tab-steht-im-entwurf.md) | offen | — | — |
-| `C-181` | feature | mittel | [ACWR wird gerechnet und muss raus](laufend_codex/recovery-c-0181-acwr-wird-gerechnet-und-muss-raus.md) | laeuft (codex) | — | C-218 |
+| `C-181` | feature | mittel | [ACWR wird gerechnet und muss raus](erledigt/recovery-c-0181-acwr-wird-gerechnet-und-muss-raus.md) | erledigt | — | C-218 |
 | `C-182` | befund | mittel | [Kein numerischer OTS-Schwellenwert](todos/recovery-c-0182-kein-numerischer-ots-schwellenwert.md) | offen | — | — |
 | `C-214` | befund | mittel | [Fuenf Modalitaeten ohne Registerzeile](todos/recovery-c-0214-fuenf-modalitaeten-ohne-registerzeile.md) | offen | — | — |
 | `C-215` | feature | mittel | [ACWR rechnet in der Datenbank weiter](todos/recovery-c-0215-acwr-rechnet-in-der-datenbank-weiter.md) | offen | — | C-209 |
@@ -259,6 +261,7 @@
 | `C-218` | entscheidung | mittel | [Frontend und Datenbank normieren den Recovery-Score verschieden](todos/recovery-c-0218-frontend-und-datenbank-normieren-den-recovery-score-verschieden.md) | offen | — | — |
 | `C-236` | feature | mittel | [Die Recovery-Seeds sind Zaehlreihen, keine Messwerte](todos/recovery-c-0236-die-recovery-seeds-sind-zaehlreihen-keine-messwerte.md) | offen | — | B-29, B-30, G-174 |
 | `C-238` | blocker | hoch | [`meal_plan_entries` hat keinen Status](todos/recovery-c-0238-meal-plan-entries-hat-keinen-status.md) | offen | — | — |
+| `C-339` | feature | niedrig | [ein Recovery-Gesamtscore, vorgesehen](todos/recovery-c-0339-ein-Recovery-Gesamtscore-vorgesehen.md) | offen | — | — |
 | `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](todos/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | offen | — | — |
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |

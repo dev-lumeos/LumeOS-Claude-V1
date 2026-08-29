@@ -10,9 +10,10 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-29
+erledigt: 2026-08-29
+commit: d2f692b2
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [recovery.scores]
 zahlen: null
 ---
 
@@ -57,3 +58,8 @@ zahlen: null
 
 **Mitbeauftragt mit C-143 am 2026-08-29.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-29, mit C-143 abgenommen.** Messung und Urteil stehen
+dort.

@@ -24,14 +24,16 @@
 // C-68 fuenf Tabellen, aber keine fuer Katalog, Stacks, Luecken oder
 // Bestand. Was fehlt, steht im Bericht.
 import * as React from 'react'
-import { Card, Pill, Icon, Row, Meter } from '@lumeos/ui'
+import { Card, Pill, Icon, Row, Meter, InEntwicklungKnopf } from '@lumeos/ui'
 
 import {
-  CATALOG, EVIDENCE_GRADES, gradeMeta, GAP_ROWS,
-  USER_STACKS, STACK_TEMPLATES, FREQUENCY_OPTIONS, INVENTORY,
+  CATALOG, EVIDENCE_GRADES, gradeMeta, GAP_ROWS, INVENTORY,
   type KatalogEintrag,
 } from './spec-daten'
 import { useSupp } from './kontext'
+import {
+  stackListeSatz, vorlagenLageVon, VORLAGEN_LEER_SATZ, frequenzSatz,
+} from '../../../lib/supplements/stack-lage'
 
 const ATTRAPPE = 'Es gibt keine Tabelle dafuer — die Zahlen stammen aus der Vorlage.'
 
@@ -67,90 +69,113 @@ function Stufe({ g }: { g: string }) {
 // (C-229).
 
 // ═══ STACKS ═══════════════════════════════════════════════════════
+//
+// `[cmd]` **G-253: die vier Kacheln haengen an echten Tabellen** —
+// drei davon an Daten, die die Seite ohnehin schon laedt.
+//
+//     My stacks           `user_stacks` ueber `ladeEigeneStacks`
+//     System templates    `stack_templates` — EXISTIERT, ist LEER
+//     Frequency options   `stack_items.frequency`, gezaehlt
+//     Item customization  `stack_items` (dose, timing, cycling)
+//
+// `[read]` **Ein neuer Leser wurde gebaut und wieder verworfen:**
+// `ladeEigeneStacks` laedt die Liste bereits, ihr fehlten nur drei
+// Felder. **Erweitert statt danebengestellt** — G-249 und G-11
+// mussten genau diese Doppelung wieder ausbauen.
 export function SuppStacks() {
+  const { daten, stacks } = useSupp()
+  const positionen = daten?.positionen ?? []
+
+  // Die Frequenzen, die im Bestand vorkommen — gezaehlt, nicht
+  // aus einer Liste behauptet.
+  const frequenzen = React.useMemo(() => {
+    const z = new Map<string, number>()
+    for (const p of positionen) z.set(p.frequency, (z.get(p.frequency) ?? 0) + 1)
+    return Array.from(z, ([wert, anzahl]) => ({ wert, anzahl }))
+      .sort((a, b) => b.anzahl - a.anzahl)
+  }, [positionen])
+
+  const listenSatz = stackListeSatz(stacks)
+  const vorlagen = vorlagenLageVon(0)   // `stack_templates`: 0 Zeilen (G-253)
+
   return (
     <div className="v2-grid v2-grid-14" style={{ gap: 14 }}>
       <div className="v2-col-gap" style={{ gap: 14 }}>
         <Card
-          title="My stacks"
-          sub="only one active at a time · DB EXCLUDE constraint"
-          attrappe={ATTRAPPE}
+          title="Meine Stacks"
+          sub={`${stacks.length} angelegt · nur einer aktiv (uq_user_stacks_one_active)`}
           actions={(
-            <button type="button" className="v2-btn v2-btn-sm">
-              <Icon name="plus" className="v2-ic v2-ic-sm" />New stack
-            </button>
+            <InEntwicklungKnopf titel="Neuer Stack" className="v2-btn v2-btn-sm">
+              <Icon name="plus" className="v2-ic v2-ic-sm" />Neuer Stack
+            </InEntwicklungKnopf>
           )}
         >
-          <div className="v2-col-gap" style={{ gap: 6 }}>
-            {USER_STACKS.map(s => (
-              <div
-                key={s.id}
-                className="v2-supp-stack-zeile"
-                style={{
-                  background: s.active
-                    ? 'color-mix(in oklch, var(--acc-suppl) 8%, var(--surface))'
-                    : 'var(--surface)',
-                  border: `1px solid ${s.active
-                    ? 'color-mix(in oklch, var(--acc-suppl) 32%, var(--border))'
-                    : 'var(--border)'}`,
-                }}
-              >
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3, flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: 13, fontWeight: 600 }}>{s.name}</span>
-                    {s.active && <Pill variant="acc" style={{ fontSize: 9 }}>active</Pill>}
-                    <Pill style={{ fontSize: 9 }}>{s.source}</Pill>
+          {listenSatz
+            ? <div className="v2-supp-hinweis">{listenSatz}</div>
+            : (
+              <div className="v2-col-gap" style={{ gap: 6 }}>
+                {stacks.map(s => (
+                  <div
+                    key={s.id}
+                    className="v2-supp-stack-zeile"
+                    style={{
+                      background: s.is_active
+                        ? 'color-mix(in oklch, var(--acc-suppl) 8%, var(--surface))'
+                        : 'var(--surface)',
+                      border: `1px solid ${s.is_active
+                        ? 'color-mix(in oklch, var(--acc-suppl) 32%, var(--border))'
+                        : 'var(--border)'}`,
+                    }}
+                  >
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3, flexWrap: 'wrap' }}>
+                        <span style={{ fontSize: 13, fontWeight: 600 }}>{s.name}</span>
+                        {s.is_active && <Pill variant="acc" style={{ fontSize: 9 }}>aktiv</Pill>}
+                        {s.quelle && <Pill style={{ fontSize: 9 }}>{s.quelle}</Pill>}
+                      </div>
+                      <div className="v2-dim v2-mono" style={{ fontSize: 10 }}>
+                        {s.posten} {s.posten === 1 ? 'Eintrag' : 'Einträge'}
+                        {s.seit ? ` · seit ${s.seit}` : ''}
+                        {s.goal ? ` · ${s.goal}` : ''}
+                      </div>
+                    </div>
                   </div>
-                  <div className="v2-dim v2-mono" style={{ fontSize: 10 }}>
-                    {s.items} items · since {s.since}
-                  </div>
-                </div>
-                {!s.active && <button type="button" className="v2-btn v2-btn-sm">Activate</button>}
-                <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm">Edit</button>
+                ))}
               </div>
-            ))}
-          </div>
+            )}
           <div className="v2-supp-hinweis">
-            Activating a stack automatically deactivates all others. Intake logs generate from
-            the active stack only.
+            Einnahme-Einträge entstehen nur aus dem aktiven Stack.
           </div>
         </Card>
 
-        <Card title="System templates" sub="5 curated starting points" attrappe={ATTRAPPE}>
-          <div className="v2-col-gap" style={{ gap: 6 }}>
-            {STACK_TEMPLATES.map(t => (
-              <div key={t.id} className="v2-supp-vorlage">
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: 12.5, fontWeight: 600 }}>{t.name}</span>
-                  <Pill style={{ fontSize: 9 }}>{t.goal}</Pill>
-                  <button type="button" className="v2-btn v2-btn-sm" style={{ marginLeft: 'auto' }}>
-                    Use template
-                  </button>
-                </div>
-                <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                  {t.items.map((i: string) => <Pill key={i} style={{ fontSize: 9.5 }}>{i}</Pill>)}
-                </div>
-              </div>
-            ))}
-          </div>
+        <Card
+          title="Vorlagen"
+          sub="stack_templates"
+        >
+          {vorlagen === 'tabelle_leer'
+            ? <div className="v2-supp-hinweis">{VORLAGEN_LEER_SATZ}</div>
+            : null}
         </Card>
       </div>
 
       <div className="v2-col-gap" style={{ gap: 14 }}>
-        <Card title="Frequency options" sub="days per month used for cost + compliance" attrappe={ATTRAPPE}>
-          {FREQUENCY_OPTIONS.map(f => (
-            <Row key={f.id} label={f.label} value={`${f.days} d/mo`} sub={f.id} />
+        <Card title="Einnahmefrequenz" sub="aus den Einträgen des aktiven Stacks gezählt">
+          {frequenzen.map(f => (
+            <Row key={f.wert} label={f.wert}
+              value={`${f.anzahl} von ${positionen.length}`} />
           ))}
+          {frequenzSatz(frequenzen)
+            ? <div className="v2-supp-hinweis">{frequenzSatz(frequenzen)}</div>
+            : null}
         </Card>
-        <Card title="Item customization" sub="per stack item" attrappe={ATTRAPPE}>
-          <Row label="Custom name" value={'"Morning Magnesium"'} />
-          <Row label="Own dose" value="can deviate from rec." />
-          <Row label="Own timing" value="any slot" />
-          <Row label="Cycling config" value="{on_weeks, off_weeks}" />
-          <div className="v2-divider" />
-          <div className="v2-dim" style={{ fontSize: 11, lineHeight: 1.5 }}>
-            Cycling config drives intake-log generation: during an off week no log is created at all.
-          </div>
+        <Card title="Je Eintrag hinterlegt" sub={`${positionen.length} Einträge im aktiven Stack`}>
+          {positionen.length === 0
+            ? <div className="v2-supp-hinweis">Kein aktiver Stack mit Einträgen.</div>
+            : positionen.map(p => (
+              <Row key={p.id} label={p.name}
+                value={`${p.dose} ${p.dose_unit}`}
+                sub={`${p.timing} · ${p.frequency}`} />
+            ))}
         </Card>
       </div>
     </div>

@@ -274,3 +274,9 @@ backup/**/*_lumeos_voll.sql
 backup/**/*_voll.sql
 backup/**/*_live_before.sql
 backup/**/*_before_live.sql
+
+# Arbeitsverzeichnis des Orchestrators (Python-Skripte je Handgriff).
+# Wird nach jedem Commit geleert; nichts darin ist Bestand.
+# Gemeldet von Claude Code in G-253 als "repo-root oddity" - er hatte
+# recht, es gehoerte ignoriert.
+scratchpad/

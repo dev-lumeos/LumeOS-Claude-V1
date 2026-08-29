@@ -92,9 +92,13 @@ test('die neuen Tabs kennzeichnen jede Kachel', () => {
   // `[cmd]` **G-172: `tab-spec.tsx` von 18 auf 16.** Die zwei Marken
   // gehoerten dem geloeschten `SuppCatalog` — der Katalog-Tab zeigt
   // jetzt die echte Substanzdatenbank (C-229), die keine traegt.
+  // `[cmd]` **G-253: von 16 auf 12.** Die vier Marken gehoerten
+  // `SuppStacks`; der Reiter liest jetzt `user_stacks` und
+  // `stack_items`. **Am Schirm gezaehlt: 4 Attrappen vorher,
+  // 0 nachher** (A-59).
   const dateien: Array<[string, number]> = [
     ['tab-injektionen.tsx', 14],
-    ['tab-spec.tsx', 16],
+    ['tab-spec.tsx', 12],
   ]
   for (const [datei, erwartet] of dateien) {
     const quelle = lies(datei)
