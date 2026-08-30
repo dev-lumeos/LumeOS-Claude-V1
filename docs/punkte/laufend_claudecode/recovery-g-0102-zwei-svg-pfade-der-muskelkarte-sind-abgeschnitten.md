@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-100
 kinder: []
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: ["packages/ui/src/koerperkarte-pfade.ts"]
@@ -46,7 +48,7 @@ zahlen: null
 **Mitbeauftragt mit G-281 am 2026-08-30.** Bericht in die
 G-281-Datei. **Dazu: A-50, C-356.**
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 ### G-102 — zwei SVG-Pfade sind abgeschnitten
 

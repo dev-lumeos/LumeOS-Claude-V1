@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-160
 kinder: []
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: ["recovery.scores"]
   dateien: ["apps/web/src/lib/recovery/scores-read.ts", "CLAUDE.md"]
@@ -44,5 +46,5 @@ zahlen: null
 
 ## Auftrag
 
-**Vorbereitet mit G-102 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit G-102 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.

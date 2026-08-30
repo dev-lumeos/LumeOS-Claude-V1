@@ -9,8 +9,11 @@ kind_von: G-277
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  dateien: [tools/server.py]
+  dateien:
+    - tools/server.py
 zahlen:
   gemessen: 2026-08-30
   speicher_gb: 1.5
@@ -212,8 +215,113 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Nachgemessen am 2026-08-30.** Der Punktname bleibt falsch:
+der Server stirbt nicht an langen Laeufen. Er wird durch einen
+expliziten Neustart beendet. Ein geschuetzter zweiter Web-Port wurde
+nicht gebaut, weil er die bereits belegte Mehrfach-Beobachtung des
+gleichen Quellbaums erneut einfuehren wuerde.
+
+| Nachweis | Ergebnis |
+|---|---|
+| Starts in `backup/dev-server.log` | **18**, davon **6** am 30.08. |
+| enge Startfolgen am 30.08. | 18:28:41 → 18:30:35 (**1:54 min**) und 20:09:56 → 20:12:06 (**2:10 min**); das Log kennt aber keinen Aufrufer, daher keine personenbezogene Zuschreibung |
+| Fehler vor den Starts | keiner im Log; jeweils neue `===== Start ... =====`-Marke nach dem Beenden |
+| aktueller Web-Server | genau ein Next-Prozess auf **3200**, PID 623864, **1.212 MB** RSS, gestartet 20:12:08 |
+| aktuelle Belastbarkeit | `/login` antwortete mit **200 in 229 ms** |
+| Gegenprobe `server.py start` | 18 Starts vor/nachher und dieselbe PID: ein gesunder 3200er bleibt bereits stehen |
+| C-209 heute | `nutrition.reference_assessment_window_flags(uuid,date,integer)` ist live; der Nachweisaufruf liefert **10** Zeilen |
+| Pipeline-Live-Stand | keine Pipeline-Schritt-ID oder Ausfuehrhistorie in der laufenden DB; nur die allgemeine Supabase-Migrationshistorie existiert |
+
+### G-280 / B-25 - ein zweiter Port trennt nicht die Watcher
+
+`LUMEOS_DIST_DIR` trennt den **Ausgabeordner**: Gate und Dev-Server
+schreiben nicht beide nach `.next`. Er trennt weder die Quelldateien
+noch ihre Beobachtung. Zwei `next dev`-Prozesse haben getrennten
+Prozessspeicher und getrennte Watcher; jeder beobachtet `apps/web`
+und kompiliert einen Edit selbst. Die historische Folge von fuenf
+Instanzen auf 3200, 3201, 3205, 3207 und 3310 hat genau diese
+Mehrfachkompilierung bereits gezeigt.
+
+Eine neue Parallelinstanz nur zum Nachmessen waere daher kein
+harmloser Versuch, sondern das Wiederherstellen des bekannten Schadens:
+zusatzliche Watcher und ein weiterer Compiler auf dem gemeinsamen
+Quellbaum. Sie wurde nicht gestartet. Die Trennung **traegt nicht**
+im verlangten Sinn; sie verhindert nur `.next`-Kollisionen.
+
+Toms Arbeitsweise ist bereits mit dem einen Port erreichbar:
+`http://127.0.0.1:3200` aktualisiert sich bei Aenderungen aus dem
+gemeinsamen Quellbaum per Dev-Server. Der vorhandene Befehl
+`python tools/server.py start` ist dabei nicht zerstoererisch. Nur
+`neustart` beendet absichtlich den gesunden 3200er via
+`taskkill /T /F`. Ein zweiter Port wuerde dieses Eigentumsproblem
+nicht loesen, sondern die Watcher-Kosten verdoppeln.
+
+Die Messung reicht noch **nicht** fuer eine Schwelle
+„ausgehungert“: 1,5 GB und 1,6 s wurden einmal vor einem Neustart
+beobachtet, der aktuelle, 1.212-MB-Prozess antwortet schnell. Es
+fehlt ein Lauf ohne externe Neustarts mit Zeitreihe aus RSS,
+Antwortzeit und Routenlast. Bis dahin waere eine harte Schwelle
+selbst gesetzt.
+
+### C-209 - Kette und laufende Datenbank haben keinen gemeinsamen Stand
+
+Der konkrete Blocker von G-273 ist erledigt: die in der Kette
+vorhandene Funktion `reference_assessment_window_flags` ist jetzt
+live und liefert im Nachweisaufruf zehn Flag-Zeilen.
+
+Das Grundproblem bleibt messbar: `supabase/_pipeline/kette.json`
+ist ein lokales Manifest, aber kein Schritt schreibt seine ID,
+Pruefsumme oder Ausfuehrzeit in die laufende Datenbank. Die vorhandene
+`supabase_migrations.schema_migrations`-Historie kann nur
+Migrationen bezeugen, nicht die Pipeline. Damit kann weder ein
+Kettenschritt „noch nicht live“ melden noch die Live-Instanz sagen,
+bis zu welchem Kettenschritt sie reicht.
+
+Eine allgemeine Loesung braucht einen expliziten, transaktional mit
+jedem Pipeline-Schritt fortgeschriebenen Ausfuehrnachweis plus
+Nachweis- und Rückstandsanzeige. Das ist eine neue
+Pipeline-Protokollierung, nicht die Reparatur eines einzelnen
+fehlenden Objekts; sie wurde nicht nebenbei erfunden oder gebaut.
+
+**Ergebnis:** Kein geschuetzter zweiter Web-Port. Der gesunde
+gemeinsame 3200er wird bereits von `start` geschont; die
+zerstoererische Handlung ist nur `neustart`. Der naechste
+Bauauftrag kann entweder die Neustart-Autoritaet/Protokollierung oder
+die allgemeine Pipeline-Live-Protokollierung entscheiden.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-30, Orchestrator.**
+
+### Kein zweiter Port — und der Grund ist gemessen
+
+`[cmd]` **Getrennte `distDir` verhindern nur `.next`-Kollisionen.**
+`[cmd]` **Zwei `next dev`-Prozesse beobachten und kompilieren
+denselben Quellbaum weiter doppelt.**
+
+`[read]` **Damit ist Toms Frage beantwortet, und die Antwort ist
+Nein** — **nicht weil es umstaendlich waere, sondern weil es nichts
+loest.**
+
+`[cmd]` **Und der wichtigere Teil: `server.py start` schont einen
+gesunden Server bereits.** `[cmd]` **18 Starts vor und nach der
+Gegenprobe unveraendert.**
+
+`[read]` **Tom kann 3200 weiter benutzen, Aenderungen erscheinen
+automatisch.** **Was ihn abschiesst, ist `neustart`, nicht `start`.**
+
+### C-209 ist live behoben
+
+`[cmd]` **`reference_assessment_window_flags` existiert und liefert 10
+Zeilen.** `[read]` **Der konkrete Blocker, der am 30.08. G-273
+aufgehalten hat, ist weg.**
+
+`[read]` **Was offen bleibt, ist der allgemeine Nachweis:** `[cmd]`
+**die Datenbank fuehrt keine Pipeline-Historie** — **es gibt keine
+Stelle, die sagt, welche Kettenschritte live sind.**
+
+`[read]` **Das ist ein groesserer Punkt als der behobene Fall.** **Als
+C-361 angelegt.**
+
+**Abgenommen.**
+

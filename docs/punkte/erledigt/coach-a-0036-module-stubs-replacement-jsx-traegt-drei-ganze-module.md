@@ -10,9 +10,11 @@ kinder: []
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien:
+    - apps/admin
 zahlen: null
 ---
 
@@ -63,3 +65,56 @@ Datei kommen** — der Punkt ist aelter als der `/v2/`-Umbau.
 Bauteil, oder fehlt nur die Verdrahtung?** `[cmd]` **Beim
 Coaches-Reiter war es die Verdrahtung, und die Behebung war ein
 Prop.**
+
+## Bericht
+
+**Claude Code, 2026-08-30.** Mitbeauftragt mit C-49. **Der
+vollstaendige Bericht steht in [C-49](nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md#bericht).**
+
+### Zuerst gemessen: die Module kommen nicht mehr aus dieser Datei
+
+`[cmd]` **`module-stubs-replacement.jsx` liegt unter
+`docs/spezifikation/10-plattform/design-system/theme-v1/`** — als
+Entwurf. **Kein Import aus `apps/` oder `packages/` zeigt darauf.**
+
+### Und es ist NICHT der Fall des Coaches-Reiters
+
+`[cmd]` **Gemessen am Schirm, angemeldet:**
+
+    Marketplace    -> https://marketplace.lumeos.app
+    Admin          -> https://admin.lumeos.app
+    /v2/marketplace   HTTP 404
+    /v2/admin         HTTP 404
+    /v2/onboarding    HTTP 404
+
+`[read]` **Beim Coaches-Reiter stand die echte Komponente daneben und
+bekam kein Prop.** **Hier gibt es keine Komponente, die man verdrahten
+koennte** — die Module sind eigene Produkte auf eigenen Domains.
+
+### Je Modul
+
+    Marketplace   nicht gebaut, keine Route, externer Verweis.
+                  Produktentscheidung, kein Befund.
+    Admin         GEBAUT als eigene App: apps/admin, mit
+                  curation/page.tsx (314 Zeilen), Middleware,
+                  Anmeldung und zwei Testdateien.
+                  A-36 ist insoweit ueberholt.
+    Onboarding    nicht gebaut, keine Route (G-83 haelt es fest).
+
+`[read]` **Als Attrappen-Befund geschlossen.** Was bleibt, ist die
+Produktfrage, ob Marketplace und Onboarding in diese Anwendung
+gehoeren — **und die stand nie in diesem Punkt.**
+
+## Abnahme
+
+**2026-08-30, mit C-49 abgenommen: geschlossen.**
+
+`[cmd]` **Kein Import zeigt auf die Entwurfsdatei.** `[cmd]`
+**Marketplace und Admin sind externe Verweise, die Routen liefern
+404.**
+
+`[read]` **Es ist nicht der Coaches-Fall** — dort stand eine
+Komponente ohne Prop, **hier gibt es keine Komponente.**
+
+`[cmd]` **Und Admin ist gebaut, als eigene App** — `apps/admin` mit
+Kuration, Middleware und Tests. **Der Punkt ist insoweit ueberholt.**

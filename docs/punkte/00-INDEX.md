@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 233 |
-| `laufend_codex` | 5 |
-| `laufend_claudecode` | 6 |
-| `erledigt` | 126 |
-| **gesamt** | **370** |
+| `laufend_codex` | 4 |
+| `laufend_claudecode` | 5 |
+| `erledigt` | 130 |
+| **gesamt** | **372** |
 
 ## medical — 42
 
@@ -31,7 +31,7 @@
 | `C-198` | feature | mittel | [ATC, CAS und CYP der 498 Wirkstoffe nachziehen](todos/medical-c-0198-atc-cas-und-cyp-der-498-wirkstoffe-nachziehen.md) | offen | — | — |
 | `C-200` | feature | mittel | [Symptomtabelle anlegen und fuellen](todos/medical-c-0200-symptomtabelle-anlegen-und-fuellen.md) | offen | — | — |
 | `C-204` | befund | mittel | [`lab_trigger_index` — 77 Analyte](todos/medical-c-0204-lab-trigger-index-77-analyte.md) | offen | — | — |
-| `C-209` | blocker | hoch | [Die laufende Instanz wird nach einem Kettenschritt nicht nachgezogen](laufend_codex/medical-c-0209-die-laufende-instanz-wird-nach-einem-kettenschritt-nicht-nachgezogen.md) | laeuft (codex) | — | — |
+| `C-209` | blocker | hoch | [Die laufende Instanz wird nach einem Kettenschritt nicht nachgezogen](erledigt/medical-c-0209-die-laufende-instanz-wird-nach-einem-kettenschritt-nicht-nachgezogen.md) | erledigt | — | C-361 |
 | `C-213` | befund | mittel | [C-124-E8 — die Arzt-Hinweis-Schwelle ist offen](todos/medical-c-0213-c-124-e8-die-arzt-hinweis-schwelle-ist-offen.md) | offen | — | — |
 | `C-285` | entscheidung | hoch | [`user_medications` speichert Medikamente im Klartext](erledigt/medical-c-0285-user-medications-speichert-medikamente-im-klartext.md) | erledigt | — | — |
 | `C-294` | feature | mittel | [was Kimi nachliefern muss](todos/medical-c-0294-was-kimi-nachliefern-muss.md) | offen | — | — |
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 123
+## nutrition — 124
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -77,7 +77,7 @@
 | `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](todos/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | offen | — | — |
 | `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — | — |
 | `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](erledigt/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | erledigt | — | G-239, G-248 |
-| `C-49` | befund | hoch | [Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach](laufend_claudecode/nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md) | laeuft (claudecode) | — | C-323, C-324 |
+| `C-49` | befund | hoch | [Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach](erledigt/nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md) | erledigt | — | C-323, C-324, C-360 |
 | `C-102` | feature | mittel | [`milch` findet Joghurt statt Milch](erledigt/nutrition-c-0102-milch-findet-joghurt-statt-milch.md) | erledigt | — | — |
 | `C-109` | entscheidung | mittel | [Die Injektions-Grenzwerte sind unbelegt](todos/nutrition-c-0109-die-injektions-grenzwerte-sind-unbelegt.md) | offen | — | — |
 | `C-117` | befund | mittel | [`milch` traegt auch mit Vorlieben nicht](erledigt/nutrition-c-0117-milch-traegt-auch-mit-vorlieben-nicht.md) | erledigt | — | — |
@@ -105,9 +105,9 @@
 | `C-336` | befund | hoch | [FD traegt den Text eines anderen Naehrstoffs](erledigt/nutrition-c-0336-fd-traegt-den-text-eines-anderen-naehrstoffs.md) | erledigt | — | C-346 |
 | `C-338` | befund | mittel | [sechs Sortierwerte fehlen live](erledigt/nutrition-c-0338-sechs-sortierwerte-fehlen-live.md) | erledigt | — | — |
 | `C-342` | entscheidung | hoch | [Vitamin A in IE gegen Mikrogramm](erledigt/nutrition-c-0342-vitamin-a-in-ie-gegen-mikrogramm.md) | erledigt | — | C-350 |
-| `C-343` | befund | hoch | [zwei Schreibweisen fuer *,,kein Vitamin C"*](erledigt/nutrition-c-0343-vitamin-c-fehlt-an-180-von-181-tagen.md) | erledigt | — | C-345 |
+| `C-343` | befund | hoch | [zwei Schreibweisen fuer *,,kein Vitamin C"*](todos/nutrition-c-0343-vitamin-c-fehlt-an-180-von-181-tagen.md) | offen | — | C-345 |
 | `C-344` | befund | hoch | [drei Obergrenzen gelten nicht fuer Nahrung](erledigt/nutrition-c-0344-drei-obergrenzen-gelten-nicht-fuer-nahrung.md) | erledigt | — | — |
-| `C-345` | befund | niedrig | [Spurenwerte im Lebensmittelimport](todos/nutrition-c-0345-spurenwerte-im-lebensmittelimport.md) | offen | — | — |
+| `C-345` | befund | niedrig | [Spurenwerte im Lebensmittelimport](laufend_codex/nutrition-c-0345-spurenwerte-im-lebensmittelimport.md) | vorbereitet (codex) | — | — |
 | `C-346` | befund | hoch | [zwei Detailtexte neu verknuepfen](erledigt/nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md) | erledigt | — | — |
 | `C-347` | entscheidung | hoch | [generelle Ausschluesse in \`food_search\`](erledigt/nutrition-c-0347-generelle-ausschluesse-in-food-search.md) | erledigt | — | — |
 | `C-348` | feature | mittel | [eine zaehlende Funktion fuer die Flags](erledigt/nutrition-c-0348-eine-zaehlende-funktion-fuer-die-flags.md) | erledigt | — | G-273 |
@@ -115,7 +115,8 @@
 | `C-350` | entscheidung | hoch | [zwei Obergrenzen fuer Magnesium](erledigt/nutrition-c-0350-zwei-obergrenzen-fuer-magnesium.md) | erledigt | — | C-351 |
 | `C-353` | messung | mittel | [die erwartete Ersparnis tritt nicht ein](erledigt/nutrition-c-0353-die-erwartete-ersparnis-tritt-nicht-ein.md) | erledigt | — | C-356 |
 | `C-355` | feature | mittel | [`food_search` kennt keine Herkunft](erledigt/nutrition-c-0355-food-search-kennt-keine-herkunft.md) | erledigt | — | — |
-| `C-356` | messung | niedrig | [woraus die 1.620 ms HTML bestehen](laufend_claudecode/nutrition-c-0356-woraus-die-1620-ms-html-bestehen.md) | vorbereitet (claudecode) | — | — |
+| `C-356` | messung | niedrig | [woraus die 1.620 ms HTML bestehen](laufend_claudecode/nutrition-c-0356-woraus-die-1620-ms-html-bestehen.md) | laeuft (claudecode) | — | — |
+| `C-360` | entscheidung | hoch | [darf ein fehlender Naehrwert als 0 zaehlen?](todos/nutrition-c-0360-darf-ein-fehlender-naehrwert-als-null-zaehlen.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -201,7 +202,7 @@
 | `C-179` | befund | mittel | [`EAA` zeigt auf den Summenwert, nicht auf die neun](todos/supplements-c-0179-eaa-zeigt-auf-den-summenwert-nicht-auf-die-neun.md) | offen | — | — |
 | `C-186` | befund | mittel | [Nebenwirkungen und Zyklen haben keine Tabelle](todos/supplements-c-0186-nebenwirkungen-und-zyklen-haben-keine-tabelle.md) | offen | — | — |
 | `C-199` | entscheidung | mittel | [`medication_regulatory` als eigene Entitaet](todos/supplements-c-0199-medication-regulatory-als-eigene-entitaet.md) | offen | — | — |
-| `C-202` | blocker | hoch | [Produkte, Marken, Hersteller, Kennungen](laufend_codex/supplements-c-0202-produkte-marken-hersteller-kennungen.md) | vorbereitet (codex) | — | — |
+| `C-202` | blocker | hoch | [Produkte, Marken, Hersteller, Kennungen](laufend_codex/supplements-c-0202-produkte-marken-hersteller-kennungen.md) | laeuft (codex) | — | — |
 | `C-203` | befund | mittel | [Beobachtung gegen Erwartung (crawl_033)](todos/supplements-c-0203-beobachtung-gegen-erwartung-crawl-033.md) | offen | — | — |
 | `C-206` | entscheidung | mittel | [Die Community-Schicht — nur Admin, oder nie?](todos/supplements-c-0206-die-community-schicht-nur-admin-oder-nie.md) | offen | — | C-341 |
 | `C-207` | befund | hoch | [Vier Entscheidungen aus dem 035-Handoff](todos/supplements-c-0207-vier-entscheidungen-aus-dem-035-handoff.md) | offen | — | C-319, C-320, C-321, C-322 |
@@ -211,7 +212,7 @@
 | `C-253` | feature | mittel | [Die IDs der beiden Kataloge sind nicht vergleichbar — drei Stellen haetten stumm nie mehr getroffen](todos/supplements-c-0253-die-ids-der-beiden-kataloge-sind-nicht-vergleichbar-drei-stellen-haetten.md) | offen | — | — |
 | `C-257` | befund | niedrig | [Nutzertexte fuer den Substanzkatalog — Schema und Befuellung](todos/supplements-c-0257-nutzertexte-fuer-den-substanzkatalog-schema-und-befuellung.md) | offen | — | — |
 | `C-258` | messung | mittel | [Die Nutzertexte sind Schablonen — und 248 Substanzen fehlen ganz](todos/supplements-c-0258-die-nutzertexte-sind-schablonen-und-248-substanzen-fehlen-ganz.md) | offen | — | C-259, C-263 |
-| `C-260` | blocker | hoch | [Die Arbeitsberichte sind nicht in die Daten zurueckgeflossen](laufend_codex/supplements-c-0260-die-arbeitsberichte-sind-nicht-in-die-daten-zurueckgeflossen.md) | vorbereitet (codex) | — | C-261 |
+| `C-260` | blocker | hoch | [Die Arbeitsberichte sind nicht in die Daten zurueckgeflossen](laufend_codex/supplements-c-0260-die-arbeitsberichte-sind-nicht-in-die-daten-zurueckgeflossen.md) | laeuft (codex) | — | C-261 |
 | `C-261` | befund | mittel | [Der Abgleich aus C-260 ist ungefiltert nicht benutzbar](todos/supplements-c-0261-der-abgleich-aus-c-260-ist-ungefiltert-nicht-benutzbar.md) | offen | — | — |
 | `C-262` | feature | mittel | [Der Import — vier Wellen](todos/supplements-c-0262-der-import-vier-wellen.md) | offen | — | — |
 | `C-263` | messung | mittel | [Deutsche Beschreibungen aus Kimis Fachdaten ableiten](todos/supplements-c-0263-deutsche-beschreibungen-aus-kimis-fachdaten-ableiten.md) | offen | — | — |
@@ -246,7 +247,7 @@
 | `G-253` | feature | hoch | [Stacks und Compliance anbinden](erledigt/supplements-g-0253-stacks-und-compliance-anbinden.md) | erledigt | — | G-255 |
 | `G-255` | entscheidung | niedrig | [drei Attrappen-Konstanten ohne Aufrufer](erledigt/supplements-g-0255-drei-attrappen-konstanten-ohne-aufrufer.md) | erledigt | — | — |
 | `G-275` | feature | hoch | [die Supplement-Tagesbilanz anzeigen](erledigt/supplements-g-0275-die-tagesbilanz-anzeigen.md) | erledigt | — | — |
-| `G-281` | feature | mittel | [der Treffergrund in der Katalogsuche](laufend_claudecode/supplements-g-0281-der-treffergrund-in-der-katalogsuche.md) | vorbereitet (claudecode) | — | — |
+| `G-281` | feature | mittel | [der Treffergrund in der Katalogsuche](laufend_claudecode/supplements-g-0281-der-treffergrund-in-der-katalogsuche.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -283,7 +284,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `A-50` | feature | mittel | [Ein `DROP COLUMN` prueft die Lesepfade nicht](laufend_claudecode/recovery-a-0050-ein-drop-column-prueft-die-lesepfade-nicht.md) | vorbereitet (claudecode) | — | — |
+| `A-50` | feature | mittel | [Ein `DROP COLUMN` prueft die Lesepfade nicht](laufend_claudecode/recovery-a-0050-ein-drop-column-prueft-die-lesepfade-nicht.md) | laeuft (claudecode) | — | — |
 | `C-111` | feature | mittel | [Recovery — neun Entscheidungen und drei Formelfehler](todos/recovery-c-0111-recovery-neun-entscheidungen-und-drei-formelfehler.md) | offen | — | — |
 | `C-123` | entscheidung | mittel | [Recovery — die neun Entscheidungen](todos/recovery-c-0123-recovery-die-neun-entscheidungen.md) | offen | — | — |
 | `C-127` | messung | mittel | [Drei Wearable-Spalten sind leer](erledigt/recovery-c-0127-drei-wearable-spalten-sind-leer.md) | erledigt | — | — |
@@ -301,7 +302,7 @@
 | `C-236` | feature | mittel | [Die Recovery-Seeds sind Zaehlreihen, keine Messwerte](todos/recovery-c-0236-die-recovery-seeds-sind-zaehlreihen-keine-messwerte.md) | offen | — | B-29, B-30, G-174 |
 | `C-238` | blocker | hoch | [`meal_plan_entries` hat keinen Status](erledigt/recovery-c-0238-meal-plan-entries-hat-keinen-status.md) | erledigt | — | — |
 | `C-339` | feature | niedrig | [ein Recovery-Gesamtscore, vorgesehen](todos/recovery-c-0339-ein-Recovery-Gesamtscore-vorgesehen.md) | offen | — | — |
-| `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](laufend_claudecode/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | vorbereitet (claudecode) | — | — |
+| `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](laufend_claudecode/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | laeuft (claudecode) | — | — |
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
 | `G-243` | befund | mittel | [die Recovery-Schwellen stehen im Mockup, nicht im Punkt](todos/recovery-g-0243-die-recovery-schwellen-stehen-im-mockup-nicht-im-punkt.md) | offen | — | — |
@@ -322,9 +323,9 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-35` | messung | mittel | [Sieben Module haben keine Seite](todos/coach-a-0035-sieben-module-haben-keine-seite.md) | offen | — | — |
-| `A-36` | befund | mittel | [`module-stubs-replacement.jsx` traegt drei ganze Module](laufend_claudecode/coach-a-0036-module-stubs-replacement-jsx-traegt-drei-ganze-module.md) | laeuft (claudecode) | — | — |
+| `A-36` | befund | mittel | [`module-stubs-replacement.jsx` traegt drei ganze Module](erledigt/coach-a-0036-module-stubs-replacement-jsx-traegt-drei-ganze-module.md) | erledigt | — | — |
 | `A-43` | entscheidung | mittel | [Coach-Permissions pro Subfunktion](todos/coach-a-0043-coach-permissions-pro-subfunktion.md) | offen | — | — |
-| `B-25` | befund | mittel | [Geteilte Sitzung im Produktbereich prüfen](laufend_codex/coach-b-0025-geteilte-sitzung-im-produktbereich-prufen.md) | laeuft (codex) | — | — |
+| `B-25` | befund | mittel | [Geteilte Sitzung im Produktbereich prüfen](erledigt/coach-b-0025-geteilte-sitzung-im-produktbereich-prufen.md) | erledigt | — | — |
 | `C-71` | entscheidung | mittel | [Permissions und Autonomy sind zwei verschiedene Sachen](todos/coach-c-0071-permissions-und-autonomy-sind-zwei-verschiedene-sachen.md) | offen | — | — |
 | `C-75` | befund | mittel | [BSS und Voice sind Neubau](todos/coach-c-0075-bss-und-voice-sind-neubau.md) | offen | — | — |
 | `C-112` | blocker | hoch | [Buddy, Coach und Marketplace — elf Entscheidungen](todos/coach-c-0112-buddy-coach-und-marketplace-elf-entscheidungen.md) | offen | — | — |
@@ -345,13 +346,13 @@
 | `G-244` | befund | mittel | [die rechten Kacheln im Human-Coach-Reiter sind Attrappe](todos/coach-g-0244-die-rechten-kacheln-im-human-coach-reiter-sind-attrappe.md) | offen | — | — |
 | `G-277` | befund | hoch | [der Rechte-Reiter nennt einen Grund, den es nicht gibt](erledigt/coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md) | erledigt | — | G-280 |
 
-## quer — 78
+## quer — 79
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-06` | befund | mittel | [Design-System spezifizieren](todos/quer-a-0006-design-system-spezifizieren.md) | offen | — | — |
 | `A-15` | messung | mittel | [Sprachpflege als laufende Regel](todos/quer-a-0015-sprachpflege-als-laufende-regel.md) | offen | — | — |
-| `A-16` | befund | mittel | [`public/mockup/` als dritten Fundus auswerten](todos/quer-a-0016-public-mockup-als-dritten-fundus-auswerten.md) | offen | — | — |
+| `A-16` | befund | mittel | [`public/mockup/` als dritten Fundus auswerten](laufend_claudecode/quer-a-0016-public-mockup-als-dritten-fundus-auswerten.md) | vorbereitet (claudecode) | — | — |
 | `A-18` | feature | mittel | [`theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf](todos/quer-a-0018-theme-v1-uploads-die-bruecke-zwischen-spec-und-entwurf.md) | offen | — | — |
 | `A-19` | messung | mittel | [Zwei README-Abweichungen in der Kette](todos/quer-a-0019-zwei-readme-abweichungen-in-der-kette.md) | offen | — | — |
 | `A-20` | befund | mittel | [Die Spec-Fehlerliste](todos/quer-a-0020-die-spec-fehlerliste.md) | offen | — | — |
@@ -402,6 +403,7 @@
 | `C-298` | feature | mittel | [der Datenlogik-Waechter meldet zwei harmlose Muster rot](todos/quer-c-0298-der-datenlogik-waechter-meldet-zwei-harmlose-muster-rot.md) | offen | — | — |
 | `C-354` | feature | hoch | [eine Lesefunktion fuer offene Coach-Aktionen](erledigt/quer-c-0354-eine-lesefunktion-fuer-offene-coach-aktionen.md) | erledigt | — | C-358 |
 | `C-357` | befund | mittel | [vier ADRs widersprechen neueren Entscheidungen](erledigt/quer-c-0357-vier-adrs-widersprechen-neueren-entscheidungen.md) | erledigt | — | — |
+| `C-361` | befund | mittel | [die Datenbank fuehrt keine Pipeline-Historie](laufend_codex/quer-c-0361-die-datenbank-fuehrt-keine-pipeline-historie.md) | vorbereitet (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -426,7 +428,7 @@
 | `G-206` | befund | mittel | [PostgREST antwortet ohne Kompression](todos/quer-g-0206-postgrest-antwortet-ohne-kompression.md) | offen | — | — |
 | `G-215` | messung | hoch | [der Durchstich: kommt eine Warnung beim Nutzer an?](erledigt/quer-g-0215-durchstich-kommt-eine-warnung-an.md) | erledigt | — | C-328, C-329 |
 | `G-278` | befund | mittel | [die restlichen 222 Abwesenheitsaussagen](erledigt/quer-g-0278-die-restlichen-222-abwesenheitsaussagen.md) | erledigt | — | C-359 |
-| `G-280` | befund | mittel | [der Dev-Server ueberlebt lange Testlaeufe nicht](laufend_codex/quer-g-0280-der-dev-server-ueberlebt-lange-testlaeufe-nicht.md) | laeuft (codex) | — | — |
+| `G-280` | befund | mittel | [der Dev-Server ueberlebt lange Testlaeufe nicht](erledigt/quer-g-0280-der-dev-server-ueberlebt-lange-testlaeufe-nicht.md) | erledigt | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

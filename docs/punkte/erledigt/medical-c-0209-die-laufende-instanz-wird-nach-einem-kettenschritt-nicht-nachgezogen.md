@@ -10,9 +10,11 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: ["medical.biomarker_reference_ranges"]
-  dateien: ["supabase/_pipeline/_validierung/testdaten-pruefen.ts"]
+  dateien:
+    - supabase/_pipeline/kette.json
 zahlen: null
 ---
 
@@ -78,3 +80,8 @@ in der Kette und war nie eingespielt.
 
 `[read]` **Miss, ob ein Kettenschritt melden kann, dass er nicht live
 ist** — **oder ob die laufende Instanz sagen kann, wie weit sie ist.**
+
+## Abnahme
+
+**2026-08-30, mit G-280 abgenommen:** der konkrete Fall ist live behoben; der allgemeine Nachweis fehlt
+und geht als C-361 weiter.

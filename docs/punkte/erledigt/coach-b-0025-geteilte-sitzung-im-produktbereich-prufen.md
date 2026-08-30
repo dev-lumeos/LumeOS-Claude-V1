@@ -10,9 +10,11 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: ["docs/ssot/38-cookie-bereich.md"]
+  dateien:
+    - tools/server.py
 zahlen: null
 ---
 
@@ -52,3 +54,8 @@ Agenten teilen sich `apps/web`, **und `server.py neustart` fuehrt
 
 `[read]` **Jeder Neustart schiesst den Server des anderen ab.**
 `[cmd]` **18 Starts im Log, sechs davon an einem Tag.**
+
+## Abnahme
+
+**2026-08-30, mit G-280 abgenommen:** geklaert: getrennte Ports loesen es nicht, `start` schont einen
+gesunden Server bereits.

@@ -7,8 +7,6 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: C-324
 entscheidung: null
-erledigt: 2026-08-29
-commit: 101053b9
 beruehrt:
   tabellen: [nutrition.nutrient_defs, nutrition.food_nutrients]
 zahlen:
@@ -111,3 +109,24 @@ Datenherkunft *Spuren*.
 `schwere: niedrig`, ohne Auftrag.**
 
 **Geschlossen.**
+
+## Wieder offen, 2026-08-30
+
+**Aus C-49, Claude Code.**
+
+`[cmd]` **`VITC` ist an 0 von 30 Tagen vollstaendig, mit 98 fehlenden
+Posten** — **die groesste Luecke aller zwoelf NRF9.3-Naehrstoffe.**
+
+`[read]` **Ich habe diesen Punkt am 29.08. geschlossen mit *,,die
+vermutete Vitamin-C-Luecke war keine"*.** **Das war falsch.**
+
+`[read]` **Tom sagte, nicht jedes Lebensmittel habe Vitamin C — das
+stimmt.** **Ich habe daraus geschlossen, es gebe keine Luecke — das
+stimmt nicht.**
+
+`[read]` **Beides gilt gleichzeitig:** die 420 Lebensmittel ohne
+`VITC` enthalten tatsaechlich keins, **und die Tagesbilanz ist
+trotzdem an keinem Tag vollstaendig**, weil `value_complete` jeden
+Posten verlangt.
+
+**Die Entscheidung dazu ist C-360.**

@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: G-214
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   dateien:
     - apps/web/src/lib/supplements/substanz-kategorien.ts
@@ -52,7 +54,7 @@ Beschreibung"* sagt mehr als *,,Treffer"*.
 
 ## Auftrag
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 `[cmd]` **Codex hat es in G-214 vermessen und nicht gebaut** — `apps/`
 war seinem Auftrag entzogen. **Die Messung liegt vor, der Bau ist

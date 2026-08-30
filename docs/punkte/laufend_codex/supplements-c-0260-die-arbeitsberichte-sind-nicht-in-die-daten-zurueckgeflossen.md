@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: ["docs/ssot/95-kimi-bestand.md"]
@@ -59,5 +61,5 @@ zahlen: null
 
 ## Auftrag
 
-**Vorbereitet mit C-202 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit C-202 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.

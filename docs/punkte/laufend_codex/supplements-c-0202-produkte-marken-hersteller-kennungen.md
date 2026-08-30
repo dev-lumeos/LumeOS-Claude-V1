@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: []
@@ -35,7 +37,7 @@ zahlen: null
 
 **Mitbeauftragt: C-260.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 `[read]` **Beide sind aelter als der Katalogneuaufbau.** **Die
 Erwartung: mindestens einer ist ueberholt** — **das war bei

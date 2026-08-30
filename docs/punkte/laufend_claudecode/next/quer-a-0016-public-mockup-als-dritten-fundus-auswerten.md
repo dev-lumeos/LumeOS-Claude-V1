@@ -47,3 +47,47 @@ zahlen: null
   `docs/ssot/80-vorgaengerrepo-fundus.md` das geloest; hier braucht es
   dasselbe: was liegt wo, und was davon ist besser als das, was wir
   haben.
+
+## Auftrag — der dritte Fundus
+
+`[read]` **Vorbereitet am 2026-08-30.**
+
+`[cmd]` **`apps/web/public/mockup/features/` traegt 94 `.js`-Dateien.**
+`[cmd]` **`theme-v1/` traegt 53 `.jsx` und ist die massgebliche
+Ideenquelle** (Tom, 28.08.).
+
+`[read]` **Die Frage ist, ob der dritte Fundus etwas traegt, das in
+keinem der beiden steht.**
+
+### Was zu messen ist
+
+`[read]` **Nicht alle 94 lesen — messen, welche Module dort Dateien
+haben, die in `theme-v1` fehlen.** `[cmd]` **Nutrition und Training
+wurden dort neu gebaut, Supplements/Medical/Goals sind
+Spiegel-Stubs** (gemessen am 28.08.).
+
+`[read]` **Und die Gegenprobe: wird der Ordner ueberhaupt
+ausgeliefert?** `[cmd]` **`public/` geht in den Build** — **94 Dateien
+im Auslieferungsverzeichnis, die niemand braucht, sind eine
+eigene Frage.**
+
+### Was nicht zu tun ist
+
+**Nichts loeschen** — erst messen, was drinsteht.
+**Keine Umsetzung** — nur Bestandsaufnahme.
+Nicht committen, nicht stagen, nicht pushen.
+
+### Nachweis
+
+    Dateien je Modul       welche, wie gross
+    nur dort vorhanden     was steht in keinem anderen Fundus
+    ausgeliefert           gehen sie in den Build? gemessen
+    Urteil                 behalten / archivieren / loeschen
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
