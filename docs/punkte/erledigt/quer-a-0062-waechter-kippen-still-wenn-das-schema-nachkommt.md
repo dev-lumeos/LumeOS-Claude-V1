@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
 erledigt: 2026-08-30
-commit: OFFEN
+commit: 6d089067
 beruehrt:
   dateien:
     - tools/abwesenheit-pruefen.mjs
