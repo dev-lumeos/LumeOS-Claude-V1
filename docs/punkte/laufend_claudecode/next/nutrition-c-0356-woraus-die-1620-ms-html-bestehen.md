@@ -41,3 +41,8 @@ nicht** — und er hat es so gesagt, statt zu schaetzen.
 `[read]` **`schwere: niedrig`, weil der Reiter benutzbar ist** und
 die Ursache bekannt. **Erst messen, wenn jemand die Sparkline aendern
 will.**
+
+## Auftrag
+
+**Vorbereitet mit G-102 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 236 |
+| `todos` | 233 |
 | `laufend_codex` | 5 |
-| `laufend_claudecode` | 3 |
+| `laufend_claudecode` | 6 |
 | `erledigt` | 126 |
 | **gesamt** | **370** |
 
@@ -115,7 +115,7 @@
 | `C-350` | entscheidung | hoch | [zwei Obergrenzen fuer Magnesium](erledigt/nutrition-c-0350-zwei-obergrenzen-fuer-magnesium.md) | erledigt | — | C-351 |
 | `C-353` | messung | mittel | [die erwartete Ersparnis tritt nicht ein](erledigt/nutrition-c-0353-die-erwartete-ersparnis-tritt-nicht-ein.md) | erledigt | — | C-356 |
 | `C-355` | feature | mittel | [`food_search` kennt keine Herkunft](erledigt/nutrition-c-0355-food-search-kennt-keine-herkunft.md) | erledigt | — | — |
-| `C-356` | messung | niedrig | [woraus die 1.620 ms HTML bestehen](todos/nutrition-c-0356-woraus-die-1620-ms-html-bestehen.md) | offen | — | — |
+| `C-356` | messung | niedrig | [woraus die 1.620 ms HTML bestehen](laufend_claudecode/nutrition-c-0356-woraus-die-1620-ms-html-bestehen.md) | vorbereitet (claudecode) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -283,7 +283,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `A-50` | feature | mittel | [Ein `DROP COLUMN` prueft die Lesepfade nicht](todos/recovery-a-0050-ein-drop-column-prueft-die-lesepfade-nicht.md) | offen | — | — |
+| `A-50` | feature | mittel | [Ein `DROP COLUMN` prueft die Lesepfade nicht](laufend_claudecode/recovery-a-0050-ein-drop-column-prueft-die-lesepfade-nicht.md) | vorbereitet (claudecode) | — | — |
 | `C-111` | feature | mittel | [Recovery — neun Entscheidungen und drei Formelfehler](todos/recovery-c-0111-recovery-neun-entscheidungen-und-drei-formelfehler.md) | offen | — | — |
 | `C-123` | entscheidung | mittel | [Recovery — die neun Entscheidungen](todos/recovery-c-0123-recovery-die-neun-entscheidungen.md) | offen | — | — |
 | `C-127` | messung | mittel | [Drei Wearable-Spalten sind leer](erledigt/recovery-c-0127-drei-wearable-spalten-sind-leer.md) | erledigt | — | — |
@@ -301,7 +301,7 @@
 | `C-236` | feature | mittel | [Die Recovery-Seeds sind Zaehlreihen, keine Messwerte](todos/recovery-c-0236-die-recovery-seeds-sind-zaehlreihen-keine-messwerte.md) | offen | — | B-29, B-30, G-174 |
 | `C-238` | blocker | hoch | [`meal_plan_entries` hat keinen Status](erledigt/recovery-c-0238-meal-plan-entries-hat-keinen-status.md) | erledigt | — | — |
 | `C-339` | feature | niedrig | [ein Recovery-Gesamtscore, vorgesehen](todos/recovery-c-0339-ein-Recovery-Gesamtscore-vorgesehen.md) | offen | — | — |
-| `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](todos/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | offen | — | — |
+| `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](laufend_claudecode/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | vorbereitet (claudecode) | — | — |
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
 | `G-243` | befund | mittel | [die Recovery-Schwellen stehen im Mockup, nicht im Punkt](todos/recovery-g-0243-die-recovery-schwellen-stehen-im-mockup-nicht-im-punkt.md) | offen | — | — |

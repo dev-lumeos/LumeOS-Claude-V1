@@ -41,3 +41,8 @@ zahlen: null
   Pipeline-Auftrag — wer eine Spalte entfernt, zaehlt vorher ihre
   Leser. Besser noch: eine Gate-Pruefung, die selektierte Spalten
   gegen den Sollstand haelt.
+
+## Auftrag
+
+**Vorbereitet mit G-102 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.
