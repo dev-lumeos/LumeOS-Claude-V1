@@ -127,7 +127,66 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Nachgemessen am 2026-08-30.** Der konkrete Pterostilbene-Fall ist
+echt, aber der Auftrag beschreibt nicht den gebauten Suchpfad. Daher
+wurde keine Auskunftsspalte oder JSON-Antwort erfunden und `apps/`
+wurde nicht angefasst.
+
+| Nachweis | Ergebnis |
+|---|---|
+| `nutrition.food_search('Resveratrol', ...)` | JSON-Dokument mit `total = 0`, `result_count = 0`, `foods = []` |
+| richtige Zaehlung des JSON | `result->>'total' = 0`, `jsonb_array_length(result->'foods') = 0`; `count(*)` um die Funktion ergibt trotzdem **1** SQL-Zeile |
+| Pterostilbene | sichtbar im Supplement-Katalog; `supplement_user_texts.kurz_was_en` sagt, der Stoff sei mit Resveratrol verwandt |
+| gebaute Katalogsuche | `apps/web/src/lib/supplements/substanz-kategorien.ts:trifftSuche()`; kein RPC, kein JSON-Dokument |
+| heutiger Rueckgabewert | nur `boolean`: Name, die fuer die Liste zusammengesetzte Beschreibung und `zwecke` |
+| Alias / Tag im gebauten Suchpfad | werden nicht abgefragt; die Behauptung im Auftrag trifft heute nicht zu |
+
+### Der Fall und der Pfad
+
+Die gespeicherte Katalogspalte `supplements.supplements.description_en`
+von Pterostilbene traegt nur die allgemeine Schablone. Die in der
+Oberflaeche durchsuchte Beschreibung kommt jedoch vorrangig aus
+`supplement_user_texts.kurz_was_en`; dort steht *"related to
+resveratrol"*. Deshalb liefert die clientseitige Suche Pterostilbene
+bei `Resveratrol`.
+
+Die Nutrition-Funktion `food_search` kann diesen Treffer nicht liefern:
+sie sucht nur BLS-Lebensmittel und hat keine Verbindung zum
+`supplements`-Schema. Der Aufruf zeigt zugleich die wichtige
+Messregel: Die Funktion gibt **ein** JSON-Dokument zurueck. `count(*)`
+zaehlt diese eine SQL-Zeile, nicht die Treffer; hier zeigen die Felder
+des Dokuments korrekt null Treffer.
+
+### Warum nicht gebaut wurde
+
+Die reale Suchentscheidung liegt ausschliesslich in der
+App-Funktion `trifftSuche()`. Sie prueft der Reihe nach `name`,
+`description` und `zwecke` und gibt unmittelbar `true` oder `false`
+zurueck. Es gibt keine Datenbankfunktion, deren JSON um einen
+Treffergrund ergaenzt werden koennte, und die aktuelle Anzeige kann
+kein neues Datenbankfeld lesen, ohne dass ihr Suchpfad ersetzt wird.
+
+Damit widersprechen sich zwei Vorgaben:
+
+1. Die Anzeige soll den konkreten Treffergrund erhalten.
+2. `apps/` darf nicht geaendert werden.
+
+Ohne mindestens eine Aenderung im bestehenden App-Suchpfad ist (1)
+nicht erreichbar; eine neue, ungenutzte RPC-Funktion wuerde nur einen
+zweiten Suchpfad schaffen und die Anzeige weiterhin nicht informieren.
+Das waere keine Erfuellung von G-214.
+
+### Vorliegende Bauwege fuer Tom
+
+| Weg | Wirkung | Grenze |
+|---|---|---|
+| `trifftSuche()` auf einen Treffergrund statt `boolean` erweitern und ihn in der Kartenzeile anzeigen | kleinster Weg, bewahrt die heutige Reihenfolge exakt | braucht die ausdruecklich ausgeschlossene `apps/`-Aenderung |
+| serverseitige Supplement-Katalogsuche mit JSON `items[].match_reason` bauen und die Ansicht darauf umstellen | ein auswertbarer Suchvertrag fuer Name, Beschreibung, Zweck, Alias und Tag | ebenfalls App-Umstellung; neue Rang- und Laufzeitgegenprobe erforderlich |
+
+Die erste Variante ist die minimale und einzige, die den heute
+wirklichen Pterostilbene-Pfad erklaert, ohne Rangregel zu veraendern.
+Eine Entscheidung zur Aufhebung der `apps/`-Sperre ist deshalb vor dem
+Bau erforderlich.
 
 ## Abnahme
 

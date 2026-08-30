@@ -223,7 +223,11 @@ geschlossen** — die vermutete Vitamin-C-Luecke war keine.
 `[read]` **Der Punkt bleibt offen, aber er ist kein Sammelpunkt
 mehr.**
 
-## Auftrag — die Klammer schliessen oder benennen
+## Auftrag — die Klammer schliessen, und drei Module pruefen
+
+**Mitbeauftragt: A-36.**
+
+## Zu C-49 im Einzelnen
 
 `[read]` **Vorbereitet am 2026-08-30.**
 

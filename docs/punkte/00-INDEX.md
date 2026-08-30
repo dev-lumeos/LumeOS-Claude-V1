@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 240 |
-| `laufend_codex` | 2 |
-| `laufend_claudecode` | 4 |
+| `todos` | 237 |
+| `laufend_codex` | 4 |
+| `laufend_claudecode` | 5 |
 | `erledigt` | 122 |
 | **gesamt** | **368** |
 
@@ -31,7 +31,7 @@
 | `C-198` | feature | mittel | [ATC, CAS und CYP der 498 Wirkstoffe nachziehen](todos/medical-c-0198-atc-cas-und-cyp-der-498-wirkstoffe-nachziehen.md) | offen | — | — |
 | `C-200` | feature | mittel | [Symptomtabelle anlegen und fuellen](todos/medical-c-0200-symptomtabelle-anlegen-und-fuellen.md) | offen | — | — |
 | `C-204` | befund | mittel | [`lab_trigger_index` — 77 Analyte](todos/medical-c-0204-lab-trigger-index-77-analyte.md) | offen | — | — |
-| `C-209` | blocker | hoch | [Die laufende Instanz wird nach einem Kettenschritt nicht nachgezogen](todos/medical-c-0209-die-laufende-instanz-wird-nach-einem-kettenschritt-nicht-nachgezogen.md) | offen | — | — |
+| `C-209` | blocker | hoch | [Die laufende Instanz wird nach einem Kettenschritt nicht nachgezogen](laufend_codex/medical-c-0209-die-laufende-instanz-wird-nach-einem-kettenschritt-nicht-nachgezogen.md) | vorbereitet (codex) | — | — |
 | `C-213` | befund | mittel | [C-124-E8 — die Arzt-Hinweis-Schwelle ist offen](todos/medical-c-0213-c-124-e8-die-arzt-hinweis-schwelle-ist-offen.md) | offen | — | — |
 | `C-285` | entscheidung | hoch | [`user_medications` speichert Medikamente im Klartext](erledigt/medical-c-0285-user-medications-speichert-medikamente-im-klartext.md) | erledigt | — | — |
 | `C-294` | feature | mittel | [was Kimi nachliefern muss](todos/medical-c-0294-was-kimi-nachliefern-muss.md) | offen | — | — |
@@ -321,9 +321,9 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-35` | messung | mittel | [Sieben Module haben keine Seite](todos/coach-a-0035-sieben-module-haben-keine-seite.md) | offen | — | — |
-| `A-36` | befund | mittel | [`module-stubs-replacement.jsx` traegt drei ganze Module](todos/coach-a-0036-module-stubs-replacement-jsx-traegt-drei-ganze-module.md) | offen | — | — |
+| `A-36` | befund | mittel | [`module-stubs-replacement.jsx` traegt drei ganze Module](laufend_claudecode/coach-a-0036-module-stubs-replacement-jsx-traegt-drei-ganze-module.md) | vorbereitet (claudecode) | — | — |
 | `A-43` | entscheidung | mittel | [Coach-Permissions pro Subfunktion](todos/coach-a-0043-coach-permissions-pro-subfunktion.md) | offen | — | — |
-| `B-25` | befund | mittel | [Geteilte Sitzung im Produktbereich prüfen](todos/coach-b-0025-geteilte-sitzung-im-produktbereich-prufen.md) | offen | — | — |
+| `B-25` | befund | mittel | [Geteilte Sitzung im Produktbereich prüfen](laufend_codex/coach-b-0025-geteilte-sitzung-im-produktbereich-prufen.md) | vorbereitet (codex) | — | — |
 | `C-71` | entscheidung | mittel | [Permissions und Autonomy sind zwei verschiedene Sachen](todos/coach-c-0071-permissions-und-autonomy-sind-zwei-verschiedene-sachen.md) | offen | — | — |
 | `C-75` | befund | mittel | [BSS und Voice sind Neubau](todos/coach-c-0075-bss-und-voice-sind-neubau.md) | offen | — | — |
 | `C-112` | blocker | hoch | [Buddy, Coach und Marketplace — elf Entscheidungen](todos/coach-c-0112-buddy-coach-und-marketplace-elf-entscheidungen.md) | offen | — | — |

@@ -45,3 +45,19 @@ zahlen: null
   `[cmd]` **`module-stubs.jsx` selbst (230 Zeilen) ist nur der
   Platzhalter** — *„keep the shell coherent when navigating."*
   **Der ist erledigt, sobald die Module stehen.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-49 am 2026-08-30.** Bericht dort.
+
+`[read]` **Dasselbe Muster wie der Coaches-Reiter am 30.08.:** dort
+zeigte die Anzeige vier erfundene Personen, **waehrend die echte
+Komponente seit G-158 danebenstand und nur kein Prop bekam.**
+
+`[cmd]` **Miss zuerst, ob die drei Module ueberhaupt noch aus dieser
+Datei kommen** — der Punkt ist aelter als der `/v2/`-Umbau.
+
+`[read]` **Und wenn ja: gilt die Frage aus G-277** — **fehlt ein
+Bauteil, oder fehlt nur die Verdrahtung?** `[cmd]` **Beim
+Coaches-Reiter war es die Verdrahtung, und die Behebung war ein
+Prop.**

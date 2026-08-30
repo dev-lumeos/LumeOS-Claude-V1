@@ -39,3 +39,14 @@ zahlen: null
   bewusst weiterhin ausformuliert).
 
 ## C — Produkt: apps/web
+
+## Auftrag
+
+**Mitbeauftragt mit G-280 am 2026-08-30.** Bericht dort.
+
+`[cmd]` **Der Serverbefund vom 30.08. ist genau dieser Punkt:** zwei
+Agenten teilen sich `apps/web`, **und `server.py neustart` fuehrt
+`taskkill /T /F` auf Port 3200 aus.**
+
+`[read]` **Jeder Neustart schiesst den Server des anderen ab.**
+`[cmd]` **18 Starts im Log, sechs davon an einem Tag.**

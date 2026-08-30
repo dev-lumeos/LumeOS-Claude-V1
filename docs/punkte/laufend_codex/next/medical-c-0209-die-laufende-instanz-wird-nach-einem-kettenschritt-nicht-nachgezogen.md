@@ -61,3 +61,18 @@ zahlen: null
   einem Schemaschritt aktualisiert, ohne Toms Daten zu verlieren?**
   Solange das offen ist, faellt es bei jeder Pipeline-Aenderung wieder
   an.
+
+## Auftrag
+
+**Mitbeauftragt mit G-280 am 2026-08-30.** Bericht dort.
+
+`[read]` **Dieselbe Klasse wie der Serverbefund: die Arbeitsumgebung
+sagt nicht, in welchem Zustand sie ist.**
+
+`[cmd]` **C-195 ist der bekannte Fall:** die Kette ist gruen, die
+Aenderung steht nicht live. `[cmd]` **Am 30.08. hat es G-273
+blockiert** — `reference_assessment_window_flags` lag 78 Zeilen lang
+in der Kette und war nie eingespielt.
+
+`[read]` **Miss, ob ein Kettenschritt melden kann, dass er nicht live
+ist** — **oder ob die laufende Instanz sagen kann, wie weit sie ist.**
