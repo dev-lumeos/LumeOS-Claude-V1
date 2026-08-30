@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: G-273
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   dateien:
     - supabase/_pipeline/05_user_tabellen/059d_reference_assessment_window_flags.sql
@@ -47,3 +49,8 @@ gemessen, nicht angenommen** — **aber es gehoert nach dem Einspielen
 belegt: dieselben Flags, dieselben Tageszaehlungen.**
 
 `[cmd]` **Vollsicherung vor dem Live-Eingriff.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-350 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

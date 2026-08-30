@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 267 |
+| `todos` | 265 |
+| `laufend_codex` | 2 |
 | `erledigt` | 83 |
 | **gesamt** | **350** |
 
@@ -110,8 +111,8 @@
 | `C-346` | befund | hoch | [zwei Detailtexte neu verknuepfen](erledigt/nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md) | erledigt | — | — |
 | `C-347` | entscheidung | hoch | [generelle Ausschluesse in \`food_search\`](erledigt/nutrition-c-0347-generelle-ausschluesse-in-food-search.md) | erledigt | — | — |
 | `C-348` | feature | mittel | [eine zaehlende Funktion fuer die Flags](erledigt/nutrition-c-0348-eine-zaehlende-funktion-fuer-die-flags.md) | erledigt | — | G-273 |
-| `C-349` | befund | hoch | [die Flag-Funktion einspielen](todos/nutrition-c-0349-die-flag-funktion-einspielen.md) | offen | — | — |
-| `C-350` | entscheidung | hoch | [zwei Obergrenzen fuer Magnesium](todos/nutrition-c-0350-zwei-obergrenzen-fuer-magnesium.md) | offen | — | — |
+| `C-349` | befund | hoch | [die Flag-Funktion einspielen](laufend_codex/nutrition-c-0349-die-flag-funktion-einspielen.md) | laeuft (codex) | — | — |
+| `C-350` | entscheidung | hoch | [zwei Obergrenzen fuer Magnesium](laufend_codex/nutrition-c-0350-zwei-obergrenzen-fuer-magnesium.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
