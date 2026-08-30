@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: G-186
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   dateien:
     - apps/web/src/lib/supplements/substanz-read.ts
@@ -53,5 +55,5 @@ zusammenlegen oder abgrenzen.**
 
 ## Auftrag
 
-**Vorbereitet mit C-205 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit C-205 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.

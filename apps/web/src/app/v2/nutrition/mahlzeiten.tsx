@@ -532,6 +532,11 @@ function HinzufuegenModal({
 
   async function waehle(f: NutritionFoodSearchRow) {
     setGewaehlt(f)
+    // G-93: **hier bleibt `name_de`, und zwar mit Grund.** Dieser Wert
+    // geht zurueck ins Suchfeld, ist also ein SUCHBEGRIFF, keine
+    // Anzeige. `[cmd]` `name_display_de` als Suchbegriff liefert 0
+    // Treffer (G-265, belegt in add-und-plaene.test.ts:38) — die
+    // Klammerzusaetze stehen so nicht im Suchindex.
     setFrage(f.name_de)
     // `[cmd]` Dieser Aufruf schreibt die Protokollzeile mit
     // `selected_bls_code` und `selected_rank` — ohne ihn fehlt genau
@@ -747,7 +752,8 @@ function HinzufuegenModal({
                   onClick={() => void waehle(f)}
                 >
                   <span style={{ flex: 1, minWidth: 0 }}>
-                    <span className="v2-wahl-titel">{f.name_de}</span>
+                    {/* G-93: der Anzeigename, sonst der Rohname. */}
+                    <span className="v2-wahl-titel">{f.name_display_de || f.name_de}</span>
                     <span className="v2-wahl-hinweis">
                       {n(f.enercc)} kcal · {n(f.prot625)}g P · {n(f.cho)}g C · {n(f.fat)}g F
                       <span className="v2-dim"> je 100 g</span>
@@ -763,7 +769,8 @@ function HinzufuegenModal({
               <div className="v2-insight" style={{ marginBottom: 12 }}>
                 <div className="v2-insight-mark" />
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div className="v2-insight-title">{gewaehlt.name_de}</div>
+                  {/* G-93: der Anzeigename, sonst der Rohname. */}
+                  <div className="v2-insight-title">{gewaehlt.name_display_de || gewaehlt.name_de}</div>
                   <div className="v2-insight-body v2-num">
                     {n(je100!.enercc)} kcal · {n(je100!.prot625)}g P ·{' '}
                     {n(je100!.cho)}g C · {n(je100!.fat)}g F — je 100 g

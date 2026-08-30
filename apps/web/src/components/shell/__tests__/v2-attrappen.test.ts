@@ -1199,12 +1199,29 @@ test('die nachgezogenen Nutrition-Tabs kennzeichnen jede Kachel', () => {
   // `VorliebenTab` liest seit G-65. **Sechs Marken weniger.**
   //
   // `[cmd]` **`plans` bleibt bei 8** — die Datei ist KEIN Rueckfall.
-  // Seit G-161 tragen drei ihrer Kacheln echte Zahlen aus `plan-lesen`;
-  // die uebrigen fuenf bleiben Attrappe, weil `meal_plan_entries` keine
-  // Statusspalte und `meal_plans` keine Lifecycle-Spalten hat.
+  // Seit G-161 tragen drei ihrer Kacheln echte Zahlen aus `plan-lesen`.
+  //
+  // `[cmd]` **BERICHTIGT IN A-62 am 2026-08-30 — halb gekippt.** Hier
+  // stand als Grund *„weil `meal_plan_entries` keine Statusspalte und
+  // `meal_plans` keine Lifecycle-Spalten hat"*.
+  //
+  //     meal_plans           GEKIPPT: fuehrt heute lifecycle_type,
+  //                          start_date, days_count, status,
+  //                          plan_origin, next_plan_id, rollover_count
+  //     meal_plan_entries    gilt: keine Statusspalte - der Zustand
+  //                          liegt in meal_plan_logs (G-274)
+  //
+  // `[read]` **Die Zahl 8 bleibt trotzdem richtig** — dass die Spalten
+  // da sind, heisst nicht, dass diese Datei sie liest. **Nur der Grund
+  // war falsch, und ein falscher Grund haelt den naechsten Auftrag
+  // auf.**
+  //
+  // `[cmd]` **`insights` faellt in G-264 von 3 auf 2:** „Micronutrient
+  // trend" ist entfernt, nicht angebunden — der Nutrients-Reiter zeigt
+  // denselben Verlauf (G-11).
   const dateien: Array<[string, number]> = [
     [NUT_PLANS, 8],
-    [NUT_INSIGHTS, 3],
+    [NUT_INSIGHTS, 2],
     [NUT_PLANNER, 1],
   ]
   for (const [datei, erwartet] of dateien) {
@@ -1755,8 +1772,16 @@ test('jede Karte des AI-Coach-Moduls traegt eine Marke', () => {
   // Karte ergaenzt und die Marke vergisst, faellt hier auf, ohne dass
   // jemand eine Zahl pflegt.
   //
-  // `[cmd]` Ein Buddy-Schema gibt es nicht: weder `buddy` noch `coach`
-  // kommt in `supabase/_pipeline/` in einem `CREATE TABLE` vor.
+  // `[cmd]` Ein Buddy-Schema gibt es nicht — **gemessen am 2026-08-30:**
+  // kein Schema `buddy`, und keine der 12 `coach`-Tabellen traegt
+  // Buddy-Material (kein Treffer auf buddy/ai/memory/persona).
+  //
+  // `[cmd]` **BERICHTIGT IN A-62:** hier stand *„weder `buddy` noch
+  // `coach` kommt in `supabase/_pipeline/` in einem `CREATE TABLE`
+  // vor"*. **Die zweite Haelfte ist seit C-119 falsch** —
+  // `15_coach/` fuehrt 13 `CREATE TABLE`. Der Waechter selbst blieb
+  // gruen, weil er Karten gegen Marken zaehlt; **nur seine
+  // Begruendung war gekippt.** Genau die Klasse A-62.
   for (const datei of [AI_ANSICHT, AI_MOTOREN, AI_WISSEN, AI_STIMME, AI_OVERRIDES]) {
     const quelle = fs.readFileSync(datei, 'utf8')
     const karten = (quelle.match(/<Card\b/g) ?? []).length

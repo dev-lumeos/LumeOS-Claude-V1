@@ -656,12 +656,29 @@ filter_exclude_processing_levels AS MATERIALIZED (
   ) AS t(level)
   WHERE level <> ''
 ),
+filter_favorites AS MATERIALIZED (
+  SELECT COALESCE(p_filters @> '{"favorites":true}'::jsonb, false) AS only_favorites
+),
+filter_sources AS MATERIALIZED (
+  SELECT CASE
+    WHEN p_filters IS NULL THEN ARRAY['bls']::text[]
+    WHEN jsonb_typeof(p_filters->'sources') = 'array' THEN ARRAY(
+      SELECT value
+      FROM jsonb_array_elements_text(p_filters->'sources') AS t(value)
+      WHERE value IN ('bls', 'custom')
+    )
+    WHEN p_filters ? 'source' AND p_filters->>'source' IN ('bls', 'custom')
+      THEN ARRAY[p_filters->>'source']
+    ELSE ARRAY['bls']::text[]
+  END AS sources
+),
 filter_state AS MATERIALIZED (
   SELECT
     EXISTS (SELECT 1 FROM filter_tag_groups) AS has_tag_groups,
     EXISTS (SELECT 1 FROM filter_exclude_tags) AS has_exclude_tags,
     EXISTS (SELECT 1 FROM filter_processing_levels) AS has_processing_levels,
-    EXISTS (SELECT 1 FROM filter_exclude_processing_levels) AS has_exclude_processing_levels
+    EXISTS (SELECT 1 FROM filter_exclude_processing_levels) AS has_exclude_processing_levels,
+    (SELECT only_favorites FROM filter_favorites) AS only_favorites
 ),
 user_preference AS (
   SELECT
@@ -925,6 +942,7 @@ preference_scores AS NOT MATERIALIZED (
       WHERE source = 'profile_general_exclusion'
          OR source LIKE 'profile_general_exclusion:%'
     )::integer AS general_exclusion_depth,
+    bool_or(constraint_level = 'boost') AS is_favorite,
     COALESCE((array_agg(score ORDER BY specificity DESC, abs(score) DESC))[1], 0) AS preference_score,
     (array_agg(constraint_level ORDER BY specificity DESC, abs(score) DESC))[1] AS preference_level,
     (array_agg(match_type ORDER BY specificity DESC, abs(score) DESC))[1] AS preference_match_type,
@@ -938,6 +956,53 @@ preference_scores AS NOT MATERIALIZED (
     AND user_id = p_user_id
   GROUP BY food_id
 ),
+search_foods AS MATERIALIZED (
+  SELECT
+    f.id,
+    f.bls_code,
+    f.name_de,
+    f.name_en,
+    f.name_th,
+    f.name_display_de,
+    f.name_display_en,
+    f.name_display_th,
+    f.category_id,
+    f.sort_weight,
+    f.processing_level,
+    'bls'::text AS food_source,
+    NULL::numeric AS source_enercc,
+    NULL::numeric AS source_prot625,
+    NULL::numeric AS source_fat,
+    NULL::numeric AS source_cho
+  FROM nutrition.foods f
+  CROSS JOIN filter_sources fs
+  WHERE 'bls' = ANY(fs.sources)
+
+  UNION ALL
+
+  SELECT
+    f.id,
+    NULL::text AS bls_code,
+    f.name_de,
+    f.name_en,
+    f.name_th,
+    f.name_de AS name_display_de,
+    f.name_en AS name_display_en,
+    f.name_th AS name_display_th,
+    NULL::uuid AS category_id,
+    0::integer AS sort_weight,
+    NULL::text AS processing_level,
+    'custom'::text AS food_source,
+    f.enercc AS source_enercc,
+    f.prot625 AS source_prot625,
+    f.fat AS source_fat,
+    f.cho AS source_cho
+  FROM nutrition.foods_custom f
+  CROSS JOIN filter_sources fs
+  WHERE 'custom' = ANY(fs.sources)
+    AND p_user_id IS NOT NULL
+    AND f.user_id = p_user_id
+),
 matching_foods AS (
   SELECT
     f.id,
@@ -950,6 +1015,7 @@ matching_foods AS (
     f.name_display_th,
     f.category_id,
     f.sort_weight,
+    f.food_source,
     COALESCE(NULLIF(f.name_display_de, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
     CASE
       WHEN p_tokens IS NULL OR cardinality(p_tokens) = 0 THEN 0.5
@@ -981,17 +1047,17 @@ matching_foods AS (
     END AS text_rank,
     fc.slug AS category_slug,
     fc.name_de AS category_name_de,
-    m.enercc,
-    m.prot625,
-    m.fat,
-    m.cho,
+    COALESCE(f.source_enercc, m.enercc) AS enercc,
+    COALESCE(f.source_prot625, m.prot625) AS prot625,
+    COALESCE(f.source_fat, m.fat) AS fat,
+    COALESCE(f.source_cho, m.cho) AS cho,
     COALESCE(tags.tags, ARRAY[]::text[]) AS tags,
     COALESCE(ps.general_exclusion_depth, 0) AS general_exclusion_depth,
     COALESCE(ps.preference_score, 0) AS preference_score,
     COALESCE(ps.preference_level, 'neutral') AS preference_level,
     COALESCE(ps.preference_match_type, '') AS preference_match_type,
     COALESCE(ps.preference_matches, '[]'::jsonb) AS preference_matches
-  FROM nutrition.foods f
+  FROM search_foods f
   LEFT JOIN nutrition.food_categories fc ON fc.id = f.category_id
   LEFT JOIN preference_scores ps ON ps.food_id = f.id
   LEFT JOIN LATERAL (
@@ -1011,6 +1077,10 @@ matching_foods AS (
   ) tags ON TRUE
   WHERE
     NOT COALESCE(ps.preference_excluded, false)
+    AND (
+      NOT (SELECT only_favorites FROM filter_state)
+      OR COALESCE(ps.is_favorite, false)
+    )
     AND
     -- ACHTUNG: Diese Bedingung steht ZWEIMAL in dieser Funktion
     -- (matching_foods und all_matching_food_ids). Wer eine aendert,
@@ -1277,10 +1347,14 @@ matching_foods AS (
 ),
 all_matching_food_ids AS (
   SELECT f.id
-  FROM nutrition.foods f
+  FROM search_foods f
   LEFT JOIN preference_scores ps ON ps.food_id = f.id
   WHERE
     NOT COALESCE(ps.preference_excluded, false)
+    AND (
+      NOT (SELECT only_favorites FROM filter_state)
+      OR COALESCE(ps.is_favorite, false)
+    )
     AND
     -- ACHTUNG: Diese Bedingung steht ZWEIMAL in dieser Funktion
     -- (matching_foods und all_matching_food_ids). Wer eine aendert,
@@ -1485,20 +1559,21 @@ selected_food AS (
     f.name_display_th,
     f.category_id,
     f.sort_weight,
+    f.food_source,
     COALESCE(NULLIF(f.name_display_de, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
     fc.slug AS category_slug,
     fc.name_de AS category_name_de,
-    m.enercc,
-    m.prot625,
-    m.fat,
-    m.cho,
+    COALESCE(f.source_enercc, m.enercc) AS enercc,
+    COALESCE(f.source_prot625, m.prot625) AS prot625,
+    COALESCE(f.source_fat, m.fat) AS fat,
+    COALESCE(f.source_cho, m.cho) AS cho,
     COALESCE(tags.tags, ARRAY[]::text[]) AS tags,
     COALESCE(ps.general_exclusion_depth, 0) AS general_exclusion_depth,
     COALESCE(ps.preference_score, 0) AS preference_score,
     COALESCE(ps.preference_level, 'neutral') AS preference_level,
     COALESCE(ps.preference_match_type, '') AS preference_match_type,
     COALESCE(ps.preference_matches, '[]'::jsonb) AS preference_matches
-  FROM nutrition.foods f
+  FROM search_foods f
   LEFT JOIN nutrition.food_categories fc ON fc.id = f.category_id
   LEFT JOIN preference_scores ps ON ps.food_id = f.id
   LEFT JOIN LATERAL (
@@ -1526,8 +1601,12 @@ selected_food_json AS (
       SELECT json_build_object(
         'id', id,
         'bls_code', bls_code,
+        'food_source', food_source,
         'source_label', source_label,
-        'source_label_marker', 'bls_source_label_not_final_display_name',
+        'source_label_marker', CASE
+          WHEN food_source = 'custom' THEN 'custom_source_label_not_final_display_name'
+          ELSE 'bls_source_label_not_final_display_name'
+        END,
         'name_display_de', name_display_de,
         'name_display_en', name_display_en,
         'name_display_th', name_display_th,
@@ -1639,8 +1718,12 @@ SELECT json_build_object(
       json_build_object(
         'id', id,
         'bls_code', bls_code,
+        'food_source', food_source,
         'source_label', source_label,
-        'source_label_marker', 'bls_source_label_not_final_display_name',
+        'source_label_marker', CASE
+          WHEN food_source = 'custom' THEN 'custom_source_label_not_final_display_name'
+          ELSE 'bls_source_label_not_final_display_name'
+        END,
         'name_display_de', name_display_de,
         'name_display_en', name_display_en,
         'name_display_th', name_display_th,
@@ -1676,9 +1759,10 @@ COMMENT ON FUNCTION nutrition.food_search(
   text[], text[], boolean, jsonb, uuid, jsonb
 ) IS
   'C-94: Lebensmittelsuche mit optionaler Preference-Anwendung. '
-  'p_user_id NULL behaelt die ungefilterte Suche; mit Nutzer greifen '
+  'p_user_id NULL behaelt die ungefilterte BLS-Suche; mit Nutzer greifen '
   'hard/strong/soft/boost aus food_preferences_read(). C-164: p_filters '
-  'ergaenzt Mehrfach-Tags, Ausschluesse und processing_level. C-245: '
+  'ergaenzt Mehrfach-Tags, Ausschluesse, processing_level, favorites und '
+  'sources (bls/custom). C-245: '
   'zehn Sortierwerte; unbekannte Werte werden als unsupported_sort '
   'im Ergebnis gemeldet und fallen sichtbar auf relevance zurueck.';
 

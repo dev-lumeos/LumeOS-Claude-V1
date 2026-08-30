@@ -4,9 +4,11 @@ typ: feature
 modul: nutrition
 schwere: mittel
 angelegt: 2026-08-29
-braucht: [C-354]
+braucht: []
 kind_von: G-254
 entscheidung: E-29
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: [coach.pending_actions]
 zahlen: null
@@ -50,3 +52,41 @@ und der Bericht stehen dort.
 direkt lesen, E-29 verbietet es.
 
 `[read]` **Wartet auf C-354.**
+
+## Auftrag — entblockt am 2026-08-30
+
+`[cmd]` **`coach.offene_aktionen(p_modul text)` ist live** — als
+`SECURITY DEFINER`, **ohne `client_id`-Parameter: ausschliesslich
+`auth.uid()` bestimmt den Klienten.** `[cmd]` **Fuer `dev` liefert sie
+2 Zeilen, fuer einen anderen Klienten 0.** `[cmd]` **`authenticated`
+darf, `anon` nicht.**
+
+`[read]` **Das ist die Naht aus E-29.** **Du hast am 30.08. gemeldet,
+dass keine der 16 Funktionen `pending_actions` liest — jetzt tut es
+eine.**
+
+`[cmd]` **Ein Befund aus dem Bau:** die beiden `dev`-Zeilen tragen
+einen vergangenen `expires_at` und trotzdem `status = 'pending'`.
+**Die Funktion gibt beides unveraendert aus.** `[read]` **Ein
+Verfall-Schreibweg wurde nicht gebaut** — **also muss die Anzeige
+entscheiden, was sie mit abgelaufenen Aktionen tut.**
+
+### Regeln
+
+`[cmd]` **A-30, A-59, A-62.** **Nichts auf `dev@lumeos.app`
+schreiben.** Nicht committen, nicht stagen, nicht pushen.
+
+### Nachweis
+
+    echte Zeilen        am Schirm, mit Bildschirmfoto
+    Leerzustand         wo er auftritt, benannt
+    Attrappen           vorher / nachher
+    Ladezeit            ms, kalt und warm
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

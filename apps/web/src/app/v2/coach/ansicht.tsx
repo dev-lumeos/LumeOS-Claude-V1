@@ -39,8 +39,18 @@
 // NICHT geaendert: keine Kachel weggelassen, keine Zahl ersetzt, keine
 // Anordnung angepasst.
 //
-// `[cmd]` ALLES IST ATTRAPPE. Ein `coach`-Schema gibt es nicht — der
-// Begriff kommt in `supabase/_pipeline/` in keiner SQL-Datei vor.
+// `[cmd]` **GEKIPPT, berichtigt in A-62 am 2026-08-30.** Hier stand
+// *„Ein `coach`-Schema gibt es nicht — der Begriff kommt in
+// `supabase/_pipeline/` in keiner SQL-Datei vor."* **Das war richtig,
+// als es geschrieben wurde, und ist es seit C-119 nicht mehr:**
+// `supabase/_pipeline/15_coach/` fuehrt 13 `CREATE TABLE`, die
+// laufende Datenbank 12 Tabellen im Schema `coach`, und `coach` steht
+// in `config.toml` unter `schemas` — also ueber PostgREST erreichbar.
+//
+// `[read]` **Was weiter gilt: diese Datei ist Attrappe.** Der Grund
+// ist nur ein anderer — nicht *,,es gibt kein Schema"*, sondern
+// *,,diese Ansicht liest es nicht"*. Die echten Kacheln liegen in
+// `rechte-echt.tsx` und `uebersicht-echt.tsx`.
 import * as React from 'react'
 import { useTabParam } from '../../../lib/tab-url'
 import {

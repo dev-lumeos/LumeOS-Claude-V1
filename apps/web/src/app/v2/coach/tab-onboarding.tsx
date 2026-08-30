@@ -45,7 +45,16 @@
 // Anordnung angepasst. Die lebenden Knoepfe bleiben lebendig — fuenf
 // Schritte, Zurueck/Weiter, fuenf Sterne.
 //
-// `[cmd]` ALLES IST ATTRAPPE. Ein `coach`-Schema gibt es nicht.
+// `[cmd]` **ALLES IST ATTRAPPE** - das gilt weiter.
+//
+// `[cmd]` **Die Begruendung ist gekippt, berichtigt in A-62 am
+// 2026-08-30.** Hier stand, ein `coach`-Schema gebe es nicht.
+// **Seit C-119 gibt es eines:** 13 `CREATE TABLE` in
+// `supabase/_pipeline/15_coach/`, 12 Tabellen in der laufenden
+// Datenbank, und `coach` steht in `config.toml` unter `schemas`.
+//
+// `[read]` **Attrappe ist diese Datei trotzdem** - sie liest das
+// Schema nicht. **Das ist der Befund, nicht ein fehlendes Schema.**
 import * as React from 'react'
 import { Card, Pill, Icon } from '@lumeos/ui'
 

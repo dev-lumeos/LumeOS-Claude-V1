@@ -9,8 +9,10 @@ kind_von: G-251
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: [nutrition.foods_custom, nutrition.food_preference_items]
+  tabellen: [nutrition.foods_custom]
 zahlen:
   gemessen: 2026-08-30
   foods_custom_spalten: 45
@@ -58,3 +60,8 @@ gibt kein Gestern"* etwas anderes ist als *,,gestern war nichts"*.
 
 **Mitbeauftragt mit C-354 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-30, mit C-354 abgenommen.** Zwei `p_filters`-Vertraege,
+Gegenprobe unveraendert, +10,655 ms. **Die Messung steht dort.**

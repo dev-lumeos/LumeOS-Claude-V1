@@ -9,8 +9,11 @@ kind_von: G-267
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  dateien: [apps/web/src/app/v2/nutrition]
+  dateien:
+    - tools/abwesenheit-pruefen.mjs
 zahlen: null
 ---
 
@@ -422,4 +425,108 @@ Scratchpad** — entfernt, danach gruen.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-30, Orchestrator.**
+
+### Die Antwort auf die eigentliche Frage lautet ja
+
+**Der Auftrag fragte:** *,,kann ein Waechter sagen — ich sichere eine
+Abwesenheit, pruef mich, wenn sie endet?"*
+
+`[cmd]` **`tools/abwesenheit-pruefen.mjs`, im Gate.** Eine Aussage
+traegt eine Marke mit ihrer Bedingung:
+
+    // @abwesend public.user_inventory
+
+**Vier Formen:** Tabelle, ganzes Schema, Spalte, PostgREST-Freigabe.
+
+`[read]` **Und die Bauentscheidung dahinter ist die kluge:** `[cmd]`
+**geprueft wird gegen `supabase/_pipeline/` und `config.toml`, nicht
+gegen die laufende Datenbank** — **der Gate laeuft ohne Zugangsdaten,
+und eine Aussage kippt in der Kette zuerst.**
+
+`[cmd]` **Jede Form einzeln durch Wirkung belegt, Rueckbau
+bytegleich** — **und die Gegenprobe auf etwas tatsaechlich
+Abwesendes haelt.** `[read]` **Ohne sie waere nicht belegt, dass er
+nicht einfach immer faellt.**
+
+### Neun Aussagen waren bereits gekippt
+
+`[cmd]` **Das `coach`-Schema (12 Tabellen) und `medical` (22) werden
+in sieben Dateien als nicht existent bezeichnet** — **alle sieben
+Schemata stehen in `config.toml`.**
+
+`[cmd]` **Die tragende Stelle ist `tab-rechte.tsx:66`:** *,,sechs
+Tabellen, nicht fuer PostgREST freigegeben"* **ist die genannte
+Begruendung dafuer, dass ein Leerzustand statt Daten erscheint** —
+**waehrend `rechte-read.ts:234` zehn `coach`-Tabellen liest, in denen
+Zeilen stehen.**
+
+`[read]` **Ein Reiter zeigt leer und nennt einen Grund, den es nicht
+gibt.** **Als G-277 angelegt.**
+
+`[cmd]` **Auch gekippt:** die Begruendung des Attrappen-Waechters
+selbst — **seine Zaehlung blieb gruen, nur der Grund war verrottet.**
+
+`[read]` **Drei Aussagen sind weiter wahr und jetzt markiert**,
+darunter *,,DIESE SEITE LIEST NICHTS"* fuer den AI-Coach. `[read]`
+**Die wertvollste, weil sie an dem Tag stillschweigend falsch wuerde,
+an dem Buddy kommt.**
+
+### Die Unterscheidung, die die Suche brauchbar machte
+
+`[cmd]` **Erster Lauf: 300 Zusicherungen. Unbrauchbar.**
+
+`[read]` **Der Grund:**
+
+    Code-Eigenschaft    kippt nie von selbst
+                        "kein .insert() in einer Lesedatei"
+    Welt-Abwesenheit    kippt bei Lieferung
+                        "die Spalte gibt es nicht"
+
+`[cmd]` **Zweiter Lauf: 656 — davon 434 in `docs/ssot/` und
+`docs/punkte/erledigt/`.**
+
+`[read]` **Und die Einordnung ist richtig:** Protokoll traegt Datum
+und `[cmd]`-Marke und **soll** altern. **A-62 betrifft, was als
+Gegenwart gelesen wird: 222 Aussagen.**
+
+### Die ehrliche Grenze
+
+`[read]` Er selbst: *,,die Marke faengt nur, was jemand markiert. Ich
+habe die neun durch Suchen gefunden, nicht durch den Waechter."*
+
+`[read]` **Das ist die richtige Beschreibung** — der Waechter
+verhindert das naechste stille Kippen, **er ist keine flaechendeckende
+Pruefung.** **Als G-278 angelegt.**
+
+### G-264 und G-93
+
+`[cmd]` **G-264: Attrappenpillen im Insights-Reiter 1 auf 0.** Die
+Karte und der aufruferlose `NutrientHeatmap` sind weg, 195 auf 122
+Zeilen, **samt zwei Folgekommentaren, die falsch geworden waeren.**
+
+`[cmd]` **G-93: der Befund besteht** — G-272 hat den Dialog nie
+angefasst. **Zwei von drei Stellen behoben.**
+
+`[read]` **Und die dritte bewusst nicht:** `[cmd]` **Zeile 535 speist
+das Suchfeld, und `name_display_de` als Suchbegriff liefert 0
+Treffer** (G-265). **Ein Waechter, der den Anzeigenamen ueberall
+verlangt haette, haette die Suche gebrochen.**
+
+`[cmd]` **Und die Praemisse des Punktes kippte auch: 0 von 7.140
+haben keinen Anzeigenamen mehr.**
+
+### Zwei eigene Fehler, von der Sabotageprobe gefangen
+
+`[read]` **Ein Test haette bestanden, ohne etwas zu pruefen** — der
+Waechter liest `git ls-files` und sieht ungetrackte Dateien nicht.
+`[read]` **Und ein Waechter suchte in zu grossem Heuhaufen.**
+
+`[cmd]` **Der Gate war einmal rot durch ihn** — Analyseskripte
+schrieben `_a62-*.json` in den Repo-Wurzelordner. **Entfernt und
+gemeldet.**
+
+`[cmd]` 1031 Tests, Gate 11/11, Encoding ueber 20.525 Dateien.
+
+**Abgenommen.**
+

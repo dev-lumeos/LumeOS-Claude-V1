@@ -38,7 +38,16 @@
 // Anordnung angepasst. Knoepfe, die in der Vorlage kein `onClick`
 // tragen, bleiben ohne — sie stehen da und tun nichts, genau wie dort.
 //
-// `[cmd]` ALLES IST ATTRAPPE. Ein `coach`-Schema gibt es nicht.
+// `[cmd]` **ALLES IST ATTRAPPE** - das gilt weiter.
+//
+// `[cmd]` **Die Begruendung ist gekippt, berichtigt in A-62 am
+// 2026-08-30.** Hier stand, ein `coach`-Schema gebe es nicht.
+// **Seit C-119 gibt es eines:** 13 `CREATE TABLE` in
+// `supabase/_pipeline/15_coach/`, 12 Tabellen in der laufenden
+// Datenbank, und `coach` steht in `config.toml` unter `schemas`.
+//
+// `[read]` **Attrappe ist diese Datei trotzdem** - sie liest das
+// Schema nicht. **Das ist der Befund, nicht ein fehlendes Schema.**
 import * as React from 'react'
 import { Card, Pill, Empty, Icon } from '@lumeos/ui'
 
@@ -54,10 +63,23 @@ import type { CoachRechteStand } from '../../../lib/coach/rechte-read'
 // [cmd] module-coach-athlete.jsx:143-262.
 //
 // **G-90: Der Tab liest.** `[cmd]` Bis hierher war er ganz Attrappe,
-// weil es kein `coach`-Schema gab. Seit C-119 gibt es sechs Tabellen.
+// weil es kein `coach`-Schema gab.
+//
+// `[cmd]` **BERICHTIGT IN A-62 am 2026-08-30 — zwei Zahlen waren
+// gekippt.** Hier stand *„Seit C-119 gibt es sechs Tabellen.
 // **Erreichbar sind sie heute nicht** (`coach` ist nicht fuer
-// PostgREST freigegeben) — deshalb steht der Leerzustand da, mit dem
-// Grund. Kein Attrappenmuster: Muster G-65.
+// PostgREST freigegeben)"*.
+//
+// **Beides gilt nicht mehr:** die laufende Datenbank fuehrt **12**
+// Tabellen im Schema `coach`, und `coach` **steht** in `config.toml`
+// unter `schemas`, ist also ueber PostgREST erreichbar.
+// `[cmd]` `rechte-read.ts:234` liest ueber `client.schema('coach')`
+// aus zehn Tabellen; live liegen 5 Zeilen in `client_permissions`,
+// 6 in `relationships`, 8 in `permission_change_log`.
+//
+// `[read]` **Der Leerzustand steht deshalb nicht mehr aus dem alten
+// Grund da**, sondern nur noch, wenn die Zeilenrechte nichts
+// durchlassen. Kein Attrappenmuster: Muster G-65.
 export function AthletePermissionsV2({ stand }: { stand?: CoachRechteStand }) {
   // `[read]` Der Entwurf bleibt nur, solange gar nichts geladen wurde
   // (kein Prop). Sobald die Seite liest — auch wenn sie nichts findet

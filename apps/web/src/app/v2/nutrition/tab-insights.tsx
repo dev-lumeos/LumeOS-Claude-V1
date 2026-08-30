@@ -3,25 +3,22 @@
 // Der Insights-Tab des Nutrition-Moduls.
 //
 // QUELLE: theme-v1/module-nutrition.jsx, `NutritionInsights`
-// (Zeile 357-399) und `NutrientHeatmap` (Zeile 400-439).
-// Drei Kacheln: Calorie balance · Macro split · Micronutrient trend.
+// (Zeile 357-399).
+//
+// **Die Vorlage fuehrt drei Kacheln.** `[cmd]` **Zwei stehen hier**
+// (Calorie balance, Macro split), **die dritte ist in G-264 am
+// 2026-08-30 entfernt** — Begruendung unten am Ort.
 //
 // GEAENDERT IST NUR DAS TECHNISCHE:
 //   1. JSX ohne Typen -> TypeScript.
 //   2. Klassen auf `v2-`-Praefix.
 //   3. `window.NutritionHeatmapView` entfaellt — die Vorlage haengt dort
 //      eine zweite Ansicht an, wenn sie geladen ist; sie liegt nicht vor.
-//   4. **Die Zufallszahlen sind ersetzt.** Begruendung unten.
 //
-// `[cmd]` WARUM KEIN `Math.random()`: Die Vorlage wuerfelt die
-// Heatmap bei jedem Rendern neu (Zeile 404-406). In Next.js rendert der
-// Server einmal und der Browser noch einmal — mit `Math.random()`
-// kommen zwei verschiedene Bilder heraus und React bricht die
-// Hydration mit einer Fehlermeldung ab. Ersetzt durch eine feste
-// Formel, die dieselbe Streuung (0 bis 1, Schwerpunkt um 0,55) und
-// dieselbe Spannweite liefert, aber bei jedem Lauf dasselbe Bild.
-// Das ist eine technische Anpassung, keine inhaltliche: die Vorlage
-// nennt ihre Werte selbst „pseudo-stable data".
+// `[cmd]` **Mit `NutrientHeatmap` ist auch der Ersatz fuer
+// `Math.random()` entfallen** (Sinusformel gegen den
+// Hydration-Fehler). Die Begruendung stand hier vier Wochen und
+// beschreibt seit G-264 keinen Code mehr.
 //
 // `[cmd]` ALLES IST ATTRAPPE. Die Kurven sind die Zahlen der Vorlage,
 // nicht die des Nutzers.
@@ -30,85 +27,12 @@ import { Card, Pill, Row, Meter, LineChart } from '@lumeos/ui'
 
 const ATTRAPPE = 'Die Zahlen stammen aus der Vorlage — die Auswertung rechnet noch nicht ueber `daily_summary`.'
 
-/** Die acht Naehrstoffe der Vorlage (Zeile 401). */
-const NAEHRSTOFFE = ['Vit D', 'Omega-3', 'Magnesium', 'Iron', 'B12', 'Calcium', 'Zinc', 'Vit C']
-const TAGE = 30
-
-/**
- * Der Ersatz fuer `Math.random()`.
- *
- * Eine Sinus-Streuung ueber Naehrstoff und Tag: kein Muster, das ins
- * Auge faellt, aber bei jedem Aufruf derselbe Wert. Die Vorlage
- * streut `0.55 + (rnd - 0.4) * 0.6` und klemmt auf 0..1 — dieselbe
- * Mitte, dieselbe Spannweite.
- */
-function wert(i: number, j: number): number {
-  // `[cmd]` GERUNDET, UND ZWAR NICHT AUS SCHOENHEIT. Der erste Versuch
-  // gab den vollen Gleitkommawert zurueck und React meldete im Browser:
-  //   Prop `style` did not match.
-  //   Server: opacity:0.6199775584337404
-  //   Client: opacity:0.6199775584345043
-  // `Math.sin` ist in ECMAScript nicht bitgenau festgelegt — Node und
-  // das V8 im Browser weichen ab der zwoelften Stelle ab. „Fest" heisst
-  // also nicht „bei jedem Aufruf gleich", sondern „in jeder Engine
-  // gleich". Drei Nachkommastellen liegen weit ueber dem Unterschied
-  // und weit unter dem, was man sieht.
-  const s = Math.sin((i + 1) * 12.9898 + (j + 1) * 78.233) * 43758.5453
-  const r = s - Math.floor(s) // 0..1, fest je (i, j)
-  const v = Math.max(0, Math.min(1, 0.55 + (r - 0.4) * 0.6))
-  return Math.round(v * 1000) / 1000
-}
-
 /** Die Makroverteilung der Vorlage (Zeile 372-375). */
 const MAKROS = [
   { l: 'Protein', v: 31, t: 28, color: 'var(--acc-train)' },
   { l: 'Carbs', v: 44, t: 47, color: 'var(--acc-recov)' },
   { l: 'Fat', v: 25, t: 25, color: 'var(--acc-goals)' },
 ]
-
-function NutrientHeatmap() {
-  return (
-    <div>
-      <div className="v2-heat-wrap">
-        <div className="v2-heat">
-          {NAEHRSTOFFE.map((n, i) => (
-            <React.Fragment key={n}>
-              <div className="v2-heat-name">{n}</div>
-              <div className="v2-heat-zeile">
-                {Array.from({ length: TAGE }, (_, j) => {
-                  const v = wert(i, j)
-                  return (
-                    <div
-                      key={j}
-                      title={`${n} · day ${j + 1}: ${Math.round(v * 100)}%`}
-                      style={{
-                        height: 16,
-                        background: v >= 0.8 ? 'var(--pos)' : v >= 0.5 ? 'var(--warn)' : 'var(--neg)',
-                        opacity: 0.25 + v * 0.7,
-                        borderRadius: 2,
-                      }}
-                    />
-                  )
-                })}
-              </div>
-            </React.Fragment>
-          ))}
-        </div>
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 10, fontSize: 10, color: 'var(--fg-muted)', flexWrap: 'wrap' }}>
-        <span className="v2-row-gap">
-          <span style={{ width: 10, height: 10, background: 'var(--neg)', opacity: 0.6, borderRadius: 2 }} /> {'<50%'}
-        </span>
-        <span className="v2-row-gap">
-          <span style={{ width: 10, height: 10, background: 'var(--warn)', opacity: 0.6, borderRadius: 2 }} /> 50–80%
-        </span>
-        <span className="v2-row-gap">
-          <span style={{ width: 10, height: 10, background: 'var(--pos)', opacity: 0.6, borderRadius: 2 }} /> {'>80%'}
-        </span>
-      </div>
-    </div>
-  )
-}
 
 export function NutritionInsightsTab({ ohneEchte = false }: {
   /**
@@ -120,9 +44,12 @@ export function NutritionInsightsTab({ ohneEchte = false }: {
    * mit denen der Vorlage. **Dieselbe Doppelung, die G-249 im
    * Nutrients-Reiter entfernt hat.**
    *
-   * `[read]` **Der Entwurf bleibt vollstaendig aufrufbar** — ohne
-   * dieses Flag zeigt er alle drei Kacheln, wie bisher. Er ist die
-   * Vorlage, und eine Vorlage mit Luecken ist keine mehr.
+   * `[read]` **Der Entwurf bleibt aufrufbar** — ohne dieses Flag zeigt
+   * er die zwei Kacheln der Vorlage, die noch hier stehen.
+   *
+   * `[cmd]` **Berichtigt in G-264:** hier stand *„alle drei Kacheln"*.
+   * **Die dritte ist entfernt**, also sind es zwei. Ein Satz, der die
+   * Zahl nennt, altert mit ihr.
    */
   ohneEchte?: boolean
 } = {}) {
@@ -174,14 +101,22 @@ export function NutritionInsightsTab({ ohneEchte = false }: {
         </>
       )}
 
-      <Card
-        title="Micronutrient trend"
-        sub="30 days · top 8"
-        attrappe={ATTRAPPE}
-        style={{ gridColumn: 'span 2' }}
-      >
-        <NutrientHeatmap />
-      </Card>
+      {/* G-264: „Micronutrient trend" ist hier entfernt (2026-08-30).
+          `[read]` **Was sie sicherte:** die Kachel zeigte eine Heatmap
+          aus 8 Naehrstoffen x 30 Tagen, deren Werte eine Sinusformel
+          erzeugte — kein Nutzerwert, sondern der Ersatz fuer das
+          `Math.random()` der Vorlage.
+
+          `[cmd]` **In G-11 wurde entschieden, sie nicht anzubinden:**
+          der Nutrients-Reiter zeigt denselben Verlauf je Naehrstoff,
+          aus `daily_nutrient_summary_long`, mit Sparkline ueber das
+          gewaehlte Fenster. **Die Kachel waere die zweite Ansicht
+          daneben gewesen.**
+
+          `[read]` **A-59: nicht angebunden ist nicht entfernt.** Sie
+          stand weiter am Schirm und sah aus wie eine Zusage — G-254
+          fuehrte sie bereits als *gestrichen*, und das war falsch.
+          **Jetzt ist sie es.** */}
     </div>
   )
 }

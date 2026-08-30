@@ -22,7 +22,16 @@
 // drei Medical-Dateien weder `Math.random()` noch `Date.now()` vor —
 // geprueft. Die Verlaeufe sind feste Zahlenreihen.
 //
-// `[cmd]` ALLES IST ATTRAPPE. Ein `medical`-Schema gibt es nicht.
+// `[cmd]` **ALLES IST ATTRAPPE** - das gilt weiter.
+//
+// `[cmd]` **Die Begruendung ist gekippt, berichtigt in A-62 am
+// 2026-08-30.** Hier stand, ein `medical`-Schema gebe es nicht.
+// **Die laufende Datenbank fuehrt 22 Tabellen im Schema
+// `medical`**, darunter `lab_result_values` und `symptoms`; das
+// Schema steht in `config.toml` unter `schemas`.
+//
+// `[read]` **Attrappe ist diese Datei trotzdem** - sie liest das
+// Schema nicht. **Das ist der Befund, nicht ein fehlendes Schema.**
 
 // ── Das Sechs-Flaggen-Verfahren (SPEC_09 §2) ────────────────────
 // [cmd] module-medical-data.jsx:5-13.

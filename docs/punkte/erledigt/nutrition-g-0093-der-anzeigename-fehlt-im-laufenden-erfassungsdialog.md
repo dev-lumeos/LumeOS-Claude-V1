@@ -10,9 +10,11 @@ kinder: []
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: ["apps/web/src/app/v2/nutrition/erfassen.tsx", "apps/web/src/app/v2/nutrition/mahlzeiten.tsx", "apps/web/src/lib/nutrition/food-search.ts"]
+  dateien:
+    - apps/web/src/app/v2/nutrition/tab-diary.tsx
 zahlen:
   gemessen: 2026-08-20
   name_display_de_abweichend: 5014
@@ -69,3 +71,8 @@ selbst.**
 `[read]` **Behoben sind zwei der drei Stellen.** Zeile 535 behaelt
 `name_de` mit Absicht: der Wert geht ins **Suchfeld**, und
 `name_display_de` als Suchbegriff liefert 0 Treffer (G-265).
+
+## Abnahme
+
+**2026-08-30, mit A-62 abgenommen:** zwei von drei behoben; Zeile 535 bewusst mit `name_de`, weil
+sie das Suchfeld speist.

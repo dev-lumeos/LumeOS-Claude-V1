@@ -14,6 +14,11 @@
 // Namen zu erfinden, steht hier die Rolle und die gekuerzte Kennung —
 // der fehlende Unterbau ist ein Befund fuer Codex (C-219).
 //
+// @abwesend coach.coach_profiles
+// `[read]` A-62: Sobald die Tabelle in der Pipeline steht, faellt
+// `tools/abwesenheit-pruefen.mjs` und meldet diese Zeile. **Dann ist
+// der Ersatz aus Rolle und Kennung nicht mehr die richtige Antwort.**
+//
 // **SEIT C-225 WIRD GESCHRIEBEN:** Antworten (messages INSERT),
 // Einladen (relationships INSERT, status='invited', per Kennung) und
 // Als-gelesen (messages UPDATE read_at) — die Regeln erzwingen die

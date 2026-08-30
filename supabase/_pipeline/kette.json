@@ -396,7 +396,7 @@
       "id": "075",
       "path": "supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql",
       "kind": "sql",
-      "creates": "food_search mit optionaler Nutzer-Praeferenzanwendung: hard exclude, strong avoid, soft dislike und boost",
+      "creates": "food_search mit optionaler Nutzer-Praeferenzanwendung: hard exclude, strong avoid, soft dislike, boost sowie C-355 Favoriten- und Quellenfilter (bls/custom)",
       "depends_on": [
         "073",
         "074",
@@ -1310,6 +1310,15 @@
       "depends_on": [
         "139",
         "149"
+      ]
+    },
+    {
+      "id": "354",
+      "path": "supabase/_pipeline/15_coach/354_offene_coach_aktionen.sql",
+      "kind": "sql",
+      "creates": "C-354/E-29: offene pending_actions aus Klientensicht ueber eine Coach-Lesefunktion",
+      "depends_on": [
+        "150"
       ]
     }
   ]

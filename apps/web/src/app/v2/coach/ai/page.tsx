@@ -13,9 +13,22 @@
 // keine V2-Weiche, der Rahmen ist eindeutig.
 //
 // DIESE SEITE LIEST NICHTS. `[cmd]` Ein Buddy-Schema gibt es nicht —
-// weder `buddy` noch `coach` kommt in `supabase/_pipeline/` in einem
-// `CREATE TABLE` vor. Es ist nichts anzubinden, also wird nichts
-// geladen.
+// **gemessen am 2026-08-30:** kein Schema `buddy`, und keine der 12
+// `coach`-Tabellen traegt Buddy-Material. Es ist nichts anzubinden,
+// also wird nichts geladen.
+//
+// `[cmd]` **BERICHTIGT IN A-62:** hier stand zusaetzlich *„weder
+// `buddy` noch `coach` kommt in `supabase/_pipeline/` in einem
+// `CREATE TABLE` vor"*. **Fuer `coach` ist das seit C-119 falsch** —
+// 13 `CREATE TABLE` in `15_coach/`, 12 Tabellen live.
+//
+// @abwesend coach.buddy_memory
+// `[read]` **A-62: der Satz oben haengt an dieser Abwesenheit.**
+// Sobald eine Buddy-Tabelle in der Pipeline steht, faellt
+// `tools/abwesenheit-pruefen.mjs` und nennt diese Zeile — **statt dass
+// „liest nichts" still zur Falschaussage wird.** Der Name ist der
+// erste, den ein Buddy-Schema braucht (Gedaechtnis, SPEC/module-buddy);
+// er ist der Wecker, nicht die Vorgabe.
 //
 // `[read]` Tom zum Umfang: „Der AI Coach ist ein Teil von
 // Buddy-Logik. Der effektive Endausbau, welcher DER BUDDY als App sein

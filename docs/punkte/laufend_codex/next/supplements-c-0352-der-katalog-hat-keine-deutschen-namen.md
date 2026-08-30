@@ -100,3 +100,58 @@ gebaute Weg** — gemessen in G-253.
 viele in den ersten Fall fallen.** `[read]` **Das sind die, bei denen
 ein deutscher Name eine Regel ist und keine Meinung** — und nur die
 gehoeren gefuellt.
+
+## Auftrag — die Nomenklaturfaelle zaehlen
+
+**Mitbeauftragt: C-358.** Bericht in diese Datei.
+
+`[read]` **Vorbereitet am 2026-08-30.**
+
+### 1 · C-352 — nicht 412 Namen, sondern eine Liste
+
+**Tom, 2026-08-30:** *,,fuer welche der 412 lohnt sich ein deutscher
+Name? Und die Antwort waere eine kurze Liste, keine Katalogarbeit."*
+
+`[read]` **Der Punkt oben nennt drei Faelle.** **Miss, wie viele in
+den ersten fallen** — **wo ein deutscher Name eine Regel ist und
+keine Meinung.**
+
+    Nomenklatur    -ine -> -in, -ate -> -at, INN mit amtlicher
+                   deutscher Schreibweise
+    Meinung        Gotu Kola gegen Indischer Wassernabel
+    nichts         GHRP-6, AOD-9604, Andarine (S4)
+
+`[read]` **Nur die erste Gruppe fuellen.** `[read]` **Und wenn ein
+Name unsicher ist, bleibt er leer** — `name_en` ist der gebaute
+Rueckfall.
+
+`[cmd]` **Kein Katalogausbau** — es geht um Namen, nicht um
+Beschreibungen oder Evidenzstufen.
+
+### 2 · C-358 — abgelaufene Aktionen
+
+`[cmd]` **Zwei `dev`-Zeilen tragen vergangenes `expires_at` und
+`status = 'pending'`.**
+
+`[read]` **Das ist eine Entscheidung, keine Bauarbeit** — **miss den
+Umfang und leg die drei Wege vor:** Schreibweg auf `expired`, Filter
+in der Funktion, oder Vermerk in der Anzeige.
+
+`[read]` **Und die Frage dahinter: wer schreibt?** **Einen
+Hintergrundlauf gibt es nicht, und ein Lesevorgang, der schreibt, ist
+eine eigene Klasse.**
+
+### Nachweis
+
+    Nomenklaturfaelle      Zahl, Liste
+    gefuellt               wie viele, je mit Regel
+    unsicher geblieben     wie viele, mit Grund
+    abgelaufene Aktionen   Zahl, drei Wege vorgelegt
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

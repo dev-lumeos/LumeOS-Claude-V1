@@ -9,6 +9,8 @@ kind_von: G-258
 entscheidung: E-29
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
   tabellen: [coach.pending_actions]
 zahlen:
@@ -179,4 +181,53 @@ Favoriten- und Custom-Leerzustand, Reihenfolgengegenprobe, Ketteneintrag sowie
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-30, Orchestrator.**
+
+`[cmd]` **`coach.offene_aktionen(p_modul text)` live**, als
+`SECURITY DEFINER`, in der Kette als Schritt 354 nach 150 registriert.
+
+`[read]` **Und die wichtigste Bauentscheidung ist die, die ich nicht
+verlangt hatte:** `[cmd]` **kein `client_id`-Parameter — ausschliesslich
+`auth.uid()` bestimmt den Klienten.**
+
+`[read]` **Damit kann kein Aufrufer fremde Aktionen lesen, auch nicht
+durch einen falschen Parameter.** `[cmd]` **`authenticated` darf,
+`anon` nicht.** `[cmd]` **Fuer `dev` 2 Zeilen, fuer einen anderen
+Klienten 0.**
+
+`[read]` **Dasselbe Muster wie bei `plan_origin` in G-267:** die Regel
+liegt im Schreib- beziehungsweise Leseweg, **nicht in der Anzeige.**
+
+### C-355 — und die rote Vormessung
+
+`[cmd]` **Vor dem Bau lieferten beide unbekannten Schluessel noch
+4.970 Treffer** — **ein unbekannter Filter wirkte also gar nicht.**
+`[read]` **Das ist die Gegenprobe in beide Richtungen, und sie stand
+im Auftrag nicht.**
+
+`[cmd]` **Nach dem Bau: Favoritenfilter 1 Treffer fuer `dev`,
+Custom-Filter 0** — **`foods_custom` hat 0 Zeilen, also der erwartete
+Leerzustand, keine angelegte Testzeile.**
+
+`[cmd]` **Und `sources` liest nur die eigenen Foods des angefragten
+Nutzers** — **die RLS bleibt wirksam, ein fremdes `p_user_id` hilft
+nicht.**
+
+`[cmd]` **Gegenprobe: derselbe Nutzer ohne Vorlieben bekommt dieselben
+25 Food-IDs in derselben Reihenfolge.** `[cmd]` **+10,655 ms Median,
+282,332 auf 292,987.**
+
+### Ein Befund aus dem Bau
+
+`[cmd]` **Die beiden `dev`-Zeilen tragen einen vergangenen
+`expires_at` und trotzdem `status = 'pending'`.** `[cmd]` **Die
+Funktion gibt beides unveraendert aus, ein Verfall-Schreibweg wurde
+nicht gebaut.**
+
+`[read]` **Richtig so — er war nicht beauftragt.** **Als C-358
+angelegt.**
+
+`[cmd]` Vollsicherung behalten, zwei Wegwerf-Datenbanken entfernt.
+
+**Abgenommen.** G-258 und G-251 sind entblockt und gehen raus.
+

@@ -11,9 +11,15 @@
 // Rendern und schreibt `lang` direkt ins HTML — kein Aufblitzen der
 // falschen Sprache.
 //
-// `[cmd]` Ueber Geraete hinweg gilt sie damit noch NICHT. Dafuer
-// braucht `public.profiles` eine `locale`-Spalte; das ist Schemaarbeit
-// und gehoert Codex. Was fehlt, steht im Bericht.
+// `[cmd]` **GEKIPPT, berichtigt in A-62 am 2026-08-30.** Hier stand
+// *„Dafuer braucht `public.profiles` eine `locale`-Spalte; das ist
+// Schemaarbeit und gehoert Codex."* **Die Spalte gibt es** —
+// `public.profiles` fuehrt heute `locale` (15 Spalten insgesamt).
+//
+// `[read]` **Der Befund bleibt, sein Grund aendert sich:** ueber
+// Geraete hinweg gilt die Wahl weiterhin nicht, **aber nicht mehr,
+// weil die Spalte fehlt — sondern weil diese Datei sie nicht
+// schreibt.** Das ist Arbeit an der Oberflaeche, nicht am Schema.
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'

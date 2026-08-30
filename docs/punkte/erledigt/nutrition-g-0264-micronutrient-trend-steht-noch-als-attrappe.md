@@ -9,8 +9,11 @@ kind_von: G-254
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
+  dateien:
+    - apps/web/src/app/v2/nutrition/tab-insights.tsx
 zahlen: null
 ---
 # G-264 — Micronutrient trend steht noch als Attrappe
@@ -42,3 +45,8 @@ das doppelt** — sie sieht aus wie eine Zusage.
 
 **Mitbeauftragt mit A-62 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-30, mit A-62 abgenommen:** entfernt: Attrappenpillen 1 auf 0, Karte und aufruferloser
+NutrientHeatmap weg, 195 auf 122 Zeilen.

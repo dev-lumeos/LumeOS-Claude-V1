@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: ["apps/web/src/lib/evidenz/registry.ts"]
@@ -28,7 +30,7 @@ zahlen: null
 
 **Mitbeauftragt: C-229, G-214.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 `[read]` **Alle drei sind Befunde ohne Messung von heute.** **Die
 Erwartung: mindestens einer ist ueberholt** — **am 30.08. waren es
