@@ -9,8 +9,10 @@ kind_von: C-350
 entscheidung: E-35
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: [supplements.intake_logs, supplements.supplement_nutrients]
+  tabellen: [supplements.intake_logs]
 zahlen:
   gemessen: 2026-08-30
   intake_logs: 744
@@ -58,3 +60,13 @@ voller Nullen.** **Erst messen, was ueberhaupt ankommt.**
 
 **Mitbeauftragt mit C-163 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-30, mit C-163 abgenommen.**
+
+`[cmd]` **`supplements.daily_intake_summary` rechnet.** `[read]`
+**E-35 ist damit gebaut:** jedes Modul fuehrt seine eigene Bilanz.
+
+`[read]` **Die Summierung fuer Dashboard und Buddy kommt spaeter** —
+sie gehoert dorthin, wo beide Bilanzen sichtbar sind.

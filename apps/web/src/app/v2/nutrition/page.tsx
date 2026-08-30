@@ -34,8 +34,10 @@ import type { VorliebenDaten } from './tab-vorlieben'
 // G-97: der Wochenplan aus den C-150-Tabellen.
 import {
   ladePlan, ladePlanLogs, ladeCoachFreigabe, ladeEinkaufslistenZahl,
+  ladeTagesEintraege,
   type PlanDaten,
 } from '../../../lib/nutrition/plan-lesen'
+import type { TagesEintrag } from './plan-eintraege'
 import type { LogZeile as PlanLogZeile } from '../../../lib/nutrition/plan-lage'
 // G-101: die zwei Mikronaehrstoff-Kacheln des Diary.
 import { ladeMikro, type MikroStand } from '../../../lib/nutrition/mikro-read'
@@ -216,18 +218,22 @@ export default async function V2NutritionPage({
   let planLogs: PlanLogZeile[] = []
   let coachFreigabe = false
   let einkaufslisten = 0
+  let tagesEintraege: TagesEintrag[] = []
   if (tab === 'planner' || tab === 'plans') {
     try {
-      const [p, l, f, e] = await Promise.all([
+      const [p, l, f, e, te] = await Promise.all([
         ladePlan(),
         ladePlanLogs(datum, 7).catch(() => []),
         ladeCoachFreigabe().catch(() => false),
         ladeEinkaufslistenZahl().catch(() => 0),
+        // G-274: die Eintraege des Tages mit ihrem Zustand.
+        ladeTagesEintraege(datum).catch(() => []),
       ])
       plan = p
       planLogs = l
       coachFreigabe = f
       einkaufslisten = e
+      tagesEintraege = te
     } catch {
       plan = null
     }
@@ -280,6 +286,7 @@ export default async function V2NutritionPage({
       planLogs={planLogs}
       coachFreigabe={coachFreigabe}
       einkaufslisten={einkaufslisten}
+      tagesEintraege={tagesEintraege}
       mikro={mikro}
       ordnung={ordnung}
       einsichten={einsichten}

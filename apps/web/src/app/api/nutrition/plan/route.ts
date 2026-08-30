@@ -15,6 +15,13 @@ import {
   planAnlegen,
   planAnlegenSchema,
 } from '../../../../lib/nutrition/plan-write'
+// G-274: der Bestaetigungsweg — Flow 4.
+import {
+  bestaetigenSchema,
+  planEintragBestaetigen,
+  planEintragUeberspringen,
+  ueberspringenSchema,
+} from '../../../../lib/nutrition/plan-log-write'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -81,5 +88,33 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  return ungueltig('Unbekannte Art. Erlaubt: plan, plan_aendern.')
+  // G-274: Flow 4 — bestaetigen und ueberspringen.
+  if (art === 'bestaetigen') {
+    const geprueft = bestaetigenSchema.safeParse(roh)
+    if (!geprueft.success) {
+      return ungueltig(geprueft.error.issues[0]?.message ?? 'Eingabe ungueltig.',
+        geprueft.error.issues.map(i => ({ feld: i.path.join('.'), meldung: i.message })))
+    }
+    try {
+      return NextResponse.json(await planEintragBestaetigen(geprueft.data))
+    } catch (error) {
+      return errorResponse(error)
+    }
+  }
+
+  if (art === 'ueberspringen') {
+    const geprueft = ueberspringenSchema.safeParse(roh)
+    if (!geprueft.success) {
+      return ungueltig(geprueft.error.issues[0]?.message ?? 'Eingabe ungueltig.',
+        geprueft.error.issues.map(i => ({ feld: i.path.join('.'), meldung: i.message })))
+    }
+    try {
+      return NextResponse.json(await planEintragUeberspringen(geprueft.data))
+    } catch (error) {
+      return errorResponse(error)
+    }
+  }
+
+  return ungueltig(
+    'Unbekannte Art. Erlaubt: plan, plan_aendern, bestaetigen, ueberspringen.')
 }

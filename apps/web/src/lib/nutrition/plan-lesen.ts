@@ -454,3 +454,83 @@ export async function ladeEinkaufslistenZahl(): Promise<number> {
   if (error || count === null) return 0
   return count
 }
+
+
+/**
+ * Die Plan-Eintraege eines Tages mit ihrem Zustand — G-274.
+ *
+ * `[read]` **Der Eintrag ist die Vorlage, das Log die Ausfuehrung.**
+ * Ein Eintrag ohne Log ist `pending` — **nicht abwesend.** Wer nur
+ * Log-Zeilen laedt, saehe am ersten Tag gar nichts, und genau das war
+ * der Leerzustand aus G-270.
+ *
+ * `[cmd]` **Zwei Abfragen, keine Schleife** — die Eintraege des Tages
+ * und die Logs desselben Tages, danach im Speicher verbunden. **Ein
+ * `await` je Eintrag kostet je Durchlauf voll** (G-252).
+ */
+export async function ladeTagesEintraege(datum: string): Promise<Array<{
+  id: string
+  meal_type: string
+  bezeichnung: string
+  kcal: number | null
+  status: 'pending' | 'confirmed' | 'deviated' | 'skipped'
+  confirmation_mode: string | null
+  deviation_kcal: number | null
+  deviation_pct: number | null
+}>> {
+  const db = nutritionDb()
+  const client = createSessionClient()
+  const { data: { user } } = await client.auth.getUser()
+  if (!user) return []
+
+  const [eintraegeR, logsR] = await Promise.all([
+    db.from('meal_plan_entries')
+      .select(`
+        id, meal_type, slot_order, entry_type, amount_g, planned_servings,
+        recipe:recipes ( name_de ),
+        food:foods ( name_display_de, name_de ),
+        day:meal_plan_days!inner ( plan_date )
+      `)
+      .eq('user_id', user.id)
+      .eq('meal_plan_days.plan_date', datum)
+      .order('slot_order', { ascending: true })
+      .limit(200),
+    db.from('meal_plan_logs')
+      .select('plan_entry_id, status, confirmation_mode, deviation_kcal, deviation_pct')
+      .eq('user_id', user.id)
+      .eq('execution_date', datum)
+      .limit(200),
+  ])
+
+  if (eintraegeR.error) return []
+
+  const jeEintrag = new Map<string, Record<string, unknown>>()
+  for (const l of (logsR.data ?? []) as unknown as Array<Record<string, unknown>>) {
+    const k = text(l.plan_entry_id)
+    if (k) jeEintrag.set(k, l)
+  }
+
+  const aus = []
+  for (const roh of (eintraegeR.data ?? []) as unknown as Array<Record<string, unknown>>) {
+    const id = text(roh.id)
+    if (!id) continue
+    const rezept = roh.recipe as Record<string, unknown> | null
+    const essen = roh.food as Record<string, unknown> | null
+    const log = jeEintrag.get(id)
+    aus.push({
+      id,
+      meal_type: text(roh.meal_type) ?? 'other',
+      bezeichnung: text(rezept?.name_de)
+        ?? text(essen?.name_display_de) ?? text(essen?.name_de) ?? '—',
+      // `[read]` Die kcal stehen erst nach dem Bestaetigen fest —
+      // hier bleibt `null`, statt eine Zahl zu behaupten.
+      kcal: null,
+      status: (text(log?.status) ?? 'pending') as
+        'pending' | 'confirmed' | 'deviated' | 'skipped',
+      confirmation_mode: text(log?.confirmation_mode),
+      deviation_kcal: zahl(log?.deviation_kcal),
+      deviation_pct: zahl(log?.deviation_pct),
+    })
+  }
+  return aus
+}

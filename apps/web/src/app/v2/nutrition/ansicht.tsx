@@ -49,6 +49,7 @@ import { Zielhinweis } from './zielhinweis'
 import { Mahlzeiten } from './mahlzeiten'
 import { Datumsnavigation, Zukunftshinweis } from './datumsnavigation'
 import type { LogZeile as PlanLogZeile } from '../../../lib/nutrition/plan-lage'
+import type { TagesEintrag } from './plan-eintraege'
 // G-38: die Tabs, die bisher nur als Attrappen-Platzhalter dastanden.
 import { NutritionInsightsTab } from './tab-insights'
 import { MealPlansTab } from './tab-plans'
@@ -118,7 +119,7 @@ function tabs(mahlzeiten: number | null): TabItem[] {
 
 export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, lueckenGesamt = null, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
-  planLogs = [], coachFreigabe = false, einkaufslisten = 0,
+  planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
   istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null,
   unvertraeglichkeiten = [],
 }: {
@@ -128,6 +129,7 @@ export async function TagebuchAnsicht({
   planLogs?: PlanLogZeile[]
   coachFreigabe?: boolean
   einkaufslisten?: number
+  tagesEintraege?: TagesEintrag[]
   tab: string
   /** G-14: nur Admins duerfen in die Zukunft blaettern. */
   istAdmin?: boolean
@@ -240,7 +242,7 @@ export async function TagebuchAnsicht({
       <Zukunftshinweis datum={datum} />
 
       {tab !== 'diary' && (
-        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} planLogs={planLogs} coachFreigabe={coachFreigabe} einkaufslisten={einkaufslisten} />
+        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} planLogs={planLogs} coachFreigabe={coachFreigabe} einkaufslisten={einkaufslisten} tagesEintraege={tagesEintraege} />
       )}
       {tab === 'diary' && (
       <>
@@ -562,7 +564,7 @@ export async function TagebuchAnsicht({
 function AndererTab({
   tab, foodsStart, vorlieben, plan, ordnung, einsichten, bewertung = [],
   datum,
-  planLogs = [], coachFreigabe = false, einkaufslisten = 0,
+  planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
   unvertraeglichkeiten = [],
 }: {
   tab: string
@@ -572,6 +574,7 @@ function AndererTab({
   planLogs?: PlanLogZeile[]
   coachFreigabe?: boolean
   einkaufslisten?: number
+  tagesEintraege?: TagesEintrag[]
   /** G-154: die gesetzten Unvertraeglichkeiten (`strong`). */
   unvertraeglichkeiten?: string[]
   /** G-66: die erste Trefferseite, serverseitig geladen. */
@@ -672,6 +675,8 @@ function AndererTab({
           logs={planLogs}
           coachFreigabe={coachFreigabe}
           einkaufslisten={einkaufslisten}
+          tagesEintraege={tagesEintraege}
+          datum={datum ?? ''}
         />
       </div>
     )

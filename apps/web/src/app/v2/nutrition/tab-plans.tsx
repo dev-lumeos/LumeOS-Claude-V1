@@ -34,10 +34,11 @@ import {
 import type { PlanDaten } from '../../../lib/nutrition/plan-lesen'
 import type { LogZeile } from '../../../lib/nutrition/plan-lage'
 import {
-  GhostEintraegeEcht, LebenszyklusEcht, EinhaltungEcht,
+  LebenszyklusEcht, EinhaltungEcht,
   HerkunftEcht, EinkaufslisteEcht,
 } from './plans-echt'
 import { PlanModal } from './plan-modal'
+import { PlanEintraegeEcht, type TagesEintrag } from './plan-eintraege'
 
 const ATTRAPPE = 'Aus dem Entwurf uebernommen. Dieser Tab ist noch nicht an die vorhandenen Essensplaene angebunden - die Zahlen sind erfunden.'
 
@@ -70,6 +71,7 @@ const EINKAUF: Array<{ cat: string; items: Array<[string, string]> }> = [
 
 export function MealPlansTab({
   d = null, logs = [], coachFreigabe = false, einkaufslisten = 0,
+  tagesEintraege = [], datum = '',
 }: {
   d?: PlanDaten | null
   /** G-270: die Ausfuehrung aus `meal_plan_logs` — nicht vom Eintrag. */
@@ -78,6 +80,10 @@ export function MealPlansTab({
   coachFreigabe?: boolean
   /** G-270: wie viele Einkaufslisten der Nutzer hat. */
   einkaufslisten?: number
+  /** G-274: die Eintraege des Tages mit ihrem Zustand aus dem Log. */
+  tagesEintraege?: TagesEintrag[]
+  /** G-274: der Tag, auf den bestaetigt wird (`execution_date`). */
+  datum?: string
 }) {
   const [tab, setTab] = React.useState('active')
   // G-267 / G-268: `null` heisst zu, `true` heisst anlegen,
@@ -154,7 +160,17 @@ export function MealPlansTab({
                 `[cmd]` **Der Status liegt im Log, nicht am Eintrag** —
                 `meal_plan_entries` hat keine Statusspalte, und wer dort
                 sucht, haelt ihn fuer fehlend. */}
-            {d ? <GhostEintraegeEcht logs={logs} /> : (
+            {/* G-274: die Eintraege DES TAGES mit ihren Knoepfen.
+                `[read]` **Nicht die Log-Zeilen** — ein Eintrag ohne
+                Log ist `pending`, nicht abwesend. Wer nur Logs zeigte,
+                saehe am ersten Tag nichts. */}
+            {d ? (
+              <PlanEintraegeEcht
+                eintraege={tagesEintraege}
+                datum={datum}
+                onGeaendert={() => router.refresh()}
+              />
+            ) : (
             <Card
               title="Today's ghost entries"
               sub={`${pending} still open · confirm via MealCam or manually`}

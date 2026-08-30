@@ -4,9 +4,11 @@ typ: feature
 modul: nutrition
 schwere: mittel
 angelegt: 2026-08-29
-braucht: [C-349]
+braucht: []
 kind_von: C-348
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
 zahlen:
@@ -65,3 +67,21 @@ Prozent, mindestens vier Tage, 0,5 Anteil. `[cmd]` **Der Reiter steht
 bei 6.898 ms.**
 
 **Wartet auf C-349.**
+
+## Auftrag — jetzt entblockt
+
+**Mitbeauftragt mit G-275 am 2026-08-30.** Bericht dort.
+
+`[cmd]` **`nutrition.reference_assessment_window_flags` ist seit dem
+30.08. live** (C-349). **Der Blocker ist weg.**
+
+`[read]` **Die Regeln stimmen mit deinem `flagVon` ueberein** — 80
+Prozent, mindestens vier Tage, 0,5 Anteil. `[cmd]` **Codex hat es
+belegt: dieselben zehn Flag-Zeilen, dieselben Tageszaehler.**
+
+`[read]` **Der Nachweis ist Ergebnisgleichheit** — dieselben Flags
+vor und nach der Umstellung. **Eine schnellere Anzeige mit anderen
+Zahlen waere keine Verbesserung.**
+
+`[cmd]` **Der Reiter stand zuletzt bei 6.898 ms, davon rund 895 ms
+Uebertragung von 8,3 MB `jsonb`.** **Miss vorher und nachher.**

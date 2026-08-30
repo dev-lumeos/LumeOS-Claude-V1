@@ -102,7 +102,11 @@ test('G-270: die Kacheln lesen echt, statt eine Marke zu tragen', () => {
   // Kacheln existieren und aus dem Log lesen.
   const s = ohneKommentare('src/app/v2/nutrition/plans-echt.tsx')
   for (const bauteil of [
-    'GhostEintraegeEcht', 'LebenszyklusEcht', 'EinhaltungEcht',
+    // G-274: `GhostEintraegeEcht` ist entfernt — sie zeigte
+    // Log-Zeilen und war damit am ersten Tag leer. Ersetzt durch
+    // `PlanEintraegeEcht` (eigene Datei), geprueft in
+    // `plan-bestaetigung.test.ts`.
+    'LebenszyklusEcht', 'EinhaltungEcht',
     'HerkunftEcht', 'EinkaufslisteEcht',
   ]) {
     assert.match(s, new RegExp(`export function ${bauteil}\\(`),

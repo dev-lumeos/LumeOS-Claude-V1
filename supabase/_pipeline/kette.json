@@ -1301,6 +1301,16 @@
         "059d",
         "342"
       ]
+    },
+    {
+      "id": "351",
+      "path": "supabase/_pipeline/13_supplements/351_supplement_tagesbilanz.sql",
+      "kind": "sql",
+      "creates": "C-163/C-351: Supplement-Tagesbilanz mit getrennten belegten und unbekannten Einnahmen",
+      "depends_on": [
+        "139",
+        "149"
+      ]
     }
   ]
 }

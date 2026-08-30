@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-154
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: []
@@ -41,3 +43,8 @@ zahlen: null
 
   `[cmd]` **Nicht `verborgeneTreffer`:** der zweite Aufruf ist auf
   kurze Trefferlisten begrenzt und laeuft bei 5.292 Treffern nicht.
+
+## Auftrag
+
+**Mitbeauftragt mit C-120 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 261 |
-| `laufend_codex` | 2 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 89 |
-| **gesamt** | **353** |
+| `todos` | 257 |
+| `laufend_codex` | 4 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 92 |
+| **gesamt** | **355** |
 
 ## medical — 41
 
@@ -57,7 +57,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 118
+## nutrition — 119
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -69,7 +69,7 @@
 | `C-08` | befund | mittel | [`services/nutrition-api` — der ADR gilt](todos/nutrition-c-0008-services-nutrition-api-der-adr-gilt.md) | offen | — | — |
 | `C-20` | feature | mittel | [Treffer am Wortanfang schlägt Treffer in der Wortmitte](erledigt/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md) | erledigt | — | — |
 | `C-24` | befund | niedrig | [Halbfertigprodukte ranken als Grundzutat](todos/nutrition-c-0024-halbfertigprodukte-ranken-als-grundzutat.md) | offen | — | — |
-| `C-27` | messung | mittel | [Alltagswörter ohne Treffer — noch zwei](todos/nutrition-c-0027-alltagsworter-ohne-treffer-noch-zwei.md) | offen | — | — |
+| `C-27` | messung | mittel | [Alltagswörter ohne Treffer — noch zwei](laufend_codex/nutrition-c-0027-alltagsworter-ohne-treffer-noch-zwei.md) | laeuft (codex) | — | — |
 | `C-29` | entscheidung | mittel | [Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt](todos/nutrition-c-0029-drei-namensschichten-und-eine-kuration-die-den-kettenlauf-uberlebt.md) | offen | — | — |
 | `C-30` | befund | mittel | [Suche und Trefferliste auf Arten umstellen](todos/nutrition-c-0030-suche-und-trefferliste-auf-arten-umstellen.md) | offen | — | — |
 | `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](todos/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | offen | — | — |
@@ -80,15 +80,15 @@
 | `C-102` | feature | mittel | [`milch` findet Joghurt statt Milch](erledigt/nutrition-c-0102-milch-findet-joghurt-statt-milch.md) | erledigt | — | — |
 | `C-109` | entscheidung | mittel | [Die Injektions-Grenzwerte sind unbelegt](todos/nutrition-c-0109-die-injektions-grenzwerte-sind-unbelegt.md) | offen | — | — |
 | `C-117` | befund | mittel | [`milch` traegt auch mit Vorlieben nicht](erledigt/nutrition-c-0117-milch-traegt-auch-mit-vorlieben-nicht.md) | erledigt | — | — |
-| `C-120` | befund | mittel | [Drei Sperren in `food_search`](todos/nutrition-c-0120-drei-sperren-in-food-search.md) | offen | — | — |
+| `C-120` | befund | mittel | [Drei Sperren in `food_search`](laufend_codex/nutrition-c-0120-drei-sperren-in-food-search.md) | laeuft (codex) | — | — |
 | `C-121` | befund | mittel | [Die Suche ist langsamer geworden](erledigt/nutrition-c-0121-die-suche-ist-langsamer-geworden.md) | erledigt | — | — |
 | `C-149` | blocker | mittel | [Vitamin D in IU gegen µg](erledigt/nutrition-c-0149-vitamin-d-in-iu-gegen-g.md) | erledigt | — | — |
 | `C-160` | befund | mittel | [Der Bewertungshorizont je Naehrstoff ist leer](todos/nutrition-c-0160-der-bewertungshorizont-je-naehrstoff-ist-leer.md) | offen | — | — |
-| `C-163` | befund | mittel | [94 Substanzen ohne maschinenlesbare Naehrstoffmenge](laufend_codex/nutrition-c-0163-94-substanzen-ohne-maschinenlesbare-naehrstoffmenge.md) | laeuft (codex) | — | — |
+| `C-163` | befund | mittel | [94 Substanzen ohne maschinenlesbare Naehrstoffmenge](erledigt/nutrition-c-0163-94-substanzen-ohne-maschinenlesbare-naehrstoffmenge.md) | erledigt | — | — |
 | `C-174` | befund | mittel | [`ADR_NUTRITION_PREFERENCES_V1` kennt drei Constraint-Stufen](todos/nutrition-c-0174-adr-nutrition-preferences-v1-kennt-drei-constraint-stufen.md) | offen | — | — |
 | `C-175` | feature | mittel | [`shopping_lists` fehlt](erledigt/nutrition-c-0175-shopping-lists-fehlt.md) | erledigt | — | — |
-| `C-177` | messung | mittel | [Thai-Aliase fehlen bewusst](todos/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | offen | — | — |
-| `C-191` | messung | mittel | [`p_user_id` kostet das Dreifache](todos/nutrition-c-0191-p-user-id-kostet-das-dreifache.md) | offen | — | — |
+| `C-177` | messung | mittel | [Thai-Aliase fehlen bewusst](laufend_codex/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | laeuft (codex) | — | — |
+| `C-191` | messung | mittel | [`p_user_id` kostet das Dreifache](laufend_codex/nutrition-c-0191-p-user-id-kostet-das-dreifache.md) | laeuft (codex) | — | — |
 | `C-192` | befund | mittel | [`p_user_id` kostet in `food_search` das Dreifache](erledigt/nutrition-c-0192-p-user-id-kostet-in-food-search-das-dreifache.md) | erledigt | — | — |
 | `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](todos/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | offen | — | — |
 | `C-210` | befund | mittel | [Die 28 fehlenden Naehrstofftexte — was ist gemeint?](todos/nutrition-c-0210-die-28-fehlenden-naehrstofftexte-was-ist-gemeint.md) | offen | — | — |
@@ -176,13 +176,14 @@
 | `G-270` | befund | mittel | [Drei Attrappen im Meal-plans-Reiter](erledigt/nutrition-g-0270-drei-attrappen-im-meal-plans-reiter.md) | erledigt | — | G-274 |
 | `G-271` | messung | hoch | [Meal plans und Planner gegen die Quellen halten](erledigt/nutrition-g-0271-meal-plans-und-planner-gegen-die-quellen-halten.md) | erledigt | — | — |
 | `G-272` | feature | hoch | [`+ Add` braucht ein Erfassungsmodal](erledigt/nutrition-g-0272-add-braucht-ein-erfassungsmodal.md) | erledigt | — | — |
-| `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](todos/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | offen | — | C-349 |
-| `G-274` | feature | hoch | [der Bestaetigungsweg fuer Plan-Eintraege](laufend_claudecode/nutrition-g-0274-der-bestaetigungsweg-fuer-plan-eintraege.md) | laeuft (claudecode) | — | — |
+| `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](laufend_claudecode/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | laeuft (claudecode) | — | C-349 |
+| `G-274` | feature | hoch | [der Bestaetigungsweg fuer Plan-Eintraege](erledigt/nutrition-g-0274-der-bestaetigungsweg-fuer-plan-eintraege.md) | erledigt | — | G-276 |
+| `G-276` | befund | mittel | [MealCam schreibt `confirmation_mode` ohne Fotoweg](todos/nutrition-g-0276-mealcam-schreibt-ohne-fotoweg.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 54
+## supplements — 55
 
-### beauftragbar — 53
+### beauftragbar — 54
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -221,7 +222,7 @@
 | `C-326` | messung | hoch | [C-129 auf die verbleibende Luecke neu fassen](erledigt/supplements-c-0326-c-129-neu-fassen.md) | erledigt | — | — |
 | `C-329` | befund | mittel | [`input_coverage_status` ist eine Selbsteinschaetzung, keine Zusage](todos/supplements-c-0329-input-coverage-status-ist-keine-zusage.md) | offen | — | — |
 | `C-341` | entscheidung | mittel | [was passiert mit gemeldeten Community-Beitraegen?](todos/supplements-c-0341-was-passiert-mit-gemeldeten-community-beitraegen.md) | offen | — | — |
-| `C-351` | feature | hoch | [Supplements braucht eine Tagesbilanz](laufend_codex/supplements-c-0351-supplements-braucht-eine-tagesbilanz.md) | laeuft (codex) | — | — |
+| `C-351` | feature | hoch | [Supplements braucht eine Tagesbilanz](erledigt/supplements-c-0351-supplements-braucht-eine-tagesbilanz.md) | erledigt | — | G-275 |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -238,6 +239,7 @@
 | `G-240` | befund | hoch | [der massgebliche Supplements-Mockup ist ungelesen](erledigt/supplements-g-0240-der-massgebliche-supplements-mockup-ist-ungelesen.md) | erledigt | — | A-59, G-253 |
 | `G-253` | feature | hoch | [Stacks und Compliance anbinden](erledigt/supplements-g-0253-stacks-und-compliance-anbinden.md) | erledigt | — | G-255 |
 | `G-255` | entscheidung | niedrig | [drei Attrappen-Konstanten ohne Aufrufer](erledigt/supplements-g-0255-drei-attrappen-konstanten-ohne-aufrufer.md) | erledigt | — | — |
+| `G-275` | feature | hoch | [die Supplement-Tagesbilanz anzeigen](laufend_claudecode/supplements-g-0275-die-tagesbilanz-anzeigen.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1

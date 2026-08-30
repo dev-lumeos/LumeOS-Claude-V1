@@ -8,6 +8,8 @@ braucht: []
 kind_von: C-165
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: []
@@ -27,3 +29,8 @@ zahlen: null
   `[read]` **Richtig entschieden.** `[cmd]` **Die 138 `name_th` sind
   da**, die Umgangsnamen nicht. **Tom lebt in Thailand** — er kann sie
   liefern oder pruefen.
+
+## Auftrag
+
+**Mitbeauftragt mit C-120 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

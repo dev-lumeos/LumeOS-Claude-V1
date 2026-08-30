@@ -207,48 +207,16 @@ export function PlanBibliothekEcht({ d }: { d: PlanDaten }) {
 
 // ══ G-267 ff.: die drei Kacheln, die bis heute Attrappe waren ══════
 
-/**
- * Die heutigen Plan-Eintraege und ihr Zustand — G-270.
- *
- * `[cmd]` **Der Status kommt aus `meal_plan_logs`, nicht aus
- * `meal_plan_entries`** — der Eintrag ist die Vorlage, das Log die
- * Ausfuehrung. **Wer am Eintrag sucht, findet keinen Status und haelt
- * ihn fuer fehlend.**
- *
- * `[cmd]` **Gemessen am 2026-08-30: `meal_plan_logs` hat 0 Zeilen.**
- * `[read]` **Also ein Leerzustand, keine erfundenen Zahlen** — die
- * Kachel sagt, was fehlt, statt eine Quote zu behaupten.
- */
-export function GhostEintraegeEcht({ logs }: { logs: readonly LogZeile[] }) {
-  const heute = logs.filter(l => l.status === 'pending')
-  return (
-    <Card
-      title="Heutige Plan-Einträge"
-      sub={logs.length === 0
-        ? 'aus meal_plan_logs'
-        : `${heute.length} offen · aus meal_plan_logs`}
-    >
-      {logs.length === 0 ? (
-        <div className="v2-hinweis">{KEIN_LOG_SATZ}</div>
-      ) : (
-        <div className="v2-col-gap" style={{ gap: 6 }}>
-          {logs.map((l, i) => (
-            <div key={`${l.execution_date}-${i}`}
-                 style={{
-                   display: 'flex', alignItems: 'center', gap: 8,
-                   padding: '6px 9px', borderRadius: 6, fontSize: 11.5,
-                   background: 'var(--surface)', border: '1px solid var(--border)',
-                 }}>
-              <span className="v2-num v2-dim">{l.execution_date}</span>
-              <span style={{ flex: 1 }}>{l.status}</span>
-              {l.confirmation_mode && <Pill>{l.confirmation_mode}</Pill>}
-            </div>
-          ))}
-        </div>
-      )}
-    </Card>
-  )
-}
+// ══ G-274: `GhostEintraegeEcht` ist entfernt ═══════════════════════
+//
+// `[cmd]` **Sie zeigte Log-Zeilen** — und war damit am ersten Tag
+// leer, weil ein Eintrag ohne Log gar nicht vorkam. `[read]` **Der
+// Eintrag ist die Vorlage, das Log die Ausfuehrung:** was gezeigt
+// werden muss, sind die Eintraege des Tages MIT ihrem Zustand.
+//
+// `[cmd]` **Ersetzt durch `PlanEintraegeEcht`** in
+// `plan-eintraege.tsx` — mit den Knoepfen aus Flow 4. **Geloescht,
+// nicht auskommentiert** (A-59); git holt sie zurueck.
 
 /**
  * Der Lebenszyklus DIESES Plans — G-270.

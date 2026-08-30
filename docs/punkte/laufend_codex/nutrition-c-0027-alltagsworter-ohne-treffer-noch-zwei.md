@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: ["docs/ssot/daten/wortschatz-luecke.json"]
@@ -42,3 +44,8 @@ zahlen: null
   `vollkornreis` -> `Reis unpoliert, roh` und `vollkornnudeln` ->
   `Vollkorneierteigwaren roh` ebenfalls. **Offen bleiben zwei:**
   `basmatireis` und `griechischer joghurt`, beide weiterhin null Treffer.
+
+## Auftrag
+
+**Mitbeauftragt mit C-120 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.
