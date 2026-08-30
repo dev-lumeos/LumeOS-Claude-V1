@@ -8,7 +8,7 @@ braucht: []
 kind_von: A-37
 entscheidung: null
 erledigt: 2026-08-30
-commit: OFFEN
+commit: 3ff91754
 beruehrt:
   dateien: [docs/specs/Nutrition/04_adrs]
 zahlen:
