@@ -10,7 +10,7 @@ kinder: []
 entscheidung: null
 beruehrt:
   tabellen: []
-  dateien: ["docs/auftraege/00-LIESMICH.md"]
+  dateien: ["docs/punkte/00-LIESMICH.md"]
 zahlen: null
 ---
 
@@ -55,4 +55,4 @@ zahlen: null
   und warm dreimal mit **298 / 292 / 297** — **Faktor 14.**
   `/v2/supplements` brauchte kalt 8.050 ms. **Laufzeitmessungen
   brauchen einen warmen Server; der erste Lauf je Route wird
-  verworfen.** Gehoert nach `docs/auftraege/00-LIESMICH.md`.
+  verworfen.** Gehoert nach `docs/punkte/00-LIESMICH.md`.

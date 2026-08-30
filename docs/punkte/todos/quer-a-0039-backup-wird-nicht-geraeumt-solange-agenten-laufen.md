@@ -10,7 +10,7 @@ kinder: []
 entscheidung: null
 beruehrt:
   tabellen: []
-  dateien: ["docs/todo/LAUFEND.md"]
+  dateien: ["docs/punkte/00-LIESMICH.md"]
 zahlen: null
 ---
 

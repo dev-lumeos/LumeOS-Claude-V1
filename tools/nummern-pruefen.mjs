@@ -11,8 +11,6 @@
 //   dublette-erledigt   Dubletten innerhalb von ERLEDIGT.md
 //   beide-dateien       Nummern, die in beiden Dateien stehen
 //   haken-in-todo       Abgehakte Punkte, die in TODO.md liegengeblieben sind
-//   laufend-unbekannt   LAUFEND.md nennt eine Nummer, die nirgends angelegt ist
-//   laufend-erledigt    LAUFEND.md fuehrt einen Auftrag, der schon erledigt ist
 //   kopfzaehler         Den Zaehler im TODO-Kopf gegen die Datei
 //   uebersicht-veraltet 00-UEBERSICHT.md gegen den Bestand in TODO.md
 //
@@ -37,10 +35,7 @@ const WURZEL = resolve(process.cwd())
 const PFAD = {
   todo: resolve(WURZEL, 'docs/todo/TODO.md'),
   erledigt: resolve(WURZEL, 'docs/todo/ERLEDIGT.md'),
-  laufend: resolve(WURZEL, 'docs/todo/LAUFEND.md'),
   uebersicht: resolve(WURZEL, 'docs/todo/00-UEBERSICHT.md'),
-  auftraege: resolve(WURZEL, 'docs/auftraege'),
-  berichte: resolve(WURZEL, 'docs/berichte'),
   ssot: resolve(WURZEL, 'docs/ssot'),
   ssotIndex: resolve(WURZEL, 'docs/ssot/00-INDEX.md')
 }
@@ -73,9 +68,6 @@ function nummernAusOrdner (pfad) {
 
 const ZEILE = /^[ \t]*- \[( |x|~)\] \*\*([A-Z]+-\d+[a-z]?):/
 
-// In LAUFEND.md stehen die Auftraege in Tabellenzeilen, fett gesetzt und
-// ohne Doppelpunkt: | **C-185** Peptide ... | `supabase/` |
-const LAUFEND_NR = /\*\*([A-Z]+-\d+[a-z]?)\*\*/g
 
 function punkte (text) {
   const aus = []
@@ -195,9 +187,14 @@ function pruefe (texte) {
     }
   }
 
-  // LAUFEND.md sagt, wer woran arbeitet. Steht dort eine Nummer, die es
-  // nicht gibt, oder ein Auftrag, der laengst in ERLEDIGT.md liegt, dann
-  // schickt die Datei jemanden auf eine Arbeit, die keine mehr ist.
+  // LAUFEND.md ist am 2026-08-29 entfallen (A-61). Tom: "laufend gibt
+  // es nicht mehr wir arbeiten nur noch mit punkten" -- der Zustand
+  // steckt seither im Ordnernamen unter docs/punkte/, und
+  // punkte-pruefen.mjs prueft ihn dort. Die beiden Pruefungen
+  // laufend-unbekannt und laufend-erledigt sind damit gegenstandslos.
+  //
+  // Die Hilfsdaten darunter bleiben: braucht und offenNr tragen die
+  // Reihenfolgepruefung fuer docs/auftraege/.
   const angelegt = new Set([...offen, ...fertig].map(p => p.nr))
   const braucht = new Map(
     [...offen, ...fertig]
@@ -205,61 +202,6 @@ function pruefe (texte) {
       .map(p => [p.nr, p.braucht])
   )
   const offenNr = new Set(offen.map(p => p.nr))
-  for (const nr of new Set([...texte.laufend.matchAll(LAUFEND_NR)].map(m => m[1]))) {
-    if (!angelegt.has(nr)) {
-      fehler.push({
-        pruefung: 'laufend-unbekannt',
-        text: `LAUFEND.md nennt ${nr} -- angelegt ist die Nummer weder in TODO.md noch in ERLEDIGT.md.`
-      })
-    } else if (!offenNr.has(nr)) {
-      fehler.push({
-        pruefung: 'laufend-erledigt',
-        text: `LAUFEND.md fuehrt ${nr} als Auftrag, der Punkt steht in ERLEDIGT.md.`
-      })
-    }
-  }
-
-  // `docs/auftraege/` sagt seit 2026-08-23, was verlangt wurde. Eine
-  // Auftragsdatei ohne Punkt im Register ist verloren -- so ist C-186
-  // verschwunden. Geprueft wird die Nummer aus dem Dateinamen; ein
-  // Auftrag darf weitere Punkte mitnehmen.
-  const berichtNr = new Set(texte.berichte.map(b => b.nr))
-  const auftragNr = new Set(texte.auftraege.map(a => a.nr))
-  for (const a of texte.auftraege) {
-    if (!angelegt.has(a.nr)) {
-      fehler.push({
-        pruefung: 'auftrag-ohne-punkt',
-        text: `docs/auftraege/${a.datei} traegt ${a.nr} -- angelegt ist die Nummer weder in TODO.md noch in ERLEDIGT.md.`
-      })
-    } else if (!offenNr.has(a.nr) && !berichtNr.has(a.nr)) {
-      // `[read]` Der Punkt ist geschlossen, aber es liegt kein Bericht
-      // daneben. Dann ist er entweder ohne Nachweis abgenommen worden,
-      // oder der Bericht ist verlorengegangen -- beides ist ein Befund.
-      fehler.push({
-        pruefung: 'auftrag-ohne-bericht',
-        text: `${a.nr} ist erledigt, aber docs/berichte/ traegt keinen Bericht dazu (Auftrag: ${a.datei}).`
-      })
-    }
-  }
-
-  // Ein Auftrag darf nicht rausgehen, solange eine Vorbedingung offen
-  // ist. Am 2026-08-25 ging C-272 raus -- Anreicherung des Katalogs --,
-  // waehrend dem Katalog 128 Substanzen fehlten, darunter Testosteron
-  // mit allen Estern. Nichts hat es verhindert, weil die Reihenfolge
-  // nur im Kopf des Orchestrators stand.
-  //
-  // `braucht: C-275, C-276` in der ersten Zeile des Punktrumpfes.
-  for (const a of texte.auftraege) {
-    const vor = braucht.get(a.nr)
-    if (!vor) continue
-    const offeneVor = vor.filter(nr => offenNr.has(nr))
-    if (offeneVor.length) {
-      fehler.push({
-        pruefung: 'auftrag-vor-vorbedingung',
-        text: `docs/auftraege/${a.datei} traegt ${a.nr}, aber ${offeneVor.join(', ')} ist noch offen. Eine Reihenfolge, die nirgends steht, ist keine.`
-      })
-    }
-  }
 
   // Eine Vorbedingung, die es nicht gibt, ist ein Tippfehler -- und
   // waere sonst eine Pruefung, die stillschweigend nichts tut.
@@ -271,19 +213,6 @@ function pruefe (texte) {
           text: `${nr} braucht ${v} -- diese Nummer ist weder in TODO.md noch in ERLEDIGT.md angelegt.`
         })
       }
-    }
-  }
-
-  // Die Gegenrichtung: ein Bericht ohne Auftrag heisst, dass jemand
-  // gearbeitet hat, ohne dass nachlesbar ist, was verlangt war. Genau
-  // diese Luecke hat am 2026-08-23 einen Auftragsfehler beinahe zu
-  // einem Agentenfehler gemacht (C-245).
-  for (const b of texte.berichte) {
-    if (!auftragNr.has(b.nr) && !BERICHTE_OHNE_AUFTRAG.has(b.nr)) {
-      fehler.push({
-        pruefung: 'bericht-ohne-auftrag',
-        text: `docs/berichte/${b.datei} traegt ${b.nr}, aber docs/auftraege/ hat keinen Auftrag dazu.`
-      })
     }
   }
 
@@ -344,10 +273,7 @@ function lesen () {
   return {
     todo: readFileSync(PFAD.todo, 'utf8'),
     erledigt: readFileSync(PFAD.erledigt, 'utf8'),
-    laufend: readFileSync(PFAD.laufend, 'utf8'),
-    uebersicht: existsSync(PFAD.uebersicht) ? readFileSync(PFAD.uebersicht, 'utf8') : null,
-    auftraege: nummernAusOrdner(PFAD.auftraege),
-    berichte: nummernAusOrdner(PFAD.berichte),
+      uebersicht: existsSync(PFAD.uebersicht) ? readFileSync(PFAD.uebersicht, 'utf8') : null,
     ssotDateien: existsSync(PFAD.ssot)
       ? readdirSync(PFAD.ssot).filter(n => n.endsWith('.md') && n !== '00-INDEX.md')
       : [],
@@ -397,16 +323,6 @@ function faelle (basis) {
       bau: t => ({ ...t, todo: `${t.todo}\n- [x] **ZZ-998: abgehakt und liegengeblieben**\n` })
     },
     {
-      pruefung: 'laufend-unbekannt',
-      was: 'LAUFEND.md nennt eine Nummer, die es nicht gibt',
-      bau: t => ({ ...t, laufend: `${t.laufend}\n| **ZZ-997** nie angelegt | \`nirgends\` |\n` })
-    },
-    {
-      pruefung: 'laufend-erledigt',
-      was: `LAUFEND.md fuehrt ${inErledigt}, das erledigt ist`,
-      bau: t => ({ ...t, laufend: `${t.laufend}\n| **${inErledigt}** laengst erledigt | \`supabase/\` |\n` })
-    },
-    {
       pruefung: 'uebersicht-veraltet',
       was: '00-UEBERSICHT.md steht auf einem alten Bestand',
       bau: t => ({ ...t, uebersicht: `${t.uebersicht}\n| **ZZ-996** von Hand angefasst | offen | 1 |\n` })
@@ -415,31 +331,6 @@ function faelle (basis) {
       pruefung: 'kopfzaehler',
       was: 'Kopfzaehler um eins verstellt',
       bau: t => ({ ...t, todo: kopfAnpassen(t.todo, 1) })
-    },
-    {
-      pruefung: 'auftrag-ohne-punkt',
-      was: 'eine Auftragsdatei traegt eine Nummer, die es nicht gibt',
-      bau: t => ({
-        ...t,
-        auftraege: [...t.auftraege, { datei: 'zz-995-erfunden.md', nr: 'ZZ-995' }]
-      })
-    },
-    {
-      pruefung: 'auftrag-ohne-bericht',
-      was: `${inErledigt} ist erledigt, aber ohne Bericht`,
-      bau: t => ({
-        ...t,
-        auftraege: [...t.auftraege, { datei: `${inErledigt.toLowerCase()}-niemand.md`, nr: inErledigt }],
-        berichte: t.berichte.filter(b => b.nr !== inErledigt)
-      })
-    },
-    {
-      pruefung: 'bericht-ohne-auftrag',
-      was: 'ein Bericht liegt da, ohne dass ein Auftrag nachlesbar ist',
-      bau: t => ({
-        ...t,
-        berichte: [...t.berichte, { datei: 'zz-993-irgendwer.md', nr: 'ZZ-993' }]
-      })
     },
     {
       pruefung: 'ssot-ohne-index',

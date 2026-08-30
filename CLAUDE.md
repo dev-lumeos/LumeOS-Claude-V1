@@ -71,7 +71,7 @@ der steht schon in der ersten Spalte.
 **Tom, 2026-08-22:** *„und der update von ssot ist auch dein job"*
 
 **Agenten schreiben nichts in `docs/`.** Kein `TODO.md`, kein
-`ERLEDIGT.md`, kein `LAUFEND.md`, **und keinen SSOT-Bericht**. Der
+`ERLEDIGT.md`, **und keinen SSOT-Bericht**. Der
 Bericht geht als Text in den Chat; der Orchestrator prueft die
 tragenden Zahlen selbst und schreibt daraus, was er geprueft hat.
 
@@ -89,7 +89,7 @@ hat.
 Codex hatten `TODO.md`, `ERLEDIGT.md`, `00-UEBERSICHT.md` und
 `00-INDEX.md` gleichzeitig offen, waehrend der Orchestrator dieselben
 Dateien schreiben wollte. `[read]` **Die Regel stand in der
-Bereichstabelle von `LAUFEND.md` — der Agent liest `LAUFEND.md` nicht,
+Bereichstabelle einer Uebersichtsdatei — der Agent liest keine Uebersicht,
 er liest seinen Auftrag.** Deshalb steht sie ab jetzt in jedem Auftrag.
 
 ### Nachweisdateien in `backup/` gehoeren derselben Encoding-Regel
@@ -145,9 +145,13 @@ mitgetaeuscht.**
 **Tom, 2026-08-23:** *„diese berichte gehoeren sowieso protokolliert
 ins repo."*
 
-**Der Agent legt seinen Bericht unter `docs/berichte/` ab** —
-`<nummer>-<agent>.md`, roh und unbearbeitet, so wie er ihn schreibt.
-Der Orchestrator prueft ihn und schreibt daraus den SSOT-Bericht.
+**Der Agent haengt seinen Bericht an die Punktdatei** — unter
+`## Bericht`, roh und unbearbeitet. Der Orchestrator prueft ihn und
+schreibt seine Abnahme darunter.
+
+`[read]` **Berichtigt 2026-08-29 (A-61):** bis dahin lag er unter
+`docs/berichte/`. **Auftrag, Bericht und Abnahme stehen jetzt in
+derselben Datei.**
 
 `[read]` **Das schaerft die Regel darueber, statt sie aufzuheben.** Ihr
 Kern stimmt: der Agent schreibt nicht den SSOT — dort steht, was
@@ -672,22 +676,30 @@ RSS, /login ohne Antwort).
   Instanzen, der frische Server stand in 6 s, /login antwortet seither
   in 0,1 s. Log: `backup/dev-server.log`.
 
-### Wer arbeitet woran: `docs/todo/LAUFEND.md`
+### Wer arbeitet woran: der Ordnername
 
-**Tom, 2026-08-20:** *,Du hast es nicht mal mehr im Griff zu wissen,
-welcher Agent noch laeuft — nicht mal den simpelsten Scheiss
-orchestrierst du richtig, wie eine laufende Todoliste, wo du
-nachschauen kannst, was wo laeuft."*
+**Tom, 2026-08-20:** *,,Du hast es nicht mal mehr im Griff zu wissen,
+welcher Agent noch laeuft."*
 
-`[cmd]` **`docs/todo/LAUFEND.md` fuehrt drei Tabellen:** wer gerade
-arbeitet, was auf einen freien Agenten wartet, **und welcher Bereich
-wem gehoert.**
+**Tom, 2026-08-29:** *,,laufend gibt es nicht mehr wir arbeiten nur
+noch mit punkten"*.
 
-**Vor jedem neuen Auftrag: nachsehen.**
-**Nach jedem Bericht: Zeile streichen.**
+`[cmd]` **Eine Punktdatei in `docs/punkte/laufend_codex/` oder
+`laufend_claudecode/` ist ein laufender Auftrag.** **Der Zustand
+steckt im Ordnernamen, nicht in einer Tabelle.**
 
-`[read]` **Der Orchestrator hat es bis dahin im Kopf gefuehrt und sich
-geirrt** — einen Auftrag an einen besetzten Agenten geschrieben.
+`[read]` **Warum die Tabelle weg ist:** sie war handgepflegt und am
+2026-08-23 dreimal falsch — sie fuehrte G-160, G-161 und C-235 als
+laufend, obwohl alle drei fertig waren. `[cmd]` **Gefunden hat es ein
+Waechter, nicht der Orchestrator.**
+
+*Regeln, die berichtet statt erzwungen werden, brechen.*
+
+**Wem welcher Bereich gehoert:**
+
+    supabase/_pipeline/          Codex
+    apps/web/src/app/v2/<modul>  je ein UI-Agent
+    docs/                        Orchestrator
 
 ## Nach jedem Bericht: nachtragen, ungefragt
 
@@ -1041,7 +1053,7 @@ Index, ein Committer.
   eine interaktive Python-Sitzung.** `[cmd]` Am 2026-08-23 hat der Weg über
   stdin einer PowerShell-Sitzung 78 doppelt kodierte Sequenzen in
   `TODO.md` und `ERLEDIGT.md` erzeugt und den Commit blockiert — dieselbe
-  Sitzung schrieb `LAUFEND.md` über das Datei-Werkzeug sauber. Der
+  Sitzung schrieb die Uebersicht über das Datei-Werkzeug sauber. Der
   Python-Aufruf war korrekt (`encoding="utf-8"`); der Text kam bereits
   beschädigt an. Hergang: `docs/ssot/32-encoding-schaeden.md`.
 - Aussagen über den Ist-Zustand tragen `[cmd]`, `[read]` oder `[annahme]` —

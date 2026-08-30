@@ -10,7 +10,7 @@ kinder: []
 entscheidung: null
 beruehrt:
   tabellen: ["medical.symptoms"]
-  dateien: ["docs/berichte/g-207-claude-code.md"]
+  dateien: ["docs/_archive/berichte/g-207-claude-code.md"]
 zahlen: null
 ---
 
@@ -20,7 +20,7 @@ zahlen: null
 
 (neu
   2026-08-27). Aus G-207, Entwurf steht in
-  `docs/berichte/g-207-claude-code.md`.
+  `docs/_archive/berichte/g-207-claude-code.md`.
 
   `[cmd]` **`medical.symptoms` ist ein Katalog von 34 Symptomarten**
   — `symptom_id`, `slug`, `name_de/_en/_th`. **Es gibt keine Tabelle

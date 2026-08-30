@@ -10,7 +10,7 @@ kinder: []
 entscheidung: null
 beruehrt:
   tabellen: []
-  dateien: ["docs/auftraege/00-LIESMICH.md"]
+  dateien: ["docs/punkte/00-LIESMICH.md"]
 zahlen: null
 ---
 
@@ -37,7 +37,7 @@ zahlen: null
   ohne Stichtag. **Beide sehen aus wie Fakten und sind
   Momentaufnahmen.**
 
-  **Zu tun:** in `docs/auftraege/00-LIESMICH.md` neben die
+  **Zu tun:** in `docs/punkte/00-LIESMICH.md` neben die
   `[cmd]`-Regel. `[read]` **Und pruefen, ob ein Waechter moeglich
   ist** — Berichte mit `ms` oder `s` ohne Kontoangabe. Wenn nicht:
   in die Auftragsvorlage.
