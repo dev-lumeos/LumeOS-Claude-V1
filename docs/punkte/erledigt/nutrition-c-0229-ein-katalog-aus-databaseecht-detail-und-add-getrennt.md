@@ -11,7 +11,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
 erledigt: 2026-08-30
-commit: OFFEN
+commit: 7136eabd
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/tabs.tsx

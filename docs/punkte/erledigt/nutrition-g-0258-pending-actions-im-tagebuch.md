@@ -10,7 +10,7 @@ entscheidung: E-29
 agent: claudecode
 beauftragt: 2026-08-30
 erledigt: 2026-08-30
-commit: OFFEN
+commit: 7136eabd
 beruehrt:
   tabellen: [coach.pending_actions]
 zahlen: null

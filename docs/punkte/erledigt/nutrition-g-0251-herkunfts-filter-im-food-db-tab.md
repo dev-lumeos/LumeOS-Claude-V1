@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
 erledigt: 2026-08-30
-commit: OFFEN
+commit: 7136eabd
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-foods.tsx
