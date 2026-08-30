@@ -31,6 +31,13 @@ import * as React from 'react'
 import { Card, Pill, Row } from '@lumeos/ui'
 
 import type { PlanDaten } from '../../../lib/nutrition/plan-lesen'
+import {
+  herkunftVon, HERKUNFT_TEXT, HERKUNFT_UNBEKANNT_SATZ,
+  zyklusVon, ZYKLUS_TEXT, ZYKLUS_ERKLAERUNG,
+  statusText, bearbeitbarkeit,
+  KEIN_LOG_SATZ, KEINE_EINKAUFSLISTE_SATZ,
+  einhaltungVon, quoteVon, type LogZeile,
+} from '../../../lib/nutrition/plan-lage'
 
 /** Eine Zahl in deutscher Schreibweise, oder ein Strich. */
 function zahl(n: number | null | undefined): string {
@@ -127,14 +134,20 @@ export function PlanEinstellungenEcht({ d }: { d: PlanDaten }) {
       <Row label="Wochen" value={zahl(z.wochen)} />
       <Row label="Tage gesamt" value={zahl(z.tage)} />
       <Row label="Einträge" value={zahl(z.eintraege)} />
-      <Row label="Zustand" value={d.plan?.is_active ? 'aktiv' : 'pausiert'} />
-      <div className="v2-divider" />
-      <p className="v2-muted" style={{ fontSize: 11, lineHeight: 1.55 }}>
-        <strong>Lebenszyklus, Startdatum und Bestätigungsmodus fehlen im
-        Schema.</strong> Die Vorlage zeigt sie; `meal_plans` führt dafür
-        keine Spalten. Sie stehen deshalb hier nicht — auch nicht als
-        Strich, denn ein Strich hiesse „leer" statt „gibt es nicht".
-      </p>
+      {/* `[cmd]` **G-267, 2026-08-30: der Zustand kommt jetzt aus
+          `status`**, nicht mehr aus `is_active` — fuenf Werte statt
+          zwei (`assigned`, `active`, `completed`, `paused`,
+          `archived`). */}
+      <Row label="Zustand"
+           value={d.plan ? statusText(d.plan.status) : '—'} />
+      {/* `[cmd]` **Hier stand bis zum 2026-08-30:** *„Lebenszyklus,
+          Startdatum und Bestaetigungsmodus fehlen im Schema."*
+          **Das stimmt nicht mehr** — Codex hat die sechs Spalten und
+          `meal_plan_logs` eingespielt, am selben Tag nachgemessen.
+          `[read]` **Der Satz stand vier Wochen richtig und wurde an
+          dem Tag falsch, an dem das Schema kam** — genau die Klasse
+          von Kommentar, die still altert. Der Lebenszyklus steht
+          jetzt in einer eigenen Kachel. */}
     </Card>
   )
 }
@@ -187,6 +200,164 @@ export function PlanBibliothekEcht({ d }: { d: PlanDaten }) {
           </div>
         ))}
       </div>
+    </Card>
+  )
+}
+
+
+// ══ G-267 ff.: die drei Kacheln, die bis heute Attrappe waren ══════
+
+/**
+ * Die heutigen Plan-Eintraege und ihr Zustand — G-270.
+ *
+ * `[cmd]` **Der Status kommt aus `meal_plan_logs`, nicht aus
+ * `meal_plan_entries`** — der Eintrag ist die Vorlage, das Log die
+ * Ausfuehrung. **Wer am Eintrag sucht, findet keinen Status und haelt
+ * ihn fuer fehlend.**
+ *
+ * `[cmd]` **Gemessen am 2026-08-30: `meal_plan_logs` hat 0 Zeilen.**
+ * `[read]` **Also ein Leerzustand, keine erfundenen Zahlen** — die
+ * Kachel sagt, was fehlt, statt eine Quote zu behaupten.
+ */
+export function GhostEintraegeEcht({ logs }: { logs: readonly LogZeile[] }) {
+  const heute = logs.filter(l => l.status === 'pending')
+  return (
+    <Card
+      title="Heutige Plan-Einträge"
+      sub={logs.length === 0
+        ? 'aus meal_plan_logs'
+        : `${heute.length} offen · aus meal_plan_logs`}
+    >
+      {logs.length === 0 ? (
+        <div className="v2-hinweis">{KEIN_LOG_SATZ}</div>
+      ) : (
+        <div className="v2-col-gap" style={{ gap: 6 }}>
+          {logs.map((l, i) => (
+            <div key={`${l.execution_date}-${i}`}
+                 style={{
+                   display: 'flex', alignItems: 'center', gap: 8,
+                   padding: '6px 9px', borderRadius: 6, fontSize: 11.5,
+                   background: 'var(--surface)', border: '1px solid var(--border)',
+                 }}>
+              <span className="v2-num v2-dim">{l.execution_date}</span>
+              <span style={{ flex: 1 }}>{l.status}</span>
+              {l.confirmation_mode && <Pill>{l.confirmation_mode}</Pill>}
+            </div>
+          ))}
+        </div>
+      )}
+    </Card>
+  )
+}
+
+/**
+ * Der Lebenszyklus DIESES Plans — G-270.
+ *
+ * `[read]` **Bisher stand hier eine Legende ueber drei Woerter.**
+ * Jetzt steht da, was fuer den vorliegenden Plan gilt — und bei den
+ * Bestandsplaenen, dass nichts hinterlegt ist.
+ */
+export function LebenszyklusEcht({ d }: { d: PlanDaten }) {
+  const p = d.plan
+  if (!p) return null
+  const z = zyklusVon(p.lifecycle_type)
+  return (
+    <Card title="Lebenszyklus" sub={statusText(p.status)}>
+      <Row label="Zyklus" value={ZYKLUS_TEXT[z]} />
+      {p.start_date && <Row label="Start" value={p.start_date} />}
+      {p.days_count !== null && <Row label="Dauer" value={`${p.days_count} Tage`} />}
+      {z === 'rollover' && p.rollover_count !== null && (
+        <Row label="Durchläufe" value={String(p.rollover_count)} />
+      )}
+      <div className="v2-hinweis" style={{ marginTop: 8 }}>
+        {ZYKLUS_ERKLAERUNG[z]}
+      </div>
+    </Card>
+  )
+}
+
+/**
+ * Die Einhaltung ueber den Zeitraum — G-270.
+ *
+ * `[read]` **Ohne entschiedene Zeilen gibt es keine Quote, nicht null
+ * Prozent** — dieselbe Regel wie in C-323.
+ */
+export function EinhaltungEcht({ logs }: { logs: readonly LogZeile[] }) {
+  const e = einhaltungVon(logs)
+  const q = quoteVon(e)
+  return (
+    <Card title="Einhaltung" sub="aus meal_plan_logs">
+      {q === null ? (
+        <div className="v2-hinweis">{KEIN_LOG_SATZ}</div>
+      ) : (
+        <>
+          <div className="v2-num" style={{ fontSize: 22 }}>{q} %</div>
+          <div style={{ display: 'flex', gap: 14, marginTop: 8, fontSize: 11 }}
+               className="v2-dim">
+            <span>bestätigt {e.bestaetigt}</span>
+            <span>abgewichen {e.abgewichen}</span>
+            <span>ausgelassen {e.ausgelassen}</span>
+          </div>
+        </>
+      )}
+    </Card>
+  )
+}
+
+/**
+ * Herkunft und Bearbeitungsrecht — G-268 / G-269.
+ *
+ * `[cmd]` **Die Freigabe kommt aus
+ * `coach.darf_nutrition_plan_aendern`** (E-29), nicht aus
+ * `coach.client_autonomy`. `[cmd]` **Gemessen am 2026-08-30: `dev`
+ * steht auf Stufe 3 und bekommt `false`.**
+ *
+ * `[read]` **Der Reiter sagt WARUM gesperrt ist, nicht nur DASS** —
+ * ein ausgegrauter Knopf ohne Begruendung ist eine Sackgasse.
+ */
+export function HerkunftEcht({
+  d, coachFreigabe, onBearbeiten,
+}: {
+  d: PlanDaten
+  coachFreigabe: boolean
+  onBearbeiten: () => void
+}) {
+  const p = d.plan
+  if (!p) return null
+  const h = herkunftVon(p.plan_origin)
+  const b = bearbeitbarkeit(h, coachFreigabe)
+  return (
+    <Card title="Herkunft" sub={HERKUNFT_TEXT[h]}>
+      {h === 'unbekannt' && (
+        <div className="v2-hinweis" style={{ marginBottom: 8 }}>
+          {HERKUNFT_UNBEKANNT_SATZ}
+        </div>
+      )}
+      {b.erlaubt ? (
+        <button type="button" className="v2-btn" onClick={onBearbeiten}>
+          Plan bearbeiten
+        </button>
+      ) : (
+        <div className="v2-hinweis" style={{ color: 'var(--warn)' }}>{b.satz}</div>
+      )}
+    </Card>
+  )
+}
+
+/**
+ * Die Einkaufsliste — G-270.
+ *
+ * `[cmd]` **`nutrition.shopping_lists` existiert** (1 Zeile, 6
+ * Positionen im Bestand); **`dev` hat nur keine.** `[read]` **Das ist
+ * ein Leerzustand, kein fehlendes Feature** — der Quelltext nannte
+ * bis heute eine fehlende Tabelle als Grund, und das war schon in
+ * G-271 falsch.
+ */
+export function EinkaufslisteEcht({ anzahl }: { anzahl: number }) {
+  if (anzahl > 0) return null
+  return (
+    <Card title="Einkaufsliste">
+      <div className="v2-hinweis">{KEINE_EINKAUFSLISTE_SATZ}</div>
     </Card>
   )
 }

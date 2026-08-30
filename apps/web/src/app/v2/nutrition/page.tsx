@@ -32,7 +32,11 @@ import {
 } from '../../../lib/nutrition/vorlieben-lesen'
 import type { VorliebenDaten } from './tab-vorlieben'
 // G-97: der Wochenplan aus den C-150-Tabellen.
-import { ladePlan, type PlanDaten } from '../../../lib/nutrition/plan-lesen'
+import {
+  ladePlan, ladePlanLogs, ladeCoachFreigabe, ladeEinkaufslistenZahl,
+  type PlanDaten,
+} from '../../../lib/nutrition/plan-lesen'
+import type { LogZeile as PlanLogZeile } from '../../../lib/nutrition/plan-lage'
 // G-101: die zwei Mikronaehrstoff-Kacheln des Diary.
 import { ladeMikro, type MikroStand } from '../../../lib/nutrition/mikro-read'
 // G-101/C-54: die Naehrstoffordnung; seit G-121 mit Zeitfenster
@@ -206,9 +210,24 @@ export default async function V2NutritionPage({
   let plan: PlanDaten | null = null
   // G-161: auch `plans` liest jetzt echt. `[cmd]` Derselbe Lesepfad wie
   // beim Planner (G-97) — vier Ebenen in einem Aufruf, nicht nachgebaut.
+  // G-267 ff.: die Ausfuehrung, das Bearbeitungsrecht und die
+  // Einkaufslisten. `[read]` **Gleichzeitig, nicht nacheinander** —
+  // ein `await` je Aufruf kostet je Durchlauf voll (G-252).
+  let planLogs: PlanLogZeile[] = []
+  let coachFreigabe = false
+  let einkaufslisten = 0
   if (tab === 'planner' || tab === 'plans') {
     try {
-      plan = await ladePlan()
+      const [p, l, f, e] = await Promise.all([
+        ladePlan(),
+        ladePlanLogs(datum, 7).catch(() => []),
+        ladeCoachFreigabe().catch(() => false),
+        ladeEinkaufslistenZahl().catch(() => 0),
+      ])
+      plan = p
+      planLogs = l
+      coachFreigabe = f
+      einkaufslisten = e
     } catch {
       plan = null
     }
@@ -258,6 +277,9 @@ export default async function V2NutritionPage({
       datum={datum}
       tab={tab}
       plan={plan}
+      planLogs={planLogs}
+      coachFreigabe={coachFreigabe}
+      einkaufslisten={einkaufslisten}
       mikro={mikro}
       ordnung={ordnung}
       einsichten={einsichten}

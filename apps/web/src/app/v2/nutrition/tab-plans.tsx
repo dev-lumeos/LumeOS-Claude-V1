@@ -22,6 +22,7 @@
 // an `plan-lesen` angebunden. Die Compliance rechnet weiter ueber die
 // Vorlagendaten, nicht ueber die Datenbank.
 import * as React from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, Pill, Icon, Row, Ring, Sparkline } from '@lumeos/ui'
 
 import { GHOST_ENTRIES } from './tabs-daten'
@@ -31,6 +32,12 @@ import {
   PlanKopfEcht, PlanEinstellungenEcht, PlanBibliothekEcht,
 } from './plans-echt'
 import type { PlanDaten } from '../../../lib/nutrition/plan-lesen'
+import type { LogZeile } from '../../../lib/nutrition/plan-lage'
+import {
+  GhostEintraegeEcht, LebenszyklusEcht, EinhaltungEcht,
+  HerkunftEcht, EinkaufslisteEcht,
+} from './plans-echt'
+import { PlanModal } from './plan-modal'
 
 const ATTRAPPE = 'Aus dem Entwurf uebernommen. Dieser Tab ist noch nicht an die vorhandenen Essensplaene angebunden - die Zahlen sind erfunden.'
 
@@ -61,8 +68,23 @@ const EINKAUF: Array<{ cat: string; items: Array<[string, string]> }> = [
   { cat: 'Fette & Nüsse', items: [['Mandeln', '140 g'], ['Olivenöl', '150 ml']] },
 ]
 
-export function MealPlansTab({ d = null }: { d?: PlanDaten | null }) {
+export function MealPlansTab({
+  d = null, logs = [], coachFreigabe = false, einkaufslisten = 0,
+}: {
+  d?: PlanDaten | null
+  /** G-270: die Ausfuehrung aus `meal_plan_logs` — nicht vom Eintrag. */
+  logs?: LogZeile[]
+  /** G-269: aus `coach.darf_nutrition_plan_aendern` (E-29). */
+  coachFreigabe?: boolean
+  /** G-270: wie viele Einkaufslisten der Nutzer hat. */
+  einkaufslisten?: number
+}) {
   const [tab, setTab] = React.useState('active')
+  // G-267 / G-268: `null` heisst zu, `true` heisst anlegen,
+  // ein Objekt heisst bearbeiten.
+  const [anlegen, setAnlegen] = React.useState(false)
+  const [bearbeiten, setBearbeiten] = React.useState(false)
+  const router = useRouter()
 
   // Die Rechnung der Vorlage (Zeile 336-343), unveraendert.
   const confirmed = GHOST_ENTRIES.filter(g => g.status === 'confirmed').length
@@ -90,7 +112,10 @@ export function MealPlansTab({ d = null }: { d?: PlanDaten | null }) {
           ))}
         </div>
         <div className="v2-spacer" />
-        <button type="button" className="v2-btn">
+        {/* G-267, Tom: „new plan geht nix". `[cmd]` **Seit dem
+            2026-08-30 kann er speichern** — die sechs Spalten stehen
+            live, am selben Tag nachgemessen. */}
+        <button type="button" className="v2-btn" onClick={() => setAnlegen(true)}>
           <Icon name="plus" className="v2-ic v2-ic-sm" />New plan
         </button>
       </div>
@@ -125,10 +150,11 @@ export function MealPlansTab({ d = null }: { d?: PlanDaten | null }) {
             </Card>
             )}
 
-            {/* `[cmd]` **Bleibt Attrappe:** `meal_plan_entries` hat
-                keine Statusspalte (`pending`/`confirmed`/`deviated`/
-                `skipped`). Ohne sie sind Geistereintraege nicht
-                ableitbar — gemessen am 2026-08-23. */}
+            {/* G-270: die Zustaende kommen aus `meal_plan_logs`.
+                `[cmd]` **Der Status liegt im Log, nicht am Eintrag** —
+                `meal_plan_entries` hat keine Statusspalte, und wer dort
+                sucht, haelt ihn fuer fehlend. */}
+            {d ? <GhostEintraegeEcht logs={logs} /> : (
             <Card
               title="Today's ghost entries"
               sub={`${pending} still open · confirm via MealCam or manually`}
@@ -179,6 +205,7 @@ export function MealPlansTab({ d = null }: { d?: PlanDaten | null }) {
                 })}
               </div>
             </Card>
+            )}
           </div>
 
           <div className="v2-col-gap" style={{ gap: 14 }}>
@@ -210,15 +237,30 @@ export function MealPlansTab({ d = null }: { d?: PlanDaten | null }) {
             </Card>
             )}
 
-            {/* `[cmd]` **Bleibt Attrappe:** Die drei Zeilen beschreiben
-                Spalten, die es nicht gibt — `days_count`, `lifecycle`,
-                `next_plan_id`. Eine Legende ueber nichts. */}
+            {/* G-270: der Zyklus DIESES Plans statt einer Legende
+                ueber drei Woerter — `lifecycle_type` steht seit dem
+                2026-08-30 im Schema. Bei den Bestandsplaenen ist er
+                `NULL`, und das wird gezeigt, nicht gefuellt. */}
+            {d ? <LebenszyklusEcht d={d} /> : (
             <Card title="Lifecycle types" attrappe={ATTRAPPE}>
               <Row label="once" value="ends after days_count" />
               <Row label="rollover" value="restarts at Day 1" />
               <Row label="sequence" value="activates next_plan_id" />
             </Card>
+            )}
 
+            {/* G-268 / G-269: Herkunft und Bearbeitungsrecht. */}
+            {d && (
+              <HerkunftEcht
+                d={d}
+                coachFreigabe={coachFreigabe}
+                onBearbeiten={() => setBearbeiten(true)}
+              />
+            )}
+
+            {/* G-270: die Einhaltung aus dem Log — ohne entschiedene
+                Zeilen gibt es keine Quote, nicht null Prozent. */}
+            {d ? <EinhaltungEcht logs={logs} /> : (
             <Card title="7-day compliance" attrappe={ATTRAPPE}>
               <Sparkline data={[100, 86, 100, 92, 80, 100, compliance]} color="var(--acc-nutri)" h={44} />
               <div style={{ display: 'flex', gap: 14, marginTop: 8, fontSize: 11, color: 'var(--fg-muted)' }}>
@@ -227,6 +269,7 @@ export function MealPlansTab({ d = null }: { d?: PlanDaten | null }) {
                 <span>Skips <span className="v2-num" style={{ color: 'var(--fg)' }}>1</span></span>
               </div>
             </Card>
+            )}
           </div>
         </div>
       )}
@@ -269,7 +312,16 @@ export function MealPlansTab({ d = null }: { d?: PlanDaten | null }) {
         </div>
       )}
 
-      {tab === 'shopping' && (
+      {tab === 'shopping' && einkaufslisten === 0 && (
+        /* G-270: `nutrition.shopping_lists` EXISTIERT (1 Zeile, 6
+           Positionen im Bestand) — dieser Nutzer hat nur keine.
+           `[read]` **Ein Leerzustand, kein fehlendes Feature.** Der
+           Quelltext nannte bis heute eine fehlende Tabelle als Grund,
+           und das war schon in G-271 falsch. */
+        <EinkaufslisteEcht anzahl={einkaufslisten} />
+      )}
+
+      {tab === 'shopping' && einkaufslisten > 0 && (
         <div className="v2-grid v2-grid-14" style={{ gap: 14 }}>
           <Card
             title="Shopping list"
@@ -339,6 +391,35 @@ export function MealPlansTab({ d = null }: { d?: PlanDaten | null }) {
             </button>
           </Card>
         </div>
+      )}
+
+      {/* G-267 / G-268: anlegen und bearbeiten. `[read]` Ein Modal
+          fuer beides — die Felder sind dieselben, nur die Route
+          unterscheidet. */}
+      {anlegen && (
+        <PlanModal
+          vorhanden={null}
+          onClose={() => setAnlegen(false)}
+          onFertig={() => { setAnlegen(false); router.refresh() }}
+        />
+      )}
+      {bearbeiten && d?.plan && (
+        <PlanModal
+          vorhanden={{
+            id: d.plan.id,
+            name: d.plan.name,
+            description: d.plan.description,
+            target_kcal: d.plan.target_kcal,
+            target_protein_g: d.plan.target_protein_g,
+            target_carbs_g: d.plan.target_carbs_g,
+            target_fat_g: d.plan.target_fat_g,
+            lifecycle_type: d.plan.lifecycle_type,
+            start_date: d.plan.start_date,
+            days_count: d.plan.days_count,
+          }}
+          onClose={() => setBearbeiten(false)}
+          onFertig={() => { setBearbeiten(false); router.refresh() }}
+        />
       )}
     </div>
   )

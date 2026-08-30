@@ -48,6 +48,7 @@ import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-re
 import { Zielhinweis } from './zielhinweis'
 import { Mahlzeiten } from './mahlzeiten'
 import { Datumsnavigation, Zukunftshinweis } from './datumsnavigation'
+import type { LogZeile as PlanLogZeile } from '../../../lib/nutrition/plan-lage'
 // G-38: die Tabs, die bisher nur als Attrappen-Platzhalter dastanden.
 import { NutritionInsightsTab } from './tab-insights'
 import { MealPlansTab } from './tab-plans'
@@ -117,12 +118,16 @@ function tabs(mahlzeiten: number | null): TabItem[] {
 
 export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, lueckenGesamt = null, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
+  planLogs = [], coachFreigabe = false, einkaufslisten = 0,
   istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null,
   unvertraeglichkeiten = [],
 }: {
   /** G-154: fuer den Hinweis im Foods-Tab. */
   unvertraeglichkeiten?: string[]
   datum: string
+  planLogs?: PlanLogZeile[]
+  coachFreigabe?: boolean
+  einkaufslisten?: number
   tab: string
   /** G-14: nur Admins duerfen in die Zukunft blaettern. */
   istAdmin?: boolean
@@ -235,7 +240,7 @@ export async function TagebuchAnsicht({
       <Zukunftshinweis datum={datum} />
 
       {tab !== 'diary' && (
-        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} />
+        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} planLogs={planLogs} coachFreigabe={coachFreigabe} einkaufslisten={einkaufslisten} />
       )}
       {tab === 'diary' && (
       <>
@@ -557,12 +562,16 @@ export async function TagebuchAnsicht({
 function AndererTab({
   tab, foodsStart, vorlieben, plan, ordnung, einsichten, bewertung = [],
   datum,
+  planLogs = [], coachFreigabe = false, einkaufslisten = 0,
   unvertraeglichkeiten = [],
 }: {
   tab: string
   /** G-239: die Referenzbewertung des Tages, fuer die Mikro-Ansicht. */
   bewertung?: ReferenceAssessmentRow[]
   datum?: string
+  planLogs?: PlanLogZeile[]
+  coachFreigabe?: boolean
+  einkaufslisten?: number
   /** G-154: die gesetzten Unvertraeglichkeiten (`strong`). */
   unvertraeglichkeiten?: string[]
   /** G-66: die erste Trefferseite, serverseitig geladen. */
@@ -656,7 +665,16 @@ function AndererTab({
     // **Fuenf bleiben Attrappe**, weil ihnen Spalten fehlen
     // (`lifecycle`, Eintragsstatus) oder eine Tabelle (`shopping_lists`,
     // C-175). Der Grund steht je Kachel im Quelltext.
-    return <div style={{ marginTop: 16 }}><MealPlansTab d={plan} /></div>
+    return (
+      <div style={{ marginTop: 16 }}>
+        <MealPlansTab
+          d={plan}
+          logs={planLogs}
+          coachFreigabe={coachFreigabe}
+          einkaufslisten={einkaufslisten}
+        />
+      </div>
+    )
   }
   if (tab === 'prefs') {
     // `[cmd]` SEIT G-65 ECHT, Rueckfall entfernt am 2026-08-23 (G-163).

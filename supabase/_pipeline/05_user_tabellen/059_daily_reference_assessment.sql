@@ -153,6 +153,7 @@ reference_candidates AS (
     ROW_NUMBER() OVER (
       PARTITION BY dv.nutrient_code, r.reference_kind
       ORDER BY
+        r.source_priority DESC,
         CASE
           WHEN r.is_pregnant = p.is_pregnant AND r.is_lactating = p.is_lactating THEN 2
           WHEN NOT r.is_pregnant AND NOT r.is_lactating THEN 1

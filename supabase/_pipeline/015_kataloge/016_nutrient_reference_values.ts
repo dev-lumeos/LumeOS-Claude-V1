@@ -567,6 +567,7 @@ CREATE TABLE IF NOT EXISTS nutrition.nutrient_reference_values (
   )),
   target_applies_to text[] NOT NULL DEFAULT '{}',
   applies_to_intake_sources text[] NOT NULL DEFAULT ARRAY['foods', 'fortified_foods', 'supplements', 'pharmacological'],
+  source_priority smallint NOT NULL DEFAULT 0 CHECK (source_priority >= 0),
   source text NOT NULL,
   source_version text NOT NULL,
   source_locator text NOT NULL,
@@ -690,6 +691,8 @@ COMMENT ON COLUMN nutrition.nutrient_reference_values.reference_kind IS
   'Wertart: AR, PRI, AI, RI, UL, ALAP, FORMULA oder ausdruecklich NO_REFERENCE/NO_STANDALONE_REFERENCE.';
 COMMENT ON COLUMN nutrition.nutrient_reference_values.applies_to_intake_sources IS
   'C-344: Zulaessige Quellen der aufgenommenen Naehrstoffmenge fuer diesen Referenzwert. foods meint natuerlich vorkommende Lebensmittelnaehrstoffe; fortified_foods, supplements und pharmacological sind getrennt, damit eine quellbeschraenkte UL nicht aus Freitext erraten werden muss.';
+COMMENT ON COLUMN nutrition.nutrient_reference_values.source_priority IS
+  'C-350: Auswahlprioritaet nur bei sonst gleich passenden Referenzzeilen. 0 ist der Normalfall; ein hoeherer Wert waehlt die fachlich entschiedene Quelle, ohne die andere Quelle zu loeschen.';
 COMMENT ON COLUMN nutrition.nutrient_reference_values.source_locator IS
   'Fundstelle innerhalb der Quelle; jede Zahl und jede NO_REFERENCE-Antwort muss eine Fundstelle tragen.';
 

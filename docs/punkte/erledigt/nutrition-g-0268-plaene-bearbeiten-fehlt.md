@@ -9,8 +9,10 @@ kind_von: G-267
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
+  tabellen: [nutrition.meal_plans]
 zahlen: null
 ---
 # G-268 — Plaene bearbeiten fehlt
@@ -46,3 +48,8 @@ und der Bericht stehen dort.
 
 **Mitbeauftragt mit G-267 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-30, mit G-267 abgenommen.** Messung und Urteil stehen
+dort.

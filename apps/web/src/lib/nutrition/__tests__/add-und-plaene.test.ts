@@ -71,24 +71,44 @@ test('G-265: ohne Parameter bleibt die Seite unveraendert', () => {
 
 // ── G-267 / G-270: was gemeldet und nicht gebaut wurde ───────────
 
-test('G-267: New plan traegt keinen erfundenen Weg', () => {
-  // `[cmd]` **Gemessen am 2026-08-29: der Knopf tut nichts** — keine
-  // Adressaenderung, kein Modal. `[read]` **Und er kann nichts tun,**
-  // solange `meal_plans` weder Lebenszyklus noch Startdatum fuehrt
-  // (C-239). **Ein Knopf, der ein halbes Formular oeffnet, waere
-  // schlimmer als einer, der wartet.**
+test('G-267: New plan schreibt, seit das Schema es traegt', () => {
+  // `[cmd]` **Am 2026-08-29 tat der Knopf nichts**, und dieser Test
+  // verbot ihm, Spalten zu benutzen, die es nicht gab (C-239).
+  //
+  // `[cmd]` **Seit dem 2026-08-30 stehen sie live** — `lifecycle_type`,
+  // `start_date`, `days_count`, `next_plan_id`, `rollover_count`,
+  // `status`, `plan_origin`, dazu `meal_plan_logs`. **Am selben Tag
+  // gegen `information_schema` nachgemessen**, nicht dem Bericht
+  // geglaubt (G-273).
+  //
+  // `[read]` **Das Verbot dreht sich damit um:** der Knopf MUSS jetzt
+  // schreiben koennen. Die Pruefung darauf steht in
+  // `plan-lage.test.ts`; hier bleibt, dass er ueberhaupt da ist.
   const s = ohneKommentare('src/app/v2/nutrition/tab-plans.tsx')
   assert.match(s, /New plan/, 'Der Knopf fehlt (G-267).')
-  // Kein Schreibweg, der die fehlenden Spalten erfinden wuerde.
-  assert.doesNotMatch(s, /lifecycle|start_date|confirmation_mode/,
-    'Der Reiter benutzt Spalten, die es im Schema nicht gibt (G-267/C-239).')
+  assert.match(s, /setAnlegen\(true\)/,
+    'Der Knopf oeffnet das Anlegen-Modal nicht mehr (G-267).')
 })
 
-test('G-270: die drei Attrappen nennen ihren Grund', () => {
-  // `[cmd]` **Alle drei tragen denselben Satz** — und die rechte
-  // Kachel nennt die Ursache: *„Lebenszyklus, Startdatum und
-  // Bestaetigungsmodus fehlen im Schema."*
-  const s = lies('src/app/v2/nutrition/plans-echt.tsx')
-  assert.match(s, /fehlen im Schema/,
-    'Der Grund fuer die Attrappen steht nicht mehr da (G-270).')
+test('G-270: die Kacheln lesen echt, statt eine Marke zu tragen', () => {
+  // `[cmd]` **Am 2026-08-29 waren es fuenf Attrappen** — drei unter
+  // *Active plan*, zwei unter *Shopping list*. **Am 2026-08-30 sind
+  // es null** (dev, alle drei Unterreiter am Schirm gezaehlt).
+  //
+  // `[read]` **Die erste Fassung dieses Waechters suchte den Satz
+  // „fehlen im Schema"** — der steht heute nur noch in einem
+  // Dokumentationskommentar. **Ein Waechter, der einen Kommentar
+  // findet, prueft nichts**; geprueft wird jetzt, dass die drei
+  // Kacheln existieren und aus dem Log lesen.
+  const s = ohneKommentare('src/app/v2/nutrition/plans-echt.tsx')
+  for (const bauteil of [
+    'GhostEintraegeEcht', 'LebenszyklusEcht', 'EinhaltungEcht',
+    'HerkunftEcht', 'EinkaufslisteEcht',
+  ]) {
+    assert.match(s, new RegExp(`export function ${bauteil}\\(`),
+      `${bauteil} fehlt — die Kachel ist wieder Attrappe (G-270).`)
+  }
+  // Und der Status kommt aus dem Log, nicht vom Eintrag.
+  assert.match(s, /aus meal_plan_logs/,
+    'Die Kacheln nennen ihre Quelle nicht (G-270).')
 })

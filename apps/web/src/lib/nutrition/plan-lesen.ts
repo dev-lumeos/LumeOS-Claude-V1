@@ -92,6 +92,26 @@ export type PlanDaten = {
     target_carbs_g: number | null
     target_fat_g: number | null
     is_active: boolean
+    // ══ G-267: der Lebenszyklus, seit 2026-08-30 im Schema ═════════
+    //
+    // `[cmd]` **Gemessen am 2026-08-30, nach dem Einspielen:** alle
+    // sechs Spalten stehen live, `status` als einziges NOT NULL mit
+    // Vorgabe `'assigned'`.
+    //
+    // `[read]` **`null` ist hier eine Aussage, kein Fehler.** Die
+    // beiden Bestandsplaene tragen `plan_origin = NULL` und
+    // `lifecycle_type = NULL`, **weil die Herkunft nicht belegbar
+    // war** — das gehoert gezeigt, nicht gefuellt.
+    /** `once` · `rollover` · `sequence` — oder `null`. */
+    lifecycle_type: string | null
+    start_date: string | null
+    days_count: number | null
+    next_plan_id: string | null
+    rollover_count: number | null
+    /** `assigned` · `active` · `completed` · `paused` · `archived`. */
+    status: string
+    /** `self_created` · `coach_created` · `marketplace` — oder `null`. */
+    plan_origin: string | null
   } | null
   wochen: PlanWoche[]
   /**
@@ -181,6 +201,8 @@ export async function ladePlan(): Promise<PlanDaten> {
     .select(`
       id, name, description, target_kcal, target_protein_g,
       target_carbs_g, target_fat_g, is_active,
+      lifecycle_type, start_date, days_count, next_plan_id,
+      rollover_count, status, plan_origin,
       weeks:meal_plan_weeks (
         id, week_start, name, copied_from_week_id,
         days:meal_plan_days (
@@ -327,6 +349,15 @@ export async function ladePlan(): Promise<PlanDaten> {
           target_carbs_g: zahl(roh.target_carbs_g),
           target_fat_g: zahl(roh.target_fat_g),
           is_active: roh.is_active === true,
+          // G-267: `text()` liefert `null` bei leer — genau richtig,
+          // denn `null` ist hier die Aussage „nicht belegbar".
+          lifecycle_type: text(roh.lifecycle_type),
+          start_date: text(roh.start_date),
+          days_count: zahl(roh.days_count),
+          next_plan_id: text(roh.next_plan_id),
+          rollover_count: zahl(roh.rollover_count),
+          status: text(roh.status) ?? 'assigned',
+          plan_origin: text(roh.plan_origin),
         }
       : null,
     wochen,
@@ -335,4 +366,91 @@ export async function ladePlan(): Promise<PlanDaten> {
     rezepte,
     ladefehler: null,
   }
+}
+
+
+// ══ G-267 ff.: die Ausfuehrung und das Bearbeitungsrecht ═══════════
+
+/**
+ * Die Log-Zeilen eines Zeitraums — G-270.
+ *
+ * `[cmd]` **`meal_plan_logs` steht seit dem 2026-08-30 live und ist
+ * LEER** (0 Zeilen, jeder Nutzer). `[read]` **Die Kacheln zeigen
+ * deshalb einen Leerzustand, keine erfundenen Zahlen** — und sobald
+ * protokolliert wird, fuellen sie sich ohne weitere Aenderung.
+ *
+ * `[cmd]` **Der Zeitraum ist beidseitig begrenzt** — die Seeds
+ * reichen in die Zukunft, eine offene Grenze finge sie mit.
+ */
+export async function ladePlanLogs(
+  bisDatum: string, tage = 7,
+): Promise<Array<{
+  execution_date: string
+  status: 'pending' | 'confirmed' | 'deviated' | 'skipped'
+  confirmation_mode: string | null
+  deviation_kcal: number | null
+}>> {
+  const client = createSessionClient()
+  const { data: { user } } = await client.auth.getUser()
+  if (!user) return []
+  const von = new Date(`${bisDatum}T00:00:00Z`)
+  von.setUTCDate(von.getUTCDate() - (tage - 1))
+  const { data, error } = await client
+    .schema('nutrition')
+    .from('meal_plan_logs')
+    .select('execution_date, status, confirmation_mode, deviation_kcal')
+    .eq('user_id', user.id)
+    .gte('execution_date', von.toISOString().slice(0, 10))
+    .lte('execution_date', bisDatum)
+    .order('execution_date', { ascending: true })
+    .limit(1000)
+  if (error || !data) return []
+  return (data as unknown as Array<Record<string, unknown>>).map(r => ({
+    execution_date: text(r.execution_date) ?? '',
+    status: (text(r.status) ?? 'pending') as 'pending' | 'confirmed' | 'deviated' | 'skipped',
+    confirmation_mode: text(r.confirmation_mode),
+    deviation_kcal: zahl(r.deviation_kcal),
+  }))
+}
+
+/**
+ * Ob der Nutzer seinen Plan aendern darf — G-269.
+ *
+ * `[cmd]` **E-29: ueber `coach.darf_nutrition_plan_aendern`, nicht
+ * ueber `coach.client_autonomy`.** Die Funktion prueft volle Sicht,
+ * `nutrition_auto_apply` UND Stufe 5.
+ *
+ * `[cmd]` **Gemessen am 2026-08-30: `dev` steht auf Stufe 3 und
+ * bekommt `false`.**
+ */
+export async function ladeCoachFreigabe(): Promise<boolean> {
+  const client = createSessionClient()
+  const { data: { user } } = await client.auth.getUser()
+  if (!user) return false
+  const { data, error } = await client
+    .schema('coach')
+    .rpc('darf_nutrition_plan_aendern', { p_client: user.id })
+  if (error) return false
+  return data === true
+}
+
+/**
+ * Wie viele Einkaufslisten der Nutzer hat — G-270.
+ *
+ * `[cmd]` **`nutrition.shopping_lists` EXISTIERT** (1 Zeile, 6
+ * Positionen im Bestand). `[read]` **Der Quelltext nannte bis heute
+ * eine fehlende Tabelle als Grund fuer die Attrappe** — das war schon
+ * in G-271 falsch. **Null Listen ist ein Leerzustand.**
+ */
+export async function ladeEinkaufslistenZahl(): Promise<number> {
+  const client = createSessionClient()
+  const { data: { user } } = await client.auth.getUser()
+  if (!user) return 0
+  const { count, error } = await client
+    .schema('nutrition')
+    .from('shopping_lists')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+  if (error || count === null) return 0
+  return count
 }

@@ -9,9 +9,11 @@ kind_von: G-273
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
   dateien:
-    - supabase/_pipeline/05_user_tabellen/059d_reference_assessment_window_flags.sql
+    - supabase/_pipeline/05_user_tabellen
 zahlen:
   gemessen: 2026-08-30
   zeilen: 78
@@ -54,3 +56,13 @@ belegt: dieselben Flags, dieselben Tageszaehlungen.**
 
 **Mitbeauftragt mit C-350 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-30, mit C-350 abgenommen.**
+
+`[cmd]` **`reference_assessment_window_flags` ist live.** `[cmd]` **Die
+zehn Flag-Zeilen und Tageszaehler stimmen mit der Tagesreihen-Logik
+ueberein.**
+
+`[read]` **Damit ist G-273 entblockt.**

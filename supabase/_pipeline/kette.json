@@ -1289,6 +1289,18 @@
         "058b",
         "150"
       ]
+    },
+    {
+      "id": "350",
+      "path": "supabase/_pipeline/05_user_tabellen/350_vitamin_a_components_magnesium_ul.sql",
+      "kind": "sql",
+      "creates": "C-350: Vitamin-A-IE aus BLS-Komponenten sowie EFSA-priorisierte Magnesium-UL neben NAM",
+      "depends_on": [
+        "016",
+        "059",
+        "059d",
+        "342"
+      ]
     }
   ]
 }

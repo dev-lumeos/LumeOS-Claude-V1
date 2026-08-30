@@ -369,6 +369,11 @@ export type DiaryWriteErrorCode =
   | 'NOT_FOUND'
   | 'DB_UNAVAILABLE'
   | 'WRITE_FAILED'
+  // G-269: die Bearbeitung ist erlaubt, aber nicht fuer diesen Plan.
+  // `[read]` **Kein Validierungsfehler** — die Eingabe war richtig,
+  // die Herkunft verbietet es. 403 statt 400, damit die Oberflaeche
+  // beides unterscheiden kann.
+  | 'FORBIDDEN'
 
 export class DiaryWriteError extends Error {
   constructor(
@@ -392,6 +397,8 @@ export function httpStatusForDiaryError(code: DiaryWriteErrorCode): number {
       return 409
     case 'NOT_FOUND':
       return 404
+    case 'FORBIDDEN':
+      return 403
     case 'DB_UNAVAILABLE':
       return 503
     case 'WRITE_FAILED':

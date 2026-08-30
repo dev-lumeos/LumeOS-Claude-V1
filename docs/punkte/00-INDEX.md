@@ -5,11 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 261 |
-| `laufend_codex` | 2 |
-| `laufend_claudecode` | 4 |
-| `erledigt` | 83 |
-| **gesamt** | **350** |
+| `todos` | 263 |
+| `erledigt` | 89 |
+| **gesamt** | **352** |
 
 ## medical — 41
 
@@ -58,8 +56,6 @@
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
 ## nutrition — 117
-
-### beauftragbar — 116
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -112,8 +108,8 @@
 | `C-346` | befund | hoch | [zwei Detailtexte neu verknuepfen](erledigt/nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md) | erledigt | — | — |
 | `C-347` | entscheidung | hoch | [generelle Ausschluesse in \`food_search\`](erledigt/nutrition-c-0347-generelle-ausschluesse-in-food-search.md) | erledigt | — | — |
 | `C-348` | feature | mittel | [eine zaehlende Funktion fuer die Flags](erledigt/nutrition-c-0348-eine-zaehlende-funktion-fuer-die-flags.md) | erledigt | — | G-273 |
-| `C-349` | befund | hoch | [die Flag-Funktion einspielen](laufend_codex/nutrition-c-0349-die-flag-funktion-einspielen.md) | laeuft (codex) | — | — |
-| `C-350` | entscheidung | hoch | [zwei Obergrenzen fuer Magnesium](laufend_codex/nutrition-c-0350-zwei-obergrenzen-fuer-magnesium.md) | laeuft (codex) | — | — |
+| `C-349` | befund | hoch | [die Flag-Funktion einspielen](erledigt/nutrition-c-0349-die-flag-funktion-einspielen.md) | erledigt | — | — |
+| `C-350` | entscheidung | hoch | [zwei Obergrenzen fuer Magnesium](erledigt/nutrition-c-0350-zwei-obergrenzen-fuer-magnesium.md) | erledigt | — | C-351 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -172,23 +168,18 @@
 | `G-264` | befund | niedrig | [Micronutrient trend steht noch als Attrappe](todos/nutrition-g-0264-micronutrient-trend-steht-noch-als-attrappe.md) | offen | — | — |
 | `G-265` | befund | hoch | [Add im Food DB oeffnet das falsche Modal](erledigt/nutrition-g-0265-add-im-food-db-oeffnet-das-falsche-modal.md) | erledigt | — | G-272 |
 | `G-266` | entscheidung | mittel | [Detailsuche mit Naehrwerten oeffnet eine eigene Seite](erledigt/nutrition-g-0266-detailsuche-mit-naehrwerten-oeffnet-eine-eigene-seite.md) | erledigt | — | — |
-| `G-267` | befund | hoch | [*New plan* tut nichts](laufend_claudecode/nutrition-g-0267-new-plan-tut-nichts.md) | laeuft (claudecode) | — | G-268, G-269 |
-| `G-268` | feature | hoch | [Plaene bearbeiten fehlt](laufend_claudecode/nutrition-g-0268-plaene-bearbeiten-fehlt.md) | laeuft (claudecode) | — | — |
-| `G-269` | feature | mittel | [Plaene von Coach und Marketplace](laufend_claudecode/nutrition-g-0269-plaene-von-coach-und-marketplace.md) | laeuft (claudecode) | — | — |
-| `G-270` | befund | mittel | [Drei Attrappen im Meal-plans-Reiter](laufend_claudecode/nutrition-g-0270-drei-attrappen-im-meal-plans-reiter.md) | laeuft (claudecode) | — | — |
+| `G-267` | befund | hoch | [*New plan* tut nichts](erledigt/nutrition-g-0267-new-plan-tut-nichts.md) | erledigt | — | A-62, G-268, G-269 |
+| `G-268` | feature | hoch | [Plaene bearbeiten fehlt](erledigt/nutrition-g-0268-plaene-bearbeiten-fehlt.md) | erledigt | — | — |
+| `G-269` | feature | mittel | [Plaene von Coach und Marketplace](erledigt/nutrition-g-0269-plaene-von-coach-und-marketplace.md) | erledigt | — | — |
+| `G-270` | befund | mittel | [Drei Attrappen im Meal-plans-Reiter](erledigt/nutrition-g-0270-drei-attrappen-im-meal-plans-reiter.md) | erledigt | — | — |
 | `G-271` | messung | hoch | [Meal plans und Planner gegen die Quellen halten](erledigt/nutrition-g-0271-meal-plans-und-planner-gegen-die-quellen-halten.md) | erledigt | — | — |
 | `G-272` | feature | hoch | [`+ Add` braucht ein Erfassungsmodal](erledigt/nutrition-g-0272-add-braucht-ein-erfassungsmodal.md) | erledigt | — | — |
+| `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](todos/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | offen | — | C-349 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-### wartet auf Blocker — 1
+## supplements — 54
 
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](todos/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | offen | C-349 | C-349 |
-
-## supplements — 53
-
-### beauftragbar — 52
+### beauftragbar — 53
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -227,6 +218,7 @@
 | `C-326` | messung | hoch | [C-129 auf die verbleibende Luecke neu fassen](erledigt/supplements-c-0326-c-129-neu-fassen.md) | erledigt | — | — |
 | `C-329` | befund | mittel | [`input_coverage_status` ist eine Selbsteinschaetzung, keine Zusage](todos/supplements-c-0329-input-coverage-status-ist-keine-zusage.md) | offen | — | — |
 | `C-341` | entscheidung | mittel | [was passiert mit gemeldeten Community-Beitraegen?](todos/supplements-c-0341-was-passiert-mit-gemeldeten-community-beitraegen.md) | offen | — | — |
+| `C-351` | feature | hoch | [Supplements braucht eine Tagesbilanz](todos/supplements-c-0351-supplements-braucht-eine-tagesbilanz.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -339,7 +331,7 @@
 | `G-169` | befund | mittel | [`coach.checkins` und `checkin_templates` liegen ungelesen](todos/coach-g-0169-coach-checkins-und-checkin-templates-liegen-ungelesen.md) | offen | — | — |
 | `G-244` | befund | mittel | [die rechten Kacheln im Human-Coach-Reiter sind Attrappe](todos/coach-g-0244-die-rechten-kacheln-im-human-coach-reiter-sind-attrappe.md) | offen | — | — |
 
-## quer — 71
+## quer — 72
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -371,6 +363,7 @@
 | `A-59` | befund | mittel | [Attrappen im Quelltext zaehlen ueberschaetzt dreifach](todos/quer-a-0059-attrappen-im-quelltext-zaehlen-ueberschaetzt-dreifach.md) | offen | — | — |
 | `A-60` | befund | mittel | [eine `Map` ueber die Client-Grenze kommt leer an](todos/quer-a-0060-eine-map-ueber-die-client-grenze-kommt-leer-an.md) | offen | — | — |
 | `A-61` | befund | mittel | [das alte Auftragswesen abloesen](erledigt/quer-a-0061-das-alte-auftragswesen-abloesen.md) | erledigt | — | — |
+| `A-62` | befund | mittel | [Waechter kippen still, wenn das Schema nachkommt](todos/quer-a-0062-waechter-kippen-still-wenn-das-schema-nachkommt.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](todos/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | offen | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

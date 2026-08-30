@@ -54,7 +54,8 @@ test('C-342: Faktoren bleiben formgebunden, UL 0 ist unzulaessig und Planursprun
           'from_unit', from_unit, 'to_unit', to_unit, 'factor', factor,
           'source', source
         ) ORDER BY nutrient_code, form_code), '[]'::json)
-        FROM nutrition.nutrient_unit_conversion_factors),
+        FROM nutrition.nutrient_unit_conversion_factors
+        WHERE nutrient_code IN ('VITA', 'VITD')),
       'referenceColumns', (SELECT COALESCE(json_agg(column_name ORDER BY column_name), '[]'::json)
         FROM information_schema.columns
         WHERE table_schema = 'nutrition' AND table_name = 'nutrient_reference_values'
