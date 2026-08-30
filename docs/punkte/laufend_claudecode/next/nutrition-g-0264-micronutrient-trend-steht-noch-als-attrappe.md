@@ -35,3 +35,8 @@ falsch.**
 `[read]` **A-59 sagt: was keinen Aufrufer hat, wird beim naechsten
 Auftrag fuer gebaut gehalten.** **Bei einer sichtbaren Attrappe gilt
 das doppelt** — sie sieht aus wie eine Zusage.
+
+## Auftrag
+
+**Vorbereitet mit A-62 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

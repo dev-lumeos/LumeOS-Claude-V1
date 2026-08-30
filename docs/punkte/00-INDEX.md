@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 251 |
+| `todos` | 248 |
 | `laufend_codex` | 5 |
-| `laufend_claudecode` | 2 |
+| `laufend_claudecode` | 5 |
 | `erledigt` | 101 |
 | **gesamt** | **359** |
 
@@ -122,7 +122,7 @@
 | `G-70` | feature | mittel | [Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab](erledigt/nutrition-g-0070-sortierbare-spalten-und-herkunfts-filter-im-food-db-tab.md) | erledigt | — | C-338, G-251 |
 | `G-72` | entscheidung | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](todos/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | offen | — | — |
 | `G-75` | befund | mittel | [Die alte Oberflaeche nennt den BLS ebenfalls](todos/nutrition-g-0075-die-alte-oberflaeche-nennt-den-bls-ebenfalls.md) | offen | — | — |
-| `G-93` | befund | mittel | [Der Anzeigename fehlt im laufenden Erfassungsdialog](todos/nutrition-g-0093-der-anzeigename-fehlt-im-laufenden-erfassungsdialog.md) | offen | — | — |
+| `G-93` | befund | mittel | [Der Anzeigename fehlt im laufenden Erfassungsdialog](laufend_claudecode/nutrition-g-0093-der-anzeigename-fehlt-im-laufenden-erfassungsdialog.md) | vorbereitet (claudecode) | — | — |
 | `G-98` | befund | mittel | [Meal plans braucht einen Zustand und eine Herkunft](todos/nutrition-g-0098-meal-plans-braucht-einen-zustand-und-eine-herkunft.md) | offen | — | — |
 | `G-99` | befund | mittel | [Drei der acht Planner-Spalten bleiben wirkungslos](todos/nutrition-g-0099-drei-der-acht-planner-spalten-bleiben-wirkungslos.md) | offen | — | — |
 | `G-107` | befund | mittel | [Der Mikronaehrstoff-Trend braucht eine Referenz je Tag](erledigt/nutrition-g-0107-der-mikronaehrstoff-trend-braucht-eine-referenz-je-tag.md) | erledigt | — | G-252 |
@@ -169,7 +169,7 @@
 | `G-261` | entscheidung | niedrig | [die Vergleichsfunktionen anbinden](todos/nutrition-g-0261-die-vergleichsfunktionen-anbinden.md) | offen | — | — |
 | `G-262` | befund | mittel | [Pre-workout window ist Attrappe](todos/nutrition-g-0262-pre-workout-window-ist-attrappe.md) | offen | — | — |
 | `G-263` | befund | mittel | [Smart suggestions ist Attrappe](todos/nutrition-g-0263-smart-suggestions-ist-attrappe.md) | offen | — | — |
-| `G-264` | befund | niedrig | [Micronutrient trend steht noch als Attrappe](todos/nutrition-g-0264-micronutrient-trend-steht-noch-als-attrappe.md) | offen | — | — |
+| `G-264` | befund | niedrig | [Micronutrient trend steht noch als Attrappe](laufend_claudecode/nutrition-g-0264-micronutrient-trend-steht-noch-als-attrappe.md) | vorbereitet (claudecode) | — | — |
 | `G-265` | befund | hoch | [Add im Food DB oeffnet das falsche Modal](erledigt/nutrition-g-0265-add-im-food-db-oeffnet-das-falsche-modal.md) | erledigt | — | G-272 |
 | `G-266` | entscheidung | mittel | [Detailsuche mit Naehrwerten oeffnet eine eigene Seite](erledigt/nutrition-g-0266-detailsuche-mit-naehrwerten-oeffnet-eine-eigene-seite.md) | erledigt | — | — |
 | `G-267` | befund | hoch | [*New plan* tut nichts](erledigt/nutrition-g-0267-new-plan-tut-nichts.md) | erledigt | — | A-62, G-268, G-269 |
@@ -378,7 +378,7 @@
 | `A-59` | befund | mittel | [Attrappen im Quelltext zaehlen ueberschaetzt dreifach](todos/quer-a-0059-attrappen-im-quelltext-zaehlen-ueberschaetzt-dreifach.md) | offen | — | — |
 | `A-60` | befund | mittel | [eine `Map` ueber die Client-Grenze kommt leer an](todos/quer-a-0060-eine-map-ueber-die-client-grenze-kommt-leer-an.md) | offen | — | — |
 | `A-61` | befund | mittel | [das alte Auftragswesen abloesen](erledigt/quer-a-0061-das-alte-auftragswesen-abloesen.md) | erledigt | — | — |
-| `A-62` | befund | mittel | [Waechter kippen still, wenn das Schema nachkommt](todos/quer-a-0062-waechter-kippen-still-wenn-das-schema-nachkommt.md) | offen | — | — |
+| `A-62` | befund | mittel | [Waechter kippen still, wenn das Schema nachkommt](laufend_claudecode/quer-a-0062-waechter-kippen-still-wenn-das-schema-nachkommt.md) | vorbereitet (claudecode) | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](todos/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | offen | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

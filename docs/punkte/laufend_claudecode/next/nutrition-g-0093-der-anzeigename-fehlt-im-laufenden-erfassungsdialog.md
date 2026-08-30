@@ -43,3 +43,8 @@ zahlen:
   `[read]` **Eine Zeile je Stelle:** `f.name_display_de || f.name_de`.
   Der Rueckfall bleibt noetig, weil nicht jeder Eintrag einen
   Anzeigenamen hat.
+
+## Auftrag
+
+**Vorbereitet mit A-62 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.
