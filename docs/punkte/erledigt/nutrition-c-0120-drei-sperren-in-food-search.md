@@ -10,9 +10,11 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien:
+    - supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql
 zahlen: null
 ---
 
@@ -179,4 +181,45 @@ oder committet.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-30, Orchestrator.**
+
+### Drei von vier waren ueberholt
+
+`[cmd]` **C-120: alle drei Sperren ueberholt.** Mehrfach-Tags,
+Ausschluesse und `processing_level` wirken messbar. `[read]` **Der
+Verdacht aus dem Auftrag traf zu:** C-347 hat eine davon mit
+erledigt.
+
+`[cmd]` **C-27: erledigt, beide Begriffe liefern Treffer.** `[read]`
+**Der Punkt ist aelter als der Dekompositor und die
+Synonymerweiterung.**
+
+`[cmd]` **C-191: kein Dreifach-Effekt mehr — +5,6 Prozent, 8,479 ms
+auf `dev`.**
+
+`[read]` **Und die Ursache ist benannt statt vermutet:** die
+Aggregation von 2.977 materialisierten Praeferenzzeilen. `[cmd]`
+**Nachgemessen: `food_preference_search_targets` traegt 5.632 Zeilen
+fuer 9 Praeferenz-Eintraege** — **die Materialisierung ist der
+Posten, nicht die Auswertung je Treffer.** `[read]` **Meine
+Vermutung im Auftrag war falsch.**
+
+### C-177 bleibt, und der Befund ist scharf
+
+`[cmd]` **E-16 betrifft Thai nicht.** `[cmd]` **TH ist im heutigen UI
+auswaehlbar, und die Datenbank hat 0 Thai-Aliase.**
+
+`[read]` **Also: die Sprache laesst sich waehlen, und die Suche
+findet nichts.** `[read]` **Das ist kein *bewusst fehlend* mehr,
+sondern eine Zusage ohne Deckung** — bei 32.845 Aliassen insgesamt.
+
+`[read]` **Der Punkt geht zurueck in `todos/` mit diesem Stand.**
+
+### Und wieder eine Fehlmessung von mir
+
+`[cmd]` **Mein `food_search`-Aufruf liefert fuer jedes Wort genau 1
+Treffer** — **derselbe Signaturfehler wie am 29.08. bei G-116.**
+`[read]` **Seine Messung gilt, meine nicht.**
+
+**Abgenommen.**
+

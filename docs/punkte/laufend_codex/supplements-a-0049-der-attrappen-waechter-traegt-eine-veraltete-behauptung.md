@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: ["apps/web/src/app/v2/supplements/tab-interactions-echt.tsx"]
@@ -26,5 +28,5 @@ zahlen: null
 
 ## Auftrag
 
-**Vorbereitet mit G-202 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit G-202 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.

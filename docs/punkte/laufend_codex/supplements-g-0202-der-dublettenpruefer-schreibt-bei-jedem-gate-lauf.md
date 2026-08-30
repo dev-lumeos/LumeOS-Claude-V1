@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: ["tools/supplement-kern-dubletten-pruefen.mjs", "backup/c276/supplement-kern-dubletten.json"]
@@ -37,8 +39,7 @@ zahlen: null
 
 **Mitbeauftragt: A-49, C-316.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-30, waehrend das C-120-Buendel
-laeuft.**
+`[read]` **Beauftragt am 2026-08-30.**
 
 ### 1 · G-202 — der Dublettenpruefer schreibt bei jedem Gate-Lauf
 

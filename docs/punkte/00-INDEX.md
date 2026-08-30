@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 251 |
-| `laufend_codex` | 7 |
+| `todos` | 252 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 5 |
-| `erledigt` | 92 |
+| `erledigt` | 95 |
 | **gesamt** | **355** |
 
 ## medical — 41
@@ -69,7 +69,7 @@
 | `C-08` | befund | mittel | [`services/nutrition-api` — der ADR gilt](todos/nutrition-c-0008-services-nutrition-api-der-adr-gilt.md) | offen | — | — |
 | `C-20` | feature | mittel | [Treffer am Wortanfang schlägt Treffer in der Wortmitte](erledigt/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md) | erledigt | — | — |
 | `C-24` | befund | niedrig | [Halbfertigprodukte ranken als Grundzutat](todos/nutrition-c-0024-halbfertigprodukte-ranken-als-grundzutat.md) | offen | — | — |
-| `C-27` | messung | mittel | [Alltagswörter ohne Treffer — noch zwei](laufend_codex/nutrition-c-0027-alltagsworter-ohne-treffer-noch-zwei.md) | laeuft (codex) | — | — |
+| `C-27` | messung | mittel | [Alltagswörter ohne Treffer — noch zwei](erledigt/nutrition-c-0027-alltagsworter-ohne-treffer-noch-zwei.md) | erledigt | — | — |
 | `C-29` | entscheidung | mittel | [Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt](todos/nutrition-c-0029-drei-namensschichten-und-eine-kuration-die-den-kettenlauf-uberlebt.md) | offen | — | — |
 | `C-30` | befund | mittel | [Suche und Trefferliste auf Arten umstellen](todos/nutrition-c-0030-suche-und-trefferliste-auf-arten-umstellen.md) | offen | — | — |
 | `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](todos/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | offen | — | — |
@@ -80,15 +80,15 @@
 | `C-102` | feature | mittel | [`milch` findet Joghurt statt Milch](erledigt/nutrition-c-0102-milch-findet-joghurt-statt-milch.md) | erledigt | — | — |
 | `C-109` | entscheidung | mittel | [Die Injektions-Grenzwerte sind unbelegt](todos/nutrition-c-0109-die-injektions-grenzwerte-sind-unbelegt.md) | offen | — | — |
 | `C-117` | befund | mittel | [`milch` traegt auch mit Vorlieben nicht](erledigt/nutrition-c-0117-milch-traegt-auch-mit-vorlieben-nicht.md) | erledigt | — | — |
-| `C-120` | befund | mittel | [Drei Sperren in `food_search`](laufend_codex/nutrition-c-0120-drei-sperren-in-food-search.md) | laeuft (codex) | — | — |
+| `C-120` | befund | mittel | [Drei Sperren in `food_search`](erledigt/nutrition-c-0120-drei-sperren-in-food-search.md) | erledigt | — | — |
 | `C-121` | befund | mittel | [Die Suche ist langsamer geworden](erledigt/nutrition-c-0121-die-suche-ist-langsamer-geworden.md) | erledigt | — | — |
 | `C-149` | blocker | mittel | [Vitamin D in IU gegen µg](erledigt/nutrition-c-0149-vitamin-d-in-iu-gegen-g.md) | erledigt | — | — |
 | `C-160` | befund | mittel | [Der Bewertungshorizont je Naehrstoff ist leer](todos/nutrition-c-0160-der-bewertungshorizont-je-naehrstoff-ist-leer.md) | offen | — | — |
 | `C-163` | befund | mittel | [94 Substanzen ohne maschinenlesbare Naehrstoffmenge](erledigt/nutrition-c-0163-94-substanzen-ohne-maschinenlesbare-naehrstoffmenge.md) | erledigt | — | — |
 | `C-174` | befund | mittel | [`ADR_NUTRITION_PREFERENCES_V1` kennt drei Constraint-Stufen](todos/nutrition-c-0174-adr-nutrition-preferences-v1-kennt-drei-constraint-stufen.md) | offen | — | — |
 | `C-175` | feature | mittel | [`shopping_lists` fehlt](erledigt/nutrition-c-0175-shopping-lists-fehlt.md) | erledigt | — | — |
-| `C-177` | messung | mittel | [Thai-Aliase fehlen bewusst](laufend_codex/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | laeuft (codex) | — | — |
-| `C-191` | messung | mittel | [`p_user_id` kostet das Dreifache](laufend_codex/nutrition-c-0191-p-user-id-kostet-das-dreifache.md) | laeuft (codex) | — | — |
+| `C-177` | messung | hoch | [Thai-Aliase fehlen bewusst](todos/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | offen | — | — |
+| `C-191` | messung | mittel | [`p_user_id` kostet das Dreifache](erledigt/nutrition-c-0191-p-user-id-kostet-das-dreifache.md) | erledigt | — | — |
 | `C-192` | befund | mittel | [`p_user_id` kostet in `food_search` das Dreifache](erledigt/nutrition-c-0192-p-user-id-kostet-in-food-search-das-dreifache.md) | erledigt | — | — |
 | `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](todos/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | offen | — | — |
 | `C-210` | befund | mittel | [Die 28 fehlenden Naehrstofftexte — was ist gemeint?](todos/nutrition-c-0210-die-28-fehlenden-naehrstofftexte-was-ist-gemeint.md) | offen | — | — |
@@ -188,7 +188,7 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-27` | feature | mittel | [Zwei Agenten, zwei Attrappen-Erwartungen](todos/supplements-a-0027-zwei-agenten-zwei-attrappen-erwartungen.md) | offen | — | — |
-| `A-49` | befund | mittel | [Der Attrappen-Waechter traegt eine veraltete Behauptung](laufend_codex/supplements-a-0049-der-attrappen-waechter-traegt-eine-veraltete-behauptung.md) | vorbereitet (codex) | — | — |
+| `A-49` | befund | mittel | [Der Attrappen-Waechter traegt eine veraltete Behauptung](laufend_codex/supplements-a-0049-der-attrappen-waechter-traegt-eine-veraltete-behauptung.md) | laeuft (codex) | — | — |
 | `C-01` | befund | mittel | [Frontend-Stack-Lücke schliessen](todos/supplements-c-0001-frontend-stack-lucke-schliessen.md) | offen | — | — |
 | `C-113` | feature | mittel | [Enhanced Mode — entschieden](todos/supplements-c-0113-enhanced-mode-entschieden.md) | offen | — | — |
 | `C-129` | befund | mittel | [Der Kimi-Import ist da; die Restluecken sind getrennt](todos/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md) | offen | — | C-327 |
@@ -213,7 +213,7 @@
 | `C-272` | befund | mittel | [Welle 1 — der Katalog wird inhaltlich fertig](todos/supplements-c-0272-welle-1-der-katalog-wird-inhaltlich-fertig.md) | offen | — | — |
 | `C-274` | befund | mittel | [die unsichtbaren Substanzen zuordnen](todos/supplements-c-0274-die-unsichtbaren-substanzen-zuordnen.md) | offen | — | — |
 | `C-287` | befund | mittel | [148 Community-Zeilen ohne Substanzbindung](todos/supplements-c-0287-148-community-zeilen-ohne-substanzbindung.md) | offen | — | — |
-| `C-316` | feature | mittel | [NAC steht im Katalog ohne deutschen Namen](laufend_codex/supplements-c-0316-nac-steht-im-katalog-ohne-deutschen-namen.md) | vorbereitet (codex) | — | — |
+| `C-316` | feature | mittel | [NAC steht im Katalog ohne deutschen Namen](laufend_codex/supplements-c-0316-nac-steht-im-katalog-ohne-deutschen-namen.md) | laeuft (codex) | — | — |
 | `C-319` | entscheidung | hoch | [Cam-Speicherweg festlegen](erledigt/supplements-c-0319-cam-speicherweg-festlegen.md) | erledigt | — | — |
 | `C-320` | entscheidung | hoch | [Cam-Datenschutz und Aufbewahrung je Rechtsraum festlegen](erledigt/supplements-c-0320-cam-datenschutz-und-aufbewahrung-je-rechtsraum-festlegen.md) | erledigt | — | — |
 | `C-321` | entscheidung | hoch | [Cam-Einwilligungsfuehrung festlegen](erledigt/supplements-c-0321-cam-einwilligungsfuehrung-festlegen.md) | erledigt | — | — |
@@ -232,7 +232,7 @@
 | `G-186` | befund | mittel | [Der Katalog zeigt noch nicht alles, was drinsteht](erledigt/supplements-g-0186-der-katalog-zeigt-noch-nicht-alles-was-drinsteht.md) | erledigt | — | G-213, G-214 |
 | `G-188` | feature | mittel | [Der Wechselwirkungs-Reiter heisst nicht, was er zeigt](erledigt/supplements-g-0188-der-wechselwirkungs-reiter-heisst-nicht-was-er-zeigt.md) | erledigt | — | — |
 | `G-189` | feature | mittel | [Der tote Rueckfallzweig `SuppInteractions` fliegt](erledigt/supplements-g-0189-der-tote-rueckfallzweig-suppinteractions-fliegt.md) | erledigt | — | — |
-| `G-202` | feature | mittel | [der Dublettenpruefer schreibt bei jedem Gate-Lauf](laufend_codex/supplements-g-0202-der-dublettenpruefer-schreibt-bei-jedem-gate-lauf.md) | vorbereitet (codex) | — | — |
+| `G-202` | feature | mittel | [der Dublettenpruefer schreibt bei jedem Gate-Lauf](laufend_codex/supplements-g-0202-der-dublettenpruefer-schreibt-bei-jedem-gate-lauf.md) | laeuft (codex) | — | — |
 | `G-205` | messung | mittel | [Der Dev-Server beendet sich selbst](todos/supplements-g-0205-der-dev-server-beendet-sich-selbst.md) | offen | — | — |
 | `G-213` | entscheidung | mittel | [soll `in_vitro_only` eine Warnung abschwaechen?](todos/supplements-g-0213-in-vitro-only-abschwaechen.md) | offen | — | — |
 | `G-214` | befund | mittel | [die Katalogsuche sagt nicht, warum ein Treffer passt](todos/supplements-g-0214-suche-sagt-nicht-warum-ein-treffer-passt.md) | offen | — | — |

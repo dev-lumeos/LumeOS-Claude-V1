@@ -10,9 +10,11 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: ["docs/ssot/daten/wortschatz-luecke.json"]
+  dateien:
+    - supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql
 zahlen: null
 ---
 
@@ -52,3 +54,8 @@ und der Bericht stehen dort.
 
 Erledigt: [C-120 - Messbericht](nutrition-c-0120-drei-sperren-in-food-search.md#2026-08-30---c-120-c-191-c-27-und-c-177-nachgemessen)
 misst fuer beide verbliebenen Begriffe je einen Treffer.
+
+## Abnahme
+
+**2026-08-30, mit C-120 abgenommen:** erledigt: beide Begriffe liefern Treffer.
+**Die Messung steht dort.**
