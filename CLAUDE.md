@@ -327,6 +327,14 @@ unberuehrt.**
 folgeauftrag betroffen, allfaellige anpassung, auftrag raus und dann
 berichte abarbeiten"*.
 
+**Und derselbe Tag, als stehender Ablauf:** *,,du spielst nun
+jedesmal den vollen cycle durch ohne mein befehl, sprich du bist
+fertig wenn berichte kurzcheck, neue auftraege raus, berichte check
+und abarbeiten, neue next drin sind"*.
+
+`[read]` **Kommt ein Bericht, laeuft der Zyklus ohne Aufforderung.**
+**Er ist erst zu Ende, wenn `next/` wieder gefuellt ist.**
+
     1  Bericht ueberfliegen: ist der vorbereitete Auftrag betroffen?
     2  falls ja: anpassen
     3  Auftrag aus laufend_<agent>/next/ eine Ebene hoeher, raus
@@ -344,6 +352,31 @@ abnimmt.** `[cmd]` **Und weil der naechste Auftrag vorbereitet in
 `[read]` **Der Ordner bleibt trotzdem ehrlich:** ein fertig
 gemeldeter Punkt liegt hoechstens Minuten in `laufend_*`, **nicht bis
 zum naechsten Gespraech.**
+
+### Wann der Zyklus zu Ende ist
+
+    laufend_*/          nur was wirklich laeuft
+    erledigt/           jeder Bericht abgenommen, mit Commit-Hash
+    laufend_*/next/     je Agent ein Buendel vorbereitet
+    Waechter            gruen
+    neue Befunde        als Punkte angelegt
+
+`[read]` **Fehlt eines davon, ist der Zyklus nicht fertig** — auch
+wenn niemand nachfragt.
+
+### Was den Zyklus unterbricht
+
+`[read]` **Nur eines: wenn ein Bericht eine Entscheidung braucht, die
+Tom gehoert.**
+
+`[cmd]` **Beispiele vom 30.08.:** die zwei Magnesium-Obergrenzen
+(C-350), der Katalog ohne deutsche Namen (C-352), Thai ohne Aliase
+(C-177).
+
+`[read]` **Dann laeuft der Zyklus trotzdem weiter** — der Punkt geht
+nach `todos/` mit dem gemessenen Stand, **und die Frage wird
+vorgelegt.** **Der Agent wartet nicht auf eine Entscheidung, die er
+nicht braucht.**
 
 ### Warum
 

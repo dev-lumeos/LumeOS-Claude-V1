@@ -379,3 +379,25 @@ beim Nachmessen aufgefallen ist.
 
 `[read]` **Ein vorbereiteter Auftrag traegt `agent:` und
 `beauftragt:` noch nicht** — er bekommt sie beim Verschieben.
+
+## Der Zyklus laeuft ohne Aufforderung
+
+**Tom, 2026-08-30:** *,,du spielst nun jedesmal den vollen cycle
+durch ohne mein befehl, sprich du bist fertig wenn berichte
+kurzcheck, neue auftraege raus, berichte check und abarbeiten, neue
+next drin sind"*.
+
+    1  Bericht ueberfliegen - ist der vorbereitete Auftrag betroffen?
+    2  falls ja: anpassen
+    3  next/ eine Ebene hoeher - der Auftrag geht raus
+    4  Bericht nachmessen, Abnahme schreiben, nach erledigt/
+    5  neue Befunde als Punkte
+    6  committen, Commit-Hash nachtragen
+    7  next/ wieder fuellen
+
+**Fertig ist, wenn Schritt 7 steht.**
+
+`[read]` **Kein Schritt braucht eine Aufforderung.** `[read]` **Und
+keiner darf uebersprungen werden, weil gerade etwas anderes
+dringender scheint** — **am 30.08. lagen zwei fertige Punkte in
+`laufend_codex/`, waehrend neue Auftraege geschrieben wurden.**
