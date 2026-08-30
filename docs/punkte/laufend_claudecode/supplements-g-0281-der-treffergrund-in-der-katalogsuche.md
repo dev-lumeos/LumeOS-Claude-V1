@@ -85,6 +85,17 @@ Nicht committen, nicht stagen, nicht pushen.
     Treffer ohne Grund              gibt es welche? dann warum
     Attrappen                       am Schirm, vorher / nachher
 
+### Der Dev-Server gehoert dir
+
+`[cmd]` **`server.py start` bevorzugen** — **er laesst einen gesunden
+Server stehen** (G-280, Gegenprobe: 18 Starts unveraendert).
+
+`[read]` **`neustart` nur, wenn `start` nicht reicht** — **er beendet
+den Server hart, und Tom arbeitet auf demselben Port.**
+
+`[cmd]` **Codex fasst ihn nicht an** — die Regel steht seit
+2026-08-30 in `CLAUDE.md`.
+
 ## Bericht
 
 _(vom Agenten anzuhaengen)_

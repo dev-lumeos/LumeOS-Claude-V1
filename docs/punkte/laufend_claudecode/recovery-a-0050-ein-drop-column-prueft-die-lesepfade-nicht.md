@@ -48,3 +48,14 @@ zahlen: null
 
 **Mitbeauftragt mit G-102 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+### Der Dev-Server gehoert dir
+
+`[cmd]` **`server.py start` bevorzugen** — **er laesst einen gesunden
+Server stehen** (G-280, Gegenprobe: 18 Starts unveraendert).
+
+`[read]` **`neustart` nur, wenn `start` nicht reicht** — **er beendet
+den Server hart, und Tom arbeitet auf demselben Port.**
+
+`[cmd]` **Codex fasst ihn nicht an** — die Regel steht seit
+2026-08-30 in `CLAUDE.md`.

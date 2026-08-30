@@ -95,3 +95,14 @@ Nicht committen, nicht stagen, nicht pushen.
     DROP COLUMN           faengt ein Waechter es? gebaut oder
                           begruendet nicht
     1.620 ms              aufgeteilt oder als unklar gemeldet
+
+### Der Dev-Server gehoert dir
+
+`[cmd]` **`server.py start` bevorzugen** — **er laesst einen gesunden
+Server stehen** (G-280, Gegenprobe: 18 Starts unveraendert).
+
+`[read]` **`neustart` nur, wenn `start` nicht reicht** — **er beendet
+den Server hart, und Tom arbeitet auf demselben Port.**
+
+`[cmd]` **Codex fasst ihn nicht an** — die Regel steht seit
+2026-08-30 in `CLAUDE.md`.

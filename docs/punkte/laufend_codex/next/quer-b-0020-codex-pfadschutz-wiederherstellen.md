@@ -64,3 +64,22 @@ zahlen: null
   2026-04-23 aus der Governance-Ära; die lebende Kette liegt unter
   `supabase/`. Ob der Pfad überhaupt noch geschützt werden muss oder
   eher archiviert gehört, ist ungeklärt.
+
+## Auftrag
+
+**Vorbereitet mit C-318 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.
+
+### Der Dev-Server gehoert dir nicht
+
+`[cmd]` **Kein `server.py neustart`, kein `start`, kein
+`aufraeumen`.** `[read]` **Wenn eine Messung ihn braucht: melden,
+nicht starten.**
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

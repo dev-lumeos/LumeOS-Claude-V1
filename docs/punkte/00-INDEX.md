@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 233 |
-| `laufend_codex` | 4 |
-| `laufend_claudecode` | 5 |
+| `todos` | 230 |
+| `laufend_codex` | 6 |
+| `laufend_claudecode` | 6 |
 | `erledigt` | 130 |
 | **gesamt** | **372** |
 
@@ -322,7 +322,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `A-35` | messung | mittel | [Sieben Module haben keine Seite](todos/coach-a-0035-sieben-module-haben-keine-seite.md) | offen | — | — |
+| `A-35` | messung | mittel | [Sieben Module haben keine Seite](laufend_claudecode/coach-a-0035-sieben-module-haben-keine-seite.md) | vorbereitet (claudecode) | — | — |
 | `A-36` | befund | mittel | [`module-stubs-replacement.jsx` traegt drei ganze Module](erledigt/coach-a-0036-module-stubs-replacement-jsx-traegt-drei-ganze-module.md) | erledigt | — | — |
 | `A-43` | entscheidung | mittel | [Coach-Permissions pro Subfunktion](todos/coach-a-0043-coach-permissions-pro-subfunktion.md) | offen | — | — |
 | `B-25` | befund | mittel | [Geteilte Sitzung im Produktbereich prüfen](erledigt/coach-b-0025-geteilte-sitzung-im-produktbereich-prufen.md) | erledigt | — | — |
@@ -335,7 +335,7 @@
 | `C-220` | befund | mittel | [`buddy` — 0 von 16 Tabellen](todos/coach-c-0220-buddy-0-von-16-tabellen.md) | offen | — | — |
 | `C-268` | feature | mittel | [Beim Einladen gibt es keine Namensaufloesung](todos/coach-c-0268-beim-einladen-gibt-es-keine-namensaufloesung.md) | offen | — | — |
 | `C-269` | feature | mittel | [Eine Einladung laesst sich nicht zuruecknehmen](todos/coach-c-0269-eine-einladung-laesst-sich-nicht-zuruecknehmen.md) | offen | — | — |
-| `C-318` | befund | hoch | [ADR-Coach-Permissions weicht von der Umsetzung ab](todos/coach-c-0318-adr-coach-permissions-weicht-von-der-umsetzung-ab.md) | offen | — | — |
+| `C-318` | befund | hoch | [ADR-Coach-Permissions weicht von der Umsetzung ab](laufend_codex/coach-c-0318-adr-coach-permissions-weicht-von-der-umsetzung-ab.md) | vorbereitet (codex) | — | — |
 | `C-358` | befund | mittel | [abgelaufene Aktionen bleiben `pending`](erledigt/coach-c-0358-abgelaufene-aktionen-bleiben-pending.md) | erledigt | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
@@ -381,7 +381,7 @@
 | `A-62` | befund | mittel | [Waechter kippen still, wenn das Schema nachkommt](erledigt/quer-a-0062-waechter-kippen-still-wenn-das-schema-nachkommt.md) | erledigt | — | A-63, G-277, G-278 |
 | `A-63` | befund | niedrig | [der Waechter las seine eigene Probe](todos/quer-a-0063-der-waechter-las-seine-eigene-probe.md) | offen | — | — |
 | `A-64` | entscheidung | niedrig | [der Schirmlauf ausserhalb des Gates](todos/quer-a-0064-der-schirmlauf-ausserhalb-des-gates.md) | offen | — | — |
-| `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](todos/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | offen | — | — |
+| `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](laufend_codex/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | vorbereitet (codex) | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
 | `C-64` | feature | mittel | [942 Schluessel und Thai aus dem Vorgaengerrepo uebertragen](todos/quer-c-0064-942-schluessel-und-thai-aus-dem-vorgaengerrepo-uebertragen.md) | offen | — | — |

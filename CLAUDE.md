@@ -319,6 +319,48 @@ SPEC"*, *,,READ-ONLY MOCK"*.
 `[read]` **`/v2/` ist der Arbeitsort. Der alte Baum bleibt
 unberuehrt.**
 
+## Nur ein Agent fasst den Dev-Server an
+
+**Tom, 2026-08-30:** *,,dann musst du deine auftraege so steuern dass
+nicht beide agents neustarts generieren"*.
+
+**Der UI-Agent darf. Codex nie.**
+
+`[read]` **Der Grund ist der Bedarf, nicht die Rangfolge:** `[cmd]`
+**Codex arbeitet in `supabase/_pipeline/` und braucht keinen
+Browser.** `[cmd]` **Der UI-Agent braucht ihn fuer `schuss.mjs` —
+Bildschirmfotos, Attrappenzahl, Ladezeit.**
+
+### Was gemessen wurde
+
+`[cmd]` **18 Starts im Log, sechs an einem Tag.** `[cmd]` **Vor keinem
+ein Fehler** — `server.py neustart` fuehrt `taskkill /T /F` auf Port
+3200 aus, **und beide Agenten teilen sich `apps/web`.**
+
+`[cmd]` **Getrennte Ports loesen es nicht:** zwei `next dev`-Prozesse
+beobachten und kompilieren denselben Quellbaum doppelt, **egal welcher
+Bauordner** (G-280).
+
+`[cmd]` **Aber `server.py start` schont einen gesunden Server
+bereits** — **18 Starts vor und nach der Gegenprobe unveraendert.**
+
+### Was in den Auftrag gehoert
+
+**An Codex, in jeden Auftrag:**
+
+    Der Dev-Server gehoert dir nicht. Kein `server.py neustart`,
+    kein `start`, kein `aufraeumen`. Wenn eine Messung ihn braucht:
+    melden, nicht starten.
+
+**An den UI-Agenten:**
+
+    Der Dev-Server gehoert dir. `server.py start` bevorzugen -- er
+    laesst einen gesunden stehen. `neustart` nur, wenn `start` nicht
+    reicht.
+
+`[read]` **Und Tom benutzt 3200 mit** — **Aenderungen erscheinen dort
+automatisch.** **Wer neu startet, unterbricht ihn.**
+
 ## Ein Bericht wird abgearbeitet, bevor der naechste Auftrag geht
 
 **Tom, 2026-08-30:** *,,abarbeiten, ergaenzen, in erledigt ablegen"*.

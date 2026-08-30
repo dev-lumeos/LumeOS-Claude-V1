@@ -84,6 +84,17 @@ Nicht committen, nicht stagen, nicht pushen.
     ausgeliefert           gehen sie in den Build? gemessen
     Urteil                 behalten / archivieren / loeschen
 
+### Der Dev-Server gehoert dir
+
+`[cmd]` **`server.py start` bevorzugen** — **er laesst einen gesunden
+Server stehen** (G-280, Gegenprobe: 18 Starts unveraendert).
+
+`[read]` **`neustart` nur, wenn `start` nicht reicht** — **er beendet
+den Server hart, und Tom arbeitet auf demselben Port.**
+
+`[cmd]` **Codex fasst ihn nicht an** — die Regel steht seit
+2026-08-30 in `CLAUDE.md`.
+
 ## Bericht
 
 _(vom Agenten anzuhaengen)_

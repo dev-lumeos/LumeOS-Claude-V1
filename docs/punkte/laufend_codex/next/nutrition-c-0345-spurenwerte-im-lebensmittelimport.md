@@ -112,6 +112,16 @@ Nicht committen, nicht stagen, nicht pushen.
     beantwortet es C-360   ja / nein, mit Begruendung
     Pipeline-Historie      Vorschlag, nicht gebaut
 
+### Der Dev-Server gehoert dir nicht
+
+`[cmd]` **Kein `server.py neustart`, kein `start`, kein
+`aufraeumen`.** `[read]` **Wenn eine Messung ihn braucht: melden,
+nicht starten.**
+
+`[cmd]` **Gemessen in G-280: 18 Starts, sechs an einem Tag, vor keinem
+ein Fehler** — **`neustart` fuehrt `taskkill /T /F` auf Port 3200
+aus, und Tom arbeitet dort mit.**
+
 ## Bericht
 
 _(vom Agenten anzuhaengen)_

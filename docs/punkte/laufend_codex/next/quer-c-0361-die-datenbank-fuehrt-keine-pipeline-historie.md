@@ -53,3 +53,13 @@ selbst, oder der Lauf, der ihn ausfuehrt?**
 
 **Vorbereitet mit C-345 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+### Der Dev-Server gehoert dir nicht
+
+`[cmd]` **Kein `server.py neustart`, kein `start`, kein
+`aufraeumen`.** `[read]` **Wenn eine Messung ihn braucht: melden,
+nicht starten.**
+
+`[cmd]` **Gemessen in G-280: 18 Starts, sechs an einem Tag, vor keinem
+ein Fehler** — **`neustart` fuehrt `taskkill /T /F` auf Port 3200
+aus, und Tom arbeitet dort mit.**
