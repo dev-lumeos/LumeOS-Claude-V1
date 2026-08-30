@@ -11,7 +11,7 @@ entscheidung: E-36
 agent: claudecode
 beauftragt: 2026-08-30
 erledigt: 2026-08-30
-commit: OFFEN
+commit: be998f73
 beruehrt:
   dateien:
     - apps/web/src/components/shell/sprachwahl.tsx
