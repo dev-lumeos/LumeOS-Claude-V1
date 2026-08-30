@@ -11,7 +11,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
 erledigt: 2026-08-30
-commit: OFFEN
+commit: c7837649
 beruehrt:
   dateien:
     - supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql
