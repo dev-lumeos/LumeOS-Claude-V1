@@ -10,7 +10,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
 erledigt: 2026-08-30
-commit: OFFEN
+commit: 9ca3e6e9
 beruehrt:
   dateien:
     - supabase/_pipeline/05_user_tabellen

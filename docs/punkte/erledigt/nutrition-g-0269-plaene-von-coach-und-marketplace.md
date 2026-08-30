@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
 erledigt: 2026-08-30
-commit: OFFEN
+commit: 9ca3e6e9
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen: null
