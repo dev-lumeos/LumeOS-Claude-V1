@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: G-274
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: [nutrition.meal_plan_logs]
 zahlen: null
@@ -45,7 +47,7 @@ muss die Wahrheit sagen** — sonst ist es schlimmer als keins.
 
 **Mitbeauftragt: G-258, G-251.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-30, waehrend G-273/G-275 laufen.**
+`[read]` **Beauftragt am 2026-08-30.**
 
 ### 1 · G-276 — MealCam sagt die Unwahrheit
 

@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: G-70
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/tab-foods.tsx]
 zahlen: null
@@ -34,5 +36,5 @@ Filter an einem Tag ohne Vortag?**
 
 ## Auftrag
 
-**Vorbereitet mit G-276 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit G-276 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.

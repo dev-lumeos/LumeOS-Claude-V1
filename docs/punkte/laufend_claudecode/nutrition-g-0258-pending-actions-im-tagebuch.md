@@ -7,6 +7,8 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: G-254
 entscheidung: E-29
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: [coach.pending_actions]
 zahlen: null
@@ -41,5 +43,5 @@ Coach-Aktion zeigt, kann der Nutzer sie vermutlich bestaetigen.
 
 ## Auftrag
 
-**Vorbereitet mit G-276 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit G-276 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.

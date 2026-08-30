@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 252 |
+| `todos` | 251 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 5 |
+| `laufend_claudecode` | 6 |
 | `erledigt` | 95 |
 | **gesamt** | **355** |
 
@@ -87,7 +87,7 @@
 | `C-163` | befund | mittel | [94 Substanzen ohne maschinenlesbare Naehrstoffmenge](erledigt/nutrition-c-0163-94-substanzen-ohne-maschinenlesbare-naehrstoffmenge.md) | erledigt | — | — |
 | `C-174` | befund | mittel | [`ADR_NUTRITION_PREFERENCES_V1` kennt drei Constraint-Stufen](todos/nutrition-c-0174-adr-nutrition-preferences-v1-kennt-drei-constraint-stufen.md) | offen | — | — |
 | `C-175` | feature | mittel | [`shopping_lists` fehlt](erledigt/nutrition-c-0175-shopping-lists-fehlt.md) | erledigt | — | — |
-| `C-177` | messung | hoch | [Thai-Aliase fehlen bewusst](todos/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | offen | — | — |
+| `C-177` | messung | hoch | [Thai-Aliase fehlen bewusst](laufend_claudecode/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | vorbereitet (claudecode) | — | — |
 | `C-191` | messung | mittel | [`p_user_id` kostet das Dreifache](erledigt/nutrition-c-0191-p-user-id-kostet-das-dreifache.md) | erledigt | — | — |
 | `C-192` | befund | mittel | [`p_user_id` kostet in `food_search` das Dreifache](erledigt/nutrition-c-0192-p-user-id-kostet-in-food-search-das-dreifache.md) | erledigt | — | — |
 | `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](todos/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | offen | — | — |
@@ -158,10 +158,10 @@
 | `G-248` | befund | mittel | [der Leseweg laedt neun von 35 Fehlzaehlern](erledigt/nutrition-g-0248-der-leseweg-laedt-neun-von-35-fehlzaehlern.md) | erledigt | — | — |
 | `G-249` | feature | hoch | [zwei Ansichten zusammenfuehren und den Verlauf als Trend zeigen](erledigt/nutrition-g-0249-zwei-ansichten-zusammenfuehren-und-trend-zeigen.md) | erledigt | — | G-250 |
 | `G-250` | entscheidung | mittel | [die vier Zustaende fehlen in der Ordnung](erledigt/nutrition-g-0250-die-vier-zustaende-fehlen-in-der-ordnung.md) | erledigt | — | G-261 |
-| `G-251` | feature | niedrig | [die Herkunfts-Filter im Food-DB-Reiter](laufend_claudecode/nutrition-g-0251-herkunfts-filter-im-food-db-tab.md) | vorbereitet (claudecode) | — | — |
+| `G-251` | feature | niedrig | [die Herkunfts-Filter im Food-DB-Reiter](laufend_claudecode/nutrition-g-0251-herkunfts-filter-im-food-db-tab.md) | laeuft (claudecode) | — | — |
 | `G-252` | messung | mittel | [die Ladezeit hat eine andere Ursache](erledigt/nutrition-g-0252-die-ladezeit-hat-eine-andere-ursache.md) | erledigt | — | — |
 | `G-254` | entscheidung | mittel | [sechs Kacheln brauchen eine Entscheidung](erledigt/nutrition-g-0254-sechs-kacheln-brauchen-eine-entscheidung.md) | erledigt | — | G-258, G-262, G-263, G-264 |
-| `G-258` | feature | mittel | [Pending actions im Tagebuch](laufend_claudecode/nutrition-g-0258-pending-actions-im-tagebuch.md) | vorbereitet (claudecode) | — | — |
+| `G-258` | feature | mittel | [Pending actions im Tagebuch](laufend_claudecode/nutrition-g-0258-pending-actions-im-tagebuch.md) | laeuft (claudecode) | — | — |
 | `G-259` | befund | mittel | [toter Leseweg und die Fensterlaufzeit](erledigt/nutrition-g-0259-toter-leseweg-und-die-fensterlaufzeit.md) | erledigt | — | — |
 | `G-260` | feature | mittel | [die Dauerregel anbinden](erledigt/nutrition-g-0260-die-dauerregel-anbinden.md) | erledigt | — | C-348 |
 | `G-261` | entscheidung | niedrig | [die Vergleichsfunktionen anbinden](todos/nutrition-g-0261-die-vergleichsfunktionen-anbinden.md) | offen | — | — |
@@ -178,7 +178,7 @@
 | `G-272` | feature | hoch | [`+ Add` braucht ein Erfassungsmodal](erledigt/nutrition-g-0272-add-braucht-ein-erfassungsmodal.md) | erledigt | — | — |
 | `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](laufend_claudecode/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | laeuft (claudecode) | — | C-349 |
 | `G-274` | feature | hoch | [der Bestaetigungsweg fuer Plan-Eintraege](erledigt/nutrition-g-0274-der-bestaetigungsweg-fuer-plan-eintraege.md) | erledigt | — | G-276 |
-| `G-276` | befund | mittel | [MealCam schreibt `confirmation_mode` ohne Fotoweg](laufend_claudecode/nutrition-g-0276-mealcam-schreibt-ohne-fotoweg.md) | vorbereitet (claudecode) | — | — |
+| `G-276` | befund | mittel | [MealCam schreibt `confirmation_mode` ohne Fotoweg](laufend_claudecode/nutrition-g-0276-mealcam-schreibt-ohne-fotoweg.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 55
