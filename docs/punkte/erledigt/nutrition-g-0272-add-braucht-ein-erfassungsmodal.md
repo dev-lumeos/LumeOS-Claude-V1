@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-29
 erledigt: 2026-08-30
-commit: OFFEN
+commit: bdecfcfa
 beruehrt:
   tabellen: [nutrition.meals, nutrition.meal_items]
 zahlen: null

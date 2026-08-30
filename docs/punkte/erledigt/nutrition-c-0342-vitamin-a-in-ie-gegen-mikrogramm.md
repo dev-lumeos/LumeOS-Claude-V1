@@ -10,7 +10,7 @@ entscheidung: E-32
 agent: codex
 beauftragt: 2026-08-29
 erledigt: 2026-08-30
-commit: OFFEN
+commit: bdecfcfa
 beruehrt:
   tabellen: [nutrition.nutrient_reference_values, nutrition.meal_plans]
 zahlen:
