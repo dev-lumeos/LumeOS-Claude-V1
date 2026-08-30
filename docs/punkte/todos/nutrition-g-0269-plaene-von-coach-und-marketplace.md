@@ -40,3 +40,9 @@ und der Bericht stehen dort.
 
 **Aus G-271 gemessen:** die Autonomieachse existiert bereits — es fehlt die Herkunftsspalte und die Regel.
 **Die Messung steht dort.**
+
+## Auftrag
+
+**Der Schemateil ist mit C-342 an Codex beauftragt (2026-08-29):**
+die Herkunftsspalte und die Autonomieregel. **Die Oberflaeche folgt
+danach.**

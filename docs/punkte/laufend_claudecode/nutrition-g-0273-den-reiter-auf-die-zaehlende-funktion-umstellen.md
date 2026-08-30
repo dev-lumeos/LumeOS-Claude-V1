@@ -7,6 +7,8 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: C-348
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-29
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
 zahlen:
@@ -40,3 +42,8 @@ Entscheidung billiger, ohne sie zu aendern.**
 `[read]` **Der Nachweis ist Ergebnisgleichheit:** dieselben Flags,
 dieselben Tageszaehlungen. **Eine schnellere Anzeige mit anderen
 Zahlen waere keine Verbesserung.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-272 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.

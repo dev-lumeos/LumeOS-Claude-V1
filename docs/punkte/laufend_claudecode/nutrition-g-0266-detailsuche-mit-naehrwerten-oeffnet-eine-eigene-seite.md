@@ -6,7 +6,9 @@ schwere: mittel
 angelegt: 2026-08-29
 braucht: []
 kind_von: null
-entscheidung: null
+entscheidung: E-33
+agent: claudecode
+beauftragt: 2026-08-29
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
 zahlen: null
@@ -50,3 +52,8 @@ und der Bericht stehen dort.
 
 **Aus G-271 gemessen:** drei Wege gemessen, Weg C bevorzugt (Seite behalten, Zustand mitnehmen) — Toms Entscheidung.
 **Die Messung steht dort.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-272 am 2026-08-29.** Der Auftragstext
+und der Bericht stehen dort.

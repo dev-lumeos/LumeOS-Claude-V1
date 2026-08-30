@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **29 Punkte tragen `typ: entscheidung`
+`[cmd]` **27 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -15,51 +15,6 @@ Dann faellt er hier heraus.
 
 `[read]` **Was aufbereitet gehoert, gehoert in die Punktdatei** —
 nicht in diese Uebersicht.
-
----
-
-# Hoch
-
-## C-342 — Vitamin A in IE gegen Mikrogramm
-
-**Modul:** nutrition · **angelegt:** 2026-08-29 · **Datei:** `todos/nutrition-c-0342-vitamin-a-in-ie-gegen-mikrogramm.md`
-
-## Befund
-
-Aus C-324, Codex, 2026-08-29. **Vom Orchestrator nachgemessen.**
-
-`[cmd]` **Der Bestand fuehrt Vitamin A in Mikrogramm
-Retinol-Aequivalent** — `nutrient_defs` und
-`nutrient_reference_values` beide.
-
-`[cmd]` **NRF9.3 rechnet gegen 5.000 IU.**
-
-`[read]` **Und die Umrechnung ist formabhaengig:** Retinol und
-Beta-Carotin haben verschiedene Faktoren. `[cmd]` **C-149 hat Vitamin
-A und E deshalb ausdruecklich ohne Zuordnung gelassen.**
-
-## Die Frage
-
-**Wie soll NRF9.3 mit Vitamin A umgehen?**
-
-`[read]` **Drei Wege, alle mit Kosten:**
-
-**Faktor setzen und begruenden.** `[read]` Ein pauschaler Faktor waere
-eine Annahme ueber die Zusammensetzung — **genau das, was C-149
-verweigert hat.**
-
-**Vitamin A weglassen.** `[read]` Dann ist es NRF8.3, **und die
-Validierungsstudien gelten nicht mehr** — sie sind fuer die
-Neunerfassung gerechnet.
-
-**Gegen einen Mikrogramm-Richtwert rechnen.** `[read]` Der
-EFSA-Zielwert steht im Bestand. **Dann ist es nicht mehr die
-Originalfassung** — E-25 haelt fest, dass die Studienlage fuer die
-Originalwerte gilt.
-
-`[read]` **Der dritte Weg ist der ehrlichste, wenn er benannt wird:**
-*,,NRF9.3 mit europaeischen Referenzwerten"* ist eine eigene Formel,
-**aber sie waere durchgehend eine.** Die anderen beiden mischen.
 
 ---
 
@@ -363,38 +318,6 @@ oder erledigt sein.
 
 **Verwandter Punkt:** C-31 (Admin-Oberflaeche fuer die Kuration). `[read]` **Nicht zusammengelegt** — ob es
 derselbe Befund ist, gehoert geprueft, nicht angenommen.
-
-## G-266 — Detailsuche mit Naehrwerten oeffnet eine eigene Seite
-
-**Modul:** nutrition · **angelegt:** 2026-08-29 · **Datei:** `todos/nutrition-g-0266-detailsuche-mit-naehrwerten-oeffnet-eine-eigene-seite.md`
-
-## Befund
-
-**Tom, 2026-08-29:** *,,Detailsuche mit naehrwerten koennen wir
-drinlassen, aber dann mit einen anstaendigen clickhandler, denn es
-oeffnet eine eigene seite -> koennte man direkt da als pulldown
-einbinden unter filters oder mach andere vorschlaege"*.
-
-`[cmd]` **Der Verweis steht rechts ueber der Trefferliste im
-Food-DB-Reiter** und fuehrt auf `/v2/nutrition/suche`.
-
-## Die Entscheidung
-
-**Bleibt es eine eigene Seite, oder wird es ein Ausklappbereich unter
-den Filtern?**
-
-`[read]` **Fuer den Ausklappbereich spricht:** der Nutzer verliert
-seine Trefferliste nicht. `[cmd]` **Die Filterzeile traegt bereits
-elf Kategorien und einen Filter-Knopf** — die Stelle ist da.
-
-`[read]` **Dagegen spricht:** eine Detailsuche ueber 138 Naehrstoffe
-ist keine Verfeinerung, sondern eine andere Suche. **Ein
-Ausklappbereich, der eine halbe Seite fuellt, ist eine Seite mit
-schlechterem Rahmen.**
-
-`[read]` **Ein dritter Weg:** die eigene Seite behalten, **aber den
-Zustand mitnehmen** — wer mit *,,reis"* im Feld hinueberwechselt,
-findet es dort wieder.
 
 ## G-72 — Acht Spalten ohne Wirkung und ohne Kachel
 

@@ -1,0 +1,154 @@
+---
+nr: C-342
+typ: entscheidung
+modul: nutrition
+schwere: hoch
+angelegt: 2026-08-29
+braucht: []
+kind_von: C-324
+entscheidung: E-32
+agent: codex
+beauftragt: 2026-08-29
+beruehrt:
+  tabellen: [nutrition.nutrient_defs, nutrition.nutrient_reference_values]
+zahlen:
+  gemessen: 2026-08-29
+  einheit_bestand: ug_RE
+  einheit_nrf: IU
+---
+
+# C-342 — Vitamin A in IE gegen Mikrogramm
+
+## Befund
+
+Aus C-324, Codex, 2026-08-29. **Vom Orchestrator nachgemessen.**
+
+`[cmd]` **Der Bestand fuehrt Vitamin A in Mikrogramm
+Retinol-Aequivalent** — `nutrient_defs` und
+`nutrient_reference_values` beide.
+
+`[cmd]` **NRF9.3 rechnet gegen 5.000 IU.**
+
+`[read]` **Und die Umrechnung ist formabhaengig:** Retinol und
+Beta-Carotin haben verschiedene Faktoren. `[cmd]` **C-149 hat Vitamin
+A und E deshalb ausdruecklich ohne Zuordnung gelassen.**
+
+## Die Frage
+
+**Wie soll NRF9.3 mit Vitamin A umgehen?**
+
+`[read]` **Drei Wege, alle mit Kosten:**
+
+**Faktor setzen und begruenden.** `[read]` Ein pauschaler Faktor waere
+eine Annahme ueber die Zusammensetzung — **genau das, was C-149
+verweigert hat.**
+
+**Vitamin A weglassen.** `[read]` Dann ist es NRF8.3, **und die
+Validierungsstudien gelten nicht mehr** — sie sind fuer die
+Neunerfassung gerechnet.
+
+**Gegen einen Mikrogramm-Richtwert rechnen.** `[read]` Der
+EFSA-Zielwert steht im Bestand. **Dann ist es nicht mehr die
+Originalfassung** — E-25 haelt fest, dass die Studienlage fuer die
+Originalwerte gilt.
+
+`[read]` **Der dritte Weg ist der ehrlichste, wenn er benannt wird:**
+*,,NRF9.3 mit europaeischen Referenzwerten"* ist eine eigene Formel,
+**aber sie waere durchgehend eine.** Die anderen beiden mischen.
+
+## Auftrag — Umrechnungsfaktoren und die Plan-Kette
+
+**Entschieden in `docs/entscheidungen/E-32`.** **Mitbeauftragt:
+C-239-Nachlauf (einspielen) und die Herkunftsspalte fuer G-269.**
+
+### Vorweg
+
+`[read]` **Dieser Auftrag traegt keine Zahlen vom Orchestrator.**
+**Nenn Nutzer und Zeitraum bei jeder Messung.**
+
+### 1 · C-342 — die Faktortabelle
+
+**Tom, 2026-08-29:** *,,es gibt fuer jedes vitamin offizielle
+umrechnungsformeln, das heisst wir koennen die table erweitern mit
+dem faktor dass wir auch ui kennen"*.
+
+`[read]` **Je Naehrstoff UND Form: Faktor, Ausgangseinheit,
+Zieleinheit, Quelle.** `[read]` **Ein Faktor je Naehrstoff waere
+falsch** — Retinol und Beta-Carotin rechnen verschieden,
+Alpha-Tocopherol und die uebrigen Tocopherole ebenso.
+
+`[cmd]` **C-149 hat Vitamin A und E deshalb ohne Zuordnung
+gelassen.** `[read]` **Das war richtig, und es faellt nicht weg** —
+es wandert in eine Spalte, die die Form mitfuehrt.
+
+**Kein Faktor ohne Beleg.** `[read]` **Wo eine Form keine offizielle
+Umrechnung hat, bleibt sie leer, und der Folat-Waechter aus C-149
+greift.** `[cmd]` **Dieselbe Regel wie bei den Tag-Schwellen in
+G-221.**
+
+`[cmd]` **Die Quelle je Zeile, wie in `nutrient_reference_values`** —
+`source`, `source_version`, `source_locator`, `source_url`.
+
+`[read]` **Und die Oberflaeche muss den Faktor lesen koennen, nicht
+nachrechnen** — ein zweiter Rechenweg waere die zweite Wahrheit aus
+E-31.
+
+### 2 · Die Plan-Kette einspielen
+
+`[cmd]` **Der Lebenszyklus aus C-239 und der Status aus C-238 liegen
+in der Kette, nicht live.** `[read]` **Vier Punkte warten darauf** —
+G-267, G-268, G-269, G-270.
+
+`[read]` **Miss vorher, was live steht, und danach, was sich
+geaendert hat.** `[cmd]` **Vollsicherung vor dem Eingriff.**
+
+### 3 · Die Herkunftsspalte am Plan
+
+`[cmd]` **`coach.client_autonomy.nutrition_level` existiert und ist
+gefuellt** — fuenf Zeilen, `CHECK 1..5`, `dev` auf Stufe 3.
+**Gemessen in G-271.**
+
+`[read]` **Was fehlt: die Spalte am Plan, die sagt woher er kommt** —
+selbst erstellt, vom Coach, aus dem Marktplatz.
+
+`[read]` **Und die Regel, die eine Autonomiestufe auf ein
+Bearbeitungsrecht abbildet.** `[cmd]` **E-29 gilt: Modulzugriffe auf
+`coach` gehen ueber eine Funktion**, nicht direkt.
+
+`[read]` **Ob die Regel schon irgendwo steht, ist zu messen** —
+`client_permissions` koennte sie tragen.
+
+### Was nicht zu tun ist
+
+**Keinen Faktor setzen, der nicht belegt ist.**
+**Keine automatischen Ablaufaktionen erfinden** — das hast du in
+C-239 richtig gelassen.
+`apps/` nicht anfassen — Claude Code arbeitet dort.
+Nicht committen, nicht stagen, nicht pushen.
+
+### Nachweis
+
+    Faktoren je Naehrstoff+Form   Zahl, je Zeile eine Quelle
+    ohne Beleg geblieben          welche, mit Grund
+    Vitamin A in IE               rechenbar? belegt
+    Plan-Kette live               vorher / nachher, alle vier
+                                  Spalten
+    Herkunftsspalte               vorhanden, Werte belegt
+    Autonomieregel                gemessen: existiert sie schon?
+    bestehende Plaene             unveraendert - belegt
+
+### Regeln
+
+`tools/lauf.py`, keine Konsolenfenster.
+**Wegwerf-Datenbank, Vollsicherung vor jedem Live-Eingriff nach
+`backup/`.**
+
+**Wenn eine Vorgabe nicht aufgeht: melden, nicht passend machen.**
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
