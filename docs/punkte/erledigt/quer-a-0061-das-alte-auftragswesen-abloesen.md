@@ -8,7 +8,7 @@ braucht: []
 kind_von: null
 entscheidung: null
 erledigt: 2026-08-29
-commit: OFFEN
+commit: b91067c0
 beruehrt:
   dateien:
     - tools/nummern-pruefen.mjs
