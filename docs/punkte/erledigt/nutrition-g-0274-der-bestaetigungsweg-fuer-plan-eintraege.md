@@ -17,7 +17,7 @@ zahlen:
 agent: claudecode
 beauftragt: 2026-08-30
 erledigt: 2026-08-30
-commit: OFFEN
+commit: 7146abc8
 ---
 
 # G-274 — der Bestaetigungsweg fuer Plan-Eintraege

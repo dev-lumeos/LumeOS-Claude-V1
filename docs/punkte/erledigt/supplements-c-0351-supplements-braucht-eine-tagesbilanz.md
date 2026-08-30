@@ -10,7 +10,7 @@ entscheidung: E-35
 agent: codex
 beauftragt: 2026-08-30
 erledigt: 2026-08-30
-commit: OFFEN
+commit: 7146abc8
 beruehrt:
   tabellen: [supplements.intake_logs]
 zahlen:
