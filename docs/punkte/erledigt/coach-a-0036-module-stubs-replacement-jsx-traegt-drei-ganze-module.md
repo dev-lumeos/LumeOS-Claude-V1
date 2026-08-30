@@ -11,7 +11,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
 erledigt: 2026-08-30
-commit: OFFEN
+commit: f4da9eb5
 beruehrt:
   dateien:
     - apps/admin
