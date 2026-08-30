@@ -8,6 +8,8 @@ braucht: []
 kind_von: C-215
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: ["medical.biomarker_reference_ranges"]
   dateien: ["supabase/_pipeline/_validierung/testdaten-pruefen.ts"]

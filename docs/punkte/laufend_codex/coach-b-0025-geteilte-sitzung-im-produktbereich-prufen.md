@@ -8,6 +8,8 @@ braucht: []
 kind_von: B-12
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: ["docs/ssot/38-cookie-bereich.md"]

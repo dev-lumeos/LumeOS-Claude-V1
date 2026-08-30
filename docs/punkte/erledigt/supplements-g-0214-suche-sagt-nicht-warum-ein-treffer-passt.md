@@ -9,10 +9,11 @@ kind_von: G-186
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
   dateien:
-    - apps/web/src/lib/supplements/substanz-read.ts
-    - apps/web/src/lib/medical/wirkstoff-marke.ts
+    - apps/web/src/lib/supplements/substanz-kategorien.ts
 zahlen: null
 ---
 
@@ -190,4 +191,51 @@ Bau erforderlich.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-30, Orchestrator. Nicht gebaut, und das ist richtig.**
+
+### Der Auftrag beschrieb den falschen Suchpfad
+
+`[cmd]` **`food_search('Resveratrol')` liefert `total = 0`** — sie
+sucht BLS-Lebensmittel und hat **keine Verbindung zum
+`supplements`-Schema.**
+
+`[cmd]` **Die reale Suchentscheidung liegt in
+`apps/web/src/lib/supplements/substanz-kategorien.ts:trifftSuche()`**
+— **kein RPC, kein JSON, nur `boolean`.**
+
+`[cmd]` **Und der Treffer erklaert sich:** die durchsuchte
+Beschreibung kommt aus `supplement_user_texts.kurz_was_en`, **dort
+steht *,,related to resveratrol"*.**
+
+`[read]` **Meine Auftragsannahme — *,,die Funktion weiss, welches Feld
+getroffen hat"* — war falsch.** **Es gibt keine Funktion; es gibt eine
+App-Funktion mit einem Boolean.**
+
+`[cmd]` **Auch *,,Alias oder Tag"* trifft nicht zu** — der gebaute
+Suchpfad fragt sie gar nicht ab.
+
+### Der Konflikt, den er benannt hat
+
+`[read]` **Zwei Vorgaben widersprachen sich:** die Anzeige soll den
+Grund bekommen, **und `apps/` darf er nicht anfassen.**
+
+`[read]` **Er hat weder umgangen noch gebaut** — `[cmd]` **eine neue
+RPC-Funktion waere ein zweiter Suchpfad gewesen, den niemand ruft.**
+
+`[read]` **Und das ist keine Frage an Tom, sondern die Bereichsregel:**
+`[cmd]` **`apps/web/src/app/v2/<modul>` gehoert einem UI-Agenten.**
+**Der Punkt geht an Claude Code.**
+
+### Und die Messregel, ein zweites Mal an einem Tag
+
+`[cmd]` **`count(*)` um `food_search` ergibt 1, weil ein JSON-Dokument
+zurueckkommt.** `[cmd]` **Richtig zaehlt `result->>'total'` oder
+`jsonb_array_length(result->'foods')`.**
+
+`[read]` **Claude Code hat es heute frueh gemeldet, Codex hat es
+unabhaengig bestaetigt** — **und ich habe denselben Fehler am 29.08.
+zweimal gemacht.**
+
+**Abgenommen als vermessen.** Der Bau geht als **G-281** an Claude
+Code.
+

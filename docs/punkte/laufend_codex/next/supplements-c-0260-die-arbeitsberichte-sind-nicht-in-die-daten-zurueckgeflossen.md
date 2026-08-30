@@ -56,3 +56,8 @@ zahlen: null
 
   **BLOCKIERT JEDEN IMPORT.** `[read]` Wer vorher importiert, holt den
   aermeren Stand und haelt ihn fuer vollstaendig.
+
+## Auftrag
+
+**Vorbereitet mit C-202 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

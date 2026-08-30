@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-122
 kinder: [C-323, C-324]
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: ["nutrition.nutrient_search_aliases"]
   dateien: ["docs/ssot/146-coach-portal.md", "apps/coach/src/lib/browser-client.ts", "supabase/_pipeline/_testdaten/testdaten-einspielen.ts", "supabase/_pipeline/kette-ausfuehren.ts", "apps/coach/src/app/tokens.css", "docs/ssot/158-tab-zustand.md", "apps/web/src/lib/tab-url.ts", "tools/schuss.mjs", "docs/ssot/172-naehrstoff-aliase.md", "docs/ssot/168-naehrstoff-suche.md", "docs/ssot/166-naehrstoffbaum-anzeige.md", "docs/ssot/161-naehrstoffanzeige.md", "docs/ssot/154-preferences.md", "supabase/_pipeline/_testdaten/coach-portal-fuellen.sql"]
@@ -229,7 +231,7 @@ mehr.**
 
 ## Zu C-49 im Einzelnen
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 ### Was uebrig ist
 

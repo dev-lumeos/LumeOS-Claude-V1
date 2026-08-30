@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **28 Punkte tragen `typ: entscheidung`
+`[cmd]` **29 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -838,6 +838,39 @@ oft dasselbe isst, findet es schneller wieder.**
 `[read]` **Dagegen:** `[cmd]` **`wieGestern()` gibt es bereits** —
 **eine zweite Abkuerzung zum selben Zweck koennte die eine
 verwaessern.**
+
+## A-64 — der Schirmlauf ausserhalb des Gates
+
+**Modul:** quer · **angelegt:** 2026-08-30 · **Datei:** `todos/quer-a-0064-der-schirmlauf-ausserhalb-des-gates.md`
+
+## Befund
+
+Aus A-29, Claude Code, 2026-08-30.
+
+`[cmd]` **Ein Schirmlauf ueber alle Reiter kostet 7,8 Minuten, der
+ganze uebrige Gate etwa eine.** `[cmd]` **Und er braucht Server,
+Datenbank, Anmeldung und Chromium** — **alle 20 Gate-Schritte sind
+reine Dateipruefungen.**
+
+`[read]` **Deshalb gehoert er nicht in den Gate.** `[cmd]` **Aber er
+funktioniert und ist stabil:** dieselbe Route fuenfmal, `attrappen=2`
+jedes Mal.
+
+## Die Frage
+
+**Soll er woanders laufen?**
+
+`[read]` **Dafuer spricht: er ist die einzige belastbare
+Attrappenzahl.** `[cmd]` **Eine Quelltextzahl kann nicht richtig
+sein** — `tabs.tsx` traegt 17 Marken und zeigt 1 / 7 / 1, je nach
+offenem Reiter.
+
+`[read]` **Dagegen: was nicht im Gate laeuft, laeuft irgendwann gar
+nicht.** `[cmd]` **`LAUFEND.md` ist genau daran gestorben.**
+
+`[read]` **Ein Mittelweg waere, ihn auf Zuruf zu behalten** — er wird
+in jedem UI-Auftrag ohnehin verlangt, **und die Zahl steht dann im
+Bericht statt in einem Lauf, den niemand ansieht.**
 
 ## G-219 — `LiveWorkout` hat keinen Aufrufer mehr
 

@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: G-277
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   dateien: [tools/server.py]
 zahlen:
@@ -96,9 +98,51 @@ nie eingespielt. `[read]` **Claude Code hat es gefunden, weil er
 gegen `pg_proc` geprueft hat, bevor er baute.** **Ohne diese Gewohnheit
 haette er eine tote Funktion gerufen.**
 
+### Noch einmal eingetreten, 2026-08-30
+
+`[cmd]` **Waehrend A-29 die Schirmlaufzeit mass, starb der Server
+zweimal** — `ERR_CONNECTION_REFUSED`. **Erst nach `server.py start`
+und Wartezeit kamen die Zahlen zustande.**
+
+`[cmd]` **Und die Zahlen sind der Grund, warum es zaehlt:** 11,7 s je
+Schuss, **7,8 Minuten fuer alle Reiter gegen etwa eine Minute fuer den
+ganzen uebrigen Gate.**
+
+`[read]` **Claude Code hat daraus geschlossen, dass ein solcher Test
+nicht in den Gate gehoert** — **richtig.** `[read]` **Aber der Grund
+dafuer ist zur Haelfte dieser Punkt hier.**
+
+### Toms Frage vom 2026-08-30
+
+*,,wieso arbeiten die nicht auf einem eigenen port? und meiner wird
+updated zb von dir wenn es aenderungen hat?"*
+
+`[cmd]` **Eigene Ports gab es — sie waren die Ursache.** Die
+Kopfzeile von `server.py` beschreibt es: **fuenf Instanzen auf 3200,
+3201, 3205, 3207, 3310**, weil Next stumm ausweicht. **Jeder Edit
+kompilierte fuenffach.**
+
+`[read]` **Der Port war nie das Problem, der geteilte Quellbaum ist
+es.**
+
+`[read]` **Toms zweiter Teil ist die eigentliche Frage:** ein Server,
+der ihm gehoert, geschuetzt wie Admin (3210) und Coach (3220).
+
+`[cmd]` **Und der Mechanismus dagegen existiert:** `LUMEOS_DIST_DIR`
+trennt heute das Gate vom Dev-Server — `.next-gate` gegen `.next`.
+
+**Zu messen, bevor gebaut wird:** `[read]` **halbieren zwei
+Dev-Server mit getrennten Bauordnern die Watcher-Kosten wirklich, oder
+laeuft die Dateiueberwachung unabhaengig vom Bauordner doppelt?**
+`[cmd]` **Der 22.08.-Befund nennt beides in einem Satz** — Watcher und
+Kompilierung — **ohne sie zu trennen.**
+
+`[read]` **Wenn die Trennung traegt: ein geschuetzter Port fuer Tom.**
+**Wenn nicht: sagen warum, und der eine Port bleibt.**
+
 ## Zu G-280 im Einzelnen
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 ### Das Ergebnis
 
