@@ -14,7 +14,7 @@ erledigt: 2026-08-30
 commit: 12ffc1bf
 beruehrt:
   dateien:
-    - tools/dubletten-pruefen.mjs
+    - tools/supplement-kern-dubletten-pruefen.mjs
 zahlen: null
 ---
 
