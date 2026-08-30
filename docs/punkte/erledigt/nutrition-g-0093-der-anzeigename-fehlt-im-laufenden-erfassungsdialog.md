@@ -14,7 +14,7 @@ erledigt: 2026-08-30
 commit: 6d089067
 beruehrt:
   dateien:
-    - apps/web/src/app/v2/nutrition/tab-diary.tsx
+    - apps/web/src/app/v2/nutrition/erfassen-modal.tsx
 zahlen:
   gemessen: 2026-08-20
   name_display_de_abweichend: 5014
