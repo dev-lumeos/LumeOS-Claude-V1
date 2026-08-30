@@ -11,7 +11,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
 erledigt: 2026-08-30
-commit: OFFEN
+commit: 851fa077
 beruehrt:
   dateien:
     - apps/web/src/lib/recovery/scores-read.ts
