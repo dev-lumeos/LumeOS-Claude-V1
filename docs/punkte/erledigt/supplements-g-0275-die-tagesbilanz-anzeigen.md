@@ -9,13 +9,14 @@ kind_von: C-351
 entscheidung: E-35
 beruehrt:
   tabellen: [supplements.intake_logs]
-  dateien: [apps/web/src/app/v2/supplements/tabs.tsx]
 zahlen:
   gemessen: 2026-08-30
   intake_logs: 744
   unklare_einnahmen: 513
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 ---
 
 # G-275 — die Supplement-Tagesbilanz anzeigen
@@ -277,4 +278,56 @@ committet, nicht gestaget.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-30, Orchestrator. Nachgemessen.**
+
+`[cmd]` **Der Nachweistag stimmt auf die Stelle:** FAPUN3 = 2,000 g
+bei 4 Einnahmen, 1 belegt, 3 unbekannt. `[cmd]` **Und die Anzeige
+traegt es:** *,,Untergrenze, aus 1 von 4 Einnahmen, fuer 3 ist keine
+Menge hinterlegt."*
+
+### Drei Praemissen gefallen, alle drei zugunsten des Bestands
+
+`[cmd]` **`daily_intake_summary` ist eine View, keine Funktion** —
+sie liefert Einnahmezahlen und `compliance_pct`, **keine
+Naehrstoffe.** `[cmd]` **Die Bilanz je Naehrstoff liefert
+`supplement_nutrient_intake_for_day(p_user_id, p_entry_date)`** —
+**nachgemessen, sie steht live.**
+
+`[read]` **Mein Auftrag nannte die falsche Quelle.** `[read]` **Und
+er hat beide gegen `pg_proc` geprueft, bevor eine Zeile
+entstand** — **die Lehre aus G-273, wo eine *gebaute* Funktion live
+fehlte.**
+
+`[cmd]` **564 Einnahmen ohne Menge, nicht 513** (180 mit Menge von
+744). **Gemeldet, nicht angepasst.**
+
+`[cmd]` **Und die dritte ist die unbequemste: die Umstellung auf die
+Flag-Funktion spart keine Zeit.**
+
+### Die Doppelungspruefung hat etwas Gefaehrliches gefunden
+
+`[cmd]` **Der `intel`-Reiter trug eine Attrappe *,,Gap analysis"***
+— Spalten `NUTRIENT`, `FOOD`, `SUPPS`, `TOTAL`, `RDA COVERAGE`.
+
+`[read]` **Sie hatte die richtige Form und die falsche Rechnung:**
+sie addierte Essen und Praeparate zu einer Gesamtzufuhr und verglich
+mit der RDA. `[cmd]` **Genau das verbietet E-35** — jedes Modul
+rechnet seine eigene Bilanz.
+
+`[read]` **Eine Attrappe, die eine verbotene Rechnung vorzeichnet,
+ist schlimmer als eine leere Kachel** — sie haette beim naechsten
+Anbinden als Vorlage gedient.
+
+### G-273 — Ergebnisgleichheit belegt, Ersparnis nicht
+
+`[cmd]` **9 / 11 / 10 Flags, in allen drei Fenstern identisch.**
+`[cmd]` **Ladezeiten: today 2.993 / 2.531 ms, intel 2.889 / 2.500
+ms.**
+
+`[read]` **Der Nachweis, den der Auftrag verlangte, ist erbracht.**
+**Die Begruendung dafuer — 895 ms Ersparnis — ist es nicht.**
+
+`[cmd]` **Attrappen im `intel`-Reiter: 7 auf 6.**
+
+**Abgenommen.**
+

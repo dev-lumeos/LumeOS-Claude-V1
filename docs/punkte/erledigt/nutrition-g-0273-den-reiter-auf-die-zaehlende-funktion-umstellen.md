@@ -9,8 +9,11 @@ kind_von: C-348
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
+  dateien:
+    - apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx
 zahlen:
   gemessen: 2026-08-29
   bytes_vorher: 8298086
@@ -85,3 +88,20 @@ Zahlen waere keine Verbesserung.**
 
 `[cmd]` **Der Reiter stand zuletzt bei 6.898 ms, davon rund 895 ms
 Uebertragung von 8,3 MB `jsonb`.** **Miss vorher und nachher.**
+
+## Abnahme
+
+**2026-08-30, mit G-275 abgenommen.**
+
+`[cmd]` **Ergebnisgleichheit belegt: 9 / 11 / 10 Flags, in allen drei
+Fenstern identisch.**
+
+`[cmd]` **Aber die Umstellung spart keine Zeit** — today 2.993 /
+2.531 ms, intel 2.889 / 2.500 ms.
+
+`[read]` **Die Begruendung fuer C-348 war eine Ersparnis von rund
+895 ms fuer 8,3 MB `jsonb`.** **Die Messung findet sie nicht.**
+
+`[read]` **Als C-353 angelegt** — die Frage ist, wo die Zeit
+tatsaechlich liegt, nicht ob die Umstellung richtig war. **Weniger
+Uebertragung ist fuer sich schon richtig.**

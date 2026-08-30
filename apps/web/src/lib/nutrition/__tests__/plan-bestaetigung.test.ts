@@ -211,7 +211,15 @@ test('G-274: die Knoepfe haengen am offenen Eintrag', () => {
   const s = ohneKommentare('src/app/v2/nutrition/plan-eintraege.tsx')
   assert.match(s, /art: 'bestaetigen'/, 'Bestaetigen fehlt (G-274).')
   assert.match(s, /art: 'ueberspringen'/, 'Ueberspringen fehlt (G-274).')
-  assert.match(s, /confirmation_mode: 'mealcam'/, 'MealCam fehlt (G-274).')
+  // `[cmd]` **A-62, G-276: dieser Waechter hat sich gedreht.** Er
+  // verlangte `confirmation_mode: 'mealcam'` in der Oberflaeche —
+  // richtig als Beleg, dass der Knopf verdrahtet ist, **falsch,
+  // seit klar ist, dass er ohne Foto schreibt.**
+  //
+  // `[read]` **Jetzt verbietet er ihn:** kein Bauteil darf `mealcam`
+  // als Herkunft senden, solange kein Foto ausgewertet wird.
+  assert.doesNotMatch(s, /confirmation_mode: 'mealcam'/,
+    'Ein Knopf schreibt wieder `mealcam`, ohne dass fotografiert wird (G-276).')
   assert.match(s, /\{offen && \(/,
     'Die Knoepfe stehen auch an entschiedenen Eintraegen (G-274).')
 })

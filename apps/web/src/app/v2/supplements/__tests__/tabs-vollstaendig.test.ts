@@ -96,9 +96,14 @@ test('die neuen Tabs kennzeichnen jede Kachel', () => {
   // `SuppStacks`; der Reiter liest jetzt `user_stacks` und
   // `stack_items`. **Am Schirm gezaehlt: 4 Attrappen vorher,
   // 0 nachher** (A-59).
+  // `[cmd]` **G-275: von 12 auf 11.** Die Marke gehoerte „Gap
+  // analysis" — die Kachel liest jetzt
+  // `supplement_nutrient_intake_for_day` und traegt die Trennung
+  // belegt / Untergrenze / unbekannt. **Am Schirm gezaehlt: 7
+  // Attrappen im `intel`-Reiter vorher, 6 nachher** (A-59).
   const dateien: Array<[string, number]> = [
     ['tab-injektionen.tsx', 14],
-    ['tab-spec.tsx', 12],
+    ['tab-spec.tsx', 11],
   ]
   for (const [datei, erwartet] of dateien) {
     const quelle = lies(datei)

@@ -14,6 +14,7 @@ import * as React from 'react'
 
 import type { StackDaten, KatalogEintrag } from '../../../lib/supplements/stack-read'
 import type { SubstanzListenEintrag, EigenerStack } from '../../../lib/supplements/substanz-read'
+import type { BilanzZeile } from '../../../lib/supplements/bilanz-lage'
 
 export type ModalTyp =
   | 'add' | 'catalogAdd' | 'catalogAddEnh' | 'skip' | 'product'
@@ -55,6 +56,16 @@ export type SuppKontext = {
    * Hydration und rechnete anders als beim Rendern.
    */
   stichtag: string
+  /**
+   * G-275: die Naehrstoffbilanz des Tages aus den Einnahmen.
+   *
+   * `[read]` **Sie traegt die Trennung belegt / unbekannt mit** —
+   * ohne sie waere eine Summe mit unbelegten Posten nicht von einer
+   * vollstaendigen zu unterscheiden.
+   */
+  bilanz: BilanzZeile[]
+  /** Wie viele Substanzen ueberhaupt eine Menge tragen (gemessen: 17). */
+  belegteSubstanzen: number
   /** Ein Schreibzugriff laeuft — die Knoepfe sperren solange. */
   laeuft: boolean
   /** Den frisch gelesenen Stand uebernehmen, den die Route mitliefert. */
@@ -74,6 +85,8 @@ export const SuppCtx = React.createContext<SuppKontext>({
   stacks: [],
   gateOffen: false,
   stichtag: '1970-01-01',
+  bilanz: [],
+  belegteSubstanzen: 0,
   laeuft: false,
   setFrisch: () => {},
   schreibfehler: null,

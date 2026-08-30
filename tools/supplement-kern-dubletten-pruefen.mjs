@@ -122,7 +122,6 @@ for (const group of duplicateGroups) {
 }
 
 const report = {
-  checked_at: new Date().toISOString(),
   top_level_rows: rows.length,
   visible_children: visibleChildren.length,
   duplicate_groups: duplicateGroups.length,
@@ -136,7 +135,11 @@ const report = {
 }
 
 fs.mkdirSync(path.dirname(OUTPUT), { recursive: true })
-fs.writeFileSync(OUTPUT, JSON.stringify(report, null, 2) + '\n', { encoding: 'utf8' })
+const reportJson = JSON.stringify(report, null, 2) + '\n'
+const previousReport = fs.existsSync(OUTPUT) ? fs.readFileSync(OUTPUT, 'utf8') : null
+if (previousReport !== reportJson) {
+  fs.writeFileSync(OUTPUT, reportJson, { encoding: 'utf8' })
+}
 
 console.log(`[supplement-kern] ${rows.length} Top-Level-Eintraege geprueft`)
 console.log(`[supplement-kern] ${visibleChildren.length} sichtbare Unterformen`)

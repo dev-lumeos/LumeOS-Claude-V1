@@ -25,6 +25,7 @@ import { useTabParam } from '../../../lib/tab-url'
 import { STACK, EXTENDED_STACK } from './daten'
 import { SuppCtx, type ModalZustand, type ModalTyp } from './kontext'
 import type { StackDaten, KatalogEintrag } from '../../../lib/supplements/stack-read'
+import type { BilanzZeile } from '../../../lib/supplements/bilanz-lage'
 import {
   SuppToday, SuppStack, SuppDatabase, SuppCost,
 } from './tabs'
@@ -111,6 +112,7 @@ function tabs(
 export function SupplementsAnsicht({
   daten: datenProp = null, katalog = [], heute: heuteProp = null,
   regeln = null, gate = null, substanzen = [], stacks = [],
+  bilanz = [], belegteSubstanzen = 0, bilanzTag = null,
 }: {
   daten?: StackDaten | null
   katalog?: KatalogEintrag[]
@@ -121,6 +123,11 @@ export function SupplementsAnsicht({
   /** C-224: die Substanzdatenbank und die eigenen Stacks. */
   substanzen?: SubstanzListenEintrag[]
   stacks?: EigenerStack[]
+  /** G-275: die Naehrstoffbilanz des angesehenen Tages. */
+  bilanz?: BilanzZeile[]
+  belegteSubstanzen?: number
+  /** Der Tag, fuer den die Bilanz gilt — der juengste Protokolltag. */
+  bilanzTag?: string | null
   /**
    * G-74: Das echte Heute, serverseitig aus `lib/datum.ts`.
    *
@@ -232,10 +239,13 @@ export function SupplementsAnsicht({
     () => ({
       takenToday, toggleTaken, open, daten, katalog,
       substanzen, stacks, gateOffen,
-      stichtag, laeuft, setFrisch, schreibfehler, setSchreibfehler,
+      // G-275: die Bilanz und der Tag, fuer den sie gilt.
+      bilanz, belegteSubstanzen,
+      stichtag: bilanzTag ?? stichtag,
+      laeuft, setFrisch, schreibfehler, setSchreibfehler,
     }),
     [takenToday, toggleTaken, open, daten, katalog,
-     substanzen, stacks, gateOffen,
+     substanzen, stacks, gateOffen, bilanz, belegteSubstanzen, bilanzTag,
      stichtag, laeuft, schreibfehler],
   )
 

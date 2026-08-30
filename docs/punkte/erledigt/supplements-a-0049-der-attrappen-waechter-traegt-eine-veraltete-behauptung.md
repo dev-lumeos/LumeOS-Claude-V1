@@ -10,9 +10,11 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: ["apps/web/src/app/v2/supplements/tab-interactions-echt.tsx"]
+  dateien:
+    - apps/web/src/components/shell/__tests__/v2-attrappen.test.ts
 zahlen: null
 ---
 
@@ -30,3 +32,7 @@ zahlen: null
 
 **Mitbeauftragt mit G-202 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-30, mit G-202 abgenommen:** ueberholt - der Waechter sichert jetzt den Rueckfall, 87/87 gruen.

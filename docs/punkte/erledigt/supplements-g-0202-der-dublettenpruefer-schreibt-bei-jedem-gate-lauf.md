@@ -10,9 +10,11 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: ["tools/supplement-kern-dubletten-pruefen.mjs", "backup/c276/supplement-kern-dubletten.json"]
+  dateien:
+    - tools/dubletten-pruefen.mjs
 zahlen: null
 ---
 
@@ -159,4 +161,44 @@ Keine Namen wurden erfunden oder gesetzt und kein Katalog wurde erweitert.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-30, Orchestrator. Nachgemessen.**
+
+`[cmd]` **G-202 behoben:** `checked_at` ist aus dem Bericht raus, das
+Werkzeug schreibt die Datei nur noch bei echter Aenderung. `[cmd]`
+**Zwei Laeufe, derselbe SHA-256.**
+
+`[read]` **Und die Unterscheidung ist die richtige:** der Bericht
+selbst ist ein sinnvoller Nachweis — 412 Eintraege, 0 sichtbare
+Unterformen, 4 erlaubte Dublettengruppen. **Nur der Zeitstempel
+machte ihn bei jedem Lauf anders.**
+
+`[cmd]` **Der gemeldete Blocker war meiner:** `punkte-index.mjs
+--pruefen` brach ab, weil ich den Index nicht geschrieben hatte.
+**Nachgeholt, `--pruefen` gibt jetzt 0.**
+
+`[read]` **Er hat es gemeldet statt umgangen, und ausserhalb seines
+Auftrags gelassen.** Richtig.
+
+### A-49 — ueberholt
+
+`[cmd]` **Der Waechter behauptet nicht mehr, `SuppInteractions` sei
+unangebunden** — er sichert jetzt den Rueckfall. `[cmd]` 87/87 Tests
+gruen.
+
+`[read]` **A-62 in seiner ersten Erscheinung, und sie hat sich
+selbst erledigt.**
+
+### C-316 — kein Tippfehler, sondern der ganze Katalog
+
+`[cmd]` **412 von 412 sichtbaren Substanzen haben kein `name_de`.**
+`[cmd]` **Alle 412 haben ein `name_en`.**
+
+`[read]` **Meine Frage im Auftrag war: *,,eine Zeile ist ein
+Tippfehler, zwanzig sind ein Importfehler"*.** **Die Antwort ist
+eine dritte: alle.**
+
+`[read]` **Und keine Namen erfunden** — genau wie vorgegeben. **Als
+C-352 angelegt.**
+
+**Abgenommen.**
+

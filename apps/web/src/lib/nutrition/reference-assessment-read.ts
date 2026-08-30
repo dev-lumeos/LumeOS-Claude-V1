@@ -359,3 +359,64 @@ export async function getNaehrstoffDauer(
   }
   return aus
 }
+
+
+// ══ G-273: die zaehlende Funktion aus C-348/C-349 ══════════════════
+
+/** Eine Flag-Zeile, wie die Datenbank sie liefert. */
+export type FlagZeile = {
+  nutrient_code: string
+  nutrient_name_de: string
+  reference_direction: string | null
+  triggered_day_count: number
+  assessed_day_count: number
+  incomplete_day_count: number
+}
+
+/**
+ * Die Flags, in der Datenbank gezaehlt — G-273.
+ *
+ * `[cmd]` **`nutrition.reference_assessment_window_flags` steht seit
+ * dem 2026-08-30 live** (C-349), am selben Tag gegen `pg_proc`
+ * nachgemessen. `[read]` **In G-273 war sie noch nicht eingespielt**
+ * — die Pipeline-Datei existierte, die laufende Instanz kannte sie
+ * nicht.
+ *
+ * `[cmd]` **Ergebnisgleichheit belegt am 2026-08-30, dev, drei
+ * Fenster:** 7 Tage 9 Flags, 30 Tage 11, 90 Tage 10 — **Code,
+ * getroffene Tage und Nenner in allen drei identisch mit der
+ * Client-Regel.**
+ *
+ * `[read]` **Der Unterschied ist die Fracht:** die alte
+ * Fensterfunktion lieferte 154 Zeilen mit 8,3 MB jsonb, aus denen
+ * der Browser zehn Flags zaehlte. **Diese liefert die zehn Zeilen.**
+ */
+export async function getFlags(
+  bisDatum: string, tage: number,
+): Promise<FlagZeile[]> {
+  const supabase = createSessionClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new DiaryWriteError('NO_SESSION', 'Keine angemeldete Session.')
+
+  const { data, error } = await supabase
+    .schema('nutrition')
+    .rpc('reference_assessment_window_flags', {
+      p_user_id: user.id, p_end_date: bisDatum, p_days: tage,
+    })
+  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+
+  const aus: FlagZeile[] = []
+  for (const raw of (data ?? []) as unknown as Array<Record<string, unknown>>) {
+    const code = asText(raw.nutrient_code)
+    if (!code) continue
+    aus.push({
+      nutrient_code: code,
+      nutrient_name_de: asText(raw.nutrient_name_de) || code,
+      reference_direction: asText(raw.reference_direction) || null,
+      triggered_day_count: asNumberOrNull(raw.triggered_day_count) ?? 0,
+      assessed_day_count: asNumberOrNull(raw.assessed_day_count) ?? 0,
+      incomplete_day_count: asNumberOrNull(raw.incomplete_day_count) ?? 0,
+    })
+  }
+  return aus
+}

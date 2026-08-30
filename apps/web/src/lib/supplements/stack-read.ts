@@ -505,3 +505,76 @@ export async function getKatalog(): Promise<KatalogEintrag[]> {
     return katalogAusNeu(roh, maps.kategorien, maps.dosing, maps.evidence)
   })
 }
+
+
+// ══ G-275: die Tagesbilanz aus den Einnahmen ═══════════════════════
+
+/** Eine Zeile der Bilanz, wie die Funktion sie liefert. */
+export type BilanzZeileRoh = {
+  nutrient_code: string
+  nutrient_unit: string
+  total_amount: number
+  taken_log_count: number
+  skipped_log_count: number
+  mapped_taken_log_count: number
+  unmapped_taken_log_count: number
+}
+
+/**
+ * Die Naehrstoffbilanz eines Tages — G-275.
+ *
+ * `[cmd]` **`supplements.supplement_nutrient_intake_for_day` steht
+ * seit dem 2026-08-30 live**, am selben Tag gegen `pg_proc`
+ * nachgemessen (die Lehre aus G-273).
+ *
+ * `[cmd]` **Sie liefert die Trennung mit:** `mapped_taken_log_count`
+ * gegen `unmapped_taken_log_count`. **Gemessen am Nachweistag:
+ * FAPUN3 = 2 g bei 4 Einnahmen, 1 belegt, 3 unbekannt.**
+ *
+ * `[read]` **E-35: keine Summierung mit Nutrition.** Diese Funktion
+ * kennt nur `supplements` — was das Essen beitraegt, steht in einem
+ * anderen Modul, und die Summe gehoert ins Dashboard.
+ */
+export async function getTagesbilanz(datum: string): Promise<BilanzZeileRoh[]> {
+  const supabase = createSessionClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return []
+  const { data, error } = await supabase
+    .schema('supplements')
+    .rpc('supplement_nutrient_intake_for_day', {
+      p_user_id: user.id, p_entry_date: datum,
+    })
+  if (error || !data) return []
+  const aus: BilanzZeileRoh[] = []
+  for (const r of data as unknown as Array<Record<string, unknown>>) {
+    const code = text(r.nutrient_code)
+    if (!code) continue
+    aus.push({
+      nutrient_code: code,
+      nutrient_unit: text(r.nutrient_unit) ?? '',
+      total_amount: zahl(r.total_amount) ?? 0,
+      taken_log_count: zahl(r.taken_log_count) ?? 0,
+      skipped_log_count: zahl(r.skipped_log_count) ?? 0,
+      mapped_taken_log_count: zahl(r.mapped_taken_log_count) ?? 0,
+      unmapped_taken_log_count: zahl(r.unmapped_taken_log_count) ?? 0,
+    })
+  }
+  return aus
+}
+
+/**
+ * Wie viele Substanzen ueberhaupt eine Naehrstoffmenge tragen.
+ *
+ * `[cmd]` **Gemessen: 17.** `[read]` **Der Auftrag verlangt, dass die
+ * Anzeige es sagt** — eine leere Tabelle ohne Erklaerung sieht aus
+ * wie ein Fehler.
+ */
+export async function getBelegteSubstanzen(): Promise<number> {
+  const supabase = createSessionClient()
+  const { count, error } = await supabase
+    .schema('supplements')
+    .from('supplement_nutrients')
+    .select('supplement_id', { count: 'exact', head: true })
+  if (error || count === null) return 0
+  return count
+}

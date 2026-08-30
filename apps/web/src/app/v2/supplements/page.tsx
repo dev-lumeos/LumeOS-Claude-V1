@@ -14,7 +14,10 @@ import type { Metadata } from 'next'
 
 import './supplements.css'
 import { heute } from '../../../lib/datum'
-import { getStackDaten, getKatalog } from '../../../lib/supplements/stack-read'
+import {
+  getStackDaten, getKatalog, getTagesbilanz, getBelegteSubstanzen,
+  type BilanzZeileRoh,
+} from '../../../lib/supplements/stack-read'
 import type { StackDaten, KatalogEintrag } from '../../../lib/supplements/stack-read'
 import { SupplementsAnsicht } from './ansicht'
 
@@ -74,20 +77,37 @@ export default async function V2SupplementsPage() {
   // Ursache steht in `rule_assessment`: `explain (analyze, buffers)`
   // meldet **temp read=9457 written=9457** bei 171 ms in der Datenbank
   // — ein Kreuzprodukt. Das ist ein eigener Befund, siehe Bericht.
-  const [daten, katalog, regeln, gate, substanzen, stacks] = await Promise.all([
-    ruhig<StackDaten | null>(getStackDaten, null),
-    ruhig<KatalogEintrag[]>(getKatalog, []),
-    ruhig<RegelStand | null>(() => ladeRegeln(stichtag), null),
-    ruhig<GateStand | null>(ladeGate, null),
-    ruhig<SubstanzListenEintrag[]>(ladeSubstanzListe, []),
-    ruhig<EigenerStack[]>(ladeEigeneStacks, []),
-  ])
+  const [daten, katalog, regeln, gate, substanzen, stacks, belegteSubstanzen]
+    = await Promise.all([
+      ruhig<StackDaten | null>(getStackDaten, null),
+      ruhig<KatalogEintrag[]>(getKatalog, []),
+      ruhig<RegelStand | null>(() => ladeRegeln(stichtag), null),
+      ruhig<GateStand | null>(ladeGate, null),
+      ruhig<SubstanzListenEintrag[]>(ladeSubstanzListe, []),
+      ruhig<EigenerStack[]>(ladeEigeneStacks, []),
+      ruhig<number>(getBelegteSubstanzen, 0),
+    ])
+
+  // ══ G-275: die Bilanz gilt fuer den ANGESEHENEN Tag ══════════════
+  //
+  // `[cmd]` **Der Reiter zeigt den juengsten Protokolltag**, nicht
+  // heute (G-149) — auf `dev` ist das der 19.08. `[read]` **Die
+  // Bilanz muss denselben Tag nehmen**, sonst stuenden Kachel und
+  // Tabelle auf verschiedenen Tagen und niemand saehe es.
+  //
+  // `[read]` **Sie laeuft NACH `daten`, weil sie davon abhaengt** —
+  // die einzige der sieben Abfragen, die das tut.
+  const bilanzTag = daten?.einnahmen[0]?.intake_date ?? stichtag
+  const bilanz = await ruhig<BilanzZeileRoh[]>(
+    () => getTagesbilanz(bilanzTag), [])
 
   return (
     <SupplementsAnsicht
       daten={daten} katalog={katalog} heute={stichtag}
       regeln={regeln} gate={gate}
       substanzen={substanzen} stacks={stacks}
+      bilanz={bilanz} belegteSubstanzen={belegteSubstanzen}
+      bilanzTag={bilanzTag}
     />
   )
 }

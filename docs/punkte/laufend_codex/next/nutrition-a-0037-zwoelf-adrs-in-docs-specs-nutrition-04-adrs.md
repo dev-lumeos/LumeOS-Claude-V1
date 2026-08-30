@@ -88,3 +88,8 @@ zahlen: null
 
   `[cmd]` **`ADR_RECIPE_SOURCE_BUDDY`** — `source` bekommt den Wert
   `buddy`, **in V1 nur als Schemawert vorbereitet.**
+
+## Auftrag
+
+**Vorbereitet mit C-160 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

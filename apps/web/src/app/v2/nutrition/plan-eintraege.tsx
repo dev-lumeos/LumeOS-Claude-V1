@@ -151,15 +151,26 @@ export function PlanEintraegeEcht({
                       <Icon name="check" className="v2-ic v2-ic-sm" />
                       {busy ? 'Speichert…' : 'Wie geplant'}
                     </button>
-                    <button
-                      type="button" className="v2-btn v2-btn-ghost v2-btn-sm" disabled={busy}
-                      onClick={() => void schicken({
-                        art: 'bestaetigen', plan_entry_id: e.id,
-                        execution_date: datum, confirmation_mode: 'mealcam',
-                      }, e.id)}
-                    >
-                      <Icon name="camera" className="v2-ic v2-ic-sm" />MealCam
-                    </button>
+                    {/* ══ G-276: der MealCam-Knopf ist entfernt ═══════
+                        `[cmd]` **Er schrieb `confirmation_mode:
+                        'mealcam'`, ohne dass fotografiert wurde** —
+                        eingebaut in G-274, gemeldet in G-276.
+                        `[cmd]` **Einen Fotoweg gibt es nirgends:**
+                        `MealCamModal` (`modale.tsx:110`) ist eine
+                        Attrappe mit drei Schritten und festen
+                        Treffern — *„MealCam hat kein Modell"*.
+                        `[read]` **Zwei Wege standen zur Wahl:** den
+                        Modus auf `manual` setzen oder den Knopf
+                        entfernen. **Der Modus waere nicht falsch,
+                        aber der Knopf bliebe eine Zusage** — zwei
+                        Knoepfe, die dasselbe tun, einer davon mit
+                        Kamerasymbol. **Also weg, bis der Fotoweg
+                        steht.**
+                        `[cmd]` **`ADR_MEALCAM_V1` verlangt ohnehin,
+                        dass MealCam nie automatisch schreibt.**
+                        `[read]` **`confirmation_mode` bleibt im
+                        Schema** — die Spalte ist richtig, nur hatte
+                        sie keinen ehrlichen Absender. */}
                     <button
                       type="button" className="v2-btn v2-btn-ghost v2-btn-sm" disabled={busy}
                       onClick={() => void schicken({

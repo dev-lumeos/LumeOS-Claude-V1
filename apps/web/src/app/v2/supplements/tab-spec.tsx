@@ -31,6 +31,7 @@ import {
   type KatalogEintrag,
 } from './spec-daten'
 import { useSupp } from './kontext'
+import { SuppTagesbilanz } from './tab-bilanz'
 import {
   stackListeSatz, vorlagenLageVon, VORLAGEN_LEER_SATZ, frequenzSatz,
 } from '../../../lib/supplements/stack-lage'
@@ -184,6 +185,9 @@ export function SuppStacks() {
 
 // ═══ INTELLIGENCE ═════════════════════════════════════════════════
 export function SuppIntelligence() {
+  // G-275: die Bilanz kommt aus dem Kontext — dieselbe Quelle wie
+  // Stack und Einnahmen, kein eigener Ladeweg.
+  const { bilanz, belegteSubstanzen, stichtag } = useSupp()
   // Die Rechnung der Vorlage (Zeile 591-597), unveraendert.
   const gaps = GAP_ROWS.map(r => {
     const total = r.nutrition + r.supp
@@ -226,79 +230,19 @@ export function SuppIntelligence() {
       </div>
 
       <div className="v2-grid v2-grid-15" style={{ gap: 14 }}>
-        <Card
-          title="Gap analysis"
-          sub="Nutrition micros + supplement contribution vs. RDA"
-          attrappe={ATTRAPPE}
-        >
-          <div className="v2-supp-tbl-wrap">
-            <table className="v2-tbl">
-              <thead>
-                <tr>
-                  <th>Nutrient</th>
-                  <th style={{ width: 90, textAlign: 'right' }}>Food</th>
-                  <th style={{ width: 90, textAlign: 'right' }}>Supps</th>
-                  <th style={{ width: 90, textAlign: 'right' }}>Total</th>
-                  <th style={{ width: 80, textAlign: 'right' }}>RDA</th>
-                  <th style={{ width: 120 }}>Coverage</th>
-                  <th style={{ width: 70, textAlign: 'right' }}>%</th>
-                </tr>
-              </thead>
-              <tbody>
-                {gaps.map(g => {
-                  const ausEssen = Math.min((g.nutrition / g.rda) * 100, 100)
-                  const ausSupp = Math.min((g.supp / g.rda) * 100, 100 - ausEssen)
-                  return (
-                    <tr
-                      key={g.code}
-                      style={g.is_gap ? { background: 'color-mix(in oklch, var(--warn) 5%, transparent)' } : undefined}
-                    >
-                      <td>
-                        <div style={{ fontSize: 12 }}>{g.name}</div>
-                        <div className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>{g.code}</div>
-                      </td>
-                      <td className="v2-num v2-muted" style={{ textAlign: 'right' }}>{g.nutrition}</td>
-                      <td className="v2-num" style={{ textAlign: 'right', color: g.supp > 0 ? 'var(--acc-suppl)' : 'var(--fg-dim)' }}>
-                        {g.supp || '—'}
-                      </td>
-                      <td className="v2-num" style={{ textAlign: 'right', fontWeight: 500 }}>{g.total}</td>
-                      <td className="v2-num v2-muted" style={{ textAlign: 'right', fontSize: 11 }}>
-                        {g.rda} {g.unit}
-                      </td>
-                      <td>
-                        <div className="v2-supp-abdeckung">
-                          <div className="v2-supp-abdeckung-essen" style={{ width: `${ausEssen}%` }} />
-                          <div className="v2-supp-abdeckung-supp" style={{ left: `${ausEssen}%`, width: `${ausSupp}%` }} />
-                          <div className="v2-supp-abdeckung-marke" />
-                        </div>
-                      </td>
-                      <td
-                        className="v2-num"
-                        style={{
-                          textAlign: 'right',
-                          color: g.is_gap ? 'var(--warn)' : g.pct > 150 ? 'var(--acc-goals)' : 'var(--pos)',
-                        }}
-                      >
-                        {g.pct}%
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-          <div style={{ display: 'flex', gap: 14, marginTop: 10, fontSize: 10, color: 'var(--fg-muted)', flexWrap: 'wrap' }}>
-            <span className="v2-row-gap">
-              <span style={{ width: 10, height: 8, background: 'var(--acc-nutri)', borderRadius: 2 }} />from food
-            </span>
-            <span className="v2-row-gap">
-              <span style={{ width: 10, height: 8, background: 'var(--acc-suppl)', borderRadius: 2 }} />from supplements
-            </span>
-            <span className="v2-row-gap">
-              <span style={{ width: 1, height: 10, background: 'var(--fg-dim)' }} />80% gap threshold
-            </span>
-          </div>
-        </Card>
+        {/* ══ G-275: die echte Bilanz statt der Attrappe ═══════════
+            `[cmd]` **Hier stand „Gap analysis"** — Spalten `FOOD`,
+            `SUPPS`, `TOTAL` gegen die RDA, mit erfundenen Zahlen.
+            `[cmd]` **Die Summierung verbietet E-35:** jedes Modul
+            rechnet seine eigene Bilanz, das Zusammenfuehren gehoert
+            ins Dashboard.
+            `[read]` **Die Form war richtig, die Rechnung nicht** —
+            deshalb ersetzt, nicht danebengestellt (G-253). */}
+        <SuppTagesbilanz
+          zeilen={bilanz}
+          datum={stichtag}
+          belegteSubstanzen={belegteSubstanzen}
+        />
 
         <div className="v2-col-gap" style={{ gap: 14 }}>
           <Card title="Redundancy detection" sub="multiple sources · over 150% RDA" attrappe={ATTRAPPE}>

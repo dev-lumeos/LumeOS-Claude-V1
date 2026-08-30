@@ -81,27 +81,35 @@ test('G-259: kein .limit ueber dem Deckel im Leseweg', () => {
 
 // ── G-260: die Dauerregel ist angebunden ─────────────────────────
 
-test('G-260: flagVon hat einen Aufrufer', () => {
+test('G-260: die Dauerregel ist angebunden', () => {
   // `[cmd]` **C-323 baute die Regel, G-108 band sie bewusst nicht
-  // an** (zusammen 7,7 s). `[cmd]` **Nach G-252 traegt der Reiter
-  // es:** 3.426 ms ohne, 6.397 ms mit — unter den neun Sekunden aus
-  // C-189.
+  // an** (zusammen 7,7 s). `[cmd]` **Nach G-252 trug der Reiter es.**
+  //
+  // `[cmd]` **A-62, 2026-08-30: dieser Waechter hat sich umgedreht.**
+  // Er verlangte `flagVon(` und `getNaehrstoffDauer(` im Leseweg —
+  // richtig, solange der Browser zaehlte. **Seit G-273 zaehlt die
+  // Datenbank** (`reference_assessment_window_flags`), und beide
+  // Namen stehen dort nicht mehr.
+  //
+  // `[read]` **Was gleich bleibt, ist die Wirkung:** der Reiter
+  // liefert Flags. **Darauf prueft er jetzt.**
   const s = ohneKommentare(ORDNUNG)
-  assert.match(s, /flagVon\(/,
-    'Die Dauerregel ist nicht angebunden (G-260).')
-  assert.match(s, /getNaehrstoffDauer\(/,
-    'Die Tageswerte fuer die Flags werden nicht geladen (G-260).')
+  assert.match(s, /flags = sortiere\(gefunden\)/,
+    'Die Flags werden nicht mehr gebildet (G-260).')
+  assert.match(s, /flagTage = bewertet/,
+    'Der Nenner wird nicht mitgegeben (G-260).')
 })
 
 test('G-260: im Tagesmodus wird die Fensterfunktion nicht gerufen', () => {
   // `[read]` **Ein Tag hat keine Dauer** — und der Aufruf kostet
   // 1.844 ms bei 90 Tagen. Ihn im Tagesmodus zu sparen ist die
   // billigste Ersparnis, die es gibt.
+  // `[cmd]` **A-62, 2026-08-30: auch dieser Waechter hat sich mit
+  // G-273 gedreht** — er nannte `getNaehrstoffDauer`, das es nicht
+  // mehr gibt. **Die Regel bleibt, der Name aendert sich.**
   const s = ohneKommentare(ORDNUNG)
-  const zeile = /fenster === 1\s*\n?\s*\?\s*Promise\.resolve\(\[\]\)\s*\n?\s*:\s*getNaehrstoffDauer/
-    .test(s.replace(/\s+/g, ' '))
-    || /fenster === 1 \? Promise\.resolve\(\[\]\) : getNaehrstoffDauer/
-      .test(s.replace(/\s+/g, ' '))
+  const eine = s.replace(/\s+/g, ' ')
+  const zeile = eine.includes('fenster === 1 ? Promise.resolve([]) : getFlags(')
   assert.ok(zeile,
     'Die Fensterfunktion laeuft auch im Tagesmodus (G-260).')
 })
@@ -124,4 +132,42 @@ test('G-260: keine zweite Ansicht neben die bestehende', () => {
   const treffer = s.match(/<NaehrstoffOrdnungTab/g) ?? []
   assert.equal(treffer.length, 1,
     `Der Reiter rendert die Ordnung ${treffer.length}-mal (G-260).`)
+})
+
+
+// ── G-273: die Zaehlung kommt aus der Datenbank ──────────────────
+
+test('G-273: der Reiter ruft die zaehlende Funktion', () => {
+  // `[cmd]` **`reference_assessment_window_flags` steht seit dem
+  // 2026-08-30 live** (C-349) — in G-273 war sie nur in der Pipeline.
+  //
+  // `[cmd]` **Ergebnisgleichheit belegt, dev, drei Fenster:**
+  // 7 Tage 9 Flags, 30 Tage 11, 90 Tage 10 — **Code, getroffene Tage
+  // und Nenner identisch mit der Client-Regel.**
+  const s = ohneKommentare(ORDNUNG)
+  assert.match(s, /getFlags\(stichtag, fenster\)/,
+    'Die zaehlende Funktion wird nicht gerufen (G-273).')
+  assert.doesNotMatch(s, /getNaehrstoffDauer\(/,
+    'Der alte Weg mit 8,3 MB jsonb wird noch benutzt (G-273).')
+})
+
+test('G-273: die Ausnahmeliste bleibt im Code', () => {
+  // `[cmd]` **Drei Obergrenzen gelten laut Quelle nicht fuer Nahrung**
+  // (MG, NIA, FOLAC — C-323). `[read]` **Die Datenbank kennt sie
+  // nicht** — sie zaehlt nur Tage. **Die Einordnung bleibt hier.**
+  const s = ohneKommentare(ORDNUNG)
+  assert.match(s, /GRENZE_NUR_SUPPLEMENT/,
+    'Die Supplement-Ausnahme faellt weg — dann warnt MG 88-mal falsch (G-273).')
+  assert.match(s, /'grenze_nur_supplement'/,
+    'Die Ausnahme wird nicht mehr zugewiesen (G-273).')
+})
+
+test('G-273: der Nenner kommt aus der Funktion, nicht geraten', () => {
+  // `[read]` **`assessed_day_count` ist der Nenner** — wer ihn aus
+  // der Zeilenzahl schaetzte, bekaeme bei Luecken etwas anderes.
+  const s = ohneKommentare(ORDNUNG)
+  assert.match(s, /bewertet: z\.assessed_day_count/,
+    'Der Nenner stammt nicht aus der Funktion (G-273).')
+  assert.match(s, /tage: z\.triggered_day_count/,
+    'Die getroffenen Tage stammen nicht aus der Funktion (G-273).')
 })

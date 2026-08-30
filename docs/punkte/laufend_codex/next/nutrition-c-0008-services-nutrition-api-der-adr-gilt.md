@@ -64,3 +64,8 @@ zahlen: null
   `[cmd]` **Die fuenf Next-Routen sind der Umzugskandidat:**
   `nutrition/diary`, `foods`, `foods/categories`, `foods/smart-preview`,
   `local-schema`.
+
+## Auftrag
+
+**Vorbereitet mit C-160 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

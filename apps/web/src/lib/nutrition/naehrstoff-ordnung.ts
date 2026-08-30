@@ -43,9 +43,8 @@
 // Laeuft ausschliesslich serverseitig.
 import { createSessionClient } from '@lumeos/shared/session'
 
-import { getReferenceAssessment, getNaehrstoffDauer } from './reference-assessment-read'
-import { flagVon, sortiere, type Flag } from './mikro-flags'
-import { GEDECKT_AB } from './mikro-lage'
+import { getReferenceAssessment, getFlags } from './reference-assessment-read'
+import { sortiere, GRENZE_NUR_SUPPLEMENT, type Flag } from './mikro-flags'
 import { getZielwerteAm, type Zielwerte } from '../profile/zielwerte-read'
 import {
   ANSICHT_SCHLUESSEL, KARTEN_REIHENFOLGE, karteFuerWurzel, normalisiere,
@@ -414,7 +413,7 @@ export async function ladeOrdnung(
       // `[read]` **Im Tagesmodus gar nicht:** ein Tag hat keine Dauer.
       fenster === 1
         ? Promise.resolve([])
-        : getNaehrstoffDauer(stichtag, fenster).catch(() => null),
+        : getFlags(stichtag, fenster).catch(() => null),
     ])
 
     if (defsR.status !== 'fulfilled' || defsR.value.error) {
@@ -608,17 +607,45 @@ export async function ladeOrdnung(
     // aus Werten Dauer wird. `[read]` Die Regel steht in
     // `mikro-flags.ts` (C-323) und wird hier nur angewandt; nichts
     // wird nachgerechnet.
+    // ══ G-273: die Zaehlung kommt aus der Datenbank ═══════════════
+    //
+    // `[cmd]` **Bis zum 2026-08-30 stand hier `flagVon` ueber
+    // `daily_assessments`** — 154 Zeilen mit 8,3 MB jsonb, aus denen
+    // der Browser zehn Flags zaehlte. **Die Fracht wurde uebertragen,
+    // ausgepackt und verworfen.**
+    //
+    // `[cmd]` **`reference_assessment_window_flags` liefert die zehn
+    // Zeilen** (C-349, seit heute live). **Ergebnisgleichheit belegt:**
+    // dev, drei Fenster — 9 / 11 / 10 Flags, **Code, getroffene Tage
+    // und Nenner in allen dreien identisch mit der Client-Regel.**
+    //
+    // `[read]` **`mikro-flags.ts` bleibt und wird weiter gebraucht** —
+    // `sortiere`, `dauerSatz` und die Ausnahmeliste
+    // `GRENZE_NUR_SUPPLEMENT` stehen dort. **Nur das Zaehlen wandert.**
     let flags: Flag[] = []
     let flagTage: number | null = null
-    const dauer = dauerR.status === 'fulfilled' ? dauerR.value : null
-    if (dauer !== null && Array.isArray(dauer) && dauer.length > 0) {
+    const roh = dauerR.status === 'fulfilled' ? dauerR.value : null
+    if (roh !== null && Array.isArray(roh) && roh.length > 0) {
       const gefunden: Flag[] = []
       let bewertet = 0
-      for (const z of dauer) {
-        bewertet = Math.max(bewertet, z.tage.length)
-        const f = flagVon(z.nutrient_code, z.nutrient_name_de,
-          z.reference_direction, z.tage, GEDECKT_AB)
-        if (f) gefunden.push(f)
+      for (const z of roh) {
+        bewertet = Math.max(bewertet, z.assessed_day_count)
+        // `[read]` **Die Art entscheidet sich weiter hier** — die
+        // Ausnahme fuer Obergrenzen, die laut Quelle nicht fuer
+        // Nahrung gelten (C-323), steht in `mikro-flags.ts` und
+        // nicht in der Datenbank.
+        const art: Flag['art'] = z.reference_direction === 'upper_limit'
+          ? (z.nutrient_code in GRENZE_NUR_SUPPLEMENT
+              ? 'grenze_nur_supplement' : 'ueber_grenze')
+          : 'unter_ziel'
+        gefunden.push({
+          code: z.nutrient_code,
+          name: z.nutrient_name_de,
+          art,
+          tage: z.triggered_day_count,
+          bewertet: z.assessed_day_count,
+          unvollstaendig: z.incomplete_day_count,
+        })
       }
       flags = sortiere(gefunden)
       flagTage = bewertet

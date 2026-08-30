@@ -10,9 +10,10 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [supplements.supplements]
 zahlen: null
 ---
 
@@ -44,3 +45,7 @@ zahlen: null
 
 **Mitbeauftragt mit G-202 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-30, mit G-202 abgenommen:** kein Einzelfall - 412 von 412 ohne name_de, als C-352 neu angelegt.
