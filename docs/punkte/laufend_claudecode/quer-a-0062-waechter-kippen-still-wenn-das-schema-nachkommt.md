@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: G-267
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition]
 zahlen: null
@@ -60,7 +62,7 @@ endet"*?
 
 **Mitbeauftragt: G-264, G-93.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 ### 1 · A-62 — der Befund, der dich viermal getroffen hat
 
@@ -76,6 +78,17 @@ endet"*?
 `[read]` **Alle vier waren richtig, als sie geschrieben wurden.**
 **Du hast alle vier selbst gefunden und repariert** — **jedes Mal
 erst, nachdem sie gekippt waren.**
+
+### Zwei weitere aus C-177, 2026-08-30
+
+`[cmd]` **Ein Waechter fand seinen Namen im eigenen Kommentar** —
+**G-186 zum zweiten Mal.** `[cmd]` **Und eine Sabotage erreichte den
+Code nie, weil `.replace(…, 1)` den Kommentar darueber traf.**
+
+`[read]` **Beide Male hat die Sabotageprobe es gefangen, nicht der
+Waechter.** `[read]` **Ein Anker, der im Kommentar landet, ist
+dieselbe Klasse wie ein Waechter, der ein Wort statt einer Wirkung
+prueft.**
 
 **Miss, welche weiteren eine Abwesenheit sichern.**
 

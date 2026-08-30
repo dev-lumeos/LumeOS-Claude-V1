@@ -10,9 +10,10 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [nutrition.nutrient_defs]
 zahlen: null
 ---
 
@@ -161,4 +162,56 @@ benannt, nicht aufgeloest. Kein ADR wurde geaendert oder geloescht.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-30, Orchestrator.**
+
+**Alle drei geprueft, keiner ueberholt — und das ist ein Ergebnis.**
+
+### C-160 — die Spalten sind da, absichtlich leer
+
+`[cmd]` **`nutrient_defs` traegt `assessment_horizon_days`,
+`assessment_horizon_source` und `assessment_horizon_notes`.**
+`[cmd]` **138 von 138 Definitionen sind in allen dreien leer.**
+
+`[read]` **Die Kommentare nennen C-157 und verbieten geratene
+Tages- oder Wochenwerte.** `[read]` **Also kein verlorener Rest,
+sondern ein bewusst vorbereiteter und quellenbasiert noch nicht
+gefuellter Horizont.**
+
+`[read]` **Meine Vermutung im Auftrag — die Spalte gebe es
+vielleicht nicht — war falsch.** **Sie ist da und wartet auf
+Quellen.**
+
+### C-08 — gebaut, nicht aufgerufen
+
+`[cmd]` **`services/nutrition-api` existiert:** sechs Dateien, ein
+Hono-Geruest auf Port 4200, alle Routen liefern Platzhalter.
+`[cmd]` **Eigener Typecheck gruen.**
+
+`[cmd]` **Kein produktiver Import, kein Aufruf auf Port 4200, kein
+Listener.** `[cmd]` **Das Wurzel-`dev` startet mit `--filter=./apps/*`
+und laesst den Dienst aus.**
+
+`[read]` **A-59 in Reinform, auf Dienstebene:** er wird nur in
+`turbo run typecheck/test/build` mitgeprueft **und sieht dabei aus
+wie gebaut.**
+
+### A-37 — kein ADR-gegen-ADR, aber vier ADR-gegen-E
+
+`[cmd]` **7 von 12 gelten weiter, 4 sind teilweise abgeloest, 1 ist
+selbst archiviert.**
+
+    ADR_COACH_PERMISSIONS_V1      E-11, E-29
+    ADR_MEALCAM_CONSENT           E-20
+    ADR_NUTRITION_PREFERENCES_V1  E-16, E-30
+    ADR_SUPPLEMENTS_API_BOUNDARY  E-35
+
+`[read]` **Und die Einordnung ist sauber gemacht:** *,,weder ihre
+Kopfzeilen noch die neueren E-Entscheidungen tragen eine formale
+`loest_ab`-Verknuepfung; die Zuordnung ist eine inhaltliche Messung,
+keine nachtraeglich gesetzte Abloesung."*
+
+`[read]` **Er hat benannt, nicht entschieden** — genau wie
+vorgegeben. **Als C-357 an Tom.**
+
+**Abgenommen.**
+

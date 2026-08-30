@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-13
 kinder: []
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: ["apps/web/src/app/v2/nutrition/erfassen.tsx", "apps/web/src/app/v2/nutrition/mahlzeiten.tsx", "apps/web/src/lib/nutrition/food-search.ts"]
@@ -46,5 +48,5 @@ zahlen:
 
 ## Auftrag
 
-**Vorbereitet mit A-62 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit A-62 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.

@@ -10,9 +10,11 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: ["services/nutrition-api/src/index.ts", "services/nutrition-api/src/routes/diary.ts", "services/nutrition-api/src/routes/food.ts", "services/nutrition-api/src/routes/meals.ts", "supabase/_pipeline/daten/schema-sollstand.json"]
+  dateien:
+    - services/nutrition-api
 zahlen: null
 ---
 
@@ -71,3 +73,8 @@ zahlen: null
 
 **Mitbeauftragt mit C-160 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-30, mit C-160 abgenommen:** bestaetigt: Dienst existiert, Typecheck gruen, keine Aufrufer,
+kein Listener auf 4200.

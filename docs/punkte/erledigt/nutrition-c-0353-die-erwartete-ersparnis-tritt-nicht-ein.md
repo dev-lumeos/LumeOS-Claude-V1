@@ -9,8 +9,11 @@ kind_von: G-273
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
+  dateien:
+    - apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx
 zahlen:
   gemessen: 2026-08-30
   today_kalt_ms: 2993
@@ -84,3 +87,18 @@ sagt, was ausgeschlossen wurde.
     ohne die Umstellung  dieselbe Messung, Funktion abgeschaltet
     Differenz            erklaert oder als unklar gemeldet
     G-252-Anteil         wie viel kam von den Seitenkosten?
+
+## Abnahme
+
+**2026-08-30, mit C-177 abgenommen. Die Praemisse war meine.**
+
+`[cmd]` **6.898 ms war `nutrition` Nutrients, 2.993 ms war
+`supplements` Today** — **zwei verschiedene Reiter.**
+
+`[read]` **Es gab nie einen Sturz um 3.900 ms.** **Der Punkt hat eine
+Zahl erklaert, die ich erfunden hatte, indem ich zwei Messungen
+verglich, die nichts miteinander zu tun hatten.**
+
+`[cmd]` **Die 6.730 ms sind trotzdem aufgeklaert:** 2.148 ms
+Datenbank, ~1.620 ms HTML durch die Sparkline. **Als C-356 bleibt,
+wie sich die 1.620 ms aufteilen.**

@@ -50,3 +50,8 @@ die Suche falsch gewichtet.**
 **G-150** — *die Volltextsuche findet ueber Erklaertexte*. `[read]`
 **Vermutlich derselbe Befund aus anderer Richtung; beide vor dem Bau
 zusammenlegen oder abgrenzen.**
+
+## Auftrag
+
+**Vorbereitet mit C-205 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

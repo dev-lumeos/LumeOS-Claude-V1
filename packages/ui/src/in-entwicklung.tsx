@@ -23,10 +23,27 @@ export type InEntwicklungProps = {
   titel: string
   /** Woran es haengt. Ohne Angabe bleibt es beim allgemeinen Satz. */
   grund?: string
+  /**
+   * Die Flaeche TUT etwas — nur nicht vollstaendig. Dann faellt der
+   * Satz „…er tut noch nichts" weg und `grund` traegt allein.
+   *
+   * `[cmd]` NACHGETRAGEN IN C-177. `[read]` **Der Anlass:** die
+   * Sprachwahl setzt Thai wirklich — Cookie `lumeos-sprache=th`,
+   * gemessen am 2026-08-30, die Oberflaeche uebersetzt sich. **Nur die
+   * Lebensmittelsuche findet nichts**, weil `food_aliases` 0 `th`-Zeilen
+   * fuehrt.
+   *
+   * `[read]` **Der Standardsatz waere dort schlicht falsch** — und ein
+   * falscher Satz im gemeinsamen Baustein ist schlimmer als in einem
+   * Einzelfall, weil ihn niemand mehr nachliest. Die 39 uebrigen
+   * Aufrufer bleiben unberuehrt: ohne das Prop steht der Satz wie
+   * bisher.
+   */
+  teilweise?: boolean
   onClose: () => void
 }
 
-export function InEntwicklung({ titel, grund, onClose }: InEntwicklungProps) {
+export function InEntwicklung({ titel, grund, teilweise = false, onClose }: InEntwicklungProps) {
   // Escape schliesst — sonst ist das Modal per Tastatur eine Sackgasse.
   React.useEffect(() => {
     const auf = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -40,26 +57,33 @@ export function InEntwicklung({ titel, grund, onClose }: InEntwicklungProps) {
         className="v2-modal"
         role="dialog"
         aria-modal="true"
-        aria-label={`${titel} — in Entwicklung`}
+        aria-label={`${titel} — ${teilweise ? 'teilweise gedeckt' : 'in Entwicklung'}`}
         onClick={e => e.stopPropagation()}
       >
         <div className="v2-modal-h">
           <Icon name="sparkles" className="v2-ic v2-ic-sm" />
           <span className="v2-card-title">{titel}</span>
-          <Pill variant="warn">in Entwicklung</Pill>
+          <Pill variant="warn">{teilweise ? 'teilweise gedeckt' : 'in Entwicklung'}</Pill>
           <div className="v2-spacer" />
           <button type="button" className="v2-icon-btn" onClick={onClose} aria-label="Schliessen">
             <Icon name="x" className="v2-ic v2-ic-sm" />
           </button>
         </div>
         <div className="v2-modal-body">
-          <p style={{ fontSize: 12.5, lineHeight: 1.6, color: 'var(--fg-muted)', margin: 0 }}>
-            Diese Flaeche stammt aus dem Entwurf und ist noch nicht
-            angebunden. Der Knopf steht hier, damit das Gesamtbild
-            vollstaendig ist — er tut noch nichts.
-          </p>
+          {!teilweise && (
+            <p style={{ fontSize: 12.5, lineHeight: 1.6, color: 'var(--fg-muted)', margin: 0 }}>
+              Diese Flaeche stammt aus dem Entwurf und ist noch nicht
+              angebunden. Der Knopf steht hier, damit das Gesamtbild
+              vollstaendig ist — er tut noch nichts.
+            </p>
+          )}
           {grund && (
-            <p style={{ fontSize: 12, lineHeight: 1.55, color: 'var(--fg-dim)', marginTop: 10 }}>
+            <p style={{
+              fontSize: teilweise ? 12.5 : 12,
+              lineHeight: teilweise ? 1.6 : 1.55,
+              color: teilweise ? 'var(--fg-muted)' : 'var(--fg-dim)',
+              marginTop: teilweise ? 0 : 10,
+            }}>
               {grund}
             </p>
           )}

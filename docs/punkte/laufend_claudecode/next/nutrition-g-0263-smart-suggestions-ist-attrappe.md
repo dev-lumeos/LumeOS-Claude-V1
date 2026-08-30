@@ -28,3 +28,8 @@ eine Bewertung** — er sagt, was jemand tun soll.
 
 `[read]` **Das ist dieselbe Frage, die bei `intel` und `extended` in
 Supplements offensteht** (G-240).
+
+## Auftrag
+
+**Vorbereitet mit G-262 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

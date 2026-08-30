@@ -10,9 +10,11 @@ kinder: [C-318]
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: ["docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md", "docs/spezifikation/00-QUELLEN.md"]
+  dateien:
+    - docs/specs/Nutrition/04_adrs
 zahlen: null
 ---
 
@@ -95,3 +97,8 @@ zahlen: null
 
 **Mitbeauftragt mit C-160 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-30, mit C-160 abgenommen:** gemessen: 7 gelten, 4 teilweise abgeloest, 1 archiviert;
+vier ADR-gegen-E-Konflikte benannt, als C-357 vorgelegt.

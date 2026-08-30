@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: G-258
 entscheidung: E-29
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: [coach.pending_actions]
 zahlen:
@@ -57,7 +59,7 @@ Aenderungsprotokolle** — eigener Punkt.
 
 **Mitbeauftragt: C-355.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 ### Das Ergebnis
 

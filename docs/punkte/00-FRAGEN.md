@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **27 Punkte tragen `typ: entscheidung`
+`[cmd]` **28 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -369,6 +369,44 @@ derselbe Befund ist, gehoert geprueft, nicht angenommen.
   Die Entscheidung ist also nicht *„vergessen"*, sondern *„soll das so
   bleiben"* — und wenn ja, wie ein Agent dort etwas belegen soll.
   Seeds gehoeren in die Kette, also zu Codex.
+
+## C-357 — vier ADRs widersprechen neueren Entscheidungen
+
+**Modul:** quer · **angelegt:** 2026-08-30 · **Datei:** `todos/quer-c-0357-vier-adrs-widersprechen-neueren-entscheidungen.md`
+
+## Befund
+
+Aus A-37, Codex, 2026-08-30.
+
+`[cmd]` **12 ADRs in `docs/specs/Nutrition/04_adrs/`: 7 gelten weiter,
+4 sind teilweise abgeloest, 1 ist selbst archiviert.**
+
+    ADR_COACH_PERMISSIONS_V1      E-11 legt Permissions je Modul und
+                                  zweiwertig fest, E-29 verlangt eine
+                                  Funktion fuer Coach-Zugriffe
+    ADR_MEALCAM_CONSENT           E-20 verlangt zwei getrennte Zwecke
+                                  statt eines `training_consent`
+    ADR_NUTRITION_PREFERENCES_V1  E-16 und E-30 behandeln generelle
+                                  Ausschluesse als Rangfolge
+    ADR_SUPPLEMENTS_API_BOUNDARY  E-35 verlangt je Modul eine eigene
+                                  Tagesbilanz
+
+`[cmd]` **Kein ADR widerspricht einem anderen ADR.**
+
+## Warum es eine Entscheidung ist
+
+`[read]` **Weder die ADRs noch die E-Entscheidungen tragen eine
+formale `loest_ab`-Verknuepfung.** `[cmd]` **Codex hat inhaltlich
+gemessen und ausdruecklich nichts gesetzt** — das war die Vorgabe.
+
+`[read]` **`docs/specs/` wird prueferisch gelesen** (CLAUDE.md).
+**Zwei Dokumente, die dieselbe Frage verschieden beantworten, sind
+schlimmer als eines.**
+
+`[read]` **Zu entscheiden: bekommen die vier einen
+`abgeloest_durch`-Vermerk, oder wandern sie ins Archiv?** **Und wer
+traegt ihn ein** — die ADRs liegen in `docs/specs/`, die
+Entscheidungen in `docs/entscheidungen/`.
 
 ## E-10 — RLS neu bewerten, sobald `main` produktiv wird
 

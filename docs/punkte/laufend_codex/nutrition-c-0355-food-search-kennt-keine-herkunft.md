@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: G-251
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: [nutrition.foods_custom, nutrition.food_preference_items]
 zahlen:
@@ -54,5 +56,5 @@ gibt kein Gestern"* etwas anderes ist als *,,gestern war nichts"*.
 
 ## Auftrag
 
-**Vorbereitet mit C-354 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit C-354 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.

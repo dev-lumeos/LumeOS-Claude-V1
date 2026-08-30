@@ -56,3 +56,8 @@ zahlen: null
   daraus auf Nichtexistenz geschlossen. **Dasselbe Muster wie die neun
   falschen Banner.** Was generisch ist, gehoert nach `packages/ui`,
   sonst wird es ein drittes Mal neu erfunden.
+
+## Auftrag
+
+**Vorbereitet mit C-205 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.
