@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: C-354
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: [coach.pending_actions]
 zahlen:
@@ -46,5 +48,27 @@ der schreibt, ist eine eigene Klasse.
 
 ## Auftrag
 
-**Vorbereitet mit C-352 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit C-352 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Die Anzeigeseite ist entschieden, 2026-08-30
+
+**Aus G-258, Claude Code.**
+
+`[cmd]` **Drei Zustaende, nicht zwei: offen / abgelaufen / erledigt.**
+
+`[read]` ***Abgelaufen* ist nicht *erledigt*** — **niemand hat
+bestaetigt oder abgelehnt, die Frist ist blos verstrichen.** `[read]`
+**Wer beides zusammenwirft, behauptet eine Entscheidung, die nie
+gefallen ist.**
+
+`[cmd]` **Die Unterzeile liest deshalb *,,2 abgelaufen"*, nicht *,,2
+offen"*** — **was bei dieser Datenlage schlicht falsch waere.**
+
+`[cmd]` **Alle 3 Zeilen in `pending_actions` sind abgelaufen**, 2 fuer
+`dev`.
+
+`[read]` **Die Anzeige entscheidet, sie schreibt nicht.** **Der
+Schreibweg bleibt diese Frage** — und sie ist damit kleiner geworden:
+**es geht nur noch darum, ob `status` je auf `expired` gesetzt wird,
+nicht darum, was der Nutzer sieht.**

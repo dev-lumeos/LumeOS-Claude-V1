@@ -56,11 +56,26 @@ export async function GET(request: NextRequest) {
   const tagListe = (request.nextUrl.searchParams.get('tags') ?? '')
     .split(',').map(c => c.trim()).filter(Boolean)
 
+  // G-251: die Herkunfts-Filter — `herkunft=bevorzugt` bzw. `eigene`.
+  //
+  // `[cmd]` **Beide brauchen `p_user_id`**, und der kommt aus der
+  // Sitzung, nie aus der Anfrage (siehe `p_user_id` in food-search.ts:
+  // eine fremde Kennung liesse fremde Allergien aus den Trefferzahlen
+  // ablesen). `[read]` **Deshalb setzt `herkunft` implizit `prefs`** —
+  // ohne angewandte Vorlieben gaebe es kein `is_favorite`, und der
+  // Filter liefe ins Leere, ohne dass jemand merkt warum.
+  const herkunft = request.nextUrl.searchParams.get('herkunft') ?? ''
+  const bevorzugt = herkunft === 'bevorzugt'
+  const nurEigene = herkunft === 'eigene'
+
   try {
     const payload = await getLocalFoodSearch(query, foodId, {
-      category, categoryId, tag, limit, offset, sort, applyPreferences,
+      category, categoryId, tag, limit, offset, sort,
+      applyPreferences: applyPreferences || bevorzugt,
       excludeTags: ohne,
       tags: tagListe,
+      bevorzugt,
+      nurEigene,
     })
     const selectedIndex = foodId
       ? payload.foods.findIndex(food => food.id === foodId)

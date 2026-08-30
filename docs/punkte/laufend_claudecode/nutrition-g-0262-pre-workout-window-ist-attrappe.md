@@ -7,6 +7,8 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: G-254
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
 zahlen: null
@@ -33,7 +35,7 @@ E-29 zugunsten einer Funktion entschieden.
 
 **Mitbeauftragt: G-263.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 `[read]` **Von den sechs Kacheln aus G-254 sind vier erledigt.**
 `[cmd]` Pending actions (E-29, wartet auf C-354), Nutrition score

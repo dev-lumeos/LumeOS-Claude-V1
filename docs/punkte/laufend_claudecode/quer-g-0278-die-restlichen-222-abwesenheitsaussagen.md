@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: A-62
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   dateien:
     - tools/abwesenheit-pruefen.mjs
@@ -63,5 +65,5 @@ eine Anzeige begruenden** — **die anderen kippen still, aber folgenlos.**
 
 ## Auftrag
 
-**Vorbereitet mit G-277 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit G-277 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.

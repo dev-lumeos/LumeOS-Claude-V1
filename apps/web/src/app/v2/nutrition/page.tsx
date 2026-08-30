@@ -49,6 +49,10 @@ import { ladeOrdnung, type NaehrstoffOrdnung } from '../../../lib/nutrition/naeh
 import { fensterOderTag } from '../../../lib/nutrition/naehrstoff-anzeige'
 // G-101: Kalorienbilanz und Makroschnitt fuer die Insights.
 import { ladeInsights, type InsightsStand } from '../../../lib/nutrition/insights-read'
+// G-258/E-29: ueber die Funktion, nicht direkt in `coach.*`.
+import {
+  ladeOffeneAktionen, type OffeneAktionenStand,
+} from '../../../lib/coach/offene-aktionen'
 
 import { datumOderHeute } from '../../../lib/datum'
 import { TagebuchAnsicht } from './ansicht'
@@ -268,6 +272,26 @@ export default async function V2NutritionPage({
     }
   }
 
+  // G-258/E-29: die offenen Coach-Aktionen dieses Moduls. Nur fuer das
+  // Tagebuch — dort steht die Kachel.
+  //
+  // `[read]` **Ueber `coach.offene_aktionen('nutrition')`, nicht ueber
+  // einen Lesezugriff auf `coach.pending_actions`.** Die Funktion ist
+  // `SECURITY DEFINER` und nimmt keine Kennung: **der Klient kommt aus
+  // `auth.uid()`.** Damit gibt es hier nichts zu pruefen und nichts
+  // nachzubauen — das ist der Sinn von E-29.
+  //
+  // `[read]` **Faellt sie aus, bleibt der Entwurf mit Marke stehen** —
+  // dasselbe Verhalten wie bei Mikro und Insights.
+  let offeneAktionen: OffeneAktionenStand | null = null
+  if (tab === 'diary') {
+    try {
+      offeneAktionen = await ladeOffeneAktionen('nutrition')
+    } catch {
+      offeneAktionen = null
+    }
+  }
+
   // G-101: die zwei Insights-Kacheln. Nur fuer den Insights-Tab.
   let einsichten: InsightsStand | null = null
   if (tab === 'insights') {
@@ -290,6 +314,7 @@ export default async function V2NutritionPage({
       mikro={mikro}
       ordnung={ordnung}
       einsichten={einsichten}
+      offeneAktionen={offeneAktionen}
       istAdmin={istAdmin}
       vorlieben={vorlieben}
       unvertraeglichkeiten={unvertraeglichkeiten}

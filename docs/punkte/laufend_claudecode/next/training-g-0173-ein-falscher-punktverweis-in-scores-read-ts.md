@@ -27,3 +27,8 @@ zahlen: null
   `[read]` Kleinigkeit, aber ein falscher Verweis fuehrt beim naechsten
   Suchen in die Irre — dasselbe Muster wie `training.sessions` gegen
   `workout_sessions`.
+
+## Auftrag
+
+**Vorbereitet mit A-29 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

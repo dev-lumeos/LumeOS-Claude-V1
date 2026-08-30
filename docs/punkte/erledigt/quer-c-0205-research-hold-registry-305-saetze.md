@@ -10,9 +10,10 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: ["apps/web/src/lib/evidenz/registry.ts"]
+  tabellen: [supplements.supplements]
 zahlen: null
 ---
 
@@ -165,4 +166,29 @@ Nahrungsmittelfunktion nicht Teil dieses Katalogpfads ist.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-30, Orchestrator.**
+
+`[cmd]` **C-205 ueberholt:** die 305 Holds sind importierte,
+ungelesene Rohdatensaetze. `[read]` **Der Punkt behauptete einen
+Tabellenbefund; es ist eine Datenmenge ohne Leser.**
+
+`[cmd]` **C-229 ueberholt und gebaut:** ein Katalog, getrenntes
+Detail, und *Add* mit sichtbarer Stackwahl. `[read]` **G-265 und
+G-272 haben den Befund erledigt, ohne dass jemand ihn gelesen hat.**
+
+### G-214 bleibt offen, und der Befund ist scharf
+
+`[cmd]` **Pterostilbene trifft bei der Suche nach *Resveratrol* ueber
+die Beschreibung** — **ohne dass der Treffergrund sichtbar waere.**
+
+`[read]` **Der Nutzer sieht einen Namen, der nicht zur Suche passt,
+und keinen Hinweis warum.** `[read]` **Das ist kein Suchfehler: die
+beiden Stoffe gehoeren zusammen, und der Treffer ist richtig.**
+**Fehlend ist die Auskunft.**
+
+`[read]` **Meine Vermutung im Auftrag — die Auskunft gebe es schon
+und komme nur nicht an — war falsch.** `[cmd]` **`unsupported_sort`
+meldet einen unbekannten Sortierwert, nicht einen Treffergrund.**
+
+**Abgenommen.** Zwei von drei ueberholt.
+

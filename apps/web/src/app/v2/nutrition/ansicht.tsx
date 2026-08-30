@@ -39,6 +39,9 @@ import { NaehrstoffOrdnungTab } from './naehrstoff-ordnung-tab'
 import type { NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnung'
 // G-101: zwei Insights-Kacheln mit echten Zahlen.
 import { KalorienbilanzKachel, MakroschnittKachel } from './insights-echt'
+// G-258/E-29: die echte Pending-Actions-Kachel.
+import { NutritionPendingEcht } from './pending-echt'
+import type { OffeneAktionenStand } from '../../../lib/coach/offene-aktionen'
 import type { InsightsStand } from '../../../lib/nutrition/insights-read'
 import type { HydrationDay } from '../../../lib/nutrition/hydration-day-read'
 import { LeerHinweis } from './leer-hinweis'
@@ -121,10 +124,13 @@ export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, lueckenGesamt = null, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
   planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
   istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null,
+  offeneAktionen = null,
   unvertraeglichkeiten = [],
 }: {
   /** G-154: fuer den Hinweis im Foods-Tab. */
   unvertraeglichkeiten?: string[]
+  /** G-258/E-29: `null` heisst nicht gelesen — dann bleibt der Entwurf. */
+  offeneAktionen?: OffeneAktionenStand | null
   datum: string
   planLogs?: PlanLogZeile[]
   coachFreigabe?: boolean
@@ -447,7 +453,18 @@ export async function TagebuchAnsicht({
         <div className="v2-col-gap" style={{ gap: 12 }}>
         <SmartSuggestionsCard />
         <NutritionScoreCard />
-        <NutritionPendingActions />
+        {/* G-258/E-29: ANGEBUNDEN an `coach.offene_aktionen('nutrition')`.
+            `[read]` **Muster G-90:** der Entwurf bleibt nur, solange gar
+            nichts geladen wurde (kein Prop). Sobald gelesen wurde — auch
+            wenn nichts gefunden wird —, gilt der echte Weg mit seinem
+            Leerzustand. **Sonst stuende eine Attrappe da, die drei
+            erfundene Aktionen zeigt, waehrend der Coach keine hat.** */}
+        {offeneAktionen
+          ? <NutritionPendingEcht
+              stand={offeneAktionen}
+              jetzt={offeneAktionen.gelesenUm}
+            />
+          : <NutritionPendingActions />}
         <PreWorkoutOptimizer />
         {/* ANGEBUNDEN: hydration_day. Deshalb keine Marke mehr — und
             zwei Farben, weil die Vorlage die beiden Herkuenfte nicht

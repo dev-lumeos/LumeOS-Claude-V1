@@ -37,6 +37,11 @@ import type {
 import { DaumenKnoepfe, type Daumen } from './daumen'
 import { daumenLesen } from './daumen-aktion'
 import { ErfassenModal } from './erfassen-modal'
+// G-251: die Herkunfts-Filter. `[read]` A-30: nur Typen und
+// Konstanten, kein Leseweg — die Datei ist serverfrei.
+import {
+  FILTER_LAGE, LEER_SATZ, SUCH_HERKUNFT, type SuchHerkunft,
+} from '../../../lib/nutrition/herkunft-filter'
 
 /**
  * Die Pillen des Entwurfs, auf die Kategoriewurzeln abgebildet.
@@ -372,6 +377,19 @@ export function NutritionFoodsTab({
    */
   const [ohne, setOhne] = React.useState<Set<string>>(new Set())
 
+  // ── G-251: die Herkunfts-Filter ───────────────────────────────────
+  //
+  // `[read]` **Etwas anderes als die Tag-Filter darueber:** die fragen
+  // nach Eigenschaften des Lebensmittels, dieser nach der Beziehung
+  // des Nutzers dazu. **Deshalb ein eigener Zustand, keine weitere
+  // Tag-Gruppe.**
+  //
+  // `[read]` **Einer zur Zeit, kein Set.** „Bevorzugt" und „nur eigene"
+  // schliessen einander sachlich aus — `foods_custom` traegt keine
+  // Vorlieben. Ein Set liesse eine Kombination zu, die immer 0
+  // liefert, und die saehe kaputt aus statt leer.
+  const [herkunft, setHerkunft] = React.useState<SuchHerkunft | null>(null)
+
   /**
    * G-154: die gesetzten Unvertraeglichkeiten, benannt.
    *
@@ -466,6 +484,11 @@ export function NutritionFoodsTab({
       // G-133: der Ausschluss geht an die Suchfunktion, nicht mehr an
       // einen Filter auf der geladenen Seite.
       if (ohne.size > 0) params.set('ohne', Array.from(ohne).sort().join(','))
+      // G-251: die Herkunft geht an die Suchfunktion, nicht an einen
+      // Filter auf der geladenen Seite. `[read]` **Dieselbe Lehre wie
+      // G-133:** clientseitig blieben die Ausgeschlossenen auf Seite 2
+      // stehen — und `total` waere gelogen.
+      if (herkunft) params.set('herkunft', herkunft)
       try {
         const antwort = await fetch(`/api/nutrition/foods?${params.toString()}`,
           { signal: ctrl.signal })
@@ -485,11 +508,15 @@ export function NutritionFoodsTab({
     // G-133: `ohne` gehoert in die Abhaengigkeiten. `[cmd]` Vorher
     // fehlte es — der Ausschluss wirkte nur clientseitig und brauchte
     // kein neues Laden. Jetzt entscheidet er die Trefferzahl.
-  }, [suche, kategorie, tags, seite, sortierung, ohne])
+    // G-251: `herkunft` gehoert aus demselben Grund dazu — sie
+    // entscheidet die Trefferzahl, nicht die Darstellung.
+  }, [suche, kategorie, tags, seite, sortierung, ohne, herkunft])
 
   // Jede Filteraenderung beginnt wieder auf Seite 1 — sonst stuende
   // man nach dem Filtern auf einer Seite, die es nicht mehr gibt.
-  React.useEffect(() => { setSeite(0) }, [suche, kategorie, tags, sortierung, ohne])
+  React.useEffect(() => {
+    setSeite(0)
+  }, [suche, kategorie, tags, sortierung, ohne, herkunft])
 
   const alleZeilen: NutritionFoodSearchRow[] = payload?.foods ?? []
   // Abgewertete Zeilen verschwinden aus der Liste — aber erst nach dem
@@ -627,6 +654,38 @@ export function NutritionFoodsTab({
               style={{ background: 'none', border: 0, padding: 0, cursor: 'pointer' }}
             >
               <Pill variant={aktiv ? 'acc' : undefined}>{p.label}</Pill>
+            </button>
+          )
+        })}
+      </div>
+
+      {/* ── G-251: die Herkunfts-Filter ──────────────────────────────
+          `[read]` **Eigene Zeile, nicht zwischen die Kategorien.** Die
+          Kategoriepillen teilen den Katalog nach dem, WAS ein
+          Lebensmittel ist; diese nach der Beziehung des Nutzers dazu.
+          Nebeneinander gestellt saehen sie aus wie dreizehn
+          gleichrangige Kategorien, und „Bevorzugt" waere eine davon.
+
+          `[cmd]` **Beide gehen an `food_search`** (C-355), nicht an
+          einen Filter auf der geladenen Seite — `total` ist deshalb
+          die echte Menge, nicht die der Seite. */}
+      <div style={{ display: 'flex', gap: 6, marginBottom: 16, flexWrap: 'wrap',
+        alignItems: 'center' }}>
+        <span className="v2-eyebrow" style={{ marginRight: 2 }}>Meine</span>
+        {SUCH_HERKUNFT.map(h => {
+          const aktiv = herkunft === h
+          return (
+            <button
+              key={h}
+              type="button"
+              // Nochmal klicken hebt auf — sonst gaebe es keinen Weg
+              // zurueck zum vollen Katalog ausser Neuladen.
+              onClick={() => setHerkunft(aktiv ? null : h)}
+              aria-pressed={aktiv}
+              title={FILTER_LAGE[h].hinweis}
+              style={{ background: 'none', border: 0, padding: 0, cursor: 'pointer' }}
+            >
+              <Pill variant={aktiv ? 'acc' : undefined}>{FILTER_LAGE[h].label}</Pill>
             </button>
           )
         })}
@@ -929,9 +988,17 @@ export function NutritionFoodsTab({
             </tbody>
           </table>
         </div>
+        {/* G-251: leer ist nicht gleich leer.
+            `[cmd]` **`foods_custom` hat 0 Zeilen** — wer „Eigene"
+            waehlt, bekommt garantiert nichts, und das liegt nicht an
+            seinem Suchbegriff. `[read]` **Ein allgemeines „passt
+            nichts" liesse ihn die Suche aendern, was nichts aendern
+            wuerde.** Deshalb nennt der Satz den Grund. */}
         {zeilen.length === 0 && !laeuft && !fehler && (
           <div className="v2-muted" style={{ fontSize: 12, padding: '14px 0', textAlign: 'center' }}>
-            Kein Lebensmittel passt zu dieser Auswahl.
+            {herkunft
+              ? LEER_SATZ[herkunft]
+              : 'Kein Lebensmittel passt zu dieser Auswahl.'}
           </div>
         )}
 

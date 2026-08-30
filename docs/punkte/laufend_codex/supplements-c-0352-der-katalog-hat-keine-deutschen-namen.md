@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: C-316
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: [supplements.supplements]
 zahlen:
@@ -105,7 +107,7 @@ gehoeren gefuellt.
 
 **Mitbeauftragt: C-358.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 ### 1 · C-352 — nicht 412 Namen, sondern eine Liste
 

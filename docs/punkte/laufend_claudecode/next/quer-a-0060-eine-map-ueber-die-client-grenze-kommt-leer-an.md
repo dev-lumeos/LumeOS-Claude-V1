@@ -48,3 +48,8 @@ Server-Client-Grenze gereicht werden.**
 `serverimport`-Waechter prueft bereits Client-Chunks auf
 Server-Importe — **die Stelle, an der so eine Pruefung sitzen
 wuerde, existiert schon.**
+
+## Auftrag
+
+**Vorbereitet mit A-29 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

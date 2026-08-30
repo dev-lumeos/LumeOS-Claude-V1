@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: A-62
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   dateien:
     - apps/web/src/app/v2/coach/tab-rechte.tsx
@@ -62,7 +64,7 @@ ist Teil des Coach-Moduls, nicht eines fremden.
 
 **Mitbeauftragt: G-278.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 ### 1 · G-277 — der Leerzustand mit falschem Grund
 

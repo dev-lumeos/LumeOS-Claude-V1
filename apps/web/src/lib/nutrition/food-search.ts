@@ -229,6 +229,37 @@ export type FoodSearchFilters = {
   tag_groups?: string[][]
   processing_levels?: string[]
   exclude_processing_levels?: string[]
+  /**
+   * Nur Bevorzugtes — seit C-355 (G-251).
+   *
+   * `[cmd]` **ACHTUNG, DIE ZAHL IST NICHT DIE ERWARTETE.** Die
+   * Funktion setzt `is_favorite = bool_or(constraint_level = 'boost')`
+   * (075, Zeile 945). **Ein `boost` entsteht auch aus einem gemochten
+   * TAG, nicht nur aus einem gemochten Lebensmittel.**
+   *
+   * `[cmd]` **Gemessen fuer `dev@lumeos.app` am 2026-08-30:**
+   *
+   *     food_preference_items   1x liked|food, 3x liked|tag
+   *     search_targets          1 boost|food, 5.557 boost|tag
+   *     food_search             ohne Filter  total 4.970
+   *                             favorites    total 4.098
+   *
+   * `[read]` **Der Filter engt also ein, aber nicht auf die
+   * Favoritenliste** — er zeigt alles, was einem gemochten Tag
+   * entspricht. **Das ist die Funktion, wie sie gebaut ist, kein
+   * Fehler** — aber eine Beschriftung *„Favoriten"* waere falsch, und
+   * genau deshalb heisst die Pille im Reiter anders.
+   */
+  favorites?: boolean
+  /**
+   * Herkunft der Zeilen — seit C-355 (G-251).
+   *
+   * `[cmd]` **`'bls'` und `'custom'`** (075, Zeilen 979/1002).
+   * `[cmd]` **`nutrition.foods_custom` hat 0 Zeilen**, also liefert
+   * `['custom']` heute `total 0` — **der erwartete Leerzustand, keine
+   * angelegte Testzeile.**
+   */
+  sources?: Array<'bls' | 'custom'>
 }
 
 export class LocalFoodSearchError extends Error {
@@ -375,6 +406,13 @@ export function buildFoodSearchRpcArgs(
     excludeTags?: string[]
     /** G-112: die gewaehlten Filter-Tags (UND zwischen ihnen). */
     tags?: string[]
+    /**
+     * G-251: nur Bevorzugtes. **Nicht „nur Favoriten"** — siehe
+     * `FoodSearchFilters.favorites`: ein gemochter Tag zaehlt mit.
+     */
+    bevorzugt?: boolean
+    /** G-251: nur eigene Lebensmittel (`foods_custom`). */
+    nurEigene?: boolean
   } = {},
 ): FoodSearchRpcArgs {
   return {
@@ -401,7 +439,9 @@ export function buildFoodSearchRpcArgs(
     // Die Codes werden nur getrimmt: die Datenbank vergleicht sie gegen
     // `tag_definitions.code`, ein unbekannter Code schliesst nichts aus
     // (gemessen, `contains_laktose` -> 7.140).
-    p_filters: buildFoodSearchFilters(options.excludeTags, options.tags),
+    p_filters: buildFoodSearchFilters(options.excludeTags, options.tags, {
+      bevorzugt: options.bevorzugt, nurEigene: options.nurEigene,
+    }),
   }
 }
 
@@ -427,6 +467,15 @@ export function buildFoodSearchFilters(
    * es Gruppen gibt, ist UND die ehrlichere Lesart.**
    */
   tags?: string[],
+  /**
+   * G-251: die Herkunft, seit C-355.
+   *
+   * `[read]` **Ein eigener Parameter, kein Teil von `tags`** — die
+   * Tag-Filter fragen nach Eigenschaften des Lebensmittels, dieser
+   * nach der Beziehung des Nutzers dazu. Zusammengeworfen waeren sie
+   * zwei Bedeutungen unter einem Namen.
+   */
+  herkunft?: { bevorzugt?: boolean; nurEigene?: boolean },
 ): FoodSearchFilters | null {
   const codes = (excludeTags ?? []).map(c => c.trim()).filter(Boolean)
   const gewaehlt = Array.from(new Set(
@@ -437,6 +486,12 @@ export function buildFoodSearchFilters(
   // Doppelte Codes wuerden dieselbe Bedingung zweimal erzeugen.
   if (codes.length > 0) aus.exclude_tag_codes = Array.from(new Set(codes)).sort()
   if (gewaehlt.length > 0) aus.tag_groups = gewaehlt.map(c => [c])
+
+  // G-251: nur setzen, wenn wahr — `favorites: false` waere ein
+  // aktiver Filter mit der Bedeutung „egal", und `filter_state` liefe
+  // dann ohne Not (SSOT 169: ein leeres Objekt kostete rund 6,8 s).
+  if (herkunft?.bevorzugt === true) aus.favorites = true
+  if (herkunft?.nurEigene === true) aus.sources = ['custom']
 
   // G-133: `null` statt `{}` bei leerer Auswahl.
   return Object.keys(aus).length === 0 ? null : aus
@@ -717,6 +772,16 @@ export async function getLocalFoodSearch(
      * Schalter fuer diese eine Suche. Beide wirken nebeneinander.
      */
     excludeTags?: string[]
+    /**
+     * G-251: nur Bevorzugtes.
+     *
+     * `[read]` **Braucht `applyPreferences`** — ohne `p_user_id`
+     * berechnet die Funktion kein `is_favorite`, und der Filter
+     * liefert stumm die volle Menge. Die Route setzt beides zusammen.
+     */
+    bevorzugt?: boolean
+    /** G-251: nur eigene Lebensmittel (`foods_custom`, heute 0 Zeilen). */
+    nurEigene?: boolean
   } = {},
 ): Promise<NutritionFoodSearchPayload> {
   const userId = options.applyPreferences === true ? await angemeldeteKennung() : null

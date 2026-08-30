@@ -10,9 +10,11 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: ["apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx", "apps/web/src/lib/nutrition/naehrstoff-anzeige.ts"]
+  dateien:
+    - apps/web/src/app/v2/supplements/tabs.tsx
 zahlen: null
 ---
 
@@ -63,3 +65,8 @@ zahlen: null
 
 **Mitbeauftragt mit C-205 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-30, mit C-205 abgenommen: ueberholt und gebaut.**
+Ein Katalog, getrenntes Detail, *Add* mit sichtbarer Stackwahl.

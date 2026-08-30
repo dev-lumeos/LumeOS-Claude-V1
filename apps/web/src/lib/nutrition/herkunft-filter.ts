@@ -1,69 +1,94 @@
 // ════════════════════════════════════════════════════════════════════
-// DIE DREI HERKUNFTS-FILTER — G-251, GEMESSEN STATT GEBAUT
+// DIE DREI HERKUNFTS-FILTER — G-251
 // ════════════════════════════════════════════════════════════════════
 //
 // `[cmd]` **Serverfrei.** Kein Import aus dem Leseweg — A-30.
 //
-// `[read]` **Diese Datei baut die Filter NICHT.** Sie haelt fest, was
-// am 2026-08-30 gemessen wurde, damit der naechste Auftrag nicht
-// dieselbe Messung wiederholt — und damit niemand einen Filter baut,
-// der aussieht, als waere er kaputt.
+// `[read]` **Sie sind etwas anderes als die Tag-Filter aus G-112** —
+// die filtern nach Eigenschaften des Lebensmittels, **diese nach der
+// Beziehung des Nutzers dazu.**
 //
-// ══ WORAUS JEDER KAEME, UND WAS FEHLT ═══════════════════════════════
+// ══ STAND 2026-08-30, NACH C-355 ════════════════════════════════════
 //
-//     Favoriten      `food_preference_items`, `preference = 'liked'`
-//                    `[cmd]` **dev hat GENAU EINEN** ("Reis poliert,
-//                    roh"). `[cmd]` **`food_search` kennt `liked`
-//                    nur als Rangschub** (`constraint_level =
-//                    'boost'`, +100/+50/+30) — **`p_filters` hat
-//                    keinen Schluessel dafuer.**
+// `[cmd]` **Zwei der drei laufen jetzt ueber `food_search`**, der
+// dritte nicht — und das ist kein Rueckstand, sondern seine Natur.
 //
-//     wie gestern    `meals` + `meal_items` des Vortags.
-//                    `[cmd]` **dev: 180 Tage mit Posten ueber eine
-//                    Spanne von 181 — also EINE Luecke.** **Der Fall
-//                    ohne Vortag ist real, nicht theoretisch.**
+//     bevorzugt     p_filters {"favorites": true}
+//                   `[cmd]` dev: total 4.098 von 4.970
+//                   ACHTUNG: NICHT die Favoritenliste. Siehe unten.
 //
-//     eigene Foods   `nutrition.foods_custom`.
-//                    `[cmd]` **Die Tabelle existiert mit 45 Spalten
-//                    und 0 Zeilen** — und **`food_search` liest sie
-//                    ueberhaupt nicht** (`prosrc` geprueft).
+//     eigene        p_filters {"sources": ["custom"]}
+//                   `[cmd]` dev: total 0 — `foods_custom` hat
+//                   0 Zeilen. Der erwartete Leerzustand.
 //
-// ══ WARUM KEINER GEBAUT WURDE ═══════════════════════════════════════
+//     wie gestern   KEIN Suchfilter. `meals` + `meal_items` des
+//                   Vortags sind eine eigene Liste, keine
+//                   Verfeinerung der Katalogsuche.
 //
-// `[cmd]` **`p_filters` kennt sechs Schluessel:** `tag_groups`,
-// `include_tag_groups`, `exclude_tags`, `exclude_tag_codes`,
-// `processing_levels`, `exclude_processing_levels`. **Keiner davon
-// trifft eine Herkunft.**
+// ══ WARUM „BEVORZUGT" UND NICHT „FAVORITEN" ═════════════════════════
 //
-// `[read]` **Client-seitig ginge nur die geladene Seite** — und das
-// waere schlimmer als nichts: `[cmd]` **7.140 Lebensmittel, 50 je
-// Seite, ein Favorit.** **Ein Filter, der fast immer nichts findet,
-// sieht kaputt aus, nicht leer.**
+// `[cmd]` **Gemessen am 2026-08-30 fuer `dev@lumeos.app`:**
 //
-// `[read]` **Also gemeldet.** Was fehlt, ist eine Datenbankaenderung
-// (Codex), nicht eine Oberflaeche.
+//     food_preference_items      1x liked|food, 3x liked|tag
+//     food_preference_search_    1 boost|food
+//       targets                  5.557 boost|tag
+//     food_search favorites      total 4.098 (ohne Filter: 4.970)
+//
+// `[cmd]` **Die Funktion setzt `is_favorite = bool_or(constraint_level
+// = 'boost')`** (075, Zeile 945). **Ein `boost` entsteht auch aus
+// einem gemochten TAG.** Wer drei Tags mag, bekommt vier Fuenftel des
+// Katalogs.
+//
+// `[read]` **Der Auftrag nannte „genau 1 Treffer"** — das ist die Zahl
+// der `boost|food`-Zeilen, also der ausdruecklich gemochten
+// Lebensmittel. **Der Filter zeigt etwas anderes**, und das ist die
+// Funktion, wie sie gebaut ist, kein Fehler.
+//
+// `[read]` **Also heisst die Pille „Bevorzugt", nicht „Favoriten".**
+// Eine Beschriftung, die 1 verspricht und 4.098 zeigt, waere die
+// Falschaussage — nicht die Zahl.
 
 /** Die drei Filter, wie G-251 sie nennt. */
-export type HerkunftFilter = 'favoriten' | 'wie_gestern' | 'eigene'
+export type HerkunftFilter = 'bevorzugt' | 'wie_gestern' | 'eigene'
 
-/** Was jedem Filter heute fehlt — je einer, nicht gesammelt. */
+/**
+ * Die zwei, die `food_search` seit C-355 kann.
+ *
+ * `[read]` **`wie_gestern` steht bewusst nicht darin** — der Reiter
+ * darf ihn nicht als Suchfilter schicken, sonst kaeme eine Anfrage
+ * heraus, die die Funktion ignoriert, und die Liste bliebe
+ * unveraendert stehen. **Ein Filter, der nichts tut, sieht aus wie
+ * ein defekter.**
+ */
+export type SuchHerkunft = Extract<HerkunftFilter, 'bevorzugt' | 'eigene'>
+
+export const SUCH_HERKUNFT: readonly SuchHerkunft[] = ['bevorzugt', 'eigene']
+
+export function istSuchHerkunft(f: HerkunftFilter | null): f is SuchHerkunft {
+  return f === 'bevorzugt' || f === 'eigene'
+}
+
+/** Beschriftung und Erklaerung je Filter. */
 export const FILTER_LAGE: Record<HerkunftFilter, {
+  label: string
   quelle: string
-  fehlt: string
+  hinweis: string
 }> = {
-  favoriten: {
-    quelle: 'nutrition.food_preference_items (preference = liked)',
-    fehlt: 'food_search kennt liked nur als Rangschub, p_filters hat '
-      + 'keinen Schlüssel dafür.',
+  bevorzugt: {
+    label: 'Bevorzugt',
+    quelle: 'food_search, p_filters {"favorites": true}',
+    hinweis: 'Alles, was zu einer gemochten Zutat oder einem gemochten '
+      + 'Merkmal passt — nicht nur ausdrücklich markierte Favoriten.',
   },
   wie_gestern: {
+    label: 'Wie gestern',
     quelle: 'nutrition.meals + meal_items des Vortags',
-    fehlt: 'Kein Suchfilter — das ist eine eigene Liste, keine '
-      + 'Verfeinerung der Katalogsuche.',
+    hinweis: 'Was am Vortag protokolliert wurde.',
   },
   eigene: {
-    quelle: 'nutrition.foods_custom',
-    fehlt: 'food_search liest die Tabelle nicht; sie hat 0 Zeilen.',
+    label: 'Eigene',
+    quelle: 'food_search, p_filters {"sources": ["custom"]}',
+    hinweis: 'Selbst angelegte Lebensmittel.',
   },
 }
 
@@ -100,4 +125,19 @@ export const VORTAG_SATZ: Record<VortagLage, string> = {
     + 'protokolliert wurde.',
   kein_tag: 'Es gibt keinen Vortag mit Protokoll. „Wie gestern" braucht '
     + 'einen Tag, von dem es übernehmen kann.',
+}
+
+/**
+ * Der Satz, wenn ein Herkunfts-Filter nichts findet.
+ *
+ * `[read]` **Leer ist nicht gleich leer.** `[cmd]` `foods_custom` hat
+ * 0 Zeilen — wer „Eigene" waehlt, bekommt garantiert nichts, und das
+ * liegt nicht an seiner Suche. **Ein allgemeines „keine Treffer"
+ * liesse ihn den Suchbegriff aendern, was nichts aendern wuerde.**
+ */
+export const LEER_SATZ: Record<SuchHerkunft, string> = {
+  bevorzugt: 'Keine Treffer unter den bevorzugten Lebensmitteln. '
+    + 'Vorlieben werden unter Preferences gepflegt.',
+  eigene: 'Es gibt noch keine eigenen Lebensmittel. Was hier erscheint, '
+    + 'legst du selbst an — der BLS-Katalog bleibt davon unberührt.',
 }

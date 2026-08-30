@@ -5,7 +5,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import {
-  FILTER_LAGE, vortagLageVon, VORTAG_SATZ,
+  FILTER_LAGE, LEER_SATZ, vortagLageVon, VORTAG_SATZ,
 } from '../herkunft-filter'
 
 const lies = (f: string) => fs.readFileSync(path.join(process.cwd(), f), 'utf8')
@@ -45,17 +45,40 @@ test('G-276: der Schreibweg kennt den Modus weiter', () => {
 
 // ── G-251: gemessen, nicht gebaut ────────────────────────────────
 
-test('G-251: je Filter steht Quelle und Luecke fest', () => {
-  // `[read]` **Der Auftrag verlangt: vor dem Bau messen, woraus jeder
-  // kommt.** Das Ergebnis steht hier, damit es niemand zweimal misst.
-  for (const k of ['favoriten', 'wie_gestern', 'eigene'] as const) {
+test('G-251: je Filter steht die Quelle fest', () => {
+  // `[cmd]` **BERICHTIGT AM 2026-08-30 — A-62.** Dieser Waechter
+  // verlangte je Filter ein Feld `fehlt` („keine Luecke benannt") und
+  // prueft jetzt die Quelle. **Er war richtig, solange keiner der drei
+  // baubar war;** seit C-355 kennt `food_search` zwei davon, und ein
+  // Waechter, der eine Luecke ERZWINGT, haelt den Bau auf.
+  for (const k of ['bevorzugt', 'wie_gestern', 'eigene'] as const) {
     assert.ok(FILTER_LAGE[k].quelle.length > 0, `${k}: keine Quelle.`)
-    assert.ok(FILTER_LAGE[k].fehlt.length > 0, `${k}: keine Luecke benannt.`)
+    assert.ok(FILTER_LAGE[k].label.length > 0, `${k}: keine Beschriftung.`)
+    assert.ok(FILTER_LAGE[k].hinweis.length > 0, `${k}: kein Hinweis.`)
   }
-  // `[cmd]` **Gemessen: `food_search` liest `foods_custom` nicht.**
-  assert.match(FILTER_LAGE.eigene.fehlt, /liest die Tabelle nicht/)
-  // `[cmd]` **Und `liked` ist nur ein Rangschub, kein Filter.**
-  assert.match(FILTER_LAGE.favoriten.fehlt, /Rangschub/)
+  // `[cmd]` **Zwei laufen ueber `food_search`, einer nicht** — und das
+  // ist keine Luecke, sondern seine Natur.
+  assert.match(FILTER_LAGE.bevorzugt.quelle, /food_search/)
+  assert.match(FILTER_LAGE.eigene.quelle, /food_search/)
+  assert.doesNotMatch(FILTER_LAGE.wie_gestern.quelle, /food_search/,
+    '„Wie gestern" ist kein Suchfilter — meals/meal_items sind eine '
+    + 'eigene Liste (G-251).')
+})
+
+test('G-251: die Pille heisst nicht „Favoriten"', () => {
+  // `[cmd]` **Gemessen am 2026-08-30 fuer dev@lumeos.app:**
+  // `{"favorites": true}` liefert **total 4.098** von 4.970 — nicht 1.
+  // Die Funktion setzt `is_favorite = bool_or(constraint_level =
+  // 'boost')`, **und ein `boost` entsteht auch aus einem gemochten
+  // TAG** (5.557 Ziele gegen 1 Lebensmittel).
+  //
+  // `[read]` **Eine Beschriftung, die 1 verspricht und 4.098 zeigt,
+  // waere die Falschaussage — nicht die Zahl.**
+  assert.doesNotMatch(FILTER_LAGE.bevorzugt.label, /Favorit/i,
+    'Die Pille verspricht Favoriten, zeigt aber alles zu gemochten '
+    + 'Tags (G-251).')
+  assert.match(FILTER_LAGE.bevorzugt.hinweis, /nicht nur/i,
+    'Der Hinweis sagt nicht, dass mehr als die Favoriten erscheinen (G-251).')
 })
 
 test('G-251: „gestern war nichts" und „es gibt kein gestern"', () => {
@@ -74,13 +97,45 @@ test('G-251: „gestern war nichts" und „es gibt kein gestern"', () => {
   assert.equal(VORTAG_SATZ.posten, '', 'Mit Posten braucht es keinen Satz.')
 })
 
-test('G-251: kein Filter wurde gebaut', () => {
-  // `[cmd]` **7.140 Lebensmittel, 50 je Seite, EIN Favorit.**
-  // `[read]` **Ein clientseitiger Filter faende fast immer nichts** —
-  // und saehe kaputt aus, nicht leer. **Deshalb gemeldet.**
+test('G-251: die zwei Filter gehen an die Suchfunktion', () => {
+  // `[cmd]` **UMGEDREHT AM 2026-08-30 — A-62.** Dieser Waechter hiess
+  // „kein Filter wurde gebaut" und verbot die Beschriftungen im Reiter.
+  // **Er war vier Wochen richtig und ist es seit C-355 nicht mehr** —
+  // er haette genau den Bau blockiert, den der Auftrag verlangt.
+  //
+  // `[read]` **Jetzt sichert er die Gegenrichtung:** der Filter muss an
+  // `food_search` gehen, nicht an die geladene Seite. **Dieselbe Lehre
+  // wie G-133** — clientseitig blieben die Ausgeschlossenen auf Seite 2
+  // stehen, und `total` waere gelogen.
   const s = ohneKommentare('src/app/v2/nutrition/tab-foods.tsx')
-  for (const wort of ['Favoriten', 'Wie gestern', 'Eigene Foods']) {
-    assert.ok(!s.includes(`>${wort}<`),
-      `Ein Filter "${wort}" ist gebaut, obwohl die Datenlage ihn nicht traegt (G-251).`)
-  }
+  assert.match(s, /params\.set\('herkunft', herkunft\)/,
+    'Die Herkunft geht nicht an die Suchfunktion (G-251).')
+  // Und sie gehoert in die Abhaengigkeiten, sonst laedt nichts nach.
+  const effekt = /\}, \[suche, kategorie, tags, seite, sortierung, ohne([^\]]*)\]\)/
+    .exec(s)
+  assert.ok(effekt, 'Der Ladeeffekt wurde nicht gefunden (G-251).')
+  assert.match(effekt[1], /(?<![a-z0-9_])herkunft(?![a-z0-9_])/,
+    '`herkunft` fehlt in den Abhaengigkeiten — der Filter wirkt dann '
+    + 'erst beim naechsten Tastendruck (G-133/G-251).')
+  // `[cmd]` **Kein clientseitiges Nachfiltern der geladenen Seite.**
+  assert.doesNotMatch(s, /zeilen\.filter\([^)]*favorit/i,
+    'Hier wird die geladene Seite nachgefiltert — dann luegt `total` (G-251).')
+})
+
+test('G-251: der Leerzustand nennt seinen Grund', () => {
+  // `[cmd]` **`foods_custom` hat 0 Zeilen** (gemessen 2026-08-30).
+  // `[read]` **Wer „Eigene" waehlt, bekommt garantiert nichts** — und
+  // das liegt nicht an seinem Suchbegriff. **Ein allgemeines „passt
+  // nichts" liesse ihn die Suche aendern, was nichts aendert.**
+  // `[read]` **Auf die Aussage pruefen, nicht auf eine Beugung** — die
+  // erste Fassung verlangte „eigene Lebensmittel" und fiel an
+  // „keine eigenen Lebensmittel".
+  assert.match(LEER_SATZ.eigene, /eigene[nr]? Lebensmittel/i)
+  assert.match(LEER_SATZ.eigene, /legst du selbst an/i,
+    'Der Satz sagt nicht, wie etwas hierher kaeme (G-251).')
+  assert.notEqual(LEER_SATZ.eigene, LEER_SATZ.bevorzugt,
+    'Beide Leerzustaende sagen dasselbe — dann tragen sie nichts bei (G-251).')
+  const s = ohneKommentare('src/app/v2/nutrition/tab-foods.tsx')
+  assert.match(s, /LEER_SATZ\[herkunft\]/,
+    'Der Reiter zeigt den allgemeinen Satz auch bei gesetztem Filter (G-251).')
 })
