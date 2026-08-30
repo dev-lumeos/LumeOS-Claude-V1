@@ -11,7 +11,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
 erledigt: 2026-08-30
-commit: OFFEN
+commit: 12ffc1bf
 beruehrt:
   tabellen: [supplements.supplements]
 zahlen: null
