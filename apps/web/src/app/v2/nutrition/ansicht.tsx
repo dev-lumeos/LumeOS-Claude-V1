@@ -19,7 +19,9 @@ import {
 } from '@lumeos/ui'
 import { Tableiste } from './tableiste'
 import {
-  SmartSuggestionsCard, NutritionScoreCard, NutritionPendingActions,
+  // G-263: `SmartSuggestionsCard` ist hier raus — die Kachel ist
+  // entfernt, nicht nur abgeschaltet (Begruendung am Renderort).
+  NutritionScoreCard, NutritionPendingActions,
   PreWorkoutOptimizer, MicronutrientSnapshot, BelowThreshold,
 } from './diary-entwurf'
 import { HydrationKachel } from './hydration'
@@ -41,6 +43,9 @@ import type { NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnun
 import { KalorienbilanzKachel, MakroschnittKachel } from './insights-echt'
 // G-258/E-29: die echte Pending-Actions-Kachel.
 import { NutritionPendingEcht } from './pending-echt'
+// G-262: die naechste geplante Trainingseinheit.
+import { PreWorkoutEcht } from './pre-workout-echt'
+import type { SitzungStand } from '../../../lib/training/naechste-sitzung'
 import type { OffeneAktionenStand } from '../../../lib/coach/offene-aktionen'
 import type { InsightsStand } from '../../../lib/nutrition/insights-read'
 import type { HydrationDay } from '../../../lib/nutrition/hydration-day-read'
@@ -124,13 +129,15 @@ export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, lueckenGesamt = null, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
   planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
   istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null,
-  offeneAktionen = null,
+  offeneAktionen = null, sitzung = null,
   unvertraeglichkeiten = [],
 }: {
   /** G-154: fuer den Hinweis im Foods-Tab. */
   unvertraeglichkeiten?: string[]
   /** G-258/E-29: `null` heisst nicht gelesen — dann bleibt der Entwurf. */
   offeneAktionen?: OffeneAktionenStand | null
+  /** G-262: `null` heisst nicht gelesen — dann bleibt der Entwurf. */
+  sitzung?: SitzungStand | null
   datum: string
   planLogs?: PlanLogZeile[]
   coachFreigabe?: boolean
@@ -451,7 +458,28 @@ export async function TagebuchAnsicht({
             Hydration 1.2/3.0 L. Die Deckung je Naehrstoff steht als
             achte darunter: sie ist angebunden und ersetzt nichts. */}
         <div className="v2-col-gap" style={{ gap: 12 }}>
-        <SmartSuggestionsCard />
+        {/* G-263 (2026-08-30): „Smart suggestions" ist ENTFERNT.
+
+            `[read]` **Die Vorfrage war inhaltlich:** was ist ein
+            Vorschlag? **Ein Vorschlag sagt, was jemand tun soll — das
+            ist eine Bewertung**, und C-108/F-02 zieht dort die Grenze
+            (*nennen ja, bewerten nein*, ausdruecklich in C-113).
+
+            `[cmd]` **Die vier Zeilen einzeln gemessen** — Belege in
+            `lib/nutrition/vorschlags-lage.ts`:
+
+              „Same as yesterday"   der Fakt ist da, ABER gebaut:
+                                    `wieGestern()` in mahlzeiten.tsx:275
+              „Top breakfast 78%"   Haeufigkeit zaehlbar, Quote nicht
+                                    (eine Zielzeile) - und „Top" wertet
+              „Quick post-workout"  keine Quelle; Dosierung + Kombination
+              „Saturday cheat meal" kein Muster: je Wochentag 13 Tage,
+                                    Samstag 625 kcal zwischen Fr 560
+                                    und Do 663
+
+            `[read]` **Eine ist gebaut, eine erfunden, zwei sind
+            Empfehlungen. Keine traegt.** Der Auftrag: *„Wenn nicht: sag
+            es, und die Kachel wird entfernt statt gefuellt."* */}
         <NutritionScoreCard />
         {/* G-258/E-29: ANGEBUNDEN an `coach.offene_aktionen('nutrition')`.
             `[read]` **Muster G-90:** der Entwurf bleibt nur, solange gar
@@ -465,7 +493,23 @@ export async function TagebuchAnsicht({
               jetzt={offeneAktionen.gelesenUm}
             />
           : <NutritionPendingActions />}
-        <PreWorkoutOptimizer />
+        {/* G-262 (2026-08-30): ANGEBUNDEN an
+            `training.workout_sessions` — aber nur der Zeitpunkt.
+
+            `[cmd]` **Von sechs Teilen der Attrappe bleiben zwei:** die
+            Sitzung (dev: 13 geplante ab heute, alle 17:30) und der
+            Abstand dazu. **Raus sind Score 68, „Eat by 16:00", die
+            Makrovorgaben und die drei Mahlzeitenkombinationen** — alle
+            vier sind Empfehlungen (C-108/F-02, C-113).
+
+            `[read]` **Die Modulgrenze ist gemessen, nicht angenommen:**
+            E-29 begruendet sich aus Protokollen und Rechtetabellen —
+            `coach` hat je vier davon, `training` **keine**. Ausserdem
+            liest `lib/dashboard/lesen.ts:229` dieselbe Tabelle bereits
+            direkt. Begruendung in `lib/training/naechste-sitzung.ts`. */}
+        {sitzung
+          ? <PreWorkoutEcht stand={sitzung} />
+          : <PreWorkoutOptimizer />}
         {/* ANGEBUNDEN: hydration_day. Deshalb keine Marke mehr — und
             zwei Farben, weil die Vorlage die beiden Herkuenfte nicht
             unterscheidet. */}

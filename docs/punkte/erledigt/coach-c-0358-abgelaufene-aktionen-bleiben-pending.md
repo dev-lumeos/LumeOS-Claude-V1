@@ -9,6 +9,8 @@ kind_von: C-354
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
   tabellen: [coach.pending_actions]
 zahlen:
@@ -72,3 +74,20 @@ offen"*** — **was bei dieser Datenlage schlicht falsch waere.**
 Schreibweg bleibt diese Frage** — und sie ist damit kleiner geworden:
 **es geht nur noch darum, ob `status` je auf `expired` gesetzt wird,
 nicht darum, was der Nutzer sieht.**
+
+## Abnahme
+
+**2026-08-30, geschlossen: beim Anzeigevermerk bleiben.**
+
+`[cmd]` **`expired` ist im CHECK erlaubt, live 0 Zeilen, kein
+Schreiber, kein Zeitplaner.**
+
+`[read]` **Seit G-258 traegt die Anzeige den Zustand** — drei
+Zustaende, *,,2 abgelaufen"* statt *,,2 offen"*.
+
+`[read]` **Ein Statuswechsel braucht einen autoritativen Schreiber,
+und den gibt es nicht.** **Ein Lesevorgang, der schreibt, waere eine
+eigene Klasse und loeste kein sichtbares Problem.**
+
+`[read]` **Wenn spaeter ein Hintergrundlauf entsteht, ist das der
+Anlass, hier neu zu fragen** — vorher nicht.

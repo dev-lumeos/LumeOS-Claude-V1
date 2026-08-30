@@ -222,3 +222,58 @@ geschlossen** — die vermutete Vitamin-C-Luecke war keine.
 
 `[read]` **Der Punkt bleibt offen, aber er ist kein Sammelpunkt
 mehr.**
+
+## Auftrag — die Klammer schliessen oder benennen
+
+`[read]` **Vorbereitet am 2026-08-30.**
+
+### Was uebrig ist
+
+`[cmd]` **C-323 erledigt** — die Dauerregel steht und ist angebunden.
+`[cmd]` **C-343 geschlossen** — die vermutete Vitamin-C-Luecke war
+keine. `[cmd]` **C-342 erledigt** — die Faktoren stehen, Vitamin A
+rechnet aus den Komponenten.
+
+`[cmd]` **C-324 ist blockiert:** die Vitamin-A-Funktion liefert
+`incomplete`, weil ueber alle 30 geprueften Tage keine
+Komponentenbilanz vollstaendig war.
+
+`[read]` **Miss, ob das noch gilt** — **seit dem 30.08. sind
+Faktoren, Quellengeltung und Flag-Funktion eingespielt.**
+
+### Die Frage
+
+**Was bleibt von der Klammer, und ist der Score baubar?**
+
+`[read]` **Wenn die Komponentenbilanz weiter unvollstaendig ist,
+bleibt C-324 blockiert** — **und dann sag, woran genau.**
+
+`[read]` **Wenn nicht: dann ist der Score baubar, und C-49 kann
+geschlossen werden.**
+
+`[cmd]` **E-25 gilt:** NRF9.3 in der Originalfassung, die Deckelung
+bei 100 Prozent, Gesamtzucker statt *added sugars*, **und ein Tag mit
+Fehlzaehlern liefert `incomplete`, keine kuenstlich niedrige Zahl.**
+
+### Was nicht zu tun ist
+
+**Keine Sportler-Variante** — sie waere unsere Formel, nicht die
+belegte.
+**Keinen Wert erfinden, wo Bestandteile fehlen.**
+**Nichts auf `dev@lumeos.app` schreiben.**
+Nicht committen, nicht stagen, nicht pushen.
+
+### Nachweis
+
+    Vitamin A in IE       rechenbar an wie vielen Tagen?
+    NRF9.3                gebaut oder begruendet nicht
+    incomplete            an wie vielen Tagen, warum
+    C-49                  was bleibt, was faellt
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

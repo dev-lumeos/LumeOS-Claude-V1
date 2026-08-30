@@ -53,8 +53,13 @@ import { ladeInsights, type InsightsStand } from '../../../lib/nutrition/insight
 import {
   ladeOffeneAktionen, type OffeneAktionenStand,
 } from '../../../lib/coach/offene-aktionen'
+// G-262: die naechste geplante Trainingseinheit (Modulgrenze
+// gemessen, Begruendung in der Datei).
+import {
+  ladeNaechsteSitzung, type SitzungStand,
+} from '../../../lib/training/naechste-sitzung'
 
-import { datumOderHeute } from '../../../lib/datum'
+import { datumOderHeute, heute } from '../../../lib/datum'
 import { TagebuchAnsicht } from './ansicht'
 
 export const metadata: Metadata = {
@@ -292,6 +297,21 @@ export default async function V2NutritionPage({
     }
   }
 
+  // G-262: die naechste geplante Trainingseinheit. Nur fuers Tagebuch.
+  //
+  //  **Ab HEUTE, nicht ab dem angezeigten Datum.** Wer im
+  // Tagebuch zurueckblaettert, will nicht wissen, was am 20.08. das
+  // naechste Training war — die Kachel sagt, wann als naechstes
+  // trainiert wird.
+  let sitzung: SitzungStand | null = null
+  if (tab === 'diary') {
+    try {
+      sitzung = await ladeNaechsteSitzung(heute())
+    } catch {
+      sitzung = null
+    }
+  }
+
   // G-101: die zwei Insights-Kacheln. Nur fuer den Insights-Tab.
   let einsichten: InsightsStand | null = null
   if (tab === 'insights') {
@@ -315,6 +335,7 @@ export default async function V2NutritionPage({
       ordnung={ordnung}
       einsichten={einsichten}
       offeneAktionen={offeneAktionen}
+      sitzung={sitzung}
       istAdmin={istAdmin}
       vorlieben={vorlieben}
       unvertraeglichkeiten={unvertraeglichkeiten}

@@ -5,13 +5,13 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 239 |
-| `laufend_codex` | 3 |
-| `laufend_claudecode` | 7 |
-| `erledigt` | 116 |
-| **gesamt** | **365** |
+| `todos` | 240 |
+| `laufend_codex` | 2 |
+| `laufend_claudecode` | 4 |
+| `erledigt` | 122 |
+| **gesamt** | **368** |
 
-## medical — 41
+## medical — 42
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -50,6 +50,7 @@
 | `C-331` | messung | hoch | [C-328 live einspielen und den Durchstich wiederholen](erledigt/medical-c-0331-c-328-live-und-durchstich.md) | erledigt | — | G-218 |
 | `C-332` | befund | mittel | [23 Regeln koennen weiterhin nicht feuern](todos/medical-c-0332-23-regeln-koennen-weiterhin-nicht-feuern.md) | offen | — | — |
 | `C-337` | befund | mittel | [die Medikamenten-Einnahmezeit fehlt](todos/medical-c-0337-die-medikamenten-einnahmezeit-fehlt.md) | offen | — | — |
+| `C-359` | feature | mittel | [Symptome brauchen ein Protokoll je Nutzer](todos/medical-c-0359-symptome-brauchen-ein-protokoll-je-nutzer.md) | offen | — | — |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
@@ -57,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 122
+## nutrition — 123
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -76,7 +77,7 @@
 | `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](todos/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | offen | — | — |
 | `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — | — |
 | `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](erledigt/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | erledigt | — | G-239, G-248 |
-| `C-49` | befund | hoch | [Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach](todos/nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md) | offen | — | C-323, C-324 |
+| `C-49` | befund | hoch | [Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach](laufend_claudecode/nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md) | vorbereitet (claudecode) | — | C-323, C-324 |
 | `C-102` | feature | mittel | [`milch` findet Joghurt statt Milch](erledigt/nutrition-c-0102-milch-findet-joghurt-statt-milch.md) | erledigt | — | — |
 | `C-109` | entscheidung | mittel | [Die Injektions-Grenzwerte sind unbelegt](todos/nutrition-c-0109-die-injektions-grenzwerte-sind-unbelegt.md) | offen | — | — |
 | `C-117` | befund | mittel | [`milch` traegt auch mit Vorlieben nicht](erledigt/nutrition-c-0117-milch-traegt-auch-mit-vorlieben-nicht.md) | erledigt | — | — |
@@ -168,8 +169,8 @@
 | `G-259` | befund | mittel | [toter Leseweg und die Fensterlaufzeit](erledigt/nutrition-g-0259-toter-leseweg-und-die-fensterlaufzeit.md) | erledigt | — | — |
 | `G-260` | feature | mittel | [die Dauerregel anbinden](erledigt/nutrition-g-0260-die-dauerregel-anbinden.md) | erledigt | — | C-348 |
 | `G-261` | entscheidung | niedrig | [die Vergleichsfunktionen anbinden](todos/nutrition-g-0261-die-vergleichsfunktionen-anbinden.md) | offen | — | — |
-| `G-262` | befund | mittel | [Pre-workout window ist Attrappe](laufend_claudecode/nutrition-g-0262-pre-workout-window-ist-attrappe.md) | laeuft (claudecode) | — | — |
-| `G-263` | befund | mittel | [Smart suggestions ist Attrappe](laufend_claudecode/nutrition-g-0263-smart-suggestions-ist-attrappe.md) | laeuft (claudecode) | — | — |
+| `G-262` | befund | mittel | [Pre-workout window ist Attrappe](erledigt/nutrition-g-0262-pre-workout-window-ist-attrappe.md) | erledigt | — | — |
+| `G-263` | befund | mittel | [Smart suggestions ist Attrappe](erledigt/nutrition-g-0263-smart-suggestions-ist-attrappe.md) | erledigt | — | G-279 |
 | `G-264` | befund | niedrig | [Micronutrient trend steht noch als Attrappe](erledigt/nutrition-g-0264-micronutrient-trend-steht-noch-als-attrappe.md) | erledigt | — | — |
 | `G-265` | befund | hoch | [Add im Food DB oeffnet das falsche Modal](erledigt/nutrition-g-0265-add-im-food-db-oeffnet-das-falsche-modal.md) | erledigt | — | G-272 |
 | `G-266` | entscheidung | mittel | [Detailsuche mit Naehrwerten oeffnet eine eigene Seite](erledigt/nutrition-g-0266-detailsuche-mit-naehrwerten-oeffnet-eine-eigene-seite.md) | erledigt | — | — |
@@ -182,6 +183,7 @@
 | `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](erledigt/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | erledigt | — | C-349, C-353 |
 | `G-274` | feature | hoch | [der Bestaetigungsweg fuer Plan-Eintraege](erledigt/nutrition-g-0274-der-bestaetigungsweg-fuer-plan-eintraege.md) | erledigt | — | G-276 |
 | `G-276` | befund | mittel | [MealCam schreibt `confirmation_mode` ohne Fotoweg](erledigt/nutrition-g-0276-mealcam-schreibt-ohne-fotoweg.md) | erledigt | — | — |
+| `G-279` | entscheidung | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 56
@@ -226,7 +228,7 @@
 | `C-329` | befund | mittel | [`input_coverage_status` ist eine Selbsteinschaetzung, keine Zusage](todos/supplements-c-0329-input-coverage-status-ist-keine-zusage.md) | offen | — | — |
 | `C-341` | entscheidung | mittel | [was passiert mit gemeldeten Community-Beitraegen?](todos/supplements-c-0341-was-passiert-mit-gemeldeten-community-beitraegen.md) | offen | — | — |
 | `C-351` | feature | hoch | [Supplements braucht eine Tagesbilanz](erledigt/supplements-c-0351-supplements-braucht-eine-tagesbilanz.md) | erledigt | — | G-275 |
-| `C-352` | befund | hoch | [der Katalog hat keine deutschen Namen](laufend_codex/supplements-c-0352-der-katalog-hat-keine-deutschen-namen.md) | laeuft (codex) | — | — |
+| `C-352` | befund | hoch | [der Katalog hat keine deutschen Namen](erledigt/supplements-c-0352-der-katalog-hat-keine-deutschen-namen.md) | erledigt | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -239,7 +241,7 @@
 | `G-202` | feature | mittel | [der Dublettenpruefer schreibt bei jedem Gate-Lauf](erledigt/supplements-g-0202-der-dublettenpruefer-schreibt-bei-jedem-gate-lauf.md) | erledigt | — | — |
 | `G-205` | messung | mittel | [Der Dev-Server beendet sich selbst](todos/supplements-g-0205-der-dev-server-beendet-sich-selbst.md) | offen | — | — |
 | `G-213` | entscheidung | mittel | [soll `in_vitro_only` eine Warnung abschwaechen?](todos/supplements-g-0213-in-vitro-only-abschwaechen.md) | offen | — | — |
-| `G-214` | befund | mittel | [die Katalogsuche sagt nicht, warum ein Treffer passt](laufend_codex/supplements-g-0214-suche-sagt-nicht-warum-ein-treffer-passt.md) | vorbereitet (codex) | — | — |
+| `G-214` | befund | mittel | [die Katalogsuche sagt nicht, warum ein Treffer passt](laufend_codex/supplements-g-0214-suche-sagt-nicht-warum-ein-treffer-passt.md) | laeuft (codex) | — | — |
 | `G-240` | befund | hoch | [der massgebliche Supplements-Mockup ist ungelesen](erledigt/supplements-g-0240-der-massgebliche-supplements-mockup-ist-ungelesen.md) | erledigt | — | A-59, G-253 |
 | `G-253` | feature | hoch | [Stacks und Compliance anbinden](erledigt/supplements-g-0253-stacks-und-compliance-anbinden.md) | erledigt | — | G-255 |
 | `G-255` | entscheidung | niedrig | [drei Attrappen-Konstanten ohne Aufrufer](erledigt/supplements-g-0255-drei-attrappen-konstanten-ohne-aufrufer.md) | erledigt | — | — |
@@ -271,7 +273,7 @@
 | `G-77` | befund | mittel | [Streaks bei 32 Auslassern](todos/training-g-0077-streaks-bei-32-auslassern.md) | offen | — | — |
 | `G-88` | entscheidung | mittel | [Die Sitzungskarte auf `Today`](todos/training-g-0088-die-sitzungskarte-auf-today.md) | offen | — | — |
 | `G-131` | befund | mittel | [`module-completeness.jsx` ist die Settings-Seite](todos/training-g-0131-module-completeness-jsx-ist-die-settings-seite.md) | offen | — | — |
-| `G-173` | befund | mittel | [Ein falscher Punktverweis in `scores-read.ts`](laufend_claudecode/training-g-0173-ein-falscher-punktverweis-in-scores-read-ts.md) | vorbereitet (claudecode) | — | — |
+| `G-173` | befund | mittel | [Ein falscher Punktverweis in `scores-read.ts`](laufend_claudecode/training-g-0173-ein-falscher-punktverweis-in-scores-read-ts.md) | laeuft (claudecode) | — | — |
 | `G-216` | feature | hoch | [Training hat Daten und keinen Schreibweg](erledigt/training-g-0216-training-hat-keinen-schreibweg.md) | erledigt | — | C-330, G-217 |
 | `G-217` | feature | mittel | [der Trainings-Schreibweg hat keine Oberflaeche](erledigt/training-g-0217-trainingsformular-fehlt.md) | erledigt | — | G-219 |
 | `G-219` | entscheidung | niedrig | [`LiveWorkout` hat keinen Aufrufer mehr](todos/training-g-0219-liveworkout-ohne-aufrufer.md) | offen | — | — |
@@ -332,7 +334,7 @@
 | `C-268` | feature | mittel | [Beim Einladen gibt es keine Namensaufloesung](todos/coach-c-0268-beim-einladen-gibt-es-keine-namensaufloesung.md) | offen | — | — |
 | `C-269` | feature | mittel | [Eine Einladung laesst sich nicht zuruecknehmen](todos/coach-c-0269-eine-einladung-laesst-sich-nicht-zuruecknehmen.md) | offen | — | — |
 | `C-318` | befund | hoch | [ADR-Coach-Permissions weicht von der Umsetzung ab](todos/coach-c-0318-adr-coach-permissions-weicht-von-der-umsetzung-ab.md) | offen | — | — |
-| `C-358` | befund | mittel | [abgelaufene Aktionen bleiben `pending`](laufend_codex/coach-c-0358-abgelaufene-aktionen-bleiben-pending.md) | laeuft (codex) | — | — |
+| `C-358` | befund | mittel | [abgelaufene Aktionen bleiben `pending`](erledigt/coach-c-0358-abgelaufene-aktionen-bleiben-pending.md) | erledigt | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](todos/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | offen | — | — |
@@ -340,9 +342,9 @@
 | `G-168` | befund | mittel | [Die coach-Kopfzeile widerspricht dem eigenen Tab](todos/coach-g-0168-die-coach-kopfzeile-widerspricht-dem-eigenen-tab.md) | offen | — | — |
 | `G-169` | befund | mittel | [`coach.checkins` und `checkin_templates` liegen ungelesen](todos/coach-g-0169-coach-checkins-und-checkin-templates-liegen-ungelesen.md) | offen | — | — |
 | `G-244` | befund | mittel | [die rechten Kacheln im Human-Coach-Reiter sind Attrappe](todos/coach-g-0244-die-rechten-kacheln-im-human-coach-reiter-sind-attrappe.md) | offen | — | — |
-| `G-277` | befund | hoch | [der Rechte-Reiter nennt einen Grund, den es nicht gibt](laufend_claudecode/coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md) | laeuft (claudecode) | — | — |
+| `G-277` | befund | hoch | [der Rechte-Reiter nennt einen Grund, den es nicht gibt](erledigt/coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md) | erledigt | — | G-280 |
 
-## quer — 76
+## quer — 77
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -355,7 +357,7 @@
 | `A-22` | blocker | hoch | [Was an Kimi gehen kann — klassifiziert](todos/quer-a-0022-was-an-kimi-gehen-kann-klassifiziert.md) | offen | — | — |
 | `A-23` | befund | mittel | [`lint` bricht repoweit ab](todos/quer-a-0023-lint-bricht-repoweit-ab.md) | offen | — | — |
 | `A-24` | messung | mittel | [Attrappenmarken sind kein brauchbares Mass](todos/quer-a-0024-attrappenmarken-sind-kein-brauchbares-mass.md) | offen | — | — |
-| `A-29` | messung | mittel | [Der Attrappen-Test koennte die gerenderte Seite zaehlen](laufend_claudecode/quer-a-0029-der-attrappen-test-koennte-die-gerenderte-seite-zaehlen.md) | vorbereitet (claudecode) | — | — |
+| `A-29` | messung | mittel | [Der Attrappen-Test koennte die gerenderte Seite zaehlen](laufend_claudecode/quer-a-0029-der-attrappen-test-koennte-die-gerenderte-seite-zaehlen.md) | laeuft (claudecode) | — | — |
 | `A-34` | befund | mittel | [Nachweislaeufe ueberschreiben Toms gespeicherte Ansicht](todos/quer-a-0034-nachweislaeufe-ueberschreiben-toms-gespeicherte-ansicht.md) | offen | — | — |
 | `A-38` | befund | mittel | [Drei Core-ADRs](todos/quer-a-0038-drei-core-adrs.md) | offen | — | — |
 | `A-39` | befund | mittel | [`backup/` wird nicht geraeumt, solange Agenten laufen](todos/quer-a-0039-backup-wird-nicht-geraeumt-solange-agenten-laufen.md) | offen | — | — |
@@ -372,7 +374,7 @@
 | `A-57` | blocker | hoch | [24 Punkte wurden per Textheuristik geschlossen und sind ungeprueft](erledigt/quer-a-0057-heuristisch-geschlossene-punkte-nachpruefen.md) | erledigt | — | — |
 | `A-58` | blocker | hoch | [der Waechter verlangt ein Feld, das es nicht mehr gibt](erledigt/quer-a-0058-waechter-verlangt-gestrichenes-feld.md) | erledigt | — | — |
 | `A-59` | befund | mittel | [Attrappen im Quelltext zaehlen ueberschaetzt dreifach](todos/quer-a-0059-attrappen-im-quelltext-zaehlen-ueberschaetzt-dreifach.md) | offen | — | — |
-| `A-60` | befund | mittel | [eine `Map` ueber die Client-Grenze kommt leer an](laufend_claudecode/quer-a-0060-eine-map-ueber-die-client-grenze-kommt-leer-an.md) | vorbereitet (claudecode) | — | — |
+| `A-60` | befund | mittel | [eine `Map` ueber die Client-Grenze kommt leer an](laufend_claudecode/quer-a-0060-eine-map-ueber-die-client-grenze-kommt-leer-an.md) | laeuft (claudecode) | — | — |
 | `A-61` | befund | mittel | [das alte Auftragswesen abloesen](erledigt/quer-a-0061-das-alte-auftragswesen-abloesen.md) | erledigt | — | — |
 | `A-62` | befund | mittel | [Waechter kippen still, wenn das Schema nachkommt](erledigt/quer-a-0062-waechter-kippen-still-wenn-das-schema-nachkommt.md) | erledigt | — | A-63, G-277, G-278 |
 | `A-63` | befund | niedrig | [der Waechter las seine eigene Probe](todos/quer-a-0063-der-waechter-las-seine-eigene-probe.md) | offen | — | — |
@@ -421,7 +423,8 @@
 | `G-204` | feature | mittel | [Admin und Coach laufen mit sichtbarer Konsole](todos/quer-g-0204-admin-und-coach-laufen-mit-sichtbarer-konsole.md) | offen | — | — |
 | `G-206` | befund | mittel | [PostgREST antwortet ohne Kompression](todos/quer-g-0206-postgrest-antwortet-ohne-kompression.md) | offen | — | — |
 | `G-215` | messung | hoch | [der Durchstich: kommt eine Warnung beim Nutzer an?](erledigt/quer-g-0215-durchstich-kommt-eine-warnung-an.md) | erledigt | — | C-328, C-329 |
-| `G-278` | befund | mittel | [die restlichen 222 Abwesenheitsaussagen](laufend_claudecode/quer-g-0278-die-restlichen-222-abwesenheitsaussagen.md) | laeuft (claudecode) | — | — |
+| `G-278` | befund | mittel | [die restlichen 222 Abwesenheitsaussagen](erledigt/quer-g-0278-die-restlichen-222-abwesenheitsaussagen.md) | erledigt | — | C-359 |
+| `G-280` | befund | mittel | [der Dev-Server ueberlebt lange Testlaeufe nicht](laufend_codex/quer-g-0280-der-dev-server-ueberlebt-lange-testlaeufe-nicht.md) | vorbereitet (codex) | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

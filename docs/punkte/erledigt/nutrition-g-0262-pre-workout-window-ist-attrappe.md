@@ -9,8 +9,11 @@ kind_von: G-254
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
+  dateien:
+    - apps/web/src/lib/training/naechste-sitzung.ts
 zahlen: null
 ---
 # G-262 — Pre-workout window ist Attrappe
@@ -89,8 +92,38 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Claude Code, 2026-08-30.** Mitbeauftragt mit G-277. **Der
+vollstaendige Bericht steht in [G-277](coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md#bericht).**
+
+### Die Modulgrenze liegt anders als bei `coach`
+
+`[cmd]` **E-29 begruendet sich aus Protokollen und Rechtetabellen —
+`coach` hat je vier, `training` keine.** `[cmd]` Ausserdem fuehrt
+`training` keine Lesefunktion (nur Trigger-Helfer), RLS ist an
+(5 Policies), und `lib/dashboard/lesen.ts:229` liest dieselbe Tabelle
+bereits direkt aus einem fremden Modul.
+
+`[read]` **Also direkt gelesen** — die Abwaegung steht in
+`lib/training/naechste-sitzung.ts`.
+
+### Die Daten tragen, die Empfehlungen nicht
+
+`[cmd]` **dev: 14 geplante Sitzungen, 13 ab heute, alle 17:30.** Die
+17:30 der Vorlage sind die 17:30 der Seeds.
+
+**Gebaut ist der Zeitpunkt und der Abstand dazu.** `[read]`
+**Entfernt sind Score 68, „Eat by 16:00", die Makrovorgaben und die
+drei Mahlzeitenkombinationen** — vier von sechs Teilen waren genau
+das, was C-108/F-02 verbietet (C-113: keine Dosierungsempfehlung,
+kein Kombinationsvorschlag).
+
+**Drei Zustaende:** `geplant` / `ohne_zeit` / `keine`.
 
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Abnahme
+
+**2026-08-30, mit G-277 abgenommen:** gebaut als Tatsache: Zeitpunkt und Abstand; vier von sechs Teilen
+waren Empfehlungen und sind entfernt.

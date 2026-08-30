@@ -421,8 +421,13 @@ function LogSymptomModal({ onClose }: { onClose: () => void }) {
           footer={
             <>
               <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
+              {/* @abwesend medical.symptom_log
+                  G-278: Was hier fehlt, ist ein Protokoll je Nutzer —
+                  nicht der Katalog. Kommt die Tabelle, faellt
+                  `tools/abwesenheit-pruefen.mjs` und nennt diese
+                  Zeile, statt dass der Grund still falsch wird. */}
               <InEntwicklungKnopf titel="Log symptom" className="v2-btn v2-btn-primary"
-                                  grund="Symptome brauchen eine Tabelle medical.symptoms — die gibt es nicht. Das Schema `medical` steht (11 Tabellen), diese eine fehlt.">
+                                  grund="`medical.symptoms` gibt es (8 Spalten, 34 Zeilen live) — aber als Katalog: die Tabelle führt Namen, keine Einträge je Nutzer und kein Datum. Was zum Erfassen fehlt, ist ein Protokoll (Nutzer, Symptom, Zeitpunkt, Ausprägung). Gemessen 2026-08-30.">
                 <Icon name="check" className="v2-ic v2-ic-sm" />Log symptom
               </InEntwicklungKnopf>
             </>
@@ -659,6 +664,11 @@ function OCRReviewModal({ onClose }: { onClose: () => void }) {
               <span className="v2-dim v2-mono" style={{ fontSize: 10.5, alignSelf: 'center', marginRight: 8 }}>
                 {auto.length + review.length} values will be saved
               </span>
+              {/* @abwesend medical.biomarker_results
+                  G-278: Der Import-Knopf begruendet sich damit, dass es sie nicht gibt. Kommt die Tabelle,
+                  faellt `tools/abwesenheit-pruefen.mjs` und nennt
+                  diese Zeile — statt dass der Grund still falsch
+                  wird (A-62). Gemessen 2026-08-30: FEHLT. */}
               <InEntwicklungKnopf titel="Confirm + save" className="v2-btn v2-btn-primary"
                                   grund="Der Import braucht eine Tabelle medical.biomarker_results — die gibt es nicht. Gemessene Werte stehen in `medical.lab_result_values` (280 Zeilen); ein eigener Schreibweg fehlt.">
                 <Icon name="check" className="v2-ic v2-ic-sm" />Confirm + save
@@ -747,6 +757,9 @@ function ManualEntryModal({ onClose }: { onClose: () => void }) {
           footer={
             <>
               <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
+              {/* @abwesend medical.biomarker_results
+                  G-278: derselbe Grund an einem zweiten Knopf.
+                  Gemessen 2026-08-30: FEHLT. */}
               <InEntwicklungKnopf titel="Save value" className="v2-btn v2-btn-primary"
                                   grund="Eigene Messwerte brauchen eine Tabelle medical.biomarker_results — die gibt es nicht. Gemessene Werte stehen in `medical.lab_result_values` (280 Zeilen); ein eigener Schreibweg fehlt.">
                 <Icon name="check" className="v2-ic v2-ic-sm" />Save value

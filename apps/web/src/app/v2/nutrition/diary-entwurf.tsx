@@ -39,32 +39,19 @@ export function nutritionScore(
   return Math.round(raw * (LEVEL_MULT[level] ?? 0.90) * 100) / 100
 }
 
-export function SmartSuggestionsCard() {
-  return (
-    <Card title="Smart suggestions" sub="based on your patterns" attrappe={ATTRAPPE}>
-      <div className="v2-col-gap" style={{ gap: 6 }}>
-        {([
-          { icon: 'copy', title: 'Same as yesterday', sub: 'Oats + Whey · 612 kcal', action: 'Log breakfast' },
-          { icon: 'trend_up', title: 'Top breakfast (last 30d)', sub: '78% adherence · 24× this month', action: 'Add' },
-          { icon: 'zap', title: 'Quick post-workout', sub: 'Whey 30g + Banana · 30 sec to log', action: 'Log' },
-          { icon: 'calendar', title: 'Saturday cheat meal', sub: 'You typically eat out Sat · 850 kcal allowance', action: 'Plan' },
-        ] as const).map(s => (
-          <div key={s.title} style={{
-            display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px',
-            background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 5,
-          }}>
-            <Icon name={s.icon} className="v2-ic v2-ic-sm" style={{ color: 'var(--acc-nutri)', flexShrink: 0 }} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 12, fontWeight: 500 }}>{s.title}</div>
-              <div className="v2-dim" style={{ fontSize: 10.5 }}>{s.sub}</div>
-            </div>
-            <InEntwicklungKnopf titel={s.action} className="v2-btn v2-btn-sm">{s.action}</InEntwicklungKnopf>
-          </div>
-        ))}
-      </div>
-    </Card>
-  )
-}
+// ── G-263 (2026-08-30): `SmartSuggestionsCard` ist entfernt ──────
+//
+// `[read]` **Was sie zeigte:** vier Zeilen — "Same as yesterday",
+// "Top breakfast (last 30d)", "Quick post-workout", "Saturday cheat
+// meal", jede mit einem Knopf.
+//
+// `[cmd]` **Je Zeile gemessen** (Belege in
+// `lib/nutrition/vorschlags-lage.ts`): eine ist anderswo gebaut
+// (`wieGestern()`), eine hat kein Muster in den Daten, zwei sind
+// Empfehlungen. **Keine traegt.**
+//
+// `[read]` **A-59: was keinen Aufrufer hat, wird geloescht, nicht
+// stehengelassen** — sonst gilt es beim naechsten Auftrag als gebaut.
 
 export function NutritionScoreCard() {
   // Die Werte der Vorlage, unveraendert.

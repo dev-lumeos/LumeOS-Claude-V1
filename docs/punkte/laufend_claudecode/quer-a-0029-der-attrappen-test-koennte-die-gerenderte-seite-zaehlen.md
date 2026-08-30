@@ -8,6 +8,8 @@ braucht: []
 kind_von: A-28
 kinder: []
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: ["apps/web/src/components/shell/__tests__/v2-attrappen.test.ts", "tools/schuss.mjs"]
@@ -44,7 +46,7 @@ zahlen:
 
 **Mitbeauftragt: A-60, G-173.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 ### 1 · A-29 — der Test koennte die gerenderte Seite lesen
 

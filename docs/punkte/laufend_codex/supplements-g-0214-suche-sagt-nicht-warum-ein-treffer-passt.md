@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: G-186
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   dateien:
     - apps/web/src/lib/supplements/substanz-read.ts
@@ -82,7 +84,7 @@ Produktfrage.**
 
 ## Auftrag — der Treffergrund
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 ### Das Ergebnis
 

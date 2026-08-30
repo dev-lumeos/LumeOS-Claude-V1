@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **27 Punkte tragen `typ: entscheidung`
+`[cmd]` **28 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -807,6 +807,37 @@ oder erledigt sein.
 
 **Verwandter Punkt:** G-98 (Meal plans braucht einen Zustand und eine Herkunft). `[read]` **Nicht zusammengelegt** — ob es
 derselbe Befund ist, gehoert geprueft, nicht angenommen.
+
+## G-279 — eine Kachel *haeufig erfasst*
+
+**Modul:** nutrition · **angelegt:** 2026-08-30 · **Datei:** `todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md`
+
+## Befund
+
+Aus G-263, Claude Code, 2026-08-30.
+
+`[cmd]` **Die Attrappe *Smart suggestions* ist entfernt** — keine
+ihrer vier Zeilen trug.
+
+`[read]` **Aber eine Zahl darin war zaehlbar:** `[cmd]` **ein
+Fruehstueck kam an 27 von 30 Tagen vor.**
+
+`[read]` **Die Attrappe machte daraus *,,Top breakfast, 78 %"*** —
+**und *Top* ist ein Urteil, die Quote war erfunden.**
+
+## Die Frage
+
+**Waere eine Kachel *,,haeufig erfasst"* gewollt?**
+
+`[read]` ***Haeufig erfasst* ist eine Angabe. *Top* ist eine
+Bewertung.** `[cmd]` **C-108/F-02: nennen ja, bewerten nein.**
+
+`[read]` **Dafuer spricht:** die Zahl ist da und ehrlich, **und wer
+oft dasselbe isst, findet es schneller wieder.**
+
+`[read]` **Dagegen:** `[cmd]` **`wieGestern()` gibt es bereits** —
+**eine zweite Abkuerzung zum selben Zweck koennte die eine
+verwaessern.**
 
 ## G-219 — `LiveWorkout` hat keinen Aufrufer mehr
 

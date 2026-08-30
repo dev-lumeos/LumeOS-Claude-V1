@@ -199,7 +199,7 @@ export function CoachAnsicht({ stand }: { stand?: CoachRechteStand }) {
       <Tabs items={tabs(stand)} active={tab} onChange={setTab} />
 
       {tab === 'overview' && <AthleteOverview stand={stand} />}
-      {tab === 'coaches' && <AthleteCoaches />}
+      {tab === 'coaches' && <AthleteCoaches stand={stand} />}
       {tab === 'permissions' && <AthletePermissionsV2 stand={stand} />}
       {tab === 'proposals' && <AthleteProposals stand={stand} />}
       {tab === 'autonomy' && <AthleteAutonomy stand={stand} />}
@@ -314,8 +314,32 @@ function AthleteOverview({ stand }: { stand?: CoachRechteStand }) {
 // ── Coaches ──────────────────────────────────────────────────────────
 // [cmd] module-coach.jsx:311-347.
 
-function AthleteCoaches() {
+function AthleteCoaches({ stand }: { stand?: CoachRechteStand }) {
   const ctx = useCoach()
+
+  // ── G-277 (2026-08-30): der Reiter zeigte vier erfundene Personen ──
+  //
+  // `[cmd]` **Gemessen am 2026-08-30:** `dev@lumeos.app` hat **eine
+  // aktive Beziehung** zu `coach@lumeos.app` in `coach.relationships`
+  // — der Reiter zeigte **vier** Coaches aus `daten.ts` (Anders
+  // Lindqvist, Jana Bauer, Dr. Magnus Kessler, David Park).
+  //
+  // `[cmd]` **Die Reiterleiste zaehlte dabei richtig** (`Coaches 1`,
+  // Zeile 99) — **nur der Inhalt kam aus dem Entwurf.** Zahl und
+  // Liste widersprachen sich auf demselben Schirm.
+  //
+  // `[read]` **Die Ursache war ein fehlendes Prop, kein fehlender
+  // Bauteil:** `CoachesEcht` steht seit G-158 fertig daneben und wird
+  // in der Uebersicht benutzt. **Diese Funktion nahm `stand` gar nicht
+  // entgegen** — sie konnte den Entwurf nicht verlassen, auch wenn
+  // Daten dagewesen waeren.
+  //
+  // `[read]` **Muster G-65/G-90:** der Entwurf bleibt nur ohne Sitzung
+  // stehen. Sobald gelesen wurde — auch mit null Beziehungen — gilt
+  // der echte Weg mit seinem Leerzustand.
+  const echt = stand?.userId != null && !stand.fehler
+  if (echt) return <CoachesEcht stand={stand!} />
+
   return (
     <div className="v2-col-gap" style={{ gap: 12 }}>
       {COACHES.map(c => (

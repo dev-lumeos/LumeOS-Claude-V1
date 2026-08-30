@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: G-246
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
 zahlen: null
@@ -51,5 +53,5 @@ wuerde, existiert schon.**
 
 ## Auftrag
 
-**Vorbereitet mit A-29 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit A-29 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.

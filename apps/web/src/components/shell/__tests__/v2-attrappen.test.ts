@@ -136,15 +136,33 @@ test('die sieben Tabs der Vorlage stehen im Nutrition-Modul', () => {
   }
 })
 
-test('die sieben Begleitkarten des Diary stehen da', () => {
+test('die Begleitkarten des Diary stehen da', () => {
   // [cmd] module-nutrition.jsx:227-289, in dieser Reihenfolge.
+  //
+  // `[cmd]` **BERICHTIGT IN G-263 am 2026-08-30 — A-62.** Hier standen
+  // sieben Karten, darunter `Smart suggestions`. **Der Waechter
+  // sicherte die Vollstaendigkeit des ENTWURFS** — richtig, solange
+  // alle sieben Entwurf waren.
+  //
+  // `[read]` **Er kippt, sobald eine Karte bewusst entfernt wird**, und
+  // stand dann dem Auftrag im Weg, statt etwas zu schuetzen.
+  //
+  // `[cmd]` **`Smart suggestions` ist in G-263 entfernt:** von vier
+  // Zeilen war eine anderswo gebaut (`wieGestern()`), eine ohne Muster
+  // in den Daten, zwei waren Empfehlungen (C-108/F-02). Belege in
+  // `lib/nutrition/vorschlags-lage.ts`.
   const quelle = fs.readFileSync(DIARY, 'utf8')
   for (const karte of [
-    'Smart suggestions', 'Nutrition score', 'Pending actions',
+    'Nutrition score', 'Pending actions',
     'Pre-workout window', 'Hydration', 'Micronutrient snapshot', 'Below threshold',
   ]) {
     assert.ok(quelle.includes(karte), `Die Karte "${karte}" fehlt.`)
   }
+  // Und die entfernte kommt nicht unbemerkt zurueck: wer sie wieder
+  // einbaut, muss diese Zeile anfassen und die Begruendung lesen.
+  assert.ok(!/export function SmartSuggestionsCard/.test(quelle),
+    'Smart suggestions ist zurueck — in G-263 entfernt, weil keine der '
+    + 'vier Zeilen traegt (C-108/F-02).')
 })
 
 test('der Nutrition score rechnet mit der Formel der Vorlage', () => {

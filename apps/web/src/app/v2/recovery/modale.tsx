@@ -133,6 +133,11 @@ function HRVMeasureModal({ onClose }: { onClose: () => void }) {
             ? (
               <>
                 <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Discard</button>
+                {/* @abwesend recovery.hrv_readings
+                    G-278: Der Messwert-Knopf begruendet sich damit. Kommt die Tabelle,
+                    faellt `tools/abwesenheit-pruefen.mjs` und nennt
+                    diese Zeile — statt dass der Grund still falsch
+                    wird (A-62). Gemessen 2026-08-30: FEHLT. */}
                 <InEntwicklungKnopf titel="Save · 64 ms" className="v2-btn v2-btn-primary"
                                     grund="Messwerte brauchen eine Tabelle recovery.hrv_readings — die gibt es nicht. HRV steht heute in `recovery.checkins.hrv_rmssd` (43 von 170 Tagen).">
                   <Icon name="check" className="v2-ic v2-ic-sm" />Save · 64 ms
@@ -494,6 +499,10 @@ function ProtocolDetailModal({ p, onClose }: { p: Protocol; onClose: () => void 
                   </InEntwicklungKnopf>
                 )
                 : (
+                                      // @abwesend recovery.protocols
+                    // G-278: Der Protokoll-Knopf begruendet sich damit.
+                    // Kommt die Tabelle, faellt der Gate-Waechter und
+                    // nennt diese Zeile (A-62). 2026-08-30: FEHLT.
                   <InEntwicklungKnopf titel="Activate protocol" className="v2-btn v2-btn-primary"
                                       grund="Protokolle brauchen eine Tabelle recovery.protocols — die gibt es nicht. Das Schema `recovery` steht (3 Tabellen), diese eine fehlt.">
                     <Icon name="play" className="v2-ic v2-ic-sm" />Activate protocol

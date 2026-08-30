@@ -39,7 +39,17 @@ export type ScoreZeile = {
   sleep_hours_used: number | null
   soreness_avg_used: number | null
   soreness_reported_count: number | null
-  // G-160: `acwr_used` ist raus — C-195 hat die Spalte entfernt, und
+  // G-160: `acwr_used` ist raus — **C-215** hat die Spalte entfernt, und
+  //
+  // `[cmd]` **BERICHTIGT IN G-173 am 2026-08-30.** Hier stand
+  // *„C-195"*; **C-195 war der Substanzkatalog.** Belegt in
+  // `supabase/_pipeline/12_recovery/121_recovery_scores_modalities.sql:142-144`:
+  // dasselbe `ALTER TABLE` setzt `algorithm_version` auf
+  // `manual_v2_c215` und wirft `acwr_used` weg.
+  //
+  // `[read]` **Ein falscher Verweis fuehrt beim naechsten Suchen in
+  // die Irre** — dieselbe Klasse wie `training.sessions` gegen
+  // `workout_sessions`.
   // ein Select darauf liess JEDE Score-Zeile scheitern: die Kachel
   // fiel still auf den Entwurf zurueck (gemessen 2026-08-23, Kopf
   // zeigte wieder „Score 84 · Good" statt der Tabellenzeile).

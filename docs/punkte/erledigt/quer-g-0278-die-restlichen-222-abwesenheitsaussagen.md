@@ -9,6 +9,8 @@ kind_von: A-62
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
   dateien:
     - tools/abwesenheit-pruefen.mjs
@@ -67,3 +69,36 @@ eine Anzeige begruenden** — **die anderen kippen still, aber folgenlos.**
 
 **Mitbeauftragt mit G-277 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Bericht
+
+**Claude Code, 2026-08-30.** Mitbeauftragt mit G-277. **Der
+vollstaendige Bericht steht in [G-277](coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md#bericht).**
+
+### Der Mittelweg, gemessen
+
+`[cmd]` **194 Abwesenheitsaussagen in laufendem Code** — nicht 222;
+die aeltere Zahl schloss die Protokollordner mit ein. **76 stehen im
+Umfeld einer Anzeige-Entscheidung.**
+
+`[read]` **Tragend sind die `grund=`-Texte** — der Satz, den ein
+Nutzer liest, wenn ein Knopf nichts tut. Genau die Sorte, die G-277
+ausgeloest hat.
+
+`[cmd]` **Zehn darin genannte Tabellen geprueft: fuenf da, fuenf
+fehlen.** **Eine war gekippt und stand am Schirm:**
+`medical.symptoms` (8 Spalten, 34 Zeilen, wird von `lesen.ts:431`
+gelesen) wurde als *„gibt es nicht"* behauptet.
+
+`[read]` **Berichtigt mit dem, was wirklich fehlt:** `symptoms` ist
+ein Katalog; **fuers Erfassen fehlt ein Protokoll je Nutzer.**
+
+**Sechs Marken gesetzt; der Gate fuehrt jetzt 10, alle gueltig.**
+
+`[read]` **Nicht alle 194** — die uebrigen stehen in Kommentaren,
+Waechtern und Protokolldateien und altern zu Recht.
+
+## Abnahme
+
+**2026-08-30, mit G-277 abgenommen:** 194 statt 222, sechs Marken gesetzt, `medical.symptoms` war
+gekippt und stand am Schirm.
