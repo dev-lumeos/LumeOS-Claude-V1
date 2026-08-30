@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: [C-318]
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: ["docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md", "docs/spezifikation/00-QUELLEN.md"]
@@ -91,5 +93,5 @@ zahlen: null
 
 ## Auftrag
 
-**Vorbereitet mit C-160 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit C-160 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.

@@ -4,11 +4,9 @@ typ: feature
 modul: nutrition
 schwere: mittel
 angelegt: 2026-08-29
-braucht: []
+braucht: [C-354]
 kind_von: G-254
 entscheidung: E-29
-agent: claudecode
-beauftragt: 2026-08-30
 beruehrt:
   tabellen: [coach.pending_actions]
 zahlen: null
@@ -45,3 +43,10 @@ Coach-Aktion zeigt, kann der Nutzer sie vermutlich bestaetigen.
 
 **Mitbeauftragt mit G-276 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Blockiert, 2026-08-30
+
+**Aus G-276 gemessen:** keine der 16 coach-Funktionen liest `pending_actions`; RLS liesse
+direkt lesen, E-29 verbietet es.
+
+`[read]` **Wartet auf C-354.**

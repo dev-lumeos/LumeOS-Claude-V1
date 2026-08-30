@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: G-273
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
 zahlen:

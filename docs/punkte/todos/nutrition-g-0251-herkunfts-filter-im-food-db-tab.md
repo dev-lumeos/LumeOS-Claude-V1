@@ -4,11 +4,9 @@ typ: feature
 modul: nutrition
 schwere: niedrig
 angelegt: 2026-08-28
-braucht: []
+braucht: [C-355]
 kind_von: G-70
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-08-30
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/tab-foods.tsx]
 zahlen: null
@@ -38,3 +36,10 @@ Filter an einem Tag ohne Vortag?**
 
 **Mitbeauftragt mit G-276 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Blockiert, 2026-08-30
+
+**Aus G-276 gemessen:** `p_filters` hat keinen Schluessel fuer Favoriten, `foods_custom` hat
+0 Zeilen und wird von `food_search` nicht gelesen.
+
+`[read]` **Wartet auf C-355.**

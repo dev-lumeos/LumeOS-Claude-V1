@@ -8,6 +8,8 @@ braucht: []
 kind_von: C-165
 kinder: []
 entscheidung: E-36
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: []

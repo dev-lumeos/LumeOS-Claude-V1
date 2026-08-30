@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: ["services/nutrition-api/src/index.ts", "services/nutrition-api/src/routes/diary.ts", "services/nutrition-api/src/routes/food.ts", "services/nutrition-api/src/routes/meals.ts", "supabase/_pipeline/daten/schema-sollstand.json"]
@@ -67,5 +69,5 @@ zahlen: null
 
 ## Auftrag
 
-**Vorbereitet mit C-160 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit C-160 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.

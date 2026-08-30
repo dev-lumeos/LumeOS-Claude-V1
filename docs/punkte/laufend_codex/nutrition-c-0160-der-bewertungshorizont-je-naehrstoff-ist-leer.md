@@ -8,6 +8,8 @@ braucht: []
 kind_von: C-157
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: []
@@ -43,7 +45,7 @@ zahlen: null
 
 **Mitbeauftragt: C-08, A-37.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 `[read]` **Alle drei sind aelter als der Katalogneuaufbau.** **Die
 Erwartung ist, dass mindestens einer sich als ueberholt erweist** —

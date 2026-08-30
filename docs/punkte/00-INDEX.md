@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 249 |
-| `laufend_codex` | 3 |
-| `laufend_claudecode` | 5 |
-| `erledigt` | 100 |
-| **gesamt** | **357** |
+| `todos` | 251 |
+| `laufend_codex` | 5 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 101 |
+| **gesamt** | **359** |
 
 ## medical — 41
 
@@ -57,16 +57,18 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 120
+## nutrition — 121
+
+### beauftragbar — 119
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-13` | befund | mittel | [Das Konsolidierungsregister abarbeiten](todos/nutrition-a-0013-das-konsolidierungsregister-abarbeiten.md) | offen | — | — |
 | `A-32` | befund | mittel | [Die Nummer G-124 war doppelt vergeben](todos/nutrition-a-0032-die-nummer-g-124-war-doppelt-vergeben.md) | offen | — | — |
-| `A-37` | befund | mittel | [Zwoelf ADRs in `docs/specs/Nutrition/04_adrs/`](laufend_codex/nutrition-a-0037-zwoelf-adrs-in-docs-specs-nutrition-04-adrs.md) | vorbereitet (codex) | — | C-175, C-318 |
+| `A-37` | befund | mittel | [Zwoelf ADRs in `docs/specs/Nutrition/04_adrs/`](laufend_codex/nutrition-a-0037-zwoelf-adrs-in-docs-specs-nutrition-04-adrs.md) | laeuft (codex) | — | C-175, C-318 |
 | `A-41` | befund | mittel | [Berichtsnummern kollidieren](todos/nutrition-a-0041-berichtsnummern-kollidieren.md) | offen | — | — |
 | `A-47` | feature | mittel | [Der ADR widerspricht sich bei `hard`](todos/nutrition-a-0047-der-adr-widerspricht-sich-bei-hard.md) | offen | — | — |
-| `C-08` | befund | mittel | [`services/nutrition-api` — der ADR gilt](laufend_codex/nutrition-c-0008-services-nutrition-api-der-adr-gilt.md) | vorbereitet (codex) | — | — |
+| `C-08` | befund | mittel | [`services/nutrition-api` — der ADR gilt](laufend_codex/nutrition-c-0008-services-nutrition-api-der-adr-gilt.md) | laeuft (codex) | — | — |
 | `C-20` | feature | mittel | [Treffer am Wortanfang schlägt Treffer in der Wortmitte](erledigt/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md) | erledigt | — | — |
 | `C-24` | befund | niedrig | [Halbfertigprodukte ranken als Grundzutat](todos/nutrition-c-0024-halbfertigprodukte-ranken-als-grundzutat.md) | offen | — | — |
 | `C-27` | messung | mittel | [Alltagswörter ohne Treffer — noch zwei](erledigt/nutrition-c-0027-alltagsworter-ohne-treffer-noch-zwei.md) | erledigt | — | — |
@@ -83,11 +85,11 @@
 | `C-120` | befund | mittel | [Drei Sperren in `food_search`](erledigt/nutrition-c-0120-drei-sperren-in-food-search.md) | erledigt | — | — |
 | `C-121` | befund | mittel | [Die Suche ist langsamer geworden](erledigt/nutrition-c-0121-die-suche-ist-langsamer-geworden.md) | erledigt | — | — |
 | `C-149` | blocker | mittel | [Vitamin D in IU gegen µg](erledigt/nutrition-c-0149-vitamin-d-in-iu-gegen-g.md) | erledigt | — | — |
-| `C-160` | befund | mittel | [Der Bewertungshorizont je Naehrstoff ist leer](laufend_codex/nutrition-c-0160-der-bewertungshorizont-je-naehrstoff-ist-leer.md) | vorbereitet (codex) | — | — |
+| `C-160` | befund | mittel | [Der Bewertungshorizont je Naehrstoff ist leer](laufend_codex/nutrition-c-0160-der-bewertungshorizont-je-naehrstoff-ist-leer.md) | laeuft (codex) | — | — |
 | `C-163` | befund | mittel | [94 Substanzen ohne maschinenlesbare Naehrstoffmenge](erledigt/nutrition-c-0163-94-substanzen-ohne-maschinenlesbare-naehrstoffmenge.md) | erledigt | — | — |
 | `C-174` | befund | mittel | [`ADR_NUTRITION_PREFERENCES_V1` kennt drei Constraint-Stufen](todos/nutrition-c-0174-adr-nutrition-preferences-v1-kennt-drei-constraint-stufen.md) | offen | — | — |
 | `C-175` | feature | mittel | [`shopping_lists` fehlt](erledigt/nutrition-c-0175-shopping-lists-fehlt.md) | erledigt | — | — |
-| `C-177` | messung | hoch | [Thai-Aliase fehlen bewusst](laufend_claudecode/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | vorbereitet (claudecode) | — | — |
+| `C-177` | messung | hoch | [Thai-Aliase fehlen bewusst](laufend_claudecode/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | laeuft (claudecode) | — | — |
 | `C-191` | messung | mittel | [`p_user_id` kostet das Dreifache](erledigt/nutrition-c-0191-p-user-id-kostet-das-dreifache.md) | erledigt | — | — |
 | `C-192` | befund | mittel | [`p_user_id` kostet in `food_search` das Dreifache](erledigt/nutrition-c-0192-p-user-id-kostet-in-food-search-das-dreifache.md) | erledigt | — | — |
 | `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](todos/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | offen | — | — |
@@ -112,7 +114,8 @@
 | `C-348` | feature | mittel | [eine zaehlende Funktion fuer die Flags](erledigt/nutrition-c-0348-eine-zaehlende-funktion-fuer-die-flags.md) | erledigt | — | G-273 |
 | `C-349` | befund | hoch | [die Flag-Funktion einspielen](erledigt/nutrition-c-0349-die-flag-funktion-einspielen.md) | erledigt | — | — |
 | `C-350` | entscheidung | hoch | [zwei Obergrenzen fuer Magnesium](erledigt/nutrition-c-0350-zwei-obergrenzen-fuer-magnesium.md) | erledigt | — | C-351 |
-| `C-353` | messung | mittel | [die erwartete Ersparnis tritt nicht ein](laufend_claudecode/nutrition-c-0353-die-erwartete-ersparnis-tritt-nicht-ein.md) | vorbereitet (claudecode) | — | — |
+| `C-353` | messung | mittel | [die erwartete Ersparnis tritt nicht ein](laufend_claudecode/nutrition-c-0353-die-erwartete-ersparnis-tritt-nicht-ein.md) | laeuft (claudecode) | — | — |
+| `C-355` | feature | mittel | [`food_search` kennt keine Herkunft](laufend_codex/nutrition-c-0355-food-search-kennt-keine-herkunft.md) | vorbereitet (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -159,10 +162,8 @@
 | `G-248` | befund | mittel | [der Leseweg laedt neun von 35 Fehlzaehlern](erledigt/nutrition-g-0248-der-leseweg-laedt-neun-von-35-fehlzaehlern.md) | erledigt | — | — |
 | `G-249` | feature | hoch | [zwei Ansichten zusammenfuehren und den Verlauf als Trend zeigen](erledigt/nutrition-g-0249-zwei-ansichten-zusammenfuehren-und-trend-zeigen.md) | erledigt | — | G-250 |
 | `G-250` | entscheidung | mittel | [die vier Zustaende fehlen in der Ordnung](erledigt/nutrition-g-0250-die-vier-zustaende-fehlen-in-der-ordnung.md) | erledigt | — | G-261 |
-| `G-251` | feature | niedrig | [die Herkunfts-Filter im Food-DB-Reiter](laufend_claudecode/nutrition-g-0251-herkunfts-filter-im-food-db-tab.md) | laeuft (claudecode) | — | — |
 | `G-252` | messung | mittel | [die Ladezeit hat eine andere Ursache](erledigt/nutrition-g-0252-die-ladezeit-hat-eine-andere-ursache.md) | erledigt | — | — |
 | `G-254` | entscheidung | mittel | [sechs Kacheln brauchen eine Entscheidung](erledigt/nutrition-g-0254-sechs-kacheln-brauchen-eine-entscheidung.md) | erledigt | — | G-258, G-262, G-263, G-264 |
-| `G-258` | feature | mittel | [Pending actions im Tagebuch](laufend_claudecode/nutrition-g-0258-pending-actions-im-tagebuch.md) | laeuft (claudecode) | — | — |
 | `G-259` | befund | mittel | [toter Leseweg und die Fensterlaufzeit](erledigt/nutrition-g-0259-toter-leseweg-und-die-fensterlaufzeit.md) | erledigt | — | — |
 | `G-260` | feature | mittel | [die Dauerregel anbinden](erledigt/nutrition-g-0260-die-dauerregel-anbinden.md) | erledigt | — | C-348 |
 | `G-261` | entscheidung | niedrig | [die Vergleichsfunktionen anbinden](todos/nutrition-g-0261-die-vergleichsfunktionen-anbinden.md) | offen | — | — |
@@ -179,8 +180,15 @@
 | `G-272` | feature | hoch | [`+ Add` braucht ein Erfassungsmodal](erledigt/nutrition-g-0272-add-braucht-ein-erfassungsmodal.md) | erledigt | — | — |
 | `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](erledigt/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | erledigt | — | C-349, C-353 |
 | `G-274` | feature | hoch | [der Bestaetigungsweg fuer Plan-Eintraege](erledigt/nutrition-g-0274-der-bestaetigungsweg-fuer-plan-eintraege.md) | erledigt | — | G-276 |
-| `G-276` | befund | mittel | [MealCam schreibt `confirmation_mode` ohne Fotoweg](laufend_claudecode/nutrition-g-0276-mealcam-schreibt-ohne-fotoweg.md) | laeuft (claudecode) | — | — |
+| `G-276` | befund | mittel | [MealCam schreibt `confirmation_mode` ohne Fotoweg](erledigt/nutrition-g-0276-mealcam-schreibt-ohne-fotoweg.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
+
+### wartet auf Blocker — 2
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-251` | feature | niedrig | [die Herkunfts-Filter im Food-DB-Reiter](todos/nutrition-g-0251-herkunfts-filter-im-food-db-tab.md) | offen | C-355 | C-355 |
+| `G-258` | feature | mittel | [Pending actions im Tagebuch](todos/nutrition-g-0258-pending-actions-im-tagebuch.md) | offen | C-354 | C-354 |
 
 ## supplements — 56
 
@@ -338,7 +346,7 @@
 | `G-169` | befund | mittel | [`coach.checkins` und `checkin_templates` liegen ungelesen](todos/coach-g-0169-coach-checkins-und-checkin-templates-liegen-ungelesen.md) | offen | — | — |
 | `G-244` | befund | mittel | [die rechten Kacheln im Human-Coach-Reiter sind Attrappe](todos/coach-g-0244-die-rechten-kacheln-im-human-coach-reiter-sind-attrappe.md) | offen | — | — |
 
-## quer — 72
+## quer — 73
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -391,6 +399,7 @@
 | `C-295` | feature | mittel | [die Kette liest aus zwei Kimi-Pfaden](todos/quer-c-0295-die-kette-liest-aus-zwei-kimi-pfaden.md) | offen | — | — |
 | `C-297` | messung | mittel | [drei Wege, an dem Datenlogik-Waechter vorbei](todos/quer-c-0297-drei-wege-an-dem-datenlogik-waechter-vorbei.md) | offen | — | — |
 | `C-298` | feature | mittel | [der Datenlogik-Waechter meldet zwei harmlose Muster rot](todos/quer-c-0298-der-datenlogik-waechter-meldet-zwei-harmlose-muster-rot.md) | offen | — | — |
+| `C-354` | feature | hoch | [eine Lesefunktion fuer offene Coach-Aktionen](laufend_codex/quer-c-0354-eine-lesefunktion-fuer-offene-coach-aktionen.md) | vorbereitet (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
