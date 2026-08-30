@@ -227,6 +227,33 @@ Seed-Konten mit je 180 Tagen, und `test-user@lumeos.local` mit einem.
 **Sonst ist sie nicht nachpruefbar — und eine Abweichung sieht aus
 wie ein Defekt.**
 
+## Suchen nach der Sache, nicht nach dem Wort
+
+`[cmd]` **Am 2026-08-30 gesucht: *,,noch nicht entwickelt"*.**
+`[cmd]` **Der Baustein heisst `InEntwicklungKnopf` und schreibt
+*,,in Entwicklung"*** — **39 Aufrufer, quer durch alle v2-Module.**
+**Nicht gefunden, und daraufhin behauptet, es gebe ihn nicht.**
+
+`[read]` **Tom hat ihn mit einem Bildschirmfoto belegt.**
+
+### Dasselbe Muster, das die Waechter betrifft
+
+`[cmd]` **G-216, G-247, G-246, G-108: ein Waechter prueft das Wort
+statt der Wirkung.** `[read]` **Hier sucht der Orchestrator das Wort
+statt der Sache** — dieselbe Klasse, andere Rolle.
+
+### Was stattdessen
+
+**Nach der Wirkung suchen, nicht nach dem Wortlaut.**
+
+    schlecht   grep "noch nicht entwickelt"
+    besser     grep "Entwicklung|Platzhalter|nicht angebunden"
+               oder: welche Datei rendert das Modal aus dem Bild?
+               oder: was importiert die Datei, die den Knopf traegt?
+
+`[read]` **Und wenn ein Bildschirmfoto vorliegt: von dort ausgehen.**
+**Der Knopf im Bild hat einen Aufrufer, und der hat einen Import.**
+
 ## Die Datei ist die Wahrheit, nicht ihre Zusammenfassung
 
 **Tom, 2026-08-29:** *,,wir arbeiten mit lokalen md dateien und nicht

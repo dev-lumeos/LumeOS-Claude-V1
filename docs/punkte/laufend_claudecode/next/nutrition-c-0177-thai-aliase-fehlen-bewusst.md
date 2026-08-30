@@ -76,40 +76,30 @@ sowas"*.
 
 **Die Sprachauswahl bleibt. Wer TH waehlt, bekommt einen Hinweis.**
 
-### Es ist eine Bauform, kein Sonderfall
+### Der Baustein existiert bereits
 
-`[read]` **Der Hinweis wird gebraucht, sobald etwas waehlbar ist und
-nicht traegt** — **und das trifft mehr als Thai.**
+`[cmd]` **`packages/ui/src/in-entwicklung.tsx`, genutzt in 39
+Dateien** quer durch alle v2-Module.
 
-`[cmd]` **Kandidaten aus den offenen Punkten:** MealCam ohne Fotoweg,
-Buddy als Attrappe im Kontextbereich, Kacheln auf leeren Tabellen.
+    <InEntwicklung titel grund? onClose />
 
-`[read]` **Also: einmal bauen, mehrfach nutzbar.**
+`[cmd]` **Und `grund` ist optional** — *,,Woran es haengt. Ohne
+Angabe bleibt es beim allgemeinen Satz."*
 
-### Was es gibt und was nicht
+`[read]` **Damit ist nichts zu bauen. Nur ein weiterer Aufrufer.**
 
-`[cmd]` **`components/ui/placeholder-page.tsx` existiert** — genutzt
-in `/coach`, `/recovery`, `/settings`, `/supplements`, `/training`.
+`[read]` **Ich hatte im Auftrag geschrieben, es gebe die Bauform
+nicht.** `[cmd]` **Falsch** — ich habe nach *,,noch nicht
+entwickelt"* gesucht, **der Baustein schreibt *,,in Entwicklung"*.**
 
-`[read]` **Aber das ist eine ganze Seite, kein Modal, und sie liegt
-im alten Routenbaum.** `[cmd]` **Der bleibt unberuehrt** (Tom,
-2026-08-29: *,,da laeuft ein anderes template und das soll
-bleiben"*).
+### Was der `grund` sagen muss
 
-`[read]` **Sieh sie dir an, bevor du baust** — **Ton und Aufbau
-gehoeren uebernommen, die Bauform nicht.**
+`[cmd]` **Bei Thai: die Aliase fehlen, und woher sie kaemen ist
+offen** — BLS 4.0 fuehrt keine thailaendischen Namen (E-03).
 
-### Was der Hinweis sagen muss
-
-`[read]` ***,,Noch nicht entwickelt"* ist nicht dasselbe wie *,,keine
-Daten vorhanden"*.** `[cmd]` **Bei Thai trifft das erste zu:** die
-Sprache ist vorgesehen, **die Aliase gibt es nicht und es ist offen,
-woher sie kaemen** — BLS 4.0 fuehrt keine thailaendischen Namen
-(E-03).
-
-`[read]` **Was genau dort steht, ist deine Entscheidung** — **aber es
-muss den Unterschied tragen koennen**, weil die naechsten Orte den
-anderen Fall brauchen.
+`[read]` **Das ist etwas anderes als *,,noch nicht gebaut"*** — **es
+ist eine Datenfrage, keine Bauzeitfrage.** **Der Satz sollte das
+tragen.**
 
 ### Was nicht zu tun ist
 

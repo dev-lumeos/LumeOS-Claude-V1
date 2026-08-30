@@ -36,27 +36,46 @@ etwas sagt, sagt: es ist vorgesehen, aber noch nicht da.**
 sitzt in Thailand. `[read]` **Sie zu entfernen waere eine Aussage
 ueber das Produkt, nicht ueber den Stand.**
 
-## Was es dafuer gibt und was nicht
+## Der Baustein existiert
 
-`[cmd]` **`apps/web/src/components/ui/placeholder-page.tsx`
-existiert** — genutzt in `/coach`, `/recovery`, `/settings`,
-`/supplements`, `/training`.
+**Berichtigt 2026-08-30.** Tom hat ihn mit einem Bildschirmfoto
+belegt.
 
-`[read]` **Aber das ist eine ganze Seite, kein Modal** — **und sie
-liegt im alten Routenbaum, nicht in `/v2/`.**
+`[cmd]` **`packages/ui/src/in-entwicklung.tsx`, 126 Zeilen**, genutzt
+in **39 Dateien** quer durch `v2/training`, `v2/nutrition`,
+`v2/goals`, `v2/medical`, `v2/recovery`, `v2/supplements`,
+`v2/coach`.
 
-`[read]` **Toms Vermutung stimmt zur Haelfte:** das Muster gibt es,
-die Bauform nicht.
+    <InEntwicklung titel grund? onClose />
+
+`[cmd]` **Und er traegt genau die Unterscheidung, die diese
+Entscheidung offenlassen wollte:** das Feld `grund` ist optional —
+*,,Woran es haengt. Ohne Angabe bleibt es beim allgemeinen Satz."*
+
+`[read]` **Also ist *,,noch nicht entwickelt"* gegen *,,keine Daten
+vorhanden"* der Unterschied zwischen mit und ohne `grund`.**
+**Nichts Neues zu bauen.**
+
+`[cmd]` **Escape schliesst** — *,,sonst ist das Modal per Tastatur
+eine Sackgasse."*
+
+### Wie ich ihn nicht gefunden habe
+
+`[read]` **Ich habe nach *,,noch nicht entwickelt"* gesucht.** **Der
+Baustein heisst `InEntwicklungKnopf` und schreibt *,,in
+Entwicklung"*.**
+
+`[read]` **Nach dem Wort gesucht statt nach der Sache** — dasselbe
+Muster, das am 30.08. viermal bei Waechtern auffiel (G-216, G-247,
+G-246, G-108).
+
+`[cmd]` **`placeholder-page.tsx` war ein falscher Treffer:** eine
+ganze Seite im alten Routenbaum, nicht der gesuchte Baustein.
 
 ## Was daraus folgt
 
-`[read]` **Der Hinweis wird gebraucht, sobald etwas waehlbar ist und
-nicht traegt** — **das trifft mehr als Thai.**
+**Fuer Thai: `InEntwicklung` mit `titel="Thai"` und einem `grund`**,
+der sagt, dass die Aliase fehlen und woher sie kaemen offen ist.
 
-`[cmd]` **Kandidaten aus den offenen Punkten:** MealCam ohne Fotoweg
-(G-276), Buddy als Attrappe im Kontextbereich, die Kacheln, die auf
-leere Tabellen zeigen.
-
-`[read]` **Also: eine Bauform, nicht ein Sonderfall fuer Thai.**
-**Was sie sagt, gehoert je Ort entschieden** — *noch nicht
-entwickelt* ist nicht dasselbe wie *keine Daten vorhanden*.
+`[read]` **Kein neuer Baustein, kein Sonderfall** — **ein weiterer
+Aufrufer von 39.**

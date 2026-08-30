@@ -109,7 +109,53 @@ Gate-Lauf leer sein.**
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### 2026-08-30 - G-202, A-49 und C-316
+
+#### G-202 - stabiler Dublettenbericht
+
+`backup/c276/supplement-kern-dubletten.json` ist ein sinnvoller, versionierter
+Nachweis: 412 Top-Level-Eintraege, 0 sichtbare Unterformen, 4
+Dublettengruppen, davon alle 4 explizit erlaubt und 0 unbekannt. Allein
+`checked_at` machte ihn bei jedem Lauf anders. Der Zeitstempel wurde daher aus
+dem Bericht entfernt; das Werkzeug serialisiert den Befund und schreibt die
+Datei nur noch, wenn sich diese Serialisierung gegenueber der vorhandenen Datei
+unterscheidet.
+
+Der neue Regressionstest ruft das Werkzeug mit einem Wegwerfbericht zweimal
+auf: Kein `checked_at`, bytegleicher zweiter Lauf. Auch der normale Aufruf
+gegen `backup/c276` war zweimal hintereinander erfolgreich und endete beide
+Male mit demselben SHA-256-Hash
+`C2A6791B27B55E27C9B29CBF4CF5275107FF191FD8C34482DCC14BA324A5E38F`.
+Der Pruefer erzeugt damit keinen Gate-spezifischen `git status`-Eintrag mehr.
+
+Der vollstaendige `pnpm gate`-Nachweis ist derzeit blockiert, bevor dieser
+Pruefer erreicht wird: `node tools/punkte-index.mjs --pruefen` bricht mit
+`docs/punkte/00-INDEX.md ist nicht auf dem Stand des Frontmatters` ab und
+verlangt `--schreiben`. Das liegt ausserhalb dieses Auftrags und wurde nicht
+geaendert. Ein komplett leerer Arbeitsbaum ist zudem hier nicht herstellbar:
+es lagen bereits fremde Aenderungen unter `apps/` und `backup/` vor, und die
+bewussten, nicht committeten G-202-Aenderungen selbst sind sichtbar. Der
+nachweisbare Teil ist: Der Bericht blieb bei zwei normalen Laeufen unveraendert.
+
+#### A-49 - Behauptung ueberholt
+
+Der aktuelle Attrappen-Waechter behauptet nicht mehr, dass `SuppInteractions`
+unangebunden sei. Er sichert jetzt den Rueckfall ab: Die entfernte Komponente
+und `INTERACTIONS` duerfen nicht wieder auftauchen. Die Supplements-Ansicht
+importiert und rendert fuer den Interactions-Reiter `InteractionsEchtTab` aus
+`tab-interactions-echt.tsx`. Der gezielte Testlauf
+`pnpm --filter @lumeos/web exec tsx --test src/components/shell/__tests__/v2-attrappen.test.ts`
+war mit 87 von 87 Tests gruen. A-49 ist damit ueberholt; `apps/` wurde nicht
+veraendert.
+
+#### C-316 - kein einzelner NAC-Tippfehler
+
+Die Messung der sichtbaren `substances` ergibt 412 von 412 mit leerem oder
+NULL-`name_de`; zugleich haben alle 412 einen `name_en`. NAC ist also ein
+sichtbares Beispiel (`slug = nac`, `name_en = NAC (N-Acetyl Cysteine)`), aber
+nicht die einzige Luecke. Es handelt sich um eine vollstaendige
+DE-Lokalisierungs-/Importluecke, nicht um einen einzelnen Katalogfehler.
+Keine Namen wurden erfunden oder gesetzt und kein Katalog wurde erweitert.
 
 ## Abnahme
 
