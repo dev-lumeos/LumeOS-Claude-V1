@@ -31,3 +31,8 @@ Beziehung des Nutzers dazu.**
 **Woraus wuerde jeder der drei kommen?** `[read]` *,,Wie gestern"*
 setzt voraus, dass gestern etwas erfasst wurde — **was zeigt der
 Filter an einem Tag ohne Vortag?**
+
+## Auftrag
+
+**Vorbereitet mit G-276 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

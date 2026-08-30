@@ -38,3 +38,8 @@ Rechtelogik nachbauen** — ab dem zweiten Modul doppelt.
 Coach-Aktion zeigt, kann der Nutzer sie vermutlich bestaetigen.
 **Ein Schreibweg zurueck ist eine eigene Entscheidung** — er beruehrt
 `confirmed_by` und die Protokolle.
+
+## Auftrag
+
+**Vorbereitet mit G-276 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

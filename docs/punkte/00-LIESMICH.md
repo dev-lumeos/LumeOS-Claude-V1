@@ -340,3 +340,42 @@ naechsten Auftrag.** `[cmd]` **Am 30.08. lagen zwei fertige Punkte in
 erzeugt hat** — drei erledigte Punkte als laufend gefuehrt.
 **Die Tabelle wurde deshalb abgeschafft. Der Ordner darf nicht
 denselben Weg gehen.**
+
+## Vorbereitete Auftraege: `laufend_<agent>/next/`
+
+**Ergaenzt 2026-08-30, auf Toms Vorschlag.**
+
+*,,mach unter zb laufend_codex einen neuen ordner zb next run da
+kannst die vorbereiteten auftraege die in der verfuegbaren zeit wenn
+agents laufen erstellen kannst. dann kommt der bericht und wenn es
+anpassungen braucht kannst das noch tun und sonst einfach
+rueberschieben zur ausfuehrung"*.
+
+**Damit hat das Modell vier Stufen:**
+
+    todos/                    offen, kein Auftrag geschrieben
+    laufend_<agent>/next/     Auftrag geschrieben, noch nicht raus
+    laufend_<agent>/          laeuft
+    erledigt/                 abgenommen
+
+`[read]` **Der Sinn:** waehrend ein Agent arbeitet, hat der
+Orchestrator Zeit. **Die gehoert in den naechsten Auftrag, nicht in
+einen zweiten Auftrag an denselben Agenten.**
+
+`[read]` **Und wenn der Bericht kommt, laesst sich der vorbereitete
+Auftrag noch anpassen** — **oft aendert ein Bericht die Praemisse des
+naechsten.**
+
+### Was der Waechter dazu tut
+
+`[cmd]` **`punkte-pruefen.mjs` zaehlt sie und meldet sie getrennt:**
+*,,N vorbereitet, noch nicht raus"*. `[read]` **Sie zaehlen nicht als
+laufend** — ein Auftrag laeuft erst, wenn er eine Ebene hoeher liegt.
+
+`[cmd]` **Und jeder andere Unterordner unter `laufend_*` macht das
+Gate rot.** `[read]` **Sonst waere `next/` ein Ort, an dem Punkte
+liegen, die keine Zaehlung erreicht** — genau das, was am 30.08.
+beim Nachmessen aufgefallen ist.
+
+`[read]` **Ein vorbereiteter Auftrag traegt `agent:` und
+`beauftragt:` noch nicht** — er bekommt sie beim Verschieben.

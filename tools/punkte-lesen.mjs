@@ -35,6 +35,20 @@ export const ORDNER = [
   'erledigt',
 ]
 
+/**
+ * `laufend_<agent>/next/` haelt vorbereitete Auftraege: geschrieben,
+ * waehrend der Agent noch am vorigen arbeitet, aber noch nicht raus.
+ *
+ * Tom, 2026-08-30: "da kannst die vorbereiteten auftraege ... erstellen
+ * ... dann kommt der bericht und wenn es anpassungen braucht kannst das
+ * noch tun und sonst einfach rueberschieben zur ausfuehrung".
+ *
+ * Sie zaehlen NICHT als laufend - ein Auftrag laeuft erst, wenn er eine
+ * Ebene hoeher liegt. Aber sie werden gezaehlt und gemeldet, sonst
+ * liegen dort Punkte, die niemand sieht.
+ */
+export const VORBEREITET = 'next'
+
 /** Der Zustand ergibt sich aus dem Ordner, nicht aus einem Feld. */
 export function zustandVon(ordner) {
   if (ordner === 'todos') return 'offen'
@@ -163,8 +177,13 @@ export function frontmatter(text) {
  */
 export function punkteLesen(wurzel) {
   const aus = []
+  const orte = []
   for (const ordner of ORDNER) {
-    const d = path.join(wurzel, ordner)
+    orte.push({ ordner, unter: null })
+    if (ordner.startsWith('laufend_')) orte.push({ ordner, unter: VORBEREITET })
+  }
+  for (const { ordner, unter } of orte) {
+    const d = unter ? path.join(wurzel, ordner, unter) : path.join(wurzel, ordner)
     if (!fs.existsSync(d)) continue
     for (const name of fs.readdirSync(d).sort()) {
       if (!name.endsWith('.md') || name.startsWith('00-')) continue
@@ -173,10 +192,11 @@ export function punkteLesen(wurzel) {
       const { daten, fehler } = frontmatter(text)
       aus.push({
         ordner,
+        vorbereitet: Boolean(unter),
         name,
         pfad: path.relative(wurzel, pfad).replace(/\\/g, '/'),
-        relativ: `docs/punkte/${ordner}/${name}`,
-        zustand: zustandVon(ordner),
+        relativ: `docs/punkte/${ordner}${unter ? '/' + unter : ''}/${name}`,
+        zustand: unter ? `vorbereitet (${ordner.slice(8)})` : zustandVon(ordner),
         daten,
         lesefehler: fehler,
         text,

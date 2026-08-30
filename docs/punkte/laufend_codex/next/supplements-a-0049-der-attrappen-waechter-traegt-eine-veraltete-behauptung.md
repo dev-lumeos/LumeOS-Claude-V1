@@ -23,3 +23,8 @@ zahlen: null
   `[cmd]` `v2-attrappen.test.ts:963` sagt *„SuppInteractions ist
   unangebunden"* — `tab-interactions-echt.tsx` existiert inzwischen.
   Ungeprueft, ob der Test noch die Rueckfall-Lage meint.
+
+## Auftrag
+
+**Vorbereitet mit G-202 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

@@ -37,3 +37,8 @@ zahlen: null
 
   **Zu tun:** Namen setzen — und einen Waechter, der
   `im_katalog AND name_de IS NULL` verbietet.
+
+## Auftrag
+
+**Vorbereitet mit G-202 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

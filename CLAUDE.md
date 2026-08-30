@@ -296,16 +296,27 @@ unberuehrt.**
 
 **Tom, 2026-08-30:** *,,abarbeiten, ergaenzen, in erledigt ablegen"*.
 
-`[read]` **Kommt ein Bericht, wird der Punkt geschlossen — sofort,
-nicht nach dem naechsten Auftrag.**
+**Tom, 2026-08-30, praezisiert:** *,,report kommt, kurzanalyse ob
+folgeauftrag betroffen, allfaellige anpassung, auftrag raus und dann
+berichte abarbeiten"*.
 
-    1  nachmessen, was der Bericht behauptet
-    2  Abnahme in die Punktdatei schreiben
-    3  Datei nach erledigt/ verschieben
-    4  neue Befunde als Punkte anlegen
-    5  committen, Commit-Hash nachtragen
+    1  Bericht ueberfliegen: ist der vorbereitete Auftrag betroffen?
+    2  falls ja: anpassen
+    3  Auftrag aus laufend_<agent>/next/ eine Ebene hoeher, raus
+    4  DANN abarbeiten:
+         nachmessen, was der Bericht behauptet
+         Abnahme in die Punktdatei
+         Datei nach erledigt/
+         neue Befunde als Punkte
+         committen, Commit-Hash nachtragen
 
-**Erst danach der naechste Auftrag.**
+`[read]` **Der Agent wartet nicht, waehrend der Orchestrator
+abnimmt.** `[cmd]` **Und weil der naechste Auftrag vorbereitet in
+`next/` liegt, ist Schritt 3 ein Verschieben, kein Schreiben.**
+
+`[read]` **Der Ordner bleibt trotzdem ehrlich:** ein fertig
+gemeldeter Punkt liegt hoechstens Minuten in `laufend_*`, **nicht bis
+zum naechsten Gespraech.**
 
 ### Warum
 

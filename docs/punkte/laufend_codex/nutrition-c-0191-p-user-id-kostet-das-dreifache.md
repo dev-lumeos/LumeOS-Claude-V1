@@ -48,3 +48,6 @@ zahlen: null
 
 **Mitbeauftragt mit C-120 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+Ergebnis: [C-120 - Messbericht](nutrition-c-0120-drei-sperren-in-food-search.md#2026-08-30---c-120-c-191-c-27-und-c-177-nachgemessen):
+derselbe dev-Aufruf liegt heute bei +5,6 %, nicht beim Dreifachen.

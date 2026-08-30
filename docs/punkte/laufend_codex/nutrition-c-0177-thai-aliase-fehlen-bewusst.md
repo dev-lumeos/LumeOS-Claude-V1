@@ -34,3 +34,7 @@ zahlen: null
 
 **Mitbeauftragt mit C-120 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+Weiter offen: [C-120 - Messbericht](nutrition-c-0120-drei-sperren-in-food-search.md#2026-08-30---c-120-c-191-c-27-und-c-177-nachgemessen).
+E-16 betrifft keine Thai-Abschaltung; die laufende Sprachwahl enthaelt TH,
+waehrend die Datenbank weiter 0 Thai-Aliase hat.

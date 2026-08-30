@@ -112,7 +112,70 @@ Laufzeit vor und nach jeder Aenderung.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### 2026-08-30 - C-120, C-191, C-27 und C-177 nachgemessen
+
+| Punkt | Urteil | Nachweis |
+|---|---|---|
+| C-120 | ueberholt | Alle drei historischen Sperren sind ueber `p_filters` auf dem laufenden Lesepfad aufgehoben. |
+| C-191 | ueberholt | Kein Dreifach-Effekt mehr: dev-Aufruf +5,6 %, nicht 3x. |
+| C-27 | erledigt | Beide letzten Alltagswoerter liefern Treffer. |
+| C-177 | offen | Die behauptete Begruendung ueber E-16 geht nicht auf; Thai ist im aktuellen UI sogar waehlbar. |
+
+#### C-120 - drei Sperren
+
+`p_tag_code` selbst ist weiter ein einzelner Altparameter. Er ist aber
+keine funktionale Sperre mehr: `p_filters.tag_groups` erlaubt ODER innerhalb
+und UND zwischen Gruppen. Auf der laufenden DB liefert die leere Suche
+7.140 Lebensmittel, die Gruppen `[vegan OR vegetarian] AND [high_protein]`
+liefern 154. `p_filters.exclude_tag_codes = [ultra_processed]` liefert
+6.213 statt 7.140 - der Ausschluss wirkt auf die Gesamtmenge, nicht erst auf
+die angezeigte Seite. Auch `processing_level` ist filterbar: nur `raw`
+liefert 3.251, Ausschluss von `raw` 3.889. Damit sind alle drei Befunde aus
+C-120 durch C-164/C-347 ueberholt; keine neue Rangregel und keine Tags
+wurden gesetzt.
+
+#### C-191 - Kosten von `p_user_id`
+
+Gemessen wurde derselbe warme Aufruf neunmal je Seite: `milch`,
+`relevance`, Limit 25, `token_groups = [[milch]]`.
+
+| Aufruf | Median | Differenz zu ohne Nutzer |
+|---|---:|---:|
+| ohne `p_user_id` | 151,752 ms | - |
+| `test-user@lumeos.local`, 0 materialisierte Ziele | 149,958 ms | -1,794 ms (-1,2 %) |
+| `dev@lumeos.app`, 2.465 Ziel-Lebensmittel | 160,231 ms | +8,479 ms (+5,6 %) |
+
+Der Parameter allein kostet damit nichts Messbares. Die gemessene
+Zusatzarbeit liegt vor dem Treffer-Join in
+`food_preference_search_targets`: fuer dev liest ein Index-Only-Scan 2.977
+Zielzeilen und `GroupAggregate` verdichtet sie auf 2.465 Lebensmittel in
+6,975 ms (93 Shared-Buffer-Hits). Das erklaert den groessten Teil des
+Aufschlags. Es ist nicht mehr die alte, je Treffer neu aufgebaute
+Praeferenzkette; die Funktion aggregiert die materialisierten Ziele je
+Nahrungsmittel.
+
+#### C-27 - zwei leere Alltagswoerter
+
+Beide damaligen Restfaelle sind durch den heutigen Dekompositor-/Aliaspfad
+nicht mehr leer: `basmatireis` liefert 1 Treffer (`Reis poliert, roh`),
+`griechischer joghurt` ebenfalls 1 (`Sahnejoghurt mind. 10 % Fett, mit
+Magermilchpulverzusatz`). C-27 ist damit erledigt; der Auftrag verlangte
+Treffer, nicht eine neue Relevanzentscheidung.
+
+#### C-177 - Thai-Aliase
+
+E-16 betrifft ausschliesslich generelle Ausschluesse; er schaltet Thai nicht
+ab. Die genannte Praemisse widerspricht zudem dem aktuellen Code:
+`SPRACHEN` enthaelt `de`, `en`, `th`, und die Kopf-Sprachwahl rendert alle
+drei ohne `disabled`. Gleichzeitig misst die Datenbank weiter 0 Thai-Aliase
+(`food_aliases`: 25.705 `de`, 7.140 `en`) und 0 von 7.140 befuellte
+`foods.name_th`. Der Punkt ist deshalb nicht gegenstandslos und bleibt offen;
+dieser Widerspruch wurde weder per UI-Aenderung noch durch erfundene Aliase
+aufgeloest.
+
+Alle Messungen waren lesend gegen den laufenden lokalen `postgres`-Stand.
+Keine Aenderung unter `apps/`, keine Rangregel, keine Tags, nichts gestagt
+oder committet.
 
 ## Abnahme
 

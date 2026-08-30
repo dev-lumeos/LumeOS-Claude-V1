@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 257 |
-| `laufend_codex` | 4 |
-| `laufend_claudecode` | 2 |
+| `todos` | 251 |
+| `laufend_codex` | 7 |
+| `laufend_claudecode` | 5 |
 | `erledigt` | 92 |
 | **gesamt** | **355** |
 
@@ -158,10 +158,10 @@
 | `G-248` | befund | mittel | [der Leseweg laedt neun von 35 Fehlzaehlern](erledigt/nutrition-g-0248-der-leseweg-laedt-neun-von-35-fehlzaehlern.md) | erledigt | — | — |
 | `G-249` | feature | hoch | [zwei Ansichten zusammenfuehren und den Verlauf als Trend zeigen](erledigt/nutrition-g-0249-zwei-ansichten-zusammenfuehren-und-trend-zeigen.md) | erledigt | — | G-250 |
 | `G-250` | entscheidung | mittel | [die vier Zustaende fehlen in der Ordnung](erledigt/nutrition-g-0250-die-vier-zustaende-fehlen-in-der-ordnung.md) | erledigt | — | G-261 |
-| `G-251` | feature | niedrig | [die Herkunfts-Filter im Food-DB-Reiter](todos/nutrition-g-0251-herkunfts-filter-im-food-db-tab.md) | offen | — | — |
+| `G-251` | feature | niedrig | [die Herkunfts-Filter im Food-DB-Reiter](laufend_claudecode/nutrition-g-0251-herkunfts-filter-im-food-db-tab.md) | vorbereitet (claudecode) | — | — |
 | `G-252` | messung | mittel | [die Ladezeit hat eine andere Ursache](erledigt/nutrition-g-0252-die-ladezeit-hat-eine-andere-ursache.md) | erledigt | — | — |
 | `G-254` | entscheidung | mittel | [sechs Kacheln brauchen eine Entscheidung](erledigt/nutrition-g-0254-sechs-kacheln-brauchen-eine-entscheidung.md) | erledigt | — | G-258, G-262, G-263, G-264 |
-| `G-258` | feature | mittel | [Pending actions im Tagebuch](todos/nutrition-g-0258-pending-actions-im-tagebuch.md) | offen | — | — |
+| `G-258` | feature | mittel | [Pending actions im Tagebuch](laufend_claudecode/nutrition-g-0258-pending-actions-im-tagebuch.md) | vorbereitet (claudecode) | — | — |
 | `G-259` | befund | mittel | [toter Leseweg und die Fensterlaufzeit](erledigt/nutrition-g-0259-toter-leseweg-und-die-fensterlaufzeit.md) | erledigt | — | — |
 | `G-260` | feature | mittel | [die Dauerregel anbinden](erledigt/nutrition-g-0260-die-dauerregel-anbinden.md) | erledigt | — | C-348 |
 | `G-261` | entscheidung | niedrig | [die Vergleichsfunktionen anbinden](todos/nutrition-g-0261-die-vergleichsfunktionen-anbinden.md) | offen | — | — |
@@ -178,7 +178,7 @@
 | `G-272` | feature | hoch | [`+ Add` braucht ein Erfassungsmodal](erledigt/nutrition-g-0272-add-braucht-ein-erfassungsmodal.md) | erledigt | — | — |
 | `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](laufend_claudecode/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | laeuft (claudecode) | — | C-349 |
 | `G-274` | feature | hoch | [der Bestaetigungsweg fuer Plan-Eintraege](erledigt/nutrition-g-0274-der-bestaetigungsweg-fuer-plan-eintraege.md) | erledigt | — | G-276 |
-| `G-276` | befund | mittel | [MealCam schreibt `confirmation_mode` ohne Fotoweg](todos/nutrition-g-0276-mealcam-schreibt-ohne-fotoweg.md) | offen | — | — |
+| `G-276` | befund | mittel | [MealCam schreibt `confirmation_mode` ohne Fotoweg](laufend_claudecode/nutrition-g-0276-mealcam-schreibt-ohne-fotoweg.md) | vorbereitet (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 55
@@ -188,7 +188,7 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-27` | feature | mittel | [Zwei Agenten, zwei Attrappen-Erwartungen](todos/supplements-a-0027-zwei-agenten-zwei-attrappen-erwartungen.md) | offen | — | — |
-| `A-49` | befund | mittel | [Der Attrappen-Waechter traegt eine veraltete Behauptung](todos/supplements-a-0049-der-attrappen-waechter-traegt-eine-veraltete-behauptung.md) | offen | — | — |
+| `A-49` | befund | mittel | [Der Attrappen-Waechter traegt eine veraltete Behauptung](laufend_codex/supplements-a-0049-der-attrappen-waechter-traegt-eine-veraltete-behauptung.md) | vorbereitet (codex) | — | — |
 | `C-01` | befund | mittel | [Frontend-Stack-Lücke schliessen](todos/supplements-c-0001-frontend-stack-lucke-schliessen.md) | offen | — | — |
 | `C-113` | feature | mittel | [Enhanced Mode — entschieden](todos/supplements-c-0113-enhanced-mode-entschieden.md) | offen | — | — |
 | `C-129` | befund | mittel | [Der Kimi-Import ist da; die Restluecken sind getrennt](todos/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md) | offen | — | C-327 |
@@ -213,7 +213,7 @@
 | `C-272` | befund | mittel | [Welle 1 — der Katalog wird inhaltlich fertig](todos/supplements-c-0272-welle-1-der-katalog-wird-inhaltlich-fertig.md) | offen | — | — |
 | `C-274` | befund | mittel | [die unsichtbaren Substanzen zuordnen](todos/supplements-c-0274-die-unsichtbaren-substanzen-zuordnen.md) | offen | — | — |
 | `C-287` | befund | mittel | [148 Community-Zeilen ohne Substanzbindung](todos/supplements-c-0287-148-community-zeilen-ohne-substanzbindung.md) | offen | — | — |
-| `C-316` | feature | mittel | [NAC steht im Katalog ohne deutschen Namen](todos/supplements-c-0316-nac-steht-im-katalog-ohne-deutschen-namen.md) | offen | — | — |
+| `C-316` | feature | mittel | [NAC steht im Katalog ohne deutschen Namen](laufend_codex/supplements-c-0316-nac-steht-im-katalog-ohne-deutschen-namen.md) | vorbereitet (codex) | — | — |
 | `C-319` | entscheidung | hoch | [Cam-Speicherweg festlegen](erledigt/supplements-c-0319-cam-speicherweg-festlegen.md) | erledigt | — | — |
 | `C-320` | entscheidung | hoch | [Cam-Datenschutz und Aufbewahrung je Rechtsraum festlegen](erledigt/supplements-c-0320-cam-datenschutz-und-aufbewahrung-je-rechtsraum-festlegen.md) | erledigt | — | — |
 | `C-321` | entscheidung | hoch | [Cam-Einwilligungsfuehrung festlegen](erledigt/supplements-c-0321-cam-einwilligungsfuehrung-festlegen.md) | erledigt | — | — |
@@ -232,7 +232,7 @@
 | `G-186` | befund | mittel | [Der Katalog zeigt noch nicht alles, was drinsteht](erledigt/supplements-g-0186-der-katalog-zeigt-noch-nicht-alles-was-drinsteht.md) | erledigt | — | G-213, G-214 |
 | `G-188` | feature | mittel | [Der Wechselwirkungs-Reiter heisst nicht, was er zeigt](erledigt/supplements-g-0188-der-wechselwirkungs-reiter-heisst-nicht-was-er-zeigt.md) | erledigt | — | — |
 | `G-189` | feature | mittel | [Der tote Rueckfallzweig `SuppInteractions` fliegt](erledigt/supplements-g-0189-der-tote-rueckfallzweig-suppinteractions-fliegt.md) | erledigt | — | — |
-| `G-202` | feature | mittel | [der Dublettenpruefer schreibt bei jedem Gate-Lauf](todos/supplements-g-0202-der-dublettenpruefer-schreibt-bei-jedem-gate-lauf.md) | offen | — | — |
+| `G-202` | feature | mittel | [der Dublettenpruefer schreibt bei jedem Gate-Lauf](laufend_codex/supplements-g-0202-der-dublettenpruefer-schreibt-bei-jedem-gate-lauf.md) | vorbereitet (codex) | — | — |
 | `G-205` | messung | mittel | [Der Dev-Server beendet sich selbst](todos/supplements-g-0205-der-dev-server-beendet-sich-selbst.md) | offen | — | — |
 | `G-213` | entscheidung | mittel | [soll `in_vitro_only` eine Warnung abschwaechen?](todos/supplements-g-0213-in-vitro-only-abschwaechen.md) | offen | — | — |
 | `G-214` | befund | mittel | [die Katalogsuche sagt nicht, warum ein Treffer passt](todos/supplements-g-0214-suche-sagt-nicht-warum-ein-treffer-passt.md) | offen | — | — |

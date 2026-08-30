@@ -370,7 +370,18 @@ for (const name of fs.readdirSync(PUNKTE)) {
   const voll = path.join(PUNKTE, name)
   if (!fs.statSync(voll).isDirectory()) continue
   if (!ORDNER.includes(name)) {
-    rot(`docs/punkte/${name}/`, 'unbekannter Ordner — nicht im Modell')
+    rot(`docs/punkte/${name}/`, 'unbekannter Ordner - nicht im Modell')
+    continue
+  }
+  // In laufend_<agent>/ ist genau ein Unterordner erlaubt: next/ mit
+  // vorbereiteten Auftraegen. Alles andere waere ein Ort, an dem Punkte
+  // liegen, die keine Zaehlung erreicht.
+  for (const unter of fs.readdirSync(voll)) {
+    const u = path.join(voll, unter)
+    if (!fs.statSync(u).isDirectory()) continue
+    if (!(name.startsWith('laufend_') && unter === 'next')) {
+      rot(`docs/punkte/${name}/${unter}/`, 'unbekannter Unterordner - nicht im Modell')
+    }
   }
 }
 
@@ -381,6 +392,17 @@ for (const p of punkte) jeOrdner[p.ordner] = (jeOrdner[p.ordner] ?? 0) + 1
 const teile = ORDNER.filter(o => jeOrdner[o])
   .map(o => `${o} ${jeOrdner[o]}`).join(' · ')
 console.log(`[punkte] ${punkte.length} Punkte geprueft.  (${teile})`)
+
+const vorbereitet = punkte.filter(p => p.vorbereitet)
+if (vorbereitet.length) {
+  const jeAgent = {}
+  for (const p of vorbereitet) {
+    const a = p.ordner.slice(8)
+    jeAgent[a] = (jeAgent[a] ?? 0) + 1
+  }
+  const liste = Object.entries(jeAgent).map(([a, n]) => `${a} ${n}`).join(' | ')
+  console.log(`[punkte] ${vorbereitet.length} vorbereitet, noch nicht raus: ${liste}`)
+}
 if (genannteTabellen.length > 0 && !OHNE_DB) {
   console.log(`[punkte] ${genannteTabellen.length} Tabellenangaben gegen `
     + 'information_schema gehalten.')
