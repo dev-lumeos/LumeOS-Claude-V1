@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 241 |
+| `todos` | 242 |
 | `laufend_codex` | 5 |
 | `laufend_claudecode` | 6 |
 | `erledigt` | 112 |
-| **gesamt** | **364** |
+| **gesamt** | **365** |
 
 ## medical — 41
 
@@ -342,7 +342,7 @@
 | `G-244` | befund | mittel | [die rechten Kacheln im Human-Coach-Reiter sind Attrappe](todos/coach-g-0244-die-rechten-kacheln-im-human-coach-reiter-sind-attrappe.md) | offen | — | — |
 | `G-277` | befund | hoch | [der Rechte-Reiter nennt einen Grund, den es nicht gibt](laufend_claudecode/coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md) | vorbereitet (claudecode) | — | — |
 
-## quer — 75
+## quer — 76
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -374,7 +374,8 @@
 | `A-59` | befund | mittel | [Attrappen im Quelltext zaehlen ueberschaetzt dreifach](todos/quer-a-0059-attrappen-im-quelltext-zaehlen-ueberschaetzt-dreifach.md) | offen | — | — |
 | `A-60` | befund | mittel | [eine `Map` ueber die Client-Grenze kommt leer an](todos/quer-a-0060-eine-map-ueber-die-client-grenze-kommt-leer-an.md) | offen | — | — |
 | `A-61` | befund | mittel | [das alte Auftragswesen abloesen](erledigt/quer-a-0061-das-alte-auftragswesen-abloesen.md) | erledigt | — | — |
-| `A-62` | befund | mittel | [Waechter kippen still, wenn das Schema nachkommt](erledigt/quer-a-0062-waechter-kippen-still-wenn-das-schema-nachkommt.md) | erledigt | — | G-277, G-278 |
+| `A-62` | befund | mittel | [Waechter kippen still, wenn das Schema nachkommt](erledigt/quer-a-0062-waechter-kippen-still-wenn-das-schema-nachkommt.md) | erledigt | — | A-63, G-277, G-278 |
+| `A-63` | befund | niedrig | [der Waechter las seine eigene Probe](todos/quer-a-0063-der-waechter-las-seine-eigene-probe.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](todos/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | offen | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

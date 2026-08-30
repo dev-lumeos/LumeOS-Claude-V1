@@ -65,10 +65,29 @@ for (const rel of dateien()) {
   } catch {
     continue
   }
+  // Zwei Orte tragen Marken, die keine Aussagen sind:
+  //   die eigene Datei      -- die Formbeschreibung im Kopf
+  //   __tests__/            -- die Wirkungsprobe schreibt eine Marke
+  //                            auf etwas Vorhandenes, damit der
+  //                            Waechter faellt. Genau das soll sie.
+  // Am 2026-08-30 ist der Waechter an beidem gescheitert: erst
+  // abgestuerzt, dann hat er seinen eigenen Beweis als Befund gemeldet.
+  // Ein Waechter, der seine eigene Probe liest, prueft nichts (G-186).
+  if (rel === 'tools/abwesenheit-pruefen.mjs') continue
+  if (rel.includes('__tests__/')) continue
   if (!text.includes('@abwesend')) continue
   text.split('\n').forEach((zeile, i) => {
     const m = MARKE.exec(zeile)
-    if (m) marken.push({ datei: rel, zeile: i + 1, art: m[1] ?? '', ziel: m[2] })
+    if (!m) return
+    // Eine Marke ohne Punkt ist keine: `@abwesend public\.user_inventory`
+    // aus einem Regex-Literal liefert nur `public`. Der Waechter ist am
+    // 2026-08-30 daran abgestuerzt -- an seiner eigenen Testdatei.
+    // Ein Waechter, der seine eigene Dokumentation liest, prueft nichts;
+    // einer, der daran stirbt, blockiert alles (A-62, G-186).
+    const art = m[1] ?? ''
+    const ziel = m[2]
+    if (art !== '-api' && !ziel.includes('.')) return
+    marken.push({ datei: rel, zeile: i + 1, art, ziel })
   })
 }
 
