@@ -5,9 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 263 |
+| `todos` | 261 |
+| `laufend_codex` | 2 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 89 |
-| **gesamt** | **352** |
+| **gesamt** | **353** |
 
 ## medical — 41
 
@@ -55,7 +57,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 117
+## nutrition — 118
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -82,7 +84,7 @@
 | `C-121` | befund | mittel | [Die Suche ist langsamer geworden](erledigt/nutrition-c-0121-die-suche-ist-langsamer-geworden.md) | erledigt | — | — |
 | `C-149` | blocker | mittel | [Vitamin D in IU gegen µg](erledigt/nutrition-c-0149-vitamin-d-in-iu-gegen-g.md) | erledigt | — | — |
 | `C-160` | befund | mittel | [Der Bewertungshorizont je Naehrstoff ist leer](todos/nutrition-c-0160-der-bewertungshorizont-je-naehrstoff-ist-leer.md) | offen | — | — |
-| `C-163` | befund | mittel | [94 Substanzen ohne maschinenlesbare Naehrstoffmenge](todos/nutrition-c-0163-94-substanzen-ohne-maschinenlesbare-naehrstoffmenge.md) | offen | — | — |
+| `C-163` | befund | mittel | [94 Substanzen ohne maschinenlesbare Naehrstoffmenge](laufend_codex/nutrition-c-0163-94-substanzen-ohne-maschinenlesbare-naehrstoffmenge.md) | laeuft (codex) | — | — |
 | `C-174` | befund | mittel | [`ADR_NUTRITION_PREFERENCES_V1` kennt drei Constraint-Stufen](todos/nutrition-c-0174-adr-nutrition-preferences-v1-kennt-drei-constraint-stufen.md) | offen | — | — |
 | `C-175` | feature | mittel | [`shopping_lists` fehlt](erledigt/nutrition-c-0175-shopping-lists-fehlt.md) | erledigt | — | — |
 | `C-177` | messung | mittel | [Thai-Aliase fehlen bewusst](todos/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | offen | — | — |
@@ -171,10 +173,11 @@
 | `G-267` | befund | hoch | [*New plan* tut nichts](erledigt/nutrition-g-0267-new-plan-tut-nichts.md) | erledigt | — | A-62, G-268, G-269 |
 | `G-268` | feature | hoch | [Plaene bearbeiten fehlt](erledigt/nutrition-g-0268-plaene-bearbeiten-fehlt.md) | erledigt | — | — |
 | `G-269` | feature | mittel | [Plaene von Coach und Marketplace](erledigt/nutrition-g-0269-plaene-von-coach-und-marketplace.md) | erledigt | — | — |
-| `G-270` | befund | mittel | [Drei Attrappen im Meal-plans-Reiter](erledigt/nutrition-g-0270-drei-attrappen-im-meal-plans-reiter.md) | erledigt | — | — |
+| `G-270` | befund | mittel | [Drei Attrappen im Meal-plans-Reiter](erledigt/nutrition-g-0270-drei-attrappen-im-meal-plans-reiter.md) | erledigt | — | G-274 |
 | `G-271` | messung | hoch | [Meal plans und Planner gegen die Quellen halten](erledigt/nutrition-g-0271-meal-plans-und-planner-gegen-die-quellen-halten.md) | erledigt | — | — |
 | `G-272` | feature | hoch | [`+ Add` braucht ein Erfassungsmodal](erledigt/nutrition-g-0272-add-braucht-ein-erfassungsmodal.md) | erledigt | — | — |
 | `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](todos/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | offen | — | C-349 |
+| `G-274` | feature | hoch | [der Bestaetigungsweg fuer Plan-Eintraege](laufend_claudecode/nutrition-g-0274-der-bestaetigungsweg-fuer-plan-eintraege.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 54
@@ -218,7 +221,7 @@
 | `C-326` | messung | hoch | [C-129 auf die verbleibende Luecke neu fassen](erledigt/supplements-c-0326-c-129-neu-fassen.md) | erledigt | — | — |
 | `C-329` | befund | mittel | [`input_coverage_status` ist eine Selbsteinschaetzung, keine Zusage](todos/supplements-c-0329-input-coverage-status-ist-keine-zusage.md) | offen | — | — |
 | `C-341` | entscheidung | mittel | [was passiert mit gemeldeten Community-Beitraegen?](todos/supplements-c-0341-was-passiert-mit-gemeldeten-community-beitraegen.md) | offen | — | — |
-| `C-351` | feature | hoch | [Supplements braucht eine Tagesbilanz](todos/supplements-c-0351-supplements-braucht-eine-tagesbilanz.md) | offen | — | — |
+| `C-351` | feature | hoch | [Supplements braucht eine Tagesbilanz](laufend_codex/supplements-c-0351-supplements-braucht-eine-tagesbilanz.md) | laeuft (codex) | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |

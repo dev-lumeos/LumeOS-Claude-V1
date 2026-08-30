@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: C-350
 entscheidung: E-35
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: [supplements.intake_logs, supplements.supplement_nutrients]
 zahlen:
@@ -51,3 +53,8 @@ erreichen 90 einen Naehrstoffcode, **alle denselben** (C-323).
 
 `[read]` **Eine Tagesbilanz ueber eine leere Kette ist eine Tabelle
 voller Nullen.** **Erst messen, was ueberhaupt ankommt.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-163 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.
