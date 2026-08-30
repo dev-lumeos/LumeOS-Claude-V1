@@ -66,6 +66,57 @@ C-239-Nachlauf (einspielen) und die Herkunftsspalte fuer G-269.**
 `[read]` **Dieser Auftrag traegt keine Zahlen vom Orchestrator.**
 **Nenn Nutzer und Zeitraum bei jeder Messung.**
 
+### 0 · Die Vorlage liegt im Repo
+
+`[cmd]` **`docs/BrainstormDocs/Nutrition/micronutrients_audited_config.json`**
+— drei Naehrstoffe als Muster, von Tom geprueft. **Die vollstaendigen
+27 kommen nach.**
+
+`[read]` **Bau die Struktur an diesen dreien.** Sie decken alle
+Faelle ab: einen Naehrstoff mit IE-Faktor und normalem UL (Vitamin
+D), einen mit Faktor und Formangabe in der Einheit (Vitamin A,
+`µg RAE`), und einen, dessen UL nur fuer Supplemente gilt
+(Magnesium).
+
+### Drei Dinge, die die Vorlage offenlaesst
+
+**1 · Die Sportlerwerte sind abgeleitet, nicht zitiert.**
+
+`[cmd]` `source` nennt *,,AG Sporternaehrung der DGE / ACSM"*, und
+`source_locator` sagt *,,Derivation: Oxidative-Stress-Pufferung (+30%
+auf Basiswert)"*.
+
+`[read]` **Die Quelle belegt das Prinzip, nicht die Zahl.** **1.100 µg
+fuer `athlete_medium` stehen dort nicht.**
+
+`[read]` **Also ein eigenes Feld, das den Wert als abgeleitet
+kennzeichnet** — nicht nur im Fliesstext. **Die Oberflaeche muss es
+zeigen koennen, damit niemand 1.300 µg fuer eine DGE-Empfehlung
+haelt.**
+
+**2 · `ul_locator` traegt die Quellengeltung als Fliesstext.**
+
+`[cmd]` *,,(gilt nur fuer Supplemente)"* bei Magnesium.
+
+`[cmd]` **Du hast die Quellengeltung in C-344 strukturell gebaut** —
+**dorthin gehoert sie, nicht in den Text.** `[read]` **Ein Freitext
+ist nicht abfragbar; genau das war der Befund.**
+
+`[cmd]` **Und die Vorlage belegt, warum:** alle sechs
+Magnesium-Zielwerte liegen ueber dem UL von 250 — **ohne die
+strukturelle Geltung saehe jeder Nutzer bei jedem Zielwert eine
+Ueberschreitung.**
+
+**3 · `upper_limit: 0` heisst *,,es gibt keine"*, nicht *,,null"*.**
+
+`[cmd]` **In der ersten Fassung der Liste trugen neun Naehrstoffe
+eine Null:** `vit_k`, `vit_b1`, `vit_b2`, `vit_b5`, `vit_b7`,
+`vit_b12`, `kalium`, `chlorid`, `chrom`.
+
+`[read]` **Beim Import muss daraus `NULL` werden.** **Eine Null als
+Obergrenze macht jeden Wert zur Ueberschreitung** — dieselbe
+Unterscheidung wie C-48 Regel 1 und `NO_STANDALONE_REFERENCE`.
+
 ### 1 · C-342 — die Faktortabelle
 
 **Tom, 2026-08-29:** *,,es gibt fuer jedes vitamin offizielle
@@ -136,6 +187,14 @@ Nicht committen, nicht stagen, nicht pushen.
     Herkunftsspalte               vorhanden, Werte belegt
     Autonomieregel                gemessen: existiert sie schon?
     bestehende Plaene             unveraendert - belegt
+    Naehrstoffe ohne BLS-Code     welche der 27 kennt der Katalog
+                                  nicht?
+
+`[read]` **Die letzte Zeile ist nicht nebensaechlich:** `[cmd]` **die
+Liste fuehrt Selen, BLS kennt es nicht** (C-211/C-333, gemessen
+2026-08-29). `[read]` **Ein Zielwert fuer einen Naehrstoff, den der
+Katalog nicht misst, kann nie erfuellt werden** — **das gehoert als
+Zustand angezeigt, nicht als Mangel.**
 
 ### Regeln
 

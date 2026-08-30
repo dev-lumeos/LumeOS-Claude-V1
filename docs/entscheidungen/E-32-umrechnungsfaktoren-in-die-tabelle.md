@@ -64,6 +64,37 @@ belegbaren Wert. `[read]` **Der Waechter bleibt richtig** — er greift
 dort, wo die Form fehlt. **Die Tabelle loest den Fall, in dem sie
 bekannt ist.**
 
+## Die Vorlage, 2026-08-29
+
+`[cmd]` **Tom hat eine gepruefte Fassung geliefert:**
+`docs/BrainstormDocs/Nutrition/micronutrients_audited_config.json` —
+drei Naehrstoffe als Muster, die vollstaendigen 27 folgen.
+
+`[cmd]` **Sie traegt Quelle, Version und Fundstelle je Zielwert** —
+genau was diese Entscheidung verlangt.
+
+`[cmd]` **Und die Form steht in der Einheit statt in einer eigenen
+Spalte:** `µg RAE`, nicht `µg Vitamin A`. `[read]` **Damit ist ein
+Faktor je Naehrstoff zulaessig** — die Einheit sagt, worauf er sich
+bezieht. **Sauberer waere eine eigene Spalte, aber die Aussage
+stimmt.**
+
+### Drei Dinge, die die Vorlage offenlaesst
+
+**Die Sportlerwerte sind abgeleitet, nicht zitiert.** `[cmd]` Die
+Quelle belegt das Prinzip, `source_locator` sagt *,,Derivation: +30%
+auf Basiswert"*. `[read]` **Die Zahl steht dort nicht** — sie braucht
+ein eigenes Feld, damit die Oberflaeche sie kennzeichnen kann.
+
+**`ul_locator` traegt die Quellengeltung als Fliesstext.** `[cmd]`
+*,,(gilt nur fuer Supplemente)"*. `[read]` **C-344 hat sie
+strukturell gebaut — dorthin gehoert sie.**
+
+**`upper_limit: 0` heisst *es gibt keine*.** `[cmd]` In der ersten
+Fassung trugen neun Naehrstoffe eine Null. `[read]` **Beim Import
+muss daraus `NULL` werden** — eine Null als Obergrenze macht jeden
+Wert zur Ueberschreitung.
+
 ## Was nicht passieren darf
 
 `[read]` **Kein Faktor ohne Beleg.** `[read]` **Wenn eine Form keine
