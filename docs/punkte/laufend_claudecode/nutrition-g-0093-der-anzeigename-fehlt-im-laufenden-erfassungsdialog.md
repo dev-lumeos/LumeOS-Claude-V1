@@ -50,3 +50,22 @@ zahlen:
 
 **Mitbeauftragt mit A-62 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Nachgemessen, 2026-08-30
+
+`[cmd]` **Den Befund gibt es noch — G-272 hat den Dialog nicht
+angefasst.** `mahlzeiten.tsx` wird weiter ueber `ansicht.tsx:49`
+ausgeliefert, die drei Stellen stehen unveraendert an **750, 766,
+535**.
+
+`[cmd]` **5.014 von 7.140 abweichend** — die Zahl im Kopf stimmt.
+
+`[cmd]` **Eine Praemisse ist gekippt:** der Befund sagt, der Rueckfall
+sei noetig, *,,weil nicht jeder Eintrag einen Anzeigenamen hat"*.
+**Heute haben 0 von 7.140 keinen.** Der Rueckfall bleibt als
+Absicherung richtig, seine Begruendung nicht — **A-62 im Punkttext
+selbst.**
+
+`[read]` **Behoben sind zwei der drei Stellen.** Zeile 535 behaelt
+`name_de` mit Absicht: der Wert geht ins **Suchfeld**, und
+`name_display_de` als Suchbegriff liefert 0 Treffer (G-265).

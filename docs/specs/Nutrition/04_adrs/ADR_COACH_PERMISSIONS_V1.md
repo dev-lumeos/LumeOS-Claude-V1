@@ -2,6 +2,19 @@
 
 **Datum:** April 2026 | **Status:** Final — V1 Entscheidung
 
+> **Teilweise abgeloest, Stand 2026-08-30.**
+>
+> **E-11** legt Permissions je Modul und zweiwertig fest, nicht je
+> Subfunktion. **E-29** verlangt fuer moduluebergreifende
+> Coach-Zugriffe eine Funktion statt eines direkten Lesezugriffs;
+> `coach.darf_nutrition_plan_aendern()` und `coach.offene_aktionen()`
+> sind der gebaute Weg.
+>
+> **Was hier weiter gilt:** der Abschnitt zu Suggestions. Dazu sagt
+> keine spaetere Entscheidung etwas.
+>
+> Gemessen in A-37 (Codex, 2026-08-30), vermerkt in C-357.
+
 ---
 
 ## Kontext

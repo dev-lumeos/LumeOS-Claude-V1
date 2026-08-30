@@ -2,6 +2,18 @@
 
 **Datum:** April 2026 | **Status:** Final — V1 Entscheidung
 
+> **Teilweise abgeloest, Stand 2026-08-30.**
+>
+> **E-16** und **E-30** behandeln generelle Ausschluesse bei einer
+> Suche mit Begriff als Rangfolge, nicht als harten Filter: wer
+> ausdruecklich sucht, bekommt Treffer — die ausgeschlossenen zuletzt.
+>
+> **Was hier weiter gilt:** Allergien bleiben harte Ausschluesse.
+> `is_exclusion_relevant` traegt `contains_gluten`,
+> `contains_lactose`, `contains_nuts`, `vegan`, `vegetarian`.
+>
+> Gemessen in A-37 (Codex, 2026-08-30), vermerkt in C-357.
+
 ---
 
 ## Kontext

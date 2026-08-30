@@ -2,6 +2,17 @@
 
 **Datum:** April 2026 | **Status:** Final — V1 Entscheidung
 
+> **Teilweise abgeloest, Stand 2026-08-30.**
+>
+> **E-20** verlangt zwei getrennte Zwecke mit je eigener Einwilligung
+> und einen Herkunftsfilter — nicht ein einzelnes `training_consent`
+> mit gemeinsamem Trainingspool.
+>
+> **Was hier weiter gilt:** alles, was den Umgang mit dem Bild selbst
+> betrifft, unabhaengig von der Einwilligungsstruktur.
+>
+> Gemessen in A-37 (Codex, 2026-08-30), vermerkt in C-357.
+
 ---
 
 ## Kontext

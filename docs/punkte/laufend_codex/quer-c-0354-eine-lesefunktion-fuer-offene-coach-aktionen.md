@@ -124,7 +124,58 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### 2026-08-30 - C-354 und C-355
+
+#### C-354 - Lesenaht im Coach-Schema gebaut
+
+`coach.offene_aktionen(p_modul text)` ist als `SECURITY DEFINER`-Funktion
+gebaut und in der Kette als Schritt 354 nach Schritt 150 registriert. Sie hat
+keinen `client_id`-Parameter: ausschliesslich `auth.uid()` bestimmt den
+Klienten. Sie liefert `id`, Modul, Aktionstyp, Vorschau, Payload, Status,
+Verfall und Erstellzeit fuer `status = 'pending'` und das angefragte Modul.
+`authenticated` darf sie ausfuehren, `anon` nicht.
+
+Als Rolle `authenticated` liefert `coach.offene_aktionen('nutrition')` fuer
+`dev` die erwarteten 2 Zeilen, fuer einen anderen Klienten 0. Die beiden
+dev-Zeilen tragen im statischen Seed bereits einen vergangenen `expires_at`,
+aber weiterhin `status = 'pending'`; die Funktion gibt beides unveraendert
+aus. Ein Verfall- oder Bestaetigungs-Schreibweg wurde nicht hinzugefuegt.
+
+#### C-355 - Herkunft in der Suchfunktion
+
+`nutrition.food_search` kennt nun zwei `p_filters`-Vertraege:
+
+    {"favorites": true}       nur als boost/liked materialisierte Foods
+    {"sources": ["custom"]}  nur eigene Foods des p_user_id
+
+Ohne `sources` bleibt der bisherige BLS-Pfad aktiv. `sources` kann `bls` und
+`custom` enthalten; Custom-Foods werden nur fuer den angefragten Nutzer aus
+`foods_custom` gelesen und tragen im Ergebnis `food_source = 'custom'`.
+Damit kann kein Aufrufer fremde eigene Foods durch eine fremde `p_user_id`
+lesen: die bestehende RLS der Tabelle bleibt wirksam.
+
+Die rote Vormessung lieferte fuer beide unbekannten Schluessel noch 4.970
+Treffer. Nach dem Bau liefert der Favoritenfilter fuer dev genau 1 Treffer.
+`foods_custom` hat weiterhin 0 Zeilen, deshalb liefert der Custom-Filter
+korrekt 0 Treffer. Das ist der erwartete Leerzustand, keine angelegte
+Testzeile.
+
+#### Gegenprobe und Sicherung
+
+Ein Nutzer ohne Vorlieben (`coach.seed@example.com`) erhielt bei der Suche
+`reis` dieselben 25 Food-IDs in derselben Reihenfolge vor und nach dem Bau.
+Auf einer aus der Vollsicherung wiederhergestellten, warmgemessenen
+Wegwerf-Datenbank lag der Median bei 282,332 ms; auf dev danach bei 292,987 ms
+(+10,655 ms). Die beiden Wegwerf-Datenbanken wurden nach der Prüfung entfernt.
+
+Vor dem Live-Einspielen entstanden und behalten wurden:
+
+    backup/vollsicherung/20260830_140937_c354_vor_live.dump
+    backup/vollsicherung/20260830_140937_c354_vor_live.sql
+
+Geprueft: Pipeline-SQL auf Wiederherstellung und live, die Klientenrechte,
+Favoriten- und Custom-Leerzustand, Reihenfolgengegenprobe, Ketteneintrag sowie
+`git diff --check`. Keine Testdaten und keine `apps/`-Datei wurden angefasst.
 
 ## Abnahme
 

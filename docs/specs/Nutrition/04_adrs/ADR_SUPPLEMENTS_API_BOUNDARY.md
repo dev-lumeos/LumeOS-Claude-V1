@@ -2,6 +2,18 @@
 
 **Datum:** April 2026 | **Status:** Final — V1 Entscheidung
 
+> **Teilweise abgeloest, Stand 2026-08-30.**
+>
+> **E-35** verlangt je Modul eine eigene Tagesbilanz und die Summe
+> erst oberhalb der Module: `nutrition.daily_summary` rechnet Nahrung,
+> `supplements.daily_intake_summary` rechnet Praeparate, summiert wird
+> im Dashboard.
+>
+> **Was hier weiter gilt:** die Grenzziehung selbst — dass die Module
+> getrennt bleiben. Nur die Summenbildung ist neu geregelt.
+>
+> Gemessen in A-37 (Codex, 2026-08-30), vermerkt in C-357.
+
 ---
 
 ## Kontext

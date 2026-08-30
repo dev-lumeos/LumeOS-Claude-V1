@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 245 |
+| `todos` | 244 |
 | `laufend_codex` | 5 |
 | `laufend_claudecode` | 5 |
-| `erledigt` | 106 |
+| `erledigt` | 107 |
 | **gesamt** | **361** |
 
 ## medical — 41
@@ -401,7 +401,7 @@
 | `C-297` | messung | mittel | [drei Wege, an dem Datenlogik-Waechter vorbei](todos/quer-c-0297-drei-wege-an-dem-datenlogik-waechter-vorbei.md) | offen | — | — |
 | `C-298` | feature | mittel | [der Datenlogik-Waechter meldet zwei harmlose Muster rot](todos/quer-c-0298-der-datenlogik-waechter-meldet-zwei-harmlose-muster-rot.md) | offen | — | — |
 | `C-354` | feature | hoch | [eine Lesefunktion fuer offene Coach-Aktionen](laufend_codex/quer-c-0354-eine-lesefunktion-fuer-offene-coach-aktionen.md) | laeuft (codex) | — | — |
-| `C-357` | entscheidung | mittel | [vier ADRs widersprechen neueren Entscheidungen](todos/quer-c-0357-vier-adrs-widersprechen-neueren-entscheidungen.md) | offen | — | — |
+| `C-357` | befund | mittel | [vier ADRs widersprechen neueren Entscheidungen](erledigt/quer-c-0357-vier-adrs-widersprechen-neueren-entscheidungen.md) | erledigt | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

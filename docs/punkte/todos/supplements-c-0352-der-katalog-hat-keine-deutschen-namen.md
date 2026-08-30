@@ -58,3 +58,45 @@ Produkten.
 
 `[read]` **Also keine Uebersetzungsaufgabe, sondern eine Frage nach
 der Quelle** — **und die gehoert Tom vorgelegt, nicht geraten.**
+
+## Praezisiert, 2026-08-30
+
+**Tom hat den Zuschnitt bestaetigt:** *,,fuer welche der 412 lohnt
+sich ein deutscher Name? Und die Antwort waere eine kurze Liste,
+keine Katalogarbeit."*
+
+### Drei Faelle, gemessen an echten Namen
+
+    Glucosamine              -> Glucosamin        Nomenklatur
+    L-Citrulline             -> L-Citrullin       nur die Endung
+    Insulin Glargine         -> Insulin glargin   INN, amtlich
+    Testosterone Isocaproate -> Testosteronisocaproat
+
+    Gotu Kola                -> Indischer Wassernabel?
+    Cistanche                -> bleibt
+
+    GHRP-6, AOD-9604, BAM15  -> bleiben           Codes
+    Andarine (S4)            -> bleibt            Forschungscode
+    1-Andro (1-DHEA)         -> bleibt            Szenename
+
+`[read]` **Der erste Fall ist keine Uebersetzung, sondern
+Nomenklatur** — `-ine` wird `-in`, `-ate` wird `-at`, und fuer
+Wirkstoffe gibt es den INN mit amtlicher deutscher Schreibweise.
+
+`[read]` **Der zweite ist eine Entscheidung, und meist gegen den
+deutschen Namen:** *Gotu Kola* heisst *Indischer Wassernabel*,
+**aber niemand sucht danach.** `[cmd]` **Die Suche findet heute ueber
+`name_en`** — ein deutscher Name, den keiner eintippt, macht sie
+schlechter.
+
+`[read]` **Der dritte hat nichts zu uebersetzen.**
+
+### Was daraus folgt
+
+`[cmd]` **Ein leeres `name_de` mit Rueckfall auf `name_en` ist der
+gebaute Weg** — gemessen in G-253.
+
+`[read]` **Also nicht *,,412 Namen beschaffen"*, sondern messen, wie
+viele in den ersten Fall fallen.** `[read]` **Das sind die, bei denen
+ein deutscher Name eine Regel ist und keine Meinung** — und nur die
+gehoeren gefuellt.

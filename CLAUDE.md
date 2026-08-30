@@ -364,6 +364,30 @@ zum naechsten Gespraech.**
 `[read]` **Fehlt eines davon, ist der Zyklus nicht fertig** — auch
 wenn niemand nachfragt.
 
+### Was keine Frage an Tom ist
+
+**Tom, 2026-08-30:** *,,entscheidungen sind gefallen was soll denn
+nun noch dazu sagen? umsetzen und ablegen oder was? ich sehe den
+punkt nicht was du von mir willst?"*
+
+`[cmd]` **Anlass: C-357.** Vier ADRs widersprachen neueren
+E-Entscheidungen. `[read]` **Die Sachfragen waren entschieden** —
+E-11, E-16, E-20, E-29, E-30, E-35. **Was fehlte, war ein Vermerk in
+`docs/`, und `docs/` gehoert dem Orchestrator.**
+
+`[read]` **Eine Aufraeumarbeit als Entscheidung vorzulegen kostet Tom
+Zeit und bringt nichts.**
+
+**Vor jeder Vorlage: ist die Sachfrage offen, oder nur ihre
+Ausfuehrung?**
+
+    Sachfrage offen      vorlegen
+    nur Ausfuehrung      machen
+    Ausfuehrung in docs/ immer machen
+
+`[read]` **Und die Gegenprobe:** koennte ich die Frage selbst
+beantworten, ohne etwas zu erfinden? **Dann ist es keine Frage.**
+
 ### Was den Zyklus unterbricht
 
 `[read]` **Nur eines: wenn ein Bericht eine Entscheidung braucht, die
