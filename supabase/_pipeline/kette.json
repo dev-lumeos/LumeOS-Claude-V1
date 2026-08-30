@@ -1278,6 +1278,17 @@
         "327",
         "145"
       ]
+    },
+    {
+      "id": "342",
+      "path": "supabase/_pipeline/05_user_tabellen/342_nutrition_reference_plan_metadata.sql",
+      "kind": "sql",
+      "creates": "C-342: formgebundene Nährstoff-Umrechnungen, Referenzgeltung und Planherkunft",
+      "depends_on": [
+        "016",
+        "058b",
+        "150"
+      ]
     }
   ]
 }

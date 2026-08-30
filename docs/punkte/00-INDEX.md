@@ -5,11 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 264 |
-| `laufend_codex` | 1 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 80 |
-| **gesamt** | **348** |
+| `todos` | 267 |
+| `erledigt` | 83 |
+| **gesamt** | **350** |
 
 ## medical — 41
 
@@ -57,7 +55,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 115
+## nutrition — 117
+
+### beauftragbar — 116
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -103,13 +103,15 @@
 | `C-335` | befund | mittel | [keine Aenderungshistorie fuer Mahlzeiten und Referenzwerte](todos/nutrition-c-0335-keine-aenderungshistorie-fuer-mahlzeiten.md) | offen | — | — |
 | `C-336` | befund | hoch | [FD traegt den Text eines anderen Naehrstoffs](erledigt/nutrition-c-0336-fd-traegt-den-text-eines-anderen-naehrstoffs.md) | erledigt | — | C-346 |
 | `C-338` | befund | mittel | [sechs Sortierwerte fehlen live](erledigt/nutrition-c-0338-sechs-sortierwerte-fehlen-live.md) | erledigt | — | — |
-| `C-342` | entscheidung | hoch | [Vitamin A in IE gegen Mikrogramm](laufend_codex/nutrition-c-0342-vitamin-a-in-ie-gegen-mikrogramm.md) | laeuft (codex) | — | — |
+| `C-342` | entscheidung | hoch | [Vitamin A in IE gegen Mikrogramm](erledigt/nutrition-c-0342-vitamin-a-in-ie-gegen-mikrogramm.md) | erledigt | — | C-350 |
 | `C-343` | befund | hoch | [zwei Schreibweisen fuer *,,kein Vitamin C"*](erledigt/nutrition-c-0343-vitamin-c-fehlt-an-180-von-181-tagen.md) | erledigt | — | C-345 |
 | `C-344` | befund | hoch | [drei Obergrenzen gelten nicht fuer Nahrung](erledigt/nutrition-c-0344-drei-obergrenzen-gelten-nicht-fuer-nahrung.md) | erledigt | — | — |
 | `C-345` | befund | niedrig | [Spurenwerte im Lebensmittelimport](todos/nutrition-c-0345-spurenwerte-im-lebensmittelimport.md) | offen | — | — |
 | `C-346` | befund | hoch | [zwei Detailtexte neu verknuepfen](erledigt/nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md) | erledigt | — | — |
 | `C-347` | entscheidung | hoch | [generelle Ausschluesse in \`food_search\`](erledigt/nutrition-c-0347-generelle-ausschluesse-in-food-search.md) | erledigt | — | — |
 | `C-348` | feature | mittel | [eine zaehlende Funktion fuer die Flags](erledigt/nutrition-c-0348-eine-zaehlende-funktion-fuer-die-flags.md) | erledigt | — | G-273 |
+| `C-349` | befund | hoch | [die Flag-Funktion einspielen](todos/nutrition-c-0349-die-flag-funktion-einspielen.md) | offen | — | — |
+| `C-350` | entscheidung | hoch | [zwei Obergrenzen fuer Magnesium](todos/nutrition-c-0350-zwei-obergrenzen-fuer-magnesium.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -167,15 +169,20 @@
 | `G-263` | befund | mittel | [Smart suggestions ist Attrappe](todos/nutrition-g-0263-smart-suggestions-ist-attrappe.md) | offen | — | — |
 | `G-264` | befund | niedrig | [Micronutrient trend steht noch als Attrappe](todos/nutrition-g-0264-micronutrient-trend-steht-noch-als-attrappe.md) | offen | — | — |
 | `G-265` | befund | hoch | [Add im Food DB oeffnet das falsche Modal](erledigt/nutrition-g-0265-add-im-food-db-oeffnet-das-falsche-modal.md) | erledigt | — | G-272 |
-| `G-266` | entscheidung | mittel | [Detailsuche mit Naehrwerten oeffnet eine eigene Seite](laufend_claudecode/nutrition-g-0266-detailsuche-mit-naehrwerten-oeffnet-eine-eigene-seite.md) | laeuft (claudecode) | — | — |
+| `G-266` | entscheidung | mittel | [Detailsuche mit Naehrwerten oeffnet eine eigene Seite](erledigt/nutrition-g-0266-detailsuche-mit-naehrwerten-oeffnet-eine-eigene-seite.md) | erledigt | — | — |
 | `G-267` | befund | hoch | [*New plan* tut nichts](todos/nutrition-g-0267-new-plan-tut-nichts.md) | offen | — | G-268, G-269 |
 | `G-268` | feature | hoch | [Plaene bearbeiten fehlt](todos/nutrition-g-0268-plaene-bearbeiten-fehlt.md) | offen | — | — |
 | `G-269` | feature | mittel | [Plaene von Coach und Marketplace](todos/nutrition-g-0269-plaene-von-coach-und-marketplace.md) | offen | — | — |
 | `G-270` | befund | mittel | [Drei Attrappen im Meal-plans-Reiter](todos/nutrition-g-0270-drei-attrappen-im-meal-plans-reiter.md) | offen | — | — |
 | `G-271` | messung | hoch | [Meal plans und Planner gegen die Quellen halten](erledigt/nutrition-g-0271-meal-plans-und-planner-gegen-die-quellen-halten.md) | erledigt | — | — |
-| `G-272` | feature | hoch | [`+ Add` braucht ein Erfassungsmodal](laufend_claudecode/nutrition-g-0272-add-braucht-ein-erfassungsmodal.md) | laeuft (claudecode) | — | — |
-| `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](laufend_claudecode/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | laeuft (claudecode) | — | — |
+| `G-272` | feature | hoch | [`+ Add` braucht ein Erfassungsmodal](erledigt/nutrition-g-0272-add-braucht-ein-erfassungsmodal.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](todos/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | offen | C-349 | C-349 |
 
 ## supplements — 53
 

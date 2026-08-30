@@ -167,6 +167,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 059a | `_ableitung/030_mikro-uebersicht.ts` | Kuratierte Mikro-Overview-Auswahl, `micronutrient_snapshot()` und `micronutrient_below_threshold()` | 8 Auswahlzeilen, 2 Funktionen |
 | 017 | `00_querschnitt/017_datenherkunft.sql` | A-17 Herkunftsspalten fuer User-Messdaten vor Geraeteanbindungen | 7 Tabellen ergaenzt, Bestandsdaten `manual` |
 | 058b | `05_user_tabellen/058b_recipes_meal_plans.sql` | Rezepte, Rezeptzutaten, Wochenplaene, Lebenszyklus und Ausfuehrungslog; Naehrwerte bleiben aus Zutaten berechnet und werden erst in `meal_items` eingefroren | 7 Tabellen, 11 Funktionen, RLS je Operation |
+| 342 | `05_user_tabellen/342_nutrition_reference_plan_metadata.sql` | C-342: formgebundene Umrechnungen, Referenzgeltung und Planherkunft | 1 Faktor-Tabelle, 3 Referenz-Metadatenfelder, 1 Coach-Funktion, RLS |
 | 150 | `15_coach/150_coach_permissions_autonomy.sql` | Coach-Rechtemodell: `client_permissions`, `client_autonomy`, Widerrufshistorie, Pending Actions und Action Log | 6 Tabellen, 19 Policies, RLS je Operation |
 | 151 | `15_coach/151_coach_relationships.sql` | Coach-Beziehung mit Anbahnung, Annahme, Ende und Historie: `relationships`, `relationship_change_log` | 2 Tabellen, 5 Policies, kein DELETE |
 | 152 | `15_coach/152_coach_lesepfad.sql` | Coach-Lesepfad: `coach.hat_sicht()` als eine Sichtregel, full-Policies auf den Nutzerdaten der sechs Module, summary-Funktionen je Modul | 22 `coach_read`-Policies, 7 Funktionen |

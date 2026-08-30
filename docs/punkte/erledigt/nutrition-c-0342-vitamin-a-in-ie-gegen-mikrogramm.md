@@ -9,8 +9,10 @@ kind_von: C-324
 entscheidung: E-32
 agent: codex
 beauftragt: 2026-08-29
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: [nutrition.nutrient_defs, nutrition.nutrient_reference_values]
+  tabellen: [nutrition.nutrient_reference_values, nutrition.meal_plans]
 zahlen:
   gemessen: 2026-08-29
   einheit_bestand: ug_RE
@@ -210,4 +212,66 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-30, Orchestrator. Nachgemessen.**
+
+`[cmd]` **Live:** `nutrition.nutrient_unit_conversion_factors`
+existiert, `is_derived` und `derivation_note` stehen in
+`nutrient_reference_values`.
+
+`[cmd]` **C-239 mit eingespielt:** `meal_plan_logs`, `plan_origin`,
+und `coach.darf_nutrition_plan_aendern()`.
+
+`[cmd]` **Vollsicherung vor dem Eingriff**, mit Pruefsumme.
+
+### Der wertvollste Teil ist, was er nicht getan hat
+
+`[read]` **Vitamin A wird nicht konvertiert, obwohl fuenf Formen
+hinterlegt sind.** `[cmd]` **Der BLS-Katalog liefert nur µg RE ohne
+Formangabe** — **also bleibt die Umrechnung gesperrt, statt einen
+falschen Faktor anzuwenden.**
+
+`[read]` **Das ist C-149 zu Ende gedacht:** die Tabelle loest den
+Fall, in dem die Form bekannt ist. **Hier ist sie es nicht, und der
+Waechter greift.**
+
+### Ein Zahlenkonflikt, nicht aufgeloest
+
+`[cmd]` **Live steht der Magnesium-UL bei 350 mg (NAM), die Vorlage
+nennt 250 mg (EFSA).**
+
+`[read]` **Zwei Institutionen, zwei Werte, beide belegt.** **Er hat
+den Bestand nicht ueberschrieben und es gemeldet** — **als C-350 an
+Tom.**
+
+### Die Falle ist verriegelt, bevor die 27 kommen
+
+`[cmd]` **`UL = 0` wird von einer Datenbankregel abgewiesen.** `[read]`
+**Ein kuenftiger Importer muss `0` zu `NULL` normalisieren** — die
+Regel erzwingt es, statt darauf zu hoffen.
+
+### Die Quellengeltung ist maschinenlesbar
+
+`[cmd]` **`MG`, `NIA` und `FOLAC` gelten nur fuer die jeweiligen
+Supplement- und Anreicherungsquellen** — nicht mehr als Freitext.
+**Das war der Befund aus C-344.**
+
+### Was offen bleibt
+
+`[cmd]` **Von den drei Mustern sind `VITA`, `VITD` und `MG` im
+Katalog, `SE` fehlt.** `[cmd]` **Die versprochenen 27 liegen noch
+nicht vor** — **deshalb keine vollstaendige Fehlliste.**
+
+`[read]` **Und Selen muss spaeter als *nicht messbar im Katalog*
+erscheinen, nicht als Mangel** — das hat er richtig festgehalten.
+
+`[cmd]` **Die zwei Bestandsplaene bleiben `active`, Lebenszyklus und
+`plan_origin` sind `NULL`** — **weil sie nicht belegbar sind.**
+`[read]` **Nicht geraten.**
+
+`[cmd]` **`coach.darf_nutrition_plan_aendern()` erlaubt direkte
+Aenderungen nur bei voller Sicht, `nutrition_auto_apply` und Stufe
+5.** `[cmd]` **`dev` steht auf Stufe 3 und bekommt keine Freigabe** —
+E-29 ist damit gebaut, nicht behauptet.
+
+**Abgenommen.**
+

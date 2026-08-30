@@ -4,11 +4,9 @@ typ: feature
 modul: nutrition
 schwere: mittel
 angelegt: 2026-08-29
-braucht: []
+braucht: [C-349]
 kind_von: C-348
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-08-29
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
 zahlen:
@@ -47,3 +45,23 @@ Zahlen waere keine Verbesserung.**
 
 **Mitbeauftragt mit G-272 am 2026-08-29.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Blockiert, 2026-08-30
+
+`[cmd]` **`nutrition.reference_assessment_window_flags` existiert
+nicht in der laufenden Datenbank.** Sie liegt in
+`supabase/_pipeline/05_user_tabellen/059d_…sql`, **78 Zeilen, nie
+eingespielt.**
+
+`[read]` **Das ist der C-195-Fall aus `CLAUDE.md`: die Kette ist
+gruen, die Aenderung steht nicht dort, wo man sie sieht.**
+
+`[read]` **Nicht angebunden, weil ein Aufruf auf eine nicht
+existierende Funktion die Seite bricht** — und `supabase/` war
+gesperrt. **Richtig entschieden.**
+
+`[cmd]` **Die Funktion passt:** dieselben Regeln wie `flagVon` — 80
+Prozent, mindestens vier Tage, 0,5 Anteil. `[cmd]` **Der Reiter steht
+bei 6.898 ms.**
+
+**Wartet auf C-349.**

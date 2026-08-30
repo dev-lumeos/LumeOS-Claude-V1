@@ -36,6 +36,7 @@ import type {
 // G-67: der Daumen in der Trefferliste.
 import { DaumenKnoepfe, type Daumen } from './daumen'
 import { daumenLesen } from './daumen-aktion'
+import { ErfassenModal } from './erfassen-modal'
 
 /**
  * Die Pillen des Entwurfs, auf die Kategoriewurzeln abgebildet.
@@ -305,9 +306,23 @@ function makro(text: string): string {
 
 export function NutritionFoodsTab({
   start,
+  datum,
   unvertraeglichkeiten = [],
 }: {
   start: NutritionFoodSearchPayload | null
+  /**
+   * G-272: der Tag, in den `+ Add` schreibt.
+   *
+   * `[read]` **Der Reiter kannte bis heute kein Datum** — er suchte
+   * nur. Zum Schreiben braucht er einen Tag, und der steht in der
+   * Seitenadresse; ihn hier zu erfinden (etwa „heute") waere eine
+   * zweite Wahrheit neben dem Datumswaehler im Kopf.
+   *
+   * `[read]` **`null` ist erlaubt und heisst: kein Tag bekannt.**
+   * Dann bleibt `+ Add` sichtbar, aber stumm — besser als in einen
+   * geratenen Tag zu schreiben.
+   */
+  datum: string | null
   /**
    * G-154: die gesetzten Unvertraeglichkeiten (`strong`).
    *
@@ -318,12 +333,23 @@ export function NutritionFoodsTab({
    */
   unvertraeglichkeiten?: string[]
 }) {
-  const [suche, setSuche] = React.useState('')
+  // G-266 / E-33: der Suchbegriff kann aus der Adresse kommen — wer
+  // von der Detailsuche zurueckkehrt, findet sein Wort wieder.
+  // `[read]` **Als Anfangswert, nicht als Effekt:** so steht er schon
+  // beim ersten Bild da und flackert nicht nach.
+  const [suche, setSuche] = React.useState(() => {
+    if (typeof window === 'undefined') return ''
+    return new URLSearchParams(window.location.search).get('q') ?? ''
+  })
   const [kategorie, setKategorie] = React.useState<string | null>(null)
   const [payload, setPayload] = React.useState<NutritionFoodSearchPayload | null>(start)
   const [laeuft, setLaeuft] = React.useState(false)
   const [fehler, setFehler] = React.useState<string | null>(null)
   const [dauerMs, setDauerMs] = React.useState<number | null>(null)
+  // G-272: das Lebensmittel, das gerade erfasst wird — `null` heisst
+  // geschlossen.
+  const [erfassen, setErfassen] = React.useState<
+    { id: string; name: string; kcal: number | null } | null>(null)
 
   // G-73: Filterleiste, Blaettern und Sortierung.
   const [filterOffen, setFilterOffen] = React.useState(false)
@@ -399,7 +425,12 @@ export function NutritionFoodsTab({
     })
   }, [])
 
-  const ersterLauf = React.useRef(true)
+  // G-266: der erste Lauf wird uebersprungen, weil `start` die
+  // Anfangstreffer schon mitbringt. `[read]` **Kam der Begriff aber
+  // aus der Adresse, passt `start` nicht dazu** — dann muss die Suche
+  // gleich laufen, sonst steht das Wort im Feld und die Liste zeigt
+  // etwas anderes.
+  const ersterLauf = React.useRef(suche.trim().length === 0)
   const laufend = React.useRef<AbortController | null>(null)
 
   React.useEffect(() => {
@@ -857,22 +888,40 @@ export function NutritionFoodsTab({
                           `[cmd]` **Der Name geht jetzt als `q` mit**,
                           damit die Suche etwas zu suchen hat; die
                           Kennung waehlt den Treffer aus.
-                          `[read]` **Was der Knopf sein sollte** — ein
-                          Erfassungsmodal, das ins Tagebuch schreibt —
-                          **ist gemeldet, nicht gebaut:** der Weg vom
-                          Lebensmittel in `diary_entries` existiert an
-                          dieser Stelle nicht. */}
-                      {/* `[cmd]` **`name_de`, nicht `name_display_de`:**
-                          der Anzeigename traegt Klammerzusaetze
-                          („Weisser Reis (roh)"), die die Volltextsuche
-                          nicht findet — gemessen: 0 Treffer. Der
-                          Katalogname („Reis poliert, roh") trifft. */}
-                      <Link href={`/v2/nutrition/suche?food=${f.id}`
-                        + `&q=${encodeURIComponent(f.name_de)}` as Route}
-                            className="v2-btn"
-                            style={{ height: 22, fontSize: 11, padding: '0 8px' }}>
-                        <Icon name="plus" className="v2-ic v2-ic-sm" />Add
-                      </Link>
+                          `[cmd]` **G-272: der Knopf schreibt jetzt.**
+                          Er oeffnet das Erfassungsmodal, das ueber
+                          `/api/nutrition/diary` in `meals` und
+                          `meal_items` schreibt — **derselbe Weg, den
+                          das Tagebuch seit C-51 benutzt.** Der Verweis
+                          auf die Detailsuche steht daneben als Lupe:
+                          *Add* fuegt hinzu, die Lupe zeigt Naehrwerte.
+                          */}
+                      <div style={{ display: 'flex', gap: 4, justifyContent: 'flex-end' }}>
+                        {/* `[cmd]` **`name_de`, nicht `name_display_de`:**
+                            der Anzeigename traegt Klammerzusaetze
+                            („Weisser Reis (roh)"), die die Volltextsuche
+                            nicht findet — gemessen: 0 Treffer. */}
+                        <Link href={`/v2/nutrition/suche?food=${f.id}`
+                          + `&q=${encodeURIComponent(f.name_de)}` as Route}
+                              className="v2-btn v2-btn-ghost"
+                              title="Nährwerte ansehen"
+                              aria-label={`Nährwerte von ${f.name_display_de || f.name_de}`}
+                              style={{ height: 22, fontSize: 11, padding: '0 7px' }}>
+                          <Icon name="search" className="v2-ic v2-ic-sm" />
+                        </Link>
+                        <button
+                          type="button"
+                          className="v2-btn"
+                          style={{ height: 22, fontSize: 11, padding: '0 8px' }}
+                          onClick={() => setErfassen({
+                            id: f.id,
+                            name: f.name_display_de || f.name_de,
+                            kcal: Number(f.enercc) || null,
+                          })}
+                        >
+                          <Icon name="plus" className="v2-ic v2-ic-sm" />Add
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 )
@@ -925,6 +974,17 @@ export function NutritionFoodsTab({
           </div>
         )}
       </Card>
+
+      {/* G-272: das Erfassungsmodal. `[read]` Es steht hier und nicht
+          je Zeile — ein Modal je Treffer waere 50 Modale im Baum. */}
+      {erfassen && datum && (
+        <ErfassenModal
+          food={erfassen}
+          datum={datum}
+          onClose={() => setErfassen(null)}
+          onFertig={() => undefined}
+        />
+      )}
     </div>
   )
 }

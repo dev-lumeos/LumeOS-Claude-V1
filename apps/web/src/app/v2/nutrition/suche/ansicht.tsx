@@ -13,6 +13,8 @@
 // `/api/nutrition/foods` — also beim ersten Aufruf von hier. An der
 // Middleware war nichts zu aendern.
 import * as React from 'react'
+import Link from 'next/link'
+import type { Route } from 'next'
 import {
   Card, Pill, Icon, Row, Tabs, ModuleHero,
 } from '@lumeos/ui'
@@ -148,6 +150,34 @@ export function SucheAnsicht() {
 
   return (
     <>
+      {/*
+        G-266 / E-33, Weg C: die eigene Seite bleibt, der Zustand
+        wandert mit — **in beide Richtungen.**
+
+        `[cmd]` **Der Hinweg steht seit G-265** (`?food=` und `?q=`
+        werden beim Start gelesen). `[read]` **Der Rueckweg fehlte
+        ganz** — es gab keinen Verweis zurueck, nur den Zurueck-Knopf
+        des Browsers. **Wer ueber `+ Add` hierherkam, verlor beim
+        Zurueckgehen seine Trefferliste**, und genau das war Toms
+        Einwand gegen die eigene Seite.
+
+        `[read]` **Der Verweis nimmt den Suchbegriff mit**, damit der
+        Reiter ihn wiederfindet — nicht die Kennung: dort ist kein
+        einzelnes Lebensmittel ausgewaehlt, sondern eine Liste.
+      */}
+      <div style={{ marginBottom: 10 }}>
+        <Link
+          href={(eingabe.trim()
+            ? `/v2/nutrition?tab=foods&q=${encodeURIComponent(eingabe.trim())}`
+            : '/v2/nutrition?tab=foods') as Route}
+          className="v2-btn v2-btn-ghost"
+          style={{ height: 26, fontSize: 11.5, padding: '0 10px' }}
+        >
+          <Icon name="chevron_left" className="v2-ic v2-ic-sm" />
+          Zurück zur Food DB
+        </Link>
+      </div>
+
       <ModuleHero
         icon="search"
         title="Lebensmittelsuche"

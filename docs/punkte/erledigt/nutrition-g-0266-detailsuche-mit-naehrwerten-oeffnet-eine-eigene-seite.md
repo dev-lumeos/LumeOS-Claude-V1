@@ -9,8 +9,11 @@ kind_von: null
 entscheidung: E-33
 agent: claudecode
 beauftragt: 2026-08-29
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
+  dateien:
+    - apps/web/src/app/v2/nutrition/tab-foods.tsx
 zahlen: null
 ---
 # G-266 — Detailsuche mit Naehrwerten oeffnet eine eigene Seite
@@ -57,3 +60,13 @@ und der Bericht stehen dort.
 
 **Mitbeauftragt mit G-272 am 2026-08-29.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-08-30, mit G-272 abgenommen.**
+
+`[cmd]` **Weg C gebaut, beide Richtungen belegt.** `[read]` **Es
+brauchte zwei Aenderungen, nicht eine:** der Reiter liest `?q=` als
+Anfangswert, **und der erste Suchlauf darf nicht uebersprungen
+werden** — sonst steht das Wort im Feld und die Liste zeigt etwas
+anderes.

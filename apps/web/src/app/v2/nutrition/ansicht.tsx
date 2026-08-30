@@ -701,6 +701,15 @@ function AndererTab({
     return (
       <NutritionFoodsTab
         start={foodsStart ?? null}
+        // G-272: `+ Add` schreibt in DIESEN Tag — denselben, den der
+        // Datumswaehler im Kopf zeigt.
+        //
+        // `[read]` **`datum` ist hier optional typisiert**, obwohl der
+        // einzige Aufrufer es immer mitgibt. **Ein Ersatzwert („heute")
+        // waere eine zweite Wahrheit neben dem Datumswaehler** —
+        // deshalb bleibt der Knopf ohne Datum stumm, statt in einen
+        // geratenen Tag zu schreiben.
+        datum={datum ?? null}
         unvertraeglichkeiten={unvertraeglichkeiten}
       />
     )
