@@ -292,6 +292,32 @@ SPEC"*, *,,READ-ONLY MOCK"*.
 `[read]` **`/v2/` ist der Arbeitsort. Der alte Baum bleibt
 unberuehrt.**
 
+## Ein Bericht wird abgearbeitet, bevor der naechste Auftrag geht
+
+**Tom, 2026-08-30:** *,,abarbeiten, ergaenzen, in erledigt ablegen"*.
+
+`[read]` **Kommt ein Bericht, wird der Punkt geschlossen — sofort,
+nicht nach dem naechsten Auftrag.**
+
+    1  nachmessen, was der Bericht behauptet
+    2  Abnahme in die Punktdatei schreiben
+    3  Datei nach erledigt/ verschieben
+    4  neue Befunde als Punkte anlegen
+    5  committen, Commit-Hash nachtragen
+
+**Erst danach der naechste Auftrag.**
+
+### Warum
+
+`[cmd]` **Am 30.08. lagen die Berichte zu C-163 und C-351 vor, und
+der Orchestrator schrieb zuerst zwei neue Auftraege.** `[read]` **Tom
+sah `laufend_codex/` mit sechs Dateien, von denen zwei laengst fertig
+waren** — **derselbe Zustand, den die alte `LAUFEND.md` am 23.08.
+erzeugt hat und der sie das Leben gekostet hat.**
+
+`[read]` **Der Ordner ist die Wahrheit ueber den Zustand.** **Wer ihn
+nicht raeumt, macht ihn zur Luege.**
+
 ## Der Auftrag beschreibt den Job, der Agent misst
 
 **Tom, 2026-08-28:** *,,beschreib den job und lass die agents

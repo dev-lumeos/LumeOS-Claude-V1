@@ -321,3 +321,22 @@ gesehen hat.**
 `[read]` **Und beim Vorlegen wird zitiert, nicht referiert.** Die
 Datei ist die Wahrheit — **nicht die Zusammenfassung im Kontext des
 Orchestrators.**
+
+## Der Ordner ist die Wahrheit ueber den Zustand
+
+**Ergaenzt 2026-08-30.**
+
+`[read]` **Eine Datei in `laufend_*` heisst: der Agent arbeitet
+daran.** **Liegt dort etwas, das fertig gemeldet ist, luegt der
+Ordner.**
+
+**Tom, 2026-08-30:** *,,abarbeiten, ergaenzen, in erledigt ablegen"*.
+
+`[cmd]` **Kommt ein Bericht, wird der Punkt geschlossen — vor dem
+naechsten Auftrag.** `[cmd]` **Am 30.08. lagen zwei fertige Punkte in
+`laufend_codex/`, waehrend der Orchestrator neue Auftraege schrieb.**
+
+`[read]` **Das ist derselbe Zustand, den `LAUFEND.md` am 23.08.
+erzeugt hat** — drei erledigte Punkte als laufend gefuehrt.
+**Die Tabelle wurde deshalb abgeschafft. Der Ordner darf nicht
+denselben Weg gehen.**
