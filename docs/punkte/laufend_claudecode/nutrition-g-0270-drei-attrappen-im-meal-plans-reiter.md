@@ -7,6 +7,8 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: null
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-08-30
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/ansicht.tsx]
 zahlen: null
@@ -45,3 +47,8 @@ und der Bericht stehen dort.
 
 **Aus G-271 gemessen:** fuenf Attrappen statt drei; die zwei weiteren unter *Shopping list*.
 **Die Messung steht dort.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-267 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

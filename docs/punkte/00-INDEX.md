@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 265 |
+| `todos` | 261 |
 | `laufend_codex` | 2 |
+| `laufend_claudecode` | 4 |
 | `erledigt` | 83 |
 | **gesamt** | **350** |
 
@@ -171,10 +172,10 @@
 | `G-264` | befund | niedrig | [Micronutrient trend steht noch als Attrappe](todos/nutrition-g-0264-micronutrient-trend-steht-noch-als-attrappe.md) | offen | — | — |
 | `G-265` | befund | hoch | [Add im Food DB oeffnet das falsche Modal](erledigt/nutrition-g-0265-add-im-food-db-oeffnet-das-falsche-modal.md) | erledigt | — | G-272 |
 | `G-266` | entscheidung | mittel | [Detailsuche mit Naehrwerten oeffnet eine eigene Seite](erledigt/nutrition-g-0266-detailsuche-mit-naehrwerten-oeffnet-eine-eigene-seite.md) | erledigt | — | — |
-| `G-267` | befund | hoch | [*New plan* tut nichts](todos/nutrition-g-0267-new-plan-tut-nichts.md) | offen | — | G-268, G-269 |
-| `G-268` | feature | hoch | [Plaene bearbeiten fehlt](todos/nutrition-g-0268-plaene-bearbeiten-fehlt.md) | offen | — | — |
-| `G-269` | feature | mittel | [Plaene von Coach und Marketplace](todos/nutrition-g-0269-plaene-von-coach-und-marketplace.md) | offen | — | — |
-| `G-270` | befund | mittel | [Drei Attrappen im Meal-plans-Reiter](todos/nutrition-g-0270-drei-attrappen-im-meal-plans-reiter.md) | offen | — | — |
+| `G-267` | befund | hoch | [*New plan* tut nichts](laufend_claudecode/nutrition-g-0267-new-plan-tut-nichts.md) | laeuft (claudecode) | — | G-268, G-269 |
+| `G-268` | feature | hoch | [Plaene bearbeiten fehlt](laufend_claudecode/nutrition-g-0268-plaene-bearbeiten-fehlt.md) | laeuft (claudecode) | — | — |
+| `G-269` | feature | mittel | [Plaene von Coach und Marketplace](laufend_claudecode/nutrition-g-0269-plaene-von-coach-und-marketplace.md) | laeuft (claudecode) | — | — |
+| `G-270` | befund | mittel | [Drei Attrappen im Meal-plans-Reiter](laufend_claudecode/nutrition-g-0270-drei-attrappen-im-meal-plans-reiter.md) | laeuft (claudecode) | — | — |
 | `G-271` | messung | hoch | [Meal plans und Planner gegen die Quellen halten](erledigt/nutrition-g-0271-meal-plans-und-planner-gegen-die-quellen-halten.md) | erledigt | — | — |
 | `G-272` | feature | hoch | [`+ Add` braucht ein Erfassungsmodal](erledigt/nutrition-g-0272-add-braucht-ein-erfassungsmodal.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
