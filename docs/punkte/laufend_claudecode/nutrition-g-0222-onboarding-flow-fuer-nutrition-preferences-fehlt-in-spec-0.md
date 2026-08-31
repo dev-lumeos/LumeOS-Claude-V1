@@ -75,3 +75,27 @@ Komponenten.
 
 **Mitbeauftragt mit G-226 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Bericht — Urteil: **Entscheidung**, enger gefasst
+
+**Claude Code, 2026-08-31.** Mitbeauftragt mit G-226. **Der vollstaendige Bericht steht in [G-226](nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md#bericht).**
+
+`[cmd]` **Das Ob ist entschieden** (Tom, 2026-08-30). `[cmd]`
+**Gebaut ist nichts:** keine `onboarding`-Spalte im ganzen Schema,
+**und keine der neun Komponenten existiert im Code** — sie stehen nur
+in `SPEC_10_PASS2_PATCH.md`.
+
+`[read]` **Was die Review vermisst, fehlt weiterhin** — und es ist
+kein Bauteil, sondern ein Ablauf: Ausloeser, Abbruch, Wiederaufnahme,
+Uebergang, Pflichtfelder je Schritt.
+
+**Die eine Frage:** *darf das Onboarding uebersprungen werden?*
+
+`[read]` **Daran haengt alles Uebrige.** Ist es Pflicht, braucht es
+keinen Wiederaufnahmezustand und keinen Abbruchweg. **Ist es
+ueberspringbar, braucht es eine Spalte fuer den Fortschritt und eine
+Regel, wann erneut gefragt wird.**
+
+`[read]` **Die Inhalte sind ausdruecklich NICHT die Frage** — Tom
+legt sie spaeter fest, wenn ein repraesentativer Datenbestand
+vorliegt.

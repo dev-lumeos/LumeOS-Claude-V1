@@ -124,7 +124,266 @@ Server stehen. **Codex fasst ihn nicht an.**
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Claude Code, 2026-08-31.** Mitbeauftragt: G-227, G-228, G-229,
+G-230, G-235, G-238, G-222. Nichts gebaut, nichts auf
+`dev@lumeos.app`, nichts committet.
+
+### Das Ergebnis in einer Zeile
+
+    ueberholt      G-226, G-230, G-235          3
+    erledigt       —                            0
+    offen          G-227, G-229                 2
+    Entscheidung   G-222, G-228, G-238          3
+
+`[read]` **Kein Punkt ist erledigt** — was die Review forderte, wurde
+nirgends gebaut. **Drei beschreiben etwas, das es nie gab.** **Und
+G-228 ist von „Inkonsistenz in der Spec" zu einem gemessenen
+Widerspruch zwischen Spec und Datenbank geworden** — der einzige, der
+heute wirkt.
+
+### Die Messungen des Orchestrators, nachgeprueft
+
+`[cmd]` **Sechs von acht stimmen.** Zwei nicht:
+
+**G-228 — die Spec liegt woanders als angenommen.** Der Punkt sagt,
+`SPEC_04_FEATURES.md` liege unter `docs/specs/Recovery/` und verweist
+auf C-143/C-218. `[cmd]` **Die Datei gibt es in acht Modulen**, und
+die mit `level_multiplier` ist **`docs/specs/Nutrition/01_current_specs/
+SPEC_04_FEATURES.md:336`.** `[read]` **Der Recovery-Umweg fuehrt in
+die Irre** — die Sache ist eine Nutrition-Sache.
+
+**G-229 — es gibt den Trigger gar nicht.** Der Punkt misst „gegen
+`apps/admin`". `[cmd]` **Wichtiger ist: `auto_tag_food` existiert
+nicht.** Kein Trigger im Schema `nutrition` traegt Tags ein; die
+Einwaende der Review haengen aber genau daran.
+
+`[cmd]` **Bestaetigt:** `recipes` 6, `shopping_lists` 1, `meal_plans`
+2, `meal_plan_logs` 0 (dazu `meal_plan_entries` 112);
+`foods_custom.barcode` da, 0 Zeilen; `display_tier` in
+`nutrient_defs`; `plan_origin` ohne `buddy`; keine
+`onboarding`-Spalte, `food_preferences` 2 Zeilen; die Pfade
+`nutrition/water/` und `nutrition/shopping-lists/` gibt es nicht.
+
+---
+
+### G-226 — **ueberholt**
+
+**Die Review fuerchtete, ein WO-Generator koenne Recipes, Shopping
+Lists und Meal Plans als V1-Pflicht schreiben, weil der V1-Hinweis in
+SPEC_10 fehlt.**
+
+`[cmd]` **Gemessen am Schirm, angemeldet, `/v2/nutrition`:** sieben
+Reiter — *Diary, Insights, Nutrients, Food DB, Meal plans,
+Preferences, Planner*. `[cmd]` **Die Woerter „recipe", „rezept",
+„shopping", „einkaufsliste" kommen auf dem Schirm null Mal vor.**
+
+`[read]` **Die befuerchtete Folge ist nicht eingetreten.** Das Schema
+steht (6 Rezepte, 1 Liste), die Oberflaeche zeigt nichts davon —
+**genau die ADR-Vorgabe *„Schema vorbereiten, kein Full-UI"*.**
+
+`[read]` **Meal Plans sind gebaut, und das widerspricht nicht:** der
+ADR nennt sie nur *„wenn Zeit knapp"* verschiebbar. **Sie war nicht
+knapp.**
+
+### G-227 — **offen**
+
+`[cmd]` **`foods_custom.barcode` existiert, `foods_custom` hat 0
+Zeilen.** `[cmd]` **Kein Barcode-Einstieg in der Oberflaeche.**
+
+`[read]` **Der Befund gilt weiter, aber entschaerft:** die Review
+fuerchtete, jemand koenne den Phase-2-Barcode-Weg bauen. **Gebaut ist
+er nicht** — **die Spalte allein ist keine Verpflichtung.**
+
+`[read]` **Warum nicht *ueberholt*:** `SPEC_03 Flow 6` und `SPEC_04
+Feature 4` fuehren den Barcode-Scan weiterhin als V1-Weg, waehrend
+zwei ADRs ihn auf Phase 2 setzen. **Der Widerspruch in der Spec
+besteht unveraendert** — er hat nur noch keinen Schaden angerichtet.
+
+### G-228 — **Entscheidung** (und der einzige wirkende Widerspruch)
+
+`[read]` **Die Frage der Review — *woher kommt `user_level`?* — hat
+inzwischen eine Antwort, und die Antwort deckt einen Fehler auf.**
+
+`[cmd]` **Gemessen 2026-08-31:**
+
+    SPEC_04 (Nutrition):336   beginner 0.75 | intermediate 0.90
+                              | advanced 1.00 | elite 1.10
+    profiles.experience_level CHECK: beginner | advanced | pro | elite
+    live                      2x 'pro', 5x NULL (von 7 Profilen)
+    diary-entwurf.tsx:31      beginner/intermediate/advanced/elite
+                              Rueckfall: `?? 0.90`
+
+`[read]` **Die Spec kennt `intermediate`, die Datenbank kennt `pro`
+— und keiner kennt den anderen.** `[cmd]` **Ein Profil mit `pro`
+faellt heute auf `0.90`** — den Wert, der fuer `intermediate` gedacht
+war. **Kein Fehler, keine Meldung, ein stiller Ersatzwert.**
+
+**Die Frage an Tom, praezise:**
+
+> **Welche vier Stufen gelten — die der Spec (`intermediate`) oder
+> die der Datenbank (`pro`)?** Und welchen Faktor traegt die vierte?
+> `[read]` Die Namen sind austauschbar, der Faktor nicht: heute
+> bekommt `pro` stillschweigend 0,90.
+
+`[read]` **Nicht selbst entschieden**, weil beide Seiten belegt sind
+und die Wahl den Score aller Nutzer verschiebt.
+
+`[read]` **Und der Zusammenhang zu E-25:** der NRF9.3-Score kennt
+keinen Stufenfaktor. **Diese Stufen gehoeren zum Entwurfsscore aus
+`diary-entwurf.tsx`, nicht zum entschiedenen.** Wer E-25 baut,
+braucht sie nicht — **wer den Entwurf stehen laesst, braucht die
+Antwort.**
+
+### G-229 — **offen**, aber der Einwand traegt anders als beschrieben
+
+`[cmd]` **`auto_tag_food` gibt es nicht.** Kein Trigger im Schema
+`nutrition` schreibt Tags; die 25 vorhandenen sind
+`touch_updated_at`, Eigentuemerwaechter und zwei
+Praeferenz-Auffrischungen.
+
+`[read]` **Damit faellt der Kern des Einwands:** *„der Trigger loescht
+alle bestehenden Tags vor INSERT, ein Admin-Override wuerde
+ueberschrieben"* — **das kann nicht passieren, weil es den Trigger
+nicht gibt.**
+
+`[cmd]` **Was bleibt, gilt:** `food_tags` traegt **30.797 Zeilen**,
+und **es gibt keinen Weg, sie zu aendern.** `[cmd]`
+**`apps/admin/src/app/api/curation/route.ts:25` liest `tag` als
+Filter** — die Kurationsseite sucht nach Tags, sie pflegt sie nicht.
+`[cmd]` **Und `foods_custom` hat kein Tag-Feld** (nur
+`custom_allergens`).
+
+`[read]` **Der Punkt ist also offen, aber praeziser:** **nicht „der
+Override wird ueberschrieben", sondern „es gibt keinen Override".**
+
+### G-230 — **ueberholt**
+
+`[cmd]` **Gemessen: alle vier Pfade antworten mit HTTP 404** —
+`/v2/nutrition/water`, `/v2/nutrition/shopping-lists`,
+`/nutrition/water`, `/nutrition/shopping-lists`.
+
+`[cmd]` **`v2/nutrition` hat zwei Unterordner: `__tests__` und
+`suche`.** `hydration.tsx` ist eine Komponente, keine Seite.
+
+`[read]` **Die Review beschreibt eine Verzeichnisstruktur, die nie
+gebaut wurde.** **Die von ihr befuerchtete Doppelung existiert
+nicht.**
+
+### G-235 — **ueberholt**
+
+`[cmd]` **Ein Abo-Tier gibt es im Schema nicht.** Die Suche nach
+`%micros_tier%`, `%subscription%`, `%abo%` und `tier` findet in
+`nutrition` nichts — die Treffer liegen in `supplements`
+(`stack_template_items.tier`) und `realtime`.
+
+`[cmd]` **`display_tier` ist keine Abo-Stufe, sondern eine
+Anzeigetiefe** — belegt an der Verteilung:
+
+    Stufe 1   31 Codes   ALC, CA, CHO, CHORL, ENERCC
+    Stufe 2   47 Codes   AAE9, ASH, BIOT, CARTB, CHOCAL
+    Stufe 3   60 Codes   ACEAC, ALA, ARG, ASP, CAROTPAXB
+
+`[read]` **Stufe 1 sind Alltagswerte, Stufe 3 Aminosaeuren und
+Carotinoide.** **Das ist Tiefe, keine Bezahlschranke.**
+
+`[cmd]` **Und ein Nebenbefund:** `apps/web/src/app/v2/nutrition/
+page.tsx:46` nennt `display_tier` *„das Abo-Gate"*. `[read]` **Das
+ist genau die Verwechslung, die G-140 und G-239 schon zweimal
+aufgeraeumt haben** — **der Kommentar traegt sie weiter.** Als eigener
+Punkt anzulegen; **nicht hier geaendert, dieser Auftrag urteilt.**
+
+### G-238 — **Entscheidung**
+
+`[cmd]` **Der CHECK erlaubt `self_created`, `coach_created`,
+`marketplace`** — oder `NULL`. **`buddy` fehlt.**
+
+`[cmd]` **Und die Anzeige kennt dieselben drei:**
+`plan-lage.ts:40-52` bildet sie ab und faellt sonst auf
+*„Herkunft nicht hinterlegt"* zurueck.
+
+`[read]` **Das schaerft die Frage:** ein `buddy`-Plan wuerde heute
+nicht nur am CHECK scheitern — **er wuerde, kaeme er durch, als
+*„Herkunft nicht hinterlegt"* erscheinen.**
+
+**Die Frage an Tom, praezise:**
+
+> **Bekommt ein von Buddy erstellter Plan eine eigene Herkunft
+> (`buddy`), oder ist er `self_created` mit Buddy als Werkzeug?**
+>
+> `[read]` **Was daran haengt:** bei eigener Herkunft braucht es
+> einen vierten CHECK-Wert, einen vierten Anzeigetext und eine
+> Entscheidung, ob der Nutzer sie unterscheiden koennen soll. **Bei
+> `self_created` bleibt alles wie es ist** — und die Information, dass
+> Buddy geholfen hat, ist verloren.
+
+`[read]` **Nichts spricht heute fuer Eile:** der Buddy-Plan-Builder
+ist Phase 2, und `meal_plan_logs` hat 0 Zeilen.
+
+### G-222 — **Entscheidung**, aber eine engere als gedacht
+
+`[cmd]` **Das Ob ist entschieden** (Tom, 2026-08-30). `[cmd]`
+**Gebaut ist nichts:** keine `onboarding`-Spalte im ganzen Schema,
+**und keine der neun Komponenten existiert im Code** — sie stehen nur
+in `SPEC_10_PASS2_PATCH.md`.
+
+`[cmd]` **Die Spec traegt das Wie:** neun Komponenten
+(`OnboardingPreferencesStep`, `DietTypeSelector`, `AllergenSelector`,
+`IntoleranceSelector`, `ReligiousDietarySelector`, `FoodLikesInput`,
+`FoodDislikesInput`, `MealSlotEditor`, `CuisinePreferenceSelector`)
+und vier Schritte.
+
+`[read]` **Was die Review vermisst, fehlt weiterhin und ist kein
+Bauteil, sondern ein Ablauf:** Ausloeser, Abbruch, Wiederaufnahme,
+Uebergang, Pflichtfelder je Schritt.
+
+**Die Frage an Tom, praezise — und nur eine:**
+
+> **Darf das Onboarding uebersprungen werden?**
+>
+> `[read]` **Daran haengt alles Uebrige:** ist es Pflicht, braucht es
+> keinen Wiederaufnahmezustand und keinen Abbruchweg — der Nutzer
+> kommt ohne es nicht ins Tagebuch. **Ist es ueberspringbar, braucht
+> es eine Spalte, die den Fortschritt haelt** (`onboarding_complete`
+> oder aehnlich), **und eine Regel, wann erneut gefragt wird.**
+
+`[read]` **Die Inhalte sind ausdruecklich NICHT die Frage** — Tom
+will sie spaeter gemeinsam festlegen, wenn ein repraesentativer
+Datenbestand vorliegt. **Der Punkt ist darauf zugeschnitten.**
+
+---
+
+### Nachweis
+
+    je Punkt ein Urteil    oben, je mit Beleg
+    Messung nachgeprueft   6 von 8 stimmen; G-228 (falscher
+                           Spec-Ort) und G-229 (Trigger existiert
+                           nicht) berichtigt
+    Entscheidungen         drei, je mit EINER Frage gestellt und
+                           mit dem, was daran haengt — nicht
+                           beantwortet
+
+`backup/g226-plans.png` — der Meal-plans-Reiter mit fuenf echten
+Karten (Plan-Eintraege, Planumfang, Lebenszyklus, Herkunft,
+Einhaltung).
+
+### Was daraus als neue Punkte folgt
+
+`[read]` **Zwei Funde gehoeren nicht in diese acht:**
+
+**1. `page.tsx:46` nennt `display_tier` das Abo-Gate** — dieselbe
+Verwechslung, die G-140 und G-239 zweimal aufgeraeumt haben.
+**Kommentar, keine Wirkung; aber er fuehrt den naechsten Leser in die
+Irre.**
+
+**2. `food_tags` hat 30.797 Zeilen und keinen Pflegeweg.** `[read]`
+**Das ist groesser als G-229 und trifft nicht nur Admins:** wer einen
+falschen Tag findet, kann ihn nirgends melden oder aendern.
+
+### Laeufe
+
+`[read]` **Nichts gebaut, also nichts zu pruefen** — keine
+Codeaenderung, keine neuen Waechter, kein Gate-Lauf noetig. **Die
+einzige Schreibarbeit ist dieser Bericht.**
 
 ## Abnahme
 

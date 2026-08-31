@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: []
@@ -40,7 +38,7 @@ zahlen: null
 
 **Mitbeauftragt mit A-16.** Bericht in die A-16-Datei.
 
-**Beauftragt am 2026-08-30.**
+`[read]` **Vorbereitet am 2026-08-30.**
 
 ### Warum jetzt
 

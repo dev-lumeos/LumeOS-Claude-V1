@@ -61,3 +61,33 @@ Normierung.
 
 **Mitbeauftragt mit G-226 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Bericht — Urteil: **Entscheidung**
+
+**Claude Code, 2026-08-31.** Mitbeauftragt mit G-226. **Der vollstaendige Bericht steht in [G-226](nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md#bericht).**
+
+### Die Messung im Punkt war falsch
+
+`[cmd]` **`SPEC_04_FEATURES.md` gibt es in acht Modulen.** Die mit
+`level_multiplier` ist **Nutrition**, nicht Recovery:
+`docs/specs/Nutrition/01_current_specs/SPEC_04_FEATURES.md:336`.
+`[read]` **Der Recovery-Umweg (C-143/C-218) fuehrt in die Irre.**
+
+### Und die Inkonsistenz wirkt heute
+
+`[cmd]` **Gemessen 2026-08-31:**
+
+    SPEC_04:336                beginner | intermediate | advanced | elite
+    profiles.experience_level  beginner | advanced | pro | elite  (CHECK)
+    live                       2x 'pro', 5x NULL (7 Profile)
+    diary-entwurf.tsx:31       die vier Namen der Spec, `?? 0.90`
+
+`[read]` **Die Spec kennt `intermediate`, die Datenbank kennt `pro`.**
+`[cmd]` **Ein `pro`-Profil faellt heute stillschweigend auf 0,90** —
+den Wert fuer `intermediate`.
+
+**Die Frage:** *welche vier Stufen gelten, und welchen Faktor traegt
+die vierte?* `[read]` Die Namen sind austauschbar, der Faktor nicht.
+
+`[read]` **Zusammenhang zu E-25:** NRF9.3 kennt keinen Stufenfaktor.
+**Die Stufen gehoeren zum Entwurfsscore, nicht zum entschiedenen.**

@@ -55,3 +55,29 @@ bekommen, oder ist er `self_created` mit Buddy als Werkzeug?**
 
 **Mitbeauftragt mit G-226 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Bericht — Urteil: **Entscheidung**
+
+**Claude Code, 2026-08-31.** Mitbeauftragt mit G-226. **Der vollstaendige Bericht steht in [G-226](nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md#bericht).**
+
+`[cmd]` **Der CHECK erlaubt `self_created`, `coach_created`,
+`marketplace`** — oder `NULL`. **`buddy` fehlt.**
+
+`[cmd]` **Und die Anzeige kennt dieselben drei:**
+`plan-lage.ts:40-52` bildet sie ab, sonst *„Herkunft nicht
+hinterlegt"*.
+
+`[read]` **Das schaerft die Frage:** ein `buddy`-Plan wuerde nicht nur
+am CHECK scheitern — **kaeme er durch, erschiene er als „Herkunft
+nicht hinterlegt".**
+
+**Die Frage:** *eigene Herkunft (`buddy`) oder `self_created` mit
+Buddy als Werkzeug?*
+
+`[read]` **Was daran haengt:** eigene Herkunft heisst vierter
+CHECK-Wert, vierter Anzeigetext und die Frage, ob der Nutzer es
+unterscheiden koennen soll. **`self_created` laesst alles wie es ist**
+— und die Information, dass Buddy geholfen hat, ist verloren.
+
+`[read]` **Keine Eile:** der Buddy-Plan-Builder ist Phase 2,
+`meal_plan_logs` hat 0 Zeilen.

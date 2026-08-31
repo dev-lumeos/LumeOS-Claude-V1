@@ -324,7 +324,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `A-35` | messung | mittel | [Sieben Module haben keine Seite](laufend_claudecode/coach-a-0035-sieben-module-haben-keine-seite.md) | laeuft (claudecode) | — | — |
+| `A-35` | messung | mittel | [Sieben Module haben keine Seite](laufend_claudecode/coach-a-0035-sieben-module-haben-keine-seite.md) | vorbereitet (claudecode) | — | — |
 | `A-36` | befund | mittel | [`module-stubs-replacement.jsx` traegt drei ganze Module](erledigt/coach-a-0036-module-stubs-replacement-jsx-traegt-drei-ganze-module.md) | erledigt | — | — |
 | `A-43` | entscheidung | mittel | [Coach-Permissions pro Subfunktion](todos/coach-a-0043-coach-permissions-pro-subfunktion.md) | offen | — | — |
 | `B-25` | befund | mittel | [Geteilte Sitzung im Produktbereich prüfen](erledigt/coach-b-0025-geteilte-sitzung-im-produktbereich-prufen.md) | erledigt | — | — |
@@ -356,7 +356,7 @@
 |---|---|---|---|---|---|---|
 | `A-06` | befund | mittel | [Design-System spezifizieren](todos/quer-a-0006-design-system-spezifizieren.md) | offen | — | — |
 | `A-15` | messung | mittel | [Sprachpflege als laufende Regel](todos/quer-a-0015-sprachpflege-als-laufende-regel.md) | offen | — | — |
-| `A-16` | befund | mittel | [`public/mockup/` als dritten Fundus auswerten](laufend_claudecode/quer-a-0016-public-mockup-als-dritten-fundus-auswerten.md) | laeuft (claudecode) | — | — |
+| `A-16` | befund | mittel | [`public/mockup/` als dritten Fundus auswerten](laufend_claudecode/quer-a-0016-public-mockup-als-dritten-fundus-auswerten.md) | vorbereitet (claudecode) | — | — |
 | `A-18` | feature | mittel | [`theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf](todos/quer-a-0018-theme-v1-uploads-die-bruecke-zwischen-spec-und-entwurf.md) | offen | — | — |
 | `A-19` | messung | mittel | [Zwei README-Abweichungen in der Kette](todos/quer-a-0019-zwei-readme-abweichungen-in-der-kette.md) | offen | — | — |
 | `A-20` | befund | mittel | [Die Spec-Fehlerliste](todos/quer-a-0020-die-spec-fehlerliste.md) | offen | — | — |

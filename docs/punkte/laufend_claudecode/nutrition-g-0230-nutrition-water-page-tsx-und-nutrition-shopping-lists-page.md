@@ -48,3 +48,17 @@ beschreibt eine Struktur, die nie gebaut wurde.**
 
 **Mitbeauftragt mit G-226 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Bericht — Urteil: **ueberholt**
+
+**Claude Code, 2026-08-31.** Mitbeauftragt mit G-226. **Der vollstaendige Bericht steht in [G-226](nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md#bericht).**
+
+`[cmd]` **Alle vier Pfade antworten mit HTTP 404:**
+`/v2/nutrition/water`, `/v2/nutrition/shopping-lists`,
+`/nutrition/water`, `/nutrition/shopping-lists`.
+
+`[cmd]` **`v2/nutrition` hat zwei Unterordner — `__tests__` und
+`suche`.** `hydration.tsx` ist eine Komponente, keine Seite.
+
+`[read]` **Die Review beschreibt eine Verzeichnisstruktur, die nie
+gebaut wurde.** Die befuerchtete Doppelung existiert nicht.

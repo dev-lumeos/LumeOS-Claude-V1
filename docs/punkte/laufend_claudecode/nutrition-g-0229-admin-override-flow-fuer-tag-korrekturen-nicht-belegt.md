@@ -66,3 +66,29 @@ Kurationsseite.
 
 **Mitbeauftragt mit G-226 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Bericht — Urteil: **offen**, praeziser gefasst
+
+**Claude Code, 2026-08-31.** Mitbeauftragt mit G-226. **Der vollstaendige Bericht steht in [G-226](nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md#bericht).**
+
+### Der Kern des Einwands faellt
+
+`[cmd]` **`auto_tag_food` existiert nicht.** Kein Trigger im Schema
+`nutrition` schreibt Tags — die 25 vorhandenen sind
+`touch_updated_at`, Eigentuemerwaechter und zwei
+Praeferenz-Auffrischungen.
+
+`[read]` **Damit kann nicht passieren, was die Review beschreibt:**
+*„der Trigger loescht alle Tags vor INSERT, ein Admin-Override wuerde
+ueberschrieben."*
+
+### Was bleibt, gilt
+
+`[cmd]` **`food_tags` traegt 30.797 Zeilen, und es gibt keinen Weg,
+sie zu aendern.** `[cmd]` `apps/admin/.../api/curation/route.ts:25`
+liest `tag` als **Filter** — die Kurationsseite sucht nach Tags, sie
+pflegt sie nicht. `[cmd]` **`foods_custom` hat kein Tag-Feld**, nur
+`custom_allergens`.
+
+`[read]` **Nicht „der Override wird ueberschrieben", sondern „es gibt
+keinen Override".**

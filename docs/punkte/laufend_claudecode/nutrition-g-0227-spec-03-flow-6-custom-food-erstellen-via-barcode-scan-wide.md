@@ -58,3 +58,19 @@ existiert.** `[read]` **Die Spalte ist da, der Flow nicht** —
 
 **Mitbeauftragt mit G-226 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Bericht — Urteil: **offen**
+
+**Claude Code, 2026-08-31.** Mitbeauftragt mit G-226. **Der vollstaendige Bericht steht in [G-226](nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md#bericht).**
+
+`[cmd]` **`foods_custom.barcode` existiert, `foods_custom` hat 0
+Zeilen, und kein Barcode-Einstieg ist gebaut.**
+
+`[read]` **Die befuerchtete Folge ist nicht eingetreten** — niemand
+hat den Phase-2-Weg gebaut. **Die Spalte allein ist keine
+Verpflichtung.**
+
+`[read]` **Warum trotzdem offen:** `SPEC_03 Flow 6` und `SPEC_04
+Feature 4` fuehren den Barcode-Scan weiter als V1-Weg, zwei ADRs
+setzen ihn auf Phase 2. **Der Widerspruch in der Spec besteht
+unveraendert** — er hat nur noch keinen Schaden angerichtet.

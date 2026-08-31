@@ -55,3 +55,26 @@ nicht.**
 
 **Mitbeauftragt mit G-226 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Bericht — Urteil: **ueberholt**
+
+**Claude Code, 2026-08-31.** Mitbeauftragt mit G-226. **Der vollstaendige Bericht steht in [G-226](nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md#bericht).**
+
+`[cmd]` **Ein Abo-Tier gibt es im Schema `nutrition` nicht.** Die
+Suche nach `%micros_tier%`, `%subscription%`, `%abo%`, `tier` findet
+dort nichts.
+
+`[cmd]` **`display_tier` ist eine Anzeigetiefe** — belegt an der
+Verteilung:
+
+    Stufe 1   31 Codes   ALC, CA, CHO, CHORL, ENERCC
+    Stufe 2   47 Codes   AAE9, ASH, BIOT, CARTB, CHOCAL
+    Stufe 3   60 Codes   ACEAC, ALA, ARG, ASP, CAROTPAXB
+
+`[read]` **Stufe 1 sind Alltagswerte, Stufe 3 Aminosaeuren und
+Carotinoide. Das ist Tiefe, keine Bezahlschranke.**
+
+`[cmd]` **Nebenbefund:** `apps/web/src/app/v2/nutrition/page.tsx:46`
+nennt `display_tier` *„das Abo-Gate"* — **dieselbe Verwechslung, die
+G-140 und G-239 zweimal aufgeraeumt haben.** Als eigener Punkt
+anzulegen.
