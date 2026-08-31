@@ -49,3 +49,8 @@ messen.**
 `[read]` **Und ob der Import sie ueberschreiben wuerde** —
 **dieselbe Frage wie C-29 bei den Anzeigenamen, die dort geloest
 ist.**
+
+## Auftrag
+
+**Vorbereitet mit G-296 am 2026-08-31.** Der Auftragstext
+und der Bericht stehen dort.

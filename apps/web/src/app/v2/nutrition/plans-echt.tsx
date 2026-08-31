@@ -158,52 +158,20 @@ export function PlanEinstellungenEcht({ d }: { d: PlanDaten }) {
  * `[cmd]` Es ist **ein** Plan sichtbar, nicht zwei: der zweite gehoert
  * einem anderen Konto und faellt per RLS heraus.
  */
-export function PlanBibliothekEcht({ d }: { d: PlanDaten }) {
-  const z = planZaehlung(d)
-  if (!d.plan) {
-    return (
-      <Card title="Bibliothek">
-        <p className="v2-muted" style={{ fontSize: 12 }}>
-          Kein Plan vorhanden.
-        </p>
-      </Card>
-    )
-  }
-  return (
-    <Card>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, flexWrap: 'wrap' }}>
-        <span style={{ fontSize: 14, fontWeight: 600 }}>{d.plan.name}</span>
-        {d.plan.is_active && <Pill variant="acc">aktiv</Pill>}
-      </div>
-      <div className="v2-dim v2-mono" style={{ fontSize: 10.5, lineHeight: 1.7 }}>
-        {z.wochen} Wochen · {z.tage} Tage · {z.eintraege} Einträge
-        {d.rezepte.length > 0 && <> · {d.rezepte.length} eigene Rezepte</>}
-      </div>
-      {/* Die Wochen einzeln — sie tragen ihre Herkunft, wenn sie
-          kopiert wurden (C-150). */}
-      <div className="v2-col-gap" style={{ gap: 4, marginTop: 10 }}>
-        {d.wochen.map(w => (
-          <div key={w.id} style={{
-            display: 'flex', alignItems: 'center', gap: 8,
-            padding: '5px 9px', borderRadius: 6, fontSize: 11.5,
-            background: 'var(--surface)', border: '1px solid var(--border)',
-          }}>
-            <span className="v2-num" style={{ color: 'var(--fg-subtle)' }}>
-              {w.week_start}
-            </span>
-            <span style={{ flex: 1, minWidth: 0 }}>{w.name ?? '—'}</span>
-            {w.kopiert_von && <Pill>kopiert</Pill>}
-            <span className="v2-num v2-dim">
-              {w.tage.length} Tage ·{' '}
-              {w.tage.reduce((s, t) => s + t.eintraege.length, 0)} Einträge
-            </span>
-          </div>
-        ))}
-      </div>
-    </Card>
-  )
-}
-
+// ══ G-287 (2026-08-31): `PlanBibliothekEcht` ist entfernt ═════
+//
+// `[read]` **Sie zeigte je Woche eine Textzeile** — Datum, Name,
+// Tageszahl, Eintragszahl. **Nicht anklickbar, kein Detail
+// dahinter.** `[cmd]` **Tom, 2026-08-31:** *„irgend eine auflistung
+// die gar nichts sagt, nichtmal anschaubar ist oder editierbar."*
+//
+// `[cmd]` **Ersetzt durch `MealPlanCard` + `MealPlanDetail`** in
+// `plan-detail.tsx` — die Karte traegt Quelle, Status und kcal/Tag
+// (SPEC_10), das Akkordeon die Tage mit ihren Eintraegen.
+//
+// `[read]` **A-59: geloescht, nicht auskommentiert** — was keinen
+// Aufrufer hat, gilt beim naechsten Auftrag sonst als gebaut. git
+// holt sie zurueck.
 
 // ══ G-267 ff.: die drei Kacheln, die bis heute Attrappe waren ══════
 

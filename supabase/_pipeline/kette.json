@@ -1341,6 +1341,15 @@
       ]
     },
     {
+      "id": "364",
+      "path": "supabase/_pipeline/13_supplements/364_supplement_cas_kennungen.sql",
+      "kind": "sql",
+      "creates": "C-365: 33 belegte CAS-Nummern als eigene Kennungen am bestehenden Supplementkatalog; Peptidsequenzen bleiben ohne Ziel",
+      "depends_on": [
+        "141y"
+      ]
+    },
+    {
       "id": "354",
       "path": "supabase/_pipeline/15_coach/354_offene_coach_aktionen.sql",
       "kind": "sql",

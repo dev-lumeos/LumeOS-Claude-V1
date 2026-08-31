@@ -9,6 +9,8 @@ kind_von: C-260
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-31
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
   tabellen: [supplements.supplements]
 zahlen:
@@ -54,3 +56,9 @@ und der Bericht stehen dort.
 ## Bericht
 
 Siehe [C-364](supplements-c-0364-die-produktebene-ist-wissen-kein-bestand.md#bericht).
+
+## Abnahme
+
+**2026-08-31, mit C-364 abgenommen:** 33 belegte CAS-Kennungen
+eingetragen, idempotenter Kettenschritt samt Test. **Die
+Peptidsequenzen bleiben ohne Zielspalte.**

@@ -9,8 +9,10 @@ kind_von: C-202
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-31
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
-  tabellen: [supplements.intake_logs]
+  tabellen: [supplements.supplements]
 zahlen:
   gemessen: 2026-08-30
   produkte: 50
@@ -171,4 +173,33 @@ wurde keine neue Spalte und kein Ersatzfeld angelegt.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-31, Orchestrator.**
+
+`[cmd]` **Die Produktverbindung wird heute nicht gebraucht: 0 Leser,
+kein Fremdschluessel gebaut.**
+
+`[read]` **Das ist die richtige Antwort auf meine Frage.** **Ich
+hatte gefragt, was eine Verbindung kosten wuerde — er hat gemessen,
+dass sie niemand ruft.**
+
+`[read]` **Und die Modulgrenze bleibt unberuehrt** — kein
+Fremdschluessel von `supplements` nach `wissen`.
+
+### C-365 — die CAS-Nummern sind drin
+
+`[cmd]` **33 belegte CAS-Kennungen eingetragen, idempotenter
+Kettenschritt samt Test.**
+
+`[cmd]` **Die Peptidsequenzen bleiben ohne Zielspalte** — **wie
+vorgegeben: kein Ort, kein Leser, keine Spalte erfinden.**
+
+### Ein Befund nebenbei
+
+`[cmd]` **Das globale `tsc` bleibt rot wegen einer bestehenden
+JSX-Konfiguration in `packages/ui`.**
+
+`[read]` **Er hat es gemeldet, statt es zu umgehen oder zu
+beheben** — **es gehoert nicht zu diesem Auftrag.** **Als G-296.**
+
+**Abgenommen.**
+

@@ -8,6 +8,8 @@ braucht: []
 kind_von: C-49
 kinder: []
 entscheidung: E-25
+agent: codex
+beauftragt: 2026-08-31
 beruehrt:
   tabellen: [nutrition.daily_summary, nutrition.nutrient_defs]
 zahlen: null

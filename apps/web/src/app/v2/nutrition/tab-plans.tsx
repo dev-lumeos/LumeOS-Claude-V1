@@ -29,7 +29,7 @@ import { GHOST_ENTRIES } from './tabs-daten'
 import type { GhostStatus } from './typen'
 // G-161: die drei Kacheln, die `plan-lesen` tragen kann.
 import {
-  PlanKopfEcht, PlanEinstellungenEcht, PlanBibliothekEcht,
+  PlanKopfEcht, PlanEinstellungenEcht,
 } from './plans-echt'
 import type { PlanDaten } from '../../../lib/nutrition/plan-lesen'
 import type { LogZeile } from '../../../lib/nutrition/plan-lage'
@@ -39,6 +39,10 @@ import {
 } from './plans-echt'
 import { PlanModal } from './plan-modal'
 import { PlanEintraegeEcht, type TagesEintrag } from './plan-eintraege'
+// G-286/G-287/G-290: Karte, Tages-Akkordeon und Aktivierungsdialog.
+import {
+  MealPlanCard, MealPlanDetail, MealPlanActivationModal,
+} from './plan-detail'
 
 const ATTRAPPE = 'Aus dem Entwurf uebernommen. Dieser Tab ist noch nicht an die vorhandenen Essensplaene angebunden - die Zahlen sind erfunden.'
 
@@ -90,6 +94,10 @@ export function MealPlansTab({
   // ein Objekt heisst bearbeiten.
   const [anlegen, setAnlegen] = React.useState(false)
   const [bearbeiten, setBearbeiten] = React.useState(false)
+  // G-286: das Tages-Akkordeon ist zu, bis jemand die Karte oeffnet.
+  const [detailOffen, setDetailOffen] = React.useState(false)
+  // G-290: der Aktivierungsdialog mit LifecyclePicker.
+  const [aktivieren, setAktivieren] = React.useState(false)
   const router = useRouter()
 
   // Die Rechnung der Vorlage (Zeile 336-343), unveraendert.
@@ -290,12 +298,26 @@ export function MealPlansTab({
         </div>
       )}
 
-      {/* G-161: Die Bibliothek zeigt den echten Plan mit seinen
-          Wochen. `[cmd]` **Einen, nicht zwei** — der zweite gehoert
-          einem anderen Konto und faellt per RLS heraus. */}
+      {/* ── G-286/G-287/G-290: die Bibliothek wird benutzbar ───────
+          **Tom, 2026-08-31:** *„irgend eine auflistung die gar nichts
+          sagt, nichtmal anschaubar ist oder editierbar."*
+
+          `[cmd]` **Vorher:** `PlanBibliothekEcht` — drei Textzeilen
+          je Woche, nicht anklickbar. **Jetzt: Karte (G-287), die
+          aufs Tages-Akkordeon fuehrt (G-286), plus Aktivieren mit
+          Lebenszyklus (G-290).**
+
+          `[cmd]` **Einen Plan, nicht zwei** — der zweite gehoert
+          `tom.seed@example.com` und faellt per RLS heraus. */}
       {tab === 'library' && d && (
         <div className="v2-col-gap" style={{ gap: 12 }}>
-          <PlanBibliothekEcht d={d} />
+          <MealPlanCard
+            d={d}
+            offen={detailOffen}
+            onOeffnen={() => setDetailOffen(o => !o)}
+            onAktivieren={() => setAktivieren(true)}
+          />
+          {detailOffen && <MealPlanDetail d={d} />}
         </div>
       )}
 
@@ -407,6 +429,18 @@ export function MealPlansTab({
             </button>
           </Card>
         </div>
+      )}
+
+      {/* G-290: Startdatum, Laenge und Lebenszyklus — ein eigener
+          Vorgang. `[read]` **`planAnlegen` setzt `status` bewusst auf
+          `'assigned'`** (G-267): ein neuer Plan ist noch nicht aktiv,
+          und zwei Entscheidungen gehoeren nicht in einen Knopf. */}
+      {aktivieren && d?.plan && (
+        <MealPlanActivationModal
+          d={d}
+          onClose={() => setAktivieren(false)}
+          onGespeichert={() => router.refresh()}
+        />
       )}
 
       {/* G-267 / G-268: anlegen und bearbeiten. `[read]` Ein Modal
