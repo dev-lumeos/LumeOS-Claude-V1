@@ -10,7 +10,7 @@ entscheidung: E-40
 agent: claudecode
 beauftragt: 2026-08-31
 erledigt: 2026-08-31
-commit: OFFEN
+commit: 18a4e31b
 beruehrt:
   tabellen: [nutrition.meal_plan_weeks]
 zahlen:
