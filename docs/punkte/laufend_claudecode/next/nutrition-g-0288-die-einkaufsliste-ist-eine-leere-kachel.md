@@ -7,8 +7,6 @@ angelegt: 2026-08-31
 braucht: []
 kind_von: null
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-08-31
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-plans.tsx
@@ -48,5 +46,5 @@ Kachel geschrieben — wenn nein, sind es drei Komponenten.**
 
 ## Auftrag
 
-**Mitbeauftragt mit G-289 am 2026-08-31.** Der Auftragstext
+**Vorbereitet mit G-289 am 2026-08-31.** Der Auftragstext
 und der Bericht stehen dort.

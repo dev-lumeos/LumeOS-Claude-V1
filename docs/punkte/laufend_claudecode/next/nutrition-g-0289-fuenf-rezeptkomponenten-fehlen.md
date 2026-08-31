@@ -7,8 +7,6 @@ angelegt: 2026-08-31
 braucht: []
 kind_von: null
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-08-31
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-plans.tsx
@@ -47,7 +45,7 @@ eintragen — **und der Schreibweg dafuer steht seit G-272.**
 
 ## Auftrag — die Rezeptoberflaeche
 
-**Mitbeauftragt: G-288.** **Beauftragt am 2026-08-31.**
+**Mitbeauftragt: G-288.** `[read]` **Vorbereitet am 2026-08-31.**
 
 ### Das Ergebnis
 

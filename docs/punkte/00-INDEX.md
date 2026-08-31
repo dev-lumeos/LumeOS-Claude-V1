@@ -190,8 +190,8 @@
 | `G-285` | befund | niedrig | [`display_tier` heisst im Code weiter *Abo-Gate*](erledigt/nutrition-g-0285-display-tier-heisst-im-code-weiter-abo-gate.md) | erledigt | — | — |
 | `G-286` | feature | hoch | [MealPlanDetail — das Tages-Akkordeon fehlt](laufend_claudecode/nutrition-g-0286-mealplandetail-das-tages-akkordeon-fehlt.md) | laeuft (claudecode) | — | — |
 | `G-287` | feature | hoch | [MealPlanCard — die Plan-Liste ist nicht anklickbar](laufend_claudecode/nutrition-g-0287-mealplancard-die-plan-liste-ist-nicht-anklickbar.md) | laeuft (claudecode) | — | — |
-| `G-288` | feature | hoch | [Die Einkaufsliste ist eine leere Kachel](laufend_claudecode/nutrition-g-0288-die-einkaufsliste-ist-eine-leere-kachel.md) | laeuft (claudecode) | — | — |
-| `G-289` | feature | hoch | [Fünf Rezeptkomponenten fehlen](laufend_claudecode/nutrition-g-0289-fuenf-rezeptkomponenten-fehlen.md) | laeuft (claudecode) | — | — |
+| `G-288` | feature | hoch | [Die Einkaufsliste ist eine leere Kachel](laufend_claudecode/nutrition-g-0288-die-einkaufsliste-ist-eine-leere-kachel.md) | vorbereitet (claudecode) | — | — |
+| `G-289` | feature | hoch | [Fünf Rezeptkomponenten fehlen](laufend_claudecode/nutrition-g-0289-fuenf-rezeptkomponenten-fehlen.md) | vorbereitet (claudecode) | — | — |
 | `G-290` | feature | mittel | [Der Aktivierungsdialog mit LifecyclePicker fehlt](laufend_claudecode/nutrition-g-0290-der-aktivierungsdialog-mit-lifecyclepicker-fehlt.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
