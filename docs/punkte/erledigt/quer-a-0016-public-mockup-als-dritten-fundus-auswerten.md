@@ -11,7 +11,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
 erledigt: 2026-08-31
-commit: OFFEN
+commit: fcd36338
 beruehrt:
   tabellen: []
   dateien: ["apps/web/public/mockup/features/nutrition/MicroDashboard.js", "apps/web/public/mockup/features/nutrition/PreferencesView.js", "apps/web/public/mockup/features/nutrition/DiaryView.js", "apps/web/public/mockup/features/training/HistoryView.js", "apps/web/public/mockup/tokens.css", "apps/web/public/mockup/index.html", "docs/ssot/80-vorgaengerrepo-fundus.md"]

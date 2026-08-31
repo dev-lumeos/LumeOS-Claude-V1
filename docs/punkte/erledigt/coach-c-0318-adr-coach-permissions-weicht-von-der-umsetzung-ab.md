@@ -11,7 +11,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
 erledigt: 2026-08-31
-commit: OFFEN
+commit: fcd36338
 beruehrt:
   tabellen: [coach.client_permissions]
 zahlen: null
