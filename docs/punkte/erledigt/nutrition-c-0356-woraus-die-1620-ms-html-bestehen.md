@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
 erledigt: 2026-08-30
-commit: OFFEN
+commit: 707cba93
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx
