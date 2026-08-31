@@ -11,7 +11,7 @@ entscheidung: E-25
 agent: codex
 beauftragt: 2026-08-31
 erledigt: 2026-08-31
-commit: OFFEN
+commit: 45687f24
 beruehrt:
   tabellen: [nutrition.food_nutrients]
 zahlen: null
