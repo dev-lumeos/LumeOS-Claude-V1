@@ -10,7 +10,7 @@ entscheidung: E-38
 agent: codex
 beauftragt: 2026-08-31
 erledigt: 2026-08-31
-commit: OFFEN
+commit: 33a526a3
 beruehrt:
   tabellen: [nutrition.nutrient_defs, nutrition.food_nutrients]
 zahlen:
