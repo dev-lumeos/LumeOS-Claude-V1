@@ -63,6 +63,28 @@ aus den Zutaten gerechnet.**
 eine Attrappe. `[read]` **`RecipeLogModal` nutzt den Schreibweg aus
 G-272** — kein zweiter.
 
+### Die Vorlagen im Altbestand
+
+`[cmd]` **CLAUDE.md: Struktur ja, Code nie.**
+
+    referenz/.../nutrition/components/RecipeBuilder.tsx  14 kB
+    referenz/.../nutrition/components/RecipeList.tsx      8 kB
+    referenz/.../nutrition/hooks/useRecipes.ts            4 kB
+    referenz/.../stores/nutrition/recipeStore.ts          7 kB
+    referenz/.../api/nutrition/routes/recipes.ts         16 kB
+    mockup-zwischenwurf/features/nutrition/...            6 kB
+
+`[read]` **Vier der fuenf Spec-Komponenten haben eine Vorlage.**
+`[cmd]` **`RecipeBuilder.tsx` mit 14 kB ist die groesste** — und der
+Kern dieses Auftrags.
+
+`[read]` **`recipes.ts` ist die alte Schnittstelle** — **lies sie auf
+die Struktur, nicht auf den Weg: unsere Naehrwerte werden aus den
+Zutaten gerechnet, nicht gespeichert.**
+
+`[read]` **Wenn eine Vorlage etwas zeigt, das `SPEC_10` nicht nennt:
+melden, nicht weglassen.**
+
 ### 2 · G-288 — die Einkaufsliste
 
 `[cmd]` **`SPEC_10` nennt drei Komponenten, gebaut ist eine leere
@@ -70,7 +92,11 @@ Kachel.** `[cmd]` **Eine Liste mit sechs Positionen existiert, sie
 gehoert `test-user`.**
 
 `[cmd]` **Und `ADR_RECIPES_SCHEMA_ONLY` sagt: *,,Schema-only V1 —
-Full UI Phase 2 wenn Zeit knapp"*.** `[read]` **Miss, ob der ADR noch
+Full UI Phase 2 wenn Zeit knapp"*.** `[cmd]` **Und fuer die Einkaufsliste gibt es keine Vorlage** — weder
+im alten Repo noch im Fundus. `[read]` **Das passt zum ADR: sie war
+nie gebaut, in keiner Fassung.**
+
+`[read]` **Miss, ob der ADR noch
 gilt** — **wenn ja, gehoert der Satz an die Kachel; wenn nein, sind
 es drei Komponenten.**
 

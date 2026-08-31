@@ -50,3 +50,7 @@ Spalte.**
 
 **Mitbeauftragt mit C-364 am 2026-08-31.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Bericht
+
+Siehe [C-364](supplements-c-0364-die-produktebene-ist-wissen-kein-bestand.md#bericht).

@@ -77,6 +77,25 @@ Abschnitt *Meal Plan Components (8)*:**
 **Drei davon sind dieser Auftrag: `MealPlanCard`, `MealPlanDetail`,
 `MealPlanActivationModal` mit `LifecyclePicker`.**
 
+### Die Vorlagen im Altbestand
+
+`[cmd]` **CLAUDE.md: Struktur ja, Code nie.**
+
+    referenz/.../nutrition/components/MealPlanView.tsx   21 kB
+    referenz/.../nutrition/hooks/useMealPlans.ts          6 kB
+    referenz/.../api/coach/engines/meal-planner.ts      18 kB
+    mockup-zwischenwurf/features/nutrition/...          11 kB
+
+`[read]` **`MealPlanView.tsx` ist mit 21 kB die groesste** — **sie
+zeigt, wie Liste, Karte und Detail zusammenhaengen.**
+
+`[read]` **`meal-planner.ts` gehoert zum Coach-Modul** — **lies sie
+nur, wenn du wissen willst, wie ein Plan entsteht; sie ist nicht Teil
+dieses Auftrags.**
+
+`[read]` **Wenn eine Vorlage etwas zeigt, das `SPEC_10` nicht nennt:
+melden, nicht weglassen.**
+
 ### Was da ist
 
 `[cmd]` **`meal_plan_entries` 112 Zeilen, `meal_plan_days` 42,
