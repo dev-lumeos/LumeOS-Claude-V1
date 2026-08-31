@@ -13,7 +13,7 @@ erledigt: 2026-08-31
 commit: 5bb0e056
 beruehrt:
   dateien:
-    - apps/web/src/app/v2/nutrition/tab-rezepte.tsx
+    - apps/web/src/app/v2/nutrition/rezepte-echt.tsx
 zahlen: null
 ---
 
