@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 230 |
+| `todos` | 231 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 5 |
+| `laufend_claudecode` | 9 |
 | `erledigt` | 148 |
-| **gesamt** | **386** |
+| **gesamt** | **391** |
 
 ## medical — 42
 
@@ -58,7 +58,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 132
+## nutrition — 137
+
+### beauftragbar — 136
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -193,7 +195,17 @@
 | `G-288` | feature | hoch | [Die Einkaufsliste ist eine leere Kachel](laufend_claudecode/nutrition-g-0288-die-einkaufsliste-ist-eine-leere-kachel.md) | vorbereitet (claudecode) | — | — |
 | `G-289` | feature | hoch | [Fünf Rezeptkomponenten fehlen](laufend_claudecode/nutrition-g-0289-fuenf-rezeptkomponenten-fehlen.md) | vorbereitet (claudecode) | — | — |
 | `G-290` | feature | mittel | [Der Aktivierungsdialog mit LifecyclePicker fehlt](laufend_claudecode/nutrition-g-0290-der-aktivierungsdialog-mit-lifecyclepicker-fehlt.md) | laeuft (claudecode) | — | — |
+| `G-291` | feature | hoch | [TrendChart fehlt im Insights-Reiter](laufend_claudecode/nutrition-g-0291-trendchart-fehlt-im-insights-reiter.md) | vorbereitet (claudecode) | — | — |
+| `G-292` | feature | hoch | [MicroFlagsList — die Warnungen werden nicht gezeigt](laufend_claudecode/nutrition-g-0292-microflagslist-die-warnungen-werden-nicht-gezeigt.md) | vorbereitet (claudecode) | — | — |
+| `G-293` | feature | mittel | [MacroDetail — die Fetthierarchie fehlt](laufend_claudecode/nutrition-g-0293-macrodetail-die-fetthierarchie-fehlt.md) | vorbereitet (claudecode) | — | — |
+| `G-295` | feature | mittel | [Die Heatmap wurde entfernt, und die Spec verlangt sie](laufend_claudecode/nutrition-g-0295-die-heatmap-wurde-entfernt-und-die-spec-verlangt-sie.md) | vorbereitet (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-294` | feature | mittel | [CrossModuleInsights — Goals bekommt nichts](todos/nutrition-g-0294-crossmoduleinsights-goals-bekommt-nichts.md) | offen | C-324 | — |
 
 ## supplements — 59
 
