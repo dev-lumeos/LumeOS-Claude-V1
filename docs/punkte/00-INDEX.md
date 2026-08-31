@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 233 |
 | `laufend_codex` | 4 |
-| `laufend_claudecode` | 4 |
+| `laufend_claudecode` | 6 |
 | `erledigt` | 168 |
-| **gesamt** | **409** |
+| **gesamt** | **411** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 153
+## nutrition — 155
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -126,6 +126,7 @@
 | `C-372` | befund | hoch | [Planwochen haben keinen Schreibweg](laufend_claudecode/nutrition-c-0372-planwochen-haben-keinen-schreibweg.md) | laeuft (claudecode) | — | — |
 | `C-373` | befund | mittel | [der Lebenszyklus wird gespeichert und nie ausgefuehrt](todos/nutrition-c-0373-der-lebenszyklus-wird-gespeichert-und-nie-ausgefuehrt.md) | offen | — | — |
 | `C-374` | befund | mittel | [`plan_origin` kennt `buddy` nicht](laufend_codex/nutrition-c-0374-plan-origin-kennt-buddy-nicht.md) | laeuft (codex) | — | — |
+| `C-375` | feature | mittel | [ein Flag fuer fremde Plaene und Rezepte](laufend_claudecode/nutrition-c-0375-ein-flag-fuer-fremde-plaene-und-rezepte.md) | laeuft (claudecode) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -207,13 +208,14 @@
 | `G-294` | feature | mittel | [CrossModuleInsights — Goals bekommt nichts](todos/nutrition-g-0294-crossmoduleinsights-goals-bekommt-nichts.md) | offen | — | — |
 | `G-295` | feature | mittel | [Die Heatmap wurde entfernt, und die Spec verlangt sie](erledigt/nutrition-g-0295-die-heatmap-wurde-entfernt-und-die-spec-verlangt-sie.md) | erledigt | — | G-297 |
 | `G-297` | befund | mittel | [die Tagesdeckung nimmt zu viel Platz](erledigt/nutrition-g-0297-die-tagesdeckung-nimmt-zu-viel-platz.md) | erledigt | — | — |
-| `G-298` | feature | hoch | [Plaene lassen sich ansehen, nicht aendern](erledigt/nutrition-g-0298-plaene-lassen-sich-ansehen-nicht-aendern.md) | erledigt | — | C-369, G-300 |
+| `G-298` | feature | hoch | [Plaene lassen sich ansehen, nicht aendern](erledigt/nutrition-g-0298-plaene-lassen-sich-ansehen-nicht-aendern.md) | erledigt | — | C-369, G-300, G-306 |
 | `G-299` | feature | hoch | [der Planner zeigt eine fremde Woche](erledigt/nutrition-g-0299-der-planner-zeigt-eine-fremde-woche.md) | erledigt | — | — |
 | `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](erledigt/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | erledigt | — | — |
 | `G-301` | befund | hoch | [der Meal-plans-Reiter folgt keinem Flow](erledigt/nutrition-g-0301-der-meal-plans-reiter-folgt-keinem-flow.md) | erledigt | — | C-370 |
 | `G-302` | befund | mittel | [die Zielzeile bricht um](laufend_claudecode/nutrition-g-0302-die-zielzeile-bricht-um.md) | vorbereitet (claudecode) | — | — |
 | `G-304` | messung | hoch | [was ein Nutzer in Plaenen und Rezepten tun kann](erledigt/nutrition-g-0304-was-ein-nutzer-in-plaenen-und-rezepten-tun-kann.md) | erledigt | — | C-372, C-373, G-305 |
 | `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](laufend_claudecode/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | laeuft (claudecode) | — | — |
+| `G-306` | befund | hoch | [der Planeditor verletzt die Immutabilitaet](laufend_claudecode/nutrition-g-0306-der-planeditor-verletzt-die-immutabilitaet.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59

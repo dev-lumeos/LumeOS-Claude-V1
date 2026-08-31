@@ -53,79 +53,104 @@ Eintraege.**
 beginnt bei der Uebersicht.** `[read]` **Das Formular war eine
 Erfindung des Orchestrators, und es erzeugt einen leeren Datensatz.**
 
-## Auftrag — die Werkbank bauen
 
-**Entschieden in `docs/entscheidungen/E-40`.** **Mitbeauftragt:
-C-370.**
+## Auftrag — Bibliothek und Werkbank
+
+**Entschieden in E-40 und E-41.** **Mitbeauftragt: C-370, G-306,
+C-375.** Bericht in diese Datei.
 
 **Beauftragt am 2026-08-31.**
 
-### Wozu der Planner da ist
+### Lies zuerst
 
-Tom, 2026-08-31:
+    docs/entscheidungen/E-40      wozu der Planner da ist
+    docs/entscheidungen/E-41      Rollenteilung und zwei Sperren
+    ADR_IMPROVEMENTS_PACKAGE #17  die Immutabilitaetsregel
+    SPEC_01 Abschnitt 8 und 9     Plaene und Rezepte, vier Quellen
+    SPEC_03 Flow 3                Aktivieren
 
-    1  dass ein Nutzer seinen eigenen Mealplan selber erstellen und
-       abspeichern kann wie er will und dementsprechend
-       wiederverwenden
-    2  ein Coach hat eigene auch erstellte Plaene die er seinen
-       Kunden geben kann, sprich er kann sharen
-    3  wenn Marketplace da ist kann man Plaene kaufen
+`[read]` **Der Orchestrator hat den ADR nicht gelesen, bevor er
+G-298 beauftragt hat.** **Deshalb steht er hier zuerst.**
 
-`[read]` **Der Planner ist der Ort, an dem ein Plan entsteht** —
-nicht der, an dem ein aktiver angezeigt wird.
+### Die Rollenteilung
 
-    Meal plans   die Bibliothek
-    Planner      die Werkbank
+    Meal plans   Bibliothek: alle Plaene, aktivieren,
+                 "Bearbeiten" fuehrt in den Planner
+    Planner      Werkbank: Auflistung aller Plaene, neu anlegen,
+                 Positionen und Rezepte einfuegen
 
-`[read]` **Du hast die Trennung in G-299 gemessen. Toms Fassung ist
-schaerfer.**
+`[read]` **Bearbeiten fuehrt in den Planner, statt in der Bibliothek
+selbst zu editieren** — **sonst gibt es wieder zwei Orte fuer
+dasselbe.**
 
-### Was zu bauen ist
-
-**Ein Schreibweg fuer `meal_plan_weeks` und `meal_plan_days`.**
+### 1 · Wochen bekommen einen Schreibweg (C-372)
 
 `[cmd]` **Du hast in G-304 belegt: `meal_plan_weeks` wird nirgends
 eingefuegt, `meal_plan_days` kommt nur in einem `select` vor.**
-`[read]` **Ohne diesen Weg gibt es keine Werkbank.**
 
-`[cmd]` **Die Positionen kannst du schon** — G-298 hat hinzufuegen,
-aendern und entfernen gebaut, mit gezaehltem Rueckbau. `[read]` **Es
-fehlt die Ebene darueber.**
+`[read]` **Ohne diesen Weg gibt es keine Werkbank.** **Die Positionen
+kannst du seit G-298** — es fehlt die Ebene darueber.
 
-### Was *New plan* fragen soll
+**`New plan` fragt: Name, Beschreibung, Tagesziele, Wochenzahl.**
+`[cmd]` **Lebenszyklus und Startdatum gehoeren nicht dorthin** — sie
+entstehen beim Aktivieren (Flow 3, Schritte 5 und 6).
 
-`[read]` **Name, Beschreibung, Tagesziele — und wie viele Wochen.**
+### 2 · Der Editor respektiert die Immutabilitaet (G-306)
 
-`[read]` **Lebenszyklus und Startdatum gehoeren nicht dorthin:**
-`[cmd]` **sie entstehen beim Aktivieren** (Flow 3, Schritte 5 und 6).
+`[cmd]` **`ADR_IMPROVEMENTS_PACKAGE` #17:**
 
-`[read]` **Danach steht ein leerer Plan in der Werkbank, und der
-Nutzer fuellt ihn Tag fuer Tag.**
+    MealPlan.status = 'active'
+      -> MealPlanDay READ-ONLY
+      -> MealPlanItem READ-ONLY
 
-### Und ein Plan ist wiederverwendbar
+`[cmd]` **Begruendung im ADR:** *,,MealPlanLog referenziert
+`plan_item_id`. Wenn Items nachtraeglich geaendert werden, stimmt die
+Compliance-History nicht mehr."*
 
-`[cmd]` **`start_date` und `days_count` sind beim Bestandsplan
-`NULL`** — **das ist kein Fehler, sondern der Normalfall.**
+`[read]` **Dein G-298-Editor arbeitet heute an einem aktiven Plan.**
+**Das gehoert an `status` gebunden: Entwurf ja, aktiv nein.**
 
-`[read]` **Ein Plan ohne Startdatum ist ein Plan in der Bibliothek.**
-**Das Datum entsteht beim Aktivieren.**
+`[cmd]` **Und der Ausweg steht im ADR:** *,,pausieren, eine Kopie
+erstellen, bearbeiten und neu aktivieren."*
 
-`[read]` **Damit klaert sich auch *Copy week*:** `[read]` **eine Woche
-in einen anderen Plan oder innerhalb desselben kopieren** — **das ist
-das Wiederverwenden aus Toms Punkt 1.**
+`[read]` **Ohne Knopf ist die Regel eine Sackgasse.** **Bau
+*,,Kopie bearbeiten"*: Kopie anlegen, im Planner oeffnen, Original mit
+seinem Log stehen lassen.**
 
-### Coach und Marketplace: vorsehen
+### 3 · Das Flag fuer fremde Inhalte (C-375)
 
-`[cmd]` **`plan_origin` wird beim Bauen auf `self_created` gesetzt.**
+Tom: *,,die gekauften Plaene oder vom Coach brauchen ein Flag das
+definiert ob es editable sein soll oder nicht."*
 
-`[read]` **Teilen heisst spaeter: eine Kopie beim Empfaenger mit
-`coach_created`** — **nicht derselbe Datensatz fuer zwei Nutzer.**
-**Nichts davon wird jetzt gebaut.**
+`[cmd]` **Es gibt keins.** `[read]` **Vorschlag: `darf_bearbeiten
+boolean NOT NULL DEFAULT true`, an `meal_plans` und `recipes`.**
+
+`[read]` **Zwei Sperren, die nichts miteinander zu tun haben:**
+
+    aktiv             jeder Plan, kommt vom Log
+    nicht editierbar  fremde Plaene, kommt vom Ersteller
+
+`[read]` **Die Anzeige muss beide unterscheiden** — *,,dieser Plan
+laeuft"* ist etwas anderes als *,,dieser Plan gehoert dir nicht"*.
+
+`[cmd]` **Den Weg zum Teilen nicht bauen** — E-39 und E-40 sagen
+vorsehen.
+
+### 4 · Rezepte in den Plan einfuegen
+
+Tom: *,,im Planner soll man Einzelpositionen oder fertige Rezepte
+einfuegen koennen."*
+
+`[cmd]` **Der `CHECK` kennt beides:** `recipe` mit
+`planned_servings`, `bls` und `custom` mit `amount_g`. `[cmd]` **Du
+hast in G-298 gemessen, dass der Typ das Feld entscheidet.**
+
+`[cmd]` **Und die Rezepte stehen seit G-289.**
 
 ### Was nicht zu tun ist
 
-**Keinen Lebenszyklus ausfuehren** — das ist C-373.
-**Kein Teilen bauen.**
+**Keinen Lebenszyklus ausfuehren** — C-373.
+**Kein Teilen, kein Kaufen bauen.**
 **Nichts auf `dev@lumeos.app`** — eine Probe, die schreiben kann,
 gehoert nicht auf ein unantastbares Konto.
 Nicht committen, nicht stagen, nicht pushen.
@@ -136,15 +161,22 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ### Nachweis
 
-    Plan anlegen        mit n Wochen, im Browser
-    Wochen entstehen    meal_plan_weeks zaehlt, gezaehlter Rueckbau
-    Tage entstehen      meal_plan_days zaehlt
-    fuellen             eine Position je Tag, sichtbar
-    wiederverwenden     der Plan steht ohne Startdatum in der
-                        Bibliothek
-    Copy week           kopiert eine Woche, belegt
-    plan_origin         self_created, belegt
-    dev                 unveraendert, vorher/nachher gezaehlt
+    Plan anlegen         mit n Wochen, im Browser
+    Wochen und Tage      meal_plan_weeks und _days zaehlen,
+                         gezaehlter Rueckbau
+    fuellen              Position und Rezept je Tag
+    aktiver Plan         Bearbeitung gesperrt, 409 oder gesperrte
+                         Oberflaeche
+    Kopie bearbeiten     Kopie entsteht, Original unveraendert
+    darf_bearbeiten      Spalte da, Vorgabe true, Anzeige
+                         unterscheidet die zwei Sperren
+    Bibliothek           listet alle Plaene, "Bearbeiten" fuehrt
+                         in den Planner
+    dev                  unveraendert, vorher/nachher gezaehlt
+
+`[read]` **Die vierte und fuenfte Zeile zusammen entscheiden, ob es
+brauchbar ist:** **gesperrt zu sein, ohne einen Weg zu haben, ist
+schlimmer als gar keine Sperre.**
 
 ## Bericht
 
