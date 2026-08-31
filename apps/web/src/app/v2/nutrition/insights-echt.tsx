@@ -33,11 +33,19 @@ const KONFIDENZ: Record<string, string> = {
   low: 'niedrig',
 }
 
-export function KalorienbilanzKachel({ d }: { d: InsightsStand }) {
+export function KalorienbilanzKachel({ d, fenster }: {
+  d: InsightsStand
+  /**
+   * `[cmd]` **Berichtigt in G-291:** hier stand `14` als Text, und
+   * seit dem Fenster von 30 Tagen war das falsch. **Eine Zahl im
+   * Titel altert mit dem Aufrufer** — sie kommt jetzt von dort.
+   */
+  fenster: number
+}) {
   const b = d.bilanz
   if (!b) {
     return (
-      <Card title="Calorie balance" sub="14 Tage">
+      <Card title="Calorie balance" sub={`${fenster} Tage`}>
         <p className="v2-muted" style={{ fontSize: 12 }}>
           Keine Bilanz — dafuer fehlen Gewichtsmessungen oder vollstaendige Tage.
         </p>
@@ -97,11 +105,15 @@ const MAKROFARBEN: Array<{
   { schluessel: 'fat', label: 'Fett', farbe: 'var(--acc-goals)' },
 ]
 
-export function MakroschnittKachel({ d }: { d: InsightsStand }) {
+export function MakroschnittKachel({ d, fenster }: {
+  d: InsightsStand
+  /** G-291: `14d avg` stand fest im Titel - siehe oben. */
+  fenster: number
+}) {
   const m = d.makros
   if (!m || m.tage === 0) {
     return (
-      <Card title="Macro split · 14d avg">
+      <Card title={`Macro split · ${fenster}d avg`}>
         <p className="v2-muted" style={{ fontSize: 12 }}>
           Fuer den Zeitraum liegen keine Tagessummen vor.
         </p>
@@ -115,7 +127,7 @@ export function MakroschnittKachel({ d }: { d: InsightsStand }) {
   const gramm = { protein: m.protein_g, carbs: m.carbs_g, fat: m.fat_g }
 
   return (
-    <Card title="Macro split · 14d avg" sub={`${m.tage} Tage gemittelt`}>
+    <Card title={`Macro split · ${fenster}d avg`} sub={`${m.tage} Tage gemittelt`}>
       <div className="v2-col-gap" style={{ gap: 10, marginTop: 8 }}>
         {MAKROFARBEN.map(f => {
           const anteil = anteile[f.schluessel]

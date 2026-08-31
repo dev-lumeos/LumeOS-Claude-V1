@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-31
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/insights-echt.tsx
@@ -49,3 +51,28 @@ erfunden. **Der Platz bleibt trotzdem leer.**
 
 **Mitbeauftragt mit G-291 am 2026-08-31.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Ergebnis (Kurzfassung, Einzelheiten in G-291)
+
+`[cmd]` **Echt gebaut. 28 Tage, ein Feld je Tag, Ziel 2.500 kcal**
+aus `goals.nutrition_targets` (gueltig ab 2026-05-21). Verteilung fuer
+`dev@lumeos.app` am 2026-08-31: **18 optimal, 5 gut, 4 knapp, 1
+gering, 0 ohne Eintrag** — die Legende zaehlt sie mit, und die Zahlen
+stimmen mit der Datenbank ueberein.
+
+`[read]` **Toms Berichtigung war richtig, meine Abnahme vom 30.08.
+falsch.** Die Sparkline zeigt einen Naehrstoff ueber die Zeit, die
+Heatmap einen Tag je Feld — *„welche Tage waren gut"*, nicht *„wie
+lief Vitamin C"*.
+
+`[cmd]` **Die Vorlage rechnet gegen ein festes `calTarget = 2100`;
+hier kommt das Ziel aus der Datenbank.** `[read]` **Fehlt es, steht
+ein Satz statt eines gefaerbten Gitters** — eine erfundene Zahl
+faerbte 28 Felder, ohne dass jemand saehe, dass sie erfunden ist.
+
+Bild: `backup/g291-heatmap.png`
+
+## Abnahme
+
+**2026-08-31, mit G-291 abgenommen:** gebaut: 28 Felder gegen das echte Ziel, ohne Ziel ein Satz statt
+eines gefaerbten Gitters.

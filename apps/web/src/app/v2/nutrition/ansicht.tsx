@@ -41,6 +41,10 @@ import { NaehrstoffOrdnungTab } from './naehrstoff-ordnung-tab'
 import type { NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnung'
 // G-101: zwei Insights-Kacheln mit echten Zahlen.
 import { KalorienbilanzKachel, MakroschnittKachel } from './insights-echt'
+// G-291/292/293/295: die vier fehlenden Kacheln aus SPEC_10.
+import {
+  TrendKachel, HeatmapKachel, MakroDetailKachel, WarnungenKachel,
+} from './insights-kacheln'
 // G-258/E-29: die echte Pending-Actions-Kachel.
 import { NutritionPendingEcht } from './pending-echt'
 // G-262: die naechste geplante Trainingseinheit.
@@ -698,15 +702,36 @@ function AndererTab({
   // Sie sind nach der Vorlage gebaut und weiterhin Attrappe — jede
   // Kachel traegt den Hinweis, woran die Anbindung haengt.
   if (tab === 'insights') {
-    // G-101: zwei der drei Kacheln lesen echt. Der Rest des Entwurfs
-    // steht darunter, mit Marke — der Mikronaehrstoff-Trend braucht
-    // eine Referenz je Tag, siehe Bericht 152.
+    // ══ G-291/292/293/295: von zwei Kacheln auf sechs ═════════════
+    //
+    // `[cmd]` **SPEC_10 nennt sechs Insights-Komponenten.** Fuenf
+    // stehen jetzt: Kalorienbilanz und Makroschnitt (G-101), dazu
+    // Verlauf (G-291), Tagesdeckung (G-295), Makrodetail (G-293) und
+    // Warnungen (G-292).
+    //
+    // `[cmd]` **DeficitSuggestions ist gemeldet statt gebaut** —
+    // SPEC_10 will Empfehlungen, C-108/F-02 verbietet sie
+    // (`DEFIZIT_HINWEIS`). **CrossModuleInsights wartet auf C-324.**
+    //
+    // `[read]` **Das Fenster steht als Zahl an einer Stelle** —
+    // `page.tsx` laedt 30 Tage, der Verlauf schneidet daraus im
+    // Browser. Warnungen und Makrodetail bekommen dieselbe Zahl als
+    // Prop, damit kein Titel eine andere behauptet.
+    const insightsFenster = 30
     return (
       <div style={{ marginTop: 16 }}>
         {einsichten && (einsichten.bilanz || einsichten.makros) && (
           <div className="v2-grid v2-g-cols-2" style={{ gap: 16, marginBottom: 16 }}>
-            <KalorienbilanzKachel d={einsichten} />
-            <MakroschnittKachel d={einsichten} />
+            <KalorienbilanzKachel d={einsichten} fenster={insightsFenster} />
+            <MakroschnittKachel d={einsichten} fenster={insightsFenster} />
+          </div>
+        )}
+        {einsichten && (
+          <div className="v2-grid v2-g-cols-2" style={{ gap: 16, marginBottom: 16 }}>
+            <TrendKachel d={einsichten} heute={datum ?? ''} />
+            <HeatmapKachel d={einsichten} heute={datum ?? ''} />
+            <MakroDetailKachel d={einsichten} fenster={insightsFenster} />
+            <WarnungenKachel d={einsichten} fenster={insightsFenster} />
           </div>
         )}
         {/* ══ G-11: nicht zweimal dieselbe Kachel ═══════════════════

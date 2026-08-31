@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-31
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/insights-echt.tsx
@@ -44,3 +46,21 @@ sollte** — **ohne ihm zu sagen, was er tun soll** (C-108/F-02).
 
 **Mitbeauftragt mit G-291 am 2026-08-31.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Ergebnis (Kurzfassung, Einzelheiten in G-291)
+
+`[cmd]` **Gebaut. 11 Warnungen bei 30 Tagen fuer `dev@lumeos.app`,
+gemessen 2026-08-31** — von Magnesium und Wasser (je 30 von 30) bis
+Chlorid (4 von 8 bewerteten Tagen, 22 nicht bewertbar).
+
+`[read]` **Der Anteil rechnet gegen die BEWERTETEN Tage, nicht gegen
+das Fenster** — sonst saehe Chlorid mit 13 % harmlos aus statt mit
+50 %. **Duenn Belegtes steht hinten UND sagt es an der Zeile**; die
+Sortierung allein zu deuten waere Sache der Leserin gewesen.
+
+Bild: `backup/g291-warnungen.png`
+
+## Abnahme
+
+**2026-08-31, mit G-291 abgenommen:** gebaut: 11 Warnungen, Anteil gegen bewertete Tage; die zwei duenn
+belegten sortieren zuletzt und sagen es.

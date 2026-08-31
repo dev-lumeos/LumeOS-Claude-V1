@@ -10,8 +10,10 @@ kinder: []
 entscheidung: E-25
 agent: codex
 beauftragt: 2026-08-31
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
-  tabellen: [nutrition.daily_summary, nutrition.nutrient_defs]
+  tabellen: [nutrition.food_nutrients]
 zahlen: null
 ---
 
@@ -211,8 +213,93 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### Gebaut
+
+`nutrition.nrf93_daily(p_user_id, p_entry_date)` liefert den NRF9.3-
+Tagesscore samt `status`, `value_complete`, fehlenden Eingangs-Codes und den
+einzelnen gedeckelten Komponenten. `nutrition.nrf93_score_from_amounts(...)`
+ist die reine, testbare Originalformel darunter.
+
+- Die neun positiven und drei begrenzten Eingaben sind jeweils bei 100 Prozent
+  gedeckelt.
+- Die Referenz ist explizit `NRF9.3 original US Daily Values`; keine EFSA-
+  Referenz wird gelesen oder ersetzt.
+- `sugar_input = total_sugar` macht die getestete Abweichung von added sugars
+  sichtbar.
+- Vitamin A wird nur aus `vitamin_a_iu_daily` gelesen. Vitamin E verwendet
+  die Originalreferenz 30 IU in der vorhandenen, im Punkt bereits benannten
+  Entsprechung 20 mg Alpha-Tocopherol.
+- Jeder fehlende Wert oder positive Missing-Zaehler liefert `status =
+  incomplete` und `score = NULL`; ein leerer Tag liefert `no_data`, ebenfalls
+  ohne Ersatzwert.
+
+Der Schritt steht als `05_user_tabellen/324_nrf93_daily_score.sql` in der
+Kette und hat keine Tabellen oder Referenzwerte geaendert.
+
+### Nachmessung, dev, 01.-30.08.2026
+
+Der genannte Zwischenstand **12 complete / 18 incomplete** widerspricht dem
+gebauten Vitamin-A-Pfad und wurde nicht aufgeloest. Er zaehlt offenbar das
+Gesamtfeld `daily_summary.vita`; E-34 verlangt aber drei Komponenten.
+`vitamin_a_iu_daily` ist an allen 30 Tagen `incomplete`: `CAROTPAXB` ist an
+allen 30 Tagen unvollstaendig (120 fehlende Positionen), `CARTB` an 20 Tagen.
+
+Damit liefert die neue Funktion ehrlich **0 complete / 30 incomplete**, keine
+Score-Spannweite. Die Gruende im gleichen Zeitraum sind: `VITA` 30 Tage,
+`VITC` 12 Tage und `FIBT` 6 Tage unvollstaendig. Der VITC-Fortschritt aus
+C-343 (18/30 vollstaendig) ist real, reicht wegen der unabhaengigen
+Vitamin-A-Regel aber nicht fuer einen scorefaehigen Tag. Ein Rueckfall auf
+das Gesamtfeld `VITA` wuerde E-34 und den Auftrag "kein Wert bei fehlendem
+Bestandteil" brechen und wurde deshalb nicht gebaut.
+
+Protein ist in den angezeigten Komponenten an 30/30 Tagen gedeckelt. Die
+Gegenprobe der reinen Formel ergibt bei sonst gleichen gedeckelten positiven
+Eingaengen 900 ohne Natrium und 800 bei 2.400 mg Natrium; 500 g Protein
+bleiben wie 50 g bei 900. Eine Abfrage ueber die 30 Tage brauchte 594,945 ms;
+weil kein Tag vollstaendig ist, gibt es bewusst keine numerische
+Score-Spannweite.
+
+### Validierung
+
+Der neue Test war zuerst rot, weil beide NRF-Funktionen fehlten, und ist nach
+dem Einspielen gruen (3/3: Deckelung/Natrium, unvollstaendiges Vitamin A,
+`no_data`). C-343 bleibt 3/3 gruen, ebenso die beiden C-350-Teiltests fuer
+Vitamin-A-Sperre und Magnesium-Quellenprioritaet.
+
+Der dritte, fachfremde C-350/C-349-Test bleibt rot: seine fest
+eingeschriebenen 90-Tage-Zaehler erwarten Vor-C-343-Werte fuer MG, NA und
+NIA, waehrend die Funktion selbst die aktuelle Tagesreihe korrekt spiegelt.
+Der Fehler wurde nicht in C-324 geaendert.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-31, Orchestrator.**
+
+`[cmd]` **`nutrition.nrf93_daily()` rechnet die gedeckelte
+Originalformel und liefert bei Luecken `incomplete` mit
+`score = NULL`.**
+
+### Und meine Zahl im Auftrag war falsch
+
+`[cmd]` **Auf `dev` sind 0 von 30 Tagen scorefaehig, nicht 12.**
+
+`[cmd]` **`vitamin_a_iu_daily()` ist an allen 30 Tagen unvollstaendig,
+wegen fehlender Komponenten.**
+
+`[read]` **Ich hatte *,,alle NRF9.3-Eingaenge an 12 von 30 Tagen
+vollstaendig"* aus dem C-343-Bericht uebernommen** — **das galt fuer
+die uebrigen elf Naehrstoffe, nicht fuer Vitamin A.**
+
+### Der Ausweg wurde abgelehnt, und das ist richtig
+
+`[read]` **Ein Rueckfall auf `daily_summary.vita` waere gegen E-34.**
+`[cmd]` **Er hat ihn nicht genommen und es gesagt.**
+
+`[read]` **Damit steht die Funktion und wartet auf die Daten** —
+**nicht umgekehrt.**
+
+`[cmd]` **Neu: `05_user_tabellen/324_nrf93_daily_score.sql` und ein
+Test, 3/3 gruen. C-343-Test bleibt 3/3.**
+
+**Abgenommen.** **Der Vitamin-A-Blocker geht als C-367.**
+

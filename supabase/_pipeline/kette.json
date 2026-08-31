@@ -1331,6 +1331,16 @@
       ]
     },
     {
+      "id": "324",
+      "path": "supabase/_pipeline/05_user_tabellen/324_nrf93_daily_score.sql",
+      "kind": "sql",
+      "creates": "C-324/E-25: NRF9.3-Tagesfunktion mit Original-US-Referenzen, Gesamtzucker und fehlwertsicherem incomplete-Status",
+      "depends_on": [
+        "343",
+        "350"
+      ]
+    },
+    {
       "id": "351",
       "path": "supabase/_pipeline/13_supplements/351_supplement_tagesbilanz.sql",
       "kind": "sql",

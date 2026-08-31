@@ -334,7 +334,10 @@ export default async function V2NutritionPage({
   let einsichten: InsightsStand | null = null
   if (tab === 'insights') {
     try {
-      einsichten = await ladeInsights(datum)
+      // `[read]` **30 Tage, nicht 14.** Die Heatmap braucht 28, und
+      // der Verlauf schneidet 7/14/30 im Browser aus derselben Reihe
+      // — ein Fensterwechsel kostet so keinen Serverlauf.
+      einsichten = await ladeInsights(datum, 30)
     } catch {
       einsichten = null
     }

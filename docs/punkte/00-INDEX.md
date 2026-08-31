@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 230 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 6 |
-| `erledigt` | 153 |
-| **gesamt** | **392** |
+| `laufend_claudecode` | 5 |
+| `erledigt` | 158 |
+| **gesamt** | **396** |
 
 ## medical — 42
 
@@ -58,9 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 137
-
-### beauftragbar — 136
+## nutrition — 141
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -100,7 +98,7 @@
 | `C-229` | befund | mittel | [Ein Katalog aus `DatabaseEcht`, Detail und Add getrennt](erledigt/nutrition-c-0229-ein-katalog-aus-databaseecht-detail-und-add-getrennt.md) | erledigt | — | — |
 | `C-239` | befund | mittel | [`meal_plans` kennt keinen Lebenszyklus](erledigt/nutrition-c-0239-meal-plans-kennt-keinen-lebenszyklus.md) | erledigt | — | — |
 | `C-323` | entscheidung | hoch | [Micro-Flags Warnschwelle und Formulierung festlegen](erledigt/nutrition-c-0323-micro-flags-warnschwelle-und-formulierung-festlegen.md) | erledigt | — | C-344, G-259 |
-| `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](laufend_codex/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | laeuft (codex) | — | C-342, C-343 |
+| `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](erledigt/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | erledigt | — | C-342, C-343, C-367 |
 | `C-333` | befund | niedrig | [Selen fehlt in der Bewertung auf dev](erledigt/nutrition-c-0333-selen-fehlt-in-der-bewertung-auf-dev.md) | erledigt | — | — |
 | `C-334` | befund | hoch | [die Tagesbewertung hat sich zwischen zwei Messungen verschoben](erledigt/nutrition-c-0334-die-bewertung-hat-sich-zwischen-zwei-messungen-verschoben.md) | erledigt | — | C-335 |
 | `C-335` | befund | mittel | [keine Aenderungshistorie fuer Mahlzeiten und Referenzwerte](todos/nutrition-c-0335-keine-aenderungshistorie-fuer-mahlzeiten.md) | offen | — | — |
@@ -120,6 +118,7 @@
 | `C-356` | messung | niedrig | [woraus die 1.620 ms HTML bestehen](erledigt/nutrition-c-0356-woraus-die-1620-ms-html-bestehen.md) | erledigt | — | — |
 | `C-360` | entscheidung | hoch | [darf ein fehlender Naehrwert als 0 zaehlen?](todos/nutrition-c-0360-darf-ein-fehlender-naehrwert-als-null-zaehlen.md) | offen | — | — |
 | `C-366` | befund | mittel | [`food_tags` hat keinen Pflegeweg](laufend_codex/nutrition-c-0366-food-tags-hat-keinen-pflegeweg.md) | vorbereitet (codex) | — | — |
+| `C-367` | befund | hoch | [Vitamin A blockiert den Score an allen Tagen](laufend_codex/nutrition-c-0367-vitamin-a-blockiert-den-score-an-allen-tagen.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -190,22 +189,20 @@
 | `G-279` | entscheidung | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | — | — |
 | `G-283` | befund | hoch | [ein `pro`-Profil faellt still auf 0,90](erledigt/nutrition-g-0283-ein-pro-profil-faellt-still-auf-090.md) | erledigt | — | — |
 | `G-285` | befund | niedrig | [`display_tier` heisst im Code weiter *Abo-Gate*](erledigt/nutrition-g-0285-display-tier-heisst-im-code-weiter-abo-gate.md) | erledigt | — | — |
-| `G-286` | feature | hoch | [MealPlanDetail — das Tages-Akkordeon fehlt](erledigt/nutrition-g-0286-mealplandetail-das-tages-akkordeon-fehlt.md) | erledigt | — | — |
+| `G-286` | feature | hoch | [MealPlanDetail — das Tages-Akkordeon fehlt](erledigt/nutrition-g-0286-mealplandetail-das-tages-akkordeon-fehlt.md) | erledigt | — | G-298 |
 | `G-287` | feature | hoch | [MealPlanCard — die Plan-Liste ist nicht anklickbar](erledigt/nutrition-g-0287-mealplancard-die-plan-liste-ist-nicht-anklickbar.md) | erledigt | — | — |
 | `G-288` | feature | hoch | [Die Einkaufsliste ist eine leere Kachel](laufend_claudecode/nutrition-g-0288-die-einkaufsliste-ist-eine-leere-kachel.md) | vorbereitet (claudecode) | — | — |
 | `G-289` | feature | hoch | [Fünf Rezeptkomponenten fehlen](laufend_claudecode/nutrition-g-0289-fuenf-rezeptkomponenten-fehlen.md) | vorbereitet (claudecode) | — | — |
 | `G-290` | feature | mittel | [Der Aktivierungsdialog mit LifecyclePicker fehlt](erledigt/nutrition-g-0290-der-aktivierungsdialog-mit-lifecyclepicker-fehlt.md) | erledigt | — | — |
-| `G-291` | feature | hoch | [TrendChart fehlt im Insights-Reiter](laufend_claudecode/nutrition-g-0291-trendchart-fehlt-im-insights-reiter.md) | laeuft (claudecode) | — | — |
-| `G-292` | feature | hoch | [MicroFlagsList — die Warnungen werden nicht gezeigt](laufend_claudecode/nutrition-g-0292-microflagslist-die-warnungen-werden-nicht-gezeigt.md) | laeuft (claudecode) | — | — |
-| `G-293` | feature | mittel | [MacroDetail — die Fetthierarchie fehlt](laufend_claudecode/nutrition-g-0293-macrodetail-die-fetthierarchie-fehlt.md) | laeuft (claudecode) | — | — |
-| `G-295` | feature | mittel | [Die Heatmap wurde entfernt, und die Spec verlangt sie](laufend_claudecode/nutrition-g-0295-die-heatmap-wurde-entfernt-und-die-spec-verlangt-sie.md) | laeuft (claudecode) | — | — |
+| `G-291` | feature | hoch | [TrendChart fehlt im Insights-Reiter](erledigt/nutrition-g-0291-trendchart-fehlt-im-insights-reiter.md) | erledigt | — | — |
+| `G-292` | feature | hoch | [MicroFlagsList — die Warnungen werden nicht gezeigt](erledigt/nutrition-g-0292-microflagslist-die-warnungen-werden-nicht-gezeigt.md) | erledigt | — | — |
+| `G-293` | feature | mittel | [MacroDetail — die Fetthierarchie fehlt](erledigt/nutrition-g-0293-macrodetail-die-fetthierarchie-fehlt.md) | erledigt | — | — |
+| `G-294` | feature | mittel | [CrossModuleInsights — Goals bekommt nichts](todos/nutrition-g-0294-crossmoduleinsights-goals-bekommt-nichts.md) | offen | — | — |
+| `G-295` | feature | mittel | [Die Heatmap wurde entfernt, und die Spec verlangt sie](erledigt/nutrition-g-0295-die-heatmap-wurde-entfernt-und-die-spec-verlangt-sie.md) | erledigt | — | G-297 |
+| `G-297` | befund | mittel | [die Tagesdeckung nimmt zu viel Platz](laufend_claudecode/nutrition-g-0297-die-tagesdeckung-nimmt-zu-viel-platz.md) | laeuft (claudecode) | — | — |
+| `G-298` | feature | hoch | [Plaene lassen sich ansehen, nicht aendern](laufend_claudecode/nutrition-g-0298-plaene-lassen-sich-ansehen-nicht-aendern.md) | laeuft (claudecode) | — | — |
+| `G-299` | feature | hoch | [der Planner zeigt eine fremde Woche](laufend_claudecode/nutrition-g-0299-der-planner-zeigt-eine-fremde-woche.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
-
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `G-294` | feature | mittel | [CrossModuleInsights — Goals bekommt nichts](todos/nutrition-g-0294-crossmoduleinsights-goals-bekommt-nichts.md) | offen | C-324 | — |
 
 ## supplements — 59
 
