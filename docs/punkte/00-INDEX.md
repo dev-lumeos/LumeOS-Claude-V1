@@ -7,8 +7,9 @@
 |---|---|
 | `todos` | 234 |
 | `laufend_codex` | 3 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 167 |
-| **gesamt** | **404** |
+| **gesamt** | **405** |
 
 ## medical — 42
 
@@ -57,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 148
+## nutrition — 149
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -208,6 +209,7 @@
 | `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](erledigt/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | erledigt | — | — |
 | `G-301` | befund | hoch | [der Meal-plans-Reiter folgt keinem Flow](erledigt/nutrition-g-0301-der-meal-plans-reiter-folgt-keinem-flow.md) | erledigt | — | C-370 |
 | `G-302` | befund | mittel | [die Zielzeile bricht um](todos/nutrition-g-0302-die-zielzeile-bricht-um.md) | offen | — | — |
+| `G-304` | messung | hoch | [was ein Nutzer in Plaenen und Rezepten tun kann](laufend_claudecode/nutrition-g-0304-was-ein-nutzer-in-plaenen-und-rezepten-tun-kann.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59
