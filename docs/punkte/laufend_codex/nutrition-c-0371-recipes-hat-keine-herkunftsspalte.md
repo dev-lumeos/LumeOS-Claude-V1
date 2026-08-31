@@ -72,3 +72,17 @@ abzuleiten.**
 `[cmd]` **Und `measurement_source` bleibt, was es ist:** eine Angabe
 zur Messung, keine Herkunft. **Claude Code hat einen Waechter
 dagegen gesetzt.**
+
+## Ergaenzt am 2026-08-31 — C-374 dazu
+
+Tom: *,,oder AI Coach erstellt irgendwann Plaene anhand Vorgaben
+seines Kunden."*
+
+`[cmd]` **Dieselbe Luecke an `meal_plans`: `plan_origin` kennt
+`self_created`, `coach_created`, `marketplace` — kein `buddy`.**
+
+`[cmd]` **`SPEC_02` fuehrt vier Quellen, `SPEC_03` Flow 3 nennt die
+Beschriftung *,,Erstellt von Buddy"*.**
+
+`[read]` **Beide Spalten zusammen erledigen** — Rezepte bekommen
+`source`, Plaene bekommen den vierten Wert.

@@ -20,6 +20,8 @@ Tom, 2026-08-31, auf die Frage *,,fuer was baut man einen planner?"*:
     2  ein Coach hat eigene auch erstellte Plaene die er seinen Kunden
        geben kann, sprich er kann sharen
     3  wenn Marketplace da ist kann man Plaene kaufen
+    4  oder AI Coach erstellt irgendwann Plaene anhand Vorgaben
+       seines Kunden
 
 ## Was daraus folgt
 
@@ -80,6 +82,30 @@ sie entstehen beim Aktivieren (Flow 3, Schritte 5 und 6).
 `[read]` **Was beim Anlegen zaehlt: Name, Beschreibung, Tagesziele,
 und wie viele Wochen.** **Dann steht ein leerer Plan in der Werkbank,
 und der Nutzer fuellt ihn.**
+
+## Die vierte Quelle fehlt im Schema
+
+`[cmd]` **`SPEC_02` fuehrt vier Quellen:** `user | coach |
+marketplace | buddy`. `[cmd]` **Der CHECK an `meal_plans` kennt
+drei:** `self_created`, `coach_created`, `marketplace`.
+
+`[read]` **`buddy` fehlt** — **die vierte Quelle aus Toms Antwort hat
+keinen Wert.** **Als C-374.**
+
+`[cmd]` **Und `SPEC_02` sagt, was ein Buddy-Plan ist:** *,,`source:
+'buddy'` — identisches Schema, User muss trotzdem aktivieren."*
+
+`[read]` **Damit ist der Weg vorgezeichnet:** Buddy baut einen Plan
+wie ein Nutzer, **und der Nutzer aktiviert ihn** — Flow 3 unveraendert.
+
+`[cmd]` **Die Autonomiestufe dafuer steht:**
+`coach.client_autonomy.nutrition_level`, 1 bis 5 (E-11, C-112).
+`[read]` **Ab welcher Stufe Buddy einen Plan anlegen darf, ist eine
+eigene Frage** — **aber die Spalte, in der es steht, gibt es.**
+
+`[cmd]` **Bei Rezepten ist es dieselbe Luecke:** `ADR_RECIPE_SOURCE_BUDDY`
+verlangt `source` mit `buddy`, **und `recipes` hat keine
+`source`-Spalte** (C-371, laeuft bei Codex).
 
 ## Was zurueckgestellt bleibt
 

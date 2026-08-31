@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 233 |
-| `laufend_codex` | 3 |
+| `laufend_codex` | 4 |
 | `laufend_claudecode` | 4 |
 | `erledigt` | 168 |
-| **gesamt** | **408** |
+| **gesamt** | **409** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 152
+## nutrition — 153
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -125,6 +125,7 @@
 | `C-371` | befund | mittel | [`recipes` hat keine Herkunftsspalte](laufend_codex/nutrition-c-0371-recipes-hat-keine-herkunftsspalte.md) | laeuft (codex) | — | — |
 | `C-372` | befund | hoch | [Planwochen haben keinen Schreibweg](laufend_claudecode/nutrition-c-0372-planwochen-haben-keinen-schreibweg.md) | laeuft (claudecode) | — | — |
 | `C-373` | befund | mittel | [der Lebenszyklus wird gespeichert und nie ausgefuehrt](todos/nutrition-c-0373-der-lebenszyklus-wird-gespeichert-und-nie-ausgefuehrt.md) | offen | — | — |
+| `C-374` | befund | mittel | [`plan_origin` kennt `buddy` nicht](laufend_codex/nutrition-c-0374-plan-origin-kennt-buddy-nicht.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
