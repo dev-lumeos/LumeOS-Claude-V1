@@ -10,9 +10,10 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [supplements.supplements]
 zahlen: null
 ---
 
@@ -185,4 +186,39 @@ aktuelle maschinenlesbare Quelle gezahlt.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-30, Orchestrator.**
+
+### C-202 — teilweise ueberholt, und die Grenze ist scharf
+
+`[cmd]` **`wissen.product_entities` traegt 50 Produkte, 120 Marken, 63
+Hersteller.** `[read]` **Der Punkt sagte, es gebe keine
+Produktebene** — **es gibt eine.**
+
+`[cmd]` **Aber Nutzerbestand und Einnahmen verweisen weiter nur auf
+Stoffe.**
+
+`[read]` **Damit ist die Frage aus meinem Auftrag beantwortet, und
+zwar mit einem Zwischenstand:** **die Produktebene existiert als
+Wissen, nicht als Bestand.** `[read]` **Ein Nutzer nimmt weiter eine
+Substanz, kein Produkt.**
+
+`[read]` **Und das ist keine Luecke, sondern eine Grenze** — `wissen`
+ist der Katalog, `supplements` der Bestand. **Die Verbindung dazwischen
+ist die eigentliche Frage. Als C-364.**
+
+### C-260 — teilweise erledigt, und der Rest ist benannt
+
+`[cmd]` **Zurueckgeflossen: UNII, PubChem, ChEMBL, InChIKey und 57
+Aliase — vollstaendig.**
+
+`[cmd]` **Offen: 33 CAS-Nummern und 27 Peptidsequenzen.**
+
+`[read]` **Und der Grund fuer die Sequenzen ist kein Versaeumnis:**
+`[cmd]` **es gibt kein Ziel im Live-Schema** — **keine Spalte, in die
+sie gehoerten.**
+
+`[read]` **Das ist die richtige Meldung: nicht *,,noch nicht
+gemacht"*, sondern *,,es gibt keinen Ort dafuer"*.** **Als C-365.**
+
+**Abgenommen.**
+

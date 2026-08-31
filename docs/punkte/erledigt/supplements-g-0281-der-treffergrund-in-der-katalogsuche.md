@@ -9,6 +9,8 @@ kind_von: G-214
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
   dateien:
     - apps/web/src/lib/supplements/substanz-kategorien.ts
@@ -327,4 +329,86 @@ und gegen die echten Dateien laufen lassen, mit beiden Gegenproben
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-30, Orchestrator.**
+
+`[cmd]` **`treffergrund()` liefert, was `trifftSuche()` ohnehin
+wusste, und `trifftSuche()` ruft es jetzt** — **Filter und
+Begruendung koennen nicht auseinandergehen.**
+
+`[read]` **Das ist die bessere Loesung als die im Auftrag
+beschriebene:** ich hatte *,,gibt statt `boolean` den Grund zurueck"*
+verlangt — **er hat die Begruendung zur Quelle gemacht und den Filter
+davon abgeleitet.**
+
+`[cmd]` **Am Schirm: *Resveratrol* liefert 2 Treffer, einer mit
+Grund.** Pterostilbene zeigt *,,in der Beschreibung"*, Resveratrol
+selbst nichts — **ein Namenstreffer braucht keine Erklaerung.**
+
+`[cmd]` **Zwei Sabotagen kippen die Rangfolge, beide fallen.**
+
+### G-102 — ueberholt, und der Punkt zitierte falsch
+
+`[cmd]` **Der Punkt zitiert `C 89.50 823.53 109.24 767.88` — vier
+Zahlen.** `[cmd]` **Die Datei traegt sechs:
+`C 89.50 823.53 107.08 773.44 109.24 767.88`.**
+
+`[read]` **Das Zitat hat die mittleren zwei weggelassen** — **und
+genau daraus entstand der Befund *,,abgeschnitten"*.**
+
+`[cmd]` **Beide Pfade im Browser geprueft: 0 Konsolenfehler, echte
+Laenge und Bounding-Box.** `[cmd]` **Die Seite: 160 Pfade, 160
+zeichnen, 0 leer.**
+
+`[read]` **Und der Waechter hat keine Luecke** — `--selbsttest-kaputt`
+faengt einen eingebauten Bruch, **und ein neuer Waechter schuetzt
+diesen Schalter.**
+
+### A-50 — gebaut, mit zwei Unterscheidungen, die ihn brauchbar machen
+
+`[cmd]` **`tools/gefallene-spalten-pruefen.mjs`, im Gate. 21
+`DROP COLUMN`, 20 ohne Rueckkehr.**
+
+`[read]` **Erste Unterscheidung:** `im_katalog` wird geworfen **und
+zwei Zeilen spaeter neu angelegt.** `[read]` **Wer nur `DROP` zaehlt,
+meldet zwei saubere Lesewege als Fehler.**
+
+`[read]` **Zweite:** Tests sind keine Lesewege. `[cmd]` **Der
+G-173-Waechter nennt `acwr_used` nur innerhalb einer regulaeren
+Ausdrucksklammer.**
+
+`[cmd]` **Gegen den historischen Fall geprueft:** `acwr_used` in
+`scores-read.ts` wieder eingesetzt — **der Waechter meldet genau
+diese Zeile.**
+
+### C-356 — und er berichtigt meine Zahl
+
+`[cmd]` **Die Aufteilung ist nicht halbe-halbe, sondern fast alles
+Server:** **TTFB waechst von 410 auf 4.183 ms, der Download von 11 auf
+28 ms** — **699 kB komprimieren auf 120.**
+
+`[read]` **Meine C-353-Schaetzung *,,rund 1.620 ms HTML-Bau und
+Uebertragung bei etwa 3 ms je kB"* war aus einer Differenz
+gerechnet** — `[read]` **und eine Differenz sagt nicht, woraus sie
+besteht.**
+
+`[read]` **Sie war in Groesse und Ort falsch.** **Wer die Ladezeit
+angeht, muss den Renderpfad angehen, nicht die Nutzlast.**
+
+### Und eine ehrliche Sabotagemeldung
+
+`[cmd]` **8 von 10 fallen in der Testsuite, zwei brechen das
+Waechterwerkzeug selbst** — **deren Schutz liegt im Gate.** `[cmd]`
+**Beide einzeln geprueft, beide machen den Gate rot.**
+
+`[read]` **Er meldet die Aufteilung, statt sie als zehn gefallene zu
+zaehlen.**
+
+`[cmd]` **Drei eigene Fehler gefangen:** ein Waechter, der zwei
+Vorkommen als eines behandelte; ein Test, der in 1,4 ms aus dem
+falschen Grund scheiterte; **und der gestrige A-36-Waechter, der
+seinen eigenen Dateinamen fand.**
+
+`[cmd]` 1072 Tests, Gate 11/11.
+
+**Abgenommen.**
+

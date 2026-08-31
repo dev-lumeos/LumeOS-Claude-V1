@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: C-209
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   dateien:
     - supabase/_pipeline/kette.json
@@ -51,7 +53,7 @@ selbst, oder der Lauf, der ihn ausfuehrt?**
 
 ## Auftrag
 
-**Vorbereitet mit C-345 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit C-345 am 2026-08-30.** Der Auftragstext
 und der Bericht stehen dort.
 
 ### Der Dev-Server gehoert dir nicht

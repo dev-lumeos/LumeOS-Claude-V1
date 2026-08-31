@@ -7,6 +7,8 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: C-343
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: [nutrition.food_nutrients]
 zahlen:
@@ -41,7 +43,7 @@ nach, ob es eine Entscheidung war.**
 
 **Mitbeauftragt: C-361.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 ### Warum dieser Punkt ploetzlich traegt
 

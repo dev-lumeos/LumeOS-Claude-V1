@@ -40,6 +40,8 @@ import {
   GRUPPEN, UNZUGEORDNET_ID, UNZUGEORDNET_TEXT,
   filtereGruppe, filtereKategorien, gruppeGesperrt, gruppeVon,
   kategorieFarbe, kategorieLabel, kategorieVon, nachGruppenwechsel, trifftSuche,
+  // G-281: der Treffergrund an der Zeile.
+  treffergrund, GRUND_TEXT, type Treffergrund,
   zaehleGruppen, zaehleKategorien, type Gruppe,
 } from '../../../lib/supplements/substanz-kategorien'
 import { useSupp } from './kontext'
@@ -147,6 +149,14 @@ export function SubstanzDatenbank() {
     // pruefbar, und die Begruendung (842 verschiedene Zwecke, deshalb
     // kein Filter) steht daneben.
     const menge = f ? nachKategorie.filter(s => trifftSuche(s, f)) : nachKategorie
+    // G-281: warum hat die Zeile getroffen? `treffergrund` gibt
+    // zurueck, was `trifftSuche` ohnehin schon wusste — dieselbe
+    // Reihenfolge, dieselbe Rangregel.
+    const gruende = new Map<string, Treffergrund>()
+    if (f) for (const s of menge) {
+      const g = treffergrund(s, f)
+      if (g) gruende.set(s.id, g)
+    }
     // ── G-176: KEIN Limit mehr (2026-08-23) ───────────────────────
     //
     // `[cmd]` Hier stand `menge.slice(0, 50)`, eingebracht mit
@@ -175,7 +185,9 @@ export function SubstanzDatenbank() {
     // nicht zeigt. Wenn der Katalog einmal Tausende traegt, ist die
     // Messung zu wiederholen — die Zahl steht oben, damit sie
     // vergleichbar ist.
-    return { gezeigt: menge, gesamt: menge.length }
+    // `[read]` A-60 gilt hier NICHT: die `Map` bleibt in dieser
+    // Client-Komponente und geht ueber keine Server-Client-Grenze.
+    return { gezeigt: menge, gesamt: menge.length, gruende }
   }, [sichtbar, frage, kategorien])
 
   async function oeffne(id: string) {
@@ -419,6 +431,19 @@ export function SubstanzDatenbank() {
                           textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                         }}>
                           {s.description}
+                        </div>
+                      )}
+                      {/* G-281: der Treffergrund, wo er etwas erklaert.
+                          `[read]` Bei einem Namenstreffer steht nichts —
+                          wer „Magnesium" sucht und Magnesium findet,
+                          braucht keine Auskunft. */}
+                      {GRUND_TEXT[treffer.gruende.get(s.id) ?? 'alle'] && (
+                        <div className="v2-dim" style={{
+                          fontSize: 9.5, marginTop: 2,
+                          display: 'flex', alignItems: 'center', gap: 4,
+                        }}>
+                          <Icon name="search" className="v2-ic v2-ic-sm" />
+                          {GRUND_TEXT[treffer.gruende.get(s.id) ?? 'alle']}
                         </div>
                       )}
                     </td>

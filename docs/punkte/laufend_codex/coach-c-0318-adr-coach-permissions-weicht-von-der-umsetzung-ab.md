@@ -8,6 +8,8 @@ braucht: []
 kind_von: A-37
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: []
@@ -24,7 +26,7 @@ ADR_COACH_PERMISSIONS_V1 verlangt Freigabe pro Modul und Subfunktion; gebaut ist
 
 **Mitbeauftragt: B-20.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-30.**
 
 ### 1 · C-318 — der ADR weicht von der Umsetzung ab
 

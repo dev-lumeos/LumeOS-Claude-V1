@@ -10,9 +10,11 @@ kinder: []
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: ["packages/ui/src/koerperkarte-pfade.ts"]
+  dateien:
+    - apps/web/src/app/v2/recovery
 zahlen: null
 ---
 
@@ -134,3 +136,8 @@ Konsolenfehler**, Laenge 6.276 bzw. 6.273, Groesse 630x1185.
 zu unterscheiden.** Ein Waechter sichert ihn jetzt.
 
 `[read]` **Nicht behoben, sondern ueberholt.**
+
+## Abnahme
+
+**2026-08-30, mit G-281 abgenommen:** ueberholt: das Zitat im Punkt liess zwei Zahlen aus; 160 Pfade
+zeichnen, 0 leer.

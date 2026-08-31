@@ -118,9 +118,15 @@ test('A-36: der Mockup traegt die drei Module, der Code zieht nichts daraus', ()
   // Wurf durch und meldete „Command failed" statt „sauber".
   let treffer: string[] = []
   try {
+    // `[read]` **Tests zaehlen nicht.** Diese Datei nennt
+    // `module-stubs` selbst — der Waechter fand sich sonst SELBST und
+    // meldete „jetzt zieht Code aus dem Mockup". **Dieselbe Klasse wie
+    // G-186:** ein Waechter, der seinen Suchbegriff im eigenen Text
+    // findet, prueft nichts.
     treffer = execFileSync('git', ['grep', '-l', 'module-stubs',
       '--', 'apps/', 'packages/'], { cwd: WURZEL, encoding: 'utf8' })
       .split('\n').filter(Boolean)
+      .filter(p => !/(^|\/)__tests__\//.test(p) && !/\.test\.tsx?$/.test(p))
   } catch (e) {
     const status = (e as { status?: number }).status
     // 1 = kein Treffer. Alles andere ist ein echter Fehler.

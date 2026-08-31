@@ -151,11 +151,60 @@ export function trifftSuche(
   e: Pick<SubstanzListenEintrag, 'name' | 'description' | 'zwecke'>,
   frage: string,
 ): boolean {
+  return treffergrund(e, frage) !== null
+}
+
+/**
+ * Warum diese Substanz getroffen hat — G-281.
+ *
+ * `[cmd]` **Der Anlass, gemessen von Codex in G-214 und hier
+ * nachgeprueft:** *Pterostilbene* trifft bei der Suche nach
+ * *Resveratrol*, weil `supplement_user_texts.kurz_was_en` sagt
+ * *„a plant compound from blueberries related to resveratrol"*.
+ * `[cmd]` **Der Text steht als `description` in der Listenzeile**
+ * (`substanz-read.ts:418` — erst `kurz_was_de`, dann `_en`).
+ *
+ * `[read]` **Der Treffer ist richtig. Die Auskunft fehlte.** Wer
+ * *Resveratrol* sucht und *Pterostilbene* bekommt, sieht sonst einen
+ * Namen, der nichts mit der Frage zu tun hat.
+ *
+ * `[read]` **Dieselbe Reihenfolge wie bisher** — `name`, dann
+ * `description`, dann `zwecke`. **Keine Rangregel geaendert:** die
+ * Funktion gibt nur zurueck, was sie ohnehin schon wusste.
+ *
+ * `null` heisst: kein Treffer. **Eine leere Frage trifft alles** und
+ * liefert `'alle'` — dort steht keine Auskunft an der Zeile, weil es
+ * nichts zu erklaeren gibt.
+ */
+export type Treffergrund = 'alle' | 'name' | 'description' | 'zwecke'
+
+export function treffergrund(
+  e: Pick<SubstanzListenEintrag, 'name' | 'description' | 'zwecke'>,
+  frage: string,
+): Treffergrund | null {
   const f = frage.trim().toLowerCase()
-  if (!f) return true
-  if (e.name.toLowerCase().includes(f)) return true
-  if ((e.description ?? '').toLowerCase().includes(f)) return true
-  return (e.zwecke ?? []).some(z => z.toLowerCase().includes(f))
+  if (!f) return 'alle'
+  if (e.name.toLowerCase().includes(f)) return 'name'
+  if ((e.description ?? '').toLowerCase().includes(f)) return 'description'
+  if ((e.zwecke ?? []).some(z => z.toLowerCase().includes(f))) return 'zwecke'
+  return null
+}
+
+/**
+ * Was an der Zeile steht.
+ *
+ * `[read]` **Die Beschriftung entscheidet, was der Nutzer versteht:**
+ * *„in der Beschreibung"* sagt mehr als *„Treffer"*.
+ *
+ * `[read]` **Bei `name` und `alle` steht nichts.** Wer nach
+ * *Magnesium* sucht und *Magnesium* findet, braucht keine Erklaerung
+ * — ein Hinweis an jeder Zeile waere Rauschen.
+ */
+export const GRUND_TEXT: Record<Treffergrund, string> = {
+  alle: '',
+  name: '',
+  description: 'in der Beschreibung',
+  zwecke: 'im Verwendungszweck',
 }
 
 // ── C-229: die drei Gruppen aus C-228 ────────────────────────────

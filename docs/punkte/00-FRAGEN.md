@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **23 Punkte tragen `typ: entscheidung`
+`[cmd]` **30 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -236,6 +236,188 @@ tragen** — **und wie viele wirklich leer sind.**
   keine gemeinsame Ereignistabelle. Sechs Abfragen je Seitenaufruf,
   nach Zeit gemischt — **oder** eine Sicht in der Datenbank, die das
   einmal tut. Das Zweite waere die Loesung, das Erste die Abkuerzung.
+
+## G-226 — V1-Status-Marker fehlen für Recipes/Shopping/MealPlans Components in SPEC_10
+
+**Modul:** nutrition · **angelegt:** 2026-08-28 · **Datei:** `laufend_claudecode/nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md`
+
+## Befund
+
+**Aus `OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`, IMP-4.**
+`[read]` **Wortlaut der Review, nicht vom Orchestrator formuliert.**
+
+`ADR_RECIPES_SCHEMA_ONLY.md`:
+> V1: Schema vorbereiten — kein Full-UI, kein Full-API Pflicht.
+> Wenn Zeit knapp: Recipes, Meal Plans und Shopping Lists komplett auf Phase 2 verschoben.
+
+`SPEC_10_COMPONENTS.md` listet:
+- 5 Recipe Components (`RecipeList`, `RecipeCard`, `RecipeBuilder`, `RecipeDetail`, `RecipeLogModal`)
+- 3 Shopping List Components (`ShoppingListView`, `ShoppingListDetail`, `ShoppingListItem`)
+- 8 Meal Plan Components (`MealPlanList`, `MealPlanCard`, ...)
+
+Ohne V1-Status-Hinweis. Reader interpretiert sie als V1-Pflicht.
+
+`SPEC_10_PASS2_PATCH.md` adressiert das nicht. Der Pass-2-Patch ergänzt nur neue Components.
+
+`SPEC_03_USER_FLOWS.md §Flow 7` (Rezepte) und §Flow 8 (Einkaufsliste) sind als komplette V1-Flows beschrieben — ohne Phase-2-Markierung.
+
+**Konsequenz:** WO-Generator könnte vollen Recipe-Builder als V1-Pflicht-WO schreiben, obwohl ADR sagt: optional.
+
+## Stand
+
+`[read]` **Die Review stammt aus der Spec-Phase und ist nicht gegen
+den heutigen Stand geprueft.** `[cmd]` **Sie kennt die Entscheidungen
+vom 27./28.08. nicht** — was sie fordert, kann inzwischen entschieden
+oder erledigt sein.
+
+## Gegen den heutigen Stand gemessen, 2026-08-30
+
+`[read]` **Dieser Punkt stammt aus
+`OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`** — **einer
+Spec-Review von vor dem `/v2/`-Umbau.** `[cmd]` **Acht Punkte kommen
+aus derselben Datei.**
+
+`[cmd]` **Gemessen 2026-08-30:** `nutrition.recipes` 6 Zeilen,
+`shopping_lists` 1, `meal_plans` 2, `meal_plan_logs` 0.
+`[read]` **Alle drei Tabellen existieren und tragen Daten.** **Der
+Bestaetigungsweg dazu ist seit G-274 gebaut.**
+
+## G-227 — SPEC_03 §Flow 6 Custom Food erstellen via Barcode-Scan widerspricht Phase-2-Status
+
+**Modul:** nutrition · **angelegt:** 2026-08-28 · **Datei:** `laufend_claudecode/nutrition-g-0227-spec-03-flow-6-custom-food-erstellen-via-barcode-scan-wide.md`
+
+## Befund
+
+**Aus `OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`, IMP-5.**
+`[read]` **Wortlaut der Review, nicht vom Orchestrator formuliert.**
+
+`NUTRITION_NEXT_SPEC_DECISIONS.md §1` und `§23`: Barcode Scanner ist Phase 2.
+`ADR_MEALCAM_V1.md`: Barcode Scanner ist Phase 2.
+
+`SPEC_03_USER_FLOWS.md §Flow 6 (Custom Food erstellen)`:
+> 1. Aus Food Search: kein Ergebnis → "Selbst anlegen"
+>    ODER: **Barcode-Scan** → nicht gefunden → "Custom erstellen"
+>    ODER: direkt über "+ Eigenes Food" Button
+
+`SPEC_04_FEATURES.md §Feature 4 (Custom Foods)` listet Barcode-Scanning als V1-Feature ("Erstellungs-Wege: 2. Barcode-Scan"). Bezieht sich auf `ADR_IMPROVEMENTS_PACKAGE.md #19` (außerhalb dieses Review-Scopes, aber in Review 1 als Phase-2-konfliktig markiert).
+
+**Konsequenz:** UI-Komponenten könnten Barcode-Scan-Einstieg implementieren, was Phase 2 ist.
+
+## Stand
+
+`[read]` **Die Review stammt aus der Spec-Phase und ist nicht gegen
+den heutigen Stand geprueft.** `[cmd]` **Sie kennt die Entscheidungen
+vom 27./28.08. nicht** — was sie fordert, kann inzwischen entschieden
+oder erledigt sein.
+
+**Verwandter Punkt:** E-19 (Cam ist Endausbau); Tom 27.08.: Barcode/QR "kommt aber spaeter". `[read]` **Nicht zusammengelegt** — ob es
+derselbe Befund ist, gehoert geprueft, nicht angenommen.
+
+## Gegen den heutigen Stand gemessen, 2026-08-30
+
+`[read]` **Dieser Punkt stammt aus
+`OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`** — **einer
+Spec-Review von vor dem `/v2/`-Umbau.** `[cmd]` **Acht Punkte kommen
+aus derselben Datei.**
+
+`[cmd]` **Gemessen 2026-08-30: `nutrition.foods_custom.barcode`
+existiert.** `[read]` **Die Spalte ist da, der Flow nicht** —
+`foods_custom` hat 0 Zeilen (C-355).
+
+## G-228 — Score Level Multiplier inkonsistent zwischen SPEC_04 und SPEC_07
+
+**Modul:** nutrition · **angelegt:** 2026-08-28 · **Datei:** `laufend_claudecode/nutrition-g-0228-score-level-multiplier-inkonsistent-zwischen-spec-04-und-s.md`
+
+## Befund
+
+**Aus `OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`, IMP-6.**
+`[read]` **Wortlaut der Review, nicht vom Orchestrator formuliert.**
+
+`SPEC_04_FEATURES.md §Feature 11 (Nutrition Score)`:
+> level_multiplier: beginner 0.75 | intermediate 0.90 | advanced 1.00 | **elite 1.10**
+
+`SPEC_07_API.md §8 Score Response`:
+```json
+{
+  "level_multiplier": 0.90,
+  "user_level": "intermediate"
+}
+```
+
+Vier Level in SPEC_04 (beginner/intermediate/advanced/elite). SPEC_07-Response zeigt nur `intermediate` als Beispiel. Es ist nicht spezifiziert, woher `user_level` kommt — User-Profil-Feld? Wo gepflegt? Settings-UI? Nicht belegt.
+
+`SPEC_10` `NutritionScoreCard` zeigt Score 0–100 + Status, aber keine UI für Level-Multiplier-Erklärung oder -Auswahl.
+
+**Konsequenz:** Score-Berechnung hat externen Input (`user_level`), dessen UI-/API-Pfad nicht spezifiziert ist. Workorder ist blockiert bis das geklärt ist.
+
+## Stand
+
+`[read]` **Die Review stammt aus der Spec-Phase und ist nicht gegen
+den heutigen Stand geprueft.** `[cmd]` **Sie kennt die Entscheidungen
+vom 27./28.08. nicht** — was sie fordert, kann inzwischen entschieden
+oder erledigt sein.
+
+## Gegen den heutigen Stand gemessen, 2026-08-30
+
+`[read]` **Dieser Punkt stammt aus
+`OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`** — **einer
+Spec-Review von vor dem `/v2/`-Umbau.** `[cmd]` **Acht Punkte kommen
+aus derselben Datei.**
+
+`[cmd]` **Zu messen: gilt die Inkonsistenz noch?** `[cmd]`
+**`SPEC_04_FEATURES.md` liegt unter `docs/specs/Recovery/`** — und
+Recovery hat seit C-143/C-218 einen eigenen offenen Punkt zur
+Normierung.
+
+## G-229 — Admin-Override-Flow für Tag-Korrekturen nicht belegt
+
+**Modul:** nutrition · **angelegt:** 2026-08-28 · **Datei:** `laufend_claudecode/nutrition-g-0229-admin-override-flow-fuer-tag-korrekturen-nicht-belegt.md`
+
+## Befund
+
+**Aus `OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`, IMP-7.**
+`[read]` **Wortlaut der Review, nicht vom Orchestrator formuliert.**
+
+`NUTRITION_NEXT_SPEC_DECISIONS.md §5`:
+> manuell gepflegte Tag-Liste für schwierige Tags
+> Admin darf Tags bei BLS Foods korrigieren
+> User darf Tags bei Custom Foods selbst setzen
+
+`SPEC_06_DATABASE_SCHEMA.md` Trigger `auto_tag_food` — automatisch.
+Manueller Override-Mechanismus für Admin nicht belegt:
+- Kein Admin-API-Endpoint in SPEC_07 oder SPEC_07_PASS2_PATCH (nicht belegt)
+- Kein Admin-UI in SPEC_10 (nicht belegt)
+- Trigger löscht alle bestehenden Tags vor INSERT (`DELETE FROM food_tags WHERE food_id = p_food_id;`) — dadurch würde ein manueller Admin-Override beim nächsten `UPDATE foods` automatisch überschrieben.
+
+User-Tags für Custom Foods:
+- Decisions §5: "User darf Tags bei Custom Foods selbst setzen"
+- `foods_custom` hat `custom_allergens TEXT[]` (EU-14 Allergene), aber kein generisches Tag-Feld.
+- Kein API-Endpoint für `POST /foods/custom/:id/tags` in SPEC_07.
+
+**Konsequenz:** Wenn V1 Admin-Tag-Korrekturen oder User-Custom-Tags verlangt, sind diese Pfade nicht implementierbar.
+
+---
+
+## Stand
+
+`[read]` **Die Review stammt aus der Spec-Phase und ist nicht gegen
+den heutigen Stand geprueft.** `[cmd]` **Sie kennt die Entscheidungen
+vom 27./28.08. nicht** — was sie fordert, kann inzwischen entschieden
+oder erledigt sein.
+
+**Verwandter Punkt:** C-31 (Admin-Oberflaeche fuer die Kuration). `[read]` **Nicht zusammengelegt** — ob es
+derselbe Befund ist, gehoert geprueft, nicht angenommen.
+
+## Gegen den heutigen Stand gemessen, 2026-08-30
+
+`[read]` **Dieser Punkt stammt aus
+`OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`** — **einer
+Spec-Review von vor dem `/v2/`-Umbau.** `[cmd]` **Acht Punkte kommen
+aus derselben Datei.**
+
+`[cmd]` **Zu messen gegen `apps/admin`** — seit A-36 ist belegt,
+dass Admin als eigene App gebaut ist, mit 314-zeiliger
+Kurationsseite.
 
 ## G-72 — Acht Spalten ohne Wirkung und ohne Kachel
 
@@ -656,6 +838,116 @@ Codex; nichts davon ist Oberflaechenarbeit, solange die Daten fehlen.
 ---
 
 # Niedrig
+
+## G-230 — `nutrition.water/page.tsx` und `nutrition.shopping-lists/page.tsx` als separate Pages
+
+**Modul:** nutrition · **angelegt:** 2026-08-28 · **Datei:** `laufend_claudecode/nutrition-g-0230-nutrition-water-page-tsx-und-nutrition-shopping-lists-page.md`
+
+## Befund
+
+**Aus `OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`, MIN-1.**
+`[read]` **Wortlaut der Review, nicht vom Orchestrator formuliert.**
+
+`SPEC_10_COMPONENTS.md §Verzeichnisstruktur` listet zwei separate Pages neben der 5-Tab-Hauptseite. Wenn Shopping Lists schema-only V1 sind, ist eine eigene Page-Datei doppelte Struktur. Konsistenz mit V1-Status (siehe IMP-4) nicht klar.
+
+## Stand
+
+`[read]` **Die Review stammt aus der Spec-Phase und ist nicht gegen
+den heutigen Stand geprueft.** `[cmd]` **Sie kennt die Entscheidungen
+vom 27./28.08. nicht** — was sie fordert, kann inzwischen entschieden
+oder erledigt sein.
+
+## Gegen den heutigen Stand gemessen, 2026-08-30
+
+`[read]` **Dieser Punkt stammt aus
+`OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`** — **einer
+Spec-Review von vor dem `/v2/`-Umbau.** `[cmd]` **Acht Punkte kommen
+aus derselben Datei.**
+
+`[cmd]` **Gemessen 2026-08-30: `v2/nutrition` hat zwei
+Unterordner — `__tests__` und `suche`.** `[cmd]` **`hydration.tsx`
+existiert als Datei, nicht als Seite.**
+`[read]` **Die im Punkt genannten Pfade `nutrition/water/page.tsx`
+und `nutrition/shopping-lists/` gibt es nicht** — **die Review
+beschreibt eine Struktur, die nie gebaut wurde.**
+
+## G-235 — `MicroDashboard` Tier-System (Tier 1/2/3) und Subscription-Gates ungeklärt
+
+**Modul:** nutrition · **angelegt:** 2026-08-28 · **Datei:** `laufend_claudecode/nutrition-g-0235-microdashboard-tier-system-tier-1-2-3-und-subscription-gat.md`
+
+## Befund
+
+**Aus `OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`, MIN-6.**
+`[read]` **Wortlaut der Review, nicht vom Orchestrator formuliert.**
+
+`SPEC_04 §Feature 10`:
+> V1: Alle Tiers sind ohne Einschränkung sichtbar.
+> Subscription-Gates werden erst implementiert wenn Monetarisierung steht.
+> `show_micros_tier` Setting ist frei konfigurierbar.
+
+`SPEC_10` MicroDashboard zeigt Tier-System ohne Gating-Hinweis. UI-Verhalten bei `show_micros_tier = 1`: nicht spezifiziert.
+
+## Stand
+
+`[read]` **Die Review stammt aus der Spec-Phase und ist nicht gegen
+den heutigen Stand geprueft.** `[cmd]` **Sie kennt die Entscheidungen
+vom 27./28.08. nicht** — was sie fordert, kann inzwischen entschieden
+oder erledigt sein.
+
+**Verwandter Punkt:** G-140 (`display_tier` ist ein Abo-Tier, keine Baumebene). `[read]` **Nicht zusammengelegt** — ob es
+derselbe Befund ist, gehoert geprueft, nicht angenommen.
+
+## Gegen den heutigen Stand gemessen, 2026-08-30
+
+`[read]` **Dieser Punkt stammt aus
+`OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`** — **einer
+Spec-Review von vor dem `/v2/`-Umbau.** `[cmd]` **Acht Punkte kommen
+aus derselben Datei.**
+
+`[cmd]` **Gemessen 2026-08-30: `display_tier` steht in
+`nutrient_defs`** — **aber das ist die Anzeigestufe je Naehrstoff,
+nicht ein Abo-Tier.** `[cmd]` **Ein Abo-Tier gibt es im Schema
+nicht.**
+`[read]` **G-140 fuehrt denselben Verdacht von der anderen Seite.**
+
+## G-238 — `Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger
+
+**Modul:** nutrition · **angelegt:** 2026-08-28 · **Datei:** `laufend_claudecode/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md`
+
+## Befund
+
+**Aus `OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`, MIN-9.**
+`[read]` **Wortlaut der Review, nicht vom Orchestrator formuliert.**
+
+`SPEC_10 §MealPlanComponents` listet `MealPlanList` mit "Source-Badge". Source-Werte: `user | coach | marketplace | buddy`. Decisions §1: "Buddy MealPlan Builder" ist Phase 2.
+
+UI zeigt also einen Quellentyp, dessen Erzeugungs-Flow Phase 2 ist. Konsistent mit `MealPlanCard` (Anzeige), aber widersprüchlich für UX-Erwartung (User sieht Buddy-Plan-Quelle, kann sie aber nicht erzeugen).
+
+---
+
+## Stand
+
+`[read]` **Die Review stammt aus der Spec-Phase und ist nicht gegen
+den heutigen Stand geprueft.** `[cmd]` **Sie kennt die Entscheidungen
+vom 27./28.08. nicht** — was sie fordert, kann inzwischen entschieden
+oder erledigt sein.
+
+**Verwandter Punkt:** G-98 (Meal plans braucht einen Zustand und eine Herkunft). `[read]` **Nicht zusammengelegt** — ob es
+derselbe Befund ist, gehoert geprueft, nicht angenommen.
+
+## Gegen den heutigen Stand gemessen, 2026-08-30
+
+`[read]` **Dieser Punkt stammt aus
+`OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`** — **einer
+Spec-Review von vor dem `/v2/`-Umbau.** `[cmd]` **Acht Punkte kommen
+aus derselben Datei.**
+
+`[cmd]` **Gemessen 2026-08-30: `plan_origin` erlaubt
+`self_created`, `coach_created`, `marketplace`** — **`buddy` ist im
+CHECK nicht enthalten.**
+`[read]` **Der Punkt hat recht, und die Frage ist praeziser
+geworden:** **soll ein Buddy-erstellter Plan eine eigene Herkunft
+bekommen, oder ist er `self_created` mit Buddy als Werkzeug?**
 
 ## G-279 — eine Kachel *haeufig erfasst*
 

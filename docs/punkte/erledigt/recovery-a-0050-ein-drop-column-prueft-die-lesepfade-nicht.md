@@ -10,9 +10,11 @@ kinder: []
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: ["recovery.scores"]
-  dateien: ["apps/web/src/lib/recovery/scores-read.ts", "CLAUDE.md"]
+  dateien:
+    - tools/gefallene-spalten-pruefen.mjs
 zahlen: null
 ---
 
@@ -87,3 +89,8 @@ die Stelle.** Rueckbau byte-gleich.
 
 `[cmd]` **Heute sauber:** 20 Spalten, 372 Codedateien, kein lebender
 Lesepfad darauf.
+
+## Abnahme
+
+**2026-08-30, mit G-281 abgenommen:** gebaut: `tools/gefallene-spalten-pruefen.mjs` im Gate, gegen den
+historischen Fall geprueft.

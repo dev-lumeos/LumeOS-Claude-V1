@@ -10,9 +10,10 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: ["docs/ssot/95-kimi-bestand.md"]
+  tabellen: [supplements.supplements]
 zahlen: null
 ---
 
@@ -73,3 +74,15 @@ nicht starten.**
 `[cmd]` **Gemessen in G-280: 18 Starts, sechs an einem Tag, vor keinem
 ein Fehler** — **`neustart` fuehrt `taskkill /T /F` auf Port 3200
 aus, und Tom arbeitet dort mit.**
+
+## Abnahme
+
+**2026-08-30, mit C-202 abgenommen: teilweise erledigt.**
+
+`[cmd]` **UNII, PubChem, ChEMBL, InChIKey und 57 Aliase sind
+vollstaendig zurueckgeflossen.**
+
+`[cmd]` **Offen: 33 CAS-Nummern und 27 Peptidsequenzen** — **fuer die
+Sequenzen gibt es kein Ziel im Live-Schema.**
+
+`[read]` **Als C-365 weitergefuehrt.**

@@ -9,8 +9,11 @@ kind_von: C-353
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-30
+commit: OFFEN
 beruehrt:
-  dateien: [apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx]
+  dateien:
+    - apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx
 zahlen:
   gemessen: 2026-08-30
   html_ms: 1620
@@ -87,3 +90,8 @@ rund 3,0 ms je kB"*.** `[cmd]` **Der Anteil ist groesser und liegt
 anders:** das Rendern kostet die Zeit, die Bytes kosten fast nichts.
 **Die Zahl war aus einer Differenz gerechnet, nicht aus der
 Zerlegung** — und eine Differenz sagt nicht, worin sie besteht.
+
+## Abnahme
+
+**2026-08-30, mit G-281 abgenommen:** gemessen: fast alles Serverzeit, TTFB 410 auf 4.183 ms; meine
+C-353-Schaetzung war in Groesse und Ort falsch.
