@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-31
 erledigt: 2026-08-31
-commit: OFFEN
+commit: 5bb0e056
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-rezepte.tsx
