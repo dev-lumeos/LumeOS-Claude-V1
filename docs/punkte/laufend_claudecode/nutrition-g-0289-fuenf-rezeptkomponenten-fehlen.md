@@ -51,6 +51,40 @@ eintragen — **und der Schreibweg dafuer steht seit G-272.**
 
 **Beauftragt am 2026-08-31.**
 
+### Entschieden: E-39
+
+Tom, 2026-08-31: *,,schliess das sauber ab und lass es richtig bauen.
+vorsehen dass coach und marketplace angebunden wird spaeter."*
+
+`[cmd]` **`ADR_RECIPES_SCHEMA_ONLY` ist abgeloest.** `[read]` **Er
+sagte: Schema ja, Oberflaeche Phase 2.** `[cmd]` **Und
+`SPEC_10_PASS2_PATCH` FIX-7 fuehrt genau diese Komponenten als
+*Schema-only V1 → Phase 2*.**
+
+`[read]` **Die Begruendung war *,,wenn Zeit knapp wird"*** — **das
+Schema steht seit Monaten, die Tabellen tragen Daten, und die Reiter
+sind sichtbar.**
+
+**Gebaut wird jetzt. Lies `docs/entscheidungen/E-39`.**
+
+### Coach und Marketplace: vorsehen, nicht bauen
+
+`[cmd]` **`SPEC_03` Flow 3 nennt die Beschriftung je Quelle:**
+*,,Von [Coach-Name]"*, *,,Gekauft: [Produkt-Name]"*, *,,Erstellt von
+Buddy"*, eigene ohne Label.
+
+`[cmd]` **Die Herkunft steht im Schema:** `plan_origin` mit
+`self_created`, `coach_created`, `marketplace`; `Recipe.source` mit
+`user | coach | marketplace | buddy`.
+
+`[read]` **Also: die Anzeige traegt die Unterscheidung, bevor es etwas
+zu unterscheiden gibt.** `[cmd]` **Heute sind alle `self_created` —
+das Etikett bleibt trotzdem vorgesehen.**
+
+`[read]` **Nicht: einen leeren Coach-Bereich bauen.** `[cmd]` **E-29
+gilt** — ein Zugriff auf `coach.*` ginge ueber eine Funktion, und die
+Sperre aus G-269 steht bereits.
+
 ### Warum dieser Auftrag neu geschrieben wurde
 
 `[read]` **Der Orchestrator hat `SPEC_10` gelesen — die
@@ -91,6 +125,20 @@ beim Eintragen kopiert, nicht verlinkt** — **wie in G-272 gebaut.**
 6 Zeilen, **die Naehrwerte werden bei jedem Aufruf aus den Zutaten
 gerechnet** — **ein Rezept speichert sie nicht.**
 
+### Und das Einzelfoods-Prinzip gilt
+
+`[cmd]` **`ADR_GHOST_ENTRY_RECIPE` ist unberuehrt:** **ein Rezept ist
+eine Vorlage.** `[read]` **Beim Loggen entstehen immer Einzelzutaten,
+je Zutat ein `MealItem` mit eingefrorenen Naehrwerten.**
+
+`[cmd]` **Und `SPEC_03_FLOW4_RECIPE_PATCH` sagt dasselbe fuer
+Plaene:** ein Ghost Entry aus einem Rezept zeigt den Rezeptnamen als
+Ueberschrift **und darunter alle Einzelzutaten mit eigenen
+Mengenfeldern.**
+
+`[read]` **Ein *,,Rezept als Einheit bestaetigen"* gibt es nicht** —
+es braeche die Mengen-Anpassbarkeit je Zutat.
+
 ### Flow 8 — Einkaufsliste aus Rezept
 
     1  Rezept oeffnen -> "Einkaufsliste erstellen"
@@ -105,9 +153,8 @@ gerechnet** — **ein Rezept speichert sie nicht.**
 sagt *,,Sie entsteht aus einer Planwoche"*** — **Flow 8 sagt: aus
 einem Rezept.**
 
-`[cmd]` **`ADR_RECIPES_SCHEMA_ONLY` sagt *Schema-only V1*.**
-`[read]` **Miss, ob er noch gilt** — **wenn ja, gehoert der richtige
-Satz an die Kachel, nicht der falsche.**
+`[cmd]` **`ADR_RECIPES_SCHEMA_ONLY` ist durch E-39 abgeloest** — **die
+Liste wird gebaut, nicht beschriftet.**
 
 ### G-297 — die Tagesdeckung
 

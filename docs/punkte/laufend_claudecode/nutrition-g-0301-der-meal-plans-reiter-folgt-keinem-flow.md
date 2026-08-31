@@ -6,7 +6,9 @@ schwere: hoch
 angelegt: 2026-08-31
 braucht: []
 kind_von: null
-entscheidung: null
+entscheidung: E-39
+agent: claudecode
+beauftragt: 2026-08-31
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-plans.tsx
@@ -64,3 +66,20 @@ abgeleitet.** **Das war eine Erfindung.**
 
 `[read]` **Als C-370 an Tom: soll ein Nutzer einen leeren Plan
 anlegen koennen, und wenn ja, wie?**
+
+## Auftrag
+
+**Mitbeauftragt mit G-289 am 2026-08-31.** Der Bericht steht dort.
+
+`[cmd]` **E-39 entscheidet: gebaut wird, was in `SPEC_03` steht.**
+
+`[read]` **Flow 3 kennt eine Uebersicht aller Plaene, nicht drei
+Unterreiter.** **Ein Plan darin traegt `status: active`, die anderen
+`paused` oder `completed`.**
+
+`[cmd]` **Und die Einkaufsliste gehoert zum Rezept** (Flow 8), **nicht
+in den Plan-Reiter.**
+
+`[read]` **Die Herkunft wird je Zeile gezeigt** — eigene ohne Label,
+Coach mit Namen, Marketplace mit Produktnamen. `[cmd]` **Heute sind
+alle `self_created`.**

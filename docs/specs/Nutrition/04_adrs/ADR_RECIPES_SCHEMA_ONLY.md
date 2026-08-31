@@ -2,6 +2,21 @@
 
 **Datum:** April 2026 | **Status:** Final — V1 Entscheidung
 
+
+> **Abgeloest, Stand 2026-08-31.**
+>
+> **E-39** entscheidet: Rezepte, Meal Plans und Einkaufslisten werden
+> in V1 gebaut. Die Begruendung dieses ADR — *"wenn Zeit knapp wird"* —
+> traegt nicht mehr: das Schema steht, die Tabellen tragen Daten, und
+> die Reiter sind sichtbar.
+>
+> **Was hier weiter gilt:** die V1-Pflichtliste der Tabellen, und die
+> drei unberuehrten Entscheidungen am Ende — universelles
+> MealPlan-Schema, Shopping Lists in Nutrition, Einzelfoods-Prinzip
+> beim Loggen.
+>
+> Vermerkt in E-39.
+
 ---
 
 ## Kontext

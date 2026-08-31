@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 233 |
+| `todos` | 232 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 4 |
+| `laufend_claudecode` | 5 |
 | `erledigt` | 161 |
 | **gesamt** | **401** |
 
@@ -206,7 +206,7 @@
 | `G-298` | feature | hoch | [Plaene lassen sich ansehen, nicht aendern](erledigt/nutrition-g-0298-plaene-lassen-sich-ansehen-nicht-aendern.md) | erledigt | — | C-369, G-300 |
 | `G-299` | feature | hoch | [der Planner zeigt eine fremde Woche](erledigt/nutrition-g-0299-der-planner-zeigt-eine-fremde-woche.md) | erledigt | — | — |
 | `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](laufend_claudecode/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | laeuft (claudecode) | — | — |
-| `G-301` | befund | hoch | [der Meal-plans-Reiter folgt keinem Flow](todos/nutrition-g-0301-der-meal-plans-reiter-folgt-keinem-flow.md) | offen | — | C-370 |
+| `G-301` | befund | hoch | [der Meal-plans-Reiter folgt keinem Flow](laufend_claudecode/nutrition-g-0301-der-meal-plans-reiter-folgt-keinem-flow.md) | laeuft (claudecode) | — | C-370 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59

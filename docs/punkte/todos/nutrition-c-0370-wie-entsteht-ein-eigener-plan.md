@@ -6,7 +6,7 @@ schwere: hoch
 angelegt: 2026-08-31
 braucht: []
 kind_von: G-301
-entscheidung: null
+entscheidung: E-39
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen: null
@@ -50,3 +50,18 @@ da ist.** `[cmd]` **`Copy week` existiert bereits im Planner.**
 
 `[read]` **Und das entscheidet auch, was das *Neuer Plan*-Formular
 sein soll** — **oder ob es verschwindet.**
+
+## Praezisiert durch E-39, 2026-08-31
+
+`[cmd]` **Tom hat entschieden, dass gebaut wird.** `[read]` **Damit
+bleibt nur noch, welchen Weg ein eigener Plan nimmt.**
+
+`[read]` **Der Auftrag G-289 baut Flow 3, 7 und 8** — **das Anlegen
+eines leeren Plans steht in keinem davon.**
+
+`[cmd]` **`Copy week` existiert im Planner.** `[read]` **Der
+naheliegende Weg ist deshalb: aus einer Woche einen Plan sichern** —
+**kein Formular, kein leerer Plan.**
+
+`[read]` **Wenn Claude Code beim Bau merkt, dass ein Weg fehlt,
+meldet er es.** **Dieser Punkt bleibt offen, bis das geschieht.**
