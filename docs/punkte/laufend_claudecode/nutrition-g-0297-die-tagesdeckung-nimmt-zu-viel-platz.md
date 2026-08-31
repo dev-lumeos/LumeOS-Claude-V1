@@ -9,8 +9,8 @@ kind_von: G-295
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-31
-erledigt: 2026-08-31
-commit: 4dd81ed9
+agent: claudecode
+beauftragt: 2026-08-31
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/insights-echt.tsx
@@ -74,3 +74,17 @@ Bild: `backup/g298-final-insights.png`
 
 **2026-08-31, mit G-298 abgenommen:** kleiner: begrenzte Zellbreite, Legende als eine Zeile, Zahl aus
 dem Feld entfernt.
+
+## Wieder offen, 2026-08-31
+
+**Tom:** *,,die hoehe ist nun definiert fuer tagesdeckung, wieso
+verteilt man dann nicht auf optimale groesse die grafik darin?"*
+
+`[read]` **Der Auftrag sagte *kleiner*. Falsch gestellt:** **das
+Gitter soll die feste Kachelhoehe ausfuellen, nicht schrumpfen.**
+
+
+## Auftrag
+
+**Mitbeauftragt mit G-289 am 2026-08-31.** Der Auftragstext
+und der Bericht stehen dort.

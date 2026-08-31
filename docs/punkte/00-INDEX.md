@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 231 |
+| `todos` | 233 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 162 |
-| **gesamt** | **399** |
+| `laufend_claudecode` | 4 |
+| `erledigt` | 161 |
+| **gesamt** | **401** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 144
+## nutrition — 146
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -121,6 +121,7 @@
 | `C-367` | befund | hoch | [Vitamin A blockiert den Score an allen Tagen](erledigt/nutrition-c-0367-vitamin-a-blockiert-den-score-an-allen-tagen.md) | erledigt | — | C-368 |
 | `C-368` | entscheidung | hoch | [fuenfzehn Lebensmittel blockieren den Score](laufend_codex/nutrition-c-0368-fuenfzehn-lebensmittel-blockieren-den-score.md) | vorbereitet (codex) | — | — |
 | `C-369` | entscheidung | mittel | [was mit einem abgelaufenen Plan geschieht](todos/nutrition-c-0369-was-mit-einem-abgelaufenen-plan-geschieht.md) | offen | — | — |
+| `C-370` | entscheidung | hoch | [wie entsteht ein eigener Plan?](todos/nutrition-c-0370-wie-entsteht-ein-eigener-plan.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -201,10 +202,11 @@
 | `G-293` | feature | mittel | [MacroDetail — die Fetthierarchie fehlt](erledigt/nutrition-g-0293-macrodetail-die-fetthierarchie-fehlt.md) | erledigt | — | — |
 | `G-294` | feature | mittel | [CrossModuleInsights — Goals bekommt nichts](todos/nutrition-g-0294-crossmoduleinsights-goals-bekommt-nichts.md) | offen | — | — |
 | `G-295` | feature | mittel | [Die Heatmap wurde entfernt, und die Spec verlangt sie](erledigt/nutrition-g-0295-die-heatmap-wurde-entfernt-und-die-spec-verlangt-sie.md) | erledigt | — | G-297 |
-| `G-297` | befund | mittel | [die Tagesdeckung nimmt zu viel Platz](erledigt/nutrition-g-0297-die-tagesdeckung-nimmt-zu-viel-platz.md) | erledigt | — | — |
+| `G-297` | befund | mittel | [die Tagesdeckung nimmt zu viel Platz](laufend_claudecode/nutrition-g-0297-die-tagesdeckung-nimmt-zu-viel-platz.md) | laeuft (claudecode) | — | — |
 | `G-298` | feature | hoch | [Plaene lassen sich ansehen, nicht aendern](erledigt/nutrition-g-0298-plaene-lassen-sich-ansehen-nicht-aendern.md) | erledigt | — | C-369, G-300 |
 | `G-299` | feature | hoch | [der Planner zeigt eine fremde Woche](erledigt/nutrition-g-0299-der-planner-zeigt-eine-fremde-woche.md) | erledigt | — | — |
 | `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](laufend_claudecode/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | laeuft (claudecode) | — | — |
+| `G-301` | befund | hoch | [der Meal-plans-Reiter folgt keinem Flow](todos/nutrition-g-0301-der-meal-plans-reiter-folgt-keinem-flow.md) | offen | — | C-370 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59

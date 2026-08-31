@@ -227,6 +227,44 @@ Seed-Konten mit je 180 Tagen, und `test-user@lumeos.local` mit einem.
 **Sonst ist sie nicht nachpruefbar — und eine Abweichung sieht aus
 wie ein Defekt.**
 
+## Der Ablauf steht in SPEC_03, nicht in SPEC_10
+
+**Tom, 2026-08-31:** *,,willkuerlich irgendwas geseeded und
+aufgelistet wo keiner definieren, anlegen oder editieren kann. wie
+soll das alles funktionieren?"*
+
+`[cmd]` **Anlass: fuenf Punkte fuer Plan- und Rezeptkomponenten, alle
+aus `SPEC_10_COMPONENTS.md` abgeleitet.** `[cmd]`
+**`SPEC_03_USER_FLOWS.md` mit vierzehn Ablaeufen war nicht gelesen.**
+
+`[read]` **Ergebnis: Bauteile ohne Bauplan.** Eine Karte, ein
+Akkordeon, ein Formular — **einzeln richtig, zusammen kein Ablauf.**
+
+### Was daraus entstand
+
+    drei Unterreiter        stehen in keiner Spec
+    "Neuer Plan"-Formular   aus dem Schema abgeleitet, erfunden
+    Einkaufsliste           "aus einer Planwoche" - Flow 8 sagt
+                            "aus einem Rezept"
+
+### Die Reihenfolge
+
+    SPEC_03   der Ablauf     was der Nutzer tut, Schritt fuer Schritt
+    SPEC_10   die Bauteile   welche Komponente welchen Schritt traegt
+    Schema    die Daten      was gespeichert wird
+
+`[read]` **Von oben nach unten.** **Wer bei den Bauteilen anfaengt,
+baut Teile, die zu keinem Ablauf gehoeren** — **und wer beim Schema
+anfaengt, erfindet Formulare fuer Spalten.**
+
+### Und die Gegenprobe vor jedem UI-Auftrag
+
+**Welcher Flow ist das, und welcher Schritt darin?**
+
+`[read]` **Wenn die Antwort *,,keiner"* lautet, ist der Auftrag
+falsch gestellt** — **oder die Spec hat eine Luecke, und die gehoert
+gemeldet, nicht ausgefuellt.**
+
 ## Eine Luecke in der Datenbank ist keine offene Frage
 
 **Tom, 2026-08-30:** *,,da sind wir wieder am punkt angelangt wo du

@@ -48,5 +48,5 @@ Kachel geschrieben — wenn nein, sind es drei Komponenten.**
 
 ## Auftrag
 
-**Mitbeauftragt mit G-300 am 2026-08-31.** Der Auftragstext
+**Mitbeauftragt mit G-289 am 2026-08-31.** Der Auftragstext
 und der Bericht stehen dort.
