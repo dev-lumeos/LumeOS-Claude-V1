@@ -217,14 +217,23 @@ export const KEIN_LOG_SATZ =
   + 'bestätigst oder auslässt, entsteht hier die Auswertung.'
 
 /**
- * Der Satz fuer die Einkaufsliste — G-270.
+ * Der Satz fuer die Einkaufsliste — G-270, berichtigt in G-288.
  *
  * `[cmd]` **`nutrition.shopping_lists` existiert** (1 Zeile, 6
  * Positionen im Bestand), **`dev` hat nur keine.**
  *
- * `[read]` **Der Quelltext nannte bis heute eine fehlende Tabelle
- * als Grund** — das war schon in G-271 falsch und ist es weiter.
+ * `[read]` **Der Quelltext nannte bis G-271 eine fehlende Tabelle
+ * als Grund** — das war falsch.
+ *
+ * `[cmd]` **UND DIE ZWEITE FASSUNG WAR ES AUCH:** sie sagte, die
+ * Liste entstehe *,,aus einer Planwoche"*. **`SPEC_03` Flow 8 sagt:
+ * *,,Rezept oeffnen -> Einkaufsliste erstellen"*.**
+ *
+ * `[cmd]` **Das Schema kann beides** — `shopping_lists.source_type`
+ * erlaubt `manual`, `recipe`, `meal_plan`, `supplement_reorder`.
+ * `[read]` **Gebaut ist `recipe`, weil nur das in einem Flow steht**
+ * (E-39, G-288).
  */
 export const KEINE_EINKAUFSLISTE_SATZ =
-  'Noch keine Einkaufsliste angelegt. Sie entsteht aus einer Planwoche — '
-  + 'die Tabelle steht bereit, sie ist nur noch leer.'
+  'Noch keine Einkaufsliste angelegt. Sie entsteht aus einem Rezept — '
+  + 'im Rezepte-Reiter über „Einkaufsliste".'

@@ -9,11 +9,13 @@ kind_von: G-295
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-31
+erledigt: 2026-08-31
+commit: OFFEN
 agent: claudecode
 beauftragt: 2026-08-31
 beruehrt:
   dateien:
-    - apps/web/src/app/v2/nutrition/insights-echt.tsx
+    - apps/web/src/app/v2/nutrition/insights-kacheln.tsx
 zahlen: null
 ---
 
@@ -88,3 +90,38 @@ Gitter soll die feste Kachelhoehe ausfuellen, nicht schrumpfen.**
 
 **Mitbeauftragt mit G-289 am 2026-08-31.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Berichtigt: die Kachel soll AUSGEFUELLT werden, nicht schrumpfen
+
+**Tom, 2026-08-31:** *„die hoehe ist nun definiert fuer tagesdeckung,
+wieso verteilt man dann nicht auf optimale groesse die grafik
+darin?"*
+
+`[read]` **Der erste Auftrag hiess *„kleiner"* und war falsch
+gestellt.** Die Umsetzung dazu (26-px-Deckelung, Legende als
+Flex-Zeile, Zahl aus dem Feld) ist damit teilweise zurueckgenommen.
+
+`[cmd]` **Gemessen am 2026-08-31, vorher:** beide Kacheln **386 px**
+hoch — die Hoehe richtet sich nach der Verlaufskachel daneben —, und
+**unter dem Gitter blieben 58 px leer.**
+
+`[cmd]` **Nachher: 463 px, 17 px Rest**, und beide Kacheln bleiben
+gleich hoch.
+
+`[cmd]` **`repeat(7, minmax(0, 1fr))` statt einer festen Obergrenze.**
+`[read]` **Die 0 darin ist nicht schmueckend:** ohne sie kann eine
+Spalte nicht unter ihre Inhaltsbreite schrumpfen, und auf 375 px
+sprengt das Gitter die Karte.
+
+`[read]` **Was aus dem ersten Auftrag BLEIBT:** die Zahl im Feld
+(sie steht im `title`), die Legende als Zeile und die Entfernung von
+`tagNummer` (A-59). **Der Waechter sicherte die Deckelung und ist
+mit Begruendung umgedreht** — er prueft jetzt, dass das Gitter mit
+der Kachel waechst UND dass `minmax(0, …)` steht.
+
+Bild: `backup/g297-nachher.png`
+
+## Abnahme
+
+**2026-08-31, mit G-289 abgenommen:** umgekehrt auf Toms Korrektur: 58 px ungenutzte Hoehe auf 17 px,
+beide Kacheln gleich hoch.

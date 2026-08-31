@@ -1237,8 +1237,20 @@ test('die nachgezogenen Nutrition-Tabs kennzeichnen jede Kachel', () => {
   // `[cmd]` **`insights` faellt in G-264 von 3 auf 2:** „Micronutrient
   // trend" ist entfernt, nicht angebunden — der Nutrients-Reiter zeigt
   // denselben Verlauf (G-11).
+  // `[cmd]` **G-288/G-301, 2026-08-31: `plans` faellt von 8 auf 6.**
+  // **Der Unterreiter *Shopping list* ist entfernt** — mit ihm zwei
+  // Attrappenkarten (*,,from Recomp 5-Meal Plan"*, Print/Export ohne
+  // Wirkung).
+  //
+  // `[cmd]` **`SPEC_03` Flow 8: *,,Rezept oeffnen -> Einkaufsliste
+  // erstellen"*** — **die Liste entsteht aus einem REZEPT**, nicht aus
+  // einer Planwoche. **Sie steht jetzt echt im Rezepte-Reiter**, mit
+  // Schreibweg und Abhaken (E-39).
+  //
+  // `[read]` **Also nicht „gesenkt, weil die Zahl stoerte"**, sondern
+  // entfernt, weil der Ort falsch war — A-59.
   const dateien: Array<[string, number]> = [
-    [NUT_PLANS, 8],
+    [NUT_PLANS, 6],
     [NUT_INSIGHTS, 2],
     [NUT_PLANNER, 1],
   ]
@@ -1278,9 +1290,16 @@ test('die Nutrition-Entwuerfe kommen nicht zurueck', () => {
     assert.equal(weg.test(quelle), false,
       `ansicht.tsx verweist wieder auf ${weg.source}.`)
   }
-  // Beide Zweige muessen den Hinweis tragen — nutrients und prefs.
-  assert.equal((quelle.match(/<LeerHinweis/g) ?? []).length, 2,
-    'Beide Rueckfaelle (nutrients, prefs) zeigen LeerHinweis.')
+  // `[cmd]` **G-289, 2026-08-31: DREI Zweige, nicht mehr zwei** —
+  // `nutrients`, `prefs` und seit E-39 `rezepte`. `[read]` **Der
+  // Rueckfall ist dort derselbe:** ohne Sitzung greift die
+  // Zeilensicherheit, und eine leere echte Flaeche saehe aus wie ein
+  // Befund.
+  //
+  // `[read]` **Gezaehlt, nicht gesucht** — ein `assert.match` faende
+  // den ersten Hinweis und uebersaehe einen fehlenden vierten.
+  assert.equal((quelle.match(/<LeerHinweis/g) ?? []).length, 3,
+    'Die drei Rueckfaelle (nutrients, prefs, rezepte) zeigen LeerHinweis.')
 })
 
 test('die vier Modale der Nutrition-Vorlage sind da', () => {

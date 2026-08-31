@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **28 Punkte tragen `typ: entscheidung`
+`[cmd]` **29 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -69,6 +69,50 @@ eine Wiederherstellung:** **wenn die Herkunft mitkaeme, waere
 `[read]` **Was zu messen ist, bevor Tom entscheidet:** `[cmd]` **wie
 viele der 98 fehlenden Posten in der Quelle eine *Logische Null*
 tragen** — **und wie viele wirklich leer sind.**
+
+## C-368 — fuenfzehn Lebensmittel blockieren den Score
+
+**Modul:** nutrition · **angelegt:** 2026-08-31 · **Datei:** `laufend_codex/nutrition-c-0368-fuenfzehn-lebensmittel-blockieren-den-score.md`
+
+## Befund
+
+Aus C-367, Codex, 2026-08-31.
+
+`[cmd]` **In den 392 Mahlzeitpositionen von `dev` liegen 108 echte
+`CAROTPAXB`-Luecken — aus 14 Lebensmitteln.** `[cmd]` **Plus 12
+Spuren aus einem weiteren.**
+
+`[read]` **Fuenfzehn Lebensmittel blockieren dreissig Tage.**
+
+`[cmd]` **`RETOL` ist an 30 von 30 Tagen vollstaendig, `CARTB` an
+10** — **nur `CAROTPAXB` faellt auf 0.**
+
+## Die Frage
+
+**Was geschieht mit fuenfzehn Lebensmitteln ohne
+Carotinoid-Messwert?**
+
+`[read]` **Es sind wenige, und sie sind benannt.** `[read]` **Wenn
+sie eine Quelle haetten, waere der Score morgen rechenbar.**
+
+## Drei Wege
+
+`[read]` **Eine zweite Quelle.** `[cmd]` **BLS 4.0 ist die einzige
+Lebensmittelquelle (E-03)** — **eine zweite waere eine
+Grundsatzentscheidung, nicht ein Nachtrag.**
+
+`[read]` **Oder der Score bleibt `incomplete`, bis die Datenlage
+besser ist.** `[read]` **Ehrlich, aber die Kachel bliebe leer.**
+
+`[read]` **Oder Vitamin A wird aus der Formel genommen.** `[cmd]`
+**Dann ist es nicht mehr NRF9.3** — **und Codex hat belegt, dass
+NRF8.3 keine Vitamin-A-lose Fassung ist.**
+
+## Zuerst messen
+
+`[read]` **Welche fuenfzehn sind es?** **Bevor entschieden wird,
+gehoert die Liste auf den Tisch** — **vielleicht sind es Randfaelle,
+vielleicht Grundnahrungsmittel.**
 
 ---
 

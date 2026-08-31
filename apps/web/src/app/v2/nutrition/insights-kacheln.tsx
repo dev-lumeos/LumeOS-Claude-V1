@@ -268,32 +268,33 @@ export function HeatmapKachel({ d, heute }: { d: InsightsStand; heute: string })
     })
   const gezaehlt = (s: Stufe) => stufen.filter(x => x.stufe === s).length
 
-  // ══ G-297: kompakt ════════════════════════════════════════════
+  // ══ G-297: die Kachelhoehe AUSFUELLEN ══════════════════════════
   //
-  // **Tom, 2026-08-31:** *,,tagesdeckung geht kleiner."*
+  // **Tom, 2026-08-31:** *,,die hoehe ist nun definiert fuer
+  // tagesdeckung, wieso verteilt man dann nicht auf optimale groesse
+  // die grafik darin?"*
   //
-  // `[cmd]` **Vorher fuellten 28 Felder die volle Kachelhoehe** — ein
-  // Feld war `aspectRatio: 1` ueber ein Siebtel der Kartenbreite, also
-  // rund 90 px hoch. **Die Verlaufskachel daneben hatte dadurch
-  // Leerraum.**
+  // `[read]` **Der vorige Auftrag hiess *,,kleiner"* und war falsch
+  // gestellt.** `[cmd]` **Gemessen am 2026-08-31: beide Kacheln sind
+  // 386 px hoch** — die Hoehe richtet sich nach der Verlaufskachel
+  // daneben. **Unter dem 26-px-Gitter blieben 58 px leer.**
   //
-  // `[cmd]` **`HeatmapView.js` macht es anders, und zwar zweifach:**
-  // eine schmale Spalte fuer die Wochenmarke (`24px repeat(7,1fr)`),
-  // **und die Legende als FLEX-ZEILE statt als Liste** — fuenf Zeilen
-  // werden zu einer.
+  // `[cmd]` **Die Karte ist 398 px breit.** Sieben Spalten mit 4 px
+  // Abstand lassen rund **50 px je Feld** — fast das Doppelte.
   //
-  // `[read]` **Die Zahl im Feld ist verzichtbar** (Auftrag): die Farbe
-  // traegt die Aussage, die Zahl steht im `title`. **Damit darf das
-  // Feld so klein werden, dass keine Ziffer mehr hineinpassen muss.**
-  const KACHEL = 'minmax(0, 26px)'
+  // `[read]` **Also `1fr` statt einer festen Obergrenze:** das Gitter
+  // nimmt die Breite, die die Karte hergibt, und `aspectRatio: 1`
+  // macht daraus die Hoehe. **Es waechst mit der Kachel, statt in
+  // ihrer Ecke zu sitzen.**
   return (
     <Card title="Tagesdeckung" sub={`28 Tage · Ziel ${z(d.zielKcal)} kcal`}>
       <div style={{
         display: 'grid',
-        // Die Spalten wachsen nicht mit der Karte — 26 px ist die
-        // Obergrenze, sonst faengt das Gitter wieder an zu wuchern.
-        gridTemplateColumns: `repeat(7, ${KACHEL})`,
-        gap: 3, marginBottom: 6, justifyContent: 'start',
+        // `[read]` **`minmax(0, 1fr)`, nicht `1fr`:** ohne die 0 kann
+        // eine Spalte nicht unter ihre Inhaltsbreite schrumpfen, und
+        // das Gitter sprengt die Karte auf schmalen Schirmen.
+        gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
+        gap: 4, marginBottom: 8,
       }}>
         {WOCHENTAG.map(w => (
           <div key={w} className="v2-eyebrow"

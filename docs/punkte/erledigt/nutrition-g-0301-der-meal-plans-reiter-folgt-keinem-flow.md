@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-39
 agent: claudecode
 beauftragt: 2026-08-31
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-plans.tsx
@@ -83,3 +85,40 @@ in den Plan-Reiter.**
 `[read]` **Die Herkunft wird je Zeile gezeigt** — eigene ohne Label,
 Coach mit Namen, Marketplace mit Produktnamen. `[cmd]` **Heute sind
 alle `self_created`.**
+
+## Ergebnis (Kurzfassung, Einzelheiten in G-289)
+
+`[cmd]` **Die drei Unterreiter sind entfernt.** `Active plan`,
+`Plan library` und `Shopping list` stehen in keiner Spec.
+
+`[cmd]` **`SPEC_03` Flow 3, Schritt 2 kennt EINE Uebersicht:**
+*„Uebersicht zeigt alle verfuegbaren Plaene"* — **und ein Plan DARIN
+traegt `status: active`.** Genau so steht es jetzt da: „Alle Pläne",
+der aktive oben, mit seinem Zustand an der Karte.
+
+`[cmd]` **Der Shopping-Unterreiter ist ENTFERNT, nicht abgeschaltet**
+(A-59) — mit ihm zwei Attrappenkarten (*„from Recomp 5-Meal Plan"*,
+Print/Export ohne Wirkung). `[cmd]` **Die Attrappenzahl in
+`tab-plans.tsx` faellt damit von 8 auf 6**, und der Waechter ist mit
+Begruendung nachgezogen.
+
+`[read]` **Flow 8 sagt, wohin die Liste gehoert:** *„Rezept oeffnen
+-> Einkaufsliste erstellen"*. **Sie steht jetzt echt im
+Rezepte-Reiter**, mit Schreibweg und Abhaken (G-288).
+
+### Die Herkunft ist vorgesehen, nicht gebaut
+
+`[cmd]` **Flow 3, Schritt 2 nennt die Beschriftung je Quelle** —
+eigene **ohne Label**, *„Von [Coach-Name]"*, *„Gekauft:
+[Produkt-Name]"*, *„Erstellt von Buddy"*. **Alle vier sind gebaut und
+geprueft.**
+
+`[read]` **Kein leerer Coach-Bereich, keine eigene Route** — E-29 und
+die Sperre aus G-269 gelten unveraendert.
+
+Bild: `backup/g289-final-plans.png`
+
+## Abnahme
+
+**2026-08-31, mit G-289 abgenommen:** gebaut: drei Unterreiter durch eine Uebersicht ersetzt, der
+Shopping-Unterreiter entfernt statt versteckt.

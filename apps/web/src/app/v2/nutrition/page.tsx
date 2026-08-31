@@ -67,6 +67,8 @@ import { ladeOrdnung, type NaehrstoffOrdnung } from '../../../lib/nutrition/naeh
 import { fensterOderTag } from '../../../lib/nutrition/naehrstoff-anzeige'
 // G-101: Kalorienbilanz und Makroschnitt fuer die Insights.
 import { ladeInsights, type InsightsStand } from '../../../lib/nutrition/insights-read'
+// G-289: Rezepte und Einkaufslisten - SPEC_03 Flow 7 und 8.
+import { ladeRezepte, type RezeptStand } from '../../../lib/nutrition/rezept-lesen'
 // G-258/E-29: ueber die Funktion, nicht direkt in `coach.*`.
 import {
   ladeOffeneAktionen, type OffeneAktionenStand,
@@ -111,7 +113,9 @@ export default async function V2NutritionPage({
   // serverseitig geladen bleiben (Begruendung in tableiste.tsx).
   // Unbekannte Werte fallen auf `diary` zurueck statt eine leere Seite
   // zu zeigen.
-  const ERLAUBT = ['diary', 'insights', 'nutrients', 'foods', 'plans', 'prefs', 'planner']
+  // G-289/E-39: `rezepte` ist der „Rezept-Bereich" aus SPEC_03 Flow 7.
+  const ERLAUBT = ['diary', 'insights', 'nutrients', 'foods',
+    'plans', 'prefs', 'planner', 'rezepte']
   const tab = ERLAUBT.includes(searchParams?.tab ?? '') ? searchParams!.tab! : 'diary'
 
   let summe: DailySummaryRow | null = null
@@ -343,6 +347,18 @@ export default async function V2NutritionPage({
     }
   }
 
+  // G-289: die Rezepte. Nur fuer den Rezepte-Reiter - `recipe_nutrition`
+  // laeuft je Rezept einmal, und auf den anderen Reitern braucht sie
+  // niemand.
+  let rezepte: RezeptStand | null = null
+  if (tab === 'rezepte') {
+    try {
+      rezepte = await ladeRezepte()
+    } catch {
+      rezepte = null
+    }
+  }
+
   return (
     <TagebuchAnsicht
       datum={datum}
@@ -355,6 +371,7 @@ export default async function V2NutritionPage({
       mikro={mikro}
       ordnung={ordnung}
       einsichten={einsichten}
+      rezepte={rezepte}
       offeneAktionen={offeneAktionen}
       sitzung={sitzung}
       istAdmin={istAdmin}

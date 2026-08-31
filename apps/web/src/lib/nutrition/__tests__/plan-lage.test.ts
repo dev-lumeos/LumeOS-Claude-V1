@@ -117,10 +117,27 @@ test('G-270: abgewichen zaehlt als Entscheidung, nicht als Erfolg', () => {
 
 test('G-270: die Leerzustaende sagen, was fehlt', () => {
   assert.match(KEIN_LOG_SATZ, /noch nichts protokolliert/)
+
   // `[cmd]` **`nutrition.shopping_lists` EXISTIERT** — der Satz darf
-  // keine fehlende Tabelle behaupten.
-  assert.match(KEINE_EINKAUFSLISTE_SATZ, /Tabelle steht bereit/)
+  // keine fehlende Tabelle behaupten. **Diese Probe bleibt.**
   assert.doesNotMatch(KEINE_EINKAUFSLISTE_SATZ, /gibt es (noch )?keine Tabelle/)
+
+  // `[cmd]` **BERICHTIGT in G-288, 2026-08-31.** Hier stand
+  // `/Tabelle steht bereit/`, und der Satz sagte dazu, die Liste
+  // entstehe *„aus einer Planwoche"*.
+  //
+  // `[cmd]` **`SPEC_03` Flow 8, Schritt 1: *„Rezept oeffnen ->
+  // Einkaufsliste erstellen"*.** `[read]` **Die zweite Fassung war
+  // also genauso falsch wie die erste** — nur unauffaelliger: sie
+  // behauptete nicht mehr eine fehlende Tabelle, sondern den falschen
+  // Ursprung.
+  //
+  // `[read]` **Geprueft wird jetzt die Quelle, nicht die
+  // Verfuegbarkeit** — das ist die Aussage, die falsch werden kann.
+  assert.match(KEINE_EINKAUFSLISTE_SATZ, /aus einem Rezept/,
+    'der Satz nennt nicht die Quelle aus Flow 8')
+  assert.doesNotMatch(KEINE_EINKAUFSLISTE_SATZ, /aus einer Planwoche/,
+    'die widerlegte Behauptung ist zurueck')
 })
 
 test('G-267: der Planzustand wird uebersetzt, nicht durchgereicht', () => {

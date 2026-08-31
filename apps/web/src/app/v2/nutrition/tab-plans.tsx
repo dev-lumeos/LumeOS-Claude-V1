@@ -35,7 +35,7 @@ import type { PlanDaten } from '../../../lib/nutrition/plan-lesen'
 import type { LogZeile } from '../../../lib/nutrition/plan-lage'
 import {
   LebenszyklusEcht, EinhaltungEcht,
-  HerkunftEcht, EinkaufslisteEcht,
+  HerkunftEcht,
 } from './plans-echt'
 import { PlanModal } from './plan-modal'
 import { PlanEintraegeEcht, type TagesEintrag } from './plan-eintraege'
@@ -89,7 +89,6 @@ export function MealPlansTab({
   /** G-274: der Tag, auf den bestaetigt wird (`execution_date`). */
   datum?: string
 }) {
-  const [tab, setTab] = React.useState('active')
   // G-267 / G-268: `null` heisst zu, `true` heisst anlegen,
   // ein Objekt heisst bearbeiten.
   const [anlegen, setAnlegen] = React.useState(false)
@@ -112,19 +111,18 @@ export function MealPlansTab({
   return (
     <div>
       <div style={{ display: 'flex', gap: 8, marginBottom: 14, alignItems: 'center' }}>
-        <div className="v2-segmented">
-          {([['active', 'Active plan'], ['library', 'Plan library'], ['shopping', 'Shopping list']] as const).map(([k, l]) => (
-            <button
-              key={k}
-              type="button"
-              onClick={() => setTab(k)}
-              className={tab === k ? 'v2-btn v2-btn-primary' : 'v2-btn v2-btn-ghost'}
-              style={{ height: 24, fontSize: 11, padding: '0 12px', borderRadius: 5 }}
-            >
-              {l}
-            </button>
-          ))}
-        </div>
+        {/* ══ G-301: die drei Unterreiter sind weg ═══════════════
+            `[cmd]` **`Active plan` / `Plan library` / `Shopping list`
+            stehen in keiner Spec.** `[cmd]` **`SPEC_03` Flow 3,
+            Schritt 2 kennt EINE Uebersicht:** *,,Uebersicht zeigt alle
+            verfuegbaren Plaene"* — und ein Plan DARIN traegt
+            `status: active`.
+
+            `[cmd]` **Und die Einkaufsliste gehoert gar nicht
+            hierher:** Flow 8 sagt *,,Rezept oeffnen -> Einkaufsliste
+            erstellen"*. **Sie steht jetzt im Rezepte-Reiter**
+            (G-288). */}
+        <span className="v2-eyebrow">Alle Pläne</span>
         <div className="v2-spacer" />
         {/* G-267, Tom: „new plan geht nix". `[cmd]` **Seit dem
             2026-08-30 kann er speichern** — die sechs Spalten stehen
@@ -134,7 +132,9 @@ export function MealPlansTab({
         </button>
       </div>
 
-      {tab === 'active' && (
+      {/* Flow 3, Schritt 2: der aktive Plan steht OBEN in
+          derselben Uebersicht - er ist kein eigener Ort. */}
+      <>
         <div className="v2-grid v2-grid-15" style={{ gap: 14 }}>
           <div className="v2-col-gap" style={{ gap: 14 }}>
             {/* G-161: Der Plankopf liest echt, sobald ein Plan da ist.
@@ -296,7 +296,7 @@ export function MealPlansTab({
             )}
           </div>
         </div>
-      )}
+      </>
 
       {/* ── G-286/G-287/G-290: die Bibliothek wird benutzbar ───────
           **Tom, 2026-08-31:** *„irgend eine auflistung die gar nichts
@@ -309,7 +309,7 @@ export function MealPlansTab({
 
           `[cmd]` **Einen Plan, nicht zwei** — der zweite gehoert
           `tom.seed@example.com` und faellt per RLS heraus. */}
-      {tab === 'library' && d && (
+      {d && (
         <div className="v2-col-gap" style={{ gap: 12 }}>
           <MealPlanCard
             d={d}
@@ -321,7 +321,7 @@ export function MealPlansTab({
         </div>
       )}
 
-      {tab === 'library' && !d && (
+      {!d && (
         <div className="v2-grid v2-g-cols-3" style={{ gap: 12 }}>
           {BIBLIOTHEK.map(p => (
             <Card
@@ -350,86 +350,15 @@ export function MealPlansTab({
         </div>
       )}
 
-      {tab === 'shopping' && einkaufslisten === 0 && (
-        /* G-270: `nutrition.shopping_lists` EXISTIERT (1 Zeile, 6
-           Positionen im Bestand) — dieser Nutzer hat nur keine.
-           `[read]` **Ein Leerzustand, kein fehlendes Feature.** Der
-           Quelltext nannte bis heute eine fehlende Tabelle als Grund,
-           und das war schon in G-271 falsch. */
-        <EinkaufslisteEcht anzahl={einkaufslisten} />
-      )}
+      {/* ══ G-288/Flow 8: die Einkaufsliste ist umgezogen ══════
+          `[cmd]` **`SPEC_03` Flow 8, Schritt 1: *,,Rezept oeffnen ->
+          Einkaufsliste erstellen"*.** `[read]` **Sie entsteht aus
+          einem REZEPT, nicht aus einer Planwoche** — der Reiter hier
+          hat sie nie erzeugen koennen.
 
-      {tab === 'shopping' && einkaufslisten > 0 && (
-        <div className="v2-grid v2-grid-14" style={{ gap: 14 }}>
-          <Card
-            title="Shopping list"
-            sub="from Recomp 5-Meal Plan · 7 days · 1 serving"
-            attrappe={ATTRAPPE}
-            actions={(
-              <>
-                <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm">Print</button>
-                <button type="button" className="v2-btn v2-btn-sm">
-                  <Icon name="download" className="v2-ic v2-ic-sm" />Export
-                </button>
-              </>
-            )}
-          >
-            {EINKAUF.map(g => (
-              <div key={g.cat} style={{ marginBottom: 14 }}>
-                <div className="v2-eyebrow" style={{ marginBottom: 6 }}>{g.cat}</div>
-                <div className="v2-col-gap" style={{ gap: 3 }}>
-                  {g.items.map(([n, q], i) => {
-                    // Die Vorlage hakt die ersten zwei je Gruppe ab.
-                    const ab = i < 2
-                    return (
-                      <div key={n} className="v2-einkauf-zeile">
-                        <span
-                          className="v2-einkauf-haken"
-                          style={{
-                            border: `1px solid ${ab ? 'var(--pos)' : 'var(--border-strong)'}`,
-                            background: ab ? 'var(--pos)' : 'transparent',
-                          }}
-                        >
-                          {ab && (
-                            <Icon name="check" className="v2-ic" style={{ width: 10, height: 10, color: 'var(--bg)', strokeWidth: 3 }} />
-                          )}
-                        </span>
-                        <span style={{ flex: 1, fontSize: 12, textDecoration: ab ? 'line-through' : 'none', opacity: ab ? 0.5 : 1 }}>
-                          {n}
-                        </span>
-                        <span className="v2-num v2-dim" style={{ fontSize: 11 }}>{q}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            ))}
-          </Card>
-
-          <Card title="Scale list" attrappe={ATTRAPPE}>
-            <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Servings</div>
-            <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
-              {[1, 2, 3, 4].map(n => (
-                <button
-                  key={n}
-                  type="button"
-                  className={n === 1 ? 'v2-btn v2-btn-primary v2-btn-sm' : 'v2-btn v2-btn-sm'}
-                  style={{ flex: 1 }}
-                >
-                  {n}×
-                </button>
-              ))}
-            </div>
-            <Row label="Total items" value="14" />
-            <Row label="Checked" value="2 of 14" />
-            <Row label="Est. cost" value="≈ €78" />
-            <div className="v2-divider" />
-            <button type="button" className="v2-btn" style={{ width: '100%' }}>
-              <Icon name="plus" className="v2-ic v2-ic-sm" />Add item manually
-            </button>
-          </Card>
-        </div>
-      )}
+          `[cmd]` **Der Unterreiter zeigte eine Attrappe** (*,,from
+          Recomp 5-Meal Plan"*, Print/Export ohne Wirkung). **Er ist
+          entfernt, nicht abgeschaltet** — A-59. */}
 
       {/* G-290: Startdatum, Laenge und Lebenszyklus — ein eigener
           Vorgang. `[read]` **`planAnlegen` setzt `status` bewusst auf

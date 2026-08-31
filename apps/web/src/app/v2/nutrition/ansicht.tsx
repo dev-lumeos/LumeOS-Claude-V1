@@ -41,6 +41,8 @@ import { NaehrstoffOrdnungTab } from './naehrstoff-ordnung-tab'
 import type { NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnung'
 // G-101: zwei Insights-Kacheln mit echten Zahlen.
 import { KalorienbilanzKachel, MakroschnittKachel } from './insights-echt'
+// G-289/G-288/G-300: Rezepte, Einkaufslisten - SPEC_03 Flow 7 und 8.
+import { RezepteTab } from './rezepte-echt'
 // G-291/292/293/295: die vier fehlenden Kacheln aus SPEC_10.
 import {
   TrendKachel, HeatmapKachel, MakroDetailKachel, WarnungenKachel,
@@ -52,6 +54,7 @@ import { PreWorkoutEcht } from './pre-workout-echt'
 import type { SitzungStand } from '../../../lib/training/naechste-sitzung'
 import type { OffeneAktionenStand } from '../../../lib/coach/offene-aktionen'
 import type { InsightsStand } from '../../../lib/nutrition/insights-read'
+import type { RezeptStand } from '../../../lib/nutrition/rezept-lesen'
 import type { HydrationDay } from '../../../lib/nutrition/hydration-day-read'
 import { LeerHinweis } from './leer-hinweis'
 import type { DailySummaryRow, SummaryMacro } from '../../../lib/nutrition/diary-summary'
@@ -126,13 +129,16 @@ function tabs(mahlzeiten: number | null): TabItem[] {
     { id: 'plans',     label: 'Meal plans',  icon: 'calendar' },
     { id: 'prefs',     label: 'Preferences', icon: 'settings' },
     { id: 'planner',   label: 'Planner',     icon: 'calendar' },
+    // G-289/E-39: der „Rezept-Bereich" aus SPEC_03 Flow 7,
+    // Schritt 1. Er traegt auch die Einkaufslisten (Flow 8).
+    { id: 'rezepte',   label: 'Rezepte',     icon: 'nutrition' },
   ]
 }
 
 export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, lueckenGesamt = null, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
   planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
-  istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null,
+  istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null, rezepte = null,
   offeneAktionen = null, sitzung = null,
   unvertraeglichkeiten = [],
 }: {
@@ -172,6 +178,8 @@ export async function TagebuchAnsicht({
   ordnung?: NaehrstoffOrdnung | null
   /** G-101: Kalorienbilanz und Makroschnitt. */
   einsichten?: InsightsStand | null
+  /** G-289: Rezepte und Einkaufslisten. */
+  rezepte?: RezeptStand | null
 }) {
   // A-14: Serverkomponente — `getTranslations`, nicht `useTranslations`.
   const t = await getTranslations('Nutrition')
@@ -259,7 +267,7 @@ export async function TagebuchAnsicht({
       <Zukunftshinweis datum={datum} />
 
       {tab !== 'diary' && (
-        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} planLogs={planLogs} coachFreigabe={coachFreigabe} einkaufslisten={einkaufslisten} tagesEintraege={tagesEintraege} />
+        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} rezepte={rezepte} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} planLogs={planLogs} coachFreigabe={coachFreigabe} einkaufslisten={einkaufslisten} tagesEintraege={tagesEintraege} />
       )}
       {tab === 'diary' && (
       <>
@@ -627,7 +635,7 @@ export async function TagebuchAnsicht({
  * eingebaut.
  */
 function AndererTab({
-  tab, foodsStart, vorlieben, plan, ordnung, einsichten, bewertung = [],
+  tab, foodsStart, vorlieben, plan, ordnung, einsichten, rezepte, bewertung = [],
   datum,
   planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
   unvertraeglichkeiten = [],
@@ -651,6 +659,8 @@ function AndererTab({
   ordnung?: NaehrstoffOrdnung | null
   /** G-101: Kalorienbilanz und Makroschnitt. */
   einsichten?: InsightsStand | null
+  /** G-289: Rezepte und Einkaufslisten. */
+  rezepte?: RezeptStand | null
 }) {
   const inhalt: Record<string, { titel: string; braucht: string }> = {
     insights: {
@@ -794,6 +804,30 @@ function AndererTab({
     return (
       <div style={{ marginTop: 16 }}>
         {plan ? <PlannerEchtTab d={plan} /> : <NutritionPlannerTab />}
+      </div>
+    )
+  }
+
+  // ══ G-289/G-288/G-300: der Rezept-Bereich ═══════════════════════
+  //
+  // `[cmd]` **`SPEC_03` Flow 7, Schritt 1: *„Rezept-Bereich → Neues
+  // Rezept"*.** `[cmd]` **Flow 8, Schritt 1: *„Rezept oeffnen →
+  // Einkaufsliste erstellen"*** — **die Liste gehoert hierher, nicht
+  // in den Plan-Reiter.**
+  //
+  // `[cmd]` **`E-39` loest `ADR_RECIPES_SCHEMA_ONLY` ab:** die
+  // Oberflaeche gehoert in V1. `[cmd]` **`SPEC_10` nennt fuenf
+  // Komponenten, gebaut war keine.**
+  if (tab === 'rezepte') {
+    return (
+      <div style={{ marginTop: 16 }}>
+        {rezepte
+          ? <RezepteTab d={rezepte} datum={datum ?? ''} />
+          : (
+            <LeerHinweis
+              titel="Rezepte nicht geladen"
+              grund="Ohne Sitzung greift die Zeilensicherheit, und es wird nichts gelesen." />
+          )}
       </div>
     )
   }

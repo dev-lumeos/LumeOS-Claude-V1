@@ -188,17 +188,31 @@ test('G-295: die Kachel zeigt den Hinweis statt eines gefaerbten Gitters', () =>
     'das Gitter wird gebaut, bevor das fehlende Ziel geprueft ist')
 })
 
-test('G-297: das Feld bleibt klein — keine Ziffer, gedeckelte Breite', () => {
-  // **Tom, 2026-08-31:** *,,tagesdeckung geht kleiner."*
+test('G-297: das Gitter fuellt die Kachelbreite — ohne sie zu sprengen', () => {
+  // **BERICHTIGT am 2026-08-31.** Der vorige Auftrag hiess
+  // *,,tagesdeckung geht kleiner"*, und dieser Waechter sicherte eine
+  // Deckelung auf 26 px.
   //
-  // `[cmd]` **Vorher: `repeat(7, 1fr)` mit `aspectRatio: 1`** — ein
-  // Feld war ein Siebtel der Kartenbreite hoch, also rund 90 px.
-  // `[read]` **Die Deckelung ist die Wirkung**, nicht die Ziffer:
-  // ohne sie waechst das Gitter wieder mit der Karte.
+  // **Tom danach:** *,,die hoehe ist nun definiert fuer tagesdeckung,
+  // wieso verteilt man dann nicht auf optimale groesse die grafik
+  // darin?"*
+  //
+  // `[cmd]` **Gemessen: beide Kacheln 386 px hoch, unter dem
+  // 26-px-Gitter blieben 58 px leer.** `[read]` **Die Deckelung war
+  // die falsche Antwort** — das Gitter soll die Kachel ausfuellen.
   const b = block(ohneKommentare(KACHELN), 'HeatmapKachel')
+  assert.doesNotMatch(b, /minmax\(0, 26px\)/,
+    'die alte Deckelung ist zurueck — das Gitter fuellt die Kachel nicht')
+  assert.match(b, /repeat\(7, minmax\(0, 1fr\)\)/,
+    'das Gitter waechst nicht mit der Kachelbreite')
+  // `[read]` **Die 0 in `minmax(0, 1fr)` ist nicht schmueckend:**
+  // ohne sie kann eine Spalte nicht unter ihre Inhaltsbreite
+  // schrumpfen, und auf 375 px sprengt das Gitter die Karte.
   assert.doesNotMatch(b, /repeat\(7, 1fr\)/,
-    'das Gitter waechst wieder mit der Kartenbreite')
-  assert.match(b, /minmax\(0, 26px\)/, 'die Feldbreite ist nicht gedeckelt')
+    'ohne minmax(0, …) sprengt das Gitter die Karte auf schmalen Schirmen')
+  // Und die Felder bleiben quadratisch — sonst wird aus der Breite
+  // keine Hoehe.
+  assert.match(b, /aspectRatio: '1'/, 'die Felder sind nicht mehr quadratisch')
 
   // `[cmd]` **A-59: `tagNummer` ist entfernt, nicht nur unbenutzt.**
   const lage = ohneKommentare('apps/web/src/lib/nutrition/insights-lage.ts')

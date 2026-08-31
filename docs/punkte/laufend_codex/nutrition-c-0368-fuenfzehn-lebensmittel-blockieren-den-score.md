@@ -7,6 +7,8 @@ angelegt: 2026-08-31
 braucht: []
 kind_von: C-367
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-31
 beruehrt:
   tabellen: [nutrition.food_nutrients]
 zahlen:
@@ -61,7 +63,7 @@ vielleicht Grundnahrungsmittel.**
 
 ## Auftrag — die fuenfzehn benennen
 
-`[read]` **Vorbereitet am 2026-08-31.**
+**Beauftragt am 2026-08-31.**
 
 ### Was zu tun ist
 

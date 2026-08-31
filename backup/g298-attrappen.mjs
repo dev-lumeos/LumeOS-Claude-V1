@@ -12,7 +12,7 @@ await seite.fill('input[type="password"]', wortFuer(KONTO))
 await seite.click('button[type="submit"]')
 await seite.waitForURL(u => !u.pathname.includes('login'), { timeout: 30000 })
 
-for (const tab of ['plans', 'planner', 'insights']) {
+for (const tab of ['plans', 'planner', 'insights', 'rezepte']) {
   await seite.goto(`http://127.0.0.1:3200/v2/nutrition?tab=${tab}`,
     { waitUntil: 'networkidle' })
   await seite.waitForTimeout(900)

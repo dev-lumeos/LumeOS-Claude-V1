@@ -7,8 +7,6 @@ angelegt: 2026-08-31
 braucht: []
 kind_von: G-226
 entscheidung: null
-agent: codex
-beauftragt: 2026-08-31
 beruehrt:
   tabellen: [nutrition.food_tags]
 zahlen:
@@ -56,3 +54,21 @@ ist.**
 
 **Mitbeauftragt mit G-296 am 2026-08-31.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Bericht
+
+Siehe [G-296](../quer-g-0296-das-globale-tsc-ist-rot-wegen-packages-ui.md#bericht):
+Die Adminseite liest Tags bereits, hat aber keinen Schreibweg; der
+Kettenlauf ersetzt verwaltete Tag-Codes ohne Herkunftsunterscheidung.
+
+## Gemessen am 2026-08-31
+
+`[cmd]` **Admin zeigt und filtert Tags, ist aber vollstaendig
+lesend.**
+
+`[cmd]` **Der Import ersetzt 12 Tag-Codes ohne
+Herkunftsunterscheidung** — **eine Kuration waere nicht geschuetzt.**
+
+`[read]` **Bei den Anzeigenamen ist dieselbe Frage geloest** (C-29):
+der Kettenschritt liest `name_display_de` aus der Quelldatei und
+laesst Kuratiertes stehen. **Bei den Tags fehlt das.**
