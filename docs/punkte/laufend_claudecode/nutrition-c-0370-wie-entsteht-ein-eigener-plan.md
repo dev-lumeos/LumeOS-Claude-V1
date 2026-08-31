@@ -6,7 +6,9 @@ schwere: hoch
 angelegt: 2026-08-31
 braucht: []
 kind_von: G-301
-entscheidung: E-39
+entscheidung: E-40
+agent: claudecode
+beauftragt: 2026-08-31
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen: null
@@ -89,3 +91,11 @@ eigentlich tun sollte.**
 
 `[read]` **Zu entscheiden bleibt:** ob das der einzige Weg ist, oder
 ob ein leerer Plan mit *n* Wochen daneben stehen soll.
+
+## Auftrag
+
+**Mitbeauftragt mit C-372 am 2026-08-31.** Bericht dort.
+
+`[cmd]` **E-40 beantwortet die Frage: der Nutzer baut seinen Plan im
+Planner.** `[read]` **Das Formular fragt Name, Ziele und Wochenzahl —
+nicht Lebenszyklus und Startdatum.**

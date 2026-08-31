@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 235 |
+| `todos` | 233 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 2 |
+| `laufend_claudecode` | 4 |
 | `erledigt` | 168 |
 | **gesamt** | **408** |
 
@@ -121,9 +121,9 @@
 | `C-367` | befund | hoch | [Vitamin A blockiert den Score an allen Tagen](erledigt/nutrition-c-0367-vitamin-a-blockiert-den-score-an-allen-tagen.md) | erledigt | — | C-368 |
 | `C-368` | entscheidung | hoch | [fuenfzehn Lebensmittel blockieren den Score](laufend_codex/nutrition-c-0368-fuenfzehn-lebensmittel-blockieren-den-score.md) | laeuft (codex) | — | — |
 | `C-369` | entscheidung | mittel | [was mit einem abgelaufenen Plan geschieht](todos/nutrition-c-0369-was-mit-einem-abgelaufenen-plan-geschieht.md) | offen | — | — |
-| `C-370` | entscheidung | hoch | [wie entsteht ein eigener Plan?](todos/nutrition-c-0370-wie-entsteht-ein-eigener-plan.md) | offen | — | — |
+| `C-370` | entscheidung | hoch | [wie entsteht ein eigener Plan?](laufend_claudecode/nutrition-c-0370-wie-entsteht-ein-eigener-plan.md) | laeuft (claudecode) | — | — |
 | `C-371` | befund | mittel | [`recipes` hat keine Herkunftsspalte](laufend_codex/nutrition-c-0371-recipes-hat-keine-herkunftsspalte.md) | laeuft (codex) | — | — |
-| `C-372` | befund | hoch | [Planwochen haben keinen Schreibweg](todos/nutrition-c-0372-planwochen-haben-keinen-schreibweg.md) | offen | — | — |
+| `C-372` | befund | hoch | [Planwochen haben keinen Schreibweg](laufend_claudecode/nutrition-c-0372-planwochen-haben-keinen-schreibweg.md) | laeuft (claudecode) | — | — |
 | `C-373` | befund | mittel | [der Lebenszyklus wird gespeichert und nie ausgefuehrt](todos/nutrition-c-0373-der-lebenszyklus-wird-gespeichert-und-nie-ausgefuehrt.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
