@@ -28,7 +28,7 @@ zahlen: null
 `module-supplements.jsx` (1.606 Zeilen, 6 Reiter), `-spec.jsx`
 (1.082), `-modals.jsx` (704), `-injection.jsx` (524).
 
-`[cmd]` **Der `.js`-Ordner `apps/web/public/mockup/features/supplements/`
+`[cmd]` **Der `.js`-Ordner `docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/features/supplements/`
 enthaelt dagegen vier Spiegel-Stubs von zusammen 120 Zeilen** mit
 hartkodiertem Beispiel-Stack. `[read]` **Er ist nicht die
 Zielgestalt.**
@@ -66,7 +66,7 @@ Befund erspart, als ich endlich nachgesehen habe.
 
     apps/web/src/app/v2/supplements/     24 Dateien
 
-`[cmd]` **NICHT `apps/web/public/mockup/features/supplements/`** —
+`[cmd]` **NICHT `docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/features/supplements/`** —
 das sind vier Spiegel-Stubs von zusammen 120 Zeilen mit hartkodiertem
 Beispiel-Stack. **Ich habe sie am 28.08. fuer den Mockup gehalten und
 drei Stunden verloren.**

@@ -28,7 +28,7 @@ zahlen: null
   `[cmd]` **Sie steht in keinem Index** — weder im SSOT noch in der
   Spezifikation. **Vierter unentdeckter Fundus** nach
   `referenz/lumeos-2026/`, `docs/ssot/70-spec-audit/` und
-  `apps/web/public/mockup/`.
+  `docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/`.
 
   ### Warum sie zaehlt
 

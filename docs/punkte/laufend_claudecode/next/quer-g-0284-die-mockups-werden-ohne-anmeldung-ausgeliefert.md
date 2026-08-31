@@ -9,7 +9,7 @@ kind_von: A-16
 entscheidung: null
 beruehrt:
   dateien:
-    - apps/web/public/mockup
+    - docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf
 zahlen:
   gemessen: 2026-08-31
   dateien: 94
@@ -23,7 +23,7 @@ zahlen:
 Aus A-16, Claude Code, 2026-08-31. **Gemessen aus einer abgemeldeten
 Sitzung.**
 
-`[cmd]` **94 Dateien, 592 kB unter `apps/web/public/mockup/`.**
+`[cmd]` **94 Dateien, 592 kB unter `docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/`.**
 `[cmd]` **`public/` geht in den Build und wird ohne Anmeldung
 ausgeliefert.**
 

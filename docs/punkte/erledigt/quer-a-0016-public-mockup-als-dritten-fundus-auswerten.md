@@ -14,7 +14,7 @@ erledigt: 2026-08-31
 commit: fcd36338
 beruehrt:
   tabellen: []
-  dateien: ["apps/web/public/mockup/features/nutrition/MicroDashboard.js", "apps/web/public/mockup/features/nutrition/PreferencesView.js", "apps/web/public/mockup/features/nutrition/DiaryView.js", "apps/web/public/mockup/features/training/HistoryView.js", "apps/web/public/mockup/tokens.css", "apps/web/public/mockup/index.html", "docs/ssot/80-vorgaengerrepo-fundus.md"]
+  dateien: ["docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/features/nutrition/MicroDashboard.js", "docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/features/nutrition/PreferencesView.js", "docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/features/nutrition/DiaryView.js", "docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/features/training/HistoryView.js", "docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/tokens.css", "docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/index.html", "docs/ssot/80-vorgaengerrepo-fundus.md"]
 zahlen: null
 ---
 
@@ -56,7 +56,7 @@ zahlen: null
 
 `[read]` **Vorbereitet am 2026-08-30.**
 
-`[cmd]` **`apps/web/public/mockup/features/` traegt 94 `.js`-Dateien.**
+`[cmd]` **`docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/features/` traegt 94 `.js`-Dateien.**
 `[cmd]` **`theme-v1/` traegt 53 `.jsx` und ist die massgebliche
 Ideenquelle** (Tom, 28.08.).
 
@@ -106,7 +106,7 @@ G-226. Nichts geloescht, nichts gebaut, nichts committet.
 
 ### Bestand
 
-`[cmd]` **94 Dateien, 592 kB** unter `apps/web/public/mockup/`.
+`[cmd]` **94 Dateien, 592 kB** unter `docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/`.
 `[cmd]` **theme-v1 traegt 184 Dateien.**
 
     Modul         Dateien

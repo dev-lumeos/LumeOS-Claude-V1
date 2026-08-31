@@ -10,7 +10,7 @@ entscheidung: null
 beruehrt:
   tabellen: [nutrition.nutrient_reference_values]
   dateien:
-    - apps/web/public/mockup/features/nutrition/MicroDashboard.js
+    - docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/features/nutrition/MicroDashboard.js
     - docs/specs/Nutrition/01_current_specs/SPEC_10_COMPONENTS.md
 zahlen: null
 agent: claudecode
@@ -59,7 +59,7 @@ zum Massstab gemacht hat:
 
     docs/specs/.../SPEC_10_COMPONENTS.md      MicroDashboard,
                                               MicroNutrientCard
-    apps/web/public/mockup/.../MicroDashboard.js
+    docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/.../MicroDashboard.js
     referenz/lumeos-2026/                     Struktur, nie Code
 
 `[read]` **Der Mockup ist aus der Spec entstanden, mit Abgleich zum

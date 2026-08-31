@@ -10,7 +10,7 @@ kinder: []
 entscheidung: E-14
 beruehrt:
   tabellen: []
-  dateien: ["apps/web/public/mockup/components/MuscleBodyMap_test.html"]
+  dateien: ["docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/components/MuscleBodyMap_test.html"]
 zahlen: null
 ---
 

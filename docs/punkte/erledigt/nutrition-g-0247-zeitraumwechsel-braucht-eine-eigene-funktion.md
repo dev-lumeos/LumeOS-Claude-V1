@@ -12,7 +12,7 @@ beauftragt: 2026-08-28
 erledigt: 2026-08-28
 commit: b3f54031
 beruehrt:
-  dateien: [apps/web/public/mockup/features/nutrition/MacroDetail.js]
+  dateien: [docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/features/nutrition/MacroDetail.js]
 zahlen: null
 ---
 

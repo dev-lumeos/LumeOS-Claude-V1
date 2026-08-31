@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 230 |
 | `laufend_codex` | 4 |
-| `laufend_claudecode` | 3 |
+| `laufend_claudecode` | 8 |
 | `erledigt` | 144 |
-| **gesamt** | **381** |
+| **gesamt** | **386** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 127
+## nutrition — 132
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -188,6 +188,11 @@
 | `G-279` | entscheidung | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | — | — |
 | `G-283` | befund | hoch | [ein `pro`-Profil faellt still auf 0,90](laufend_claudecode/nutrition-g-0283-ein-pro-profil-faellt-still-auf-090.md) | vorbereitet (claudecode) | — | — |
 | `G-285` | befund | niedrig | [`display_tier` heisst im Code weiter *Abo-Gate*](laufend_claudecode/nutrition-g-0285-display-tier-heisst-im-code-weiter-abo-gate.md) | vorbereitet (claudecode) | — | — |
+| `G-286` | feature | hoch | [MealPlanDetail — das Tages-Akkordeon fehlt](laufend_claudecode/nutrition-g-0286-mealplandetail-das-tages-akkordeon-fehlt.md) | laeuft (claudecode) | — | — |
+| `G-287` | feature | hoch | [MealPlanCard — die Plan-Liste ist nicht anklickbar](laufend_claudecode/nutrition-g-0287-mealplancard-die-plan-liste-ist-nicht-anklickbar.md) | laeuft (claudecode) | — | — |
+| `G-288` | feature | hoch | [Die Einkaufsliste ist eine leere Kachel](laufend_claudecode/nutrition-g-0288-die-einkaufsliste-ist-eine-leere-kachel.md) | vorbereitet (claudecode) | — | — |
+| `G-289` | feature | hoch | [Fünf Rezeptkomponenten fehlen](laufend_claudecode/nutrition-g-0289-fuenf-rezeptkomponenten-fehlen.md) | vorbereitet (claudecode) | — | — |
+| `G-290` | feature | mittel | [Der Aktivierungsdialog mit LifecyclePicker fehlt](laufend_claudecode/nutrition-g-0290-der-aktivierungsdialog-mit-lifecyclepicker-fehlt.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59
