@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 234 |
+| `todos` | 235 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 167 |
-| **gesamt** | **405** |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 168 |
+| **gesamt** | **408** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 149
+## nutrition — 152
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -123,6 +123,8 @@
 | `C-369` | entscheidung | mittel | [was mit einem abgelaufenen Plan geschieht](todos/nutrition-c-0369-was-mit-einem-abgelaufenen-plan-geschieht.md) | offen | — | — |
 | `C-370` | entscheidung | hoch | [wie entsteht ein eigener Plan?](todos/nutrition-c-0370-wie-entsteht-ein-eigener-plan.md) | offen | — | — |
 | `C-371` | befund | mittel | [`recipes` hat keine Herkunftsspalte](laufend_codex/nutrition-c-0371-recipes-hat-keine-herkunftsspalte.md) | laeuft (codex) | — | — |
+| `C-372` | befund | hoch | [Planwochen haben keinen Schreibweg](todos/nutrition-c-0372-planwochen-haben-keinen-schreibweg.md) | offen | — | — |
+| `C-373` | befund | mittel | [der Lebenszyklus wird gespeichert und nie ausgefuehrt](todos/nutrition-c-0373-der-lebenszyklus-wird-gespeichert-und-nie-ausgefuehrt.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -208,8 +210,9 @@
 | `G-299` | feature | hoch | [der Planner zeigt eine fremde Woche](erledigt/nutrition-g-0299-der-planner-zeigt-eine-fremde-woche.md) | erledigt | — | — |
 | `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](erledigt/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | erledigt | — | — |
 | `G-301` | befund | hoch | [der Meal-plans-Reiter folgt keinem Flow](erledigt/nutrition-g-0301-der-meal-plans-reiter-folgt-keinem-flow.md) | erledigt | — | C-370 |
-| `G-302` | befund | mittel | [die Zielzeile bricht um](todos/nutrition-g-0302-die-zielzeile-bricht-um.md) | offen | — | — |
-| `G-304` | messung | hoch | [was ein Nutzer in Plaenen und Rezepten tun kann](laufend_claudecode/nutrition-g-0304-was-ein-nutzer-in-plaenen-und-rezepten-tun-kann.md) | laeuft (claudecode) | — | — |
+| `G-302` | befund | mittel | [die Zielzeile bricht um](laufend_claudecode/nutrition-g-0302-die-zielzeile-bricht-um.md) | vorbereitet (claudecode) | — | — |
+| `G-304` | messung | hoch | [was ein Nutzer in Plaenen und Rezepten tun kann](erledigt/nutrition-g-0304-was-ein-nutzer-in-plaenen-und-rezepten-tun-kann.md) | erledigt | — | C-372, C-373, G-305 |
+| `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](laufend_claudecode/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59

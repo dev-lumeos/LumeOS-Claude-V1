@@ -65,3 +65,27 @@ naheliegende Weg ist deshalb: aus einer Woche einen Plan sichern** —
 
 `[read]` **Wenn Claude Code beim Bau merkt, dass ein Weg fehlt,
 meldet er es.** **Dieser Punkt bleibt offen, bis das geschieht.**
+
+## Gemessen am 2026-08-31 — die Luecke ist belegt
+
+`[cmd]` **`meal_plan_weeks` wird nirgends eingefuegt.** `[cmd]`
+**`meal_plan_days` kommt nur in einem `select` vor.**
+
+`[read]` **Es gibt keinen Schreibweg fuer Planwochen** — **also kann
+kein Nutzer einen fuellbaren Plan bekommen, gleich welchen Weg man
+baut.**
+
+`[cmd]` **Der eine vorhandene Plan stammt aus dem C-150-Seed.**
+
+## Der naheliegende Weg
+
+`[read]` **Aus einer Woche einen Plan sichern.** `[cmd]` **Das
+Tagebuch traegt 2.895 Mahlzeiten ueber 181 Tage** — **eine Woche
+daraus ist ein fertiger Planinhalt.**
+
+`[read]` **Kein Formular, keine leeren Wochen, kein Tag fuer Tag
+fuellen.** `[read]` **Und es beantwortet auch, was *Copy week*
+eigentlich tun sollte.**
+
+`[read]` **Zu entscheiden bleibt:** ob das der einzige Weg ist, oder
+ob ein leerer Plan mit *n* Wochen daneben stehen soll.

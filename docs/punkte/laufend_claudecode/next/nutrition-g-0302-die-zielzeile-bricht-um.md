@@ -36,3 +36,12 @@ schmalen Schirm.**
 standen Samstag und Sonntag ausserhalb der Karte. **Beide entstehen
 beim Nebeneinandersetzen von Werten mit ungleich langen
 Beschriftungen.**
+
+## Auftrag
+
+`[read]` **Vorbereitet am 2026-08-31.**
+
+`[cmd]` **Vier Werte in einer Zeile, der dritte hat die laengste
+Beschriftung, der Umbruch trifft genau ihn.** **Bei 1440 px.**
+
+`[read]` **Dieselbe Klasse wie die Raster-Regression in G-298.**
