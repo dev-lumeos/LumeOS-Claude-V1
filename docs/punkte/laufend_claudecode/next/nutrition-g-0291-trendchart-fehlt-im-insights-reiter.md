@@ -69,13 +69,45 @@ Flags bei 7 / 30 / 90 Tagen.**
 `[read]` **Es fehlt nirgends eine Datengrundlage** — **es fehlen die
 Anzeigen.**
 
+### Die Vorlagen stehen an drei Stellen
+
+`[cmd]` **CLAUDE.md: das Vorgaengerrepo — Struktur ja, Code nie.**
+
+    referenz/.../nutrition/components/TrendAnalysis.tsx
+      339 Zeilen. Score-Farbe, Makro-Maximum, Zeitraumwahl.
+
+    mockup-zwischenwurf/features/nutrition/TrendsView.js
+      116 Zeilen. Kalorien-Trend 30 Tage, Protein-Streak-Kalender,
+      7x7-Heatmap, Makro-Qualitaet.
+
+    mockup-zwischenwurf/features/nutrition/HeatmapView.js
+      69 Zeilen. 7x5-Kalendergitter mit Farbintensitaet.
+
+    mockup-zwischenwurf/features/nutrition/InsightsView.js
+      210 Zeilen. Sagt selbst: *,,Mirrors InsightsView + MacroDetail
+      + NutritionScoreCard + TrendAnalysis + SPEC_09_SCORING"*.
+
+`[read]` **Die letzte ist die wichtigste** — **sie ist gegen die Spec
+gebaut und zeigt, wie die vier Kacheln zusammen aussehen.**
+
+`[cmd]` **Und sie traegt eine Score-Aufschluesselung mit Gewichten**
+— **das ist C-324, das gerade bei Codex laeuft.** `[read]` **Nicht
+uebernehmen; die Formel ist in E-25 entschieden.**
+
+`[read]` **Lies alle vier, bevor du baust.** `[read]` **Und wenn eine
+Vorlage etwas zeigt, das die Spec nicht nennt: melden, nicht
+weglassen.**
+
 ### Zu G-295 — meine Abnahme war falsch
 
 `[cmd]` **Ich habe der Entfernung der Heatmap am 30.08.
 zugestimmt**, mit der Begruendung, der Nutrients-Reiter zeige
 dasselbe.
 
-`[read]` **Das war falsch.** **Die Sparkline zeigt einen Naehrstoff
+`[read]` **Das war falsch.** `[cmd]` **`HeatmapView.js` ist genau diese Kachel: 7x5-Gitter,
+Farbintensitaet je Tag.**
+
+**Die Sparkline zeigt einen Naehrstoff
 ueber die Zeit; die Heatmap zeigt einen Tag je Feld, ueber alle
 Naehrstoffe.** **Nicht *,,wie lief Vitamin C"*, sondern *,,welche
 Tage waren gut"*.**
