@@ -40,3 +40,19 @@ oder erledigt sein.
 
 **Verwandter Punkt:** E-19 (Cam ist Endausbau); Tom 27.08.: Barcode/QR "kommt aber spaeter". `[read]` **Nicht zusammengelegt** — ob es
 derselbe Befund ist, gehoert geprueft, nicht angenommen.
+
+## Gegen den heutigen Stand gemessen, 2026-08-30
+
+`[read]` **Dieser Punkt stammt aus
+`OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`** — **einer
+Spec-Review von vor dem `/v2/`-Umbau.** `[cmd]` **Acht Punkte kommen
+aus derselben Datei.**
+
+`[cmd]` **Gemessen 2026-08-30: `nutrition.foods_custom.barcode`
+existiert.** `[read]` **Die Spalte ist da, der Flow nicht** —
+`foods_custom` hat 0 Zeilen (C-355).
+
+## Auftrag
+
+**Vorbereitet mit G-226 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

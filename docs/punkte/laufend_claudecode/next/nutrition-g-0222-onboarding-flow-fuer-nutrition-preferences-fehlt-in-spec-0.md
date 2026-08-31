@@ -53,3 +53,23 @@ den heutigen Stand geprueft.** `[cmd]` **Sie kennt die Entscheidungen
 vom 27./28.08. nicht** — was sie fordert, kann inzwischen entschieden
 oder erledigt sein.
 
+## Gegen den heutigen Stand gemessen, 2026-08-30
+
+`[read]` **Dieser Punkt stammt aus
+`OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`** — **einer
+Spec-Review von vor dem `/v2/`-Umbau.** `[cmd]` **Acht Punkte kommen
+aus derselben Datei.**
+
+`[cmd]` **Gemessen 2026-08-30: keine Spalte `onboarding` im
+ganzen Schema, `food_preferences` hat 2 Zeilen.**
+`[read]` **Tom, 2026-08-30:** *,,wir bauen ein initiales komplettes
+onboarding fuer jeden user wenn er nach der registrierung sich
+einloggt."* **Damit ist das Ob entschieden.**
+`[cmd]` **Und die Spec traegt es:** `SPEC_03_USER_FLOWS.md` der
+Buddy-Spec zeigt vier Schritte, `SPEC_10_PASS2_PATCH.md` neun
+Komponenten.
+
+## Auftrag
+
+**Vorbereitet mit G-226 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

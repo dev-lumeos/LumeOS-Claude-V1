@@ -6,7 +6,7 @@ schwere: niedrig
 angelegt: 2026-08-30
 braucht: []
 kind_von: C-112
-entscheidung: null
+entscheidung: E-37
 beruehrt:
   dateien:
     - docs/spezifikation/30-module/addon/00-entwurf-buddy-coach-marketplace.md
@@ -44,3 +44,16 @@ nichts, braucht vorher den Anwalt."*
 
 `[read]` **Nichts davon haelt die Arbeit auf.** **Es gehoert
 entschieden, bevor gebaut wird — nicht vorher.**
+
+## Entschieden: E-37
+
+**Zurueckgestellt.** Tom, 2026-08-30: *,,marketplace ist
+zurueckgestellt bauen wir spaeter."*
+
+`[read]` **Die drei oekonomischen Befunde und die acht Rechtsfragen
+bleiben** — **sie werden entschieden, wenn gebaut wird, nicht
+vorher.**
+
+`[cmd]` **Was vorgesehen ist, steht:** der Import gekaufter Inhalte
+ueber die Modul-APIs, und `plan_origin = 'marketplace'` seit dem
+30.08. im Schema.

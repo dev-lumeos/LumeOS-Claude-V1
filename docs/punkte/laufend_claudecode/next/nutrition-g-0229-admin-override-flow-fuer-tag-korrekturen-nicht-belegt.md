@@ -48,3 +48,19 @@ oder erledigt sein.
 
 **Verwandter Punkt:** C-31 (Admin-Oberflaeche fuer die Kuration). `[read]` **Nicht zusammengelegt** — ob es
 derselbe Befund ist, gehoert geprueft, nicht angenommen.
+
+## Gegen den heutigen Stand gemessen, 2026-08-30
+
+`[read]` **Dieser Punkt stammt aus
+`OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`** — **einer
+Spec-Review von vor dem `/v2/`-Umbau.** `[cmd]` **Acht Punkte kommen
+aus derselben Datei.**
+
+`[cmd]` **Zu messen gegen `apps/admin`** — seit A-36 ist belegt,
+dass Admin als eigene App gebaut ist, mit 314-zeiliger
+Kurationsseite.
+
+## Auftrag
+
+**Vorbereitet mit G-226 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

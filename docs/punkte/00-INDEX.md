@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 232 |
+| `todos` | 224 |
 | `laufend_codex` | 6 |
-| `laufend_claudecode` | 6 |
+| `laufend_claudecode` | 14 |
 | `erledigt` | 131 |
 | **gesamt** | **375** |
 
@@ -139,23 +139,23 @@
 | `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — | — |
 | `G-220` | entscheidung | hoch | [MealCam Auto-Accept widerspricht ADR_MEALCAM_V1](erledigt/nutrition-g-0220-mealcam-auto-accept-widerspricht-adr-mealcam-v1.md) | erledigt | — | — |
 | `G-221` | entscheidung | hoch | [Food-Tag-Set V1 widersprüchlich definiert](erledigt/nutrition-g-0221-food-tag-set-v1-widerspruechlich-definiert.md) | erledigt | — | G-245 |
-| `G-222` | befund | hoch | [Onboarding Flow für Nutrition Preferences fehlt in SPEC_03](todos/nutrition-g-0222-onboarding-flow-fuer-nutrition-preferences-fehlt-in-spec-0.md) | offen | — | — |
+| `G-222` | befund | hoch | [Onboarding Flow für Nutrition Preferences fehlt in SPEC_03](laufend_claudecode/nutrition-g-0222-onboarding-flow-fuer-nutrition-preferences-fehlt-in-spec-0.md) | vorbereitet (claudecode) | — | — |
 | `G-223` | befund | mittel | [Recalculate-UI in SPEC_10 fehlt (bekanntes Open Item)](todos/nutrition-g-0223-recalculate-ui-in-spec-10-fehlt-bekanntes-open-item.md) | offen | — | — |
 | `G-224` | befund | mittel | [MealCam Consent-Widerruf in Nutrition Settings nicht beschrieben](todos/nutrition-g-0224-mealcam-consent-widerruf-in-nutrition-settings-nicht-besch.md) | offen | — | — |
 | `G-225` | befund | mittel | [Coach Suggestion User Flow fehlt](todos/nutrition-g-0225-coach-suggestion-user-flow-fehlt.md) | offen | — | — |
-| `G-226` | entscheidung | mittel | [V1-Status-Marker fehlen für Recipes/Shopping/MealPlans Components in SPEC_10](todos/nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md) | offen | — | — |
-| `G-227` | entscheidung | mittel | [SPEC_03 §Flow 6 Custom Food erstellen via Barcode-Scan widerspricht Phase-2-Status](todos/nutrition-g-0227-spec-03-flow-6-custom-food-erstellen-via-barcode-scan-wide.md) | offen | — | — |
-| `G-228` | entscheidung | mittel | [Score Level Multiplier inkonsistent zwischen SPEC_04 und SPEC_07](todos/nutrition-g-0228-score-level-multiplier-inkonsistent-zwischen-spec-04-und-s.md) | offen | — | — |
-| `G-229` | entscheidung | mittel | [Admin-Override-Flow für Tag-Korrekturen nicht belegt](todos/nutrition-g-0229-admin-override-flow-fuer-tag-korrekturen-nicht-belegt.md) | offen | — | — |
-| `G-230` | entscheidung | niedrig | [`nutrition.water/page.tsx` und `nutrition.shopping-lists/page.tsx` als separate Pages](todos/nutrition-g-0230-nutrition-water-page-tsx-und-nutrition-shopping-lists-page.md) | offen | — | — |
+| `G-226` | entscheidung | mittel | [V1-Status-Marker fehlen für Recipes/Shopping/MealPlans Components in SPEC_10](laufend_claudecode/nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md) | vorbereitet (claudecode) | — | — |
+| `G-227` | entscheidung | mittel | [SPEC_03 §Flow 6 Custom Food erstellen via Barcode-Scan widerspricht Phase-2-Status](laufend_claudecode/nutrition-g-0227-spec-03-flow-6-custom-food-erstellen-via-barcode-scan-wide.md) | vorbereitet (claudecode) | — | — |
+| `G-228` | entscheidung | mittel | [Score Level Multiplier inkonsistent zwischen SPEC_04 und SPEC_07](laufend_claudecode/nutrition-g-0228-score-level-multiplier-inkonsistent-zwischen-spec-04-und-s.md) | vorbereitet (claudecode) | — | — |
+| `G-229` | entscheidung | mittel | [Admin-Override-Flow für Tag-Korrekturen nicht belegt](laufend_claudecode/nutrition-g-0229-admin-override-flow-fuer-tag-korrekturen-nicht-belegt.md) | vorbereitet (claudecode) | — | — |
+| `G-230` | entscheidung | niedrig | [`nutrition.water/page.tsx` und `nutrition.shopping-lists/page.tsx` als separate Pages](laufend_claudecode/nutrition-g-0230-nutrition-water-page-tsx-und-nutrition-shopping-lists-page.md) | vorbereitet (claudecode) | — | — |
 | `G-231` | befund | niedrig | [`SPEC_04 §Feature 9 MealCam` referenziert `ADR_AI_USAGE_WALLET.md` — nicht im Nutrition Spec Pfad](todos/nutrition-g-0231-spec-04-feature-9-mealcam-referenziert-adr-ai-usage-wallet.md) | offen | — | — |
 | `G-232` | befund | niedrig | [Quick-Add Makros UI-Component fehlt in SPEC_10](todos/nutrition-g-0232-quick-add-makros-ui-component-fehlt-in-spec-10.md) | offen | — | — |
 | `G-233` | befund | niedrig | [`MealSlotEditor` Component-Name doppelt verwendet](todos/nutrition-g-0233-mealsloteditor-component-name-doppelt-verwendet.md) | offen | — | — |
 | `G-234` | befund | niedrig | [`IntoleranceSelector` und `ReligiousDietarySelector` nur als Onboarding-Components definiert](todos/nutrition-g-0234-intoleranceselector-und-religiousdietaryselector-nur-als-o.md) | offen | — | — |
-| `G-235` | entscheidung | niedrig | [`MicroDashboard` Tier-System (Tier 1/2/3) und Subscription-Gates ungeklärt](todos/nutrition-g-0235-microdashboard-tier-system-tier-1-2-3-und-subscription-gat.md) | offen | — | — |
+| `G-235` | entscheidung | niedrig | [`MicroDashboard` Tier-System (Tier 1/2/3) und Subscription-Gates ungeklärt](laufend_claudecode/nutrition-g-0235-microdashboard-tier-system-tier-1-2-3-und-subscription-gat.md) | vorbereitet (claudecode) | — | — |
 | `G-236` | befund | niedrig | [`SmartSuggestions` Component und `useSmartSearchSuggestions` Hook ohne klaren V1-Trigger](todos/nutrition-g-0236-smartsuggestions-component-und-usesmartsearchsuggestions-h.md) | offen | — | — |
 | `G-237` | befund | niedrig | [`data/nutrientDetails.ts` als statisches Array — `food_sources` Array veraltet (per Review 1 ADR_IMPROVEMENTS_PACKAGE #20)](todos/nutrition-g-0237-data-nutrientdetails-ts-als-statisches-array-food-sources-.md) | offen | — | — |
-| `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | — | — |
+| `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](laufend_claudecode/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | vorbereitet (claudecode) | — | — |
 | `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](erledigt/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | erledigt | — | C-333, C-334, G-246, G-247, G-249 |
 | `G-245` | feature | mittel | [die Sortier-Tags bauen](erledigt/nutrition-g-0245-die-sortier-tags-bauen.md) | erledigt | — | — |
 | `G-246` | feature | hoch | [die Detailtexte liegen in der Datenbank und werden nicht gelesen](erledigt/nutrition-g-0246-die-detailtexte-werden-nicht-gelesen.md) | erledigt | — | A-60, C-336 |

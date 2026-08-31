@@ -43,3 +43,19 @@ den heutigen Stand geprueft.** `[cmd]` **Sie kennt die Entscheidungen
 vom 27./28.08. nicht** — was sie fordert, kann inzwischen entschieden
 oder erledigt sein.
 
+## Gegen den heutigen Stand gemessen, 2026-08-30
+
+`[read]` **Dieser Punkt stammt aus
+`OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`** — **einer
+Spec-Review von vor dem `/v2/`-Umbau.** `[cmd]` **Acht Punkte kommen
+aus derselben Datei.**
+
+`[cmd]` **Zu messen: gilt die Inkonsistenz noch?** `[cmd]`
+**`SPEC_04_FEATURES.md` liegt unter `docs/specs/Recovery/`** — und
+Recovery hat seit C-143/C-218 einen eigenen offenen Punkt zur
+Normierung.
+
+## Auftrag
+
+**Vorbereitet mit G-226 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.

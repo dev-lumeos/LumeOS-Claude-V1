@@ -35,3 +35,21 @@ oder erledigt sein.
 
 **Verwandter Punkt:** G-140 (`display_tier` ist ein Abo-Tier, keine Baumebene). `[read]` **Nicht zusammengelegt** — ob es
 derselbe Befund ist, gehoert geprueft, nicht angenommen.
+
+## Gegen den heutigen Stand gemessen, 2026-08-30
+
+`[read]` **Dieser Punkt stammt aus
+`OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md`** — **einer
+Spec-Review von vor dem `/v2/`-Umbau.** `[cmd]` **Acht Punkte kommen
+aus derselben Datei.**
+
+`[cmd]` **Gemessen 2026-08-30: `display_tier` steht in
+`nutrient_defs`** — **aber das ist die Anzeigestufe je Naehrstoff,
+nicht ein Abo-Tier.** `[cmd]` **Ein Abo-Tier gibt es im Schema
+nicht.**
+`[read]` **G-140 fuehrt denselben Verdacht von der anderen Seite.**
+
+## Auftrag
+
+**Vorbereitet mit G-226 am 2026-08-30.** Der Auftragstext
+und der Bericht stehen dort.
