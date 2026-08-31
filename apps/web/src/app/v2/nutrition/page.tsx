@@ -43,8 +43,26 @@ import type { LogZeile as PlanLogZeile } from '../../../lib/nutrition/plan-lage'
 import { ladeMikro, type MikroStand } from '../../../lib/nutrition/mikro-read'
 // G-101/C-54: die Naehrstoffordnung; seit G-121 mit Zeitfenster
 // (C-157). `[cmd]` G-140: **der Baum kommt aus `parent_code`**
-// (C-161) — hier stand *„aus display_tier"*, und das ist das Abo-Gate,
-// keine Baumtiefe.
+// (C-161) — hier stand *„aus display_tier"*, und das ist keine
+// Baumtiefe.
+//
+// `[cmd]` **BERICHTIGT IN G-285 am 2026-08-31.** Hier stand weiter,
+// `display_tier` sei *„das Abo-Gate"*. **Das ist es nicht** — G-235
+// hat es am 2026-08-31 gemessen:
+//
+//     Stufe 1   31 Codes   ALC, CA, CHO, CHORL, ENERCC
+//     Stufe 2   47 Codes   AAE9, ASH, BIOT, CARTB, CHOCAL
+//     Stufe 3   60 Codes   ACEAC, ALA, ARG, ASP, CAROTPAXB
+//
+// `[read]` **Stufe 1 sind Alltagswerte, Stufe 3 Aminosaeuren und
+// Carotinoide** — das ist ANZEIGETIEFE. `[cmd]` **Ein Abo-Tier gibt
+// es im Schema `nutrition` nicht** (G-235: die Suche nach
+// `%micros_tier%`, `%subscription%`, `%abo%`, `tier` findet dort
+// nichts).
+//
+// `[read]` **Dreimal geklaert, dreimal hier stehengeblieben** —
+// G-140, G-239, G-235. **Deshalb sichert ein Waechter diese Zeile
+// (G-285/G-173).**
 import { ladeOrdnung, type NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnung'
 import { fensterOderTag } from '../../../lib/nutrition/naehrstoff-anzeige'
 // G-101: Kalorienbilanz und Makroschnitt fuer die Insights.

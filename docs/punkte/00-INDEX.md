@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 230 |
-| `laufend_codex` | 4 |
-| `laufend_claudecode` | 8 |
-| `erledigt` | 144 |
+| `laufend_codex` | 3 |
+| `laufend_claudecode` | 5 |
+| `erledigt` | 148 |
 | **gesamt** | **386** |
 
 ## medical — 42
@@ -98,16 +98,16 @@
 | `C-229` | befund | mittel | [Ein Katalog aus `DatabaseEcht`, Detail und Add getrennt](erledigt/nutrition-c-0229-ein-katalog-aus-databaseecht-detail-und-add-getrennt.md) | erledigt | — | — |
 | `C-239` | befund | mittel | [`meal_plans` kennt keinen Lebenszyklus](erledigt/nutrition-c-0239-meal-plans-kennt-keinen-lebenszyklus.md) | erledigt | — | — |
 | `C-323` | entscheidung | hoch | [Micro-Flags Warnschwelle und Formulierung festlegen](erledigt/nutrition-c-0323-micro-flags-warnschwelle-und-formulierung-festlegen.md) | erledigt | — | C-344, G-259 |
-| `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](erledigt/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | erledigt | — | C-342, C-343 |
+| `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](laufend_codex/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | vorbereitet (codex) | — | C-342, C-343 |
 | `C-333` | befund | niedrig | [Selen fehlt in der Bewertung auf dev](erledigt/nutrition-c-0333-selen-fehlt-in-der-bewertung-auf-dev.md) | erledigt | — | — |
 | `C-334` | befund | hoch | [die Tagesbewertung hat sich zwischen zwei Messungen verschoben](erledigt/nutrition-c-0334-die-bewertung-hat-sich-zwischen-zwei-messungen-verschoben.md) | erledigt | — | C-335 |
 | `C-335` | befund | mittel | [keine Aenderungshistorie fuer Mahlzeiten und Referenzwerte](todos/nutrition-c-0335-keine-aenderungshistorie-fuer-mahlzeiten.md) | offen | — | — |
 | `C-336` | befund | hoch | [FD traegt den Text eines anderen Naehrstoffs](erledigt/nutrition-c-0336-fd-traegt-den-text-eines-anderen-naehrstoffs.md) | erledigt | — | C-346 |
 | `C-338` | befund | mittel | [sechs Sortierwerte fehlen live](erledigt/nutrition-c-0338-sechs-sortierwerte-fehlen-live.md) | erledigt | — | — |
 | `C-342` | entscheidung | hoch | [Vitamin A in IE gegen Mikrogramm](erledigt/nutrition-c-0342-vitamin-a-in-ie-gegen-mikrogramm.md) | erledigt | — | C-350 |
-| `C-343` | befund | hoch | [zwei Schreibweisen fuer *,,kein Vitamin C"*](laufend_codex/nutrition-c-0343-vitamin-c-fehlt-an-180-von-181-tagen.md) | laeuft (codex) | — | C-345 |
+| `C-343` | befund | hoch | [zwei Schreibweisen fuer *,,kein Vitamin C"*](erledigt/nutrition-c-0343-vitamin-c-fehlt-an-180-von-181-tagen.md) | erledigt | — | C-345 |
 | `C-344` | befund | hoch | [drei Obergrenzen gelten nicht fuer Nahrung](erledigt/nutrition-c-0344-drei-obergrenzen-gelten-nicht-fuer-nahrung.md) | erledigt | — | — |
-| `C-345` | befund | niedrig | [Spurenwerte im Lebensmittelimport](laufend_codex/nutrition-c-0345-spurenwerte-im-lebensmittelimport.md) | laeuft (codex) | — | — |
+| `C-345` | befund | niedrig | [Spurenwerte im Lebensmittelimport](erledigt/nutrition-c-0345-spurenwerte-im-lebensmittelimport.md) | erledigt | — | — |
 | `C-346` | befund | hoch | [zwei Detailtexte neu verknuepfen](erledigt/nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md) | erledigt | — | — |
 | `C-347` | entscheidung | hoch | [generelle Ausschluesse in \`food_search\`](erledigt/nutrition-c-0347-generelle-ausschluesse-in-food-search.md) | erledigt | — | — |
 | `C-348` | feature | mittel | [eine zaehlende Funktion fuer die Flags](erledigt/nutrition-c-0348-eine-zaehlende-funktion-fuer-die-flags.md) | erledigt | — | G-273 |
@@ -186,12 +186,12 @@
 | `G-274` | feature | hoch | [der Bestaetigungsweg fuer Plan-Eintraege](erledigt/nutrition-g-0274-der-bestaetigungsweg-fuer-plan-eintraege.md) | erledigt | — | G-276 |
 | `G-276` | befund | mittel | [MealCam schreibt `confirmation_mode` ohne Fotoweg](erledigt/nutrition-g-0276-mealcam-schreibt-ohne-fotoweg.md) | erledigt | — | — |
 | `G-279` | entscheidung | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | — | — |
-| `G-283` | befund | hoch | [ein `pro`-Profil faellt still auf 0,90](laufend_claudecode/nutrition-g-0283-ein-pro-profil-faellt-still-auf-090.md) | vorbereitet (claudecode) | — | — |
-| `G-285` | befund | niedrig | [`display_tier` heisst im Code weiter *Abo-Gate*](laufend_claudecode/nutrition-g-0285-display-tier-heisst-im-code-weiter-abo-gate.md) | vorbereitet (claudecode) | — | — |
+| `G-283` | befund | hoch | [ein `pro`-Profil faellt still auf 0,90](erledigt/nutrition-g-0283-ein-pro-profil-faellt-still-auf-090.md) | erledigt | — | — |
+| `G-285` | befund | niedrig | [`display_tier` heisst im Code weiter *Abo-Gate*](erledigt/nutrition-g-0285-display-tier-heisst-im-code-weiter-abo-gate.md) | erledigt | — | — |
 | `G-286` | feature | hoch | [MealPlanDetail — das Tages-Akkordeon fehlt](laufend_claudecode/nutrition-g-0286-mealplandetail-das-tages-akkordeon-fehlt.md) | laeuft (claudecode) | — | — |
 | `G-287` | feature | hoch | [MealPlanCard — die Plan-Liste ist nicht anklickbar](laufend_claudecode/nutrition-g-0287-mealplancard-die-plan-liste-ist-nicht-anklickbar.md) | laeuft (claudecode) | — | — |
-| `G-288` | feature | hoch | [Die Einkaufsliste ist eine leere Kachel](laufend_claudecode/nutrition-g-0288-die-einkaufsliste-ist-eine-leere-kachel.md) | vorbereitet (claudecode) | — | — |
-| `G-289` | feature | hoch | [Fünf Rezeptkomponenten fehlen](laufend_claudecode/nutrition-g-0289-fuenf-rezeptkomponenten-fehlen.md) | vorbereitet (claudecode) | — | — |
+| `G-288` | feature | hoch | [Die Einkaufsliste ist eine leere Kachel](laufend_claudecode/nutrition-g-0288-die-einkaufsliste-ist-eine-leere-kachel.md) | laeuft (claudecode) | — | — |
+| `G-289` | feature | hoch | [Fünf Rezeptkomponenten fehlen](laufend_claudecode/nutrition-g-0289-fuenf-rezeptkomponenten-fehlen.md) | laeuft (claudecode) | — | — |
 | `G-290` | feature | mittel | [Der Aktivierungsdialog mit LifecyclePicker fehlt](laufend_claudecode/nutrition-g-0290-der-aktivierungsdialog-mit-lifecyclepicker-fehlt.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
@@ -238,8 +238,8 @@
 | `C-341` | entscheidung | mittel | [was passiert mit gemeldeten Community-Beitraegen?](todos/supplements-c-0341-was-passiert-mit-gemeldeten-community-beitraegen.md) | offen | — | — |
 | `C-351` | feature | hoch | [Supplements braucht eine Tagesbilanz](erledigt/supplements-c-0351-supplements-braucht-eine-tagesbilanz.md) | erledigt | — | G-275 |
 | `C-352` | befund | hoch | [der Katalog hat keine deutschen Namen](erledigt/supplements-c-0352-der-katalog-hat-keine-deutschen-namen.md) | erledigt | — | — |
-| `C-364` | entscheidung | mittel | [die Produktebene ist Wissen, kein Bestand](laufend_codex/supplements-c-0364-die-produktebene-ist-wissen-kein-bestand.md) | vorbereitet (codex) | — | — |
-| `C-365` | befund | niedrig | [Peptidsequenzen haben kein Ziel im Schema](laufend_codex/supplements-c-0365-peptidsequenzen-haben-kein-ziel-im-schema.md) | vorbereitet (codex) | — | — |
+| `C-364` | entscheidung | mittel | [die Produktebene ist Wissen, kein Bestand](laufend_codex/supplements-c-0364-die-produktebene-ist-wissen-kein-bestand.md) | laeuft (codex) | — | — |
+| `C-365` | befund | niedrig | [Peptidsequenzen haben kein Ziel im Schema](laufend_codex/supplements-c-0365-peptidsequenzen-haben-kein-ziel-im-schema.md) | laeuft (codex) | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -442,7 +442,7 @@
 | `G-215` | messung | hoch | [der Durchstich: kommt eine Warnung beim Nutzer an?](erledigt/quer-g-0215-durchstich-kommt-eine-warnung-an.md) | erledigt | — | C-328, C-329 |
 | `G-278` | befund | mittel | [die restlichen 222 Abwesenheitsaussagen](erledigt/quer-g-0278-die-restlichen-222-abwesenheitsaussagen.md) | erledigt | — | C-359 |
 | `G-280` | befund | mittel | [der Dev-Server ueberlebt lange Testlaeufe nicht](erledigt/quer-g-0280-der-dev-server-ueberlebt-lange-testlaeufe-nicht.md) | erledigt | — | — |
-| `G-284` | befund | hoch | [die Mockups werden ohne Anmeldung ausgeliefert](laufend_claudecode/quer-g-0284-die-mockups-werden-ohne-anmeldung-ausgeliefert.md) | vorbereitet (claudecode) | — | — |
+| `G-284` | befund | hoch | [die Mockups werden ohne Anmeldung ausgeliefert](erledigt/quer-g-0284-die-mockups-werden-ohne-anmeldung-ausgeliefert.md) | erledigt | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

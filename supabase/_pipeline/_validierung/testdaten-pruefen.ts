@@ -262,7 +262,7 @@ if (MODE === 'clean') {
   if (substanceLocalKimiMatches < 16) errors.push(`supplements.substance_alias_matches LumeOS-Kimi: ${substanceLocalKimiMatches}, erwartet mindestens 16`)
   if (ruleCatalog !== 64) errors.push(`supplements.rule_catalog: ${ruleCatalog}, erwartet 64`)
   if (foods !== 7140) errors.push(`foods: ${foods}, erwartet 7140`)
-  if (nutrients !== 869501) errors.push(`food_nutrients: ${nutrients}, erwartet 869501`)
+  if (nutrients !== 985320) errors.push(`food_nutrients: ${nutrients}, erwartet 985320`)
 
   console.log('C-82 Testdaten-Pruefung (clean)')
   console.log(`  Nutzer/Coach/Profile/Ziele: ${users}/${coachUsers}/${profiles}/${targets}`)

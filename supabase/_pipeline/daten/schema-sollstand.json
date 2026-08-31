@@ -127,7 +127,7 @@
     },
     {
       "name": "food_nutrients",
-      "schritt": "Baseline",
+      "schritt": "Baseline/343",
       "rls": true,
       "policies": [
         "SELECT"
@@ -147,7 +147,15 @@
         ]
       },
       "grants_herkunft": "060 3b (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
-      "zeilenschutzart": "oeffentlich"
+      "zeilenschutzart": "oeffentlich",
+      "spalten": [
+        "food_id",
+        "nutrient_code",
+        "value",
+        "data_source",
+        "bls_value_status"
+      ],
+      "spalten_herkunft": "C-343/E-38: bls_value_status trennt zensiert, echte Luecke, logische Null, Spur und vorhandenen Zahlenwert vom technischen Importweg; value ist fuer Luecke und Spur NULL."
     },
     {
       "name": "food_categories",
@@ -1644,7 +1652,7 @@
   "mindestzeilen": {
     "_kommentar": "Untergrenzen, keine Sollwerte. Sie fangen den Fall ab, dass eine Tabelle zwar existiert, aber leer geblieben ist.",
     "foods": 7140,
-    "food_nutrients": 869501,
+    "food_nutrients": 985320,
     "food_aliases": 32817,
     "food_tags": 30797,
     "nutrient_defs": 138,
@@ -1731,7 +1739,7 @@
   "mindestzeilen_belege": {
     "_kommentar": "Herkunft je Untergrenze. Gerundete Werte sind absichtlich als gerundet markiert; sie sind Warnschwellen, keine exakten Sollwerte.",
     "foods": "[read] docs/ssot/30-datenbank.md, Tabelle Stand lokale Datenbank: 7.140.",
-    "food_nutrients": "[cmd] 031_fettsaeuren_nachtrag.sql + v031_fettsaeuren.sql: 698.092 aus 030 plus 171.409 Nachtrag = 869.501.",
+    "food_nutrients": "[cmd] C-343/E-38: vollstaendige BLS-Matrix 7.140 x 138 = 985.320; 3.870 zensierte Werte sind Lower Bound 0, 110.188 Luecken und 1.800 Spuren bleiben NULL.",
     "food_aliases": "[cmd] Ist-Stand nach 022/026/028: editorial 21.420, derived 11.102, curated_nebenname 283, curated_suchbegriff 12. Summe: 32.817.",
     "food_tags": "[cmd] 020_food_human_layer.sql erzeugt 9.265 Makro-Tags; 027_lebensmittel-tags.ts ergaenzt 8.702 kuratierte C-44-Tags (Summe 17.967). C-93 ergaenzt 032-halal-koscher-tags.sql: halal 6.379 und kosher 6.451 aus den Ausschluss-Presets abgeleitet. Summe nach Lauf: 30.797.",
     "nutrient_defs": "[read] 015_nutrient_defs_seed.sql und BLS-Katalog: 138.",
@@ -1810,9 +1818,10 @@
       "distinct_nutrient_codes": 138,
       "data_sources": [
         "bls_4_0_local_import",
-        "bls_4_0_xlsx_nachtrag"
+        "bls_4_0_xlsx_nachtrag",
+        "bls_4_0_xlsx_status_import"
       ],
-      "beleg": "[cmd] v031_fettsaeuren.sql nach 031: 138 Codes, zwei data_source-Werte; Nachtrag 171.409 Werte nur fuer 30 Doppelpunkt-Codes."
+      "beleg": "[cmd] C-343/E-38: 343_bls_value_status.ts ergaenzt die nichtnumerischen BLS-Zellen als status_import und trennt ihren BLS-Wertzustand von data_source."
     },
     "medical_medication_wave1": {
       "cas_number": 489,

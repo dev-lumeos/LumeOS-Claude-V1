@@ -2,7 +2,7 @@
 
 // Die Koerperkarte — anatomische Muskeldarstellung, vorne und hinten.
 //
-// QUELLE: `apps/web/public/mockup/components/MuscleBodyMap.js`
+// QUELLE: `docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/components/MuscleBodyMap.js`
 // (593 Zeilen, Stand 2026-04-28). `[read]` Tom, 2026-08-17: „Die
 // Muskelkomponente nehmen wir sicher mit rein und verwenden sie, wo
 // gebraucht. Das HTML zeigt schon, was moeglich ist — das ist sehr

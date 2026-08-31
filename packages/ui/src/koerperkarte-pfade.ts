@@ -1,6 +1,6 @@
 // Die Pfaddaten der Koerperkarte.
 //
-// QUELLE: `apps/web/public/mockup/components/MuscleBodyMap.js`
+// QUELLE: `docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/components/MuscleBodyMap.js`
 // (593 Zeilen, Stand 2026-04-28) — der Mockup, den Tom evaluiert hat.
 //   MUSCLES          Zeile 83-282
 //   OUTLINE_FRONT    Zeile 285

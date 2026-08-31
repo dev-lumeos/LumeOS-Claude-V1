@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **27 Punkte tragen `typ: entscheidung`
+`[cmd]` **28 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -635,6 +635,40 @@ der ein Protokoll enthaelt, und wie faellt er auf?**
 `[read]` **Wer meldet, wer entscheidet, wie schnell.** `[read]` **Und
 was mit dem Beitrag geschieht** — verborgen oder geloescht. **Bei
 einem Gesundheitsprodukt ist das nicht dasselbe.**
+
+## C-364 — die Produktebene ist Wissen, kein Bestand
+
+**Modul:** supplements · **angelegt:** 2026-08-30 · **Datei:** `laufend_codex/supplements-c-0364-die-produktebene-ist-wissen-kein-bestand.md`
+
+## Befund
+
+Aus C-202, Codex, 2026-08-30.
+
+`[cmd]` **`wissen.product_entities` traegt 50 Produkte, 120 Marken, 63
+Hersteller.**
+
+`[cmd]` **Nutzerbestand und Einnahmen verweisen weiter nur auf
+Stoffe.**
+
+`[read]` **Ein Nutzer nimmt heute *Magnesium*, nicht *Produkt X von
+Hersteller Y*.**
+
+## Die Frage
+
+**Soll eine Einnahme auf ein Produkt zeigen koennen?**
+
+`[read]` **Dafuer spricht:** `[cmd]` **C-250 hat gemessen, dass
+`cost_per_serving` und `serving_size` fehlen** — **beides sind
+Produkteigenschaften, keine Stoffeigenschaften.** `[read]` **Und der
+Cam-Weg aus C-207 liest Packungen, also Produkte.**
+
+`[read]` **Dagegen:** die Bilanz aus C-351 rechnet Stoffe. **Ein
+Produkt haette eine Dosierung, die auf einen Stoff zeigt** — **eine
+Zwischenschicht, die heute niemand braucht.**
+
+`[read]` **Und die Modulgrenze:** `wissen` ist der Katalog,
+`supplements` der Bestand. **Eine Verbindung waere ein Fremdschluessel
+ueber Schemagrenzen** — **dieselbe Klasse wie E-29 bei `coach`.**
 
 ## G-150 — Die Volltextsuche findet ueber Erklaertexte
 

@@ -27,16 +27,84 @@ const ATTRAPPE = 'Aus dem Entwurf uebernommen. Die Zahlen sind erfunden, bis die
 // --- Nutrition score, reine Funktion aus der Vorlage ---------------
 // [cmd] module-nutrition-spec.jsx:37-42. Die Gewichtung steht dort;
 // uebernommen wird sie unveraendert, samt Stufenfaktor.
-const LEVEL_MULT: Record<string, number> = {
-  beginner: 0.75, intermediate: 0.90, advanced: 1.00, elite: 1.10,
+// ── G-283 (2026-08-31): der stille Rueckfall ist raus ─────────────
+//
+// `[cmd]` **Gemessen am 2026-08-31:** die Datenbank kennt
+// `beginner | advanced | pro | elite` (CHECK auf
+// `public.profiles.experience_level`), **live 2x `pro`, 5x NULL.**
+// **Diese Tabelle kannte `intermediate` und nicht `pro`.**
+//
+// `[cmd]` **Und die massgebliche Liste steht laengst im Code:**
+// `EXPERIENCE_LEVELS` in `lib/profile/profile-model.ts:79` —
+// **dieselben vier wie der CHECK.**
+//
+// `[read]` **Der alte Rueckfall `?? 0.90` gab einem `pro`-Nutzer den
+// Faktor von `intermediate`** — **kein Absturz, keine Meldung, nur
+// ein falscher Wert.** Dieselbe Klasse wie A-60.
+//
+// `[read]` **Welche vier Faktoren gelten, ist G-228 und gehoert
+// Tom.** **Hier wird nur sichergestellt, dass ein unbekannter Name
+// nicht stillschweigend zu einer Zahl wird.**
+//
+// `[cmd]` **`elite` bleibt bei 1,10, `beginner` bei 0,75, `advanced`
+// bei 1,00** — die drei Namen stehen in beiden Listen und ihre Werte
+// sind unstrittig. **`pro` hat keinen belegten Faktor**, deshalb
+// steht dort `null` und nicht geraten.
+const LEVEL_MULT: Record<string, number | null> = {
+  beginner: 0.75,
+  advanced: 1.00,
+  elite: 1.10,
+  // `[read]` **Offen bis G-228.** `null` heisst: der Name gilt, der
+  // Faktor ist nicht entschieden. **Ein geratener Wert waere hier
+  // schlimmer als keiner** — er saehe aus wie eine Antwort.
+  pro: null,
 }
 
+/**
+ * Der Stufenfaktor, oder `null`.
+ *
+ * `[read]` **Drei Faelle, nicht zwei:**
+ *
+ *     Zahl    der Name gilt und sein Faktor ist belegt
+ *     null    der Name gilt, der Faktor ist offen (`pro`, G-228)
+ *     null    der Name ist unbekannt — und dann sagt es die Anzeige
+ *
+ * `[read]` **Der Unterschied zwischen den letzten beiden ist fuer den
+ * Aufrufer keiner:** in beiden Faellen gibt es keinen Score. **Fuer
+ * die Anzeige schon** — deshalb `stufeGilt()` daneben.
+ */
+export function stufenFaktor(level: string): number | null {
+  return LEVEL_MULT[level] ?? null
+}
+
+/** Kennt die Tabelle den Namen ueberhaupt? */
+export function stufeGilt(level: string): boolean {
+  return Object.prototype.hasOwnProperty.call(LEVEL_MULT, level)
+}
+
+export const STUFE_OFFEN_SATZ =
+  'Für diese Erfahrungsstufe ist kein Faktor hinterlegt — der Score '
+  + 'bleibt offen, bis er entschieden ist (G-228).'
+
+export const STUFE_UNBEKANNT_SATZ =
+  'Unbekannte Erfahrungsstufe — der Score wird nicht berechnet, '
+  + 'statt einen Faktor zu raten.'
+
+/**
+ * Der Score, oder `null`.
+ *
+ * `[cmd]` **Frueher: `LEVEL_MULT[level] ?? 0.90`.** `[read]` **Jetzt
+ * gibt es keinen stillen Ersatzwert mehr** — wer keinen Faktor hat,
+ * bekommt keinen Score, und die Anzeige sagt warum.
+ */
 export function nutritionScore(
   c: { protein: number; calorie: number; carbs: number; fat: number; fiber: number },
-  level = 'intermediate',
-): number {
+  level: string,
+): number | null {
+  const f = stufenFaktor(level)
+  if (f === null) return null
   const raw = c.protein * 0.30 + c.calorie * 0.25 + c.carbs * 0.15 + c.fat * 0.15 + c.fiber * 0.15
-  return Math.round(raw * (LEVEL_MULT[level] ?? 0.90) * 100) / 100
+  return Math.round(raw * f * 100) / 100
 }
 
 // ── G-263 (2026-08-30): `SmartSuggestionsCard` ist entfernt ──────
@@ -58,11 +126,16 @@ export function NutritionScoreCard() {
   const compliance = { protein: 0.79, calorie: 0.68, carbs: 0.53, fat: 0.80, fiber: 0.69 }
   const level = 'advanced'
   const score = nutritionScore(compliance, level)
-  const band = score >= 80
-    ? { l: 'ok', c: 'var(--pos)' }
-    : score >= 50
-      ? { l: 'warn', c: 'var(--warn)' }
-      : { l: 'block', c: 'var(--neg)' }
+  // `[read]` **G-283: ohne Faktor kein Score.** Die Kachel zeigt dann
+  // den Grund statt einer Zahl — ein Ring auf `0` waere eine Aussage
+  // ueber den Nutzer, die niemand gemacht hat.
+  const band = score === null
+    ? { l: 'offen', c: 'var(--fg-dim)' }
+    : score >= 80
+      ? { l: 'ok', c: 'var(--pos)' }
+      : score >= 50
+        ? { l: 'warn', c: 'var(--warn)' }
+        : { l: 'block', c: 'var(--neg)' }
   return (
     <Card
       title="Nutrition score"
@@ -75,7 +148,13 @@ export function NutritionScoreCard() {
       }
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12 }}>
-        <Ring value={Math.round(score)} max={100} color={band.c} label="score" size={88} stroke={7} />
+        {score === null
+          ? (
+            <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.5, flex: 1 }}>
+              {stufeGilt(level) ? STUFE_OFFEN_SATZ : STUFE_UNBEKANNT_SATZ}
+            </div>
+          )
+          : <Ring value={Math.round(score)} max={100} color={band.c} label="score" size={88} stroke={7} />}
         <div style={{ flex: 1 }}>
           <div className="v2-dim v2-num" style={{ fontSize: 10.5, lineHeight: 1.7 }}>
             protein 0.79 × 0.30<br />
@@ -86,9 +165,24 @@ export function NutritionScoreCard() {
           </div>
         </div>
       </div>
-      <Row label="Level multiplier" value={`${level} · ×${LEVEL_MULT[level]}`} />
+      {/* `[read]` **Drei Faelle, drei Texte.** „offen (G-228)" gilt
+          nur fuer eine BEKANNTE Stufe ohne Faktor; ein unbekannter
+          Name hat mit G-228 nichts zu tun und darf ihn nicht
+          zitieren. */}
+      <Row
+        label="Level multiplier"
+        value={stufenFaktor(level) !== null
+          ? `${level} · ×${stufenFaktor(level)}`
+          : stufeGilt(level)
+            ? `${level} · offen (G-228)`
+            : `${level} · unbekannt`}
+      />
       <Row label="Thresholds" value="ok ≥ 80 · warn 50–79 · block < 50" />
-      <Row label="Source of level" value="Auth · experience_level" />
+      {/* `[cmd]` **G-283: hier stand *„Auth · experience_level"*** —
+          und die Kachel setzt `level` fest auf `'advanced'`. **Sie las
+          das Profil nie.** Ein Satz, der eine Quelle nennt, die nicht
+          benutzt wird, ist eine Falschaussage. */}
+      <Row label="Source of level" value="fest im Entwurf · liest kein Profil" />
     </Card>
   )
 }

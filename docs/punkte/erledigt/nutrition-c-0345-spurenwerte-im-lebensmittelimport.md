@@ -9,6 +9,8 @@ kind_von: C-343
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-31
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.food_nutrients]
 zahlen:
@@ -259,3 +261,13 @@ mitfuehren, damit E-38 wirken kann.**
 
 **Mitbeauftragt mit C-343.** `[read]` **Die Messung steht; jetzt geht
 es um die Wiederherstellung, damit E-38 wirken kann.**
+
+**Umsetzung:** C-343 hat die Herkunft als
+`nutrition.food_nutrients.bls_value_status` eingespielt und E-38
+angewandt. Der Nachweis, die Statuszahlen und die Bilanz-Gegenprobe stehen
+im [C-343-Bericht](nutrition-c-0343-vitamin-c-fehlt-an-180-von-181-tagen.md).
+
+## Abnahme
+
+**2026-08-31, mit C-343 abgenommen.** `[cmd]` **Die Herkunft steht in
+`bls_value_status`, die 1.800 Spurenwerte tragen `NULL`.**

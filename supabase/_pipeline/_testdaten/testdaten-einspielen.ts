@@ -3839,28 +3839,24 @@ WITH frozen AS (
     i.meal_id,
     i.user_id,
     f.id AS food_id,
-    COALESCE(NULLIF(f.name_display_de, ''), f.name_de) AS food_name,
+    snap.food_name,
     i.amount_g,
     i.portion_name,
     i.portion_quantity,
     i.portion_amount_g,
-    COALESCE(jsonb_object_agg(fn.nutrient_code, round(fn.value * i.amount_g / 100, 5))
-      FILTER (WHERE fn.nutrient_code IS NOT NULL), '{}'::jsonb) AS nutrients,
-    max(round(fn.value * i.amount_g / 100, 5)) FILTER (WHERE fn.nutrient_code = 'ENERCC') AS enercc,
-    max(round(fn.value * i.amount_g / 100, 5)) FILTER (WHERE fn.nutrient_code = 'PROT625') AS prot625,
-    max(round(fn.value * i.amount_g / 100, 5)) FILTER (WHERE fn.nutrient_code = 'FAT') AS fat,
-    max(round(fn.value * i.amount_g / 100, 5)) FILTER (WHERE fn.nutrient_code = 'CHO') AS cho,
-    max(round(fn.value * i.amount_g / 100, 5)) FILTER (WHERE fn.nutrient_code = 'FIBT') AS fibt,
-    max(round(fn.value * i.amount_g / 100, 5)) FILTER (WHERE fn.nutrient_code = 'SUGAR') AS sugar,
-    max(round(fn.value * i.amount_g / 100, 5)) FILTER (WHERE fn.nutrient_code = 'FASAT') AS fasat,
-    max(round(fn.value * i.amount_g / 100, 5)) FILTER (WHERE fn.nutrient_code = 'NACL') AS nacl,
-    max(round(fn.value * i.amount_g / 100, 5)) FILTER (WHERE fn.nutrient_code = 'WATER') AS water_g
+    snap.nutrients,
+    snap.enercc,
+    snap.prot625,
+    snap.fat,
+    snap.cho,
+    snap.fibt,
+    snap.sugar,
+    snap.fasat,
+    snap.nacl,
+    snap.water_g
   FROM test_items i
   JOIN nutrition.foods f ON f.bls_code = i.bls_code
-  LEFT JOIN nutrition.food_nutrients fn ON fn.food_id = f.id
-  GROUP BY
-    i.meal_id, i.user_id, f.id, f.name_display_de, f.name_de,
-    i.amount_g, i.portion_name, i.portion_quantity, i.portion_amount_g
+  CROSS JOIN LATERAL nutrition.food_nutrient_snapshot('bls', f.id, NULL, i.amount_g) snap
 )
 INSERT INTO nutrition.meal_items (
   meal_id, user_id, food_id, food_source, food_name, amount_g,

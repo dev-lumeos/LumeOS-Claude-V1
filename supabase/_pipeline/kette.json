@@ -1143,6 +1143,25 @@
       ]
     },
     {
+      "id": "343_schema",
+      "path": "supabase/migrations/20260831080000_c343_bls_value_status.sql",
+      "kind": "sql",
+      "creates": "BLS-Wertzustand in food_nutrients und NULL-freie Nahrungsschnappschuesse",
+      "depends_on": [
+        "058b"
+      ]
+    },
+    {
+      "id": "343",
+      "path": "supabase/_pipeline/03_bls_import/343_bls_value_status.ts",
+      "kind": "tsx",
+      "creates": "vollstaendige BLS-Wertmatrix mit Lower-Bound-Zensur, Luecken, Spuren und logischen Nullen",
+      "depends_on": [
+        "031",
+        "343_schema"
+      ]
+    },
+    {
       "id": "150",
       "path": "supabase/_pipeline/15_coach/150_coach_permissions_autonomy.sql",
       "kind": "sql",

@@ -9,6 +9,8 @@ kind_von: C-324
 entscheidung: E-38
 agent: codex
 beauftragt: 2026-08-31
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.nutrient_defs, nutrition.food_nutrients]
 zahlen:
@@ -208,8 +210,86 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**2026-08-31, Codex — umgesetzt, nicht committed.**
+
+`nutrition.food_nutrients` hat jetzt die abfragbare Spalte
+`bls_value_status`; `data_source` bleibt ausschliesslich der technische
+Importweg. Der Status hat genau die fuer Bilanz und Anzeige benoetigten
+fuenf Auspraegungen: `measured`, `censored`, `missing`, `logical_zero`,
+`trace`. `measured` heisst dabei nur: ein vorhandener Zahlenwert ohne
+einen dieser Sonderzustaende — nicht zwingend Laboranalyse.
+
+| BLS-Wertzustand | Zeilen | gespeicherter Wert |
+|---|---:|---|
+| `measured` | 850.896 | Quellzahl |
+| `censored` | 3.870 | `0` nach E-38 Lower Bound |
+| `missing` | 110.188 | `NULL` |
+| `logical_zero` | 18.566 | Quellwert `0` |
+| `trace` | 1.800 | `NULL` |
+
+Die sechs zusaetzlichen `missing`-Zeilen gegenueber den 110.182
+Herkunftsangaben `-` haben ebenfalls keinen Wert in der BLS-Arbeitsmappe;
+sie werden nicht geraten oder zur Null gemacht.
+
+Der Import uebernimmt die vollstaendige BLS-Matrix (7.140 x 138 =
+985.320). Er aktualisiert bei bereits eingefrorenen BLS-Mahlzeiten nur
+zensierte Schluessel auf die entschiedene Null: **1.726** Positionen.
+Spuren und echte Luecken erhalten weiterhin keinen JSON-Schluessel. Neue
+Snapshots verwenden dieselbe Regel. Damit bleibt der Snapshot-Charakter
+erhalten, ohne alte Bilanzen mit neu erfundenen Werten zu ersetzen.
+
+**Nachweis, dev, 01.–30.08.2026:**
+
+- VITC: vorher 0/30, jetzt **18/30** vollstaendige Tage; die **12**
+  Ziegenfleisch-Positionen bleiben echte Luecken und damit unvollstaendig.
+- VITA: **30/30** vollstaendige Tage, keine Verschlechterung.
+- Alle zwoelf NRF9.3-Eingaenge sind an **12/30** Tagen vollstaendig. Die
+  Tagesbilanz kann diese Tage daher ohne fehlende VITC-Werte liefern; eine
+  NRF-Score-Ausgabe war nicht Teil dieses Auftrags.
+- Gegenprobe PROT625: 0 zensierte BLS-Zeilen, 30/30 vollstaendige Tage,
+  0 fehlende Positionen.
+
+Der gezielte Test `nutrition-c343-bls-censoring.test.ts` ist gruen
+(3/3). Die Vollstaendigkeitspruefung bestaetigt die neue Matrix und die
+drei Importwege; ihr einziger Fehler ist die vorbestehende, fachfremde
+fehlende Tabelle `supplements.substance_group_memberships`.
+
+**C-345:** Der Befund und die Entscheidung E-38 sind umgesetzt; siehe
+diesen Bericht. C-345 bleibt als Quellen-/Spurenbefund referenzierbar.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-31, Orchestrator. Der Blocker ist weg.**
+
+`[cmd]` **`food_nutrients.bls_value_status` unterscheidet zensiert,
+Luecke, logische Null, Spur und Zahlenwert.**
+
+`[cmd]` **E-38 umgesetzt: 3.870 zensierte Werte auf 0, 110.188
+Luecken und 1.800 Spuren auf `NULL`.**
+
+`[cmd]` **VITC: 18 von 30 vollstaendigen Tagen — vorher 0.** `[cmd]`
+**Die zwoelf Ziegenfleisch-Positionen bleiben unvollstaendig.**
+
+`[cmd]` **Und alle NRF9.3-Eingaenge sind an 12 von 30 Tagen
+vollstaendig.**
+
+`[read]` **Damit ist C-324 nach zwei Tagen entblockt** — der Score ist
+rechenbar.
+
+### Der vorsichtige Teil
+
+`[cmd]` **1.726 alte eingefrorene Mahlzeit-Positionen wurden
+ausschliesslich um zensierte Nullwerte ergaenzt** — **nichts
+ueberschrieben, nichts geraten.**
+
+`[read]` **Eingefrorene Naehrwerte sind Bestand; sie nachtraeglich zu
+aendern waere ein Eingriff in Vergangenes.** **Er hat nur ergaenzt,
+was E-38 deckt.**
+
+`[cmd]` Test 3/3 gruen. `[cmd]` **Die Schemapruefung meldet eine
+vorbestehende, fachfremde Luecke bei
+`supplements.substance_group_memberships`** — **gemeldet, nicht
+angefasst.**
+
+**Abgenommen.** **C-324 geht als Naechstes raus.**
+

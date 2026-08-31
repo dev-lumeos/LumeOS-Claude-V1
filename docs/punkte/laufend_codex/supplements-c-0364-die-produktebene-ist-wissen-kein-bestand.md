@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: C-202
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-31
 beruehrt:
   tabellen: [supplements.intake_logs]
 zahlen:
@@ -52,7 +54,7 @@ ueber Schemagrenzen** — **dieselbe Klasse wie E-29 bei `coach`.**
 
 **Mitbeauftragt: C-365.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-30.**
+**Beauftragt am 2026-08-31.**
 
 ### Was zu messen ist, bevor entschieden wird
 

@@ -959,7 +959,7 @@ select.v2-feld { cursor: pointer; }
 }
 
 /* Die Koerperkarte (G-26).
-   [cmd] Uebernommen aus apps/web/public/mockup/components/
+   [cmd] Uebernommen aus docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/components/
    MuscleBodyMap.js — dort stehen diese Regeln als Inline-Stile
    (Zeile 442-460). Als Klasse sind sie einmal beschrieben statt bei
    jedem Rendern gesetzt, und die Haltepunkte lassen sich ergaenzen:

@@ -804,7 +804,7 @@ BEGIN
       max(round(fn.value * p_amount_g / 100, 5)) FILTER (WHERE fn.nutrient_code = 'NACL') AS nacl,
       max(round(fn.value * p_amount_g / 100, 5)) FILTER (WHERE fn.nutrient_code = 'WATER') AS water_g,
       COALESCE(jsonb_object_agg(fn.nutrient_code, round(fn.value * p_amount_g / 100, 5))
-        FILTER (WHERE fn.nutrient_code IS NOT NULL), '{}'::jsonb) AS nutrients
+        FILTER (WHERE fn.nutrient_code IS NOT NULL AND fn.value IS NOT NULL), '{}'::jsonb) AS nutrients
     FROM nutrition.foods f
     LEFT JOIN nutrition.food_nutrients fn ON fn.food_id = f.id
     WHERE f.id = p_food_id

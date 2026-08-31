@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: C-260
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-31
 beruehrt:
   tabellen: [supplements.supplements]
 zahlen:
@@ -46,5 +48,5 @@ Spalte.**
 
 ## Auftrag
 
-**Vorbereitet mit C-364 am 2026-08-30.** Der Auftragstext
+**Mitbeauftragt mit C-364 am 2026-08-31.** Der Auftragstext
 und der Bericht stehen dort.

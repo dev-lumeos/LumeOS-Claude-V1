@@ -8,10 +8,6 @@ braucht: []
 kind_von: C-49
 kinder: []
 entscheidung: E-25
-agent: codex
-beauftragt: 2026-08-29
-erledigt: 2026-08-29
-commit: b16ea855
 beruehrt:
   tabellen: [nutrition.daily_summary, nutrition.nutrient_defs]
 zahlen: null
@@ -144,3 +140,77 @@ traegt Protein nichts zur Unterscheidung bei.**
 **Abgenommen als blockiert.** Zwei Punkte gehen daraus hervor:
 **C-342** (Vitamin A) und **C-343** (die Vitamin-C-Luecke).
 
+## Entblockt, 2026-08-31 — jetzt bauen
+
+`[cmd]` **C-343 hat den Blocker entfernt:** `bls_value_status`
+unterscheidet zensiert, Luecke, logische Null, Spur und Zahlenwert.
+`[cmd]` **E-38 ist umgesetzt: 3.870 zensierte Werte auf 0.**
+
+`[cmd]` **VITC: 18 von 30 vollstaendigen Tagen, vorher 0.** `[cmd]`
+**Alle NRF9.3-Eingaenge sind an 12 von 30 Tagen vollstaendig.**
+
+## Auftrag — NRF9.3 bauen
+
+**Beauftragt am 2026-08-31.** **Entschieden in E-25.**
+
+### Die Formel
+
+    NRF9.3 = (Protein/50g + Ballaststoffe/25g + VitA/5000IU
+            + VitC/60mg + VitE/30IU + Calcium/1000mg + Eisen/18mg
+            + Magnesium/400mg + Kalium/3500mg
+            - gesaettigte Fette/20g - Zucker/50g - Natrium/2400mg)
+            x 100
+
+`[cmd]` **Je Naehrstoff bei 100 Prozent gedeckelt** — **das ist der
+Kern der Originalkonstruktion, ohne sie zieht ein Uebermass den Score
+hoch.**
+
+`[cmd]` **Originalreferenzen, nicht EFSA** — sonst ist es nicht die
+validierte Fassung. **Die Abweichung sichtbar machen.**
+
+`[cmd]` **Gesamtzucker statt *added sugars*** — die Autoren haben die
+Variante getestet, **aber der Score muss sagen, dass er so rechnet.**
+
+### Vitamin A
+
+`[cmd]` **`vitamin_a_iu_daily` rechnet aus den Komponenten** (E-34).
+`[cmd]` **Sie liefert `incomplete`, wenn eine Komponente fehlt** —
+**das gilt weiter.**
+
+### Was ein unvollstaendiger Tag liefert
+
+`[read]` **`incomplete`, keine kuenstlich niedrige Zahl.** `[cmd]`
+**An 18 von 30 Tagen ist das der Fall** — **und die Anzeige muss den
+Unterschied tragen.**
+
+`[cmd]` **Das Muster steht: der `teilweise`-Zustand aus C-177.**
+
+### Was nicht zu tun ist
+
+**Keine Sportler-Variante** — sie waere unsere Formel, nicht die
+belegte. **Kein Wert, wo Bestandteile fehlen.**
+`apps/` nicht anfassen.
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server gehoert dir nicht
+
+`[cmd]` **Kein `neustart`, kein `start`, kein `aufraeumen`.**
+
+### Nachweis
+
+    Score je Tag           Spannweite ueber 30 Tage
+    vollstaendige Tage     12 erwartet - stimmt es?
+    incomplete             an wie vielen, warum
+    Deckelung              greift sie, wo
+    Protein gedeckelt      an wie vielen Tagen
+    Gegenprobe             ein Tag mit viel Natrium steht
+                           schlechter als derselbe ohne
+    Laufzeit               ms je Zeitraum
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
