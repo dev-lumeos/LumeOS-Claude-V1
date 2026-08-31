@@ -35,7 +35,9 @@ import type { VorliebenDaten } from './tab-vorlieben'
 import {
   ladePlan, ladePlanLogs, ladeCoachFreigabe, ladeEinkaufslistenZahl,
   ladeTagesEintraege,
-  type PlanDaten,
+  // C-372/E-41: die Auflistung aller Plaene - Bibliothek UND Werkbank.
+  ladeAllePlaene,
+  type PlanDaten, type PlanKurz,
 } from '../../../lib/nutrition/plan-lesen'
 import type { TagesEintrag } from './plan-eintraege'
 import type { LogZeile as PlanLogZeile } from '../../../lib/nutrition/plan-lage'
@@ -359,6 +361,16 @@ export default async function V2NutritionPage({
     }
   }
 
+  // C-372/E-41: alle Plaene - fuer die Bibliothek und die Werkbank.
+  let allePlaene: PlanKurz[] = []
+  if (tab === 'planner' || tab === 'plans') {
+    try {
+      allePlaene = await ladeAllePlaene()
+    } catch {
+      allePlaene = []
+    }
+  }
+
   return (
     <TagebuchAnsicht
       datum={datum}
@@ -372,6 +384,7 @@ export default async function V2NutritionPage({
       ordnung={ordnung}
       einsichten={einsichten}
       rezepte={rezepte}
+      allePlaene={allePlaene}
       offeneAktionen={offeneAktionen}
       sitzung={sitzung}
       istAdmin={istAdmin}

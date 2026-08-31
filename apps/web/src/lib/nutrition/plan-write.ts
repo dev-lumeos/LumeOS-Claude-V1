@@ -23,6 +23,14 @@ import {
   EINTRAG_TYPEN, MAHLZEIT_TYPEN, bauEintrag, verletztCheck,
   naechstePosition,
 } from './plan-eintrag-lage'
+// C-372/G-306: Wochen, Kopie und die zwei Sperren.
+import {
+  positionenGesperrt, AKTIV_GESPERRT_SATZ, AKTIV_AUSWEG_SATZ,
+  darfBearbeiten, FREMD_GESPERRT_SATZ,
+  wochenAnker, wochenDaten, tageDerWoche,
+  verschiebung, tageVerschieben,
+  WOCHEN_MIN, WOCHEN_MAX,
+} from './plan-werkbank'
 
 /**
  * Die erlaubten Werte, wie die CHECKs sie fuehren.
@@ -187,7 +195,74 @@ export async function planAendern(eingabe: PlanAendern): Promise<GespeicherterPl
     .select('id, name, status, plan_origin, lifecycle_type')
     .single()
   if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+
+  // ══ C-372: beim Aktivieren wandern die Wochen mit ═══════════════
+  //
+  // **Flow 3, Schritt 5: das Startdatum waehlt der Nutzer.**
+  //
+  // `[cmd]` **Ein Plan aus der Werkbank traegt Ankerdaten** — die
+  // Wochen liegen relativ zueinander, verankert am Montag der
+  // Anlegewoche (`wochenAnker`). `[read]` **Ohne diesen Schritt
+  // stuende der aktivierte Plan an seinem Anker statt am gewaehlten
+  // Startdatum**, und der Nutzer saehe seine Tage in der falschen
+  // Woche.
+  //
+  // `[read]` **Die Abstaende bleiben, das Datum wird richtig** — alle
+  // Wochen UND ihre Tage verschieben sich um dieselbe Zahl.
+  if (felder.start_date) {
+    await wochenAufStartdatumSchieben(db, id, felder.start_date)
+  }
+
   return data as unknown as GespeicherterPlan
+}
+
+/**
+ * Die Wochen eines Plans auf ein Startdatum schieben.
+ *
+ * `[cmd]` **`UNIQUE (plan_id, week_start)` und
+ * `UNIQUE (week_id, plan_date)`** — deshalb wird in EINER Runde je
+ * Zeile geschrieben und nicht paarweise getauscht.
+ */
+async function wochenAufStartdatumSchieben(
+  db: Db, planId: string, startdatum: string,
+): Promise<void> {
+  const { data: wRoh, error } = await db
+    .from('meal_plan_weeks')
+    .select('id, week_start')
+    .eq('plan_id', planId)
+    .order('week_start')
+  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+
+  const wochen = (wRoh ?? []) as unknown as Array<{ id: string; week_start: string }>
+  if (wochen.length === 0) return
+
+  const tage = verschiebung(wochen[0].week_start, startdatum)
+  // `[read]` **Null Tage heisst: schon richtig** — dann wird nichts
+  // geschrieben, statt jede Zeile mit demselben Wert zu ueberschreiben.
+  if (tage === 0) return
+
+  for (const w of wochen) {
+    const neuStart = tageVerschieben(w.week_start, tage)
+    const { error: wFehler } = await db
+      .from('meal_plan_weeks')
+      .update({ week_start: neuStart })
+      .eq('id', w.id)
+    if (wFehler) throw new DiaryWriteError('WRITE_FAILED', wFehler.message)
+
+    const { data: dRoh } = await db
+      .from('meal_plan_days')
+      .select('id, plan_date')
+      .eq('week_id', w.id)
+    for (const d of ((dRoh ?? []) as unknown as Array<{
+      id: string; plan_date: string
+    }>)) {
+      const { error: dFehler } = await db
+        .from('meal_plan_days')
+        .update({ plan_date: tageVerschieben(d.plan_date, tage) })
+        .eq('id', d.id)
+      if (dFehler) throw new DiaryWriteError('WRITE_FAILED', dFehler.message)
+    }
+  }
 }
 
 
@@ -239,41 +314,12 @@ export type GespeicherterEintrag = {
   slot_order: number
 }
 
-/**
- * Die Herkunft des Plans, zu dem ein Tag gehoert.
- *
- * `[read]` **Die Coach-Sperre gilt auch fuer Eintraege.** `[cmd]`
- * G-269 sperrt `planAendern`; **ohne diese Pruefung liesse sich ein
- * gesperrter Coach-Plan ueber seine Positionen umbauen** — die Sperre
- * waere dann eine Bitte.
- */
-type Db = Awaited<ReturnType<typeof sitzung>>['db']
-
-async function herkunftDesTages(db: Db, dayId: string): Promise<string | null> {
-  // `[read]` **Zwei Spruenge, ein Aufruf** — Tag zur Woche, Woche zum
-  // Plan. Drei einzelne Abfragen waeren drei Rundreisen.
-  const { data, error } = await db
-    .from('meal_plan_days')
-    .select('week_id, meal_plan_weeks!inner(plan_id, meal_plans!inner(plan_origin))')
-    .eq('id', dayId)
-    .single()
-  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
-  const w = (data as Record<string, unknown>)?.meal_plan_weeks as
-    Record<string, unknown> | undefined
-  const p = w?.meal_plans as Record<string, unknown> | undefined
-  return (p?.plan_origin as string | null) ?? null
-}
-
-/** Die Sperre, gemeinsam fuer alle drei Vorgaenge. */
-async function pruefeFreigabe(herkunft: string | null): Promise<void> {
-  if (await darfAendern(herkunft)) return
-  throw new DiaryWriteError(
-    'FORBIDDEN',
-    herkunft === 'coach_created'
-      ? 'Dieser Plan kommt von deinem Coach und ist fuer direkte Aenderungen gesperrt.'
-      : 'Dieser Plan stammt aus dem Marktplatz und wird unveraendert uebernommen.',
-  )
-}
+// `[cmd]` **`herkunftDesTages` und `pruefeFreigabe` sind in G-306
+// entfernt.** `[read]` **Sie prueften nur die Herkunft;
+// `pruefePositionsRecht` prueft beide Sperren in EINER Abfrage** —
+// zwei Funktionen fuer dieselbe Frage waeren zwei Stellen, an denen
+// eine vergessen werden kann. **A-59: nicht aufgerufen heisst
+// entfernt.**
 
 /**
  * Einen Eintrag anlegen — G-298.
@@ -285,7 +331,8 @@ export async function planEintragAnlegen(
   eingabe: EintragAnlegen,
 ): Promise<GespeicherterEintrag> {
   const { db, user } = await sitzung()
-  await pruefeFreigabe(await herkunftDesTages(db, eingabe.day_id))
+  // G-306/ADR #17: prueft BEIDE Sperren - Status und Herkunft.
+  await pruefePositionsRecht(db, eingabe.day_id)
 
   const felder = bauEintrag(eingabe)
   // `[read]` **Die Gegenprobe vor dem Schreiben**, damit die Meldung
@@ -339,7 +386,7 @@ export async function planEintragAendern(
     .single()
   if (leseFehler) throw new DiaryWriteError('WRITE_FAILED', leseFehler.message)
   const dayId = (vorher as unknown as { day_id: string }).day_id
-  await pruefeFreigabe(await herkunftDesTages(db, dayId))
+  await pruefePositionsRecht(db, dayId)
 
   const felder = bauEintrag(eingabe)
   const fehler = verletztCheck(felder)
@@ -375,8 +422,8 @@ export async function planEintragLoeschen(
     .eq('id', eingabe.id)
     .single()
   if (leseFehler) throw new DiaryWriteError('WRITE_FAILED', leseFehler.message)
-  await pruefeFreigabe(
-    await herkunftDesTages(db, (vorher as unknown as { day_id: string }).day_id))
+  await pruefePositionsRecht(
+    db, (vorher as unknown as { day_id: string }).day_id)
 
   const { error } = await db
     .from('meal_plan_entries')
@@ -384,4 +431,332 @@ export async function planEintragLoeschen(
     .eq('id', eingabe.id)
   if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
   return { geloescht: eingabe.id }
+}
+
+// ════════════════════════════════════════════════════════════════════
+// DIE WERKBANK — C-372 / G-306
+// ════════════════════════════════════════════════════════════════════
+//
+// **E-40:** *,,ohne Schreibweg fuer Wochen gibt es keine Werkbank."*
+// **E-41:** Bibliothek gegen Werkbank, und zwei Sperren.
+// **ADR #17:** ein aktiver Plan hat READ-ONLY Positionen.
+
+/**
+ * Die Sperre aus ADR #17 — G-306.
+ *
+ * `[cmd]` **`MealPlan.status = 'active'` -> `MealPlanItem`
+ * READ-ONLY, API gibt 409.** `[cmd]` **Der Grund:
+ * `meal_plan_logs.plan_entry_id` zeigt auf die Position** (am
+ * 2026-08-31 gemessen, mit `ON DELETE RESTRICT`).
+ *
+ * `[read]` **Die Datenbank verhindert nur das LOESCHEN einer
+ * protokollierten Position, nicht ihr AENDERN** — deshalb steht die
+ * Regel hier und nicht nur im Schema.
+ *
+ * `[read]` **Und sie prueft BEIDE Sperren** (E-41): die vom Status
+ * und die vom Ersteller. Sie haben verschiedene Meldungen, weil sie
+ * verschiedene Auswege haben.
+ */
+type Db = Awaited<ReturnType<typeof sitzung>>['db']
+
+async function pruefePositionsRecht(db: Db, dayId: string): Promise<void> {
+  const { data, error } = await db
+    .from('meal_plan_days')
+    .select('week_id, meal_plan_weeks!inner(plan_id, '
+      + 'meal_plans!inner(status, plan_origin))')
+    .eq('id', dayId)
+    .single()
+  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+
+  // `[read]` Ueber `unknown`, nicht direkt: der Typ der verschachtelten
+  // Auswahl ist ein Vereinigungstyp mit `GenericStringError`, und ein
+  // direkter Cast waere ein Typfehler.
+  const w = (data as unknown as Record<string, unknown>)?.meal_plan_weeks as
+    Record<string, unknown> | undefined
+  const p = w?.meal_plans as Record<string, unknown> | undefined
+  const status = String(p?.status ?? '')
+  const herkunft = (p?.plan_origin as string | null) ?? null
+
+  // `[read]` **Die fremde Herkunft zuerst** — sie laesst sich nicht
+  // durch Kopieren umgehen, also waere der Kopier-Hinweis falsch.
+  //
+  // `[cmd]` **C-375: die Spalte `darf_bearbeiten` gibt es noch
+  // nicht** (am 2026-08-31 gemessen). Bis dahin traegt `plan_origin`
+  // die Aussage: die Coach-Sperre aus G-269 gilt weiter.
+  if (!(await darfAendern(herkunft))) {
+    throw new DiaryWriteError('FORBIDDEN',
+      herkunft === 'coach_created'
+        ? 'Dieser Plan kommt von deinem Coach und ist fuer direkte Aenderungen gesperrt.'
+        : FREMD_GESPERRT_SATZ)
+  }
+
+  if (positionenGesperrt(status)) {
+    throw new DiaryWriteError('PLAN_AKTIV',
+      `${AKTIV_GESPERRT_SATZ} ${AKTIV_AUSWEG_SATZ}`)
+  }
+}
+
+// ══ C-372: einen Plan MIT Wochen anlegen ════════════════════════════
+//
+// `[cmd]` **`New plan` fragte bisher Name, Ziele, Lebenszyklus,
+// Startdatum, Tageszahl** — und legte einen Plan ohne Wochen an, den
+// niemand fuellen konnte (G-304).
+//
+// `[read]` **E-40: Lebenszyklus und Startdatum gehoeren nicht ins
+// Anlegen** — sie entstehen beim Aktivieren (Flow 3, Schritte 5+6).
+// **Was zaehlt: Name, Beschreibung, Tagesziele, Wochenzahl.**
+
+export const planMitWochenSchema = z.object({
+  art: z.literal('plan_werkbank'),
+  name: z.string().trim().min(1, 'Der Plan braucht einen Namen.').max(120),
+  description: z.string().trim().max(500).nullish(),
+  target_kcal: z.number().positive().max(20000).nullish(),
+  target_protein_g: z.number().nonnegative().max(2000).nullish(),
+  target_carbs_g: z.number().nonnegative().max(3000).nullish(),
+  target_fat_g: z.number().nonnegative().max(1000).nullish(),
+  wochen: z.number().int().min(WOCHEN_MIN).max(WOCHEN_MAX),
+  /** `[read]` Der Anker kommt vom Aufrufer, nie aus `new Date()` hier. */
+  heute: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Datum als YYYY-MM-DD.'),
+})
+
+export type PlanMitWochen = z.infer<typeof planMitWochenSchema>
+
+/**
+ * Ein Plan mit leeren Wochen und Tagen — die Werkbank.
+ *
+ * `[read]` **Der Plan bekommt `status: 'assigned'`**, nicht `active`
+ * — er ist ein Entwurf, und genau deshalb sind seine Positionen
+ * bearbeitbar (ADR #17).
+ *
+ * `[cmd]` **`week_start` ist NOT NULL, ein Entwurf hat aber kein
+ * Startdatum.** `[read]` **Geloest ueber den Anker** (`wochenAnker`):
+ * die Wochen liegen relativ zueinander, und beim Aktivieren werden
+ * sie auf das echte Datum verschoben.
+ */
+export async function planMitWochenAnlegen(
+  eingabe: PlanMitWochen,
+): Promise<{ id: string; name: string; wochen: number; tage: number }> {
+  const { db, user } = await sitzung()
+
+  const { data, error } = await db
+    .from('meal_plans')
+    .insert({
+      user_id: user.id,
+      name: eingabe.name,
+      description: eingabe.description ?? null,
+      target_kcal: eingabe.target_kcal ?? null,
+      target_protein_g: eingabe.target_protein_g ?? null,
+      target_carbs_g: eingabe.target_carbs_g ?? null,
+      target_fat_g: eingabe.target_fat_g ?? null,
+      // E-40: Startdatum und Lebenszyklus entstehen beim Aktivieren.
+      start_date: null,
+      days_count: eingabe.wochen * 7,
+      lifecycle_type: null,
+      status: 'assigned',
+      plan_origin: 'self_created',
+      measurement_source: 'manual',
+    })
+    .select('id, name')
+    .single()
+  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+  const plan = data as unknown as { id: string; name: string }
+
+  const anker = wochenAnker(eingabe.heute)
+  const starts = wochenDaten(anker, eingabe.wochen)
+
+  const { data: wochenRoh, error: wFehler } = await db
+    .from('meal_plan_weeks')
+    .insert(starts.map((s, i) => ({
+      plan_id: plan.id,
+      user_id: user.id,
+      week_start: s,
+      name: `Woche ${i + 1}`,
+    })))
+    .select('id, week_start')
+  if (wFehler) throw new DiaryWriteError('WRITE_FAILED', wFehler.message)
+
+  const wochen = (wochenRoh ?? []) as unknown as Array<{
+    id: string; week_start: string
+  }>
+
+  // `[cmd]` **`day_index` CHECK 1..7** — gemessen am 2026-08-31:
+  // 0 und 8 werden abgewiesen, 1 nicht.
+  const tage = wochen.flatMap(w =>
+    tageDerWoche(w.week_start).map(t => ({
+      week_id: w.id,
+      user_id: user.id,
+      plan_date: t.plan_date,
+      day_index: t.day_index,
+    })))
+
+  const { error: tFehler } = await db.from('meal_plan_days').insert(tage)
+  if (tFehler) throw new DiaryWriteError('WRITE_FAILED', tFehler.message)
+
+  return { id: plan.id, name: plan.name, wochen: wochen.length, tage: tage.length }
+}
+
+// ══ G-306: der Ausweg — Kopie bearbeiten ════════════════════════════
+//
+// `[cmd]` **Der ADR schreibt ihn vor:** *,,Coach oder User muss Plan
+// pausieren, eine Kopie erstellen, bearbeiten und neu aktivieren.
+// Original-Plan mit seinem Log bleibt unveraendert erhalten."*
+//
+// `[read]` **Ohne Knopf ist die Regel eine Sackgasse** — der Nutzer
+// sieht, dass er nicht darf, und findet keinen Weg (Auftrag).
+
+export const planKopierenSchema = z.object({
+  art: z.literal('plan_kopieren'),
+  id: z.string().uuid(),
+  /** `[read]` Der Name darf abweichen; ohne Angabe „… (Kopie)". */
+  name: z.string().trim().min(1).max(120).optional(),
+  /**
+   * `[cmd]` **Der ADR nennt das Pausieren als ersten Schritt.**
+   * `[read]` **Es ist trotzdem eine Wahl:** wer eine Variante bauen
+   * will, laesst das Original laufen.
+   */
+  original_pausieren: z.boolean().default(false),
+})
+
+export type PlanKopieren = z.infer<typeof planKopierenSchema>
+
+/**
+ * Eine bearbeitbare Kopie eines Plans — mit Wochen, Tagen und
+ * Positionen.
+ *
+ * `[read]` **Das Log wird NICHT kopiert.** `meal_plan_logs` gehoert
+ * zum Original; eine Kopie hat nichts ausgefuehrt. **Genau darum
+ * geht der ADR diesen Weg: das Original behaelt seine Historie.**
+ */
+export async function planKopieren(eingabe: PlanKopieren): Promise<{
+  id: string; name: string; wochen: number; tage: number; positionen: number
+  original_pausiert: boolean
+}> {
+  const { db, user } = await sitzung()
+
+  const { data: origRoh, error: oFehler } = await db
+    .from('meal_plans')
+    .select('name, description, target_kcal, target_protein_g, '
+      + 'target_carbs_g, target_fat_g, days_count, plan_origin, status')
+    .eq('id', eingabe.id)
+    .single()
+  if (oFehler) throw new DiaryWriteError('WRITE_FAILED', oFehler.message)
+  const orig = origRoh as unknown as Record<string, unknown>
+
+  // `[read]` **Die fremde Sperre gilt auch fuer die Kopie.** Wer
+  // einen Plan nicht bearbeiten darf, darf ihn nicht durch Kopieren
+  // aufmachen — sonst waere das Flag wirkungslos.
+  if (!(await darfAendern((orig.plan_origin as string | null) ?? null))) {
+    throw new DiaryWriteError('FORBIDDEN', FREMD_GESPERRT_SATZ)
+  }
+
+  const { data: neuRoh, error: nFehler } = await db
+    .from('meal_plans')
+    .insert({
+      user_id: user.id,
+      name: eingabe.name ?? `${String(orig.name)} (Kopie)`,
+      description: orig.description ?? null,
+      target_kcal: orig.target_kcal ?? null,
+      target_protein_g: orig.target_protein_g ?? null,
+      target_carbs_g: orig.target_carbs_g ?? null,
+      target_fat_g: orig.target_fat_g ?? null,
+      days_count: orig.days_count ?? null,
+      // Die Kopie ist ein Entwurf - sonst waere sie sofort wieder
+      // gesperrt, und der Ausweg fuehrte im Kreis.
+      status: 'assigned',
+      start_date: null,
+      lifecycle_type: null,
+      // `[read]` **Eine Kopie ist selbst erstellt** — sie stammt aus
+      // der Hand des Nutzers, nicht mehr vom urspruenglichen Sender.
+      plan_origin: 'self_created',
+      measurement_source: 'manual',
+    })
+    .select('id, name')
+    .single()
+  if (nFehler) throw new DiaryWriteError('WRITE_FAILED', nFehler.message)
+  const neu = neuRoh as unknown as { id: string; name: string }
+
+  // Wochen, Tage und Positionen mitnehmen.
+  const { data: wRoh } = await db
+    .from('meal_plan_weeks')
+    .select('id, week_start, name')
+    .eq('plan_id', eingabe.id)
+    .order('week_start')
+  const altWochen = (wRoh ?? []) as unknown as Array<{
+    id: string; week_start: string; name: string | null
+  }>
+
+  let tageZahl = 0
+  let posZahl = 0
+
+  for (const aw of altWochen) {
+    const { data: nwRoh, error: nwFehler } = await db
+      .from('meal_plan_weeks')
+      .insert({
+        plan_id: neu.id, user_id: user.id,
+        week_start: aw.week_start, name: aw.name,
+        // `[cmd]` Die Spalte traegt die Herkunft einer kopierten
+        // Woche - sie steht seit C-150 und wird hier gesetzt.
+        copied_from_week_id: aw.id,
+      })
+      .select('id')
+      .single()
+    if (nwFehler) throw new DiaryWriteError('WRITE_FAILED', nwFehler.message)
+    const nw = nwRoh as unknown as { id: string }
+
+    const { data: dRoh } = await db
+      .from('meal_plan_days')
+      .select('id, plan_date, day_index, notes')
+      .eq('week_id', aw.id)
+      .order('day_index')
+    const altTage = (dRoh ?? []) as unknown as Array<{
+      id: string; plan_date: string; day_index: number; notes: string | null
+    }>
+
+    for (const at of altTage) {
+      const { data: ntRoh, error: ntFehler } = await db
+        .from('meal_plan_days')
+        .insert({
+          week_id: nw.id, user_id: user.id,
+          plan_date: at.plan_date, day_index: at.day_index, notes: at.notes,
+        })
+        .select('id')
+        .single()
+      if (ntFehler) throw new DiaryWriteError('WRITE_FAILED', ntFehler.message)
+      const nt = ntRoh as unknown as { id: string }
+      tageZahl += 1
+
+      const { data: eRoh } = await db
+        .from('meal_plan_entries')
+        .select('meal_type, slot_order, entry_type, recipe_id, food_id, '
+          + 'custom_food_id, amount_g, planned_servings, portion_name, '
+          + 'portion_quantity, portion_amount_g, note, planned_time')
+        .eq('day_id', at.id)
+        .order('slot_order')
+      const altPos = (eRoh ?? []) as unknown as Array<Record<string, unknown>>
+      if (altPos.length === 0) continue
+
+      const { error: peFehler } = await db.from('meal_plan_entries').insert(
+        altPos.map(p => ({ ...p, day_id: nt.id, user_id: user.id })))
+      if (peFehler) throw new DiaryWriteError('WRITE_FAILED', peFehler.message)
+      posZahl += altPos.length
+    }
+  }
+
+  // `[cmd]` **Der ADR nennt das Pausieren als ersten Schritt** — hier
+  // ist es eine Wahl, und sie wird gemeldet statt stillschweigend
+  // getan.
+  let pausiert = false
+  if (eingabe.original_pausieren && orig.status === 'active') {
+    const { error } = await db
+      .from('meal_plans')
+      .update({ status: 'paused', is_active: false })
+      .eq('id', eingabe.id)
+    if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+    pausiert = true
+  }
+
+  return {
+    id: neu.id, name: neu.name, wochen: altWochen.length,
+    tage: tageZahl, positionen: posZahl, original_pausiert: pausiert,
+  }
 }

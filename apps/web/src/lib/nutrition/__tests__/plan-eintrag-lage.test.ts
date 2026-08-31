@@ -196,17 +196,26 @@ test('G-298: die drei Vorgaenge sind in der Route erreichbar', () => {
   assert.match(r, /eintrag, eintrag_aendern, eintrag_loeschen/)
 })
 
-test('G-298: der Schreibweg prueft die Coach-Sperre — bei allen dreien', () => {
+test('G-298: der Schreibweg prueft die Sperren — bei allen dreien', () => {
   // `[read]` **Ohne diese Pruefung liesse sich ein gesperrter
   // Coach-Plan ueber seine Positionen umbauen** — G-269 waere dann
   // eine Bitte. `[read]` **Gezaehlt, nicht gesucht:** ein Vorgang
   // ohne Pruefung faellt bei `assert.match` nicht auf.
+  //
+  // `[cmd]` **BERICHTIGT in G-306, 2026-08-31:** hier stand
+  // `pruefeFreigabe`, und die prueft NUR die Herkunft. **`ADR
+  // #17` verlangt zusaetzlich, dass ein AKTIVER Plan seine
+  // Positionen einfriert** — `pruefePositionsRecht` prueft beides in
+  // einer Abfrage, und `pruefeFreigabe` ist entfernt (A-59).
   const s = ohneKommentare(SCHREIB)
-  const rufe = (s.match(/await pruefeFreigabe\(/g) ?? []).length
+  const rufe = (s.match(/await pruefePositionsRecht\(/g) ?? []).length
   assert.equal(rufe, 3,
-    `${rufe} von 3 Vorgaengen pruefen die Freigabe`)
+    `${rufe} von 3 Vorgaengen pruefen die Sperren`)
   assert.match(s, /darfAendern\(herkunft\)/,
     'die Sperre fragt nicht die Herkunft')
+  // Und die alte, schwaechere Pruefung ist wirklich weg.
+  assert.doesNotMatch(s, /(?<![a-zA-Z0-9_])pruefeFreigabe(?![a-zA-Z0-9_])/,
+    'die Pruefung ohne Statussperre lebt weiter')
 })
 
 test('G-298: der Schreibweg prueft den CHECK vor dem Senden', () => {

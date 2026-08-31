@@ -9,8 +9,10 @@ kind_von: null
 entscheidung: E-41
 agent: claudecode
 beauftragt: 2026-08-31
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
-  tabellen: [nutrition.meal_plans, nutrition.recipes]
+  tabellen: [nutrition.meal_plans]
 zahlen:
   gemessen: 2026-08-31
 ---
@@ -59,3 +61,36 @@ Tabellen.**
 
 **Mitbeauftragt mit C-372 am 2026-08-31.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Ergebnis (Kurzfassung, Einzelheiten in C-372)
+
+`[cmd]` **Gemessen am 2026-08-31: es gibt kein solches Flag.** Keine
+Spalte `darf_bearbeiten`, `editable`, `readonly`, `locked` oder
+`is_template` in `nutrition` oder `coach` — der einzige Treffer war
+`checkins.template_id`, und der gehoert zu Recovery.
+
+**Die Auswertung ist gebaut, die Spalte gehoert Codex.**
+
+`[cmd]` **`darfBearbeiten(undefined)` ist `true`** — gemessen, nicht
+behauptet: heute sind alle Plaene `self_created` oder `NULL`.
+**Nur ein ausdrueckliches `false` sperrt.**
+
+### Die zwei Sperren werden unterschieden — E-41
+
+    aktiv             vom Log        Ausweg: Kopie bearbeiten
+    nicht editierbar  vom Ersteller  Ausweg: KEINER
+    beides            —              Ausweg: keiner
+
+`[read]` **Die fremde Sperre gewinnt.** Bei ihr hilft eine Kopie
+nicht — **sie fuehrte um die Entscheidung des Erstellers herum**, und
+genau das soll das Flag verhindern. **Deshalb erscheint der
+Kopierknopf dort nicht;** `kopieHilft()` ist die eine Stelle, die es
+entscheidet, und ein Waechter zaehlt ihre Aufrufe.
+
+`[read]` **Sobald die Spalte kommt, wird aus `undefined` ein
+Feldwert** — die Anzeige bleibt, wie sie ist.
+
+## Abnahme
+
+**2026-08-31, mit C-372 abgenommen:** vorbereitet: die Auswertung steht, die Spalte fehlt und kommt von
+Codex. Der Kopierknopf erscheint nur bei der Aktiv-Sperre.

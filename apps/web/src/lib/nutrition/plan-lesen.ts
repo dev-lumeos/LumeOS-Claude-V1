@@ -534,3 +534,86 @@ export async function ladeTagesEintraege(datum: string): Promise<Array<{
   }
   return aus
 }
+
+
+// ════════════════════════════════════════════════════════════════════
+// ALLE PLAENE — C-372 / E-41
+// ════════════════════════════════════════════════════════════════════
+//
+// **E-41:** *,,edit oder neuer Plan bleibt beim Planner, dann brauchen
+// wir da auch eine Auflistung aller Plaene."*
+//
+// `[cmd]` **`ladePlan` liest alle, sortiert nach `is_active` und
+// nimmt `plaene[0]`** — in G-304 gemessen. `[read]` **Damit gibt es
+// heute keine Liste, nur EINEN Plan.** **Flow 3, Schritt 2 verlangt
+// aber eine Uebersicht.**
+
+export type PlanKurz = {
+  id: string
+  name: string
+  description: string | null
+  status: string
+  is_active: boolean
+  plan_origin: string | null
+  wochen: number
+  tage: number
+  positionen: number
+  /**
+   * C-375: das Flag gibt es noch nicht.
+   *
+   * `[cmd]` **Am 2026-08-31 gemessen: keine Spalte `darf_bearbeiten`,
+   * `editable`, `readonly` oder `locked` in `nutrition` oder
+   * `coach`.** `[read]` **`undefined` heisst deshalb: noch nicht
+   * hinterlegt** — und `darfBearbeiten()` liest daraus `true`.
+   */
+  darf_bearbeiten: boolean | undefined
+}
+
+/**
+ * Alle Plaene des Nutzers, kurz — fuer Bibliothek und Werkbank.
+ *
+ * `[read]` **Ohne Wochen und Positionen im Detail** — die Liste soll
+ * zeigen, welche Plaene es gibt, nicht was in ihnen steht. Das Detail
+ * laedt `ladePlan`.
+ */
+export async function ladeAllePlaene(): Promise<PlanKurz[]> {
+  try {
+    const client = createSessionClient()
+    const { data: { user } } = await client.auth.getUser()
+    if (!user) return []
+    const db = client.schema('nutrition')
+
+    const { data, error } = await db
+      .from('meal_plans')
+      .select('id, name, description, status, is_active, plan_origin, '
+        + 'weeks:meal_plan_weeks(id, days:meal_plan_days(id, '
+        + 'entries:meal_plan_entries(id)))')
+      .eq('user_id', user.id)
+      .order('is_active', { ascending: false })
+      .order('created_at', { ascending: false })
+    if (error) return []
+
+    const zeilen = (data ?? []) as unknown as Array<Record<string, unknown>>
+    return zeilen.map(p => {
+      const wochen = (p.weeks ?? []) as Array<Record<string, unknown>>
+      const tage = wochen.flatMap(w => (w.days ?? []) as Array<Record<string, unknown>>)
+      const positionen = tage.flatMap(
+        d => (d.entries ?? []) as Array<Record<string, unknown>>)
+      return {
+        id: String(p.id),
+        name: String(p.name ?? ''),
+        description: (p.description as string | null) ?? null,
+        status: String(p.status ?? 'assigned'),
+        is_active: p.is_active === true,
+        plan_origin: (p.plan_origin as string | null) ?? null,
+        wochen: wochen.length,
+        tage: tage.length,
+        positionen: positionen.length,
+        // Die Spalte gibt es noch nicht - C-375 bei Codex.
+        darf_bearbeiten: undefined,
+      }
+    })
+  } catch {
+    return []
+  }
+}

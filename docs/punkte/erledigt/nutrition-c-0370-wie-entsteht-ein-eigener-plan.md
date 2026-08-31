@@ -9,6 +9,8 @@ kind_von: G-301
 entscheidung: E-40
 agent: claudecode
 beauftragt: 2026-08-31
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen: null
@@ -99,3 +101,39 @@ ob ein leerer Plan mit *n* Wochen daneben stehen soll.
 `[cmd]` **E-40 beantwortet die Frage: der Nutzer baut seinen Plan im
 Planner.** `[read]` **Das Formular fragt Name, Ziele und Wochenzahl —
 nicht Lebenszyklus und Startdatum.**
+
+## Ergebnis (Kurzfassung, Einzelheiten in C-372)
+
+`[cmd]` **Der Weg steht.** *,,Neuer Plan"* im Planner fragt Name,
+Beschreibung, Tagesziele und **Wochenzahl** — und legt **Plan, Wochen
+UND Tage** an. `[cmd]` **Im Browser gefahren: 2 Wochen -> 2 Wochen,
+14 Tage in der Datenbank.**
+
+`[read]` **Damit ist die Sackgasse aus G-304 zu:** dort entstand ein
+Plan mit 0 Wochen, den niemand fuellen konnte, und der Planner
+meldete anschliessend *,,Es liegt kein Plan vor"*.
+
+### Was E-40 dabei verlangt hat
+
+`[cmd]` **Startdatum und Lebenszyklus stehen NICHT im Formular** —
+sie entstehen beim Aktivieren (Flow 3, Schritte 5 und 6). `[cmd]` **Im
+Browser gemessen: 0 Datumsfelder, 0 Zyklusknoepfe, 1 Wochenfeld.**
+
+### Der Widerspruch, der dabei zu loesen war
+
+`[cmd]` **`meal_plan_weeks.week_start` ist NOT NULL** — **ein Entwurf
+hat aber kein Startdatum.**
+
+`[read]` **Geloest ueber einen Anker:** die Wochen liegen relativ
+zueinander, verankert am Montag der Anlegewoche. **Beim Aktivieren
+wandern sie auf das gewaehlte Datum**, mitsamt ihren Tagen.
+
+`[cmd]` **Gegengeprueft:** zwei Wochen ab 2026-08-31, aktiviert auf
+den 2026-09-14 -> **2026-09-14 und 2026-09-21, alle 14 Tage um +14.**
+
+Bild: `backup/c372-werkbank.png`
+
+## Abnahme
+
+**2026-08-31, mit C-372 abgenommen:** beantwortet: der Nutzer baut seinen Plan im Planner, das Formular
+fragt Name, Ziele und Wochenzahl.

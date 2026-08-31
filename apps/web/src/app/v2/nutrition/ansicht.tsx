@@ -43,6 +43,8 @@ import type { NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnun
 import { KalorienbilanzKachel, MakroschnittKachel } from './insights-echt'
 // G-289/G-288/G-300: Rezepte, Einkaufslisten - SPEC_03 Flow 7 und 8.
 import { RezepteTab } from './rezepte-echt'
+// C-372/G-306/E-41: die Werkbank - alle Plaene, neu, Kopie.
+import { PlanWerkbank } from './plan-werkbank-ui'
 // G-291/292/293/295: die vier fehlenden Kacheln aus SPEC_10.
 import {
   TrendKachel, HeatmapKachel, MakroDetailKachel, WarnungenKachel,
@@ -55,6 +57,7 @@ import type { SitzungStand } from '../../../lib/training/naechste-sitzung'
 import type { OffeneAktionenStand } from '../../../lib/coach/offene-aktionen'
 import type { InsightsStand } from '../../../lib/nutrition/insights-read'
 import type { RezeptStand } from '../../../lib/nutrition/rezept-lesen'
+import type { PlanKurz } from '../../../lib/nutrition/plan-lesen'
 import type { HydrationDay } from '../../../lib/nutrition/hydration-day-read'
 import { LeerHinweis } from './leer-hinweis'
 import type { DailySummaryRow, SummaryMacro } from '../../../lib/nutrition/diary-summary'
@@ -138,7 +141,7 @@ function tabs(mahlzeiten: number | null): TabItem[] {
 export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, lueckenGesamt = null, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
   planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
-  istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null, rezepte = null,
+  istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null, rezepte = null, allePlaene = [],
   offeneAktionen = null, sitzung = null,
   unvertraeglichkeiten = [],
 }: {
@@ -180,6 +183,8 @@ export async function TagebuchAnsicht({
   einsichten?: InsightsStand | null
   /** G-289: Rezepte und Einkaufslisten. */
   rezepte?: RezeptStand | null
+  /** C-372/E-41: alle Plaene, kurz. */
+  allePlaene?: PlanKurz[]
 }) {
   // A-14: Serverkomponente — `getTranslations`, nicht `useTranslations`.
   const t = await getTranslations('Nutrition')
@@ -267,7 +272,7 @@ export async function TagebuchAnsicht({
       <Zukunftshinweis datum={datum} />
 
       {tab !== 'diary' && (
-        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} rezepte={rezepte} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} planLogs={planLogs} coachFreigabe={coachFreigabe} einkaufslisten={einkaufslisten} tagesEintraege={tagesEintraege} />
+        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} rezepte={rezepte} allePlaene={allePlaene} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} planLogs={planLogs} coachFreigabe={coachFreigabe} einkaufslisten={einkaufslisten} tagesEintraege={tagesEintraege} />
       )}
       {tab === 'diary' && (
       <>
@@ -635,7 +640,8 @@ export async function TagebuchAnsicht({
  * eingebaut.
  */
 function AndererTab({
-  tab, foodsStart, vorlieben, plan, ordnung, einsichten, rezepte, bewertung = [],
+  tab, foodsStart, vorlieben, plan, ordnung, einsichten, rezepte,
+  allePlaene = [], bewertung = [],
   datum,
   planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
   unvertraeglichkeiten = [],
@@ -661,6 +667,8 @@ function AndererTab({
   einsichten?: InsightsStand | null
   /** G-289: Rezepte und Einkaufslisten. */
   rezepte?: RezeptStand | null
+  /** C-372/E-41: alle Plaene, kurz. */
+  allePlaene?: PlanKurz[]
 }) {
   const inhalt: Record<string, { titel: string; braucht: string }> = {
     insights: {
@@ -797,12 +805,21 @@ function AndererTab({
     )
   }
   if (tab === 'planner') {
-    // `[cmd]` SEIT G-97 ECHT, sobald ein Plan gelesen wurde. Dasselbe
-    // Muster wie bei `prefs` (G-65): ohne Sitzung oder ohne Plan bleibt
-    // der Entwurf mit seiner Marke stehen — eine leere echte Flaeche
-    // saehe aus wie ein Befund und waere doch nur ein fehlendes Cookie.
+    // ══ C-372/E-41: der Planner ist die WERKBANK ═══════════════════
+    //
+    // **E-41:** *„edit oder neuer Plan bleibt beim Planner, dann
+    // brauchen wir da auch eine Auflistung aller Plaene."*
+    //
+    // `[cmd]` **Bis heute gab es hier keine Liste** — `ladePlan`
+    // liefert `plaene[0]`, und *Neuen Plan anlegen* war die
+    // *in Entwicklung*-Attrappe (G-304).
+    //
+    // `[read]` **Die Liste steht ueber dem Raster**, weil sie die
+    // Frage beantwortet, an welchem Plan gearbeitet wird — das Raster
+    // zeigt dann dessen Wochen.
     return (
-      <div style={{ marginTop: 16 }}>
+      <div style={{ marginTop: 16 }} className="v2-col-gap">
+        <PlanWerkbank plaene={allePlaene} heute={datum ?? ''} />
         {plan ? <PlannerEchtTab d={plan} /> : <NutritionPlannerTab />}
       </div>
     )

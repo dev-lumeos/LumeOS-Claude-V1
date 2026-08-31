@@ -21,6 +21,11 @@ import {
   planEintragAnlegen,
   planEintragAendern,
   planEintragLoeschen,
+  // C-372/G-306: die Werkbank - Plan mit Wochen, und die Kopie.
+  planMitWochenAnlegen,
+  planMitWochenSchema,
+  planKopieren,
+  planKopierenSchema,
 } from '../../../../lib/nutrition/plan-write'
 // G-274: der Bestaetigungsweg — Flow 4.
 import {
@@ -166,7 +171,36 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // ── C-372: ein Plan MIT Wochen (die Werkbank) ───────────────
+  if (art === 'plan_werkbank') {
+    const g = planMitWochenSchema.safeParse(roh)
+    if (!g.success) {
+      return ungueltig(g.error.issues[0]?.message ?? 'Eingabe ungueltig.',
+        g.error.issues.map(i => ({ feld: i.path.join('.'), meldung: i.message })))
+    }
+    try {
+      return NextResponse.json(await planMitWochenAnlegen(g.data))
+    } catch (error) {
+      return errorResponse(error)
+    }
+  }
+
+  // ── G-306: der Ausweg aus der Aktivsperre ───────────────────
+  if (art === 'plan_kopieren') {
+    const g = planKopierenSchema.safeParse(roh)
+    if (!g.success) {
+      return ungueltig(g.error.issues[0]?.message ?? 'Eingabe ungueltig.',
+        g.error.issues.map(i => ({ feld: i.path.join('.'), meldung: i.message })))
+    }
+    try {
+      return NextResponse.json(await planKopieren(g.data))
+    } catch (error) {
+      return errorResponse(error)
+    }
+  }
+
   return ungueltig(
     'Unbekannte Art. Erlaubt: plan, plan_aendern, bestaetigen, ueberspringen, '
-    + 'eintrag, eintrag_aendern, eintrag_loeschen.')
+    + 'eintrag, eintrag_aendern, eintrag_loeschen, plan_werkbank, '
+    + 'plan_kopieren.')
 }
