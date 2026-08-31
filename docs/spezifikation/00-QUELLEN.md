@@ -390,3 +390,39 @@ warum es ersetzt wurde.**
 
 `[read]` **Ein Auftrag, der eine dieser vier auslaesst, kostet den
 Agenten einen halben Durchgang.**
+
+## Nachgetragen 2026-08-30 — zwei Quellen im Vorgaengerrepo
+
+`[read]` **Beim Durchgehen von C-112 lagen die Antworten auf drei
+Fragen in Dateien, die dieses Verzeichnis nicht nannte.**
+
+    referenz/lumeos-2026/AUTONOMY_ARCHITECTURE.md
+      444 Zeilen. Die fuenf Autonomiestufen mit Erlaubnisliste je
+      Stufe, Entscheidungsfluss, Berechtigungsmatrix,
+      Sicherheitsarchitektur.
+      1 Supervised - 2 Guided - 3 Collaborative (Default)
+      4 Adaptive - 5 Autonomous
+
+    referenz/lumeos-2026/specs/coach-buddy-killer-feature.md
+      1.591 Zeilen, 22 Kapitel. Produktdefinition, Voice, Live
+      Workout, Meal Planning, Supplement Protocol, Medical Safety
+      Layer als Hard Gate, Decision Boundary Engine gegen LLM,
+      Coach Memory, Kostenmodell, Adaptive Intervention Engine.
+
+`[read]` **Beide sind aelter als dieses Repo und tragen Struktur, die
+`docs/specs/` nicht wiederholt.** `[cmd]` **CLAUDE.md sagt: Struktur
+ja, Code nie.**
+
+## Und eine Lehre zur Benutzung dieses Verzeichnisses
+
+`[cmd]` **`docs/specs/BuddyandAICoach/` (12 Dateien, 136 KB) und
+`docs/specs/HumanCoach/` (12 Dateien, 97 KB) stehen hier seit
+Langem.**
+
+`[read]` **Am 30.08. hat der Orchestrator Tom drei Fragen gestellt,
+deren Antworten in genau diesen Dateien standen** — **weil er die
+Datenbank gemessen und dort eine Luecke gesehen hat.**
+
+`[read]` **Eine Luecke in der Datenbank heisst *nicht gebaut*, nicht
+*nicht entschieden*.** **Die Reihenfolge ist: Spec lesen, dann
+Datenbank messen, dann fragen.**

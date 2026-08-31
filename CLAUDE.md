@@ -227,6 +227,33 @@ Seed-Konten mit je 180 Tagen, und `test-user@lumeos.local` mit einem.
 **Sonst ist sie nicht nachpruefbar — und eine Abweichung sieht aus
 wie ein Defekt.**
 
+## Eine Luecke in der Datenbank ist keine offene Frage
+
+**Tom, 2026-08-30:** *,,da sind wir wieder am punkt angelangt wo du
+mich sachen fragst wo ziemlich sicher in den specs, altem repo oder
+vision oder neues design schon deklarationen hat die du nun zuerst
+suchst."*
+
+`[cmd]` **Anlass: drei Fragen zu Buddy, deren Antworten in vier
+Dateien standen** — `docs/specs/BuddyandAICoach/` (136 KB),
+`docs/specs/HumanCoach/` (97 KB), `AUTONOMY_ARCHITECTURE.md` (444
+Zeilen), `coach-buddy-killer-feature.md` (1.591 Zeilen).
+
+`[cmd]` **Die ersten beiden nennt `00-QUELLEN.md` beim Namen.**
+
+`[read]` **Der Fehler war die Reihenfolge:** Datenbank gemessen, Luecke
+gesehen, gefragt. **Richtig ist: Spec lesen, dann messen, dann
+fragen.**
+
+### Was eine Luecke in der Datenbank bedeutet
+
+    nicht gebaut          haeufig, und meist spezifiziert
+    nicht entschieden     selten, und dann steht es nirgends
+
+`[read]` **Vor jeder Frage an Tom: steht es in einer Spec?** `[cmd]`
+**Bei C-112 waren von elf Punkten drei gebaut, fuenf spezifiziert und
+nur drei wirklich offen.**
+
 ## Suchen nach der Sache, nicht nach dem Wort
 
 `[cmd]` **Am 2026-08-30 gesucht: *,,noch nicht entwickelt"*.**

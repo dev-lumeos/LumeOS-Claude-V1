@@ -59,3 +59,31 @@ den Server hart, und Tom arbeitet auf demselben Port.**
 
 `[cmd]` **Codex fasst ihn nicht an** — die Regel steht seit
 2026-08-30 in `CLAUDE.md`.
+
+## Bericht
+
+**Claude Code, 2026-08-31.** Mitbeauftragt mit G-281. **Der
+vollstaendige Bericht steht in [G-281](supplements-g-0281-der-treffergrund-in-der-katalogsuche.md#bericht).**
+
+### Gebaut: `tools/gefallene-spalten-pruefen.mjs`, im Gate
+
+`[cmd]` **21 `DROP COLUMN` in der Pipeline, 20 ohne Wiederkehr.**
+
+**Zwei Unterscheidungen entscheiden, ob der Waechter benutzbar ist:**
+
+`[cmd]` **Wiederkehr:** `im_katalog` faellt in
+`144_kimi_wave3_name_bridge.ts:91` **und wird zwei Zeilen weiter neu
+angelegt.** Sie steht live. `[read]` **Wer nur `DROP` zaehlt, meldet
+zwei saubere Lesewege als Fehler** — und wird abgeschaltet.
+
+`[cmd]` **Tests sind keine Lesepfade:** der G-173-Waechter nennt
+`acwr_used` viermal, um einen KOMMENTAR zu pruefen. `[read]` **Ein
+Waechter, der einen Waechter meldet, erzieht dazu, ihn
+abzuschalten.**
+
+`[cmd]` **Gegengeprobt am historischen Fall:** `acwr_used` als
+Lesefeld in `scores-read.ts` eingesetzt — **der Waechter meldet genau
+die Stelle.** Rueckbau byte-gleich.
+
+`[cmd]` **Heute sauber:** 20 Spalten, 372 Codedateien, kein lebender
+Lesepfad darauf.

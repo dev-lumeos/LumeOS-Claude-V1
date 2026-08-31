@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 230 |
+| `todos` | 232 |
 | `laufend_codex` | 6 |
 | `laufend_claudecode` | 6 |
-| `erledigt` | 130 |
-| **gesamt** | **372** |
+| `erledigt` | 131 |
+| **gesamt** | **375** |
 
 ## medical — 42
 
@@ -318,7 +318,7 @@
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 23
+## coach — 25
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -328,7 +328,7 @@
 | `B-25` | befund | mittel | [Geteilte Sitzung im Produktbereich prüfen](erledigt/coach-b-0025-geteilte-sitzung-im-produktbereich-prufen.md) | erledigt | — | — |
 | `C-71` | entscheidung | mittel | [Permissions und Autonomy sind zwei verschiedene Sachen](todos/coach-c-0071-permissions-und-autonomy-sind-zwei-verschiedene-sachen.md) | offen | — | — |
 | `C-75` | befund | mittel | [BSS und Voice sind Neubau](todos/coach-c-0075-bss-und-voice-sind-neubau.md) | offen | — | — |
-| `C-112` | blocker | hoch | [Buddy, Coach und Marketplace — elf Entscheidungen](todos/coach-c-0112-buddy-coach-und-marketplace-elf-entscheidungen.md) | offen | — | — |
+| `C-112` | blocker | hoch | [Buddy, Coach und Marketplace — elf Entscheidungen](erledigt/coach-c-0112-buddy-coach-und-marketplace-elf-entscheidungen.md) | erledigt | — | C-362, C-363, G-282 |
 | `C-114` | befund | mittel | [Was das Vorgaengerrepo beim Coach falsch machte](todos/coach-c-0114-was-das-vorgaengerrepo-beim-coach-falsch-machte.md) | offen | — | — |
 | `C-115` | befund | mittel | [Was der Markt kann und was LumeOS eigen ist](todos/coach-c-0115-was-der-markt-kann-und-was-lumeos-eigen-ist.md) | offen | — | — |
 | `C-173` | befund | mittel | [`MARKETPLACE_PRODUCTS` traegt `inStack` und `evidence`](todos/coach-c-0173-marketplace-products-traegt-instack-und-evidence.md) | offen | — | — |
@@ -337,6 +337,7 @@
 | `C-269` | feature | mittel | [Eine Einladung laesst sich nicht zuruecknehmen](todos/coach-c-0269-eine-einladung-laesst-sich-nicht-zuruecknehmen.md) | offen | — | — |
 | `C-318` | befund | hoch | [ADR-Coach-Permissions weicht von der Umsetzung ab](laufend_codex/coach-c-0318-adr-coach-permissions-weicht-von-der-umsetzung-ab.md) | vorbereitet (codex) | — | — |
 | `C-358` | befund | mittel | [abgelaufene Aktionen bleiben `pending`](erledigt/coach-c-0358-abgelaufene-aktionen-bleiben-pending.md) | erledigt | — | — |
+| `C-362` | feature | mittel | [das Consent-Log ist beschrieben und nicht gebaut](todos/coach-c-0362-das-consent-log-ist-beschrieben-und-nicht-gebaut.md) | offen | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](todos/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | offen | — | — |
@@ -345,8 +346,9 @@
 | `G-169` | befund | mittel | [`coach.checkins` und `checkin_templates` liegen ungelesen](todos/coach-g-0169-coach-checkins-und-checkin-templates-liegen-ungelesen.md) | offen | — | — |
 | `G-244` | befund | mittel | [die rechten Kacheln im Human-Coach-Reiter sind Attrappe](todos/coach-g-0244-die-rechten-kacheln-im-human-coach-reiter-sind-attrappe.md) | offen | — | — |
 | `G-277` | befund | hoch | [der Rechte-Reiter nennt einen Grund, den es nicht gibt](erledigt/coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md) | erledigt | — | G-280 |
+| `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 
-## quer — 79
+## quer — 80
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -404,6 +406,7 @@
 | `C-354` | feature | hoch | [eine Lesefunktion fuer offene Coach-Aktionen](erledigt/quer-c-0354-eine-lesefunktion-fuer-offene-coach-aktionen.md) | erledigt | — | C-358 |
 | `C-357` | befund | mittel | [vier ADRs widersprechen neueren Entscheidungen](erledigt/quer-c-0357-vier-adrs-widersprechen-neueren-entscheidungen.md) | erledigt | — | — |
 | `C-361` | befund | mittel | [die Datenbank fuehrt keine Pipeline-Historie](laufend_codex/quer-c-0361-die-datenbank-fuehrt-keine-pipeline-historie.md) | vorbereitet (codex) | — | — |
+| `C-363` | entscheidung | niedrig | [drei oekonomische Befunde im Marketplace](todos/quer-c-0363-drei-oekonomische-befunde-im-marketplace.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

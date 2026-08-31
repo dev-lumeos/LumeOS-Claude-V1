@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **30 Punkte tragen `typ: entscheidung`
+`[cmd]` **31 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -925,6 +925,40 @@ nicht.** `[cmd]` **`LAUFEND.md` ist genau daran gestorben.**
 `[read]` **Ein Mittelweg waere, ihn auf Zuruf zu behalten** — er wird
 in jedem UI-Auftrag ohnehin verlangt, **und die Zahl steht dann im
 Bericht statt in einem Lauf, den niemand ansieht.**
+
+## C-363 — drei oekonomische Befunde im Marketplace
+
+**Modul:** quer · **angelegt:** 2026-08-30 · **Datei:** `todos/quer-c-0363-drei-oekonomische-befunde-im-marketplace.md`
+
+## Befund
+
+Aus C-112, 2026-08-30. **Der einzige Teil, der wirklich eine
+Entscheidung braucht.**
+
+`[cmd]` **Creator erhaelt real 64 statt 80 Prozent** — Doppelabzug,
+`SPEC_09:198-200`.
+
+`[cmd]` **Das Abo ist wirtschaftlich gratis** — 1:1-Voucher.
+
+`[cmd]` **Drei Gebuehrensaetze stehen nebeneinander:** 15 Prozent
+gegen 20, 10 und 25.
+
+## Und acht Rechtsfragen
+
+`[read]` **Die schaerfste:** die *,,kein E-Geld"*-Konstruktion wird
+vom eigenen Top-up unterlaufen — **echtes Geld hinein, nicht
+auszahlbarer, verfallender EUR-Saldo heraus.**
+
+## Warum `niedrig`
+
+`[read]` **C-112 sagt es selbst:** *,,Marketplace zuletzt, blockiert
+nichts, braucht vorher den Anwalt."*
+
+`[cmd]` **Und der Bestand bestaetigt es:** `/v2/marketplace` liefert
+404, der Verweis zeigt auf eine eigene Domain (A-36).
+
+`[read]` **Nichts davon haelt die Arbeit auf.** **Es gehoert
+entschieden, bevor gebaut wird — nicht vorher.**
 
 ## G-219 — `LiveWorkout` hat keinen Aufrufer mehr
 

@@ -94,7 +94,94 @@ aus, und Tom arbeitet dort mit.**
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Gemessen am 2026-08-31 auf `dev`; keine Produkt-, Katalog- oder App-Aenderung.**
+
+| Punkt | Urteil | Messung |
+|---|---|---|
+| C-202 | **teilweise ueberholt, offen** | Die frueher nur im Report genannten Produktdaten sind gebaut, aber nicht Teil des Supplements-Nutzermodells. |
+| C-260 | **teilweise erledigt, offen** | Der Rueckfluss aus den maschinenlesbaren Daten besteht fuer Aliase und vier Identitaetsarten; CAS und Peptidsequenzen fehlen weiterhin. |
+
+### C-202 - zwei Ebenen existieren, aber sie sind nicht dieselbe Sache
+
+`supplements.supplements` hat 596 Stoffe, davon **412 sichtbare**. Die
+Stoffebene traegt **1.226** maschinenlesbare Stoffkennungen: 272 UNII,
+242 Summenformeln, 241 PubChem-CIDs, 239 InChIKeys, 155 ChEMBL-IDs und
+77 CAS-Kandidaten. Das sind chemische Identitaeten, keine Handels- oder
+Packungskennungen.
+
+Die beim Anlegen von C-202 genannten Produktzahlen sind inzwischen als
+Kimi-Import in `wissen.product_entities` vorhanden:
+
+| entity_type | Zeilen | weiterer Befund |
+|---|---:|---|
+| `product` | 50 | 73 Zutaten-Referenzen; alle loesen gegen `supplements.supplements.slug` auf |
+| `brand` | 120 | 120 Markenkennungen |
+| `manufacturer` | 63 | 63 Herstellerkennungen |
+| `brand_index` | 120 | Such-/Indexeintraege |
+
+Das ist keine Annahme aus dem alten Punkt: `273d_wissen_produkte.ts`
+liest die vier Kimi-Dateien und sichert genau diese Sollzahlen. Die
+Produkt-Zutaten sind damit absichtlich an den Stoffkatalog anschlussfaehig;
+eine Datenbank-FK gibt es nicht.
+
+Die Grenze bleibt sichtbar:
+
+- `user_inventory`, `stack_items`, Einnahmen und Dosierungen referenzieren
+  `supplement_id`, nie ein Produkt. Der Nutzer nimmt im gebauten Modell
+  also einen Stoff, nicht eine konkrete Packung.
+- Es gibt keine relationale Supplements-Tabelle fuer Produkte, Marken,
+  Hersteller, Varianten oder Produktkennungen. In `wissen` liegen sie als
+  generische Produkt-Entitaeten mit JSON-Rohdaten. `external_id` ist die
+  Kimi-Kennung (`prd_...`), kein GTIN/EAN.
+- Von 32 Produktvarianten haben **0** eine UPC/EAN und **0** eine SKU.
+  32 Produkte sind wegen fehlender `serving_size` markiert; nur 4 von 50
+  enthalten eine Serviergroesse. Preis und `price_per_serving` liegen zwar
+  in den Rohdaten, aber nicht als `supplements.cost_per_serving`.
+
+Damit ist die Vorfrage beantwortet: **Ein Praeparat ist im Bestand ein
+Produkt aus Stoffen, nicht ein Stoff.** Beide Ebenen gibt es, doch nur die
+Stoffebene ist derzeit Nutzerbestand und Einnahmekette. Ob die vorhandene
+Produktebene dorthin angeschlossen werden soll, ist die ausstehende
+Produktentscheidung; dieser Auftrag baut sie nicht.
+
+### C-260 - welcher Bericht gemeint ist und was wirklich rueckfloss
+
+C-260 meint nicht alle derzeit 1.944 Kimi-Reportdateien, sondern den
+alten Arbeitsbereich `reports/crawl_027_ws/` (11 Dateien). Seine
+Identitaetspruefung steht in `A.json` fuer 37 Peptid-/Substanz-Eintraege;
+`crawl_027_profiles/` sind die 37 zugehoerigen Profilberichte. Das
+Kimi-Output-Contract trennt bewusst Arbeitsberichte unter `reports/` von
+maschinenlesbaren Daten unter `data/`; nur letztere sind ein Importinput.
+
+Gegen die aktuellen 446 maschinenlesbaren Stoffdatensaetze loesen sich
+**36 von 37** Eintraegen aus `A.json` per kanonischem Namen oder Alias
+auf. Der einzige Rest ist bereits dort so markiert:
+`5-Amino-1MQ (NOT in dataset - evaluate)`.
+
+Fuer diese 36 Datensaetze ist der Rueckfluss in den Livekatalog:
+
+| Feld in `data/` | dort belegt | gleiches Feld live | fehlt live |
+|---|---:|---:|---:|
+| UNII | 32 | 32 | 0 |
+| PubChem-CID | 30 | 30 | 0 |
+| ChEMBL-ID | 13 | 13 | 0 |
+| InChIKey | 28 | 28 | 0 |
+| Aliase | 57 | 57 | 0 |
+| CAS-Nummer | 33 | 0 | **33** |
+| Peptidsequenz | 27 | 0 | **27** |
+
+Die vier Identitaetsarten und Aliase sind somit seit dem Neuaufbau
+ueberholt; der alte Befund "keine Daten" gilt dafuer nicht mehr. CAS ist
+in den aktuellen Kimi-Daten `cas_number`, waehrend live nur
+`cas_candidates` vorkommt; keine der 33 Quellnummern ist dort vorhanden.
+Fuer Peptidsequenzen findet `information_schema` im Supplements-Schema
+ueberhaupt keine Zielspalte. Der Rueckfluss ist deshalb nicht vollstaendig
+und C-260 nicht schliessbar.
+
+Der alte Arbeitsbericht und die heutige Datenquelle widersprechen sich
+zusaetzlich bei der Sequenzanzahl (35 in `A.json`, 27 in `data/`). Das ist
+ein Quellunterschied, keine Zahl zum Wegmitteln; fuer den Import wurde die
+aktuelle maschinenlesbare Quelle gezahlt.
 
 ## Abnahme
 

@@ -106,3 +106,31 @@ den Server hart, und Tom arbeitet auf demselben Port.**
 
 `[cmd]` **Codex fasst ihn nicht an** — die Regel steht seit
 2026-08-30 in `CLAUDE.md`.
+
+## Bericht
+
+**Claude Code, 2026-08-31.** Mitbeauftragt mit G-281. **Der
+vollstaendige Bericht steht in [G-281](supplements-g-0281-der-treffergrund-in-der-katalogsuche.md#bericht).**
+
+### Ueberholt: die Pfade sind vollstaendig
+
+`[cmd]` **Die zitierten Bruchstuecke stehen so nicht in der Datei.**
+Der Befund zitiert `C 89.50 823.53 109.24 767.88 A` — vier Zahlen.
+**Im Repo steht `C 89.50 823.53 107.08 773.44 109.24 767.88 A`** —
+sechs, korrekt. Dem Zitat fehlt die Mitte. Beim zweiten Fall dasselbe.
+
+`[cmd]` **Gegengeprobt, weil ein Zitat kein Beleg ist:** beide
+betroffenen Pfade vollstaendig in einen Browser gelegt — **0
+Konsolenfehler**, Laenge 6.276 bzw. 6.273, Groesse 630x1185.
+
+`[cmd]` **Am Schirm (`/v2/recovery`, angemeldet):** 0 SVG-Fehler,
+**160 Pfade, 160 gezeichnet, 0 leer.** `backup/g102-karte.png`.
+
+### Der Waechter hat keine Luecke
+
+`[cmd]` **`svgpfade-pruefen.mjs`: 160 Pfade, 0 bemaengelt** — und mit
+`--selbsttest-kaputt` faellt genau der eingebaute Fehler. `[read]`
+**Ohne diesen Schalter waere „0 bemaengelt" nicht von „prueft nichts"
+zu unterscheiden.** Ein Waechter sichert ihn jetzt.
+
+`[read]` **Nicht behoben, sondern ueberholt.**
