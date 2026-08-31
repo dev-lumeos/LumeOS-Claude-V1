@@ -14,6 +14,13 @@ import {
   planAendernSchema,
   planAnlegen,
   planAnlegenSchema,
+  // G-298: die Positionen - hinzufuegen, aendern, entfernen.
+  eintragAnlegenSchema,
+  eintragAendernSchema,
+  eintragLoeschenSchema,
+  planEintragAnlegen,
+  planEintragAendern,
+  planEintragLoeschen,
 } from '../../../../lib/nutrition/plan-write'
 // G-274: der Bestaetigungsweg — Flow 4.
 import {
@@ -115,6 +122,51 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // ── G-298: die Eintraege ────────────────────────────────────
+  //
+  // `[read]` **Dieselbe Form wie oben** - eine Route, ein `art`.
+  // Drei eigene Routen waeren drei Stellen mit derselben
+  // Fehlerbehandlung.
+  if (art === 'eintrag') {
+    const geprueft = eintragAnlegenSchema.safeParse(roh)
+    if (!geprueft.success) {
+      return ungueltig(geprueft.error.issues[0]?.message ?? 'Eingabe ungueltig.',
+        geprueft.error.issues.map(i => ({ feld: i.path.join('.'), meldung: i.message })))
+    }
+    try {
+      return NextResponse.json(await planEintragAnlegen(geprueft.data))
+    } catch (error) {
+      return errorResponse(error)
+    }
+  }
+
+  if (art === 'eintrag_aendern') {
+    const geprueft = eintragAendernSchema.safeParse(roh)
+    if (!geprueft.success) {
+      return ungueltig(geprueft.error.issues[0]?.message ?? 'Eingabe ungueltig.',
+        geprueft.error.issues.map(i => ({ feld: i.path.join('.'), meldung: i.message })))
+    }
+    try {
+      return NextResponse.json(await planEintragAendern(geprueft.data))
+    } catch (error) {
+      return errorResponse(error)
+    }
+  }
+
+  if (art === 'eintrag_loeschen') {
+    const geprueft = eintragLoeschenSchema.safeParse(roh)
+    if (!geprueft.success) {
+      return ungueltig(geprueft.error.issues[0]?.message ?? 'Eingabe ungueltig.',
+        geprueft.error.issues.map(i => ({ feld: i.path.join('.'), meldung: i.message })))
+    }
+    try {
+      return NextResponse.json(await planEintragLoeschen(geprueft.data))
+    } catch (error) {
+      return errorResponse(error)
+    }
+  }
+
   return ungueltig(
-    'Unbekannte Art. Erlaubt: plan, plan_aendern, bestaetigen, ueberspringen.')
+    'Unbekannte Art. Erlaubt: plan, plan_aendern, bestaetigen, ueberspringen, '
+    + 'eintrag, eintrag_aendern, eintrag_loeschen.')
 }

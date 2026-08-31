@@ -24,12 +24,51 @@
 //    ueber `nutrition.recipe_nutrition`, BLS-Eintraege ueber
 //    `food_nutrient_snapshot` — beide aus C-150.
 //
+// ══ WAS DER PLANNER IST — die Vorfrage aus G-299 ═══════════════════
+//
+// **Tom, 2026-08-31:** *,,planner ist irgendwas aber noch nicht
+// brauchbar"* — und: *,,was ist der Planner, wenn es den
+// Meal-plans-Reiter gibt?"*
+//
+// `[cmd]` **Gemessen am 2026-08-31:** `SPEC_10_COMPONENTS.md` fuehrt
+// **acht Meal-Plan-Komponenten und keinen Planner.** `MealPlanDayView`
+// heisst dort *,,Ein Tag innerhalb eines Plans"*.
+//
+// `[cmd]` **Beide Reiter lesen denselben Plan** (`ladePlan`), zeigen
+// aber Verschiedenes:
+//
+//     Meal plans   Karte, Ziele, Lebenszyklus, Herkunft, Einhaltung
+//                  -> WAS der Plan ist
+//     Planner      Wochengitter, Zelle je Mahlzeit und Tag
+//                  -> WANN was gegessen wird
+//
+// `[read]` **Die Antwort ist deshalb nicht ,,loeschen", sondern
+// ,,zustaendig machen":** eine Position gehoert in ein Raster aus Tag
+// und Mahlzeit — **genau das ist dieses Gitter.** Der Planner ist ab
+// G-298 die **Bearbeitungsflaeche des aktiven Plans**; Meal plans
+// bleibt seine Beschreibung.
+//
+// `[read]` **Keine dritte Ansicht** (Auftrag): das Formular klappt IN
+// der Zelle auf, es entsteht kein eigener Ort.
+//
+// ══ WARUM ER AUF DEM 18.6. OEFFNETE ════════════════════════════════
+//
+// `[cmd]` **Nicht die Navigation war schuld.** `PlannerEchtTab` sucht
+// seit jeher die Woche, in der heute liegt (`findIndex`), und faellt
+// auf die erste zurueck. `[cmd]` **Der Plan hat nur drei Wochen:
+// 18.6.-24.6., 2.7.-8.7., 9.7.-15.7.** — **heute ist in keiner.**
+//
+// `[read]` **Der Rueckfall war stumm.** Jetzt sagt die Leiste, dass
+// die gezeigte Woche nicht die laufende ist, und **ein Knopf fuehrt
+// zur naechstgelegenen.**
+//
 // **NICHT GEBAUT: der Generator.** `[read]` Tom, im Auftrag: *„Ein
 // Plan, den der Nutzer fuellt, ist ein Kalender. Ein Plan, den das
 // System vorschlaegt, ist eine Ernaehrungsempfehlung."* Das ist Buddys
 // Aufgabe. `Copy week` kopiert deshalb eine vorhandene Woche
 // (`copy_meal_plan_week`), es erfindet keine.
 import * as React from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, Icon, Pill, InEntwicklungKnopf } from '@lumeos/ui'
 
 // `[cmd]` **NUR TYPEN AUS `plan-lesen.ts`.** Die Datei importiert
@@ -39,8 +78,17 @@ import { Card, Icon, Pill, InEntwicklungKnopf } from '@lumeos/ui'
 // Bauen einmal ausgeloest und gemessen.
 //
 // Die Beschriftung steht deshalb in `plan-model.ts`, ohne Serverbezug.
-import type { PlanDaten, PlanWoche } from '../../../lib/nutrition/plan-lesen'
+import type {
+  PlanDaten, PlanWoche, PlanEintrag,
+} from '../../../lib/nutrition/plan-lesen'
 import { SLOT_LABEL } from '../../../lib/nutrition/plan-model'
+// G-298: die Positionen bearbeiten - das Formular sitzt in der Zelle.
+import {
+  EintragForm, EintragLoeschen, type Quelle,
+} from './plan-eintrag-editor'
+import type { MahlzeitTyp } from '../../../lib/nutrition/plan-eintrag-lage'
+import { laufzeitVon, laufzeitSatz, LAUFZEIT_MARKE }
+  from '../../../lib/nutrition/plan-eintrag-lage'
 
 const WOCHENTAGE = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -67,12 +115,29 @@ function heuteIso(): string {
 }
 
 export function PlannerEchtTab({ d }: { d: PlanDaten }) {
+  const router = useRouter()
   const [woche, setWoche] = React.useState(() => {
     // Die Woche, in der heute liegt — sonst die erste.
     const heute = heuteIso()
     const i = d.wochen.findIndex(w => w.tage.some(t => t.plan_date === heute))
     return i >= 0 ? i : 0
   })
+
+  /**
+   * Nach jeder Aenderung neu lesen.
+   *
+   * `[read]` **`router.refresh()`, kein eigener Zustand.** Die Zahlen
+   * der Zelle (kcal je Eintrag) rechnet der Leseweg aus `recipe_nutrition`
+   * — sie im Browser nachzuhalten hiesse, dieselbe Rechnung ein
+   * zweites Mal zu bauen. **Zwei Wahrheiten statt einer.**
+   */
+  const neuLaden = React.useCallback(() => { router.refresh() }, [router])
+
+  /** Die Rezepte als Auswahl — mehr braucht das Formular nicht. */
+  const rezeptWahl: Quelle[] = React.useMemo(
+    () => d.rezepte.map(r => ({ id: r.id, name: r.name_de })),
+    [d.rezepte],
+  )
 
   if (d.ladefehler) {
     return (
@@ -115,8 +180,54 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
   const heute = heuteIso()
   const eintraegeDerWoche = w.tage.reduce((s, t) => s + t.eintraege.length, 0)
 
+  // ══ G-298: die Laufzeit, aus den Tagen gelesen ═══════════════════
+  //
+  // `[cmd]` **`start_date`, `days_count` und `lifecycle_type` sind bei
+  // diesem Plan alle `NULL`** (gemessen 2026-08-31) — **die Laufzeit
+  // steht nur in den Tageszeilen.** Eine Rechnung aus `start_date`
+  // ergaebe `NULL`, und die Karte sagte weiter nur *„aktiv"*.
+  const alleTage = d.wochen.flatMap(x => x.tage.map(t => t.plan_date))
+  const laufzeit = laufzeitVon(alleTage, heute)
+
+  // `[read]` **Die Coach-Sperre wirkt auch hier.** `[cmd]` G-269:
+  // `coach_created` und `marketplace` sind ohne Freigabe gesperrt —
+  // sonst liesse sich ein gesperrter Plan ueber seine Positionen
+  // umbauen. **Der Schreibweg prueft es ebenfalls**; das hier ist die
+  // Anzeige, nicht die Regel.
+  const herkunft = d.plan.plan_origin
+  const bearbeitbar = herkunft !== 'coach_created' && herkunft !== 'marketplace'
+
+  // Die Woche, die heute am naechsten liegt — fuer den Sprungknopf.
+  const heuteWoche = d.wochen.findIndex(x => x.tage.some(t => t.plan_date === heute))
+  const zeigtLaufende = heuteWoche >= 0 && heuteWoche === woche
+
   return (
     <div>
+      {/* ══ G-298/G-299: sagen, was los ist ═══════════════════════
+          **Tom, 2026-08-31:** *,,der Plan laeuft vom 18.06. bis
+          08.07., heute ist der 31.08., und die Karte sagt aktiv."*
+          `[read]` **Beides stimmt einzeln und ergibt zusammen keinen
+          Sinn.** Der Zustand in der Datenbank bleibt `active` — ihn
+          beim Lesen umzuschreiben waere ein Schreibvorgang. **Also
+          wird er gezeigt UND eingeordnet.** */}
+      {laufzeit.art !== 'laeuft' && (
+        <div className="v2-insight" style={{ marginBottom: 12 }}>
+          <div className="v2-insight-mark" />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="v2-insight-title">
+              {LAUFZEIT_MARKE[laufzeit.art] ?? 'Laufzeit'}
+            </div>
+            <div className="v2-insight-body">
+              {laufzeitSatz(laufzeit)}
+              {!zeigtLaufende && heuteWoche < 0 && (
+                <> Der Planner zeigt deshalb die erste Planwoche, nicht die
+                  laufende — es gibt für heute keine.</>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
         <button
           type="button"
@@ -139,6 +250,22 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
         >
           <Icon name="chevron_right" className="v2-ic v2-ic-sm" />
         </button>
+
+        {/* `[cmd]` **Der Planner oeffnete auf dem 18.6.** (G-299) -
+            nicht wegen der Navigation, sondern weil KEINE der drei
+            Wochen heute enthaelt. `[read]` **Der Rueckfall war
+            stumm; jetzt steht er da.** */}
+        {heuteWoche >= 0 && !zeigtLaufende && (
+          <button type="button" className="v2-btn v2-btn-sm"
+                  onClick={() => setWoche(heuteWoche)}>
+            Zur laufenden Woche
+          </button>
+        )}
+        {heuteWoche < 0 && (
+          <span className="v2-dim" style={{ fontSize: 10.5 }}>
+            keine Planwoche für heute
+          </span>
+        )}
 
         {w.name && <Pill>{w.name}</Pill>}
         {/* `[cmd]` `copied_from_week_id` steht in der Tabelle — eine
@@ -221,9 +348,14 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
                 {w.tage.map(t => (
                   <Zelle
                     key={`${t.id}-${slot}`}
+                    tagId={t.id}
                     tag={t.plan_date}
                     heute={heute}
                     eintraege={t.eintraege.filter(e => e.meal_type === slot)}
+                    slot={slot as MahlzeitTyp}
+                    rezepte={rezeptWahl}
+                    bearbeitbar={bearbeitbar}
+                    onAenderung={neuLaden}
                   />
                 ))}
               </React.Fragment>
@@ -256,43 +388,123 @@ function Ziel({ label, wert, einheit }: {
 }
 
 /**
- * Eine Zelle des Rasters.
+ * Eine Zelle des Rasters — seit G-298 bearbeitbar.
  *
  * `[read]` **Eine leere Zelle bleibt leer** — kein Platzhalter, kein
  * „—". Im Entwurf war jede Zelle gefuellt, weil die Daten erfunden
  * waren; echte Plaene haben Luecken, und die leere Woche des Seeds ist
  * genau dafuer da.
+ *
+ * `[read]` **Der Plus-Knopf erscheint beim Darauffahren**, nicht
+ * dauerhaft: 28 sichtbare Plus-Zeichen in einem Gitter sind Rauschen.
+ * **Bei Tastaturbedienung erscheint er ueber `:focus-within`** — sonst
+ * waere er ohne Maus nicht erreichbar.
  */
-function Zelle({ tag, heute, eintraege }: {
+function Zelle({ tagId, tag, heute, eintraege, slot, rezepte, bearbeitbar, onAenderung }: {
+  tagId: string
   tag: string
   heute: string
-  eintraege: Array<{ id: string; bezeichnung: string; kcal: number | null
-    entry_type: string; amount_g: number | null; planned_servings: number | null }>
+  eintraege: PlanEintrag[]
+  slot: MahlzeitTyp
+  rezepte: readonly Quelle[]
+  /** G-269: bei gesperrter Herkunft wird nichts angeboten. */
+  bearbeitbar: boolean
+  onAenderung: () => void
 }) {
   const istHeute = tag === heute
+  // `null` = zu, `'neu'` = Formular fuer einen neuen Eintrag,
+  // sonst die Id des Eintrags, der bearbeitet wird.
+  const [offen, setOffen] = React.useState<string | null>(null)
+
+  const fertig = () => { setOffen(null); onAenderung() }
+
   return (
-    <div style={{
-      padding: 8, minHeight: 60, borderTop: '1px solid var(--border)',
-      background: istHeute
-        ? 'color-mix(in oklch, var(--acc-nutri) 5%, transparent)'
-        : 'transparent',
-      fontSize: 11,
-    }}>
+    <div
+      className="v2-planner-zelle"
+      style={{
+        padding: 8, minHeight: 60, borderTop: '1px solid var(--border)',
+        background: istHeute
+          ? 'color-mix(in oklch, var(--acc-nutri) 5%, transparent)'
+          : 'transparent',
+        fontSize: 11,
+      }}
+    >
       {eintraege.map(e => (
         <div key={e.id} style={{ marginBottom: 6 }}>
-          <div style={{ fontSize: 11, color: 'var(--fg)', lineHeight: 1.35 }}>
-            {e.bezeichnung}
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 11, color: 'var(--fg)', lineHeight: 1.35 }}>
+                {e.bezeichnung}
+              </div>
+              <div className="v2-num v2-dim" style={{ fontSize: 10 }}>
+                {e.kcal === null ? '—' : `${e.kcal.toLocaleString('de-DE')} kcal`}
+                {e.entry_type === 'recipe' && e.planned_servings !== null
+                  ? ` · ${e.planned_servings.toLocaleString('de-DE')}×`
+                  : e.amount_g !== null
+                    ? ` · ${e.amount_g.toLocaleString('de-DE')} g`
+                    : ''}
+              </div>
+            </div>
+            {bearbeitbar && offen !== e.id && (
+              <span className="v2-planner-werkzeug"
+                    style={{ display: 'inline-flex', gap: 1 }}>
+                <button
+                  type="button"
+                  className="v2-btn v2-btn-ghost v2-btn-sm"
+                  aria-label={`${e.bezeichnung} ändern`}
+                  onClick={() => setOffen(e.id)}
+                >
+                  <Icon name="edit" className="v2-ic v2-ic-sm" />
+                </button>
+                <EintragLoeschen id={e.id} onFertig={onAenderung} />
+              </span>
+            )}
           </div>
-          <div className="v2-num v2-dim" style={{ fontSize: 10 }}>
-            {e.kcal === null ? '—' : `${e.kcal.toLocaleString('de-DE')} kcal`}
-            {e.entry_type === 'recipe' && e.planned_servings !== null
-              ? ` · ${e.planned_servings.toLocaleString('de-DE')}×`
-              : e.amount_g !== null
-                ? ` · ${e.amount_g.toLocaleString('de-DE')} g`
-                : ''}
-          </div>
+          {offen === e.id && (
+            <EintragForm
+              tagId={tagId}
+              vorhanden={{
+                id: e.id,
+                entry_type: e.entry_type,
+                meal_type: e.meal_type,
+                recipe_id: e.recipe_id,
+                food_id: e.food_id,
+                custom_food_id: null,
+                amount_g: e.amount_g,
+                planned_servings: e.planned_servings,
+                bezeichnung: e.bezeichnung,
+              }}
+              rezepte={rezepte}
+              mahlzeit={slot}
+              onFertig={fertig}
+              onAbbruch={() => setOffen(null)}
+            />
+          )}
         </div>
       ))}
+
+      {bearbeitbar && offen === 'neu' && (
+        <EintragForm
+          tagId={tagId}
+          vorhanden={null}
+          rezepte={rezepte}
+          mahlzeit={slot}
+          onFertig={fertig}
+          onAbbruch={() => setOffen(null)}
+        />
+      )}
+
+      {bearbeitbar && offen === null && (
+        <button
+          type="button"
+          className="v2-btn v2-btn-ghost v2-btn-sm v2-planner-werkzeug v2-planner-werkzeug-unten"
+          aria-label={`Eintrag hinzufügen — ${tag}`}
+          onClick={() => setOffen('neu')}
+          style={{ width: '100%', justifyContent: 'center', padding: '2px 0' }}
+        >
+          <Icon name="plus" className="v2-ic v2-ic-sm" />
+        </button>
+      )}
     </div>
   )
 }

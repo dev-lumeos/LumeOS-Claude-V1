@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **27 Punkte tragen `typ: entscheidung`
+`[cmd]` **28 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -167,6 +167,38 @@ tragen** — **und wie viele wirklich leer sind.**
     automatisch einen Alias, oder nur einen Vorschlag zum Bestätigen?
     Automatisch ist bequemer, aber eine Zuordnung wie „Hüttenkäse" auf
     einen Frischkäse ist eine inhaltliche Aussage, die falsch sein kann.
+
+## C-369 — was mit einem abgelaufenen Plan geschieht
+
+**Modul:** nutrition · **angelegt:** 2026-08-31 · **Datei:** `todos/nutrition-c-0369-was-mit-einem-abgelaufenen-plan-geschieht.md`
+
+## Befund
+
+Aus G-298, Claude Code, 2026-08-31.
+
+`[cmd]` **Der aktive Plan endete am 15.07., heute ist der 31.08.**
+`[cmd]` **Die Karte liest jetzt *aktiv · abgelaufen*** — der Zustand
+wird gezeigt und eingeordnet, nicht ueberschrieben.
+
+`[cmd]` **`start_date`, `days_count` und `lifecycle_type` sind alle
+`NULL`** — **die Laufzeit steht ausschliesslich in den Tageszeilen.**
+
+## Die Frage
+
+**Was soll geschehen, wenn ein Plan auslaeuft?**
+
+`[cmd]` **E-31 hat drei Zyklen festgelegt:** `once` endet, `rollover`
+wiederholt, `sequence` uebergibt an den naechsten.
+
+`[read]` **Bei diesem Plan ist keiner gesetzt** — **er stammt aus der
+Zeit vor der Unterscheidung.**
+
+`[read]` **Also zwei Fragen:** **was geschieht mit Altplaenen ohne
+Zyklus** — **und wer setzt den Uebergang, wenn ein Zyklus gesetzt
+ist?**
+
+`[cmd]` **Einen Hintergrundlauf gibt es nicht** — dieselbe Frage wie
+bei C-358, dort mit *beim Anzeigevermerk bleiben* beantwortet.
 
 ## G-134 — Die vier Filtergruppen gibt es in den Daten nicht
 

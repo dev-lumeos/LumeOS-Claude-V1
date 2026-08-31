@@ -7,6 +7,8 @@ angelegt: 2026-08-31
 braucht: []
 kind_von: G-226
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-31
 beruehrt:
   tabellen: [nutrition.food_tags]
 zahlen:
@@ -52,5 +54,5 @@ ist.**
 
 ## Auftrag
 
-**Vorbereitet mit G-296 am 2026-08-31.** Der Auftragstext
+**Mitbeauftragt mit G-296 am 2026-08-31.** Der Auftragstext
 und der Bericht stehen dort.

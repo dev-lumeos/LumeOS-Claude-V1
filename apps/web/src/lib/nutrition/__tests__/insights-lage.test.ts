@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url'
 
 import {
   FENSTER, imFenster, schnitt, pfadMitLuecken,
-  deckung, stufeVon, STUFE_FARBE, STUFE_TEXT, tagNummer,
+  deckung, stufeVon, STUFE_FARBE, STUFE_TEXT,
   istVollstaendig, luekenSatz, restVon,
   anteil, belastbarkeit, sortiere, DUENN_SATZ,
   DEFIZIT_WIDERSPRUCH,
@@ -188,21 +188,28 @@ test('G-295: die Kachel zeigt den Hinweis statt eines gefaerbten Gitters', () =>
     'das Gitter wird gebaut, bevor das fehlende Ziel geprueft ist')
 })
 
-test('G-295: die Tageszahl im Feld ist der Tag, nicht Tag+Monat', () => {
-  // `[cmd]` **Gefunden am 2026-08-31 auf dem Bildschirmfoto:** alle 28
-  // Felder trugen 48, 58, 68 … 318. **Der Typecheck sah nichts** — die
-  // Bastelei `kurzDatum(iso).replace('.','').split('.')[0]` lieferte
-  // die ganze Zeit einen gueltigen String.
-  assert.equal(tagNummer('2026-08-04'), '4')
-  assert.equal(tagNummer('2026-08-31'), '31')
-  assert.equal(tagNummer('2026-11-01'), '1')
-  // Und der Fehler selbst: Tag und Monat duerfen nicht verschmelzen.
-  assert.notEqual(tagNummer('2026-08-04'), '48')
-  // Kein Feld traegt mehr als zwei Ziffern.
-  for (let t = 1; t <= 31; t += 1) {
-    const iso = `2026-08-${String(t).padStart(2, '0')}`
-    assert.ok(tagNummer(iso).length <= 2, `${iso} ergibt ${tagNummer(iso)}`)
-  }
+test('G-297: das Feld bleibt klein — keine Ziffer, gedeckelte Breite', () => {
+  // **Tom, 2026-08-31:** *,,tagesdeckung geht kleiner."*
+  //
+  // `[cmd]` **Vorher: `repeat(7, 1fr)` mit `aspectRatio: 1`** — ein
+  // Feld war ein Siebtel der Kartenbreite hoch, also rund 90 px.
+  // `[read]` **Die Deckelung ist die Wirkung**, nicht die Ziffer:
+  // ohne sie waechst das Gitter wieder mit der Karte.
+  const b = block(ohneKommentare(KACHELN), 'HeatmapKachel')
+  assert.doesNotMatch(b, /repeat\(7, 1fr\)/,
+    'das Gitter waechst wieder mit der Kartenbreite')
+  assert.match(b, /minmax\(0, 26px\)/, 'die Feldbreite ist nicht gedeckelt')
+
+  // `[cmd]` **A-59: `tagNummer` ist entfernt, nicht nur unbenutzt.**
+  const lage = ohneKommentare('apps/web/src/lib/nutrition/insights-lage.ts')
+  assert.doesNotMatch(lage, /(?<![a-zA-Z0-9_])tagNummer(?![a-zA-Z0-9_])/,
+    'tagNummer lebt weiter, obwohl niemand sie ruft')
+  assert.doesNotMatch(b, /(?<![a-zA-Z0-9_])tagNummer(?![a-zA-Z0-9_])/,
+    'die Ziffer steht wieder im Feld')
+
+  // Und die Legende ist eine Zeile, keine Liste — sonst sind es
+  // wieder fuenf Zeilen unter dem Gitter.
+  assert.match(b, /flexWrap: 'wrap'/, 'die Legende ist keine Flex-Zeile mehr')
 })
 
 test('G-295: alle fuenf Stufen stehen in der Legende', () => {

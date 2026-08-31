@@ -151,7 +151,13 @@
 .v2-planner-wrap { overflow-x: auto; }
 .v2-planner {
   display: grid;
-  grid-template-columns: 100px repeat(7, 1fr);
+  /* [cmd] G-298: `1fr` war `minmax(auto, 1fr)` - eine Spalte konnte
+     nicht unter ihre Inhaltsbreite schrumpfen. Mit den Werkzeugknoepfen
+     in der Zelle wuchs dieses Minimum, und Sa/So standen ausserhalb
+     der Karte (gemessen am 2026-08-31 auf 1440 px).
+     [read] `minmax(0, 1fr)` erlaubt das Schrumpfen; der Text bricht
+     dann um, statt das Gitter zu sprengen. */
+  grid-template-columns: 100px repeat(7, minmax(0, 1fr));
   gap: 6px;
   min-width: 640px;
 }
@@ -395,4 +401,69 @@
     border-bottom: 1px solid var(--border);
   }
   .v2-food-filter-gruppen { grid-template-columns: 1fr; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   G-298: die Werkzeuge einer Planner-Zelle
+   ════════════════════════════════════════════════════════════════
+
+   [read] Die Knoepfe erscheinen beim Darauffahren. 28 Zellen mit je
+   drei dauerhaft sichtbaren Knoepfen sind Rauschen; das Gitter soll
+   den Plan zeigen, nicht seine Bedienung.
+
+   [read] :focus-within ist die zweite Bedingung und nicht optional -
+   ohne sie waeren die Knoepfe per Tastatur unerreichbar. Wer mit Tab
+   in die Zelle geht, sieht sie.
+
+   [read] Und `opacity` statt `display: none`: der Platz bleibt
+   reserviert, sonst springt die Zeile beim Darauffahren. */
+/* [cmd] Gemessen am 2026-08-31: im Fluss verschmaelerten die
+   Knoepfe die Textspalte, die kcal-Zeile brach auf vier Zeilen um
+   ("789 / kcal / . / 1x") und die Reihen wurden doppelt so hoch -
+   auch unsichtbar (`opacity: 0`) belegen sie Platz.
+   [read] Also aus dem Fluss nehmen: die Zelle wird `relative`, die
+   Knoepfe legen sich oben rechts darueber. Der Text bekommt die
+   ganze Breite zurueck. */
+.v2-planner-zelle { position: relative; }
+.v2-planner-werkzeug {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  z-index: 1;
+  border-radius: 4px;
+  background: var(--surface);
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+/* Der Hinzufuegen-Knopf sitzt unten und bleibt im Fluss - er
+   ersetzt keine Zeile, sondern haengt unter den Eintraegen. */
+.v2-planner-werkzeug-unten {
+  position: static;
+  background: transparent;
+}
+.v2-planner-zelle:hover .v2-planner-werkzeug,
+.v2-planner-zelle:focus-within .v2-planner-werkzeug {
+  opacity: 1;
+}
+/* Auf Zeigergeraeten ohne Hover (Touch) sind sie immer da. */
+@media (hover: none) {
+  .v2-planner-werkzeug { opacity: 1; }
+}
+
+/* [cmd] Gemessen am 2026-08-31: im Raster ist eine Zelle rund ein
+   Siebtel der Kartenbreite - die Auswahlfelder des Formulars waren
+   darin etwa 30 px breit und unlesbar.
+   [read] Das Formular bleibt IN der Zelle (keine dritte Ansicht),
+   legt sich aber darueber statt sich hineinzuquetschen. `min-width`
+   gibt ihm eine lesbare Breite, `z-index` hebt es ueber die Nachbarn. */
+.v2-planner-form {
+  position: relative;
+  z-index: 5;
+  min-width: 190px;
+}
+/* Am rechten Rand nach links ausrichten, sonst laeuft es aus der
+   Karte. Die letzten beiden Spalten sind betroffen. */
+.v2-planner-zelle:nth-child(7n) .v2-planner-form,
+.v2-planner-zelle:nth-child(7n+1) .v2-planner-form {
+  margin-left: auto;
 }

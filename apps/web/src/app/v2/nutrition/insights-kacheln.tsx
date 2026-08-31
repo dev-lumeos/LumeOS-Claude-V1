@@ -24,7 +24,7 @@ import { Card, Pill, Row, Meter } from '@lumeos/ui'
 import type { InsightsStand } from '../../../lib/nutrition/insights-read'
 import {
   FENSTER, imFenster, schnitt, pfadMitLuecken,
-  deckung, stufeVon, STUFE_FARBE, STUFE_TEXT, tagNummer,
+  deckung, stufeVon, STUFE_FARBE, STUFE_TEXT,
   istVollstaendig, luekenSatz, restVon,
   anteil, belastbarkeit, sortiere, DUENN_SATZ,
   DEFIZIT_WIDERSPRUCH,
@@ -268,14 +268,36 @@ export function HeatmapKachel({ d, heute }: { d: InsightsStand; heute: string })
     })
   const gezaehlt = (s: Stufe) => stufen.filter(x => x.stufe === s).length
 
+  // ══ G-297: kompakt ════════════════════════════════════════════
+  //
+  // **Tom, 2026-08-31:** *,,tagesdeckung geht kleiner."*
+  //
+  // `[cmd]` **Vorher fuellten 28 Felder die volle Kachelhoehe** — ein
+  // Feld war `aspectRatio: 1` ueber ein Siebtel der Kartenbreite, also
+  // rund 90 px hoch. **Die Verlaufskachel daneben hatte dadurch
+  // Leerraum.**
+  //
+  // `[cmd]` **`HeatmapView.js` macht es anders, und zwar zweifach:**
+  // eine schmale Spalte fuer die Wochenmarke (`24px repeat(7,1fr)`),
+  // **und die Legende als FLEX-ZEILE statt als Liste** — fuenf Zeilen
+  // werden zu einer.
+  //
+  // `[read]` **Die Zahl im Feld ist verzichtbar** (Auftrag): die Farbe
+  // traegt die Aussage, die Zahl steht im `title`. **Damit darf das
+  // Feld so klein werden, dass keine Ziffer mehr hineinpassen muss.**
+  const KACHEL = 'minmax(0, 26px)'
   return (
     <Card title="Tagesdeckung" sub={`28 Tage · Ziel ${z(d.zielKcal)} kcal`}>
       <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4,
-        marginBottom: 6,
+        display: 'grid',
+        // Die Spalten wachsen nicht mit der Karte — 26 px ist die
+        // Obergrenze, sonst faengt das Gitter wieder an zu wuchern.
+        gridTemplateColumns: `repeat(7, ${KACHEL})`,
+        gap: 3, marginBottom: 6, justifyContent: 'start',
       }}>
         {WOCHENTAG.map(w => (
-          <div key={w} className="v2-eyebrow" style={{ textAlign: 'center', fontSize: 9 }}>
+          <div key={w} className="v2-eyebrow"
+               style={{ textAlign: 'center', fontSize: 8.5 }}>
             {w}
           </div>
         ))}
@@ -287,32 +309,29 @@ export function HeatmapKachel({ d, heute }: { d: InsightsStand; heute: string })
             key={tag.datum}
             title={`${kurzDatum(tag.datum)} — ${pct === null ? 'kein Eintrag' : `${pct} % des Ziels`}`}
             style={{
-              aspectRatio: '1', borderRadius: 4,
+              aspectRatio: '1', borderRadius: 3,
               background: STUFE_FARBE[stufe],
               border: '1px solid var(--border)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 9, fontFamily: 'var(--font-mono)',
-              color: stufe === 'leer' ? 'var(--fg-dim)' : 'var(--bg)',
             }}
-          >
-            {tagNummer(tag.datum)}
-          </div>
+          />
         ))}
       </div>
 
       <div className="v2-divider" />
-      {/* Die Legende der Vorlage, fuenf Stufen, mit der Zahl daneben —
-          sonst ist die Farbe eine Behauptung ohne Beleg. */}
-      <div className="v2-col-gap" style={{ gap: 4 }}>
+      {/* `[cmd]` **Die Legende der Vorlage ist eine FLEX-ZEILE**
+          (`HeatmapView.js:38`) — fuenf Zeilen wurden zu einer.
+          `[read]` **Die Zahl bleibt daneben:** ohne sie waere die
+          Farbe eine Behauptung ohne Beleg. */}
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', rowGap: 4 }}>
         {(['optimal', 'gut', 'knapp', 'gering', 'leer'] as Stufe[]).map(s => (
           <div key={s} style={{
-            display: 'flex', alignItems: 'center', gap: 8, fontSize: 11,
+            display: 'flex', alignItems: 'center', gap: 4, fontSize: 10.5,
           }}>
             <span style={{
-              width: 12, height: 12, borderRadius: 3, flexShrink: 0,
+              width: 10, height: 10, borderRadius: 2, flexShrink: 0,
               background: STUFE_FARBE[s], border: '1px solid var(--border)',
             }} />
-            <span className="v2-dim" style={{ flex: 1 }}>{STUFE_TEXT[s]}</span>
+            <span className="v2-dim">{STUFE_TEXT[s]}</span>
             <span className="v2-num">{gezaehlt(s)}</span>
           </div>
         ))}

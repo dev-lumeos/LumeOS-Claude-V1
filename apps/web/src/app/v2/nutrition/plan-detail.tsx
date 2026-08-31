@@ -40,6 +40,19 @@ import {
 import {
   ZYKLUS_WAEHLBAR, type ZyklusWahl, planKennzahlen, tagesKcal,
 } from '../../../lib/nutrition/plan-detail-lage'
+// G-298: der abgelaufene Plan - die Laufzeit steht in den Tagen,
+// nicht in `start_date` (dort ist sie NULL).
+import {
+  laufzeitVon, laufzeitSatz, LAUFZEIT_MARKE,
+} from '../../../lib/nutrition/plan-eintrag-lage'
+
+/** Heute als ISO — eine Stelle, damit Karte und Planner gleich rechnen. */
+function heuteIso(): string {
+  const j = new Date()
+  const m = String(j.getMonth() + 1).padStart(2, '0')
+  const t = String(j.getDate()).padStart(2, '0')
+  return `${j.getFullYear()}-${m}-${t}`
+}
 
 // ── MealPlanCard ──────────────────────────────────────────────────
 //
@@ -72,6 +85,19 @@ export function MealPlanCard({
   const k = planKennzahlen(d)
   const herkunft = herkunftVon(p.plan_origin)
 
+  // ══ G-298: aktiv, aber abgelaufen ═══════════════════════════════
+  //
+  // **Tom, 2026-08-31:** *,,der Plan laeuft vom 18.06. bis 08.07.,
+  // heute ist der 31.08., und die Karte sagt aktiv."*
+  //
+  // `[cmd]` **Gemessen: `start_date` und `days_count` sind `NULL`** —
+  // **die Laufzeit steht nur in den Tageszeilen** (18.6. bis 15.7.,
+  // 47 Tage vor heute). `[read]` **Eine Rechnung aus `start_date`
+  // ergaebe `NULL`, und die Karte sagte weiter nur „aktiv".**
+  const laufzeit = laufzeitVon(
+    d.wochen.flatMap(w => w.tage.map(t => t.plan_date)), heuteIso())
+  const marke = LAUFZEIT_MARKE[laufzeit.art]
+
   return (
     <Card>
       <button
@@ -95,6 +121,10 @@ export function MealPlanCard({
             {HERKUNFT_TEXT[herkunft]}
           </Pill>
           <Pill variant={p.status === 'active' ? 'pos' : undefined}>{p.status}</Pill>
+          {/* `[read]` **Der Zustand bleibt stehen, die Einordnung
+              kommt daneben.** Ihn beim Lesen umzuschreiben waere ein
+              Schreibvorgang; ihn allein zu zeigen war die Luecke. */}
+          {marke && <Pill>{marke}</Pill>}
           <span className="v2-num v2-dim" style={{ marginLeft: 'auto', fontSize: 10.5 }}>
             {k.tage} Tage · {k.eintraege} Einträge
             {k.kcalSchnitt !== null && <> · ø {k.kcalSchnitt} kcal/Tag</>}
@@ -105,6 +135,12 @@ export function MealPlanCard({
       {p.description && (
         <div className="v2-muted" style={{ fontSize: 11.5, marginTop: 6 }}>
           {p.description}
+        </div>
+      )}
+
+      {laufzeit.art !== 'laeuft' && (
+        <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 6, lineHeight: 1.5 }}>
+          {laufzeitSatz(laufzeit)}
         </div>
       )}
 

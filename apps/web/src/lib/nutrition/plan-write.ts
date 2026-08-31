@@ -18,6 +18,11 @@ import { z } from 'zod'
 
 import { createSessionClient } from '@lumeos/shared/session'
 import { DiaryWriteError } from './diary-model'
+// G-298: der CHECK in ausfuehrbarer Form - eine Stelle, nicht zwei.
+import {
+  EINTRAG_TYPEN, MAHLZEIT_TYPEN, bauEintrag, verletztCheck,
+  naechstePosition,
+} from './plan-eintrag-lage'
 
 /**
  * Die erlaubten Werte, wie die CHECKs sie fuehren.
@@ -183,4 +188,200 @@ export async function planAendern(eingabe: PlanAendern): Promise<GespeicherterPl
     .single()
   if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
   return data as unknown as GespeicherterPlan
+}
+
+
+// ════════════════════════════════════════════════════════════════════
+// DIE EINTRAEGE — G-298
+// ════════════════════════════════════════════════════════════════════
+//
+// **Tom, 2026-08-31:** *,,meal plans sehe ich noch nichts
+// brauchbares."* `[cmd]` **Die einzigen Knoepfe waren *Zuklappen* und
+// *Laufzeit aendern*.**
+//
+// `[cmd]` **Der Schreibweg fuer den PLAN steht seit G-267/G-286.**
+// **Was fehlte, sind die Positionen** — also diese drei Vorgaenge.
+
+export const eintragAnlegenSchema = z.object({
+  art: z.literal('eintrag'),
+  day_id: z.string().uuid(),
+  typ: z.enum(EINTRAG_TYPEN),
+  quelleId: z.string().uuid(),
+  mahlzeit: z.enum(MAHLZEIT_TYPEN),
+  menge: z.number().positive('Die Menge muss groesser als 0 sein.').max(100000),
+  notiz: z.string().trim().max(500).nullish(),
+})
+
+export const eintragAendernSchema = z.object({
+  art: z.literal('eintrag_aendern'),
+  id: z.string().uuid(),
+  typ: z.enum(EINTRAG_TYPEN),
+  quelleId: z.string().uuid(),
+  mahlzeit: z.enum(MAHLZEIT_TYPEN),
+  menge: z.number().positive('Die Menge muss groesser als 0 sein.').max(100000),
+  notiz: z.string().trim().max(500).nullish(),
+})
+
+export const eintragLoeschenSchema = z.object({
+  art: z.literal('eintrag_loeschen'),
+  id: z.string().uuid(),
+})
+
+export type EintragAnlegen = z.infer<typeof eintragAnlegenSchema>
+export type EintragAendern = z.infer<typeof eintragAendernSchema>
+export type EintragLoeschen = z.infer<typeof eintragLoeschenSchema>
+
+export type GespeicherterEintrag = {
+  id: string
+  day_id: string
+  entry_type: string
+  meal_type: string
+  slot_order: number
+}
+
+/**
+ * Die Herkunft des Plans, zu dem ein Tag gehoert.
+ *
+ * `[read]` **Die Coach-Sperre gilt auch fuer Eintraege.** `[cmd]`
+ * G-269 sperrt `planAendern`; **ohne diese Pruefung liesse sich ein
+ * gesperrter Coach-Plan ueber seine Positionen umbauen** — die Sperre
+ * waere dann eine Bitte.
+ */
+type Db = Awaited<ReturnType<typeof sitzung>>['db']
+
+async function herkunftDesTages(db: Db, dayId: string): Promise<string | null> {
+  // `[read]` **Zwei Spruenge, ein Aufruf** — Tag zur Woche, Woche zum
+  // Plan. Drei einzelne Abfragen waeren drei Rundreisen.
+  const { data, error } = await db
+    .from('meal_plan_days')
+    .select('week_id, meal_plan_weeks!inner(plan_id, meal_plans!inner(plan_origin))')
+    .eq('id', dayId)
+    .single()
+  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+  const w = (data as Record<string, unknown>)?.meal_plan_weeks as
+    Record<string, unknown> | undefined
+  const p = w?.meal_plans as Record<string, unknown> | undefined
+  return (p?.plan_origin as string | null) ?? null
+}
+
+/** Die Sperre, gemeinsam fuer alle drei Vorgaenge. */
+async function pruefeFreigabe(herkunft: string | null): Promise<void> {
+  if (await darfAendern(herkunft)) return
+  throw new DiaryWriteError(
+    'FORBIDDEN',
+    herkunft === 'coach_created'
+      ? 'Dieser Plan kommt von deinem Coach und ist fuer direkte Aenderungen gesperrt.'
+      : 'Dieser Plan stammt aus dem Marktplatz und wird unveraendert uebernommen.',
+  )
+}
+
+/**
+ * Einen Eintrag anlegen — G-298.
+ *
+ * `[cmd]` **`slot_order` wird hier vergeben, nicht vom Browser
+ * geschickt** — sonst kollidieren zwei Fenster auf derselben Zahl.
+ */
+export async function planEintragAnlegen(
+  eingabe: EintragAnlegen,
+): Promise<GespeicherterEintrag> {
+  const { db, user } = await sitzung()
+  await pruefeFreigabe(await herkunftDesTages(db, eingabe.day_id))
+
+  const felder = bauEintrag(eingabe)
+  // `[read]` **Die Gegenprobe vor dem Schreiben**, damit die Meldung
+  // sagt, WAS falsch ist — die Datenbank meldete nur den CHECK-Namen.
+  const fehler = verletztCheck(felder)
+  if (fehler) throw new DiaryWriteError('VALIDATION_FAILED', fehler)
+
+  const { data: belegt, error: leseFehler } = await db
+    .from('meal_plan_entries')
+    .select('slot_order')
+    .eq('day_id', eingabe.day_id)
+    .eq('meal_type', eingabe.mahlzeit)
+  if (leseFehler) throw new DiaryWriteError('WRITE_FAILED', leseFehler.message)
+
+  const position = naechstePosition(
+    ((belegt ?? []) as unknown as Array<{ slot_order: number }>)
+      .map(z => z.slot_order),
+  )
+
+  const { data, error } = await db
+    .from('meal_plan_entries')
+    .insert({
+      ...felder,
+      day_id: eingabe.day_id,
+      user_id: user.id,
+      slot_order: position,
+    })
+    .select('id, day_id, entry_type, meal_type, slot_order')
+    .single()
+  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+  return data as unknown as GespeicherterEintrag
+}
+
+/**
+ * Einen Eintrag aendern — G-298.
+ *
+ * `[read]` **Alle drei Quellkennungen werden geschrieben, auch die
+ * `null`en.** Wechselt ein Eintrag von Rezept auf Lebensmittel und
+ * bliebe `recipe_id` stehen, waeren zwei Kennungen gesetzt — der
+ * CHECK verlangt genau eine.
+ */
+export async function planEintragAendern(
+  eingabe: EintragAendern,
+): Promise<GespeicherterEintrag> {
+  const { db } = await sitzung()
+
+  const { data: vorher, error: leseFehler } = await db
+    .from('meal_plan_entries')
+    .select('day_id')
+    .eq('id', eingabe.id)
+    .single()
+  if (leseFehler) throw new DiaryWriteError('WRITE_FAILED', leseFehler.message)
+  const dayId = (vorher as unknown as { day_id: string }).day_id
+  await pruefeFreigabe(await herkunftDesTages(db, dayId))
+
+  const felder = bauEintrag(eingabe)
+  const fehler = verletztCheck(felder)
+  if (fehler) throw new DiaryWriteError('VALIDATION_FAILED', fehler)
+
+  const { data, error } = await db
+    .from('meal_plan_entries')
+    .update(felder)
+    .eq('id', eingabe.id)
+    .select('id, day_id, entry_type, meal_type, slot_order')
+    .single()
+  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+  return data as unknown as GespeicherterEintrag
+}
+
+/**
+ * Einen Eintrag entfernen — G-298.
+ *
+ * `[read]` **Hart geloescht, nicht `deleted_at`.** `[cmd]`
+ * **`meal_plan_entries` hat keine solche Spalte** (18 Spalten,
+ * gemessen am 2026-08-31) — **eine Position ist eine Vorlage, kein
+ * Protokoll.** Die Ausfuehrung steht in `meal_plan_logs` und bleibt
+ * unberuehrt.
+ */
+export async function planEintragLoeschen(
+  eingabe: EintragLoeschen,
+): Promise<{ geloescht: string }> {
+  const { db } = await sitzung()
+
+  const { data: vorher, error: leseFehler } = await db
+    .from('meal_plan_entries')
+    .select('day_id')
+    .eq('id', eingabe.id)
+    .single()
+  if (leseFehler) throw new DiaryWriteError('WRITE_FAILED', leseFehler.message)
+  await pruefeFreigabe(
+    await herkunftDesTages(db, (vorher as unknown as { day_id: string }).day_id))
+
+  const { error } = await db
+    .from('meal_plan_entries')
+    .delete()
+    .eq('id', eingabe.id)
+  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+  return { geloescht: eingabe.id }
 }

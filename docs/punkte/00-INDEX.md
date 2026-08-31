@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 230 |
+| `todos` | 231 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 5 |
-| `erledigt` | 158 |
-| **gesamt** | **396** |
+| `laufend_claudecode` | 3 |
+| `erledigt` | 162 |
+| **gesamt** | **399** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 141
+## nutrition — 144
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -117,8 +117,10 @@
 | `C-355` | feature | mittel | [`food_search` kennt keine Herkunft](erledigt/nutrition-c-0355-food-search-kennt-keine-herkunft.md) | erledigt | — | — |
 | `C-356` | messung | niedrig | [woraus die 1.620 ms HTML bestehen](erledigt/nutrition-c-0356-woraus-die-1620-ms-html-bestehen.md) | erledigt | — | — |
 | `C-360` | entscheidung | hoch | [darf ein fehlender Naehrwert als 0 zaehlen?](todos/nutrition-c-0360-darf-ein-fehlender-naehrwert-als-null-zaehlen.md) | offen | — | — |
-| `C-366` | befund | mittel | [`food_tags` hat keinen Pflegeweg](laufend_codex/nutrition-c-0366-food-tags-hat-keinen-pflegeweg.md) | vorbereitet (codex) | — | — |
-| `C-367` | befund | hoch | [Vitamin A blockiert den Score an allen Tagen](laufend_codex/nutrition-c-0367-vitamin-a-blockiert-den-score-an-allen-tagen.md) | laeuft (codex) | — | — |
+| `C-366` | befund | mittel | [`food_tags` hat keinen Pflegeweg](laufend_codex/nutrition-c-0366-food-tags-hat-keinen-pflegeweg.md) | laeuft (codex) | — | — |
+| `C-367` | befund | hoch | [Vitamin A blockiert den Score an allen Tagen](erledigt/nutrition-c-0367-vitamin-a-blockiert-den-score-an-allen-tagen.md) | erledigt | — | C-368 |
+| `C-368` | entscheidung | hoch | [fuenfzehn Lebensmittel blockieren den Score](laufend_codex/nutrition-c-0368-fuenfzehn-lebensmittel-blockieren-den-score.md) | vorbereitet (codex) | — | — |
+| `C-369` | entscheidung | mittel | [was mit einem abgelaufenen Plan geschieht](todos/nutrition-c-0369-was-mit-einem-abgelaufenen-plan-geschieht.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -191,17 +193,18 @@
 | `G-285` | befund | niedrig | [`display_tier` heisst im Code weiter *Abo-Gate*](erledigt/nutrition-g-0285-display-tier-heisst-im-code-weiter-abo-gate.md) | erledigt | — | — |
 | `G-286` | feature | hoch | [MealPlanDetail — das Tages-Akkordeon fehlt](erledigt/nutrition-g-0286-mealplandetail-das-tages-akkordeon-fehlt.md) | erledigt | — | G-298 |
 | `G-287` | feature | hoch | [MealPlanCard — die Plan-Liste ist nicht anklickbar](erledigt/nutrition-g-0287-mealplancard-die-plan-liste-ist-nicht-anklickbar.md) | erledigt | — | — |
-| `G-288` | feature | hoch | [Die Einkaufsliste ist eine leere Kachel](laufend_claudecode/nutrition-g-0288-die-einkaufsliste-ist-eine-leere-kachel.md) | vorbereitet (claudecode) | — | — |
-| `G-289` | feature | hoch | [Fünf Rezeptkomponenten fehlen](laufend_claudecode/nutrition-g-0289-fuenf-rezeptkomponenten-fehlen.md) | vorbereitet (claudecode) | — | — |
+| `G-288` | feature | hoch | [Die Einkaufsliste ist eine leere Kachel](laufend_claudecode/nutrition-g-0288-die-einkaufsliste-ist-eine-leere-kachel.md) | laeuft (claudecode) | — | — |
+| `G-289` | feature | hoch | [Fünf Rezeptkomponenten fehlen](laufend_claudecode/nutrition-g-0289-fuenf-rezeptkomponenten-fehlen.md) | laeuft (claudecode) | — | — |
 | `G-290` | feature | mittel | [Der Aktivierungsdialog mit LifecyclePicker fehlt](erledigt/nutrition-g-0290-der-aktivierungsdialog-mit-lifecyclepicker-fehlt.md) | erledigt | — | — |
 | `G-291` | feature | hoch | [TrendChart fehlt im Insights-Reiter](erledigt/nutrition-g-0291-trendchart-fehlt-im-insights-reiter.md) | erledigt | — | — |
 | `G-292` | feature | hoch | [MicroFlagsList — die Warnungen werden nicht gezeigt](erledigt/nutrition-g-0292-microflagslist-die-warnungen-werden-nicht-gezeigt.md) | erledigt | — | — |
 | `G-293` | feature | mittel | [MacroDetail — die Fetthierarchie fehlt](erledigt/nutrition-g-0293-macrodetail-die-fetthierarchie-fehlt.md) | erledigt | — | — |
 | `G-294` | feature | mittel | [CrossModuleInsights — Goals bekommt nichts](todos/nutrition-g-0294-crossmoduleinsights-goals-bekommt-nichts.md) | offen | — | — |
 | `G-295` | feature | mittel | [Die Heatmap wurde entfernt, und die Spec verlangt sie](erledigt/nutrition-g-0295-die-heatmap-wurde-entfernt-und-die-spec-verlangt-sie.md) | erledigt | — | G-297 |
-| `G-297` | befund | mittel | [die Tagesdeckung nimmt zu viel Platz](laufend_claudecode/nutrition-g-0297-die-tagesdeckung-nimmt-zu-viel-platz.md) | laeuft (claudecode) | — | — |
-| `G-298` | feature | hoch | [Plaene lassen sich ansehen, nicht aendern](laufend_claudecode/nutrition-g-0298-plaene-lassen-sich-ansehen-nicht-aendern.md) | laeuft (claudecode) | — | — |
-| `G-299` | feature | hoch | [der Planner zeigt eine fremde Woche](laufend_claudecode/nutrition-g-0299-der-planner-zeigt-eine-fremde-woche.md) | laeuft (claudecode) | — | — |
+| `G-297` | befund | mittel | [die Tagesdeckung nimmt zu viel Platz](erledigt/nutrition-g-0297-die-tagesdeckung-nimmt-zu-viel-platz.md) | erledigt | — | — |
+| `G-298` | feature | hoch | [Plaene lassen sich ansehen, nicht aendern](erledigt/nutrition-g-0298-plaene-lassen-sich-ansehen-nicht-aendern.md) | erledigt | — | C-369, G-300 |
+| `G-299` | feature | hoch | [der Planner zeigt eine fremde Woche](erledigt/nutrition-g-0299-der-planner-zeigt-eine-fremde-woche.md) | erledigt | — | — |
+| `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](laufend_claudecode/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59
@@ -452,7 +455,7 @@
 | `G-278` | befund | mittel | [die restlichen 222 Abwesenheitsaussagen](erledigt/quer-g-0278-die-restlichen-222-abwesenheitsaussagen.md) | erledigt | — | C-359 |
 | `G-280` | befund | mittel | [der Dev-Server ueberlebt lange Testlaeufe nicht](erledigt/quer-g-0280-der-dev-server-ueberlebt-lange-testlaeufe-nicht.md) | erledigt | — | — |
 | `G-284` | befund | hoch | [die Mockups werden ohne Anmeldung ausgeliefert](erledigt/quer-g-0284-die-mockups-werden-ohne-anmeldung-ausgeliefert.md) | erledigt | — | — |
-| `G-296` | befund | mittel | [das globale `tsc` ist rot wegen `packages/ui`](laufend_codex/quer-g-0296-das-globale-tsc-ist-rot-wegen-packages-ui.md) | vorbereitet (codex) | — | — |
+| `G-296` | befund | mittel | [das globale `tsc` ist rot wegen `packages/ui`](laufend_codex/quer-g-0296-das-globale-tsc-ist-rot-wegen-packages-ui.md) | laeuft (codex) | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

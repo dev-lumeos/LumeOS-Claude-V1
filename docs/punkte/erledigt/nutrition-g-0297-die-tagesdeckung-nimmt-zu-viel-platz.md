@@ -9,6 +9,8 @@ kind_von: G-295
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-31
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/insights-echt.tsx
@@ -45,3 +47,30 @@ die Aussage, die Zahl steht beim Darauffahren.**
 
 **Mitbeauftragt mit G-298 am 2026-08-31.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Ergebnis (Kurzfassung, Einzelheiten in G-298)
+
+`[cmd]` **Vorher: `repeat(7, 1fr)` mit `aspectRatio: 1`** — ein Feld
+war ein Siebtel der Kartenbreite hoch, rund 90 px, und 28 davon
+fuellten die Kachel.
+
+`[cmd]` **`HeatmapView.js` macht es zweifach anders, und beides ist
+uebernommen:** eine **gedeckelte Feldbreite** (`minmax(0, 26px)`
+statt `1fr`) **und die Legende als Flex-Zeile statt als Liste** —
+fuenf Zeilen werden zu einer.
+
+`[cmd]` **Die Zahl im Feld ist entfernt** (Auftrag: sie ist
+verzichtbar): die Farbe traegt die Aussage, die Zahl steht im
+`title`. `[read]` **Damit darf das Feld so klein werden, dass keine
+Ziffer mehr hineinpassen muss.**
+
+`[cmd]` **Und `tagNummer()` ist mitentfernt, nicht unbenutzt
+liegengelassen** — A-59. Ein Waechter prueft, dass sie nicht
+zurueckkommt, und dass das Gitter nicht wieder mit der Karte waechst.
+
+Bild: `backup/g298-final-insights.png`
+
+## Abnahme
+
+**2026-08-31, mit G-298 abgenommen:** kleiner: begrenzte Zellbreite, Legende als eine Zeile, Zahl aus
+dem Feld entfernt.

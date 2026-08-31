@@ -113,22 +113,14 @@ export function deckung(kcal: number | null, ziel: number | null): number | null
   return Math.round((kcal / ziel) * 100)
 }
 
-/**
- * Die Tageszahl fuer das Feld der Heatmap.
- *
- * `[cmd]` **Hier stand eine Zeichenkettenbastelei, und sie war
- * falsch:** aus `kurzDatum('2026-08-04') = '4.8.'` machte
- * `.replace('.', '').split('.')[0]` den Wert **`48`** — auf dem
- * Bildschirmfoto vom 2026-08-31 trugen alle 28 Felder solche Zahlen
- * (48, 58, ... 318).
- *
- * `[read]` **Der Typecheck sah nichts** — es war die ganze Zeit ein
- * gueltiger String. **Gefunden hat es das Bild, nicht die Pruefung**;
- * deshalb steht die Funktion jetzt hier und hat einen Waechter.
- */
-export function tagNummer(iso: string): string {
-  return String(Number(iso.slice(8, 10)))
-}
+// `[cmd]` **`tagNummer()` ist in G-297 entfernt.** Sie schrieb die
+// Tageszahl ins Feld; `[cmd]` **Tom am 2026-08-31: *,,tagesdeckung
+// geht kleiner"*** — und der Auftrag sagt, die Zahl sei
+// verzichtbar. **Ohne Ziffer darf das Feld 26 px klein sein.**
+//
+// `[read]` **A-59: nicht aufgerufen heisst entfernt**, nicht
+// stehengelassen. Der Waechter dazu faellt mit ihr weg; die Zahl
+// steht jetzt im `title` und wird dort nicht gerechnet.
 
 export type Stufe = 'optimal' | 'gut' | 'knapp' | 'gering' | 'leer'
 

@@ -66,6 +66,19 @@ export function planZaehlung(d: PlanDaten) {
  * `meal_plan_entries` fuehrt keinen Status. **Statt einer erfundenen
  * Zahl steht die Zaehlung da**, die wirklich gemessen ist.
  */
+// G-298: die Laufzeit kommt aus den Tagen - `start_date` ist NULL.
+import {
+  laufzeitVon, laufzeitSatz, LAUFZEIT_MARKE,
+} from '../../../lib/nutrition/plan-eintrag-lage'
+
+/** Heute als ISO - dieselbe Rechnung wie im Planner. */
+function heuteIso(): string {
+  const j = new Date()
+  const m = String(j.getMonth() + 1).padStart(2, '0')
+  const t = String(j.getDate()).padStart(2, '0')
+  return `${j.getFullYear()}-${m}-${t}`
+}
+
 export function PlanKopfEcht({ d }: { d: PlanDaten }) {
   const z = planZaehlung(d)
   const p = d.plan
@@ -79,6 +92,23 @@ export function PlanKopfEcht({ d }: { d: PlanDaten }) {
       </Card>
     )
   }
+  // ══ G-298: aktiv, aber abgelaufen ═══════════════════════════════
+  //
+  // **Tom, 2026-08-31:** *,,der Plan laeuft vom 18.06. bis 08.07.,
+  // heute ist der 31.08., und die Karte sagt aktiv."*
+  //
+  // `[cmd]` **Gemessen am 2026-08-31: `start_date`, `days_count` und
+  // `lifecycle_type` sind bei diesem Plan alle `NULL`** — **die
+  // Laufzeit steht nur in den Tageszeilen** (18.6. bis 15.7., also 47
+  // Tage vor heute).
+  //
+  // `[read]` **`is_active` bleibt `true`** — das beim Lesen
+  // umzuschreiben waere ein Schreibvorgang. **Also wird der Zustand
+  // gezeigt UND eingeordnet.**
+  const laufzeit = laufzeitVon(
+    d.wochen.flatMap(w => w.tage.map(x => x.plan_date)), heuteIso())
+  const marke = LAUFZEIT_MARKE[laufzeit.art]
+
   return (
     <Card>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
@@ -86,7 +116,13 @@ export function PlanKopfEcht({ d }: { d: PlanDaten }) {
         {p.is_active
           ? <Pill variant="acc">aktiv</Pill>
           : <Pill>pausiert</Pill>}
+        {marke && <Pill>{marke}</Pill>}
       </div>
+      {laufzeit.art !== 'laeuft' && (
+        <div className="v2-dim" style={{ fontSize: 11, marginBottom: 8, lineHeight: 1.5 }}>
+          {laufzeitSatz(laufzeit)}
+        </div>
+      )}
       {p.description && (
         <div className="v2-muted" style={{ fontSize: 12, marginBottom: 8 }}>
           {p.description}

@@ -7,6 +7,8 @@ angelegt: 2026-08-31
 braucht: []
 kind_von: C-364
 entscheidung: null
+agent: codex
+beauftragt: 2026-08-31
 beruehrt:
   dateien:
     - packages/ui
@@ -46,7 +48,7 @@ einen bekannten Fehler nicht sieht, ist ein halbes Gruen.**
 
 **Mitbeauftragt: C-366.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-08-31.**
+**Beauftragt am 2026-08-31.**
 
 ### 1 · G-296 — das globale `tsc`
 
