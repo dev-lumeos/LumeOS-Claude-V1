@@ -9,7 +9,7 @@ kind_von: F-03
 kinder: []
 entscheidung: null
 erledigt: 2026-08-30
-commit: OFFEN
+commit: f4010501
 beruehrt:
   tabellen: []
   dateien: ["docs/spezifikation/30-module/addon/00-entwurf-buddy-coach-marketplace.md"]
