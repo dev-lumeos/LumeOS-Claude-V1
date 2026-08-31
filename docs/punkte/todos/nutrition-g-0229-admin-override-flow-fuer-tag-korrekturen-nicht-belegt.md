@@ -7,8 +7,6 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: null
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-08-30
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -92,3 +90,10 @@ pflegt sie nicht. `[cmd]` **`foods_custom` hat kein Tag-Feld**, nur
 
 `[read]` **Nicht „der Override wird ueberschrieben", sondern „es gibt
 keinen Override".**
+
+## Geprueft am 2026-08-31
+
+**Urteil aus G-226:** offen, anders begruendet: `auto_tag_food` existiert nicht,
+damit faellt der zentrale Einwand der Review.
+
+`[read]` **Die Messung steht in der G-226-Datei.**

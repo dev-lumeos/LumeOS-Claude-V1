@@ -7,8 +7,6 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: null
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-08-30
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -81,3 +79,10 @@ unterscheiden koennen soll. **`self_created` laesst alles wie es ist**
 
 `[read]` **Keine Eile:** der Buddy-Plan-Builder ist Phase 2,
 `meal_plan_logs` hat 0 Zeilen.
+
+## Geprueft am 2026-08-31
+
+**Urteil aus G-226:** Entscheidung: eigene Herkunft fuer Buddy-Plaene, oder
+`self_created` mit Buddy als Werkzeug?.
+
+`[read]` **Die Messung steht in der G-226-Datei.**

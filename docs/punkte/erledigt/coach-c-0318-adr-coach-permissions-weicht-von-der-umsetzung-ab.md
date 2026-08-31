@@ -10,9 +10,10 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [coach.client_permissions]
 zahlen: null
 ---
 
@@ -126,4 +127,17 @@ eingehängt.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-31, Orchestrator.**
+
+`[cmd]` **Derselbe Befund wie A-37 — durch C-357 erledigt.** `[cmd]`
+**Der Abloesungsvermerk steht seit dem 30.08. im Kopf von
+`ADR_COACH_PERMISSIONS_V1`.**
+
+`[read]` **Der Punkt war aelter und beschrieb dieselbe Abweichung.**
+
+`[cmd]` **B-20 bleibt offen: Codex hat keinen verifizierten
+Pfadschutz.** `[read]` **Das ist eine ehrliche Meldung** — er haette
+sagen koennen, der Punkt sei gegenstandslos.
+
+**Abgenommen.**
+

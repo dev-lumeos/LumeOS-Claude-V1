@@ -7,8 +7,6 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: null
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-08-30
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -74,3 +72,9 @@ Verpflichtung.**
 Feature 4` fuehren den Barcode-Scan weiter als V1-Weg, zwei ADRs
 setzen ihn auf Phase 2. **Der Widerspruch in der Spec besteht
 unveraendert** — er hat nur noch keinen Schaden angerichtet.
+
+## Geprueft am 2026-08-31
+
+**Urteil aus G-226:** offen: der Befund gilt weiter.
+
+`[read]` **Die Messung steht in der G-226-Datei.**

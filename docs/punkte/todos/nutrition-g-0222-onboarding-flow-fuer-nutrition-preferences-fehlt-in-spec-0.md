@@ -7,8 +7,6 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: null
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-08-30
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -99,3 +97,10 @@ Regel, wann erneut gefragt wird.**
 `[read]` **Die Inhalte sind ausdruecklich NICHT die Frage** — Tom
 legt sie spaeter fest, wenn ein repraesentativer Datenbestand
 vorliegt.
+
+## Geprueft am 2026-08-31
+
+**Urteil aus G-226:** Entscheidung: darf das Onboarding uebersprungen werden?
+Alles Weitere folgt daraus.
+
+`[read]` **Die Messung steht in der G-226-Datei.**

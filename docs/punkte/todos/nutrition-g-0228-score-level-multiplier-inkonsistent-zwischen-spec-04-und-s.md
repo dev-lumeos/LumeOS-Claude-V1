@@ -7,8 +7,6 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: null
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-08-30
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -91,3 +89,15 @@ die vierte?* `[read]` Die Namen sind austauschbar, der Faktor nicht.
 
 `[read]` **Zusammenhang zu E-25:** NRF9.3 kennt keinen Stufenfaktor.
 **Die Stufen gehoeren zum Entwurfsscore, nicht zum entschiedenen.**
+
+## Geprueft am 2026-08-31 — und der Befund wirkt
+
+`[cmd]` **Meine Messung im Punkt war falsch:** `SPEC_04_FEATURES.md`
+gibt es in acht Modulen, **die mit `level_multiplier` ist Nutrition.**
+
+`[cmd]` **Die Spec kennt `intermediate`, die Datenbank kennt `pro`** —
+**ein `pro`-Profil faellt still auf 0,90.**
+
+`[read]` **Der wirkende Teil ist als G-283 herausgeloest.** **Hier
+bleibt die Entscheidung: welche vier Stufennamen gelten, und welchen
+Faktor traegt die vierte?**

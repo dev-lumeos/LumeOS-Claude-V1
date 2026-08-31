@@ -9,8 +9,11 @@ kind_von: null
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
-  dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
+  dateien:
+    - apps/web/src/app/v2/nutrition
 zahlen: null
 ---
 
@@ -387,4 +390,81 @@ einzige Schreibarbeit ist dieser Bericht.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-31, Orchestrator.**
+
+**Zehn Urteile, und keiner heisst *erledigt*.**
+
+    ueberholt      G-226, G-230, G-235
+    offen          G-227, G-229
+    Entscheidung   G-222, G-228, G-238
+    A-16           archivieren
+    A-35           geschlossen, alle sieben aufgeloest
+
+### Zwei meiner acht Messungen waren falsch
+
+`[cmd]` **G-228: `SPEC_04_FEATURES.md` gibt es in acht Modulen.** Die
+mit `level_multiplier` ist **Nutrition**, nicht Recovery. `[read]`
+**Mein Recovery-Umweg ueber C-143/C-218 fuehrte weg vom Thema.**
+
+`[cmd]` **G-229: die wichtigere Tatsache ist nicht `apps/admin`** —
+**es ist, dass `auto_tag_food` nicht existiert.** `[cmd]` **Kein
+Trigger im Nutrition-Schema schreibt Tags** — **damit faellt der
+zentrale Einwand der Review**, der Trigger loesche vor dem Einfuegen
+alle Tags.
+
+### Der einzige Befund, der heute beisst
+
+`[cmd]` **Die Review fragte, woher `user_level` kommt. Es hat jetzt
+eine Antwort, und die zeigt einen Bruch:**
+
+    SPEC_04:336                beginner | intermediate | advanced | elite
+    profiles.experience_level  beginner | advanced | pro | elite  (CHECK)
+    live                       2x 'pro', 5x NULL
+    diary-entwurf.tsx:31       die vier Namen der Spec, `?? 0.90`
+
+`[read]` **Die Spec kennt `intermediate`, die Datenbank kennt `pro`,
+und keine kennt die andere** — **ein `pro`-Profil faellt still auf
+0,90, den Wert fuer `intermediate`.**
+
+`[read]` **Als eigener Punkt, weil er wirkt: G-283.**
+
+### Die drei ueberholten sind sauber belegt
+
+`[cmd]` **G-226: kein Recipes- oder Shopping-Reiter, die Woerter
+kommen null Mal am Schirm vor** — genau das *,,schema only, no full
+UI"* des ADR.
+
+`[cmd]` **G-230: alle vier Pfade liefern 404.**
+
+`[cmd]` **G-235: `display_tier` ist eine Anzeigetiefe, kein
+Abo-Gate** — Stufe 1 traegt Kalorien und Calcium, Stufe 3
+Aminosaeuren und Carotinoide.
+
+### A-16 und A-35
+
+`[cmd]` **A-16: archivieren, nicht loeschen.** `[read]` **Und ein
+Nebenbefund, der schwerer wiegt als der Fundus:** `[cmd]` **die 94
+Mockup-Dateien, 592 kB, werden ohne Anmeldung ausgeliefert** —
+gemessen aus einer abgemeldeten Sitzung. `[cmd]`
+**`/mockup/index.html` ist ein lauffaehiges zweites Produkt neben dem
+echten.** **Als G-284.**
+
+`[cmd]` **A-35: alle sieben aufgeloest, keiner der Coaches-Fall.**
+Buddy ist unter `/v2/coach/ai` mit 20 Reitern gebaut, *completeness*
+sind die Einstellungen, *crossmodule* ein Querverweis in
+`goals`/`recovery` — **die uebrigen drei hat A-36 schon geklaert.**
+
+### Und er hat gemeldet, was ihm auffiel
+
+`[cmd]` **A-16 und A-35 lagen in `next/`, nicht ausgegeben** — **er
+hat sie an Ort und Stelle bearbeitet und es gesagt.** `[read]` **Mein
+Fehler, seiner Meldung nach berichtigt.**
+
+`[cmd]` **Zwei weitere Befunde, die zu keinem Punkt gehoeren:**
+`page.tsx:46` nennt `display_tier` weiter *,,das Abo-Gate"* — **die
+Verwechslung, die G-140 und G-239 schon zweimal geklaert haben.**
+**Und `food_tags` traegt 30.797 Zeilen ohne jeden Pflegeweg.**
+**Als G-285 und C-366.**
+
+**Abgenommen.**
+

@@ -9,8 +9,10 @@ kind_von: null
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-08-30
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
-  dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
+  tabellen: [nutrition.nutrient_defs]
 zahlen: null
 ---
 
@@ -78,3 +80,7 @@ Carotinoide. Das ist Tiefe, keine Bezahlschranke.**
 nennt `display_tier` *„das Abo-Gate"* — **dieselbe Verwechslung, die
 G-140 und G-239 zweimal aufgeraeumt haben.** Als eigener Punkt
 anzulegen.
+
+## Abnahme
+
+**2026-08-31, mit G-226 abgenommen:** ueberholt: `display_tier` ist Anzeigetiefe, kein Abo-Gate.

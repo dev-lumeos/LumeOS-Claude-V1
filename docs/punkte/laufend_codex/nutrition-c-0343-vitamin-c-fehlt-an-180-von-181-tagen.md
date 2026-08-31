@@ -6,7 +6,9 @@ schwere: hoch
 angelegt: 2026-08-29
 braucht: []
 kind_von: C-324
-entscheidung: null
+entscheidung: E-38
+agent: codex
+beauftragt: 2026-08-31
 beruehrt:
   tabellen: [nutrition.nutrient_defs, nutrition.food_nutrients]
 zahlen:
@@ -130,3 +132,84 @@ trotzdem an keinem Tag vollstaendig**, weil `value_complete` jeden
 Posten verlangt.
 
 **Die Entscheidung dazu ist C-360.**
+
+## Auftrag — die Herkunft mitfuehren, damit E-38 wirkt
+
+**Entschieden in `docs/entscheidungen/E-38`.** **Mitbeauftragt: das
+neu gefasste C-345.**
+
+### Das Ergebnis
+
+`[read]` **Nach diesem Auftrag ist der Vitamin-C-Tag rechenbar** —
+**und damit NRF9.3.**
+
+### Was entschieden ist
+
+`[cmd]` **E-38: zensierte Werte (`<LOD`, `<LOQ`) zaehlen als 0, echte
+Luecken (`-`) bleiben unvollstaendig.**
+
+`[read]` **Das ist die EFSA/WHO-Substitutionsmethode, Lower Bound** —
+**und die Leitlinie nennt Naehrstoffe ausdruecklich als
+Anwendungsfall.**
+
+`[cmd]` **Lower Bound, weil der BLS die Grenze nicht mitliefert:**
+Middle und Upper braeuchten den LOD-Wert, **LB kommt ohne erfundene
+Zahl aus.**
+
+### Was zu bauen ist
+
+**Die BLS-Herkunft muss in `food_nutrients` ankommen.**
+
+`[cmd]` **Heute unterscheidet `data_source` nur zwei Importwege** —
+`bls_4_0_local_import` und `bls_4_0_xlsx_nachtrag`. `[cmd]` **Die
+Quelle traegt je Naehrstoff eine Herkunftsspalte mit 14 Werten.**
+
+`[read]` **Es braucht nicht alle 14.** **Was die Bilanz unterscheiden
+muss:** zensiert (`<LOD`/`<LOQ`), echte Luecke (`-`), logische Null,
+Spuren, gemessen.
+
+`[cmd]` **985.320 Angaben in der Quelle, 18.566 logische Nullen,
+1.800 Spuren, 110.182 Striche.**
+
+### Dann die Bilanz
+
+`[read]` **`value_complete` muss zensierte Werte als vorhanden
+zaehlen** — **mit dem Wert 0.**
+
+`[cmd]` **Die zwoelf Ziegenfleisch-Posten bleiben unvollstaendig** —
+C-48 Regel 1 gilt weiter.
+
+`[read]` **Und die Anzeige muss es sagen koennen:** ein Tag aus
+zensierten Werten ist nicht dasselbe wie einer aus Messungen.
+`[cmd]` **Das Muster steht: der `teilweise`-Zustand aus C-177.**
+
+### Was nicht zu tun ist
+
+**Keine Grenze erfinden** — MB und UB brauchen den LOD-Wert, den es
+nicht gibt.
+**Die logische Null nicht anfassen** — sie traegt in der Quelle
+bereits eine 0.
+`apps/` nicht anfassen.
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server gehoert dir nicht
+
+`[cmd]` **Kein `neustart`, kein `start`, kein `aufraeumen`.**
+
+### Nachweis
+
+    Herkunft in food_nutrients   welche Werte, wie viele je Art
+    VITC vollstaendige Tage      vorher 0 von 30, nachher
+    Ziegenfleisch                bleibt unvollstaendig - belegt
+    Vitamin A                    aendert sich etwas?
+    NRF9.3                       rechenbar? an wie vielen Tagen
+    Gegenprobe                   ein Naehrstoff ohne zensierte
+                                 Werte bleibt unveraendert
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

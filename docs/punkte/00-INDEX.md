@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 224 |
-| `laufend_codex` | 6 |
-| `laufend_claudecode` | 10 |
-| `erledigt` | 137 |
-| **gesamt** | **377** |
+| `todos` | 230 |
+| `laufend_codex` | 4 |
+| `laufend_claudecode` | 3 |
+| `erledigt` | 144 |
+| **gesamt** | **381** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 124
+## nutrition — 127
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -105,7 +105,7 @@
 | `C-336` | befund | hoch | [FD traegt den Text eines anderen Naehrstoffs](erledigt/nutrition-c-0336-fd-traegt-den-text-eines-anderen-naehrstoffs.md) | erledigt | — | C-346 |
 | `C-338` | befund | mittel | [sechs Sortierwerte fehlen live](erledigt/nutrition-c-0338-sechs-sortierwerte-fehlen-live.md) | erledigt | — | — |
 | `C-342` | entscheidung | hoch | [Vitamin A in IE gegen Mikrogramm](erledigt/nutrition-c-0342-vitamin-a-in-ie-gegen-mikrogramm.md) | erledigt | — | C-350 |
-| `C-343` | befund | hoch | [zwei Schreibweisen fuer *,,kein Vitamin C"*](todos/nutrition-c-0343-vitamin-c-fehlt-an-180-von-181-tagen.md) | offen | — | C-345 |
+| `C-343` | befund | hoch | [zwei Schreibweisen fuer *,,kein Vitamin C"*](laufend_codex/nutrition-c-0343-vitamin-c-fehlt-an-180-von-181-tagen.md) | laeuft (codex) | — | C-345 |
 | `C-344` | befund | hoch | [drei Obergrenzen gelten nicht fuer Nahrung](erledigt/nutrition-c-0344-drei-obergrenzen-gelten-nicht-fuer-nahrung.md) | erledigt | — | — |
 | `C-345` | befund | niedrig | [Spurenwerte im Lebensmittelimport](laufend_codex/nutrition-c-0345-spurenwerte-im-lebensmittelimport.md) | laeuft (codex) | — | — |
 | `C-346` | befund | hoch | [zwei Detailtexte neu verknuepfen](erledigt/nutrition-c-0346-zwei-detailtexte-neu-verknuepfen.md) | erledigt | — | — |
@@ -117,6 +117,7 @@
 | `C-355` | feature | mittel | [`food_search` kennt keine Herkunft](erledigt/nutrition-c-0355-food-search-kennt-keine-herkunft.md) | erledigt | — | — |
 | `C-356` | messung | niedrig | [woraus die 1.620 ms HTML bestehen](erledigt/nutrition-c-0356-woraus-die-1620-ms-html-bestehen.md) | erledigt | — | — |
 | `C-360` | entscheidung | hoch | [darf ein fehlender Naehrwert als 0 zaehlen?](todos/nutrition-c-0360-darf-ein-fehlender-naehrwert-als-null-zaehlen.md) | offen | — | — |
+| `C-366` | befund | mittel | [`food_tags` hat keinen Pflegeweg](todos/nutrition-c-0366-food-tags-hat-keinen-pflegeweg.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -139,23 +140,23 @@
 | `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — | — |
 | `G-220` | entscheidung | hoch | [MealCam Auto-Accept widerspricht ADR_MEALCAM_V1](erledigt/nutrition-g-0220-mealcam-auto-accept-widerspricht-adr-mealcam-v1.md) | erledigt | — | — |
 | `G-221` | entscheidung | hoch | [Food-Tag-Set V1 widersprüchlich definiert](erledigt/nutrition-g-0221-food-tag-set-v1-widerspruechlich-definiert.md) | erledigt | — | G-245 |
-| `G-222` | befund | hoch | [Onboarding Flow für Nutrition Preferences fehlt in SPEC_03](laufend_claudecode/nutrition-g-0222-onboarding-flow-fuer-nutrition-preferences-fehlt-in-spec-0.md) | laeuft (claudecode) | — | — |
+| `G-222` | befund | hoch | [Onboarding Flow für Nutrition Preferences fehlt in SPEC_03](todos/nutrition-g-0222-onboarding-flow-fuer-nutrition-preferences-fehlt-in-spec-0.md) | offen | — | — |
 | `G-223` | befund | mittel | [Recalculate-UI in SPEC_10 fehlt (bekanntes Open Item)](todos/nutrition-g-0223-recalculate-ui-in-spec-10-fehlt-bekanntes-open-item.md) | offen | — | — |
 | `G-224` | befund | mittel | [MealCam Consent-Widerruf in Nutrition Settings nicht beschrieben](todos/nutrition-g-0224-mealcam-consent-widerruf-in-nutrition-settings-nicht-besch.md) | offen | — | — |
 | `G-225` | befund | mittel | [Coach Suggestion User Flow fehlt](todos/nutrition-g-0225-coach-suggestion-user-flow-fehlt.md) | offen | — | — |
-| `G-226` | entscheidung | mittel | [V1-Status-Marker fehlen für Recipes/Shopping/MealPlans Components in SPEC_10](laufend_claudecode/nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md) | laeuft (claudecode) | — | — |
-| `G-227` | entscheidung | mittel | [SPEC_03 §Flow 6 Custom Food erstellen via Barcode-Scan widerspricht Phase-2-Status](laufend_claudecode/nutrition-g-0227-spec-03-flow-6-custom-food-erstellen-via-barcode-scan-wide.md) | laeuft (claudecode) | — | — |
-| `G-228` | entscheidung | mittel | [Score Level Multiplier inkonsistent zwischen SPEC_04 und SPEC_07](laufend_claudecode/nutrition-g-0228-score-level-multiplier-inkonsistent-zwischen-spec-04-und-s.md) | laeuft (claudecode) | — | — |
-| `G-229` | entscheidung | mittel | [Admin-Override-Flow für Tag-Korrekturen nicht belegt](laufend_claudecode/nutrition-g-0229-admin-override-flow-fuer-tag-korrekturen-nicht-belegt.md) | laeuft (claudecode) | — | — |
-| `G-230` | entscheidung | niedrig | [`nutrition.water/page.tsx` und `nutrition.shopping-lists/page.tsx` als separate Pages](laufend_claudecode/nutrition-g-0230-nutrition-water-page-tsx-und-nutrition-shopping-lists-page.md) | laeuft (claudecode) | — | — |
+| `G-226` | entscheidung | mittel | [V1-Status-Marker fehlen für Recipes/Shopping/MealPlans Components in SPEC_10](erledigt/nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md) | erledigt | — | C-366, G-285 |
+| `G-227` | entscheidung | mittel | [SPEC_03 §Flow 6 Custom Food erstellen via Barcode-Scan widerspricht Phase-2-Status](todos/nutrition-g-0227-spec-03-flow-6-custom-food-erstellen-via-barcode-scan-wide.md) | offen | — | — |
+| `G-228` | entscheidung | mittel | [Score Level Multiplier inkonsistent zwischen SPEC_04 und SPEC_07](todos/nutrition-g-0228-score-level-multiplier-inkonsistent-zwischen-spec-04-und-s.md) | offen | — | G-283 |
+| `G-229` | entscheidung | mittel | [Admin-Override-Flow für Tag-Korrekturen nicht belegt](todos/nutrition-g-0229-admin-override-flow-fuer-tag-korrekturen-nicht-belegt.md) | offen | — | — |
+| `G-230` | entscheidung | niedrig | [`nutrition.water/page.tsx` und `nutrition.shopping-lists/page.tsx` als separate Pages](erledigt/nutrition-g-0230-nutrition-water-page-tsx-und-nutrition-shopping-lists-page.md) | erledigt | — | — |
 | `G-231` | befund | niedrig | [`SPEC_04 §Feature 9 MealCam` referenziert `ADR_AI_USAGE_WALLET.md` — nicht im Nutrition Spec Pfad](todos/nutrition-g-0231-spec-04-feature-9-mealcam-referenziert-adr-ai-usage-wallet.md) | offen | — | — |
 | `G-232` | befund | niedrig | [Quick-Add Makros UI-Component fehlt in SPEC_10](todos/nutrition-g-0232-quick-add-makros-ui-component-fehlt-in-spec-10.md) | offen | — | — |
 | `G-233` | befund | niedrig | [`MealSlotEditor` Component-Name doppelt verwendet](todos/nutrition-g-0233-mealsloteditor-component-name-doppelt-verwendet.md) | offen | — | — |
 | `G-234` | befund | niedrig | [`IntoleranceSelector` und `ReligiousDietarySelector` nur als Onboarding-Components definiert](todos/nutrition-g-0234-intoleranceselector-und-religiousdietaryselector-nur-als-o.md) | offen | — | — |
-| `G-235` | entscheidung | niedrig | [`MicroDashboard` Tier-System (Tier 1/2/3) und Subscription-Gates ungeklärt](laufend_claudecode/nutrition-g-0235-microdashboard-tier-system-tier-1-2-3-und-subscription-gat.md) | laeuft (claudecode) | — | — |
+| `G-235` | entscheidung | niedrig | [`MicroDashboard` Tier-System (Tier 1/2/3) und Subscription-Gates ungeklärt](erledigt/nutrition-g-0235-microdashboard-tier-system-tier-1-2-3-und-subscription-gat.md) | erledigt | — | — |
 | `G-236` | befund | niedrig | [`SmartSuggestions` Component und `useSmartSearchSuggestions` Hook ohne klaren V1-Trigger](todos/nutrition-g-0236-smartsuggestions-component-und-usesmartsearchsuggestions-h.md) | offen | — | — |
 | `G-237` | befund | niedrig | [`data/nutrientDetails.ts` als statisches Array — `food_sources` Array veraltet (per Review 1 ADR_IMPROVEMENTS_PACKAGE #20)](todos/nutrition-g-0237-data-nutrientdetails-ts-als-statisches-array-food-sources-.md) | offen | — | — |
-| `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](laufend_claudecode/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | laeuft (claudecode) | — | — |
+| `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | — | — |
 | `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](erledigt/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | erledigt | — | C-333, C-334, G-246, G-247, G-249 |
 | `G-245` | feature | mittel | [die Sortier-Tags bauen](erledigt/nutrition-g-0245-die-sortier-tags-bauen.md) | erledigt | — | — |
 | `G-246` | feature | hoch | [die Detailtexte liegen in der Datenbank und werden nicht gelesen](erledigt/nutrition-g-0246-die-detailtexte-werden-nicht-gelesen.md) | erledigt | — | A-60, C-336 |
@@ -185,6 +186,8 @@
 | `G-274` | feature | hoch | [der Bestaetigungsweg fuer Plan-Eintraege](erledigt/nutrition-g-0274-der-bestaetigungsweg-fuer-plan-eintraege.md) | erledigt | — | G-276 |
 | `G-276` | befund | mittel | [MealCam schreibt `confirmation_mode` ohne Fotoweg](erledigt/nutrition-g-0276-mealcam-schreibt-ohne-fotoweg.md) | erledigt | — | — |
 | `G-279` | entscheidung | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | — | — |
+| `G-283` | befund | hoch | [ein `pro`-Profil faellt still auf 0,90](laufend_claudecode/nutrition-g-0283-ein-pro-profil-faellt-still-auf-090.md) | vorbereitet (claudecode) | — | — |
+| `G-285` | befund | niedrig | [`display_tier` heisst im Code weiter *Abo-Gate*](laufend_claudecode/nutrition-g-0285-display-tier-heisst-im-code-weiter-abo-gate.md) | vorbereitet (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59
@@ -324,7 +327,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `A-35` | messung | mittel | [Sieben Module haben keine Seite](laufend_claudecode/coach-a-0035-sieben-module-haben-keine-seite.md) | vorbereitet (claudecode) | — | — |
+| `A-35` | messung | mittel | [Sieben Module haben keine Seite](erledigt/coach-a-0035-sieben-module-haben-keine-seite.md) | erledigt | — | — |
 | `A-36` | befund | mittel | [`module-stubs-replacement.jsx` traegt drei ganze Module](erledigt/coach-a-0036-module-stubs-replacement-jsx-traegt-drei-ganze-module.md) | erledigt | — | — |
 | `A-43` | entscheidung | mittel | [Coach-Permissions pro Subfunktion](todos/coach-a-0043-coach-permissions-pro-subfunktion.md) | offen | — | — |
 | `B-25` | befund | mittel | [Geteilte Sitzung im Produktbereich prüfen](erledigt/coach-b-0025-geteilte-sitzung-im-produktbereich-prufen.md) | erledigt | — | — |
@@ -337,7 +340,7 @@
 | `C-220` | befund | mittel | [`buddy` — 0 von 16 Tabellen](todos/coach-c-0220-buddy-0-von-16-tabellen.md) | offen | — | — |
 | `C-268` | feature | mittel | [Beim Einladen gibt es keine Namensaufloesung](todos/coach-c-0268-beim-einladen-gibt-es-keine-namensaufloesung.md) | offen | — | — |
 | `C-269` | feature | mittel | [Eine Einladung laesst sich nicht zuruecknehmen](todos/coach-c-0269-eine-einladung-laesst-sich-nicht-zuruecknehmen.md) | offen | — | — |
-| `C-318` | befund | hoch | [ADR-Coach-Permissions weicht von der Umsetzung ab](laufend_codex/coach-c-0318-adr-coach-permissions-weicht-von-der-umsetzung-ab.md) | laeuft (codex) | — | — |
+| `C-318` | befund | hoch | [ADR-Coach-Permissions weicht von der Umsetzung ab](erledigt/coach-c-0318-adr-coach-permissions-weicht-von-der-umsetzung-ab.md) | erledigt | — | — |
 | `C-358` | befund | mittel | [abgelaufene Aktionen bleiben `pending`](erledigt/coach-c-0358-abgelaufene-aktionen-bleiben-pending.md) | erledigt | — | — |
 | `C-362` | feature | mittel | [das Consent-Log ist beschrieben und nicht gebaut](todos/coach-c-0362-das-consent-log-ist-beschrieben-und-nicht-gebaut.md) | offen | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
@@ -350,13 +353,13 @@
 | `G-277` | befund | hoch | [der Rechte-Reiter nennt einen Grund, den es nicht gibt](erledigt/coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md) | erledigt | — | G-280 |
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 
-## quer — 80
+## quer — 81
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-06` | befund | mittel | [Design-System spezifizieren](todos/quer-a-0006-design-system-spezifizieren.md) | offen | — | — |
 | `A-15` | messung | mittel | [Sprachpflege als laufende Regel](todos/quer-a-0015-sprachpflege-als-laufende-regel.md) | offen | — | — |
-| `A-16` | befund | mittel | [`public/mockup/` als dritten Fundus auswerten](laufend_claudecode/quer-a-0016-public-mockup-als-dritten-fundus-auswerten.md) | vorbereitet (claudecode) | — | — |
+| `A-16` | befund | mittel | [`public/mockup/` als dritten Fundus auswerten](erledigt/quer-a-0016-public-mockup-als-dritten-fundus-auswerten.md) | erledigt | — | G-284 |
 | `A-18` | feature | mittel | [`theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf](todos/quer-a-0018-theme-v1-uploads-die-bruecke-zwischen-spec-und-entwurf.md) | offen | — | — |
 | `A-19` | messung | mittel | [Zwei README-Abweichungen in der Kette](todos/quer-a-0019-zwei-readme-abweichungen-in-der-kette.md) | offen | — | — |
 | `A-20` | befund | mittel | [Die Spec-Fehlerliste](todos/quer-a-0020-die-spec-fehlerliste.md) | offen | — | — |
@@ -385,7 +388,7 @@
 | `A-62` | befund | mittel | [Waechter kippen still, wenn das Schema nachkommt](erledigt/quer-a-0062-waechter-kippen-still-wenn-das-schema-nachkommt.md) | erledigt | — | A-63, G-277, G-278 |
 | `A-63` | befund | niedrig | [der Waechter las seine eigene Probe](todos/quer-a-0063-der-waechter-las-seine-eigene-probe.md) | offen | — | — |
 | `A-64` | entscheidung | niedrig | [der Schirmlauf ausserhalb des Gates](todos/quer-a-0064-der-schirmlauf-ausserhalb-des-gates.md) | offen | — | — |
-| `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](laufend_codex/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | laeuft (codex) | — | — |
+| `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](todos/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | offen | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
 | `C-64` | feature | mittel | [942 Schluessel und Thai aus dem Vorgaengerrepo uebertragen](todos/quer-c-0064-942-schluessel-und-thai-aus-dem-vorgaengerrepo-uebertragen.md) | offen | — | — |
@@ -407,7 +410,7 @@
 | `C-298` | feature | mittel | [der Datenlogik-Waechter meldet zwei harmlose Muster rot](todos/quer-c-0298-der-datenlogik-waechter-meldet-zwei-harmlose-muster-rot.md) | offen | — | — |
 | `C-354` | feature | hoch | [eine Lesefunktion fuer offene Coach-Aktionen](erledigt/quer-c-0354-eine-lesefunktion-fuer-offene-coach-aktionen.md) | erledigt | — | C-358 |
 | `C-357` | befund | mittel | [vier ADRs widersprechen neueren Entscheidungen](erledigt/quer-c-0357-vier-adrs-widersprechen-neueren-entscheidungen.md) | erledigt | — | — |
-| `C-361` | befund | mittel | [die Datenbank fuehrt keine Pipeline-Historie](laufend_codex/quer-c-0361-die-datenbank-fuehrt-keine-pipeline-historie.md) | laeuft (codex) | — | — |
+| `C-361` | befund | mittel | [die Datenbank fuehrt keine Pipeline-Historie](erledigt/quer-c-0361-die-datenbank-fuehrt-keine-pipeline-historie.md) | erledigt | — | — |
 | `C-363` | entscheidung | niedrig | [drei oekonomische Befunde im Marketplace](todos/quer-c-0363-drei-oekonomische-befunde-im-marketplace.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
@@ -434,6 +437,7 @@
 | `G-215` | messung | hoch | [der Durchstich: kommt eine Warnung beim Nutzer an?](erledigt/quer-g-0215-durchstich-kommt-eine-warnung-an.md) | erledigt | — | C-328, C-329 |
 | `G-278` | befund | mittel | [die restlichen 222 Abwesenheitsaussagen](erledigt/quer-g-0278-die-restlichen-222-abwesenheitsaussagen.md) | erledigt | — | C-359 |
 | `G-280` | befund | mittel | [der Dev-Server ueberlebt lange Testlaeufe nicht](erledigt/quer-g-0280-der-dev-server-ueberlebt-lange-testlaeufe-nicht.md) | erledigt | — | — |
+| `G-284` | befund | hoch | [die Mockups werden ohne Anmeldung ausgeliefert](laufend_claudecode/quer-g-0284-die-mockups-werden-ohne-anmeldung-ausgeliefert.md) | vorbereitet (claudecode) | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

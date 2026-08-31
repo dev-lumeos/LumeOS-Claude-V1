@@ -8,7 +8,7 @@ braucht: []
 kind_von: C-343
 entscheidung: null
 agent: codex
-beauftragt: 2026-08-30
+beauftragt: 2026-08-31
 beruehrt:
   tabellen: [nutrition.food_nutrients]
 zahlen:
@@ -198,4 +198,64 @@ Testprotokoll und keine Antwort auf C-209/C-361.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-08-31, Orchestrator.**
+
+### Der Befund widerlegt meine eigene Begruendung
+
+`[cmd]` **Von 98 fehlenden VITC-Posten: 0 logische Nullen, 86
+zensierte `<LOD`/`<LOQ`, 12 echte Luecken.**
+
+`[read]` **Ich hatte in C-49 und C-360 geschrieben, Ei, Kabeljau und
+weisser Reis enthielten *,,tatsaechlich keins"*.** `[cmd]` **Die
+Quelle bezeichnet acht der neun Faelle gerade nicht als biologische
+Null** — **sie sagt: gemessen, unterhalb der Grenze.**
+
+`[cmd]` **Die zwoelf echten Luecken sind Ziegenfleisch.** `[cmd]`
+**Die 86 zensierten: Ei 26, Reis 17, Thunfisch 12, Kabeljau 12,
+Haferflocken 7, Skyr 6, Lachs 6.**
+
+`[read]` **Und die Gesamtpruefung ordnet es ein:** `[cmd]` 985.320
+Herkunftsangaben, davon 18.566 *Logische Null*, 1.800 *Spuren*,
+110.182 `-`. **Die logische Null traegt in der Datei einen
+numerischen Wert 0 und faellt deshalb gar nicht unter die fehlenden
+Posten.**
+
+### Die Wiederherstellung beantwortet C-360 nicht — der Standard schon
+
+`[read]` Sein Urteil: *,,Eine Wiederherstellung der Herkunft waere
+richtig, beantwortet C-360 aber nicht. Nullen zu setzen ist aus
+diesem Befund nicht gedeckt."*
+
+`[read]` **Richtig — und genau deshalb habe ich recherchiert statt
+Tom zu fragen.**
+
+**EFSA und WHO/IPCS fuehren fuer zensierte Werte eine
+Substitutionsmethode:** Lower Bound setzt `<LOD`/`<LOQ` auf 0, Upper
+Bound auf die Grenze, Middle Bound dazwischen. **Und die Leitlinie
+nennt Naehrstoffe ausdruecklich als Anwendungsfall.**
+
+`[cmd]` **Als E-38 entschieden: Lower Bound.** `[read]` **Weil der
+BLS die Grenze nicht mitliefert** — MB und UB braeuchten den LOD-Wert,
+**LB kommt ohne erfundene Zahl aus.**
+
+`[read]` **C-345 ist damit die Voraussetzung, nicht die Antwort:**
+ohne mitgefuehrte Herkunft weiss die Bilanz nicht, welche 86 Posten
+zensiert sind.
+
+### C-361 — Vorschlag, nicht gebaut
+
+`[cmd]` **138 Kettenschritte, keine Historientabelle.** `[cmd]`
+**Weder Datenbank noch Ausfuehrer fuehren den Zustand.**
+
+`[read]` **Vorschlag vorgelegt: vom Live-Deployer geschriebene
+Schritt-Historie.** **Nicht gebaut, wie beauftragt.**
+
+**Abgenommen.** C-345 bleibt offen und wird konkret: **die Herkunft
+mitfuehren, damit E-38 wirken kann.**
+
+
+
+## Erneut beauftragt, 2026-08-31
+
+**Mitbeauftragt mit C-343.** `[read]` **Die Messung steht; jetzt geht
+es um die Wiederherstellung, damit E-38 wirken kann.**

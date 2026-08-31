@@ -9,6 +9,8 @@ kind_von: C-209
 entscheidung: null
 agent: codex
 beauftragt: 2026-08-30
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
   dateien:
     - supabase/_pipeline/kette.json
@@ -65,3 +67,11 @@ nicht starten.**
 `[cmd]` **Gemessen in G-280: 18 Starts, sechs an einem Tag, vor keinem
 ein Fehler** — **`neustart` fuehrt `taskkill /T /F` auf Port 3200
 aus, und Tom arbeitet dort mit.**
+
+## Abnahme
+
+**2026-08-31, mit C-345 abgenommen: Vorschlag vorgelegt.**
+
+`[cmd]` **138 Kettenschritte, keine Historientabelle, weder in der
+Datenbank noch beim Ausfuehrer.** `[read]` **Der Vorschlag steht in
+der C-345-Datei.**

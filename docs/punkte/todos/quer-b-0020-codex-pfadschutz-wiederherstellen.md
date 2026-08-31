@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-08-30
 beruehrt:
   tabellen: []
   dateien: ["supabase/config.toml"]
@@ -85,3 +83,8 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Neu gemessen, 2026-08-31
+
+`[cmd]` **Codex hat keinen verifizierten Pfadschutz.** `[read]` **Der
+Punkt bleibt offen und ist damit belegt statt vermutet.**
