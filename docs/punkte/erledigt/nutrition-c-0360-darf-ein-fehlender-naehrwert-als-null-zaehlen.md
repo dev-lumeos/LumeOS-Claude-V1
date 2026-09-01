@@ -6,7 +6,9 @@ schwere: hoch
 angelegt: 2026-08-30
 braucht: []
 kind_von: C-49
-entscheidung: null
+entscheidung: E-38
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.food_nutrients]
 zahlen:
@@ -64,3 +66,21 @@ eine Wiederherstellung:** **wenn die Herkunft mitkaeme, waere
 `[read]` **Was zu messen ist, bevor Tom entscheidet:** `[cmd]` **wie
 viele der 98 fehlenden Posten in der Quelle eine *Logische Null*
 tragen** — **und wie viele wirklich leer sind.**
+
+## Abnahme
+
+**2026-09-02, durch E-38 beantwortet.**
+
+`[cmd]` **E-38, 31.08.:** zensierte Messwerte (`<LOD`/`<LOQ`) zaehlen
+als 0 nach dem Lower Bound, **echte Luecken bleiben unvollstaendig.**
+
+`[cmd]` **Und Tom hat es am 01.09. bestaetigt:** *,,wenn die daten
+nicht da sind erfinden wir sie nicht."*
+
+`[read]` **Damit ist die Frage in beide Richtungen beantwortet:** ein
+gemessener Wert unter der Grenze ist eine Null, **ein fehlender ist
+eine Luecke.**
+
+`[cmd]` **C-378 hat denselben Weg genommen und ist geschlossen.**
+
+**Geschlossen.**

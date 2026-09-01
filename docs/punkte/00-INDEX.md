@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 220 |
+| `todos` | 219 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 205 |
+| `erledigt` | 206 |
 | **gesamt** | **430** |
 
 ## medical — 42
@@ -116,7 +116,7 @@
 | `C-353` | messung | mittel | [die erwartete Ersparnis tritt nicht ein](erledigt/nutrition-c-0353-die-erwartete-ersparnis-tritt-nicht-ein.md) | erledigt | — | C-356 |
 | `C-355` | feature | mittel | [`food_search` kennt keine Herkunft](erledigt/nutrition-c-0355-food-search-kennt-keine-herkunft.md) | erledigt | — | — |
 | `C-356` | messung | niedrig | [woraus die 1.620 ms HTML bestehen](erledigt/nutrition-c-0356-woraus-die-1620-ms-html-bestehen.md) | erledigt | — | — |
-| `C-360` | entscheidung | hoch | [darf ein fehlender Naehrwert als 0 zaehlen?](todos/nutrition-c-0360-darf-ein-fehlender-naehrwert-als-null-zaehlen.md) | offen | — | — |
+| `C-360` | entscheidung | hoch | [darf ein fehlender Naehrwert als 0 zaehlen?](erledigt/nutrition-c-0360-darf-ein-fehlender-naehrwert-als-null-zaehlen.md) | erledigt | — | — |
 | `C-366` | befund | mittel | [`food_tags` hat keinen Pflegeweg](todos/nutrition-c-0366-food-tags-hat-keinen-pflegeweg.md) | offen | — | — |
 | `C-367` | befund | hoch | [Vitamin A blockiert den Score an allen Tagen](erledigt/nutrition-c-0367-vitamin-a-blockiert-den-score-an-allen-tagen.md) | erledigt | — | C-368 |
 | `C-368` | entscheidung | hoch | [fuenfzehn Lebensmittel blockieren den Score](erledigt/nutrition-c-0368-fuenfzehn-lebensmittel-blockieren-den-score.md) | erledigt | — | C-378 |

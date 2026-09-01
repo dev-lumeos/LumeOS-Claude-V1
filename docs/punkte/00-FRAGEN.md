@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **27 Punkte tragen `typ: entscheidung`
+`[cmd]` **26 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -15,60 +15,6 @@ Dann faellt er hier heraus.
 
 `[read]` **Was aufbereitet gehoert, gehoert in die Punktdatei** —
 nicht in diese Uebersicht.
-
----
-
-# Hoch
-
-## C-360 — darf ein fehlender Naehrwert als 0 zaehlen?
-
-**Modul:** nutrition · **angelegt:** 2026-08-30 · **Datei:** `todos/nutrition-c-0360-darf-ein-fehlender-naehrwert-als-null-zaehlen.md`
-
-## Der Befund
-
-Aus C-49, Claude Code, 2026-08-30.
-
-`[cmd]` **`VITC` ist an 0 von 30 Tagen vollstaendig, 98 fehlende
-Posten.** `[cmd]` **Vitamin A ebenso, weil Beta-Carotin jeden Tag
-bricht.**
-
-`[cmd]` **Am 2026-08-29 fehlte `VITC` bei Ei, Kabeljau, weissem Reis
-und Ziegenfleisch** — **alle enthalten tatsaechlich keins.**
-
-`[read]` **Ein einziges Stueck Fleisch macht den Vitamin-C-Tag
-unvollstaendig** — **nicht weil ein Wert fehlt, sondern weil eine Null
-nicht erfasst wird.**
-
-## Die Frage
-
-**Darf ein fehlender Naehrwert als 0 zaehlen, wenn das Lebensmittel
-ihn nicht enthaelt?**
-
-## Was dagegen spricht
-
-`[cmd]` **Die BLS-Dokumentation, Kapitel 4.3, sagt woertlich:** *,,Ein
-fehlender Wert ist nicht gleichbedeutend mit Null und sollte nicht als
-Null interpretiert werden."*
-
-`[read]` **Und C-48 Regel 1 sagt dasselbe:** kein Fehlzaehler wird zur
-Null.
-
-## Was dafuer spricht — und wo die Antwort liegt
-
-`[cmd]` **Der BLS fuehrt *Logische Null* als eigene Datenherkunft:
-18.566 Werte.** `[cmd]` **Er unterscheidet also selbst zwischen
-*nicht gemessen* und *enthaelt keins*.**
-
-`[cmd]` **Der Import hat die Unterscheidung verworfen** — **das ist
-C-345**, und dort liegen auch die 1.800 Spurenwerte.
-
-`[read]` **Damit ist die Frage vielleicht keine Entscheidung, sondern
-eine Wiederherstellung:** **wenn die Herkunft mitkaeme, waere
-*logische Null* eine Null und *fehlend* weiter fehlend.**
-
-`[read]` **Was zu messen ist, bevor Tom entscheidet:** `[cmd]` **wie
-viele der 98 fehlenden Posten in der Quelle eine *Logische Null*
-tragen** — **und wie viele wirklich leer sind.**
 
 ---
 
