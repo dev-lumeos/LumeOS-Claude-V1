@@ -2163,19 +2163,17 @@
     {
       "schema": "coach",
       "name": "pending_actions",
-      "schritt": "150",
+      "schritt": "150/381",
       "rls": true,
       "policies": [
         "SELECT",
         "INSERT",
-        "UPDATE",
         "DELETE"
       ],
       "grants": {
         "authenticated": [
           "SELECT",
           "INSERT",
-          "UPDATE",
           "DELETE"
         ],
         "service_role": [
@@ -2188,24 +2186,20 @@
           "TRUNCATE"
         ]
       },
-      "grants_herkunft": "150_coach_permissions_autonomy.sql vergibt authenticated DML und service_role ALL explizit.",
+      "grants_herkunft": "150_coach_permissions_autonomy.sql legt die Tabelle an; 381_sichere_aktionsbestaetigung.sql entzieht authenticated UPDATE. Bestaetigung geht ausschliesslich ueber coach.bestaetige_aktion(uuid); service_role ALL.",
       "zeilenschutzart": "eigene_zeilen"
     },
     {
       "schema": "coach",
       "name": "action_log",
-      "schritt": "150",
+      "schritt": "150/381",
       "rls": true,
       "policies": [
-        "SELECT",
-        "INSERT",
-        "UPDATE"
+        "SELECT"
       ],
       "grants": {
         "authenticated": [
-          "SELECT",
-          "INSERT",
-          "UPDATE"
+          "SELECT"
         ],
         "service_role": [
           "SELECT",
@@ -2217,7 +2211,7 @@
           "TRUNCATE"
         ]
       },
-      "grants_herkunft": "150_coach_permissions_autonomy.sql vergibt authenticated SELECT/INSERT/UPDATE fuer Undo-Snapshot, aber kein DELETE; service_role ALL.",
+      "grants_herkunft": "150_coach_permissions_autonomy.sql legt die Tabelle an; 381_sichere_aktionsbestaetigung.sql entzieht authenticated INSERT/UPDATE. Nur coach.bestaetige_aktion(uuid) schreibt das Ausfuehrungsprotokoll; service_role ALL.",
       "zeilenschutzart": "eigene_zeilen"
     },
     {

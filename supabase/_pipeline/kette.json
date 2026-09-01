@@ -1385,6 +1385,17 @@
       "depends_on": [
         "150"
       ]
+    },
+    {
+      "id": "381",
+      "path": "supabase/_pipeline/15_coach/381_sichere_aktionsbestaetigung.sql",
+      "kind": "sql",
+      "creates": "C-381/G-151: atomare, ablaufgesicherte Klientenbestaetigung fuer erlaubte Coach-Aktionen mit Zielwert- und Undo-Protokoll",
+      "depends_on": [
+        "110",
+        "150",
+        "354"
+      ]
     }
   ]
 }
