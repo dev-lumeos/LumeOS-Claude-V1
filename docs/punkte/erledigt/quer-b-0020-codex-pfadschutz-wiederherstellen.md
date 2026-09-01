@@ -11,7 +11,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-09-01
 erledigt: 2026-09-01
-commit: OFFEN
+commit: 4a2bd5df
 beruehrt:
   tabellen: []
   dateien: ["supabase/config.toml"]
