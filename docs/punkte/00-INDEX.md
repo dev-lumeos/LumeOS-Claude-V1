@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 231 |
+| `todos` | 230 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 6 |
-| `erledigt` | 178 |
+| `laufend_claudecode` | 3 |
+| `erledigt` | 182 |
 | **gesamt** | **416** |
 
 ## medical — 42
@@ -124,11 +124,11 @@
 | `C-370` | entscheidung | hoch | [wie entsteht ein eigener Plan?](erledigt/nutrition-c-0370-wie-entsteht-ein-eigener-plan.md) | erledigt | — | — |
 | `C-371` | befund | mittel | [`recipes` hat keine Herkunftsspalte](erledigt/nutrition-c-0371-recipes-hat-keine-herkunftsspalte.md) | erledigt | — | — |
 | `C-372` | befund | hoch | [Planwochen haben keinen Schreibweg](erledigt/nutrition-c-0372-planwochen-haben-keinen-schreibweg.md) | erledigt | — | G-307 |
-| `C-373` | befund | mittel | [der Lebenszyklus wird gespeichert und nie ausgefuehrt](laufend_claudecode/nutrition-c-0373-der-lebenszyklus-wird-gespeichert-und-nie-ausgefuehrt.md) | laeuft (claudecode) | — | C-377 |
+| `C-373` | befund | mittel | [der Lebenszyklus wird gespeichert und nie ausgefuehrt](erledigt/nutrition-c-0373-der-lebenszyklus-wird-gespeichert-und-nie-ausgefuehrt.md) | erledigt | — | C-377 |
 | `C-374` | befund | mittel | [`plan_origin` kennt `buddy` nicht](erledigt/nutrition-c-0374-plan-origin-kennt-buddy-nicht.md) | erledigt | — | — |
-| `C-375` | feature | mittel | [ein Flag fuer fremde Plaene und Rezepte](laufend_claudecode/nutrition-c-0375-ein-flag-fuer-fremde-plaene-und-rezepte.md) | laeuft (claudecode) | — | — |
+| `C-375` | feature | mittel | [ein Flag fuer fremde Plaene und Rezepte](erledigt/nutrition-c-0375-ein-flag-fuer-fremde-plaene-und-rezepte.md) | erledigt | — | — |
 | `C-376` | befund | mittel | [frieren abgeschlossene Plaene auch ein?](erledigt/nutrition-c-0376-frieren-abgeschlossene-plaene-auch-ein.md) | erledigt | — | — |
-| `C-377` | feature | hoch | [ein abgelaufener Plan braucht eine Frage](todos/nutrition-c-0377-ein-abgelaufener-plan-braucht-eine-frage.md) | offen | — | — |
+| `C-377` | feature | hoch | [ein abgelaufener Plan braucht eine Frage](erledigt/nutrition-c-0377-ein-abgelaufener-plan-braucht-eine-frage.md) | erledigt | — | — |
 | `C-378` | entscheidung | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](todos/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
@@ -215,11 +215,11 @@
 | `G-299` | feature | hoch | [der Planner zeigt eine fremde Woche](erledigt/nutrition-g-0299-der-planner-zeigt-eine-fremde-woche.md) | erledigt | — | — |
 | `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](erledigt/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | erledigt | — | — |
 | `G-301` | befund | hoch | [der Meal-plans-Reiter folgt keinem Flow](erledigt/nutrition-g-0301-der-meal-plans-reiter-folgt-keinem-flow.md) | erledigt | — | C-370 |
-| `G-302` | befund | mittel | [die Zielzeile bricht um](laufend_claudecode/nutrition-g-0302-die-zielzeile-bricht-um.md) | vorbereitet (claudecode) | — | — |
+| `G-302` | befund | mittel | [die Zielzeile bricht um](laufend_claudecode/nutrition-g-0302-die-zielzeile-bricht-um.md) | laeuft (claudecode) | — | — |
 | `G-304` | messung | hoch | [was ein Nutzer in Plaenen und Rezepten tun kann](erledigt/nutrition-g-0304-was-ein-nutzer-in-plaenen-und-rezepten-tun-kann.md) | erledigt | — | C-372, C-373, G-305 |
 | `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](laufend_claudecode/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | laeuft (claudecode) | — | — |
-| `G-306` | befund | hoch | [der Planeditor verletzt die Immutabilitaet](laufend_claudecode/nutrition-g-0306-der-planeditor-verletzt-die-immutabilitaet.md) | laeuft (claudecode) | — | C-376 |
-| `G-307` | feature | mittel | [*Bearbeiten* in der Bibliothek fuehrt nirgendwohin](laufend_claudecode/nutrition-g-0307-bearbeiten-in-der-bibliothek-fuehrt-nirgendwohin.md) | vorbereitet (claudecode) | — | — |
+| `G-306` | befund | hoch | [der Planeditor verletzt die Immutabilitaet](erledigt/nutrition-g-0306-der-planeditor-verletzt-die-immutabilitaet.md) | erledigt | — | C-376 |
+| `G-307` | feature | mittel | [*Bearbeiten* in der Bibliothek fuehrt nirgendwohin](laufend_claudecode/nutrition-g-0307-bearbeiten-in-der-bibliothek-fuehrt-nirgendwohin.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59

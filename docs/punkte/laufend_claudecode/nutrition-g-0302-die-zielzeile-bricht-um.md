@@ -7,6 +7,8 @@ angelegt: 2026-08-31
 braucht: []
 kind_von: G-289
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-01
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-plans.tsx
@@ -39,7 +41,7 @@ Beschriftungen.**
 
 ## Auftrag
 
-`[read]` **Vorbereitet am 2026-08-31.**
+**Beauftragt am 2026-09-01.**
 
 `[cmd]` **Vier Werte in einer Zeile, der dritte hat die laengste
 Beschriftung, der Umbruch trifft genau ihn.** **Bei 1440 px.**

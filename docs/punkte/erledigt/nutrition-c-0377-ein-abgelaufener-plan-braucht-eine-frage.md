@@ -9,6 +9,8 @@ kind_von: C-373
 entscheidung: E-42
 agent: claudecode
 beauftragt: 2026-08-31
+erledigt: 2026-09-01
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen: null
@@ -69,3 +71,10 @@ abgeschlossen, nicht weggeraeumt; er bleibt waehlbar.
 der Plan auf `completed` und die Frage blieb stehen -- die Anzeige
 rechnete nur die Laufzeit, nicht den Zustand. **Behoben und
 nachgemessen.**
+
+## Abnahme
+
+**2026-09-01, mit G-306 abgenommen: gebaut.**
+
+`[cmd]` **Die Meldung mit drei Wegen steht, jeder einmal gegangen.**
+`[cmd]` **rollover: *neu starten*, `rollover_count` 0 auf 1.**

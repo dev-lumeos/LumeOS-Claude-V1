@@ -9,6 +9,8 @@ kind_von: G-304
 entscheidung: E-42
 agent: claudecode
 beauftragt: 2026-08-31
+erledigt: 2026-09-01
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -76,3 +78,21 @@ keine Lebenszyklus-Funktion. **Die Meldung IST die Ausfuehrung.**
 Knopf, weil `meal_plans` keine Spalte fuer den Folgeplan hat
 (gemessen 2026-09-01). **Soll spaeter eine Kette entstehen, gehoert
 der Folgeplan benannt.**
+
+## Abnahme
+
+**2026-09-01, mit G-306 abgenommen: geloest.**
+
+`[read]` **Die Meldung beim Ablauf ist die Ausfuehrung** — kein
+Zeitplaner noetig.
+
+`[cmd]` **`rollover` gegangen: der Vorschlag lautet *neu starten*,
+`rollover_count` 0 auf 1, Wochen vom Juli auf 01.–07.09.**
+
+`[cmd]` **Und ein Nebenbefund im Browser gefunden:** nach dem
+Abschliessen stand der Plan auf `completed` **und die Ablauffrage
+blieb stehen** — die Anzeige rechnete nur die Laufzeit, nicht den
+Zustand. **Behoben.**
+
+`[read]` **Was bleibt: `once` und `sequence` teilen einen Knopf**,
+weil `meal_plans` keine Folgeplan-Spalte hat. **Als C-379.**

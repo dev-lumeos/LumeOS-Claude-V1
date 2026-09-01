@@ -7,6 +7,8 @@ angelegt: 2026-08-31
 braucht: []
 kind_von: C-372
 entscheidung: E-41
+agent: claudecode
+beauftragt: 2026-09-01
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-plans.tsx
@@ -39,7 +41,7 @@ Auswahl** (G-304, Flow 3 Schritt 2).
 
 ## Auftrag
 
-**Mitbeauftragt mit G-302.** `[read]` **Vorbereitet am 2026-08-31.**
+**Mitbeauftragt mit G-302.** **Beauftragt am 2026-09-01.**
 
 `[cmd]` **E-41: *Bearbeiten fuehrt in den Planner*.** **Nicht
 verdrahtet.**

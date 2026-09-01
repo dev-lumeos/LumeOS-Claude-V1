@@ -9,6 +9,8 @@ kind_von: G-298
 entscheidung: E-42
 agent: claudecode
 beauftragt: 2026-08-31
+erledigt: 2026-09-01
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.meal_plan_entries]
 zahlen:
@@ -409,4 +411,75 @@ getrennt.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-01, Orchestrator.**
+
+**Alle sechs Nachweiszeilen belegt, je Position ueber die
+Oberflaeche.**
+
+    breakfast / 31.08.   confirmed   409   200 g unveraendert
+    lunch / 01.09.       kein Log    200   250 g
+    dinner / 04.09.      kein Log    200   250 g
+
+`[read]` **Die dritte Zeile ist der Zukunftstag** — **genau der Fall,
+den meine alte Vorgabe gesperrt haette.**
+
+`[cmd]` **`darf_weiterverkaufen` liegt live auf `meal_plans` und
+`recipes`, die Anzeige liest sie** — Codex hat sie waehrend des
+Auftrags eingespielt.
+
+`[cmd]` **Die drei Ablaufwege sind jeder einmal geklickt:** rollover
+auf *neu starten*, `rollover_count` 0 auf 1, Wochen vom Juli auf
+01.–07.09.
+
+### Warum *Kopie bearbeiten* weg ist
+
+`[cmd]` **165 Zeilen mit genau einer Aufgabe: um die Plansperre
+herumfuehren.**
+
+`[read]` Sein Satz: *,,Ohne die Sperre fuehrt er um nichts mehr
+herum. Einen Plan zu duplizieren mag fuer sich sinnvoll sein — dann
+als Bibliotheksfunktion mit eigener Begruendung, beantragt statt
+uebriggelassen."*
+
+`[read]` **Richtig.** **A-59 in seiner sauberen Form: nicht
+liegenlassen, weil es mal gebraucht wurde.**
+
+### Zwei Funde, die er nicht gesucht hat
+
+`[cmd]` **Die Sabotageprobe liess im ersten Durchgang S6 und S8
+durch:** der Schreibweg konnte aufhoeren zu pruefen, **und jeder
+Waechter blieb gruen.**
+
+`[read]` **Er ordnet es selbst ein:** *,,die Klasse aus
+G-216/G-247/G-246 — ich suchte den Aufruf im Quelltext, statt zu
+messen, ob ein Fehler kommt."*
+
+`[cmd]` **Behoben mit einem Verhaltenswaechter gegen eine
+Attrappen-Datenbank**, der prueft **dass**, **womit**
+(`POSITION_GELOGGT`) und **wonach** (`neq('status','pending')`).
+`[cmd]` **Zweiter Durchgang: 22 von 22 gefangen.**
+
+`[cmd]` **Der zweite Fund kam erst im Browser:** nach Weg 2 stand der
+Plan auf `completed` **und die Ablauffrage blieb stehen** — **die
+Anzeige rechnete nur die Laufzeit, nicht den Zustand.**
+
+### Eine offene Frage, sauber benannt
+
+`[cmd]` **`once` und `sequence` teilen sich einen Knopf, weil
+`meal_plans` keine Spalte fuer den Folgeplan hat.** `[cmd]` **Der
+Vorschlagssatz unterscheidet sie, der Knopf nicht.**
+
+`[read]` Sein Urteil: *,,Reicht, solange keine Kette gebaut wird."*
+**Als C-379.**
+
+### Und eine saubere Behandlung des ueberholten Abschnitts
+
+`[cmd]` **Bei C-375 hat er den alten C-372-Abschnitt nicht
+ueberschrieben, sondern als *UEBERHOLT durch E-42* gekennzeichnet.**
+
+`[read]` **Richtig — er war als Stand vom 31.08. korrekt.**
+
+`[cmd]` Gate gruen, 1.175 Tests, 11/11, `dev` unberuehrt.
+
+**Abgenommen.**
+

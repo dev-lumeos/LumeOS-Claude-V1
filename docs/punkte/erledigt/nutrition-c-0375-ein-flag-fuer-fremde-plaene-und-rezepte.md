@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-42
 agent: claudecode
 beauftragt: 2026-08-31
+erledigt: 2026-09-01
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -139,3 +141,8 @@ ihre Abwesenheit.
 
 `[read]` **Kein Weiterverkauf gebaut** — nur das Flag und der Satz,
 wie beauftragt.
+
+## Abnahme
+
+**2026-09-01, mit G-306 abgenommen:** `darf_weiterverkaufen` live an beiden Tabellen, die Anzeige liest
+sie statt hart `undefined`.
