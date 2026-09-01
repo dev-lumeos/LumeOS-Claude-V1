@@ -10,7 +10,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-09-01
 erledigt: 2026-09-01
-commit: OFFEN
+commit: cf61b6c4
 beruehrt:
   tabellen:
     - supplements.supplements
