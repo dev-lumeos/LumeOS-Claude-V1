@@ -440,4 +440,99 @@ Naehrstoffe nachgemessen**, nur fuer `enercc`.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator.**
+
+**Der Weg laeuft vollstaendig.** `[cmd]` Gate gruen, 1.190 Tests, 36
+von 36 Sabotagen, `dev` unveraendert.
+
+### Zwei meiner Auftragspunkte sind gefallen
+
+`[cmd]` **1. `meal_plan_day_to_diary` schreibt echte `meals` mit
+`entry_source = 'seed'`** — ihr eigener Kommentar sagt *,,als
+**normale** meals/meal_items"*.
+
+`[read]` **Mein Auftragspunkt hiess *,,Ghost Entries entstehen — ruf
+sie auf"*.** **Er hat gemessen, bevor er baute, und den Widerspruch
+vorgelegt statt ihn zu entscheiden.**
+
+`[cmd]` **Gebaut ist eine Anzeige**, geschrieben wird beim Klick.
+`[cmd]` **Und ein Waechter durchsucht alle vier Dateitypen unter
+`apps/` nach der Funktion — heute 0 Treffer.**
+
+`[cmd]` **4. Der Bestaetigungsweg schrieb bereits vollstaendig in
+`meal_plan_logs`.** `[read]` **Meine Vermutung *,,vielleicht nur ins
+Tagebuch"* war falsch** — **die Luecke lag davor: es gab nichts zu
+bestaetigen.**
+
+### Und die Wurzel fand er selbst
+
+`[cmd]` **Erster Browserlauf: `Aktivieren-Knoepfe: 0`.** `[cmd]` **Die
+Bibliothek hatte nur *Bearbeiten*.**
+
+`[read]` **Damit war Flow 3 an Schritt 4 zu Ende** — **und ohne
+aktiven Plan gibt es keine Ghost Entries, also nichts zu
+protokollieren.** `[read]` **Das war der Grund fuer die 0 Zeilen, nicht
+die fehlende Funktion.**
+
+`[cmd]` **Gebaut: Flow 3 Schritte 5 bis 7.** Startdatum mit Vorgabe
+**morgen** — im Browser gemessen: `2026-09-02` am Messtag 01.09.
+
+`[cmd]` **Und `sequence` steht nicht zur Wahl, mit Begruendung an der
+Kachel:** `meal_plans_sequence_target_check` verlangt `next_plan_id`,
+**und den Planpicker gibt es nicht.** `[read]` **Eine Wahl, die beim
+Speichern scheitert, ist schlimmer als eine, die fehlt.**
+
+### Das Pausieren, belegt
+
+    G-309 Altplan   active, is_active=t   ->  paused, is_active=f
+    G-309 Neuplan   assigned, f           ->  active, t, start 01.09.
+
+`[read]` **`paused`, nicht `completed`** — **der Plan ruht, er ist
+nicht durch.**
+
+`[cmd]` **Zwei Wege setzen `active`** — `planAendern` und
+`ablaufKlaeren`. **Deshalb steht das Pausieren in einer Funktion und
+wird zweimal gerufen, gezaehlt statt gesucht.**
+
+### Ein Fehler in G-274, den erst die Abweichung zeigte
+
+`[cmd]` **Der erste Lauf ergab `confirmed` statt `deviated`**, obwohl
+200 g auf 600 g standen.
+
+    const faktor = planned_servings              <- so stand es
+    const faktor = planned_servings / servings   <- so ist es richtig
+
+`[read]` **Sichtbar wurde es am Zustand, nicht an der Menge.** **Die
+Mengen kamen korrekt an — nur der Vergleichswert war falsch.**
+
+`[cmd]` **Der Massstab waren zwei Stellen, die es richtig rechnen** —
+`meal_plan_day_to_diary` und der neue Leseweg. **Zwei von drei
+stimmten ueberein, eine wich ab.**
+
+`[cmd]` **Und ein zweiter Fallstrick an derselben Stelle:**
+`servings` ist `numeric`, **PostgREST liefert es als Zeichenkette** —
+ein `typeof x === 'number'` waere immer falsch gewesen, **und der
+Nenner still 1 geblieben.**
+
+### Die drei Zustaende, gegangen und nachgelesen
+
+    breakfast  bls     confirmed  meal ja   conf_at ja
+    lunch      recipe  deviated   dev_kcal 1028  dev_pct 76,3
+    dinner     bls     skipped    skip_at ja
+
+`[cmd]` **Nachgerechnet: geplant 1.348, tatsaechlich 2.376,
+Differenz 1.028 — 76,3 Prozent.**
+
+### Und das Rezept als Einzelzutaten
+
+`[cmd]` **Rezeptname als Ueberschrift, drei Zutaten einzeln, fuenf
+editierbare Mengenfelder mit `aria-label` je Zutat.**
+
+`[cmd]` **Skalierung stimmt: 400/300/200 g ergeben 200/150/100 g bei
+einer von zwei Portionen.**
+
+`[read]` **Kein *Rezept als Einheit bestaetigen*** — die Karte sendet
+kein `recipe_id`, ein Waechter prueft es.
+
+**Abgenommen.** `[cmd]` Committet als `012962d5`.
+

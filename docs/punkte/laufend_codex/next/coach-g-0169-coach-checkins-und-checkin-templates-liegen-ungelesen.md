@@ -8,8 +8,6 @@ braucht: []
 kind_von: G-158
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-01
 beruehrt:
   tabellen: ["coach.checkins"]
   dateien: []
@@ -27,5 +25,5 @@ zahlen: null
 
 ## Auftrag
 
-**Mitbeauftragt mit G-151 am 2026-09-01.** Der Auftragstext
+**Vorbereitet mit G-151 am 2026-09-01.** Der Auftragstext
 und der Bericht stehen dort.
