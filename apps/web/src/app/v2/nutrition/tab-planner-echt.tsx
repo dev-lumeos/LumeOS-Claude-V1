@@ -629,6 +629,8 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
                     slot={slot as MahlzeitTyp}
                     rezepte={rezeptWahl}
                     alleRezepte={d.rezepte}
+                    tagesSumme={tagesSummeVon(t.eintraege)}
+                    ziel={d.plan?.target_kcal ?? null}
                     bearbeitbar={bearbeitbar}
                     onAenderung={neuLaden}
                   />
@@ -738,13 +740,53 @@ function ZutatenListe({ rezeptId, rezepte, portionen }: {
  * **Bei Tastaturbedienung erscheint er ueber `:focus-within`** — sonst
  * waere er ohne Maus nicht erreichbar.
  */
-function Zelle({ tagId, tag, heute, eintraege, slot, rezepte, alleRezepte, bearbeitbar, onAenderung }: {
+/**
+ * Was ein Tag schon trägt, in kcal — G-320.
+ *
+ * `[cmd]` **Aus `PlanEintrag.kcal` gerechnet** — der Wert steht seit
+ * G-298 im Leseweg, aus `recipe_nutrition` beziehungsweise
+ * `food_nutrient_snapshot`. **Keine zweite Abfrage über denselben
+ * Tag.**
+ *
+ * `[read]` **Trägt KEIN Eintrag einen Wert, ist die Antwort `null`,
+ * nicht 0** — ein Tag mit drei Positionen ohne ermittelbare kcal hat
+ * nicht null Kalorien, er hat unbekannte. `[read]` **Das ist die
+ * Lehre aus `bls-fehlend-heisst-nicht-null`.**
+ *
+ * `[read]` **Trägt EINER einen Wert, wird summiert, was da ist** —
+ * mit einem Strich zu antworten, weil eine von vier Positionen
+ * fehlt, wäre unbrauchbarer als eine Untergrenze.
+ */
+export function tagesSummeVon(eintraege: readonly PlanEintrag[]): number | null {
+  const werte = eintraege
+    .map(e => e.kcal)
+    .filter((k): k is number => typeof k === 'number' && Number.isFinite(k))
+  if (werte.length === 0) return null
+  return Math.round(werte.reduce((s, k) => s + k, 0))
+}
+
+function Zelle({
+  tagId, tag, heute, eintraege, slot, rezepte, alleRezepte,
+  tagesSumme, ziel, bearbeitbar, onAenderung,
+}: {
   tagId: string
   tag: string
   heute: string
   eintraege: PlanEintrag[]
   slot: MahlzeitTyp
   rezepte: readonly Quelle[]
+  /**
+   * G-320: was der GANZE Tag schon traegt, in kcal.
+   *
+   * `[cmd]` **Aus den Eintraegen gerechnet, nicht neu geladen** —
+   * `PlanEintrag.kcal` steht seit G-298 im Leseweg. **Eine eigene
+   * Abfrage waere eine zweite Wahrheit ueber denselben Tag.**
+   *
+   * `null` heisst: nicht ermittelbar, **nicht null Kalorien.**
+   */
+  tagesSumme: number | null
+  /** G-320: `target_kcal` des Plans — `null`, wenn keines gesetzt ist. */
+  ziel: number | null
   /** G-311: die vollen Rezepte — fuer die Zutatenliste beim Klick. */
   alleRezepte: PlanDaten['rezepte']
   /** G-269: bei gesperrter Herkunft wird nichts angeboten. */
@@ -854,6 +896,7 @@ function Zelle({ tagId, tag, heute, eintraege, slot, rezepte, alleRezepte, bearb
               }}
               rezepte={rezepte}
               mahlzeit={slot}
+              kontext={{ datum: tag, schonImTag: tagesSumme, ziel }}
               onFertig={fertig}
               onAbbruch={() => setOffen(null)}
             />
@@ -867,6 +910,7 @@ function Zelle({ tagId, tag, heute, eintraege, slot, rezepte, alleRezepte, bearb
           vorhanden={null}
           rezepte={rezepte}
           mahlzeit={slot}
+          kontext={{ datum: tag, schonImTag: tagesSumme, ziel }}
           onFertig={fertig}
           onAbbruch={() => setOffen(null)}
         />

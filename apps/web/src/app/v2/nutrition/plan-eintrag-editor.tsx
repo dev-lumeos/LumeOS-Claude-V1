@@ -28,6 +28,10 @@ import {
   bauEintrag, verletztCheck,
   type EintragTyp, type MahlzeitTyp,
 } from '../../../lib/nutrition/plan-eintrag-lage'
+// G-320: die Lebensmittelsuche als Modal — dieselbe Mechanik wie in
+// Food DB (`useFoodSuche`), nicht eine sechste eigene Suche.
+import { FoodSuchModal, type SuchKontext } from './food-such-modal'
+import type { NutritionFoodSearchRow } from '../../../lib/nutrition/food-search'
 
 /** Was der Editor zum Auswaehlen braucht. */
 export type Quelle = { id: string; name: string }
@@ -69,7 +73,7 @@ export const MAHLZEIT_LABEL: Record<MahlzeitTyp, string> = {
  * kann.
  */
 export function EintragForm({
-  tagId, vorhanden, rezepte, mahlzeit, onFertig, onAbbruch,
+  tagId, vorhanden, rezepte, mahlzeit, kontext, onFertig, onAbbruch,
 }: {
   tagId: string
   /** `null` heisst: ein neuer Eintrag. */
@@ -77,6 +81,14 @@ export function EintragForm({
   rezepte: readonly Quelle[]
   /** Der Slot, in dem das Formular sitzt. */
   mahlzeit: MahlzeitTyp
+  /**
+   * G-320: wohin geschrieben wird — Tag, Tagessumme, Tagesziel.
+   *
+   * `[read]` **Das Modal soll wissen, wo der Nutzer landet.** Der
+   * Auftrag: *,,Wer mittags 800 kcal eintraegt, soll sehen, wo er
+   * landet."*
+   */
+  kontext: Omit<SuchKontext, 'slot' | 'slotLabel'>
   onFertig: () => void
   onAbbruch: () => void
 }) {
@@ -99,6 +111,13 @@ export function EintragForm({
   )
   const [laeuft, setLaeuft] = React.useState(false)
   const [fehler, setFehler] = React.useState<string | null>(null)
+  // G-320: ist die Lebensmittelsuche offen?
+  const [suchen, setSuchen] = React.useState(false)
+  // G-320: der Name des gewaehlten Lebensmittels — `quelleId` allein
+  // ist eine Kennung, und eine Kennung sagt dem Nutzer nichts.
+  const [gewaehltName, setGewaehltName] = React.useState(
+    () => (vorhanden?.food_id ? vorhanden.bezeichnung : ''),
+  )
 
   const feld = feldFuer(typ)
 
@@ -108,6 +127,11 @@ export function EintragForm({
   const typWechseln = (neu: EintragTyp) => {
     setTyp(neu)
     setQuelleId(neu === 'recipe' ? (rezepte[0]?.id ?? '') : '')
+    // G-320: der Name gehoert zur Quelle. `[read]` **Bleibt er
+    // stehen, zeigt das Feld ein Lebensmittel an, das nicht mehr
+    // gewaehlt ist** — genau die Art stiller Falschaussage, die
+    // `zahl-stimmt-aussage-nicht` beschreibt.
+    setGewaehltName('')
     setFehler(null)
   }
 
@@ -193,13 +217,46 @@ export function EintragForm({
             </select>
           </label>
         ) : (
-          <p className="v2-muted" style={{ fontSize: 10.5, lineHeight: 1.5 }}>
-            {vorhanden
-              ? `Quelle: ${vorhanden.bezeichnung} — sie bleibt, `
-                + 'nur Menge und Mahlzeit sind hier änderbar.'
-              : 'Lebensmittel werden über die Suche hinzugefügt — '
-                + 'dieser Weg ist noch nicht angebunden.'}
-          </p>
+          /* ══ G-320: die Suche, nicht der Satz ══════════════
+             **Tom, 2026-09-02:** *,,offen planner ist die
+             lebensmittelsuche die muss gleich aufgebaut sein wie die
+             suche in food db."*
+
+             `[cmd]` **Hier stand: *,,dieser Weg ist noch nicht
+             angebunden."*** `[read]` **Ein ehrlicher Satz, aber eine
+             Sackgasse** — genau die Art, die G-311 geschlossen hat.
+
+             `[read]` **Ein vorhandener Eintrag behaelt seine
+             Quelle**: sie zu tauschen waere ein anderer Eintrag,
+             und dafuer gibt es Loeschen und Neuanlegen. */
+          <div className="v2-col-gap" style={{ gap: 6 }}>
+            {vorhanden ? (
+              <p className="v2-muted" style={{ fontSize: 10.5, lineHeight: 1.5 }}>
+                {`Quelle: ${vorhanden.bezeichnung} — sie bleibt, `}
+                nur Menge und Mahlzeit sind hier änderbar.
+              </p>
+            ) : (
+              <>
+                <label style={{ fontSize: 10 }}>
+                  <span className="v2-eyebrow">Lebensmittel</span>
+                  <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                    <input
+                      className="v2-feld" readOnly
+                      style={{ fontSize: 11, flex: 1 }}
+                      aria-label="Gewähltes Lebensmittel"
+                      value={gewaehltName}
+                      placeholder="— noch keines gewählt —"
+                    />
+                    <button type="button" className="v2-btn v2-btn-sm"
+                            onClick={() => setSuchen(true)}>
+                      <Icon name="search" className="v2-ic v2-ic-sm" />
+                      Suchen
+                    </button>
+                  </div>
+                </label>
+              </>
+            )}
+          </div>
         )}
 
         <label style={{ fontSize: 10 }}>
@@ -251,6 +308,25 @@ export function EintragForm({
           </button>
         </div>
       </div>
+
+      {/* ══ G-320: die Lebensmittelsuche ═══════════════════════════
+          `[read]` **Das Modal schreibt nicht selbst** — es gibt
+          Lebensmittel und Menge zurück, und der Schreibweg bleibt
+          `art: 'eintrag'` mit `typ: 'bls'`. **Ein Modal, das seinen
+          Schreibweg kennt, wäre an ihn gebunden** und könnte weder
+          vom Rezept noch vom Quick-add gerufen werden. */}
+      {suchen && (
+        <FoodSuchModal
+          kontext={{ ...kontext, slot, slotLabel: MAHLZEIT_LABEL[slot] }}
+          onClose={() => setSuchen(false)}
+          onWaehlen={async (f: NutritionFoodSearchRow, mengeG: number) => {
+            setQuelleId(f.id)
+            setGewaehltName(f.name_display_de || f.name_de)
+            setMenge(String(mengeG))
+            setSuchen(false)
+          }}
+        />
+      )}
     </div>
   )
 }
