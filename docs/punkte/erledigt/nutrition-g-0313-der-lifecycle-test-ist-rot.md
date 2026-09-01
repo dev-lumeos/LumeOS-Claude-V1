@@ -10,7 +10,7 @@ entscheidung: E-44
 agent: codex
 beauftragt: 2026-09-01
 erledigt: 2026-09-02
-commit: OFFEN
+commit: 43e6154e
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:

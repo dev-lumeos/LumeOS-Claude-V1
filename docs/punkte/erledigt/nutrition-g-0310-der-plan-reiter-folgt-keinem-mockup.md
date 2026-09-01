@@ -10,7 +10,7 @@ entscheidung: E-41
 agent: claudecode
 beauftragt: 2026-09-01
 erledigt: 2026-09-02
-commit: OFFEN
+commit: 43e6154e
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-plans.tsx
