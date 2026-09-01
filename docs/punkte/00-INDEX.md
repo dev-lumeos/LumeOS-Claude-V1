@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 230 |
+| `todos` | 229 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 4 |
-| `erledigt` | 182 |
+| `erledigt` | 183 |
 | **gesamt** | **417** |
 
 ## medical — 42
@@ -129,7 +129,7 @@
 | `C-375` | feature | mittel | [ein Flag fuer fremde Plaene und Rezepte](erledigt/nutrition-c-0375-ein-flag-fuer-fremde-plaene-und-rezepte.md) | erledigt | — | — |
 | `C-376` | befund | mittel | [frieren abgeschlossene Plaene auch ein?](erledigt/nutrition-c-0376-frieren-abgeschlossene-plaene-auch-ein.md) | erledigt | — | — |
 | `C-377` | feature | hoch | [ein abgelaufener Plan braucht eine Frage](erledigt/nutrition-c-0377-ein-abgelaufener-plan-braucht-eine-frage.md) | erledigt | — | — |
-| `C-378` | entscheidung | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](todos/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | offen | — | — |
+| `C-378` | befund | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](erledigt/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | erledigt | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |

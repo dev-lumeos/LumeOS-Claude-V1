@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **27 Punkte tragen `typ: entscheidung`
+`[cmd]` **26 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -69,72 +69,6 @@ eine Wiederherstellung:** **wenn die Herkunft mitkaeme, waere
 `[read]` **Was zu messen ist, bevor Tom entscheidet:** `[cmd]` **wie
 viele der 98 fehlenden Posten in der Quelle eine *Logische Null*
 tragen** — **und wie viele wirklich leer sind.**
-
-## C-378 — NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar
-
-**Modul:** nutrition · **angelegt:** 2026-09-01 · **Datei:** `todos/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md`
-
-## Der Befund
-
-Aus C-368, Codex, 2026-09-01.
-
-`[cmd]` **5.092 von 7.140 Lebensmitteln (71,3 %) haben alle drei
-Vitamin-A-Komponenten.** `[cmd]` **Der Speiseplan von `dev` trifft
-die uebrigen 29 Prozent.**
-
-**Die fuenfzehn Blockierer:**
-
-    6 Getreide/Beilagen   weisser Reis, Vollkornreis, Bulgur (roh
-                          und gekocht), Couscous, Haferflocken
-    4 Fischvarianten      Lachs (roh und geduenstet), Thunfisch,
-                          Kabeljau
-    3 Frischkaese         Magerquark, Skyr, koerniger Frischkaese
-    1 Ziegenfleisch
-    1 Haehnchenbrust      nur Spuren, in beiden Komponenten
-
-`[read]` **Keine Randfaelle.** **Wer Reis, Haferflocken und Fisch
-isst, bekommt keinen Score.**
-
-`[read]` **Und der Grund ist einleuchtend:** der BLS misst
-Carotinoide dort nicht, **wo praktisch keine sind.** **Ein
-Nichtvorkommen wird als Luecke gefuehrt, nicht als Null.**
-
-## Die Frage
-
-**Was tun, wenn ein Score an Lebensmitteln scheitert, die
-tatsaechlich keine Carotinoide enthalten?**
-
-## Drei Wege
-
-`[read]` **1. Als *incomplete* stehenlassen.** Ehrlich, aber die
-Kachel bleibt bei einem normalen Speiseplan dauerhaft leer.
-
-`[read]` **2. `Luecke` bei Carotinoiden wie eine logische Null
-behandeln** — **nur fuer CARTB und CAROTPAXB, nur bei
-Lebensmittelgruppen, in denen Carotinoide nicht vorkommen.**
-
-`[cmd]` **Das waere eine Ausnahme von E-38** und von C-48 Regel 1.
-`[read]` **Fachlich vertretbar: Fisch, Milchprodukt und Getreide
-enthalten kein Beta-Carotin.** `[read]` **Aber es waere unsere
-Annahme, nicht die des BLS.**
-
-`[read]` **3. Vitamin A aus der Formel nehmen.** `[cmd]` **Codex hat
-belegt, dass NRF8.3 keine Vitamin-A-lose Fassung ist** — **dann waere
-es unsere Formel, nicht die validierte.**
-
-## Was ich empfehlen wuerde
-
-`[read]` **Weg 2, eng begrenzt und sichtbar gemacht:** **nur die zwei
-Carotin-Komponenten, nur wo `RETOL` gemessen vorliegt** — **also wo
-der BLS das Lebensmittel auf Vitamin A untersucht hat und nur die
-Carotinoide nicht beziffert.**
-
-`[cmd]` **Bei zwoelf der fuenfzehn ist `RETOL` gemessen oder logische
-Null.** `[read]` **Dort ist die Annahme *,,kein Beta-Carotin"* keine
-Erfindung, sondern die naheliegende Lesart.**
-
-`[read]` **Und der Score muss sagen, dass er so rechnet** — der
-`teilweise`-Zustand aus C-177 traegt das.
 
 ---
 

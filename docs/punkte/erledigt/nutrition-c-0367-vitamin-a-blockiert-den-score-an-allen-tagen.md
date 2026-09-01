@@ -226,3 +226,13 @@ schaetzen.**
 **Abgenommen.** **Die fuenfzehn Lebensmittel gehen als C-368 an Tom,
 mit einer Messung davor.**
 
+## Nachtrag 2026-09-01
+
+**Tom hat entschieden:** *,,wenn die daten nicht da sind erfinden wir
+sie nicht."*
+
+`[cmd]` **E-38 gilt unveraendert.** `[read]` **Der Score liefert
+`incomplete`, solange die Komponenten fehlen** — **das ist die
+Datenlage, kein Fehler.**
+
+`[read]` **C-378 ist damit geschlossen.**
