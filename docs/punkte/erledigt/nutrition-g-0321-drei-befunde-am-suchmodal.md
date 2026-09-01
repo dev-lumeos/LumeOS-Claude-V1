@@ -9,6 +9,8 @@ kind_von: G-320
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: e70e1cfe
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/food-such-modal.tsx
@@ -176,4 +178,77 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Bildschirmfoto angesehen.**
+
+`[cmd]` **Alle drei sitzen:** Kopfzeile oben, Spalten getrennt und
+rechtsbuendig, das Feld ist ein Knopf mit Lupe.
+
+    Punkt       vorher                        nachher
+    Feld        <input> readOnly + Knopf      ein Knopf, Fokus im
+                                              Suchfeld
+    bewegbar    drag 0, onMouseDown 0         gezogen dx=-220 dy=160
+    Kopfzeile   thead y=493, Zeile 1 y=275    thead y=267, Zeile 1
+                                              y=299
+    Werte       "79 1.3 15.9 0.4"             kcal b=60, P/C/F b=50,
+                                              alle rechtsbuendig
+
+`[read]` **Gemessen in Pixeln, nicht behauptet.** `[read]` **Der
+Kopf lag vorher hinter der achten Zeile** — das war Toms Bild.
+
+### Der Spaltenfehler war ein anderer als mein Verdacht
+
+`[read]` **Mein Auftrag verdaechtigte lange Kategorienamen und
+waagerechten Lauf.**
+
+`[cmd]` **Gemessen: `scrollWidth − clientWidth = 0`** — **es lag nie
+am Ueberlauf.**
+
+`[cmd]` **Die Ursache ist seine eigene aus G-320:
+`className="v2-tab"`.** `[cmd]` **Das ist die Klasse fuer
+Reiter-Knoepfe, `v2.css:423`, mit `display: flex`.**
+
+`[read]` **Damit gilt keine Tabellenmechanik mehr:** `<thead>` und
+`<tbody>` werden Flex-Kinder nebeneinander, **der Kopf rutscht neben
+die Liste, und die Zellen schieben sich ohne Breite zusammen.**
+`[read]` **Genau die zwei Symptome.**
+
+`[cmd]` **Richtig ist `v2-tbl`, wie `tab-foods.tsx:875` sie nutzt** —
+**dieselbe Klasse wie in Food DB, wie Tom es verlangt hat.**
+
+### Und der Waechter darauf ist die richtige Art
+
+`[cmd]` **Er prueft, dass `.v2-tab` ueberhaupt noch eine Flexbox
+ist.**
+
+`[read]` **Faellt die Eigenschaft weg, ist die Begruendung
+hinfaellig** — **und der Test erinnert daran, statt still
+weiterzulaufen.** **A-62 vorweggenommen.**
+
+### Drei Fallen, die keine Sabotage gemeldet haette
+
+`[cmd]` **Die Maus-Zuhoerer haengen am `window`, nicht am Kasten** —
+sonst reisst der Zug ab, sobald die Maus ihn verlaesst.
+
+`[cmd]` **Ein Zug, der auf der Huelle endet, schliesst nicht mehr** —
+sonst verschwaende das Modal mitten in der Bewegung.
+
+`[cmd]` **Die Kopfknoepfe halten den Zug auf** — sonst waere jeder
+Klick auf *Schliessen* ein Zug von 0 px.
+
+`[read]` **Alle drei entstehen nur beim Ziehen** — **eine Sabotage
+erzeugt sie nicht, nur ein Nutzer.**
+
+### Und eine Zahl im Auftrag gehoert mir
+
+`[cmd]` **Ich schrieb *,,dev traegt 8 Plaene"*.** `[cmd]` **Gemessen:
+4** — 1 active, 1 paused, 2 assigned. **Die 8 ist die Gesamtzahl
+ueber alle Konten.**
+
+`[read]` **`count(*)` ohne `user_id`** — dieselbe Klasse wie die
+112 Eintraege aus G-286.
+
+`[cmd]` Gate 15/15, 1.254 Tests, 19 von 19 Sabotagen, `dev`
+unberuehrt.
+
+**Abgenommen.**
+
