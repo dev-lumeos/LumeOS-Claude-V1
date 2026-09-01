@@ -11,7 +11,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-09-01
 erledigt: 2026-09-01
-commit: OFFEN
+commit: a33ca39c
 beruehrt:
   tabellen: []
   dateien: ["docs/specs/Medical/SPEC_09_SCORING.md"]
