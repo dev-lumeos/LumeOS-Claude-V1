@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-311
 entscheidung: E-41
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-plans.tsx
@@ -60,7 +62,7 @@ Werkbank vor dem Bearbeiten.** **Zwei Wege, zwei Zwecke.**
 
 ## Auftrag
 
-`[read]` **Vorbereitet am 2026-09-02.**
+**Beauftragt am 2026-09-02.**
 
 `[cmd]` **`SPEC_03` Flow 3 Schritt 3: *Tap auf Plan → Plan-Vorschau*,
 danach *Plan aktivieren*.**

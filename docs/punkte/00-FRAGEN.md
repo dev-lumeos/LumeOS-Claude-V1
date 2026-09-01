@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **26 Punkte tragen `typ: entscheidung`
+`[cmd]` **27 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -100,6 +100,55 @@ tragen** — **und wie viele wirklich leer sind.**
   `[cmd]` **F-06 hat gemessen, dass die Freigabe ueberhaupt erst seit
   C-162 wirkt** — 22 `coach_read`-Policies ueber sechs Module. **Eine
   Feinstufe waere sechs mal soviel.**
+
+## C-382 — wer entscheidet, ob ein Plan editierbar ist?
+
+**Modul:** nutrition · **angelegt:** 2026-09-02 · **Datei:** `todos/nutrition-c-0382-wer-entscheidet-ob-ein-plan-editierbar-ist.md`
+
+## Befund
+
+Aus G-319, Claude Code, 2026-09-02.
+
+Tom: *,,der coach oder derjenige der den plan fuer marketplace
+erstellt definiert ob er editierbar ist."*
+
+`[cmd]` **Diese Aussage hat keine Entsprechung im Schema.**
+
+`[cmd]` **`nutrition.meal_plans` traegt `darf_weiterverkaufen boolean
+NOT NULL DEFAULT true`** — **und E-42 sagt ausdruecklich, das sei
+Weiterverkaufs-, nicht Bearbeitungsschutz.**
+
+`[read]` **Die Sperre haengt heute an der Herkunft** —
+`coach_created`, `marketplace` — **nicht an einer Wahl des
+Erstellers.**
+
+## Der Widerspruch zu E-42
+
+`[cmd]` **E-42, 31.08.:** *,,Editieren darf nie gesperrt werden — der
+Nutzer besitzt seinen Plan."*
+
+Toms Begruendung damals: *,,wenn wir den einschraenken dass er nicht
+editieren kann dann bescheisst er sich ja selber."*
+
+`[read]` **Das galt fuer den eigenen Plan.** `[read]` **Ein gekaufter
+oder vom Coach vergebener ist ein anderer Fall:** **der Ersteller hat
+ein Interesse daran, dass sein Plan bleibt, wie er ist.**
+
+## Zu entscheiden
+
+**Soll es eine Spalte `darf_bearbeiten` geben, die der Ersteller
+setzt?**
+
+`[read]` **Dafuer:** ein Coach-Plan, den der Klient umbaut, ist nicht
+mehr der Plan des Coaches — **und die Compliance-Auswertung misst
+etwas anderes als vereinbart.**
+
+`[read]` **Dagegen:** E-42s Argument gilt weiter — **wer nicht
+aendern darf, traegt beim Loggen etwas Falsches ein.**
+
+`[read]` **Ein dritter Weg: bearbeiten erzeugt eine Kopie.** `[cmd]`
+**Der Weg dafuer stand schon einmal** — *Kopie bearbeiten* aus G-306,
+in G-315 entfernt, weil die Sperre wegfiel.
 
 ## G-134 — Die vier Filtergruppen gibt es in den Daten nicht
 

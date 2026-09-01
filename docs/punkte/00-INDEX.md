@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 219 |
+| `todos` | 220 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 5 |
-| `erledigt` | 201 |
-| **gesamt** | **428** |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 205 |
+| **gesamt** | **430** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 169
+## nutrition — 171
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -132,6 +132,7 @@
 | `C-378` | befund | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](erledigt/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | erledigt | — | — |
 | `C-379` | entscheidung | mittel | [`sequence` hat kein Ziel](todos/nutrition-c-0379-sequence-hat-kein-ziel.md) | offen | — | G-313 |
 | `C-380` | befund | mittel | [die Seed-Plaene tragen 84 mal Hammelfilet](laufend_codex/nutrition-c-0380-die-seed-plaene-tragen-84-mal-hammelfilet.md) | laeuft (codex) | — | — |
+| `C-382` | entscheidung | mittel | [wer entscheidet, ob ein Plan editierbar ist?](todos/nutrition-c-0382-wer-entscheidet-ob-ein-plan-editierbar-ist.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -225,11 +226,12 @@
 | `G-310` | befund | hoch | [der Plan-Reiter folgt keinem Mockup](erledigt/nutrition-g-0310-der-plan-reiter-folgt-keinem-mockup.md) | erledigt | — | G-311, G-315 |
 | `G-311` | befund | hoch | [drei Sackgassen im Planner](erledigt/nutrition-g-0311-drei-sackgassen-im-planner.md) | erledigt | — | G-314 |
 | `G-313` | befund | mittel | [der Lifecycle-Test ist rot](erledigt/nutrition-g-0313-der-lifecycle-test-ist-rot.md) | erledigt | — | — |
-| `G-314` | feature | mittel | [die Vorschau fuer nicht-aktive Plaene](laufend_claudecode/nutrition-g-0314-die-vorschau-fuer-nicht-aktive-plaene.md) | vorbereitet (claudecode) | — | — |
+| `G-314` | feature | mittel | [die Vorschau fuer nicht-aktive Plaene](laufend_claudecode/nutrition-g-0314-die-vorschau-fuer-nicht-aktive-plaene.md) | laeuft (claudecode) | — | — |
 | `G-315` | befund | hoch | [die Kopien sind keine Kopien](erledigt/nutrition-g-0315-die-kopien-sind-keine-kopien.md) | erledigt | — | G-316, G-317 |
-| `G-316` | feature | mittel | [*Log deviation* braucht die Posten](laufend_claudecode/nutrition-g-0316-log-deviation-braucht-die-posten.md) | laeuft (claudecode) | — | — |
-| `G-317` | befund | mittel | [drei Zeilen der Vorlage fehlen am Schirm](laufend_claudecode/nutrition-g-0317-drei-zeilen-der-vorlage-fehlen-am-schirm.md) | laeuft (claudecode) | — | — |
-| `G-318` | befund | hoch | [Planner und Diary sehen einander nicht](laufend_claudecode/nutrition-g-0318-planner-und-diary-sehen-einander-nicht.md) | vorbereitet (claudecode) | — | — |
+| `G-316` | feature | mittel | [*Log deviation* braucht die Posten](erledigt/nutrition-g-0316-log-deviation-braucht-die-posten.md) | erledigt | — | — |
+| `G-317` | befund | mittel | [drei Zeilen der Vorlage fehlen am Schirm](erledigt/nutrition-g-0317-drei-zeilen-der-vorlage-fehlen-am-schirm.md) | erledigt | — | G-319 |
+| `G-318` | befund | hoch | [Planner und Diary sehen einander nicht](erledigt/nutrition-g-0318-planner-und-diary-sehen-einander-nicht.md) | erledigt | — | — |
+| `G-319` | befund | hoch | [die Bedienung in *Alle Plaene*](erledigt/nutrition-g-0319-die-bedienung-in-alle-plaene.md) | erledigt | — | C-382 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59

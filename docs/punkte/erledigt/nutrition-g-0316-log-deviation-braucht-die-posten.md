@@ -9,6 +9,8 @@ kind_von: G-315
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 3d5854f7
 beruehrt:
   dateien:
     - apps/web/src/lib/nutrition/plan-lesen.ts
@@ -48,3 +50,8 @@ G-311 fuer das Rezept im Raster gebraucht hat.**
 
 **Mitbeauftragt mit G-317 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit G-317 abgenommen:** gebaut: der Leseweg liefert die Posten, die Abweichung ist
+bezifferbar.

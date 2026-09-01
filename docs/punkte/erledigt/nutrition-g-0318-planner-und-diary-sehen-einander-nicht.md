@@ -7,6 +7,10 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: null
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 3d5854f7
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/mahlzeiten.tsx
@@ -97,3 +101,13 @@ Logzeilen stehen dort zum Ansehen.
     bestaetigter Eintrag   bleibt, wie er war
     Datumswechsel          laedt neu
     Bildschirmfoto         beide Reiter, nacheinander
+
+## Abnahme
+
+**2026-09-02, mit G-317 abgenommen: gebaut.**
+
+`[cmd]` **Planner und Diary sehen einander jetzt** — dazu die
+Ring-Beschriftung und die Wochenkollision.
+
+`[read]` **Der Punkt lag noch in `next/`, weil Tom direkt mit Claude
+Code gearbeitet hat.**

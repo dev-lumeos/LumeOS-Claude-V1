@@ -1,0 +1,31 @@
+import { chromium } from '@playwright/test'
+import { wortFuer } from '../tools/konten.mjs'
+const b = await chromium.launch()
+const s = await b.newPage({ viewport: { width: 1440, height: 1800 } })
+await s.goto('http://127.0.0.1:3200/login', { waitUntil: 'networkidle' })
+await s.fill('input[type="email"]', 'dev@lumeos.app')
+await s.fill('input[type="password"]', wortFuer('dev@lumeos.app'))
+await s.click('button[type="submit"]')
+await s.waitForURL(u => !u.pathname.includes('login'), { timeout: 30000 })
+await s.goto('http://127.0.0.1:3200/v2/nutrition?tab=planner', { waitUntil: 'networkidle' })
+await s.waitForTimeout(2600)
+
+const k = s.locator('[role="button"][aria-label$="anwählen"]')
+console.log(`anwaehlbare Kacheln: ${await k.count()}`)
+const echte = await s.locator('button').filter({ hasText: /^\s*Anwählen\s*$/ }).count()
+console.log(`echte <button> „Anwählen": ${echte} (soll 0)`)
+if (await k.count()) {
+  const name = await k.first().getAttribute('aria-label')
+  const vorher = await s.locator('.v2-eyebrow', { hasText: 'Werkbank' }).count()
+  await k.first().click()
+  await s.waitForTimeout(1800)
+  const t = await s.locator('body').innerText()
+  console.log(`geklickt: ${JSON.stringify(name)}`)
+  console.log(`  URL:            ${new URL(s.url()).search}`)
+  console.log(`  „In der Werkbank": ${t.includes('In der Werkbank') ? 'da' : 'FEHLT'}`)
+  console.log(`  Trennung:       ${vorher > 0 ? 'da' : 'FEHLT'}`)
+  console.log(`  Bearbeiten:     ${await s.getByRole('button', { name: 'Bearbeiten' }).count()}`)
+  console.log(`  Copy week:      ${await s.getByRole('button', { name: /Copy week/ }).count()}`)
+}
+await s.screenshot({ path: 'backup/g319-kachel.png', fullPage: false })
+await b.close()
