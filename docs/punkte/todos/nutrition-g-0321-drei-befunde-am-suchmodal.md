@@ -9,7 +9,7 @@ kind_von: G-320
 entscheidung: null
 beruehrt:
   dateien:
-    - apps/web/src/app/v2/nutrition/lebensmittel-modal.tsx
+    - apps/web/src/app/v2/nutrition/food-such-modal.tsx
 zahlen: null
 ---
 
