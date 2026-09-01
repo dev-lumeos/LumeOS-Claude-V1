@@ -227,6 +227,56 @@ Seed-Konten mit je 180 Tagen, und `test-user@lumeos.local` mit einem.
 **Sonst ist sie nicht nachpruefbar — und eine Abweichung sieht aus
 wie ein Defekt.**
 
+## Eine Pruefung muss in beide Richtungen belegt sein
+
+`[read]` **Ein Waechter, der laeuft und nichts findet, ist von einem,
+der nichts prueft, nicht zu unterscheiden** — **ausser man baut einen
+Fehler ein.**
+
+`[cmd]` **Am 01.09. waren acht Waechter gruen, waehrend `tsc` acht
+Syntaxfehler meldete.** Ursache: ein JSX-Kommentar als erstes Element
+nach `return (` — dort gilt er nicht.
+
+`[cmd]` **Und am 02.09. fiel dieselbe Klasse zwoelfmal an einem Tag:**
+**der Waechter prueft das Wort statt der Wirkung.**
+
+    onAktivieren?: (id: string) => void
+      der Name war da, die id wurde verworfen
+
+    pruefeHerkunft == 4
+      wocheKopieren ist der fuenfte
+
+    posten.slice(0,0).map
+      das Wort stand da, die Liste war leer
+
+### Die Regel
+
+**Vor jeder Validierung: einen Fehler einbauen und messen, dass sie
+rot wird.**
+
+`[read]` **Und die Frage dabei ist nicht *,,steht das Wort da"*,
+sondern *,,was wuerde die Sabotage aendern, und faengt der Waechter
+genau das"*.**
+
+`[cmd]` **`nutrition-c380-seed-plan-variety.test.ts` ist das
+Vorbild:** erst rot gegen die 84 Hammelfilet-Zeilen, danach gruen.
+
+## Markdown nur ueber write_file
+
+`[cmd]` **`edit_block` und `str_replace` zerstoeren Tabellen** —
+Pipes gehen verloren, Zeilen verschmelzen.
+
+**Vollstaendiger Inhalt, dann `git diff` zur Kontrolle.**
+
+`[read]` **Und die Datei vorher einlesen, nicht aus dem Kontext
+rekonstruieren.** `[cmd]` **Am 02.09. hat ein `UnicodeEncodeError`
+`plan-lesen.ts` von 645 auf 119 Zeilen abgeschnitten** —
+`io.open(...,"w")` leert die Datei sofort, der Fehler kam erst beim
+Schreiben.
+
+`[read]` **Wer ueber eine Nebendatei mit `os.replace` schreibt, hat
+das Problem nicht.**
+
 ## Ein Bericht ist kein Nachweis
 
 **Tom, 2026-09-02:** *,,da hat sich null komma nichts geaendert."*
