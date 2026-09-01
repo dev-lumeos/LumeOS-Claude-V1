@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: C-112
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-01
 beruehrt:
   tabellen: [coach.relationships]
 zahlen:
@@ -52,5 +54,5 @@ Memory/Chat.** **Dieser Punkt ist Stufe vier.**
 
 ## Auftrag
 
-**Vorbereitet mit C-362 am 2026-09-01.** Der Auftragstext
+**Mitbeauftragt mit C-362 am 2026-09-01.** Der Auftragstext
 und der Bericht stehen dort.

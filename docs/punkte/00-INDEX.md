@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 226 |
-| `laufend_codex` | 4 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 4 |
-| `erledigt` | 183 |
+| `erledigt` | 184 |
 | **gesamt** | **417** |
 
 ## medical — 42
@@ -350,7 +350,7 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-06` | befund | mittel | [WP-05 erstes Mock-Modul echt machen](todos/goals-c-0006-wp-05-erstes-mock-modul-echt-machen.md) | offen | — | — |
-| `E-04` | blocker | hoch | [Alte `public`-Tabellen nach `legacy` verschieben](laufend_codex/goals-e-0004-alte-public-tabellen-nach-legacy-verschieben.md) | vorbereitet (codex) | — | — |
+| `E-04` | blocker | hoch | [Alte `public`-Tabellen nach `legacy` verschieben](laufend_codex/goals-e-0004-alte-public-tabellen-nach-legacy-verschieben.md) | laeuft (codex) | — | — |
 | `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](todos/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | offen | — | — |
 | `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — | — |
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
@@ -375,7 +375,7 @@
 | `C-269` | feature | mittel | [Eine Einladung laesst sich nicht zuruecknehmen](todos/coach-c-0269-eine-einladung-laesst-sich-nicht-zuruecknehmen.md) | offen | — | — |
 | `C-318` | befund | hoch | [ADR-Coach-Permissions weicht von der Umsetzung ab](erledigt/coach-c-0318-adr-coach-permissions-weicht-von-der-umsetzung-ab.md) | erledigt | — | — |
 | `C-358` | befund | mittel | [abgelaufene Aktionen bleiben `pending`](erledigt/coach-c-0358-abgelaufene-aktionen-bleiben-pending.md) | erledigt | — | — |
-| `C-362` | feature | mittel | [das Consent-Log ist beschrieben und nicht gebaut](laufend_codex/coach-c-0362-das-consent-log-ist-beschrieben-und-nicht-gebaut.md) | vorbereitet (codex) | — | — |
+| `C-362` | feature | mittel | [das Consent-Log ist beschrieben und nicht gebaut](laufend_codex/coach-c-0362-das-consent-log-ist-beschrieben-und-nicht-gebaut.md) | laeuft (codex) | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](todos/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | offen | — | — |
@@ -384,7 +384,7 @@
 | `G-169` | befund | mittel | [`coach.checkins` und `checkin_templates` liegen ungelesen](todos/coach-g-0169-coach-checkins-und-checkin-templates-liegen-ungelesen.md) | offen | — | — |
 | `G-244` | befund | mittel | [die rechten Kacheln im Human-Coach-Reiter sind Attrappe](todos/coach-g-0244-die-rechten-kacheln-im-human-coach-reiter-sind-attrappe.md) | offen | — | — |
 | `G-277` | befund | hoch | [der Rechte-Reiter nennt einen Grund, den es nicht gibt](erledigt/coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md) | erledigt | — | G-280 |
-| `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](laufend_codex/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | vorbereitet (codex) | — | — |
+| `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](laufend_codex/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | laeuft (codex) | — | — |
 
 ## quer — 84
 
@@ -473,7 +473,7 @@
 | `G-284` | befund | hoch | [die Mockups werden ohne Anmeldung ausgeliefert](erledigt/quer-g-0284-die-mockups-werden-ohne-anmeldung-ausgeliefert.md) | erledigt | — | — |
 | `G-296` | befund | mittel | [das globale `tsc` ist rot wegen `packages/ui`](erledigt/quer-g-0296-das-globale-tsc-ist-rot-wegen-packages-ui.md) | erledigt | — | G-303 |
 | `G-303` | befund | hoch | [der Gate prueft `packages/ui` nicht](erledigt/quer-g-0303-der-gate-prueft-packages-ui-nicht.md) | erledigt | — | G-308 |
-| `G-308` | feature | mittel | [die zwei Pakete brauchen eigene Pruefungen](laufend_codex/quer-g-0308-die-zwei-pakete-brauchen-eigene-pruefungen.md) | laeuft (codex) | — | — |
+| `G-308` | feature | mittel | [die zwei Pakete brauchen eigene Pruefungen](erledigt/quer-g-0308-die-zwei-pakete-brauchen-eigene-pruefungen.md) | erledigt | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

@@ -9,6 +9,5 @@
     "noEmit": true,
     "jsx": "preserve"
   },
-  "include": ["packages/*/src/**/*"],
-  "exclude": ["node_modules", "dist", ".next"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

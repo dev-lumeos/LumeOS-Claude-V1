@@ -6,9 +6,7 @@
     "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "noEmit": true,
-    "jsx": "preserve"
+    "noEmit": true
   },
-  "include": ["packages/*/src/**/*"],
-  "exclude": ["node_modules", "dist", ".next"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

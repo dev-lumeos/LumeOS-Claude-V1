@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: C-112
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-01
 beruehrt:
   tabellen: [coach.client_permissions]
 zahlen:
@@ -55,7 +57,7 @@ Frage.**
 
 **Mitbeauftragt: G-282, E-04.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-01.**
+**Beauftragt am 2026-09-01.**
 
 ### 1 · C-362 — das Consent-Log
 

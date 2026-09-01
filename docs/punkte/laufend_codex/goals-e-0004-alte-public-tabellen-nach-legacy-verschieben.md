@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-01
 beruehrt:
   tabellen: []
   dateien: []
@@ -37,5 +39,5 @@ zahlen: null
 
 ## Auftrag
 
-**Vorbereitet mit C-362 am 2026-09-01.** Der Auftragstext
+**Mitbeauftragt mit C-362 am 2026-09-01.** Der Auftragstext
 und der Bericht stehen dort.
