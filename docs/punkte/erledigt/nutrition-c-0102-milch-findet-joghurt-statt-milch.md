@@ -57,7 +57,7 @@ und der Bericht stehen dort.
 
 ## Bericht
 
-Ueberholt gemessen am 2026-08-29. Die aktuelle `milch`-Anfrage liefert Trinkmilch auf Rang 1 und Joghurt auf Rang 66; die Messung und die beiden nicht entschiedenen Rangwege stehen in C-20, `docs/punkte/laufend_codex/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md`.
+Ueberholt gemessen am 2026-08-29. Die aktuelle `milch`-Anfrage liefert Trinkmilch auf Rang 1 und Joghurt auf Rang 66; die Messung und die beiden nicht entschiedenen Rangwege stehen in C-20, `docs/punkte/erledigt/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md`.
 
 ## Abnahme
 

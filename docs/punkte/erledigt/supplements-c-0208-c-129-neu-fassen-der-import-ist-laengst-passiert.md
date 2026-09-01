@@ -17,7 +17,7 @@ beruehrt:
     - medical.medication_formulations
     - medical.medication_products
   dateien:
-    - docs/punkte/laufend_codex/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md
+    - docs/punkte/erledigt/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md
 zahlen:
   gemessen: 2026-08-28
   supplements_gesamt: 596

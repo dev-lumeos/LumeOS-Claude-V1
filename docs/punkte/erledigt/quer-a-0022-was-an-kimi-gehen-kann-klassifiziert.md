@@ -13,8 +13,7 @@ beauftragt: 2026-09-01
 erledigt: 2026-09-01
 commit: cf61b6c4
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [supplements.supplements]
 zahlen: null
 ---
 

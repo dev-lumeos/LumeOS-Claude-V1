@@ -157,7 +157,7 @@ ausgefuehrten Tests, nicht aus den beiden Hinweisberichten.
 ### Wiederherstellung
 
 `[cmd]` **1 neue Punktdatei:**
-`docs/punkte/todos/supplements-c-0208-c-129-neu-fassen-der-import-ist-laengst-passiert.md`.
+`docs/punkte/erledigt/supplements-c-0208-c-129-neu-fassen-der-import-ist-laengst-passiert.md`.
 Sie folgt dem C-274-Muster, hat `zahlen.gemessen: 2026-08-28` und die
 heutigen Werte 596 / 412 / 498 / 453 / 448. C-274 bleibt als die zweite
 falsch geschlossene Datei bereits wiederhergestellt. `ERLEDIGT.md`

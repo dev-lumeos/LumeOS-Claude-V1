@@ -54,7 +54,7 @@ und der Bericht stehen dort.
 
 ## Bericht
 
-Erledigt am 2026-08-29. Nachweis, Vorher-/Nachhermessung und Vollsicherung: C-20, `docs/punkte/laufend_codex/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md`.
+Erledigt am 2026-08-29. Nachweis, Vorher-/Nachhermessung und Vollsicherung: C-20, `docs/punkte/erledigt/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md`.
 
 ## Abnahme
 
