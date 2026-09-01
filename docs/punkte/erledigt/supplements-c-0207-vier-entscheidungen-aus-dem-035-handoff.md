@@ -11,7 +11,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-09-01
 erledigt: 2026-09-01
-commit: OFFEN
+commit: fa117b20
 beruehrt:
   tabellen: []
   dateien: []
