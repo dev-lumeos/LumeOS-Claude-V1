@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 230 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 3 |
+| `laufend_claudecode` | 4 |
 | `erledigt` | 182 |
-| **gesamt** | **416** |
+| **gesamt** | **417** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 159
+## nutrition — 160
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -216,10 +216,11 @@
 | `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](erledigt/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | erledigt | — | — |
 | `G-301` | befund | hoch | [der Meal-plans-Reiter folgt keinem Flow](erledigt/nutrition-g-0301-der-meal-plans-reiter-folgt-keinem-flow.md) | erledigt | — | C-370 |
 | `G-302` | befund | mittel | [die Zielzeile bricht um](laufend_claudecode/nutrition-g-0302-die-zielzeile-bricht-um.md) | laeuft (claudecode) | — | — |
-| `G-304` | messung | hoch | [was ein Nutzer in Plaenen und Rezepten tun kann](erledigt/nutrition-g-0304-was-ein-nutzer-in-plaenen-und-rezepten-tun-kann.md) | erledigt | — | C-372, C-373, G-305 |
+| `G-304` | messung | hoch | [was ein Nutzer in Plaenen und Rezepten tun kann](erledigt/nutrition-g-0304-was-ein-nutzer-in-plaenen-und-rezepten-tun-kann.md) | erledigt | — | C-372, C-373, G-305, G-309 |
 | `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](laufend_claudecode/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | laeuft (claudecode) | — | — |
 | `G-306` | befund | hoch | [der Planeditor verletzt die Immutabilitaet](erledigt/nutrition-g-0306-der-planeditor-verletzt-die-immutabilitaet.md) | erledigt | — | C-376 |
 | `G-307` | feature | mittel | [*Bearbeiten* in der Bibliothek fuehrt nirgendwohin](laufend_claudecode/nutrition-g-0307-bearbeiten-in-der-bibliothek-fuehrt-nirgendwohin.md) | laeuft (claudecode) | — | — |
+| `G-309` | feature | hoch | [der Plan erzeugt keine Eintraege im Tagebuch](laufend_claudecode/nutrition-g-0309-der-plan-erzeugt-keine-eintraege-im-tagebuch.md) | vorbereitet (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59
