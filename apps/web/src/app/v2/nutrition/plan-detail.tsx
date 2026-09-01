@@ -35,6 +35,8 @@ import { Card, Pill, Icon, Empty } from '@lumeos/ui'
 import type { PlanDaten, PlanTag, PlanWoche } from '../../../lib/nutrition/plan-lesen'
 import {
   HERKUNFT_TEXT, herkunftVon, HERKUNFT_UNBEKANNT_SATZ,
+  // G-310: Badge und Farbe aus der Vorlage.
+  HERKUNFT_BADGE, HERKUNFT_FARBE,
   ZYKLUS_TEXT, ZYKLUS_ERKLAERUNG,
 } from '../../../lib/nutrition/plan-lage'
 import {
@@ -115,11 +117,28 @@ export function MealPlanCard({
             className="v2-ic v2-ic-sm"
           />
           <span style={{ fontSize: 14, fontWeight: 600 }}>{p.name}</span>
-          {/* Das Source-Badge aus der Spec. `[read]` Bei `null` steht
-              „Herkunft nicht hinterlegt" — zeigen, nicht fuellen. */}
-          <Pill variant={herkunft === 'unbekannt' ? undefined : 'acc'}>
-            {HERKUNFT_TEXT[herkunft]}
-          </Pill>
+          {/* ══ G-310: das Badge der Vorlage ═════════════════
+              **Tom, 2026-09-01:** *,,Herkunft wird Badge in der
+              Plankarte. Genau dort steht sie in der Attrappe, und
+              SPEC_03 Flow 3 nennt die Beschriftungen je Quelle."*
+
+              `[cmd]` **`SPEC_03` Flow 3, Schritt 2:** *,,Eigene
+              (source: user) — **ohne Label**"*. `[read]` **Deshalb
+              `null` fuer `self_created`** — ein Badge *,,selbst
+              erstellt" an jedem eigenen Plan ist Rauschen.
+
+              `[read]` **Und `unbekannt` traegt keines**, sondern den
+              Satz darunter: er sagt mehr, als ein Badge fasst. */}
+          {HERKUNFT_BADGE[herkunft] && (
+            <Pill style={{
+              color: HERKUNFT_FARBE[herkunft] ?? undefined,
+              borderColor: HERKUNFT_FARBE[herkunft]
+                ? `color-mix(in srgb, ${HERKUNFT_FARBE[herkunft]} 40%, var(--border))`
+                : undefined,
+            }}>
+              {HERKUNFT_BADGE[herkunft]}
+            </Pill>
+          )}
           <Pill variant={p.status === 'active' ? 'pos' : undefined}>{p.status}</Pill>
           {/* `[read]` **Der Zustand bleibt stehen, die Einordnung
               kommt daneben.** Ihn beim Lesen umzuschreiben waere ein

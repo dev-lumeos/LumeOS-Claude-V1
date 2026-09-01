@@ -37,7 +37,6 @@ import {
 } from '../../../lib/nutrition/plan-lage'
 import {
   LebenszyklusEcht, EinhaltungEcht, WechselbefundEcht,
-  HerkunftEcht,
 } from './plans-echt'
 import { PlanModal } from './plan-modal'
 import { PlanEintraegeEcht, type TagesEintrag } from './plan-eintraege'
@@ -147,7 +146,7 @@ export function MealPlansTab({
                 dasselbe Muster wie bei `prefs` (G-65) und `planner`
                 (G-97): eine leere echte Kachel saehe aus wie ein Befund
                 und waere doch nur ein fehlendes Cookie. */}
-            {d ? <PlanKopfEcht d={d} /> : (
+            {d ? <PlanKopfEcht d={d} logs={logs} /> : (
             <Card attrappe={ATTRAPPE}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                 <Ring value={compliance} max={100} color="var(--acc-nutri)" label="compliance" size={92} stroke={7} />
@@ -278,14 +277,21 @@ export function MealPlansTab({
             </Card>
             )}
 
-            {/* G-268 / G-269: Herkunft und Bearbeitungsrecht. */}
-            {d && (
-              <HerkunftEcht
-                d={d}
-                coachFreigabe={coachFreigabe}
-                onBearbeiten={() => setBearbeiten(true)}
-              />
-            )}
+            {/* ══ G-310: die Herkunfts-Karte ist entfernt ════════
+                `[cmd]` **Sie stand in keiner Attrappe** — sie war
+                aus dem Schema abgeleitet, eine Kachel je
+                Spaltengruppe.
+
+                `[cmd]` **In der Vorlage steht die Herkunft als BADGE
+                an der Plankarte** (`MealPlansView.js` Z. 89,
+                `SPEC_03` Flow 3 Schritt 2). **Dorthin ist sie
+                gewandert** — `plan-detail.tsx`, `MealPlanCard`.
+
+                `[read]` **Und der Knopf *Plan bearbeiten* gehoerte
+                ohnehin nicht hierher.** Tom: *,,irgend einen
+                plannamen anpassen und seine laufzeiten ist fuer mich
+                nicht planbearbeiten."* **Er fuehrt in den Planner**
+                (E-41, G-307). */}
 
             {/* G-270: die Einhaltung aus dem Log — ohne entschiedene
                 Zeilen gibt es keine Quote, nicht null Prozent. */}
@@ -297,7 +303,7 @@ export function MealPlansTab({
               />
             )}
 
-            {d ? <EinhaltungEcht logs={logs} /> : (
+            {d ? <EinhaltungEcht logs={logs} datum={datum} /> : (
             <Card title="7-day compliance" attrappe={ATTRAPPE}>
               <Sparkline data={[100, 86, 100, 92, 80, 100, compliance]} color="var(--acc-nutri)" h={44} />
               <div style={{ display: 'flex', gap: 14, marginTop: 8, fontSize: 11, color: 'var(--fg-muted)' }}>

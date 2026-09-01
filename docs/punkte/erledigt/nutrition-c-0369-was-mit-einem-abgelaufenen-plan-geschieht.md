@@ -32,7 +32,7 @@ wird gezeigt und eingeordnet, nicht ueberschrieben.
 
 **Was soll geschehen, wenn ein Plan auslaeuft?**
 
-`[cmd]` **E-31 hat drei Zyklen festgelegt:** `once` endet, `rollover`
+`[cmd]` **E-44 hat drei Zyklen festgelegt:** `once` endet, `rollover`
 wiederholt, `sequence` uebergibt an den naechsten.
 
 `[read]` **Bei diesem Plan ist keiner gesetzt** — **er stammt aus der

@@ -106,8 +106,11 @@ test('G-270: die Kacheln lesen echt, statt eine Marke zu tragen', () => {
     // Log-Zeilen und war damit am ersten Tag leer. Ersetzt durch
     // `PlanEintraegeEcht` (eigene Datei), geprueft in
     // `plan-bestaetigung.test.ts`.
-    'LebenszyklusEcht', 'EinhaltungEcht',
-    'HerkunftEcht', 'EinkaufslisteEcht',
+    // `[cmd]` **BERICHTIGT in G-310: `HerkunftEcht` ist entfernt.**
+    // `[read]` **Sie stand in keiner Attrappe** — die Herkunft ist
+    // ein BADGE an der Plankarte (`MealPlansView.js` Z. 89), keine
+    // eigene Kachel. **Der Waechter darf sie nicht zurueckverlangen.**
+    'LebenszyklusEcht', 'EinhaltungEcht', 'EinkaufslisteEcht',
   ]) {
     assert.match(s, new RegExp(`export function ${bauteil}\\(`),
       `${bauteil} fehlt — die Kachel ist wieder Attrappe (G-270).`)
@@ -115,4 +118,9 @@ test('G-270: die Kacheln lesen echt, statt eine Marke zu tragen', () => {
   // Und der Status kommt aus dem Log, nicht vom Eintrag.
   assert.match(s, /aus meal_plan_logs/,
     'Die Kacheln nennen ihre Quelle nicht (G-270).')
+
+  // `[cmd]` **G-310/A-59: die aus dem Schema abgeleitete Kachel ist
+  // weg, nicht auskommentiert.**
+  assert.doesNotMatch(s, /(?<![a-zA-Z0-9_])HerkunftEcht(?![a-zA-Z0-9_])/,
+    'HerkunftEcht lebt weiter — die Herkunft ist ein Badge (G-310).')
 })

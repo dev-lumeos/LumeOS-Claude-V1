@@ -4,6 +4,8 @@
 // LUMEOS_DIST_DIR=.next-gate, der Dev-Server bleibt auf .next.
 const nextConfig = {
   distDir: process.env.LUMEOS_DIST_DIR || '.next',
+  // Lint laeuft einmal explizit im Root-Gate, nicht erneut pro Build.
+  eslint: { ignoreDuringBuilds: true },
   transpilePackages: ['@lumeos/shared', '@lumeos/ui'],
 }
 

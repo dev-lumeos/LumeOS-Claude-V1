@@ -10,6 +10,8 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-01
+erledigt: 2026-09-01
+commit: OFFEN
 beruehrt:
   tabellen: []
   dateien: ["supabase/config.toml"]
@@ -84,7 +86,75 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-01, Orchestrator.**
+
+### A-23 — eingerichtet, und der Gate ist jetzt ehrlich rot
+
+`[cmd]` **`.eslintrc.json` mit `next/core-web-vitals`, ESLint 8.57.1
+und `eslint-config-next` 14.2.35 fest installiert.** `[cmd]` **Keine
+Rueckfrage mehr.**
+
+`[cmd]` **Admin Exit 0, Web 18 echte Fehler und 3 Warnungen, Coach 1
+Fehler.**
+
+`[cmd]` **Der Gate erreicht Lint und wird deshalb rot — 22 statt 15
+Teilschritte.**
+
+`[read]` **Das ist der richtige Zustand.** **Ein Gate, das gruen ist,
+weil ein Schritt nicht laeuft, war das halbe Gruen aus G-303.**
+`[read]` **Jetzt ist er rot, weil etwas kaputt ist** — **und das ist
+messbar besser.**
+
+`[cmd]` **Und die Builds linten nicht doppelt** — Coach-Build sagt
+ausdruecklich *,,Skipping linting"*.
+
+**Die 19 Fehler gehen als G-312.**
+
+### B-20 — offen, nicht gegenstandslos
+
+`[cmd]` **`.codex/hooks.json` existiert und ist getrackt** — **aber
+es enthaelt nur die zwei `lean-ctx`-Hooks, keinen Pfadschutz.**
+`[cmd]` **Der Claude-Hook schuetzt Codex nicht.**
+
+`[cmd]` **Die Ziele existieren weiter:** `supabase/config.toml`,
+`db/migrations/` (2 Dateien), `.claude/rules/` (7 Dateien).
+
+`[read]` **Und seine Bedingung ist die richtige:** *,,vor einem
+Schutzbau braucht es die harmlose Payload-Sonde; ohne ihr
+Eingabeformat waere ein Hook nur scheinbarer Schutz."*
+
+`[read]` **Ein Waechter, der nicht weiss, was er bekommt, prueft
+nichts** — dieselbe Klasse, die heute achtmal auffiel.
+
+### C-379 — die Spalte ist da, der Schreiber fehlt
+
+`[cmd]` **`next_plan_id` steht live, mit Ziel- und
+Selbstreferenz-Constraint.**
+
+`[cmd]` **Kein Schreiber:** beide Web-Schreibschemata lassen sie
+nicht zu, der Aktivierungsdialog bietet nur `once` und `rollover`,
+**live 0 `sequence`-Plaene.**
+
+`[read]` **Und der Widerspruch ist benannt:** die Spec fordert
+automatische Uebergabe, **C-373 bevorzugt die manuelle Auswahl.**
+
+### Und der zweite falsche Verweis von mir heute
+
+`[cmd]` **Er meldet: E-31 betrifft Referenzbewertungen, nicht
+Meal-Plan-Lebenszyklen.**
+
+`[cmd]` **Nachgemessen: E-31 ist *zwei Wahrheiten messen statt
+anbinden*, vom 29.08.**
+
+`[read]` **Nach E-03 fuer BLS der zweite an einem Tag.** `[cmd]`
+**Als E-44 angelegt, die Verweise berichtigt.**
+
+`[cmd]` **Und ein Nebenbefund: der Lifecycle-Test ist rot**, weil
+seine Annahme ueber ausschliesslich alte Nullwerte nicht mehr zum
+Bestand passt. **Als G-313.**
+
+**Abgenommen.**
+
 
 ## Neu gemessen, 2026-08-31
 

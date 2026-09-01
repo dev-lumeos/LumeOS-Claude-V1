@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 221 |
-| `laufend_codex` | 1 |
+| `todos` | 222 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 6 |
-| `erledigt` | 190 |
-| **gesamt** | **418** |
+| `erledigt` | 192 |
+| **gesamt** | **422** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 162
+## nutrition — 164
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -128,8 +128,9 @@
 | `C-374` | befund | mittel | [`plan_origin` kennt `buddy` nicht](erledigt/nutrition-c-0374-plan-origin-kennt-buddy-nicht.md) | erledigt | — | — |
 | `C-375` | feature | mittel | [ein Flag fuer fremde Plaene und Rezepte](erledigt/nutrition-c-0375-ein-flag-fuer-fremde-plaene-und-rezepte.md) | erledigt | — | — |
 | `C-376` | befund | mittel | [frieren abgeschlossene Plaene auch ein?](erledigt/nutrition-c-0376-frieren-abgeschlossene-plaene-auch-ein.md) | erledigt | — | — |
-| `C-377` | feature | hoch | [ein abgelaufener Plan braucht eine Frage](erledigt/nutrition-c-0377-ein-abgelaufener-plan-braucht-eine-frage.md) | erledigt | — | — |
+| `C-377` | feature | hoch | [ein abgelaufener Plan braucht eine Frage](erledigt/nutrition-c-0377-ein-abgelaufener-plan-braucht-eine-frage.md) | erledigt | — | C-379 |
 | `C-378` | befund | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](erledigt/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | erledigt | — | — |
+| `C-379` | entscheidung | mittel | [`sequence` hat kein Ziel](todos/nutrition-c-0379-sequence-hat-kein-ziel.md) | offen | — | G-313 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -223,6 +224,7 @@
 | `G-309` | feature | hoch | [der Plan erzeugt keine Eintraege im Tagebuch](laufend_claudecode/nutrition-g-0309-der-plan-erzeugt-keine-eintraege-im-tagebuch.md) | laeuft (claudecode) | — | — |
 | `G-310` | befund | hoch | [der Plan-Reiter folgt keinem Mockup](laufend_claudecode/nutrition-g-0310-der-plan-reiter-folgt-keinem-mockup.md) | vorbereitet (claudecode) | — | G-311 |
 | `G-311` | befund | hoch | [drei Sackgassen im Planner](laufend_claudecode/nutrition-g-0311-drei-sackgassen-im-planner.md) | vorbereitet (claudecode) | — | — |
+| `G-313` | befund | mittel | [der Lifecycle-Test ist rot](laufend_codex/nutrition-g-0313-der-lifecycle-test-ist-rot.md) | laeuft (codex) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59
@@ -388,7 +390,7 @@
 | `G-277` | befund | hoch | [der Rechte-Reiter nennt einen Grund, den es nicht gibt](erledigt/coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md) | erledigt | — | G-280 |
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 
-## quer — 83
+## quer — 85
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -399,6 +401,7 @@
 | `A-19` | messung | mittel | [Zwei README-Abweichungen in der Kette](todos/quer-a-0019-zwei-readme-abweichungen-in-der-kette.md) | offen | — | — |
 | `A-20` | befund | mittel | [Die Spec-Fehlerliste](todos/quer-a-0020-die-spec-fehlerliste.md) | offen | — | — |
 | `A-22` | blocker | hoch | [Was an Kimi gehen kann — klassifiziert](erledigt/quer-a-0022-was-an-kimi-gehen-kann-klassifiziert.md) | erledigt | — | — |
+| `A-23` | befund | mittel | [`lint` bricht repoweit ab](erledigt/quer-a-0023-lint-bricht-repoweit-ab.md) | erledigt | — | G-312 |
 | `A-24` | messung | mittel | [Attrappenmarken sind kein brauchbares Mass](todos/quer-a-0024-attrappenmarken-sind-kein-brauchbares-mass.md) | offen | — | — |
 | `A-29` | messung | mittel | [Der Attrappen-Test koennte die gerenderte Seite zaehlen](erledigt/quer-a-0029-der-attrappen-test-koennte-die-gerenderte-seite-zaehlen.md) | erledigt | — | A-64 |
 | `A-34` | befund | mittel | [Nachweislaeufe ueberschreiben Toms gespeicherte Ansicht](todos/quer-a-0034-nachweislaeufe-ueberschreiben-toms-gespeicherte-ansicht.md) | offen | — | — |
@@ -422,7 +425,7 @@
 | `A-62` | befund | mittel | [Waechter kippen still, wenn das Schema nachkommt](erledigt/quer-a-0062-waechter-kippen-still-wenn-das-schema-nachkommt.md) | erledigt | — | A-63, G-277, G-278 |
 | `A-63` | befund | niedrig | [der Waechter las seine eigene Probe](todos/quer-a-0063-der-waechter-las-seine-eigene-probe.md) | offen | — | — |
 | `A-64` | entscheidung | niedrig | [der Schirmlauf ausserhalb des Gates](todos/quer-a-0064-der-schirmlauf-ausserhalb-des-gates.md) | offen | — | — |
-| `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](laufend_codex/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | laeuft (codex) | — | — |
+| `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
 | `C-64` | feature | mittel | [942 Schluessel und Thai aus dem Vorgaengerrepo uebertragen](todos/quer-c-0064-942-schluessel-und-thai-aus-dem-vorgaengerrepo-uebertragen.md) | offen | — | — |
@@ -475,6 +478,7 @@
 | `G-296` | befund | mittel | [das globale `tsc` ist rot wegen `packages/ui`](erledigt/quer-g-0296-das-globale-tsc-ist-rot-wegen-packages-ui.md) | erledigt | — | G-303 |
 | `G-303` | befund | hoch | [der Gate prueft `packages/ui` nicht](erledigt/quer-g-0303-der-gate-prueft-packages-ui-nicht.md) | erledigt | — | G-308 |
 | `G-308` | feature | mittel | [die zwei Pakete brauchen eigene Pruefungen](erledigt/quer-g-0308-die-zwei-pakete-brauchen-eigene-pruefungen.md) | erledigt | — | — |
+| `G-312` | befund | mittel | [neunzehn Lint-Fehler](laufend_codex/quer-g-0312-neunzehn-lint-fehler.md) | laeuft (codex) | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

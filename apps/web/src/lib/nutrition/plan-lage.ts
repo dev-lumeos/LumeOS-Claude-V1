@@ -382,3 +382,62 @@ export const WECHSEL_AB_MAL = 2
 
 /** Und ab welchem Anteil. */
 export const WECHSEL_AB_QUOTE = 0.5
+
+// ══ G-310: DIE SIEBEN TAGE DER SPARKLINE ════════════════════
+//
+// `[cmd]` **Die Attrappe (`tab-plans.tsx` Z. 301) zeigt:**
+// `Sparkline` ueber sieben Werte, darunter `Avg`, `Deviations`,
+// `Skips`.
+//
+// `[read]` **Serverfrei gerechnet** — `ladePlanLogs(datum, 7)` liefert
+// die Zeilen mit ihrem `execution_date` bereits; **eine zweite Abfrage
+// waere eine zweite Wahrheit.**
+
+/** Ein Tag der Reihe — `quote` ist `null`, wenn nichts entschieden ist. */
+export type TagesQuote = {
+  datum: string
+  quote: number | null
+  entschieden: number
+}
+
+/**
+ * Die Quote je Tag, aelteste zuerst — G-310.
+ *
+ * `[read]` **Jeder der `tage` Tage kommt vor**, auch die ohne Zeilen:
+ * eine Sparkline mit Luecken zeigt sonst eine falsche Steigung.
+ * **Tage ohne Entscheidung tragen `null`**, nicht `0`.
+ */
+export function tagesQuoten(
+  zeilen: readonly LogZeile[], bisDatum: string, tage = 7,
+): TagesQuote[] {
+  const jeTag = new Map<string, LogZeile[]>()
+  for (const l of zeilen) {
+    const liste = jeTag.get(l.execution_date)
+    if (liste) liste.push(l)
+    else jeTag.set(l.execution_date, [l])
+  }
+
+  const aus: TagesQuote[] = []
+  const bis = new Date(`${bisDatum}T00:00:00Z`)
+  for (let i = tage - 1; i >= 0; i -= 1) {
+    const d = new Date(bis)
+    d.setUTCDate(d.getUTCDate() - i)
+    const iso = d.toISOString().slice(0, 10)
+    const e = einhaltungVon(jeTag.get(iso) ?? [])
+    aus.push({ datum: iso, quote: quoteVon(e), entschieden: e.entschieden })
+  }
+  return aus
+}
+
+/**
+ * Der Durchschnitt der Tage MIT Aussage — die `Avg`-Zahl der Attrappe.
+ *
+ * `[read]` **Tage ohne Entscheidung zaehlen nicht mit.** Sonst zoege
+ * jeder leere Tag den Schnitt gegen null, **und ein Plan mit einer
+ * Luecke saehe schlechter aus als einer, der gebrochen wurde.**
+ */
+export function schnittQuote(reihe: readonly TagesQuote[]): number | null {
+  const mit = reihe.filter(t => t.quote !== null)
+  if (mit.length === 0) return null
+  return Math.round(mit.reduce((s, t) => s + (t.quote ?? 0), 0) / mit.length)
+}

@@ -28,15 +28,16 @@
 // aus wie eine Messung. Genau das war der Fall bei der
 // Health-Score-Kachel (G-135).
 import * as React from 'react'
-import { Card, Pill, Row } from '@lumeos/ui'
+import { Card, Pill, Row, Ring, Sparkline } from '@lumeos/ui'
 
 import type { PlanDaten } from '../../../lib/nutrition/plan-lesen'
 import {
-  herkunftVon, HERKUNFT_TEXT, HERKUNFT_UNBEKANNT_SATZ,
   zyklusVon, ZYKLUS_TEXT, ZYKLUS_ERKLAERUNG,
-  statusText, bearbeitbarkeit,
+  statusText,
   KEIN_LOG_SATZ, KEINE_EINKAUFSLISTE_SATZ,
   einhaltungVon, quoteVon, type LogZeile,
+  // G-310: die Sieben-Tage-Reihe der Attrappe.
+  tagesQuoten, schnittQuote,
   type WechselStand,
 } from '../../../lib/nutrition/plan-lage'
 
@@ -60,17 +61,40 @@ export function planZaehlung(d: PlanDaten) {
 }
 
 /**
- * Der Plankopf — Name, Zustand, Ziele.
+ * Der Plankopf — die Kopie der Attrappe, mit echten Zahlen.
  *
- * `[cmd]` **Ohne Ring.** Die Vorlage zeigt dort eine Compliance in
- * Prozent; sie braucht einen Ist-Soll-Vergleich je Eintrag, und
- * `meal_plan_entries` fuehrt keinen Status. **Statt einer erfundenen
- * Zahl steht die Zaehlung da**, die wirklich gemessen ist.
+ * ══ A-62: DIE BEGRUENDUNG FUER „OHNE RING" IST GEKIPPT ═════════
+ *
+ * `[cmd]` **Hier stand:** *,,Ohne Ring. Die Vorlage zeigt dort eine
+ * Compliance in Prozent; sie braucht einen Ist-Soll-Vergleich je
+ * Eintrag, und `meal_plan_entries` fuehrt keinen Status."*
+ *
+ * `[cmd]` **Das stimmte, bis G-309 den Weg gebaut hat.** Der Status
+ * liegt in `meal_plan_logs`, nicht am Eintrag — und seit dem
+ * 2026-09-01 entstehen dort Zeilen. **Die Zahl ist gemessen, nicht
+ * erfunden.**
+ *
+ * ══ DIE ATTRAPPE IST DIE VORLAGE ═════════════════════════
+ *
+ * **Tom, 2026-09-01:** *,,es war definiert das attrappe mockup bleibt
+ * im code reaktivierbar und das angebunden ist eine kopie des mockups
+ * angebunden."*
+ *
+ * `[cmd]` **`tab-plans.tsx` Zeilen 151-169** — Ring links, rechts
+ * Name, Pills, eine Zeile mit Tag/Start/Quelle, darunter die
+ * ausgeschriebene Rechnung. **Herkunft: `theme-v1/
+ * module-nutrition-spec.jsx`, `MealPlansView` Zeile 334-521.**
  */
 // G-298: die Laufzeit kommt aus den Tagen - `start_date` ist NULL.
 import {
   laufzeitVon, laufzeitSatz, LAUFZEIT_MARKE,
 } from '../../../lib/nutrition/plan-eintrag-lage'
+
+/** Ein ISO-Datum deutsch — dieselbe Form wie in `plan-werkbank`. */
+function deutschesDatum(iso: string): string {
+  const [j, m, tg] = iso.split('-')
+  return tg && m && j ? `${Number(tg)}.${Number(m)}.${j}` : iso
+}
 
 /** Heute als ISO - dieselbe Rechnung wie im Planner. */
 function heuteIso(): string {
@@ -80,7 +104,11 @@ function heuteIso(): string {
   return `${j.getFullYear()}-${m}-${t}`
 }
 
-export function PlanKopfEcht({ d }: { d: PlanDaten }) {
+export function PlanKopfEcht({ d, logs = [] }: {
+  d: PlanDaten
+  /** G-310: die Logzeilen fuer Ring und Rechnung (Attrappe Z. 153+164). */
+  logs?: readonly LogZeile[]
+}) {
   const z = planZaehlung(d)
   const p = d.plan
   if (!p) {
@@ -110,25 +138,60 @@ export function PlanKopfEcht({ d }: { d: PlanDaten }) {
     d.wochen.flatMap(w => w.tage.map(x => x.plan_date)), heuteIso())
   const marke = LAUFZEIT_MARKE[laufzeit.art]
 
+  // ══ DIE RECHNUNG STEHT IN DER ATTRAPPE, ZEILE 164-166 ═══════
+  //
+  // `[cmd]` **`(confirmed + deviated) / (confirmed + deviated +
+  // skipped)`** — dieselbe Formel wie in `theme-v1` Zeile 340 **und
+  // in `SPEC_09` Abschnitt 2.**
+  //
+  // `[read]` **Die Attrappe schreibt sie aus**, damit die Zahl
+  // nachvollziehbar ist. **Die Kopie tut dasselbe** — sonst stuende
+  // dort eine Prozentzahl, die niemand nachrechnen kann.
+  const e = einhaltungVon(logs)
+  const quote = quoteVon(e)
+
   return (
     <Card>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
-        <span style={{ fontSize: 15, fontWeight: 600 }}>{p.name}</span>
-        {p.is_active
-          ? <Pill variant="acc">aktiv</Pill>
-          : <Pill>pausiert</Pill>}
-        {marke && <Pill>{marke}</Pill>}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+        {/* `[read]` **Ohne entschiedene Zeile kein Ring** — ein Ring
+            auf 0 % behauptet, der Plan sei nicht eingehalten worden.
+            **`null` heisst „noch keine Aussage"** (C-323). */}
+        {quote !== null && (
+          <Ring value={quote} max={100} color="var(--acc-nutri)"
+                label="compliance" size={92} stroke={7} />
+        )}
+        <div style={{ flex: 1, minWidth: 220 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 15, fontWeight: 600 }}>{p.name}</span>
+            {p.is_active
+              ? <Pill variant="acc">aktiv</Pill>
+              : <Pill>pausiert</Pill>}
+            {/* Die Attrappe traegt hier den Zyklus als zweite Pille. */}
+            {p.lifecycle_type && <Pill>{p.lifecycle_type}</Pill>}
+            {marke && <Pill>{marke}</Pill>}
+          </div>
+          {laufzeit.art !== 'laeuft' && (
+            <div className="v2-dim" style={{ fontSize: 11, marginBottom: 8, lineHeight: 1.5 }}>
+              {laufzeitSatz(laufzeit)}
+            </div>
+          )}
+          {p.description && (
+            <div className="v2-muted" style={{ fontSize: 12, marginBottom: 8 }}>
+              {p.description}
+            </div>
+          )}
+          {/* `[read]` **Die ausgeschriebene Rechnung** — wie in der
+              Attrappe. `[cmd]` **Ohne Entscheidung sagt sie, dass
+              nichts entschieden ist**, statt „0 %". */}
+          <div className="v2-dim v2-mono" style={{ fontSize: 10.5, lineHeight: 1.6 }}>
+            {quote === null
+              ? `noch nichts entschieden · ${e.offen} offen`
+              : `(${e.bestaetigt} bestätigt + ${e.abgewichen} abgewichen) / `
+                + `(${e.bestaetigt} + ${e.abgewichen} + ${e.ausgelassen} ausgelassen)`
+                + ` = ${quote} % · ${e.offen} offen zählen nicht`}
+          </div>
+        </div>
       </div>
-      {laufzeit.art !== 'laeuft' && (
-        <div className="v2-dim" style={{ fontSize: 11, marginBottom: 8, lineHeight: 1.5 }}>
-          {laufzeitSatz(laufzeit)}
-        </div>
-      )}
-      {p.description && (
-        <div className="v2-muted" style={{ fontSize: 12, marginBottom: 8 }}>
-          {p.description}
-        </div>
-      )}
       <div className="v2-grid v2-g-cols-4" style={{ gap: 10, marginTop: 10 }}>
         <Row label="Wochen" value={zahl(z.wochen)} />
         <Row label="Tage" value={zahl(z.tage)} />
@@ -157,17 +220,68 @@ export function PlanKopfEcht({ d }: { d: PlanDaten }) {
 }
 
 /**
- * Die Planeinstellungen, soweit sie in den Daten stehen.
+ * `Plan settings` — die Kopie der Attrappe (`tab-plans.tsx` Z. 246).
  *
- * `[cmd]` **Vier der fuenf Zeilen der Vorlage fehlen im Schema:**
- * `Lifecycle`, `Started`, `Next restart` und `Confirm mode` haben
- * keine Spalte. Sie stehen deshalb nicht als Strich da, **sondern gar
- * nicht** — eine Zeile mit Strich behauptet, der Wert sei nur leer.
+ * ══ A-62: DER SATZ HIER WAR SEIT DEM 2026-08-30 FALSCH ═════════
+ *
+ * `[cmd]` **Hier stand:** *,,Vier der fuenf Zeilen der Vorlage fehlen
+ * im Schema: `Lifecycle`, `Started`, `Next restart` und `Confirm
+ * mode` haben keine Spalte."*
+ *
+ * `[cmd]` **Am 2026-09-01 gemessen: alle vier existieren.**
+ * `lifecycle_type`, `start_date`, `days_count`, `next_plan_id` und
+ * `rollover_count` stehen an `meal_plans`; `confirmation_mode` liegt
+ * an `meal_plan_logs`.
+ *
+ * `[read]` **Die Berichtigung stand seit dem 30.08. IM RUMPF** (der
+ * Kommentar unter „Zustand"), **aber nicht im Kopf** — und der Kopf
+ * ist, was der naechste Leser zuerst sieht. **Genau die Klasse, die
+ * A-62 meint: eine Aussage, die still kippt.**
+ *
+ * ══ WAS DIE ATTRAPPE ZEIGT, UND WAS DAVON BLEIBT ═════════════
+ *
+ *     Lifecycle       bleibt   `lifecycle_type`
+ *     Days count      bleibt   `days_count`, sonst gezaehlte Tage
+ *     Started         bleibt   `start_date`
+ *     Next restart    ENTFAELLT
+ *     Confirm mode    ENTFAELLT
+ *
+ * `[cmd]` **`Next restart` entfaellt**, weil die Zeile einen Termin
+ * behauptet, an dem etwas geschieht. **Nach C-373/E-42 geschieht
+ * nichts von selbst** — der Ablauf erzeugt eine Frage, und der
+ * Nutzer waehlt. `[read]` **Ein Datum ohne Ausfuehrer ist ein
+ * Versprechen.**
+ *
+ * `[cmd]` **`Confirm mode` entfaellt**, weil `confirmation_mode` an
+ * `meal_plan_logs` haengt — **je Ausfuehrung, nicht als
+ * Planeinstellung.** `[read]` **Und der MealCam-Weg existiert nicht**
+ * (G-276): einen Modus anzubieten, den nichts ausfuehrt, waere
+ * dasselbe Versprechen.
  */
 export function PlanEinstellungenEcht({ d }: { d: PlanDaten }) {
   const z = planZaehlung(d)
+  const p = d.plan
+  // `[read]` **Die Laufzeit ist echt** — sie steht in den Tageszeilen,
+  // auch wenn `days_count` fehlt (G-298).
+  const laufzeit = laufzeitVon(
+    d.wochen.flatMap(w => w.tage.map(x => x.plan_date)), heuteIso())
   return (
-    <Card title="Planumfang" sub="aus dem Schema gelesen">
+    <Card title="Plan settings" sub="aus nutrition.meal_plans">
+      {/* Die Attrappe: Lifecycle · Days count · Started. */}
+      <Row label="Lifecycle"
+           value={p?.lifecycle_type ? ZYKLUS_TEXT[zyklusVon(p.lifecycle_type)] : '—'} />
+      <Row label="Days count"
+           value={zahl(p?.days_count ?? z.tage)} />
+      {/* `[read]` **`start_date` oder gar nichts** — ein Plan aus der
+          Zeit vor der Unterscheidung hat kein Startdatum, **und das
+          ist eine Tatsache, keine Luecke** (E-40, G-287). */}
+      <Row label="Started"
+           value={p?.start_date ? deutschesDatum(p.start_date) : '—'} />
+      {/* `[cmd]` **Statt `Next restart` das Ende der Laufzeit** — es
+          ist gemessen, und es behauptet keinen Vollzug. */}
+      {laufzeit.art !== 'unbekannt' && (
+        <Row label="Läuft bis" value={deutschesDatum(laufzeit.bis)} />
+      )}
       <Row label="Wochen" value={zahl(z.wochen)} />
       <Row label="Tage gesamt" value={zahl(z.tage)} />
       <Row label="Einträge" value={zahl(z.eintraege)} />
@@ -177,14 +291,9 @@ export function PlanEinstellungenEcht({ d }: { d: PlanDaten }) {
           `archived`). */}
       <Row label="Zustand"
            value={d.plan ? statusText(d.plan.status) : '—'} />
-      {/* `[cmd]` **Hier stand bis zum 2026-08-30:** *„Lebenszyklus,
-          Startdatum und Bestaetigungsmodus fehlen im Schema."*
-          **Das stimmt nicht mehr** — Codex hat die sechs Spalten und
-          `meal_plan_logs` eingespielt, am selben Tag nachgemessen.
-          `[read]` **Der Satz stand vier Wochen richtig und wurde an
-          dem Tag falsch, an dem das Schema kam** — genau die Klasse
-          von Kommentar, die still altert. Der Lebenszyklus steht
-          jetzt in einer eigenen Kachel. */}
+      {/* `[read]` **Der Lebenszyklus steht oben UND als eigene
+          Karte** — hier der Wert, dort die drei Wahlen (Attrappe
+          `Lifecycle types`). */}
     </Card>
   )
 }
@@ -255,21 +364,51 @@ export function LebenszyklusEcht({ d }: { d: PlanDaten }) {
  * `[read]` **Ohne entschiedene Zeilen gibt es keine Quote, nicht null
  * Prozent** — dieselbe Regel wie in C-323.
  */
-export function EinhaltungEcht({ logs }: { logs: readonly LogZeile[] }) {
+export function EinhaltungEcht({ logs, datum }: {
+  logs: readonly LogZeile[]
+  /** G-310: der letzte Tag der Reihe — ohne ihn keine Sparkline. */
+  datum?: string
+}) {
   const e = einhaltungVon(logs)
   const q = quoteVon(e)
+  // `[cmd]` **Die Attrappe zeigt SIEBEN Werte** (Z. 301) — dieselbe
+  // Zahl, damit die Kurve dieselbe Breite hat.
+  const reihe = datum ? tagesQuoten(logs, datum, 7) : []
+  const schnitt = schnittQuote(reihe)
   return (
-    <Card title="Einhaltung" sub="aus meal_plan_logs">
+    <Card title="7-day compliance" sub="aus meal_plan_logs">
       {q === null ? (
         <div className="v2-hinweis">{KEIN_LOG_SATZ}</div>
       ) : (
         <>
-          <div className="v2-num" style={{ fontSize: 22 }}>{q} %</div>
-          <div style={{ display: 'flex', gap: 14, marginTop: 8, fontSize: 11 }}
+          {/* `[read]` **Nur zeichnen, wenn mindestens ZWEI Tage eine
+              Aussage tragen** — eine Linie durch einen Punkt ist
+              keine Kurve, sondern eine Behauptung ueber einen Verlauf,
+              den niemand gemessen hat. */}
+          {reihe.filter(x => x.quote !== null).length >= 2 && (
+            <Sparkline
+              data={reihe.map(x => x.quote ?? 0)}
+              color="var(--acc-nutri)" h={44}
+            />
+          )}
+          <div style={{ display: 'flex', gap: 14, marginTop: 8, fontSize: 11, flexWrap: 'wrap' }}
                className="v2-dim">
-            <span>bestätigt {e.bestaetigt}</span>
-            <span>abgewichen {e.abgewichen}</span>
-            <span>ausgelassen {e.ausgelassen}</span>
+            {/* Die drei Zahlen der Attrappe: Avg · Deviations · Skips. */}
+            <span>Avg <span className="v2-num" style={{ color: 'var(--fg)' }}>
+              {schnitt === null ? '—' : `${schnitt} %`}
+            </span></span>
+            <span>Deviations <span className="v2-num" style={{ color: 'var(--warn)' }}>
+              {e.abgewichen}
+            </span></span>
+            <span>Skips <span className="v2-num" style={{ color: 'var(--fg)' }}>
+              {e.ausgelassen}
+            </span></span>
+            {/* `[read]` **Bestaetigt steht nicht in der Attrappe** —
+                aber die Rechnung in der Kopfkarte nennt es, und ohne
+                die Zahl waere `Avg` nicht nachvollziehbar. */}
+            <span>Confirmed <span className="v2-num" style={{ color: 'var(--pos)' }}>
+              {e.bestaetigt}
+            </span></span>
           </div>
         </>
       )}
@@ -347,55 +486,26 @@ const SLOT_TEXT: Record<string, string> = {
   snack: 'Snack', pre_workout: 'Pre-Workout', post_workout: 'Post-Workout',
 }
 
-/**
- * Herkunft und Bearbeitungsrecht — G-268 / G-269.
- *
- * `[cmd]` **Die Freigabe kommt aus
- * `coach.darf_nutrition_plan_aendern`** (E-29), nicht aus
- * `coach.client_autonomy`. `[cmd]` **Gemessen am 2026-08-30: `dev`
- * steht auf Stufe 3 und bekommt `false`.**
- *
- * `[read]` **Der Reiter sagt WARUM gesperrt ist, nicht nur DASS** —
- * ein ausgegrauter Knopf ohne Begruendung ist eine Sackgasse.
- */
-export function HerkunftEcht({
-  d, coachFreigabe, onBearbeiten,
-}: {
-  d: PlanDaten
-  coachFreigabe: boolean
-  onBearbeiten: () => void
-}) {
-  const p = d.plan
-  if (!p) return null
-  const h = herkunftVon(p.plan_origin)
-  const b = bearbeitbarkeit(h, coachFreigabe)
-  return (
-    <Card title="Herkunft" sub={HERKUNFT_TEXT[h]}>
-      {h === 'unbekannt' && (
-        <div className="v2-hinweis" style={{ marginBottom: 8 }}>
-          {HERKUNFT_UNBEKANNT_SATZ}
-        </div>
-      )}
-      {b.erlaubt ? (
-        <button type="button" className="v2-btn" onClick={onBearbeiten}>
-          Plan bearbeiten
-        </button>
-      ) : (
-        <div className="v2-hinweis" style={{ color: 'var(--warn)' }}>{b.satz}</div>
-      )}
-    </Card>
-  )
-}
+// ══ G-310: `HerkunftEcht` ist entfernt ════════════════════
+//
+// `[cmd]` **Sie stand in keiner Attrappe.** `[read]` **Sie war aus
+// dem Schema abgeleitet** — eine Kachel je Spaltengruppe, genau das
+// Muster, das G-310 beanstandet.
+//
+// `[cmd]` **In der Vorlage steht die Herkunft als BADGE an der
+// Plankarte** (`MealPlansView.js` Z. 89; `SPEC_03` Flow 3 Schritt 2
+// nennt die Beschriftungen je Quelle). **Dorthin ist sie gewandert**
+// — `plan-detail.tsx`, `MealPlanCard`, mit `HERKUNFT_BADGE` und
+// `HERKUNFT_FARBE`.
+//
+// `[read]` **Der Satz zur unbekannten Herkunft ist mitgegangen** —
+// `plan-detail.tsx` zeigt ihn bereits; er traegt Information, die kein
+// Badge fasst.
+//
+// `[read]` **A-59: geloescht, nicht auskommentiert** — was keinen
+// Aufrufer hat, gilt beim naechsten Auftrag sonst als gebaut. git holt
+// sie zurueck.
 
-/**
- * Die Einkaufsliste — G-270.
- *
- * `[cmd]` **`nutrition.shopping_lists` existiert** (1 Zeile, 6
- * Positionen im Bestand); **`dev` hat nur keine.** `[read]` **Das ist
- * ein Leerzustand, kein fehlendes Feature** — der Quelltext nannte
- * bis heute eine fehlende Tabelle als Grund, und das war schon in
- * G-271 falsch.
- */
 export function EinkaufslisteEcht({ anzahl }: { anzahl: number }) {
   if (anzahl > 0) return null
   return (
