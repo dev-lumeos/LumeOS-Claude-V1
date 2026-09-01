@@ -9,7 +9,7 @@ kind_von: null
 kinder: []
 entscheidung: null
 erledigt: 2026-08-31
-commit: OFFEN
+commit: ea312816
 beruehrt:
   dateien:
     - supabase/_pipeline/03_bls_import/030_apply_local.sql

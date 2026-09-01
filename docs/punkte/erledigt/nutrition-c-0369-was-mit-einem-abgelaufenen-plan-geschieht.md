@@ -8,7 +8,7 @@ braucht: []
 kind_von: G-298
 entscheidung: E-42
 erledigt: 2026-08-31
-commit: OFFEN
+commit: ea312816
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:

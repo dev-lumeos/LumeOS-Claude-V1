@@ -9,7 +9,7 @@ kind_von: G-97
 kinder: []
 entscheidung: null
 erledigt: 2026-08-31
-commit: OFFEN
+commit: ea312816
 beruehrt:
   tabellen: [nutrition.meal_plan_logs]
 zahlen: null
