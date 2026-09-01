@@ -8,7 +8,7 @@ braucht: []
 kind_von: C-49
 entscheidung: E-38
 erledigt: 2026-09-02
-commit: OFFEN
+commit: 31e5588e
 beruehrt:
   tabellen: [nutrition.food_nutrients]
 zahlen:
