@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 219 |
 | `laufend_codex` | 5 |
-| `laufend_claudecode` | 5 |
-| `erledigt` | 193 |
+| `laufend_claudecode` | 4 |
+| `erledigt` | 194 |
 | **gesamt** | **422** |
 
 ## medical — 42
@@ -222,8 +222,8 @@
 | `G-306` | befund | hoch | [der Planeditor verletzt die Immutabilitaet](erledigt/nutrition-g-0306-der-planeditor-verletzt-die-immutabilitaet.md) | erledigt | — | C-376 |
 | `G-307` | feature | mittel | [*Bearbeiten* in der Bibliothek fuehrt nirgendwohin](laufend_claudecode/nutrition-g-0307-bearbeiten-in-der-bibliothek-fuehrt-nirgendwohin.md) | laeuft (claudecode) | — | — |
 | `G-309` | feature | hoch | [der Plan erzeugt keine Eintraege im Tagebuch](erledigt/nutrition-g-0309-der-plan-erzeugt-keine-eintraege-im-tagebuch.md) | erledigt | — | — |
-| `G-310` | befund | hoch | [der Plan-Reiter folgt keinem Mockup](laufend_claudecode/nutrition-g-0310-der-plan-reiter-folgt-keinem-mockup.md) | vorbereitet (claudecode) | — | G-311 |
-| `G-311` | befund | hoch | [drei Sackgassen im Planner](laufend_claudecode/nutrition-g-0311-drei-sackgassen-im-planner.md) | vorbereitet (claudecode) | — | — |
+| `G-310` | befund | hoch | [der Plan-Reiter folgt keinem Mockup](erledigt/nutrition-g-0310-der-plan-reiter-folgt-keinem-mockup.md) | erledigt | — | G-311 |
+| `G-311` | befund | hoch | [drei Sackgassen im Planner](laufend_claudecode/nutrition-g-0311-drei-sackgassen-im-planner.md) | laeuft (claudecode) | — | — |
 | `G-313` | befund | mittel | [der Lifecycle-Test ist rot](laufend_codex/nutrition-g-0313-der-lifecycle-test-ist-rot.md) | laeuft (codex) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 

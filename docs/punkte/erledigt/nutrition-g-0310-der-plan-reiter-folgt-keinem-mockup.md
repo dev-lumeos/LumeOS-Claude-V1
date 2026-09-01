@@ -7,6 +7,10 @@ angelegt: 2026-09-01
 braucht: []
 kind_von: null
 entscheidung: E-41
+agent: claudecode
+beauftragt: 2026-09-01
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-plans.tsx
@@ -163,4 +167,62 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator.**
+
+**Der Reiter folgt jetzt der Attrappe, mit Zeilenbeleg je Kachel.**
+
+    Kopfkarte          Ring + (4 bestaetigt + 1 abgewichen) /
+                       (4+1+1 ausgelassen) = 83,3 %      Z. 153, 164-166
+    Plan settings      Lifecycle, Days count, Started,
+                       Laeuft bis                        Z. 246
+    7-day compliance   Sparkline, Avg, Deviations, Skips  Z. 301
+    Herkunfts-Badge    in MealPlanCard                    Mockup Z. 89
+
+`[cmd]` **Sieben Entfernungen, jede belegt:** Planumfang, Einhaltung,
+Herkunft, Next restart, Confirm mode, *read-only while active*, Pause
+plan.
+
+`[read]` **Die letzten beiden waren durch E-42 abgeloest** — **er hat
+sie nicht stehen lassen, weil sie in der Attrappe standen.**
+
+### Die Buehne war falsch, nicht die Anzeige
+
+`[cmd]` **Erst zeigte die Compliance Avg 100 % bei 4/1/1 auf der
+Buehne.**
+
+`[cmd]` **Gemessen statt vermutet: `ladePlanLogs(datum, 7)` liest
+rueckwaerts vom Anzeigetag** — **vier der sechs Zeilen lagen in der
+Zukunft und fielen korrekt heraus.**
+
+`[read]` **Die naheliegende Reaktion waere gewesen, das Fenster zu
+aendern.** **Er hat die Buehne korrigiert.**
+
+`[cmd]` **Danach: 5/6 = 83,33 Prozent, ausgeschrieben wie in der
+Attrappe.**
+
+### Der Befund, den er nicht selbst entschieden hat
+
+`[cmd]` **Der Plans-Reiter zeigt einen von vier Plaenen.** `[cmd]`
+**`allePlaene` ist geladen und wird durchgereicht** — **an
+`PlanWerkbank` im Planner, nicht in den Plans-Reiter.**
+
+`[read]` **Damit sind zwei der vier Herkunfts-Badges nicht belegbar:
+die Plaene, die sie tragen, werden nicht gerendert.**
+
+`[read]` **Er hat angehalten und gemeldet, statt die Liste zu
+erfinden.** **Die Antwort ist ja** — drei Quellen verlangen sie:
+Attrappe, E-41 und `SPEC_03` Flow 3 Schritt 1.
+
+### Und ein dritter gekippter Kommentar
+
+`[cmd]` **`,,Einen Plan, nicht zwei — der zweite gehoert
+tom.seed"`** — **bei `test-user` liegen vier eigene.**
+
+`[read]` **A-62, und er begruendete genau die Luecke, die derselbe
+Lauf gefunden hat.**
+
+`[cmd]` **Offen bleibt ein erfundener Titel: *Lebenszyklus* statt
+*Lifecycle types*.** **Mit G-311 beauftragt.**
+
+**Abgenommen.**
+
