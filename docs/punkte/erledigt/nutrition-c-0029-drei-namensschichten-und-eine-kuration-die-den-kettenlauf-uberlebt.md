@@ -8,9 +8,11 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: ["supabase/_pipeline/02_human_layer/024_suchsynonyme.sql", "supabase/_pipeline/03_bls_import/030_apply_local.sql"]
+  dateien:
+    - supabase/_pipeline/03_bls_import/030_apply_local.sql
 zahlen: null
 ---
 
@@ -78,3 +80,24 @@ zahlen: null
     automatisch einen Alias, oder nur einen Vorschlag zum Bestätigen?
     Automatisch ist bequemer, aber eine Zuordnung wie „Hüttenkäse" auf
     einen Frischkäse ist eine inhaltliche Aussage, die falsch sein kann.
+
+## Abnahme
+
+**2026-08-31, gegen den Bestand geprueft: erledigt.**
+
+`[cmd]` **5.014 von 7.140 Anzeigenamen weichen vom Quellnamen ab.**
+`[read]` **Der Punkt sagte: *,,`name_display` ist bei 7.140 von 7.140
+identisch mit `name_de` — null Abweichungen."***
+
+`[cmd]` **Der Kettenschritt traegt eine eigene Spalte
+`name_display_de` und liest sie aus der Quelldatei** — **die Kuration
+liegt in der CSV, nicht in Handarbeit an der Datenbank.**
+
+`[cmd]` **Und die Spec beschreibt genau das:** *,,Phase 4: Canonical
+Names (AI-generiert)"*.
+
+`[read]` **Damit ist die Reihenfolge eingehalten, die der Punkt
+verlangte:** *,,dieses Skript wird umgebaut, bevor der erste Name
+kuriert wird."* **Es ist geschehen, nur hat es niemand vermerkt.**
+
+**Geschlossen.**

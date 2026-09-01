@@ -6,7 +6,9 @@ schwere: mittel
 angelegt: 2026-08-31
 braucht: []
 kind_von: G-298
-entscheidung: null
+entscheidung: E-42
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -42,3 +44,19 @@ ist?**
 
 `[cmd]` **Einen Hintergrundlauf gibt es nicht** — dieselbe Frage wie
 bei C-358, dort mit *beim Anzeigevermerk bleiben* beantwortet.
+
+## Abnahme
+
+**2026-08-31, durch C-377 ersetzt.**
+
+`[read]` **Die Frage ist beantwortet, und zwar von Tom:**
+
+*,,ist ein kompletter plan abgelaufen muss eine meldung kommen und
+geklaert werden wie es weiter geht, renew/anderen wochenplan/manuelle
+erfassung."*
+
+`[cmd]` **C-377 baut das und laeuft.** `[read]` **Und die zweite
+Frage dieses Punktes — wer den Uebergang setzt — ist damit auch
+beantwortet: der Nutzer, bei der Meldung.** **Kein Zeitplaner.**
+
+**Geschlossen, fortgefuehrt in C-377.**

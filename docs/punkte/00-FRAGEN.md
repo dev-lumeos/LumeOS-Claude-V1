@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **29 Punkte tragen `typ: entscheidung`
+`[cmd]` **27 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -144,105 +144,6 @@ vielleicht Grundnahrungsmittel.**
   `[cmd]` **F-06 hat gemessen, dass die Freigabe ueberhaupt erst seit
   C-162 wirkt** — 22 `coach_read`-Policies ueber sechs Module. **Eine
   Feinstufe waere sechs mal soviel.**
-
-## C-29 — Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt
-
-**Modul:** nutrition · **angelegt:** 2026-08-14 · **Datei:** `todos/nutrition-c-0029-drei-namensschichten-und-eine-kuration-die-den-kettenlauf-uberlebt.md`
-
-## Befund
-
-(neu 2026-08-14). Setzt C-28 voraus.
-
-  **Zwei Befunde, die das nötig machen:**
-
-  `[cmd]` **Der heutige Importschritt überschreibt jede Handarbeit.**
-  `supabase/_pipeline/03_bls_import/030_apply_local.sql:48` trägt
-  `on conflict (bls_code) do update set … name_display = excluded.name_display`.
-  Jeder Aufbau — und der läuft in unter zehn Sekunden, also oft — setzt
-  den CSV-Wert zurück.
-
-  **Das ist keine Eigenschaft der Kette, sondern dieses einen Skripts**
-  (Tom, 2026-08-14). Neue BLS-Codes kommen dazu, Quellwerte ändern sich
-  gelegentlich — ein Schritt, der **gezielt** aktualisiert und kuratierte
-  Felder unangetastet lässt, löst das sauber. Was bleibt, ist eine
-  Reihenfolge: **dieses Skript wird umgebaut, bevor der erste Name
-  kuriert wird.** Solange es unverändert läuft, ist jede Handarbeit beim
-  nächsten Aufbau verloren.
-
-  `[cmd]` **Die Anzeigespalten sind heute reine Kopien.** `name_display`
-  ist bei **7.140 von 7.140** identisch mit `name_de` — null Abweichungen.
-  `name_display_en` ist identisch mit `name_en`, `name_display_th` und
-  `name_th` sind durchgehend leere Zeichenketten. Die Spalten tragen
-  keine Information; sie sind Platzhalter für genau diese Arbeit.
-
-  **Die drei Schichten:**
-
-  | Schicht | Inhalt | editierbar | Zweck |
-  |---|---|---|---|
-  | Quellname `name_de`/`name_en` | amtlicher BLS-Wortlaut | **nein** | Prüfbarkeit gegen die Arbeitsmappe |
-  | Anzeigename (je Zuordnung) | wie der Mensch es nennt | ja | Anzeige und Sortierung |
-  | Suchnamen `food_aliases` | alle Schreibweisen | ja | was gefunden wird |
-
-  `name_de` bleibt unveränderlich. `[cmd]` Der Bestand ist gegen die
-  amtliche Arbeitsmappe verifiziert — 698.092 Werte, 353 Abweichungen,
-  alle Rundungen. Diese Prüfbarkeit hängt am unveränderten Wortlaut. Wer
-  den Quellnamen überschreibt, kann nie wieder gegen die Quelle prüfen.
-
-  **`name_en` ist der maschinelle Startwert** (Befund 2026-08-14 am
-  Reis-Fall). `[cmd]` Der englische BLS-Name ist durchgängig
-  menschenlesbarer als der deutsche: `Reis poliert, roh` heißt dort
-  **White rice raw**, `Reis unpoliert` heißt **Brown rice**. Die
-  deutsche Fachsprache des BLS (poliert/unpoliert) hat im Englischen
-  keine Entsprechung. Der Gattungsname ist damit für einen grossen Teil
-  des Bestands keine Erfindung, sondern eine Übersetzung aus einem Feld,
-  das bereits vorhanden ist — Handarbeit fällt nur dort an, wo auch das
-  Englische Fachsprache bleibt. Vor der Kuration zu messen: bei wie
-  vielen Arten weicht `name_en` inhaltlich von `name_de` ab und ist
-  dabei das gebräuchlichere Wort.
-
-  **Umfang:**
-  - Override-Tabelle je kuratierter Zuordnung (nicht je Art — siehe
-    C-36), angewandt in einem Kettenschritt unter
-    `02_human_layer/` — nach dem Import, wie `024_suchsynonyme.sql` es
-    bereits vormacht.
-  - Umbenennung `name_display` → `name_display_de`. `[cmd]` 246
-    Vorkommen in 32 Dateien. Ein eigener Commit, keine Vermischung.
-  - **Offene Entscheidung für Tom:** Erzeugt ein gepflegter Gattungsname
-    automatisch einen Alias, oder nur einen Vorschlag zum Bestätigen?
-    Automatisch ist bequemer, aber eine Zuordnung wie „Hüttenkäse" auf
-    einen Frischkäse ist eine inhaltliche Aussage, die falsch sein kann.
-
-## C-369 — was mit einem abgelaufenen Plan geschieht
-
-**Modul:** nutrition · **angelegt:** 2026-08-31 · **Datei:** `todos/nutrition-c-0369-was-mit-einem-abgelaufenen-plan-geschieht.md`
-
-## Befund
-
-Aus G-298, Claude Code, 2026-08-31.
-
-`[cmd]` **Der aktive Plan endete am 15.07., heute ist der 31.08.**
-`[cmd]` **Die Karte liest jetzt *aktiv · abgelaufen*** — der Zustand
-wird gezeigt und eingeordnet, nicht ueberschrieben.
-
-`[cmd]` **`start_date`, `days_count` und `lifecycle_type` sind alle
-`NULL`** — **die Laufzeit steht ausschliesslich in den Tageszeilen.**
-
-## Die Frage
-
-**Was soll geschehen, wenn ein Plan auslaeuft?**
-
-`[cmd]` **E-31 hat drei Zyklen festgelegt:** `once` endet, `rollover`
-wiederholt, `sequence` uebergibt an den naechsten.
-
-`[read]` **Bei diesem Plan ist keiner gesetzt** — **er stammt aus der
-Zeit vor der Unterscheidung.**
-
-`[read]` **Also zwei Fragen:** **was geschieht mit Altplaenen ohne
-Zyklus** — **und wer setzt den Uebergang, wenn ein Zyklus gesetzt
-ist?**
-
-`[cmd]` **Einen Hintergrundlauf gibt es nicht** — dieselbe Frage wie
-bei C-358, dort mit *beim Anzeigevermerk bleiben* beantwortet.
 
 ## G-134 — Die vier Filtergruppen gibt es in den Daten nicht
 
@@ -473,6 +374,27 @@ Kurationsseite.
   Essensplaenen**, die es nicht gibt.
 
   **Zu entscheiden:** Kachel dazu, oder liegenlassen bis Meal plans?
+
+## Neu bewertet, 2026-08-31
+
+`[read]` **Der Punkt fragte: Kachel dazu, oder liegenlassen bis Meal
+plans?**
+
+`[cmd]` **Meal plans, Planner und Rezepte sind seit dem 31.08.
+gebaut** (E-39, E-40, G-289, C-372).
+
+`[read]` **Damit ist die Bedingung eingetreten** — **die acht Spalten
+koennen jetzt wirken oder es zeigt sich, dass sie es nicht koennen.**
+
+`[cmd]` **G-99 hat drei davon als wirkungslos gemessen:**
+`budget_level`, `meal_prep_ok`, `planner_notes` — **weil `recipes`
+kein Preis- und kein Vorkochfeld fuehrt.**
+
+`[read]` **Das ist heute noch so** — nachgemessen: `recipes` traegt
+`cooking_skill` und `prep_time_min`, sonst nichts davon.
+
+`[read]` **Also bleibt die Frage, aber schaerfer:** **drei Spalten
+brauchen Gegenstuecke an `recipes`, oder sie gehoeren weg.**
 
 ## C-241 — Das Nachweiskonto traegt weder Essensplaene noch Medikamente
 

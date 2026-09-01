@@ -35,3 +35,24 @@ zahlen: null
   Essensplaenen**, die es nicht gibt.
 
   **Zu entscheiden:** Kachel dazu, oder liegenlassen bis Meal plans?
+
+## Neu bewertet, 2026-08-31
+
+`[read]` **Der Punkt fragte: Kachel dazu, oder liegenlassen bis Meal
+plans?**
+
+`[cmd]` **Meal plans, Planner und Rezepte sind seit dem 31.08.
+gebaut** (E-39, E-40, G-289, C-372).
+
+`[read]` **Damit ist die Bedingung eingetreten** — **die acht Spalten
+koennen jetzt wirken oder es zeigt sich, dass sie es nicht koennen.**
+
+`[cmd]` **G-99 hat drei davon als wirkungslos gemessen:**
+`budget_level`, `meal_prep_ok`, `planner_notes` — **weil `recipes`
+kein Preis- und kein Vorkochfeld fuehrt.**
+
+`[read]` **Das ist heute noch so** — nachgemessen: `recipes` traegt
+`cooking_skill` und `prep_time_min`, sonst nichts davon.
+
+`[read]` **Also bleibt die Frage, aber schaerfer:** **drei Spalten
+brauchen Gegenstuecke an `recipes`, oder sie gehoeren weg.**

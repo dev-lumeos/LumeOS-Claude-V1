@@ -8,9 +8,10 @@ braucht: []
 kind_von: G-97
 kinder: []
 entscheidung: null
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [nutrition.meal_plan_logs]
 zahlen: null
 ---
 
@@ -50,3 +51,30 @@ zahlen: null
   Es fehlt nur eine Kategorie je Lebensmittel („Fleisch & Fisch") und
   die Umrechnung in Einkaufseinheiten. **Der guenstigste der vier
   Punkte.**
+
+## Abnahme
+
+**2026-08-31, gegen den Bestand geprueft: erledigt.**
+
+`[read]` **Der Punkt verlangte zwei Dinge, beide gibt es.**
+
+`[cmd]` **1. Ein Zustand je Planeintrag:** `meal_plan_logs` traegt
+`plan_entry_id` und `status` mit `pending`, `confirmed`, `deviated`,
+`skipped` — plus `deviation_kcal` und `deviation_pct`.
+
+`[read]` **Er sucht die Spalte an `meal_plan_entries`** — **sie liegt
+an einer eigenen Tabelle, und das ist besser:** ein Planeintrag kann
+in einem `rollover` mehrfach ausgefuehrt werden.
+
+`[cmd]` **2. Eine Herkunft am Tagebuch:** `meals` traegt
+`entry_source` und `source_detail`, `meal_plan_logs.actual_meal_id`
+zeigt zurueck.
+
+`[read]` **Damit ist die Compliance rechenbar** — was der Punkt
+verlangte.
+
+`[cmd]` **Und der Bestaetigungsweg steht seit G-274.** `[cmd]`
+**`meal_plan_logs` traegt heute 0 Zeilen** — **das ist eine
+Datenlage, kein Schemabefund.**
+
+**Geschlossen.**

@@ -44,3 +44,16 @@ zahlen:
   `[read]` **„Sichtbar" ist nicht „filtert".** Die drei mittleren lassen
   sich vergleichen; ein Filter waere eine Rezeptauswahl und gehoert zum
   Schreibpfad.
+
+## Nachgemessen 2026-08-31
+
+`[cmd]` **`recipes` traegt `cooking_skill` und `prep_time_min`** —
+**kein Preis-, kein Budget-, kein Vorkochfeld.**
+
+`[read]` **Der Befund von 2026-08-20 gilt unveraendert**, obwohl
+Rezepte seit G-289 gebaut sind.
+
+`[read]` **Damit ist es kein Anzeigefehler, sondern eine
+Schemaentscheidung:** **`budget_level`, `meal_prep_ok` und
+`planner_notes` brauchen Gegenstuecke an `recipes` — oder sie
+gehoeren weg.**

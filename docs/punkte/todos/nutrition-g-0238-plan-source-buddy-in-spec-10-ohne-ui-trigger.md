@@ -4,7 +4,7 @@ typ: entscheidung
 modul: nutrition
 schwere: niedrig
 angelegt: 2026-08-28
-braucht: []
+braucht: [C-374]
 kind_von: null
 entscheidung: null
 beruehrt:
@@ -86,3 +86,14 @@ unterscheiden koennen soll. **`self_created` laesst alles wie es ist**
 `self_created` mit Buddy als Werkzeug?.
 
 `[read]` **Die Messung steht in der G-226-Datei.**
+
+## Blockiert durch C-374, 2026-08-31
+
+`[cmd]` **`plan_origin` kennt `self_created`, `coach_created`,
+`marketplace` — kein `buddy`.**
+
+`[read]` **Der Punkt fragte nach dem UI-Trigger.** **Zuerst fehlt der
+Wert im Schema.**
+
+`[cmd]` **C-374 legt ihn an und laeuft bei Codex.** `[cmd]` **Und
+E-40 fuehrt Buddy als vierten Zweck des Planners.**

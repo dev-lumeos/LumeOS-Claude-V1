@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 233 |
+| `todos` | 230 |
 | `laufend_codex` | 4 |
 | `laufend_claudecode` | 6 |
-| `erledigt` | 171 |
+| `erledigt` | 174 |
 | **gesamt** | **414** |
 
 ## medical — 42
@@ -60,6 +60,8 @@
 
 ## nutrition — 158
 
+### beauftragbar — 157
+
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-13` | befund | mittel | [Das Konsolidierungsregister abarbeiten](todos/nutrition-a-0013-das-konsolidierungsregister-abarbeiten.md) | offen | — | — |
@@ -71,7 +73,7 @@
 | `C-20` | feature | mittel | [Treffer am Wortanfang schlägt Treffer in der Wortmitte](erledigt/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md) | erledigt | — | — |
 | `C-24` | befund | niedrig | [Halbfertigprodukte ranken als Grundzutat](todos/nutrition-c-0024-halbfertigprodukte-ranken-als-grundzutat.md) | offen | — | — |
 | `C-27` | messung | mittel | [Alltagswörter ohne Treffer — noch zwei](erledigt/nutrition-c-0027-alltagsworter-ohne-treffer-noch-zwei.md) | erledigt | — | — |
-| `C-29` | entscheidung | mittel | [Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt](todos/nutrition-c-0029-drei-namensschichten-und-eine-kuration-die-den-kettenlauf-uberlebt.md) | offen | — | — |
+| `C-29` | entscheidung | mittel | [Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt](erledigt/nutrition-c-0029-drei-namensschichten-und-eine-kuration-die-den-kettenlauf-uberlebt.md) | erledigt | — | — |
 | `C-30` | befund | mittel | [Suche und Trefferliste auf Arten umstellen](todos/nutrition-c-0030-suche-und-trefferliste-auf-arten-umstellen.md) | offen | — | — |
 | `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](todos/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | offen | — | — |
 | `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](todos/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | offen | — | — |
@@ -120,7 +122,7 @@
 | `C-366` | befund | mittel | [`food_tags` hat keinen Pflegeweg](todos/nutrition-c-0366-food-tags-hat-keinen-pflegeweg.md) | offen | — | — |
 | `C-367` | befund | hoch | [Vitamin A blockiert den Score an allen Tagen](erledigt/nutrition-c-0367-vitamin-a-blockiert-den-score-an-allen-tagen.md) | erledigt | — | C-368 |
 | `C-368` | entscheidung | hoch | [fuenfzehn Lebensmittel blockieren den Score](laufend_codex/nutrition-c-0368-fuenfzehn-lebensmittel-blockieren-den-score.md) | laeuft (codex) | — | — |
-| `C-369` | entscheidung | mittel | [was mit einem abgelaufenen Plan geschieht](todos/nutrition-c-0369-was-mit-einem-abgelaufenen-plan-geschieht.md) | offen | — | — |
+| `C-369` | entscheidung | mittel | [was mit einem abgelaufenen Plan geschieht](erledigt/nutrition-c-0369-was-mit-einem-abgelaufenen-plan-geschieht.md) | erledigt | — | — |
 | `C-370` | entscheidung | hoch | [wie entsteht ein eigener Plan?](erledigt/nutrition-c-0370-wie-entsteht-ein-eigener-plan.md) | erledigt | — | — |
 | `C-371` | befund | mittel | [`recipes` hat keine Herkunftsspalte](laufend_codex/nutrition-c-0371-recipes-hat-keine-herkunftsspalte.md) | laeuft (codex) | — | — |
 | `C-372` | befund | hoch | [Planwochen haben keinen Schreibweg](erledigt/nutrition-c-0372-planwochen-haben-keinen-schreibweg.md) | erledigt | — | G-307 |
@@ -136,7 +138,7 @@
 | `G-72` | entscheidung | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](todos/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | offen | — | — |
 | `G-75` | befund | mittel | [Die alte Oberflaeche nennt den BLS ebenfalls](todos/nutrition-g-0075-die-alte-oberflaeche-nennt-den-bls-ebenfalls.md) | offen | — | — |
 | `G-93` | befund | mittel | [Der Anzeigename fehlt im laufenden Erfassungsdialog](erledigt/nutrition-g-0093-der-anzeigename-fehlt-im-laufenden-erfassungsdialog.md) | erledigt | — | — |
-| `G-98` | befund | mittel | [Meal plans braucht einen Zustand und eine Herkunft](todos/nutrition-g-0098-meal-plans-braucht-einen-zustand-und-eine-herkunft.md) | offen | — | — |
+| `G-98` | befund | mittel | [Meal plans braucht einen Zustand und eine Herkunft](erledigt/nutrition-g-0098-meal-plans-braucht-einen-zustand-und-eine-herkunft.md) | erledigt | — | — |
 | `G-99` | befund | mittel | [Drei der acht Planner-Spalten bleiben wirkungslos](todos/nutrition-g-0099-drei-der-acht-planner-spalten-bleiben-wirkungslos.md) | offen | — | — |
 | `G-107` | befund | mittel | [Der Mikronaehrstoff-Trend braucht eine Referenz je Tag](erledigt/nutrition-g-0107-der-mikronaehrstoff-trend-braucht-eine-referenz-je-tag.md) | erledigt | — | G-252 |
 | `G-108` | befund | mittel | [Die Filter des Nutrients-Tabs](erledigt/nutrition-g-0108-die-filter-des-nutrients-tabs.md) | erledigt | — | G-260 |
@@ -167,7 +169,6 @@
 | `G-235` | entscheidung | niedrig | [`MicroDashboard` Tier-System (Tier 1/2/3) und Subscription-Gates ungeklärt](erledigt/nutrition-g-0235-microdashboard-tier-system-tier-1-2-3-und-subscription-gat.md) | erledigt | — | — |
 | `G-236` | befund | niedrig | [`SmartSuggestions` Component und `useSmartSearchSuggestions` Hook ohne klaren V1-Trigger](todos/nutrition-g-0236-smartsuggestions-component-und-usesmartsearchsuggestions-h.md) | offen | — | — |
 | `G-237` | befund | niedrig | [`data/nutrientDetails.ts` als statisches Array — `food_sources` Array veraltet (per Review 1 ADR_IMPROVEMENTS_PACKAGE #20)](todos/nutrition-g-0237-data-nutrientdetails-ts-als-statisches-array-food-sources-.md) | offen | — | — |
-| `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | — | — |
 | `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](erledigt/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | erledigt | — | C-333, C-334, G-246, G-247, G-249 |
 | `G-245` | feature | mittel | [die Sortier-Tags bauen](erledigt/nutrition-g-0245-die-sortier-tags-bauen.md) | erledigt | — | — |
 | `G-246` | feature | hoch | [die Detailtexte liegen in der Datenbank und werden nicht gelesen](erledigt/nutrition-g-0246-die-detailtexte-werden-nicht-gelesen.md) | erledigt | — | A-60, C-336 |
@@ -220,6 +221,12 @@
 | `G-306` | befund | hoch | [der Planeditor verletzt die Immutabilitaet](laufend_claudecode/nutrition-g-0306-der-planeditor-verletzt-die-immutabilitaet.md) | laeuft (claudecode) | — | C-376 |
 | `G-307` | feature | mittel | [*Bearbeiten* in der Bibliothek fuehrt nirgendwohin](laufend_claudecode/nutrition-g-0307-bearbeiten-in-der-bibliothek-fuehrt-nirgendwohin.md) | vorbereitet (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | C-374 | — |
 
 ## supplements — 59
 
