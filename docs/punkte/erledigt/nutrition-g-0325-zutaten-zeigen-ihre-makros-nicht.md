@@ -9,6 +9,8 @@ kind_von: G-323
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: c9d91b1c
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/rezepte-echt.tsx
@@ -91,3 +93,15 @@ belegt.
     Menge aendern    die Werte der Zeile aendern sich
     Summe            bleibt die Summe der Zeilen
     Bildschirmfoto   vorher / nachher
+
+## Abnahme
+
+**2026-09-02, mit G-323 abgenommen: gebaut.**
+
+`[cmd]` **Je Zutat Menge und vier Makros, aus der eingegebenen Menge
+gerechnet.** `[cmd]` **80 auf 300 g: 1.044 kcal, 39,7 P, 20,0 F,
+159,9 C** — gegen `food_nutrient_snapshot` geprueft, exakt.
+
+`[read]` **Und zwei Befunde kamen erst beim Messen:** der Leseweg
+lieferte je Zutat keine Naehrwerte, **und `.v2-feld` setzt `flex: 1`,
+weshalb das schmale Feld 262 px breit war.**

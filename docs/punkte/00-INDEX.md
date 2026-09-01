@@ -6,8 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 221 |
-| `laufend_claudecode` | 4 |
-| `erledigt` | 211 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 213 |
 | **gesamt** | **436** |
 
 ## medical — 42
@@ -236,14 +236,14 @@
 | `G-320` | feature | hoch | [die Lebensmittelsuche als Modal](erledigt/nutrition-g-0320-die-lebensmittelsuche-als-modal.md) | erledigt | — | G-321, G-322, G-323 |
 | `G-321` | befund | hoch | [drei Befunde am Suchmodal](erledigt/nutrition-g-0321-drei-befunde-am-suchmodal.md) | erledigt | — | — |
 | `G-322` | feature | mittel | [die Bauteile aus `tab-foods.tsx` herausloesen](todos/nutrition-g-0322-die-bauteile-aus-tab-foods-herausloesen.md) | offen | — | — |
-| `G-325` | feature | hoch | [Zutaten zeigen ihre Makros nicht](laufend_claudecode/nutrition-g-0325-zutaten-zeigen-ihre-makros-nicht.md) | laeuft (claudecode) | — | — |
+| `G-325` | feature | hoch | [Zutaten zeigen ihre Makros nicht](erledigt/nutrition-g-0325-zutaten-zeigen-ihre-makros-nicht.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-323` | befund | hoch | [vier Suchen ohne die Lehren](laufend_claudecode/nutrition-g-0323-vier-suchen-ohne-die-lehren.md) | laeuft (claudecode) | G-322 | G-325 |
+| `G-323` | befund | hoch | [vier Suchen ohne die Lehren](erledigt/nutrition-g-0323-vier-suchen-ohne-die-lehren.md) | erledigt | G-322 | G-325 |
 
 ## supplements — 59
 
