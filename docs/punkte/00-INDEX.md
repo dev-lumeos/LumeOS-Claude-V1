@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 221 |
-| `laufend_claudecode` | 2 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 213 |
-| **gesamt** | **436** |
+| **gesamt** | **437** |
 
 ## medical — 42
 
@@ -57,9 +57,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 176
+## nutrition — 177
 
-### beauftragbar — 175
+### beauftragbar — 176
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -236,7 +236,8 @@
 | `G-320` | feature | hoch | [die Lebensmittelsuche als Modal](erledigt/nutrition-g-0320-die-lebensmittelsuche-als-modal.md) | erledigt | — | G-321, G-322, G-323 |
 | `G-321` | befund | hoch | [drei Befunde am Suchmodal](erledigt/nutrition-g-0321-drei-befunde-am-suchmodal.md) | erledigt | — | — |
 | `G-322` | feature | mittel | [die Bauteile aus `tab-foods.tsx` herausloesen](todos/nutrition-g-0322-die-bauteile-aus-tab-foods-herausloesen.md) | offen | — | — |
-| `G-325` | feature | hoch | [Zutaten zeigen ihre Makros nicht](erledigt/nutrition-g-0325-zutaten-zeigen-ihre-makros-nicht.md) | erledigt | — | — |
+| `G-325` | feature | hoch | [Zutaten zeigen ihre Makros nicht](erledigt/nutrition-g-0325-zutaten-zeigen-ihre-makros-nicht.md) | erledigt | — | G-326 |
+| `G-326` | befund | hoch | [der Rezepteditor liest sich nicht](laufend_claudecode/nutrition-g-0326-der-rezepteditor-liest-sich-nicht.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
