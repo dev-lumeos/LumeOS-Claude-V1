@@ -13,8 +13,8 @@ beauftragt: 2026-09-02
 erledigt: 2026-09-02
 commit: 7a6e77a7
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien:
+    - apps/web/src/app/v2/supplements/tab-spec.tsx
 zahlen: null
 ---
 
