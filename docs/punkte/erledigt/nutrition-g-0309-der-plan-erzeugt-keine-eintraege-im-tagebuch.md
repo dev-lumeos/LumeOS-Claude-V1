@@ -7,6 +7,10 @@ angelegt: 2026-09-01
 braucht: []
 kind_von: G-304
 entscheidung: E-42
+agent: claudecode
+beauftragt: 2026-09-01
+erledigt: 2026-09-02
+commit: 012962d5
 beruehrt:
   tabellen: [nutrition.meal_plan_logs]
 zahlen:
