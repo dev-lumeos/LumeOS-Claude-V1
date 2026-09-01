@@ -13,8 +13,8 @@ beauftragt: 2026-09-01
 erledigt: 2026-09-01
 commit: 4a2bd5df
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien:
+    - .eslintrc.json
 zahlen: null
 ---
 
