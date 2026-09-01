@@ -13,8 +13,8 @@ beauftragt: 2026-09-01
 erledigt: 2026-09-01
 commit: a598cb88
 beruehrt:
-  tabellen: [public.nutrition_goals]
-  dateien: []
+  dateien:
+    - supabase/_pipeline/kette.json
 zahlen: null
 ---
 
