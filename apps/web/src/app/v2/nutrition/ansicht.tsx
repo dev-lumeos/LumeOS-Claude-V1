@@ -66,7 +66,10 @@ import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-re
 import { Zielhinweis } from './zielhinweis'
 import { Mahlzeiten } from './mahlzeiten'
 import { Datumsnavigation, Zukunftshinweis } from './datumsnavigation'
-import type { LogZeile as PlanLogZeile } from '../../../lib/nutrition/plan-lage'
+import {
+  LEERER_WECHSELSTAND,
+  type LogZeile as PlanLogZeile, type WechselStand,
+} from '../../../lib/nutrition/plan-lage'
 import type { TagesEintrag } from './plan-eintraege'
 // G-38: die Tabs, die bisher nur als Attrappen-Platzhalter dastanden.
 import { NutritionInsightsTab } from './tab-insights'
@@ -141,6 +144,7 @@ function tabs(mahlzeiten: number | null): TabItem[] {
 export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, lueckenGesamt = null, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
   planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
+  wechsel = LEERER_WECHSELSTAND,
   istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null, rezepte = null, allePlaene = [],
   offeneAktionen = null, sitzung = null,
   unvertraeglichkeiten = [],
@@ -156,6 +160,8 @@ export async function TagebuchAnsicht({
   coachFreigabe?: boolean
   einkaufslisten?: number
   tagesEintraege?: TagesEintrag[]
+  /** G-309: Befunde UND Grundgesamtheit, aus EINER Messung. */
+  wechsel?: WechselStand
   tab: string
   /** G-14: nur Admins duerfen in die Zukunft blaettern. */
   istAdmin?: boolean
@@ -272,7 +278,7 @@ export async function TagebuchAnsicht({
       <Zukunftshinweis datum={datum} />
 
       {tab !== 'diary' && (
-        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} rezepte={rezepte} allePlaene={allePlaene} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} planLogs={planLogs} coachFreigabe={coachFreigabe} einkaufslisten={einkaufslisten} tagesEintraege={tagesEintraege} />
+        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} rezepte={rezepte} allePlaene={allePlaene} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} planLogs={planLogs} coachFreigabe={coachFreigabe} einkaufslisten={einkaufslisten} tagesEintraege={tagesEintraege} wechsel={wechsel} />
       )}
       {tab === 'diary' && (
       <>
@@ -644,6 +650,7 @@ function AndererTab({
   allePlaene = [], bewertung = [],
   datum,
   planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
+  wechsel = LEERER_WECHSELSTAND,
   unvertraeglichkeiten = [],
 }: {
   tab: string
@@ -654,6 +661,8 @@ function AndererTab({
   coachFreigabe?: boolean
   einkaufslisten?: number
   tagesEintraege?: TagesEintrag[]
+  /** G-309: Befunde UND Grundgesamtheit, aus EINER Messung. */
+  wechsel?: WechselStand
   /** G-154: die gesetzten Unvertraeglichkeiten (`strong`). */
   unvertraeglichkeiten?: string[]
   /** G-66: die erste Trefferseite, serverseitig geladen. */
@@ -780,6 +789,7 @@ function AndererTab({
           coachFreigabe={coachFreigabe}
           einkaufslisten={einkaufslisten}
           tagesEintraege={tagesEintraege}
+          wechsel={wechsel}
           datum={datum ?? ''}
         />
       </div>

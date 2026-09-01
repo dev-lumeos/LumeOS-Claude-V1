@@ -96,6 +96,7 @@ async function eintragLesen(planEntryId: string) {
     .select(`
       id, meal_type, entry_type, food_id, recipe_id, amount_g,
       planned_servings,
+      recipe:recipes ( servings ),
       day:meal_plan_days ( id, plan_date, week:meal_plan_weeks ( plan_id ) )
     `)
     .eq('id', planEntryId)
@@ -110,15 +111,42 @@ async function eintragLesen(planEntryId: string) {
     throw new DiaryWriteError('NOT_FOUND', 'Der Eintrag hängt an keinem Plan.')
   }
 
+  // G-309: die Portionszahl des Rezepts — sie ist der Nenner.
+  //
+  // `[cmd]` **`servings` ist `numeric`** — PostgREST liefert das als
+  // Zeichenkette. `[read]` **Ein `typeof x === 'number'` waere hier
+  // immer falsch gewesen**, und der Nenner still 1 geblieben.
+  const rohPortionen = (e.recipe as Record<string, unknown> | null)?.servings
+  const rezeptPortionen = typeof rohPortionen === 'string'
+    ? Number(rohPortionen) : rohPortionen
   const posten: Posten[] = []
   if (typeof e.food_id === 'string' && typeof e.amount_g === 'number') {
     posten.push({ food_id: e.food_id, amount_g: e.amount_g })
   } else if (typeof e.recipe_id === 'string') {
-    // `[cmd]` Die Zutaten tragen alle ein `food_id` (gemessen).
-    // `planned_servings` skaliert sie — ein halbes Rezept ist die
-    // halbe Menge je Zutat.
-    const faktor = typeof e.planned_servings === 'number' && e.planned_servings > 0
+    // ══ G-309: BERICHTIGT — hier fehlte der Nenner ════════════════
+    //
+    // `[cmd]` **Hier stand `faktor = planned_servings`**, ohne
+    // Division durch `recipes.servings`. `[read]` **Ein Rezept fuer
+    // ZWEI Portionen fuehrt die Menge fuer zwei** — wer eine Portion
+    // plant, bekommt die Haelfte, nicht das Doppelte.
+    //
+    // `[cmd]` **Am 2026-09-01 gemessen, Rezept mit `servings = 2`,
+    // `planned_servings = 1`:** 400 g Zutat ergaben 400 g statt 200 g.
+    //
+    // `[read]` **Sichtbar wurde es am Zustand, nicht an der Menge:**
+    // eine Bestaetigung mit 600 statt 200 g wurde `confirmed` statt
+    // `deviated` — der Vergleichswert war doppelt so gross wie der
+    // Plan, und damit sah die Verdreifachung wie eine Unterschreitung
+    // aus.
+    //
+    // `[cmd]` **Zwei andere Stellen rechnen es richtig** und waren der
+    // Massstab: `nutrition.meal_plan_day_to_diary` (`ri.amount_g *
+    // e.planned_servings / r.servings`) und `ladeGhostEintraege`.
+    const portionen = typeof e.planned_servings === 'number' && e.planned_servings > 0
       ? e.planned_servings : 1
+    const proRezept = typeof rezeptPortionen === 'number' && rezeptPortionen > 0
+      ? rezeptPortionen : 1
+    const faktor = portionen / proRezept
     const { data: zutaten } = await db
       .from('recipe_ingredients')
       .select('food_id, amount_g')

@@ -32,9 +32,11 @@ import {
   PlanKopfEcht, PlanEinstellungenEcht,
 } from './plans-echt'
 import type { PlanDaten } from '../../../lib/nutrition/plan-lesen'
-import type { LogZeile } from '../../../lib/nutrition/plan-lage'
 import {
-  LebenszyklusEcht, EinhaltungEcht,
+  LEERER_WECHSELSTAND, type LogZeile, type WechselStand,
+} from '../../../lib/nutrition/plan-lage'
+import {
+  LebenszyklusEcht, EinhaltungEcht, WechselbefundEcht,
   HerkunftEcht,
 } from './plans-echt'
 import { PlanModal } from './plan-modal'
@@ -76,6 +78,7 @@ const EINKAUF: Array<{ cat: string; items: Array<[string, string]> }> = [
 export function MealPlansTab({
   d = null, logs = [], coachFreigabe = false, einkaufslisten = 0,
   tagesEintraege = [], datum = '',
+  wechsel = LEERER_WECHSELSTAND,
 }: {
   d?: PlanDaten | null
   /** G-270: die Ausfuehrung aus `meal_plan_logs` — nicht vom Eintrag. */
@@ -88,6 +91,8 @@ export function MealPlansTab({
   tagesEintraege?: TagesEintrag[]
   /** G-274: der Tag, auf den bestaetigt wird (`execution_date`). */
   datum?: string
+  /** G-309: Befunde UND Grundgesamtheit, aus EINER Messung. */
+  wechsel?: WechselStand
 }) {
   // G-267 / G-268: `null` heisst zu, `true` heisst anlegen,
   // ein Objekt heisst bearbeiten.
@@ -284,6 +289,14 @@ export function MealPlansTab({
 
             {/* G-270: die Einhaltung aus dem Log — ohne entschiedene
                 Zeilen gibt es keine Quote, nicht null Prozent. */}
+            {/* G-309: welche Position regelmaessig gewechselt wird
+                — Toms Frage, und etwas anderes als die Quote. */}
+            {d && (
+              <WechselbefundEcht
+                stand={wechsel}
+              />
+            )}
+
             {d ? <EinhaltungEcht logs={logs} /> : (
             <Card title="7-day compliance" attrappe={ATTRAPPE}>
               <Sparkline data={[100, 86, 100, 92, 80, 100, compliance]} color="var(--acc-nutri)" h={44} />

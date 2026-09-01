@@ -15,30 +15,44 @@
 // haelt ihn fuer fehlend.** Deshalb steht es hier als Satz und nicht
 // nur im Auftragstext.
 //
-// ══ UND DER BEFUND, DER DEN AUFTRAG EINSCHRAENKT ════════════════════
+// ══ DER BEFUND VON G-270 IST SEIT G-309 UEBERHOLT ═══════════════════
 //
-// `[cmd]` **`meal_plan_logs` ist LEER — 0 Zeilen, fuer jeden
-// Nutzer.** `[read]` **Damit werden die drei Attrappen nicht zu
-// echten Zahlen, sondern zu Leerzustaenden.** Das ist ein
-// Fortschritt (eine Kachel, die sagt „noch nichts protokolliert",
-// ist ehrlich; eine mit erfundenen Zahlen nicht) — **aber es ist
-// nicht dasselbe wie „angebunden".**
+// `[cmd]` **Hier stand: *,,`meal_plan_logs` ist LEER — 0 Zeilen, fuer
+// jeden Nutzer"*** (G-270, 2026-08-30). **Das galt, solange nichts
+// die Zeilen erzeugte.**
+//
+// `[cmd]` **Seit G-309 (2026-09-01) schreibt der Weg:** Ghost Entry
+// bestaetigen, abweichen oder auslassen legt eine Zeile an. **Am
+// selben Tag gemessen: drei Zeilen mit `confirmed`, `deviated`,
+// `skipped`.**
+//
+// `[read]` **Die Leerzustaende bleiben trotzdem** — sie gelten fuer
+// ein Konto, das noch nichts protokolliert hat. **Sie sind kein
+// Dauerzustand mehr, sondern ein Anfangszustand.**
 
 /**
  * Die Herkunft eines Plans — G-268 / G-269.
  *
- * `[cmd]` **Der CHECK erlaubt drei Werte oder `NULL`:**
- * `self_created`, `coach_created`, `marketplace`.
+ * `[cmd]` **Der CHECK erlaubt VIER Werte oder `NULL`** — am
+ * 2026-09-01 gemessen: `self_created`, `coach_created`,
+ * `marketplace`, `buddy`.
+ *
+ * `[cmd]` **BERICHTIGT in G-310:** hier stand *,,drei Werte"*, und
+ * `herkunftVon` warf `buddy` auf `unbekannt`. **Mockup
+ * (`MealPlansView.js` Z. 14) und `SPEC_03` Flow 3 Schritt 2 nennen
+ * es beide.**
  *
  * `[read]` **`NULL` ist der vierte Zustand und der haeufigste:** die
  * beiden Bestandsplaene tragen ihn, **weil die Herkunft nicht
  * belegbar war.** Ihn als „selbst erstellt" anzuzeigen waere eine
  * Behauptung.
  */
-export type Herkunft = 'self_created' | 'coach_created' | 'marketplace' | 'unbekannt'
+export type Herkunft =
+  | 'self_created' | 'coach_created' | 'marketplace' | 'buddy' | 'unbekannt'
 
 export function herkunftVon(roh: string | null): Herkunft {
-  if (roh === 'self_created' || roh === 'coach_created' || roh === 'marketplace') {
+  if (roh === 'self_created' || roh === 'coach_created'
+    || roh === 'marketplace' || roh === 'buddy') {
     return roh
   }
   return 'unbekannt'
@@ -48,7 +62,54 @@ export const HERKUNFT_TEXT: Record<Herkunft, string> = {
   self_created: 'selbst erstellt',
   coach_created: 'vom Coach',
   marketplace: 'aus dem Marktplatz',
+  buddy: 'von Buddy',
   unbekannt: 'Herkunft nicht hinterlegt',
+}
+
+// ══ G-310: die Badges der Planliste ══════════════════════════
+//
+// `[cmd]` **`MealPlansView.js` Zeilen 10-15 und 89** — je Plan ein
+// Badge mit eigener Farbe, **und `self_created` traegt keines.**
+//
+// `[cmd]` **`SPEC_03` Flow 3, Schritt 2 sagt dasselbe:**
+//
+//     Eigene (source: user)        — ohne Label
+//     Vom Coach (source: coach)    — "Von [Coach-Name]"
+//     Marketplace                  — "Gekauft: [Produkt-Name]"
+//     Von Buddy (source: buddy)    — "Erstellt von Buddy"
+//
+// `[read]` **Mockup und Spec widersprechen sich hier nicht** — die
+// Spec nennt den Coach- und Produktnamen zusaetzlich; **die stehen
+// nicht im Schema** (`meal_plans` fuehrt keine Coach-Referenz), also
+// bleibt es beim Wort ohne Namen.
+//
+// `[cmd]` **Der CHECK erlaubt genau diese vier** — am 2026-09-01
+// gemessen: `self_created`, `coach_created`, `marketplace`, `buddy`.
+
+/** Das Badge je Herkunft — `null` heisst: kein Badge (Mockup Z. 89). */
+export const HERKUNFT_BADGE: Record<Herkunft, string | null> = {
+  self_created: null,
+  coach_created: 'Von Coach',
+  marketplace: 'Marketplace',
+  buddy: 'AI erstellt',
+  unbekannt: null,
+}
+
+/**
+ * Die Farbe je Badge — aus dem Mockup uebernommen.
+ *
+ * `[cmd]` **`MealPlansView.js`:** `#f97316` (Marketplace, Z. 11),
+ * `#3b82f6` (Coach, Z. 13), `var(--brand-600)` (AI, Z. 15).
+ *
+ * `[read]` **`--brand-600` gibt es in v2 nicht** — dort heisst der
+ * Nutrition-Akzent `--acc-nutri`. **Uebersetzt, nicht erfunden.**
+ */
+export const HERKUNFT_FARBE: Record<Herkunft, string | null> = {
+  self_created: null,
+  coach_created: '#3b82f6',
+  marketplace: '#f97316',
+  buddy: 'var(--acc-nutri)',
+  unbekannt: null,
 }
 
 /**
@@ -196,12 +257,33 @@ export function einhaltungVon(zeilen: readonly LogZeile[]): Einhaltung {
  * Die Quote — oder `null`, wenn nichts entschieden wurde.
  *
  * `[read]` **`null` heisst „noch keine Aussage", nicht „0 Prozent".**
- * `[cmd]` **Und das ist heute der Normalfall:** `meal_plan_logs` ist
- * leer.
+ *
+ * ══ BERICHTIGT IN G-310 — `deviated` ZAEHLT ALS ERFOLG ═════════════
+ *
+ * `[cmd]` **Hier stand `bestaetigt / entschieden`.**
+ * `[cmd]` **`SPEC_09` Abschnitt 2 verlangt
+ * `(confirmed + deviated) / decided`** und nennt die Regel
+ * ausdruecklich: *,,`deviated` zaehlt als Erfolg fuer Compliance
+ * (User hat sich aktiv entschieden)."*
+ *
+ * **Tom, 2026-09-01:** *,,Compliance misst, ob jemand seinen Plan
+ * verfolgt — nicht, ob er gehorcht. Wer abweicht, hat sich mit dem
+ * Plan befasst und entschieden. Wer auslaesst oder nichts tut, hat es
+ * nicht."*
+ *
+ * `[read]` **Und die falsche Formel arbeitete gegen die Auswertung
+ * aus G-309:** wenn jede Abweichung die Quote senkt, ist Abweichen
+ * bestraft — **und der Nutzer traegt lieber falsch ein, als
+ * abzuweichen.** Dasselbe Argument wie in E-42: eine Regel, die sich
+ * umgehen laesst, erzeugt unehrliche Daten.
+ *
+ * `[cmd]` **Gemessen vor der Aenderung: EIN Produktaufrufer**
+ * (`plans-echt.tsx`), der Rest Tests. **Keine Stelle zaehlte bewusst
+ * nur `confirmed`** — deshalb dieselbe Funktion, kein zweiter Name.
  */
 export function quoteVon(e: Einhaltung): number | null {
   if (e.entschieden === 0) return null
-  return Math.round((e.bestaetigt / e.entschieden) * 1000) / 10
+  return Math.round(((e.bestaetigt + e.abgewichen) / e.entschieden) * 1000) / 10
 }
 
 /**
@@ -237,3 +319,66 @@ export const KEIN_LOG_SATZ =
 export const KEINE_EINKAUFSLISTE_SATZ =
   'Noch keine Einkaufsliste angelegt. Sie entsteht aus einem Rezept — '
   + 'im Rezepte-Reiter über „Einkaufsliste".'
+
+
+// ══ G-309: die Auswertung, die Tom will ═════════════════════
+//
+// `[cmd]` **Der Typ steht HIER, nicht in `plan-lesen.ts`** — die
+// Kachel ist eine Client-Komponente, und ein WERT-Import aus dem
+// Leseweg zieht `next/headers` mit (A-30).
+//
+// `[cmd]` **Am 2026-09-01 gemessen: `/login` antwortete HTTP 500**,
+// *,,You're importing a component that needs next/headers"* — **der
+// ganze Server stand, nicht nur die Kachel.**
+//
+// `[read]` **Ein `import type` waere durchgegangen** (er verschwindet
+// beim Uebersetzen). **Der Wert `LEERER_WECHSELSTAND` nicht** — und
+// genau den brauchte die Vorgabe der Prop.
+
+export type Wechselbefund = {
+  plan_entry_id: string
+  meal_type: string
+  bezeichnung: string
+  /** Wie oft diese Position ueberhaupt entschieden wurde. */
+  gesamt: number
+  abgewichen: number
+  ausgelassen: number
+  /** `abgewichen + ausgelassen`, gemessen an `gesamt`. */
+  quote: number
+}
+
+/**
+ * Was die Auswertung zurueckgibt — Befunde UND Grundgesamtheit.
+ *
+ * `[cmd]` **Am 2026-09-01 gemessen: die Kachel sagte *,,Noch nichts
+ * protokolliert"*, waehrend `lunch` dreimal abgewichen war.**
+ *
+ * `[read]` **Die Ursache waren zwei Quellen fuer eine Aussage:** die
+ * Befunde kamen aus 28 Tagen, die Zahl der entschiedenen Zeilen aus
+ * `ladePlanLogs(datum, 7)`. **Ein Wechsel vor mehr als sieben Tagen
+ * erzeugte einen Befund, den die Kachel als *,,nichts da"* auswies.**
+ *
+ * `[read]` **Deshalb beides aus derselben Messung.** Die Kachel
+ * unterscheidet drei Lagen: nichts protokolliert / protokolliert,
+ * aber unauffaellig / ein Befund.
+ */
+export type WechselStand = {
+  befunde: Wechselbefund[]
+  /** Wie viele entschiedene Logzeilen im Zeitraum lagen. */
+  entschieden: number
+}
+
+export const LEERER_WECHSELSTAND: WechselStand = { befunde: [], entschieden: 0 }
+
+/**
+ * Ab wann eine Position auffaellt.
+ *
+ * `[read]` **Zwei Vorkommen, nicht eines** — *,,immer gewechselt"*
+ * heisst nicht *,,einmal gewechselt"*. **Ein einzelner Ausrutscher
+ * ist kein Muster**, und eine Empfehlung darauf zu stuetzen waere
+ * geraten.
+ */
+export const WECHSEL_AB_MAL = 2
+
+/** Und ab welchem Anteil. */
+export const WECHSEL_AB_QUOTE = 0.5

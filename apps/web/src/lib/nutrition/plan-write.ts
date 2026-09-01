@@ -190,6 +190,8 @@ export async function planAendern(eingabe: PlanAendern): Promise<GespeicherterPl
     )
   }
 
+  if (felder.status === 'active') await anderePlaenePausieren(db, id)
+
   const { data, error } = await db
     .from('meal_plans')
     .update(felder)
@@ -216,6 +218,38 @@ export async function planAendern(eingabe: PlanAendern): Promise<GespeicherterPl
   }
 
   return data as unknown as GespeicherterPlan
+}
+
+/**
+ * Beim Aktivieren wird der bestehende aktive Plan pausiert — G-309.
+ *
+ * **`SPEC_03` Flow 3, Schritt 7:** *,,Bestätigen → status: active /
+ * Bestehender aktiver Plan → status: paused."*
+ *
+ * `[cmd]` **Am 2026-09-01 gemessen: das geschah nicht.** `[read]`
+ * **Dann haetten zwei Plaene Anspruch auf denselben Tag** — und die
+ * Ghost Entries zeigten die Positionen beider nebeneinander, ohne dass
+ * jemand entschieden hat, welcher gilt.
+ *
+ * `[read]` **`paused`, nicht `completed`:** der Plan ist nicht durch,
+ * er ruht. **Er bleibt in der Bibliothek und kann zurueckgeholt
+ * werden.**
+ *
+ * `[read]` **Der Aufruf steht VOR dem eigenen Schreiben** — danach
+ * pausierte er den gerade aktivierten Plan gleich mit. **Deshalb auch
+ * `.neq('id', ...)`:** zwei Gruende, einer genuegte nicht.
+ *
+ * `[cmd]` **Zwei Wege setzen `active`** — `planAendern` und
+ * `ablaufKlaeren` (C-373). **Deshalb steht es hier einmal und nicht
+ * zweimal hingeschrieben.**
+ */
+async function anderePlaenePausieren(db: Db, ausser: string): Promise<void> {
+  const { error } = await db
+    .from('meal_plans')
+    .update({ status: 'paused', is_active: false })
+    .eq('status', 'active')
+    .neq('id', ausser)
+  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
 }
 
 /**
@@ -693,6 +727,8 @@ export async function ablaufKlaeren(eingabe: AblaufKlaeren): Promise<{
     // `[read]` **Der Zaehler steht in `rollover_count`** — die Spalte
     // gibt es seit C-150, und sie stand bisher immer auf 0.
     const neuZaehler = (v.rollover_count ?? 0) + 1
+    // G-309/Flow 3 Schritt 7 gilt auch hier — ein Neustart aktiviert.
+    await anderePlaenePausieren(db, eingabe.id)
     const { error } = await db
       .from('meal_plans')
       .update({

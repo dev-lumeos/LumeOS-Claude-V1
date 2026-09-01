@@ -34,10 +34,13 @@ import type { VorliebenDaten } from './tab-vorlieben'
 // G-97: der Wochenplan aus den C-150-Tabellen.
 import {
   ladePlan, ladePlanLogs, ladeCoachFreigabe, ladeEinkaufslistenZahl,
+  // G-309: welche Position wird regelmaessig gewechselt?
+  ladeWechselbefunde,
   ladeTagesEintraege,
   // C-372/E-41: die Auflistung aller Plaene - Bibliothek UND Werkbank.
   ladeAllePlaene,
   type PlanDaten, type PlanKurz,
+  type WechselStand, LEERER_WECHSELSTAND,
 } from '../../../lib/nutrition/plan-lesen'
 import type { TagesEintrag } from './plan-eintraege'
 import type { LogZeile as PlanLogZeile } from '../../../lib/nutrition/plan-lage'
@@ -252,21 +255,27 @@ export default async function V2NutritionPage({
   let coachFreigabe = false
   let einkaufslisten = 0
   let tagesEintraege: TagesEintrag[] = []
+  // G-309 Punkt 4: die Auswertung, die Tom will.
+  let wechsel: WechselStand = LEERER_WECHSELSTAND
   if (tab === 'planner' || tab === 'plans') {
     try {
-      const [p, l, f, e, te] = await Promise.all([
+      const [p, l, f, e, te, wb] = await Promise.all([
         ladePlan(),
         ladePlanLogs(datum, 7).catch(() => []),
         ladeCoachFreigabe().catch(() => false),
         ladeEinkaufslistenZahl().catch(() => 0),
         // G-274: die Eintraege des Tages mit ihrem Zustand.
         ladeTagesEintraege(datum).catch(() => []),
+        // `[read]` **28 Tage** — ein Muster braucht Wiederholungen,
+        // und eine Planwoche allein zeigt keine.
+        ladeWechselbefunde(datum, 28).catch(() => LEERER_WECHSELSTAND),
       ])
       plan = p
       planLogs = l
       coachFreigabe = f
       einkaufslisten = e
       tagesEintraege = te
+      wechsel = wb
     } catch {
       plan = null
     }
@@ -380,6 +389,7 @@ export default async function V2NutritionPage({
       coachFreigabe={coachFreigabe}
       einkaufslisten={einkaufslisten}
       tagesEintraege={tagesEintraege}
+      wechsel={wechsel}
       mikro={mikro}
       ordnung={ordnung}
       einsichten={einsichten}

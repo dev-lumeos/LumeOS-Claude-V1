@@ -29,7 +29,12 @@ import {
   ABLAUF_FRAGE_TITEL, ablaufFrage,
   WOCHEN_MIN, WOCHEN_MAX,
   type AblaufWeg,
+  // G-309: Flow 3, Schritte 5-7 — aktivieren.
+  AKTIVIEREN_TITEL, startVorgabe, startGrenze, startErlaubt, startFehler,
+  pausiertSatz, ZYKLUS_WAEHLBAR, ZYKLUS_FEHLT_SATZ,
 } from '../../../lib/nutrition/plan-werkbank'
+import { ZYKLUS_TEXT, ZYKLUS_ERKLAERUNG, zyklusVon }
+  from '../../../lib/nutrition/plan-lage'
 import { statusText, herkunftVon, HERKUNFT_TEXT }
   from '../../../lib/nutrition/plan-lage'
 // C-377: die Laufzeit steht in den Tagen, nicht in `start_date` (G-298).
@@ -191,6 +196,131 @@ export function NeuerPlanForm({ heute, onFertig, onAbbruch }: {
 //
 // `[cmd]` **Heute stand dort *aktiv · abgelaufen* und sonst nichts.**
 
+// ════════════════════════════════════════════════════════════════════
+// EINEN PLAN AKTIVIEREN — G-309, Flow 3, Schritte 5–7
+// ════════════════════════════════════════════════════════════════════
+//
+// `[cmd]` **Am 2026-09-01 gemessen: es gab keinen Aktivieren-Knopf.**
+// `[read]` **Damit war Flow 3 an Schritt 4 zu Ende** — und ohne
+// aktiven Plan gibt es keine Ghost Entries, also auch nichts zu
+// bestaetigen. **Das war die Wurzel des leeren `meal_plan_logs`.**
+
+export function AktivierenFrage({ plan, laufender, heute, onFertig, onAbbruch }: {
+  plan: PlanKurz
+  /** Der Plan, der gerade laeuft — oder `null`. */
+  laufender: PlanKurz | null
+  heute: string
+  onFertig: () => void
+  onAbbruch: () => void
+}) {
+  const [start, setStart] = React.useState(() => startVorgabe(heute))
+  const [zyklus, setZyklus] = React.useState<'once' | 'rollover'>('once')
+  const [laeuft, setLaeuft] = React.useState(false)
+  const [fehler, setFehler] = React.useState<string | null>(null)
+
+  async function aktivieren() {
+    // `[read]` **Erst pruefen, dann senden** — der Serverweg pruefte
+    // das Fenster nicht, und ein Startdatum in drei Wochen waere
+    // stillschweigend durchgegangen.
+    if (!startErlaubt(start, heute)) {
+      setFehler(startFehler(heute))
+      return
+    }
+    setLaeuft(true); setFehler(null)
+    // `[cmd]` **EIN Aufruf, nicht drei** — `plan_aendern` traegt
+    // `status`, `start_date` und `lifecycle_type` zugleich. **Das
+    // Pausieren des laufenden Plans macht der Schreibweg** (G-309),
+    // nicht die Anzeige.
+    const r = await senden({
+      art: 'plan_aendern', id: plan.id,
+      status: 'active', start_date: start, lifecycle_type: zyklus,
+    })
+    setLaeuft(false)
+    if (!r.ok) { setFehler(r.fehler ?? 'Fehler'); return }
+    onFertig()
+  }
+
+  return (
+    <div style={{
+      border: '1px solid var(--acc-nutri)', borderRadius: 6, padding: 10,
+      marginTop: 8, background: 'var(--surface-2)',
+    }}>
+      <div style={{ fontSize: 12.5, fontWeight: 600, marginBottom: 6 }}>
+        {AKTIVIEREN_TITEL}
+      </div>
+
+      {/* Flow 3, Schritt 7: der bestehende Plan wird pausiert — und
+          das steht VORHER da, nicht als Ueberraschung danach. */}
+      {laufender && laufender.id !== plan.id && (
+        <p className="v2-muted" style={{
+          fontSize: 11, margin: '0 0 8px', lineHeight: 1.5,
+        }}>
+          {pausiertSatz(laufender.name)}
+        </p>
+      )}
+
+      {/* Flow 3, Schritt 5: Startdatum. */}
+      <label style={{ fontSize: 10, display: 'block', marginBottom: 8 }}>
+        <span className="v2-eyebrow">Startdatum</span>
+        <input className="v2-feld" type="date" value={start}
+               aria-label="Startdatum" style={{ width: '100%' }}
+               min={heute} max={startGrenze(heute)}
+               onChange={e => setStart(e.target.value)} />
+      </label>
+
+      {/* Flow 3, Schritt 6: Lifecycle. */}
+      <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Lebenszyklus</div>
+      <div className="v2-col-gap" style={{ gap: 4, marginBottom: 8 }}>
+        {ZYKLUS_WAEHLBAR.map(w => (
+          <button
+            key={w}
+            type="button"
+            onClick={() => setZyklus(w)}
+            aria-pressed={zyklus === w}
+            style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
+              gap: 2, padding: '7px 9px', borderRadius: 6, cursor: 'pointer',
+              textAlign: 'left', width: '100%', color: 'inherit',
+              background: zyklus === w ? 'var(--bg-elev)' : 'var(--surface)',
+              border: `1px solid ${zyklus === w ? 'var(--acc-nutri)' : 'var(--border)'}`,
+            }}
+          >
+            <span style={{ fontSize: 11.5, fontWeight: zyklus === w ? 600 : 400 }}>
+              {ZYKLUS_TEXT[zyklusVon(w)]}
+            </span>
+            <span className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.45 }}>
+              {ZYKLUS_ERKLAERUNG[zyklusVon(w)]}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {/* `[cmd]` **`sequence` fehlt, und der Satz sagt warum** — der
+          CHECK verlangt `next_plan_id`, und den Planpicker aus
+          Schritt 6 gibt es nicht. `[read]` **Eine Wahl, die beim
+          Speichern scheitert, ist schlimmer als eine, die fehlt.** */}
+      <p className="v2-dim" style={{ fontSize: 10, margin: '0 0 8px', lineHeight: 1.45 }}>
+        {ZYKLUS_FEHLT_SATZ}
+      </p>
+
+      {fehler && (
+        <p style={{ fontSize: 10.5, color: 'var(--neg)', margin: '0 0 6px' }}>{fehler}</p>
+      )}
+
+      <div style={{ display: 'flex', gap: 6 }}>
+        <button type="button" className="v2-btn v2-btn-sm v2-btn-primary"
+                disabled={laeuft} onClick={aktivieren}>
+          {laeuft ? 'Aktiviert…' : 'Aktivieren'}
+        </button>
+        <button type="button" className="v2-btn v2-btn-sm"
+                disabled={laeuft} onClick={onAbbruch}>
+          Abbrechen
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export function AblaufFrage({ plan, bis, tage, heute, onFertig }: {
   plan: PlanKurz
   bis: string
@@ -296,7 +426,13 @@ export function PlanListe({ plaene, heute, aktiv, onWaehlen }: {
 }) {
   const router = useRouter()
   const [neu, setNeu] = React.useState(false)
+  // G-309: welcher Plan wird gerade aktiviert? (Flow 3, Schritte 5–7)
+  const [aktiviert, setAktiviert] = React.useState<string | null>(null)
   const neuLaden = React.useCallback(() => { router.refresh() }, [router])
+
+  // `[read]` **Der laufende Plan** — er wird beim Aktivieren pausiert,
+  // und die Frage sagt es vorher.
+  const laufender = plaene.find(p => p.status === 'active') ?? null
 
   if (neu) {
     return (
@@ -409,7 +545,29 @@ export function PlanListe({ plaene, heute, aktiv, onWaehlen }: {
               />
             )}
 
+            {/* ══ G-309: Flow 3, Schritte 5–7 ═══════════════════
+                `[cmd]` **Hier stand nur *Bearbeiten*** — der
+                Aktivierungsweg fehlte ganz. */}
+            {aktiviert === p.id && (
+              <AktivierenFrage
+                plan={p}
+                laufender={laufender}
+                heute={heute}
+                onFertig={() => { setAktiviert(null); neuLaden() }}
+                onAbbruch={() => setAktiviert(null)}
+              />
+            )}
+
             <div style={{ display: 'flex', gap: 6, marginTop: 10, flexWrap: 'wrap' }}>
+              {/* `[read]` **Ein laufender Plan wird nicht noch einmal
+                  aktiviert** — er laeuft ja. **Ein pausierter schon:**
+                  so holt man ihn zurueck. */}
+              {p.status !== 'active' && aktiviert !== p.id && (
+                <button type="button" className="v2-btn v2-btn-sm v2-btn-primary"
+                        onClick={() => setAktiviert(p.id)}>
+                  Aktivieren
+                </button>
+              )}
               {/* `[cmd]` **E-42: JEDER Plan ist bearbeitbar** — auch
                   ein aktiver, auch ein gekaufter. **Gesperrt sind
                   einzelne Positionen, sobald sie protokolliert

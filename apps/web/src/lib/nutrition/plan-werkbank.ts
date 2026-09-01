@@ -369,6 +369,90 @@ export function ablaufFrage(bis: string, tage: number): string {
     + 'Tagen. Wie möchtest du weitermachen?'
 }
 
+// ════════════════════════════════════════════════════════════════════
+// EINEN PLAN AKTIVIEREN — G-309, `SPEC_03` Flow 3, Schritte 5–7
+// ════════════════════════════════════════════════════════════════════
+//
+// `[cmd]` **Am 2026-09-01 gemessen: die Bibliothek hatte nur
+// *Bearbeiten*.** `[read]` **Der Text sagte *,,werden beim Aktivieren
+// gesetzt"*, aber den Schritt gab es nicht** — und ohne ihn gibt es
+// keinen aktiven Plan, also auch keine Ghost Entries.
+//
+// **Flow 3:**
+//
+//     5. Startdatum waehlen (Default: morgen, max. 7 Tage im Voraus)
+//     6. Lifecycle waehlen
+//     7. Bestaetigen -> status: active
+//          bestehender aktiver Plan -> status: paused
+//          ab Startdatum: Ghost Entries erscheinen im Diary
+
+export const AKTIVIEREN_TITEL = 'Plan aktivieren'
+
+/**
+ * Der Vorgabewert fuer das Startdatum — **morgen.**
+ *
+ * `[read]` **Flow 3, Schritt 5 sagt es ausdruecklich.** `[read]`
+ * **Heute waere falsch:** wer mittags aktiviert, haette Ghost Entries
+ * fuer ein Fruehstueck, das vorbei ist.
+ */
+export function startVorgabe(heute: string): string {
+  return tageVerschieben(heute, 1)
+}
+
+/**
+ * Die Obergrenze — **hoechstens sieben Tage im Voraus.**
+ *
+ * `[cmd]` **Flow 3, Schritt 5: *,,max. 7 Tage im Voraus"*.**
+ */
+export const START_MAX_TAGE = 7
+
+export function startGrenze(heute: string): string {
+  return tageVerschieben(heute, START_MAX_TAGE)
+}
+
+/**
+ * Liegt das Startdatum im erlaubten Fenster?
+ *
+ * `[read]` **Die Vergangenheit ist erlaubt bis heute** — wer einen
+ * Plan rueckwirkend aktiviert, will die Tage von heute an sehen.
+ * **Weiter zurueck nicht:** dann entstuenden Ghost Entries fuer Tage,
+ * die schon erfasst sind.
+ */
+export function startErlaubt(datum: string, heute: string): boolean {
+  return datum >= heute && datum <= startGrenze(heute)
+}
+
+export function startFehler(heute: string): string {
+  return `Das Startdatum liegt zwischen heute und dem ${deutschesDatum(startGrenze(heute))} `
+    + `— höchstens ${START_MAX_TAGE} Tage im Voraus.`
+}
+
+/**
+ * Was beim Aktivieren mit dem bestehenden Plan geschieht.
+ *
+ * `[read]` **Der Satz steht in der Frage, nicht erst hinterher** —
+ * wer aktiviert, soll vorher wissen, dass sein laufender Plan ruht.
+ */
+export function pausiertSatz(name: string): string {
+  return `„${name}“ läuft gerade und wird pausiert. Er bleibt in deiner `
+    + 'Bibliothek und kann jederzeit zurückgeholt werden.'
+}
+
+/**
+ * Die Lebenszyklen, die ohne Folgeplan waehlbar sind.
+ *
+ * `[cmd]` **`meal_plans_sequence_target_check`: `sequence` verlangt
+ * `next_plan_id NOT NULL`.** `[read]` **Solange es keinen Planpicker
+ * gibt (Flow 3, Schritt 6), waere die Wahl nicht speicherbar** — der
+ * CHECK wiese sie ab. **Sie steht deshalb nicht zur Wahl, statt beim
+ * Speichern zu scheitern.**
+ */
+export const ZYKLUS_WAEHLBAR = ['once', 'rollover'] as const
+
+export const ZYKLUS_FEHLT_SATZ =
+  '„Geht in einen Folgeplan über" braucht einen Folgeplan — die Auswahl '
+  + 'dafür ist noch nicht gebaut.'
+
 function deutschesDatum(iso: string): string {
   const [j, m, t] = iso.split('-')
   return t && m && j ? `${Number(t)}.${Number(m)}.${j}` : iso

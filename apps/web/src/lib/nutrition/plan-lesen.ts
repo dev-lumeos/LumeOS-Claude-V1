@@ -20,6 +20,12 @@
 //
 // Laeuft ausschliesslich serverseitig.
 import { createSessionClient } from '@lumeos/shared/session'
+// G-309: Typ und Schwellen stehen serverfrei in `plan-lage.ts`
+// — die Kachel ist eine Client-Komponente (A-30).
+import {
+  LEERER_WECHSELSTAND, WECHSEL_AB_MAL, WECHSEL_AB_QUOTE,
+  type Wechselbefund, type WechselStand,
+} from './plan-lage'
 
 function nutritionDb() {
   return createSessionClient().schema('nutrition')
@@ -643,3 +649,462 @@ export async function ladeAllePlaene(): Promise<PlanKurz[]> {
     return []
   }
 }
+// ════════════════════════════════════════════════════════════════════
+// GHOST ENTRIES — G-309
+// ════════════════════════════════════════════════════════════════════
+//
+// **`SPEC_03` Flow 3, Schritt 7:** *,,Ab Startdatum: Ghost Entries
+// erscheinen im Diary."*
+//
+// ══ EIN GHOST ENTRY IST EINE ABSICHT, KEINE ERFASSUNG ═══════════════
+//
+// **Tom, 2026-09-01:** *,,Wer ihn als `meals` schreibt, hat gegessen,
+// ohne gegessen zu haben \u2014 und die Tagesbilanz zaehlt es mit."*
+//
+// `[cmd]` **`nutrition.meal_plan_day_to_diary` schreibt genau das:**
+// echte `meals` mit `entry_source = 'seed'`. **Ihr eigener Kommentar
+// nennt es *,,als NORMALE meals/meal_items"*.** `[read]` **Sie ist
+// ein Seed-Werkzeug aus C-150, kein Produktweg \u2014 der Name taeuscht.**
+// **Sie wird nicht gerufen**, und ein Waechter haelt das fest.
+//
+// `[cmd]` **`SPEC_03` Flow 4:** *,,Ghost Entries haben kein
+// automatisches Expiry. User entscheidet jederzeit \u2014 auch
+// retroaktiv."* `[read]` **Ein geschriebener `meals`-Satz koennte das
+// nicht** \u2014 er waere gegessen oder geloescht. **Nur eine Anzeige
+// bleibt offen.**
+//
+// ══ UND DAS REZEPT WIRD AUFGELOEST ══════════════════════════════════
+//
+// `[cmd]` **`ADR_GHOST_ENTRY_RECIPE`:** *,,Ghost Entries die aus einem
+// `MealPlanItem.recipe_id` stammen zeigen immer alle Einzelzutaten \u2014
+// nie das Rezept als Einheit."* **Jede Zeile hat ein editierbares
+// Mengenfeld.**
+//
+// `[read]` **Der Rezeptname bleibt als Ueberschrift** (Flow-4-Patch),
+// **die Zutaten stehen einzeln darunter.**
+
+/** Ein Posten eines Ghost Entry \u2014 eine Zutat mit ihrer Menge. */
+export type GhostPosten = {
+  food_id: string
+  name: string
+  amount_g: number
+  kcal: number | null
+}
+
+/**
+ * Ein Ghost Entry \u2014 ein Plan-Slot eines Tages, noch nicht erfasst.
+ *
+ * `[read]` **`status` kommt aus `meal_plan_logs`**, nicht aus dem
+ * Eintrag: der Eintrag ist die Vorlage, das Log die Ausfuehrung
+ * (G-274). **Ohne Log ist er `pending`** \u2014 nicht abwesend.
+ */
+export type GhostEintrag = {
+  id: string
+  meal_type: string
+  /** Der Rezeptname, wenn es einer ist \u2014 sonst `null`. */
+  rezept: string | null
+  posten: GhostPosten[]
+  kcal: number | null
+  status: 'pending' | 'confirmed' | 'deviated' | 'skipped'
+}
+
+/**
+ * Die Ghost Entries eines Tages \u2014 G-309.
+ *
+ * `[cmd]` **NUR vom aktiven Plan.** `[read]` **`ladeTagesEintraege`
+ * (G-274) filtert den Planstatus nicht** \u2014 sie liefert die
+ * Positionen jedes Plans, der an dem Tag einen Tag hat. **Fuer die
+ * Anzeige waere das falsch:** ein pausierter Plan hat keinen Anspruch
+ * auf den Tag, genau deshalb wird beim Aktivieren pausiert.
+ *
+ * `[cmd]` **Drei Abfragen, keine Schleife** \u2014 die Eintraege, ihre
+ * Logs, und die Naehrwerte gleichzeitig. **Ein `await` je Eintrag
+ * kostet je Durchlauf voll** (G-252).
+ */
+export async function ladeGhostEintraege(datum: string): Promise<GhostEintrag[]> {
+  const client = createSessionClient()
+  const { data: { user } } = await client.auth.getUser()
+  if (!user) return []
+  const db = client.schema('nutrition')
+
+  // `[read]` **Der Weg von unten:** die Positionen des Tages, aber nur
+  // die, deren Plan aktiv ist. `!inner` erzwingt den Verbund \u2014 ohne
+  // ihn kaemen Positionen ohne passenden Plan mit `null` durch.
+  const [eintraegeR, logsR] = await Promise.all([
+    db.from('meal_plan_entries')
+      .select(`
+        id, meal_type, slot_order, entry_type, food_id, amount_g,
+        planned_servings,
+        recipe:recipes ( id, name_de, servings ),
+        food:foods ( name_display_de, name_de ),
+        day:meal_plan_days!inner (
+          plan_date,
+          week:meal_plan_weeks!inner (
+            plan:meal_plans!inner ( id, status )
+          )
+        )
+      `)
+      .eq('user_id', user.id)
+      .eq('meal_plan_days.plan_date', datum)
+      .eq('meal_plan_days.meal_plan_weeks.meal_plans.status', 'active')
+      .order('slot_order', { ascending: true })
+      .limit(200),
+    db.from('meal_plan_logs')
+      .select('plan_entry_id, status')
+      .eq('user_id', user.id)
+      .eq('execution_date', datum)
+      .limit(200),
+  ])
+  if (eintraegeR.error) return []
+
+  const zustand = new Map<string, string>()
+  for (const l of (logsR.data ?? []) as unknown as Array<Record<string, unknown>>) {
+    const k = text(l.plan_entry_id)
+    const s = text(l.status)
+    if (k && s) zustand.set(k, s)
+  }
+
+  const zeilen = (eintraegeR.data ?? []) as unknown as Array<Record<string, unknown>>
+
+  // Die Rezeptzutaten aller Rezepteintraege in EINER Abfrage.
+  // `Array.from` statt `[...set]` — das Ziel steht unter ES2015.
+  const rezeptIds = Array.from(new Set(zeilen
+    .map(r => text((r.recipe as Record<string, unknown> | null)?.id))
+    .filter((v): v is string => v !== null)))
+  const zutatenJeRezept = new Map<string, Array<Record<string, unknown>>>()
+  if (rezeptIds.length > 0) {
+    const { data: zRoh } = await db
+      .from('recipe_ingredients')
+      .select('recipe_id, food_id, amount_g, food_name_snapshot, sort_order, '
+        + 'food:foods ( name_display_de, name_de )')
+      .in('recipe_id', rezeptIds)
+      .order('sort_order', { ascending: true })
+      .limit(500)
+    for (const z of (zRoh ?? []) as unknown as Array<Record<string, unknown>>) {
+      const k = text(z.recipe_id)
+      if (!k) continue
+      const liste = zutatenJeRezept.get(k)
+      if (liste) liste.push(z)
+      else zutatenJeRezept.set(k, [z])
+    }
+  }
+
+  // Die Posten je Eintrag \u2014 ein Rezept wird hier aufgeloest.
+  const roh: Array<{
+    id: string; meal_type: string; rezept: string | null
+    posten: Array<{ food_id: string; name: string; amount_g: number }>
+    status: string
+  }> = []
+  for (const r of zeilen) {
+    const id = text(r.id)
+    if (!id) continue
+    const rezept = r.recipe as Record<string, unknown> | null
+    const essen = r.food as Record<string, unknown> | null
+    const posten: Array<{ food_id: string; name: string; amount_g: number }> = []
+
+    const rezeptId = text(rezept?.id)
+    if (rezeptId) {
+      // `[cmd]` **`planned_servings / servings` skaliert** \u2014 ein
+      // halbes Rezept ist die halbe Menge je Zutat. **Dieselbe
+      // Rechnung wie in `plan-log-write.ts`**, damit die Vorschau
+      // zeigt, was das Bestaetigen schreibt.
+      const portionen = zahl(r.planned_servings) ?? 1
+      const proRezept = zahl(rezept?.servings) ?? 1
+      const faktor = proRezept > 0 ? portionen / proRezept : 1
+      for (const z of (zutatenJeRezept.get(rezeptId) ?? [])) {
+        const fid = text(z.food_id)
+        const menge = zahl(z.amount_g)
+        if (!fid || menge === null) continue
+        const zf = z.food as Record<string, unknown> | null
+        posten.push({
+          food_id: fid,
+          name: text(zf?.name_display_de) ?? text(zf?.name_de)
+            ?? text(z.food_name_snapshot) ?? '\u2014',
+          amount_g: Math.round(menge * faktor * 10) / 10,
+        })
+      }
+    } else {
+      const fid = text(r.food_id)
+      const menge = zahl(r.amount_g)
+      if (fid && menge !== null) {
+        posten.push({
+          food_id: fid,
+          name: text(essen?.name_display_de) ?? text(essen?.name_de) ?? '\u2014',
+          amount_g: menge,
+        })
+      }
+    }
+
+    roh.push({
+      id,
+      meal_type: text(r.meal_type) ?? 'other',
+      rezept: text(rezept?.name_de),
+      posten,
+      status: zustand.get(id) ?? 'pending',
+    })
+  }
+
+  // `[cmd]` **Die kcal ueber `food_nutrient_snapshot`** \u2014 dieselbe
+  // Funktion, die der Planner und der Bestaetigungsweg benutzen
+  // (C-150). **Nichts nachgerechnet.**
+  //
+  // `[read]` **Gleichzeitig ueber ALLE Posten aller Eintraege**, nicht
+  // je Eintrag \u2014 sonst kostet jeder Slot eine eigene Runde (G-252).
+  const flach = roh.flatMap((e, i) => e.posten.map((p, j) => ({ i, j, p })))
+  const werte = await Promise.all(flach.map(({ p }) => db.rpc(
+    'food_nutrient_snapshot',
+    {
+      p_food_source: 'bls', p_food_id: p.food_id,
+      p_custom_food_id: null, p_amount_g: p.amount_g,
+    },
+  )))
+
+  const kcalJePosten = new Map<string, number>()
+  flach.forEach(({ i, j }, k) => {
+    const { data, error } = werte[k]
+    if (error) return
+    const z = (Array.isArray(data) ? data[0] : data) as Record<string, unknown> | null
+    const n = zahl(z?.enercc)
+    if (n !== null) kcalJePosten.set(`${i}:${j}`, n)
+  })
+
+  return roh.map((e, i) => {
+    const posten: GhostPosten[] = e.posten.map((p, j) => ({
+      ...p, kcal: kcalJePosten.get(`${i}:${j}`) ?? null,
+    }))
+    // `[read]` **`null`, wenn KEIN Posten eine Zahl hat** \u2014 eine
+    // Summe aus lauter Fehlwerten waere `0` und saehe aus wie
+    // *,,null Kalorien"*. Dieselbe Klasse wie die BLS-Deckung.
+    const bekannt = posten.filter(p => p.kcal !== null)
+    return {
+      id: e.id,
+      meal_type: e.meal_type,
+      rezept: e.rezept,
+      posten,
+      kcal: bekannt.length === 0
+        ? null
+        : Math.round(bekannt.reduce((s, p) => s + (p.kcal ?? 0), 0) * 10) / 10,
+      status: e.status as GhostEintrag['status'],
+    }
+  })
+}
+// ════════════════════════════════════════════════════════════════════
+// WELCHE MAHLZEIT WIRD IMMER GEWECHSELT — G-309, Punkt 4
+// ════════════════════════════════════════════════════════════════════
+//
+// **Tom, 2026-08-31:** *,,dass er seinen plan dementsprechend
+// vielleicht anpassen sollte wenn er eh zb die eine mahlzeit immer
+// gewechselt hat weil er es vielleicht nicht mag."*
+//
+// `[read]` **Das ist etwas anderes als die Einhaltungsquote aus
+// G-270.** **Die Quote sagt, WIE VIEL umgesetzt wurde; das hier sagt,
+// WELCHE Position stoert.** Eine Quote von 80 % kann heissen: alles
+// laeuft, ausser dem Fruehstueck — und genau das soll sichtbar
+// werden.
+//
+// `[cmd]` **Eine Abfrage ueber `status` je `plan_entry_id`** \u2014 der
+// Auftrag nennt sie so. **`deviated` UND `skipped` zaehlen**: wer eine
+// Position dreimal auslaesst, mag sie so wenig wie einer, der sie
+// dreimal austauscht.
+
+/**
+ * Welche Planpositionen der Nutzer regelmaessig wechselt \u2014 G-309.
+ *
+ * `[cmd]` **Der Zeitraum ist beidseitig begrenzt** \u2014 die Seeds
+ * reichen in die Zukunft, eine offene Grenze finge sie mit (A-56).
+ *
+ * `[read]` **Ohne Zeilen gibt es keinen Befund, keine leere Kachel
+ * mit 0 %** \u2014 der Auftrag sagt es ausdruecklich: *,,wenn nicht: sag,
+ * was fehlt."*
+ */
+export async function ladeWechselbefunde(
+  bisDatum: string, tage = 28,
+): Promise<WechselStand> {
+  const client = createSessionClient()
+  const { data: { user } } = await client.auth.getUser()
+  if (!user) return LEERER_WECHSELSTAND
+  const von = new Date(`${bisDatum}T00:00:00Z`)
+  von.setUTCDate(von.getUTCDate() - (tage - 1))
+
+  const { data, error } = await client
+    .schema('nutrition')
+    .from('meal_plan_logs')
+    .select(`
+      plan_entry_id, status,
+      entry:meal_plan_entries (
+        meal_type,
+        recipe:recipes ( name_de ),
+        food:foods ( name_display_de, name_de )
+      )
+    `)
+    .eq('user_id', user.id)
+    .neq('status', 'pending')
+    .gte('execution_date', von.toISOString().slice(0, 10))
+    .lte('execution_date', bisDatum)
+    .limit(1000)
+  if (error || !data) return LEERER_WECHSELSTAND
+
+  const jePosition = new Map<string, Wechselbefund>()
+  for (const roh of (data as unknown as Array<Record<string, unknown>>)) {
+    const id = text(roh.plan_entry_id)
+    const status = text(roh.status)
+    if (!id || !status) continue
+    const e = roh.entry as Record<string, unknown> | null
+    const rezept = e?.recipe as Record<string, unknown> | null
+    const essen = e?.food as Record<string, unknown> | null
+
+    let b = jePosition.get(id)
+    if (!b) {
+      b = {
+        plan_entry_id: id,
+        meal_type: text(e?.meal_type) ?? 'other',
+        bezeichnung: text(rezept?.name_de)
+          ?? text(essen?.name_display_de) ?? text(essen?.name_de) ?? '\u2014',
+        gesamt: 0, abgewichen: 0, ausgelassen: 0, quote: 0,
+      }
+      jePosition.set(id, b)
+    }
+    b.gesamt += 1
+    if (status === 'deviated') b.abgewichen += 1
+    if (status === 'skipped') b.ausgelassen += 1
+  }
+
+  const aus: Wechselbefund[] = []
+  for (const b of Array.from(jePosition.values())) {
+    const gewechselt = b.abgewichen + b.ausgelassen
+    // `[read]` **Beide Schwellen, nicht eine** \u2014 2 von 2 ist ein
+    // Muster, 2 von 20 nicht.
+    if (gewechselt < WECHSEL_AB_MAL) continue
+    const quote = gewechselt / b.gesamt
+    if (quote < WECHSEL_AB_QUOTE) continue
+    aus.push({ ...b, quote: Math.round(quote * 100) / 100 })
+  }
+  return {
+    // Der staerkste Befund zuerst.
+    befunde: aus.sort((a, b) => b.quote - a.quote || b.gesamt - a.gesamt),
+    entschieden: (data as unknown as unknown[]).length,
+  }
+}
+
+// ═════════════════════════════════════════════════════════════════════
+// DIE PLAN-STATISTIKEN — G-310
+// ═════════════════════════════════════════════════════════════════════
+//
+// `[cmd]` **`MealPlansView.js` Zeilen 125-132** — die rechte Karte
+// *,,Plan-Statistiken"* mit fuenf Zeilen:
+//
+//     Z. 127   Aktiver Plan seit      25. Apr 2026
+//     Z. 128   Compliance gesamt      60%
+//     Z. 129   Mahlzeiten bestaetigt  9 / 15
+//     Z. 130   Offene Ghost Entries   2
+//     Z. 131   Ø Kalorien (3T)        1.987 kcal
+//
+// `[cmd]` **Eine Spalte `activated_at` gibt es nicht** — am
+// 2026-09-01 gemessen. **`start_date` traegt die Sache:** ab wann
+// der Plan gilt, seit G-309 beim Aktivieren gesetzt (Flow 3,
+// Schritt 5).
+//
+// **Tom, 2026-09-01:** *,,`created_at` sagt, wann jemand ihn angelegt
+// hat — bei einem Plan, der wochenlang in der Bibliothek lag, sind
+// das zwei verschiedene Tage, und der falsche stuende da."*
+//
+// `[read]` **Fehlt `start_date`, entfaellt die Zeile** — ein Plan
+// aus der Zeit vor der Unterscheidung hat kein Aktivierungsdatum,
+// **und das ist eine Tatsache, keine Luecke** (E-40, G-287).
+
+export type PlanStatistik = {
+  /** `start_date` des aktiven Plans — `null` heisst: kein Datum. */
+  aktiv_seit: string | null
+  /** Alle Logzeilen des Plans, fuer Compliance und Zaehler. */
+  bestaetigt: number
+  abgewichen: number
+  ausgelassen: number
+  offen: number
+  /** Ø kcal der letzten Tage mit Daten — `null`, wenn keine da sind. */
+  schnitt_kcal: number | null
+  /** Ueber wie viele Tage der Schnitt geht (Mockup: 3). */
+  schnitt_tage: number
+}
+
+export const LEERE_STATISTIK: PlanStatistik = {
+  aktiv_seit: null, bestaetigt: 0, abgewichen: 0, ausgelassen: 0,
+  offen: 0, schnitt_kcal: null, schnitt_tage: 0,
+}
+
+/**
+ * Die Statistiken des aktiven Plans — G-310.
+ *
+ * `[cmd]` **Drei Abfragen gleichzeitig**, keine Schleife — ein
+ * `await` je Zeile kostet je Durchlauf voll (G-252).
+ *
+ * `[read]` **Ueber ALLE Logzeilen des Plans**, nicht nur die des
+ * Tages: das Mockup sagt *,,Compliance **gesamt**"*.
+ */
+export async function ladePlanStatistik(
+  bisDatum: string, schnittTage = 3,
+): Promise<PlanStatistik> {
+  const client = createSessionClient()
+  const { data: { user } } = await client.auth.getUser()
+  if (!user) return LEERE_STATISTIK
+  const db = client.schema('nutrition')
+
+  // Der aktive Plan — seine `start_date` und seine Logzeilen.
+  const { data: planRoh } = await db
+    .from('meal_plans')
+    .select('id, start_date')
+    .eq('user_id', user.id)
+    .eq('status', 'active')
+    .limit(1)
+  const plan = ((planRoh ?? []) as unknown as Array<Record<string, unknown>>)[0]
+  if (!plan) return LEERE_STATISTIK
+  const planId = text(plan.id)
+  if (!planId) return LEERE_STATISTIK
+
+  const von = new Date(`${bisDatum}T00:00:00Z`)
+  von.setUTCDate(von.getUTCDate() - (schnittTage - 1))
+  const vonIso = von.toISOString().slice(0, 10)
+
+  const [logsR, tageR] = await Promise.all([
+    db.from('meal_plan_logs')
+      .select('status')
+      .eq('user_id', user.id)
+      .eq('plan_id', planId)
+      .limit(1000),
+    // `[cmd]` **Der Zeitraum ist beidseitig begrenzt** — die Seeds
+    // reichen in die Zukunft, eine offene Grenze finge sie mit (A-56).
+    db.from('daily_summary')
+      .select('entry_date, enercc')
+      .eq('user_id', user.id)
+      .gte('entry_date', vonIso)
+      .lte('entry_date', bisDatum)
+      .limit(400),
+  ])
+
+  const zaehler = { bestaetigt: 0, abgewichen: 0, ausgelassen: 0, offen: 0 }
+  for (const l of ((logsR.data ?? []) as unknown as Array<Record<string, unknown>>)) {
+    const s = text(l.status)
+    if (s === 'confirmed') zaehler.bestaetigt += 1
+    else if (s === 'deviated') zaehler.abgewichen += 1
+    else if (s === 'skipped') zaehler.ausgelassen += 1
+    else zaehler.offen += 1
+  }
+
+  // `[read]` **Nur Tage MIT Wert zaehlen** — ein Tag ohne Eintrag ist
+  // kein Tag mit 0 kcal. **Sonst zieht jeder leere Tag den Schnitt.**
+  const werte = ((tageR.data ?? []) as unknown as Array<Record<string, unknown>>)
+    .map(r => zahl(r.enercc))
+    .filter((v): v is number => v !== null && v > 0)
+
+  return {
+    aktiv_seit: text(plan.start_date),
+    ...zaehler,
+    schnitt_kcal: werte.length === 0
+      ? null
+      : Math.round(werte.reduce((s, v) => s + v, 0) / werte.length),
+    schnitt_tage: werte.length,
+  }
+}
+
+export type { Wechselbefund, WechselStand } from './plan-lage'
+export { LEERER_WECHSELSTAND, WECHSEL_AB_MAL, WECHSEL_AB_QUOTE }
+  from './plan-lage'

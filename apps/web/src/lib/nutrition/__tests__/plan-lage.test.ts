@@ -109,10 +109,31 @@ test('G-270: die Quote rechnet nur ueber entschiedene Zeilen', () => {
   assert.equal(quoteVon(e), 75)
 })
 
-test('G-270: abgewichen zaehlt als Entscheidung, nicht als Erfolg', () => {
+test('G-310/SPEC_09: abgewichen zaehlt als ERFOLG, nicht nur als Entscheidung', () => {
+  // `[cmd]` **BERICHTIGT in G-310.** Hier stand *,,nicht als Erfolg"*
+  // und `quoteVon(e) === 50`.
+  //
+  // `[cmd]` **`SPEC_09` Abschnitt 2, Regeln:** *,,`deviated` zaehlt
+  // als Erfolg fuer Compliance (User hat sich aktiv entschieden)."*
+  //
+  // **Tom, 2026-09-01:** *,,Compliance misst, ob jemand seinen Plan
+  // verfolgt — nicht, ob er gehorcht."*
   const e = einhaltungVon([...tage(1, 'confirmed'), ...tage(1, 'deviated')])
   assert.equal(e.entschieden, 2)
-  assert.equal(quoteVon(e), 50)
+  assert.equal(quoteVon(e), 100,
+    'abgewichen senkt die Quote — SPEC_09 zaehlt es als Erfolg')
+
+  // `[read]` **Ausgelassen bleibt ein Misserfolg** — wer nichts isst,
+  // hat den Plan nicht umgesetzt. **Das trennt die beiden Faelle.**
+  const s = einhaltungVon([...tage(1, 'confirmed'), ...tage(1, 'skipped')])
+  assert.equal(quoteVon(s), 50, 'ausgelassen zaehlt faelschlich als Erfolg')
+
+  // Und der Nenner bleibt: offen zaehlt nicht mit.
+  const o = einhaltungVon([
+    ...tage(1, 'confirmed'), ...tage(1, 'deviated'), ...tage(8, 'pending'),
+  ])
+  assert.equal(o.entschieden, 2, 'offene Zeilen im Nenner')
+  assert.equal(quoteVon(o), 100)
 })
 
 test('G-270: die Leerzustaende sagen, was fehlt', () => {

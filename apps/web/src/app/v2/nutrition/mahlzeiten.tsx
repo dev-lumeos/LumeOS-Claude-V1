@@ -25,6 +25,8 @@ import { Card, Icon, InEntwicklung } from '@lumeos/ui'
 import { MEAL_TYPES, type MealType } from '../../../lib/nutrition/diary-model'
 import { vortag } from '../../../lib/datum'
 import type { NutritionFoodSearchRow } from '../../../lib/nutrition/food-search'
+// G-309: die Plantage erscheinen als Ghost Entries — Flow 3, Schritt 7.
+import { GhostEintragKarte, type GhostEintrag } from './ghost-eintrag'
 
 /** Die Slots der Vorlage, in ihrer Reihenfolge. */
 const SLOT_LABEL: Record<MealType, string> = {
@@ -142,6 +144,8 @@ export function Mahlzeiten({
   onGeaendert?: () => void
 }) {
   const [mahlzeiten, setMahlzeiten] = React.useState<Mahlzeit[]>([])
+  // G-309: die Plantage des Tages, sofern ein Plan aktiv ist.
+  const [ghosts, setGhosts] = React.useState<GhostEintrag[]>([])
   const [laden, setLaden] = React.useState(true)
   const [fehler, setFehler] = React.useState<string | null>(null)
   const router = useRouter()
@@ -151,10 +155,18 @@ export function Mahlzeiten({
   const laden_ = React.useCallback(async () => {
     setLaden(true)
     try {
-      const a = await fetch(`/api/nutrition/diary?datum=${datum}`)
-      const d = await a.json()
-      if (!a.ok) throw new Error(d?.error ?? `HTTP ${a.status}`)
+      // `[read]` **Gleichzeitig, nicht nacheinander** — sonst wartet
+      // das Tagebuch auf den Plan (G-252).
+      const [aM, aG] = await Promise.all([
+        fetch(`/api/nutrition/diary?datum=${datum}`),
+        fetch(`/api/nutrition/plan?datum=${datum}`),
+      ])
+      const d = await aM.json()
+      if (!aM.ok) throw new Error(d?.error ?? `HTTP ${aM.status}`)
       setMahlzeiten(d.meals ?? [])
+      // `[read]` **Ein Planfehler darf das Tagebuch nicht leeren** —
+      // ohne aktiven Plan gibt es schlicht keine Ghost Entries.
+      setGhosts(aG.ok ? ((await aG.json())?.eintraege ?? []) : [])
       setFehler(null)
     } catch (e) {
       setFehler(e instanceof Error ? e.message : String(e))
@@ -189,7 +201,23 @@ export function Mahlzeiten({
   // „Same as yesterday".
   const VORLAGE: MealType[] = ['breakfast', 'snack', 'lunch', 'dinner', 'post_workout']
   const belegteTypen = new Set(mahlzeiten.map(m => m.meal_type))
-  const leereSlots = VORLAGE.filter(typ => !belegteTypen.has(typ))
+
+  // ══ G-309: die Ghost Entries ══════════════════════════════════════
+  //
+  // `[read]` **Nur die offenen.** `[cmd]` **Ein bestaetigter Eintrag
+  // hat eine Mahlzeit erzeugt** (`actual_meal_id`), **die schon oben
+  // steht** — ihn daneben nochmal als Vorschlag zu zeigen, waere
+  // derselbe Tag zweimal. **Ein ausgelassener ist entschieden.**
+  //
+  // `[read]` **Kein Expiry:** ein `pending` von vorgestern steht
+  // weiter da — Flow 4, *,,auch retroaktiv"*.
+  const offeneGhosts = ghosts.filter(g => g.status === 'pending')
+  const ghostTypen = new Set(offeneGhosts.map(g => g.meal_type))
+
+  // `[read]` **Ein Slot mit Ghost Entry bekommt keine leere Karte** —
+  // sonst stuenden „Empty" und der Plan-Vorschlag nebeneinander.
+  const leereSlots = VORLAGE.filter(
+    typ => !belegteTypen.has(typ) && !ghostTypen.has(typ))
 
   if (laden && mahlzeiten.length === 0) {
     return <Card><p className="v2-muted" style={{ fontSize: 12 }}>{tA('laedt')}</p></Card>
@@ -214,6 +242,19 @@ export function Mahlzeiten({
           datum={datum}
           typ={m.meal_type}
           mahlzeit={m}
+          onGeaendert={neuLaden}
+        />
+      ))}
+
+      {/* G-309: dann, was der Plan fuer den Tag vorsieht — gestrichelt,
+          noch nicht erfasst. `[read]` **Zwischen dem Erfassten und den
+          leeren Slots**, weil er beides zugleich ist: es steht etwas
+          da, aber gegessen ist es nicht. */}
+      {offeneGhosts.map(g => (
+        <GhostEintragKarte
+          key={`ghost-${g.id}`}
+          eintrag={g}
+          datum={datum}
           onGeaendert={neuLaden}
         />
       ))}

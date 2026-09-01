@@ -37,6 +37,7 @@ import {
   statusText, bearbeitbarkeit,
   KEIN_LOG_SATZ, KEINE_EINKAUFSLISTE_SATZ,
   einhaltungVon, quoteVon, type LogZeile,
+  type WechselStand,
 } from '../../../lib/nutrition/plan-lage'
 
 /** Eine Zahl in deutscher Schreibweise, oder ein Strich. */
@@ -274,6 +275,76 @@ export function EinhaltungEcht({ logs }: { logs: readonly LogZeile[] }) {
       )}
     </Card>
   )
+}
+
+/**
+ * Welche Planposition regelmaessig gewechselt wird — G-309.
+ *
+ * **Tom, 2026-08-31:** *,,dass er seinen plan dementsprechend
+ * vielleicht anpassen sollte wenn er eh zb die eine mahlzeit immer
+ * gewechselt hat weil er es vielleicht nicht mag."*
+ *
+ * `[read]` **Etwas anderes als die Einhaltungsquote daneben.** **Die
+ * sagt, WIE VIEL umgesetzt wurde — diese, WELCHE Position stoert.**
+ * Eine Quote von 80 % kann heissen: alles laeuft, ausser dem
+ * Fruehstueck.
+ *
+ * `[read]` **Ohne Befund keine leere Kachel mit 0 %** — sie sagt,
+ * was fehlt: entweder noch keine Protokollzeilen, oder keine
+ * Position, die auffaellt. **Das sind zwei verschiedene Aussagen.**
+ */
+export function WechselbefundEcht({ stand }: { stand: WechselStand }) {
+  const { befunde, entschieden } = stand
+  return (
+    <Card title="Was du regelmäßig wechselst" sub="aus meal_plan_logs">
+      {entschieden === 0 ? (
+        <div className="v2-hinweis">
+          Noch nichts protokolliert — bestätige oder lass Planpositionen
+          aus, dann steht hier, welche du regelmäßig wechselst.
+        </div>
+      ) : befunde.length === 0 ? (
+        <div className="v2-hinweis">
+          {entschieden} {entschieden === 1 ? 'Position' : 'Positionen'} entschieden,
+          keine fällt auf. Auffällig wird eine ab zwei Wechseln und mehr
+          als der Hälfte ihrer Vorkommen.
+        </div>
+      ) : (
+        <div className="v2-col-gap" style={{ gap: 8 }}>
+          {befunde.map(b => (
+            <div key={b.plan_entry_id}>
+              <div style={{
+                display: 'flex', alignItems: 'baseline', gap: 8, fontSize: 12,
+              }}>
+                <span style={{ fontWeight: 600 }}>{b.bezeichnung}</span>
+                <span className="v2-dim" style={{ fontSize: 10.5 }}>
+                  {SLOT_TEXT[b.meal_type] ?? b.meal_type}
+                </span>
+                <span className="v2-num" style={{ marginLeft: 'auto' }}>
+                  {Math.round(b.quote * 100)} %
+                </span>
+              </div>
+              <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.5 }}>
+                {b.abgewichen > 0 && `${b.abgewichen}× anders gegessen`}
+                {b.abgewichen > 0 && b.ausgelassen > 0 && ', '}
+                {b.ausgelassen > 0 && `${b.ausgelassen}× ausgelassen`}
+                {` — von ${b.gesamt} ${b.gesamt === 1 ? 'Mal' : 'Malen'}`}
+              </div>
+            </div>
+          ))}
+          <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.5 }}>
+            Vielleicht magst du das nicht — du kannst die Position im
+            Plan austauschen.
+          </div>
+        </div>
+      )}
+    </Card>
+  )
+}
+
+/** Die Slotnamen, wie sie im Tagebuch stehen. */
+const SLOT_TEXT: Record<string, string> = {
+  breakfast: 'Frühstück', lunch: 'Mittag', dinner: 'Abend',
+  snack: 'Snack', pre_workout: 'Pre-Workout', post_workout: 'Post-Workout',
 }
 
 /**

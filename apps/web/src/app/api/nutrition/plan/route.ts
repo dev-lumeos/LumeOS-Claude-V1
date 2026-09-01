@@ -28,6 +28,8 @@ import {
   ablaufKlaeren,
   ablaufKlaerenSchema,
 } from '../../../../lib/nutrition/plan-write'
+// G-309: die Ghost Entries eines Tages — Flow 3, Schritt 7.
+import { ladeGhostEintraege } from '../../../../lib/nutrition/plan-lesen'
 // G-274: der Bestaetigungsweg — Flow 4.
 import {
   bestaetigenSchema,
@@ -57,6 +59,28 @@ function ungueltig(meldung: string, details?: unknown) {
     { error: meldung, code: 'VALIDATION_FAILED', details },
     { status: 400 },
   )
+}
+
+/**
+ * Die Ghost Entries eines Tages — G-309.
+ *
+ * **`SPEC_03` Flow 3, Schritt 7:** *,,Ab Startdatum: Ghost Entries
+ * erscheinen im Diary."*
+ *
+ * `[read]` **Lesend, deshalb GET** — ein Ghost Entry entsteht durch
+ * Anzeigen, nicht durch Schreiben. **Geschrieben wird erst beim
+ * Bestaetigen**, und dafuer gibt es `POST art=bestaetigen` (G-274).
+ */
+export async function GET(request: NextRequest) {
+  const datum = request.nextUrl.searchParams.get('datum')
+  if (!datum || !/^\d{4}-\d{2}-\d{2}$/.test(datum)) {
+    return ungueltig('Erwartet ?datum=YYYY-MM-DD.')
+  }
+  try {
+    return NextResponse.json({ eintraege: await ladeGhostEintraege(datum) })
+  } catch (error) {
+    return errorResponse(error)
+  }
 }
 
 /**
