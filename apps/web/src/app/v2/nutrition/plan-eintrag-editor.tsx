@@ -236,25 +236,39 @@ export function EintragForm({
                 nur Menge und Mahlzeit sind hier änderbar.
               </p>
             ) : (
-              <>
-                <label style={{ fontSize: 10 }}>
-                  <span className="v2-eyebrow">Lebensmittel</span>
-                  <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                    <input
-                      className="v2-feld" readOnly
-                      style={{ fontSize: 11, flex: 1 }}
-                      aria-label="Gewähltes Lebensmittel"
-                      value={gewaehltName}
-                      placeholder="— noch keines gewählt —"
-                    />
-                    <button type="button" className="v2-btn v2-btn-sm"
-                            onClick={() => setSuchen(true)}>
-                      <Icon name="search" className="v2-ic v2-ic-sm" />
-                      Suchen
-                    </button>
-                  </div>
-                </label>
-              </>
+              /* ══ G-321: EIN Knopf, kein Feld daneben ═════════════
+                 **Tom, 2026-09-02:** *„da ist nicht klar dass man
+                 zuerst den suchen button klicken muss."*
+
+                 `[cmd]` **Hier stand ein `<input>` mit
+                 `placeholder="— noch keines gewählt —"` und daneben
+                 ein Knopf.** `[read]` **Ein Feld mit Platzhalter ist
+                 ein Eingabefeld** — wer hineintippt, erwartet
+                 Treffer und bekommt nichts, weil es `readOnly` war.
+
+                 `[read]` **Und das Modal sucht beim Tippen** (der
+                 Hook entprellt). **Zwei Eingabestellen für dieselbe
+                 Sache, von denen nur eine funktioniert.**
+
+                 `[read]` **Also gibt es nur noch eine:** die ganze
+                 Zeile ist der Knopf, und der Fokus landet im Modal
+                 im Suchfeld. **Kein Platzhalter, der eine Eingabe
+                 verspricht.** */
+              <div>
+                <span className="v2-eyebrow">Lebensmittel</span>
+                <button
+                  type="button" className="v2-btn"
+                  data-probe="lebensmittel-waehlen"
+                  style={{
+                    fontSize: 11, width: '100%', justifyContent: 'flex-start',
+                    gap: 6, marginTop: 2,
+                  }}
+                  onClick={() => setSuchen(true)}
+                >
+                  <Icon name="search" className="v2-ic v2-ic-sm" />
+                  {gewaehltName || 'Lebensmittel suchen …'}
+                </button>
+              </div>
             )}
           </div>
         )}

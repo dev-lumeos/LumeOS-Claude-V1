@@ -233,6 +233,48 @@ export function FoodSuchModal({
   const [portionen, setPortionen] = React.useState<Portion[]>([])
   const [menge, setMenge] = React.useState('100')
   const [laeuftSchreiben, setLaeuftSchreiben] = React.useState(false)
+
+  // ══ G-321: die verschobene Lage ═══════════════════════════════════
+  //
+  // **Tom, 2026-09-02:** *„das modal muss bewegbar werden."*
+  //
+  // `[read]` **Ein Versatz, keine Position** — die Hülle zentriert
+  // per Flex, und `top`/`left` würden das aufheben. **`{0,0}` heisst
+  // also: da, wo es von selbst steht.**
+  const [versatz, setVersatz] = React.useState({ x: 0, y: 0 })
+  const [zieht, setZieht] = React.useState(false)
+  // `[read]` **Der Griffpunkt in einer Ref, nicht im Zustand** — er
+  // ändert sich bei jeder Mausbewegung, und ein `setState` je Pixel
+  // wäre ein Neuzeichnen je Pixel.
+  const griff = React.useRef<{ mx: number; my: number; x: number; y: number } | null>(null)
+
+  const zugStart = React.useCallback((e: React.MouseEvent) => {
+    // `[read]` **Nur die linke Taste** — ein Rechtsklick öffnet das
+    // Kontextmenü und liesse das Modal danach an der Maus kleben.
+    if (e.button !== 0) return
+    griff.current = { mx: e.clientX, my: e.clientY, x: versatz.x, y: versatz.y }
+    setZieht(true)
+  }, [versatz.x, versatz.y])
+
+  // `[cmd]` **Die Zuhörer hängen am `window`, nicht am Modal** —
+  // sonst reisst der Zug ab, sobald die Maus den Kasten verlässt.
+  // **Das ist der übliche Fehler bei Ziehflächen**, und er fällt erst
+  // bei schnellem Ziehen auf.
+  React.useEffect(() => {
+    if (!zieht) return
+    const bewegen = (e: MouseEvent) => {
+      const g = griff.current
+      if (!g) return
+      setVersatz({ x: g.x + (e.clientX - g.mx), y: g.y + (e.clientY - g.my) })
+    }
+    const los = () => { setZieht(false); griff.current = null }
+    window.addEventListener('mousemove', bewegen)
+    window.addEventListener('mouseup', los)
+    return () => {
+      window.removeEventListener('mousemove', bewegen)
+      window.removeEventListener('mouseup', los)
+    }
+  }, [zieht])
   const [fehler, setFehler] = React.useState<string | null>(null)
 
   // `[read]` **Erst ab zwei Zeichen** — ein einzelner Buchstabe
@@ -287,7 +329,13 @@ export function FoodSuchModal({
   return (
     <div
       role="dialog" aria-modal="true" aria-label="Lebensmittel suchen"
-      onClick={e => { if (e.target === e.currentTarget) onClose() }}
+      // `[cmd]` **G-321: `zieht` bricht das Schliessen ab.**
+      // `[read]` **Endet ein Zug auf der Huelle** — was bei
+      // schnellem Schieben nach aussen passiert — **kaeme sonst ein
+      // Klick an, und das Modal schloesse mitten in der Bewegung.**
+      onClick={e => {
+        if (!zieht && e.target === e.currentTarget) onClose()
+      }}
       style={{
         position: 'fixed', inset: 0, zIndex: 60,
         background: 'rgba(0,0,0,0.5)',
@@ -295,18 +343,58 @@ export function FoodSuchModal({
         padding: '5vh 16px', overflowY: 'auto',
       }}
     >
-      <div style={{
-        background: 'var(--surface)', border: '1px solid var(--border)',
-        borderRadius: 8, width: '100%', maxWidth: 760, padding: 16,
-      }}>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12,
-        }}>
+      <div
+        data-probe="modal-kasten"
+        style={{
+          background: 'var(--surface)', border: '1px solid var(--border)',
+          borderRadius: 8, width: '100%', maxWidth: 760, padding: 16,
+          // ══ G-321: die verschobene Lage ═════════════════
+          // `[read]` **`translate`, nicht `top`/`left`** — die Hülle
+          // zentriert per Flex; ein Positionswechsel würde das
+          // aufheben und das Modal beim ersten Zug springen lassen.
+          transform: `translate(${versatz.x}px, ${versatz.y}px)`,
+        }}
+      >
+        {/* ══ G-321: die Titelleiste zieht ══════════════════
+            **Tom, 2026-09-02:** *„das modal muss bewegbar werden."*
+
+            `[cmd]` **Gemessen: `drag` 0, `transform` 0,
+            `onMouseDown` 0.** `[read]` **Es verdeckte das Raster, in
+            dem der Nutzer sieht, was der Tag schon trägt** —
+            obwohl das Modal die Tagessumme kennt.
+
+            `[read]` **Nur Ziehen** — kein Grössenändern, kein
+            Andocken. `[read]` **Und der Schliessen-Knopf ist
+            ausgenommen**, sonst wäre jeder Klick darauf ein Zug von
+            0 px und das Modal bliebe offen. */}
+        <div
+          data-probe="titelleiste"
+          onMouseDown={zugStart}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12,
+            cursor: zieht ? 'grabbing' : 'grab',
+            // `[read]` **Kein Textmarkieren beim Ziehen** — sonst
+            // färbt sich der Titel blau, während man schiebt.
+            userSelect: 'none',
+          }}
+        >
+          <Icon name="more" className="v2-ic v2-ic-sm" />
           <span style={{ fontSize: 14, fontWeight: 600 }}>
             Lebensmittel suchen
           </span>
           <div style={{ flex: 1 }} />
+          {/* `[read]` **Zurücksetzen erscheint erst, wenn verschoben
+              wurde** — ein Knopf, der nichts tut, ist keiner. */}
+          {(versatz.x !== 0 || versatz.y !== 0) && (
+            <button type="button" className="v2-btn v2-btn-sm"
+                    onMouseDown={e => e.stopPropagation()}
+                    onClick={() => setVersatz({ x: 0, y: 0 })}
+                    title="Wieder in die Mitte">
+              Zurücksetzen
+            </button>
+          )}
           <button type="button" className="v2-btn v2-btn-sm"
+                  onMouseDown={e => e.stopPropagation()}
                   onClick={onClose} aria-label="Schliessen">
             <Icon name="x" className="v2-ic v2-ic-sm" />
           </button>
@@ -399,9 +487,36 @@ export function FoodSuchModal({
               </div>
             )}
 
+            {/* ══ G-321: die Tabellenklasse heisst `v2-tbl` ═════════
+                **Tom, 2026-09-02:** *„es hat einen spaltenfehler
+                drin."*
+
+                `[cmd]` **Hier stand `className="v2-tab"`.** **Das ist
+                die Klasse für REITER-Knöpfe** (`v2.css:423`), und sie
+                setzt `display: flex`.
+
+                `[cmd]` **Gemessen am 2026-09-02 mit „banane", 24
+                Treffer:** `thead` bei y=493, Zeile 1 bei y=275,
+                Zeile 8 bei y=520 — **der Kopf stand zwischen den
+                Zeilen**, genau wie in Toms Bild. **Und die Werte
+                liefen ungetrennt: *79 1.3 15.9 0.4***, weil Flex die
+                Zellen zusammenschiebt und keine Spaltenbreite gilt.
+
+                `[cmd]` **Der Verdacht aus dem Auftrag war ein
+                anderer** — lange Kategorienamen, waagerechter Lauf.
+                **Gemessen: `scrollWidth - clientWidth` = 0 px.** **Es
+                lag nie am Überlauf.**
+
+                `[cmd]` **`tab-foods.tsx:875` benutzt `v2-tbl`** — die
+                Klasse für Tabellen. `[read]` **Dieselbe wie in Food
+                DB, wie Tom es verlangt hat.**
+
+                `[read]` **`overflowX` bleibt** — nicht als Ursache,
+                sondern damit schmale Fenster die Tabelle rollen
+                können statt die Seite. */}
             {sortiert.length > 0 && (
               <div style={{ overflowX: 'auto' }}>
-                <table className="v2-tab" style={{ width: '100%' }}>
+                <table className="v2-tbl">
                   <thead>
                     <tr>
                       <th>Name</th>
