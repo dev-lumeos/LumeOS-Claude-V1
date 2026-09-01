@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 219 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 2 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 207 |
-| **gesamt** | **430** |
+| **gesamt** | **431** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 171
+## nutrition — 172
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -216,7 +216,7 @@
 | `G-297` | befund | mittel | [die Tagesdeckung nimmt zu viel Platz](erledigt/nutrition-g-0297-die-tagesdeckung-nimmt-zu-viel-platz.md) | erledigt | — | — |
 | `G-298` | feature | hoch | [Plaene lassen sich ansehen, nicht aendern](erledigt/nutrition-g-0298-plaene-lassen-sich-ansehen-nicht-aendern.md) | erledigt | — | C-369, G-300, G-306 |
 | `G-299` | feature | hoch | [der Planner zeigt eine fremde Woche](erledigt/nutrition-g-0299-der-planner-zeigt-eine-fremde-woche.md) | erledigt | — | — |
-| `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](erledigt/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | erledigt | — | — |
+| `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](erledigt/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | erledigt | — | G-320 |
 | `G-301` | befund | hoch | [der Meal-plans-Reiter folgt keinem Flow](erledigt/nutrition-g-0301-der-meal-plans-reiter-folgt-keinem-flow.md) | erledigt | — | C-370 |
 | `G-304` | messung | hoch | [was ein Nutzer in Plaenen und Rezepten tun kann](erledigt/nutrition-g-0304-was-ein-nutzer-in-plaenen-und-rezepten-tun-kann.md) | erledigt | — | C-372, C-373, G-305, G-309 |
 | `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](laufend_claudecode/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | laeuft (claudecode) | — | — |
@@ -232,6 +232,7 @@
 | `G-317` | befund | mittel | [drei Zeilen der Vorlage fehlen am Schirm](erledigt/nutrition-g-0317-drei-zeilen-der-vorlage-fehlen-am-schirm.md) | erledigt | — | G-319 |
 | `G-318` | befund | hoch | [Planner und Diary sehen einander nicht](erledigt/nutrition-g-0318-planner-und-diary-sehen-einander-nicht.md) | erledigt | — | — |
 | `G-319` | befund | hoch | [die Bedienung in *Alle Plaene*](erledigt/nutrition-g-0319-die-bedienung-in-alle-plaene.md) | erledigt | — | C-382 |
+| `G-320` | feature | hoch | [die Lebensmittelsuche als Modal](laufend_claudecode/nutrition-g-0320-die-lebensmittelsuche-als-modal.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59
