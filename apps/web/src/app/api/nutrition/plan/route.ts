@@ -21,11 +21,12 @@ import {
   planEintragAnlegen,
   planEintragAendern,
   planEintragLoeschen,
-  // C-372/G-306: die Werkbank - Plan mit Wochen, und die Kopie.
+  // C-372: die Werkbank - ein Plan mit Wochen.
   planMitWochenAnlegen,
   planMitWochenSchema,
-  planKopieren,
-  planKopierenSchema,
+  // C-377/C-373: der abgelaufene Plan wird geklaert.
+  ablaufKlaeren,
+  ablaufKlaerenSchema,
 } from '../../../../lib/nutrition/plan-write'
 // G-274: der Bestaetigungsweg — Flow 4.
 import {
@@ -185,15 +186,15 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // ── G-306: der Ausweg aus der Aktivsperre ───────────────────
-  if (art === 'plan_kopieren') {
-    const g = planKopierenSchema.safeParse(roh)
+  // ── C-377/C-373: den abgelaufenen Plan klaeren ──────────────
+  if (art === 'ablauf_klaeren') {
+    const g = ablaufKlaerenSchema.safeParse(roh)
     if (!g.success) {
       return ungueltig(g.error.issues[0]?.message ?? 'Eingabe ungueltig.',
         g.error.issues.map(i => ({ feld: i.path.join('.'), meldung: i.message })))
     }
     try {
-      return NextResponse.json(await planKopieren(g.data))
+      return NextResponse.json(await ablaufKlaeren(g.data))
     } catch (error) {
       return errorResponse(error)
     }
@@ -202,5 +203,5 @@ export async function POST(request: NextRequest) {
   return ungueltig(
     'Unbekannte Art. Erlaubt: plan, plan_aendern, bestaetigen, ueberspringen, '
     + 'eintrag, eintrag_aendern, eintrag_loeschen, plan_werkbank, '
-    + 'plan_kopieren.')
+    + 'ablauf_klaeren.')
 }

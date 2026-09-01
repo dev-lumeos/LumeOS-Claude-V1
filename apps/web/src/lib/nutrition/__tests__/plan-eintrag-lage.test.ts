@@ -202,15 +202,30 @@ test('G-298: der Schreibweg prueft die Sperren — bei allen dreien', () => {
   // eine Bitte. `[read]` **Gezaehlt, nicht gesucht:** ein Vorgang
   // ohne Pruefung faellt bei `assert.match` nicht auf.
   //
-  // `[cmd]` **BERICHTIGT in G-306, 2026-08-31:** hier stand
-  // `pruefeFreigabe`, und die prueft NUR die Herkunft. **`ADR
-  // #17` verlangt zusaetzlich, dass ein AKTIVER Plan seine
-  // Positionen einfriert** — `pruefePositionsRecht` prueft beides in
-  // einer Abfrage, und `pruefeFreigabe` ist entfernt (A-59).
+  // `[cmd]` **BERICHTIGT ZWEIMAL.** Zuerst in G-306 von
+  // `pruefeFreigabe` auf `pruefePositionsRecht` — `ADR #17` verlangte,
+  // dass ein AKTIVER Plan seine Positionen einfriert.
+  //
+  // `[cmd]` **Dann durch E-42, 2026-09-01: `ADR #17` ist abgeloest.**
+  // **Tom:** *,,wenn wir den einschraenken dass er nicht editieren
+  // kann dann bescheisst er sich ja selber."* **Der Planstatus sperrt
+  // nichts mehr — nur ein Protokoll an DIESER Position tut es.**
+  //
+  // `[read]` **Was hier weiter gilt, ist G-269: die HERKUNFT.** Ein
+  // Coach-Plan bleibt gesperrt, egal ob geloggt oder nicht — deshalb
+  // steht die Herkunftspruefung an allen drei Vorgaengen, die
+  // Protokollpruefung nur an zweien (eine Position, die es noch nicht
+  // gibt, kann nicht geloggt sein).
   const s = ohneKommentare(SCHREIB)
-  const rufe = (s.match(/await pruefePositionsRecht\(/g) ?? []).length
-  assert.equal(rufe, 3,
-    `${rufe} von 3 Vorgaengen pruefen die Sperren`)
+  const rufe = (s.match(/await pruefeHerkunft\(/g) ?? []).length
+  assert.equal(rufe, 4,
+    `${rufe} von 4 Herkunftspruefungen (3 Positionen + Ablauf)`)
+  const protokoll = (s.match(/await pruefeProtokoll\(/g) ?? []).length
+  assert.equal(protokoll, 2,
+    `${protokoll} von 2 Vorgaengen pruefen das Protokoll (aendern, loeschen)`)
+  // `[cmd]` **A-59: die Plansperre aus C-372 ist entfernt.**
+  assert.doesNotMatch(s, /(?<![a-zA-Z0-9_])pruefePositionsRecht(?![a-zA-Z0-9_])/,
+    'die Sperre ueber den Planstatus lebt weiter — E-42 hebt sie auf')
   assert.match(s, /darfAendern\(herkunft\)/,
     'die Sperre fragt nicht die Herkunft')
   // Und die alte, schwaechere Pruefung ist wirklich weg.

@@ -24,11 +24,17 @@ import { Card, Pill, Icon, Empty } from '@lumeos/ui'
 
 import type { PlanKurz } from '../../../lib/nutrition/plan-lesen'
 import {
-  sperreVon, SPERRE_MARKE, kopieHilft,
+  darfWeiterverkaufen, KEIN_WEITERVERKAUF_MARKE, KEIN_WEITERVERKAUF_SATZ,
+  ABLAUF_WEGE, WEG_TEXT, WEG_ERKLAERUNG, vorschlagFuer, vorschlagSatz,
+  ABLAUF_FRAGE_TITEL, ablaufFrage,
   WOCHEN_MIN, WOCHEN_MAX,
+  type AblaufWeg,
 } from '../../../lib/nutrition/plan-werkbank'
 import { statusText, herkunftVon, HERKUNFT_TEXT }
   from '../../../lib/nutrition/plan-lage'
+// C-377: die Laufzeit steht in den Tagen, nicht in `start_date` (G-298).
+import { laufzeitVon, LAUFZEIT_MARKE }
+  from '../../../lib/nutrition/plan-eintrag-lage'
 
 async function senden(koerper: unknown): Promise<{
   ok: boolean; fehler?: string; daten?: Record<string, unknown>
@@ -167,70 +173,112 @@ export function NeuerPlanForm({ heute, onFertig, onAbbruch }: {
   )
 }
 
-// ════════════════════════════════════════════════════════════════════
-// G-306 — „Kopie bearbeiten", der Ausweg aus der Aktivsperre
-// ════════════════════════════════════════════════════════════════════
+// ══ „Kopie bearbeiten" ist entfernt — G-306/E-42 ═══════════════════
+//
+// `[cmd]` **E-42 hebt die Sperre auf, zu der dieser Knopf der Ausweg
+// war.** `[read]` **Ein Ausweg ohne Sperre ist keiner.**
+//
+// **Tom, 2026-08-31:** *,,wenn wir den einschraenken dass er nicht
+// editieren kann dann bescheisst er sich ja selber."*
 
-export function KopieKnopf({ plan, onFertig }: {
-  plan: PlanKurz; onFertig: (id: string) => void
+// ════════════════════════════════════════════════════════════════════
+// C-377/C-373 — die Frage beim Ablauf
+// ════════════════════════════════════════════════════════════════════
+//
+// **Tom:** *,,ist ein kompletter plan abgelaufen muss eine meldung
+// kommen und geklaert werden wie es weiter geht, renew/anderen
+// wochenplan/manuelle erfassung."*
+//
+// `[cmd]` **Heute stand dort *aktiv · abgelaufen* und sonst nichts.**
+
+export function AblaufFrage({ plan, bis, tage, heute, onFertig }: {
+  plan: PlanKurz
+  bis: string
+  tage: number
+  heute: string
+  onFertig: () => void
 }) {
-  const [offen, setOffen] = React.useState(false)
-  const [pausieren, setPausieren] = React.useState(false)
+  const vorschlag = vorschlagFuer(plan.lifecycle_type)
+  const [weg, setWeg] = React.useState<AblaufWeg>(vorschlag ?? 'neu_starten')
+  const [start, setStart] = React.useState(heute)
   const [laeuft, setLaeuft] = React.useState(false)
   const [fehler, setFehler] = React.useState<string | null>(null)
 
-  async function kopieren() {
+  async function klaeren() {
     setLaeuft(true); setFehler(null)
     const r = await senden({
-      art: 'plan_kopieren', id: plan.id, original_pausieren: pausieren,
+      art: 'ablauf_klaeren', id: plan.id, weg,
+      ...(weg === 'neu_starten' ? { start_date: start } : {}),
     })
     setLaeuft(false)
     if (!r.ok) { setFehler(r.fehler ?? 'Fehler'); return }
-    setOffen(false)
-    onFertig(String(r.daten?.id ?? ''))
-  }
-
-  if (!offen) {
-    return (
-      <button type="button" className="v2-btn v2-btn-sm v2-btn-primary"
-              onClick={() => setOffen(true)}>
-        <Icon name="copy" className="v2-ic v2-ic-sm" /> Kopie bearbeiten
-      </button>
-    )
+    onFertig()
   }
 
   return (
     <div style={{
-      border: '1px solid var(--acc-nutri)', borderRadius: 6, padding: 8,
-      marginTop: 6, background: 'var(--surface-2)', fontSize: 11.5,
+      border: '1px solid var(--warn)', borderRadius: 6, padding: 10,
+      marginTop: 8, background: 'var(--surface-2)',
     }}>
-      <p style={{ margin: '0 0 6px', lineHeight: 1.5 }}>
-        Es entsteht ein <strong>Entwurf</strong> mit denselben{' '}
-        {plan.wochen} Wochen und {plan.positionen} Positionen. Der laufende
-        Plan behält sein Protokoll.
+      <div style={{ fontSize: 12.5, fontWeight: 600, marginBottom: 4 }}>
+        {ABLAUF_FRAGE_TITEL}
+      </div>
+      <p className="v2-muted" style={{ fontSize: 11.5, margin: '0 0 8px', lineHeight: 1.5 }}>
+        {ablaufFrage(bis, tage)}
       </p>
-      {/* `[cmd]` **Der ADR nennt das Pausieren als ersten Schritt** —
-          `[read]` **hier ist es eine Wahl:** wer eine Variante baut,
-          laesst das Original laufen. */}
-      <label style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-        <input type="checkbox" checked={pausieren}
-               aria-label="Original pausieren"
-               onChange={e => setPausieren(e.target.checked)} />
-        <span>Original dabei pausieren</span>
-      </label>
+
+      {/* `[cmd]` **C-373: der Lebenszyklus bestimmt den VORSCHLAG,
+          nicht die Handlung.** `[read]` **Bei `NULL` gibt es keinen
+          Vorschlag** — dann stehen die drei Wege gleichwertig da. */}
+      <p className="v2-dim" style={{ fontSize: 10.5, margin: '0 0 8px', lineHeight: 1.5 }}>
+        {vorschlagSatz(plan.lifecycle_type)}
+      </p>
+
+      <div className="v2-col-gap" style={{ gap: 4, marginBottom: 8 }}>
+        {ABLAUF_WEGE.map(w => (
+          <button
+            key={w}
+            type="button"
+            onClick={() => setWeg(w)}
+            aria-pressed={weg === w}
+            style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
+              gap: 2, padding: '7px 9px', borderRadius: 6, cursor: 'pointer',
+              textAlign: 'left', width: '100%', color: 'inherit',
+              background: weg === w ? 'var(--bg-elev)' : 'var(--surface)',
+              border: `1px solid ${weg === w ? 'var(--acc-nutri)' : 'var(--border)'}`,
+            }}
+          >
+            <span style={{ fontSize: 11.5, fontWeight: weg === w ? 600 : 400 }}>
+              {WEG_TEXT[w]}
+              {vorschlag === w && (
+                <span className="v2-dim" style={{ fontWeight: 400 }}> · vorgeschlagen</span>
+              )}
+            </span>
+            <span className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.45 }}>
+              {WEG_ERKLAERUNG[w]}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {weg === 'neu_starten' && (
+        <label style={{ fontSize: 10, display: 'block', marginBottom: 8 }}>
+          <span className="v2-eyebrow">Neuer Start</span>
+          <input className="v2-feld" type="date" value={start}
+                 aria-label="Neues Startdatum" style={{ width: '100%' }}
+                 onChange={e => setStart(e.target.value)} />
+        </label>
+      )}
+
       {fehler && (
         <p style={{ fontSize: 10.5, color: 'var(--neg)', margin: '0 0 6px' }}>{fehler}</p>
       )}
-      <div style={{ display: 'flex', gap: 6 }}>
-        <button type="button" className="v2-btn v2-btn-sm v2-btn-primary"
-                disabled={laeuft} onClick={kopieren}>
-          {laeuft ? 'Kopiert…' : 'Kopie anlegen'}
-        </button>
-        <button type="button" className="v2-btn v2-btn-sm"
-                onClick={() => setOffen(false)}>
-          Abbrechen
-        </button>
-      </div>
+
+      <button type="button" className="v2-btn v2-btn-sm v2-btn-primary"
+              disabled={laeuft} onClick={klaeren}>
+        {laeuft ? 'Übernimmt…' : 'Übernehmen'}
+      </button>
     </div>
   )
 }
@@ -285,9 +333,25 @@ export function PlanListe({ plaene, heute, aktiv, onWaehlen }: {
       )}
 
       {plaene.map(p => {
-        const sperre = sperreVon(p.status, p.darf_bearbeiten)
-        const marke = SPERRE_MARKE[sperre.art]
+        // C-375/E-42: das Flag sagt etwas, es sperrt nichts.
+        const verkaeuflich = darfWeiterverkaufen(p.darf_weiterverkaufen)
         const herkunft = herkunftVon(p.plan_origin)
+        // ══ C-377: wann ist die Frage OFFEN? ═════════════════
+        //
+        // `[cmd]` **Nicht schon, wenn der letzte Tag vorbei ist.**
+        // `[read]` **Ein Plan, der auf `completed` steht, HAT die
+        // Frage beantwortet** — sie noch einmal zu stellen hiesse,
+        // die Entscheidung des Nutzers zu ignorieren.
+        //
+        // `[cmd]` **Am 2026-09-01 im Browser gemessen:** nach dem Weg
+        // *,,anderen Plan aktivieren"* stand der Plan auf
+        // `completed`, **und die Frage blieb trotzdem stehen.**
+        // **Das war ein Fehler in dieser Bedingung, nicht im
+        // Schreibweg.**
+        const laufzeit = laufzeitVon(
+          p.letzter_tag ? [p.letzter_tag] : [], heute)
+        const laeuftNoch = p.status === 'active' || p.status === 'assigned'
+        const abgelaufen = laufzeit.art === 'abgelaufen' && laeuftNoch
         const offen = aktiv === p.id
         return (
           <Card key={p.id} style={offen
@@ -300,10 +364,15 @@ export function PlanListe({ plaene, heute, aktiv, onWaehlen }: {
               <Pill variant={p.status === 'active' ? 'pos' : undefined}>
                 {statusText(p.status)}
               </Pill>
-              {/* `[read]` **Zwei Sperren, zwei Marken** (E-41) — sie
-                  haben verschiedene Auswege und duerfen nicht wie eine
-                  aussehen. */}
-              {marke && <Pill>{marke}</Pill>}
+              {/* `[cmd]` **C-375/E-42: die Marke sagt, was nicht geht
+                  — und das ist der WEITERVERKAUF, nicht das
+                  Bearbeiten.** `[read]` **Der Plan gehoert dem
+                  Kaeufer; er darf ihn aendern.** */}
+              {!verkaeuflich && <Pill>{KEIN_WEITERVERKAUF_MARKE}</Pill>}
+              {/* C-377: die Marke steht am Plan, die Frage darunter. */}
+              {abgelaufen && LAUFZEIT_MARKE.abgelaufen && (
+                <Pill>{LAUFZEIT_MARKE.abgelaufen}</Pill>
+              )}
               {herkunft !== 'unbekannt' && herkunft !== 'self_created' && (
                 <Pill variant="acc">{HERKUNFT_TEXT[herkunft]}</Pill>
               )}
@@ -318,35 +387,38 @@ export function PlanListe({ plaene, heute, aktiv, onWaehlen }: {
               </div>
             )}
 
-            {/* Der Grund der Sperre — und der Ausweg, wenn es einen gibt. */}
-            {sperre.art !== 'offen' && (
+            {!verkaeuflich && (
               <div className="v2-dim" style={{
                 fontSize: 10.5, marginTop: 6, lineHeight: 1.5,
               }}>
-                {sperre.satz}
-                {sperre.art === 'aktiv' && <> {sperre.ausweg}</>}
+                {KEIN_WEITERVERKAUF_SATZ}
               </div>
             )}
 
+            {/* ══ C-377: die Frage, nicht nur die Marke ══════════
+                `[cmd]` **Heute stand dort *aktiv · abgelaufen* und
+                sonst nichts** (G-304). `[read]` **Eine Marke ohne Weg
+                ist eine Feststellung, keine Klaerung.** */}
+            {abgelaufen && laufzeit.art === 'abgelaufen' && (
+              <AblaufFrage
+                plan={p}
+                bis={laufzeit.bis}
+                tage={laufzeit.tage}
+                heute={heute}
+                onFertig={neuLaden}
+              />
+            )}
+
             <div style={{ display: 'flex', gap: 6, marginTop: 10, flexWrap: 'wrap' }}>
-              {sperre.art === 'offen' && (
-                <button type="button"
-                        className={offen ? 'v2-btn v2-btn-sm v2-btn-primary' : 'v2-btn v2-btn-sm'}
-                        onClick={() => onWaehlen(p.id)}>
-                  {offen ? 'In der Werkbank' : 'Bearbeiten'}
-                </button>
-              )}
-              {/* `[read]` **Der Ausweg nur, wo er hilft** — bei fremder
-                  Herkunft fuehrte eine Kopie um die Entscheidung des
-                  Erstellers herum. */}
-              {kopieHilft(sperre) && (
-                <KopieKnopf plan={p} onFertig={id => { neuLaden(); if (id) onWaehlen(id) }} />
-              )}
-              {!offen && sperre.art !== 'offen' && !kopieHilft(sperre) && (
-                <span className="v2-dim" style={{ fontSize: 10.5 }}>
-                  Nur ansehen und aktivieren.
-                </span>
-              )}
+              {/* `[cmd]` **E-42: JEDER Plan ist bearbeitbar** — auch
+                  ein aktiver, auch ein gekaufter. **Gesperrt sind
+                  einzelne Positionen, sobald sie protokolliert
+                  sind**, und das steht an der Position. */}
+              <button type="button"
+                      className={offen ? 'v2-btn v2-btn-sm v2-btn-primary' : 'v2-btn v2-btn-sm'}
+                      onClick={() => onWaehlen(p.id)}>
+                {offen ? 'In der Werkbank' : 'Bearbeiten'}
+              </button>
             </div>
           </Card>
         )

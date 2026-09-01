@@ -558,15 +558,32 @@ export type PlanKurz = {
   wochen: number
   tage: number
   positionen: number
+  /** C-373: bestimmt den Vorschlag beim Ablauf, nicht die Handlung. */
+  lifecycle_type: string | null
   /**
-   * C-375: das Flag gibt es noch nicht.
+   * C-377: der letzte Plantag — daraus entsteht die Ablauffrage.
    *
-   * `[cmd]` **Am 2026-08-31 gemessen: keine Spalte `darf_bearbeiten`,
-   * `editable`, `readonly` oder `locked` in `nutrition` oder
-   * `coach`.** `[read]` **`undefined` heisst deshalb: noch nicht
-   * hinterlegt** — und `darfBearbeiten()` liest daraus `true`.
+   * `[cmd]` **`start_date` und `days_count` sind beim Bestandsplan
+   * `NULL`** (G-298), **die Laufzeit steht nur in den Tageszeilen.**
    */
-  darf_bearbeiten: boolean | undefined
+  letzter_tag: string | null
+  /**
+   * C-375/E-42: der Weiterverkaufsschutz.
+   *
+   * `[cmd]` **Berichtigt am 2026-09-01:** hier stand
+   * `darf_bearbeiten`. **E-42: gemeint ist ein Weiterverkaufsschutz,
+   * kein Editierschutz** — *,,wenn ich einen plan kaufe dann ist das
+   * mein plan"*.
+   *
+   * `[cmd]` **Am 2026-09-01 gemessen: die Spalte steht live** —
+   * `boolean NOT NULL DEFAULT true` an `meal_plans` und `recipes`
+   * (Kettenschritt 371, von Codex eingespielt).
+   *
+   * `[read]` **Sie sperrt nichts.** Es gibt keinen Weiterverkauf zu
+   * verhindern, solange kein Marktplatz existiert (E-39) — **die
+   * Anzeige traegt die Einschraenkung, bevor sie greift.**
+   */
+  darf_weiterverkaufen: boolean | undefined
 }
 
 /**
@@ -586,7 +603,8 @@ export async function ladeAllePlaene(): Promise<PlanKurz[]> {
     const { data, error } = await db
       .from('meal_plans')
       .select('id, name, description, status, is_active, plan_origin, '
-        + 'weeks:meal_plan_weeks(id, days:meal_plan_days(id, '
+        + 'lifecycle_type, darf_weiterverkaufen, '
+        + 'weeks:meal_plan_weeks(id, days:meal_plan_days(id, plan_date, '
         + 'entries:meal_plan_entries(id)))')
       .eq('user_id', user.id)
       .order('is_active', { ascending: false })
@@ -599,9 +617,15 @@ export async function ladeAllePlaene(): Promise<PlanKurz[]> {
       const tage = wochen.flatMap(w => (w.days ?? []) as Array<Record<string, unknown>>)
       const positionen = tage.flatMap(
         d => (d.entries ?? []) as Array<Record<string, unknown>>)
+      const daten = tage
+        .map(d => String(d.plan_date ?? ''))
+        .filter(Boolean)
+        .sort()
       return {
         id: String(p.id),
         name: String(p.name ?? ''),
+        lifecycle_type: (p.lifecycle_type as string | null) ?? null,
+        letzter_tag: daten.length > 0 ? daten[daten.length - 1] : null,
         description: (p.description as string | null) ?? null,
         status: String(p.status ?? 'assigned'),
         is_active: p.is_active === true,
@@ -609,8 +633,10 @@ export async function ladeAllePlaene(): Promise<PlanKurz[]> {
         wochen: wochen.length,
         tage: tage.length,
         positionen: positionen.length,
-        // Die Spalte gibt es noch nicht - C-375 bei Codex.
-        darf_bearbeiten: undefined,
+        // `[cmd]` **Die Spalte steht seit dem 2026-09-01 live**
+        // (C-371/C-375, Kettenschritt 371) — `boolean NOT NULL
+        // DEFAULT true` an `meal_plans` UND `recipes`.
+        darf_weiterverkaufen: p.darf_weiterverkaufen === false ? false : true,
       }
     })
   } catch {

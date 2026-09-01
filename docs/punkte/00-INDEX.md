@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 230 |
-| `laufend_codex` | 4 |
+| `todos` | 231 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 6 |
-| `erledigt` | 174 |
-| **gesamt** | **414** |
+| `erledigt` | 178 |
+| **gesamt** | **416** |
 
 ## medical — 42
 
@@ -58,9 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 158
-
-### beauftragbar — 157
+## nutrition — 159
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -121,16 +119,17 @@
 | `C-360` | entscheidung | hoch | [darf ein fehlender Naehrwert als 0 zaehlen?](todos/nutrition-c-0360-darf-ein-fehlender-naehrwert-als-null-zaehlen.md) | offen | — | — |
 | `C-366` | befund | mittel | [`food_tags` hat keinen Pflegeweg](todos/nutrition-c-0366-food-tags-hat-keinen-pflegeweg.md) | offen | — | — |
 | `C-367` | befund | hoch | [Vitamin A blockiert den Score an allen Tagen](erledigt/nutrition-c-0367-vitamin-a-blockiert-den-score-an-allen-tagen.md) | erledigt | — | C-368 |
-| `C-368` | entscheidung | hoch | [fuenfzehn Lebensmittel blockieren den Score](laufend_codex/nutrition-c-0368-fuenfzehn-lebensmittel-blockieren-den-score.md) | laeuft (codex) | — | — |
+| `C-368` | entscheidung | hoch | [fuenfzehn Lebensmittel blockieren den Score](erledigt/nutrition-c-0368-fuenfzehn-lebensmittel-blockieren-den-score.md) | erledigt | — | C-378 |
 | `C-369` | entscheidung | mittel | [was mit einem abgelaufenen Plan geschieht](erledigt/nutrition-c-0369-was-mit-einem-abgelaufenen-plan-geschieht.md) | erledigt | — | — |
 | `C-370` | entscheidung | hoch | [wie entsteht ein eigener Plan?](erledigt/nutrition-c-0370-wie-entsteht-ein-eigener-plan.md) | erledigt | — | — |
-| `C-371` | befund | mittel | [`recipes` hat keine Herkunftsspalte](laufend_codex/nutrition-c-0371-recipes-hat-keine-herkunftsspalte.md) | laeuft (codex) | — | — |
+| `C-371` | befund | mittel | [`recipes` hat keine Herkunftsspalte](erledigt/nutrition-c-0371-recipes-hat-keine-herkunftsspalte.md) | erledigt | — | — |
 | `C-372` | befund | hoch | [Planwochen haben keinen Schreibweg](erledigt/nutrition-c-0372-planwochen-haben-keinen-schreibweg.md) | erledigt | — | G-307 |
 | `C-373` | befund | mittel | [der Lebenszyklus wird gespeichert und nie ausgefuehrt](laufend_claudecode/nutrition-c-0373-der-lebenszyklus-wird-gespeichert-und-nie-ausgefuehrt.md) | laeuft (claudecode) | — | C-377 |
-| `C-374` | befund | mittel | [`plan_origin` kennt `buddy` nicht](laufend_codex/nutrition-c-0374-plan-origin-kennt-buddy-nicht.md) | laeuft (codex) | — | — |
+| `C-374` | befund | mittel | [`plan_origin` kennt `buddy` nicht](erledigt/nutrition-c-0374-plan-origin-kennt-buddy-nicht.md) | erledigt | — | — |
 | `C-375` | feature | mittel | [ein Flag fuer fremde Plaene und Rezepte](laufend_claudecode/nutrition-c-0375-ein-flag-fuer-fremde-plaene-und-rezepte.md) | laeuft (claudecode) | — | — |
 | `C-376` | befund | mittel | [frieren abgeschlossene Plaene auch ein?](erledigt/nutrition-c-0376-frieren-abgeschlossene-plaene-auch-ein.md) | erledigt | — | — |
 | `C-377` | feature | hoch | [ein abgelaufener Plan braucht eine Frage](todos/nutrition-c-0377-ein-abgelaufener-plan-braucht-eine-frage.md) | offen | — | — |
+| `C-378` | entscheidung | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](todos/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -169,6 +168,7 @@
 | `G-235` | entscheidung | niedrig | [`MicroDashboard` Tier-System (Tier 1/2/3) und Subscription-Gates ungeklärt](erledigt/nutrition-g-0235-microdashboard-tier-system-tier-1-2-3-und-subscription-gat.md) | erledigt | — | — |
 | `G-236` | befund | niedrig | [`SmartSuggestions` Component und `useSmartSearchSuggestions` Hook ohne klaren V1-Trigger](todos/nutrition-g-0236-smartsuggestions-component-und-usesmartsearchsuggestions-h.md) | offen | — | — |
 | `G-237` | befund | niedrig | [`data/nutrientDetails.ts` als statisches Array — `food_sources` Array veraltet (per Review 1 ADR_IMPROVEMENTS_PACKAGE #20)](todos/nutrition-g-0237-data-nutrientdetails-ts-als-statisches-array-food-sources-.md) | offen | — | — |
+| `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | — | — |
 | `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](erledigt/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | erledigt | — | C-333, C-334, G-246, G-247, G-249 |
 | `G-245` | feature | mittel | [die Sortier-Tags bauen](erledigt/nutrition-g-0245-die-sortier-tags-bauen.md) | erledigt | — | — |
 | `G-246` | feature | hoch | [die Detailtexte liegen in der Datenbank und werden nicht gelesen](erledigt/nutrition-g-0246-die-detailtexte-werden-nicht-gelesen.md) | erledigt | — | A-60, C-336 |
@@ -221,12 +221,6 @@
 | `G-306` | befund | hoch | [der Planeditor verletzt die Immutabilitaet](laufend_claudecode/nutrition-g-0306-der-planeditor-verletzt-die-immutabilitaet.md) | laeuft (claudecode) | — | C-376 |
 | `G-307` | feature | mittel | [*Bearbeiten* in der Bibliothek fuehrt nirgendwohin](laufend_claudecode/nutrition-g-0307-bearbeiten-in-der-bibliothek-fuehrt-nirgendwohin.md) | vorbereitet (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
-
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | C-374 | — |
 
 ## supplements — 59
 
@@ -391,7 +385,7 @@
 | `G-277` | befund | hoch | [der Rechte-Reiter nennt einen Grund, den es nicht gibt](erledigt/coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md) | erledigt | — | G-280 |
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 
-## quer — 83
+## quer — 84
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -477,7 +471,8 @@
 | `G-280` | befund | mittel | [der Dev-Server ueberlebt lange Testlaeufe nicht](erledigt/quer-g-0280-der-dev-server-ueberlebt-lange-testlaeufe-nicht.md) | erledigt | — | — |
 | `G-284` | befund | hoch | [die Mockups werden ohne Anmeldung ausgeliefert](erledigt/quer-g-0284-die-mockups-werden-ohne-anmeldung-ausgeliefert.md) | erledigt | — | — |
 | `G-296` | befund | mittel | [das globale `tsc` ist rot wegen `packages/ui`](erledigt/quer-g-0296-das-globale-tsc-ist-rot-wegen-packages-ui.md) | erledigt | — | G-303 |
-| `G-303` | befund | hoch | [der Gate prueft `packages/ui` nicht](laufend_codex/quer-g-0303-der-gate-prueft-packages-ui-nicht.md) | laeuft (codex) | — | — |
+| `G-303` | befund | hoch | [der Gate prueft `packages/ui` nicht](erledigt/quer-g-0303-der-gate-prueft-packages-ui-nicht.md) | erledigt | — | G-308 |
+| `G-308` | feature | mittel | [die zwei Pakete brauchen eigene Pruefungen](laufend_codex/quer-g-0308-die-zwei-pakete-brauchen-eigene-pruefungen.md) | laeuft (codex) | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

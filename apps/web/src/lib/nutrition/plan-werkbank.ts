@@ -4,35 +4,51 @@
 //
 // `[cmd]` **Serverfrei.** Kein Import aus dem Leseweg — A-30.
 //
-// **Grundlage, in dieser Reihenfolge gelesen:**
+// **Grundlage:**
 //
-//     E-40                          wozu der Planner da ist
-//     E-41                          Rollenteilung, zwei Sperren
-//     ADR_IMPROVEMENTS_PACKAGE #17  die Immutabilitaetsregel
-//     SPEC_01 Abschnitt 8 und 9     vier Quellen
-//     SPEC_03 Flow 3                Aktivieren
+//     E-40   wozu der Planner da ist
+//     E-41   Rollenteilung
+//     E-42   editieren ist erlaubt, weiterverkaufen nicht
+//            -- loest ADR_IMPROVEMENTS_PACKAGE #17 ab
+//     SPEC_01 Abschnitt 8 und 9, SPEC_03 Flow 3
 //
-// `[read]` **Den ADR hat vor G-298 niemand gelesen** — deshalb steht
-// er hier an dritter Stelle und nicht am Ende.
+// `[cmd]` **`E-42` hat am 2026-08-31 den ADR abgeloest.** `[read]`
+// **Die Sperre aus C-372 (409 fuer jeden aktiven Plan) ist damit
+// zurueckgebaut** — sie steht jetzt an der einzelnen Position und
+// haengt am Protokoll, nicht am Planzustand.
 
-// ══ DIE ERSTE SPERRE: aktiv heisst eingefroren ══════════════════════
+// ══ DIE SPERRE: geloggt heisst eingefroren, nicht „aktiv" ═══════════
 //
-// `[cmd]` **`ADR_IMPROVEMENTS_PACKAGE` #17, woertlich:**
+// **BERICHTIGT am 2026-09-01 durch E-42.** `[cmd]` **`E-42` loest
+// `ADR_IMPROVEMENTS_PACKAGE` #17 ab.**
 //
-//     MealPlan.status = 'active'
-//       -> MealPlanDay: READ-ONLY
-//       -> MealPlanItem: READ-ONLY
-//       -> API gibt 409 Conflict bei PUT/PATCH/DELETE
+// `[cmd]` **In C-372 stand hier: 409 fuer JEDEN aktiven Plan.** Das
+// war die Vorgabe, und sie war falsch.
 //
-// `[cmd]` **Die Begruendung steht dort:** *,,MealPlanLog referenziert
-// `plan_item_id`. Wenn Items nachtraeglich geaendert werden, stimmt
-// die Compliance-History nicht mehr."*
+// **Tom, 2026-08-31:** *,,wenn wir den einschraenken dass er nicht
+// editieren kann dann bescheisst er sich ja selber im sinne: ach ich
+// kann nicht editieren dann melde ich einfach etwas anderes das ich
+// gegessen habe."*
 //
-// `[cmd]` **Am 2026-08-31 gemessen: `meal_plan_logs.plan_entry_id`
-// existiert und traegt `ON DELETE RESTRICT`** auf
-// `meal_plan_entries`. `[read]` **Die Datenbank verhindert also das
-// LOESCHEN einer protokollierten Position — nicht ihr AENDERN.**
-// **Genau die Luecke, die G-298 aufgemacht hat.**
+// `[read]` **Eine Sperre, die sich umgehen laesst, macht die Daten
+// schlechter.** **Wer den Plan nicht aendern darf, traegt beim Loggen
+// etwas Falsches ein — und dann steht im Protokoll eine Abweichung,
+// die keine war.**
+//
+//     geloggt         eingefroren -- das ist Vergangenheit
+//     nicht geloggt   frei, auch zukuenftige Plantage
+//
+// `[cmd]` **Der `resolution_check` an `meal_plan_logs` erzwingt es
+// bereits** — am 2026-09-01 aus `pg_constraint` gelesen:
+//
+//     pending    -> actual_meal_id NULL, confirmation_mode NULL,
+//                   confirmed_at NULL, skipped_at NULL
+//     confirmed  -> actual_meal_id NOT NULL, confirmed_at NOT NULL
+//     deviated   -> zusaetzlich deviation_kcal/-_pct NOT NULL
+//     skipped    -> skipped_at NOT NULL
+//
+// `[read]` **Ein `pending`-Log traegt nichts, was sich verfaelschen
+// liesse.** **Deshalb sperrt es nicht.**
 
 /**
  * `[cmd]` **Der CHECK an `meal_plans` kennt fuenf Werte** — am
@@ -44,129 +60,103 @@ export const PLAN_STATUS = [
 export type PlanStatus = (typeof PLAN_STATUS)[number]
 
 /**
- * Duerfen die Positionen dieses Plans geaendert werden?
- *
- * `[read]` **Nur `active` sperrt.** `[read]` **`completed` und
- * `archived` sperren NICHT** — der ADR nennt sie nicht, und ein
- * abgeschlossener Plan traegt sein Log bereits; wer ihn umbaut,
- * aendert Vergangenes. **Das ist eine offene Frage und im Bericht
- * benannt, nicht hier entschieden.**
- *
- * `[read]` **Die Regel heisst also: gesperrt ist, was laeuft.**
+ * `[cmd]` **Die vier Log-Zustaende**, aus
+ * `meal_plan_logs_status_check`.
  */
-export function positionenGesperrt(status: string): boolean {
-  return status === 'active'
+export const LOG_STATUS = [
+  'pending', 'confirmed', 'deviated', 'skipped',
+] as const
+export type LogStatus = (typeof LOG_STATUS)[number]
+
+/**
+ * Ist DIESE Position eingefroren?
+ *
+ * `[read]` **Die Frage gilt der Position, nicht dem Plan.** `[cmd]`
+ * **E-42: 409 nur, wenn diese Position ein Log mit
+ * `status <> 'pending'` traegt.**
+ *
+ * `[read]` **`null` heisst: kein Log** — dann ist sie frei. **Und ein
+ * `pending`-Log ist auch keines im Sinne der Sperre:** es haelt keinen
+ * Wert, der sich verfaelschen liesse.
+ *
+ * `[read]` **Der Plan-Status spielt keine Rolle mehr.** Ein aktiver
+ * Plan mit ungeloggten Positionen ist voll bearbeitbar — auch fuer
+ * zukuenftige Plantage.
+ */
+export function positionEingefroren(logStatus: string | null | undefined): boolean {
+  if (!logStatus) return false
+  return logStatus !== 'pending'
 }
 
 /**
- * Warum gesperrt — der Satz, den der Nutzer liest.
+ * Warum eingefroren — der Satz, den der Nutzer liest.
  *
- * `[read]` **Er nennt den Grund UND den Ausweg.** `[cmd]` **Der ADR
- * schreibt beides vor:** *,,Coach oder User muss Plan pausieren, eine
- * Kopie erstellen, bearbeiten und neu aktivieren."*
- *
- * `[read]` **Ein Satz ohne Ausweg waere die Sackgasse, vor der der
- * Auftrag warnt** — *gesperrt zu sein, ohne einen Weg zu haben, ist
- * schlimmer als gar keine Sperre.*
+ * `[read]` **Kein Ausweg noetig und keiner genannt.** Der Grund ist
+ * kein Zustand, der sich aufheben laesst: **diese Mahlzeit ist
+ * gegessen oder ausgelassen worden.** Was vergangen ist, bleibt.
  */
-export const AKTIV_GESPERRT_SATZ =
-  'Dieser Plan läuft. Seine Positionen sind eingefroren, weil das '
-  + 'Protokoll auf sie zeigt — nachträgliche Änderungen würden die '
-  + 'Einhaltungs-Auswertung verfälschen.'
+export const GELOGGT_SATZ =
+  'Diese Position ist protokolliert — sie wurde bestätigt, abgewichen '
+  + 'oder ausgelassen. Vergangenes bleibt stehen, damit die Auswertung '
+  + 'stimmt. Für heute und morgen kannst du frei planen.'
 
-export const AKTIV_AUSWEG_SATZ =
-  'Über „Kopie bearbeiten“ entsteht ein Entwurf mit denselben Wochen '
-  + 'und Positionen. Der laufende Plan bleibt mit seinem Protokoll '
-  + 'unberührt.'
+/** Die Marke an einer eingefrorenen Position. */
+export const GELOGGT_MARKE = 'protokolliert'
 
-// ══ DIE ZWEITE SPERRE: fremde Herkunft ══════════════════════════════
+// ══ C-375/E-42: das Flag heisst Weiterverkauf, nicht Bearbeiten ═════
 //
-// **Tom, E-41:** *,,die gekauften Plaene oder vom Coach brauchen ein
-// Flag das definiert ob es editable sein soll oder nicht."*
+// **Tom, 2026-08-31:** *,,wenn ich einen plan kaufe dann ist das mein
+// plan, aber ein Coach der einen mealplan auf marketplace verkauft,
+// dass der nicht wiederverkaufbar wird."*
 //
-// `[cmd]` **Gemessen am 2026-08-31: es gibt kein solches Flag** —
-// kein `editable`, `readonly`, `locked` oder `is_template` in
-// `nutrition` oder `coach`. **Der einzige Treffer war
-// `checkins.template_id`, und der gehoert zu Recovery.**
+// `[read]` **In C-372 stand hier `darf_bearbeiten`** — **das falsche
+// Flag.** `[cmd]` **E-42: gemeint ist ein Weiterverkaufsschutz, kein
+// Editierschutz.**
 //
-// `[read]` **Die Spalte gehoert Codex** (C-375 nennt sie:
-// `darf_bearbeiten boolean NOT NULL DEFAULT true`). **Hier steht die
-// Auswertung, damit sie fertig ist, wenn die Spalte kommt** — und
-// solange sie fehlt, ist die Antwort `true`, gemessen und nicht
-// behauptet.
+//     Weiterverkauf   ein gekaufter Plan darf nicht weiterverkauft
+//                     werden -- ein Lizenzthema
+//     Editieren       darf nie gesperrt werden -- der Nutzer besitzt
+//                     seinen Plan
+//
+// `[read]` **Die Anzeige sagt es, sie sperrt nicht.**
 
 /**
- * Darf der Empfaenger diesen Plan ueberhaupt aendern?
+ * Darf dieser Plan weiterverkauft werden?
  *
- * `[read]` **`undefined` heisst: die Spalte gibt es noch nicht.**
- * **Dann gilt `true`** — ein eigener Plan war nie gesperrt, und
- * fremde gibt es heute nicht (alle `plan_origin` sind
- * `self_created` oder `NULL`).
+ * `[cmd]` **Die Spalte heisst `darf_weiterverkaufen`, `NOT NULL
+ * DEFAULT true`.** `[read]` **`undefined` heisst: noch nicht
+ * gelesen** — dann gilt die Vorgabe.
+ *
+ * `[read]` **Diese Frage sperrt NICHTS in der Oberflaeche.** Es gibt
+ * keinen Weiterverkauf zu verhindern, solange es keinen Marktplatz
+ * gibt (E-39). **Das Flag wird angezeigt, damit die Einschraenkung
+ * sichtbar ist, bevor sie greift.**
  */
-export function darfBearbeiten(flag: boolean | null | undefined): boolean {
+export function darfWeiterverkaufen(flag: boolean | null | undefined): boolean {
   return flag !== false
 }
 
-export const FREMD_GESPERRT_SATZ =
-  'Der Ersteller dieses Plans hat Änderungen nicht freigegeben. '
-  + 'Du kannst ihn aktivieren und verwenden, aber nicht umbauen.'
+export const KEIN_WEITERVERKAUF_SATZ =
+  'Dieser Plan darf nicht weiterverkauft werden. Ändern und verwenden '
+  + 'kannst du ihn frei — er gehört dir.'
 
-// ══ BEIDE SPERREN ZUSAMMEN ══════════════════════════════════════════
+export const KEIN_WEITERVERKAUF_MARKE = 'nicht weiterverkäuflich'
+
+// ══ WAS HIER NICHT MEHR STEHT ═══════════════════════════════════════
 //
-// `[read]` **E-41: *,,Zwei Sperren, die nichts miteinander zu tun
-// haben."*** **`aktiv` kommt vom Log, `nicht editierbar` vom
-// Ersteller.**
+// `[cmd]` **`positionenGesperrt`, `AKTIV_GESPERRT_SATZ`,
+// `AKTIV_AUSWEG_SATZ`, `darfBearbeiten`, `FREMD_GESPERRT_SATZ`,
+// `sperreVon`, `SPERRE_MARKE` und `kopieHilft` sind entfernt** —
+// A-59.
 //
-// `[read]` **Die Anzeige muss sie unterscheiden**, weil der Ausweg
-// verschieden ist: bei `aktiv` hilft eine Kopie, bei fremder Herkunft
-// nicht.
-
-export type Sperre =
-  | { art: 'offen' }
-  | { art: 'aktiv'; satz: string; ausweg: string }
-  | { art: 'fremd'; satz: string }
-  /** Beides zugleich — der Kopierweg hilft dann nicht. */
-  | { art: 'beides'; satz: string }
-
-export function sperreVon(
-  status: string, darfFlag: boolean | null | undefined,
-): Sperre {
-  const aktiv = positionenGesperrt(status)
-  const fremd = !darfBearbeiten(darfFlag)
-  if (aktiv && fremd) {
-    return {
-      art: 'beides',
-      satz: `${FREMD_GESPERRT_SATZ} Außerdem läuft er gerade.`,
-    }
-  }
-  // `[read]` **Die fremde Herkunft steht VOR der Aktivsperre**, weil
-  // sie sich nicht durch Kopieren umgehen laesst — ein Ausweg, den es
-  // nicht gibt, waere schlimmer als keiner.
-  if (fremd) return { art: 'fremd', satz: FREMD_GESPERRT_SATZ }
-  if (aktiv) {
-    return { art: 'aktiv', satz: AKTIV_GESPERRT_SATZ, ausweg: AKTIV_AUSWEG_SATZ }
-  }
-  return { art: 'offen' }
-}
-
-/** Die Marke an der Karte — kurz, neben dem Status. */
-export const SPERRE_MARKE: Record<Sperre['art'], string | null> = {
-  offen: null,
-  aktiv: 'Positionen eingefroren',
-  fremd: 'nicht bearbeitbar',
-  beides: 'nicht bearbeitbar',
-}
-
-/**
- * Hilft eine Kopie?
- *
- * `[read]` **Nur bei der Aktivsperre.** Bei fremder Herkunft waere
- * die Kopie ein Weg um die Entscheidung des Erstellers herum — und
- * genau das soll das Flag verhindern.
- */
-export function kopieHilft(s: Sperre): boolean {
-  return s.art === 'aktiv'
-}
+// `[read]` **Sie gehoerten zu einer Sperre, die es so nicht geben
+// soll.** `[cmd]` **Und `planKopieren` faellt mit ihnen:** *,,Kopie
+// bearbeiten"* war die Antwort auf diese Sperre.
+//
+// `[read]` **Einen Plan zu duplizieren mag sinnvoll sein** — aber
+// dann als Bibliotheksfunktion mit eigener Begruendung, nicht als
+// Ausweg aus einer aufgehobenen Regel. **Der Auftrag laesst die Wahl,
+// und das ist sie.**
 
 // ══ C-372: die Wochen eines neuen Plans ═════════════════════════════
 //
@@ -279,3 +269,107 @@ export const NICHT_GEBAUT = [
   'Teilen an einen Coach — E-40 stellt es zurück',
   'Kaufen im Marktplatz — E-39 stellt es zurück',
 ] as const
+
+
+// ════════════════════════════════════════════════════════════════════
+// C-377/C-373 — der abgelaufene Plan stellt eine Frage
+// ════════════════════════════════════════════════════════════════════
+//
+// **Tom, 2026-08-31:** *,,ist ein kompletter plan abgelaufen muss eine
+// meldung kommen und geklaert werden wie es weiter geht,
+// renew/anderen wochenplan/manuelle erfassung."*
+//
+// `[cmd]` **Heute steht dort *aktiv · abgelaufen* und sonst nichts**
+// (G-298 zeigt es an, G-304 hat belegt, dass es keinen Weg gibt).
+//
+// ══ UND DAMIT KLAERT SICH C-373 ═════════════════════════════════════
+//
+// `[cmd]` **In G-304 gemessen: es gibt keine Funktion, die einen
+// Lebenszyklus ausfuehrt, und kein `pg_cron`.**
+//
+// `[read]` **Die Meldung beim Ablauf IST die Ausfuehrung.** **Kein
+// Zeitplaner noetig** — dieselbe Antwort wie bei C-358:
+//
+//     rollover    der Vorschlag lautet „neu starten"
+//     sequence    der Vorschlag nennt den Folgeplan
+//     once        der Vorschlag ist die Bibliothek
+//
+// `[read]` **Der Nutzer waehlt** — auch bei `rollover`. `[cmd]`
+// **`SPEC_03` Flow 11-13 sagt *,,startet automatisch neu"*;** `[read]`
+// **ohne Zeitplaner gibt es kein „automatisch", und ein Vorschlag,
+// den jemand bestaetigt, ist ehrlicher als ein stiller Neustart.**
+
+/** Die drei Wege aus Toms Satz. */
+export const ABLAUF_WEGE = ['neu_starten', 'anderer_plan', 'ohne_plan'] as const
+export type AblaufWeg = (typeof ABLAUF_WEGE)[number]
+
+export const WEG_TEXT: Record<AblaufWeg, string> = {
+  neu_starten: 'Denselben Plan neu starten',
+  anderer_plan: 'Einen anderen Plan aktivieren',
+  ohne_plan: 'Ohne Plan weitermachen',
+}
+
+export const WEG_ERKLAERUNG: Record<AblaufWeg, string> = {
+  neu_starten: 'Die Wochen beginnen ab dem gewählten Startdatum von vorn. '
+    + 'Das Protokoll des abgelaufenen Durchgangs bleibt stehen.',
+  anderer_plan: 'Du wählst einen Plan aus der Bibliothek und aktivierst ihn.',
+  ohne_plan: 'Der Plan wird abgeschlossen. Du erfasst weiter von Hand — '
+    + 'ohne Plan-Einträge im Tagebuch.',
+}
+
+/**
+ * Welcher Weg wird vorgeschlagen? — C-373.
+ *
+ * `[read]` **Der Lebenszyklus bestimmt den VORSCHLAG, nicht die
+ * Handlung.** `[cmd]` **`lifecycle_type` kennt `once`, `rollover`,
+ * `sequence` oder `NULL`** (`meal_plans_lifecycle_type_check`).
+ *
+ * `[read]` **`NULL` heisst: nicht festgelegt** — dann gibt es keinen
+ * Vorschlag, und alle drei Wege stehen gleichwertig da. **Einen zu
+ * bevorzugen waere eine Behauptung ueber eine Wahl, die niemand
+ * getroffen hat.**
+ */
+export function vorschlagFuer(
+  lifecycle: string | null | undefined,
+): AblaufWeg | null {
+  if (lifecycle === 'rollover') return 'neu_starten'
+  if (lifecycle === 'sequence') return 'anderer_plan'
+  if (lifecycle === 'once') return 'anderer_plan'
+  return null
+}
+
+/**
+ * Warum dieser Vorschlag — der Satz am gewaehlten Weg.
+ *
+ * `[read]` **Er nennt den Lebenszyklus als Grund**, damit der Nutzer
+ * sieht, dass der Vorschlag aus seiner eigenen Wahl beim Aktivieren
+ * stammt.
+ */
+export function vorschlagSatz(lifecycle: string | null | undefined): string | null {
+  if (lifecycle === 'rollover') {
+    return 'Du hattest „beginnt danach von vorn" gewählt — deshalb der Vorschlag, '
+      + 'ihn neu zu starten.'
+  }
+  if (lifecycle === 'sequence') {
+    return 'Du hattest „geht in einen Folgeplan über" gewählt — der hinterlegte '
+      + 'Folgeplan steht in der Bibliothek.'
+  }
+  if (lifecycle === 'once') {
+    return 'Du hattest „läuft einmal ab" gewählt — der Plan ist damit zu Ende.'
+  }
+  return 'Für diesen Plan ist kein Lebenszyklus hinterlegt — die drei Wege '
+    + 'stehen deshalb gleichwertig.'
+}
+
+/** Die Frage selbst — sie steht ueber den drei Wegen. */
+export const ABLAUF_FRAGE_TITEL = 'Dieser Plan ist abgelaufen'
+
+export function ablaufFrage(bis: string, tage: number): string {
+  return `Die letzte Planwoche endete am ${deutschesDatum(bis)} — vor ${tage} `
+    + 'Tagen. Wie möchtest du weitermachen?'
+}
+
+function deutschesDatum(iso: string): string {
+  const [j, m, t] = iso.split('-')
+  return t && m && j ? `${Number(t)}.${Number(m)}.${j}` : iso
+}

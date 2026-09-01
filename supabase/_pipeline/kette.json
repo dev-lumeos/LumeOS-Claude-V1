@@ -1367,6 +1367,15 @@
       "depends_on": [
         "150"
       ]
+    },
+    {
+      "id": "371",
+      "path": "supabase/_pipeline/05_user_tabellen/371_recipe_source_plan_origin_buddy_resale.sql",
+      "kind": "sql",
+      "creates": "C-371/C-374/C-375: Rezept- und Planherkunft mit Buddy sowie Weiterverkaufsrecht ohne neuen Schreibweg",
+      "depends_on": [
+        "342"
+      ]
     }
   ]
 }

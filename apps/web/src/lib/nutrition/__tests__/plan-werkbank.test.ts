@@ -1,7 +1,8 @@
-// C-372 / G-306 / C-375: die Werkbank und die zwei Sperren.
+// C-372 / G-306 / C-375 / C-377 / C-373: Werkbank, Sperre, Ablauf.
 //
-// **Grundlage: E-40, E-41, ADR_IMPROVEMENTS_PACKAGE #17,
-// SPEC_01 Abschnitt 8/9, SPEC_03 Flow 3.**
+// **Grundlage: E-40, E-41, E-42** (E-42 loest
+// `ADR_IMPROVEMENTS_PACKAGE` #17 ab), **SPEC_01 Abschnitt 8/9,
+// SPEC_03 Flow 3 und 11-13.**
 //
 // `[read]` **Die Waechter messen die Wirkung, nicht das Wort.**
 import test from 'node:test'
@@ -11,12 +12,13 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import {
-  PLAN_STATUS, positionenGesperrt, AKTIV_GESPERRT_SATZ, AKTIV_AUSWEG_SATZ,
-  darfBearbeiten, FREMD_GESPERRT_SATZ,
-  sperreVon, SPERRE_MARKE, kopieHilft,
+  PLAN_STATUS, LOG_STATUS, positionEingefroren, GELOGGT_SATZ, GELOGGT_MARKE,
+  darfWeiterverkaufen, KEIN_WEITERVERKAUF_SATZ, KEIN_WEITERVERKAUF_MARKE,
+  ABLAUF_WEGE, WEG_TEXT, WEG_ERKLAERUNG, vorschlagFuer, vorschlagSatz,
   wochenAnker, wochenDaten, tageDerWoche, verschiebung, tageVerschieben,
   WOCHEN_MIN, WOCHEN_MAX, NICHT_GEBAUT,
 } from '../plan-werkbank'
+import { pruefeProtokoll } from '../plan-write'
 
 // `[cmd]` **Pfad aus der Lage DIESER Datei** — mit `process.cwd()`
 // gruen aus der Wurzel und rot im Gate (G-291).
@@ -42,86 +44,6 @@ test('die Dateiproben finden ihre Dateien — unabhaengig vom Startort', () => {
   }
   assert.ok(fs.existsSync(path.join(WURZEL, 'pnpm-workspace.yaml')),
     `WURZEL zeigt nicht auf das Repo: ${WURZEL}`)
-})
-
-// ══ G-306 / ADR #17: die Aktivsperre ═════════════════════════════
-
-test('G-306: nur ein AKTIVER Plan sperrt seine Positionen', () => {
-  // `[cmd]` **ADR #17: `MealPlan.status = 'active'` -> READ-ONLY.**
-  // `[read]` **Nur `active`** — der ADR nennt keinen anderen Status,
-  // und ein Entwurf muss bearbeitbar sein, sonst gibt es keine
-  // Werkbank.
-  assert.equal(positionenGesperrt('active'), true)
-  assert.equal(positionenGesperrt('assigned'), false)
-  assert.equal(positionenGesperrt('paused'), false)
-  // `[read]` **`completed`/`archived` sperren NICHT** — offene Frage,
-  // im Bericht benannt, hier nicht heimlich entschieden.
-  assert.equal(positionenGesperrt('completed'), false)
-  assert.equal(positionenGesperrt('archived'), false)
-  // Und alle fuenf CHECK-Werte sind bekannt.
-  assert.equal(PLAN_STATUS.length, 5)
-})
-
-test('G-306: der Sperrsatz nennt den Grund UND den Ausweg', () => {
-  // **Der Auftrag: *,,gesperrt zu sein, ohne einen Weg zu haben, ist
-  // schlimmer als gar keine Sperre."***
-  //
-  // `[cmd]` **Der ADR nennt den Ausweg woertlich:** *,,pausieren, eine
-  // Kopie erstellen, bearbeiten und neu aktivieren."*
-  assert.match(AKTIV_GESPERRT_SATZ, /Protokoll/,
-    'der Grund aus dem ADR fehlt')
-  assert.match(AKTIV_AUSWEG_SATZ, /Kopie bearbeiten/,
-    'der Ausweg nennt den Knopf nicht')
-  assert.match(AKTIV_AUSWEG_SATZ, /unberührt|unberuehrt/,
-    'dass das Original bleibt, steht nicht da')
-})
-
-// ══ C-375: die zweite Sperre ═════════════════════════════════════
-
-test('C-375: fehlt das Flag, ist die Antwort true — gemessen, nicht geraten', () => {
-  // `[cmd]` **Am 2026-08-31 gemessen: es gibt KEINE Spalte
-  // `darf_bearbeiten`, `editable`, `readonly` oder `locked` in
-  // `nutrition` oder `coach`.** `[read]` **`undefined` heisst: noch
-  // nicht hinterlegt** — und ein eigener Plan war nie gesperrt.
-  assert.equal(darfBearbeiten(undefined), true)
-  assert.equal(darfBearbeiten(null), true)
-  assert.equal(darfBearbeiten(true), true)
-  // Nur ein ausdrueckliches `false` sperrt.
-  assert.equal(darfBearbeiten(false), false)
-})
-
-test('E-41: die zwei Sperren werden unterschieden — sie haben verschiedene Auswege', () => {
-  // **E-41:** *,,Zwei Sperren, die nichts miteinander zu tun haben."*
-  const offen = sperreVon('assigned', true)
-  const aktiv = sperreVon('active', true)
-  const fremd = sperreVon('assigned', false)
-  const beides = sperreVon('active', false)
-
-  assert.equal(offen.art, 'offen')
-  assert.equal(aktiv.art, 'aktiv')
-  assert.equal(fremd.art, 'fremd')
-  assert.equal(beides.art, 'beides')
-
-  // `[read]` **Die Kopie hilft NUR bei der Aktivsperre.** Bei fremder
-  // Herkunft fuehrte sie um die Entscheidung des Erstellers herum —
-  // und ein Ausweg, den es nicht gibt, waere schlimmer als keiner.
-  assert.equal(kopieHilft(aktiv), true)
-  assert.equal(kopieHilft(fremd), false)
-  assert.equal(kopieHilft(beides), false)
-  assert.equal(kopieHilft(offen), false)
-
-  // Und die Marken sind verschieden — sonst sehen beide gleich aus.
-  assert.equal(SPERRE_MARKE.offen, null)
-  assert.notEqual(SPERRE_MARKE.aktiv, SPERRE_MARKE.fremd)
-  assert.match(String(SPERRE_MARKE.aktiv), /eingefroren/)
-})
-
-test('E-41: bei fremder Herkunft gewinnt sie — auch wenn der Plan laeuft', () => {
-  // `[read]` **Sonst bekaeme der Nutzer einen Kopier-Hinweis, der
-  // ihm nicht hilft.**
-  const beides = sperreVon('active', false)
-  assert.match(beides.art === 'beides' ? beides.satz : '', /nicht freigegeben/)
-  assert.equal(kopieHilft(beides), false)
 })
 
 // ══ C-372: die Wochen ════════════════════════════════════════════
@@ -180,47 +102,232 @@ test('C-372: beim Aktivieren verschieben sich alle Wochen gleich', () => {
 
 // ══ Die Verdrahtung ══════════════════════════════════════════════
 
+// ══ G-306/E-42: die Sperre haengt am PROTOKOLL ═══════════════════
+
+test('G-306/E-42: nur eine geloggte Position ist eingefroren', () => {
+  // **Tom, 2026-08-31:** *,,wenn wir den einschraenken dass er nicht
+  // editieren kann dann bescheisst er sich ja selber."*
+  //
+  // `[read]` **In C-372 sperrte JEDER aktive Plan.** `[cmd]` **E-42:
+  // 409 nur, wenn DIESE Position ein Log mit `status <> 'pending'`
+  // traegt.**
+  assert.equal(positionEingefroren(null), false, 'kein Log heisst frei')
+  assert.equal(positionEingefroren(undefined), false)
+  // `[cmd]` **Der `resolution_check`: ein `pending`-Log hat kein
+  // `actual_meal_id` und kein `confirmed_at`** — es gibt nichts zu
+  // verfaelschen.
+  assert.equal(positionEingefroren('pending'), false,
+    'ein pending-Log sperrt — dann ist auch der Zukunftstag gesperrt')
+  assert.equal(positionEingefroren('confirmed'), true)
+  assert.equal(positionEingefroren('deviated'), true)
+  assert.equal(positionEingefroren('skipped'), true)
+  // Alle vier Zustaende des CHECKs sind bekannt.
+  assert.equal(LOG_STATUS.length, 4)
+  assert.equal(PLAN_STATUS.length, 5)
+})
+
+test('G-306/E-42: der Satz nennt keinen Ausweg — es gibt keinen noetig', () => {
+  // `[read]` **Vergangenes bleibt.** Anders als bei der alten Sperre
+  // gibt es keinen Zustand, den man aufheben koennte — **und ein
+  // Ausweg, der nichts oeffnet, waere eine Luege.**
+  assert.match(GELOGGT_SATZ, /protokolliert/)
+  assert.doesNotMatch(GELOGGT_SATZ, /Kopie bearbeiten/,
+    'der Satz nennt einen Ausweg, den es nicht mehr gibt')
+  // Er sagt stattdessen, was WEITER geht.
+  assert.match(GELOGGT_SATZ, /heute und morgen|frei planen/)
+  assert.equal(GELOGGT_MARKE, 'protokolliert')
+})
+
+test('G-306/E-42: der Schreibweg WEIST AB — gemessen, nicht gelesen', async () => {
+  // `[cmd]` **In der Sabotageprobe kamen S6 und S8 durch:** der
+  // Schreibweg konnte aufhoeren zu pruefen, und jeder Textwaechter
+  // blieb gruen.
+  //
+  // `[read]` **Genau die Klasse, die G-216/G-247/G-246 beschreiben** —
+  // das Wort steht da, die Wirkung fehlt. **Also wird hier die Wirkung
+  // gemessen: kommt ein Fehler, und welcher?**
+  //
+  // Die Attrappe merkt sich, wonach gefragt wurde.
+  const gefragt: Record<string, unknown> = {}
+  const db = (zeilen: Array<{ status: string }>) => ({
+    from(tabelle: string) {
+      gefragt.tabelle = tabelle
+      const kette = {
+        select(s: string) { gefragt.select = s; return kette },
+        eq(f: string, w: unknown) { gefragt.eqFeld = f; gefragt.eqWert = w; return kette },
+        neq(f: string, w: unknown) { gefragt.neqFeld = f; gefragt.neqWert = w; return kette },
+        limit() { return Promise.resolve({ data: zeilen, error: null }) },
+      }
+      return kette
+    },
+  })
+
+  // 1. Eine Position OHNE Log geht durch.
+  await pruefeProtokoll(db([]) as never, 'e-frei')
+
+  // 2. Eine geloggte Position wird abgewiesen — mit 409 und dem Satz.
+  for (const status of ['confirmed', 'deviated', 'skipped']) {
+    const fehler = await pruefeProtokoll(db([{ status }]) as never, 'e-log')
+      .then(() => null, (e: unknown) => e as { code?: string; message?: string })
+    assert.ok(fehler, `${status} wird nicht abgewiesen`)
+    assert.equal(fehler?.code, 'POSITION_GELOGGT',
+      `${status} wirft ${fehler?.code} statt POSITION_GELOGGT`)
+    assert.equal(fehler?.message, GELOGGT_SATZ)
+  }
+
+  // 3. `[cmd]` **Die Abfrage schliesst `pending` aus, nichts anderes.**
+  // `[read]` **S8 tauschte 'pending' gegen 'confirmed'** — dann laege
+  // ein confirmed-Log nicht mehr in der Antwort, und der Zukunftstag
+  // waere gesperrt statt der Vergangenheit.
+  assert.equal(gefragt.tabelle, 'meal_plan_logs')
+  assert.equal(gefragt.eqFeld, 'plan_entry_id')
+  assert.equal(gefragt.eqWert, 'e-log')
+  assert.equal(gefragt.neqFeld, 'status')
+  assert.equal(gefragt.neqWert, 'pending',
+    `die Abfrage schliesst „${gefragt.neqWert}" aus statt „pending"`)
+})
+
 test('G-306: die Sperre steht im SCHREIBWEG, nicht nur in der Anzeige', () => {
   // `[read]` **Ein ausgegrauter Knopf ist eine Bitte.** `[cmd]`
   // **Und die Datenbank sperrt nicht:** am 2026-08-31 gemessen ging
   // ein `UPDATE` auf eine Position eines aktiven Plans durch.
   const s = ohneKommentare(SCHREIB)
-  assert.match(s, /positionenGesperrt\(status\)/,
-    'der Status wird im Schreibweg nicht geprueft')
-  assert.match(s, /PLAN_AKTIV/, 'der 409-Code fehlt')
+  assert.match(s, /positionEingefroren\(treffer\.status\)/,
+    'das Protokoll wird im Schreibweg nicht geprueft')
+  assert.match(s, /POSITION_GELOGGT/, 'der 409-Code fehlt')
 
-  // `[read]` **Gezaehlt, nicht gesucht:** drei Vorgaenge (anlegen,
-  // aendern, loeschen) muessen ALLE pruefen.
-  const rufe = (s.match(/await pruefePositionsRecht\(/g) ?? []).length
-  assert.equal(rufe, 3, `${rufe} von 3 Vorgaengen pruefen die Sperre`)
+  // `[read]` **Gezaehlt, nicht gesucht.** `[cmd]` **Aendern und
+  // Loeschen pruefen das Protokoll — das ANLEGEN nicht**, denn eine
+  // Position, die es noch nicht gibt, kann nicht geloggt sein.
+  const protokoll = (s.match(/await pruefeProtokoll\(/g) ?? []).length
+  assert.equal(protokoll, 2,
+    `${protokoll} von 2 Vorgaengen pruefen das Protokoll (aendern, loeschen)`)
+  // Die Herkunft wird bei allen dreien geprueft — G-269 gilt weiter.
+  const herkunft = (s.match(/await pruefeHerkunft\(/g) ?? []).length
+  assert.equal(herkunft, 4,
+    `${herkunft} Herkunftspruefungen — erwartet 4 (3 Positionen + Ablauf)`)
 
-  // Und die alte, schwaechere Pruefung ist weg — A-59.
-  assert.doesNotMatch(s, /(?<![a-zA-Z0-9_])pruefeFreigabe(?![a-zA-Z0-9_])/,
-    'die alte Pruefung (nur Herkunft) lebt weiter')
+  // `[cmd]` **A-59: die Sperre aus C-372 ist entfernt, nicht
+  // auskommentiert.**
+  assert.doesNotMatch(s, /(?<![a-zA-Z0-9_])positionenGesperrt(?![a-zA-Z0-9_])/,
+    'die alte Plansperre lebt weiter')
+  assert.doesNotMatch(s, /(?<![a-zA-Z0-9_])planKopieren(?![a-zA-Z0-9_])/,
+    '„Kopie bearbeiten" lebt weiter — der Ausweg ohne Sperre')
 })
 
-test('G-306/ADR #17: der Fehler ist 409, nicht 403', () => {
-  // `[cmd]` **Der ADR schreibt es vor:** *,,API gibt 409 Conflict
-  // zurueck."* `[read]` **Nicht 403** — dort fehlt das Recht
-  // dauerhaft; hier ist der Zustand im Weg und laesst sich aendern.
+test('G-306/E-42: der Fehler ist 409 und heisst nach der Position', () => {
   const m = ohneKommentare(MODELL)
-  assert.match(m, /\| 'PLAN_AKTIV'/, 'der Code fehlt im Typ')
+  assert.match(m, /\| 'POSITION_GELOGGT'/, 'der Code fehlt im Typ')
+  assert.doesNotMatch(m, /\| 'PLAN_AKTIV'/, 'der alte Code lebt weiter')
   const start = m.indexOf('httpStatusForDiaryError')
-  const block = m.slice(start, start + 700)
-  assert.match(block, /case 'PLAN_AKTIV':\s*\n\s*return 409/,
-    'PLAN_AKTIV bildet nicht auf 409 ab')
+  const block = m.slice(start, start + 800)
+  assert.match(block, /case 'POSITION_GELOGGT':\s*\n\s*return 409/,
+    'POSITION_GELOGGT bildet nicht auf 409 ab')
 })
 
-test('C-372: die zwei Vorgaenge sind in der Route erreichbar', () => {
-  // `[cmd]` **A-59/G-192: ein Schreibweg ohne Aufrufer ist tot.**
+// ══ C-375/E-42: das Flag heisst Weiterverkauf ════════════════════
+
+test('C-375/E-42: das Flag sperrt nichts — es sagt etwas', () => {
+  // **Tom:** *,,wenn ich einen plan kaufe dann ist das mein plan."*
+  // `[read]` **`darf_bearbeiten` war das falsche Flag.**
+  assert.equal(darfWeiterverkaufen(undefined), true)
+  assert.equal(darfWeiterverkaufen(null), true)
+  assert.equal(darfWeiterverkaufen(true), true)
+  assert.equal(darfWeiterverkaufen(false), false)
+  // Der Satz sagt ausdruecklich, dass Aendern erlaubt bleibt.
+  assert.match(KEIN_WEITERVERKAUF_SATZ, /weiterverkauft/)
+  assert.match(KEIN_WEITERVERKAUF_SATZ, /Ändern|ändern/,
+    'der Satz sagt nicht, dass Aendern erlaubt bleibt')
+  assert.equal(KEIN_WEITERVERKAUF_MARKE, 'nicht weiterverkäuflich')
+})
+
+test('C-375: die Oberflaeche sperrt keinen Plan mehr', () => {
+  // `[cmd]` **E-42: JEDER Plan ist bearbeitbar** — auch ein aktiver,
+  // auch ein gekaufter.
+  const u = ohneKommentare(UI)
+  assert.doesNotMatch(u, /(?<![a-zA-Z0-9_])kopieHilft(?![a-zA-Z0-9_])/,
+    'der Kopierknopf lebt weiter')
+  assert.doesNotMatch(u, /(?<![a-zA-Z0-9_])sperreVon(?![a-zA-Z0-9_])/,
+    'die alte Sperrlogik lebt weiter')
+  // Der Bearbeiten-Knopf haengt an KEINER Bedingung mehr.
+  assert.match(u, /\{offen \? 'In der Werkbank' : 'Bearbeiten'\}/,
+    'der Bearbeiten-Knopf fehlt')
+})
+
+// ══ C-377/C-373: die Frage beim Ablauf ═══════════════════════════
+
+test('C-377: drei Wege, und jeder erklaert sich', () => {
+  // **Tom:** *,,renew/anderen wochenplan/manuelle erfassung."*
+  assert.equal(ABLAUF_WEGE.length, 3)
+  for (const w of ABLAUF_WEGE) {
+    assert.ok(WEG_TEXT[w], `${w} ohne Text`)
+    assert.ok(WEG_ERKLAERUNG[w].length > 30, `${w} ohne Erklaerung`)
+  }
+  assert.match(WEG_TEXT.neu_starten, /neu starten/)
+  assert.match(WEG_TEXT.anderer_plan, /anderen Plan/)
+  assert.match(WEG_TEXT.ohne_plan, /Ohne Plan/)
+})
+
+test('C-373: der Lebenszyklus bestimmt den VORSCHLAG, nicht die Handlung', () => {
+  // `[cmd]` **In G-304 gemessen: es gibt keine Funktion, die einen
+  // Lebenszyklus ausfuehrt, und kein `pg_cron`.** `[read]` **Die
+  // Meldung IST die Ausfuehrung** — dieselbe Antwort wie bei C-358.
+  assert.equal(vorschlagFuer('rollover'), 'neu_starten')
+  assert.equal(vorschlagFuer('sequence'), 'anderer_plan')
+  assert.equal(vorschlagFuer('once'), 'anderer_plan')
+  // `[read]` **`NULL` heisst: nicht festgelegt** — dann gibt es
+  // keinen Vorschlag, und alle drei stehen gleichwertig da.
+  assert.equal(vorschlagFuer(null), null)
+  assert.equal(vorschlagFuer(undefined), null)
+  // Und der Grund wird genannt, damit der Vorschlag nachvollziehbar ist.
+  assert.match(String(vorschlagSatz('rollover')), /von vorn/)
+  assert.match(String(vorschlagSatz('sequence')), /Folgeplan/)
+  assert.match(String(vorschlagSatz(null)), /kein Lebenszyklus/)
+})
+
+test('C-377: der Schreibweg kennt die drei Wege', () => {
+  const s = ohneKommentare(SCHREIB)
+  assert.match(s, /export async function ablaufKlaeren/, 'der Weg fehlt')
+  // `neu_starten` haelt den Plan aktiv und zaehlt hoch.
+  const von = s.indexOf('export async function ablaufKlaeren')
+  const bis = s.indexOf('\nexport ', von + 10)
+  const block = s.slice(von, bis === -1 ? undefined : bis)
+  // `[cmd]` **S15 kam durch:** `rollover_count: neuZaehler` steht
+  // ZWEIMAL im Block — im `update` und im Rueckgabewert. **Das
+  // Entfernen des ersten liess den zweiten stehen.**
+  //
+  // `[read]` **Also gezaehlt, nicht gesucht** (A-59/G-216).
+  const zaehler = (block.match(/rollover_count: neuZaehler/g) ?? []).length
+  assert.equal(zaehler, 2,
+    `${zaehler} von 2 Stellen setzen den Zaehler (update + Rueckgabe)`)
+  assert.match(block, /const neuZaehler = \(v\.rollover_count \?\? 0\) \+ 1/,
+    'der Zaehler wird nicht aus dem alten Stand erhoeht')
+  assert.match(block, /wochenAufStartdatumSchieben\(db, eingabe\.id/,
+    'beim Neustart wandern die Wochen nicht mit')
+  // Die anderen beiden schliessen ab — `completed`, nicht `archived`.
+  assert.match(block, /status: 'completed'/,
+    'der Plan wird nicht abgeschlossen')
+  assert.doesNotMatch(block, /status: 'archived'/,
+    'der Plan wird weggeraeumt statt abgeschlossen')
+  // Und die Route kennt ihn.
   const r = ohneKommentare(ROUTE)
-  assert.match(r, /art === 'plan_werkbank'/, 'plan_werkbank fehlt')
-  assert.match(r, /art === 'plan_kopieren'/, 'plan_kopieren fehlt')
-  // `[read]` **Die Meldung ist ueber zwei Zeilen umbrochen** — der
-  // erste Waechter suchte sie am Stueck und fiel darueber.
-  const ohneUmbruch = r.replace(/'[\s]*\+[\s]*'/g, '')
-  assert.match(ohneUmbruch, /plan_werkbank, plan_kopieren/,
-    'die Fehlermeldung nennt sie nicht')
+  assert.match(r, /art === 'ablauf_klaeren'/, 'die Route fehlt')
+})
+
+test('C-377: die Frage steht nur an einem Plan, der noch laeuft', () => {
+  // `[cmd]` **Am 2026-09-01 im Browser gemessen:** nach dem Weg
+  // *,,anderen Plan aktivieren"* stand der Plan auf `completed`, **und
+  // die Frage blieb trotzdem stehen.**
+  //
+  // `[read]` **Ein Plan, der die Frage beantwortet hat, darf sie nicht
+  // erneut stellen** — sonst ignoriert die Anzeige die Entscheidung
+  // des Nutzers.
+  const u = ohneKommentare(UI)
+  assert.match(u, /const laeuftNoch = p\.status === 'active' \|\| p\.status === 'assigned'/,
+    'die Frage haengt nicht am Planzustand')
+  assert.match(u, /laufzeit\.art === 'abgelaufen' && laeuftNoch/,
+    'die Frage erscheint auch an einem abgeschlossenen Plan')
+  assert.match(u, /<AblaufFrage/, 'die Frage wird nicht gerendert')
 })
 
 test('C-372/E-40: das Formular fragt Wochen — und NICHT Startdatum', () => {
@@ -231,7 +338,12 @@ test('C-372/E-40: das Formular fragt Wochen — und NICHT Startdatum', () => {
   // Browserlauf hat daran „Startdatum: true" gemeldet (G-216).
   const u = ohneKommentare(UI)
   const start = u.indexOf('export function NeuerPlanForm')
-  const block = u.slice(start, u.indexOf('export function KopieKnopf'))
+  // `[cmd]` **`KopieKnopf` ist in G-306 entfernt** — `indexOf`
+  // liefert dann -1, und der Block umfasste die ganze Datei.
+  // **Dann traf die Datumsprobe das Feld der AblaufFrage**, das
+  // dort richtig ist (C-377, Schritt 5 von Flow 3).
+  const naechste = u.indexOf('\nexport function', start + 10)
+  const block = u.slice(start, naechste === -1 ? undefined : naechste)
   assert.match(block, /aria-label="Anzahl Wochen"/, 'das Wochenfeld fehlt')
   assert.doesNotMatch(block, /type="date"/,
     'das Formular hat ein Datumsfeld — E-40 verbietet es hier')
@@ -251,89 +363,25 @@ test('C-372/E-40: das Formular fragt Wochen — und NICHT Startdatum', () => {
     'das Anlegen schreibt doch ein Startdatum — E-40 verbietet es hier')
 })
 
-test('G-306: die Kopie ist ein ENTWURF — sonst fuehrte der Ausweg im Kreis', () => {
-  const s = ohneKommentare(SCHREIB)
-  const start = s.indexOf('export async function planKopieren')
-  assert.notEqual(start, -1)
-  // `[read]` **Bis zum naechsten `export`, nicht auf gut Glueck
-  // 3000 Zeichen** — der erste Waechter schnitt bei 3000 ab und sah
-  // `meal_plan_entries` (bei 3731) nicht mehr.
-  const naechste = s.indexOf('\nexport ', start + 10)
-  const block = s.slice(start, naechste === -1 ? undefined : naechste)
-  assert.match(block, /status: 'assigned'/,
-    'die Kopie ist nicht als Entwurf angelegt')
-  // `[read]` **Das Log wird NICHT kopiert** — es gehoert zum
-  // Original, und genau darum geht der ADR diesen Weg.
-  assert.doesNotMatch(block, /meal_plan_logs/,
-    'das Protokoll wird mitkopiert — das Original verlaere seine Historie')
-  // `[read]` **Gezaehlt, nicht gesucht.** Die Sabotageprobe hat den
-  // Positions-Insert auf `meal_plan_days` umgebogen — der Name steht
-  // achtmal in der Datei, und `assert.match` fand ein anderes
-  // Vorkommen. **G-216 zum wiederholten Mal.**
-  for (const tab of ['meal_plan_weeks', 'meal_plan_days', 'meal_plan_entries']) {
-    assert.match(block, new RegExp(`from\\('${tab}'\\)`),
-      `${tab} wird nicht kopiert`)
-  }
-  // **Die Wirkung: der Positions-Insert haengt an `meal_plan_entries`,
-  // nicht an irgendeiner Tabelle.**
-  assert.match(block, /from\('meal_plan_entries'\)\.insert\(/,
-    'die Positionen werden in eine andere Tabelle geschrieben')
-  // Und je Ebene genau ein Insert — Woche, Tag, Position.
-  const inserts = (block.match(/from\('meal_plan_days'\)\s*\n?\s*\.insert/g) ?? [])
-  assert.equal(inserts.length, 1,
-    `${inserts.length} Tages-Inserts im Kopierblock — erwartet 1`)
-})
-
-test('G-306: der Ausweg ist im Browser erreichbar — nicht nur im Schreibweg', () => {
-  // **Der Auftrag: ein Knopf, sonst ist die Regel eine Sackgasse.**
-  const u = ohneKommentare(UI)
-  assert.match(u, /Kopie bearbeiten/, 'der Knopf fehlt')
-  assert.match(u, /art: 'plan_kopieren'/, 'der Knopf ruft nichts auf')
-  // Und er haengt an `kopieHilft`, nicht an einer eigenen Bedingung.
-  // `[read]` **Gezaehlt:** `kopieHilft` steht zweimal — am Knopf und
-  // am Ersatztext. **Die Sabotageprobe hat eines ersetzt, und
-  // `assert.match` fand das andere.**
-  const rufe = (u.match(/kopieHilft\(sperre\)/g) ?? []).length
-  assert.equal(rufe, 2,
-    `${rufe} Stellen fragen die Regel — erwartet 2 (Knopf und Ersatztext)`)
-  // Und der Knopf haengt an der Regel, nicht an einer eigenen Bedingung.
-  assert.match(u, /\{kopieHilft\(sperre\) && \(/,
-    'der Kopierknopf entscheidet selbst')
-  // Die Werkbank ist gerendert — A-59.
-  const a = ohneKommentare(ANSICHT)
-  assert.match(a, /<PlanWerkbank\s/, 'die Werkbank wird nicht gerendert')
-})
-
-test('C-372: beim Aktivieren wandern die Wochen mit — Flow 3, Schritt 5', () => {
-  // `[read]` **Ohne diesen Schritt stuende ein Plan aus der Werkbank
-  // an seinem ANKER statt am gewaehlten Startdatum** — der Nutzer
-  // saehe seine Tage in der falschen Woche.
+test('G-306/E-42: „Kopie bearbeiten" ist entfernt, nicht abgeschaltet', () => {
+  // `[cmd]` **E-42 hebt die Sperre auf, zu der dieser Knopf der
+  // Ausweg war.** `[read]` **Ein Ausweg ohne Sperre ist keiner** —
+  // und ein Knopf ohne Grund ist genau das, was A-59 verbietet.
   //
-  // `[cmd]` **An der Datenbank gegengeprueft:** zwei Wochen ab
-  // 2026-08-31, verschoben auf den 2026-09-14, ergeben 2026-09-14 und
-  // 2026-09-21 — **beide Wochen und alle 14 Tage um +14.**
+  // `[read]` **Der Auftrag liess die Wahl:** *,,Falls du ihn behalten
+  // willst: sag warum, aber nicht als Ausweg aus einer Sperre."*
+  // **Einen Plan zu duplizieren mag fuer sich sinnvoll sein** — dann
+  // als Bibliotheksfunktion mit eigener Begruendung, beantragt statt
+  // uebriggelassen.
   const s = ohneKommentare(SCHREIB)
-  assert.match(s, /wochenAufStartdatumSchieben\(db, id, felder\.start_date\)/,
-    'das Aktivieren verschiebt die Wochen nicht')
-  const start = s.indexOf('async function wochenAufStartdatumSchieben')
-  assert.notEqual(start, -1, 'die Verschiebefunktion fehlt')
-  const bis = s.indexOf('\nexport ', start + 10)
-  const block = s.slice(start, bis === -1 ? undefined : bis)
-  // Die Wirkung: BEIDE Ebenen wandern, nicht nur die Woche.
-  assert.match(block, /from\('meal_plan_weeks'\)\s*\n?\s*\.update/,
-    'die Wochen werden nicht verschoben')
-  // `[read]` **Das FELD pruefen, nicht die Tabelle.** Die
-  // Sabotageprobe hat `plan_date` durch `notes` ersetzt — der
-  // `.update` auf `meal_plan_days` blieb stehen, und der Waechter sah
-  // nichts. **G-216, und ich bin schon wieder darauf
-  // hereingefallen.**
-  assert.match(block, /\.update\(\{ plan_date: tageVerschieben\(/,
-    'die Tage bleiben stehen — dann passt der Plan nicht mehr zusammen')
-  assert.match(block, /\.update\(\{ week_start: neuStart \}\)/,
-    'die Wochen wandern nicht mit')
-  // `[read]` **Null Tage heisst: nichts schreiben.**
-  assert.match(block, /if \(tage === 0\) return/,
-    'bei gleicher Lage wird trotzdem geschrieben')
+  const u = ohneKommentare(UI)
+  const r = ohneKommentare(ROUTE)
+  for (const [name, quelle] of [['Schreibweg', s], ['Oberflaeche', u],
+                                ['Route', r]] as const) {
+    assert.doesNotMatch(quelle,
+      /(?<![a-zA-Z0-9_])(planKopieren|KopieKnopf|plan_kopieren)(?![a-zA-Z0-9_])/,
+      `„Kopie bearbeiten" lebt weiter im ${name}`)
+  }
 })
 
 test('C-372: was NICHT gebaut wird, steht als Liste da', () => {
@@ -343,8 +391,23 @@ test('C-372: was NICHT gebaut wird, steht als Liste da', () => {
   assert.match(texte, /C-373/)
   assert.match(texte, /Teilen/)
   assert.match(texte, /Kaufen|Marktplatz/)
-  // Und die Wirkung: kein Lebenszyklus-Vollzug im Schreibweg.
+  // `[cmd]` **BERICHTIGT durch C-373:** hier stand, ein Rollover
+  // duerfe nicht ausgefuehrt werden. **E-42/C-373: die Meldung beim
+  // Ablauf IST die Ausfuehrung** — der Nutzer waehlt, und dann zaehlt
+  // `rollover_count` hoch.
+  //
+  // `[read]` **Was weiterhin NICHT gebaut ist: ein Zeitplaner.**
+  // `[cmd]` **In G-304 gemessen: kein `pg_cron`, keine Funktion.**
+  // **Die Wirkung: nichts laeuft ohne Klick.**
   const s = ohneKommentare(SCHREIB)
-  assert.doesNotMatch(s, /rollover_count\s*[+:]/,
-    'ein Rollover wird ausgefuehrt — das ist C-373')
+  const von = s.indexOf('export async function ablaufKlaeren')
+  assert.notEqual(von, -1, 'der Weg beim Ablauf fehlt')
+  const bis = s.indexOf('\nexport ', von + 10)
+  const block = s.slice(von, bis === -1 ? undefined : bis)
+  // Der Zaehler steigt NUR in diesem Block — nirgends automatisch.
+  const ausserhalb = s.slice(0, von) + (bis === -1 ? '' : s.slice(bis))
+  assert.doesNotMatch(ausserhalb, /rollover_count:/,
+    'ein Rollover wird ausserhalb der Nutzerentscheidung ausgefuehrt')
+  assert.match(block, /rollover_count: neuZaehler/,
+    'der Durchgang wird nicht gezaehlt')
 })

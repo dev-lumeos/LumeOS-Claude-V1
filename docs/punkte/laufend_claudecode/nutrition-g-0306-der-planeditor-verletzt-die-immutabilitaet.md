@@ -213,7 +213,199 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Alle Nachweiszeilen belegt. Gate gruen (1.175 Tests), 22 von 22
+Sabotagen gefangen, `dev@lumeos.app` unveraendert.**
+
+### 1. Die Sperre haengt jetzt an der Position, nicht am Plan
+
+`[cmd]` **Vor dem Umbau gemessen, an einem AKTIVEN Plan:** ein
+`UPDATE amount_g = 999` ging durch. **Die Datenbank sperrt nichts** --
+der `ON DELETE RESTRICT` an `meal_plan_logs.plan_entry_id` blockiert
+das *Loeschen* einer geloggten Position, nicht ihr *Aendern*.
+
+`[read]` **Die Sperre lag also allein im Schreibweg, und sie lag
+falsch:** `pruefePositionsRecht` wies jede Position eines aktiven
+Plans ab.
+
+**Neu, nach E-42:** `pruefeProtokoll` fragt genau eine Frage --
+*traegt DIESE Position ein Log mit `status <> 'pending'`?*
+
+    positionEingefroren(null)         false   kein Log
+    positionEingefroren('pending')    false   nichts zu verfaelschen
+    positionEingefroren('confirmed')  true
+    positionEingefroren('deviated')   true
+    positionEingefroren('skipped')    true
+
+`[cmd]` **Der `resolution_check` traegt es:** ein `pending`-Log hat
+`actual_meal_id IS NULL` und `confirmed_at IS NULL`. **Es gibt nichts
+zu verfaelschen, also gibt es nichts zu sperren.**
+
+### 2. Im Browser gemessen -- ein aktiver Plan, drei Positionen
+
+`[cmd]` **Konto `test-user@lumeos.local`, 2026-09-01, Plan
+*G-306 Browserprobe* auf `status = 'active'`.** Jede Position
+einzeln ueber die Oberflaeche geaendert:
+
+    Position                       Log         HTTP   danach in der DB
+    breakfast / 2026-08-31         confirmed   409    200 g (unveraendert)
+    lunch     / 2026-09-01         kein Log    200    250 g
+    dinner    / 2026-09-04         kein Log    200    250 g
+
+`[read]` **Zeile 1 ist die Zusage *,,geloggte Position 409"*, Zeile 2
+*,,nicht geloggte Position aenderbar am aktiven Plan"*, Zeile 3
+*,,Zukunftstag aenderbar"*** -- 2026-09-04 liegt drei Tage vor dem
+Messtag.
+
+### 3. Warum ,,Kopie bearbeiten" entfernt und nicht behalten wurde
+
+**Der Auftrag liess die Wahl:** *,,Falls du ihn behalten willst: sag
+warum, aber nicht als Ausweg aus einer Sperre."*
+
+`[read]` **Ich habe ihn entfernt, und den Grund gibt der Halbsatz
+selbst.** Der Knopf war 165 Zeilen, die genau eine Aufgabe hatten:
+den Nutzer um die Plansperre herumfuehren. **Ohne die Sperre fuehrt
+er um nichts mehr herum.**
+
+`[read]` **Einen Plan zu duplizieren mag fuer sich sinnvoll sein** --
+als Bibliotheksfunktion, mit eigener Begruendung, beantragt. **Was
+ich nicht tun wollte, ist ihn stehen lassen und ihm nachtraeglich
+einen Zweck suchen** -- das ist die Sorte Code, die A-59 meint.
+
+`[cmd]` **Entfernt: `planKopieren`, `planKopierenSchema`, `KopieKnopf`,
+`plan_kopieren` in der Route.** Ein Waechter prueft die Abwesenheit in
+allen drei Dateien.
+
+### 4. C-375: das Flag heisst `darf_weiterverkaufen`
+
+`[cmd]` **Waehrend dieses Auftrags hat Codex die Spalte eingespielt**
+(Schritt `371_recipe_source_plan_origin_buddy_resale.sql`). **Live
+gemessen, 2026-09-01:**
+
+    nutrition.meal_plans.darf_weiterverkaufen   boolean  NOT NULL  DEFAULT true
+    nutrition.recipes.darf_weiterverkaufen      boolean  NOT NULL  DEFAULT true
+
+`[read]` **Die Anzeige las bis dahin hart `undefined`.** Jetzt liest
+sie die Spalte, und sie **sagt** statt zu sperren:
+
+> ,,Dieser Plan darf nicht weiterverkauft werden. Aendern und
+> verwenden kannst du ihn frei -- er gehoert dir."
+
+`[cmd]` **Der Bearbeiten-Knopf haengt an keiner Bedingung mehr** --
+kein `sperreVon`, kein Zustandsvergleich. **Ein Waechter prueft das.**
+
+### 5. C-377/C-373: drei Wege, und jeder gegangen
+
+`[cmd]` **Alle drei ueber die Oberflaeche geklickt, HTTP und
+Datenbankstand je Weg:**
+
+    Weg                            HTTP   Plan danach          Frage danach
+    Denselben Plan neu starten     200    active, rollover 0->1   weg
+    Einen anderen Plan aktivieren  200    completed               weg
+    Ohne Plan weitermachen         200    completed               weg
+
+`[cmd]` **Bei ,,neu starten" wanderten die Wochen mit:** die Tage lagen
+vorher im Juli, danach auf 01.--07.09.
+
+`[read]` **`completed`, nicht `archived`** -- der Plan ist
+abgeschlossen, nicht weggeraeumt; er bleibt in der Bibliothek
+waehlbar.
+
+**Der Vorschlag kommt aus dem Lebenszyklus, die Handlung vom Nutzer:**
+
+    rollover   -> "Denselben Plan neu starten"
+    sequence   -> "Einen anderen Plan aktivieren"  (der Folgeplan)
+    once       -> "Einen anderen Plan aktivieren"  (die Bibliothek)
+    NULL       -> kein Vorschlag, alle drei gleichwertig
+
+`[cmd]` **Kein Zeitplaner gebaut, und keiner noetig:** in G-304
+gemessen, es gibt kein `pg_cron` und keine Lebenszyklus-Funktion.
+**Die Meldung IST die Ausfuehrung** -- dieselbe Antwort wie bei C-358.
+
+### 6. Ein Fehler, den erst der Browser gezeigt hat
+
+`[cmd]` **Nach dem Weg *,,anderen Plan aktivieren"* stand der Plan auf
+`completed` -- und die Ablauffrage stand weiter da.**
+
+`[read]` **Die Anzeige rechnete nur die Laufzeit, nicht den Zustand.**
+Ein Plan, der die Frage beantwortet hat, stellte sie erneut.
+
+**Behoben** mit einer zweiten Bedingung; Wege 2 und 3 danach
+nachgemessen: *Frage noch da: false*. **Ein Waechter deckt es.**
+
+### 7. Die Waechter, und was die Sabotageprobe gefunden hat
+
+`[cmd]` **20 Waechter in `plan-werkbank.test.ts`, 22 Sabotagen, 22
+gefangen** -- Rueckbau je Sabotage per SHA-256 als byteidentisch
+belegt.
+
+`[cmd]` **Im ersten Durchgang kamen drei durch, und zwei davon waren
+ernst:**
+
+    S6   der Schreibweg prueft das Protokoll gar nicht mehr
+    S8   die Abfrage schliesst 'confirmed' aus statt 'pending'
+    S15  der Zaehler wird im UPDATE entfernt
+
+`[read]` **S6 und S8 sind genau die Klasse aus G-216/G-247/G-246:**
+mein Waechter suchte den Aufruf im Quelltext, statt zu messen, ob ein
+Fehler kommt. **Der Text stand da, die Wirkung fehlte** -- und der
+Waechter blieb gruen.
+
+**Behoben durch einen Verhaltenswaechter:** `pruefeProtokoll` wird mit
+einer Attrappen-Datenbank aufgerufen und geprueft wird, *dass*
+abgewiesen wird, *womit* (`POSITION_GELOGGT`, der Satz) und *wonach*
+die Abfrage sucht (`neq('status','pending')`).
+
+`[read]` **S15 war der Zaehlfehler aus derselben Familie:**
+`rollover_count: neuZaehler` steht zweimal im Block -- im `UPDATE`
+und im Rueckgabewert. **`assert.match` fand den zweiten.** Jetzt wird
+gezaehlt, nicht gesucht.
+
+### 8. Ein fremder Waechter fiel mit
+
+`[cmd]` **G-298 in `plan-eintrag-lage.test.ts` zaehlte
+`pruefePositionsRecht` -- die Funktion, die E-42 aufloest.**
+
+`[read]` **Der Kern des Waechters gilt weiter:** G-269 sperrt nach
+**Herkunft**, und das hat E-42 nicht angetastet. **Nur die
+Statushaelfte ist weg.** Umgestellt auf die zwei getrennten
+Pruefungen, mit dem Grund im Kommentar.
+
+    pruefeHerkunft    4x   (anlegen, aendern, loeschen, ablauf_klaeren)
+    pruefeProtokoll   2x   (aendern, loeschen)
+
+`[read]` **Das Anlegen prueft kein Protokoll** -- eine Position, die es
+noch nicht gibt, kann nicht geloggt sein.
+
+### 9. Stand
+
+    pnpm gate                gruen, 11 von 11 Aufgaben
+    Tests apps/web           1.175, davon 0 rot
+    Sabotagen                22 von 22 gefangen, Rueckbau byteidentisch
+    test-user@lumeos.local   0 Plaene, 0 Logs -- Buehne zurueckgebaut
+    dev@lumeos.app           1 Plan, updated_at 2026-08-30 (vor diesem Auftrag)
+    committet                nein
+
+### Was ich NICHT gebaut habe
+
+`[read]` **Kein Weiterverkauf** -- nur das Flag und der Satz, wie
+vorgegeben.
+`[read]` **Kein Zeitplaner** -- C-373 braucht keinen.
+`[read]` **Keine Editiersperre fuer nicht geloggte Positionen** --
+das war der Auftrag.
+
+### Eine Frage, die offen bleibt
+
+`[read]` **`once` und `sequence` bekommen denselben Vorschlag**
+(*,,einen anderen Plan aktivieren"*), aber aus verschiedenen Gruenden:
+bei `sequence` ist der Folgeplan benannt, bei `once` ist es die
+Bibliothek. `[cmd]` **Der Vorschlagssatz unterscheidet die beiden,
+der Knopf nicht.**
+
+**Das reicht, solange kein Feld den Folgeplan traegt** -- `meal_plans`
+hat keine Spalte dafuer, gemessen am 2026-09-01. **Wenn C-373 spaeter
+eine Kette bauen soll, gehoert der Folgeplan benannt und der Knopf
+getrennt.**
+
 
 ## Abnahme
 

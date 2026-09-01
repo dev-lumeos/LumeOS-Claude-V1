@@ -374,16 +374,17 @@ export type DiaryWriteErrorCode =
   // die Herkunft verbietet es. 403 statt 400, damit die Oberflaeche
   // beides unterscheiden kann.
   | 'FORBIDDEN'
-  // G-306/ADR #17: die Positionen eines AKTIVEN Plans sind
-  // eingefroren. `[cmd]` **Der ADR schreibt den Status vor:**
-  // *,,API gibt 409 Conflict zurueck bei PUT/PATCH/DELETE auf
-  // Items."*
+  // G-306/E-42: eine PROTOKOLLIERTE Position ist eingefroren.
   //
-  // `[read]` **Nicht `FORBIDDEN` (403):** dort fehlt das Recht
-  // dauerhaft; hier ist der Zustand des Plans im Weg, und er laesst
-  // sich aendern (pausieren, kopieren). **Die Oberflaeche muss die
-  // beiden unterscheiden, weil der Ausweg verschieden ist.**
-  | 'PLAN_AKTIV'
+  // `[cmd]` **Berichtigt am 2026-09-01:** hier stand `PLAN_AKTIV`,
+  // und die Sperre galt fuer jeden aktiven Plan. **E-42 loest das
+  // ab** — gesperrt ist die einzelne Position, sobald sie ein Log mit
+  // `status <> 'pending'` traegt.
+  //
+  // `[read]` **Nicht `FORBIDDEN` (403):** dort fehlt das Recht; hier
+  // steht Vergangenes im Weg. **409 sagt: der Zustand passt nicht,
+  // nicht: du darfst nicht.**
+  | 'POSITION_GELOGGT'
 
 export class DiaryWriteError extends Error {
   constructor(
@@ -404,8 +405,8 @@ export function httpStatusForDiaryError(code: DiaryWriteErrorCode): number {
     case 'UNKNOWN_FOOD':
       return 400
     case 'DUPLICATE_MEAL':
-    // ADR #17 nennt 409 ausdruecklich.
-    case 'PLAN_AKTIV':
+    // E-42: eine protokollierte Position ist Vergangenheit.
+    case 'POSITION_GELOGGT':
       return 409
     case 'NOT_FOUND':
       return 404

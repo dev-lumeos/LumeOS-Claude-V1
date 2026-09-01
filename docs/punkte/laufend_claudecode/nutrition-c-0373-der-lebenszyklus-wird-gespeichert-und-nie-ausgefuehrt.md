@@ -53,3 +53,26 @@ nicht angeboten, bis es einen gibt.**
 
 `[read]` **C-377 loest es: die Meldung beim Ablauf ist die
 Ausfuehrung.** **Kein Zeitplaner noetig.**
+
+## Ergebnis
+
+**Gebaut in G-306, 2026-09-01. Roher Bericht dort.**
+
+`[cmd]` **Der Lebenszyklus bestimmt den VORSCHLAG, nicht die
+Handlung** -- `vorschlagFuer()` in `plan-werkbank.ts`:
+
+    rollover   -> "Denselben Plan neu starten"
+    sequence   -> "Einen anderen Plan aktivieren"  (der Folgeplan)
+    once       -> "Einen anderen Plan aktivieren"  (die Bibliothek)
+    NULL       -> kein Vorschlag, alle drei gleichwertig
+
+`[cmd]` **Kein Zeitplaner gebaut.** In G-304 gemessen: kein `pg_cron`,
+keine Lebenszyklus-Funktion. **Die Meldung IST die Ausfuehrung.**
+
+`[cmd]` **Weg 1 im Browser gegangen, 2026-09-01:** `rollover_count`
+0 -> 1, die Wochen wanderten vom Juli auf 01.--07.09.
+
+`[read]` **Offen bleibt:** `once` und `sequence` teilen sich einen
+Knopf, weil `meal_plans` keine Spalte fuer den Folgeplan hat
+(gemessen 2026-09-01). **Soll spaeter eine Kette entstehen, gehoert
+der Folgeplan benannt.**

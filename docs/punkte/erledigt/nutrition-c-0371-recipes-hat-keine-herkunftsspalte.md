@@ -9,6 +9,8 @@ kind_von: G-289
 entscheidung: E-39
 agent: codex
 beauftragt: 2026-08-31
+erledigt: 2026-09-01
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.recipes]
 zahlen:
@@ -86,3 +88,45 @@ Beschriftung *,,Erstellt von Buddy"*.**
 
 `[read]` **Beide Spalten zusammen erledigen** — Rezepte bekommen
 `source`, Plaene bekommen den vierten Wert.
+
+## Bericht — 2026-09-01, Codex
+
+**Eingespielt, ohne neuen Schreibweg:**
+
+- `nutrition.recipes.source text NOT NULL DEFAULT 'user'` mit CHECK
+  `user | coach | marketplace | buddy`;
+- `nutrition.meal_plans.plan_origin` akzeptiert jetzt zusaetzlich
+  `buddy` und bleibt fuer unbekannte Altwerte nullable;
+- `darf_weiterverkaufen boolean NOT NULL DEFAULT true` liegt an
+  `recipes` und `meal_plans` (E-42), getrennt von einem
+  Bearbeitungsrecht.
+
+Die Kettenquelle
+`supabase/_pipeline/05_user_tabellen/371_recipe_source_plan_origin_buddy_resale.sql`
+und die Live-Migration
+`supabase/migrations/20260901090000_c371_recipe_source_plan_origin_buddy.sql`
+sind eingespielt; davor entstand eine 25.926.153-Byte-Vollsicherung
+ausserhalb des Repos.
+
+`[cmd]` Vormessung: `recipes` hatte 17 Spalten, 6 Reihen und kein
+`source`; `meal_plans` hatte 2 Reihen, den Dreiwert-CHECK und beide
+Tabellen hatten RLS aktiv. Nach der Migration haben alle **6/6**
+Bestandsrezepte `source = user`, alle **2/2** Plaene und **6/6**
+Rezepte `darf_weiterverkaufen = true`. Ein schon gesetzter gueltiger
+`plan_origin` wurde nicht ueberschrieben; unbekannte bleiben NULL.
+
+`[cmd]` Der neue Test
+`nutrition-c371-c374-provenance.test.ts` war vor der Migration rot
+(`recipes.source` fehlte) und ist danach gruen. Er sichert Spalten,
+Defaults, beide CHECKs, Bestandswerte und unveraendert aktive RLS.
+`ladekette-pruefen` meldet unabhaengig weiterhin 14 serielle Abfragen
+in `apps/web/src/app/v2/nutrition/page.tsx`; dort wurde nichts
+geaendert.
+
+## Abnahme
+
+**2026-09-01, mit G-303 abgenommen:** `recipes.source` mit `user|coach|marketplace|buddy` live.
+
+`[cmd]` **Migration
+`20260901090000_c371_recipe_source_plan_origin_buddy.sql`, keine RLS-
+und keine Schreibwegaenderung.**

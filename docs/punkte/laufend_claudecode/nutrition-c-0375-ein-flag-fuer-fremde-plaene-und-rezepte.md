@@ -60,7 +60,12 @@ Tabellen.**
 **Mitbeauftragt mit C-372 am 2026-08-31.** Der Auftragstext
 und der Bericht stehen dort.
 
-## Ergebnis (Kurzfassung, Einzelheiten in C-372)
+## Ergebnis vom 2026-08-31 — UEBERHOLT durch E-42
+
+`[read]` **Der Abschnitt bleibt als Stand vom 31.08. stehen.**
+**Was daran nicht mehr gilt: `darf_bearbeiten` als Name, und der
+Ausweg *Kopie bearbeiten*.** Beides loest E-42 auf; das Ergebnis
+vom 01.09. steht weiter unten.
 
 `[cmd]` **Gemessen am 2026-08-31: es gibt kein solches Flag.** Keine
 Spalte `darf_bearbeiten`, `editable`, `readonly`, `locked` oder
@@ -108,3 +113,29 @@ Editiersperre erzeugt unehrliche Daten.**
 ## Auftrag
 
 **Mitbeauftragt mit G-306 am 2026-08-31.** Bericht dort.
+
+## Ergebnis vom 2026-09-01 — gebaut in G-306
+
+**Roher Bericht in der G-306-Punktdatei.**
+
+`[cmd]` **Die Spalte hat Codex waehrend des Auftrags eingespielt**
+(Schritt `371_recipe_source_plan_origin_buddy_resale.sql`). **Live
+gemessen, 2026-09-01:**
+
+    nutrition.meal_plans.darf_weiterverkaufen   boolean  NOT NULL  DEFAULT true
+    nutrition.recipes.darf_weiterverkaufen      boolean  NOT NULL  DEFAULT true
+
+`[cmd]` **Die Anzeige las bis dahin hart `undefined`** — jetzt liest
+sie die Spalte. `darfWeiterverkaufen(flag)` ist `flag !== false`:
+**nur ein ausdrueckliches `false` verbietet.**
+
+`[read]` **Und sie sagt es, statt zu sperren:** *,,Dieser Plan darf
+nicht weiterverkauft werden. Aendern und verwenden kannst du ihn frei
+— er gehoert dir."*
+
+`[cmd]` **Der Bearbeiten-Knopf haengt an keiner Bedingung mehr** —
+`sperreVon` und `kopieHilft` sind entfernt (A-59), ein Waechter prueft
+ihre Abwesenheit.
+
+`[read]` **Kein Weiterverkauf gebaut** — nur das Flag und der Satz,
+wie beauftragt.

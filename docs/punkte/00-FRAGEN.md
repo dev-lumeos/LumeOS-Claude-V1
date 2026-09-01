@@ -70,49 +70,71 @@ eine Wiederherstellung:** **wenn die Herkunft mitkaeme, waere
 viele der 98 fehlenden Posten in der Quelle eine *Logische Null*
 tragen** — **und wie viele wirklich leer sind.**
 
-## C-368 — fuenfzehn Lebensmittel blockieren den Score
+## C-378 — NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar
 
-**Modul:** nutrition · **angelegt:** 2026-08-31 · **Datei:** `laufend_codex/nutrition-c-0368-fuenfzehn-lebensmittel-blockieren-den-score.md`
+**Modul:** nutrition · **angelegt:** 2026-09-01 · **Datei:** `todos/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md`
 
-## Befund
+## Der Befund
 
-Aus C-367, Codex, 2026-08-31.
+Aus C-368, Codex, 2026-09-01.
 
-`[cmd]` **In den 392 Mahlzeitpositionen von `dev` liegen 108 echte
-`CAROTPAXB`-Luecken — aus 14 Lebensmitteln.** `[cmd]` **Plus 12
-Spuren aus einem weiteren.**
+`[cmd]` **5.092 von 7.140 Lebensmitteln (71,3 %) haben alle drei
+Vitamin-A-Komponenten.** `[cmd]` **Der Speiseplan von `dev` trifft
+die uebrigen 29 Prozent.**
 
-`[read]` **Fuenfzehn Lebensmittel blockieren dreissig Tage.**
+**Die fuenfzehn Blockierer:**
 
-`[cmd]` **`RETOL` ist an 30 von 30 Tagen vollstaendig, `CARTB` an
-10** — **nur `CAROTPAXB` faellt auf 0.**
+    6 Getreide/Beilagen   weisser Reis, Vollkornreis, Bulgur (roh
+                          und gekocht), Couscous, Haferflocken
+    4 Fischvarianten      Lachs (roh und geduenstet), Thunfisch,
+                          Kabeljau
+    3 Frischkaese         Magerquark, Skyr, koerniger Frischkaese
+    1 Ziegenfleisch
+    1 Haehnchenbrust      nur Spuren, in beiden Komponenten
+
+`[read]` **Keine Randfaelle.** **Wer Reis, Haferflocken und Fisch
+isst, bekommt keinen Score.**
+
+`[read]` **Und der Grund ist einleuchtend:** der BLS misst
+Carotinoide dort nicht, **wo praktisch keine sind.** **Ein
+Nichtvorkommen wird als Luecke gefuehrt, nicht als Null.**
 
 ## Die Frage
 
-**Was geschieht mit fuenfzehn Lebensmitteln ohne
-Carotinoid-Messwert?**
-
-`[read]` **Es sind wenige, und sie sind benannt.** `[read]` **Wenn
-sie eine Quelle haetten, waere der Score morgen rechenbar.**
+**Was tun, wenn ein Score an Lebensmitteln scheitert, die
+tatsaechlich keine Carotinoide enthalten?**
 
 ## Drei Wege
 
-`[read]` **Eine zweite Quelle.** `[cmd]` **BLS 4.0 ist die einzige
-Lebensmittelquelle (E-03)** — **eine zweite waere eine
-Grundsatzentscheidung, nicht ein Nachtrag.**
+`[read]` **1. Als *incomplete* stehenlassen.** Ehrlich, aber die
+Kachel bleibt bei einem normalen Speiseplan dauerhaft leer.
 
-`[read]` **Oder der Score bleibt `incomplete`, bis die Datenlage
-besser ist.** `[read]` **Ehrlich, aber die Kachel bliebe leer.**
+`[read]` **2. `Luecke` bei Carotinoiden wie eine logische Null
+behandeln** — **nur fuer CARTB und CAROTPAXB, nur bei
+Lebensmittelgruppen, in denen Carotinoide nicht vorkommen.**
 
-`[read]` **Oder Vitamin A wird aus der Formel genommen.** `[cmd]`
-**Dann ist es nicht mehr NRF9.3** — **und Codex hat belegt, dass
-NRF8.3 keine Vitamin-A-lose Fassung ist.**
+`[cmd]` **Das waere eine Ausnahme von E-38** und von C-48 Regel 1.
+`[read]` **Fachlich vertretbar: Fisch, Milchprodukt und Getreide
+enthalten kein Beta-Carotin.** `[read]` **Aber es waere unsere
+Annahme, nicht die des BLS.**
 
-## Zuerst messen
+`[read]` **3. Vitamin A aus der Formel nehmen.** `[cmd]` **Codex hat
+belegt, dass NRF8.3 keine Vitamin-A-lose Fassung ist** — **dann waere
+es unsere Formel, nicht die validierte.**
 
-`[read]` **Welche fuenfzehn sind es?** **Bevor entschieden wird,
-gehoert die Liste auf den Tisch** — **vielleicht sind es Randfaelle,
-vielleicht Grundnahrungsmittel.**
+## Was ich empfehlen wuerde
+
+`[read]` **Weg 2, eng begrenzt und sichtbar gemacht:** **nur die zwei
+Carotin-Komponenten, nur wo `RETOL` gemessen vorliegt** — **also wo
+der BLS das Lebensmittel auf Vitamin A untersucht hat und nur die
+Carotinoide nicht beziffert.**
+
+`[cmd]` **Bei zwoelf der fuenfzehn ist `RETOL` gemessen oder logische
+Null.** `[read]` **Dort ist die Annahme *,,kein Beta-Carotin"* keine
+Erfindung, sondern die naheliegende Lesart.**
+
+`[read]` **Und der Score muss sagen, dass er so rechnet** — der
+`teilweise`-Zustand aus C-177 traegt das.
 
 ---
 

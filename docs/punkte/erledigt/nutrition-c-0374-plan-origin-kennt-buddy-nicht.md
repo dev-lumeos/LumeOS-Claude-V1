@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-40
 agent: codex
 beauftragt: 2026-08-31
+erledigt: 2026-09-01
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -75,3 +77,25 @@ heute drei Werte, `SPEC_02` fuehrt vier.
 `[read]` **Kein Bau, nur der Wert:** E-39 und E-40 sagen *vorsehen*.
 `[cmd]` **`SPEC_02`: *,,identisches Schema, User muss trotzdem
 aktivieren."***
+
+## Bericht — 2026-09-01, Codex
+
+Mit C-371 gemeinsam eingespielt: Der bestehende CHECK von
+`nutrition.meal_plans.plan_origin` akzeptiert nun
+`self_created | coach_created | marketplace | buddy`. Bestehende
+unbekannte Urspruenge bleiben NULL; ein bereits vorhandener gueltiger
+Wert wurde nicht geraten oder ersetzt. Die Migration fuegt zudem das
+von E-42 verlangte `darf_weiterverkaufen boolean NOT NULL DEFAULT
+true` an `meal_plans` und `recipes` an.
+
+Nachweis und Rot-zu-Gruen-Test stehen im Bericht von C-371:
+`supabase/_pipeline/_validierung/nutrition-c371-c374-provenance.test.ts`.
+Kein Buddy-, Coach- oder Marketplace-Schreibweg wurde gebaut.
+
+## Abnahme
+
+**2026-09-01, mit G-303 abgenommen:** `buddy` steht im `plan_origin`-CHECK.
+
+`[cmd]` **Migration
+`20260901090000_c371_recipe_source_plan_origin_buddy.sql`, keine RLS-
+und keine Schreibwegaenderung.**

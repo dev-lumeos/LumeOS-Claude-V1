@@ -50,3 +50,22 @@ C-358.
 ## Auftrag
 
 **Mitbeauftragt mit G-306 am 2026-08-31.** Bericht dort.
+
+## Ergebnis
+
+**Gebaut in G-306, 2026-09-01. Roher Bericht dort.**
+
+`[cmd]` **Alle drei Wege ueber die Oberflaeche geklickt:**
+
+    Weg                            HTTP   Plan danach          Frage danach
+    Denselben Plan neu starten     200    active, rollover 0->1   weg
+    Einen anderen Plan aktivieren  200    completed               weg
+    Ohne Plan weitermachen         200    completed               weg
+
+`[read]` **`completed`, nicht `archived`** -- der Plan ist
+abgeschlossen, nicht weggeraeumt; er bleibt waehlbar.
+
+`[cmd]` **Ein Fehler kam erst im Browser heraus:** nach Weg 2 stand
+der Plan auf `completed` und die Frage blieb stehen -- die Anzeige
+rechnete nur die Laufzeit, nicht den Zustand. **Behoben und
+nachgemessen.**
