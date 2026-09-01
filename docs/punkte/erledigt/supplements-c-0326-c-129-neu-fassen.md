@@ -9,7 +9,7 @@ kind_von: C-208
 entscheidung: null
 beruehrt:
   dateien:
-    - docs/punkte/todos/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md
+    - docs/punkte/laufend_codex/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md
     - docs/punkte/erledigt/supplements-c-0208-c-129-neu-fassen-der-import-ist-laengst-passiert.md
 zahlen: null
 agent: codex

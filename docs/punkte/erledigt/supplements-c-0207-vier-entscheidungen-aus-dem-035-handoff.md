@@ -13,8 +13,7 @@ beauftragt: 2026-09-01
 erledigt: 2026-09-01
 commit: fa117b20
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [coach.client_consent_log]
 zahlen: null
 ---
 

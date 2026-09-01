@@ -9,7 +9,7 @@ kind_von: null
 entscheidung: null
 beruehrt:
   dateien:
-    - docs/punkte/todos/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md
+    - docs/punkte/laufend_codex/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md
 zahlen:
   gemessen: 2026-08-27
   supplements_punkte: 42
