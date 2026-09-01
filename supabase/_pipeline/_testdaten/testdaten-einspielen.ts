@@ -2164,6 +2164,104 @@ const recipeIngredientRows: RecipeIngredientRow[] = [
   { recipeId: RECIPE_IDS.salmonSweetPotato, userId: TOM_ID, sortOrder: 4, blsCode: 'Q120000', amountG: 20 },
 ]
 
+const C380_MEAL_SLOTS = [
+  { mealType: 'breakfast' as const, plannedTime: '07:30' },
+  { mealType: 'lunch' as const, plannedTime: '12:30' },
+  { mealType: 'dinner' as const, plannedTime: '19:30' },
+  { mealType: 'snack' as const, plannedTime: '16:00' },
+]
+
+const C380_SEED_PLANS = [
+  {
+    slug: 'cut-2200', name: 'Cut 4-Meal 2200', targetKcal: 2200, targetProteinG: 165, targetCarbsG: 250, targetFatG: 70,
+    days: [
+      [['M713100', 500], ['V416172', 300], ['C351000', 250], ['H120100', 75]],
+      [['M710100', 500], ['T410072', 300], ['E401000', 300], ['H120100', 31]],
+      [['M141100', 700], ['V486172', 300], ['C351000', 300], ['H120100', 50]],
+      [['M711100', 500], ['T410072', 300], ['C133000', 300], ['H120100', 25]],
+      [['M713100', 400], ['U211162', 400], ['C351000', 300], ['H120100', 45]],
+      [['M141100', 600], ['V416172', 300], ['E401000', 350], ['H120100', 40]],
+      [['M710100', 500], ['U211162', 350], ['C351000', 300], ['H120100', 45]],
+    ],
+  },
+  {
+    slug: 'lean-bulk-3100', name: 'Lean bulk 3100', targetKcal: 3100, targetProteinG: 190, targetCarbsG: 400, targetFatG: 90,
+    days: [
+      [['M141100', 600], ['V416172', 300], ['C351000', 500], ['H120100', 80]],
+      [['M710100', 500], ['T410072', 300], ['E401000', 550], ['H120100', 35]],
+      [['M141100', 700], ['V486172', 250], ['C351000', 600], ['H120100', 40]],
+      [['M713100', 400], ['T121902', 350], ['E401000', 600], ['H120100', 60]],
+      [['M141100', 600], ['U211162', 400], ['C351000', 520], ['H120100', 55]],
+      [['M711100', 400], ['T410072', 350], ['C133000', 500], ['H120100', 50]],
+      [['M141100', 600], ['V486172', 250], ['C133000', 550], ['H120100', 75]],
+    ],
+  },
+  {
+    slug: 'buddy-2700', name: 'Buddy auto-plan', targetKcal: 2700, targetProteinG: 175, targetCarbsG: 325, targetFatG: 80,
+    days: [
+      [['M713100', 500], ['V416172', 300], ['C351000', 400], ['H120100', 70]],
+      [['M141100', 700], ['V416172', 350], ['C351000', 400], ['H120100', 60]],
+      [['M710100', 500], ['T410072', 350], ['E401000', 350], ['H120100', 60]],
+      [['M711100', 500], ['T121902', 350], ['C351000', 450], ['H120100', 55]],
+      [['M141100', 450], ['V486172', 300], ['E510000', 430], ['H120100', 70]],
+      [['M141100', 500], ['U211162', 400], ['C351000', 420], ['H120100', 55]],
+      [['M713100', 500], ['T410072', 300], ['C133000', 400], ['H120100', 50]],
+    ],
+  },
+] as const
+
+const c380PlanId = (slug: string) => uuidFrom(`tom.seed@example.com:meal-plan:c380:${slug}`)
+const c380WeekId = (slug: string) => uuidFrom(`tom.seed@example.com:meal-plan-week:c380:${slug}`)
+const c380DayId = (slug: string, dayIndex: number) => uuidFrom(`tom.seed@example.com:meal-plan-day:c380:${slug}:${dayIndex}`)
+
+const c380MealPlanRows: MealPlanRow[] = C380_SEED_PLANS.map(plan => ({
+  id: c380PlanId(plan.slug),
+  userId: TOM_ID,
+  name: plan.name,
+  description: 'C-380 Seed: abwechslungsreiche Vier-Mahlzeiten-Woche',
+  targetKcal: plan.targetKcal,
+  targetProteinG: plan.targetProteinG,
+  targetCarbsG: plan.targetCarbsG,
+  targetFatG: plan.targetFatG,
+  isActive: false,
+}))
+
+const c380MealPlanWeekRows: MealPlanWeekRow[] = C380_SEED_PLANS.map(plan => ({
+  id: c380WeekId(plan.slug),
+  planId: c380PlanId(plan.slug),
+  userId: TOM_ID,
+  weekStart: FILLED_WEEK_START,
+  name: 'C-380 abwechslungsreiche Woche',
+}))
+
+const c380MealPlanDayRows: MealPlanDayRow[] = C380_SEED_PLANS.flatMap(plan =>
+  plan.days.map((_, index) => ({
+    id: c380DayId(plan.slug, index + 1),
+    weekId: c380WeekId(plan.slug),
+    userId: TOM_ID,
+    planDate: addIsoDays(FILLED_WEEK_START, index),
+    dayIndex: index + 1,
+    notes: 'C-380: anderer Tagesplan statt Tageskopie',
+  })),
+)
+
+const c380MealPlanEntryRows: MealPlanEntryRow[] = C380_SEED_PLANS.flatMap(plan =>
+  plan.days.flatMap((day, dayIndex) => day.map(([blsCode, amountG], mealIndex) => {
+    const slot = C380_MEAL_SLOTS[mealIndex]!
+    return {
+      dayId: c380DayId(plan.slug, dayIndex + 1),
+      userId: TOM_ID,
+      mealType: slot.mealType,
+      plannedTime: slot.plannedTime,
+      slotOrder: 1,
+      entryType: 'bls',
+      blsCode,
+      amountG,
+      note: 'C-380 Seed: abwechslungsreiche Vier-Mahlzeiten-Woche',
+    }
+  })),
+)
+
 const mealPlanRows: MealPlanRow[] = [{
   id: MEAL_PLAN_ID,
   userId: TOM_ID,
@@ -2174,7 +2272,7 @@ const mealPlanRows: MealPlanRow[] = [{
   targetCarbsG: 313,
   targetFatG: 75,
   isActive: true,
-}]
+}, ...c380MealPlanRows]
 
 const mealPlanWeekRows: MealPlanWeekRow[] = [
   {
@@ -2191,6 +2289,7 @@ const mealPlanWeekRows: MealPlanWeekRow[] = [
     weekStart: EMPTY_WEEK_START,
     name: 'Leere Planwoche',
   },
+  ...c380MealPlanWeekRows,
 ]
 
 const mealPlanDayRows: MealPlanDayRow[] = [
@@ -2210,9 +2309,10 @@ const mealPlanDayRows: MealPlanDayRow[] = [
     dayIndex: index + 1,
     notes: 'C-150 Testfall: leere Woche bleibt leer',
   })),
+  ...c380MealPlanDayRows,
 ]
 
-const mealPlanEntryRows: MealPlanEntryRow[] = mealPlanDayRows
+const c150MealPlanEntryRows: MealPlanEntryRow[] = mealPlanDayRows
   .filter(day => day.weekId === FILLED_WEEK_ID)
   .flatMap((day, index) => [
     {
@@ -2265,6 +2365,11 @@ const mealPlanEntryRows: MealPlanEntryRow[] = mealPlanDayRows
       note: index % 2 === 0 ? 'Rezept-Dinner' : 'Direkter Lachs im Plan',
     },
   ])
+
+const mealPlanEntryRows: MealPlanEntryRow[] = [
+  ...c150MealPlanEntryRows,
+  ...c380MealPlanEntryRows,
+]
 
 const userIds = USERS.map(user => lit(user.id)).join(', ')
 const allSeedUserIds = [...USERS.map(user => lit(user.id)), lit(COACH_USER.id)].join(', ')
@@ -4272,4 +4377,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 
-console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer plus 1 Coach, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${recipeRows.length} Rezepte, ${recipeIngredientRows.length} Rezeptzutaten, ${mealPlanRows.length} Wochenplan, ${mealPlanWeekRows.length + 1} Planwochen, ${mealPlanEntryRows.length * 2} Planeintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${recoveryModalities.length} Recovery-Modalitaeten, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${goalMilestoneRows.length} Meilensteine, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length + 1} Medical-Befunde, ${medicalLabValues.length + medicalImportRows.length} Medical-Messwerte, 1 Medical-Medikation, 1 Medical-Condition, 1 Coach-Beziehung.`)
+console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer plus 1 Coach, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${recipeRows.length} Rezepte, ${recipeIngredientRows.length} Rezeptzutaten, ${mealPlanRows.length} Wochenplan, ${mealPlanWeekRows.length + 1} Planwochen, ${mealPlanEntryRows.length + c150MealPlanEntryRows.length} Planeintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${recoveryModalities.length} Recovery-Modalitaeten, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${goalMilestoneRows.length} Meilensteine, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length + 1} Medical-Befunde, ${medicalLabValues.length + medicalImportRows.length} Medical-Messwerte, 1 Medical-Medikation, 1 Medical-Condition, 1 Coach-Beziehung.`)
