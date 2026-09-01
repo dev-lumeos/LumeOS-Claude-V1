@@ -286,7 +286,15 @@ test('G-289/G-300: die Suche sitzt IM Rezept — Flow 7, Schritt 3', () => {
     'das Modal wird nicht im Rezeptmodus gerufen')
   // Live-Vorschau: Gesamt UND je Portion, nicht eines von beiden.
   assert.match(u, /Live-Vorschau/)
-  assert.match(u, /je Portion/)
+  // `[cmd]` **BERICHTIGT in G-326: der Wortlaut hat sich geaendert.**
+  // **Tom, 2026-09-02:** *,,wieso zwei totale?"* — aus *je Portion*
+  // wurde *Eine Portion (von n)*, damit die Ueberschrift sagt, was
+  // die Spalte ist.
+  //
+  // `[read]` **Was der Waechter sichert, gilt weiter:** die Vorschau
+  // zeigt Gesamt UND je Portion, nicht eines von beiden.
+  assert.match(u, /Eine Portion \(von /)
+  assert.match(u, /Ganzes Rezept \(/)
   assert.match(u, /jePortion\(gesamt, portionen\)/,
     'die Vorschau rechnet je Portion nicht')
 })

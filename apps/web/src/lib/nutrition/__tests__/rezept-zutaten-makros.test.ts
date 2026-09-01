@@ -145,8 +145,15 @@ test('G-325: das Grammfeld ist schmal — und flex:none macht es wirksam', () =>
   // **Ohne `flex: 'none'` war das Feld 262 px breit statt 56** — am
   // 2026-09-02 am Schirm gemessen.
   const r = ohneKommentare(REZEPTE)
-  assert.match(r, /style=\{\{ width: 56, flex: 'none' \}\}/,
-    'das Grammfeld ist nicht schmal oder wächst wieder')
+  // `[cmd]` **BERICHTIGT in G-326: 56 px waren zu schmal.**
+  // **Tom, 2026-09-02:** *,,56 px zeigen `44(` statt `440`."*
+  // `[cmd]` **Gemessen: 72 px ist die Grenze fuer vierstellige
+  // Mengen, 76 mit Reserve fuer die Zahlenpfeile.**
+  //
+  // `[read]` **Was G-325 sichert, gilt weiter:** `flex: 'none'` —
+  // ohne das war das Feld 262 px breit.
+  assert.match(r, /style=\{\{ width: 76, flex: 'none' \}\}/,
+    'das Grammfeld ist zu schmal oder wächst wieder')
 
   // `[read]` **Die Ursache wird mitgeprüft** — wäre `.v2-feld` kein
   // Flex-Kind mehr, wäre die Begründung hinfällig.

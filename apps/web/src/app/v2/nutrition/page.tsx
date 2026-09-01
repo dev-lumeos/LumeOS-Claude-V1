@@ -264,8 +264,33 @@ export default async function V2NutritionPage({
   if (tab === 'planner' || tab === 'plans') {
     try {
       const [p, l, f, e, te, wb] = await Promise.all([
-        // G-311: der in der Werkbank gewaehlte Plan (?plan=...).
-        ladePlan(typeof searchParams?.plan === 'string'
+        // ══ G-327: `?plan=` gilt NUR im Planner ═══════════════════
+        //
+        // **Tom, 2026-09-02:** *„wenn ich im planer einen anderen plan
+        // anwaehle und anschaue wechselt der plan in meal plans."*
+        //
+        // `[cmd]` **Gemessen am 2026-09-02, `dev@lumeos.app`:** mit
+        // `?plan=` zeigte Meal plans den ANGEWÄHLTEN statt des
+        // aktiven — **in vier Bereichen gleichzeitig:**
+        //
+        //     Kopfkarte        Tag 1 von 28   ->  Tag 2 von 7
+        //     Plan settings    Days count 21  ->  Days count 7
+        //     Lifecycle types  aktiv          ->  zugewiesen
+        //     Bibliothek       ohne Aufbau-Wochenplan -> ohne Buddy
+        //
+        // `[read]` **Die beiden Reiter haben verschiedene Fragen:**
+        // der Planner zeigt, WAS gerade bearbeitet wird; **Meal plans
+        // zeigt, welcher Plan LÄUFT** — und der wechselt nicht,
+        // solange man in der Werkbank blättert.
+        //
+        // `[cmd]` **`ladePlan(null)` nimmt `liste[0]`** aus einer nach
+        // `is_active DESC` sortierten Abfrage — also den aktiven.
+        // **Kein zweiter Leseweg, nur ein anderes Argument.**
+        //
+        // `[read]` **Die Bibliothek unten folgt mit**: sie lässt den
+        // Plan aus, der oben steht (`aktivId`) — deshalb verschwand
+        // dort der falsche.
+        ladePlan(tab === 'planner' && typeof searchParams?.plan === 'string'
           ? searchParams.plan : null),
         ladePlanLogs(datum, 7).catch(() => []),
         ladeCoachFreigabe().catch(() => false),

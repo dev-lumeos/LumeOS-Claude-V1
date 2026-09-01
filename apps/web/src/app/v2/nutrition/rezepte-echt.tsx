@@ -104,32 +104,69 @@ function zahlOderNull(v: string | number | null | undefined): number | null {
 }
 
 
-/** Gesamt und je Portion nebeneinander — Flow 7, Schritt 3. */
-function Vorschau({ gesamt, portionen }: {
-  gesamt: Naehrwerte; portionen: number
+/**
+ * Ganzes Rezept und eine Portion — Flow 7, Schritt 3.
+ *
+ * ══ G-326: absetzen und beschriften ════════════════════
+ *
+ * **Tom, 2026-09-02:** *,,wieso zwei totale?"*
+ *
+ * `[cmd]` **Hier stand *GESAMT* und *JE PORTION (2)*.** `[read]`
+ * **Die zwei Woerter sagen nicht, dass das eine das andere geteilt
+ * durch zwei ist** — **und bei einer Portion stehen zweimal
+ * dieselben Zahlen** (493 und 493), was die Frage nahelegt.
+ *
+ * `[read]` **Jetzt sagt die Ueberschrift, was die Spalte ist:**
+ * *Ganzes Rezept (4 Zutaten)* gegen *Eine Portion (von 2)*.
+ *
+ * `[cmd]` **Die Zahl in der Klammer haengt am Portionenfeld** —
+ * wird es auf 4 gesetzt, steht dort *(von 4)*.
+ *
+ * `[read]` **Und die Spalten sind getrennt**, mit einer Linie
+ * dazwischen; die ganze Vorschau ist gegen die Zutatenliste
+ * abgesetzt.
+ */
+function Vorschau({ gesamt, portionen, zutaten, titel }: {
+  gesamt: Naehrwerte
+  portionen: number
+  /** Wie viele Zutaten — steht in der Klammer der linken Spalte. */
+  zutaten: number
+  /** `Live-Vorschau` im Editor, `Nährwerte` in der Detailansicht. */
+  titel?: string
 }) {
   const je = jePortion(gesamt, portionen)
   const unvollstaendig = gesamt.kcal === null
+  const spalte = (
+    kopf: string, w: Naehrwerte,
+  ) => (
+    <div style={{ flex: 1, minWidth: 0 }}>
+      <div className="v2-eyebrow" style={{ fontSize: 9, marginBottom: 3 }}>
+        {kopf}
+      </div>
+      <Row label="kcal" value={z(w.kcal)} />
+      <Row label="Protein" value={`${z(w.protein, 1)} g`} />
+      <Row label="Fett" value={`${z(w.fett, 1)} g`} />
+      <Row label="Kohlenhydrate" value={`${z(w.kohlenhydrate, 1)} g`} />
+    </div>
+  )
   return (
-    <div style={{ marginTop: 10 }}>
-      <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Live-Vorschau</div>
-      <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
-        <div>
-          <div className="v2-eyebrow" style={{ fontSize: 9 }}>Gesamt</div>
-          <Row label="kcal" value={z(gesamt.kcal)} />
-          <Row label="Protein" value={`${z(gesamt.protein, 1)} g`} />
-          <Row label="Fett" value={`${z(gesamt.fett, 1)} g`} />
-          <Row label="Kohlenhydrate" value={`${z(gesamt.kohlenhydrate, 1)} g`} />
-        </div>
-        <div>
-          <div className="v2-eyebrow" style={{ fontSize: 9 }}>
-            je Portion ({z(portionen, 0)})
-          </div>
-          <Row label="kcal" value={z(je.kcal)} />
-          <Row label="Protein" value={`${z(je.protein, 1)} g`} />
-          <Row label="Fett" value={`${z(je.fett, 1)} g`} />
-          <Row label="Kohlenhydrate" value={`${z(je.kohlenhydrate, 1)} g`} />
-        </div>
+    <div data-probe="vorschau-block" style={{ marginTop: 12 }}>
+      {/* `[cmd]` **Die Trennung gegen die Zutatenliste** — Tom:
+          *,,eine sichtbare Trennung gegen die Zutatenliste
+          darueber."* */}
+      <div className="v2-divider" style={{ marginBottom: 8 }} />
+      <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
+        {titel ?? 'Live-Vorschau'}
+      </div>
+      <div data-probe="vorschau-spalten" style={{ display: 'flex', gap: 14 }}>
+        {spalte(`Ganzes Rezept (${z(zutaten, 0)} ${
+          zutaten === 1 ? 'Zutat' : 'Zutaten'})`, gesamt)}
+        {/* `[read]` **Die Linie dazwischen** — heute standen die
+            Spalten nebeneinander ohne Grenze. */}
+        <div data-probe="spaltentrenner" style={{
+          width: 1, background: 'var(--border)', alignSelf: 'stretch',
+        }} />
+        {spalte(`Eine Portion (von ${z(portionen, 0)})`, je)}
       </div>
       {unvollstaendig && (
         <p className="v2-muted" style={{ fontSize: 10.5, marginTop: 6, lineHeight: 1.5 }}>
@@ -236,14 +273,28 @@ export function RezeptBauer({ vorhanden, onFertig, onAbbruch }: {
       sub="SPEC_03 Flow 7"
     >
       <div className="v2-col-gap" style={{ gap: 8 }}>
-        <label style={{ fontSize: 10 }}>
-          <span className="v2-eyebrow">Name</span>
-          <input className="v2-feld" style={{ width: '100%' }} value={name}
-                 aria-label="Rezeptname"
-                 onChange={e => setName(e.target.value)} />
-        </label>
+        {/* ══ G-326: der Kopf, eine Breite ══════════════════
+            **Tom, 2026-09-02:** *,,name (beschriftungsfeld oben und
+            darunter die ganze breite als namefeld, unnoetig)."*
 
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            `[cmd]` **Am 2026-09-02 gemessen:** das Namensfeld war
+            **778 px** breit und lief bis an den rechten Rand, **die
+            vier Felder darunter enden bei 598 px**
+            (90 + 110 + 110 + 127 plus drei Lücken à 8).
+
+            `[read]` **Beide Reihen teilen sich jetzt EINE
+            Hüllenbreite** — so bleibt das Namensfeld genau so breit
+            wie die vier zusammen. */}
+        <div data-probe="kopf-block" style={{ maxWidth: 598 }}>
+          <label style={{ fontSize: 10, display: 'block' }}>
+            <span className="v2-eyebrow">Name</span>
+            <input className="v2-feld" style={{ width: '100%' }} value={name}
+                   aria-label="Rezeptname"
+                   onChange={e => setName(e.target.value)} />
+          </label>
+
+          <div data-probe="kopf-felder"
+               style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
           <label style={{ fontSize: 10 }}>
             <span className="v2-eyebrow">Portionen</span>
             <input className="v2-feld" type="number" min="1" step="1"
@@ -273,8 +324,9 @@ export function RezeptBauer({ vorhanden, onFertig, onAbbruch }: {
               {KOENNEN.map(k => (
                 <option key={k} value={k}>{KOENNEN_LABEL[k]}</option>
               ))}
-            </select>
-          </label>
+              </select>
+            </label>
+          </div>
         </div>
 
         <label style={{ fontSize: 10 }}>
@@ -331,10 +383,25 @@ export function RezeptBauer({ vorhanden, onFertig, onAbbruch }: {
               {/* `[cmd]` **`flex: 'none'` ist nötig**: `.v2-feld` setzt
                   `flex: 1` (v2.css:1396), und `width` wäre dann nur
                   die Basisbreite. **Am 2026-09-02 gemessen: 262 px
-                  statt der gesetzten 56.** */}
+                  statt der gesetzten 56.**
+
+                  ══ G-326: 56 px waren zu schmal ══════════════
+                  **Tom, 2026-09-02:** *,,56 px zeigen `44(` statt
+                  `440`."*
+
+                  `[cmd]` **Gemessen mit `4400` und derselben
+                  Polsterung** (`padding: 7px 10px`, 12,5 px Schrift):
+
+                      56 px   scrollWidth 63 > clientWidth 54   abgeschnitten
+                      64 px   scrollWidth 63 > clientWidth 62   abgeschnitten
+                      72 px   scrollWidth 70 = clientWidth 70   passt
+
+                  `[read]` **76 px, nicht 72** — die Reserve traegt
+                  die Zahlenpfeile, die manche Browser innen
+                  zeichnen. */}
               <input
                 className="v2-feld" type="number" min="1"
-                style={{ width: 56, flex: 'none' }}
+                style={{ width: 76, flex: 'none' }}
                 value={String(x.amount_g)}
                 aria-label={`Menge ${x.name}`}
                 onChange={e => {
@@ -416,7 +483,8 @@ export function RezeptBauer({ vorhanden, onFertig, onAbbruch }: {
           />
         )}
 
-        <Vorschau gesamt={angezeigt} portionen={portionen_n} />
+        <Vorschau gesamt={angezeigt} portionen={portionen_n}
+                  zutaten={zutaten.length} />
 
         {fehler && (
           <p style={{ fontSize: 11, color: 'var(--neg)', margin: 0 }}>{fehler}</p>
@@ -724,33 +792,75 @@ function RezeptKarte({ r, offen, onOeffnen, onBearbeiten, onLoggen, onListe }: {
       {offen && (
         <div style={{ marginTop: 10 }}>
           <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Zutaten</div>
+          {/* ══ G-326: Makros je Zutat, wie im Editor ══════════
+              **Tom, 2026-09-02:** *,,detailansicht dasselbe, da
+              muessen die einzelmakros rein."*
+
+              `[cmd]` **Hier stand nur Name und Menge** — dieselbe
+              Luecke wie im Editor vor G-325.
+
+              `[cmd]` **`vorschauFuer` rechnet es**, aus den Werten je
+              100 g, die `rezept-lesen.ts` seit G-325 ueber
+              `food_nutrient_snapshot(…, 100)` beschafft. **Kein
+              zweiter Rechenweg.** */}
           <div className="v2-col-gap" style={{ gap: 2 }}>
-            {r.zutaten.map(zt => (
-              <div key={zt.id} style={{
-                display: 'flex', justifyContent: 'space-between', fontSize: 11.5,
-              }}>
-                <span>{zt.name}</span>
-                <span className="v2-num v2-dim">{mengeAnzeige(zt.amount_g)}</span>
-              </div>
-            ))}
+            {r.zutaten.map(zt => {
+              const m = vorschauFuer({
+                enercc: zt.enercc_100, prot625: zt.prot625_100,
+                fat: zt.fat_100, cho: zt.cho_100,
+              }, zt.amount_g)
+              return (
+                <div key={zt.id} data-probe="detail-zutat" style={{
+                  display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5,
+                }}>
+                  <span style={{ flex: 1, minWidth: 0 }}>{zt.name}</span>
+                  <span className="v2-num v2-dim" style={{ width: 56, textAlign: 'right' }}>
+                    {mengeAnzeige(zt.amount_g)}
+                  </span>
+                  {/* `[read]` **Vier Werte, feste Breite** — sonst
+                      springen die Spalten, sobald eine Zahl
+                      dreistellig wird. **Ein Strich heisst ,,nicht
+                      ermittelbar", nicht 0.** */}
+                  <span data-probe="detail-makros" className="v2-num v2-dim"
+                        style={{ display: 'flex', gap: 8, fontSize: 10.5 }}>
+                    <span style={{ width: 54, textAlign: 'right' }}>
+                      {m.kcal === null ? '—' : `${z(m.kcal)} kcal`}
+                    </span>
+                    <span style={{ width: 46, textAlign: 'right' }}>
+                      {m.protein === null ? '—' : `${z(m.protein, 1)} P`}
+                    </span>
+                    <span style={{ width: 46, textAlign: 'right' }}>
+                      {m.fett === null ? '—' : `${z(m.fett, 1)} F`}
+                    </span>
+                    <span style={{ width: 46, textAlign: 'right' }}>
+                      {m.kh === null ? '—' : `${z(m.kh, 1)} C`}
+                    </span>
+                  </span>
+                </div>
+              )
+            })}
           </div>
 
+          {/* ══ G-326: DIESELBE Vorschau wie im Editor ═════════
+              `[cmd]` **Hier stand eine zweite Fassung mit NUR ZWEI
+              Werten** — kcal und Protein. **Tom:** *,,die karte zeigt
+              nur kcal und protein, im editor stehen vier. Fett und
+              Kohlenhydrate fehlen ohne Grund."*
+
+              `[read]` **Eine zweite Fassung ist der Grund, warum sie
+              auseinanderliefen.** **Jetzt ruft die Karte denselben
+              Baustein** — vier Werte, getrennte Spalten, sprechende
+              Ueberschriften, alles an einer Stelle. */}
           {w && (
-            <>
-              <div className="v2-divider" />
-              <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
-                <div>
-                  <div className="v2-eyebrow" style={{ fontSize: 9 }}>Gesamt</div>
-                  <Row label="kcal" value={z(w.kcal)} />
-                  <Row label="Protein" value={`${z(w.protein, 1)} g`} />
-                </div>
-                <div>
-                  <div className="v2-eyebrow" style={{ fontSize: 9 }}>je Portion</div>
-                  <Row label="kcal" value={z(je?.kcal ?? null)} />
-                  <Row label="Protein" value={`${z(je?.protein ?? null, 1)} g`} />
-                </div>
-              </div>
-            </>
+            <Vorschau
+              gesamt={{
+                kcal: w.kcal, protein: w.protein,
+                fett: w.fett, kohlenhydrate: w.kohlenhydrate,
+              }}
+              portionen={r.servings}
+              zutaten={r.zutaten.length}
+              titel="Nährwerte"
+            />
           )}
 
           {r.instructions && (
