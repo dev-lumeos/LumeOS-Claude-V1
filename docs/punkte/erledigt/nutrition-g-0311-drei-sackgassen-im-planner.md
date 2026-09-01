@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
 erledigt: 2026-09-02
-commit: OFFEN
+commit: 69abd8f0
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-planner-echt.tsx
