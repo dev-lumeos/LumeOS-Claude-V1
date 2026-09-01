@@ -1,0 +1,43 @@
+import { chromium } from '@playwright/test'
+import { wortFuer } from '../tools/konten.mjs'
+const b = await chromium.launch()
+const s = await b.newPage({ viewport: { width: 1440, height: 1700 } })
+await s.goto('http://127.0.0.1:3200/login', { waitUntil: 'networkidle' })
+await s.fill('input[type="email"]', 'dev@lumeos.app')
+await s.fill('input[type="password"]', wortFuer('dev@lumeos.app'))
+await s.click('button[type="submit"]')
+await s.waitForURL(u => !u.pathname.includes('login'), { timeout: 30000 })
+await s.goto('http://127.0.0.1:3200/v2/nutrition?tab=rezepte', { waitUntil: 'networkidle' })
+await s.waitForTimeout(2600)
+
+console.log('══ DETAILANSICHT (Karte aufklappen) ══════════')
+await s.getByRole('button', { name: 'Ansehen' }).first().click()
+await s.waitForTimeout(1400)
+const t = await s.locator('body').innerText()
+const i = t.indexOf('Zutaten')
+console.log(JSON.stringify(t.slice(i, i + 320).replace(/\n/g, ' | ')))
+await s.screenshot({ path: 'backup/g326-detail-vorher.png' })
+
+console.log('\n══ EDITOR ═══════════════════════════════════')
+await s.goto('http://127.0.0.1:3200/v2/nutrition?tab=rezepte', { waitUntil: 'networkidle' })
+await s.waitForTimeout(1800)
+await s.getByRole('button', { name: 'Bearbeiten' }).first().click()
+await s.waitForTimeout(1600)
+const name = s.locator('input[aria-label="Rezeptname"]')
+const nb = await name.boundingBox().catch(() => null)
+console.log(`Namensfeld: ${nb ? `x=${nb.x.toFixed(0)} b=${nb.width.toFixed(0)}` : 'nicht gefunden'}`)
+for (const l of ['Portionen', 'Vorbereitungszeit', 'Garzeit', 'Können']) {
+  const e = s.locator(`[aria-label="${l}"]`)
+  if (await e.count()) {
+    const bb = await e.first().boundingBox()
+    console.log(`  ${l.padEnd(26)} x=${bb.x.toFixed(0)} b=${bb.width.toFixed(0)}`)
+  } else console.log(`  ${l.padEnd(26)} — nicht gefunden`)
+}
+const g = s.locator('input[aria-label^="Menge "]').first()
+const gb = await g.boundingBox()
+console.log(`Grammfeld: b=${gb.width.toFixed(0)} px, Wert="${await g.inputValue()}"`)
+const vor = await s.locator('body').innerText()
+const j = vor.indexOf('GESAMT')
+console.log(`Vorschau-Text: ${JSON.stringify(vor.slice(j, j + 200).replace(/\n/g, ' | '))}`)
+await s.screenshot({ path: 'backup/g326-editor-vorher.png' })
+await b.close()

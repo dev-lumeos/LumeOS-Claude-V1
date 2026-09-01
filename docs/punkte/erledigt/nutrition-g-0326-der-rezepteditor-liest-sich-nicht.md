@@ -9,6 +9,8 @@ kind_von: G-325
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 0dfa6788
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/rezepte-echt.tsx
@@ -184,4 +186,33 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Beide Bildschirmfotos angesehen.**
+
+`[cmd]` Gate 15/15 gruen.
+
+### Alle fuenf Punkte sitzen
+
+    Namensfeld     laeuft nicht mehr bis zum Rand, deckt sich mit
+                   der Zeile darunter
+    Kopfzeile      Portionen · Vorbereitung · Garzeit · Koennen
+    Grammfeld      440 vollstaendig sichtbar, mit Zaehlpfeilen
+    Vorschau       abgesetzt, zwei Spalten mit Trennung
+    Beschriftung   GANZES REZEPT (3 ZUTATEN) / EINE PORTION (VON 1)
+
+`[read]` **Die Beschriftung beantwortet Toms Frage** — *,,wieso zwei
+totale?"* `[read]` **Jetzt steht da, dass das eine das ganze Rezept
+ist und das andere ein Teil davon.**
+
+### Und die Detailansicht folgt
+
+`[cmd]` **Makros je Zutat:** *80 g · 278 kcal · 10,6 P · 5,3 F ·
+42,6 C*.
+
+`[cmd]` **Vier Werte statt zwei** — Fett und Kohlenhydrate sind
+dazugekommen.
+
+`[cmd]` **Und die Vorschau traegt dieselbe Beschriftung wie im
+Editor**, unter der Ueberschrift *NAEHRWERTE*.
+
+**Abgenommen.**
+

@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 221 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 213 |
-| **gesamt** | **437** |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 215 |
+| **gesamt** | **438** |
 
 ## medical — 42
 
@@ -57,9 +57,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 177
+## nutrition — 178
 
-### beauftragbar — 176
+### beauftragbar — 177
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -225,7 +225,7 @@
 | `G-307` | feature | mittel | [*Bearbeiten* in der Bibliothek fuehrt nirgendwohin](erledigt/nutrition-g-0307-bearbeiten-in-der-bibliothek-fuehrt-nirgendwohin.md) | erledigt | — | — |
 | `G-309` | feature | hoch | [der Plan erzeugt keine Eintraege im Tagebuch](erledigt/nutrition-g-0309-der-plan-erzeugt-keine-eintraege-im-tagebuch.md) | erledigt | — | — |
 | `G-310` | befund | hoch | [der Plan-Reiter folgt keinem Mockup](erledigt/nutrition-g-0310-der-plan-reiter-folgt-keinem-mockup.md) | erledigt | — | G-311, G-315 |
-| `G-311` | befund | hoch | [drei Sackgassen im Planner](erledigt/nutrition-g-0311-drei-sackgassen-im-planner.md) | erledigt | — | G-314 |
+| `G-311` | befund | hoch | [drei Sackgassen im Planner](erledigt/nutrition-g-0311-drei-sackgassen-im-planner.md) | erledigt | — | G-314, G-327 |
 | `G-313` | befund | mittel | [der Lifecycle-Test ist rot](erledigt/nutrition-g-0313-der-lifecycle-test-ist-rot.md) | erledigt | — | — |
 | `G-314` | feature | mittel | [die Vorschau fuer nicht-aktive Plaene](laufend_claudecode/nutrition-g-0314-die-vorschau-fuer-nicht-aktive-plaene.md) | laeuft (claudecode) | — | — |
 | `G-315` | befund | hoch | [die Kopien sind keine Kopien](erledigt/nutrition-g-0315-die-kopien-sind-keine-kopien.md) | erledigt | — | G-316, G-317 |
@@ -237,7 +237,8 @@
 | `G-321` | befund | hoch | [drei Befunde am Suchmodal](erledigt/nutrition-g-0321-drei-befunde-am-suchmodal.md) | erledigt | — | — |
 | `G-322` | feature | mittel | [die Bauteile aus `tab-foods.tsx` herausloesen](todos/nutrition-g-0322-die-bauteile-aus-tab-foods-herausloesen.md) | offen | — | — |
 | `G-325` | feature | hoch | [Zutaten zeigen ihre Makros nicht](erledigt/nutrition-g-0325-zutaten-zeigen-ihre-makros-nicht.md) | erledigt | — | G-326 |
-| `G-326` | befund | hoch | [der Rezepteditor liest sich nicht](laufend_claudecode/nutrition-g-0326-der-rezepteditor-liest-sich-nicht.md) | laeuft (claudecode) | — | — |
+| `G-326` | befund | hoch | [der Rezepteditor liest sich nicht](erledigt/nutrition-g-0326-der-rezepteditor-liest-sich-nicht.md) | erledigt | — | — |
+| `G-327` | befund | hoch | [`?plan=` galt in beiden Reitern](erledigt/nutrition-g-0327-plan-galt-in-beiden-reitern.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
