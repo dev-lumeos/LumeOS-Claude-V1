@@ -132,7 +132,7 @@ const OHNE_DB = process.argv.includes('--ohne-db')
 // das die Punktverwaltung nicht kennt.
 //
 // **HIER nachziehen, nirgends sonst — mit Datum und Anlass.**
-const SOLLSTAND = 24
+const SOLLSTAND = 25
 
 const meldungen = []
 function rot(pfad, text) { meldungen.push({ pfad, text }) }
