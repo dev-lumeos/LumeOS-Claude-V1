@@ -9,6 +9,8 @@ kind_von: C-372
 entscheidung: E-41
 agent: claudecode
 beauftragt: 2026-09-01
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-plans.tsx
@@ -63,3 +65,14 @@ ohne Tuer.**
     Auflistung im Planner   alle Plaene, waehlbar
     Sprung                  Bibliothek -> Planner mit diesem Plan
     Zielzeile               bricht nicht mehr um, Bildschirmfoto
+
+## Abnahme
+
+**2026-09-02, mit G-311 abgenommen: gebaut.**
+
+`[cmd]` **Der Werkbank-Sprung geht ueber `?plan=`**, mit Rueckfall
+auf den ersten Plan bei veralteter Kennung.
+
+`[read]` **Und die Ursache lag tiefer als der Punkt sagte:** der
+Knopf setzte einen Client-Zustand, **der Plan wird auf dem Server
+geladen** — sie konnten sich nie treffen.

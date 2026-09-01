@@ -9,6 +9,8 @@ kind_von: G-310
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-planner-echt.tsx
@@ -434,4 +436,74 @@ bedienen verschiedene Typen.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator.**
+
+`[cmd]` Gate gruen, 1.204 Tests, 34 von 34 Sabotagen, `dev`
+unveraendert.
+
+### Die Bibliothek zeigt jetzt vier von vier
+
+`[cmd]` **Von Coach, Marketplace, AI erstellt** — **und
+`self_created` traegt keines**, wie `SPEC_03` Flow 3 verlangt:
+*,,Eigene — ohne Label"*.
+
+`[cmd]` **Der aktive Plan steht oben in voller Breite und wird nicht
+wiederholt** — **wie das Mockup es mit `plans.slice(1)` macht.**
+
+`[read]` **Damit sind die zwei Badges belegt, die vorher nicht
+belegbar waren.**
+
+`[cmd]` **Und zwei weitere erfundene Titel mitgenommen:** *Lifecycle
+types* und *Today's ghost entries* — der hiess *Plan-Eintraege*.
+**Vierter und fuenfter.**
+
+### Sackgasse 1 lag tiefer als mein Auftrag sagte
+
+`[read]` **Mein Auftrag sagte *,,der Sprung fehlt"*.**
+
+`[cmd]` **Tatsaechlich setzte der Knopf einen Client-Zustand, und der
+Plan wird auf dem Server geladen** — **sie konnten sich nie
+treffen.**
+
+`[read]` **Nicht *der Sprung fehlt*, sondern *der Sprung war nicht
+moeglich*.** `[cmd]` **Jetzt ueber `?plan=`, mit Rueckfall auf den
+ersten Plan bei veralteter Kennung.**
+
+`[cmd]` **Belegt: das Raster wechselt von *Recomp 5-Meal Plan* auf
+*Buddy AI*, die Adresse traegt `?plan=`.**
+
+### Und `RecipeDetail` gibt es nicht
+
+`[cmd]` **Nur als Kommentar.** `[cmd]` **Das Detail heisst
+`RezeptKarte`, ist nicht exportiert und an einen anderen Typ
+gebunden.**
+
+`[read]` **Ich habe in G-311 eine Komponente zitiert, die es nicht
+gibt** — **zum zweiten Mal an zwei Tagen, nach `MealPlansView.js`.**
+
+`[read]` **Er hat die Zutaten aus demselben Verbund gelesen, der
+schon zum Zaehlen diente** — statt eine Komponente zu bauen, die ich
+faelschlich als vorhanden angenommen hatte.
+
+### Zwei fremde Waechter fielen, beide berechtigt
+
+`[cmd]` **G-287 verlangte `HERKUNFT_TEXT` an der Karte** — steht
+jetzt als Badge. `[cmd]` **Und dass `PlanBibliothekEcht` geloescht
+ist** — **in G-287 richtig, jetzt aus drei Quellen wieder da.**
+
+`[read]` **A-62 in seiner sauberen Form: die Waechter waren nicht
+falsch, sie sind ueberholt.** **Nachgezogen mit Begruendung.**
+
+### Was er nicht gebaut hat
+
+`[cmd]` **Den Preview-Knopf der Attrappe, Zeile 365.**
+
+`[read]` **Begruendung:** das Tages-Akkordeon braucht `PlanDaten`,
+**die Bibliothek hat `PlanKurz`** — *,,ein Knopf ohne Ziel waere die
+naechste Sackgasse."*
+
+`[read]` **Genau die Klasse, die wir heute viermal entfernt haben.**
+**Als G-314 vorgelegt.**
+
+**Abgenommen.**
+

@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 219 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 4 |
-| `erledigt` | 196 |
-| **gesamt** | **422** |
+| `laufend_claudecode` | 3 |
+| `erledigt` | 198 |
+| **gesamt** | **423** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 164
+## nutrition — 165
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -220,11 +220,12 @@
 | `G-304` | messung | hoch | [was ein Nutzer in Plaenen und Rezepten tun kann](erledigt/nutrition-g-0304-was-ein-nutzer-in-plaenen-und-rezepten-tun-kann.md) | erledigt | — | C-372, C-373, G-305, G-309 |
 | `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](laufend_claudecode/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | laeuft (claudecode) | — | — |
 | `G-306` | befund | hoch | [der Planeditor verletzt die Immutabilitaet](erledigt/nutrition-g-0306-der-planeditor-verletzt-die-immutabilitaet.md) | erledigt | — | C-376 |
-| `G-307` | feature | mittel | [*Bearbeiten* in der Bibliothek fuehrt nirgendwohin](laufend_claudecode/nutrition-g-0307-bearbeiten-in-der-bibliothek-fuehrt-nirgendwohin.md) | laeuft (claudecode) | — | — |
+| `G-307` | feature | mittel | [*Bearbeiten* in der Bibliothek fuehrt nirgendwohin](erledigt/nutrition-g-0307-bearbeiten-in-der-bibliothek-fuehrt-nirgendwohin.md) | erledigt | — | — |
 | `G-309` | feature | hoch | [der Plan erzeugt keine Eintraege im Tagebuch](erledigt/nutrition-g-0309-der-plan-erzeugt-keine-eintraege-im-tagebuch.md) | erledigt | — | — |
 | `G-310` | befund | hoch | [der Plan-Reiter folgt keinem Mockup](erledigt/nutrition-g-0310-der-plan-reiter-folgt-keinem-mockup.md) | erledigt | — | G-311 |
-| `G-311` | befund | hoch | [drei Sackgassen im Planner](laufend_claudecode/nutrition-g-0311-drei-sackgassen-im-planner.md) | laeuft (claudecode) | — | — |
+| `G-311` | befund | hoch | [drei Sackgassen im Planner](erledigt/nutrition-g-0311-drei-sackgassen-im-planner.md) | erledigt | — | G-314 |
 | `G-313` | befund | mittel | [der Lifecycle-Test ist rot](erledigt/nutrition-g-0313-der-lifecycle-test-ist-rot.md) | erledigt | — | — |
+| `G-314` | feature | mittel | [die Vorschau fuer nicht-aktive Plaene](laufend_claudecode/nutrition-g-0314-die-vorschau-fuer-nicht-aktive-plaene.md) | vorbereitet (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59
