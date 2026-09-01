@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 219 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 4 |
+| `laufend_claudecode` | 5 |
 | `erledigt` | 199 |
-| **gesamt** | **425** |
+| **gesamt** | **426** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 167
+## nutrition — 168
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -228,6 +228,7 @@
 | `G-315` | befund | hoch | [die Kopien sind keine Kopien](erledigt/nutrition-g-0315-die-kopien-sind-keine-kopien.md) | erledigt | — | G-316, G-317 |
 | `G-316` | feature | mittel | [*Log deviation* braucht die Posten](laufend_claudecode/nutrition-g-0316-log-deviation-braucht-die-posten.md) | laeuft (claudecode) | — | — |
 | `G-317` | befund | mittel | [drei Zeilen der Vorlage fehlen am Schirm](laufend_claudecode/nutrition-g-0317-drei-zeilen-der-vorlage-fehlen-am-schirm.md) | laeuft (claudecode) | — | — |
+| `G-318` | befund | hoch | [Planner und Diary sehen einander nicht](laufend_claudecode/nutrition-g-0318-planner-und-diary-sehen-einander-nicht.md) | vorbereitet (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59
