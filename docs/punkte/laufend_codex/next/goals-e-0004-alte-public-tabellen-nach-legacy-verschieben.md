@@ -34,3 +34,8 @@ zahlen: null
   **Wer diesen Punkt künftig liest: er blockiert nichts.** Er ist Kosmetik
   an einer Instanz, die ohnehin umgebaut wird, und gehört hinter E-05
   (Mapping) und E-08 (Deployment) eingereiht, nicht davor.
+
+## Auftrag
+
+**Vorbereitet mit C-362 am 2026-09-01.** Der Auftragstext
+und der Bericht stehen dort.

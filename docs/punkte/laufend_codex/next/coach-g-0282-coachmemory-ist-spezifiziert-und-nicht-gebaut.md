@@ -49,3 +49,8 @@ Antwort steht vermutlich dort.**
 `[read]` **C-112 sagt: Rechtemodell zuerst (steht), dann
 Coach-Athletensicht, dann Buddy-Schema und Engines, dann
 Memory/Chat.** **Dieser Punkt ist Stufe vier.**
+
+## Auftrag
+
+**Vorbereitet mit C-362 am 2026-09-01.** Der Auftragstext
+und der Bericht stehen dort.
