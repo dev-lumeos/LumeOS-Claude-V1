@@ -227,6 +227,43 @@ Seed-Konten mit je 180 Tagen, und `test-user@lumeos.local` mit einem.
 **Sonst ist sie nicht nachpruefbar — und eine Abweichung sieht aus
 wie ein Defekt.**
 
+## Vier Quellen, und das Mockup ist die vierte
+
+**Tom, 2026-09-01:** *,,immer und immer wieder haluzinierst du dir
+irgend einen scheiss zusammen obwohl strikt nach vorgaben zu arbeiten
+hast und alle quellen checken sollst bevor einen auftrag vergibst."*
+
+`[cmd]` **Anlass: der Plan-Reiter.** **`MealPlansView.js` liegt seit
+Monaten im Fundus, 136 Zeilen, mit Layout, Kacheln, Reihenfolge und
+Badges.** `[cmd]` **Nie gelesen.**
+
+`[read]` **Stattdessen vier Kacheln aus dem Schema abgeleitet — eine
+je Spaltengruppe.** **Planumfang, Lebenszyklus, Herkunft, Einhaltung.**
+**Keine davon steht irgendwo.**
+
+### Die Reihenfolge, vollstaendig
+
+    SPEC_03   der Ablauf      was der Nutzer tut
+    SPEC_10   die Bauteile    welche Komponente welchen Schritt
+    Mockup    das Layout      welche Kachel wo, was zusammensteht
+    Schema    die Daten       was gespeichert wird
+
+`[read]` **Aus dem Schema folgt kein Layout.** **Wer eine Kachel je
+Tabelle baut, baut die Datenbank ab, nicht das Produkt.**
+
+### Wo die Mockups liegen
+
+    docs/spezifikation/10-plattform/design-system/theme-v1
+    docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf
+    referenz/lumeos-2026/src/.../components
+
+`[cmd]` **Der zweite Ordner traegt 94 Dateien** — er wurde am 30.08.
+aus `public/` dorthin verschoben (G-284), **und er ist die
+vollstaendigste Layoutquelle.**
+
+`[read]` **Vor jedem UI-Auftrag: gibt es ein Mockup fuer diesen
+Reiter?** **Wenn ja, gehoert es in den Auftrag, mit Dateinamen.**
+
 ## Der Ablauf steht in SPEC_03, nicht in SPEC_10
 
 **Tom, 2026-08-31:** *,,willkuerlich irgendwas geseeded und

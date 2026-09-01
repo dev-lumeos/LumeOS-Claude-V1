@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 226 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 4 |
+| `laufend_claudecode` | 6 |
 | `erledigt` | 184 |
-| **gesamt** | **417** |
+| **gesamt** | **419** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 160
+## nutrition — 162
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -220,7 +220,9 @@
 | `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](laufend_claudecode/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | laeuft (claudecode) | — | — |
 | `G-306` | befund | hoch | [der Planeditor verletzt die Immutabilitaet](erledigt/nutrition-g-0306-der-planeditor-verletzt-die-immutabilitaet.md) | erledigt | — | C-376 |
 | `G-307` | feature | mittel | [*Bearbeiten* in der Bibliothek fuehrt nirgendwohin](laufend_claudecode/nutrition-g-0307-bearbeiten-in-der-bibliothek-fuehrt-nirgendwohin.md) | laeuft (claudecode) | — | — |
-| `G-309` | feature | hoch | [der Plan erzeugt keine Eintraege im Tagebuch](laufend_claudecode/nutrition-g-0309-der-plan-erzeugt-keine-eintraege-im-tagebuch.md) | vorbereitet (claudecode) | — | — |
+| `G-309` | feature | hoch | [der Plan erzeugt keine Eintraege im Tagebuch](laufend_claudecode/nutrition-g-0309-der-plan-erzeugt-keine-eintraege-im-tagebuch.md) | laeuft (claudecode) | — | — |
+| `G-310` | befund | hoch | [der Plan-Reiter folgt keinem Mockup](laufend_claudecode/nutrition-g-0310-der-plan-reiter-folgt-keinem-mockup.md) | vorbereitet (claudecode) | — | G-311 |
+| `G-311` | befund | hoch | [drei Sackgassen im Planner](laufend_claudecode/nutrition-g-0311-drei-sackgassen-im-planner.md) | vorbereitet (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59
