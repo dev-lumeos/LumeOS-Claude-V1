@@ -10,6 +10,8 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: dddbe5fc
 beruehrt:
   tabellen: []
   dateien: []
@@ -153,3 +155,17 @@ C-381.**
 
 **Mitbeauftragt mit C-381 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit C-381 abgenommen: gebaut.**
+
+`[cmd]` **`coach.bestaetige_aktion` fuehrt aus, was bestaetigt
+wird** — `adjust_macro_targets` uebernimmt `protein_g_delta`,
+historisiert den Zielwert, schreibt einen Undo-Schnappschuss.
+
+`[read]` **Der Punkt hiess *bestaetigen aendert den Zustand der
+Aktion, nicht die Welt*.** **Jetzt aendert es beides.**
+
+`[cmd]` **Und `confirmed_by` kommt aus `auth.uid()`, nicht aus dem
+Aufruf.**

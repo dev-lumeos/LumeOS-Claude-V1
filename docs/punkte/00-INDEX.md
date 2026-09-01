@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 221 |
-| `laufend_codex` | 2 |
+| `todos` | 222 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 208 |
-| **gesamt** | **434** |
+| `erledigt` | 210 |
+| **gesamt** | **435** |
 
 ## medical — 42
 
@@ -378,7 +377,7 @@
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 26
+## coach — 27
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -398,16 +397,17 @@
 | `C-318` | befund | hoch | [ADR-Coach-Permissions weicht von der Umsetzung ab](erledigt/coach-c-0318-adr-coach-permissions-weicht-von-der-umsetzung-ab.md) | erledigt | — | — |
 | `C-358` | befund | mittel | [abgelaufene Aktionen bleiben `pending`](erledigt/coach-c-0358-abgelaufene-aktionen-bleiben-pending.md) | erledigt | — | — |
 | `C-362` | feature | mittel | [das Consent-Log ist beschrieben und nicht gebaut](erledigt/coach-c-0362-das-consent-log-ist-beschrieben-und-nicht-gebaut.md) | erledigt | — | — |
-| `C-381` | befund | hoch | [die Freigaberegel liegt im Browser](laufend_codex/coach-c-0381-die-freigaberegel-liegt-im-browser.md) | laeuft (codex) | — | — |
+| `C-381` | befund | hoch | [die Freigaberegel liegt im Browser](erledigt/coach-c-0381-die-freigaberegel-liegt-im-browser.md) | erledigt | — | G-324 |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
-| `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](laufend_codex/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | laeuft (codex) | — | C-381 |
+| `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](erledigt/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | erledigt | — | C-381 |
 | `G-164` | befund | mittel | [Drei Module des Vorgaengers haben hier kein Gegenstueck](todos/coach-g-0164-drei-module-des-vorgaengers-haben-hier-kein-gegenstueck.md) | offen | — | — |
 | `G-168` | befund | mittel | [Die coach-Kopfzeile widerspricht dem eigenen Tab](todos/coach-g-0168-die-coach-kopfzeile-widerspricht-dem-eigenen-tab.md) | offen | — | — |
 | `G-169` | befund | mittel | [`coach.checkins` und `checkin_templates` liegen ungelesen](erledigt/coach-g-0169-coach-checkins-und-checkin-templates-liegen-ungelesen.md) | erledigt | — | — |
 | `G-244` | befund | mittel | [die rechten Kacheln im Human-Coach-Reiter sind Attrappe](todos/coach-g-0244-die-rechten-kacheln-im-human-coach-reiter-sind-attrappe.md) | offen | — | — |
 | `G-277` | befund | hoch | [der Rechte-Reiter nennt einen Grund, den es nicht gibt](erledigt/coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md) | erledigt | — | G-280 |
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
+| `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 
 ## quer — 85
 

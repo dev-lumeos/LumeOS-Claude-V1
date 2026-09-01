@@ -9,6 +9,8 @@ kind_von: G-151
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: dddbe5fc
 beruehrt:
   tabellen: [coach.pending_actions]
 zahlen:
@@ -180,4 +182,53 @@ nicht mehr berechtigt und muss in einem separaten UI-Auftrag die RPC
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Nachgemessen.**
+
+### Die Regel liegt jetzt in der Datenbank
+
+`[cmd]` **`coach.bestaetige_aktion` ist live, `SECURITY DEFINER`.**
+
+`[cmd]` **Und die UPDATE-Regel ist weg:** an `pending_actions`
+stehen nur noch `SELECT`, `INSERT`, `DELETE`.
+
+`[read]` **Damit ist der einzige Weg zu einer Statusaenderung die
+Funktion** — **genau das, was der Punkt verlangte.**
+
+`[cmd]` **`action_log` ist fuer Clients nur lesbar.**
+
+### Die Probe lief in alle Richtungen
+
+`[cmd]` **Fremde, abgelaufene und direkte Updates werden
+abgewiesen.**
+
+`[cmd]` **Die gueltige Probe aenderte Protein um 10, setzte beide
+Akteursspalten aus `auth.uid()` und rollte vollstaendig zurueck.**
+
+`[read]` **Der zweite Teil ist der Kern:** **`confirmed_by` kommt
+nicht mehr aus dem Aufruf.**
+
+### Und er hat den Umfang eng gehalten
+
+`[cmd]` **`adjust_macro_targets` uebernimmt ausschliesslich
+`protein_g_delta`.**
+
+`[read]` **Nicht alles, was in `payload` stehen koennte** — **nur
+das, was belegt ist.** `[cmd]` **Der Zielwert wird historisiert, mit
+Undo-Schnappschuss.**
+
+`[cmd]` **Die zwei echten Aktionen bleiben `pending` und abgelaufen,
+0 Logs dafuer** — nachgemessen: 20.08. und 01.09., beide `pending`.
+
+`[read]` **Er hat sie nicht ausgefuehrt, obwohl er konnte.** **Sie
+waren der Testfall fuer die Ablaufpruefung, und sie bleiben es.**
+
+### Was offen bleibt, und er sagt es
+
+`[cmd]` **Der bestehende Browser-Schreibweg muss noch auf die RPC
+umgestellt werden.**
+
+`[read]` **Solange das nicht geschehen ist, ruft die Oberflaeche
+einen Weg, den es nicht mehr gibt** — **als G-324.**
+
+**Abgenommen.**
+
