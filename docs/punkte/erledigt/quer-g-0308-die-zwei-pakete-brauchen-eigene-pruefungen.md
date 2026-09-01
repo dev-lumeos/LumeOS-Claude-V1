@@ -10,7 +10,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-09-01
 erledigt: 2026-09-01
-commit: OFFEN
+commit: 6d4a155a
 beruehrt:
   dateien:
     - packages/ui/package.json
