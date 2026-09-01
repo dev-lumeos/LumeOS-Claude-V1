@@ -8,7 +8,7 @@ braucht: []
 kind_von: G-306
 entscheidung: E-42
 erledigt: 2026-08-31
-commit: OFFEN
+commit: 0b985fdc
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen: null
