@@ -120,7 +120,63 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Gebaut am 02.09.2026 (Codex, nicht committed).**
+
+### C-381 — Freigabe liegt jetzt in der Datenbank
+
+`[cmd]` `coach.pending_actions` hat fuer `authenticated` kein `UPDATE`
+mehr und keine Update-Policy. `coach.action_log` hat fuer
+`authenticated` nur noch `SELECT`; direkte `INSERT`- und `UPDATE`-
+Rechte sowie ihre Policies sind entfernt.
+
+`[cmd]` Die neue Funktion `coach.bestaetige_aktion(p_action_id uuid)`
+ist `SECURITY DEFINER`, mit `search_path=pg_catalog, pg_temp`; sie ist
+fuer `authenticated` und `service_role` ausfuehrbar, nicht fuer
+`PUBLIC`.
+
+`[cmd]` Sie leitet den Akteur ausschliesslich aus `auth.uid()` ab,
+sperrt die passende Aktion, prueft Klient, Status und Ablauf atomar
+und erlaubt ausschliesslich `nutrition/adjust_macro_targets`.
+`confirmed_by` ist kein Parameter und wird ausschliesslich mit diesem
+Akteur geschrieben.
+
+### G-151 — der Ausfuehrer
+
+`[cmd]` Das vorhandene Payload `{ protein_g_delta, reason }` passt zu
+`goals.nutrition_targets.protein_g`. Die anderen fuenf Zielspalten
+werden beim neuen Tagesstand uebernommen; historische Zielzeilen
+bleiben unveraendert. Gibt es bereits einen heutigen Zielstand, wird
+nur dieser fortgeschrieben.
+
+`[cmd]` Die Bestaetigung schreibt Zielwert, `pending_actions` und genau
+einen `coach.action_log`-Eintrag mit Payload-Snapshot und
+`undo_data` in derselben Transaktion. Der Dispatcher weist unbekannte
+Aktionstypen und unerwartete Payload-Felder ab.
+
+`[cmd]` Die zwei vorhandenen Aktionen mit `adjust_macro_targets` sind
+beide weiter `pending` und abgelaufen; fuer sie existieren null
+`action_log`-Eintraege. Sie wurden nicht ausgefuehrt.
+
+### Nachweise
+
+`[cmd]` `pnpm exec tsx --test
+supabase/_pipeline/_validierung/coach-c381-action-executor.test.ts`
+ist gruen: fremde Aktion abgewiesen, abgelaufene Aktion abgewiesen,
+direktes Tabellen-Update abgewiesen, gueltige Probe erhoeht Protein um
+10, setzt `confirmed_by` und `executed_by` auf den JWT-Akteur und
+schreibt genau einen Log-Eintrag. Die Probe rollt vollstaendig zurueck:
+vorher und nachher null ihrer zwei Testaktionen bzw. Log-Eintraege.
+
+`[cmd]` Zusaetzlich gruen: C-362-Consent-Test,
+`schemafreigabe-pruefen`, `migration-datenlogik-pruefen`,
+`nummern-pruefen`, `punkte-pruefen` und `git diff --check`.
+
+### Offen ausserhalb dieses Auftrags
+
+`[read]` `apps/web/src/lib/coach/rechte-schreiben.ts` ruft noch den
+alten direkten Update-Weg. Er ist nach dem Rechte-Rueckbau bewusst
+nicht mehr berechtigt und muss in einem separaten UI-Auftrag die RPC
+`coach.bestaetige_aktion` aufrufen. `apps/` blieb hier unberuehrt.
 
 ## Abnahme
 

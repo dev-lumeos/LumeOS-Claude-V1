@@ -227,6 +227,37 @@ Seed-Konten mit je 180 Tagen, und `test-user@lumeos.local` mit einem.
 **Sonst ist sie nicht nachpruefbar — und eine Abweichung sieht aus
 wie ein Defekt.**
 
+## Ein Bericht ist kein Nachweis
+
+**Tom, 2026-09-02:** *,,da hat sich null komma nichts geaendert."*
+
+`[cmd]` **Anlass: G-311 meldete *vier von vier Plaenen sichtbar, alle
+Herkunfts-Badges belegt*.** `[cmd]` **Die Buehne lag auf
+`test-user` und war nach dem Nachweis zurueckgebaut** — **der Beleg
+existierte nicht mehr, als der Orchestrator abnahm.**
+
+`[read]` **Zwei Fassungen des Fehlers, beide an einem Tag:**
+
+    "vier von vier sichtbar"     die Buehne war weg
+    Kacheltitel abgehakt         der Inhalt war ein anderer
+
+`[read]` **Was zaehlt, ist der Zustand, den Tom sieht** —
+`dev@lumeos.app`, im Browser, mit Daten.
+
+### Drei Regeln daraus
+
+**Wer einen Nachweis fuehrt, laesst die Buehne stehen** — oder der
+Orchestrator legt Daten an, bevor er abnimmt.
+
+**Wer eine Kachel abnimmt, vergleicht den Inhalt** — nicht den
+Titel. `[cmd]` **Zeile der Vorlage gegen Zeile am Schirm, mit
+Zeilennummer.**
+
+**Und wer eine Komponente in einen Auftrag schreibt, prueft, dass es
+sie gibt.** `[cmd]` **`RecipeDetail` und `MealPlansView.js` waren
+beide erfunden** — die eine ein Kommentar, die andere die falsche
+von zwei gleichnamigen Dateien.
+
 ## Vier Quellen, und das Mockup ist die vierte
 
 **Tom, 2026-09-01:** *,,immer und immer wieder haluzinierst du dir
