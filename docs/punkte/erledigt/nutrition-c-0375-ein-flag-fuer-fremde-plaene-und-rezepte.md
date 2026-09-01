@@ -10,7 +10,7 @@ entscheidung: E-42
 agent: claudecode
 beauftragt: 2026-08-31
 erledigt: 2026-09-01
-commit: OFFEN
+commit: aae75918
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
