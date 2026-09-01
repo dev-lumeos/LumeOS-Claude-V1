@@ -10,6 +10,8 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   tabellen: ["coach.checkins"]
   dateien: []
@@ -29,3 +31,13 @@ zahlen: null
 
 **Mitbeauftragt mit G-151 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit G-151 abgenommen:** gemessen: ueberholt.
+
+`[cmd]` **`checkin_templates` traegt 2, `checkins` 6 Zeilen.**
+`[cmd]` **Beide werden in `apps/coach` und im V2-Leseweg abgefragt,
+`template_id` verknuepft sie.**
+
+`[read]` **Die Behauptung *liegen unbenutzt* gilt nicht mehr.**

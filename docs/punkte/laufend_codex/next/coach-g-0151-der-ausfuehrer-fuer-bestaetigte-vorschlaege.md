@@ -8,8 +8,6 @@ braucht: []
 kind_von: F-07
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -97,4 +95,59 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator.**
+
+### Es gibt einen Bestaetigungsweg, aber keinen Ausfuehrer
+
+`[cmd]` **`entscheideAktion` setzt bei Bestaetigung `status`,
+`confirmed_at` und `confirmed_by`** — **`payload` wird nicht
+angewandt.**
+
+`[cmd]` **Fuer die zwei abgelaufenen Nutrition-Aktionen
+(`adjust_macro_targets`, `protein_g_delta`) gibt es keine Zuordnung
+zu einem Zielwert, keinen `action_log`-Eintrag und keine
+transaktionale Ausfuehrung.**
+
+`[read]` **Damit ist der Punkt genau benannt: bestaetigen aendert den
+Zustand der Aktion, nicht die Welt.**
+
+`[cmd]` **Und meine Zahl war wieder falsch** — **zwei, nicht drei.**
+
+### Der Sicherheitsbefund, den er nebenbei gefunden hat
+
+`[cmd]` **Die RLS-Update-Regel erlaubt Coach und Client
+Aenderungen.** `[cmd]` **Ablauf und bestaetigender Client werden nur
+im Clientcode geprueft.**
+
+`[read]` **Das ist der wichtigere Teil des Berichts.** **Eine Regel,
+die im Browser liegt, ist keine Regel** — dieselbe Klasse wie die
+Immutabilitaet in G-306, wo `ON DELETE RESTRICT` nur das Loeschen
+blockierte.
+
+`[read]` **Und seine Anforderung an einen spaeteren Ausfuehrer ist
+vollstaendig:** atomar pruefen, **den Akteur aus `auth.uid()`
+ableiten**, nur erlaubte Aktionstypen dispatchen, die Zieländerung
+schreiben und protokollieren.
+
+### G-169 und C-173 sind ueberholt
+
+`[cmd]` **`checkin_templates` traegt 2, `checkins` 6 Zeilen.**
+`[cmd]` **Beide werden in `apps/coach` und im V2-Leseweg abgefragt,
+`template_id` verknuepft sie.**
+
+`[cmd]` **Und es gibt keine Marketplace-Produkttabelle.** `[cmd]`
+**`inStack` liegt ausschliesslich in statischen, als Entwurf
+markierten Supplements-Dateien.** `[cmd]` **Die 419
+`evidence_grade`-Werte gehoeren zum Stoffkatalog, nicht zu
+Produkten.**
+
+`[read]` **Das entspricht E-37: der Marktplatz bleibt
+zurueckgestellt.**
+
+**Abgenommen.** **G-151 bleibt offen, der Sicherheitsbefund geht als
+C-381.**
+
+## Auftrag
+
+**Vorbereitet mit C-381 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
