@@ -14,7 +14,6 @@ erledigt: 2026-09-01
 commit: a598cb88
 beruehrt:
   tabellen: [public.nutrition_goals]
-  tabellen: []
   dateien: []
 zahlen: null
 ---
