@@ -9,6 +9,8 @@ kind_von: C-112
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-01
+erledigt: 2026-09-01
+commit: OFFEN
 beruehrt:
   tabellen: [coach.client_permissions]
 zahlen:
@@ -201,4 +203,45 @@ wurde verschoben oder geloescht.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-01, Orchestrator. Nachgemessen.**
+
+`[cmd]` **`coach.client_consent_log` ist live:**
+
+    client_id  recipient_type  recipient_id  purpose_code
+    policy_version  event_kind  revokes_consent_id  recorded_at
+
+`[read]` **Und die Form beantwortet, was der Punkt verlangte:**
+**wem** (`recipient_type`, `recipient_id`), **wozu** (`purpose_code`),
+**in welcher Fassung** (`policy_version`), **wann** (`recorded_at`).
+
+`[read]` **Der Widerruf ist eine eigene Zeile** — `event_kind` mit
+`revokes_consent_id`, **nicht ein Feld, das die alte ueberschreibt.**
+`[read]` **Damit bleibt die Historie stehen, und das ist der
+Unterschied zu den drei Aenderungsprotokollen.**
+
+`[cmd]` **E-20 kann `mealcam_analysis` und
+`mealcam_model_improvement` unabhaengig fuehren** — die zwei
+getrennten Zwecke, die der ADR verlangt.
+
+`[cmd]` **Schreibrechte auf `service_role`-INSERT begrenzt** — **der
+Klient kann seine Einwilligung nicht selbst eintragen.** `[read]`
+**Richtig: ein Protokoll, das der Betroffene schreibt, beweist
+nichts.**
+
+### G-282 bleibt offen, und das ist die richtige Meldung
+
+`[cmd]` **Entity-, API-, Komponenten- und Kapitel-17-Spec
+widersprechen sich bei den Memory-Typen und beim Vergessen.**
+
+`[read]` **C-112 hatte vier parallele Gedaechtnismodelle genannt.**
+**Er hat sie gefunden und nicht ausgewaehlt.**
+
+### E-04 — gegenstandslos
+
+`[cmd]` **Vier historische Cloud-Tabellen, lokal nicht vorhanden.**
+`[cmd]` **Nachgemessen: keine davon im `public`-Schema.**
+
+`[cmd]` **Nichts verschoben, nichts geloescht.**
+
+**Abgenommen.**
+

@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-85
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-01
 beruehrt:
   tabellen: []
   dateien: ["docs/specs/Medical/SPEC_09_SCORING.md"]
@@ -106,3 +108,61 @@ zahlen: null
 
   `[read]` **Und C-159s Landkarte wird kuerzer:** Die Symptomtabelle
   fehlt im Schema, **aber nicht im Entwurf.**
+
+## Auftrag — der Medical-Abgleich
+
+**Mitbeauftragt: C-268, C-269.** Bericht in diese Datei.
+
+**Beauftragt am 2026-09-01.**
+
+### 1 · A-33 — der Abgleich, den der Orchestrator schuldig blieb
+
+`[read]` **Lies den Punkt und miss, was er verlangt.** `[read]`
+**Wenn die Sache inzwischen erledigt ist, sag es** — **bei
+zweiundzwanzig geprueften Altpunkten waren es neun.**
+
+`[cmd]` **`user_medications` ist bis heute gesperrt** — bis
+Verschluesselung und Schluesselverwaltung stehen. **Das gilt weiter.**
+
+`[cmd]` **Und E-12 haelt Medical-Daten in der Entwicklungsphase als
+Klartext** — **das ist eine Entscheidung, kein Versaeumnis.**
+
+### 2 · C-268 — beim Einladen gibt es keine Namensaufloesung
+
+`[cmd]` **`coach.relationships` traegt 6 Zeilen.** `[read]` **Miss,
+wie eine Einladung heute entsteht und was der Eingeladene sieht.**
+
+### 3 · C-269 — eine Einladung laesst sich nicht zuruecknehmen
+
+`[cmd]` **`relationships` traegt `status`, `ended_at`, `ended_by`,
+`end_reason`, `withdrawn_at`, `withdrawn_by`, `withdraw_reason`**
+(C-112).
+
+`[read]` **Die Spalten sind da.** **Miss, ob ein Weg dorthin
+fuehrt.**
+
+### Was nicht zu tun ist
+
+**Kein `user_medications`** — gesperrt.
+**Kein Coach-UI** — nur Schema und Lesewege.
+`apps/` nicht anfassen.
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server gehoert dir nicht
+
+`[cmd]` **Kein `neustart`, kein `start`, kein `aufraeumen`.**
+
+### Nachweis
+
+    je Punkt ein Urteil   erledigt / gebaut / offen / ueberholt
+    Einladung             wie entsteht sie, was sieht der Eingeladene
+    Ruecknahme            gibt es einen Weg? gemessen
+    A-33                  was bleibt
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

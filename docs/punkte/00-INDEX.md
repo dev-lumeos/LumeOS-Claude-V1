@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 226 |
+| `todos` | 224 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 6 |
-| `erledigt` | 184 |
+| `erledigt` | 186 |
 | **gesamt** | **419** |
 
 ## medical — 42
@@ -16,7 +16,7 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-21` | befund | mittel | [Kimi-K3-Schwarm als Rechercheweg](todos/medical-a-0021-kimi-k3-schwarm-als-rechercheweg.md) | offen | — | — |
-| `A-33` | blocker | hoch | [Der Medical-Abgleich, den der Orchestrator nachgeholt hat](todos/medical-a-0033-der-medical-abgleich-den-der-orchestrator-nachgeholt-hat.md) | offen | — | — |
+| `A-33` | blocker | hoch | [Der Medical-Abgleich, den der Orchestrator nachgeholt hat](laufend_codex/medical-a-0033-der-medical-abgleich-den-der-orchestrator-nachgeholt-hat.md) | laeuft (codex) | — | — |
 | `C-85` | befund | mittel | [Kurznamen fehlen bei 11 von 35](todos/medical-c-0085-kurznamen-fehlen-bei-11-von-35.md) | offen | — | — |
 | `C-91` | feature | mittel | [Die Spec nennt LOINC-Codes, die nicht die ueblichen sind](todos/medical-c-0091-die-spec-nennt-loinc-codes-die-nicht-die-ueblichen-sind.md) | offen | — | — |
 | `C-92` | befund | mittel | [Die Spec verwechselt Marker](todos/medical-c-0092-die-spec-verwechselt-marker.md) | offen | — | — |
@@ -352,7 +352,7 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-06` | befund | mittel | [WP-05 erstes Mock-Modul echt machen](todos/goals-c-0006-wp-05-erstes-mock-modul-echt-machen.md) | offen | — | — |
-| `E-04` | blocker | hoch | [Alte `public`-Tabellen nach `legacy` verschieben](laufend_codex/goals-e-0004-alte-public-tabellen-nach-legacy-verschieben.md) | laeuft (codex) | — | — |
+| `E-04` | blocker | hoch | [Alte `public`-Tabellen nach `legacy` verschieben](erledigt/goals-e-0004-alte-public-tabellen-nach-legacy-verschieben.md) | erledigt | — | — |
 | `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](todos/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | offen | — | — |
 | `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — | — |
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
@@ -373,11 +373,11 @@
 | `C-115` | befund | mittel | [Was der Markt kann und was LumeOS eigen ist](todos/coach-c-0115-was-der-markt-kann-und-was-lumeos-eigen-ist.md) | offen | — | — |
 | `C-173` | befund | mittel | [`MARKETPLACE_PRODUCTS` traegt `inStack` und `evidence`](todos/coach-c-0173-marketplace-products-traegt-instack-und-evidence.md) | offen | — | — |
 | `C-220` | befund | mittel | [`buddy` — 0 von 16 Tabellen](todos/coach-c-0220-buddy-0-von-16-tabellen.md) | offen | — | — |
-| `C-268` | feature | mittel | [Beim Einladen gibt es keine Namensaufloesung](todos/coach-c-0268-beim-einladen-gibt-es-keine-namensaufloesung.md) | offen | — | — |
-| `C-269` | feature | mittel | [Eine Einladung laesst sich nicht zuruecknehmen](todos/coach-c-0269-eine-einladung-laesst-sich-nicht-zuruecknehmen.md) | offen | — | — |
+| `C-268` | feature | mittel | [Beim Einladen gibt es keine Namensaufloesung](laufend_codex/coach-c-0268-beim-einladen-gibt-es-keine-namensaufloesung.md) | laeuft (codex) | — | — |
+| `C-269` | feature | mittel | [Eine Einladung laesst sich nicht zuruecknehmen](laufend_codex/coach-c-0269-eine-einladung-laesst-sich-nicht-zuruecknehmen.md) | laeuft (codex) | — | — |
 | `C-318` | befund | hoch | [ADR-Coach-Permissions weicht von der Umsetzung ab](erledigt/coach-c-0318-adr-coach-permissions-weicht-von-der-umsetzung-ab.md) | erledigt | — | — |
 | `C-358` | befund | mittel | [abgelaufene Aktionen bleiben `pending`](erledigt/coach-c-0358-abgelaufene-aktionen-bleiben-pending.md) | erledigt | — | — |
-| `C-362` | feature | mittel | [das Consent-Log ist beschrieben und nicht gebaut](laufend_codex/coach-c-0362-das-consent-log-ist-beschrieben-und-nicht-gebaut.md) | laeuft (codex) | — | — |
+| `C-362` | feature | mittel | [das Consent-Log ist beschrieben und nicht gebaut](erledigt/coach-c-0362-das-consent-log-ist-beschrieben-und-nicht-gebaut.md) | erledigt | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](todos/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | offen | — | — |
@@ -386,7 +386,7 @@
 | `G-169` | befund | mittel | [`coach.checkins` und `checkin_templates` liegen ungelesen](todos/coach-g-0169-coach-checkins-und-checkin-templates-liegen-ungelesen.md) | offen | — | — |
 | `G-244` | befund | mittel | [die rechten Kacheln im Human-Coach-Reiter sind Attrappe](todos/coach-g-0244-die-rechten-kacheln-im-human-coach-reiter-sind-attrappe.md) | offen | — | — |
 | `G-277` | befund | hoch | [der Rechte-Reiter nennt einen Grund, den es nicht gibt](erledigt/coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md) | erledigt | — | G-280 |
-| `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](laufend_codex/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | laeuft (codex) | — | — |
+| `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 
 ## quer — 84
 

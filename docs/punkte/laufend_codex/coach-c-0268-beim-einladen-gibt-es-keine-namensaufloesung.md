@@ -8,6 +8,8 @@ braucht: []
 kind_von: C-225
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-01
 beruehrt:
   tabellen: ["auth.users", "public.profiles"]
   dateien: []
@@ -35,3 +37,8 @@ zahlen: null
 
   **Zu tun:** erst entscheiden, woher der Name kommt — dann die
   Funktion. Gehoert zu Codex.
+
+## Auftrag
+
+**Mitbeauftragt mit A-33 am 2026-09-01.** Der Auftragstext
+und der Bericht stehen dort.

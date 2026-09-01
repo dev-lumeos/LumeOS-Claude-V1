@@ -10,6 +10,8 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-01
+erledigt: 2026-09-01
+commit: OFFEN
 beruehrt:
   tabellen: []
   dateien: []
@@ -41,3 +43,12 @@ zahlen: null
 
 **Mitbeauftragt mit C-362 am 2026-09-01.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-01, mit C-362 abgenommen: gegenstandslos.**
+
+`[cmd]` **Vier historische Cloud-Tabellen, lokal nicht vorhanden** —
+nachgemessen, keine davon im `public`-Schema.
+
+`[read]` **Nichts verschoben, nichts geloescht.**

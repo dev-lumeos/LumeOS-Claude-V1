@@ -7,8 +7,6 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: C-112
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-01
 beruehrt:
   tabellen: [coach.relationships]
 zahlen:
@@ -56,3 +54,17 @@ Memory/Chat.** **Dieser Punkt ist Stufe vier.**
 
 **Mitbeauftragt mit C-362 am 2026-09-01.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-01
+
+`[cmd]` **Entity-, API-, Komponenten- und Kapitel-17-Spec
+widersprechen sich bei den Memory-Typen und beim Vergessen.**
+
+`[read]` **C-112 hatte vier parallele Gedaechtnismodelle genannt.**
+**Codex hat sie gefunden und nicht ausgewaehlt** — richtig, das war
+die Vorgabe.
+
+`[read]` **Der Punkt bleibt offen, und die Frage ist jetzt praezise:**
+**welches der vier Modelle gilt, und wie wird vergessen?**
+
+`[read]` **Das ist eine Entscheidung, keine Messung.**

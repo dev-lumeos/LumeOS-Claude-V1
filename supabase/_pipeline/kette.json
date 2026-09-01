@@ -1376,6 +1376,15 @@
       "depends_on": [
         "342"
       ]
+    },
+    {
+      "id": "362",
+      "path": "supabase/_pipeline/15_coach/362_client_consent_log.sql",
+      "kind": "sql",
+      "creates": "C-362/E-20: zweck- und empfaengerbezogenes Consent-Log mit Erteilung und Widerruf, ohne neuen Schreibweg",
+      "depends_on": [
+        "150"
+      ]
     }
   ]
 }

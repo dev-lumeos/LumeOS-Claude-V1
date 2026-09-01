@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-185
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-01
 beruehrt:
   tabellen: []
   dateien: []
@@ -42,3 +44,8 @@ zahlen: null
   Loeschen.** Ein Aenderungsprotokoll, das beim Loeschen verschwindet,
   ist kein Protokoll — und eine zurueckgenommene Einladung ist ein
   Vorgang, kein Nichts.
+
+## Auftrag
+
+**Mitbeauftragt mit A-33 am 2026-09-01.** Der Auftragstext
+und der Bericht stehen dort.
