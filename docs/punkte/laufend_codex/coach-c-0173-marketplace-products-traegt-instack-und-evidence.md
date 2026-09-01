@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-01
 beruehrt:
   tabellen: []
   dateien: []
@@ -30,3 +32,8 @@ zahlen: null
 
   `[cmd]` **`substance_catalog` traegt 567 Eintraege mit Evidenzgrad**
   — die Gegenseite steht.
+
+## Auftrag
+
+**Mitbeauftragt mit G-151 am 2026-09-01.** Der Auftragstext
+und der Bericht stehen dort.

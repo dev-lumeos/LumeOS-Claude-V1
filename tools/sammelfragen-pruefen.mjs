@@ -20,7 +20,7 @@ const ORDNER = ['todos', 'laufend_codex', 'laufend_claudecode', 'laufend_kimi', 
 
 // Bekannte Sammelpunkte, die noch aufzuteilen sind. Beim Aufteilen hier
 // senken.
-const SOLL = 2;
+const SOLL = 1  // 2026-09-01: C-112 aufgeloest (elf auf drei);
 
 const ZAHLWORT = '(?:zwei|drei|vier|f(?:ue|\u00fc)nf|sechs|sieben|acht|neun|zehn|elf|zw(?:oe|\u00f6)lf|\\d+)';
 // "Punkte" ist absichtlich NICHT dabei: C-218 sagt "eine Verschlechterung um

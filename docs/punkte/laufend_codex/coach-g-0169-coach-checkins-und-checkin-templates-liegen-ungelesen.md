@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-158
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-01
 beruehrt:
   tabellen: ["coach.checkins"]
   dateien: []
@@ -22,3 +24,8 @@ zahlen: null
 
   `[cmd]` `checkins` 6, `checkin_templates` 2 — nach G-158 der
   billigste Treffer im Modul.
+
+## Auftrag
+
+**Mitbeauftragt mit G-151 am 2026-09-01.** Der Auftragstext
+und der Bericht stehen dort.
