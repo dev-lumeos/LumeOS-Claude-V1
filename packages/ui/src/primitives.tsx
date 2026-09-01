@@ -29,6 +29,20 @@ export type CardProps = {
   accent?: string
   onClick?: () => void
   /**
+   * Die Kachel selbst ist bedienbar — G-319.
+   *
+   * **Tom, 2026-09-02:** *„anstatt diesen anwaehlbutton einfach die
+   * kachel anwaehlbar machen."*
+   *
+   * `[read]` **Ein `onClick` auf einem `div` ist mit der Tastatur
+   * nicht erreichbar** — deshalb gehoeren `role`, `tabIndex` und
+   * `onKeyDown` dazu, sonst waere die Kachel nur fuer die Maus da.
+   */
+  role?: string
+  tabIndex?: number
+  'aria-label'?: string
+  onKeyDown?: (e: React.KeyboardEvent) => void
+  /**
    * Attrappe: die Kachel steht, hat aber noch keine Datenquelle.
    *
    * `[read]` Tom, 2026-08-16: „Jedes Feature traegt einen Hinweis, ob es
@@ -46,6 +60,7 @@ export type CardProps = {
 
 export function Card({
   title, sub, actions, children, className = '', style, accent, onClick, attrappe,
+  role, tabIndex, onKeyDown, 'aria-label': ariaLabel,
 }: CardProps) {
   const hatKopf = title != null || actions != null || attrappe
   const grund = typeof attrappe === 'string' ? attrappe : null
@@ -54,6 +69,10 @@ export function Card({
       className={`v2-card ${attrappe ? 'v2-attrappe' : ''} ${className}`.trim()}
       style={style}
       onClick={onClick}
+      role={role}
+      tabIndex={tabIndex}
+      aria-label={ariaLabel}
+      onKeyDown={onKeyDown}
     >
       {hatKopf && (
         <div className="v2-card-h">
@@ -168,18 +187,31 @@ export type SparklineProps = {
   h?: number
   strokeWidth?: number
   fill?: boolean
+  /** G-317: feste Skala — sonst normalisiert die Kurve auf min/max. */
+  min?: number
+  max?: number
 }
 
 export function Sparkline({
   data, color = 'currentColor', w = 120, h = 30, strokeWidth = 1.4, fill = true,
+  min: minVorgabe, max: maxVorgabe,
 }: SparklineProps) {
   // Die Vorlage prueft auf leere Daten. Zusaetzlich abgefangen: EIN
   // Punkt. Dort teilt die Vorlage durch (length - 1) = 0 und erzeugt
   // ein Infinity im Pfad — die Kurve verschwindet ohne Fehlermeldung.
   if (!data || data.length < 2) return null
 
-  const min = Math.min(...data)
-  const max = Math.max(...data)
+  // ══ G-317: die Skala darf vorgegeben werden ══════════════
+  //
+  // `[cmd]` **Ohne Vorgabe normalisiert die Kurve auf min/max** —
+  // der niedrigste Wert sitzt immer am Boden, der hoechste immer
+  // oben. **Bei 75/80/100 sieht das aus wie ein Absturz und ein
+  // Aufstieg**, obwohl alle drei hoch sind.
+  //
+  // `[read]` **Bei einer Prozentreihe ist die Skala bekannt: 0 bis
+  // 100.** **Dann zeigt die Hoehe, was sie zu zeigen vorgibt.**
+  const min = minVorgabe ?? Math.min(...data)
+  const max = maxVorgabe ?? Math.max(...data)
   const range = max - min || 1
   const step = w / (data.length - 1)
   const punkte = data.map((v, i): [number, number] =>

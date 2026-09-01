@@ -68,6 +68,12 @@
 // Aufgabe. `Copy week` kopiert deshalb eine vorhandene Woche
 // (`copy_meal_plan_week`), es erfindet keine.
 import * as React from 'react'
+// G-319: der Planeditor.
+import { PlanModal } from './plan-modal'
+
+// G-319: die Sperre und ihr Grund.
+import { bearbeitbarkeit, herkunftVon }
+  from '../../../lib/nutrition/plan-lage'
 import { useRouter } from 'next/navigation'
 import { Card, Icon, Pill, InEntwicklungKnopf } from '@lumeos/ui'
 
@@ -98,6 +104,200 @@ function tagKurz(iso: string): string {
   return d && m ? `${Number(d)}.${Number(m)}.` : iso
 }
 
+/**
+ * Wohin die kopierte Woche soll — G-319.
+ *
+ * **Tom, 2026-09-02:** *,,user fragen und vorschlaege bringen wie: ab
+ * naechsten ungeplanten tag / anschluss an diese woche / oder
+ * usereingabe datum dann muss aber ein kalender oeffnen der schon
+ * geplante tage anzeigt zb rot zur info."*
+ *
+ * `[read]` **Drei Wege, und der Nutzer waehlt** — dieselbe Form wie
+ * die Ablauffrage aus C-377.
+ *
+ * `[cmd]` **`UNIQUE (plan_id, week_start)`** — eine belegte Woche
+ * nimmt keine zweite auf. **Der Kalender zeigt sie rot**, statt den
+ * Fehler erst beim Speichern zu bringen.
+ */
+function KopierZiel({ woche, wochen, onFertig, onAbbruch }: {
+  /** Die Woche, die kopiert wird. */
+  woche: PlanWoche
+  /** Alle Wochen des Plans — sie sind die belegten Plaetze. */
+  wochen: readonly PlanWoche[]
+  onFertig: () => void
+  onAbbruch: () => void
+}) {
+  const belegt = React.useMemo(
+    () => new Set(wochen.map(w => w.week_start)), [wochen])
+
+  // `[read]` **Anschluss an DIESE Woche** — sieben Tage weiter.
+  const anschluss = tageWeiter(woche.week_start, 7)
+  // `[read]` **Der naechste freie Montag ab dem Planende** — nicht
+  // ab heute: der Plan soll laenger werden, nicht zerrissen.
+  const letzte = [...wochen].map(w => w.week_start).sort().pop()
+    ?? woche.week_start
+  let frei = tageWeiter(letzte, 7)
+  for (let i = 0; i < 52 && belegt.has(frei); i += 1) frei = tageWeiter(frei, 7)
+
+  const [weg, setWeg] = React.useState<'anschluss' | 'ende' | 'datum'>(
+    belegt.has(anschluss) ? 'ende' : 'anschluss')
+  const [datum, setDatum] = React.useState(frei)
+  const [laeuft, setLaeuft] = React.useState(false)
+  const [fehler, setFehler] = React.useState<string | null>(null)
+
+  const ziel = weg === 'anschluss' ? anschluss : weg === 'ende' ? frei : datum
+  const zielBelegt = belegt.has(ziel)
+
+  async function kopieren() {
+    if (zielBelegt) {
+      setFehler('In dieser Woche liegt schon eine Planwoche.')
+      return
+    }
+    setLaeuft(true); setFehler(null)
+    const a = await fetch('/api/nutrition/plan', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        art: 'woche_kopieren', week_id: woche.id, ziel,
+      }),
+    })
+    const k = await a.json().catch(() => null)
+    setLaeuft(false)
+    if (!a.ok) { setFehler(k?.error ?? `Fehler ${a.status}`); return }
+    onFertig()
+  }
+
+  return (
+    <div style={{
+      border: '1px solid var(--acc-nutri)', borderRadius: 6, padding: 10,
+      marginTop: 8, background: 'var(--surface-2)',
+    }}>
+      <div style={{ fontSize: 12.5, fontWeight: 600, marginBottom: 6 }}>
+        Woche kopieren
+      </div>
+      <p className="v2-muted" style={{ fontSize: 11, margin: '0 0 8px', lineHeight: 1.5 }}>
+        Die Woche ab {deutschesDatum(woche.week_start)} mit allen
+        Positionen — wohin?
+      </p>
+
+      <div className="v2-col-gap" style={{ gap: 4, marginBottom: 8 }}>
+        {([
+          ['anschluss', 'Direkt im Anschluss',
+           `ab ${deutschesDatum(anschluss)}`, belegt.has(anschluss)],
+          ['ende', 'Ans Planende',
+           `ab ${deutschesDatum(frei)} — die nächste freie Woche`, false],
+          ['datum', 'Datum wählen', 'im Kalender unten', false],
+        ] as const).map(([k, titel, satz, gesperrt]) => (
+          <button
+            key={k} type="button"
+            onClick={() => { if (!gesperrt) setWeg(k) }}
+            aria-pressed={weg === k}
+            disabled={gesperrt}
+            style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
+              gap: 2, padding: '7px 9px', borderRadius: 6,
+              cursor: gesperrt ? 'not-allowed' : 'pointer',
+              textAlign: 'left', width: '100%', color: 'inherit',
+              opacity: gesperrt ? 0.5 : 1,
+              background: weg === k ? 'var(--bg-elev)' : 'var(--surface)',
+              border: `1px solid ${weg === k ? 'var(--acc-nutri)' : 'var(--border)'}`,
+            }}
+          >
+            <span style={{ fontSize: 11.5, fontWeight: weg === k ? 600 : 400 }}>
+              {titel}
+              {gesperrt && (
+                <span className="v2-dim" style={{ fontWeight: 400 }}>
+                  {' '}· belegt
+                </span>
+              )}
+            </span>
+            <span className="v2-dim" style={{ fontSize: 10.5 }}>{satz}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* ══ Der Kalender: belegte Wochen rot ═══════════════
+          `[read]` **Zwoelf Wochen ab der ersten des Plans** — genug,
+          um ein Quartal zu ueberblicken, ohne zu blaettern. */}
+      {weg === 'datum' && (
+        <div style={{ marginBottom: 8 }}>
+          <div className="v2-eyebrow" style={{ marginBottom: 4 }}>
+            Zielwoche — <span style={{ color: 'var(--neg)' }}>rot</span> ist belegt
+          </div>
+          <div style={{
+            display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 4,
+          }}>
+            {wochenGitter(wochen).map(m => {
+              const istBelegt = belegt.has(m)
+              const gewaehlt = datum === m
+              return (
+                <button
+                  key={m} type="button"
+                  onClick={() => { if (!istBelegt) setDatum(m) }}
+                  disabled={istBelegt}
+                  aria-pressed={gewaehlt}
+                  style={{
+                    padding: '5px 4px', borderRadius: 5, fontSize: 10.5,
+                    cursor: istBelegt ? 'not-allowed' : 'pointer',
+                    color: istBelegt ? 'var(--neg)' : 'inherit',
+                    background: gewaehlt ? 'var(--bg-elev)' : 'var(--surface)',
+                    border: `1px solid ${gewaehlt
+                      ? 'var(--acc-nutri)'
+                      : istBelegt
+                        ? 'color-mix(in srgb, var(--neg) 35%, var(--border))'
+                        : 'var(--border)'}`,
+                  }}
+                >
+                  {deutschesDatum(m)}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {fehler && (
+        <p style={{ fontSize: 10.5, color: 'var(--neg)', margin: '0 0 6px' }}>{fehler}</p>
+      )}
+
+      <div style={{ display: 'flex', gap: 6 }}>
+        <button type="button" className="v2-btn v2-btn-sm v2-btn-primary"
+                disabled={laeuft || zielBelegt} onClick={kopieren}>
+          {laeuft ? 'Kopiert…' : `Kopieren nach ${deutschesDatum(ziel)}`}
+        </button>
+        <button type="button" className="v2-btn v2-btn-sm"
+                disabled={laeuft} onClick={onAbbruch}>
+          Abbrechen
+        </button>
+      </div>
+    </div>
+  )
+}
+
+/** Ein ISO-Datum um `n` Tage weiter. */
+function tageWeiter(iso: string, n: number): string {
+  const d = new Date(`${iso}T00:00:00Z`)
+  d.setUTCDate(d.getUTCDate() + n)
+  return d.toISOString().slice(0, 10)
+}
+
+/** Ein ISO-Datum deutsch, kurz. */
+function deutschesDatum(iso: string): string {
+  const [, m, t] = iso.split('-')
+  return t && m ? `${Number(t)}.${Number(m)}.` : iso
+}
+
+/**
+ * Zwoelf Wochenanfaenge ab der ersten Planwoche — G-319.
+ *
+ * `[read]` **Ab der ERSTEN, nicht ab heute** — so sieht man den Plan
+ * im Zusammenhang, samt seiner Luecken.
+ */
+function wochenGitter(wochen: readonly PlanWoche[]): string[] {
+  const start = [...wochen].map(w => w.week_start).sort()[0]
+  if (!start) return []
+  return Array.from({ length: 12 }, (_, i) => tageWeiter(start, i * 7))
+}
+
 /** Die Woche als Spanne, wie im Entwurf („Week of May 12–18"). */
 function wochenSpanne(woche: PlanWoche): string {
   const tage = woche.tage
@@ -115,6 +315,11 @@ function heuteIso(): string {
 }
 
 export function PlannerEchtTab({ d }: { d: PlanDaten }) {
+  // G-319: welche Woche wird gerade kopiert?
+  const [kopieren, setKopieren] = React.useState<string | null>(null)
+  // G-319: der Planeditor.  **Vor dem fruehen Ausstieg** —
+  // ein Hook nach einem  verletzt die Aufrufreihenfolge.
+  const [bearbeiten, setBearbeiten] = React.useState(false)
   const router = useRouter()
   const [woche, setWoche] = React.useState(() => {
     // Die Woche, in der heute liegt — sonst die erste.
@@ -196,6 +401,9 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
   // Anzeige, nicht die Regel.
   const herkunft = d.plan.plan_origin
   const bearbeitbar = herkunft !== 'coach_created' && herkunft !== 'marketplace'
+  // G-319: der Satz zur Sperre — je Herkunft ein anderer.
+  const recht = bearbeitbarkeit(herkunftVon(herkunft), false)
+  const sperrGrund = recht.erlaubt ? '' : recht.satz
 
   // Die Woche, die heute am naechsten liegt — fuer den Sprungknopf.
   const heuteWoche = d.wochen.findIndex(x => x.tage.some(t => t.plan_date === heute))
@@ -276,29 +484,95 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
         <span className="v2-num v2-dim" style={{ fontSize: 11 }}>
           {eintraegeDerWoche} Eintr{eintraegeDerWoche === 1 ? 'ag' : 'aege'}
         </span>
-        <InEntwicklungKnopf
-          titel="Copy week"
-          className="v2-btn"
-          grund={'`copy_meal_plan_week` liegt in der Datenbank (C-150) und ist dort '
-            + 'gegengeprueft — es fehlt der Schreibpfad im Browser (G-97).'}
-        >
+        {/* ══ G-319: `Copy week` kopiert wirklich ═════════════
+            **Tom, 2026-09-02:** *,,copy week braucht eine
+            funktion."*
+
+            `[cmd]` **`nutrition.copy_meal_plan_week(p_week_id,
+            p_target_week_start)` steht seit C-150** — mit
+            Zeilenschutz (`auth.uid()`), und sie gibt die neue
+            Wochen-ID zurueck. **Der Knopf war eine Attrappe ueber
+            einer fertigen Funktion.** */}
+        <button type="button" className="v2-btn"
+                disabled={!bearbeitbar}
+                onClick={() => setKopieren(w.id)}>
           <Icon name="copy" className="v2-ic v2-ic-sm" /> Copy week
-        </InEntwicklungKnopf>
-        <InEntwicklungKnopf
-          titel="New recipe"
-          className="v2-btn v2-btn-primary"
-          grund={'`recipes` und `recipe_ingredients` stehen (C-150). Der '
-            + 'Rezepteditor ist nicht Teil dieses Auftrags (G-97).'}
-        >
-          <Icon name="plus" className="v2-ic v2-ic-sm" /> New recipe
-        </InEntwicklungKnopf>
+        </button>
+        {/* ══ G-319: `New recipe` ist entfernt ═══════════════
+            **Tom, 2026-09-02:** *,,+new recipe gibt es nicht in
+            planner."*
+
+            `[cmd]` **Der Rezepteditor steht seit G-300** — im
+            Rezepte-Reiter, mit Zutatensuche und Naehrwerten.
+            `[read]` **Ein zweiter Einstieg hier waere derselbe
+            Fehler wie die Rezepte-Auflistung** (G-311/3): doppelt,
+            und in keiner Spec.
+
+            `[read]` **A-59: entfernt, nicht auskommentiert.** */}
       </div>
+
+      {/* G-319: der Planeditor — derselbe wie im Meal-plans-Reiter. */}
+      {bearbeiten && d.plan && (
+        <PlanModal
+          vorhanden={{
+            id: d.plan.id,
+            name: d.plan.name,
+            description: d.plan.description,
+            target_kcal: d.plan.target_kcal,
+            target_protein_g: d.plan.target_protein_g,
+            target_carbs_g: d.plan.target_carbs_g,
+            target_fat_g: d.plan.target_fat_g,
+            lifecycle_type: d.plan.lifecycle_type,
+            start_date: d.plan.start_date,
+            days_count: d.plan.days_count,
+          }}
+          onClose={() => setBearbeiten(false)}
+          onFertig={() => { setBearbeiten(false); neuLaden() }}
+        />
+      )}
+
+      {/* G-319: der Kopier-Dialog mit Kalender. */}
+      {kopieren === w.id && (
+        <KopierZiel
+          woche={w}
+          wochen={d.wochen}
+          onFertig={() => { setKopieren(null); neuLaden() }}
+          onAbbruch={() => setKopieren(null)}
+        />
+      )}
 
       <Card
         title={d.plan.name}
         sub={d.plan.description ?? undefined}
-        actions={d.plan.is_active ? <Pill variant="acc">aktiv</Pill> : undefined}
+        /* ══ G-319: Bearbeiten oben rechts ═════════════════
+           **Tom, 2026-09-02:** *,,darin bearbeiten button auf der
+           rechten oberen seite, falls ein plan nicht bearbeitbar ist
+           weil gesperrt muss das ausgewiesen werden und der
+           bearbeiten button nicht anwaehlbar sein."*
+
+           `[cmd]` **`bearbeitbarkeit()` steht in `plan-lage.ts` und
+           liefert je Herkunft einen eigenen Satz** — sie wurde hier
+           nicht benutzt. */
+        actions={(
+          <>
+            {d.plan.is_active && <Pill variant="acc">aktiv</Pill>}
+            {!bearbeitbar && <Pill>gesperrt</Pill>}
+            <button type="button" className="v2-btn v2-btn-sm"
+                    disabled={!bearbeitbar}
+                    title={bearbeitbar ? undefined : sperrGrund}
+                    onClick={() => setBearbeiten(true)}>
+              Bearbeiten
+            </button>
+          </>
+        )}
       >
+        {/* `[read]` **Der Grund steht da, nicht nur das Schloss** —
+            eine Sperre ohne Begruendung ist eine Sackgasse (G-311). */}
+        {!bearbeitbar && (
+          <div className="v2-hinweis" style={{ marginBottom: 10 }}>
+            {sperrGrund}
+          </div>
+        )}
         {/* Die Ziele des Plans — sie stehen in `meal_plans`, also
             gezeigt. Kein Urteil daneben, nur die Zahlen. */}
         {d.plan.target_kcal !== null && (

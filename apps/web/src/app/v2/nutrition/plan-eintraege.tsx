@@ -35,6 +35,8 @@ export type TagesEintrag = {
   meal_type: string
   /** G-315, Vorlage Z. 391: die geplante Uhrzeit, links, 38 px. */
   planned_time?: string | null
+  /** G-316, Vorlage Z. 402: die Posten fuer `Log deviation`. */
+  posten?: Array<{ food_id: string; name: string; amount_g: number }>
   bezeichnung: string
   kcal: number | null
   /** `pending`, solange kein Log dazu existiert. */
@@ -53,6 +55,9 @@ export function PlanEintraegeEcht({
   onGeaendert: () => void
 }) {
   const [laeuft, setLaeuft] = React.useState<string | null>(null)
+  // G-316: welcher Eintrag zeigt seine Mengenfelder?
+  const [abweichung, setAbweichung] = React.useState<string | null>(null)
+  const [mengen, setMengen] = React.useState<Record<string, string>>({})
   const [fehler, setFehler] = React.useState<string | null>(null)
 
   const heute = new Date().toISOString().slice(0, 10)
@@ -206,6 +211,67 @@ export function PlanEintraegeEcht({
 
                     `[cmd]` **Zwei davon sind gebaut, zwei nicht** —
                     die Gruende stehen unten an ihrer Stelle. */}
+                {/* ══ G-316: die Mengenfelder ═════════════════
+                    `[cmd]` **Dieselbe Form wie im Tagebuch**
+                    (`ghost-eintrag.tsx`, G-309): je Posten ein Feld,
+                    46 px eingerueckt wie die Zeilen darueber. */}
+                {offen && abweichung === e.id && e.posten && (
+                  <div style={{
+                    marginTop: 8, paddingLeft: 46,
+                    display: 'grid', gap: 5,
+                  }}>
+                    {e.posten.map(p => (
+                      <div key={p.food_id} style={{
+                        display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5,
+                      }}>
+                        <span style={{ flex: 1, minWidth: 0 }}>{p.name}</span>
+                        <input
+                          type="number" inputMode="decimal" min={0} step={1}
+                          aria-label={`Menge ${p.name}`}
+                          value={mengen[p.food_id] ?? ''}
+                          disabled={busy}
+                          onChange={ev => setMengen(m => ({
+                            ...m, [p.food_id]: ev.target.value,
+                          }))}
+                          className="v2-input"
+                          style={{ width: 70, textAlign: 'right' }}
+                        />
+                        <span className="v2-dim" style={{ fontSize: 10, width: 12 }}>g</span>
+                      </div>
+                    ))}
+                    <div style={{ display: 'flex', gap: 6, marginTop: 2 }}>
+                      <button
+                        type="button" className="v2-btn v2-btn-primary v2-btn-sm"
+                        disabled={busy}
+                        onClick={() => {
+                          // `[read]` **Nur die geaenderten senden** —
+                          // leer heisst „stimmt so" (Flow 4, 4a).
+                          const aus: Array<{ food_id: string; amount_g: number }> = []
+                          let anders = false
+                          for (const p of e.posten ?? []) {
+                            const n = Number(mengen[p.food_id])
+                            if (!Number.isFinite(n) || n <= 0) continue
+                            aus.push({ food_id: p.food_id, amount_g: n })
+                            if (Math.abs(n - p.amount_g) > 0.001) anders = true
+                          }
+                          void schicken({
+                            art: 'bestaetigen', plan_entry_id: e.id,
+                            execution_date: datum, confirmation_mode: 'manual',
+                            mengen: anders ? aus : undefined,
+                          }, e.id)
+                          setAbweichung(null)
+                        }}
+                      >
+                        {busy ? 'Speichert…' : 'Mit diesen Mengen buchen'}
+                      </button>
+                      <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                              disabled={busy} onClick={() => setAbweichung(null)}>
+                        Abbrechen
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {offen && (
                   <div style={{
                     display: 'flex', gap: 6, marginTop: 8,
@@ -243,7 +309,29 @@ export function PlanEintraegeEcht({
                         `[read]` **`confirmation_mode` bleibt im
                         Schema** — die Spalte ist richtig, nur hatte
                         sie keinen ehrlichen Absender. */}
-                    {/* ══ Z. 402: `Log deviation` — NICHT GEBAUT ════
+                    {/* Z. 402 — `Log deviation`: die Mengen anpassen.
+                        `[cmd]` **Gebaut in G-316.** Der Schreibweg
+                        konnte es seit G-309 (`bestaetigen` nimmt
+                        `mengen`); **es fehlte der Leseweg** — ohne
+                        Posten keine Felder. */}
+                    {e.posten && e.posten.length > 0 && (
+                      <button
+                        type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                        disabled={busy}
+                        aria-expanded={abweichung === e.id}
+                        onClick={() => {
+                          if (abweichung === e.id) { setAbweichung(null); return }
+                          setAbweichung(e.id)
+                          // `[read]` **Die Planmengen als Ausgangswert**
+                          // — wer nichts aendert, hat nicht abgewichen.
+                          setMengen(Object.fromEntries(
+                            (e.posten ?? []).map(p => [p.food_id, String(p.amount_g)])))
+                        }}
+                      >
+                        Log deviation
+                      </button>
+                    )}
+                    {/* ══ Z. 401: `MealCam` — NICHT GEBAUT ═════════
                         `[cmd]` **Der Schreibweg kann es**
                         (`bestaetigen` nimmt `mengen`, und daraus
                         entsteht `deviated` mit `deviation_kcal`).

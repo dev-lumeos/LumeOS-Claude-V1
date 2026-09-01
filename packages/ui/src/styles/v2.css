@@ -579,14 +579,36 @@ a { color: inherit; text-decoration: none; }
 .v2-ring {
   position: relative;
   width: 120px; height: 120px;
+  /* G-318: Platz fuer das Label UNTER dem Kreis.
+     `height` wird von `Ring` per `style` ueberschrieben (size), die
+     Polsterung bleibt — deshalb steht sie hier und nicht in einem
+     zweiten Block, der gegen die feste Hoehe nichts ausrichtet. */
+  padding-bottom: 16px;
+  box-sizing: content-box;
 }
 .v2-ring svg { transform: rotate(-90deg); display: block; }
+/* ══ G-318: das Label steht UNTER dem Ring ═════════════════
+
+   Tom, 2026-09-02: "wieso ist compliance immer noch in der grafik
+   anstatt darunter?"
+
+   Am 2026-09-02 gemessen: Ring y 306..398, Label y 367..382 — es
+   lag IM Kreis, quer ueber dem unteren Bogen.
+
+   In G-317 habe ich geprueft, ob das Label UNTER DER ZAHL sitzt.
+   Das war erfuellt und trotzdem falsch: beides steckte in
+   `inset: 0`, also mittig im Ring. Die richtige Frage war, ob es
+   unter dem RING sitzt.
+
+   Der Wert bleibt mittig im Kreis, das Label wandert darunter. */
 .v2-ring-label {
   position: absolute;
-  inset: 0;
-  display: flex; flex-direction: column;
+  /* `inset: 0` zentrierte BEIDES im Kreis — daher lag das Label
+     ueber dem unteren Bogen. Jetzt endet der Kasten dort, wo der
+     Kreis endet: die Zahl bleibt mittig, das Label steht darunter. */
+  top: 0; left: 0; right: 0; bottom: 16px;
+  display: flex;
   align-items: center; justify-content: center;
-  gap: 0;
 }
 .v2-ring-label .v2-v {
   font-family: var(--font-mono);
@@ -594,7 +616,21 @@ a { color: inherit; text-decoration: none; }
   font-weight: 500;
   letter-spacing: -0.03em;
 }
-.v2-ring-label .v2-l { font-size: 10px; color: var(--fg-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+/* G-315: das Label sass ohne Abstand direkt unter der Zahl —
+   gemessen am 2026-09-02: Wert endet bei y=372, Label beginnt bei
+   y=372. Keine Ueberlappung, aber auch keine Luft, und bei einer
+   dreistelligen Zahl (83.3) sieht es zusammengeschoben aus.
+   Die Vorlage (theme-v1 Z. 364) zeigt beide getrennt. */
+.v2-ring-label .v2-l {
+  /* G-318: unter dem Kreis — `bottom: -16px` liegt genau in der
+     Polsterung, die `.v2-ring` dafuer freihaelt. */
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  bottom: -16px;
+  font-size: 10px; color: var(--fg-dim);
+  text-transform: uppercase; letter-spacing: 0.05em;
+  white-space: nowrap;
+}
 
 /* Pill / chip */
 .v2-pill {

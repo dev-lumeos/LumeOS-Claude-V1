@@ -44,9 +44,6 @@ import { PlanModal } from './plan-modal'
 import { PlanEintraegeEcht, type TagesEintrag } from './plan-eintraege'
 // G-286/G-287/G-290: Karte, Tages-Akkordeon und Aktivierungsdialog.
 import {
-  // G-315: `MealPlanCard`/`MealPlanDetail` entfernt — der aktive
-  // Plan stand dreimal. Das Aktivierungsmodal bleibt.
-  MealPlanActivationModal,
 } from './plan-detail'
 
 const ATTRAPPE = 'Aus dem Entwurf uebernommen. Dieser Tab ist noch nicht an die vorhandenen Essensplaene angebunden - die Zahlen sind erfunden.'
@@ -103,8 +100,6 @@ export function MealPlansTab({
   // ein Objekt heisst bearbeiten.
   const [anlegen, setAnlegen] = React.useState(false)
   const [bearbeiten, setBearbeiten] = React.useState(false)
-  // G-290: der Aktivierungsdialog mit LifecyclePicker.
-  const [aktivieren, setAktivieren] = React.useState(false)
   const router = useRouter()
 
   // Die Rechnung der Vorlage (Zeile 336-343), unveraendert.
@@ -371,7 +366,8 @@ export function MealPlansTab({
         <PlanBibliothekEcht
           plaene={allePlaene}
           aktivId={d.plan?.id ?? null}
-          onAktivieren={() => setAktivieren(true)}
+          heute={datum}
+          onGeaendert={() => router.refresh()}
         />
       )}
 
@@ -414,17 +410,20 @@ export function MealPlansTab({
           Recomp 5-Meal Plan"*, Print/Export ohne Wirkung). **Er ist
           entfernt, nicht abgeschaltet** — A-59. */}
 
-      {/* G-290: Startdatum, Laenge und Lebenszyklus — ein eigener
-          Vorgang. `[read]` **`planAnlegen` setzt `status` bewusst auf
-          `'assigned'`** (G-267): ein neuer Plan ist noch nicht aktiv,
-          und zwei Entscheidungen gehoeren nicht in einen Knopf. */}
-      {aktivieren && d?.plan && (
-        <MealPlanActivationModal
-          d={d}
-          onClose={() => setAktivieren(false)}
-          onGespeichert={() => router.refresh()}
-        />
-      )}
+      {/* ══ G-319: `MealPlanActivationModal` ist entfernt ═══════
+          `[cmd]` **Es bekam `d`** — den AKTIVEN Plan. **Ein Klick auf
+          *Aktivieren* bei einem anderen oeffnete den Dialog fuer den
+          falschen**, und genau das meinte Tom mit *,,da geht
+          nichts."*
+
+          `[cmd]` **`AktivierenFrage` (G-309) fuehrt Flow 3
+          Schritte 5-7 je Plan** — die Bibliothek ruft sie jetzt
+          selbst, mit der `id` der Kachel.
+
+          `[read]` **A-59: entfernt, nicht auskommentiert** — nach der
+          Umstellung war der Aufruf unerreichbar (`setAktivieren`
+          wurde nur noch beim Schliessen gerufen). git holt ihn
+          zurueck. */}
 
       {/* G-267 / G-268: anlegen und bearbeiten. `[read]` Ein Modal
           fuer beides — die Felder sind dieselben, nur die Route

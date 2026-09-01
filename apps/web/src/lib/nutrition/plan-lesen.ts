@@ -549,6 +549,21 @@ export async function ladeTagesEintraege(datum: string): Promise<Array<{
   confirmation_mode: string | null
   deviation_kcal: number | null
   deviation_pct: number | null
+  /**
+   * Die Posten — G-316, Vorlage Z. 402 (`Log deviation`).
+   *
+   * `[cmd]` **Der Schreibweg kann die Abweichung** (`bestaetigen`
+   * nimmt `mengen`, daraus entsteht `deviated` mit `deviation_kcal`
+   * — in G-309 mit 1.028 kcal / 76,3 % belegt).
+   *
+   * `[cmd]` **Was fehlte, war der Leseweg:** ohne Posten keine
+   * Mengenfelder, ohne Mengenfelder keine bezifferbare Abweichung.
+   *
+   * `[read]` **Ein Rezept wird aufgeloest, ein Lebensmittel ist sein
+   * eigener Posten** — dieselbe Form wie in `plan-log-write.ts`,
+   * damit die Anzeige zeigt, was das Bestaetigen schreibt.
+   */
+  posten: Array<{ food_id: string; name: string; amount_g: number }>
 }>> {
   const db = nutritionDb()
   const client = createSessionClient()
@@ -559,13 +574,37 @@ export async function ladeTagesEintraege(datum: string): Promise<Array<{
     db.from('meal_plan_entries')
       .select(`
         id, meal_type, slot_order, entry_type, amount_g, planned_servings,
-        planned_time,
-        recipe:recipes ( name_de ),
+        planned_time, food_id, recipe_id,
+        recipe:recipes ( id, name_de, servings ),
         food:foods ( name_display_de, name_de ),
-        day:meal_plan_days!inner ( plan_date )
+        day:meal_plan_days!inner (
+          plan_date,
+          week:meal_plan_weeks!inner (
+            plan:meal_plans!inner ( id, status )
+          )
+        )
       `)
       .eq('user_id', user.id)
       .eq('meal_plan_days.plan_date', datum)
+      // ══ G-318: NUR vom aktiven Plan ═══════════════════════════════
+      //
+      // **Tom, 2026-09-02:** *„wieso sehe ich dann immer noch soviele
+      // eintraege anstatt der normalen 4 von einem aktivierten
+      // mealplan?"*
+      //
+      // `[cmd]` **Am 2026-09-02 gemessen: „16 still open"** — vier
+      // Pläne × vier Einträge. **Die Kachel zeigte die Positionen
+      // JEDES Plans, der an diesem Tag einen Tag hat.**
+      //
+      // `[cmd]` **Ich habe das in G-309 als offenen Punkt GEMELDET,
+      // statt es zu beheben** — mit dem Satz, `ladeGhostEintraege`
+      // filtere ja. `[read]` **Das war falsch: die Kachel im
+      // Plans-Reiter benutzt DIESE Funktion, nicht jene.** **Ein
+      // gemeldeter Befund ist kein behobener.**
+      //
+      // `[read]` **Ein pausierter Plan hat keinen Anspruch auf den
+      // Tag** — genau deshalb wird beim Aktivieren pausiert (G-309).
+      .eq('meal_plan_days.meal_plan_weeks.meal_plans.status', 'active')
       .order('slot_order', { ascending: true })
       .limit(200),
     db.from('meal_plan_logs')
@@ -583,8 +622,110 @@ export async function ladeTagesEintraege(datum: string): Promise<Array<{
     if (k) jeEintrag.set(k, l)
   }
 
+  // ══ G-316: die Zutaten der Rezepte, in EINER Abfrage ═══════
+  //
+  // `[read]` **Nicht je Eintrag** — ein `await` je Zeile kostet je
+  // Durchlauf voll (G-252). **Dieselbe Form wie in G-311.**
+  const rohE = (eintraegeR.data ?? []) as unknown as Array<Record<string, unknown>>
+  const rezeptIds = Array.from(new Set(rohE
+    .map(r => text((r.recipe as Record<string, unknown> | null)?.id))
+    .filter((v): v is string => v !== null)))
+  const zutatenJeRezept = new Map<string, Array<Record<string, unknown>>>()
+  if (rezeptIds.length > 0) {
+    const { data: zRoh } = await db
+      .from('recipe_ingredients')
+      .select('recipe_id, food_id, amount_g, food_name_snapshot, sort_order, '
+        + 'food:foods ( name_display_de, name_de )')
+      .in('recipe_id', rezeptIds)
+      .order('sort_order', { ascending: true })
+      .limit(500)
+    for (const z of (zRoh ?? []) as unknown as Array<Record<string, unknown>>) {
+      const k = text(z.recipe_id)
+      if (!k) continue
+      const liste = zutatenJeRezept.get(k)
+      if (liste) liste.push(z)
+      else zutatenJeRezept.set(k, [z])
+    }
+  }
+
+  /**
+   * Die Posten eines Eintrags — G-316.
+   *
+   * `[read]` **`planned_servings / servings` skaliert** — dieselbe
+   * Rechnung wie beim Bestaetigen (G-309). **Sonst zeigte das
+   * Formular andere Mengen, als es schreibt.**
+   */
+  const postenVon = (r: Record<string, unknown>) => {
+    const rez = r.recipe as Record<string, unknown> | null
+    const rezeptId = text(rez?.id)
+    if (rezeptId) {
+      const portionen = zahl(r.planned_servings) ?? 1
+      const proRezept = zahl(rez?.servings) ?? 1
+      const faktor = proRezept > 0 ? portionen / proRezept : 1
+      const aus: Array<{ food_id: string; name: string; amount_g: number }> = []
+      for (const z of (zutatenJeRezept.get(rezeptId) ?? [])) {
+        const fid = text(z.food_id)
+        const menge = zahl(z.amount_g)
+        if (!fid || menge === null) continue
+        const zf = z.food as Record<string, unknown> | null
+        aus.push({
+          food_id: fid,
+          name: text(zf?.name_display_de) ?? text(zf?.name_de)
+            ?? text(z.food_name_snapshot) ?? '—',
+          amount_g: Math.round(menge * faktor * 10) / 10,
+        })
+      }
+      return aus
+    }
+    // `[read]` **Ein BLS-Eintrag ist sein eigener Posten.**
+    const fid = text(r.food_id)
+    const menge = zahl(r.amount_g)
+    if (!fid || menge === null) return []
+    const essen = r.food as Record<string, unknown> | null
+    return [{
+      food_id: fid,
+      name: text(essen?.name_display_de) ?? text(essen?.name_de) ?? '—',
+      amount_g: menge,
+    }]
+  }
+
+  // ══ G-317: die geplanten kcal je Eintrag ════════════════
+  //
+  // `[read]` **Gleichzeitig, nicht nacheinander** — ein `await` je
+  // Eintrag kostet je Durchlauf voll (G-252).
+  //
+  // `[cmd]` **Bei einem Rezept ueber `recipe_nutrition`**, bei einem
+  // Lebensmittel ueber `food_nutrient_snapshot` — dieselben zwei
+  // Funktionen, die `ladePlan` benutzt.
+  const kcalJeEintrag = new Map<string, number>()
+  await Promise.all(rohE.map(async r => {
+    const id = text(r.id)
+    if (!id) return
+    const rez = r.recipe as Record<string, unknown> | null
+    const rezeptId = text(rez?.id)
+    if (rezeptId) {
+      // `[read]` **`planned_servings` skaliert** — dieselbe Rechnung
+      // wie beim Bestaetigen (G-309).
+      const portionen = zahl(r.planned_servings) ?? 1
+      try {
+        const { data } = await db.rpc('recipe_nutrition', {
+          p_recipe_id: rezeptId, p_servings: portionen,
+        })
+        const z = (Array.isArray(data) ? data[0] : data) as Record<string, unknown> | null
+        const k = zahl(z?.enercc)
+        if (k !== null) kcalJeEintrag.set(id, Math.round(k))
+      } catch {
+        // `[read]` **Ohne Wert bleibt die Zelle leer** — ein Strich
+        // ist ehrlicher als eine Null.
+      }
+      return
+    }
+    const k = await kcalAusLebensmittel(db, text(r.food_id), zahl(r.amount_g))
+    if (k !== null) kcalJeEintrag.set(id, k)
+  }))
+
   const aus = []
-  for (const roh of (eintraegeR.data ?? []) as unknown as Array<Record<string, unknown>>) {
+  for (const roh of rohE) {
     const id = text(roh.id)
     if (!id) continue
     const rezept = roh.recipe as Record<string, unknown> | null
@@ -597,14 +738,29 @@ export async function ladeTagesEintraege(datum: string): Promise<Array<{
       planned_time: text(roh.planned_time)?.slice(0, 5) ?? null,
       bezeichnung: text(rezept?.name_de)
         ?? text(essen?.name_display_de) ?? text(essen?.name_de) ?? '—',
-      // `[read]` Die kcal stehen erst nach dem Bestaetigen fest —
-      // hier bleibt `null`, statt eine Zahl zu behaupten.
-      kcal: null,
+      // ══ G-317, Vorlage Z. 394: die GEPLANTEN kcal ═════════
+      //
+      // `[cmd]` **Hier stand `kcal: null`** mit der Begruendung *,,die
+      // kcal stehen erst nach dem Bestaetigen fest"*.
+      //
+      // `[read]` **Das verwechselt zwei Zahlen.** **Was nach dem
+      // Bestaetigen feststeht, ist die GEGESSENE Menge** — sie steht
+      // in `meals`. **Die Vorlage zeigt die GEPLANTE**, und die steht
+      // im Eintrag: `amount_g` oder `planned_servings`.
+      //
+      // `[cmd]` **Am 2026-09-02 gemessen: 0 kcal-Spannen am Schirm** —
+      // die Zeile war leer, obwohl die Daten dastehen.
+      //
+      // `[read]` **Derselbe Rechenweg wie im Planner** (`ladePlan`
+      // Z. 363-365) — kein zweiter, keine zweite Wahrheit.
+      kcal: kcalJeEintrag.get(id) ?? null,
       status: (text(log?.status) ?? 'pending') as
         'pending' | 'confirmed' | 'deviated' | 'skipped',
       confirmation_mode: text(log?.confirmation_mode),
       deviation_kcal: zahl(log?.deviation_kcal),
       deviation_pct: zahl(log?.deviation_pct),
+      // G-316: die Posten fuer die Mengenfelder.
+      posten: postenVon(roh),
     })
   }
   return aus

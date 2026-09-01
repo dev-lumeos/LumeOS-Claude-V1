@@ -157,7 +157,17 @@ test('G-310: die Sparkline der Attrappe, mit Avg · Deviations · Skips', () => 
   // `[read]` **Eine Linie durch EINEN Punkt ist keine Kurve** —
   // sondern eine Behauptung ueber einen Verlauf, den niemand gemessen
   // hat.
-  assert.match(block, /filter\(x => x\.quote !== null\)\.length >= 2/,
+  //
+  // `[cmd]` **BERICHTIGT in G-317:** hier stand
+  // `filter(x => x.quote !== null).length >= 2`.
+  //
+  // `[cmd]` **Der Filter steht jetzt eine Zeile hoeher** — die Reihe
+  // wird VORHER auf die gemessenen Tage reduziert, statt beim
+  // Zeichnen. **Grund: `?? 0` machte aus einem Tag ohne Entscheidung
+  // eine 0-Prozent-Aussage** (C-323).
+  assert.match(block, /\.filter\(\(v\): v is number => v !== null\)/,
+    'die leeren Tage werden nicht herausgefiltert')
+  assert.match(block, /\{gemessen\.length >= 2 && \(/,
     'die Sparkline zeichnet auch bei einem einzigen Datenpunkt')
 })
 

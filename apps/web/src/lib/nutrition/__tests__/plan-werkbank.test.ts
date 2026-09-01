@@ -203,9 +203,13 @@ test('G-306: die Sperre steht im SCHREIBWEG, nicht nur in der Anzeige', () => {
   assert.equal(protokoll, 2,
     `${protokoll} von 2 Vorgaengen pruefen das Protokoll (aendern, loeschen)`)
   // Die Herkunft wird bei allen dreien geprueft — G-269 gilt weiter.
+  // `[cmd]` **G-319: der fuenfte ist `wocheKopieren`** — sonst waere
+  // die Kopie der Ausweg um die Sperre herum, so wie es
+  // „Kopie bearbeiten" vor C-372 war.
   const herkunft = (s.match(/await pruefeHerkunft\(/g) ?? []).length
-  assert.equal(herkunft, 4,
-    `${herkunft} Herkunftspruefungen — erwartet 4 (3 Positionen + Ablauf)`)
+  assert.equal(herkunft, 5,
+    `${herkunft} Herkunftspruefungen — erwartet 5 `
+    + `(3 Positionen, Ablauf, Wochenkopie)`)
 
   // `[cmd]` **A-59: die Sperre aus C-372 ist entfernt, nicht
   // auskommentiert.**
@@ -261,12 +265,22 @@ test('C-375: die Oberflaeche sperrt keinen Plan mehr', () => {
   // laesst sich bearbeiten, auch ein aktiver, auch ein gekaufter.
   assert.match(u, /<Pill variant="acc">In der Werkbank<\/Pill>/,
     'der offene Plan traegt keine Marke')
-  assert.match(u, />\s*Bearbeiten\s*<\/button>/,
-    'der Bearbeiten-Knopf fehlt')
-  // `[read]` **An KEINER Herkunftsbedingung** — das war der Kern
-  // von C-375.
-  assert.doesNotMatch(u, /verkaeuflich && [^\n]*Bearbeiten/,
-    'der Bearbeiten-Knopf haengt wieder an einer Sperre')
+  // `[cmd]` **BERICHTIGT in G-319: der Knopf heisst `Anwählen`.**
+  //
+  // **Tom, 2026-09-02:** *„prinzipiell anwaehlen zeigt unten die
+  // werkbank davon, darin bearbeiten button auf der rechten oberen
+  // seite."*
+  //
+  // **Tom, 2026-09-02, berichtigt:** *„anstatt diesen anwaehlbutton
+  // einfach die kachel anwaehlbar machen."*
+  //
+  // `[read]` **Zwei Schritte, zwei Orte** — die Kachel waehlt an, die
+  // Werkbank bearbeitet. **Was C-375 sichert, sichert der Waechter
+  // weiter:** die Auswahl haengt an keiner Herkunft.
+  assert.match(u, /onClick=\{offen \? undefined : \(*\(\) => onWaehlen\(p\.id\)\)*\}/,
+    'die Kachel waehlt nicht an')
+  assert.doesNotMatch(u, /verkaeuflich && [^\n]*onWaehlen/,
+    'die Auswahl haengt wieder an einer Sperre')
 })
 
 // ══ C-377/C-373: die Frage beim Ablauf ═══════════════════════════

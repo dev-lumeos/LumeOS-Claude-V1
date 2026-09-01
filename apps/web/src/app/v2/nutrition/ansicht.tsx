@@ -831,6 +831,21 @@ function AndererTab({
     return (
       <div style={{ marginTop: 16 }} className="v2-col-gap">
         <PlanWerkbank plaene={allePlaene} heute={datum ?? ''} />
+
+        {/* ══ G-319: die Trennung ══════════════════════════════════
+            **Tom, 2026-09-02:** *„zwischen alle plaene und der
+            werkbank darunter muss eine klare trennung kommen."*
+
+            `[read]` **Vorher stiessen zwei Bereiche ohne Uebergang
+            aneinander** — die Plankarten und das Wochenraster sahen
+            aus wie eine durchlaufende Liste. */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 10, marginTop: 6,
+        }}>
+          <span className="v2-eyebrow">Werkbank</span>
+          <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+        </div>
+
         {plan ? <PlannerEchtTab d={plan} /> : <NutritionPlannerTab />}
       </div>
     )

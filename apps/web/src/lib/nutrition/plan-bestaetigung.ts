@@ -166,6 +166,32 @@ export const STATUS_TEXT: Record<LogStatus, string> = {
   skipped: 'ausgelassen',
 }
 
+/**
+ * Die Farbe je Zustand — Vorlage Z. 341-346.
+ *
+ * ══ G-317: `skipped` UND `pending` WAREN BEIDE GRAU ═════════════════
+ *
+ * `[cmd]` **Am 2026-09-02 am Schirm gemessen:** `ausgelassen` und
+ * `offen` trugen dieselbe Farbe (`oklch(0.68 0.005 270)`) — **zwei von
+ * drei sichtbaren Zuständen waren nicht zu unterscheiden.**
+ *
+ * `[cmd]` **Die Vorlage gibt jedem eine eigene** (Z. 342-345):
+ *
+ *     confirmed   var(--pos)
+ *     deviated    var(--warn)
+ *     skipped     var(--neg)
+ *     pending     var(--fg-dim)
+ *
+ * `[read]` **Der Kommentar hier sagte *„Offen ist kein Befund"*** —
+ * das stimmt für `pending`. **Für `skipped` galt er nie:** wer eine
+ * Mahlzeit auslässt, hat entschieden. **Die Zeile hatte die
+ * Begründung der Nachbarzeile geerbt.**
+ *
+ * `[read]` **Und es zählt:** die Pille ist die einzige Stelle, an der
+ * die drei entschiedenen Zustände sich unterscheiden — **sie trägt
+ * die Compliance-Rechnung darüber** (SPEC_09 §2: `confirmed` und
+ * `deviated` zählen als Erfolg, `skipped` nicht).
+ */
 export const STATUS_FARBE: Record<LogStatus, string> = {
   // `[read]` Offen ist kein Befund, sondern das Fehlen einer
   // Entscheidung — grau, nicht gelb.
@@ -173,7 +199,9 @@ export const STATUS_FARBE: Record<LogStatus, string> = {
   confirmed: 'var(--pos)',
   // `[read]` Abgewichen ist keine Warnung: gegessen wurde, nur anders.
   deviated: 'var(--warn)',
-  skipped: 'var(--fg-dim)',
+  // `[read]` **Ausgelassen ist eine Entscheidung, kein Fehlen** — und
+  // die einzige, die in der Quote als Misserfolg zählt.
+  skipped: 'var(--neg)',
 }
 
 /**

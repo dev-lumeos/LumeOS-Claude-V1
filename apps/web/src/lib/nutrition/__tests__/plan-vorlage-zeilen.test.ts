@@ -135,12 +135,23 @@ test('G-315/2: „In der Werkbank" steht an den NICHT-aktiven', () => {
   //
   // `[read]` **Ein Knopf, der sagt *,,du bist hier"*, ist kein
   // Knopf.**
+  // ══ BERICHTIGT in G-319 ═══════════════════════════════════════
+  //
+  // **Tom, 2026-09-02:** *,,anstatt diesen anwaehlbutton einfach die
+  // kachel anwaehlbar machen."*
+  //
+  // `[cmd]` **Hier stand das Muster des Knopfes.** `[read]` **Den
+  // gibt es nicht mehr — die Kachel selbst waehlt an.** **Was G-315
+  // sichert, bleibt gesichert:** der offene Plan traegt eine Marke,
+  // und kein Klick tut an ihm etwas.
   const w = ohneKommentare(WERKB)
-  assert.match(w, /\{offen \? \(\s*\n\s*<Pill variant="acc">In der Werkbank<\/Pill>/,
-    'der offene Plan traegt weiter einen Knopf statt einer Marke')
-  // Und der Knopf steht nur am geschlossenen.
-  assert.match(w, /\) : \(\s*\n\s*<button type="button" className="v2-btn v2-btn-sm"\s*\n\s*onClick=\{\(\) => onWaehlen\(p\.id\)\}/,
-    'der Bearbeiten-Knopf haengt nicht am geschlossenen Plan')
+  assert.match(w, /\{offen && <Pill variant="acc">In der Werkbank<\/Pill>\}/,
+    'der offene Plan traegt keine Marke')
+  // `[cmd]` **Und der Klick haengt am GESCHLOSSENEN** — beim offenen
+  // ist er `undefined`, sonst waere die Kachel ein Knopf, der sagt
+  // *,,du bist hier"*.
+  assert.match(w, /onClick=\{offen \? undefined : \(*\(\) => onWaehlen\(p\.id\)\)*\}/,
+    'die Auswahl haengt nicht am geschlossenen Plan')
 })
 
 // ══ DER AKTIVE PLAN STEHT EINMAL ════════════════════════════════════
@@ -246,11 +257,18 @@ test('G-315/Z. 398-404: die Knoepfe, 46 px eingerueckt', () => {
   assert.doesNotMatch(e, /name="camera"/,
     'der MealCam-Knopf ist zurueck — ohne Fotoweg (G-276)')
 
-  // `[cmd]` **Z. 402 `Log deviation` ist NICHT gebaut** — die Posten
-  // fehlen im Tageseintrag. **Der Grund steht als Kommentar dort.**
-  const roh = lies(EINTR)
-  assert.match(roh, /Z\. 402: `Log deviation` — NICHT GEBAUT/,
-    'die fehlende Zeile ist nicht als fehlend vermerkt')
+  // `[cmd]` **BERICHTIGT in G-317/G-316: Z. 402 IST gebaut.**
+  //
+  // `[cmd]` **Hier stand, die Zeile sei als fehlend vermerkt** — mit
+  // der Begruendung, die Posten fehlten im Tageseintrag.
+  //
+  // `[cmd]` **G-316 hat den Leseweg nachgezogen** (derselbe Verbund
+  // wie in G-311), **und am 2026-09-02 belegt:** 200 g auf 600 g
+  // ergaben `deviated` mit 1.372 kcal und 200,0 %.
+  assert.match(e, />\s*Log deviation\s*<\/button>/,
+    'Z. 402: der Knopf fehlt — er ist seit G-316 gebaut')
+  assert.match(e, /aria-label=\{`Menge \$\{p\.name\}`\}/,
+    'Z. 402: die Mengenfelder fehlen')
 })
 
 test('G-315/Z. 414-419: Plan settings hat GENAU fuenf Zeilen', () => {

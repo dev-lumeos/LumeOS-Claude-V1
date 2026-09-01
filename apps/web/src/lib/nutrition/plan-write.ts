@@ -317,7 +317,32 @@ async function wochenAufStartdatumSchieben(
   // geschrieben, statt jede Zeile mit demselben Wert zu ueberschreiben.
   if (tage === 0) return
 
-  for (const w of wochen) {
+  // ══ G-318: DIE RICHTUNG ENTSCHEIDET ÜBER DIE REIHENFOLGE ═════════
+  //
+  // **Tom, 2026-09-02:** *„wieso kann ich im planner nicht
+  // aktivieren? duplicate key value violates unique constraint
+  // `uq_meal_plan_days_week_date`"*
+  //
+  // `[cmd]` **Der Plan hat einen Wochensprung:** 1.9., **15.9.**,
+  // 22.9. — die Woche vom 8.9. fehlt.
+  //
+  // `[cmd]` **Nachgerechnet für +14 Tage, aufsteigend:**
+  //
+  //     1.9.  -> 15.9.   KOLLISION (dort steht Woche 2 noch)
+  //     15.9. -> 29.9.   frei
+  //     22.9. -> 6.10.   frei
+  //
+  // `[read]` **Beim Vorwärtsschieben muss die LETZTE Woche zuerst
+  // weichen**, sonst rückt die erste auf einen belegten Platz.
+  // **Rückwärts ist es umgekehrt.**
+  //
+  // `[cmd]` **`UNIQUE (plan_id, week_start)` und `UNIQUE (week_id,
+  // plan_date)`** — beide greifen mitten in der Schleife, nicht erst
+  // am Ende. **Eine Transaktion gibt es hier nicht: PostgREST
+  // schreibt je Aufruf.**
+  const reihenfolge = tage > 0 ? [...wochen].reverse() : wochen
+
+  for (const w of reihenfolge) {
     const neuStart = tageVerschieben(w.week_start, tage)
     const { error: wFehler } = await db
       .from('meal_plan_weeks')
@@ -329,9 +354,18 @@ async function wochenAufStartdatumSchieben(
       .from('meal_plan_days')
       .select('id, plan_date')
       .eq('week_id', w.id)
-    for (const d of ((dRoh ?? []) as unknown as Array<{
+      .order('plan_date')
+    // `[read]` **Dieselbe Falle eine Ebene tiefer:** die Tage einer
+    // Woche liegen aufeinanderfolgend, und `UNIQUE (week_id,
+    // plan_date)` greift INNERHALB der Woche.
+    //
+    // `[cmd]` **Bei einer Verschiebung um weniger als sieben Tage
+    // ueberlappen alt und neu** — Tag 1 rueckt auf Tag 2, der noch
+    // dasteht. **Vorwaerts also von hinten.**
+    const tageDerWoche = (dRoh ?? []) as unknown as Array<{
       id: string; plan_date: string
-    }>)) {
+    }>
+    for (const d of (tage > 0 ? [...tageDerWoche].reverse() : tageDerWoche)) {
       const { error: dFehler } = await db
         .from('meal_plan_days')
         .update({ plan_date: tageVerschieben(d.plan_date, tage) })
@@ -715,6 +749,76 @@ export async function planMitWochenAnlegen(
 // kommen und geklaert werden wie es weiter geht."*
 //
 // `[read]` **Die Meldung IST die Ausfuehrung des Lebenszyklus**
+// ═════════════════════════════════════════════════════════════════════
+// EINE WOCHE KOPIEREN — G-319
+// ═════════════════════════════════════════════════════════════════════
+//
+// **Tom, 2026-09-02:** *,,copy week braucht eine funktion."*
+//
+// `[cmd]` **`nutrition.copy_meal_plan_week(p_week_id,
+// p_target_week_start)` steht seit C-150** — sie legt Woche, Tage und
+// Eintraege an, prueft `auth.uid()` und gibt die neue Wochen-ID
+// zurueck. **Der Knopf war eine Attrappe darueber.**
+//
+// `[read]` **Hier wird gerufen, nicht nachgebaut** — eine zweite
+// Kopierlogik im Browser waere eine zweite Wahrheit.
+
+export const wocheKopierenSchema = z.object({
+  art: z.literal('woche_kopieren'),
+  week_id: z.string().uuid(),
+  /** Der Montag der Zielwoche. */
+  ziel: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+})
+
+export type WocheKopieren = z.infer<typeof wocheKopierenSchema>
+
+/**
+ * Eine Planwoche kopieren — G-319.
+ *
+ * `[cmd]` **`UNIQUE (plan_id, week_start)`** — liegt dort schon eine
+ * Woche, wirft die Datenbank. `[read]` **Das wird abgefangen und
+ * beantwortet**, statt einen Datenbankfehler durchzureichen.
+ */
+export async function wocheKopieren(
+  eingabe: WocheKopieren,
+): Promise<{ week_id: string; ziel: string }> {
+  const { db } = await sitzung()
+
+  // Die Herkunft entscheidet, ob ueberhaupt geaendert werden darf.
+  const { data: wRoh, error: wFehler } = await db
+    .from('meal_plan_weeks')
+    .select('plan_id, plan:meal_plans ( plan_origin )')
+    .eq('id', eingabe.week_id)
+    .single()
+  if (wFehler) throw new DiaryWriteError('NOT_FOUND', 'Diese Woche gibt es nicht.')
+  const w = wRoh as unknown as {
+    plan_id: string; plan: { plan_origin: string | null } | null
+  }
+  await pruefeHerkunft(w.plan?.plan_origin ?? null)
+
+  // `[read]` **Liegt dort schon eine Woche, sagt es die Anzeige** —
+  // der Kalender zeigt belegte Wochen, aber zwei Nutzer koennen
+  // gleichzeitig kopieren.
+  const { data: belegt } = await db
+    .from('meal_plan_weeks')
+    .select('id')
+    .eq('plan_id', w.plan_id)
+    .eq('week_start', eingabe.ziel)
+    .limit(1)
+  if (((belegt ?? []) as unknown[]).length > 0) {
+    throw new DiaryWriteError('VALIDATION_FAILED',
+      'In dieser Woche liegt schon eine Planwoche. Wähl eine freie.')
+  }
+
+  const { data, error } = await db.rpc('copy_meal_plan_week', {
+    p_week_id: eingabe.week_id,
+    p_target_week_start: eingabe.ziel,
+  })
+  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+  const neu = typeof data === 'string' ? data : String(data ?? '')
+  return { week_id: neu, ziel: eingabe.ziel }
+}
+
 // (C-373) — es braucht keinen Zeitplaner, sondern eine Entscheidung.
 
 export const ablaufKlaerenSchema = z.object({

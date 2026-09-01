@@ -175,10 +175,26 @@ test('G-287/G-310: die Bibliothek ist zurueck — mit anderem Inhalt', () => {
   const s = ohneKommentare('apps/web/src/app/v2/nutrition/plans-echt.tsx')
   assert.match(s, /export function PlanBibliothekEcht/,
     'Die Bibliothek fehlt — E-41 und SPEC_03 Flow 3 verlangen sie.')
-  assert.match(s, /onAktivieren\?: \(id: string\) => void/,
-    'Die Bibliothek kann nicht aktivieren (E-41) — dann ist sie '
-    + 'wieder die Auflistung, die G-287 entfernt hat.')
-  assert.match(s, /p\.status !== 'active' && onAktivieren && \(/,
+  // ══ BERICHTIGT IN G-319 ════════════════════════════
+  //
+  // `[cmd]` **Hier stand `onAktivieren?: (id: string) => void`.**
+  // `[read]` **Der Name war da, die Wirkung nicht:** der Aufrufer gab
+  // `onAktivieren={() => setAktivieren(true)}` — **die `id` wurde
+  // verworfen**, und der Dialog oeffnete fuer den AKTIVEN Plan.
+  //
+  // **Tom, 2026-09-02:** *„wenn unten plaene stehen muessen die auch
+  // aktivierbar sein, da geht nichts."*
+  //
+  // `[read]` **Also prueft der Waechter die Wirkung** — die Bibliothek
+  // fuehrt die Frage selbst, je Kachel eine, mit der `id` DIESER
+  // Kachel. **Ein Rueckruf, der sie verliert, faellt hier durch.**
+  assert.match(s, /aktiviert === p\.id && \(/,
+    'Die Bibliothek fragt nicht je Kachel — dann trifft die '
+    + 'Aktivierung wieder den falschen Plan (G-319).')
+  assert.match(s, /<AktivierenFrage[\s\S]{0,240}?plan=\{p\}/,
+    'Die Frage bekommt nicht den Plan der Kachel — genau der '
+    + 'Fehler, den G-319 behoben hat.')
+  assert.match(s, /p\.status !== 'active' && aktiviert !== p\.id && \(/,
     'Der Aktivieren-Knopf steht auch am laufenden Plan.')
 })
 

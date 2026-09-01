@@ -468,6 +468,18 @@ export function PlanListe({ plaene, heute, aktiv, onWaehlen }: {
         </Card>
       )}
 
+      {/* ══ G-319: drei Kacheln nebeneinander ═══════════════
+          **Tom, 2026-09-02:** *,,die plaene oben nehmen die ganze
+          breite fuer nichts."*
+
+          `[cmd]` **Vier Plaene, vier volle Zeilen** — und die
+          Werkbank rutschte darunter aus dem Bild.
+
+          `[cmd]` **`Meal plans` zeigt drei nebeneinander mit allem
+          drin** (`plans-echt.tsx` Z. 646, `v2-g-cols-3`). **Dieselbe
+          Breite hier** — Tom: *,,wir haben eine webapplikation und
+          genug platz."* */}
+      <div className="v2-grid v2-g-cols-3" style={{ gap: 12 }}>
       {plaene.map(p => {
         // C-375/E-42: das Flag sagt etwas, es sperrt nichts.
         const verkaeuflich = darfWeiterverkaufen(p.darf_weiterverkaufen)
@@ -489,10 +501,34 @@ export function PlanListe({ plaene, heute, aktiv, onWaehlen }: {
         const laeuftNoch = p.status === 'active' || p.status === 'assigned'
         const abgelaufen = laufzeit.art === 'abgelaufen' && laeuftNoch
         const offen = aktiv === p.id
+        // ══ G-319: die KACHEL waehlt an ═══════════════════════════
+        //
+        // **Tom, 2026-09-02:** *„anstatt diesen anwaehlbutton einfach
+        // die kachel anwaehlbar machen."*
+        //
+        // `[read]` **Also traegt die Kachel den Klick, nicht ein Knopf
+        // darin.** `[cmd]` **Mit `role`, `tabIndex` und
+        // Tastaturbedienung** — ein `onClick` auf einem `div` ist mit
+        // der Tastatur sonst nicht erreichbar.
+        //
+        // `[read]` **Der offene traegt keinen Klick mehr** — er ist
+        // schon gewaehlt, und ein Klick, der nichts tut, ist ein
+        // defekter Knopf.
         return (
-          <Card key={p.id} style={offen
-            ? { border: '1px solid var(--acc-nutri)' }
-            : undefined}>
+          <Card key={p.id}
+            role={offen ? undefined : 'button'}
+            tabIndex={offen ? undefined : 0}
+            aria-label={offen ? undefined : `${p.name} anwählen`}
+            onClick={offen ? undefined : (() => onWaehlen(p.id))}
+            onKeyDown={offen ? undefined : ((e: React.KeyboardEvent) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                onWaehlen(p.id)
+              }
+            })}
+            style={offen
+              ? { border: '1px solid var(--acc-nutri)' }
+              : { cursor: 'pointer' }}>
             <div style={{
               display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap',
             }}>
@@ -512,16 +548,18 @@ export function PlanListe({ plaene, heute, aktiv, onWaehlen }: {
               {herkunft !== 'unbekannt' && herkunft !== 'self_created' && (
                 <Pill variant="acc">{HERKUNFT_TEXT[herkunft]}</Pill>
               )}
-              <span className="v2-num v2-dim" style={{ marginLeft: 'auto', fontSize: 10.5 }}>
-                {p.wochen} Wochen · {p.tage} Tage · {p.positionen} Positionen
-              </span>
+            </div>
+            {/* `[read]` **Eigene Zeile statt `marginLeft: auto`** —
+                in einer Kachel von einem Drittel Breite draengt sie
+                sonst die Marken um. */}
+            <div className="v2-num v2-dim" style={{ fontSize: 10.5, marginTop: 4 }}>
+              {p.wochen} Wochen · {p.tage} Tage · {p.positionen} Positionen
             </div>
 
-            {p.description && (
-              <div className="v2-muted" style={{ fontSize: 11.5, marginTop: 4 }}>
-                {p.description}
-              </div>
-            )}
+            {/* `[read]` **Die Beschreibung faellt weg** — sie ist der
+                laengste Teil und steht in der Werkbank darunter,
+                sobald der Plan gewaehlt ist. **In einer Kachel von
+                einem Drittel Breite waere sie nur ein Umbruch.** */}
 
             {!verkaeuflich && (
               <div className="v2-dim" style={{
@@ -535,36 +573,47 @@ export function PlanListe({ plaene, heute, aktiv, onWaehlen }: {
                 `[cmd]` **Heute stand dort *aktiv · abgelaufen* und
                 sonst nichts** (G-304). `[read]` **Eine Marke ohne Weg
                 ist eine Feststellung, keine Klaerung.** */}
+            {/* `[cmd]` **G-319: die Dialoge sind gekapselt** — die
+                Kachel traegt selbst einen Klick, und ein Klick auf
+                *Abbrechen* darin waehlte sie sonst mit an. */}
             {abgelaufen && laufzeit.art === 'abgelaufen' && (
-              <AblaufFrage
-                plan={p}
-                bis={laufzeit.bis}
-                tage={laufzeit.tage}
-                heute={heute}
-                onFertig={neuLaden}
-              />
+              <div onClick={e => e.stopPropagation()}>
+                <AblaufFrage
+                  plan={p}
+                  bis={laufzeit.bis}
+                  tage={laufzeit.tage}
+                  heute={heute}
+                  onFertig={neuLaden}
+                />
+              </div>
             )}
 
             {/* ══ G-309: Flow 3, Schritte 5–7 ═══════════════════
                 `[cmd]` **Hier stand nur *Bearbeiten*** — der
                 Aktivierungsweg fehlte ganz. */}
             {aktiviert === p.id && (
-              <AktivierenFrage
-                plan={p}
-                laufender={laufender}
-                heute={heute}
-                onFertig={() => { setAktiviert(null); neuLaden() }}
-                onAbbruch={() => setAktiviert(null)}
-              />
+              <div onClick={e => e.stopPropagation()}>
+                <AktivierenFrage
+                  plan={p}
+                  laufender={laufender}
+                  heute={heute}
+                  onFertig={() => { setAktiviert(null); neuLaden() }}
+                  onAbbruch={() => setAktiviert(null)}
+                />
+              </div>
             )}
 
             <div style={{ display: 'flex', gap: 6, marginTop: 10, flexWrap: 'wrap' }}>
               {/* `[read]` **Ein laufender Plan wird nicht noch einmal
                   aktiviert** — er laeuft ja. **Ein pausierter schon:**
                   so holt man ihn zurueck. */}
+              {/* `[cmd]` **G-319: `stopPropagation`** — die Kachel
+                  traegt seit Toms Berichtigung selbst einen Klick.
+                  **Ohne das loeste *Aktivieren* beides aus:** die
+                  Frage UND den Wechsel in die Werkbank. */}
               {p.status !== 'active' && aktiviert !== p.id && (
                 <button type="button" className="v2-btn v2-btn-sm v2-btn-primary"
-                        onClick={() => setAktiviert(p.id)}>
+                        onClick={e => { e.stopPropagation(); setAktiviert(p.id) }}>
                   Aktivieren
                 </button>
               )}
@@ -580,18 +629,30 @@ export function PlanListe({ plaene, heute, aktiv, onWaehlen }: {
                   ist kein Knopf.** **Er steht jetzt nur an den
                   anderen**, und der offene traegt eine Marke statt
                   eines Knopfs. */}
-              {offen ? (
-                <Pill variant="acc">In der Werkbank</Pill>
-              ) : (
-                <button type="button" className="v2-btn v2-btn-sm"
-                        onClick={() => onWaehlen(p.id)}>
-                  Bearbeiten
-                </button>
-              )}
+              {/* ══ G-319: ANWAEHLEN, nicht bearbeiten ═══════════
+                  **Tom, 2026-09-02:** *,,prinzipiell anwaehlen zeigt
+                  unten die werkbank davon, darin bearbeiten button
+                  auf der rechten oberen seite."*
+
+                  `[cmd]` **Hier stand *Bearbeiten*** — der Knopf
+                  oeffnete die Werkbank, versprach aber eine
+                  Aenderung. `[read]` **Die Kachel waehlt, die
+                  Werkbank bearbeitet.**
+
+                  ══ BERICHTIGT, Tom 2026-09-02 ══════════════════
+                  *„anstatt diesen anwaehlbutton einfach die kachel
+                  anwaehlbar machen."*
+
+                  `[read]` **Der Knopf ist weg — die Kachel IST der
+                  Knopf.** Ein Anwaehlknopf in einem anwaehlbaren
+                  Feld ist eine Verdopplung: der Nutzer klickt
+                  ohnehin auf die Kachel. */}
+              {offen && <Pill variant="acc">In der Werkbank</Pill>}
             </div>
           </Card>
         )
       })}
+      </div>
     </div>
   )
 }

@@ -31,9 +31,11 @@ import * as React from 'react'
 import { Card, Pill, Row, Ring, Sparkline } from '@lumeos/ui'
 
 import type { PlanDaten, PlanKurz } from '../../../lib/nutrition/plan-lesen'
+// G-319: dieselbe Frage wie im Planner — je Plan eine.
+import { AktivierenFrage } from './plan-werkbank-ui'
 import {
   zyklusVon, ZYKLUS_TEXT, ZYKLUS_ERKLAERUNG,
-  statusText, herkunftVon,
+  statusText, herkunftVon, HERKUNFT_TEXT, type Herkunft,
   // G-310: die Badges der Bibliothek (Mockup Z. 89).
   HERKUNFT_BADGE, HERKUNFT_FARBE,
   KEIN_LOG_SATZ, KEINE_EINKAUFSLISTE_SATZ,
@@ -96,6 +98,70 @@ import {
 function deutschesDatum(iso: string): string {
   const [j, m, tg] = iso.split('-')
   return tg && m && j ? `${Number(tg)}.${Number(m)}.${j}` : iso
+}
+
+/**
+ * Die EINE Zeile unter dem Plannamen — Vorlage Z. 371.
+ *
+ * `[cmd]` **Die Vorlage zeigt:** *,,Day 3 of 7 · started May 14 ·
+ * source: coach (Jana Bauer)"* — **Dauer, Start und Herkunft in
+ * einer Zeile, durch `·` getrennt.**
+ *
+ * **Tom, 2026-09-02:** *,,Aufbau-Wochenplan zeigt genau die gleichen
+ * daten wie nebendran Plan settings."*
+ *
+ * `[read]` **Jeder Teil faellt weg, wenn er nicht belegbar ist** —
+ * ein `· — ·` behauptet eine Leerstelle, wo es keine gibt.
+ *
+ * `[cmd]` **Der Bestandsplan traegt `plan_origin = NULL`** (G-287:
+ * zeigen, nicht fuellen) — **dann steht die Herkunft nicht da.**
+ */
+export function kopfzeile(
+  d: PlanDaten,
+  p: NonNullable<PlanDaten['plan']>,
+  laufzeit: ReturnType<typeof laufzeitVon>,
+  h: Herkunft,
+): string {
+  const teile: string[] = []
+
+  // „Day 3 of 7" — der wievielte Tag von wie vielen.
+  const tage = d.wochen.reduce((s, w) => s + w.tage.length, 0)
+  const heute = heuteIso()
+  const alle = d.wochen
+    .flatMap(w => w.tage.map(x => x.plan_date))
+    .filter(Boolean)
+    .sort()
+  const index = alle.indexOf(heute)
+  if (index >= 0 && tage > 0) {
+    teile.push(`Tag ${index + 1} von ${tage}`)
+  } else if (tage > 0) {
+    // ══ G-298: aktiv, aber abgelaufen ══════════════════════════════
+    //
+    // **Tom, 2026-08-31:** *„der Plan laeuft vom 18.06. bis 08.07.,
+    // heute ist der 31.08., und die Karte sagt aktiv."*
+    //
+    // `[read]` **Läuft der Plan nicht heute, sagt die Zeile das** —
+    // statt einen Tag zu behaupten, der nicht läuft.
+    //
+    // `[read]` **Und sie sagt WANN** — „abgelaufen" ohne Datum lässt
+    // offen, ob es gestern war oder im Juni. **Der alte
+    // `laufzeitSatz` nannte es; die Zeile der Vorlage tut es jetzt.**
+    teile.push(laufzeit.art === 'abgelaufen'
+      ? `${tage} Tage, abgelaufen am ${deutschesDatum(laufzeit.bis)}`
+      : laufzeit.art === 'kuenftig'
+        ? `${tage} Tage, beginnt am ${deutschesDatum(laufzeit.von)}`
+        : `${tage} Tage`)
+  }
+
+  // „started May 14" — aus `start_date`, sonst aus dem ersten Tag.
+  const start = p.start_date ?? alle[0] ?? null
+  if (start) teile.push(`Start ${deutschesDatum(start)}`)
+
+  // „source: coach (Jana Bauer)" — ohne Namen: `meal_plans` fuehrt
+  // keine Coach-Referenz (in G-310 gemessen).
+  if (h !== 'unbekannt') teile.push(HERKUNFT_TEXT[h])
+
+  return teile.join(' · ')
 }
 
 /** Heute als ISO - dieselbe Rechnung wie im Planner. */
@@ -172,16 +238,22 @@ export function PlanKopfEcht({ d, logs = [] }: {
             {p.lifecycle_type && <Pill>{p.lifecycle_type}</Pill>}
             {marke && <Pill>{marke}</Pill>}
           </div>
-          {laufzeit.art !== 'laeuft' && (
-            <div className="v2-dim" style={{ fontSize: 11, marginBottom: 8, lineHeight: 1.5 }}>
-              {laufzeitSatz(laufzeit)}
-            </div>
-          )}
-          {p.description && (
-            <div className="v2-muted" style={{ fontSize: 12, marginBottom: 8 }}>
-              {p.description}
-            </div>
-          )}
+          {/* ══ Vorlage Z. 371: EINE Zeile, muted, 12 px ════════
+              *,,Day 3 of 7 · started May 14 · source: coach (Jana
+              Bauer)"* — **Dauer, Start und Herkunft zusammen.**
+
+              **Tom, 2026-09-02:** *,,Aufbau-Wochenplan zeigt genau die
+              gleichen daten wie nebendran Plan settings."*
+
+              `[cmd]` **Hier standen zwei Bloecke und darunter zwei
+              Tabellen mit acht Zeilen** — vier davon nochmal rechts
+              in `Plan settings`.
+
+              `[read]` **Die Vorlage fasst zusammen, wir haben
+              ausgebreitet.** */}
+          <div className="v2-muted" style={{ fontSize: 12, marginBottom: 8, lineHeight: 1.5 }}>
+            {kopfzeile(d, p, laufzeit, herkunftVon(p.plan_origin))}
+          </div>
           {/* `[read]` **Die ausgeschriebene Rechnung** — wie in der
               Attrappe. `[cmd]` **Ohne Entscheidung sagt sie, dass
               nichts entschieden ist**, statt „0 %". */}
@@ -194,29 +266,34 @@ export function PlanKopfEcht({ d, logs = [] }: {
           </div>
         </div>
       </div>
-      <div className="v2-grid v2-g-cols-4" style={{ gap: 10, marginTop: 10 }}>
-        <Row label="Wochen" value={zahl(z.wochen)} />
-        <Row label="Tage" value={zahl(z.tage)} />
-        <Row label="Einträge" value={zahl(z.eintraege)} />
-        <Row label="Zeilen je Tag" value={zahl(d.zeilen.length)} />
-      </div>
-      {/* `[read]` Die Ziele stehen als Zahlen da, ohne Bewertung —
-          ein „89 % erreicht" braeuchte den Ist-Wert des Tages. */}
-      {(p.target_kcal !== null || p.target_protein_g !== null) && (
-        <>
-          <div className="v2-divider" />
-          <div className="v2-grid v2-g-cols-4" style={{ gap: 10 }}>
-            <Row label="kcal Ziel" value={zahl(p.target_kcal)} />
-            <Row label="Protein" value={p.target_protein_g !== null ? `${zahl(p.target_protein_g)} g` : '—'} />
-            <Row label="Kohlenhydrate" value={p.target_carbs_g !== null ? `${zahl(p.target_carbs_g)} g` : '—'} />
-            <Row label="Fett" value={p.target_fat_g !== null ? `${zahl(p.target_fat_g)} g` : '—'} />
-          </div>
-        </>
-      )}
-      <div className="v2-dim v2-mono" style={{ fontSize: 10, marginTop: 10, lineHeight: 1.6 }}>
-        aus nutrition.meal_plans · {z.wochen} Wochen · {z.tage} Tage ·
-        {' '}{z.eintraege} Einträge · {d.zeilenGrund}
-      </div>
+      {/* ══ G-317: HIER STANDEN ZWEI TABELLEN ════════════════
+          `[cmd]` **Wochen, Tage, Eintraege, Zeilen je Tag** — und
+          darunter kcal Ziel, Protein, Kohlenhydrate, Fett.
+
+          `[cmd]` **Vier davon standen rechts nochmal** in `Plan
+          settings` (G-315 hat sie dort auf fuenf Zeilen gebracht).
+
+          `[cmd]` **Und die Vorlage zeigt im aktiven Bereich KEINE
+          Zielwerte** — gemessen ueber Z. 334-521: `target_kcal`
+          kommt dort nicht vor, nur `kcal` als Pille in der
+          Bibliothek (Z. 464).
+
+          `[read]` **Damit loest sich G-302 mit auf:** die Zielzeile,
+          die bei 1440 px umbrach, war kein Layoutfehler — **sie
+          stand an der falschen Stelle.**
+
+          `[read]` **Was der Plan anstrebt, gehoert zu seinen
+          Einstellungen, nicht in den Kopf** — dort steht, wie er
+          gerade laeuft. */}
+
+      {/* ══ G-317: der Fliesstext ist weg ══════════════════
+          `[cmd]` **Er lautete *,,aus nutrition.meal_plans · 3 Wochen
+          · 21 Tage · 56 Eintraege · 4 Reihen aus deinen
+          Vorlieben…"*** — **die dritte Wiederholung derselben
+          Zahlen.**
+
+          `[read]` **Die Herkunftsangabe gehoert an die Karte, nicht
+          in einen Absatz** — `Plan settings` traegt sie als `sub`. */}
     </Card>
   )
 }
@@ -389,6 +466,10 @@ export function EinhaltungEcht({ logs, datum }: {
   // Zahl, damit die Kurve dieselbe Breite hat.
   const reihe = datum ? tagesQuoten(logs, datum, 7) : []
   const schnitt = schnittQuote(reihe)
+  // G-317: nur die Tage MIT Aussage — `null` ist keine 0.
+  const gemessen = reihe
+    .map(x => x.quote)
+    .filter((v): v is number => v !== null)
   return (
     <Card title="7-day compliance" sub="aus meal_plan_logs">
       {q === null ? (
@@ -399,11 +480,36 @@ export function EinhaltungEcht({ logs, datum }: {
               Aussage tragen** — eine Linie durch einen Punkt ist
               keine Kurve, sondern eine Behauptung ueber einen Verlauf,
               den niemand gemessen hat. */}
-          {reihe.filter(x => x.quote !== null).length >= 2 && (
+          {/* ══ G-317: die Kurve zeigt NUR gemessene Tage ════════
+              `[cmd]` **Hier stand `reihe.map(x => x.quote ?? 0)`** —
+              **ein Tag ohne Entscheidung wurde als 0 % gezeichnet.**
+
+              `[read]` **Das ist dieselbe Erfindung, die `quoteVon`
+              vermeidet:** `null` heisst *,,noch keine Aussage"*, nicht
+              *,,null Prozent"* (C-323). **Eine Kurve, die an solchen
+              Tagen auf den Boden faellt, behauptet einen Einbruch, den
+              es nicht gab.**
+
+              `[read]` **Der Auftrag fragt, was sie zeigen soll, wenn
+              nur wenige Tage Daten haben.** **Antwort: nur diese** —
+              die Kurve wird kuerzer, nicht falscher.
+
+              `[cmd]` **Und die Skala steht fest auf 0-100** — ohne
+              Vorgabe normalisiert die Sparkline auf min/max, und
+              75/80/100 saehe aus wie ein Absturz. */}
+          {gemessen.length >= 2 && (
             <Sparkline
-              data={reihe.map(x => x.quote ?? 0)}
+              data={gemessen}
+              min={0} max={100}
               color="var(--acc-nutri)" h={44}
             />
+          )}
+          {/* `[read]` **Und die Kurve sagt, ueber wie viele Tage sie
+              geht** — sonst liest man sieben, wo sechs stehen. */}
+          {gemessen.length >= 2 && gemessen.length < reihe.length && (
+            <div className="v2-dim" style={{ fontSize: 10, marginTop: 2 }}>
+              {gemessen.length} von {reihe.length} Tagen protokolliert
+            </div>
           )}
           <div style={{ display: 'flex', gap: 14, marginTop: 8, fontSize: 11, flexWrap: 'wrap' }}
                className="v2-dim">
@@ -521,12 +627,21 @@ export function WechselbefundEcht({ stand }: { stand: WechselStand }) {
  * welche Plaene es gibt, nicht was in ihnen steht. **Das Detail laedt
  * `MealPlanCard` fuer den aktiven.**
  */
-export function PlanBibliothekEcht({ plaene, aktivId, onAktivieren }: {
+export function PlanBibliothekEcht({
+  plaene, aktivId, heute, onGeaendert,
+}: {
   plaene: readonly PlanKurz[]
   /** Der Plan, der oben schon in voller Breite steht. */
   aktivId?: string | null
-  onAktivieren?: (id: string) => void
+  /** G-319: fuer die Aktivierungsfrage (Flow 3, Schritt 5). */
+  heute: string
+  onGeaendert?: () => void
 }) {
+  // G-319: welcher Plan wird gerade aktiviert?
+  const [aktiviert, setAktiviert] = React.useState<string | null>(null)
+  // `[read]` **Der laufende Plan** — er wird pausiert, und die Frage
+  // sagt es vorher (G-309).
+  const laufender = plaene.find(p => p.status === 'active') ?? null
   // `[read]` **Der aktive Plan steht OBEN in voller Breite** — ihn
   // hier zu wiederholen waere derselbe Plan zweimal. **Das Mockup
   // macht es genauso:** `plans.slice(1)` (Z. 84).
@@ -581,11 +696,33 @@ export function PlanBibliothekEcht({ plaene, aktivId, onAktivieren }: {
                   fuehrt heute nirgendwohin, deshalb steht er nicht
                   da. **Ein Knopf ohne Ziel ist eine Sackgasse**
                   (G-311). */}
-              {p.status !== 'active' && onAktivieren && (
+              {/* ══ G-319: der Knopf aktiviert DIESEN Plan ═══════
+                  **Tom, 2026-09-02:** *,,wenn unten plaene stehen
+                  muessen die auch aktivierbar sein, da geht
+                  nichts."*
+
+                  `[cmd]` **Der Aufrufer gab
+                  `onAktivieren={() => setAktivieren(true)}`** — die
+                  `id` wurde verworfen, und das Modal oeffnete fuer
+                  den AKTIVEN Plan.
+
+                  `[read]` **Deshalb fuehrt die Bibliothek die Frage
+                  jetzt selbst** — dieselbe `AktivierenFrage` wie im
+                  Planner, je Kachel eine. */}
+              {p.status !== 'active' && aktiviert !== p.id && (
                 <button type="button" className="v2-btn v2-btn-primary v2-btn-sm"
-                        onClick={() => onAktivieren(p.id)}>
+                        onClick={() => setAktiviert(p.id)}>
                   Aktivieren
                 </button>
+              )}
+              {aktiviert === p.id && (
+                <AktivierenFrage
+                  plan={p}
+                  laufender={laufender}
+                  heute={heute}
+                  onFertig={() => { setAktiviert(null); onGeaendert?.() }}
+                  onAbbruch={() => setAktiviert(null)}
+                />
               )}
             </Card>
           )

@@ -217,9 +217,11 @@ test('G-298: der Schreibweg prueft die Sperren — bei allen dreien', () => {
   // Protokollpruefung nur an zweien (eine Position, die es noch nicht
   // gibt, kann nicht geloggt sein).
   const s = ohneKommentare(SCHREIB)
+  // `[cmd]` **G-319: der fuenfte ist `wocheKopieren`** — eine Kopie
+  // aus einem gesperrten Plan waere der Ausweg um die Sperre herum.
   const rufe = (s.match(/await pruefeHerkunft\(/g) ?? []).length
-  assert.equal(rufe, 4,
-    `${rufe} von 4 Herkunftspruefungen (3 Positionen + Ablauf)`)
+  assert.equal(rufe, 5,
+    `${rufe} von 5 Herkunftspruefungen (3 Positionen, Ablauf, Kopie)`)
   const protokoll = (s.match(/await pruefeProtokoll\(/g) ?? []).length
   assert.equal(protokoll, 2,
     `${protokoll} von 2 Vorgaengen pruefen das Protokoll (aendern, loeschen)`)
@@ -302,7 +304,19 @@ test('G-298: die Karte sagt, dass der Plan abgelaufen ist', () => {
   // **Tom sah *,,aktiv"* an einem Plan, der 47 Tage vorbei war.**
   const k = ohneKommentare(KARTE)
   assert.match(k, /laufzeitVon\(/, 'die Karte rechnet die Laufzeit nicht')
-  assert.match(k, /\{laufzeitSatz\(laufzeit\)\}/, 'der Satz fehlt an der Karte')
+  // `[cmd]` **BERICHTIGT in G-317:** hier stand
+  // `{laufzeitSatz(laufzeit)}` als eigener Absatz.
+  //
+  // `[cmd]` **Die Vorlage (Z. 371) hat EINE Zeile** — Dauer, Start
+  // und Herkunft zusammen. **Tom, 2026-09-02:** *,,Aufbau-Wochenplan
+  // zeigt genau die gleichen daten wie nebendran Plan settings."*
+  //
+  // `[read]` **Was G-298 sichert, bleibt gesichert:** ein
+  // abgelaufener Plan sagt es — **mit Datum**, in derselben Zeile.
+  assert.match(k, /abgelaufen am \$\{deutschesDatum\(laufzeit\.bis\)\}/,
+    'der Ablauf steht nicht mehr an der Karte (G-298/G-317)')
+  assert.match(k, /beginnt am \$\{deutschesDatum\(laufzeit\.von\)\}/,
+    'ein kuenftiger Plan nennt seinen Beginn nicht')
   assert.match(k, /marke && <Pill>\{marke\}<\/Pill>/, 'die Marke fehlt')
   // `[read]` **Und der Zustand bleibt stehen** — er wird eingeordnet,
   // nicht ersetzt.

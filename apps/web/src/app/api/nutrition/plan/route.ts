@@ -27,6 +27,9 @@ import {
   // C-377/C-373: der abgelaufene Plan wird geklaert.
   ablaufKlaeren,
   ablaufKlaerenSchema,
+  // G-319: eine Planwoche kopieren.
+  wocheKopieren,
+  wocheKopierenSchema,
 } from '../../../../lib/nutrition/plan-write'
 // G-309: die Ghost Entries eines Tages — Flow 3, Schritt 7.
 import { ladeGhostEintraege } from '../../../../lib/nutrition/plan-lesen'
@@ -224,8 +227,22 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // ══ G-319: eine Woche kopieren ═════════════════════
+  if (art === 'woche_kopieren') {
+    const g = wocheKopierenSchema.safeParse(roh)
+    if (!g.success) {
+      return ungueltig(g.error.issues[0]?.message ?? 'Eingabe ungueltig.',
+        g.error.issues.map(i => ({ feld: i.path.join('.'), meldung: i.message })))
+    }
+    try {
+      return NextResponse.json(await wocheKopieren(g.data))
+    } catch (error) {
+      return errorResponse(error)
+    }
+  }
+
   return ungueltig(
     'Unbekannte Art. Erlaubt: plan, plan_aendern, bestaetigen, ueberspringen, '
     + 'eintrag, eintrag_aendern, eintrag_loeschen, plan_werkbank, '
-    + 'ablauf_klaeren.')
+    + 'ablauf_klaeren, woche_kopieren.')
 }
