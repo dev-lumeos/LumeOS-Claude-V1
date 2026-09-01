@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 219 |
+| `todos` | 222 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 207 |
-| **gesamt** | **431** |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 208 |
+| **gesamt** | **434** |
 
 ## medical — 42
 
@@ -58,7 +58,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 172
+## nutrition — 175
+
+### beauftragbar — 174
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -232,8 +234,16 @@
 | `G-317` | befund | mittel | [drei Zeilen der Vorlage fehlen am Schirm](erledigt/nutrition-g-0317-drei-zeilen-der-vorlage-fehlen-am-schirm.md) | erledigt | — | G-319 |
 | `G-318` | befund | hoch | [Planner und Diary sehen einander nicht](erledigt/nutrition-g-0318-planner-und-diary-sehen-einander-nicht.md) | erledigt | — | — |
 | `G-319` | befund | hoch | [die Bedienung in *Alle Plaene*](erledigt/nutrition-g-0319-die-bedienung-in-alle-plaene.md) | erledigt | — | C-382 |
-| `G-320` | feature | hoch | [die Lebensmittelsuche als Modal](laufend_claudecode/nutrition-g-0320-die-lebensmittelsuche-als-modal.md) | laeuft (claudecode) | — | — |
+| `G-320` | feature | hoch | [die Lebensmittelsuche als Modal](erledigt/nutrition-g-0320-die-lebensmittelsuche-als-modal.md) | erledigt | — | G-321, G-322, G-323 |
+| `G-321` | befund | hoch | [drei Befunde am Suchmodal](todos/nutrition-g-0321-drei-befunde-am-suchmodal.md) | offen | — | — |
+| `G-322` | feature | mittel | [die Bauteile aus `tab-foods.tsx` herausloesen](todos/nutrition-g-0322-die-bauteile-aus-tab-foods-herausloesen.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-323` | befund | hoch | [vier Suchen ohne die Lehren](todos/nutrition-g-0323-vier-suchen-ohne-die-lehren.md) | offen | G-322 | — |
 
 ## supplements — 59
 
