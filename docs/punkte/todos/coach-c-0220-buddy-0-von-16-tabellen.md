@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-01
 beruehrt:
   tabellen: []
   dateien: []
@@ -35,3 +33,19 @@ zahlen: null
 
 **Mitbeauftragt mit C-207 am 2026-09-01.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-01
+
+`[cmd]` **`buddy` erscheint in 8 Tabellen** — die Ueberschrift
+*,,0 von 16"* ist ueberholt.
+
+`[cmd]` **Aber: kein `buddy`-Schema, keine der 16
+Buddy-Entitaetstabellen.** `[cmd]` **Und die zwei neuen
+Herkunftswerte sind unbenutzt** — `plan_origin = 'buddy'` und
+`recipes.source = 'buddy'`, beide seit dem 01.09.
+
+`[read]` **Der Punkt ist praeziser geworden, nicht erledigt:** **die
+Herkunft ist vorgesehen, das Modul nicht gebaut.**
+
+`[read]` **Und das ist gewollt** — E-39 und E-40 sagen *vorsehen,
+nicht bauen*.

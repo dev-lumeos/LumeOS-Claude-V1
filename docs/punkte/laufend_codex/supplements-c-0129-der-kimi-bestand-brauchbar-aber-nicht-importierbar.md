@@ -7,6 +7,8 @@ angelegt: 2026-08-19
 braucht: []
 kind_von: C-128
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-01
 beruehrt:
   tabellen:
     - supplements.supplements
@@ -86,3 +88,8 @@ Berechtigung von `user_medications`.
 `[read]` C-129 ist damit nur noch der nachgemessene Herkunftsbefund.
 Jede verbleibende Arbeit steht in einem eigenen Punkt; weder Import noch
 alte Katalogzahlen sind als offene Luecke fortzuschreiben.
+
+## Auftrag
+
+**Mitbeauftragt mit A-22 am 2026-09-01.** Der Auftragstext
+und der Bericht stehen dort.

@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-84
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-01
 beruehrt:
   tabellen: []
   dateien: []
@@ -69,3 +71,70 @@ zahlen: null
   **C-114, C-115** — von Fable erledigt. **C-116** — wartet auf Kimis
   eigene Lieferung. **C-127, E-14, G-70** — Befunde im Repo, keine
   Aussenfrage.
+
+## Auftrag — was an Kimi gehen kann, und zwei Altbestaende
+
+**Mitbeauftragt: A-23, C-129.** Bericht in diese Datei.
+
+**Beauftragt am 2026-09-01.**
+
+### 1 · A-22 — was an Kimi gehen kann
+
+`[read]` **Lies den Punkt und miss, was er verlangt.**
+
+`[cmd]` **Der Bestand hat sich seither bewegt:** C-352 hat 20
+deutsche Nomenklaturnamen gesetzt, C-365 33 CAS-Kennungen, C-260 hat
+UNII, PubChem, ChEMBL und InChIKey zurueckgefuehrt.
+
+`[read]` **Also: was fehlt noch, und was davon kann eine externe
+Recherche liefern?**
+
+`[cmd]` **Und die Grenze steht:** E-03 — BLS 4.0 ist die einzige
+Lebensmittelquelle. `[read]` **Fuer Supplements gilt das nicht, dort
+ist Kimi bereits die Quelle.**
+
+### 2 · A-23 — Lint bricht repoweit ab
+
+`[read]` **Miss, ob es noch gilt.** `[cmd]` **Seit G-308 haben
+`@lumeos/ui` und `@lumeos/shared` eigene `tsconfig` und eigene
+Aufgaben, und das Root-`tsconfig` traegt `jsx`.**
+
+`[read]` **Wenn Lint an derselben Ursache hing, ist er mit
+erledigt.**
+
+### 3 · C-129 — der Kimi-Bestand, brauchbar aber nicht eingespielt
+
+`[cmd]` **Miss, was von den Forschungsdaten heute in der Datenbank
+steht und was nicht.** `[cmd]` **C-260 hat die Kennungen
+zurueckgefuehrt** — **offen blieben 27 Peptidsequenzen ohne
+Zielspalte** (C-365).
+
+`[read]` **Wenn der Rest eingespielt ist: schliessen.** **Wenn nicht:
+sagen was fehlt und wie viel.**
+
+### Was nicht zu tun ist
+
+**Keine externe Quelle heranziehen** — das ist die Frage, nicht die
+Antwort.
+**Kein Katalogausbau.**
+`apps/` nicht anfassen.
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server gehoert dir nicht
+
+`[cmd]` **Kein `neustart`, kein `start`, kein `aufraeumen`.**
+
+### Nachweis
+
+    je Punkt ein Urteil   erledigt / gebaut / offen / ueberholt
+    was fehlt             benannt, mit Zahl
+    Kimi-Bestand          was steht drin, was nicht
+    Lint                  laeuft er? seit wann
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

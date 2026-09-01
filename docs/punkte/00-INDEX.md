@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 223 |
+| `todos` | 222 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 6 |
-| `erledigt` | 187 |
+| `erledigt` | 188 |
 | **gesamt** | **419** |
 
 ## medical — 42
@@ -35,7 +35,7 @@
 | `C-213` | befund | mittel | [C-124-E8 — die Arzt-Hinweis-Schwelle ist offen](todos/medical-c-0213-c-124-e8-die-arzt-hinweis-schwelle-ist-offen.md) | offen | — | — |
 | `C-285` | entscheidung | hoch | [`user_medications` speichert Medikamente im Klartext](erledigt/medical-c-0285-user-medications-speichert-medikamente-im-klartext.md) | erledigt | — | — |
 | `C-294` | feature | mittel | [was Kimi nachliefern muss](todos/medical-c-0294-was-kimi-nachliefern-muss.md) | offen | — | — |
-| `C-303` | feature | mittel | [erfasste Symptome haben keine Tabelle](laufend_codex/medical-c-0303-erfasste-symptome-haben-keine-tabelle.md) | laeuft (codex) | — | — |
+| `C-303` | feature | mittel | [erfasste Symptome haben keine Tabelle](todos/medical-c-0303-erfasste-symptome-haben-keine-tabelle.md) | offen | — | — |
 | `C-304` | befund | mittel | [51 Zuordnungen zeigen ins Leere](todos/medical-c-0304-51-zuordnungen-zeigen-ins-leere.md) | offen | — | — |
 | `C-306` | befund | mittel | [`atc_code` traegt JSON in einer `text`-Spalte](todos/medical-c-0306-atc-code-traegt-json-in-einer-text-spalte.md) | offen | — | — |
 | `C-307` | befund | mittel | [`mythen_de` hat drei Gestalten in einer Spalte](todos/medical-c-0307-mythen-de-hat-drei-gestalten-in-einer-spalte.md) | offen | — | — |
@@ -235,7 +235,7 @@
 | `A-49` | befund | mittel | [Der Attrappen-Waechter traegt eine veraltete Behauptung](erledigt/supplements-a-0049-der-attrappen-waechter-traegt-eine-veraltete-behauptung.md) | erledigt | — | — |
 | `C-01` | befund | mittel | [Frontend-Stack-Lücke schliessen](todos/supplements-c-0001-frontend-stack-lucke-schliessen.md) | offen | — | — |
 | `C-113` | feature | mittel | [Enhanced Mode — entschieden](todos/supplements-c-0113-enhanced-mode-entschieden.md) | offen | — | — |
-| `C-129` | befund | mittel | [Der Kimi-Import ist da; die Restluecken sind getrennt](todos/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md) | offen | — | C-327 |
+| `C-129` | befund | mittel | [Der Kimi-Import ist da; die Restluecken sind getrennt](laufend_codex/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md) | laeuft (codex) | — | C-327 |
 | `C-146` | befund | mittel | [`phase_am()` liefert 8 von 14 Spalten](todos/supplements-c-0146-phase-am-liefert-8-von-14-spalten.md) | offen | — | — |
 | `C-179` | befund | mittel | [`EAA` zeigt auf den Summenwert, nicht auf die neun](todos/supplements-c-0179-eaa-zeigt-auf-den-summenwert-nicht-auf-die-neun.md) | offen | — | — |
 | `C-186` | befund | mittel | [Nebenwirkungen und Zyklen haben keine Tabelle](todos/supplements-c-0186-nebenwirkungen-und-zyklen-haben-keine-tabelle.md) | offen | — | — |
@@ -243,7 +243,7 @@
 | `C-202` | blocker | hoch | [Produkte, Marken, Hersteller, Kennungen](erledigt/supplements-c-0202-produkte-marken-hersteller-kennungen.md) | erledigt | — | C-364 |
 | `C-203` | befund | mittel | [Beobachtung gegen Erwartung (crawl_033)](todos/supplements-c-0203-beobachtung-gegen-erwartung-crawl-033.md) | offen | — | — |
 | `C-206` | entscheidung | mittel | [Die Community-Schicht — nur Admin, oder nie?](todos/supplements-c-0206-die-community-schicht-nur-admin-oder-nie.md) | offen | — | C-341 |
-| `C-207` | befund | hoch | [Vier Entscheidungen aus dem 035-Handoff](laufend_codex/supplements-c-0207-vier-entscheidungen-aus-dem-035-handoff.md) | laeuft (codex) | — | C-319, C-320, C-321, C-322 |
+| `C-207` | befund | hoch | [Vier Entscheidungen aus dem 035-Handoff](erledigt/supplements-c-0207-vier-entscheidungen-aus-dem-035-handoff.md) | erledigt | — | C-319, C-320, C-321, C-322 |
 | `C-208` | befund | mittel | [C-129 neu fassen: der Import ist laengst passiert](erledigt/supplements-c-0208-c-129-neu-fassen-der-import-ist-laengst-passiert.md) | erledigt | — | C-326 |
 | `C-233` | feature | mittel | [`user_supplement_settings` — die Spec sieht es vor, wir bauen es nicht](todos/supplements-c-0233-user-supplement-settings-die-spec-sieht-es-vor-wir-bauen-es-nicht.md) | offen | — | — |
 | `C-237` | befund | mittel | [Die Kimi-Quelle fuehrt leere Strings statt `unknown`](todos/supplements-c-0237-die-kimi-quelle-fuehrt-leere-strings-statt-unknown.md) | offen | — | — |
@@ -372,7 +372,7 @@
 | `C-114` | befund | mittel | [Was das Vorgaengerrepo beim Coach falsch machte](todos/coach-c-0114-was-das-vorgaengerrepo-beim-coach-falsch-machte.md) | offen | — | — |
 | `C-115` | befund | mittel | [Was der Markt kann und was LumeOS eigen ist](todos/coach-c-0115-was-der-markt-kann-und-was-lumeos-eigen-ist.md) | offen | — | — |
 | `C-173` | befund | mittel | [`MARKETPLACE_PRODUCTS` traegt `inStack` und `evidence`](todos/coach-c-0173-marketplace-products-traegt-instack-und-evidence.md) | offen | — | — |
-| `C-220` | befund | mittel | [`buddy` — 0 von 16 Tabellen](laufend_codex/coach-c-0220-buddy-0-von-16-tabellen.md) | laeuft (codex) | — | — |
+| `C-220` | befund | mittel | [`buddy` — 0 von 16 Tabellen](todos/coach-c-0220-buddy-0-von-16-tabellen.md) | offen | — | — |
 | `C-268` | feature | mittel | [Beim Einladen gibt es keine Namensaufloesung](todos/coach-c-0268-beim-einladen-gibt-es-keine-namensaufloesung.md) | offen | — | — |
 | `C-269` | feature | mittel | [Eine Einladung laesst sich nicht zuruecknehmen](todos/coach-c-0269-eine-einladung-laesst-sich-nicht-zuruecknehmen.md) | offen | — | — |
 | `C-318` | befund | hoch | [ADR-Coach-Permissions weicht von der Umsetzung ab](erledigt/coach-c-0318-adr-coach-permissions-weicht-von-der-umsetzung-ab.md) | erledigt | — | — |
@@ -398,8 +398,8 @@
 | `A-18` | feature | mittel | [`theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf](todos/quer-a-0018-theme-v1-uploads-die-bruecke-zwischen-spec-und-entwurf.md) | offen | — | — |
 | `A-19` | messung | mittel | [Zwei README-Abweichungen in der Kette](todos/quer-a-0019-zwei-readme-abweichungen-in-der-kette.md) | offen | — | — |
 | `A-20` | befund | mittel | [Die Spec-Fehlerliste](todos/quer-a-0020-die-spec-fehlerliste.md) | offen | — | — |
-| `A-22` | blocker | hoch | [Was an Kimi gehen kann — klassifiziert](todos/quer-a-0022-was-an-kimi-gehen-kann-klassifiziert.md) | offen | — | — |
-| `A-23` | befund | mittel | [`lint` bricht repoweit ab](todos/quer-a-0023-lint-bricht-repoweit-ab.md) | offen | — | — |
+| `A-22` | blocker | hoch | [Was an Kimi gehen kann — klassifiziert](laufend_codex/quer-a-0022-was-an-kimi-gehen-kann-klassifiziert.md) | laeuft (codex) | — | — |
+| `A-23` | befund | mittel | [`lint` bricht repoweit ab](laufend_codex/quer-a-0023-lint-bricht-repoweit-ab.md) | laeuft (codex) | — | — |
 | `A-24` | messung | mittel | [Attrappenmarken sind kein brauchbares Mass](todos/quer-a-0024-attrappenmarken-sind-kein-brauchbares-mass.md) | offen | — | — |
 | `A-29` | messung | mittel | [Der Attrappen-Test koennte die gerenderte Seite zaehlen](erledigt/quer-a-0029-der-attrappen-test-koennte-die-gerenderte-seite-zaehlen.md) | erledigt | — | A-64 |
 | `A-34` | befund | mittel | [Nachweislaeufe ueberschreiben Toms gespeicherte Ansicht](todos/quer-a-0034-nachweislaeufe-ueberschreiben-toms-gespeicherte-ansicht.md) | offen | — | — |

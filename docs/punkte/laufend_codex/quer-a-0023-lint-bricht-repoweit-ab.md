@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-84
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-01
 beruehrt:
   tabellen: []
   dateien: []
@@ -30,3 +32,8 @@ zahlen: null
 
   `[cmd]` **Der G-84-Agent hat Typecheck und Tests ohne Cache
   erzwungen** — 3 von 3, 393 gruen. **Das gehoert zur Nachweisregel.**
+
+## Auftrag
+
+**Mitbeauftragt mit A-22 am 2026-09-01.** Der Auftragstext
+und der Bericht stehen dort.
