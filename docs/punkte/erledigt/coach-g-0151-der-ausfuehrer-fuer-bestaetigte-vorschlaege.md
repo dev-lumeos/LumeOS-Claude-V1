@@ -13,8 +13,7 @@ beauftragt: 2026-09-02
 erledigt: 2026-09-02
 commit: dddbe5fc
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [coach.pending_actions]
 zahlen: null
 ---
 
