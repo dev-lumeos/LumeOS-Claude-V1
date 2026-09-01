@@ -675,7 +675,7 @@ function AddFenster({
               </select>
             ) : (
               <p className="v2-dim" style={{ fontSize: 10.5, margin: 0 }}>
-                Kein eigener Stack — zuerst unter „Stack" einen anlegen.
+                Kein eigener Stack — zuerst unter „Stack&quot; einen anlegen.
               </p>
             )}
           </div>

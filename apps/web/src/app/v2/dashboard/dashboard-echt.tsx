@@ -318,7 +318,7 @@ export function DashboardEcht({ d }: { d: DashboardDaten }) {
             </div>
             <p className="v2-muted" style={{ fontSize: 11 }}>
               {d.supplements.genommen} genommen, {d.supplements.uebersprungen} ausgelassen —
-              gerechnet ueber den gemessenen Zeitraum, nicht ueber „immer".
+              gerechnet ueber den gemessenen Zeitraum, nicht ueber „immer&quot;.
             </p>
           </Card>
         </div>

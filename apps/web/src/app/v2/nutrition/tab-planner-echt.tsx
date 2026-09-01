@@ -354,6 +354,7 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
                     eintraege={t.eintraege.filter(e => e.meal_type === slot)}
                     slot={slot as MahlzeitTyp}
                     rezepte={rezeptWahl}
+                    alleRezepte={d.rezepte}
                     bearbeitbar={bearbeitbar}
                     onAenderung={neuLaden}
                   />
@@ -368,7 +369,16 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
         </p>
       </Card>
 
-      <RezeptListe rezepte={d.rezepte} />
+      {/* ══ G-311: die Rezepte-Auflistung ist entfernt ═════════
+          **Tom, 2026-09-01:** *,,darunter rezepte auflistung? fuer
+          was ist das zeigt nur irgendwelche daten an."*
+
+          `[cmd]` **Sie stand in keiner Spec und in keinem Mockup.**
+          `[read]` **Sie stammt aus der Zeit vor dem Rezepte-Reiter**
+          — **und ist seit G-289 doppelt.**
+
+          `[read]` **A-59: geloescht, nicht auskommentiert.** git holt
+          sie zurueck. */}
     </div>
   )
 }
@@ -388,6 +398,60 @@ function Ziel({ label, wert, einheit }: {
 }
 
 /**
+ * Die Zutaten eines Rezepts im Raster — G-311.
+ *
+ * `[cmd]` **Dieselben Angaben wie `RezeptKarte` im Rezepte-Reiter**
+ * (`rezepte-echt.tsx` Z. 700): Name und Menge je Zutat.
+ *
+ * `[read]` **Aus `PlanDaten.rezepte`**, nicht aus einer zweiten
+ * Abfrage — der Leseweg holt sie im selben Verbund, der schon fuer
+ * die Zaehlung gelesen wurde.
+ *
+ * `[read]` **`planned_servings` skaliert** — dieselbe Rechnung wie
+ * beim Bestaetigen (G-309): `portionen / servings`. **Sonst zeigte
+ * das Raster andere Mengen als das Tagebuch.**
+ */
+function ZutatenListe({ rezeptId, rezepte, portionen }: {
+  rezeptId: string | null
+  rezepte: PlanDaten['rezepte']
+  portionen: number | null
+}) {
+  const r = rezepte.find(x => x.id === rezeptId)
+  if (!r) return null
+  if (r.posten.length === 0) {
+    return (
+      <div className="v2-dim" style={{ fontSize: 10, paddingLeft: 4, marginTop: 2 }}>
+        Für dieses Rezept sind keine Zutaten hinterlegt.
+      </div>
+    )
+  }
+  const proRezept = r.servings && r.servings > 0 ? r.servings : 1
+  const faktor = (portionen ?? 1) / proRezept
+  return (
+    <div style={{
+      marginTop: 4, paddingLeft: 6, borderLeft: '2px solid var(--border)',
+    }}>
+      {r.posten.map(p => (
+        <div key={p.id} style={{
+          display: 'flex', justifyContent: 'space-between', gap: 6,
+          fontSize: 10, lineHeight: 1.5,
+        }}>
+          <span className="v2-dim" style={{ minWidth: 0 }}>{p.name}</span>
+          <span className="v2-num v2-dim">
+            {p.amount_g === null
+              ? '—'
+              : `${Math.round(p.amount_g * faktor * 10) / 10} g`}
+          </span>
+        </div>
+      ))}
+      <div className="v2-dim" style={{ fontSize: 9.5, marginTop: 2 }}>
+        {r.zutaten} Zutaten{r.kcal !== null && ` · ${r.kcal} kcal je Rezept`}
+      </div>
+    </div>
+  )
+}
+
+/**
  * Eine Zelle des Rasters — seit G-298 bearbeitbar.
  *
  * `[read]` **Eine leere Zelle bleibt leer** — kein Platzhalter, kein
@@ -400,17 +464,21 @@ function Ziel({ label, wert, einheit }: {
  * **Bei Tastaturbedienung erscheint er ueber `:focus-within`** — sonst
  * waere er ohne Maus nicht erreichbar.
  */
-function Zelle({ tagId, tag, heute, eintraege, slot, rezepte, bearbeitbar, onAenderung }: {
+function Zelle({ tagId, tag, heute, eintraege, slot, rezepte, alleRezepte, bearbeitbar, onAenderung }: {
   tagId: string
   tag: string
   heute: string
   eintraege: PlanEintrag[]
   slot: MahlzeitTyp
   rezepte: readonly Quelle[]
+  /** G-311: die vollen Rezepte — fuer die Zutatenliste beim Klick. */
+  alleRezepte: PlanDaten['rezepte']
   /** G-269: bei gesperrter Herkunft wird nichts angeboten. */
   bearbeitbar: boolean
   onAenderung: () => void
 }) {
+  // G-311: welches Rezept zeigt seine Zutaten?
+  const [zutaten, setZutaten] = React.useState<string | null>(null)
   const istHeute = tag === heute
   // `null` = zu, `'neu'` = Formular fuer einen neuen Eintrag,
   // sonst die Id des Eintrags, der bearbeitet wird.
@@ -433,9 +501,36 @@ function Zelle({ tagId, tag, heute, eintraege, slot, rezepte, bearbeitbar, onAen
         <div key={e.id} style={{ marginBottom: 6 }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 11, color: 'var(--fg)', lineHeight: 1.35 }}>
-                {e.bezeichnung}
-              </div>
+              {/* ══ G-311: ein Rezept laesst sich oeffnen ════════
+                  **Tom, 2026-09-01:** *,,eingetragene recipes sind ja
+                  ok, aber mindestens bei klick drauf will man sehen
+                  was darin ist an lebensmittel und details."*
+
+                  `[read]` **Nur ein Rezept** — ein BLS-Eintrag ist
+                  sein eigener Inhalt, da gibt es nichts aufzuklappen.
+                  **Ein Knopf, der nichts oeffnet, waere die naechste
+                  Sackgasse.** */}
+              {e.entry_type === 'recipe' ? (
+                <button
+                  type="button"
+                  onClick={() => setZutaten(z => z === e.id ? null : e.id)}
+                  aria-expanded={zutaten === e.id}
+                  aria-label={`${e.bezeichnung} — Zutaten`}
+                  style={{
+                    background: 'none', border: 0, padding: 0, textAlign: 'left',
+                    fontSize: 11, color: 'var(--fg)', lineHeight: 1.35,
+                    cursor: 'pointer', width: '100%',
+                    textDecoration: 'underline', textDecorationStyle: 'dotted',
+                    textUnderlineOffset: 2,
+                  }}
+                >
+                  {e.bezeichnung}
+                </button>
+              ) : (
+                <div style={{ fontSize: 11, color: 'var(--fg)', lineHeight: 1.35 }}>
+                  {e.bezeichnung}
+                </div>
+              )}
               <div className="v2-num v2-dim" style={{ fontSize: 10 }}>
                 {e.kcal === null ? '—' : `${e.kcal.toLocaleString('de-DE')} kcal`}
                 {e.entry_type === 'recipe' && e.planned_servings !== null
@@ -460,6 +555,15 @@ function Zelle({ tagId, tag, heute, eintraege, slot, rezepte, bearbeitbar, onAen
               </span>
             )}
           </div>
+          {/* G-311: die Zutaten des Rezepts — dieselben Angaben wie
+              im Rezepte-Reiter (`RezeptKarte`): Name und Menge. */}
+          {zutaten === e.id && (
+            <ZutatenListe
+              rezeptId={e.recipe_id}
+              rezepte={alleRezepte}
+              portionen={e.planned_servings}
+            />
+          )}
           {offen === e.id && (
             <EintragForm
               tagId={tagId}
@@ -509,62 +613,20 @@ function Zelle({ tagId, tag, heute, eintraege, slot, rezepte, bearbeitbar, onAen
   )
 }
 
-/**
- * Die Rezepte des Nutzers.
- *
- * `[cmd]` **Hier wirken zwei weitere G-72-Spalten sichtbar:**
- * `cooking_skill` und die Zubereitungszeit stehen an jedem Rezept, weil
- * `recipes` sie fuehrt — `prep_time_max_min` aus den Vorlieben laesst
- * sich damit vergleichen.
- */
-function RezeptListe({ rezepte }: { rezepte: PlanDaten['rezepte'] }) {
-  if (rezepte.length === 0) return null
-  return (
-    <Card
-      title="Rezepte"
-      sub={`${rezepte.length} — Naehrwerte aus den Zutaten gerechnet`}
-      style={{ marginTop: 14 }}
-    >
-      <div className="v2-tbl-wrap">
-        <table className="v2-tbl">
-          <thead>
-            <tr>
-              <th>Rezept</th>
-              <th style={{ width: 110 }}>Kueche</th>
-              <th style={{ width: 110 }}>Koennen</th>
-              <th style={{ width: 90 }}>Zeit</th>
-              <th style={{ width: 80 }}>Zutaten</th>
-              <th style={{ width: 100 }}>kcal</th>
-              <th style={{ width: 90 }}>Protein</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rezepte.map(r => {
-              const zeit = (r.prep_time_min ?? 0) + (r.cook_time_min ?? 0)
-              return (
-                <tr key={r.id}>
-                  <td>{r.name_de}</td>
-                  <td className="v2-dim">{r.cuisine_code ?? '—'}</td>
-                  <td className="v2-dim">{r.cooking_skill ?? '—'}</td>
-                  <td className="v2-num">{zeit > 0 ? `${zeit} min` : '—'}</td>
-                  <td className="v2-num">{r.zutaten}</td>
-                  <td className="v2-num">
-                    {r.kcal === null ? '—' : Math.round(r.kcal).toLocaleString('de-DE')}
-                  </td>
-                  <td className="v2-num">
-                    {r.protein_g === null ? '—' : `${Math.round(r.protein_g)} g`}
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
-      <p className="v2-muted" style={{ fontSize: 11, marginTop: 8 }}>
-        Die Werte gelten je Portion und werden bei jedem Aufruf aus den
-        Zutaten gerechnet — ein Rezept speichert sie nicht, damit eine
-        geaenderte Zutat nicht zwei Wahrheiten hinterlaesst.
-      </p>
-    </Card>
-  )
-}
+// ══ G-311: `RezeptListe` ist entfernt ═══════════════════
+//
+// **Tom, 2026-09-01:** *,,darunter rezepte auflistung? fuer was ist
+// das zeigt nur irgendwelche daten an."*
+//
+// `[cmd]` **Sie stand in keiner Spec und in keinem Mockup** — eine
+// Tabelle mit sieben Spalten unter dem Raster. `[read]` **Seit dem
+// Rezepte-Reiter (G-289) doppelt**, und dort mit Detail, Bearbeiten
+// und Einkaufsliste.
+//
+// `[read]` **Was der Planner stattdessen kann:** ein Rezept IM Raster
+// aufklappen und seine Zutaten sehen (`ZutatenListe`) — das war
+// Toms eigentliche Frage.
+//
+// `[read]` **A-59: geloescht, nicht auskommentiert.** git holt sie
+// zurueck.
+

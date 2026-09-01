@@ -123,7 +123,14 @@ test('G-287: die Karte fuehrt aufs Detail', () => {
     `Kopf und Knopf muessen beide aufs Detail fuehren, gefunden: ${klick} (G-287).`)
   // SPEC_10: Name, Quelle, Status, Tage, kcal/Tag.
   for (const [was, muster] of [
-    ['die Quelle', /HERKUNFT_TEXT\[herkunft\]/],
+    // `[cmd]` **BERICHTIGT in G-310:** hier stand
+    // `HERKUNFT_TEXT[herkunft]`. **Die Quelle steht weiter an der
+    // Karte — aber als BADGE**, wie in der Vorlage
+    // (`MealPlansView.js` Z. 89) und `SPEC_03` Flow 3 Schritt 2.
+    //
+    // `[read]` **`SPEC_10` verlangt *,,Quelle"*, nicht eine bestimmte
+    // Schreibweise** — der Waechter prueft weiter, DASS sie da ist.
+    ['die Quelle', /HERKUNFT_BADGE\[herkunft\]/],
     ['den Status', /\{p\.status\}/],
     ['die Tage', /\{k\.tage\} Tage/],
     ['kcal\\/Tag', /k\.kcalSchnitt/],
@@ -146,12 +153,33 @@ test('G-287: eine fehlende Herkunft wird gezeigt, nicht gefuellt', () => {
     'Die Karte fuellt eine fehlende Herkunft auf (G-287).')
 })
 
-test('G-287: die abgeloeste Bibliothek ist geloescht', () => {
-  // `[read]` **A-59: was keinen Aufrufer hat, wird geloescht** —
-  // sonst gilt es beim naechsten Auftrag als gebaut.
-  const s = lies('apps/web/src/app/v2/nutrition/plans-echt.tsx')
-  assert.doesNotMatch(s, /export function PlanBibliothekEcht/,
-    'Die abgeloeste Bibliothek steht noch da (G-287/A-59).')
+test('G-287/G-310: die Bibliothek ist zurueck — mit anderem Inhalt', () => {
+  // ══ BERICHTIGT IN G-310 ════════════════════════════
+  //
+  // `[cmd]` **Hier stand `doesNotMatch(/export function
+  // PlanBibliothekEcht/)`.** `[read]` **In G-287 war das richtig:**
+  // die alte Bibliothek zeigte je Woche eine Textzeile, nicht
+  // anklickbar — *,,irgend eine auflistung die gar nichts sagt"*.
+  //
+  // `[cmd]` **G-310 baut sie neu, aus drei Quellen:** die Attrappe
+  // (`tab-plans.tsx` Z. 343, ein Raster aus Plankarten), **E-41**
+  // (*,,Meal plans ist die Bibliothek — alle Plaene, aktivieren"*)
+  // und **`SPEC_03` Flow 3 Schritt 2**.
+  //
+  // `[cmd]` **Und der Befund, der sie noetig machte: vier Plaene bei
+  // `test-user`, EINER erschien** (2026-09-01 gemessen).
+  //
+  // `[read]` **Derselbe Name, andere Sache** — deshalb prueft der
+  // Waechter jetzt, dass sie das tut, was G-287 vermisst hat:
+  // **Plaene zeigen, die man aktivieren kann.**
+  const s = ohneKommentare('apps/web/src/app/v2/nutrition/plans-echt.tsx')
+  assert.match(s, /export function PlanBibliothekEcht/,
+    'Die Bibliothek fehlt — E-41 und SPEC_03 Flow 3 verlangen sie.')
+  assert.match(s, /onAktivieren\?: \(id: string\) => void/,
+    'Die Bibliothek kann nicht aktivieren (E-41) — dann ist sie '
+    + 'wieder die Auflistung, die G-287 entfernt hat.')
+  assert.match(s, /p\.status !== 'active' && onAktivieren && \(/,
+    'Der Aktivieren-Knopf steht auch am laufenden Plan.')
 })
 
 // ══ G-290 ══════════════════════════════════════════════════════════

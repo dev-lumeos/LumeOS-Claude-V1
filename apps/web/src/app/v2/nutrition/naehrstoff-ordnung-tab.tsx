@@ -247,7 +247,7 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
         <p className="v2-muted" style={{ fontSize: 11.5, marginTop: 8, lineHeight: 1.55 }}>
           <strong>{d.mitReferenz}</strong> tragen ein Ziel — die Makros
           dein <strong>persoenliches</strong> aus den Goals
-          (<span className="v2-mono">nutrition_targets</span>, „Ziel"),
+          (<span className="v2-mono">nutrition_targets</span>, „Ziel&quot;),
           die uebrigen die wissenschaftliche Referenz
           (<span className="v2-mono">daily_reference_assessment</span>).
           Davon stehen <strong>{d.unterZiel}</strong> unter dem Ziel

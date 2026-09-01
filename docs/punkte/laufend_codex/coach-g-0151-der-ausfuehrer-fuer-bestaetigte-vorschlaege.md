@@ -8,6 +8,8 @@ braucht: []
 kind_von: F-07
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -34,7 +36,7 @@ zahlen: null
 
 **Mitbeauftragt: G-169, C-173.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-01.**
+**Beauftragt am 2026-09-02.**
 
 ### 1 · G-151 — der Ausfuehrer fuer bestaetigte Vorschlaege
 

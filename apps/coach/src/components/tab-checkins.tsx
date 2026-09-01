@@ -149,7 +149,7 @@ function CheckinKarte({
               </label>
               <button className="cp-knopf cp-knopf-primaer" type="submit">Review abschliessen</button>
               <p className="cp-hinweis">
-                Die meisten Wochen ist die Antwort „halten" — eine fachliche
+                Die meisten Wochen ist die Antwort „halten&quot; — eine fachliche
                 Aenderung geht als Vorschlag aus der Klientenakte.
               </p>
             </form>

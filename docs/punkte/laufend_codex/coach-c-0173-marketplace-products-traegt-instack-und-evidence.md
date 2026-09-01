@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -33,5 +35,5 @@ zahlen: null
 
 ## Auftrag
 
-**Vorbereitet mit G-151 am 2026-09-01.** Der Auftragstext
+**Mitbeauftragt mit G-151 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

@@ -136,7 +136,7 @@ export function CheckinStreifen({ stand }: { stand?: CheckinStand }) {
         `[read]` Hier steht, was erfasst wurde. Der Erholungswert darunter
         rechnet daraus die <strong>Manual-Gewichte</strong> (30/15/15/10/15/10/5)
         — <strong>eine Zahl, keine Einordnung</strong>. Die Readiness-Stufen
-        aus `SPEC_09` („Optimal", „Vorsicht") sind Urteilssprache und
+        aus `SPEC_09` („Optimal&quot;, „Vorsicht&quot;) sind Urteilssprache und
         bleiben offen, bis Tom sie entschieden hat.
       </div>
     </Card>

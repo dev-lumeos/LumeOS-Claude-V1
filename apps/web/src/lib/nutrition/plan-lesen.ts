@@ -140,6 +140,17 @@ export type PlanDaten = {
     zutaten: number
     kcal: number | null
     protein_g: number | null
+    /**
+     * Die Zutaten — G-311.
+     *
+     * **Tom, 2026-09-01:** *,,eingetragene recipes sind ja ok, aber
+     * mindestens bei klick drauf will man sehen was darin ist an
+     * lebensmittel und details."*
+     *
+     * `[cmd]` **Derselbe Verbund, keine zweite Runde** — die Abfrage
+     * las `recipe_ingredients ( id )` bereits, nur zum Zaehlen.
+     */
+    posten: Array<{ id: string; name: string; amount_g: number | null }>
   }>
   ladefehler: string | null
 }
@@ -179,7 +190,26 @@ async function kcalAusLebensmittel(
   }
 }
 
-export async function ladePlan(): Promise<PlanDaten> {
+/**
+ * Der Plan fuer den Planner — G-97, erweitert in G-311.
+ *
+ * `[cmd]` **`planId` waehlt gezielt.** `[read]` **Ohne sie gilt der
+ * alte Weg:** nach `is_active` sortiert, der erste gewinnt.
+ *
+ * ══ WARUM DER PARAMETER ══════════════════════════════
+ *
+ * `[cmd]` **G-311: *In der Werkbank* tat nichts.** Der Knopf setzte
+ * einen Zustand in der Liste, **aber das Raster darunter zeigte
+ * weiter den aktiven Plan.**
+ *
+ * `[read]` **Der Kommentar in `ansicht.tsx` sagte *,,das Raster zeigt
+ * dann dessen Wochen"*** — **und genau das tat es nicht.**
+ *
+ * `[read]` **Ueber die URL, nicht ueber einen Client-Zustand:** der
+ * Plan wird serverseitig geladen, und ein Neuladen der Seite behaelt
+ * die Wahl.
+ */
+export async function ladePlan(planId?: string | null): Promise<PlanDaten> {
   const db = nutritionDb()
 
   // Die Zeilen des Rasters aus den Vorlieben (G-72). `[read]` Faellt
@@ -231,15 +261,25 @@ export async function ladePlan(): Promise<PlanDaten> {
     }
   }
 
-  const roh = Array.isArray(plaene) && plaene.length > 0
-    ? plaene[0] as Record<string, unknown>
-    : null
+  // `[read]` **Der gewaehlte Plan, sonst der erste.** `[cmd]` **Eine
+  // unbekannte Kennung faellt auf den ersten zurueck** — sie kommt
+  // aus der URL und kann veraltet sein; ein leeres Raster waere dann
+  // ein Fehler, den niemand erklaert.
+  const liste = Array.isArray(plaene)
+    ? plaene as Array<Record<string, unknown>>
+    : []
+  const roh = (planId ? liste.find(p => text(p.id) === planId) : null)
+    ?? liste[0] ?? null
 
   // Die Rezepte des Nutzers, mit Naehrwerten aus der Datenbankfunktion.
   const { data: rezepteRoh } = await db
     .from('recipes')
+    // G-311: Name und Menge je Zutat — derselbe Verbund, der schon
+    // fuer die Zaehlung gelesen wurde.
     .select('id, name_de, cuisine_code, cooking_skill, prep_time_min, '
-      + 'cook_time_min, servings, recipe_ingredients ( id )')
+      + 'cook_time_min, servings, '
+      + 'recipe_ingredients ( id, amount_g, food_name_snapshot, sort_order, '
+      + 'food:foods ( name_display_de, name_de ) )')
     .order('name_de')
 
   const rezepte: PlanDaten['rezepte'] = []
@@ -283,6 +323,24 @@ export async function ladePlan(): Promise<PlanDaten> {
       zutaten: Array.isArray(r.recipe_ingredients) ? r.recipe_ingredients.length : 0,
       kcal: n?.kcal ?? null,
       protein_g: n?.protein ?? null,
+      // G-311: die Zutaten selbst, aus demselben Verbund.
+      posten: (Array.isArray(r.recipe_ingredients)
+        ? r.recipe_ingredients as Array<Record<string, unknown>>
+        : [])
+        .slice()
+        .sort((a, b) => (zahl(a.sort_order) ?? 0) - (zahl(b.sort_order) ?? 0))
+        .map(zt => {
+          const f = zt.food as Record<string, unknown> | null
+          return {
+            id: text(zt.id) ?? '',
+            // `[read]` **Der Name aus `foods`, sonst der Schnappschuss**
+            // — eine Zutat ohne beides gibt es nicht, aber der Strich
+            // ist ehrlicher als ein leeres Feld.
+            name: text(f?.name_display_de) ?? text(f?.name_de)
+              ?? text(zt.food_name_snapshot) ?? '—',
+            amount_g: zahl(zt.amount_g),
+          }
+        }),
     })
   }
 

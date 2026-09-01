@@ -22,7 +22,7 @@ test('C-239/C-238: Lifecycle und Ghost-Ausfuehrung sind getrennt modelliert', ()
     logColumns: string[]
     lifecycleCheck: string | null
     executionCheck: string | null
-    legacy: { lifecycle_type: string | null; start_date: string | null; days_count: number | null; status: string }[]
+    plans: { lifecycle_type: string | null; rollover_count: number | null; status: string }[]
   }>(`
     SELECT json_build_object(
       'planColumns', (SELECT COALESCE(json_agg(column_name ORDER BY column_name), '[]'::json)
@@ -45,10 +45,9 @@ test('C-239/C-238: Lifecycle und Ghost-Ausfuehrung sind getrennt modelliert', ()
                          JOIN pg_namespace n ON n.oid = t.relnamespace
                          WHERE n.nspname = 'nutrition' AND t.relname = 'meal_plan_logs'
                            AND c.conname = 'meal_plan_logs_status_check'),
-      'legacy', (SELECT COALESCE(json_agg(json_build_object(
+      'plans', (SELECT COALESCE(json_agg(json_build_object(
                     'lifecycle_type', to_jsonb(mp)->>'lifecycle_type',
-                    'start_date', to_jsonb(mp)->>'start_date',
-                    'days_count', (to_jsonb(mp)->>'days_count')::integer,
+                    'rollover_count', (to_jsonb(mp)->>'rollover_count')::integer,
                     'status', to_jsonb(mp)->>'status') ORDER BY mp.id), '[]'::json)
                  FROM nutrition.meal_plans mp)
     );`)
@@ -62,8 +61,11 @@ test('C-239/C-238: Lifecycle und Ghost-Ausfuehrung sind getrennt modelliert', ()
   ])
   assert.match(schema.lifecycleCheck ?? '', /once.*rollover.*sequence/)
   assert.match(schema.executionCheck ?? '', /pending.*confirmed.*deviated.*skipped/)
-  assert.ok(schema.legacy.every(p => p.lifecycle_type === null && p.start_date === null && p.days_count === null))
-  assert.ok(schema.legacy.every(p => p.status === 'active' || p.status === 'paused'))
+  assert.ok(schema.plans.every(p => p.lifecycle_type === null
+    || ['once', 'rollover', 'sequence'].includes(p.lifecycle_type)))
+  assert.ok(schema.plans.some(p => p.lifecycle_type !== null))
+  assert.ok(schema.plans.some(p => (p.rollover_count ?? 0) > 0))
+  assert.ok(schema.plans.every(p => ['assigned', 'active', 'completed', 'paused', 'archived'].includes(p.status)))
 })
 
 test('C-348: Flag-Funktion verdichtet exakt dieselbe Fensterbewertung', () => {

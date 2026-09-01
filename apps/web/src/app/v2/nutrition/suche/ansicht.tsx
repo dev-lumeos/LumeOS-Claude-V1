@@ -241,7 +241,7 @@ export function SucheAnsicht() {
 
             {zustand.art === 'fertig' && treffer.length === 0 && (
               <p className="v2-muted" style={{ fontSize: 12 }}>
-                Kein Treffer fuer „{payload?.query}". Normalisiert:{' '}
+                Kein Treffer fuer „{payload?.query}&quot;. Normalisiert:{' '}
                 <code>{payload?.normalized_query || '—'}</code>
               </p>
             )}

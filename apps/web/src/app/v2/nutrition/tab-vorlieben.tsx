@@ -789,7 +789,7 @@ export function VorliebenTab({ d }: { d: VorliebenDaten }) {
                     : `${g.general_exclusions.length} gesetzt`}
                 </div>
                 <div className="v2-dim" style={{ fontSize: 11.5, lineHeight: 1.5 }}>
-                  Voreinstellungen wie „keine Innereien" oder „halal-konform"
+                  Voreinstellungen wie „keine Innereien&quot; oder „halal-konform&quot;
                   werden gerade erstellt. Sobald sie da sind, stehen sie hier
                   zur Auswahl.
                 </div>

@@ -85,7 +85,7 @@ function Stufe({ g }: { g: string }) {
 // mussten genau diese Doppelung wieder ausbauen.
 export function SuppStacks() {
   const { daten, stacks } = useSupp()
-  const positionen = daten?.positionen ?? []
+  const positionen = React.useMemo(() => daten?.positionen ?? [], [daten?.positionen])
 
   // Die Frequenzen, die im Bestand vorkommen — gezaehlt, nicht
   // aus einer Liste behauptet.

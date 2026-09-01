@@ -518,7 +518,10 @@ export function NutritionFoodsTab({
     setSeite(0)
   }, [suche, kategorie, tags, sortierung, ohne, herkunft])
 
-  const alleZeilen: NutritionFoodSearchRow[] = payload?.foods ?? []
+  const alleZeilen = React.useMemo<NutritionFoodSearchRow[]>(
+    () => payload?.foods ?? [],
+    [payload?.foods],
+  )
   // Abgewertete Zeilen verschwinden aus der Liste — aber erst nach dem
   // Bestaetigen, und nur bis zum naechsten Laden.
   //
@@ -599,7 +602,7 @@ export function NutritionFoodsTab({
         Object.entries(stand).filter(([, v]) => v === 'disliked').map(([k]) => k)))
     })
     return () => { verworfen = true }
-  }, [payload])
+  }, [alleZeilen])
 
   return (
     <div style={{ marginTop: 16 }}>

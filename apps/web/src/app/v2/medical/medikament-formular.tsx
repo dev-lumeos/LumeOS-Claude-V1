@@ -144,7 +144,7 @@ function Wirkstoffwahl(
         // dass Weitertippen im Namensfeld richtig ist — nicht, dass es
         // das Medikament nicht gibt.
         <p className="v2-med-eingabe-kein-treffer">
-          Kein Wirkstoff und kein Handelsname passt zu „{frage.trim()}".
+          Kein Wirkstoff und kein Handelsname passt zu „{frage.trim()}&quot;.
           {' '}<strong>Trag den Namen unten trotzdem ein</strong> — der
           Katalog kennt keine deutschen Handelsnamen.
         </p>

@@ -1,0 +1,17 @@
+import { chromium } from '@playwright/test'
+import { wortFuer } from '../tools/konten.mjs'
+const b = await chromium.launch()
+const s = await b.newPage({ viewport: { width: 1500, height: 1600 } })
+await s.goto('http://127.0.0.1:3200/login', { waitUntil: 'networkidle' })
+await s.fill('input[type="email"]', 'test-user@lumeos.local')
+await s.fill('input[type="password"]', wortFuer('test-user@lumeos.local'))
+await s.click('button[type="submit"]')
+await s.waitForURL(u => !u.pathname.includes('login'), { timeout: 30000 })
+await s.goto('http://127.0.0.1:3200/v2/nutrition?tab=plans', { waitUntil: 'networkidle' })
+await s.waitForTimeout(2200)
+const marken = s.locator('[title*="Attrappe"], [data-attrappe], .v2-attrappe')
+console.log(`Attrappen-Marken: ${await marken.count()}`)
+const t = await s.locator('body').innerText()
+const i = t.indexOf('Attrappe')
+console.log(i >= 0 ? `Umgebung: ${JSON.stringify(t.slice(Math.max(0,i-120), i+60))}` : 'kein Text "Attrappe"')
+await b.close()

@@ -187,7 +187,7 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
             <div className="v2-module-sub" style={{ opacity: 0.75 }}>
               {lagen.ausserhalb_bereich} + {lagen.ausserhalb_optimal} ={' '}
               {lagen.auffaellig} marker{lagen.auffaellig === 1 ? '' : 's'} —
-              {' '}die gleichen, die „Non-optimal only" in Biomarkers zeigt
+              {' '}die gleichen, die „Non-optimal only&quot; in Biomarkers zeigt
               {lagen.ohne_bereich > 0
                 && ` · ${lagen.ohne_bereich} ohne hinterlegten Bereich`}
             </div>

@@ -371,7 +371,7 @@ export function TrainingLandmarksView() {
           Messwerte. Die fruehere MAV-Zone ist entfernt: fuer sie gibt
           es keinen Beleg und keinen Ersatzwert. Wissenschaftlich
           gestuetzt ist nur die Richtung „mehr Wochenvolumen → mehr
-          Hypertrophie, abflachend" (Meta-Regression, Sports Medicine
+          Hypertrophie, abflachend&quot; (Meta-Regression, Sports Medicine
           2017).
         </div>
       </Card>
@@ -382,7 +382,7 @@ export function TrainingLandmarksView() {
           <div className="v2-dim" style={{ fontSize: 11.5, marginBottom: 12, lineHeight: 1.55 }}>
             After each session you rate pump (1–3) and soreness (1–3)
             per muscle group. After 5 data points the loop suggests a
-            DIRECTION — C-105: die frühere „personal_mav += 1"-Regel
+            DIRECTION — C-105: die frühere „personal_mav += 1&quot;-Regel
             ist entfernt, MAV gibt es nicht mehr.
           </div>
           <pre style={{

@@ -433,7 +433,7 @@ function SleepEcht({ stand }: { stand: CheckinStand }) {
           )}
           <div className="v2-divider" />
           <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.5 }}>
-            Erfasste Werte, keine Deutung — ob 300 mg Koffein „zu viel"
+            Erfasste Werte, keine Deutung — ob 300 mg Koffein „zu viel&quot;
             sind, ist eine Schwellenfrage ohne belegte Quelle im Repo.
           </div>
         </Card>

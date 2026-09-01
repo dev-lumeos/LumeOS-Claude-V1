@@ -96,7 +96,11 @@ export const dynamic = 'force-dynamic'
 export default async function V2NutritionPage({
   searchParams,
 }: {
-  searchParams?: { datum?: string; tab?: string; fenster?: string }
+  searchParams?: {
+    datum?: string; tab?: string; fenster?: string
+    /** G-311: der in der Werkbank gewaehlte Plan. */
+    plan?: string
+  }
 }) {
   const datum = datumOderHeute(searchParams?.datum)
 
@@ -260,7 +264,9 @@ export default async function V2NutritionPage({
   if (tab === 'planner' || tab === 'plans') {
     try {
       const [p, l, f, e, te, wb] = await Promise.all([
-        ladePlan(),
+        // G-311: der in der Werkbank gewaehlte Plan (?plan=...).
+        ladePlan(typeof searchParams?.plan === 'string'
+          ? searchParams.plan : null),
         ladePlanLogs(datum, 7).catch(() => []),
         ladeCoachFreigabe().catch(() => false),
         ladeEinkaufslistenZahl().catch(() => 0),

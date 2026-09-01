@@ -30,10 +30,12 @@
 import * as React from 'react'
 import { Card, Pill, Row, Ring, Sparkline } from '@lumeos/ui'
 
-import type { PlanDaten } from '../../../lib/nutrition/plan-lesen'
+import type { PlanDaten, PlanKurz } from '../../../lib/nutrition/plan-lesen'
 import {
   zyklusVon, ZYKLUS_TEXT, ZYKLUS_ERKLAERUNG,
-  statusText,
+  statusText, herkunftVon,
+  // G-310: die Badges der Bibliothek (Mockup Z. 89).
+  HERKUNFT_BADGE, HERKUNFT_FARBE,
   KEIN_LOG_SATZ, KEINE_EINKAUFSLISTE_SATZ,
   einhaltungVon, quoteVon, type LogZeile,
   // G-310: die Sieben-Tage-Reihe der Attrappe.
@@ -333,6 +335,12 @@ export function PlanEinstellungenEcht({ d }: { d: PlanDaten }) {
 // nicht auskommentiert** (A-59); git holt sie zurueck.
 
 /**
+ * `Lifecycle types` — die Kopie der Attrappe (`tab-plans.tsx` Z. 274).
+ *
+ * `[cmd]` **BERICHTIGT in G-310: der Titel hiess *,,Lebenszyklus"*.**
+ * `[read]` **Dieselbe Klasse wie `Planumfang` und `Einhaltung`** —
+ * ein erfundener Titel neben einer Attrappe, die einen anderen traegt.
+ *
  * Der Lebenszyklus DIESES Plans — G-270.
  *
  * `[read]` **Bisher stand hier eine Legende ueber drei Woerter.**
@@ -344,7 +352,7 @@ export function LebenszyklusEcht({ d }: { d: PlanDaten }) {
   if (!p) return null
   const z = zyklusVon(p.lifecycle_type)
   return (
-    <Card title="Lebenszyklus" sub={statusText(p.status)}>
+    <Card title="Lifecycle types" sub={statusText(p.status)}>
       <Row label="Zyklus" value={ZYKLUS_TEXT[z]} />
       {p.start_date && <Row label="Start" value={p.start_date} />}
       {p.days_count !== null && <Row label="Dauer" value={`${p.days_count} Tage`} />}
@@ -477,6 +485,107 @@ export function WechselbefundEcht({ stand }: { stand: WechselStand }) {
         </div>
       )}
     </Card>
+  )
+}
+
+/**
+ * Die Bibliothek — alle Plaene, als Kopie der Attrappe.
+ *
+ * ══ DREI QUELLEN SAGEN DASSELBE ═════════════════════════
+ *
+ * `[cmd]` **Die Attrappe** (`tab-plans.tsx` Z. 343-370) zeigt unten
+ * ein Raster aus Plankarten mit `Activate` und `Preview`.
+ * `[cmd]` **E-41:** *,,Meal plans ist die Bibliothek — alle Plaene,
+ * aktivieren."*
+ * `[cmd]` **`SPEC_03` Flow 3, Schritt 1-2:** *,,Uebersicht zeigt alle
+ * verfuegbaren Plaene."*
+ *
+ * ══ DER BEFUND, DER DAZU FUEHRTE ════════════════════════
+ *
+ * `[cmd]` **Am 2026-09-01 gemessen: vier Plaene bei `test-user`, EINER
+ * erschien.** `[read]` **Der Reiter zeigte nur den aktiven** —
+ * `ladePlan()` nimmt `plaene[0]`. **`allePlaene` war geladen, ging
+ * aber nur an den Planner.**
+ *
+ * `[cmd]` **Und der Kommentar dort sagte *,,Einen Plan, nicht zwei —
+ * der zweite gehoert `tom.seed`"*** — **das begruendete genau die
+ * Luecke** (A-62: eine Aussage, die still kippt).
+ *
+ * `[read]` **`PlanKurz`, nicht `PlanDaten`** — die Liste soll zeigen,
+ * welche Plaene es gibt, nicht was in ihnen steht. **Das Detail laedt
+ * `MealPlanCard` fuer den aktiven.**
+ */
+export function PlanBibliothekEcht({ plaene, aktivId, onAktivieren }: {
+  plaene: readonly PlanKurz[]
+  /** Der Plan, der oben schon in voller Breite steht. */
+  aktivId?: string | null
+  onAktivieren?: (id: string) => void
+}) {
+  // `[read]` **Der aktive Plan steht OBEN in voller Breite** — ihn
+  // hier zu wiederholen waere derselbe Plan zweimal. **Das Mockup
+  // macht es genauso:** `plans.slice(1)` (Z. 84).
+  const uebrige = plaene.filter(p => p.id !== aktivId)
+  if (uebrige.length === 0) return null
+
+  return (
+    <div className="v2-col-gap" style={{ gap: 8 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span className="v2-eyebrow">Alle Pläne</span>
+        <Pill>{plaene.length} Pläne</Pill>
+      </div>
+      <div className="v2-grid v2-g-cols-3" style={{ gap: 12 }}>
+        {uebrige.map(p => {
+          const h = herkunftVon(p.plan_origin)
+          const badge = HERKUNFT_BADGE[h]
+          const farbe = HERKUNFT_FARBE[h]
+          return (
+            <Card key={p.id} style={{ padding: 14 }}>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                marginBottom: 6, flexWrap: 'wrap',
+              }}>
+                <span style={{ fontSize: 13, fontWeight: 600 }}>{p.name}</span>
+                {/* `[cmd]` **Das Badge der Vorlage** (Mockup Z. 89).
+                    `[read]` **`self_created` traegt keines** —
+                    `SPEC_03` Flow 3: *,,Eigene — ohne Label"*. */}
+                {badge && (
+                  <Pill style={{
+                    fontSize: 9,
+                    color: farbe ?? undefined,
+                    borderColor: farbe
+                      ? `color-mix(in srgb, ${farbe} 40%, var(--border))`
+                      : undefined,
+                  }}>
+                    {badge}
+                  </Pill>
+                )}
+              </div>
+              {p.description && (
+                <div className="v2-muted" style={{ fontSize: 11, marginBottom: 6 }}>
+                  {p.description}
+                </div>
+              )}
+              <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 10 }}>
+                <Pill style={{ fontSize: 9.5 }}>{statusText(p.status)}</Pill>
+                <Pill style={{ fontSize: 9.5 }}>{p.tage} Tage</Pill>
+                <Pill style={{ fontSize: 9.5 }}>{p.positionen} Positionen</Pill>
+              </div>
+              {/* `[cmd]` **Die Attrappe zeigt `Activate` nur an einem
+                  Plan, der nicht laeuft** (Z. 364) — und `Preview`
+                  fuehrt heute nirgendwohin, deshalb steht er nicht
+                  da. **Ein Knopf ohne Ziel ist eine Sackgasse**
+                  (G-311). */}
+              {p.status !== 'active' && onAktivieren && (
+                <button type="button" className="v2-btn v2-btn-primary v2-btn-sm"
+                        onClick={() => onAktivieren(p.id)}>
+                  Aktivieren
+                </button>
+              )}
+            </Card>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 

@@ -641,7 +641,7 @@ export function EinkaufslisteKarte({ liste, onAenderung }: {
           ohne Format, ohne Ziel, ohne Mechanismus.** `[read]` **Nicht
           gebaut, sondern gemeldet** (Auftrag: nicht ausdenken). */}
       <p className="v2-muted" style={{ fontSize: 10.5, marginTop: 8, lineHeight: 1.5 }}>
-        Flow 8 nennt als sechsten Schritt „Teilen / Exportieren" —{' '}
+        Flow 8 nennt als sechsten Schritt „Teilen / Exportieren&quot; —{' '}
         <strong>ohne Format und ohne Ziel</strong>. Der Schritt ist gemeldet,
         nicht erfunden.
       </p>

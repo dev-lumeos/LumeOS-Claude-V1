@@ -790,6 +790,7 @@ function AndererTab({
           einkaufslisten={einkaufslisten}
           tagesEintraege={tagesEintraege}
           wechsel={wechsel}
+          allePlaene={allePlaene}
           datum={datum ?? ''}
         />
       </div>

@@ -199,7 +199,7 @@ export function PhaseEcht({ phase, stichtag }: { phase: Phase; stichtag: string 
           <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.55 }}>
             <span className="v2-mono">recommended_next</span> ist ein
             gespeicherter Text, keine Ableitung aus dem Verlauf. Der
-            Entwurf zeigt daneben einen Zeitpunkt („in 4 Wochen") und
+            Entwurf zeigt daneben einen Zeitpunkt („in 4 Wochen&quot;) und
             eine Konfidenz — beides hat keine Spalte.
           </div>
         </Card>

@@ -119,7 +119,7 @@ export function RecoveryAnsicht({
     close: () => setModal(null),
     modus, setModus, sc, rd, ot, pending,
     zeigeTab: setTab,
-  }), [modus, sc, rd, ot, pending])
+  }), [modus, sc, rd, ot, pending, setTab])
 
   return (
     <RecoveryKontext.Provider value={kontext}>

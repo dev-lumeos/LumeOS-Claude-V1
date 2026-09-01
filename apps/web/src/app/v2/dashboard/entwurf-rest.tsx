@@ -103,7 +103,7 @@ export function DashboardEntwurfRest() {
           <Card title="Today&apos;s flow" sub="06:30 — 22:00" attrappe={GRUND_FLOW}>
             <p className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.5 }}>
               Der Entwurf zeigt sieben Ereignisse auf einer Zeitachse von
-              06:00 bis 22:00, mit einer Marke fuer „jetzt".
+              06:00 bis 22:00, mit einer Marke fuer „jetzt&quot;.
             </p>
           </Card>
 

@@ -76,10 +76,17 @@ export function PlanEintraegeEcht({
 
   return (
     <Card
-      title="Plan-Einträge"
+      // `[cmd]` **G-310: der Titel der Attrappe** (`tab-plans.tsx`
+      // Z. 188). Hier stand „Plan-Einträge" — dieselbe Klasse wie
+      // `Planumfang`, `Einhaltung` und `Lebenszyklus`: ein erfundener
+      // Titel neben einer Attrappe, die einen anderen trägt.
+      title="Today's ghost entries"
+      // Die Attrappe: „N still open · confirm via MealCam or manually".
+      // `[read]` **MealCam bleibt ungenannt** — der Weg existiert
+      // nicht (G-276), und ein Hinweis darauf wäre ein Versprechen.
       sub={eintraege.length === 0
         ? `${datum} · kein Eintrag`
-        : `${offen} von ${eintraege.length} offen · ${datum}`}
+        : `${offen} still open · ${datum}`}
     >
       {rueckwirkend && eintraege.length > 0 && (
         // Flow 4: „Bestaetigung mit originalem execution_date,

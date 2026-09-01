@@ -9,6 +9,8 @@ kind_von: A-23
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-01
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   dateien:
     - .eslintrc.json
@@ -83,4 +85,55 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Nachgemessen.**
+
+`[cmd]` **`pnpm lint`: Exit 0 fuer Web, Admin und Coach.**
+
+### Alle 19 waren echte Fehler
+
+`[cmd]` **`react/no-unescaped-entities`, jeder einzelne berechtigt.**
+`[cmd]` **Keine Regel abgeschaltet** — die JSX-Texte tragen jetzt
+Entities.
+
+`[read]` **Das war die Frage im Auftrag: echte Fehler oder
+unpassende Regeln?** **Die Antwort ist eindeutig, und sie haette auch
+anders ausfallen koennen.**
+
+`[cmd]` **Und die drei Warnungen sind mit behoben** — aktuelle
+Trefferliste, aktueller `setTab`-Rueckruf, stabile
+Stack-Positionsliste.
+
+### G-313 — die Annahme nachgezogen, nicht der Test abgeschaltet
+
+`[cmd]` **Lifecycle-Test 2/2 gruen.** `[cmd]` **Er prueft jetzt
+gueltige gespeicherte Zyklen, mindestens einen gesetzten und einen
+erfolgten Rollover** — statt *,,alle Werte NULL"*.
+
+`[read]` **Der Test sichert damit den Zustand, der eingetreten ist,
+statt den, der vorbei war.**
+
+### Und die Antwort auf meine Waechterfrage ist Nein
+
+`[cmd]` **`abwesenheit-pruefen` kann den Fall nicht fassen:** **er
+prueft Pipeline-Struktur, keine veraenderlichen Zeilenwerte.**
+`[cmd]` **Alle 10 Strukturmarken gelten.**
+
+`[read]` **Meine Vermutung — *,,alle Werte sind NULL* ist eine
+Abwesenheitsaussage"* — war falsch.** `[read]` **Der Waechter
+unterscheidet Struktur von Inhalt, und das ist richtig so:** eine
+Marke, die Zeilenwerte prueft, faellt bei jedem Seed.
+
+### Der gemeldete rote Test ist inzwischen gruen
+
+`[cmd]` **Er meldete den Gate rot wegen `plan-detail-lage.test.ts`
+aus G-287** — und hat ihn nicht angefasst, weil er fachfremd war.
+
+`[cmd]` **Nachgemessen: `pnpm --filter @lumeos/web test` Exit 0, 0
+Fehlschlaege.** `[read]` **Claude Code hat die Datei im selben
+Zeitraum bearbeitet** — der Test war zwischen zwei Baustellen
+eingeklemmt.
+
+`[read]` **Richtig, ihn stehen zu lassen.**
+
+**Abgenommen.**
+

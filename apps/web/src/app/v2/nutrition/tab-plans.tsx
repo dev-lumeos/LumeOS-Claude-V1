@@ -31,12 +31,14 @@ import type { GhostStatus } from './typen'
 import {
   PlanKopfEcht, PlanEinstellungenEcht,
 } from './plans-echt'
-import type { PlanDaten } from '../../../lib/nutrition/plan-lesen'
+import type { PlanDaten, PlanKurz } from '../../../lib/nutrition/plan-lesen'
 import {
   LEERER_WECHSELSTAND, type LogZeile, type WechselStand,
 } from '../../../lib/nutrition/plan-lage'
 import {
   LebenszyklusEcht, EinhaltungEcht, WechselbefundEcht,
+  // G-310: alle Plaene — die Bibliothek der Attrappe (Z. 343).
+  PlanBibliothekEcht,
 } from './plans-echt'
 import { PlanModal } from './plan-modal'
 import { PlanEintraegeEcht, type TagesEintrag } from './plan-eintraege'
@@ -77,7 +79,7 @@ const EINKAUF: Array<{ cat: string; items: Array<[string, string]> }> = [
 export function MealPlansTab({
   d = null, logs = [], coachFreigabe = false, einkaufslisten = 0,
   tagesEintraege = [], datum = '',
-  wechsel = LEERER_WECHSELSTAND,
+  wechsel = LEERER_WECHSELSTAND, allePlaene = [],
 }: {
   d?: PlanDaten | null
   /** G-270: die Ausfuehrung aus `meal_plan_logs` — nicht vom Eintrag. */
@@ -92,6 +94,8 @@ export function MealPlansTab({
   datum?: string
   /** G-309: Befunde UND Grundgesamtheit, aus EINER Messung. */
   wechsel?: WechselStand
+  /** G-310: alle Plaene des Nutzers — die Bibliothek (E-41). */
+  allePlaene?: PlanKurz[]
 }) {
   // G-267 / G-268: `null` heisst zu, `true` heisst anlegen,
   // ein Objekt heisst bearbeiten.
@@ -326,8 +330,13 @@ export function MealPlansTab({
           aufs Tages-Akkordeon fuehrt (G-286), plus Aktivieren mit
           Lebenszyklus (G-290).**
 
-          `[cmd]` **Einen Plan, nicht zwei** — der zweite gehoert
-          `tom.seed@example.com` und faellt per RLS heraus. */}
+          `[cmd]` **BERICHTIGT in G-310:** hier stand *,,Einen Plan,
+          nicht zwei — der zweite gehoert `tom.seed@example.com` und
+          faellt per RLS heraus."* **Am 2026-09-01 gemessen: vier
+          eigene Plaene bei `test-user`, und nur dieser eine wurde
+          gezeigt.** `[read]` **Der Satz war eine Erklaerung fuer eine
+          Luecke** (A-62). **Die uebrigen stehen jetzt in der
+          Bibliothek darunter.** */}
       {d && (
         <div className="v2-col-gap" style={{ gap: 12 }}>
           <MealPlanCard
@@ -338,6 +347,22 @@ export function MealPlansTab({
           />
           {detailOffen && <MealPlanDetail d={d} />}
         </div>
+      )}
+
+      {/* ══ G-310: die Bibliothek, echt ═════════════════════
+          `[cmd]` **Am 2026-09-01 gemessen: vier Plaene bei
+          `test-user`, EINER erschien.** `[read]` **`allePlaene` war
+          geladen, ging aber nur an den Planner.**
+
+          `[cmd]` **Hier stand: *,,Einen Plan, nicht zwei — der zweite
+          gehoert `tom.seed@example.com` und faellt per RLS heraus."***
+          **Das begruendete genau die Luecke** (A-62). */}
+      {d && allePlaene.length > 0 && (
+        <PlanBibliothekEcht
+          plaene={allePlaene}
+          aktivId={d.plan?.id ?? null}
+          onAktivieren={() => setAktivieren(true)}
+        />
       )}
 
       {!d && (

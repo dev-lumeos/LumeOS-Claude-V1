@@ -335,7 +335,7 @@ export function MedWirkstoffe({ liste }: { liste: WirkstoffZeile[] }) {
               <p className="v2-med-wirk-leer-kopf">
                 <Icon name="search" className="v2-ic v2-ic-sm" />
                 Weder ein Wirkstoff noch ein Handelsname enthält
-                {' '}„{frage.trim()}".
+                {' '}„{frage.trim()}&quot;.
               </p>
               <p className="v2-med-wirk-leer-satz">
                 <strong>Das heisst nicht, dass es das Medikament nicht

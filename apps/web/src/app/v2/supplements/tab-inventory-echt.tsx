@@ -268,7 +268,7 @@ export function ComplianceEcht({ d, heute }: { d: StackDaten; heute: string }) {
             dastehen, sonst liest sich eine Lücke wie ein Versäumnis. */}
         <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.45 }}>
           Leere Felder heissen: an diesem Tag wurde nichts erfasst. Das ist
-          etwas anderes als „nichts genommen".
+          etwas anderes als „nichts genommen&quot;.
         </div>
       </Card>
 

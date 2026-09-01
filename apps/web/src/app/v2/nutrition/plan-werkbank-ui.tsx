@@ -19,7 +19,7 @@
 //
 // `[read]` **A-30:** nur Typen aus dem Leseweg, kein Wertimport.
 import * as React from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, Pill, Icon, Empty } from '@lumeos/ui'
 
 import type { PlanKurz } from '../../../lib/nutrition/plan-lesen'
@@ -599,15 +599,34 @@ export function PlanWerkbank({ plaene, heute }: {
   // `[read]` **Der aktive Plan ist vorgewaehlt** — das Raster darunter
   // zeigt ohnehin ihn, und zwei verschiedene Auswahlen nebeneinander
   // waeren verwirrend.
-  const [gewaehlt, setGewaehlt] = React.useState<string | null>(
-    () => plaene.find(p => p.is_active)?.id ?? plaene[0]?.id ?? null,
-  )
+  // ══ G-311: der Sprung geht ueber die URL ════════════════
+  //
+  // `[cmd]` **Vorher stand hier ein `useState`** — der Knopf setzte
+  // ihn, **und das Raster darunter zeigte weiter den aktiven Plan.**
+  // `[read]` **Der Zustand blieb im Client, der Plan wird auf dem
+  // Server geladen** — sie konnten sich gar nicht treffen.
+  //
+  // `[read]` **Ueber `?plan=` liest ihn `ladePlan`**, und ein
+  // Neuladen behaelt die Wahl.
+  const router = useRouter()
+  const params = useSearchParams()
+  const ausUrl = params.get('plan')
+  const gewaehlt = ausUrl
+    ?? plaene.find(p => p.is_active)?.id ?? plaene[0]?.id ?? null
+
   return (
     <PlanListe
       plaene={plaene}
       heute={heute}
       aktiv={gewaehlt}
-      onWaehlen={setGewaehlt}
+      onWaehlen={id => {
+        const q = new URLSearchParams(params.toString())
+        q.set('plan', id)
+        // `[read]` **`scroll: false`** — der Nutzer steht in der
+        // Liste; nach oben zu springen waere ein Ortswechsel, den er
+        // nicht ausgeloest hat.
+        router.push(`?${q.toString()}`, { scroll: false })
+      }}
     />
   )
 }
