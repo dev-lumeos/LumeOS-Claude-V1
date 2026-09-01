@@ -34,6 +34,11 @@ import {
   KOENNEN, KOENNEN_LABEL, KOENNEN_VORGABE, UNVOLLSTAENDIG_SATZ,
   type ZutatEntwurf, type Koennen, type Naehrwerte,
 } from '../../../lib/nutrition/rezept-lage'
+// G-323: dasselbe Suchmodal wie im Planner — keine zweite Suche.
+import { FoodSuchModal } from './food-such-modal'
+import type { NutritionFoodSearchRow } from '../../../lib/nutrition/food-search'
+// G-325: die Makros je Zutat — dieselbe Rechnung wie im Modal.
+import { vorschauFuer } from '../../../lib/nutrition/menge-rechnen'
 
 const MAHLZEITEN = [
   ['breakfast', 'Frühstück'], ['lunch', 'Mittag'], ['dinner', 'Abend'],
@@ -58,129 +63,46 @@ async function senden(koerper: unknown): Promise<{ ok: boolean; fehler?: string 
   return { ok: false, fehler: k?.error ?? `Fehler ${antwort.status}` }
 }
 
-// ════════════════════════════════════════════════════════════════════
-// G-300 — Flow 7 Schritt 3: Zutaten via Food Search
-// ════════════════════════════════════════════════════════════════════
+// ══ G-323: `ZutatSuche` ist ENTFERNT ════════════════════
 //
-// `[cmd]` **`/api/nutrition/foods?q=` steht** — dieselbe Route, die
-// der Erfassungsdialog benutzt. **Die Suche gehoert ins Rezept**, wie
-// Flow 7 sie beschreibt, nicht in den Plan.
-
-// `[cmd]` **`NutritionFoodSearchRow` liefert die Naehrwerte als
-// ZEICHENKETTEN** (`enercc: string`), nicht als Zahlen — gemessen am
-// 2026-08-31 am Typ.
+// **Tom, 2026-09-02:** *,,das modal ist perfekt, wieso nutzen wir das
+// nicht auch fuer rezepte? anstatt das pulldown wo nur kalorien
+// zeigt."*
 //
-// `[read]` **Ohne Umwandlung rechnet die Vorschau mit Text:**
-// `'309' * 2 / 100` ergaebe zwar 6,18, aber `null`-Pruefungen und
-// Summen liefen ins Leere, und `NaN` saehe aus wie ein fehlender
-// Wert. **`zahlOderNull` ist deshalb keine Kosmetik.**
-type Treffer = {
-  id: string; name_display_de?: string | null; name_de?: string | null
-  enercc?: string | number | null; prot625?: string | number | null
-  fat?: string | number | null; cho?: string | number | null
-}
+// `[cmd]` **Sie stand hier, 95 Zeilen, seit G-300** — mit eigenem
+// Suchfeld, eigenem `fetch`, eigener Trefferliste.
+//
+// `[cmd]` **Gemessen in G-320: ihr fehlten ALLE ACHT Lehren** —
+// G-70 (Seitensortierung), G-112 (mehrere Tags), G-133 (`ohne`),
+// G-154 (Vorlieben), G-251 (Herkunft), G-266 (Erstlauf), Abbruch,
+// Entprellen. **Sie suchte auf Absenden statt beim Tippen.**
+//
+// `[read]` **A-59: entfernt, nicht auskommentiert** — git holt sie
+// zurueck, wenn jemand nachsehen will. **`FoodSuchModal` ersetzt
+// sie**, und mit ihm kommen alle acht Lehren.
+//
+// `[read]` **Was blieb: `zahlOderNull`** — die Naehrwerte kommen
+// weiter als Zeichenketten aus der Suche, und der Grund dafuer
+// (G-300) gilt unveraendert.
 
+/**
+ * Eine Zahl aus einem Feld, das Text oder Zahl sein kann — G-300.
+ *
+ * `[cmd]` **`NutritionFoodSearchRow` liefert die Naehrwerte als
+ * ZEICHENKETTEN** (`enercc: string`), nicht als Zahlen — gemessen
+ * am 2026-08-31 am Typ.
+ *
+ * `[read]` **Ohne Umwandlung rechnet die Vorschau mit Text:**
+ * `'309' * 2 / 100` ergaebe zwar 6,18, aber `null`-Pruefungen und
+ * Summen liefen ins Leere, und `NaN` saehe aus wie ein fehlender
+ * Wert.
+ */
 function zahlOderNull(v: string | number | null | undefined): number | null {
   if (v === null || v === undefined || v === '') return null
   const n = typeof v === 'string' ? Number(v) : v
   return Number.isFinite(n) ? n : null
 }
 
-function ZutatSuche({ onWaehlen }: {
-  onWaehlen: (z: ZutatEntwurf) => void
-}) {
-  const [frage, setFrage] = React.useState('')
-  const [treffer, setTreffer] = React.useState<Treffer[]>([])
-  const [sucht, setSucht] = React.useState(false)
-  const [gewaehlt, setGewaehlt] = React.useState<Treffer | null>(null)
-  const [menge, setMenge] = React.useState('100')
-
-  async function suchen(e: React.FormEvent) {
-    e.preventDefault()
-    if (!frage.trim()) return
-    setSucht(true)
-    try {
-      const a = await fetch(`/api/nutrition/foods?q=${encodeURIComponent(frage)}&limit=12`)
-      const d = await a.json()
-      setTreffer(Array.isArray(d.foods) ? d.foods : [])
-    } finally {
-      setSucht(false)
-    }
-  }
-
-  function uebernehmen() {
-    if (!gewaehlt) return
-    const g = Number(menge.replace(',', '.'))
-    if (!Number.isFinite(g) || g <= 0) return
-    onWaehlen({
-      food_id: gewaehlt.id,
-      name: gewaehlt.name_display_de || gewaehlt.name_de || 'Unbenannt',
-      amount_g: g,
-      enercc_100: zahlOderNull(gewaehlt.enercc),
-      prot625_100: zahlOderNull(gewaehlt.prot625),
-      fat_100: zahlOderNull(gewaehlt.fat),
-      cho_100: zahlOderNull(gewaehlt.cho),
-    })
-    setGewaehlt(null); setFrage(''); setTreffer([]); setMenge('100')
-  }
-
-  return (
-    <div className="v2-suchblock">
-      <form onSubmit={suchen} style={{ display: 'flex', gap: 6 }}>
-        <input
-          className="v2-feld" value={frage} placeholder="Zutat suchen …"
-          aria-label="Zutat suchen"
-          onChange={e => setFrage(e.target.value)}
-        />
-        <button type="submit" className="v2-btn" disabled={!frage.trim() || sucht}>
-          <Icon name="search" className="v2-ic v2-ic-sm" />
-        </button>
-      </form>
-
-      {treffer.length > 0 && !gewaehlt && (
-        <div style={{ marginTop: 6, maxHeight: 180, overflowY: 'auto' }}>
-          {treffer.map(t => (
-            <button
-              key={t.id} type="button" className="v2-hit"
-              onClick={() => { setGewaehlt(t); setTreffer([]) }}
-            >
-              {t.name_display_de || t.name_de}
-              <span className="v2-num v2-dim" style={{ marginLeft: 6, fontSize: 10 }}>
-                {zahlOderNull(t.enercc) === null
-                  ? '—'
-                  : `${Math.round(zahlOderNull(t.enercc)!)} kcal/100 g`}
-              </span>
-            </button>
-          ))}
-        </div>
-      )}
-
-      {gewaehlt && (
-        <div style={{ display: 'flex', gap: 6, marginTop: 6, alignItems: 'flex-end' }}>
-          <span style={{ flex: 1, fontSize: 11.5 }}>
-            {gewaehlt.name_display_de || gewaehlt.name_de}
-          </span>
-          <label style={{ fontSize: 10 }}>
-            <span className="v2-eyebrow">Menge (g)</span>
-            <input
-              className="v2-feld" type="number" min="0" step="1" value={menge}
-              aria-label="Menge in Gramm" style={{ width: 90 }}
-              onChange={e => setMenge(e.target.value)}
-            />
-          </label>
-          <button type="button" className="v2-btn v2-btn-sm v2-btn-primary"
-                  onClick={uebernehmen}>
-            Hinzufügen
-          </button>
-          <button type="button" className="v2-btn v2-btn-sm"
-                  onClick={() => setGewaehlt(null)}>
-            Abbrechen
-          </button>
-        </div>
-      )}
-    </div>
-  )
-}
 
 /** Gesamt und je Portion nebeneinander — Flow 7, Schritt 3. */
 function Vorschau({ gesamt, portionen }: {
@@ -241,10 +163,22 @@ export function RezeptBauer({ vorhanden, onFertig, onAbbruch }: {
   // Naehrwerte je 100 g mit** — der Leseweg liefert die Summe, nicht
   // die Einzelwerte. **Die Vorschau zeigt dann die gespeicherten
   // Werte, nicht die gerechneten** (siehe unten).
+  // G-323: ist die Zutatensuche offen?
+  const [suchen, setSuchen] = React.useState(false)
+  // ══ G-325: die Werte je 100 g kommen jetzt mit ═══════════════════
+  //
+  // `[cmd]` **Hier stand viermal `null`** — und damit zeigten die
+  // Zutaten eines BESTEHENDEN Rezepts vier Striche, während eine neu
+  // hinzugefügte ihre Makros trug. **Am 2026-09-02 am Schirm
+  // gemessen**, bevor es verdrahtet war.
+  //
+  // `[cmd]` **`rezept-lesen.ts` liefert sie seit G-325** über
+  // `food_nutrient_snapshot(…, 100)`.
   const [zutaten, setZutaten] = React.useState<ZutatEntwurf[]>(
     () => (vorhanden?.zutaten ?? []).map(x => ({
       food_id: x.food_id ?? '', name: x.name, amount_g: x.amount_g,
-      enercc_100: null, prot625_100: null, fat_100: null, cho_100: null,
+      enercc_100: x.enercc_100, prot625_100: x.prot625_100,
+      fat_100: x.fat_100, cho_100: x.cho_100,
     })),
   )
   const [laeuft, setLaeuft] = React.useState(false)
@@ -365,31 +299,122 @@ export function RezeptBauer({ vorhanden, onFertig, onAbbruch }: {
             Noch keine Zutat. Ein Rezept braucht mindestens eine.
           </p>
         )}
-        {zutaten.map((x, i) => (
-          <div key={`${x.food_id}-${i}`} style={{
-            display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5,
-          }}>
-            <span style={{ flex: 1, minWidth: 0 }}>{x.name}</span>
-            <input
-              className="v2-feld" type="number" min="1" style={{ width: 80 }}
-              value={String(x.amount_g)}
-              aria-label={`Menge ${x.name}`}
-              onChange={e => {
-                const g = Number(e.target.value)
-                setZutaten(alt => alt.map((y, j) =>
-                  j === i ? { ...y, amount_g: Number.isFinite(g) ? g : 0 } : y))
-              }}
-            />
-            <span className="v2-dim" style={{ fontSize: 10 }}>g</span>
-            <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
-                    aria-label={`${x.name} entfernen`}
-                    onClick={() => setZutaten(alt => alt.filter((_, j) => j !== i))}>
-              <Icon name="trash" className="v2-ic v2-ic-sm" />
-            </button>
-          </div>
-        ))}
+        {/* ══ G-325: je Zutat Menge UND Makros ═══════════════
+            **Tom, 2026-09-02:** *,,die einzelpositionen sollen die
+            makros anzeigen wenn man da editiert weiss man nichts
+            mehr. also eine saubere auflistung inkl schon errechneten
+            makros, das eingabefeld gramm kleiner dafuer alle makros
+            sauber auflisten von der menge die eingegeben wird."*
 
-        <ZutatSuche onWaehlen={neu => setZutaten(alt => [...alt, neu])} />
+            `[cmd]` **Hier stand nur Name und ein 80-px-Grammfeld.**
+            **Die Makros gab es nur als Gesamtsumme** — 1.579 kcal,
+            132,7 g Protein, 45,3 g Fett, 150,5 g Kohlenhydrate.
+
+            `[cmd]` **Gerechnet mit `vorschauFuer`** — dieselbe
+            Funktion wie im Suchmodal, am 2026-09-02 gegen
+            `food_nutrient_snapshot` geprueft. **Kein zweiter
+            Rechenweg, keine Rundreise je Tastendruck:** die Rechnung
+            ist linear (G-320).
+
+            `[read]` **Das Grammfeld ist 56 statt 80 px breit** —
+            Toms Wort: *,,das eingabefeld gramm kleiner."* */}
+        {zutaten.map((x, i) => {
+          const m = vorschauFuer({
+            enercc: x.enercc_100, prot625: x.prot625_100,
+            fat: x.fat_100, cho: x.cho_100,
+          }, x.amount_g)
+          return (
+            <div key={`${x.food_id}-${i}`} data-probe="zutat-zeile" style={{
+              display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5,
+            }}>
+              <span style={{ flex: 1, minWidth: 0 }}>{x.name}</span>
+              {/* `[cmd]` **`flex: 'none'` ist nötig**: `.v2-feld` setzt
+                  `flex: 1` (v2.css:1396), und `width` wäre dann nur
+                  die Basisbreite. **Am 2026-09-02 gemessen: 262 px
+                  statt der gesetzten 56.** */}
+              <input
+                className="v2-feld" type="number" min="1"
+                style={{ width: 56, flex: 'none' }}
+                value={String(x.amount_g)}
+                aria-label={`Menge ${x.name}`}
+                onChange={e => {
+                  const g = Number(e.target.value)
+                  setZutaten(alt => alt.map((y, j) =>
+                    j === i ? { ...y, amount_g: Number.isFinite(g) ? g : 0 } : y))
+                }}
+              />
+              <span className="v2-dim" style={{ fontSize: 10 }}>g</span>
+              {/* `[read]` **Vier Werte, feste Breite, rechtsbuendig** —
+                  sonst springen die Spalten, sobald eine Zahl
+                  dreistellig wird. `[read]` **Ein Strich heisst
+                  ,,nicht ermittelbar", nicht 0.** */}
+              <span data-probe="zutat-makros" className="v2-num v2-dim"
+                    style={{ display: 'flex', gap: 8, fontSize: 10.5 }}>
+                <span style={{ width: 54, textAlign: 'right' }}>
+                  {m.kcal === null ? '—' : `${z(m.kcal)} kcal`}
+                </span>
+                <span style={{ width: 46, textAlign: 'right' }}>
+                  {m.protein === null ? '—' : `${z(m.protein, 1)} P`}
+                </span>
+                <span style={{ width: 46, textAlign: 'right' }}>
+                  {m.fett === null ? '—' : `${z(m.fett, 1)} F`}
+                </span>
+                <span style={{ width: 46, textAlign: 'right' }}>
+                  {m.kh === null ? '—' : `${z(m.kh, 1)} C`}
+                </span>
+              </span>
+              <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                      aria-label={`${x.name} entfernen`}
+                      onClick={() => setZutaten(alt => alt.filter((_, j) => j !== i))}>
+                <Icon name="trash" className="v2-ic v2-ic-sm" />
+              </button>
+            </div>
+          )
+        })}
+
+        {/* ══ G-323: dasselbe Modal wie im Planner ════════════
+            **Tom, 2026-09-02:** *,,das modal ist perfekt, wieso
+            nutzen wir das nicht auch fuer rezepte?"*
+
+            `[read]` **Der Knopf ist die ganze Zeile** — dieselbe
+            Form wie im Planner (G-321): ein Feld mit Platzhalter
+            wuerde eine Eingabe vortaeuschen, die es nicht gibt. */}
+        <button
+          type="button" className="v2-btn" data-probe="zutat-suchen"
+          style={{ justifyContent: 'flex-start', gap: 6, width: '100%' }}
+          onClick={() => setSuchen(true)}
+        >
+          <Icon name="search" className="v2-ic v2-ic-sm" />
+          Zutat suchen …
+        </button>
+
+        {suchen && (
+          <FoodSuchModal
+            kontext={{
+              art: 'rezept',
+              rezeptName: name,
+              zutaten: zutaten.length,
+              schonImRezept: angezeigt.kcal === null
+                ? null : Math.round(angezeigt.kcal),
+            }}
+            onClose={() => setSuchen(false)}
+            onWaehlen={async (f: NutritionFoodSearchRow, mengeG: number) => {
+              // `[read]` **Die Angleichung der beiden Rueckgaben** —
+              // das Modal gibt Lebensmittel und Menge, das Rezept
+              // braucht einen `ZutatEntwurf` mit Werten je 100 g.
+              setZutaten(alt => [...alt, {
+                food_id: f.id,
+                name: f.name_display_de || f.name_de || 'Unbenannt',
+                amount_g: mengeG,
+                enercc_100: zahlOderNull(f.enercc),
+                prot625_100: zahlOderNull(f.prot625),
+                fat_100: zahlOderNull(f.fat),
+                cho_100: zahlOderNull(f.cho),
+              }])
+              setSuchen(false)
+            }}
+          />
+        )}
 
         <Vorschau gesamt={angezeigt} portionen={portionen_n} />
 

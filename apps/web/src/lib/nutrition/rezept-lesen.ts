@@ -46,6 +46,26 @@ export type RezeptZutat = {
   name: string
   amount_g: number
   sort_order: number
+  // ══ G-325: die Nährwerte je 100 g ═════════════════════════════════
+  //
+  // **Tom, 2026-09-02:** *„die einzelpositionen sollen die makros
+  // anzeigen wenn man da editiert weiss man nichts mehr."*
+  //
+  // `[cmd]` **Der Leseweg lieferte je Zutat nur Name und Menge** —
+  // beim Bearbeiten eines bestehenden Rezepts stünden vier Striche,
+  // weil die Anzeige nichts zu rechnen hätte.
+  //
+  // `[cmd]` **Über `food_nutrient_snapshot(…, 100)` beschafft** —
+  // dieselbe Funktion, die schon die Gesamtwerte liefert. **Am
+  // 2026-09-02 gegengeprüft:** Hähnchenbrust 109,0 kcal je 100 g,
+  // bei 440 g 479,6 — und 109,0 × 4,4 = 479,6.
+  //
+  // `[read]` **`null` heisst „nicht ermittelbar", nicht 0** — die
+  // Anzeige schreibt dann einen Strich (`bls-fehlend-heisst-nicht-null`).
+  enercc_100: number | null
+  prot625_100: number | null
+  fat_100: number | null
+  cho_100: number | null
 }
 
 export type RezeptNaehrwerte = {
@@ -152,6 +172,42 @@ export async function ladeRezepte(): Promise<RezeptStand> {
         .map(f => [f.id, f.name_de ?? '']),
     )
 
+    // ══ G-325: die Naehrwerte je 100 g ════════════════════
+    //
+    // **Tom, 2026-09-02:** *,,eine saubere auflistung inkl schon
+    // errechneten makros."*
+    //
+    // `[cmd]` **`food_nutrient_snapshot(…, 100)`** — dieselbe
+    // Funktion, die die Gesamtwerte liefert. **Kein zweiter
+    // Rechenweg.**
+    //
+    // `[read]` **Gleichzeitig ueber ALLE Lebensmittel, nicht je
+    // Zutat** — sonst kostet jede Zeile eine eigene Rundreise
+    // (G-252). `[cmd]` **Je Lebensmittel EINMAL**, auch wenn es in
+    // mehreren Rezepten steckt: `foodIds` ist bereits entdoppelt.
+    const je100Roh = await Promise.all(foodIds.map(id => db.rpc(
+      'food_nutrient_snapshot',
+      {
+        p_food_source: 'bls', p_food_id: id,
+        p_custom_food_id: null, p_amount_g: 100,
+      },
+    )))
+    const je100 = new Map<string, {
+      enercc: number | null; prot625: number | null
+      fat: number | null; cho: number | null
+    }>()
+    foodIds.forEach((id, k) => {
+      const { data, error } = je100Roh[k]
+      if (error) return
+      const z = (Array.isArray(data) ? data[0] : data) as
+        Record<string, unknown> | null
+      if (!z) return
+      je100.set(id, {
+        enercc: zahl(z.enercc), prot625: zahl(z.prot625),
+        fat: zahl(z.fat), cho: zahl(z.cho),
+      })
+    })
+
     // `[read]` **Nebeneinander, nicht nacheinander** — sonst kostet
     // jedes Rezept eine eigene Rundreise (siehe
     // `offset-blaettern-kostet-je-seite-voll`).
@@ -187,6 +243,15 @@ export async function ladeRezepte(): Promise<RezeptStand> {
               || (z.food_name_snapshot as string | null) || 'Unbenannt',
             amount_g: zahl(z.amount_g) ?? 0,
             sort_order: zahl(z.sort_order) ?? 0,
+            // G-325: `null` heisst nicht ermittelbar, nicht 0.
+            enercc_100: typeof z.food_id === 'string'
+              ? (je100.get(z.food_id)?.enercc ?? null) : null,
+            prot625_100: typeof z.food_id === 'string'
+              ? (je100.get(z.food_id)?.prot625 ?? null) : null,
+            fat_100: typeof z.food_id === 'string'
+              ? (je100.get(z.food_id)?.fat ?? null) : null,
+            cho_100: typeof z.food_id === 'string'
+              ? (je100.get(z.food_id)?.cho ?? null) : null,
           })),
         naehrwerte: w
           ? {

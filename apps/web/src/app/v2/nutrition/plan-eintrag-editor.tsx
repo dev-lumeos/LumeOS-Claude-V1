@@ -30,7 +30,7 @@ import {
 } from '../../../lib/nutrition/plan-eintrag-lage'
 // G-320: die Lebensmittelsuche als Modal — dieselbe Mechanik wie in
 // Food DB (`useFoodSuche`), nicht eine sechste eigene Suche.
-import { FoodSuchModal, type SuchKontext } from './food-such-modal'
+import { FoodSuchModal, type TagesKontext } from './food-such-modal'
 import type { NutritionFoodSearchRow } from '../../../lib/nutrition/food-search'
 
 /** Was der Editor zum Auswaehlen braucht. */
@@ -88,7 +88,7 @@ export function EintragForm({
    * Auftrag: *,,Wer mittags 800 kcal eintraegt, soll sehen, wo er
    * landet."*
    */
-  kontext: Omit<SuchKontext, 'slot' | 'slotLabel'>
+  kontext: Omit<TagesKontext, 'art' | 'slot' | 'slotLabel'>
   onFertig: () => void
   onAbbruch: () => void
 }) {
@@ -331,7 +331,9 @@ export function EintragForm({
           vom Rezept noch vom Quick-add gerufen werden. */}
       {suchen && (
         <FoodSuchModal
-          kontext={{ ...kontext, slot, slotLabel: MAHLZEIT_LABEL[slot] }}
+          kontext={{
+            art: 'tag', ...kontext, slot, slotLabel: MAHLZEIT_LABEL[slot],
+          }}
           onClose={() => setSuchen(false)}
           onWaehlen={async (f: NutritionFoodSearchRow, mengeG: number) => {
             setQuelleId(f.id)

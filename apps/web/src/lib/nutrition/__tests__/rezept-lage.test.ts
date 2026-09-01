@@ -263,11 +263,27 @@ test('G-301: die drei Unterreiter sind weg — Flow 3 kennt eine Uebersicht', ()
 })
 
 test('G-289/G-300: die Suche sitzt IM Rezept — Flow 7, Schritt 3', () => {
+  // ══ BERICHTIGT IN G-323 ═════════════════════════
+  //
+  // `[cmd]` **Hier stand `/api/nutrition/foods?q=` und
+  // `aria-label="Menge in Gramm"`** — beides Teile der eigenen
+  // `ZutatSuche`.
+  //
+  // **Tom, 2026-09-02:** *,,das modal ist perfekt, wieso nutzen wir
+  // das nicht auch fuer rezepte?"*
+  //
+  // `[read]` **Was der Waechter sichert, gilt weiter:** die Suche
+  // sitzt IM Rezept, Flow 7 Schritt 3. **Sie ruft jetzt nur nicht
+  // mehr selbst** — `FoodSuchModal` tut es, mit acht Lehren, die
+  // `ZutatSuche` fehlten (G-320).
+  //
+  // `[read]` **Und die Mengeneingabe steht im Modal** (`FoodAmountInput`),
+  // nicht mehr hier.
   const u = ohneKommentare(UI)
-  assert.match(u, /\/api\/nutrition\/foods\?q=/,
+  assert.match(u, /<FoodSuchModal/,
     'die Zutatensuche ruft die Lebensmittelsuche nicht')
-  assert.match(u, /aria-label="Menge in Gramm"/,
-    'die Menge in g fehlt — Flow 7 nennt sie ausdruecklich')
+  assert.match(u, /art: 'rezept'/,
+    'das Modal wird nicht im Rezeptmodus gerufen')
   // Live-Vorschau: Gesamt UND je Portion, nicht eines von beiden.
   assert.match(u, /Live-Vorschau/)
   assert.match(u, /je Portion/)
@@ -279,8 +295,19 @@ test('G-289: die Naehrwerte der Suche werden in Zahlen gewandelt', () => {
   // `[cmd]` **`NutritionFoodSearchRow` liefert `enercc: string`** —
   // gemessen am Typ. `[read]` **Ohne Umwandlung rechnete die Vorschau
   // mit Text, und `NaN` saehe aus wie ein fehlender Wert.**
+  // `[cmd]` **BERICHTIGT in G-323: die Quelle heisst jetzt `f`**,
+  // nicht `gewaehlt` — das Modal reicht das Lebensmittel als
+  // Argument, statt es selbst im Zustand zu halten.
+  //
+  // `[read]` **Der Grund fuer die Umwandlung gilt unveraendert:**
+  // `NutritionFoodSearchRow` liefert Zeichenketten.
   const u = ohneKommentare(UI)
   assert.match(u, /function zahlOderNull/, 'die Umwandlung fehlt')
-  assert.match(u, /enercc_100: zahlOderNull\(gewaehlt\.enercc\)/,
+  assert.match(u, /enercc_100: zahlOderNull\(f\.enercc\)/,
     'die kcal werden ungewandelt uebernommen')
+  // `[read]` **Alle vier, gezaehlt** — eine vergessene Zeile faellt
+  // sonst nicht auf.
+  const zahl = (u.match(/zahlOderNull\(f\./g) ?? []).length
+  assert.equal(zahl, 4,
+    `${zahl} von 4 Naehrwerten werden gewandelt`)
 })

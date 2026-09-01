@@ -55,8 +55,29 @@ import {
   type Portion, type Vorschau,
 } from '../../../lib/nutrition/menge-rechnen'
 
-/** Wohin geschrieben wird — der Kontext aus dem Auftrag. */
-export type SuchKontext = {
+// ══ G-323: zwei Kontexte, nicht einer mit leeren Feldern ════════════
+//
+// **Tom, 2026-09-02:** *„das modal ist perfekt, wieso nutzen wir das
+// nicht auch fuer rezepte?"*
+//
+// `[cmd]` **Gemessen, bevor gebaut wurde:** der alte `SuchKontext`
+// hatte `datum`, `slot` und `ziel` als PFLICHTFELDER, und der
+// Anzeigeblock schrieb *„am {datum}"* und *„für diesen Plan ist kein
+// Tagesziel gesetzt"*.
+//
+// `[read]` **Für ein Rezept wäre beides falsch** — es hat keinen Tag,
+// keine Mahlzeit und kein Tagesziel. **Ein Rezept mit `datum: ''` zu
+// füttern hiesse, die Anzeige zu belügen** und darauf zu hoffen, dass
+// niemand hinsieht.
+//
+// `[read]` **Also unterscheidet der Typ die beiden Fälle**, statt
+// Felder leer zu lassen. **Der Compiler erzwingt dann, dass jeder
+// Zweig behandelt wird** — eine vergessene Anzeige fällt beim
+// Typecheck auf, nicht beim Nutzer.
+
+/** Eine Position in einem Plantag — Tag, Mahlzeit, Tagesziel. */
+export type TagesKontext = {
+  art: 'tag'
   /** Der Tag, in den die Position gehört (ISO). */
   datum: string
   /** Die Mahlzeit — `breakfast`, `lunch`, … */
@@ -68,6 +89,25 @@ export type SuchKontext = {
   /** Der Name der Mahlzeit, wie er am Schirm steht. */
   slotLabel?: string
 }
+
+/**
+ * Eine Zutat in einem Rezept — G-323.
+ *
+ * `[read]` **Kein Tagesziel**, denn ein Rezept hat keines. `[read]`
+ * **Was hier zählt, ist das Rezept und was schon drinsteht** — der
+ * Auftrag nennt genau das.
+ */
+export type RezeptKontext = {
+  art: 'rezept'
+  /** Der Name des Rezepts, wie er im Formular steht. */
+  rezeptName: string
+  /** Wie viele Zutaten schon drin sind. */
+  zutaten: number
+  /** Was die bisherigen Zutaten zusammen tragen, in kcal. */
+  schonImRezept: number | null
+}
+
+export type SuchKontext = TagesKontext | RezeptKontext
 
 const MAKRO = (v: string | null | undefined): string => {
   const n = Number(v)
@@ -96,7 +136,12 @@ export function FoodAmountInput({
 
   const g = Number(menge.replace(',', '.'))
   const vorschau: Vorschau = vorschauFuer(food, g)
-  const lage = tagesLage(kontext.schonImTag, vorschau.kcal, kontext.ziel)
+  // `[read]` **G-323: die Tageslage gibt es nur im Tagesfall.** Ein
+  // Rezept hat kein Tagesziel — `tagesLage` mit `null, null` würde
+  // zwar rechnen, aber die Zahl hätte keine Bedeutung.
+  const lage = kontext.art === 'tag'
+    ? tagesLage(kontext.schonImTag, vorschau.kcal, kontext.ziel)
+    : { summe: null, anteil: null, ueber: false }
 
   function waehlePortion(name: string) {
     setPortion(name)
@@ -179,34 +224,69 @@ export function FoodAmountInput({
         ))}
       </div>
 
-      {/* ══ Der Tageskontext ════════════════════════════════════════
-          **Der Auftrag:** *„Wer mittags 800 kcal einträgt, soll sehen,
-          wo er landet."* */}
+      {/* ══ Der Kontext — je nach Art ein anderer ═══════════════════
+          **Planner:** *„Wer mittags 800 kcal einträgt, soll sehen, wo
+          er landet."*
+
+          **G-323, Rezept:** kein Tag, keine Mahlzeit, kein Tagesziel
+          — **sondern das Rezept und was schon drinsteht.** */}
       <div data-probe="tageskontext" className="v2-muted"
            style={{ fontSize: 10.5, lineHeight: 1.6 }}>
-        <strong>{kontext.slotLabel ?? kontext.slot}</strong> am{' '}
-        {kontext.datum}
-        {lage.summe !== null && (
+        {kontext.art === 'tag' ? (
           <>
-            {' · Tag danach: '}
-            <span className="v2-num" style={{
-              fontWeight: 600,
-              color: lage.ueber ? 'var(--neg)' : 'inherit',
-            }}>
-              {lage.summe} kcal
-            </span>
-            {kontext.ziel !== null && (
+            <strong>{kontext.slotLabel ?? kontext.slot}</strong> am{' '}
+            {kontext.datum}
+            {lage.summe !== null && (
               <>
-                {' von '}
-                <span className="v2-num">{kontext.ziel}</span>
-                {lage.anteil !== null && ` (${lage.anteil} %)`}
+                {' · Tag danach: '}
+                <span className="v2-num" style={{
+                  fontWeight: 600,
+                  color: lage.ueber ? 'var(--neg)' : 'inherit',
+                }}>
+                  {lage.summe} kcal
+                </span>
+                {kontext.ziel !== null && (
+                  <>
+                    {' von '}
+                    <span className="v2-num">{kontext.ziel}</span>
+                    {lage.anteil !== null && ` (${lage.anteil} %)`}
+                  </>
+                )}
+              </>
+            )}
+            {/* `[read]` **Ohne Ziel steht kein Anteil da** — `null` ist
+                die ehrliche Antwort, 0 % wäre eine Behauptung. */}
+            {kontext.ziel === null
+              && ' · für diesen Plan ist kein Tagesziel gesetzt'}
+          </>
+        ) : (
+          <>
+            {/* `[read]` **Kein Ziel, kein Prozentsatz** — ein Rezept
+                hat keines, und eine Zahl zu zeigen, die es nicht gibt,
+                wäre schlimmer als keine. */}
+            Zutat für <strong>{kontext.rezeptName || 'das Rezept'}</strong>
+            {' · '}
+            {kontext.zutaten === 0
+              ? 'noch keine Zutat'
+              : `${kontext.zutaten} ${kontext.zutaten === 1 ? 'Zutat' : 'Zutaten'}`}
+            {kontext.schonImRezept !== null && (
+              <>
+                {' · bisher '}
+                <span className="v2-num" style={{ fontWeight: 600 }}>
+                  {kontext.schonImRezept} kcal
+                </span>
+              </>
+            )}
+            {vorschau.kcal !== null && (
+              <>
+                {' · danach '}
+                <span className="v2-num" style={{ fontWeight: 600 }}>
+                  {Math.round((kontext.schonImRezept ?? 0) + vorschau.kcal)} kcal
+                </span>
               </>
             )}
           </>
         )}
-        {/* `[read]` **Ohne Ziel steht kein Anteil da** — `null` ist die
-            ehrliche Antwort, 0 % wäre eine Behauptung. */}
-        {kontext.ziel === null && ' · für diesen Plan ist kein Tagesziel gesetzt'}
       </div>
     </div>
   )
