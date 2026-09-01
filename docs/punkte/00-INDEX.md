@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 222 |
-| `laufend_claudecode` | 2 |
+| `todos` | 221 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 211 |
 | **gesamt** | **435** |
 
@@ -242,7 +242,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-323` | befund | hoch | [vier Suchen ohne die Lehren](todos/nutrition-g-0323-vier-suchen-ohne-die-lehren.md) | offen | G-322 | — |
+| `G-323` | befund | hoch | [vier Suchen ohne die Lehren](laufend_claudecode/nutrition-g-0323-vier-suchen-ohne-die-lehren.md) | laeuft (claudecode) | G-322 | — |
 
 ## supplements — 59
 
