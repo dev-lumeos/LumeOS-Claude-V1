@@ -122,6 +122,38 @@ heute stehen sie nebeneinander ohne Grenze.
 `[cmd]` **Die Zahl in Klammern haengt am Portionenfeld:** wird es auf
 4 gesetzt, steht dort *(von 4)*.
 
+### 5 · Dieselben zwei Sachen in der Detailansicht
+
+Tom, 2026-09-02: *,,detailansicht dasselbe, da muessen die
+einzelmakros rein und auch die saubere trennung unten."*
+
+`[cmd]` **Die aufgeklappte Rezeptkarte zeigt je Zutat nur Name und
+Menge:**
+
+    Hafer Flocken                                    80 g
+    Joghurt aus entrahmter Milch, max. 0,5 % Fett   250 g
+    Banane roh                                      120 g
+
+`[read]` **Dieselbe Luecke wie im Editor vor G-325** — **man sieht
+nicht, was die einzelne Zutat beitraegt.**
+
+`[cmd]` **Und unten stehen *GESAMT* und *JE PORTION* wieder
+nebeneinander ohne Trennung** — **bei einer Portion sogar mit
+identischen Zahlen (493 und 493), was die Frage *,,wieso zwei
+totale?"* noch naeher legt.**
+
+`[read]` **Beide Aenderungen aus Punkt 3 und 4 gelten hier
+genauso** — **Makros je Zeile, und die Vorschau abgesetzt mit zwei
+erkennbaren Spalten.**
+
+`[cmd]` **Die Werte kommen aus derselben Stelle:** `rezept-lesen.ts`
+beschafft sie seit G-325 ueber `food_nutrient_snapshot(…, 100)`.
+`[read]` **Es ist wieder nur die Anzeige.**
+
+`[cmd]` **Und die Karte zeigt nur kcal und Protein** — **im Editor
+stehen vier Werte.** `[read]` **Fett und Kohlenhydrate fehlen ohne
+Grund.**
+
 ### Was nicht zu tun ist
 
 **Keine Werte aendern** — die Rechnung stimmt, gegen
@@ -142,6 +174,8 @@ Nicht committen, nicht stagen, nicht pushen.
     Beschriftung     sagt, dass eine Portion das Rezept
                      geteilt durch n ist
     Portionen 2 -> 4 die Klammer und die Werte folgen
+    Detailansicht    Makros je Zutat, vier Werte statt zwei,
+                     Vorschau abgesetzt
     Bildschirmfoto   vorher / nachher
 
 ## Bericht
