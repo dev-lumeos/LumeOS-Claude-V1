@@ -100,6 +100,64 @@ das Rezept im Raster gebraucht hast.**
 
 `[read]` **MealCam bleibt weg** — G-276, kein Modell.
 
+### 4 · Die Kopfkarte traegt zwoelf Zeilen statt vier
+
+Tom, 2026-09-02: *,,Aufbau-Wochenplan zeigt genau die gleichen daten
+wie nebendran Plan settings."*
+
+`[cmd]` **Die Vorlage, Z. 362-377, hat GENAU vier Zeilen neben dem
+Ring:**
+
+    Z. 367   Name
+    Z. 368   Pille "active"
+    Z. 369   Pille mit dem Zyklus
+    Z. 371   "Day 3 of 7 ? started May 14 ? source: coach (Jana
+             Bauer)"  -- EINE Zeile, muted, 12 px
+    Z. 373   die Rechnung, mono, 10,5 px
+
+`[cmd]` **Bei uns stehen darunter zusaetzlich:** Wochen, Tage,
+Eintraege, Zeilen je Tag, kcal Ziel, Protein, Kohlenhydrate, Fett
+**und ein Absatz Fliesstext.**
+
+`[cmd]` **Vier davon stehen rechts nochmal in *Plan settings*:**
+Wochen, Tage gesamt, Eintraege, Zustand.
+
+`[read]` **Die Vorlage fasst Dauer, Start und Herkunft in eine
+Zeile.** **Wir haben sie in zwei Tabellen ausgebreitet, links und
+rechts, mit Ueberschneidung.**
+
+**Bau die vier Zeilen. Was rechts steht, steht nicht links.**
+
+`[read]` **Und der Fliesstext *aus nutrition.meal_plans ? 3 Wochen ?
+21 Tage ?"* gehoert weg** — er wiederholt zum dritten Mal, was schon
+zweimal dasteht.
+
+### 5 · Die Sparkline zeigt keinen Verlauf
+
+`[cmd]` **Vorlage Z. 436: `Sparkline data={[...sieben Werte]} h=44`.**
+
+`[cmd]` **Bei uns: ein Balken, der von links unten nach rechts oben
+laeuft und dann flach bleibt.**
+
+`[read]` **Sieben Tage, sechs davon ohne Protokoll** — **die Kurve
+zeigt fast nur Fuellwerte.** `[read]` **Sag, was sie zeigen soll,
+wenn nur zwei Tage Daten haben** — **eine Linie durch erfundene
+Punkte ist schlimmer als eine kurze.**
+
+### 6 · Was Tom sonst benannt hat
+
+*,,wechseln im planner geht irgendwas aber keine daten da"*
+
+`[cmd]` **Die drei Plaene hatten 0 Positionen** — mein Seed. `[cmd]`
+**Codex fuellt sie gerade** (C-380). `[read]` **Pruef nach seinem
+Bericht, ob das Wechseln dann Daten zeigt.**
+
+*,,der untere teil alles ineinander verschoben"*
+
+`[cmd]` **Das war der dreifache Plan, in G-315 behoben.** `[read]`
+**Sieh am Bildschirmfoto nach, ob es jetzt sitzt** — und sag es,
+falls nicht.
+
 ### Wie du es belegst
 
 `[cmd]` **`dev@lumeos.app` traegt vier Plaene und sechs
@@ -111,6 +169,7 @@ und skipped.**
 
 ### Nachweis
 
+    Kopfkarte       vier Zeilen, keine Wiederholung von rechts
     Ring            label unter der Zahl, Bildschirmfoto
     Statuspille     drei Farben gleichzeitig sichtbar
     kcal            rechtsbuendig je Zeile
