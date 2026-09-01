@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-01
 beruehrt:
   tabellen: []
   dateien: ["supabase/config.toml"]
@@ -88,3 +90,79 @@ _(vom Orchestrator)_
 
 `[cmd]` **Codex hat keinen verifizierten Pfadschutz.** `[read]` **Der
 Punkt bleibt offen und ist damit belegt statt vermutet.**
+
+## Auftrag — Werkzeugschaeden
+
+**Mitbeauftragt: A-23, C-379.** Bericht in diese Datei.
+
+**Beauftragt am 2026-09-01.**
+
+### 1 · A-23 — Lint scheitert an der Ersteinrichtung
+
+`[cmd]` **Du hast es gerade gemessen:** `pnpm lint` scheitert in Web,
+Admin und Coach **an der interaktiven ESLint-Ersteinrichtung.**
+`[cmd]` **UI-, Shared- und Root-Typecheck sind gruen — G-308 loeste
+eine andere Ursache.**
+
+`[read]` **Ein Befehl, der nach Eingaben fragt, laeuft in keinem
+Gate.** **Bau die Einrichtung fest, oder sag, warum Lint nicht in den
+Gate gehoert.**
+
+`[cmd]` **Der Gate fuehrt 15 Aufgaben** — `lint` ist keine davon.
+
+### 2 · B-20 — Codex-Pfadschutz
+
+`[read]` **Miss zuerst, was der Schutz war und ob er fehlt.**
+`[cmd]` **Der Punkt ist aelter als die Punktverwaltung**, und
+`.codex/` steht in `CLAUDE.md` unter *nicht als Referenz lesen*.
+
+`[read]` **Wenn er an einer Stelle liegt, die es nicht mehr gibt:
+schliessen.** **Wenn er fehlt und gebraucht wird: sagen, wofuer.**
+
+### 3 · C-379 — `sequence` ohne Folgeplan
+
+`[cmd]` **`meal_plans` hat keine Spalte fuer den Folgeplan.**
+`[cmd]` **`sequence` ist waehlbar und tut dasselbe wie `once`.**
+
+`[cmd]` **E-31 sagt: `sequence` uebergibt an den naechsten.**
+`[cmd]` **`next_plan_id` steht im Schema** — **es gibt keinen Weg,
+sie zu setzen.**
+
+`[read]` **Miss, was fehlt.** `[read]` **Und melde, ob eine Kette
+ueberhaupt gebaut werden soll** — Claude Code hat es als *,,reicht,
+solange keine Kette gebaut wird"* eingeordnet.
+
+### Der Zusatzbefund aus A-22
+
+`[cmd]` **Du hast gemeldet: die BLS-Regel steht in
+`ADR_BLS_ONLY`, `docs/entscheidungen/E-43` behandelt
+Recovery/Soreness.** `[read]` **Ich habe E-43 mehrfach als
+BLS-Entscheidung zitiert — die Sachregel stimmt, die Kennung nicht.**
+
+`[read]` **Das ist ein Doku-Befund und gehoert dem Orchestrator.**
+**Nimm ihn nicht mit auf.**
+
+### Was nicht zu tun ist
+
+**Keine ESLint-Regeln aendern** — nur die Einrichtung.
+`apps/` nicht anfassen, ausser es geht um die Einrichtungsdatei.
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server gehoert dir nicht
+
+`[cmd]` **Kein `neustart`, kein `start`, kein `aufraeumen`.**
+
+### Nachweis
+
+    pnpm lint         laeuft ohne Rueckfrage? Exit
+    Gate              soll lint hinein? begruendet
+    B-20              vorhanden / fehlt / gegenstandslos
+    next_plan_id      was fehlt zum Setzen
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

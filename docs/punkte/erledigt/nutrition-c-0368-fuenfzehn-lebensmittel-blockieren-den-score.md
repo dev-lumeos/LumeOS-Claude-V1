@@ -47,7 +47,7 @@ sie eine Quelle haetten, waere der Score morgen rechenbar.**
 ## Drei Wege
 
 `[read]` **Eine zweite Quelle.** `[cmd]` **BLS 4.0 ist die einzige
-Lebensmittelquelle (E-03)** — **eine zweite waere eine
+Lebensmittelquelle (E-43)** — **eine zweite waere eine
 Grundsatzentscheidung, nicht ein Nachtrag.**
 
 `[read]` **Oder der Score bleibt `incomplete`, bis die Datenlage
@@ -90,7 +90,7 @@ ist, ist das Problem die Auswahl auf `dev`, nicht die Datenlage.**
 ### Was nicht zu tun ist
 
 **Keine Werte setzen** — C-368 ist eine Entscheidung.
-**Keine zweite Quelle heranziehen** — E-03 gilt.
+**Keine zweite Quelle heranziehen** — E-43 gilt.
 `apps/` nicht anfassen.
 Nicht committen, nicht stagen, nicht pushen.
 

@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 222 |
-| `laufend_codex` | 3 |
+| `todos` | 221 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 6 |
-| `erledigt` | 188 |
-| **gesamt** | **419** |
+| `erledigt` | 190 |
+| **gesamt** | **418** |
 
 ## medical — 42
 
@@ -235,7 +235,7 @@
 | `A-49` | befund | mittel | [Der Attrappen-Waechter traegt eine veraltete Behauptung](erledigt/supplements-a-0049-der-attrappen-waechter-traegt-eine-veraltete-behauptung.md) | erledigt | — | — |
 | `C-01` | befund | mittel | [Frontend-Stack-Lücke schliessen](todos/supplements-c-0001-frontend-stack-lucke-schliessen.md) | offen | — | — |
 | `C-113` | feature | mittel | [Enhanced Mode — entschieden](todos/supplements-c-0113-enhanced-mode-entschieden.md) | offen | — | — |
-| `C-129` | befund | mittel | [Der Kimi-Import ist da; die Restluecken sind getrennt](laufend_codex/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md) | laeuft (codex) | — | C-327 |
+| `C-129` | befund | mittel | [Der Kimi-Import ist da; die Restluecken sind getrennt](erledigt/supplements-c-0129-der-kimi-bestand-brauchbar-aber-nicht-importierbar.md) | erledigt | — | C-327 |
 | `C-146` | befund | mittel | [`phase_am()` liefert 8 von 14 Spalten](todos/supplements-c-0146-phase-am-liefert-8-von-14-spalten.md) | offen | — | — |
 | `C-179` | befund | mittel | [`EAA` zeigt auf den Summenwert, nicht auf die neun](todos/supplements-c-0179-eaa-zeigt-auf-den-summenwert-nicht-auf-die-neun.md) | offen | — | — |
 | `C-186` | befund | mittel | [Nebenwirkungen und Zyklen haben keine Tabelle](todos/supplements-c-0186-nebenwirkungen-und-zyklen-haben-keine-tabelle.md) | offen | — | — |
@@ -388,7 +388,7 @@
 | `G-277` | befund | hoch | [der Rechte-Reiter nennt einen Grund, den es nicht gibt](erledigt/coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md) | erledigt | — | G-280 |
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 
-## quer — 84
+## quer — 83
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -398,8 +398,7 @@
 | `A-18` | feature | mittel | [`theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf](todos/quer-a-0018-theme-v1-uploads-die-bruecke-zwischen-spec-und-entwurf.md) | offen | — | — |
 | `A-19` | messung | mittel | [Zwei README-Abweichungen in der Kette](todos/quer-a-0019-zwei-readme-abweichungen-in-der-kette.md) | offen | — | — |
 | `A-20` | befund | mittel | [Die Spec-Fehlerliste](todos/quer-a-0020-die-spec-fehlerliste.md) | offen | — | — |
-| `A-22` | blocker | hoch | [Was an Kimi gehen kann — klassifiziert](laufend_codex/quer-a-0022-was-an-kimi-gehen-kann-klassifiziert.md) | laeuft (codex) | — | — |
-| `A-23` | befund | mittel | [`lint` bricht repoweit ab](laufend_codex/quer-a-0023-lint-bricht-repoweit-ab.md) | laeuft (codex) | — | — |
+| `A-22` | blocker | hoch | [Was an Kimi gehen kann — klassifiziert](erledigt/quer-a-0022-was-an-kimi-gehen-kann-klassifiziert.md) | erledigt | — | — |
 | `A-24` | messung | mittel | [Attrappenmarken sind kein brauchbares Mass](todos/quer-a-0024-attrappenmarken-sind-kein-brauchbares-mass.md) | offen | — | — |
 | `A-29` | messung | mittel | [Der Attrappen-Test koennte die gerenderte Seite zaehlen](erledigt/quer-a-0029-der-attrappen-test-koennte-die-gerenderte-seite-zaehlen.md) | erledigt | — | A-64 |
 | `A-34` | befund | mittel | [Nachweislaeufe ueberschreiben Toms gespeicherte Ansicht](todos/quer-a-0034-nachweislaeufe-ueberschreiben-toms-gespeicherte-ansicht.md) | offen | — | — |
@@ -423,7 +422,7 @@
 | `A-62` | befund | mittel | [Waechter kippen still, wenn das Schema nachkommt](erledigt/quer-a-0062-waechter-kippen-still-wenn-das-schema-nachkommt.md) | erledigt | — | A-63, G-277, G-278 |
 | `A-63` | befund | niedrig | [der Waechter las seine eigene Probe](todos/quer-a-0063-der-waechter-las-seine-eigene-probe.md) | offen | — | — |
 | `A-64` | entscheidung | niedrig | [der Schirmlauf ausserhalb des Gates](todos/quer-a-0064-der-schirmlauf-ausserhalb-des-gates.md) | offen | — | — |
-| `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](todos/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | offen | — | — |
+| `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](laufend_codex/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | laeuft (codex) | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
 | `C-64` | feature | mittel | [942 Schluessel und Thai aus dem Vorgaengerrepo uebertragen](todos/quer-c-0064-942-schluessel-und-thai-aus-dem-vorgaengerrepo-uebertragen.md) | offen | — | — |

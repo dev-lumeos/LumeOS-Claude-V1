@@ -9,6 +9,8 @@ kind_von: C-128
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-01
+erledigt: 2026-09-01
+commit: OFFEN
 beruehrt:
   tabellen:
     - supplements.supplements
@@ -93,3 +95,10 @@ alte Katalogzahlen sind als offene Luecke fortzuschreiben.
 
 **Mitbeauftragt mit A-22 am 2026-09-01.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-01, mit A-22 abgenommen: erledigt.**
+
+`[cmd]` **Der Import ist durch** — nur die 27 Peptidsequenzen bleiben
+aussen, **und dafuer fehlt keine Quelle, sondern eine Spalte** (C-365).

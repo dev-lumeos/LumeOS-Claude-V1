@@ -60,7 +60,7 @@ nichts** — **das ist eine Zusage ohne Deckung.**
 `[read]` **Thai in der Sprachwahl abschalten, bis Aliase da sind.**
 **Oder Aliase beschaffen.**
 
-`[cmd]` **BLS 4.0 ist die einzige Lebensmittelquelle (E-03)** und
+`[cmd]` **BLS 4.0 ist die einzige Lebensmittelquelle (E-43)** und
 fuehrt keine thailaendischen Namen. `[read]` **Woher sie kaemen, ist
 offen** — und das ist die eigentliche Frage.
 
@@ -99,7 +99,7 @@ entwickelt"* gesucht, **der Baustein schreibt *,,in Entwicklung"*.**
 ### Was der `grund` sagen muss
 
 `[cmd]` **Bei Thai: die Aliase fehlen, und woher sie kaemen ist
-offen** — BLS 4.0 fuehrt keine thailaendischen Namen (E-03).
+offen** — BLS 4.0 fuehrt keine thailaendischen Namen (E-43).
 
 `[read]` **Das ist etwas anderes als *,,noch nicht gebaut"*** — **es
 ist eine Datenfrage, keine Bauzeitfrage.** **Der Satz sollte das
