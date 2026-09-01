@@ -249,9 +249,24 @@ test('C-375: die Oberflaeche sperrt keinen Plan mehr', () => {
     'der Kopierknopf lebt weiter')
   assert.doesNotMatch(u, /(?<![a-zA-Z0-9_])sperreVon(?![a-zA-Z0-9_])/,
     'die alte Sperrlogik lebt weiter')
-  // Der Bearbeiten-Knopf haengt an KEINER Bedingung mehr.
-  assert.match(u, /\{offen \? 'In der Werkbank' : 'Bearbeiten'\}/,
+  // `[cmd]` **BERICHTIGT in G-315:** hier stand
+  // `{offen ? 'In der Werkbank' : 'Bearbeiten'}`.
+  //
+  // `[cmd]` **Tom, 2026-09-02: *In der Werkbank* stand am aktiven
+  // Plan** — dem, der schon offen ist. `[read]` **Ein Knopf, der
+  // sagt *,,du bist hier"*, ist kein Knopf** — der offene traegt
+  // jetzt eine Marke, der Knopf steht an den anderen.
+  //
+  // `[read]` **Was C-375 sichert, bleibt gesichert:** JEDER Plan
+  // laesst sich bearbeiten, auch ein aktiver, auch ein gekaufter.
+  assert.match(u, /<Pill variant="acc">In der Werkbank<\/Pill>/,
+    'der offene Plan traegt keine Marke')
+  assert.match(u, />\s*Bearbeiten\s*<\/button>/,
     'der Bearbeiten-Knopf fehlt')
+  // `[read]` **An KEINER Herkunftsbedingung** — das war der Kern
+  // von C-375.
+  assert.doesNotMatch(u, /verkaeuflich && [^\n]*Bearbeiten/,
+    'der Bearbeiten-Knopf haengt wieder an einer Sperre')
 })
 
 // ══ C-377/C-373: die Frage beim Ablauf ═══════════════════════════

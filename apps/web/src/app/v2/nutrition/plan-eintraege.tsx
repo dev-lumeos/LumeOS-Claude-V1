@@ -26,11 +26,15 @@ import {
   STATUS_TEXT, STATUS_FARBE, abweichungSatz, istRueckwirkend,
   rueckwirkendSatz, type LogStatus,
 } from '../../../lib/nutrition/plan-bestaetigung'
+// G-315, Vorlage Z. 392: der Mahlzeitname, nicht der Code.
+import { MAHLZEIT_LABEL } from '../../../lib/nutrition/plan-model'
 
 /** Ein Eintrag des Tages, mit seinem Zustand aus dem Log. */
 export type TagesEintrag = {
   id: string
   meal_type: string
+  /** G-315, Vorlage Z. 391: die geplante Uhrzeit, links, 38 px. */
+  planned_time?: string | null
   bezeichnung: string
   kcal: number | null
   /** `pending`, solange kein Log dazu existiert. */
@@ -109,34 +113,83 @@ export function PlanEintraegeEcht({
             return (
               <div
                 key={e.id}
+                // ══ Vorlage Z. 384-388 ══════════════════════
+                //
+                // `[cmd]` **`padding: 12, borderRadius: 7`**, und der
+                // Rahmen traegt die STATUSFARBE: gestrichelt bei
+                // `pending`, sonst durchgezogen mit 5 % Hintergrund
+                // und 25 % Rand.
+                //
+                // `[read]` **Vorher stand hier ein einheitliches
+                // `var(--border)`** — der Zustand war nur an der
+                // Pille zu sehen, nicht an der Zeile.
                 style={{
-                  padding: '7px 10px', borderRadius: 6,
-                  background: 'var(--surface)',
-                  border: `1px ${offen ? 'dashed' : 'solid'} var(--border)`,
-                  opacity: e.status === 'skipped' ? 0.6 : 1,
+                  padding: 12, borderRadius: 7,
+                  background: offen
+                    ? 'var(--surface)'
+                    : `color-mix(in srgb, ${STATUS_FARBE[e.status]} 5%, var(--surface))`,
+                  border: `1px ${offen ? 'dashed' : 'solid'} ${offen
+                    ? 'var(--border)'
+                    : `color-mix(in srgb, ${STATUS_FARBE[e.status]} 25%, var(--border))`}`,
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                  <span className="v2-dim v2-mono" style={{ fontSize: 10.5, width: 74 }}>
-                    {e.meal_type}
+                {/* ══ Vorlage Z. 390-394 ════════════════════
+                    Zeit (38 px, num dim) · Mahlzeitname (12,5 px,
+                    600) · Status-Pille in der Statusfarbe · kcal
+                    rechtsbuendig. */}
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5,
+                }}>
+                  {/* Z. 391 — `[cmd]` **`planned_time` steht im
+                      Schema und ist gefuellt** (07:30, 12:30, 16:00,
+                      19:30). **Fehlt sie, bleibt die Spalte leer**,
+                      damit die Namen trotzdem fluchten. */}
+                  <span className="v2-num v2-dim" style={{ fontSize: 10, width: 38 }}>
+                    {e.planned_time ?? ''}
                   </span>
-                  <span style={{ flex: 1, minWidth: 0, fontSize: 12 }}>{e.bezeichnung}</span>
-                  {e.kcal !== null && (
-                    <span className="v2-num v2-dim" style={{ fontSize: 11 }}>
-                      {Math.round(e.kcal)} kcal
-                    </span>
-                  )}
-                  <Pill style={{ color: STATUS_FARBE[e.status], fontSize: 9.5 }}>
+                  {/* Z. 392 — der Mahlzeitname, nicht der `meal_type`. */}
+                  <span style={{ fontSize: 12.5, fontWeight: 600 }}>
+                    {MAHLZEIT_LABEL[e.meal_type] ?? e.meal_type}
+                  </span>
+                  {/* Z. 393 — die Pille traegt die Statusfarbe auch im
+                      Rand, nicht nur im Text. */}
+                  <Pill style={{
+                    borderColor: `color-mix(in srgb, ${STATUS_FARBE[e.status]} 35%, var(--border))`,
+                    color: STATUS_FARBE[e.status],
+                    fontSize: 9.5,
+                  }}>
                     {STATUS_TEXT[e.status]}
                   </Pill>
                   {e.confirmation_mode && (
                     <Pill style={{ fontSize: 9.5 }}>{e.confirmation_mode}</Pill>
                   )}
+                  {/* Z. 394 — kcal rechtsbuendig, ueber `marginLeft`. */}
+                  {e.kcal !== null && (
+                    <span className="v2-num v2-dim"
+                          style={{ marginLeft: 'auto', fontSize: 11 }}>
+                      {Math.round(e.kcal)} kcal
+                    </span>
+                  )}
                 </div>
 
+                {/* Z. 396 — die Lebensmittel, 46 px eingerueckt.
+                    `[read]` **Die Vorlage verbindet mehrere mit
+                    *,, · "***; ein Planeintrag traegt EINEN Namen
+                    (ein Rezept oder ein Lebensmittel), **deshalb steht
+                    hier einer.** */}
+                <div className="v2-muted"
+                     style={{ fontSize: 11.5, paddingLeft: 46, lineHeight: 1.5 }}>
+                  {e.bezeichnung}
+                </div>
+
+                {/* Z. 397 — die Notiz bei Abweichung, mit Pfeil, in
+                    `var(--warn)`, mono. */}
                 {e.status === 'deviated' && (
-                  <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 3 }}>
-                    {abweichungSatz(e.deviation_kcal, e.deviation_pct)}
+                  <div style={{
+                    fontSize: 11, paddingLeft: 46, marginTop: 4,
+                    color: 'var(--warn)', fontFamily: 'var(--font-mono)',
+                  }}>
+                    ↳ {abweichungSatz(e.deviation_kcal, e.deviation_pct)}
                   </div>
                 )}
 
@@ -146,17 +199,29 @@ export function PlanEintraegeEcht({
                     traegt es —, aber der haeufige Fall ist der
                     offene, und vier Knoepfe an jeder Zeile waeren
                     Laerm. */}
+                {/* ══ Vorlage Z. 398-404: VIER Knoepfe ══════════
+                    `Confirm as planned` · `MealCam` · `Log deviation`
+                    · `Skip`, **46 px eingerueckt wie die Zeilen
+                    darueber** (Z. 399).
+
+                    `[cmd]` **Zwei davon sind gebaut, zwei nicht** —
+                    die Gruende stehen unten an ihrer Stelle. */}
                 {offen && (
-                  <div style={{ display: 'flex', gap: 5, marginTop: 6, flexWrap: 'wrap' }}>
+                  <div style={{
+                    display: 'flex', gap: 6, marginTop: 8,
+                    paddingLeft: 46, flexWrap: 'wrap',
+                  }}>
+                    {/* Z. 400 — `Confirm as planned`, primaer, mit Haken. */}
                     <button
-                      type="button" className="v2-btn v2-btn-sm" disabled={busy}
+                      type="button" className="v2-btn v2-btn-primary v2-btn-sm"
+                      disabled={busy}
                       onClick={() => void schicken({
                         art: 'bestaetigen', plan_entry_id: e.id,
                         execution_date: datum, confirmation_mode: 'manual',
                       }, e.id)}
                     >
                       <Icon name="check" className="v2-ic v2-ic-sm" />
-                      {busy ? 'Speichert…' : 'Wie geplant'}
+                      {busy ? 'Speichert…' : 'Confirm as planned'}
                     </button>
                     {/* ══ G-276: der MealCam-Knopf ist entfernt ═══════
                         `[cmd]` **Er schrieb `confirmation_mode:
@@ -178,6 +243,30 @@ export function PlanEintraegeEcht({
                         `[read]` **`confirmation_mode` bleibt im
                         Schema** — die Spalte ist richtig, nur hatte
                         sie keinen ehrlichen Absender. */}
+                    {/* ══ Z. 402: `Log deviation` — NICHT GEBAUT ════
+                        `[cmd]` **Der Schreibweg kann es**
+                        (`bestaetigen` nimmt `mengen`, und daraus
+                        entsteht `deviated` mit `deviation_kcal`).
+                        `[cmd]` **Im Tagebuch ist er gebaut** —
+                        `ghost-eintrag.tsx` zeigt je Zutat ein
+                        Mengenfeld (G-309).
+
+                        `[cmd]` **Was hier fehlt, sind die POSTEN:**
+                        `ladeTagesEintraege` liefert `bezeichnung` und
+                        `kcal`, **keine Zutatenliste** — am
+                        2026-09-02 gemessen.
+
+                        `[read]` **Ohne Posten keine Mengenfelder, und
+                        ohne Mengenfelder keine Abweichung**, die man
+                        beziffern koennte. **Ein Knopf, der ein leeres
+                        Formular oeffnet, waere eine Sackgasse**
+                        (G-311).
+
+                        `[read]` **Der Weg dorthin ist derselbe wie in
+                        G-311/2:** die Posten aus demselben Verbund
+                        mitlesen. **Das ist ein eigener Punkt, kein
+                        Nebensatz** — gemeldet, nicht weggelassen. */}
+                    {/* Z. 403 — `Skip`. */}
                     <button
                       type="button" className="v2-btn v2-btn-ghost v2-btn-sm" disabled={busy}
                       onClick={() => void schicken({
@@ -185,7 +274,7 @@ export function PlanEintraegeEcht({
                         execution_date: datum,
                       }, e.id)}
                     >
-                      Auslassen
+                      Skip
                     </button>
                   </div>
                 )}

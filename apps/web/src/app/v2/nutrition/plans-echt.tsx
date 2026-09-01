@@ -284,13 +284,19 @@ export function PlanEinstellungenEcht({ d }: { d: PlanDaten }) {
       {laufzeit.art !== 'unbekannt' && (
         <Row label="Läuft bis" value={deutschesDatum(laufzeit.bis)} />
       )}
-      <Row label="Wochen" value={zahl(z.wochen)} />
-      <Row label="Tage gesamt" value={zahl(z.tage)} />
-      <Row label="Einträge" value={zahl(z.eintraege)} />
-      {/* `[cmd]` **G-267, 2026-08-30: der Zustand kommt jetzt aus
-          `status`**, nicht mehr aus `is_active` — fuenf Werte statt
-          zwei (`assigned`, `active`, `completed`, `paused`,
-          `archived`). */}
+      {/* ══ G-315: HIER STANDEN VIER ZEILEN ZU VIEL ═══════════
+          `[cmd]` **`Wochen`, `Tage gesamt`, `Eintraege` und
+          `Zustand`** — **acht Zeilen statt fuenf.**
+
+          `[cmd]` **Die Vorlage (Z. 414-419) hat fuenf**, und alle
+          vier Entfernten standen schon woanders:
+
+              Wochen / Tage / Eintraege   in der Kopfkarte, Z. 132-137
+              Zustand                     als Pille am Plannamen
+
+          `[read]` **Eine Zahl an zwei Stellen ist keine Bestaetigung,
+          sondern eine Frage** — welche gilt, wenn sie
+          auseinandergehen? */}
       <Row label="Zustand"
            value={d.plan ? statusText(d.plan.status) : '—'} />
       {/* `[read]` **Der Lebenszyklus steht oben UND als eigene

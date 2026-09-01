@@ -23,6 +23,27 @@ export const SLOT_LABEL: Record<Slot, string> = {
 }
 
 /**
+ * Alle Mahlzeitarten, die das Schema kennt — G-315.
+ *
+ * `[cmd]` **`SLOT_LABEL` deckt nur die vier Rasterzeilen ab.**
+ * `[cmd]` **`meal_plan_entries.meal_type` kennt mehr** —
+ * `pre_workout` und `post_workout` stehen im CHECK.
+ *
+ * `[read]` **Dieselbe Tabelle stand doppelt** — hier und lokal in
+ * `ghost-eintrag.tsx` (G-309). **Zwei Kopien sind zwei Wahrheiten**,
+ * und die eine kannte sechs Slots, die andere vier.
+ */
+export const MAHLZEIT_LABEL: Record<string, string> = {
+  breakfast: 'Breakfast',
+  lunch: 'Lunch',
+  dinner: 'Dinner',
+  snack: 'Snack',
+  pre_workout: 'Pre-Workout',
+  post_workout: 'Post-Workout',
+  other: 'Sonstiges',
+}
+
+/**
  * Welche Mahlzeitenreihen das Raster zeigt.
  *
  * `[cmd]` **Hier wirken zwei der acht G-72-Spalten.** `meals_per_day`

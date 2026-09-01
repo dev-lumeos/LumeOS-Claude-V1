@@ -8,8 +8,8 @@
 | `todos` | 219 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 4 |
-| `erledigt` | 198 |
-| **gesamt** | **424** |
+| `erledigt` | 199 |
+| **gesamt** | **425** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 166
+## nutrition — 167
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -204,7 +204,7 @@
 | `G-286` | feature | hoch | [MealPlanDetail — das Tages-Akkordeon fehlt](erledigt/nutrition-g-0286-mealplandetail-das-tages-akkordeon-fehlt.md) | erledigt | — | G-298 |
 | `G-287` | feature | hoch | [MealPlanCard — die Plan-Liste ist nicht anklickbar](erledigt/nutrition-g-0287-mealplancard-die-plan-liste-ist-nicht-anklickbar.md) | erledigt | — | — |
 | `G-288` | feature | hoch | [Die Einkaufsliste ist eine leere Kachel](erledigt/nutrition-g-0288-die-einkaufsliste-ist-eine-leere-kachel.md) | erledigt | — | — |
-| `G-289` | feature | hoch | [Fünf Rezeptkomponenten fehlen](erledigt/nutrition-g-0289-fuenf-rezeptkomponenten-fehlen.md) | erledigt | — | C-371, G-302 |
+| `G-289` | feature | hoch | [Fünf Rezeptkomponenten fehlen](erledigt/nutrition-g-0289-fuenf-rezeptkomponenten-fehlen.md) | erledigt | — | C-371 |
 | `G-290` | feature | mittel | [Der Aktivierungsdialog mit LifecyclePicker fehlt](erledigt/nutrition-g-0290-der-aktivierungsdialog-mit-lifecyclepicker-fehlt.md) | erledigt | — | — |
 | `G-291` | feature | hoch | [TrendChart fehlt im Insights-Reiter](erledigt/nutrition-g-0291-trendchart-fehlt-im-insights-reiter.md) | erledigt | — | — |
 | `G-292` | feature | hoch | [MicroFlagsList — die Warnungen werden nicht gezeigt](erledigt/nutrition-g-0292-microflagslist-die-warnungen-werden-nicht-gezeigt.md) | erledigt | — | — |
@@ -216,7 +216,6 @@
 | `G-299` | feature | hoch | [der Planner zeigt eine fremde Woche](erledigt/nutrition-g-0299-der-planner-zeigt-eine-fremde-woche.md) | erledigt | — | — |
 | `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](erledigt/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | erledigt | — | — |
 | `G-301` | befund | hoch | [der Meal-plans-Reiter folgt keinem Flow](erledigt/nutrition-g-0301-der-meal-plans-reiter-folgt-keinem-flow.md) | erledigt | — | C-370 |
-| `G-302` | befund | mittel | [die Zielzeile bricht um](laufend_claudecode/nutrition-g-0302-die-zielzeile-bricht-um.md) | laeuft (claudecode) | — | — |
 | `G-304` | messung | hoch | [was ein Nutzer in Plaenen und Rezepten tun kann](erledigt/nutrition-g-0304-was-ein-nutzer-in-plaenen-und-rezepten-tun-kann.md) | erledigt | — | C-372, C-373, G-305, G-309 |
 | `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](laufend_claudecode/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | laeuft (claudecode) | — | — |
 | `G-306` | befund | hoch | [der Planeditor verletzt die Immutabilitaet](erledigt/nutrition-g-0306-der-planeditor-verletzt-die-immutabilitaet.md) | erledigt | — | C-376 |
@@ -226,7 +225,9 @@
 | `G-311` | befund | hoch | [drei Sackgassen im Planner](erledigt/nutrition-g-0311-drei-sackgassen-im-planner.md) | erledigt | — | G-314 |
 | `G-313` | befund | mittel | [der Lifecycle-Test ist rot](erledigt/nutrition-g-0313-der-lifecycle-test-ist-rot.md) | erledigt | — | — |
 | `G-314` | feature | mittel | [die Vorschau fuer nicht-aktive Plaene](laufend_claudecode/nutrition-g-0314-die-vorschau-fuer-nicht-aktive-plaene.md) | vorbereitet (claudecode) | — | — |
-| `G-315` | befund | hoch | [die Kopien sind keine Kopien](laufend_claudecode/nutrition-g-0315-die-kopien-sind-keine-kopien.md) | laeuft (claudecode) | — | — |
+| `G-315` | befund | hoch | [die Kopien sind keine Kopien](erledigt/nutrition-g-0315-die-kopien-sind-keine-kopien.md) | erledigt | — | G-316, G-317 |
+| `G-316` | feature | mittel | [*Log deviation* braucht die Posten](laufend_claudecode/nutrition-g-0316-log-deviation-braucht-die-posten.md) | laeuft (claudecode) | — | — |
+| `G-317` | befund | mittel | [drei Zeilen der Vorlage fehlen am Schirm](laufend_claudecode/nutrition-g-0317-drei-zeilen-der-vorlage-fehlen-am-schirm.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 59

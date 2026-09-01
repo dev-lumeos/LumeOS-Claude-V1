@@ -44,7 +44,9 @@ import { PlanModal } from './plan-modal'
 import { PlanEintraegeEcht, type TagesEintrag } from './plan-eintraege'
 // G-286/G-287/G-290: Karte, Tages-Akkordeon und Aktivierungsdialog.
 import {
-  MealPlanCard, MealPlanDetail, MealPlanActivationModal,
+  // G-315: `MealPlanCard`/`MealPlanDetail` entfernt — der aktive
+  // Plan stand dreimal. Das Aktivierungsmodal bleibt.
+  MealPlanActivationModal,
 } from './plan-detail'
 
 const ATTRAPPE = 'Aus dem Entwurf uebernommen. Dieser Tab ist noch nicht an die vorhandenen Essensplaene angebunden - die Zahlen sind erfunden.'
@@ -101,8 +103,6 @@ export function MealPlansTab({
   // ein Objekt heisst bearbeiten.
   const [anlegen, setAnlegen] = React.useState(false)
   const [bearbeiten, setBearbeiten] = React.useState(false)
-  // G-286: das Tages-Akkordeon ist zu, bis jemand die Karte oeffnet.
-  const [detailOffen, setDetailOffen] = React.useState(false)
   // G-290: der Aktivierungsdialog mit LifecyclePicker.
   const [aktivieren, setAktivieren] = React.useState(false)
   const router = useRouter()
@@ -337,17 +337,27 @@ export function MealPlansTab({
           gezeigt.** `[read]` **Der Satz war eine Erklaerung fuer eine
           Luecke** (A-62). **Die uebrigen stehen jetzt in der
           Bibliothek darunter.** */}
-      {d && (
-        <div className="v2-col-gap" style={{ gap: 12 }}>
-          <MealPlanCard
-            d={d}
-            offen={detailOffen}
-            onOeffnen={() => setDetailOffen(o => !o)}
-            onAktivieren={() => setAktivieren(true)}
-          />
-          {detailOffen && <MealPlanDetail d={d} />}
-        </div>
-      )}
+      {/* ══ G-315: der aktive Plan steht EINMAL ══════════════
+          **Tom, 2026-09-02:** *,,der untere teil alles ineinander
+          verschoben."*
+
+          `[cmd]` **Er stand dreimal:** oben als `PlanKopfEcht`, hier
+          als `MealPlanCard` mit Aufklappzeile, unten in der
+          Bibliothek.
+
+          `[cmd]` **Die Vorlage trennt in UNTER-TABS** —
+          `tab === "active"` (Z. 359) und `tab === "library"`
+          (Z. 447). **Sie stehen nie gleichzeitig auf dem Schirm.**
+
+          `[read]` **Wir haben die Unter-Tabs aufgeloest** (G-286:
+          `SPEC_03` Flow 3 kennt EINE Uebersicht). **Dann darf der
+          aktive Plan aber auch nur einmal erscheinen** — sonst ist
+          die Aufloesung eine Verdreifachung.
+
+          `[cmd]` **`MealPlanCard` und `MealPlanDetail` sind entfernt,
+          nicht auskommentiert** (A-59). **Was sie zeigten, steht in
+          `PlanKopfEcht` (Kopf, Ring, Rechnung) und der Bibliothek
+          (die anderen Plaene).** */}
 
       {/* ══ G-310: die Bibliothek, echt ═════════════════════
           `[cmd]` **Am 2026-09-01 gemessen: vier Plaene bei

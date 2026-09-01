@@ -535,6 +535,14 @@ export async function ladeEinkaufslistenZahl(): Promise<number> {
 export async function ladeTagesEintraege(datum: string): Promise<Array<{
   id: string
   meal_type: string
+  /**
+   * Die geplante Uhrzeit — G-315, Vorlage Z. 391.
+   *
+   * `[cmd]` **`planned_time` steht in `meal_plan_entries`** und ist
+   * gefuellt (07:30, 12:30, 16:00, 19:30 — am 2026-09-02 gemessen).
+   * **Der Leseweg holte sie nur nicht.**
+   */
+  planned_time: string | null
   bezeichnung: string
   kcal: number | null
   status: 'pending' | 'confirmed' | 'deviated' | 'skipped'
@@ -551,6 +559,7 @@ export async function ladeTagesEintraege(datum: string): Promise<Array<{
     db.from('meal_plan_entries')
       .select(`
         id, meal_type, slot_order, entry_type, amount_g, planned_servings,
+        planned_time,
         recipe:recipes ( name_de ),
         food:foods ( name_display_de, name_de ),
         day:meal_plan_days!inner ( plan_date )
@@ -584,6 +593,8 @@ export async function ladeTagesEintraege(datum: string): Promise<Array<{
     aus.push({
       id,
       meal_type: text(roh.meal_type) ?? 'other',
+      // G-315/Z. 391: die Uhrzeit, ohne Sekunden.
+      planned_time: text(roh.planned_time)?.slice(0, 5) ?? null,
       bezeichnung: text(rezept?.name_de)
         ?? text(essen?.name_display_de) ?? text(essen?.name_de) ?? '—',
       // `[read]` Die kcal stehen erst nach dem Bestaetigen fest —

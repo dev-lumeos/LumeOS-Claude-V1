@@ -53,15 +53,9 @@ export type GhostEintrag = {
   status: 'pending' | 'confirmed' | 'deviated' | 'skipped'
 }
 
-const SLOT_LABEL: Record<string, string> = {
-  breakfast: 'Breakfast',
-  lunch: 'Lunch',
-  dinner: 'Dinner',
-  snack: 'Snack',
-  pre_workout: 'Pre-Workout',
-  post_workout: 'Post-Workout',
-  other: 'Sonstiges',
-}
+// G-315: die Tabelle steht in `plan-model.ts` — sie stand hier
+// doppelt, und die andere Kopie kannte nur vier Slots.
+import { MAHLZEIT_LABEL } from '../../../lib/nutrition/plan-model'
 
 function z(v: number | null): string {
   return v === null ? '—' : String(Math.round(v))
@@ -176,7 +170,7 @@ export function GhostEintragKarte({
         padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10,
       }}>
         <span style={{ fontSize: 13, fontWeight: 600 }}>
-          {SLOT_LABEL[eintrag.meal_type] ?? eintrag.meal_type}
+          {MAHLZEIT_LABEL[eintrag.meal_type] ?? eintrag.meal_type}
         </span>
         <span className="v2-dim" style={{ fontSize: 11 }}>· aus deinem Plan</span>
         <div className="v2-spacer" />

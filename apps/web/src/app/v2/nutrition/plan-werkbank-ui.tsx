@@ -571,12 +571,23 @@ export function PlanListe({ plaene, heute, aktiv, onWaehlen }: {
               {/* `[cmd]` **E-42: JEDER Plan ist bearbeitbar** — auch
                   ein aktiver, auch ein gekaufter. **Gesperrt sind
                   einzelne Positionen, sobald sie protokolliert
-                  sind**, und das steht an der Position. */}
-              <button type="button"
-                      className={offen ? 'v2-btn v2-btn-sm v2-btn-primary' : 'v2-btn v2-btn-sm'}
-                      onClick={() => onWaehlen(p.id)}>
-                {offen ? 'In der Werkbank' : 'Bearbeiten'}
-              </button>
+                  sind**, und das steht an der Position.
+
+                  ══ G-315: *In der Werkbank* stand am OFFENEN Plan ══
+                  `[cmd]` **Tom, 2026-09-02: der Knopf stand am
+                  aktiven Plan — dem, der schon offen ist.**
+                  `[read]` **Ein Knopf, der sagt *,,du bist hier"*,
+                  ist kein Knopf.** **Er steht jetzt nur an den
+                  anderen**, und der offene traegt eine Marke statt
+                  eines Knopfs. */}
+              {offen ? (
+                <Pill variant="acc">In der Werkbank</Pill>
+              ) : (
+                <button type="button" className="v2-btn v2-btn-sm"
+                        onClick={() => onWaehlen(p.id)}>
+                  Bearbeiten
+                </button>
+              )}
             </div>
           </Card>
         )

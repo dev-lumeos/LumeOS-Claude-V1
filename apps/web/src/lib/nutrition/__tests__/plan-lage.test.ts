@@ -200,6 +200,17 @@ test('G-269: die Sperre sitzt im Schreibweg, nicht nur in der Anzeige', () => {
     'E-29: die Freigabe kommt nicht aus der Funktion (G-269).')
   assert.doesNotMatch(s, /from\('client_autonomy'\)/,
     'E-29 verlangt den Weg ueber die Funktion, nicht ueber die Tabelle (G-269).')
-  assert.match(s, /if \(!\(await darfAendern\(herkunft\)\)\)/,
-    'Der Schreibweg prueft die Freigabe nicht (G-269).')
+  // `[cmd]` **BERICHTIGT in G-315:** hier stand
+  // `if (!(await darfAendern(herkunft)))`. **Die Sache gilt weiter**
+  // — nur greift die Sperre jetzt am INHALT, nicht an jedem Feld.
+  //
+  // `[cmd]` **G-315: Aktivieren ging denselben Weg wie Umbenennen**,
+  // und ein Coach-Plan liess sich nicht starten. **E-42:
+  // `darf_weiterverkaufen` schuetzt vor Weiterverkauf, nicht vor
+  // Benutzung.**
+  //
+  // `[read]` **Was G-269 sichert, bleibt gesichert:** der Inhalt
+  // eines Coach-Plans ist ohne Freigabe unantastbar.
+  assert.match(s, /if \(aendertInhalt\(felder\) && !\(await darfAendern\(herkunft\)\)\)/,
+    'Der Schreibweg prueft die Freigabe nicht (G-269/G-315).')
 })

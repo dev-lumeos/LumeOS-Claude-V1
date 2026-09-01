@@ -160,6 +160,43 @@ export async function planAnlegen(eingabe: PlanAnlegen): Promise<GespeicherterPl
 }
 
 /**
+ * Aendert dieser Aufruf den INHALT des Plans — oder fuehrt er ihn aus?
+ *
+ * ══ G-315: AKTIVIEREN IST KEINE AENDERUNG ═════════════════
+ *
+ * **Tom, 2026-09-02:** *,,schwachsinn hoch 2 plan aktivieren gesperrt
+ * wegen aenderung? wenn man starten will."*
+ *
+ * `[cmd]` **`planAendern` fragte `darfAendern` VOR jedem Feld** —
+ * auch vor `status: 'active'`. **Aktivieren ging denselben Weg wie
+ * Umbenennen**, und ein Coach-Plan liess sich nicht starten.
+ *
+ * `[cmd]` **E-42: `darf_weiterverkaufen` schuetzt vor Weiterverkauf,
+ * nicht vor Benutzung.** `[cmd]` **Und E-29 schuetzt den INHALT** —
+ * damit der Klient nicht umbaut, was der Coach verordnet hat.
+ *
+ * `[read]` **Aktivieren aendert den Inhalt nicht.** Es sagt: *ab
+ * heute halte ich mich daran.* **Das ist die Benutzung, die der Coach
+ * gerade will.**
+ *
+ * `[read]` **Als eigene Funktion, damit sie messbar ist** — inline
+ * kam die Sabotage durch, weil der Waechter nur die Feldnamen im
+ * Quelltext sah (G-216).
+ *
+ * `[cmd]` **Die ausfuehrenden Felder entstehen beim Aktivieren**
+ * (Flow 3, Schritte 5-7) **und beim Ablauf** (C-373).
+ */
+export const AUSFUEHRENDE_FELDER = [
+  'status', 'is_active', 'start_date', 'lifecycle_type', 'rollover_count',
+] as const
+
+export function aendertInhalt(felder: Record<string, unknown>): boolean {
+  const gesetzt = Object.keys(felder).filter(k => felder[k] !== undefined)
+  // `[read]` **Ein leerer Aufruf ist keine Aenderung.**
+  return gesetzt.some(k => !(AUSFUEHRENDE_FELDER as readonly string[]).includes(k))
+}
+
+/**
  * Einen Plan aendern — G-268.
  *
  * `[read]` **Die Sperre sitzt hier, nicht nur in der Oberflaeche.**
@@ -181,12 +218,15 @@ export async function planAendern(eingabe: PlanAendern): Promise<GespeicherterPl
   if (leseFehler) throw new DiaryWriteError('WRITE_FAILED', leseFehler.message)
 
   const herkunft = (vorher as unknown as { plan_origin: string | null }).plan_origin
-  if (!(await darfAendern(herkunft))) {
+
+  if (aendertInhalt(felder) && !(await darfAendern(herkunft))) {
     throw new DiaryWriteError(
       'FORBIDDEN',
       herkunft === 'coach_created'
-        ? 'Dieser Plan kommt von deinem Coach und ist für direkte Änderungen gesperrt.'
-        : 'Dieser Plan stammt aus dem Marktplatz und wird unverändert übernommen.',
+        ? 'Dieser Plan kommt von deinem Coach. Du kannst ihn aktivieren und '
+          + 'verwenden — seinen Inhalt ändern erst ab Autonomiestufe 5.'
+        : 'Dieser Plan stammt aus dem Marktplatz. Du kannst ihn aktivieren und '
+          + 'verwenden — geändert wird er nicht.',
     )
   }
 
