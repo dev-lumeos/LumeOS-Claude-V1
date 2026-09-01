@@ -8,6 +8,8 @@ braucht: []
 kind_von: F-07
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -149,5 +151,5 @@ C-381.**
 
 ## Auftrag
 
-**Vorbereitet mit C-381 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit C-381 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

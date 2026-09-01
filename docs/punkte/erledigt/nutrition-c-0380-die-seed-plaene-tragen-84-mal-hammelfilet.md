@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 6992fca2
 beruehrt:
   tabellen: [nutrition.meal_plan_entries]
 zahlen:
@@ -115,4 +117,53 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Nachgemessen.**
+
+    Plan               kcal/Tag          Protein/Tag     Vielfalt
+    Cut 4-Meal 2200    2.190,8-2.212,5   162,8-183,1 g   12 Lebensmittel
+    Lean bulk 3100     3.084,8-3.131,9   172,9-211,5 g   13
+    Buddy auto-plan    2.668,5-2.714,1   170,9-194,9 g   14
+
+`[cmd]` **Gegen die Ziele: 2.200, 3.100, 2.700** — **jeder Plan
+trifft sein Ziel auf unter ein Prozent.**
+
+`[cmd]` **Nachgemessen: 0 Hammelfilet-Positionen.** `[cmd]` **12, 13
+und 14 verschiedene Lebensmittel je Plan, sieben Tagesmenues.**
+
+`[read]` **Und die Zusammenstellung folgt der Vorgabe:** vier
+Positionen je Tag aus Milchprodukten, Gefluegel/Fisch/Fleisch,
+Getreide und Nuessen.
+
+### Der Seed ist dauerhaft, nicht nur eingespielt
+
+`[cmd]` **`testdaten-einspielen.ts:2167` erzeugt die drei Plaene
+kuenftig mit.** `[cmd]` **Und `380_seed_meal_plan_variety.sql` ist
+idempotent und ruehrt nur diese drei an.**
+
+`[read]` **Das war die Frage im Auftrag** — *,,sag es, damit es beim
+naechsten Kettenlauf nicht verschwindet."* **Er hat es nicht nur
+gesagt, sondern verhindert.**
+
+### Und er hat den Kopierlauf nicht gestartet
+
+`[cmd]` **Begruendung: er wuerde den protokollierten Aufbau-Plan
+beruehren.**
+
+`[read]` **Richtig.** `[cmd]` **Der Aufbau-Plan traegt 6
+Protokollzeilen und ist der einzige aktive** — **ein allgemeiner
+Kopierlauf haette die Compliance-Anzeige zerstoert, die seit G-315
+sichtbar ist.**
+
+`[cmd]` **Nachgemessen: Aufbau-Wochenplan unveraendert, 6
+Protokollzeilen, keine angelegt.**
+
+### Der Nachweis lief in beide Richtungen
+
+`[cmd]` **`nutrition-c380-seed-plan-variety.test.ts` lief erst rot
+gegen die 84 Hammelfilet-Zeilen, danach gruen.**
+
+`[read]` **Genau das verlangt die Regel: eine Pruefung ohne
+eingebauten Fehler misst nichts.**
+
+**Abgenommen.**
+

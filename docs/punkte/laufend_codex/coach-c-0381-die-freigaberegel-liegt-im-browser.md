@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-151
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [coach.pending_actions]
 zahlen:
@@ -58,7 +60,7 @@ richtig, die Schreibnaht nicht.**
 
 **Mitbeauftragt: G-151.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-02.**
+**Beauftragt am 2026-09-02.**
 
 ### 1 · C-381 — die Regel gehoert in die Datenbank
 
