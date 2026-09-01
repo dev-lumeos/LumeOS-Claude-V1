@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 219 |
-| `laufend_codex` | 3 |
+| `laufend_codex` | 4 |
 | `laufend_claudecode` | 5 |
 | `erledigt` | 199 |
-| **gesamt** | **426** |
+| **gesamt** | **427** |
 
 ## medical — 42
 
@@ -58,7 +58,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 168
+## nutrition — 169
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -131,6 +131,7 @@
 | `C-377` | feature | hoch | [ein abgelaufener Plan braucht eine Frage](erledigt/nutrition-c-0377-ein-abgelaufener-plan-braucht-eine-frage.md) | erledigt | — | C-379 |
 | `C-378` | befund | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](erledigt/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | erledigt | — | — |
 | `C-379` | entscheidung | mittel | [`sequence` hat kein Ziel](todos/nutrition-c-0379-sequence-hat-kein-ziel.md) | offen | — | G-313 |
+| `C-380` | befund | mittel | [die Seed-Plaene tragen 84 mal Hammelfilet](laufend_codex/nutrition-c-0380-die-seed-plaene-tragen-84-mal-hammelfilet.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
