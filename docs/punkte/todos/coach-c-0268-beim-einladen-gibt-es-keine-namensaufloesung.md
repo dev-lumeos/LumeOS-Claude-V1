@@ -8,8 +8,6 @@ braucht: []
 kind_von: C-225
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-01
 beruehrt:
   tabellen: ["auth.users", "public.profiles"]
   dateien: []
@@ -42,3 +40,16 @@ zahlen: null
 
 **Mitbeauftragt mit A-33 am 2026-09-01.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-01
+
+`[cmd]` **Es gibt einen ungenutzten E-Mail-nach-UUID-Helfer, aber
+keine Namensquelle.** `[cmd]` **Eingeladene sehen Rolle, Status und
+Kurz-UUID.**
+
+`[read]` **Nicht der Weg fehlt, sondern der Name.**
+
+`[read]` **Und die Frage dahinter ist eine Datenschutzfrage:** **darf
+ein Eingeladener den Namen des Einladenden sehen, bevor er
+zugestimmt hat?** `[cmd]` **Seit heute gibt es
+`coach.client_consent_log`** — der Ort, an dem so etwas stuende.

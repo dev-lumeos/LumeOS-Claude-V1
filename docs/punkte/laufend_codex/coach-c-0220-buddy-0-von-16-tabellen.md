@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-01
 beruehrt:
   tabellen: []
   dateien: []
@@ -28,3 +30,8 @@ zahlen: null
   `buddy_dependency_graph` (140 Kanten) — s. Gruppe K.
 
 ### Was ganz fehlt
+
+## Auftrag
+
+**Mitbeauftragt mit C-207 am 2026-09-01.** Der Auftragstext
+und der Bericht stehen dort.

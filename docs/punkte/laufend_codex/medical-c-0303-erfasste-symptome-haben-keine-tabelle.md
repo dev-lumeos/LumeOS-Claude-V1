@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-207
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-01
 beruehrt:
   tabellen: ["medical.symptoms"]
   dateien: ["docs/_archive/berichte/g-207-claude-code.md"]
@@ -40,3 +42,8 @@ zahlen: null
   **Zu tun:** `user_symptom_logs` nach dem Entwurf, **mit
   Fremdschluessel auf `symptoms`.** `[read]` **Dann kann genau der
   Fehler aus G-207 strukturell nicht wiederkehren.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-207 am 2026-09-01.** Der Auftragstext
+und der Bericht stehen dort.

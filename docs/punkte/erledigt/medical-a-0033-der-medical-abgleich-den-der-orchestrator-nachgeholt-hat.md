@@ -10,6 +10,8 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-01
+erledigt: 2026-09-01
+commit: OFFEN
 beruehrt:
   tabellen: []
   dateien: ["docs/specs/Medical/SPEC_09_SCORING.md"]
@@ -161,8 +163,117 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### 2026-09-01 - Codex
+
+## A-33 - weitgehend ueberholt, ein Medical-Rest bleibt
+
+Der Kernbefund ist erledigt: G-85 wurde am 2026-08-21 als G-135
+geschlossen. Die gebaute Rechnung liegt in
+`apps/web/src/lib/medical/systemscore.ts`, nutzt die Systemgruppen aus
+`medical.biomarker_spec_enrichment` und die Gewichte der SPEC_09.
+Der vorhandene Test lief erneut: **14/14 gruen**. Auf dev haben 29 von
+51 Enrichment-Zeilen mindestens eine Systemgruppe; `biomarker_aliases`
+hat weiter **292** Zeilen. Die vom alten Punkt benannten Unbekannten
+sind damit weder offen noch an Tom zu entscheiden.
+
+Auch zwei weitere alte Luecken sind nicht mehr der damalige Befund:
+`medical.lab_marker_catalog` hat **66** Zeilen und
+`supplements.supplement_lab_effects` heute **271**; die urspruengliche
+222er-Bridge wurde beim Katalogneuaufbau weitergefuehrt. Der
+Symptomkatalog und seine Markerkarte existieren ebenfalls
+(`medical.symptoms` **34**, `medical.symptom_biomarker_map` **102**).
+Offen ist davon getrennt nur das Nutzertagebuch
+`medical.user_symptom_logs` (C-303), nicht erneut ein Symptomkatalog.
+
+`medical.user_medications` existiert bereits und hat **2** Zeilen. Es
+wurde nicht beruehrt. Die Formulierung "bis Verschluesselung und
+Schluesselverwaltung gesperrt" widerspricht dem Ist-Stand und E-12:
+E-12 entscheidet Klartext fuer die Entwicklungsphase; Verschluesselung
+ist dort bewusst keine noch fehlende Implementierung. Dieser Auftrag
+legt weder einen weiteren Medikationspfad noch eine Verschluesselung
+an.
+
+**Urteil A-33: weitgehend ueberholt.** Als Abgleich bleibt nur C-303
+als neuer, praeziser Nutzersymptom-Blocker; die vier Mockup-Tabs wurden
+wegen des ausdruecklichen UI-Verbots nicht bewertet oder gebaut.
+
+## C-268 - Namensluecke bleibt, E-Mail-Helfer ist kein Name
+
+`coach.relationships` hat **6** Zeilen: **4 active**, **2 invited**.
+Heute legt `ladeCoachEin` in
+`apps/web/src/lib/coach/nachrichten-schreiben.ts` eine Beziehung direkt
+per UUID an (`status='invited'`, `invited_by=auth.uid()`). Es ruft die
+in Kettenschritt 155 vorhandene
+`coach.resolve_invite_user_id(p_email text)` nicht auf.
+
+Die Funktion selbst ist gebaut, fuer `authenticated` ausfuehrbar und
+loest nach Anmeldung E-Mail nach UUID auf; die Rollback-Gegenprobe
+ergab einen Treffer. Sie liefert aber absichtlich weder Namen noch
+E-Mail. `public.profiles` hat kein Namensfeld, `coach.coach_profiles`
+existiert weiter nicht. Damit kann sie die eigentliche Namensluecke
+nicht schliessen.
+
+Der Eingeladene liest die Beziehung ueber den vorhandenen RLS-Lesepfad
+`ladeCoachRechte()`. Die Anzeige zeigt Gegenrolle, Status,
+Einladungsnotiz und die ersten acht Stellen der UUID - keinen Namen
+und keine E-Mail. Der Datenbankhelfer ist ausserdem in keinem App- oder
+Service-Leser verdrahtet. **C-268 bleibt daher offen.** Vor einer
+spaeteren Einbindung ist zudem zu entscheiden, ob jeder angemeldete
+Nutzer E-Mail-Existenz mittels UUID/NULL abfragen darf; das ist eine
+Existenzabfrage, keine Namensquelle.
+
+## C-269 - Statusweg gebaut, aber nicht in der Anzeige erreichbar
+
+`coach.withdraw_relationship_invite(uuid, text)` ist vorhanden,
+`SECURITY INVOKER`, fuer `authenticated` freigegeben und beschraenkt
+den Wechsel auf eine eigene offene Einladung
+(`invited_by=auth.uid()`). Er setzt `status='withdrawn'`,
+`withdrawn_at`, `withdrawn_by` und optional `withdraw_reason`; die
+CHECK-Constraint verlangt Zeitpunkt und Akteur bei diesem Status.
+
+Die Gegenprobe lief als Einladender vollstaendig im Rollback:
+**`withdrawn=true`**, Status und Auditfelder wurden gesetzt, und
+`relationship_change_log` stieg innerhalb der Transaktion um genau
+eine Zeile. Keine Seed-Beziehung und kein Log wurden dadurch
+veraendert.
+
+Es gibt jedoch keinen Aufrufer ausserhalb der Kettenquelle - weder
+Server-Action noch Anzeige ruft die Funktion. **C-269 ist als
+Schema-/Datenbankweg erledigt; der sichtbare Ruecknahmepfad bleibt
+offen.** Entsprechend dem Auftrag wurde kein Coach-UI gebaut.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-01, Orchestrator.**
+
+`[cmd]` **A-33 weitgehend ueberholt:** Health-Score und
+Alias-/Labormarker-Bruecken stehen, **Score-Test 14/14 gruen.**
+
+`[read]` **Der Punkt hiess *,,der Abgleich, den der Orchestrator
+nachgeholt hat"*** — **er ist nachgeholt und seither gebaut worden.**
+
+`[cmd]` **Offen bleibt nur das Nutzersymptom-Protokoll** — C-303.
+
+### C-268 — offen, und der Befund ist praeziser geworden
+
+`[cmd]` **Es gibt einen ungenutzten E-Mail-nach-UUID-Helfer, aber
+keine Namensquelle.** `[cmd]` **Eingeladene sehen Rolle, Status und
+Kurz-UUID.**
+
+`[read]` **Damit ist die Luecke benannt: nicht der Weg fehlt, sondern
+der Name.** `[read]` **Ein Coach laedt ein, und der Klient sieht eine
+Kennung.**
+
+### C-269 — die Datenbankseite steht
+
+`[cmd]` **Der Widerruf setzt Status und Auditfelder und schreibt ins
+Aenderungslog.** `[cmd]` **Rueckbau-Gegenprobe bestanden.**
+
+`[cmd]` **Ein sichtbarer Aufrufer fehlt** — **das ist UI-Arbeit, kein
+Schemabefund.**
+
+`[read]` **Und er hat es so gemeldet, statt einen Knopf zu bauen, der
+nicht sein Auftrag war.**
+
+**Abgenommen.**
+

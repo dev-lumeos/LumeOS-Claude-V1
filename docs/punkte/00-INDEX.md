@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 224 |
+| `todos` | 223 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 6 |
-| `erledigt` | 186 |
+| `erledigt` | 187 |
 | **gesamt** | **419** |
 
 ## medical — 42
@@ -16,7 +16,7 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-21` | befund | mittel | [Kimi-K3-Schwarm als Rechercheweg](todos/medical-a-0021-kimi-k3-schwarm-als-rechercheweg.md) | offen | — | — |
-| `A-33` | blocker | hoch | [Der Medical-Abgleich, den der Orchestrator nachgeholt hat](laufend_codex/medical-a-0033-der-medical-abgleich-den-der-orchestrator-nachgeholt-hat.md) | laeuft (codex) | — | — |
+| `A-33` | blocker | hoch | [Der Medical-Abgleich, den der Orchestrator nachgeholt hat](erledigt/medical-a-0033-der-medical-abgleich-den-der-orchestrator-nachgeholt-hat.md) | erledigt | — | — |
 | `C-85` | befund | mittel | [Kurznamen fehlen bei 11 von 35](todos/medical-c-0085-kurznamen-fehlen-bei-11-von-35.md) | offen | — | — |
 | `C-91` | feature | mittel | [Die Spec nennt LOINC-Codes, die nicht die ueblichen sind](todos/medical-c-0091-die-spec-nennt-loinc-codes-die-nicht-die-ueblichen-sind.md) | offen | — | — |
 | `C-92` | befund | mittel | [Die Spec verwechselt Marker](todos/medical-c-0092-die-spec-verwechselt-marker.md) | offen | — | — |
@@ -35,7 +35,7 @@
 | `C-213` | befund | mittel | [C-124-E8 — die Arzt-Hinweis-Schwelle ist offen](todos/medical-c-0213-c-124-e8-die-arzt-hinweis-schwelle-ist-offen.md) | offen | — | — |
 | `C-285` | entscheidung | hoch | [`user_medications` speichert Medikamente im Klartext](erledigt/medical-c-0285-user-medications-speichert-medikamente-im-klartext.md) | erledigt | — | — |
 | `C-294` | feature | mittel | [was Kimi nachliefern muss](todos/medical-c-0294-was-kimi-nachliefern-muss.md) | offen | — | — |
-| `C-303` | feature | mittel | [erfasste Symptome haben keine Tabelle](todos/medical-c-0303-erfasste-symptome-haben-keine-tabelle.md) | offen | — | — |
+| `C-303` | feature | mittel | [erfasste Symptome haben keine Tabelle](laufend_codex/medical-c-0303-erfasste-symptome-haben-keine-tabelle.md) | laeuft (codex) | — | — |
 | `C-304` | befund | mittel | [51 Zuordnungen zeigen ins Leere](todos/medical-c-0304-51-zuordnungen-zeigen-ins-leere.md) | offen | — | — |
 | `C-306` | befund | mittel | [`atc_code` traegt JSON in einer `text`-Spalte](todos/medical-c-0306-atc-code-traegt-json-in-einer-text-spalte.md) | offen | — | — |
 | `C-307` | befund | mittel | [`mythen_de` hat drei Gestalten in einer Spalte](todos/medical-c-0307-mythen-de-hat-drei-gestalten-in-einer-spalte.md) | offen | — | — |
@@ -243,7 +243,7 @@
 | `C-202` | blocker | hoch | [Produkte, Marken, Hersteller, Kennungen](erledigt/supplements-c-0202-produkte-marken-hersteller-kennungen.md) | erledigt | — | C-364 |
 | `C-203` | befund | mittel | [Beobachtung gegen Erwartung (crawl_033)](todos/supplements-c-0203-beobachtung-gegen-erwartung-crawl-033.md) | offen | — | — |
 | `C-206` | entscheidung | mittel | [Die Community-Schicht — nur Admin, oder nie?](todos/supplements-c-0206-die-community-schicht-nur-admin-oder-nie.md) | offen | — | C-341 |
-| `C-207` | befund | hoch | [Vier Entscheidungen aus dem 035-Handoff](todos/supplements-c-0207-vier-entscheidungen-aus-dem-035-handoff.md) | offen | — | C-319, C-320, C-321, C-322 |
+| `C-207` | befund | hoch | [Vier Entscheidungen aus dem 035-Handoff](laufend_codex/supplements-c-0207-vier-entscheidungen-aus-dem-035-handoff.md) | laeuft (codex) | — | C-319, C-320, C-321, C-322 |
 | `C-208` | befund | mittel | [C-129 neu fassen: der Import ist laengst passiert](erledigt/supplements-c-0208-c-129-neu-fassen-der-import-ist-laengst-passiert.md) | erledigt | — | C-326 |
 | `C-233` | feature | mittel | [`user_supplement_settings` — die Spec sieht es vor, wir bauen es nicht](todos/supplements-c-0233-user-supplement-settings-die-spec-sieht-es-vor-wir-bauen-es-nicht.md) | offen | — | — |
 | `C-237` | befund | mittel | [Die Kimi-Quelle fuehrt leere Strings statt `unknown`](todos/supplements-c-0237-die-kimi-quelle-fuehrt-leere-strings-statt-unknown.md) | offen | — | — |
@@ -372,9 +372,9 @@
 | `C-114` | befund | mittel | [Was das Vorgaengerrepo beim Coach falsch machte](todos/coach-c-0114-was-das-vorgaengerrepo-beim-coach-falsch-machte.md) | offen | — | — |
 | `C-115` | befund | mittel | [Was der Markt kann und was LumeOS eigen ist](todos/coach-c-0115-was-der-markt-kann-und-was-lumeos-eigen-ist.md) | offen | — | — |
 | `C-173` | befund | mittel | [`MARKETPLACE_PRODUCTS` traegt `inStack` und `evidence`](todos/coach-c-0173-marketplace-products-traegt-instack-und-evidence.md) | offen | — | — |
-| `C-220` | befund | mittel | [`buddy` — 0 von 16 Tabellen](todos/coach-c-0220-buddy-0-von-16-tabellen.md) | offen | — | — |
-| `C-268` | feature | mittel | [Beim Einladen gibt es keine Namensaufloesung](laufend_codex/coach-c-0268-beim-einladen-gibt-es-keine-namensaufloesung.md) | laeuft (codex) | — | — |
-| `C-269` | feature | mittel | [Eine Einladung laesst sich nicht zuruecknehmen](laufend_codex/coach-c-0269-eine-einladung-laesst-sich-nicht-zuruecknehmen.md) | laeuft (codex) | — | — |
+| `C-220` | befund | mittel | [`buddy` — 0 von 16 Tabellen](laufend_codex/coach-c-0220-buddy-0-von-16-tabellen.md) | laeuft (codex) | — | — |
+| `C-268` | feature | mittel | [Beim Einladen gibt es keine Namensaufloesung](todos/coach-c-0268-beim-einladen-gibt-es-keine-namensaufloesung.md) | offen | — | — |
+| `C-269` | feature | mittel | [Eine Einladung laesst sich nicht zuruecknehmen](todos/coach-c-0269-eine-einladung-laesst-sich-nicht-zuruecknehmen.md) | offen | — | — |
 | `C-318` | befund | hoch | [ADR-Coach-Permissions weicht von der Umsetzung ab](erledigt/coach-c-0318-adr-coach-permissions-weicht-von-der-umsetzung-ab.md) | erledigt | — | — |
 | `C-358` | befund | mittel | [abgelaufene Aktionen bleiben `pending`](erledigt/coach-c-0358-abgelaufene-aktionen-bleiben-pending.md) | erledigt | — | — |
 | `C-362` | feature | mittel | [das Consent-Log ist beschrieben und nicht gebaut](erledigt/coach-c-0362-das-consent-log-ist-beschrieben-und-nicht-gebaut.md) | erledigt | — | — |

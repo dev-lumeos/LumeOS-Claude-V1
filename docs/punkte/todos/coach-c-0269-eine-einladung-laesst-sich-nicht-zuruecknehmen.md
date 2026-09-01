@@ -8,8 +8,6 @@ braucht: []
 kind_von: G-185
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-01
 beruehrt:
   tabellen: []
   dateien: []
@@ -49,3 +47,14 @@ zahlen: null
 
 **Mitbeauftragt mit A-33 am 2026-09-01.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-01
+
+`[cmd]` **Die Datenbankseite steht:** der Widerruf setzt Status und
+Auditfelder und schreibt ins Aenderungslog. **Rueckbau-Gegenprobe
+bestanden.**
+
+`[cmd]` **Ein sichtbarer Aufrufer fehlt.**
+
+`[read]` **Damit ist es UI-Arbeit geworden, kein Schemabefund** —
+**und gehoert an einen UI-Agenten, wenn der Coach-Bereich dran ist.**
