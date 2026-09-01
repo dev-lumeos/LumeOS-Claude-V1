@@ -6,7 +6,9 @@ schwere: mittel
 angelegt: 2026-08-31
 braucht: []
 kind_von: G-304
-entscheidung: null
+entscheidung: E-42
+agent: claudecode
+beauftragt: 2026-08-31
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -44,3 +46,10 @@ schlimmer als ein Vermerk.**
 
 `[read]` **Also entweder ein Schreiber, oder die zwei Zyklen werden
 nicht angeboten, bis es einen gibt.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-306 am 2026-08-31.** Bericht dort.
+
+`[read]` **C-377 loest es: die Meldung beim Ablauf ist die
+Ausfuehrung.** **Kein Zeitplaner noetig.**

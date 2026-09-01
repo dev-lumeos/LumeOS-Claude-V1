@@ -6,11 +6,9 @@ schwere: hoch
 angelegt: 2026-08-31
 braucht: []
 kind_von: G-298
-entscheidung: E-41
+entscheidung: E-42
 agent: claudecode
 beauftragt: 2026-08-31
-erledigt: 2026-08-31
-commit: 18a4e31b
 beruehrt:
   tabellen: [nutrition.meal_plan_entries]
 zahlen:
@@ -115,3 +113,108 @@ Automatismus.**
 
 **2026-08-31, mit C-372 abgenommen:** gebaut: HTTP 409 mit Grund und Ausweg. Der Befund dazu: `ON DELETE
 RESTRICT` blockiert nur das Loeschen, nicht das Aendern.
+
+## Auftrag — die Sperre feiner fassen
+
+**Entschieden in `docs/entscheidungen/E-42`.** **Mitbeauftragt:
+C-375, C-377, C-373.**
+
+**Beauftragt am 2026-08-31.**
+
+### Was zurueckzubauen ist
+
+`[cmd]` **Du hast in C-372 die Sperre auf Planebene gebaut: HTTP 409
+fuer jeden aktiven Plan.** `[read]` **Das war meine Vorgabe, und sie
+war falsch.**
+
+Tom, 2026-08-31: *,,wenn wir den einschraenken dass er nicht editieren
+kann dann bescheisst er sich ja selber im sinne: ach ich kann nicht
+editieren dann melde ich einfach etwas anderes das ich gegessen
+habe."*
+
+`[read]` **Eine Sperre, die sich umgehen laesst, macht die Daten
+schlechter.**
+
+### Die richtige Regel
+
+    geloggt           eingefroren -- das ist Vergangenheit
+    nicht geloggt     frei, auch zukuenftige Plantage
+
+`[read]` **409 nur, wenn diese Position ein Log mit
+`status <> 'pending'` traegt** — nicht fuer den ganzen Plan.
+
+`[cmd]` **Der `resolution_check` erzwingt es bereits:** ein
+`pending`-Log hat kein `actual_meal_id` und kein `confirmed_at`.
+**Es gibt nichts zu verfaelschen.**
+
+`[read]` **Und damit faellt *Kopie bearbeiten* weg** — er war die
+Antwort auf eine Sperre, die es so nicht geben soll. `[read]` **Falls
+du ihn behalten willst: sag warum, aber nicht als Ausweg aus einer
+Sperre.**
+
+### C-375 — das Flag heisst anders
+
+`[read]` **Mein `darf_bearbeiten` war das falsche Flag.**
+
+Tom: *,,wenn ich einen plan kaufe dann ist das mein plan, aber ein
+Coach der einen mealplan auf marketplace verkauft, dass der nicht
+wiederverkaufbar wird."*
+
+`[cmd]` **Gemeint ist ein Weiterverkaufsschutz, kein Editierschutz.**
+
+`[read]` **Vorschlag: `darf_weiterverkaufen boolean NOT NULL DEFAULT
+true`** — **und die Anzeige sagt es, statt zu sperren.**
+
+`[read]` **Der Kaeufer darf seinen Plan aendern. Er darf ihn nur
+nicht weiterverkaufen.**
+
+### C-377 — der abgelaufene Plan braucht eine Frage
+
+Tom: *,,ist ein kompletter plan abgelaufen muss eine meldung kommen
+und geklaert werden wie es weiter geht, renew/anderen
+wochenplan/manuelle erfassung."*
+
+`[cmd]` **Heute steht dort *,,aktiv · abgelaufen"* und sonst nichts.**
+
+`[read]` **Drei Wege, und der Nutzer waehlt:** denselben Plan neu
+starten, einen anderen aktivieren, oder ohne Plan weitermachen.
+
+`[cmd]` **`meal_plans.status` kennt die Zustaende** — es fehlt der
+Weg dorthin.
+
+### C-373 — und der Lebenszyklus
+
+`[cmd]` **Die Zykluswahl wird gespeichert und nie ausgefuehrt.**
+
+`[read]` **Mit C-377 klaert sich das:** **die Meldung beim Ablauf ist
+die Ausfuehrung.** `[read]` **`rollover` heisst dann: der Vorschlag
+lautet *,,denselben Plan neu starten"*.** **Kein Zeitplaner noetig.**
+
+### Was nicht zu tun ist
+
+**Keine Editiersperre fuer nicht geloggte Positionen.**
+**Kein Weiterverkauf bauen** — nur das Flag.
+**Nichts auf `dev@lumeos.app`.**
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server gehoert dir
+
+`[cmd]` **`server.py start` bevorzugen.**
+
+### Nachweis
+
+    nicht geloggte Position   aenderbar am aktiven Plan, belegt
+    geloggte Position         409, belegt
+    Zukunftstag               aenderbar, belegt
+    darf_weiterverkaufen      Spalte da, Anzeige sagt es
+    abgelaufener Plan         Meldung mit drei Wegen, jeder gegangen
+    rollover                  der Vorschlag heisst "neu starten"
+    dev                       unveraendert
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

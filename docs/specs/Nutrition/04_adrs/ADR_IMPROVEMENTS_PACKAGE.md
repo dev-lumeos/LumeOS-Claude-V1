@@ -1,6 +1,22 @@
 # ADR: Verbesserungen Nutrition — Paket April 2026
 
 **Status:** Archiviert (Pass-1-Inputs)
+
+
+> **Punkt 17 teilweise abgeloest, Stand 2026-08-31.**
+>
+> **E-42** entscheidet: die Sperre gilt je Position, nicht je Plan.
+> Eine Position ist eingefroren, sobald sie ein Log mit
+> `status <> 'pending'` traegt — nicht weil der Plan aktiv ist.
+>
+> **Begruendung (Tom):** wer seinen Plan nicht aendern darf, traegt
+> beim Loggen etwas Falsches ein. Eine Sperre, die sich umgehen
+> laesst, erzeugt unehrliche Daten.
+>
+> **Was hier weiter gilt:** die Sorge um die Compliance-History, und
+> alle uebrigen Punkte des Pakets.
+>
+> Vermerkt in E-42.
 **Hinweis:** Inhalte teilweise in V1 übernommen, teilweise Phase 2.
 Konkret: Punkt #19 (Barcode für Custom Foods) ist Phase 2 — siehe `ADR_MEALCAM_V1.md`.
 

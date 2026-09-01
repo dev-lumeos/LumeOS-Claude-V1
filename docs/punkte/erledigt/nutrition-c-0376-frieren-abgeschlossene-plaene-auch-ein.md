@@ -6,7 +6,9 @@ schwere: mittel
 angelegt: 2026-08-31
 braucht: []
 kind_von: G-306
-entscheidung: E-41
+entscheidung: E-42
+erledigt: 2026-08-31
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen: null
@@ -48,3 +50,22 @@ richtig, denn es gibt nichts zu verfaelschen.**
 
 `[read]` **Der ADR hat die einfachere Regel gewaehlt.** **Die
 genauere ist die am Log.** **Zu entscheiden, welche gilt.**
+
+## Abnahme
+
+**2026-08-31, durch E-42 beantwortet.**
+
+`[read]` **Die Frage war: frieren `completed`/`archived` auch ein?**
+
+`[read]` **E-42 macht sie gegenstandslos:** **die Sperre haengt an der
+einzelnen Position, nicht am Status des Plans.**
+
+`[cmd]` **Eine Position mit Log (`status <> 'pending'`) ist
+eingefroren, eine ohne nicht** — **unabhaengig davon, ob der Plan
+aktiv, abgeschlossen oder archiviert ist.**
+
+`[read]` **Mein Vorschlag *die Sperre ans Log haengen* war richtig,
+die Begruendung aber zu eng:** ich hatte den Planzustand gemeint,
+**Tom meint die Position.**
+
+**Geschlossen.**

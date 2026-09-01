@@ -6,11 +6,9 @@ schwere: mittel
 angelegt: 2026-08-31
 braucht: []
 kind_von: null
-entscheidung: E-41
+entscheidung: E-42
 agent: claudecode
 beauftragt: 2026-08-31
-erledigt: 2026-08-31
-commit: 18a4e31b
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -94,3 +92,19 @@ Feldwert** — die Anzeige bleibt, wie sie ist.
 
 **2026-08-31, mit C-372 abgenommen:** vorbereitet: die Auswertung steht, die Spalte fehlt und kommt von
 Codex. Der Kopierknopf erscheint nur bei der Aktiv-Sperre.
+
+## Berichtigt, 2026-08-31 — es ist ein Weiterverkaufsschutz
+
+Tom: *,,wenn ich einen plan kaufe dann ist das mein plan, aber ein
+Coach der einen mealplan auf marketplace verkauft, dass der nicht
+wiederverkaufbar wird."*
+
+`[read]` **`darf_bearbeiten` war das falsche Flag.** **Gemeint ist
+`darf_weiterverkaufen`.**
+
+`[read]` **Der Kaeufer darf seinen Plan aendern** — **E-42: eine
+Editiersperre erzeugt unehrliche Daten.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-306 am 2026-08-31.** Bericht dort.
