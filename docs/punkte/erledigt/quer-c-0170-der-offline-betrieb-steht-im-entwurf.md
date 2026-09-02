@@ -7,7 +7,9 @@ angelegt: 2026-08-20
 braucht: []
 kind_von: null
 kinder: []
-entscheidung: null
+entscheidung: E-60
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   tabellen: []
   dateien: []
@@ -45,3 +47,27 @@ eigener formaler Entscheidung.**
 wurde, wird beim naechsten Auftrag fuer geplant gehalten.**
 
 **Die Entscheidung gehoert Tom.**
+
+## Abnahme
+
+**2026-09-02, durch E-60 beantwortet.**
+
+Tom: *,,das eine ist diese webapp oder coach plattform oder
+marketplace und das andere ist der zukuenftige buddy als app."*
+
+    apps/web    online, ohne Vorbehalt
+    apps/coach  online
+    Marktplatz  online (E-37)
+    Buddy       spaeter, als eigene App -- dort gehoert es hin
+
+`[read]` **Eine Webapp offline zu machen ist Arbeit fuer nichts** —
+**wer am Rechner sitzt, hat Netz.**
+
+`[read]` **Und das ist keine Zurueckstellung, sondern eine
+Entscheidung:** **`apps/web` bekommt keinen Offline-Betrieb, auch
+spaeter nicht.**
+
+`[read]` **Fuer Buddy gilt E-50** — **und `meals.entry_source` sowie
+`entry_date` getrennt von `created_at` stehen bereits.**
+
+**Geschlossen.**

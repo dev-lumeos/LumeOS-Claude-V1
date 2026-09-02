@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 214 |
+| `todos` | 213 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 247 |
+| `erledigt` | 248 |
 | **gesamt** | **466** |
 
 ## medical — 43
@@ -480,7 +480,7 @@
 | `C-110` | befund | mittel | [Cost-Rest und Compliance-Notizen](todos/quer-c-0110-cost-rest-und-compliance-notizen.md) | offen | — | — |
 | `C-155` | befund | mittel | [Zwei Befunde in `@supabase/ssr` 0.1.0](todos/quer-c-0155-zwei-befunde-in-supabase-ssr-0-1-0.md) | offen | — | — |
 | `C-159` | feature | mittel | [Sieben Regelpfade zeigen auf Schemata, die es nicht gibt](todos/quer-c-0159-sieben-regelpfade-zeigen-auf-schemata-die-es-nicht-gibt.md) | offen | — | — |
-| `C-170` | befund | mittel | [Der Offline-Betrieb steht im Entwurf](todos/quer-c-0170-der-offline-betrieb-steht-im-entwurf.md) | offen | — | — |
+| `C-170` | befund | mittel | [Der Offline-Betrieb steht im Entwurf](erledigt/quer-c-0170-der-offline-betrieb-steht-im-entwurf.md) | erledigt | — | — |
 | `C-187` | befund | mittel | [Fuenf kleine Datenluecken — als ein Auftrag](todos/quer-c-0187-fuenf-kleine-datenluecken-als-ein-auftrag.md) | offen | — | — |
 | `C-201` | befund | mittel | [Der Populations-Atlas hat kein Schema](todos/quer-c-0201-der-populations-atlas-hat-kein-schema.md) | offen | — | — |
 | `C-205` | befund | mittel | [`research_hold_registry` — 305 Saetze](erledigt/quer-c-0205-research-hold-registry-305-saetze.md) | erledigt | — | — |
