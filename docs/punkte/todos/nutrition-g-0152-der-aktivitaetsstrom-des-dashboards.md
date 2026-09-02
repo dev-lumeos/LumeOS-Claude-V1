@@ -1,13 +1,13 @@
 ---
 nr: G-152
-typ: entscheidung
+typ: feature
 modul: nutrition
 schwere: mittel
 angelegt: 2026-08-20
 braucht: []
 kind_von: G-100
 kinder: []
-entscheidung: null
+entscheidung: E-52
 beruehrt:
   tabellen: []
   dateien: []
@@ -51,3 +51,26 @@ keine gemeinsame Ereignissicht.**
 
 `[read]` **Das ist Codex' Bereich** — eine Sicht ueber mehrere
 Module braucht eine Funktion, keine Oberflaeche.
+
+## Entschieden: E-52, 2026-09-02
+
+Tom: *,,wieso soll ich 6 straenge abfragen wenn wir die sowieso als
+daten immer brauchen? also zusammenfassen als eine sicht in der db
+und wenn was dazu kommt erweitern."*
+
+**Eine Sicht in der Datenbank, keine Schleife im Browser.**
+
+`[read]` **Und die Entscheidung reicht ueber diesen Punkt hinaus:**
+**wo mehrere Abfragen dieselbe Frage beantworten, gehoert eine Sicht
+hin.**
+
+`[cmd]` **C-353 hat gemessen, was der andere Weg kostet:** TTFB von
+410 auf 4.183 ms — **die Zeit lag im Warten auf mehrere Abfragen,
+nicht in der Uebertragung.**
+
+`[read]` **Der zweite Grund ist Wahrheit, nicht Tempo:** **wer im
+Browser mischt, hat die Sortierregel in der Anzeige** — **an einer
+Stelle, die kein Waechter erreicht.**
+
+`[cmd]` **Der Ereignisstrom ist die erste modulschneidende Sicht** —
+wie *Wasser* bei den Naehrwerten (E-48).

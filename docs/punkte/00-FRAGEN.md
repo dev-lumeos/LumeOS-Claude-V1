@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **19 Punkte tragen `typ: entscheidung`
+`[cmd]` **18 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -46,26 +46,6 @@ nicht in diese Uebersicht.
   `[cmd]` **F-06 hat gemessen, dass die Freigabe ueberhaupt erst seit
   C-162 wirkt** — 22 `coach_read`-Policies ueber sechs Module. **Eine
   Feinstufe waere sechs mal soviel.**
-
-## G-152 — Der Aktivitaetsstrom des Dashboards
-
-**Modul:** nutrition · **angelegt:** 2026-08-20 · **Datei:** `todos/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md`
-
-## Befund
-
-(neu 2026-08-20,
-  aus G-100).
-
-  `[cmd]` **Er waere baubar** — anders als der Tagesverlauf braucht er
-  keine Dauer, nur Zeitpunkt, Modul und einen Satz. Die Zeitpunkte
-  liegen vollstaendig vor: `meals.meal_time` **725/725**,
-  `intake_logs.intake_time` **360/360**,
-  `workout_sessions.started_time` **30/30**.
-
-  `[read]` **Was fehlt, ist eine Entscheidung, keine Spalte:** Es gibt
-  keine gemeinsame Ereignistabelle. Sechs Abfragen je Seitenaufruf,
-  nach Zeit gemischt — **oder** eine Sicht in der Datenbank, die das
-  einmal tut. Das Zweite waere die Loesung, das Erste die Abkuerzung.
 
 ## G-229 — Admin-Override-Flow für Tag-Korrekturen nicht belegt
 
