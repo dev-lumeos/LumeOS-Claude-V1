@@ -38,3 +38,8 @@ Liste** — **und muss selbst erkennen, dass das etwas anderes ist.**
 
 `[cmd]` **C-35 nannte es *,,je ein echter Suchfehler weniger, und
 ohne Kuration zu haben"*** — **die Trennung waere ableitbar.**
+
+## Auftrag
+
+**Vorbereitet mit C-394 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

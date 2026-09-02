@@ -40,3 +40,8 @@ Ableitung?
 
 `[read]` **Solange die Pruefung rot bleibt, verdeckt sie neue
 Fehler** — **dieselbe Klasse wie ein Gate, das immer rot ist.**
+
+## Auftrag
+
+**Vorbereitet mit C-394 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

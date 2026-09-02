@@ -42,3 +42,8 @@ auf 0* — ist weder nachweisbar noch erreicht.**
 403 ist das hoechste `sort_weight` nicht eindeutig.**
 
 `[read]` **Ein vierter Fall fehlt** — **oder eine Kuration.**
+
+## Auftrag
+
+**Vorbereitet mit C-394 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
