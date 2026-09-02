@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **24 Punkte tragen `typ: entscheidung`
+`[cmd]` **23 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -207,51 +207,6 @@ aus derselben Datei.**
 `[cmd]` **Zu messen gegen `apps/admin`** — seit A-36 ist belegt,
 dass Admin als eigene App gebaut ist, mit 314-zeiliger
 Kurationsseite.
-
-## G-72 — Acht Spalten ohne Wirkung und ohne Kachel
-
-**Modul:** nutrition · **angelegt:** 2026-08-19 · **Datei:** `todos/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md`
-
-## Befund
-
-(neu
-  2026-08-19). **Entscheidung fuer Tom.** Rest aus G-65.
-
-  `[cmd]` **`cooking_skill`, `prep_time_max_min`, `budget_level`,
-  `meals_per_day`, `snacks_per_day`, `meal_prep_ok`,
-  `preferred_cuisines`, `planner_notes`** — gespeichert, ohne Wirkung,
-  **und das Mockup hat fuer keine eine Stelle.**
-
-  `[read]` **Der Agent hat richtig gemeldet statt gebaut:** *„Der
-  Auftrag sagte „Zeigen ja" — aber das Mockup hat fuer keine eine
-  Stelle, und eine zu erfinden waere eine doppelte Erfindung."*
-
-  `[cmd]` **Sie stammen aus Schritt 3 des Vorgaenger-Assistenten** —
-  Kochen & Alltag. **Und sie wirken erst mit Rezepten und
-  Essensplaenen**, die es nicht gibt.
-
-  **Zu entscheiden:** Kachel dazu, oder liegenlassen bis Meal plans?
-
-## Neu bewertet, 2026-08-31
-
-`[read]` **Der Punkt fragte: Kachel dazu, oder liegenlassen bis Meal
-plans?**
-
-`[cmd]` **Meal plans, Planner und Rezepte sind seit dem 31.08.
-gebaut** (E-39, E-40, G-289, C-372).
-
-`[read]` **Damit ist die Bedingung eingetreten** — **die acht Spalten
-koennen jetzt wirken oder es zeigt sich, dass sie es nicht koennen.**
-
-`[cmd]` **G-99 hat drei davon als wirkungslos gemessen:**
-`budget_level`, `meal_prep_ok`, `planner_notes` — **weil `recipes`
-kein Preis- und kein Vorkochfeld fuehrt.**
-
-`[read]` **Das ist heute noch so** — nachgemessen: `recipes` traegt
-`cooking_skill` und `prep_time_min`, sonst nichts davon.
-
-`[read]` **Also bleibt die Frage, aber schaerfer:** **drei Spalten
-brauchen Gegenstuecke an `recipes`, oder sie gehoeren weg.**
 
 ## C-241 — Das Nachweiskonto traegt weder Essensplaene noch Medikamente
 

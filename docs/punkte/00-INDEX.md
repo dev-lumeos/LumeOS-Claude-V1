@@ -138,7 +138,7 @@
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
 | `G-70` | feature | mittel | [Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab](erledigt/nutrition-g-0070-sortierbare-spalten-und-herkunfts-filter-im-food-db-tab.md) | erledigt | — | C-338, G-251 |
-| `G-72` | entscheidung | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](todos/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | offen | — | — |
+| `G-72` | feature | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](todos/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | offen | — | — |
 | `G-75` | befund | mittel | [Die alte Oberflaeche nennt den BLS ebenfalls](todos/nutrition-g-0075-die-alte-oberflaeche-nennt-den-bls-ebenfalls.md) | offen | — | — |
 | `G-93` | befund | mittel | [Der Anzeigename fehlt im laufenden Erfassungsdialog](erledigt/nutrition-g-0093-der-anzeigename-fehlt-im-laufenden-erfassungsdialog.md) | erledigt | — | — |
 | `G-98` | befund | mittel | [Meal plans braucht einen Zustand und eine Herkunft](erledigt/nutrition-g-0098-meal-plans-braucht-einen-zustand-und-eine-herkunft.md) | erledigt | — | — |

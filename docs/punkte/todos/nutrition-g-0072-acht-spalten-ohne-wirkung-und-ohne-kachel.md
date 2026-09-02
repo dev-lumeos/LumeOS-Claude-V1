@@ -1,13 +1,13 @@
 ---
 nr: G-72
-typ: entscheidung
+typ: feature
 modul: nutrition
 schwere: mittel
 angelegt: 2026-08-19
 braucht: []
 kind_von: G-65
 kinder: []
-entscheidung: null
+entscheidung: E-47
 beruehrt:
   tabellen: []
   dateien: []
@@ -56,3 +56,23 @@ kein Preis- und kein Vorkochfeld fuehrt.**
 
 `[read]` **Also bleibt die Frage, aber schaerfer:** **drei Spalten
 brauchen Gegenstuecke an `recipes`, oder sie gehoeren weg.**
+
+## Entschieden: E-47, 2026-09-02
+
+Tom hat die acht Spalten einzeln zugeordnet:
+
+    cooking_skill        vorsehen, auskommentiert -- spaeteres
+    prep_time_max_min    Ausbaumodul mit Rezepten und Kochen
+    budget_level
+
+    meals_per_day        in Nutrition Diary: wie viele Mahlzeiten
+    snacks_per_day       dargestellt werden. Gehoeren in Preferences
+    meal_prep_ok         UND in die Nutzereinstellungen
+
+    preferred_cuisines   weggelassen, allfaellig spaetere Ausbaustufe
+
+    planner_notes        Freitext, den der Nutzer frei schreibt --
+                         wird Buddy-Material
+
+`[read]` **Damit ist der Punkt kein Entscheid mehr, sondern drei
+Bauauftraege verschiedener Reife.**

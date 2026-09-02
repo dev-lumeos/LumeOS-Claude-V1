@@ -7,7 +7,7 @@ angelegt: 2026-08-20
 braucht: []
 kind_von: G-97
 kinder: []
-entscheidung: null
+entscheidung: E-47
 beruehrt:
   tabellen: ["nutrition.recipes"]
   dateien: []
@@ -57,3 +57,15 @@ Rezepte seit G-289 gebaut sind.
 Schemaentscheidung:** **`budget_level`, `meal_prep_ok` und
 `planner_notes` brauchen Gegenstuecke an `recipes` — oder sie
 gehoeren weg.**
+
+## Entschieden: E-47, 2026-09-02
+
+`[cmd]` **`budget_level`, `meal_prep_ok` und `planner_notes` bleiben
+nicht wirkungslos** — **sie bekommen je einen anderen Weg:**
+
+    budget_level     auskommentiert, mit dem Kochmodul
+    meal_prep_ok     wirkt im Tagebuch (Mahlzeitenzahl)
+    planner_notes    Freitext, wird Buddy-Material
+
+`[read]` **Die Gegenstuecke an `recipes` braucht nur `budget_level`**
+— und die kommen mit dem Ausbaumodul.
