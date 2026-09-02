@@ -9,9 +9,11 @@ kind_von: G-232
 entscheidung: E-58
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 0c70caec
 beruehrt:
   dateien:
-    - apps/web/src/app/v2/nutrition/kopfknoepfe.tsx
+    - apps/web/src/app/v2/nutrition/modale.tsx
 zahlen:
   gemessen: 2026-09-02
 ---
@@ -358,4 +360,46 @@ ungetrackten Migrationen (C-327a, C-385, Codex) mit INSERT/DELETE.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator.**
+
+### Meine Fundstelle war wieder falsch
+
+`[read]` **Mein Auftrag nannte `kopfknoepfe.tsx`.** `[cmd]` **Es war
+`modale.tsx`.**
+
+`[read]` **Zum dritten Mal an einem Tag habe ich eine Datei
+genannt, ohne sie zu oeffnen** — nach `mikro-lage.ts` (G-136) und
+`RecipeDetail` (G-311).
+
+### Und die Liste war schlimmer als gemeldet
+
+`[cmd]` **Die `<option>` trug gar kein `value`** — **sie haette den
+Label statt `preworkout` abgeschickt.**
+
+`[read]` **Der Punkt sagte *ungueltiger Wert*.** `[read]` **Es war
+kein Wert.** `[cmd]` **Der `meal_type`-CHECK haette *Vor dem
+Training* bekommen.**
+
+### Der Zaehlwaechter hatte sie uebersehen
+
+`[cmd]` **G-335 fuehrte einen Waechter fuer die Namensquellen ein**
+— **und `modale.tsx` fiel durch.**
+
+`[cmd]` **Er ist erweitert, 6 von 6 Sabotagen bestanden.**
+
+`[read]` **Ein Waechter, der eine Quelle uebersieht, zaehlt falsch
+und meldet gruen** — **dieselbe Klasse wie das Wort statt der
+Wirkung.**
+
+### GO-23 gilt, mit anderen Zahlen
+
+`[cmd]` **Die vier Zahlen 59/20/50/9 sind mit keiner von drei
+Abgrenzungen reproduzierbar.**
+
+`[cmd]` **Heute: 7 Codes unter 50 Prozent.**
+
+`[read]` **Der Punkt gilt, die Zahlen sind alt** — **im Punkt
+berichtigt.**
+
+**Abgenommen.**
+

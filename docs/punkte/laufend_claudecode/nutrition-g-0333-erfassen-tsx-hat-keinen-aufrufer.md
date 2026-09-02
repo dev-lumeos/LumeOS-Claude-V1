@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-331
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/erfassen.tsx
@@ -44,3 +46,8 @@ bekommt** — dann gehoert sie auf den Hook.
 `[read]` **A-59 sagt: geloescht, nicht auskommentiert.** `[read]`
 **Aber 477 Zeilen zu loeschen heisst, eine Arbeit wegzuwerfen, die
 jemand gemacht hat** — **deshalb eine Entscheidung, kein Auftrag.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-341 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

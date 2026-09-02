@@ -8,8 +8,6 @@ braucht: []
 kind_von: G-122
 kinder: []
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -36,3 +34,14 @@ zahlen: null
 
 **Mitbeauftragt mit G-339 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: gilt, mit anderen Zahlen
+
+`[cmd]` **Nicht gebaut.**
+
+`[cmd]` **Die vier Zahlen 59/20/50/9 sind mit keiner von drei
+Abgrenzungen reproduzierbar.**
+
+`[cmd]` **Heute: 7 Codes unter 50 Prozent.**
+
+`[read]` **Der Befund gilt, die Zahlen im Punkt waren alt.**

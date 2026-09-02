@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: [G-339]
 kind_von: G-232
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/kopfknoepfe.tsx
@@ -36,3 +38,8 @@ Mahlzeiten-Modal.**
 Lebensmittel.**
 
 `[read]` **Das gehoert entschieden, bevor der Schreibweg entsteht.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-341 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

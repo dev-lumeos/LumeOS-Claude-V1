@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 212 |
+| `todos` | 211 |
 | `laufend_codex` | 4 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 254 |
-| **gesamt** | **472** |
+| `laufend_claudecode` | 3 |
+| `erledigt` | 256 |
+| **gesamt** | **474** |
 
 ## medical — 43
 
@@ -59,9 +59,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 205
+## nutrition — 207
 
-### beauftragbar — 203
+### beauftragbar — 206
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -149,7 +149,7 @@
 | `C-397` | befund | hoch | [die gelieferten Plaene haben keine Slots](erledigt/nutrition-c-0397-die-gelieferten-plaene-haben-keine-slots.md) | erledigt | — | C-400 |
 | `C-398` | befund | hoch | [`CAROTPAXB` fehlt an 1.983 Lebensmitteln](laufend_codex/nutrition-c-0398-carotpaxb-fehlt-an-1983-lebensmitteln.md) | vorbereitet (codex) | — | — |
 | `C-399` | befund | hoch | [ein Schnitt ohne einen einzigen Wert](erledigt/nutrition-c-0399-ein-schnitt-ohne-einen-einzigen-wert.md) | erledigt | — | G-341 |
-| `C-400` | befund | mittel | [eine Woche zuviel im Buddy-Plan](laufend_codex/nutrition-c-0400-eine-woche-zuviel-im-buddy-plan.md) | laeuft (codex) | — | — |
+| `C-400` | befund | mittel | [- eine Woche zuviel im Buddy-Plan](laufend_codex/nutrition-c-0400-eine-woche-zuviel-im-buddy-plan.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -234,6 +234,7 @@
 | `G-299` | feature | hoch | [der Planner zeigt eine fremde Woche](erledigt/nutrition-g-0299-der-planner-zeigt-eine-fremde-woche.md) | erledigt | — | — |
 | `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](erledigt/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | erledigt | — | G-320 |
 | `G-301` | befund | hoch | [der Meal-plans-Reiter folgt keinem Flow](erledigt/nutrition-g-0301-der-meal-plans-reiter-folgt-keinem-flow.md) | erledigt | — | C-370 |
+| `G-302` | befund | niedrig | [die Zielzeile bricht um](erledigt/nutrition-g-0302-die-zielzeile-bricht-um.md) | erledigt | — | — |
 | `G-304` | messung | hoch | [was ein Nutzer in Plaenen und Rezepten tun kann](erledigt/nutrition-g-0304-was-ein-nutzer-in-plaenen-und-rezepten-tun-kann.md) | erledigt | — | C-372, C-373, G-305, G-309 |
 | `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](erledigt/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | erledigt | — | — |
 | `G-306` | befund | hoch | [der Planeditor verletzt die Immutabilitaet](erledigt/nutrition-g-0306-der-planeditor-verletzt-die-immutabilitaet.md) | erledigt | — | C-376 |
@@ -260,21 +261,22 @@
 | `G-330` | feature | mittel | [die Kopfzeile zeigt zwei von vier Werten](erledigt/nutrition-g-0330-die-kopfzeile-zeigt-zwei-von-vier-werten.md) | erledigt | — | — |
 | `G-331` | feature | hoch | [vier Suchen auf den Hook umstellen](erledigt/nutrition-g-0331-vier-suchen-auf-den-hook-umstellen.md) | erledigt | — | G-333 |
 | `G-332` | feature | hoch | [die Mahlzeiten benennen und terminieren](erledigt/nutrition-g-0332-die-mahlzeiten-benennen-und-terminieren.md) | erledigt | — | C-396, G-335 |
-| `G-333` | befund | niedrig | [`erfassen.tsx` hat keinen Aufrufer](todos/nutrition-g-0333-erfassen-tsx-hat-keinen-aufrufer.md) | offen | — | — |
+| `G-333` | befund | niedrig | [`erfassen.tsx` hat keinen Aufrufer](laufend_claudecode/nutrition-g-0333-erfassen-tsx-hat-keinen-aufrufer.md) | laeuft (claudecode) | — | — |
 | `G-335` | feature | hoch | [acht Stellen uebersetzen `meal_type` selbst](erledigt/nutrition-g-0335-acht-stellen-uebersetzen-meal-type-selbst.md) | erledigt | — | G-336 |
 | `G-336` | befund | hoch | [das Raster liest `meal_plan_slots` nicht](erledigt/nutrition-g-0336-das-raster-liest-meal-plan-slots-nicht.md) | erledigt | — | C-397, G-338 |
 | `G-337` | befund | mittel | [`strong_avoid` hat keinen Schreibweg](todos/nutrition-g-0337-strong-avoid-hat-keinen-schreibweg.md) | offen | — | — |
 | `G-338` | entscheidung | mittel | [eine freie Mahlzeit hat keinen Namen](todos/nutrition-g-0338-eine-freie-mahlzeit-hat-keinen-namen.md) | offen | — | — |
-| `G-339` | befund | mittel | [Quick-Add liest die Namen nicht](laufend_claudecode/nutrition-g-0339-quick-add-liest-die-namen-nicht.md) | laeuft (claudecode) | — | — |
-| `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](todos/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | offen | — | — |
-| `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](laufend_claudecode/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | laeuft (claudecode) | — | — |
+| `G-339` | befund | mittel | [Quick-Add liest die Namen nicht](erledigt/nutrition-g-0339-quick-add-liest-die-namen-nicht.md) | erledigt | — | G-342 |
+| `G-340` | befund | mittel | [Quick-Add hat keinen Schreibweg](laufend_claudecode/nutrition-g-0340-quick-add-hat-keinen-schreibweg.md) | laeuft (claudecode) | — | — |
+| `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](laufend_claudecode/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | laeuft (claudecode) | — | — |
+| `G-342` | befund | niedrig | [`nutsettings` hat keinen Aufrufer](todos/nutrition-g-0342-nutsettings-hat-keinen-aufrufer.md) | offen | — | — |
+| `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | G-328 | G-328 |
-| `G-340` | befund | mittel | [Quick-Add hat keinen Schreibweg](todos/nutrition-g-0340-quick-add-hat-keinen-schreibweg.md) | offen | G-339 | — |
 
 ## supplements — 60
 
