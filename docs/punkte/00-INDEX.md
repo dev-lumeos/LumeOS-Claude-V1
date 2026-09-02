@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 218 |
+| `todos` | 220 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 227 |
-| **gesamt** | **451** |
+| **gesamt** | **453** |
 
 ## medical — 43
 
@@ -59,9 +59,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 189
+## nutrition — 191
 
-### beauftragbar — 188
+### beauftragbar — 189
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -143,11 +143,12 @@
 | `C-389` | befund | mittel | [Saft und Nektar liegen bei der Frucht](todos/nutrition-c-0389-saft-und-nektar-liegen-bei-der-frucht.md) | offen | — | — |
 | `C-390` | feature | mittel | [`tag_definitions` hat keine Untergruppe](laufend_codex/nutrition-c-0390-tag-definitions-hat-keine-untergruppe.md) | laeuft (codex) | — | — |
 | `C-391` | feature | hoch | [`food_search` hat keinen Treffergrund](laufend_codex/nutrition-c-0391-food-search-hat-keinen-treffergrund.md) | laeuft (codex) | — | — |
+| `C-392` | feature | hoch | [die Tabelle `meal_slots`](todos/nutrition-c-0392-die-tabelle-meal-slots.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
 | `G-70` | feature | mittel | [Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab](erledigt/nutrition-g-0070-sortierbare-spalten-und-herkunfts-filter-im-food-db-tab.md) | erledigt | — | C-338, G-251 |
-| `G-72` | feature | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](erledigt/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | erledigt | — | — |
+| `G-72` | feature | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](erledigt/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | erledigt | — | C-392, G-332 |
 | `G-75` | befund | mittel | [Die alte Oberflaeche nennt den BLS ebenfalls](todos/nutrition-g-0075-die-alte-oberflaeche-nennt-den-bls-ebenfalls.md) | offen | — | — |
 | `G-93` | befund | mittel | [Der Anzeigename fehlt im laufenden Erfassungsdialog](erledigt/nutrition-g-0093-der-anzeigename-fehlt-im-laufenden-erfassungsdialog.md) | erledigt | — | — |
 | `G-98` | befund | mittel | [Meal plans braucht einen Zustand und eine Herkunft](erledigt/nutrition-g-0098-meal-plans-braucht-einen-zustand-und-eine-herkunft.md) | erledigt | — | — |
@@ -254,11 +255,12 @@
 | `G-331` | feature | hoch | [vier Suchen auf den Hook umstellen](laufend_claudecode/nutrition-g-0331-vier-suchen-auf-den-hook-umstellen.md) | vorbereitet (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-### wartet auf Blocker — 1
+### wartet auf Blocker — 2
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | G-328 | G-328 |
+| `G-332` | feature | hoch | [die Mahlzeiten benennen und terminieren](todos/nutrition-g-0332-die-mahlzeiten-benennen-und-terminieren.md) | offen | C-392 | — |
 
 ## supplements — 59
 
