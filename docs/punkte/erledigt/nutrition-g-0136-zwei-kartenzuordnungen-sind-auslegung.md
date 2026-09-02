@@ -13,8 +13,8 @@ beauftragt: 2026-09-02
 erledigt: 2026-09-02
 commit: 8ecaa528
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien:
+    - apps/web/src/lib/nutrition/naehrstoff-anzeige.ts
 zahlen: null
 ---
 
