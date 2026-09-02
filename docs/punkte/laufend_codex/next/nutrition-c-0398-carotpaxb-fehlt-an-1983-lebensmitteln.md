@@ -57,3 +57,8 @@ Lebensmittelquelle).
 `[read]` **Damit ist es moeglicherweise gar nicht loesbar** — **und
 dann ist die Antwort, den Score zurueckzustellen, nicht ihn zu
 reparieren.**
+
+## Auftrag
+
+**Vorbereitet mit C-399 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

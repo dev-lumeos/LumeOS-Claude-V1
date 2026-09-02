@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 214 |
-| `laufend_codex` | 2 |
+| `laufend_codex` | 4 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 251 |
-| **gesamt** | **469** |
+| **gesamt** | **471** |
 
 ## medical — 43
 
@@ -59,9 +59,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 202
+## nutrition — 204
 
-### beauftragbar — 200
+### beauftragbar — 201
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -147,7 +147,8 @@
 | `C-394` | befund | mittel | [`test-user` hat keine Slots](erledigt/nutrition-c-0394-test-user-hat-keine-slots.md) | erledigt | — | G-334 |
 | `C-396` | feature | hoch | [`meal_plans` traegt keine Struktur](erledigt/nutrition-c-0396-meal-plans-traegt-keine-struktur.md) | erledigt | — | — |
 | `C-397` | befund | hoch | [die gelieferten Plaene haben keine Slots](laufend_codex/nutrition-c-0397-die-gelieferten-plaene-haben-keine-slots.md) | laeuft (codex) | — | — |
-| `C-398` | befund | hoch | [`CAROTPAXB` fehlt an 1.983 Lebensmitteln](todos/nutrition-c-0398-carotpaxb-fehlt-an-1983-lebensmitteln.md) | offen | — | — |
+| `C-398` | befund | hoch | [`CAROTPAXB` fehlt an 1.983 Lebensmitteln](laufend_codex/nutrition-c-0398-carotpaxb-fehlt-an-1983-lebensmitteln.md) | vorbereitet (codex) | — | — |
+| `C-399` | befund | hoch | [ein Schnitt ohne einen einzigen Wert](laufend_codex/nutrition-c-0399-ein-schnitt-ohne-einen-einzigen-wert.md) | vorbereitet (codex) | — | G-341 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -266,12 +267,13 @@
 | `G-339` | befund | mittel | [Quick-Add liest die Namen nicht](laufend_claudecode/nutrition-g-0339-quick-add-liest-die-namen-nicht.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](laufend_claudecode/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | laeuft (claudecode) | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 3
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | G-328 | G-328 |
 | `G-340` | befund | mittel | [Quick-Add hat keinen Schreibweg](todos/nutrition-g-0340-quick-add-hat-keinen-schreibweg.md) | offen | G-339 | — |
+| `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](todos/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | offen | C-399 | — |
 
 ## supplements — 60
 

@@ -130,7 +130,45 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### C-397 und C-389 — umgesetzt und auf `dev@lumeos.app` nachgewiesen
+
+`[cmd]` Die drei gelieferten Plaene tragen jetzt je vier eigene Slots.
+`Cut 4-Meal 2200` (`coach_created`) hat vier Hauptmahlzeiten mit
+`Nachmittagsmahlzeit`; `Lean bulk 3100` (`marketplace`) hat eine
+`Pre-Workout-Mahlzeit`; `Buddy auto-plan` (`buddy`) hat eine
+`Zwischenmahlzeit`. Alle drei haben `Fruehstueck` 07:30,
+`Mittagessen` 12:30 und `Abendessen` 19:30 als weitere Plan-Slots.
+Der gezielte Upsert schrieb 12 Zeilen; es wurde nichts geloescht.
+
+`[cmd]` `Aufbau-Wochenplan` blieb unveraendert bei 0 Plan-Slots und
+ist weiter der aktive Selbstplan; `test` blieb bei seinen fuenf
+Plan-Slots. Der aktive Aufbauplan hat 28 Plantage und sechs verschiedene
+`execution_date`-Tage im Protokoll. Sein Raster faellt damit bewusst
+weiter auf Nutzer-Slots zurueck; er ist kein vierter gelieferter Plan.
+
+`[read]` Die Wiederholbarkeit liegt in beiden C-380-Seedwegen: der
+Dev-Seed schreibt die 12 Slots idempotent mit `ON CONFLICT`, und
+`testdaten-einspielen.ts` erzeugt fuer dieselben drei Plaene Herkunft
+und Slots. Keine Datenlogik wurde in `migrations/` gelegt.
+
+`[cmd]` C-389 ist auf genau vier BLS-Zeilen begrenzt: `F201600`,
+`F603600`, `F603700` und `F310600` stehen jetzt auf
+`minimally_processed`; die drei rohen Gegenstuecke bleiben `raw`.
+Die drei Smoothies `F032600`, `F033600` und `F034600` bleiben ebenfalls
+`raw`. Die registrierte Ableitung 027 kennt nur diese vier Codes, keine
+Regel fuer die 53 Obst-600-Zeilen.
+
+`[cmd]` Bei der Suche nach `Aprikose` bleibt `F201600` auf Rang 6 mit
+`match_reason = {kind: name_prefix}`. Ein Filter, der
+`minimally_processed` ausschliesst, entfernt genau diesen Safttreffer;
+der Treffergrund belegt damit weiter den Namensweg, nicht einen Alias.
+
+`[cmd]` Gruen: `nutrition-c397-delivered-plan-slots`,
+`nutrition-c389-juice-processing`, C-391, C-396 und der
+C-395-Datenlogik-Waechter. Der bestehende C-380-Qualitaetstest bleibt
+unabhaengig rot: `Buddy auto-plan` hat am 2026-09-02 fuenf statt vier
+Eintraege (29 statt 28 insgesamt). Diese Zeile wurde nicht geloescht
+und der Test nicht abgeschwaecht.
 
 ## Abnahme
 
