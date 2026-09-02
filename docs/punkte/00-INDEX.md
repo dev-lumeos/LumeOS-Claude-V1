@@ -145,11 +145,11 @@
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
 | `G-70` | feature | mittel | [Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab](erledigt/nutrition-g-0070-sortierbare-spalten-und-herkunfts-filter-im-food-db-tab.md) | erledigt | — | C-338, G-251 |
-| `G-72` | feature | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](laufend_claudecode/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | vorbereitet (claudecode) | — | — |
+| `G-72` | feature | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](laufend_claudecode/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | laeuft (claudecode) | — | — |
 | `G-75` | befund | mittel | [Die alte Oberflaeche nennt den BLS ebenfalls](todos/nutrition-g-0075-die-alte-oberflaeche-nennt-den-bls-ebenfalls.md) | offen | — | — |
 | `G-93` | befund | mittel | [Der Anzeigename fehlt im laufenden Erfassungsdialog](erledigt/nutrition-g-0093-der-anzeigename-fehlt-im-laufenden-erfassungsdialog.md) | erledigt | — | — |
 | `G-98` | befund | mittel | [Meal plans braucht einen Zustand und eine Herkunft](erledigt/nutrition-g-0098-meal-plans-braucht-einen-zustand-und-eine-herkunft.md) | erledigt | — | — |
-| `G-99` | befund | mittel | [Drei der acht Planner-Spalten bleiben wirkungslos](laufend_claudecode/nutrition-g-0099-drei-der-acht-planner-spalten-bleiben-wirkungslos.md) | vorbereitet (claudecode) | — | — |
+| `G-99` | befund | mittel | [Drei der acht Planner-Spalten bleiben wirkungslos](laufend_claudecode/nutrition-g-0099-drei-der-acht-planner-spalten-bleiben-wirkungslos.md) | laeuft (claudecode) | — | — |
 | `G-107` | befund | mittel | [Der Mikronaehrstoff-Trend braucht eine Referenz je Tag](erledigt/nutrition-g-0107-der-mikronaehrstoff-trend-braucht-eine-referenz-je-tag.md) | erledigt | — | G-252 |
 | `G-108` | befund | mittel | [Die Filter des Nutrients-Tabs](erledigt/nutrition-g-0108-die-filter-des-nutrients-tabs.md) | erledigt | — | G-260 |
 | `G-112` | befund | mittel | [Der Food-DB-Filter laesst nur einen Wert zu](erledigt/nutrition-g-0112-der-food-db-filter-laesst-nur-einen-wert-zu.md) | erledigt | — | — |
@@ -241,7 +241,7 @@
 | `G-319` | befund | hoch | [die Bedienung in *Alle Plaene*](erledigt/nutrition-g-0319-die-bedienung-in-alle-plaene.md) | erledigt | — | C-382 |
 | `G-320` | feature | hoch | [die Lebensmittelsuche als Modal](erledigt/nutrition-g-0320-die-lebensmittelsuche-als-modal.md) | erledigt | — | G-321, G-322, G-323 |
 | `G-321` | befund | hoch | [drei Befunde am Suchmodal](erledigt/nutrition-g-0321-drei-befunde-am-suchmodal.md) | erledigt | — | — |
-| `G-322` | feature | mittel | [die Bauteile aus `tab-foods.tsx` herausloesen](laufend_claudecode/nutrition-g-0322-die-bauteile-aus-tab-foods-herausloesen.md) | vorbereitet (claudecode) | — | — |
+| `G-322` | feature | mittel | [die Bauteile aus `tab-foods.tsx` herausloesen](laufend_claudecode/nutrition-g-0322-die-bauteile-aus-tab-foods-herausloesen.md) | laeuft (claudecode) | — | — |
 | `G-325` | feature | hoch | [Zutaten zeigen ihre Makros nicht](erledigt/nutrition-g-0325-zutaten-zeigen-ihre-makros-nicht.md) | erledigt | — | G-326 |
 | `G-326` | befund | hoch | [der Rezepteditor liest sich nicht](erledigt/nutrition-g-0326-der-rezepteditor-liest-sich-nicht.md) | erledigt | — | — |
 | `G-327` | befund | hoch | [`?plan=` galt in beiden Reitern](erledigt/nutrition-g-0327-plan-galt-in-beiden-reitern.md) | erledigt | — | — |

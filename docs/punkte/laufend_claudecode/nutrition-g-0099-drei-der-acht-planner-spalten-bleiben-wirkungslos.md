@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-97
 kinder: []
 entscheidung: E-47
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: ["nutrition.recipes"]
   dateien: []
@@ -72,5 +74,5 @@ nicht wirkungslos** — **sie bekommen je einen anderen Weg:**
 
 ## Auftrag
 
-**Vorbereitet mit G-72 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit G-72 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

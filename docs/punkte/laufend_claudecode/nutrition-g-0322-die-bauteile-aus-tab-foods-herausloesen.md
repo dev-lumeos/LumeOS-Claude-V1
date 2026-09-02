@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-320
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-foods.tsx
@@ -44,5 +46,5 @@ ist fast vollstaendig vom Reiter trennbar.
 
 ## Auftrag
 
-**Vorbereitet mit G-72 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit G-72 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

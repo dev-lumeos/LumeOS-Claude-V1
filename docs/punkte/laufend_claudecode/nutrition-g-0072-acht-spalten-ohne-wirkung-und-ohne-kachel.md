@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-65
 kinder: []
 entscheidung: E-47
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -81,7 +83,7 @@ Bauauftraege verschiedener Reife.**
 
 **Mitbeauftragt: G-99, G-322.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-02.**
+**Beauftragt am 2026-09-02.**
 
 ### Die vier Quellen
 
