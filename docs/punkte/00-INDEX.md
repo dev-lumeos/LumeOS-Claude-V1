@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 221 |
+| `todos` | 222 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 216 |
-| **gesamt** | **439** |
+| **gesamt** | **440** |
 
 ## medical — 42
 
@@ -57,7 +57,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 178
+## nutrition — 179
 
 ### beauftragbar — 176
 
@@ -133,6 +133,7 @@
 | `C-378` | befund | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](erledigt/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | erledigt | — | — |
 | `C-380` | befund | mittel | [die Seed-Plaene tragen 84 mal Hammelfilet](erledigt/nutrition-c-0380-die-seed-plaene-tragen-84-mal-hammelfilet.md) | erledigt | — | — |
 | `C-382` | feature | mittel | [wer entscheidet, ob ein Plan editierbar ist?](todos/nutrition-c-0382-wer-entscheidet-ob-ein-plan-editierbar-ist.md) | offen | — | — |
+| `C-384` | befund | hoch | [wer schreibt die 30.797 Tag-Zeilen?](todos/nutrition-c-0384-wer-schreibt-die-30797-tag-zeilen.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -162,7 +163,6 @@
 | `G-226` | entscheidung | mittel | [V1-Status-Marker fehlen für Recipes/Shopping/MealPlans Components in SPEC_10](erledigt/nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md) | erledigt | — | C-366, G-285 |
 | `G-227` | befund | mittel | [SPEC_03 §Flow 6 Custom Food erstellen via Barcode-Scan widerspricht Phase-2-Status](todos/nutrition-g-0227-spec-03-flow-6-custom-food-erstellen-via-barcode-scan-wide.md) | offen | — | — |
 | `G-228` | feature | mittel | [Score Level Multiplier inkonsistent zwischen SPEC_04 und SPEC_07](todos/nutrition-g-0228-score-level-multiplier-inkonsistent-zwischen-spec-04-und-s.md) | offen | — | G-283 |
-| `G-229` | entscheidung | mittel | [Admin-Override-Flow für Tag-Korrekturen nicht belegt](todos/nutrition-g-0229-admin-override-flow-fuer-tag-korrekturen-nicht-belegt.md) | offen | — | — |
 | `G-230` | entscheidung | niedrig | [`nutrition.water/page.tsx` und `nutrition.shopping-lists/page.tsx` als separate Pages](erledigt/nutrition-g-0230-nutrition-water-page-tsx-und-nutrition-shopping-lists-page.md) | erledigt | — | — |
 | `G-231` | befund | niedrig | [`SPEC_04 §Feature 9 MealCam` referenziert `ADR_AI_USAGE_WALLET.md` — nicht im Nutrition Spec Pfad](todos/nutrition-g-0231-spec-04-feature-9-mealcam-referenziert-adr-ai-usage-wallet.md) | offen | — | — |
 | `G-232` | befund | niedrig | [Quick-Add Makros UI-Component fehlt in SPEC_10](todos/nutrition-g-0232-quick-add-makros-ui-component-fehlt-in-spec-10.md) | offen | — | — |
@@ -240,11 +240,12 @@
 | `G-327` | befund | hoch | [`?plan=` galt in beiden Reitern](erledigt/nutrition-g-0327-plan-galt-in-beiden-reitern.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 3
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-379` | feature | mittel | [`sequence` hat kein Ziel](todos/nutrition-c-0379-sequence-hat-kein-ziel.md) | offen | C-383 | C-383, G-313 |
+| `G-229` | feature | mittel | [Admin-Override-Flow für Tag-Korrekturen nicht belegt](todos/nutrition-g-0229-admin-override-flow-fuer-tag-korrekturen-nicht-belegt.md) | offen | C-384 | C-384 |
 | `G-323` | befund | hoch | [vier Suchen ohne die Lehren](erledigt/nutrition-g-0323-vier-suchen-ohne-die-lehren.md) | erledigt | G-322 | G-325 |
 
 ## supplements — 59

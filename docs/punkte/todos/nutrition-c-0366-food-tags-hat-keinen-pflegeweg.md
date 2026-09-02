@@ -6,7 +6,7 @@ schwere: mittel
 angelegt: 2026-08-31
 braucht: []
 kind_von: G-226
-entscheidung: null
+entscheidung: E-55
 beruehrt:
   tabellen: [nutrition.food_tags]
 zahlen:
@@ -72,3 +72,11 @@ Herkunftsunterscheidung** — **eine Kuration waere nicht geschuetzt.**
 `[read]` **Bei den Anzeigenamen ist dieselbe Frage geloest** (C-29):
 der Kettenschritt liest `name_display_de` aus der Quelldatei und
 laesst Kuratiertes stehen. **Bei den Tags fehlt das.**
+
+## Entschieden: E-55, 2026-09-02
+
+`[read]` **Der Pflegeweg entsteht als zweite Tabelle**,
+`food_tags_kuriert` — dasselbe Muster wie C-29 bei den Namen.
+
+`[cmd]` **Vorher wird gemessen, wer die 30.797 Zeilen schreibt**
+(C-384).

@@ -1,12 +1,12 @@
 ---
 nr: G-229
-typ: entscheidung
+typ: feature
 modul: nutrition
 schwere: mittel
 angelegt: 2026-08-28
-braucht: []
+braucht: [C-384]
 kind_von: null
-entscheidung: null
+entscheidung: E-55
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -97,3 +97,33 @@ keinen Override".**
 damit faellt der zentrale Einwand der Review.
 
 `[read]` **Die Messung steht in der G-226-Datei.**
+
+## Entschieden: E-55, 2026-09-02
+
+**Kuration in einer zweiten Tabelle** — dasselbe Muster wie C-29 bei
+den Anzeigenamen.
+
+    food_tags           bleibt, was der Import erzeugt
+    food_tags_kuriert   was ein Mensch gesetzt oder entfernt hat
+
+`[read]` **Der Import muss dann nicht wissen, was er anfassen darf**
+— **er leert seine Tabelle und fuellt sie neu.**
+
+`[read]` **Und der Fall, den ein Herkunftsflag nicht koennte:**
+*,,entferne `vegan` von Kokosmilch"* **braucht eine Zeile, die es
+nicht gibt.** `[cmd]` **Die kuratierte Tabelle traegt ein
+`entfernt`-Kennzeichen.**
+
+`[cmd]` **`confidence` bleibt beim Import** — eine Kuration hat
+keine, sie ist entschieden.
+
+`[cmd]` **Und der Ort steht:** `apps/admin` hat eine Kurationsseite
+mit 314 Zeilen, vollstaendig lesend (C-366). **C-31 fuehrt das als
+Punkt.**
+
+### Vorher: C-384
+
+`[cmd]` **`auto_tag_food` existiert nicht.** `[read]` **Wer die
+30.797 Zeilen schreibt, gehoert gemessen, bevor die zweite Tabelle
+entsteht** — **sonst schuetzt sie vor einem Schreiber, den es nicht
+gibt.**
