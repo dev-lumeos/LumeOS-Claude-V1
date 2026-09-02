@@ -9,6 +9,8 @@ kind_von: C-401
 entscheidung: E-62
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 72b77a4c
 beruehrt:
   tabellen: [nutrition.meal_plan_weeks]
 zahlen:
@@ -63,3 +65,16 @@ Werkbank, richtig leer.**
 
 **Mitbeauftragt mit C-402 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit C-402 abgenommen: die Wochen stehen.**
+
+    Cut 4-Meal 2200    4 Wochen, 28 Tage, 112 Eintraege
+    Lean bulk 3100    12 Wochen, 84 Tage, 336 Eintraege
+
+`[cmd]` **Nachgemessen, beide exakt.** `[cmd]` **Der C-380-Seed ist
+idempotent und loescht keine Eintraege.**
+
+`[cmd]` **`Aufbau-Wochenplan` bleibt offen** — 4 Wochen und 28 Tage
+bei `days_count 21`. **Als C-404.**
