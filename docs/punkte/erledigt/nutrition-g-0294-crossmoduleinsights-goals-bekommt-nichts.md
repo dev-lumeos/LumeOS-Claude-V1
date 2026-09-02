@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
 erledigt: 2026-09-02
-commit: OFFEN
+commit: d4c6a1be
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/insights-echt.tsx
