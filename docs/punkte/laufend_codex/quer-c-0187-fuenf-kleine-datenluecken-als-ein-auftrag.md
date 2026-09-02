@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -73,5 +75,5 @@ liegengebliebener Kettenschritt.**
 
 ## Auftrag
 
-**Vorbereitet mit C-401 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit C-401 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

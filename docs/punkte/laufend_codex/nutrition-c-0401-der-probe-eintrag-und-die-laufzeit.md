@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: C-400
 entscheidung: E-62
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.meal_plan_entries]
 zahlen:
@@ -51,7 +53,7 @@ fehlen die Wochen im Seed.**
 
 **Mitbeauftragt: C-187.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-02.**
+**Beauftragt am 2026-09-02.**
 
 ### 1 · Der Probe-Eintrag — Freigabe liegt vor
 

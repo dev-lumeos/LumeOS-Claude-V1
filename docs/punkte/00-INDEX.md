@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 212 |
-| `laufend_codex` | 3 |
+| `todos` | 213 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 258 |
-| **gesamt** | **476** |
+| `erledigt` | 259 |
+| **gesamt** | **477** |
 
 ## medical — 43
 
@@ -59,9 +59,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 208
+## nutrition — 209
 
-### beauftragbar — 207
+### beauftragbar — 208
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -147,10 +147,11 @@
 | `C-394` | befund | mittel | [`test-user` hat keine Slots](erledigt/nutrition-c-0394-test-user-hat-keine-slots.md) | erledigt | — | G-334 |
 | `C-396` | feature | hoch | [`meal_plans` traegt keine Struktur](erledigt/nutrition-c-0396-meal-plans-traegt-keine-struktur.md) | erledigt | — | — |
 | `C-397` | befund | hoch | [die gelieferten Plaene haben keine Slots](erledigt/nutrition-c-0397-die-gelieferten-plaene-haben-keine-slots.md) | erledigt | — | C-400 |
-| `C-398` | befund | hoch | [- `CAROTPAXB` fehlt an 1.983 Lebensmitteln](laufend_codex/nutrition-c-0398-carotpaxb-fehlt-an-1983-lebensmitteln.md) | laeuft (codex) | — | — |
+| `C-398` | befund | hoch | [- `CAROTPAXB` fehlt an 1.983 Lebensmitteln](erledigt/nutrition-c-0398-carotpaxb-fehlt-an-1983-lebensmitteln.md) | erledigt | — | C-402 |
 | `C-399` | befund | hoch | [ein Schnitt ohne einen einzigen Wert](erledigt/nutrition-c-0399-ein-schnitt-ohne-einen-einzigen-wert.md) | erledigt | — | G-341 |
 | `C-400` | befund | mittel | [- eine Woche zuviel im Buddy-Plan](erledigt/nutrition-c-0400-eine-woche-zuviel-im-buddy-plan.md) | erledigt | — | C-401 |
-| `C-401` | feature | mittel | [der Probe-Eintrag und die Laufzeit](laufend_codex/nutrition-c-0401-der-probe-eintrag-und-die-laufzeit.md) | vorbereitet (codex) | — | — |
+| `C-401` | feature | mittel | [der Probe-Eintrag und die Laufzeit](laufend_codex/nutrition-c-0401-der-probe-eintrag-und-die-laufzeit.md) | laeuft (codex) | — | — |
+| `C-402` | befund | hoch | [`VITC` fehlt an 39 Tagen](todos/nutrition-c-0402-vitc-fehlt-an-39-tagen.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -491,7 +492,7 @@
 | `C-155` | befund | mittel | [Zwei Befunde in `@supabase/ssr` 0.1.0](todos/quer-c-0155-zwei-befunde-in-supabase-ssr-0-1-0.md) | offen | — | — |
 | `C-159` | feature | mittel | [Sieben Regelpfade zeigen auf Schemata, die es nicht gibt](todos/quer-c-0159-sieben-regelpfade-zeigen-auf-schemata-die-es-nicht-gibt.md) | offen | — | — |
 | `C-170` | befund | mittel | [Der Offline-Betrieb steht im Entwurf](erledigt/quer-c-0170-der-offline-betrieb-steht-im-entwurf.md) | erledigt | — | — |
-| `C-187` | befund | mittel | [Fuenf kleine Datenluecken — als ein Auftrag](laufend_codex/quer-c-0187-fuenf-kleine-datenluecken-als-ein-auftrag.md) | vorbereitet (codex) | — | — |
+| `C-187` | befund | mittel | [Fuenf kleine Datenluecken — als ein Auftrag](laufend_codex/quer-c-0187-fuenf-kleine-datenluecken-als-ein-auftrag.md) | laeuft (codex) | — | — |
 | `C-201` | befund | mittel | [Der Populations-Atlas hat kein Schema](todos/quer-c-0201-der-populations-atlas-hat-kein-schema.md) | offen | — | — |
 | `C-205` | befund | mittel | [`research_hold_registry` — 305 Saetze](erledigt/quer-c-0205-research-hold-registry-305-saetze.md) | erledigt | — | — |
 | `C-216` | befund | mittel | [`backup/` waechst ungebremst](todos/quer-c-0216-backup-waechst-ungebremst.md) | offen | — | A-70 |

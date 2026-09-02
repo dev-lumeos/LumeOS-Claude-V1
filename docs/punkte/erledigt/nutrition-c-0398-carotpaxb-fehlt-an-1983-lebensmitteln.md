@@ -9,6 +9,8 @@ kind_von: G-294
 entscheidung: E-61
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 51531f39
 beruehrt:
   tabellen: [nutrition.food_nutrients]
 zahlen:
@@ -116,4 +118,58 @@ gepusht.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Nachgemessen.**
+
+### Der Score steht — zum ersten Mal
+
+`[cmd]` **Selbst gemessen, `dev`, gestern:**
+
+    Status    complete
+    Score     662,3
+    fehlt     nichts
+
+`[cmd]` **Vorher: `incomplete` an 120 von 120 Tagen.**
+
+### Und die Zerlegung zeigt beides
+
+`[cmd]` **`{"code": "VITA", "unit": "IU", "amount": 54678.6633,
+"status": "incomplete", "reference": 5000, "capped_ratio": 1}`**
+
+`[read]` **Der Wert ist da, `status: incomplete` steht daneben** —
+**genau wie beauftragt.**
+
+`[read]` **Die Anzeige bleibt ehrlich, der Score wird nicht mehr
+blockiert.** **Das war der Kern von E-61.**
+
+### Die Gegenprobe ist die richtige
+
+`[cmd]` **Ein Tag mit unvollstaendigem `CAROTPAXB`: 10.717,335 IE.**
+`[cmd]` **Ein Tag ohne `CAROTPAXB`- und `CARTB`-Tageswert: 0 IE,
+nicht NULL.**
+
+`[read]` **Der zweite Fall ist der wichtige:** **null ist eine Zahl,
+NULL ist keine.** `[read]` **Toms Satz, in einer Zeile belegt.**
+
+`[cmd]` **Und beide Wege ergeben 27.761 IE fuer den
+60-Tage-Schnitt** — **die Zahl aus E-61, unabhaengig
+nachgerechnet.**
+
+### C-324 — und die Zahl, die den Tag zusammenfasst
+
+`[cmd]` **`VITA` blockiert keinen der 120 Tage mehr.**
+
+`[cmd]` **Aber nur 44 von 120 Scores sind vollstaendig:**
+
+    61 unvollstaendig   VITC (39), FIBT (22), FE (1)
+    15 ohne Daten
+    44 vollstaendig
+
+`[read]` **Wir haben den ganzen Tag ueber `CAROTPAXB` gestritten** —
+**und `VITC` fehlt an 39 Tagen, fast dreimal so oft.**
+
+`[read]` **Tom, heute:** *,,wir kuemmern uns um sachen die sehr
+wahrscheinlich ueber den schnitt keinen einfluss haben."* **Er hatte
+recht, und jetzt steht die Zahl dazu.**
+
+**Abgenommen.** **`VITC` und `FIBT` als C-402.**
+
