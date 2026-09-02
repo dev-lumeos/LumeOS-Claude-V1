@@ -277,6 +277,30 @@ Schreiben.
 `[read]` **Wer ueber eine Nebendatei mit `os.replace` schreibt, hat
 das Problem nicht.**
 
+## Der Auftrag geht raus, bevor abgenommen wird
+
+**Tom, 2026-09-02, dreimal an einem Tag:** *,,und wieder vergessen
+den neuen auftrag zu geben."*
+
+`[read]` **Der Zyklus hat eine feste Reihenfolge, und der zweite
+Schritt wird uebersprungen, weil der Bericht interessanter ist als
+die Verwaltung:**
+
+    Bericht kommt
+      1  Kurzcheck: ist ein vorbereiteter Auftrag betroffen?
+      2  AUFTRAG RAUS -- der Agent wartet
+      3  Abnahme mit eigener Messung
+      4  Befunde als Punkte
+      5  committen, getrennt nach Agentenbereich
+      6  next/ fuellen
+
+`[read]` **Schritt 2 kostet eine Minute, Schritt 3 zwanzig.**
+**Wer zuerst abnimmt, laesst einen Agenten zwanzig Minuten
+stillstehen.**
+
+`[cmd]` **Der Fehler faellt nur Tom auf** — **kein Waechter misst,
+ob ein Agent arbeitslos ist.**
+
 ## Ein Bericht ist kein Nachweis
 
 **Tom, 2026-09-02:** *,,da hat sich null komma nichts geaendert."*

@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: C-386
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.foods]
 zahlen:
@@ -55,7 +57,7 @@ Namens-Stichentscheide, keinen fachlichen vierten Vertreterfall.**
 
 **Mitbeauftragt: C-389, C-387.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-02.**
+**Beauftragt am 2026-09-02.**
 
 ### 1 · C-388 — es gibt keinen vierten Fall, also Kuration
 

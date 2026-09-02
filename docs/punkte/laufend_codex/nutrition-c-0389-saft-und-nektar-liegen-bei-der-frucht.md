@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: C-386
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.foods]
 zahlen:
@@ -50,5 +52,5 @@ sondern der Name selbst.** **Der Punkt bleibt offen.**
 
 ## Auftrag
 
-**Vorbereitet mit C-388 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit C-388 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
