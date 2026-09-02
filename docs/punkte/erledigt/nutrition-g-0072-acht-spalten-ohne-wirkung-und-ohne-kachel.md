@@ -14,7 +14,7 @@ erledigt: 2026-09-02
 commit: 6cc890c1
 beruehrt:
   dateien:
-    - apps/web/src/app/v2/nutrition/vorlieben.tsx
+    - apps/web/src/app/v2/nutrition/tab-vorlieben.tsx
 zahlen: null
 ---
 
