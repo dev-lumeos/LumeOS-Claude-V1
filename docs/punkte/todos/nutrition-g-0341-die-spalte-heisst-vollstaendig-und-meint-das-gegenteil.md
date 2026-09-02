@@ -9,7 +9,7 @@ kind_von: C-399
 entscheidung: null
 beruehrt:
   dateien:
-    - apps/web/src/app/v2/nutrition/tab-nutrients.tsx
+    - apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx
 zahlen:
   gemessen: 2026-09-02
 ---
