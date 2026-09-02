@@ -4,9 +4,9 @@ typ: feature
 modul: nutrition
 schwere: mittel
 angelegt: 2026-09-01
-braucht: []
+braucht: [C-383]
 kind_von: C-377
-entscheidung: E-53
+entscheidung: E-54
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -97,3 +97,24 @@ waere das zweite Startdatum abgeleitet, nicht eingegeben.**
 
 `[read]` **Bis dahin bleibt `sequence` nicht waehlbar, mit Grund an
 der Kachel.**
+
+## Weitergedacht: E-54, 2026-09-02
+
+Tom: *,,das kann ein komplettes jahr sein mit allen phasen parallel
+zu training/supplement etc. also ja das spricht fuer eigene
+ausbaubare tables."*
+
+`[read]` **Damit faellt `next_plan_id` als Traeger** — **eine
+verkettete Liste bildet eine Reihe ab, kein Jahr mit mehreren
+Spuren.**
+
+`[cmd]` **Und das Muster gibt es schon zweimal:**
+`goals.goal_phases` (5 Zeilen) und
+`supplements.user_supplement_cycles`.
+
+`[read]` **Bevor eine dritte Fassung entsteht, wird gemessen** —
+**C-383.**
+
+`[read]` **Die Frage waere dann nicht *welcher Plan folgt auf
+welchen*, sondern *welcher Plan gilt in dieser Phase*** — **und die
+Kette entsteht aus der Zeitachse, nicht umgekehrt.**

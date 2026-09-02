@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 220 |
+| `todos` | 221 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 216 |
-| **gesamt** | **438** |
+| **gesamt** | **439** |
 
 ## medical — 42
 
@@ -59,7 +59,7 @@
 
 ## nutrition — 178
 
-### beauftragbar — 177
+### beauftragbar — 176
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -131,7 +131,6 @@
 | `C-376` | befund | mittel | [frieren abgeschlossene Plaene auch ein?](erledigt/nutrition-c-0376-frieren-abgeschlossene-plaene-auch-ein.md) | erledigt | — | — |
 | `C-377` | feature | hoch | [ein abgelaufener Plan braucht eine Frage](erledigt/nutrition-c-0377-ein-abgelaufener-plan-braucht-eine-frage.md) | erledigt | — | C-379 |
 | `C-378` | befund | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](erledigt/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | erledigt | — | — |
-| `C-379` | feature | mittel | [`sequence` hat kein Ziel](todos/nutrition-c-0379-sequence-hat-kein-ziel.md) | offen | — | G-313 |
 | `C-380` | befund | mittel | [die Seed-Plaene tragen 84 mal Hammelfilet](erledigt/nutrition-c-0380-die-seed-plaene-tragen-84-mal-hammelfilet.md) | erledigt | — | — |
 | `C-382` | feature | mittel | [wer entscheidet, ob ein Plan editierbar ist?](todos/nutrition-c-0382-wer-entscheidet-ob-ein-plan-editierbar-ist.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
@@ -241,10 +240,11 @@
 | `G-327` | befund | hoch | [`?plan=` galt in beiden Reitern](erledigt/nutrition-g-0327-plan-galt-in-beiden-reitern.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-### wartet auf Blocker — 1
+### wartet auf Blocker — 2
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
+| `C-379` | feature | mittel | [`sequence` hat kein Ziel](todos/nutrition-c-0379-sequence-hat-kein-ziel.md) | offen | C-383 | C-383, G-313 |
 | `G-323` | befund | hoch | [vier Suchen ohne die Lehren](erledigt/nutrition-g-0323-vier-suchen-ohne-die-lehren.md) | erledigt | G-322 | G-325 |
 
 ## supplements — 59
@@ -412,7 +412,7 @@
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 
-## quer — 85
+## quer — 86
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -471,6 +471,7 @@
 | `C-357` | befund | mittel | [vier ADRs widersprechen neueren Entscheidungen](erledigt/quer-c-0357-vier-adrs-widersprechen-neueren-entscheidungen.md) | erledigt | — | — |
 | `C-361` | befund | mittel | [die Datenbank fuehrt keine Pipeline-Historie](erledigt/quer-c-0361-die-datenbank-fuehrt-keine-pipeline-historie.md) | erledigt | — | — |
 | `C-363` | entscheidung | niedrig | [drei oekonomische Befunde im Marketplace](todos/quer-c-0363-drei-oekonomische-befunde-im-marketplace.md) | offen | — | — |
+| `C-383` | befund | hoch | [gehoeren Plaene in `goal_phases`?](todos/quer-c-0383-gehoeren-plaene-in-goal-phases.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
