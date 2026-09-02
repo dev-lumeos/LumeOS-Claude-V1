@@ -91,8 +91,9 @@ Ghost-Zeile zeigt weniger, obwohl die Werte da sind.**
 `[read]` **Zwei Darstellungen fuer dieselbe Sache** — **und die
 Ghost-Zeile zeigt weniger, obwohl die Werte da sind.**
 
-`[cmd]` **`menge-rechnen.ts` liefert alle vier** (G-320, gegen
-`food_nutrient_snapshot` geprueft).
+`[cmd]` **`menge-rechnen.ts` liefert die Naehrwerte** (G-320,
+gegen `food_nutrient_snapshot` geprueft) — **das Gewicht steht im
+Mengenfeld.**
 
 `[read]` **Das Mengenfeld bleibt** — es ist der Unterschied: **ein
 Ghost-Eintrag ist ein Vorschlag, den man aendern darf, bevor man ihn
@@ -133,18 +134,29 @@ MealCam or manually"*.
 in der leeren Mahlzeit** — **eine Attrappe an der richtigen Stelle
 ist besser als keine an der falschen.**
 
-### 4 · G-330 — die Kopfzeile
+### 4 · G-330 — die Kopfzeile, fuenf Werte
 
-Tom: *,,Totale im header fuer alle werte und beschriftung darunter,
-dann zaehlt die auch fuer den inhalt."*
+Tom, praezisiert: *,,es sind 5 werte die in header als total rein
+muessen und einzeln in den positionen.
+gewicht/kalorien/protein/kohlenhydrate/fat."*
 
-`[cmd]` **Heute:** `413 kcal · 23g P` — **zwei von vier.**
+    07:30  Breakfast · 3 items      333  413   23   47    2
+                                      G  KCAL    P    K    F
 
-`[read]` **Alle vier, mit Spaltenbeschriftung darunter** — **sie gilt
-dann fuer die Zeilen.** `[read]` **Heute steht ueber den Zahlen
-nichts: wer *6 g 31 g 1 g* liest, muss raten.**
+    Vollkornbrot                      81  170    6   31    1
+    Ei (roh)                         126  170   17    0   11
+    Apfel                            126   73    1   15    1
 
-`[cmd]` **Reihenfolge kcal, P, C, F** — wie in `mahlzeiten.tsx:799`.
+`[cmd]` **Heute:** `413 kcal · 23g P` — **zwei von fuenf.**
+
+`[read]` **Das Gewicht gehoert dazu** — **es ist die einzige Angabe,
+die man direkt nachwiegen kann.**
+
+`[read]` **Und die Spalten muessen senkrecht fluchten:** `[cmd]`
+**die Ueberschrift steht ueber derselben Spalte wie der Einzelwert.**
+`[read]` **Sonst beschriftet sie nichts.**
+
+`[cmd]` **Kurzform ist erlaubt: G / KCAL / P / K / F.**
 
 ### Was nicht zu tun ist
 
@@ -159,11 +171,12 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ### Nachweis
 
-    Ghost-Zeile      vier Werte wie die normale
+    Ghost-Zeile      fuenf Werte wie die normale
     Bearbeiten       Zutat tauschen, hinzufuegen, entfernen
     Wirkung          aendert es den Plan oder den Tag? gemessen
     MealCam          an der Ghost-Karte, mit Vermerk
-    Kopfzeile        vier Werte, Beschriftung darunter
+    Kopfzeile        fuenf Werte, Beschriftung darunter
+    Flucht           Ueberschrift steht ueber ihrer Spalte
     Bildschirmfoto   vorher / nachher
 
 ## Bericht

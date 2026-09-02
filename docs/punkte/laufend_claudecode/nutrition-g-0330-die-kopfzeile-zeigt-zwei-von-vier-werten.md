@@ -38,17 +38,37 @@ Tom, 2026-09-02:
 
 ## Was zu bauen ist
 
-**Alle vier Werte im Kopf, mit Beschriftung darunter.**
+Tom, 2026-09-02, praezisiert:
 
-`[read]` **Und Toms Begruendung ist der eigentliche Punkt:**
-*,,dann zaehlt die auch fuer den inhalt"* — **die Spaltenbeschriftung
-im Kopf gilt fuer die Zeilen darunter.**
+> es sind 5 werte die in header als total rein muessen und einzeln in
+> den positionen. gewicht/kalorien/protein/kohlenhydrate/fat
+>
+> header zeigt total von gewicht/kalorien/protein/kohlenhydrate/fat
+> und darunter die spaltenueberschrift was es ist, kann verstaendliche
+> kurzform sein wie G/KCAL/P/K oder C/F. diese spalten muessen mit den
+> unteren korrespondieren dass sie auch fuer die einzelwerte sichtbar
+> passen
 
-`[read]` **Heute steht ueber den Zahlen nichts** — **wer *6 g 31 g
-1 g* liest, muss raten, was welche ist.**
+**Fuenf Werte, nicht vier** — **das Gewicht gehoert dazu.**
 
-`[cmd]` **Die Reihenfolge ist heute kcal, P, C, F** —
-`mahlzeiten.tsx:799` bestaetigt es fuer die Detailzeile.
+    07:30  Breakfast · 3 items      333  413   23   47    2
+                                      G  KCAL    P    K    F
+
+    Vollkornbrot                      81  170    6   31    1
+    Ei (roh)                         126  170   17    0   11
+    Apfel                            126   73    1   15    1
+
+`[read]` **Die Summe des Gewichts ist eine Angabe, die heute
+fehlt** — **und sie ist die einzige, die man direkt nachwiegen
+kann.**
+
+`[read]` **Und die Spalten muessen senkrecht fluchten:** `[cmd]`
+**die Ueberschrift im Kopf steht ueber derselben Spalte wie die
+Einzelwerte darunter.** `[read]` **Sonst beschriftet sie nichts.**
+
+`[cmd]` **Reihenfolge: Gewicht, kcal, Protein, Kohlenhydrate, Fett.**
+`[cmd]` **Heute zeigt `mahlzeiten.tsx:799` kcal, P, C, F** — **das
+Gewicht steht davor in der Zeile, aber nicht im Kopf.**
 
 ## Auftrag
 
