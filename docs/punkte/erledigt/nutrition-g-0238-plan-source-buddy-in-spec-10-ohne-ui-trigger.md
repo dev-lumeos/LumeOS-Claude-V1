@@ -8,7 +8,7 @@ braucht: [C-374]
 kind_von: null
 entscheidung: E-50
 erledigt: 2026-09-02
-commit: OFFEN
+commit: 987e82c7
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
