@@ -9,7 +9,7 @@ kind_von: F-02
 kinder: []
 entscheidung: E-57
 erledigt: 2026-09-02
-commit: OFFEN
+commit: c7aac690
 beruehrt:
   tabellen: []
   dateien: ["docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/components/MuscleBodyMap_test.html"]
