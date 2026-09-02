@@ -8,7 +8,7 @@ braucht: []
 kind_von: C-216
 entscheidung: null
 erledigt: 2026-09-02
-commit: OFFEN
+commit: 4da2c419
 beruehrt:
   dateien:
     - tools/backup-manifest.mjs
