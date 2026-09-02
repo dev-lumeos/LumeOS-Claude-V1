@@ -44,6 +44,8 @@ const MODEL = 'apps/web/src/lib/nutrition/plan-model.ts'
 const GHOST = 'apps/web/src/app/v2/nutrition/ghost-eintrag.tsx'
 const DIARY = 'apps/web/src/app/v2/nutrition/mahlzeiten.tsx'
 const PREFS = 'apps/web/src/app/v2/nutrition/tab-vorlieben.tsx'
+// G-339: die sechste Liste stand hier.
+const MODALE = 'apps/web/src/app/v2/nutrition/modale.tsx'
 
 // `[cmd]` **Der Waechter liest die Platte, nicht den Index** —
 // `git ls-files` sieht Ungetracktes nicht (A-63).
@@ -106,15 +108,40 @@ test('G-335: es gibt genau EINE Namensliste im Quelltext', () => {
   // Text steht. **Gesucht wird das Muster, nicht der Variablenname** —
   // die naechste Kopie heisst anders.
   //
-  // `[read]` **Zwei Schluessel genuegen als Nachweis:** `breakfast` und
-  // `pre_workout` stehen in JEDER der fuenf gefundenen Tabellen.
+  // ══ ERWEITERT IN G-339 ══════════════════════════════════════
+  //
+  // `[cmd]` **Dieser Waechter hat die SECHSTE Liste nicht gesehen.**
+  // `modale.tsx` schrieb `{ id: 'breakfast', label: 'Breakfast' }` —
+  // **der Code stand als WERT, nicht als Schluessel**, und der
+  // fuenfte hiess `preworkout` ohne Unterstrich.
+  //
+  // `[read]` **Beide Bedingungen verfehlten ihn**, und die Liste
+  // ueberlebte G-335 unbemerkt. **Ein Waechter, der nur eine
+  // Schreibform kennt, findet die naechste Kopie nicht.**
+  //
+  // `[read]` **Jetzt zaehlt die Sache, nicht die Form:** eine Datei
+  // gilt als Namensliste, wenn drei oder mehr Kategoriecodes darin
+  // neben Text stehen — als Schluessel ODER als Wert.
+  const CODES = ['breakfast', 'lunch', 'dinner', 'snack',
+    'pre_workout', 'preworkout', 'post_workout', 'postworkout']
   const treffer: string[] = []
   for (const rel of QUELLEN) {
     for (const f of dateien(rel)) {
       const t = ohneKommentare(f)
-      // `breakfast: '…'` UND `pre_workout: '…'` in derselben Datei.
-      if (/(?<![a-z0-9_])breakfast:\s*['"]/.test(t)
-        && /(?<![a-z0-9_])pre_workout:\s*['"]/.test(t)) treffer.push(f)
+      // `breakfast: '…'` (Schluessel) oder `'breakfast'` (Wert in
+      // einem Tupel mit Beschriftung).
+      // `[cmd]` **Eine Uhrzeit ist keine Beschriftung.** `modale.tsx`
+      // traegt seit G-339 `VORGABE_ZEIT` — dieselben Codes, aber
+      // `'07:00'` dahinter. **Ohne diese Ausnahme faende der Waechter
+      // eine Namensliste, wo eine Zeittabelle steht.**
+      const NUR_ZEIT = /^['"]\d{2}:\d{2}['"]/
+      const gefunden = CODES.filter(c => {
+        const alsSchluessel = new RegExp(`(?<![a-z0-9_])${c}:\\s*(['"][^'"]*['"])`)
+          .exec(t)
+        if (alsSchluessel && !NUR_ZEIT.test(alsSchluessel[1])) return true
+        return new RegExp(`id:\\s*['"]${c}['"]`).test(t)
+      })
+      if (gefunden.length >= 3) treffer.push(f)
     }
   }
   assert.deepEqual(treffer, [LAGE],
@@ -301,4 +328,69 @@ test('G-335: Mahlzeitenstruktur ist in Meine Mahlzeiten aufgegangen', () => {
   // verwaister Import ist kein Fehler, aber ein Rest.
   assert.doesNotMatch(p, /(?<![a-z0-9_])rasterZeilen(?![a-z0-9_])/,
     'der verwaiste rasterZeilen-Import ist zurueck')
+})
+
+// ══ 5 · G-339: Quick-Add schickt CHECK-taugliche Werte ═══════════════
+
+test('G-339: die Quick-Add-Auswahl kommt aus KATEGORIE_TEXT', () => {
+  // `[cmd]` **Hier stand eine sechste Liste** — fuenf englische Namen
+  // (`Breakfast` … `Pre-workout`) mit dem Schluessel `preworkout`.
+  //
+  // `[read]` **Sie ueberlebte G-335**, weil sie den Code als WERT
+  // schrieb (`{ id: 'breakfast' }`) statt als Schluessel.
+  const m = ohneKommentare(MODALE)
+  assert.match(m, /const MEAL_TYPES = Object\.entries\(KATEGORIE_TEXT\)/,
+    'die Auswahl haelt wieder eine eigene Liste')
+  assert.match(m, /import \{ KATEGORIE_TEXT \}/,
+    'die eine Namensquelle wird nicht importiert')
+})
+
+test('G-339: preworkout ist weg — der CHECK kennt ihn nicht', () => {
+  // `[cmd]` **`nutrition.meals.meal_type` CHECK, gemessen 2026-09-02:**
+  // breakfast, lunch, dinner, snack, pre_workout, post_workout, other.
+  //
+  // `[cmd]` **`preworkout` ohne Unterstrich steht NICHT darin.**
+  const m = ohneKommentare(MODALE)
+  assert.doesNotMatch(m, /(?<![a-z0-9_])preworkout(?![a-z0-9_])/,
+    'preworkout ist zurueck — die Zeile waere nicht schreibbar')
+
+  // Die Wirkung: jeder angebotene Wert steht im CHECK.
+  const CHECK = ['breakfast', 'lunch', 'dinner', 'snack',
+    'pre_workout', 'post_workout', 'other']
+  for (const code of Object.keys(KATEGORIE_TEXT)) {
+    assert.ok(CHECK.includes(code),
+      `${code} wird angeboten, steht aber nicht im CHECK`)
+  }
+  assert.equal(Object.keys(KATEGORIE_TEXT).length, CHECK.length,
+    'die Auswahl deckt nicht genau die CHECK-Werte ab')
+})
+
+test('G-339: die option traegt ein value — sonst faehrt der Label los', () => {
+  // `[cmd]` **Am 2026-09-02 gemessen, vor dem Bau:** die `<option>`
+  // hatte KEIN `value`. **Der Browser schickt dann den Text** — also
+  // `Pre-workout`, nicht einmal `preworkout`.
+  //
+  // `[read]` **Das ist schlimmer als der falsche Schluessel** und
+  // faellt in keinem Typecheck auf.
+  const m = ohneKommentare(MODALE)
+  const i = m.indexOf('aria-label="Meal"')
+  assert.ok(i > 0, 'die Mahlzeitenauswahl fehlt')
+  const block = m.slice(i, i + 400)
+  assert.match(block, /<option key=\{m\.id\} value=\{m\.id\}>/,
+    'die option traegt kein value — der Browser schickt den Label')
+})
+
+test('G-339: Namen und Zeiten sind getrennt', () => {
+  // `[read]` **Die alte Liste vermischte beides.** `[cmd]`
+  // `KATEGORIE_TEXT` kennt keine Zeiten und soll keine kennen —
+  // **die echten stehen in `nutrition.meal_slots`** (C-392).
+  const m = ohneKommentare(MODALE)
+  assert.match(m, /const VORGABE_ZEIT: Record<string, string>/,
+    'die Vorgabezeiten fehlen')
+
+  // Die Wirkung: die Zeittabelle traegt KEINE Beschriftungen.
+  const i = m.indexOf('const VORGABE_ZEIT')
+  const block = m.slice(i, m.indexOf('}', i))
+  assert.doesNotMatch(block, /['"][A-Za-zÄÖÜäöü][^'"]{2,}['"]/,
+    'in den Vorgabezeiten steht Text — dann ist es wieder eine Namensliste')
 })

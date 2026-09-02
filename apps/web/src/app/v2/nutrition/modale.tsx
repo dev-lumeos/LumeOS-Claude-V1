@@ -24,17 +24,53 @@ import * as React from 'react'
 import { Card, Pill, Icon, InEntwicklungKnopf, type IconName } from '@lumeos/ui'
 
 import { EU14_ALLERGENS } from './tabs-daten'
+// G-339: EINE Namensquelle statt sechs (E-58).
+import { KATEGORIE_TEXT } from '../../../lib/nutrition/slots-lage'
 
 export type NutritionModalTyp = 'mealcam' | 'customfood' | 'quickadd' | 'nutsettings' | 'recipe'
 
-/** Die fuenf Mahlzeitentypen (module-nutrition-spec.jsx:26-33). */
-const MEAL_TYPES = [
-  { id: 'breakfast', label: 'Breakfast', time: '07:00' },
-  { id: 'lunch', label: 'Lunch', time: '13:00' },
-  { id: 'dinner', label: 'Dinner', time: '20:00' },
-  { id: 'snack', label: 'Snack', time: '16:00' },
-  { id: 'preworkout', label: 'Pre-workout', time: '16:30' },
-]
+// ══ G-339: die sechste Namensliste ist weg ══════════════════════════
+//
+// `[cmd]` **Hier stand eine eigene Liste** — fuenf englische Namen
+// (`Breakfast`, `Pre-workout`) mit dem Schluessel `preworkout`.
+//
+// `[cmd]` **Gemessen am 2026-09-02: `preworkout` steht NICHT im
+// CHECK.** `nutrition.meals.meal_type` kennt `breakfast`, `lunch`,
+// `dinner`, `snack`, `pre_workout`, `post_workout`, `other`.
+//
+// `[cmd]` **Und schlimmer als der Schluessel war seine Abwesenheit:**
+// die `<option>` trug gar kein `value`, **also waere der LABEL
+// abgeschickt worden** — `Pre-workout`. **Am Schirm gemessen.**
+//
+// `[read]` **G-335 hat fuenf Listen zusammengefuehrt; diese ist
+// durchgerutscht**, weil sie einen anderen Schluessel schrieb und
+// deshalb keiner Suche nach `pre_workout` auffiel.
+//
+// `[read]` **Jetzt kommt der Name aus `KATEGORIE_TEXT`** (E-58) —
+// **eine Quelle, nicht sechs.**
+//
+// `[cmd]` **Die sieben Kategorien statt fuenf:** `post_workout` und
+// `other` fehlten. **Sie stehen im CHECK und gehoeren in die
+// Auswahl.**
+const MEAL_TYPES = Object.entries(KATEGORIE_TEXT)
+  .map(([id, label]) => ({ id, label }))
+
+// ══ G-339: die Vorgabezeiten, getrennt von den Namen ════════════════
+//
+// `[read]` **Die alte Liste vermischte zwei Dinge** — wie eine
+// Kategorie HEISST und wann sie ueblicherweise liegt. **Der Name
+// kommt jetzt aus `KATEGORIE_TEXT`; die Zeit bleibt hier**, weil
+// `KATEGORIE_TEXT` keine kennt und auch keine kennen soll.
+//
+// `[cmd]` **Sie sind nur eine Vorbelegung fuer die Attrappe unten**
+// (`meal_schedule`). `[read]` **Die echten Zeiten des Nutzers stehen
+// in `nutrition.meal_slots`** (C-392) und werden im Vorlieben-Reiter
+// gepflegt — **diese Werte schreiben nichts.**
+const VORGABE_ZEIT: Record<string, string> = {
+  breakfast: '07:00', lunch: '13:00', dinner: '20:00',
+  snack: '16:00', pre_workout: '16:30', post_workout: '19:00',
+  other: '12:00',
+}
 
 /** Rahmen fuer alle Modale — wie `Rahmen` im Supplements-Modul. */
 function Rahmen({
@@ -360,7 +396,12 @@ function QuickAddModal({ onClose }: { onClose: () => void }) {
         <div>
           <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Meal</div>
           <select className="v2-feld" style={{ height: 34, fontSize: 12.5 }} aria-label="Meal">
-            {MEAL_TYPES.map(m => <option key={m.id}>{m.label}</option>)}
+            {/* `[cmd]` **G-339: `value` gesetzt.** Ohne es
+                schickt der Browser den LABEL — gemessen am
+                2026-09-02: `Pre-workout` statt `pre_workout`. */}
+            {MEAL_TYPES.map(m => (
+              <option key={m.id} value={m.id}>{m.label}</option>
+            ))}
           </select>
         </div>
       </div>
@@ -417,7 +458,7 @@ function NutritionSettingsModal({ onClose }: { onClose: () => void }) {
                   <td>
                     <input
                       type="time"
-                      defaultValue={m.time}
+                      defaultValue={VORGABE_ZEIT[m.id] ?? ''}
                       aria-label={`${m.label} Uhrzeit`}
                       className="v2-feld-klein v2-mono"
                     />
