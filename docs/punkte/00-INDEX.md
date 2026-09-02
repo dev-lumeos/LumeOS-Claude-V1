@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 214 |
-| `laufend_codex` | 4 |
+| `todos` | 215 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 251 |
-| **gesamt** | **471** |
+| `erledigt` | 253 |
+| **gesamt** | **472** |
 
 ## medical — 43
 
@@ -59,9 +59,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 204
+## nutrition — 205
 
-### beauftragbar — 201
+### beauftragbar — 202
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -140,15 +140,16 @@
 | `C-386` | befund | mittel | [sind die drei Reste aus C-35 eingeflossen?](erledigt/nutrition-c-0386-sind-die-drei-reste-aus-c-35-eingeflossen.md) | erledigt | — | C-388, C-389 |
 | `C-387` | befund | hoch | [vier Kettenschritte schreiben Tags](erledigt/nutrition-c-0387-vier-kettenschritte-schreiben-tags.md) | erledigt | — | — |
 | `C-388` | befund | mittel | [die Vertreterregel ist nicht erreicht](erledigt/nutrition-c-0388-die-vertreterregel-ist-nicht-erreicht.md) | erledigt | — | — |
-| `C-389` | befund | mittel | [Saft und Nektar liegen bei der Frucht](laufend_codex/nutrition-c-0389-saft-und-nektar-liegen-bei-der-frucht.md) | laeuft (codex) | — | — |
+| `C-389` | befund | mittel | [Saft und Nektar liegen bei der Frucht](erledigt/nutrition-c-0389-saft-und-nektar-liegen-bei-der-frucht.md) | erledigt | — | — |
 | `C-390` | feature | mittel | [`tag_definitions` hat keine Untergruppe](erledigt/nutrition-c-0390-tag-definitions-hat-keine-untergruppe.md) | erledigt | — | — |
 | `C-391` | feature | hoch | [`food_search` hat keinen Treffergrund](erledigt/nutrition-c-0391-food-search-hat-keinen-treffergrund.md) | erledigt | — | C-393 |
 | `C-392` | feature | hoch | [die Tabelle `meal_slots`](erledigt/nutrition-c-0392-die-tabelle-meal-slots.md) | erledigt | — | C-394 |
 | `C-394` | befund | mittel | [`test-user` hat keine Slots](erledigt/nutrition-c-0394-test-user-hat-keine-slots.md) | erledigt | — | G-334 |
 | `C-396` | feature | hoch | [`meal_plans` traegt keine Struktur](erledigt/nutrition-c-0396-meal-plans-traegt-keine-struktur.md) | erledigt | — | — |
-| `C-397` | befund | hoch | [die gelieferten Plaene haben keine Slots](laufend_codex/nutrition-c-0397-die-gelieferten-plaene-haben-keine-slots.md) | laeuft (codex) | — | — |
-| `C-398` | befund | hoch | [`CAROTPAXB` fehlt an 1.983 Lebensmitteln](laufend_codex/nutrition-c-0398-carotpaxb-fehlt-an-1983-lebensmitteln.md) | vorbereitet (codex) | — | — |
-| `C-399` | befund | hoch | [ein Schnitt ohne einen einzigen Wert](laufend_codex/nutrition-c-0399-ein-schnitt-ohne-einen-einzigen-wert.md) | vorbereitet (codex) | — | G-341 |
+| `C-397` | befund | hoch | [die gelieferten Plaene haben keine Slots](erledigt/nutrition-c-0397-die-gelieferten-plaene-haben-keine-slots.md) | erledigt | — | C-400 |
+| `C-398` | befund | hoch | [`CAROTPAXB` fehlt an 1.983 Lebensmitteln](laufend_codex/nutrition-c-0398-carotpaxb-fehlt-an-1983-lebensmitteln.md) | laeuft (codex) | — | — |
+| `C-399` | befund | hoch | [ein Schnitt ohne einen einzigen Wert](laufend_codex/nutrition-c-0399-ein-schnitt-ohne-einen-einzigen-wert.md) | laeuft (codex) | — | G-341 |
+| `C-400` | befund | mittel | [eine Woche zuviel im Buddy-Plan](todos/nutrition-c-0400-eine-woche-zuviel-im-buddy-plan.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |

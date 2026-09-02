@@ -9,6 +9,8 @@ kind_von: C-386
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: cd07bf99
 beruehrt:
   tabellen: [nutrition.foods]
 zahlen:
@@ -298,3 +300,17 @@ Mahlzeiten nicht entschieden.**
 
 **Mitbeauftragt mit C-397 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit C-397 abgenommen: vier Zeilen, keine Regel.**
+
+`[cmd]` **`F201600`, `F310600`, `F603600`, `F603700` stehen auf
+`minimally_processed`.** `[cmd]` **Die drei Smoothies bleiben
+`raw`.**
+
+`[cmd]` **`Aprikosensaft` bleibt Rang 6 mit `match_reason:
+name_prefix`** — **ein Ausschlussfilter blendet ihn aus.**
+
+`[read]` **Die Rangfolge aendert sich nicht, aber der Nutzer kann
+filtern.**

@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-294
 entscheidung: E-38
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.food_nutrients]
 zahlen:
@@ -60,5 +62,5 @@ reparieren.**
 
 ## Auftrag
 
-**Vorbereitet mit C-399 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit C-399 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

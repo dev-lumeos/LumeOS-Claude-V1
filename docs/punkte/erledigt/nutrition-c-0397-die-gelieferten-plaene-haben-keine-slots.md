@@ -9,6 +9,8 @@ kind_von: G-336
 entscheidung: E-59
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: cd07bf99
 beruehrt:
   tabellen: [nutrition.meal_plan_slots]
 zahlen:
@@ -172,4 +174,64 @@ und der Test nicht abgeschwaecht.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Nachgemessen.**
+
+### Die drei gelieferten Plaene tragen jetzt Slots
+
+    Cut 4-Meal 2200    4
+    Lean bulk 3100     4
+    Buddy auto-plan    4
+    Aufbau-Wochenplan  0   -- Selbstplan, Rueckfall greift
+    test               5
+
+`[read]` **Genau die Trennung aus dem Auftrag: drei Plaene, nicht
+vier.**
+
+`[cmd]` **Und die C-380-Seedwege tragen die Slots kuenftig mit** —
+`380_seed_meal_plan_variety.sql:58` und
+`testdaten-einspielen.ts:2189`.
+
+`[read]` **Damit ueberlebt es den naechsten Kettenlauf** — **der
+Fehler, der C-397 ueberhaupt erzeugt hat.**
+
+### C-389 — vier Zeilen, keine Regel
+
+`[cmd]` **Nachgemessen:**
+
+    F201100  Aprikose roh        raw
+    F201600  Aprikosensaft       minimally_processed
+    F310600  Traubensaft         minimally_processed
+    F603600  Orangensaft         minimally_processed
+    F603700  Orangennektar       minimally_processed
+
+`[cmd]` **Die drei Smoothies bleiben `raw`.** `[read]` **Keine
+53er-Regel, wie beauftragt.**
+
+`[cmd]` **`Aprikosensaft` bleibt Rang 6 mit `match_reason:
+name_prefix`** — **ein Ausschlussfilter fuer `minimally_processed`
+blendet ihn aus.**
+
+`[read]` **Das ist die ehrliche Loesung:** **die Rangfolge aendert
+sich nicht, aber der Nutzer kann jetzt filtern.**
+
+### Und der rote Test gehoert mir
+
+`[cmd]` **Er meldet: `Buddy auto-plan` hat 29 statt 28 Eintraege, am
+02.09. fuenf.**
+
+`[cmd]` **Nachgemessen: zwei Wochen, 14 Tage, 57 Eintraege.**
+
+    18.-24.06.   je 4   = 28
+    31.08.-06.09. je 4, am 02.09. fuenf = 29
+
+`[read]` **Die zweite Woche habe ich am 02.09. angelegt, als ich die
+Plaene fuellte** — **und der fuenfte Eintrag entstand beim
+Ausprobieren.**
+
+`[read]` **Er hat nichts geloescht und den Test nicht abgeschwaecht**
+— richtig. **Es ist meine Zeile, nicht seine.**
+
+**Als C-400.**
+
+**Abgenommen.**
+
