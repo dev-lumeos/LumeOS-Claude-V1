@@ -55,6 +55,37 @@ BEGIN
   END IF;
 END $$;
 
+CREATE TEMP TABLE c380_plan_slots (
+  plan_name text NOT NULL,
+  position integer NOT NULL,
+  name text NOT NULL,
+  planned_time time NOT NULL,
+  PRIMARY KEY (plan_name, position)
+) ON COMMIT DROP;
+
+INSERT INTO c380_plan_slots (plan_name, position, name, planned_time) VALUES
+  ('Cut 4-Meal 2200', 1, 'Frühstück', '07:30'),
+  ('Cut 4-Meal 2200', 2, 'Mittagessen', '12:30'),
+  ('Cut 4-Meal 2200', 3, 'Nachmittagsmahlzeit', '16:00'),
+  ('Cut 4-Meal 2200', 4, 'Abendessen', '19:30'),
+  ('Lean bulk 3100', 1, 'Frühstück', '07:30'),
+  ('Lean bulk 3100', 2, 'Mittagessen', '12:30'),
+  ('Lean bulk 3100', 3, 'Pre-Workout-Mahlzeit', '16:00'),
+  ('Lean bulk 3100', 4, 'Abendessen', '19:30'),
+  ('Buddy auto-plan', 1, 'Frühstück', '07:30'),
+  ('Buddy auto-plan', 2, 'Mittagessen', '12:30'),
+  ('Buddy auto-plan', 3, 'Zwischenmahlzeit', '16:00'),
+  ('Buddy auto-plan', 4, 'Abendessen', '19:30');
+
+INSERT INTO nutrition.meal_plan_slots (plan_id, user_id, position, name, planned_time)
+SELECT mp.id, mp.user_id, s.position, s.name, s.planned_time
+FROM c380_plan_slots s
+JOIN nutrition.meal_plans mp ON mp.name = s.plan_name
+WHERE mp.user_id = :'dev_id'::uuid
+ON CONFLICT (plan_id, position) DO UPDATE
+  SET name = EXCLUDED.name,
+      planned_time = EXCLUDED.planned_time;
+
 CREATE TEMP TABLE c380_entries (
   plan_name text NOT NULL,
   day_index smallint NOT NULL,

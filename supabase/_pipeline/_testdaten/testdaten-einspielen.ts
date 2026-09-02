@@ -378,11 +378,20 @@ type MealPlanRow = {
   userId: string
   name: string
   description: string
+  planOrigin?: 'self_created' | 'coach_created' | 'marketplace' | 'buddy'
   targetKcal: number
   targetProteinG: number
   targetCarbsG: number
   targetFatG: number
   isActive: boolean
+}
+
+type MealPlanSlotRow = {
+  planId: string
+  userId: string
+  position: number
+  name: string
+  plannedTime: string
 }
 
 type MealPlanWeekRow = {
@@ -2171,6 +2180,33 @@ const C380_MEAL_SLOTS = [
   { mealType: 'snack' as const, plannedTime: '16:00' },
 ]
 
+const C380_PLAN_ORIGINS = {
+  'cut-2200': 'coach_created',
+  'lean-bulk-3100': 'marketplace',
+  'buddy-2700': 'buddy',
+} as const
+
+const C380_PLAN_SLOTS = {
+  'cut-2200': [
+    { position: 1, name: 'Frühstück', plannedTime: '07:30' },
+    { position: 2, name: 'Mittagessen', plannedTime: '12:30' },
+    { position: 3, name: 'Nachmittagsmahlzeit', plannedTime: '16:00' },
+    { position: 4, name: 'Abendessen', plannedTime: '19:30' },
+  ],
+  'lean-bulk-3100': [
+    { position: 1, name: 'Frühstück', plannedTime: '07:30' },
+    { position: 2, name: 'Mittagessen', plannedTime: '12:30' },
+    { position: 3, name: 'Pre-Workout-Mahlzeit', plannedTime: '16:00' },
+    { position: 4, name: 'Abendessen', plannedTime: '19:30' },
+  ],
+  'buddy-2700': [
+    { position: 1, name: 'Frühstück', plannedTime: '07:30' },
+    { position: 2, name: 'Mittagessen', plannedTime: '12:30' },
+    { position: 3, name: 'Zwischenmahlzeit', plannedTime: '16:00' },
+    { position: 4, name: 'Abendessen', plannedTime: '19:30' },
+  ],
+} as const
+
 const C380_SEED_PLANS = [
   {
     slug: 'cut-2200', name: 'Cut 4-Meal 2200', targetKcal: 2200, targetProteinG: 165, targetCarbsG: 250, targetFatG: 70,
@@ -2219,12 +2255,21 @@ const c380MealPlanRows: MealPlanRow[] = C380_SEED_PLANS.map(plan => ({
   userId: TOM_ID,
   name: plan.name,
   description: 'C-380 Seed: abwechslungsreiche Vier-Mahlzeiten-Woche',
+  planOrigin: C380_PLAN_ORIGINS[plan.slug],
   targetKcal: plan.targetKcal,
   targetProteinG: plan.targetProteinG,
   targetCarbsG: plan.targetCarbsG,
   targetFatG: plan.targetFatG,
   isActive: false,
 }))
+
+const c380MealPlanSlotRows: MealPlanSlotRow[] = C380_SEED_PLANS.flatMap(plan =>
+  C380_PLAN_SLOTS[plan.slug].map(slot => ({
+    planId: c380PlanId(plan.slug),
+    userId: TOM_ID,
+    ...slot,
+  })),
+)
 
 const c380MealPlanWeekRows: MealPlanWeekRow[] = C380_SEED_PLANS.map(plan => ({
   id: c380WeekId(plan.slug),
@@ -2370,6 +2415,8 @@ const mealPlanEntryRows: MealPlanEntryRow[] = [
   ...c150MealPlanEntryRows,
   ...c380MealPlanEntryRows,
 ]
+
+const mealPlanSlotRows: MealPlanSlotRow[] = c380MealPlanSlotRows
 
 const userIds = USERS.map(user => lit(user.id)).join(', ')
 const allSeedUserIds = [...USERS.map(user => lit(user.id)), lit(COACH_USER.id)].join(', ')
@@ -2655,11 +2702,19 @@ const mealPlanValues = mealPlanRows.map(plan => tuple([
   plan.userId,
   plan.name,
   plan.description,
+  plan.planOrigin ?? 'self_created',
   plan.targetKcal,
   plan.targetProteinG,
   plan.targetCarbsG,
   plan.targetFatG,
   plan.isActive,
+])).join(',\n')
+const mealPlanSlotValues = mealPlanSlotRows.map(slot => tuple([
+  slot.planId,
+  slot.userId,
+  slot.position,
+  slot.name,
+  slot.plannedTime,
 ])).join(',\n')
 const mealPlanWeekValues = mealPlanWeekRows.map(week => tuple([
   week.id,
@@ -3773,6 +3828,7 @@ CREATE TEMP TABLE test_meal_plans (
   user_id uuid NOT NULL,
   name text NOT NULL,
   description text NOT NULL,
+  plan_origin text NOT NULL,
   target_kcal numeric NOT NULL,
   target_protein_g numeric NOT NULL,
   target_carbs_g numeric NOT NULL,
@@ -3784,13 +3840,32 @@ INSERT INTO test_meal_plans VALUES
 ${mealPlanValues};
 
 INSERT INTO nutrition.meal_plans (
-  id, user_id, name, description, target_kcal, target_protein_g,
+  id, user_id, name, description, plan_origin, target_kcal, target_protein_g,
   target_carbs_g, target_fat_g, is_active, measurement_source, source_detail
 )
 SELECT
-  id, user_id, name, description, target_kcal, target_protein_g,
+  id, user_id, name, description, plan_origin, target_kcal, target_protein_g,
   target_carbs_g, target_fat_g, is_active, 'seed', 'C-150 Testdaten Wochenplan'
 FROM test_meal_plans;
+
+CREATE TEMP TABLE test_meal_plan_slots (
+  plan_id uuid NOT NULL,
+  user_id uuid NOT NULL,
+  position integer NOT NULL,
+  name text NOT NULL,
+  planned_time time NOT NULL,
+  PRIMARY KEY (plan_id, position)
+) ON COMMIT DROP;
+
+INSERT INTO test_meal_plan_slots VALUES
+${mealPlanSlotValues};
+
+INSERT INTO nutrition.meal_plan_slots (plan_id, user_id, position, name, planned_time)
+SELECT plan_id, user_id, position, name, planned_time
+FROM test_meal_plan_slots
+ON CONFLICT (plan_id, position) DO UPDATE
+  SET name = EXCLUDED.name,
+      planned_time = EXCLUDED.planned_time;
 
 CREATE TEMP TABLE test_meal_plan_weeks (
   id uuid PRIMARY KEY,

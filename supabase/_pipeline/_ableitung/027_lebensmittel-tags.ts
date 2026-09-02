@@ -194,6 +194,9 @@ BEGIN
            WHEN name_folded ~ '\\m(fermentiert|sauerkraut|kimchi|joghurt|kefir)\\M' THEN 'fermented'
            WHEN name_folded ~ '\\m(gebraten|gekocht|gegrillt|gebacken|geduenstet|geschmort|frittiert|pochiert|paniert)\\M' THEN 'cooked'
            WHEN name_folded ~ '\\mtiefgefroren\\M' THEN 'minimally_processed'
+           -- C-389: Nur die gemessenen Obstfamilien sind über den BLS-Code
+           -- sicher als Saft/Nektar belegt. 600 ist global nicht eindeutig.
+           WHEN bls_code IN ('F201600', 'F603600', 'F603700', 'F310600') THEN 'minimally_processed'
            WHEN name_folded ~ '\\m(geschaelt|zerkleinert|passiert|pasteurisiert|homogenisiert|flocken|mehl|griess|schrot|graupen|saft|nektar)\\M' THEN 'minimally_processed'
            ELSE 'raw'
          END AS processing_level,
@@ -205,6 +208,7 @@ BEGIN
            WHEN name_folded ~ '\\m(fermentiert|sauerkraut|kimchi|joghurt|kefir)\\M' THEN 'name:fermentiert'
            WHEN name_folded ~ '\\m(gebraten|gekocht|gegrillt|gebacken|geduenstet|geschmort|frittiert|pochiert|paniert)\\M' THEN 'name:gekocht-gebraten'
            WHEN name_folded ~ '\\mtiefgefroren\\M' THEN 'name:tiefgefroren'
+           WHEN bls_code IN ('F201600', 'F603600', 'F603700', 'F310600') THEN 'bls:c389-saft-nektar'
            WHEN name_folded ~ '\\m(geschaelt|zerkleinert|passiert|pasteurisiert|homogenisiert|flocken|mehl|griess|schrot|graupen|saft|nektar)\\M' THEN 'name:minimal'
            ELSE 'default:raw'
          END AS rule
