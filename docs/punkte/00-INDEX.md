@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 210 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 3 |
+| `laufend_claudecode` | 4 |
 | `erledigt` | 246 |
-| **gesamt** | **462** |
+| **gesamt** | **463** |
 
 ## medical — 43
 
@@ -59,9 +59,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 195
+## nutrition — 196
 
-### beauftragbar — 194
+### beauftragbar — 195
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -257,7 +257,8 @@
 | `G-331` | feature | hoch | [vier Suchen auf den Hook umstellen](erledigt/nutrition-g-0331-vier-suchen-auf-den-hook-umstellen.md) | erledigt | — | G-333 |
 | `G-332` | feature | hoch | [die Mahlzeiten benennen und terminieren](erledigt/nutrition-g-0332-die-mahlzeiten-benennen-und-terminieren.md) | erledigt | — | C-396, G-335 |
 | `G-333` | befund | niedrig | [`erfassen.tsx` hat keinen Aufrufer](todos/nutrition-g-0333-erfassen-tsx-hat-keinen-aufrufer.md) | offen | — | — |
-| `G-335` | feature | hoch | [acht Stellen uebersetzen `meal_type` selbst](erledigt/nutrition-g-0335-acht-stellen-uebersetzen-meal-type-selbst.md) | erledigt | — | — |
+| `G-335` | feature | hoch | [acht Stellen uebersetzen `meal_type` selbst](erledigt/nutrition-g-0335-acht-stellen-uebersetzen-meal-type-selbst.md) | erledigt | — | G-336 |
+| `G-336` | befund | hoch | [das Raster liest `meal_plan_slots` nicht](laufend_claudecode/nutrition-g-0336-das-raster-liest-meal-plan-slots-nicht.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
