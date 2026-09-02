@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **16 Punkte tragen `typ: entscheidung`
+`[cmd]` **15 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -46,33 +46,6 @@ nicht in diese Uebersicht.
   `[cmd]` **F-06 hat gemessen, dass die Freigabe ueberhaupt erst seit
   C-162 wirkt** — 22 `coach_read`-Policies ueber sechs Module. **Eine
   Feinstufe waere sechs mal soviel.**
-
-## C-241 — Das Nachweiskonto traegt weder Essensplaene noch Medikamente
-
-**Modul:** quer · **angelegt:** 2026-08-23 · **Datei:** `laufend_codex/quer-c-0241-das-nachweiskonto-traegt-weder-essensplaene-noch-medikamente.md`
-
-## Befund
-
-(neu 2026-08-23). Aus der Pruefung von G-161 und der
-  Vorbereitung von G-162.
-
-  `[cmd]` `nutrition.meal_plans` — gesamt 2, `dev@lumeos.app` 1,
-  **`test-user@lumeos.local` 0**. Ebenso Wochen 6/3/0, Tage 42/21/0,
-  Eintraege 112/56/0.
-  `[cmd]` `medical.user_medications` — gesamt 2, `dev` 1,
-  **`test-user` 0**.
-
-  `[read]` **Die Folge ist konkret, nicht theoretisch:** G-161 musste
-  seinen Nachweis auf `dev@lumeos.app` fuehren, gegen die Regel. Und
-  **G-162 ist in seinem medical-Teil gar nicht beauftragbar** — der
-  Punkt nennt *„`user_medications` 2"*, das ist die Gesamtzahl. Ein
-  Agent saehe auf dem Nachweiskonto eine leere Liste und koennte nicht
-  belegen, dass die Kachel liest.
-
-  `[read]` **Beides ist in der Uebergabe als *bewusst leer* vermerkt.**
-  Die Entscheidung ist also nicht *„vergessen"*, sondern *„soll das so
-  bleiben"* — und wenn ja, wie ein Agent dort etwas belegen soll.
-  Seeds gehoeren in die Kette, also zu Codex.
 
 ## E-10 — RLS neu bewerten, sobald `main` produktiv wird
 

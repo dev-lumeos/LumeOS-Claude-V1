@@ -9,6 +9,8 @@ kind_von: C-394
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.meal_slots]
 zahlen:
@@ -56,3 +58,13 @@ Tom etwas sieht.**
 
 **Mitbeauftragt mit C-241 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit C-241 abgenommen:** gemessen, Vorschlag liegt vor.
+
+`[cmd]` **`test-user` hat in allen geprueften Tabellen 0 Zeilen.**
+`[cmd]` **`dev` traegt vier Plaene, sechs Logzeilen, sechs Slots.**
+
+`[read]` **Der Seed-Vorschlag steht in C-241, mit Groessenordnung** —
+**vorgelegt, nicht entschieden.**

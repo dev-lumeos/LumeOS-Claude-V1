@@ -10,6 +10,8 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   tabellen: ["nutrition.meal_plans", "medical.user_medications"]
   dateien: []
@@ -181,4 +183,56 @@ Lesefunktionen.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Nachgemessen.**
+
+### `test-user` ist in allen Tabellen leer
+
+`[cmd]` **0 Zeilen, ueberall.** `[cmd]` **`dev` traegt vier Plaene,
+sechs Logzeilen, sechs Slots** — **nichts davon veraendert.**
+
+`[read]` **Der Seed-Vorschlag steht im Punkt, mit Groessenordnung.**
+`[read]` **Er entscheidet nicht, sondern legt vor** — richtig.
+
+### C-366 — die zweite Tabelle steht
+
+`[cmd]` **`nutrition.food_tags_kuriert`, Spalten `food_id`,
+`tag_code`, `action`** — **kein `confidence`**, wie im Entwurf.
+
+`[cmd]` **`nutrition.food_tags_effective` als Sicht**, RLS-geschuetzt.
+
+`[cmd]` **Nachgemessen: 30.797 Zeilen in beiden** — **die Kuration
+ist leer, also veraendert die Sicht nichts.**
+
+`[read]` **Das ist der richtige Ausgangszustand:** **die Ueberlagerung
+ist da und tut noch nichts.**
+
+### Und die Zusage haelt in beide Richtungen
+
+`[read]` **`removed` ueberdeckt auch einen erneuten Import.**
+`[read]` **`set` gewinnt als Quelle `curated`.**
+
+`[cmd]` **Der Reimport-Test ist gruen** —
+`nutrition-c366-curated-food-tags.test.ts`.
+
+`[read]` **Das war der Kern aus C-387:** *,,Eine Entfernt-Zeile
+ueberdeckt auch einen Tag, den ein Import spaeter erneut setzt."*
+**Belegt.**
+
+### Und die Leser sind mit umgestellt
+
+`[cmd]` **Suche, Vorschau und Suchziel-Aktualisierung lesen die
+effektive Sicht.**
+
+`[read]` **Nicht nur die Tabelle gebaut, sondern angeschlossen** —
+**sonst waere es die vierte Funktion ohne Aufrufer gewesen.**
+
+### Der Sicherheitshinweis
+
+`[cmd]` **`pnpm audit` meldet 26 bestehende High-Severity-
+Abhaengigkeiten**, darunter Next 14.2.35 und Playwright.
+
+`[read]` **Er sagt selbst: nicht Teil dieses Auftrags.** **Als
+A-69.**
+
+**Abgenommen.** **Nicht committet** — der Gate ist rot wegen C-395.
+

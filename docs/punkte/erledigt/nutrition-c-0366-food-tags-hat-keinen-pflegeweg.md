@@ -9,6 +9,8 @@ kind_von: G-226
 entscheidung: E-55
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.food_tags]
 zahlen:
@@ -87,3 +89,19 @@ laesst Kuratiertes stehen. **Bei den Tags fehlt das.**
 
 **Mitbeauftragt mit C-241 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit C-241 abgenommen:** gebaut und angeschlossen.
+
+`[cmd]` **`food_tags_kuriert` (`food_id`, `tag_code`, `action`) und
+die Sicht `food_tags_effective`.**
+
+`[cmd]` **30.797 Zeilen in beiden** — die Kuration ist leer, die
+Sicht veraendert nichts.
+
+`[read]` **`removed` ueberdeckt einen erneuten Import, `set` gewinnt
+als Quelle `curated`** — **der Reimport-Test ist gruen.**
+
+`[cmd]` **Und Suche, Vorschau und Suchziel-Aktualisierung lesen die
+Sicht** — **nicht die vierte Funktion ohne Aufrufer.**
