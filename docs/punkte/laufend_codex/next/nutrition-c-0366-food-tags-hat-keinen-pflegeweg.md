@@ -80,3 +80,8 @@ laesst Kuratiertes stehen. **Bei den Tags fehlt das.**
 
 `[cmd]` **Vorher wird gemessen, wer die 30.797 Zeilen schreibt**
 (C-384).
+
+## Auftrag
+
+**Vorbereitet mit C-241 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

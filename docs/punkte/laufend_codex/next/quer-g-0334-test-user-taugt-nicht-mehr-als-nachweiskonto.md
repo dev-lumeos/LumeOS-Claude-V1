@@ -49,3 +49,8 @@ Tom etwas sieht.**
 
 `[read]` **Damit ist `dev` faktisch das Nachweiskonto geworden** —
 **gegen die Regel, aber mit Toms Wissen.**
+
+## Auftrag
+
+**Vorbereitet mit C-241 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
