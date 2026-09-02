@@ -52,6 +52,9 @@
 import * as React from 'react'
 import { Icon, Pill } from '@lumeos/ui'
 
+// G-336: die gemeinsame Modalhuelle — eine Ziehlogik.
+import { ZiehModal } from './zieh-modal'
+
 import type { NutritionFoodSearchRow } from '../../../lib/nutrition/food-search'
 import {
   useFoodSuche, MODAL_GROESSE, LEERE_LAGE, type SuchLage,
@@ -323,47 +326,15 @@ export function FoodSuchModal({
   const [menge, setMenge] = React.useState('100')
   const [laeuftSchreiben, setLaeuftSchreiben] = React.useState(false)
 
-  // ══ G-321: die verschobene Lage ═══════════════════════════════════
+  // ══ G-336: die Ziehlogik steht in `zieh-modal.tsx` ═══════════════
   //
-  // **Tom, 2026-09-02:** *„das modal muss bewegbar werden."*
+  // `[cmd]` **Hier standen 40 Zeilen** — Versatz, Griffpunkt,
+  // `mousemove`/`mouseup`, Escape. `[read]` **G-336 brauchte
+  // dieselbe Huelle fuer *Mahlzeit hinzufuegen*** — und eine Kopie
+  // waere eine zweite Wahrheit gewesen.
   //
-  // `[read]` **Ein Versatz, keine Position** — die Hülle zentriert
-  // per Flex, und `top`/`left` würden das aufheben. **`{0,0}` heisst
-  // also: da, wo es von selbst steht.**
-  const [versatz, setVersatz] = React.useState({ x: 0, y: 0 })
-  const [zieht, setZieht] = React.useState(false)
-  // `[read]` **Der Griffpunkt in einer Ref, nicht im Zustand** — er
-  // ändert sich bei jeder Mausbewegung, und ein `setState` je Pixel
-  // wäre ein Neuzeichnen je Pixel.
-  const griff = React.useRef<{ mx: number; my: number; x: number; y: number } | null>(null)
-
-  const zugStart = React.useCallback((e: React.MouseEvent) => {
-    // `[read]` **Nur die linke Taste** — ein Rechtsklick öffnet das
-    // Kontextmenü und liesse das Modal danach an der Maus kleben.
-    if (e.button !== 0) return
-    griff.current = { mx: e.clientX, my: e.clientY, x: versatz.x, y: versatz.y }
-    setZieht(true)
-  }, [versatz.x, versatz.y])
-
-  // `[cmd]` **Die Zuhörer hängen am `window`, nicht am Modal** —
-  // sonst reisst der Zug ab, sobald die Maus den Kasten verlässt.
-  // **Das ist der übliche Fehler bei Ziehflächen**, und er fällt erst
-  // bei schnellem Ziehen auf.
-  React.useEffect(() => {
-    if (!zieht) return
-    const bewegen = (e: MouseEvent) => {
-      const g = griff.current
-      if (!g) return
-      setVersatz({ x: g.x + (e.clientX - g.mx), y: g.y + (e.clientY - g.my) })
-    }
-    const los = () => { setZieht(false); griff.current = null }
-    window.addEventListener('mousemove', bewegen)
-    window.addEventListener('mouseup', los)
-    return () => {
-      window.removeEventListener('mousemove', bewegen)
-      window.removeEventListener('mouseup', los)
-    }
-  }, [zieht])
+  // `[read]` **Das Verhalten ist unveraendert** — derselbe Code, nur
+  // an einer Stelle.
   const [fehler, setFehler] = React.useState<string | null>(null)
 
   // `[read]` **Erst ab zwei Zeichen** — ein einzelner Buchstabe
@@ -416,79 +387,11 @@ export function FoodSuchModal({
   }
 
   return (
-    <div
-      role="dialog" aria-modal="true" aria-label="Lebensmittel suchen"
-      // `[cmd]` **G-321: `zieht` bricht das Schliessen ab.**
-      // `[read]` **Endet ein Zug auf der Huelle** — was bei
-      // schnellem Schieben nach aussen passiert — **kaeme sonst ein
-      // Klick an, und das Modal schloesse mitten in der Bewegung.**
-      onClick={e => {
-        if (!zieht && e.target === e.currentTarget) onClose()
-      }}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 60,
-        background: 'rgba(0,0,0,0.5)',
-        display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-        padding: '5vh 16px', overflowY: 'auto',
-      }}
+    <ZiehModal
+      titel="Lebensmittel suchen"
+      aria="Lebensmittel suchen"
+      onClose={onClose}
     >
-      <div
-        data-probe="modal-kasten"
-        style={{
-          background: 'var(--surface)', border: '1px solid var(--border)',
-          borderRadius: 8, width: '100%', maxWidth: 760, padding: 16,
-          // ══ G-321: die verschobene Lage ═════════════════
-          // `[read]` **`translate`, nicht `top`/`left`** — die Hülle
-          // zentriert per Flex; ein Positionswechsel würde das
-          // aufheben und das Modal beim ersten Zug springen lassen.
-          transform: `translate(${versatz.x}px, ${versatz.y}px)`,
-        }}
-      >
-        {/* ══ G-321: die Titelleiste zieht ══════════════════
-            **Tom, 2026-09-02:** *„das modal muss bewegbar werden."*
-
-            `[cmd]` **Gemessen: `drag` 0, `transform` 0,
-            `onMouseDown` 0.** `[read]` **Es verdeckte das Raster, in
-            dem der Nutzer sieht, was der Tag schon trägt** —
-            obwohl das Modal die Tagessumme kennt.
-
-            `[read]` **Nur Ziehen** — kein Grössenändern, kein
-            Andocken. `[read]` **Und der Schliessen-Knopf ist
-            ausgenommen**, sonst wäre jeder Klick darauf ein Zug von
-            0 px und das Modal bliebe offen. */}
-        <div
-          data-probe="titelleiste"
-          onMouseDown={zugStart}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12,
-            cursor: zieht ? 'grabbing' : 'grab',
-            // `[read]` **Kein Textmarkieren beim Ziehen** — sonst
-            // färbt sich der Titel blau, während man schiebt.
-            userSelect: 'none',
-          }}
-        >
-          <Icon name="more" className="v2-ic v2-ic-sm" />
-          <span style={{ fontSize: 14, fontWeight: 600 }}>
-            Lebensmittel suchen
-          </span>
-          <div style={{ flex: 1 }} />
-          {/* `[read]` **Zurücksetzen erscheint erst, wenn verschoben
-              wurde** — ein Knopf, der nichts tut, ist keiner. */}
-          {(versatz.x !== 0 || versatz.y !== 0) && (
-            <button type="button" className="v2-btn v2-btn-sm"
-                    onMouseDown={e => e.stopPropagation()}
-                    onClick={() => setVersatz({ x: 0, y: 0 })}
-                    title="Wieder in die Mitte">
-              Zurücksetzen
-            </button>
-          )}
-          <button type="button" className="v2-btn v2-btn-sm"
-                  onMouseDown={e => e.stopPropagation()}
-                  onClick={onClose} aria-label="Schliessen">
-            <Icon name="x" className="v2-ic v2-ic-sm" />
-          </button>
-        </div>
-
         {gewaehlt ? (
           // ══ Schritt 2: Menge ══════════════════════════════════════
           <div className="v2-col-gap" style={{ gap: 10 }}>
@@ -657,7 +560,6 @@ export function FoodSuchModal({
             )}
           </div>
         )}
-      </div>
-    </div>
+    </ZiehModal>
   )
 }

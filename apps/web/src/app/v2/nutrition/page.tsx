@@ -31,7 +31,8 @@ import {
   leererStand,
 } from '../../../lib/nutrition/vorlieben-lesen'
 // G-332: die Mahlzeiten-Slots.
-import { ladeSlots } from '../../../lib/nutrition/slots-lesen'
+import { ladeSlots, ladeAktivPlanSlots }
+  from '../../../lib/nutrition/slots-lesen'
 import type { MahlzeitSlot } from '../../../lib/nutrition/slots-lage'
 // G-72: die Reihen aus den Vorlieben — dieselbe Funktion wie
 // im Planner, kein zweiter Wortlaut.
@@ -187,6 +188,31 @@ export default async function V2NutritionPage({
       mahlzeitSlots = []
     }
   }
+
+  // ══ G-336 Punkt 4: die Ghost-Eintraege folgen dem Plan ═══════════
+  //
+  // **Tom, 2026-09-02:** *,,ghostentries bilden ab was im plan drin
+  // ist, also muss der plan angepasst werden."*
+  //
+  // `[read]` **Ein Ghost gehoert dem Plan, nicht dem Tag** — er zeigt,
+  // was der Plan fuer diese Stelle vorsieht. **Also gilt die
+  // Benennung des Plans** (E-59), nicht die des Nutzers.
+  //
+  // `[cmd]` **Nur der AKTIVE Plan** — dieselbe Bedingung, unter der
+  // `ladeGhostEintraege` seine Positionen holt (`status = 'active'`).
+  // **Ein anderer Plan hat heute keine Ghosts.**
+  //
+  // `[read]` **Ist er leer, bleibt es bei den Nutzerslots** — der
+  // Rueckfall aus G-335 traegt weiter.
+  let ghostSlots: MahlzeitSlot[] = []
+  if (tab === 'diary') {
+    try {
+      ghostSlots = await ladeAktivPlanSlots()
+    } catch {
+      ghostSlots = []
+    }
+  }
+  const ghostBenennung = ghostSlots.length > 0 ? ghostSlots : mahlzeitSlots
 
   let slots: Slot[] | null = null
   if (tab === 'diary') {
@@ -481,6 +507,7 @@ export default async function V2NutritionPage({
       coachFreigabe={coachFreigabe}
       einkaufslisten={einkaufslisten}
       tagesEintraege={tagesEintraege} slots={slots} mahlzeitSlots={mahlzeitSlots}
+      ghostSlots={ghostBenennung}
       wechsel={wechsel}
       mikro={mikro}
       ordnung={ordnung}

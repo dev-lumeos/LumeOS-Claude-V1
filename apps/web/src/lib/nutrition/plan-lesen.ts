@@ -46,8 +46,22 @@ function text(v: unknown): string | null {
 // `next/headers` mitzuziehen. Begruendung dort.
 import { SLOTS, rasterZeilen, type Slot } from './plan-model'
 
+// ══ G-336: die Rangfolge fuer die Zeilen ══════════════════════════
+//
+// `[cmd]` **`meal_plan_slots` steht seit C-396 und hatte in `apps/`
+// KEINEN Leser** — nur die Pipeline und ihr Test.
+//
+// `[read]` **Die Rangfolge steht in `slots-lage.ts`**, weil sie dort
+// schon fuer die Namen steht (G-335). **Keine zweite.**
+import {
+  rasterQuelle, zeilenSatz,
+  type MahlzeitSlot, type RasterZeile, type ZeilenQuelle,
+} from './slots-lage'
+import { ladeSlots } from './slots-lesen'
+
 export { SLOTS, SLOT_LABEL, rasterZeilen } from './plan-model'
 export type { Slot } from './plan-model'
+export type { RasterZeile } from './slots-lage'
 
 export type PlanEintrag = {
   id: string
@@ -121,11 +135,18 @@ export type PlanDaten = {
   } | null
   wochen: PlanWoche[]
   /**
-   * Die Zeilen des Rasters. `[cmd]` `meals_per_day` und
-   * `snacks_per_day` aus `food_preferences` (G-72) bestimmen sie —
-   * siehe `rasterZeilen`.
+   * Die Zeilen des Rasters — G-336.
+   *
+   * `[cmd]` **Bis G-336 waren es `Slot[]`** und kamen aus
+   * `meals_per_day`. **Jetzt tragen sie ihre Beschriftung mit** —
+   * ein Plan-Slot heisst *,,Nachmittagssnack"*, nicht `snack`.
+   *
+   * `[read]` **Die Rangfolge steht in `rasterQuelle`:** Plan-Slots,
+   * dann Nutzer-Slots (nur bei eigenem Plan), dann die Vorlieben.
    */
-  zeilen: Slot[]
+  zeilen: RasterZeile[]
+  /** Woher die Zeilen kommen — fuer den Waechter und den Satz. */
+  zeilenQuelle: ZeilenQuelle
   /** Woher die Zeilenzahl kommt, im Klartext fuer die Anzeige. */
   zeilenGrund: string
   /** Rezepte des Nutzers, fuer „New recipe" und die Zellenauswahl. */
@@ -212,23 +233,32 @@ async function kcalAusLebensmittel(
 export async function ladePlan(planId?: string | null): Promise<PlanDaten> {
   const db = nutritionDb()
 
-  // Die Zeilen des Rasters aus den Vorlieben (G-72). `[read]` Faellt
+  // Der unterste Rueckfall aus den Vorlieben (G-72). `[read]` Faellt
   // die Abfrage aus, bleibt es bei den vier Reihen des Entwurfs — der
   // Planner soll daran nicht scheitern.
-  let zeilen: Slot[] = [...SLOTS]
-  let zeilenGrund = 'Vier Reihen wie im Entwurf — Vorlieben nicht gelesen.'
+  let vorliebenZeilen: Slot[] = [...SLOTS]
   try {
     const { data } = await db
       .from('food_preferences')
       .select('meals_per_day, snacks_per_day')
       .maybeSingle()
     const p = (data ?? null) as Record<string, unknown> | null
-    const r = rasterZeilen(zahl(p?.meals_per_day), zahl(p?.snacks_per_day))
-    zeilen = r.zeilen
-    zeilenGrund = r.grund
+    vorliebenZeilen = rasterZeilen(
+      zahl(p?.meals_per_day), zahl(p?.snacks_per_day)).zeilen
   } catch {
     // Vorgabe bleibt stehen.
   }
+
+  // ══ G-336: die Slots des Nutzers ═══════════════════════════════
+  //
+  // `[read]` **Sie gelten nur fuer einen SELBST angelegten Plan** —
+  // ein gekaufter bringt seine eigene Struktur mit oder hat keine
+  // (E-59). **Geladen werden sie trotzdem immer**, weil erst nach
+  // dem Plan feststeht, ob sie gebraucht werden.
+  //
+  // `[cmd]` **Dieselbe Funktion wie im Tagebuch** (`ladeSlots`) —
+  // kein zweiter Leseweg.
+  const nutzerSlots = await ladeSlots().catch(() => [])
 
   // Der aktive Plan mit Wochen, Tagen und Eintraegen. Die Namen der
   // Lebensmittel kommen eingebettet mit; die der Rezepte ebenso.
@@ -255,8 +285,14 @@ export async function ladePlan(planId?: string | null): Promise<PlanDaten> {
     .order('is_active', { ascending: false })
 
   if (error) {
+    // `[read]` **Ohne Plan gibt es keine Planstruktur** — der
+    // Rueckfall auf die Vorlieben ist hier die einzige Quelle.
+    const fallback = rasterQuelle({ vorlieben: vorliebenZeilen })
     return {
-      plan: null, wochen: [], zeilen, zeilenGrund,
+      plan: null, wochen: [],
+      zeilen: fallback.zeilen,
+      zeilenQuelle: fallback.quelle,
+      zeilenGrund: zeilenSatz('vorlieben', fallback.zeilen.length),
       rezepte: [], ladefehler: error.message,
     }
   }
@@ -270,6 +306,37 @@ export async function ladePlan(planId?: string | null): Promise<PlanDaten> {
     : []
   const roh = (planId ? liste.find(p => text(p.id) === planId) : null)
     ?? liste[0] ?? null
+
+  // ══ G-336: die Slots DIESES Plans ══════════════════════════════
+  //
+  // **Tom, 2026-09-02:** *,,ich habe getestet einen neuen plan
+  // anzulegen, genau was ich sage es uebernimmt die definition in
+  // preferences nicht."*
+  //
+  // `[cmd]` **Der Plan `test` traegt fuenf Slots** (C-396 kopiert sie
+  // beim Anlegen) — **und niemand las sie.** `[cmd]` **Das Raster
+  // rechnete weiter aus `meals_per_day`: vier Zeilen.**
+  //
+  // `[read]` **Erst hier, nicht in der grossen Abfrage:** die Slots
+  // haengen am gewaehlten Plan, und der steht erst jetzt fest.
+  const planSlotId = text(roh?.id)
+  let planSlots: MahlzeitSlot[] = []
+  if (planSlotId) {
+    const { data: slotRoh } = await db
+      .from('meal_plan_slots')
+      .select('position, name, planned_time')
+      .eq('plan_id', planSlotId)
+      .order('position', { ascending: true })
+    planSlots = ((slotRoh ?? []) as unknown as Array<Record<string, unknown>>)
+      .map(z => ({
+        position: zahl(z.position) ?? 0,
+        name: text(z.name) ?? '',
+        // `[read]` **Ohne Sekunden** — dieselbe Form wie
+        // `meal_slots` (G-332), damit `slotFuerZeit` beide versteht.
+        planned_time: text(z.planned_time)?.slice(0, 5) ?? '',
+      }))
+      .filter(s => s.name.length > 0 && s.planned_time.length > 0)
+  }
 
   // Die Rezepte des Nutzers, mit Naehrwerten aus der Datenbankfunktion.
   const { data: rezepteRoh } = await db
@@ -402,18 +469,46 @@ export async function ladePlan(planId?: string | null): Promise<PlanDaten> {
   }
   wochen.sort((a, b) => a.week_start.localeCompare(b.week_start))
 
-  // ══ G-332: die Reihen, die dieser Plan tatsaechlich benutzt ═══
+  // ══ G-336: welche Kategorien der Plan wirklich benutzt ═════════
   //
   // `[read]` **In der Reihenfolge von `SLOTS`**, nicht in der des
   // ersten Fundes — sonst haenge die Zeilenfolge davon ab, welcher
   // Tag zuerst gelesen wurde.
+  //
+  // `[cmd]` **Bis G-336 waren DIESE Werte die Zeilen.** `[read]`
+  // **Jetzt sind sie die Zuordnung:** sie sagen, welche Kategorie die
+  // dritte Slotzeile filtert — **nicht mehr, wie viele Zeilen es
+  // gibt.** Das entscheidet `meal_plan_slots`.
   const benutzt = new Set<string>()
   for (const w of wochen) {
     for (const d of w.tage) {
       for (const e of d.eintraege) benutzt.add(e.meal_type)
     }
   }
-  const planZeilen: Slot[] = SLOTS.filter(s => benutzt.has(s))
+  const benutzteReihen: string[] = SLOTS.filter(s => benutzt.has(s))
+
+  // ══ G-336: die Rangfolge, einmal fuer alle drei Quellen ════════
+  //
+  // `[cmd]` **`plan_origin` traegt `self_created`, `coach_created`,
+  // `marketplace`, `buddy` — oder `NULL`.** `[cmd]` **Gemessen am
+  // 2026-09-02: `Aufbau-Wochenplan` hat `NULL`**, die anderen vier
+  // sind belegt.
+  //
+  // `[read]` **`NULL` gilt als eigener Plan** — er ist auf dem Konto
+  // des Nutzers entstanden und niemand hat ihn geliefert. **Der
+  // Rueckfall auf die eigenen Mahlzeiten ist da richtig.**
+  const herkunft = text(roh?.plan_origin)
+  const planEigen = herkunft === null || herkunft === 'self_created'
+
+  const rasterLage = rasterQuelle({
+    planSlots,
+    nutzerSlots,
+    planEigen,
+    vorlieben: vorliebenZeilen,
+    // `[read]` **Die benutzten Kategorien zuerst** — hat der Plan
+    // Eintraege, sagen sie die Reihenfolge genauer als die Vorgabe.
+    reihen: benutzteReihen.length > 0 ? benutzteReihen : vorliebenZeilen,
+  })
 
   return {
     plan: roh
@@ -438,29 +533,28 @@ export async function ladePlan(planId?: string | null): Promise<PlanDaten> {
         }
       : null,
     wochen,
-    // ══ G-332 Punkt 6: ein fremder Plan bringt seine Struktur mit ══
+    // ══ G-336: die Rangfolge entscheidet die Zeilen ═══════════════
     //
-    // **Tom, 2026-09-02:** *,,bei gekauften oder von coach wird der
-    // plan ja vollstaendig geliefert."*
+    // `[cmd]` **Hier stand `planZeilen`** — aus den `meal_type`-Werten
+    // der EINTRAEGE abgeleitet (G-332). `[cmd]` **Das ging in beide
+    // Richtungen schief, am 2026-09-02 gemessen:**
     //
-    // `[cmd]` **Gemessen am 2026-09-02: die Struktur steht bereits in
-    // den Positionen.** Alle vier Herkuenfte — `self_created`,
-    // `coach_created`, `marketplace`, `buddy` — tragen ihre
-    // `meal_type`-Werte in `meal_plan_entries`.
+    //     test, 5 Slots, 0 Eintraege   -> "4 Reihen aus deinen
+    //                                     Vorlieben"
+    //     Lean bulk, 0 Slots           -> "4 Reihen aus diesem Plan"
     //
-    // `[cmd]` **`meal_plans` traegt KEINE Zeilenzahl** (gemessen:
-    // keine Spalte fuer `meals`, `slots` oder Zeilen) — **sie muss
-    // auch keine tragen.** Die Positionen sagen es genauer als eine
-    // Zahl es koennte.
+    // `[read]` **Ein Plan ohne Eintraege hat trotzdem eine Struktur**,
+    // und ein Plan mit Eintraegen hat deshalb noch keine eigene.
+    // **Die Struktur steht in `meal_plan_slots`, nicht in dem, was
+    // schon eingetragen wurde.**
     //
-    // `[read]` **Also: hat der Plan Positionen, gelten SEINE Reihen.**
-    // **Sonst die Vorlieben** — fuer einen leeren, selbst angelegten
-    // Plan ist das richtig.
-    zeilen: planZeilen.length > 0 ? planZeilen : zeilen,
-    zeilenGrund: planZeilen.length > 0
-      ? `${planZeilen.length} Reihen aus diesem Plan — `
-        + 'ein gelieferter Plan bringt seine Struktur mit.'
-      : zeilenGrund,
+    // `[read]` **Die Reihenfolge der Kategorien bleibt der Rueckfall
+    // aus den Vorlieben** — sie sagt, welche Kategorie die dritte
+    // Zeile bekommt, wenn der Plan fuenf Slots hat.
+    zeilen: rasterLage.zeilen,
+    zeilenQuelle: rasterLage.quelle,
+    zeilenGrund: zeilenSatz(
+      rasterLage.quelle, rasterLage.zeilen.length, planEigen),
     rezepte,
     ladefehler: null,
   }

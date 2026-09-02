@@ -339,6 +339,121 @@ export function mahlzeitName(
   return KATEGORIE_TEXT[kategorie] ?? kategorie
 }
 
+// ══ G-336: die Zeilen des Rasters ═══════════════════════════════════
+
+/** Eine Rasterzeile: was dransteht, und welche Eintraege hineinfallen. */
+export type RasterZeile = {
+  /** Die Beschriftung — der Slotname, sonst die Kategorie. */
+  label: string
+  /** Die Kategorie, nach der Eintraege gefiltert werden. */
+  kategorie: string
+  /** Die geplante Zeit, wenn die Quelle eine kennt. */
+  zeit: string | null
+}
+
+/** Woher die Zeilen kommen — fuer den Satz unter dem Raster. */
+export type ZeilenQuelle = 'plan' | 'nutzer' | 'vorlieben'
+
+/**
+ * Welche Zeilen ein Plan-Raster hat — G-336.
+ *
+ * **Der Auftrag:** *,,Plan-Slots, wenn der Plan welche hat ·
+ * Nutzer-Slots, wenn nicht und es ein Selbstplan ist · `meals_per_day`
+ * als Rueckfall."*
+ *
+ * `[read]` **Dieselbe Ordnung wie `mahlzeitName`** (G-335): der Plan
+ * schlaegt den Nutzer schlaegt die Kategorie. **Keine zweite
+ * Rangfolge** — diese Funktion IST die eine, nur fuer Zeilen statt
+ * fuer Namen.
+ *
+ * `[cmd]` **Warum die Kategorie mitlaeuft:** `meal_plan_entries`
+ * traegt `meal_type`, nicht die Slotposition. **Eine Zeile braucht
+ * beides** — den Namen zum Anzeigen und die Kategorie zum Filtern.
+ *
+ * `[cmd]` **Die Zuordnung Slot → Kategorie geht ueber die Stellung**,
+ * nicht ueber den Namen: der erste Slot nimmt die erste Kategorie der
+ * Reihe. **Nach `reihen`** — hat der Plan mehr Slots als Kategorien,
+ * bekommen die uebrigen `other`.
+ *
+ * `[read]` **Ein Selbstplan ohne eigene Slots liest die Nutzerslots**
+ * — er ist ja der Plan desselben Menschen. **Ein gelieferter Plan
+ * ohne Slots faellt auf die Vorlieben zurueck** und meldet das:
+ * seine Struktur fehlt, sie wird nicht erfunden (E-59).
+ */
+export function rasterQuelle(
+  {
+    planSlots = [], nutzerSlots = [], planEigen = false,
+    vorlieben = [], reihen = [],
+  }: {
+    /** Die Slots DIESES Plans (`meal_plan_slots`). */
+    planSlots?: readonly MahlzeitSlot[]
+    /** Die Slots des Nutzers (`meal_slots`). */
+    nutzerSlots?: readonly MahlzeitSlot[]
+    /** Ist es ein selbst angelegter Plan? */
+    planEigen?: boolean
+    /** Der Rueckfall aus `meals_per_day` — Kategorien, keine Namen. */
+    vorlieben?: readonly string[]
+    /** Die Kategorien in ihrer Reihenfolge, fuer die Zuordnung. */
+    reihen?: readonly string[]
+  } = {},
+): { zeilen: RasterZeile[]; quelle: ZeilenQuelle } {
+  const ordnung = reihen.length > 0 ? reihen : vorlieben
+
+  const ausSlots = (slots: readonly MahlzeitSlot[]): RasterZeile[] =>
+    [...slots]
+      .sort((a, b) => a.position - b.position)
+      .map((s, i) => ({
+        label: s.name,
+        kategorie: ordnung[i] ?? 'other',
+        zeit: s.planned_time,
+      }))
+
+  // 1. Der Plan, wenn er eigene Slots traegt (E-59).
+  if (planSlots.length > 0) {
+    return { zeilen: ausSlots(planSlots), quelle: 'plan' }
+  }
+  // 2. Die Slots des Nutzers — aber nur bei einem eigenen Plan (E-58).
+  if (planEigen && nutzerSlots.length > 0) {
+    return { zeilen: ausSlots(nutzerSlots), quelle: 'nutzer' }
+  }
+  // 3. Der Rueckfall aus den Vorlieben — Kategorien ohne Zeit.
+  return {
+    zeilen: vorlieben.map(k => ({
+      label: KATEGORIE_TEXT[k] ?? k, kategorie: k, zeit: null,
+    })),
+    quelle: 'vorlieben',
+  }
+}
+
+/**
+ * Der Satz unter dem Raster — G-336.
+ *
+ * `[cmd]` **Gemessen am 2026-09-02, vor dem Bau:** drei Plaene mit
+ * NULL Slots schrieben *,,4 Reihen aus diesem Plan"*, waehrend `test`
+ * mit FUENF Slots *,,aus deinen Vorlieben"* schrieb. **Der Satz war
+ * in jedem gemessenen Fall falsch herum.**
+ *
+ * `[read]` **Er stand neben der Rangfolge, statt aus ihr zu folgen** —
+ * deshalb kommt er jetzt aus derselben Funktion.
+ */
+export function zeilenSatz(
+  quelle: ZeilenQuelle, anzahl: number, planEigen = false,
+): string {
+  if (quelle === 'plan') {
+    return `${anzahl} Reihen aus diesem Plan — er bringt seine eigene `
+      + 'Mahlzeitenstruktur mit.'
+  }
+  if (quelle === 'nutzer') {
+    return `${anzahl} Reihen aus deinen Mahlzeiten — dieser Plan hat `
+      + 'keine eigene Struktur, also gilt deine.'
+  }
+  return planEigen
+    ? `${anzahl} Reihen aus deinen Vorlieben — weder der Plan noch `
+      + 'deine Mahlzeiten sind gesetzt.'
+    : `${anzahl} Reihen aus deinen Vorlieben — dieser Plan bringt `
+      + 'keine eigene Struktur mit.'
+}
+
 /**
  * Der Name fuer eine LEERE Karte — G-332.
  *

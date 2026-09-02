@@ -34,8 +34,13 @@ import { GhostEintragKarte, type GhostEintrag } from './ghost-eintrag'
 // und Ghost-Eintrag (G-329) — keine fuenfte Suche.
 import { FoodSuchModal } from './food-such-modal'
 // G-332: die benannten Slots (C-392) und ihre Zuordnung.
-import { slotFuerZeit, slotFuerTyp, KATEGORIE_TEXT, type MahlzeitSlot }
-  from '../../../lib/nutrition/slots-lage'
+import {
+  slotFuerZeit, slotFuerTyp, kategorieAuswahl, KATEGORIE_TEXT,
+  type MahlzeitSlot,
+} from '../../../lib/nutrition/slots-lage'
+// G-336: dieselbe Modalhuelle wie die Suche (G-320/G-321) —
+// keine zweite Ziehlogik.
+import { ZiehModal } from './zieh-modal'
 
 /** Die Slots der Vorlage, in ihrer Reihenfolge. */
 // ══ G-335: die eigene Namensliste ist weg ═════════════════
@@ -147,7 +152,7 @@ function z(v: number | null): string {
 }
 
 export function Mahlzeiten({
-  datum, slots = null, mahlzeitSlots = [], onGeaendert,
+  datum, slots = null, mahlzeitSlots = [], ghostSlots, onGeaendert,
 }: {
   datum: string
   /**
@@ -160,6 +165,23 @@ export function Mahlzeiten({
    * `SLOT_LABEL`, den festen Bezeichnungen.
    */
   mahlzeitSlots?: readonly MahlzeitSlot[]
+  /**
+   * G-336: die Slots des AKTIVEN Plans, fuer die Ghost-Eintraege.
+   *
+   * **Tom, 2026-09-02:** *,,ghostentries bilden ab was im plan drin
+   * ist, also muss der plan angepasst werden."*
+   *
+   * `[read]` **Ein Ghost gehoert dem Plan** — er zeigt, was der Plan
+   * vorsieht. **Also gilt dessen Benennung** (E-59).
+   *
+   * `[read]` **Getrennt von `mahlzeitSlots`, nicht statt dessen:**
+   * die EIGENEN Karten des Tages heissen weiter nach den eigenen
+   * Slots (E-58). **Nur die Ghosts folgen dem Plan.**
+   *
+   * `[read]` **Ohne Angabe gilt `mahlzeitSlots`** — der Rueckfall aus
+   * G-335 bleibt damit unveraendert bestehen.
+   */
+  ghostSlots?: readonly MahlzeitSlot[]
   /**
    * G-72: welche Mahlzeitenreihen der Tag zeigt.
    *
@@ -334,7 +356,11 @@ export function Mahlzeiten({
           datum={datum}
           // G-335: die Ghost-Karte heisst wie der Slot, nicht wie die
           // Kategorie — Toms Befund *,,Breakfast statt Fruehstueck"*.
-          slots={mahlzeitSlots}
+          //
+          // G-336: und zwar wie der Slot DES PLANS, wenn er einen hat
+          // (E-59) — sonst wie der eigene. `ghostSlots` traegt bereits
+          // die Entscheidung; hier steht nur der Rueckfall.
+          slots={ghostSlots ?? mahlzeitSlots}
           onGeaendert={neuLaden}
         />
       ))}
@@ -400,6 +426,52 @@ function FreieMahlzeit({ datum, slots, offen, setOffen, onGeaendert }: {
   const [laeuft, setLaeuft] = React.useState(false)
   const [fehler, setFehler] = React.useState<string | null>(null)
 
+  // ══ G-336: die Auswahl kennt zwei Arten von Eintrag ═══════════════
+  //
+  // `[read]` **Ein Slot ist etwas anderes als eine Kategorie:** der
+  // Slot bringt Namen UND Zeit mit, die Kategorie nur einen Text.
+  // **Der Wert traegt deshalb, woher er kommt** — `slot:2` oder
+  // `kat:breakfast`.
+  //
+  // `[cmd]` **Der gespeicherte Wert bleibt `meal_type`** — die
+  // Datenbank kennt keine Slotspalte in `meals`. **Der Slot waehlt
+  // die Kategorie ueber seine Stellung**, wie im Raster (G-336).
+  const [wahl, setWahl] = React.useState('kat:other')
+  const [name, setName] = React.useState('')
+
+  // `[read]` **Die Kategorien in ihrer Reihenfolge** — sie ordnet den
+  // Slots ihre Kategorie zu. **Dieselbe Ordnung wie im Raster.**
+  const reihen = React.useMemo(
+    () => Object.keys(KATEGORIE_TEXT), [])
+
+  /**
+   * Eine Wahl uebernehmen — G-336.
+   *
+   * `[read]` **Ein Slot setzt Zeit und Name mit**, weil er beides
+   * kennt. **Beide bleiben danach frei**: die Wahl ist ein Vorschlag,
+   * keine Festlegung (E-58).
+   */
+  function waehle(wert: string) {
+    setWahl(wert)
+    if (wert.startsWith('slot:')) {
+      const pos = Number(wert.slice(5))
+      const s = slots.find(x => x.position === pos)
+      if (s) {
+        setZeit(s.planned_time)
+        setName(s.name)
+        // Die Kategorie folgt der Stellung, nicht dem Namen.
+        const i = slots.findIndex(x => x.position === pos)
+        setTyp((reihen[i] ?? 'other') as MealType)
+      }
+      return
+    }
+    const kat = wert.slice(4)
+    setTyp(kat as MealType)
+    // `[read]` **Der Name bleibt, wenn der Nutzer ihn getippt hat** —
+    // nur der Vorschlag aus einem Slot wird ersetzt.
+    setName(n => (slots.some(s => s.name === n) ? '' : n))
+  }
+
   // `[read]` **Die Vorgabe ist die aktuelle Uhrzeit** — wer jetzt
   // isst, muss sie nicht tippen. **Auf volle Minuten**, weil
   // `meals_meal_time_minute_check` Sekunden verbietet.
@@ -422,6 +494,9 @@ function FreieMahlzeit({ datum, slots, offen, setOffen, onGeaendert }: {
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           art: 'mahlzeit', entry_date: datum, meal_type: typ, meal_time: zeit,
+          // `[read]` **Leer heisst: keine Notiz** — ein leerer String
+          // waere eine Aussage, wo keine gemacht wurde.
+          ...(name.trim().length > 0 ? { notes: name.trim() } : {}),
         }),
       })
       if (!a.ok) {
@@ -430,6 +505,7 @@ function FreieMahlzeit({ datum, slots, offen, setOffen, onGeaendert }: {
         return
       }
       setOffen(false)
+      setName('')
       onGeaendert()
     } catch (e) {
       setFehler(e instanceof Error ? e.message : String(e))
@@ -438,8 +514,20 @@ function FreieMahlzeit({ datum, slots, offen, setOffen, onGeaendert }: {
     }
   }
 
-  if (!offen) {
-    return (
+  // ══ G-336: der Knopf bleibt stehen ════════════════════════════════
+  //
+  // **Tom, 2026-09-02:** *,,das unten in diary auch nicht geloest, ich
+  // denke da ist ein modal besser."*
+  //
+  // `[cmd]` **Gemessen vor dem Bau:** der Knopf lag bei **y = 2720**,
+  // und beim Klick war er weg (`knopf_noch_da: 0`) — **das Formular
+  // stand an seiner Stelle, unterhalb des sichtbaren Bereichs.**
+  //
+  // `[read]` **Der Knopf verschwand nicht durch einen Fehler, sondern
+  // durch die Bauweise:** er WAR das Formular, an derselben Stelle.
+  // **Im Modal steht er weiter da, und das Formular liegt darueber.**
+  return (
+    <>
       <button
         type="button" className="v2-btn v2-btn-sm"
         data-probe="freie-mahlzeit-oeffnen"
@@ -449,71 +537,146 @@ function FreieMahlzeit({ datum, slots, offen, setOffen, onGeaendert }: {
         <Icon name="plus" className="v2-ic v2-ic-sm" />
         Mahlzeit hinzufügen
       </button>
-    )
-  }
 
-  return (
-    <Card className="v2-card-tight" data-probe="freie-mahlzeit">
-      <div style={{
-        display: 'flex', gap: 8, alignItems: 'flex-end', flexWrap: 'wrap',
-      }}>
-        <label style={{ fontSize: 10 }}>
-          <span className="v2-eyebrow">Uhrzeit</span>
-          <input
-            className="v2-feld" type="time"
-            data-probe="freie-zeit"
-            style={{ width: 106, flex: 'none', fontSize: 11.5 }}
-            aria-label="Uhrzeit der Mahlzeit"
-            value={zeit}
-            disabled={laeuft}
-            onChange={e => setZeit(e.target.value)}
-          />
-        </label>
-        <label style={{ fontSize: 10 }}>
-          <span className="v2-eyebrow">Art</span>
-          <select
-            className="v2-feld" data-probe="freie-art"
-            style={{ fontSize: 11.5 }}
-            aria-label="Art der Mahlzeit"
-            value={typ}
-            disabled={laeuft}
-            onChange={e => setTyp(e.target.value as MealType)}
-          >
-            {(Object.keys(SLOT_LABEL) as MealType[]).map(k => (
-              <option key={k} value={k}>{SLOT_LABEL[k]}</option>
-            ))}
-          </select>
-        </label>
-        <button
-          type="button" className="v2-btn v2-btn-sm v2-btn-primary"
-          data-probe="freie-anlegen"
-          disabled={laeuft || !zeit}
-          onClick={anlegen}
+      {offen && (
+        <ZiehModal
+          titel="Mahlzeit hinzufügen"
+          aria="Mahlzeit hinzufügen"
+          breite={520}
+          probe="freie-mahlzeit"
+          onClose={() => { if (!laeuft) setOffen(false) }}
         >
-          {laeuft ? 'Legt an…' : 'Anlegen'}
-        </button>
-        <button type="button" className="v2-btn v2-btn-sm"
-                disabled={laeuft} onClick={() => setOffen(false)}>
-          Abbrechen
-        </button>
-      </div>
+          <div className="v2-col-gap" style={{ gap: 12 }}>
+            <label style={{ fontSize: 10, display: 'block' }}>
+              <span className="v2-eyebrow">Uhrzeit</span>
+              <input
+                className="v2-feld" type="time"
+                data-probe="freie-zeit"
+                style={{ width: 130, fontSize: 12 }}
+                aria-label="Uhrzeit der Mahlzeit"
+                value={zeit}
+                disabled={laeuft}
+                onChange={e => setZeit(e.target.value)}
+              />
+            </label>
 
-      {/* `[read]` **Der Vorschlag sagt, wohin sie faellt** — ohne
-          passenden Slot steht es genauso da. **Das ist der 22-Uhr-
-          Fall aus dem Auftrag.** */}
-      <p className="v2-muted" data-probe="freie-hinweis"
-         style={{ fontSize: 10.5, marginTop: 8, lineHeight: 1.5 }}>
-        {vorschlag
-          ? <>Wird bei <strong>{vorschlag.name}</strong> ({vorschlag.planned_time})
-              einsortiert — die nächstliegende Zeit.</>
-          : <>Für diese Zeit gibt es keinen Slot. <strong>Die Mahlzeit wird
-              trotzdem erfasst</strong> und steht mit ihrer Uhrzeit da.</>}
-      </p>
+            {/* ══ G-336: die eigenen Slots als Auswahl ═══════════
+                **Der Auftrag:** *,,Die Auswahl bietet die eigenen
+                Slots mit ihrer Zeit — und Freitext daneben."*
 
-      {fehler && (
-        <p style={{ fontSize: 11, color: 'var(--neg)', margin: '6px 0 0' }}>{fehler}</p>
+                `[cmd]` **Hier stand `SLOT_LABEL`** — die sieben
+                Kategorien, mit *Sonstiges* als Vorgabe. `[cmd]`
+                **Gemessen: die Auswahl zeigte Fruehstueck,
+                Mittagessen, Abendessen, Snack, Vor dem Training,
+                Nach dem Training, Sonstiges** — **kein einziger
+                Name des Nutzers.**
+
+                `[read]` **Ein Slot traegt seine Zeit mit:** wer
+                *Nachmittagssnack* waehlt, meint 16:00. **Die Zeit
+                folgt der Wahl** — aber sie bleibt danach frei
+                (E-58). */}
+            <label style={{ fontSize: 10, display: 'block' }}>
+              <span className="v2-eyebrow">Mahlzeit</span>
+              <select
+                className="v2-feld" data-probe="freie-art"
+                style={{ fontSize: 12, width: '100%' }}
+                aria-label="Art der Mahlzeit"
+                value={wahl}
+                disabled={laeuft}
+                onChange={e => waehle(e.target.value)}
+              >
+                {slots.map(s => (
+                  <option key={`slot-${s.position}`} value={`slot:${s.position}`}>
+                    {s.name} ({s.planned_time})
+                  </option>
+                ))}
+                {slots.length > 0 && (
+                  <option disabled>── ohne eigenen Slot ──</option>
+                )}
+                {/* `[cmd]` **Ohne Slots aufgerufen, mit Absicht.**
+                    `kategorieAuswahl(slots, …)` loeste die Kategorien
+                    ueber die Nutzerslots auf — **gemessen am
+                    2026-09-02: beide Haelften zeigten dieselben fuenf
+                    Namen, und *Vor dem Training* fehlte ganz**, weil
+                    es von einem Slotnamen verdeckt wurde.
+
+                    `[read]` **Hier ist die Kategorie gemeint, nicht
+                    ihr Slotname** — die Slots stehen schon darueber. */}
+                {kategorieAuswahl().map(k => (
+                  <option key={k.code} value={`kat:${k.code}`}>
+                    {k.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            {/* ══ G-336: Freitext daneben ════════════════════════
+                **Der Auftrag:** *,,und Freitext daneben."*
+
+                `[read]` **Der Text ist frei** — die Auswahl setzt ihn
+                als Vorschlag, wer will, ueberschreibt ihn. **Sie
+                ordnet, sie schreibt nicht vor** (E-58).
+
+                `[cmd]` **Er geht nach `meals.notes`, nicht in eine
+                Namensspalte** — **`nutrition.meals` hat keine**
+                (gemessen 2026-09-02: `id, user_id, entry_date,
+                meal_type, notes, created_at, updated_at, meal_time,
+                entry_source, source_detail`).
+
+                `[read]` **Deshalb heisst das Feld *Notiz*, nicht
+                *Name*** — ein Name, der als Notiz gespeichert wird,
+                waere eine Beschriftung, die ihr Feld nicht haelt.
+                **Die fehlende Spalte ist gemeldet.** */}
+            <label style={{ fontSize: 10, display: 'block' }}>
+              <span className="v2-eyebrow">Notiz (frei)</span>
+              <input
+                className="v2-feld" type="text"
+                data-probe="freie-name"
+                style={{ fontSize: 12, width: '100%' }}
+                aria-label="Name der Mahlzeit"
+                placeholder="z. B. Spätmahlzeit"
+                value={name}
+                disabled={laeuft}
+                onChange={e => setName(e.target.value)}
+              />
+            </label>
+
+            {/* `[read]` **Der Vorschlag sagt, wohin sie faellt** —
+                ohne passenden Slot steht es genauso da. **Das ist
+                der 22-Uhr-Fall aus dem Auftrag**, und er steht
+                jetzt im Modal statt unter einem halb verdeckten
+                Feld. */}
+            <p className="v2-muted" data-probe="freie-hinweis"
+               style={{ fontSize: 11, lineHeight: 1.5, margin: 0 }}>
+              {vorschlag
+                ? <>Wird bei <strong>{vorschlag.name}</strong> ({vorschlag.planned_time})
+                    einsortiert — die nächstliegende Zeit.</>
+                : <>Für diese Zeit gibt es keinen Slot. <strong>Die Mahlzeit wird
+                    trotzdem erfasst</strong> und steht mit ihrer Uhrzeit da.</>}
+            </p>
+
+            {fehler && (
+              <p style={{ fontSize: 11, color: 'var(--neg)', margin: 0 }}>{fehler}</p>
+            )}
+
+            <div style={{ display: 'flex', gap: 8, marginTop: 2 }}>
+              <button
+                type="button" className="v2-btn v2-btn-sm v2-btn-primary"
+                data-probe="freie-anlegen"
+                disabled={laeuft || !zeit}
+                onClick={anlegen}
+              >
+                {laeuft ? 'Legt an…' : 'Anlegen'}
+              </button>
+              <button type="button" className="v2-btn v2-btn-sm"
+                      disabled={laeuft} onClick={() => setOffen(false)}>
+                Abbrechen
+              </button>
+            </div>
+          </div>
+        </ZiehModal>
       )}
-    </Card>
+    </>
   )
 }
 

@@ -355,31 +355,53 @@ test('G-332: eine Mahlzeit ausserhalb der Slots ist anlegbar', () => {
 
 // ══ Planner ══════════════════════════════════════════════════════════
 
-test('G-332: ein gelieferter Plan bringt seine Struktur mit', () => {
+test('G-332/G-336: ein gelieferter Plan bringt seine Struktur mit', () => {
   // **Tom:** *„bei gekauften oder von coach wird der plan ja
   // vollstaendig geliefert."*
   //
-  // `[cmd]` **Gemessen am 2026-09-02: die Struktur steht bereits in
-  // den Positionen.** Alle vier Herkünfte — `self_created`,
-  // `coach_created`, `marketplace`, `buddy` — tragen ihre
-  // `meal_type`-Werte in `meal_plan_entries`.
+  // ══ BERICHTIGT IN G-336 ═════════════════════════
   //
-  // `[cmd]` **`meal_plans` trägt KEINE Zeilenzahl** — und muss
-  // keine tragen.
+  // `[cmd]` **Hier stand `planZeilen: Slot[] = SLOTS.filter(...)`** —
+  // die Zeilen aus den EINTRAEGEN abgeleitet.
+  //
+  // `[cmd]` **Am 2026-09-02 gemessen, und es ging in beide Richtungen
+  // schief:**
+  //
+  //     test, 5 Slots, 0 Eintraege    -> 4 Zeilen "aus deinen
+  //                                      Vorlieben"
+  //     Lean bulk, 0 Slots, marketpl. -> 4 Zeilen "aus diesem Plan"
+  //
+  // `[read]` **Ein Plan ohne Eintraege hat trotzdem eine Struktur**,
+  // und ein Plan mit Eintraegen hat deshalb noch keine eigene.
+  //
+  // `[read]` **Die Zusage bleibt, ihre Quelle wechselt:** die
+  // Struktur steht in `meal_plan_slots` (C-396), nicht in dem, was
+  // schon eingetragen wurde. **Die Rangfolge prueft
+  // `raster-liest-planslots.test.ts` mit Werten.**
   const p = ohneKommentare(PLAN)
-  assert.match(p, /const planZeilen: Slot\[\] = SLOTS\.filter\(s => benutzt\.has\(s\)\)/,
-    'die Zeilen werden nicht aus dem Plan abgeleitet')
-  assert.match(p, /zeilen: planZeilen\.length > 0 \? planZeilen : zeilen/,
-    'ein gelieferter Plan setzt seine Reihen nicht durch')
+  assert.match(p, /\.from\('meal_plan_slots'\)/,
+    'die Planstruktur wird nicht gelesen')
+  assert.match(p, /rasterQuelle\(\{/,
+    'die Rangfolge entscheidet die Zeilen nicht')
 
-  // `[read]` **Sonst die Vorlieben** — für einen leeren, selbst
-  // angelegten Plan ist das richtig.
-  assert.match(p, /rasterZeilen\(zahl\(p\?\.meals_per_day\), zahl\(p\?\.snacks_per_day\)\)/,
-    'der Rückfall auf die Vorlieben ist weg')
+  // `[cmd]` **Der alte Weg ist entfernt, nicht auskommentiert**
+  // (A-59).
+  assert.doesNotMatch(p, /(?<![a-z0-9_])planZeilen(?![a-z0-9_])/,
+    'planZeilen lebt weiter — dann gibt es zwei Wahrheiten')
 
-  // `[read]` **In der Reihenfolge von `SLOTS`** — sonst hinge die
-  // Zeilenfolge davon ab, welcher Tag zuerst gelesen wurde.
-  const i = p.indexOf('const benutzt = new Set<string>()')
-  const j = p.indexOf('const planZeilen')
-  assert.ok(i > 0 && j > i, 'die benutzten Typen werden nicht gesammelt')
+  // `[read]` **Der Rueckfall auf die Vorlieben bleibt** — fuer einen
+  // Nutzer ohne Slots ist er die einzige Quelle.
+  // `[cmd]` **Ueber Zeilenumbrueche hinweg** — G-336 hat den Aufruf
+  // auf zwei Zeilen gelegt, und ein Muster auf einer Zeile faende ihn
+  // nicht mehr. **Die Wirkung ist, DASS aus den zwei Spalten
+  // gerechnet wird, nicht wie es umbrochen ist.**
+  assert.match(p, /rasterZeilen\(\s*zahl\(p\?\.meals_per_day\),\s*zahl\(p\?\.snacks_per_day\)\)/,
+    'der Rueckfall auf die Vorlieben ist weg')
+  assert.match(p, /vorliebenZeilen = rasterZeilen\(/,
+    'das Ergebnis des Rueckfalls wird nicht behalten')
+
+  // `[read]` **Die benutzten Kategorien werden weiter gesammelt** —
+  // sie sagen jetzt die Zuordnung, nicht die Zeilenzahl.
+  assert.match(p, /const benutzteReihen: string\[\] = SLOTS\.filter/,
+    'die benutzten Kategorien werden nicht mehr gesammelt')
 })

@@ -148,7 +148,7 @@ export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, lueckenGesamt = null, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
   planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
   wechsel = LEERER_WECHSELSTAND,
-  istAdmin = false, slots = null, mahlzeitSlots = [], foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null, rezepte = null, allePlaene = [],
+  istAdmin = false, slots = null, mahlzeitSlots = [], ghostSlots = [], foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null, rezepte = null, allePlaene = [],
   offeneAktionen = null, sitzung = null,
   unvertraeglichkeiten = [],
 }: {
@@ -191,6 +191,8 @@ export async function TagebuchAnsicht({
   slots?: Slot[] | null
   /** G-332: die benannten Slots aus `meal_slots` (C-392). */
   mahlzeitSlots?: MahlzeitSlot[]
+  /** G-336: die Slots des aktiven Plans — nur fuer die Ghosts. */
+  ghostSlots?: MahlzeitSlot[]
   /** G-97: der Wochenplan, wenn der Planner-Tab gezeigt wird. */
   plan?: PlanDaten | null
   /** G-101: Mikronaehrstoffe und Schwellenunterschreitungen. */
@@ -483,7 +485,8 @@ export async function TagebuchAnsicht({
         {/* Die Mahlzeitenkarten der Vorlage — Anzeige wie dort,
             Bearbeitung ueber `+` und `···`. Ersetzt das Formular aus
             C-03, das je Zeile ein Eingabefeld hatte. */}
-        <Mahlzeiten datum={datum} slots={slots} mahlzeitSlots={mahlzeitSlots} />
+        <Mahlzeiten datum={datum} slots={slots} mahlzeitSlots={mahlzeitSlots}
+                    ghostSlots={ghostSlots} />
         </div>
 
         {/* ---------- Rechte Spalte, Reihenfolge der Vorlage ----------

@@ -27,6 +27,16 @@ const ohneKommentare = (f: string) => lies(f)
   .replace(/^[ \t]*\/\/.*$/gm, '')
 
 const MODAL = 'apps/web/src/app/v2/nutrition/food-such-modal.tsx'
+// ══ G-336: die Ziehlogik steht jetzt in der gemeinsamen Huelle ══
+//
+// `[cmd]` **G-336 brauchte dieselbe Huelle fuer *Mahlzeit
+// hinzufuegen*.** `[read]` **Eine Kopie waere eine zweite Wahrheit
+// gewesen** — deshalb steht sie einmal in `zieh-modal.tsx`, und
+// beide Modale benutzen sie.
+//
+// `[read]` **Die Zusagen unten sind unveraendert** — nur die Datei,
+// in der sie gemessen werden, hat gewechselt.
+const HUELLE = 'apps/web/src/app/v2/nutrition/zieh-modal.tsx'
 const EDITOR = 'apps/web/src/app/v2/nutrition/plan-eintrag-editor.tsx'
 const CSS = 'packages/ui/src/styles/v2.css'
 
@@ -102,7 +112,7 @@ test('G-321/2: das Modal lässt sich an der Titelleiste ziehen', () => {
   //
   // `[cmd]` **Gemessen vorher: `drag` 0, `transform` 0,
   // `onMouseDown` 0.**
-  const m = ohneKommentare(MODAL)
+  const m = ohneKommentare(HUELLE)
 
   assert.match(m, /data-probe="titelleiste"/, 'die Titelleiste fehlt')
   const i = m.indexOf('data-probe="titelleiste"')
@@ -140,7 +150,7 @@ test('G-321/2: ein beendeter Zug schliesst das Modal nicht', () => {
   // `[read]` **Endet ein Zug auf der Hülle** — bei schnellem Schieben
   // nach aussen — **käme sonst ein Klick an, und das Modal schlösse
   // mitten in der Bewegung.**
-  const m = ohneKommentare(MODAL)
+  const m = ohneKommentare(HUELLE)
   assert.match(m, /if \(!zieht && e\.target === e\.currentTarget\) onClose\(\)/,
     'ein Zug, der auf der Hülle endet, schliesst das Modal')
 
@@ -153,11 +163,21 @@ test('G-321/2: ein beendeter Zug schliesst das Modal nicht', () => {
 
 test('G-321/2: Zurücksetzen erscheint nur, wenn verschoben wurde', () => {
   // `[read]` **Ein Knopf, der nichts tut, ist keiner.**
-  const m = ohneKommentare(MODAL)
+  const m = ohneKommentare(HUELLE)
   assert.match(m, /\{\(versatz\.x !== 0 \|\| versatz\.y !== 0\) && \(/,
     'der Zurücksetzen-Knopf steht auch bei unverschobenem Modal')
   assert.match(m, /onClick=\{\(\) => setVersatz\(\{ x: 0, y: 0 \}\)\}/,
     'Zurücksetzen setzt den Versatz nicht zurück')
+})
+
+test('G-336: das Suchmodal benutzt die gemeinsame Huelle', () => {
+  // `[read]` **Sonst waeren die drei Waechter darueber gruen**,
+  // waehrend das Suchmodal eine eigene Ziehlogik haelt — **sie
+  // messen seit G-336 die Huelle, nicht das Modal.**
+  const m = ohneKommentare(MODAL)
+  assert.match(m, /<ZiehModal/, 'das Suchmodal benutzt die Huelle nicht')
+  assert.doesNotMatch(m, /griff\.current = \{/,
+    'das Suchmodal haelt wieder eine eigene Ziehlogik')
 })
 
 // ══ 3. Der Spaltenfehler ═════════════════════════════════════════════

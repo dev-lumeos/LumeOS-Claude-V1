@@ -626,22 +626,41 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
               )
             })}
 
-            {d.zeilen.map(slot => (
-              <React.Fragment key={slot}>
-                <div style={{
-                  padding: '10px 6px', fontSize: 11, fontWeight: 500,
-                  color: 'var(--fg-muted)', borderTop: '1px solid var(--border)',
-                }}>
-                  {SLOT_LABEL[slot]}
+            {/* ══ G-336: die Zeile traegt ihren Namen mit ═══════
+                `[cmd]` **Hier stand `SLOT_LABEL[slot]`** — die feste
+                Kategorienliste. `[read]` **Ein Plan-Slot heisst
+                *,,Nachmittagssnack"*, nicht `snack`** (E-59), und ein
+                Nutzer-Slot heisst, wie der Nutzer ihn nannte (E-58).
+
+                `[read]` **`kategorie` bleibt daneben stehen** — sie
+                filtert die Eintraege, denn `meal_plan_entries` traegt
+                `meal_type`, nicht die Slotposition. */}
+            {d.zeilen.map((zeile, i) => (
+              <React.Fragment key={`${zeile.kategorie}-${i}`}>
+                <div
+                  data-probe="raster-zeile"
+                  style={{
+                    padding: '10px 6px', fontSize: 11, fontWeight: 500,
+                    color: 'var(--fg-muted)', borderTop: '1px solid var(--border)',
+                  }}
+                >
+                  {zeile.label}
+                  {zeile.zeit && (
+                    <span className="v2-dim v2-num"
+                          style={{ fontSize: 9.5, marginLeft: 5 }}>
+                      {zeile.zeit}
+                    </span>
+                  )}
                 </div>
                 {w.tage.map(t => (
                   <Zelle
-                    key={`${t.id}-${slot}`}
+                    key={`${t.id}-${zeile.kategorie}-${i}`}
                     tagId={t.id}
                     tag={t.plan_date}
                     heute={heute}
-                    eintraege={t.eintraege.filter(e => e.meal_type === slot)}
-                    slot={slot as MahlzeitTyp}
+                    eintraege={t.eintraege.filter(
+                      e => e.meal_type === zeile.kategorie)}
+                    slot={zeile.kategorie as MahlzeitTyp}
                     rezepte={rezeptWahl}
                     alleRezepte={d.rezepte}
                     tagesSumme={tagesSummeVon(t.eintraege)}
