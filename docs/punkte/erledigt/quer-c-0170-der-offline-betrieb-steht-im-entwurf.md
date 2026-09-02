@@ -11,8 +11,8 @@ entscheidung: E-60
 erledigt: 2026-09-02
 commit: f38363c5
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien:
+    - apps/web/package.json
 zahlen: null
 ---
 
