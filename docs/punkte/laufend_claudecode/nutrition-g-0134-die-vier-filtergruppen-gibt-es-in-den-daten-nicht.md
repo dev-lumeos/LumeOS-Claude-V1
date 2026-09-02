@@ -8,6 +8,8 @@ braucht: []
 kind_von: C-164
 kinder: []
 entscheidung: E-49
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -63,3 +65,8 @@ fuer diesen Moment.**
 `[cmd]` **Und die Zuordnung gehoert als Spalte in
 `tag_definitions`** — heute steht sie nur in der Oberflaeche, **an
 einer Stelle, die kein Waechter erreicht.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-136 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

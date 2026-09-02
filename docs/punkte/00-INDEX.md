@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 224 |
-| `laufend_claudecode` | 2 |
+| `todos` | 219 |
+| `laufend_codex` | 3 |
+| `laufend_claudecode` | 4 |
 | `erledigt` | 219 |
 | **gesamt** | **445** |
 
@@ -74,7 +75,7 @@
 | `C-24` | befund | niedrig | [Halbfertigprodukte ranken als Grundzutat](todos/nutrition-c-0024-halbfertigprodukte-ranken-als-grundzutat.md) | offen | — | — |
 | `C-27` | messung | mittel | [Alltagswörter ohne Treffer — noch zwei](erledigt/nutrition-c-0027-alltagsworter-ohne-treffer-noch-zwei.md) | erledigt | — | — |
 | `C-29` | entscheidung | mittel | [Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt](erledigt/nutrition-c-0029-drei-namensschichten-und-eine-kuration-die-den-kettenlauf-uberlebt.md) | erledigt | — | — |
-| `C-30` | befund | mittel | [Suche und Trefferliste auf Arten umstellen](todos/nutrition-c-0030-suche-und-trefferliste-auf-arten-umstellen.md) | offen | — | — |
+| `C-30` | befund | mittel | [Suche und Trefferliste auf Arten umstellen](laufend_codex/nutrition-c-0030-suche-und-trefferliste-auf-arten-umstellen.md) | laeuft (codex) | — | — |
 | `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](todos/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | offen | — | — |
 | `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — | — |
 | `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](erledigt/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | erledigt | — | G-239, G-248 |
@@ -133,8 +134,8 @@
 | `C-378` | befund | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](erledigt/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | erledigt | — | — |
 | `C-380` | befund | mittel | [die Seed-Plaene tragen 84 mal Hammelfilet](erledigt/nutrition-c-0380-die-seed-plaene-tragen-84-mal-hammelfilet.md) | erledigt | — | — |
 | `C-382` | feature | mittel | [wer entscheidet, ob ein Plan editierbar ist?](todos/nutrition-c-0382-wer-entscheidet-ob-ein-plan-editierbar-ist.md) | offen | — | — |
-| `C-384` | befund | hoch | [wer schreibt die 30.797 Tag-Zeilen?](todos/nutrition-c-0384-wer-schreibt-die-30797-tag-zeilen.md) | offen | — | — |
-| `C-386` | befund | mittel | [sind die drei Reste aus C-35 eingeflossen?](todos/nutrition-c-0386-sind-die-drei-reste-aus-c-35-eingeflossen.md) | offen | — | — |
+| `C-384` | befund | hoch | [wer schreibt die 30.797 Tag-Zeilen?](laufend_codex/nutrition-c-0384-wer-schreibt-die-30797-tag-zeilen.md) | laeuft (codex) | — | — |
+| `C-386` | befund | mittel | [sind die drei Reste aus C-35 eingeflossen?](laufend_codex/nutrition-c-0386-sind-die-drei-reste-aus-c-35-eingeflossen.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -149,8 +150,8 @@
 | `G-112` | befund | mittel | [Der Food-DB-Filter laesst nur einen Wert zu](erledigt/nutrition-g-0112-der-food-db-filter-laesst-nur-einen-wert-zu.md) | erledigt | — | — |
 | `G-116` | entscheidung | mittel | [Generelle Ausschluesse bewerten mit 0, statt zu filtern](erledigt/nutrition-g-0116-generelle-ausschluesse-bewerten-mit-0-statt-zu-filtern.md) | erledigt | — | C-347 |
 | `G-126` | befund | mittel | [Drei Reste aus G-122](todos/nutrition-g-0126-drei-reste-aus-g-122.md) | offen | — | C-210, C-211, C-212 |
-| `G-134` | feature | mittel | [Die vier Filtergruppen gibt es in den Daten nicht](todos/nutrition-g-0134-die-vier-filtergruppen-gibt-es-in-den-daten-nicht.md) | offen | — | — |
-| `G-136` | feature | mittel | [Zwei Kartenzuordnungen sind Auslegung](todos/nutrition-g-0136-zwei-kartenzuordnungen-sind-auslegung.md) | offen | — | — |
+| `G-134` | feature | mittel | [Die vier Filtergruppen gibt es in den Daten nicht](laufend_claudecode/nutrition-g-0134-die-vier-filtergruppen-gibt-es-in-den-daten-nicht.md) | laeuft (claudecode) | — | — |
+| `G-136` | feature | mittel | [Zwei Kartenzuordnungen sind Auslegung](laufend_claudecode/nutrition-g-0136-zwei-kartenzuordnungen-sind-auslegung.md) | laeuft (claudecode) | — | — |
 | `G-137` | befund | mittel | [Acht Karten — die alten Ansichtsschluessel verfallen](erledigt/nutrition-g-0137-acht-karten-die-alten-ansichtsschluessel-verfallen.md) | erledigt | — | — |
 | `G-140` | feature | mittel | [`display_tier` ist ein Abo-Tier, keine Baumebene](todos/nutrition-g-0140-display-tier-ist-ein-abo-tier-keine-baumebene.md) | offen | — | — |
 | `G-152` | feature | mittel | [Der Aktivitaetsstrom des Dashboards](todos/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | offen | — | — |

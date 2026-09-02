@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: C-35
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.foods]
 zahlen:
@@ -69,3 +71,8 @@ Punkt** — **wenn nicht, findet sie niemand mehr.**
 `[cmd]` **Und die Suche liegt heute bei rund 84 Prozent auf dem
 Bodybuilder-Massstab** — **Punkt 3 waere messbarer Zuwachs, wenn er
 fehlt.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-384 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
