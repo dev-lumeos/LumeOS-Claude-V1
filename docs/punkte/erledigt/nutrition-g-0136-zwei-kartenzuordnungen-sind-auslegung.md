@@ -10,6 +10,8 @@ kinder: []
 entscheidung: E-48
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 8ecaa528
 beruehrt:
   tabellen: []
   dateien: []
@@ -303,4 +305,87 @@ jetzt die neue Zuordnung, mit allen vier Wurzeln einzeln.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator.**
+
+### Meine Fundstelle war die falsche
+
+`[read]` **Mein Auftrag nannte `mikro-lage.ts:325-327`.**
+
+`[cmd]` **Gemessen: die Datei hat ausser Tests keinen Aufrufer.**
+`[cmd]` **G-249 hat die zweite Ansicht entfernt** — der
+Nutrients-Reiter laeuft ueber `NaehrstoffOrdnungTab`, **die Karten
+vergibt `naehrstoff-anzeige.ts:karteFuerWurzel`.**
+
+`[read]` **Er hat zuerst dort gebaut und es zurueckgenommen** —
+*,,dort waere es eine tote zweite Wahrheit gewesen."*
+
+`[read]` **Ich habe eine Datei gemessen, die aussah wie die
+richtige, ohne ihre Aufrufer zu zaehlen.** **Dieselbe Klasse wie die
+drei Funktionen ohne Aufrufer.**
+
+### Die vier Karten stehen
+
+`[cmd]` **`WATER`, `ALC`, `OA` und `ASH` trugen alle
+`group_de = 'Makronaehrstoffe'`** und fielen damit in *Sonstige*.
+
+    vorher                       nachher
+    Sonstige  4 Wurzeln + CHORL  Wasser              1
+                                 Organische Saeuren  6
+                                 Genussmittel        1
+                                 Elemente  16 -> 17  (mit ASH)
+                                 Sonstige            1 (CHORL)
+
+`[cmd]` **Elf Karten, vier mit Erklaerungssatz.**
+
+`[read]` **Und seine Begruendung fuer *nur vier*:** *,,Ein Satz, der
+nichts hinzufuegt, wird beim Lesen uebersprungen und macht die
+naechsten wertlos."*
+
+### `FIBT` war bereits geloest
+
+`[cmd]` **`karteFuerWurzel` gibt seit jeher *Kohlenhydrate*,
+`parent_code` ist leer, `insights-read.ts:270-282` fuehrt es als
+eigenen Knoten neben `CHO`.**
+
+`[cmd]` **Mit Zahlen belegt: als Kind gerechnet ergaeben die Teile
+320,78 gegen 281,86** — **mehr als das Ganze.**
+
+`[read]` **Nichts zu tun** — **und er hat es gemessen, statt es zu
+bauen.**
+
+### Die Trinkmenge liegt schon dort
+
+`[cmd]` **`hydration-day-read.ts:24-46` liefert beide Positionen:**
+`logged_ml` aus `water_logs`, `food_ml` aus `daily_summary.water_g`,
+**dazu `food_ml_missing`.**
+
+`[read]` **Deshalb keine zweite Fluessigkeitsbilanz** — **die Karte
+ordnet `WATER` ein, die Bilanz bleibt im Wassermodul.** `[read]`
+*,,Eine zweite waere eine zweite Wahrheit ueber dieselbe Zahl."*
+
+### G-134 — und ein Fund, den niemand gesucht hat
+
+`[cmd]` **`halal` und `kosher` fehlten in jeder Gruppe der
+Oberflaeche** — **sie waren nicht erreichbar, obwohl die Tags seit
+jeher in der Datenbank stehen** (`sort_order` 130, 140).
+
+`[cmd]` **Am Schirm belegt: 4.970 auf 4.440 Treffer mit `halal`.**
+
+`[cmd]` **Und die zweite Zahl ist die interessantere:** ohne
+Vorlieben 7.140 auf 6.379 — **die Differenz sind Toms gespeicherte
+Vorlieben** (C-94), **die auf jede Suche wirken.**
+
+`[cmd]` **`thai_food` steht als *Thai (Kueche — geparkt)*** —
+`[read]` *,,ein vorhandener Filter, den niemand mehr findet, waere
+schlimmer als einer an der falschen Stelle."*
+
+### Und die Spalte fehlt weiter
+
+`[cmd]` **`tag_definitions` hat neun Spalten, keine fuer die
+Untergruppe.**
+
+`[read]` **Er hat sie gemeldet statt angelegt** — richtig, das ist
+Codex' Bereich. **Als C-390.**
+
+**Abgenommen.**
+

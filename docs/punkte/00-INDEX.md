@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 217 |
+| `todos` | 218 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 7 |
-| `erledigt` | 221 |
-| **gesamt** | **448** |
+| `laufend_claudecode` | 5 |
+| `erledigt` | 223 |
+| **gesamt** | **449** |
 
 ## medical — 43
 
@@ -59,9 +59,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 186
+## nutrition — 187
 
-### beauftragbar — 183
+### beauftragbar — 184
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -140,6 +140,7 @@
 | `C-387` | befund | hoch | [vier Kettenschritte schreiben Tags](todos/nutrition-c-0387-vier-kettenschritte-schreiben-tags.md) | offen | — | — |
 | `C-388` | befund | mittel | [die Vertreterregel ist nicht erreicht](todos/nutrition-c-0388-die-vertreterregel-ist-nicht-erreicht.md) | offen | — | — |
 | `C-389` | befund | mittel | [Saft und Nektar liegen bei der Frucht](todos/nutrition-c-0389-saft-und-nektar-liegen-bei-der-frucht.md) | offen | — | — |
+| `C-390` | feature | mittel | [`tag_definitions` hat keine Untergruppe](todos/nutrition-c-0390-tag-definitions-hat-keine-untergruppe.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -154,8 +155,8 @@
 | `G-112` | befund | mittel | [Der Food-DB-Filter laesst nur einen Wert zu](erledigt/nutrition-g-0112-der-food-db-filter-laesst-nur-einen-wert-zu.md) | erledigt | — | — |
 | `G-116` | entscheidung | mittel | [Generelle Ausschluesse bewerten mit 0, statt zu filtern](erledigt/nutrition-g-0116-generelle-ausschluesse-bewerten-mit-0-statt-zu-filtern.md) | erledigt | — | C-347 |
 | `G-126` | befund | mittel | [Drei Reste aus G-122](todos/nutrition-g-0126-drei-reste-aus-g-122.md) | offen | — | C-210, C-211, C-212 |
-| `G-134` | feature | mittel | [Die vier Filtergruppen gibt es in den Daten nicht](laufend_claudecode/nutrition-g-0134-die-vier-filtergruppen-gibt-es-in-den-daten-nicht.md) | laeuft (claudecode) | — | — |
-| `G-136` | feature | mittel | [Zwei Kartenzuordnungen sind Auslegung](laufend_claudecode/nutrition-g-0136-zwei-kartenzuordnungen-sind-auslegung.md) | laeuft (claudecode) | — | — |
+| `G-134` | feature | mittel | [Die vier Filtergruppen gibt es in den Daten nicht](erledigt/nutrition-g-0134-die-vier-filtergruppen-gibt-es-in-den-daten-nicht.md) | erledigt | — | C-390 |
+| `G-136` | feature | mittel | [Zwei Kartenzuordnungen sind Auslegung](erledigt/nutrition-g-0136-zwei-kartenzuordnungen-sind-auslegung.md) | erledigt | — | — |
 | `G-137` | befund | mittel | [Acht Karten — die alten Ansichtsschluessel verfallen](erledigt/nutrition-g-0137-acht-karten-die-alten-ansichtsschluessel-verfallen.md) | erledigt | — | — |
 | `G-140` | feature | mittel | [`display_tier` ist ein Abo-Tier, keine Baumebene](todos/nutrition-g-0140-display-tier-ist-ein-abo-tier-keine-baumebene.md) | offen | — | — |
 | `G-152` | feature | mittel | [Der Aktivitaetsstrom des Dashboards](todos/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | offen | — | — |

@@ -10,6 +10,8 @@ kinder: []
 entscheidung: E-49
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 8ecaa528
 beruehrt:
   tabellen: []
   dateien: []
@@ -70,3 +72,19 @@ einer Stelle, die kein Waechter erreicht.**
 
 **Mitbeauftragt mit G-136 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit G-136 abgenommen: gebaut.**
+
+`[cmd]` **Drei Gruppen standen bereits, `halal` und `kosher` fehlten
+in jeder** — **nicht erreichbar, obwohl die Tags seit jeher in der
+Datenbank stehen** (`sort_order` 130, 140).
+
+`[cmd]` **Am Schirm belegt: 4.970 auf 4.440 Treffer mit `halal`.**
+
+`[cmd]` **`thai_food` steht als *Thai (Kueche — geparkt)***, bis
+`preferred_cuisines` kommt.
+
+`[cmd]` **Und die Untergruppenspalte fehlt in `tag_definitions`** —
+gemeldet, nicht angelegt. **Als C-390.**
