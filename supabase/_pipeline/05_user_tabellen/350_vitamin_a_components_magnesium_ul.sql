@@ -137,8 +137,8 @@ AS $vitamin_a$
   SELECT
     p_user_id,
     p_entry_date,
-    CASE WHEN bool_and(component_complete)
-      THEN round(sum(total_value * factor), 4)
+    CASE WHEN count(*) FILTER (WHERE total_value IS NOT NULL) > 0
+      THEN round(sum(COALESCE(total_value, 0) * factor), 4)
       ELSE NULL
     END AS total_iu,
     count(*) FILTER (WHERE NOT component_complete)::integer AS incomplete_component_count,
@@ -152,7 +152,7 @@ AS $vitamin_a$
 $vitamin_a$;
 
 COMMENT ON FUNCTION nutrition.vitamin_a_iu_daily(uuid, date) IS
-  'C-350/E-34: Vitamin A in IE aus BLS RETOL, CARTB und CAROTPAXB. Kein Gesamtfaktor. Sobald ein Bestandteil unvollstaendig ist, bleibt total_iu NULL (C-48 Regel 1).';
+  'C-398/E-61: Vitamin A in IE aus BLS RETOL, CARTB und CAROTPAXB. Kein Gesamtfaktor. Vorhandene Komponentensummen werden mit ihren drei Faktoren addiert; censored, trace und missing tragen 0 bei. value_complete zeigt die Komponentenluecken weiter ehrlich an.';
 
 REVOKE ALL ON FUNCTION nutrition.vitamin_a_iu_daily(uuid, date) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION nutrition.vitamin_a_iu_daily(uuid, date)

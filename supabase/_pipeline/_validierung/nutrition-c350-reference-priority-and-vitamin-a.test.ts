@@ -16,7 +16,7 @@ function one<T>(sql: string): T {
   ], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).trim()) as T
 }
 
-test('C-350: Vitamin A wird nur aus vollständigen BLS-Komponenten als IE ausgegeben', () => {
+test('C-398/E-61: unvollstaendige Vitamin-A-Komponenten liefern ihre vorhandene IE-Summe', () => {
   const result = one<{
     factors: Array<{ nutrient_code: string; factor: number; from_unit: string; to_unit: string }>
     day: { status: string; total_iu: number | null; value_complete: boolean; incomplete_component_count: number }
@@ -39,7 +39,7 @@ test('C-350: Vitamin A wird nur aus vollständigen BLS-Komponenten als IE ausgeg
     { nutrient_code: 'RETOL', factor: 3.3333333333, from_unit: 'ug', to_unit: 'IU' },
   ])
   assert.equal(result.day.status, 'incomplete')
-  assert.equal(result.day.total_iu, null)
+  assert.equal(result.day.total_iu, 10717.335)
   assert.equal(result.day.value_complete, false)
   assert.ok(result.day.incomplete_component_count > 0)
 })

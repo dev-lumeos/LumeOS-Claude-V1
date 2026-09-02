@@ -38,7 +38,7 @@ test('C-324: NRF9.3 deckelt Protein und bewertet hohe Natriumzufuhr schlechter',
   })
 })
 
-test('C-324: unvollstaendiges Vitamin A liefert keinen NRF9.3-Wert', () => {
+test('C-398/E-61: eine unvollstaendige Vitamin-A-Komponente blockiert den NRF9.3-Score nicht', () => {
   const result = one<{
     status: string
     score: number | null
@@ -56,13 +56,11 @@ test('C-324: unvollstaendiges Vitamin A liefert keinen NRF9.3-Wert', () => {
     FROM nutrition.nrf93_daily('${USER_ID}'::uuid, DATE '2026-08-02') d;
   `)
 
-  assert.deepEqual(result, {
-    status: 'incomplete',
-    score: null,
-    reference_set: 'NRF9.3 original US Daily Values',
-    sugar_input: 'total_sugar',
-    incomplete_input_codes: ['VITA'],
-  })
+  assert.equal(result.status, 'complete')
+  assert.notEqual(result.score, null)
+  assert.equal(result.reference_set, 'NRF9.3 original US Daily Values')
+  assert.equal(result.sugar_input, 'total_sugar')
+  assert.deepEqual(result.incomplete_input_codes, [])
 })
 
 test('C-324: ein Tag ohne Positionen ist no_data und kein Null-Score', () => {
