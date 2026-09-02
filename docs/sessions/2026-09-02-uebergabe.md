@@ -1,177 +1,140 @@
-Uebergabe 2026-09-02
-====================
+# Uebergabe 2026-09-02
 
-Fuer den Orchestrator der naechsten Sitzung.
-
-> **An Tom:** die Projektanweisung nennt als Einstieg
-> `docs/sessions/2026-08-27-uebergabe.md`. **Bitte auf
-> `2026-09-02-uebergabe.md` aendern.** Ich kann die Projektanweisung
-> nicht selbst bearbeiten.
+**Stand:** `adff4a07` gepusht, Gate 15/15, Punktelauf gruen.
+**Naechste Sitzung:** Sonntag. Tom ist bis Samstag in Bangkok.
 
 ---
 
-Zuerst lesen
-------------
+## Wo wir stehen
 
-1. **Diese Datei.**
-2. `CLAUDE.md` — vier neue Regeln vom 01. und 02.09., siehe unten.
-3. `docs/punkte/00-INDEX.md` — 431 Punkte, nach Nummer.
+    todos                212
+    erledigt             263
+    laufend_codex        leer
+    laufend_claudecode   G-342 · G-333 · G-337  (Bericht steht aus)
+    claudecode/next      G-340  Quick-Add
+    Gate                 15/15
 
-`[read]` **`docs/todo/LAUFEND.md` gibt es nicht mehr.** Wer woran
-arbeitet, steht in `docs/punkte/laufend_codex/` und
-`laufend_claudecode/`.
-
----
-
-Was gerade laeuft
------------------
-
-    Codex          C-381 + G-151   die Freigaberegel liegt im
-                                   Browser; der Ausfuehrer fehlt
-    Claude Code    G-320           die Lebensmittelsuche als Modal
-                   G-305, G-314    Sackgassen, Plan-Vorschau
+`[cmd]` **Der Baum ist sauber, alles gepusht.**
 
 ---
 
-Der Stand
----------
+## Was heute entschieden wurde: E-45 bis E-63
 
-    todos       219   quer 58 - nutrition 46 - medical 34 -
-                      supplements 32 - training 16 - coach 14 -
-                      recovery 14 - goals 5
-    erledigt    207
-    E-Nummern    44
-    Waechter     25 Befunde, genau der Sollstand
-    Gate         15 Aufgaben, gruen
-    gepusht      bis 4aca5b5e
+Die vollstaendigen Texte stehen in `docs/entscheidungen/`.
 
----
-
-Nutrition ist der Schwerpunkt der letzten zwei Tage
----------------------------------------------------
-
-    Diary        vollstaendig
-    Insights     6 Kacheln
-    Nutrients    vollstaendig
-    Preferences  vollstaendig
-    Rezepte      Flow 7 und 8 gehen durch
-    Meal plans   Bibliothek, Aktivieren, Compliance, Protokoll
-    Planner      Werkbank, Positionen, Copy week
-    Food DB      zwei Luecken: FoodAmountInput, CustomFoodForm
-
-`[cmd]` **Der Weg laeuft durchgehend:** Plan bauen, aktivieren,
-Tagebuch zeigt die Plantage, bestaetigen oder abweichen, das
-Protokoll traegt es, die Auswertung sagt was regelmaessig gewechselt
-wird.
-
-`[cmd]` **Auf `dev@lumeos.app` stehen 8 Plaene mit allen vier
-Herkuenften und 6 Protokollzeilen** — angelegt, damit am Schirm
-etwas zu sehen ist. **Der Seed ist dauerhaft**
-(`testdaten-einspielen.ts:2167`).
+    E-58   der Nutzer benennt seine Mahlzeiten
+           meal_slots: position, name, planned_time,
+           keine Obergrenze, kein `kind`
+    E-59   der Plan bringt seine Struktur mit
+           self_created nimmt die Slots als Vorlage, gelieferte
+           tragen eigene
+    E-60   die Webapp bleibt online, Buddy nicht
+           kein Offline-Betrieb in apps/web -- auch spaeter nicht
+    E-61   Vitamin A in IE aus den drei Tagesschnitten
+           RETOL x 3,3333 + CARTB x 1,6667 + CAROTPAXB x 0,8333
+    E-62   days_count ist die Laufzeit
+    E-63   Sonstige faellt weg
+           CHORL zu Fettbegleitstoffen, NT zu Protein
 
 ---
 
-Neun Entscheidungen aus zwei Tagen
-----------------------------------
+## Die drei Zahlen des Tages
 
-    E-36  Thai bleibt waehlbar mit Hinweis
-    E-37  Marketplace zurueckgestellt, Importweg definiert
-    E-38  zensierte Messwerte nach Lower Bound
-    E-39  Rezepte, Plaene, Einkaufslisten werden in V1 gebaut
-    E-40  der Planner ist die Werkbank, Meal plans die Bibliothek
-    E-41  zwei verschiedene Sperren, getrennt gehalten
-    E-42  Editieren ist erlaubt, Weiterverkaufen nicht
-    E-43  BLS 4.0 ist die einzige Lebensmittelquelle
-    E-44  drei Lebenszyklen fuer Plaene
+### Der NRF9.3-Score laeuft
 
-`[read]` **E-43 und E-44 entstanden, weil der Orchestrator zwei
-falsche Kennungen zitiert hatte** — E-03 ist Soreness, E-31 sind
-Referenzbewertungen. **Codex hat beide gefunden.**
+    morgens     0 von 120 Tagen
+    nach E-61   44
+    abends      65 complete, 40 incomplete, 15 no_data
 
----
+`[read]` **Die IE-Funktion stieg bei jeder Komponentenluecke aus.**
+Tom: *,,eine summe kann man bilden mit 0."*
 
-Was der Orchestrator falsch gemacht hat
----------------------------------------
+`[cmd]` **Und `FIBT` war ein Backfill-Fehler bei zensiertem rohem
+Lachs** — 37 Werte bekamen die E-38-Null.
 
-`[read]` **Vier Fehlerklassen, alle mehrfach:**
+`[cmd]` **`VITC` bleibt unvollstaendig** — echte BLS-Luecke bei
+Ziegenfleisch, C-378 gilt.
 
-**1. Kacheln aus dem Schema abgeleitet statt aus dem Mockup.**
-`[cmd]` Planumfang, Einhaltung, Herkunft — eine Kachel je
-Spaltengruppe. **Keine davon stand in einer Vorlage.**
+### `backup/` von 5,97 auf 2,31 GiB
 
-**2. Zwei gleichnamige Dateien vermischt.** `[cmd]`
-`theme-v1/module-nutrition-spec.jsx` ist die Vorlage,
-`mockup-zwischenwurf/.../MealPlansView.js` nicht. **Dreimal
-verwechselt.**
+`[cmd]` **56 von 57 Vollsicherungen entsorgt.** `[cmd]` **Die
+juengste bleibt:** `20260830_140937_c354_vor_live`.
 
-**3. Komponenten zitiert, die es nicht gibt.** `[cmd]`
-`RecipeDetail` steht nur als Kommentar. **Zweimal.**
+**Die Regeln stehen in `backup/00-LIESMICH.md`:**
 
-**4. Berichte abgenommen, ohne selbst hinzusehen.** `[cmd]` Bei
-G-311 stand *,,vier von vier Plaenen sichtbar"* — **die Buehne war
-zurueckgebaut, der Nachweis existierte nicht mehr.**
+`[read]` **Kein Agent, kein Orchestrator loescht.** **Was seine Frist
+ueberschreitet, geht nach `_temp/`. Tom entsorgt.**
 
-`[read]` **Alle vier stehen jetzt als Regel in `CLAUDE.md`.**
+`[cmd]` **`backup/quellen-NICHT-RAEUMEN.md`:** **sieben Fundstellen
+lesen aus `backup/kimi-research/` und `backup/legacy-v2/`** — **ein
+Raeumplan haette sie mitgenommen.**
 
----
+`[cmd]` **`tools/backup-wachstum.mjs` laeuft im Gate** — meldet bei
+ueber 2,5 GiB oder sieben Tagen ohne Inventur.
 
-Was die Agenten gut gemacht haben
----------------------------------
+### `meal_slots` durch den ganzen Workflow
 
-`[read]` **Beide haben mehrfach angehalten und gemeldet, statt zu
-erfinden:**
+    C-392   die Tabelle, vier Policies, keine Obergrenze
+    C-396   meal_plan_slots, Kopie beim Anlegen
+    C-397   die drei gelieferten Plaene tragen je vier
+    G-332   die Liste in Preferences links unten
+    G-335   eine Namensquelle statt fuenf
+    G-336   das Raster liest die Planstruktur
 
-`[cmd]` **Claude Code:** `meal_plan_day_to_diary` schreibt echte
-`meals` — **Auftragspunkt vorgelegt statt gebaut.** `[cmd]` Und
-*,,Copy week"*: die Funktion existierte seit C-150 unter einem
-Attrappen-Knopf.
-
-`[cmd]` **Codex:** zwei falsche E-Nummern gefunden. `[cmd]` Den
-allgemeinen Kopierlauf nicht gestartet, **weil er den
-protokollierten Plan beruehrt haette.** `[cmd]` Und den Fremdanteil
-im Arbeitsbaum gemeldet.
+`[cmd]` **Und C-403: Cut traegt 4 Wochen/112 Eintraege, Lean 12
+Wochen/336** — **der Seed ist idempotent.**
 
 ---
 
-Wiederkehrende Fallen
----------------------
+## Was auf dich wartet
 
-`[read]` **Der Waechter prueft das Wort statt der Wirkung** — an
-einem Tag zwoelfmal aufgetreten, bei beiden Agenten.
+### Entscheidungen
 
-`[cmd]` **Acht Waechter waren gruen, waehrend `tsc` acht
-Syntaxfehler meldete** — ein JSX-Kommentar als erstes Element nach
-`return (`. **Die Reihenfolge im Gate ist die einzige Absicherung.**
+    G-222   Onboarding -- Inhalt festlegen. Die Daten stehen jetzt:
+            meal_slots, food_preferences, vier Filtergruppen
+    G-337   strong_avoid: CHECK-Wert ohne Schreibweg. Braucht ein
+            Nutzer die Stufe je Lebensmittel?
+    C-404   Aufbau-Wochenplan: 28 Tage beschrieben, 21 behauptet
+    A-69    26 High-Severity-Abhaengigkeiten, darunter Next 14.2.35
 
-`[cmd]` **Drei Funktionen ohne Aufrufer gefunden:**
-`meal_plan_day_to_diary`, `copy_meal_plan_week`,
-`reference_assessment_window_flags`. `[read]` **Was keinen Aufrufer
-hat, wird beim naechsten Auftrag fuer gebaut gehalten.**
+### Vorbereitet, geht sofort raus
 
----
-
-Was bei Tom liegt
------------------
-
-    G-222   Onboarding — Inhalt gemeinsam festlegen, Daten sind da
-    C-382   wer entscheidet, ob ein Plan editierbar ist
-    C-379   sequence ist waehlbar und tut dasselbe wie once
-    G-228   Stufennamen intermediate gegen pro
+    G-340   Quick-Add bauen -- der einzige Zugang zu
+            food_source = 'manual'. Alle 9.051 meal_items tragen
+            heute 'bls'.
+    C-405   Sonstige faellt weg (E-63)
 
 ---
 
-Wie gearbeitet wird
--------------------
+## Die drei Fehler, die ich heute gemacht habe
 
-`[read]` **Der Zyklus laeuft ohne Aufforderung:**
+`[read]` **Sie stehen hier, weil sie sich wiederholen werden.**
 
-    Bericht kommt
-      -> Kurzcheck: ist ein vorbereiteter Auftrag betroffen?
-      -> Auftrag raus, BEVOR abgenommen wird
-      -> Abnahme mit eigener Messung
-      -> Befunde als Punkte
-      -> committen, getrennt nach Agentenbereich
-      -> next/ fuellen
+**1 · Dreimal eine Datei genannt, ohne sie zu oeffnen.**
+`mikro-lage.ts` (G-136), `RecipeDetail` (G-311), `kopfknoepfe.tsx`
+(G-339). `[read]` **Jedes Mal hat der Agent es berichtigt.**
 
-`[read]` **Der Orchestrator hat den dritten Schritt zweimal
-uebersprungen** — **Tom musste beide Male nachfragen.**
+**2 · `NULL` und `0` verwechselt, zweimal in einer Messung.**
+`[cmd]` **C-399 stand auf zwei falschen Zahlen** — erst *,,kein
+einziger Wert"*, dann *,,1.205 von 1.749"*. `[read]` **Beim zweiten
+Mal kam das Gegenteil heraus, und ich merkte nicht, dass beide nicht
+stimmen koennen.**
+
+**3 · Dreimal den Auftrag vergessen, bevor ich abgenommen habe.**
+`[cmd]` **Seit A-68 meldet `punkte-pruefen.mjs`:** *,,ACHTUNG: codex
+hat nichts laufen, aber 3 Punkt(e) in next/."*
+
+---
+
+## Wie es weitergeht
+
+`[read]` **Wenn Claude Code seinen G-342-Bericht liefert:** abnehmen,
+**dann G-340 raus** — es liegt in `next/`.
+
+`[read]` **Codex ist frei.** `[cmd]` **C-405 waere der naechste**
+(E-63), **oder C-404.**
+
+`[read]` **Und Tom hat heute gesagt, was zaehlt:** *,,wir kuemmern
+uns um sachen die sehr wahrscheinlich ueber den schnitt keinen
+einfluss haben."* `[cmd]` **Der ganze Tag ging um `CAROTPAXB`** —
+**und `VITC` fehlte an dreimal so vielen Tagen.**
