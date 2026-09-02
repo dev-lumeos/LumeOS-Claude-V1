@@ -158,6 +158,61 @@ sich.** **Das ist gewollt** (E-58).
 keine tatsaechliche Zeit, `meal_plan_entries.planned_time` **ist die
 Slot-Zeit.**
 
+### 5 · Eine Mahlzeit im Tagebuch anlegen — sie ist verschwunden
+
+Tom, 2026-09-02: *,,in diary unten mahlzeit hinzufuegen, das ist
+verschwunden. ein user kann auch jederzeit im diary eine neue
+mahlzeit anlegen und nutrients reinpacken."*
+
+`[read]` **Vermutung: mit `HinzufuegenModal` in G-331
+mitgegangen** — **380 Zeilen aus C-03 entfernt.** `[read]` **Miss
+es, bevor du baust.**
+
+`[cmd]` **Und mit den Slots wird es eine andere Sache:** **eine neue
+Mahlzeit braucht Name und Zeit.**
+
+`[read]` **Naheliegend: die Slots als Vorschlag, aber frei** —
+**wer um 22:00 noch isst, hat dafuer keinen Slot und soll trotzdem
+erfassen koennen.** `[read]` **Das folgt E-58: der Slot ordnet, die
+Buchung ist die Wahrheit.**
+
+### 6 · Dieselbe Logik im Planner
+
+Tom: *,,dieselbe logik soll auch in den planner, man soll auch da
+beim erstellen oder editieren definieren koennen wieviele mahlzeiten
+man will. bei gekauften oder von coach wird der plan ja vollstaendig
+geliefert. und das muss sich ueber den workflow durchziehen."*
+
+`[cmd]` **Heute rechnet `rasterZeilen` die Zeilen aus
+`meals_per_day` und `snacks_per_day`** — **den Vorlieben des
+Nutzers.**
+
+`[read]` **Das ist fuer einen eigenen Plan richtig** — **aber ein
+gekaufter oder vom Coach vergebener bringt seine eigene Struktur
+mit.**
+
+`[read]` **Also gehoert die Zahl an den Plan, nicht nur an die
+Vorlieben:**
+
+    self_created     Vorgabe aus den Vorlieben, beim Anlegen
+                     aenderbar
+    coach_created    kommt mit dem Plan
+    marketplace      kommt mit dem Plan
+    buddy            kommt mit dem Plan
+
+`[cmd]` **`meal_plans` traegt heute keine Slot- oder Zeilenzahl** —
+**miss es und melde, wenn Codex eine Spalte bauen muss.**
+
+`[read]` **Und E-45 gilt:** **ein gekaufter Plan ist editierbar** —
+**wer die Mahlzeitenzahl aendert, aendert seinen Plan, nicht die
+Vorlage.**
+
+`[read]` **Das ist der Teil, der sich *ueber den Workflow
+durchzieht*:** Plan anlegen, Plan aktivieren, Ghost Entries,
+Tagebuch. `[cmd]` **Miss, wo die Zeilenzahl heute ueberall
+herkommt** — **und sag, wie viele Stellen es sind, bevor du eine
+aenderst.**
+
 ### Was nicht zu tun ist
 
 **`meal_type` nicht anfassen** — es hoert auf, eine Bedeutung zu
@@ -179,6 +234,10 @@ Nicht committen, nicht stagen, nicht pushen.
     Settings         dasselbe Formular, ein Schreibweg
     Tagebuch         Zeilen heissen wie die Slots
     Planner          gemessen: braucht er sie auch
+    neue Mahlzeit    im Tagebuch anlegen, mit Name und Zeit
+    22-Uhr-Fall      ohne passenden Slot erfassbar
+    Plan-Zeilenzahl  woher kommt sie heute, an wie vielen Stellen
+    fremder Plan     bringt seine Struktur mit, gemessen
     Bildschirmfoto   vorher / nachher
 
 ## Bericht
