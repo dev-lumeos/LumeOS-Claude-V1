@@ -23,11 +23,20 @@
 // (`lib/nutrition/menge-rechnen.ts`).
 //
 // `[cmd]` **NICHT geteilt: die Darstellung aus `tab-foods.tsx`.**
-// `[read]` **Der Grund ist gemessen, nicht vermutet:** die Datei
-// exportiert **genau ein** Bauteil — `NutritionFoodsTab`, den ganzen
-// Reiter. **Die neun inneren Teile (`FilterChip`, `SortKopf`,
-// `DaumenKnoepfe`, `filterLabel`, `facettenZahl`, `makro`, `zahl`,
-// `PILLEN`, `FILTERGRUPPEN`) sind privat.**
+// `[read]` **Der Grund war gemessen:** die Datei exportierte **genau
+// ein** Bauteil — `NutritionFoodsTab`, den ganzen Reiter.
+//
+// `[cmd]` **BERICHTIGT in G-322: sie sind jetzt exportiert** —
+// `PILLEN`, `SEITE_GROESSE`, `FILTERGRUPPEN`, `filterLabel`,
+// `FilterChip`, `facettenZahl`, `UNVERTRAEGLICH_LABEL`, `SortKopf`,
+// `zahl`, `makro`.
+//
+// `[cmd]` **Und der Zaehlfehler:** hier stand `DaumenKnoepfe` in der
+// Liste — **sie war nie in `tab-foods.tsx`**, sondern steht seit
+// jeher in `daumen.tsx` und wird dort importiert.
+//
+// `[read]` **Dieses Modal baut die Darstellung weiter selbst** — sie
+// umzustellen ist G-323, ein eigener Auftrag.
 //
 // `[read]` **Sie herauszulösen wäre der richtige Weg, aber ein
 // eigener Punkt:** der Reiter trägt 15 `useState`, davon **14 reine

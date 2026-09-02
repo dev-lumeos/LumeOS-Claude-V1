@@ -18,6 +18,9 @@
 // ANGEBUNDEN ist alles, was Daten hat: Positionen, Summen, Suche,
 // Portionen, Same as yesterday. MealCam bleibt Attrappe.
 import * as React from 'react'
+
+// G-72: die Reihen aus den Vorlieben.
+import type { Slot } from '../../../lib/nutrition/plan-model'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Card, Icon, InEntwicklung } from '@lumeos/ui'
@@ -138,9 +141,18 @@ function z(v: number | null): string {
 }
 
 export function Mahlzeiten({
-  datum, onGeaendert,
+  datum, slots = null, onGeaendert,
 }: {
   datum: string
+  /**
+   * G-72: welche Mahlzeitenreihen der Tag zeigt.
+   *
+   * `[cmd]` **Aus `meals_per_day` und `snacks_per_day`** — dieselbe
+   * Funktion, die der Planner benutzt (`rasterZeilen`).
+   *
+   * `[read]` **`null` heisst: nicht lesbar**, dann gilt die Vorlage.
+   */
+  slots?: Slot[] | null
   onGeaendert?: () => void
 }) {
   const [mahlzeiten, setMahlzeiten] = React.useState<Mahlzeit[]>([])
@@ -199,7 +211,22 @@ export function Mahlzeiten({
   // aus einer festen Liste. Fuer Typen OHNE Eintrag stehen weiterhin
   // leere Karten da — sonst gaebe es keinen Platz fuer „Search" und
   // „Same as yesterday".
+  // ══ G-72 / E-47: die Reihen kommen aus den Vorlieben ════════
+  //
+  // `[cmd]` **Hier stand eine feste Liste aus fuenf Slots.** `[cmd]`
+  // **`meals_per_day` und `snacks_per_day` wirkten nur im Planner**
+  // — wer zwei Mahlzeiten isst, sah im Tagebuch trotzdem fuenf leere
+  // Karten.
+  //
+  // `[read]` **Die Vorlage bleibt als Rueckfall** — sind die
+  // Vorlieben nicht lesbar, ist eine zu lange Liste besser als eine
+  // leere. **`post_workout` steht nur dort:** `rasterZeilen` kennt
+  // ihn nicht, und ihn hier zu ergaenzen hiesse, zwei Wahrheiten
+  // ueber die Reihen zu fuehren.
   const VORLAGE: MealType[] = ['breakfast', 'snack', 'lunch', 'dinner', 'post_workout']
+  const reihen: MealType[] = slots && slots.length > 0
+    ? (slots as MealType[])
+    : VORLAGE
   const belegteTypen = new Set(mahlzeiten.map(m => m.meal_type))
 
   // ══ G-309: die Ghost Entries ══════════════════════════════════════
@@ -216,7 +243,7 @@ export function Mahlzeiten({
 
   // `[read]` **Ein Slot mit Ghost Entry bekommt keine leere Karte** —
   // sonst stuenden „Empty" und der Plan-Vorschlag nebeneinander.
-  const leereSlots = VORLAGE.filter(
+  const leereSlots = reihen.filter(
     typ => !belegteTypen.has(typ) && !ghostTypen.has(typ))
 
   if (laden && mahlzeiten.length === 0) {

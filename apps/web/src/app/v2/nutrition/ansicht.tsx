@@ -75,6 +75,8 @@ import type { TagesEintrag } from './plan-eintraege'
 import { NutritionInsightsTab } from './tab-insights'
 import { MealPlansTab } from './tab-plans'
 // G-65: derselbe Tab mit echten Daten.
+// G-72: die Reihen aus den Vorlieben.
+import type { Slot } from '../../../lib/nutrition/plan-model'
 import { VorliebenTab, type VorliebenDaten } from './tab-vorlieben'
 import { NutritionPlannerTab } from './tab-planner'
 // G-97: der Planner mit echten Daten (C-150).
@@ -145,7 +147,7 @@ export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, lueckenGesamt = null, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
   planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
   wechsel = LEERER_WECHSELSTAND,
-  istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null, rezepte = null, allePlaene = [],
+  istAdmin = false, slots = null, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null, rezepte = null, allePlaene = [],
   offeneAktionen = null, sitzung = null,
   unvertraeglichkeiten = [],
 }: {
@@ -179,6 +181,13 @@ export async function TagebuchAnsicht({
   foodsStart?: NutritionFoodSearchPayload | null
   /** G-65: die Vorlieben, wenn der Tab gezeigt wird. */
   vorlieben?: VorliebenDaten | null
+  /**
+   * G-72: die Mahlzeitenreihen aus den Vorlieben.
+   *
+   * `[read]` **`null` heisst: nicht lesbar** — die Liste faellt dann
+   * auf ihre Vorlage zurueck, statt leer zu bleiben.
+   */
+  slots?: Slot[] | null
   /** G-97: der Wochenplan, wenn der Planner-Tab gezeigt wird. */
   plan?: PlanDaten | null
   /** G-101: Mikronaehrstoffe und Schwellenunterschreitungen. */
@@ -471,7 +480,7 @@ export async function TagebuchAnsicht({
         {/* Die Mahlzeitenkarten der Vorlage — Anzeige wie dort,
             Bearbeitung ueber `+` und `···`. Ersetzt das Formular aus
             C-03, das je Zeile ein Eingabefeld hatte. */}
-        <Mahlzeiten datum={datum} />
+        <Mahlzeiten datum={datum} slots={slots} />
         </div>
 
         {/* ---------- Rechte Spalte, Reihenfolge der Vorlage ----------

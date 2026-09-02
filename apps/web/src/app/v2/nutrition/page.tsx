@@ -30,6 +30,9 @@ import {
   angemeldeteNutzerin, ladeKategorien, ladePresets, ladeTags, ladeVorlieben,
   leererStand,
 } from '../../../lib/nutrition/vorlieben-lesen'
+// G-72: die Reihen aus den Vorlieben — dieselbe Funktion wie
+// im Planner, kein zweiter Wortlaut.
+import { rasterZeilen, type Slot } from '../../../lib/nutrition/plan-model'
 import type { VorliebenDaten } from './tab-vorlieben'
 // G-97: der Wochenplan aus den C-150-Tabellen.
 import {
@@ -157,6 +160,31 @@ export default async function V2NutritionPage({
       luecken = await getLueckenZahl(datum)
     } catch {
       luecken = null
+    }
+  }
+
+  // ══ G-72 / E-47: die Mahlzeitenstruktur ════════════════
+  //
+  // `[cmd]` **`meals_per_day` und `snacks_per_day` wirkten nur im
+  // Planner** (`rasterZeilen`, `plan-model.ts:73`) — **das Tagebuch
+  // hatte eine feste Liste aus fuenf Slots.**
+  //
+  // `[read]` **Wer zwei Mahlzeiten isst, sah trotzdem fuenf leere
+  // Karten** — und die Einstellung, die es haette aendern sollen, war
+  // nirgends erreichbar.
+  //
+  // `[read]` **Nur die zwei Zahlen, nicht der ganze Vorliebenstand**
+  // — der Diary-Reiter braucht keine Kategorien, Tags oder Presets.
+  let slots: Slot[] | null = null
+  if (tab === 'diary') {
+    try {
+      const g = (await ladeVorlieben(await angemeldeteNutzerin())).grund
+      slots = rasterZeilen(g.meals_per_day, g.snacks_per_day).zeilen
+    } catch {
+      // `[read]` **`null` heisst: keine Vorlieben lesbar** — die
+      // Ansicht faellt dann auf ihre Vorlage zurueck, statt eine
+      // leere Liste zu zeigen.
+      slots = null
     }
   }
 
@@ -419,7 +447,7 @@ export default async function V2NutritionPage({
       planLogs={planLogs}
       coachFreigabe={coachFreigabe}
       einkaufslisten={einkaufslisten}
-      tagesEintraege={tagesEintraege}
+      tagesEintraege={tagesEintraege} slots={slots}
       wechsel={wechsel}
       mikro={mikro}
       ordnung={ordnung}

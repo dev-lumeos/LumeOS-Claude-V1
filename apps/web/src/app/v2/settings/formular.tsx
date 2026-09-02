@@ -7,6 +7,9 @@
 // Uebernommen wurden die Muster, nicht die Inline-Stile: die Klassen
 // aus v2.css leisten dasselbe und sind an einer Stelle beschrieben.
 import * as React from 'react'
+// G-72: der Verweis auf die Vorlieben.
+import Link from 'next/link'
+import type { Route } from 'next'
 import { useTranslations } from 'next-intl'
 import { Card, Pill, Icon, ModuleHero, Meter } from '@lumeos/ui'
 
@@ -373,6 +376,38 @@ export function ProfilFormular({
                 <span>
                   <strong>Noch nicht endgueltig geregelt.</strong>{' '}
                   {EXTENDED_VORLAEUFIG}
+                </span>
+              </p>
+            </Card>
+
+            {/* ══ G-72 / E-47: die Mahlzeitenstruktur ═══════════
+                **Der Auftrag:** *,,einstellbar an zwei Orten —
+                Preferences UND Nutzereinstellungen."*
+
+                `[cmd]` **Gemessen: dieses Formular schreibt nach
+                `/api/profile`** (`user_profiles`), **die
+                Mahlzeitenstruktur liegt in
+                `nutrition.food_preferences`.**
+
+                `[read]` **Ein zweiter Schreibweg waere eine zweite
+                Wahrheit** — zwei Formulare, die dieselbe Spalte
+                setzen, laufen bei jedem Speichern gegeneinander.
+
+                `[read]` **Deshalb ein Verweis, kein zweites Feld:**
+                der Ort ist von hier aus erreichbar, **die Einstellung
+                bleibt an einer Stelle.** */}
+            <Card title="Mahlzeitenstruktur"
+                  sub="wie viele Mahlzeiten Tagebuch und Planner zeigen">
+              <p className="v2-hinweis" data-probe="struktur-verweis"
+                 style={{ borderTop: 0, paddingTop: 0, margin: 0 }}>
+                <Icon name="nutrition" className="v2-ic v2-ic-sm" />
+                <span>
+                  Hauptmahlzeiten, Snacks und Vorkochen stehen bei den{' '}
+                  <Link href={'/v2/nutrition?tab=prefs' as Route}>
+                    Ernährungs-Vorlieben
+                  </Link>{' '}
+                  — dort gehören sie hin, weil sie mit Allergien und
+                  Ausschlüssen zusammen gelesen werden.
                 </span>
               </p>
             </Card>

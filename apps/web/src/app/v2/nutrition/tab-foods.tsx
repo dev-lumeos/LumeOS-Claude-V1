@@ -57,7 +57,29 @@ import {
  *     Nahrungsergaenzung; das ist das Supplements-Modul.
  *   - `Produce` deckt ZWEI Wurzeln (Gemuese 717 + Obst 275).
  */
-const PILLEN: Array<{ label: string; slug: string | null }> = [
+// ══ G-322: die Bauteile sind exportiert ══════════════════
+//
+// `[cmd]` **Bis G-322 exportierte diese Datei GENAU EIN Bauteil** —
+// `NutritionFoodsTab`, den ganzen Reiter. **Die zehn inneren waren
+// privat.**
+//
+// `[cmd]` **Die Folge, gemessen:** G-320 musste die Trefferliste im
+// Suchmodal **neu bauen** — Spalten, Sortierleiste, Zahlenformat.
+// **Zwei Darstellungen derselben Sache, die auseinanderlaufen
+// koennen.**
+//
+// `[read]` **Ein Export ist kein Umbau.** Die Datei bleibt, wie sie
+// ist; **die Teile sind nur nicht mehr eingesperrt.**
+//
+// `[cmd]` **Berichtigt: `DaumenKnoepfe` war nie hier** — sie steht
+// seit jeher in `daumen.tsx` und wird importiert. **Der
+// G-320-Kommentar zaehlte sie faelschlich mit; es sind neun
+// Bauteile plus zwei Konstanten, nicht zehn.**
+//
+// `[read]` **Was jetzt offen ist, ist G-323:** die vier bestehenden
+// Suchen auf den Hook umstellen. **Das ist ein eigener Auftrag.**
+
+export const PILLEN: Array<{ label: string; slug: string | null }> = [
   { label: 'All', slug: null },
   { label: 'Meat', slug: 'fleisch-gefluegel' },
   { label: 'Fish', slug: 'fisch-meeresfruechte' },
@@ -74,7 +96,7 @@ const PILLEN: Array<{ label: string; slug: string | null }> = [
 ]
 
 /** Zeilen je Seite. `[read]` 50 wie bisher — nur jetzt blaetterbar. */
-const SEITE_GROESSE = 50
+export const SEITE_GROESSE = 50
 
 // G-70: die Sortierlogik steht serverfrei in `food-sortierung.ts`.
 // `[cmd]` **Hier stand eine zweite Liste mit vier Werten** — sie hielt
@@ -112,7 +134,7 @@ const SEITE_GROESSE = 50
 // `[read]` **Hier gehoeren sie ersetzt, nicht entfernt.** Anders als
 // bei den Allergenen steht die Zahl VOR der Auswahl und hilft beim
 // Waehlen; die Trefferzahl ueber der Liste sagt sie nicht voraus.
-const FILTERGRUPPEN: Array<{
+export const FILTERGRUPPEN: Array<{
   titel: string
   art: 'auswahl' | 'ausschluss'
   optionen: Array<{ code: string; label: string }>
@@ -205,7 +227,7 @@ const FILTERGRUPPEN: Array<{
  * was man einem Nutzer hinschreibt. Die Gruppen fuehren die
  * Beschriftung ohnehin — hier wird sie nur gefunden.
  */
-function filterLabel(code: string): string {
+export function filterLabel(code: string): string {
   for (const g of FILTERGRUPPEN) {
     const o = g.optionen.find(x => x.code === code)
     if (o) return o.label
@@ -214,7 +236,7 @@ function filterLabel(code: string): string {
 }
 
 /** Ein gesetzter Filter ueber der Liste, mit Weg-Knopf (G-101). */
-function FilterChip({ label, onWeg }: { label: string; onWeg: () => void }) {
+export function FilterChip({ label, onWeg }: { label: string; onWeg: () => void }) {
   return (
     <span
       className="v2-pill"
@@ -261,7 +283,7 @@ function FilterChip({ label, onWeg }: { label: string; onWeg: () => void }) {
  */
 
 /** Eine Trefferzahl in deutscher Schreibweise. */
-function facettenZahl(n: number): string {
+export function facettenZahl(n: number): string {
   return n.toLocaleString('de-DE')
 }
 
@@ -273,7 +295,7 @@ function facettenZahl(n: number): string {
  * beiden Listen verschieden, zeigte die Oberflaeche etwas anderes an,
  * als die Datenbank tut.
  */
-const UNVERTRAEGLICH_LABEL: Record<string, string> = {
+export const UNVERTRAEGLICH_LABEL: Record<string, string> = {
   gluten_wheat: 'Gluten',
   gluten: 'Gluten',
   tree_nuts: 'Nüsse',
@@ -292,7 +314,7 @@ const UNVERTRAEGLICH_LABEL: Record<string, string> = {
  * sondern an/aus. Ein Pfeil, der eine Richtung verspricht, die die
  * Datenbank nicht liefert, waere schlimmer als keiner.
  */
-function SortKopf({
+export function SortKopf({
   label, spalte, aktiv, setzen,
 }: {
   label: string
@@ -327,13 +349,13 @@ function SortKopf({
   )
 }
 
-function zahl(text: string): number | null {
+export function zahl(text: string): number | null {
   const n = Number(text)
   return Number.isFinite(n) ? n : null
 }
 
 /** Ein Makro auf eine Nachkommastelle, oder ein Strich. */
-function makro(text: string): string {
+export function makro(text: string): string {
   const n = zahl(text)
   if (n === null) return '—'
   return n >= 10 ? String(Math.round(n)) : n.toFixed(1)

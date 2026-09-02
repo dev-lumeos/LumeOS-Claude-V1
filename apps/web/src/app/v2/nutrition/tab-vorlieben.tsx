@@ -51,6 +51,9 @@
 // Warteschlange und einen synchronen Stand-Ref — sonst schickte der
 // zweite Klick den Stand VOR dem ersten und loeschte ihn wieder.
 import * as React from 'react'
+
+// G-72: derselbe Satz wie im Planner — kein zweiter Wortlaut.
+import { rasterZeilen } from '../../../lib/nutrition/plan-model'
 import { Card, Icon, Pill, Row } from '@lumeos/ui'
 
 import type {
@@ -898,6 +901,134 @@ export function VorliebenTab({ d }: { d: VorliebenDaten }) {
               Ein Ausschluss schliesst die <strong>Zutat</strong> aus. Halal und
               koscher haengen zusätzlich an der Schlachtung, und davon wissen die
               Nährwertdaten nichts — die Zubereitung wird nicht geprüft.
+            </div>
+          </Card>
+
+          {/* ══ G-72 / E-47: die Mahlzeitenstruktur ═════════════
+              `[cmd]` **`food_preferences` traegt acht Spalten, die
+              nirgends einstellbar waren** — gemessen am 2026-09-02:
+              zwei Zeilen, alle acht gefuellt, **keine davon im
+              Preferences-Tab.**
+
+              `[cmd]` **Drei wirken bereits im Planner**
+              (`rasterZeilen`, `plan-model.ts:73`) — **aber nur mit
+              den Vorgabewerten**, weil niemand sie aendern konnte.
+
+              ══ DREI SIND AUSGESETZT, NICHT VERGESSEN ═══════════
+
+              `[cmd]` **G-99 hat gemessen, warum sie heute nichts tun
+              koennen:**
+
+                  cooking_skill       `recipes.cooking_skill` steht —
+                                      aber nichts filtert danach
+                  prep_time_max_min   `recipes.prep_time_min` steht —
+                                      dasselbe
+                  budget_level        **kein Preisfeld in `recipes`**
+                                      und keine Preisquelle
+
+              `[read]` **Ein Regler, der nichts bewirkt, ist schlimmer
+              als keiner** — er behauptet eine Wirkung. **Deshalb
+              stehen sie hier als Kommentar und nicht als Feld**
+              (A-59: nicht loeschen, nicht still lassen).
+
+              `[read]` **Sie gehoeren zum Kochmodul**, das es noch
+              nicht gibt — mit Rezeptfilterung nach Koennen, Zeit und
+              Preis. **Dieser Auftrag baut es ausdruecklich nicht.**
+
+              ══ UND ZWEI BLEIBEN LIEGEN ═══════════════════
+
+              `[cmd]` **`preferred_cuisines`** steht in der Datenbank
+              (`{mediterranean}` auf dev), **hier aber bewusst nicht**
+              — E-47. **Sie wartet auf denselben Punkt wie
+              `thai_food` aus G-134.**
+
+              `[cmd]` **`planner_notes` bekommt ein Feld** — Freitext,
+              **nicht ausgewertet, nur gespeichert.** */}
+          <Card title="Mahlzeitenstruktur"
+                sub="wie viele Mahlzeiten Tagebuch und Planner zeigen">
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              <label style={{ fontSize: 10 }}>
+                <span className="v2-eyebrow">Hauptmahlzeiten</span>
+                <input
+                  className="v2-feld" type="number" min={1} max={5}
+                  data-probe="meals-per-day"
+                  style={{ width: 76, flex: 'none', fontSize: 12 }}
+                  aria-label="Hauptmahlzeiten pro Tag"
+                  value={g.meals_per_day ?? 3}
+                  onChange={e => {
+                    const n = Number(e.target.value)
+                    grundAendern(g0 => ({
+                      ...g0,
+                      meals_per_day: Number.isFinite(n) ? n : g0.meals_per_day,
+                    }))
+                  }}
+                />
+              </label>
+              <label style={{ fontSize: 10 }}>
+                <span className="v2-eyebrow">Snacks</span>
+                <input
+                  className="v2-feld" type="number" min={0} max={3}
+                  data-probe="snacks-per-day"
+                  style={{ width: 76, flex: 'none', fontSize: 12 }}
+                  aria-label="Snacks pro Tag"
+                  value={g.snacks_per_day ?? 0}
+                  onChange={e => {
+                    const n = Number(e.target.value)
+                    grundAendern(g0 => ({
+                      ...g0,
+                      snacks_per_day: Number.isFinite(n) ? n : g0.snacks_per_day,
+                    }))
+                  }}
+                />
+              </label>
+              <label style={{
+                fontSize: 11.5, display: 'flex', alignItems: 'center',
+                gap: 6, alignSelf: 'flex-end', paddingBottom: 7,
+              }}>
+                <input
+                  type="checkbox" data-probe="meal-prep-ok"
+                  aria-label="Vorkochen"
+                  checked={g.meal_prep_ok ?? false}
+                  onChange={e => grundAendern(g0 => ({
+                    ...g0, meal_prep_ok: e.target.checked,
+                  }))}
+                />
+                Vorkochen (Meal Prep)
+              </label>
+            </div>
+
+            {/* `[read]` **Der Satz sagt, was die Zahl TUT** — sonst
+                raet man, ob sie ein Ziel oder eine Anzeige ist. */}
+            <div className="v2-dim" data-probe="struktur-wirkung"
+                 style={{ fontSize: 10.5, marginTop: 8, lineHeight: 1.5 }}>
+              {/* `[cmd]` **`rasterZeilen` liefert den Satz mit** —
+                  dieselbe Funktion, die der Planner benutzt
+                  (`plan-model.ts:73`). **Kein zweiter Wortlaut**,
+                  sonst sagten Preferences und Planner Verschiedenes
+                  ueber dieselbe Zahl. */}
+              {rasterZeilen(g.meals_per_day, g.snacks_per_day).grund}
+            </div>
+
+            {/* ══ `planner_notes` — gespeichert, nicht ausgewertet ══
+                `[read]` **Der Hinweis sagt es**, statt eine Wirkung
+                zu versprechen, die es nicht gibt. */}
+            <label style={{ fontSize: 10, display: 'block', marginTop: 12 }}>
+              <span className="v2-eyebrow">Notizen für die Planung</span>
+              <textarea
+                className="v2-feld" data-probe="planner-notes"
+                style={{ width: '100%', minHeight: 56, fontSize: 11.5 }}
+                aria-label="Notizen für die Planung"
+                value={g.planner_notes ?? ''}
+                onChange={e => grundAendern(g0 => ({
+                  ...g0, planner_notes: e.target.value,
+                }))}
+              />
+            </label>
+            <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 4, lineHeight: 1.5 }}>
+              Freitext für Buddy — etwa {'„abends leicht"'} oder{' '}
+              {'„montags keine Zeit"'}. <strong>Wird gespeichert, aber
+              noch nicht ausgewertet</strong>; Buddy liest es, sobald
+              er plant.
             </div>
           </Card>
 
