@@ -6,8 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 224 |
-| `laufend_claudecode` | 4 |
-| `erledigt` | 217 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 219 |
 | **gesamt** | **445** |
 
 ## medical — 43
@@ -239,8 +239,8 @@
 | `G-326` | befund | hoch | [der Rezepteditor liest sich nicht](erledigt/nutrition-g-0326-der-rezepteditor-liest-sich-nicht.md) | erledigt | — | — |
 | `G-327` | befund | hoch | [`?plan=` galt in beiden Reitern](erledigt/nutrition-g-0327-plan-galt-in-beiden-reitern.md) | erledigt | — | — |
 | `G-328` | befund | mittel | [was zaehlt *am haeufigsten*?](todos/nutrition-g-0328-was-zaehlt-am-haeufigsten.md) | offen | — | — |
-| `G-329` | feature | hoch | [Ghost-Eintraege koennen nur bestaetigen oder auslassen](laufend_claudecode/nutrition-g-0329-ghost-eintraege-koennen-nur-bestaetigen-oder-auslassen.md) | laeuft (claudecode) | — | — |
-| `G-330` | feature | mittel | [die Kopfzeile zeigt zwei von vier Werten](laufend_claudecode/nutrition-g-0330-die-kopfzeile-zeigt-zwei-von-vier-werten.md) | laeuft (claudecode) | — | — |
+| `G-329` | feature | hoch | [Ghost-Eintraege koennen nur bestaetigen oder auslassen](erledigt/nutrition-g-0329-ghost-eintraege-koennen-nur-bestaetigen-oder-auslassen.md) | erledigt | — | — |
+| `G-330` | feature | mittel | [die Kopfzeile zeigt zwei von vier Werten](erledigt/nutrition-g-0330-die-kopfzeile-zeigt-zwei-von-vier-werten.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 5

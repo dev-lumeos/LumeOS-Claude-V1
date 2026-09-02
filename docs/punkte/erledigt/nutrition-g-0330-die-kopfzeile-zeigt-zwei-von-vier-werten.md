@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: eecfede1
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/mahlzeiten.tsx
@@ -74,3 +76,18 @@ Gewicht steht davor in der Zeile, aber nicht im Kopf.**
 
 **Mitbeauftragt mit G-329 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit G-329 abgenommen: gebaut.**
+
+`[cmd]` **Fuenf Werte statt zwei:** *333g 413kcal 23P 46K 13F*.
+`[cmd]` **8 von 8 Spalten fluchten, delta 0.**
+
+`[read]` **Die Beschriftung steht im `<thead>` derselben Tabelle** —
+**nicht als gerechneter Abstand in der Kopfzeile.** `[cmd]` **Der
+erste Versuch lag 66 px daneben, der Ausgleich verschob die ganze
+Karte.**
+
+`[cmd]` **Und der Kopf summiert ungerundet und rundet einmal am
+Ende** — er erbt nicht die Rundungsfehler der Anzeige.
