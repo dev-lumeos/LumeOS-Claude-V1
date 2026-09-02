@@ -43,7 +43,10 @@ auf 0* — ist weder nachweisbar noch erreicht.**
 
 `[read]` **Ein vierter Fall fehlt** — **oder eine Kuration.**
 
-## Auftrag
 
-**Vorbereitet mit C-394 am 2026-09-02.** Der Auftragstext
-und der Bericht stehen dort.
+## Gemessen am 2026-09-02: es gibt keinen vierten Fall.
+
+`[cmd]` **Die 403 gebundenen Familien haben nur technische
+Namens-Stichentscheide, keinen fachlichen vierten Vertreterfall.**
+
+`[read]` **Eine Regel hilft dort nicht, nur Kuration.**

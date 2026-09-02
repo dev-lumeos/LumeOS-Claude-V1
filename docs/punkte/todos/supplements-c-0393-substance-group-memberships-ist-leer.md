@@ -41,7 +41,11 @@ Ableitung?
 `[read]` **Solange die Pruefung rot bleibt, verdeckt sie neue
 Fehler** — **dieselbe Klasse wie ein Gate, das immer rot ist.**
 
-## Auftrag
 
-**Vorbereitet mit C-394 am 2026-09-02.** Der Auftragstext
-und der Bericht stehen dort.
+## Gemessen am 2026-09-02: die Sollzahl 8 stammt aus `wr_chelation_timing`.
+
+`[cmd]` **327 und 327a sind der vorgesehene Tabellen- und
+Schreibweg** — **auf `dev` nie eingespielt.**
+
+`[read]` **Zu entscheiden: einspielen oder die Erwartung
+zuruecknehmen.** **Der Punkt bleibt offen.**

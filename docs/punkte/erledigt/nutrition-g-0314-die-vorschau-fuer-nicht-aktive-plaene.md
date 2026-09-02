@@ -9,6 +9,8 @@ kind_von: G-311
 entscheidung: E-41
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 13c12f6f
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-plans.tsx
@@ -65,3 +67,13 @@ Werkbank vor dem Bearbeiten.** **Zwei Wege, zwei Zwecke.**
 
 **Mitbeauftragt mit G-331 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit G-331 abgenommen:** gebaut.
+
+`[cmd]` **`GET ?vorschau=<uuid>`, rein lesend, mit UUID-Pruefung.**
+`[cmd]` **Belegt: 3 Knoepfe, 7 Tageszeilen, URL unveraendert.**
+
+`[read]` **Nur die erste Woche** — *,,bei 28 Tagen waere das Fenster
+eine Tabelle, durch die niemand scrollt."*

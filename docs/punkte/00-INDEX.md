@@ -5,11 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 217 |
-| `laufend_codex` | 4 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 231 |
-| **gesamt** | **455** |
+| `todos` | 222 |
+| `erledigt` | 235 |
+| **gesamt** | **457** |
 
 ## medical — 43
 
@@ -59,9 +57,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 192
+## nutrition — 193
 
-### beauftragbar — 191
+### beauftragbar — 192
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -139,12 +137,12 @@
 | `C-384` | befund | hoch | [wer schreibt die 30.797 Tag-Zeilen?](erledigt/nutrition-c-0384-wer-schreibt-die-30797-tag-zeilen.md) | erledigt | — | C-387 |
 | `C-386` | befund | mittel | [sind die drei Reste aus C-35 eingeflossen?](erledigt/nutrition-c-0386-sind-die-drei-reste-aus-c-35-eingeflossen.md) | erledigt | — | C-388, C-389 |
 | `C-387` | befund | hoch | [vier Kettenschritte schreiben Tags](erledigt/nutrition-c-0387-vier-kettenschritte-schreiben-tags.md) | erledigt | — | — |
-| `C-388` | befund | mittel | [die Vertreterregel ist nicht erreicht](laufend_codex/nutrition-c-0388-die-vertreterregel-ist-nicht-erreicht.md) | vorbereitet (codex) | — | — |
-| `C-389` | befund | mittel | [Saft und Nektar liegen bei der Frucht](laufend_codex/nutrition-c-0389-saft-und-nektar-liegen-bei-der-frucht.md) | vorbereitet (codex) | — | — |
+| `C-388` | befund | mittel | [die Vertreterregel ist nicht erreicht](todos/nutrition-c-0388-die-vertreterregel-ist-nicht-erreicht.md) | offen | — | — |
+| `C-389` | befund | mittel | [Saft und Nektar liegen bei der Frucht](todos/nutrition-c-0389-saft-und-nektar-liegen-bei-der-frucht.md) | offen | — | — |
 | `C-390` | feature | mittel | [`tag_definitions` hat keine Untergruppe](erledigt/nutrition-c-0390-tag-definitions-hat-keine-untergruppe.md) | erledigt | — | — |
 | `C-391` | feature | hoch | [`food_search` hat keinen Treffergrund](erledigt/nutrition-c-0391-food-search-hat-keinen-treffergrund.md) | erledigt | — | C-393 |
 | `C-392` | feature | hoch | [die Tabelle `meal_slots`](erledigt/nutrition-c-0392-die-tabelle-meal-slots.md) | erledigt | — | C-394 |
-| `C-394` | befund | mittel | [`test-user` hat keine Slots](laufend_codex/nutrition-c-0394-test-user-hat-keine-slots.md) | vorbereitet (codex) | — | — |
+| `C-394` | befund | mittel | [`test-user` hat keine Slots](erledigt/nutrition-c-0394-test-user-hat-keine-slots.md) | erledigt | — | G-334 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -230,14 +228,14 @@
 | `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](erledigt/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | erledigt | — | G-320 |
 | `G-301` | befund | hoch | [der Meal-plans-Reiter folgt keinem Flow](erledigt/nutrition-g-0301-der-meal-plans-reiter-folgt-keinem-flow.md) | erledigt | — | C-370 |
 | `G-304` | messung | hoch | [was ein Nutzer in Plaenen und Rezepten tun kann](erledigt/nutrition-g-0304-was-ein-nutzer-in-plaenen-und-rezepten-tun-kann.md) | erledigt | — | C-372, C-373, G-305, G-309 |
-| `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](laufend_claudecode/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | laeuft (claudecode) | — | — |
+| `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](erledigt/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | erledigt | — | — |
 | `G-306` | befund | hoch | [der Planeditor verletzt die Immutabilitaet](erledigt/nutrition-g-0306-der-planeditor-verletzt-die-immutabilitaet.md) | erledigt | — | C-376 |
 | `G-307` | feature | mittel | [*Bearbeiten* in der Bibliothek fuehrt nirgendwohin](erledigt/nutrition-g-0307-bearbeiten-in-der-bibliothek-fuehrt-nirgendwohin.md) | erledigt | — | — |
 | `G-309` | feature | hoch | [der Plan erzeugt keine Eintraege im Tagebuch](erledigt/nutrition-g-0309-der-plan-erzeugt-keine-eintraege-im-tagebuch.md) | erledigt | — | G-329 |
 | `G-310` | befund | hoch | [der Plan-Reiter folgt keinem Mockup](erledigt/nutrition-g-0310-der-plan-reiter-folgt-keinem-mockup.md) | erledigt | — | G-311, G-315 |
 | `G-311` | befund | hoch | [drei Sackgassen im Planner](erledigt/nutrition-g-0311-drei-sackgassen-im-planner.md) | erledigt | — | G-314, G-327 |
 | `G-313` | befund | mittel | [der Lifecycle-Test ist rot](erledigt/nutrition-g-0313-der-lifecycle-test-ist-rot.md) | erledigt | — | — |
-| `G-314` | feature | mittel | [die Vorschau fuer nicht-aktive Plaene](laufend_claudecode/nutrition-g-0314-die-vorschau-fuer-nicht-aktive-plaene.md) | laeuft (claudecode) | — | — |
+| `G-314` | feature | mittel | [die Vorschau fuer nicht-aktive Plaene](erledigt/nutrition-g-0314-die-vorschau-fuer-nicht-aktive-plaene.md) | erledigt | — | — |
 | `G-315` | befund | hoch | [die Kopien sind keine Kopien](erledigt/nutrition-g-0315-die-kopien-sind-keine-kopien.md) | erledigt | — | G-316, G-317 |
 | `G-316` | feature | mittel | [*Log deviation* braucht die Posten](erledigt/nutrition-g-0316-log-deviation-braucht-die-posten.md) | erledigt | — | — |
 | `G-317` | befund | mittel | [drei Zeilen der Vorlage fehlen am Schirm](erledigt/nutrition-g-0317-drei-zeilen-der-vorlage-fehlen-am-schirm.md) | erledigt | — | G-319 |
@@ -253,8 +251,9 @@
 | `G-328` | befund | mittel | [was zaehlt *am haeufigsten*?](todos/nutrition-g-0328-was-zaehlt-am-haeufigsten.md) | offen | — | — |
 | `G-329` | feature | hoch | [Ghost-Eintraege koennen nur bestaetigen oder auslassen](erledigt/nutrition-g-0329-ghost-eintraege-koennen-nur-bestaetigen-oder-auslassen.md) | erledigt | — | — |
 | `G-330` | feature | mittel | [die Kopfzeile zeigt zwei von vier Werten](erledigt/nutrition-g-0330-die-kopfzeile-zeigt-zwei-von-vier-werten.md) | erledigt | — | — |
-| `G-331` | feature | hoch | [vier Suchen auf den Hook umstellen](laufend_claudecode/nutrition-g-0331-vier-suchen-auf-den-hook-umstellen.md) | laeuft (claudecode) | — | — |
+| `G-331` | feature | hoch | [vier Suchen auf den Hook umstellen](erledigt/nutrition-g-0331-vier-suchen-auf-den-hook-umstellen.md) | erledigt | — | G-333 |
 | `G-332` | feature | hoch | [die Mahlzeiten benennen und terminieren](todos/nutrition-g-0332-die-mahlzeiten-benennen-und-terminieren.md) | offen | — | — |
+| `G-333` | befund | niedrig | [`erfassen.tsx` hat keinen Aufrufer](todos/nutrition-g-0333-erfassen-tsx-hat-keinen-aufrufer.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -308,7 +307,7 @@
 | `C-352` | befund | hoch | [der Katalog hat keine deutschen Namen](erledigt/supplements-c-0352-der-katalog-hat-keine-deutschen-namen.md) | erledigt | — | — |
 | `C-364` | entscheidung | mittel | [die Produktebene ist Wissen, kein Bestand](erledigt/supplements-c-0364-die-produktebene-ist-wissen-kein-bestand.md) | erledigt | — | G-296 |
 | `C-365` | befund | niedrig | [Peptidsequenzen haben kein Ziel im Schema](erledigt/supplements-c-0365-peptidsequenzen-haben-kein-ziel-im-schema.md) | erledigt | — | — |
-| `C-393` | befund | mittel | [`substance_group_memberships` ist leer](laufend_codex/supplements-c-0393-substance-group-memberships-ist-leer.md) | vorbereitet (codex) | — | — |
+| `C-393` | befund | mittel | [`substance_group_memberships` ist leer](todos/supplements-c-0393-substance-group-memberships-ist-leer.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -429,7 +428,7 @@
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 
-## quer — 86
+## quer — 87
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -519,6 +518,7 @@
 | `G-303` | befund | hoch | [der Gate prueft `packages/ui` nicht](erledigt/quer-g-0303-der-gate-prueft-packages-ui-nicht.md) | erledigt | — | G-308 |
 | `G-308` | feature | mittel | [die zwei Pakete brauchen eigene Pruefungen](erledigt/quer-g-0308-die-zwei-pakete-brauchen-eigene-pruefungen.md) | erledigt | — | — |
 | `G-312` | befund | mittel | [neunzehn Lint-Fehler](erledigt/quer-g-0312-neunzehn-lint-fehler.md) | erledigt | — | — |
+| `G-334` | befund | hoch | [`test-user` taugt nicht mehr als Nachweiskonto](todos/nutrition-g-0334-test-user-taugt-nicht-mehr-als-nachweiskonto.md) | offen | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

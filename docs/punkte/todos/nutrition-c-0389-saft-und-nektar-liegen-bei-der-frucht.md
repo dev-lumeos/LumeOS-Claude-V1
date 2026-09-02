@@ -39,7 +39,11 @@ Liste** — **und muss selbst erkennen, dass das etwas anderes ist.**
 `[cmd]` **C-35 nannte es *,,je ein echter Suchfehler weniger, und
 ohne Kuration zu haben"*** — **die Trennung waere ableitbar.**
 
-## Auftrag
 
-**Vorbereitet mit C-394 am 2026-09-02.** Der Auftragstext
-und der Bericht stehen dort.
+## Gemessen am 2026-09-02: belegt, mit Rang.
+
+`[cmd]` **Saft und Nektar bleiben in `obst` und `raw`.** `[cmd]`
+**`Aprikosensaft` trifft bei *Aprikose* per `name_prefix`, Rang 6.**
+
+`[read]` **Der Treffergrund zeigt: kein Synonym- oder Aliasfehler,
+sondern der Name selbst.** **Der Punkt bleibt offen.**

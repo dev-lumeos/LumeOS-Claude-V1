@@ -9,6 +9,8 @@ kind_von: G-304
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 13c12f6f
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-planner-echt.tsx
@@ -71,3 +73,15 @@ anschaubar"* — `[cmd]` **Flow 7 und Flow 8 gehen vollstaendig durch.**
 
 **Mitbeauftragt mit G-331 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit G-331 abgenommen:** einer von sechs galt noch.
+
+`[cmd]` **Fuenf waren durch C-372, C-373 und G-319 erledigt.**
+
+`[cmd]` **Der sechste: ein `InEntwicklungKnopf` mit *,,der
+Schreibpfad im Browser ist nicht Teil dieses Auftrags"*** — **und der
+Schreibpfad steht seit C-372.**
+
+`[read]` **Die Attrappe log ueber ihren eigenen Zustand.**
