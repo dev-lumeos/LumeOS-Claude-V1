@@ -8,8 +8,6 @@ braucht: []
 kind_von: G-154
 kinder: []
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -449,4 +447,81 @@ ADR selbst). **Ob mehr, ist ungemessen.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Nachgemessen.**
+
+### Das Ergebnis dreht die Frage um
+
+`[read]` **Der ADR widerspricht sich, aber der Code nicht** — **er
+setzt genau die drei Stufen um, die die ADR-Tabelle nennt.**
+
+`[read]` **Was fehlt, ist der Vermerk, dass das Rangmodell darunter
+ueberholt ist.**
+
+### Der Widerspruch, mit Zeilennummer
+
+    Zeile 29   Allergie | hard | nie anzeigen, nie vorschlagen
+    Zeile 88   -300 fuer allergen match (hard constraint)
+
+`[read]` **Zeile 29 sagt entfernen, Zeile 88 sagt abwerten.**
+`[read]` **Punkte schliessen nicht aus** — **ein Eintrag mit -300
+steht weiter in der Liste, nur weiter unten.**
+
+`[cmd]` **Dreimal dasselbe Muster:** 29/88, 30/89, 31/90.
+
+### Und die Gegenprobe entscheidet, welche Zeile gilt
+
+`[cmd]` **Suche *nuss* mit Nutzer: 0 von 77 Treffern tragen
+`contains_nuts`.** `[cmd]` **Ohne Nutzer: 24 von 100.**
+
+`[read]` **Der Allergietreffer ist weg, nicht unten** — **waere Zeile
+88 umgesetzt, staenden die 24 mit -300 am Ende.**
+
+`[cmd]` **Und die Grundgesamtheit belegt es zweimal:** bei vier
+verschiedenen Begriffen fehlen **immer genau 120** — `[cmd]`
+**selbst nachgemessen: `contains_nuts` traegt 120 Zeilen.**
+
+`[read]` **Sie fehlen bei JEDER Suche.** **Die harte Stufe kennt
+keine Ausnahme.**
+
+### C-174 ist ueberholt, und der Beweis ist ein toter Zweig
+
+`[cmd]` **C-174 sagte, `strength` kenne vier Werte.** `[cmd]`
+**Selbst nachgemessen: der CHECK kennt sechs** — `hard_exclude`,
+`strong_avoid`, `soft_dislike`, `neutral`, `like`, `boost`.
+
+`[cmd]` **Belegt sind drei:** `boost 5`, `hard_exclude 2`,
+`soft_dislike 2`.
+
+`[cmd]` **Und `strong_avoid` hat keinen Schreibweg** — **drei
+Erzeuger gemessen, keiner setzt ihn, `food_preferences_write` nennt
+ihn null mal.**
+
+`[read]` **Ein Wert, den der CHECK erlaubt und niemand erzeugen
+kann.** **Als G-337.**
+
+### Die vier Stufen kommen an
+
+    Suche      boost  strong  hard  neutral
+    milch          2      98     -        -
+    joghurt        2      93     2        -
+    kaese          3      95     -        2
+
+`[cmd]` **Und die Entscheidungsstelle steht in
+`075_preference_search_application.sql:1053-1065`:** `hard` schliesst
+immer aus, `strong` **nur bei leerem Suchbegriff.**
+
+`[read]` **Das ist woertlich *,,nur auf explizite User-Suche
+anzeigen"*.**
+
+### Vier ADR-Spalten, die es nicht gibt
+
+`[cmd]` **`severity` heisst live `strength`.** `[cmd]`
+**`excluded_foods`, `religious_dietary`, `religious_is_hard`
+existieren nicht** — live steht `general_exclusions`.
+
+`[read]` **Die religioese Stufe hat keine eigene Datenquelle** —
+**`halal` und `kosher` sind Tags in `dietary_pattern`** (E-49).
+
+**Abgenommen.** **Sieben Vorschlaege im Bericht, drei davon werden
+Punkte.**
+

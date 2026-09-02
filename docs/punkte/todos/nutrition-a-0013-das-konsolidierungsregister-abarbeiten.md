@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: ["docs/specs/Nutrition/01_current_specs/SPEC_05_FOOD_TAXONOMY.md", "docs/spezifikation/00-UMSETZUNGSPLAENE.md", "docs/specs/Nutrition/01_current_specs/SPEC_09_SCORING.md"]
@@ -44,3 +42,12 @@ zahlen: null
 
 **Mitbeauftragt mit A-47 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: 74 von 84 offen, unveraendert.
+
+`[cmd]` **Und mindestens eine Zeile ist nachweislich falsch:** **der
+ADR selbst steht auf offen, obwohl er seit dem 30.08. einen
+Statuskopf traegt.**
+
+`[read]` **Ein Register, das seinen eigenen Stand nicht kennt, misst
+nichts** — **es zaehlt Zeilen, nicht Zustaende.**
