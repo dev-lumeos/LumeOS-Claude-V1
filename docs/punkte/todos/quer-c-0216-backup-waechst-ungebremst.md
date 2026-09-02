@@ -7,8 +7,6 @@ angelegt: 2026-08-22
 braucht: []
 kind_von: null
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   dateien: [backup, tools/encoding-pruefen.mjs]
 zahlen:
@@ -88,3 +86,13 @@ werden darf, solange Agenten laufen.**
 
 **Mitbeauftragt mit C-400 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: der Manifestlauf steht.
+
+`[cmd]` **`tools/backup-manifest.mjs` mit Test**, loeschfrei.
+
+`[cmd]` **Inventar: 11.629 Dateien, 5,963 GiB.** `[cmd]` **Erstes
+Manifest in `backup/_manifests/`.**
+
+`[read]` **A-39 haelt** — **und der naechste weiss, was er dort
+vorfindet.**

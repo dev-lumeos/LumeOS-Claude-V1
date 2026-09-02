@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -60,4 +58,20 @@ geschlossen.**
 ## Auftrag
 
 **Mitbeauftragt mit C-400 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: zwei Entscheidungen, ein Kettenschritt.
+
+`[cmd]` **EAA und Medication-Monitoring brauchen Fach- und
+Schemaentscheidungen.**
+
+`[cmd]` **Fuer CHOL existiert die C-346-Korrektur, nicht live
+eingespielt.**
+
+`[read]` **Der dritte ist kein offener Befund, sondern ein
+liegengebliebener Kettenschritt.**
+
+## Auftrag
+
+**Vorbereitet mit C-401 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

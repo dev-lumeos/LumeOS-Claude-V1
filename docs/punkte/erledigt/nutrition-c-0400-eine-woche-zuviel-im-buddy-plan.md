@@ -9,6 +9,8 @@ kind_von: C-397
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 7dc4073e
 beruehrt:
   tabellen: [nutrition.meal_plan_entries]
 zahlen:
@@ -106,4 +108,58 @@ automatisiert, solange A-39 gilt.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator.**
+
+### Die Woche ist weg, der Eintrag bleibt
+
+`[cmd]` **`Buddy auto-plan` hat nur noch eine Woche** — **aber 29
+statt 28 Eintraege.**
+
+`[cmd]` **Der einzelne Probe-Eintrag am 02.09. bleibt** — **Codex
+fasst ihn ohne Loeschfreigabe nicht an.**
+
+`[read]` **Richtig.** **Er stammt vom Orchestrator, und eine Zeile
+zu loeschen, die man nicht selbst angelegt hat, ist keine
+Nebensache.**
+
+`[cmd]` **Toms Freigabe liegt vor** (E-62) — **als C-401.**
+
+### Und zwei `days_count`-Werte brauchen die Semantik
+
+`[cmd]` **Cut traegt 28, Lean 84** — **beide mit einer Woche und 28
+Eintraegen.**
+
+`[cmd]` **`Aufbau-Wochenplan` traegt 21 bei 3 Wochen** — **dort
+stimmt die Laufzeit.**
+
+`[read]` **E-62 entscheidet:** `days_count` **ist die Laufzeit, nicht
+die Zahl der beschriebenen Tage.**
+
+`[read]` **Und E-44 hat den Fall schon:** **`rollover` — eine Woche,
+mehrfach durchlaufen.** `[read]` **Zu messen, ob Cut und Lean ihn
+tragen.**
+
+### C-187 — zwei brauchen Entscheidungen, einer eine Einspielung
+
+`[cmd]` **EAA und Medication-Monitoring: Fach- und
+Schemaentscheidungen.**
+
+`[cmd]` **Fuer CHOL existiert die C-346-Korrektur** — **nicht live
+eingespielt.**
+
+`[read]` **Der dritte ist also kein offener Befund, sondern ein
+liegengebliebener Kettenschritt.**
+
+### C-216 — der Manifestlauf steht
+
+`[cmd]` **`tools/backup-manifest.mjs` mit Test.** `[cmd]`
+**Inventar: 11.629 Dateien, 5,963 GiB.**
+
+`[read]` **Loeschfrei, wie beauftragt** — **A-39 haelt.**
+
+`[read]` **Und das erste Manifest liegt in
+`backup/_manifests/`** — **damit weiss der naechste, was er dort
+vorfindet.**
+
+**Abgenommen.**
+

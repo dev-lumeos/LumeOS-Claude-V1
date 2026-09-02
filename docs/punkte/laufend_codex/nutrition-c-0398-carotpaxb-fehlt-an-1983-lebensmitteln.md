@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-294
 entscheidung: E-61
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.food_nutrients]
 zahlen:
@@ -87,7 +89,7 @@ die der BLS-Wert schon anwendet.**
 
 **Mitbeauftragt: C-324.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-02.**
+**Beauftragt am 2026-09-02.**
 
 ### E-61 entscheidet es
 
