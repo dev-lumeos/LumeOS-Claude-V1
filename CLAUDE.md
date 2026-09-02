@@ -227,6 +227,40 @@ Seed-Konten mit je 180 Tagen, und `test-user@lumeos.local` mit einem.
 **Sonst ist sie nicht nachpruefbar — und eine Abweichung sieht aus
 wie ein Defekt.**
 
+## In `backup/` loescht niemand ausser Tom
+
+**Tom, 2026-09-02:** *,,alles was aelter ist wird in einen /temp
+ordner gelegt den ich entsorge. ich traue niemandem mehr von euch
+betreffs loeschbefehlen."*
+
+`[read]` **Kein Agent, kein Orchestrator.** **Was seine Frist
+ueberschreitet, wird nach `backup/_temp/` verschoben.**
+
+`[read]` **Ein Verschieben ist umkehrbar, ein Loeschen nicht** —
+**und das Manifest haelt fest, was wohin ging** (C-216).
+
+### Zwei Ordner sind Quellen, keine Sicherungen
+
+`[cmd]` **Sechs Kettenschritte und `apps/web/.../evidenz/registry.ts`
+lesen aus `backup/kimi-research/` und `backup/legacy-v2/`.**
+
+`[read]` **Ein Raeumplan haette sie mitgenommen** — **der naechste
+Kettenlauf waere gescheitert.**
+
+`[cmd]` **`backup/quellen-NICHT-RAEUMEN.md` fuehrt die sieben
+Fundstellen.**
+
+### Und der Waechter erinnert
+
+`[cmd]` **`tools/backup-wachstum.mjs` laeuft im Gate** — **er meldet
+bei ueber 2,5 GiB oder sieben Tagen ohne Inventur.**
+
+`[cmd]` **Am 02.09.: 5,97 auf 2,31 GiB** — **56 von 57
+Vollsicherungen, von denen nie eine zurueckgespielt wurde.**
+
+`[read]` **A-39 gilt weiter: nicht raeumen, solange Agenten
+laufen.**
+
 ## Eine Pruefung muss in beide Richtungen belegt sein
 
 `[read]` **Ein Waechter, der laeuft und nichts findet, ist von einem,

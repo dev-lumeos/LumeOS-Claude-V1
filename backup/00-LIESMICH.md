@@ -121,6 +121,41 @@ ein weiterer noetig ist.**
 
 ---
 
+Woechentlich raeumen
+--------------------
+
+Tom, 2026-09-02: *,,setz dir fuer die ueberwachung einen reminder
+dass wir das woechentlich raeumen."*
+
+`[cmd]` **`pnpm gate` meldet den Stand** — **wenn `backup/` mehr als
+2,5 GiB traegt oder seit sieben Tagen nicht geraeumt wurde.**
+
+`[read]` **Der Orchestrator legt dann vor, was raus kann.** **Tom
+entscheidet und entsorgt.**
+
+### Was am 02.09. geraeumt wurde
+
+    vorher    11.633 Dateien, 5,97 GiB
+    nachher   11.581 Dateien, 2,31 GiB
+
+`[cmd]` **56 von 57 Vollsicherungen** — **3,66 GiB.** `[cmd]` **Die
+juengste bleibt:** `20260830_140937_c354_vor_live`, als `.sql` und
+`.dump`.
+
+`[read]` **Keine wurde je zurueckgespielt** — **und der Zustand
+entsteht ohnehin aus `supabase/_pipeline/`.**
+
+### Was als naechstes ansteht
+
+    c262        658,7 MiB   Arbeitsstand, Punkt erledigt
+    schema      211,6 MiB   276 Kettenlauf-Sicherungen
+    c255        152,7 MiB   Arbeitsstand
+    (direkt)    126,1 MiB   575 lose Dateien
+
+`[cmd]` **In `schema` liegen `20260902045205`, `...211`, `...244`
+innerhalb von 40 Sekunden** — **dieselbe Sache wie bei den
+Vollsicherungen, nur kleiner.**
+
 Wann geraeumt wird
 ------------------
 

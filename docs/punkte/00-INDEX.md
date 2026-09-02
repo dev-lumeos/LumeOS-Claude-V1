@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 213 |
+| `todos` | 212 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 257 |
+| `erledigt` | 258 |
 | **gesamt** | **476** |
 
 ## medical — 43
@@ -482,7 +482,7 @@
 | `A-64` | entscheidung | niedrig | [der Schirmlauf ausserhalb des Gates](todos/quer-a-0064-der-schirmlauf-ausserhalb-des-gates.md) | offen | — | — |
 | `A-68` | befund | niedrig | [der Waechter fuer leerlaufende Agenten](erledigt/quer-a-0068-der-waechter-fuer-leerlaufende-agenten.md) | erledigt | — | — |
 | `A-69` | befund | mittel | [26 Abhaengigkeiten mit High Severity](todos/quer-a-0069-26-abhaengigkeiten-mit-high-severity.md) | offen | — | — |
-| `A-70` | feature | hoch | [ein Backupsystem statt eines wachsenden Ordners](todos/quer-a-0070-ein-backupsystem-statt-eines-wachsenden-ordners.md) | offen | — | — |
+| `A-70` | feature | hoch | [ein Backupsystem statt eines wachsenden Ordners](erledigt/quer-a-0070-ein-backupsystem-statt-eines-wachsenden-ordners.md) | erledigt | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

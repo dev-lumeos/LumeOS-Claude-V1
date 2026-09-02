@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: C-216
 entscheidung: null
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   dateien:
     - tools/backup-manifest.mjs
@@ -142,3 +144,62 @@ niemand schreibt.**
 
 `[read]` **Und die Vollsicherungen sind eine Produktfrage:**
 **wie weit zurueck will Tom springen koennen?**
+
+## Abnahme
+
+**2026-09-02, Orchestrator.** **Geraeumt und gesichert.**
+
+### Der Stand
+
+    vorher    11.633 Dateien, 5,97 GiB
+    nachher   11.581 Dateien, 2,31 GiB
+
+`[cmd]` **56 von 57 Vollsicherungen entsorgt, 3,66 GiB.** `[cmd]`
+**Die juengste bleibt:** `20260830_140937_c354_vor_live`, als `.sql`
+und `.dump`.
+
+`[read]` **Tom hat sie selbst entsorgt** — **kein Agent hat
+geloescht.**
+
+### Was gebaut wurde
+
+`[cmd]` **`backup/00-LIESMICH.md`** — die Regeln, Quellen zuerst.
+`[cmd]` **`backup/quellen-NICHT-RAEUMEN.md`** — sieben Fundstellen.
+`[cmd]` **`backup/_temp/00-LIESMICH.md`** — *,,Tom entsorgt, sonst
+niemand."*
+`[cmd]` **`tools/backup-wachstum.mjs`** — laeuft im Gate, meldet bei
+ueber 2,5 GiB oder sieben Tagen ohne Inventur.
+
+### Der Waechter, in beide Richtungen belegt
+
+    Manifest da, 2,19 GiB      keine Erinnerung   richtig
+    kein Manifest              Erinnerung         richtig
+    zurueckgebaut              keine Erinnerung   richtig
+
+`[read]` **Die erste Fassung schwieg, wenn kein Manifest da war** —
+**`alter !== null` liess den Fall durch.** `[read]` **Kein Manifest
+heisst: nie inventarisiert** — **der aelteste denkbare Stand, kein
+Grund zu schweigen.**
+
+### Der Fund, der den Raeumplan gerettet hat
+
+`[cmd]` **Sechs Kettenschritte und Produktcode lesen aus
+`backup/kimi-research/` und `backup/legacy-v2/`.**
+
+`[read]` **Mein Probelauf haette sie mitgenommen.**
+
+`[cmd]` **Und `schema/` habe ich zuerst falsch als Quelle
+eingeordnet** — **die eine Referenz steht in einem Kommentar, nicht
+im Code.** **Es ist raeumbar.**
+
+### Was als naechstes ansteht
+
+    c262        658,7 MiB   Arbeitsstand, Punkt erledigt
+    schema      211,6 MiB   276 Kettenlauf-Sicherungen
+    c255        152,7 MiB   Arbeitsstand
+    (direkt)    126,1 MiB   575 lose Dateien
+
+`[cmd]` **In `schema` liegen drei Sicherungen innerhalb von 40
+Sekunden** — **dieselbe Sache, nur kleiner.**
+
+**Abgenommen.**
