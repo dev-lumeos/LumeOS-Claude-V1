@@ -166,7 +166,140 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Claude Code, 2026-09-02.** Mitbeauftragt G-134; beides in diesem
+Bericht. **Nicht committet, nichts auf `dev@lumeos.app` geschrieben,
+kein Schema angefasst** (138 Definitionen, 98 mit `parent_code`, 14
+Tags — vor und nach dem Lauf gleich).
+
+### Zwei Auftragsfragen, gemessen
+
+**1 · Liegt die Trinkmenge in `hydration.tsx`?** — **Ja.**
+
+`[cmd]` **`hydration-day-read.ts:24-46` liefert bereits beide
+Positionen:** `logged_ml` (getrunken, aus `water_logs`) und `food_ml`
+(Wasseranteil, aus `daily_summary.water_g`), dazu
+`food_ml_missing` fuer die Vollstaendigkeit.
+
+`[read]` **Deshalb habe ich KEINE zweite Fluessigkeitsbilanz
+gebaut.** Die Karte ordnet `WATER` ein — die Bilanz bleibt im
+Wassermodul, und der Erklaerungssatz verweist darauf. **Eine zweite
+waere eine zweite Wahrheit ueber dieselbe Zahl.**
+
+**2 · Wo wirkt die Gruppierung?** — **Nicht in `mikro-lage.ts`.**
+
+`[cmd]` **Der Auftrag nennt `mikro-lage.ts:325-327`** (`const rest =
+… → titel: 'Weitere'`). `[cmd]` **Gemessen: die Datei hat ausser
+Tests KEINEN Aufrufer.** `[cmd]` **G-249 hat die zweite Ansicht
+entfernt** — der Nutrients-Reiter laeuft ueber
+`NaehrstoffOrdnungTab`, und die Karten vergibt
+`naehrstoff-anzeige.ts:karteFuerWurzel`.
+
+`[read]` **Ich habe zuerst in `mikro-lage.ts` gebaut und es
+zurueckgenommen** — dort waere es eine tote zweite Wahrheit
+gewesen. **Die Aenderung sitzt jetzt an der Stelle, die wirkt.**
+
+`[read]` **Die Sammelkarte heisst dort *Sonstige*, nicht
+*Weitere*** — dasselbe Verhalten, anderer Name.
+
+### G-136 / E-48 — vier Karten
+
+`[cmd]` **Gemessen am 2026-09-02:** `WATER`, `ALC`, `OA` und `ASH`
+tragen alle `group_de = 'Makronaehrstoffe'` und fielen damit in
+*Sonstige*.
+
+    vorher                          nachher
+    Sonstige   4 Wurzeln + CHORL    Wasser              1 Eintrag
+                                    Organische Saeuren  6 Eintraege
+                                    Genussmittel        1 Eintrag
+                                    Elemente  16 -> 17  (mit ASH)
+                                    Sonstige            1 (CHORL)
+
+`[cmd]` **Am Schirm gemessen:** elf Karten, vier mit
+Erklaerungssatz.
+
+**`FIBT` war bereits geloest** — `karteFuerWurzel` gibt seit jeher
+*Kohlenhydrate*, `parent_code` ist leer, und
+`insights-read.ts:270-282` fuehrt es als eigenen Knoten NEBEN `CHO`.
+`[cmd]` **Der Grund steht dort mit Zahlen: als Kind gerechnet
+ergaeben die Teile 320,78 gegen 281,86** — mehr als das Ganze.
+**Nichts zu tun.**
+
+**`ASH` ist Karte, nicht Elternteil.** `[cmd]` **Kein
+`parent_code`, kein Baumknoten** — ein Waechter prueft beides,
+denn sonst zaehlte die Elemente-Karte Summe UND Bestandteile.
+
+`[read]` **Vier von elf Karten tragen einen Satz** — nur wo der
+Name irrefuehrt. **Ein Satz, der nichts hinzufuegt, wird beim Lesen
+uebersprungen und macht die naechsten wertlos.**
+
+### G-134 / E-49 — drei Fragen in einem Feld
+
+`[cmd]` **Gemessen: neun Tags tragen `tag_type = 'diet'`** — vier
+Naehrwertangaben (`high_protein`, `low_carb`, `low_fat`,
+`high_fiber`), zwei Ernaehrungsformen, `halal`, `kosher`,
+`thai_food`.
+
+`[cmd]` **Die drei Gruppen standen in der Oberflaeche bereits**
+(Ernaehrungsform, Naehrwert, Verarbeitung) — **aber `halal` und
+`kosher` fehlten in jeder.** `[read]` **Sie waren nicht erreichbar,
+obwohl die Tags seit jeher in der Datenbank stehen** (`sort_order`
+130, 140).
+
+`[cmd]` **Am Schirm gegengeprueft, dass der Filter wirkt:** 4.970
+-> **4.440 Treffer** mit `halal`. `[cmd]` **Ohne Vorlieben: 7.140 ->
+6.379** — die Differenz sind Toms gespeicherte Vorlieben (C-94),
+die auf jede Suche wirken.
+
+**`thai_food` ist geparkt, nicht eingeordnet.** `[read]` **Eine
+Kueche ist keine Ernaehrungsform** — wer thai isst, isst nicht *nur*
+thai. **Sie steht mit Vermerk `Thai (Kueche — geparkt)` dort, bis
+`preferred_cuisines` kommt;** ein vorhandener Filter, den niemand
+mehr findet, waere schlimmer als einer an der falschen Stelle.
+
+### Zu melden: die Spalte in `tag_definitions`
+
+`[cmd]` **`tag_definitions` hat neun Spalten und KEINE fuer die
+Untergruppe:** `code`, `name_de`, `name_en`, `tag_type`,
+`is_exclusion_relevant`, `icon`, `sort_order`,
+`requires_macro_check`, `macro_rule`.
+
+`[read]` **Die Zuordnung steht damit weiter nur in der
+Oberflaeche** (`tab-foods.tsx:FILTERGRUPPEN`) — genau der Zustand,
+den E-49 beheben will. **Der Auftrag sagt: wenn die Spalte Codex
+braucht, melden statt selbst anlegen.** **Hiermit gemeldet.**
+
+`[read]` **Was die Spalte tragen muesste:** `ernaehrungsform`,
+`naehrwert`, `verarbeitung`, `allergen`, spaeter `kueche`.
+**Solange sie fehlt, ist die Trennung eine Anzeigeentscheidung, die
+jede zweite Oberflaeche neu treffen muss.**
+
+### Nachweis
+
+    Karten          11, davon Wasser 1, Saeuren 6, Genussmittel 1
+    Elemente        16 -> 17 (mit ASH)
+    Sonstige        nur noch CHORL
+    Erklaerungen    4 von 11, am Schirm sichtbar
+    FIBT            Karte Kohlenhydrate, kein parent_code
+    ASH             Karte Elemente, kein Baumknoten
+    halal/kosher    erreichbar, Filter wirkt (4.970 -> 4.440)
+    thai_food       geparkt, mit Vermerk
+    Bilder          backup/g136-nachher.png, g134-nachher.png
+
+### Gate und Sabotageprobe
+
+    pnpm gate        15 von 15 Tasks, 1.301 Tests, 0 Fehler
+    Sabotageprobe    21 von 21 gefangen
+    neuer Waechter   karten-und-filtergruppen.test.ts, 10 Proben
+
+### Ein bestehender Waechter hielt den alten Zustand fest
+
+`[cmd]` **`naehrstoff-anzeige.test.ts:146` pruefte
+`karteFuerWurzel('WATER', …) === 'Sonstige'`** — den Zustand vor
+E-48.
+
+`[read]` **Was er sichert, gilt weiter** (die drei Makro-Aeste
+tragen eigene Karten, *Sonstige* faengt weiter auf) — **er prueft
+jetzt die neue Zuordnung, mit allen vier Wurzeln einzeln.**
 
 ## Abnahme
 

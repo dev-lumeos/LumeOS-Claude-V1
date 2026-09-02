@@ -9,6 +9,8 @@ kind_von: C-35
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.foods]
 zahlen:
@@ -76,3 +78,18 @@ fehlt.**
 
 **Mitbeauftragt mit C-384 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit C-384 abgenommen.**
+
+    Zubereitungsschluessel   eingeflossen (name_display_de)
+    Vertreterregel           teilweise -- 504 Familien ohne
+                             100/000-Form, nur 101 eindeutig
+    Erzeugnis-Zellen         nicht eingeflossen
+
+`[read]` **Die Sorge war berechtigt:** **zwei von drei Ergebnissen
+waeren verloren gegangen.**
+
+`[cmd]` **Und die alte Aussage *953 auf 0* ist weder nachweisbar noch
+erreicht** — **als C-388.**

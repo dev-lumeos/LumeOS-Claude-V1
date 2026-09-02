@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: C-379
 entscheidung: E-54
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [goals.goal_phases]
 zahlen:
@@ -66,7 +68,7 @@ nicht *von Maerz bis Mai, dreimal wiederholt*.**
 
 **Mitbeauftragt: C-36, C-24.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-02.**
+**Beauftragt am 2026-09-02.**
 
 ### 1 · C-383 — gehoeren Plaene in `goal_phases`?
 

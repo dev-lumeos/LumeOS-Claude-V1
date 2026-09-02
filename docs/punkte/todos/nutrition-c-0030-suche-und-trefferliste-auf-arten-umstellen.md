@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -53,3 +51,21 @@ zahlen: null
 
 **Mitbeauftragt mit C-384 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: gilt weiter
+
+`[cmd]` **`nutrition.foods` hat keine Arten- oder Vertreterspalte.**
+`[cmd]` **`food_search` liefert eine flache Liste** — die
+Aprikosenprobe ergibt **24 von 24 Zeilen**, nicht eine Art mit
+Varianten.
+
+`[cmd]` **Und `food_search` fuehrt keinen `match_reason`** —
+`[read]` **der Orchestrator hatte G-281 als Beleg genannt, das
+betrifft den Supplement-Katalog.**
+
+`[cmd]` **Der Herkunftsfilter aus C-355 unterscheidet nur `bls` und
+`custom`** — kein Artenmodell.
+
+`[read]` **Die Vorbedingung ist erfuellt:** die kuratierten
+Anzeigenamen stehen (C-29). **Der Punkt bleibt ein eigener
+Bauauftrag.**
