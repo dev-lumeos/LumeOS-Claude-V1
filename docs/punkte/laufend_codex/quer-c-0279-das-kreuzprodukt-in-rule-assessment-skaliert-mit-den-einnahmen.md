@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-190
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -38,5 +40,5 @@ zahlen: null
 
 ## Auftrag
 
-**Vorbereitet mit C-159 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit C-159 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

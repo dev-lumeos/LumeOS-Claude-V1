@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-110
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -41,7 +43,7 @@ zahlen: null
 
 **Mitbeauftragt: C-271, C-279.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-02.**
+**Beauftragt am 2026-09-02.**
 
 ### Warum diese drei zusammen
 
