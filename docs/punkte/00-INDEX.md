@@ -258,7 +258,7 @@
 | `G-332` | feature | hoch | [die Mahlzeiten benennen und terminieren](erledigt/nutrition-g-0332-die-mahlzeiten-benennen-und-terminieren.md) | erledigt | — | C-396, G-335 |
 | `G-333` | befund | niedrig | [`erfassen.tsx` hat keinen Aufrufer](todos/nutrition-g-0333-erfassen-tsx-hat-keinen-aufrufer.md) | offen | — | — |
 | `G-335` | feature | hoch | [acht Stellen uebersetzen `meal_type` selbst](erledigt/nutrition-g-0335-acht-stellen-uebersetzen-meal-type-selbst.md) | erledigt | — | G-336 |
-| `G-336` | befund | hoch | [das Raster liest `meal_plan_slots` nicht](laufend_claudecode/nutrition-g-0336-das-raster-liest-meal-plan-slots-nicht.md) | laeuft (claudecode) | — | — |
+| `G-336` | befund | hoch | [das Raster liest `meal_plan_slots` nicht](laufend_claudecode/nutrition-g-0336-das-raster-liest-meal-plan-slots-nicht.md) | vorbereitet (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 1

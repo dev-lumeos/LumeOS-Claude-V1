@@ -7,8 +7,6 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-335
 entscheidung: E-59
-agent: claudecode
-beauftragt: 2026-09-02
 beruehrt:
   dateien:
     - apps/web/src/lib/nutrition/plan-lesen.ts
@@ -74,7 +72,8 @@ Raster sie liest, folgen die Ghost-Eintraege von selbst.**
 
 ## Auftrag — das Raster liest die Planstruktur
 
-**Beauftragt am 2026-09-02.** **Vorrang vor A-47.**
+`[read]` **Vorbereitet am 2026-09-02.** **A-47 laeuft und wird
+nicht unterbrochen.**
 
 ### 1 · `meal_plan_slots` anschliessen
 
