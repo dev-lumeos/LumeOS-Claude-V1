@@ -57,9 +57,17 @@ Kind unter `CHO`** — als Kind ueberstiegen die Teile das Elternteil.
 
 `[read]` **Karte und Hierarchie sind zwei verschiedene Sachen.**
 
-`[cmd]` **Offen bleibt `ASH` (Rohasche)** — von Tom nicht genannt.
-`[read]` **Der Mineralstoffrueckstand nach dem Verbrennen, kein
-Naehrwert fuer den Nutzer.** **Eigene Karte oder gar nicht zeigen?**
+`[cmd]` **`ASH` gehoert zu den Mineralstoffen** — Tom, 2026-09-02:
+*,,die Summe aller lebensnotwendigen Mineralstoffe und Spurenelemente
+in einem Lebensmittel."*
+
+`[cmd]` **Gemessen: sechzehn Mineralstoff-Wurzeln stehen bereits
+nebeneinander, `ASH` mitten darin.** `[read]` **Keine neue Karte
+noetig.**
+
+`[read]` **Aber dieselbe Vorsicht wie bei `FIBT`:** `[cmd]` **`ASH`
+ist die Summe der uebrigen fuenfzehn, nicht ihr Elternteil** — **auf
+derselben Karte ja, als `parent_code` nein.**
 
 `[read]` **Und *Wasser* ist der erste modulschneidende Naehrwert:**
 **die Trinkmenge kommt aus einem anderen Modul.** **Wo sie liegt und

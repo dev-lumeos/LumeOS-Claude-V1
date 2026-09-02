@@ -86,10 +86,41 @@ muss.**
 Nicht-Naehrstoffe*. `[cmd]` **Und die Karte ist offen fuer mehr** —
 Koffein waere der naechste Kandidat, **sobald der BLS ihn fuehrt.**
 
-### Und `ASH`?
+### Rohasche gehoert zu den Mineralstoffen
 
-`[cmd]` **Rohasche bleibt ohne Zuordnung.** `[read]` **Tom hat sie
-nicht genannt** — **sie ist der Mineralstoffrueckstand nach dem
-Verbrennen, kein Naehrwert fuer den Nutzer.**
+Tom, 2026-09-02, auf die Rueckfrage:
 
-`[read]` **Zu entscheiden: eigene Karte, oder gar nicht zeigen?**
+> Rohasche (ASH) gehoert in die Kategorie der Mineralstoffe
+> (Anorganische Stoffe).
+>
+> **Bedeutung:** Rohasche ist kein einzelner Naehrstoff. Sie
+> bezeichnet die Summe aller lebensnotwendigen Mineralstoffe und
+> Spurenelemente (wie Calcium, Phosphor, Magnesium, Kalium, Natrium
+> und Eisen) in einem Lebensmittel.
+>
+> **Bestimmung:** Der Name kommt aus dem Labor. Wenn man ein
+> Lebensmittel bei ueber 500 Grad komplett verbrennt, verbrennen alle
+> organischen Anteile (Fette, Proteine, Kohlenhydrate, Vitamine). Was
+> als unbrennbare *Asche* uebrig bleibt, sind die reinen
+> Mineralstoffe.
+>
+> **Energie:** Rohasche liefert 0 kcal.
+
+`[cmd]` **Gemessen: sechzehn Mineralstoff-Wurzeln stehen bereits
+nebeneinander** — Calcium, Chlorid, Chrom, Kupfer, Fluorid, Eisen,
+Iodid, Kalium, Magnesium, Mangan, Molybdaen, Natrium, Salz, Phosphor,
+Schwefel, Zink. **Und `ASH` mitten darin.**
+
+`[read]` **Es braucht also keine neue Karte** — **die Mineralstoffkarte
+gibt es, `ASH` steht nur nicht als das darauf, was es ist.**
+
+`[read]` **Und die Beziehung ist besonders:** `[cmd]` **`ASH` ist die
+Summe der uebrigen fuenfzehn, nicht ihr Elternteil.**
+
+`[read]` **Wie bei `FIBT` unter `CHO`:** **auf derselben Karte ja,
+als `parent_code` nein** — **sonst uebersteigen die Teile das
+Elternteil oder das Elternteil zaehlt doppelt.**
+
+`[cmd]` **Der Erklaerungstext gehoert an die Zeile:** *Summe aller
+Mineralstoffe und Spurenelemente, im Labor durch Verbrennen bei ueber
+500 Grad bestimmt. Liefert keine Energie.*
