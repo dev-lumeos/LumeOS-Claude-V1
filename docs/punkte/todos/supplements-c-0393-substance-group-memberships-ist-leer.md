@@ -8,7 +8,7 @@ braucht: []
 kind_von: C-391
 entscheidung: null
 beruehrt:
-  tabellen: [supplements.substance_groups]
+  tabellen: [supplements.supplement_groups]
 zahlen:
   gemessen: 2026-09-02
   soll: 8
