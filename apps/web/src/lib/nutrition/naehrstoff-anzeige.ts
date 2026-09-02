@@ -43,22 +43,87 @@ export function zahlMitEinheit(v: number | null, einheit: string | null): string
 export const KARTEN_REIHENFOLGE = [
   'Kohlenhydrate', 'Fette', 'Protein',
   'Fettlösliche Vitamine', 'Wasserlösliche Vitamine',
-  'Elemente', 'Energie', 'Sonstige',
+  'Elemente', 'Energie',
+  // ══ G-136 / E-48: drei Karten aus *Sonstige* herausgeloest ════
+  //
+  // `[cmd]` **Gemessen am 2026-09-02:** `WATER`, `ALC`, `OA` und
+  // `ASH` tragen alle `group_de = 'Makronährstoffe'` und fielen
+  // damit in die Sammelkarte.
+  //
+  // `[read]` **Sie ist der Auffangzustand seit G-239** (damals fielen
+  // 100 von 154 Zeilen in keine Gruppe). **Ehrlich, aber sie
+  // sortiert nicht** — und E-48 sagt, wohin die vier gehören.
+  'Wasser', 'Organische Säuren', 'Genussmittel',
+  'Sonstige',
 ] as const
 
 /**
- * Welche Karte eine Wurzel bekommt. Die Zuordnung ist Anzeige, kein
- * Schema: `CHO` und `FIBT` unter „Kohlenhydrate" (Ballaststoffe SIND
- * Kohlenhydrate — so auch Cronometer), `FAT` unter „Fette",
- * `PROT625` unter „Protein"; die restlichen Makro-Wurzeln (Wasser,
- * Alkohol, Organische Saeuren, Rohasche) und `group_de = 'Sonstige
- * Naehrstoffe'` sammeln sich unter „Sonstige". Vitamine, Elemente und
- * Energie behalten ihr `group_de`.
+ * Was eine Karte ist — G-136.
+ *
+ * `[read]` **Nur wo der Name allein irreführt.** *Rohasche* klingt
+ * nach Rückstand; es ist die Summe aller Mineralstoffe. *Wasser* in
+ * einer Nährstoffkarte ist der Wasseranteil der Lebensmittel, nicht
+ * die Trinkmenge.
+ *
+ * `[cmd]` **Die übrigen fünf Karten stehen bewusst ohne Satz** —
+ * *Kohlenhydrate*, *Fette*, *Protein*, *Elemente* und die beiden
+ * Vitaminkarten erklären sich selbst. **Ein Satz, der nichts
+ * hinzufügt, wird beim Lesen übersprungen und macht die nächsten
+ * wertlos.**
+ */
+export const KARTEN_ERKLAERUNG: Readonly<Record<string, string>> = {
+  Wasser: 'Der Wasseranteil der Lebensmittel. Die vollständige '
+    + 'Flüssigkeitsbilanz — Getrunkenes und Wasser aus dem Essen '
+    + 'zusammen — steht im Wassermodul.',
+  'Organische Säuren': 'Nicht-essentielle Wirkstoffe. Sie kommen '
+    + 'natürlich in Obst und Gemüse vor oder entstehen beim Gären.',
+  Genussmittel: 'Liefert Energie, aber keine Nährstoffe.',
+  Elemente: 'Rohasche ist die Summe aller Mineralstoffe — im Labor '
+    + 'durch Verbrennen bei über 500 Grad bestimmt. Sie liefert keine '
+    + 'Energie und ist kein eigener Nährstoff, sondern eine '
+    + 'Messgröße.',
+}
+
+/**
+ * Welche Karte eine Wurzel bekommt — Anzeige, kein Schema.
+ *
+ * ══ DIE UNTERSCHEIDUNG, DIE DER AUFTRAG VERLANGT ════════════
+ *
+ * **Karte und Hierarchie sind zwei verschiedene Sachen.** `[read]`
+ * **Diese Funktion vergibt Karten.** `[cmd]` **`parent_code` in
+ * `nutrient_defs` bleibt unberührt** — kein `FIBT` unter `CHO`, kein
+ * `ASH` über den fünfzehn Elementen.
+ *
+ * `[cmd]` **Warum das wichtig ist, ist gemessen (G-291):** als Kind
+ * von `CHO` gerechnet ergäben die Teile **320,78 gegen 281,86** —
+ * mehr als das Ganze, und die Differenz wäre negativ. **Bei `ASH`
+ * wäre es dasselbe:** die Karte zählte Summe UND Bestandteile.
+ *
+ * ══ DIE ZUORDNUNG ═════════════════════════════════
+ *
+ *     CHO, FIBT   Kohlenhydrate   Ballaststoffe SIND Kohlenhydrate
+ *     FAT         Fette
+ *     PROT625     Protein
+ *     WATER       Wasser          E-48, G-136
+ *     OA          Organische Säuren
+ *     ALC         Genussmittel
+ *     ASH         Elemente        Summe der Mineralstoffe
+ *     Rest        Sonstige        was in keine passt
+ *
+ * `[read]` **„Sonstige" bleibt** — eine stumm weggelassene Wurzel
+ * wäre derselbe Fehler wie eine Null statt eines Fehlzählers.
  */
 export function karteFuerWurzel(code: string, gruppe: string): string {
   if (code === 'CHO' || code === 'FIBT') return 'Kohlenhydrate'
   if (code === 'FAT') return 'Fette'
   if (code === 'PROT625') return 'Protein'
+  // G-136 / E-48: die vier Wurzeln, die bisher in *Sonstige* fielen.
+  if (code === 'WATER') return 'Wasser'
+  if (code === 'OA') return 'Organische Säuren'
+  if (code === 'ALC') return 'Genussmittel'
+  // `[read]` **`ASH` zu den Elementen, aber NICHT als deren
+  // Elternteil** — die Karte ordnet ein, die Hierarchie bleibt.
+  if (code === 'ASH') return 'Elemente'
   if (gruppe === 'Makronährstoffe' || gruppe === 'Sonstige Nährstoffe') return 'Sonstige'
   return gruppe
 }

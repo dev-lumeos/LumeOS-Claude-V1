@@ -118,6 +118,17 @@ const FILTERGRUPPEN: Array<{
   optionen: Array<{ code: string; label: string }>
 }> = [
   {
+    // ══ G-134 / E-49: `diet` mischt drei Fragen ══════════════
+    //
+    // `[cmd]` **Gemessen am 2026-09-02 in `tag_definitions`:** neun
+    // Tags tragen `tag_type = 'diet'` — **vier Naehrwertangaben
+    // (`high_protein`, `low_carb`, `low_fat`, `high_fiber`), zwei
+    // Ernaehrungsformen, `halal`, `kosher` und `thai_food`.**
+    //
+    // `[read]` **Drei Fragen in einem Feld:** *was isst du nicht*,
+    // *wie ist es zusammengesetzt*, *wie stark verarbeitet*. **Die
+    // Oberflaeche trennt sie hier;** `tag_type` in der Datenbank
+    // bleibt, wie es ist.
     titel: 'Ernährungsform',
     art: 'auswahl',
     optionen: [
@@ -126,6 +137,25 @@ const FILTERGRUPPEN: Array<{
       // und nicht als „oder".
       { code: 'vegan', label: 'Vegan' },
       { code: 'vegetarian', label: 'Vegetarisch' },
+      // `[cmd]` **`halal` und `kosher` standen in KEINER Gruppe** —
+      // sie waren in der Oberflaeche nicht erreichbar, obwohl die
+      // Tags seit jeher in der Datenbank stehen (sort_order 130,
+      // 140).
+      { code: 'halal', label: 'Halal' },
+      { code: 'kosher', label: 'Koscher' },
+      // ══ `thai_food` ist geparkt, nicht eingeordnet ═════════
+      //
+      // **E-49:** *,,`thai_food` faellt heraus — eine Kueche."*
+      //
+      // `[read]` **Eine Kueche ist keine Ernaehrungsform:** wer thai
+      // isst, isst nicht *nur* thai, und die anderen vier schliessen
+      // etwas aus. **Hierher gehoert sie nicht.**
+      //
+      // `[read]` **Sie steht trotzdem hier, bis `preferred_cuisines`
+      // kommt** — sonst waere der Tag unerreichbar, und ein
+      // vorhandener Filter, den niemand mehr findet, ist schlimmer
+      // als einer an der falschen Stelle. **Der Vermerk sagt es.**
+      { code: 'thai_food', label: 'Thai (Kueche — geparkt)' },
     ],
   },
   {

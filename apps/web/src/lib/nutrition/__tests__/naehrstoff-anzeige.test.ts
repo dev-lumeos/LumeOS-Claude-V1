@@ -138,12 +138,30 @@ test('zeigeKind: unter einem selbst auffaelligen Knoten erscheinen die Kinder mi
   }
 })
 
-test('karteFuerWurzel: acht Karten, die Makro-Aeste getrennt', () => {
+test('karteFuerWurzel: elf Karten, die Makro-Aeste getrennt', () => {
+  // ══ BERICHTIGT IN G-136 ════════════════════════════════════════
+  //
+  // `[cmd]` **Hier stand `karteFuerWurzel('WATER', …) === 'Sonstige'`**
+  // — der Zustand vor E-48.
+  //
+  // `[cmd]` **E-48 ordnet die vier Wurzeln zu:** `WATER` → *Wasser*,
+  // `OA` → *Organische Säuren*, `ALC` → *Genussmittel*, `ASH` → zu
+  // den *Elementen*.
+  //
+  // `[read]` **Was der Wächter sichert, gilt weiter:** die drei
+  // Makro-Äste tragen eigene Karten (G-129/GO-22), und *Sonstige*
+  // fängt weiter auf, was in keine passt.
   assert.equal(karteFuerWurzel('CHO', 'Makronährstoffe'), 'Kohlenhydrate')
   assert.equal(karteFuerWurzel('FIBT', 'Makronährstoffe'), 'Kohlenhydrate')
   assert.equal(karteFuerWurzel('FAT', 'Makronährstoffe'), 'Fette')
   assert.equal(karteFuerWurzel('PROT625', 'Makronährstoffe'), 'Protein')
-  assert.equal(karteFuerWurzel('WATER', 'Makronährstoffe'), 'Sonstige')
+  // G-136 / E-48: die vier, die bisher in *Sonstige* fielen.
+  assert.equal(karteFuerWurzel('WATER', 'Makronährstoffe'), 'Wasser')
+  assert.equal(karteFuerWurzel('OA', 'Makronährstoffe'), 'Organische Säuren')
+  assert.equal(karteFuerWurzel('ALC', 'Makronährstoffe'), 'Genussmittel')
+  assert.equal(karteFuerWurzel('ASH', 'Makronährstoffe'), 'Elemente')
+  // `[cmd]` **Am 2026-09-02 gemessen: nur noch `CHORL` fällt in
+  // *Sonstige*.**
   assert.equal(karteFuerWurzel('CHORL', 'Sonstige Nährstoffe'), 'Sonstige')
   assert.equal(karteFuerWurzel('FE', 'Elemente'), 'Elemente')
   assert.equal(karteFuerWurzel('ENERCC', 'Energie'), 'Energie')

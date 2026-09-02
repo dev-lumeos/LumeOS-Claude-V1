@@ -31,6 +31,8 @@ import {
   FENSTER, sichtbar, trifft, trifftSuche, zeigeKind, spektrumLage,
   STATUS_TEXT, STATUS_FARBE,
   zahlMitEinheit as zahl, type Scope, type GespeicherteAnsicht,
+  // G-136: was die Karte ist.
+  KARTEN_ERKLAERUNG,
 } from '../../../lib/nutrition/naehrstoff-anzeige'
 import {
   fensterbreite, gleitend, richtungVon, sparklinePfad, bezugsY,
@@ -368,6 +370,26 @@ function GruppenKarte({ g, sicht, treffer, istTag, fenster, offen, knotenOffen, 
           <Pill>{g.mitWert} mit Wert</Pill>
         </span>
       </button>
+
+      {/* ══ G-136: was die Karte ist ══════════════════════
+          `[read]` **Nur wo der Name allein irrefuehrt** — *Rohasche*
+          klingt nach Rueckstand, ist aber die Summe aller
+          Mineralstoffe; *Wasser* ist hier der Wasseranteil der
+          Lebensmittel, nicht die Trinkmenge.
+
+          `[cmd]` **Fuenf der acht Karten stehen bewusst ohne Satz.**
+          `[read]` **Ein Satz, der nichts hinzufuegt, wird beim Lesen
+          uebersprungen und macht die naechsten wertlos.**
+
+          `[read]` **Immer sichtbar, nicht nur im offenen Zustand** —
+          wer die Karte zuklappt, soll trotzdem wissen, was sie
+          zeigt. */}
+      {KARTEN_ERKLAERUNG[g.name] && (
+        <p data-probe="karten-erklaerung" className="v2-muted"
+           style={{ fontSize: 10.5, margin: '6px 0 0 26px', lineHeight: 1.5 }}>
+          {KARTEN_ERKLAERUNG[g.name]}
+        </p>
+      )}
 
       {offen && (
         <div className="v2-tbl-wrap" style={{ marginTop: 10 }}>
