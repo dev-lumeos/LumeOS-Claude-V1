@@ -79,29 +79,44 @@ konkreten Injektionsort."***
     Spratt 2017         SC-Testosteron, 25G x 16 mm, BMI 19-50
     FDA Xyosted 2019    SC-Testosteron, 27G x 12,7 mm, 0,5 ml
 
-### Der Vorschlag sagt, worauf er beruht
+### Alle zutreffenden Varianten, der Nutzer waehlt
 
-    Vorschlag: 25-38 mm, 22-25G
-    Grundlage: CDC 2026, Deltoid, 70-118 kg
-    Deine Angaben: 82 kg, BMI 26
+Tom, 2026-09-02: *,,wieso soll eine quelle gewinnen, zeig einfach
+alle varianten mit quellen an dann waehlt der user."*
 
-`[read]` **Wer die Grundlage sieht, kann sie pruefen** — **und
-merkt, wenn sie nicht passt.**
+    Deltoid, 82 kg, BMI 26, maennlich
 
-`[cmd]` **Bei Ventrogluteal und hohem BMI warnt der Vorschlag
-statt zu empfehlen:** **Zaybak hat gemessen, dass eine 38-mm-Nadel
-dort den Muskel nicht erreicht.**
+      25-38 mm, 22-25G     CDC 2026, Gewichtsklasse 70-118 kg
+      25 mm                Cook 2006, Ultraschall, BMI <35
 
-## Zu klaeren
+`[read]` **Keine Rangfolge.** `[cmd]` **C-108 und F-02: nennen ja,
+bewerten nein.**
 
-`[read]` **Welche Quelle gewinnt, wenn zwei zutreffen?** `[cmd]`
-**CDC und Cook widersprechen sich beim Deltoid nicht, aber Larkin und
-Zaybak liefern fuer Ventrogluteal verschiedene Zahlen** — die eine
-misst die noetige Laenge, die andere die Fettdicke.
+`[read]` **Und wo die Quellen auseinandergehen, sieht man es** —
+`[cmd]` **bei Ventrogluteal misst Larkin die noetige Laenge, Zaybak
+die Fettdicke.** `[read]` **Beide zeigen heisst: der Nutzer sieht,
+dass 38 mm bei starker Adipositas nicht reichen.** **Eine Rangfolge
+haette das verdeckt.**
 
-`[read]` **Und woher kommt `body_fat_pct`?** `[cmd]` **`goals.body_
-measurements` ist eine Messreihe** — **welcher Eintrag gilt, der
-letzte oder ein Durchschnitt?**
+### Welcher Koerperwert gilt
+
+Tom: *,,der letzte natuerlich das zeigt den aktuellsten stand."*
+
+`[cmd]` **`goals.body_measurements` ist eine Messreihe** — **der
+juengste Eintrag, kein Durchschnitt.**
+
+`[read]` **Und die Anzeige nennt sein Datum:** **wer vor drei Monaten
+zuletzt gewogen hat, soll das sehen, bevor er danach eine
+Nadellaenge waehlt.**
+
+## Zu messen
+
+`[read]` **Wie viele Zeilen traegt `body_measurements` je Nutzer,
+und wie alt ist der juengste Eintrag?**
+
+`[read]` **Und was geschieht, wenn keiner existiert?** `[cmd]`
+**`public.profiles` traegt `body_weight_kg` und `height_cm`** —
+**daraus liesse sich BMI rechnen, aber kein `body_fat_pct`.**
 
 ## Und die Grafik
 

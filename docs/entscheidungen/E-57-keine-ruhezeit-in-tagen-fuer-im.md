@@ -207,21 +207,39 @@ Vorschlag von einer Praxisregel unterscheiden laesst:**
     Spratt 2017         SC-Testosteron, 25G x 16 mm, BMI 19-50
     FDA Xyosted 2019    SC-Testosteron, 27G x 12,7 mm, 0,5 ml
 
-### Und der Vorschlag sagt, was er ist
+### Alle zutreffenden Varianten, der Nutzer waehlt
 
-`[read]` **Nicht *,,nimm 25 mm"*, sondern:**
+Tom, 2026-09-02: *,,wieso soll eine quelle gewinnen, zeig einfach
+alle varianten mit quellen an dann waehlt der user."*
 
-> Vorschlag: 25-38 mm, 22-25G
-> Grundlage: CDC 2026, Deltoid, 70-118 kg
-> Deine Angaben: 82 kg, BMI 26
+`[read]` **Keine Rangfolge zwischen den Quellen.** **Was auf die
+Angaben des Nutzers passt, wird gezeigt** — **mit Herkunft.**
 
-`[read]` **Wer die Grundlage sieht, kann sie pruefen** — **und merkt,
-wenn sie nicht passt.**
+    Deltoid, 82 kg, BMI 26, maennlich
 
-`[cmd]` **Bei Ventrogluteal und hohem BMI muss der Vorschlag
-warnen:** **Zaybak hat gemessen, dass eine 38-mm-Nadel dort den
-Muskel nicht erreicht.** `[read]` **Das ist kein Vorschlag mehr,
-sondern ein Hinweis auf ein Problem.**
+      25-38 mm, 22-25G     CDC 2026, Gewichtsklasse 70-118 kg
+      25 mm                Cook 2006, Ultraschall, BMI <35
+
+`[read]` **Zwei Zahlen, zwei Quellen, keine davon *,,die
+richtige"*.** `[cmd]` **C-108 und F-02: nennen ja, bewerten nein.**
+
+`[read]` **Und wo die Quellen auseinandergehen, sieht man es** —
+`[cmd]` **bei Ventrogluteal misst Larkin die noetige Laenge, Zaybak
+die Fettdicke.** `[read]` **Beide zeigen heisst: der Nutzer sieht,
+dass 38 mm bei starker Adipositas nicht reichen.**
+
+`[read]` **Eine Rangfolge haette das verdeckt.**
+
+### Welcher Koerperwert gilt
+
+Tom: *,,der letzte natuerlich das zeigt den aktuellsten stand."*
+
+`[cmd]` **`goals.body_measurements` ist eine Messreihe** — **der
+juengste Eintrag zaehlt, kein Durchschnitt.**
+
+`[read]` **Und die Anzeige nennt sein Datum:** **wer vor drei Monaten
+zuletzt gewogen hat, soll das sehen, bevor er eine Nadellaenge danach
+waehlt.**
 
 ## Was das fuer `injection_sites` heisst
 
