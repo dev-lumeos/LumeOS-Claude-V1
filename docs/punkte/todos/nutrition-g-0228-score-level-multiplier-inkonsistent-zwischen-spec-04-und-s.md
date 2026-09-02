@@ -1,12 +1,12 @@
 ---
 nr: G-228
-typ: entscheidung
+typ: feature
 modul: nutrition
 schwere: mittel
 angelegt: 2026-08-28
 braucht: []
 kind_von: null
-entscheidung: null
+entscheidung: E-46
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -101,3 +101,19 @@ gibt es in acht Modulen, **die mit `level_multiplier` ist Nutrition.**
 `[read]` **Der wirkende Teil ist als G-283 herausgeloest.** **Hier
 bleibt die Entscheidung: welche vier Stufennamen gelten, und welchen
 Faktor traegt die vierte?**
+
+## Entschieden: E-46, 2026-09-02
+
+Tom: *,,maximale aufsplittung des Erfahrungsgrad, je mehr stufen wir
+haben umso genauer koennen wir die multiplikatoren nutzen."*
+
+`[read]` **Die Luecke wird nicht durch Angleichen geloest, sondern
+durch Ausbauen.**
+
+`[read]` **Zwei Sachen sind vorher zu klaeren:** `[cmd]` **wie viele
+Stufen**, und **woran der Multiplikator fachlich haengt** —
+Trainingsjahre, Koerperzusammensetzung, etwas anderes.
+
+`[cmd]` **Und die 0,90 fuer `intermediate` steht in `SPEC_04` ohne
+Quelle.** `[read]` **Nach C-109 gilt: eine Zahl ohne Beleg ist ein
+*conservative default*, kein Ergebnis.**

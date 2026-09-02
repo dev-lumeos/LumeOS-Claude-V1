@@ -1,12 +1,12 @@
 ---
 nr: C-382
-typ: entscheidung
+typ: feature
 modul: nutrition
 schwere: mittel
 angelegt: 2026-09-02
 braucht: []
 kind_von: G-319
-entscheidung: null
+entscheidung: E-45
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -59,3 +59,20 @@ aendern darf, traegt beim Loggen etwas Falsches ein.**
 `[read]` **Ein dritter Weg: bearbeiten erzeugt eine Kopie.** `[cmd]`
 **Der Weg dafuer stand schon einmal** — *Kopie bearbeiten* aus G-306,
 in G-315 entfernt, weil die Sperre wegfiel.
+
+## Entschieden: E-45, 2026-09-02
+
+Tom: *,,kein editierschutz aber rueckmeldeweg."*
+
+    coach_created   editierbar, Coach wird benachrichtigt
+    buddy           editierbar, von Hand oder per Anweisung
+    marketplace     editierbar, aber nie weiterverkaeuflich --
+                    Original wie Kopie
+
+`[read]` **Damit ist der Punkt kein Entscheid mehr, sondern
+Bauarbeit** — **drei Wege, je einer je Herkunft.**
+
+`[cmd]` **Und `darf_weiterverkaufen` reicht nicht:** ein `boolean`
+ueberlebt keinen neuen Plan, in den jemand den Inhalt kopiert.
+`[read]` **E-45 schlaegt `stammt_aus_kauf uuid` vor** — eine Kennung,
+die mitwandert.
