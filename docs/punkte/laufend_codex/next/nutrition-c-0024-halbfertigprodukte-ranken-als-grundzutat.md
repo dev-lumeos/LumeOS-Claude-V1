@@ -66,3 +66,8 @@ zahlen: null
   Instantpulvers — **anders falsch, nicht besser**. Der Punkt steht
   unveraendert: `sort_weight` unterscheidet Rohstoff gegen Gericht, nicht
   verzehrfertig gegen zuzubereiten.
+
+## Auftrag
+
+**Vorbereitet mit C-383 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

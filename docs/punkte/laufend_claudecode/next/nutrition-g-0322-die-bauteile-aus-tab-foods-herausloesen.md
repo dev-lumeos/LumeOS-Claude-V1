@@ -41,3 +41,8 @@ gebaut** — **weil es keinen anderen Weg gab.**
 `[read]` **Das ist ein Umbau von 1.060 Zeilen, kein Nebenbei.**
 `[read]` **Und die Zahl 14 zu 1 sagt, dass es geht:** die Suchlogik
 ist fast vollstaendig vom Reiter trennbar.
+
+## Auftrag
+
+**Vorbereitet mit G-72 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

@@ -58,3 +58,8 @@ zahlen: null
     nicht mehr beziffert — er ergibt sich aus C-18.
   - **C-32 (Reis)** bleibt der erste durchkurierte Fall und ist jetzt
     ohne Vorbedingung machbar.
+
+## Auftrag
+
+**Vorbereitet mit C-383 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

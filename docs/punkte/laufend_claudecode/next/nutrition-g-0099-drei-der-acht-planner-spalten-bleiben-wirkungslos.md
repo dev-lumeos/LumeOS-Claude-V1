@@ -69,3 +69,8 @@ nicht wirkungslos** — **sie bekommen je einen anderen Weg:**
 
 `[read]` **Die Gegenstuecke an `recipes` braucht nur `budget_level`**
 — und die kommen mit dem Ausbaumodul.
+
+## Auftrag
+
+**Vorbereitet mit G-72 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
