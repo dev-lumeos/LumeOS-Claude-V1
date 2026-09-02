@@ -518,7 +518,7 @@
 | `G-303` | befund | hoch | [der Gate prueft `packages/ui` nicht](erledigt/quer-g-0303-der-gate-prueft-packages-ui-nicht.md) | erledigt | — | G-308 |
 | `G-308` | feature | mittel | [die zwei Pakete brauchen eigene Pruefungen](erledigt/quer-g-0308-die-zwei-pakete-brauchen-eigene-pruefungen.md) | erledigt | — | — |
 | `G-312` | befund | mittel | [neunzehn Lint-Fehler](erledigt/quer-g-0312-neunzehn-lint-fehler.md) | erledigt | — | — |
-| `G-334` | befund | hoch | [`test-user` taugt nicht mehr als Nachweiskonto](todos/nutrition-g-0334-test-user-taugt-nicht-mehr-als-nachweiskonto.md) | offen | — | — |
+| `G-334` | befund | hoch | [`test-user` taugt nicht mehr als Nachweiskonto](todos/quer-g-0334-test-user-taugt-nicht-mehr-als-nachweiskonto.md) | offen | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 
