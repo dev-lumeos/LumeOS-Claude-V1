@@ -9,7 +9,7 @@ kind_von: null
 entscheidung: null
 agent: null
 erledigt: 2026-09-02
-commit: OFFEN
+commit: 66eb3824
 beruehrt:
   dateien:
     - tools/punkte-pruefen.mjs
