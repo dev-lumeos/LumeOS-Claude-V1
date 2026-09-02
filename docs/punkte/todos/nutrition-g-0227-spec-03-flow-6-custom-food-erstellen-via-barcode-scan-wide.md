@@ -1,12 +1,12 @@
 ---
 nr: G-227
-typ: entscheidung
+typ: befund
 modul: nutrition
 schwere: mittel
 angelegt: 2026-08-28
 braucht: []
 kind_von: null
-entscheidung: null
+entscheidung: E-51
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -78,3 +78,27 @@ unveraendert** — er hat nur noch keinen Schaden angerichtet.
 **Urteil aus G-226:** offen: der Befund gilt weiter.
 
 `[read]` **Die Messung steht in der G-226-Datei.**
+
+## Entschieden: E-51, 2026-09-02
+
+Tom: *,,barcodescan bedingt customfoods und das haben wir
+zurueckgestellt. es wird keinen barcode fuer blsdaten geben."*
+
+`[read]` **Der Widerspruch ist keine Phasenfrage, sondern eine
+Zuordnung:** **der Barcode gehoert nicht zur Suche, sondern zum
+Anlegen.**
+
+`[cmd]` **E-43: BLS 4.0 fuehrt *Haehnchenbrust, roh* — keine
+Handelsprodukte.** `[read]` **Ein Scan gegen den BLS waere immer
+ergebnislos** — **und genau das steht in Flow 6 als Einstieg.**
+
+`[cmd]` **Nachgemessen: `foods_custom.barcode text` existiert**,
+neben `brand`. `[read]` **Das Schema hat es richtig eingeordnet, die
+Spec nicht.**
+
+### Was zu tun ist
+
+`[cmd]` **`SPEC_03` Flow 6 berichtigen** — der Barcode ist ein Feld
+am Custom Food, kein Einstieg.
+`[cmd]` **`SPEC_04` Feature 4 nennt ihn als V1** — faellt mit Custom
+Foods zusammen zurueck.

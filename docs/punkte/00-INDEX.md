@@ -161,7 +161,7 @@
 | `G-224` | befund | mittel | [MealCam Consent-Widerruf in Nutrition Settings nicht beschrieben](todos/nutrition-g-0224-mealcam-consent-widerruf-in-nutrition-settings-nicht-besch.md) | offen | — | — |
 | `G-225` | befund | mittel | [Coach Suggestion User Flow fehlt](todos/nutrition-g-0225-coach-suggestion-user-flow-fehlt.md) | offen | — | — |
 | `G-226` | entscheidung | mittel | [V1-Status-Marker fehlen für Recipes/Shopping/MealPlans Components in SPEC_10](erledigt/nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md) | erledigt | — | C-366, G-285 |
-| `G-227` | entscheidung | mittel | [SPEC_03 §Flow 6 Custom Food erstellen via Barcode-Scan widerspricht Phase-2-Status](todos/nutrition-g-0227-spec-03-flow-6-custom-food-erstellen-via-barcode-scan-wide.md) | offen | — | — |
+| `G-227` | befund | mittel | [SPEC_03 §Flow 6 Custom Food erstellen via Barcode-Scan widerspricht Phase-2-Status](todos/nutrition-g-0227-spec-03-flow-6-custom-food-erstellen-via-barcode-scan-wide.md) | offen | — | — |
 | `G-228` | feature | mittel | [Score Level Multiplier inkonsistent zwischen SPEC_04 und SPEC_07](todos/nutrition-g-0228-score-level-multiplier-inkonsistent-zwischen-spec-04-und-s.md) | offen | — | G-283 |
 | `G-229` | entscheidung | mittel | [Admin-Override-Flow für Tag-Korrekturen nicht belegt](todos/nutrition-g-0229-admin-override-flow-fuer-tag-korrekturen-nicht-belegt.md) | offen | — | — |
 | `G-230` | entscheidung | niedrig | [`nutrition.water/page.tsx` und `nutrition.shopping-lists/page.tsx` als separate Pages](erledigt/nutrition-g-0230-nutrition-water-page-tsx-und-nutrition-shopping-lists-page.md) | erledigt | — | — |
