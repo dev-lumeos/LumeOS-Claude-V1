@@ -1406,6 +1406,16 @@
         "075",
         "027"
       ]
+    },
+    {
+      "id": "392",
+      "path": "supabase/_pipeline/05_user_tabellen/392_meal_slots.sql",
+      "kind": "sql",
+      "creates": "C-392/E-58: frei benannte, terminierte und per RLS geschuetzte Mahlzeiten-Slots ohne Obergrenze",
+      "depends_on": [
+        "050",
+        "052a"
+      ]
     }
   ]
 }

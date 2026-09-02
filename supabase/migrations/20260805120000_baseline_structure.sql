@@ -1250,7 +1250,7 @@ CREATE TABLE nutrition.tag_definitions (
     requires_macro_check boolean DEFAULT false,
     macro_rule jsonb,
     filter_group text,
-    CONSTRAINT tag_definitions_filter_group_check CHECK (((filter_group IS NULL) OR (filter_group = ANY (ARRAY['dietary_pattern'::text, 'nutrient'::text, 'processing'::text, 'allergen'::text]))),
+    CONSTRAINT tag_definitions_filter_group_check CHECK (((filter_group IS NULL) OR (filter_group = ANY (ARRAY['dietary_pattern'::text, 'nutrient'::text, 'processing'::text, 'allergen'::text])))),
     CONSTRAINT tag_definitions_tag_type_check CHECK ((tag_type = ANY (ARRAY['ingredient'::text, 'diet'::text, 'allergen'::text, 'fitness'::text, 'gym'::text, 'processing'::text])))
 );
 

@@ -507,6 +507,43 @@
       "spalten_herkunft": "[cmd] 2026-08-17 gegen information_schema.columns geprueft. 052_diary_foundation.sql erzeugt die Tagebuchspalten, 052a_meal_time.sql ergaenzt meal_time als lokale Uhrzeit des Essens. [cmd] 2026-08-18: 017_datenherkunft.sql ergaenzt entry_source und source_detail."
     },
     {
+      "name": "meal_slots",
+      "schritt": "392",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "392_meal_slots.sql",
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": [
+        "user_id",
+        "position",
+        "name",
+        "planned_time"
+      ],
+      "spalten_herkunft": "C-392/E-58: frei benannte und terminierte Mahlzeiten, eindeutig je (user_id, position), ohne Obergrenze und ohne meal_type-Zuordnung."
+    },
+    {
       "name": "meal_items",
       "schritt": "052",
       "rls": true,
