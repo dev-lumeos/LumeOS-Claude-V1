@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -48,3 +46,12 @@ zahlen: null
 
 **Mitbeauftragt mit C-297 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: keine Ausnahmeliste noetig.
+
+`[cmd]` **`FOR UPDATE` und `ON DELETE CASCADE` sind unterscheidbare
+Strukturklauseln.**
+
+`[read]` **Der Fehlalarm ist behebbar, ohne eine Liste zu pflegen** —
+**und eine Liste waere schlechter gewesen: sie waechst mit jedem
+neuen Muster.**

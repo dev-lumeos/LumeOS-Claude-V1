@@ -35,3 +35,8 @@ zahlen: null
   `[read]` **Damit waechst die Ladezeit mit der Nutzungsdauer.** Ein
   Konto, das ein Jahr protokolliert, traegt ein Vielfaches von 360
   Zeilen. **Das ist kein Ausreisser, das ist eine Kurve.**
+
+## Auftrag
+
+**Vorbereitet mit C-159 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

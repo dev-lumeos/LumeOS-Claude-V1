@@ -7,8 +7,6 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-319
 entscheidung: E-45
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -83,3 +81,18 @@ die mitwandert.
 
 **Mitbeauftragt mit C-297 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: vier Teile vorgeschlagen.
+
+    unveraenderliche Kauf-UUID
+    kontrollierter Kopierweg
+    Marketplace-Sperre
+    eigene Coach-Meldung je Plan/Tag
+
+`[read]` **Der zweite Teil fehlte in meinem Auftrag:** **eine Kennung
+allein reicht nicht, wenn das Kopieren unkontrolliert ist.**
+`[read]` **Wer den Inhalt von Hand in einen neuen Plan schreibt,
+umgeht sie.**
+
+`[read]` **Und die Koernung je Plan und Tag hat er selbst
+vorgeschlagen.**

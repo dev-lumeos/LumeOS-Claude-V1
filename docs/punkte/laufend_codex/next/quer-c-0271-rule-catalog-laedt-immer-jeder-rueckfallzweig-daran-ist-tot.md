@@ -34,3 +34,8 @@ zahlen: null
   **Zu tun:** alle Stellen finden, die auf `regeln.length === 0` oder
   Vergleichbares warten. **Wo der Zweig tot ist: melden.** `[read]`
   Ob er weg soll, ist je Fall zu entscheiden — **die Zahl zuerst.**
+
+## Auftrag
+
+**Vorbereitet mit C-159 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
