@@ -8,8 +8,6 @@ braucht: []
 kind_von: F-02
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -164,4 +162,49 @@ ein stilles Fertigbauen rechtfertigen wuerde.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator.**
+
+### C-110 — gebaut, mit einer Luecke am Nachweiskonto
+
+`[cmd]` **Kostenverlauf und die reine *,,If you removed …"*-Rechnung
+sind gebaut.**
+
+`[cmd]` **Compliance-Notizen existieren auf `dev`** — **fehlen aber
+bei 3 von 3 `skipped` auf `test-user`.**
+
+`[read]` **Und das ist wieder G-334:** **das Nachweiskonto traegt
+nicht, was `dev` traegt.**
+
+`[cmd]` **`action_log` ist ein separater Coach-Auditweg** — **nicht
+dasselbe.** `[read]` **Meine Vermutung im Auftrag war, C-381 koennte
+den Punkt erledigt haben. Falsch.**
+
+### C-155 — beide Befunde bestehen, und A-69 ersetzt sie nicht
+
+`[cmd]` **Beide `@supabase/ssr` 0.1.0-Befunde bestehen.** `[cmd]`
+**Der Admin nutzt den gefaehrdeten Shared-Pfad.**
+
+`[cmd]` **A-69 ueberschneidet sich nur ueber ein transitives
+`ws`-High-Advisory.**
+
+`[read]` **Ich hatte gefragt, ob C-155 in A-69 aufgeht** — **nein.**
+`[read]` **Zwei verschiedene Sachen: A-69 ist eine Zaehlung, C-155
+ein benannter Pfad im Admin.**
+
+### C-170 — kein Offline-Betrieb, und die Empfehlung ist richtig
+
+`[cmd]` **Kein IndexedDB-Einsatz, keine Outbox, kein Sync, keine
+Konfliktaufloesung.**
+
+`[read]` **Seine Empfehlung: wie den Marktplatz fuer V1
+zurueckstellen, mit eigener formaler Entscheidung.**
+
+`[read]` **Und das ist mehr als *nicht gebaut*:** **ein Entwurf, der
+im Bestand steht und nie zurueckgestellt wurde, wird beim naechsten
+Auftrag fuer geplant gehalten** — **dieselbe Klasse wie E-37 beim
+Marktplatz.**
+
+`[read]` **Die Entscheidung gehoert Tom.**
+
+**Abgenommen.** **Alle drei bleiben offen.**
+
