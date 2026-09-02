@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 213 |
+| `todos` | 214 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 248 |
-| **gesamt** | **466** |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 251 |
+| **gesamt** | **469** |
 
 ## medical — 43
 
@@ -59,9 +59,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 199
+## nutrition — 202
 
-### beauftragbar — 198
+### beauftragbar — 200
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -147,6 +147,7 @@
 | `C-394` | befund | mittel | [`test-user` hat keine Slots](erledigt/nutrition-c-0394-test-user-hat-keine-slots.md) | erledigt | — | G-334 |
 | `C-396` | feature | hoch | [`meal_plans` traegt keine Struktur](erledigt/nutrition-c-0396-meal-plans-traegt-keine-struktur.md) | erledigt | — | — |
 | `C-397` | befund | hoch | [die gelieferten Plaene haben keine Slots](laufend_codex/nutrition-c-0397-die-gelieferten-plaene-haben-keine-slots.md) | laeuft (codex) | — | — |
+| `C-398` | befund | hoch | [`CAROTPAXB` fehlt an 1.983 Lebensmitteln](todos/nutrition-c-0398-carotpaxb-fehlt-an-1983-lebensmitteln.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -179,9 +180,9 @@
 | `G-229` | feature | mittel | [Admin-Override-Flow für Tag-Korrekturen nicht belegt](todos/nutrition-g-0229-admin-override-flow-fuer-tag-korrekturen-nicht-belegt.md) | offen | — | C-384 |
 | `G-230` | entscheidung | niedrig | [`nutrition.water/page.tsx` und `nutrition.shopping-lists/page.tsx` als separate Pages](erledigt/nutrition-g-0230-nutrition-water-page-tsx-und-nutrition-shopping-lists-page.md) | erledigt | — | — |
 | `G-231` | befund | niedrig | [`SPEC_04 §Feature 9 MealCam` referenziert `ADR_AI_USAGE_WALLET.md` — nicht im Nutrition Spec Pfad](todos/nutrition-g-0231-spec-04-feature-9-mealcam-referenziert-adr-ai-usage-wallet.md) | offen | — | — |
-| `G-232` | befund | niedrig | [Quick-Add Makros UI-Component fehlt in SPEC_10](laufend_claudecode/nutrition-g-0232-quick-add-makros-ui-component-fehlt-in-spec-10.md) | laeuft (claudecode) | — | — |
+| `G-232` | befund | niedrig | [Quick-Add Makros UI-Component fehlt in SPEC_10](erledigt/nutrition-g-0232-quick-add-makros-ui-component-fehlt-in-spec-10.md) | erledigt | — | G-339, G-340 |
 | `G-233` | befund | niedrig | [`MealSlotEditor` Component-Name doppelt verwendet](todos/nutrition-g-0233-mealsloteditor-component-name-doppelt-verwendet.md) | offen | — | — |
-| `G-234` | befund | niedrig | [`IntoleranceSelector` und `ReligiousDietarySelector` nur als Onboarding-Components definiert](laufend_claudecode/nutrition-g-0234-intoleranceselector-und-religiousdietaryselector-nur-als-o.md) | laeuft (claudecode) | — | — |
+| `G-234` | befund | niedrig | [`IntoleranceSelector` und `ReligiousDietarySelector` nur als Onboarding-Components definiert](erledigt/nutrition-g-0234-intoleranceselector-und-religiousdietaryselector-nur-als-o.md) | erledigt | — | — |
 | `G-235` | entscheidung | niedrig | [`MicroDashboard` Tier-System (Tier 1/2/3) und Subscription-Gates ungeklärt](erledigt/nutrition-g-0235-microdashboard-tier-system-tier-1-2-3-und-subscription-gat.md) | erledigt | — | — |
 | `G-236` | befund | niedrig | [`SmartSuggestions` Component und `useSmartSearchSuggestions` Hook ohne klaren V1-Trigger](todos/nutrition-g-0236-smartsuggestions-component-und-usesmartsearchsuggestions-h.md) | offen | — | — |
 | `G-237` | befund | niedrig | [`data/nutrientDetails.ts` als statisches Array — `food_sources` Array veraltet (per Review 1 ADR_IMPROVEMENTS_PACKAGE #20)](todos/nutrition-g-0237-data-nutrientdetails-ts-als-statisches-array-food-sources-.md) | offen | — | — |
@@ -224,7 +225,7 @@
 | `G-291` | feature | hoch | [TrendChart fehlt im Insights-Reiter](erledigt/nutrition-g-0291-trendchart-fehlt-im-insights-reiter.md) | erledigt | — | — |
 | `G-292` | feature | hoch | [MicroFlagsList — die Warnungen werden nicht gezeigt](erledigt/nutrition-g-0292-microflagslist-die-warnungen-werden-nicht-gezeigt.md) | erledigt | — | — |
 | `G-293` | feature | mittel | [MacroDetail — die Fetthierarchie fehlt](erledigt/nutrition-g-0293-macrodetail-die-fetthierarchie-fehlt.md) | erledigt | — | — |
-| `G-294` | feature | mittel | [CrossModuleInsights — Goals bekommt nichts](laufend_claudecode/nutrition-g-0294-crossmoduleinsights-goals-bekommt-nichts.md) | laeuft (claudecode) | — | — |
+| `G-294` | feature | mittel | [CrossModuleInsights — Goals bekommt nichts](erledigt/nutrition-g-0294-crossmoduleinsights-goals-bekommt-nichts.md) | erledigt | — | C-398 |
 | `G-295` | feature | mittel | [Die Heatmap wurde entfernt, und die Spec verlangt sie](erledigt/nutrition-g-0295-die-heatmap-wurde-entfernt-und-die-spec-verlangt-sie.md) | erledigt | — | G-297 |
 | `G-297` | befund | mittel | [die Tagesdeckung nimmt zu viel Platz](erledigt/nutrition-g-0297-die-tagesdeckung-nimmt-zu-viel-platz.md) | erledigt | — | — |
 | `G-298` | feature | hoch | [Plaene lassen sich ansehen, nicht aendern](erledigt/nutrition-g-0298-plaene-lassen-sich-ansehen-nicht-aendern.md) | erledigt | — | C-369, G-300, G-306 |
@@ -262,13 +263,15 @@
 | `G-336` | befund | hoch | [das Raster liest `meal_plan_slots` nicht](erledigt/nutrition-g-0336-das-raster-liest-meal-plan-slots-nicht.md) | erledigt | — | C-397, G-338 |
 | `G-337` | befund | mittel | [`strong_avoid` hat keinen Schreibweg](todos/nutrition-g-0337-strong-avoid-hat-keinen-schreibweg.md) | offen | — | — |
 | `G-338` | entscheidung | mittel | [eine freie Mahlzeit hat keinen Namen](todos/nutrition-g-0338-eine-freie-mahlzeit-hat-keinen-namen.md) | offen | — | — |
-| `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
+| `G-339` | befund | mittel | [Quick-Add liest die Namen nicht](laufend_claudecode/nutrition-g-0339-quick-add-liest-die-namen-nicht.md) | laeuft (claudecode) | — | — |
+| `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](laufend_claudecode/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | laeuft (claudecode) | — | — |
 
-### wartet auf Blocker — 1
+### wartet auf Blocker — 2
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | G-328 | G-328 |
+| `G-340` | befund | mittel | [Quick-Add hat keinen Schreibweg](todos/nutrition-g-0340-quick-add-hat-keinen-schreibweg.md) | offen | G-339 | — |
 
 ## supplements — 60
 

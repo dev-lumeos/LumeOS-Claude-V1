@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/insights-echt.tsx
@@ -479,4 +481,61 @@ gebraucht werden.** **Verwandt, aber zwei Fragen.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Nachgemessen.**
+
+### G-294 — der Score ist an 120 von 120 Tagen unvollstaendig
+
+`[cmd]` **Ursache: `CAROTPAXB` fehlt und blockiert `VITA`.**
+
+`[cmd]` **Selbst nachgemessen, und seine Zahl stimmt exakt:**
+
+    CAROTPAXB ohne Wert    2046 von 7140  (Rohzahl)
+      davon trace            63           -- zaehlt als 0 (E-38)
+      davon missing        1983           -- die echte Luecke
+    VITA ohne Wert            6
+
+`[read]` **Meine erste Messung ergab 2.046** — **er hatte 1.983.**
+`[read]` **Der Unterschied ist E-38: `trace` und `censored` sind
+Nullen, keine Luecken.** **Er hat die Entscheidung mitgerechnet, ich
+nicht.**
+
+`[read]` **Und die Empfehlung ist richtig:** **zurueckstellen mit
+Verweis auf C-378** — **Toms Entscheidung vom 01.09. deckt den Fall
+bereits ab: wenn die Daten nicht da sind, erfinden wir sie nicht.**
+
+`[cmd]` **Keine Sicht gemeldet** — **eine Sicht auf einen Score, der
+nie vollstaendig wird, waere eine leere Kachel mit Aufwand.**
+
+### Und eine Zahl macht die Entscheidung greifbar
+
+`[cmd]` **Eine VITA-Loesung allein braechte 78 von 120 Tagen.**
+
+`[read]` **Das ist die Zahl, die Tom braucht** — **nicht *,,es fehlt
+etwas"*, sondern *,,zwei Drittel waeren zu haben"*.**
+
+`[read]` **Und C-378 schliesst Annahmen aus** — **also ist es keine
+Rechenfrage, sondern eine Datenfrage.** **Als C-398 an Codex.**
+
+### G-232 — der Punkt beschrieb es falsch
+
+`[cmd]` **Die Komponente ist gebaut.** `[cmd]` **Die Spec hat eine
+Luecke.** `[cmd]` **Der Schreibweg fehlt.**
+
+`[cmd]` **Und eine sechste Namensliste mit ungueltigem
+`preworkout`** — **der `meal_type`-CHECK kennt den Wert nicht.**
+
+`[read]` **G-335 hat fuenf Listen zusammengefuehrt** — **diese
+rutschte durch, weil sie einen anderen Schluessel schreibt.**
+
+`[read]` **Vier Befunde statt einem.** **Als G-339 und G-340.**
+
+### G-234 — streichen
+
+`[cmd]` **Beide Selektoren sind unter anderen Namen gebaut und mit
+Daten belegt.**
+
+`[read]` **Der Punkt sagte *nur in der Spec*** — **falsch, sie
+heissen nur anders.**
+
+**Abgenommen.**
+

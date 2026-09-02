@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -38,3 +40,13 @@ oder erledigt sein.
 
 **Mitbeauftragt mit G-294 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit G-294 abgenommen:** der Punkt beschrieb es falsch.
+
+`[cmd]` **Die Komponente ist gebaut, die Spec hat eine Luecke, der
+Schreibweg fehlt** — **und eine sechste Namensliste mit ungueltigem
+`preworkout`.**
+
+`[read]` **Vier Befunde statt einem** — **als G-339 und G-340.**

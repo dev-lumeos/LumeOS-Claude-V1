@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-122
 kinder: []
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -29,3 +31,8 @@ zahlen: null
   `[cmd]` **Umsetzung:** unter 50 % den Wert dimmen und die
   *„aus X von Y"*-Angabe hervorheben. **Nicht ausblenden, nicht
   werten.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-339 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

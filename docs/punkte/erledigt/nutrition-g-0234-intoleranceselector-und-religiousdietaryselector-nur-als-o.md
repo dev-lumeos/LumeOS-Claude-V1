@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -39,3 +41,13 @@ derselbe Befund ist, gehoert geprueft, nicht angenommen.
 
 **Mitbeauftragt mit G-294 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit G-294 abgenommen:** gestrichen.
+
+`[cmd]` **Beide Selektoren sind unter anderen Namen gebaut und mit
+Daten belegt.**
+
+`[read]` **Der Punkt sagte *nur in der Spec*** — **falsch, sie
+heissen nur anders.**
