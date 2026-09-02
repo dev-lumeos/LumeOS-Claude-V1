@@ -308,10 +308,29 @@ test('G-309: das Rezept erscheint als EINZELZUTATEN', () => {
   // gruen, waehrend die Liste leer war (G-216/G-247).
   //
   // `[read]` **Also: ueber die volle Liste, ohne Zwischenschnitt.**
-  assert.match(g, /\{eintrag\.posten\.map\(p => \(/,
-    'die Zutaten werden nicht direkt aus der vollen Liste gerendert')
-  assert.ok(!/eintrag\.posten\s*\.?\s*\.(slice|filter|splice)\(/.test(g),
-    'die Zutatenliste wird vor dem Rendern beschnitten')
+  //
+  // ══ BERICHTIGT IN G-329 ════════════════════════
+  //
+  // `[cmd]` **Hier stand `{eintrag.posten.map(p => (` und ein Verbot
+  // von `filter`.** **Tom, 2026-09-02:** *,,die ghosteintraege
+  // brauchen bearbeiten (fuer manuelle aenderungen)."*
+  //
+  // `[read]` **Zutaten entfernen HEISST filtern** — das Verbot
+  // stand der Anforderung im Weg.
+  //
+  // `[read]` **Was G-309 sichert, gilt weiter:** die Zutaten stehen
+  // EINZELN da, nicht das Rezept als Einheit. **Nur wird jetzt die
+  // Wirkung geprueft, nicht der Wortlaut:** gerendert wird ueber
+  // `posten`, und diese Liste entsteht sichtbar aus der vollen Liste
+  // minus den vom NUTZER entfernten.
+  assert.match(g, /\{posten\.map\(p => \{/,
+    'die Zutaten werden nicht einzeln gerendert')
+  assert.match(g, /\[\.\.\.eintrag\.posten\.filter\(p => !entfernt\.has\(p\.food_id\)\), \.\.\.dazu\]/,
+    'die gerenderte Liste entsteht nicht aus der vollen Liste')
+  // `[cmd]` **Und ohne Nutzereingriff ist sie vollstaendig** — der
+  // Anfangszustand ist leer, also faellt nichts still weg.
+  assert.match(g, /useState<Set<string>>\(new Set\(\)\)/,
+    'die Entfernt-Liste beginnt nicht leer — dann fehlten Zutaten von Anfang an')
   assert.match(g, /aria-label=\{`Menge \$\{p\.name\}`\}/,
     'die Zutaten haben keine eigenen Mengenfelder')
   // `[read]` **Kein *Rezept als Einheit bestaetigen*.**

@@ -291,12 +291,28 @@ function MahlzeitKarte({
 
   React.useEffect(() => { setOffen(items.length > 0) }, [items.length])
 
+  // ══ G-330: fuenf Werte, nicht zwei ═══════════════════
+  //
+  // **Tom, 2026-09-02:** *,,dann zaehlt die auch fuer den inhalt."*
+  //
+  // `[cmd]` **Hier stand *413 kcal · 23g P*** — zwei von fuenf,
+  // waehrend die Zeilen darunter alle fuenf tragen.
+  //
+  // `[cmd]` **Das Gewicht gehoert dazu** — Tom: *,,die einzige
+  // Angabe, die man direkt nachwiegen kann."*
+  //
+  // `[read]` **Reihenfolge: Gewicht, kcal, Protein, Kohlenhydrate,
+  // Fett** — dieselbe wie in den Zeilen, sonst beschriftet die
+  // Kopfzeile die falsche Spalte.
   const summe = items.reduce(
     (a, it) => ({
+      g: a.g + (it.amount_g ?? 0),
       kcal: a.kcal + (it.enercc ?? 0),
       p: a.p + (it.prot625 ?? 0),
+      k: a.k + (it.cho ?? 0),
+      f: a.f + (it.fat ?? 0),
     }),
-    { kcal: 0, p: 0 },
+    { g: 0, kcal: 0, p: 0, k: 0, f: 0 },
   )
 
   /** Mahlzeit anlegen, falls es sie noch nicht gibt. Liefert die id. */
@@ -375,11 +391,34 @@ function MahlzeitKarte({
           · {leer ? 'Empty' : `${items.length} items`}
         </span>
         <div className="v2-spacer" />
+        {/* ══ G-330: fuenf Werte statt zwei ══════════════════
+            **Tom, 2026-09-02:** *,,dann zaehlt die auch fuer den
+            inhalt."*
+
+            `[cmd]` **Hier stand *413 kcal · 23g P*** — zwei von
+            fuenf, waehrend die Zeilen darunter alle fuenf tragen.
+
+            `[cmd]` **Das Gewicht gehoert dazu** — Tom: *,,die
+            einzige Angabe, die man direkt nachwiegen kann."*
+
+            `[read]` **Die Beschriftung steht in der Tabelle**, nicht
+            hier: **die Kopfzeile traegt rechts zwei Knoepfe**, und
+            eine Spalte, die daran vorbei fluchten muesste, waere
+            beim naechsten Knopf wieder daneben. */}
         {!leer && (
-          <span className="v2-num" style={{ fontSize: 12 }}>
-            {z(summe.kcal)}<span className="v2-dim" style={{ fontSize: 10 }}> kcal</span>
-            <span className="v2-dim" style={{ margin: '0 6px' }}>·</span>
-            {z(summe.p)}<span className="v2-dim" style={{ fontSize: 10 }}>g P</span>
+          <span data-probe="kopf-summe" className="v2-num"
+                style={{ fontSize: 12, display: 'flex', gap: 10 }}>
+            {([
+              ['g', z(summe.g)], ['kcal', z(summe.kcal)],
+              ['P', z(summe.p)], ['K', z(summe.k)], ['F', z(summe.f)],
+            ] as const).map(([kurz, wert]) => (
+              <span key={kurz}>
+                {wert}
+                <span className="v2-dim" style={{ fontSize: 10, marginLeft: 2 }}>
+                  {kurz}
+                </span>
+              </span>
+            ))}
           </span>
         )}
         <button
@@ -400,6 +439,32 @@ function MahlzeitKarte({
       {offen && !leer && (
         <div style={{ padding: '0 14px 10px' }}>
           <table className="v2-tbl v2-tbl-meal">
+            {/* ══ G-330: die Spaltenbeschriftung ══════════════
+                **Tom, 2026-09-02:** *,,wer *6 g 31 g 1 g* liest, muss
+                raten."* — und: *,,die spalten muessen senkrecht
+                fluchten."*
+
+                `[cmd]` **Ein erster Versuch setzte sie in die
+                Kopfzeile, mit gerechnetem Abstand.** `[cmd]`
+                **Gemessen: 66 px daneben** (zwei Knoepfe rechts der
+                Summe), **und der Ausgleich verschob die ganze
+                Karte.**
+
+                `[read]` **Hier fluchtet sie von selbst** — dieselbe
+                Tabelle, dieselben Spalten. **Kein gerechneter
+                Abstand, der beim naechsten Knopf falsch waere.** */}
+            <thead data-probe="spalten-kopf">
+              <tr>
+                <th style={{ width: 18 }} />
+                <th />
+                <th style={{ width: 44, textAlign: 'right' }}>G</th>
+                <th style={{ width: 58, textAlign: 'right' }}>KCAL</th>
+                <th style={{ width: 40, textAlign: 'right' }}>P</th>
+                <th style={{ width: 40, textAlign: 'right' }}>K</th>
+                <th style={{ width: 40, textAlign: 'right' }}>F</th>
+                <th style={{ width: 20 }} />
+              </tr>
+            </thead>
             <tbody>
               {items.map(it => (
                 <tr key={it.id}>

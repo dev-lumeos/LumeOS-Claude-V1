@@ -1084,18 +1084,60 @@ export async function ladeGhostEintraege(datum: string): Promise<GhostEintrag[]>
     },
   )))
 
+  // ══ G-329: alle vier Naehrwerte, nicht nur kcal ═══════════
+  //
+  // **Tom, 2026-09-02:** *,,die positionen sollen gleich abgebildet
+  // sein wie in den normalen eintraegen."*
+  //
+  // `[cmd]` **Hier stand nur `zahl(z?.enercc)`** — **die Abfrage
+  // lieferte alle vier, drei wurden verworfen.** `[read]` **Die
+  // Ghost-Zeile zeigte deshalb weniger als die normale, obwohl die
+  // Werte da waren.**
+  //
+  // `[read]` **Je 100 g, nicht je Menge** — dann rechnet die Anzeige
+  // beim Tippen mit, so wie im Rezepteditor (G-325). **Die Menge ist
+  // im Ghost-Eintrag aenderbar; ein fester Wert waere nach der
+  // ersten Aenderung falsch.**
+  const werteJe100 = await Promise.all(flach.map(({ p }) => db.rpc(
+    'food_nutrient_snapshot',
+    {
+      p_food_source: 'bls', p_food_id: p.food_id,
+      p_custom_food_id: null, p_amount_g: 100,
+    },
+  )))
+
   const kcalJePosten = new Map<string, number>()
+  const je100JePosten = new Map<string, {
+    enercc: number | null; prot625: number | null
+    fat: number | null; cho: number | null
+  }>()
   flach.forEach(({ i, j }, k) => {
     const { data, error } = werte[k]
-    if (error) return
-    const z = (Array.isArray(data) ? data[0] : data) as Record<string, unknown> | null
-    const n = zahl(z?.enercc)
-    if (n !== null) kcalJePosten.set(`${i}:${j}`, n)
+    if (!error) {
+      const z = (Array.isArray(data) ? data[0] : data) as Record<string, unknown> | null
+      const n = zahl(z?.enercc)
+      if (n !== null) kcalJePosten.set(`${i}:${j}`, n)
+    }
+    const { data: d100, error: e100 } = werteJe100[k]
+    if (e100) return
+    const z1 = (Array.isArray(d100) ? d100[0] : d100) as Record<string, unknown> | null
+    if (!z1) return
+    je100JePosten.set(`${i}:${j}`, {
+      enercc: zahl(z1.enercc), prot625: zahl(z1.prot625),
+      fat: zahl(z1.fat), cho: zahl(z1.cho),
+    })
   })
 
   return roh.map((e, i) => {
     const posten: GhostPosten[] = e.posten.map((p, j) => ({
-      ...p, kcal: kcalJePosten.get(`${i}:${j}`) ?? null,
+      ...p,
+      kcal: kcalJePosten.get(`${i}:${j}`) ?? null,
+      // G-329: die Werte je 100 g — die Anzeige rechnet auf die
+      // eingegebene Menge, wie im Rezepteditor.
+      enercc_100: je100JePosten.get(`${i}:${j}`)?.enercc ?? null,
+      prot625_100: je100JePosten.get(`${i}:${j}`)?.prot625 ?? null,
+      fat_100: je100JePosten.get(`${i}:${j}`)?.fat ?? null,
+      cho_100: je100JePosten.get(`${i}:${j}`)?.cho ?? null,
     }))
     // `[read]` **`null`, wenn KEIN Posten eine Zahl hat** \u2014 eine
     // Summe aus lauter Fehlwerten waere `0` und saehe aus wie
