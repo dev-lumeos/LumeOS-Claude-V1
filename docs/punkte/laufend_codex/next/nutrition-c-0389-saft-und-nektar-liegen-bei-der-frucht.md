@@ -47,3 +47,8 @@ ohne Kuration zu haben"*** — **die Trennung waere ableitbar.**
 
 `[read]` **Der Treffergrund zeigt: kein Synonym- oder Aliasfehler,
 sondern der Name selbst.** **Der Punkt bleibt offen.**
+
+## Auftrag
+
+**Vorbereitet mit C-388 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

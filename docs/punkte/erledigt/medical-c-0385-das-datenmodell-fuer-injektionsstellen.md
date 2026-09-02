@@ -9,6 +9,8 @@ kind_von: C-109
 entscheidung: E-57
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: f9db161b
 beruehrt:
   tabellen: [medical.symptoms]
 zahlen: null
@@ -230,8 +232,117 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Umgesetzt und lokal eingespielt, 2026-09-02.** `apps/` blieb unveraendert; kein Dev-Server, Stage, Commit oder Push.
+
+### C-385
+
+Live sind `medical.injection_sites`, `medical.injection_needle_recommendations`, `medical.injection_tissue_condition_guidance`, `medical.injection_logs` und `medical.injection_site_conditions`.
+
+- IM und SC haben `minimum_rest_days = NULL` samt Begruendung. IM fordert Rotation ohne Tageszahl; SC nutzt stattdessen 10 mm Abstand und einen Quadranten je sieben Tage.
+- Lipohypertrophie ist ein eigener Gewebezustand: 3--6 Monate aussetzen, keine verlaengerte Ruhezeit.
+- Die Nadel-Tabelle hat exakt acht, nicht gerankte Quellenvarianten mit allen geforderten Feldern. Evidenztypen: CDC/FITTER `guideline`, Cook/Larkin/Zaybak/Spratt `study`, Open RN `practice_rule`, FDA Xyosted ehrlich `product_label`.
+- `injection_body_measurement_context` zaehlt die ganze Messreihe und nimmt den juengsten Wert nach Datum, Uhrzeit, Anlagezeit und ID. Ohne Messreihe liefert sie Profilgewicht/-groesse und berechneten BMI, aber keinen Koerperfettwert. `injection_needle_suggestions` liefert alle passenden Quellen ohne Rangfolge.
+
+| Pruefung | Ergebnis |
+| --- | --- |
+| RLS | Alle fuenf Tabellen: RLS an, `anon` ohne Zugriff. Referenzdaten nur lesbar fuer `authenticated`; Log und Gewebezustand haben eigene Owner-Policies fuer alle vier Operationen. Der Test belegt eigene sowie unsichtbare und nicht aenderbare Fremdzeilen. |
+| Acht Quellen | 8/8, jede mit `evidence_type`. |
+| Deltoid 82 kg | BMI 25,88: CDC 2026 (22--25G, 25--38 mm) und Cook 2006 (25 mm), beide sichtbar. |
+| Ventrogluteal | Mit derselben Messung: Larkin 2018 und Zaybak 2007 gleichzeitig sichtbar. Zaybak bleibt als Fettdickenmessung, nicht als Nadellaenge, gekennzeichnet. |
+| Koerpermessungen | `dev@lumeos.app` und `tom.seed@example.com`: je 181 Zeilen, juengster Wert 2026-11-16. Fuenf weitere Konten, einschliesslich `test-user@lumeos.local`, haben 0; dort greift der Profil-Fallback. |
+| C-393 | C-327 und deploybare C-327a sind eingespielt und in der lokalen Historie angewandt. `wr_chelation_timing` ergibt jetzt 8/8 Mitgliedschaften. |
+
+### Validierung
+
+`pnpm exec tsx --test supabase/_pipeline/_validierung/medical-c385-injection-sites.test.ts`, `pnpm lint`, `pnpm typecheck` und `git diff --check` sind gruen.
+
+### Security-Review
+
+```yaml
+security_review:
+  status: passed
+  issues: []
+```
+
+Geprueft: RLS, fehlende `anon`-Grants, Owner-Checks in `USING` und `WITH CHECK`, ausschliesslich `SECURITY INVOKER` sowie keine medizinischen Nutzdaten in Ausgaben oder Logs.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Nachgemessen.**
+
+### Fuenf Tabellen, und keine erfundene Zahl
+
+    injection_sites                      4 Zeilen, 10 Spalten
+    injection_needle_recommendations     8 Zeilen, 12 Spalten
+    injection_tissue_condition_guidance  1 Zeile
+    injection_site_conditions           10 Spalten
+    injection_logs                       6 Spalten
+
+`[cmd]` **Alle vier Stellen tragen `minimum_rest_days = NULL`** —
+**mit `minimum_rest_days_reason` daneben.**
+
+    im  Deltoid            rest=NULL, rotation
+    im  Vastus lateralis   rest=NULL, rotation
+    im  Ventrogluteal      rest=NULL, rotation
+    sc  Subkutan           rest=NULL, rotation, 10 mm, Quadrant 7 d
+
+`[read]` **Das belegte Nein aus E-57 steht als Datensatz** — **nicht
+als fehlender Wert, sondern als begruendetes NULL.**
+
+`[cmd]` **Und SC traegt die einzige Zahl, die eine Quelle hat:** 10
+mm Abstand, Quadrant je Woche (FITTER Forward 2025).
+
+### Die acht Quellen, je eine Zeile
+
+    cdc_2026             im deltoid      22-25G   25/25-38/38 mm   guideline
+    cook_2006            im deltoid      -        25 mm, BMI>35: 32   study
+    larkin_2018          im ventrogl.    -        32 mm; 38 mm     study
+    zaybak_2007          im ventrogl.    -        SC-Dicke 38,2-53,8  study
+    open_rn_2023         im vastus       20-25G; 18-21G  25-38 mm  practice_rule
+    fitter_forward_2025  sc              -        Pen 4 / Spritze 6   guideline
+    spratt_2017          sc              25G      16 mm            study
+    fda_xyosted_2019     sc              27G      12,7 mm          product_label
+
+`[read]` **`evidence_type` unterscheidet vier Klassen:** `guideline`,
+`study`, `practice_rule`, `product_label`.
+
+`[read]` **Damit ist die Forderung aus E-57 erfuellt:** *,,Trenne
+klar zwischen durch Leitlinie belegt und verbreiteter
+Praxisempfehlung."* `[cmd]` **Open RN steht als `practice_rule`,
+nicht als Leitlinie.**
+
+`[cmd]` **Und wo eine Quelle nichts sagt, steht *Nicht
+angegeben*** — **kein geratener Wert.**
+
+`[read]` **Zaybak ist das beste Beispiel:** *,,Keine Nadellaenge
+angegeben; gemessene SC-Gewebedicke 38,2-53,8 mm."* **Die Studie misst
+etwas anderes als eine Empfehlung, und die Zeile sagt es.**
+
+### Der Gewebezustand ist getrennt
+
+`[cmd]` **`lipohypertrophy: 3-6 Monate, guideline`** — **eine eigene
+Tabelle, keine laengere Ruhezeit.**
+
+`[read]` **Genau die Trennung, die E-57 verlangt.**
+
+### C-393 — 8 von 8
+
+`[cmd]` **`substance_group_memberships` traegt jetzt 8
+Mitgliedschaften.**
+
+`[cmd]` **Er hat C-327 mit einem deploybaren 327a ergaenzt** —
+**statt die Erwartung zurueckzunehmen.**
+
+`[read]` **Die rote Pruefung ist gruen, ohne dass jemand die
+Sollzahl gesenkt hat.**
+
+### Und eine Nebenkorrektur
+
+`[cmd]` **Eine zweite Migration berichtigt die
+Messwert-Kontextfunktion.**
+
+`[read]` **Er hat sie beim Bauen gefunden** — **`body_measurements`
+war der Zugriffsweg fuer `body_size_modifier`.**
+
+**Abgenommen.**
+

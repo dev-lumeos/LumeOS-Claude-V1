@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 219 |
+| `todos` | 217 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 235 |
+| `erledigt` | 237 |
 | **gesamt** | **457** |
 
 ## medical — 43
@@ -51,7 +51,7 @@
 | `C-332` | befund | mittel | [23 Regeln koennen weiterhin nicht feuern](todos/medical-c-0332-23-regeln-koennen-weiterhin-nicht-feuern.md) | offen | — | — |
 | `C-337` | befund | mittel | [die Medikamenten-Einnahmezeit fehlt](todos/medical-c-0337-die-medikamenten-einnahmezeit-fehlt.md) | offen | — | — |
 | `C-359` | feature | mittel | [Symptome brauchen ein Protokoll je Nutzer](todos/medical-c-0359-symptome-brauchen-ein-protokoll-je-nutzer.md) | offen | — | — |
-| `C-385` | feature | hoch | [das Datenmodell fuer Injektionsstellen](laufend_codex/medical-c-0385-das-datenmodell-fuer-injektionsstellen.md) | laeuft (codex) | — | — |
+| `C-385` | feature | hoch | [das Datenmodell fuer Injektionsstellen](erledigt/medical-c-0385-das-datenmodell-fuer-injektionsstellen.md) | erledigt | — | — |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
@@ -139,8 +139,8 @@
 | `C-384` | befund | hoch | [wer schreibt die 30.797 Tag-Zeilen?](erledigt/nutrition-c-0384-wer-schreibt-die-30797-tag-zeilen.md) | erledigt | — | C-387 |
 | `C-386` | befund | mittel | [sind die drei Reste aus C-35 eingeflossen?](erledigt/nutrition-c-0386-sind-die-drei-reste-aus-c-35-eingeflossen.md) | erledigt | — | C-388, C-389 |
 | `C-387` | befund | hoch | [vier Kettenschritte schreiben Tags](erledigt/nutrition-c-0387-vier-kettenschritte-schreiben-tags.md) | erledigt | — | — |
-| `C-388` | befund | mittel | [die Vertreterregel ist nicht erreicht](todos/nutrition-c-0388-die-vertreterregel-ist-nicht-erreicht.md) | offen | — | — |
-| `C-389` | befund | mittel | [Saft und Nektar liegen bei der Frucht](todos/nutrition-c-0389-saft-und-nektar-liegen-bei-der-frucht.md) | offen | — | — |
+| `C-388` | befund | mittel | [die Vertreterregel ist nicht erreicht](laufend_codex/nutrition-c-0388-die-vertreterregel-ist-nicht-erreicht.md) | vorbereitet (codex) | — | — |
+| `C-389` | befund | mittel | [Saft und Nektar liegen bei der Frucht](laufend_codex/nutrition-c-0389-saft-und-nektar-liegen-bei-der-frucht.md) | vorbereitet (codex) | — | — |
 | `C-390` | feature | mittel | [`tag_definitions` hat keine Untergruppe](erledigt/nutrition-c-0390-tag-definitions-hat-keine-untergruppe.md) | erledigt | — | — |
 | `C-391` | feature | hoch | [`food_search` hat keinen Treffergrund](erledigt/nutrition-c-0391-food-search-hat-keinen-treffergrund.md) | erledigt | — | C-393 |
 | `C-392` | feature | hoch | [die Tabelle `meal_slots`](erledigt/nutrition-c-0392-die-tabelle-meal-slots.md) | erledigt | — | C-394 |
@@ -309,7 +309,7 @@
 | `C-352` | befund | hoch | [der Katalog hat keine deutschen Namen](erledigt/supplements-c-0352-der-katalog-hat-keine-deutschen-namen.md) | erledigt | — | — |
 | `C-364` | entscheidung | mittel | [die Produktebene ist Wissen, kein Bestand](erledigt/supplements-c-0364-die-produktebene-ist-wissen-kein-bestand.md) | erledigt | — | G-296 |
 | `C-365` | befund | niedrig | [Peptidsequenzen haben kein Ziel im Schema](erledigt/supplements-c-0365-peptidsequenzen-haben-kein-ziel-im-schema.md) | erledigt | — | — |
-| `C-393` | befund | mittel | [`substance_group_memberships` ist leer](laufend_codex/supplements-c-0393-substance-group-memberships-ist-leer.md) | laeuft (codex) | — | — |
+| `C-393` | befund | mittel | [`substance_group_memberships` ist leer](erledigt/supplements-c-0393-substance-group-memberships-ist-leer.md) | erledigt | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |

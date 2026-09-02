@@ -9,6 +9,8 @@ kind_von: C-391
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: f9db161b
 beruehrt:
   tabellen: [supplements.supplement_groups]
 zahlen:
@@ -56,3 +58,16 @@ zuruecknehmen.** **Der Punkt bleibt offen.**
 
 **Mitbeauftragt mit C-385 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit C-385 abgenommen: 8 von 8.**
+
+`[cmd]` **`substance_group_memberships` traegt jetzt 8
+Mitgliedschaften.**
+
+`[cmd]` **C-327 mit einem deploybaren 327a ergaenzt** — **statt die
+Erwartung zurueckzunehmen.**
+
+`[read]` **Die rote Pruefung ist gruen, ohne dass jemand die Sollzahl
+gesenkt hat.**
