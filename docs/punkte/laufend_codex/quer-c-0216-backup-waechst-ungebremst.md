@@ -7,6 +7,8 @@ angelegt: 2026-08-22
 braucht: []
 kind_von: null
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   dateien: [backup, tools/encoding-pruefen.mjs]
 zahlen:
@@ -65,3 +67,8 @@ Quelldateien; fuer `backup/` galt es offenbar als nicht gemeint.**
 `[read]` **Kein untracktes Verzeichnis wird dem Namen nach
 geloescht** — die Regel gilt. **Was weg kann, muss einzeln benannt
 werden.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-219 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

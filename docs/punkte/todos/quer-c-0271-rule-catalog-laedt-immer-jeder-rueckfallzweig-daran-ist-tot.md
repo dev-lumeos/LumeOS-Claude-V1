@@ -8,8 +8,6 @@ braucht: []
 kind_von: G-187
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -41,3 +39,11 @@ zahlen: null
 
 **Mitbeauftragt mit C-159 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: gemessen und entkraeftet.
+
+`[cmd]` **`rule_catalog` laedt bei jedem eingeloggten Aufruf mit.**
+`[cmd]` **64 Zeilen kosten lokal median 0,117 ms.**
+
+`[read]` **Der Punkt behauptete einen Engpass** — **es ist keiner.**
+`[read]` **Und der Beleg ist ein Median, kein Einzelwert.**

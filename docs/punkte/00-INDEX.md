@@ -475,17 +475,17 @@
 | `C-64` | feature | mittel | [942 Schluessel und Thai aus dem Vorgaengerrepo uebertragen](todos/quer-c-0064-942-schluessel-und-thai-aus-dem-vorgaengerrepo-uebertragen.md) | offen | — | — |
 | `C-110` | befund | mittel | [Cost-Rest und Compliance-Notizen](todos/quer-c-0110-cost-rest-und-compliance-notizen.md) | offen | — | — |
 | `C-155` | befund | mittel | [Zwei Befunde in `@supabase/ssr` 0.1.0](todos/quer-c-0155-zwei-befunde-in-supabase-ssr-0-1-0.md) | offen | — | — |
-| `C-159` | feature | mittel | [Sieben Regelpfade zeigen auf Schemata, die es nicht gibt](laufend_codex/quer-c-0159-sieben-regelpfade-zeigen-auf-schemata-die-es-nicht-gibt.md) | laeuft (codex) | — | — |
+| `C-159` | feature | mittel | [Sieben Regelpfade zeigen auf Schemata, die es nicht gibt](todos/quer-c-0159-sieben-regelpfade-zeigen-auf-schemata-die-es-nicht-gibt.md) | offen | — | — |
 | `C-170` | befund | mittel | [Der Offline-Betrieb steht im Entwurf](todos/quer-c-0170-der-offline-betrieb-steht-im-entwurf.md) | offen | — | — |
-| `C-187` | befund | mittel | [Fuenf kleine Datenluecken — als ein Auftrag](todos/quer-c-0187-fuenf-kleine-datenluecken-als-ein-auftrag.md) | offen | — | — |
+| `C-187` | befund | mittel | [Fuenf kleine Datenluecken — als ein Auftrag](laufend_codex/quer-c-0187-fuenf-kleine-datenluecken-als-ein-auftrag.md) | laeuft (codex) | — | — |
 | `C-201` | befund | mittel | [Der Populations-Atlas hat kein Schema](todos/quer-c-0201-der-populations-atlas-hat-kein-schema.md) | offen | — | — |
 | `C-205` | befund | mittel | [`research_hold_registry` — 305 Saetze](erledigt/quer-c-0205-research-hold-registry-305-saetze.md) | erledigt | — | — |
-| `C-216` | befund | mittel | [`backup/` waechst ungebremst](todos/quer-c-0216-backup-waechst-ungebremst.md) | offen | — | — |
-| `C-219` | befund | mittel | [Tabellen, die die Spec kennt und die es nicht gibt](todos/quer-c-0219-tabellen-die-die-spec-kennt-und-die-es-nicht-gibt.md) | offen | — | — |
+| `C-216` | befund | mittel | [`backup/` waechst ungebremst](laufend_codex/quer-c-0216-backup-waechst-ungebremst.md) | laeuft (codex) | — | — |
+| `C-219` | befund | mittel | [Tabellen, die die Spec kennt und die es nicht gibt](laufend_codex/quer-c-0219-tabellen-die-die-spec-kennt-und-die-es-nicht-gibt.md) | laeuft (codex) | — | — |
 | `C-241` | entscheidung | mittel | [Das Nachweiskonto traegt weder Essensplaene noch Medikamente](erledigt/quer-c-0241-das-nachweiskonto-traegt-weder-essensplaene-noch-medikamente.md) | erledigt | — | A-69 |
 | `C-259` | feature | mittel | [Kimis Bestand ist weit groesser als angenommen — und der Orchestrator hat den Statusbericht nie gelesen](todos/quer-c-0259-kimis-bestand-ist-weit-groesser-als-angenommen-und-der-orchestrator-hat-.md) | offen | — | C-262 |
-| `C-271` | befund | mittel | [`rule_catalog` laedt immer — jeder Rueckfallzweig daran ist tot](laufend_codex/quer-c-0271-rule-catalog-laedt-immer-jeder-rueckfallzweig-daran-ist-tot.md) | laeuft (codex) | — | — |
-| `C-279` | befund | mittel | [Das Kreuzprodukt in `rule_assessment` skaliert mit den Einnahmen](laufend_codex/quer-c-0279-das-kreuzprodukt-in-rule-assessment-skaliert-mit-den-einnahmen.md) | laeuft (codex) | — | — |
+| `C-271` | befund | mittel | [`rule_catalog` laedt immer — jeder Rueckfallzweig daran ist tot](todos/quer-c-0271-rule-catalog-laedt-immer-jeder-rueckfallzweig-daran-ist-tot.md) | offen | — | — |
+| `C-279` | befund | mittel | [Das Kreuzprodukt in `rule_assessment` skaliert mit den Einnahmen](todos/quer-c-0279-das-kreuzprodukt-in-rule-assessment-skaliert-mit-den-einnahmen.md) | offen | — | — |
 | `C-295` | feature | mittel | [die Kette liest aus zwei Kimi-Pfaden](todos/quer-c-0295-die-kette-liest-aus-zwei-kimi-pfaden.md) | offen | — | — |
 | `C-297` | messung | mittel | [drei Wege, an dem Datenlogik-Waechter vorbei](todos/quer-c-0297-drei-wege-an-dem-datenlogik-waechter-vorbei.md) | offen | — | — |
 | `C-298` | feature | mittel | [der Datenlogik-Waechter meldet zwei harmlose Muster rot](todos/quer-c-0298-der-datenlogik-waechter-meldet-zwei-harmlose-muster-rot.md) | offen | — | — |

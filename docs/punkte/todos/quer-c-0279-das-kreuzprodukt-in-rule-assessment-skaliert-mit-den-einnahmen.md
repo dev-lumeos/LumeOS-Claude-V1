@@ -8,8 +8,6 @@ braucht: []
 kind_von: G-190
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -42,3 +40,13 @@ zahlen: null
 
 **Mitbeauftragt mit C-159 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: der Befund ist verschwunden.
+
+`[cmd]` **Das historische Einnahmen-mal-Regeln-Kreuzprodukt existiert
+im aktuellen `rule_assessment` nicht mehr.**
+
+`[cmd]` **Hypothetisch waeren es 23.040 Zeilen fuer `dev`.**
+
+`[read]` **Er hat die Zahl trotzdem gerechnet** — **damit steht fest,
+was vermieden wurde.**
