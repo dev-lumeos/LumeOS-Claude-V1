@@ -30,6 +30,9 @@ import { vortag } from '../../../lib/datum'
 import type { NutritionFoodSearchRow } from '../../../lib/nutrition/food-search'
 // G-309: die Plantage erscheinen als Ghost Entries — Flow 3, Schritt 7.
 import { GhostEintragKarte, type GhostEintrag } from './ghost-eintrag'
+// G-331: dasselbe Suchmodal wie Planner (G-320), Rezept (G-323)
+// und Ghost-Eintrag (G-329) — keine fuenfte Suche.
+import { FoodSuchModal } from './food-such-modal'
 
 /** Die Slots der Vorlage, in ihrer Reihenfolge. */
 const SLOT_LABEL: Record<MealType, string> = {
@@ -559,12 +562,44 @@ function MahlzeitKarte({
         </p>
       )}
 
+      {/* ══ G-331: dasselbe Modal wie Planner, Rezept und Ghost ════
+          `[read]` **Der Kontext ist der TAG** — Datum und Mahlzeit
+          stehen fest, das Tagesziel kennt diese Karte nicht.
+          `[read]` **`ziel: null` heisst: kein Ziel bekannt** — die
+          Anzeige schreibt dann keinen Prozentsatz, statt einen zu
+          erfinden. */}
       {sucheAuf && (
-        <HinzufuegenModal
-          slot={SLOT_LABEL[typ]}
+        <FoodSuchModal
+          kontext={{
+            art: 'tag',
+            datum,
+            slot: typ,
+            slotLabel: SLOT_LABEL[typ],
+            schonImTag: summe.kcal > 0 ? Math.round(summe.kcal) : null,
+            ziel: null,
+          }}
           onClose={() => setSucheAuf(false)}
-          onFertig={() => { setSucheAuf(false); onGeaendert() }}
-          sicherstellen={sicherstellen}
+          onWaehlen={async (f, mengeG) => {
+            // `[read]` **Der Schreibweg bleibt hier** — das Modal
+            // gibt Lebensmittel und Menge zurueck, mehr nicht.
+            // **Ein Modal, das seinen Schreibweg kennt, waere an ihn
+            // gebunden.**
+            const mealId = await sicherstellen()
+            const a = await fetch('/api/nutrition/diary', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: JSON.stringify({
+                art: 'position', meal_id: mealId,
+                food_id: f.id, amount_g: mengeG,
+              }),
+            })
+            if (!a.ok) {
+              const k = await a.json().catch(() => null)
+              throw new Error(k?.error ?? `Fehler ${a.status}`)
+            }
+            setSucheAuf(false)
+            onGeaendert()
+          }}
         />
       )}
       {aendern && (
@@ -585,386 +620,27 @@ function MahlzeitKarte({
   )
 }
 
-/**
- * Suchen, Portion waehlen, Menge angeben — ohne Seitenwechsel.
- *
- * `[read]` Aufbau uebernommen aus `AddFoodModal.tsx` des
- * Vorgaengerrepos: Suchfeld, Trefferliste mit vier Naehrwerten, nach
- * der Auswahl Portionsliste („Custom amount (g)" zuerst) und
- * Mengenfeld, darunter die Werte je 100 g.
- *
- * ANGEPASST ans neue Schema: dort `public.foods` mit UUID und
- * `food.kcal`; hier `nutrition.foods` mit `bls_code` und die Suche
- * ueber `/api/nutrition/foods`. Die Portionen kommen aus
- * `foods_portions` (C-51), nicht aus einem eigenen Hook.
- */
-function HinzufuegenModal({
-  slot, onClose, onFertig, sicherstellen,
-}: {
-  slot: string
-  onClose: () => void
-  onFertig: () => void
-  sicherstellen: () => Promise<string>
-}) {
-  const [frage, setFrage] = React.useState('')
-  const [treffer, setTreffer] = React.useState<NutritionFoodSearchRow[]>([])
-  const [sucht, setSucht] = React.useState(false)
-  const [gewaehlt, setGewaehlt] = React.useState<NutritionFoodSearchRow | null>(null)
-  const [portionen, setPortionen] = React.useState<Portion[]>([])
-  const [portion, setPortion] = React.useState<string>('')
-  const [anzahl, setAnzahl] = React.useState('1')
-  const [menge, setMenge] = React.useState('100')
-  const [laeuft, setLaeuft] = React.useState(false)
-  const [fehler, setFehler] = React.useState<string | null>(null)
-  // G-13: Filter, Sortierung und die Wirkung der Vorlieben.
-  const [tag, setTag] = React.useState<string | null>(null)
-  const [sortierung, setSortierung] = React.useState<'relevance' | 'protein_desc'>('relevance')
-  const [verborgen, setVerborgen] = React.useState<number | null>(null)
-  const [vorliebenAktiv, setVorliebenAktiv] = React.useState(false)
-
-  React.useEffect(() => {
-    const auf = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', auf)
-    return () => window.removeEventListener('keydown', auf)
-  }, [onClose])
-
-  // Suche mit kurzer Verzoegerung — sonst eine Abfrage je Tastendruck.
-  React.useEffect(() => {
-    if (gewaehlt || frage.trim().length < 2) { setTreffer([]); return }
-    let weg = false
-    const t = setTimeout(async () => {
-      setSucht(true)
-      try {
-        const params = new URLSearchParams({
-          q: frage,
-          limit: '12',
-          sort: sortierung,
-          // `[read]` DIE VORLIEBEN GELTEN HIER (C-94). Ohne diesen
-          // Schalter sucht die Route den ganzen Katalog — dann stuenden
-          // Nuesse in der Liste, obwohl sie als Allergie hinterlegt
-          // sind. Die Kennung schickt der Browser NICHT mit; sie kommt
-          // serverseitig aus der Sitzung.
-          prefs: '1',
-        })
-        if (tag) params.set('tag', tag)
-        const a = await fetch(`/api/nutrition/foods?${params.toString()}`)
-        const d = await a.json()
-        if (!weg) {
-          setTreffer(a.ok ? (d.foods ?? []) : [])
-          setVerborgen(typeof d.preferences_hidden === 'number' ? d.preferences_hidden : null)
-          setVorliebenAktiv(d.preferences_applied === true)
-        }
-      } catch {
-        if (!weg) setTreffer([])
-      } finally {
-        if (!weg) setSucht(false)
-      }
-    }, 250)
-    return () => { weg = true; clearTimeout(t) }
-  }, [frage, gewaehlt, tag, sortierung])
-
-  async function waehle(f: NutritionFoodSearchRow) {
-    setGewaehlt(f)
-    // G-93: **hier bleibt `name_de`, und zwar mit Grund.** Dieser Wert
-    // geht zurueck ins Suchfeld, ist also ein SUCHBEGRIFF, keine
-    // Anzeige. `[cmd]` `name_display_de` als Suchbegriff liefert 0
-    // Treffer (G-265, belegt in add-und-plaene.test.ts:38) — die
-    // Klammerzusaetze stehen so nicht im Suchindex.
-    setFrage(f.name_de)
-    // `[cmd]` Dieser Aufruf schreibt die Protokollzeile mit
-    // `selected_bls_code` und `selected_rank` — ohne ihn fehlt genau
-    // die Nutzung, die uns interessiert.
-    void fetch(`/api/nutrition/foods?food=${encodeURIComponent(f.id)}&q=${encodeURIComponent(frage)}`)
-    try {
-      const a = await fetch(`/api/nutrition/diary?portionen_fuer=${f.id}`)
-      const d = await a.json()
-      const p: Portion[] = a.ok ? (d.portionen ?? []) : []
-      setPortionen(p)
-      // Die Vorgabeportion ist vorausgewaehlt (Auftrag).
-      const vorgabe = p.find(x => x.is_default) ?? null
-      if (vorgabe) {
-        setPortion(vorgabe.name_de)
-        setAnzahl('1')
-        setMenge(String(vorgabe.amount_g))
-      } else {
-        setPortion('')
-        setMenge('100')
-      }
-    } catch {
-      setPortionen([])
-    }
-  }
-
-  function waehlePortion(name: string) {
-    setPortion(name)
-    const p = portionen.find(x => x.name_de === name)
-    const n = Number(anzahl) || 1
-    if (p) setMenge(String(Math.round(p.amount_g * n * 10) / 10))
-  }
-
-  function setzeAnzahl(v: string) {
-    setAnzahl(v)
-    const p = portionen.find(x => x.name_de === portion)
-    const n = Number(v)
-    if (p && Number.isFinite(n) && n > 0) {
-      setMenge(String(Math.round(p.amount_g * n * 10) / 10))
-    }
-  }
-
-  async function hinzufuegen() {
-    if (!gewaehlt) return
-    const g = Number(menge)
-    if (!Number.isFinite(g) || g <= 0) { setFehler('Menge muss groesser als 0 sein.'); return }
-    setLaeuft(true)
-    setFehler(null)
-    try {
-      const mealId = await sicherstellen()
-      const p = portionen.find(x => x.name_de === portion)
-      const n = Number(anzahl)
-      // Entweder alle drei Portionsfelder oder keines — so prueft es
-      // der CHECK in 058a. Bei direkter Grammeingabe bleiben sie leer.
-      const portionsfelder = p && Number.isFinite(n) && n > 0
-        ? { portion_name: p.name_de, portion_quantity: n, portion_amount_g: p.amount_g }
-        : {}
-      const a = await fetch('/api/nutrition/diary', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          art: 'position', meal_id: mealId,
-          food_id: gewaehlt.id, amount_g: g, ...portionsfelder,
-        }),
-      })
-      const d = await a.json()
-      if (!a.ok) throw new Error(d?.error ?? 'Hinzufuegen fehlgeschlagen.')
-      onFertig()
-    } catch (e) {
-      setFehler(e instanceof Error ? e.message : String(e))
-    } finally {
-      setLaeuft(false)
-    }
-  }
-
-  const je100 = gewaehlt
-
-  return (
-    <div className="v2-modal-veil" onClick={onClose} role="presentation">
-      <div className="v2-modal" style={{ width: 640, maxHeight: '88vh' }}
-           role="dialog" aria-modal="true" aria-label={`Zu ${slot} hinzufuegen`}
-           onClick={e => e.stopPropagation()}>
-        <div className="v2-modal-h">
-          <Icon name="search" className="v2-ic v2-ic-sm" />
-          <span className="v2-card-title">Add food to {slot}</span>
-          <div className="v2-spacer" />
-          <button type="button" className="v2-icon-btn" onClick={onClose} aria-label="Schliessen">
-            <Icon name="x" className="v2-ic v2-ic-sm" />
-          </button>
-        </div>
-
-        <div className="v2-modal-body">
-          <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Search for food</div>
-          <input
-            className="v2-feld"
-            value={frage}
-            autoFocus
-            // G-73: „— BLS 4.0" entfernt, wie im Kopf und in der Suche.
-            placeholder="Lebensmittel suchen"
-            onChange={e => { setFrage(e.target.value); setGewaehlt(null) }}
-          />
-
-          {!gewaehlt && (
-            <div style={{
-              display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 4,
-              marginTop: 8,
-            }}>
-              <Icon name="filter" className="v2-ic v2-ic-sm v2-dim" />
-              {FILTER.map(f => {
-                const an = tag === f.code
-                return (
-                  <button
-                    key={f.code}
-                    type="button"
-                    className="v2-pill"
-                    aria-pressed={an}
-                    style={pillenStil(an)}
-                    // `[cmd]` Die Zahl steht am Filter, damit niemand
-                    // raet, wie gross die Einschraenkung ist.
-                    title={`${f.anzahl.toLocaleString('de-DE')} Lebensmittel`}
-                    onClick={() => setTag(an ? null : f.code)}
-                  >
-                    {f.label}
-                    <span className="v2-num v2-dim" style={{ marginLeft: 5, fontSize: 10 }}>
-                      {f.anzahl.toLocaleString('de-DE')}
-                    </span>
-                  </button>
-                )
-              })}
-              {/*
-                `[read]` Eigene Zeile statt `marginLeft: auto`: bei vier
-                Filtern bleibt rechts kein Platz, die Sortierung bricht
-                ohnehin um — und `auto` wirkt nach einem Umbruch nicht
-                mehr. Lieber ein bewusster Umbruch als ein zufaelliger.
-              */}
-              <span style={{
-                flexBasis: '100%', display: 'flex', gap: 4,
-                justifyContent: 'flex-end',
-              }}>
-                <span className="v2-eyebrow" style={{ marginRight: 'auto' }}>
-                  Sortierung
-                </span>
-                {SORTIERUNGEN.map(s => (
-                  <button
-                    key={s.code}
-                    type="button"
-                    className="v2-pill"
-                    aria-pressed={sortierung === s.code}
-                    style={pillenStil(sortierung === s.code)}
-                    title={`Nach ${s.label} sortieren`}
-                    onClick={() => setSortierung(s.code)}
-                  >
-                    {s.label}
-                  </button>
-                ))}
-              </span>
-            </div>
-          )}
-
-          {sucht && <p className="v2-muted" style={{ fontSize: 12, marginTop: 10 }}>Sucht …</p>}
-
-          {/*
-            `[read]` WARUM DIESER HINWEIS SEIN MUSS: `[cmd]` „mandel"
-            liefert fuer `dev@lumeos.app` **0 von 64** Treffern, weil 63
-            davon `contains_nuts` tragen und die Nussallergie hart
-            ausschliesst. Ohne den Hinweis sieht das aus, als kenne die
-            Datenbank keine Mandeln — und der Nutzer sucht weiter.
-          */}
-          {!gewaehlt && !sucht && verborgen !== null && verborgen > 0 && (
-            <p className="v2-muted" style={{ fontSize: 11.5, marginTop: 10 }}>
-              {treffer.length === 0 ? 'Kein Treffer — ' : ''}
-              {verborgen} {verborgen === 1 ? 'Eintrag ist' : 'Eintraege sind'} durch
-              deine Vorlieben ausgeblendet.
-            </p>
-          )}
-
-          {!gewaehlt && !sucht && verborgen === null
-            && frage.trim().length >= 2 && treffer.length === 0 && (
-            <p className="v2-muted" style={{ fontSize: 11.5, marginTop: 10 }}>
-              Kein Treffer{tag ? ' mit diesem Filter' : ''}
-              {/*
-                `[read]` Wenn die Vorlieben griffen und trotzdem nichts
-                verborgen ist, liegt es NICHT an ihnen — das gehoert
-                dazugesagt, sonst sucht jemand den Fehler bei seinen
-                Einstellungen.
-              */}
-              {vorliebenAktiv ? ' — auch ohne deine Vorlieben nicht' : ''}.
-              {tag && (
-                <>
-                  {' '}
-                  <button
-                    type="button"
-                    onClick={() => setTag(null)}
-                    style={{
-                      background: 'none', border: 0, padding: 0, font: 'inherit',
-                      cursor: 'pointer', color: 'var(--acc-nutri)',
-                    }}
-                  >
-                    Filter aufheben
-                  </button>
-                </>
-              )}
-            </p>
-          )}
-
-          {!gewaehlt && treffer.length > 0 && (
-            <div className="v2-col-gap" style={{ gap: 6, marginTop: 10 }}>
-              {treffer.map(f => (
-                <button
-                  key={f.id}
-                  type="button"
-                  className="v2-wahl"
-                  style={{ textAlign: 'left' }}
-                  onClick={() => void waehle(f)}
-                >
-                  <span style={{ flex: 1, minWidth: 0 }}>
-                    {/* G-93: der Anzeigename, sonst der Rohname. */}
-                    <span className="v2-wahl-titel">{f.name_display_de || f.name_de}</span>
-                    <span className="v2-wahl-hinweis">
-                      {n(f.enercc)} kcal · {n(f.prot625)}g P · {n(f.cho)}g C · {n(f.fat)}g F
-                      <span className="v2-dim"> je 100 g</span>
-                    </span>
-                  </span>
-                </button>
-              ))}
-            </div>
-          )}
-
-          {gewaehlt && (
-            <div style={{ marginTop: 12 }}>
-              <div className="v2-insight" style={{ marginBottom: 12 }}>
-                <div className="v2-insight-mark" />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  {/* G-93: der Anzeigename, sonst der Rohname. */}
-                  <div className="v2-insight-title">{gewaehlt.name_display_de || gewaehlt.name_de}</div>
-                  <div className="v2-insight-body v2-num">
-                    {n(je100!.enercc)} kcal · {n(je100!.prot625)}g P ·{' '}
-                    {n(je100!.cho)}g C · {n(je100!.fat)}g F — je 100 g
-                  </div>
-                </div>
-              </div>
-
-              {portionen.length > 0 && (
-                <div className="v2-grid v2-g-cols-2" style={{ gap: 10, marginBottom: 10 }}>
-                  <div>
-                    <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Portion</div>
-                    <select className="v2-feld" value={portion}
-                            onChange={e => waehlePortion(e.target.value)}>
-                      <option value="">Menge in Gramm</option>
-                      {portionen.map(p => (
-                        <option key={p.name_de} value={p.name_de}>
-                          {p.name_de} ({z(p.amount_g)} g){p.is_default ? ' · Vorgabe' : ''}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Anzahl</div>
-                    <input className="v2-feld" type="number" min="0.25" step="0.25"
-                           value={anzahl} disabled={!portion}
-                           onChange={e => setzeAnzahl(e.target.value)} />
-                  </div>
-                </div>
-              )}
-
-              <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Menge</div>
-              <div style={{ position: 'relative', display: 'flex' }}>
-                <input
-                  className="v2-feld" type="number" min="1" step="1" value={menge}
-                  onChange={e => { setMenge(e.target.value); setPortion('') }}
-                />
-                <span className="v2-feld-einheit">g</span>
-              </div>
-              <p style={{ fontSize: 10.5, color: 'var(--fg-dim)', marginTop: 6 }}>
-                {portion
-                  ? 'Portion gewaehlt — Name, Anzahl und Grammgewicht werden mitgespeichert.'
-                  : 'Direkte Grammeingabe — die Portionsfelder bleiben leer.'}
-              </p>
-            </div>
-          )}
-
-          {fehler && <p className="v2-feldfehler" style={{ marginTop: 10 }}>{fehler}</p>}
-        </div>
-
-        <div className="v2-modal-f">
-          <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Abbrechen</button>
-          <button type="button" className="v2-btn v2-btn-primary"
-                  disabled={!gewaehlt || laeuft} onClick={() => void hinzufuegen()}>
-            <Icon name="plus" className="v2-ic v2-ic-sm" />
-            {laeuft ? 'Fuegt hinzu …' : 'Hinzufuegen'}
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
+// ══ G-331: `HinzufuegenModal` ist ENTFERNT ═══════════════
+//
+// `[cmd]` **380 Zeilen, seit C-03** — mit eigenem Suchfeld, eigenem
+// `fetch`, eigener Trefferliste, eigener Portionswahl.
+//
+// `[cmd]` **Gemessen am 2026-09-02: ihr fehlten sechs der acht
+// Lehren** — Abbruch, G-70 (Seitensortierung), G-112 (mehrere Tags),
+// G-133 (`ohne`), G-251 (Herkunft), G-266 (Erstlauf). **Entprellen
+// und `prefs=1` hatte sie.**
+//
+// `[read]` **`FoodSuchModal` (G-320) tut dasselbe** — suchen,
+// waehlen, Menge, Live-Vorschau — **und traegt alle acht.** Es
+// schreibt nicht selbst: der Schreibweg (`art: 'position'`) bleibt
+// hier, wo er war.
+//
+// `[cmd]` **Was dabei dazukommt:** zehn Sortierwerte, Filter,
+// Treffergrund, die Naehrwertvorschau je Menge — alles, was der
+// Food-DB-Reiter kann.
+//
+// `[read]` **A-59: entfernt, nicht auskommentiert** — git holt die
+// 380 Zeilen zurueck, wenn jemand nachsehen will.
 
 /**
  * Menge aendern oder Position entfernen.

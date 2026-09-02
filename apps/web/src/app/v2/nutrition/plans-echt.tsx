@@ -28,7 +28,7 @@
 // aus wie eine Messung. Genau das war der Fall bei der
 // Health-Score-Kachel (G-135).
 import * as React from 'react'
-import { Card, Pill, Row, Ring, Sparkline } from '@lumeos/ui'
+import { Card, Pill, Row, Ring, Sparkline, Icon } from '@lumeos/ui'
 
 import type { PlanDaten, PlanKurz } from '../../../lib/nutrition/plan-lesen'
 // G-319: dieselbe Frage wie im Planner — je Plan eine.
@@ -627,6 +627,146 @@ export function WechselbefundEcht({ stand }: { stand: WechselStand }) {
  * welche Plaene es gibt, nicht was in ihnen steht. **Das Detail laedt
  * `MealPlanCard` fuer den aktiven.**
  */
+/**
+ * Die Vorschau eines Plans — G-314.
+ *
+ * **`SPEC_03` Flow 3, Schritt 3:** *,,Tap auf Plan → Plan-Vorschau"*,
+ * danach *,,Plan aktivieren"*.
+ *
+ * `[cmd]` **Der Knopf stand in der Attrappe** (`tab-plans.tsx`
+ * Z. 365) — **und war nicht gebaut**, weil die Bibliothek `PlanKurz`
+ * haelt und das Tages-Akkordeon `PlanDaten` braucht.
+ *
+ * `[cmd]` **Geloest ueber `GET ?vorschau=<id>`** — `ladePlan(planId)`
+ * nimmt den Bezeichner seit G-311, **nur der Weg dorthin fehlte.**
+ *
+ * `[read]` **Rein lesend, und der Reiter bleibt stehen** — seit
+ * G-327 gilt `?plan=` nur im Planner. **Die Vorschau setzt die
+ * Adresse nicht**, sie laedt in ein Fenster.
+ */
+function PlanVorschau({ plan, onClose }: {
+  plan: PlanKurz
+  onClose: () => void
+}) {
+  const [daten, setDaten] = React.useState<PlanDaten | null>(null)
+  const [fehler, setFehler] = React.useState<string | null>(null)
+
+  React.useEffect(() => {
+    let weg = false
+    void (async () => {
+      try {
+        const a = await fetch(`/api/nutrition/plan?vorschau=${plan.id}`)
+        const k = await a.json()
+        if (weg) return
+        if (!a.ok) { setFehler(k?.error ?? `Fehler ${a.status}`); return }
+        setDaten(k.plan as PlanDaten)
+      } catch (e) {
+        if (!weg) setFehler(e instanceof Error ? e.message : String(e))
+      }
+    })()
+    return () => { weg = true }
+  }, [plan.id])
+
+  React.useEffect(() => {
+    const auf = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', auf)
+    return () => window.removeEventListener('keydown', auf)
+  }, [onClose])
+
+  return (
+    <div
+      role="dialog" aria-modal="true" aria-label={`Vorschau: ${plan.name}`}
+      data-probe="plan-vorschau"
+      onClick={e => { if (e.target === e.currentTarget) onClose() }}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 60,
+        background: 'rgba(0,0,0,0.5)', display: 'flex',
+        alignItems: 'flex-start', justifyContent: 'center',
+        padding: '5vh 16px', overflowY: 'auto',
+      }}
+    >
+      <div style={{
+        background: 'var(--surface)', border: '1px solid var(--border)',
+        borderRadius: 8, width: '100%', maxWidth: 720, padding: 16,
+      }}>
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12,
+        }}>
+          <span style={{ fontSize: 14, fontWeight: 600 }}>{plan.name}</span>
+          <Pill>{statusText(plan.status)}</Pill>
+          <div style={{ flex: 1 }} />
+          <button type="button" className="v2-btn v2-btn-sm"
+                  onClick={onClose} aria-label="Schliessen">
+            <Icon name="x" className="v2-ic v2-ic-sm" />
+          </button>
+        </div>
+
+        {plan.description && (
+          <p className="v2-muted" style={{ fontSize: 11.5, margin: '0 0 10px' }}>
+            {plan.description}
+          </p>
+        )}
+
+        {fehler && (
+          <p style={{ fontSize: 11.5, color: 'var(--neg)' }}>{fehler}</p>
+        )}
+        {!daten && !fehler && (
+          <p className="v2-muted" style={{ fontSize: 11.5 }}>Lädt …</p>
+        )}
+
+        {daten && (
+          <>
+            {/* `[read]` **Die Zahlen zuerst** — wer entscheidet, ob er
+                einen Plan aktiviert, will wissen, wie gross er ist. */}
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
+              <Pill style={{ fontSize: 9.5 }}>{plan.wochen} Wochen</Pill>
+              <Pill style={{ fontSize: 9.5 }}>{plan.tage} Tage</Pill>
+              <Pill style={{ fontSize: 9.5 }}>{plan.positionen} Positionen</Pill>
+            </div>
+
+            {/* `[cmd]` **Die erste Woche als Beispiel** — nicht alle:
+                bei 28 Tagen waere das Fenster eine Tabelle, durch die
+                niemand scrollt. `[read]` **Die Zahl daneben sagt, was
+                nicht gezeigt wird.** */}
+            {daten.wochen.length > 0 ? (
+              <div data-probe="vorschau-tage" className="v2-col-gap" style={{ gap: 4 }}>
+                {daten.wochen[0].tage.map(tag => (
+                  <div key={tag.id} style={{
+                    display: 'flex', gap: 8, fontSize: 11.5,
+                    padding: '4px 0', borderBottom: '1px solid var(--border)',
+                  }}>
+                    <span className="v2-num v2-dim" style={{ width: 76 }}>
+                      {tag.plan_date}
+                    </span>
+                    <span style={{ flex: 1, minWidth: 0 }}>
+                      {tag.eintraege.length === 0
+                        ? <span className="v2-dim">— nichts geplant</span>
+                        : tag.eintraege.map(e => e.bezeichnung).join(' · ')}
+                    </span>
+                    <span className="v2-num v2-dim" style={{ width: 44, textAlign: 'right' }}>
+                      {tag.eintraege.length}
+                    </span>
+                  </div>
+                ))}
+                {daten.wochen.length > 1 && (
+                  <p className="v2-muted" style={{ fontSize: 10.5, marginTop: 6 }}>
+                    Woche 1 von {daten.wochen.length} — die übrigen stehen
+                    im Planner, sobald der Plan gewählt ist.
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p className="v2-muted" style={{ fontSize: 11.5 }}>
+                Dieser Plan hat noch keine Wochen.
+              </p>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export function PlanBibliothekEcht({
   plaene, aktivId, heute, onGeaendert,
 }: {
@@ -639,6 +779,8 @@ export function PlanBibliothekEcht({
 }) {
   // G-319: welcher Plan wird gerade aktiviert?
   const [aktiviert, setAktiviert] = React.useState<string | null>(null)
+  // G-314: welcher Plan wird gerade angesehen?
+  const [vorschau, setVorschau] = React.useState<PlanKurz | null>(null)
   // `[read]` **Der laufende Plan** — er wird pausiert, und die Frage
   // sagt es vorher (G-309).
   const laufender = plaene.find(p => p.status === 'active') ?? null
@@ -709,6 +851,17 @@ export function PlanBibliothekEcht({
                   `[read]` **Deshalb fuehrt die Bibliothek die Frage
                   jetzt selbst** — dieselbe `AktivierenFrage` wie im
                   Planner, je Kachel eine. */}
+              {/* ══ G-314: Vorschau vor dem Aktivieren ══════════
+                  **Flow 3 Schritt 3.** `[read]` **An JEDER Kachel**,
+                  auch am laufenden Plan — nachsehen darf man immer.
+                  `[read]` **Der Reiter bleibt stehen:** die Vorschau
+                  laedt in ein Fenster, sie setzt keine Adresse
+                  (G-327). */}
+              <button type="button" className="v2-btn v2-btn-sm"
+                      data-probe="vorschau-knopf"
+                      onClick={e => { e.stopPropagation(); setVorschau(p) }}>
+                Vorschau
+              </button>
               {p.status !== 'active' && aktiviert !== p.id && (
                 <button type="button" className="v2-btn v2-btn-primary v2-btn-sm"
                         onClick={() => setAktiviert(p.id)}>
@@ -727,6 +880,11 @@ export function PlanBibliothekEcht({
             </Card>
           )
         })}
+
+      {/* G-314: das Vorschaufenster — eines fuer alle Kacheln. */}
+      {vorschau && (
+        <PlanVorschau plan={vorschau} onClose={() => setVorschau(null)} />
+      )}
       </div>
     </div>
   )

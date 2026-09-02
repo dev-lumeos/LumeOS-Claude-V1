@@ -12,7 +12,9 @@ const ohneKommentare = (f: string) => lies(f)
   .replace(/\/\*[\s\S]*?\*\//g, '')
   .replace(/^[ \t]*\/\/.*$/gm, '')
 
-const DIALOG = 'src/app/v2/nutrition/mahlzeiten.tsx'
+// G-331: die Trefferliste stand in `mahlzeiten.tsx` (`HinzufuegenModal`).
+// Seit dem Umbau steht sie im geteilten Modal; `DIALOG` ist entfallen.
+const MODAL = 'src/app/v2/nutrition/food-such-modal.tsx'
 
 // ══ G-93 ═══════════════════════════════════════════════════════════
 //
@@ -27,40 +29,52 @@ const DIALOG = 'src/app/v2/nutrition/mahlzeiten.tsx'
 // ausgeliefert.** Ausgeliefert ist `mahlzeiten.tsx` (ansicht.tsx:49).
 
 test('G-93: der laufende Dialog zeigt den Anzeigenamen', () => {
-  const s = ohneKommentare(DIALOG)
+  // ══ BERICHTIGT IN G-331 ═════════════════════════
+  //
+  // `[cmd]` **Hier wurde `mahlzeiten.tsx` geprueft** — dort stand
+  // `HinzufuegenModal` mit eigener Trefferliste.
+  //
+  // `[cmd]` **G-331 hat sie entfernt** (380 Zeilen, sechs von acht
+  // Lehren fehlten) — **das Tagebuch ruft jetzt `FoodSuchModal`.**
+  //
+  // `[read]` **Was G-93 sichert, gilt unveraendert:** die Anzeige
+  // zeigt `name_display_de`, **weil 5.014 von 7.140 Eintraegen einen
+  // abweichenden tragen.** Nur die Datei hat gewechselt.
+  const s = ohneKommentare(MODAL)
 
-  // `[read]` **Die Wirkung pruefen, nicht das Wort** — nicht "kommt
-  // `name_display_de` vor", sondern: steht an der ANZEIGESTELLE der
-  // Rueckfall? Ein blosses Vorkommen erfuellte auch ein Import.
-  const treffer = /<span className="v2-wahl-titel">\{([^}]+)\}<\/span>/.exec(s)
-  assert.ok(treffer, 'Die Trefferzeile wurde nicht gefunden (G-93).')
-  assert.match(treffer[1], /name_display_de \|\| f\.name_de/,
-    'Die Trefferliste zeigt den Rohnamen statt des Anzeigenamens (G-93).')
+  // `[read]` **Die Wirkung, nicht das Wort** — an der ANZEIGESTELLE
+  // muss der Rueckfall stehen. **Ein blosses Vorkommen erfuellte auch
+  // ein Import.**
+  const zeile = /\{f\.name_display_de \|\| f\.name_de\}/.exec(s)
+  assert.ok(zeile, 'Die Trefferliste zeigt den Anzeigenamen nicht (G-93).')
 
-  // `[cmd]` **`v2-insight-title` kommt zweimal vor** — Zeile 204 traegt
-  // eine Fehlermeldung, Zeile 773 den Namen. `[read]` **Die erste
-  // Fassung nahm `exec` und traf die Fehlermeldung** — dieselbe Klasse
-  // wie „im zu grossen Heuhaufen suchen". **Deshalb alle Vorkommen,
-  // und eines muss den Namen zeigen.**
-  const koepfe = Array.from(
-    s.matchAll(/<div className="v2-insight-title">\{([^}]+)\}<\/div>/g))
-  assert.ok(koepfe.length >= 1, 'Kein Auswahlkopf gefunden (G-93).')
-  assert.ok(
-    koepfe.some(m => /name_display_de \|\| gewaehlt\.name_de/.test(m[1])),
-    'Kein Auswahlkopf zeigt den Anzeigenamen — nur der Rohname (G-93).')
+  // Und der Kopf des gewaehlten Lebensmittels ebenso.
+  assert.match(s, /\{gewaehlt\.name_display_de \|\| gewaehlt\.name_de\}/,
+    'Der Auswahlkopf zeigt den Rohnamen statt des Anzeigenamens (G-93).')
 })
 
-test('G-93: das Suchfeld behaelt den Rohnamen', () => {
+test('G-93/G-265: der Anzeigename wird nicht zum Suchbegriff', () => {
   // `[cmd]` **G-265, belegt in add-und-plaene.test.ts:38:**
   // `name_display_de` als Suchbegriff liefert **0 Treffer** — die
   // Klammerzusaetze stehen so nicht im Index.
   //
-  // `[read]` **Deshalb ist hier der Rohname richtig.** Ein Waechter,
-  // der ueberall `name_display_de` verlangt, wuerde die Suche
-  // kaputtmachen — die Unterscheidung ist Anzeige gegen Suchbegriff.
-  const s = ohneKommentare(DIALOG)
-  assert.match(s, /setFrage\(f\.name_de\)/,
-    'Das Suchfeld bekommt nicht mehr den Rohnamen — die Suche findet dann nichts (G-93/G-265).')
+  // ══ BERICHTIGT IN G-331 ═════════════════════════
+  //
+  // `[cmd]` **Hier stand `setFrage(f.name_de)`** — das alte Modal
+  // schrieb den Namen ins Suchfeld zurueck, und der Waechter sicherte,
+  // dass es der ROHNAME war.
+  //
+  // `[cmd]` **`FoodSuchModal` schreibt gar nichts zurueck** — die
+  // Auswahl wechselt in den Mengenschritt, das Suchfeld bleibt
+  // unberuehrt.
+  //
+  // `[read]` **Damit ist die Gefahr weg, nicht nur behoben:** ohne
+  // Rueckschreiben kann kein Anzeigename zum Suchbegriff werden.
+  // **Der Waechter prueft jetzt die Abwesenheit.**
+  const s = ohneKommentare(MODAL)
+  assert.doesNotMatch(s, /setLage\([^)]*suche: (f|gewaehlt)\.name/,
+    'Das Modal schreibt einen Namen ins Suchfeld — mit dem '
+    + 'Anzeigenamen faende die naechste Suche 0 Treffer (G-265).')
 })
 
 // ══ A-62 ═══════════════════════════════════════════════════════════

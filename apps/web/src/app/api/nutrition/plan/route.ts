@@ -32,7 +32,7 @@ import {
   wocheKopierenSchema,
 } from '../../../../lib/nutrition/plan-write'
 // G-309: die Ghost Entries eines Tages — Flow 3, Schritt 7.
-import { ladeGhostEintraege } from '../../../../lib/nutrition/plan-lesen'
+import { ladeGhostEintraege, ladePlan } from '../../../../lib/nutrition/plan-lesen'
 // G-274: der Bestaetigungsweg — Flow 4.
 import {
   bestaetigenSchema,
@@ -75,9 +75,35 @@ function ungueltig(meldung: string, details?: unknown) {
  * Bestaetigen**, und dafuer gibt es `POST art=bestaetigen` (G-274).
  */
 export async function GET(request: NextRequest) {
+  // ══ G-314: die Vorschau eines beliebigen Plans ════════════
+  //
+  // **`SPEC_03` Flow 3, Schritt 3:** *,,Tap auf Plan →
+  // Plan-Vorschau"*, danach *,,Plan aktivieren"*.
+  //
+  // `[cmd]` **`ladePlan(planId)` nimmt seit G-311 einen Bezeichner**
+  // — der Leseweg stand, nur der Weg dorthin fehlte.
+  //
+  // `[read]` **Rein lesend** — die Vorschau zeigt, was ein Plan
+  // enthaelt, **bevor** man ihn aktiviert. **Aktiviert wird ueber
+  // `POST art=aktivieren`**, nicht hier.
+  //
+  // `[read]` **Und die Zeilensicherheit gilt:** `ladePlan` liest ueber
+  // die Sitzung, ein fremder Plan liefert nichts.
+  const vorschau = request.nextUrl.searchParams.get('vorschau')
+  if (vorschau) {
+    if (!/^[0-9a-f-]{36}$/i.test(vorschau)) {
+      return ungueltig('vorschau muss eine UUID sein.')
+    }
+    try {
+      return NextResponse.json({ plan: await ladePlan(vorschau) })
+    } catch (error) {
+      return errorResponse(error)
+    }
+  }
+
   const datum = request.nextUrl.searchParams.get('datum')
   if (!datum || !/^\d{4}-\d{2}-\d{2}$/.test(datum)) {
-    return ungueltig('Erwartet ?datum=YYYY-MM-DD.')
+    return ungueltig('Erwartet ?datum=YYYY-MM-DD oder ?vorschau=<uuid>.')
   }
   try {
     return NextResponse.json({ eintraege: await ladeGhostEintraege(datum) })

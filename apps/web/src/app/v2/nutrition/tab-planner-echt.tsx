@@ -75,7 +75,9 @@ import { PlanModal } from './plan-modal'
 import { bearbeitbarkeit, herkunftVon }
   from '../../../lib/nutrition/plan-lage'
 import { useRouter } from 'next/navigation'
-import { Card, Icon, Pill, InEntwicklungKnopf } from '@lumeos/ui'
+// G-331: `InEntwicklungKnopf` ist weg — die letzte Attrappe im
+// Planner war ueberholt (der Schreibpfad steht seit C-372).
+import { Card, Icon, Pill } from '@lumeos/ui'
 
 // `[cmd]` **NUR TYPEN AUS `plan-lesen.ts`.** Die Datei importiert
 // `next/headers`; ein WERT-Import von hier zoege das Server-I/O ins
@@ -367,16 +369,29 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
           Eintraegen — angelegt wird er hier, gefuellt aus deinen Rezepten
           oder direkt aus der Lebensmitteldatenbank.
         </p>
-        <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
-          <InEntwicklungKnopf
-            titel="Neuen Plan anlegen"
-            className="v2-btn v2-btn-primary"
-            grund={'C-150 hat die Tabellen geliefert; der Schreibpfad im '
-              + 'Browser ist nicht Teil dieses Auftrags (G-97).'}
-          >
-            <Icon name="plus" className="v2-ic v2-ic-sm" /> Neuen Plan anlegen
-          </InEntwicklungKnopf>
-        </div>
+        {/* ══ G-331 / G-305 Punkt 2+3: die Attrappe war ueberholt ══
+            `[cmd]` **Hier stand ein `InEntwicklungKnopf` mit dem
+            Grund *,,der Schreibpfad im Browser ist nicht Teil dieses
+            Auftrags (G-97)"*.**
+
+            `[cmd]` **Gemessen am 2026-09-02: der Schreibpfad steht.**
+            `planMitWochenAnlegen` (C-372) legt Plan, Wochen und Tage
+            an, **und `NeuerPlanForm` ruft ihn** — in der Werkbank,
+            zwei Bildschirmzeilen weiter oben.
+
+            `[read]` **Ein Knopf, der falsch informiert, ist
+            schlimmer als keiner** (G-305). **Der Verweis fuehrt
+            dorthin, wo es geht**, statt eine Sackgasse zu
+            behaupten. */}
+        <p className="v2-hinweis" data-probe="plan-anlegen-verweis"
+           style={{ marginTop: 12 }}>
+          <Icon name="plus" className="v2-ic v2-ic-sm" />
+          <span>
+            Einen Plan legst du in der <strong>Werkbank</strong> oben
+            an — dort steht <em>Neuer Plan</em> mit Name, Zielen und
+            der Wochenzahl.
+          </span>
+        </p>
       </Card>
     )
   }

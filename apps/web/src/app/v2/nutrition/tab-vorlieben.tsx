@@ -61,6 +61,10 @@ import type {
   VorliebenStand,
 } from '../../../lib/nutrition/vorlieben-lesen'
 import type { NutritionFoodSearchRow } from '../../../lib/nutrition/food-search'
+// G-331: dieselbe Mechanik wie Food DB und die Modale —
+// aber OHNE Vorlieben, siehe unten.
+import { useFoodSuche, LEERE_LAGE }
+  from '../../../lib/nutrition/food-suche-hook'
 import { vorliebenSpeichern, type VorliebeEingabe } from './vorlieben-aktionen'
 import { daumenSpeichern } from './daumen-aktion'
 
@@ -367,38 +371,28 @@ export function VorliebenTab({ d }: { d: VorliebenDaten }) {
   // `prefs=1`: wer ein Lebensmittel abwerten will, muss es finden
   // koennen; eine gefilterte Suche versteckte genau die Kandidaten.
   const [foodSuche, setFoodSuche] = React.useState('')
-  const [foodTreffer, setFoodTreffer] = React.useState<NutritionFoodSearchRow[]>([])
-  const [foodSuchFehler, setFoodSuchFehler] = React.useState<string | null>(null)
-  const foodAbbruch = React.useRef<AbortController | null>(null)
-
-  React.useEffect(() => {
-    const frage = foodSuche.trim()
-    if (frage.length < 2) {
-      setFoodTreffer([])
-      setFoodSuchFehler(null)
-      return
-    }
-    const zeit = setTimeout(async () => {
-      foodAbbruch.current?.abort()
-      const ctrl = new AbortController()
-      foodAbbruch.current = ctrl
-      try {
-        const a = await fetch(
-          `/api/nutrition/foods?q=${encodeURIComponent(frage)}&limit=6`,
-          { signal: ctrl.signal },
-        )
-        if (!a.ok) throw new Error(`HTTP ${a.status}`)
-        const daten = await a.json() as { foods?: NutritionFoodSearchRow[] }
-        setFoodTreffer(daten.foods ?? [])
-        setFoodSuchFehler(null)
-      } catch (e) {
-        if (e instanceof Error && e.name === 'AbortError') return
-        setFoodTreffer([])
-        setFoodSuchFehler(e instanceof Error ? e.message : String(e))
-      }
-    }, 250)
-    return () => clearTimeout(zeit)
-  }, [foodSuche])
+  // ══ G-331: die Suche kommt aus dem Hook ═════════════════
+  //
+  // `[cmd]` **Hier stand ein eigener `fetch` mit Entprellen und
+  // Abbruch.** `[cmd]` **Gemessen am 2026-09-02: vier der acht
+  // Lehren fehlten** — G-70 (Seitensortierung), G-133 (`ohne`),
+  // G-251 (Herkunft), G-266 (Erstlauf).
+  //
+  // ══ UND EINE GILT HIER NICHT ══════════════════════
+  //
+  // `[cmd]` **`prefs=1` waere hier falsch** — **diese Suche setzt
+  // Vorlieben** (`foodSetzen(…, 'liked')`), sie liest nicht den
+  // gefilterten Katalog.
+  //
+  // `[read]` **Mit den Vorlieben angewandt versteckte der Filter
+  // genau die Lebensmittel, die man aufnehmen will:** wer Nuesse als
+  // Allergie gesetzt hat, faende keine Nuss mehr, um sie zu
+  // berichtigen. **Deshalb `vorlieben = false`.**
+  const foodLage = React.useMemo(
+    () => ({ ...LEERE_LAGE, suche: foodSuche }), [foodSuche])
+  const {
+    zeilen: foodTreffer, fehler: foodSuchFehler,
+  } = useFoodSuche(foodLage, 6, null, 2, false)
 
   const foodItems = stand.items.filter(i => i.target_type === 'food')
 
@@ -596,8 +590,11 @@ export function VorliebenTab({ d }: { d: VorliebenDaten }) {
                         disabled={schonGesetzt}
                         onClick={() => {
                           foodSetzen(t.id, name, t.bls_code, 'liked')
+                          // `[cmd]` **G-331: `setFoodTreffer([])` ist
+                          // weg** — der Hook fuehrt die Liste. **Ein
+                          // leeres Suchfeld faellt unter die
+                          // Mindestlaenge, und er raeumt selbst.**
                           setFoodSuche('')
-                          setFoodTreffer([])
                         }}
                         title={schonGesetzt ? 'Schon gesetzt — unten aendern' : 'Als +100 mag ich aufnehmen'}
                         style={{

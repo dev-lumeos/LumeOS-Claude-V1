@@ -98,7 +98,9 @@ export const LEERE_LAGE: SuchLage = {
  * lässt sich nur über ihren Wortlaut prüfen, nicht über ihre
  * Wirkung — und dann prüft der Wächter das Wort.
  */
-export function sucheParams(lage: SuchLage, grenze: number): URLSearchParams {
+export function sucheParams(
+  lage: SuchLage, grenze: number, vorlieben = true,
+): URLSearchParams {
   const p = new URLSearchParams({
     q: lage.suche,
     limit: String(grenze),
@@ -106,11 +108,24 @@ export function sucheParams(lage: SuchLage, grenze: number): URLSearchParams {
     // G-70: nur was die Datenbank kann; der Rest wird auf der Seite
     // sortiert.
     sort: serverSort(lage.sortierung),
-    // G-154: die Vorlieben sind die Konfiguration dieses Katalogs.
-    // `[read]` **Die Kennung kommt serverseitig aus der Sitzung**,
-    // nicht aus der Adresse.
-    prefs: '1',
   })
+  // ══ G-154 / G-331: die Vorlieben gelten — fast immer ════════
+  //
+  // `[read]` **Die Vorlieben sind die Konfiguration dieses Katalogs.**
+  // **Die Kennung kommt serverseitig aus der Sitzung**, nicht aus der
+  // Adresse.
+  //
+  // `[cmd]` **G-331: eine Suche darf sie NICHT anwenden** — die im
+  // Vorlieben-Reiter. **Dort sucht man, um eine Vorliebe zu SETZEN**
+  // (`foodSetzen(t.id, name, t.bls_code, 'liked')`).
+  //
+  // `[read]` **Mit `prefs=1` versteckte der Filter genau die
+  // Lebensmittel, die man aufnehmen will** — wer Nuesse als Allergie
+  // gesetzt hat, faende keine Nuss mehr, um sie zu berichtigen.
+  //
+  // `[read]` **Deshalb ein Schalter mit `true` als Vorgabe:** wer ihn
+  // nicht setzt, bekommt das richtige Verhalten.
+  if (vorlieben) p.set('prefs', '1')
   if (lage.kategorie) p.set('category', lage.kategorie)
   // G-112: alle gewählten Tags, kommagetrennt und sortiert — sonst
   // ist dieselbe Auswahl zweimal eine andere Adresse.
@@ -156,6 +171,8 @@ export function useFoodSuche(
   grenze: number,
   start: NutritionFoodSearchPayload | null = null,
   mindestens = 0,
+  /** G-331: `false` nur im Vorlieben-Reiter — siehe `sucheParams`. */
+  vorlieben = true,
 ): SuchErgebnis {
   const [payload, setPayload] = React.useState(start)
   const [laeuft, setLaeuft] = React.useState(false)
@@ -171,7 +188,8 @@ export function useFoodSuche(
   // Die Filter als Zeichenkette — ein `Set` ist bei jedem Rendern ein
   // neues Objekt und würde den Effekt endlos auslösen.
   const schluessel = React.useMemo(
-    () => sucheParams(lage, grenze).toString(), [lage, grenze])
+    () => sucheParams(lage, grenze, vorlieben).toString(),
+    [lage, grenze, vorlieben])
 
   React.useEffect(() => {
     if (ersterLauf.current) { ersterLauf.current = false; return }
