@@ -7,8 +7,6 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: C-386
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.foods]
 zahlen:
@@ -54,3 +52,17 @@ sondern der Name selbst.** **Der Punkt bleibt offen.**
 
 **Mitbeauftragt mit C-388 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: trennbar, aber nicht global
+
+`[cmd]` **Die drei Saftfamilien sind ueber BLS-Codes trennbar:**
+**100 roh, 600 Saft, bei Orange 700 Nektar.**
+
+`[cmd]` **Aber global ist 600 nicht eindeutig Saft:** **3 von 53
+Obst-600-Zeilen sind Smoothies.**
+
+`[read]` **Die Regel laesst sich nicht allgemein ausrollen** —
+**C-35 nannte drei Familien, nicht alle.**
+
+`[read]` **Der Umfang steht damit: `F201`, `F603`, `F310` — drei
+Familien, keine Regel.**

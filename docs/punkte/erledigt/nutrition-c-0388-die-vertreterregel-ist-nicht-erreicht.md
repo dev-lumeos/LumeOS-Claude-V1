@@ -9,6 +9,8 @@ kind_von: C-386
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.foods]
 zahlen:
@@ -181,4 +183,46 @@ processing_level-Aenderung wurde nicht abgeleitet.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator.**
+
+### Die Zahl, die die Frage beantwortet
+
+`[cmd]` **Von 403 gebundenen Familien wurde genau EINE im
+Suchprotokoll ausgewaehlt.** **402 nie.**
+
+`[read]` **Damit ist die Frage nach dem Nutzen beantwortet:** **403
+Familien zu kuratieren waere Arbeit fuer einen Fall.**
+
+`[read]` **Ich hatte gefragt, ob es sich lohnt** — **er hat es
+gemessen statt geschaetzt.**
+
+### Der Aliasweg taugt nicht als Vertretermodell
+
+`[cmd]` **Er taugt fuer konkrete Suchbegriffe** — `reis` auf
+`C352000`.
+
+`[read]` **Aber nicht als Familien-Vertretermodell:** **ein Alias
+zeigt auf einen Eintrag, kein Vertreter auf eine Gruppe.**
+
+`[read]` **Damit ist C-388 zu Ende gemessen:** **kein vierter
+Regelfall, kein tragfaehiger Kurationsweg, und kein messbarer
+Nutzen.** **Der Punkt schliesst.**
+
+### C-389 — trennbar, aber nicht global
+
+`[cmd]` **Die drei Saftfamilien sind ueber BLS-Codes trennbar:**
+**100 roh, 600 Saft, bei Orange 700 Nektar.**
+
+`[cmd]` **Aber global ist 600 nicht eindeutig Saft:** **3 von 53
+Obst-600-Zeilen sind Smoothies.**
+
+`[read]` **Das ist der Grund, warum die Regel nicht allgemein
+ausgerollt werden kann** — **und C-35 nannte genau drei Familien,
+nicht alle.**
+
+`[read]` **Fuer `F201`, `F603` und `F310` traegt der Code die
+Trennung.** **Der Punkt bleibt offen, aber sein Umfang steht: drei
+Familien, keine Regel.**
+
+**Abgenommen.**
+
