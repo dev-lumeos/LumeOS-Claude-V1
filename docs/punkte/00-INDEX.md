@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 213 |
-| `laufend_codex` | 2 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 257 |
-| **gesamt** | **475** |
+| **gesamt** | **476** |
 
 ## medical — 43
 
@@ -59,9 +59,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 207
+## nutrition — 208
 
-### beauftragbar — 206
+### beauftragbar — 207
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -147,6 +147,7 @@
 | `C-394` | befund | mittel | [`test-user` hat keine Slots](erledigt/nutrition-c-0394-test-user-hat-keine-slots.md) | erledigt | — | G-334 |
 | `C-396` | feature | hoch | [`meal_plans` traegt keine Struktur](erledigt/nutrition-c-0396-meal-plans-traegt-keine-struktur.md) | erledigt | — | — |
 | `C-397` | befund | hoch | [die gelieferten Plaene haben keine Slots](erledigt/nutrition-c-0397-die-gelieferten-plaene-haben-keine-slots.md) | erledigt | — | C-400 |
+| `C-398` | befund | hoch | [- `CAROTPAXB` fehlt an 1.983 Lebensmitteln](laufend_codex/nutrition-c-0398-carotpaxb-fehlt-an-1983-lebensmitteln.md) | laeuft (codex) | — | — |
 | `C-399` | befund | hoch | [ein Schnitt ohne einen einzigen Wert](erledigt/nutrition-c-0399-ein-schnitt-ohne-einen-einzigen-wert.md) | erledigt | — | G-341 |
 | `C-400` | befund | mittel | [- eine Woche zuviel im Buddy-Plan](erledigt/nutrition-c-0400-eine-woche-zuviel-im-buddy-plan.md) | erledigt | — | C-401 |
 | `C-401` | feature | mittel | [der Probe-Eintrag und die Laufzeit](laufend_codex/nutrition-c-0401-der-probe-eintrag-und-die-laufzeit.md) | vorbereitet (codex) | — | — |
@@ -227,7 +228,7 @@
 | `G-291` | feature | hoch | [TrendChart fehlt im Insights-Reiter](erledigt/nutrition-g-0291-trendchart-fehlt-im-insights-reiter.md) | erledigt | — | — |
 | `G-292` | feature | hoch | [MicroFlagsList — die Warnungen werden nicht gezeigt](erledigt/nutrition-g-0292-microflagslist-die-warnungen-werden-nicht-gezeigt.md) | erledigt | — | — |
 | `G-293` | feature | mittel | [MacroDetail — die Fetthierarchie fehlt](erledigt/nutrition-g-0293-macrodetail-die-fetthierarchie-fehlt.md) | erledigt | — | — |
-| `G-294` | feature | mittel | [CrossModuleInsights — Goals bekommt nichts](erledigt/nutrition-g-0294-crossmoduleinsights-goals-bekommt-nichts.md) | erledigt | — | — |
+| `G-294` | feature | mittel | [CrossModuleInsights — Goals bekommt nichts](erledigt/nutrition-g-0294-crossmoduleinsights-goals-bekommt-nichts.md) | erledigt | — | C-398 |
 | `G-295` | feature | mittel | [Die Heatmap wurde entfernt, und die Spec verlangt sie](erledigt/nutrition-g-0295-die-heatmap-wurde-entfernt-und-die-spec-verlangt-sie.md) | erledigt | — | G-297 |
 | `G-297` | befund | mittel | [die Tagesdeckung nimmt zu viel Platz](erledigt/nutrition-g-0297-die-tagesdeckung-nimmt-zu-viel-platz.md) | erledigt | — | — |
 | `G-298` | feature | hoch | [Plaene lassen sich ansehen, nicht aendern](erledigt/nutrition-g-0298-plaene-lassen-sich-ansehen-nicht-aendern.md) | erledigt | — | C-369, G-300, G-306 |

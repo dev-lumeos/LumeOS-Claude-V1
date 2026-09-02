@@ -96,6 +96,44 @@ anderen nicht.**
 `[read]` **Damit ist Loeschen erstmals verantwortbar:** **was
 verschwindet, bleibt im Manifest nachweisbar.**
 
+## Der Fund, der den Plan geaendert hat
+
+`[cmd]` **Gemessen 2026-09-02: sechs Kettenschritte und Produktcode
+lesen aus `backup/`:**
+
+    132_substance_alias_bridge.ts    backup/kimi-research/
+    133_kimi_rules.ts                backup/kimi-research/
+    134_substance_catalog.ts         backup/kimi-research/
+    142_kimi_wave1_pharmacology.ts   backup/kimi-research/
+    146_medications_katalog.ts       backup/kimi-research/
+    101_training_seed.sql            backup/legacy-v2/training/
+    080_public_bereinigen.sql        backup/schema/
+    apps/web/.../evidenz/registry.ts backup/kimi-research/
+
+`[read]` **Das sind keine Sicherungen, das sind Datenquellen.**
+
+`[read]` **Ein Probelauf haette 3,43 GiB nach `_temp` verschoben** —
+**darunter `kimi-research` und `legacy-v2`.** `[read]` **Der naechste
+Kettenlauf waere gescheitert.**
+
+`[cmd]` **Und `referenz/lumeos-2026/` existiert mit 91.290
+Dateien** — **das Vorgaengerrepo liegt bereits richtig, `legacy-v2`
+ist etwas anderes.**
+
+## Was angelegt wurde
+
+`[cmd]` **`backup/00-LIESMICH.md`** — die Regeln, mit den Quellen
+zuerst.
+`[cmd]` **`backup/quellen-NICHT-RAEUMEN.md`** — die sieben
+Fundstellen.
+`[cmd]` **`_temp/` mit eigener Liesmich:** *,,Kein Agent loescht.
+Kein Orchestrator loescht. Tom entsorgt."*
+`[cmd]` **Und die Ordner `vollsicherung/`, `arbeitsstaende/`,
+`nachweise/`, `_manifests/`.**
+
+`[read]` **Nichts wurde verschoben** — **die Regeln stehen, der
+Umzug ist ein eigener Auftrag.**
+
 ## Was zuerst zu klaeren ist
 
 `[read]` **A-39 sagt: `backup/` wird nicht geraeumt, solange Agenten
