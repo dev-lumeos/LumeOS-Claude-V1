@@ -8,6 +8,9 @@
 // aus v2.css leisten dasselbe und sind an einer Stelle beschrieben.
 import * as React from 'react'
 // G-72: der Verweis auf die Vorlieben.
+// G-332: ein Formular, zwei Orte — derselbe Baustein wie Preferences.
+import { SlotsFormular } from '../nutrition/slots-formular'
+import type { MahlzeitSlot } from '../../../lib/nutrition/slots-lage'
 import Link from 'next/link'
 import type { Route } from 'next'
 import { useTranslations } from 'next-intl'
@@ -70,10 +73,17 @@ type Zustand =
   | { art: 'fehler'; text: string; felder?: Record<string, string> }
 
 export function ProfilFormular({
-  start, ladefehler,
+  start, ladefehler, slots = [],
 }: {
   start: StoredProfile
   ladefehler: string | null
+  /**
+   * G-332: die Mahlzeiten-Slots (C-392).
+   *
+   * `[read]` **Derselbe Baustein wie in Preferences** — *„Ein
+   * Formular, zwei Orte."* **Leer heisst: noch keine gesetzt.**
+   */
+  slots?: MahlzeitSlot[]
 }) {
   // A-14: zwei Namensraeume — die Seite und das Allgemeine.
   const t = useTranslations('Einstellungen')
@@ -396,21 +406,37 @@ export function ProfilFormular({
                 `[read]` **Deshalb ein Verweis, kein zweites Feld:**
                 der Ort ist von hier aus erreichbar, **die Einstellung
                 bleibt an einer Stelle.** */}
-            <Card title="Mahlzeitenstruktur"
-                  sub="wie viele Mahlzeiten Tagebuch und Planner zeigen">
-              <p className="v2-hinweis" data-probe="struktur-verweis"
-                 style={{ borderTop: 0, paddingTop: 0, margin: 0 }}>
-                <Icon name="nutrition" className="v2-ic v2-ic-sm" />
-                <span>
-                  Hauptmahlzeiten, Snacks und Vorkochen stehen bei den{' '}
-                  <Link href={'/v2/nutrition?tab=prefs' as Route}>
-                    Ernährungs-Vorlieben
-                  </Link>{' '}
-                  — dort gehören sie hin, weil sie mit Allergien und
-                  Ausschlüssen zusammen gelesen werden.
-                </span>
-              </p>
-            </Card>
+            {/* ══ G-332: dasselbe Formular wie in Preferences ═════
+                `[cmd]` **Hier stand ein VERWEIS** (G-72) — weil die
+                Mahlzeitenzahlen in `food_preferences` lagen und
+                dieses Formular nach `user_profiles` schreibt. **Zwei
+                Formulare auf dieselbe Spalte wären zwei
+                Schreibwege.**
+
+                `[cmd]` **Mit `meal_slots` (C-392) fällt das weg** —
+                eine eigene Tabelle, ein eigener Schreibweg
+                (`slotsSpeichern`). **Der Auftrag sagt es:** *„Ein
+                Formular, zwei Orte — nicht zwei Formulare."*
+
+                `[read]` **Es ist derselbe Baustein**, nicht eine
+                Kopie: `SlotsFormular` steht einmal und wird zweimal
+                gerufen. */}
+            <SlotsFormular start={slots} />
+
+            {/* `[read]` **Hauptmahlzeiten, Snacks und Vorkochen
+                bleiben bei den Vorlieben** (G-72) — sie liegen in
+                `food_preferences` und werden mit Allergien zusammen
+                gelesen. **Der Verweis bleibt deshalb stehen.** */}
+            <p className="v2-hinweis" data-probe="struktur-verweis"
+               style={{ fontSize: 11 }}>
+              <Icon name="nutrition" className="v2-ic v2-ic-sm" />
+              <span>
+                Hauptmahlzeiten, Snacks und Vorkochen stehen bei den{' '}
+                <Link href={'/v2/nutrition?tab=prefs' as Route}>
+                  Ernährungs-Vorlieben
+                </Link>.
+              </span>
+            </p>
 
             {/* Nur bei `female`. Der Block wird AUSGEBLENDET, nicht
                 geleert: `werte` behaelt die Zeitraeume, und das Formular

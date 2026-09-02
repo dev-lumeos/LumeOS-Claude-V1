@@ -77,6 +77,7 @@ import { MealPlansTab } from './tab-plans'
 // G-65: derselbe Tab mit echten Daten.
 // G-72: die Reihen aus den Vorlieben.
 import type { Slot } from '../../../lib/nutrition/plan-model'
+import type { MahlzeitSlot } from '../../../lib/nutrition/slots-lage'
 import { VorliebenTab, type VorliebenDaten } from './tab-vorlieben'
 import { NutritionPlannerTab } from './tab-planner'
 // G-97: der Planner mit echten Daten (C-150).
@@ -147,7 +148,7 @@ export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, lueckenGesamt = null, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
   planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
   wechsel = LEERER_WECHSELSTAND,
-  istAdmin = false, slots = null, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null, rezepte = null, allePlaene = [],
+  istAdmin = false, slots = null, mahlzeitSlots = [], foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null, rezepte = null, allePlaene = [],
   offeneAktionen = null, sitzung = null,
   unvertraeglichkeiten = [],
 }: {
@@ -188,6 +189,8 @@ export async function TagebuchAnsicht({
    * auf ihre Vorlage zurueck, statt leer zu bleiben.
    */
   slots?: Slot[] | null
+  /** G-332: die benannten Slots aus `meal_slots` (C-392). */
+  mahlzeitSlots?: MahlzeitSlot[]
   /** G-97: der Wochenplan, wenn der Planner-Tab gezeigt wird. */
   plan?: PlanDaten | null
   /** G-101: Mikronaehrstoffe und Schwellenunterschreitungen. */
@@ -480,7 +483,7 @@ export async function TagebuchAnsicht({
         {/* Die Mahlzeitenkarten der Vorlage — Anzeige wie dort,
             Bearbeitung ueber `+` und `···`. Ersetzt das Formular aus
             C-03, das je Zeile ein Eingabefeld hatte. */}
-        <Mahlzeiten datum={datum} slots={slots} />
+        <Mahlzeiten datum={datum} slots={slots} mahlzeitSlots={mahlzeitSlots} />
         </div>
 
         {/* ---------- Rechte Spalte, Reihenfolge der Vorlage ----------

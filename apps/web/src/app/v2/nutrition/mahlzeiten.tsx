@@ -33,17 +33,20 @@ import { GhostEintragKarte, type GhostEintrag } from './ghost-eintrag'
 // G-331: dasselbe Suchmodal wie Planner (G-320), Rezept (G-323)
 // und Ghost-Eintrag (G-329) — keine fuenfte Suche.
 import { FoodSuchModal } from './food-such-modal'
+// G-332: die benannten Slots (C-392) und ihre Zuordnung.
+import { slotFuerZeit, slotFuerTyp, KATEGORIE_TEXT, type MahlzeitSlot }
+  from '../../../lib/nutrition/slots-lage'
 
 /** Die Slots der Vorlage, in ihrer Reihenfolge. */
-const SLOT_LABEL: Record<MealType, string> = {
-  breakfast: 'Breakfast',
-  lunch: 'Lunch',
-  dinner: 'Dinner',
-  snack: 'Snack',
-  pre_workout: 'Pre-workout',
-  post_workout: 'Post-workout',
-  other: 'Other',
-}
+// ══ G-335: die eigene Namensliste ist weg ═════════════════
+//
+// `[cmd]` **Hier stand `SLOT_LABEL` mit englischen Bezeichnungen** —
+// eine von ACHT Listen, mit vier Schreibweisen fuer `pre_workout`.
+//
+// `[read]` **`meal_type` ist eine Kategorie, keine Beschriftung**
+// (E-58). **`KATEGORIE_TEXT` ist der Rueckfall**, wenn keine Quelle
+// einen Namen liefert.
+const SLOT_LABEL = KATEGORIE_TEXT
 
 type Position = {
   id: string
@@ -144,9 +147,19 @@ function z(v: number | null): string {
 }
 
 export function Mahlzeiten({
-  datum, slots = null, onGeaendert,
+  datum, slots = null, mahlzeitSlots = [], onGeaendert,
 }: {
   datum: string
+  /**
+   * G-332: die benannten Slots aus `meal_slots` (C-392).
+   *
+   * `[cmd]` **Sie bestimmen, wie die Zeilen HEISSEN** — `slots`
+   * (aus G-72) bestimmt weiterhin, WELCHE `meal_type` es gibt.
+   *
+   * `[read]` **Leer heisst: keine gesetzt** — dann bleibt es bei
+   * `SLOT_LABEL`, den festen Bezeichnungen.
+   */
+  mahlzeitSlots?: readonly MahlzeitSlot[]
   /**
    * G-72: welche Mahlzeitenreihen der Tag zeigt.
    *
@@ -161,6 +174,21 @@ export function Mahlzeiten({
   const [mahlzeiten, setMahlzeiten] = React.useState<Mahlzeit[]>([])
   // G-309: die Plantage des Tages, sofern ein Plan aktiv ist.
   const [ghosts, setGhosts] = React.useState<GhostEintrag[]>([])
+  // ══ G-332 Punkt 5: eine Mahlzeit ausserhalb der Slots ═══════
+  //
+  // **Tom, 2026-09-02:** *,,ein user kann auch jederzeit im diary
+  // eine neue mahlzeit anlegen und nutrients reinpacken."*
+  //
+  // `[cmd]` **Gemessen, bevor gebaut wurde: der Weg fehlte nicht
+  // erst seit G-331.** `sicherstellen()` legt seit C-03 Mahlzeiten
+  // an — **aber nur fuer die vordefinierten Slots.** Eine leere
+  // Karte entsteht je `reihen`-Eintrag; wer um 22:00 isst, hatte
+  // keine.
+  //
+  // `[read]` **E-58: der Slot ordnet, die Buchung ist die
+  // Wahrheit.** **Deshalb ist die Zeit frei waehlbar**, und die
+  // Slots stehen nur als Vorschlag daneben.
+  const [freieMahlzeit, setFreieMahlzeit] = React.useState(false)
   const [laden, setLaden] = React.useState(true)
   const [fehler, setFehler] = React.useState<string | null>(null)
   const router = useRouter()
@@ -249,6 +277,24 @@ export function Mahlzeiten({
   const leereSlots = reihen.filter(
     typ => !belegteTypen.has(typ) && !ghostTypen.has(typ))
 
+  // ══ G-332 Punkt 4: die Zeilen heissen wie die Slots ════════
+  //
+  // **Der Auftrag:** *,,Die Zuordnung macht die Zeit —
+  // naechstliegende Slot-Zeit, ohne gespeicherte Kennung."*
+  //
+  // `[cmd]` **0 von 2.899 `meals` sind ohne `meal_time`**
+  // (2026-09-02) — die Zuordnung greift lueckenlos.
+  //
+  // `[read]` **E-58: kein gespeicherter Wert aendert sich.** Wer eine
+  // Slot-Zeit verschiebt, sieht alte Eintraege anders gruppiert —
+  // **das ist gewollt.**
+  const nameFuer = React.useCallback((
+    typ: MealType, zeit: string | null,
+  ): string => {
+    const s = slotFuerZeit(mahlzeitSlots, zeit)
+    return s?.name ?? SLOT_LABEL[typ]
+  }, [mahlzeitSlots])
+
   if (laden && mahlzeiten.length === 0) {
     return <Card><p className="v2-muted" style={{ fontSize: 12 }}>{tA('laedt')}</p></Card>
   }
@@ -272,6 +318,7 @@ export function Mahlzeiten({
           datum={datum}
           typ={m.meal_type}
           mahlzeit={m}
+          name={nameFuer(m.meal_type, m.meal_time)}
           onGeaendert={neuLaden}
         />
       ))}
@@ -285,6 +332,9 @@ export function Mahlzeiten({
           key={`ghost-${g.id}`}
           eintrag={g}
           datum={datum}
+          // G-335: die Ghost-Karte heisst wie der Slot, nicht wie die
+          // Kategorie — Toms Befund *,,Breakfast statt Fruehstueck"*.
+          slots={mahlzeitSlots}
           onGeaendert={neuLaden}
         />
       ))}
@@ -296,19 +346,192 @@ export function Mahlzeiten({
           datum={datum}
           typ={typ}
           mahlzeit={null}
+          // `[read]` **Eine leere Karte hat keine Uhrzeit** — der
+          // Name kommt dann aus dem Slot mit derselben Nummer, nicht
+          // ueber die Zeit. **`SLOT_LABEL` bleibt der Rueckfall.**
+          name={slotFuerTyp(mahlzeitSlots, typ, reihen) ?? SLOT_LABEL[typ]}
           onGeaendert={neuLaden}
         />
       ))}
+
+      {/* ══ G-332 Punkt 5: eine Mahlzeit ausserhalb der Slots ═════
+          **Tom, 2026-09-02:** *,,in diary unten mahlzeit
+          hinzufuegen, das ist verschwunden. ein user kann auch
+          jederzeit im diary eine neue mahlzeit anlegen und nutrients
+          reinpacken."*
+
+          `[cmd]` **Gemessen: der Knopf ist nicht mit G-331
+          verschwunden** — `sicherstellen()` legt seit C-03 an, und
+          der Code ist gegen `HEAD` unveraendert. **Es gab ihn nie
+          fuer eine FREIE Mahlzeit:** leere Karten entstehen je
+          vordefiniertem Slot, **wer um 22:00 isst, hatte keine.**
+
+          `[read]` **E-58: der Slot ordnet, die Buchung ist die
+          Wahrheit.** **Die Zeit ist frei**, die Slots stehen als
+          Vorschlag daneben. */}
+      <FreieMahlzeit
+        datum={datum}
+        slots={mahlzeitSlots}
+        offen={freieMahlzeit}
+        setOffen={setFreieMahlzeit}
+        onGeaendert={neuLaden}
+      />
     </>
   )
 }
 
+/**
+ * Eine Mahlzeit anlegen, die in keinen Slot passt — G-332.
+ *
+ * `[read]` **Name und Zeit frei** — die Slots sind ein Vorschlag,
+ * keine Auswahlpflicht. `[cmd]` **`meal_type` bleibt unangetastet**
+ * (der Auftrag sagt es): die Karte waehlt eine Kategorie, der Name
+ * kommt aus der Zeit.
+ */
+function FreieMahlzeit({ datum, slots, offen, setOffen, onGeaendert }: {
+  datum: string
+  slots: readonly MahlzeitSlot[]
+  offen: boolean
+  setOffen: (v: boolean) => void
+  onGeaendert: () => void
+}) {
+  const [zeit, setZeit] = React.useState('')
+  const [typ, setTyp] = React.useState<MealType>('other')
+  const [laeuft, setLaeuft] = React.useState(false)
+  const [fehler, setFehler] = React.useState<string | null>(null)
+
+  // `[read]` **Die Vorgabe ist die aktuelle Uhrzeit** — wer jetzt
+  // isst, muss sie nicht tippen. **Auf volle Minuten**, weil
+  // `meals_meal_time_minute_check` Sekunden verbietet.
+  React.useEffect(() => {
+    if (!offen) return
+    const j = new Date()
+    setZeit(`${String(j.getHours()).padStart(2, '0')}:${String(j.getMinutes()).padStart(2, '0')}`)
+  }, [offen])
+
+  // `[read]` **Der Slot-Vorschlag folgt der Zeit** — er sagt, wohin
+  // die Mahlzeit fallen WIRD, ohne sie dorthin zu zwingen.
+  const vorschlag = slotFuerZeit(slots, zeit)
+
+  async function anlegen() {
+    setLaeuft(true)
+    setFehler(null)
+    try {
+      const a = await fetch('/api/nutrition/diary', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          art: 'mahlzeit', entry_date: datum, meal_type: typ, meal_time: zeit,
+        }),
+      })
+      if (!a.ok) {
+        const k = await a.json().catch(() => null)
+        setFehler(k?.error ?? `Fehler ${a.status}`)
+        return
+      }
+      setOffen(false)
+      onGeaendert()
+    } catch (e) {
+      setFehler(e instanceof Error ? e.message : String(e))
+    } finally {
+      setLaeuft(false)
+    }
+  }
+
+  if (!offen) {
+    return (
+      <button
+        type="button" className="v2-btn v2-btn-sm"
+        data-probe="freie-mahlzeit-oeffnen"
+        style={{ marginTop: 10, gap: 6 }}
+        onClick={() => setOffen(true)}
+      >
+        <Icon name="plus" className="v2-ic v2-ic-sm" />
+        Mahlzeit hinzufügen
+      </button>
+    )
+  }
+
+  return (
+    <Card className="v2-card-tight" data-probe="freie-mahlzeit">
+      <div style={{
+        display: 'flex', gap: 8, alignItems: 'flex-end', flexWrap: 'wrap',
+      }}>
+        <label style={{ fontSize: 10 }}>
+          <span className="v2-eyebrow">Uhrzeit</span>
+          <input
+            className="v2-feld" type="time"
+            data-probe="freie-zeit"
+            style={{ width: 106, flex: 'none', fontSize: 11.5 }}
+            aria-label="Uhrzeit der Mahlzeit"
+            value={zeit}
+            disabled={laeuft}
+            onChange={e => setZeit(e.target.value)}
+          />
+        </label>
+        <label style={{ fontSize: 10 }}>
+          <span className="v2-eyebrow">Art</span>
+          <select
+            className="v2-feld" data-probe="freie-art"
+            style={{ fontSize: 11.5 }}
+            aria-label="Art der Mahlzeit"
+            value={typ}
+            disabled={laeuft}
+            onChange={e => setTyp(e.target.value as MealType)}
+          >
+            {(Object.keys(SLOT_LABEL) as MealType[]).map(k => (
+              <option key={k} value={k}>{SLOT_LABEL[k]}</option>
+            ))}
+          </select>
+        </label>
+        <button
+          type="button" className="v2-btn v2-btn-sm v2-btn-primary"
+          data-probe="freie-anlegen"
+          disabled={laeuft || !zeit}
+          onClick={anlegen}
+        >
+          {laeuft ? 'Legt an…' : 'Anlegen'}
+        </button>
+        <button type="button" className="v2-btn v2-btn-sm"
+                disabled={laeuft} onClick={() => setOffen(false)}>
+          Abbrechen
+        </button>
+      </div>
+
+      {/* `[read]` **Der Vorschlag sagt, wohin sie faellt** — ohne
+          passenden Slot steht es genauso da. **Das ist der 22-Uhr-
+          Fall aus dem Auftrag.** */}
+      <p className="v2-muted" data-probe="freie-hinweis"
+         style={{ fontSize: 10.5, marginTop: 8, lineHeight: 1.5 }}>
+        {vorschlag
+          ? <>Wird bei <strong>{vorschlag.name}</strong> ({vorschlag.planned_time})
+              einsortiert — die nächstliegende Zeit.</>
+          : <>Für diese Zeit gibt es keinen Slot. <strong>Die Mahlzeit wird
+              trotzdem erfasst</strong> und steht mit ihrer Uhrzeit da.</>}
+      </p>
+
+      {fehler && (
+        <p style={{ fontSize: 11, color: 'var(--neg)', margin: '6px 0 0' }}>{fehler}</p>
+      )}
+    </Card>
+  )
+}
+
 function MahlzeitKarte({
-  datum, typ, mahlzeit, onGeaendert,
+  datum, typ, mahlzeit, name, onGeaendert,
 }: {
   datum: string
   typ: MealType
   mahlzeit: Mahlzeit | null
+  /**
+   * G-332: wie die Zeile heisst.
+   *
+   * `[read]` **Aus `meal_slots`, ueber die Zeit zugeordnet** — ohne
+   * gesetzte Slots faellt es auf `SLOT_LABEL` zurueck. **Der
+   * Aufrufer entscheidet das**, nicht die Karte: sie kennt die
+   * Slots nicht.
+   */
+  name: string
   onGeaendert: () => void
 }) {
   const items = mahlzeit?.items ?? []
@@ -416,7 +639,8 @@ function MahlzeitKarte({
         <span className="v2-num" style={{ fontSize: 10, color: 'var(--fg-dim)', width: 40 }}>
           {uhrzeit(mahlzeit?.meal_time)}
         </span>
-        <span style={{ fontSize: 13, fontWeight: 600 }}>{SLOT_LABEL[typ]}</span>
+        <span data-probe="karten-name"
+              style={{ fontSize: 13, fontWeight: 600 }}>{name}</span>
         <span className="v2-dim" style={{ fontSize: 11 }}>
           · {leer ? 'Empty' : `${items.length} items`}
         </span>
@@ -574,7 +798,7 @@ function MahlzeitKarte({
             art: 'tag',
             datum,
             slot: typ,
-            slotLabel: SLOT_LABEL[typ],
+            slotLabel: name,
             schonImTag: summe.kcal > 0 ? Math.round(summe.kcal) : null,
             ziel: null,
           }}

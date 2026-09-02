@@ -402,6 +402,19 @@ export async function ladePlan(planId?: string | null): Promise<PlanDaten> {
   }
   wochen.sort((a, b) => a.week_start.localeCompare(b.week_start))
 
+  // ══ G-332: die Reihen, die dieser Plan tatsaechlich benutzt ═══
+  //
+  // `[read]` **In der Reihenfolge von `SLOTS`**, nicht in der des
+  // ersten Fundes — sonst haenge die Zeilenfolge davon ab, welcher
+  // Tag zuerst gelesen wurde.
+  const benutzt = new Set<string>()
+  for (const w of wochen) {
+    for (const d of w.tage) {
+      for (const e of d.eintraege) benutzt.add(e.meal_type)
+    }
+  }
+  const planZeilen: Slot[] = SLOTS.filter(s => benutzt.has(s))
+
   return {
     plan: roh
       ? {
@@ -425,8 +438,29 @@ export async function ladePlan(planId?: string | null): Promise<PlanDaten> {
         }
       : null,
     wochen,
-    zeilen,
-    zeilenGrund,
+    // ══ G-332 Punkt 6: ein fremder Plan bringt seine Struktur mit ══
+    //
+    // **Tom, 2026-09-02:** *,,bei gekauften oder von coach wird der
+    // plan ja vollstaendig geliefert."*
+    //
+    // `[cmd]` **Gemessen am 2026-09-02: die Struktur steht bereits in
+    // den Positionen.** Alle vier Herkuenfte — `self_created`,
+    // `coach_created`, `marketplace`, `buddy` — tragen ihre
+    // `meal_type`-Werte in `meal_plan_entries`.
+    //
+    // `[cmd]` **`meal_plans` traegt KEINE Zeilenzahl** (gemessen:
+    // keine Spalte fuer `meals`, `slots` oder Zeilen) — **sie muss
+    // auch keine tragen.** Die Positionen sagen es genauer als eine
+    // Zahl es koennte.
+    //
+    // `[read]` **Also: hat der Plan Positionen, gelten SEINE Reihen.**
+    // **Sonst die Vorlieben** — fuer einen leeren, selbst angelegten
+    // Plan ist das richtig.
+    zeilen: planZeilen.length > 0 ? planZeilen : zeilen,
+    zeilenGrund: planZeilen.length > 0
+      ? `${planZeilen.length} Reihen aus diesem Plan — `
+        + 'ein gelieferter Plan bringt seine Struktur mit.'
+      : zeilenGrund,
     rezepte,
     ladefehler: null,
   }
@@ -959,6 +993,7 @@ export async function ladeGhostEintraege(datum: string): Promise<GhostEintrag[]>
     db.from('meal_plan_entries')
       .select(`
         id, meal_type, slot_order, entry_type, food_id, amount_g,
+        planned_time,
         planned_servings,
         recipe:recipes ( id, name_de, servings ),
         food:foods ( name_display_de, name_de ),
@@ -1017,6 +1052,8 @@ export async function ladeGhostEintraege(datum: string): Promise<GhostEintrag[]>
   // Die Posten je Eintrag \u2014 ein Rezept wird hier aufgeloest.
   const roh: Array<{
     id: string; meal_type: string; rezept: string | null
+    // G-335: die geplante Zeit ordnet dem Slot zu (E-58).
+    planned_time: string | null
     posten: Array<{ food_id: string; name: string; amount_g: number }>
     status: string
   }> = []
@@ -1063,6 +1100,7 @@ export async function ladeGhostEintraege(datum: string): Promise<GhostEintrag[]>
     roh.push({
       id,
       meal_type: text(r.meal_type) ?? 'other',
+      planned_time: text(r.planned_time)?.slice(0, 5) ?? null,
       rezept: text(rezept?.name_de),
       posten,
       status: zustand.get(id) ?? 'pending',
@@ -1146,6 +1184,8 @@ export async function ladeGhostEintraege(datum: string): Promise<GhostEintrag[]>
     return {
       id: e.id,
       meal_type: e.meal_type,
+      // G-335: die geplante Zeit ordnet dem Slot zu (E-58).
+      planned_time: e.planned_time,
       rezept: e.rezept,
       posten,
       kcal: bekannt.length === 0

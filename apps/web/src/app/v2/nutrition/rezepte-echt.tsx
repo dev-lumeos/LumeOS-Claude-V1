@@ -39,12 +39,21 @@ import { FoodSuchModal } from './food-such-modal'
 import type { NutritionFoodSearchRow } from '../../../lib/nutrition/food-search'
 // G-325: die Makros je Zutat — dieselbe Rechnung wie im Modal.
 import { vorschauFuer } from '../../../lib/nutrition/menge-rechnen'
+// G-335: EINE Auswahlliste statt zwei.
+import { kategorieAuswahl } from '../../../lib/nutrition/slots-lage'
 
-const MAHLZEITEN = [
-  ['breakfast', 'Frühstück'], ['lunch', 'Mittag'], ['dinner', 'Abend'],
-  ['snack', 'Snack'], ['pre_workout', 'Vor dem Training'],
-  ['post_workout', 'Nach dem Training'], ['other', 'Sonstiges'],
-] as const
+// ══ G-335: die eigene Tupel-Liste ist weg ═════════════════
+//
+// **Tom, 2026-09-02:** *,,Pulldown zeigt Pre-workout statt der
+// eigenen Namen."*
+//
+// `[cmd]` **Zwei Stellen bauten dieselbe Auswahl mit anderen
+// Woertern** — *Pre-workout* hier, *Vor dem Training* im
+// Rezeptformular.
+//
+// `[read]` **`kategorieAuswahl` liefert beides:** ohne Slots die
+// Kategorie, mit Slots die eigenen Namen.
+const MAHLZEITEN = kategorieAuswahl()
 
 function z(v: number | null, nach = 0): string {
   return v === null ? '—' : v.toLocaleString('de-DE', {
@@ -559,7 +568,9 @@ export function LogModal({ rezept, datum, onFertig, onClose }: {
           <select className="v2-feld" style={{ width: '100%', marginBottom: 12 }}
                   value={typ} aria-label="Mahlzeitentyp"
                   onChange={e => setTyp(e.target.value)}>
-            {MAHLZEITEN.map(([k, l]) => <option key={k} value={k}>{l}</option>)}
+            {MAHLZEITEN.map(m => (
+              <option key={m.code} value={m.code}>{m.label}</option>
+            ))}
           </select>
 
           {/* `[cmd]` **`ADR_GHOST_ENTRY_RECIPE`: ein Rezept ist eine

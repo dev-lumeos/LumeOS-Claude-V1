@@ -62,6 +62,25 @@ export const mealCreateSchema = z.object({
   entry_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'entry_date muss YYYY-MM-DD sein.'),
   meal_type: z.enum(MEAL_TYPES),
   notes: z.string().max(2000).optional(),
+  // ══ G-332: die Uhrzeit ══════════════════════════════
+  //
+  // **Tom, 2026-09-02:** *,,ein user kann auch jederzeit im diary
+  // eine neue mahlzeit anlegen"* — **wer um 22:00 isst, hat dafuer
+  // keinen Slot und soll trotzdem erfassen koennen.**
+  //
+  // `[cmd]` **`meal_time` wurde bis heute NIE gesetzt**
+  // (`buildMealInsert`) — die 2.899 vorhandenen Zeiten kommen aus
+  // den Seeds. **Eine im Browser angelegte Mahlzeit haette keine**,
+  // und die Slot-Zuordnung (E-58) liefe ins Leere.
+  //
+  // `[cmd]` **`meals_meal_time_minute_check` verlangt volle
+  // Minuten** — deshalb `HH:MM`, keine Sekunden.
+  //
+  // `[read]` **Optional, weil der Bestandsweg sie nicht schickt** —
+  // `sicherstellen()` legt weiter ohne an, und das bleibt gueltig.
+  meal_time: z.string()
+    .regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'meal_time muss HH:MM sein.')
+    .optional(),
 })
 export type MealCreate = z.infer<typeof mealCreateSchema>
 
@@ -161,6 +180,9 @@ export function buildMealInsert(userId: string, input: MealCreate) {
     entry_date: input.entry_date,
     meal_type: input.meal_type,
     notes: input.notes ?? null,
+    // G-332: `null` heisst weiterhin „keine Zeit erfasst“ — der
+    // Bestandsweg schickt sie nicht, und das bleibt gueltig.
+    meal_time: input.meal_time ?? null,
   }
 }
 

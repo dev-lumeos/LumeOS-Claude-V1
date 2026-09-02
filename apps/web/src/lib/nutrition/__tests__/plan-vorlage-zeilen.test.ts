@@ -15,7 +15,9 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { MAHLZEIT_LABEL, SLOT_LABEL } from '../plan-model'
+import { SLOT_LABEL } from '../plan-model'
+// G-335: die Namen stehen jetzt in `slots-lage.ts`.
+import { KATEGORIE_TEXT } from '../slots-lage'
 import { aendertInhalt, AUSFUEHRENDE_FELDER } from '../plan-write'
 
 const WURZEL = path.resolve(
@@ -313,31 +315,40 @@ test('G-315/Z. 414-419: Plan settings hat GENAU fuenf Zeilen', () => {
 
 // ══ EINE TABELLE, NICHT ZWEI ════════════════════════════════════════
 
-test('G-315: die Mahlzeitnamen stehen an EINER Stelle', () => {
-  // `[cmd]` **Dieselbe Tabelle stand doppelt** — in `plan-model.ts`
-  // (vier Slots) und lokal in `ghost-eintrag.tsx` (sieben).
+test('G-315/G-335: die Mahlzeitnamen stehen an EINER Stelle', () => {
+  // ══ BERICHTIGT IN G-335 ═════════════════════════
   //
-  // `[read]` **Zwei Kopien sind zwei Wahrheiten**, und die eine kannte
-  // `pre_workout` nicht.
-  assert.equal(MAHLZEIT_LABEL.breakfast, 'Breakfast')
-  assert.equal(MAHLZEIT_LABEL.pre_workout, 'Pre-Workout')
-  assert.equal(MAHLZEIT_LABEL.post_workout, 'Post-Workout')
-  assert.equal(MAHLZEIT_LABEL.other, 'Sonstiges')
-  // `SLOT_LABEL` bleibt fuer die vier Rasterzeilen.
-  assert.equal(Object.keys(SLOT_LABEL).length, 4,
-    'SLOT_LABEL ist nicht mehr die Rastertabelle')
+  // `[cmd]` **Hier stand `MAHLZEIT_LABEL` aus `plan-model.ts`.**
+  // `[cmd]` **G-335 hat gemessen: `meal_type` wurde an ZEHN Stellen
+  // uebersetzt** — vier Schreibweisen fuer `pre_workout` allein.
+  //
+  // `[read]` **Was G-315 sichert, gilt schaerfer:** die Namen stehen
+  // an EINER Stelle — **jetzt in `slots-lage.ts`, wo auch die
+  // Aufloesung sitzt** (Plan vor Nutzerslot vor Kategorie).
+  //
+  // `[read]` **Und `meal_type` ist eine Kategorie, keine
+  // Beschriftung** (E-58/E-59) — deshalb heisst die Tabelle
+  // `KATEGORIE_TEXT` und nicht mehr `MAHLZEIT_LABEL`.
+  const lage = ohneKommentare('apps/web/src/lib/nutrition/slots-lage.ts')
+  assert.match(lage, /export const KATEGORIE_TEXT: Record<string, string> = \{/,
+    'die gemeinsame Tabelle fehlt')
 
+  // Die sieben Kategorien des CHECKs, auf Deutsch.
+  assert.equal(KATEGORIE_TEXT.breakfast, 'Frühstück')
+  assert.equal(KATEGORIE_TEXT.pre_workout, 'Vor dem Training')
+  assert.equal(KATEGORIE_TEXT.post_workout, 'Nach dem Training')
+  assert.equal(KATEGORIE_TEXT.other, 'Sonstiges')
+  assert.equal(Object.keys(KATEGORIE_TEXT).length, 7,
+    'die Tabelle deckt nicht alle sieben CHECK-Werte')
+
+  // `[cmd]` **Die Ghost-Karte holt den Namen aus den Slots**, nicht
+  // aus einer eigenen Liste — Toms Befund *,,Breakfast statt
+  // Fruehstueck"*.
   const g = ohneKommentare('apps/web/src/app/v2/nutrition/ghost-eintrag.tsx')
-  // `[cmd]` **S29 kam durch:** die Kopie hiess dann
-  // `MAHLZEIT_LABEL` statt `SLOT_LABEL`. `[read]` **Der Waechter
-  // suchte den alten Namen** — also wird jetzt geprueft, dass die
-  // Tabelle IMPORTIERT wird, statt dass ein bestimmter Name fehlt.
-  assert.match(g, /import \{ MAHLZEIT_LABEL \} from '\.\.\/\.\.\/\.\.\/lib\/nutrition\/plan-model'/,
-    'die gemeinsame Tabelle wird nicht importiert')
-  assert.doesNotMatch(g, /const (SLOT|MAHLZEIT)_LABEL[^=]*=\s*\{/,
-    'eine lokale Kopie der Tabelle lebt weiter')
-  assert.match(g, /MAHLZEIT_LABEL\[eintrag\.meal_type\]/,
-    'die Ghost-Karte nutzt die gemeinsame Tabelle nicht')
+  assert.match(g, /mahlzeitName\(eintrag\.meal_type, \{/,
+    'die Ghost-Karte loest den Namen nicht ueber die Slots auf')
+  assert.doesNotMatch(g, /MAHLZEIT_LABEL\[/,
+    'die Ghost-Karte benutzt wieder eine eigene Liste')
 })
 
 // ══ DIE UHRZEIT KOMMT AUS DEM SCHEMA ════════════════════════════════

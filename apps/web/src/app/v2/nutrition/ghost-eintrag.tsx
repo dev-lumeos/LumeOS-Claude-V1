@@ -60,6 +60,13 @@ export type GhostPosten = {
 export type GhostEintrag = {
   id: string
   meal_type: string
+  /**
+   * G-335: die geplante Uhrzeit (`meal_plan_entries.planned_time`).
+   *
+   * `[read]` **Sie ordnet dem Slot zu** (E-58) — `meal_type` ist
+   * eine Kategorie, keine Beschriftung.
+   */
+  planned_time: string | null
   rezept: string | null
   posten: GhostPosten[]
   kcal: number | null
@@ -68,7 +75,10 @@ export type GhostEintrag = {
 
 // G-315: die Tabelle steht in `plan-model.ts` — sie stand hier
 // doppelt, und die andere Kopie kannte nur vier Slots.
-import { MAHLZEIT_LABEL } from '../../../lib/nutrition/plan-model'
+// G-335: EINE Namensaufloesung statt acht Listen — Plan vor
+// Nutzerslot vor Kategorie.
+import { mahlzeitName, type MahlzeitSlot }
+  from '../../../lib/nutrition/slots-lage'
 // G-329: dieselbe Rechnung wie im Rezepteditor und im Suchmodal.
 import { vorschauFuer } from '../../../lib/nutrition/menge-rechnen'
 // G-329: dasselbe Suchmodal wie Planner (G-320) und Rezept (G-323).
@@ -86,10 +96,24 @@ function z(v: number | null): string {
  * Umrandung, andere Farbe"*.
  */
 export function GhostEintragKarte({
-  eintrag, datum, onGeaendert,
+  eintrag, datum, slots = [], onGeaendert,
 }: {
   eintrag: GhostEintrag
   datum: string
+  /**
+   * G-335: die Slots des Nutzers (C-392).
+   *
+   * **Tom, 2026-09-02:** *,,Ghost-Karten heissen Breakfast statt
+   * Fruehstueck."*
+   *
+   * `[cmd]` **Hier stand `MAHLZEIT_LABEL[eintrag.meal_type]`** —
+   * eine von acht Namenslisten, mit englischen Bezeichnungen.
+   *
+   * `[read]` **`meal_type` ist eine Kategorie, keine Beschriftung**
+   * (E-58). **Der Name kommt aus den Slots**, ueber die geplante
+   * Zeit.
+   */
+  slots?: readonly MahlzeitSlot[]
   onGeaendert: () => void
 }) {
   // `[read]` **Die Mengen sind editierbar** — das verlangt das ADR
@@ -250,7 +274,9 @@ export function GhostEintragKarte({
         padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10,
       }}>
         <span style={{ fontSize: 13, fontWeight: 600 }}>
-          {MAHLZEIT_LABEL[eintrag.meal_type] ?? eintrag.meal_type}
+          {mahlzeitName(eintrag.meal_type, {
+            zeit: eintrag.planned_time, slots,
+          })}
         </span>
         <span className="v2-dim" style={{ fontSize: 11 }}>· aus deinem Plan</span>
         <div className="v2-spacer" />
@@ -499,7 +525,9 @@ export function GhostEintragKarte({
             art: 'tag',
             datum,
             slot: eintrag.meal_type,
-            slotLabel: MAHLZEIT_LABEL[eintrag.meal_type] ?? eintrag.meal_type,
+            slotLabel: mahlzeitName(eintrag.meal_type, {
+              zeit: eintrag.planned_time, slots,
+            }),
             schonImTag: summeBekannt ? Math.round(summe) : null,
             ziel: null,
           }}

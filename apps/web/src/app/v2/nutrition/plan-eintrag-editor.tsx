@@ -21,6 +21,10 @@
 //
 // `[read]` **A-30:** nur Typen aus dem Leseweg, kein Wertimport.
 import * as React from 'react'
+
+// G-335: EINE Namensliste statt acht.
+import { KATEGORIE_TEXT }
+  from '../../../lib/nutrition/slots-lage'
 import { Icon } from '@lumeos/ui'
 
 import {
@@ -54,15 +58,16 @@ const TYP_LABEL: Record<EintragTyp, string> = {
   custom: 'Eigenes',
 }
 
-export const MAHLZEIT_LABEL: Record<MahlzeitTyp, string> = {
-  breakfast: 'Frühstück',
-  lunch: 'Mittag',
-  dinner: 'Abend',
-  snack: 'Snack',
-  pre_workout: 'Vor dem Training',
-  post_workout: 'Nach dem Training',
-  other: 'Sonstiges',
-}
+// ══ G-335: die eigene Namensliste ist weg ═════════════════
+//
+// `[cmd]` **`meal_type` wurde ueber FUENF Tabellen an ZEHN Stellen
+// uebersetzt** (gemessen an HEAD, 2026-09-02) — vier
+// Schreibweisen fuer `pre_workout` allein.
+//
+// `[read]` **`meal_type` ist eine Kategorie, keine Beschriftung**
+// (E-58). **`KATEGORIE_TEXT` ist der Rueckfall**, wenn keine Quelle
+// einen Namen liefert.
+export const MAHLZEIT_LABEL = KATEGORIE_TEXT
 
 /**
  * Das Formular fuer einen Eintrag — neu oder vorhanden.

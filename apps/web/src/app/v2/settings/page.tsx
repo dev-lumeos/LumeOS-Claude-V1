@@ -15,6 +15,9 @@ import type { Metadata } from 'next'
 
 import { getOwnProfile } from '../../../lib/profile/profile-write'
 import { EMPTY_PROFILE, type StoredProfile } from '../../../lib/profile/profile-model'
+// G-332: die Mahlzeiten-Slots — ein Formular, zwei Orte.
+import { ladeSlots } from '../../../lib/nutrition/slots-lesen'
+import type { MahlzeitSlot } from '../../../lib/nutrition/slots-lage'
 import { ProfilFormular } from './formular'
 
 export const metadata: Metadata = {
@@ -27,11 +30,20 @@ export default async function V2SettingsPage() {
   let profil: StoredProfile = EMPTY_PROFILE
   let fehler: string | null = null
 
+  // G-332: die Mahlzeiten-Slots (C-392) — dieselbe Quelle wie in
+  // Preferences. `[read]` **Getrennt abgefangen:** faellt sie aus,
+  // bleibt das Profilformular nutzbar.
+  let slots: MahlzeitSlot[] = []
   try {
     profil = await getOwnProfile()
   } catch (e) {
     fehler = e instanceof Error ? e.message : String(e)
   }
+  try {
+    slots = await ladeSlots()
+  } catch {
+    slots = []
+  }
 
-  return <ProfilFormular start={profil} ladefehler={fehler} />
+  return <ProfilFormular start={profil} ladefehler={fehler} slots={slots} />
 }

@@ -14,34 +14,24 @@
 export const SLOTS = ['breakfast', 'lunch', 'dinner', 'snack'] as const
 export type Slot = typeof SLOTS[number]
 
-/** Beschriftung wie im Entwurf (`NutritionPlanner`). */
-export const SLOT_LABEL: Record<Slot, string> = {
-  breakfast: 'Breakfast',
-  lunch: 'Lunch',
-  dinner: 'Dinner',
-  snack: 'Snacks',
-}
-
-/**
- * Alle Mahlzeitarten, die das Schema kennt — G-315.
- *
- * `[cmd]` **`SLOT_LABEL` deckt nur die vier Rasterzeilen ab.**
- * `[cmd]` **`meal_plan_entries.meal_type` kennt mehr** —
- * `pre_workout` und `post_workout` stehen im CHECK.
- *
- * `[read]` **Dieselbe Tabelle stand doppelt** — hier und lokal in
- * `ghost-eintrag.tsx` (G-309). **Zwei Kopien sind zwei Wahrheiten**,
- * und die eine kannte sechs Slots, die andere vier.
- */
-export const MAHLZEIT_LABEL: Record<string, string> = {
-  breakfast: 'Breakfast',
-  lunch: 'Lunch',
-  dinner: 'Dinner',
-  snack: 'Snack',
-  pre_workout: 'Pre-Workout',
-  post_workout: 'Post-Workout',
-  other: 'Sonstiges',
-}
+// ══ G-335: die eigenen Namenslisten sind weg ═════════════════════════
+//
+// `[cmd]` **Hier standen ZWEI Tabellen** — `SLOT_LABEL` mit vier
+// englischen Namen (`Breakfast`, `Snacks`) und `MAHLZEIT_LABEL` mit
+// sieben (`Pre-Workout`). `[cmd]` **Insgesamt wurde `meal_type` an
+// zehn Stellen uebersetzt, ueber fuenf Tabellen, mit vier
+// Schreibweisen fuer
+// `pre_workout`.**
+//
+// `[read]` **`meal_type` ist eine Kategorie, keine Beschriftung**
+// (E-58). **`KATEGORIE_TEXT` ist der Rueckfall**, wenn weder ein Plan
+// (E-59) noch die Slotliste des Nutzers einen Namen liefert.
+//
+// `[cmd]` **Der Wert-Import ist unbedenklich:** `slots-lage.ts` ist
+// reine Rechnung ohne `next/headers` — der Grund fuer diese Datei
+// (siehe Kopf) trifft nicht zu.
+export { KATEGORIE_TEXT as MAHLZEIT_LABEL } from './slots-lage'
+export { KATEGORIE_TEXT as SLOT_LABEL } from './slots-lage'
 
 /**
  * Welche Mahlzeitenreihen das Raster zeigt.

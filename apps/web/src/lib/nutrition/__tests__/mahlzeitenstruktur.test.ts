@@ -45,53 +45,74 @@ test('die Dateiproben finden ihre Dateien — unabhängig vom Startort', () => {
 // ══ 1 · Drei sind ausgesetzt, mit Begründung ═════════════════════════
 
 test('G-99: die drei ohne Wirkung stehen als Kommentar, nicht als Feld', () => {
-  // `[cmd]` **G-99 hat gemessen, warum sie nichts tun können:**
-  // `recipes` trägt `cooking_skill` und `prep_time_min` — **aber
+  // `[cmd]` **G-99 hat gemessen, warum sie nichts tun koennen:**
+  // `recipes` traegt `cooking_skill` und `prep_time_min` — **aber
   // nichts filtert danach, und ein Preisfeld gibt es nicht.**
   //
-  // `[read]` **Ein Regler, der nichts bewirkt, ist schlimmer als
-  // keiner** — er behauptet eine Wirkung.
-  const roh = lies(PREFS)
+  // ══ BERICHTIGT IN G-335 ═════════════════════════
+  //
+  // **Tom, 2026-09-02:** *,,mahlzeitenstruktur muessen wir mit meine
+  // mahlzeiten verschmelzen."*
+  //
+  // `[cmd]` **Die Kachel *Mahlzeitenstruktur* ist weg** — mit ihr
+  // der Kommentarblock, der die drei Spalten begruendete.
+  //
+  // `[read]` **Was G-99 sichert, gilt unveraendert:** sie haben KEIN
+  // Feld. **Der Waechter prueft jetzt nur noch das** — die
+  // Begruendung steht im Punkt G-99, nicht mehr im Quelltext einer
+  // Kachel, die es nicht gibt.
   const ohne = ohneKommentare(PREFS)
-
   for (const spalte of ['cooking_skill', 'prep_time_max_min', 'budget_level']) {
-    // Die Wirkung: kein Eingabefeld.
     assert.ok(!ohne.includes(spalte),
       `${spalte} hat ein Feld — es kann heute nichts bewirken`)
-    // A-59: nicht still weggelassen, sondern begründet.
-    assert.ok(roh.includes(spalte),
-      `${spalte} fehlt ganz — die Begründung muss dastehen`)
   }
-
-  // `[cmd]` **Und der Grund ist genannt**, nicht nur die Namen.
-  assert.match(roh, /kein Preisfeld in `recipes`/,
-    'die Begründung nennt nicht, woran budget_level hängt')
 })
 
 // ══ 2 · Drei wirken ══════════════════════════════════════════════════
 
-test('G-72: die drei wirkenden Spalten haben ein Feld', () => {
+test('G-72/G-335: die Mahlzeitenzahl kommt aus der Slotliste', () => {
+  // ══ BERICHTIGT IN G-335 ═════════════════════════
+  //
+  // `[cmd]` **Hier standen Felder fuer `meals_per_day` und
+  // `snacks_per_day`.** `[cmd]` **Daneben standen fuenf benannte
+  // Zeilen** — **zwei Wahrheiten ueber dieselbe Zahl.**
+  //
+  // `[read]` **Die Slotliste ist die genauere** — sie kennt Anzahl,
+  // Namen UND Zeiten. **Die zwei Zahlenfelder sind weg.**
   const p = ohneKommentare(PREFS)
-  for (const probe of ['meals-per-day', 'snacks-per-day', 'meal-prep-ok']) {
-    assert.ok(p.includes(`data-probe="${probe}"`), `${probe} fehlt`)
-  }
+  assert.doesNotMatch(p, /data-probe="meals-per-day"/,
+    'das Feld fuer die Mahlzeitenzahl ist zurueck — zwei Wahrheiten')
+  assert.doesNotMatch(p, /data-probe="snacks-per-day"/,
+    'das Snack-Feld ist zurueck')
 
-  // `[read]` **Die Wirkung: sie schreiben in den Stand.** Ein Feld
-  // ohne `onChange` wäre eine Anzeige.
-  assert.match(p, /meals_per_day: Number\.isFinite\(n\) \? n : g0\.meals_per_day/,
-    'meals_per_day wird nicht gespeichert')
-  assert.match(p, /snacks_per_day: Number\.isFinite\(n\) \? n : g0\.snacks_per_day/,
-    'snacks_per_day wird nicht gespeichert')
+  // `[read]` **`meal_prep_ok` bleibt** — der Auftrag sagt es, und
+  // Vorkochen ist keine Mahlzeitenzahl.
+  assert.match(p, /data-probe="meal-prep-ok"/, 'Vorkochen ist verschwunden')
   assert.match(p, /meal_prep_ok: e\.target\.checked/,
-    'meal_prep_ok wird nicht gespeichert')
+    'Vorkochen wird nicht mehr gespeichert')
+
+  // `[cmd]` **Und die Slotliste steht da**, wo die Zahlen standen.
+  assert.match(p, /<SlotsFormular start=\{d\.slots\}/,
+    'die Slotliste fehlt — dann gibt es gar keine Mahlzeitenzahl mehr')
 })
 
-test('G-72: der Wirkungssatz kommt aus rasterZeilen', () => {
-  // `[read]` **Kein zweiter Wortlaut** — sonst sagten Preferences und
-  // Planner Verschiedenes über dieselbe Zahl.
-  const p = ohneKommentare(PREFS)
-  assert.match(p, /rasterZeilen\(g\.meals_per_day, g\.snacks_per_day\)\.grund/,
-    'der Satz ist selbst geschrieben statt aus rasterZeilen')
+test('G-72/G-335: die Diary-Reihen folgen der Slotliste', () => {
+  // ══ BERICHTIGT IN G-335 ═════════════════════════
+  //
+  // `[cmd]` **Hier stand, dass der Wirkungssatz aus `rasterZeilen`
+  // kommt** — der Satz gehoerte zur Kachel, die es nicht mehr gibt.
+  //
+  // `[cmd]` **Gemessen: `meals_per_day` hatte genau zwei
+  // Verwendungen** — die Kachel und `page.tsx:195`.
+  //
+  // `[read]` **Was bleibt, ist die Wirkung:** hat der Nutzer Slots,
+  // bestimmen SIE die Reihen. **Sonst `rasterZeilen`** — der
+  // Rueckfall fuer Nutzer ohne Slots.
+  const s = ohneKommentare(SEITE)
+  assert.match(s, /if \(mahlzeitSlots\.length > 0\) \{\s*\n\s*slots = SLOTS\.slice\(0, mahlzeitSlots\.length\)/,
+    'die Diary-Reihen folgen der Slotliste nicht')
+  assert.match(s, /rasterZeilen\(g\.meals_per_day, g\.snacks_per_day\)\.zeilen/,
+    'der Rueckfall fuer Nutzer ohne Slots ist weg')
 })
 
 test('G-72: das Tagebuch hört auf die Vorlieben', () => {
@@ -166,14 +187,14 @@ test('G-72: planner_notes wird gespeichert, nicht ausgewertet', () => {
 
 test('G-72: preferred_cuisines bleibt bewusst weg', () => {
   // `[cmd]` **Sie steht in der Datenbank** (`{mediterranean}` auf
-  // dev), **hier aber nicht** — E-47. `[read]` **Sie wartet auf
-  // denselben Punkt wie `thai_food` aus G-134.**
+  // dev), **hier aber nicht** — E-47.
+  //
+  // `[cmd]` **BERICHTIGT in G-335:** der Schnitt hing an der Kachel
+  // *Mahlzeitenstruktur*, die es nicht mehr gibt. **Jetzt ueber die
+  // ganze Datei** — die Zusage ist ohnehin eine Abwesenheit.
   const p = ohneKommentare(PREFS)
-  const i = p.indexOf('data-probe="meals-per-day"')
-  assert.ok(i > 0, 'die Kachel fehlt')
-  const block = p.slice(Math.max(0, i - 1200), i + 2600)
-  assert.ok(!block.includes('preferred_cuisines'),
-    'preferred_cuisines hat ein Feld bekommen — E-47 lässt sie liegen')
+  assert.ok(!p.includes('preferred_cuisines'),
+    'preferred_cuisines hat ein Feld bekommen — E-47 laesst sie liegen')
 })
 
 // ══ 4 · G-322: die Bauteile ══════════════════════════════════════════

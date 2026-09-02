@@ -43,6 +43,9 @@
 // **Die Suche des anderen Modals waere hier ueberfluessig.**
 
 import * as React from 'react'
+
+// G-335: EINE Auswahlliste statt zwei.
+import { kategorieAuswahl } from '../../../lib/nutrition/slots-lage'
 import { Icon } from '@lumeos/ui'
 
 /** Eine Portion aus `nutrition.food_portions` (C-51). */
@@ -53,15 +56,18 @@ type Portion = {
 }
 
 /** Die Mahlzeitarten, wie `mahlzeiten.tsx` sie fuehrt. */
-const MAHLZEITEN = [
-  ['breakfast', 'Breakfast'],
-  ['lunch', 'Lunch'],
-  ['dinner', 'Dinner'],
-  ['snack', 'Snack'],
-  ['pre_workout', 'Pre-workout'],
-  ['post_workout', 'Post-workout'],
-  ['other', 'Other'],
-] as const
+// ══ G-335: die eigene Tupel-Liste ist weg ═════════════════
+//
+// **Tom, 2026-09-02:** *,,Pulldown zeigt Pre-workout statt der
+// eigenen Namen."*
+//
+// `[cmd]` **Zwei Stellen bauten dieselbe Auswahl mit anderen
+// Woertern** — *Pre-workout* hier, *Vor dem Training* im
+// Rezeptformular.
+//
+// `[read]` **`kategorieAuswahl` liefert beides:** ohne Slots die
+// Kategorie, mit Slots die eigenen Namen.
+const MAHLZEITEN = kategorieAuswahl()
 
 /**
  * Welche Mahlzeit zur Tageszeit passt.
@@ -191,7 +197,7 @@ export function ErfassenModal({
     }
   }
 
-  const label = MAHLZEITEN.find(([k]) => k === typ)?.[1] ?? typ
+  const label = MAHLZEITEN.find(m => m.code === typ)?.label ?? typ
 
   return (
     <div className="v2-modal-veil" onClick={onClose} role="presentation">
@@ -222,7 +228,7 @@ export function ErfassenModal({
               Food-DB-Reiter nicht kennt. */}
           <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Mahlzeit</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: 12 }}>
-            {MAHLZEITEN.map(([k, l]) => (
+            {MAHLZEITEN.map(({ code: k, label: l }) => (
               <button
                 key={k}
                 type="button"

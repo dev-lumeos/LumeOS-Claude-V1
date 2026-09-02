@@ -117,12 +117,38 @@ test('meal item schema rejects non-positive and non-finite amounts', () => {
 })
 
 test('meal insert payload carries the user id and normalizes notes', () => {
+  // ══ ERWEITERT IN G-332 ═════════════════════════════════════════
+  //
+  // `[cmd]` **`meal_time` kam dazu.** **Tom, 2026-09-02:** *„ein user
+  // kann auch jederzeit im diary eine neue mahlzeit anlegen"* — wer
+  // um 22:00 isst, braucht eine Uhrzeit.
+  //
+  // `[cmd]` **Sie wurde bis dahin NIE gesetzt** — die 2.899
+  // vorhandenen Zeiten kommen aus den Seeds. **Eine im Browser
+  // angelegte Mahlzeit hatte keine**, und die Slot-Zuordnung (E-58)
+  // liefe ins Leere.
+  //
+  // `[read]` **`null` bleibt der Vorgabewert** — der Bestandsweg
+  // (`sicherstellen()`) schickt keine Zeit, und das bleibt gültig.
   assert.deepEqual(buildMealInsert('user-1', { entry_date: '2026-08-06', meal_type: 'lunch' }), {
     user_id: 'user-1',
     entry_date: '2026-08-06',
     meal_type: 'lunch',
     notes: null,
+    meal_time: null,
   })
+})
+
+test('G-332: eine mitgeschickte Uhrzeit landet im Insert', () => {
+  // `[cmd]` **`meals_meal_time_minute_check` verlangt volle
+  // Minuten** — deshalb `HH:MM`, keine Sekunden.
+  assert.equal(
+    buildMealInsert('user-1', {
+      entry_date: '2026-09-02', meal_type: 'other', meal_time: '22:00',
+    }).meal_time,
+    '22:00',
+    'die Uhrzeit geht verloren — die Slot-Zuordnung liefe ins Leere',
+  )
 })
 
 test('meal item insert freezes the macros and leaves frozen_at to the database', () => {

@@ -30,9 +30,12 @@ import {
   angemeldeteNutzerin, ladeKategorien, ladePresets, ladeTags, ladeVorlieben,
   leererStand,
 } from '../../../lib/nutrition/vorlieben-lesen'
+// G-332: die Mahlzeiten-Slots.
+import { ladeSlots } from '../../../lib/nutrition/slots-lesen'
+import type { MahlzeitSlot } from '../../../lib/nutrition/slots-lage'
 // G-72: die Reihen aus den Vorlieben — dieselbe Funktion wie
 // im Planner, kein zweiter Wortlaut.
-import { rasterZeilen, type Slot } from '../../../lib/nutrition/plan-model'
+import { rasterZeilen, SLOTS, type Slot } from '../../../lib/nutrition/plan-model'
 import type { VorliebenDaten } from './tab-vorlieben'
 // G-97: der Wochenplan aus den C-150-Tabellen.
 import {
@@ -175,9 +178,34 @@ export default async function V2NutritionPage({
   //
   // `[read]` **Nur die zwei Zahlen, nicht der ganze Vorliebenstand**
   // — der Diary-Reiter braucht keine Kategorien, Tags oder Presets.
+  // G-332: die benannten Slots (C-392) — fuer Tagebuch und Planner.
+  let mahlzeitSlots: MahlzeitSlot[] = []
+  if (tab === 'diary' || tab === 'planner' || tab === 'plans') {
+    try {
+      mahlzeitSlots = await ladeSlots()
+    } catch {
+      mahlzeitSlots = []
+    }
+  }
+
   let slots: Slot[] | null = null
   if (tab === 'diary') {
-    try {
+    // ══ G-335: die Slotliste ist die genauere Quelle ═════════
+    //
+    // **Tom, 2026-09-02:** *,,mahlzeitenstruktur muessen wir mit
+    // meine mahlzeiten verschmelzen."*
+    //
+    // `[cmd]` **Zwei Wahrheiten ueber dieselbe Zahl:**
+    // `meals_per_day` 4 + `snacks_per_day` 1 gegen fuenf benannte
+    // Zeilen. `[read]` **Die Slotliste sagt mehr** — sie kennt
+    // Anzahl, Namen UND Zeiten.
+    //
+    // `[read]` **Also: hat der Nutzer Slots, gelten sie.** **Sonst
+    // `rasterZeilen`** — wer noch keine gesetzt hat, bekommt die
+    // Reihen aus seinen Vorlieben.
+    if (mahlzeitSlots.length > 0) {
+      slots = SLOTS.slice(0, mahlzeitSlots.length)
+    } else try {
       const g = (await ladeVorlieben(await angemeldeteNutzerin())).grund
       slots = rasterZeilen(g.meals_per_day, g.snacks_per_day).zeilen
     } catch {
@@ -256,18 +284,23 @@ export default async function V2NutritionPage({
   if (tab === 'prefs') {
     try {
       const userId = await angemeldeteNutzerin()
-      const [stand, kategorien, tags, presets] = await Promise.all([
+      const [stand, kategorien, tags, presets, slots] = await Promise.all([
         ladeVorlieben(userId),
         ladeKategorien(),
         ladeTags(),
         ladePresets(),
+        // G-332: die Mahlzeiten-Slots (C-392).
+        ladeSlots(),
       ])
-      vorlieben = { stand, kategorien, tags, presets, ladefehler: null }
+      vorlieben = { stand, kategorien, tags, presets, slots, ladefehler: null }
     } catch (e) {
       // Ohne Sitzung ist der Leerzustand richtig, kein Fehlerkasten:
       // „noch nichts eingestellt" ist ein gueltiger Zustand.
       vorlieben = {
         stand: leererStand(), kategorien: [], tags: [], presets: [],
+        // `[read]` **Leer heisst: noch nichts gesetzt** — das
+        // Formular bietet dann Initialwerte an (G-332).
+        slots: [],
         ladefehler: e instanceof Error ? e.message : String(e),
       }
     }
@@ -447,7 +480,7 @@ export default async function V2NutritionPage({
       planLogs={planLogs}
       coachFreigabe={coachFreigabe}
       einkaufslisten={einkaufslisten}
-      tagesEintraege={tagesEintraege} slots={slots}
+      tagesEintraege={tagesEintraege} slots={slots} mahlzeitSlots={mahlzeitSlots}
       wechsel={wechsel}
       mikro={mikro}
       ordnung={ordnung}

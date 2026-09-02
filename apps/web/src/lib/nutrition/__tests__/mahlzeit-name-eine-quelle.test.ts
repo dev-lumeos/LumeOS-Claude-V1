@@ -1,0 +1,304 @@
+/**
+ * G-335 — EINE Namensliste, und der Name kommt aus der Quelle.
+ *
+ * **Tom, 2026-09-02:** *„Wo ein Plan die Quelle ist, kommt der Name aus
+ * dem Plan (E-59). Wo der Nutzer die Quelle ist, aus meal_slots (E-58).
+ * meal_type bleibt Kategorie ohne Bedeutung — nicht Beschriftung."*
+ *
+ * `[cmd]` **Gemessen an HEAD, 2026-09-02:** `meal_type` wurde ueber
+ * **FUENF eigene Namenstabellen** an **ZEHN Stellen** uebersetzt —
+ * mit **VIER Schreibweisen fuer `pre_workout`**: `Pre-Workout`
+ * (plans-echt, plan-model), `Pre-workout` (mahlzeiten), `Vor dem
+ * Training` (plan-eintrag-editor), `vor dem Training` (erfassen).
+ *
+ * `[read]` **Berichtigt gegenueber dem Auftrag**, der acht Stellen
+ * nannte: acht war meine Zahl, zehn ist die gemessene.
+ *
+ * `[read]` **Die Waechter messen die Wirkung, nicht das Wort** —
+ * CLAUDE.md nennt vier Faelle (G-216, G-247, G-246, G-108), in denen
+ * einer gruen blieb, waehrend die Sache kaputt war. **Deshalb steht
+ * hier fuenfmal ein Aufruf mit Werten statt einer Textprobe.**
+ */
+import assert from 'node:assert/strict'
+import * as fs from 'node:fs'
+import * as path from 'node:path'
+import { test } from 'node:test'
+
+import { KATEGORIE_TEXT, kategorieAuswahl, mahlzeitName } from '../slots-lage'
+import type { MahlzeitSlot } from '../slots-lage'
+
+// `[cmd]` **Pfad aus der Lage DIESER Datei** — mit `process.cwd()`
+// gruen aus der Wurzel und rot im Gate (G-291, A-63).
+const WURZEL = path.resolve(
+  path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')),
+  '../../../../../..',
+)
+const lies = (f: string) => fs.readFileSync(path.join(WURZEL, f), 'utf8')
+const ohneKommentare = (f: string) => lies(f)
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+  .replace(/^[ \t]*\/\/.*$/gm, '')
+
+const LAGE = 'apps/web/src/lib/nutrition/slots-lage.ts'
+const MODEL = 'apps/web/src/lib/nutrition/plan-model.ts'
+const GHOST = 'apps/web/src/app/v2/nutrition/ghost-eintrag.tsx'
+const DIARY = 'apps/web/src/app/v2/nutrition/mahlzeiten.tsx'
+const PREFS = 'apps/web/src/app/v2/nutrition/tab-vorlieben.tsx'
+
+// `[cmd]` **Der Waechter liest die Platte, nicht den Index** —
+// `git ls-files` sieht Ungetracktes nicht (A-63).
+const QUELLEN = [
+  'apps/web/src/lib/nutrition',
+  'apps/web/src/app/v2/nutrition',
+]
+
+// `[cmd]` **`erfassen.tsx` traegt eine der fuenf Tabellen** —
+// `Fruehstueck`
+// ohne Umlaut, `vor dem Training` klein. `[cmd]` **Sie hat keinen
+// Aufrufer und ist seit dem 2026-08-16 unberuehrt** (477 Zeilen).
+//
+// `[read]` **Sie bleibt hier draussen, statt umgebaut zu werden:**
+// eine tote Datei zu verbessern aendert nichts am Schirm. **Ob sie
+// geloescht wird, ist eine eigene Entscheidung** — `suchen-und-
+// vorschau.test.ts` haelt fest, dass sie tot ist, und faellt, sobald
+// jemand sie wieder anschliesst. **Dann faellt auch dieser Waechter.**
+const TOT = 'apps/web/src/app/v2/nutrition/erfassen.tsx'
+
+/** Alle `.ts`/`.tsx` unterhalb eines Ordners, ohne `__tests__`. */
+function dateien(rel: string): string[] {
+  const abs = path.join(WURZEL, rel)
+  const raus: string[] = []
+  for (const e of fs.readdirSync(abs, { withFileTypes: true })) {
+    if (e.name === '__tests__') continue
+    const p = path.join(rel, e.name).replace(/\\/g, '/')
+    if (e.isDirectory()) raus.push(...dateien(p))
+    else if (/\.tsx?$/.test(e.name) && p !== TOT) raus.push(p)
+  }
+  return raus
+}
+
+test('die Dateiproben finden ihre Dateien — unabhaengig vom Startort', () => {
+  for (const f of [LAGE, MODEL, GHOST, DIARY, PREFS]) {
+    assert.ok(fs.existsSync(path.join(WURZEL, f)), `${f} nicht gefunden`)
+    assert.ok(lies(f).length > 500, `${f} ist verdaechtig kurz`)
+  }
+  assert.ok(fs.existsSync(path.join(WURZEL, 'pnpm-workspace.yaml')),
+    `WURZEL zeigt nicht auf das Repo: ${WURZEL}`)
+  assert.ok(dateien(QUELLEN[1]).length > 20,
+    'der Dateibaum ist leer — die Suche unten liefe ins Leere')
+
+  // `[cmd]` **Der Ausschluss deckt GENAU eine Datei zu** — und nur,
+  // solange sie tot ist. **Bekommt sie einen Aufrufer, faellt der
+  // Ausschluss mit.**
+  assert.ok(fs.existsSync(path.join(WURZEL, TOT)),
+    'die ausgeschlossene Datei gibt es nicht mehr — dann den Ausschluss entfernen')
+  const rufer = [...dateien(QUELLEN[0]), ...dateien(QUELLEN[1])]
+    .filter(f => /from '[^']*\/erfassen'/.test(lies(f)))
+  assert.deepEqual(rufer, [],
+    `erfassen.tsx ist wieder angeschlossen (${rufer.join(', ')}) — Ausschluss weg`)
+})
+
+// ══ 1 · EINE Liste, nicht fuenf ══════════════════════════════════════
+
+test('G-335: es gibt genau EINE Namensliste im Quelltext', () => {
+  // `[cmd]` **Die Wirkung, nicht das Wort:** eine zweite Liste erkennt
+  // man daran, dass ein Kategoriecode als Objektschluessel neben einem
+  // Text steht. **Gesucht wird das Muster, nicht der Variablenname** —
+  // die naechste Kopie heisst anders.
+  //
+  // `[read]` **Zwei Schluessel genuegen als Nachweis:** `breakfast` und
+  // `pre_workout` stehen in JEDER der fuenf gefundenen Tabellen.
+  const treffer: string[] = []
+  for (const rel of QUELLEN) {
+    for (const f of dateien(rel)) {
+      const t = ohneKommentare(f)
+      // `breakfast: '…'` UND `pre_workout: '…'` in derselben Datei.
+      if (/(?<![a-z0-9_])breakfast:\s*['"]/.test(t)
+        && /(?<![a-z0-9_])pre_workout:\s*['"]/.test(t)) treffer.push(f)
+    }
+  }
+  assert.deepEqual(treffer, [LAGE],
+    `Namenslisten stehen in ${treffer.length} Dateien statt in einer`)
+})
+
+test('G-335: die alten Listen sind Weiterleitungen, keine Kopien', () => {
+  // `[cmd]` **`plan-model.ts` trug beide** — `SLOT_LABEL` (vier
+  // englische) und `MAHLZEIT_LABEL` (sieben englische).
+  //
+  // `[read]` **Sie bleiben als Name bestehen** — die Aufrufer
+  // importieren sie weiter. **Aber sie zeigen auf dieselbe Tabelle.**
+  const m = ohneKommentare(MODEL)
+  assert.match(m, /export \{ KATEGORIE_TEXT as MAHLZEIT_LABEL \}/,
+    'MAHLZEIT_LABEL ist wieder eine eigene Tabelle')
+  assert.match(m, /export \{ KATEGORIE_TEXT as SLOT_LABEL \}/,
+    'SLOT_LABEL ist wieder eine eigene Tabelle')
+
+  // `[cmd]` **Die Wirkung:** derselbe Code liefert denselben Text,
+  // egal ueber welchen Namen.
+  assert.equal(KATEGORIE_TEXT.pre_workout, 'Vor dem Training')
+  assert.ok(!Object.values(KATEGORIE_TEXT).some(v => /[A-Za-z]-[A-Za-z]/.test(v)
+    && v.includes('Workout')), 'eine englische Schreibweise ist zurueck')
+})
+
+test('G-335: alle sieben Kategorien des CHECK haben einen Text', () => {
+  // `[cmd]` **Der CHECK steht in ZWEI Tabellen** — `meals` und
+  // `meal_plan_entries` — und nennt sieben Werte.
+  //
+  // `[read]` **Fehlt einer, faellt `mahlzeitName` auf den Rohcode
+  // zurueck** und der Nutzer liest `pre_workout` auf dem Schirm.
+  for (const code of ['breakfast', 'lunch', 'dinner', 'snack',
+    'pre_workout', 'post_workout', 'other']) {
+    assert.ok(KATEGORIE_TEXT[code], `${code} hat keinen Text`)
+    assert.notEqual(mahlzeitName(code), code,
+      `${code} erscheint roh auf dem Schirm`)
+  }
+  assert.equal(Object.keys(KATEGORIE_TEXT).length, 7,
+    'die Liste deckt nicht genau die sieben CHECK-Werte ab')
+})
+
+// ══ 2 · Die Rangfolge der Quellen ════════════════════════════════════
+
+const SLOTS: MahlzeitSlot[] = [
+  { position: 1, name: 'Morgenbrei', planned_time: '07:00' },
+  { position: 2, name: 'Mittag', planned_time: '12:30' },
+  { position: 3, name: 'Abendbrot', planned_time: '19:00' },
+]
+
+test('G-335/E-59: ein gelieferter Plan schlaegt alles', () => {
+  // `[read]` **Ein gekaufter Plan bringt seine Benennung mit** — sie
+  // gilt, auch wenn der Nutzer eigene Slots hat.
+  assert.equal(
+    mahlzeitName('breakfast', {
+      planName: 'Refeed 1', zeit: '07:00', slots: SLOTS,
+    }),
+    'Refeed 1',
+    'der Plannname wird von der Slotliste ueberstimmt')
+
+  // `[cmd]` **Leerer Plannname ist keine Quelle** — sonst stuende eine
+  // leere Ueberschrift da.
+  assert.equal(
+    mahlzeitName('breakfast', { planName: '   ', zeit: '07:00', slots: SLOTS }),
+    'Morgenbrei',
+    'ein leerer Plannname verdeckt die Slotliste')
+})
+
+test('G-335/E-58: ohne Plan entscheidet die Zeit', () => {
+  // `[read]` **Die Buchung ist die Wahrheit** — der Slot ordnet sie nur
+  // ein. **Wer um 12:35 isst, isst zu Mittag.**
+  assert.equal(mahlzeitName('other', { zeit: '12:35', slots: SLOTS }), 'Mittag')
+  assert.equal(mahlzeitName('breakfast', { zeit: '19:10', slots: SLOTS }),
+    'Abendbrot', 'die Kategorie schlaegt die Zeit — falsch herum')
+
+  // `[cmd]` **Ausserhalb jedes Fensters bleibt es bei der Kategorie** —
+  // `MAX_ABSTAND_MIN` ist 120, 03:00 liegt 240 min von 07:00 weg.
+  assert.equal(mahlzeitName('snack', { zeit: '03:00', slots: SLOTS }), 'Snack',
+    'eine Zeit weit ausserhalb wird trotzdem einem Slot zugeschlagen')
+})
+
+test('G-335: ohne Zeit entscheidet die Reihenfolge, dann die Kategorie', () => {
+  // `[read]` **Eine Planzeile ohne Zeit hat trotzdem eine Position** —
+  // die zweite Reihe des Rasters ist der zweite Slot des Nutzers.
+  assert.equal(
+    mahlzeitName('lunch', { slots: SLOTS, reihen: ['breakfast', 'lunch', 'dinner'] }),
+    'Mittag')
+
+  // **Ohne jede Quelle: der deutsche Text.**
+  assert.equal(mahlzeitName('pre_workout'), 'Vor dem Training')
+  assert.equal(mahlzeitName('lunch', { slots: [] }), 'Mittagessen')
+})
+
+test('G-335: das Pulldown zeigt die Namen des Nutzers, nicht die Kategorien', () => {
+  // `[cmd]` **Die Auswahl traegt sieben Eintraege** — die Codes bleiben
+  // als Wert, nur die Beschriftung folgt der Quelle.
+  const ohne = kategorieAuswahl()
+  assert.equal(ohne.length, 7)
+  assert.deepEqual(ohne.map(o => o.label).slice(0, 3),
+    ['Frühstück', 'Mittagessen', 'Abendessen'])
+
+  const mit = kategorieAuswahl(SLOTS, ['breakfast', 'lunch', 'dinner'])
+  assert.deepEqual(mit.map(o => o.label).slice(0, 3),
+    ['Morgenbrei', 'Mittag', 'Abendbrot'],
+    'das Pulldown zeigt die Kategorien statt der Nutzernamen')
+  assert.deepEqual(mit.map(o => o.code), ohne.map(o => o.code),
+    'die gespeicherten Werte haben sich mitverschoben')
+})
+
+// ══ 3 · Die Verdrahtung ══════════════════════════════════════════════
+
+test('G-335: die Ghost-Karten fragen mit Zeit UND Slots', () => {
+  // `[cmd]` **Hier stand `MAHLZEIT_LABEL[eintrag.meal_type]`** — an
+  // ZWEI Stellen (Karte und Uebergabe an das Modal).
+  //
+  // `[read]` **Ein Aufruf ohne `zeit` waere gruen und wirkungslos** —
+  // deshalb pruefen beide Argumente.
+  const g = ohneKommentare(GHOST)
+  const rufe = g.match(/mahlzeitName\(eintrag\.meal_type, \{[^}]*\}/g) ?? []
+  assert.equal(rufe.length, 2,
+    `${rufe.length} Aufrufe statt zwei — eine Anzeigestelle fehlt`)
+  for (const r of rufe) {
+    assert.match(r, /zeit: eintrag\.planned_time/, `ohne Zeit: ${r}`)
+    assert.match(r, /slots(,|\s*\})/, `ohne Slots: ${r}`)
+  }
+
+  // `[cmd]` **Und die Zeit muss geladen werden** — sonst ist sie immer
+  // `null` und die Zeitregel laeuft leer.
+  //
+  // ══ BERICHTIGT NACH DER SABOTAGEPROBE ═══════════════════════════
+  //
+  // `[cmd]` **Hier stand `assert.match(l, /planned_time/)`.** Die
+  // Sabotage benannte ALLE ACHT Vorkommen um — typkonsistent, gruen,
+  // und die Zeit kam nie an. **Ein Wortwaechter, wie ihn CLAUDE.md
+  // viermal beschreibt (G-216, G-247, G-246, G-108).**
+  //
+  // `[read]` **Die Wirkung haengt am SPALTENNAMEN**, den PostgREST
+  // kennt — `meal_plan_entries.planned_time`. **Ein umbenanntes Feld
+  // liefert `undefined`.** Deshalb wird die Kette einzeln geprueft:
+  // Abfrage, Rohtyp, Rueckgabe.
+  const l = ohneKommentare('apps/web/src/lib/nutrition/plan-lesen.ts')
+
+  // 1 · die Spalte steht in der `.select`-Liste der Ghost-Abfrage
+  const i = l.indexOf(".from('meal_plan_entries')")
+  assert.ok(i > 0, 'die Ghost-Abfrage ist weg')
+  const select = l.slice(i, l.indexOf('`', l.indexOf('.select(`', i) + 9))
+  assert.match(select, /(?<![a-z0-9_])planned_time(?![a-z0-9_])/,
+    'planned_time steht nicht in der Spaltenliste — die Zeit kommt nie an')
+
+  // 2 · aus dem Rohsatz gelesen, nicht erfunden
+  assert.match(l, /planned_time: text\(roh\.planned_time\)/,
+    'die Zeit wird nicht aus dem Rohsatz uebernommen')
+
+  // 3 · und weitergereicht
+  assert.match(l, /planned_time: e\.planned_time/,
+    'die Zeit erreicht die Karte nicht')
+})
+
+test('G-335: das Tagebuch benennt die Karten aus der Slotliste', () => {
+  const d = ohneKommentare(DIARY)
+  assert.match(d, /const SLOT_LABEL = KATEGORIE_TEXT/,
+    'das Tagebuch haelt wieder eine eigene Liste')
+  assert.match(d, /slotFuerZeit\(/, 'die Karten fragen die Zeit nicht ab')
+  assert.match(d, /slotFuerTyp\(mahlzeitSlots, typ, reihen\) \?\? SLOT_LABEL\[typ\]/,
+    'die leeren Karten tragen die Kategorie statt des Nutzernamens')
+})
+
+// ══ 4 · Die Verschmelzung ════════════════════════════════════════════
+
+test('G-335: Mahlzeitenstruktur ist in Meine Mahlzeiten aufgegangen', () => {
+  // **Tom, 2026-09-02:** *„mahlzeitenstruktur muessen wir mit meine
+  // mahlzeiten verschmelzen."*
+  //
+  // `[read]` **Die Wirkung ist eine Abwesenheit plus eine Anwesenheit**
+  // — die Kachel weg, die Slotliste da. **Beides zaehlt.**
+  const p = ohneKommentare(PREFS)
+  assert.doesNotMatch(p, /title="Mahlzeitenstruktur"/,
+    'die Kachel Mahlzeitenstruktur ist zurueck')
+  assert.doesNotMatch(p, /Hauptmahlzeiten/,
+    'das Feld Hauptmahlzeiten ist zurueck — zwei Wahrheiten')
+  assert.match(p, /<SlotsFormular start=\{d\.slots\}/,
+    'die Slotliste steht nicht in den Vorlieben')
+
+  // `[cmd]` **`rasterZeilen` wird hier nicht mehr gebraucht** — ein
+  // verwaister Import ist kein Fehler, aber ein Rest.
+  assert.doesNotMatch(p, /(?<![a-z0-9_])rasterZeilen(?![a-z0-9_])/,
+    'der verwaiste rasterZeilen-Import ist zurueck')
+})
