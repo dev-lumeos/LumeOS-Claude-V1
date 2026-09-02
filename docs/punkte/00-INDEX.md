@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 221 |
+| `todos` | 219 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 235 |
 | **gesamt** | **457** |
@@ -50,7 +51,7 @@
 | `C-332` | befund | mittel | [23 Regeln koennen weiterhin nicht feuern](todos/medical-c-0332-23-regeln-koennen-weiterhin-nicht-feuern.md) | offen | — | — |
 | `C-337` | befund | mittel | [die Medikamenten-Einnahmezeit fehlt](todos/medical-c-0337-die-medikamenten-einnahmezeit-fehlt.md) | offen | — | — |
 | `C-359` | feature | mittel | [Symptome brauchen ein Protokoll je Nutzer](todos/medical-c-0359-symptome-brauchen-ein-protokoll-je-nutzer.md) | offen | — | — |
-| `C-385` | feature | hoch | [das Datenmodell fuer Injektionsstellen](todos/medical-c-0385-das-datenmodell-fuer-injektionsstellen.md) | offen | — | — |
+| `C-385` | feature | hoch | [das Datenmodell fuer Injektionsstellen](laufend_codex/medical-c-0385-das-datenmodell-fuer-injektionsstellen.md) | laeuft (codex) | — | — |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
@@ -308,7 +309,7 @@
 | `C-352` | befund | hoch | [der Katalog hat keine deutschen Namen](erledigt/supplements-c-0352-der-katalog-hat-keine-deutschen-namen.md) | erledigt | — | — |
 | `C-364` | entscheidung | mittel | [die Produktebene ist Wissen, kein Bestand](erledigt/supplements-c-0364-die-produktebene-ist-wissen-kein-bestand.md) | erledigt | — | G-296 |
 | `C-365` | befund | niedrig | [Peptidsequenzen haben kein Ziel im Schema](erledigt/supplements-c-0365-peptidsequenzen-haben-kein-ziel-im-schema.md) | erledigt | — | — |
-| `C-393` | befund | mittel | [`substance_group_memberships` ist leer](todos/supplements-c-0393-substance-group-memberships-ist-leer.md) | offen | — | — |
+| `C-393` | befund | mittel | [`substance_group_memberships` ist leer](laufend_codex/supplements-c-0393-substance-group-memberships-ist-leer.md) | laeuft (codex) | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |

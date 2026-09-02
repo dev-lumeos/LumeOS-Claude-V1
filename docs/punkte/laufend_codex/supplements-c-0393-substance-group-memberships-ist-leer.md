@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: C-391
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [supplements.supplement_groups]
 zahlen:
@@ -49,3 +51,8 @@ Schreibweg** — **auf `dev` nie eingespielt.**
 
 `[read]` **Zu entscheiden: einspielen oder die Erwartung
 zuruecknehmen.** **Der Punkt bleibt offen.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-385 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
