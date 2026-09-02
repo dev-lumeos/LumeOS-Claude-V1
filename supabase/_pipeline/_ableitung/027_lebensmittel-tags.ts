@@ -18,16 +18,16 @@ const INPUT = 'supabase/_pipeline/daten/lebensmittel-tags.jsonl'
 const EXPECTED_FOODS = foodsImBestand(CONTAINER, DB)
 
 const TAG_DEFINITIONS = [
-  ['whole_food', 'Grundnahrungsmittel', 'Whole food', 'processing', false, 50],
-  ['ultra_processed', 'Hochverarbeitet', 'Ultra-processed', 'processing', false, 60],
-  ['vegan', 'Vegan', 'Vegan', 'diet', true, 70],
-  ['vegetarian', 'Vegetarisch', 'Vegetarian', 'diet', true, 80],
-  ['contains_nuts', 'Enthält Nüsse', 'Contains nuts', 'allergen', true, 90],
-  ['contains_gluten', 'Enthält Gluten', 'Contains gluten', 'allergen', true, 100],
-  ['contains_lactose', 'Enthält Laktose', 'Contains lactose', 'allergen', true, 110],
-  ['thai_food', 'Thai Food', 'Thai food', 'diet', false, 120],
-  ['halal', 'Halal', 'Halal', 'diet', false, 130],
-  ['kosher', 'Koscher', 'Kosher', 'diet', false, 140],
+  ['whole_food', 'Grundnahrungsmittel', 'Whole food', 'processing', false, 50, 'processing'],
+  ['ultra_processed', 'Hochverarbeitet', 'Ultra-processed', 'processing', false, 60, 'processing'],
+  ['vegan', 'Vegan', 'Vegan', 'diet', true, 70, 'dietary_pattern'],
+  ['vegetarian', 'Vegetarisch', 'Vegetarian', 'diet', true, 80, 'dietary_pattern'],
+  ['contains_nuts', 'Enthält Nüsse', 'Contains nuts', 'allergen', true, 90, 'allergen'],
+  ['contains_gluten', 'Enthält Gluten', 'Contains gluten', 'allergen', true, 100, 'allergen'],
+  ['contains_lactose', 'Enthält Laktose', 'Contains lactose', 'allergen', true, 110, 'allergen'],
+  ['thai_food', 'Thai Food', 'Thai food', 'diet', false, 120, 'dietary_pattern'],
+  ['halal', 'Halal', 'Halal', 'diet', false, 130, 'dietary_pattern'],
+  ['kosher', 'Koscher', 'Kosher', 'diet', false, 140, 'dietary_pattern'],
 ] as const
 
 const MANAGED_TAGS = TAG_DEFINITIONS.map(([code]) => code)
@@ -92,8 +92,8 @@ function readRows(): { rows: ParsedTag[]; taggedFoods: number; assignments: numb
 function runPsql(rows: ParsedTag[]): void {
   const payload = rows.map(row => csvCell(JSON.stringify(row))).join('\n')
   const tagValues = TAG_DEFINITIONS
-    .map(([code, nameDe, nameEn, type, exclusion, order]) =>
-      `('${code}','${nameDe}','${nameEn}','${type}',${exclusion},'','${order}'::int,false,NULL::jsonb)`)
+    .map(([code, nameDe, nameEn, type, exclusion, order, filterGroup]) =>
+      `('${code}','${nameDe}','${nameEn}','${type}',${exclusion},'','${order}'::int,false,NULL::jsonb,'${filterGroup}')`)
     .join(',\n    ')
   const managedArray = `ARRAY[${MANAGED_TAGS.map(tag => `'${tag}'`).join(',')}]`
   const obsoleteArray = `ARRAY[${OBSOLETE_TAGS.map(tag => `'${tag}'`).join(',')}]`
@@ -110,7 +110,7 @@ ${payload}
 \\.
 
 INSERT INTO nutrition.tag_definitions
-  (code, name_de, name_en, tag_type, is_exclusion_relevant, icon, sort_order, requires_macro_check, macro_rule)
+  (code, name_de, name_en, tag_type, is_exclusion_relevant, icon, sort_order, requires_macro_check, macro_rule, filter_group)
 VALUES
     ${tagValues}
 ON CONFLICT (code) DO UPDATE SET
@@ -121,7 +121,8 @@ ON CONFLICT (code) DO UPDATE SET
   icon = EXCLUDED.icon,
   sort_order = EXCLUDED.sort_order,
   requires_macro_check = EXCLUDED.requires_macro_check,
-  macro_rule = EXCLUDED.macro_rule;
+  macro_rule = EXCLUDED.macro_rule,
+  filter_group = EXCLUDED.filter_group;
 
 DO $$
 DECLARE

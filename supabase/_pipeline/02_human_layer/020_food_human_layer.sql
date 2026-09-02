@@ -54,7 +54,8 @@ CREATE TABLE IF NOT EXISTS nutrition.tag_definitions (
   icon text,
   sort_order integer DEFAULT 0,
   requires_macro_check boolean DEFAULT false,
-  macro_rule jsonb
+  macro_rule jsonb,
+  filter_group text CHECK (filter_group IS NULL OR filter_group IN ('dietary_pattern','nutrient','processing','allergen'))
 );
 
 CREATE TABLE IF NOT EXISTS nutrition.food_tags (

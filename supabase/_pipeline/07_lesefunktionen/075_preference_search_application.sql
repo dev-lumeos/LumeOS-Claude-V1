@@ -550,6 +550,134 @@ DROP FUNCTION IF EXISTS nutrition.food_search(
   text[], text[], boolean, jsonb, uuid, jsonb);
 -- =============================================================
 
+-- C-391: Die Trefferauswahl ist schon vollständig in food_search
+-- beschrieben. Diese Funktion gibt denselben Weg als JSON aus; sie nimmt
+-- weder Einfluss auf Filter noch auf die bestehende Rangfolge.
+CREATE OR REPLACE FUNCTION nutrition.food_match_reason(
+  p_food_id uuid,
+  p_name_de text,
+  p_query text,
+  p_normalized_query text,
+  p_tokens text[],
+  p_token_groups jsonb,
+  p_food_source text
+)
+RETURNS json
+LANGUAGE sql
+STABLE
+AS $function$
+  SELECT CASE
+    WHEN p_tokens IS NULL OR cardinality(p_tokens) = 0
+      THEN json_build_object('kind', 'browse')
+    WHEN lower(COALESCE(p_name_de, '')) = lower(COALESCE(p_query, ''))
+      THEN json_build_object('kind', 'name_exact')
+    WHEN p_food_source = 'bls' AND EXISTS (
+      SELECT 1
+      FROM nutrition.food_aliases fa
+      WHERE fa.food_id = p_food_id
+        AND nutrition.search_fold(fa.alias) = p_normalized_query
+    ) THEN (
+      SELECT json_build_object('kind', 'alias_exact', 'source', fa.source)
+      FROM nutrition.food_aliases fa
+      WHERE fa.food_id = p_food_id
+        AND nutrition.search_fold(fa.alias) = p_normalized_query
+      ORDER BY fa.source, fa.alias
+      LIMIT 1
+    )
+    WHEN lower(COALESCE(p_name_de, '')) LIKE lower(COALESCE(p_query, '')) || '%'
+      THEN json_build_object('kind', 'name_prefix')
+    WHEN p_food_source = 'bls' AND EXISTS (
+      SELECT 1
+      FROM nutrition.food_aliases fa
+      WHERE fa.food_id = p_food_id
+        AND nutrition.search_fold(fa.alias) LIKE p_normalized_query || '%'
+    ) THEN (
+      SELECT json_build_object('kind', 'alias_prefix', 'source', fa.source)
+      FROM nutrition.food_aliases fa
+      WHERE fa.food_id = p_food_id
+        AND nutrition.search_fold(fa.alias) LIKE p_normalized_query || '%'
+      ORDER BY fa.source, fa.alias
+      LIMIT 1
+    )
+    WHEN nutrition.search_fold(COALESCE(p_name_de, '')) LIKE p_normalized_query || '%'
+      OR nutrition.search_fold(COALESCE(p_name_de, '')) LIKE '% ' || p_normalized_query || '%'
+      THEN json_build_object('kind', 'name_word_start')
+    WHEN EXISTS (
+      SELECT 1
+      FROM nutrition.search_synonyms ss
+      CROSS JOIN LATERAL unnest(ss.targets) AS target(value)
+      WHERE ss.term = p_normalized_query
+        AND (
+          nutrition.search_fold(COALESCE(p_name_de, '')) LIKE '%' || target.value || '%'
+          OR (
+            p_food_source = 'bls'
+            AND EXISTS (
+              SELECT 1
+              FROM nutrition.food_aliases fa
+              WHERE fa.food_id = p_food_id
+                AND nutrition.search_fold(fa.alias) LIKE '%' || target.value || '%'
+            )
+          )
+        )
+      ORDER BY target.value
+      LIMIT 1
+    ) THEN (
+      SELECT json_build_object(
+        'kind', 'synonym',
+        'term', ss.term,
+        'matched_term', target.value,
+        'source', ss.source
+      )
+      FROM nutrition.search_synonyms ss
+      CROSS JOIN LATERAL unnest(ss.targets) AS target(value)
+      WHERE ss.term = p_normalized_query
+        AND (
+          nutrition.search_fold(COALESCE(p_name_de, '')) LIKE '%' || target.value || '%'
+          OR (
+            p_food_source = 'bls'
+            AND EXISTS (
+              SELECT 1
+              FROM nutrition.food_aliases fa
+              WHERE fa.food_id = p_food_id
+                AND nutrition.search_fold(fa.alias) LIKE '%' || target.value || '%'
+            )
+          )
+        )
+      ORDER BY target.value
+      LIMIT 1
+    )
+    WHEN p_food_source = 'bls' AND EXISTS (
+      SELECT 1
+      FROM nutrition.food_aliases fa
+      JOIN LATERAL unnest(COALESCE(p_tokens, ARRAY[]::text[])) AS token(value) ON true
+      WHERE fa.food_id = p_food_id
+        AND nutrition.search_fold(fa.alias) LIKE '%' || token.value || '%'
+    ) THEN (
+      SELECT json_build_object('kind', 'alias', 'source', fa.source)
+      FROM nutrition.food_aliases fa
+      JOIN LATERAL unnest(COALESCE(p_tokens, ARRAY[]::text[])) AS token(value) ON true
+      WHERE fa.food_id = p_food_id
+        AND nutrition.search_fold(fa.alias) LIKE '%' || token.value || '%'
+      ORDER BY fa.source, fa.alias
+      LIMIT 1
+    )
+    WHEN EXISTS (
+      SELECT 1
+      FROM unnest(COALESCE(p_tokens, ARRAY[]::text[])) AS token(value)
+      WHERE nutrition.search_fold(COALESCE(p_name_de, '')) LIKE '%' || token.value || '%'
+    ) THEN json_build_object('kind', 'name')
+    ELSE json_build_object('kind', 'token_group')
+  END
+$function$;
+
+REVOKE ALL ON FUNCTION nutrition.food_match_reason(
+  uuid, text, text, text, text[], jsonb, text
+) FROM PUBLIC, anon;
+
+GRANT EXECUTE ON FUNCTION nutrition.food_match_reason(
+  uuid, text, text, text, text[], jsonb, text
+) TO authenticated, service_role;
+
 CREATE OR REPLACE FUNCTION nutrition.food_search(p_query text, p_normalized_query text, p_tokens text[], p_selected_food_id uuid, p_category_slug text, p_category_id uuid, p_tag_code text, p_sort text, p_limit integer, p_offset integer, p_preparations text[] DEFAULT NULL, p_groups text[] DEFAULT NULL, p_basics_only boolean DEFAULT false, p_token_groups jsonb DEFAULT NULL, p_user_id uuid DEFAULT NULL, p_filters jsonb DEFAULT NULL)
  RETURNS json
  LANGUAGE sql
@@ -1056,7 +1184,11 @@ matching_foods AS (
     COALESCE(ps.preference_score, 0) AS preference_score,
     COALESCE(ps.preference_level, 'neutral') AS preference_level,
     COALESCE(ps.preference_match_type, '') AS preference_match_type,
-    COALESCE(ps.preference_matches, '[]'::jsonb) AS preference_matches
+    COALESCE(ps.preference_matches, '[]'::jsonb) AS preference_matches,
+    nutrition.food_match_reason(
+      f.id, f.name_de, p_query, p_normalized_query, p_tokens,
+      p_token_groups, f.food_source
+    ) AS match_reason
   FROM search_foods f
   LEFT JOIN nutrition.food_categories fc ON fc.id = f.category_id
   LEFT JOIN preference_scores ps ON ps.food_id = f.id
@@ -1572,7 +1704,11 @@ selected_food AS (
     COALESCE(ps.preference_score, 0) AS preference_score,
     COALESCE(ps.preference_level, 'neutral') AS preference_level,
     COALESCE(ps.preference_match_type, '') AS preference_match_type,
-    COALESCE(ps.preference_matches, '[]'::jsonb) AS preference_matches
+    COALESCE(ps.preference_matches, '[]'::jsonb) AS preference_matches,
+    nutrition.food_match_reason(
+      f.id, f.name_de, p_query, p_normalized_query, p_tokens,
+      p_token_groups, f.food_source
+    ) AS match_reason
   FROM search_foods f
   LEFT JOIN nutrition.food_categories fc ON fc.id = f.category_id
   LEFT JOIN preference_scores ps ON ps.food_id = f.id
@@ -1625,7 +1761,8 @@ selected_food_json AS (
         'preference_score', preference_score,
         'preference_level', preference_level,
         'preference_match_type', preference_match_type,
-        'preference_matches', preference_matches
+        'preference_matches', preference_matches,
+        'match_reason', match_reason
       )
       FROM selected_food
     )
@@ -1742,7 +1879,8 @@ SELECT json_build_object(
         'preference_score', preference_score,
         'preference_level', preference_level,
         'preference_match_type', preference_match_type,
-        'preference_matches', preference_matches
+        'preference_matches', preference_matches,
+        'match_reason', match_reason
       )
     )
     FROM matching_foods

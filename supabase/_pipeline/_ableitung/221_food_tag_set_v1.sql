@@ -11,7 +11,7 @@ WHERE tag_code NOT IN ('high_fat', 'gluten_free')
 GROUP BY tag_code;
 
 INSERT INTO nutrition.tag_definitions
-  (code, name_de, name_en, tag_type, is_exclusion_relevant, icon, sort_order, requires_macro_check, macro_rule)
+  (code, name_de, name_en, tag_type, is_exclusion_relevant, icon, sort_order, requires_macro_check, macro_rule, filter_group)
 VALUES
   (
     'high_fat',
@@ -22,7 +22,8 @@ VALUES
     '',
     35,
     true,
-    '{"nutrient_code":"FAT","op":">","value":17.5,"unit":"g_per_100g","source":"UK Department of Health and Social Care, Front of Pack nutrition labelling guidance, Table 2","source_url":"https://www.gov.uk/government/publications/front-of-pack-nutrition-labelling-guidance"}'::jsonb
+    '{"nutrient_code":"FAT","op":">","value":17.5,"unit":"g_per_100g","source":"UK Department of Health and Social Care, Front of Pack nutrition labelling guidance, Table 2","source_url":"https://www.gov.uk/government/publications/front-of-pack-nutrition-labelling-guidance"}'::jsonb,
+    'nutrient'
   ),
   (
     'gluten_free',
@@ -33,7 +34,8 @@ VALUES
     '',
     105,
     false,
-    NULL
+    NULL,
+    'dietary_pattern'
   )
 ON CONFLICT (code) DO UPDATE SET
   name_de = EXCLUDED.name_de,
@@ -43,7 +45,8 @@ ON CONFLICT (code) DO UPDATE SET
   icon = EXCLUDED.icon,
   sort_order = EXCLUDED.sort_order,
   requires_macro_check = EXCLUDED.requires_macro_check,
-  macro_rule = EXCLUDED.macro_rule;
+  macro_rule = EXCLUDED.macro_rule,
+  filter_group = EXCLUDED.filter_group;
 
 DELETE FROM nutrition.food_tags
 WHERE tag_code IN ('high_fat', 'gluten_free');
