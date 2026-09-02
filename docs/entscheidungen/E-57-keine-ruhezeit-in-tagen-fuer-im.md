@@ -163,6 +163,66 @@ Testosteron in Oel, **BMI 19,0 bis 49,9.**
 `[read]` **Fuer TRT-SC gibt es also produktbezogene Evidenz** —
 **besser als jede Forenregel.**
 
+## Die Nadelempfehlung wird eine Tabelle mit Vorschlag
+
+Tom, 2026-09-02:
+
+> ja sieh diese nadelempfehlungen auch vor, daraus machen wir eine
+> table und schlagen die groessen auch vor, die daten fuer die
+> auswahl haben wir ja aus den profilen
+
+### Die Eingaben stehen im Profil
+
+`[cmd]` **Gemessen 2026-09-02:**
+
+    public.profiles            biological_sex, height_cm,
+                               body_weight_kg
+    goals.body_measurements    weight_kg, body_fat_pct,
+                               height_cm_snapshot, bmi
+
+`[read]` **Damit sind alle vier Groessen da, die die Quellen
+brauchen:** Geschlecht, Gewicht, BMI — **und `body_fat_pct`, das
+genauer ist als BMI.**
+
+`[cmd]` **Die Recherche sagt es ausdruecklich:** *,,BMI ist nur ein
+Proxy. Die tatsaechlich relevante Groesse ist die Distanz Haut zu
+Muskel am konkreten Injektionsort."*
+
+`[read]` **`body_fat_pct` ist naeher dran als BMI, aber auch nicht
+die Distanz** — **der Vorschlag bleibt ein Vorschlag.**
+
+### Die Tabelle traegt die Quelle je Zeile
+
+`[read]` **Jede Zeile nennt, woher sie kommt** — **damit sich ein
+Vorschlag von einer Praxisregel unterscheiden laesst:**
+
+    CDC 2026            Deltoid, sechs Gewichtsklassen, 22-25G
+    Cook 2006           Deltoid, BMI >35 bei Frauen: 32 mm
+    Larkin 2018         Ventrogluteal, 32 mm / 38 mm nach
+                        Geschlecht
+    Zaybak 2007         Ventrogluteal, Fettdicke 38-54 mm bei
+                        BMI >= 25
+    Open RN 2023        Vastus, 25-38 mm, Gauge nach Viskositaet
+    FITTER Forward 2025 SC, Pen 4 mm, Spritze 6 mm
+    Spratt 2017         SC-Testosteron, 25G x 16 mm, BMI 19-50
+    FDA Xyosted 2019    SC-Testosteron, 27G x 12,7 mm, 0,5 ml
+
+### Und der Vorschlag sagt, was er ist
+
+`[read]` **Nicht *,,nimm 25 mm"*, sondern:**
+
+> Vorschlag: 25-38 mm, 22-25G
+> Grundlage: CDC 2026, Deltoid, 70-118 kg
+> Deine Angaben: 82 kg, BMI 26
+
+`[read]` **Wer die Grundlage sieht, kann sie pruefen** — **und merkt,
+wenn sie nicht passt.**
+
+`[cmd]` **Bei Ventrogluteal und hohem BMI muss der Vorschlag
+warnen:** **Zaybak hat gemessen, dass eine 38-mm-Nadel dort den
+Muskel nicht erreicht.** `[read]` **Das ist kein Vorschlag mehr,
+sondern ein Hinweis auf ein Problem.**
+
 ## Was das fuer `injection_sites` heisst
 
 `[read]` **Kein Feld `recommended_needle`.** **Stattdessen:**
