@@ -17,6 +17,7 @@ function k(code: string, eltern: string | null, sort: number): NaehrstoffKnoten 
     zielQuelle: null, referenz: null, referenzArt: null,
     wert: null, summe: null, positionen: 0, positionenMitWert: 0,
     positionenOhneWert: 0, tageErfasst: 0, tageVollstaendig: 0,
+    tageMitWert: 0,
     ziel: null, zielMax: null, zielArt: null, obergrenze: null,
     prozent: null, status: null, reihe: [], kinder: [],
   }

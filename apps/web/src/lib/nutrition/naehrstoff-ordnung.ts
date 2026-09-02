@@ -123,6 +123,20 @@ export type NaehrstoffKnoten = {
    *  Naehrstoff. */
   tageErfasst: number
   tageVollstaendig: number
+  /**
+   * Tage, an denen dieser Naehrstoff ueberhaupt einen Wert hatte —
+   * G-341.
+   *
+   * `[cmd]` **`days_with_value` lag in `nutrient_summary_window`
+   * bereit und wurde nicht gelesen.** `[read]` **Genau diese Zahl
+   * fehlte der Anzeige:** `tageVollstaendig` ist 0, wenn an jedem Tag
+   * EIN Posten fehlt — **auch wenn alle 60 Tage einen Wert tragen.**
+   *
+   * `[cmd]` **Bei `CAROTPAXB` am 2026-09-02:** `tageVollstaendig` 0,
+   * `tageMitWert` **60**. **Der Schnitt beruht auf 60 Tagen, nicht
+   * auf null.**
+   */
+  tageMitWert: number
   /** Das Ziel, das Balken, Prozent und Status treibt: das
    *  persoenliche aus `nutrition_targets`, sonst die Referenz. */
   ziel: number | null
@@ -314,6 +328,8 @@ export function baueWald(flach: NaehrstoffKnoten[]): NaehrstoffKnoten[] {
 type FensterZeile = {
   logged_day_count: number
   complete_day_count: number
+  /** G-341: Tage mit Wert — die Grundlage des Schnitts. */
+  days_with_value: number
   item_count: number
   value_count: number
   missing_count: number
@@ -435,6 +451,7 @@ export async function ladeOrdnung(
         werte.set(code, {
           logged_day_count: zahl(r.logged_day_count) ?? 0,
           complete_day_count: zahl(r.complete_day_count) ?? 0,
+          days_with_value: zahl(r.days_with_value) ?? 0,
           item_count: zahl(r.item_count) ?? 0,
           value_count: zahl(r.value_count) ?? 0,
           missing_count: zahl(r.missing_count) ?? 0,
@@ -560,6 +577,8 @@ export async function ladeOrdnung(
         positionenOhneWert: z?.missing_count ?? 0,
         tageErfasst: z?.logged_day_count ?? 0,
         tageVollstaendig: z?.complete_day_count ?? 0,
+        // G-341: die Zahl, auf der der Schnitt wirklich beruht.
+        tageMitWert: z?.days_with_value ?? 0,
         ziel: ziel?.min ?? null,
         zielMax: ziel?.max != null && ziel.max !== ziel.min ? ziel.max : null,
         zielArt: ziel?.art ?? null,

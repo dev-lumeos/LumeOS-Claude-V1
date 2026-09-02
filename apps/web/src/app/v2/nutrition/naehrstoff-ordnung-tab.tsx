@@ -581,10 +581,46 @@ function Zeilen({ k, tiefe, elternName, sicht, istTag, fenster, knotenOffen, ums
         >
           {zahl(k.wert, k.einheit)}
         </td>
-        <td className="v2-num v2-dim" style={{ fontSize: 11 }}>
+        {/* ══ G-341: die Spalte sagt, was sie zaehlt ═══════════════
+            **Tom, 2026-09-02:** *„der naechste schwachsinn der mich
+            alles hinterfragen laesst was ich hier an daten sehe."*
+
+            `[cmd]` **Hier stand `0/60 Tg. vollst.` neben einem
+            Schnitt von 1.088,6 µg.** `[read]` **Die Zahl sagte
+            *null*, das Wort sagte *vollstaendig*** — und dazwischen
+            stand ein Wert. **Das liest sich wie ein Fehler.**
+
+            `[cmd]` **Es ist keiner:** bei `CAROTPAXB` tragen ALLE 60
+            Tage einen Wert, 539 von 780 Posten sind belegt.
+            **`tageVollstaendig` zaehlt Tage OHNE jede Luecke** —
+            fehlt an jedem Tag ein Posten, ist sie null.
+
+            `[read]` **Die Zahlen bleiben unveraendert** (der Auftrag
+            sagt es). **Was sich aendert, ist, welche gezeigt wird:**
+            **`tageMitWert` traegt den Schnitt**, `tageVollstaendig`
+            steht daneben, wenn sie etwas anderes sagt. */}
+        <td className="v2-num v2-dim" style={{ fontSize: 11 }}
+            title={istTag || k.positionen === 0 ? undefined
+              : `${k.positionenMitWert} von ${k.positionen} Posten `
+                + `haben einen Wert, ${k.positionenOhneWert} fehlen. `
+                + `Der Schnitt beruht auf ${k.tageMitWert} Tagen; `
+                + `${k.tageVollstaendig} davon sind lückenlos.`}>
           {k.positionen === 0 ? '—' : istTag
             ? `${k.positionenMitWert} von ${k.positionen} Pos.`
-            : `${k.tageVollstaendig}/${k.tageErfasst} Tg. vollst.`}
+            : (
+              <>
+                {/* `[read]` **Die tragende Zahl zuerst** — auf ihr
+                    beruht der Schnitt links daneben. */}
+                {k.tageMitWert}/{k.tageErfasst} Tg. mit Wert
+                {/* `[read]` **Die Luecke nur, wenn es eine gibt** —
+                    bei `60/60` waere der Zusatz Rauschen. */}
+                {k.tageMitWert > k.tageVollstaendig && (
+                  <span style={{ display: 'block', fontSize: 9.5 }}>
+                    {k.positionenOhneWert} Pos. ohne Wert
+                  </span>
+                )}
+              </>
+            )}
         </td>
         <td className="v2-num v2-dim">
           {k.ziel === null ? '—' : (
