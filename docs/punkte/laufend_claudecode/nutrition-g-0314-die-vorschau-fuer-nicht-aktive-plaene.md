@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-311
 entscheidung: E-41
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-plans.tsx
@@ -61,5 +63,5 @@ Werkbank vor dem Bearbeiten.** **Zwei Wege, zwei Zwecke.**
 
 ## Auftrag
 
-**Vorbereitet mit G-331 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit G-331 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

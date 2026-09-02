@@ -7,6 +7,8 @@ angelegt: 2026-08-31
 braucht: []
 kind_von: G-304
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-planner-echt.tsx
@@ -67,5 +69,5 @@ anschaubar"* — `[cmd]` **Flow 7 und Flow 8 gehen vollstaendig durch.**
 
 ## Auftrag
 
-**Vorbereitet mit G-331 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit G-331 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

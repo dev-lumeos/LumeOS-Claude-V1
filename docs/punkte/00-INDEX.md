@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 220 |
-| `laufend_codex` | 3 |
+| `todos` | 219 |
+| `laufend_codex` | 4 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 227 |
 | **gesamt** | **453** |
@@ -143,7 +143,7 @@
 | `C-389` | befund | mittel | [Saft und Nektar liegen bei der Frucht](todos/nutrition-c-0389-saft-und-nektar-liegen-bei-der-frucht.md) | offen | — | — |
 | `C-390` | feature | mittel | [`tag_definitions` hat keine Untergruppe](laufend_codex/nutrition-c-0390-tag-definitions-hat-keine-untergruppe.md) | laeuft (codex) | — | — |
 | `C-391` | feature | hoch | [`food_search` hat keinen Treffergrund](laufend_codex/nutrition-c-0391-food-search-hat-keinen-treffergrund.md) | laeuft (codex) | — | — |
-| `C-392` | feature | hoch | [die Tabelle `meal_slots`](todos/nutrition-c-0392-die-tabelle-meal-slots.md) | offen | — | — |
+| `C-392` | feature | hoch | [die Tabelle `meal_slots`](laufend_codex/nutrition-c-0392-die-tabelle-meal-slots.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -229,14 +229,14 @@
 | `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](erledigt/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | erledigt | — | G-320 |
 | `G-301` | befund | hoch | [der Meal-plans-Reiter folgt keinem Flow](erledigt/nutrition-g-0301-der-meal-plans-reiter-folgt-keinem-flow.md) | erledigt | — | C-370 |
 | `G-304` | messung | hoch | [was ein Nutzer in Plaenen und Rezepten tun kann](erledigt/nutrition-g-0304-was-ein-nutzer-in-plaenen-und-rezepten-tun-kann.md) | erledigt | — | C-372, C-373, G-305, G-309 |
-| `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](laufend_claudecode/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | vorbereitet (claudecode) | — | — |
+| `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](laufend_claudecode/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | laeuft (claudecode) | — | — |
 | `G-306` | befund | hoch | [der Planeditor verletzt die Immutabilitaet](erledigt/nutrition-g-0306-der-planeditor-verletzt-die-immutabilitaet.md) | erledigt | — | C-376 |
 | `G-307` | feature | mittel | [*Bearbeiten* in der Bibliothek fuehrt nirgendwohin](erledigt/nutrition-g-0307-bearbeiten-in-der-bibliothek-fuehrt-nirgendwohin.md) | erledigt | — | — |
 | `G-309` | feature | hoch | [der Plan erzeugt keine Eintraege im Tagebuch](erledigt/nutrition-g-0309-der-plan-erzeugt-keine-eintraege-im-tagebuch.md) | erledigt | — | G-329 |
 | `G-310` | befund | hoch | [der Plan-Reiter folgt keinem Mockup](erledigt/nutrition-g-0310-der-plan-reiter-folgt-keinem-mockup.md) | erledigt | — | G-311, G-315 |
 | `G-311` | befund | hoch | [drei Sackgassen im Planner](erledigt/nutrition-g-0311-drei-sackgassen-im-planner.md) | erledigt | — | G-314, G-327 |
 | `G-313` | befund | mittel | [der Lifecycle-Test ist rot](erledigt/nutrition-g-0313-der-lifecycle-test-ist-rot.md) | erledigt | — | — |
-| `G-314` | feature | mittel | [die Vorschau fuer nicht-aktive Plaene](laufend_claudecode/nutrition-g-0314-die-vorschau-fuer-nicht-aktive-plaene.md) | vorbereitet (claudecode) | — | — |
+| `G-314` | feature | mittel | [die Vorschau fuer nicht-aktive Plaene](laufend_claudecode/nutrition-g-0314-die-vorschau-fuer-nicht-aktive-plaene.md) | laeuft (claudecode) | — | — |
 | `G-315` | befund | hoch | [die Kopien sind keine Kopien](erledigt/nutrition-g-0315-die-kopien-sind-keine-kopien.md) | erledigt | — | G-316, G-317 |
 | `G-316` | feature | mittel | [*Log deviation* braucht die Posten](erledigt/nutrition-g-0316-log-deviation-braucht-die-posten.md) | erledigt | — | — |
 | `G-317` | befund | mittel | [drei Zeilen der Vorlage fehlen am Schirm](erledigt/nutrition-g-0317-drei-zeilen-der-vorlage-fehlen-am-schirm.md) | erledigt | — | G-319 |
@@ -252,7 +252,7 @@
 | `G-328` | befund | mittel | [was zaehlt *am haeufigsten*?](todos/nutrition-g-0328-was-zaehlt-am-haeufigsten.md) | offen | — | — |
 | `G-329` | feature | hoch | [Ghost-Eintraege koennen nur bestaetigen oder auslassen](erledigt/nutrition-g-0329-ghost-eintraege-koennen-nur-bestaetigen-oder-auslassen.md) | erledigt | — | — |
 | `G-330` | feature | mittel | [die Kopfzeile zeigt zwei von vier Werten](erledigt/nutrition-g-0330-die-kopfzeile-zeigt-zwei-von-vier-werten.md) | erledigt | — | — |
-| `G-331` | feature | hoch | [vier Suchen auf den Hook umstellen](laufend_claudecode/nutrition-g-0331-vier-suchen-auf-den-hook-umstellen.md) | vorbereitet (claudecode) | — | — |
+| `G-331` | feature | hoch | [vier Suchen auf den Hook umstellen](laufend_claudecode/nutrition-g-0331-vier-suchen-auf-den-hook-umstellen.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 2

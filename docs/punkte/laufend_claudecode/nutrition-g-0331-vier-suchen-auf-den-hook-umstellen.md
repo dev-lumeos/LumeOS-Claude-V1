@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-323
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/mahlzeiten.tsx
@@ -54,7 +56,7 @@ Neubau.**
 
 **Mitbeauftragt: G-305, G-314.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-02.**
+**Beauftragt am 2026-09-02.**
 
 ### 1 · Die vier Suchen
 
