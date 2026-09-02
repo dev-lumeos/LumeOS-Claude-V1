@@ -9,6 +9,8 @@ kind_von: G-320
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 6cc890c1
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-foods.tsx
@@ -48,3 +50,19 @@ ist fast vollstaendig vom Reiter trennbar.
 
 **Mitbeauftragt mit G-72 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit G-72 abgenommen:** geloest, ohne Umbau.
+
+`[cmd]` **Zehn Bauteile exportiert, elf Exporte insgesamt.**
+
+`[read]` *,,Ein Export ist kein Umbau — die Teile sind nur nicht mehr
+eingesperrt."* `[read]` **Damit ist der Umbau von 1.060 Zeilen
+vermieden.**
+
+`[cmd]` **Und `DaumenKnoepfe` war nie in `tab-foods.tsx`** — sie
+steht in `daumen.tsx`, der G-320-Kommentar ist berichtigt.
+
+`[read]` **G-323 bleibt offen** — die vier Suchen auf den Hook
+umstellen.

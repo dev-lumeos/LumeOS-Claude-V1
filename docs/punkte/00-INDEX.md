@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 218 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 5 |
-| `erledigt` | 224 |
-| **gesamt** | **450** |
+| `laufend_claudecode` | 3 |
+| `erledigt` | 227 |
+| **gesamt** | **451** |
 
 ## medical — 43
 
@@ -59,9 +59,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 188
+## nutrition — 189
 
-### beauftragbar — 186
+### beauftragbar — 188
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -147,11 +147,11 @@
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
 | `G-70` | feature | mittel | [Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab](erledigt/nutrition-g-0070-sortierbare-spalten-und-herkunfts-filter-im-food-db-tab.md) | erledigt | — | C-338, G-251 |
-| `G-72` | feature | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](laufend_claudecode/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | laeuft (claudecode) | — | — |
+| `G-72` | feature | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](erledigt/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | erledigt | — | — |
 | `G-75` | befund | mittel | [Die alte Oberflaeche nennt den BLS ebenfalls](todos/nutrition-g-0075-die-alte-oberflaeche-nennt-den-bls-ebenfalls.md) | offen | — | — |
 | `G-93` | befund | mittel | [Der Anzeigename fehlt im laufenden Erfassungsdialog](erledigt/nutrition-g-0093-der-anzeigename-fehlt-im-laufenden-erfassungsdialog.md) | erledigt | — | — |
 | `G-98` | befund | mittel | [Meal plans braucht einen Zustand und eine Herkunft](erledigt/nutrition-g-0098-meal-plans-braucht-einen-zustand-und-eine-herkunft.md) | erledigt | — | — |
-| `G-99` | befund | mittel | [Drei der acht Planner-Spalten bleiben wirkungslos](laufend_claudecode/nutrition-g-0099-drei-der-acht-planner-spalten-bleiben-wirkungslos.md) | laeuft (claudecode) | — | — |
+| `G-99` | befund | mittel | [Drei der acht Planner-Spalten bleiben wirkungslos](erledigt/nutrition-g-0099-drei-der-acht-planner-spalten-bleiben-wirkungslos.md) | erledigt | — | — |
 | `G-107` | befund | mittel | [Der Mikronaehrstoff-Trend braucht eine Referenz je Tag](erledigt/nutrition-g-0107-der-mikronaehrstoff-trend-braucht-eine-referenz-je-tag.md) | erledigt | — | G-252 |
 | `G-108` | befund | mittel | [Die Filter des Nutrients-Tabs](erledigt/nutrition-g-0108-die-filter-des-nutrients-tabs.md) | erledigt | — | G-260 |
 | `G-112` | befund | mittel | [Der Food-DB-Filter laesst nur einen Wert zu](erledigt/nutrition-g-0112-der-food-db-filter-laesst-nur-einen-wert-zu.md) | erledigt | — | — |
@@ -228,14 +228,14 @@
 | `G-300` | feature | hoch | [Lebensmittel lassen sich nicht in einen Plan legen](erledigt/nutrition-g-0300-lebensmittel-lassen-sich-nicht-in-einen-plan-legen.md) | erledigt | — | G-320 |
 | `G-301` | befund | hoch | [der Meal-plans-Reiter folgt keinem Flow](erledigt/nutrition-g-0301-der-meal-plans-reiter-folgt-keinem-flow.md) | erledigt | — | C-370 |
 | `G-304` | messung | hoch | [was ein Nutzer in Plaenen und Rezepten tun kann](erledigt/nutrition-g-0304-was-ein-nutzer-in-plaenen-und-rezepten-tun-kann.md) | erledigt | — | C-372, C-373, G-305, G-309 |
-| `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](laufend_claudecode/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | laeuft (claudecode) | — | — |
+| `G-305` | befund | hoch | [vier Sackgassen in Plaenen und Planner](laufend_claudecode/nutrition-g-0305-vier-sackgassen-in-plaenen-und-planner.md) | vorbereitet (claudecode) | — | — |
 | `G-306` | befund | hoch | [der Planeditor verletzt die Immutabilitaet](erledigt/nutrition-g-0306-der-planeditor-verletzt-die-immutabilitaet.md) | erledigt | — | C-376 |
 | `G-307` | feature | mittel | [*Bearbeiten* in der Bibliothek fuehrt nirgendwohin](erledigt/nutrition-g-0307-bearbeiten-in-der-bibliothek-fuehrt-nirgendwohin.md) | erledigt | — | — |
 | `G-309` | feature | hoch | [der Plan erzeugt keine Eintraege im Tagebuch](erledigt/nutrition-g-0309-der-plan-erzeugt-keine-eintraege-im-tagebuch.md) | erledigt | — | G-329 |
 | `G-310` | befund | hoch | [der Plan-Reiter folgt keinem Mockup](erledigt/nutrition-g-0310-der-plan-reiter-folgt-keinem-mockup.md) | erledigt | — | G-311, G-315 |
 | `G-311` | befund | hoch | [drei Sackgassen im Planner](erledigt/nutrition-g-0311-drei-sackgassen-im-planner.md) | erledigt | — | G-314, G-327 |
 | `G-313` | befund | mittel | [der Lifecycle-Test ist rot](erledigt/nutrition-g-0313-der-lifecycle-test-ist-rot.md) | erledigt | — | — |
-| `G-314` | feature | mittel | [die Vorschau fuer nicht-aktive Plaene](laufend_claudecode/nutrition-g-0314-die-vorschau-fuer-nicht-aktive-plaene.md) | laeuft (claudecode) | — | — |
+| `G-314` | feature | mittel | [die Vorschau fuer nicht-aktive Plaene](laufend_claudecode/nutrition-g-0314-die-vorschau-fuer-nicht-aktive-plaene.md) | vorbereitet (claudecode) | — | — |
 | `G-315` | befund | hoch | [die Kopien sind keine Kopien](erledigt/nutrition-g-0315-die-kopien-sind-keine-kopien.md) | erledigt | — | G-316, G-317 |
 | `G-316` | feature | mittel | [*Log deviation* braucht die Posten](erledigt/nutrition-g-0316-log-deviation-braucht-die-posten.md) | erledigt | — | — |
 | `G-317` | befund | mittel | [drei Zeilen der Vorlage fehlen am Schirm](erledigt/nutrition-g-0317-drei-zeilen-der-vorlage-fehlen-am-schirm.md) | erledigt | — | G-319 |
@@ -243,21 +243,22 @@
 | `G-319` | befund | hoch | [die Bedienung in *Alle Plaene*](erledigt/nutrition-g-0319-die-bedienung-in-alle-plaene.md) | erledigt | — | C-382 |
 | `G-320` | feature | hoch | [die Lebensmittelsuche als Modal](erledigt/nutrition-g-0320-die-lebensmittelsuche-als-modal.md) | erledigt | — | G-321, G-322, G-323 |
 | `G-321` | befund | hoch | [drei Befunde am Suchmodal](erledigt/nutrition-g-0321-drei-befunde-am-suchmodal.md) | erledigt | — | — |
-| `G-322` | feature | mittel | [die Bauteile aus `tab-foods.tsx` herausloesen](laufend_claudecode/nutrition-g-0322-die-bauteile-aus-tab-foods-herausloesen.md) | laeuft (claudecode) | — | — |
+| `G-322` | feature | mittel | [die Bauteile aus `tab-foods.tsx` herausloesen](erledigt/nutrition-g-0322-die-bauteile-aus-tab-foods-herausloesen.md) | erledigt | — | — |
+| `G-323` | befund | hoch | [vier Suchen ohne die Lehren](erledigt/nutrition-g-0323-vier-suchen-ohne-die-lehren.md) | erledigt | — | G-325, G-331 |
 | `G-325` | feature | hoch | [Zutaten zeigen ihre Makros nicht](erledigt/nutrition-g-0325-zutaten-zeigen-ihre-makros-nicht.md) | erledigt | — | G-326 |
 | `G-326` | befund | hoch | [der Rezepteditor liest sich nicht](erledigt/nutrition-g-0326-der-rezepteditor-liest-sich-nicht.md) | erledigt | — | — |
 | `G-327` | befund | hoch | [`?plan=` galt in beiden Reitern](erledigt/nutrition-g-0327-plan-galt-in-beiden-reitern.md) | erledigt | — | — |
 | `G-328` | befund | mittel | [was zaehlt *am haeufigsten*?](todos/nutrition-g-0328-was-zaehlt-am-haeufigsten.md) | offen | — | — |
 | `G-329` | feature | hoch | [Ghost-Eintraege koennen nur bestaetigen oder auslassen](erledigt/nutrition-g-0329-ghost-eintraege-koennen-nur-bestaetigen-oder-auslassen.md) | erledigt | — | — |
 | `G-330` | feature | mittel | [die Kopfzeile zeigt zwei von vier Werten](erledigt/nutrition-g-0330-die-kopfzeile-zeigt-zwei-von-vier-werten.md) | erledigt | — | — |
+| `G-331` | feature | hoch | [vier Suchen auf den Hook umstellen](laufend_claudecode/nutrition-g-0331-vier-suchen-auf-den-hook-umstellen.md) | vorbereitet (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | G-328 | G-328 |
-| `G-323` | befund | hoch | [vier Suchen ohne die Lehren](erledigt/nutrition-g-0323-vier-suchen-ohne-die-lehren.md) | erledigt | G-322 | G-325 |
 
 ## supplements — 59
 

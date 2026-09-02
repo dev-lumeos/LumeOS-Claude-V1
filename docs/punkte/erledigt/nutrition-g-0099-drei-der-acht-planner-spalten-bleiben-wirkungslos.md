@@ -10,6 +10,8 @@ kinder: []
 entscheidung: E-47
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 6cc890c1
 beruehrt:
   tabellen: ["nutrition.recipes"]
   dateien: []
@@ -76,3 +78,15 @@ nicht wirkungslos** — **sie bekommen je einen anderen Weg:**
 
 **Mitbeauftragt mit G-72 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit G-72 abgenommen:** geloest.
+
+`[cmd]` **Die drei sind ausgesetzt, mit Grund im Code:**
+`cooking_skill` und `prep_time_max_min` haben Gegenstuecke an
+`recipes`, **aber nichts filtert danach.** `budget_level` hat kein
+Preisfeld.
+
+`[read]` *,,Ein Regler, der nichts bewirkt, ist schlimmer als
+keiner."*

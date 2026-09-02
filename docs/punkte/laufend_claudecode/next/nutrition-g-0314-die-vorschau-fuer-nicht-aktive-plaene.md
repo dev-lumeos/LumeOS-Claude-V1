@@ -7,8 +7,6 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-311
 entscheidung: E-41
-agent: claudecode
-beauftragt: 2026-09-02
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-plans.tsx
@@ -60,29 +58,8 @@ Vorschau*, und erst danach kommt *Plan aktivieren*.**
 `[read]` **Also ja — die Vorschau steht vor dem Aktivieren, die
 Werkbank vor dem Bearbeiten.** **Zwei Wege, zwei Zwecke.**
 
+
 ## Auftrag
 
-**Beauftragt am 2026-09-02.**
-
-`[cmd]` **`SPEC_03` Flow 3 Schritt 3: *Tap auf Plan → Plan-Vorschau*,
-danach *Plan aktivieren*.**
-
-`[read]` **Die Vorschau steht vor dem Aktivieren, die Werkbank vor
-dem Bearbeiten** — zwei Wege, zwei Zwecke.
-
-`[cmd]` **`MealPlanDetail` ist gebaut, `ladePlan()` nimmt heute den
-aktiven Plan.** `[cmd]` **Und seit G-311 gibt es `?plan=`** — der
-Planner kann schon einen beliebigen oeffnen.
-
-`[read]` **Die Vorschau braucht dasselbe, nur lesend.**
-
-### Der Dev-Server gehoert dir
-
-`[cmd]` **`server.py start` bevorzugen.**
-
-### Nachweis
-
-    Preview           oeffnet die Tage eines nicht-aktiven Plans
-    aktivieren        aus der Vorschau heraus, Flow 3 Schritt 4
-    Zielzeile         bricht nicht mehr um (G-302)
-    Bildschirmfoto    vorher / nachher
+**Vorbereitet mit G-331 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
