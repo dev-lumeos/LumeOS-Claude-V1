@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 213 |
-| `laufend_codex` | 3 |
+| `todos` | 210 |
+| `laufend_codex` | 6 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 244 |
 | **gesamt** | **462** |
@@ -135,7 +135,7 @@
 | `C-378` | befund | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](erledigt/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | erledigt | — | — |
 | `C-379` | feature | mittel | [`sequence` hat kein Ziel](todos/nutrition-c-0379-sequence-hat-kein-ziel.md) | offen | — | C-383, G-313 |
 | `C-380` | befund | mittel | [die Seed-Plaene tragen 84 mal Hammelfilet](erledigt/nutrition-c-0380-die-seed-plaene-tragen-84-mal-hammelfilet.md) | erledigt | — | — |
-| `C-382` | feature | mittel | [wer entscheidet, ob ein Plan editierbar ist?](todos/nutrition-c-0382-wer-entscheidet-ob-ein-plan-editierbar-ist.md) | offen | — | — |
+| `C-382` | feature | mittel | [wer entscheidet, ob ein Plan editierbar ist?](laufend_codex/nutrition-c-0382-wer-entscheidet-ob-ein-plan-editierbar-ist.md) | vorbereitet (codex) | — | — |
 | `C-384` | befund | hoch | [wer schreibt die 30.797 Tag-Zeilen?](erledigt/nutrition-c-0384-wer-schreibt-die-30797-tag-zeilen.md) | erledigt | — | C-387 |
 | `C-386` | befund | mittel | [sind die drei Reste aus C-35 eingeflossen?](erledigt/nutrition-c-0386-sind-die-drei-reste-aus-c-35-eingeflossen.md) | erledigt | — | C-388, C-389 |
 | `C-387` | befund | hoch | [vier Kettenschritte schreiben Tags](erledigt/nutrition-c-0387-vier-kettenschritte-schreiben-tags.md) | erledigt | — | — |
@@ -487,8 +487,8 @@
 | `C-271` | befund | mittel | [`rule_catalog` laedt immer — jeder Rueckfallzweig daran ist tot](todos/quer-c-0271-rule-catalog-laedt-immer-jeder-rueckfallzweig-daran-ist-tot.md) | offen | — | — |
 | `C-279` | befund | mittel | [Das Kreuzprodukt in `rule_assessment` skaliert mit den Einnahmen](todos/quer-c-0279-das-kreuzprodukt-in-rule-assessment-skaliert-mit-den-einnahmen.md) | offen | — | — |
 | `C-295` | feature | mittel | [die Kette liest aus zwei Kimi-Pfaden](todos/quer-c-0295-die-kette-liest-aus-zwei-kimi-pfaden.md) | offen | — | — |
-| `C-297` | messung | mittel | [drei Wege, an dem Datenlogik-Waechter vorbei](todos/quer-c-0297-drei-wege-an-dem-datenlogik-waechter-vorbei.md) | offen | — | — |
-| `C-298` | feature | mittel | [der Datenlogik-Waechter meldet zwei harmlose Muster rot](todos/quer-c-0298-der-datenlogik-waechter-meldet-zwei-harmlose-muster-rot.md) | offen | — | — |
+| `C-297` | messung | mittel | [drei Wege, an dem Datenlogik-Waechter vorbei](laufend_codex/quer-c-0297-drei-wege-an-dem-datenlogik-waechter-vorbei.md) | vorbereitet (codex) | — | — |
+| `C-298` | feature | mittel | [der Datenlogik-Waechter meldet zwei harmlose Muster rot](laufend_codex/quer-c-0298-der-datenlogik-waechter-meldet-zwei-harmlose-muster-rot.md) | vorbereitet (codex) | — | — |
 | `C-354` | feature | hoch | [eine Lesefunktion fuer offene Coach-Aktionen](erledigt/quer-c-0354-eine-lesefunktion-fuer-offene-coach-aktionen.md) | erledigt | — | C-358 |
 | `C-357` | befund | mittel | [vier ADRs widersprechen neueren Entscheidungen](erledigt/quer-c-0357-vier-adrs-widersprechen-neueren-entscheidungen.md) | erledigt | — | — |
 | `C-361` | befund | mittel | [die Datenbank fuehrt keine Pipeline-Historie](erledigt/quer-c-0361-die-datenbank-fuehrt-keine-pipeline-historie.md) | erledigt | — | — |

@@ -76,3 +76,8 @@ Bauarbeit** — **drei Wege, je einer je Herkunft.**
 ueberlebt keinen neuen Plan, in den jemand den Inhalt kopiert.
 `[read]` **E-45 schlaegt `stammt_aus_kauf uuid` vor** — eine Kennung,
 die mitwandert.
+
+## Auftrag
+
+**Vorbereitet mit C-297 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

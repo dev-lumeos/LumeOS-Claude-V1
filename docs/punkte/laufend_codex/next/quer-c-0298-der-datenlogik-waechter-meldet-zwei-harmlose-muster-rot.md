@@ -41,3 +41,8 @@ zahlen: null
   behalten**, dass `DO $$ BEGIN INSERT ... END $$` weiter rot wird.
   `[read]` **Beide Richtungen, sonst tauscht die Reparatur nur die
   eine Luecke gegen die andere.**
+
+## Auftrag
+
+**Vorbereitet mit C-297 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
