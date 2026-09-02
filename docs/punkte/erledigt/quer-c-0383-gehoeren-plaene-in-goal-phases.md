@@ -10,7 +10,7 @@ entscheidung: E-54
 agent: codex
 beauftragt: 2026-09-02
 erledigt: 2026-09-02
-commit: OFFEN
+commit: 107387fd
 beruehrt:
   tabellen: [goals.goal_phases]
 zahlen:
