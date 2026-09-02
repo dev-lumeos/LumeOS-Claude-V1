@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 210 |
+| `todos` | 207 |
 | `laufend_codex` | 6 |
-| `laufend_claudecode` | 2 |
+| `laufend_claudecode` | 5 |
 | `erledigt` | 244 |
 | **gesamt** | **462** |
 
@@ -65,11 +65,11 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `A-13` | befund | mittel | [Das Konsolidierungsregister abarbeiten](todos/nutrition-a-0013-das-konsolidierungsregister-abarbeiten.md) | offen | — | — |
+| `A-13` | befund | mittel | [Das Konsolidierungsregister abarbeiten](laufend_claudecode/nutrition-a-0013-das-konsolidierungsregister-abarbeiten.md) | vorbereitet (claudecode) | — | — |
 | `A-32` | befund | mittel | [Die Nummer G-124 war doppelt vergeben](todos/nutrition-a-0032-die-nummer-g-124-war-doppelt-vergeben.md) | offen | — | — |
 | `A-37` | befund | mittel | [Zwoelf ADRs in `docs/specs/Nutrition/04_adrs/`](erledigt/nutrition-a-0037-zwoelf-adrs-in-docs-specs-nutrition-04-adrs.md) | erledigt | — | C-175, C-318, C-357 |
 | `A-41` | befund | mittel | [Berichtsnummern kollidieren](todos/nutrition-a-0041-berichtsnummern-kollidieren.md) | offen | — | — |
-| `A-47` | feature | mittel | [Der ADR widerspricht sich bei `hard`](todos/nutrition-a-0047-der-adr-widerspricht-sich-bei-hard.md) | offen | — | — |
+| `A-47` | feature | mittel | [Der ADR widerspricht sich bei `hard`](laufend_claudecode/nutrition-a-0047-der-adr-widerspricht-sich-bei-hard.md) | vorbereitet (claudecode) | — | — |
 | `C-08` | befund | mittel | [`services/nutrition-api` — der ADR gilt](erledigt/nutrition-c-0008-services-nutrition-api-der-adr-gilt.md) | erledigt | — | — |
 | `C-20` | feature | mittel | [Treffer am Wortanfang schlägt Treffer in der Wortmitte](erledigt/nutrition-c-0020-treffer-am-wortanfang-schlagt-treffer-in-der-wortmitte.md) | erledigt | — | — |
 | `C-24` | befund | niedrig | [Halbfertigprodukte ranken als Grundzutat](todos/nutrition-c-0024-halbfertigprodukte-ranken-als-grundzutat.md) | offen | — | C-391 |
@@ -89,7 +89,7 @@
 | `C-149` | blocker | mittel | [Vitamin D in IU gegen µg](erledigt/nutrition-c-0149-vitamin-d-in-iu-gegen-g.md) | erledigt | — | — |
 | `C-160` | befund | mittel | [Der Bewertungshorizont je Naehrstoff ist leer](erledigt/nutrition-c-0160-der-bewertungshorizont-je-naehrstoff-ist-leer.md) | erledigt | — | — |
 | `C-163` | befund | mittel | [94 Substanzen ohne maschinenlesbare Naehrstoffmenge](erledigt/nutrition-c-0163-94-substanzen-ohne-maschinenlesbare-naehrstoffmenge.md) | erledigt | — | — |
-| `C-174` | befund | mittel | [`ADR_NUTRITION_PREFERENCES_V1` kennt drei Constraint-Stufen](todos/nutrition-c-0174-adr-nutrition-preferences-v1-kennt-drei-constraint-stufen.md) | offen | — | — |
+| `C-174` | befund | mittel | [`ADR_NUTRITION_PREFERENCES_V1` kennt drei Constraint-Stufen](laufend_claudecode/nutrition-c-0174-adr-nutrition-preferences-v1-kennt-drei-constraint-stufen.md) | vorbereitet (claudecode) | — | — |
 | `C-175` | feature | mittel | [`shopping_lists` fehlt](erledigt/nutrition-c-0175-shopping-lists-fehlt.md) | erledigt | — | — |
 | `C-177` | messung | hoch | [Thai-Aliase fehlen bewusst](erledigt/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | erledigt | — | — |
 | `C-191` | messung | mittel | [`p_user_id` kostet das Dreifache](erledigt/nutrition-c-0191-p-user-id-kostet-das-dreifache.md) | erledigt | — | — |

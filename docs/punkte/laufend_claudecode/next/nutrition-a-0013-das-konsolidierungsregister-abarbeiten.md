@@ -37,3 +37,8 @@ zahlen: null
   `[cmd]` **Nächste Kandidaten**, weil ihre Module anstehen:
   `SPEC_09_SCORING.md` (C-49), die Preferences-Specs (G-11), und die
   Planner-/Meal-plans-Specs.
+
+## Auftrag
+
+**Vorbereitet mit A-47 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

@@ -39,3 +39,8 @@ zahlen: null
   **Zu klaeren:** Bleibt es bei `0`, oder wird `strong` als eigene Stufe
   gebaut? `[cmd]` **Heute kennt `food_preference_items` nur `liked`,
   `disliked`, `hard_exclude`, `soft_dislike`.**
+
+## Auftrag
+
+**Vorbereitet mit A-47 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
