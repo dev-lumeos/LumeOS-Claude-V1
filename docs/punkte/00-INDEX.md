@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 222 |
+| `todos` | 223 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 216 |
-| **gesamt** | **440** |
+| **gesamt** | **441** |
 
 ## medical — 42
 
@@ -57,7 +57,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 179
+## nutrition — 180
 
 ### beauftragbar — 176
 
@@ -200,7 +200,6 @@
 | `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](erledigt/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | erledigt | — | C-349, C-353 |
 | `G-274` | feature | hoch | [der Bestaetigungsweg fuer Plan-Eintraege](erledigt/nutrition-g-0274-der-bestaetigungsweg-fuer-plan-eintraege.md) | erledigt | — | G-276 |
 | `G-276` | befund | mittel | [MealCam schreibt `confirmation_mode` ohne Fotoweg](erledigt/nutrition-g-0276-mealcam-schreibt-ohne-fotoweg.md) | erledigt | — | — |
-| `G-279` | entscheidung | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | — | — |
 | `G-283` | befund | hoch | [ein `pro`-Profil faellt still auf 0,90](erledigt/nutrition-g-0283-ein-pro-profil-faellt-still-auf-090.md) | erledigt | — | — |
 | `G-285` | befund | niedrig | [`display_tier` heisst im Code weiter *Abo-Gate*](erledigt/nutrition-g-0285-display-tier-heisst-im-code-weiter-abo-gate.md) | erledigt | — | — |
 | `G-286` | feature | hoch | [MealPlanDetail — das Tages-Akkordeon fehlt](erledigt/nutrition-g-0286-mealplandetail-das-tages-akkordeon-fehlt.md) | erledigt | — | G-298 |
@@ -238,14 +237,16 @@
 | `G-325` | feature | hoch | [Zutaten zeigen ihre Makros nicht](erledigt/nutrition-g-0325-zutaten-zeigen-ihre-makros-nicht.md) | erledigt | — | G-326 |
 | `G-326` | befund | hoch | [der Rezepteditor liest sich nicht](erledigt/nutrition-g-0326-der-rezepteditor-liest-sich-nicht.md) | erledigt | — | — |
 | `G-327` | befund | hoch | [`?plan=` galt in beiden Reitern](erledigt/nutrition-g-0327-plan-galt-in-beiden-reitern.md) | erledigt | — | — |
+| `G-328` | befund | mittel | [was zaehlt *am haeufigsten*?](todos/nutrition-g-0328-was-zaehlt-am-haeufigsten.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-### wartet auf Blocker — 3
+### wartet auf Blocker — 4
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-379` | feature | mittel | [`sequence` hat kein Ziel](todos/nutrition-c-0379-sequence-hat-kein-ziel.md) | offen | C-383 | C-383, G-313 |
 | `G-229` | feature | mittel | [Admin-Override-Flow für Tag-Korrekturen nicht belegt](todos/nutrition-g-0229-admin-override-flow-fuer-tag-korrekturen-nicht-belegt.md) | offen | C-384 | C-384 |
+| `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | G-328 | G-328 |
 | `G-323` | befund | hoch | [vier Suchen ohne die Lehren](erledigt/nutrition-g-0323-vier-suchen-ohne-die-lehren.md) | erledigt | G-322 | G-325 |
 
 ## supplements — 59

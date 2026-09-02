@@ -1,12 +1,12 @@
 ---
 nr: G-279
-typ: entscheidung
+typ: feature
 modul: nutrition
 schwere: niedrig
 angelegt: 2026-08-30
-braucht: []
+braucht: [G-328]
 kind_von: G-263
-entscheidung: null
+entscheidung: E-56
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/tab-insights.tsx]
 zahlen:
@@ -43,3 +43,32 @@ oft dasselbe isst, findet es schneller wieder.**
 `[read]` **Dagegen:** `[cmd]` **`wieGestern()` gibt es bereits** —
 **eine zweite Abkuerzung zum selben Zweck koennte die eine
 verwaessern.**
+
+## Entschieden: E-56, 2026-09-02
+
+Tom: *,,ja beide verwenden aber darin auch zeigen was das ist, sprich
+same as yesterday und darunter was das war / most used und darunter
+was das war."*
+
+    Wie gestern      darunter: die Posten des Vortags
+    Am haeufigsten   darunter: was das war, mit Zahl
+
+`[read]` **Der Unterschied zur entfernten Attrappe ist die
+Ehrlichkeit:** `[cmd]` **sie machte aus 27 von 30 Tagen ein *,,Top
+breakfast, 78 %"***. `[read]` ***Am haeufigsten* ist eine Angabe,
+*Top* ein Urteil** — C-108 und F-02.
+
+`[read]` **Und die Zahl steht als das da, was sie ist:** *27 von 30
+Tagen*, kein Prozentwert.
+
+`[read]` **Ein Knopf ohne Inhalt zwingt zum Ausprobieren** — **wer
+sieht, was er uebernimmt, entscheidet vorher.** `[read]` **Und die
+zwei unterscheiden sich dann sichtbar: gestern kann ein Ausreisser
+gewesen sein, das Haeufigste ist ein Muster.**
+
+### Vorher: G-328
+
+`[cmd]` **Auf `dev` kommt das haeufigste Fruehstueck einmal in 30
+Tagen vor, nicht 27 mal.** `[read]` **Was *am haeufigsten* zaehlt —
+Name, Posten oder Zusammensetzung — ist zu klaeren, bevor die Kachel
+entsteht.**
