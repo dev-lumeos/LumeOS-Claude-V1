@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -77,3 +75,14 @@ liegengebliebener Kettenschritt.**
 
 **Mitbeauftragt mit C-401 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: einer erledigt, zwei offen
+
+`[cmd]` **C-346 live ausgefuehrt: `CHORL` auf `CHOL` mit *Hormone,
+Zellmembranen*, `FD` auf `F` korrekt.** `[cmd]` **Legacy-Map-Test
+gruen.**
+
+`[read]` **Ein Kettenschritt, der nie lief** — jetzt gelaufen.
+
+`[cmd]` **EAA und Medication-Monitoring bleiben unveraendert** —
+**sie brauchen Fach- und Schemaentscheidungen, keine Arbeit.**

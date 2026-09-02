@@ -9,6 +9,8 @@ kind_von: C-400
 entscheidung: E-62
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 0d63a69f
 beruehrt:
   tabellen: [nutrition.meal_plan_entries]
 zahlen:
@@ -146,4 +148,55 @@ nicht gepusht.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Nachgemessen.**
+
+### Der Probe-Eintrag ist weg
+
+`[cmd]` **`Buddy auto-plan`: 1 Woche, 7 Tage, 28 Eintraege.**
+`[cmd]` **C-380 ist gruen.**
+
+`[read]` **Meine erste Zaehlung ergab 56** — **sie zaehlte ueber alle
+Nutzer, nicht nur `dev`.** `[read]` **Derselbe Fehler wie dreimal
+zuvor: `count(*)` ohne `user_id`.**
+
+### Und die Laufzeit ist geklaert
+
+`[cmd]` **`Cut` und `Lean bulk` sind beide `lifecycle_type =
+'once'`** — **nicht `rollover`.**
+
+`[read]` **Damit ist die Frage aus E-62 beantwortet:** **bei `once`
+laeuft der Plan einmal ab, also braucht er alle Tage, die er
+behauptet.**
+
+    Cut 4-Meal 2200    28 Tage behauptet, 7 beschrieben
+    Lean bulk 3100     84 Tage behauptet, 7 beschrieben
+
+`[cmd]` **Es fehlen 3 beziehungsweise 11 Wochen** — **als C-403.**
+
+`[read]` **`days_count` bleibt unveraendert** — **es ist die
+Laufzeit, und die stimmt.**
+
+### Ein Fund, den er nicht nennt
+
+`[cmd]` **Nachgemessen: `Aufbau-Wochenplan` traegt 4 Wochen, 28 Tage,
+84 Eintraege** — **bei `days_count 21`.**
+
+`[read]` **28 Tage beschrieben, 21 behauptet.** `[read]` **Das ist
+der umgekehrte Fall zu Cut und Lean: zu viele Tage, nicht zu
+wenige.**
+
+`[cmd]` **Und `test` traegt 4 Wochen, 28 Tage, 0 Eintraege** — **die
+Werkbank, richtig leer.**
+
+**Als C-403 mitgemessen.**
+
+### C-346 ist eingespielt
+
+`[cmd]` **`CHORL` auf `CHOL` mit *Hormone, Zellmembranen*.**
+`[cmd]` **`FD` auf `F` ist korrekt.** `[cmd]` **Der Legacy-Map-Test
+ist gruen.**
+
+`[read]` **Ein Kettenschritt, der nie lief** — **jetzt gelaufen.**
+
+**Abgenommen.**
+
