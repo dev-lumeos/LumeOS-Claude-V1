@@ -130,7 +130,54 @@ ein UI-Auftrag, nicht deiner.**
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Stand 2026-09-02 — gemessen, nichts gebaut.** apps/, Dev-Server,
+Stage, Commit und Push blieben unberuehrt.
+
+### C-388 — der Aliasweg ist Suchkuration, kein Vertreterfeld
+
+nutrition.food_aliases hat nur food_id, alias, locale und source. Die
+12 curated_suchbegriff-Zeilen zeigen genau das Modell: ein Mensch setzt
+einen Suchbegriff auf einen konkreten Eintrag, etwa reis auf C352000.
+Das verbessert die Rangfolge einer getippten Anfrage, speichert aber
+weder eine BLS-Familie noch eine allgemeine Vertreter-Aussage.
+
+Damit taugt der Aliasweg fuer die richtige Folge des gefallenen Modells:
+gezielt auftretende Suchbegriffe kuratieren. Fuer ein abstraktes
+Vertretermodell ueber alle Konsumenten braeuchte es eine getrennte
+Familie-zu-Food-Zuordnung, nicht ein Feld an foods; sie waere aber
+fachlich nicht durch die 403 Namen begruendet.
+
+Der Nutzen einer Vollkuration ist gegen den vorhandenen Suchverkehr
+klein: search_events hat 319 Ereignisse, 61 verschiedene Anfragen und
+293 Auswahlen. Von den 403 gebundenen Familien wurde nur **eine**
+ausgewaehlt (X411, Huehnerbruehe bei huehnerbr); **402** wurden nie
+ausgewaehlt. Eine Kuration aller 403 waere damit heute kein
+nachweisbarer Suchnutzen. Neue Aliaszeilen gehoeren an konkrete
+Fehlsuchen, nicht an eine pauschale Familienliste.
+
+### C-389 — die drei Faelle sind trennbar, die Ziffer allein nicht global
+
+In den drei von C-35 genannten Familien traegt der BLS-Code die
+Trennung tatsaechlich:
+
+| Familie | Rohform | Saft | Nektar |
+| --- | --- | --- | --- |
+| F201 Aprikose | F201100 | F201600 | — |
+| F603 Orange | F603100 | F603600 | F603700 |
+| F310 Weintraube | F310100 | F310600 | — |
+
+100 ist hier die Rohform, 600 der Saft und 700 der Nektar. Die
+Trennung der drei konkreten Familien ist also ohne Namenskurierung
+messbar. Sie rechtfertigt aber **nicht** die globale Regel
+Obst-600 ist Saft: Unter allen Obstcodes sind 50 von 53
+600-Zeilen Saft/Nektar, drei aber Smoothies (F032600, F033600,
+F034600). 700 trifft im Obstbestand 14 von 14 Mal Saft/Nektar.
+
+Der BLS-Code ist damit ein belastbarer Selektor fuer diese drei
+belegten Familien, keine allgemeine Saftklasse. Die bestehende
+Fehleinordnung bleibt sichtbar: F201600, F603600, F603700 und F310600
+stehen noch auf processing_level = raw; eine globale
+processing_level-Aenderung wurde nicht abgeleitet.
 
 ## Abnahme
 

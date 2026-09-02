@@ -8,8 +8,8 @@
 | `todos` | 214 |
 | `laufend_codex` | 5 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 237 |
-| **gesamt** | **457** |
+| `erledigt` | 238 |
+| **gesamt** | **458** |
 
 ## medical — 43
 
@@ -430,7 +430,7 @@
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 
-## quer — 87
+## quer — 88
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -465,6 +465,7 @@
 | `A-62` | befund | mittel | [Waechter kippen still, wenn das Schema nachkommt](erledigt/quer-a-0062-waechter-kippen-still-wenn-das-schema-nachkommt.md) | erledigt | — | A-63, G-277, G-278 |
 | `A-63` | befund | niedrig | [der Waechter las seine eigene Probe](todos/quer-a-0063-der-waechter-las-seine-eigene-probe.md) | offen | — | — |
 | `A-64` | entscheidung | niedrig | [der Schirmlauf ausserhalb des Gates](todos/quer-a-0064-der-schirmlauf-ausserhalb-des-gates.md) | offen | — | — |
+| `A-68` | befund | niedrig | [der Waechter fuer leerlaufende Agenten](erledigt/quer-a-0068-der-waechter-fuer-leerlaufende-agenten.md) | erledigt | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

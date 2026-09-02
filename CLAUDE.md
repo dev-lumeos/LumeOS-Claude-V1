@@ -298,8 +298,11 @@ die Verwaltung:**
 **Wer zuerst abnimmt, laesst einen Agenten zwanzig Minuten
 stillstehen.**
 
-`[cmd]` **Der Fehler faellt nur Tom auf** — **kein Waechter misst,
-ob ein Agent arbeitslos ist.**
+`[cmd]` **Seit A-68 misst ein Waechter es:** `punkte-pruefen.mjs`
+meldet **ACHTUNG**, wenn ein Agent null laufende Punkte hat und
+mindestens einen in `next/`.
+
+`[read]` **Er steht im Punktelauf, den der Zyklus ohnehin macht.**
 
 ## Ein Bericht ist kein Nachweis
 

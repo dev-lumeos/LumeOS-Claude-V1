@@ -402,6 +402,19 @@ if (vorbereitet.length) {
   }
   const liste = Object.entries(jeAgent).map(([a, n]) => `${a} ${n}`).join(' | ')
   console.log(`[punkte] ${vorbereitet.length} vorbereitet, noch nicht raus: ${liste}`)
+
+  // Ein Agent ohne laufenden Auftrag, waehrend in seinem next/ etwas
+  // wartet: das ist Stillstand, den sonst nur Tom bemerkt. Am 02.09.
+  // dreimal passiert. Der Zaehler oben sah es, aber niemand fragte ihn.
+  for (const a of Object.keys(jeAgent)) {
+    const laufend = punkte.filter(
+      p => p.ordner === `laufend_${a}` && !p.vorbereitet).length
+    if (laufend === 0) {
+      console.log(`[punkte] ACHTUNG: ${a} hat nichts laufen, aber `
+        + `${jeAgent[a]} Punkt(e) in next/ - der Auftrag geht raus, `
+        + 'bevor abgenommen wird.')
+    }
+  }
 }
 if (genannteTabellen.length > 0 && !OHNE_DB) {
   console.log(`[punkte] ${genannteTabellen.length} Tabellenangaben gegen `

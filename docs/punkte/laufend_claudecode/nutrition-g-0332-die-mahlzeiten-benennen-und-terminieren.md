@@ -247,3 +247,151 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Bericht
+
+**Claude Code, 2026-09-02.** **Nicht committet, nichts auf
+`dev@lumeos.app` geschrieben** (5 Slots, test-user 0, 2.899 meals —
+vor und nach dem Lauf gleich).
+
+**Web-Tests: 1.340 grün, 0 Fehler. Sabotageprobe: 28 von 28
+gefangen.** `pnpm gate` bricht an **fremden Migrationen** (C-327a,
+C-385, ungetrackt in `supabase/migrations/`) — nicht an dieser
+Arbeit; Typecheck und Lint sind sauber.
+
+### Zwei Auftragsfragen, gemessen
+
+**1 · Was geschieht mit einer gelöschten Position?**
+
+`[cmd]` **Gegen eine Wegwerf-Tabelle gemessen:**
+
+    DELETE position=2, dann UPDATE 3 -> 2     geht
+    UPDATE 3 -> 2, waehrend 2 noch steht      duplicate key
+
+`[read]` **Der PK ist `(user_id, position)`, es gibt keine `id`.**
+**Deshalb schreibt der Weg DELETE + INSERT, nicht UPDATE** — nach dem
+Löschen ist der Nummernraum leer, und die Reihenfolge der Anweisungen
+kann gar nicht kollidieren.
+
+**2 · Wo kommt die Zeilenzahl im Planner her?** — **Drei Stellen**,
+alle über `rasterZeilen`: `page.tsx:184`, `tab-vorlieben.tsx:1031`,
+`plan-lesen.ts:226`.
+
+`[cmd]` **Und `meal_plans` trägt keine Zeilenzahl** — keine Spalte
+für `meals`, `slots` oder Zeilen.
+
+`[read]` **Sie muss auch keine tragen.** `[cmd]` **Gemessen: alle vier
+Herkünfte bringen ihre Struktur bereits mit** — `self_created`,
+`coach_created`, `marketplace` und `buddy` tragen ihre
+`meal_type`-Werte in `meal_plan_entries`. **Die Positionen sagen es
+genauer als eine Zahl es könnte.**
+
+**Codex braucht also KEINE Spalte.** Der Planner leitet die Reihen aus
+dem geladenen Plan ab; nur ein leerer, selbst angelegter Plan fällt
+auf die Vorlieben zurück.
+
+### Was gebaut wurde
+
+**1 · Die Liste in Preferences, links unten** (Kachel bei x=264).
+Zwei Schritte: Anzahl nennen, dann je Zeile Name und Zeit. `[cmd]`
+**Namen als `<datalist>`** — Auswahl **plus** Freitext, wie Tom es
+verlangt; ein `<select>` verböte den freien Text, und `name` ist in
+der Datenbank frei.
+
+**Die G-72-Kachel *Mahlzeitenstruktur* bleibt** — Hauptmahlzeiten,
+Snacks und Vorkochen liegen in `food_preferences` und werden mit
+Allergien zusammen gelesen. `[read]` **Sie wird nicht überflüssig:**
+`meals_per_day` steuert die Planzeilen, `meal_slots` benennt die
+Tagebuchzeilen.
+
+**2 · Initialwerte** aus den gemessenen Zeiten (07:30 / 12:30 / 19:30
+für drei Mahlzeiten). **Erhöhen fügt an, senken kürzt von unten**,
+eigene Namen überleben. `[cmd]` **Keine Obergrenze** — über sechs
+füllt die Liste mit nummerierten Mahlzeiten auf, statt abzuschneiden.
+
+**3 · `/v2/settings`: dasselbe Formular.** `[cmd]` **Ein Baustein,
+zwei Aufrufer** — die Kollision aus G-72 fällt weg, weil `meal_slots`
+eine eigene Tabelle mit eigenem Schreibweg ist.
+
+**4 · Tagebuch und Planner lesen die Slots.** `[cmd]` **Am Schirm:**
+*Frühstück · Mittagessen · Nachmittagssnack · Abendessen* statt der
+festen Bezeichnungen. **Der Planner meldet: *,,4 Reihen aus diesem
+Plan"*.**
+
+### Eine Grenze, die der Auftrag nicht nannte
+
+`[cmd]` **Ohne sie fände 22:00 das Abendessen um 19:30** — 150
+Minuten entfernt. **Das ist keine Zuordnung, das ist der nächstbeste
+Rest** — und Toms Satz sagt das Gegenteil: *,,wer um 22:00 noch isst,
+hat dafuer keinen Slot."*
+
+`[cmd]` **Gemessen an den dev-Slots:** die Abstände zwischen
+benachbarten Slots sind 164, 136, 210 und 210 Minuten. **Die Hälfte
+des grössten ist 105.**
+
+`[read]` **`MAX_ABSTAND_MIN = 120` liegt knapp darüber** — jede Zeit
+ZWISCHEN zwei Slots wird noch zugeordnet, auch in der weitesten
+Lücke; erst ausserhalb der Reihe fällt sie heraus.
+
+**Am Schirm belegt:**
+
+    22:00   "Fuer diese Zeit gibt es keinen Slot. Die Mahlzeit wird
+             trotzdem erfasst und steht mit ihrer Uhrzeit da."
+    12:20   "Wird bei Mittagessen (12:30) einsortiert."
+
+### Punkt 5 — die Vermutung war falsch
+
+**Tom:** *,,in diary unten mahlzeit hinzufuegen, das ist
+verschwunden."*
+
+`[cmd]` **Gemessen: der Weg ist NICHT mit G-331 verschwunden.**
+`sicherstellen()` legt seit C-03 Mahlzeiten an, und der Code ist
+gegen `HEAD` unverändert.
+
+`[read]` **Es gab ihn nie für eine FREIE Mahlzeit:** leere Karten
+entstehen je vordefiniertem Slot — **wer um 22:00 isst, hatte keine.**
+
+`[cmd]` **Und `meal_time` wurde bis heute NIE gesetzt**
+(`buildMealInsert`) — die 2.899 vorhandenen Zeiten kommen aus den
+Seeds. **Ohne Schema-Erweiterung hätte die neue Mahlzeit keine Zeit,
+und die Zuordnung liefe ins Leere.** Beides ergänzt, mit `null` als
+Vorgabe für den Bestandsweg.
+
+### Leerzustand
+
+`[cmd]` **`test-user@lumeos.local`, 0 Slots:** *,,Noch keine
+Mahlzeiten festgelegt. Nenne oben eine Anzahl."* **Plus ein Knopf
+*Vier Mahlzeiten vorschlagen*** — ein Angebot, kein Fehler.
+
+### Nachweis
+
+    Liste          5 Zeilen, Anzahl-Feld 5, Kachel links (x=264)
+    Namen          datalist mit 9 Vorschlaegen, Freitext moeglich
+    Leerzustand    0 Zeilen, Hinweis + Angebot
+    Settings       5 Zeilen, derselbe Baustein, Verweis bleibt
+    Tagebuch       Fruehstueck, Mittagessen, Nachmittagssnack, Abendessen
+    Planner        "4 Reihen aus diesem Plan"
+    22-Uhr-Fall    kein Slot, trotzdem erfassbar
+    Bilder         backup/g332-prefs.png, -settings.png, -diary.png,
+                   -planner.png, -leer.png
+
+### Gate und Sabotageprobe
+
+    Web-Tests        1.340 gruen, 0 Fehler
+    Typecheck/Lint   sauber
+    Sabotageprobe    28 von 28 gefangen
+    neuer Waechter   meal-slots.test.ts, 19 Proben
+
+`[cmd]` **`pnpm gate` bricht an fremden Migrationen** — C-327a und
+C-385 liegen ungetrackt in `supabase/migrations/` und enthalten
+`INSERT`/`DELETE`. **Codex' laufende Arbeit, nicht diese.**
+
+### Zwei Sabotagen kamen zuerst durch
+
+`[cmd]` **`position: i + 1` steht auch in `slots-lage.ts`** — mein
+Wächter suchte über die ganze Datei und fand das falsche Vorkommen.
+**Jetzt im INSERT-Block geschnitten**, mit ausdrücklichem Ausschluss
+von `position: s.position`.
+
+`[cmd]` **Und die Vorab-Prüfung war ungeprüft** — dass `listenFehler`
+VOR dem Schreiben läuft, hielt kein Wächter fest.
