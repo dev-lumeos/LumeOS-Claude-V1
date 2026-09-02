@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-154
 kinder: []
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -44,7 +46,7 @@ zahlen: null
 
 **Mitbeauftragt: C-174, A-13.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-02.**
+**Beauftragt am 2026-09-02.**
 
 ### Warum diese drei zusammen
 

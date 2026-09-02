@@ -9,6 +9,8 @@ kind_von: G-332
 entscheidung: E-59
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: b2d3248d
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/mahlzeiten.tsx
@@ -402,4 +404,93 @@ ungetrackten Migrationen (C-327a, C-385, Codex) mit INSERT/DELETE.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Nachgemessen.** `[cmd]` Gate gruen.
+
+### Meine Zahl war falsch, und er hat sie berichtigt
+
+`[read]` **Mein Auftrag sagte: acht Stellen uebersetzen `meal_type`.**
+
+`[cmd]` **Gemessen: FUENF Namenstabellen, ZEHN
+Uebersetzungsstellen.**
+
+`[cmd]` **Und drei meiner acht waren gar keine Uebersetzung:**
+`modale.tsx` ist ein Recovery-Zeitraster, `rezepte-echt.tsx` traegt
+`KOENNEN_LABEL` (Kochkoennen), `ansicht.tsx` nur einen Kommentar.
+`[cmd]` **`erfassen-modal.tsx` hat keine Tabelle.**
+
+`[read]` **Ich hatte nach `pre_workout` gesucht und jeden Treffer
+gezaehlt** — **ohne zu pruefen, ob es dieselbe Sache ist.**
+
+`[cmd]` **Die vier Schreibweisen stimmen exakt**, und er hat sie
+zugeordnet:
+
+    Pre-Workout        plans-echt.tsx, plan-model.ts
+    Pre-workout        mahlzeiten.tsx
+    Vor dem Training   plan-eintrag-editor.tsx
+    vor dem Training   erfassen.tsx
+
+`[cmd]` **`zahlen.stellen` ist berichtigt.**
+
+### Eine Quelle, mit Rangfolge
+
+`[cmd]` **Selbst gemessen: `KATEGORIE_TEXT` in `slots-lage.ts`, und
+die alten Namen sind Weiterleitungen** — `SLOT_LABEL`,
+`MAHLZEIT_LABEL`, `SLOT_TEXT` **zeigen alle darauf.**
+
+`[read]` **Kein zweiter Datenbestand** — **die Aufrufer behalten ihre
+Namen, dahinter steht eine Tabelle.**
+
+**Die Rangfolge:**
+
+    planName    E-59   ein gelieferter Plan bringt seinen Namen mit
+    zeit        E-58   der Slot, in dessen Fenster die Buchung faellt
+    reihen      E-58   sonst die Position in der Rasterreihe
+    Kategorie          zuletzt der deutsche Text
+
+`[read]` **Sie bildet beide Entscheidungen ab, in der richtigen
+Reihenfolge.**
+
+### Ein Befund, der die Zeitregel gerettet hat
+
+`[cmd]` **`planned_time` fehlte im Leseweg der Ghost-Abfrage.**
+
+`[read]` **Die Zeitregel haette nie gegriffen** — **die Karten haetten
+weiter nach Kategorie zugeordnet, und niemand haette gemerkt, dass die
+Regel nicht wirkt.**
+
+`[cmd]` **An drei Stellen in `plan-lesen.ts` nachgezogen.**
+
+### Am Schirm: null englische Namen, null Rohcodes
+
+    Reiter     englische Namen   Rohcodes
+    diary      0                 0
+    plans      0                 0
+    planner    0                 0
+
+`[cmd]` **Die fuenf Slotnamen:** Fruehstueck, Snack, Mittagessen,
+Nachmittagssnack, Abendessen.
+
+### Die Verschmelzung, und warum die Spalten bleiben
+
+`[cmd]` **Am Schirm: *Mahlzeitenstruktur* weg, *Hauptmahlzeiten* weg,
+fuenf Slotzeilen.** `[cmd]` **Neue Kachel *Vorkochen und Notizen*
+traegt `meal_prep_ok` und `planner_notes`.**
+
+`[read]` **Zur Frage, ob `meals_per_day` noch gebraucht wird:**
+`[cmd]` **ja, als Rueckfall** — drei tragende Verwendungen bleiben.
+
+`[cmd]` **Und die Zahl dazu: 7 Nutzer, 2 mit Slots, 2 mit
+Vorlieben** — **dieselben zwei.** `[read]` **Fuenf haben weder das
+eine noch das andere.**
+
+`[read]` **Sein Schluss:** *,,Der Rueckfall traegt heute niemanden,
+aber jeden neuen Nutzer, bis er Slots anlegt."* **Richtig.**
+
+### Und der sechste Slot war seiner
+
+`[cmd]` **Die *Spaetmahlzeit 21:30* entstand beim G-332-Nachweis.**
+`[cmd]` **Zu Beginn dieses Auftrags entfernt** — **nachgemessen: fuenf
+Slots auf `dev`.**
+
+**Abgenommen.**
+

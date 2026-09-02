@@ -9,6 +9,8 @@ kind_von: G-72
 entscheidung: E-58
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: b2d3248d
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-vorlieben.tsx
@@ -455,3 +457,19 @@ VOR dem Schreiben läuft, hielt kein Wächter fest.
 
 **Mit G-335 am 2026-09-02 weiterbeauftragt.** Der neue
 Auftragstext und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit G-335 abgenommen: fertig.**
+
+`[cmd]` **Die Kachel *Meine Mahlzeiten* steht in Preferences links
+unten**, mit Anzahl und je Zeile Name und Zeit.
+
+`[cmd]` **Und die Verschmelzung ist vollzogen:** *Mahlzeitenstruktur*
+weg, **neue Kachel *Vorkochen und Notizen* fuer `meal_prep_ok` und
+`planner_notes`.**
+
+`[cmd]` **Die drei Anzeigefehler aus Toms Durchgang sind mit
+G-335 behoben** — Ghost-Karten, Pulldown, Planner.
+
+`[cmd]` **Und der sechste Slot auf `dev` ist zurueckgebaut.**

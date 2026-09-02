@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: E-16
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -42,5 +44,5 @@ zahlen: null
 
 ## Auftrag
 
-**Vorbereitet mit A-47 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit A-47 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

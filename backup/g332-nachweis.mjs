@@ -1,0 +1,52 @@
+import { chromium } from '@playwright/test'
+import { wortFuer } from '../tools/konten.mjs'
+const b = await chromium.launch()
+const s = await b.newPage({ viewport: { width: 1440, height: 2400 } })
+await s.goto('http://127.0.0.1:3200/login', { waitUntil: 'networkidle' })
+await s.fill('input[type="email"]', 'dev@lumeos.app')
+await s.fill('input[type="password"]', wortFuer('dev@lumeos.app'))
+await s.click('button[type="submit"]')
+await s.waitForURL(u => !u.pathname.includes('login'), { timeout: 30000 })
+
+console.log('══ 1 · Preferences, links unten ════════════')
+await s.goto('http://127.0.0.1:3200/v2/nutrition?tab=prefs', { waitUntil: 'networkidle' })
+await s.waitForTimeout(3200)
+const zeilen = s.locator('[data-probe="slot-zeile"]')
+console.log(`  Zeilen: ${await zeilen.count()} (dev traegt 5)`)
+console.log(`  Anzahl-Feld: ${await s.locator('[data-probe="slots-anzahl"]').inputValue()}`)
+for (let i = 0; i < Math.min(3, await zeilen.count()); i++) {
+  const z = zeilen.nth(i)
+  console.log(`    ${await z.locator('[data-probe="slot-name"]').inputValue()} · ${await z.locator('[data-probe="slot-zeit"]').inputValue()}`)
+}
+console.log(`  datalist-Vorschlaege: ${await s.locator('#slot-namen option').count()}`)
+// Links oder rechts?
+const kachel = s.locator('[data-probe="slots-anzahl"]').locator('xpath=ancestor::*[contains(@class,"v2-card")][1]')
+const bb = await kachel.boundingBox()
+console.log(`  Kachel x=${bb.x.toFixed(0)} (linke Spalte < 700)`)
+await s.screenshot({ path: 'backup/g332-prefs.png', fullPage: true })
+
+console.log('\n══ 3 · Settings: dasselbe Formular ═════════')
+await s.goto('http://127.0.0.1:3200/v2/settings', { waitUntil: 'networkidle' })
+await s.waitForTimeout(2600)
+console.log(`  Zeilen: ${await s.locator('[data-probe="slot-zeile"]').count()}`)
+console.log(`  Verweis auf Vorlieben bleibt: ${await s.locator('[data-probe="struktur-verweis"]').count()}`)
+await s.screenshot({ path: 'backup/g332-settings.png', fullPage: true })
+
+console.log('\n══ 4 · Tagebuch: Zeilen heissen wie die Slots ══')
+await s.goto('http://127.0.0.1:3200/v2/nutrition?tab=diary', { waitUntil: 'networkidle' })
+await s.waitForTimeout(3000)
+const namen = await s.locator('[data-probe="karten-name"]').allInnerTexts()
+console.log(`  ${JSON.stringify(namen)}`)
+
+console.log('\n══ 5 · Freie Mahlzeit ═════════════════════')
+console.log(`  Knopf: ${await s.locator('[data-probe="freie-mahlzeit-oeffnen"]').count()}`)
+await s.locator('[data-probe="freie-mahlzeit-oeffnen"]').click()
+await s.waitForTimeout(700)
+await s.locator('[data-probe="freie-zeit"]').fill('22:00')
+await s.waitForTimeout(500)
+console.log(`  22-Uhr-Hinweis: ${JSON.stringify(await s.locator('[data-probe="freie-hinweis"]').innerText())}`)
+await s.locator('[data-probe="freie-zeit"]').fill('12:20')
+await s.waitForTimeout(500)
+console.log(`  12:20-Hinweis:  ${JSON.stringify(await s.locator('[data-probe="freie-hinweis"]').innerText())}`)
+await s.screenshot({ path: 'backup/g332-diary.png', fullPage: true })
+await b.close()

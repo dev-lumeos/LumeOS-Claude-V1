@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: ["docs/specs/Nutrition/01_current_specs/SPEC_05_FOOD_TAXONOMY.md", "docs/spezifikation/00-UMSETZUNGSPLAENE.md", "docs/specs/Nutrition/01_current_specs/SPEC_09_SCORING.md"]
@@ -40,5 +42,5 @@ zahlen: null
 
 ## Auftrag
 
-**Vorbereitet mit A-47 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit A-47 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

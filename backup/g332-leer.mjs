@@ -1,0 +1,17 @@
+import { chromium } from '@playwright/test'
+import { wortFuer } from '../tools/konten.mjs'
+const b = await chromium.launch()
+const s = await b.newPage({ viewport: { width: 1440, height: 2000 } })
+await s.goto('http://127.0.0.1:3200/login', { waitUntil: 'networkidle' })
+await s.fill('input[type="email"]', 'test-user@lumeos.local')
+await s.fill('input[type="password"]', wortFuer('test-user@lumeos.local'))
+await s.click('button[type="submit"]')
+await s.waitForURL(u => !u.pathname.includes('login'), { timeout: 30000 })
+await s.goto('http://127.0.0.1:3200/v2/nutrition?tab=prefs', { waitUntil: 'networkidle' })
+await s.waitForTimeout(3200)
+console.log(`Slot-Zeilen: ${await s.locator('[data-probe="slot-zeile"]').count()} (test-user traegt 0)`)
+console.log(`Leerhinweis: ${JSON.stringify(await s.locator('[data-probe="slots-leer"]').innerText().catch(()=>'—'))}`)
+console.log(`Vorschlag-Knopf: ${await s.locator('[data-probe="slots-vorschlag"]').count()}`)
+console.log(`Anzahl-Feld: ${await s.locator('[data-probe="slots-anzahl"]').inputValue().catch(()=>'—')}`)
+await s.screenshot({ path: 'backup/g332-leer.png', fullPage: true })
+await b.close()
