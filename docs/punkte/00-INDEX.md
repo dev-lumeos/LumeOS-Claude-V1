@@ -76,7 +76,7 @@
 | `C-27` | messung | mittel | [Alltagswörter ohne Treffer — noch zwei](erledigt/nutrition-c-0027-alltagsworter-ohne-treffer-noch-zwei.md) | erledigt | — | — |
 | `C-29` | entscheidung | mittel | [Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt](erledigt/nutrition-c-0029-drei-namensschichten-und-eine-kuration-die-den-kettenlauf-uberlebt.md) | erledigt | — | — |
 | `C-30` | befund | mittel | [Suche und Trefferliste auf Arten umstellen](todos/nutrition-c-0030-suche-und-trefferliste-auf-arten-umstellen.md) | offen | — | — |
-| `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](laufend_codex/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | vorbereitet (codex) | — | — |
+| `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](laufend_codex/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | laeuft (codex) | — | — |
 | `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](todos/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | offen | — | C-386 |
 | `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — | — |
 | `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](erledigt/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | erledigt | — | G-239, G-248 |
@@ -104,7 +104,7 @@
 | `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](erledigt/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | erledigt | — | C-342, C-343, C-367 |
 | `C-333` | befund | niedrig | [Selen fehlt in der Bewertung auf dev](erledigt/nutrition-c-0333-selen-fehlt-in-der-bewertung-auf-dev.md) | erledigt | — | — |
 | `C-334` | befund | hoch | [die Tagesbewertung hat sich zwischen zwei Messungen verschoben](erledigt/nutrition-c-0334-die-bewertung-hat-sich-zwischen-zwei-messungen-verschoben.md) | erledigt | — | C-335 |
-| `C-335` | befund | mittel | [keine Aenderungshistorie fuer Mahlzeiten und Referenzwerte](laufend_codex/nutrition-c-0335-keine-aenderungshistorie-fuer-mahlzeiten.md) | vorbereitet (codex) | — | — |
+| `C-335` | befund | mittel | [keine Aenderungshistorie fuer Mahlzeiten und Referenzwerte](laufend_codex/nutrition-c-0335-keine-aenderungshistorie-fuer-mahlzeiten.md) | laeuft (codex) | — | — |
 | `C-336` | befund | hoch | [FD traegt den Text eines anderen Naehrstoffs](erledigt/nutrition-c-0336-fd-traegt-den-text-eines-anderen-naehrstoffs.md) | erledigt | — | C-346 |
 | `C-338` | befund | mittel | [sechs Sortierwerte fehlen live](erledigt/nutrition-c-0338-sechs-sortierwerte-fehlen-live.md) | erledigt | — | — |
 | `C-342` | entscheidung | hoch | [Vitamin A in IE gegen Mikrogramm](erledigt/nutrition-c-0342-vitamin-a-in-ie-gegen-mikrogramm.md) | erledigt | — | C-350 |
@@ -140,7 +140,7 @@
 | `C-386` | befund | mittel | [sind die drei Reste aus C-35 eingeflossen?](erledigt/nutrition-c-0386-sind-die-drei-reste-aus-c-35-eingeflossen.md) | erledigt | — | C-388, C-389 |
 | `C-387` | befund | hoch | [vier Kettenschritte schreiben Tags](erledigt/nutrition-c-0387-vier-kettenschritte-schreiben-tags.md) | erledigt | — | — |
 | `C-388` | befund | mittel | [die Vertreterregel ist nicht erreicht](erledigt/nutrition-c-0388-die-vertreterregel-ist-nicht-erreicht.md) | erledigt | — | — |
-| `C-389` | befund | mittel | [Saft und Nektar liegen bei der Frucht](laufend_codex/nutrition-c-0389-saft-und-nektar-liegen-bei-der-frucht.md) | vorbereitet (codex) | — | — |
+| `C-389` | befund | mittel | [Saft und Nektar liegen bei der Frucht](laufend_codex/nutrition-c-0389-saft-und-nektar-liegen-bei-der-frucht.md) | laeuft (codex) | — | — |
 | `C-390` | feature | mittel | [`tag_definitions` hat keine Untergruppe](erledigt/nutrition-c-0390-tag-definitions-hat-keine-untergruppe.md) | erledigt | — | — |
 | `C-391` | feature | hoch | [`food_search` hat keinen Treffergrund](erledigt/nutrition-c-0391-food-search-hat-keinen-treffergrund.md) | erledigt | — | C-393 |
 | `C-392` | feature | hoch | [die Tabelle `meal_slots`](erledigt/nutrition-c-0392-die-tabelle-meal-slots.md) | erledigt | — | C-394 |

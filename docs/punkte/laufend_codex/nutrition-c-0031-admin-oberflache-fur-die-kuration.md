@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: ["nutrition.foods"]
   dateien: ["docs/ssot/daten/wortschatz-luecke.json"]
@@ -41,5 +43,5 @@ zahlen: null
 
 ## Auftrag
 
-**Vorbereitet mit C-389 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit C-389 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

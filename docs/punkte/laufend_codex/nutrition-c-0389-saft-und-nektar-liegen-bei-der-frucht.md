@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: C-386
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.foods]
 zahlen:
@@ -71,7 +73,7 @@ Familien, keine Regel.**
 
 **Mitbeauftragt: C-31, C-335.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-02.**
+**Beauftragt am 2026-09-02.**
 
 ### 1 · C-389 — die drei Saftfamilien
 
