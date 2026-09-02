@@ -1,12 +1,12 @@
 ---
 nr: C-379
-typ: entscheidung
+typ: feature
 modul: nutrition
 schwere: mittel
 angelegt: 2026-09-01
 braucht: []
 kind_von: C-377
-entscheidung: E-44
+entscheidung: E-53
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -62,3 +62,38 @@ verspricht.**
 `[cmd]` **Bei 0 Plaenen faellt das niemandem auf** — **aber es ist
 ein Versprechen ohne Ausfuehrung, wie *Next restart* und *Copy
 week*.**
+
+## Entschieden: E-53, 2026-09-02
+
+Tom dreht die Frage um: *,,der kern der frage ist wie werden diese
+plaene ueberhaupt gespeichert und dargestellt? wir brauchen ein
+flowchart mit editierbaren daten wie startdatum etc und das muss auch
+so in die db. dann koennen wir mit planpicker arbeiten."*
+
+`[read]` **Nicht *Planpicker bauen oder `sequence` entfernen*, sondern
+*erst die Kette, dann der Picker als Feld darin*.**
+
+### Das Schema kann es bereits
+
+`[cmd]` **Zwei CHECKs erzwingen die Kette:**
+
+    sequence_not_self_check     next_plan_id <> id
+    sequence_target_check       lifecycle_type = 'sequence'
+                                -> next_plan_id NOT NULL
+
+`[read]` **Das Schema laesst keine halbe Kette zu** — **wer
+`sequence` waehlt, muss ein Ziel nennen.** `[cmd]` **Genau deshalb
+bietet der Dialog es heute nicht an.**
+
+### Zwei Fragen vor dem Bau
+
+`[read]` **Reicht `next_plan_id`?** `[cmd]` **Eine einfach verkettete
+Liste bildet eine Reihe ab** — **keine Verzweigung, keinen
+gemeinsamen Nachfolger.**
+
+`[read]` **Und was geschieht mit `start_date` in der Kette?**
+`[cmd]` **Heute setzt das Aktivieren es.** `[read]` **In einer Kette
+waere das zweite Startdatum abgeleitet, nicht eingegeben.**
+
+`[read]` **Bis dahin bleibt `sequence` nicht waehlbar, mit Grund an
+der Kachel.**
