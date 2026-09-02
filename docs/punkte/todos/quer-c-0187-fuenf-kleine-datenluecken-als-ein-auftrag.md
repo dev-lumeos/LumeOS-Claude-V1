@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -46,3 +44,13 @@ zahlen: null
 
 **Mitbeauftragt mit C-219 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: drei offen, drei erledigt.
+
+    offen      EAA, zehn Medication-Monitoring-Spalten,
+               CHOL-Livebestand
+    erledigt   Einkaufslisten, Prolaktin/ApoB,
+               Selen (kein BLS-Importfehler)
+
+`[read]` **Der Punkt sagte fuenf, er hat sechs gemessen und drei
+geschlossen.**

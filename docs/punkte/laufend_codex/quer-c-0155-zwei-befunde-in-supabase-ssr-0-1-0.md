@@ -8,6 +8,8 @@ braucht: []
 kind_von: F-07
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -27,3 +29,8 @@ zahlen: null
 
   `[read]` **`apps/admin` nutzt denselben Pfad und sollte geprueft
   werden** — der F-07-Agent hat es gemeldet statt nebenbei angefasst.
+
+## Auftrag
+
+**Mitbeauftragt mit C-110 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

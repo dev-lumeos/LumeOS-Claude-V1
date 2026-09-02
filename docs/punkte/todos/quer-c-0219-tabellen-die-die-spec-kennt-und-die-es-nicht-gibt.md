@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -184,4 +182,54 @@ Proben-Skripte werden nicht als "aufräumbar" eingestuft.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator.**
+
+### C-219 — 21 fehlen, zwei waren Irrtuemer
+
+`[cmd]` **21 Fachmodelle fehlen weiter.** `[cmd]` **`user_symptoms`
+und `micro_flags` sind Spec-Irrtuemer.**
+
+`[read]` **Genau die Trennung, die der Auftrag verlangte:** **was
+fehlt, weil es ungebaut ist — und was fehlt, weil die Spec sich
+geirrt hat.**
+
+`[cmd]` **Und ein dritter Fall:** *,,der Einzelwert-ohne-Laborbericht
+bleibt fachlich offen, obwohl der alte Name `biomarker_results`
+ueberholt ist."*
+
+`[read]` **Ein ueberholter Name, aber eine bestehende Frage** —
+**er hat es nicht als Irrtum abgeraeumt, obwohl es einfacher
+gewesen waere.**
+
+### C-187 — drei offen, drei erledigt
+
+    offen      EAA
+               alle zehn Medication-Monitoring-Spalten
+               CHOL-Livebestand, nicht nachgezogen
+    erledigt   Einkaufslisten
+               Prolaktin / ApoB
+               Selen -- kein BLS-Importfehler
+
+`[read]` **Der Punkt sagte *fuenf kleine Datenluecken*.** `[cmd]`
+**Er hat sechs Sachen gemessen und drei davon geschlossen.**
+
+`[read]` **Und *Selen ist kein BLS-Importfehler* ist die beste
+Zeile** — **eine Vermutung, die sich nicht bestaetigt hat, statt
+einer stillen Korrektur.**
+
+### C-216 — und die Zahl ist der Befund
+
+`[cmd]` **`backup/` misst 11.606 Dateien, 5,959 GiB.**
+
+`[cmd]` **Aktuelle Schreibzugriffe vorhanden** — **G-329, G-331,
+G-332 haben ihre Nachweise dort.**
+
+`[read]` **Er schlaegt einen spaeteren Manifest- und
+Archivierungslauf vor, keine Loeschung** — **A-39 haelt.**
+
+`[read]` **Sechs Gigabyte in einem Verzeichnis, das nicht geraeumt
+werden darf, solange Agenten laufen** — **das ist ein wachsendes
+Problem, kein akutes.**
+
+**Abgenommen.** **Alle drei bleiben offen, C-187 deutlich kleiner.**
+

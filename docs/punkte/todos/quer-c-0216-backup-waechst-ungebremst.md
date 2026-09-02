@@ -7,8 +7,6 @@ angelegt: 2026-08-22
 braucht: []
 kind_von: null
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   dateien: [backup, tools/encoding-pruefen.mjs]
 zahlen:
@@ -72,3 +70,14 @@ werden.**
 
 **Mitbeauftragt mit C-219 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: 11.606 Dateien, 5,959 GiB.
+
+`[cmd]` **Aktuelle Schreibzugriffe vorhanden** — G-329, G-331, G-332
+haben ihre Nachweise dort.
+
+`[read]` **Vorgeschlagen: ein spaeterer Manifest- und
+Archivierungslauf, keine Loeschung** — **A-39 haelt.**
+
+`[read]` **Sechs Gigabyte in einem Verzeichnis, das nicht geraeumt
+werden darf, solange Agenten laufen.**
