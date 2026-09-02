@@ -6,7 +6,7 @@ schwere: hoch
 angelegt: 2026-09-02
 braucht: []
 kind_von: G-294
-entscheidung: E-38
+entscheidung: E-61
 beruehrt:
   tabellen: [nutrition.food_nutrients]
 zahlen:
@@ -82,3 +82,81 @@ wie es der ug-Snapshot offenbar tut?**
 
 `[read]` **Das waere keine Erfindung** — **es waere dieselbe Regel,
 die der BLS-Wert schon anwendet.**
+
+## Auftrag — die Summe bilden
+
+**Mitbeauftragt: C-324.** Bericht in diese Datei.
+
+`[read]` **Vorbereitet am 2026-09-02.**
+
+### E-61 entscheidet es
+
+Tom: *,,die einzelgesamt schnitt/tag haben wir ja, egal ob sie
+vollstaendig sind oder nicht. also nehmen wir diese werte, rechnen
+sie um zu IE und verwenden dann die summe."*
+
+    RETOL       x 3,3333
+    CARTB       x 1,6667
+    CAROTPAXB   x 0,8333
+                  --------
+                  Summe in IE
+
+`[cmd]` **Beispiel `dev`, 60 Tage:** 391,5 / 15.329,3 / 1.088,6 ug
+**ergeben 27.761 IE.**
+
+### Was zu aendern ist
+
+`[cmd]` **Die IE-Funktion verweigert die Ausgabe bei jeder
+Komponentenluecke.** `[read]` **Sie soll die vorhandenen summieren.**
+
+`[read]` **Eine fehlende Komponente traegt nichts bei** — **sie
+verhindert die Summe nicht.**
+
+`[cmd]` **E-34 bleibt gueltig:** kein Gesamtfaktor, drei
+Komponenten, drei Faktoren.
+
+`[cmd]` **E-38 gilt weiter:** `censored` und `trace` sind Nullen,
+`missing` traegt nichts bei.
+
+### Und die Anzeige bleibt ehrlich
+
+`[cmd]` **Die drei Komponenten bleiben einzeln im Reiter, mit ihrer
+Vollstaendigkeitsangabe.**
+
+`[read]` **Nur der Score wird nicht mehr blockiert.**
+
+### C-324 — der Score selbst
+
+`[read]` **Lies den Punkt und miss, was nach E-61 noch fehlt.**
+
+`[cmd]` **`nrf93_daily` meldete `VITA` als einzigen fehlenden
+Code** — **mit der Summe muesste der Score an allen Tagen
+berechenbar sein.**
+
+`[read]` **Miss es, statt es anzunehmen.**
+
+### Was nicht zu tun ist
+
+**Keinen Gesamtfaktor auf `VITA`** — E-34.
+**Keine Vollstaendigkeitsangabe aendern** — sie bleibt ehrlich.
+`apps/` nicht anfassen.
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server gehoert dir nicht
+
+`[cmd]` **Kein `neustart`, kein `start`, kein `aufraeumen`.**
+
+### Nachweis
+
+    Summe          IE je Tag, gegen 27.761 fuer den 60-Tage-Schnitt
+    Score          an wie vielen von 120 Tagen jetzt berechenbar
+    Anzeige        die drei Komponenten unveraendert
+    Gegenprobe     ein Tag ohne CAROTPAXB liefert trotzdem einen Wert
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

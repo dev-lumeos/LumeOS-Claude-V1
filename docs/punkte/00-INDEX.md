@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 213 |
-| `laufend_codex` | 3 |
+| `todos` | 212 |
+| `laufend_codex` | 4 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 254 |
 | **gesamt** | **472** |
@@ -147,7 +147,7 @@
 | `C-394` | befund | mittel | [`test-user` hat keine Slots](erledigt/nutrition-c-0394-test-user-hat-keine-slots.md) | erledigt | — | G-334 |
 | `C-396` | feature | hoch | [`meal_plans` traegt keine Struktur](erledigt/nutrition-c-0396-meal-plans-traegt-keine-struktur.md) | erledigt | — | — |
 | `C-397` | befund | hoch | [die gelieferten Plaene haben keine Slots](erledigt/nutrition-c-0397-die-gelieferten-plaene-haben-keine-slots.md) | erledigt | — | C-400 |
-| `C-398` | befund | hoch | [`CAROTPAXB` fehlt an 1.983 Lebensmitteln](todos/nutrition-c-0398-carotpaxb-fehlt-an-1983-lebensmitteln.md) | offen | — | — |
+| `C-398` | befund | hoch | [`CAROTPAXB` fehlt an 1.983 Lebensmitteln](laufend_codex/nutrition-c-0398-carotpaxb-fehlt-an-1983-lebensmitteln.md) | vorbereitet (codex) | — | — |
 | `C-399` | befund | hoch | [ein Schnitt ohne einen einzigen Wert](erledigt/nutrition-c-0399-ein-schnitt-ohne-einen-einzigen-wert.md) | erledigt | — | G-341 |
 | `C-400` | befund | mittel | [eine Woche zuviel im Buddy-Plan](laufend_codex/nutrition-c-0400-eine-woche-zuviel-im-buddy-plan.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
