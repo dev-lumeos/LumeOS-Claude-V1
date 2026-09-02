@@ -1,13 +1,15 @@
 ---
 nr: C-109
-typ: entscheidung
+typ: befund
 modul: nutrition
 schwere: mittel
 angelegt: 2026-08-19
 braucht: []
 kind_von: F-02
 kinder: []
-entscheidung: E-14
+entscheidung: E-57
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   tabellen: []
   dateien: ["docs/spezifikation/10-plattform/design-system/mockup-zwischenwurf/components/MuscleBodyMap_test.html"]
@@ -63,3 +65,50 @@ zahlen: null
   bleibt oder faellt.
   **Dieselbe Regel wie bei MEV/MAV/MRV (C-105) und den
   Naehrstoff-Referenzwerten (C-45).**
+
+## Abnahme
+
+**2026-09-02, durch E-57 beantwortet.** **Tom hat extern
+recherchiert, 18 Quellen.**
+
+### Das Ergebnis ist ein belegtes Nein
+
+`[cmd]` **Fuer wiederholte IM-Injektionen gibt es keine
+evidenzbasierte Ruhezeit in Tagen.** **Keine Leitlinie von WHO oder
+CDC, keine kontrollierte Humanstudie.**
+
+`[read]` **Damit ist die Frage nicht offen geblieben, sondern
+beantwortet** — **die Zahl existiert nicht.**
+
+`[cmd]` **Fibrose durch wiederholte Injektionen ist belegt** (Oh et
+al. 1977, Fallserie 2006) — **eine Schwelle nicht.**
+
+`[cmd]` **Volumen wirkt** (Diness 1985, Svendsen 1984, beide
+Tierversuch) — **ergibt aber keine Formel.**
+
+### Was stattdessen gilt
+
+    IM   rest_days = null, Rotation Pflicht, ohne Zahl
+    SC   mindestens 10 mm Abstand, Quadrant je Woche
+         (FITTER Forward 2025)
+    Lipohypertrophie: 3-6 Monate aussetzen -- eigener Zustand
+
+`[read]` **Und der Warnsatz sagt, was die App weiss und was
+nicht:** *,,Eine wissenschaftlich validierte Mindest-Ruhezeit fuer
+diese Stelle existiert nicht."*
+
+`[read]` **Dieselbe Haltung wie E-38 und C-378** — **wenn die Daten
+nicht da sind, erfinden wir sie nicht.**
+
+### Nadeln: gute Evidenz, anderes Modell
+
+`[cmd]` **CDC 2026, Cook 2006, Larkin 2018, Zaybak 2007, Spratt
+2017, FDA Xyosted** — alle in E-57 mit Zahlen.
+
+`[read]` **Aber die Recherche aendert das Datenmodell:** **Gauge
+haengt an der Viskositaet, Laenge an Route und Koerperbau** — **nicht
+beides am Ort.**
+
+`[cmd]` **Als C-385.**
+
+**Geschlossen.**
