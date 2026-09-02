@@ -7,6 +7,8 @@ angelegt: 2026-08-31
 braucht: []
 kind_von: G-226
 entscheidung: E-55
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.food_tags]
 zahlen:
@@ -83,5 +85,5 @@ laesst Kuratiertes stehen. **Bei den Tags fehlt das.**
 
 ## Auftrag
 
-**Vorbereitet mit C-241 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit C-241 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

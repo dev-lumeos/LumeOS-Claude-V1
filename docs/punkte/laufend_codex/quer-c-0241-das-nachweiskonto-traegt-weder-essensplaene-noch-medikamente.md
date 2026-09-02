@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: ["nutrition.meal_plans", "medical.user_medications"]
   dateien: []
@@ -43,7 +45,7 @@ zahlen: null
 
 **Mitbeauftragt: G-334, C-366.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-02.**
+**Beauftragt am 2026-09-02.**
 
 ### 1 · C-241 und G-334 sind derselbe Punkt
 

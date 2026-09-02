@@ -120,7 +120,7 @@
 | `C-355` | feature | mittel | [`food_search` kennt keine Herkunft](erledigt/nutrition-c-0355-food-search-kennt-keine-herkunft.md) | erledigt | — | — |
 | `C-356` | messung | niedrig | [woraus die 1.620 ms HTML bestehen](erledigt/nutrition-c-0356-woraus-die-1620-ms-html-bestehen.md) | erledigt | — | — |
 | `C-360` | entscheidung | hoch | [darf ein fehlender Naehrwert als 0 zaehlen?](erledigt/nutrition-c-0360-darf-ein-fehlender-naehrwert-als-null-zaehlen.md) | erledigt | — | — |
-| `C-366` | befund | mittel | [`food_tags` hat keinen Pflegeweg](laufend_codex/nutrition-c-0366-food-tags-hat-keinen-pflegeweg.md) | vorbereitet (codex) | — | — |
+| `C-366` | befund | mittel | [`food_tags` hat keinen Pflegeweg](laufend_codex/nutrition-c-0366-food-tags-hat-keinen-pflegeweg.md) | laeuft (codex) | — | — |
 | `C-367` | befund | hoch | [Vitamin A blockiert den Score an allen Tagen](erledigt/nutrition-c-0367-vitamin-a-blockiert-den-score-an-allen-tagen.md) | erledigt | — | C-368 |
 | `C-368` | entscheidung | hoch | [fuenfzehn Lebensmittel blockieren den Score](erledigt/nutrition-c-0368-fuenfzehn-lebensmittel-blockieren-den-score.md) | erledigt | — | C-378 |
 | `C-369` | entscheidung | mittel | [was mit einem abgelaufenen Plan geschieht](erledigt/nutrition-c-0369-was-mit-einem-abgelaufenen-plan-geschieht.md) | erledigt | — | — |
@@ -479,7 +479,7 @@
 | `C-205` | befund | mittel | [`research_hold_registry` — 305 Saetze](erledigt/quer-c-0205-research-hold-registry-305-saetze.md) | erledigt | — | — |
 | `C-216` | befund | mittel | [`backup/` waechst ungebremst](todos/quer-c-0216-backup-waechst-ungebremst.md) | offen | — | — |
 | `C-219` | befund | mittel | [Tabellen, die die Spec kennt und die es nicht gibt](todos/quer-c-0219-tabellen-die-die-spec-kennt-und-die-es-nicht-gibt.md) | offen | — | — |
-| `C-241` | entscheidung | mittel | [Das Nachweiskonto traegt weder Essensplaene noch Medikamente](laufend_codex/quer-c-0241-das-nachweiskonto-traegt-weder-essensplaene-noch-medikamente.md) | vorbereitet (codex) | — | — |
+| `C-241` | entscheidung | mittel | [Das Nachweiskonto traegt weder Essensplaene noch Medikamente](laufend_codex/quer-c-0241-das-nachweiskonto-traegt-weder-essensplaene-noch-medikamente.md) | laeuft (codex) | — | — |
 | `C-259` | feature | mittel | [Kimis Bestand ist weit groesser als angenommen — und der Orchestrator hat den Statusbericht nie gelesen](todos/quer-c-0259-kimis-bestand-ist-weit-groesser-als-angenommen-und-der-orchestrator-hat-.md) | offen | — | C-262 |
 | `C-271` | befund | mittel | [`rule_catalog` laedt immer — jeder Rueckfallzweig daran ist tot](todos/quer-c-0271-rule-catalog-laedt-immer-jeder-rueckfallzweig-daran-ist-tot.md) | offen | — | — |
 | `C-279` | befund | mittel | [Das Kreuzprodukt in `rule_assessment` skaliert mit den Einnahmen](todos/quer-c-0279-das-kreuzprodukt-in-rule-assessment-skaliert-mit-den-einnahmen.md) | offen | — | — |
@@ -521,7 +521,7 @@
 | `G-303` | befund | hoch | [der Gate prueft `packages/ui` nicht](erledigt/quer-g-0303-der-gate-prueft-packages-ui-nicht.md) | erledigt | — | G-308 |
 | `G-308` | feature | mittel | [die zwei Pakete brauchen eigene Pruefungen](erledigt/quer-g-0308-die-zwei-pakete-brauchen-eigene-pruefungen.md) | erledigt | — | — |
 | `G-312` | befund | mittel | [neunzehn Lint-Fehler](erledigt/quer-g-0312-neunzehn-lint-fehler.md) | erledigt | — | — |
-| `G-334` | befund | hoch | [`test-user` taugt nicht mehr als Nachweiskonto](laufend_codex/quer-g-0334-test-user-taugt-nicht-mehr-als-nachweiskonto.md) | vorbereitet (codex) | — | — |
+| `G-334` | befund | hoch | [`test-user` taugt nicht mehr als Nachweiskonto](laufend_codex/quer-g-0334-test-user-taugt-nicht-mehr-als-nachweiskonto.md) | laeuft (codex) | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

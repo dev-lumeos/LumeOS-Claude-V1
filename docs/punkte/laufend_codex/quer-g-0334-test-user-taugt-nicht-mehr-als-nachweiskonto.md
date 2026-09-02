@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: C-394
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.meal_slots]
 zahlen:
@@ -52,5 +54,5 @@ Tom etwas sieht.**
 
 ## Auftrag
 
-**Vorbereitet mit C-241 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit C-241 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
