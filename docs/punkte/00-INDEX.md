@@ -148,7 +148,7 @@
 | `G-112` | befund | mittel | [Der Food-DB-Filter laesst nur einen Wert zu](erledigt/nutrition-g-0112-der-food-db-filter-laesst-nur-einen-wert-zu.md) | erledigt | — | — |
 | `G-116` | entscheidung | mittel | [Generelle Ausschluesse bewerten mit 0, statt zu filtern](erledigt/nutrition-g-0116-generelle-ausschluesse-bewerten-mit-0-statt-zu-filtern.md) | erledigt | — | C-347 |
 | `G-126` | befund | mittel | [Drei Reste aus G-122](todos/nutrition-g-0126-drei-reste-aus-g-122.md) | offen | — | C-210, C-211, C-212 |
-| `G-134` | entscheidung | mittel | [Die vier Filtergruppen gibt es in den Daten nicht](todos/nutrition-g-0134-die-vier-filtergruppen-gibt-es-in-den-daten-nicht.md) | offen | — | — |
+| `G-134` | feature | mittel | [Die vier Filtergruppen gibt es in den Daten nicht](todos/nutrition-g-0134-die-vier-filtergruppen-gibt-es-in-den-daten-nicht.md) | offen | — | — |
 | `G-136` | feature | mittel | [Zwei Kartenzuordnungen sind Auslegung](todos/nutrition-g-0136-zwei-kartenzuordnungen-sind-auslegung.md) | offen | — | — |
 | `G-137` | befund | mittel | [Acht Karten — die alten Ansichtsschluessel verfallen](erledigt/nutrition-g-0137-acht-karten-die-alten-ansichtsschluessel-verfallen.md) | erledigt | — | — |
 | `G-140` | feature | mittel | [`display_tier` ist ein Abo-Tier, keine Baumebene](todos/nutrition-g-0140-display-tier-ist-ein-abo-tier-keine-baumebene.md) | offen | — | — |

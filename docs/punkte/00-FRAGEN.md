@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **22 Punkte tragen `typ: entscheidung`
+`[cmd]` **21 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -46,30 +46,6 @@ nicht in diese Uebersicht.
   `[cmd]` **F-06 hat gemessen, dass die Freigabe ueberhaupt erst seit
   C-162 wirkt** — 22 `coach_read`-Policies ueber sechs Module. **Eine
   Feinstufe waere sechs mal soviel.**
-
-## G-134 — Die vier Filtergruppen gibt es in den Daten nicht
-
-**Modul:** nutrition · **angelegt:** 2026-08-20 · **Datei:** `todos/nutrition-g-0134-die-vier-filtergruppen-gibt-es-in-den-daten-nicht.md`
-
-## Befund
-
-(neu
-  2026-08-20). **Entscheidung.** Befund aus C-164.
-
-  `[cmd]` **`tag_type` traegt drei Werte:** `diet` (9 Codes),
-  `processing` (2), `allergen` (3).
-
-  `[read]` **Die Oberflaeche zeigt vier Gruppen** — Ernaehrungsform,
-  Naehrwert, Verarbeitung, Allergene. **„Ernaehrungsform" und „Naehrwert"
-  sind beide `diet`.**
-
-  `[cmd]` **Folge:** *„Wer stumpf nach `tag_type` gruppiert, verodert
-  `vegan` mit `high_protein`."*
-
-  `[read]` **Damit ist die Gruppierung eine Entscheidung, keine
-  Ablesung.** **Entweder eine Gruppenspalte in `tag_definitions`, oder
-  die Zuordnung bleibt in der Anzeige** — dann steht sie an zwei
-  Stellen.
 
 ## G-152 — Der Aktivitaetsstrom des Dashboards
 
