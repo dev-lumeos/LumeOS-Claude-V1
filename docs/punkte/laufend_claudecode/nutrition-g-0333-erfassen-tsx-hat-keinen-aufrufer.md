@@ -11,7 +11,7 @@ agent: claudecode
 beauftragt: 2026-09-02
 beruehrt:
   dateien:
-    - apps/web/src/app/v2/nutrition/erfassen.tsx
+    - apps/web/src/app/v2/nutrition/erfassen-modal.tsx
 zahlen:
   gemessen: 2026-09-02
   zeilen: 477
