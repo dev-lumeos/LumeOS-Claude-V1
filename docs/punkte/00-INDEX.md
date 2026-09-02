@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 222 |
+| `todos` | 221 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 235 |
 | **gesamt** | **457** |
 
@@ -252,7 +253,7 @@
 | `G-329` | feature | hoch | [Ghost-Eintraege koennen nur bestaetigen oder auslassen](erledigt/nutrition-g-0329-ghost-eintraege-koennen-nur-bestaetigen-oder-auslassen.md) | erledigt | — | — |
 | `G-330` | feature | mittel | [die Kopfzeile zeigt zwei von vier Werten](erledigt/nutrition-g-0330-die-kopfzeile-zeigt-zwei-von-vier-werten.md) | erledigt | — | — |
 | `G-331` | feature | hoch | [vier Suchen auf den Hook umstellen](erledigt/nutrition-g-0331-vier-suchen-auf-den-hook-umstellen.md) | erledigt | — | G-333 |
-| `G-332` | feature | hoch | [die Mahlzeiten benennen und terminieren](todos/nutrition-g-0332-die-mahlzeiten-benennen-und-terminieren.md) | offen | — | — |
+| `G-332` | feature | hoch | [die Mahlzeiten benennen und terminieren](laufend_claudecode/nutrition-g-0332-die-mahlzeiten-benennen-und-terminieren.md) | laeuft (claudecode) | — | — |
 | `G-333` | befund | niedrig | [`erfassen.tsx` hat keinen Aufrufer](todos/nutrition-g-0333-erfassen-tsx-hat-keinen-aufrufer.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
