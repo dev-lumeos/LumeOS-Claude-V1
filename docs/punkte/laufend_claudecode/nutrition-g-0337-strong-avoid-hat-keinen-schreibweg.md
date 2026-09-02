@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: C-174
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.food_preference_items]
 zahlen:
@@ -56,3 +58,8 @@ Unvertraeglichkeit haengt?**
 `[read]` **Ein CHECK-Wert ohne Schreibweg ist dieselbe Klasse wie
 eine Funktion ohne Aufrufer** — **beim naechsten Auftrag wird er fuer
 gebaut gehalten.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-342 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

@@ -9,6 +9,8 @@ kind_von: C-399
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 55f0c8a8
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx
@@ -434,4 +436,52 @@ ungetrackten Migrationen (C-327a, C-385, Codex) mit INSERT/DELETE.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator.**
+
+### Die Spalte zeigt jetzt, was sie zaehlt
+
+`[cmd]` **`tageMitWert` statt `tageVollstaendig`.**
+
+`[cmd]` **18 irrefuehrende `0/60 vollst.`-Zeilen stehen jetzt auf
+0** — **keine Zahl geaendert.**
+
+`[read]` **Das ist der Punkt:** **die Rechnung war richtig, die
+Beschriftung war falsch.** `[read]` **Und niemand musste eine Zahl
+anfassen, um es zu beheben.**
+
+`[cmd]` **Sechs Waechter, 8 von 8 Sabotagen.**
+
+### Und C-399 ist endgueltig widerlegt
+
+`[read]` **Zweimal unabhaengig bestaetigt** — **einmal von Codex,
+einmal von Claude Code.**
+
+`[read]` **Ich hatte den Punkt aus zwei falschen Messungen
+gebaut.** `[read]` **Toms Beobachtung war richtig, meine Erklaerung
+dazu nicht.**
+
+### G-340 — Quick-Add ist nicht ueberfluessig
+
+`[cmd]` **Es ist der einzige Zugang zu `food_source = 'manual'`** —
+**das Schema sieht den Wert ausdruecklich vor, und kein Weg bedient
+ihn.**
+
+`[read]` **Ich hatte gefragt, ob es ueberholt sei.** `[read]` **Er
+hat gemessen, dass es einen Zweck hat, den kein anderer Weg
+erfuellt:** **eine Zahl ohne Lebensmittel.**
+
+`[read]` **Bauen oder begruenden, warum nicht** — **das gehoert
+Tom.**
+
+### G-333 — die Begruendung traegt
+
+`[cmd]` **`erfassen.tsx` enthaelt nichts, was anderswo fehlt.**
+
+`[cmd]` **Ihr einziges Alleinstellungsmerkmal beruft sich auf ein
+UNIQUE, das es nicht mehr gibt.**
+
+`[read]` **Das ist mehr als *kein Aufrufer*** — **es ist der Beleg,
+dass beim Loeschen nichts verloren geht.**
+
+**Abgenommen.**
+

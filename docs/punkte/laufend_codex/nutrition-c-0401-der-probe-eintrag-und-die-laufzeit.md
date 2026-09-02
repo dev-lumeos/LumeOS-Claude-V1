@@ -109,7 +109,40 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+`[cmd]` **Dev-Datenbank, Konto `dev@lumeos.app`, gemessen am 2026-09-02:**
+**die eine freigegebene Probezeile** `232c1079-28a3-4d7f-a525-924ba8e06d93`
+aus `Buddy auto-plan` wurde gelöscht. Sie war die alleinige zusätzliche
+`lunch`-Zeile ohne `planned_time` und ohne Notiz. Keine andere Zeile wurde
+gelöscht.
+
+`[cmd]` Danach hat
+`supabase/_pipeline/_validierung/nutrition-c380-seed-plan-variety.test.ts`
+bestanden: alle drei Seed-Pläne haben jeweils **28 Einträge**, sieben Tage,
+vier Mahlzeiten je Tag, keinen Hammelfilet-Eintrag und sieben unterschiedliche
+Tagesmenüs.
+
+`[cmd]` **Cut 4-Meal 2200** trägt `days_count = 28`,
+`lifecycle_type = 'once'`, eine Woche, sieben Tage und 28 Einträge.
+**Lean bulk 3100** trägt `days_count = 84`, `lifecycle_type = 'once'`,
+ebenfalls eine Woche, sieben Tage und 28 Einträge. Beide sind damit nicht
+`rollover`-Pläne. Nach E-62 bleiben die `days_count`-Werte Laufzeiten;
+sie dürfen nicht auf sieben berichtigt werden. Der Seed muss deshalb für
+`once` die fehlenden drei beziehungsweise elf Wochen anlegen (28 bzw. 84
+Plantage), oder eine spätere Entscheidung muss ihren Lifecycle ausdrücklich
+auf `rollover` ändern. Die jetzige Kombination aus `once` und einer Woche
+ist nicht vollständig.
+
+`[cmd]` Der bestehende Kettenschritt
+`supabase/_pipeline/015_kataloge/015a_nutrient_tree_details.ts` wurde auf
+der Dev-Datenbank ausgeführt. Der Livebestand enthält nun 110 Detailzeilen;
+`CHORL` hat `source_key = 'CHOL'` und `function_de = 'Hormone,
+Zellmembranen'`. Der mitverarbeitete zweite C-346-Fall ist ebenfalls korrekt:
+`FD` hat `source_key = 'F'` und `function_de = 'Zahnschutz'`.
+`supabase/_pipeline/_validierung/nutrient-details-legacy-map.test.ts` ist
+danach grün. EAA und Medication-Monitoring wurden nicht verändert.
+
+Keine Datei unter `apps/` wurde verändert. Nicht gestaged, nicht committed,
+nicht gepusht.
 
 ## Abnahme
 

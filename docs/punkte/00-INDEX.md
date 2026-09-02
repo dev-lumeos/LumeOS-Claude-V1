@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 213 |
+| `todos` | 212 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 259 |
+| `erledigt` | 260 |
 | **gesamt** | **477** |
 
 ## medical — 43
@@ -266,12 +266,12 @@
 | `G-333` | befund | niedrig | [`erfassen.tsx` hat keinen Aufrufer](laufend_claudecode/nutrition-g-0333-erfassen-tsx-hat-keinen-aufrufer.md) | laeuft (claudecode) | — | — |
 | `G-335` | feature | hoch | [acht Stellen uebersetzen `meal_type` selbst](erledigt/nutrition-g-0335-acht-stellen-uebersetzen-meal-type-selbst.md) | erledigt | — | G-336 |
 | `G-336` | befund | hoch | [das Raster liest `meal_plan_slots` nicht](erledigt/nutrition-g-0336-das-raster-liest-meal-plan-slots-nicht.md) | erledigt | — | C-397, G-338 |
-| `G-337` | befund | mittel | [`strong_avoid` hat keinen Schreibweg](todos/nutrition-g-0337-strong-avoid-hat-keinen-schreibweg.md) | offen | — | — |
+| `G-337` | befund | mittel | [`strong_avoid` hat keinen Schreibweg](laufend_claudecode/nutrition-g-0337-strong-avoid-hat-keinen-schreibweg.md) | laeuft (claudecode) | — | — |
 | `G-338` | entscheidung | mittel | [eine freie Mahlzeit hat keinen Namen](todos/nutrition-g-0338-eine-freie-mahlzeit-hat-keinen-namen.md) | offen | — | — |
 | `G-339` | befund | mittel | [Quick-Add liest die Namen nicht](erledigt/nutrition-g-0339-quick-add-liest-die-namen-nicht.md) | erledigt | — | G-342 |
-| `G-340` | befund | mittel | [Quick-Add hat keinen Schreibweg](laufend_claudecode/nutrition-g-0340-quick-add-hat-keinen-schreibweg.md) | laeuft (claudecode) | — | — |
-| `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](laufend_claudecode/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | laeuft (claudecode) | — | — |
-| `G-342` | befund | niedrig | [`nutsettings` hat keinen Aufrufer](todos/nutrition-g-0342-nutsettings-hat-keinen-aufrufer.md) | offen | — | — |
+| `G-340` | befund | mittel | [Quick-Add hat keinen Schreibweg](todos/nutrition-g-0340-quick-add-hat-keinen-schreibweg.md) | offen | — | — |
+| `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](erledigt/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | erledigt | — | — |
+| `G-342` | befund | niedrig | [`nutsettings` hat keinen Aufrufer](laufend_claudecode/nutrition-g-0342-nutsettings-hat-keinen-aufrufer.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
