@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 212 |
+| `todos` | 213 |
 | `laufend_claudecode` | 4 |
 | `erledigt` | 263 |
-| **gesamt** | **479** |
+| **gesamt** | **480** |
 
 ## medical — 43
 
@@ -58,9 +58,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 211
+## nutrition — 212
 
-### beauftragbar — 210
+### beauftragbar — 211
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -153,6 +153,7 @@
 | `C-402` | befund | hoch | [`VITC` fehlt an 39 Tagen](erledigt/nutrition-c-0402-vitc-fehlt-an-39-tagen.md) | erledigt | — | — |
 | `C-403` | befund | mittel | [den `once`-Plaenen fehlen die Wochen](erledigt/nutrition-c-0403-den-once-plaenen-fehlen-die-wochen.md) | erledigt | — | C-404 |
 | `C-404` | befund | niedrig | [`Aufbau-Wochenplan` beschreibt 28 Tage, behauptet 21](todos/nutrition-c-0404-aufbau-wochenplan-beschreibt-28-tage-behauptet-21.md) | offen | — | — |
+| `C-405` | feature | mittel | [*Sonstige* faellt weg](todos/nutrition-c-0405-sonstige-faellt-weg.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
