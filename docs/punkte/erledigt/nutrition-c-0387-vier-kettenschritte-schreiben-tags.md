@@ -9,6 +9,8 @@ kind_von: C-384
 entscheidung: E-55
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 77cb7fb6
 beruehrt:
   tabellen: [nutrition.food_tags]
 zahlen:
@@ -61,3 +63,17 @@ Ersetzungen** — **die Zahl 14 waere dann 16.**
 
 **Mitbeauftragt mit C-391 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit C-391 abgenommen:** als Entwurf dokumentiert, nicht gebaut.
+
+`[read]` **`food_tags_kuriert` als Ueberlagerung:** `food_id`,
+`tag_code`, **entschiedene Aktion gesetzt/entfernt, ohne
+`confidence`.**
+
+`[read]` **Der tragende Satz:** *,,Eine Entfernt-Zeile ueberdeckt
+auch einen Tag, den ein Import spaeter erneut setzt."*
+
+`[cmd]` **Damit wirken alle vier Schreiber nur auf ihre eigene
+Tabelle.** **Der Bau bleibt offen.**

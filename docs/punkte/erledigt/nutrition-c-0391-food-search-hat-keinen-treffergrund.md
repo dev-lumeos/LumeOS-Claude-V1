@@ -9,6 +9,8 @@ kind_von: C-24
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 77cb7fb6
 beruehrt:
   tabellen: [nutrition.foods]
 zahlen:
@@ -190,4 +192,82 @@ Sonderbehandlung dafür.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Nachgemessen.**
+
+### Der Treffergrund steht
+
+`[cmd]` **Selbst gemessen: `Banane roh` liefert
+`{"kind": "name_prefix"}`.** `[cmd]` **Acht Vorkommen von
+`match_reason` im Funktionsrumpf.**
+
+`[cmd]` **Zehn Wege:** `browse`, `name_exact`, `name_prefix`,
+`name_word_start`, `alias_exact`, `alias_prefix`, `alias`, `synonym`,
+`name`, `token_group` — **Aliasgruende nennen ihre Herkunft.**
+
+`[cmd]` **Und die Funktion aendert weder Filter noch `ORDER BY`.**
+
+`[read]` **Das ist der Punkt: der Treffergrund erklaert, er
+korrigiert nicht.**
+
+### Und er sagt es selbst
+
+`[read]` *,,`K213000 Kartoffelpueree Instantpulver` bleibt
+unveraendert Platz 1, weil es nach der gleichen Textstufe
+`sort_weight 450` traegt. Der Treffergrund macht den Rangfehler
+sichtbar, er korrigiert ihn nicht."*
+
+`[cmd]` **Alle 16 kommen aus dem `openthesaurus`-Synonym, der erste
+ueber `kartoffelpueree`.**
+
+`[read]` **C-24 ist damit erklaerbar, nicht behoben** — **und das war
+der Auftrag.**
+
+### C-390 — die Gruppe liegt am Tag
+
+`[cmd]` **Nachgemessen: `filter_group` ist live, CHECK auf vier
+Werte, alle 14 Tags zugeordnet.**
+
+    dietary_pattern  halal, kosher, thai_food, vegan, vegetarian
+    nutrient         high_fiber, high_protein, low_carb, low_fat
+    processing       ultra_processed, whole_food
+    allergen         contains_gluten, contains_lactose, contains_nuts
+
+`[cmd]` **`food_tags` unveraendert bei 30.797 Zeilen.**
+
+`[read]` **Die Metadaten liegen am Tag, nicht an den 30.797
+Zuordnungen** — **genau die Trennung, die E-49 verlangt.**
+
+`[cmd]` **Und der Nachtrag steht in der Kette als 391:** **die
+spaeteren Schreiber 027 und 221 setzen die Gruppe beim
+Definitionseintrag mit.**
+
+### C-387 — der Entwurf haelt
+
+`[read]` **`food_tags_kuriert` als Ueberlagerung:** `food_id`,
+`tag_code`, **eine entschiedene Aktion gesetzt/entfernt, ohne
+`confidence`.**
+
+`[read]` **Und der Satz, der es traegt:** *,,Eine Entfernt-Zeile
+ueberdeckt daher auch einen Tag, den ein Import spaeter erneut
+setzt."*
+
+`[cmd]` **Damit wirken alle vier Schreiber nur auf ihre eigene
+Tabelle** — 020 fuegt ein, 027 ersetzt zehn, 032 ersetzt zwei, 221
+wuerde zwei ersetzen.
+
+`[cmd]` **Und G-221 braucht keine Sonderbehandlung:** sein
+Kettenschritt setzt `high_fat` auf `nutrient` und `gluten_free` auf
+`dietary_pattern`.
+
+### Zwei fremde Fehler, richtig gemeldet
+
+`[cmd]` **Die Umlautpruefung in `v070_lesefunktionen.sql` scheitert
+in der Windows-Pipe** — `k rbis l s` statt `kuerbis oel suess`.
+`[read]` **Ausserhalb dieser Aenderung.**
+
+`[cmd]` **Und die Schema-Vollstaendigkeit bleibt an
+`supplements.substance_group_memberships` rot** (0 statt 8).
+**Als C-393.**
+
+**Abgenommen.**
+

@@ -9,6 +9,8 @@ kind_von: G-134
 entscheidung: E-49
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: 77cb7fb6
 beruehrt:
   tabellen: [nutrition.tag_definitions]
 zahlen:
@@ -63,3 +65,14 @@ Anlegen, nicht beim Anzeigen.**
 
 **Mitbeauftragt mit C-391 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit C-391 abgenommen:** gebaut.
+
+`[cmd]` **`tag_definitions.filter_group` ist live**, CHECK auf vier
+Werte, **alle 14 Tags zugeordnet.** `[cmd]` **`food_tags`
+unveraendert bei 30.797 Zeilen.**
+
+`[read]` **Die Metadaten liegen am Tag, nicht an den Zuordnungen** —
+**die Trennung, die E-49 verlangt.**

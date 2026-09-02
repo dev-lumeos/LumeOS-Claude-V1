@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 219 |
-| `laufend_codex` | 4 |
+| `todos` | 220 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 227 |
-| **gesamt** | **453** |
+| `erledigt` | 230 |
+| **gesamt** | **454** |
 
 ## medical — 43
 
@@ -138,11 +138,11 @@
 | `C-382` | feature | mittel | [wer entscheidet, ob ein Plan editierbar ist?](todos/nutrition-c-0382-wer-entscheidet-ob-ein-plan-editierbar-ist.md) | offen | — | — |
 | `C-384` | befund | hoch | [wer schreibt die 30.797 Tag-Zeilen?](erledigt/nutrition-c-0384-wer-schreibt-die-30797-tag-zeilen.md) | erledigt | — | C-387 |
 | `C-386` | befund | mittel | [sind die drei Reste aus C-35 eingeflossen?](erledigt/nutrition-c-0386-sind-die-drei-reste-aus-c-35-eingeflossen.md) | erledigt | — | C-388, C-389 |
-| `C-387` | befund | hoch | [vier Kettenschritte schreiben Tags](laufend_codex/nutrition-c-0387-vier-kettenschritte-schreiben-tags.md) | laeuft (codex) | — | — |
+| `C-387` | befund | hoch | [vier Kettenschritte schreiben Tags](erledigt/nutrition-c-0387-vier-kettenschritte-schreiben-tags.md) | erledigt | — | — |
 | `C-388` | befund | mittel | [die Vertreterregel ist nicht erreicht](todos/nutrition-c-0388-die-vertreterregel-ist-nicht-erreicht.md) | offen | — | — |
 | `C-389` | befund | mittel | [Saft und Nektar liegen bei der Frucht](todos/nutrition-c-0389-saft-und-nektar-liegen-bei-der-frucht.md) | offen | — | — |
-| `C-390` | feature | mittel | [`tag_definitions` hat keine Untergruppe](laufend_codex/nutrition-c-0390-tag-definitions-hat-keine-untergruppe.md) | laeuft (codex) | — | — |
-| `C-391` | feature | hoch | [`food_search` hat keinen Treffergrund](laufend_codex/nutrition-c-0391-food-search-hat-keinen-treffergrund.md) | laeuft (codex) | — | — |
+| `C-390` | feature | mittel | [`tag_definitions` hat keine Untergruppe](erledigt/nutrition-c-0390-tag-definitions-hat-keine-untergruppe.md) | erledigt | — | — |
+| `C-391` | feature | hoch | [`food_search` hat keinen Treffergrund](erledigt/nutrition-c-0391-food-search-hat-keinen-treffergrund.md) | erledigt | — | C-393 |
 | `C-392` | feature | hoch | [die Tabelle `meal_slots`](laufend_codex/nutrition-c-0392-die-tabelle-meal-slots.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
@@ -262,9 +262,9 @@
 | `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | G-328 | G-328 |
 | `G-332` | feature | hoch | [die Mahlzeiten benennen und terminieren](todos/nutrition-g-0332-die-mahlzeiten-benennen-und-terminieren.md) | offen | C-392 | — |
 
-## supplements — 59
+## supplements — 60
 
-### beauftragbar — 58
+### beauftragbar — 59
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -307,6 +307,7 @@
 | `C-352` | befund | hoch | [der Katalog hat keine deutschen Namen](erledigt/supplements-c-0352-der-katalog-hat-keine-deutschen-namen.md) | erledigt | — | — |
 | `C-364` | entscheidung | mittel | [die Produktebene ist Wissen, kein Bestand](erledigt/supplements-c-0364-die-produktebene-ist-wissen-kein-bestand.md) | erledigt | — | G-296 |
 | `C-365` | befund | niedrig | [Peptidsequenzen haben kein Ziel im Schema](erledigt/supplements-c-0365-peptidsequenzen-haben-kein-ziel-im-schema.md) | erledigt | — | — |
+| `C-393` | befund | mittel | [`substance_group_memberships` ist leer](todos/supplements-c-0393-substance-group-memberships-ist-leer.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
