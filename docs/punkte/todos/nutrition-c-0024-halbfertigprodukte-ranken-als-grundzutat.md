@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -73,3 +71,15 @@ zahlen: null
 
 **Mitbeauftragt mit C-383 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: gilt weiter.
+
+`[cmd]` **`kartoffelstock` liefert 16 Treffer, Platz 1 ist
+`Kartoffelpueree Instantpulver`** mit `sort_weight 450`.
+
+`[cmd]` **Die Zahlen haben sich bewegt:** das Namensmuster trifft 69
+Lebensmittel, `sort_weight` im Mittel 214,3 — **nicht mehr 73 mit
+369.**
+
+`[read]` **Kein sicheres Klassifikationsmerkmal** — einzelne Faelle
+muessten kuratiert werden.

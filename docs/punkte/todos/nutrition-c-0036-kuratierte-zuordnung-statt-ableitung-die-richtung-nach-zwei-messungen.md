@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -65,3 +63,16 @@ zahlen: null
 
 **Mitbeauftragt mit C-383 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: gilt weiter, mit engerem Befund.
+
+`[cmd]` **`food_aliases` traegt 12 `curated_suchbegriff`-Zeilen,
+saemtlich fuer Reis** — `reis` liefert `C352000` auf Platz 1 von 145.
+
+`[read]` **Der erste funktionierende Fall, nicht der Abschluss.**
+`[cmd]` **Die uebrigen 32.522 Zeilen sind `editorial` (21.420) oder
+`derived` (11.102).**
+
+`[read]` **Und die Abgrenzung zu E-55:** sie ersetzt weder den
+kuratierten Alias noch macht sie aus abgeleiteten Aliasen
+Zuordnungen.

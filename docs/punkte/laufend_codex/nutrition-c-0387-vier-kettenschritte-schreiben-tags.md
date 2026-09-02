@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: C-384
 entscheidung: E-55
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.food_tags]
 zahlen:
@@ -54,3 +56,8 @@ und `kosher`, die 027 gerade gesetzt hat, und rechnet sie neu.**
 
 `[read]` **Sie braechten zwei neue Definitionen und eigene
 Ersetzungen** — **die Zahl 14 waere dann 16.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-391 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-134
 entscheidung: E-49
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.tag_definitions]
 zahlen:
@@ -56,3 +58,8 @@ Anlegen, nicht beim Anzeigen.**
 `[read]` **Die Spalte gehoert an `tag_definitions`, nicht an
 `food_tags`** — **sie beschreibt den Tag, nicht die Zuordnung.**
 `[read]` **Damit ueberlebt sie den Import.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-391 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
