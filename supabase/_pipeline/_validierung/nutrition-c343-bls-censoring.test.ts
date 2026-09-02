@@ -118,3 +118,46 @@ test('C-343: ein Naehrstoff ohne Zensur bleibt vollstaendig', () => {
     missingPositions: 0,
   })
 })
+
+test('C-402: zensierter FIBT-Wert vervollstaendigt den eingefrorenen Flachwert', () => {
+  const result = one<{
+    censoredLachs: number
+    completeDays: number
+    loggedDays: number
+    missingPositions: number
+  }>(`
+    SELECT json_build_object(
+      'censoredLachs', (
+        SELECT count(*)::integer
+        FROM nutrition.food_nutrients fn
+        JOIN nutrition.foods f ON f.id = fn.food_id
+        WHERE f.bls_code = 'T410100'
+          AND fn.nutrient_code = 'FIBT'
+          AND fn.value = 0
+          AND fn.bls_value_status = 'censored'
+      ),
+      'completeDays', (
+        SELECT count(*) FILTER (WHERE fibt_missing = 0)::integer
+        FROM nutrition.daily_summary
+        WHERE user_id = '${USER_ID}'::uuid
+          AND entry_date BETWEEN DATE '2026-05-06' AND DATE '2026-09-02'
+      ),
+      'loggedDays', (
+        SELECT count(*)::integer
+        FROM nutrition.daily_summary
+        WHERE user_id = '${USER_ID}'::uuid
+          AND entry_date BETWEEN DATE '2026-05-06' AND DATE '2026-09-02'
+      ),
+      'missingPositions', (
+        SELECT COALESCE(sum(fibt_missing), 0)::integer
+        FROM nutrition.daily_summary
+        WHERE user_id = '${USER_ID}'::uuid
+          AND entry_date BETWEEN DATE '2026-05-06' AND DATE '2026-09-02'
+      )
+    );
+  `)
+
+  assert.equal(result.censoredLachs, 1)
+  assert.equal(result.missingPositions, 0)
+  assert.equal(result.completeDays, result.loggedDays)
+})

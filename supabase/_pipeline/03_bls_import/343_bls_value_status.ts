@@ -163,6 +163,22 @@ WHERE mi.food_source = 'bls'
   AND mi.food_id = c.food_id
   AND NOT mi.nutrients @> c.nutrients;
 
+-- Die breite Tagesbilanz liest FIBT aus dem eingefrorenen Flachwert,
+-- nicht aus dem JSON-Snapshot. E-38 gilt auch dort: die zensierte
+-- BLS-Angabe ist Lower Bound 0, keine fehlende Position.
+WITH censored_fiber_foods AS (
+  SELECT food_id
+  FROM nutrition.food_nutrients
+  WHERE nutrient_code = 'FIBT'
+    AND bls_value_status = 'censored'
+)
+UPDATE nutrition.meal_items mi
+SET fibt = 0
+FROM censored_fiber_foods c
+WHERE mi.food_source = 'bls'
+  AND mi.food_id = c.food_id
+  AND mi.fibt IS NULL;
+
 DO $$
 DECLARE
   v_rows integer;

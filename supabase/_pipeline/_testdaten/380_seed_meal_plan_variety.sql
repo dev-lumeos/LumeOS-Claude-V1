@@ -40,8 +40,8 @@ BEGIN
   WHERE mp.user_id = v_dev_id
     AND mp.name IN ('Cut 4-Meal 2200', 'Lean bulk 3100', 'Buddy auto-plan');
 
-  IF v_days <> 21 THEN
-    RAISE EXCEPTION 'C-380: erwartet 21 bestehende Plantage, gefunden %', v_days;
+  IF v_days < 21 THEN
+    RAISE EXCEPTION 'C-380: erwartet mindestens die 21 Plantage der drei Seed-Pläne, gefunden %', v_days;
   END IF;
 
   SELECT count(*) INTO v_logs
@@ -85,6 +85,68 @@ WHERE mp.user_id = :'dev_id'::uuid
 ON CONFLICT (plan_id, position) DO UPDATE
   SET name = EXCLUDED.name,
       planned_time = EXCLUDED.planned_time;
+
+-- C-403/E-62: `once`-Pläne beschreiben ihre gesamte Laufzeit. Die
+-- vorhandene erste Woche bleibt die Vorlage; jede weitere Woche und ihre
+-- sieben Tage werden ohne Löschen ergänzt und beim nächsten Kettenlauf
+-- wiederhergestellt.
+CREATE TEMP TABLE c380_plan_periods (
+  plan_name text PRIMARY KEY,
+  week_count integer NOT NULL CHECK (week_count > 0)
+) ON COMMIT DROP;
+
+INSERT INTO c380_plan_periods (plan_name, week_count) VALUES
+  ('Cut 4-Meal 2200', 4),
+  ('Lean bulk 3100', 12),
+  ('Buddy auto-plan', 1);
+
+WITH base_weeks AS (
+  SELECT
+    p.plan_name,
+    p.week_count,
+    mp.id AS plan_id,
+    mp.user_id,
+    w.id AS base_week_id,
+    w.week_start,
+    w.name
+  FROM c380_plan_periods p
+  JOIN nutrition.meal_plans mp
+    ON mp.user_id = :'dev_id'::uuid AND mp.name = p.plan_name
+  CROSS JOIN LATERAL (
+    SELECT id, week_start, name
+    FROM nutrition.meal_plan_weeks
+    WHERE plan_id = mp.id
+    ORDER BY week_start, id
+    LIMIT 1
+  ) w
+)
+INSERT INTO nutrition.meal_plan_weeks (
+  plan_id, user_id, week_start, name, copied_from_week_id
+)
+SELECT
+  b.plan_id,
+  b.user_id,
+  b.week_start + (period.week_offset * 7),
+  b.name,
+  CASE WHEN period.week_offset = 0 THEN NULL ELSE b.base_week_id END
+FROM base_weeks b
+CROSS JOIN LATERAL generate_series(0, b.week_count - 1) AS period(week_offset)
+ON CONFLICT (plan_id, week_start) DO NOTHING;
+
+INSERT INTO nutrition.meal_plan_days (
+  week_id, user_id, plan_date, day_index
+)
+SELECT
+  w.id,
+  mp.user_id,
+  w.week_start + (day.day_index - 1),
+  day.day_index
+FROM c380_plan_periods p
+JOIN nutrition.meal_plans mp
+  ON mp.user_id = :'dev_id'::uuid AND mp.name = p.plan_name
+JOIN nutrition.meal_plan_weeks w ON w.plan_id = mp.id
+CROSS JOIN LATERAL generate_series(1, 7) AS day(day_index)
+ON CONFLICT (week_id, day_index) DO NOTHING;
 
 CREATE TEMP TABLE c380_entries (
   plan_name text NOT NULL,
@@ -197,14 +259,6 @@ BEGIN
   END IF;
 END $$;
 
-DELETE FROM nutrition.meal_plan_entries e
-USING nutrition.meal_plan_days d, nutrition.meal_plan_weeks w, nutrition.meal_plans mp
-WHERE e.day_id = d.id
-  AND d.week_id = w.id
-  AND w.plan_id = mp.id
-  AND mp.user_id = :'dev_id'::uuid
-  AND mp.name IN ('Cut 4-Meal 2200', 'Lean bulk 3100', 'Buddy auto-plan');
-
 INSERT INTO nutrition.meal_plan_entries (
   day_id, user_id, meal_type, planned_time, slot_order, entry_type,
   food_id, amount_g, note
@@ -217,7 +271,14 @@ JOIN nutrition.meal_plans mp
   ON mp.user_id = :'dev_id'::uuid AND mp.name = e.plan_name
 JOIN nutrition.meal_plan_weeks w ON w.plan_id = mp.id
 JOIN nutrition.meal_plan_days d ON d.week_id = w.id AND d.day_index = e.day_index
-JOIN nutrition.foods f ON f.bls_code = e.bls_code;
+JOIN nutrition.foods f ON f.bls_code = e.bls_code
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM nutrition.meal_plan_entries existing
+  WHERE existing.day_id = d.id
+    AND existing.meal_type = e.meal_type
+    AND existing.slot_order = 1
+);
 
 DO $$
 DECLARE
@@ -234,8 +295,8 @@ BEGIN
   WHERE mp.user_id = v_dev_id
     AND mp.name IN ('Cut 4-Meal 2200', 'Lean bulk 3100', 'Buddy auto-plan');
 
-  IF v_entries <> 84 THEN
-    RAISE EXCEPTION 'C-380: % Positionen nach Einspielen statt 84', v_entries;
+  IF v_entries <> 476 THEN
+    RAISE EXCEPTION 'C-380: % Positionen nach Einspielen statt 476', v_entries;
   END IF;
 END $$;
 

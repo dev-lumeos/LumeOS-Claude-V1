@@ -17,6 +17,7 @@ function one<T>(sql: string): T {
 
 type Plan = {
   name: string
+  weeks: number
   entries: number
   days: number
   entriesPerDay: number[]
@@ -49,6 +50,8 @@ test('C-380: drei Seed-PlÃ¤ne sind abwechslungsreich und plausibel zum Ziel befÃ
     )
     SELECT coalesce(json_agg(json_build_object(
       'name', tp.name,
+      'weeks', (SELECT count(*)::integer FROM nutrition.meal_plan_weeks w
+                WHERE w.plan_id = tp.id),
       'entries', (SELECT count(*) FROM nutrition.meal_plan_weeks w
                   JOIN nutrition.meal_plan_days d ON d.week_id = w.id
                   JOIN nutrition.meal_plan_entries e ON e.day_id = d.id
@@ -78,11 +81,20 @@ test('C-380: drei Seed-PlÃ¤ne sind abwechslungsreich und plausibel zum Ziel befÃ
     FROM target_plans tp;
   `)
 
+  const expectedDuration = {
+    'Buddy auto-plan': { weeks: 1, days: 7, entries: 28 },
+    'Cut 4-Meal 2200': { weeks: 4, days: 28, entries: 112 },
+    'Lean bulk 3100': { weeks: 12, days: 84, entries: 336 },
+  } as const
+
   assert.equal(plans.length, 3)
   for (const plan of plans) {
-    assert.equal(plan.entries, 28, `${plan.name}: 28 Positionen`)
-    assert.equal(plan.days, 7, `${plan.name}: sieben Tage`)
-    assert.deepEqual(plan.entriesPerDay, [4, 4, 4, 4, 4, 4, 4], `${plan.name}: vier Mahlzeiten je Tag`)
+    const expected = expectedDuration[plan.name as keyof typeof expectedDuration]
+    assert.ok(expected, `${plan.name}: erwarteter Seed-Plan`)
+    assert.equal(plan.weeks, expected.weeks, `${plan.name}: Laufzeit in Wochen`)
+    assert.equal(plan.entries, expected.entries, `${plan.name}: vier Positionen je Tag`)
+    assert.equal(plan.days, expected.days, `${plan.name}: Laufzeit in Tagen`)
+    assert.ok(plan.entriesPerDay.every(count => count === 4), `${plan.name}: vier Mahlzeiten je Tag`)
     assert.equal(plan.hammelEntries, 0, `${plan.name}: kein Hammelfilet`)
     assert.ok(plan.distinctFoods >= 10, `${plan.name}: mindestens zehn Lebensmittel`)
     assert.equal(plan.distinctDailyMenus, 7, `${plan.name}: kein wiederholter Tag`)
