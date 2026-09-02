@@ -85,28 +85,45 @@ test('G-331: die Vorlieben suchen über den Hook — OHNE prefs', () => {
     'der Schalter wirkt nicht — die Vorlieben filtern weiter')
 })
 
-test('G-331: erfassen.tsx ist toter Code — gemeldet, nicht umgebaut', () => {
-  // `[cmd]` **477 Zeilen, `export function Erfassen`, KEIN Aufrufer**
-  // — gemessen am 2026-09-02, zuletzt geändert am 16.08.
+test('G-333: erfassen.tsx ist geloescht — und kommt nicht zurueck', () => {
+  // ══ UMGESTELLT IN G-333, 2026-09-02 ════════════════
   //
-  // `[read]` **Deshalb nicht auf den Hook umgestellt:** eine tote
-  // Datei zu verbessern kostet Zeit und ändert nichts. **Der Punkt
-  // steht im Bericht.**
+  // `[cmd]` **Hier stand *,,toter Code — gemeldet, nicht
+  // umgebaut"*.** `[cmd]` **Die Datei ist geloescht** — 477 Zeilen,
+  // kein Aufrufer, zuletzt geaendert am 16.08.
   //
-  // `[cmd]` **Fällt dieser Wächter, hat die Datei einen Aufrufer
-  // bekommen** — dann gehört sie auf den Hook.
+  // `[cmd]` **Gemessen vor dem Loeschen, Stueck fuer Stueck:** kein
+  // Bestandteil war einzigartig. `TYP_LABEL` → `KATEGORIE_TEXT`,
+  // Mahlzeit anlegen → `FreieMahlzeit` (G-336), Menge/Entfernen
+  // → `mahlzeiten.tsx` (PATCH/DELETE), Suche → `useFoodSuche`,
+  // `search_events` → `food-search.ts`.
+  //
+  // `[cmd]` **Ihr einziges Alleinstellungsmerkmal war FALSCH:** sie
+  // sperrte Mahlzeitentypen wegen eines `UNIQUE (user_id,
+  // entry_date, meal_type)`, **das es nicht mehr gibt** —
+  // `dev@lumeos.app` hat an vier Tagen zwei `lunch`-Eintraege.
+  //
+  // `[read]` **Die Zusage ist jetzt eine Abwesenheit:** die Datei
+  // gibt es nicht, und kein Import zeigt auf sie. **Kehrt sie
+  // zurueck, faellt dieser Waechter** — und dann gehoert sie auf
+  // den Hook, nicht zurueck in den alten Zustand.
+  const pfad = path.join(WURZEL, 'apps/web/src/app/v2/nutrition/erfassen.tsx')
+  assert.ok(!fs.existsSync(pfad),
+    'erfassen.tsx ist zurueck — sie war geloescht (G-333, A-59)')
+
+  // `[cmd]` **Der Waechter liest die Platte, nicht den Index** —
+  // `git ls-files` saehe eine ungetrackte Datei nicht (A-63).
   const dateien = fs.readdirSync(path.join(WURZEL, 'apps/web/src'), {
     recursive: true, encoding: 'utf-8',
   }).filter(f => (f.endsWith('.tsx') || f.endsWith('.ts'))
-    && !f.includes('__tests__')
-    && !f.endsWith('erfassen.tsx'))
+    && !f.includes('__tests__'))
 
   const rufer = dateien.filter(f => {
     const t = fs.readFileSync(path.join(WURZEL, 'apps/web/src', f), 'utf-8')
     return /from '[^']*\/erfassen'/.test(t) || /<Erfassen[\s/>]/.test(t)
   })
   assert.deepEqual(rufer, [],
-    `erfassen.tsx hat Aufrufer (${rufer.join(', ')}) — dann gehört sie auf den Hook`)
+    `etwas ruft erfassen.tsx (${rufer.join(', ')}) — die Datei gibt es nicht mehr`)
 })
 
 // ══ 2 · G-305: die letzte Sackgasse im Planner ═══════════════════════

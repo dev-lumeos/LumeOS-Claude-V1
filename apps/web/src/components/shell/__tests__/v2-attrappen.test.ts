@@ -1302,12 +1302,28 @@ test('die Nutrition-Entwuerfe kommen nicht zurueck', () => {
     'Die drei Rueckfaelle (nutrients, prefs, rezepte) zeigen LeerHinweis.')
 })
 
-test('die vier Modale der Nutrition-Vorlage sind da', () => {
+test('die drei lebenden Modale der Nutrition-Vorlage sind da', () => {
   // [cmd] Die Vorlage fuehrt vier (module-nutrition.jsx:68-71):
   // quickadd, customfood, nutsettings, mealcam. G-38 hat sie gebaut;
   // vorher zeigte der Kopf fuer alle nur „in Entwicklung".
+  //
+  // ══ BERICHTIGT IN G-342, 2026-09-02 ══════════════════════════
+  //
+  // `[cmd]` **`NutritionSettingsModal` ist geloescht** — 132 Zeilen,
+  // **kein Aufrufer** (gemessen 2026-09-02 in G-339: der Typ stand
+  // da, der Verteiler auch, aber nichts setzte `nutsettings`).
+  //
+  // `[cmd]` **Sein `meal_schedule`-Block ist seit E-58 ueberholt:**
+  // die Mahlzeitenstruktur liegt in `nutrition.meal_slots` (C-392),
+  // gepflegt im Vorlieben-Reiter (G-332), aus den Einstellungen
+  // verlinkt (G-335).
+  //
+  // `[read]` **Dieser Waechter mass die Treue zur Vorlage.** **Die
+  // Vorlage ist an dieser Stelle ueberholt** — eine Entscheidung
+  // (E-58) schlaegt einen Entwurf. **Dass es ihn NICHT mehr gibt,
+  // sichert `mahlzeit-name-eine-quelle.test.ts`.**
   const quelle = fs.readFileSync(NUT_MODALE, 'utf8')
-  for (const k of ['MealCamModal', 'CustomFoodModal', 'QuickAddModal', 'NutritionSettingsModal']) {
+  for (const k of ['MealCamModal', 'CustomFoodModal', 'QuickAddModal']) {
     // `\\b` mit zwei Zeichen: in einem Template-Literal waere `\b`
     // das Steuerzeichen Backspace, keine Wortgrenze. Dieselbe Falle
     // wie in G-33 — hier faellt sie auf, weil der Test zuerst

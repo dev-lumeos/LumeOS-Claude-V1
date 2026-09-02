@@ -27,7 +27,7 @@ import { EU14_ALLERGENS } from './tabs-daten'
 // G-339: EINE Namensquelle statt sechs (E-58).
 import { KATEGORIE_TEXT } from '../../../lib/nutrition/slots-lage'
 
-export type NutritionModalTyp = 'mealcam' | 'customfood' | 'quickadd' | 'nutsettings' | 'recipe'
+export type NutritionModalTyp = 'mealcam' | 'customfood' | 'quickadd' | 'recipe'
 
 // ══ G-339: die sechste Namensliste ist weg ══════════════════════════
 //
@@ -55,22 +55,6 @@ export type NutritionModalTyp = 'mealcam' | 'customfood' | 'quickadd' | 'nutsett
 const MEAL_TYPES = Object.entries(KATEGORIE_TEXT)
   .map(([id, label]) => ({ id, label }))
 
-// ══ G-339: die Vorgabezeiten, getrennt von den Namen ════════════════
-//
-// `[read]` **Die alte Liste vermischte zwei Dinge** — wie eine
-// Kategorie HEISST und wann sie ueblicherweise liegt. **Der Name
-// kommt jetzt aus `KATEGORIE_TEXT`; die Zeit bleibt hier**, weil
-// `KATEGORIE_TEXT` keine kennt und auch keine kennen soll.
-//
-// `[cmd]` **Sie sind nur eine Vorbelegung fuer die Attrappe unten**
-// (`meal_schedule`). `[read]` **Die echten Zeiten des Nutzers stehen
-// in `nutrition.meal_slots`** (C-392) und werden im Vorlieben-Reiter
-// gepflegt — **diese Werte schreiben nichts.**
-const VORGABE_ZEIT: Record<string, string> = {
-  breakfast: '07:00', lunch: '13:00', dinner: '20:00',
-  snack: '16:00', pre_workout: '16:30', post_workout: '19:00',
-  other: '12:00',
-}
 
 /** Rahmen fuer alle Modale — wie `Rahmen` im Supplements-Modul. */
 function Rahmen({
@@ -418,138 +402,6 @@ function QuickAddModal({ onClose }: { onClose: () => void }) {
   )
 }
 
-// --- Nutrition settings ----------------------------------------------
-function NutritionSettingsModal({ onClose }: { onClose: () => void }) {
-  const [tier, setTier] = React.useState(3)
-
-  return (
-    <Rahmen
-      titel="Nutrition settings"
-      sub="Key-value store · per user"
-      symbol="settings"
-      breite={640}
-      onClose={onClose}
-      fuss={(
-        <>
-          <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
-          <InEntwicklungKnopf titel="Save settings" className="v2-btn v2-btn-primary">
-            <Icon name="check" className="v2-ic v2-ic-sm" />Save settings
-          </InEntwicklungKnopf>
-        </>
-      )}
-    >
-      <div className="v2-eyebrow" style={{ marginBottom: 8 }}>meal_schedule</div>
-      <Card style={{ padding: 0, marginBottom: 14 }}>
-        <div className="v2-nutri-tbl-wrap">
-          <table className="v2-tbl" style={{ margin: 0 }}>
-            <thead>
-              <tr>
-                <th style={{ paddingLeft: 12 }}>Meal</th>
-                <th style={{ width: 110 }}>Time</th>
-                <th style={{ width: 40 }} />
-              </tr>
-            </thead>
-            <tbody>
-              {MEAL_TYPES.map(m => (
-                <tr key={m.id}>
-                  <td style={{ paddingLeft: 12 }}>
-                    <input defaultValue={m.label} aria-label={`${m.label} Name`} className="v2-feld-klein" />
-                  </td>
-                  <td>
-                    <input
-                      type="time"
-                      defaultValue={VORGABE_ZEIT[m.id] ?? ''}
-                      aria-label={`${m.label} Uhrzeit`}
-                      className="v2-feld-klein v2-mono"
-                    />
-                  </td>
-                  <td>
-                    <button type="button" className="v2-icon-btn" aria-label={`${m.label} entfernen`}>
-                      <Icon name="trash" className="v2-ic v2-ic-sm" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Card>
-      <button type="button" className="v2-btn v2-btn-sm" style={{ marginBottom: 16 }}>
-        <Icon name="plus" className="v2-ic v2-ic-sm" />Add meal slot
-      </button>
-
-      <div className="v2-eyebrow" style={{ marginBottom: 8 }}>show_micros_tier</div>
-      <div style={{ display: 'flex', gap: 6, marginBottom: 6 }}>
-        {[
-          { t: 1, l: 'Essential · 15' },
-          { t: 2, l: 'Athlete · +8' },
-          { t: 3, l: 'Medical · all 138' },
-        ].map(o => (
-          <button
-            key={o.t}
-            type="button"
-            onClick={() => setTier(o.t)}
-            className={tier === o.t ? 'v2-btn v2-btn-primary v2-btn-sm' : 'v2-btn v2-btn-sm'}
-            style={{ flex: 1 }}
-          >
-            {o.l}
-          </button>
-        ))}
-      </div>
-      <div className="v2-dim" style={{ fontSize: 10.5, marginBottom: 16 }}>
-        V1: all tiers visible without gate. Subscription gates ship with monetisation.
-      </div>
-
-      <div className="v2-eyebrow" style={{ marginBottom: 8 }}>water_quick_amounts · ml</div>
-      <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
-        {[250, 500, 750, 1000].map(v => (
-          <input
-            key={v}
-            defaultValue={v}
-            aria-label={`Menge ${v} ml`}
-            className="v2-feld v2-mono"
-            style={{ flex: 1, height: 30, textAlign: 'center' }}
-          />
-        ))}
-      </div>
-
-      <div className="v2-eyebrow" style={{ marginBottom: 8 }}>mealcam_threshold</div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
-        <input
-          type="range" min="0.5" max="0.95" step="0.05" defaultValue="0.85"
-          aria-label="MealCam-Schwelle"
-          style={{ flex: 1, accentColor: 'var(--acc-nutri)' }}
-        />
-        <span className="v2-num" style={{ width: 44, textAlign: 'right' }}>0.85</span>
-      </div>
-      <div className="v2-dim" style={{ fontSize: 10.5, marginBottom: 16 }}>
-        Confidence at which MealCam marks an item green. Never auto-adds — user tap always required.
-      </div>
-
-      <div className="v2-eyebrow" style={{ marginBottom: 8 }}>meal_plan_confirm_mode</div>
-      <div style={{ display: 'flex', gap: 6, marginBottom: 16 }}>
-        {['mealcam', 'manual', 'ask'].map((m, i) => (
-          <button
-            key={m}
-            type="button"
-            className={i === 2 ? 'v2-btn v2-btn-primary v2-btn-sm' : 'v2-btn v2-btn-sm'}
-            style={{ flex: 1 }}
-          >
-            {m}
-          </button>
-        ))}
-      </div>
-
-      <div className="v2-eyebrow" style={{ marginBottom: 8 }}>morning_weigh_in</div>
-      <div className="v2-schalter-zeile">
-        <span style={{ flex: 1, fontSize: 12 }}>Track weight every morning</span>
-        <div className="v2-schalter" style={{ background: 'var(--pos)' }}>
-          <div className="v2-schalter-knopf" style={{ marginLeft: 13 }} />
-        </div>
-      </div>
-    </Rahmen>
-  )
-}
 
 /**
  * Der Verteiler — Vorlage: `NutritionModalLauncher`
@@ -569,6 +421,20 @@ export function NutritionModale({ modal, onClose }: {
   if (modal === 'mealcam') return <MealCamModal onClose={onClose} />
   if (modal === 'customfood') return <CustomFoodModal onClose={onClose} />
   if (modal === 'quickadd') return <QuickAddModal onClose={onClose} />
-  if (modal === 'nutsettings') return <NutritionSettingsModal onClose={onClose} />
+  // ══ G-342: `nutsettings` ist entfernt ══════════════════
+  //
+  // `[cmd]` **Es hatte keinen Aufrufer** — der Typ stand hier, der
+  // Verteiler auch, **aber nichts setzte ihn** (gemessen 2026-09-02
+  // in G-339).
+  //
+  // `[cmd]` **Sein `meal_schedule`-Block ist seit E-58 ueberholt:**
+  // die Mahlzeitenstruktur liegt in `nutrition.meal_slots` (C-392),
+  // gepflegt im Vorlieben-Reiter (G-332) und in den Einstellungen
+  // verlinkt (G-335). **Der Ort existiert, und er schreibt.**
+  //
+  // `[read]` **Ein zweiter Block waere ein zweiter Schreibweg** —
+  // genau das, was G-72 vermieden hat.
+  //
+  // `[read]` **A-59: geloescht, nicht auskommentiert.**
   return null
 }

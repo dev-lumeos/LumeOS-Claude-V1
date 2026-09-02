@@ -54,17 +54,18 @@ const QUELLEN = [
   'apps/web/src/app/v2/nutrition',
 ]
 
-// `[cmd]` **`erfassen.tsx` traegt eine der fuenf Tabellen** —
-// `Fruehstueck`
-// ohne Umlaut, `vor dem Training` klein. `[cmd]` **Sie hat keinen
-// Aufrufer und ist seit dem 2026-08-16 unberuehrt** (477 Zeilen).
+// ══ G-333: der Ausschluss ist weg ════════════════════
 //
-// `[read]` **Sie bleibt hier draussen, statt umgebaut zu werden:**
-// eine tote Datei zu verbessern aendert nichts am Schirm. **Ob sie
-// geloescht wird, ist eine eigene Entscheidung** — `suchen-und-
-// vorschau.test.ts` haelt fest, dass sie tot ist, und faellt, sobald
-// jemand sie wieder anschliesst. **Dann faellt auch dieser Waechter.**
-const TOT = 'apps/web/src/app/v2/nutrition/erfassen.tsx'
+// `[cmd]` **Hier stand `TOT`** — `erfassen.tsx` war von der
+// Zaehlung ausgenommen, weil sie tot war und ein Umbau nichts
+// geaendert haette.
+//
+// `[cmd]` **Die Datei ist in G-333 geloescht** (477 Zeilen).
+// **Damit faellt der Ausschluss** — genau, wie es der Waechter
+// unten verlangt hat: die ausgeschlossene Datei gibt es nicht
+// mehr, also faellt der Ausschluss.
+//
+// `[read]` **Der Zaehler sieht jetzt den ganzen Baum.**
 
 /** Alle `.ts`/`.tsx` unterhalb eines Ordners, ohne `__tests__`. */
 function dateien(rel: string): string[] {
@@ -74,7 +75,7 @@ function dateien(rel: string): string[] {
     if (e.name === '__tests__') continue
     const p = path.join(rel, e.name).replace(/\\/g, '/')
     if (e.isDirectory()) raus.push(...dateien(p))
-    else if (/\.tsx?$/.test(e.name) && p !== TOT) raus.push(p)
+    else if (/\.tsx?$/.test(e.name)) raus.push(p)
   }
   return raus
 }
@@ -89,15 +90,16 @@ test('die Dateiproben finden ihre Dateien — unabhaengig vom Startort', () => {
   assert.ok(dateien(QUELLEN[1]).length > 20,
     'der Dateibaum ist leer — die Suche unten liefe ins Leere')
 
-  // `[cmd]` **Der Ausschluss deckt GENAU eine Datei zu** — und nur,
-  // solange sie tot ist. **Bekommt sie einen Aufrufer, faellt der
-  // Ausschluss mit.**
-  assert.ok(fs.existsSync(path.join(WURZEL, TOT)),
-    'die ausgeschlossene Datei gibt es nicht mehr — dann den Ausschluss entfernen')
-  const rufer = [...dateien(QUELLEN[0]), ...dateien(QUELLEN[1])]
-    .filter(f => /from '[^']*\/erfassen'/.test(lies(f)))
-  assert.deepEqual(rufer, [],
-    `erfassen.tsx ist wieder angeschlossen (${rufer.join(', ')}) — Ausschluss weg`)
+  // `[cmd]` **G-333: `erfassen.tsx` ist geloescht** — und damit auch
+  // der Ausschluss, der sie aus der Zaehlung nahm.
+  //
+  // `[read]` **Die Zusage kehrt sich um:** vorher *,,die Datei ist da
+  // und bleibt draussen"*, jetzt *,,sie ist weg und niemand ruft
+  // sie"*. **`suchen-und-vorschau.test.ts` fuehrt die Hauptzusage**;
+  // hier steht nur, dass die Zaehlung sie nicht wieder einsammelt.
+  assert.ok(!fs.existsSync(
+    path.join(WURZEL, 'apps/web/src/app/v2/nutrition/erfassen.tsx')),
+  'erfassen.tsx ist zurueck — dann gehoert sie auf den Hook (G-333)')
 })
 
 // ══ 1 · EINE Liste, nicht fuenf ══════════════════════════════════════
@@ -380,17 +382,53 @@ test('G-339: die option traegt ein value — sonst faehrt der Label los', () => 
     'die option traegt kein value — der Browser schickt den Label')
 })
 
-test('G-339: Namen und Zeiten sind getrennt', () => {
-  // `[read]` **Die alte Liste vermischte beides.** `[cmd]`
-  // `KATEGORIE_TEXT` kennt keine Zeiten und soll keine kennen —
-  // **die echten stehen in `nutrition.meal_slots`** (C-392).
+test('G-339/G-342: in modale.tsx stehen keine Zeiten mehr', () => {
+  // `[read]` **Die alte Liste vermischte beides** — wie eine
+  // Kategorie heisst UND wann sie liegt.
+  //
+  // ══ UMGESTELLT IN G-342, 2026-09-02 ═════════════════════════
+  //
+  // `[cmd]` **G-339 trennte sie in `VORGABE_ZEIT`** — noetig fuer
+  // den `meal_schedule`-Block in *Nutrition settings*.
+  //
+  // `[cmd]` **G-342 hat diesen Block geloescht** (132 Zeilen, kein
+  // Aufrufer, seit E-58 ueberholt). **Damit faellt auch die
+  // Zeittabelle** — sie hatte nur ihn als Verbraucher.
+  //
+  // `[read]` **Die Trennung ist jetzt vollstaendig:** `modale.tsx`
+  // fuehrt ueberhaupt keine Zeiten mehr. **Die echten stehen in
+  // `nutrition.meal_slots`** (C-392), gepflegt im Vorlieben-Reiter.
   const m = ohneKommentare(MODALE)
-  assert.match(m, /const VORGABE_ZEIT: Record<string, string>/,
-    'die Vorgabezeiten fehlen')
+  assert.doesNotMatch(m, /const VORGABE_ZEIT/,
+    'die Vorgabezeiten sind zurueck — dann ist der tote Block auch zurueck')
 
-  // Die Wirkung: die Zeittabelle traegt KEINE Beschriftungen.
-  const i = m.indexOf('const VORGABE_ZEIT')
-  const block = m.slice(i, m.indexOf('}', i))
-  assert.doesNotMatch(block, /['"][A-Za-zÄÖÜäöü][^'"]{2,}['"]/,
-    'in den Vorgabezeiten steht Text — dann ist es wieder eine Namensliste')
+  // `[cmd]` **Die Wirkung, nicht das Wort:** keine `'HH:MM'`-Werte
+  // im Quelltext. **Ein zweiter Zeitvorrat waere eine zweite
+  // Wahrheit ueber die Mahlzeitenstruktur.**
+  assert.doesNotMatch(m, /['"][012]\d:[0-5]\d['"]/,
+    'in modale.tsx stehen wieder Uhrzeiten — sie gehoeren in meal_slots')
 })
+
+test('G-342: der tote Einstellungsblock ist weg', () => {
+  // `[cmd]` **`nutsettings` hatte keinen Aufrufer** — der Typ stand
+  // da, der Verteiler auch, **aber nichts setzte ihn.**
+  //
+  // `[read]` **Die Wirkung ist eine dreifache Abwesenheit:** die
+  // Funktion, der Typwert und die Verteilerzeile. **Fehlt eine
+  // Probe, kaeme der Block ueber sie zurueck.**
+  const m = ohneKommentare(MODALE)
+  assert.doesNotMatch(m, /function NutritionSettingsModal/,
+    'das Einstellungsmodal ist zurueck')
+  assert.doesNotMatch(m, /'nutsettings'/,
+    'der Typwert nutsettings ist zurueck')
+  assert.doesNotMatch(m, /meal_schedule/,
+    'der meal_schedule-Block ist zurueck — die Struktur liegt in meal_slots (E-58)')
+
+  // `[read]` **Die vier lebenden Modale bleiben** — die Loeschung
+  // sollte genau eines treffen.
+  for (const k of ['MealCamModal', 'CustomFoodModal', 'QuickAddModal']) {
+    assert.match(m, new RegExp(`function ${k}\\b`),
+      `${k} ist mitgeloescht worden — nur nutsettings war gemeint`)
+  }
+})
+
