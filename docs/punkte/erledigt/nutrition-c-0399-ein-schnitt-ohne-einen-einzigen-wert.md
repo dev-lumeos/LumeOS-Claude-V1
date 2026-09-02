@@ -10,7 +10,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
 erledigt: 2026-09-02
-commit: OFFEN
+commit: 2796ee5c
 beruehrt:
   tabellen: [nutrition.food_nutrients]
 zahlen:
