@@ -4,7 +4,7 @@ typ: entscheidung
 modul: nutrition
 schwere: niedrig
 angelegt: 2026-08-14
-braucht: []
+braucht: [C-386]
 kind_von: C-28
 kinder: []
 entscheidung: E-13
@@ -45,3 +45,18 @@ zahlen: null
   Unterschied ist grösser als der zwischen Hähnchenbrust und Brustfilet.
   Die Einstufung war technisch begründet (sonst zerfällt `M710`) — nach
   dem Fall der Gruppierung ist dieser Grund entfallen.
+
+## Eingeordnet, 2026-09-02
+
+Tom fragte, ob sich dieser Punkt von selbst erledigt.
+
+`[read]` **Nein** — **anders als G-261 gibt es hier keinen
+Waechter.** `[cmd]` **Die drei Erkenntnisse stehen als Text, keine
+ist gebaut oder gesichert.**
+
+`[read]` **Und zwei sind seither vermutlich gebraucht worden:**
+`[cmd]` **der Zubereitungsschluessel klingt nach dem, was
+`name_display_de` leistet** (C-29, 5.014 von 7.140 weichen ab),
+`[cmd]` **die Vertreterregel nach der Suchsortierung** (G-70, G-281).
+
+`[cmd]` **C-386 misst es** — **eingeflossen oder verloren.**
