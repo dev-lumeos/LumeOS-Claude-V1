@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: null
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-02
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -32,3 +34,8 @@ oder erledigt sein.
 
 **Verwandter Punkt:** C-174 (`ADR_NUTRITION_PREFERENCES_V1` kennt drei Constraint-Stufen). `[read]` **Nicht zusammengelegt** — ob es
 derselbe Befund ist, gehoert geprueft, nicht angenommen.
+
+## Auftrag
+
+**Mitbeauftragt mit G-294 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
