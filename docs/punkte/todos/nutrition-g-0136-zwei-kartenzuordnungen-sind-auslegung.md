@@ -1,13 +1,13 @@
 ---
 nr: G-136
-typ: entscheidung
+typ: feature
 modul: nutrition
 schwere: mittel
 angelegt: 2026-08-20
 braucht: []
 kind_von: null
 kinder: []
-entscheidung: null
+entscheidung: E-48
 beruehrt:
   tabellen: []
   dateien: []
@@ -36,3 +36,31 @@ zahlen: null
   ist fachlich richtig. **Wasser bei *„Sonstige"* ist der schwaechere
   Teil** — es ist einer der sechs Naehrstoffklassen, aber eine eigene
   Karte fuer einen Eintrag waere seltsam.
+
+## Entschieden: E-48, 2026-09-02
+
+Tom hat *Sonstige* aufgeloest — **drei der vier bekommen eine eigene
+Karte:**
+
+    FIBT    bleibt bei den Kohlenhydraten          (bestaetigt)
+    WATER   Karte "Wasser" als Fluessigkeitsbilanz --
+            zwei Positionen: Trinkwasser aus dem Wassermodul,
+            Wasseranteil aus den Lebensmitteln
+    OA      Karte "Organische Saeuren" --
+            nicht-essentielle Wirkstoffe, fuenf Kinder
+    ALC     Karte "Genussmittel" --
+            energieliefernde Nicht-Naehrstoffe
+
+`[read]` **Und ein Hinweis aus G-291, der beim Bauen zaehlt:**
+`[cmd]` **`FIBT` gehoert auf die Kohlenhydrat-Karte, aber nicht als
+Kind unter `CHO`** — als Kind ueberstiegen die Teile das Elternteil.
+
+`[read]` **Karte und Hierarchie sind zwei verschiedene Sachen.**
+
+`[cmd]` **Offen bleibt `ASH` (Rohasche)** — von Tom nicht genannt.
+`[read]` **Der Mineralstoffrueckstand nach dem Verbrennen, kein
+Naehrwert fuer den Nutzer.** **Eigene Karte oder gar nicht zeigen?**
+
+`[read]` **Und *Wasser* ist der erste modulschneidende Naehrwert:**
+**die Trinkmenge kommt aus einem anderen Modul.** **Wo sie liegt und
+wie sie hereinkommt, ist zu messen.**

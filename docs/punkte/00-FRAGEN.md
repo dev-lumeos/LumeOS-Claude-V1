@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **23 Punkte tragen `typ: entscheidung`
+`[cmd]` **22 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -70,31 +70,6 @@ nicht in diese Uebersicht.
   Ablesung.** **Entweder eine Gruppenspalte in `tag_definitions`, oder
   die Zuordnung bleibt in der Anzeige** — dann steht sie an zwei
   Stellen.
-
-## G-136 — Zwei Kartenzuordnungen sind Auslegung
-
-**Modul:** nutrition · **angelegt:** 2026-08-20 · **Datei:** `todos/nutrition-g-0136-zwei-kartenzuordnungen-sind-auslegung.md`
-
-## Befund
-
-(neu
-  2026-08-20). **Entscheidung fuer Tom.** Aus G-129.
-
-  `[cmd]` **Die Acht-Karten-Liste aus GO-22 nennt sie nicht** — der
-  Agent hat entschieden und markiert:
-
-  | | wohin | Begruendung |
-  |---|---|---|
-  | **`FIBT` Ballaststoffe** | **Kohlenhydrate** | *„sind Kohlenhydrate; Cronometer ebenso"* |
-  | Wasser, Alkohol, Organische Saeuren, Rohasche | **Sonstige** | *„die Liste laesst ihnen keinen anderen Platz"* |
-
-  `[cmd]` **Je eine Zeile in `karteFuerWurzel`**, falls es anders sein
-  soll.
-
-  `[read]` **Beide sind vertretbar.** Ballaststoffe unter Kohlenhydrate
-  ist fachlich richtig. **Wasser bei *„Sonstige"* ist der schwaechere
-  Teil** — es ist einer der sechs Naehrstoffklassen, aber eine eigene
-  Karte fuer einen Eintrag waere seltsam.
 
 ## G-152 — Der Aktivitaetsstrom des Dashboards
 
