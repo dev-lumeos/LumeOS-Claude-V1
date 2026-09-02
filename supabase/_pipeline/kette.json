@@ -1416,6 +1416,44 @@
         "050",
         "052a"
       ]
+    },
+    {
+      "id": "385_schema",
+      "path": "supabase/migrations/20260902070205_c385_injection_site_model.sql",
+      "kind": "sql",
+      "creates": "C-385/E-57: deploybare Struktur fuer Injektionsstellen, Quellen und Gewebezustaende",
+      "depends_on": [
+        "112",
+        "145"
+      ]
+    },
+    {
+      "id": "385",
+      "path": "supabase/_pipeline/14_medical/385_injection_site_seed.sql",
+      "kind": "sql",
+      "creates": "C-385/E-57: vier Injektionsstellen, Lipohypertrophie-Regel und acht Quellenvarianten",
+      "depends_on": [
+        "385_schema"
+      ]
+    },
+    {
+      "id": "396_schema",
+      "path": "supabase/migrations/20260902080039_c396_meal_plan_slots.sql",
+      "kind": "sql",
+      "creates": "C-396/E-59: planbesessene Mahlzeitenstruktur mit RLS",
+      "depends_on": [
+        "058b"
+      ]
+    },
+    {
+      "id": "396",
+      "path": "supabase/_pipeline/05_user_tabellen/396_meal_plan_slot_copy.sql",
+      "kind": "sql",
+      "creates": "C-396/E-59: Selbstplaene kopieren eigene Slots einmalig bei der Anlage",
+      "depends_on": [
+        "392",
+        "396_schema"
+      ]
     }
   ]
 }
