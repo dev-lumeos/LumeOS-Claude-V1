@@ -7,8 +7,6 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-294
 entscheidung: E-38
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.food_nutrients]
 zahlen:
@@ -64,3 +62,23 @@ reparieren.**
 
 **Mitbeauftragt mit C-399 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: die Ursache steht
+
+`[cmd]` **`VITA` in ug ist ein direkt eingefrorener Snapshot, 60/60
+vollstaendig.**
+
+`[cmd]` **Die IE-Funktion rechnet aus `RETOL`, `CARTB`, `CAROTPAXB`
+und verweigert die Ausgabe bei jeder Komponentenluecke.** `[cmd]`
+**Sie summiert keine Nullen, nutzt keinen Gesamtfaktor.**
+
+`[read]` **Der ug-Wert kommt fertig aus dem BLS, der IE-Wert wird
+gerechnet** — **und die Rechnung ist strenger als die Quelle.**
+
+Tom, 2026-09-02: *,,eine summe kann man bilden mit 0."*
+
+`[read]` **Zu entscheiden: soll eine fehlende Komponente 0 beitragen,
+wie es der ug-Snapshot offenbar tut?**
+
+`[read]` **Das waere keine Erfindung** — **es waere dieselbe Regel,
+die der BLS-Wert schon anwendet.**

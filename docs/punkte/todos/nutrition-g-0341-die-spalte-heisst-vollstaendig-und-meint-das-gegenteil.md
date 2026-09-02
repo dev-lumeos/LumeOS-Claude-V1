@@ -4,7 +4,7 @@ typ: befund
 modul: nutrition
 schwere: mittel
 angelegt: 2026-09-02
-braucht: [C-399]
+braucht: []
 kind_von: C-399
 entscheidung: null
 beruehrt:
@@ -41,3 +41,17 @@ dazu** — **oder er wird gar nicht gezeigt** (C-399).
 hat, ist die Beschriftung das kleinere Problem.**
 
 `[read]` **Danach: die Spalte sagt, was sie zaehlt.**
+
+## Gemessen am 2026-09-02: 47 Codes betroffen
+
+`[cmd]` **Von 138 Codes zeigt keiner einen Schnitt bei
+`value_count = 0`** — **die Rechnung ist richtig.**
+
+`[cmd]` **Aber 47 zeigen einen begruendeten Teilschnitt bei null
+vollstaendigen Tagen.**
+
+`[read]` **47 mal dieselbe missverstaendliche Beschriftung** — **Tom
+hat drei davon gesehen und alles hinterfragt.**
+
+`[read]` **C-399 ist widerlegt: die Zahlen stimmen.** **Was fehlt,
+ist die Spalte, die sagt, was sie zaehlt.**

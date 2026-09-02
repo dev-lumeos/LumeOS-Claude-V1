@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 215 |
-| `laufend_codex` | 2 |
+| `todos` | 213 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 253 |
+| `erledigt` | 254 |
 | **gesamt** | **472** |
 
 ## medical — 43
@@ -61,7 +61,7 @@
 
 ## nutrition — 205
 
-### beauftragbar — 202
+### beauftragbar — 203
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -147,9 +147,9 @@
 | `C-394` | befund | mittel | [`test-user` hat keine Slots](erledigt/nutrition-c-0394-test-user-hat-keine-slots.md) | erledigt | — | G-334 |
 | `C-396` | feature | hoch | [`meal_plans` traegt keine Struktur](erledigt/nutrition-c-0396-meal-plans-traegt-keine-struktur.md) | erledigt | — | — |
 | `C-397` | befund | hoch | [die gelieferten Plaene haben keine Slots](erledigt/nutrition-c-0397-die-gelieferten-plaene-haben-keine-slots.md) | erledigt | — | C-400 |
-| `C-398` | befund | hoch | [`CAROTPAXB` fehlt an 1.983 Lebensmitteln](laufend_codex/nutrition-c-0398-carotpaxb-fehlt-an-1983-lebensmitteln.md) | laeuft (codex) | — | — |
-| `C-399` | befund | hoch | [ein Schnitt ohne einen einzigen Wert](laufend_codex/nutrition-c-0399-ein-schnitt-ohne-einen-einzigen-wert.md) | laeuft (codex) | — | G-341 |
-| `C-400` | befund | mittel | [eine Woche zuviel im Buddy-Plan](todos/nutrition-c-0400-eine-woche-zuviel-im-buddy-plan.md) | offen | — | — |
+| `C-398` | befund | hoch | [`CAROTPAXB` fehlt an 1.983 Lebensmitteln](todos/nutrition-c-0398-carotpaxb-fehlt-an-1983-lebensmitteln.md) | offen | — | — |
+| `C-399` | befund | hoch | [ein Schnitt ohne einen einzigen Wert](erledigt/nutrition-c-0399-ein-schnitt-ohne-einen-einzigen-wert.md) | erledigt | — | G-341 |
+| `C-400` | befund | mittel | [eine Woche zuviel im Buddy-Plan](laufend_codex/nutrition-c-0400-eine-woche-zuviel-im-buddy-plan.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -266,15 +266,15 @@
 | `G-337` | befund | mittel | [`strong_avoid` hat keinen Schreibweg](todos/nutrition-g-0337-strong-avoid-hat-keinen-schreibweg.md) | offen | — | — |
 | `G-338` | entscheidung | mittel | [eine freie Mahlzeit hat keinen Namen](todos/nutrition-g-0338-eine-freie-mahlzeit-hat-keinen-namen.md) | offen | — | — |
 | `G-339` | befund | mittel | [Quick-Add liest die Namen nicht](laufend_claudecode/nutrition-g-0339-quick-add-liest-die-namen-nicht.md) | laeuft (claudecode) | — | — |
+| `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](todos/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](laufend_claudecode/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | laeuft (claudecode) | — | — |
 
-### wartet auf Blocker — 3
+### wartet auf Blocker — 2
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | G-328 | G-328 |
 | `G-340` | befund | mittel | [Quick-Add hat keinen Schreibweg](todos/nutrition-g-0340-quick-add-hat-keinen-schreibweg.md) | offen | G-339 | — |
-| `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](todos/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | offen | C-399 | — |
 
 ## supplements — 60
 
@@ -487,10 +487,10 @@
 | `C-155` | befund | mittel | [Zwei Befunde in `@supabase/ssr` 0.1.0](todos/quer-c-0155-zwei-befunde-in-supabase-ssr-0-1-0.md) | offen | — | — |
 | `C-159` | feature | mittel | [Sieben Regelpfade zeigen auf Schemata, die es nicht gibt](todos/quer-c-0159-sieben-regelpfade-zeigen-auf-schemata-die-es-nicht-gibt.md) | offen | — | — |
 | `C-170` | befund | mittel | [Der Offline-Betrieb steht im Entwurf](erledigt/quer-c-0170-der-offline-betrieb-steht-im-entwurf.md) | erledigt | — | — |
-| `C-187` | befund | mittel | [Fuenf kleine Datenluecken — als ein Auftrag](todos/quer-c-0187-fuenf-kleine-datenluecken-als-ein-auftrag.md) | offen | — | — |
+| `C-187` | befund | mittel | [Fuenf kleine Datenluecken — als ein Auftrag](laufend_codex/quer-c-0187-fuenf-kleine-datenluecken-als-ein-auftrag.md) | laeuft (codex) | — | — |
 | `C-201` | befund | mittel | [Der Populations-Atlas hat kein Schema](todos/quer-c-0201-der-populations-atlas-hat-kein-schema.md) | offen | — | — |
 | `C-205` | befund | mittel | [`research_hold_registry` — 305 Saetze](erledigt/quer-c-0205-research-hold-registry-305-saetze.md) | erledigt | — | — |
-| `C-216` | befund | mittel | [`backup/` waechst ungebremst](todos/quer-c-0216-backup-waechst-ungebremst.md) | offen | — | — |
+| `C-216` | befund | mittel | [`backup/` waechst ungebremst](laufend_codex/quer-c-0216-backup-waechst-ungebremst.md) | laeuft (codex) | — | — |
 | `C-219` | befund | mittel | [Tabellen, die die Spec kennt und die es nicht gibt](todos/quer-c-0219-tabellen-die-die-spec-kennt-und-die-es-nicht-gibt.md) | offen | — | — |
 | `C-241` | entscheidung | mittel | [Das Nachweiskonto traegt weder Essensplaene noch Medikamente](erledigt/quer-c-0241-das-nachweiskonto-traegt-weder-essensplaene-noch-medikamente.md) | erledigt | — | A-69 |
 | `C-259` | feature | mittel | [Kimis Bestand ist weit groesser als angenommen — und der Orchestrator hat den Statusbericht nie gelesen](todos/quer-c-0259-kimis-bestand-ist-weit-groesser-als-angenommen-und-der-orchestrator-hat-.md) | offen | — | C-262 |

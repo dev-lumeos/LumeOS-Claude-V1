@@ -7,6 +7,8 @@ angelegt: 2026-08-22
 braucht: []
 kind_von: null
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   dateien: [backup, tools/encoding-pruefen.mjs]
 zahlen:
@@ -81,3 +83,8 @@ Archivierungslauf, keine Loeschung** — **A-39 haelt.**
 
 `[read]` **Sechs Gigabyte in einem Verzeichnis, das nicht geraeumt
 werden darf, solange Agenten laufen.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-400 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

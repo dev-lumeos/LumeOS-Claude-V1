@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: []
   dateien: []
@@ -54,3 +56,8 @@ und der Bericht stehen dort.
 
 `[read]` **Der Punkt sagte fuenf, er hat sechs gemessen und drei
 geschlossen.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-400 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
