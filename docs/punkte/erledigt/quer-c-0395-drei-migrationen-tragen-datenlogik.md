@@ -9,6 +9,8 @@ kind_von: C-385
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
+erledigt: 2026-09-02
+commit: ae0fb34b
 beruehrt:
   tabellen: [medical.injection_sites]
 zahlen:
@@ -60,3 +62,19 @@ angelegt.**
 
 **Mitbeauftragt mit C-396 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-02, mit C-396 abgenommen: Gate gruen.**
+
+`[cmd]` **Der Waechter meldet: *,,Migrationen enthalten keine
+Datenlogik."***
+
+`[cmd]` **327a bleibt Kettenschritt, C-385 hat Struktur-Migration
+plus Seed-Schritt.**
+
+`[cmd]` **Nachgemessen: 4 Stellen, 8 Quellen, 1 Gewebe-Regel, 8
+Chelat-Mitgliedschaften** — **unveraendert.**
+
+`[read]` **Die Trennung ist vollzogen, nichts ist verloren
+gegangen.**

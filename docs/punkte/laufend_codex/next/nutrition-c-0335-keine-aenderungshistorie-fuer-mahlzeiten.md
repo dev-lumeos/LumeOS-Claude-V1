@@ -50,3 +50,8 @@ sieht als heute, kann nicht erfahren warum** — und wir auch nicht.
 Referenzwerte aendern darf.** `[cmd]` Sie kommen heute aus der Kette,
 nicht aus der Oberflaeche. **Solange das so bleibt, reicht
 moeglicherweise die Kette selbst als Nachweis.**
+
+## Auftrag
+
+**Vorbereitet mit C-389 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.

@@ -11,7 +11,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-09-02
 erledigt: 2026-09-02
-commit: OFFEN
+commit: ae0fb34b
 beruehrt:
   tabellen: ["nutrition.meal_plans", "medical.user_medications"]
   dateien: []

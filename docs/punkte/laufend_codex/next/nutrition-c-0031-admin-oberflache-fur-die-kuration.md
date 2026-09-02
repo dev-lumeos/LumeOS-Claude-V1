@@ -38,3 +38,8 @@ zahlen: null
   mitschreiben) nicht steht: die Häufigkeitsliste aus
   `daten/wortschatz-luecke.json` (1.581 Kandidaten) und die 37 Zutaten
   des MealCam-Maßstabs.
+
+## Auftrag
+
+**Vorbereitet mit C-389 am 2026-09-02.** Der Auftragstext
+und der Bericht stehen dort.
