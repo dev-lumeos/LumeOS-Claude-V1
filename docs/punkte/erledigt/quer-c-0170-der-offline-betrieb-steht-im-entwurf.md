@@ -9,7 +9,7 @@ kind_von: null
 kinder: []
 entscheidung: E-60
 erledigt: 2026-09-02
-commit: OFFEN
+commit: f38363c5
 beruehrt:
   tabellen: []
   dateien: []
