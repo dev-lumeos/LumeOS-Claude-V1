@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 221 |
+| `todos` | 220 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 215 |
+| `erledigt` | 216 |
 | **gesamt** | **438** |
 
 ## medical — 42
@@ -172,7 +172,7 @@
 | `G-235` | entscheidung | niedrig | [`MicroDashboard` Tier-System (Tier 1/2/3) und Subscription-Gates ungeklärt](erledigt/nutrition-g-0235-microdashboard-tier-system-tier-1-2-3-und-subscription-gat.md) | erledigt | — | — |
 | `G-236` | befund | niedrig | [`SmartSuggestions` Component und `useSmartSearchSuggestions` Hook ohne klaren V1-Trigger](todos/nutrition-g-0236-smartsuggestions-component-und-usesmartsearchsuggestions-h.md) | offen | — | — |
 | `G-237` | befund | niedrig | [`data/nutrientDetails.ts` als statisches Array — `food_sources` Array veraltet (per Review 1 ADR_IMPROVEMENTS_PACKAGE #20)](todos/nutrition-g-0237-data-nutrientdetails-ts-als-statisches-array-food-sources-.md) | offen | — | — |
-| `G-238` | entscheidung | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](todos/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | offen | — | — |
+| `G-238` | befund | niedrig | [`Plan.source = 'buddy'` in SPEC_10 ohne UI-Trigger](erledigt/nutrition-g-0238-plan-source-buddy-in-spec-10-ohne-ui-trigger.md) | erledigt | — | — |
 | `G-239` | feature | hoch | [die Mikronaehrstoff-Ansicht bauen](erledigt/nutrition-g-0239-die-mikronaehrstoff-ansicht-bauen.md) | erledigt | — | C-333, C-334, G-246, G-247, G-249 |
 | `G-245` | feature | mittel | [die Sortier-Tags bauen](erledigt/nutrition-g-0245-die-sortier-tags-bauen.md) | erledigt | — | — |
 | `G-246` | feature | hoch | [die Detailtexte liegen in der Datenbank und werden nicht gelesen](erledigt/nutrition-g-0246-die-detailtexte-werden-nicht-gelesen.md) | erledigt | — | A-60, C-336 |

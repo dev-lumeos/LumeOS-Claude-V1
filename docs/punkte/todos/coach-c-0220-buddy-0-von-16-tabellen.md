@@ -7,7 +7,7 @@ angelegt: 2026-08-22
 braucht: []
 kind_von: null
 kinder: []
-entscheidung: null
+entscheidung: E-50
 beruehrt:
   tabellen: []
   dateien: []
@@ -49,3 +49,15 @@ Herkunft ist vorgesehen, das Modul nicht gebaut.**
 
 `[read]` **Und das ist gewollt** — E-39 und E-40 sagen *vorsehen,
 nicht bauen*.
+
+## Eingeordnet durch E-50, 2026-09-02
+
+Tom: *,,wenn wir ueber buddydaten stossen sehen wir diese schon vor in
+der struktur."*
+
+`[read]` **Damit ist der gemessene Zustand der gewollte:** `[cmd]`
+**`buddy` in 8 Tabellen, kein Buddy-Schema, keine der 16
+Entitaetstabellen.**
+
+`[read]` **Der Punkt bleibt als Bestandsaufnahme offen** — **nicht
+als Mangel.**

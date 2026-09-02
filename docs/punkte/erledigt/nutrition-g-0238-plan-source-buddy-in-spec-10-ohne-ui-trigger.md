@@ -1,12 +1,14 @@
 ---
 nr: G-238
-typ: entscheidung
+typ: befund
 modul: nutrition
 schwere: niedrig
 angelegt: 2026-08-28
 braucht: [C-374]
 kind_von: null
-entscheidung: null
+entscheidung: E-50
+erledigt: 2026-09-02
+commit: OFFEN
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -97,3 +99,22 @@ Wert im Schema.**
 
 `[cmd]` **C-374 legt ihn an und laeuft bei Codex.** `[cmd]` **Und
 E-40 fuehrt Buddy als vierten Zweck des Planners.**
+
+## Abnahme
+
+**2026-09-02, durch E-50 beantwortet.**
+
+Tom: *,,wir arbeiten mit seeddaten, ja zeichen anzeigen obwohl es
+nicht richtig von buddy kam. buddy beginnen wir zu bauen sobald die
+grundlagen vorhanden sind, aber wenn wir ueber buddydaten stossen
+sehen wir diese schon vor in der struktur."*
+
+`[cmd]` **Das Zeichen *AI erstellt* steht seit G-311 in der
+Bibliothek und wird belegt** — mit einem Seed-Plan.
+
+`[read]` **Der Widerspruch der Review loest sich damit auf:** **sie
+sah eine Anzeige ohne Erzeugungsweg und hielt das fuer einen
+Fehler.** `[read]` **Es ist die Reihenfolge: die Struktur steht vor
+dem Erzeuger.**
+
+**Geschlossen.**
