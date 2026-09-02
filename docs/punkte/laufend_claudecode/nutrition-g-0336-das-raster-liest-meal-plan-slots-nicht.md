@@ -120,6 +120,36 @@ plan angepasst werden."*
 `[read]` **Richtig** — **wenn das Raster die Struktur liest, folgen
 sie von selbst.** `[cmd]` **Miss es, statt es anzunehmen.**
 
+### 5 · *Mahlzeit hinzufuegen* wird ein Modal
+
+Tom, 2026-09-02: *,,das unten in diary auch nicht geloest, ich denke
+da ist ein modal besser."*
+
+`[cmd]` **Heute steht das Formular inline unter der letzten Karte** —
+**deshalb verschwindet der Knopf beim Klick, deshalb draengeln sich
+Uhrzeit und Auswahl.**
+
+`[cmd]` **Und die Auswahl heisst weiter *Sonstiges*** — **sie liest
+die Slots nicht.**
+
+`[read]` **Ein Modal hat Platz fuer das, was eine neue Mahlzeit
+braucht:** Name, Zeit, und den Hinweis, wo sie einsortiert wird.
+
+`[cmd]` **Und es gibt schon eins:** `FoodSuchModal` aus G-320,
+**ziehbar seit G-321.** `[read]` **Dieselbe Machart, keine neue.**
+
+### Was die Auswahl anbietet
+
+`[read]` **Die eigenen Slots, mit ihrer Zeit** — **und Freitext
+daneben.**
+
+`[cmd]` **E-58: wer um 22:00 isst und keinen Slot dafuer hat, erfasst
+trotzdem.** `[read]` **Die Slots ordnen, sie schreiben nicht vor.**
+
+`[read]` **Der Satz *,,Wird bei Nachmittagssnack (16:00) einsortiert
+— die naechstliegende Zeit"* ist richtig** — **er gehoert ins Modal,
+nicht unter ein halb verdecktes Feld.**
+
 ### Was nicht zu tun ist
 
 **Keine zweite Rangfolge** — die aus `slots-lage.ts` gilt.
@@ -138,6 +168,9 @@ Nicht committen, nicht stagen, nicht pushen.
     Aufbau-Plan       Rueckfall greift, gezaehlt
     Ghost-Eintraege   folgen der Planstruktur, gemessen
     gelieferte Plaene was fehlt, gemeldet
+    Mahlzeit anlegen  im Modal, Slots als Auswahl plus Freitext
+    22-Uhr-Fall       ohne passenden Slot erfassbar
+    Einsortiersatz    steht im Modal, sichtbar
     Bildschirmfoto    vorher / nachher
 
 ## Bericht
