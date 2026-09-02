@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-02
 beruehrt:
   tabellen: ["nutrition.foods"]
   dateien: ["docs/ssot/daten/wortschatz-luecke.json"]
@@ -45,3 +43,13 @@ zahlen: null
 
 **Mitbeauftragt mit C-389 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-02: gemessen: die Naht ist bekannt.
+
+`[cmd]` **Die Admin-Kuration ist vollstaendig lesend.**
+
+`[read]` **Ein Schreibweg braucht drei Teile:** serverseitige
+Admin-Mutation, Overlay-Upsert, Lesen ueber `food_tags_effective`.
+
+`[cmd]` **Der dritte steht seit C-366.** `[read]` **Damit ist es ein
+UI-Auftrag mit bekannter Naht, kein Entwurf mehr.**

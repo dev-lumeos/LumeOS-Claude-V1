@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-319
 entscheidung: E-45
+agent: codex
+beauftragt: 2026-09-02
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -79,5 +81,5 @@ die mitwandert.
 
 ## Auftrag
 
-**Vorbereitet mit C-297 am 2026-09-02.** Der Auftragstext
+**Mitbeauftragt mit C-297 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.

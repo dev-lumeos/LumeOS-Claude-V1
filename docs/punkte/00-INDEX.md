@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 207 |
-| `laufend_codex` | 6 |
+| `todos` | 210 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 5 |
 | `erledigt` | 244 |
 | **gesamt** | **462** |
@@ -76,7 +76,7 @@
 | `C-27` | messung | mittel | [Alltagswörter ohne Treffer — noch zwei](erledigt/nutrition-c-0027-alltagsworter-ohne-treffer-noch-zwei.md) | erledigt | — | — |
 | `C-29` | entscheidung | mittel | [Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt](erledigt/nutrition-c-0029-drei-namensschichten-und-eine-kuration-die-den-kettenlauf-uberlebt.md) | erledigt | — | — |
 | `C-30` | befund | mittel | [Suche und Trefferliste auf Arten umstellen](todos/nutrition-c-0030-suche-und-trefferliste-auf-arten-umstellen.md) | offen | — | — |
-| `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](laufend_codex/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | laeuft (codex) | — | — |
+| `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](todos/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | offen | — | — |
 | `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](todos/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | offen | — | C-386 |
 | `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — | — |
 | `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](erledigt/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | erledigt | — | G-239, G-248 |
@@ -104,7 +104,7 @@
 | `C-324` | entscheidung | hoch | [Tages-Score Gewichtung festlegen](erledigt/nutrition-c-0324-tages-score-gewichtung-festlegen.md) | erledigt | — | C-342, C-343, C-367 |
 | `C-333` | befund | niedrig | [Selen fehlt in der Bewertung auf dev](erledigt/nutrition-c-0333-selen-fehlt-in-der-bewertung-auf-dev.md) | erledigt | — | — |
 | `C-334` | befund | hoch | [die Tagesbewertung hat sich zwischen zwei Messungen verschoben](erledigt/nutrition-c-0334-die-bewertung-hat-sich-zwischen-zwei-messungen-verschoben.md) | erledigt | — | C-335 |
-| `C-335` | befund | mittel | [keine Aenderungshistorie fuer Mahlzeiten und Referenzwerte](laufend_codex/nutrition-c-0335-keine-aenderungshistorie-fuer-mahlzeiten.md) | laeuft (codex) | — | — |
+| `C-335` | befund | mittel | [keine Aenderungshistorie fuer Mahlzeiten und Referenzwerte](todos/nutrition-c-0335-keine-aenderungshistorie-fuer-mahlzeiten.md) | offen | — | — |
 | `C-336` | befund | hoch | [FD traegt den Text eines anderen Naehrstoffs](erledigt/nutrition-c-0336-fd-traegt-den-text-eines-anderen-naehrstoffs.md) | erledigt | — | C-346 |
 | `C-338` | befund | mittel | [sechs Sortierwerte fehlen live](erledigt/nutrition-c-0338-sechs-sortierwerte-fehlen-live.md) | erledigt | — | — |
 | `C-342` | entscheidung | hoch | [Vitamin A in IE gegen Mikrogramm](erledigt/nutrition-c-0342-vitamin-a-in-ie-gegen-mikrogramm.md) | erledigt | — | C-350 |
@@ -135,12 +135,12 @@
 | `C-378` | befund | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](erledigt/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | erledigt | — | — |
 | `C-379` | feature | mittel | [`sequence` hat kein Ziel](todos/nutrition-c-0379-sequence-hat-kein-ziel.md) | offen | — | C-383, G-313 |
 | `C-380` | befund | mittel | [die Seed-Plaene tragen 84 mal Hammelfilet](erledigt/nutrition-c-0380-die-seed-plaene-tragen-84-mal-hammelfilet.md) | erledigt | — | — |
-| `C-382` | feature | mittel | [wer entscheidet, ob ein Plan editierbar ist?](laufend_codex/nutrition-c-0382-wer-entscheidet-ob-ein-plan-editierbar-ist.md) | vorbereitet (codex) | — | — |
+| `C-382` | feature | mittel | [wer entscheidet, ob ein Plan editierbar ist?](laufend_codex/nutrition-c-0382-wer-entscheidet-ob-ein-plan-editierbar-ist.md) | laeuft (codex) | — | — |
 | `C-384` | befund | hoch | [wer schreibt die 30.797 Tag-Zeilen?](erledigt/nutrition-c-0384-wer-schreibt-die-30797-tag-zeilen.md) | erledigt | — | C-387 |
 | `C-386` | befund | mittel | [sind die drei Reste aus C-35 eingeflossen?](erledigt/nutrition-c-0386-sind-die-drei-reste-aus-c-35-eingeflossen.md) | erledigt | — | C-388, C-389 |
 | `C-387` | befund | hoch | [vier Kettenschritte schreiben Tags](erledigt/nutrition-c-0387-vier-kettenschritte-schreiben-tags.md) | erledigt | — | — |
 | `C-388` | befund | mittel | [die Vertreterregel ist nicht erreicht](erledigt/nutrition-c-0388-die-vertreterregel-ist-nicht-erreicht.md) | erledigt | — | — |
-| `C-389` | befund | mittel | [Saft und Nektar liegen bei der Frucht](laufend_codex/nutrition-c-0389-saft-und-nektar-liegen-bei-der-frucht.md) | laeuft (codex) | — | — |
+| `C-389` | befund | mittel | [Saft und Nektar liegen bei der Frucht](todos/nutrition-c-0389-saft-und-nektar-liegen-bei-der-frucht.md) | offen | — | — |
 | `C-390` | feature | mittel | [`tag_definitions` hat keine Untergruppe](erledigt/nutrition-c-0390-tag-definitions-hat-keine-untergruppe.md) | erledigt | — | — |
 | `C-391` | feature | hoch | [`food_search` hat keinen Treffergrund](erledigt/nutrition-c-0391-food-search-hat-keinen-treffergrund.md) | erledigt | — | C-393 |
 | `C-392` | feature | hoch | [die Tabelle `meal_slots`](erledigt/nutrition-c-0392-die-tabelle-meal-slots.md) | erledigt | — | C-394 |
@@ -487,8 +487,8 @@
 | `C-271` | befund | mittel | [`rule_catalog` laedt immer — jeder Rueckfallzweig daran ist tot](todos/quer-c-0271-rule-catalog-laedt-immer-jeder-rueckfallzweig-daran-ist-tot.md) | offen | — | — |
 | `C-279` | befund | mittel | [Das Kreuzprodukt in `rule_assessment` skaliert mit den Einnahmen](todos/quer-c-0279-das-kreuzprodukt-in-rule-assessment-skaliert-mit-den-einnahmen.md) | offen | — | — |
 | `C-295` | feature | mittel | [die Kette liest aus zwei Kimi-Pfaden](todos/quer-c-0295-die-kette-liest-aus-zwei-kimi-pfaden.md) | offen | — | — |
-| `C-297` | messung | mittel | [drei Wege, an dem Datenlogik-Waechter vorbei](laufend_codex/quer-c-0297-drei-wege-an-dem-datenlogik-waechter-vorbei.md) | vorbereitet (codex) | — | — |
-| `C-298` | feature | mittel | [der Datenlogik-Waechter meldet zwei harmlose Muster rot](laufend_codex/quer-c-0298-der-datenlogik-waechter-meldet-zwei-harmlose-muster-rot.md) | vorbereitet (codex) | — | — |
+| `C-297` | messung | mittel | [drei Wege, an dem Datenlogik-Waechter vorbei](laufend_codex/quer-c-0297-drei-wege-an-dem-datenlogik-waechter-vorbei.md) | laeuft (codex) | — | — |
+| `C-298` | feature | mittel | [der Datenlogik-Waechter meldet zwei harmlose Muster rot](laufend_codex/quer-c-0298-der-datenlogik-waechter-meldet-zwei-harmlose-muster-rot.md) | laeuft (codex) | — | — |
 | `C-354` | feature | hoch | [eine Lesefunktion fuer offene Coach-Aktionen](erledigt/quer-c-0354-eine-lesefunktion-fuer-offene-coach-aktionen.md) | erledigt | — | C-358 |
 | `C-357` | befund | mittel | [vier ADRs widersprechen neueren Entscheidungen](erledigt/quer-c-0357-vier-adrs-widersprechen-neueren-entscheidungen.md) | erledigt | — | — |
 | `C-361` | befund | mittel | [die Datenbank fuehrt keine Pipeline-Historie](erledigt/quer-c-0361-die-datenbank-fuehrt-keine-pipeline-historie.md) | erledigt | — | — |
