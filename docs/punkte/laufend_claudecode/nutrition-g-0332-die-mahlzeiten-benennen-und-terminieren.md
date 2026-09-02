@@ -246,7 +246,62 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-02, Orchestrator. Bildschirmfotos angesehen.**
+
+`[read]` **Der Bericht steht nicht in der Punktdatei** — **die
+Abnahme stuetzt sich auf die Bilder und eigene Messung.**
+
+### Gebaut ist es
+
+`[cmd]` **Fuenf neue Dateien:** `slots-aktionen.ts`,
+`slots-formular.tsx`, `slots-lage.ts`, `slots-lesen.ts`,
+`meal-slots.test.ts`.
+
+`[cmd]` **Die Kachel *Meine Mahlzeiten* steht in Preferences links
+unten**, mit Anzahl und je Zeile Name und Zeit.
+
+`[cmd]` **Und der Erklaersatz sagt die Regel:** *,,Die Zeit ordnet
+zu, sie schreibt nichts um: eine Mahlzeit landet bei der
+naechstliegenden Zeit."*
+
+`[read]` **Das ist E-58, in einem Satz fuer den Nutzer.**
+
+### Drei Befunde am Schirm
+
+**1 · Die Ghost-Karten heissen weiter englisch.**
+
+`[cmd]` **Im Tagebuch: *Breakfast*, *Lunch*, *Snack*, *Dinner*** —
+**waehrend die eigenen Mahlzeiten darueber *Mittagessen*,
+*Nachmittagssnack*, *Abendessen* heissen.**
+
+`[read]` **Die Ghost-Karten lesen die Slots nicht.** `[cmd]` **Sie
+kommen aus dem Plan und tragen `meal_type`.**
+
+**2 · Das Uhrzeit-Feld beim Anlegen ist kaputt.**
+
+`[cmd]` **Es zeigt *12 20* uebereinander** — **zwei Werte in einem
+Feld.**
+
+**3 · Sechs Slots auf `dev`, vorher fuenf.**
+
+`[cmd]` **Ein *Spaetmahlzeit 21:30* ist dazugekommen.**
+
+`[read]` **Der Auftrag sagte: nichts auf `dev` schreiben.** `[read]`
+**Vermutlich beim Ausprobieren der Anzahl entstanden** — **und nicht
+zurueckgebaut.**
+
+### Und der Gate ist rot, aber nicht durch ihn
+
+`[cmd]` **Drei Migrationen aus C-385/C-393 tragen `DELETE` und
+`INSERT`** — **der Datenlogik-Waechter faellt.**
+
+`[read]` **Ich habe sie als `f9db161b` committet, ohne den Gate zu
+pruefen** — **die Abnahme mass die Daten, nicht den Bau.** **Als
+C-395.**
+
+**Abgenommen mit drei Befunden.** **Nicht committet** — der Gate ist
+rot.
+
 
 ## Bericht
 
@@ -395,3 +450,8 @@ von `position: s.position`.
 
 `[cmd]` **Und die Vorab-Prüfung war ungeprüft** — dass `listenFehler`
 VOR dem Schreiben läuft, hielt kein Wächter fest.
+
+## Fortsetzung
+
+**Mit G-335 am 2026-09-02 weiterbeauftragt.** Der neue
+Auftragstext und der Bericht stehen dort.

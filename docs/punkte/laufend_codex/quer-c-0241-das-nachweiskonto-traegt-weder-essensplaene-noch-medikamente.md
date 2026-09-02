@@ -111,7 +111,73 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### C-241 / G-334 — Messung 2026-09-02
+
+`test-user@lumeos.local` hat fuer keinen der benoetigten Nachweise
+eine Zeile. `dev@lumeos.app` wurde nur gelesen und nicht veraendert.
+
+| Tabelle bzw. Nachweis | test-user | dev |
+| --- | ---: | ---: |
+| `nutrition.food_preferences` | 0 | 1 |
+| `nutrition.food_preference_items` | 0 | 6 |
+| `nutrition.meal_plans` | 0 | 4 |
+| `nutrition.meal_plan_weeks` | 0 | 7 |
+| `nutrition.meal_plan_days` | 0 | 49 |
+| `nutrition.meal_plan_entries` | 0 | 169 |
+| `nutrition.meals` | 0 | 730 |
+| `nutrition.meal_items` | 0 | 2.300 |
+| `nutrition.meal_plan_logs` | 0 | 6 |
+| `nutrition.meal_slots` | 0 | 6 |
+
+Die Slots sind beim aktuellen Messstand sechs, nicht die im Auftrag
+genannten fuenf: Position 1 bis 6, einschliesslich `Spätmahlzeit`.
+Die anderen genannten Werte (vier Plaene, sechs Protokollzeilen)
+stimmen. Ein Nachweis auf `test-user` kann damit weder Plan- noch
+Mahlzeiten-, Protokoll-, Slot- oder Vorlieben-Lesewege zeigen.
+
+**Vorschlag, keine Entscheidung:** Ein idempotenter, ausschliesslich
+auf `test-user` gerichteter Grund-Seed sollte mindestens eine
+Vorlieben-Zeile mit einzelnen Praeferenzen, einen Plan mit Woche,
+Tagen und Eintraegen, gespeicherte Mahlzeiten samt Positionen, zwei
+unterschiedliche Protokollzustaende sowie geordnete Slots enthalten.
+So kann ein Kettenlauf jeden dieser Lesewege belastbar zeigen, ohne
+Toms Daten auf `dev` anzufassen.
+
+Als Groessenordnung kostet ein kleiner Nachweis-Seed rund 30 bis 35
+Einfügezeilen je frischem Lauf und bei Ersetzung ebenso viele
+Loeschungen. Ein Seed, der den heutigen `dev`-Bestand nur nachbildet,
+waere dagegen 3.278 Einfügezeilen und bei jedem erneuten Lauf bis zu
+weitere 3.278 Loeschungen. Der kleine, fachlich gezielte Seed ist
+deshalb der naheliegende Vorschlag; ob das Konto so befüllt werden
+soll, bleibt bei Tom.
+
+### C-366 — gebaut 2026-09-02
+
+Die drei Migrationen `20260902073231`, `20260902073543` und
+`20260902073914` sind lokal angewandt:
+
+- `nutrition.food_tags_kuriert` traegt `food_id`, `tag_code`, die
+  entschiedene Aktion `set` oder `removed` sowie Zeitstempel; die
+  Kombination aus Lebensmittel und Tag ist eindeutig. Sie hat keine
+  `confidence`.
+- RLS ist aktiv. `authenticated` darf lesen, `anon` hat keinen
+  Tabellenzugriff; der Test prueft den abgewiesenen anon-Zugriff.
+  Der spaetere Admin-Schreibweg bleibt ausserhalb dieses Auftrags.
+- `nutrition.food_tags_effective` ist der gemeinsame Leseweg:
+  Import ohne Kuration erscheint als `import`, `removed` verbirgt ihn,
+  und `set` erscheint als `curated`. Die Kuration hat damit auch bei
+  einem bereits importierten Tag Vorrang.
+- `food_search`, `preference_search_preview` und
+  `refresh_food_preference_search_targets` lesen den gemeinsamen
+  Leseweg. Die vier Kettenschreiber 020, 027, 032 und 221 bleiben
+  unveraendert auf `nutrition.food_tags` begrenzt.
+
+`supabase/_pipeline/_validierung/nutrition-c366-curated-food-tags.test.ts`
+ist gruen. Er importiert eine temporaere Basiszeile, kuratiert sie als
+`removed`, loescht und importiert sie erneut und prueft weiter 0
+sichtbare Zeilen. Danach prueft er `set` als eine sichtbare Zeile aus
+der Quelle `curated` sowie Tabelle, RLS, Policy und drei umgestellte
+Lesefunktionen.
 
 ## Abnahme
 

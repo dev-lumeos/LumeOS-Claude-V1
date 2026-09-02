@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 215 |
-| `laufend_codex` | 3 |
-| `laufend_claudecode` | 1 |
+| `laufend_codex` | 5 |
+| `laufend_claudecode` | 2 |
 | `erledigt` | 239 |
-| **gesamt** | **458** |
+| **gesamt** | **461** |
 
 ## medical — 43
 
@@ -51,7 +51,7 @@
 | `C-332` | befund | mittel | [23 Regeln koennen weiterhin nicht feuern](todos/medical-c-0332-23-regeln-koennen-weiterhin-nicht-feuern.md) | offen | — | — |
 | `C-337` | befund | mittel | [die Medikamenten-Einnahmezeit fehlt](todos/medical-c-0337-die-medikamenten-einnahmezeit-fehlt.md) | offen | — | — |
 | `C-359` | feature | mittel | [Symptome brauchen ein Protokoll je Nutzer](todos/medical-c-0359-symptome-brauchen-ein-protokoll-je-nutzer.md) | offen | — | — |
-| `C-385` | feature | hoch | [das Datenmodell fuer Injektionsstellen](erledigt/medical-c-0385-das-datenmodell-fuer-injektionsstellen.md) | erledigt | — | — |
+| `C-385` | feature | hoch | [das Datenmodell fuer Injektionsstellen](erledigt/medical-c-0385-das-datenmodell-fuer-injektionsstellen.md) | erledigt | — | C-395 |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
@@ -59,9 +59,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 193
+## nutrition — 195
 
-### beauftragbar — 192
+### beauftragbar — 193
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -145,6 +145,7 @@
 | `C-391` | feature | hoch | [`food_search` hat keinen Treffergrund](erledigt/nutrition-c-0391-food-search-hat-keinen-treffergrund.md) | erledigt | — | C-393 |
 | `C-392` | feature | hoch | [die Tabelle `meal_slots`](erledigt/nutrition-c-0392-die-tabelle-meal-slots.md) | erledigt | — | C-394 |
 | `C-394` | befund | mittel | [`test-user` hat keine Slots](erledigt/nutrition-c-0394-test-user-hat-keine-slots.md) | erledigt | — | G-334 |
+| `C-396` | feature | hoch | [`meal_plans` traegt keine Struktur](laufend_codex/nutrition-c-0396-meal-plans-traegt-keine-struktur.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -254,15 +255,16 @@
 | `G-329` | feature | hoch | [Ghost-Eintraege koennen nur bestaetigen oder auslassen](erledigt/nutrition-g-0329-ghost-eintraege-koennen-nur-bestaetigen-oder-auslassen.md) | erledigt | — | — |
 | `G-330` | feature | mittel | [die Kopfzeile zeigt zwei von vier Werten](erledigt/nutrition-g-0330-die-kopfzeile-zeigt-zwei-von-vier-werten.md) | erledigt | — | — |
 | `G-331` | feature | hoch | [vier Suchen auf den Hook umstellen](erledigt/nutrition-g-0331-vier-suchen-auf-den-hook-umstellen.md) | erledigt | — | G-333 |
-| `G-332` | feature | hoch | [die Mahlzeiten benennen und terminieren](laufend_claudecode/nutrition-g-0332-die-mahlzeiten-benennen-und-terminieren.md) | laeuft (claudecode) | — | — |
+| `G-332` | feature | hoch | [die Mahlzeiten benennen und terminieren](laufend_claudecode/nutrition-g-0332-die-mahlzeiten-benennen-und-terminieren.md) | laeuft (claudecode) | — | C-396, G-335 |
 | `G-333` | befund | niedrig | [`erfassen.tsx` hat keinen Aufrufer](todos/nutrition-g-0333-erfassen-tsx-hat-keinen-aufrufer.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-### wartet auf Blocker — 1
+### wartet auf Blocker — 2
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | G-328 | G-328 |
+| `G-335` | feature | hoch | [acht Stellen uebersetzen `meal_type` selbst](laufend_claudecode/nutrition-g-0335-acht-stellen-uebersetzen-meal-type-selbst.md) | laeuft (claudecode) | C-396 | — |
 
 ## supplements — 60
 
@@ -430,7 +432,7 @@
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 
-## quer — 88
+## quer — 89
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -491,6 +493,7 @@
 | `C-361` | befund | mittel | [die Datenbank fuehrt keine Pipeline-Historie](erledigt/quer-c-0361-die-datenbank-fuehrt-keine-pipeline-historie.md) | erledigt | — | — |
 | `C-363` | entscheidung | niedrig | [drei oekonomische Befunde im Marketplace](todos/quer-c-0363-drei-oekonomische-befunde-im-marketplace.md) | offen | — | — |
 | `C-383` | befund | hoch | [gehoeren Plaene in `goal_phases`?](erledigt/quer-c-0383-gehoeren-plaene-in-goal-phases.md) | erledigt | — | — |
+| `C-395` | befund | hoch | [drei Migrationen tragen Datenlogik](laufend_codex/quer-c-0395-drei-migrationen-tragen-datenlogik.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
