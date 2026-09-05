@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS nutrition.food_preference_items (
   user_id UUID NOT NULL,
   preference TEXT NOT NULL CHECK (preference IN ('liked','disliked','hard_exclude')),
   strength TEXT NOT NULL DEFAULT 'neutral'
-    CHECK (strength IN ('hard_exclude','strong_avoid','soft_dislike','neutral','like','boost')),
+    CHECK (strength IN ('hard_exclude','soft_dislike','neutral','like','boost')),
   target_type TEXT NOT NULL CHECK (target_type IN ('food','category','tag','cuisine','exclusion_preset','catalog_item')),
   food_id UUID REFERENCES nutrition.foods(id),
   category_id UUID REFERENCES nutrition.food_categories(id),
@@ -86,6 +86,11 @@ ALTER TABLE nutrition.food_preference_items
   ADD COLUMN IF NOT EXISTS exclusion_preset_code TEXT,
   ADD COLUMN IF NOT EXISTS catalog_item_code TEXT,
   ADD COLUMN IF NOT EXISTS source TEXT NOT NULL DEFAULT 'user';
+
+ALTER TABLE nutrition.food_preference_items
+  DROP CONSTRAINT IF EXISTS food_preference_items_strength_check,
+  ADD CONSTRAINT food_preference_items_strength_check
+    CHECK (strength IN ('hard_exclude','soft_dislike','neutral','like','boost'));
 
 CREATE INDEX IF NOT EXISTS idx_food_pref_items_user ON nutrition.food_preference_items(user_id);
 CREATE INDEX IF NOT EXISTS idx_food_pref_items_category ON nutrition.food_preference_items(category_id);

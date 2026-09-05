@@ -72,7 +72,6 @@ items AS (
     CASE
       WHEN fpi.preference = 'hard_exclude'
         OR fpi.strength = 'hard_exclude' THEN 'hard'
-      WHEN fpi.strength = 'strong_avoid' THEN 'strong'
       WHEN fpi.preference = 'disliked'
         OR fpi.strength = 'soft_dislike' THEN 'soft'
       WHEN fpi.preference = 'liked'

@@ -169,7 +169,7 @@ INSERT INTO nutrition.nutrient_defs
 ('FAX','Fettsäuren, sonstige','Fatty acids, other','g','Fettsäuren','Fatty acids',117,3,false,false,NULL),
 
 -- CHOLESTERIN (Tier 1)
-('CHORL','Cholesterin','Cholesterol','mg','Sonstige Nährstoffe','Other nutrients',118,1,false,false,NULL),
+('CHORL','Cholesterin','Cholesterol','mg','Fettbegleitstoffe','Lipid-associated compounds',118,1,false,false,NULL),
 
 -- AMINOSÄUREN (Tier 2/3)
 ('AAE9','Aminosäuren, unentbehrlich, gesamt','Amino acids, essential, total','g','Aminosäuren','Amino acids',119,2,true,false,
@@ -194,7 +194,7 @@ INSERT INTO nutrition.nutrient_defs
 ('VAL','Valin','Valine','g','Aminosäuren','Amino acids',137,2,false,false,NULL),
 
 -- STICKSTOFF (Tier 3)
-('NT','Stickstoff, gesamt','Nitrogen, total','g','Sonstige Nährstoffe','Other nutrients',138,3,false,false,NULL)
+('NT','Stickstoff, gesamt','Nitrogen, total','g','Makronährstoffe','Proximate',138,3,false,false,NULL)
 ON CONFLICT (code) DO UPDATE SET
   name_de = EXCLUDED.name_de,
   name_en = EXCLUDED.name_en,

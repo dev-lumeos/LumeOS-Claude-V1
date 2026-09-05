@@ -43,7 +43,8 @@ const PARENT: Record<string, string | null> = {
   ENERCC: null,
   WATER: null,
   PROT625: null,
-  NT: 'PROT625',
+  // NT ist die Rechengrösse fuer PROT625, aber kein Proteinbestandteil.
+  NT: null,
   AAE9: 'PROT625',
   ALA: 'PROT625',
   ARG: 'PROT625',
@@ -452,8 +453,8 @@ BEGIN
          count(*) FILTER (WHERE parent_code IS NOT NULL)
     INTO v_roots, v_children
   FROM nutrition.nutrient_defs;
-  IF v_roots <> 40 OR v_children <> 98 THEN
-    RAISE EXCEPTION 'nutrient_defs parent_code: % Wurzeln/% Kinder, erwartet 40/98', v_roots, v_children;
+  IF v_roots <> 41 OR v_children <> 97 THEN
+    RAISE EXCEPTION 'nutrient_defs parent_code: % Wurzeln/% Kinder, erwartet 41/97', v_roots, v_children;
   END IF;
 
   SELECT count(*) INTO v_details FROM nutrition.nutrient_details;
