@@ -120,11 +120,21 @@ test('G-336: die Kategorie folgt der Stellung, nicht dem Namen', () => {
     planSlots: PLAN_SLOTS, vorlieben: VORLIEBEN,
     reihen: ['breakfast', 'lunch', 'dinner', 'snack'],
   })
+  // `[cmd]` **Hier stand `other` als fuenfter Wert** — und der
+  // Kommentar nannte es richtig: *,,er verschwindet nicht"*.
+  //
+  // `[cmd]` **Berichtigt am 2026-09-05 (G-351): er verschwand
+  // doch** — **`rasterZeilen` hat keine Karte fuer `other`**, also
+  // fiel die Zeile aus dem Tag. **Die Absicht stimmte, das Mittel
+  // nicht.**
+  //
+  // `[read]` **Jetzt traegt der Ueberhang die letzte Kategorie** —
+  // keine Sammelgruppe (E-63), und der Slot bleibt sichtbar.
   assert.deepEqual(r.zeilen.map(z => z.kategorie),
-    ['breakfast', 'lunch', 'dinner', 'snack', 'other'])
-  // `[read]` **Der fuenfte Slot bekommt `other`** — es gibt keine
-  // fuenfte Kategorie. **Er verschwindet nicht.**
+    ['breakfast', 'lunch', 'dinner', 'snack', 'snack'])
+  // **Er verschwindet nicht** — das war und bleibt die Zusage.
   assert.equal(r.zeilen[4].label, 'Abendessen')
+  assert.equal(r.zeilen.length, 5, 'der fuenfte Slot ist weg')
 })
 
 test('G-336: Slots werden nach Position sortiert, nicht nach Lesefolge', () => {

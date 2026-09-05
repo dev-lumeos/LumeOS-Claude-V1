@@ -237,10 +237,18 @@ test('G-335: ohne Zeit entscheidet die Reihenfolge, dann die Kategorie', () => {
 })
 
 test('G-335: das Pulldown zeigt die Namen des Nutzers, nicht die Kategorien', () => {
-  // `[cmd]` **Die Auswahl traegt sieben Eintraege** — die Codes bleiben
-  // als Wert, nur die Beschriftung folgt der Quelle.
+  // `[cmd]` **Die Auswahl trug sieben Eintraege.** `[cmd]`
+  // **Berichtigt am 2026-09-05 (G-351): es sind sechs** — `other`
+  // steht nicht mehr zur Wahl, **weil `rasterZeilen` keine Karte
+  // dafuer hat** und die Mahlzeit sonst aus dem Tag faellt.
+  //
+  // `[read]` **Die Zusage dieses Tests bleibt dieselbe** — die Codes
+  // bleiben als Wert, nur die Beschriftung folgt der Quelle. **Nur
+  // ihr Gegenstand ist um einen Eintrag kleiner.**
   const ohne = kategorieAuswahl()
-  assert.equal(ohne.length, 7)
+  assert.equal(ohne.length, 6)
+  assert.ok(!ohne.some(o => o.code === 'other'),
+    '`other` steht wieder zur Wahl — G-351')
   assert.deepEqual(ohne.map(o => o.label).slice(0, 3),
     ['Frühstück', 'Mittagessen', 'Abendessen'])
 

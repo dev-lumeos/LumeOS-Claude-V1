@@ -284,15 +284,40 @@ export const KATEGORIE_TEXT: Record<string, string> = {
  * `[read]` **Wo der Nutzer eigene Slots hat, stehen SEINE Namen** —
  * die Kategorie ist dann nur der gespeicherte Wert. **Ohne Slots
  * bleibt es bei `KATEGORIE_TEXT`.**
+ *
+ * ## `other` steht nicht zur Wahl — G-351
+ *
+ * `[cmd]` **Gemessen am 2026-09-05:** **drei Formulare boten
+ * *Sonstiges* an** — das freie Mahlzeitenformular, `erfassen-modal`
+ * und `rezepte-echt`, **alle drei ueber diese Funktion.**
+ *
+ * `[cmd]` **Und es gibt keine Karte dafuer:** `rasterZeilen` kennt
+ * `breakfast`, `lunch`, `dinner`, `snack`. **Eine Mahlzeit auf
+ * `other` faellt aus dem Tag** — nicht sichtbar, ueber *Wie gestern*
+ * nicht erreichbar (G-348).
+ *
+ * `[read]` **Keine Sammelreihe (E-63)** — *,,wir wissen nicht, wohin
+ * damit"* ist keine Kategorie. **Der Slot ist die Ordnung (E-58),
+ * und es gibt keine Obergrenze:** wer keinen passenden hat, legt
+ * einen an.
+ *
+ * `[cmd]` **Der Bestand vertraegt es:** **null Zeilen auf `other`**
+ * in 2.899 Mahlzeiten (gemessen 2026-09-05, alle Nutzer).
+ *
+ * `[read]` **`KATEGORIE_TEXT` behaelt `other`** — die Auswahl bietet
+ * es nicht an, aber eine bestehende Zeile soll ihren Namen zeigen
+ * statt des Rohcodes.
  */
 export function kategorieAuswahl(
   slots: readonly MahlzeitSlot[] = [],
   reihen: readonly string[] = [],
 ): Array<{ code: string; label: string }> {
-  return Object.keys(KATEGORIE_TEXT).map(code => ({
-    code,
-    label: mahlzeitName(code, { slots, reihen }),
-  }))
+  return Object.keys(KATEGORIE_TEXT)
+    .filter(code => code !== 'other')
+    .map(code => ({
+      code,
+      label: mahlzeitName(code, { slots, reihen }),
+    }))
 }
 
 /**
@@ -372,8 +397,18 @@ export type ZeilenQuelle = 'plan' | 'nutzer' | 'vorlieben'
  *
  * `[cmd]` **Die Zuordnung Slot → Kategorie geht ueber die Stellung**,
  * nicht ueber den Namen: der erste Slot nimmt die erste Kategorie der
- * Reihe. **Nach `reihen`** — hat der Plan mehr Slots als Kategorien,
- * bekommen die uebrigen `other`.
+ * Reihe.
+ *
+ * `[cmd]` **Berichtigt am 2026-09-05 (G-351): sie bekamen `other`.**
+ * **`dev@lumeos.app` traf genau das** — fuenf `meal_slots`, ein Plan
+ * mit fuenf `meal_plan_slots`, und `benutzteReihen` sind vier.
+ *
+ * `[read]` **Das war keine Wahl, sondern eine Rechnung** — der
+ * Nutzer bekam eine Zeile, die kein Raster traegt, ohne sie zu
+ * waehlen. **Jetzt traegt der Ueberhang die LETZTE Kategorie der
+ * Reihe**, nicht eine Sammelgruppe (E-63): wer nach dem Abendessen
+ * noch einen Slot hat, hat einen weiteren Snack — **der Slot
+ * ordnet, der Name steht ohnehin daneben** (E-58).
  *
  * `[read]` **Ein Selbstplan ohne eigene Slots liest die Nutzerslots**
  * — er ist ja der Plan desselben Menschen. **Ein gelieferter Plan
@@ -399,12 +434,17 @@ export function rasterQuelle(
 ): { zeilen: RasterZeile[]; quelle: ZeilenQuelle } {
   const ordnung = reihen.length > 0 ? reihen : vorlieben
 
+  // `[read]` **Der Ueberhang faellt auf die letzte Kategorie**, nicht
+  // auf `other` (G-351). **Ist die Reihe leer, traegt `snack`** — die
+  // einzige, die mehrfach am Tag vorkommt.
+  const letzte = ordnung.length > 0 ? ordnung[ordnung.length - 1] : 'snack'
+
   const ausSlots = (slots: readonly MahlzeitSlot[]): RasterZeile[] =>
     [...slots]
       .sort((a, b) => a.position - b.position)
       .map((s, i) => ({
         label: s.name,
-        kategorie: ordnung[i] ?? 'other',
+        kategorie: ordnung[i] ?? letzte,
         zeit: s.planned_time,
       }))
 

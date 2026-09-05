@@ -422,7 +422,13 @@ function FreieMahlzeit({ datum, slots, offen, setOffen, onGeaendert }: {
   onGeaendert: () => void
 }) {
   const [zeit, setZeit] = React.useState('')
-  const [typ, setTyp] = React.useState<MealType>('other')
+  // `[cmd]` **Bis G-351 stand hier `other`** — **wer die Auswahl nicht
+  // anfasste, legte eine Mahlzeit an, die kein Raster traegt.**
+  // `[read]` **Jetzt der erste Eintrag der Auswahl** — derselbe, den
+  // das Pulldown ohnehin zeigt.
+  const [typ, setTyp] = React.useState<MealType>(
+    (kategorieAuswahl()[0]?.code ?? 'breakfast') as MealType,
+  )
   const [laeuft, setLaeuft] = React.useState(false)
   const [fehler, setFehler] = React.useState<string | null>(null)
 
@@ -460,8 +466,10 @@ function FreieMahlzeit({ datum, slots, offen, setOffen, onGeaendert }: {
         setZeit(s.planned_time)
         setName(s.name)
         // Die Kategorie folgt der Stellung, nicht dem Namen.
+        // `[read]` **Der Ueberhang traegt die letzte Reihe, nicht
+        // `other`** (G-351) — dieselbe Regel wie in `rasterQuelle`.
         const i = slots.findIndex(x => x.position === pos)
-        setTyp((reihen[i] ?? 'other') as MealType)
+        setTyp((reihen[i] ?? reihen[reihen.length - 1]) as MealType)
       }
       return
     }
