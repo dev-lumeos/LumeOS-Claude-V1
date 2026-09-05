@@ -44,9 +44,18 @@ export type VorliebeEingabe = {
 /**
  * `strength` aus `preference`.
  *
- * `[cmd]` Die Pruefbedingung erlaubt sechs Werte (`hard_exclude`,
- * `strong_avoid`, `soft_dislike`, `neutral`, `like`, `boost`). Genommen
- * sind die drei, die der Bestand benutzt — dieselbe Zuordnung wie in
+ * `[cmd]` **Die Pruefbedingung erlaubt FUENF Werte** (`hard_exclude`,
+ * `soft_dislike`, `neutral`, `like`, `boost`).
+ *
+ * `[cmd]` **BERICHTIGT IN G-347, 2026-09-07:** hier standen sechs —
+ * `strong_avoid` war der sechste. **C-408 hat ihn aus dem CHECK
+ * entfernt**, nachdem G-337 gemessen hatte: kein Erzeuger, kein
+ * Eingabewort, drei tote Lesezweige.
+ *
+ * `[read]` **Die mittlere Stufe gibt es weiter** — sie kommt aus
+ * `food_preferences.intolerances`, nicht aus dieser Spalte.
+ *
+ * Genommen sind die drei, die der Bestand benutzt — dieselbe Zuordnung wie in
  * `preferences-model.ts:strengthForPreference`, nur dass die
  * Testdaten `boost` statt `like` fuehren.
  */

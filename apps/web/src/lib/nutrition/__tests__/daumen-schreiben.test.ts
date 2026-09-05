@@ -36,10 +36,27 @@ test('die Stufen liegen unter denen des Assistenten', () => {
 
 test('die Stufen sind in der CHECK-Bedingung erlaubt', () => {
   // `[cmd]` food_preference_items_strength_check.
-  const ERLAUBT = ['hard_exclude', 'strong_avoid', 'soft_dislike',
+  //
+  // ══ NACHGEZOGEN IN G-347, 2026-09-07 ═════════════════
+  //
+  // `[cmd]` **Hier stand `strong_avoid` mit in der Liste.** `[cmd]`
+  // **Der CHECK kennt ihn nicht mehr** — gemessen am 2026-09-07:
+  // `hard_exclude, soft_dislike, neutral, like, boost`. **C-408 hat
+  // ihn entfernt** (G-337: kein Erzeuger, kein Eingabewort).
+  //
+  // `[read]` **Der Waechter waere nicht rot geworden** — er prueft
+  // nur, ob der Daumen in der Liste landet, und `like` steht in
+  // beiden. **Ein zu grosser Erlaubnisbereich faellt nie auf**
+  // (G-343: der Test kann seiner eigenen Liste nicht widersprechen).
+  const ERLAUBT = ['hard_exclude', 'soft_dislike',
     'neutral', 'like', 'boost']
   assert.ok(ERLAUBT.includes(staerkeFuerDaumen('liked')))
   assert.ok(ERLAUBT.includes(staerkeFuerDaumen('disliked')))
+
+  // `[cmd]` **Und der entfernte Wert darf nicht zurueckkommen** —
+  // ein Schreibversuch damit faellt heute an der Datenbank.
+  assert.ok(!ERLAUBT.includes('strong_avoid'),
+    'strong_avoid ist zurueck — der CHECK kennt ihn seit C-408 nicht mehr')
 })
 
 test('die Richtungen sind in der CHECK-Bedingung erlaubt', () => {

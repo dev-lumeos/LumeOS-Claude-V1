@@ -147,6 +147,17 @@ export type PlanDaten = {
   zeilen: RasterZeile[]
   /** Woher die Zeilen kommen — fuer den Waechter und den Satz. */
   zeilenQuelle: ZeilenQuelle
+  /**
+   * G-345: welche Woche schon eine offene Einkaufsliste hat.
+   *
+   * `[read]` **Wochen-ID auf Listen-ID.** **Damit der Knopf
+   * *oeffnen* heisst statt *anlegen*** — sonst legt ein zweiter
+   * Klick eine zweite Liste an.
+   *
+   * `[cmd]` **Archivierte fehlen absichtlich** — wer eine Woche neu
+   * einkauft, bekommt eine neue Liste.
+   */
+  wochenlisten: Record<string, string>
   /** Woher die Zeilenzahl kommt, im Klartext fuer die Anzeige. */
   zeilenGrund: string
   /** Rezepte des Nutzers, fuer „New recipe" und die Zellenauswahl. */
@@ -292,6 +303,7 @@ export async function ladePlan(planId?: string | null): Promise<PlanDaten> {
       plan: null, wochen: [],
       zeilen: fallback.zeilen,
       zeilenQuelle: fallback.quelle,
+      wochenlisten: {},
       zeilenGrund: zeilenSatz('vorlieben', fallback.zeilen.length),
       rezepte: [], ladefehler: error.message,
     }
@@ -500,6 +512,30 @@ export async function ladePlan(planId?: string | null): Promise<PlanDaten> {
   const herkunft = text(roh?.plan_origin)
   const planEigen = herkunft === null || herkunft === 'self_created'
 
+  // ══ G-345 / E-64: die offenen Einkaufslisten der Wochen ══════
+  //
+  // `[cmd]` **EINE Abfrage fuer alle Wochen** — nicht je Woche eine
+  // (G-252: kein `await` in der Schleife).
+  //
+  // `[read]` **Nur offene und abgearbeitete** — eine archivierte
+  // Liste soll den Knopf nicht auf *oeffnen* stellen: wer eine Woche
+  // neu einkauft, bekommt eine neue.
+  const wochenlisten: Record<string, string> = {}
+  const wochenIds = wochen.map(w => w.id).filter(Boolean)
+  if (wochenIds.length > 0) {
+    const { data: listenRoh } = await db
+      .from('shopping_lists')
+      .select('id, meal_plan_week_id')
+      .in('meal_plan_week_id', wochenIds)
+      .neq('status', 'archived')
+      .limit(200)
+    for (const l of (listenRoh ?? []) as unknown as Array<Record<string, unknown>>) {
+      const w = text(l.meal_plan_week_id)
+      const i = text(l.id)
+      if (w && i && !wochenlisten[w]) wochenlisten[w] = i
+    }
+  }
+
   const rasterLage = rasterQuelle({
     planSlots,
     nutzerSlots,
@@ -553,6 +589,7 @@ export async function ladePlan(planId?: string | null): Promise<PlanDaten> {
     // Zeile bekommt, wenn der Plan fuenf Slots hat.
     zeilen: rasterLage.zeilen,
     zeilenQuelle: rasterLage.quelle,
+    wochenlisten,
     zeilenGrund: zeilenSatz(
       rasterLage.quelle, rasterLage.zeilen.length, planEigen),
     rezepte,

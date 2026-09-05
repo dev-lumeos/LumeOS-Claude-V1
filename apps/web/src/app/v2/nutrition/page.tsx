@@ -33,6 +33,11 @@ import {
 // G-332: die Mahlzeiten-Slots.
 import { ladeSlots, ladeAktivPlanSlots }
   from '../../../lib/nutrition/slots-lesen'
+// G-345 / E-64: die Einkaufslisten.
+import { ladeEinkaufslisten }
+  from '../../../lib/nutrition/einkaufsliste-lesen'
+import type { EinkaufslisteKurz }
+  from '../../../lib/nutrition/einkaufsliste-lesen'
 import type { MahlzeitSlot } from '../../../lib/nutrition/slots-lage'
 // G-72: die Reihen aus den Vorlieben — dieselbe Funktion wie
 // im Planner, kein zweiter Wortlaut.
@@ -130,8 +135,9 @@ export default async function V2NutritionPage({
   // Unbekannte Werte fallen auf `diary` zurueck statt eine leere Seite
   // zu zeigen.
   // G-289/E-39: `rezepte` ist der „Rezept-Bereich" aus SPEC_03 Flow 7.
+  // G-345 / E-64: `einkauf` ist der dritte Ort fuer Einkaufslisten.
   const ERLAUBT = ['diary', 'insights', 'nutrients', 'foods',
-    'plans', 'prefs', 'planner', 'rezepte']
+    'plans', 'prefs', 'planner', 'rezepte', 'einkauf']
   const tab = ERLAUBT.includes(searchParams?.tab ?? '') ? searchParams!.tab! : 'diary'
 
   let summe: DailySummaryRow | null = null
@@ -345,6 +351,19 @@ export default async function V2NutritionPage({
   let planLogs: PlanLogZeile[] = []
   let coachFreigabe = false
   let einkaufslisten = 0
+  // ══ G-345 / E-64: die Listen selbst, fuer den Einkaufsreiter ══
+  //
+  // `[read]` **Nur wenn der Reiter offen ist** — die uebrigen
+  // brauchen sie nicht, und zwei Abfragen je Seitenaufruf sind
+  // zwei zu viel.
+  let einkaufsliste: EinkaufslisteKurz[] | null = null
+  if (tab === 'einkauf') {
+    try {
+      einkaufsliste = await ladeEinkaufslisten()
+    } catch {
+      einkaufsliste = null
+    }
+  }
   let tagesEintraege: TagesEintrag[] = []
   // G-309 Punkt 4: die Auswertung, die Tom will.
   let wechsel: WechselStand = LEERER_WECHSELSTAND
@@ -506,6 +525,7 @@ export default async function V2NutritionPage({
       planLogs={planLogs}
       coachFreigabe={coachFreigabe}
       einkaufslisten={einkaufslisten}
+      einkaufsliste={einkaufsliste}
       tagesEintraege={tagesEintraege} slots={slots} mahlzeitSlots={mahlzeitSlots}
       ghostSlots={ghostBenennung}
       wechsel={wechsel}

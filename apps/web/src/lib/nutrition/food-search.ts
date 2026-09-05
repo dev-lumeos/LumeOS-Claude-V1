@@ -757,8 +757,18 @@ export async function getLocalFoodSearch(
      *
      * `[cmd]` Bei der Startliste kaeme es zusaetzlich darauf an: sie
      * sucht mit LEERER Anfrage, und bei leerer Anfrage schliesst
-     * `food_search` auch `strong_avoid` aus (075, Zeile 455) — der
-     * Filter wirkt dort also breiter als anderswo.
+     * `food_search` auch die STARKE Stufe aus (075, Zeile 1058) —
+     * der Filter wirkt dort also breiter als anderswo.
+     *
+     * `[cmd]` **BERICHTIGT IN G-347, 2026-09-07:** hier stand
+     * *,,schliesst auch `strong_avoid` aus (075, Zeile 455)"*.
+     * **Beides war ueberholt:** `strong_avoid` ist seit C-408 aus
+     * dem CHECK, und die genannte Zeile traegt seit laengerem
+     * `diet_type`, nicht den Ausschluss.
+     *
+     * `[cmd]` **Gemessen am 2026-09-07:** die Stufe kommt jetzt aus
+     * `intolerances` (075, Zeile 403). **Sie wirkt** — Suche
+     * *milch* auf `dev` liefert 98 Treffer mit `strong`.
      *
      * `[read]` Der Erfassungsdialog ist etwas anderes: was dort
      * ausgewaehlt wird, wird gegessen. Er schaltet es ein.

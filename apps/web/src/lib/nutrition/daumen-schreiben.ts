@@ -46,7 +46,11 @@ export function naechsterDaumen(jetzt: Daumen): Daumen {
  *
  * `[cmd]` Beide Werte sind in
  * `food_preference_items_strength_check` erlaubt:
- * hard_exclude · strong_avoid · soft_dislike · neutral · like · boost.
+ * hard_exclude · soft_dislike · neutral · like · boost.
+ *
+ * `[cmd]` **BERICHTIGT IN G-347, 2026-09-07:** `strong_avoid` stand
+ * hier als sechster Wert. **C-408 hat ihn entfernt** — ein
+ * Schreibversuch damit faellt heute an der Datenbank.
  */
 export function staerkeFuerDaumen(d: Exclude<Daumen, 'neutral'>): string {
   return d === 'liked' ? 'like' : 'soft_dislike'

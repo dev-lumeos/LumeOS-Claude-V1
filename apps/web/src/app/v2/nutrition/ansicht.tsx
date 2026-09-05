@@ -87,6 +87,10 @@ import type { PlanDaten } from '../../../lib/nutrition/plan-lesen'
 import { NutritionFoodsTab } from './tab-foods'
 import type { NutritionFoodSearchPayload } from '../../../lib/nutrition/food-search'
 import { Kopfknoepfe } from './kopfknoepfe'
+// G-345 / E-64: der Einkaufsreiter.
+import { EinkaufTab } from './tab-einkauf-echt'
+import type { EinkaufslisteKurz }
+  from '../../../lib/nutrition/einkaufsliste-lesen'
 import './nutrition.css'
 
 /** Die vier Makros, die die Vorlage oben zeigt. */
@@ -129,7 +133,7 @@ function tagText(datum: string): string {
  * aus den Daten gefuellt, der zweite bleibt fest: `[cmd]` es sind die
  * 138 Naehrstoffe des BLS, keine Tagesgroesse.
  */
-function tabs(mahlzeiten: number | null): TabItem[] {
+function tabs(mahlzeiten: number | null, einkauf: number | null): TabItem[] {
   return [
     { id: 'diary',     label: 'Diary',       icon: 'edit',     count: mahlzeiten ?? undefined },
     { id: 'insights',  label: 'Insights',    icon: 'sparkles' },
@@ -141,12 +145,22 @@ function tabs(mahlzeiten: number | null): TabItem[] {
     // G-289/E-39: der „Rezept-Bereich" aus SPEC_03 Flow 7,
     // Schritt 1. Er traegt auch die Einkaufslisten (Flow 8).
     { id: 'rezepte',   label: 'Rezepte',     icon: 'nutrition' },
+    // ══ G-345 / E-64: der eigene Reiter ═══════════════════════
+    //
+    // `[read]` **Hier stand, der Rezepte-Reiter trage auch die
+    // Einkaufslisten.** `[cmd]` **E-64 gibt ihnen einen eigenen
+    // Ort** — **wo man ALLE sieht, offene und archivierte.**
+    //
+    // `[read]` **Der Rezeptweg bleibt** (Flow 8, der Nebenfall) —
+    // er fuehrt in dasselbe Fenster.
+    { id: 'einkauf',   label: 'Einkauf',     icon: 'bookmark',
+      count: einkauf ?? undefined },
   ]
 }
 
 export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, lueckenGesamt = null, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
-  planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
+  planLogs = [], coachFreigabe = false, einkaufslisten = 0, einkaufsliste = null, tagesEintraege = [],
   wechsel = LEERER_WECHSELSTAND,
   istAdmin = false, slots = null, mahlzeitSlots = [], ghostSlots = [], foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null, rezepte = null, allePlaene = [],
   offeneAktionen = null, sitzung = null,
@@ -162,6 +176,8 @@ export async function TagebuchAnsicht({
   planLogs?: PlanLogZeile[]
   coachFreigabe?: boolean
   einkaufslisten?: number
+  /** G-345: die Listen selbst, fuer den Einkaufsreiter. */
+  einkaufsliste?: EinkaufslisteKurz[] | null
   tagesEintraege?: TagesEintrag[]
   /** G-309: Befunde UND Grundgesamtheit, aus EINER Messung. */
   wechsel?: WechselStand
@@ -288,12 +304,12 @@ export async function TagebuchAnsicht({
         </div>
       </div>
 
-      <Tableiste items={tabs(summe?.meal_count ?? null)} aktiv={tab} />
+      <Tableiste items={tabs(summe?.meal_count ?? null, einkaufslisten)} aktiv={tab} />
 
       <Zukunftshinweis datum={datum} />
 
       {tab !== 'diary' && (
-        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} rezepte={rezepte} allePlaene={allePlaene} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} planLogs={planLogs} coachFreigabe={coachFreigabe} einkaufslisten={einkaufslisten} tagesEintraege={tagesEintraege} wechsel={wechsel} />
+        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} rezepte={rezepte} allePlaene={allePlaene} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} planLogs={planLogs} coachFreigabe={coachFreigabe} einkaufslisten={einkaufslisten} einkaufsliste={einkaufsliste} tagesEintraege={tagesEintraege} wechsel={wechsel} />
       )}
       {tab === 'diary' && (
       <>
@@ -665,7 +681,7 @@ function AndererTab({
   tab, foodsStart, vorlieben, plan, ordnung, einsichten, rezepte,
   allePlaene = [], bewertung = [],
   datum,
-  planLogs = [], coachFreigabe = false, einkaufslisten = 0, tagesEintraege = [],
+  planLogs = [], coachFreigabe = false, einkaufslisten = 0, einkaufsliste = null, tagesEintraege = [],
   wechsel = LEERER_WECHSELSTAND,
   unvertraeglichkeiten = [],
 }: {
@@ -676,6 +692,8 @@ function AndererTab({
   planLogs?: PlanLogZeile[]
   coachFreigabe?: boolean
   einkaufslisten?: number
+  /** G-345: die Listen selbst, fuer den Einkaufsreiter. */
+  einkaufsliste?: EinkaufslisteKurz[] | null
   tagesEintraege?: TagesEintrag[]
   /** G-309: Befunde UND Grundgesamtheit, aus EINER Messung. */
   wechsel?: WechselStand
@@ -885,6 +903,24 @@ function AndererTab({
           : (
             <LeerHinweis
               titel="Rezepte nicht geladen"
+              grund="Ohne Sitzung greift die Zeilensicherheit, und es wird nichts gelesen." />
+          )}
+      </div>
+    )
+  }
+
+  // ══ G-345 / E-64: der Einkaufsreiter ═══════════════════════════
+  //
+  // `[read]` **Der dritte Ort:** wo man ALLE Listen sieht, offene und
+  // archivierte. **Planner und Rezept fuehren in dasselbe Fenster.**
+  if (tab === 'einkauf') {
+    return (
+      <div style={{ marginTop: 16 }}>
+        {einkaufsliste
+          ? <EinkaufTab listen={einkaufsliste} />
+          : (
+            <LeerHinweis
+              titel="Einkaufslisten nicht geladen"
               grund="Ohne Sitzung greift die Zeilensicherheit, und es wird nichts gelesen." />
           )}
       </div>

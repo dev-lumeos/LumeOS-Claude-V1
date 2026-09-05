@@ -75,6 +75,14 @@ import { PlanModal } from './plan-modal'
 import { bearbeitbarkeit, herkunftVon }
   from '../../../lib/nutrition/plan-lage'
 import { useRouter } from 'next/navigation'
+
+// G-345 / E-64: die Einkaufsliste an der Planwoche.
+import { listeHolen, wochenlisteErzeugen } from './einkaufsliste-aktionen'
+import { EinkaufslisteModal } from './einkaufsliste-modal'
+// `[cmd]` **NUR DER TYP** aus dem Leseweg — er zieht `next/headers`
+// mit, und ein Wert-Import brächte HTTP 500 bei gruenem Typecheck
+// (G-74, G-79, G-97).
+import type { Einkaufsliste } from '../../../lib/nutrition/einkaufsliste-lesen'
 // G-331: `InEntwicklungKnopf` ist weg — die letzte Attrappe im
 // Planner war ueberholt (der Schreibpfad steht seit C-372).
 import { Card, Icon, Pill } from '@lumeos/ui'
@@ -322,6 +330,15 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
   // G-319: der Planeditor.  **Vor dem fruehen Ausstieg** —
   // ein Hook nach einem  verletzt die Aufrufreihenfolge.
   const [bearbeiten, setBearbeiten] = React.useState(false)
+  // ══ G-345: die Einkaufsliste je Woche ═══════════════════════════
+  //
+  // `[read]` **Welche Woche schon eine hat** — der Knopf heisst
+  // danach *oeffnen* statt *anlegen*. **Kommt vom Server mit**
+  // (`d.wochenlisten`), damit kein Ladezustand je Woche entsteht.
+  const [listen, setListen] = React.useState<Record<string, string>>(
+    () => d.wochenlisten ?? {})
+  const [laeuftListe, setLaeuftListe] = React.useState<string | null>(null)
+  const [listeOffen, setListeOffen] = React.useState<Einkaufsliste | null>(null)
   const router = useRouter()
   const [woche, setWoche] = React.useState(() => {
     // Die Woche, in der heute liegt — sonst die erste.
@@ -339,6 +356,33 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
    * zweites Mal zu bauen. **Zwei Wahrheiten statt einer.**
    */
   const neuLaden = React.useCallback(() => { router.refresh() }, [router])
+
+  /**
+   * Die Einkaufsliste einer Woche — G-345 / E-64.
+   *
+   * `[read]` **Gibt es schon eine, wird sie geoeffnet.** **Sonst
+   * erzeugt `shopping_list_from_meal_plan_week` sie** (C-407) und
+   * oeffnet sie danach.
+   *
+   * `[cmd]` **Zwei Wirkungen, ein Knopf** — aber nie zweimal
+   * anlegen: der Zustand merkt sich die Kennung.
+   */
+  async function wochenliste(wocheId: string) {
+    setLaeuftListe(wocheId)
+    try {
+      let id = listen[wocheId]
+      if (!id) {
+        const a = await wochenlisteErzeugen(wocheId)
+        if (!a.ok || !a.id) return
+        id = a.id
+        setListen(v => ({ ...v, [wocheId]: id }))
+        router.refresh()
+      }
+      setListeOffen(await listeHolen(id))
+    } finally {
+      setLaeuftListe(null)
+    }
+  }
 
   /** Die Rezepte als Auswahl — mehr braucht das Formular nicht. */
   const rezeptWahl: Quelle[] = React.useMemo(
@@ -513,6 +557,28 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
                 onClick={() => setKopieren(w.id)}>
           <Icon name="copy" className="v2-ic v2-ic-sm" /> Copy week
         </button>
+        {/* ══ G-345 / E-64: die Einkaufsliste an der Woche ══════
+            **E-64, 2026-09-07:** die Einkaufsliste gehoert an die
+            Planwoche. **Der Hauptfall: wer eine Woche plant, kauft
+            fuer die Woche.**
+
+            `[cmd]` **`shopping_list_from_meal_plan_week` steht seit
+            C-407** — sie summiert gleiche `food_id` in Gramm und
+            haelt gleiche Freitextnamen getrennt.
+
+            `[read]` **Der Knopf heisst verschieden, je nachdem, ob
+            es die Liste schon gibt** — *anlegen* gegen *oeffnen*.
+            **Ein Knopf, der zweimal dasselbe tut, legt zwei Listen
+            an.** */}
+        <button type="button" className="v2-btn"
+                data-probe="wochenliste"
+                disabled={laeuftListe === w.id}
+                onClick={() => void wochenliste(w.id)}>
+          <Icon name="bookmark" className="v2-ic v2-ic-sm" />
+          {laeuftListe === w.id
+            ? 'Einen Moment…'
+            : listen[w.id] ? 'Einkaufsliste öffnen' : 'Einkaufsliste'}
+        </button>
         {/* ══ G-319: `New recipe` ist entfernt ═══════════════
             **Tom, 2026-09-02:** *,,+new recipe gibt es nicht in
             planner."*
@@ -553,6 +619,17 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
           wochen={d.wochen}
           onFertig={() => { setKopieren(null); neuLaden() }}
           onAbbruch={() => setKopieren(null)}
+        />
+      )}
+
+      {/* ══ G-345 / E-64: die Einkaufsliste der Woche ══════════
+          `[read]` **Dasselbe Fenster wie im Rezept und im eigenen
+          Reiter** — drei Orte, eine Ansicht. */}
+      {listeOffen && (
+        <EinkaufslisteModal
+          liste={listeOffen}
+          onClose={() => setListeOffen(null)}
+          onGeaendert={neuLaden}
         />
       )}
 

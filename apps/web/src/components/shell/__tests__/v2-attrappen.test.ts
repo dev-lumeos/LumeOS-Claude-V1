@@ -1298,8 +1298,18 @@ test('die Nutrition-Entwuerfe kommen nicht zurueck', () => {
   //
   // `[read]` **Gezaehlt, nicht gesucht** — ein `assert.match` faende
   // den ersten Hinweis und uebersaehe einen fehlenden vierten.
-  assert.equal((quelle.match(/<LeerHinweis/g) ?? []).length, 3,
-    'Die drei Rueckfaelle (nutrients, prefs, rezepte) zeigen LeerHinweis.')
+  //
+  // ══ NACHGEZOGEN IN G-345 (E-64) ═══════════════════
+  //
+  // `[cmd]` **VIER Zweige seit G-345** — `einkauf` ist dazugekommen
+  // (E-64: der eigene Reiter fuer alle Einkaufslisten).
+  //
+  // `[read]` **Der Waechter hat genau getan, wofuer er gebaut ist:**
+  // er zaehlt, statt zu suchen, **und wurde rot, als ein vierter
+  // Zweig entstand.** **Die Zusage bleibt** — jeder Rueckfall zeigt
+  // einen `LeerHinweis`, keiner eine erfundene Flaeche.
+  assert.equal((quelle.match(/<LeerHinweis/g) ?? []).length, 4,
+    'Die vier Rueckfaelle (nutrients, prefs, rezepte, einkauf) zeigen LeerHinweis.')
 })
 
 test('die drei lebenden Modale der Nutrition-Vorlage sind da', () => {
