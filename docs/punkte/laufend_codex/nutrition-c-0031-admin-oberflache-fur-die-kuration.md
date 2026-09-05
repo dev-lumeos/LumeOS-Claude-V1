@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: ["nutrition.foods"]
   dateien: ["docs/ssot/daten/wortschatz-luecke.json"]
@@ -53,3 +55,8 @@ Admin-Mutation, Overlay-Upsert, Lesen ueber `food_tags_effective`.
 
 `[cmd]` **Der dritte steht seit C-366.** `[read]` **Damit ist es ein
 UI-Auftrag mit bekannter Naht, kein Entwurf mehr.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-409 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

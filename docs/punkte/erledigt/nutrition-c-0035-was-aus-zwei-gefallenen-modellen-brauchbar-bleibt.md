@@ -10,6 +10,8 @@ kinder: []
 entscheidung: E-13
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: OFFEN
 beruehrt:
   tabellen: []
   dateien: ["supabase/_pipeline/07_lesefunktionen/073_suchfilter.sql"]
@@ -67,3 +69,16 @@ ist gebaut oder gesichert.**
 
 **Mitbeauftragt mit C-379 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit C-379 abgenommen: nichts mehr uebrig.**
+
+    Anzeigehilfe        aktiv
+    Vertreterregel      fachlich beendet (C-388)
+    vier Saftzeilen     korrigiert (C-389)
+
+`[read]` **Der Punkt stand seit Wochen offen und wartete auf eine
+Vorbedingung, die zweimal ohne ihn erledigt wurde.**
+
+**Geschlossen.**

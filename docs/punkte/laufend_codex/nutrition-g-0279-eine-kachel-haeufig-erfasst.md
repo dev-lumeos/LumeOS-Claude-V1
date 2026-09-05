@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: G-263
 entscheidung: E-56
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/tab-insights.tsx]
 zahlen:
@@ -94,3 +96,8 @@ Eintraege.**
 `[read]` **Beide Faelle gemessen.** `[read]` **Und das Ergebnis
 entscheidet fast von selbst:** **eine Kachel *haeufig erfasst*, die
 *2 von 30* zeigt, sagt nichts.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-409 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

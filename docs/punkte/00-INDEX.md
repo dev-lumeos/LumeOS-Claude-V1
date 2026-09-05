@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 211 |
+| `todos` | 210 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 273 |
+| `erledigt` | 274 |
 | **gesamt** | **490** |
 
 ## medical — 43
@@ -74,8 +74,8 @@
 | `C-27` | messung | mittel | [Alltagswörter ohne Treffer — noch zwei](erledigt/nutrition-c-0027-alltagsworter-ohne-treffer-noch-zwei.md) | erledigt | — | — |
 | `C-29` | entscheidung | mittel | [Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt](erledigt/nutrition-c-0029-drei-namensschichten-und-eine-kuration-die-den-kettenlauf-uberlebt.md) | erledigt | — | — |
 | `C-30` | befund | mittel | [Suche und Trefferliste auf Arten umstellen](todos/nutrition-c-0030-suche-und-trefferliste-auf-arten-umstellen.md) | offen | — | — |
-| `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](todos/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | offen | — | — |
-| `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](laufend_codex/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | laeuft (codex) | — | C-386 |
+| `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](laufend_codex/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | laeuft (codex) | — | — |
+| `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](erledigt/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | erledigt | — | C-386 |
 | `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — | — |
 | `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](erledigt/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | erledigt | — | G-239, G-248 |
 | `C-49` | befund | hoch | [Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach](erledigt/nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md) | erledigt | — | C-323, C-324, C-360 |
@@ -92,7 +92,7 @@
 | `C-177` | messung | hoch | [Thai-Aliase fehlen bewusst](erledigt/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | erledigt | — | — |
 | `C-191` | messung | mittel | [`p_user_id` kostet das Dreifache](erledigt/nutrition-c-0191-p-user-id-kostet-das-dreifache.md) | erledigt | — | — |
 | `C-192` | befund | mittel | [`p_user_id` kostet in `food_search` das Dreifache](erledigt/nutrition-c-0192-p-user-id-kostet-in-food-search-das-dreifache.md) | erledigt | — | — |
-| `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](laufend_codex/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | laeuft (codex) | — | — |
+| `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](todos/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | offen | — | — |
 | `C-210` | befund | mittel | [Die 28 fehlenden Naehrstofftexte — was ist gemeint?](todos/nutrition-c-0210-die-28-fehlenden-naehrstofftexte-was-ist-gemeint.md) | offen | — | — |
 | `C-211` | befund | mittel | [Selen fehlt im BLS-Katalog](erledigt/nutrition-c-0211-selen-fehlt-im-bls-katalog.md) | erledigt | — | — |
 | `C-212` | befund | mittel | [`CHORL` haengt nicht im Naehrstoffbaum](erledigt/nutrition-c-0212-chorl-haengt-nicht-im-naehrstoffbaum.md) | erledigt | — | — |
@@ -131,7 +131,7 @@
 | `C-376` | befund | mittel | [frieren abgeschlossene Plaene auch ein?](erledigt/nutrition-c-0376-frieren-abgeschlossene-plaene-auch-ein.md) | erledigt | — | — |
 | `C-377` | feature | hoch | [ein abgelaufener Plan braucht eine Frage](erledigt/nutrition-c-0377-ein-abgelaufener-plan-braucht-eine-frage.md) | erledigt | — | C-379 |
 | `C-378` | befund | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](erledigt/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | erledigt | — | — |
-| `C-379` | feature | mittel | [`sequence` hat kein Ziel](laufend_codex/nutrition-c-0379-sequence-hat-kein-ziel.md) | laeuft (codex) | — | C-383, G-313 |
+| `C-379` | feature | mittel | [`sequence` hat kein Ziel](todos/nutrition-c-0379-sequence-hat-kein-ziel.md) | offen | — | C-383, G-313 |
 | `C-380` | befund | mittel | [die Seed-Plaene tragen 84 mal Hammelfilet](erledigt/nutrition-c-0380-die-seed-plaene-tragen-84-mal-hammelfilet.md) | erledigt | — | — |
 | `C-382` | feature | mittel | [wer entscheidet, ob ein Plan editierbar ist?](todos/nutrition-c-0382-wer-entscheidet-ob-ein-plan-editierbar-ist.md) | offen | — | — |
 | `C-384` | befund | hoch | [wer schreibt die 30.797 Tag-Zeilen?](erledigt/nutrition-c-0384-wer-schreibt-die-30797-tag-zeilen.md) | erledigt | — | C-387 |
@@ -156,7 +156,7 @@
 | `C-406` | feature | mittel | [`strong_avoid` an vier Stellen entfernen](erledigt/nutrition-c-0406-strong-avoid-an-vier-stellen-entfernen.md) | erledigt | — | — |
 | `C-407` | feature | hoch | [der Leseweg fuer Wochenlisten](erledigt/nutrition-c-0407-der-leseweg-fuer-wochenlisten.md) | erledigt | — | — |
 | `C-408` | feature | mittel | [Vorrat nach dem Vorbild von Supplements](erledigt/nutrition-c-0408-vorrat-nach-dem-vorbild-von-supplements.md) | erledigt | — | C-409 |
-| `C-409` | befund | hoch | [`nutrition_reorder` ist unerreichbar](todos/nutrition-c-0409-nutrition-reorder-ist-unerreichbar.md) | offen | — | — |
+| `C-409` | befund | hoch | [`nutrition_reorder` ist unerreichbar](laufend_codex/nutrition-c-0409-nutrition-reorder-ist-unerreichbar.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -224,7 +224,7 @@
 | `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](erledigt/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | erledigt | — | C-349, C-353 |
 | `G-274` | feature | hoch | [der Bestaetigungsweg fuer Plan-Eintraege](erledigt/nutrition-g-0274-der-bestaetigungsweg-fuer-plan-eintraege.md) | erledigt | — | G-276 |
 | `G-276` | befund | mittel | [MealCam schreibt `confirmation_mode` ohne Fotoweg](erledigt/nutrition-g-0276-mealcam-schreibt-ohne-fotoweg.md) | erledigt | — | — |
-| `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | — | G-328 |
+| `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](laufend_codex/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | laeuft (codex) | — | G-328 |
 | `G-283` | befund | hoch | [ein `pro`-Profil faellt still auf 0,90](erledigt/nutrition-g-0283-ein-pro-profil-faellt-still-auf-090.md) | erledigt | — | — |
 | `G-285` | befund | niedrig | [`display_tier` heisst im Code weiter *Abo-Gate*](erledigt/nutrition-g-0285-display-tier-heisst-im-code-weiter-abo-gate.md) | erledigt | — | — |
 | `G-286` | feature | hoch | [MealPlanDetail — das Tages-Akkordeon fehlt](erledigt/nutrition-g-0286-mealplandetail-das-tages-akkordeon-fehlt.md) | erledigt | — | G-298 |

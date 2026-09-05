@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-07
 beruehrt:
   tabellen: []
   dateien: ["docs/specs/Nutrition/04_adrs/ADR_MEALCAM_V1.md"]
@@ -45,3 +43,14 @@ zahlen: null
 
 **Mitbeauftragt mit C-379 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-07: offen, aus anderem Grund
+
+`[cmd]` **Die Suche entfernt harte Nuss-Ausschluesse weiterhin** —
+A-47 bestaetigt.
+
+`[cmd]` **Aber MealCam ist rein statisch und hat keinen Leseweg** —
+**weder dieselbe Filterung noch eine Zutatenwarnung.**
+
+`[read]` **Der Punkt ist kein Vergleichsbefund mehr, sondern eine
+Anforderung an einen Leseweg, der noch nicht existiert** (G-276).
