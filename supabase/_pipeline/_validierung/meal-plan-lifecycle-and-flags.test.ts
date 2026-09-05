@@ -68,6 +68,39 @@ test('C-239/C-238: Lifecycle und Ghost-Ausfuehrung sind getrennt modelliert', ()
   assert.ok(schema.plans.every(p => ['assigned', 'active', 'completed', 'paused', 'archived'].includes(p.status)))
 })
 
+test('C-404: der Aufbau-Seed deckt die vollstaendige 28-Tage-Laufzeit eines once-Plans ab', () => {
+  const plan = one<{
+    lifecycleType: string
+    startDate: string
+    daysCount: number
+    describedDays: number
+    lastDay: string
+  }>(`
+    SELECT json_build_object(
+      'lifecycleType', mp.lifecycle_type,
+      'startDate', mp.start_date,
+      'daysCount', mp.days_count,
+      'describedDays', count(d.id)::integer,
+      'lastDay', max(d.plan_date)
+    )
+    FROM nutrition.meal_plans mp
+    JOIN auth.users u ON u.id = mp.user_id
+    LEFT JOIN nutrition.meal_plan_weeks w ON w.plan_id = mp.id
+    LEFT JOIN nutrition.meal_plan_days d ON d.week_id = w.id
+    WHERE u.email = 'dev@lumeos.app'
+      AND mp.name = 'Aufbau-Wochenplan'
+    GROUP BY mp.id;
+  `)
+
+  assert.equal(plan.lifecycleType, 'once')
+  assert.equal(plan.daysCount, 28)
+  assert.equal(plan.describedDays, 28)
+  assert.equal(
+    Date.parse(`${plan.lastDay}T00:00:00Z`) - Date.parse(`${plan.startDate}T00:00:00Z`),
+    27 * 86_400_000,
+  )
+})
+
 test('C-348: Flag-Funktion verdichtet exakt dieselbe Fensterbewertung', () => {
   const exists = one<{ exists: boolean }>(`
     SELECT json_build_object(

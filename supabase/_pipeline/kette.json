@@ -1474,6 +1474,16 @@
         "407",
         "058b"
       ]
+    },
+    {
+      "id": "411",
+      "path": "supabase/_pipeline/05_user_tabellen/411_recipe_curation_candidates.sql",
+      "kind": "sql",
+      "creates": "C-411/E-66: getrennte MealCam-Rezeptkandidaten mit Zutaten-Snapshot und Admin-Leserecht",
+      "depends_on": [
+        "409",
+        "061"
+      ]
     }
   ]
 }

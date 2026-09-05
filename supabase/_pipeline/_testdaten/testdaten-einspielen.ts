@@ -379,6 +379,9 @@ type MealPlanRow = {
   name: string
   description: string
   planOrigin?: 'self_created' | 'coach_created' | 'marketplace' | 'buddy'
+  lifecycleType: 'once' | 'rollover' | 'sequence'
+  startDate: string
+  daysCount: number
   targetKcal: number
   targetProteinG: number
   targetCarbsG: number
@@ -2256,6 +2259,9 @@ const c380MealPlanRows: MealPlanRow[] = C380_SEED_PLANS.map(plan => ({
   name: plan.name,
   description: 'C-380 Seed: abwechslungsreiche Vier-Mahlzeiten-Woche',
   planOrigin: C380_PLAN_ORIGINS[plan.slug],
+  lifecycleType: 'once',
+  startDate: plan.slug === 'cut-2200' ? relDate('2026-09-02') : relDate('2026-09-01'),
+  daysCount: plan.slug === 'cut-2200' ? 28 : plan.slug === 'lean-bulk-3100' ? 84 : 7,
   targetKcal: plan.targetKcal,
   targetProteinG: plan.targetProteinG,
   targetCarbsG: plan.targetCarbsG,
@@ -2312,6 +2318,9 @@ const mealPlanRows: MealPlanRow[] = [{
   userId: TOM_ID,
   name: 'Aufbau-Wochenplan',
   description: 'C-150 Seed: eine gefuellte, eine leere und eine kopierte Woche',
+  lifecycleType: 'once',
+  startDate: relDate('2026-09-01'),
+  daysCount: 28,
   targetKcal: 2500,
   targetProteinG: 170,
   targetCarbsG: 313,
@@ -2703,6 +2712,9 @@ const mealPlanValues = mealPlanRows.map(plan => tuple([
   plan.name,
   plan.description,
   plan.planOrigin ?? 'self_created',
+  plan.lifecycleType,
+  plan.startDate,
+  plan.daysCount,
   plan.targetKcal,
   plan.targetProteinG,
   plan.targetCarbsG,
@@ -3829,6 +3841,9 @@ CREATE TEMP TABLE test_meal_plans (
   name text NOT NULL,
   description text NOT NULL,
   plan_origin text NOT NULL,
+  lifecycle_type text NOT NULL,
+  start_date date NOT NULL,
+  days_count integer NOT NULL,
   target_kcal numeric NOT NULL,
   target_protein_g numeric NOT NULL,
   target_carbs_g numeric NOT NULL,
@@ -3841,11 +3856,13 @@ ${mealPlanValues};
 
 INSERT INTO nutrition.meal_plans (
   id, user_id, name, description, plan_origin, target_kcal, target_protein_g,
-  target_carbs_g, target_fat_g, is_active, measurement_source, source_detail
+  target_carbs_g, target_fat_g, is_active, lifecycle_type, start_date, days_count,
+  measurement_source, source_detail
 )
 SELECT
   id, user_id, name, description, plan_origin, target_kcal, target_protein_g,
-  target_carbs_g, target_fat_g, is_active, 'seed', 'C-150 Testdaten Wochenplan'
+  target_carbs_g, target_fat_g, is_active, lifecycle_type, start_date, days_count,
+  'seed', 'C-150 Testdaten Wochenplan'
 FROM test_meal_plans;
 
 CREATE TEMP TABLE test_meal_plan_slots (
