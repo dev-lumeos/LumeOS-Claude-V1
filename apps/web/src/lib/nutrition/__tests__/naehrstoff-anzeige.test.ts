@@ -161,9 +161,27 @@ test('karteFuerWurzel: elf Karten, die Makro-Aeste getrennt', () => {
   assert.equal(karteFuerWurzel('OA', 'Makronährstoffe'), 'Organische Säuren')
   assert.equal(karteFuerWurzel('ALC', 'Makronährstoffe'), 'Genussmittel')
   assert.equal(karteFuerWurzel('ASH', 'Makronährstoffe'), 'Elemente')
-  // `[cmd]` **Am 2026-09-02 gemessen: nur noch `CHORL` fällt in
-  // *Sonstige*.**
-  assert.equal(karteFuerWurzel('CHORL', 'Sonstige Nährstoffe'), 'Sonstige')
+  // ══ BERICHTIGT IN G-343 (E-63) ══════════════════════════════
+  //
+  // `[cmd]` **Hier stand `karteFuerWurzel('CHORL', 'Sonstige
+  // Nährstoffe') === 'Sonstige'`** — gemessen am 2026-09-02, also
+  // VOR E-63.
+  //
+  // `[cmd]` **Live am 2026-09-05:** `CHORL` trägt
+  // `Fettbegleitstoffe`, **und die Gruppe `Sonstige Nährstoffe`
+  // gibt es in `nutrient_defs` nicht mehr** (0 Zeilen).
+  //
+  // `[read]` **Der alte Aufruf blieb grün** — er reichte eine
+  // Gruppe hinein, die keine Zeile mehr trägt. **Genau die Klasse,
+  // die G-343 sucht.**
+  assert.equal(karteFuerWurzel('CHORL', 'Fettbegleitstoffe'),
+    'Fettbegleitstoffe',
+    'CHORL landet nicht bei den Fettbegleitstoffen (E-63)')
+
+  // `[cmd]` **`NT` war der letzte Rest** — E-63: *„Stickstoff ist die
+  // Rechengröße, aus der Protein entsteht."*
+  assert.equal(karteFuerWurzel('NT', 'Makronährstoffe'), 'Protein',
+    'NT faellt wieder in einen Rest — E-63 teilt ihn Protein zu')
   assert.equal(karteFuerWurzel('FE', 'Elemente'), 'Elemente')
   assert.equal(karteFuerWurzel('ENERCC', 'Energie'), 'Energie')
 })

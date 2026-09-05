@@ -62,7 +62,18 @@ test('G-136: die vier Wurzeln bekommen ihre Karte', () => {
   // Wurzel wäre derselbe Fehler wie eine Null statt eines
   // Fehlzählers. `[cmd]` **Am 2026-09-02 fällt nur noch `CHORL`
   // (Cholesterin) hinein.**
-  assert.equal(karteFuerWurzel('CHORL', 'Sonstige Nährstoffe'), 'Sonstige')
+  // ══ BERICHTIGT IN G-343 (E-63) ══════════════════════════════
+  //
+  // `[cmd]` **Hier stand `('CHORL', 'Sonstige Nährstoffe') ===
+  // 'Sonstige'`** — grün, obwohl die Gruppe live nicht mehr
+  // existiert (0 Zeilen in `nutrient_defs`).
+  //
+  // `[read]` **Der Test reichte die Gruppe selbst hinein** — damit
+  // prüfte er seine eigene Annahme, nicht den Bestand.
+  assert.equal(karteFuerWurzel('CHORL', 'Fettbegleitstoffe'),
+    'Fettbegleitstoffe', 'CHORL gehoert zu den Fettbegleitstoffen (E-63)')
+  assert.equal(karteFuerWurzel('NT', 'Makronährstoffe'), 'Protein',
+    'NT faellt wieder in einen Rest (E-63)')
 })
 
 test('G-136: FIBT bleibt bei den Kohlenhydraten, ohne parent_code', () => {
@@ -100,10 +111,21 @@ test('G-136: Karte und Hierarchie sind getrennt', () => {
 })
 
 test('G-136: die Karten stehen in fester Reihenfolge', () => {
-  // `[read]` **Elf Karten, und die neuen stehen VOR *Sonstige*** —
-  // die Sammelkarte ist das Ende, nicht die Mitte.
+  // `[read]` **Die neuen stehen VOR *Sonstige*** — die Sammelkarte
+  // ist das Ende, nicht die Mitte.
+  //
+  // ══ NACHGEZOGEN IN G-343 (E-63) ═════════════════════════════
+  //
+  // `[cmd]` **Hier standen elf Karten.** `[cmd]` **`Fettbegleitstoffe`
+  // fehlte** — die Gruppe steht seit dem 02.09. live, `CHORL` traegt
+  // sie, und `naehrstoff-ordnung.ts:620` gab ihr deshalb den
+  // Sortierwert `length`: **am Schirm stand sie als LETZTE, hinter
+  // *Genussmittel*.**
+  //
+  // `[read]` **E-63 sagt, wohin:** *„Sichtbar bei den Lipiden"* —
+  // **direkt hinter *Fette*, wie `FIBT` bei den Kohlenhydraten.**
   const erwartet = [
-    'Kohlenhydrate', 'Fette', 'Protein',
+    'Kohlenhydrate', 'Fette', 'Fettbegleitstoffe', 'Protein',
     'Fettlösliche Vitamine', 'Wasserlösliche Vitamine',
     'Elemente', 'Energie',
     'Wasser', 'Organische Säuren', 'Genussmittel',

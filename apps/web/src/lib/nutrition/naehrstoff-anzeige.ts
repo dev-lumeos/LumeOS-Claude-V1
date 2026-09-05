@@ -41,7 +41,21 @@ export function zahlMitEinheit(v: number | null, einheit: string | null): string
  * Cronometer es tun; die Aeste selbst bleiben ganz.
  */
 export const KARTEN_REIHENFOLGE = [
-  'Kohlenhydrate', 'Fette', 'Protein',
+  // ══ G-343 / E-63: `Fettbegleitstoffe` steht bei den Lipiden ══
+  //
+  // `[cmd]` **`CHORL` traegt seit dem 02.09. diese Gruppe** — die
+  // Karte kam durch, **stand hier aber nicht drin.**
+  // `naehrstoff-ordnung.ts:620` gibt unbekannten Karten den
+  // Sortierwert `length`: **am Schirm gemessen stand sie als
+  // LETZTE, hinter *Genussmittel*.**
+  //
+  // `[read]` **E-63 sagt, wohin:** *„Sichtbar bei den Lipiden, ohne
+  // in die Fettsumme einzugehen"* — **also direkt hinter *Fette*,
+  // dieselbe Trennung wie `FIBT` bei den Kohlenhydraten** (E-48).
+  //
+  // `[read]` **Kein Test hat es gefangen**, weil keiner die Karten
+  // gegen die Wurzeln hielt. **Genau das ist G-343.**
+  'Kohlenhydrate', 'Fette', 'Fettbegleitstoffe', 'Protein',
   'Fettlösliche Vitamine', 'Wasserlösliche Vitamine',
   'Elemente', 'Energie',
   // ══ G-136 / E-48: drei Karten aus *Sonstige* herausgeloest ════
@@ -108,10 +122,34 @@ export const KARTEN_ERKLAERUNG: Readonly<Record<string, string>> = {
  *     OA          Organische Säuren
  *     ALC         Genussmittel
  *     ASH         Elemente        Summe der Mineralstoffe
+ *     NT          Protein         E-63 — seine Rechengröße
  *     Rest        Sonstige        was in keine passt
  *
- * `[read]` **„Sonstige" bleibt** — eine stumm weggelassene Wurzel
- * wäre derselbe Fehler wie eine Null statt eines Fehlzählers.
+ * ══ BERICHTIGT IN G-343 (E-63) ═══════════════════════════════════
+ *
+ * `[cmd]` **Hier stand: *„Sonstige" bleibt*.** `[read]` **Das war vor
+ * E-63 richtig** — damals fiel dort noch etwas hinein.
+ *
+ * **Tom, 2026-09-02:** *„dann faellt naemlich das sonstige weg, das
+ * sieht unprofessionell aus denn die sind alle zuteilbar."*
+ *
+ * `[cmd]` **Gemessen am 2026-09-05, live:** von 41 Wurzeln fiel noch
+ * GENAU EINE auf *Sonstige* — `NT`, Stickstoff. **Am Schirm eine
+ * Karte mit einem einzigen Eintrag.**
+ *
+ * `[cmd]` **`CHORL` ist bereits umgezogen** (`Fettbegleitstoffe`),
+ * **und die Gruppe `Sonstige Nährstoffe` gibt es in
+ * `nutrient_defs` nicht mehr** — 0 Zeilen.
+ *
+ * `[read]` **`NT` gehört zu Protein:** `PROT625` heißt so, weil es
+ * `NT × 6,25` ist. **Als Karte, nicht als `parent_code`** — E-63
+ * sagt es ausdrücklich: *„Stickstoff ist kein Bestandteil von
+ * Protein, sondern seine Quelle."*
+ *
+ * `[read]` **Der Rückfall bleibt trotzdem stehen.** Er fängt heute
+ * nichts — aber eine stumm weggelassene Wurzel wäre derselbe Fehler
+ * wie eine Null statt eines Fehlzählers. **Er ist der Wächter für
+ * den nächsten Code, den jemand anlegt.**
  */
 export function karteFuerWurzel(code: string, gruppe: string): string {
   if (code === 'CHO' || code === 'FIBT') return 'Kohlenhydrate'
@@ -124,6 +162,8 @@ export function karteFuerWurzel(code: string, gruppe: string): string {
   // `[read]` **`ASH` zu den Elementen, aber NICHT als deren
   // Elternteil** — die Karte ordnet ein, die Hierarchie bleibt.
   if (code === 'ASH') return 'Elemente'
+  // G-343 / E-63: der letzte Rest — dieselbe Trennung wie bei `ASH`.
+  if (code === 'NT') return 'Protein'
   if (gruppe === 'Makronährstoffe' || gruppe === 'Sonstige Nährstoffe') return 'Sonstige'
   return gruppe
 }
