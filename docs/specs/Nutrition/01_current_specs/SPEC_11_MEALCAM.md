@@ -267,6 +267,63 @@ zurueck** — **er wird Katalogmaterial.**
 seins.** `[read]` **Aber der naechste, der Tomatensauce
 fotografiert, bekommt einen besseren Vorschlag.**
 
+## 4c · Zwei Wege zu einem globalen Rezept
+
+**Tom, 2026-09-07:** *,,wir werden bald automatische researcher
+haben. der kann genau solche rezepte mit bild, ingredients,
+kochanleitungen, etc recherchieren und als knowledge ablegen, daraus
+koennen wir globale rezepte erstellen."*
+
+`[read]` **Damit ist die Kuration nicht mehr die einzige Quelle.**
+
+    von unten   MealCam-Rezepte -> Kuration -> Katalog
+    von oben    Researcher -> wissen -> Katalog
+
+`[read]` **Der zweite Weg ist der schnellere:** **ein recherchiertes
+Rezept liegt im Bestand, bevor jemand es fotografiert.**
+
+`[read]` **Und der erste bleibt der genauere:** **er sagt, was
+Nutzer tatsaechlich essen** — **nicht, was ein Kochbuch schreibt.**
+
+### Der Ort existiert
+
+`[cmd]` **Das `wissen`-Schema traegt zehn Tabellen**, darunter
+`buddy_knowledge_records`, `evidence_register_entries`,
+`knowledge_gap_records`.
+
+`[read]` **Recherchiertes Wissen landet dort, nicht in
+`nutrition`** — **und wird von dort in einen Katalogeintrag
+uebersetzt.**
+
+`[read]` **Das ist dieselbe Trennung wie bei den Tags:** `[cmd]`
+**der Import fuellt `food_tags`, die Kuration `food_tags_kuriert`,
+und `food_tags_effective` vereint beides** (E-55).
+
+### Was sich fuer MealCam aendert
+
+`[read]` **Ein globales Rezept ist ein Kandidat, den der Resolver
+vorschlagen kann** — **wie ein BLS-Eintrag.**
+
+`[cmd]` **Damit waechst der Kandidatenraum aus Abschnitt 2** — **nicht
+nur 7.140 BLS-Eintraege, sondern auch kuratierte
+Zusammensetzungen.**
+
+`[read]` **Und die Untergrenze aus 17a wird beantwortbar:**
+**erkennt MealCam die Zwiebel, oder schlaegt es *Tomatensauce* vor?**
+**Wenn ein globales Rezept existiert, schlaegt es das Rezept vor.**
+
+### Was das nicht heisst
+
+`[read]` **Ein recherchiertes Rezept ist keine Naehrwertquelle.**
+
+`[cmd]` **E-43: BLS 4.0 ist die einzige Lebensmittelquelle.**
+
+`[read]` **Ein globales Rezept nennt Zutaten und Mengen** — **die
+Naehrwerte kommen weiter aus dem BLS-Eintrag je Zutat.**
+
+`[read]` **Und ein Researcher darf keine Naehrwerte liefern** —
+**dieselbe Regel wie fuer das Vision-Modell** (Regel 9).
+
 ---
 
 ## 5 · Sichtbarkeit ist ein Datentyp
@@ -608,6 +665,10 @@ Sauce sind zwei Posten** — **die Sauce ist selbst eine Sammlung.**
 `[read]` **Offen bleibt die Untergrenze:** **erkennt MealCam die
 Zwiebel in der Sauce, oder schlaegt es *Tomatensauce* als bekanntes
 Rezept vor?**
+
+`[read]` **Mit globalen Rezepten aus der Recherche (4c) wird die
+Frage kleiner:** **wenn ein Rezept existiert, wird es
+vorgeschlagen.**
 
 `[read]` **Und welchen `source`-Wert ein MealCam-Rezept traegt** —
 `buddy` **oder ein eigener.**
