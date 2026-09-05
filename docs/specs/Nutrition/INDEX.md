@@ -54,6 +54,7 @@ docs/specs/Nutrition/
 | 08 | [01_current_specs/SPEC_08_IMPORT_PIPELINE.md](01_current_specs/SPEC_08_IMPORT_PIPELINE.md) | BLS 4.0 Import: Pipeline, Mapping, Warn-Report, Review Queue |
 | 09 | [01_current_specs/SPEC_09_SCORING.md](01_current_specs/SPEC_09_SCORING.md) | Scoring Engine: Pure Functions, Mikro-Review mit UL-Logik |
 | 10 | [01_current_specs/SPEC_10_COMPONENTS.md](01_current_specs/SPEC_10_COMPONENTS.md) | Frontend: Pages, Components, Hooks, Stores, i18n |
+| 11 | [01_current_specs/SPEC_11_MEALCAM.md](01_current_specs/SPEC_11_MEALCAM.md) | MealCam: Erkennung, Aufloesung, Portion, Lernspeicher |
 
 ---
 
