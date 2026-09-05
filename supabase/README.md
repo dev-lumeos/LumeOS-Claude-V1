@@ -167,6 +167,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 059a | `_ableitung/030_mikro-uebersicht.ts` | Kuratierte Mikro-Overview-Auswahl, `micronutrient_snapshot()` und `micronutrient_below_threshold()` | 8 Auswahlzeilen, 2 Funktionen |
 | 017 | `00_querschnitt/017_datenherkunft.sql` | A-17 Herkunftsspalten fuer User-Messdaten vor Geraeteanbindungen | 7 Tabellen ergaenzt, Bestandsdaten `manual` |
 | 058b | `05_user_tabellen/058b_recipes_meal_plans.sql` | Rezepte, Rezeptzutaten, Wochenplaene, Lebenszyklus und Ausfuehrungslog; Naehrwerte bleiben aus Zutaten berechnet und werden erst in `meal_items` eingefroren | 7 Tabellen, 11 Funktionen, RLS je Operation |
+| 407 | `05_user_tabellen/407_shopping_lists_and_food_inventory.sql` | Wochenlisten aus Planwochen, lesbare Archivbelege und separater Nutrition-Vorrat in Gramm | 1 Tabelle, 6 Funktionen, 3 Trigger, RLS je Operation |
 | 342 | `05_user_tabellen/342_nutrition_reference_plan_metadata.sql` | C-342: formgebundene Umrechnungen, Referenzgeltung und Planherkunft | 1 Faktor-Tabelle, 3 Referenz-Metadatenfelder, 1 Coach-Funktion, RLS |
 | 350 | `05_user_tabellen/350_vitamin_a_components_magnesium_ul.sql` | C-350: Vitamin-A-IE aus BLS-Bestandteilen und EFSA-priorisierte Magnesium-UL | 3 BLS-Faktoren, 1 Tagesfunktion, 1 Quellenprioritaet |
 | 150 | `15_coach/150_coach_permissions_autonomy.sql` | Coach-Rechtemodell: `client_permissions`, `client_autonomy`, Widerrufshistorie, Pending Actions und Action Log | 6 Tabellen, 19 Policies, RLS je Operation |

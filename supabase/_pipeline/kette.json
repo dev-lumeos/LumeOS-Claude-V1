@@ -1454,6 +1454,16 @@
         "392",
         "396_schema"
       ]
+    },
+    {
+      "id": "407",
+      "path": "supabase/_pipeline/05_user_tabellen/407_shopping_lists_and_food_inventory.sql",
+      "kind": "sql",
+      "creates": "C-407/C-408: aggregierte Wochenlisten mit Archivierung sowie Nutrition-Vorrat in Gramm ohne Supplements-Kopplung",
+      "depends_on": [
+        "058b",
+        "052"
+      ]
     }
   ]
 }

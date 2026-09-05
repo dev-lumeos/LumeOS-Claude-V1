@@ -916,21 +916,19 @@
     },
     {
       "name": "shopping_lists",
-      "schritt": "058b",
+      "schritt": "407",
       "rls": true,
       "policies": [
         "SELECT",
         "INSERT",
-        "UPDATE",
-        "DELETE"
+        "UPDATE"
       ],
       "zeilenschutzart": "eigene_zeilen",
       "grants": {
         "authenticated": [
           "SELECT",
           "INSERT",
-          "UPDATE",
-          "DELETE"
+          "UPDATE"
         ],
         "service_role": [
           "SELECT",
@@ -942,7 +940,7 @@
           "TRUNCATE"
         ]
       },
-      "grants_herkunft": "058b_recipes_meal_plans.sql"
+      "grants_herkunft": "407_shopping_lists_and_food_inventory.sql"
     },
     {
       "name": "shopping_list_items",
@@ -973,6 +971,47 @@
         ]
       },
       "grants_herkunft": "058b_recipes_meal_plans.sql"
+    },
+    {
+      "name": "user_inventory",
+      "schritt": "407",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "zeilenschutzart": "eigene_zeilen",
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "407_shopping_lists_and_food_inventory.sql",
+      "spalten": [
+        "id",
+        "user_id",
+        "food_id",
+        "custom_food_id",
+        "menge_g",
+        "schwelle_g",
+        "zuletzt_angepasst",
+        "reorder_flag",
+        "created_at"
+      ]
     }
   ],
   "_sichten": "security_invoker MUSS true sein. [read] Ohne diesen Schalter laeuft eine Sicht mit den Rechten ihres Eigentuemers, nicht der Abfragenden — im Repo hat das bereits dazu gefuehrt, dass der zweite Nutzer die Daten des ersten sah. 'Sicht vorhanden' und 'Sicht geschuetzt' sind zwei Aussagen.",
@@ -1182,6 +1221,21 @@
       "schritt": "058b"
     },
     {
+      "tabelle": "meal_items",
+      "name": "meal_items_inventory_deduct_trg",
+      "schritt": "407"
+    },
+    {
+      "tabelle": "user_inventory",
+      "name": "user_inventory_owner_guard_trg",
+      "schritt": "407"
+    },
+    {
+      "tabelle": "user_inventory",
+      "name": "user_inventory_set_state_trg",
+      "schritt": "407"
+    },
+    {
       "tabelle": "food_preferences",
       "name": "food_preferences_search_targets_refresh",
       "schritt": "075"
@@ -1325,6 +1379,24 @@
       "tabelle": "shopping_list_items",
       "zeigt_auf": "foods_custom",
       "schritt": "058b"
+    },
+    {
+      "name": "user_inventory_user_id_fkey",
+      "tabelle": "user_inventory",
+      "zeigt_auf": "auth.users",
+      "schritt": "407"
+    },
+    {
+      "name": "user_inventory_food_id_fkey",
+      "tabelle": "user_inventory",
+      "zeigt_auf": "foods",
+      "schritt": "407"
+    },
+    {
+      "name": "user_inventory_custom_food_id_fkey",
+      "tabelle": "user_inventory",
+      "zeigt_auf": "foods_custom",
+      "schritt": "407"
     },
     {
       "name": "food_preference_search_targets_food_id_fkey",
@@ -1684,6 +1756,30 @@
     {
       "name": "refresh_food_preference_search_targets_trigger",
       "schritt": "075"
+    },
+    {
+      "name": "shopping_list_from_meal_plan_week",
+      "schritt": "407"
+    },
+    {
+      "name": "shopping_list_read",
+      "schritt": "407"
+    },
+    {
+      "name": "shopping_list_archive",
+      "schritt": "407"
+    },
+    {
+      "name": "user_inventory_owner_guard",
+      "schritt": "407"
+    },
+    {
+      "name": "user_inventory_set_state",
+      "schritt": "407"
+    },
+    {
+      "name": "meal_items_inventory_deduct",
+      "schritt": "407"
     }
   ],
   "mindestzeilen": {
