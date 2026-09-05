@@ -9,6 +9,8 @@ kind_von: G-331
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-07
+commit: adff4a07
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/erfassen-modal.tsx
@@ -51,3 +53,16 @@ jemand gemacht hat** — **deshalb eine Entscheidung, kein Auftrag.**
 
 **Mitbeauftragt mit G-341 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit G-342 abgenommen: geloescht.**
+
+`[cmd]` **477 Zeilen weg.**
+
+`[read]` **Die Begruendung trug:** *,,enthaelt nichts, was anderswo
+fehlt, und ihr einziges Alleinstellungsmerkmal beruft sich auf ein
+UNIQUE, das es nicht mehr gibt."*
+
+`[cmd]` **Und die Waechter, die sie am Leben hielten, sind
+umgestellt** — 6 von 6 Sabotagen.

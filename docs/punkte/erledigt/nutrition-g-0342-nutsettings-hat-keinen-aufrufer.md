@@ -9,6 +9,8 @@ kind_von: G-339
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-07
+commit: adff4a07
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/modale.tsx
@@ -352,4 +354,39 @@ blockieren.** **Web-Tests, Typecheck und Lint sind einzeln gruen.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator. Nachgemessen.** `[cmd]` Gate 15/15
+gruen — **die Blockade, die er meldete, ist weg.**
+
+### 610 Zeilen weniger
+
+    nutsettings-Block   133 Zeilen, modale.tsx 574 -> 440
+    erfassen.tsx        477 Zeilen
+
+`[cmd]` **Committet in `adff4a07`.**
+
+### Vier Waechter hielten sie am Leben
+
+`[read]` **Das ist der interessante Teil:** **die Dateien waren nicht
+nur ungenutzt** — **vier Waechter pruefen ihre Existenz und haetten
+das Loeschen gemeldet.**
+
+`[cmd]` **Umgestellt, 6 von 6 Sabotagen bestanden** — **durch
+Zurueckbringen geprueft.**
+
+`[read]` **Ein Waechter, der toten Code schuetzt, ist selbst ein
+Befund** — **er misst das Wort *existiert*, nicht die Wirkung.**
+
+### Und ein Test mass gegen einen ueberholten Entwurf
+
+`[cmd]` **`v2-attrappen.test.ts` prueft Vorlagentreue gegen einen
+Stand von vor E-58.**
+
+`[read]` **Er hat eine Zusage berichtigt und gemeldet, dass eine
+Durchsicht lohnt** — **ob weitere Tests denselben alten Stand
+messen.**
+
+`[read]` **Das ist die richtige Reihenfolge:** **berichtigen, was im
+Auftrag steht, und den Rest melden.** **Als G-343.**
+
+**Abgenommen.**
+

@@ -9,6 +9,8 @@ kind_von: C-174
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-02
+erledigt: 2026-09-07
+commit: adff4a07
 beruehrt:
   tabellen: [nutrition.food_preference_items]
 zahlen:
@@ -63,3 +65,19 @@ gebaut gehalten.**
 
 **Mitbeauftragt mit G-342 am 2026-09-02.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit G-342 abgenommen: gemessen und beantwortet.**
+
+`[read]` **Der Nutzer braucht die mittlere Stufe je Lebensmittel
+nicht.**
+
+`[cmd]` **`strong_avoid` gehoert an vier Stellen aus `supabase/`
+entfernt:** `050:63`, `074:75`, `075:263`, `075:837`.
+
+`[read]` **Die mittlere Stufe bleibt ueber `intolerances`
+erhalten** — **sie wirkt weiter, sie kommt nur nicht mehr aus einem
+Wert, den niemand setzt.**
+
+`[read]` **Das ist Codex' Arbeit** — **als C-406.**

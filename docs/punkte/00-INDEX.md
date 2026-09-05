@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 213 |
-| `laufend_claudecode` | 4 |
-| `erledigt` | 263 |
-| **gesamt** | **480** |
+| `todos` | 215 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 266 |
+| **gesamt** | **482** |
 
 ## medical — 43
 
@@ -58,9 +58,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 212
+## nutrition — 214
 
-### beauftragbar — 211
+### beauftragbar — 213
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -154,6 +154,7 @@
 | `C-403` | befund | mittel | [den `once`-Plaenen fehlen die Wochen](erledigt/nutrition-c-0403-den-once-plaenen-fehlen-die-wochen.md) | erledigt | — | C-404 |
 | `C-404` | befund | niedrig | [`Aufbau-Wochenplan` beschreibt 28 Tage, behauptet 21](todos/nutrition-c-0404-aufbau-wochenplan-beschreibt-28-tage-behauptet-21.md) | offen | — | — |
 | `C-405` | feature | mittel | [*Sonstige* faellt weg](todos/nutrition-c-0405-sonstige-faellt-weg.md) | offen | — | — |
+| `C-406` | feature | mittel | [`strong_avoid` an vier Stellen entfernen](todos/nutrition-c-0406-strong-avoid-an-vier-stellen-entfernen.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -265,15 +266,16 @@
 | `G-330` | feature | mittel | [die Kopfzeile zeigt zwei von vier Werten](erledigt/nutrition-g-0330-die-kopfzeile-zeigt-zwei-von-vier-werten.md) | erledigt | — | — |
 | `G-331` | feature | hoch | [vier Suchen auf den Hook umstellen](erledigt/nutrition-g-0331-vier-suchen-auf-den-hook-umstellen.md) | erledigt | — | G-333 |
 | `G-332` | feature | hoch | [die Mahlzeiten benennen und terminieren](erledigt/nutrition-g-0332-die-mahlzeiten-benennen-und-terminieren.md) | erledigt | — | C-396, G-335 |
-| `G-333` | befund | niedrig | [`erfassen.tsx` hat keinen Aufrufer](laufend_claudecode/nutrition-g-0333-erfassen-tsx-hat-keinen-aufrufer.md) | laeuft (claudecode) | — | — |
+| `G-333` | befund | niedrig | [`erfassen.tsx` hat keinen Aufrufer](erledigt/nutrition-g-0333-erfassen-tsx-hat-keinen-aufrufer.md) | erledigt | — | — |
 | `G-335` | feature | hoch | [acht Stellen uebersetzen `meal_type` selbst](erledigt/nutrition-g-0335-acht-stellen-uebersetzen-meal-type-selbst.md) | erledigt | — | G-336 |
 | `G-336` | befund | hoch | [das Raster liest `meal_plan_slots` nicht](erledigt/nutrition-g-0336-das-raster-liest-meal-plan-slots-nicht.md) | erledigt | — | C-397, G-338 |
-| `G-337` | befund | mittel | [`strong_avoid` hat keinen Schreibweg](laufend_claudecode/nutrition-g-0337-strong-avoid-hat-keinen-schreibweg.md) | laeuft (claudecode) | — | — |
+| `G-337` | befund | mittel | [`strong_avoid` hat keinen Schreibweg](erledigt/nutrition-g-0337-strong-avoid-hat-keinen-schreibweg.md) | erledigt | — | C-406 |
 | `G-338` | entscheidung | mittel | [eine freie Mahlzeit hat keinen Namen](todos/nutrition-g-0338-eine-freie-mahlzeit-hat-keinen-namen.md) | offen | — | — |
 | `G-339` | befund | mittel | [Quick-Add liest die Namen nicht](erledigt/nutrition-g-0339-quick-add-liest-die-namen-nicht.md) | erledigt | — | G-342 |
 | `G-340` | befund | mittel | [Quick-Add hat keinen Schreibweg](laufend_claudecode/nutrition-g-0340-quick-add-hat-keinen-schreibweg.md) | vorbereitet (claudecode) | — | — |
 | `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](erledigt/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | erledigt | — | — |
-| `G-342` | befund | niedrig | [`nutsettings` hat keinen Aufrufer](laufend_claudecode/nutrition-g-0342-nutsettings-hat-keinen-aufrufer.md) | laeuft (claudecode) | — | — |
+| `G-342` | befund | niedrig | [`nutsettings` hat keinen Aufrufer](erledigt/nutrition-g-0342-nutsettings-hat-keinen-aufrufer.md) | erledigt | — | G-343 |
+| `G-343` | befund | mittel | [Tests messen gegen ueberholte Entwuerfe](todos/nutrition-g-0343-tests-messen-gegen-ueberholte-entwuerfe.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
