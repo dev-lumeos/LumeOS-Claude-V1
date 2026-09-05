@@ -7,6 +7,8 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: G-344
 entscheidung: E-64
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-planner-echt.tsx
@@ -66,8 +68,8 @@ anzuzeigen.**
 
 **Mitbeauftragt: G-347, G-346.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-07.** `[read]` **C-407 baut gerade
-den Leseweg** — **beginn mit G-347, wenn er noch nicht fertig ist.**
+**Beauftragt am 2026-09-07.** `[cmd]` **C-407 ist erledigt** — der
+Leseweg steht.
 
 ### 1 · G-347 — die Anzeige zieht nach (zuerst)
 

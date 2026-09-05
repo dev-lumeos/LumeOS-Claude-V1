@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 209 |
+| `todos` | 211 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 6 |
-| `erledigt` | 271 |
-| **gesamt** | **489** |
+| `laufend_claudecode` | 3 |
+| `erledigt` | 273 |
+| **gesamt** | **490** |
 
 ## medical — 43
 
@@ -59,9 +59,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 221
-
-### beauftragbar — 220
+## nutrition — 222
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -226,6 +224,7 @@
 | `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](erledigt/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | erledigt | — | C-349, C-353 |
 | `G-274` | feature | hoch | [der Bestaetigungsweg fuer Plan-Eintraege](erledigt/nutrition-g-0274-der-bestaetigungsweg-fuer-plan-eintraege.md) | erledigt | — | G-276 |
 | `G-276` | befund | mittel | [MealCam schreibt `confirmation_mode` ohne Fotoweg](erledigt/nutrition-g-0276-mealcam-schreibt-ohne-fotoweg.md) | erledigt | — | — |
+| `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | — | G-328 |
 | `G-283` | befund | hoch | [ein `pro`-Profil faellt still auf 0,90](erledigt/nutrition-g-0283-ein-pro-profil-faellt-still-auf-090.md) | erledigt | — | — |
 | `G-285` | befund | niedrig | [`display_tier` heisst im Code weiter *Abo-Gate*](erledigt/nutrition-g-0285-display-tier-heisst-im-code-weiter-abo-gate.md) | erledigt | — | — |
 | `G-286` | feature | hoch | [MealPlanDetail — das Tages-Akkordeon fehlt](erledigt/nutrition-g-0286-mealplandetail-das-tages-akkordeon-fehlt.md) | erledigt | — | G-298 |
@@ -265,7 +264,7 @@
 | `G-325` | feature | hoch | [Zutaten zeigen ihre Makros nicht](erledigt/nutrition-g-0325-zutaten-zeigen-ihre-makros-nicht.md) | erledigt | — | G-326 |
 | `G-326` | befund | hoch | [der Rezepteditor liest sich nicht](erledigt/nutrition-g-0326-der-rezepteditor-liest-sich-nicht.md) | erledigt | — | — |
 | `G-327` | befund | hoch | [`?plan=` galt in beiden Reitern](erledigt/nutrition-g-0327-plan-galt-in-beiden-reitern.md) | erledigt | — | — |
-| `G-328` | befund | mittel | [was zaehlt *am haeufigsten*?](laufend_claudecode/nutrition-g-0328-was-zaehlt-am-haeufigsten.md) | laeuft (claudecode) | — | — |
+| `G-328` | befund | mittel | [was zaehlt *am haeufigsten*?](erledigt/nutrition-g-0328-was-zaehlt-am-haeufigsten.md) | erledigt | — | — |
 | `G-329` | feature | hoch | [Ghost-Eintraege koennen nur bestaetigen oder auslassen](erledigt/nutrition-g-0329-ghost-eintraege-koennen-nur-bestaetigen-oder-auslassen.md) | erledigt | — | — |
 | `G-330` | feature | mittel | [die Kopfzeile zeigt zwei von vier Werten](erledigt/nutrition-g-0330-die-kopfzeile-zeigt-zwei-von-vier-werten.md) | erledigt | — | — |
 | `G-331` | feature | hoch | [vier Suchen auf den Hook umstellen](erledigt/nutrition-g-0331-vier-suchen-auf-den-hook-umstellen.md) | erledigt | — | G-333 |
@@ -279,18 +278,13 @@
 | `G-340` | befund | mittel | [Quick-Add hat keinen Schreibweg](erledigt/nutrition-g-0340-quick-add-hat-keinen-schreibweg.md) | erledigt | — | G-346 |
 | `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](erledigt/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | erledigt | — | — |
 | `G-342` | befund | niedrig | [`nutsettings` hat keinen Aufrufer](erledigt/nutrition-g-0342-nutsettings-hat-keinen-aufrufer.md) | erledigt | — | G-343 |
-| `G-343` | befund | mittel | [Tests messen gegen ueberholte Entwuerfe](laufend_claudecode/nutrition-g-0343-tests-messen-gegen-ueberholte-entwuerfe.md) | laeuft (claudecode) | — | — |
+| `G-343` | befund | mittel | [Tests messen gegen ueberholte Entwuerfe](erledigt/nutrition-g-0343-tests-messen-gegen-ueberholte-entwuerfe.md) | erledigt | — | G-348 |
 | `G-344` | befund | hoch | [Einkaufslisten koennen mehr, als die Spec sagt](todos/nutrition-g-0344-einkaufslisten-koennen-mehr-als-die-spec-sagt.md) | offen | — | C-407, G-345 |
-| `G-345` | feature | hoch | [die Oberflaeche fuer Einkaufslisten](laufend_claudecode/nutrition-g-0345-die-oberflaeche-fuer-einkaufslisten.md) | vorbereitet (claudecode) | — | — |
-| `G-346` | entscheidung | mittel | [Quick-Add braucht eine Mahlzeit](laufend_claudecode/nutrition-g-0346-quick-add-braucht-eine-mahlzeit.md) | vorbereitet (claudecode) | — | — |
-| `G-347` | feature | mittel | [die Anzeige zieht nach](laufend_claudecode/nutrition-g-0347-die-anzeige-zieht-nach.md) | vorbereitet (claudecode) | — | — |
+| `G-345` | feature | hoch | [die Oberflaeche fuer Einkaufslisten](laufend_claudecode/nutrition-g-0345-die-oberflaeche-fuer-einkaufslisten.md) | laeuft (claudecode) | — | — |
+| `G-346` | entscheidung | mittel | [Quick-Add braucht eine Mahlzeit](laufend_claudecode/nutrition-g-0346-quick-add-braucht-eine-mahlzeit.md) | laeuft (claudecode) | — | — |
+| `G-347` | feature | mittel | [die Anzeige zieht nach](laufend_claudecode/nutrition-g-0347-die-anzeige-zieht-nach.md) | laeuft (claudecode) | — | — |
+| `G-348` | befund | mittel | [`wieGestern` ueberspringt manuelle Posten](todos/nutrition-g-0348-wiegestern-ueberspringt-manuelle-posten.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
-
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](laufend_claudecode/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | laeuft (claudecode) | G-328 | G-328 |
 
 ## supplements — 60
 

@@ -4,11 +4,9 @@ typ: feature
 modul: nutrition
 schwere: niedrig
 angelegt: 2026-08-30
-braucht: [G-328]
+braucht: []
 kind_von: G-263
 entscheidung: E-56
-agent: claudecode
-beauftragt: 2026-09-07
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/tab-insights.tsx]
 zahlen:
@@ -79,3 +77,20 @@ entsteht.**
 
 **Mitbeauftragt mit G-343 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-07: nicht gebaut, zwei Gruende
+
+`[cmd]` **Der Leseweg fehlt:** **388 Posten in den Browser gegen 4
+Zeilen aus einer Sicht** (E-52). `[read]` **Das ist Codex' Arbeit.**
+
+`[cmd]` **Und die Zaehlweise steht seit G-328: Tage, nicht
+Eintraege.**
+
+**Aber eine Produktentscheidung fehlt:**
+
+    Position          Olivenoel 26 von 30   -- eine Zutat
+    Zusammensetzung   nur 2 von 30          -- kein Muster
+
+`[read]` **Beide Faelle gemessen.** `[read]` **Und das Ergebnis
+entscheidet fast von selbst:** **eine Kachel *haeufig erfasst*, die
+*2 von 30* zeigt, sagt nichts.**

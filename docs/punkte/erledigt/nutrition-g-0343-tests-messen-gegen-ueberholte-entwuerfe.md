@@ -9,6 +9,8 @@ kind_von: G-342
 entscheidung: E-58
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: 7759013e
 beruehrt:
   dateien:
     - apps/web/src/components/shell/__tests__/v2-attrappen.test.ts
@@ -394,4 +396,61 @@ ungetrackten Migrationen (C-327a, C-385, Codex) mit INSERT/DELETE.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator.**
+
+### Drei gruene Tests, zwei echte Fehler dahinter
+
+`[cmd]` **`NT` fiel noch in die abgeschaffte Karte *Sonstige*.**
+`[cmd]` **`Fettbegleitstoffe` stand mangels Eintrag in der
+Sortierliste ganz hinten.**
+
+`[read]` **Das ist der Beleg fuer den Punkt:** **die Tests waren
+gruen, und der Schirm war falsch.**
+
+`[read]` **Ein Test, der eine ueberholte Vorlage sichert, meldet
+nicht *,,es ist anders"* — er meldet *,,es ist wie damals"*.**
+
+### G-328 — Tage, nicht Eintraege
+
+`[cmd]` **Olivenoel: 52 Eintraege an 30 Tagen.**
+
+`[read]` **Der Unterschied ist gross, und die Zahl belegt es** —
+**wer siebenmal Kaffee an einem Tag traegt, hat einen Tag, nicht
+sieben.**
+
+### Und eine Zahl in E-56 ist falsch zitiert
+
+`[cmd]` **Die *27 von 30* in E-56 ist eine Eintragszahl aus
+`vorschlags-lage.ts`** — **zitiert als Tageszahl.**
+
+`[read]` **Ich habe die Entscheidung am 02.09. mit dieser Zahl
+geschrieben.** `[read]` **Sie stammt aus dem Code, nicht aus einer
+Messung** — **genau der Fehler, den A-58 verbietet.**
+
+**Berichtigt.**
+
+### G-279 nicht gebaut — mit zwei Gruenden
+
+`[cmd]` **Der Leseweg fehlt:** **388 Posten in den Browser gegen 4
+Zeilen aus einer Sicht** (E-52).
+
+`[read]` **Und eine Produktentscheidung fehlt:**
+
+    Position          Olivenoel 26 von 30   -- eine Zutat
+    Zusammensetzung   nur 2 von 30          -- kein Muster
+
+`[read]` **Er hat beide Faelle gemessen, statt einen zu waehlen.**
+`[read]` **Und das Ergebnis entscheidet die Frage fast von
+selbst:** **eine Kachel *haeufig erfasst*, die *2 von 30* zeigt,
+sagt nichts.**
+
+### Und ein dritter Befund
+
+`[cmd]` **`wieGestern` ueberspringt Posten ohne `food_id`** —
+**seit G-340 mit dem manuellen Posten erreichbar.**
+
+`[read]` **Quick-Add hat einen Fall geschaffen, den eine aeltere
+Funktion nicht kennt.** **Als G-348.**
+
+**Abgenommen.**
+

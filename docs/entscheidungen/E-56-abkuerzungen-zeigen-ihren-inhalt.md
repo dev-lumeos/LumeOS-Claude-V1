@@ -35,7 +35,7 @@ gestern*, nicht *was gestern war*.**
 
 `[cmd]` **G-263 hat die Attrappe *Smart suggestions* entfernt** —
 keine ihrer vier Zeilen trug. `[read]` **Aber eine Zahl darin war
-zaehlbar: ein Fruehstueck kam an 27 von 30 Tagen vor.**
+zaehlbar: ein Fruehstueck kam an 26 von 30 Tagen vor.**
 
 ## Was gilt
 
@@ -75,3 +75,18 @@ einer anderen Zaehlung.** `[cmd]` **Was *am haeufigsten* zaehlt** —
 zu klaeren, bevor die Kachel entsteht.**
 
 `[cmd]` **Als G-328.**
+
+## Berichtigung 2026-09-07
+
+`[cmd]` **Die urspruengliche Zahl *27 von 30* stammte aus
+`vorschlags-lage.ts`** — **es ist eine Eintragszahl, zitiert als
+Tageszahl.**
+
+`[read]` **Sie kam aus dem Code, nicht aus einer Messung** — genau
+der Fehler, den A-58 verbietet.
+
+`[cmd]` **Gemessen am 2026-09-07 (G-328): Olivenoel 52 Eintraege an
+30 Tagen, haeufigste Position 26 von 30.**
+
+`[cmd]` **Und G-328 hat die Zaehlweise entschieden: Tage, nicht
+Eintraege.**

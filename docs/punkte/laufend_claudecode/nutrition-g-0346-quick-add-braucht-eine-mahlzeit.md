@@ -7,6 +7,8 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: G-340
 entscheidung: E-58
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/modale.tsx
@@ -56,5 +58,5 @@ die Mahlzeit mit an** — **ein Schritt, zwei Wirkungen.**
 
 ## Auftrag
 
-**Vorbereitet mit G-345 am 2026-09-07.** Der Auftragstext
+**Mitbeauftragt mit G-345 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.

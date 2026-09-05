@@ -9,6 +9,8 @@ kind_von: G-279
 entscheidung: E-56
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: 7759013e
 beruehrt:
   tabellen: [nutrition.meals]
 zahlen:
@@ -56,3 +58,16 @@ noch das Alte.**
 
 **Mitbeauftragt mit G-343 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit G-343 abgenommen: Tage, nicht Eintraege.**
+
+`[cmd]` **Olivenoel: 52 Eintraege an 30 Tagen.**
+
+`[read]` **Wer siebenmal Kaffee an einem Tag traegt, hat einen Tag,
+nicht sieben.**
+
+`[cmd]` **Und die *27 von 30* in E-56 ist eine Eintragszahl aus
+`vorschlags-lage.ts`, zitiert als Tageszahl** — **im
+Entscheidungstext berichtigt.**

@@ -7,6 +7,8 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: C-405
 entscheidung: E-63
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   dateien:
     - apps/web/src/lib/nutrition/naehrstoff-anzeige.ts
@@ -54,5 +56,5 @@ naechsten Schreibversuch faellt der CHECK.**
 
 ## Auftrag
 
-**Vorbereitet mit G-345 am 2026-09-07.** Der Auftragstext
+**Mitbeauftragt mit G-345 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
