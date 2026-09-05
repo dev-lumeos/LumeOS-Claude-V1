@@ -7,6 +7,8 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: G-340
 entscheidung: E-58
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/modale.tsx
@@ -81,3 +83,8 @@ landet der Keks im *Nachmittagssnack*, was richtig waere.**
 
 `[read]` **Nach Zeitfenster** — **etwa 30 Minuten.** `[read]` **Aber
 eine Zahl, die niemand gewaehlt hat.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-351 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

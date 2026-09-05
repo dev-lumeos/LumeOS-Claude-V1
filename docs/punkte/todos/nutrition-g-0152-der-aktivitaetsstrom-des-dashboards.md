@@ -8,8 +8,6 @@ braucht: []
 kind_von: G-100
 kinder: []
 entscheidung: E-52
-agent: claudecode
-beauftragt: 2026-09-07
 beruehrt:
   tabellen: []
   dateien: []
@@ -81,3 +79,18 @@ wie *Wasser* bei den Naehrwerten (E-48).
 
 **Mitbeauftragt mit G-348 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-07: braucht die Sicht
+
+`[cmd]` **Die Entscheidung ist mit E-52 laengst gefallen:**
+**gemeinsame Sichten statt sechs Abfragen.**
+
+`[read]` **Der Punkt wartet auf Codex** — **die Sicht ist nicht
+gebaut.**
+
+`[cmd]` **Und ein Befund haengt daran: `intake_logs` endet am
+19.08.** — **ein 7-Tage-Strom wuerde Supplements faelschlich als
+still zeigen** (C-412).
+
+`[read]` **Eine richtige Funktion auf altem Bestand erzeugt eine
+falsche Aussage.**

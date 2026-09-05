@@ -9,6 +9,8 @@ kind_von: G-343
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: dd20f24c
 beruehrt:
   dateien:
     - apps/web/src/lib/nutrition/vorschlags-lage.ts
@@ -366,4 +368,53 @@ ungetrackten Migrationen (C-327a, C-385, Codex) mit INSERT/DELETE.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator.** `[cmd]` Neun Waechter, 10 von 10
+Sabotagen.
+
+### Das Ueberspringen wird gezaehlt und gesagt
+
+`[cmd]` **Manuelle Posten kommen in *Wie gestern* mit,
+`food_source` geht durch die ganze Lesekette.**
+
+`[read]` **Und der zweite Teil ist der wichtigere:** **das
+Ueberspringen wird gezaehlt und benannt.**
+
+`[read]` **Vorher sprang die Funktion still** — **wer nichts fand,
+erfuhr nicht, dass etwas ausgelassen wurde.** `[read]` **Dieselbe
+Klasse wie ein Waechter, der still gruen wird.**
+
+`[cmd]` **Und ein zweiter Skip im Rezept-Loggen gefunden** — **im
+Auftrag stand *pruef, ob weitere Funktionen `food_id` als Pflicht
+annehmen*.** **Er hat einen gefunden.**
+
+### G-350 — ein Schreibweg, und der alte ganz weg
+
+`[cmd]` **Route, Funktion und Schema entfernt** — **nicht nur der
+Aufruf.**
+
+`[read]` **Das ist mehr als beauftragt:** **ich schrieb *,,der alte
+zieht um"*** — **er hat ihn abgebaut.**
+
+`[read]` **Richtig: ein Weg, der nur nicht mehr gerufen wird, ist
+weiter da** — **und der naechste findet ihn.**
+
+### Drei Befunde, alle ausserhalb des Auftrags
+
+`[cmd]` **1. `other` ist ueber *Wie gestern* nicht erreichbar** —
+`rasterZeilen` kennt nur die vier Rasterreihen. **Als G-351.**
+
+`[cmd]` **2. G-152 braucht die Sicht von Codex** — **die
+Entscheidung ist mit E-52 laengst gefallen.**
+
+`[cmd]` **3. `intake_logs` endet am 19.08.** — **ein
+7-Tage-Strom wuerde Supplements faelschlich als still zeigen.**
+
+`[read]` **Der dritte ist der interessante:** **eine richtige
+Funktion auf altem Bestand erzeugt eine falsche Aussage.**
+
+`[read]` **Und er haette es gebaut und niemand haette es
+gemerkt** — **die Kachel waere leer gewesen, und leer sieht aus wie
+*nichts eingenommen*.** **Als C-412.**
+
+**Abgenommen.**
+

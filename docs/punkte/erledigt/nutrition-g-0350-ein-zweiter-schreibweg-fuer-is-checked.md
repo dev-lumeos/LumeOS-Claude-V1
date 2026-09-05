@@ -9,6 +9,8 @@ kind_von: G-345
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: dd20f24c
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/rezepte-echt.tsx
@@ -41,3 +43,16 @@ wieder einen gibt.**
 
 **Mitbeauftragt mit G-348 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit G-348 abgenommen: ein Schreibweg.**
+
+`[cmd]` **Route, Funktion und Schema entfernt** — **nicht nur der
+Aufruf.**
+
+`[read]` **Mehr als beauftragt** — **ich schrieb *der alte zieht
+um*, er hat ihn abgebaut.**
+
+`[read]` **Ein Weg, der nur nicht mehr gerufen wird, ist weiter
+da.**
