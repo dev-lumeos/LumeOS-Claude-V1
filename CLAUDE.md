@@ -338,6 +338,25 @@ mindestens einen in `next/`.
 
 `[read]` **Er steht im Punktelauf, den der Zyklus ohnehin macht.**
 
+## Die Kette gewinnt gegen die Live-Aenderung
+
+**C-410, gemessen 2026-09-07.**
+
+`[cmd]` **C-366 stellte drei Lesefunktionen live auf
+`food_tags_effective` um.** `[cmd]` **C-405 liess die Kette neu
+laufen** — **und `075_preference_search_application.sql` erzeugte
+zwei davon aus dem alten Quelltext neu.**
+
+`[read]` **Kein Mensch hat etwas zurueckgenommen.** **Ein
+Kettenschritt hat eine spaetere Aenderung ueberschrieben.**
+
+`[read]` **Wer eine Funktion aendert, aendert sie an der Quelle** —
+**`supabase/_pipeline/`, nicht nur live.**
+
+`[cmd]` **Und der Test, der es haette melden koennen, war rot und
+nicht im Gate** — **ein Test, der niemanden erreicht, ist eine
+Notiz.**
+
 ## Ein Bericht ist kein Nachweis
 
 **Tom, 2026-09-02:** *,,da hat sich null komma nichts geaendert."*

@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 211 |
-| `laufend_codex` | 2 |
+| `todos` | 209 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 277 |
+| `erledigt` | 278 |
 | **gesamt** | **493** |
 
 ## medical — 43
@@ -92,7 +92,7 @@
 | `C-177` | messung | hoch | [Thai-Aliase fehlen bewusst](erledigt/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | erledigt | — | — |
 | `C-191` | messung | mittel | [`p_user_id` kostet das Dreifache](erledigt/nutrition-c-0191-p-user-id-kostet-das-dreifache.md) | erledigt | — | — |
 | `C-192` | befund | mittel | [`p_user_id` kostet in `food_search` das Dreifache](erledigt/nutrition-c-0192-p-user-id-kostet-in-food-search-das-dreifache.md) | erledigt | — | — |
-| `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](todos/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | offen | — | — |
+| `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](laufend_codex/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | laeuft (codex) | — | — |
 | `C-210` | befund | mittel | [Die 28 fehlenden Naehrstofftexte — was ist gemeint?](todos/nutrition-c-0210-die-28-fehlenden-naehrstofftexte-was-ist-gemeint.md) | offen | — | — |
 | `C-211` | befund | mittel | [Selen fehlt im BLS-Katalog](erledigt/nutrition-c-0211-selen-fehlt-im-bls-katalog.md) | erledigt | — | — |
 | `C-212` | befund | mittel | [`CHORL` haengt nicht im Naehrstoffbaum](erledigt/nutrition-c-0212-chorl-haengt-nicht-im-naehrstoffbaum.md) | erledigt | — | — |
@@ -157,8 +157,8 @@
 | `C-407` | feature | hoch | [der Leseweg fuer Wochenlisten](erledigt/nutrition-c-0407-der-leseweg-fuer-wochenlisten.md) | erledigt | — | — |
 | `C-408` | feature | mittel | [Vorrat nach dem Vorbild von Supplements](erledigt/nutrition-c-0408-vorrat-nach-dem-vorbild-von-supplements.md) | erledigt | — | C-409 |
 | `C-409` | befund | hoch | [`nutrition_reorder` ist unerreichbar](erledigt/nutrition-c-0409-nutrition-reorder-ist-unerreichbar.md) | erledigt | — | — |
-| `C-410` | befund | hoch | [zwei Leser nehmen `food_tags` statt der Sicht](laufend_codex/nutrition-c-0410-zwei-leser-nehmen-food-tags-statt-der-sicht.md) | laeuft (codex) | — | — |
-| `C-411` | feature | mittel | [Rezeptvorschlaege in der Kuration](todos/nutrition-c-0411-rezeptvorschlaege-in-der-kuration.md) | offen | — | — |
+| `C-410` | befund | hoch | [zwei Leser nehmen `food_tags` statt der Sicht](erledigt/nutrition-c-0410-zwei-leser-nehmen-food-tags-statt-der-sicht.md) | erledigt | — | — |
+| `C-411` | feature | mittel | [Rezeptvorschlaege in der Kuration](laufend_codex/nutrition-c-0411-rezeptvorschlaege-in-der-kuration.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |

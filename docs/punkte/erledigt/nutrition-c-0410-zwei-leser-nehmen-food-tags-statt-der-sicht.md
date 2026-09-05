@@ -9,6 +9,8 @@ kind_von: C-366
 entscheidung: E-55
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: 9940d6b3
 beruehrt:
   tabellen: [nutrition.food_tags]
 zahlen:
@@ -188,4 +190,58 @@ blieben ausserhalb dieses Auftrags.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator. Nachgemessen.**
+
+`[cmd]` **Selbst gemessen: alle drei lesen `food_tags_effective`.**
+
+    food_search                             food_tags_effective
+    refresh_food_preference_search_targets  food_tags_effective
+    preference_search_preview               food_tags_effective
+
+`[cmd]` **Und die Kuration wirkt nach Gegenprobe in beiden Wegen.**
+
+### Die Ursache ist die wichtigste Zeile
+
+`[cmd]` **Der Rueckfall kam mit C-405 am 05.09.:** **die erneute
+Ausfuehrung von `075_preference_search_application.sql` erzeugte die
+zwei Funktionen aus dem alten Quelltext neu.**
+
+`[read]` **Kein Mensch hat etwas zurueckgenommen** — **ein
+Kettenschritt hat eine spaetere Aenderung ueberschrieben.**
+
+`[read]` **Das ist eine Eigenschaft der Kette, nicht ein
+Versehen:** `[cmd]` **der Zustand entsteht aus
+`supabase/_pipeline/`, und wer eine Funktion dort aendert, muss sie
+an der Quelle aendern** — **nicht nur live.**
+
+`[read]` **C-366 hat live umgestellt.** `[read]` **C-405 hat die
+Kette neu laufen lassen.** **Die Kette gewann.**
+
+### Und der Test war rot, aber nicht im Gate
+
+`[cmd]` **Er meldete 1 statt 3 Leser** — **und war nicht in den
+allgemeinen Gate-Lauf eingebunden.**
+
+`[read]` **Ein Test, der rot ist und niemanden erreicht, ist kein
+Test** — **er ist eine Notiz.**
+
+`[cmd]` **Er enthaelt jetzt zusaetzlich die Wirkungsprobe** —
+**nicht nur *wer liest was*, sondern *wirkt die Kuration*.**
+
+### C-404 — beabsichtigt, und deshalb `days_count 28`
+
+`[cmd]` **Die vierte Aufbau-Woche ist eine kopierte Woche und darf
+nicht geloescht werden.**
+
+`[read]` **Damit ist E-62 eindeutig:** **vier Wochen heissen 28
+Tage.**
+
+`[cmd]` **Er hat ohne Auftrag keine nicht-persistente
+Einzelkorrektur vorgenommen** — **richtig.** `[read]` **Eine
+Aenderung, die der naechste Kettenlauf wegwischt, waere genau der
+Fehler, den er gerade aufgeklaert hat.**
+
+**Jetzt beauftragt.**
+
+**Abgenommen.**
+

@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: []
   dateien: ["docs/specs/Nutrition/04_adrs/ADR_MEALCAM_V1.md"]
