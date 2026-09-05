@@ -9,6 +9,8 @@ kind_von: C-403
 entscheidung: E-62
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: 0a0b8b93
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -52,3 +54,15 @@ Werkbank, richtig leer.**
 
 **Mitbeauftragt mit C-410 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit C-411 abgenommen.**
+
+`[cmd]` **Lifecycle-Felder in der Seedquelle modelliert.**
+`[cmd]` **`dev`: `once`, `days_count 28`, 28 Tage** — stimmig.
+
+`[cmd]` **Die Testinvariante sichert 28 beschriebene Tage.**
+
+`[cmd]` **Aber `tom.seed@example.com` traegt `days_count 7` bei 21
+Tagen** — **dasselbe Muster, anderes Konto.** **Als C-413.**

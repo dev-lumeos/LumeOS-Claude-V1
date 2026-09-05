@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 207 |
-| `laufend_codex` | 3 |
+| `todos` | 208 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 282 |
-| **gesamt** | **495** |
+| `erledigt` | 284 |
+| **gesamt** | **496** |
 
 ## medical — 43
 
@@ -59,7 +59,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 226
+## nutrition — 227
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -92,7 +92,7 @@
 | `C-177` | messung | hoch | [Thai-Aliase fehlen bewusst](erledigt/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | erledigt | — | — |
 | `C-191` | messung | mittel | [`p_user_id` kostet das Dreifache](erledigt/nutrition-c-0191-p-user-id-kostet-das-dreifache.md) | erledigt | — | — |
 | `C-192` | befund | mittel | [`p_user_id` kostet in `food_search` das Dreifache](erledigt/nutrition-c-0192-p-user-id-kostet-in-food-search-das-dreifache.md) | erledigt | — | — |
-| `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](laufend_codex/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | laeuft (codex) | — | — |
+| `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](todos/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | offen | — | — |
 | `C-210` | befund | mittel | [Die 28 fehlenden Naehrstofftexte — was ist gemeint?](todos/nutrition-c-0210-die-28-fehlenden-naehrstofftexte-was-ist-gemeint.md) | offen | — | — |
 | `C-211` | befund | mittel | [Selen fehlt im BLS-Katalog](erledigt/nutrition-c-0211-selen-fehlt-im-bls-katalog.md) | erledigt | — | — |
 | `C-212` | befund | mittel | [`CHORL` haengt nicht im Naehrstoffbaum](erledigt/nutrition-c-0212-chorl-haengt-nicht-im-naehrstoffbaum.md) | erledigt | — | — |
@@ -151,14 +151,15 @@
 | `C-401` | feature | mittel | [der Probe-Eintrag und die Laufzeit](erledigt/nutrition-c-0401-der-probe-eintrag-und-die-laufzeit.md) | erledigt | — | C-403 |
 | `C-402` | befund | hoch | [`VITC` fehlt an 39 Tagen](erledigt/nutrition-c-0402-vitc-fehlt-an-39-tagen.md) | erledigt | — | — |
 | `C-403` | befund | mittel | [den `once`-Plaenen fehlen die Wochen](erledigt/nutrition-c-0403-den-once-plaenen-fehlen-die-wochen.md) | erledigt | — | C-404 |
-| `C-404` | befund | niedrig | [`Aufbau-Wochenplan` beschreibt 28 Tage, behauptet 21](laufend_codex/nutrition-c-0404-aufbau-wochenplan-beschreibt-28-tage-behauptet-21.md) | laeuft (codex) | — | — |
+| `C-404` | befund | niedrig | [`Aufbau-Wochenplan` beschreibt 28 Tage, behauptet 21](erledigt/nutrition-c-0404-aufbau-wochenplan-beschreibt-28-tage-behauptet-21.md) | erledigt | — | C-413 |
 | `C-405` | feature | mittel | [*Sonstige* faellt weg](erledigt/nutrition-c-0405-sonstige-faellt-weg.md) | erledigt | — | G-347 |
 | `C-406` | feature | mittel | [`strong_avoid` an vier Stellen entfernen](erledigt/nutrition-c-0406-strong-avoid-an-vier-stellen-entfernen.md) | erledigt | — | — |
 | `C-407` | feature | hoch | [der Leseweg fuer Wochenlisten](erledigt/nutrition-c-0407-der-leseweg-fuer-wochenlisten.md) | erledigt | — | — |
 | `C-408` | feature | mittel | [Vorrat nach dem Vorbild von Supplements](erledigt/nutrition-c-0408-vorrat-nach-dem-vorbild-von-supplements.md) | erledigt | — | C-409 |
 | `C-409` | befund | hoch | [`nutrition_reorder` ist unerreichbar](erledigt/nutrition-c-0409-nutrition-reorder-ist-unerreichbar.md) | erledigt | — | — |
 | `C-410` | befund | hoch | [zwei Leser nehmen `food_tags` statt der Sicht](erledigt/nutrition-c-0410-zwei-leser-nehmen-food-tags-statt-der-sicht.md) | erledigt | — | — |
-| `C-411` | feature | mittel | [Rezeptvorschlaege in der Kuration](laufend_codex/nutrition-c-0411-rezeptvorschlaege-in-der-kuration.md) | laeuft (codex) | — | — |
+| `C-411` | feature | mittel | [Rezeptvorschlaege in der Kuration](erledigt/nutrition-c-0411-rezeptvorschlaege-in-der-kuration.md) | erledigt | — | — |
+| `C-413` | befund | niedrig | [`tom.seed` traegt `days_count 7` bei 21 Tagen](todos/nutrition-c-0413-tom-seed-traegt-days-count-7-bei-21-tagen.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -520,7 +521,7 @@
 | `C-363` | entscheidung | niedrig | [drei oekonomische Befunde im Marketplace](todos/quer-c-0363-drei-oekonomische-befunde-im-marketplace.md) | offen | — | — |
 | `C-383` | befund | hoch | [gehoeren Plaene in `goal_phases`?](erledigt/quer-c-0383-gehoeren-plaene-in-goal-phases.md) | erledigt | — | — |
 | `C-395` | befund | hoch | [drei Migrationen tragen Datenlogik](erledigt/quer-c-0395-drei-migrationen-tragen-datenlogik.md) | erledigt | — | — |
-| `C-412` | befund | mittel | [`intake_logs` endet am 19. August](todos/quer-c-0412-intake-logs-endet-am-19-august.md) | offen | — | — |
+| `C-412` | befund | mittel | [`intake_logs` endet am 19. August](laufend_codex/quer-c-0412-intake-logs-endet-am-19-august.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

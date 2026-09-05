@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-66
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: 0a0b8b93
 beruehrt:
   tabellen: [nutrition.food_curation_candidates]
 zahlen:
@@ -262,4 +264,78 @@ eingebaute Datenlogik.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator. Nachgemessen.**
+
+### Drei Tabellen statt eines `target_type`
+
+`[cmd]` **Selbst gemessen:**
+
+    recipe_curation_candidates              18 Spalten
+    recipe_curation_candidate_ingredients   13 Spalten
+    recipe_curation_decisions                6 Spalten
+
+`[read]` **Er hat die Frage aus dem Auftrag entschieden** — **ein
+Rezept traegt Zutaten mit Mengen, das passt nicht in
+`proposed_value`.**
+
+`[read]` **Und die Trennung folgt dem Vorbild:** `[cmd]`
+**`food_curation_candidates` und `food_curation_decisions` sind
+ebenfalls zwei Tabellen** — **die Entscheidung ist ein eigener
+Vorgang.**
+
+`[cmd]` **Die Gegenprobe erstellt Zutaten-Snapshots transaktional:
+Admin sieht ihn, Normalnutzer nicht, danach 0 Zeilen.**
+
+`[read]` **Beide Richtungen belegt** — **wer sieht was, und was
+bleibt zurueck.**
+
+### Und der Herkunftswert ist vorgeschlagen, nicht gesetzt
+
+`[cmd]` **`recipes.source = 'mealcam'` als fuenfter Wert, nicht
+`buddy`.**
+
+`[read]` **Richtig** — **und er hat es als Vorschlag fuer eine
+E-45-Entscheidung markiert, nicht selbst gebaut.**
+
+`[cmd]` **SPEC_11 schlaegt zusaetzlich ein zweites Feld vor:**
+`created_via` **neben `source`** — **weil `source` sagt, WEM ein
+Rezept gehoert, nicht WODURCH es entstand.**
+
+`[read]` **Beide Vorschlaege gehen an Tom.**
+
+### C-404 — und ein zweiter Plan mit demselben Fehler
+
+`[cmd]` **Lifecycle-Felder in der Seedquelle modelliert.** `[cmd]`
+**`dev`: `once`, `days_count 28`, 28 Tage** — **stimmig.**
+
+`[cmd]` **Aber `tom.seed@example.com` traegt `days_count 7` bei 21
+Tagen.**
+
+`[read]` **Dasselbe Muster, anderes Konto** — **und es war nicht im
+Auftrag, weil ich nur `dev` gemessen hatte.**
+
+`[read]` **Zum sechsten Mal eine Zahl ohne `user_id`.** **Als
+C-413.**
+
+### C-193 — dokumentiert, mit der richtigen Reihenfolge
+
+`[read]` **Sein Satz ist der Kern:** *,,MealCam muss BLS-Kandidaten
+ungefiltert lesen und erst danach Konflikte pro Food/Zutat als
+Warnung zurueckgeben."*
+
+`[cmd]` **Die Suche entfernt aktuell alle 120
+`contains_nuts`-Foods** (A-47).
+
+`[read]` **Fuer eine Suche ist das richtig** — **wer nach Nuss
+sucht, will keine Nuss vorgeschlagen bekommen.**
+
+`[read]` **Fuer eine Kamera ist es falsch:** **wer eine Nuss
+fotografiert, hat sie vor sich.** `[read]` **Sie zu verschweigen
+waere gefaehrlicher als sie zu benennen.**
+
+`[cmd]` **Und SPEC_11 Abschnitt 5 traegt es bereits:** **die Quelle
+je Eigenschaft ist ein Datentyp** — `IMAGE` **ist etwas anderes als**
+`DATABASE`.
+
+**Abgenommen.**
+
