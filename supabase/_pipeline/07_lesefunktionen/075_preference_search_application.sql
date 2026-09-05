@@ -357,7 +357,7 @@ BEGIN
       10,
       'preference_item'::text
     FROM preference_items pi
-    JOIN nutrition.food_tags ft ON ft.tag_code = pi.tag_code
+    JOIN nutrition.food_tags_effective ft ON ft.tag_code = pi.tag_code
     WHERE pi.target_type = 'tag'
       AND pi.tag_code IS NOT NULL
       AND pi.constraint_level <> 'neutral'
@@ -394,7 +394,7 @@ BEGIN
       'profile_allergy'::text
     FROM user_preference up
     JOIN allergy_tag_map m ON m.source_code = ANY(up.allergies)
-    JOIN nutrition.food_tags ft ON ft.tag_code = m.tag_code
+    JOIN nutrition.food_tags_effective ft ON ft.tag_code = m.tag_code
 
     UNION ALL
 
@@ -407,7 +407,7 @@ BEGIN
       'profile_intolerance'::text
     FROM user_preference up
     JOIN allergy_tag_map m ON m.source_code = ANY(up.intolerances)
-    JOIN nutrition.food_tags ft ON ft.tag_code = m.tag_code
+    JOIN nutrition.food_tags_effective ft ON ft.tag_code = m.tag_code
 
     UNION ALL
 
@@ -420,7 +420,7 @@ BEGIN
       'profile_general_exclusion:' || td.code
     FROM user_preference up
     JOIN nutrition.tag_definitions td ON td.code = ANY(up.general_exclusions)
-    JOIN nutrition.food_tags ft ON ft.tag_code = td.code
+    JOIN nutrition.food_tags_effective ft ON ft.tag_code = td.code
 
     UNION ALL
 
@@ -448,7 +448,7 @@ BEGIN
     JOIN nutrition.foods f ON TRUE
     WHERE up.diet_type = 'vegan'
       AND NOT EXISTS (
-        SELECT 1 FROM nutrition.food_tags ft
+        SELECT 1 FROM nutrition.food_tags_effective ft
         WHERE ft.food_id = f.id AND ft.tag_code = 'vegan'
       )
 
@@ -465,7 +465,7 @@ BEGIN
     JOIN nutrition.foods f ON TRUE
     WHERE up.diet_type = 'vegetarian'
       AND NOT EXISTS (
-        SELECT 1 FROM nutrition.food_tags ft
+        SELECT 1 FROM nutrition.food_tags_effective ft
         WHERE ft.food_id = f.id AND ft.tag_code = 'vegetarian'
       )
 
@@ -928,7 +928,7 @@ preference_targets AS MATERIALIZED (
     END,
     10
   FROM preference_items pi
-  JOIN nutrition.food_tags ft ON ft.tag_code = pi.tag_code
+  JOIN nutrition.food_tags_effective ft ON ft.tag_code = pi.tag_code
   WHERE pi.target_type = 'tag'
     AND pi.tag_code IS NOT NULL
     AND pi.constraint_level <> 'neutral'
@@ -963,7 +963,7 @@ preference_targets AS MATERIALIZED (
     100
   FROM user_preference up
   JOIN allergy_tag_map m ON m.source_code = ANY(up.allergies)
-  JOIN nutrition.food_tags ft ON ft.tag_code = m.tag_code
+  JOIN nutrition.food_tags_effective ft ON ft.tag_code = m.tag_code
 
   UNION ALL
 
@@ -975,7 +975,7 @@ preference_targets AS MATERIALIZED (
     90
   FROM user_preference up
   JOIN allergy_tag_map m ON m.source_code = ANY(up.intolerances)
-  JOIN nutrition.food_tags ft ON ft.tag_code = m.tag_code
+  JOIN nutrition.food_tags_effective ft ON ft.tag_code = m.tag_code
 
   UNION ALL
 
@@ -987,7 +987,7 @@ preference_targets AS MATERIALIZED (
     80
   FROM user_preference up
   JOIN nutrition.tag_definitions td ON td.code = ANY(up.general_exclusions)
-  JOIN nutrition.food_tags ft ON ft.tag_code = td.code
+  JOIN nutrition.food_tags_effective ft ON ft.tag_code = td.code
 
   UNION ALL
 
@@ -1013,7 +1013,7 @@ preference_targets AS MATERIALIZED (
   JOIN nutrition.foods f ON TRUE
   WHERE up.diet_type = 'vegan'
     AND NOT EXISTS (
-      SELECT 1 FROM nutrition.food_tags ft
+      SELECT 1 FROM nutrition.food_tags_effective ft
       WHERE ft.food_id = f.id AND ft.tag_code = 'vegan'
     )
 
@@ -1029,7 +1029,7 @@ preference_targets AS MATERIALIZED (
   JOIN nutrition.foods f ON TRUE
   WHERE up.diet_type = 'vegetarian'
     AND NOT EXISTS (
-      SELECT 1 FROM nutrition.food_tags ft
+      SELECT 1 FROM nutrition.food_tags_effective ft
       WHERE ft.food_id = f.id AND ft.tag_code = 'vegetarian'
     )
 
@@ -1201,7 +1201,7 @@ matching_foods AS (
   ) m ON TRUE
   LEFT JOIN LATERAL (
     SELECT array_agg(ft.tag_code ORDER BY td.sort_order, ft.tag_code) AS tags
-    FROM nutrition.food_tags ft
+    FROM nutrition.food_tags_effective ft
     JOIN nutrition.tag_definitions td ON td.code = ft.tag_code
     WHERE ft.food_id = f.id
   ) tags ON TRUE
@@ -1311,7 +1311,7 @@ matching_foods AS (
     AND (
       COALESCE(p_tag_code, '') = ''
       OR EXISTS (
-        SELECT 1 FROM nutrition.food_tags selected_tag
+        SELECT 1 FROM nutrition.food_tags_effective selected_tag
         WHERE selected_tag.food_id = f.id
           AND selected_tag.tag_code = p_tag_code
       )
@@ -1327,7 +1327,7 @@ matching_foods AS (
         WHERE NOT EXISTS (
           SELECT 1
           FROM jsonb_array_elements_text(fg.gruppe) AS wanted(tag_code)
-          JOIN nutrition.food_tags ft ON ft.tag_code = wanted.tag_code
+          JOIN nutrition.food_tags_effective ft ON ft.tag_code = wanted.tag_code
           WHERE ft.food_id = f.id
         )
       )
@@ -1337,7 +1337,7 @@ matching_foods AS (
       OR NOT EXISTS (
         SELECT 1
         FROM filter_exclude_tags et
-        JOIN nutrition.food_tags ft ON ft.tag_code = et.code
+        JOIN nutrition.food_tags_effective ft ON ft.tag_code = et.code
         WHERE ft.food_id = f.id
       )
     )
@@ -1585,7 +1585,7 @@ all_matching_food_ids AS (
     AND (
       COALESCE(p_tag_code, '') = ''
       OR EXISTS (
-        SELECT 1 FROM nutrition.food_tags selected_tag
+        SELECT 1 FROM nutrition.food_tags_effective selected_tag
         WHERE selected_tag.food_id = f.id
           AND selected_tag.tag_code = p_tag_code
       )
@@ -1603,7 +1603,7 @@ all_matching_food_ids AS (
         WHERE NOT EXISTS (
           SELECT 1
           FROM jsonb_array_elements_text(fg.gruppe) AS wanted(tag_code)
-          JOIN nutrition.food_tags ft ON ft.tag_code = wanted.tag_code
+          JOIN nutrition.food_tags_effective ft ON ft.tag_code = wanted.tag_code
           WHERE ft.food_id = f.id
         )
       )
@@ -1613,7 +1613,7 @@ all_matching_food_ids AS (
       OR NOT EXISTS (
         SELECT 1
         FROM filter_exclude_tags et
-        JOIN nutrition.food_tags ft ON ft.tag_code = et.code
+        JOIN nutrition.food_tags_effective ft ON ft.tag_code = et.code
         WHERE ft.food_id = f.id
       )
     )
@@ -1721,7 +1721,7 @@ selected_food AS (
   ) m ON TRUE
   LEFT JOIN LATERAL (
     SELECT array_agg(ft.tag_code ORDER BY td.sort_order, ft.tag_code) AS tags
-    FROM nutrition.food_tags ft
+    FROM nutrition.food_tags_effective ft
     JOIN nutrition.tag_definitions td ON td.code = ft.tag_code
     WHERE ft.food_id = f.id
   ) tags ON TRUE
@@ -1825,7 +1825,7 @@ tags_json AS (
   FROM (
     SELECT td.code, td.name_de, td.sort_order, COUNT(ft.food_id)::int AS food_count
     FROM nutrition.tag_definitions td
-    JOIN nutrition.food_tags ft ON ft.tag_code = td.code
+    JOIN nutrition.food_tags_effective ft ON ft.tag_code = td.code
     GROUP BY td.code, td.name_de, td.sort_order
     ORDER BY td.sort_order
   ) tag_counts

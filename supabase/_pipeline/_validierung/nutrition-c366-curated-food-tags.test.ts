@@ -87,3 +87,48 @@ test('C-366: Entfernt-Kuration ueberdeckt den Import auch nach dessen erneuter Z
   `)
   assert.notEqual(anon.status, 0, 'anon darf keine Kuration lesen')
 })
+
+test('C-410: eine gesetzte Kuration wirkt zugleich in food_search und im Preference-Refresh', () => {
+  const result = one<{ foodSearchSeesCurated: boolean; refreshSeesCurated: boolean }>(`
+    BEGIN;
+    CREATE TEMP TABLE c410_probe ON COMMIT DROP AS
+      SELECT
+        (SELECT id FROM auth.users WHERE email = 'dev@lumeos.app') AS user_id,
+        (SELECT f.id
+         FROM nutrition.foods f
+         WHERE NOT EXISTS (
+           SELECT 1 FROM nutrition.food_tags ft
+           WHERE ft.food_id = f.id AND ft.tag_code = 'contains_nuts'
+         )
+         ORDER BY f.bls_code
+         LIMIT 1) AS food_id;
+    INSERT INTO nutrition.food_tags_kuriert(food_id, tag_code, action)
+      SELECT food_id, 'contains_nuts', 'set' FROM c410_probe;
+    SELECT nutrition.refresh_food_preference_search_targets(user_id)
+    FROM c410_probe;
+    SELECT json_build_object(
+      'foodSearchSeesCurated', EXISTS (
+        SELECT 1
+        FROM json_array_elements(
+          nutrition.food_search(
+            '', '', ARRAY[]::text[], NULL, '', NULL, 'contains_nuts', 'relevance',
+            1000, 0, NULL, NULL, false, NULL, NULL, NULL
+          )->'foods'
+        ) AS result(food)
+        JOIN c410_probe p ON (result.food->>'id')::uuid = p.food_id
+      ),
+      'refreshSeesCurated', EXISTS (
+        SELECT 1
+        FROM nutrition.food_preference_search_targets target
+        JOIN c410_probe p ON p.user_id = target.user_id AND p.food_id = target.food_id
+        WHERE target.source = 'profile_allergy' AND target.match_type = 'allergy'
+      )
+    );
+    ROLLBACK;
+  `)
+
+  assert.deepEqual(result, {
+    foodSearchSeesCurated: true,
+    refreshSeesCurated: true,
+  })
+})
