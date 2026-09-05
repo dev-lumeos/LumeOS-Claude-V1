@@ -11,7 +11,7 @@ entscheidung: E-13
 agent: codex
 beauftragt: 2026-09-07
 erledigt: 2026-09-07
-commit: OFFEN
+commit: a1a818b0
 beruehrt:
   tabellen: []
   dateien: ["supabase/_pipeline/07_lesefunktionen/073_suchfilter.sql"]
