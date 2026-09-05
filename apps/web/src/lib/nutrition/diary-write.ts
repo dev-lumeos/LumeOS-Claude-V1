@@ -12,6 +12,7 @@ import {
   buildMealInsert,
   buildMealItemAmountUpdate,
   buildMealItemInsert,
+  buildManualItemInsert,
   computeFrozenNutrients,
   parseStoredMealItems,
   parseStoredMeals,
@@ -19,6 +20,7 @@ import {
   type MealCreate,
   type MealItemCreate,
   type MealItemUpdate,
+  type ManualItemCreate,
   type StoredMeal,
   type StoredMealItem,
 } from './diary-model'
@@ -183,6 +185,44 @@ export async function addMealItem(input: MealItemCreate): Promise<StoredMealItem
     if (error.code === '23503') {
       // FK auf meals(id) oder foods(id) — bzw. der Wachhund-Trigger.
       throw new DiaryWriteError('UNKNOWN_FOOD', 'Unbekannte meal_id oder food_id.')
+    }
+    throw classifyDbError(error.message, 'WRITE_FAILED')
+  }
+  const item = parseStoredMealItems(data)[0]
+  if (!item) {
+    throw new DiaryWriteError('WRITE_FAILED', 'Insert lieferte keine Zeile zurück.')
+  }
+  return item
+}
+
+/**
+ * Einen manuellen Posten anlegen — G-340.
+ *
+ * **Tom, 2026-09-02:** *„Quick-Add bauen."*
+ *
+ * `[read]` **Kein Katalog, kein Einfrieren:** die Zahlen kommen vom
+ * Nutzer und sind bereits absolut. `[cmd]` **`computeFrozenNutrients`
+ * waere hier falsch** — sie rechnet je 100 g hoch, und ein
+ * Restaurantteller hat keine Naehrwerte je 100 g.
+ *
+ * `[read]` **Der Wachhund-Trigger prueft weiter die Eigentuemerschaft**
+ * — `meal_items_owner_guard` liegt auf der Tabelle, nicht am Weg.
+ */
+export async function addManualItem(
+  input: ManualItemCreate,
+): Promise<StoredMealItem> {
+  const { supabase, userId } = await requireSession()
+
+  const { data, error } = await supabase
+    .schema('nutrition')
+    .from('meal_items')
+    .insert(buildManualItemInsert(userId, input))
+    .select('id, meal_id, food_id, food_name, amount_g, enercc, prot625, fat, cho')
+  if (error) {
+    if (error.code === '23503') {
+      // `[read]` **Nur `meal_id` kann hier fehlschlagen** — eine
+      // `food_id` gibt es nicht.
+      throw new DiaryWriteError('UNKNOWN_FOOD', 'Unbekannte meal_id.')
     }
     throw classifyDbError(error.message, 'WRITE_FAILED')
   }

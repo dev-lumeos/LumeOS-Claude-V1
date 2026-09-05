@@ -18,9 +18,12 @@ import {
   mealCreateSchema,
   mealItemCreateSchema,
   mealItemUpdateSchema,
+  // G-340: der manuelle Posten.
+  manualItemCreateSchema,
 } from '../../../../lib/nutrition/diary-model'
 import {
   addMealItem,
+  addManualItem,
   createMeal,
   listOwnMealItems,
   listOwnMeals,
@@ -139,7 +142,30 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  return ungueltig('art muss "mahlzeit" oder "position" sein.')
+  // ══ G-340: der manuelle Posten ═══════════════════════════════
+  //
+  // **Tom, 2026-09-02:** *„Quick-Add bauen."*
+  //
+  // `[read]` **Eine dritte `art`, kein dritter Endpunkt** — dieselbe
+  // Sitzung, derselbe Bildschirm, dieselbe Fehlerbehandlung.
+  //
+  // `[cmd]` **Er unterscheidet sich von `position` an genau einer
+  // Stelle:** keine `food_id`, also auch kein Einfrieren aus dem
+  // Katalog.
+  if (art === 'manuell') {
+    const geprueft = manualItemCreateSchema.safeParse(roh)
+    if (!geprueft.success) {
+      return ungueltig(geprueft.error.issues[0]?.message ?? 'Eingabe ungueltig.',
+        geprueft.error.issues.map(i => ({ feld: i.path.join('.'), meldung: i.message })))
+    }
+    try {
+      return NextResponse.json(await addManualItem(geprueft.data))
+    } catch (error) {
+      return errorResponse(error)
+    }
+  }
+
+  return ungueltig('art muss "mahlzeit", "position" oder "manuell" sein.')
 }
 
 /** Menge einer Position aendern — die Naehrwerte werden neu eingefroren. */

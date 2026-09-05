@@ -26,34 +26,24 @@ import { Card, Pill, Icon, InEntwicklungKnopf, type IconName } from '@lumeos/ui'
 import { EU14_ALLERGENS } from './tabs-daten'
 // G-339: EINE Namensquelle statt sechs (E-58).
 import { KATEGORIE_TEXT } from '../../../lib/nutrition/slots-lage'
+// G-340: dieselbe Huelle wie Suche (G-320/321) und
+// Mahlzeiten-Modal (G-336) — keine dritte Ziehlogik.
+import { ZiehModal } from './zieh-modal'
 
 export type NutritionModalTyp = 'mealcam' | 'customfood' | 'quickadd' | 'recipe'
 
-// ══ G-339: die sechste Namensliste ist weg ══════════════════════════
+// ══ G-340: die Kategorie-Auswahl ist weg ═════════════════
 //
-// `[cmd]` **Hier stand eine eigene Liste** — fuenf englische Namen
-// (`Breakfast`, `Pre-workout`) mit dem Schluessel `preworkout`.
+// `[cmd]` **Hier stand `MEAL_TYPES`** — die sieben Kategorien aus
+// `KATEGORIE_TEXT`, seit G-339 aus der einen Quelle.
 //
-// `[cmd]` **Gemessen am 2026-09-02: `preworkout` steht NICHT im
-// CHECK.** `nutrition.meals.meal_type` kennt `breakfast`, `lunch`,
-// `dinner`, `snack`, `pre_workout`, `post_workout`, `other`.
+// `[read]` **Quick-Add braucht sie nicht mehr:** ein Posten haengt an
+// einer MAHLZEIT (`meal_id`, eine Zeile), nicht an einer Kategorie
+// (ein Wort). **Das Modal laedt die Mahlzeiten des Tages und zeigt
+// ihre Namen** — weiterhin ueber `KATEGORIE_TEXT`, also ohne zweite
+// Liste.
 //
-// `[cmd]` **Und schlimmer als der Schluessel war seine Abwesenheit:**
-// die `<option>` trug gar kein `value`, **also waere der LABEL
-// abgeschickt worden** — `Pre-workout`. **Am Schirm gemessen.**
-//
-// `[read]` **G-335 hat fuenf Listen zusammengefuehrt; diese ist
-// durchgerutscht**, weil sie einen anderen Schluessel schrieb und
-// deshalb keiner Suche nach `pre_workout` auffiel.
-//
-// `[read]` **Jetzt kommt der Name aus `KATEGORIE_TEXT`** (E-58) —
-// **eine Quelle, nicht sechs.**
-//
-// `[cmd]` **Die sieben Kategorien statt fuenf:** `post_workout` und
-// `other` fehlten. **Sie stehen im CHECK und gehoeren in die
-// Auswahl.**
-const MEAL_TYPES = Object.entries(KATEGORIE_TEXT)
-  .map(([id, label]) => ({ id, label }))
+// `[read]` **A-59: entfernt, nicht auskommentiert.**
 
 
 /** Rahmen fuer alle Modale — wie `Rahmen` im Supplements-Modul. */
@@ -322,9 +312,106 @@ function CustomFoodModal({ onClose }: { onClose: () => void }) {
 }
 
 // --- Quick-add -------------------------------------------------------
-function QuickAddModal({ onClose }: { onClose: () => void }) {
+/**
+ * Quick-Add: eine Zahl ohne Lebensmittel — G-340.
+ *
+ * **Tom, 2026-09-02:** *„Quick-Add bauen."*
+ *
+ * `[read]` **Der Fall: wer im Restaurant isst, kennt die Kalorien vom
+ * Menue, aber kein Lebensmittel.** `[cmd]` **Das Schema sieht ihn vor**
+ * (`food_source = 'manual'`), **und bis G-340 bediente ihn niemand:**
+ * alle 9.051 Posten trugen `bls`.
+ *
+ * `[cmd]` **Der Knopf schrieb bis hierher nicht** — er war ein
+ * `InEntwicklungKnopf`.
+ *
+ * `[read]` **Auf derselben Huelle wie die Suche** (G-320/G-321) **und
+ * das Mahlzeiten-Modal** (G-336) — der Auftrag sagt: dieselbe Machart,
+ * keine neue.
+ */
+function QuickAddModal({ datum, onClose }: {
+  datum: string
+  onClose: () => void
+}) {
   const [v, setV] = React.useState({ kcal: '', p: '', c: '', f: '', label: '' })
+  const [gramm, setGramm] = React.useState('')
+  const [mahlzeitId, setMahlzeitId] = React.useState('')
+  const [mahlzeiten, setMahlzeiten] = React.useState<
+    Array<{ id: string; meal_type: string }>>([])
+  const [laeuft, setLaeuft] = React.useState(false)
+  const [fehler, setFehler] = React.useState<string | null>(null)
   const setze = (k: keyof typeof v, wert: string) => setV(s => ({ ...s, [k]: wert }))
+
+  // `[read]` **Ein Posten braucht eine Mahlzeit** — `meal_id` ist NOT
+  // NULL. **Also die des Tages laden**, ueber denselben GET, den das
+  // Tagebuch benutzt.
+  React.useEffect(() => {
+    let abgebrochen = false
+    void (async () => {
+      try {
+        const a = await fetch(`/api/nutrition/diary?datum=${datum}`)
+        const d = await a.json()
+        if (abgebrochen || !a.ok) return
+        const liste = (d.meals ?? []) as Array<{ id: string; meal_type: string }>
+        setMahlzeiten(liste)
+        if (liste[0]) setMahlzeitId(liste[0].id)
+      } catch {
+        // `[read]` **Stumm** — die Auswahl bleibt leer, und der
+        // Hinweis unten sagt, was fehlt.
+      }
+    })()
+    return () => { abgebrochen = true }
+  }, [datum])
+
+  /** Komma wie Punkt, leer heisst „nicht angegeben". */
+  const zahl = (s: string): number | undefined => {
+    const x = s.trim()
+    if (x.length === 0) return undefined
+    const n = Number(x.replace(',', '.'))
+    return Number.isFinite(n) && n >= 0 ? n : undefined
+  }
+
+  const kcal = zahl(v.kcal)
+  const bereit = mahlzeitId.length > 0
+    && v.label.trim().length > 0
+    && kcal !== undefined
+
+  async function anlegen() {
+    if (!bereit) return
+    setLaeuft(true)
+    setFehler(null)
+    try {
+      const a = await fetch('/api/nutrition/diary', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          art: 'manuell',
+          meal_id: mahlzeitId,
+          food_name: v.label.trim(),
+          enercc: kcal,
+          // `[read]` **Nur mitschicken, was dasteht** — `undefined`
+          // faellt aus dem JSON, und die Spalte bleibt `null`.
+          prot625: zahl(v.p),
+          fat: zahl(v.f),
+          cho: zahl(v.c),
+          amount_g: zahl(gramm),
+        }),
+      })
+      if (!a.ok) {
+        const d = await a.json().catch(() => null)
+        setFehler(d?.error ?? `Fehler ${a.status}`)
+        return
+      }
+      onClose()
+      // `[read]` **Die Seite neu laden** — Tagessumme, Ringe und
+      // Deckung kommen aus der Serverkomponente.
+      window.location.reload()
+    } catch (e) {
+      setFehler(e instanceof Error ? e.message : String(e))
+    } finally {
+      setLaeuft(false)
+    }
+  }
 
   const Zahl = ({ k, suffix }: { k: 'kcal' | 'p' | 'c' | 'f'; suffix: string }) => (
     <div style={{ position: 'relative' }}>
@@ -333,6 +420,7 @@ function QuickAddModal({ onClose }: { onClose: () => void }) {
         onChange={e => setze(k, e.target.value)}
         placeholder="0"
         aria-label={suffix}
+        data-probe={`quick-${k}`}
         className="v2-feld v2-mono"
         style={{ height: 34, padding: '0 40px 0 10px', fontSize: 13 }}
       />
@@ -341,64 +429,156 @@ function QuickAddModal({ onClose }: { onClose: () => void }) {
   )
 
   return (
-    <Rahmen
-      titel="Quick-add macros"
-      sub="No food lookup · for meal prep in bulk"
-      symbol="bolt"
+    <ZiehModal
+      titel="Quick-Add"
+      aria="Quick-Add — eine Zahl ohne Lebensmittel"
       breite={460}
-      onClose={onClose}
-      fuss={(
-        <>
-          <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
-          <InEntwicklungKnopf titel="Add" className="v2-btn v2-btn-primary">
-            <Icon name="plus" className="v2-ic v2-ic-sm" />Add
-          </InEntwicklungKnopf>
-        </>
-      )}
+      probe="quick-add"
+      onClose={() => { if (!laeuft) onClose() }}
     >
       <div className="v2-col-gap" style={{ gap: 10 }}>
-        <div>
-          <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Calories</div>
-          <Zahl k="kcal" suffix="kcal" />
+        <div className="v2-dim" style={{ fontSize: 11, lineHeight: 1.5 }}>
+          Ohne Suche — für Gerichte, deren Kalorien du kennst, aber die
+          in keinem Katalog stehen.
         </div>
-        <div className="v2-grid v2-g-cols-3" style={{ gap: 8 }}>
-          <div><div className="v2-eyebrow" style={{ marginBottom: 4 }}>Protein</div><Zahl k="p" suffix="g" /></div>
-          <div><div className="v2-eyebrow" style={{ marginBottom: 4 }}>Carbs</div><Zahl k="c" suffix="g" /></div>
-          <div><div className="v2-eyebrow" style={{ marginBottom: 4 }}>Fat</div><Zahl k="f" suffix="g" /></div>
-        </div>
+
         <div>
-          <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Label</div>
+          <div className="v2-eyebrow" style={{ marginBottom: 4 }}>
+            Bezeichnung
+          </div>
           <input
             value={v.label}
             onChange={e => setze('label', e.target.value)}
-            placeholder={'z.B. "Meal Prep Bowl"'}
-            aria-label="Label"
+            placeholder={'z. B. „Pasta im Ristorante"'}
+            aria-label="Bezeichnung"
+            data-probe="quick-name"
             className="v2-feld"
             style={{ height: 34, fontSize: 13 }}
           />
         </div>
+
         <div>
-          <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Meal</div>
-          <select className="v2-feld" style={{ height: 34, fontSize: 12.5 }} aria-label="Meal">
-            {/* `[cmd]` **G-339: `value` gesetzt.** Ohne es
-                schickt der Browser den LABEL — gemessen am
-                2026-09-02: `Pre-workout` statt `pre_workout`. */}
-            {MEAL_TYPES.map(m => (
-              <option key={m.id} value={m.id}>{m.label}</option>
+          <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Kalorien</div>
+          <Zahl k="kcal" suffix="kcal" />
+        </div>
+
+        {/* `[read]` **Die drei Makros sind freiwillig** — wer nur die
+            Zahl von der Menuekarte hat, laesst sie leer. **Leer heisst
+            `null`, nicht null Gramm** (C-48 Regel 1). */}
+        <div>
+          <div className="v2-eyebrow" style={{ marginBottom: 4 }}>
+            Makros <span className="v2-dim">— optional</span>
+          </div>
+          <div className="v2-grid v2-g-cols-3" style={{ gap: 8 }}>
+            <div><div className="v2-eyebrow" style={{ marginBottom: 4 }}>Protein</div><Zahl k="p" suffix="g" /></div>
+            <div><div className="v2-eyebrow" style={{ marginBottom: 4 }}>Kohlenhydrate</div><Zahl k="c" suffix="g" /></div>
+            <div><div className="v2-eyebrow" style={{ marginBottom: 4 }}>Fett</div><Zahl k="f" suffix="g" /></div>
+          </div>
+        </div>
+
+        {/* ══ G-340: das Gewicht wird nicht erfunden ═══════════════
+            `[cmd]` **`amount_g` ist NOT NULL und muss `> 0` sein** —
+            eine Null ist unmoeglich.
+
+            `[cmd]` **Gemessen: die Menge wird NICHT zum Hochrechnen
+            benutzt** (059b liest die eingefrorenen Spalten), **aber
+            sie faellt in die Grammsumme des Tages.**
+
+            **Tom zu dieser Zeile (G-330):** *„eine Angabe, die man
+            direkt nachwiegen kann."*
+
+            `[read]` **Deshalb: wer das Gewicht kennt, gibt es an.**
+            **Sonst steht 1 g** — der kleinste erlaubte Wert, und
+            damit die kleinste Verschiebung. */}
+        <div>
+          <div className="v2-eyebrow" style={{ marginBottom: 4 }}>
+            Gewicht <span className="v2-dim">— optional</span>
+          </div>
+          <div style={{ position: 'relative' }}>
+            <input
+              value={gramm}
+              onChange={e => setGramm(e.target.value)}
+              placeholder="—"
+              aria-label="Gewicht in Gramm"
+              data-probe="quick-gramm"
+              className="v2-feld v2-mono"
+              style={{ height: 34, padding: '0 40px 0 10px', fontSize: 13 }}
+            />
+            <span className="v2-dim v2-mono v2-feld-suffix">g</span>
+          </div>
+          <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 4, lineHeight: 1.5 }}>
+            {zahl(gramm) === undefined
+              ? <>Ohne Angabe zählt der Posten mit <strong>1 g</strong> in
+                  die Tagessumme — geraten wird nichts.</>
+              : <>Zählt mit <strong>{zahl(gramm)} g</strong> in die
+                  Tagessumme.</>}
+          </div>
+        </div>
+
+        <div>
+          <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Mahlzeit</div>
+          <select
+            className="v2-feld" style={{ height: 34, fontSize: 12.5 }}
+            aria-label="Mahlzeit" data-probe="quick-mahlzeit"
+            value={mahlzeitId}
+            disabled={laeuft || mahlzeiten.length === 0}
+            onChange={e => setMahlzeitId(e.target.value)}
+          >
+            {/* `[cmd]` **Die Mahlzeiten DIESES Tages, nicht die
+                Kategorien** — `meal_id` ist eine Zeile, kein Wort.
+                `[read]` **Der Name kommt aus `KATEGORIE_TEXT`**
+                (G-339), damit hier keine siebte Liste entsteht. */}
+            {mahlzeiten.map(m => (
+              <option key={m.id} value={m.id}>
+                {KATEGORIE_TEXT[m.meal_type] ?? m.meal_type}
+              </option>
             ))}
           </select>
+          {mahlzeiten.length === 0 && (
+            <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 4 }}>
+              Für diesen Tag gibt es noch keine Mahlzeit. Leg im Tagebuch
+              eine an — dann kannst du hier eintragen.
+            </div>
+          )}
+        </div>
+
+        {/* `[read]` **Ehrlich, nicht entschuldigend** (C-378): ein
+            manueller Posten traegt kcal und die angegebenen Makros.
+            **Die uebrigen 138 Codes bleiben leer, und der
+            Naehrstoffreiter sagt es** (G-341). */}
+        <div className="v2-hinweis">
+          <Icon
+            name="alert"
+            className="v2-ic v2-ic-sm"
+            style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4, color: 'var(--warn)' }}
+          />
+          Ein manueller Posten hat keine Mikronährstoffe. Der Tag bleibt
+          im Nährstoffreiter als unvollständig gekennzeichnet — geschätzt
+          wird nichts.
+        </div>
+
+        {fehler && (
+          <p style={{ fontSize: 11, color: 'var(--neg)', margin: 0 }}
+             data-probe="quick-fehler">{fehler}</p>
+        )}
+
+        <div style={{ display: 'flex', gap: 8, marginTop: 2 }}>
+          <button
+            type="button" className="v2-btn v2-btn-sm v2-btn-primary"
+            data-probe="quick-anlegen"
+            disabled={!bereit || laeuft}
+            onClick={() => void anlegen()}
+          >
+            <Icon name="plus" className="v2-ic v2-ic-sm" />
+            {laeuft ? 'Legt an…' : 'Eintragen'}
+          </button>
+          <button type="button" className="v2-btn v2-btn-sm"
+                  disabled={laeuft} onClick={onClose}>
+            Abbrechen
+          </button>
         </div>
       </div>
-      <div className="v2-hinweis" style={{ marginTop: 14 }}>
-        <Icon
-          name="alert"
-          className="v2-ic v2-ic-sm"
-          style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4, color: 'var(--warn)' }}
-        />
-        Quick-add produces no micronutrient data. The micro dashboard will show this entry as
-        {' '}&ldquo;no micro data&rdquo;.
-      </div>
-    </Rahmen>
+    </ZiehModal>
   )
 }
 
@@ -413,14 +593,16 @@ function QuickAddModal({ onClose }: { onClose: () => void }) {
  * Nutrition-Dateien. Hier faellt der Fall deshalb auf `null` — wie in
  * der Vorlage, wo nichts aufgeht.
  */
-export function NutritionModale({ modal, onClose }: {
+export function NutritionModale({ modal, datum, onClose }: {
   modal: NutritionModalTyp | null
+  /** G-340: Quick-Add braucht den Tag, um seine Mahlzeiten zu finden. */
+  datum: string
   onClose: () => void
 }) {
   if (!modal) return null
   if (modal === 'mealcam') return <MealCamModal onClose={onClose} />
   if (modal === 'customfood') return <CustomFoodModal onClose={onClose} />
-  if (modal === 'quickadd') return <QuickAddModal onClose={onClose} />
+  if (modal === 'quickadd') return <QuickAddModal datum={datum} onClose={onClose} />
   // ══ G-342: `nutsettings` ist entfernt ══════════════════
   //
   // `[cmd]` **Es hatte keinen Aufrufer** — der Typ stand hier, der

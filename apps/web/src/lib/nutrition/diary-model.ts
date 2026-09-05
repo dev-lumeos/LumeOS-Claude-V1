@@ -218,6 +218,124 @@ export function buildMealItemInsert(
   }
 }
 
+// ════════════════════════════════════════════════════════════════════
+// QUICK-ADD: EINE ZAHL OHNE LEBENSMITTEL — G-340
+// ════════════════════════════════════════════════════════════════════
+//
+// **Tom, 2026-09-02:** *„Quick-Add bauen."*
+//
+// `[read]` **Der Fall: wer im Restaurant isst, kennt die Kalorien vom
+// Menue, aber kein Lebensmittel.** **Er soll eine Zahl eintragen
+// koennen, ohne zu suchen.**
+//
+// `[cmd]` **Das Schema sieht ihn ausdruecklich vor** —
+// `meal_items_source_target_check`:
+//
+//     food_source = 'manual' AND food_id IS NULL
+//                            AND custom_food_id IS NULL
+//
+// `[cmd]` **Gemessen am 2026-09-05: alle 9.051 Posten tragen `bls`**
+// — `manual` und `custom` sind unbenutzt.
+
+/**
+ * Ein manueller Posten: Name, Kalorien, optional die drei Makros.
+ *
+ * `[read]` **Kein `food_id`** — genau das unterscheidet ihn.
+ *
+ * `[cmd]` **`amount_g` ist OPTIONAL, obwohl die Spalte NOT NULL ist**
+ * — die Begruendung steht bei `buildManualItemInsert`.
+ *
+ * `[read]` **Keine Naehrwertschaetzung** (C-378): was der Nutzer nicht
+ * eingibt, bleibt leer. **Aus 450 kcal folgt kein Proteinwert.**
+ */
+export const manualItemCreateSchema = z.object({
+  meal_id: z.string().uuid('meal_id muss eine UUID sein.'),
+  food_name: z.string().trim().min(1, 'Der Name darf nicht leer sein.').max(200),
+  enercc: z.number().nonnegative('Kalorien duerfen nicht negativ sein.').finite(),
+  // `[read]` **Die drei Makros sind freiwillig** — wer nur die
+  // Kalorien der Menuekarte kennt, hat sie nicht.
+  prot625: z.number().nonnegative().finite().optional(),
+  fat: z.number().nonnegative().finite().optional(),
+  cho: z.number().nonnegative().finite().optional(),
+  // `[cmd]` **Der CHECK verlangt `> 0`** — deshalb `positive`, nicht
+  // `nonnegative`. **Wer nichts angibt, bekommt die Vorgabe unten.**
+  amount_g: z.number().positive('Die Menge muss groesser als 0 sein.')
+    .finite().optional(),
+})
+
+export type ManualItemCreate = z.infer<typeof manualItemCreateSchema>
+
+/**
+ * Insert-Payload für einen manuellen Posten — G-340.
+ *
+ * ── Warum `amount_g` die Vorgabe 1 bekommt ────────────────────────
+ *
+ * `[cmd]` **Die Spalte ist NOT NULL und der CHECK verlangt `> 0`** —
+ * eine Null ist unmöglich, `null` auch.
+ *
+ * `[cmd]` **Gemessen: `amount_g` wird zum Hochrechnen NICHT benutzt.**
+ * `059b_daily_nutrient_summary_long.sql` liest die eingefrorenen
+ * Spalten direkt; die Menge steht nirgends in einer Multiplikation.
+ * **Eine falsche Zahl verfälscht also keinen Nährwert.**
+ *
+ * `[cmd]` **Aber sie fällt in die Grammsumme des Tages**
+ * (`mahlzeiten.tsx:725`), und die steht in der Kopfzeile.
+ *
+ * **Tom zu dieser Zeile (G-330):** *„eine Angabe, die man direkt
+ * nachwiegen kann."*
+ *
+ * `[read]` **Deshalb wird kein Gewicht erfunden.** Ein Restaurantteller
+ * mit „450 kcal" wiegt nicht 450 g und nicht 100 g — **jede geratene
+ * Zahl wäre eine Behauptung über etwas, das niemand gewogen hat.**
+ *
+ * `[read]` **`1` ist der kleinstmögliche Wert, den der CHECK zulässt**
+ * — er hält die Zeile schreibbar und verschiebt die Grammsumme um das
+ * Minimum. `[cmd]` **Zwei Bestandsposten tragen bereits `1`**, der Wert
+ * ist also kein Fremdkörper.
+ *
+ * `[read]` **Wer das Gewicht kennt, gibt es an** — dann steht es da,
+ * und die Summe stimmt.
+ *
+ * ── Warum `nutrients` leer bleibt ─────────────────────────────────
+ *
+ * `[cmd]` **Gemessen in `059b`, Zeile 94-96:** der jsonb-Zweig
+ * schliesst die neun Spaltencodes ausdrücklich aus —
+ * `WHERE kv.key NOT IN ('ENERCC','PROT625','FAT','CHO', …)`.
+ *
+ * `[read]` **Die Eingaben gehören also in die SPALTEN, nicht in den
+ * jsonb.** Dort geschrieben würden sie schlicht ignoriert — und ein
+ * Wert, den niemand liest, ist eine zweite Wahrheit, die auf ihren
+ * Fehler wartet.
+ *
+ * `[cmd]` **`{}` ist der Spaltenvorgabewert** und heisst genau das
+ * Richtige: **für die übrigen 138 Codes gibt es keine Messung.**
+ * `[read]` **Seit G-341 sagt der Nährstoffreiter das auch** — der Tag
+ * bleibt „unvollständig", und das ist ehrlich (C-378).
+ */
+export function buildManualItemInsert(userId: string, input: ManualItemCreate) {
+  return {
+    meal_id: input.meal_id,
+    user_id: userId,
+    // `[cmd]` **Beide NULL** — sonst greift der CHECK.
+    food_id: null,
+    custom_food_id: null,
+    food_source: 'manual' as const,
+    food_name: input.food_name.trim(),
+    amount_g: input.amount_g ?? 1,
+    enercc: input.enercc,
+    // `[read]` **`null`, nicht `0`** — wer kein Protein angibt, sagt
+    // nicht „null Gramm", sondern „ich weiss es nicht". **Genau die
+    // Unterscheidung, die C-48 Regel 1 traegt.**
+    prot625: input.prot625 ?? null,
+    fat: input.fat ?? null,
+    cho: input.cho ?? null,
+    nutrients: {},
+    measurement_source: 'manual' as const,
+    // `frozen_at` bleibt der Datenbank überlassen — dieselbe
+    // Begründung wie bei `buildMealItemInsert`.
+  }
+}
+
 /**
  * Update-Payload beim nachträglichen Ändern der Menge.
  *

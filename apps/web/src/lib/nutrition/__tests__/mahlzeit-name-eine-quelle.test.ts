@@ -340,11 +340,29 @@ test('G-339: die Quick-Add-Auswahl kommt aus KATEGORIE_TEXT', () => {
   //
   // `[read]` **Sie ueberlebte G-335**, weil sie den Code als WERT
   // schrieb (`{ id: 'breakfast' }`) statt als Schluessel.
+  // ══ NACHGEZOGEN IN G-340, 2026-09-05 ═══════════════════════════
+  //
+  // `[cmd]` **`MEAL_TYPES` ist entfernt** — G-340 hat die
+  // Kategorie-Auswahl durch die Mahlzeiten des Tages ersetzt, und
+  // damit verlor die Liste ihren letzten Verbraucher (A-59).
+  //
+  // `[read]` **Die Zusage bleibt: keine eigene Namensliste in
+  // `modale.tsx`.** **Sie wird jetzt als Abwesenheit geprueft** —
+  // das ist die staerkere Form, denn sie faengt auch eine Liste,
+  // die anders heisst.
   const m = ohneKommentare(MODALE)
-  assert.match(m, /const MEAL_TYPES = Object\.entries\(KATEGORIE_TEXT\)/,
-    'die Auswahl haelt wieder eine eigene Liste')
   assert.match(m, /import \{ KATEGORIE_TEXT \}/,
     'die eine Namensquelle wird nicht importiert')
+
+  // `[cmd]` **Kein Kategoriecode neben einem Text** — weder als
+  // Schluessel (`breakfast: 'x'`) noch als Wert (`id: 'breakfast'`).
+  for (const c of ['breakfast', 'lunch', 'dinner', 'snack',
+    'pre_workout', 'preworkout']) {
+    assert.doesNotMatch(m, new RegExp(`(?<![a-z0-9_])${c}:\\s*['"]`),
+      `${c} steht wieder als Schluessel in modale.tsx`)
+    assert.doesNotMatch(m, new RegExp(`id:\\s*['"]${c}['"]`),
+      `${c} steht wieder als Wert in modale.tsx`)
+  }
 })
 
 test('G-339: preworkout ist weg — der CHECK kennt ihn nicht', () => {
@@ -374,12 +392,27 @@ test('G-339: die option traegt ein value — sonst faehrt der Label los', () => 
   //
   // `[read]` **Das ist schlimmer als der falsche Schluessel** und
   // faellt in keinem Typecheck auf.
+  // ══ NACHGEZOGEN IN G-340, 2026-09-05 ═══════════════════════════
+  //
+  // `[cmd]` **Der Anker `aria-label="Meal"` ist weg** — G-340 hat die
+  // Kategorie-Auswahl durch die MAHLZEITEN des Tages ersetzt: ein
+  // Posten haengt an einer `meal_id` (eine Zeile), nicht an einer
+  // Kategorie (ein Wort).
+  //
+  // `[read]` **Die Zusage bleibt Wort fuer Wort dieselbe** — eine
+  // `<option>` ohne `value` schickt ihren Text. **Nur das Pulldown
+  // ist ein anderes.**
   const m = ohneKommentare(MODALE)
-  const i = m.indexOf('aria-label="Meal"')
+  const i = m.indexOf('data-probe="quick-mahlzeit"')
   assert.ok(i > 0, 'die Mahlzeitenauswahl fehlt')
-  const block = m.slice(i, i + 400)
+  const block = m.slice(i, i + 500)
   assert.match(block, /<option key=\{m\.id\} value=\{m\.id\}>/,
     'die option traegt kein value — der Browser schickt den Label')
+
+  // `[cmd]` **Und der Name kommt weiter aus der einen Quelle** —
+  // sonst waere hier die siebte Liste entstanden.
+  assert.match(block, /KATEGORIE_TEXT\[m\.meal_type\]/,
+    'die Auswahl uebersetzt meal_type selbst — das waere eine neue Liste')
 })
 
 test('G-339/G-342: in modale.tsx stehen keine Zeiten mehr', () => {

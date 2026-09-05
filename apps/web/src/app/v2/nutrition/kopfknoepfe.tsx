@@ -29,7 +29,11 @@ import { NutritionModale, type NutritionModalTyp } from './modale'
  * stimmt, reicht die Ansicht ihn hier durch, statt ihn hinten
  * anzuhaengen.
  */
-export function Kopfknoepfe({ kinder }: { kinder?: React.ReactNode }) {
+export function Kopfknoepfe({ datum, kinder }: {
+  /** G-340: Quick-Add schreibt in eine Mahlzeit DIESES Tages. */
+  datum: string
+  kinder?: React.ReactNode
+}) {
   const [modal, setModal] = React.useState<NutritionModalTyp | null>(null)
 
   return (
@@ -52,7 +56,7 @@ export function Kopfknoepfe({ kinder }: { kinder?: React.ReactNode }) {
         <Icon name="camera" className="v2-ic v2-ic-sm" /> MealCam
       </button>
 
-      <NutritionModale modal={modal} onClose={() => setModal(null)} />
+      <NutritionModale modal={modal} datum={datum} onClose={() => setModal(null)} />
     </>
   )
 }

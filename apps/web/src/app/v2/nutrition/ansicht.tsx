@@ -278,6 +278,7 @@ export async function TagebuchAnsicht({
               Server-Komponente ist und keinen Zustand halten kann.
               „Find food" bleibt dazwischen — Reihenfolge der Vorlage. */}
           <Kopfknoepfe
+            datum={datum}
             kinder={(
               <Link href={'/v2/nutrition/suche' as Route} className="v2-btn">
                 <Icon name="search" className="v2-ic v2-ic-sm" /> Find food
