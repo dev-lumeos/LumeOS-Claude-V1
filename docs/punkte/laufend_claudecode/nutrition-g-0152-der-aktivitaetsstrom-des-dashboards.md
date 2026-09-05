@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-100
 kinder: []
 entscheidung: E-52
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: []
   dateien: []
@@ -74,3 +76,8 @@ Stelle, die kein Waechter erreicht.**
 
 `[cmd]` **Der Ereignisstrom ist die erste modulschneidende Sicht** —
 wie *Wasser* bei den Naehrwerten (E-48).
+
+## Auftrag
+
+**Mitbeauftragt mit G-348 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

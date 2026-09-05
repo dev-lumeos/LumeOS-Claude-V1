@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 210 |
+| `todos` | 209 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 274 |
-| **gesamt** | **490** |
+| `erledigt` | 276 |
+| **gesamt** | **491** |
 
 ## medical — 43
 
@@ -59,7 +59,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 222
+## nutrition — 223
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -175,7 +175,7 @@
 | `G-136` | feature | mittel | [Zwei Kartenzuordnungen sind Auslegung](erledigt/nutrition-g-0136-zwei-kartenzuordnungen-sind-auslegung.md) | erledigt | — | — |
 | `G-137` | befund | mittel | [Acht Karten — die alten Ansichtsschluessel verfallen](erledigt/nutrition-g-0137-acht-karten-die-alten-ansichtsschluessel-verfallen.md) | erledigt | — | — |
 | `G-140` | feature | mittel | [`display_tier` ist ein Abo-Tier, keine Baumebene](todos/nutrition-g-0140-display-tier-ist-ein-abo-tier-keine-baumebene.md) | offen | — | — |
-| `G-152` | feature | mittel | [Der Aktivitaetsstrom des Dashboards](todos/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | offen | — | — |
+| `G-152` | feature | mittel | [Der Aktivitaetsstrom des Dashboards](laufend_claudecode/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | laeuft (claudecode) | — | — |
 | `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — | — |
 | `G-220` | entscheidung | hoch | [MealCam Auto-Accept widerspricht ADR_MEALCAM_V1](erledigt/nutrition-g-0220-mealcam-auto-accept-widerspricht-adr-mealcam-v1.md) | erledigt | — | — |
 | `G-221` | entscheidung | hoch | [Food-Tag-Set V1 widersprüchlich definiert](erledigt/nutrition-g-0221-food-tag-set-v1-widerspruechlich-definiert.md) | erledigt | — | G-245 |
@@ -280,10 +280,11 @@
 | `G-342` | befund | niedrig | [`nutsettings` hat keinen Aufrufer](erledigt/nutrition-g-0342-nutsettings-hat-keinen-aufrufer.md) | erledigt | — | G-343 |
 | `G-343` | befund | mittel | [Tests messen gegen ueberholte Entwuerfe](erledigt/nutrition-g-0343-tests-messen-gegen-ueberholte-entwuerfe.md) | erledigt | — | G-348 |
 | `G-344` | befund | hoch | [Einkaufslisten koennen mehr, als die Spec sagt](todos/nutrition-g-0344-einkaufslisten-koennen-mehr-als-die-spec-sagt.md) | offen | — | C-407, G-345 |
-| `G-345` | feature | hoch | [die Oberflaeche fuer Einkaufslisten](laufend_claudecode/nutrition-g-0345-die-oberflaeche-fuer-einkaufslisten.md) | laeuft (claudecode) | — | — |
-| `G-346` | entscheidung | mittel | [Quick-Add braucht eine Mahlzeit](laufend_claudecode/nutrition-g-0346-quick-add-braucht-eine-mahlzeit.md) | laeuft (claudecode) | — | — |
-| `G-347` | feature | mittel | [die Anzeige zieht nach](laufend_claudecode/nutrition-g-0347-die-anzeige-zieht-nach.md) | laeuft (claudecode) | — | — |
-| `G-348` | befund | mittel | [`wieGestern` ueberspringt manuelle Posten](todos/nutrition-g-0348-wiegestern-ueberspringt-manuelle-posten.md) | offen | — | — |
+| `G-345` | feature | hoch | [die Oberflaeche fuer Einkaufslisten](erledigt/nutrition-g-0345-die-oberflaeche-fuer-einkaufslisten.md) | erledigt | — | G-350 |
+| `G-346` | entscheidung | mittel | [Quick-Add braucht eine Mahlzeit](todos/nutrition-g-0346-quick-add-braucht-eine-mahlzeit.md) | offen | — | — |
+| `G-347` | feature | mittel | [die Anzeige zieht nach](erledigt/nutrition-g-0347-die-anzeige-zieht-nach.md) | erledigt | — | — |
+| `G-348` | befund | mittel | [`wieGestern` ueberspringt manuelle Posten](laufend_claudecode/nutrition-g-0348-wiegestern-ueberspringt-manuelle-posten.md) | laeuft (claudecode) | — | — |
+| `G-350` | befund | mittel | [ein zweiter Schreibweg fuer `is_checked`](laufend_claudecode/nutrition-g-0350-ein-zweiter-schreibweg-fuer-is-checked.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 60

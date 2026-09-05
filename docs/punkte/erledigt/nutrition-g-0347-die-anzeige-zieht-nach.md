@@ -9,6 +9,8 @@ kind_von: C-405
 entscheidung: E-63
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: 1450c56b
 beruehrt:
   dateien:
     - apps/web/src/lib/nutrition/naehrstoff-anzeige.ts
@@ -58,3 +60,17 @@ naechsten Schreibversuch faellt der CHECK.**
 
 **Mitbeauftragt mit G-345 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit G-345 abgenommen.**
+
+`[cmd]` **`NT` bei Makronaehrstoffen, *Fettbegleitstoffe* nach
+*Fette*.**
+
+`[cmd]` **Vier `strong_avoid`-Stellen bereinigt** — **davon eine
+stille Zusage, plus ein doppelt falscher Kommentar.**
+
+`[read]` **Eine stille Zusage ist eine, die niemand bemerkt haette:
+sie galt und zeigte auf einen Wert, den die Datenbank nicht mehr
+kennt.**

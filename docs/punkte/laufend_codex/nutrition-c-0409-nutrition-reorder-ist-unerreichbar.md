@@ -134,7 +134,90 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Stand 2026-09-05 — gebaut und lokal eingespielt.** `apps/`,
+Migrationen, Dev-Server, Stage, Commit und Push blieben unberuehrt.
+
+### C-409 — beide CHECKs lassen Nutrition-Nachbestellung zu
+
+`[cmd]` **`407_shopping_lists_and_food_inventory.sql` ersetzt jetzt
+auch `shopping_lists_source_type_check`.** Seine Werteliste und
+`shopping_lists_source_target_check` enthalten beide
+`nutrition_reorder`; die Suche nach den alten Wertelisten fand keine
+weitere Stelle im Pipelinebestand.
+
+`[cmd]` **Die Gegenprobe wurde wirklich geschrieben und entfernt:**
+eine Liste `C409 Gegenprobe 2026-09-05` mit
+`source_type = nutrition_reorder` wurde angelegt, erhielt eine UUID,
+anschliessend gezielt entfernt. Die getrennte Nachmessung liefert
+**0** verbliebene Probereihen.
+
+### G-279 — eine Sicht statt 388 Browser-Posten
+
+`[cmd]` **`nutrition.frequent_food_positions` liefert je Nutzer und
+Mahlzeitart genau eine Position der letzten 30 Kalendertage.**
+`days_used` zaehlt verschiedene `entry_date`; `entry_count` bleibt nur
+als Diagnose sichtbar. Der Nenner `days_with_meal_type` zaehlt die
+Tage, an denen diese Mahlzeitart vorkam.
+
+`[cmd]` **Fuer `dev@lumeos.app`, 2026-08-07 bis 2026-09-05, sind es
+vier Zeilen:** Fruehstueck *Ei (roh)* 26 von 30, Mittag *Olivenoel*
+26 von 30, Abend *Olivenoel* 26 von 30, Snack *Vollkornbrot* 11 von
+30. Die zwei Olivenoel-Zeilen ergeben zusammen die 52 Eintraege aus
+G-328, ohne sie als 52 Tage auszugeben.
+
+`[cmd]` **Manuelle Posten werden nicht uebergangen:** Die
+Wirkungsprobe legte einen Item ohne `food_id` mit
+`food_source = manual` an; die Sicht lieferte ihn mit `days_used = 1`
+und `days_with_meal_type = 1`. Ihr Positionsschluessel ist der
+normalisierte, gespeicherte Name; BLS und Custom-Foods bleiben an
+ihren IDs gruppiert.
+
+`[read]` **Die spaetere Kachel braucht nur eine Select-Abfrage auf die
+Sicht** (`meal_type`, Quelle/IDs, `food_name`, `days_used`,
+`days_with_meal_type`, `entry_count`, `last_logged_on`). Sie bleibt ein
+UI-Auftrag.
+
+### C-31 — enger serverseitiger Admin-Schreibkanal
+
+`[cmd]` **`nutrition.curate_food_tag(food_id, tag_code, action)` ist
+eine `SECURITY DEFINER`-RPC mit leerem Suchpfad.** Sie verlangt
+`public.is_admin()` (ausschliesslich JWT-`app_metadata`), validiert
+Lebensmittel, Tag und `set|removed` und schreibt dann den gezielten
+Upsert nach `food_tags_kuriert`.
+
+`[cmd]` **Die Rechte bleiben eng:** `authenticated` darf die RPC
+ausfuehren, hat aber kein direktes `INSERT` auf das Overlay. Die
+Gegenprobe weist Nicht-Admin ab; als Admin ueberdeckt `removed` einen
+vorhandenen Import-Tag in `food_tags_effective` (0 effektive Zeilen).
+Der Test rollt seine Probe zurueck.
+
+`[cmd]` **Gegen die Auftragsannahme ist C-366 im aktuellen Bestand
+nicht mehr vollstaendig angeschlossen:** Seine bestehende Validierung
+erwartet drei Leser von `food_tags_effective`, misst aber **1**.
+`preference_search_preview` liest die Sicht; `food_search` und
+`refresh_food_preference_search_targets` lesen wieder
+`food_tags`. Diese beiden spaeteren Leser wurden hier nicht
+still geaendert — sie sind ein eigener Rueckfallbefund gegen den
+angeblich bereits gebauten dritten Teil.
+
+### Nachweise
+
+`[cmd]` **Rot vor Gruen:** Vor der Umsetzung schlugen alle drei neuen
+Wirkungsproben fehl (CHECK, Sicht, RPC fehlten). Danach:
+
+    pnpm exec tsx --test supabase/_pipeline/_validierung/
+      nutrition-c409-reorder-frequent-curation.test.ts      3 gruen
+    pnpm exec tsx --test supabase/_pipeline/_validierung/
+      nutrition-c407-shopping-lists-and-c408-inventory.test.ts
+                                                               2 gruen
+    node tools/schemafreigabe-pruefen.mjs                      gruen
+    node tools/migration-datenlogik-pruefen.mjs                gruen
+
+`[cmd]` **Nicht gruen, vorbestehend und nicht von diesem Schritt
+veraendert:** `nutrition-c366-curated-food-tags.test.ts`
+erwartet drei effektive Leser, findet einen; `pnpm ladekette` meldet
+in `apps/web/src/app/nutrition/page.tsx` 17 serielle Abfragen bei
+einer geduldeten Grenze von 10. `apps/` blieb unveraendert.
 
 ## Abnahme
 

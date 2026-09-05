@@ -7,8 +7,6 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: G-340
 entscheidung: E-58
-agent: claudecode
-beauftragt: 2026-09-07
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/modale.tsx
@@ -60,3 +58,26 @@ die Mahlzeit mit an** — **ein Schritt, zwei Wirkungen.**
 
 **Mitbeauftragt mit G-345 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-07: bleibt Produktentscheidung
+
+`[cmd]` **Ohne das entfallene UNIQUE ist offen, ob *Mahlzeit mit
+anlegen* immer eine neue erzeugt oder eine bestehende
+wiederverwendet** — **und wenn ja, nach welcher Regel.**
+
+`[read]` **Das ist die Frage, die im Auftrag fehlte.** `[read]` **Der
+Vorschlag lautete *ein Schritt, zwei Wirkungen*** — **und liess
+offen, was bei einer zweiten Erfassung um dieselbe Zeit geschieht.**
+
+`[read]` **Wer um 15:00 einen Kaffee und um 15:10 einen Keks
+erfasst: eine Mahlzeit oder zwei?**
+
+**Drei Wege:**
+
+`[read]` **Immer neu** — **dann entstehen viele kleine Mahlzeiten.**
+
+`[read]` **Bestehende im selben Slot wiederverwenden** — **dann
+landet der Keks im *Nachmittagssnack*, was richtig waere.**
+
+`[read]` **Nach Zeitfenster** — **etwa 30 Minuten.** `[read]` **Aber
+eine Zahl, die niemand gewaehlt hat.**
