@@ -141,7 +141,50 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+`[cmd]` 2026-09-05 live geprueft und eingespielt.
+
+### C-405
+
+- `CHORL` ist weiter der Definitionscode (C-346 mappt nur den
+  Legacy-Quellschluessel `CHOL` darauf). Seine Definition liegt nun in
+  `Fettbegleitstoffe`, `sort_index = 118`, direkt nach den Fettsaeuren,
+  und hat weiterhin keinen `parent_code`. Cholesterin wird damit nicht
+  faelschlich zu `FAT` aufsummiert.
+- `NT` liegt nun bei `Makronaehrstoffe` und hat ebenfalls keinen
+  `parent_code`. `PROT625 = NT x 6,25` beschreibt eine Umrechnung, keine
+  Bestandteilsbeziehung; ein Parent wuerde eine falsche Summandenbeziehung
+  modellieren.
+- `Sonstige Naehrstoffe` hat danach 0 Codes; der Baum hat 41 Wurzeln und
+  97 Kinder (vorher 40/98).
+
+`apps/` blieb unveraendert. Fuer die Anzeige ist ein UI-Folgeauftrag
+noetig: In `apps/web/src/lib/nutrition/naehrstoff-anzeige.ts` muss `NT`
+der Protein-Karte zugeordnet werden, und `Fettbegleitstoffe` gehoert in
+`KARTEN_REIHENFOLGE` direkt hinter `Fette`. Ohne diese Nacharbeit landet
+`NT` weiterhin auf der Sonstige-Karte bzw. die neue Karte fehlt in der
+Reihenfolge.
+
+### C-406
+
+- `strong_avoid` ist aus dem CHECK von
+  `nutrition.food_preference_items` und aus den drei lesenden
+  Pipeline-Stellen entfernt. Es gab keine gespeicherten
+  `strong_avoid`-Zeilen.
+- Die Intoleranzwirkung bleibt erhalten: Das Dev-Profil hat
+  `intolerances = {lactose}`; die materialisierten Suchziele enthalten
+  1.021 `profile_intolerance`-Treffer auf Stufe `strong`. Die Suche nach
+  `Milch` liefert diese weiterhin als `preference_level = strong`,
+  `preference_match_type = intolerance` und `score = -25`.
+- In `apps/` bleiben vier bewusst nicht angefasste Altstellen:
+  `src/lib/nutrition/daumen-schreiben.ts:49`,
+  `src/lib/nutrition/food-search.ts:760`,
+  `src/lib/nutrition/__tests__/daumen-schreiben.test.ts:39` und
+  `src/app/v2/nutrition/vorlieben-aktionen.ts:48`.
+
+Nachweis: die neue C-405/C-406-Validierung und der bestehende
+C-346-Legacy-Mapping-Test sind gruen; der gezielte ESLint-Lauf hat keine
+Fehler. Keine Migration, keine App-Datei und kein Dev-Server wurden
+angefasst; nichts wurde gestaged oder committed.
 
 ## Abnahme
 

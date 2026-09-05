@@ -7,6 +7,8 @@ angelegt: 2026-08-30
 braucht: [G-328]
 kind_von: G-263
 entscheidung: E-56
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/tab-insights.tsx]
 zahlen:
@@ -72,3 +74,8 @@ gewesen sein, das Haeufigste ist ein Muster.**
 Tagen vor, nicht 27 mal.** `[read]` **Was *am haeufigsten* zaehlt —
 Name, Posten oder Zusammensetzung — ist zu klaeren, bevor die Kachel
 entsteht.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-343 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

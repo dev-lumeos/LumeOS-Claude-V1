@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-279
 entscheidung: E-56
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: [nutrition.meals]
 zahlen:
@@ -49,3 +51,8 @@ naheliegend** — dieselbe Spanne wie die Insights-Kacheln.
 
 `[read]` **Aber wer seit einer Woche etwas Neues isst, sieht dann
 noch das Alte.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-343 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.
