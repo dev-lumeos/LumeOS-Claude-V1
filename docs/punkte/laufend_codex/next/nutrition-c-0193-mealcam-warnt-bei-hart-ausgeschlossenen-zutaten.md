@@ -38,3 +38,8 @@ zahlen: null
 
   **Offen:** ob ein bestaetigter Treffer die Preference dauerhaft
   aendern darf oder einmalig durchgewunken wird.
+
+## Auftrag
+
+**Vorbereitet mit C-379 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

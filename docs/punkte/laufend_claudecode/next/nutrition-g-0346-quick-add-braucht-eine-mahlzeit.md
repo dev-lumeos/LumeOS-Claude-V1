@@ -53,3 +53,8 @@ dann entstehen Mahlzeiten, die der Nutzer nicht erwartet.**
 
 `[read]` **Ein dritter Weg: Quick-Add fragt nach der Zeit und legt
 die Mahlzeit mit an** — **ein Schritt, zwei Wirkungen.**
+
+## Auftrag
+
+**Vorbereitet mit G-345 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

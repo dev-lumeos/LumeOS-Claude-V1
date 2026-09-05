@@ -51,3 +51,8 @@ naechsten Schreibversuch faellt der CHECK.**
 `[read]` **Die mittlere Stufe bleibt ueber `intolerances`** —
 `[cmd]` **Laktose liefert weiterhin `strong / intolerance` mit Score
 -25.**
+
+## Auftrag
+
+**Vorbereitet mit G-345 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

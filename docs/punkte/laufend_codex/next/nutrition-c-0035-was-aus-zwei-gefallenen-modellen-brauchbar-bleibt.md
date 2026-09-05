@@ -4,7 +4,7 @@ typ: entscheidung
 modul: nutrition
 schwere: niedrig
 angelegt: 2026-08-14
-braucht: [C-386]
+braucht: []
 kind_von: C-28
 kinder: []
 entscheidung: E-13
@@ -60,3 +60,8 @@ ist gebaut oder gesichert.**
 `[cmd]` **die Vertreterregel nach der Suchsortierung** (G-70, G-281).
 
 `[cmd]` **C-386 misst es** — **eingeflossen oder verloren.**
+
+## Auftrag
+
+**Vorbereitet mit C-379 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

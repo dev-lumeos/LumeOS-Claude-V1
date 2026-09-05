@@ -4,7 +4,7 @@ typ: feature
 modul: nutrition
 schwere: mittel
 angelegt: 2026-09-01
-braucht: [C-383]
+braucht: []
 kind_von: C-377
 entscheidung: E-54
 beruehrt:
@@ -118,3 +118,80 @@ Spuren.**
 `[read]` **Die Frage waere dann nicht *welcher Plan folgt auf
 welchen*, sondern *welcher Plan gilt in dieser Phase*** — **und die
 Kette entsteht aus der Zeitachse, nicht umgekehrt.**
+
+## Auftrag — drei Punkte, deren Vorbedingung erledigt ist
+
+**Mitbeauftragt: C-35, C-193.** Bericht in diese Datei.
+
+`[read]` **Vorbereitet am 2026-09-07.**
+
+### Warum diese drei
+
+`[read]` **Alle drei tragen ein `braucht:`, dessen Vorbedingung
+laengst erledigt ist** — **sie warten auf nichts.**
+
+    C-379   braucht C-383   -- C-383 erledigt am 02.09.
+    C-35    braucht C-386   -- C-386 erledigt am 02.09.
+
+### 1 · C-379 — `sequence` hat kein Ziel
+
+`[cmd]` **C-383 hat gemessen:** `goal_phases` **traegt fuenf
+Testzeilen, keine Planreferenz, keinen Produkt-Schreibweg.**
+
+`[cmd]` **Und E-53 stellte den Punkt zurueck, bis das Flussbild
+steht.**
+
+`[read]` **Miss, ob er noch gilt** — `[cmd]` **E-62 hat inzwischen
+`days_count` als Laufzeit festgeschrieben, und C-403 hat die
+fehlenden Wochen gebaut.**
+
+`[read]` **Vielleicht ist die Frage jetzt kleiner:** **`sequence`
+braucht einen Folgeplan, und `next_plan_id` gibt es.**
+
+### 2 · C-35 — was aus zwei gefallenen Modellen bleibt
+
+`[cmd]` **C-386 hat drei Reste gemessen:** Zubereitungsschluessel
+eingeflossen, Vertreterregel teilweise, Erzeugnis-Zellen nicht.
+
+`[cmd]` **C-388 hat den zweiten geschlossen:** **402 von 403 Familien
+treffen nie eine Suche.**
+
+`[cmd]` **Und C-389 den dritten:** **vier Saftzeilen berichtigt,
+keine 53er-Regel.**
+
+`[read]` **Miss, was von C-35 uebrig ist** — **vermutlich nichts.**
+
+### 3 · C-193 — MealCam warnt bei harten Ausschluessen
+
+`[cmd]` **A-47 hat gemessen: die harte Stufe entfernt, sie wertet
+nicht ab** — **120 `contains_nuts`-Zeilen fehlen bei JEDER Suche.**
+
+`[read]` **Miss, ob MealCam denselben Weg nimmt** — **oder ob sie
+Zutaten zeigt, die die Suche ausschliesst.**
+
+`[cmd]` **MealCam ist eine Attrappe** (G-276) — **aber der Leseweg
+dahinter koennte schon stehen.**
+
+### Was nicht zu tun ist
+
+**Keine Datenlogik in `migrations/`.**
+`apps/` nicht anfassen.
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server gehoert dir nicht
+
+`[cmd]` **Kein `neustart`, kein `start`, kein `aufraeumen`.**
+
+### Nachweis
+
+    C-379   gilt noch / kleiner geworden, begruendet
+    C-35    was uebrig ist, gezaehlt
+    C-193   nimmt MealCam den harten Weg, gemessen
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

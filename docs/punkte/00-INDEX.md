@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 214 |
-| `laufend_codex` | 2 |
-| `laufend_claudecode` | 3 |
+| `todos` | 208 |
+| `laufend_codex` | 5 |
+| `laufend_claudecode` | 6 |
 | `erledigt` | 269 |
 | **gesamt** | **488** |
 
@@ -61,7 +61,7 @@
 
 ## nutrition — 220
 
-### beauftragbar — 218
+### beauftragbar — 219
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -77,7 +77,7 @@
 | `C-29` | entscheidung | mittel | [Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt](erledigt/nutrition-c-0029-drei-namensschichten-und-eine-kuration-die-den-kettenlauf-uberlebt.md) | erledigt | — | — |
 | `C-30` | befund | mittel | [Suche und Trefferliste auf Arten umstellen](todos/nutrition-c-0030-suche-und-trefferliste-auf-arten-umstellen.md) | offen | — | — |
 | `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](todos/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | offen | — | — |
-| `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](todos/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | offen | — | C-386 |
+| `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](laufend_codex/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | vorbereitet (codex) | — | C-386 |
 | `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — | — |
 | `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](erledigt/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | erledigt | — | G-239, G-248 |
 | `C-49` | befund | hoch | [Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach](erledigt/nutrition-c-0049-deckungsgrad-warnungen-und-tages-score-die-drei-stufen-danach.md) | erledigt | — | C-323, C-324, C-360 |
@@ -94,7 +94,7 @@
 | `C-177` | messung | hoch | [Thai-Aliase fehlen bewusst](erledigt/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | erledigt | — | — |
 | `C-191` | messung | mittel | [`p_user_id` kostet das Dreifache](erledigt/nutrition-c-0191-p-user-id-kostet-das-dreifache.md) | erledigt | — | — |
 | `C-192` | befund | mittel | [`p_user_id` kostet in `food_search` das Dreifache](erledigt/nutrition-c-0192-p-user-id-kostet-in-food-search-das-dreifache.md) | erledigt | — | — |
-| `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](todos/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | offen | — | — |
+| `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](laufend_codex/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | vorbereitet (codex) | — | — |
 | `C-210` | befund | mittel | [Die 28 fehlenden Naehrstofftexte — was ist gemeint?](todos/nutrition-c-0210-die-28-fehlenden-naehrstofftexte-was-ist-gemeint.md) | offen | — | — |
 | `C-211` | befund | mittel | [Selen fehlt im BLS-Katalog](erledigt/nutrition-c-0211-selen-fehlt-im-bls-katalog.md) | erledigt | — | — |
 | `C-212` | befund | mittel | [`CHORL` haengt nicht im Naehrstoffbaum](erledigt/nutrition-c-0212-chorl-haengt-nicht-im-naehrstoffbaum.md) | erledigt | — | — |
@@ -133,7 +133,7 @@
 | `C-376` | befund | mittel | [frieren abgeschlossene Plaene auch ein?](erledigt/nutrition-c-0376-frieren-abgeschlossene-plaene-auch-ein.md) | erledigt | — | — |
 | `C-377` | feature | hoch | [ein abgelaufener Plan braucht eine Frage](erledigt/nutrition-c-0377-ein-abgelaufener-plan-braucht-eine-frage.md) | erledigt | — | C-379 |
 | `C-378` | befund | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](erledigt/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | erledigt | — | — |
-| `C-379` | feature | mittel | [`sequence` hat kein Ziel](todos/nutrition-c-0379-sequence-hat-kein-ziel.md) | offen | — | C-383, G-313 |
+| `C-379` | feature | mittel | [`sequence` hat kein Ziel](laufend_codex/nutrition-c-0379-sequence-hat-kein-ziel.md) | vorbereitet (codex) | — | C-383, G-313 |
 | `C-380` | befund | mittel | [die Seed-Plaene tragen 84 mal Hammelfilet](erledigt/nutrition-c-0380-die-seed-plaene-tragen-84-mal-hammelfilet.md) | erledigt | — | — |
 | `C-382` | feature | mittel | [wer entscheidet, ob ein Plan editierbar ist?](todos/nutrition-c-0382-wer-entscheidet-ob-ein-plan-editierbar-ist.md) | offen | — | — |
 | `C-384` | befund | hoch | [wer schreibt die 30.797 Tag-Zeilen?](erledigt/nutrition-c-0384-wer-schreibt-die-30797-tag-zeilen.md) | erledigt | — | C-387 |
@@ -280,16 +280,16 @@
 | `G-342` | befund | niedrig | [`nutsettings` hat keinen Aufrufer](erledigt/nutrition-g-0342-nutsettings-hat-keinen-aufrufer.md) | erledigt | — | G-343 |
 | `G-343` | befund | mittel | [Tests messen gegen ueberholte Entwuerfe](laufend_claudecode/nutrition-g-0343-tests-messen-gegen-ueberholte-entwuerfe.md) | laeuft (claudecode) | — | — |
 | `G-344` | befund | hoch | [Einkaufslisten koennen mehr, als die Spec sagt](todos/nutrition-g-0344-einkaufslisten-koennen-mehr-als-die-spec-sagt.md) | offen | — | C-407, G-345 |
-| `G-346` | entscheidung | mittel | [Quick-Add braucht eine Mahlzeit](todos/nutrition-g-0346-quick-add-braucht-eine-mahlzeit.md) | offen | — | — |
-| `G-347` | feature | mittel | [die Anzeige zieht nach](todos/nutrition-g-0347-die-anzeige-zieht-nach.md) | offen | — | — |
+| `G-345` | feature | hoch | [die Oberflaeche fuer Einkaufslisten](laufend_claudecode/nutrition-g-0345-die-oberflaeche-fuer-einkaufslisten.md) | vorbereitet (claudecode) | — | — |
+| `G-346` | entscheidung | mittel | [Quick-Add braucht eine Mahlzeit](laufend_claudecode/nutrition-g-0346-quick-add-braucht-eine-mahlzeit.md) | vorbereitet (claudecode) | — | — |
+| `G-347` | feature | mittel | [die Anzeige zieht nach](laufend_claudecode/nutrition-g-0347-die-anzeige-zieht-nach.md) | vorbereitet (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](laufend_claudecode/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | laeuft (claudecode) | G-328 | G-328 |
-| `G-345` | feature | hoch | [die Oberflaeche fuer Einkaufslisten](todos/nutrition-g-0345-die-oberflaeche-fuer-einkaufslisten.md) | offen | C-407 | — |
 
 ## supplements — 60
 
