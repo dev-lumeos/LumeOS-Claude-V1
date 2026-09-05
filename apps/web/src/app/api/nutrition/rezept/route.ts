@@ -16,7 +16,6 @@ import {
   rezeptAendern, rezeptAendernSchema,
   rezeptLoggen, rezeptLoggenSchema,
   listeAusRezept, listeAusRezeptSchema,
-  postenHaken, postenHakenSchema,
 } from '../../../../lib/nutrition/rezept-write'
 
 export const dynamic = 'force-dynamic'
@@ -111,21 +110,23 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // Flow 8, Schritt 5 — abhaken.
-  if (art === 'posten_haken') {
-    const g = postenHakenSchema.safeParse(roh)
-    if (!g.success) {
-      return ungueltig(g.error.issues[0]?.message ?? 'Eingabe ungueltig.',
-        g.error.issues.map(i => ({ feld: i.path.join('.'), meldung: i.message })))
-    }
-    try {
-      return NextResponse.json(await postenHaken(g.data))
-    } catch (error) {
-      return errorResponse(error)
-    }
-  }
+  // ══ G-350: `posten_haken` ist entfernt ══════════════════
+  //
+  // `[cmd]` **Flow 8, Schritt 5 lief bis hierher ueber diese
+  // Route** (G-289). `[cmd]` **G-345 hat `postenAbhaken` gebaut**,
+  // weil die Einkaufsliste seit E-64 an drei Orten haengt — und
+  // damit gab es ZWEI Wege auf `is_checked`.
+  //
+  // `[read]` **Der Vorgang ist nicht weg, nur sein Ort:** er steht
+  // jetzt in `einkaufsliste-aktionen.ts`, wo die Liste hingehoert.
+  // **Eine Einkaufslisten-Aktion unter `/rezept` waere am falschen
+  // Platz.**
+  //
+  // `[cmd]` **A-59: entfernt, nicht auskommentiert.** `[cmd]`
+  // **Gemessen vor dem Entfernen: kein Aufrufer mehr** —
+  // `rezepte-echt.tsx` ruft seit G-350 die Serveraktion.
 
   return ungueltig(
     'Unbekannte Art. Erlaubt: rezept, rezept_aendern, rezept_loggen, '
-    + 'einkaufsliste, posten_haken.')
+    + 'einkaufsliste.')
 }

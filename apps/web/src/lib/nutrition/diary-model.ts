@@ -375,6 +375,15 @@ export type StoredMealItem = {
   id: string
   meal_id: string
   food_id: string | null
+  /**
+   * G-348: `bls` · `custom` · `manual` — welcher der drei Faelle.
+   *
+   * `[read]` **`food_id` allein genuegt nicht:** `custom` und
+   * `manual` haben beide `food_id IS NULL`. **Wer sie nicht
+   * unterscheidet, behandelt beide gleich falsch.**
+   */
+  food_source: string
+  custom_food_id: string | null
   food_name: string
   amount_g: number
   enercc: number | null
@@ -440,6 +449,23 @@ export function parseStoredMealItems(rows: unknown): StoredMealItem[] {
         id: record.id,
         meal_id: record.meal_id,
         food_id: typeof record.food_id === 'string' ? record.food_id : null,
+        // ══ G-348: die Herkunft muss mit ═══════════════════
+        //
+        // `[cmd]` **Der CHECK erlaubt drei Faelle**, und **zwei davon
+        // haben `food_id IS NULL`:**
+        //
+        //     bls      food_id NOT NULL, custom_food_id NULL
+        //     custom   food_id NULL,     custom_food_id NOT NULL
+        //     manual   food_id NULL,     custom_food_id NULL
+        //
+        // `[read]` **Wer nur `food_id` liest, kann `manual` und
+        // `custom` nicht unterscheiden** — und behandelt beide
+        // gleich falsch. **`wieGestern` uebersprang sie deshalb
+        // still** (G-348).
+        food_source: typeof record.food_source === 'string'
+          ? record.food_source : 'bls',
+        custom_food_id: typeof record.custom_food_id === 'string'
+          ? record.custom_food_id : null,
         food_name: record.food_name,
         amount_g: amount,
         enercc: asNumberOrNull(record.enercc),

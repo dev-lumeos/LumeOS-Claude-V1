@@ -189,7 +189,10 @@ export type RezeptLoggen = z.infer<typeof rezeptLoggenSchema>
  * Funktion — sonst gaebe es zwei Kopien derselben Regel.
  */
 export async function rezeptLoggen(eingabe: RezeptLoggen): Promise<{
-  meal_id: string; positionen: number; skalierung: number
+  meal_id: string; positionen: number
+  /** G-348: Zutaten ohne `food_id` — sie tragen keine Naehrwerte. */
+  uebersprungen: number
+  skalierung: number
 }> {
   const { db } = await sitzung()
 
@@ -230,9 +233,23 @@ export async function rezeptLoggen(eingabe: RezeptLoggen): Promise<{
     notes: `Rezept: ${r.name_de}`,
   })
 
+  // ══ G-348: das Ueberspringen wird gezaehlt ═══════════════════
+  //
+  // `[cmd]` **`recipe_ingredients.food_id` ist NULL-bar** — heute
+  // hat keine der 22 Zeilen ein `null`, **aber der Weg steht.**
+  //
+  // `[read]` **Mitnehmen geht NICHT:** eine Zutat ohne `food_id`
+  // traegt nur `food_name_snapshot`, keine Naehrwerte. **Sie zu
+  // uebernehmen hiesse, Zahlen zu erfinden** (C-378).
+  //
+  // `[read]` **Also bleibt es beim Ueberspringen** — aber nicht mehr
+  // still: **der Aufrufer bekommt die Zahl** und kann es sagen.
+  // **Das war der Befund bei `wieGestern`** (G-348): nicht das
+  // Ueberspringen, sondern das stille.
   let positionen = 0
+  let uebersprungen = 0
   for (const z of liste) {
-    if (!z.food_id) continue
+    if (!z.food_id) { uebersprungen += 1; continue }
     await addMealItem({
       meal_id: mahlzeit.id,
       food_id: z.food_id,
@@ -241,7 +258,7 @@ export async function rezeptLoggen(eingabe: RezeptLoggen): Promise<{
     positionen += 1
   }
 
-  return { meal_id: mahlzeit.id, positionen, skalierung }
+  return { meal_id: mahlzeit.id, positionen, uebersprungen, skalierung }
 }
 
 // ══ FLOW 8: die Einkaufsliste aus einem REZEPT ══════════════════════
@@ -252,14 +269,11 @@ export const listeAusRezeptSchema = z.object({
   portionen: z.number().positive('Mindestens eine Portion.').max(100),
 })
 
-export const postenHakenSchema = z.object({
-  art: z.literal('posten_haken'),
-  id: z.string().uuid(),
-  is_checked: z.boolean(),
-})
+// G-350: `postenHakenSchema` ist entfernt — der Vorgang laeuft
+// ueber `postenAbhaken` (G-345), und eine Serveraktion braucht kein
+// Routen-Schema.
 
 export type ListeAusRezept = z.infer<typeof listeAusRezeptSchema>
-export type PostenHaken = z.infer<typeof postenHakenSchema>
 
 /**
  * Flow 8, Schritte 1-3 — Liste aus einem Rezept, Mengen skaliert.
@@ -352,17 +366,13 @@ export async function listeAusRezept(eingabe: ListeAusRezept): Promise<{
   return { id: l.id, name: l.name, posten: liste.length }
 }
 
-/** Flow 8, Schritt 5 — abhaken. */
-export async function postenHaken(eingabe: PostenHaken): Promise<{
-  id: string; is_checked: boolean
-}> {
-  const { db } = await sitzung()
-  const { data, error } = await db
-    .from('shopping_list_items')
-    .update({ is_checked: eingabe.is_checked })
-    .eq('id', eingabe.id)
-    .select('id, is_checked')
-    .single()
-  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
-  return data as unknown as { id: string; is_checked: boolean }
-}
+// ══ G-350: `postenHaken` ist entfernt ════════════════════
+//
+// `[cmd]` **Flow 8, Schritt 5 steht jetzt in
+// `einkaufsliste-aktionen.ts`** (`postenAbhaken`, G-345) — dort,
+// wo die Liste seit E-64 hingehoert: Planner, Rezept und eigener
+// Reiter.
+//
+// `[read]` **Zwei Wege auf dieselbe Spalte laufen auseinander**
+// (G-335, dasselbe Muster bei den Namenslisten). `[cmd]` **A-59:
+// entfernt, nicht auskommentiert.**

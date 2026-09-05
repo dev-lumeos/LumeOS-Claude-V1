@@ -73,7 +73,10 @@ export async function listOwnMealItems(mealId: string): Promise<StoredMealItem[]
     // G-12: die Portionsspalten kommen mit. Sie stehen seit C-51 in
     // der Tabelle und wurden nie gelesen — ohne sie ist in der Zeile
     // nicht erkennbar, ob „2 Scheiben" gemeint waren oder 60 g.
-    .select('id, meal_id, food_id, food_name, amount_g, enercc, prot625, fat, cho, portion_name, portion_quantity, portion_amount_g')
+    // G-348: `food_source` und `custom_food_id` kommen mit — ohne
+    // sie ist ein manueller Posten von einem eigenen Lebensmittel
+    // nicht zu unterscheiden (beide haben `food_id IS NULL`).
+    .select('id, meal_id, food_id, custom_food_id, food_source, food_name, amount_g, enercc, prot625, fat, cho, portion_name, portion_quantity, portion_amount_g')
     .eq('meal_id', mealId)
     .order('created_at', { ascending: true })
   if (error) {

@@ -36,6 +36,8 @@ import {
 } from '../../../lib/nutrition/rezept-lage'
 // G-323: dasselbe Suchmodal wie im Planner — keine zweite Suche.
 import { FoodSuchModal } from './food-such-modal'
+// G-350: EIN Schreibweg fuer `is_checked` (G-345).
+import { postenAbhaken } from './einkaufsliste-aktionen'
 import type { NutritionFoodSearchRow } from '../../../lib/nutrition/food-search'
 // G-325: die Makros je Zutat — dieselbe Rechnung wie im Modal.
 import { vorschauFuer } from '../../../lib/nutrition/menge-rechnen'
@@ -688,9 +690,30 @@ export function EinkaufslisteKarte({ liste, onAenderung }: {
   const f = fortschritt(liste.posten)
   const [laeuft, setLaeuft] = React.useState<string | null>(null)
 
+  // ══ G-350: EIN Schreibweg fuer `is_checked` ═══════════════════
+  //
+  // `[cmd]` **Hier stand `senden({ art: 'posten_haken', … })`** —
+  // ueber `/api/nutrition/rezept`, seit G-289.
+  //
+  // `[cmd]` **G-345 hat `postenAbhaken` gebaut**, weil die Liste
+  // seit E-64 auch an der Planwoche und im eigenen Reiter haengt.
+  // **Damit gab es ZWEI Wege auf dieselbe Spalte.**
+  //
+  // `[read]` **Dasselbe Muster wie bei den Namenslisten** (G-335):
+  // zwei Wege laufen frueher oder spaeter auseinander, **und die
+  // naechste Aenderung trifft nur einen.**
+  //
+  // `[read]` **Der neue gewinnt, nicht der aeltere** — nicht wegen
+  // seines Alters, sondern wegen seines Ortes: **eine
+  // Einkaufslisten-Aktion unter `/rezept` waere am falschen Platz**,
+  // seit die Liste drei Orte hat.
+  //
+  // `[cmd]` **Er prueft zusaetzlich `user_id`** — der Wachhund tut
+  // es ohnehin, aber der Fehler kommt so aus der Anwendung statt aus
+  // der Datenbank.
   async function haken(id: string, jetzt: boolean) {
     setLaeuft(id)
-    await senden({ art: 'posten_haken', id, is_checked: !jetzt })
+    await postenAbhaken(id, !jetzt)
     setLaeuft(null)
     onAenderung()
   }

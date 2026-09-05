@@ -763,8 +763,48 @@ function MahlzeitKarte({
       // `[read]` Die Naehrwerte werden NEU eingefroren, nicht kopiert:
       // es ist eine Erfassung von heute. Deshalb geht nur `food_id` und
       // `amount_g` mit — den Rest rechnet `addMealItem`.
+      //
+      // ══ G-348: manuelle Posten kommen mit ═══════════════════════
+      //
+      // `[cmd]` **Hier stand `if (!it.food_id) continue`** — ein
+      // stilles Ueberspringen. `[cmd]` **Seit G-340 ist der Fall
+      // erreichbar:** `food_source = 'manual'` traegt weder
+      // `food_id` noch `custom_food_id`.
+      //
+      // `[read]` **Wer gestern *450 kcal Restaurant* eingetragen
+      // hatte, fand es nicht wieder — und erfuhr nicht, warum.**
+      //
+      // `[read]` **Ein manueller Posten braucht kein Einfrieren:**
+      // seine Zahlen kommen vom Nutzer und sind bereits absolut.
+      // **Deshalb geht er ueber `art: 'manuell'`** (G-340), nicht
+      // ueber `position`.
+      //
+      // `[cmd]` **`custom` bleibt aussen vor** — `foods_custom` hat
+      // 0 Zeilen, und es gibt keinen Schreibweg dafuer (Flow 6).
+      // **Aber jetzt still ist es nicht mehr:** der Satz unten sagt
+      // es.
+      let uebersprungen = 0
       for (const it of quelle.items) {
-        if (!it.food_id) continue
+        if (it.food_source === 'manual') {
+          await fetch('/api/nutrition/diary', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              art: 'manuell', meal_id: ziel,
+              food_name: it.food_name,
+              enercc: it.enercc ?? 0,
+              // `[read]` **`?? undefined`, nicht `?? 0`** — ein
+              // fehlendes Makro heisst „unbekannt", nicht „null
+              // Gramm" (C-48 Regel 1).
+              prot625: it.prot625 ?? undefined,
+              fat: it.fat ?? undefined,
+              cho: it.cho ?? undefined,
+              amount_g: it.amount_g,
+            }),
+          })
+          continue
+        }
+        if (!it.food_id) { uebersprungen += 1; continue }
         await fetch('/api/nutrition/diary', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
@@ -773,6 +813,13 @@ function MahlzeitKarte({
             food_id: it.food_id, amount_g: it.amount_g,
           }),
         })
+      }
+      // `[read]` **Was nicht mitkam, wird gesagt** — das war der
+      // eigentliche Befund: nicht das Ueberspringen, sondern das
+      // stille Ueberspringen.
+      if (uebersprungen > 0) {
+        setFehler(`${uebersprungen} ${uebersprungen === 1 ? 'Posten' : 'Posten'} `
+          + 'aus eigenen Lebensmitteln konnte nicht uebernommen werden.')
       }
       onGeaendert()
     } catch (e) {

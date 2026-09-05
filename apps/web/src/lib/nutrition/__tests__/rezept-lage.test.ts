@@ -182,13 +182,28 @@ test('G-289: cooking_skill hat eine Vorgabe — der CHECK verlangt sie', () => {
 
 // ══ DIE VERDRAHTUNG ══════════════════════════════════════════════
 
-test('G-289: die fuenf Vorgaenge sind in der Route erreichbar', () => {
+test('G-289/G-350: die VIER Vorgaenge sind in der Route erreichbar', () => {
   // `[cmd]` **A-59/G-192: ein Schreibweg ohne Aufrufer ist tot.**
+  //
+  // ══ NACHGEZOGEN IN G-350, 2026-09-07 ═════════════════
+  //
+  // `[cmd]` **Es waren fuenf; `posten_haken` ist entfernt.**
+  // **G-345 hat `postenAbhaken` gebaut** (die Liste haengt seit
+  // E-64 an drei Orten), **und damit gab es zwei Wege auf
+  // `is_checked`.**
+  //
+  // `[read]` **Dieselbe Regel, andere Richtung:** der Waechter hielt
+  // einen Weg am Leben, der seinen Aufrufer verloren hatte.
   const r = ohneKommentare(ROUTE)
   for (const art of ['rezept', 'rezept_aendern', 'rezept_loggen',
-                     'einkaufsliste', 'posten_haken']) {
+                     'einkaufsliste']) {
     assert.match(r, new RegExp(`art === '${art}'`), `${art} fehlt in der Route`)
   }
+
+  // `[cmd]` **Und der entfernte darf nicht zurueckkommen** — sonst
+  // gibt es wieder zwei Wege.
+  assert.doesNotMatch(r, /art === 'posten_haken'/,
+    'posten_haken ist zurueck — der Weg steht in einkaufsliste-aktionen.ts (G-350)')
 })
 
 test('G-289: das Loggen benutzt den Schreibweg aus G-272 — keinen zweiten', () => {
