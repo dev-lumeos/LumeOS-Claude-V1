@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: [G-339]
 kind_von: G-232
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/kopfknoepfe.tsx
@@ -61,7 +63,7 @@ Tom.**
 
 **Tom, 2026-09-02: *,,Quick-Add bauen."***
 
-`[read]` **Vorbereitet am 2026-09-02.**
+**Beauftragt am 2026-09-07.**
 
 ### Warum es gebraucht wird
 

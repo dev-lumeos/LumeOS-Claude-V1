@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 216 |
+| `todos` | 214 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 266 |
 | **gesamt** | **483** |
@@ -153,8 +154,8 @@
 | `C-402` | befund | hoch | [`VITC` fehlt an 39 Tagen](erledigt/nutrition-c-0402-vitc-fehlt-an-39-tagen.md) | erledigt | — | — |
 | `C-403` | befund | mittel | [den `once`-Plaenen fehlen die Wochen](erledigt/nutrition-c-0403-den-once-plaenen-fehlen-die-wochen.md) | erledigt | — | C-404 |
 | `C-404` | befund | niedrig | [`Aufbau-Wochenplan` beschreibt 28 Tage, behauptet 21](todos/nutrition-c-0404-aufbau-wochenplan-beschreibt-28-tage-behauptet-21.md) | offen | — | — |
-| `C-405` | feature | mittel | [*Sonstige* faellt weg](todos/nutrition-c-0405-sonstige-faellt-weg.md) | offen | — | — |
-| `C-406` | feature | mittel | [`strong_avoid` an vier Stellen entfernen](todos/nutrition-c-0406-strong-avoid-an-vier-stellen-entfernen.md) | offen | — | — |
+| `C-405` | feature | mittel | [*Sonstige* faellt weg](laufend_codex/nutrition-c-0405-sonstige-faellt-weg.md) | laeuft (codex) | — | — |
+| `C-406` | feature | mittel | [`strong_avoid` an vier Stellen entfernen](laufend_codex/nutrition-c-0406-strong-avoid-an-vier-stellen-entfernen.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -272,7 +273,7 @@
 | `G-337` | befund | mittel | [`strong_avoid` hat keinen Schreibweg](erledigt/nutrition-g-0337-strong-avoid-hat-keinen-schreibweg.md) | erledigt | — | C-406 |
 | `G-338` | entscheidung | mittel | [eine freie Mahlzeit hat keinen Namen](todos/nutrition-g-0338-eine-freie-mahlzeit-hat-keinen-namen.md) | offen | — | — |
 | `G-339` | befund | mittel | [Quick-Add liest die Namen nicht](erledigt/nutrition-g-0339-quick-add-liest-die-namen-nicht.md) | erledigt | — | G-342 |
-| `G-340` | befund | mittel | [Quick-Add hat keinen Schreibweg](laufend_claudecode/nutrition-g-0340-quick-add-hat-keinen-schreibweg.md) | vorbereitet (claudecode) | — | — |
+| `G-340` | befund | mittel | [Quick-Add hat keinen Schreibweg](laufend_claudecode/nutrition-g-0340-quick-add-hat-keinen-schreibweg.md) | laeuft (claudecode) | — | — |
 | `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](erledigt/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | erledigt | — | — |
 | `G-342` | befund | niedrig | [`nutsettings` hat keinen Aufrufer](erledigt/nutrition-g-0342-nutsettings-hat-keinen-aufrufer.md) | erledigt | — | G-343 |
 | `G-343` | befund | mittel | [Tests messen gegen ueberholte Entwuerfe](todos/nutrition-g-0343-tests-messen-gegen-ueberholte-entwuerfe.md) | offen | — | — |

@@ -7,6 +7,8 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: G-337
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: [nutrition.food_preference_items]
 zahlen:
@@ -57,3 +59,8 @@ gebaut gehalten.**
 `vorlieben-aktionen.ts`, `daumen-schreiben.ts`, `food-search.ts`,
 `daumen-schreiben.test.ts`. `[read]` **Melde, was dort nachzuziehen
 ist** — **das ist ein UI-Auftrag.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-405 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.
