@@ -20,6 +20,17 @@ ALTER TABLE nutrition.shopping_lists
       AND recipe_id IS NULL AND meal_plan_week_id IS NULL)
   );
 
+-- C-409: Beide source_type-CHECKs muessen denselben neuen Ursprung
+-- kennen. Der Basisschutz stammt aus 058b und wird hier bewusst
+-- ersetzt, statt zwei widerspruechliche Wertelisten zu behalten.
+ALTER TABLE nutrition.shopping_lists
+  DROP CONSTRAINT IF EXISTS shopping_lists_source_type_check;
+ALTER TABLE nutrition.shopping_lists
+  ADD CONSTRAINT shopping_lists_source_type_check
+  CHECK (source_type IN (
+    'manual', 'recipe', 'meal_plan', 'supplement_reorder', 'nutrition_reorder'
+  ));
+
 -- Eine Liste ist ein Beleg. Das UI archiviert sie ueber die Funktion
 -- unten; direktes DELETE bleibt fuer einzelne, noch offene Positionen
 -- moeglich, aber nicht fuer die Liste selbst.

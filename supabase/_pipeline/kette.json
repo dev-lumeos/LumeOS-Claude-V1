@@ -1464,6 +1464,16 @@
         "058b",
         "052"
       ]
+    },
+    {
+      "id": "409",
+      "path": "supabase/_pipeline/05_user_tabellen/409_reorder_frequent_curation.sql",
+      "kind": "sql",
+      "creates": "C-409/G-279/C-31: erreichbare Nutrition-Nachbestellung, haeufigste Position je Mahlzeitart und admin-autorisierter Tag-Overlay-Upsert",
+      "depends_on": [
+        "407",
+        "058b"
+      ]
     }
   ]
 }
