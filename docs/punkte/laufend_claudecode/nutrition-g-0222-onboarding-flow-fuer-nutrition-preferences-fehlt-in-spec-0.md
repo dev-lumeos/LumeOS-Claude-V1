@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: null
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -104,3 +106,83 @@ vorliegt.
 Alles Weitere folgt daraus.
 
 `[read]` **Die Messung steht in der G-226-Datei.**
+
+## Auftrag — Onboarding, mit den Daten von heute
+
+**Mitbeauftragt: G-152, G-228.** Bericht in diese Datei.
+
+**Beauftragt am 2026-09-07.**
+
+### Warum jetzt
+
+`[read]` **Der Punkt stand seit Wochen offen, weil die Daten
+fehlten.** `[cmd]` **Sie stehen seit dem 02.09.:**
+
+    meal_slots           Anzahl, Namen, Zeiten (E-58)
+    food_preferences     acht Spalten, drei ausgesetzt (E-47)
+    tag_definitions      vier Filtergruppen (E-49)
+    profiles             biological_sex, height_cm, body_weight_kg
+    goals.goal_phases    Zeitachse, fuenf Testzeilen
+
+### 1 · Was ein neuer Nutzer mindestens braucht
+
+`[read]` **Miss, was der Betrieb voraussetzt** — **nicht, was ein
+Formular fragen koennte.**
+
+`[cmd]` **Beispiel: `test-user` hat keine Preferences, keine Meals,
+keine Slots** (C-394) — **und die Oberflaeche zeigt Leerzustaende.**
+
+`[read]` **Welche davon sind ertraeglich, welche machen die App
+unbenutzbar?**
+
+### 2 · Was ein Nutzer spaeter nachtragen kann
+
+`[read]` **Onboarding ist keine Datenerhebung** — **es ist der
+kuerzeste Weg zu einem brauchbaren ersten Tag.**
+
+`[cmd]` **Die Slotliste hat eine Vorgabe** (G-332) — **fuenf Zeilen
+mit gemessenen Zeiten.** `[read]` **Muss man sie im Onboarding
+sehen, oder reicht sie als Vorgabe?**
+
+### 3 · Die Reihenfolge
+
+`[read]` **Schlag eine vor, mit Begruendung je Schritt.**
+
+`[read]` **Und sag, welcher Schritt uebersprungen werden darf** —
+**ein Onboarding ohne Ausweg ist eine Huerde.**
+
+### 4 · G-152 und G-228
+
+`[cmd]` **G-152 wartet auf die Sicht von Codex** — **miss nur, ob
+sich seit deiner Messung etwas geaendert hat.**
+
+`[cmd]` **G-228: Erfahrungsgrade fein aufteilen** (E-46). `[read]`
+**Die Skala ist zu entwerfen, die Multiplikatoren brauchen
+Quellen.** `[read]` **Miss, was heute existiert, und melde, was
+fehlt** — **nicht bauen.**
+
+### Was nicht zu tun ist
+
+**Kein Onboarding bauen** — **dieser Auftrag entwirft.**
+**Nichts auf `dev@lumeos.app` schreiben.**
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server gehoert dir
+
+`[cmd]` **`server.py start` bevorzugen.**
+
+### Nachweis
+
+    Pflichtdaten    was der Betrieb voraussetzt, je Modul
+    Leerzustaende   welche ertraeglich sind, am Schirm
+    Reihenfolge     vorgeschlagen, je Schritt begruendet
+    ueberspringbar  welche Schritte
+    G-228           was existiert, was fehlt
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

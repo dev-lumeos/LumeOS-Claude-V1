@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 210 |
+| `todos` | 207 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 280 |
+| `laufend_claudecode` | 3 |
+| `erledigt` | 282 |
 | **gesamt** | **495** |
 
 ## medical — 43
@@ -177,17 +177,17 @@
 | `G-136` | feature | mittel | [Zwei Kartenzuordnungen sind Auslegung](erledigt/nutrition-g-0136-zwei-kartenzuordnungen-sind-auslegung.md) | erledigt | — | — |
 | `G-137` | befund | mittel | [Acht Karten — die alten Ansichtsschluessel verfallen](erledigt/nutrition-g-0137-acht-karten-die-alten-ansichtsschluessel-verfallen.md) | erledigt | — | — |
 | `G-140` | feature | mittel | [`display_tier` ist ein Abo-Tier, keine Baumebene](todos/nutrition-g-0140-display-tier-ist-ein-abo-tier-keine-baumebene.md) | offen | — | — |
-| `G-152` | feature | mittel | [Der Aktivitaetsstrom des Dashboards](todos/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | offen | — | — |
+| `G-152` | feature | mittel | [Der Aktivitaetsstrom des Dashboards](laufend_claudecode/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | laeuft (claudecode) | — | — |
 | `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — | — |
 | `G-220` | entscheidung | hoch | [MealCam Auto-Accept widerspricht ADR_MEALCAM_V1](erledigt/nutrition-g-0220-mealcam-auto-accept-widerspricht-adr-mealcam-v1.md) | erledigt | — | — |
 | `G-221` | entscheidung | hoch | [Food-Tag-Set V1 widersprüchlich definiert](erledigt/nutrition-g-0221-food-tag-set-v1-widerspruechlich-definiert.md) | erledigt | — | G-245 |
-| `G-222` | befund | hoch | [Onboarding Flow für Nutrition Preferences fehlt in SPEC_03](todos/nutrition-g-0222-onboarding-flow-fuer-nutrition-preferences-fehlt-in-spec-0.md) | offen | — | — |
+| `G-222` | befund | hoch | [Onboarding Flow für Nutrition Preferences fehlt in SPEC_03](laufend_claudecode/nutrition-g-0222-onboarding-flow-fuer-nutrition-preferences-fehlt-in-spec-0.md) | laeuft (claudecode) | — | — |
 | `G-223` | befund | mittel | [Recalculate-UI in SPEC_10 fehlt (bekanntes Open Item)](todos/nutrition-g-0223-recalculate-ui-in-spec-10-fehlt-bekanntes-open-item.md) | offen | — | — |
 | `G-224` | befund | mittel | [MealCam Consent-Widerruf in Nutrition Settings nicht beschrieben](todos/nutrition-g-0224-mealcam-consent-widerruf-in-nutrition-settings-nicht-besch.md) | offen | — | — |
 | `G-225` | befund | mittel | [Coach Suggestion User Flow fehlt](todos/nutrition-g-0225-coach-suggestion-user-flow-fehlt.md) | offen | — | — |
 | `G-226` | entscheidung | mittel | [V1-Status-Marker fehlen für Recipes/Shopping/MealPlans Components in SPEC_10](erledigt/nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md) | erledigt | — | C-366, G-285 |
 | `G-227` | befund | mittel | [SPEC_03 §Flow 6 Custom Food erstellen via Barcode-Scan widerspricht Phase-2-Status](todos/nutrition-g-0227-spec-03-flow-6-custom-food-erstellen-via-barcode-scan-wide.md) | offen | — | — |
-| `G-228` | feature | mittel | [Score Level Multiplier inkonsistent zwischen SPEC_04 und SPEC_07](todos/nutrition-g-0228-score-level-multiplier-inkonsistent-zwischen-spec-04-und-s.md) | offen | — | G-283 |
+| `G-228` | feature | mittel | [Score Level Multiplier inkonsistent zwischen SPEC_04 und SPEC_07](laufend_claudecode/nutrition-g-0228-score-level-multiplier-inkonsistent-zwischen-spec-04-und-s.md) | laeuft (claudecode) | — | G-283 |
 | `G-229` | feature | mittel | [Admin-Override-Flow für Tag-Korrekturen nicht belegt](todos/nutrition-g-0229-admin-override-flow-fuer-tag-korrekturen-nicht-belegt.md) | offen | — | C-384 |
 | `G-230` | entscheidung | niedrig | [`nutrition.water/page.tsx` und `nutrition.shopping-lists/page.tsx` als separate Pages](erledigt/nutrition-g-0230-nutrition-water-page-tsx-und-nutrition-shopping-lists-page.md) | erledigt | — | — |
 | `G-231` | befund | niedrig | [`SPEC_04 §Feature 9 MealCam` referenziert `ADR_AI_USAGE_WALLET.md` — nicht im Nutrition Spec Pfad](todos/nutrition-g-0231-spec-04-feature-9-mealcam-referenziert-adr-ai-usage-wallet.md) | offen | — | — |
@@ -283,11 +283,11 @@
 | `G-343` | befund | mittel | [Tests messen gegen ueberholte Entwuerfe](erledigt/nutrition-g-0343-tests-messen-gegen-ueberholte-entwuerfe.md) | erledigt | — | G-348 |
 | `G-344` | befund | hoch | [Einkaufslisten koennen mehr, als die Spec sagt](todos/nutrition-g-0344-einkaufslisten-koennen-mehr-als-die-spec-sagt.md) | offen | — | C-407, G-345 |
 | `G-345` | feature | hoch | [die Oberflaeche fuer Einkaufslisten](erledigt/nutrition-g-0345-die-oberflaeche-fuer-einkaufslisten.md) | erledigt | — | G-350 |
-| `G-346` | entscheidung | mittel | [Quick-Add braucht eine Mahlzeit](laufend_claudecode/nutrition-g-0346-quick-add-braucht-eine-mahlzeit.md) | laeuft (claudecode) | — | — |
+| `G-346` | entscheidung | mittel | [Quick-Add braucht eine Mahlzeit](erledigt/nutrition-g-0346-quick-add-braucht-eine-mahlzeit.md) | erledigt | — | — |
 | `G-347` | feature | mittel | [die Anzeige zieht nach](erledigt/nutrition-g-0347-die-anzeige-zieht-nach.md) | erledigt | — | — |
 | `G-348` | befund | mittel | [`wieGestern` ueberspringt manuelle Posten](erledigt/nutrition-g-0348-wiegestern-ueberspringt-manuelle-posten.md) | erledigt | — | C-412, G-351 |
 | `G-350` | befund | mittel | [ein zweiter Schreibweg fuer `is_checked`](erledigt/nutrition-g-0350-ein-zweiter-schreibweg-fuer-is-checked.md) | erledigt | — | — |
-| `G-351` | befund | mittel | [`other` hat keine Karte](laufend_claudecode/nutrition-g-0351-other-hat-keine-karte.md) | laeuft (claudecode) | — | — |
+| `G-351` | befund | mittel | [`other` hat keine Karte](erledigt/nutrition-g-0351-other-hat-keine-karte.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 60

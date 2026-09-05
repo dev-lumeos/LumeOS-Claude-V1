@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: null
 entscheidung: E-46
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -117,3 +119,8 @@ Trainingsjahre, Koerperzusammensetzung, etwas anderes.
 `[cmd]` **Und die 0,90 fuer `intermediate` steht in `SPEC_04` ohne
 Quelle.** `[read]` **Nach C-109 gilt: eine Zahl ohne Beleg ist ein
 *conservative default*, kein Ergebnis.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-222 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

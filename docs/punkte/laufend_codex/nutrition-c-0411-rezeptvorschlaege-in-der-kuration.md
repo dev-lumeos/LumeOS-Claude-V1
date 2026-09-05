@@ -165,7 +165,100 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Codex, 2026-09-05.** Keine Datei in `apps/`, keine Migration, kein
+Dev-Server, kein Commit. C-411 und C-404 sind gebaut; C-193 ist nur
+gemessen, wie beauftragt.
+
+### C-411 — ein eigener Rezeptkandidatenraum
+
+**Entscheidung:** eigene Tabellen, nicht ein weiterer `target_type` in
+`food_curation_candidates`.
+
+`food_curation_candidates` bleibt eine Feldkorrektur an genau einem
+Lebensmittel (`food_id`, `target_field`, `proposed_value`). Ein Rezept ist
+dagegen eine eigene Entitaet mit geordneten Zutaten und Grammwerten. Ein
+JSON-Text in `proposed_value` waere weder sinnvoll lesbar noch einzeln
+pruefbar.
+
+Der neue Kettenschritt `411` legt deshalb an:
+
+    recipe_curation_candidates
+      recipe_id                 -- optionale Spur, bei Rezeptloeschung NULL
+      recipe_owner_id
+      name_de, Beschreibung, Anleitung, Portionen, Tags  -- Snapshot
+      submitted_via = mealcam
+      status, reviewer, reason
+
+    recipe_curation_candidate_ingredients
+      candidate_id, sort_order
+      food_source, food_id / custom_food_id, Namenssnapshot, amount_g
+      Portionssnapshot, Notiz
+
+    recipe_curation_decisions
+      candidate_id, Entscheidung, reviewer, reason
+
+Damit bleibt die zu pruefende Zusammensetzung bestehen, auch falls der
+Nutzer sein Rezept danach aendert oder loescht. Alle drei Tabellen haben RLS
+und ausschließliches Admin-SELECT fuer `authenticated`; der kuenftige
+MealCam-Schreibweg ist nicht Teil dieses Auftrags. Der Kandidatstisch startet
+mit **0 Kandidaten, 0 Zutaten, 0 Entscheidungen**.
+
+**Gegenprobe:** Ein vorhandenes Rezept wurde innerhalb einer Transaktion als
+Kandidat mit seinen Zutaten und Mengen gesnapshottet. Der Kandidat war
+`pending`, enthielt Zutaten und eine positive Gesamtmenge; `ROLLBACK` liess
+anschliessend wieder 0 Kandidaten zurueck.
+
+**Herkunftsvorschlag, nicht umgesetzt:** `recipes.source` sollte einen
+fuenften Wert **`mealcam`** erhalten. `buddy` benennt den handelnden
+Gefaehrten, nicht die Kamera als Entstehungsweg. E-45 braeuchte dazu eine
+vierte Regel: MealCam-Rezepte bleiben fuer den Nutzer editierbar, erzeugen
+eine Kurationsvorlage, aber keine Buddy- oder Coach-Rueckmeldung. Bis zu
+dieser Entscheidung bleibt das bestehende Vierer-Enum unveraendert.
+
+### C-404 — Laufzeit ist jetzt Seed-Datum
+
+`MealPlanRow` traegt jetzt `lifecycleType`, `startDate` und `daysCount`; die
+temporäre Seed-Tabelle und ihr `INSERT` schreiben diese Felder mit. Fuer den
+`Aufbau-Wochenplan` stehen damit dauerhaft:
+
+    lifecycle_type = once
+    start_date     = 2026-09-01
+    days_count     = 28
+
+Die vierte Woche bleibt Teil des Plans. Der lokale aktive Aufbau-Plan wurde
+auf dieselben drei Seedwerte korrigiert; der C-404-Test belegt 28
+Tageszeilen bis 2026-09-28 bei `days_count = 28`.
+
+### C-193 — ein MealCam-Leseweg darf nicht die Suche wiederverwenden
+
+`dev@lumeos.app` hat `allergies = {tree_nuts}`. `contains_nuts` traegt
+**120** effektive Food-Zeilen. Die Suche liefert ohne Nutzer **7.140** und
+mit seinen Praeferenzen **4.970** Foods; unter den Resultaten einer
+Nuss-Suche mit Nutzer liegen **0** `contains_nuts`-Treffer. A-47 gilt also
+weiter: der Suchleser entfernt die 120 bei jeder Anfrage.
+
+Der neue MealCam-Leser braeuchte daher drei getrennte Schritte:
+
+1. Den BLS-Kandidatenraum ohne `p_user_id` lesen, damit die vier
+   Aufloesungsgrade nicht bereits vor der Erkennung Informationen verlieren.
+2. Nach Exact-/Parent-/Ambiguous-Aufloesung jedes ausgewaehlte Food — bei
+   Rezepten jede Zutat — gegen `food_preference_search_targets` pruefen.
+   Die Sicht hat `food_id`, `constraint_level`, `match_type` und `source`;
+   die 120 Allergieziele sind dort als `profile_allergy` materialisiert.
+3. Einen harten Konflikt als sichtbare Warnung mit Grund zurueckgeben,
+   niemals den Kandidaten filtern. Allgemeine Ausschluesse muessen dabei von
+   Allergie-, Diät- und ausdruecklichen Hard-Excludes getrennt bleiben, weil
+   E-16/E-30 sie nur bewerten lassen.
+
+Es gibt heute keinen MealCam-Leseweg, keine Kamera-Tabellen und keinen
+Resolver-Aufruf. Das ist deshalb eine Anforderung an Phase 0, keine hier
+eingebaute Datenlogik.
+
+### Nachweis
+
+`nutrition-c411-recipe-curation.test.ts` und
+`meal-plan-lifecycle-and-flags.test.ts`: **5/5 gruen**. ESLint und
+`tsc --noEmit` gruen; die Migrationspruefung meldet keine Datenlogik.
 
 ## Abnahme
 

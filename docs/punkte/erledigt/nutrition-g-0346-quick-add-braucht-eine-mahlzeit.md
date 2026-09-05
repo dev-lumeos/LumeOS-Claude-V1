@@ -9,6 +9,8 @@ kind_von: G-340
 entscheidung: E-58
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: de9f4351
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/modale.tsx
@@ -88,3 +90,19 @@ eine Zahl, die niemand gewaehlt hat.**
 
 **Mitbeauftragt mit G-351 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit G-351 abgenommen: war schon gebaut.**
+
+`[cmd]` **So, wie Tom es vorgeschlagen hatte** — **die bestehende
+Mahlzeit im selben Slot wird wiederverwendet.**
+
+`[cmd]` **Der 15:00/15:10-Fall am Schirm belegt:** **ein
+Nachmittagssnack, nicht zwei.**
+
+`[read]` **Ich hatte es als offene Produktentscheidung
+weitergegeben** — **es war entschieden und umgesetzt.**
+
+`[read]` **Und E-66 hat dasselbe fuer MealCam festgeschrieben:** die
+Mahlzeit steht vor dem Foto.

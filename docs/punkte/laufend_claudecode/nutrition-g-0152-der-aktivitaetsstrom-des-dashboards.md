@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-100
 kinder: []
 entscheidung: E-52
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: []
   dateien: []
@@ -94,3 +96,8 @@ still zeigen** (C-412).
 
 `[read]` **Eine richtige Funktion auf altem Bestand erzeugt eine
 falsche Aussage.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-222 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.
