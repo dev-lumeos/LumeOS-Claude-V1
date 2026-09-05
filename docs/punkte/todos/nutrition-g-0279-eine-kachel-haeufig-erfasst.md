@@ -7,8 +7,6 @@ angelegt: 2026-08-30
 braucht: []
 kind_von: G-263
 entscheidung: E-56
-agent: codex
-beauftragt: 2026-09-07
 beruehrt:
   dateien: [apps/web/src/app/v2/nutrition/tab-insights.tsx]
 zahlen:
@@ -101,3 +99,19 @@ entscheidet fast von selbst:** **eine Kachel *haeufig erfasst*, die
 
 **Mitbeauftragt mit C-409 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-07: die Sicht steht.
+
+`[cmd]` **`nutrition.frequent_food_positions`, zehn Spalten, 16
+Zeilen** — **je Nutzer UND Mahlzeitart.**
+
+`[cmd]` **Vier Zaehlungen nebeneinander:** `days_used`,
+`days_with_meal_type`, `entry_count`, `last_logged_on`.
+
+`[read]` **Genauer als der Auftrag:** *Olivenoel zum Fruehstueck* ist
+etwas anderes als *Olivenoel zum Abendessen*.
+
+`[cmd]` **Manuelle Posten bleiben enthalten** (G-348).
+
+`[read]` **Die Kachel bleibt offen** — **sie braucht Toms
+Entscheidung: Position oder Zusammensetzung.**

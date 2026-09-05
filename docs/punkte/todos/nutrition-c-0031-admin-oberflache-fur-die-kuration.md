@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-07
 beruehrt:
   tabellen: ["nutrition.foods"]
   dateien: ["docs/ssot/daten/wortschatz-luecke.json"]
@@ -60,3 +58,16 @@ UI-Auftrag mit bekannter Naht, kein Entwurf mehr.**
 
 **Mitbeauftragt mit C-409 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-07: der Schreibweg steht.
+
+`[cmd]` **`nutrition.curate_food_tag(p_food_id, p_tag_code,
+p_action)`** — validierter Overlay-Upsert.
+
+`[cmd]` **Nicht-Admins abgewiesen, keine direkten Schreibrechte fuer
+`authenticated`.**
+
+`[read]` **Die Schranke liegt in der Datenbank, nicht in der
+Oberflaeche.**
+
+`[read]` **Die Admin-Oberflaeche bleibt ein UI-Auftrag.**

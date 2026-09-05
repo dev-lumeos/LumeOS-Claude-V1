@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 209 |
-| `laufend_codex` | 3 |
+| `todos` | 210 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 276 |
-| **gesamt** | **491** |
+| `erledigt` | 277 |
+| **gesamt** | **492** |
 
 ## medical — 43
 
@@ -59,7 +59,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 223
+## nutrition — 224
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -74,7 +74,7 @@
 | `C-27` | messung | mittel | [Alltagswörter ohne Treffer — noch zwei](erledigt/nutrition-c-0027-alltagsworter-ohne-treffer-noch-zwei.md) | erledigt | — | — |
 | `C-29` | entscheidung | mittel | [Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt](erledigt/nutrition-c-0029-drei-namensschichten-und-eine-kuration-die-den-kettenlauf-uberlebt.md) | erledigt | — | — |
 | `C-30` | befund | mittel | [Suche und Trefferliste auf Arten umstellen](todos/nutrition-c-0030-suche-und-trefferliste-auf-arten-umstellen.md) | offen | — | — |
-| `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](laufend_codex/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | laeuft (codex) | — | — |
+| `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](todos/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | offen | — | — |
 | `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](erledigt/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | erledigt | — | C-386 |
 | `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — | — |
 | `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](erledigt/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | erledigt | — | G-239, G-248 |
@@ -118,7 +118,7 @@
 | `C-355` | feature | mittel | [`food_search` kennt keine Herkunft](erledigt/nutrition-c-0355-food-search-kennt-keine-herkunft.md) | erledigt | — | — |
 | `C-356` | messung | niedrig | [woraus die 1.620 ms HTML bestehen](erledigt/nutrition-c-0356-woraus-die-1620-ms-html-bestehen.md) | erledigt | — | — |
 | `C-360` | entscheidung | hoch | [darf ein fehlender Naehrwert als 0 zaehlen?](erledigt/nutrition-c-0360-darf-ein-fehlender-naehrwert-als-null-zaehlen.md) | erledigt | — | — |
-| `C-366` | befund | mittel | [`food_tags` hat keinen Pflegeweg](erledigt/nutrition-c-0366-food-tags-hat-keinen-pflegeweg.md) | erledigt | — | — |
+| `C-366` | befund | mittel | [`food_tags` hat keinen Pflegeweg](erledigt/nutrition-c-0366-food-tags-hat-keinen-pflegeweg.md) | erledigt | — | C-410 |
 | `C-367` | befund | hoch | [Vitamin A blockiert den Score an allen Tagen](erledigt/nutrition-c-0367-vitamin-a-blockiert-den-score-an-allen-tagen.md) | erledigt | — | C-368 |
 | `C-368` | entscheidung | hoch | [fuenfzehn Lebensmittel blockieren den Score](erledigt/nutrition-c-0368-fuenfzehn-lebensmittel-blockieren-den-score.md) | erledigt | — | C-378 |
 | `C-369` | entscheidung | mittel | [was mit einem abgelaufenen Plan geschieht](erledigt/nutrition-c-0369-was-mit-einem-abgelaufenen-plan-geschieht.md) | erledigt | — | — |
@@ -151,12 +151,13 @@
 | `C-401` | feature | mittel | [der Probe-Eintrag und die Laufzeit](erledigt/nutrition-c-0401-der-probe-eintrag-und-die-laufzeit.md) | erledigt | — | C-403 |
 | `C-402` | befund | hoch | [`VITC` fehlt an 39 Tagen](erledigt/nutrition-c-0402-vitc-fehlt-an-39-tagen.md) | erledigt | — | — |
 | `C-403` | befund | mittel | [den `once`-Plaenen fehlen die Wochen](erledigt/nutrition-c-0403-den-once-plaenen-fehlen-die-wochen.md) | erledigt | — | C-404 |
-| `C-404` | befund | niedrig | [`Aufbau-Wochenplan` beschreibt 28 Tage, behauptet 21](todos/nutrition-c-0404-aufbau-wochenplan-beschreibt-28-tage-behauptet-21.md) | offen | — | — |
+| `C-404` | befund | niedrig | [`Aufbau-Wochenplan` beschreibt 28 Tage, behauptet 21](laufend_codex/nutrition-c-0404-aufbau-wochenplan-beschreibt-28-tage-behauptet-21.md) | laeuft (codex) | — | — |
 | `C-405` | feature | mittel | [*Sonstige* faellt weg](erledigt/nutrition-c-0405-sonstige-faellt-weg.md) | erledigt | — | G-347 |
 | `C-406` | feature | mittel | [`strong_avoid` an vier Stellen entfernen](erledigt/nutrition-c-0406-strong-avoid-an-vier-stellen-entfernen.md) | erledigt | — | — |
 | `C-407` | feature | hoch | [der Leseweg fuer Wochenlisten](erledigt/nutrition-c-0407-der-leseweg-fuer-wochenlisten.md) | erledigt | — | — |
 | `C-408` | feature | mittel | [Vorrat nach dem Vorbild von Supplements](erledigt/nutrition-c-0408-vorrat-nach-dem-vorbild-von-supplements.md) | erledigt | — | C-409 |
-| `C-409` | befund | hoch | [`nutrition_reorder` ist unerreichbar](laufend_codex/nutrition-c-0409-nutrition-reorder-ist-unerreichbar.md) | laeuft (codex) | — | — |
+| `C-409` | befund | hoch | [`nutrition_reorder` ist unerreichbar](erledigt/nutrition-c-0409-nutrition-reorder-ist-unerreichbar.md) | erledigt | — | — |
+| `C-410` | befund | hoch | [zwei Leser nehmen `food_tags` statt der Sicht](laufend_codex/nutrition-c-0410-zwei-leser-nehmen-food-tags-statt-der-sicht.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -224,7 +225,7 @@
 | `G-273` | feature | mittel | [den Reiter auf die zaehlende Funktion umstellen](erledigt/nutrition-g-0273-den-reiter-auf-die-zaehlende-funktion-umstellen.md) | erledigt | — | C-349, C-353 |
 | `G-274` | feature | hoch | [der Bestaetigungsweg fuer Plan-Eintraege](erledigt/nutrition-g-0274-der-bestaetigungsweg-fuer-plan-eintraege.md) | erledigt | — | G-276 |
 | `G-276` | befund | mittel | [MealCam schreibt `confirmation_mode` ohne Fotoweg](erledigt/nutrition-g-0276-mealcam-schreibt-ohne-fotoweg.md) | erledigt | — | — |
-| `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](laufend_codex/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | laeuft (codex) | — | G-328 |
+| `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | — | G-328 |
 | `G-283` | befund | hoch | [ein `pro`-Profil faellt still auf 0,90](erledigt/nutrition-g-0283-ein-pro-profil-faellt-still-auf-090.md) | erledigt | — | — |
 | `G-285` | befund | niedrig | [`display_tier` heisst im Code weiter *Abo-Gate*](erledigt/nutrition-g-0285-display-tier-heisst-im-code-weiter-abo-gate.md) | erledigt | — | — |
 | `G-286` | feature | hoch | [MealPlanDetail — das Tages-Akkordeon fehlt](erledigt/nutrition-g-0286-mealplandetail-das-tages-akkordeon-fehlt.md) | erledigt | — | G-298 |

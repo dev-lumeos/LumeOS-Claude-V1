@@ -9,6 +9,8 @@ kind_von: C-408
 entscheidung: E-65
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: b268640a
 beruehrt:
   tabellen: [nutrition.shopping_lists]
 zahlen:
@@ -221,4 +223,74 @@ einer geduldeten Grenze von 10. `apps/` blieb unveraendert.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator. Nachgemessen.**
+
+### Beide CHECKs kennen ihn jetzt
+
+`[cmd]` **Selbst gemessen:**
+
+    shopping_lists_source_target_check   kennt nutrition_reorder
+    shopping_lists_source_type_check     kennt nutrition_reorder
+
+`[cmd]` **Gegenprobe angelegt, gezielt entfernt, danach 0
+Probereihen.**
+
+`[read]` **Der Weg ist begehbar und der Bestand sauber** — **genau
+so, wie es sein soll.**
+
+### G-279 — die Sicht traegt vier Zaehlungen
+
+`[cmd]` **`nutrition.frequent_food_positions`, zehn Spalten, 16
+Zeilen.**
+
+    days_used             Tage mit diesem Posten
+    days_with_meal_type   Tage mit dieser Mahlzeitart
+    entry_count           Eintraege
+    last_logged_on        zuletzt
+
+`[read]` **Er liefert beide Zaehlweisen nebeneinander** — **Tage und
+Eintraege.** `[read]` **Damit ist G-328 belegt und die Kachel kann
+zeigen, was sie zeigt.**
+
+`[cmd]` **Und je Nutzer UND Mahlzeitart** — **das ist genauer als
+mein Auftrag.** `[read]` **Ich schrieb *haeufigste Position je
+Nutzer*** — **er hat gesehen, dass *Olivenoel zum Fruehstueck* etwas
+anderes ist als *Olivenoel zum Abendessen*.**
+
+`[cmd]` **Manuelle Posten bleiben enthalten** — **G-348
+beruecksichtigt.**
+
+### C-31 — der Schreibweg mit Rechteschranke
+
+`[cmd]` **`nutrition.curate_food_tag(p_food_id, p_tag_code,
+p_action)`.**
+
+`[cmd]` **Nicht-Admins abgewiesen, keine direkten Schreibrechte fuer
+`authenticated`.**
+
+`[read]` **Die Schranke liegt in der Datenbank, nicht in der
+Oberflaeche** — **dieselbe Entscheidung wie bei `shopping_lists`
+ohne DELETE.**
+
+### Und ein Befund, den er gemeldet statt versteckt hat
+
+`[cmd]` **Der C-366-Test ist fachlich rot:** **nur
+`preference_search_preview` liest `food_tags_effective`,
+`food_search` und `refresh_food_preference_search_targets` lesen
+wieder `food_tags`.**
+
+`[read]` **C-366 hatte alle drei umgestellt** — **zwei sind
+zurueckgefallen.**
+
+`[read]` **Und es ist jetzt schlimmer als vorher:** `[cmd]`
+**`curate_food_tag` schreibt seit heute in die Overlay-Tabelle** —
+**die Kuration entsteht, und zwei von drei Lesern ignorieren sie.**
+
+`[read]` **Dieselbe Suche liefert je nach Weg andere Tags.** **Als
+C-410.**
+
+`[cmd]` **Und `pnpm ladekette` bleibt an 17 seriellen Abfragen in
+`apps/web` rot** — **ausserhalb dieses Auftrags.**
+
+**Abgenommen.**
+

@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: C-403
 entscheidung: E-62
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -45,3 +47,8 @@ Zahl falsch.**
 
 `[cmd]` **Und `test` traegt 4 Wochen, 28 Tage, 0 Eintraege** — **die
 Werkbank, richtig leer.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-410 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.
