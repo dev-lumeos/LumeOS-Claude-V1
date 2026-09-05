@@ -117,29 +117,70 @@ eine Maschine, die raet.**
 
 ---
 
-## 4 · Was ein `PARENT_MATCH` in `meal_items` schreibt
+## 4 · Ein Posten ohne Naehrwerte gibt es nicht
 
-`[cmd]` **`meal_items.nutrients` ist Pflicht und wird eingefroren.**
-`[cmd]` **Ein Parent hat keine BLS-ID mit Naehrwerten.**
+**Tom, 2026-09-07:** *,,es gibt die auswahl NUR parent ohne
+naehrstoffe nicht, wenn es nicht erkannt wird muss der user es
+deklarieren."*
 
-**Offen, zu entscheiden vor dem Bau.** Drei Wege:
+`[read]` **Damit faellt der dritte Weg** — **kein
+Quick-Add-artiger Posten aus MealCam.**
 
-`[read]` **Durchschnitt der Kinder** — **eine erfundene Zahl,
-widerspricht C-378.**
+    EXACT_MATCH    Naehrwerte aus dem BLS-Eintrag
+    PARENT_MATCH   der Nutzer waehlt die Zubereitung -> Exact
+    AMBIGUOUS      der Nutzer waehlt aus den Kandidaten -> Exact
+    NO_MATCH       der Nutzer deklariert
 
-`[read]` **Das haeufigste Kind** — **eine Annahme, die niemand
-sieht.**
+`[read]` **`PARENT_MATCH` ist kein Endzustand im Tagebuch** — **es
+ist ein Zwischenstand, den der Nutzer aufloest.**
 
-`[read]` **Keine Naehrwerte, wie ein Quick-Add-Posten** — **ehrlich,
-aber der Nutzer bekommt keine Kalorien.**
+`[cmd]` **Und `meal_items.nutrients` traegt 96 Schluessel** — nicht
+drei Makros. `[read]` **Ein halb gefuellter Posten waere in 96
+Feldern halb falsch.**
 
-`[cmd]` **Seit G-340 gibt es den Fall bereits:** `food_source =
-'manual'` **traegt `nutrients` leer und `amount_g` als 1.**
+### Wann der Nutzer deklarieren muss
 
-`[read]` **Der dritte Weg folgt C-378** — *,,wenn die Daten nicht da
-sind, erfinden wir sie nicht."* `[read]` **Und er hat einen
-Ausweg: der Nutzer waehlt die Zubereitung nach, dann wird aus dem
-Parent ein Exact.**
+`[read]` **Die Regel steht in Abschnitt 5:** **was `NOT_VISIBLE` ist,
+kann das Modell nicht bestimmen** — **also fragt es.**
+
+`[cmd]` **Beispiel: `172` gegrillt gegen `162` gebraten im Ofen** —
+**auf einem Foto meist nicht unterscheidbar.** `[read]` **Der Nutzer
+waehlt, das Modell raet nicht.**
+
+`[read]` **Und was `VISIBLE` ist, wird angenommen** — **Huehnerbrust
+ist Huehnerbrust.**
+
+## 4a · Ein Posten kann eine Zusammensetzung sein
+
+**Tom, 2026-09-07:** *,,nutrients detailliert speichern (oder wir
+bauen fuer bls nutrient rezepte mit sammlungen von nutrients=xy),
+darstellung kann eine sammlung verschiedener nutrients von bls
+sein."*
+
+`[cmd]` **Das gibt es bereits:** `nutrition.recipe_ingredients`
+**traegt `food_source`, `food_id`, `custom_food_id`, `amount_g`** —
+**eine Sammlung von BLS-Eintraegen mit Mengen.**
+
+`[read]` **Eine Sauce ist kein einzelner BLS-Eintrag** — **sie ist
+Oel plus Tomate plus Gewuerz.**
+
+`[read]` **MealCam braucht dafuer kein neues Modell:** **wo ein
+Posten aus mehreren BLS-Eintraegen besteht, entsteht ein Rezept.**
+
+`[cmd]` **Und E-45 kennt die Herkunft `buddy`** — **ein von der
+Maschine vorgeschlagenes Rezept ist vorgesehen.**
+
+### Was daraus folgt
+
+    ein BLS-Eintrag      -> meal_item mit food_id
+    mehrere Eintraege    -> Rezept, dann Ghost Entries (E-40)
+
+`[read]` **Der zweite Weg ist gebaut:** `[cmd]` **E-40 schreibt je
+Zutat eine Zeile in `meal_items`, einzeln anpassbar.**
+
+`[read]` **Zu klaeren bleibt, ob MealCam ein Rezept anlegt oder nur
+die Zutaten** — **ein Rezept ist wiederverwendbar, eine Zutatenliste
+nicht.**
 
 ---
 
@@ -233,6 +274,32 @@ Meal Items schreiben."***
 korrigieren, die Portion aendern oder einen Posten verwerfen.**
 
 `[read]` **Kein Formularzwang.**
+
+### Die Mahlzeit steht vor dem Foto
+
+**Tom, 2026-09-07:** *,,klickt user mealcam deklariert er zuerst was
+das fuer eine mahlzeit ist, das kann auch eine geplante sein oder
+eine neue."*
+
+    MealCam oeffnen
+      -> welche Mahlzeit?
+           eine geplante aus dem Plan
+           eine bestehende des Tages
+           eine neue, mit Zeit und Name
+      -> Foto
+      -> Erkennung
+      -> Bestaetigung
+      -> Posten in diese Mahlzeit
+
+`[read]` **Damit ist G-346 fuer MealCam beantwortet:** **die
+Mahlzeit wird gewaehlt, nicht abgeleitet.**
+
+`[cmd]` **Und der geplante Fall ist der interessante:** **wer einen
+Plan aktiv hat, fotografiert, was er geplant hatte** — **die
+Ghost-Eintraege sind der Vergleichsmassstab.**
+
+`[read]` **Das Ergebnis kann also *bestaetigt* oder *abweichend*
+sein** (E-42, Protokollzeilen `confirmed` / `deviated`).
 
 ### Stufen
 
@@ -408,7 +475,8 @@ Lernspeicher nicht rueckwirkend fuellen.**
  2. Vorhersage ist nie Wahrheit.
  3. Nicht sichtbare Eigenschaften werden nicht als visuell gelernt.
  4. `EXACT_MATCH` wird nicht erzwungen.
- 5. `PARENT_MATCH` ist ein gueltiges Ergebnis.
+ 5. `PARENT_MATCH` ist ein gueltiger Zwischenstand, kein
+    Tagebucheintrag -- der Nutzer loest ihn auf.
  6. Mehrere legitime Positive sind moeglich.
  7. Mehrdeutige Kandidaten werden nicht zu Gegenbeispielen.
  8. Portion und Identitaet bleiben getrennt.
@@ -425,20 +493,29 @@ Lernspeicher nicht rueckwirkend fuellen.**
 
 ---
 
-## 17 · Was noch zu entscheiden ist
+## 17 · Was Tom am 2026-09-07 entschieden hat
 
-`[read]` **Naehrwerte bei `PARENT_MATCH`** — Abschnitt 4. **Das ist
-die groesste offene Frage.**
+**Naehrwerte bei `PARENT_MATCH`** — `[cmd]` **es gibt keinen Posten
+ohne Naehrwerte.** **Was nicht erkannt wird, deklariert der
+Nutzer.** Abschnitt 4.
+
+**Zusammensetzungen** — `[cmd]` **ein Posten kann eine Sammlung
+mehrerer BLS-Eintraege sein.** `[cmd]` **`recipe_ingredients` traegt
+das bereits.** Abschnitt 4a.
+
+**`AMBIGUOUS`** — **zwei Aktionen: `ACCEPT` durch den Nutzer oder
+`ASK_USER`.** `[read]` **Crop, OCR und Barcode sind Phase 4.**
+
+**Die Mahlzeit** — `[cmd]` **wird vor dem Foto gewaehlt**, geplant
+oder neu. Abschnitt 8.
+
+## 17a · Was noch offen ist
 
 `[read]` **Wie tief die Region-Erkennung geht:** **ein Teller mit
 Sauce ist ein Posten oder zwei?**
 
-`[read]` **Ob `AMBIGUOUS` den Nutzer fragt oder als Parent
-schreibt** — **Blueprint Punkt 7 nennt neun moegliche Aktionen,
-V1 braucht zwei oder drei.**
-
-`[read]` **Und ob MealCam eine Mahlzeit anlegen darf** — **derselbe
-Fall wie G-346 bei Quick-Add.**
+`[read]` **Und ob MealCam ein Rezept anlegt oder nur Zutaten** —
+**ein Rezept ist wiederverwendbar, eine Zutatenliste nicht.**
 
 ---
 
