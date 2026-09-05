@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 215 |
+| `todos` | 216 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 266 |
-| **gesamt** | **482** |
+| **gesamt** | **483** |
 
 ## medical — 43
 
@@ -58,9 +58,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 214
+## nutrition — 215
 
-### beauftragbar — 213
+### beauftragbar — 214
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -276,6 +276,7 @@
 | `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](erledigt/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | erledigt | — | — |
 | `G-342` | befund | niedrig | [`nutsettings` hat keinen Aufrufer](erledigt/nutrition-g-0342-nutsettings-hat-keinen-aufrufer.md) | erledigt | — | G-343 |
 | `G-343` | befund | mittel | [Tests messen gegen ueberholte Entwuerfe](todos/nutrition-g-0343-tests-messen-gegen-ueberholte-entwuerfe.md) | offen | — | — |
+| `G-344` | befund | hoch | [Einkaufslisten koennen mehr, als die Spec sagt](todos/nutrition-g-0344-einkaufslisten-koennen-mehr-als-die-spec-sagt.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
