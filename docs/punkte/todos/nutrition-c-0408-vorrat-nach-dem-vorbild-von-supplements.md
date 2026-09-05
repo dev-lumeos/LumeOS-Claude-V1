@@ -6,7 +6,7 @@ schwere: mittel
 angelegt: 2026-09-07
 braucht: [C-407]
 kind_von: null
-entscheidung: E-64
+entscheidung: E-65
 beruehrt:
   tabellen: [nutrition.shopping_lists]
 zahlen:
@@ -21,44 +21,64 @@ Tom, 2026-09-07: *,,sehen wir dementsprechend gleich auch
 stockverwaltung nutrition vor, macht ja sinn."*
 
 `[cmd]` **`supplements.user_inventory` ist gebaut UND
-angeschlossen** — eigener Reiter `tab-inventory-echt.tsx`.
+angeschlossen** — eigener Reiter `tab-inventory-echt.tsx`, gelesen
+in `intake/route.ts`.
 
-    id, user_id, supplement_id, status
-    quantity_remaining, quantity_unit
-    purchased_at, expires_at
-    supplier, cost_per_unit, total_cost
-    reorder_flag, source
+## Eine eigene Tabelle, keine geteilte
 
-`[cmd]` **Und `stack_items` traegt `stock_remaining`,
-`low_stock_threshold`, `stock_unit`** — **die Schwelle liegt am
-Posten.**
+Tom: *,,wir mischen keine module durcheinander. jedes modul ist in
+sich geschlossen."*
 
-`[read]` **Dasselbe Muster fuer Nutrition** — **kein neues Modell
-erfinden.**
+`[read]` **Das Muster wird kopiert, nicht die Tabelle geteilt.**
+`[read]` **Ein Fremdschluessel ueber die Modulgrenze macht aus zwei
+Modulen eines.**
 
-## Der Kreis
+    nutrition.user_inventory
+      user_id
+      food_id            -- BLS
+      custom_food_id     -- oder Eigenes
+      menge_g            -- oder ml, in Gramm gefuehrt
+      schwelle_g         -- ab hier: geht zur Neige
+      zuletzt_angepasst  -- fuer die Anzeige
+      reorder_flag
 
-    Vorrat sinkt        beim Erfassen einer Mahlzeit
-    Schwelle unter      reorder_flag wird gesetzt
-    Einkaufsliste       nimmt es auf
+`[cmd]` **Der CHECK folgt `meal_items`:** **entweder `food_id` oder
+`custom_food_id`, nie beides.**
 
-`[cmd]` **`supplement_reorder` steht bereits als `source_type` im
-CHECK von `shopping_lists`** — **die Absicht war vorgesehen.**
+## Menge in Gramm
 
-## Zwei Fragen zuerst
+Tom: *,,ich denke g oder ml hilft uns mehr."*
 
-`[read]` **Vorrat je Lebensmittel oder je Verpackung?**
+`[cmd]` **`meal_items` rechnet in `amount_g`** — **der Abzug braucht
+keine Umrechnung.**
 
-`[cmd]` **Supplements loesen es je Verpackung** — `user_inventory`
-haengt an `supplement_id`, mit `purchased_at` und `expires_at`.
+`[read]` **Kein Verpackungsmodell** — **keine `purchased_at`- und
+`expires_at`-Ketten je Packung.** `[read]` **Der Nutzer entscheidet,
+was er fuehrt.**
 
-`[read]` **Ein Kilo Reis ist eine Packung, 200 g Huehnchen eine
-Portion** — **die Frage ist, was der Nutzer zaehlt.**
+## Der Abzug, und warum er ungenau sein darf
 
-`[read]` **Und ob der Abzug automatisch geschieht:** **wer eine
-Mahlzeit erfasst, hat das Lebensmittel verbraucht** — **aber nicht
-jeder erfasst alles.**
+Tom: *,,wenn ein kumpel auch mit isst haben wir die daten nicht,
+sprich das wird mehr oder weniger symbolischer wert als lager
+haben."*
 
-`[read]` **Ein automatischer Abzug, der nicht stimmt, ist schlimmer
-als keiner.** `[read]` **Miss, wie Supplements es loesen** —
-`intake/route.ts` liest `user_inventory`.
+`[cmd]` **E-65: der Vorrat ist ein Anhaltspunkt, kein Bestand.**
+
+    Wer erfasst          zieht ab
+    Wer nicht erfasst    zieht nicht ab
+    Wer teilt            zieht zu wenig ab
+    Wer wegwirft         zieht gar nicht ab
+
+`[read]` **Deshalb: automatisch abziehen, jederzeit editierbar,
+ohne Begruendungszwang.**
+
+`[read]` **Miss, wie Supplements den Abzug loesen** —
+`apps/web/src/app/api/supplements/intake/route.ts` **liest
+`user_inventory`.**
+
+## Und die Einkaufsliste
+
+`[cmd]` **`shopping_lists.source_type` kennt `supplement_reorder`.**
+
+`[read]` **Fuer Nutrition braucht es einen eigenen Wert** — **oder
+`manual` mit Vermerk.** **Entscheide beim Bau und begruende es.**
