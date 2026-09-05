@@ -8,6 +8,8 @@ braucht: []
 kind_von: C-28
 kinder: []
 entscheidung: E-13
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: []
   dateien: ["supabase/_pipeline/07_lesefunktionen/073_suchfilter.sql"]
@@ -63,5 +65,5 @@ ist gebaut oder gesichert.**
 
 ## Auftrag
 
-**Vorbereitet mit C-379 am 2026-09-07.** Der Auftragstext
+**Mitbeauftragt mit C-379 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.

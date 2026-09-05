@@ -7,6 +7,8 @@ angelegt: 2026-09-01
 braucht: []
 kind_von: C-377
 entscheidung: E-54
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -123,7 +125,7 @@ Kette entsteht aus der Zeitachse, nicht umgekehrt.**
 
 **Mitbeauftragt: C-35, C-193.** Bericht in diese Datei.
 
-`[read]` **Vorbereitet am 2026-09-07.**
+**Beauftragt am 2026-09-07.**
 
 ### Warum diese drei
 

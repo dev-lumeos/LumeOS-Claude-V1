@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-65
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: f3675133
 beruehrt:
   tabellen: [nutrition.shopping_lists]
 zahlen:
@@ -89,3 +91,22 @@ ohne Begruendungszwang.**
 
 **Mitbeauftragt mit C-407 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit C-407 abgenommen: eigene Tabelle, eigener Abzug.**
+
+`[cmd]` **`nutrition.user_inventory` mit sieben Sachspalten und vier
+Policies** — **keine Supplements-Kopplung** (E-65).
+
+`[cmd]` **Neue Meal-Items reduzieren den Vorrat in `amount_g`,
+manuelle Korrekturen bleiben Grundlage fuer den naechsten Abzug.**
+
+`[read]` **Und ein Irrtum von mir ist berichtigt:** `[cmd]`
+**Supplements zieht gar nicht automatisch ab** — die Intake-Route
+schreibt nur `intake_logs`.
+
+`[read]` **Nutrition ist das erste Modul, das es tut.**
+
+`[cmd]` **`nutrition_reorder` als eigener Ursprung** — **aber
+unerreichbar wegen eines zweiten CHECK** (C-409).
