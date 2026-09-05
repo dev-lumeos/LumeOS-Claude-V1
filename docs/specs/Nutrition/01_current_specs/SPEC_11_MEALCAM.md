@@ -85,8 +85,38 @@ Rangordnung gebaut wird: nachsehen, ob die Quelle sie
 mitliefert."*
 
 `[cmd]` **`sort_weight` ist bei allen 7.140 gefuellt** — **X und Y
-stehen auf null.** **Der Retriever braucht keine eigene
-Gewichtung.**
+stehen auf null.**
+
+`[read]` **Das ist ein Katalogvorrang, kein Retrieval-Score.**
+`[read]` **Der multimodale Retriever braucht seine eigene
+Aehnlichkeit** — **visuell, semantisch, Facettenabgleich.**
+
+`[read]` **`sort_weight` geht als Vorrang ein, es ersetzt die
+Bewertung nicht.** `[read]` **Was es ersetzt: eine selbst erfundene
+Taxonomie-Gewichtung.**
+
+## 2a · Kandidaten haben einen Typ
+
+`[read]` **Seit Abschnitt 4c ist ein Rezept ein moeglicher Treffer**
+— **damit reicht eine Liste von Food-IDs nicht mehr.**
+
+    candidates[]
+      entity_type    BLS_FOOD | GLOBAL_RECIPE | USER_RECIPE
+      entity_id
+      match_reason
+      rank
+
+`[cmd]` **`match_reason` gibt es bereits in `food_search`** (C-391)
+— **zehn Wege, von `name_exact` bis `token_group`.**
+
+**Beispiel *Spaghetti Napoli*:**
+
+    BLS_FOOD        Spaghetti gekocht
+    GLOBAL_RECIPE   Spaghetti Napoli
+    USER_RECIPE     Meine Spaghetti Napoli
+
+`[read]` **Ein bekanntes Gericht ist oft besser als Rezept
+aufloesbar als durch sichtbares Zerlegen in alle Zutaten.**
 
 ---
 
@@ -250,10 +280,27 @@ eigene Kandidatentabelle, wenn ein Rezept zu viel traegt fuer
 `[cmd]` **`recipes.source` kennt `buddy`** (E-45) — **ein
 maschinell erzeugtes Rezept ist im Schema vorgesehen.**
 
-`[read]` **Zu klaeren: traegt ein MealCam-Rezept `source = 'buddy'`,
-oder braucht es einen eigenen Wert?** `[read]` **`buddy` ist der
-Gefaehrte, MealCam ist eine Kamera** — **das sind zwei verschiedene
-Herkuenfte.**
+### Die Herkunft ist ein eigenes Feld
+
+`[cmd]` **`recipes.source` traegt heute vier Werte** — `user`,
+`coach`, `marketplace`, `buddy` (E-45).
+
+`[read]` **Das beschreibt, WEM ein Rezept gehoert** — **nicht,
+WODURCH es entstanden ist.**
+
+**Vorschlag: ein zweites Feld.**
+
+    source       user | coach | marketplace | buddy
+    created_via  manual | mealcam | buddy | researcher | admin
+
+`[read]` **Ein MealCam-Rezept gehoert dem Nutzer (`source = user`)
+und entstand durch die Kamera (`created_via = mealcam`).**
+
+`[read]` **Spaeter muss unterscheidbar sein:** **Buddy hat
+vorgeschlagen, MealCam hat aus einem Foto erzeugt, ein Researcher hat
+recherchiert.** `[read]` **Fuer Herkunft, Qualitaet und Training.**
+
+`[cmd]` **Als C-411, dort zu entscheiden.**
 
 ### Und was der Admin damit tut
 
@@ -263,9 +310,77 @@ zurueck** — **er wird Katalogmaterial.**
 `[cmd]` **Wie `food_tags_kuriert` bei den Tags** (E-55, C-366):
 **eine Ueberlagerung, die den Import ueberlebt.**
 
+### Was der Admin sieht
+
+    Zusammensetzung des Rezepts        ja
+    wie oft es vorkommt                ja, aggregiert
+    wer es angelegt hat                nein
+    das private Mahlzeitenfoto         nein
+
+`[read]` **Ein Foto nur bei ausdruecklicher, eigener Einwilligung**
+— **nicht als Beiwerk der Rezeptfreigabe.**
+
+### Drei Zwecke, drei Einwilligungen
+
+    private Ernaehrungshistorie
+    Beitrag zum globalen Katalog
+    Modelltraining
+
+`[read]` **Das sind drei verschiedene Sachen.** `[cmd]` **E-20
+verlangt bereits getrennte Zwecke mit je eigener Einwilligung.**
+
+`[read]` **Wer sein Rezept dem Katalog beisteuert, hat damit weder
+sein Tagebuch geoeffnet noch dem Training zugestimmt.**
+
 `[read]` **Der Nutzer merkt davon nichts** — **sein Rezept bleibt
 seins.** `[read]` **Aber der naechste, der Tomatensauce
 fotografiert, bekommt einen besseren Vorschlag.**
+
+## 4d · Wann etwas ein eigener Posten ist
+
+**Die Regel:**
+
+> **MealCam erkennt die hoechste visuell trennbare Einheit, fuer die
+> ein kanonischer Eintrag existiert.** **Nicht sichtbare Zutaten
+> werden nicht aus dem Bild erfunden.**
+
+    Spaghetti Napoli
+      sichtbar getrennt: Spaghetti | Tomatensauce
+      -> zwei Posten
+
+    Tomatensauce als globales Rezept
+      -> Tomate, Oel, Zwiebel, Gewuerz
+
+`[read]` **MealCam muss die Zwiebel nicht sehen** — **sie kommt aus
+`DATABASE`, nicht aus `IMAGE`.**
+
+`[cmd]` **Und Abschnitt 5 haelt das fest:** **die Quelle je
+Eigenschaft ist ein Datentyp.**
+
+`[read]` **Sagt der Nutzer *keine Zwiebel drin*, wird die Instanz
+angepasst** — **nicht das Rezept.**
+
+## 4e · Vorlage und Instanz sind zwei Sachen
+
+    GLOBAL_RECIPE        Vorlage
+      Tomate 70 %
+      Oel 10 %
+      Zwiebel 10 %
+
+    Instanz im Tagebuch  was der Nutzer gegessen hat
+      Tomate
+      Oel
+      keine Zwiebel
+
+`[read]` **Der Katalog aendert sich durch eine einzelne Anpassung
+nicht.**
+
+`[read]` **Aber die Anpassung ist ein Kurationssignal** — **wenn
+hundert Nutzer die Zwiebel streichen, sagt das etwas ueber die
+Vorlage.**
+
+`[cmd]` **Und E-42 kennt das Muster:** **geloggte Positionen sind
+eingefroren, die Vorlage bleibt.**
 
 ## 4c · Zwei Wege zu einem globalen Rezept
 
@@ -536,6 +651,29 @@ Je Vorhersage:
 trainiert werden** — **sonst lernt das Modell, sicher zu sein, wo
 es unsicher sein muesste.**
 
+### Auch der Weg zur Aufloesung wird festgehalten
+
+`[read]` **Nicht nur *Vorhersage -> Korrektur*, sondern was
+dazwischen geschah.**
+
+    resolution_events[]   append-only
+
+      initial_candidates   gegrillt, im Ofen gebraten
+      state                AMBIGUOUS
+      action               ASK_USER
+      question             "Gegrillt oder aus dem Ofen?"
+      answer               gegrillt
+      final                BLS_xxx
+
+`[read]` **Daraus laesst sich spaeter lernen, bei welcher
+Unsicherheit welche Rueckfrage geholfen hat.**
+
+`[read]` **V1 braucht dafuer kein Modell** — **aber die Rohdaten
+duerfen nicht verloren gehen.**
+
+`[cmd]` **Dasselbe Argument wie fuer den Lernspeicher: nicht
+nachruestbar.**
+
 ---
 
 ## 12 · Fähigkeit statt Modellname
@@ -562,6 +700,32 @@ es unsicher sein muesste.**
 `[cmd]` **`ADR_MEALCAM_V1`: *,,Spec ist Provider-agnostisch."***
 
 `[read]` **`LOCAL_ONLY` darf nie still in die Cloud eskalieren.**
+
+### Der Rest gehoert in eine eigene Spec
+
+`[read]` **Was MealCam braucht, brauchen spaeter auch MedicationCam,
+PrescriptionCam und Buddy:**
+
+    Capability Discovery
+    sichere Kopplung
+    Gateway-Authentifizierung
+    LAN-Erkennung
+    private Fernverbindung
+    Zustandspruefung
+    Protokollversionen
+    Verfuegbarkeit
+    Datenschutz-Wegewahl
+    LOCAL_ONLY und Eskalationsregeln
+    Modell- und Pipeline-Versionsmeldung
+
+`[read]` **Das gehoert nicht in SPEC_11 kopiert** — **es gehoert in
+eine Infrastruktur-Spec, auf die SPEC_11 verweist.**
+
+    SPEC_11 MealCam
+      braucht ->  SPEC_AI_INFRASTRUKTUR
+
+`[read]` **Dann gilt dieselbe Infrastruktur automatisch fuer jedes
+weitere Modul, das ein Modell ruft.**
 
 ---
 
@@ -635,6 +799,49 @@ Lernspeicher nicht rueckwirkend fuellen.**
 
 ---
 
+## 16a · Woran V1 gemessen wird
+
+`[read]` **Ohne Massstab laesst sich keine Modellgeneration mit der
+naechsten vergleichen.**
+
+### Der Produkt-Massstab
+
+> **Anteil der Mahlzeiten, die mit hoechstens einer Korrektur
+> richtig erfasst werden.**
+
+`[read]` **Eine Zahl, die der Nutzer spuert** — **nicht eine, die
+nur im Bericht steht.**
+
+### Die technischen Groessen
+
+    Kandidatenausbeute      ist der richtige unter den ersten K?
+    EXACT-Treffergenauigkeit
+    falsche EXACT-Rate      der teuerste Fehler
+    AMBIGUOUS-Erkennung     wird Unsicherheit erkannt?
+    NO_MATCH-Genauigkeit
+    bestaetigte ID          nach der Nutzerkorrektur
+    Portionsabweichung      mittlerer Fehler
+    Korrekturrate           je Mahlzeit
+    Zeit Foto -> bestaetigt Median
+
+`[read]` **Die falsche EXACT-Rate ist die wichtigste:** **ein
+sicherer Irrtum ist schlimmer als ein eingestandenes *ich weiss es
+nicht*.**
+
+`[cmd]` **Und sie haengt an Abschnitt 3:** **`EXACT_MATCH` wird nicht
+erzwungen** — **wer erzwingt, treibt genau diese Rate hoch.**
+
+### Was V1 davon braucht
+
+`[read]` **Die Groessen werden von Tag 1 erhoben, nicht von Tag 1
+erfuellt.**
+
+`[read]` **Ein Schwellenwert ohne Messreihe waere geraten** —
+**dieselbe Klasse wie eine Zahl ohne Kommando** (A-58).
+
+`[read]` **Also: messen, ein paar Wochen sammeln, dann
+Schwellenwerte setzen.**
+
 ## 17 · Was Tom am 2026-09-07 entschieden hat
 
 **Naehrwerte bei `PARENT_MATCH`** — `[cmd]` **es gibt keinen Posten
@@ -654,24 +861,39 @@ oder neu. Abschnitt 8.
 **Rezepte** — `[cmd]` **MealCam legt sie im Nutzerprofil an, und
 sie erscheinen im Adminbereich zur Validierung.** Abschnitt 4b.
 
-## 17a · Was noch offen ist
+## 17a · Was am 2026-09-07 nachgeschaerft wurde
 
-`[read]` **Wie tief die Region-Erkennung geht:** **ein Teller mit
-Sauce ist ein Posten oder zwei?**
+`[read]` **Aus einer Durchsicht der Spec durch Codex.** **Acht
+Punkte uebernommen, einer eingeschraenkt.**
 
-`[cmd]` **Toms Beispiel beantwortet es teilweise:** **Spaghetti und
-Sauce sind zwei Posten** — **die Sauce ist selbst eine Sammlung.**
+    Kandidatentyp        2a   BLS_FOOD | GLOBAL_RECIPE | USER_RECIPE
+    Segmentierung        4d   hoechste visuell trennbare Einheit
+    Vorlage vs Instanz   4e   der Katalog aendert sich nicht
+    created_via          4b   Herkunft getrennt vom Besitz
+    resolution_events    11   auch der Weg zur Aufloesung
+    sort_weight           2   Vorrang, kein Retrieval-Score
+    AI-Infrastruktur     12   eigene Spec, SPEC_11 verweist
+    Kurations-Privacy    4b   drei Zwecke, drei Einwilligungen
+    Massstaebe          16a   erhoben ab Tag 1, Schwellen spaeter
 
-`[read]` **Offen bleibt die Untergrenze:** **erkennt MealCam die
-Zwiebel in der Sauce, oder schlaegt es *Tomatensauce* als bekanntes
-Rezept vor?**
+`[read]` **Bei `sort_weight` war meine Formulierung zu stark:**
+**ich schrieb *,,der Retriever braucht keine eigene Gewichtung"*.**
 
-`[read]` **Mit globalen Rezepten aus der Recherche (4c) wird die
-Frage kleiner:** **wenn ein Rezept existiert, wird es
-vorgeschlagen.**
+`[read]` **Richtig ist: er braucht keine neue Taxonomie-Gewichtung**
+— **eine visuelle und semantische Aehnlichkeit braucht er sehr
+wohl.** `[cmd]` **Berichtigt in Abschnitt 2.**
 
-`[read]` **Und welchen `source`-Wert ein MealCam-Rezept traegt** —
-`buddy` **oder ein eigener.**
+`[read]` **Und bei den Massstaeben habe ich eingeschraenkt:**
+**erhoben ab Tag 1, Schwellenwerte erst nach einer Messreihe.**
+`[read]` **Ein Schwellenwert ohne Daten waere geraten** (A-58).
+
+## 17b · Was noch offen ist
+
+`[read]` **Die Segmentierungsregel aus 4d ist gesetzt, aber
+ungeprueft** — **sie muss sich an echten Bildern bewaehren.**
+
+`[read]` **Und `SPEC_AI_INFRASTRUKTUR` existiert noch nicht** —
+**Abschnitt 12 verweist auf etwas, das zu schreiben ist.**
 
 ---
 
