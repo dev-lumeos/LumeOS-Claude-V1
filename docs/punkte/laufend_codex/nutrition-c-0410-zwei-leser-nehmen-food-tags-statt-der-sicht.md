@@ -116,7 +116,75 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Stand 2026-09-05 — gebaut und lokal eingespielt.** `apps/`,
+Migrationen, Dev-Server, Stage, Commit und Push blieben unberuehrt.
+
+### C-410 — kein einzelner Rueckfall, sondern eine nicht dauerhafte Reparatur
+
+`[cmd]` **C-366 wurde am 2026-09-02 um 15:19 als Migration
+committet.** Sie ersetzte die drei Funktionsdefinitionen im laufenden
+Bestand, aenderte aber nicht die dauerhafte Quelle
+`075_preference_search_application.sql`: ihre 21 direkten
+`nutrition.food_tags`-Lesestellen stammen unveraendert aus dem
+2026-08-22-Commit.
+
+`[cmd]` **Der Rueckfall wurde mit C-405 am 2026-09-05 ausgeloest.**
+Der Commit aenderte in Schritt 075 `strong_avoid`; dessen erneute
+Ausfuehrung erzeugte `food_search` und
+`refresh_food_preference_search_targets` aus der weiterhin alten
+Quelle neu. Vor diesem Fix mass der C-366-Test deshalb genau einen
+effektiven Leser (`preference_search_preview`) statt drei. Die
+Ausfuehrungszeit selbst wird nicht protokolliert; Ursache und
+Reproduktionsweg sind aber durch Commit, unveraenderte Quellzeilen und
+die vorherigen Live-Definitionen belegt.
+
+`[cmd]` **Der dauerhafte Fix steht jetzt in 075:** alle 21 Lesestellen
+der beiden Funktionen verwenden `nutrition.food_tags_effective`.
+Nach dem lokalen Lauf lesen wieder alle drei Funktionen die Sicht;
+keine direkte `nutrition.food_tags`-Lesestelle bleibt in Schritt 075.
+
+`[cmd]` **Die Gegenprobe wirkt in beiden Wegen:** Eine vorher nicht
+als `contains_nuts` importierte Food-Zeile wurde in einer
+zurueckgerollten Probe kuratiert auf `set`. `food_search` findet sie
+daraufhin im Tagfilter, und
+`refresh_food_preference_search_targets` erzeugt fuer das
+Nussallergieprofil das zugehoerige harte Ziel. Vor dem Fix waren beide
+Werte `false`, danach beide `true`.
+
+`[cmd]` **Der vorhandene Test haette den Rueckfall gemeldet:** Seine
+Strukturpruefung erwartete drei Leser und war rot bei eins. Er wird
+nicht vom allgemeinen Gate ausgefuehrt; deshalb blieb der rote
+Nachweis ungelesen. Der Test enthaelt nun auch die direkte
+Wirkungsprobe fuer Suche und Refresh.
+
+### C-404 — die 28 Tage gehoeren zum Aufbau-Plan
+
+`[cmd]` **`dev@lumeos.app` beschreibt vom 2026-09-01 bis 2026-09-28
+28 Kalendertage:** vier Wochen, 28 Tageszeilen und 84 Eintraege bei
+`lifecycle_type = once`; `days_count` steht noch auf 21.
+
+`[cmd]` **Die Woche ab 22.09. ist nicht ueberzaehlig.** Der
+dauerhafte C-150-Seed bezeichnet den Plan als eine gefuellte, eine
+leere und eine *kopierte* Woche und ruft `copy_meal_plan_week` fuer
+den 22.09. auf. Zusaetzlich entstand am 01.09. eine dokumentierte
+Kopie fuer den 08.09. Beide Kopien tragen `copied_from_week_id`; keine
+ist ein verwaister Eintrag.
+
+**Ergebnis:** Nach E-62 ist `days_count = 21` falsch; die Laufzeit des
+aktiven Plans muss **28** sein. Die vierte Woche und ihre 84
+Eintraege bleiben. Der Testdatenseed traegt diese Laufzeitmetadaten
+heute nicht mit, daher waere eine blosse Live-Korrektur beim naechsten
+Neuaufbau nicht dauerhaft. Diesen separaten Seed-/Aktivierungs-Schreibweg
+habe ich nicht ohne ausdruecklichen Auftrag erweitert.
+
+### Nachweise
+
+    pnpm exec tsx --test supabase/_pipeline/_validierung/
+      nutrition-c366-curated-food-tags.test.ts                 2 gruen
+
+Der Lauf war vor der Quellaenderung rot (1 statt 3 Leser; beide neue
+Wirkungswerte false) und danach gruen. Die allgemeinen App-Tests
+blieben ausserhalb dieses Auftrags.
 
 ## Abnahme
 

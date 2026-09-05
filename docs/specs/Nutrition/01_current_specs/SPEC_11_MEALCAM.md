@@ -178,9 +178,94 @@ Maschine vorgeschlagenes Rezept ist vorgesehen.**
 `[read]` **Der zweite Weg ist gebaut:** `[cmd]` **E-40 schreibt je
 Zutat eine Zeile in `meal_items`, einzeln anpassbar.**
 
-`[read]` **Zu klaeren bleibt, ob MealCam ein Rezept anlegt oder nur
-die Zutaten** — **ein Rezept ist wiederverwendbar, eine Zutatenliste
-nicht.**
+### Der Sammelpunkt: Spaghetti Napoli
+
+**Tom, 2026-09-07:**
+
+    Spaghetti Napoli
+      Spaghetti (Teigwaren)          -- ein BLS-Eintrag
+      Tomatensauce                   -- Rezept als Sammelpunkt
+        Tomate
+        Olivenoel
+        Zwiebel
+        Gewuerz
+
+`[read]` **Zwei Ebenen:** **die Mahlzeit traegt Posten, ein Posten
+kann selbst eine Sammlung sein.**
+
+`[cmd]` **`recipe_ingredients` traegt `food_source`, `food_id`,
+`custom_food_id`, `amount_g`** — **die Sammlung ist gebaut.**
+
+**Tom:** *,,dann kann der user immer noch loeschen / aendern /
+hinzufuegen."*
+
+`[cmd]` **Und das ist E-40:** **je Zutat eine Zeile in `meal_items`,
+einzeln anpassbar.** `[read]` **Wer die Zwiebel weglaesst, streicht
+eine Zeile** — **das Rezept bleibt.**
+
+## 4b · MealCam legt Rezepte an, der Admin sieht sie
+
+**Tom, 2026-09-07:** *,,mealcam kann rezepte im userprofil erstellen,
+das rezept muss aber auch im adminbereich zur validierung
+auftauchen, dann koennen wir einen ausbau administrieren."*
+
+### Zwei Wirkungen aus einem Vorgang
+
+    im Nutzerprofil    das Rezept ist sofort benutzbar
+    im Adminbereich    es erscheint zur Pruefung
+
+`[read]` **Der Nutzer wartet nicht auf eine Freigabe** — **sein
+Rezept gehoert ihm.**
+
+`[read]` **Aber jedes MealCam-Rezept ist zugleich ein Vorschlag an
+den Katalog** — **wenn hundert Nutzer *Tomatensauce* fotografieren,
+entsteht daraus eine kuratierte Zusammensetzung.**
+
+### Der Weg existiert bereits, fuer Lebensmittel
+
+`[cmd]` **`nutrition.food_curation_candidates`:** `food_id`,
+`target_type`, `target_field`, `proposed_value`, `source`, `reason`,
+`status`, `reviewer`. **0 Zeilen.**
+
+`[cmd]` **`status`:** `pending`, `accepted`, `rejected`,
+`superseded`.
+
+`[cmd]` **`target_type`:** `category_assignment`, `display_name`,
+`alias`, `preference_item_mapping`.
+
+`[read]` **Kein Wert fuer Rezepte** — **das ist die Luecke.**
+
+`[cmd]` **Und `food_curation_decisions` fuehrt die Entscheidung
+getrennt:** `candidate_id`, `decision`, `reviewer`, `reason`.
+
+`[read]` **Zwei Tabellen statt einer Statusspalte** — **die
+Entscheidung ist ein eigener Vorgang mit Begruendung.**
+
+### Was zu bauen ist
+
+`[read]` **Ein `target_type` fuer Rezeptvorschlaege** — **oder eine
+eigene Kandidatentabelle, wenn ein Rezept zu viel traegt fuer
+`proposed_value`.**
+
+`[cmd]` **`recipes.source` kennt `buddy`** (E-45) — **ein
+maschinell erzeugtes Rezept ist im Schema vorgesehen.**
+
+`[read]` **Zu klaeren: traegt ein MealCam-Rezept `source = 'buddy'`,
+oder braucht es einen eigenen Wert?** `[read]` **`buddy` ist der
+Gefaehrte, MealCam ist eine Kamera** — **das sind zwei verschiedene
+Herkuenfte.**
+
+### Und was der Admin damit tut
+
+`[read]` **Ein angenommener Vorschlag wird nicht zum Nutzerrezept
+zurueck** — **er wird Katalogmaterial.**
+
+`[cmd]` **Wie `food_tags_kuriert` bei den Tags** (E-55, C-366):
+**eine Ueberlagerung, die den Import ueberlebt.**
+
+`[read]` **Der Nutzer merkt davon nichts** — **sein Rezept bleibt
+seins.** `[read]` **Aber der naechste, der Tomatensauce
+fotografiert, bekommt einen besseren Vorschlag.**
 
 ---
 
@@ -509,13 +594,23 @@ das bereits.** Abschnitt 4a.
 **Die Mahlzeit** — `[cmd]` **wird vor dem Foto gewaehlt**, geplant
 oder neu. Abschnitt 8.
 
+**Rezepte** — `[cmd]` **MealCam legt sie im Nutzerprofil an, und
+sie erscheinen im Adminbereich zur Validierung.** Abschnitt 4b.
+
 ## 17a · Was noch offen ist
 
 `[read]` **Wie tief die Region-Erkennung geht:** **ein Teller mit
 Sauce ist ein Posten oder zwei?**
 
-`[read]` **Und ob MealCam ein Rezept anlegt oder nur Zutaten** —
-**ein Rezept ist wiederverwendbar, eine Zutatenliste nicht.**
+`[cmd]` **Toms Beispiel beantwortet es teilweise:** **Spaghetti und
+Sauce sind zwei Posten** — **die Sauce ist selbst eine Sammlung.**
+
+`[read]` **Offen bleibt die Untergrenze:** **erkennt MealCam die
+Zwiebel in der Sauce, oder schlaegt es *Tomatensauce* als bekanntes
+Rezept vor?**
+
+`[read]` **Und welchen `source`-Wert ein MealCam-Rezept traegt** —
+`buddy` **oder ein eigener.**
 
 ---
 

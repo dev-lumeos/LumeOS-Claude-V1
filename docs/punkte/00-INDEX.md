@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 210 |
+| `todos` | 211 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 277 |
-| **gesamt** | **492** |
+| **gesamt** | **493** |
 
 ## medical — 43
 
@@ -59,7 +59,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 224
+## nutrition — 225
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -158,6 +158,7 @@
 | `C-408` | feature | mittel | [Vorrat nach dem Vorbild von Supplements](erledigt/nutrition-c-0408-vorrat-nach-dem-vorbild-von-supplements.md) | erledigt | — | C-409 |
 | `C-409` | befund | hoch | [`nutrition_reorder` ist unerreichbar](erledigt/nutrition-c-0409-nutrition-reorder-ist-unerreichbar.md) | erledigt | — | — |
 | `C-410` | befund | hoch | [zwei Leser nehmen `food_tags` statt der Sicht](laufend_codex/nutrition-c-0410-zwei-leser-nehmen-food-tags-statt-der-sicht.md) | laeuft (codex) | — | — |
+| `C-411` | feature | mittel | [Rezeptvorschlaege in der Kuration](todos/nutrition-c-0411-rezeptvorschlaege-in-der-kuration.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
