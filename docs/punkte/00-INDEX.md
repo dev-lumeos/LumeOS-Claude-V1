@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 214 |
+| `todos` | 217 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 266 |
-| **gesamt** | **483** |
+| **gesamt** | **486** |
 
 ## medical — 43
 
@@ -59,9 +59,9 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 215
+## nutrition — 218
 
-### beauftragbar — 214
+### beauftragbar — 215
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -156,6 +156,7 @@
 | `C-404` | befund | niedrig | [`Aufbau-Wochenplan` beschreibt 28 Tage, behauptet 21](todos/nutrition-c-0404-aufbau-wochenplan-beschreibt-28-tage-behauptet-21.md) | offen | — | — |
 | `C-405` | feature | mittel | [*Sonstige* faellt weg](laufend_codex/nutrition-c-0405-sonstige-faellt-weg.md) | laeuft (codex) | — | — |
 | `C-406` | feature | mittel | [`strong_avoid` an vier Stellen entfernen](laufend_codex/nutrition-c-0406-strong-avoid-an-vier-stellen-entfernen.md) | laeuft (codex) | — | — |
+| `C-407` | feature | hoch | [der Leseweg fuer Wochenlisten](todos/nutrition-c-0407-der-leseweg-fuer-wochenlisten.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -277,14 +278,16 @@
 | `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](erledigt/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | erledigt | — | — |
 | `G-342` | befund | niedrig | [`nutsettings` hat keinen Aufrufer](erledigt/nutrition-g-0342-nutsettings-hat-keinen-aufrufer.md) | erledigt | — | G-343 |
 | `G-343` | befund | mittel | [Tests messen gegen ueberholte Entwuerfe](todos/nutrition-g-0343-tests-messen-gegen-ueberholte-entwuerfe.md) | offen | — | — |
-| `G-344` | befund | hoch | [Einkaufslisten koennen mehr, als die Spec sagt](todos/nutrition-g-0344-einkaufslisten-koennen-mehr-als-die-spec-sagt.md) | offen | — | — |
+| `G-344` | befund | hoch | [Einkaufslisten koennen mehr, als die Spec sagt](todos/nutrition-g-0344-einkaufslisten-koennen-mehr-als-die-spec-sagt.md) | offen | — | C-407, G-345 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-### wartet auf Blocker — 1
+### wartet auf Blocker — 3
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
+| `C-408` | feature | mittel | [Vorrat nach dem Vorbild von Supplements](todos/nutrition-c-0408-vorrat-nach-dem-vorbild-von-supplements.md) | offen | C-407 | — |
 | `G-279` | feature | niedrig | [eine Kachel *haeufig erfasst*](todos/nutrition-g-0279-eine-kachel-haeufig-erfasst.md) | offen | G-328 | G-328 |
+| `G-345` | feature | hoch | [die Oberflaeche fuer Einkaufslisten](todos/nutrition-g-0345-die-oberflaeche-fuer-einkaufslisten.md) | offen | C-407 | — |
 
 ## supplements — 60
 
