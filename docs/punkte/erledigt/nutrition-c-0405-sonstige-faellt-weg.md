@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-63
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: 4b841cca
 beruehrt:
   tabellen: [nutrition.nutrient_defs]
 zahlen:
@@ -188,4 +190,66 @@ angefasst; nichts wurde gestaged oder committed.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator. Nachgemessen.**
+
+### *Sonstige* ist leer
+
+`[cmd]` **Selbst gemessen:**
+
+    CHORL | Fettbegleitstoffe | parent = -
+    NT    | Makronaehrstoffe  | parent = -
+
+`[cmd]` **`group_de ilike '%sonstig%'` liefert nichts.**
+
+`[read]` **Tom, 2026-09-07:** *,,das sieht unprofessionell aus denn
+die sind alle zuteilbar."* **Erledigt.**
+
+### `NT` bei Makronaehrstoffen, nicht als Kind
+
+`[read]` **Ich hatte *zu Protein* geschrieben und offen gelassen, ob
+ein `parent_code` richtig ist.**
+
+`[cmd]` **Seine Antwort: Makronaehrstoffe, ohne `parent_code`** —
+**`NT x 6,25 → PROT625` ist Umrechnung, keine Summen-Hierarchie.**
+
+`[read]` **Das ist genauer als mein Auftrag.** `[read]` **Ein
+`parent_code` haette behauptet, Stickstoff sei ein Bestandteil von
+Protein** — **er ist seine Quelle.**
+
+### Und der Name bleibt
+
+`[cmd]` **`CHORL` bleibt `CHORL`.** `[cmd]` **C-346s `CHOL` bleibt
+ausschliesslich Legacy-Mapping.**
+
+`[read]` **Richtig: der BLS-Code ist der BLS-Code.** `[read]` **Eine
+Umbenennung in der Definition haette die Herkunft verwischt.**
+
+### C-406 — der CHECK ist bereinigt
+
+`[cmd]` **Nachgemessen:**
+
+    CHECK (strength IN ('hard_exclude', 'soft_dislike',
+                        'neutral', 'like', 'boost'))
+
+`[cmd]` **`strong_avoid` ist weg** — aus Constraint und
+Lesefunktionen.
+
+`[cmd]` **Und die Gegenprobe:** **Laktose liefert in der Suche
+weiterhin `strong / intolerance` mit Score -25.**
+
+`[read]` **Das ist der Beleg, der zaehlt:** **die mittlere Stufe
+wirkt weiter, sie kommt nur nicht mehr aus einem Wert, den niemand
+setzt.**
+
+### Gemeldet, nicht selbst geaendert
+
+`[cmd]` **`naehrstoff-anzeige.ts` braucht `NT` zu Protein und
+*Fettbegleitstoffe* direkt nach *Fette*.**
+
+`[cmd]` **Und vier alte `strong_avoid`-Stellen unter `apps/`.**
+
+`[read]` **Beides gemeldet statt angefasst** — `apps/` **gehoert
+Claude Code.** **Als G-347.**
+
+**Abgenommen.**
+

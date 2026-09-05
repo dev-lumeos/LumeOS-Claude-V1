@@ -9,6 +9,8 @@ kind_von: G-337
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: 4b841cca
 beruehrt:
   tabellen: [nutrition.food_preference_items]
 zahlen:
@@ -64,3 +66,19 @@ ist** — **das ist ein UI-Auftrag.**
 
 **Mitbeauftragt mit C-405 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit C-405 abgenommen: der CHECK ist bereinigt.**
+
+`[cmd]` **Nachgemessen:** `strength IN ('hard_exclude',
+'soft_dislike', 'neutral', 'like', 'boost')`.
+
+`[cmd]` **Und die Gegenprobe: Laktose liefert weiterhin
+`strong / intolerance` mit Score -25.**
+
+`[read]` **Die mittlere Stufe wirkt weiter** — **sie kommt nur nicht
+mehr aus einem Wert, den niemand setzt.**
+
+`[cmd]` **Vier `strong_avoid`-Stellen unter `apps/` gemeldet** — als
+G-347.

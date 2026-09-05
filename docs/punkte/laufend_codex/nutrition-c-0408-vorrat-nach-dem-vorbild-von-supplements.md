@@ -4,9 +4,11 @@ typ: feature
 modul: nutrition
 schwere: mittel
 angelegt: 2026-09-07
-braucht: [C-407]
+braucht: []
 kind_von: null
 entscheidung: E-65
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: [nutrition.shopping_lists]
 zahlen:
@@ -82,3 +84,8 @@ ohne Begruendungszwang.**
 
 `[read]` **Fuer Nutrition braucht es einen eigenen Wert** — **oder
 `manual` mit Vermerk.** **Entscheide beim Bau und begruende es.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-407 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.
