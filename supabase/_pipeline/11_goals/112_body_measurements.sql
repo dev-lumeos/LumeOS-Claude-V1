@@ -350,6 +350,70 @@ BEFORE UPDATE ON goals.body_circumferences
 FOR EACH ROW
 EXECUTE FUNCTION goals.touch_updated_at();
 
+-- G-356: eine Umfangsmessung ist ein zusammengehoeriger Satz. Die
+-- Seitentrennung liegt in den vier linken/rechten Spaltenpaaren und wird
+-- deshalb weder gemittelt noch in eine Kindtabelle aufgeloest.
+CREATE OR REPLACE FUNCTION goals.body_circumference_write(
+  p_measurement_date date,
+  p_measurement_time time,
+  p_measurement_source text DEFAULT 'manual',
+  p_source_detail text DEFAULT NULL,
+  p_notes text DEFAULT NULL,
+  p_neck_cm numeric DEFAULT NULL,
+  p_shoulders_cm numeric DEFAULT NULL,
+  p_chest_cm numeric DEFAULT NULL,
+  p_upper_arm_left_cm numeric DEFAULT NULL,
+  p_upper_arm_right_cm numeric DEFAULT NULL,
+  p_forearm_left_cm numeric DEFAULT NULL,
+  p_forearm_right_cm numeric DEFAULT NULL,
+  p_waist_cm numeric DEFAULT NULL,
+  p_hip_cm numeric DEFAULT NULL,
+  p_thigh_left_cm numeric DEFAULT NULL,
+  p_thigh_right_cm numeric DEFAULT NULL,
+  p_calf_left_cm numeric DEFAULT NULL,
+  p_calf_right_cm numeric DEFAULT NULL
+)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+DECLARE
+  v_user_id uuid := NULLIF(current_setting('request.jwt.claim.sub', true), '')::uuid;
+  v_measurement_id uuid;
+BEGIN
+  IF v_user_id IS NULL THEN
+    RAISE EXCEPTION 'body_circumference_write: Anmeldung erforderlich'
+      USING ERRCODE = '42501';
+  END IF;
+
+  INSERT INTO goals.body_circumferences (
+    user_id, measurement_date, measurement_time,
+    neck_cm, shoulders_cm, chest_cm,
+    upper_arm_left_cm, upper_arm_right_cm,
+    forearm_left_cm, forearm_right_cm,
+    waist_cm, hip_cm, thigh_left_cm, thigh_right_cm, calf_left_cm, calf_right_cm,
+    measurement_source, source_detail, notes
+  ) VALUES (
+    v_user_id, p_measurement_date, p_measurement_time,
+    p_neck_cm, p_shoulders_cm, p_chest_cm,
+    p_upper_arm_left_cm, p_upper_arm_right_cm,
+    p_forearm_left_cm, p_forearm_right_cm,
+    p_waist_cm, p_hip_cm, p_thigh_left_cm, p_thigh_right_cm, p_calf_left_cm, p_calf_right_cm,
+    p_measurement_source, p_source_detail, p_notes
+  )
+  RETURNING id INTO v_measurement_id;
+
+  RETURN v_measurement_id;
+END;
+$$;
+
+COMMENT ON FUNCTION goals.body_circumference_write(
+  date, time, text, text, text, numeric, numeric, numeric, numeric, numeric,
+  numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric
+) IS
+  'G-356: erfasst einen eigenen Umfangssatz mit allen 13 Messpunkten und getrennten linken/rechten Werten.';
+
 DROP TRIGGER IF EXISTS body_measurements_sync_profile_weight ON goals.body_measurements;
 CREATE TRIGGER body_measurements_sync_profile_weight
 AFTER INSERT OR UPDATE OR DELETE ON goals.body_measurements
@@ -411,8 +475,16 @@ REVOKE ALL ON FUNCTION goals.fill_body_measurement_snapshot() FROM PUBLIC;
 REVOKE ALL ON FUNCTION goals.refresh_profile_body_weight(uuid) FROM PUBLIC;
 REVOKE ALL ON FUNCTION goals.sync_profile_weight_from_measurement() FROM PUBLIC;
 REVOKE ALL ON FUNCTION goals.body_composition_navy(uuid, date) FROM PUBLIC;
+REVOKE ALL ON FUNCTION goals.body_circumference_write(
+  date, time, text, text, text, numeric, numeric, numeric, numeric, numeric,
+  numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric
+) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION goals.refresh_profile_body_weight(uuid) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION goals.body_composition_navy(uuid, date) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION goals.body_circumference_write(
+  date, time, text, text, text, numeric, numeric, numeric, numeric, numeric,
+  numeric, numeric, numeric, numeric, numeric, numeric, numeric, numeric
+) TO authenticated, service_role;
 
 DO $$
 DECLARE
@@ -435,7 +507,16 @@ BEGIN
     INTO v_policies
   FROM pg_policies
   WHERE schemaname = 'goals'
-    AND tablename IN ('body_measurements', 'body_circumferences');
+    AND (
+      (tablename = 'body_measurements' AND policyname IN (
+        'body_measurements_select_own', 'body_measurements_insert_own',
+        'body_measurements_update_own', 'body_measurements_delete_own'
+      ))
+      OR (tablename = 'body_circumferences' AND policyname IN (
+        'body_circumferences_select_own', 'body_circumferences_insert_own',
+        'body_circumferences_update_own', 'body_circumferences_delete_own'
+      ))
+    );
 
   IF v_policies <> 8 THEN
     RAISE EXCEPTION '112_body_measurements: Policies unvollstaendig (%/8)', v_policies;

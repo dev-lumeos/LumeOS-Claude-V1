@@ -204,7 +204,117 @@ COMMENT ON FUNCTION goals.phase_am(UUID, DATE) IS
   'Die am lokalen Stichtag gueltige Goal-Phase. Vor der ersten gueltig_ab-Zeile keine Zeile.';
 
 -- -------------------------------------------------------------
--- 5. Rechte und Zeilenschutz.
+-- 5. Schreibvertrag fuer die Zeitachse.
+-- -------------------------------------------------------------
+CREATE OR REPLACE FUNCTION goals.goal_phase_start(
+  p_phase_type text,
+  p_gueltig_ab date DEFAULT CURRENT_DATE,
+  p_goal_id uuid DEFAULT NULL,
+  p_projected_end_date date DEFAULT NULL,
+  p_variant text DEFAULT NULL,
+  p_parameters jsonb DEFAULT '{}'::jsonb
+)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+DECLARE
+  v_user_id uuid := NULLIF(current_setting('request.jwt.claim.sub', true), '')::uuid;
+  v_phase_id uuid;
+BEGIN
+  IF v_user_id IS NULL THEN
+    RAISE EXCEPTION 'goal_phase_start: Anmeldung erforderlich'
+      USING ERRCODE = '42501';
+  END IF;
+
+  IF p_parameters IS NULL OR jsonb_typeof(p_parameters) <> 'object' THEN
+    RAISE EXCEPTION 'goal_phase_start: parameters muss ein JSON-Objekt sein'
+      USING ERRCODE = '22023';
+  END IF;
+
+  IF p_goal_id IS NOT NULL AND NOT EXISTS (
+    SELECT 1
+    FROM goals.user_goals ug
+    WHERE ug.id = p_goal_id
+      AND ug.user_id = v_user_id
+  ) THEN
+    RAISE EXCEPTION 'goal_phase_start: Ziel gehoert nicht dem angemeldeten Nutzer'
+      USING ERRCODE = '42501';
+  END IF;
+
+  IF EXISTS (
+    SELECT 1
+    FROM goals.goal_phases gp
+    WHERE gp.user_id = v_user_id
+      AND gp.actual_end_date IS NULL
+  ) THEN
+    RAISE EXCEPTION 'goal_phase_start: zuerst die laufende Phase beenden'
+      USING ERRCODE = '23505';
+  END IF;
+
+  INSERT INTO goals.goal_phases (
+    user_id, goal_id, phase_type, gueltig_ab, projected_end_date,
+    variant, parameters
+  ) VALUES (
+    v_user_id, p_goal_id, p_phase_type, p_gueltig_ab, p_projected_end_date,
+    p_variant, p_parameters
+  )
+  RETURNING id INTO v_phase_id;
+
+  RETURN v_phase_id;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION goals.goal_phase_end(
+  p_phase_id uuid,
+  p_transition_reason text,
+  p_actual_end_date date DEFAULT CURRENT_DATE
+)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+DECLARE
+  v_user_id uuid := NULLIF(current_setting('request.jwt.claim.sub', true), '')::uuid;
+  v_phase_id uuid;
+BEGIN
+  IF v_user_id IS NULL THEN
+    RAISE EXCEPTION 'goal_phase_end: Anmeldung erforderlich'
+      USING ERRCODE = '42501';
+  END IF;
+
+  IF NULLIF(btrim(p_transition_reason), '') IS NULL THEN
+    RAISE EXCEPTION 'goal_phase_end: Ein Uebergangsgrund ist erforderlich'
+      USING ERRCODE = '22023';
+  END IF;
+
+  UPDATE goals.goal_phases gp
+  SET actual_end_date = p_actual_end_date,
+      transition_reason = btrim(p_transition_reason)
+  WHERE gp.id = p_phase_id
+    AND gp.user_id = v_user_id
+    AND gp.actual_end_date IS NULL
+    AND p_actual_end_date >= gp.gueltig_ab
+  RETURNING gp.id INTO v_phase_id;
+
+  IF v_phase_id IS NULL THEN
+    RAISE EXCEPTION 'goal_phase_end: laufende eigene Phase nicht gefunden oder Enddatum liegt vor Beginn'
+      USING ERRCODE = 'P0002';
+  END IF;
+
+  RETURN v_phase_id;
+END;
+$$;
+
+COMMENT ON FUNCTION goals.goal_phase_start(text, date, uuid, date, text, jsonb) IS
+  'G-357/E-54/E-67: beginnt die eine laufende Goal-Phase des angemeldeten Nutzers. recommended_next bleibt bewusst leer.';
+COMMENT ON FUNCTION goals.goal_phase_end(uuid, text, date) IS
+  'G-357: beendet eine eigene laufende Goal-Phase mit einem verpflichtenden Uebergangsgrund.';
+
+-- -------------------------------------------------------------
+-- 6. Rechte und Zeilenschutz.
 -- -------------------------------------------------------------
 GRANT USAGE ON SCHEMA goals TO authenticated, service_role;
 
@@ -213,6 +323,10 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON goals.goal_phases TO authenticated;
 GRANT ALL ON goals.user_goals TO service_role;
 GRANT ALL ON goals.goal_phases TO service_role;
 GRANT EXECUTE ON FUNCTION goals.phase_am(UUID, DATE) TO authenticated, service_role;
+REVOKE ALL ON FUNCTION goals.goal_phase_start(text, date, uuid, date, text, jsonb) FROM PUBLIC, anon;
+REVOKE ALL ON FUNCTION goals.goal_phase_end(uuid, text, date) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION goals.goal_phase_start(text, date, uuid, date, text, jsonb) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION goals.goal_phase_end(uuid, text, date) TO authenticated, service_role;
 
 ALTER TABLE goals.user_goals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE goals.goal_phases ENABLE ROW LEVEL SECURITY;
@@ -259,9 +373,19 @@ DECLARE
   v_goal_phases_rls BOOLEAN;
 BEGIN
   SELECT count(*) INTO v_user_goal_policies
-  FROM pg_policies WHERE schemaname = 'goals' AND tablename = 'user_goals';
+  FROM pg_policies
+  WHERE schemaname = 'goals'
+    AND tablename = 'user_goals'
+    AND policyname IN (
+      'user_goals_select', 'user_goals_insert', 'user_goals_update', 'user_goals_delete'
+    );
   SELECT count(*) INTO v_phase_policies
-  FROM pg_policies WHERE schemaname = 'goals' AND tablename = 'goal_phases';
+  FROM pg_policies
+  WHERE schemaname = 'goals'
+    AND tablename = 'goal_phases'
+    AND policyname IN (
+      'goal_phases_select', 'goal_phases_insert', 'goal_phases_update', 'goal_phases_delete'
+    );
 
   IF v_user_goal_policies <> 4 THEN
     RAISE EXCEPTION 'goals.user_goals: % Policies statt 4', v_user_goal_policies;

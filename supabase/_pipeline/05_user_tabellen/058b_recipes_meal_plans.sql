@@ -1199,6 +1199,64 @@ BEGIN
 END;
 $function$;
 
+-- C-379: Quelle und Ziel werden zusammen gesetzt. Damit kann ein Plan nie
+-- als sequence ohne Folgeplan gespeichert werden; days_count bleibt dabei
+-- unangetastet und ist weiterhin ausschliesslich die Laufzeit (E-62).
+CREATE OR REPLACE FUNCTION nutrition.meal_plan_set_next_plan(
+  p_plan_id uuid,
+  p_next_plan_id uuid
+)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = ''
+AS $function$
+DECLARE
+  v_user_id uuid := NULLIF(current_setting('request.jwt.claim.sub', true), '')::uuid;
+  v_next_plan_id uuid;
+BEGIN
+  IF v_user_id IS NULL THEN
+    RAISE EXCEPTION 'meal_plan_set_next_plan: Anmeldung erforderlich'
+      USING ERRCODE = '42501';
+  END IF;
+
+  IF p_plan_id IS NULL OR p_next_plan_id IS NULL OR p_plan_id = p_next_plan_id THEN
+    RAISE EXCEPTION 'meal_plan_set_next_plan: Quelle und unterschiedlicher Folgeplan sind erforderlich'
+      USING ERRCODE = '22023';
+  END IF;
+
+  PERFORM 1
+  FROM nutrition.meal_plans mp
+  WHERE mp.id = p_plan_id
+    AND mp.user_id = v_user_id
+  FOR UPDATE;
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'meal_plan_set_next_plan: eigener Quellplan nicht gefunden'
+      USING ERRCODE = 'P0002';
+  END IF;
+
+  PERFORM 1
+  FROM nutrition.meal_plans mp
+  WHERE mp.id = p_next_plan_id
+    AND mp.user_id = v_user_id;
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'meal_plan_set_next_plan: eigener Folgeplan nicht gefunden'
+      USING ERRCODE = 'P0002';
+  END IF;
+
+  UPDATE nutrition.meal_plans mp
+  SET lifecycle_type = 'sequence',
+      next_plan_id = p_next_plan_id
+  WHERE mp.id = p_plan_id
+    AND mp.user_id = v_user_id
+  RETURNING mp.next_plan_id INTO v_next_plan_id;
+
+  RETURN v_next_plan_id;
+END;
+$function$;
+
 -- -------------------------------------------------------------
 -- 7. Rechte und Zeilenschutz.
 -- -------------------------------------------------------------
@@ -1230,6 +1288,7 @@ REVOKE ALL ON FUNCTION nutrition.food_nutrient_snapshot(text, uuid, uuid, numeri
 REVOKE ALL ON FUNCTION nutrition.recipe_nutrition(uuid, numeric) FROM PUBLIC, anon;
 REVOKE ALL ON FUNCTION nutrition.copy_meal_plan_week(uuid, date) FROM PUBLIC, anon;
 REVOKE ALL ON FUNCTION nutrition.meal_plan_day_to_diary(uuid, date) FROM PUBLIC, anon;
+REVOKE ALL ON FUNCTION nutrition.meal_plan_set_next_plan(uuid, uuid) FROM PUBLIC, anon;
 
 GRANT EXECUTE ON FUNCTION nutrition.food_nutrient_snapshot(text, uuid, uuid, numeric)
   TO authenticated, service_role;
@@ -1238,6 +1297,8 @@ GRANT EXECUTE ON FUNCTION nutrition.recipe_nutrition(uuid, numeric)
 GRANT EXECUTE ON FUNCTION nutrition.copy_meal_plan_week(uuid, date)
   TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION nutrition.meal_plan_day_to_diary(uuid, date)
+  TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION nutrition.meal_plan_set_next_plan(uuid, uuid)
   TO authenticated, service_role;
 
 ALTER TABLE nutrition.recipes ENABLE ROW LEVEL SECURITY;
