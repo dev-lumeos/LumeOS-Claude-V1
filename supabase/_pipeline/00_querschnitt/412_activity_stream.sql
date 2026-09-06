@@ -1,7 +1,10 @@
 -- 412 -- G-152/E-52: ein gemeinsamer, zeitlich sortierbarer Aktivitaetsstrom
 --
--- Sechs Ereignisquellen aus fuenf Modulen: Nutrition stellt Mahlzeiten und
--- Wasser, daneben Supplements, Training, Recovery und Medical. Die Sicht
+-- Sechs Ereignisquellen aus fuenf Modulen. Sie liegt in public, dem bereits
+-- exponierten Plattform-Schema: Die Fachschemas bleiben geschlossen, waehrend
+-- ein neues quer-Schema fuer diese eine Sicht nur eine zweite API-Exposition
+-- schaffen wuerde. Nutrition stellt Mahlzeiten und Wasser, daneben
+-- Supplements, Training, Recovery und Medical. Die Sicht
 -- vereinheitlicht nur den Leseweg; sie bewertet weder fehlende Ereignisse
 -- noch erzeugt sie Daten. Insbesondere bedeutet ein leeres Zeitfenster nicht,
 -- dass in einem Modul nichts getan wurde (C-412).
@@ -10,7 +13,11 @@
 
 BEGIN;
 
-CREATE OR REPLACE VIEW nutrition.activity_stream
+-- C-414: Der alte Fachschema-Name darf nach einem Kettenlauf nicht neben der
+-- Querschnittssicht bestehen bleiben.
+DROP VIEW IF EXISTS nutrition.activity_stream;
+
+CREATE OR REPLACE VIEW public.activity_stream
 WITH (security_invoker = true) AS
 SELECT
   m.user_id,
@@ -104,9 +111,9 @@ SELECT
   ) AS summary_de
 FROM medical.lab_reports lr;
 
-GRANT SELECT ON nutrition.activity_stream TO authenticated, service_role;
+GRANT SELECT ON public.activity_stream TO authenticated, service_role;
 
-COMMENT ON VIEW nutrition.activity_stream IS
-  'G-152/E-52: gemeinsamer Aktivitaetsstrom ueber Mahlzeiten, Wasser, Supplements, Training, Recovery und Medical. event_date und event_time sind die fachlichen Zeitwerte; occurred_at bleibt bei fehlender Uhrzeit NULL statt eine Uhrzeit zu erfinden. C-412: Leere Zeitraeume beschreiben nur den Bestand, keine Einnahme- oder Aktivitaetsaussage.';
+COMMENT ON VIEW public.activity_stream IS
+  'C-414/G-152/E-52: Querschnittssicht im Plattform-Schema public ueber Mahlzeiten, Wasser, Supplements, Training, Recovery und Medical. event_date und event_time sind die fachlichen Zeitwerte; occurred_at bleibt bei fehlender Uhrzeit NULL statt eine Uhrzeit zu erfinden. C-412: Leere Zeitraeume beschreiben nur den Bestand, keine Einnahme- oder Aktivitaetsaussage.';
 
 COMMIT;

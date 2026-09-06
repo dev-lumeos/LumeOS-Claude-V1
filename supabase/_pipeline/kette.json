@@ -1489,7 +1489,7 @@
       "id": "412",
       "path": "supabase/_pipeline/00_querschnitt/412_activity_stream.sql",
       "kind": "sql",
-      "creates": "G-152/E-52: gemeinsamer Aktivitaetsstrom ueber die sechs Ereignisquellen aus Nutrition, Supplements, Training, Recovery und Medical",
+      "creates": "C-414/G-152/E-52: gemeinsame public.activity_stream-Sicht ueber die sechs Ereignisquellen aus Nutrition, Supplements, Training, Recovery und Medical",
       "depends_on": [
         "017"
       ]

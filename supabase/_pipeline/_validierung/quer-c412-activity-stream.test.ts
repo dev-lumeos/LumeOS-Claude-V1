@@ -12,9 +12,10 @@ function one<T>(sql: string): T {
   ], { encoding: 'utf8' }).trim()) as T
 }
 
-test('G-152/C-412: activity_stream vereinigt die sechs Quellen aus fuenf Modulen', () => {
+test('C-414/G-152: activity_stream ist als Querschnittssicht in public und vereinigt sechs Quellen', () => {
   const result = one<{
     viewExists: boolean
+    legacyNutritionViewAbsent: boolean
     securityInvoker: boolean
     authenticatedSelect: boolean
     eventTypes: string[]
@@ -31,22 +32,23 @@ test('G-152/C-412: activity_stream vereinigt die sechs Quellen aus fuenf Modulen
       UNION ALL SELECT 'lab_report', count(*)::integer FROM medical.lab_reports
     ), stream_rows AS (
       SELECT event_type, count(*)::integer AS rows
-      FROM nutrition.activity_stream
+      FROM public.activity_stream
       GROUP BY event_type
     )
     SELECT json_build_object(
-      'viewExists', to_regclass('nutrition.activity_stream') IS NOT NULL,
+      'viewExists', to_regclass('public.activity_stream') IS NOT NULL,
+      'legacyNutritionViewAbsent', to_regclass('nutrition.activity_stream') IS NULL,
       'securityInvoker', (
         SELECT 'security_invoker=true' = ANY(c.reloptions)
         FROM pg_class c
-        WHERE c.oid = 'nutrition.activity_stream'::regclass
+        WHERE c.oid = 'public.activity_stream'::regclass
       ),
-      'authenticatedSelect', has_table_privilege('authenticated', 'nutrition.activity_stream', 'SELECT'),
+      'authenticatedSelect', has_table_privilege('authenticated', 'public.activity_stream', 'SELECT'),
       'eventTypes', (
         SELECT json_agg(event_type ORDER BY event_type) FROM stream_rows
       ),
       'missingSummaries', (
-        SELECT count(*)::integer FROM nutrition.activity_stream
+        SELECT count(*)::integer FROM public.activity_stream
         WHERE btrim(summary_de) = ''
       ),
       'sourceRows', (SELECT json_object_agg(event_type, rows) FROM source_rows),
@@ -55,6 +57,7 @@ test('G-152/C-412: activity_stream vereinigt die sechs Quellen aus fuenf Modulen
   `)
 
   assert.equal(result.viewExists, true)
+  assert.equal(result.legacyNutritionViewAbsent, true)
   assert.equal(result.securityInvoker, true)
   assert.equal(result.authenticatedSelect, true)
   assert.deepEqual(result.eventTypes, [
@@ -78,12 +81,12 @@ test('C-412: der Strom macht die veraltete Supplement-Historie sichtbar statt si
   }>(`
     SELECT json_build_object(
       'streamLatest', (
-        SELECT max(event_date)::text FROM nutrition.activity_stream
+        SELECT max(event_date)::text FROM public.activity_stream
         WHERE event_type = 'supplement_intake'
       ),
       'sourceLatest', (SELECT max(intake_date)::text FROM supplements.intake_logs),
       'streamLastSevenDays', (
-        SELECT count(*)::integer FROM nutrition.activity_stream
+        SELECT count(*)::integer FROM public.activity_stream
         WHERE event_type = 'supplement_intake'
           AND event_date >= current_date - 6
       ),
@@ -110,9 +113,9 @@ test('G-152: die Sicht bleibt fuer eine authentifizierte Sitzung auf deren eigen
     SET LOCAL ROLE authenticated;
     SELECT json_build_object(
       'onlyOwnRows', NOT EXISTS (
-        SELECT 1 FROM nutrition.activity_stream WHERE user_id <> auth.uid()
+        SELECT 1 FROM public.activity_stream WHERE user_id <> auth.uid()
       ),
-      'streamRows', (SELECT count(*)::integer FROM nutrition.activity_stream),
+      'streamRows', (SELECT count(*)::integer FROM public.activity_stream),
       'sourceRows', (
         (SELECT count(*)::integer FROM nutrition.meals)
         + (SELECT count(*)::integer FROM nutrition.water_logs)
