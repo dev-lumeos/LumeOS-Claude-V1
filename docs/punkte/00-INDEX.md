@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 205 |
+| `todos` | 206 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 5 |
 | `erledigt` | 295 |
-| **gesamt** | **508** |
+| **gesamt** | **509** |
 
 ## medical — 43
 
@@ -458,7 +458,7 @@
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 
-## quer — 103
+## quer — 104
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -564,7 +564,8 @@
 | `G-356` | feature | hoch | [die Umfangserfassung fehlt](laufend_claudecode/quer-g-0356-die-umfangserfassung-fehlt.md) | laeuft (claudecode) | — | — |
 | `G-357` | feature | hoch | [kein Weg in eine Phase](laufend_claudecode/quer-g-0357-kein-weg-in-eine-phase.md) | laeuft (claudecode) | — | — |
 | `G-358` | befund | mittel | [62 Vermerke ohne Grund](laufend_claudecode/quer-g-0358-62-vermerke-ohne-grund.md) | laeuft (claudecode) | — | — |
-| `G-359` | befund | hoch | [1.343 Mockup-Elemente fehlen in der UI](laufend_claudecode/quer-g-0359-1343-mockup-elemente-fehlen-in-der-ui.md) | laeuft (claudecode) | — | C-417 |
+| `G-359` | befund | hoch | [1.343 Mockup-Elemente fehlen in der UI](laufend_claudecode/quer-g-0359-1343-mockup-elemente-fehlen-in-der-ui.md) | laeuft (claudecode) | — | C-417, G-360 |
+| `G-360` | feature | hoch | [coach, market und admin als eigene Apps](todos/quer-g-0360-coach-market-admin-als-eigene-apps.md) | offen | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

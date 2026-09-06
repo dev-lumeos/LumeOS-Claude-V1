@@ -464,3 +464,213 @@ ueberholt ist:** **melden, nicht selbst verwerfen.**
     unangetastet      kein bestehendes Verhalten geaendert
     Waechter          mockup-deckung.mjs bleibt gruen
     Bildschirmfoto    je Modul, vorher / nachher
+
+## Bericht — Auftrag 2 (training, dashboard)
+
+**Claude Code, 2026-09-06.** **Zwei Module fertig, coach gemessen und
+NICHT begonnen** — der Grund steht unten und braucht eine
+Entscheidung.
+
+### Zuerst: die Fehlmenge zerfaellt in zwei Arten
+
+`[read]` **Der Auftrag vermutet es, und die Messung bestaetigt es:**
+**es gibt zwei verschiedene Ursachen, und sie brauchen verschiedene
+Arbeit.**
+
+`[cmd]` **Gemessen ueber alle acht v2-Module: 38 Ternaere mit
+Komponenten in beiden Zweigen, davon 18 echte Verdraengungen**
+(der Rest ist `Pill / Pill` — Gestaltung, keine Ansicht):
+
+    nutrition     6      supplements   8      training   4 (+1)
+    goals         2 (erledigt in Auftrag 1)
+    coach         0      medical       0      dashboard  0
+
+`[read]` **Verdraengt heisst: der Quelltext ist da, aber der Zweig
+laeuft nie.** **Weg heisst: es gibt ihn nicht.**
+
+### training — 5 Verdraengungen, alle behoben
+
+`[cmd]` **`dev@lumeos.app` hat 30 Sitzungen und 1.416 Uebungen** —
+**also lief IMMER der echte Zweig.**
+
+    Reiter      vorher            nachher
+    history     1 Attrappe        5
+    library     1 Attrappe        2
+    progress    1 Attrappe        5
+    standards   1 Attrappe        3
+    calendar    1 Attrappe        5
+
+`[cmd]` **Am Schirm gemessen, angemeldet, vorher aus `git stash`** —
+**nicht aus dem Quelltext geschlossen.**
+
+`[read]` **Der echte Teil ist unangetastet:** aus
+`verlauf ? <Echt/> : <Entwurf/>` wurde
+`{verlauf && <Echt/>}` plus `<Entwurf/>` darunter. **Die Bedingung
+fuer den echten Teil ist dieselbe geblieben.**
+
+**Bildschirmfotos:** `backup/g359b-training-vorher-*.png` und
+`-nachher-*.png`, je fuenf Reiter.
+
+### dashboard — nichts zu tun
+
+`[cmd]` **Kein Ternaer zwischen echt und Entwurf.** `[cmd]`
+**`page.tsx:69` rendert `<DashboardEntwurfRest />` unbedingt** —
+**die Machart ist dort bereits umgesetzt.**
+
+`[read]` **Das erklaert die 93 %:** nicht weil weniger gebaut wurde,
+sondern weil nichts versteckt ist. **Der einzige Ternaer
+(`dashboard-echt.tsx:384`) waehlt zwischen `Meter` und einem
+Abstandshalter** — Gestaltung, keine Ansicht.
+
+### coach — gemessen, und es ist etwas anderes
+
+`[cmd]` **NULL Verdraengungen.** `[cmd]` **Der einzige Ternaer
+(`ansicht.tsx:233`) faellt auf einen ehrlichen `Empty`-Zustand
+zurueck, nicht auf einen Entwurf** — *,,Der Coach-Stand wurde nicht
+gelesen"*.
+
+`[cmd]` **Die 285 fehlenden Beschriftungen verteilen sich auf ACHT
+Mockupdateien:**
+
+    module-coach-gaps.jsx              fehlt  95
+    module-coach.jsx                   fehlt  58
+    module-coach-extras.jsx            fehlt  55
+    module-coach-athlete.jsx           fehlt  29
+    module-coach-portal-v2.jsx         fehlt  24
+    module-coach-portal-workflows.jsx  fehlt  14
+    module-coach-programs.jsx          fehlt  10
+    module-coach-meta.jsx              fehlt   0
+
+`[cmd]` **`module-coach-gaps.jsx` traegt zehn vollstaendige Modale**
+— Athlete Detail, Rule Editor, Intervention Engine, Pattern
+Analysis, Consent Flow, Team/Audit. **Das sind Ansichten, die es im
+Code nicht gibt.**
+
+`[read]` **Hier ist nichts einzublenden** — **es muesste gebaut
+werden.** `[read]` **Und das ist etwas anderes als das, was
+abgenommen wurde:** die Machart aus Auftrag 1 macht Vorhandenes
+sichtbar; sie erzeugt keine neuen Ansichten.
+
+### Deshalb nicht begonnen — eine Frage
+
+`[read]` **Der Auftrag sagt *,,kein Umbau, keine Verbesserung, keine
+Anbindung"*.** `[read]` **Zehn Modale aus einem Mockup nachzubauen
+ist keines von dreien, aber es ist auch nicht *,,einblenden"*.**
+
+**Zu entscheiden:**
+
+    A  coach-gaps als Attrappenansichten nachbauen
+       -- 95 Elemente, zehn Modale, echte Bauarbeit
+    B  nur die 190 aus den uebrigen sieben Dateien, wo ein
+       Gegenstueck existiert
+    C  coach zurueckstellen, erst nutrition und supplements
+       (14 Verdraengungen, dieselbe Machart wie training)
+
+`[read]` **Mein Vorschlag ist C** — **14 Verdraengungen sind
+derselbe Handgriff, der gerade abgenommen wurde, und sie bringen
+sofort etwas sichtbar.** **Coach braucht eine eigene
+Entscheidung.**
+
+### Waechter und Sabotage
+
+`[cmd]` **Neu: `training/__tests__/entwurf-wird-nicht-verdraengt.test.ts`,
+12 Proben** — dieselbe Bauart wie in goals.
+
+`[cmd]` **Je Zusage eine Sabotage, alle fuenf ROT:**
+
+    Verdraengung bei history kehrt zurueck    fail=1
+    Progression-Entwurf abgeschaltet          fail=1
+    Kalender-Entwurf abgeschaltet             fail=1
+    Library-Entwurf abgeschaltet              fail=1
+    der ECHTE Teil wird entfernt              fail=1
+    Nachlauf                                  fail=0
+
+`[read]` **Die fuenfte fand eine Luecke in meinem eigenen
+Waechter:** `[cmd]` **die Probe *,,bestehendes unangetastet"*
+pruefte nur, ob der Name vorkommt** — **`{false && <TrainingStandards/>}`
+kam durch.** `[read]` **Jetzt prueft sie die Bedingung davor.**
+**Das ist genau die Zusage, auf die Tom Wert legt.**
+
+### Zwei bestehende Waechter mussten nachziehen
+
+`[cmd]` **`v2-attrappen.test.ts:278` und `:305` verlangten
+woertlich `verlauf ? <Echt`** — **also genau das Entweder-oder, das
+E-68 aufhebt.**
+
+`[read]` **Die Zusage dahinter ist richtig und bleibt:** der echte
+Teil muss rendern, wenn Daten da sind. `[cmd]` **Nur ihre
+Schreibform ist jetzt `{verlauf && <Echt`** — **die Bedingung ist
+dieselbe.**
+
+`[read]` **Nicht abgeschwaecht:** beide pruefen weiterhin je Reiter,
+dass der echte Bestandteil dasteht.
+
+### Vollstaendiger Lauf
+
+    tsc --noEmit         sauber
+    next lint            keine Warnung, kein Fehler
+    Tests                1463 / 1463 gruen, 0 Fehler
+    mockup-deckung.mjs   gruen (1145 / 2488, unveraendert)
+    dev@lumeos.app       nicht geschrieben
+    gestaged             nichts
+
+`[read]` **Warum der Deckungswaechter unveraendert bleibt:** **er
+zaehlt Beschriftungen im QUELLTEXT, und dort waren sie immer.**
+`[cmd]` **Die Aenderung wirkt am Schirm** — **das ist mit
+Bildschirmfotos belegt, nicht mit der Zahl.**
+
+`[read]` **Damit misst der Waechter die falsche Sache fuer diesen
+Auftrag** — er findet die *weg*-Faelle, nicht die *versteckt*-Faelle.
+**Fuer coach ist er richtig, fuer training war er blind.**
+
+## Abnahme
+
+_(vom Orchestrator)_
+
+## Auftrag 3 — die vier Module in `apps/web`
+
+**Beauftragt am 2026-09-07.**
+
+`[cmd]` **`training` und `dashboard` sind abgenommen** — **fuenf
+Verschiebungen, am Schirm geprueft.**
+
+`[read]` **`coach` ist herausgeloest** (G-360, E-71) — **285
+fehlende sind nie gebaute Ansichten, das ist eine eigene App.**
+
+**Weiter mit den vier, die bleiben:**
+
+    nutrition     152
+    supplements   263
+    medical       199
+    recovery      170
+
+`[read]` **Beginn mit `nutrition` und `supplements`** — **14
+Verschiebungen, derselbe Handgriff wie `training`.**
+
+`[read]` **Dann `medical` und `recovery`.**
+
+### Und je Modul dieselbe Trennung
+
+`[cmd]` **Du hast sie in `goals` und `training` gemacht:**
+
+    versteckt      hinter Verzweigungen, sichtbar zu machen
+    nie gebaut     als Attrappe neu einzublenden
+
+`[read]` **Melde beide Zahlen** — **die zweite sagt, wie viel Arbeit
+wirklich aussteht.**
+
+### Bestehendes bleibt unangetastet
+
+**Tom:** *,,bestehendes bleibt wie es ist, wir blenden nur mockup
+attrappen ein als referenz."*
+
+`[read]` **Kein Umbau, keine Anbindung.** `[read]` **Auch wenn dir
+etwas falsch vorkommt: melden.**
+
+### Nachweis je Modul
+
+    versteckt       gezaehlt
+    nie gebaut      gezaehlt
+    unangetastet    kein bestehendes Verhalten geaendert
+    Bildschirmfoto  vorher / nachher
+    Waechter        mockup-deckung.mjs bleibt gruen
