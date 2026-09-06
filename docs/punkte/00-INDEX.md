@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 207 |
+| `todos` | 209 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 4 |
 | `erledigt` | 296 |
-| **gesamt** | **510** |
+| **gesamt** | **512** |
 
 ## medical — 43
 
@@ -426,7 +426,7 @@
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 27
+## coach — 28
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -457,6 +457,7 @@
 | `G-277` | befund | hoch | [der Rechte-Reiter nennt einen Grund, den es nicht gibt](erledigt/coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md) | erledigt | — | G-280 |
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
+| `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | — |
 
 ## quer — 105
 
@@ -566,7 +567,13 @@
 | `G-357` | feature | hoch | [kein Weg in eine Phase](laufend_codex/quer-g-0357-kein-weg-in-eine-phase.md) | laeuft (codex) | — | — |
 | `G-358` | befund | mittel | [62 Vermerke ohne Grund](laufend_claudecode/quer-g-0358-62-vermerke-ohne-grund.md) | laeuft (claudecode) | — | — |
 | `G-359` | befund | hoch | [1.343 Mockup-Elemente fehlen in der UI](laufend_claudecode/quer-g-0359-1343-mockup-elemente-fehlen-in-der-ui.md) | laeuft (claudecode) | — | C-417, C-418, G-360 |
-| `G-360` | feature | hoch | [coach, market und admin als eigene Apps](todos/quer-g-0360-coach-market-admin-als-eigene-apps.md) | offen | — | — |
+| `G-360` | feature | hoch | [coach, market und admin als eigene Apps](todos/quer-g-0360-coach-market-admin-als-eigene-apps.md) | offen | — | G-361, G-362 |
+
+## market — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-362` | feature | hoch | [marketplace initialisieren](todos/market-g-0362-marketplace-initialisieren.md) | offen | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 
