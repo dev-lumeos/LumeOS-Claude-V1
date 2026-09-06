@@ -7,6 +7,8 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: G-364
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: [training.workout_sessions]
 zahlen:
@@ -38,3 +40,8 @@ erlaubt gemeinsame Sichten.**
 
 `[cmd]` **`public.activity_stream` ist der Praezedenzfall** (C-414):
 **sechs Module in `public`, nicht im Fachschema.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-421 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

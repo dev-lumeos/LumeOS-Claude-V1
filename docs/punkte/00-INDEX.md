@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 216 |
+| `todos` | 214 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 6 |
 | `erledigt` | 301 |
 | **gesamt** | **523** |
@@ -411,13 +412,13 @@
 | `C-236` | feature | mittel | [Die Recovery-Seeds sind Zaehlreihen, keine Messwerte](todos/recovery-c-0236-die-recovery-seeds-sind-zaehlreihen-keine-messwerte.md) | offen | — | B-29, B-30, G-174 |
 | `C-238` | blocker | hoch | [`meal_plan_entries` hat keinen Status](erledigt/recovery-c-0238-meal-plan-entries-hat-keinen-status.md) | erledigt | — | — |
 | `C-339` | feature | niedrig | [ein Recovery-Gesamtscore, vorgesehen](todos/recovery-c-0339-ein-Recovery-Gesamtscore-vorgesehen.md) | offen | — | — |
-| `C-421` | feature | hoch | [vier Tabellen fuer die 17 Attrappen](todos/recovery-c-0421-vier-tabellen-fuer-die-17-attrappen.md) | offen | — | — |
+| `C-421` | feature | hoch | [vier Tabellen fuer die 17 Attrappen](laufend_codex/recovery-c-0421-vier-tabellen-fuer-die-17-attrappen.md) | laeuft (codex) | — | — |
 | `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](erledigt/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | erledigt | — | — |
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
 | `G-243` | befund | mittel | [die Recovery-Schwellen stehen im Mockup, nicht im Punkt](todos/recovery-g-0243-die-recovery-schwellen-stehen-im-mockup-nicht-im-punkt.md) | offen | — | — |
 | `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](laufend_claudecode/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | laeuft (claudecode) | — | G-365, G-367 |
-| `G-367` | feature | mittel | [Stunden und Saetze je Muskel](todos/recovery-g-0367-per-muscle-stunden-und-saetze.md) | offen | — | — |
+| `G-367` | feature | mittel | [Stunden und Saetze je Muskel](laufend_codex/recovery-g-0367-per-muscle-stunden-und-saetze.md) | laeuft (codex) | — | — |
 
 ## goals — 6
 
