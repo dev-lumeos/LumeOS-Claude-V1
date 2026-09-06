@@ -22,7 +22,7 @@ nicht in diese Uebersicht.
 
 ## G-352 — drei Zielskalen widersprechen sich
 
-**Modul:** quer · **angelegt:** 2026-09-07 · **Datei:** `todos/quer-g-0352-drei-zielskalen-widersprechen-sich.md`
+**Modul:** quer · **angelegt:** 2026-09-07 · **Datei:** `laufend_claudecode/quer-g-0352-drei-zielskalen-widersprechen-sich.md`
 
 ## Befund
 
@@ -66,6 +66,50 @@ der Ort fuer die zwoelf sein.**
 **vier Kategorien, zwoelf Unterarten.**
 
 `[read]` **Zu pruefen, bevor eine dritte entsteht.**
+
+## Gemessen am 2026-09-06 (G-353)
+
+**Die Pruefung, die dieser Punkt verlangt** — *,,zu pruefen, bevor
+eine dritte entsteht"* — **ist gelaufen. Der Verdacht stimmt, und er
+greift weiter.**
+
+`[cmd]` **`subtype` ist `text`, nullable, OHNE CHECK** — eine freie
+zweite Ebene. **Und schon belegt:** `cut`, `gain_muscle`,
+`strength`, `training_capacity`, `cardio_frequency` unter den vier
+`goal_type`.
+
+`[cmd]` **Die zwoelf des ADR sind keine Zielarten, sondern PHASEN.**
+**`goals.goal_phases.phase_type` steht live mit neun Werten:**
+`fat_loss`, `lean_bulk`, `maintenance`, `recomp`, `contest_prep`,
+`reverse_diet`, `expert_bb_annual`, `mini_cut`, `peak_week`.
+
+`[cmd]` **Fuenf davon stehen woertlich in der Liste, aus der der ADR
+zitiert** (`docs/BrainstormDocs/Core/auth_API.md:224`) — **und die
+traegt FUENFZEHN Werte, nicht zwoelf.**
+
+`[read]` **Jene Liste vermischt grob und fein** (`bulk` neben
+`lean_bulk`). **Das laufende Schema hat genau das aufgeloest.**
+
+`[cmd]` **Berichtigt: `difficulty_level` ist KEINE Zielskala**,
+sondern die Schwierigkeit — eine Achse quer dazu. **Die Zahl 5 im
+Kopf dieses Punktes zaehlt etwas anderes als die 4 und die 12.**
+
+`[read]` **Es sind also vier Achsen, drei davon gebaut:**
+
+    goal_type    WAS        4, CHECK, NOT NULL
+    subtype      WELCHES    frei, kein CHECK
+    phase_type   WIE        9, CHECK, live belegt
+    variant      WIE STARK  frei, Vorgabe 'moderate'
+
+**Was noch zu entscheiden bleibt, ist kleiner:**
+
+    1  Bekommt `subtype` einen CHECK, oder bleibt er frei?
+    2  Welche Achse setzt das Onboarding?
+       (die Zielwerte lesen heute `profiles.nutrition_goal`,
+        nicht `user_goals` - gemessen in G-83)
+
+`[read]` **Keine Entscheidung ,,vier gegen zwoelf"** — **die Ebenen
+existieren bereits.**
 
 ---
 

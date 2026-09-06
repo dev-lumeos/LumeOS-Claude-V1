@@ -7,6 +7,8 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: G-250
 entscheidung: E-31
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: [goals.nutrition_targets]
 zahlen:
@@ -54,3 +56,8 @@ und dieser Punkt wird von selbst wieder zur Frage.
 
 `[read]` **Die Zurueckstellung hat damit ein Ablaufdatum, das sich
 selbst meldet.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-352 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

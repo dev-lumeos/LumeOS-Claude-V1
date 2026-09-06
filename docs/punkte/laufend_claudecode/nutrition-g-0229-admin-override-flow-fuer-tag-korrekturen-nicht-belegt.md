@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: [C-384]
 kind_von: null
 entscheidung: E-55
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -127,3 +129,8 @@ Punkt.**
 30.797 Zeilen schreibt, gehoert gemessen, bevor die zweite Tabelle
 entsteht** — **sonst schuetzt sie vor einem Schreiber, den es nicht
 gibt.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-352 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

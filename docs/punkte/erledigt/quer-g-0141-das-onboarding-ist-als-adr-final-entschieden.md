@@ -10,6 +10,8 @@ kinder: []
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: OFFEN
 beruehrt:
   tabellen: []
   dateien: ["docs/specs/Core/ONBOARDING_ADR.md"]
@@ -82,3 +84,16 @@ gehen sonst mit diesem Punkt verloren.**
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Abnahme
+
+**2026-09-07, mit G-353 abgenommen: leer genug.**
+
+`[cmd]` **Nach G-353 bleibt nichts uebrig** — **die Setup-Karten
+sind dort entworfen.**
+
+`[read]` **Und sie haengen an der Leere, nicht am
+Konfigurationszustand** — **deshalb braucht es keine Spalte fuer
+*weggewischt*.**
+
+**Geschlossen.**
