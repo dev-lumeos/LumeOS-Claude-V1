@@ -514,7 +514,13 @@ test('das Recovery-Modul kennzeichnet jede Kachel', () => {
     [RECOVERY, 2],
     [path.join(process.cwd(), 'src/app/v2/recovery/tab-checkin.tsx'), 3],
     [path.join(process.cwd(), 'src/app/v2/recovery/tab-messwerte.tsx'), 2],
-    [path.join(process.cwd(), 'src/app/v2/recovery/tab-protokolle.tsx'), 17],
+    // `[cmd]` **G-365: 17 -> 13.** `RecModalities` liest jetzt
+    // `recovery.modality_log` (178 Zeilen) — vier Kacheln sind
+    // angebunden: drei Zahlenkacheln und das Effectiveness log.
+    //
+    // `[read]` **Der Leseweg lag ungenutzt daneben**, wie bei
+    // G-364 und der Sitzungskachel.
+    [path.join(process.cwd(), 'src/app/v2/recovery/tab-protokolle.tsx'), 13],
   ]
   for (const [datei, erwartet] of dateien) {
     const quelle = fs.readFileSync(datei, 'utf8')

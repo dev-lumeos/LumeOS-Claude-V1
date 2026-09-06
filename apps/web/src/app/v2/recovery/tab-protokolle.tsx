@@ -29,6 +29,8 @@ import {
   STRESS_TODAY, STRESS_SOURCES, STRESS_BANDS, STRESS_14D,
 } from './motor'
 import { useRecovery } from './kontext'
+// G-365: die erfassten Modalitaeten.
+import type { ModalitaetenStand } from '../../../lib/recovery/scores-read'
 import { ATTRAPPE } from './ansicht'
 
 // ═══ MODALITIES ══════════════════════════════════════════════════
@@ -36,22 +38,59 @@ import { ATTRAPPE } from './ansicht'
 // Vorlage („Today's bonus +3.5", Katalogspalte „Bonus", „Δ score")
 // sind entfernt — alle 32 Registry-Zeilen sagen REMOVE_NUMERIC_VALUE.
 // An ihrer Stelle steht je Modalitaet Richtung + Endpunkt + Quelle.**
-export function RecModalities() {
+export function RecModalities({ stand }: { stand?: ModalitaetenStand | null }) {
   const { open } = useRecovery()
+
+  // ══ G-365: die Modalitaeten kommen aus der Tabelle ═══════════
+  //
+  // `[cmd]` **Gemessen 2026-09-06: `recovery.modality_log` traegt 178
+  // Zeilen**, und `scores-read.ts` liest sie samt `jeArt` mit dem
+  // GEMESSENEN Folgetagsunterschied (C-153).
+  //
+  // `[cmd]` **`<RecModalities />` wurde ohne Prop gerufen** —
+  // dieselbe Sache wie bei den Muskelkacheln (G-364) und der
+  // Sitzungskachel (G-365/training). **Der Leseweg lag ungenutzt
+  // daneben.**
+  const echt = stand && stand.gesamt > 0 ? stand : null
+  const zeilen = echt?.zeilen ?? []
+  const heute = echt?.heute ?? []
+  const offen = zeilen.filter(z => z.next_day_effect == null).length
+  // `[read]` **Das beste Folgetagsurteil** — aus den erfassten
+  // Bewertungen, nicht aus einer festen 9/10.
+  const bestes = zeilen.reduce<typeof zeilen[number] | null>(
+    (b, z) => (z.next_day_effect != null
+      && (b == null || z.next_day_effect > (b.next_day_effect ?? -1)) ? z : b), null)
+
   return (
     <div>
       <div className="v2-grid v2-g-cols-4" style={{ gap: 10, marginBottom: 14 }}>
         {/* Marke ohne Begruendungstext — wie bei Training: der Satz
             waere laenger als die Kachel selbst. */}
-        <Card className="v2-card-tight" style={{ padding: 14 }} attrappe>
+        <Card className="v2-card-tight" style={{ padding: 14 }}
+              attrappe={echt ? undefined : true}>
           <div className="v2-eyebrow">Logged today</div>
-          <div className="v2-num" style={{ fontSize: 22 }}>{TODAY_MODALITIES.length}</div>
-          <div className="v2-dim" style={{ fontSize: 11 }}>{MODALITY_LOG.length} in last 7 days</div>
+          <div className="v2-num" style={{ fontSize: 22 }}>
+            {echt ? heute.length : TODAY_MODALITIES.length}
+          </div>
+          <div className="v2-dim" style={{ fontSize: 11 }}>
+            {echt ? `${echt.gesamt} erfasst` : `${MODALITY_LOG.length} in last 7 days`}
+          </div>
         </Card>
-        <Card className="v2-card-tight" style={{ padding: 14 }} attrappe>
+        <Card className="v2-card-tight" style={{ padding: 14 }}
+              attrappe={echt ? undefined : true}>
           <div className="v2-eyebrow">Best next-day rating</div>
-          <div className="v2-num" style={{ fontSize: 22, color: 'var(--pos)' }}>9/10</div>
-          <div className="v2-dim" style={{ fontSize: 11 }}>massage · 12 Aug · dein Rating</div>
+          <div className="v2-num" style={{ fontSize: 22, color: 'var(--pos)' }}>
+            {echt
+              ? (bestes?.next_day_effect != null ? `${bestes.next_day_effect}/10` : '—')
+              : '9/10'}
+          </div>
+          <div className="v2-dim" style={{ fontSize: 11 }}>
+            {echt
+              ? (bestes
+                ? `${bestes.modality_type.replace(/_/g, ' ')} · ${bestes.entry_date}`
+                : 'noch keine Folgetagsbewertung')
+              : 'massage · 12 Aug · dein Rating'}
+          </div>
         </Card>
         <Card className="v2-card-tight" style={{ padding: 14 }} attrappe>
           <div className="v2-eyebrow">Belegte Modalitaeten</div>
@@ -60,10 +99,11 @@ export function RecModalities() {
           </div>
           <div className="v2-dim" style={{ fontSize: 11 }}>von {Object.keys(MODALITY_EVIDENZ).length} im Register (crawl_025)</div>
         </Card>
-        <Card className="v2-card-tight" style={{ padding: 14 }} attrappe>
+        <Card className="v2-card-tight" style={{ padding: 14 }}
+              attrappe={echt ? undefined : true}>
           <div className="v2-eyebrow">Awaiting rating</div>
           <div className="v2-num" style={{ fontSize: 22, color: 'var(--warn)' }}>
-            {MODALITY_LOG.filter(m => m.nextDay == null).length}
+            {echt ? offen : MODALITY_LOG.filter(m => m.nextDay == null).length}
           </div>
           <div className="v2-dim" style={{ fontSize: 11 }}>next-day feedback</div>
         </Card>
@@ -134,10 +174,33 @@ export function RecModalities() {
           </div>
         </Card>
 
-        <Card title="Effectiveness log" sub="immediate rating + next-day follow-up" attrappe={ATTRAPPE}>
+        {/* `[cmd]` **G-365: die Liste kommt aus `recovery.modality_log`**
+            (178 Zeilen). `[read]` **Die Entwurfsfassung bleibt, wenn
+            nichts geladen ist** — eine leere echte Liste saehe aus wie
+            ein Befund. */}
+        <Card
+          title="Effectiveness log"
+          sub={echt
+            ? `${zeilen.length} erfasst · Sofort- und Folgetagsurteil`
+            : 'immediate rating + next-day follow-up'}
+          attrappe={echt ? undefined : ATTRAPPE}
+          actions={echt ? <Pill variant="pos">echte Daten</Pill> : undefined}
+        >
           <div className="v2-col-gap" style={{ gap: 6 }}>
-            {MODALITY_LOG.map(m => {
-              const meta = MODALITY_META[m.type]
+            {(echt
+              ? zeilen.slice(0, 12).map(z => ({
+                id: `${z.entry_date}-${z.modality_type}-${z.logged_time ?? ''}`,
+                type: z.modality_type,
+                duration: z.duration_min ?? 0,
+                detail: z.detail ?? '—',
+                date: z.entry_date,
+                time: z.logged_time ?? '',
+                immediate: z.immediate_effect ?? 0,
+                nextDay: z.next_day_effect,
+              }))
+              : MODALITY_LOG
+            ).map(m => {
+              const meta = MODALITY_META[m.type] ?? MODALITY_META.stretching
               return (
                 <div key={m.id} style={{ padding: 11, background: 'var(--bg-elev)', border: '1px solid var(--border)', borderRadius: 6 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, flexWrap: 'wrap' }}>

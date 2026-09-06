@@ -242,7 +242,7 @@ export function RecoveryAnsicht({
           <RecSleepReferenz />
         </>
       )}
-      {tab === 'modalities' && <RecModalities />}
+      {tab === 'modalities' && <RecModalities stand={modalitaeten} />}
       {tab === 'overtraining' && <RecOvertraining />}
       {tab === 'protocols' && <RecProtocols />}
       {tab === 'stress' && <RecStress />}
