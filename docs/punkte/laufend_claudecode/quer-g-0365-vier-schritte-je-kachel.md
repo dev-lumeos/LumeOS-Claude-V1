@@ -258,3 +258,117 @@ Erwartung herunter."*
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Bericht — recovery
+
+**Claude Code, 2026-09-06.** **21 unbedingte Marken geprueft, vier
+angebunden.**
+
+### Die Tabelle
+
+    Kachel                  oben  unten  war angebunden  was fehlt
+    ------------------------------------------------------------------
+    Logged today            JA    --     NEIN            NICHTS -> AN
+    Best next-day rating    JA    --     NEIN            NICHTS -> AN
+    Awaiting rating         JA    --     NEIN            NICHTS -> AN
+    Effectiveness log       JA    --     NEIN            NICHTS -> AN
+    Belegte Modalitaeten    JA    --     nie             nichts *
+    Modality catalog        JA    --     nie             Wirkung je Art
+                                                          (Register, kein
+                                                          Nutzerbezug)
+    Pending actions         JA    --     nie             Aufgabenquelle
+    Overtraining watch      JA    --     nie             8 Signale, kein
+                                                          Schema
+    Signal panel            JA    --     nie             dito
+    Severity                JA    --     nie             dito
+    Alert lifecycle         JA    --     nie             dito
+    Protocol library        JA    --     nie             Protokolltabelle
+    When to run which       JA    --     nie             dito
+    Contributors            JA    --     nie             Score-Beitraege
+                                                          je Modul
+    14 days                 JA    --     nie             dito
+    Log stress              JA    --     nie             Stresstabelle
+    What helps you          JA    --     nie             dito
+    Morning check-in        JA    --     nie             Formular, kein
+                                                          Schreibweg hier
+    Readiness levels        JA    --     nie             Stufen sind
+                                                          Urteilssprache
+    Why check in daily      JA    --     nie             Erklaertext
+    Phone camera HRV        JA    --     nie             Geraetefunktion
+    Score paths             JA    --     nie             Erklaertext
+
+    * zaehlt das Evidenzregister, nicht Nutzerdaten — die Marke ist
+      richtig und bleibt.
+
+### Was gefunden wurde: vier falsche Marken
+
+`[cmd]` **`<RecModalities />` wurde OHNE Prop gerufen** — **zum
+dritten Mal dasselbe Muster** (G-364 Muskelkacheln, G-365 training
+Sitzungskachel).
+
+`[cmd]` **Daneben: `recovery.modality_log` mit 178 Zeilen**, gelesen
+von `scores-read.ts` samt `jeArt` und dem GEMESSENEN
+Folgetagsunterschied (C-153).
+
+**Angebunden:**
+
+    Logged today          heute erfasst · 89 gesamt
+    Best next-day rating  8/10 · massage · 2026-10-15
+    Awaiting rating       aus next_day_effect
+    Effectiveness log     89 Zeilen, echte Daten
+
+`[cmd]` **Am Schirm belegt** (`backup/g359b-recovery-g365m-modalities.png`):
+**Attrappen im Reiter 7 -> 3**, die Liste zeigt *Stretching 13 min ·
+11-03*, *Sauna 26 min · 10-30*, *Cold plunge 4 min · Eisbad nach
+Training* — mit Sofort- und Folgetagsurteil.
+
+### Was Entwurf bleibt, und warum
+
+`[read]` **Die uebrigen 17 sind ehrlich markiert** — **fuer keine
+gibt es einen Leseweg:**
+
+    Uebertraining (5 Kacheln)   die 8 Signale haben kein Schema
+    Protokolle (2)              keine Protokolltabelle
+    Stress (2)                  keine Stresstabelle
+    Beitraege (2)               Score je Modul wird nicht gefuehrt
+    Check-in (3)                Formular, Erklaertext, Urteilsstufen
+    HRV/Sleep (2)               Geraetefunktion, Erklaertext
+    Modality catalog (1)        Register ohne Nutzerbezug
+
+`[cmd]` **Schritt 3 nachgemessen fuer zwei davon:**
+`git log -S "Signal panel"` und `-S "Protocol library"` **nennen nur
+`e274735b add the recovery module as a marked mockup`** — **nie
+angebunden.**
+
+`[read]` **Gemeldet, nicht gebaut**, wie beauftragt.
+
+### Zahlen
+
+    unbedingte Marken           21
+      FALSCH                     4  -> angebunden
+      ehrlich (kein Leseweg)    17
+    Attrappen Modalities     7 -> 3
+    Marken tab-protokolle   17 -> 13
+
+### Ein Waechter musste nachziehen
+
+`[cmd]` **`v2-attrappen.test.ts`: tab-protokolle 17 -> 13.**
+
+`[cmd]` **Gegengeprueft, warum nicht 16:** der Waechter zaehlt
+`attrappe={ATTRAPPE}` (12) und das blosse `attrappe` (1) — **die
+vier bedingten Formen zaehlt er nicht mehr mit, und das ist
+richtig.**
+
+### Vollstaendiger Lauf
+
+    tsc --noEmit    sauber
+    next lint       keine Warnung, kein Fehler
+    Tests           1500 / 1500 gruen, 0 Fehler
+    dev@lumeos.app  nicht geschrieben
+    gestaged        nichts
+
+**Naechstes Modul: supplements** (18 Dateien, 11 Reiter).
+
+## Abnahme
+
+_(vom Orchestrator)_

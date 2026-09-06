@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 210 |
+| `todos` | 215 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 6 |
 | `erledigt` | 299 |
-| **gesamt** | **517** |
+| **gesamt** | **522** |
 
 ## medical — 43
 
@@ -364,7 +364,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 19
+## training — 20
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -387,8 +387,9 @@
 | `G-216` | feature | hoch | [Training hat Daten und keinen Schreibweg](erledigt/training-g-0216-training-hat-keinen-schreibweg.md) | erledigt | — | C-330, G-217 |
 | `G-217` | feature | mittel | [der Trainings-Schreibweg hat keine Oberflaeche](erledigt/training-g-0217-trainingsformular-fehlt.md) | erledigt | — | G-219 |
 | `G-219` | entscheidung | niedrig | [`LiveWorkout` hat keinen Aufrufer mehr](todos/training-g-0219-liveworkout-ohne-aufrufer.md) | offen | — | — |
+| `G-366` | feature | mittel | [die Uebungsliste der Sitzung](todos/training-g-0366-die-uebungsliste-der-sitzung.md) | offen | — | — |
 
-## recovery — 23
+## recovery — 25
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -410,11 +411,13 @@
 | `C-236` | feature | mittel | [Die Recovery-Seeds sind Zaehlreihen, keine Messwerte](todos/recovery-c-0236-die-recovery-seeds-sind-zaehlreihen-keine-messwerte.md) | offen | — | B-29, B-30, G-174 |
 | `C-238` | blocker | hoch | [`meal_plan_entries` hat keinen Status](erledigt/recovery-c-0238-meal-plan-entries-hat-keinen-status.md) | erledigt | — | — |
 | `C-339` | feature | niedrig | [ein Recovery-Gesamtscore, vorgesehen](todos/recovery-c-0339-ein-Recovery-Gesamtscore-vorgesehen.md) | offen | — | — |
+| `C-421` | feature | hoch | [vier Tabellen fuer die 17 Attrappen](todos/recovery-c-0421-vier-tabellen-fuer-die-17-attrappen.md) | offen | — | — |
 | `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](erledigt/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | erledigt | — | — |
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
 | `G-243` | befund | mittel | [die Recovery-Schwellen stehen im Mockup, nicht im Punkt](todos/recovery-g-0243-die-recovery-schwellen-stehen-im-mockup-nicht-im-punkt.md) | offen | — | — |
-| `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](laufend_claudecode/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | laeuft (claudecode) | — | G-365 |
+| `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](laufend_claudecode/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | laeuft (claudecode) | — | G-365, G-367 |
+| `G-367` | feature | mittel | [Stunden und Saetze je Muskel](todos/nutrition-g-0367-per-muscle-stunden-und-saetze.md) | offen | — | — |
 
 ## goals — 6
 
@@ -460,7 +463,7 @@
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | — |
 
-## quer — 109
+## quer — 111
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -498,6 +501,7 @@
 | `A-68` | befund | niedrig | [der Waechter fuer leerlaufende Agenten](erledigt/quer-a-0068-der-waechter-fuer-leerlaufende-agenten.md) | erledigt | — | — |
 | `A-69` | befund | mittel | [26 Abhaengigkeiten mit High Severity](todos/quer-a-0069-26-abhaengigkeiten-mit-high-severity.md) | offen | — | — |
 | `A-70` | feature | hoch | [ein Backupsystem statt eines wachsenden Ordners](erledigt/quer-a-0070-ein-backupsystem-statt-eines-wachsenden-ordners.md) | erledigt | — | — |
+| `A-71` | befund | hoch | [der Leseweg liegt daneben](todos/quer-a-0071-der-leseweg-liegt-daneben.md) | offen | — | G-368 |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
@@ -572,7 +576,8 @@
 | `G-359` | befund | hoch | [1.343 Mockup-Elemente fehlen in der UI](laufend_claudecode/quer-g-0359-1343-mockup-elemente-fehlen-in-der-ui.md) | laeuft (claudecode) | — | C-417, C-418, G-360 |
 | `G-360` | feature | hoch | [coach, market und admin als eigene Apps](todos/quer-g-0360-coach-market-admin-als-eigene-apps.md) | offen | — | G-361, G-362 |
 | `G-363` | entscheidung | mittel | [wer schlaegt die naechste Phase vor?](todos/quer-g-0363-wer-schlaegt-die-naechste-phase-vor.md) | offen | — | — |
-| `G-365` | feature | hoch | [vier Schritte je Kachel](laufend_claudecode/quer-g-0365-vier-schritte-je-kachel.md) | laeuft (claudecode) | — | — |
+| `G-365` | feature | hoch | [vier Schritte je Kachel](laufend_claudecode/quer-g-0365-vier-schritte-je-kachel.md) | laeuft (claudecode) | — | C-421, G-366 |
+| `G-368` | befund | mittel | [Attrappen-Vermerke mit falschem Grund](todos/quer-g-0368-attrappen-vermerke-mit-falschem-grund.md) | offen | — | — |
 
 ## market — 1
 
