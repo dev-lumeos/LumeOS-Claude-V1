@@ -9,6 +9,8 @@ kind_von: C-414
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: 9c9a250d
 beruehrt:
   tabellen: [nutrition.food_tags]
 zahlen:
@@ -182,4 +184,62 @@ Wegwerf-Datenbank wurde danach wieder entfernt.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator.**
+
+### Die Ursache, mit Commit und Uhrzeit
+
+`[cmd]` **C-410 (`9940d6b3`, 05.09. 16:29 +07) machte
+`food_tags_effective` zur Voraussetzung von 075.**
+
+`[cmd]` **Und C-366 hatte die Sicht nie in der Kette registriert.**
+
+`[read]` **Zwei Halbheiten ergeben einen Bruch:** **C-366 baute die
+Sicht live, C-410 machte sie zur Bedingung** — **und keiner von
+beiden trug sie in die Kette ein.**
+
+`[read]` **Das ist genauer als meine Vermutung im Auftrag.**
+`[read]` **Ich schrieb *,,dazwischen liegt der Bruch"*** — **er hat
+die Minute genannt.**
+
+### Der Vollauf geht durch
+
+`[cmd]` **157 Schritte, `KETTE OK: 266.6s`, auf
+`lumeos_c415_validation`.** `[cmd]` **Die Wegwerf-Datenbank wurde
+danach entfernt.**
+
+`[cmd]` **366_schema und 366_precedence laufen jetzt vor 075** —
+**ein Regressionstest sichert die Reihenfolge.**
+
+`[read]` **Nicht nur repariert, sondern gegen Rueckfall
+gesichert** — **genau das, was bei C-366 gefehlt hat.**
+
+### Und der Sollstand war falsch, nicht die Kette
+
+`[cmd]` **Sechs bereits erzeugte Fremdtabellen fehlten im
+Sollstand** — **die Abschlusspruefung meldete einen falschen
+Fehler.**
+
+`[read]` **Er hat es nebenbei berichtigt und gesagt, dass er es tat.**
+
+`[read]` **Eine Pruefung, die falsch rot meldet, ist dieselbe Klasse
+wie eine, die falsch gruen meldet** — **beide verlieren ihren
+Wert.**
+
+### C-389 ist geschlossen
+
+`[cmd]` **Vier Saefte und Nektare `minimally_processed`, drei
+Smoothies `raw`, keine pauschale 53er-Regel.**
+
+### Die Waechter-Empfehlung ist richtig
+
+`[cmd]` **266,6 s gegen 31,6 s Gate** — **achtmal so teuer.**
+
+`[read]` **Nicht ins Gate, taeglich als Wegwerf-Lauf** —
+**uebernommen als C-416.**
+
+`[read]` **Und der Grund steht in seinem eigenen Befund:** **die
+Kette war zwei Tage gebrochen, und in dieser Zeit entstanden sieben
+Punkte, die alle live eingespielt wurden.**
+
+**Abgenommen.**
+

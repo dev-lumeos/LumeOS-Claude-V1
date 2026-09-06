@@ -8,6 +8,8 @@ braucht: []
 kind_von: F-07
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: []
   dateien: []
@@ -42,3 +44,8 @@ ueber ein transitives `ws`-High-Advisory.**
 
 `[read]` **Zwei verschiedene Sachen: A-69 ist eine Zaehlung, C-155
 ein benannter Pfad.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-416 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

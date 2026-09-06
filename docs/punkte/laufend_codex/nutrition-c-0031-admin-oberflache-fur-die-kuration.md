@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: ["nutrition.foods"]
   dateien: ["docs/ssot/daten/wortschatz-luecke.json"]
@@ -71,3 +73,8 @@ p_action)`** — validierter Overlay-Upsert.
 Oberflaeche.**
 
 `[read]` **Die Admin-Oberflaeche bleibt ein UI-Auftrag.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-416 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

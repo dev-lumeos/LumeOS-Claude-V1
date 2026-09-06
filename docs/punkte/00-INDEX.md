@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 207 |
-| `laufend_codex` | 1 |
+| `todos` | 205 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 293 |
-| **gesamt** | **502** |
+| `erledigt` | 294 |
+| **gesamt** | **503** |
 
 ## medical — 43
 
@@ -74,7 +74,7 @@
 | `C-27` | messung | mittel | [Alltagswörter ohne Treffer — noch zwei](erledigt/nutrition-c-0027-alltagsworter-ohne-treffer-noch-zwei.md) | erledigt | — | — |
 | `C-29` | entscheidung | mittel | [Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt](erledigt/nutrition-c-0029-drei-namensschichten-und-eine-kuration-die-den-kettenlauf-uberlebt.md) | erledigt | — | — |
 | `C-30` | befund | mittel | [Suche und Trefferliste auf Arten umstellen](todos/nutrition-c-0030-suche-und-trefferliste-auf-arten-umstellen.md) | offen | — | — |
-| `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](todos/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | offen | — | — |
+| `C-31` | befund | mittel | [Admin-Oberfläche für die Kuration](laufend_codex/nutrition-c-0031-admin-oberflache-fur-die-kuration.md) | laeuft (codex) | — | — |
 | `C-35` | entscheidung | niedrig | [Was aus zwei gefallenen Modellen brauchbar bleibt](erledigt/nutrition-c-0035-was-aus-zwei-gefallenen-modellen-brauchbar-bleibt.md) | erledigt | — | C-386 |
 | `C-36` | befund | mittel | [Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen](todos/nutrition-c-0036-kuratierte-zuordnung-statt-ableitung-die-richtung-nach-zwei-messungen.md) | offen | — | — |
 | `C-48` | blocker | hoch | [Die Tagesbilanz sichtbar machen](erledigt/nutrition-c-0048-die-tagesbilanz-sichtbar-machen.md) | erledigt | — | G-239, G-248 |
@@ -458,7 +458,7 @@
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 
-## quer — 97
+## quer — 98
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -501,7 +501,7 @@
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
 | `C-64` | feature | mittel | [942 Schluessel und Thai aus dem Vorgaengerrepo uebertragen](todos/quer-c-0064-942-schluessel-und-thai-aus-dem-vorgaengerrepo-uebertragen.md) | offen | — | — |
 | `C-110` | befund | mittel | [Cost-Rest und Compliance-Notizen](todos/quer-c-0110-cost-rest-und-compliance-notizen.md) | offen | — | — |
-| `C-155` | befund | mittel | [Zwei Befunde in `@supabase/ssr` 0.1.0](todos/quer-c-0155-zwei-befunde-in-supabase-ssr-0-1-0.md) | offen | — | — |
+| `C-155` | befund | mittel | [Zwei Befunde in `@supabase/ssr` 0.1.0](laufend_codex/quer-c-0155-zwei-befunde-in-supabase-ssr-0-1-0.md) | laeuft (codex) | — | — |
 | `C-159` | feature | mittel | [Sieben Regelpfade zeigen auf Schemata, die es nicht gibt](todos/quer-c-0159-sieben-regelpfade-zeigen-auf-schemata-die-es-nicht-gibt.md) | offen | — | — |
 | `C-170` | befund | mittel | [Der Offline-Betrieb steht im Entwurf](erledigt/quer-c-0170-der-offline-betrieb-steht-im-entwurf.md) | erledigt | — | — |
 | `C-187` | befund | mittel | [Fuenf kleine Datenluecken — als ein Auftrag](todos/quer-c-0187-fuenf-kleine-datenluecken-als-ein-auftrag.md) | offen | — | — |
@@ -524,7 +524,8 @@
 | `C-395` | befund | hoch | [drei Migrationen tragen Datenlogik](erledigt/quer-c-0395-drei-migrationen-tragen-datenlogik.md) | erledigt | — | — |
 | `C-412` | befund | mittel | [`intake_logs` endet am 19. August](erledigt/quer-c-0412-intake-logs-endet-am-19-august.md) | erledigt | — | C-414 |
 | `C-414` | befund | mittel | [die Querschnittssicht liegt in `nutrition`](erledigt/quer-c-0414-die-querschnittssicht-liegt-in-nutrition.md) | erledigt | — | C-415 |
-| `C-415` | befund | hoch | [der Vollkettenlauf scheitert in Schritt 075](laufend_codex/quer-c-0415-der-vollkettenlauf-scheitert-in-schritt-075.md) | laeuft (codex) | — | — |
+| `C-415` | befund | hoch | [der Vollkettenlauf scheitert in Schritt 075](erledigt/quer-c-0415-der-vollkettenlauf-scheitert-in-schritt-075.md) | erledigt | — | C-416 |
+| `C-416` | feature | hoch | [ein taeglicher Kettenlauf](laufend_codex/quer-c-0416-ein-taeglicher-kettenlauf.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
