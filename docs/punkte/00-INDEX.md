@@ -8,8 +8,8 @@
 | `todos` | 208 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 284 |
-| **gesamt** | **496** |
+| `erledigt` | 285 |
+| **gesamt** | **497** |
 
 ## medical — 43
 
@@ -159,7 +159,7 @@
 | `C-409` | befund | hoch | [`nutrition_reorder` ist unerreichbar](erledigt/nutrition-c-0409-nutrition-reorder-ist-unerreichbar.md) | erledigt | — | — |
 | `C-410` | befund | hoch | [zwei Leser nehmen `food_tags` statt der Sicht](erledigt/nutrition-c-0410-zwei-leser-nehmen-food-tags-statt-der-sicht.md) | erledigt | — | — |
 | `C-411` | feature | mittel | [Rezeptvorschlaege in der Kuration](erledigt/nutrition-c-0411-rezeptvorschlaege-in-der-kuration.md) | erledigt | — | — |
-| `C-413` | befund | niedrig | [`tom.seed` traegt `days_count 7` bei 21 Tagen](todos/nutrition-c-0413-tom-seed-traegt-days-count-7-bei-21-tagen.md) | offen | — | — |
+| `C-413` | befund | niedrig | [`tom.seed` traegt `days_count 7` bei 21 Tagen](laufend_codex/nutrition-c-0413-tom-seed-traegt-days-count-7-bei-21-tagen.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -457,7 +457,7 @@
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 
-## quer — 92
+## quer — 93
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -521,7 +521,8 @@
 | `C-363` | entscheidung | niedrig | [drei oekonomische Befunde im Marketplace](todos/quer-c-0363-drei-oekonomische-befunde-im-marketplace.md) | offen | — | — |
 | `C-383` | befund | hoch | [gehoeren Plaene in `goal_phases`?](erledigt/quer-c-0383-gehoeren-plaene-in-goal-phases.md) | erledigt | — | — |
 | `C-395` | befund | hoch | [drei Migrationen tragen Datenlogik](erledigt/quer-c-0395-drei-migrationen-tragen-datenlogik.md) | erledigt | — | — |
-| `C-412` | befund | mittel | [`intake_logs` endet am 19. August](laufend_codex/quer-c-0412-intake-logs-endet-am-19-august.md) | laeuft (codex) | — | — |
+| `C-412` | befund | mittel | [`intake_logs` endet am 19. August](erledigt/quer-c-0412-intake-logs-endet-am-19-august.md) | erledigt | — | C-414 |
+| `C-414` | befund | mittel | [die Querschnittssicht liegt in `nutrition`](todos/quer-c-0414-die-querschnittssicht-liegt-in-nutrition.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
