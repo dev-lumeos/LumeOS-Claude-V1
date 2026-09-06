@@ -174,7 +174,220 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Claude Code, 2026-09-06. Gemessen, nichts gebaut.**
+
+### Frage 1 — bekommt `subtype` einen CHECK?
+
+`[cmd]` **Gemessen am 2026-09-06, alle 11 Zeilen:**
+
+    goal_type          subtype              Zeilen  Nutzer
+    body_composition   cut                       2       2
+    body_composition   gain_muscle               2       2
+    lifestyle          cardio_frequency          2       2
+    performance        strength                  4       2
+    performance        training_capacity         1       1
+
+    verschiedene Werte:  5
+    NULL:                0 von 11
+
+`[read]` **Das ist die Antwort auf die Frage des Auftrags:** **fuenf
+gelebte Werte, nicht elf** — **und keine einzige leere Zelle.**
+
+`[read]` **Die Spalte ist `nullable`, aber niemand hat sie je leer
+gelassen.** **Sie wird bereits benutzt, als haette sie einen
+CHECK** — nur ohne Absicherung.
+
+`[cmd]` **Und jeder Wert steht unter genau einem `goal_type`** —
+keine Ueberschneidung. **Die zweite Ebene ist nicht nur da, sie ist
+auch sauber.**
+
+**Vorlage zur Entscheidung:**
+
+    JA, CHECK   Die fuenf Werte sind belegt und ueberschneidungsfrei.
+                Ein CHECK haelt Tippfehler und fremde Werte fern.
+                Kosten: jede neue Unterart braucht eine Migration.
+
+    NEIN, frei  Neue Unterarten ohne Migration. Kosten: `cut` und
+                `Cut` und `cutting` koennen nebeneinander stehen,
+                und keine Abfrage merkt es.
+
+`[read]` **Meine Empfehlung: ja, aber erst nach Frage 2.** `[read]`
+**Solange niemand ein Ziel anlegen kann (siehe unten), waechst die
+Liste ohnehin nicht** — **der CHECK haette heute nichts zu
+verteidigen.**
+
+### Frage 2 — welche Achse setzt das Onboarding?
+
+`[read]` **Der Auftrag nennt es den wichtigeren Befund. Er ist es,
+und er faellt anders aus als erwartet.**
+
+**Wer schreibt, wer liest — gemessen:**
+
+    profiles.nutrition_goal
+      schreibt   settings/formular.tsx:246 -> profile-write.ts:37
+                 SECHS Werte im Pulldown, am Schirm belegt
+      liest      goals/lesen.ts:521 - fuer die Zielwerte
+                 profile/zielwerte-read.ts:93
+                 nutrition/zielhinweis.tsx:127
+                 goals/tab-composition.tsx:268 - "Zielrichtung"
+
+    goals.user_goals.goal_type / subtype
+      schreibt   NIEMAND
+      liest      goals/lesen.ts:219, dashboard/lesen.ts:237
+
+`[cmd]` **`lib/goals/schreiben.ts` hat genau eine Operation:
+`.update()`.** **Kein `insert`, kein `upsert`.**
+
+`[cmd]` **Und `ZielAenderung` (`ziel-regeln.ts:69`) fuehrt acht
+Felder** — `title`, `description`, `target_value`, `target_unit`,
+`target_date`, `status`, `priority`, `is_primary`. **`goal_type` und
+`subtype` stehen NICHT darin.**
+
+`[read]` **Beide Achsen sind aus der Oberflaeche unerreichbar.**
+**Die elf Zeilen stammen aus Seeds.**
+
+**Am Schirm gegengeprueft** (`dev@lumeos.app`, 2026-09-06):
+
+    /v2/settings   Pulldown "Zielrichtung" mit sechs Werten:
+                   lose_weight, maintain, gain_muscle,
+                   recomposition, performance, health
+    /v2/goals      NULL Auswahlfelder.
+                   goal_type waehlbar:  nein
+                   subtype waehlbar:    nein
+
+**Bildschirmfotos:** `backup/g352-settings.png`, `backup/g352-goals.png`.
+
+### Damit beantwortet sich die Frage von selbst
+
+`[read]` **Das Onboarding kann heute nur EINE Achse setzen, weil es
+nur eine gibt, die einen Schreibweg hat:**
+**`profiles.nutrition_goal`.**
+
+`[read]` **Und das ist kein Notbehelf, sondern passt:** `[cmd]`
+**die Zielwerte (`goals.nutrition_targets`) lesen genau diese
+Spalte** — `herkunft: formel`, `nutrition_goal: gain_muscle` bei
+`test-user`. **Wer sie setzt, aendert die Makros. Wer `goal_type`
+setzt, aendert heute nichts.**
+
+**Vorlage zur Entscheidung:**
+
+    JA    Onboarding setzt `profiles.nutrition_goal` (sechs Werte).
+          Es ist die einzige Achse mit Schreibweg und die einzige,
+          die auf die Zielwerte wirkt. `user_goals` bleibt, was es
+          heute ist: eine Leseansicht ueber Seed-Daten.
+
+    NEIN  Dann braucht es zuerst einen Anlegeweg fuer `user_goals` —
+          das ist Arbeit, keine Entscheidung, und eine eigene
+          Vorbedingung fuer den Onboarding-Schritt.
+
+### Ein Fund, der die Zaehlung nochmal aendert
+
+`[cmd]` **`goals/modale.tsx:116` fuehrt eine SECHSTE Liste** — das
+`New goal`-Modal, mit eigenen Typen als Knoepfe (nicht als
+Pulldown, deshalb fand meine Schirmprobe null Auswahlfelder):
+
+    body_comp · weight · strength · performance · habit · custom
+
+`[cmd]` **`body_comp` ist nicht `body_composition`** — **die
+Datenbank kennt diesen Wert nicht.** `[cmd]` **Der Kommentar nennt
+die Herkunft: `module-goals.jsx:694-744`, also das Altrepo.**
+
+`[cmd]` **Der `Create goal`-Knopf ist ein `InEntwicklungKnopf`** —
+**und sein Grund benennt die Vorbedingung schon richtig:** *,,Was
+fehlt, ist nur das ANLEGEN: es gibt genau drei aktive Plaetze, und
+welcher beim Anlegen frei wird, ist eine Produktentscheidung."*
+
+`[read]` **Das ist eine dritte offene Sache, aber eine kleine** —
+**und sie gehoert zu Frage 2, nicht daneben.**
+
+### Der Stand der Achsen, berichtigt
+
+    goal_type          4 Werte, CHECK, NOT NULL   kein Schreibweg
+    subtype            5 gelebte Werte, kein CHECK kein Schreibweg
+    phase_type         9 Werte, CHECK              kein Schreibweg
+    variant            frei, Vorgabe 'moderate'    kein Schreibweg
+    nutrition_goal     6 Werte, CHECK, nullable    SETTINGS
+    difficulty_level   5 Werte (quer dazu)         kein Schreibweg
+    Modal-Liste        6 Werte, nur Anzeige        Attrappe
+
+`[read]` **Keine fuenfte Achse angelegt** — **die fuenfte Stelle war
+schon da, sie wurde nur nie als Achse gezaehlt.** **Und sie ist die
+einzige, die ein Nutzer erreicht.**
+
+### 2 · G-229 — die Haelfte ist erledigt
+
+**Der Auftrag: gilt er noch, seit C-31 `curate_food_tag` gebaut hat?**
+
+`[cmd]` **Die Funktion steht:**
+`nutrition.curate_food_tag(p_food_id uuid, p_tag_code text,
+p_action text)`.
+
+`[cmd]` **Mit Rechteschranke in der Datenbank:**
+
+    IF NOT public.is_admin() THEN
+      RAISE EXCEPTION 'curate_food_tag: Adminrolle erforderlich'
+
+`[cmd]` **Und drei weitere Ausnahmen** — ungueltige Aktion,
+unbekanntes Lebensmittel, undefiniertes Tag.
+
+**Die drei Beanstandungen der Review, einzeln:**
+
+    "Kein Admin-Endpoint"        ERLEDIGT - die Funktion ist der
+                                 Weg, mit Schranke in der DB
+    "Trigger ueberschreibt"      GEGENSTANDSLOS - `auto_tag_food`
+                                 gibt es nicht mehr (pg_proc, 0
+                                 Treffer)
+    "User-Tags fuer Custom"      OFFEN - `foods_custom` hat nur
+                                 `custom_allergens`, kein
+                                 generisches Tag-Feld
+
+`[cmd]` **Und E-55 ist nicht nur entschieden, sondern gebaut:**
+**`nutrition.food_tags_kuriert` existiert als Tabelle**, und
+`curate_food_tag` schreibt genau dorthin —
+`INSERT INTO nutrition.food_tags_kuriert (food_id, tag_code, action)
+... ON CONFLICT DO UPDATE`. `[cmd]` **`food_tags_effective`
+verbindet beide.**
+
+`[read]` **Damit ist die Adminhaelfte vollstaendig zu** — Beschluss,
+Tabelle, Schreibweg und Schranke stehen. **Die Nutzerhaelfte steht
+unveraendert.**
+
+`[read]` **Der Punkt gilt also noch, aber nur zur Haelfte.**
+
+`[read]` **Vorschlag: den Befund auf die Nutzerhaelfte
+zusammenstreichen, statt ihn ganz zu schliessen oder ganz
+offenzulassen.** `[read]` **Und C-31 ist damit geprueft, nicht
+angenommen** — der Punkt verlangte genau das.
+
+### 3 · G-261 — entschieden, und der Waechter laeuft
+
+`[cmd]` **Er wartet nicht auf sich selbst — er ist mit E-31
+entschieden:** *,,nicht anbinden, aber messbar halten"*.
+
+`[cmd]` **Nachgemessen 2026-09-06:**
+
+    node tools/zwei-wahrheiten-pruefen.mjs
+    -> gruen: 6 Naehrstoffspalten, Soll 6.
+       G-261 bleibt zurueckgestellt.
+
+`[cmd]` **Und er steht im Gate** (`package.json:10`, neunter
+Schritt).
+
+`[read]` **Was ihn blockiert, ist also nichts** — **er ist
+absichtlich zurueckgestellt, mit einem Ablaufdatum, das sich selbst
+meldet.** `[cmd]` **Kommt eine siebte Naehrstoffspalte, faellt das
+Gate und der Punkt wird wieder zur Frage.**
+
+`[read]` **Kein Handlungsbedarf.** **Er koennte nach `todos/`
+wandern, damit `laufend_*` ehrlich bleibt** — **er laeuft ja
+nicht.**
+
+### Gemessen, nicht gebaut
+
+    geaendert           nichts am Code
+    supabase/           nicht angefasst - ein CHECK ist Codex' Arbeit
+    dev@lumeos.app      nicht geschrieben, 730 Mahlzeiten
+    gestaged            nichts
 
 ## Abnahme
 

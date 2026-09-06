@@ -61,3 +61,26 @@ selbst meldet.**
 
 **Mitbeauftragt mit G-352 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Bericht
+
+**Claude Code, 2026-09-06.** Mitbeauftragt mit G-352. **Der
+vollstaendige Bericht steht in
+[G-352](quer-g-0352-drei-zielskalen-widersprechen-sich.md#bericht).**
+
+`[read]` **Er wartet nicht auf sich selbst** — **er ist mit E-31
+entschieden:** *,,nicht anbinden, aber messbar halten"*.
+
+`[cmd]` **Nachgemessen 2026-09-06:** `tools/zwei-wahrheiten-pruefen.mjs`
+meldet *,,gruen: 6 Naehrstoffspalten, Soll 6"* — **und steht im Gate**
+(`package.json:10`).
+
+`[read]` **Nichts blockiert ihn.** **Kommt eine siebte Spalte, faellt
+das Gate und der Punkt wird von selbst wieder zur Frage.**
+
+`[read]` **Vorschlag: nach `todos/`** — **er laeuft nicht, und
+`laufend_*` soll ehrlich bleiben.**
+
+## Abnahme
+
+_(vom Orchestrator)_

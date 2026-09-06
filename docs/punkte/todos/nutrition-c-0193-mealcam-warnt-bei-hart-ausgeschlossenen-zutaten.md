@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-07
 beruehrt:
   tabellen: []
   dateien: ["docs/specs/Nutrition/04_adrs/ADR_MEALCAM_V1.md"]
@@ -82,3 +80,21 @@ etwas anderes als** `DATABASE`.
 
 **Mitbeauftragt mit C-414 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-07: ein eigener Resolver ist noetig
+
+`[cmd]` **`food_search` liefert nur BLS- und Custom-Foods und
+filtert harte Konflikte weg** — **weder `GLOBAL_RECIPE` noch
+`USER_RECIPE`.**
+
+`[read]` **Damit kann es MealCam nicht tragen** — **SPEC_11
+Abschnitt 2a nennt drei Kandidatentypen.**
+
+`[cmd]` **Zahlen:** 120 `contains_nuts`-Foods, sechs Nutzerrezepte,
+kein globaler Rezeptkatalog, `test-user` ohne Rezepte.
+
+`[read]` **Der letzte ist ein Befund fuer sich:** **der neue Seed
+traegt Plaene und Mahlzeiten, aber keine Rezepte** — **und MealCam
+wird sie brauchen.**
+
+**Vertrag und Empfehlung stehen im C-414-Bericht.**
