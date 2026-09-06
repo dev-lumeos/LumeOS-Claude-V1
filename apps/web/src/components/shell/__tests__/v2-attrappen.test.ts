@@ -215,8 +215,16 @@ test('das Training-Modul kennzeichnet jede Kachel', () => {
   // die Marke samt Begruendung, das blosse `attrappe` nur die Marke.
   // Letzteres steht an den kleinen Zahlenkacheln, wo der
   // Begruendungssatz laenger waere als die Kachel.
+  // `[cmd]` **G-365: eine Marke weniger (11 -> 10).** Die
+  // Sitzungskachel des Today-Reiters liest jetzt
+  // `verlauf.sitzungen` — **14 geplante Sitzungen auf
+  // `dev@lumeos.app`, die naechste ist *Push 7*.**
+  //
+  // `[read]` **Der Leseweg lag seit G-69 als Prop an, die Kachel
+  // nahm ihn nur nicht** — dieselbe Sache wie G-364 bei den
+  // Muskelkacheln.
   const dateien: Array<[string, number]> = [
-    [TRAINING, 11],
+    [TRAINING, 10],
     [TRAINING_SPEC, 17],
     [TRAINING_HR, 9],
     [path.join(process.cwd(), 'src/app/v2/training/tabs-extras.tsx'), 1],

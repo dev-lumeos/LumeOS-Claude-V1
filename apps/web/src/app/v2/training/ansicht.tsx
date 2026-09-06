@@ -261,7 +261,34 @@ function TrainingToday({ onStart, verlauf, readiness }: {
   /** G-86: echt, wenn eine Score-Zeile vorliegt. */
   readiness?: ReadinessStand | null
 }) {
-  const session = {
+  // ══ G-365: die naechste Sitzung kommt aus der Tabelle ══════════
+  //
+  // `[cmd]` **Gemessen 2026-09-06: `dev@lumeos.app` hat 14 Sitzungen
+  // mit `status='planned'`** — die naechste ab heute ist *Push 7*,
+  // 17:30, 75 min geplant.
+  //
+  // `[cmd]` **`verlauf.sitzungen` liegt seit G-69 als Prop an** —
+  // **diese Kachel nahm es nur nicht.** **Dieselbe Sache wie bei den
+  // Muskelkacheln** (G-364): der Leseweg lag ungenutzt daneben.
+  //
+  // `[read]` **`total_sets` und `total_volume_kg` sind bei geplanten
+  // Sitzungen `0`** — **kein Messwert, sondern ein Training, das noch
+  // nicht stattgefunden hat.** **Also steht dort ein Strich, keine
+  // erfundene Tonnage** (C-378).
+  // `[cmd]` **Gemessen: `!s.absolviert` uebersprang die HEUTIGE
+  // Sitzung** — `absolviert` kommt aus dem Datum, und heute zaehlt
+  // als stattgefunden. **Die Kachel zeigte *Pull 7* vom 12.09.,
+  // waehrend die Wochenzeile *Push 7* als heute markierte.**
+  //
+  // `[read]` **Die naechste Sitzung ist die erste ab dem Stichtag** —
+  // einschliesslich heute.
+  const naechste = React.useMemo(() => {
+    const alle = verlauf?.sitzungen ?? []
+    const stichtag = verlauf?.stichtag ?? ''
+    return alle.find(s => s.session_date >= stichtag) ?? null
+  }, [verlauf])
+
+  const entwurf = {
     name: 'Push B',
     sub: 'Chest, Shoulders, Triceps',
     block: 'Block 3 · Wk 2',
@@ -280,10 +307,31 @@ function TrainingToday({ onStart, verlauf, readiness }: {
     ],
   }
 
+  // `[read]` **Kopf echt, Uebungsliste Entwurf.** `[cmd]`
+  // **`ladeSitzungsUebungen` gibt es** (`sitzungen-read.ts`),
+  // **wird an diese Ansicht aber nicht durchgereicht** — gemeldet,
+  // nicht gebaut.
+  const session = naechste
+    ? {
+      name: naechste.name ?? 'Sitzung',
+      sub: naechste.location ?? 'geplant',
+      block: naechste.status ?? '',
+      date: naechste.session_date,
+      sets: naechste.total_sets ?? 0,
+      volume: naechste.total_volume_kg
+        ? `${(naechste.total_volume_kg / 1000).toFixed(1)} t` : '—',
+      duration: naechste.duration_minutes ? `~${naechste.duration_minutes}m` : '—',
+      exercises: entwurf.exercises,
+    }
+    : entwurf
+
   return (
     <div className="v2-grid-14">
       <div className="v2-col-gap" style={{ gap: 16 }}>
-        <Card attrappe={ATTRAPPE}>
+        <Card
+          attrappe={naechste ? undefined : ATTRAPPE}
+          actions={naechste ? <Pill variant="pos">echte Daten</Pill> : undefined}
+        >
           <div className="v2-train-session-kopf">
             <div className="v2-train-medallion">
               <Icon name="training" className="v2-ic" style={{ width: 24, height: 24 }} />
