@@ -314,3 +314,84 @@ unbrauchbar** — **sie zaehlen Datenwerte und Uebersetzungen mit.**
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Auftrag 2 — auch das Gebaute bekommt seine Referenz
+
+**Beauftragt am 2026-09-07.**
+
+Tom, 2026-09-07: *,,dann lass claude code das nun loesen dass das
+gebaute auch eingeblendet wird."*
+
+### Was bisher fehlt
+
+`[cmd]` **In `recovery` hast du die 11 fehlenden als Attrappen
+eingeblendet** — richtig.
+
+`[cmd]` **Aber bei den 28 vorhandenen steht nur das Gebaute** —
+**ohne Mockup-Referenz darunter.**
+
+`[read]` **Damit kann Tom nicht vergleichen** — **und genau dafuer
+ist E-69 da.**
+
+### Die Regel, vollstaendig
+
+`[cmd]` **E-69, 2026-09-07:**
+
+    1  die Attrappe wird kopiert
+    2  die Kopie wird angebunden und oben eingehaengt
+    3  die Attrappe bleibt DARUNTER stehen
+    4  Tom vergleicht Ist gegen Soll auf einem Schirm
+    5  nimmt er ab, faellt die Attrappe
+
+`[read]` **Punkt 3 gilt fuer jedes Element** — **nicht nur fuer die
+fehlenden.**
+
+Tom: *,,so habe ich ist und soll fuer mich immer bereit und ich kann
+arbeiten."*
+
+### Was zu tun ist
+
+`[read]` **Je Modul: das vollstaendige Mockup als Attrappe unter die
+gebaute Ansicht.**
+
+`[read]` **Nicht Element fuer Element** — **der ganze Schirm, wie er
+im Mockup steht.**
+
+`[cmd]` **In `goals` hast du es so gemacht** — **echte Ansicht oben,
+Attrappe darunter.** `[read]` **Dasselbe fuer die uebrigen.**
+
+### Und die Kennzeichnung
+
+`[cmd]` **E-68: Quelle und Grund.**
+
+    // Attrappe -- theme-v1/module-recovery.jsx
+    //   Referenz zum Vergleich, faellt mit Toms Abnahme
+
+`[read]` **Bei vorhandenen Elementen ist der Grund nicht *,,wartet
+auf X"*** — **es ist *,,Referenz zum Vergleich"*.**
+
+### Reihenfolge
+
+    recovery      zuerst -- dort ist die Abnahme schon erfolgt
+    medical
+    nutrition
+    supplements
+    goals         pruefen, ob vollstaendig
+    training      pruefen
+    dashboard     pruefen
+
+`[read]` **Nach jedem Modul melden** — **Tom nimmt einzeln ab.**
+
+### Was nicht zu tun ist
+
+**Bestehendes bleibt unangetastet.**
+**Keine Anbindung, kein Umbau.**
+**Nichts auf `dev@lumeos.app` schreiben.**
+Nicht committen, nicht stagen, nicht pushen.
+
+### Nachweis je Modul
+
+    Mockup unten    vollstaendig, als Attrappe gekennzeichnet
+    Gebautes oben   unveraendert
+    Bildschirmfoto  beide untereinander sichtbar
+    Waechter        mockup-deckung.mjs bleibt gruen
