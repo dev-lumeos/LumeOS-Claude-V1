@@ -184,6 +184,55 @@ und die Frage ist, wie viele davon erreichbar sind.**
 Feld fehlt"*, sondern *,,die fortgeschrittene Haelfte ist nicht
 erreichbar"*.**
 
+### Die Regel greift, und trotzdem weiss niemand mehr Bescheid
+
+**Tom, 2026-09-07:** *,,das war alles im mockup und verschwindet
+einfach irgendwann irgendwie. wir haben verdammt nochmal rules. wir
+binden mockups an; was nicht anbindbar ist bleibt in der ui als
+mockup deklariert, genau aus dem grund dass nichts verschwindet und
+keiner mehr weiss um was es geht."*
+
+`[cmd]` **Gemessen 2026-09-07: die Regel wird befolgt.**
+
+    131 Dateien im Repo tragen einen Attrappen-Vermerk
+     10 davon in v2/goals
+
+    phase-editor.tsx    796 Zeilen, 40 Vermerke
+    tab-phase.tsx       689 Zeilen, 17 Vermerke
+    modale.tsx          507 Zeilen, 20 Vermerke
+
+`[cmd]` **`v2/goals` hat 12 Dateien, 4.253 Zeilen.**
+
+`[read]` **Die Mockups sind nicht verschwunden** — **sie stehen als
+Attrappen da.**
+
+`[read]` **Aber 40 Vermerke in einer Datei sind kein *,,hier fehlt
+noch ein Knopf"*** — **das ist eine Flaeche, die aussieht wie gebaut
+und nichts tut.**
+
+`[read]` **Und niemand weiss mehr, welcher Vermerk auf welche
+Quelle zeigt.**
+
+### Was daraus fuer diesen Auftrag folgt
+
+`[read]` **Zaehl die Vermerke und ordne sie zu:**
+
+    welcher Vermerk       auf welche Mockup-Stelle
+    welche Datenlage      liegt dahinter
+    warum nicht gebunden  fehlt der Leseweg, die Entscheidung,
+                          oder hat es nie jemand versucht?
+
+`[cmd]` **Beispiel aus C-193, heute:** **MealCam ist *,,rein
+statisch, kein Leseweg"*** — **und niemand wusste es, bis jemand
+fragte.**
+
+`[read]` **Ein Vermerk sagt *,,noch nicht"*.** `[read]` **Er sagt
+nicht, was fehlt** — **und genau das ist die Luecke.**
+
+`[cmd]` **`phase-editor.tsx` ist der Anfang** — 796 Zeilen, 40
+Vermerke, **und `goal_phases` traegt neun Phasenarten mit
+Uebergangsfeldern.**
+
 ### Was nicht zu tun ist
 
 **Nichts bauen** — **dieser Auftrag stellt gegenueber.**
@@ -198,6 +247,9 @@ Nicht committen, nicht stagen, nicht pushen.
 
     Gegenueberstellung  Spec / Datenbank / Schirm, je Bereich
     110 Spalten         wie viele erreichbar, gezaehlt
+    Attrappen-Vermerke  gezaehlt und zugeordnet
+    je Vermerk          was fehlt: Leseweg / Entscheidung /
+                        nie versucht
     neun Phasenarten    welche haben einen Weg, welche nicht
     FFMI und Umfaenge   erreichbar oder tot
     fehlt               was, und ob es je da war
