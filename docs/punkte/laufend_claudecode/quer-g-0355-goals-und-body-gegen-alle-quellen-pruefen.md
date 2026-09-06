@@ -130,6 +130,60 @@ nie.** `[read]` **Und nachsehen, warum es ersetzt wurde.**
 `[cmd]` **Entscheidungen:** E-54 (Zeitachse), E-46
 (Erfahrungsgrade), E-67 (Onboarding gegen Goals).
 
+### Das Fortgeschrittene steht im Schema
+
+**Tom, 2026-09-07:** *,,da fehlen all die pro sachen und
+grundsaetzlichen sachen in goals, da hatten wir auch advanced stuff
+drin nicht nur so 0815 goals wie 100kg druecken und so
+anfaengerzeugs."*
+
+`[cmd]` **Gemessen 2026-09-07:**
+
+    phase_type   fat_loss, lean_bulk, maintenance, recomp,
+                 contest_prep, reverse_diet, expert_bb_annual,
+                 mini_cut, peak_week
+
+`[read]` **`contest_prep`, `peak_week`, `reverse_diet`,
+`expert_bb_annual`, `mini_cut`** — **Wettkampfvorbereitung, kein
+Anfaengerzeug.**
+
+`[cmd]` **`goal_phases` traegt eine Phasenmaschine:**
+
+    variant             eine Auspraegung je Phasenart
+    parameters jsonb    die Stellgroessen
+    gueltig_ab          Beginn
+    projected_end_date  geplant
+    actual_end_date     tatsaechlich
+    transitioned_from   woher
+    recommended_next    wohin
+    transition_reason   warum
+
+`[read]` **Uebergaenge mit Begruendung** — **das ist eine
+Zustandsmaschine, keine Zielliste.**
+
+`[cmd]` **`body_measurements`: `ffmi`, `lean_mass_kg`,
+`fat_mass_kg`, `bf_method`, `height_cm_snapshot`.**
+
+`[read]` **FFMI ist ein Bodybuilder-Mass** — **und `bf_method` sagt,
+womit gemessen wurde.**
+
+`[cmd]` **`body_circumferences`: 13 Messpunkte, links und rechts
+getrennt** — Hals, Schultern, Brust, Ober- und Unterarm, Taille,
+Huefte, Oberschenkel, Wade.
+
+### Danach richtet sich die Gegenueberstellung
+
+`[read]` **Miss je Spalte, ob der Schirm sie zeigt** — **110 Spalten,
+und die Frage ist, wie viele davon erreichbar sind.**
+
+`[read]` **Und je Phasenart, ob es einen Weg dorthin gibt:**
+`[cmd]` **`contest_prep` und `peak_week` sind im CHECK** —
+**existiert eine Oberflaeche, die sie setzt?**
+
+`[read]` **Das ist der Kern von Toms Beobachtung:** **nicht *,,ein
+Feld fehlt"*, sondern *,,die fortgeschrittene Haelfte ist nicht
+erreichbar"*.**
+
 ### Was nicht zu tun ist
 
 **Nichts bauen** — **dieser Auftrag stellt gegenueber.**
@@ -143,6 +197,9 @@ Nicht committen, nicht stagen, nicht pushen.
 ### Nachweis
 
     Gegenueberstellung  Spec / Datenbank / Schirm, je Bereich
+    110 Spalten         wie viele erreichbar, gezaehlt
+    neun Phasenarten    welche haben einen Weg, welche nicht
+    FFMI und Umfaenge   erreichbar oder tot
     fehlt               was, und ob es je da war
     Kommentare          weitere Falschaussagen, gezaehlt
     Bildschirmfoto      was Goals und Body heute zeigen
