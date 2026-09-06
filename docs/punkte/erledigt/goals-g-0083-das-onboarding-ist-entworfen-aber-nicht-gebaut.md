@@ -13,8 +13,7 @@ beauftragt: 2026-09-07
 erledigt: 2026-09-07
 commit: 034a4620
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [goals.user_goals]
 zahlen: null
 ---
 
