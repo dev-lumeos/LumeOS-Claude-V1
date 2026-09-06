@@ -11,7 +11,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-07
 erledigt: 2026-09-07
-commit: OFFEN
+commit: e748fbdb
 beruehrt:
   tabellen: []
   dateien: ["docs/specs/Core/ONBOARDING_ADR.md"]
