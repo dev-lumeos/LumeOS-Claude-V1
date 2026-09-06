@@ -142,7 +142,49 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+2026-09-06, Codex.
+
+`[cmd]` Die 158 Schritte der lokalen Aufbaukette liefen vollstaendig in
+`lumeos_g357_verify2` durch: `KETTE OK: 300.7s`, Abschlusspruefung
+`SCHEMA VOLLSTAENDIG`. Der Nachweis lief ausschliesslich gegen diese
+Wegwerf-Datenbank.
+
+`[cmd]` **G-357:** Die eingeloggte Testnutzerin begann genau eine
+`lean_bulk`-Phase und beendete genau diese wieder. `transition_reason`
+ist `G357 planmaessig beendet`; `recommended_next` ist NULL.
+
+`[cmd]` **G-356:** Ein Umfangssatz schrieb alle 13 Punkte. Getrennt
+belegt sind u. a. Oberarm links/rechts `39/40` und Oberschenkel
+links/rechts `61/62`; `measurement_source=manual` und
+`source_detail=G-356 Testmessung` blieben erhalten.
+
+`[cmd]` **C-379:** `meal_plan_set_next_plan` setzte einen eigenen
+Folgeplan und las dessen ID wieder. Die Laufzeit des Ausgangsplans blieb
+bei `days_count=28`.
+
+`[cmd]` **Vorrat:** Eine vorhandene Vorratszeile sank beim Eintragen
+eines Meal-Items von `menge_g=500` auf `375`. Eine Mahlzeit erzeugt
+keine Vorratszeile von selbst: der Vorrat bleibt der explizit angelegte,
+symbolische Anhaltspunkt aus C-408/E-65.
+
+`[cmd]` Für alle vier betroffenen Tabellen wurde RLS in beide Richtungen
+geprüft: die zweite Testnutzerin las weder Phase noch Umfang, Plan oder
+Vorrat der ersten. Der Nachweis-Test hat 2/2 Fälle grün.
+
+`[cmd]` Die drei Pipeline-Schritte `058b`, `111` und `112` sind in die
+lokale Dev-Datenbank eingespielt. Alle vier RPC-Signaturen sind vorhanden.
+Je Goals-Tabelle stehen fünf Policies: die vier Eigentümer-Policies plus
+die spätere Coach-Lesepolicy. Der Selbstcheck prüft deshalb die
+verpflichtenden Policy-Namen statt fälschlich die Gesamtzahl.
+
+`[cmd]` `pnpm gate` ist grün: 15/15 Tasks, 1.500 Web-Tests grün,
+Typecheck und Build grün. Nicht gestaged, nicht committed.
+
+`[read]` Ein Vorschlag für `recommended_next` braucht noch eine
+Produktentscheidung: welche Eingaben (Ziel, Fortschritt, Dauer,
+Messwerte und Präferenz) ihn bestimmen, ob er regelbasiert oder
+modellsuggestiert ist und wie Begründung sowie Nutzer-Übersteuerung
+gespeichert werden. Bis dahin bleibt das Feld absichtlich leer.
 
 ## Abnahme
 

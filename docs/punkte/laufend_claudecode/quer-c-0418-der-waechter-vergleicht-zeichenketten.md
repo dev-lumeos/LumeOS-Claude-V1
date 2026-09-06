@@ -395,3 +395,192 @@ Nicht committen, nicht stagen, nicht pushen.
     Gebautes oben   unveraendert
     Bildschirmfoto  beide untereinander sichtbar
     Waechter        mockup-deckung.mjs bleibt gruen
+
+## Bericht — Auftrag 2, recovery (HRV und Sleep)
+
+**Claude Code, 2026-09-06.** **Zwei Reiter fertig, sechs offen** —
+Zwischenstand, weil die Machart erst abgenommen gehoert.
+
+### Was E-69 hier bedeutet
+
+`[read]` **Schritt 3 galt bisher nur fuer die FEHLENDEN Elemente**
+(Auftrag 1, `fehlende-kacheln.tsx`). `[read]` **Jetzt steht der
+ganze Mockup-Reiter darunter** — auch dort, wo das Gebaute
+vollstaendig ist.
+
+`[cmd]` **Neu: `apps/web/src/app/v2/recovery/mockup-referenz.tsx`**,
+393 Zeilen, mit `RecHRVReferenz` und `RecSleepReferenz`.
+
+**Der Aufbau je Reiter, von oben nach unten:**
+
+    1  die gebaute Ansicht      unveraendert
+    2  die fehlenden Kacheln    aus Auftrag 1, mit „wartet auf"
+    3  ── Mockup-Referenz ──    Trennlinie mit Pille
+    4  der Mockup-Reiter        vollstaendig, als Attrappe
+
+### Die Kennzeichnung
+
+`[cmd]` **Der Grund ist NICHT *,,wartet auf X"*, wie der Auftrag
+sagt:**
+
+    Attrappe — theme-v1/module-recovery-v2.jsx
+      wartet auf: nichts — Referenz zum Vergleich,
+                  faellt mit Toms Abnahme
+
+`[cmd]` **Dazu eine Trennlinie ueber jedem Referenzblock** — Pille
+*Mockup-Referenz*, Reitername, Quelldatei, und der Satz *,,faellt
+mit der Abnahme"*.
+
+`[read]` **Ohne sie stehen zwei Fassungen derselben Kachel
+untereinander und niemand weiss, welche gilt** — z. B. zweimal
+*,,Last night"*.
+
+### Am Schirm, vorher/nachher
+
+    Reiter   Attrappen        Kacheln
+    hrv      10 -> 18          9 -> 13
+    sleep     8 -> 16          8 -> 12
+
+`[cmd]` **Belegt: `backup/g359b-recovery-ref-hrv-hrv.png`** — oben
+der gebaute HRV-Reiter mit **39,6 ms aus `recovery.checkins`**,
+darunter die vier fehlenden Kacheln, darunter das Mockup mit seinen
+Entwurfszahlen.
+
+### Der Deckungswaechter bewegt sich zum ersten Mal
+
+`[cmd]` **`mockup-deckung.mjs`: 1.145 -> 1.161 sichtbar, 16
+Elemente zurueckgebracht.**
+
+`[read]` **Bei den bisherigen Auftraegen blieb er stehen** — dort
+wurde Verstecktes eingeblendet, und die Beschriftungen standen
+schon im Quelltext. **Hier kommen sie neu dazu, also zaehlt er
+mit.**
+
+`[read]` **Damit misst er ab jetzt genau das, was dieser Auftrag
+tut** — im Gegensatz zu G-359/2 und /3.
+
+### Bestehendes unangetastet
+
+`[cmd]` **`RecHRV` und `RecSleep` werden unveraendert mit
+denselben Werten aufgerufen.** **Kein Ternaer angefasst, keine
+Bedingung geaendert.**
+
+`[read]` **Die Referenz haengt hinter dem Bestehenden, im selben
+Fragment.**
+
+### Keine Anbindung, keine erfundene Zahl
+
+`[cmd]` **Die Referenzansichten lesen ausschliesslich die
+Entwurfskonstanten aus `motor.ts`** — `CHECKIN`, `HRV_BASELINE`,
+`HRV_LOG`, `SLEEP_DATA`, `calcHRVScore`, `calcSleepScore`.
+
+`[read]` **Die stehen dort seit dem Modulbau** — **hier wird nichts
+neu erfunden und nichts neu gerechnet.** **Der Soll-Stand zeigt die
+Entwurfszahlen, der Ist-Stand darueber die gemessenen.**
+
+### Was der Typecheck gefunden hat
+
+`[cmd]` **`SleepScore.eff/dur/deep` sind optional** (`motor.ts:387`)
+— **sie stehen nur auf dem Wearable-Weg.**
+
+`[read]` **Hier liegt `SLEEP_DATA` vor, also sind sie gesetzt** —
+**aber ein `!` waere eine Behauptung.** `[cmd]` **Stattdessen
+`?? 0`, mit dem Grund als Kommentar daneben.**
+
+### Was noch offen ist
+
+    Reiter          Mockupzeilen   Stand
+    today                    146   offen
+    checkin                  133   offen
+    muscles                   68   offen
+    hrv                       94   FERTIG
+    sleep                    108   FERTIG
+    modalities               100   offen
+    overtraining              77   offen
+    protocols                 75   offen
+
+`[read]` **Rund 600 Zeilen Mockup-JSX sind noch zu uebertragen** —
+**derselbe Handgriff, aber je Reiter eine eigene Pruefung.**
+
+### Vollstaendiger Lauf
+
+    tsc --noEmit         sauber
+    next lint            keine Warnung, kein Fehler
+    Tests                1500 / 1500 gruen, 0 Fehler
+    mockup-deckung.mjs   1.161 / 2.488 (+16)
+    dev@lumeos.app       nicht geschrieben
+    gestaged             nichts
+
+**Zur Abnahme: traegt die Machart so?** `[read]` **Wenn ja, ziehe
+ich die sechs uebrigen Reiter nach und melde recovery
+vollstaendig.**
+
+## Abnahme
+
+_(vom Orchestrator)_
+
+## Auftrag 3 — jeder Reiter, jedes Modul
+
+**Beauftragt am 2026-09-07.**
+
+Tom, 2026-09-07: *,,bring einfach die loesung dass es dargestellt ist
+wie ich seit 30 minuten davon rede."*
+
+### Was falsch lief
+
+`[cmd]` **Auftrag 2 wurde in zwei von sechs Recovery-Reitern
+umgesetzt** — `hrv` und `sleep`.
+
+`[cmd]` **`modalities`, `overtraining`, `protocols`, `stress` haben
+nichts.**
+
+`[cmd]` **Und `tab-messwerte.tsx` mit `Per-muscle detail` kam gar
+nicht vor.**
+
+`[read]` **Tom zeigte auf `Muscle map`, `Muscle recovery`,
+`Per-muscle detail`** — **und bekam Referenzen in zwei anderen
+Reitern.**
+
+### Was zu tun ist
+
+**Unter JEDEN Reiter von JEDEM Modul das vollstaendige Mockup als
+Attrappe.**
+
+    recovery       6 Reiter -- 4 fehlen noch
+    medical        alle
+    nutrition      alle
+    supplements    alle
+    goals          alle -- pruefen, ob vollstaendig
+    training       alle
+    dashboard      alle
+
+`[read]` **Keine Auswahl, keine Reihenfolge nach Wichtigkeit.**
+**Jeder Reiter.**
+
+`[cmd]` **Die Form ist abgenommen:** Gebautes oben, fehlende Kacheln,
+Trennlinie, Mockup-Reiter darunter.
+
+### Und wo ein Mockup-Reiter keinen Gegenpart hat
+
+`[read]` **Dann steht dort nur die Attrappe** — **das ist der Fall
+bei allem, was nie gebaut wurde.**
+
+### Melden
+
+`[read]` **Nach jedem Modul, nicht nach jedem Reiter.**
+
+`[cmd]` **Und je Modul: wie viele Reiter, wie viele haben jetzt eine
+Referenz.**
+
+### Was nicht zu tun ist
+
+**Bestehendes bleibt unangetastet.**
+**Keine Anbindung, kein Umbau, keine Leseweg-Arbeit.**
+**Nichts auf `dev@lumeos.app` schreiben.**
+Nicht committen, nicht stagen, nicht pushen.
+
+### Nachweis je Modul
+
+    Reiter          alle, gezaehlt
+    Referenz        unter jedem, Bildschirmfoto
+    unangetastet    kein bestehendes Verhalten geaendert
