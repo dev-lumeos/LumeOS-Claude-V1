@@ -1,91 +1,91 @@
 {
   "gemessen": "2026-09-06",
-  "gesamt": 2488,
-  "sichtbar": 1145,
+  "gesamt": 242,
+  "sichtbar": 172,
   "verworfen": 0,
-  "fehlt": 1343,
+  "fehlt": 93,
   "je": [
     {
       "modul": "admin",
-      "mockup": 155,
+      "mockup": 19,
       "fehlt": null
     },
     {
       "modul": "buddy",
-      "mockup": 265,
+      "mockup": 37,
       "fehlt": null
     },
     {
       "modul": "coach",
-      "mockup": 521,
-      "fehlt": 421,
+      "mockup": 52,
+      "fehlt": 41,
       "verworfen": 0
     },
     {
       "modul": "completeness",
-      "mockup": 182,
+      "mockup": 5,
       "fehlt": null
     },
     {
       "modul": "crossmodule",
-      "mockup": 44,
+      "mockup": 9,
       "fehlt": null
     },
     {
       "modul": "dashboard",
-      "mockup": 42,
-      "fehlt": 3,
+      "mockup": 7,
+      "fehlt": 0,
       "verworfen": 0
     },
     {
       "modul": "goals",
-      "mockup": 341,
-      "fehlt": 105,
+      "mockup": 32,
+      "fehlt": 8,
       "verworfen": 0
     },
     {
       "modul": "market",
-      "mockup": 314,
+      "mockup": 32,
       "fehlt": null
     },
     {
       "modul": "medical",
-      "mockup": 352,
-      "fehlt": 199,
+      "mockup": 24,
+      "fehlt": 9,
       "verworfen": 0
     },
     {
       "modul": "nutrition",
-      "mockup": 259,
-      "fehlt": 152,
+      "mockup": 20,
+      "fehlt": 0,
       "verworfen": 0
     },
     {
       "modul": "onboarding",
-      "mockup": 13,
+      "mockup": 0,
       "fehlt": null
     },
     {
       "modul": "recovery",
-      "mockup": 250,
-      "fehlt": 170,
+      "mockup": 39,
+      "fehlt": 6,
       "verworfen": 0
     },
     {
       "modul": "stubs",
-      "mockup": 230,
+      "mockup": 19,
       "fehlt": null
     },
     {
       "modul": "supplements",
-      "mockup": 423,
-      "fehlt": 263,
+      "mockup": 40,
+      "fehlt": 6,
       "verworfen": 0
     },
     {
       "modul": "training",
-      "mockup": 300,
-      "fehlt": 30,
+      "mockup": 28,
+      "fehlt": 0,
       "verworfen": 0
     }
   ]

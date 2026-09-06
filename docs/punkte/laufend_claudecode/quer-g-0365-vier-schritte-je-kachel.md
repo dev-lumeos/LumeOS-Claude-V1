@@ -478,3 +478,38 @@ sind die Referenz aus G-359.
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Auftrag 2 — E-72: anbinden heisst mit Daten
+
+**Beauftragt am 2026-09-07.**
+
+Tom: *,,wenn wir was anbinden sollen auch daten dafuer da sein um es
+anzuzeigen und nicht einfach verschwinden und jeder vergisst es."*
+
+`[cmd]` **Supplements-Heute zeigt `TODAY'S ADHERENCE 0 / 9`,
+`TAKEN 0`.**
+
+`[read]` **Die Anbindung steht, der Bestand fehlt** — **und die
+Kachel zeigt Null, als waere das ein Ergebnis.**
+
+### Ein fuenfter Schritt
+
+    1  Ist die Mockup-Kachel oben vorhanden?
+    2  Wenn angebunden: setz die Mockup-Kachel UNTEN als Soll
+    3  Wenn Attrappe: war sie schon mal angebunden?
+    4  Wenn Attrappe: was fehlt zum Anbinden?
+    5  Wenn angebunden: LIEGEN DATEN VOR?           <-- neu
+
+`[read]` **Bei 5 nein: melde es, mit Tabelle und Zeilenzahl.**
+
+`[read]` **Und setz einen benannten Leerhinweis statt einer Null** —
+**nicht *,,0 von 9"*, sondern *,,keine Einnahmen erfasst"*.**
+
+`[cmd]` **`dev@lumeos.app` traegt echte Daten** — **eine Kachel, die
+dort leer bleibt, ist ein Befund.**
+
+### Rueckwirkend
+
+`[read]` **Fuer `training`, `recovery` und `supplements`
+nachziehen** — **die drei Module sind geprueft, aber ohne Schritt
+5.**

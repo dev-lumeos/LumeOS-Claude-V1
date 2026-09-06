@@ -370,6 +370,26 @@ Recovery fuenf, Coach acht.
 `[read]` **Und *nicht gefunden* ist keine Aussage** — **es heisst
 nur, dass die Suche nichts fand.**
 
+## Anbinden heisst mit Daten
+
+**Tom, 2026-09-07:** *,,wenn wir was anbinden sollen auch daten
+dafuer da sein um es anzuzeigen und nicht einfach verschwinden und
+jeder vergisst es."*
+
+`[cmd]` **Beispiel: Supplements-Heute zeigt `TODAY'S ADHERENCE
+0 / 9`** — **die Anbindung steht, der Bestand fehlt.**
+
+`[read]` **Eine Attrappe sagt *,,noch nicht angebunden"*.** **Eine
+leere Kachel sagt nichts** — **sie sieht aus wie ein Ergebnis.**
+
+    angebunden mit Daten     zeigt Werte
+    angebunden ohne Daten    zeigt einen Leerhinweis, benannt
+    Attrappe                 zeigt Entwurfswerte, gekennzeichnet
+
+`[read]` **Zu jedem Anbindeauftrag gehoert die Frage: liegen Daten
+vor?** `[read]` **Wenn nein, ist der Seed Teil des Auftrags** —
+**oder die Kachel bleibt Attrappe** (E-72).
+
 ## Tom entscheidet, wann eine Attrappe faellt
 
 **Tom, 2026-09-07:** *,,wenn etwas vollumfaenglich angebunden ist
