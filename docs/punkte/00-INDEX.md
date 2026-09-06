@@ -417,7 +417,7 @@
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
 | `G-243` | befund | mittel | [die Recovery-Schwellen stehen im Mockup, nicht im Punkt](todos/recovery-g-0243-die-recovery-schwellen-stehen-im-mockup-nicht-im-punkt.md) | offen | — | — |
 | `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](laufend_claudecode/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | laeuft (claudecode) | — | G-365, G-367 |
-| `G-367` | feature | mittel | [Stunden und Saetze je Muskel](todos/nutrition-g-0367-per-muscle-stunden-und-saetze.md) | offen | — | — |
+| `G-367` | feature | mittel | [Stunden und Saetze je Muskel](todos/recovery-g-0367-per-muscle-stunden-und-saetze.md) | offen | — | — |
 
 ## goals — 6
 
