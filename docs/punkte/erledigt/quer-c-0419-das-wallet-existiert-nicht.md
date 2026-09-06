@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: cc54cbbb
 beruehrt:
   tabellen: [public.profiles]
 zahlen:
@@ -193,4 +195,59 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator.**
+
+### Die Vollkette laeuft durch
+
+`[cmd]` **`lumeos_c419_final`, `KETTE OK: 279.7s`.** `[cmd]`
+**Marketplace 13 von 13 Tabellen, RLS, Policies und Grants
+geprueft.**
+
+`[cmd]` **Sollstand: Fremde Tabellen 134 von 134**, **Marketplace
+als Tabellenblock.**
+
+`[cmd]` **Nicht live eingespielt** — **nachgemessen: `market`
+existiert auf `dev` nicht.** `[read]` **Richtig so, das war die
+Anweisung.**
+
+### Das Wallet selbst
+
+`[cmd]` **13 Tabellen, `book_wallet_purchase` atomar, Voucher vor
+Revenue, Gebuehrenjournal.**
+
+`[cmd]` **4 von 4 Tests:** Schema, Buchung, Fehler-Rollback,
+Zwei-Nutzer-RLS.
+
+`[read]` **Der Fehler-Rollback ist der wichtige** — **eine Buchung,
+die zur Haelfte geschieht, waere schlimmer als keine.**
+
+### C-420 — der Waechter hat einen dritten Fehler gehabt
+
+`[cmd]` **`includes()` statt exaktem Vergleich:** **ein umbenannter
+Titel mit dem alten als Praefix galt weiter als vorhanden.**
+
+`[cmd]` **Der Waechter meldete 6, es sind 16 von 39 in
+`recovery`.**
+
+`[read]` **Dritter Anlauf am selben Werkzeug:**
+
+    erst   Zeichenkette gegen Dateiinhalt   Faktor 15
+    dann   ohne Uebersetzungen              DE/EN/TH
+    jetzt  includes() statt exakt           6 statt 16
+
+`[read]` **Alle drei waren Fehler des Orchestrators.** `[read]`
+**Und alle drei fand erst eine Gegenprobe.**
+
+### Diese Gegenprobe ist die richtige
+
+`[cmd]` **`30-day trend` entfernt: ROT, 17 statt 16.** `[cmd]`
+**Wiederhergestellt: 16, kein ROT.**
+
+`[read]` **Und er hat einen Titel gewaehlt, der nachweislich in der
+Menge ist** — **nach dem ersten Versuch, der ins Leere lief.**
+
+`[read]` **Genau der Schritt, den ich heute frueh bei meinem eigenen
+Waechter machen musste.**
+
+**Abgenommen.**
+

@@ -6,9 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 216 |
-| `laufend_codex` | 2 |
 | `laufend_claudecode` | 6 |
-| `erledigt` | 299 |
+| `erledigt` | 301 |
 | **gesamt** | **523** |
 
 ## medical — 43
@@ -535,8 +534,8 @@
 | `C-416` | feature | hoch | [ein taeglicher Kettenlauf](erledigt/quer-c-0416-ein-taeglicher-kettenlauf.md) | erledigt | — | — |
 | `C-417` | feature | hoch | [der Schirm wird nicht gemessen](erledigt/quer-c-0417-der-schirm-wird-nicht-gemessen.md) | erledigt | — | — |
 | `C-418` | befund | hoch | [der Waechter vergleicht Zeichenketten, nicht Inhalte](laufend_claudecode/quer-c-0418-der-waechter-vergleicht-zeichenketten.md) | laeuft (claudecode) | — | C-420 |
-| `C-419` | feature | hoch | [das Wallet existiert nicht](laufend_codex/quer-c-0419-das-wallet-existiert-nicht.md) | laeuft (codex) | — | — |
-| `C-420` | befund | hoch | [der Waechter kennt keine Uebersetzung](laufend_codex/quer-c-0420-der-waechter-kennt-keine-uebersetzung.md) | laeuft (codex) | — | — |
+| `C-419` | feature | hoch | [das Wallet existiert nicht](erledigt/quer-c-0419-das-wallet-existiert-nicht.md) | erledigt | — | — |
+| `C-420` | befund | hoch | [der Waechter kennt keine Uebersetzung](erledigt/quer-c-0420-der-waechter-kennt-keine-uebersetzung.md) | erledigt | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

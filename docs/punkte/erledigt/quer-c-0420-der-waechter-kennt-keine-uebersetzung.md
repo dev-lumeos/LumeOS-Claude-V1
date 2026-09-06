@@ -9,6 +9,8 @@ kind_von: C-418
 entscheidung: E-70
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: cc54cbbb
 beruehrt:
   dateien:
     - tools/mockup-deckung.mjs
@@ -75,3 +77,20 @@ gelten.**
 
 **Mitbeauftragt mit C-419 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit C-419 abgenommen: drei Fehler, alle behoben.**
+
+    erst   Zeichenkette gegen Dateiinhalt   Faktor 15
+    dann   ohne Uebersetzungen              DE/EN/TH
+    jetzt  includes() statt exakt           6 statt 16
+
+`[cmd]` **Der Waechter liest DE/EN/TH aus `apps/web/messages` und
+vergleicht Kacheltitel exakt.**
+
+`[cmd]` **Gegenprobe: `30-day trend` entfernt -> ROT, 17 statt 16.
+Wiederhergestellt -> 16, kein ROT.**
+
+`[read]` **Alle drei Fehler waren die des Orchestrators, und alle
+drei fand erst eine Gegenprobe.**
