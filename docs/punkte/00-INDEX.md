@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 210 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 5 |
+| `laufend_claudecode` | 6 |
 | `erledigt` | 299 |
-| **gesamt** | **516** |
+| **gesamt** | **517** |
 
 ## medical — 43
 
@@ -414,7 +414,7 @@
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
 | `G-243` | befund | mittel | [die Recovery-Schwellen stehen im Mockup, nicht im Punkt](todos/recovery-g-0243-die-recovery-schwellen-stehen-im-mockup-nicht-im-punkt.md) | offen | — | — |
-| `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](laufend_claudecode/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | laeuft (claudecode) | — | — |
+| `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](laufend_claudecode/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | laeuft (claudecode) | — | G-365 |
 
 ## goals — 6
 
@@ -460,7 +460,7 @@
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | — |
 
-## quer — 108
+## quer — 109
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -572,6 +572,7 @@
 | `G-359` | befund | hoch | [1.343 Mockup-Elemente fehlen in der UI](laufend_claudecode/quer-g-0359-1343-mockup-elemente-fehlen-in-der-ui.md) | laeuft (claudecode) | — | C-417, C-418, G-360 |
 | `G-360` | feature | hoch | [coach, market und admin als eigene Apps](todos/quer-g-0360-coach-market-admin-als-eigene-apps.md) | offen | — | G-361, G-362 |
 | `G-363` | entscheidung | mittel | [wer schlaegt die naechste Phase vor?](todos/quer-g-0363-wer-schlaegt-die-naechste-phase-vor.md) | offen | — | — |
+| `G-365` | feature | hoch | [vier Schritte je Kachel](laufend_claudecode/quer-g-0365-vier-schritte-je-kachel.md) | laeuft (claudecode) | — | — |
 
 ## market — 1
 

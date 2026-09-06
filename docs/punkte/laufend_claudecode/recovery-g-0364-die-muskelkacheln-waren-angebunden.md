@@ -103,3 +103,145 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Bericht
+
+**Claude Code, 2026-09-06.**
+
+### 1 · Was der Leseweg liefert — und warum die Kachel ihn nicht nahm
+
+`[cmd]` **`recovery.checkins.soreness` ist ein `jsonb` und traegt
+den Muskelkater je Gruppe.** `[cmd]` **Auf `dev@lumeos.app`,
+juengste drei Zeilen:**
+
+    2026-11-06 | {"back": 1, "chest": 1}
+    2026-11-05 | {"back": 1, "chest": 1}
+    2026-11-04 | {"back": 1, "chest": 1}
+
+`[cmd]` **`checkin-read.ts:28` liest es** (`soreness:
+Record<string, number>`), **und `checkin-streifen.tsx:59` zeigt es
+seit G-160.**
+
+**Die Fundstelle, nach der der Auftrag fragt:**
+
+`[cmd]` **`ansicht.tsx:215` rief `<RecMuscleMap />` OHNE Prop auf**
+— **anders als `<RecHRV stand={checkins} />` eine Zeile weiter.**
+
+`[read]` **Die Daten kamen nie an der Kachel an.** **Sie rechnete
+mit `MUSCLE_STATE` und `CHECKIN` aus `motor.ts`** — den
+Entwurfskonstanten.
+
+### Eine Berichtigung an der Vorgeschichte
+
+`[cmd]` **`git show f725899d` nachgesehen: dort stand `<RecMuscleMap />`
+schon ohne Prop**, und `tab-messwerte.tsx` trug im Kopf
+*,,ALLES IST ATTRAPPE"*.
+
+`[read]` **Was f725899d anband, waren die Check-in-Zeile und die
+Muskelstufen** — **nicht die Werte der Karte.** `[cmd]` **Die Marke
+sitzt seit `e274735b` an der Kachel, dem Commit, der das Modul als
+Attrappe einfuehrte.**
+
+`[read]` **Toms Beobachtung stimmt trotzdem, und zwar in dem, was
+er beschreibt:** `[cmd]` **die Karte zeigt 18 Gruppen mit Farben,
+und *Full map →* springt auf `?tab=muscles`** (`ansicht.tsx:316`).
+**Beides funktioniert und hat immer funktioniert.**
+
+`[read]` **Was nicht stimmte, war der Vermerk:** *,,noch nicht
+angebunden — die Zahlen sind erfunden"*. **Der Leseweg lag
+daneben, ungenutzt.**
+
+### 2 · und 3 · Die echten Werte, drei Kacheln
+
+`[cmd]` **`Muscle recovery` und `Per-muscle detail`**
+(`tab-messwerte.tsx`) **und `Muscle readiness`** (`ansicht.tsx`,
+Today-Reiter) **lesen jetzt den erfassten Muskelkater und die
+Schlafqualitaet.**
+
+    vorher   soreness aus MUSCLE_STATE       (Entwurf)
+             sleepQuality aus CHECKIN        (Entwurf)
+    nachher  soreness aus checkins.soreness  (erfasst)
+             sleepQuality aus dem Check-in   (erfasst)
+
+`[cmd]` **Am Schirm belegt** (`backup/g359b-recovery-g364-muscles.png`):
+**beide Kacheln tragen die Pille *echte Daten* und den Untertitel
+*,,Muskelkater aus dem Check-in 2026-11-06"*.**
+
+`[cmd]` **Attrappen im Muskelreiter: 3 -> 1.**
+
+### Was Entwurf BLEIBT, und warum es dasteht
+
+`[cmd]` **`hours` und `sets` je Muskel haben keinen Leseweg** —
+**kein Volumen je Muskelgruppe in `apps/web/src/lib/training`.**
+
+`[read]` **Deshalb sagt die Kachel es selbst:** *,,Muskelkater
+erfasst, Volumen aus dem Entwurf"*. `[read]` **Kein pauschaler
+Vermerk mehr, sondern die genaue Grenze** — **das ist der
+Unterschied, um den es in diesem Punkt geht.**
+
+`[read]` **Nicht erfunden** (C-378): **die Spalten dafuer gibt es
+nicht, also wird nichts gerechnet, was so tut als gaebe es sie.**
+
+### 4 · Dasselbe Muster — gezaehlt
+
+`[cmd]` **40 Kacheln tragen eine Marke UND stehen in einer Datei
+mit Leseweg.** `[cmd]` **Davon 23 mit der PAUSCHALEN Marke
+`attrappe={ATTRAPPE}`:**
+
+    training       8    coach          4
+    recovery       4    nutrition      3
+    supplements    3    goals          1
+
+`[read]` **Das sind Verdachtsfaelle, keine belegten
+Falschaussagen** — **eine Marke in einem Fehlerzweig ist richtig.**
+`[cmd]` **Gegenprobe an `Morning check-ins`
+(`checkin-streifen.tsx:38`): die Marke steht dort NUR im
+Fehlerzweig** — **korrekt, kein Fund.**
+
+`[read]` **Die uebrigen 17 mit bedingter Marke habe ich deshalb
+ausgeschlossen.** **Je Kachel gehoert nachgesehen, ob sie den
+Leseweg ihrer Datei wirklich benutzt** — **genau die Pruefung, die
+bei den Muskelkacheln unterblieben ist.**
+
+**Die 23 zur Durchsicht:**
+
+    training/ansicht.tsx      This week · Training readiness ·
+                              Weekly volume · Streak · Mesocycle ·
+                              Routines · Recent sessions ·
+                              Volume by muscle
+    coach/ansicht.tsx         Latest from your coaches ·
+                              Coaching balance · Trust circle ·
+                              Coach activity
+    recovery/ansicht.tsx      Pending actions · Overtraining watch
+    recovery/tab-messwerte    Phone camera HRV · Score paths
+    nutrition/tab-plans.tsx   Plan settings · Lifecycle types ·
+                              7-day compliance
+    supplements/tab-spec.tsx  Redundancy detection ·
+                              Timing conflicts · Inventory
+    goals/ansicht.tsx         Goal timeline · 2026
+
+`[read]` **`training/ansicht.tsx` mit acht ist der naechste
+Verdacht** — `[cmd]` **dort werden `verlauf` und `readiness`
+durchgereicht** (G-69/G-86).
+
+### Ein Waechter musste nachziehen
+
+`[cmd]` **`v2-attrappen.test.ts:499` zaehlte die Marken je Datei**
+— **ansicht 3 -> 2, tab-messwerte 4 -> 2.**
+
+`[read]` **Nicht abgeschwaecht: die Zahl ist gesunken, weil zwei
+Kacheln angebunden wurden** — genau der Fall, den der Kommentar dort
+vorsieht (*,,wer eine anbindet, entfernt `attrappe` und zaehlt die
+Erwartung herunter"*).
+
+### Vollstaendiger Lauf
+
+    tsc --noEmit    sauber
+    next lint       keine Warnung, kein Fehler
+    Tests           1500 / 1500 gruen, 0 Fehler
+    dev@lumeos.app  nicht geschrieben
+    gestaged        nichts
+
+## Abnahme
+
+_(vom Orchestrator)_
