@@ -557,8 +557,27 @@ Attrappe.**
 `[read]` **Keine Auswahl, keine Reihenfolge nach Wichtigkeit.**
 **Jeder Reiter.**
 
-`[cmd]` **Die Form ist abgenommen:** Gebautes oben, fehlende Kacheln,
-Trennlinie, Mockup-Reiter darunter.
+### Die Form, abgenommen von Tom am 2026-09-07
+
+> *,,oben angebundenes plus mockups der noch nicht angebundenen und
+> unten die mockups der angebundenen als vergleich"*
+
+    OBEN     das Angebundene
+             + die Mockups dessen, was noch nicht angebunden ist
+
+    ------   Trennlinie
+
+    UNTEN    die Mockups des Angebundenen, als Vergleich
+
+`[read]` **Oben steht, was der Nutzer heute hat** — **echte Kacheln
+und Attrappen dessen, was noch fehlt.**
+
+`[read]` **Unten steht nur das, was oben schon angebunden ist** —
+**zum Vergleich Ist gegen Soll.**
+
+`[cmd]` **Damit doppelt sich unten nichts, was oben als Attrappe
+steht** — **eine Attrappe braucht keine Referenz auf sich
+selbst.**
 
 ### Und wo ein Mockup-Reiter keinen Gegenpart hat
 

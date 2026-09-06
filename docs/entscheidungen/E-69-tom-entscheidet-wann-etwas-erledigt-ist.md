@@ -52,6 +52,24 @@ Tom, 2026-09-07:
 
 `[read]` **Kein Ersetzen** — **ein Danebenstellen.**
 
+### Die Anordnung, praezisiert 2026-09-07
+
+Tom: *,,oben angebundenes plus mockups der noch nicht angebundenen
+und unten die mockups der angebundenen als vergleich."*
+
+    OBEN     das Angebundene
+             + Mockups dessen, was noch nicht angebunden ist
+
+    ------   Trennlinie
+
+    UNTEN    die Mockups des Angebundenen, als Vergleich
+
+`[read]` **Oben steht, was der Nutzer heute hat.** `[read]` **Unten
+nur das, was oben schon angebunden ist.**
+
+`[read]` **Eine Attrappe braucht keine Referenz auf sich selbst** —
+**deshalb doppelt sich unten nichts.**
+
 `[read]` **Oben das Angebundene, unten das Mockup wie es gedacht
 war.** `[read]` **Damit entscheidet Tom im Vergleich, nicht aus der
 Erinnerung.**
