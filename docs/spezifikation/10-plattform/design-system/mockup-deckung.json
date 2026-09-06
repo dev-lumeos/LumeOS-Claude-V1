@@ -1,0 +1,83 @@
+{
+  "gemessen": "2026-09-06",
+  "gesamt": 2488,
+  "sichtbar": 1145,
+  "fehlt": 1343,
+  "je": [
+    {
+      "modul": "admin",
+      "mockup": 155,
+      "fehlt": null
+    },
+    {
+      "modul": "buddy",
+      "mockup": 265,
+      "fehlt": null
+    },
+    {
+      "modul": "coach",
+      "mockup": 521,
+      "fehlt": 421
+    },
+    {
+      "modul": "completeness",
+      "mockup": 182,
+      "fehlt": null
+    },
+    {
+      "modul": "crossmodule",
+      "mockup": 44,
+      "fehlt": null
+    },
+    {
+      "modul": "dashboard",
+      "mockup": 42,
+      "fehlt": 3
+    },
+    {
+      "modul": "goals",
+      "mockup": 341,
+      "fehlt": 105
+    },
+    {
+      "modul": "market",
+      "mockup": 314,
+      "fehlt": null
+    },
+    {
+      "modul": "medical",
+      "mockup": 352,
+      "fehlt": 199
+    },
+    {
+      "modul": "nutrition",
+      "mockup": 259,
+      "fehlt": 152
+    },
+    {
+      "modul": "onboarding",
+      "mockup": 13,
+      "fehlt": null
+    },
+    {
+      "modul": "recovery",
+      "mockup": 250,
+      "fehlt": 170
+    },
+    {
+      "modul": "stubs",
+      "mockup": 230,
+      "fehlt": null
+    },
+    {
+      "modul": "supplements",
+      "mockup": 423,
+      "fehlt": 263
+    },
+    {
+      "modul": "training",
+      "mockup": 300,
+      "fehlt": 30
+    }
+  ]
+}

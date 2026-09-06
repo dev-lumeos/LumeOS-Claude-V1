@@ -49,7 +49,7 @@
 //     node tools/punkte-pruefen.mjs --ohne-db  (ohne Datenbank)
 import fs from 'node:fs'
 import path from 'node:path'
-import { execFileSync } from 'node:child_process'
+import { execFileSync, spawnSync } from 'node:child_process'
 
 import { punkteLesen, nummernTeil, ORDNER } from './punkte-lesen.mjs'
 
@@ -455,7 +455,16 @@ if (meldungen.length > 0 && AUSFUEHRLICH) {
 }
 
 // ── Der Sollstand entscheidet ───────────────────────────────────────
-if (meldungen.length === SOLLSTAND) {
+const kettenlauf = spawnSync(process.execPath, ['tools/kettenlauf-status-pruefen.mjs'], {
+  cwd: WURZEL,
+  encoding: 'utf8',
+  env: process.env,
+})
+if (kettenlauf.stdout) process.stdout.write(kettenlauf.stdout)
+if (kettenlauf.stderr) process.stderr.write(kettenlauf.stderr)
+const kettenlaufGruen = kettenlauf.status === 0
+
+if (meldungen.length === SOLLSTAND && kettenlaufGruen) {
   console.log('')
   console.log(`[punkte] gruen: ${meldungen.length} Befunde, genau der `
     + 'Sollstand. Kein neuer Schaden.')
@@ -463,6 +472,10 @@ if (meldungen.length === SOLLSTAND) {
 }
 
 console.error('')
+if (!kettenlaufGruen) {
+  console.error('[punkte] ROT: der taegliche Kettenlauf ist fehlgeschlagen oder ueberfaellig.')
+  process.exit(1)
+}
 if (meldungen.length > SOLLSTAND) {
   console.error(`[punkte] ROT: ${meldungen.length} Befunde, Soll `
     + `${SOLLSTAND} — ${meldungen.length - SOLLSTAND} neu hinzugekommen.`)

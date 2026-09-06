@@ -338,6 +338,26 @@ mindestens einen in `next/`.
 
 `[read]` **Er steht im Punktelauf, den der Zyklus ohnehin macht.**
 
+## Tom entscheidet, wann eine Attrappe faellt
+
+**Tom, 2026-09-07:** *,,wenn etwas vollumfaenglich angebunden ist
+nehme ich das ab und dann ist die attrappe obsolet weil erledigt.
+und ich definiere wann was erledigt ist."*
+
+    angebunden      der Agent hat gebaut
+    geprueft        der Orchestrator hat gemessen
+    abgenommen      Tom hat es gesehen
+                    -> erst jetzt faellt die Attrappe
+
+`[read]` **Kein Agent entfernt eine Attrappe. Der Orchestrator auch
+nicht.**
+
+`[read]` **Bis zur Abnahme bleibt sie stehen, auch wenn daneben die
+echte Sache schon funktioniert** (E-69).
+
+`[read]` **Das kostet ein paar Tage doppelte Anzeige** — **und
+verhindert, dass etwas still verschwindet.**
+
 ## Eine Attrappe bleibt sichtbar und sagt, worauf sie wartet
 
 **Tom, 2026-09-07:** *,,nicht angebunden heisst es bleibt als
