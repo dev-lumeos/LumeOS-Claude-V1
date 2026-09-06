@@ -372,3 +372,109 @@ richtig.**
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Bericht — supplements
+
+**Claude Code, 2026-09-06.** **35 unbedingte Marken geprueft, KEINE
+falsch.** **Nichts geaendert.**
+
+### Die Tabelle
+
+    Kachelgruppe (Datei)      oben  unten  war angebunden  was fehlt
+    ------------------------------------------------------------------
+    Compliance (4)            JA    JA *   nie             nichts *
+    Extended (6)              JA    --     nie             user_supplement_
+                                                            cycles: 0 Zeilen
+    Injektionen (14)          JA    --     nie             medical.injection_
+                                                            logs: 0 Zeilen,
+                                                            kein Leseweg
+    Intelligence (11)         JA    --     nie             GAP_ROWS ist
+                                                            Entwurf; Sitzung
+                                                            fehlt im Kontext
+
+    * `ComplianceEcht` rendert DARUEBER (G-359). Die vier Marken
+      gehoeren der Entwurfsfassung, die als Referenz darunter steht —
+      sie SIND das Soll.
+
+### Warum keine falsch ist
+
+`[read]` **Anders als in training und recovery liegt hier kein
+ungenutzter Leseweg daneben.** **Je Gruppe nachgemessen:**
+
+`[cmd]` **Injektionen:** `medical.injection_logs` hat **0 Zeilen**,
+`injection_site_conditions` **0**. `[cmd]` **Und es gibt keinen
+Leseweg** — `grep` ueber `apps/web/src/lib` findet keine Datei, die
+`injection_logs` liest. **14 Marken, alle ehrlich.**
+
+`[cmd]` **Extended:** `supplements.user_supplement_cycles` hat **0
+Zeilen**. **6 Marken, alle ehrlich.**
+
+`[cmd]` **Intelligence:** die Zahlen kommen aus `GAP_ROWS` und
+`CATALOG` — **Entwurfskonstanten in `daten.ts`, keine Tabelle.**
+`[cmd]` **Und *Session today · Push B* haette einen Leseweg**
+(`verlauf.sitzungen`, gerade in training angebunden) — **aber der
+Supplements-Kontext fuehrt keine Sitzung.** `[read]` **Das waere
+Leseweg-Arbeit und ist ausserhalb dieses Auftrags** — gemeldet.
+
+`[cmd]` **Compliance:** `supplements.intake_logs` hat **810 Zeilen**,
+und **`ComplianceEcht` liest sie bereits** (`ansicht.tsx:331`).
+**Die vier Marken sitzen in `SuppCompliance`, der Entwurfsfassung
+darunter.**
+
+### Ein Fehlalarm im eigenen Vorgehen
+
+`[cmd]` **`Redundancy detection` sah zuerst wie ein Fund aus:** die
+Kachel rechnet aus `doppelt`, also aus einer Variablen — **nicht aus
+einer festen Zahl.**
+
+`[cmd]` **Nachgesehen: `doppelt` filtert `GAP_ROWS`**
+(`tab-spec.tsx:192`), **eine Entwurfskonstante.** `[read]` **Eine
+Rechnung ueber erfundene Zahlen bleibt erfunden** — **die Marke ist
+richtig.**
+
+`[read]` **Die Lehre: „rechnet statt fest verdrahtet" ist kein
+Beleg fuer Anbindung.** **Die Frage ist, woher die Eingabe kommt.**
+
+### Schritt 3, nachgemessen
+
+`[cmd]` `git log -S` **fuer drei Kacheln:**
+
+    Rotation map          5d5bdffb  complete the supplements mockup
+    Active protocols      f4199db8  fill the supplements sub components
+    Redundancy detection  5d5bdffb  complete the supplements mockup
+
+`[read]` **Alle drei kamen als Mockup herein und waren nie
+angebunden.**
+
+### Am Schirm, alle elf Reiter
+
+    Reiter       Attrappen  Kacheln     Reiter      Attrappen  Kacheln
+    today             10       16       intel             7        8
+    stack              2        3       injection         7       11
+    inventory          6       11       extended          7        8
+    compliance         4        7       cost             10       10
+
+`[cmd]` **`stack` mit 2 von 3 und `compliance` mit 4 von 7 zeigen,
+dass die echten Fassungen oben laufen** — die Attrappen darunter
+sind die Referenz aus G-359.
+
+### Zahlen
+
+    unbedingte Marken     35
+      FALSCH               0
+      ehrlich             35
+    geaendert              nichts
+
+### Vollstaendiger Lauf
+
+    tsc --noEmit    sauber
+    next lint       keine Warnung, kein Fehler
+    Tests           1500 / 1500 gruen, 0 Fehler
+    dev@lumeos.app  nicht geschrieben
+    gestaged        nichts
+
+**Naechstes Modul: goals** (15 Dateien, 10 Reiter).
+
+## Abnahme
+
+_(vom Orchestrator)_

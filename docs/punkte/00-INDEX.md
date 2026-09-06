@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 215 |
+| `todos` | 216 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 6 |
 | `erledigt` | 299 |
-| **gesamt** | **522** |
+| **gesamt** | **523** |
 
 ## medical — 43
 
@@ -292,9 +292,9 @@
 | `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 60
+## supplements — 61
 
-### beauftragbar — 59
+### beauftragbar — 60
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -356,6 +356,7 @@
 | `G-255` | entscheidung | niedrig | [drei Attrappen-Konstanten ohne Aufrufer](erledigt/supplements-g-0255-drei-attrappen-konstanten-ohne-aufrufer.md) | erledigt | — | — |
 | `G-275` | feature | hoch | [die Supplement-Tagesbilanz anzeigen](erledigt/supplements-g-0275-die-tagesbilanz-anzeigen.md) | erledigt | — | — |
 | `G-281` | feature | mittel | [der Treffergrund in der Katalogsuche](erledigt/supplements-g-0281-der-treffergrund-in-der-katalogsuche.md) | erledigt | — | — |
+| `G-369` | feature | niedrig | [*Session today* braucht den Sitzungsbezug](todos/supplements-g-0369-session-today-braucht-den-sitzungsbezug.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -576,7 +577,7 @@
 | `G-359` | befund | hoch | [1.343 Mockup-Elemente fehlen in der UI](laufend_claudecode/quer-g-0359-1343-mockup-elemente-fehlen-in-der-ui.md) | laeuft (claudecode) | — | C-417, C-418, G-360 |
 | `G-360` | feature | hoch | [coach, market und admin als eigene Apps](todos/quer-g-0360-coach-market-admin-als-eigene-apps.md) | offen | — | G-361, G-362 |
 | `G-363` | entscheidung | mittel | [wer schlaegt die naechste Phase vor?](todos/quer-g-0363-wer-schlaegt-die-naechste-phase-vor.md) | offen | — | — |
-| `G-365` | feature | hoch | [vier Schritte je Kachel](laufend_claudecode/quer-g-0365-vier-schritte-je-kachel.md) | laeuft (claudecode) | — | C-421, G-366 |
+| `G-365` | feature | hoch | [vier Schritte je Kachel](laufend_claudecode/quer-g-0365-vier-schritte-je-kachel.md) | laeuft (claudecode) | — | C-421, G-366, G-369 |
 | `G-368` | befund | mittel | [Attrappen-Vermerke mit falschem Grund](todos/quer-g-0368-attrappen-vermerke-mit-falschem-grund.md) | offen | — | — |
 
 ## market — 1
