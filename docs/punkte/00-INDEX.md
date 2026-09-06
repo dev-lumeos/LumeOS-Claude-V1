@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 206 |
+| `todos` | 207 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 4 |
-| `erledigt` | 291 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 293 |
 | **gesamt** | **502** |
 
 ## medical — 43
@@ -189,7 +189,7 @@
 | `G-226` | entscheidung | mittel | [V1-Status-Marker fehlen für Recipes/Shopping/MealPlans Components in SPEC_10](erledigt/nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md) | erledigt | — | C-366, G-285 |
 | `G-227` | befund | mittel | [SPEC_03 §Flow 6 Custom Food erstellen via Barcode-Scan widerspricht Phase-2-Status](todos/nutrition-g-0227-spec-03-flow-6-custom-food-erstellen-via-barcode-scan-wide.md) | offen | — | — |
 | `G-228` | feature | mittel | [Score Level Multiplier inkonsistent zwischen SPEC_04 und SPEC_07](todos/nutrition-g-0228-score-level-multiplier-inkonsistent-zwischen-spec-04-und-s.md) | offen | — | G-283 |
-| `G-229` | feature | mittel | [Admin-Override-Flow für Tag-Korrekturen nicht belegt](laufend_claudecode/nutrition-g-0229-admin-override-flow-fuer-tag-korrekturen-nicht-belegt.md) | laeuft (claudecode) | — | C-384 |
+| `G-229` | feature | mittel | [Admin-Override-Flow für Tag-Korrekturen nicht belegt](todos/nutrition-g-0229-admin-override-flow-fuer-tag-korrekturen-nicht-belegt.md) | offen | — | C-384 |
 | `G-230` | entscheidung | niedrig | [`nutrition.water/page.tsx` und `nutrition.shopping-lists/page.tsx` als separate Pages](erledigt/nutrition-g-0230-nutrition-water-page-tsx-und-nutrition-shopping-lists-page.md) | erledigt | — | — |
 | `G-231` | befund | niedrig | [`SPEC_04 §Feature 9 MealCam` referenziert `ADR_AI_USAGE_WALLET.md` — nicht im Nutrition Spec Pfad](todos/nutrition-g-0231-spec-04-feature-9-mealcam-referenziert-adr-ai-usage-wallet.md) | offen | — | — |
 | `G-232` | befund | niedrig | [Quick-Add Makros UI-Component fehlt in SPEC_10](erledigt/nutrition-g-0232-quick-add-makros-ui-component-fehlt-in-spec-10.md) | erledigt | — | G-339, G-340 |
@@ -212,7 +212,7 @@
 | `G-258` | feature | mittel | [Pending actions im Tagebuch](erledigt/nutrition-g-0258-pending-actions-im-tagebuch.md) | erledigt | — | C-354 |
 | `G-259` | befund | mittel | [toter Leseweg und die Fensterlaufzeit](erledigt/nutrition-g-0259-toter-leseweg-und-die-fensterlaufzeit.md) | erledigt | — | — |
 | `G-260` | feature | mittel | [die Dauerregel anbinden](erledigt/nutrition-g-0260-die-dauerregel-anbinden.md) | erledigt | — | C-348 |
-| `G-261` | entscheidung | niedrig | [die Vergleichsfunktionen anbinden](laufend_claudecode/nutrition-g-0261-die-vergleichsfunktionen-anbinden.md) | laeuft (claudecode) | — | — |
+| `G-261` | entscheidung | niedrig | [die Vergleichsfunktionen anbinden](todos/nutrition-g-0261-die-vergleichsfunktionen-anbinden.md) | offen | — | — |
 | `G-262` | befund | mittel | [Pre-workout window ist Attrappe](erledigt/nutrition-g-0262-pre-workout-window-ist-attrappe.md) | erledigt | — | — |
 | `G-263` | befund | mittel | [Smart suggestions ist Attrappe](erledigt/nutrition-g-0263-smart-suggestions-ist-attrappe.md) | erledigt | — | G-279 |
 | `G-264` | befund | niedrig | [Micronutrient trend steht noch als Attrappe](erledigt/nutrition-g-0264-micronutrient-trend-steht-noch-als-attrappe.md) | erledigt | — | — |
@@ -556,9 +556,9 @@
 | `G-308` | feature | mittel | [die zwei Pakete brauchen eigene Pruefungen](erledigt/quer-g-0308-die-zwei-pakete-brauchen-eigene-pruefungen.md) | erledigt | — | — |
 | `G-312` | befund | mittel | [neunzehn Lint-Fehler](erledigt/quer-g-0312-neunzehn-lint-fehler.md) | erledigt | — | — |
 | `G-334` | befund | hoch | [`test-user` taugt nicht mehr als Nachweiskonto](erledigt/quer-g-0334-test-user-taugt-nicht-mehr-als-nachweiskonto.md) | erledigt | — | — |
-| `G-352` | entscheidung | hoch | [drei Zielskalen widersprechen sich](laufend_claudecode/quer-g-0352-drei-zielskalen-widersprechen-sich.md) | laeuft (claudecode) | — | G-354 |
-| `G-354` | befund | mittel | [ein sechstes Ziellisten-Modal](laufend_claudecode/quer-g-0354-ein-sechstes-ziellisten-modal.md) | laeuft (claudecode) | — | — |
-| `G-355` | befund | hoch | [Goals und Body gegen alle Quellen pruefen](todos/quer-g-0355-goals-und-body-gegen-alle-quellen-pruefen.md) | offen | — | — |
+| `G-352` | entscheidung | hoch | [drei Zielskalen widersprechen sich](erledigt/quer-g-0352-drei-zielskalen-widersprechen-sich.md) | erledigt | — | G-354 |
+| `G-354` | befund | mittel | [ein sechstes Ziellisten-Modal](erledigt/quer-g-0354-ein-sechstes-ziellisten-modal.md) | erledigt | — | — |
+| `G-355` | befund | hoch | [Goals und Body gegen alle Quellen pruefen](laufend_claudecode/quer-g-0355-goals-und-body-gegen-alle-quellen-pruefen.md) | laeuft (claudecode) | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

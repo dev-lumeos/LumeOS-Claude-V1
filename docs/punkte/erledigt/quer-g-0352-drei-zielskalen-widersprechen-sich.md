@@ -9,6 +9,8 @@ kind_von: G-222
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: d5cad642
 beruehrt:
   tabellen: [goals.user_goals]
 zahlen:
@@ -392,3 +394,23 @@ nicht.**
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Abnahme
+
+**2026-09-07, mit G-354 abgenommen: vier Achsen, eine Antwort.**
+
+`[cmd]` **`subtype` traegt fuenf gelebte Werte, kein NULL.**
+
+`[cmd]` **Und `profiles.nutrition_goal` ist die einzige Achse mit
+einem Schreibweg** — **`lib/goals/schreiben.ts` kann nur aendern,
+nicht anlegen, und kennt weder `goal_type` noch `subtype`.**
+
+`[read]` **Damit beantwortete sich die Frage selbst.**
+
+**Tom hat am 2026-09-07 entschieden** (E-67):
+
+    Onboarding   Grundeinstellungen, profiles.nutrition_goal
+    Goals        Zielwerte, Phasen, Termine
+
+`[cmd]` **Und `subtype` bekommt einen CHECK, sobald ein Schreibweg
+existiert.**

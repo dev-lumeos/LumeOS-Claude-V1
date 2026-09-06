@@ -9,6 +9,8 @@ kind_von: G-352
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: d5cad642
 beruehrt:
   tabellen: [goals.user_goals]
 zahlen:
@@ -318,4 +320,94 @@ weiter offen (G-352) und waere Codex' Arbeit.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator.**
+
+### Die Drei steht im CHECK — doppelt gesichert
+
+`[cmd]` **Selbst nachgelesen aus dem Bericht:**
+
+    user_goals_check1
+      CHECK (status <> 'active' OR (priority BETWEEN 1 AND 3))
+    uq_user_goals_active_slot
+      UNIQUE ON (user_id, priority) WHERE status = 'active'
+
+`[read]` **Der CHECK begrenzt den Wert, der Index verhindert zwei
+Ziele auf demselben Platz.**
+
+`[read]` **Und er hat seine eigene Aussage berichtigt:** **er hatte
+in G-352 geschrieben, das Anlegen sei durch eine *unentschiedene
+Produktfrage* blockiert.** `[cmd]` **Zu weit gefasst** — **die Zahl
+ist entschieden, offen ist nur, welchen freien Platz ein neues Ziel
+bekommt.**
+
+`[cmd]` **Und derselbe zu weite Satz stand im `InEntwicklungKnopf`**
+— **berichtigt, mit Fundstelle.**
+
+`[read]` **Zum zweiten Mal heute: eine Attrappe log ueber ihren
+eigenen Zustand** (nach G-305).
+
+### Angeschlossen statt berichtigt — und der Typ hat mitgearbeitet
+
+`[read]` **Der Auftrag liess beides zu.** `[cmd]` **Er hat
+angeschlossen:** neu `lib/goals/ziel-arten.ts`, **`modale.tsx:117`
+holt die vier Werte von dort.**
+
+`[read]` **Seine Begruendung ist die richtige:** *,,ein berichtigter
+Wert in einer eigenen Liste laeuft beim naechsten Mal wieder
+auseinander"* — **genau das ist bei G-339 passiert.**
+
+**Und dann kam der Gewinn:**
+
+`[cmd]` **`tsc` meldete drei Fehler** — `type === 'strength'` **hat
+keine Ueberschneidung mehr.**
+
+`[cmd]` **`strength` war in der Altrepo-Liste eine ART, in der
+Datenbank ist es ein `subtype` unter `performance`.**
+
+`[read]` **Die drei Vergleiche steuerten Beispieltexte und haetten
+still den falschen Zweig genommen.** `[read]` **Ein berichtigter
+Wert haette sie nicht gefunden** — **der Typ schon.**
+
+`[cmd]` **Ersetzt durch `Record<ZielArt, ...>`** — **vollstaendig
+erzwungen.**
+
+### Die Zaehlung ist die Lehre aus G-339
+
+`[read]` **Nicht nach `const types =` gesucht** — **sondern nach der
+Wirkung:** Literal-Felder, feste `<option>`-Reihen, Knoepfe mit
+`aria-pressed`.
+
+    15 Fenster mit eigener Liste
+      12 Reiternamen        kein CHECK dahinter
+       3 Fachwerte
+         supplements/tabs.tsx    8 = CHECK    OK
+         training/tabs-spec.tsx  4 = CHECK    OK
+         goals/modale.tsx        6 != CHECK   FALSCH
+
+`[cmd]` **`goals/phase-editor.tsx` sieht wie eine Liste aus, ist
+keine** — `t1`, `s1` **sind Zeilenkennungen einer Attrappe.**
+
+`[read]` **Damit war das Zielmodal die einzige abweichende Liste** —
+**gemessen, nicht vermutet.**
+
+### Und ein Kommentar, der eine Tabelle wegdeklarierte
+
+`[cmd]` **`modale.tsx:13` behauptete:** *,,es gibt weder
+`goals.user_goals` noch `goals.body_measurements`."*
+
+`[cmd]` **Beide gibt es** — **`user_goals` mit 23 Spalten und 11
+Zeilen, und `lib/goals/schreiben.ts` aendert sie bereits.**
+
+`[read]` **Ein Kommentar, der eine vorhandene Tabelle fuer abwesend
+erklaert, wird beim naechsten Auftrag als Grund zitiert.**
+
+`[read]` **Und er erklaert Toms Beobachtung von heute:** *,,da fehlt
+mittlerweile sehr viel das ploetzlich verschwunden ist."*
+`[read]` **Vielleicht ist nichts verschwunden** — **vielleicht steht
+an mehreren Stellen, es sei nie da gewesen.** **Das misst G-355.**
+
+`[cmd]` **`health` bekommt eine leere Unterartenliste** — **null
+Zeilen im Bestand, kein erfundener Wert** (C-378).
+
+**Abgenommen.**
+

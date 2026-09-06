@@ -7,8 +7,6 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: G-250
 entscheidung: E-31
-agent: claudecode
-beauftragt: 2026-09-07
 beruehrt:
   tabellen: [goals.nutrition_targets]
 zahlen:
@@ -84,3 +82,11 @@ das Gate und der Punkt wird von selbst wieder zur Frage.**
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Gemessen am 2026-09-07: bewusst zurueckgestellt.
+
+`[cmd]` **Hinter einem funktionierenden Gate-Waechter** — **gemessen
+am 2026-09-07.**
+
+`[read]` **Der Punkt wartet nicht auf sich selbst, sondern auf eine
+Entscheidung.**
