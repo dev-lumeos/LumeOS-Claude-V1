@@ -1505,6 +1505,16 @@
       ]
     },
     {
+      "id": "417",
+      "path": "supabase/_pipeline/05_user_tabellen/417_recipe_curation_decision_contract.sql",
+      "kind": "sql",
+      "creates": "C-417/C-31: atomare Admin-Entscheidung, BLS-gesicherter Rezeptkatalog-Snapshot und Entscheidungsprotokoll",
+      "depends_on": [
+        "411",
+        "061"
+      ]
+    },
+    {
       "id": "412",
       "path": "supabase/_pipeline/00_querschnitt/412_activity_stream.sql",
       "kind": "sql",
