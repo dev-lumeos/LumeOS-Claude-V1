@@ -623,6 +623,154 @@ Bildschirmfotos belegt, nicht mit der Zahl.**
 Auftrag** — er findet die *weg*-Faelle, nicht die *versteckt*-Faelle.
 **Fuer coach ist er richtig, fuer training war er blind.**
 
+## Bericht — Auftrag 3 (nutrition, supplements, medical, recovery)
+
+**Claude Code, 2026-09-06.** **Zwei Module eingeblendet, zwei
+gemessen und gemeldet** — bei medical und recovery gibt es nichts
+einzublenden.
+
+### Die beiden Zahlen je Modul
+
+`[read]` **Die Trennung, die der Auftrag verlangt** — und sie faellt
+sehr unterschiedlich aus:
+
+    Modul         versteckt   nie gebaut   Mockupdateien
+    nutrition             4           45               3
+    supplements           8          124               4
+    medical               0           66               4
+    recovery              0          118               5
+    ---------------------------------------------------------
+    training              5            7    (Auftrag 2)
+    goals                 2           12    (Auftrag 1)
+    dashboard             0            0    (Auftrag 2)
+
+`[read]` **Die zweite Spalte ist die Antwort auf die Frage des
+Auftrags:** **353 Elemente in diesen vier Modulen sind nie gebaut
+worden** — **kein Einblenden, sondern Bauen.**
+
+### nutrition — 4 versteckt, alle behoben
+
+`[cmd]` **Meine erste Zaehlung sagte sechs.** `[cmd]` **Zwei davon
+fallen aber auf `LeerHinweis` zurueck, nicht auf einen Entwurf**
+(Naehrstoffordnung, Vorlieben) — **ein ehrlicher Leerzustand ist
+keine Verdraengung.** **Nicht angefasst.**
+
+`[cmd]` **Die vier echten:** `PreWorkoutOptimizer`,
+`MicronutrientSnapshot`, `BelowThreshold`, `NutritionPlannerTab`.
+
+**Am Schirm, vorher/nachher:**
+
+    diary      2 Attrappen -> 5      Kacheltitel  7 -> 10
+    planner    1 -> 2
+    nutrients  1 -> 1   (unveraendert, siehe oben)
+
+`[cmd]` **Die Kachelzahl ging von 17 auf 16** — **das sah nach
+Verlust aus und ist keiner.** `[cmd]` **Nachgemessen ueber die
+Titel: *Pre-workout window* ist NEU dazugekommen**, und
+*Micronutrient snapshot* sowie *Below threshold* stehen jetzt
+doppelt (echt + Entwurf, gleicher Titel). **Die Differenz kommt von
+Kacheln ohne Titel, die der Zaehler nicht sieht.**
+
+`[read]` **Die doppelten Titel sind die gewollte Folge von E-68** —
+oben was gilt, darunter was geplant ist. **Ob sie unterschiedlich
+heissen sollen, ist eine Gestaltungsfrage: gemeldet, nicht
+geaendert.**
+
+### supplements — 8 versteckt, alle behoben
+
+    Reiter       vorher   nachher
+    today             1        10
+    cost              2        10
+    inventory         1         6
+    compliance        1         4
+    stack             1         2
+    extended          7         7   (Gate, nicht verdraengt)
+
+`[cmd]` **`extended` bleibt gleich, und das ist richtig:** der
+Zweig haengt an der Freischaltung (`gate.offen`), **beide Teile
+stehen jetzt untereinander** — der gesperrte Hinweis ist selbst der
+Entwurf.
+
+### medical und recovery — nichts versteckt
+
+`[cmd]` **medical hat genau einen Ternaer, `Pill / Pill`** —
+Gestaltung, keine Ansicht. `[cmd]` **recovery hat keinen.**
+
+`[read]` **Damit ist ihre gesamte Fehlmenge *nie gebaut*:** 66 und
+118 Elemente. `[read]` **Der Auftrag sagt *,,kein Umbau, keine
+Anbindung"*** — **und neue Ansichten zu bauen ist beides nicht,
+aber auch kein Einblenden.**
+
+`[cmd]` **recovery ist der auffaelligste Fall im ganzen Repo:** 5
+Mockupdateien, **103 Beschriftungen in der UI gegen 118 nie
+gebaute** — **mehr als die Haelfte des Moduls fehlt.**
+
+`[read]` **Gemeldet, nicht gebaut** — wie coach (G-360) braucht das
+eine eigene Entscheidung.
+
+### Bestehendes unangetastet
+
+`[read]` **Aus `echt ? <Echt/> : <Entwurf/>` wurde
+`{echt && <Echt/>}` plus `<Entwurf/>` darunter.** **Die Bedingung
+fuer den echten Teil ist in allen zwoelf Faellen woertlich
+dieselbe geblieben.**
+
+`[cmd]` **Der Waechter prueft genau das** — je Fall einmal fuer den
+Entwurf und einmal fuer den echten Teil, 37 Proben.
+
+### Waechter und Sabotage
+
+`[cmd]` **Neu: `nutrition/__tests__/entwurf-wird-nicht-verdraengt.test.ts`,
+37 Proben ueber beide Module.**
+
+`[cmd]` **Je Zusage eine Sabotage, alle sechs ROT:**
+
+    Verdraengung bei Pre-workout kehrt zurueck   fail=1
+    Mikro-Entwurf abgeschaltet                   fail=1
+    ECHTER Mikro-Teil abgeschaltet               fail=1
+    ECHTER Today-Teil abgeschaltet               fail=1
+    Cost-Entwurf abgeschaltet                    fail=1
+    Inventory-Entwurf abgeschaltet               fail=1
+    Nachlauf                                     fail=0
+
+### Ein Fehlalarm im eigenen Waechter, behoben
+
+`[cmd]` **Erster Lauf: 5 von 37 rot** — **alle fuenf falsch.**
+
+`[cmd]` **Ursache: die echte Wache `{mikro && mikro.zeilen.length > 0 &&`
+endet auf `0 &&`** — **mein Muster las das als literale `0` und
+hielt eine Datenpruefung fuer eine Abschaltung.**
+
+`[read]` **Behoben durch eine Vorbedingung:** steht vor der `0` ein
+Vergleichszeichen, ist es eine Datenpruefung. `[cmd]` **Die
+Sabotageprobe belegt, dass die Ausnahme den Waechter nicht blind
+gemacht hat** — `{false && <MikroSchnappschuss …>}` faellt weiter
+rot.
+
+### Vollstaendiger Lauf
+
+    tsc --noEmit         sauber
+    next lint            keine Warnung, kein Fehler
+    Tests                1500 / 1500 gruen, 0 Fehler
+    mockup-deckung.mjs   gruen (1145 / 2488, unveraendert)
+    dev@lumeos.app       nicht geschrieben
+    gestaged             nichts
+
+`[read]` **Der Deckungswaechter bleibt wieder unveraendert** — **er
+zaehlt Quelltext, und dort waren die Elemente immer.** **Er misst
+die *nie gebaut*-Spalte, nicht die *versteckt*-Spalte.**
+
+### Was aussteht
+
+    medical     66 nie gebaut, 0 versteckt
+    recovery   118 nie gebaut, 0 versteckt
+    nutrition   45 nie gebaut  (versteckt: erledigt)
+    supplements 124 nie gebaut (versteckt: erledigt)
+
+`[read]` **Das Einblenden ist in `apps/web` damit fertig** — **19
+Verdraengungen in fuenf Modulen, alle behoben.** **Was bleibt, ist
+Bauen.**
+
 ## Abnahme
 
 _(vom Orchestrator)_
