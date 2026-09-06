@@ -415,6 +415,27 @@ traegt.**
 
 `[read]` **Dann `coach`** — **der schlimmste Fall, 421 von 521.**
 
+### Bestehendes bleibt unangetastet
+
+**Tom, 2026-09-07:** *,,bestehendes bleibt wie es ist, wir blenden
+nur mockup attrappen ein als referenz."*
+
+`[read]` **Kein Umbau, keine Verbesserung, keine Anbindung.**
+
+    was steht         bleibt genau so
+    was fehlt         kommt als Attrappe darunter
+    was versteckt ist wird sichtbar gemacht, nicht umgebaut
+
+`[read]` **Auch wenn dir etwas falsch vorkommt** — **melden, nicht
+aendern.**
+
+`[cmd]` **In `goals` hast du drei Ternaries ersetzt** — **das war
+noetig, weil sie das Einblenden verhinderten.** `[read]` **Mehr
+nicht.**
+
+`[read]` **Die Attrappe ist eine Referenz, kein Ersatz** — **sie
+steht daneben, damit Tom Ist gegen Soll sieht.**
+
 ### Such nach denselben Verzweigungen
 
 `[cmd]` **In `goals` waren 18 von 26 hinter Ternaries versteckt.**
@@ -440,4 +461,6 @@ ueberholt ist:** **melden, nicht selbst verwerfen.**
     zurueckgebracht   gezaehlt
     versteckt         wie viele hinter Verzweigungen
     wirklich weg      wie viele gar nicht im Code
+    unangetastet      kein bestehendes Verhalten geaendert
     Waechter          mockup-deckung.mjs bleibt gruen
+    Bildschirmfoto    je Modul, vorher / nachher
