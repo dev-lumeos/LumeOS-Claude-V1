@@ -9,6 +9,8 @@ kind_von: G-355
 entscheidung: E-54
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: ec3fa071
 beruehrt:
   tabellen: [goals.goal_phases]
 zahlen:
@@ -188,4 +190,70 @@ gespeichert werden. Bis dahin bleibt das Feld absichtlich leer.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator. Nachgemessen.**
+
+### Vier Schreibwege, alle live
+
+`[cmd]` **Selbst gemessen:**
+
+    goals.goal_phase_start
+    goals.goal_phase_end
+    goals.body_circumference_write
+    nutrition.meal_plan_set_next_plan
+
+`[cmd]` **Und der Abzug: `meal_items_inventory_deduct_trg` auf
+`meal_items`.**
+
+`[read]` **Damit ist die Klasse *Feld ohne Schreibweg* an vier
+Stellen geschlossen** — **sie kam heute sechsmal vor.**
+
+### Der Vorrat: sein Nachweis, meine Messung
+
+`[cmd]` **Er meldet: 500 g auf 375 g nach einem Meal-Item.**
+
+`[cmd]` **Ich messe: `user_inventory` hat 0 Zeilen.**
+
+`[read]` **Kein Widerspruch** — **sein Nachweis lief in einer
+Wegwerf-Datenbank und hat aufgeraeumt.**
+
+`[read]` **Der Trigger ist da, der Weg ist belegt** — **aber auf
+`dev` und `test-user` liegt noch kein Vorrat.**
+
+`[read]` **Das ist richtig so:** **E-65 sagt, der Nutzer traegt ein,
+was er fuehrt** — **nicht der Seed.**
+
+### Der Grund ist Pflicht
+
+`[cmd]` **Phasen starten und beenden mit verpflichtendem Grund.**
+
+`[read]` **Das ist mehr als beauftragt** — **ich schrieb *,,mit
+Grund"*, er hat es erzwungen.**
+
+`[cmd]` **`transition_reason` ist damit nie leer** — **und in einem
+halben Jahr weiss man, warum eine Phase endete.**
+
+### Und ein Nebenbefund
+
+`[cmd]` **Die Pipeline-Selbstchecks nehmen jetzt zusaetzliche
+Coach-Policies an.**
+
+`[read]` **Eine Pruefung, die eine berechtigte Policy als Fehler
+meldet, ist dieselbe Klasse wie C-415** — **falsch rot ist so
+schaedlich wie falsch gruen.**
+
+### `recommended_next` bleibt leer, mit vier offenen Fragen
+
+`[cmd]` **Eingaben, Regel- gegen Modelllogik, Begruendung,
+Override.**
+
+`[read]` **Er hat nichts erfunden** — **und die vier Fragen sind die
+richtigen.**
+
+`[cmd]` **`00_MASTER_VISION.md`, Kernprinzip 3:** *,,Rule-first, AI
+second."* `[read]` **Damit ist die zweite Frage halb beantwortet:
+die Regel zuerst, das Modell verpackt.**
+
+**Als Entscheidung fuer Tom.**
+
+**Abgenommen.**
+

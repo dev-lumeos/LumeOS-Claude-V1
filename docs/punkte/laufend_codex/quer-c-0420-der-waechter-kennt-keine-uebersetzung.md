@@ -7,6 +7,8 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: C-418
 entscheidung: E-70
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   dateien:
     - tools/mockup-deckung.mjs
@@ -68,3 +70,8 @@ meldet, wenn etwas verschwindet.**
 
 `[read]` **Erst wenn die Zaehlung stimmt, darf sie als Massstab
 gelten.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-419 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

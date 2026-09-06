@@ -9,6 +9,8 @@ kind_von: G-355
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: ec3fa071
 beruehrt:
   tabellen: [goals.body_circumferences]
 zahlen:
@@ -133,3 +135,14 @@ _(vom Orchestrator)_
 
 **Mitbeauftragt mit G-357.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit G-357 abgenommen: der Schreibweg steht.
+
+`[cmd]` **`goals.body_circumference_write`** — **alle 13 Punkte,
+links und rechts getrennt.**
+
+`[cmd]` **RLS in beide Richtungen geprueft.**
+
+`[read]` **Die Oberflaeche bleibt ein UI-Auftrag.**

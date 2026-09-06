@@ -9,6 +9,8 @@ kind_von: C-377
 entscheidung: E-54
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: ec3fa071
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -327,3 +329,15 @@ eine Anforderung an einen Leseweg, der noch nicht existiert**
 
 **Mitbeauftragt mit G-357.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit G-357 abgenommen: die Mutation steht.
+
+`[cmd]` **`nutrition.meal_plan_set_next_plan`** — **setzt
+`next_plan_id`.**
+
+`[read]` **Der Folgeplan-Picker bleibt ein UI-Auftrag.**
+
+`[cmd]` **Und die Flussfrage aus E-53/E-54 bleibt offen:** **ob eine
+Planfolge neben einer Jahres-Phasenplanung stehen darf.**

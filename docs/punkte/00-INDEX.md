@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 211 |
-| `laufend_codex` | 3 |
+| `todos` | 210 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 4 |
-| `erledigt` | 296 |
-| **gesamt** | **514** |
+| `erledigt` | 299 |
+| **gesamt** | **515** |
 
 ## medical — 43
 
@@ -131,7 +131,7 @@
 | `C-376` | befund | mittel | [frieren abgeschlossene Plaene auch ein?](erledigt/nutrition-c-0376-frieren-abgeschlossene-plaene-auch-ein.md) | erledigt | — | — |
 | `C-377` | feature | hoch | [ein abgelaufener Plan braucht eine Frage](erledigt/nutrition-c-0377-ein-abgelaufener-plan-braucht-eine-frage.md) | erledigt | — | C-379 |
 | `C-378` | befund | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](erledigt/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | erledigt | — | — |
-| `C-379` | feature | mittel | [`sequence` hat kein Ziel](laufend_codex/nutrition-c-0379-sequence-hat-kein-ziel.md) | laeuft (codex) | — | C-383, G-313 |
+| `C-379` | feature | mittel | [`sequence` hat kein Ziel](erledigt/nutrition-c-0379-sequence-hat-kein-ziel.md) | erledigt | — | C-383, G-313 |
 | `C-380` | befund | mittel | [die Seed-Plaene tragen 84 mal Hammelfilet](erledigt/nutrition-c-0380-die-seed-plaene-tragen-84-mal-hammelfilet.md) | erledigt | — | — |
 | `C-382` | feature | mittel | [wer entscheidet, ob ein Plan editierbar ist?](todos/nutrition-c-0382-wer-entscheidet-ob-ein-plan-editierbar-ist.md) | offen | — | — |
 | `C-384` | befund | hoch | [wer schreibt die 30.797 Tag-Zeilen?](erledigt/nutrition-c-0384-wer-schreibt-die-30797-tag-zeilen.md) | erledigt | — | C-387 |
@@ -459,7 +459,7 @@
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | — |
 
-## quer — 107
+## quer — 108
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -529,8 +529,8 @@
 | `C-416` | feature | hoch | [ein taeglicher Kettenlauf](erledigt/quer-c-0416-ein-taeglicher-kettenlauf.md) | erledigt | — | — |
 | `C-417` | feature | hoch | [der Schirm wird nicht gemessen](erledigt/quer-c-0417-der-schirm-wird-nicht-gemessen.md) | erledigt | — | — |
 | `C-418` | befund | hoch | [der Waechter vergleicht Zeichenketten, nicht Inhalte](laufend_claudecode/quer-c-0418-der-waechter-vergleicht-zeichenketten.md) | laeuft (claudecode) | — | C-420 |
-| `C-419` | feature | hoch | [das Wallet existiert nicht](todos/quer-c-0419-das-wallet-existiert-nicht.md) | offen | — | — |
-| `C-420` | befund | hoch | [der Waechter kennt keine Uebersetzung](todos/quer-c-0420-der-waechter-kennt-keine-uebersetzung.md) | offen | — | — |
+| `C-419` | feature | hoch | [das Wallet existiert nicht](laufend_codex/quer-c-0419-das-wallet-existiert-nicht.md) | laeuft (codex) | — | — |
+| `C-420` | befund | hoch | [der Waechter kennt keine Uebersetzung](laufend_codex/quer-c-0420-der-waechter-kennt-keine-uebersetzung.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -565,11 +565,12 @@
 | `G-352` | entscheidung | hoch | [drei Zielskalen widersprechen sich](erledigt/quer-g-0352-drei-zielskalen-widersprechen-sich.md) | erledigt | — | G-354 |
 | `G-354` | befund | mittel | [ein sechstes Ziellisten-Modal](erledigt/quer-g-0354-ein-sechstes-ziellisten-modal.md) | erledigt | — | — |
 | `G-355` | befund | hoch | [Goals und Body gegen alle Quellen pruefen](laufend_claudecode/quer-g-0355-goals-und-body-gegen-alle-quellen-pruefen.md) | laeuft (claudecode) | — | G-356, G-357, G-358, G-359 |
-| `G-356` | feature | hoch | [die Umfangserfassung fehlt](laufend_codex/quer-g-0356-die-umfangserfassung-fehlt.md) | laeuft (codex) | — | — |
-| `G-357` | feature | hoch | [kein Weg in eine Phase](laufend_codex/quer-g-0357-kein-weg-in-eine-phase.md) | laeuft (codex) | — | — |
+| `G-356` | feature | hoch | [die Umfangserfassung fehlt](erledigt/quer-g-0356-die-umfangserfassung-fehlt.md) | erledigt | — | — |
+| `G-357` | feature | hoch | [kein Weg in eine Phase](erledigt/quer-g-0357-kein-weg-in-eine-phase.md) | erledigt | — | G-363 |
 | `G-358` | befund | mittel | [62 Vermerke ohne Grund](laufend_claudecode/quer-g-0358-62-vermerke-ohne-grund.md) | laeuft (claudecode) | — | — |
 | `G-359` | befund | hoch | [1.343 Mockup-Elemente fehlen in der UI](laufend_claudecode/quer-g-0359-1343-mockup-elemente-fehlen-in-der-ui.md) | laeuft (claudecode) | — | C-417, C-418, G-360 |
 | `G-360` | feature | hoch | [coach, market und admin als eigene Apps](todos/quer-g-0360-coach-market-admin-als-eigene-apps.md) | offen | — | G-361, G-362 |
+| `G-363` | entscheidung | mittel | [wer schlaegt die naechste Phase vor?](todos/quer-g-0363-wer-schlaegt-die-naechste-phase-vor.md) | offen | — | — |
 
 ## market — 1
 
