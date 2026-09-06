@@ -9,6 +9,8 @@ kind_von: C-404
 entscheidung: E-62
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: a80b4459
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -179,4 +181,53 @@ unberuehrt. Keine Daten auf `dev` geloescht, keine Datenlogik in
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator. Nachgemessen.**
+
+### Meine Diagnose war falsch
+
+`[read]` **Ich schrieb: *,,vermutlich ein Restbestand aus einem
+aelteren Lauf."***
+
+`[cmd]` **Gemessen: `days_count` stand bereits auf 28** — **aber die
+Quelle erzeugte nur drei Wochen.**
+
+`[read]` **Kein Restbestand, sondern eine Quelle, die zwei Zahlen
+auseinanderlaufen liess.**
+
+`[cmd]` **Jetzt: `tom.seed` 21/21, `dev` unveraendert 28/28** —
+**selbst nachgemessen.**
+
+`[read]` **Und die Richtung der Korrektur ist die richtige:**
+**nicht `days_count` auf 28 heben, sondern auf 21 senken** —
+**drei Wochen sind drei Wochen.**
+
+### `test-user` traegt jetzt den vollen Fall
+
+`[cmd]` **Selbst gemessen:**
+
+    Slots        4
+    Plaene       1   (7 Tage, 28 Eintraege)
+    Mahlzeiten   7
+    Vorlieben    1
+    Einnahmen   90
+
+`[read]` **Damit ist C-241 geschlossen** — **der Punkt stand seit
+Wochen offen, und G-334 sagte dasselbe von der anderen Seite.**
+
+`[read]` **Und die Regel wird wieder haltbar:** **Nachweise auf
+`test-user`, weil Laeufe auf `dev` Toms Einstellungen
+ueberschreiben.**
+
+### Und der Seed endet nicht mehr an einem festen Tag
+
+`[cmd]` **Intake-Logs reichen ohne `--today` bis zum jeweiligen
+Lauftag.**
+
+`[read]` **Das war mein Hinweis aus dem Auftrag** — **und er hat ihn
+auf den ganzen Seed angewandt, nicht nur auf die eine Tabelle.**
+
+`[read]` **C-412 hatte gezeigt, was ein festes Enddatum anrichtet:**
+**ein 7-Tage-Strom zeigte drei von fuenf Modulen.**
+
+**Abgenommen.**
+

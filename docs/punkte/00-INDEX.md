@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 209 |
-| `laufend_codex` | 1 |
+| `todos` | 207 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 287 |
+| `erledigt` | 288 |
 | **gesamt** | **499** |
 
 ## medical — 43
@@ -92,7 +92,7 @@
 | `C-177` | messung | hoch | [Thai-Aliase fehlen bewusst](erledigt/nutrition-c-0177-thai-aliase-fehlen-bewusst.md) | erledigt | — | — |
 | `C-191` | messung | mittel | [`p_user_id` kostet das Dreifache](erledigt/nutrition-c-0191-p-user-id-kostet-das-dreifache.md) | erledigt | — | — |
 | `C-192` | befund | mittel | [`p_user_id` kostet in `food_search` das Dreifache](erledigt/nutrition-c-0192-p-user-id-kostet-in-food-search-das-dreifache.md) | erledigt | — | — |
-| `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](todos/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | offen | — | — |
+| `C-193` | befund | mittel | [MealCam warnt bei hart ausgeschlossenen Zutaten](laufend_codex/nutrition-c-0193-mealcam-warnt-bei-hart-ausgeschlossenen-zutaten.md) | laeuft (codex) | — | — |
 | `C-210` | befund | mittel | [Die 28 fehlenden Naehrstofftexte — was ist gemeint?](todos/nutrition-c-0210-die-28-fehlenden-naehrstofftexte-was-ist-gemeint.md) | offen | — | — |
 | `C-211` | befund | mittel | [Selen fehlt im BLS-Katalog](erledigt/nutrition-c-0211-selen-fehlt-im-bls-katalog.md) | erledigt | — | — |
 | `C-212` | befund | mittel | [`CHORL` haengt nicht im Naehrstoffbaum](erledigt/nutrition-c-0212-chorl-haengt-nicht-im-naehrstoffbaum.md) | erledigt | — | — |
@@ -159,7 +159,7 @@
 | `C-409` | befund | hoch | [`nutrition_reorder` ist unerreichbar](erledigt/nutrition-c-0409-nutrition-reorder-ist-unerreichbar.md) | erledigt | — | — |
 | `C-410` | befund | hoch | [zwei Leser nehmen `food_tags` statt der Sicht](erledigt/nutrition-c-0410-zwei-leser-nehmen-food-tags-statt-der-sicht.md) | erledigt | — | — |
 | `C-411` | feature | mittel | [Rezeptvorschlaege in der Kuration](erledigt/nutrition-c-0411-rezeptvorschlaege-in-der-kuration.md) | erledigt | — | — |
-| `C-413` | befund | niedrig | [`tom.seed` traegt `days_count 7` bei 21 Tagen](laufend_codex/nutrition-c-0413-tom-seed-traegt-days-count-7-bei-21-tagen.md) | laeuft (codex) | — | — |
+| `C-413` | befund | niedrig | [`tom.seed` traegt `days_count 7` bei 21 Tagen](erledigt/nutrition-c-0413-tom-seed-traegt-days-count-7-bei-21-tagen.md) | erledigt | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
@@ -523,7 +523,7 @@
 | `C-383` | befund | hoch | [gehoeren Plaene in `goal_phases`?](erledigt/quer-c-0383-gehoeren-plaene-in-goal-phases.md) | erledigt | — | — |
 | `C-395` | befund | hoch | [drei Migrationen tragen Datenlogik](erledigt/quer-c-0395-drei-migrationen-tragen-datenlogik.md) | erledigt | — | — |
 | `C-412` | befund | mittel | [`intake_logs` endet am 19. August](erledigt/quer-c-0412-intake-logs-endet-am-19-august.md) | erledigt | — | C-414 |
-| `C-414` | befund | mittel | [die Querschnittssicht liegt in `nutrition`](todos/quer-c-0414-die-querschnittssicht-liegt-in-nutrition.md) | offen | — | — |
+| `C-414` | befund | mittel | [die Querschnittssicht liegt in `nutrition`](laufend_codex/quer-c-0414-die-querschnittssicht-liegt-in-nutrition.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

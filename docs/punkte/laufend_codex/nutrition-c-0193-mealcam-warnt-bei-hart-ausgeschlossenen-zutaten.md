@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: []
   dateien: ["docs/specs/Nutrition/04_adrs/ADR_MEALCAM_V1.md"]
@@ -75,3 +77,8 @@ waere gefaehrlicher als sie zu benennen.**
 etwas anderes als** `DATABASE`.
 
 **Gebaut wird es mit MealCam Phase 1.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-414 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.
