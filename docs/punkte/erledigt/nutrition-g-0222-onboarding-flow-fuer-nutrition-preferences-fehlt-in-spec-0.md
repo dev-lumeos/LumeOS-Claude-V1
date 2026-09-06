@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-07
 erledigt: 2026-09-07
-commit: OFFEN
+commit: 74c42842
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
