@@ -67,6 +67,10 @@ import {
   FehlendeHrvKacheln, FehlendeSchlafKacheln,
   FehlendeAuswertungsKacheln,
 } from './fehlende-kacheln'
+// C-418/2 (E-69): das Mockup als Referenz unter dem Gebauten.
+import {
+  RecHRVReferenz, RecSleepReferenz, RecTodayReferenz,
+} from './mockup-referenz'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
@@ -204,10 +208,11 @@ export function RecoveryAnsicht({
         <>
           <RecToday checkins={checkins} scores={scores} modalitaeten={modalitaeten} />
           <FehlendeAuswertungsKacheln />
+          <RecTodayReferenz />
         </>
       )}
       {tab === 'checkin' && <RecCheckin />}
-      {tab === 'muscles' && <RecMuscleMap />}
+      {tab === 'muscles' && <RecMuscleMap stand={checkins} />}
       {/* G-160: HRV und Sleep zeigen die erfassten Werte, sobald
           Check-ins geladen sind — der Entwurf ist nur noch Rueckfall. */}
       {/* ══ C-418 / E-68: die elf wirklich fehlenden Kacheln ══════
@@ -215,16 +220,26 @@ export function RecoveryAnsicht({
           10 unter anderem Namen** (`Letzte Nacht`, `Messprotokoll`,
           `Schlafhygiene`, `Vorschau`, `Verlauf`). **Elf fehlen
           wirklich** — sie stehen hier, mit Quelle und Grund. */}
+      {/* ══ C-418/2 · E-69: das Mockup als Referenz darunter ══════
+          **Tom, 2026-09-07:** *„so habe ich ist und soll fuer mich
+          immer bereit und ich kann arbeiten."*
+
+          `[read]` **Oben das Gebaute, darunter das Mockup** — nicht
+          nur fuer die fehlenden Kacheln (das war C-418/1), sondern
+          fuer den ganzen Reiter. **Die Referenz faellt mit Toms
+          Abnahme.** */}
       {tab === 'hrv' && (
         <>
           <RecHRV stand={checkins} />
           <FehlendeHrvKacheln />
+          <RecHRVReferenz />
         </>
       )}
       {tab === 'sleep' && (
         <>
           <RecSleep stand={checkins} />
           <FehlendeSchlafKacheln />
+          <RecSleepReferenz />
         </>
       )}
       {tab === 'modalities' && <RecModalities />}
@@ -248,7 +263,33 @@ function RecToday({
 }) {
   const { open, modus, setModus, sc, rd, ot, pending, zeigeTab } = useRecovery()
 
-  const recoveryValues = React.useMemo(() => muskelwerte(), [])
+  // ══ G-364: der Muskelkater kommt aus dem Check-in ═══════════════
+  //
+  // `[cmd]` **`muskelwerte()` rechnet aus `MUSCLE_STATE`** — dem
+  // Entwurf. `[cmd]` **`recovery.checkins.soreness` liegt vor und
+  // wird von `checkin-read.ts:28` gelesen.**
+  //
+  // `[read]` **Dieselbe Kachel, dieselbe Rechnung — nur mit dem
+  // erfassten Muskelkater statt dem erfundenen.**
+  const kater = checkins?.neuster?.soreness ?? null
+  const schlafguete = checkins?.neuster?.sleep_quality ?? null
+  const recoveryValues = React.useMemo(() => {
+    const aus: Record<string, number | null> = {}
+    for (const slug of MUSCLE_GROUPS_BODYMAP) {
+      const st = MUSCLE_STATE[slug]
+      if (!st) { aus[slug] = null; continue }
+      aus[slug] = calcMuscleRecovery({
+        hours: st.hours, sets: st.sets,
+        sleepQuality: schlafguete ?? CHECKIN.sleep_quality,
+        proteinPct: NUTRITION_INPUT.proteinPct,
+        caloriePct: NUTRITION_INPUT.caloriePct,
+        // `[read]` **`??`, nicht `||`** — eine erfasste `0` ist eine
+        // Angabe, kein fehlender Wert.
+        soreness: kater?.[slug] ?? st.soreness,
+      }).value
+    }
+    return aus
+  }, [kater, schlafguete])
 
   // G-82: dieselbe Zeile wie im Kopf — einmal gelesen, weitergereicht.
   const echterScore = scores?.neuster ?? null
@@ -295,8 +336,10 @@ function RecToday({
         )}
 
         <Card
-          title="Muscle readiness" sub="18 groups · click for the calculation"
-          attrappe={ATTRAPPE}
+          title="Muscle readiness"
+          sub={kater
+            ? `18 Gruppen · Muskelkater aus dem Check-in ${checkins?.neuster?.entry_date ?? ''}`
+            : '18 groups · click for the calculation'}
           actions={
             <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm" onClick={() => zeigeTab('muscles')}>
               Full map →

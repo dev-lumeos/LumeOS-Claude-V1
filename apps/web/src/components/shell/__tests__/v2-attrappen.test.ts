@@ -496,9 +496,16 @@ test('das Recovery-Modul kennzeichnet jede Kachel', () => {
     // Marke. ansicht 5 -> 3 (Score- und Modalitaeten-Entwurf raus),
     // tab-messwerte 10 -> 4 (Hrv-/Sleep-Entwurf raus; Muscle map,
     // Phone camera und Score paths bleiben echte Attrappen).
-    [RECOVERY, 3],
+    // `[cmd]` **G-364: zwei Marken weniger.** `Muscle readiness`
+    // (ansicht) und `Muscle recovery`/`Per-muscle detail`
+    // (tab-messwerte) lesen jetzt `recovery.checkins.soreness`.
+    //
+    // `[read]` **Der Vermerk behauptete einen Mangel, den es nicht
+    // gab** — der Leseweg lag daneben, die Kachel nahm ihn nur nicht.
+    // **Tom, 2026-09-07:** *„DIE WAREN ANGEBUNDEN."*
+    [RECOVERY, 2],
     [path.join(process.cwd(), 'src/app/v2/recovery/tab-checkin.tsx'), 3],
-    [path.join(process.cwd(), 'src/app/v2/recovery/tab-messwerte.tsx'), 4],
+    [path.join(process.cwd(), 'src/app/v2/recovery/tab-messwerte.tsx'), 2],
     [path.join(process.cwd(), 'src/app/v2/recovery/tab-protokolle.tsx'), 17],
   ]
   for (const [datei, erwartet] of dateien) {

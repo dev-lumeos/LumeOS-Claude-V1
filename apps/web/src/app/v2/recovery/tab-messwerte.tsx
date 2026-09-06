@@ -35,25 +35,61 @@ import type { CheckinStand, CheckinZeile } from '../../../lib/recovery/checkin-r
 
 // ═══ MUSCLE MAP ══════════════════════════════════════════════════
 // [cmd] module-recovery-v2.jsx:378-443.
-export function RecMuscleMap() {
+export function RecMuscleMap({ stand }: { stand?: CheckinStand | null }) {
   const { open } = useRecovery()
+
+  // ══ G-364: der Muskelkater kommt aus dem Check-in ════════════
+  //
+  // **Tom, 2026-09-07:** *„DIE WAREN ANGEBUNDEN UND HABEN
+  // VOLLUMFAENGLICH FUNKTIONIERT."*
+  //
+  // `[cmd]` **Gemessen 2026-09-06: `recovery.checkins.soreness` ist
+  // ein `jsonb` und traegt je Muskel eine Stufe** — auf
+  // `dev@lumeos.app` `{"back": 1, "chest": 1}`.
+  //
+  // `[cmd]` **`checkin-read.ts:28` liest es, `CheckinStreifen:59`
+  // zeigt es** — **nur diese Kachel bekam es nie:
+  // `<RecMuscleMap />` wurde ohne Prop aufgerufen**, anders als
+  // `<RecHRV stand={checkins} />`.
+  //
+  // `[read]` **Was echt ist, ist jetzt echt:** Muskelkater und
+  // Schlafqualitaet aus dem juengsten Check-in.
+  //
+  // `[cmd]` **Was Entwurf BLEIBT: `hours` und `sets` je Muskel** —
+  // **dafuer gibt es keinen Leseweg** (kein Volumen je Muskelgruppe
+  // in `apps/web/src/lib/training`). **Gemeldet, nicht erfunden**
+  // (C-378) — die Kachel sagt es unten selbst.
+  const neuster = stand?.neuster ?? null
+  const echterKater = neuster?.soreness ?? null
+  const echteSchlafguete = neuster?.sleep_quality ?? null
 
   const rows = React.useMemo(() => MUSCLE_GROUPS_BODYMAP.map(slug => {
     const st = MUSCLE_STATE[slug]
     if (!st) return { slug, value: null as number | null }
+    // `[read]` **Der erfasste Wert schlaegt den Entwurfswert** — und
+    // `0` ist eine Angabe, kein fehlender Wert (`??`, nicht `||`).
+    const kater = echterKater?.[slug] ?? st.soreness
+    const guete = echteSchlafguete ?? CHECKIN.sleep_quality
     const calc = calcMuscleRecovery({
-      hours: st.hours, sets: st.sets, sleepQuality: CHECKIN.sleep_quality,
+      hours: st.hours, sets: st.sets, sleepQuality: guete,
       proteinPct: NUTRITION_INPUT.proteinPct, caloriePct: NUTRITION_INPUT.caloriePct,
-      soreness: st.soreness,
+      soreness: kater,
     })
-    return { slug, ...st, ...calc }
-  }).sort((a, b) => (a.value ?? 999) - (b.value ?? 999)), [])
+    return { slug, ...st, soreness: kater, ...calc }
+  }).sort((a, b) => (a.value ?? 999) - (b.value ?? 999)),
+  [echterKater, echteSchlafguete])
 
   const values = Object.fromEntries(rows.map(r => [r.slug, r.value]))
 
   return (
     <div className="v2-rec-grid-1135">
-      <Card title="Muscle recovery" sub="18 groups · click for the breakdown" attrappe={ATTRAPPE}>
+      <Card
+        title="Muscle recovery"
+        sub={echterKater
+          ? `18 Gruppen · Muskelkater aus dem Check-in ${neuster?.entry_date ?? ''}`
+          : '18 groups · click for the breakdown'}
+        actions={echterKater ? <Pill variant="pos">echte Daten</Pill> : undefined}
+      >
         {/* G-26: die anatomische Karte. Sie bringt ihre Legende mit —
             die drei Zeilen, die hier standen, sind entfallen. */}
         <ErmuedungsKarte
@@ -73,7 +109,13 @@ export function RecMuscleMap() {
         </div>
       </Card>
 
-      <Card title="Per-muscle detail" sub="sorted by readiness · lowest first" attrappe={ATTRAPPE}>
+      <Card
+        title="Per-muscle detail"
+        sub={echterKater
+          ? 'nach Bereitschaft · Muskelkater erfasst, Volumen aus dem Entwurf'
+          : 'sorted by readiness · lowest first'}
+        actions={echterKater ? <Pill variant="pos">echte Daten</Pill> : undefined}
+      >
         <div className="v2-tbl-wrap">
           <table className="v2-tbl">
             <thead>
