@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 205 |
+| `todos` | 206 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 3 |
+| `laufend_claudecode` | 4 |
 | `erledigt` | 291 |
-| **gesamt** | **500** |
+| **gesamt** | **502** |
 
 ## medical — 43
 
@@ -458,7 +458,7 @@
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 
-## quer — 95
+## quer — 97
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -556,7 +556,9 @@
 | `G-308` | feature | mittel | [die zwei Pakete brauchen eigene Pruefungen](erledigt/quer-g-0308-die-zwei-pakete-brauchen-eigene-pruefungen.md) | erledigt | — | — |
 | `G-312` | befund | mittel | [neunzehn Lint-Fehler](erledigt/quer-g-0312-neunzehn-lint-fehler.md) | erledigt | — | — |
 | `G-334` | befund | hoch | [`test-user` taugt nicht mehr als Nachweiskonto](erledigt/quer-g-0334-test-user-taugt-nicht-mehr-als-nachweiskonto.md) | erledigt | — | — |
-| `G-352` | entscheidung | hoch | [drei Zielskalen widersprechen sich](laufend_claudecode/quer-g-0352-drei-zielskalen-widersprechen-sich.md) | laeuft (claudecode) | — | — |
+| `G-352` | entscheidung | hoch | [drei Zielskalen widersprechen sich](laufend_claudecode/quer-g-0352-drei-zielskalen-widersprechen-sich.md) | laeuft (claudecode) | — | G-354 |
+| `G-354` | befund | mittel | [ein sechstes Ziellisten-Modal](laufend_claudecode/quer-g-0354-ein-sechstes-ziellisten-modal.md) | laeuft (claudecode) | — | — |
+| `G-355` | befund | hoch | [Goals und Body gegen alle Quellen pruefen](todos/quer-g-0355-goals-und-body-gegen-alle-quellen-pruefen.md) | offen | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 
