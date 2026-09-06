@@ -225,7 +225,13 @@ test('das Training-Modul kennzeichnet jede Kachel', () => {
     const quelle = fs.readFileSync(datei, 'utf8')
     const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
     const ohneGrund = (quelle.match(/\battrappe(?=>|\s*$)/gm) ?? []).length
-    const markiert = mitGrund + ohneGrund
+    // `[cmd]` **G-359/E-68: die dritte Schreibform.** `attrappeAus()`
+    // traegt Quelle UND Grund. `[read]` **Sie zaehlt mit** — sonst
+    // meldet dieser Waechter einen Verlust, wo eine Marke nur
+    // ausfuehrlicher geworden ist. **Genau das trat am 2026-09-06
+    // ein: 12 gezaehlt statt 15.**
+    const mitQuelle = (quelle.match(/attrappe=\{attrappeAus\(/g) ?? []).length
+    const markiert = mitGrund + ohneGrund + mitQuelle
     assert.equal(markiert, erwartet,
       `${path.basename(datei)}: ${markiert} Kacheln gekennzeichnet, erwartet ${erwartet}. ` +
       'Angebunden? Dann die Erwartung hier senken.')
@@ -485,7 +491,13 @@ test('das Recovery-Modul kennzeichnet jede Kachel', () => {
     const quelle = fs.readFileSync(datei, 'utf8')
     const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
     const ohneGrund = (quelle.match(/\battrappe(?=>|\s*$)/gm) ?? []).length
-    const markiert = mitGrund + ohneGrund
+    // `[cmd]` **G-359/E-68: die dritte Schreibform.** `attrappeAus()`
+    // traegt Quelle UND Grund. `[read]` **Sie zaehlt mit** — sonst
+    // meldet dieser Waechter einen Verlust, wo eine Marke nur
+    // ausfuehrlicher geworden ist. **Genau das trat am 2026-09-06
+    // ein: 12 gezaehlt statt 15.**
+    const mitQuelle = (quelle.match(/attrappe=\{attrappeAus\(/g) ?? []).length
+    const markiert = mitGrund + ohneGrund + mitQuelle
     assert.equal(markiert, erwartet,
       `${path.basename(datei)}: ${markiert} Kacheln gekennzeichnet, erwartet ${erwartet}. ` +
       'Angebunden? Dann die Erwartung hier senken.')
@@ -599,7 +611,13 @@ test('das Goals-Modul kennzeichnet jede Kachel', () => {
     const quelle = fs.readFileSync(datei, 'utf8')
     const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
     const ohneGrund = (quelle.match(/\battrappe(?=>|\s*$)/gm) ?? []).length
-    const markiert = mitGrund + ohneGrund
+    // `[cmd]` **G-359/E-68: die dritte Schreibform.** `attrappeAus()`
+    // traegt Quelle UND Grund. `[read]` **Sie zaehlt mit** — sonst
+    // meldet dieser Waechter einen Verlust, wo eine Marke nur
+    // ausfuehrlicher geworden ist. **Genau das trat am 2026-09-06
+    // ein: 12 gezaehlt statt 15.**
+    const mitQuelle = (quelle.match(/attrappe=\{attrappeAus\(/g) ?? []).length
+    const markiert = mitGrund + ohneGrund + mitQuelle
     assert.equal(markiert, erwartet,
       `${path.basename(datei)}: ${markiert} Kacheln gekennzeichnet, erwartet ${erwartet}. ` +
       'Angebunden? Dann die Erwartung hier senken.')
@@ -1497,7 +1515,13 @@ test('das Coach-Modul kennzeichnet jede Kachel', () => {
     const quelle = fs.readFileSync(datei, 'utf8')
     const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
     const ohneGrund = (quelle.match(/\battrappe(?=>|\s*$)/gm) ?? []).length
-    const markiert = mitGrund + ohneGrund
+    // `[cmd]` **G-359/E-68: die dritte Schreibform.** `attrappeAus()`
+    // traegt Quelle UND Grund. `[read]` **Sie zaehlt mit** — sonst
+    // meldet dieser Waechter einen Verlust, wo eine Marke nur
+    // ausfuehrlicher geworden ist. **Genau das trat am 2026-09-06
+    // ein: 12 gezaehlt statt 15.**
+    const mitQuelle = (quelle.match(/attrappe=\{attrappeAus\(/g) ?? []).length
+    const markiert = mitGrund + ohneGrund + mitQuelle
     assert.equal(markiert, erwartet,
       `${path.basename(datei)}: ${markiert} Kacheln gekennzeichnet, erwartet ${erwartet}. `
       + 'Angebunden? Dann die Erwartung hier senken.')

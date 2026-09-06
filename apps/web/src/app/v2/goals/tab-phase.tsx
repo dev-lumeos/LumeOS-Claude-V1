@@ -25,7 +25,7 @@ import {
   calcGoalProgress, findBottleneck, type Phase,
 } from './daten'
 import { PhaseEditorModal, PhaseTemplateLibrary } from './phase-editor'
-import { ATTRAPPE } from './ansicht'
+import { ATTRAPPE, attrappeAus } from './ansicht'
 import { TdeeKopf } from './tdee-kopf'
 
 /** `weeklyIncrease` -> „Weekly increase". [cmd] module-goals-pro.jsx:334. */
@@ -123,7 +123,10 @@ export function GoalsPhaseView() {
         </Card>
 
         {/* Kachel 3: der Zustandsautomat */}
-        <Card title="Phase state machine" sub="7 phases · click any phase to preview or switch" attrappe={ATTRAPPE}>
+        <Card title="Phase state machine" sub="9 Phasenarten · aus dem CHECK"
+              attrappe={attrappeAus('theme-v1/module-goals-pro.jsx',
+                'goal_phases-Schreibweg (G-357) — die neun Arten stehen im CHECK, '
+                + 'gelesen wird ueber goals.phase_am, geschrieben nirgends')}>
           <div className="v2-goals-phasen">
             {Object.values(GOAL_PHASES).map(ph => {
               const active = ph.id === PHASE_STATE.current
@@ -201,7 +204,9 @@ export function GoalsPhaseView() {
       <div className="v2-col-gap" style={{ gap: 14 }}>
         <Card
           title="Phase parameters" sub={p.name}
-          attrappe={ATTRAPPE}
+          attrappe={attrappeAus('theme-v1/module-goals-pro.jsx',
+            'goal_phases.parameters ist ein jsonb und wird gelesen — '
+            + 'es fehlt der Schreibweg (G-357)')}
           actions={
             <>
               <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm" onClick={() => setLibrary(true)}>
@@ -231,7 +236,9 @@ export function GoalsPhaseView() {
 
         <Card
           title="Expert BB annual" sub="12-month cycle · advanced only"
-          attrappe={ATTRAPPE}
+          attrappe={attrappeAus('theme-v1/module-goals-pro.jsx',
+            'expert_bb_annual steht im phase_type-CHECK — '
+            + 'es fehlt der Schreibweg (G-357)')}
           actions={
             <button type="button" className="v2-btn v2-btn-sm" onClick={() => setEditing('expert_bb_annual')}>
               <Icon name="edit" className="v2-ic v2-ic-sm" />Customize

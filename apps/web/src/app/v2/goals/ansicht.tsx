@@ -70,6 +70,26 @@ export const ATTRAPPE =
   'Aus dem Entwurf uebernommen. Diese Kachel ist noch nicht an die vorhandenen '
   + 'Goals- und Koerperdaten angebunden - die Zahlen sind erfunden.'
 
+/**
+ * Eine Attrappenmarke nach E-68 — Quelle UND Grund.
+ *
+ * **Tom, 2026-09-07:** *,,was nicht anbindbar ist bleibt in der ui
+ * als mockup deklariert."*
+ *
+ * `[cmd]` **Gemessen in G-355: 62 von 69 Vermerken nannten keine
+ * Ursache.** `[read]` **Ein Vermerk, der nur *,,noch nicht"* sagt,
+ * zwingt den naechsten Auftrag, von vorn zu messen.**
+ *
+ * `[read]` **Wo der Grund unbekannt ist, gehoert genau das hin** —
+ * *,,unbekannt, nie untersucht"* ist ehrlicher als nichts.
+ *
+ * @param quelle  Die Mockup-Datei, aus der die Kachel stammt.
+ * @param wartet  Worauf sie wartet — mit Punktnummer, wenn es eine gibt.
+ */
+export function attrappeAus(quelle: string, wartet: string): string {
+  return `Attrappe — ${quelle} · wartet auf: ${wartet}`
+}
+
 // [cmd] module-goals.jsx:172-183, in dieser Reihenfolge.
 //
 // `[cmd]` Der Zaehler an „Goals" ist seit GO-16 echt — die Ziele der
@@ -207,24 +227,44 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
           )}
           {tab === 'comp' && <CompositionTab d={comp} />}
 
-          {/* G-87: die laufende Phase aus `goals.goal_phases`, ueber
-              `phase_am()`. Der Entwurf bleibt als Rueckfall, wenn
-              keine Phase gilt — dasselbe Muster wie bei der Zeitachse
-              (G-79). */}
+          {/* ══ G-359 / E-68: der Entwurf verdraengt nicht mehr ═══
+              **Tom, 2026-09-07:** *„nun sehe ich dass tonnenweise
+              zeugs einfach weg ist aus der ui."*
+
+              `[cmd]` **Hier stand ein Entweder-oder:** lag eine echte
+              Phase vor, ersetzte `PhaseEcht` den ganzen Entwurf —
+              **und mit ihm die neun Phasenarten, der
+              Jahreszyklus-Editor und die Vorlagenbibliothek.**
+
+              `[cmd]` **Am Schirm gemessen (2026-09-06): 18 von 26
+              genannten Elementen waren nicht erreichbar**, obwohl
+              ihr Quelltext dasteht. **Nicht geloescht — verdraengt.**
+
+              `[read]` **E-68: was nicht angebunden ist, bleibt
+              sichtbar.** **Also beides untereinander:** oben, was
+              gilt; darunter, was geplant ist, mit Marke. */}
           {tab === 'phase' && (
-            echt.phase
-              ? <PhaseEcht phase={echt.phase} stichtag={echt.stichtag} />
-              : <GoalsPhaseView />
+            <>
+              {echt.phase
+                && <PhaseEcht phase={echt.phase} stichtag={echt.stichtag} />}
+              <GoalsPhaseView />
+            </>
           )}
 
           {/* G-87: die Verhaeltnisse aus `goals.body_circumferences`.
               **Die Einstufungen bleiben im Entwurf** — „golden target
               1.618", V-Taper und Steve Reeves haben keine Quelle
               ausserhalb der Entwurfs-Begleitdateien. */}
+          {/* `[cmd]` **G-359: dieselbe Verdraengung wie beim
+              Phasenreiter** — `dev@lumeos.app` hat 54 Umfangszeilen,
+              **also lief immer der echte Zweig und der Entwurf war
+              nie zu sehen.** */}
           {tab === 'physique' && (
-            echt.umfaenge.length > 0
-              ? <PhysiqueEcht saetze={echt.umfaenge} navy={echt.navy} stichtag={echt.stichtag} profil={echt.profil} />
-              : <GoalsPhysiqueView />
+            <>
+              {echt.umfaenge.length > 0
+                && <PhysiqueEcht saetze={echt.umfaenge} navy={echt.navy} stichtag={echt.stichtag} profil={echt.profil} />}
+              <GoalsPhysiqueView />
+            </>
           )}
         </>
       )}
@@ -233,13 +273,18 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
       {/* G-79: echte Zeitachse aus Zielen, Phasen und
           Meilensteinen. Der Entwurf bleibt als Rueckfall, wenn
           nichts mit Datum vorliegt. */}
+      {/* `[cmd]` **G-359: die dritte Verdraengungsstelle.**
+          `dev@lumeos.app` hat 11 Ziele und 13 Meilensteine —
+          **der Entwurf lief nie.** */}
       {tab === 'timeline' && (
-        (echt.ziele.length + echt.meilensteine.length) > 0
-          ? (
-            <ZeitachseTab ziele={echt.ziele} phase={echt.phase}
-                          meilensteine={echt.meilensteine} stichtag={echt.stichtag} />
-          )
-          : <TimelineTab />
+        <>
+          {(echt.ziele.length + echt.meilensteine.length) > 0
+            && (
+              <ZeitachseTab ziele={echt.ziele} phase={echt.phase}
+                            meilensteine={echt.meilensteine} stichtag={echt.stichtag} />
+            )}
+          <TimelineTab />
+        </>
       )}
       {tab === 'poses' && <GoalsPosesView />}
 
