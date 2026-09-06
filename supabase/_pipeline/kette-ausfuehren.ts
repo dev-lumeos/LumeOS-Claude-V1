@@ -167,7 +167,8 @@ function dropDatabase(db: string): void {
   sqlCommand(ADMIN_DB, `
     SELECT pg_terminate_backend(pid)
     FROM pg_stat_activity
-    WHERE datname = '${db.replace(/'/g, "''")}';
+    WHERE datname = '${db.replace(/'/g, "''")}'
+      AND usename = current_user;
   `)
   sqlCommand(ADMIN_DB, `DROP DATABASE IF EXISTS ${quoteIdent(db)};`)
 }
