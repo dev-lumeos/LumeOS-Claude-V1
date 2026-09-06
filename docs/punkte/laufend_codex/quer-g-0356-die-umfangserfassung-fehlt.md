@@ -7,7 +7,7 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: G-355
 entscheidung: null
-agent: claudecode
+agent: codex
 beauftragt: 2026-09-07
 beruehrt:
   tabellen: [goals.body_circumferences]
@@ -128,3 +128,8 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Auftrag (2026-09-07)
+
+**Mitbeauftragt mit G-357.** Der Auftragstext
+und der Bericht stehen dort.

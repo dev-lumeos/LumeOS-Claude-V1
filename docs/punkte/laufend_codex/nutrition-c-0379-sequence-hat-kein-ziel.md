@@ -7,6 +7,8 @@ angelegt: 2026-09-01
 braucht: []
 kind_von: C-377
 entscheidung: E-54
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -321,3 +323,7 @@ eine Anforderung an einen Leseweg, der noch nicht existiert**
 
 **Abgenommen.**
 
+## Auftrag (2026-09-07)
+
+**Mitbeauftragt mit G-357.** Der Auftragstext
+und der Bericht stehen dort.

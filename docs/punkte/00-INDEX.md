@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
-| `laufend_claudecode` | 6 |
+| `todos` | 207 |
+| `laufend_codex` | 3 |
+| `laufend_claudecode` | 4 |
 | `erledigt` | 296 |
 | **gesamt** | **510** |
 
@@ -130,7 +131,7 @@
 | `C-376` | befund | mittel | [frieren abgeschlossene Plaene auch ein?](erledigt/nutrition-c-0376-frieren-abgeschlossene-plaene-auch-ein.md) | erledigt | — | — |
 | `C-377` | feature | hoch | [ein abgelaufener Plan braucht eine Frage](erledigt/nutrition-c-0377-ein-abgelaufener-plan-braucht-eine-frage.md) | erledigt | — | C-379 |
 | `C-378` | befund | hoch | [NRF9.3 ist fuer einen normalen Speiseplan nicht rechenbar](erledigt/nutrition-c-0378-nrf93-ist-fuer-einen-normalen-speiseplan-nicht-rechenbar.md) | erledigt | — | — |
-| `C-379` | feature | mittel | [`sequence` hat kein Ziel](todos/nutrition-c-0379-sequence-hat-kein-ziel.md) | offen | — | C-383, G-313 |
+| `C-379` | feature | mittel | [`sequence` hat kein Ziel](laufend_codex/nutrition-c-0379-sequence-hat-kein-ziel.md) | laeuft (codex) | — | C-383, G-313 |
 | `C-380` | befund | mittel | [die Seed-Plaene tragen 84 mal Hammelfilet](erledigt/nutrition-c-0380-die-seed-plaene-tragen-84-mal-hammelfilet.md) | erledigt | — | — |
 | `C-382` | feature | mittel | [wer entscheidet, ob ein Plan editierbar ist?](todos/nutrition-c-0382-wer-entscheidet-ob-ein-plan-editierbar-ist.md) | offen | — | — |
 | `C-384` | befund | hoch | [wer schreibt die 30.797 Tag-Zeilen?](erledigt/nutrition-c-0384-wer-schreibt-die-30797-tag-zeilen.md) | erledigt | — | C-387 |
@@ -561,8 +562,8 @@
 | `G-352` | entscheidung | hoch | [drei Zielskalen widersprechen sich](erledigt/quer-g-0352-drei-zielskalen-widersprechen-sich.md) | erledigt | — | G-354 |
 | `G-354` | befund | mittel | [ein sechstes Ziellisten-Modal](erledigt/quer-g-0354-ein-sechstes-ziellisten-modal.md) | erledigt | — | — |
 | `G-355` | befund | hoch | [Goals und Body gegen alle Quellen pruefen](laufend_claudecode/quer-g-0355-goals-und-body-gegen-alle-quellen-pruefen.md) | laeuft (claudecode) | — | G-356, G-357, G-358, G-359 |
-| `G-356` | feature | hoch | [die Umfangserfassung fehlt](laufend_claudecode/quer-g-0356-die-umfangserfassung-fehlt.md) | laeuft (claudecode) | — | — |
-| `G-357` | feature | hoch | [kein Weg in eine Phase](laufend_claudecode/quer-g-0357-kein-weg-in-eine-phase.md) | laeuft (claudecode) | — | — |
+| `G-356` | feature | hoch | [die Umfangserfassung fehlt](laufend_codex/quer-g-0356-die-umfangserfassung-fehlt.md) | laeuft (codex) | — | — |
+| `G-357` | feature | hoch | [kein Weg in eine Phase](laufend_codex/quer-g-0357-kein-weg-in-eine-phase.md) | laeuft (codex) | — | — |
 | `G-358` | befund | mittel | [62 Vermerke ohne Grund](laufend_claudecode/quer-g-0358-62-vermerke-ohne-grund.md) | laeuft (claudecode) | — | — |
 | `G-359` | befund | hoch | [1.343 Mockup-Elemente fehlen in der UI](laufend_claudecode/quer-g-0359-1343-mockup-elemente-fehlen-in-der-ui.md) | laeuft (claudecode) | — | C-417, C-418, G-360 |
 | `G-360` | feature | hoch | [coach, market und admin als eigene Apps](todos/quer-g-0360-coach-market-admin-als-eigene-apps.md) | offen | — | — |
