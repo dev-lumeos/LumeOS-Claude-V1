@@ -8,8 +8,8 @@
 | `todos` | 205 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 5 |
-| `erledigt` | 294 |
-| **gesamt** | **507** |
+| `erledigt` | 295 |
+| **gesamt** | **508** |
 
 ## medical — 43
 
@@ -458,7 +458,7 @@
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 
-## quer — 102
+## quer — 103
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -525,7 +525,8 @@
 | `C-412` | befund | mittel | [`intake_logs` endet am 19. August](erledigt/quer-c-0412-intake-logs-endet-am-19-august.md) | erledigt | — | C-414 |
 | `C-414` | befund | mittel | [die Querschnittssicht liegt in `nutrition`](erledigt/quer-c-0414-die-querschnittssicht-liegt-in-nutrition.md) | erledigt | — | C-415 |
 | `C-415` | befund | hoch | [der Vollkettenlauf scheitert in Schritt 075](erledigt/quer-c-0415-der-vollkettenlauf-scheitert-in-schritt-075.md) | erledigt | — | C-416 |
-| `C-416` | feature | hoch | [ein taeglicher Kettenlauf](laufend_codex/quer-c-0416-ein-taeglicher-kettenlauf.md) | laeuft (codex) | — | — |
+| `C-416` | feature | hoch | [ein taeglicher Kettenlauf](erledigt/quer-c-0416-ein-taeglicher-kettenlauf.md) | erledigt | — | — |
+| `C-417` | feature | hoch | [der Schirm wird nicht gemessen](laufend_codex/quer-c-0417-der-schirm-wird-nicht-gemessen.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -563,7 +564,7 @@
 | `G-356` | feature | hoch | [die Umfangserfassung fehlt](laufend_claudecode/quer-g-0356-die-umfangserfassung-fehlt.md) | laeuft (claudecode) | — | — |
 | `G-357` | feature | hoch | [kein Weg in eine Phase](laufend_claudecode/quer-g-0357-kein-weg-in-eine-phase.md) | laeuft (claudecode) | — | — |
 | `G-358` | befund | mittel | [62 Vermerke ohne Grund](laufend_claudecode/quer-g-0358-62-vermerke-ohne-grund.md) | laeuft (claudecode) | — | — |
-| `G-359` | befund | hoch | [1.343 Mockup-Elemente fehlen in der UI](laufend_claudecode/quer-g-0359-1343-mockup-elemente-fehlen-in-der-ui.md) | laeuft (claudecode) | — | — |
+| `G-359` | befund | hoch | [1.343 Mockup-Elemente fehlen in der UI](laufend_claudecode/quer-g-0359-1343-mockup-elemente-fehlen-in-der-ui.md) | laeuft (claudecode) | — | C-417 |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

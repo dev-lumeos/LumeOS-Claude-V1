@@ -9,6 +9,8 @@ kind_von: C-415
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: 027a383e
 beruehrt:
   dateien:
     - tools/backup-wachstum.mjs
@@ -202,4 +204,67 @@ keine App-Datei wurde geaendert.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator. Nachgemessen.**
+
+### Der taegliche Lauf steht
+
+`[cmd]` **Selbst gelesen,
+`backup/_manifests/kettenlauf-status.json`:**
+
+    status             passed
+    duration_seconds   270.9
+    database           lumeos_tageskette_20260906
+    exit_code          0
+
+`[cmd]` **Windows-Task taeglich 04:00 (+07), nur Wegwerf-DB,
+Ergebnis atomar geschrieben.**
+
+`[cmd]` **Punktelauf und Gate lesen den Status** — **fehlend, rot
+oder aelter als 36 Stunden wird sichtbar rot.**
+
+`[read]` **Die 36 Stunden sind die richtige Wahl:** **ein
+uebersprungener Tag faellt auf, eine Stunde Verzug nicht.**
+
+### Und die Gegenprobe ist die richtige
+
+`[cmd]` **Ein absichtlich defektes Manifest wird automatisiert rot
+gemeldet.**
+
+`[read]` **Damit ist belegt, dass der Waechter in beide Richtungen
+misst** — **nicht nur, dass er heute gruen ist.**
+
+`[cmd]` **Dazu ein realer Lauf: 157 Schritte in 267,7 s, danach
+entfernt.**
+
+### Ein Nebenbefund, der zaehlt
+
+`[cmd]` **Der Kettenrunner beendete fremde Superuser-Sitzungen** —
+**jetzt auf eigene Verbindungen beschraenkt.**
+
+`[read]` **Ein taeglicher Lauf um 04:00, der fremde Sitzungen
+abraeumt, haette irgendwann etwas getroffen** — **und niemand haette
+den Zusammenhang gesehen.**
+
+`[read]` **Er hat es gefunden, weil er den Lauf taeglich machen
+sollte** — **nicht, weil jemand danach gefragt hat.**
+
+### C-31 und C-155
+
+`[cmd]` **Die Admin-UI kann Tags ueber die abgesicherte RPC
+kuratieren und Rezeptkandidaten lesen.**
+
+`[read]` **Und er hat gemeldet, was fehlt:** **der atomare
+Serververtrag fuer Annehmen und Ablehnen** — **insbesondere, ob
+dabei ein Rezept entsteht.**
+
+`[read]` **Das ist die richtige Frage, und sie steht im
+Folgeauftrag.**
+
+`[cmd]` **C-155: `@supabase/ssr` bei 0.1.0, aktuell 0.12.6, vier
+Workspaces betroffen.** `[cmd]` **Nicht gewechselt** — richtig.
+
+`[read]` **Ein Wechsel braucht Build, Admin- und Coach-Login,
+Sitzung, Abmeldung** — **das ist ein eigener Tag, kein Nebenbei.**
+
+**Abgenommen.**
+
