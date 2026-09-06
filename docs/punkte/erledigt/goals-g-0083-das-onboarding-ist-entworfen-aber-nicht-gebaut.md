@@ -11,7 +11,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-07
 erledigt: 2026-09-07
-commit: OFFEN
+commit: 034a4620
 beruehrt:
   tabellen: []
   dateien: []
