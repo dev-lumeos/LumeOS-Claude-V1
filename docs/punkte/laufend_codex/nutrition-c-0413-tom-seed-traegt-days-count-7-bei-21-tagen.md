@@ -112,7 +112,70 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### C-413 — keine reine Altzeile, sondern ein unvollstaendiger Seed
+
+`[cmd]` Die Quelle behandelte die beiden Konten nicht gleich: Fuer
+`tom.seed@example.com` stand in `testdaten-einspielen.ts` bereits
+`days_count = 28`, sie erzeugte aber weiter nur die drei
+C-150-Wochen (gefuellt, leer, Kopie), also **21 Tage und 56 Eintraege**.
+`dev@lumeos.app` traegt dagegen **28 Tage und 84 Eintraege**.
+
+`[read]` Das ist nicht nur ein Restbestand eines alten Laufs. C-404
+hatte die Laufzeit am Tom-Plan auf 28 gesetzt, aber keine vierte Woche
+in diese Quelle aufgenommen. E-62 verlangt bei `once` die beschriebene
+Laufzeit: drei Wochen sind **21**.
+
+`[cmd]` Die Quelle setzt den Tom-Plan nun auf `once, days_count = 21`.
+Nach dem Kettenlauf gilt:
+
+    Konto                  Laufzeit  beschriebene Tage  Eintraege
+    dev@lumeos.app         28        28                  84
+    tom.seed@example.com   21        21                  56
+
+`[read]` `dev` wurde nur gelesen; sein Bestand blieb unveraendert.
+
+### C-241 — kleiner, kettengetragener Grundbestand fuer test-user
+
+`[cmd]` Der Haupt-Testdatengenerator setzt den Grundbestand jetzt
+ausschliesslich auf `test-user@lumeos.local` neu:
+
+    food_preferences / items   1 / 3
+    meal_slots                 4
+    meal_plans / Tage / Eintraege
+                               1 / 7 / 28
+    meal_plan_logs             2 (confirmed, skipped)
+    meals / meal_items         7 / 14
+    intake_logs                90
+
+`[read]` Das ist die C-241-Groessenordnung als gezielter
+Nachweisbestand, keine Kopie von dev. Die Bereinigung erfasst nur die
+eigenen Nutrition- und Supplement-Zeilen von test-user; `dev` wird
+nicht als Testbuehne verwendet.
+
+### C-412 mitgezogen — Einnahmen bis zum Lauftag
+
+`[cmd]` `TODAY_DATE` ist ohne `--today` nun der UTC-Lauftag statt des
+festen 19.08.; ein explizites `--today` bleibt fuer reproduzierbare
+Laeufe erhalten. Der neue test-user-Stream reicht nach dem Lauf vom
+**2026-06-09 bis 2026-09-06**. Damit beschreibt ein 7-Tage-Strom nicht
+mehr allein wegen eines festen Seed-Endes Stille.
+
+### Nachweis
+
+    pnpm exec tsx --test supabase/_pipeline/_validierung/nutrition-c413-test-user-seed.test.ts
+    2 gruen: Tom-Laufzeit 21/21; test-user-Grundbestand und aktueller Stream
+
+    pnpm exec tsx supabase/_pipeline/_validierung/testdaten-pruefen.ts
+    gruen
+
+    node tools/migration-datenlogik-pruefen.mjs
+    node tools/punkte-pruefen.mjs
+    node tools/nummern-pruefen.mjs
+    gruen
+
+`[read]` C-393 war nicht Teil der aktuellen Anweisung und blieb
+unberuehrt. Keine Daten auf `dev` geloescht, keine Datenlogik in
+`migrations/`, kein Dev-Server und kein Commit.
 
 ## Abnahme
 

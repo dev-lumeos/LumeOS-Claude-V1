@@ -57,3 +57,28 @@ zahlen: null
 
 **Mitbeauftragt mit G-83 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Bericht
+
+**Claude Code, 2026-09-06.** Mitbeauftragt mit G-83. **Der
+vollstaendige Bericht steht in
+[G-83](goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md#bericht).**
+
+`[cmd]` **Die Abweichung dieses Punktes ist nachgemessen:**
+`profiles.experience_level` traegt `beginner | advanced | pro |
+elite`, **der ADR nennt `intermediate`.** `[cmd]` **Dazu eine
+dritte Skala in `rezept-lage.ts:273`** — sie meint aber die
+Schwierigkeit eines Rezepts, nicht den Grad des Nutzers.
+
+`[read]` **Toms Entscheidung gilt weiter** (C-118, 2026-08-19).
+**Die offene Sache ist die Skala selbst, und die lebt in G-228
+(E-46) weiter** — nicht in diesem Punkt.
+
+`[read]` **Vorschlag: schliessen.** `[read]` **Aber die
+*Post-Onboarding Setup-Cards* gehoeren als eigener Punkt angelegt**
+— **sie sind der Gegenpart zum ueberspringbaren Onboarding und
+gehen sonst mit diesem Punkt verloren.**
+
+## Abnahme
+
+_(vom Orchestrator)_

@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
+| `todos` | 209 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 286 |
-| **gesamt** | **497** |
+| `erledigt` | 287 |
+| **gesamt** | **499** |
 
 ## medical — 43
 
@@ -59,7 +59,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
-## nutrition — 227
+## nutrition — 228
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -182,7 +182,7 @@
 | `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — | — |
 | `G-220` | entscheidung | hoch | [MealCam Auto-Accept widerspricht ADR_MEALCAM_V1](erledigt/nutrition-g-0220-mealcam-auto-accept-widerspricht-adr-mealcam-v1.md) | erledigt | — | — |
 | `G-221` | entscheidung | hoch | [Food-Tag-Set V1 widersprüchlich definiert](erledigt/nutrition-g-0221-food-tag-set-v1-widerspruechlich-definiert.md) | erledigt | — | G-245 |
-| `G-222` | befund | hoch | [Onboarding Flow für Nutrition Preferences fehlt in SPEC_03](erledigt/nutrition-g-0222-onboarding-flow-fuer-nutrition-preferences-fehlt-in-spec-0.md) | erledigt | — | — |
+| `G-222` | befund | hoch | [Onboarding Flow für Nutrition Preferences fehlt in SPEC_03](erledigt/nutrition-g-0222-onboarding-flow-fuer-nutrition-preferences-fehlt-in-spec-0.md) | erledigt | — | G-352 |
 | `G-223` | befund | mittel | [Recalculate-UI in SPEC_10 fehlt (bekanntes Open Item)](todos/nutrition-g-0223-recalculate-ui-in-spec-10-fehlt-bekanntes-open-item.md) | offen | — | — |
 | `G-224` | befund | mittel | [MealCam Consent-Widerruf in Nutrition Settings nicht beschrieben](todos/nutrition-g-0224-mealcam-consent-widerruf-in-nutrition-settings-nicht-besch.md) | offen | — | — |
 | `G-225` | befund | mittel | [Coach Suggestion User Flow fehlt](todos/nutrition-g-0225-coach-suggestion-user-flow-fehlt.md) | offen | — | — |
@@ -289,6 +289,7 @@
 | `G-348` | befund | mittel | [`wieGestern` ueberspringt manuelle Posten](erledigt/nutrition-g-0348-wiegestern-ueberspringt-manuelle-posten.md) | erledigt | — | C-412, G-351 |
 | `G-350` | befund | mittel | [ein zweiter Schreibweg fuer `is_checked`](erledigt/nutrition-g-0350-ein-zweiter-schreibweg-fuer-is-checked.md) | erledigt | — | — |
 | `G-351` | befund | mittel | [`other` hat keine Karte](erledigt/nutrition-g-0351-other-hat-keine-karte.md) | erledigt | — | — |
+| `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](laufend_claudecode/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 60
@@ -420,7 +421,7 @@
 |---|---|---|---|---|---|---|
 | `C-06` | befund | mittel | [WP-05 erstes Mock-Modul echt machen](todos/goals-c-0006-wp-05-erstes-mock-modul-echt-machen.md) | offen | — | — |
 | `E-04` | blocker | hoch | [Alte `public`-Tabellen nach `legacy` verschieben](erledigt/goals-e-0004-alte-public-tabellen-nach-legacy-verschieben.md) | erledigt | — | — |
-| `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](laufend_claudecode/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | laeuft (claudecode) | — | — |
+| `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](erledigt/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | erledigt | — | — |
 | `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — | — |
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
@@ -457,7 +458,7 @@
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 
-## quer — 93
+## quer — 94
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -539,7 +540,7 @@
 | `G-58` | befund | niedrig | [Kontrast auf Attrappenkarten gegen den gerenderten Grund messen](todos/quer-g-0058-kontrast-auf-attrappenkarten-gegen-den-gerenderten-grund-messen.md) | offen | — | — |
 | `G-109` | befund | mittel | [Der Dev-Server kompiliert geaenderte Routen wiederholt nicht neu](todos/quer-g-0109-der-dev-server-kompiliert-geaenderte-routen-wiederholt-nicht-neu.md) | offen | — | — |
 | `G-122` | feature | mittel | [Fuenf Tabellen mit Daten haben keinen Schreibweg](erledigt/quer-g-0122-fuenf-tabellen-mit-daten-haben-keinen-schreibweg.md) | erledigt | — | C-49, G-126, GO-23 |
-| `G-141` | befund | mittel | [Das Onboarding ist als ADR final entschieden](laufend_claudecode/quer-g-0141-das-onboarding-ist-als-adr-final-entschieden.md) | laeuft (claudecode) | — | — |
+| `G-141` | befund | mittel | [Das Onboarding ist als ADR final entschieden](laufend_claudecode/quer-g-0141-das-onboarding-ist-als-adr-final-entschieden.md) | laeuft (claudecode) | — | G-353 |
 | `G-155` | befund | mittel | [Jede Kachel jedes Moduls als Bild](todos/quer-g-0155-jede-kachel-jedes-moduls-als-bild.md) | offen | — | — |
 | `G-175` | feature | mittel | [Das Nachweiskonto hat kein bekanntes Passwort](todos/quer-g-0175-das-nachweiskonto-hat-kein-bekanntes-passwort.md) | offen | — | — |
 | `G-193` | feature | mittel | [Jede Leistungszahl nennt das Konto](todos/quer-g-0193-jede-leistungszahl-nennt-das-konto.md) | offen | — | — |
@@ -554,6 +555,7 @@
 | `G-308` | feature | mittel | [die zwei Pakete brauchen eigene Pruefungen](erledigt/quer-g-0308-die-zwei-pakete-brauchen-eigene-pruefungen.md) | erledigt | — | — |
 | `G-312` | befund | mittel | [neunzehn Lint-Fehler](erledigt/quer-g-0312-neunzehn-lint-fehler.md) | erledigt | — | — |
 | `G-334` | befund | hoch | [`test-user` taugt nicht mehr als Nachweiskonto](erledigt/quer-g-0334-test-user-taugt-nicht-mehr-als-nachweiskonto.md) | erledigt | — | — |
+| `G-352` | entscheidung | hoch | [drei Zielskalen widersprechen sich](todos/quer-g-0352-drei-zielskalen-widersprechen-sich.md) | offen | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 
