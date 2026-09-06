@@ -10,10 +10,23 @@
 // `color-mix(in srgb, …)` -> `in oklch`, Escape schliesst, Felder
 // bekommen `aria-label`, Knoepfe ohne Ziel oeffnen `InEntwicklung`.
 //
-// `[cmd]` ALLES IST ATTRAPPE. Kein Modal schreibt — es gibt weder
-// `goals.user_goals` noch `goals.body_measurements` (GO-07, GO-10).
+// `[cmd]` ALLES IST ATTRAPPE. Kein Modal schreibt.
+//
+// `[cmd]` **BERICHTIGT AM 2026-09-06 (G-354):** hier stand *„es gibt
+// weder `goals.user_goals` noch `goals.body_measurements`"* (GO-07,
+// GO-10). **Beide Tabellen gibt es** — `user_goals` mit 23 Spalten
+// und 11 Zeilen, und `lib/goals/schreiben.ts` aendert sie bereits.
+//
+// `[read]` **Was fehlt, ist das ANLEGEN, nicht die Tabelle.** Ein
+// Kommentar, der eine vorhandene Tabelle für abwesend erklärt, ist
+// eine Falschaussage, die beim nächsten Auftrag als Grund zitiert
+// wird.
 import * as React from 'react'
 import { Card, Pill, Icon, LineChart, InEntwicklungKnopf } from '@lumeos/ui'
+
+import {
+  zielArtAuswahl, AKTIVE_PLAETZE, type ZielArt,
+} from '../../../lib/goals/ziel-arten'
 
 import { MEASUREMENTS, daysToDeadline, type Ziel } from './daten'
 import type { ModalZustand } from './kontext'
@@ -112,16 +125,48 @@ export function GoalsModale({ modal, onClose }: {
 
 // ── NEW GOAL ────────────────────────────────────────────────────
 // [cmd] module-goals.jsx:694-744.
+
+/**
+ * Beispieltexte je Zielart — G-354.
+ *
+ * `[read]` **Platzhalter, keine Werte:** sie stehen im `placeholder`
+ * und werden nie gespeichert. **Sie zeigen die Form einer Eingabe,
+ * nicht eine gemessene Zahl.**
+ */
+const BEISPIEL: Record<ZielArt, { titel: string; ist: string; ziel: string }> = {
+  body_composition: { titel: 'z. B. auf 12 % Körperfett', ist: '79.4', ziel: '78' },
+  performance: { titel: 'z. B. Bankdrücken 1RM · 130 kg', ist: '122.5', ziel: '130' },
+  health: { titel: 'z. B. Blutdruck unter 130/80', ist: '138', ziel: '130' },
+  lifestyle: { titel: 'z. B. dreimal pro Woche Ausdauer', ist: '1', ziel: '3' },
+}
 function NewGoalModal({ onClose }: { onClose: () => void }) {
-  const [type, setType] = React.useState('body_comp')
-  const types = [
-    { id: 'body_comp', label: 'Body composition', icon: 'goals' },
-    { id: 'weight', label: 'Weight', icon: 'trend_up' },
-    { id: 'strength', label: 'Strength PR', icon: 'training' },
-    { id: 'performance', label: 'Performance', icon: 'training' },
-    { id: 'habit', label: 'Habit', icon: 'brain' },
-    { id: 'custom', label: 'Custom', icon: 'edit' },
-  ]
+  // ══ G-354: die Arten kommen aus einer Quelle ═══════════════════
+  //
+  // `[cmd]` **Hier stand eine eigene Liste aus dem Altrepo**
+  // (`module-goals.jsx:694-744`) mit sechs Eintraegen: einer
+  // abgekuerzten Koerperzusammensetzung, `weight`, `strength`,
+  // `performance`, `habit`, `custom`.
+  //
+  // `[cmd]` **Die abgekuerzte Form kennt die Datenbank nicht** — der
+  // CHECK `user_goals_goal_type_check` laesst vier Werte zu, und
+  // `body_composition` ist ausgeschrieben. **Ein Ziel mit dem
+  // abgekuerzten Wert waere beim Anlegen abgewiesen worden.**
+  //
+  // `[read]` **Dieselbe Klasse wie die sechste Namensliste in
+  // `nutrition/modale.tsx`** (G-339) — **eine Liste, die niemand
+  // mitzaehlt, weil sie in einem Fenster steht.**
+  const [type, setType] = React.useState<ZielArt>('body_composition')
+  // `[read]` **Das Sinnbild bleibt hier** — es ist Darstellung, kein
+  // Wert. **Die Zuordnung deckt genau die vier Arten ab.**
+  const SINNBILD: Record<ZielArt, React.ComponentProps<typeof Icon>['name']> = {
+    body_composition: 'goals',
+    performance: 'training',
+    health: 'brain',
+    lifestyle: 'edit',
+  }
+  const types = zielArtAuswahl().map(a => ({
+    id: a.code, label: a.label, icon: SINNBILD[a.code],
+  }))
   return (
     <GModal title="New goal" subtitle="Choose type · set target · link modules"
             eyebrow="plus" onClose={onClose}
@@ -129,7 +174,7 @@ function NewGoalModal({ onClose }: { onClose: () => void }) {
               <>
                 <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
                 <InEntwicklungKnopf titel="Create goal" className="v2-btn v2-btn-primary"
-                                    grund="`goals.user_goals` gibt es (23 Spalten, 11 Zeilen live), und geschrieben wird sie bereits — `lib/goals/schreiben.ts` setzt Prioritaet und Status. Was fehlt, ist nur das ANLEGEN: es gibt genau drei aktive Plaetze (`user_goals_check1` 1–3 und `uq_user_goals_active_slot`), und welcher beim Anlegen frei wird, ist eine Produktentscheidung.">
+                                    grund={`\`goals.user_goals\` gibt es (23 Spalten, 11 Zeilen live), und geschrieben wird sie bereits — \`lib/goals/schreiben.ts\` setzt Prioritaet und Status. Was fehlt, ist nur das ANLEGEN: \`schreiben.ts\` kennt genau eine Operation, \`.update()\`, und \`ZielAenderung\` fuehrt weder \`goal_type\` noch \`subtype\` (G-352). Die ${AKTIVE_PLAETZE} aktiven Plaetze sind dabei KEINE offene Frage — sie stehen im CHECK \`user_goals_check1\` und im Index \`uq_user_goals_active_slot\` (G-354). Offen ist nur, welchen freien Platz die Oberflaeche waehlt.`}>
                   <Icon name="check" className="v2-ic v2-ic-sm" />Create goal
                 </InEntwicklungKnopf>
               </>
@@ -152,18 +197,23 @@ function NewGoalModal({ onClose }: { onClose: () => void }) {
           ))}
         </div>
       </GField>
+      {/* ══ G-354: die Beispiele folgen den vier Arten ═════════════
+          `[cmd]` **Hier stand `type === 'strength'`** — **`strength`
+          war in der Altrepo-Liste eine ART.** `[cmd]` **In der
+          Datenbank ist es ein `subtype` unter `performance`.**
+
+          `[read]` **Der Typecheck hat es gefunden, nicht ich** — die
+          drei Vergleiche hatten nach dem Anschluss keine
+          Ueberschneidung mehr. */}
       <GField label="Title">
-        <GInput aria-label="Title" placeholder={
-          type === 'strength' ? 'e.g. Bench Press 1RM · 130 kg'
-            : type === 'performance' ? 'e.g. 10k under 45:00' : 'e.g. Drop to 12% BF'
-        } />
+        <GInput aria-label="Title" placeholder={BEISPIEL[type].titel} />
       </GField>
       <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
         <GField label="Current value">
-          <GInput aria-label="Current value" placeholder={type === 'strength' ? '122.5' : '79.4'} />
+          <GInput aria-label="Current value" placeholder={BEISPIEL[type].ist} />
         </GField>
         <GField label="Target value">
-          <GInput aria-label="Target value" placeholder={type === 'strength' ? '130' : '78'} />
+          <GInput aria-label="Target value" placeholder={BEISPIEL[type].ziel} />
         </GField>
       </div>
       <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
