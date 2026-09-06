@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 210 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 4 |
+| `laufend_claudecode` | 5 |
 | `erledigt` | 299 |
-| **gesamt** | **515** |
+| **gesamt** | **516** |
 
 ## medical — 43
 
@@ -388,7 +388,7 @@
 | `G-217` | feature | mittel | [der Trainings-Schreibweg hat keine Oberflaeche](erledigt/training-g-0217-trainingsformular-fehlt.md) | erledigt | — | G-219 |
 | `G-219` | entscheidung | niedrig | [`LiveWorkout` hat keinen Aufrufer mehr](todos/training-g-0219-liveworkout-ohne-aufrufer.md) | offen | — | — |
 
-## recovery — 22
+## recovery — 23
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -414,6 +414,7 @@
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
 | `G-243` | befund | mittel | [die Recovery-Schwellen stehen im Mockup, nicht im Punkt](todos/recovery-g-0243-die-recovery-schwellen-stehen-im-mockup-nicht-im-punkt.md) | offen | — | — |
+| `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](laufend_claudecode/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | laeuft (claudecode) | — | — |
 
 ## goals — 6
 

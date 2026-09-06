@@ -603,3 +603,133 @@ Nicht committen, nicht stagen, nicht pushen.
     Reiter          alle, gezaehlt
     Referenz        unter jedem, Bildschirmfoto
     unangetastet    kein bestehendes Verhalten geaendert
+
+## Bericht — Auftrag 3, recovery vollstaendig
+
+**Claude Code, 2026-09-06.** **Neun Reiter, alle geprueft.**
+
+### Toms Praezisierung aendert, was unten steht
+
+**Tom, 2026-09-07:** *,,oben angebundenes plus mockups der noch
+nicht angebundenen und unten die mockups der angebundenen als
+vergleich"*.
+
+`[read]` **Damit ist die Frage nicht mehr *,,welcher Reiter"*,
+sondern *,,welche KACHEL ist angebunden"*** — **nur die bekommt
+eine Referenz.**
+
+`[cmd]` **Gemessen ueber alle `<Card>` in `v2/recovery`: 17
+angebunden, 31 tragen selbst `attrappe=`.**
+
+### Das hat meinen Auftrag 2 berichtigt
+
+`[cmd]` **Drei Referenzkacheln aus Auftrag 2 mussten wieder
+raus** — **sie stehen oben schon als Attrappe:**
+
+    Phone camera HRV       oben attrappe={ATTRAPPE}
+    Score paths            oben attrappe={ATTRAPPE}
+    Sleep hygiene inputs   oben attrappe={ATTRAPPE}
+
+`[read]` **Eine Attrappe braucht keine Referenz auf sich selbst** —
+das war Toms Satz, und mein Auftrag 2 hatte es doppelt gezeigt.
+
+### Was jetzt je Reiter steht
+
+    Reiter         angebundene Kacheln   Referenz unten
+    today          3 (Score, Modalitaeten, Verlauf)   JA
+    checkin        1 (Vorschau)                       nein *
+    muscles        0                                  nein
+    hrv            4 (HRV, Messprotokoll, Verlauf)    JA
+    sleep          4 (Letzte Nacht, 14 Naechte, …)    JA
+    modalities     0                                  nein
+    overtraining   0                                  nein
+    protocols      0                                  nein
+    stress         0                                  nein
+
+`[read]` **Sechs Reiter bekommen KEINE Referenz, und das ist die
+Regel, nicht ein Versaeumnis:** `[cmd]` **`modalities`,
+`overtraining`, `protocols` und `stress` bestehen vollstaendig aus
+Attrappen** (7/7, 4/4, 4/4, 6/6 am Schirm) — **es gibt dort nichts
+Angebundenes zu vergleichen.**
+
+`[cmd]` **Dasselbe bei `muscles`:** `Muscle recovery` und
+`Per-muscle detail` tragen beide `attrappe=`.
+
+`[read]` **\* `checkin` hat mit `Vorschau` genau eine angebundene
+Kachel** — **sie rechnet die Live-Vorschau, hat aber im Mockup
+keinen eigenen Gegenpart** (dort heisst der Block *Live score
+preview* und ist Teil des Formulars). **Gemeldet, nicht erfunden.**
+
+### Damit ist Toms Beobachtung beantwortet
+
+`[cmd]` **Er zeigte auf *Muscle map*, *Muscle recovery* und
+*Per-muscle detail*** — **alle drei sind Attrappen.**
+
+`[read]` **Sie brauchen keine Referenz darunter, sondern eine
+Anbindung.** `[read]` **Was fehlte, war nicht der Vergleich, sondern
+die Klarheit, dass sie noch nicht angebunden SIND** — und die
+tragen sie oben bereits als Marke.
+
+### Am Schirm, alle neun
+
+    Reiter         Attrappen   Kacheln
+    today                 16        14
+    checkin                4         6
+    muscles                3         3
+    hrv                   16        12
+    sleep                 12        10
+    modalities             7         7
+    overtraining           4         4
+    protocols              4         4
+    stress                 6         6
+
+`[cmd]` **Bildschirmfoto `backup/g359b-recovery-final-today.png`:**
+oben *,,echte Daten"* (30 Check-ins), Score 74.9 aus
+`recovery.scores`, Modalitaeten mit 89 erfassten Zeilen —
+**daneben** die Attrappen *Pending actions* und *Overtraining
+watch*, **darunter** die Referenz.
+
+### Was der Typecheck gefunden hat
+
+`[cmd]` **Zwei Stellen, an denen das Mockup nicht mehr zum Code
+passt:**
+
+    sc.bonus         gibt es nicht mehr - C-181 hat den
+                     ACWR-/Bonus-Term per Evidenzregister entfernt
+    m.duration_min   heisst im Code `duration`
+
+`[read]` **Die Referenz zeigt jetzt die Gewichtssumme, die es
+GIBT** — **eine erfundene Bonuszahl waere schlechter als keine**
+(C-378).
+
+`[read]` **Das ist ein Nebenbefund, der ohne diese Arbeit nicht
+aufgefallen waere:** **das Mockup ist an zwei Stellen ueberholt.**
+
+### Bestehendes unangetastet
+
+`[cmd]` **`RecToday`, `RecHRV`, `RecSleep` werden unveraendert mit
+denselben Werten aufgerufen.** **Kein Ternaer angefasst, keine
+Bedingung geaendert.**
+
+### Vollstaendiger Lauf
+
+    tsc --noEmit         sauber
+    next lint            keine Warnung, kein Fehler
+    Tests                1500 / 1500 gruen, 0 Fehler
+    mockup-deckung.mjs   1.157 / 2.488 (+12)
+    dev@lumeos.app       nicht geschrieben
+    gestaged             nichts
+
+### Was das fuer die uebrigen Module heisst
+
+`[read]` **Die Arbeit je Modul ist kleiner als gedacht** — **nur
+angebundene Kacheln brauchen eine Referenz.** `[cmd]` **In recovery
+waren das 3 von 9 Reitern.**
+
+`[read]` **Vor jedem weiteren Modul messe ich zuerst, welche
+Kacheln angebunden sind** — sonst baue ich wieder Referenzen auf
+Attrappen.
+
+## Abnahme
+
+_(vom Orchestrator)_
