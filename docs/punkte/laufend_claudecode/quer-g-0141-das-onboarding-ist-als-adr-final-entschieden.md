@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: []
   dateien: ["docs/specs/Core/ONBOARDING_ADR.md"]
@@ -50,3 +52,8 @@ zahlen: null
   `[cmd]` **Und *„Post-Onboarding Setup-Cards"*** — in noch nicht
   konfigurierten Modulen erscheinen Einrichtungskarten. **Das ist eine
   eigene Bauform, die niemand kennt.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-83 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

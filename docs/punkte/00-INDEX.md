@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 208 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 285 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 286 |
 | **gesamt** | **497** |
 
 ## medical — 43
@@ -178,17 +178,17 @@
 | `G-136` | feature | mittel | [Zwei Kartenzuordnungen sind Auslegung](erledigt/nutrition-g-0136-zwei-kartenzuordnungen-sind-auslegung.md) | erledigt | — | — |
 | `G-137` | befund | mittel | [Acht Karten — die alten Ansichtsschluessel verfallen](erledigt/nutrition-g-0137-acht-karten-die-alten-ansichtsschluessel-verfallen.md) | erledigt | — | — |
 | `G-140` | feature | mittel | [`display_tier` ist ein Abo-Tier, keine Baumebene](todos/nutrition-g-0140-display-tier-ist-ein-abo-tier-keine-baumebene.md) | offen | — | — |
-| `G-152` | feature | mittel | [Der Aktivitaetsstrom des Dashboards](laufend_claudecode/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | laeuft (claudecode) | — | — |
+| `G-152` | feature | mittel | [Der Aktivitaetsstrom des Dashboards](todos/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | offen | — | — |
 | `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — | — |
 | `G-220` | entscheidung | hoch | [MealCam Auto-Accept widerspricht ADR_MEALCAM_V1](erledigt/nutrition-g-0220-mealcam-auto-accept-widerspricht-adr-mealcam-v1.md) | erledigt | — | — |
 | `G-221` | entscheidung | hoch | [Food-Tag-Set V1 widersprüchlich definiert](erledigt/nutrition-g-0221-food-tag-set-v1-widerspruechlich-definiert.md) | erledigt | — | G-245 |
-| `G-222` | befund | hoch | [Onboarding Flow für Nutrition Preferences fehlt in SPEC_03](laufend_claudecode/nutrition-g-0222-onboarding-flow-fuer-nutrition-preferences-fehlt-in-spec-0.md) | laeuft (claudecode) | — | — |
+| `G-222` | befund | hoch | [Onboarding Flow für Nutrition Preferences fehlt in SPEC_03](erledigt/nutrition-g-0222-onboarding-flow-fuer-nutrition-preferences-fehlt-in-spec-0.md) | erledigt | — | — |
 | `G-223` | befund | mittel | [Recalculate-UI in SPEC_10 fehlt (bekanntes Open Item)](todos/nutrition-g-0223-recalculate-ui-in-spec-10-fehlt-bekanntes-open-item.md) | offen | — | — |
 | `G-224` | befund | mittel | [MealCam Consent-Widerruf in Nutrition Settings nicht beschrieben](todos/nutrition-g-0224-mealcam-consent-widerruf-in-nutrition-settings-nicht-besch.md) | offen | — | — |
 | `G-225` | befund | mittel | [Coach Suggestion User Flow fehlt](todos/nutrition-g-0225-coach-suggestion-user-flow-fehlt.md) | offen | — | — |
 | `G-226` | entscheidung | mittel | [V1-Status-Marker fehlen für Recipes/Shopping/MealPlans Components in SPEC_10](erledigt/nutrition-g-0226-v1-status-marker-fehlen-fuer-recipes-shopping-mealplans-co.md) | erledigt | — | C-366, G-285 |
 | `G-227` | befund | mittel | [SPEC_03 §Flow 6 Custom Food erstellen via Barcode-Scan widerspricht Phase-2-Status](todos/nutrition-g-0227-spec-03-flow-6-custom-food-erstellen-via-barcode-scan-wide.md) | offen | — | — |
-| `G-228` | feature | mittel | [Score Level Multiplier inkonsistent zwischen SPEC_04 und SPEC_07](laufend_claudecode/nutrition-g-0228-score-level-multiplier-inkonsistent-zwischen-spec-04-und-s.md) | laeuft (claudecode) | — | G-283 |
+| `G-228` | feature | mittel | [Score Level Multiplier inkonsistent zwischen SPEC_04 und SPEC_07](todos/nutrition-g-0228-score-level-multiplier-inkonsistent-zwischen-spec-04-und-s.md) | offen | — | G-283 |
 | `G-229` | feature | mittel | [Admin-Override-Flow für Tag-Korrekturen nicht belegt](todos/nutrition-g-0229-admin-override-flow-fuer-tag-korrekturen-nicht-belegt.md) | offen | — | C-384 |
 | `G-230` | entscheidung | niedrig | [`nutrition.water/page.tsx` und `nutrition.shopping-lists/page.tsx` als separate Pages](erledigt/nutrition-g-0230-nutrition-water-page-tsx-und-nutrition-shopping-lists-page.md) | erledigt | — | — |
 | `G-231` | befund | niedrig | [`SPEC_04 §Feature 9 MealCam` referenziert `ADR_AI_USAGE_WALLET.md` — nicht im Nutrition Spec Pfad](todos/nutrition-g-0231-spec-04-feature-9-mealcam-referenziert-adr-ai-usage-wallet.md) | offen | — | — |
@@ -420,7 +420,7 @@
 |---|---|---|---|---|---|---|
 | `C-06` | befund | mittel | [WP-05 erstes Mock-Modul echt machen](todos/goals-c-0006-wp-05-erstes-mock-modul-echt-machen.md) | offen | — | — |
 | `E-04` | blocker | hoch | [Alte `public`-Tabellen nach `legacy` verschieben](erledigt/goals-e-0004-alte-public-tabellen-nach-legacy-verschieben.md) | erledigt | — | — |
-| `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](todos/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | offen | — | — |
+| `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](laufend_claudecode/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | laeuft (claudecode) | — | — |
 | `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — | — |
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
@@ -539,7 +539,7 @@
 | `G-58` | befund | niedrig | [Kontrast auf Attrappenkarten gegen den gerenderten Grund messen](todos/quer-g-0058-kontrast-auf-attrappenkarten-gegen-den-gerenderten-grund-messen.md) | offen | — | — |
 | `G-109` | befund | mittel | [Der Dev-Server kompiliert geaenderte Routen wiederholt nicht neu](todos/quer-g-0109-der-dev-server-kompiliert-geaenderte-routen-wiederholt-nicht-neu.md) | offen | — | — |
 | `G-122` | feature | mittel | [Fuenf Tabellen mit Daten haben keinen Schreibweg](erledigt/quer-g-0122-fuenf-tabellen-mit-daten-haben-keinen-schreibweg.md) | erledigt | — | C-49, G-126, GO-23 |
-| `G-141` | befund | mittel | [Das Onboarding ist als ADR final entschieden](todos/quer-g-0141-das-onboarding-ist-als-adr-final-entschieden.md) | offen | — | — |
+| `G-141` | befund | mittel | [Das Onboarding ist als ADR final entschieden](laufend_claudecode/quer-g-0141-das-onboarding-ist-als-adr-final-entschieden.md) | laeuft (claudecode) | — | — |
 | `G-155` | befund | mittel | [Jede Kachel jedes Moduls als Bild](todos/quer-g-0155-jede-kachel-jedes-moduls-als-bild.md) | offen | — | — |
 | `G-175` | feature | mittel | [Das Nachweiskonto hat kein bekanntes Passwort](todos/quer-g-0175-das-nachweiskonto-hat-kein-bekanntes-passwort.md) | offen | — | — |
 | `G-193` | feature | mittel | [Jede Leistungszahl nennt das Konto](todos/quer-g-0193-jede-leistungszahl-nennt-das-konto.md) | offen | — | — |

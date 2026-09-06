@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: OFFEN
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -427,4 +429,52 @@ Daten), `backup/g222-voll-*.png` (dieselben mit).
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator.**
+
+### Die Messung traegt den Entwurf
+
+`[cmd]` **Nichts ist fuer den Betrieb noetig.** `[cmd]` **Jede
+`food_preferences`-Spalte hat eine Vorgabe.** `[cmd]` **137 von 138
+Naehrstoffen arbeiten ohne biologisches Geschlecht.**
+
+`[read]` **Ich hatte gefragt, was der Betrieb voraussetzt** —
+**nicht, was ein Formular fragen koennte.** `[read]` **Die Antwort
+ist: nichts.**
+
+`[read]` **Damit ist das Onboarding nicht die Bedingung fuer den
+Start, sondern eine Abkuerzung** — **und jeder Schritt darf
+uebersprungen werden.**
+
+### Drei Schritte, alle uebersprungbar
+
+`[cmd]` **Und die Slotliste bleibt Vorgabe** — **fuenf Zeilen mit
+gemessenen Zeiten** (G-332).
+
+`[read]` **Sie im Onboarding zu zeigen waere ein Schritt fuer eine
+Entscheidung, die schon getroffen ist.**
+
+### G-228 — drei Skalen, die sich widersprechen
+
+`[cmd]` **Drei gegenseitig unvereinbare Erfahrungsskalen
+gefunden.**
+
+`[read]` **E-46 laesst beides offen:** **die Skala ist zu entwerfen,
+die Multiplikatoren brauchen Quellen.**
+
+`[read]` **Und er hat nichts gebaut** — richtig. `[read]` **Eine
+vierte Skala haette das Problem verdreifacht.**
+
+**Bleibt bei Tom.**
+
+### Zwei Punkte doppeln sich vermutlich
+
+`[cmd]` **G-83 und G-141 liegen in `todos/`** — **beide zum
+Onboarding.**
+
+`[read]` **Er hat es gemeldet, bevor gebaut wird** — **genau der
+richtige Zeitpunkt.**
+
+`[cmd]` **Als Auftrag zurueckgegeben.**
+
+**Abgenommen.**
+

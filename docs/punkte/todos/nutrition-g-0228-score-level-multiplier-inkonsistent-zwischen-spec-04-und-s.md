@@ -7,8 +7,6 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: null
 entscheidung: E-46
-agent: claudecode
-beauftragt: 2026-09-07
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -124,3 +122,16 @@ Quelle.** `[read]` **Nach C-109 gilt: eine Zahl ohne Beleg ist ein
 
 **Mitbeauftragt mit G-222 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-07: drei Skalen, die sich widersprechen.
+
+`[cmd]` **Drei gegenseitig unvereinbare Erfahrungsskalen
+gefunden.**
+
+`[read]` **E-46 laesst beides offen: die Skala ist zu entwerfen,
+die Multiplikatoren brauchen Quellen.**
+
+`[read]` **Nichts gebaut** — **eine vierte Skala haette das Problem
+verdreifacht.**
+
+**Die Entscheidung gehoert Tom.**

@@ -8,8 +8,6 @@ braucht: []
 kind_von: G-100
 kinder: []
 entscheidung: E-52
-agent: claudecode
-beauftragt: 2026-09-07
 beruehrt:
   tabellen: []
   dateien: []
@@ -101,3 +99,13 @@ falsche Aussage.**
 
 **Mitbeauftragt mit G-222 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-07: wartet weiter, aber die Sicht kommt.
+
+`[cmd]` **Codex hat sie am 2026-09-07 gebaut** —
+`activity_stream`, sechs Module, TTFB 4,60 ms warm (C-412).
+
+`[cmd]` **Und ein Befund haengt daran: sie liegt in `nutrition`
+statt querschnittlich** (C-414).
+
+`[read]` **Der Anschluss ist ein UI-Auftrag** — **nach C-414.**
