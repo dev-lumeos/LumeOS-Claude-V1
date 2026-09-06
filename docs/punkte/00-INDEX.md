@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 209 |
+| `todos` | 210 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 4 |
 | `erledigt` | 296 |
-| **gesamt** | **512** |
+| **gesamt** | **513** |
 
 ## medical — 43
 
@@ -459,7 +459,7 @@
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | — |
 
-## quer — 105
+## quer — 106
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -529,6 +529,7 @@
 | `C-416` | feature | hoch | [ein taeglicher Kettenlauf](erledigt/quer-c-0416-ein-taeglicher-kettenlauf.md) | erledigt | — | — |
 | `C-417` | feature | hoch | [der Schirm wird nicht gemessen](erledigt/quer-c-0417-der-schirm-wird-nicht-gemessen.md) | erledigt | — | — |
 | `C-418` | befund | hoch | [der Waechter vergleicht Zeichenketten, nicht Inhalte](laufend_claudecode/quer-c-0418-der-waechter-vergleicht-zeichenketten.md) | laeuft (claudecode) | — | — |
+| `C-419` | feature | hoch | [das Wallet existiert nicht](todos/quer-c-0419-das-wallet-existiert-nicht.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

@@ -842,6 +842,35 @@ erfuellt.**
 `[read]` **Also: messen, ein paar Wochen sammeln, dann
 Schwellenwerte setzen.**
 
+## 16b · MealCam kostet Geld
+
+`[cmd]` **`docs/specs/Marketplace/SPEC_05_WALLET_ECONOMICS.md`:**
+
+    ai_usage       voucher -> --   AI Micro-Transaction
+    Lumeos Basic   ai_credits_included: 20
+                   -- 20 MealCam Scans/mo inklusive
+    Lumeos Plus    ai_credits_included: 50
+
+`[read]` **Jede Aufnahme ist eine Transaktion gegen das
+Voucher-Guthaben.**
+
+`[read]` **Das aendert zwei Sachen an dieser Spec:**
+
+`[read]` **Erstens: eine Aufnahme, die scheitert, darf nicht
+abgerechnet werden.** `[cmd]` **`NO_MATCH` ist ein gueltiges
+Ergebnis** (Abschnitt 3) — **aber ein Abbruch ist keins.**
+
+`[read]` **Zweitens: der Nutzer muss vorher wissen, was es
+kostet.** `[read]` **Eine Kamera, die stumm Guthaben verbraucht,
+ist ein Vertrauensbruch.**
+
+`[cmd]` **Und das Wallet existiert noch nicht** (C-419) — **kein
+Schema, keine Tabelle, keine Zeile Code.**
+
+`[read]` **MealCam Phase 0 kann ohne Abrechnung beginnen** —
+**aber die Zaehlung je Aufnahme gehoert in den Lernspeicher, damit
+sie spaeter anschliessbar ist.**
+
 ## 17 · Was Tom am 2026-09-07 entschieden hat
 
 **Naehrwerte bei `PARENT_MATCH`** — `[cmd]` **es gibt keinen Posten
