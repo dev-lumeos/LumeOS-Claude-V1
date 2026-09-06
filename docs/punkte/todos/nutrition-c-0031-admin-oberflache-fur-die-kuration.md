@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-07
 beruehrt:
   tabellen: ["nutrition.foods"]
   dateien: ["docs/ssot/daten/wortschatz-luecke.json"]
@@ -78,3 +76,19 @@ Oberflaeche.**
 
 **Mitbeauftragt mit C-416 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-07: der Vertrag steht.
+
+`[cmd]` **`nutrition.decide_recipe_curation_candidate(...)`, Schritt
+417 in der Kette.**
+
+`[cmd]` **Annahme erzeugt einen unveraenderlichen
+BLS-Katalog-Snapshot** — **kein privates `recipes`-Objekt.**
+
+`[read]` **Die Ueberlagerung statt der Kopie** — **wie
+`food_tags_kuriert`** (E-55).
+
+`[cmd]` **Fehler hinterlassen keinen Teilzustand.**
+
+`[read]` **Was bleibt: die Oberflaeche zum Annehmen und Ablehnen** —
+ein UI-Auftrag.

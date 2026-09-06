@@ -9,6 +9,8 @@ kind_von: G-359
 entscheidung: E-70
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: 0b19887f
 beruehrt:
   dateien:
     - tools/mockup-deckung.mjs
@@ -208,4 +210,71 @@ nicht.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator.**
+
+### Der Schirmlauf kostet 8,4 Minuten
+
+`[cmd]` **128 Aufnahmen, mindestens 502,4 s** — **plus Anmeldung,
+Chromium und Bilder.**
+
+`[read]` **Er gehoert nicht ins Gate** — **das dauert 31,6 s.**
+
+`[cmd]` **Und nicht in den Kettenprozess** — **der laeuft gegen eine
+Wegwerf-Datenbank ohne Server.**
+
+### Die Entscheidung ist richtig
+
+    eigener taeglicher Schirmlauf
+    eigene Statusdatei schirm-status.json
+    eigener kurzlebiger Server auf eigenem Port
+    kontrollierter Seed-Bestand
+    niemals Port 3200
+
+`[read]` **Der letzte Punkt ist der wichtige:** `[cmd]` **Port 3200
+gehoert Claude Codes Dev-Server** — **ein Waechter, der ihn
+uebernimmt, wuerde einen Agenten mitten in der Arbeit stoeren.**
+
+`[read]` **Und *kontrollierter Seed-Bestand* heisst:** **der
+Schirmlauf misst gegen bekannte Daten, nicht gegen das, was gerade
+auf `dev` liegt.**
+
+### Der Gegenbeleg steht
+
+`[cmd]` **G-359 fand am gerenderten Goals-Schirm 18 von 26 im Code
+vorhandene, aber durch Ternaries unerreichbare Elemente.**
+
+`[read]` **Damit ist belegt, dass ein Schirmlauf findet, was ein
+Codelauf uebersieht** — **die Begruendung fuer C-417 in einer
+Zeile.**
+
+### C-31 — der Vertrag steht, und die Entscheidung darin
+
+`[cmd]` **`nutrition.decide_recipe_curation_candidate(...)`, als
+Schritt 417 in der Kette registriert.**
+
+`[cmd]` **Annahme erzeugt ausschliesslich einen unveraenderlichen
+BLS-Katalog-Snapshot** — **kein privates `nutrition.recipes`-Objekt.**
+
+`[read]` **Das ist die Antwort auf meine Frage im Auftrag:**
+*,,entsteht ein Rezept oder nur eine Ueberlagerung?"*
+
+`[read]` **Er hat sich fuer die Ueberlagerung entschieden und es
+begruendet** — **wie `food_tags_kuriert` bei den Tags** (E-55).
+
+`[cmd]` **Nicht-Admins, leere Kandidaten und Custom-Food-Zutaten
+werden abgewiesen; Fehler hinterlassen keinen Teilzustand.**
+
+`[read]` **Der letzte Halbsatz ist der wichtige:** **eine
+halbangenommene Kuration waere schlimmer als eine abgelehnte.**
+
+### C-155 — die Liste steht
+
+`[cmd]` **`@supabase/ssr` bleibt bei 0.1.0.** `[cmd]` **Die
+Checkliste fuer Admin, Coach, Shared, Web, Login, Sitzung,
+Erneuerung und Abmeldung steht im Bericht.**
+
+`[read]` **Damit ist es entscheidbar, wenn Tom Zeit dafuer hat** —
+**und bis dahin steht dokumentiert, was es kostet.**
+
+**Abgenommen.**
+

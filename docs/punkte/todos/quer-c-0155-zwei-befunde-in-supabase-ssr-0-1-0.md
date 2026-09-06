@@ -8,8 +8,6 @@ braucht: []
 kind_von: F-07
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-07
 beruehrt:
   tabellen: []
   dateien: []
@@ -49,3 +47,12 @@ ein benannter Pfad.**
 
 **Mitbeauftragt mit C-416 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-07: nicht gewechselt, Liste steht.
+
+`[cmd]` **`@supabase/ssr` bleibt bei 0.1.0, aktuell waere 0.12.6.**
+
+`[cmd]` **Die Checkliste steht im C-417-Bericht:** Admin, Coach,
+Shared, Web, Login, Sitzung, Erneuerung, Abmeldung.
+
+`[read]` **Entscheidbar, wenn Tom Zeit dafuer hat.**
