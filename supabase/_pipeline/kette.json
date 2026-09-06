@@ -1522,6 +1522,24 @@
       "depends_on": [
         "017"
       ]
+    },
+    {
+      "id": "419_schema",
+      "path": "supabase/migrations/20260906072641_c419_marketplace_wallet_schema.sql",
+      "kind": "sql",
+      "creates": "C-419: Marketplace-Wallet, Transaktionsjournal, Katalogtabellen und RLS ohne Browser-Schreibrechte",
+      "depends_on": [
+        "auth_stub"
+      ]
+    },
+    {
+      "id": "419",
+      "path": "supabase/_pipeline/17_marketplace/419_wallet_booking.sql",
+      "kind": "sql",
+      "creates": "C-419: drei Abo-Pläne, sieben Gebuehrensaetze, vier Werbeplaetze sowie atomare Voucher-then-Revenue-Buchung",
+      "depends_on": [
+        "419_schema"
+      ]
     }
   ]
 }

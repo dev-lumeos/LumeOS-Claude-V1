@@ -5286,7 +5286,20 @@
       },
       "grants_herkunft": "273_wissen_schema.sql: Wissen ist nicht fuer anon/authenticated freigegeben; nur service_role kann importieren/lesen.",
       "zeilenschutzart": "service_role_only"
-    }
+    },
+    {"schema":"marketplace","name":"wallets","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"wallet_transactions","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"subscription_plans","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
+    {"schema":"marketplace","name":"creators","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"products","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"product_bundles","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
+    {"schema":"marketplace","name":"orders","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"order_items","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"product_licenses","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"product_reviews","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"promotion_slots","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"fee_schedules","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
+    {"schema":"marketplace","name":"promotion_slot_catalog","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"}
   ],
   "_fremde_funktionen": "GO-04: Funktionen ausserhalb nutrition. Dieselbe Luecke wie oben.",
   "fremde_funktionen": [
@@ -5459,6 +5472,136 @@
       "schema": "coach",
       "name": "withdraw_relationship_invite",
       "schritt": "155"
+    },
+    {
+      "schema": "marketplace",
+      "name": "touch_updated_at",
+      "schritt": "419_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-419: keine Browser-DML auf Geldtabellen; Service-Rolle bucht atomar.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "marketplace",
+      "name": "touch_updated_at",
+      "schritt": "419_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-419: Journal ist nur lesbar, Buchungen gehen ueber die Service-Rolle.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "marketplace",
+      "name": "touch_updated_at",
+      "schritt": "419_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-419: aktive Abo-Katalogeintraege lesbar.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "marketplace",
+      "name": "touch_updated_at",
+      "schritt": "419_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-419: verifizierte Creator oder eigene Zeile lesbar.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "marketplace",
+      "name": "touch_updated_at",
+      "schritt": "419_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-419: aktive Produkte oder eigene Entwuerfe lesbar.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "marketplace",
+      "name": "touch_updated_at",
+      "schritt": "419_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-419: Bestandteile aktiver Bundles lesbar.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "marketplace",
+      "name": "touch_updated_at",
+      "schritt": "419_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-419: Kaeufer oder betroffener Creator lesen Bestellungen.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "marketplace",
+      "name": "touch_updated_at",
+      "schritt": "419_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-419: nur Parteien der Bestellung lesen Positionen.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "marketplace",
+      "name": "touch_updated_at",
+      "schritt": "419_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-419: Lizenz nur fuer ihren Nutzer lesbar.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "marketplace",
+      "name": "touch_updated_at",
+      "schritt": "419_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-419: sichtbare Rezensionen oder eigene unsichtbare Rezension lesbar.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "marketplace",
+      "name": "touch_updated_at",
+      "schritt": "419_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-419: aktive Slots oder eigene abgelaufene Slots lesbar.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "marketplace",
+      "name": "touch_updated_at",
+      "schritt": "419_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-419: aktive Gebuehrenplaene lesbar.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "marketplace",
+      "name": "touch_updated_at",
+      "schritt": "419_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-419: aktive Werbeplatzpreise lesbar.",
+      "zeilenschutzart": "oeffentlich"
     }
   ],
   "fremde_sichten": [

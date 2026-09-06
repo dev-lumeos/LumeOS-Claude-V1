@@ -1,9 +1,9 @@
 {
   "gemessen": "2026-09-06",
   "gesamt": 242,
-  "sichtbar": 172,
+  "sichtbar": 150,
   "verworfen": 0,
-  "fehlt": 93,
+  "fehlt": 92,
   "je": [
     {
       "modul": "admin",
@@ -18,7 +18,7 @@
     {
       "modul": "coach",
       "mockup": 52,
-      "fehlt": 41,
+      "fehlt": 46,
       "verworfen": 0
     },
     {
@@ -57,7 +57,7 @@
     {
       "modul": "nutrition",
       "mockup": 20,
-      "fehlt": 0,
+      "fehlt": 3,
       "verworfen": 0
     },
     {
@@ -68,7 +68,7 @@
     {
       "modul": "recovery",
       "mockup": 39,
-      "fehlt": 6,
+      "fehlt": 15,
       "verworfen": 0
     },
     {
@@ -79,7 +79,7 @@
     {
       "modul": "supplements",
       "mockup": 40,
-      "fehlt": 6,
+      "fehlt": 11,
       "verworfen": 0
     },
     {

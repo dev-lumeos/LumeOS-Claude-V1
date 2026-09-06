@@ -17,35 +17,70 @@ const MOCKUPS = 'docs/spezifikation/10-plattform/design-system/theme-v1'
 const V2 = 'apps/web/src/app/v2'
 const STAND = 'docs/spezifikation/10-plattform/design-system/mockup-deckung.json'
 const VERWORFEN = 'docs/spezifikation/10-plattform/design-system/mockup-verworfen.json'
+const MESSAGE_CATALOGS = ['apps/web/messages/de.json', 'apps/web/messages/en.json', 'apps/web/messages/th.json']
 
-/** `[read]` Beschriftungen: Text zwischen Tags, und label/title-Zuweisungen. */
+// C-420: Die Laufzeit-Uebersetzungen liegen in apps/web/messages. Sie werden
+// ueber denselben Schluessel miteinander verbunden; ein englischer Mockup-Titel
+// und sein deutscher/thailaendischer Laufzeittext sind damit gleichwertig.
+function flacheWerte(wert, pfad = '', ziel = new Map()) {
+  if (typeof wert === 'string') ziel.set(pfad, wert)
+  else if (wert && typeof wert === 'object') {
+    for (const [schluessel, kind] of Object.entries(wert)) flacheWerte(kind, `${pfad}.${schluessel}`, ziel)
+  }
+  return ziel
+}
+
+function titelAequivalenzen() {
+  const nachSchluessel = new Map()
+  for (const katalog of MESSAGE_CATALOGS) {
+    if (!existsSync(katalog)) continue
+    try {
+      for (const [schluessel, wert] of flacheWerte(JSON.parse(readFileSync(katalog, 'utf8')))) {
+        if (!nachSchluessel.has(schluessel)) nachSchluessel.set(schluessel, new Set())
+        nachSchluessel.get(schluessel).add(wert)
+      }
+    } catch { /* Ein unlesbarer Katalog darf den Verlustwaechter nicht abschalten. */ }
+  }
+  const aus = new Map()
+  for (const werte of nachSchluessel.values()) {
+    for (const wert of werte) {
+      if (!aus.has(wert)) aus.set(wert, new Set())
+      for (const gleichwertig of werte) aus.get(wert).add(gleichwertig)
+    }
+  }
+  return aus
+}
+
+const UEBERSETZUNGEN = titelAequivalenzen()
+
+/** `[read]` C-418/C-420: Nur Kacheltitel sind Vergleichseinheiten.
+ * Datenwerte und freie Textfragmente sind kein fehlendes UI-Element. */
 function texte(pfad) {
   const t = readFileSync(pfad, 'utf8')
   const s = new Set()
-  for (const m of t.matchAll(/>([A-Za-z][A-Za-z0-9 \-/&.']{3,34})</g)) {
+  for (const m of t.matchAll(/<Card\s+[^>]*\btitle\s*=\s*['"]([^'"]{3,60})['"]/g)) {
     s.add(m[1].trim())
-  }
-  for (const m of t.matchAll(/(?:label|title|name|heading)\s*[:=]\s*['"]([^'"]{4,34})['"]/g)) {
-    s.add(m[1].trim())
-  }
-  for (const x of [...s]) {
-    if (/^(https?|M |px|rgb)/.test(x)) s.delete(x)
   }
   return s
 }
 
-function alleTexte(verzeichnis, endung) {
-  const s = new Set()
-  if (!existsSync(verzeichnis)) return s
+function alleTitel(verzeichnis, endung) {
+  const titel = new Set()
+  if (!existsSync(verzeichnis)) return titel
   for (const e of readdirSync(verzeichnis, { withFileTypes: true })) {
     const p = join(verzeichnis, e.name)
     if (e.isDirectory()) {
-      for (const x of alleTexte(p, endung)) s.add(x)
+      for (const wert of alleTitel(p, endung)) titel.add(wert)
     } else if (e.name.endsWith(endung)) {
-      for (const x of texte(p)) s.add(x)
+      for (const wert of texte(p)) titel.add(wert)
     }
   }
-  return s
+  return titel
+}
+
+function istVorhanden(titel, ui) {
+  if (ui.has(titel)) return true
+  return [...(UEBERSETZUNGEN.get(titel) ?? [])].some(uebersetzung => ui.has(uebersetzung))
 }
 
 if (!existsSync(MOCKUPS)) {
@@ -83,10 +118,10 @@ for (const [modul, mock] of [...je].sort()) {
     zeilen.push({ modul, mockup: mock.size, fehlt: null })
     continue
   }
-  const ui = alleTexte(d, '.tsx')
+  const ui = alleTitel(d, '.tsx')
   const weg = verworfen.get(modul) ?? new Set()
   let fehlt = 0
-  for (const x of mock) if (!ui.has(x) && !weg.has(x)) fehlt += 1
+  for (const x of mock) if (!istVorhanden(x, ui) && !weg.has(x)) fehlt += 1
   gesM += mock.size
   gesF += fehlt
   zeilen.push({ modul, mockup: mock.size, fehlt, verworfen: weg.size })
@@ -96,6 +131,10 @@ let gesV = 0
 for (const s of verworfen.values()) gesV += s.size
 console.log(`[mockup] ${gesM - gesF - gesV} von ${gesM} sichtbar, `
   + `${gesV} verworfen, ${gesF} fehlen`)
+const recovery = zeilen.find(z => z.modul === 'recovery')
+if (recovery?.fehlt !== undefined && recovery.fehlt !== null) {
+  console.log(`[mockup] recovery: ${recovery.mockup - recovery.fehlt - (recovery.verworfen ?? 0)} von ${recovery.mockup} Titeln sichtbar, ${recovery.fehlt} fehlen`)
+}
 
 // `[read]` **Der Vergleich mit dem letzten Stand.** **Steigt die
 // Zahl, ist etwas verschwunden** - **und das ist immer ein Fehler.**
