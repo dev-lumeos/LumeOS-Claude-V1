@@ -4911,6 +4911,163 @@
       "name": "pubchem_conflict_records"
     },
     {
+      "schema": "coach",
+      "name": "client_consent_log",
+      "schritt": "362",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT"
+        ]
+      },
+      "grants_herkunft": "362_client_consent_log.sql: Nutzer lesen ihre Einwilligungsereignisse; nur service_role protokolliert Erteilung und Widerruf.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "medical",
+      "name": "injection_sites",
+      "schritt": "385_schema",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "20260902070205_c385_injection_site_model.sql: katalogisierte Injektionsorte sind lesbar; service_role ALL.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "injection_needle_recommendations",
+      "schritt": "385_schema",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "20260902070205_c385_injection_site_model.sql: Katalogempfehlungen sind lesbar; service_role ALL.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "injection_tissue_condition_guidance",
+      "schritt": "385_schema",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "20260902070205_c385_injection_site_model.sql: Gewebezustands-Leitlinien sind lesbar; service_role ALL.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "injection_logs",
+      "schritt": "385_schema",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "20260902070205_c385_injection_site_model.sql: eigene Injektionsprotokolle sind voll bearbeitbar; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "medical",
+      "name": "injection_site_conditions",
+      "schritt": "385_schema",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "20260902070205_c385_injection_site_model.sql: eigene Gewebezustaende sind voll bearbeitbar; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
       "schema": "wissen",
       "name": "rule_engine_rules",
       "schritt": "273",

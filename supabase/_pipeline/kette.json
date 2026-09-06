@@ -393,6 +393,24 @@
       ]
     },
     {
+      "id": "366_schema",
+      "path": "supabase/migrations/20260902073231_c366_curated_food_tags.sql",
+      "kind": "sql",
+      "creates": "C-366/E-55: food_tags_kuriert und die security-invoker-Sicht food_tags_effective vor ihren Lesern",
+      "depends_on": [
+        "B"
+      ]
+    },
+    {
+      "id": "366_precedence",
+      "path": "supabase/migrations/20260902073543_c366_curated_tag_precedence.sql",
+      "kind": "sql",
+      "creates": "C-366/E-55: kuratierte Tags ueberdecken Import-Tags in food_tags_effective",
+      "depends_on": [
+        "366_schema"
+      ]
+    },
+    {
       "id": "075",
       "path": "supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql",
       "kind": "sql",
@@ -401,7 +419,8 @@
         "073",
         "074",
         "018",
-        "032"
+        "032",
+        "366_precedence"
       ]
     },
     {
