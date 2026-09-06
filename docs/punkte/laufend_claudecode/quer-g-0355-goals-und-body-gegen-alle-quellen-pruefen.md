@@ -521,3 +521,13 @@ haette.**
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Nachtrag 2026-09-07 — die Spec liegt in `docs/specs/Goals/`
+
+`[cmd]` **Zehn Dateien, 1.996 Zeilen.**
+
+`[read]` **Der Orchestrator hatte im Auftrag auf `00-QUELLEN.md`
+verwiesen, ohne das Verzeichnis zu nennen.**
+
+`[cmd]` **`docs/specs/` traegt 13 Modulordner mit rund 50.500
+Zeilen** — **Nutrition allein 46 Dateien.**
