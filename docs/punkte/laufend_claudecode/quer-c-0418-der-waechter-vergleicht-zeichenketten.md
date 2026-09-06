@@ -122,9 +122,59 @@ modul."*
 
 _(vom Agenten anzuhaengen)_
 
-## Abnahme
+## Abnahme — recovery
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator.** **Fuer `recovery` abgenommen, der Rest
+folgt.**
+
+### Toms Vermutung war exakt richtig
+
+`[cmd]` **170 gemeldet, 11 wirklich weg.**
+
+    18   wortgleich vorhanden
+    10   unter deutschen Namen
+    11   wirklich weg
+    ---
+   170   gemeldet
+
+`[cmd]` **`Muscle readiness` ist da** — **genau wie Tom sagte.**
+
+Tom, 2026-09-07: *,,recovery hat er schlecht gearbeitet, denn da
+haben wir vorher schon einiges mehr angebunden."*
+
+`[read]` **Er hatte recht, und der Fehler lag beim Waechter.**
+
+### Der Massstab war falsch
+
+`[read]` **Titel gegen Titel statt Zeichenkette gegen Dateiinhalt.**
+
+`[read]` **Mein Waechter lag um Faktor 15 daneben** — **und deutsche
+Namen waren fuer ihn Verluste.**
+
+`[cmd]` **`Muscle readiness` im Mockup gegen `Muskelbereitschaft` im
+Code** — **derselbe Schirm, andere Sprache.**
+
+`[read]` **Das ist der Fehler hinter dem Fehler:** **die App ist
+mehrsprachig** (DE/EN/TH), **das Mockup ist englisch.** `[read]`
+**Ein Vergleich, der das nicht kennt, meldet jede Uebersetzung als
+Verlust.**
+
+### Und die Hochrechnung sinkt entsprechend
+
+`[cmd]` **Die automatischen Obergrenzen fuer die restlichen drei:**
+medical 7, nutrition 3, supplements 10.
+
+`[read]` **Aus 1.343 werden vermutlich unter 50.**
+
+`[read]` **Er sagt selbst, dass auch diese Zahlen bei
+Handpruefung sinken duerften** — **wie `recovery` von 20 auf 11.**
+
+### Elf Attrappen, nichts angetastet
+
+`[cmd]` **Mit E-68-Vermerk eingeblendet.**
+
+**Abgenommen fuer `recovery`.** **Weiter mit `medical`.**
+
 
 ## Bericht — recovery
 
