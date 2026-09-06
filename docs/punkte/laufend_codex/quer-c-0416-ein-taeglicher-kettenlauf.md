@@ -125,7 +125,80 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### C-416 - Tageslauf und Empfaenger
+
+Der leichteste Weg ohne CI ist ein lokaler Statusnachweis:
+`tools/kettenlauf-taeglich.mjs` startet den bestehenden Lauf mit einer
+tagesbezogenen Wegwerf-Datenbank und schreibt danach atomar
+`backup/_manifests/kettenlauf-status.json`. Der Status enthaelt nur
+Ergebnis, Zeit, Dauer, Datenbank, Manifest und Exit-Code. Es sind keine
+Produkt- oder Entwicklungsdaten enthalten.
+
+`tools/kettenlauf-status-pruefen.mjs` macht bei fehlendem, rotem oder mehr
+als 36 Stunden altem Nachweis rot. `tools/punkte-pruefen.mjs` ruft ihn nun
+immer auf. Damit erreicht ein Nachtfehler beim naechsten Punktelauf und damit
+auch bei `pnpm gate` dieselbe Person, die den Arbeitsstand prueft. Der
+Status selbst ist bewusst nicht versioniert.
+
+Der Windows-Task `LumeOS - taeglicher Kettenlauf` ist lokal fuer 04:00 Uhr
+(+07) taeglich registriert, mit `StartWhenAvailable`, 30-Minuten-Limit,
+`node tools/kettenlauf-taeglich.mjs` und dem Repo als Working Directory.
+Er laeuft nur im angemeldeten Desktop-Kontext; Docker muss deshalb verfuegbar
+sein. Das ist absichtlich kein CI- und kein Gate-Schritt.
+
+Die Gegenprobe ist automatisiert: Ein absichtlich ungueltiges Manifest mit
+fehlendem Schrittpfad beendet den Tageslauf mit Exit 1, schreibt
+`status: failed` samt Datenbankname, und der Statuswaechter meldet ihn rot.
+Der echte Lauf danach war gruen: 157 Schritte plus Abschlusspruefung,
+`KETTE OK: 267.7s`; der Status misst inklusive Aufraeumen 270.9 s. Die
+Wegwerf-Datenbank `lumeos_tageskette_20260906` wurde danach automatisch
+entfernt, und `punkte-pruefen --ohne-db` meldet den frischen Lauf gruen.
+
+Dabei wurde ein bisher verdeckter Aufraeumfehler korrigiert: Der Kettenrunner
+versuchte, auch fremde Superuser-Verbindungen zur Wegwerf-Datenbank zu
+beenden. Die Bereinigung beschraenkt sich nun auf `current_user`; damit
+bleibt sie im eigenen Rollenbereich und der Tageslauf wird nicht nach einer
+gruenen Kette faelschlich rot.
+
+### C-31 - Vertrag fuer die Admin-Oberflaeche
+
+Die Tag-Kuration kann als UI-Auftrag beginnen. Sie braucht eine
+Admin-geschuetzte Such-/Detailansicht mit Import-Tags aus
+`food_tags_effective`, der Liste gueltiger `tag_definitions` und getrennten
+Aktionen `set` sowie `removed`. Die Mutation muss serverseitig die RPC
+`nutrition.curate_food_tag(food_id, tag_code, action)` mit der Sitzung
+aufrufen, ihre vier Fehlerfaelle (keine Adminrolle, ungueltige Aktion,
+unbekanntes Food, unbekanntes Tag) anzeigen und danach die effektiven Tags
+neu lesen. Direkte DML auf `food_tags_kuriert` bleibt ausgeschlossen; die
+Datenbankschranke ist die Autoritaet.
+
+Die Rezeptansicht kann admin-only die Kandidaten nach Status/Erstelldatum,
+ihren unveraenderlichen Zutaten-Snapshot in `sort_order`, Mengen, Herkunft,
+Besitzer und vorhandene Entscheidungen lesen. Die drei C-411-Tabellen
+erlauben `authenticated` jedoch ausschliesslich SELECT unter Admin-RLS.
+Ein Annehmen/Ablehnen ist noch nicht als atomarer Serververtrag definiert:
+Es fehlt insbesondere, ob eine Entscheidung nur Status und
+`recipe_curation_decisions` schreibt oder zugleich ein Rezept erzeugt bzw.
+veraendert. Die Rezeptliste ist daher jetzt baubar; Entscheidungsbuttons
+brauchen einen eigenen, vorher festgelegten Admin-Schreibweg.
+
+### C-155 - Wechselaufwand, nicht ausgefuehrt
+
+`pnpm outdated -r @supabase/ssr` misst 0.1.0 gegen 0.12.6. Vier
+Arbeitsbereiche deklarieren die Abhaengigkeit direkt:
+`@lumeos/admin`, `@lumeos/coach`, `@lumeos/shared` und
+`@lumeos/web`; der Lockfile-Wechsel ist damit ein gemeinsamer
+Versionswechsel, nicht ein isolierter Admin-Fix.
+
+Der gefaehrdete Admin-Login ruft den Shared-Browserclient auf. Coach hat
+dagegen einen eigenen Browserclient mit expliziter Cookie-Implementierung und
+`auth.storageKey`; die Serverclients in Admin, Coach, Web und Shared geben
+ebenfalls `cookieOptions` weiter. Ein Wechsel muss daher mindestens vier
+Workspace-Builds sowie die beiden Browser-Wege pruefen: Admin-Login mit
+eigenem Cookienamen und Coach-Login mit getrenntem Speicher-/Cookienamen,
+jeweils inklusive Session-Persistenz und Abmeldung. Er beruehrt damit beide
+Agenten und die gemeinsame Shared-Naht zugleich. Keine Abhaengigkeit und
+keine App-Datei wurde geaendert.
 
 ## Abnahme
 

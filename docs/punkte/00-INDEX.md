@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 205 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 4 |
+| `laufend_claudecode` | 5 |
 | `erledigt` | 294 |
-| **gesamt** | **506** |
+| **gesamt** | **507** |
 
 ## medical — 43
 
@@ -458,7 +458,7 @@
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 
-## quer — 101
+## quer — 102
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -559,10 +559,11 @@
 | `G-334` | befund | hoch | [`test-user` taugt nicht mehr als Nachweiskonto](erledigt/quer-g-0334-test-user-taugt-nicht-mehr-als-nachweiskonto.md) | erledigt | — | — |
 | `G-352` | entscheidung | hoch | [drei Zielskalen widersprechen sich](erledigt/quer-g-0352-drei-zielskalen-widersprechen-sich.md) | erledigt | — | G-354 |
 | `G-354` | befund | mittel | [ein sechstes Ziellisten-Modal](erledigt/quer-g-0354-ein-sechstes-ziellisten-modal.md) | erledigt | — | — |
-| `G-355` | befund | hoch | [Goals und Body gegen alle Quellen pruefen](laufend_claudecode/quer-g-0355-goals-und-body-gegen-alle-quellen-pruefen.md) | laeuft (claudecode) | — | G-356, G-357, G-358 |
+| `G-355` | befund | hoch | [Goals und Body gegen alle Quellen pruefen](laufend_claudecode/quer-g-0355-goals-und-body-gegen-alle-quellen-pruefen.md) | laeuft (claudecode) | — | G-356, G-357, G-358, G-359 |
 | `G-356` | feature | hoch | [die Umfangserfassung fehlt](laufend_claudecode/quer-g-0356-die-umfangserfassung-fehlt.md) | laeuft (claudecode) | — | — |
 | `G-357` | feature | hoch | [kein Weg in eine Phase](laufend_claudecode/quer-g-0357-kein-weg-in-eine-phase.md) | laeuft (claudecode) | — | — |
 | `G-358` | befund | mittel | [62 Vermerke ohne Grund](laufend_claudecode/quer-g-0358-62-vermerke-ohne-grund.md) | laeuft (claudecode) | — | — |
+| `G-359` | befund | hoch | [1.343 Mockup-Elemente fehlen in der UI](laufend_claudecode/quer-g-0359-1343-mockup-elemente-fehlen-in-der-ui.md) | laeuft (claudecode) | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 
