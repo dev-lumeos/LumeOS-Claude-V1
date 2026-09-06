@@ -32,6 +32,36 @@ Anschluss.**
 `[read]` **Kein Agent entfernt eine Attrappe.** `[read]` **Der
 Orchestrator auch nicht.**
 
+## Die Attrappe wird nicht ersetzt, sie bleibt darunter
+
+Tom, 2026-09-07:
+
+> wir wollen ein attrappe modul anbinden, vorgabe ui ist das mockup,
+> sprich die attrappe wird kopiert und in den code eingebunden und
+> angehaengt, die attrappe bleibt als modul untendran bis das
+> angebundene modul abgenommen wurde. so habe ich ist und soll fuer
+> mich immer bereit und ich kann arbeiten
+
+**Der Ablauf:**
+
+    1  die Attrappe wird kopiert
+    2  die Kopie wird angebunden und oben eingehaengt
+    3  die Attrappe bleibt darunter stehen
+    4  Tom vergleicht Ist gegen Soll auf einem Schirm
+    5  nimmt er ab, faellt die Attrappe
+
+`[read]` **Kein Ersetzen** — **ein Danebenstellen.**
+
+`[read]` **Oben das Angebundene, unten das Mockup wie es gedacht
+war.** `[read]` **Damit entscheidet Tom im Vergleich, nicht aus der
+Erinnerung.**
+
+`[cmd]` **Die Vorgabe fuer die Oberflaeche ist das Mockup** — **nicht
+die Vorstellung des Agenten davon.**
+
+`[read]` **Und wenn das Angebundene weniger kann als die Attrappe,
+sieht man es sofort** — **statt es in drei Wochen zu messen.**
+
 ## Warum die Trennung noetig ist
 
 `[cmd]` **Gemessen 2026-09-07: 1.343 von 2.488 Mockup-Elementen

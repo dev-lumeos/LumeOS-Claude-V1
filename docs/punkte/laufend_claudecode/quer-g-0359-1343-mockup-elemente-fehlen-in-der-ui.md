@@ -121,6 +121,23 @@ fehlen 105 von 341 allein in `goals`.**
 Machart einmal abgenommen ist, bevor sie 1.238 Mal wiederholt
 wird.**
 
+### Die Machart: kopieren, anbinden, darunter stehen lassen
+
+Tom, 2026-09-07: *,,die attrappe wird kopiert und in den code
+eingebunden und angehaengt, die attrappe bleibt als modul untendran
+bis das angebundene modul abgenommen wurde. so habe ich ist und soll
+fuer mich immer bereit und ich kann arbeiten."*
+
+    1  Attrappe kopieren
+    2  Kopie anbinden, oben einhaengen
+    3  Attrappe bleibt DARUNTER
+    4  Tom vergleicht Ist gegen Soll
+    5  nimmt er ab, faellt die Attrappe
+
+`[read]` **Kein Ersetzen.** `[read]` **Und wo noch gar nichts
+angebunden ist, steht nur die Attrappe** — **das ist der Fall bei
+allen 105 in `goals`.**
+
 ### Die Form (E-68)
 
     // Attrappe -- theme-v1/module-goals-pro.jsx

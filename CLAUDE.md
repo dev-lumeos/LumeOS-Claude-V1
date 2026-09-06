@@ -344,10 +344,17 @@ mindestens einen in `next/`.
 nehme ich das ab und dann ist die attrappe obsolet weil erledigt.
 und ich definiere wann was erledigt ist."*
 
-    angebunden      der Agent hat gebaut
-    geprueft        der Orchestrator hat gemessen
-    abgenommen      Tom hat es gesehen
-                    -> erst jetzt faellt die Attrappe
+    1  die Attrappe wird kopiert
+    2  die Kopie wird angebunden und oben eingehaengt
+    3  die Attrappe bleibt DARUNTER stehen
+    4  Tom vergleicht Ist gegen Soll auf einem Schirm
+    5  nimmt er ab, faellt die Attrappe
+
+`[read]` **Kein Ersetzen, ein Danebenstellen.** **Oben das
+Angebundene, unten das Mockup wie es gedacht war.**
+
+`[cmd]` **Die Vorgabe fuer die Oberflaeche ist das Mockup** —
+**nicht die Vorstellung des Agenten davon.**
 
 `[read]` **Kein Agent entfernt eine Attrappe. Der Orchestrator auch
 nicht.**
