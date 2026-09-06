@@ -338,6 +338,38 @@ mindestens einen in `next/`.
 
 `[read]` **Er steht im Punktelauf, den der Zyklus ohnehin macht.**
 
+## `00-QUELLEN.md` wird geoeffnet, nicht erinnert
+
+`[cmd]` **`docs/spezifikation/00-QUELLEN.md`, 428 Zeilen** — **sie
+sagt je Modul, was vor einem Auftrag zu lesen ist.**
+
+**Ihr eigener Anlass, Tom 2026-08-20:** *,,Und das hast alles gegen
+Spec, Docs, altes Repo und neues Design gegengeprueft?"* — **Nein,
+mehrfach nicht.**
+
+`[cmd]` **Am 2026-09-07 zweimal wieder:** **der Orchestrator
+behauptete, es gebe keine Marketplace-Spec** (`docs/specs/
+Marketplace/`, 12 Dateien) **und uebersah die HumanCoach-Spec**
+(12 Dateien, 3.291 Zeilen).
+
+`[read]` **Beide Male mit `git grep` nach Dateinamen gesucht,
+statt das Verzeichnis zu oeffnen.**
+
+### Die Regel
+
+`[read]` **Vor jedem Punkt zu einem Modul:**
+
+    1  docs/spezifikation/00-QUELLEN.md, Abschnitt des Moduls
+    2  docs/specs/<Modul>/  -- das Verzeichnis, nicht die Suche
+    3  die Mockups, die dort genannt sind
+    4  referenz/lumeos-2026/ -- Struktur, und warum ersetzt
+
+`[cmd]` **Kein Modul hat nur eine Mockup-Datei** — Nutrition drei,
+Recovery fuenf, Coach acht.
+
+`[read]` **Und *nicht gefunden* ist keine Aussage** — **es heisst
+nur, dass die Suche nichts fand.**
+
 ## Tom entscheidet, wann eine Attrappe faellt
 
 **Tom, 2026-09-07:** *,,wenn etwas vollumfaenglich angebunden ist
