@@ -1,0 +1,10 @@
+{
+  "_liesmich": [
+    "E-70, 2026-09-07. Bewusst verworfene Mockup-Elemente.",
+    "Nur Tom traegt hier ein. Ein Eintrag heisst: es war gedacht,",
+    "wir machen es anders, und hier steht warum.",
+    "tools/mockup-deckung.mjs zieht diese Eintraege von der",
+    "Fehlmenge ab -- was uebrig bleibt, ist wirklich verschwunden."
+  ],
+  "verworfen": []
+}

@@ -16,6 +16,7 @@ import { join } from 'node:path'
 const MOCKUPS = 'docs/spezifikation/10-plattform/design-system/theme-v1'
 const V2 = 'apps/web/src/app/v2'
 const STAND = 'docs/spezifikation/10-plattform/design-system/mockup-deckung.json'
+const VERWORFEN = 'docs/spezifikation/10-plattform/design-system/mockup-verworfen.json'
 
 /** `[read]` Beschriftungen: Text zwischen Tags, und label/title-Zuweisungen. */
 function texte(pfad) {
@@ -52,6 +53,20 @@ if (!existsSync(MOCKUPS)) {
   process.exit(0)
 }
 
+// `[read]` **E-70: drei Zustaende.** **Verworfenes zaehlt nicht als
+// fehlend** - **es ist eine Entscheidung, kein Verlust.**
+const verworfen = new Map()
+if (existsSync(VERWORFEN)) {
+  try {
+    const roh = JSON.parse(readFileSync(VERWORFEN, 'utf8'))
+    for (const e of roh.verworfen ?? []) {
+      if (!e.modul || !e.element) continue
+      if (!verworfen.has(e.modul)) verworfen.set(e.modul, new Set())
+      verworfen.get(e.modul).add(e.element)
+    }
+  } catch { /* `[read]` unlesbar heisst: nichts verworfen */ }
+}
+
 const je = new Map()
 for (const f of readdirSync(MOCKUPS)) {
   if (!f.startsWith('module-') || !f.endsWith('.jsx')) continue
@@ -69,14 +84,18 @@ for (const [modul, mock] of [...je].sort()) {
     continue
   }
   const ui = alleTexte(d, '.tsx')
+  const weg = verworfen.get(modul) ?? new Set()
   let fehlt = 0
-  for (const x of mock) if (!ui.has(x)) fehlt += 1
+  for (const x of mock) if (!ui.has(x) && !weg.has(x)) fehlt += 1
   gesM += mock.size
   gesF += fehlt
-  zeilen.push({ modul, mockup: mock.size, fehlt })
+  zeilen.push({ modul, mockup: mock.size, fehlt, verworfen: weg.size })
 }
 
-console.log(`[mockup] ${gesM - gesF} von ${gesM} Elementen sichtbar, ${gesF} fehlen`)
+let gesV = 0
+for (const s of verworfen.values()) gesV += s.size
+console.log(`[mockup] ${gesM - gesF - gesV} von ${gesM} sichtbar, `
+  + `${gesV} verworfen, ${gesF} fehlen`)
 
 // `[read]` **Der Vergleich mit dem letzten Stand.** **Steigt die
 // Zahl, ist etwas verschwunden** - **und das ist immer ein Fehler.**
@@ -105,7 +124,8 @@ if (process.argv.includes('--schreiben')) {
   const { writeFileSync } = await import('node:fs')
   writeFileSync(STAND, JSON.stringify({
     gemessen: new Date().toISOString().slice(0, 10),
-    gesamt: gesM, sichtbar: gesM - gesF, fehlt: gesF, je: zeilen
+    gesamt: gesM, sichtbar: gesM - gesF - gesV,
+    verworfen: gesV, fehlt: gesF, je: zeilen
   }, null, 2) + '\n', 'utf8')
   console.log(`[mockup] Stand festgehalten: ${gesF} fehlen.`)
 }
