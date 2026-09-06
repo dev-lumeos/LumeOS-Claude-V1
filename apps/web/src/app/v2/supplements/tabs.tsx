@@ -89,8 +89,17 @@ function CheckCircle({ status }: { status: Status }) {
 // ── TODAY ──────────────────────────────────────────────────────
 export function SuppToday() {
   const { daten } = useSupp()
-  // G-37: Liegen echte Daten vor, zeigt der Tab sie. Sonst die Vorlage.
-  return daten ? <TodayEcht /> : <TodayAttrappe />
+  // G-37: Liegen echte Daten vor, zeigt der Tab sie.
+  //
+  // `[cmd]` **G-359/3 (E-68): kein Entweder-oder mehr.** Der Entwurf
+  // stand hinter dem echten Zweig und war fuer jeden mit Daten
+  // unsichtbar. **Jetzt steht er darunter, mit seiner Marke.**
+  return (
+    <>
+      {daten && <TodayEcht />}
+      <TodayAttrappe />
+    </>
+  )
 }
 
 /**
@@ -559,9 +568,18 @@ export function SuppStack() {
         </button>
       </div>
 
-      {view === 'matrix'
-        ? (daten ? <StackMatrixEcht /> : <StackMatrix />)
-        : (daten ? <StackListeEcht /> : <StackList />)}
+      {/* G-359/3: der Entwurf steht unter dem echten Teil. */}
+      {view === 'matrix' ? (
+        <>
+          {daten && <StackMatrixEcht />}
+          <StackMatrix />
+        </>
+      ) : (
+        <>
+          {daten && <StackListeEcht />}
+          <StackList />
+        </>
+      )}
     </div>
   )
 }
@@ -797,7 +815,13 @@ export function SuppDatabase() {
   // frueheren `DatabaseEcht` (44er, G-37). Die 44er-Fassung ist raus;
   // `serving_size` und `cost_per_serving` gab es NUR dort und sie
   // entfallen ersatzlos — gemeldet, nicht geraten.
-  return substanzen.length > 0 ? <SubstanzDatenbank /> : <DatabaseAttrappe />
+  // G-359/3: der Entwurf steht unter dem echten Teil.
+  return (
+    <>
+      {substanzen.length > 0 && <SubstanzDatenbank />}
+      <DatabaseAttrappe />
+    </>
+  )
 }
 
 function DatabaseAttrappe() {
@@ -902,7 +926,13 @@ export function SuppCost() {
   // es keine Quelle fuer `cost_per_serving` und `serving_size`.
   // Deshalb wird keine 0-Euro-Rechnung angezeigt, sondern der fehlende
   // Messpfad markiert.
-  return daten ? <CostEcht /> : <CostAttrappe />
+  // G-359/3: der Entwurf steht unter dem echten Teil.
+  return (
+    <>
+      {daten && <CostEcht />}
+      <CostAttrappe />
+    </>
+  )
 }
 
 /**

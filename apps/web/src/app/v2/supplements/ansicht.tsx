@@ -311,7 +311,11 @@ export function SupplementsAnsicht({
             // G-110: Das Gate entscheidet SERVERSEITIG. Reicht der
             // Grad nicht, wird `SuppExtended` gar nicht gerendert —
             // vorher war es ein `useState` im Browser (G-92).
-            gate?.offen ? <SuppExtended /> : <ExtendedGesperrt g={gate ?? { grad: null, offen: false, fehler: null }} />
+            // G-359/3: beides untereinander (E-68).
+            <>
+              {gate?.offen && <SuppExtended />}
+              <ExtendedGesperrt g={gate ?? { grad: null, offen: false, fehler: null }} />
+            </>
           )}
           {/* G-172: `database` ist kein eigener Tab mehr — der Inhalt
               steht auf `catalog`. Die Weiche bleibt als Umleitung
@@ -322,9 +326,11 @@ export function SupplementsAnsicht({
               vorliegt. Ohne Daten bleibt der Entwurf mit seiner Marke —
               dasselbe Muster wie bei Today, Stack, Database und Cost. */}
           {tab === 'compliance' && (
-            daten && daten.einnahmen.length > 0
-              ? <ComplianceEcht d={daten} heute={stichtag} />
-              : <SuppCompliance />
+            <>
+              {daten && daten.einnahmen.length > 0
+                && <ComplianceEcht d={daten} heute={stichtag} />}
+              <SuppCompliance />
+            </>
           )}
           {/* ══ G-189: der Rueckfallzweig ist ENTFERNT ═══════════
               `[cmd]` **Hier stand `: <SuppInteractions />`.** Der
@@ -369,9 +375,11 @@ export function SupplementsAnsicht({
               `stock_remaining` gegen die Tagesdosis. Ohne Positionen
               bleibt der Entwurf stehen. */}
           {tab === 'inventory' && (
-            daten && daten.positionen.length > 0
-              ? <InventoryEcht d={daten} heute={stichtag} />
-              : <SuppInventory />
+            <>
+              {daten && daten.positionen.length > 0
+                && <InventoryEcht d={daten} heute={stichtag} />}
+              <SuppInventory />
+            </>
           )}
         </div>
 

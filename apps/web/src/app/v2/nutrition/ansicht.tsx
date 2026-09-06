@@ -562,9 +562,18 @@ export async function TagebuchAnsicht({
             `coach` hat je vier davon, `training` **keine**. Ausserdem
             liest `lib/dashboard/lesen.ts:229` dieselbe Tabelle bereits
             direkt. Begruendung in `lib/training/naechste-sitzung.ts`. */}
-        {sitzung
-          ? <PreWorkoutEcht stand={sitzung} />
-          : <PreWorkoutOptimizer />}
+        {/* ══ G-359/3 · E-68: der Entwurf verdraengt nicht mehr ════
+            **Tom, 2026-09-07:** *„bestehendes bleibt wie es ist, wir
+            blenden nur mockup attrappen ein als referenz."*
+
+            `[cmd]` **Gemessen 2026-09-06: `dev@lumeos.app` hat 30
+            Sitzungen und 5 Plaene** — **also lief immer der echte
+            Zweig, und die Entwuerfe waren nie zu sehen.**
+
+            `[read]` **Der echte Teil bleibt unveraendert** — dieselbe
+            Bedingung, nur kein Sonst-Zweig mehr. */}
+        {sitzung && <PreWorkoutEcht stand={sitzung} />}
+        <PreWorkoutOptimizer />
         {/* ANGEBUNDEN: hydration_day. Deshalb keine Marke mehr — und
             zwei Farben, weil die Vorlage die beiden Herkuenfte nicht
             unterscheidet. */}
@@ -573,12 +582,10 @@ export async function TagebuchAnsicht({
             `micronutrient_below_threshold`. Ohne Daten bleibt der
             Entwurf mit seiner Marke stehen — dasselbe Muster wie bei
             den Vorlieben (G-65). */}
-        {mikro && mikro.zeilen.length > 0
-          ? <MikroSchnappschuss d={mikro} />
-          : <MicronutrientSnapshot />}
-        {mikro && mikro.zeilen.length > 0
-          ? <UnterSchwelle d={mikro} />
-          : <BelowThreshold />}
+        {mikro && mikro.zeilen.length > 0 && <MikroSchnappschuss d={mikro} />}
+        <MicronutrientSnapshot />
+        {mikro && mikro.zeilen.length > 0 && <UnterSchwelle d={mikro} />}
+        <BelowThreshold />
 
         <Card
           title={t('deckungTitel')}
@@ -880,7 +887,9 @@ function AndererTab({
           <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
         </div>
 
-        {plan ? <PlannerEchtTab d={plan} /> : <NutritionPlannerTab />}
+        {/* G-359/3: der Entwurf steht jetzt darunter, nicht dahinter. */}
+        {plan && <PlannerEchtTab d={plan} />}
+        <NutritionPlannerTab />
       </div>
     )
   }

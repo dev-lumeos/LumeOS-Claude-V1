@@ -62,11 +62,30 @@ import { CheckinStreifen } from './checkin-streifen'
 import { RecCheckin } from './tab-checkin'
 import { RecMuscleMap, RecHRV, RecSleep } from './tab-messwerte'
 import { RecModalities, RecOvertraining, RecProtocols, RecStress } from './tab-protokolle'
+// C-418: die elf Kacheln, die es im Code nicht gibt.
+import {
+  FehlendeHrvKacheln, FehlendeSchlafKacheln,
+  FehlendeAuswertungsKacheln,
+} from './fehlende-kacheln'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
   'Aus dem Entwurf uebernommen. Diese Kachel ist noch nicht an die vorhandenen '
   + 'Recovery-Daten angebunden - die Zahlen sind erfunden.'
+
+/**
+ * Eine Attrappenmarke nach E-68 — Quelle UND Grund.
+ *
+ * `[read]` **Dieselbe Form wie in `v2/goals`** (G-359): ein Vermerk,
+ * der nur *,,noch nicht"* sagt, zwingt den naechsten Auftrag, von
+ * vorn zu messen.
+ *
+ * @param quelle  Die Mockup-Datei, aus der die Kachel stammt.
+ * @param wartet  Worauf sie wartet — mit Punktnummer, wenn es eine gibt.
+ */
+export function attrappeAus(quelle: string, wartet: string): string {
+  return `Attrappe — ${quelle} · wartet auf: ${wartet}`
+}
 
 // [cmd] module-recovery-v2.jsx:32-42, in dieser Reihenfolge.
 function tabs(muskelzahl: number, modalitaeten: number, otZahl: number): TabItem[] {
@@ -182,14 +201,32 @@ export function RecoveryAnsicht({
       <Tabs items={tabs(18, modalitaeten?.gesamt ?? 0, ot.count)} active={tab} onChange={setTab} />
 
       {tab === 'today' && (
-        <RecToday checkins={checkins} scores={scores} modalitaeten={modalitaeten} />
+        <>
+          <RecToday checkins={checkins} scores={scores} modalitaeten={modalitaeten} />
+          <FehlendeAuswertungsKacheln />
+        </>
       )}
       {tab === 'checkin' && <RecCheckin />}
       {tab === 'muscles' && <RecMuscleMap />}
       {/* G-160: HRV und Sleep zeigen die erfassten Werte, sobald
           Check-ins geladen sind — der Entwurf ist nur noch Rueckfall. */}
-      {tab === 'hrv' && <RecHRV stand={checkins} />}
-      {tab === 'sleep' && <RecSleep stand={checkins} />}
+      {/* ══ C-418 / E-68: die elf wirklich fehlenden Kacheln ══════
+          `[cmd]` **Von 39 Mockup-Kacheln sind 18 wortgleich da und
+          10 unter anderem Namen** (`Letzte Nacht`, `Messprotokoll`,
+          `Schlafhygiene`, `Vorschau`, `Verlauf`). **Elf fehlen
+          wirklich** — sie stehen hier, mit Quelle und Grund. */}
+      {tab === 'hrv' && (
+        <>
+          <RecHRV stand={checkins} />
+          <FehlendeHrvKacheln />
+        </>
+      )}
+      {tab === 'sleep' && (
+        <>
+          <RecSleep stand={checkins} />
+          <FehlendeSchlafKacheln />
+        </>
+      )}
       {tab === 'modalities' && <RecModalities />}
       {tab === 'overtraining' && <RecOvertraining />}
       {tab === 'protocols' && <RecProtocols />}
