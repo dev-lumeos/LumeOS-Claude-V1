@@ -275,7 +275,15 @@ test('G-159: die fuenf Today/History-Weichen lesen echt, Entwurf nur als Rueckfa
     [/verlauf && verlauf\.woche\.some/, 'This week'],
     [/verlauf && verlauf\.muskelVolumen\.length > 0/, 'Weekly volume (Saetze je Muskelgruppe)'],
     [/<TrainingSerie d=\{verlauf\}/, 'Streak'],
-    [/verlauf \? <TrainingVerlauf d=\{verlauf\}/, 'History (Recent sessions, Volume by muscle)'],
+    // `[cmd]` **G-359/2 (E-68): hier stand `verlauf ? <TrainingVerlauf`.**
+    // **Das Entweder-oder ist weg** — der Entwurf verdraengte den
+    // echten Teil nicht, sondern umgekehrt: **wer Sitzungen hatte,
+    // sah den Entwurf nie** (30 Sitzungen auf `dev@lumeos.app`).
+    //
+    // `[read]` **Die Zusage bleibt dieselbe und wird schaerfer:** der
+    // echte Teil rendert weiter, und zwar an eine Bedingung
+    // gebunden — nur nicht mehr AUSSCHLIESSLICH.
+    [/\{verlauf && <TrainingVerlauf d=\{verlauf\}/, 'History (Recent sessions, Volume by muscle)'],
     [/readiness && readiness\.zeilen\.length > 0/, 'Training readiness'],
   ]
   for (const [muster, name] of weichen) {
@@ -287,7 +295,13 @@ const TRAIN_AUSW = path.join(process.cwd(), 'src/lib/training/auswertung.ts')
 test('fuenf Training-Tabs zeigen echte Sitzungen', () => {
   // `[read]` Der Auftrag G-69: die Tabs, die Sitzungen brauchen.
   // Gebaut sind History, Progression, Standards, Kalender und die
-  // Serie — je mit Rueckfall auf den Entwurf.
+  // Serie.
+  //
+  // `[cmd]` **G-359/2 (E-68): kein Rueckfall mehr.** Hier stand
+  // `verlauf ? <Echt`, **und genau das versteckte den Entwurf vor
+  // jedem, der Sitzungen hat.** `[read]` **Die Zusage bleibt: der
+  // echte Teil rendert, wenn Daten da sind** — nur steht der Entwurf
+  // jetzt darunter statt dahinter.
   const ansicht = fs.readFileSync(TRAINING, 'utf8')
   for (const [tab, echt] of [
     ['history', 'TrainingVerlauf'],
@@ -296,9 +310,9 @@ test('fuenf Training-Tabs zeigen echte Sitzungen', () => {
     ['calendar', 'TrainingKalender'],
   ] as Array<[string, string]>) {
     const muster = new RegExp(
-      `tab === '${tab}'[\\s\\S]{0,200}verlauf \\? <${echt}`)
+      `tab === '${tab}'[\\s\\S]{0,200}\\{verlauf && <${echt}`)
     assert.ok(muster.test(ansicht),
-      `Der Tab "${tab}" zeigt ${echt} nicht mit Rueckfall.`)
+      `Der Tab "${tab}" zeigt ${echt} nicht.`)
   }
   // Die Serie sitzt im Today-Tab, nicht an einem eigenen.
   assert.ok(/verlauf \? \(\s*<TrainingSerie/.test(ansicht),

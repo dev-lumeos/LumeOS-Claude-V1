@@ -172,12 +172,26 @@ export function TrainingAnsicht({
           ohne Sitzungen bleibt der Entwurf stehen — samt Marke. Eine
           leere echte Kachel saehe aus wie ein Befund und waere doch
           nur ein fehlendes Cookie. */}
+      {/* ══ G-359/2 · E-68: der Entwurf verdraengt nicht mehr ═════
+          **Tom, 2026-09-07:** *„bestehendes bleibt wie es ist, wir
+          blenden nur mockup attrappen ein als referenz."*
+
+          `[cmd]` **Gemessen 2026-09-06: `dev@lumeos.app` hat 30
+          Sitzungen und 1.416 Uebungen** — **also lief IMMER der
+          echte Zweig, und die fuenf Entwuerfe dieses Moduls waren
+          nie zu sehen.**
+
+          `[read]` **Der echte Teil bleibt unveraendert.** **Der
+          Entwurf kommt darunter, mit seiner Marke.** */}
       {tab === 'history' && (
-        verlauf ? <TrainingVerlauf d={verlauf} /> : <TrainingHistory />
+        <>
+          {verlauf && <TrainingVerlauf d={verlauf} />}
+          <TrainingHistory />
+        </>
       )}
       {tab === 'library' && (
-        uebungenGesamt > 0
-          ? (
+        <>
+          {uebungenGesamt > 0 && (
             <TrainingUebungen
               start={uebungenStart}
               gesamtKatalog={uebungenGesamt}
@@ -185,12 +199,17 @@ export function TrainingAnsicht({
               disziplinen={disziplinen}
               muskelBaum={muskelBaum}
             />
-          )
-          // Ohne Katalog bleibt der Entwurf stehen — mit seiner Marke.
-          : <TrainingLibrary />
+          )}
+          {/* G-359/2: der Entwurf steht jetzt IMMER darunter, nicht
+              nur ohne Katalog. */}
+          <TrainingLibrary />
+        </>
       )}
       {tab === 'progress' && (
-        verlauf ? <TrainingKraftverlauf d={verlauf} /> : <TrainingProgressionView />
+        <>
+          {verlauf && <TrainingKraftverlauf d={verlauf} />}
+          <TrainingProgressionView />
+        </>
       )}
       {/* `[read]` BLEIBT ATTRAPPE — aber seit C-105 mit geklaerter
           Einstufung: MAV ist entfernt (DO_NOT_IMPLEMENT), MEV ist
@@ -200,10 +219,16 @@ export function TrainingAnsicht({
           duerfen als Orientierung stehen, nicht als Messwert. */}
       {tab === 'landmarks' && <TrainingLandmarksView />}
       {tab === 'standards' && (
-        verlauf ? <TrainingStandards d={verlauf} /> : <TrainingStandardsView />
+        <>
+          {verlauf && <TrainingStandards d={verlauf} />}
+          <TrainingStandardsView />
+        </>
       )}
       {tab === 'calendar' && (
-        verlauf ? <TrainingKalender d={verlauf} /> : <TrainingCalendarView />
+        <>
+          {verlauf && <TrainingKalender d={verlauf} />}
+          <TrainingCalendarView />
+        </>
       )}
       {tab === 'hrzones' && <TrainingHRAnalysis />}
       {tab === 'offline' && <TrainingOfflineView />}
