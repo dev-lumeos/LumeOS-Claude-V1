@@ -338,6 +338,26 @@ mindestens einen in `next/`.
 
 `[read]` **Er steht im Punktelauf, den der Zyklus ohnehin macht.**
 
+## Eine Attrappe bleibt sichtbar und sagt, worauf sie wartet
+
+**Tom, 2026-09-07:** *,,nicht angebunden heisst es bleibt als
+attrappe in der ui visible."*
+
+`[read]` **Nicht anbindbar ist kein Grund zum Weglassen** — **es ist
+ein Grund zum Kennzeichnen.**
+
+**Die Form** (E-68):
+
+    // Attrappe -- SPEC_08 Flow 3
+    //   wartet auf: goal_phases-Schreibweg (G-357)
+
+`[cmd]` **Gemessen 2026-09-07: 69 Vermerke in `v2/goals`, 62 ohne
+Grund.**
+
+`[read]` **Ein Vermerk ohne Grund wird zur Ausrede.** `[read]` **Ein
+Vermerk mit falschem Grund wird beim naechsten Auftrag zitiert** —
+`[cmd]` **dreimal an einem Tag passiert.**
+
 ## Die Kette gewinnt gegen die Live-Aenderung
 
 **C-410, gemessen 2026-09-07.**
