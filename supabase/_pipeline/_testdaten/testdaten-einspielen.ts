@@ -54,7 +54,9 @@ const WINDOWS = [
 const TARGET_START_DATE = addIsoDays(START_DATE, 1)
 const ALL_DATES = WINDOWS.flatMap(window => daysBetween(window.start, window.end))
 const END_DATE = WINDOWS[WINDOWS.length - 1]!.end
-const TODAY_DATE = argValue('--today') ?? NEXT_START_DATE
+// C-412/C-413: Einnahmeprotokolle muessen bis zum Lauftag reichen.
+// --today bleibt fuer einen reproduzierbaren Nachweis moeglich.
+const TODAY_DATE = argValue('--today') ?? new Date().toISOString().slice(0, 10)
 
 function relDate(anchorDate: string): string {
   return addIsoDays(START_DATE, daysOffset(ANCHOR_DATE, anchorDate))
@@ -2320,7 +2322,9 @@ const mealPlanRows: MealPlanRow[] = [{
   description: 'C-150 Seed: eine gefuellte, eine leere und eine kopierte Woche',
   lifecycleType: 'once',
   startDate: relDate('2026-09-01'),
-  daysCount: 28,
+  // C-413/E-62: Der Seed beschreibt genau drei Wochen (gefuellt,
+  // leer, Kopie). Bei once ist days_count deshalb 21, nicht 28.
+  daysCount: 21,
   targetKcal: 2500,
   targetProteinG: 170,
   targetCarbsG: 313,
@@ -2767,6 +2771,37 @@ DELETE FROM nutrition.meal_plan_entries WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meal_plan_days WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meal_plan_weeks WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meal_plans WHERE user_id IN (${userIds});
+-- C-241/C-413: Der Grundbestand des Nachweiskontos ist klein und
+-- vollstaendig kettengetragen. Nur seine eigenen, hiervon abhaengigen
+-- Nutrition- und Supplement-Zeilen werden vor dem Neuaufbau ersetzt.
+DELETE FROM nutrition.meal_plan_logs
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM nutrition.meal_plan_entries
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM nutrition.meal_plan_days
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM nutrition.meal_plan_weeks
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM nutrition.meal_plans
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM nutrition.meal_slots
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM nutrition.meal_items
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM nutrition.meals
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM supplements.intake_logs
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM supplements.stack_items si
+USING supplements.user_stacks us
+WHERE si.stack_id = us.id
+  AND us.user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM supplements.user_stacks
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM nutrition.food_preference_items
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM nutrition.food_preferences
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
 DELETE FROM nutrition.recipe_ingredients WHERE user_id IN (${userIds});
 DELETE FROM nutrition.recipes WHERE user_id IN (${userIds});
 DELETE FROM nutrition.water_logs WHERE user_id IN (${userIds});
@@ -3766,6 +3801,168 @@ SELECT nutrition.food_preferences_write(
     )
   )
 );
+
+-- C-241/C-413: Ein begrenzter, aber voll lesbarer Nutrition-Grundbestand
+-- fuer das Nachweiskonto. Die Daten sind absichtlich nicht von dev kopiert:
+-- ein Kettenlauf darf Toms Konto nicht als Testbuehne verwenden.
+SELECT nutrition.food_preferences_write(
+  (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'),
+  jsonb_build_object(
+    'diet_type', 'omnivore',
+    'allergies', jsonb_build_array(),
+    'intolerances', jsonb_build_array('lactose'),
+    'general_exclusions', jsonb_build_array(),
+    'preferred_cuisines', jsonb_build_array('mediterranean'),
+    'meals_per_day', 4,
+    'snacks_per_day', 1,
+    'cooking_skill', 'intermediate',
+    'prep_time_max_min', 30,
+    'budget_level', 'medium',
+    'meal_prep_ok', true,
+    'planner_notes', 'C-241/C-413: kleiner kettengetragener Nachweisbestand'
+  ),
+  jsonb_build_array(
+    jsonb_build_object('preference', 'hard_exclude', 'strength', 'hard_exclude',
+      'target_type', 'tag', 'tag_code', 'contains_nuts', 'source', 'settings'),
+    jsonb_build_object('preference', 'liked', 'strength', 'boost',
+      'target_type', 'food', 'food_id', (SELECT id FROM nutrition.foods WHERE bls_code = 'C352000'),
+      'source', 'settings'),
+    jsonb_build_object('preference', 'disliked', 'strength', 'soft_dislike',
+      'target_type', 'food', 'food_id', (SELECT id FROM nutrition.foods WHERE bls_code = 'T410052'),
+      'source', 'settings')
+  )
+);
+
+INSERT INTO nutrition.meal_slots (user_id, position, name, planned_time)
+SELECT u.id, s.position, s.name, s.planned_time::time
+FROM (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local') u
+CROSS JOIN (VALUES
+  (1, 'Fruehstueck', '07:30'),
+  (2, 'Mittagessen', '12:30'),
+  (3, 'Snack', '16:00'),
+  (4, 'Abendessen', '19:30')
+) AS s(position, name, planned_time);
+
+INSERT INTO nutrition.meal_plans (
+  id, user_id, name, description, lifecycle_type, start_date, days_count,
+  target_kcal, target_protein_g, target_carbs_g, target_fat_g, is_active,
+  measurement_source, source_detail
+)
+SELECT
+  'c4130000-0000-0000-0000-000000000001'::uuid, u.id,
+  'Nachweiswoche', 'C-241/C-413: eine voll lesbare Woche', 'once',
+  DATE ${lit(addIsoDays(TODAY_DATE, -6))}, 7, 2200, 160, 230, 70, true,
+  'seed', 'C-241/C-413 test-user Grundbestand'
+FROM auth.users u WHERE u.email = 'test-user@lumeos.local';
+
+INSERT INTO nutrition.meal_plan_weeks (id, plan_id, user_id, week_start, name)
+SELECT
+  'c4130000-0000-0000-0000-000000000002'::uuid,
+  'c4130000-0000-0000-0000-000000000001'::uuid, u.id,
+  DATE ${lit(addIsoDays(TODAY_DATE, -6))}, 'Nachweiswoche'
+FROM auth.users u WHERE u.email = 'test-user@lumeos.local';
+
+INSERT INTO nutrition.meal_plan_days (week_id, user_id, plan_date, day_index, notes)
+SELECT
+  'c4130000-0000-0000-0000-000000000002'::uuid, u.id,
+  DATE ${lit(addIsoDays(TODAY_DATE, -6))} + d, d + 1, 'C-241/C-413 Nachweistag'
+FROM auth.users u
+CROSS JOIN generate_series(0, 6) AS d
+WHERE u.email = 'test-user@lumeos.local';
+
+INSERT INTO nutrition.meal_plan_entries (
+  day_id, user_id, meal_type, planned_time, slot_order, entry_type, food_id, amount_g, note
+)
+SELECT d.id, d.user_id, e.meal_type, e.planned_time::time, 1, 'bls', f.id, e.amount_g,
+       'C-241/C-413 Planposition'
+FROM nutrition.meal_plan_days d
+CROSS JOIN (VALUES
+  ('breakfast', '07:30', 'C352000', 250::numeric),
+  ('lunch', '12:30', 'M713100', 180::numeric),
+  ('snack', '16:00', 'F503100', 150::numeric),
+  ('dinner', '19:30', 'T410052', 180::numeric)
+) AS e(meal_type, planned_time, bls_code, amount_g)
+JOIN nutrition.foods f ON f.bls_code = e.bls_code
+WHERE d.week_id = 'c4130000-0000-0000-0000-000000000002'::uuid;
+
+INSERT INTO nutrition.meals (user_id, entry_date, meal_type, meal_time, notes, entry_source, source_detail)
+SELECT u.id, DATE ${lit(addIsoDays(TODAY_DATE, -6))} + d, 'dinner', time '19:30',
+       'C-241/C-413 gespeicherte Mahlzeit', 'seed', 'C-241/C-413 test-user Grundbestand'
+FROM auth.users u
+CROSS JOIN generate_series(0, 6) AS d
+WHERE u.email = 'test-user@lumeos.local';
+
+WITH meal_foods AS (
+  SELECT m.id AS meal_id, m.user_id, f.id AS food_id, f.bls_code, a.amount_g
+  FROM nutrition.meals m
+  CROSS JOIN (VALUES ('C352000', 250::numeric), ('T410052', 180::numeric)) AS a(bls_code, amount_g)
+  JOIN nutrition.foods f ON f.bls_code = a.bls_code
+  WHERE m.user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local')
+), frozen AS (
+  SELECT mf.*, s.food_name, s.nutrients, s.enercc, s.prot625, s.fat, s.cho, s.fibt, s.sugar, s.fasat, s.nacl, s.water_g
+  FROM meal_foods mf
+  CROSS JOIN LATERAL nutrition.food_nutrient_snapshot('bls', mf.food_id, NULL, mf.amount_g) s
+)
+INSERT INTO nutrition.meal_items (
+  meal_id, user_id, food_id, food_source, food_name, amount_g,
+  enercc, prot625, fat, cho, fibt, sugar, fasat, nacl, water_g, nutrients,
+  measurement_source, source_detail
+)
+SELECT meal_id, user_id, food_id, 'bls', food_name, amount_g,
+       enercc, prot625, fat, cho, fibt, sugar, fasat, nacl, water_g, nutrients,
+       'seed', 'C-241/C-413 test-user Grundbestand'
+FROM frozen;
+
+INSERT INTO nutrition.meal_plan_logs (
+  plan_id, plan_entry_id, user_id, execution_date, status,
+  actual_meal_id, confirmation_mode, confirmed_at
+)
+SELECT p.id, e.id, p.user_id, d.plan_date, 'confirmed', m.id, 'manual', now()
+FROM nutrition.meal_plans p
+JOIN nutrition.meal_plan_weeks w ON w.plan_id = p.id
+JOIN nutrition.meal_plan_days d ON d.week_id = w.id AND d.day_index = 1
+JOIN nutrition.meal_plan_entries e ON e.day_id = d.id AND e.meal_type = 'dinner'
+JOIN nutrition.meals m ON m.user_id = p.user_id AND m.entry_date = d.plan_date AND m.meal_type = 'dinner'
+WHERE p.id = 'c4130000-0000-0000-0000-000000000001'::uuid;
+
+INSERT INTO nutrition.meal_plan_logs (plan_id, plan_entry_id, user_id, execution_date, status, skipped_at)
+SELECT p.id, e.id, p.user_id, d.plan_date, 'skipped', now()
+FROM nutrition.meal_plans p
+JOIN nutrition.meal_plan_weeks w ON w.plan_id = p.id
+JOIN nutrition.meal_plan_days d ON d.week_id = w.id AND d.day_index = 2
+JOIN nutrition.meal_plan_entries e ON e.day_id = d.id AND e.meal_type = 'breakfast'
+WHERE p.id = 'c4130000-0000-0000-0000-000000000001'::uuid;
+
+INSERT INTO supplements.user_stacks (id, user_id, name, description, goal, source, is_active)
+SELECT 'c4130000-0000-0000-0000-000000000003'::uuid, u.id,
+       'Nachweis-Stack', 'C-413: aktueller 90-Tage-Stream', 'muscle_building', 'user', true
+FROM auth.users u WHERE u.email = 'test-user@lumeos.local';
+
+INSERT INTO supplements.stack_items (
+  id, stack_id, custom_name, dose, dose_unit, frequency, timing, sort_order, notes
+)
+VALUES (
+  'c4130000-0000-0000-0000-000000000004'::uuid,
+  'c4130000-0000-0000-0000-000000000003'::uuid,
+  'Vitamin D3', 2000, 'IU', 'daily', 'morning', 1,
+  'C-413 test-user Nachweisposition'
+);
+
+INSERT INTO supplements.intake_logs (
+  user_id, stack_item_id, intake_date, intake_time, status,
+  supplement_name_snapshot, dose_snapshot, dose_unit_snapshot,
+  actual_dose, actual_dose_unit, notes, measurement_source, source_detail
+)
+SELECT u.id, 'c4130000-0000-0000-0000-000000000004'::uuid,
+       DATE ${lit(TODAY_DATE)} - d, time '08:10',
+       CASE WHEN d % 11 = 0 THEN 'skipped' ELSE 'taken' END,
+       'Vitamin D3', 2000, 'IU',
+       CASE WHEN d % 11 = 0 THEN NULL ELSE 2000 END,
+       CASE WHEN d % 11 = 0 THEN NULL ELSE 'IU' END,
+       'C-413 aktueller 90-Tage-Nachweis', 'seed', 'C-413 test-user Grundbestand'
+FROM auth.users u
+CROSS JOIN generate_series(0, 89) AS d
+WHERE u.email = 'test-user@lumeos.local';
 
 CREATE TEMP TABLE test_recipes (
   id uuid PRIMARY KEY,

@@ -934,12 +934,20 @@ if (MODE === 'clean') {
       AND copied_entries = 28;`)) {
     errors.push('Fall C-150 Wochenplan: gefuellte/leere/kopierte Woche stimmt nicht')
   }
-  if (numberScalar(`
-    SELECT count(*)
+  if (!hasRows(`
+    SELECT 1
     FROM nutrition.meal_plans mp
+    JOIN nutrition.meal_plan_weeks w ON w.plan_id = mp.id
+    JOIN nutrition.meal_plan_days d ON d.week_id = w.id
+    JOIN nutrition.meal_plan_entries e ON e.day_id = d.id
     JOIN auth.users u ON u.id = mp.user_id
-    WHERE u.email = 'test-user@lumeos.local';`) !== 0) {
-    errors.push('Fall C-150 RLS-Gegenkonto: test-user hat Wochenplaene, erwartet keine')
+    WHERE u.email = 'test-user@lumeos.local'
+      AND mp.name = 'Nachweiswoche'
+      AND mp.lifecycle_type = 'once'
+      AND mp.days_count = 7
+    GROUP BY mp.id
+    HAVING count(DISTINCT d.id) = 7 AND count(e.id) = 28;`)) {
+    errors.push('Fall C-241/C-413: test-user Grundplan mit 7 Tagen und 28 Eintraegen fehlt')
   }
   if (testUserShoppingLists !== 1) {
     errors.push(`Fall C-251 Einkaufsliste: test-user hat ${testUserShoppingLists} Listen, erwartet 1`)
