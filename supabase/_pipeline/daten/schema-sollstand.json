@@ -2881,6 +2881,58 @@
       "zeilenschutzart": "eigene_zeilen"
     },
     {
+      "schema": "recovery",
+      "name": "overtraining_alerts",
+      "schritt": "421_schema",
+      "rls": true,
+      "policies": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+      "grants": {
+        "authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+        "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]
+      },
+      "grants_herkunft": "20260907090000_c421_recovery_read_models.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "recovery",
+      "name": "recovery_protocols",
+      "schritt": "421_schema",
+      "rls": true,
+      "policies": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+      "grants": {
+        "authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+        "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]
+      },
+      "grants_herkunft": "20260907090000_c421_recovery_read_models.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "recovery",
+      "name": "score_contributions",
+      "schritt": "421_schema",
+      "rls": true,
+      "policies": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+      "grants": {
+        "authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+        "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]
+      },
+      "grants_herkunft": "20260907090000_c421_recovery_read_models.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "recovery",
+      "name": "stress_logs",
+      "schritt": "421_schema",
+      "rls": true,
+      "policies": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+      "grants": {
+        "authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+        "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]
+      },
+      "grants_herkunft": "20260907090000_c421_recovery_read_models.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
       "schema": "supplements",
       "name": "substance_aliases",
       "schritt": "132",
@@ -5605,6 +5657,28 @@
     }
   ],
   "fremde_sichten": [
+    {
+      "schema": "public",
+      "name": "muscle_training_loads",
+      "schritt": "421_schema",
+      "security_invoker": true,
+      "security_barrier": false,
+      "grants": {
+        "authenticated": ["SELECT"],
+        "service_role": ["SELECT"]
+      },
+      "grants_herkunft": "20260907090000_c421_recovery_read_models.sql: security_invoker-Sicht auf eigene training-Daten, authenticated SELECT und service_role ALL.",
+      "spalten": [
+        "user_id",
+        "muscle_group",
+        "session_id",
+        "last_trained_date",
+        "last_trained_time",
+        "hours_since_trained",
+        "sets",
+        "volume_kg"
+      ]
+    },
     {
       "schema": "supplements",
       "name": "community_anzeige",

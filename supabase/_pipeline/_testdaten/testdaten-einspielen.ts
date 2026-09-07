@@ -2838,6 +2838,10 @@ DELETE FROM training.workout_sessions WHERE user_id IN (${userIds});
 DELETE FROM recovery.modality_log WHERE user_id IN (${userIds});
 DELETE FROM recovery.scores WHERE user_id IN (${userIds});
 DELETE FROM recovery.checkins WHERE user_id IN (${userIds});
+DELETE FROM recovery.score_contributions WHERE user_id IN (${userIds});
+DELETE FROM recovery.stress_logs WHERE user_id IN (${userIds});
+DELETE FROM recovery.recovery_protocols WHERE user_id IN (${userIds});
+DELETE FROM recovery.overtraining_alerts WHERE user_id IN (${userIds});
 DELETE FROM medical.user_conditions WHERE user_id IN (${userIds});
 DELETE FROM medical.user_medications WHERE user_id IN (${userIds});
 DELETE FROM medical.lab_result_values WHERE user_id IN (${userIds});
@@ -2925,6 +2929,15 @@ BEGIN
     WHERE table_schema = 'auth' AND table_name = 'users'
       AND column_name = 'encrypted_password'
   ) THEN
+    INSERT INTO auth.users (id, email, raw_app_meta_data, created_at)
+    SELECT
+      '20000000-0000-0000-0000-000000000901'::uuid,
+      'test-user@lumeos.local',
+      jsonb_build_object('provider', 'email', 'providers', jsonb_build_array('email'), 'seed', 'g175_pruefkonto'),
+      now()
+    WHERE NOT EXISTS (
+      SELECT 1 FROM auth.users WHERE email = 'test-user@lumeos.local'
+    );
     RAISE NOTICE 'G-175: Minimal-auth ohne encrypted_password — Pruefkonto-Passwort uebersprungen.';
     RETURN;
   END IF;
@@ -2951,6 +2964,65 @@ BEGIN
 
   RAISE NOTICE 'G-175: Pruefkonto-Passwort gesetzt (test-user@lumeos.local).';
 END $$;
+
+-- C-421/E-72: Das Nachweiskonto existiert jetzt und braucht bis heute
+-- lesbare Zeilen fuer jede neue Recovery-Grundlage; leere Karten sind kein Ergebnis.
+WITH test_user AS (
+  SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'
+)
+INSERT INTO recovery.stress_logs (
+  user_id, entry_date, logged_at, stress_level, work_stress, life_stress,
+  hrv_impact_points, source, notes
+)
+SELECT u.id, current_date - d, (current_date - d)::timestamp + time '07:15',
+  (4 + (d % 3))::smallint, (3 + (d % 4))::smallint, (3 + ((d + 1) % 4))::smallint,
+  (-1 * (d % 3))::numeric, 'checkin', 'C-421 Nachweis-Stressverlauf'
+FROM test_user u CROSS JOIN generate_series(0, 6) AS d;
+
+WITH test_user AS (
+  SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'
+)
+INSERT INTO recovery.score_contributions (
+  user_id, entry_date, source_module, contribution_key, input_score,
+  weight_percent, weighted_points, source_status
+)
+SELECT u.id, current_date - d, source_module, contribution_key, input_score,
+  weight_percent, round(input_score * weight_percent / 100, 2), source_status
+FROM test_user u
+CROSS JOIN generate_series(0, 6) AS d
+CROSS JOIN (VALUES
+  ('recovery'::text, 'sleep_quality'::text, 80::numeric, 30::numeric, 'measured'::text),
+  ('training', 'training_load', 70::numeric, 15::numeric, 'measured'),
+  ('nutrition', 'nutrition_compliance', 70::numeric, 10::numeric, 'fallback')
+) AS contribution(source_module, contribution_key, input_score, weight_percent, source_status);
+
+WITH test_user AS (
+  SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'
+)
+INSERT INTO recovery.recovery_protocols (
+  user_id, protocol_key, name, target_condition, started_on, duration_days,
+  daily_activities, status, completed_days
+)
+SELECT u.id, protocol_key, name, target_condition, current_date - 3, duration_days,
+  daily_activities::jsonb, status, completed_days
+FROM test_user u
+CROSS JOIN (VALUES
+  ('active_recovery_week'::text, 'Active Recovery Week'::text, 'general_recovery'::text, 7,
+   '["Light cardio 25 min", "Mobility flow", "Sleep 8h target"]'::text, 'active'::text, 3),
+  ('sleep_optimization', 'Sleep Optimization', 'poor_sleep', 14,
+   '["No caffeine after 14:00", "Screen-free wind-down"]', 'completed', 14)
+) AS protocol(protocol_key, name, target_condition, duration_days, daily_activities, status, completed_days);
+
+WITH test_user AS (
+  SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'
+)
+INSERT INTO recovery.overtraining_alerts (
+  user_id, alert_date, severity, signals, recommended_action, status
+)
+SELECT u.id, current_date - 2, 'moderate',
+  '[{"id":"score_low","value":52,"threshold":55,"days":3},{"id":"sleep_poor","value":5.5,"threshold":6,"days":3},{"id":"fatigue","value":4,"threshold":4,"days":3}]'::jsonb,
+  'Light training and recovery protocol', 'acknowledged'
+FROM test_user u;
 
 INSERT INTO public.profiles (
   id, birth_date, biological_sex, height_cm, body_weight_kg, activity_level, nutrition_goal

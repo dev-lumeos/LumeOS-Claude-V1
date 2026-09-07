@@ -1524,6 +1524,16 @@
       ]
     },
     {
+      "id": "421_schema",
+      "path": "supabase/migrations/20260907090000_c421_recovery_read_models.sql",
+      "kind": "sql",
+      "creates": "C-421/G-367: vier Recovery-Lesegrundlagen mit RLS und public.muscle_training_loads als security-invoker-Plattformsicht",
+      "depends_on": [
+        "106",
+        "121"
+      ]
+    },
+    {
       "id": "419_schema",
       "path": "supabase/migrations/20260906072641_c419_marketplace_wallet_schema.sql",
       "kind": "sql",
