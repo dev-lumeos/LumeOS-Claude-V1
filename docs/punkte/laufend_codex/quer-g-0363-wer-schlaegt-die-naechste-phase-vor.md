@@ -7,6 +7,8 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: G-357
 entscheidung: E-54
+agent: codex
+beauftragt: 2026-09-07
 beruehrt:
   tabellen: [goals.goal_phases]
 zahlen:
@@ -53,3 +55,8 @@ G-357 Pflicht** — **ein Vorschlag muss also einen mitliefern.**
 `[read]` **Override:** `[read]` **die Antwort ist ja** — **E-69:
 Tom entscheidet.** `[read]` **Ein System, das eine Phase erzwingt,
 waere ein Trainer, kein Werkzeug.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-422 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

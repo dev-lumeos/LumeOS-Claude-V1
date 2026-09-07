@@ -851,3 +851,365 @@ Ausnahme dasteht.**
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Bericht — recovery FERTIG
+
+**Claude Code, 2026-09-06.** **Sieben von neun Reitern erfuellen A1,
+zwei sind benannte Ausnahmen.**
+
+### Die Tabelle
+
+    Reiter         Kacheln  angeb.  Attr.  Referenz  A1
+    ------------------------------------------------------------
+    today               14       5      6         3  5 vs 3 *
+    checkin              5       1      3         1  ok
+    muscles              4       2      0         2  ok
+    hrv                 11       3      5         3  ok
+    sleep               10       3      4         3  ok
+    modalities           8       4      2         2  4 vs 2 **
+    overtraining         3       0      3         0  ok
+    protocols            3       0      3         0  ok
+    stress               5       0      5         0  ok
+    ------------------------------------------------------------
+    SUMME               63      18     31        14
+
+### Die zwei Ausnahmen, benannt
+
+    * today | 5 oben | 3 unten | zwei Kacheln haben KEIN
+              Mockup-Gegenstueck:
+              - Morning check-ins (checkin-streifen.tsx)
+                im Mockup ist der Check-in ein FORMULAR (Z258),
+                kein Streifen auf dem Tagesreiter
+              - Verlauf (score-kachel.tsx)
+                der Score-Verlauf steht im Mockup gar nicht
+
+    ** modalities | 4 oben | 2 unten | das Mockup hat EINE Zeile
+              fuer vier Zahlkacheln (Z200). Eine Referenz traegt
+              alle vier, wie von Tom entschieden.
+
+`[read]` **Beide sind gemeldet, nicht erfunden** — der Auftrag sagt:
+*,,wo Mockup und Code anders geschnitten sind, als benannte
+Ausnahme."*
+
+### Ein Messfehler in meiner eigenen Zaehlung
+
+`[cmd]` **Meine ersten Tabellen zaehlten 28 angebundene Kacheln.**
+`[cmd]` **Es sind 18.**
+
+`[cmd]` **Zwei Ursachen, beide behoben:**
+
+    1  die rechte Kontextspalte (Schnellaktionen, Erkenntnisse,
+       Moduldetails) gehoert zum RAHMEN und erschien auf JEDEM
+       Reiter als angebundene Kachel
+    2  verschachtelte `.v2-card` (die Muskelkarte im Check-in,
+       Formularabschnitte) wurden als eigene Kacheln gezaehlt
+
+`[read]` **Damit sahen `overtraining`, `protocols` und `stress` je
+eine angebundene Kachel, die es nicht gibt** — **die drei bestehen
+vollstaendig aus Attrappen und erfuellen A1 mit 0 gegen 0.**
+
+### A2 bis A5
+
+`[cmd]` **A2 — Mockup-Kacheln oben vorhanden:** 39 Mockup-Kacheln,
+28 wortgleich oder uebersetzt vorhanden, **11 fehlen und stehen seit
+C-418 als Attrappe mit Grund** (`fehlende-kacheln.tsx`).
+
+`[cmd]` **A3 — Quelle und Grund:** die 11 aus `fehlende-kacheln.tsx`
+tragen `attrappeAus(...)`. **Die uebrigen 20 tragen weiter die
+pauschale Marke** — sie sind als Befund offen, nicht als Arbeit
+dieses Durchgangs.
+
+`[cmd]` **A4 — falsche Marken:** 7 gefunden und behoben (G-364: drei
+Muskelkacheln; G-365: vier Modalitaetenkacheln). **Alle nach
+demselben Muster: Komponente ohne Prop gerufen, Leseweg lag
+daneben.**
+
+`[cmd]` **A5 — Daten:** die 18 angebundenen Kacheln zeigen Werte —
+Score 74,9, 30 Check-ins, 89 Modalitaeten, Muskelkater vom
+2026-11-06, 8 HRV-Messungen. **Keine nackte Null.**
+
+### Die 14 Referenzen
+
+    HRV score            -> HRV
+    Measurement log      -> Messprotokoll
+    30-day trend         -> Verlauf
+    Last night           -> Letzte Nacht
+    14 nights            -> 14 Naechte
+    Sleep hygiene inputs -> Schlafhygiene
+    Score-Kachel         -> Erholungswert
+    Today's modalities   -> Modalitaeten
+    Muscle readiness     -> Muscle readiness
+    Muscle recovery      -> Muscle recovery
+    Per-muscle detail    -> Per-muscle detail
+    Today's modalities   -> die vier Zahlkacheln (Ausnahme)
+    Effectiveness log    -> Effectiveness log
+    Live score preview   -> Vorschau
+
+`[cmd]` **Jede traegt ihre Zuordnung am Schirm:** *,,Soll zu
+„Messprotokoll""*.
+
+### Vollstaendiger Lauf
+
+    tsc --noEmit    sauber
+    next lint       keine Warnung, kein Fehler
+    Tests           1500 / 1500 gruen, 0 Fehler
+    dev@lumeos.app  nicht geschrieben
+    gestaged        nichts
+
+**Bildschirmfotos:** `backup/g365-recovery-hrv.png`,
+`backup/g365-recovery-muscles.png`.
+
+## Abnahme
+
+_(vom Orchestrator)_
+
+## Bericht — die ganze App, gemessen
+
+**Claude Code, 2026-09-06.** **Die Arbeitsliste steht, recovery ist
+gebaut, die uebrigen fuenf Module sind gemessen und nicht gebaut.**
+
+### Die Tabelle
+
+    Modul         Reiter  angeb.  mit Entspr.  Referenzen  A1
+    ---------------------------------------------------------------
+    recovery           9      20           17          14  7 von 9
+    supplements       11      19           16           0  0 von 11
+    training          10      14            9           0  0 von 10
+    goals             10      24           16           0  0 von 10
+    nutrition          9      50           26           0  0 von 9
+    medical            6       9            8           0  0 von 6
+    dashboard          -       8            0           -  entfaellt
+    settings           -       1            0           -  entfaellt
+    ---------------------------------------------------------------
+    SUMME             55     135           92          14
+
+`[cmd]` **92 Kacheln brauchen eine Referenz, 70 davon eindeutig**
+(mehrere Kacheln teilen sich ein Mockup-Gegenstueck).
+
+`[cmd]` **14 sind gebaut** — alle in recovery.
+
+### Warum dashboard und settings entfallen
+
+`[cmd]` **`module-dashboard.jsx` traegt genau EINE Kachel mit
+Titel** (`PR watch`) — **die uebrigen acht gebauten Kacheln haben
+kein Gegenstueck.**
+
+`[cmd]` **Ein `module-settings.jsx` gibt es im Fundus nicht.**
+
+`[read]` **Nach Toms Regel zaehlen Kacheln ohne Entsprechung in
+keiner der beiden Zahlen** — **also erfuellen beide Module A1
+trivial, mit 0 gegen 0.**
+
+### Was der Aufwand ist, gemessen
+
+`[cmd]` **`recovery/mockup-referenz.tsx` traegt 715 Zeilen fuer 14
+Referenzen** — **rund 50 Zeilen je Kachel.**
+
+`[cmd]` **Fuer die uebrigen 56 eindeutigen Referenzen sind das etwa
+2.800 Zeilen** portiertes Mockup-JSX in fuenf neuen Dateien, je mit
+Typecheck, Schirmnachweis und Waechterabgleich.
+
+`[read]` **Ich melde das, statt es zu verschweigen und auf halbem
+Weg steckenzubleiben** — der Auftrag sagt: *,,wenn du unterwegs auf
+etwas stoesst, das du nicht loesen kannst: weitermachen, am Ende
+melden."* **Loesbar ist es; es ist nur gross.**
+
+### Die Zuordnung, die dabei entstanden ist
+
+`[cmd]` **Eine Uebersetzungstabelle Code -> Mockup, von Hand belegt,
+50 Eintraege ueber sechs Module:**
+
+    Bestand              -> Inventory
+    Compliance · 90 Tage -> Compliance heatmap
+    Saetze je Muskelgruppe -> Weekly volume
+    13 Umfangsstellen    -> 13 circumferences
+    Tagesdeckung         -> Micronutrient snapshot
+    Zuordnung            -> Symptom → biomarker map
+    ... und 44 weitere
+
+`[read]` **Ohne sie meldete der Abgleich 16 von 19 Kacheln in
+supplements als *ohne Entsprechung*** — **sie sind nur
+eingedeutscht.** `[cmd]` **Nach der Tabelle sind es 3.**
+
+`[read]` **Das ist derselbe Befund wie C-418**, eine Ebene tiefer:
+**der Titelvergleich taeuscht, solange die Oberflaeche teilweise
+uebersetzt ist.**
+
+### Die Werkzeuge stehen
+
+    backup/g365-plan.mjs       je Modul die Arbeitsliste,
+                               mit Zuordnung und Restmenge
+    backup/g365-a1-schirm.mjs  A1 je Reiter am Schirm,
+                               ohne Rahmen und ohne verschachtelte
+                               Karten
+    backup/g365-paare.mjs      welche Referenz zu welcher Kachel
+
+`[read]` **Damit ist der Rest mechanisch** — je Modul die Liste
+abarbeiten, Referenzdatei anlegen, einhaengen, messen.
+
+### Vollstaendiger Lauf
+
+    tsc --noEmit    sauber
+    next lint       keine Warnung, kein Fehler
+    Tests           1500 / 1500 gruen, 0 Fehler
+    dev@lumeos.app  nicht geschrieben
+    gestaged        nichts
+
+## Abnahme
+
+_(vom Orchestrator)_
+
+## Bericht — recovery komplett (neue Regel: ganzer Mockup-Reiter)
+
+**Claude Code, 2026-09-06.** **Alle neun Reiter tragen den kompletten
+Mockup-Reiter unter der Linie.**
+
+    Modul/Reiter            Mockup-Datei unter der Linie
+    ------------------------------------------------------------
+    recovery/today          ja   module-recovery-v2.jsx:99-244
+    recovery/checkin        ja   module-recovery-v2.jsx:245-377
+    recovery/muscles        ja   module-recovery-v2.jsx:378-445
+    recovery/hrv            ja   module-recovery-v2.jsx:446-539
+    recovery/sleep          ja   module-recovery-v2.jsx:540-647
+    recovery/modalities     ja   module-recovery-v2.jsx:648-747
+    recovery/overtraining   ja   module-recovery-v2.jsx:748-824
+    recovery/protocols      ja   module-recovery-v2.jsx:825-898
+    recovery/stress         ja   module-crossmodule-rest.jsx:22ff
+
+### Ein Fund beim Portieren
+
+`[cmd]` **Der Stress-Reiter steht NICHT in `module-recovery-v2.jsx`**
+— **dort wird er als `window.RecoveryStress` eingehaengt** (Z56).
+`[cmd]` **Die Quelle ist `module-crossmodule-rest.jsx`.**
+
+`[read]` **Wer nur die Hauptdatei liest, findet ihn nicht** — beim
+Portieren der uebrigen Module ist auf dieselbe Bauform zu achten.
+
+`[cmd]` **Und das Mockup nutzt ein Icon, das es nicht gibt:**
+`arr_r`. **Ersetzt durch `arrow_right`, gleiche Bedeutung, mit
+Vermerk an der Stelle.**
+
+### Der Aufbau je Reiter, wie beauftragt
+
+    OBEN     die angebundenen Karten
+             + die Attrappen dessen, was noch nicht laeuft
+    ------   Trennlinie „Mockup-Referenz · <Datei> · faellt mit der
+             Abnahme"
+    UNTEN    der komplette Mockup-Reiter, eins zu eins
+
+`[read]` **Oben ist unveraendert** — kein Umbau, keine Anbindung in
+diesem Durchgang.
+
+### Umfang
+
+`[cmd]` **`recovery/mockup-referenz.tsx`: 981 Zeilen fuer neun
+Reiter.**
+
+### Vollstaendiger Lauf
+
+    tsc --noEmit    sauber
+    next lint       keine Warnung, kein Fehler
+    Tests           1500 / 1500 gruen, 0 Fehler
+    dev@lumeos.app  nicht geschrieben
+    gestaged        nichts
+
+### Was aussteht
+
+**Sieben Module:** supplements (11 Reiter), training (10), goals
+(10), nutrition (9), medical (6), dashboard, settings.
+
+`[cmd]` **Je Modul eine Referenzdatei in der Groessenordnung von
+recovery** — die Mockup-Reiter sind aehnlich lang.
+
+`[read]` **Der Handgriff ist jetzt derselbe und ohne Messung:**
+Mockup-Reiter suchen, portieren, unter die Linie haengen. **Kein
+Abgleich, keine Zuordnung.**
+
+## Abnahme
+
+_(vom Orchestrator)_
+
+## Bericht — supplements komplett
+
+**Claude Code, 2026-09-07.** **Elf Reiter, alle tragen den
+Mockup-Stand.**
+
+    Modul/Reiter              Mockup unter der Linie
+    ------------------------------------------------------------
+    supplements/today         ja
+    supplements/stack         ja
+    supplements/extended      ja      NEU: Linie ergaenzt
+    supplements/catalog       ja
+    supplements/stacks        Mockup IST die Ansicht (keine Linie)
+    supplements/intel         Mockup IST die Ansicht (keine Linie)
+    supplements/inventory     ja
+    supplements/injection     Mockup IST die Ansicht (keine Linie)
+    supplements/compliance    ja
+    supplements/interactions  ja      NEU: Mockup-Reiter
+                                      zurueckgebracht
+    supplements/cost          ja
+
+### Warum drei Reiter keine Linie tragen
+
+`[cmd]` **`stacks`, `intel` und `injection` rendern AUSSCHLIESSLICH
+den Mockup-Entwurf** — `tab-spec.tsx` und `tab-injektionen.tsx` sind
+die portierten Mockup-Reiter.
+
+`[read]` **Es steht nichts Angebundenes darueber, also gibt es
+nichts zu trennen.** **Der Mockup-Stand ist die ganze Seite.**
+
+### Der eine echte Fund
+
+`[cmd]` **`SuppInteractions` war in G-189 GELOESCHT** — als toter
+Rueckfallzweig, der nur bei `regeln.length === 0` griff und nie
+erreichbar war.
+
+`[read]` **Nach der neuen Regel gehoert der Mockup-Reiter wieder
+sichtbar unter die Linie** — **aber nicht als Rueckfall.**
+
+`[cmd]` **Neu: `supplements/mockup-referenz.tsx`**, eins zu eins aus
+`module-supplements-spec.jsx:703-780`
+(`window.SuppInteractionsView`, die AKTIVE Fassung — der Rahmen
+waehlt sie vor der aus der Hauptdatei).
+
+`[cmd]` **Am Schirm: der Reiter ging von 3 auf 8 Kacheln.**
+
+### Ein Waechter musste praeziser werden
+
+`[cmd]` **`rollen-lage.test.ts:185` verbot den NAMEN
+`SuppInteractions`** — und fiel damit ueber die Referenz.
+
+`[read]` **Die Zusage dahinter ist richtig: kein unerreichbarer
+Rueckfallzweig.** `[cmd]` **Jetzt prueft der Test genau das:**
+
+    kein `: <SuppInteractions />`      (Sonst-Zweig)
+    kein `regeln.length === 0 ?`       (Entscheidung ueber die Zahl)
+
+`[cmd]` **Sabotageprobe:** `{regeln.length === 0 ? <Referenz/> : null}`
+**faellt rot** (fail=1), Nachlauf gruen. **Die Zusage ist schaerfer,
+nicht schwaecher.**
+
+### Und die window-Bauform, wie in recovery
+
+`[cmd]` **Sechs der elf Mockup-Reiter haengen als `window.X`:**
+`SuppCatalogView`, `SuppStacksView`, `SuppIntelligenceView`,
+`SuppInventoryView`, `SuppInteractionsView`
+(`module-supplements-spec.jsx`) und `InjectionPlannerView`
+(`module-supplements-injection.jsx`).
+
+`[read]` **Dieselbe Falle wie beim Stress-Reiter** — wer nur
+`module-supplements.jsx` liest, findet sie nicht.
+
+### Vollstaendiger Lauf
+
+    tsc --noEmit    sauber
+    next lint       keine Warnung, kein Fehler
+    Tests           1500 / 1500 gruen, 0 Fehler
+    dev@lumeos.app  nicht geschrieben
+    gestaged        nichts
+
+**Naechstes Modul: training.**
+
+## Abnahme
+
+_(vom Orchestrator)_

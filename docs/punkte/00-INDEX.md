@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 214 |
+| `todos` | 213 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 6 |
-| `erledigt` | 301 |
-| **gesamt** | **523** |
+| `erledigt` | 303 |
+| **gesamt** | **524** |
 
 ## medical — 43
 
@@ -412,13 +412,13 @@
 | `C-236` | feature | mittel | [Die Recovery-Seeds sind Zaehlreihen, keine Messwerte](todos/recovery-c-0236-die-recovery-seeds-sind-zaehlreihen-keine-messwerte.md) | offen | — | B-29, B-30, G-174 |
 | `C-238` | blocker | hoch | [`meal_plan_entries` hat keinen Status](erledigt/recovery-c-0238-meal-plan-entries-hat-keinen-status.md) | erledigt | — | — |
 | `C-339` | feature | niedrig | [ein Recovery-Gesamtscore, vorgesehen](todos/recovery-c-0339-ein-Recovery-Gesamtscore-vorgesehen.md) | offen | — | — |
-| `C-421` | feature | hoch | [vier Tabellen fuer die 17 Attrappen](laufend_codex/recovery-c-0421-vier-tabellen-fuer-die-17-attrappen.md) | laeuft (codex) | — | — |
+| `C-421` | feature | hoch | [vier Tabellen fuer die 17 Attrappen](erledigt/recovery-c-0421-vier-tabellen-fuer-die-17-attrappen.md) | erledigt | — | C-422 |
 | `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](erledigt/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | erledigt | — | — |
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
 | `G-243` | befund | mittel | [die Recovery-Schwellen stehen im Mockup, nicht im Punkt](todos/recovery-g-0243-die-recovery-schwellen-stehen-im-mockup-nicht-im-punkt.md) | offen | — | — |
 | `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](laufend_claudecode/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | laeuft (claudecode) | — | G-365, G-367 |
-| `G-367` | feature | mittel | [Stunden und Saetze je Muskel](laufend_codex/recovery-g-0367-per-muscle-stunden-und-saetze.md) | laeuft (codex) | — | — |
+| `G-367` | feature | mittel | [Stunden und Saetze je Muskel](erledigt/recovery-g-0367-per-muscle-stunden-und-saetze.md) | erledigt | — | — |
 
 ## goals — 6
 
@@ -464,7 +464,7 @@
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | — |
 
-## quer — 111
+## quer — 112
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -537,6 +537,7 @@
 | `C-418` | befund | hoch | [der Waechter vergleicht Zeichenketten, nicht Inhalte](laufend_claudecode/quer-c-0418-der-waechter-vergleicht-zeichenketten.md) | laeuft (claudecode) | — | C-420 |
 | `C-419` | feature | hoch | [das Wallet existiert nicht](erledigt/quer-c-0419-das-wallet-existiert-nicht.md) | erledigt | — | — |
 | `C-420` | befund | hoch | [der Waechter kennt keine Uebersetzung](erledigt/quer-c-0420-der-waechter-kennt-keine-uebersetzung.md) | erledigt | — | — |
+| `C-422` | feature | hoch | [die Lesewege fuer elf Kacheln](laufend_codex/quer-c-0422-die-lesewege-fuer-elf-kacheln.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -576,7 +577,7 @@
 | `G-358` | befund | mittel | [62 Vermerke ohne Grund](laufend_claudecode/quer-g-0358-62-vermerke-ohne-grund.md) | laeuft (claudecode) | — | — |
 | `G-359` | befund | hoch | [1.343 Mockup-Elemente fehlen in der UI](laufend_claudecode/quer-g-0359-1343-mockup-elemente-fehlen-in-der-ui.md) | laeuft (claudecode) | — | C-417, C-418, G-360 |
 | `G-360` | feature | hoch | [coach, market und admin als eigene Apps](todos/quer-g-0360-coach-market-admin-als-eigene-apps.md) | offen | — | G-361, G-362 |
-| `G-363` | entscheidung | mittel | [wer schlaegt die naechste Phase vor?](todos/quer-g-0363-wer-schlaegt-die-naechste-phase-vor.md) | offen | — | — |
+| `G-363` | entscheidung | mittel | [wer schlaegt die naechste Phase vor?](laufend_codex/quer-g-0363-wer-schlaegt-die-naechste-phase-vor.md) | laeuft (codex) | — | — |
 | `G-365` | feature | hoch | [vier Schritte je Kachel](laufend_claudecode/quer-g-0365-vier-schritte-je-kachel.md) | laeuft (claudecode) | — | C-421, G-366, G-369 |
 | `G-368` | befund | mittel | [Attrappen-Vermerke mit falschem Grund](todos/quer-g-0368-attrappen-vermerke-mit-falschem-grund.md) | offen | — | — |
 

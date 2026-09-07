@@ -9,6 +9,8 @@ kind_von: G-364
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: c3067369
 beruehrt:
   tabellen: [training.workout_sessions]
 zahlen:
@@ -45,3 +47,16 @@ erlaubt gemeinsame Sichten.**
 
 **Mitbeauftragt mit C-421 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit C-421 abgenommen.**
+
+`[cmd]` **`public.muscle_training_loads` liefert echte Working-Sets
+und Stunden je Muskelgruppe.**
+
+`[read]` **Der Ort ist richtig:** `public`, **nicht `recovery` oder
+`training`** — **wie `activity_stream`** (C-414, E-65).
+
+`[cmd]` **Der vollstaendige Muskelvergleich steht im
+C-421-Bericht.**
