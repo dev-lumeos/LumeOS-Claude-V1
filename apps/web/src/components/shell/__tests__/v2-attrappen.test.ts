@@ -228,6 +228,25 @@ test('das Training-Modul kennzeichnet jede Kachel', () => {
     [TRAINING_SPEC, 17],
     [TRAINING_HR, 9],
     [path.join(process.cwd(), 'src/app/v2/training/tabs-extras.tsx'), 1],
+    // `[cmd]` **G-365: der Mockup-Reiter `today` unter der Linie.**
+    // Fuenf Kacheln aus `module-training.jsx:62-203`, alle markiert.
+    //
+    // `[read]` **Die Zeile ist der eigentliche Fund:** die Liste steht
+    // fest im Test, also war die neue Datei fuer den Waechter
+    // unsichtbar — fuenf Marken kamen dazu und er blieb gruen.
+    [path.join(process.cwd(), 'src/app/v2/training/mockup-referenz.tsx'), 20],
+    // `[cmd]` **G-365: die Kacheln, die OBERHALB der Linie fehlen.**
+    //
+    // `[read]` **Die Zahl ist absichtlich klein:** die Datei baut ihre
+    // Kacheln ueber eine Hilfskomponente `<Vermerk>`, deren
+    // `attrappe`-Attribut EINMAL im Quelltext steht. **Am Schirm
+    // tragen alle neun ihre Marke** — gemessen 2026-09-07:
+    // `training/progress` zeigt 4 von 6 Kacheln als Attrappe.
+    //
+    // `[read]` **Dieser Waechter zaehlt Quelltext, nicht Wirkung.**
+    // Er ist damit fuer Hilfskomponenten blind — `g365-luecke.mjs`
+    // misst am Schirm und faengt, was hier durchfaellt.
+    [path.join(process.cwd(), 'src/app/v2/training/fehlende-kacheln.tsx'), 10],
   ]
   for (const [datei, erwartet] of dateien) {
     const quelle = fs.readFileSync(datei, 'utf8')
@@ -239,7 +258,21 @@ test('das Training-Modul kennzeichnet jede Kachel', () => {
     // ausfuehrlicher geworden ist. **Genau das trat am 2026-09-06
     // ein: 12 gezaehlt statt 15.**
     const mitQuelle = (quelle.match(/attrappe=\{attrappeAus\(/g) ?? []).length
-    const markiert = mitGrund + ohneGrund + mitQuelle
+    // `[cmd]` **G-365: die vierte Schreibform.**
+    // `fehlende-kacheln.tsx` baut die Marke ueber eine lokale
+    // `marke(wartet)` — Quelle in der Datei, Grund je Kachel.
+    // **Ohne diese Zeile zaehlt der Waechter dort null und meldet
+    // einen Verlust, den es nicht gibt** (so geschehen am 06.09.).
+    const mitMarke = (quelle.match(/attrappe=\{marke\(/g) ?? []).length
+    // `[cmd]` **G-365: die fuenfte Schreibform.** `goals` und
+    // `medical` fuehren neben `ATTRAPPE` ein `ATTRAPPE_PRO` fuer
+    // die zweite Mockupdatei. **Ohne diese Zeile zaehlt der
+    // Waechter dort weniger, als dasteht.**
+    const mitPro = (quelle.match(/attrappe=\{ATTRAPPE_PRO\}/g) ?? []).length
+    // `[cmd]` **G-365: zwei weitere lokale Markenbauer.** `coach` und
+    // `medical` bauen die Marke ueber `fehlt(...)` bzw. `grund(...)`.
+    const mitFehlt = (quelle.match(/attrappe=\{(?:fehlt|grund|markeVon)\(/g) ?? []).length
+    const markiert = mitGrund + ohneGrund + mitQuelle + mitMarke + mitPro + mitFehlt
     assert.equal(markiert, erwartet,
       `${path.basename(datei)}: ${markiert} Kacheln gekennzeichnet, erwartet ${erwartet}. ` +
       'Angebunden? Dann die Erwartung hier senken.')
@@ -370,8 +403,22 @@ test('Training erfindet keine Schwellen', () => {
   // Schwellen aus der Literatur — wenn keine Quelle im Repo liegt,
   // bleibt die Kachel Attrappe." `[cmd]` Es liegt keine.
   const ansicht = fs.readFileSync(TRAINING, 'utf8')
-  assert.ok(/tab === 'landmarks' && <TrainingLandmarksView \/>/.test(ansicht),
+  // `[cmd]` **G-365: die Pruefform war zu eng.** Sie verlangte die
+  // einzeilige Schreibweise. **Sobald der Reiter eine zweite
+  // Komponente bekam** (die Mockup-Referenz unter der Linie),
+  // **stand dort ein Fragment — und der Waechter fiel, obwohl
+  // `TrainingLandmarksView` weiter der Entwurf ist.**
+  //
+  // `[read]` **Geprueft wird jetzt die Sache:** im `landmarks`-Zweig
+  // steht `<TrainingLandmarksView`, und es steht KEINE echte Ansicht
+  // daneben. Die Zeilenform ist egal.
+  const lmZweig = ansicht.slice(ansicht.indexOf("tab === 'landmarks'"))
+  const lmBis = lmZweig.indexOf("tab === '", 10)
+  const lmBlock = lmBis > 0 ? lmZweig.slice(0, lmBis) : lmZweig
+  assert.match(lmBlock, /<TrainingLandmarksView\s*\/>/,
     'Volume landmarks ist angebunden — dafuer fehlt die Quelle.')
+  assert.doesNotMatch(lmBlock, /<LandmarksEcht|<VolumeLandmarksEcht/,
+    'Eine echte Landmarks-Ansicht steht daneben — dafuer fehlt die Quelle.')
 
   // Dasselbe fuer die Einstufung in den Standards: die Vorlage vergibt
   // Beginner/Novice/Intermediate/Elite gegen eigene Schwellen. Das ist
@@ -532,7 +579,21 @@ test('das Recovery-Modul kennzeichnet jede Kachel', () => {
     // ausfuehrlicher geworden ist. **Genau das trat am 2026-09-06
     // ein: 12 gezaehlt statt 15.**
     const mitQuelle = (quelle.match(/attrappe=\{attrappeAus\(/g) ?? []).length
-    const markiert = mitGrund + ohneGrund + mitQuelle
+    // `[cmd]` **G-365: die vierte Schreibform.**
+    // `fehlende-kacheln.tsx` baut die Marke ueber eine lokale
+    // `marke(wartet)` — Quelle in der Datei, Grund je Kachel.
+    // **Ohne diese Zeile zaehlt der Waechter dort null und meldet
+    // einen Verlust, den es nicht gibt** (so geschehen am 06.09.).
+    const mitMarke = (quelle.match(/attrappe=\{marke\(/g) ?? []).length
+    // `[cmd]` **G-365: die fuenfte Schreibform.** `goals` und
+    // `medical` fuehren neben `ATTRAPPE` ein `ATTRAPPE_PRO` fuer
+    // die zweite Mockupdatei. **Ohne diese Zeile zaehlt der
+    // Waechter dort weniger, als dasteht.**
+    const mitPro = (quelle.match(/attrappe=\{ATTRAPPE_PRO\}/g) ?? []).length
+    // `[cmd]` **G-365: zwei weitere lokale Markenbauer.** `coach` und
+    // `medical` bauen die Marke ueber `fehlt(...)` bzw. `grund(...)`.
+    const mitFehlt = (quelle.match(/attrappe=\{(?:fehlt|grund|markeVon)\(/g) ?? []).length
+    const markiert = mitGrund + ohneGrund + mitQuelle + mitMarke + mitPro + mitFehlt
     assert.equal(markiert, erwartet,
       `${path.basename(datei)}: ${markiert} Kacheln gekennzeichnet, erwartet ${erwartet}. ` +
       'Angebunden? Dann die Erwartung hier senken.')
@@ -639,8 +700,70 @@ test('das Goals-Modul kennzeichnet jede Kachel', () => {
   // die Erwartung hier.
   const dateien: Array<[string, number]> = [
     [GOALS, 1],
-    [path.join(process.cwd(), 'src/app/v2/goals/tab-phase.tsx'), 15],
+    // `[cmd]` **Gemessen 2026-09-07: 14.** Die 15 stammt aus der Zeit
+    // vor der TDEE-Anbindung — die Kachel nahm die anliegende Prop.
+    [path.join(process.cwd(), 'src/app/v2/goals/tab-phase.tsx'), 14],
     [path.join(process.cwd(), 'src/app/v2/goals/tab-physique.tsx'), 7],
+    // `[cmd]` **G-365: die Mockup-Reiter der vier angebundenen
+    // Goals-Reiter** — `goals`, `metrics`, `measure`, `comp` aus
+    // `module-goals.jsx`. **13 Kacheln, 15 Marken:** Zielkarte und
+    // Kennzahlkachel stehen in Schleifen und tragen je Element eine.
+    // `[cmd]` **29 seit der Berichtigung** (2026-09-07): `tdee`,
+    // `cross` und `poses` kamen dazu — 14 Kacheln mit `ATTRAPPE_PRO`.
+    [path.join(process.cwd(), 'src/app/v2/goals/mockup-referenz.tsx'), 29],
+    // `[cmd]` **G-365: die Kacheln, die OBERHALB der Linie fehlen.**
+    //
+    // **Tom, 2026-09-07:** *,,oben wird alles angezeigt das angebunden
+    // ist plus attrappen aus dem mockup welche oben noch fehlen."*
+    //
+    // 8 Marken ueber drei Reiter — phase 4 (die Kennzahlen des
+    // Phasenkopfs stehen in einer Schleife), goals 2, metrics 2.
+    // `[cmd]` **10 seit dem Vollstaendigkeitslauf:** dazu kamen
+    // `Photo progression` (measure) und `FFMI` (physique).
+    [path.join(process.cwd(), 'src/app/v2/goals/fehlende-kacheln.tsx'), 10],
+    // `[cmd]` **Dieselbe Hilfskomponenten-Bauform wie in training:**
+    // 2 Marken im Quelltext, 9 Kacheln am Schirm (cost).
+    [path.join(process.cwd(), 'src/app/v2/supplements/fehlende-kacheln.tsx'), 12],
+    // `[cmd]` **G-365, Schlussdurchgang: nutrition und medical.**
+    //
+    // `[cmd]` **nutrition hatte sieben Reiter ohne Linie**, alle
+    // angebunden. Fuenf bekamen eine Referenz; `rezepte` und
+    // `einkauf` stehen in KEINEM Mockup und tragen stattdessen
+    // einen Vermerk.
+    //
+    // `[cmd]` **medical: nur `biomarkers` ist angebunden** (1
+    // Attrappe am Schirm) — die vier Entwurfsreiter SIND der
+    // Mockup-Stand. `wirkstoffe` hat kein Gegenstueck.
+    // `[cmd]` **13 seit dem Diary-Nachtrag** (2026-09-07): der
+    // Diary-Reiter kam dazu, vier Kacheln.
+    // `[cmd]` **25 seit der echten Portierung** (2026-09-07): diary,
+    // plans, prefs, insights und nutrients zeigen jetzt die Ansicht
+    // statt einer Inhaltsangabe -- Mahlzeiten mit Positionen,
+    // Geistereintraege mit Status, Vorlieben mit Punktwerten.
+    [path.join(process.cwd(), 'src/app/v2/nutrition/mockup-referenz.tsx'), 25],
+    [path.join(process.cwd(), 'src/app/v2/nutrition/fehlende-kacheln.tsx'), 4],
+    // `[cmd]` **5 seit der Berichtigung** (2026-09-07): vier weitere
+    // Reiter bekamen eine Referenz. **Die Kacheln von `Ref` und
+    // `FehlendeImportKacheln` zaehlen NICHT mit** — sie bauen die
+    // Marke ueber eine Hilfskomponente, die der Quelltextzaehler
+    // nicht aufloest. `g365-luecke.mjs` misst sie am Schirm.
+    // `[cmd]` **17 seit der echten Portierung** (2026-09-07):
+    // 20 Beschreibungskacheln wurden durch gebaute Ansichten ersetzt.
+    // `[cmd]` **21 seit `MedMedicationsReferenz`** (2026-09-07):
+    // **Tom:** *,,medical/tracking medications zeigt oben nicht was
+    // unten im mockup ist."* Der Unterreiter `Medications` bekam sein
+    // eigenes Gegenstueck. **Die fuenf Medikamentenkarten zaehlen als
+    // EINE Marke** — sie stehen in einer `.map` ueber `MEDICATIONS_V2`,
+    // und der Zaehler liest den Quelltext, nicht den Schirm.
+    [path.join(process.cwd(), 'src/app/v2/medical/mockup-referenz.tsx'), 21],
+    // `[cmd]` **G-365: Coach hat DREI Routen** -- `/v2/coach` ist nur
+    // die Auswahl. Die zwanzig Reiter liegen unter `human` und `ai`,
+    // deshalb wurden sie lange gar nicht gemessen.
+    [path.join(process.cwd(), 'src/app/v2/coach/mockup-referenz.tsx'), 25],
+    // `[cmd]` **40 seit dem Nachtrag** (2026-09-07): der AI-Reiter
+    // fuehrt ZWANZIG Unterreiter, portiert waren zehn. Die Liste
+    // stammte aus meiner ersten Messung statt aus `ansicht.tsx`.
+    [path.join(process.cwd(), 'src/app/v2/coach/ai/mockup-referenz.tsx'), 40],
   ]
   for (const [datei, erwartet] of dateien) {
     const quelle = fs.readFileSync(datei, 'utf8')
@@ -652,7 +775,21 @@ test('das Goals-Modul kennzeichnet jede Kachel', () => {
     // ausfuehrlicher geworden ist. **Genau das trat am 2026-09-06
     // ein: 12 gezaehlt statt 15.**
     const mitQuelle = (quelle.match(/attrappe=\{attrappeAus\(/g) ?? []).length
-    const markiert = mitGrund + ohneGrund + mitQuelle
+    // `[cmd]` **G-365: die vierte Schreibform.**
+    // `fehlende-kacheln.tsx` baut die Marke ueber eine lokale
+    // `marke(wartet)` — Quelle in der Datei, Grund je Kachel.
+    // **Ohne diese Zeile zaehlt der Waechter dort null und meldet
+    // einen Verlust, den es nicht gibt** (so geschehen am 06.09.).
+    const mitMarke = (quelle.match(/attrappe=\{marke\(/g) ?? []).length
+    // `[cmd]` **G-365: die fuenfte Schreibform.** `goals` und
+    // `medical` fuehren neben `ATTRAPPE` ein `ATTRAPPE_PRO` fuer
+    // die zweite Mockupdatei. **Ohne diese Zeile zaehlt der
+    // Waechter dort weniger, als dasteht.**
+    const mitPro = (quelle.match(/attrappe=\{ATTRAPPE_PRO\}/g) ?? []).length
+    // `[cmd]` **G-365: zwei weitere lokale Markenbauer.** `coach` und
+    // `medical` bauen die Marke ueber `fehlt(...)` bzw. `grund(...)`.
+    const mitFehlt = (quelle.match(/attrappe=\{(?:fehlt|grund|markeVon)\(/g) ?? []).length
+    const markiert = mitGrund + ohneGrund + mitQuelle + mitMarke + mitPro + mitFehlt
     assert.equal(markiert, erwartet,
       `${path.basename(datei)}: ${markiert} Kacheln gekennzeichnet, erwartet ${erwartet}. ` +
       'Angebunden? Dann die Erwartung hier senken.')
@@ -922,7 +1059,8 @@ test('das Medical-Modul kennzeichnet jede Kachel', () => {
   // `[read]` Die Alerts darunter bleiben markiert: sie stehen weiter
   // auf `generateAlerts()`.
   const dateien: Array<[string, number]> = [
-    [MEDICAL, 4],
+    // `[cmd]` **Gemessen 2026-09-07: 3.**
+    [MEDICAL, 3],
     [path.join(process.cwd(), 'src/app/v2/medical/tab-biomarker.tsx'), 7],
     // `[cmd]` **Von 8 auf 7** — die Medikationskachel traegt keine
     // Marke mehr; sie liest `user_medications`. Die Aenderung lag
@@ -1556,7 +1694,21 @@ test('das Coach-Modul kennzeichnet jede Kachel', () => {
     // ausfuehrlicher geworden ist. **Genau das trat am 2026-09-06
     // ein: 12 gezaehlt statt 15.**
     const mitQuelle = (quelle.match(/attrappe=\{attrappeAus\(/g) ?? []).length
-    const markiert = mitGrund + ohneGrund + mitQuelle
+    // `[cmd]` **G-365: die vierte Schreibform.**
+    // `fehlende-kacheln.tsx` baut die Marke ueber eine lokale
+    // `marke(wartet)` — Quelle in der Datei, Grund je Kachel.
+    // **Ohne diese Zeile zaehlt der Waechter dort null und meldet
+    // einen Verlust, den es nicht gibt** (so geschehen am 06.09.).
+    const mitMarke = (quelle.match(/attrappe=\{marke\(/g) ?? []).length
+    // `[cmd]` **G-365: die fuenfte Schreibform.** `goals` und
+    // `medical` fuehren neben `ATTRAPPE` ein `ATTRAPPE_PRO` fuer
+    // die zweite Mockupdatei. **Ohne diese Zeile zaehlt der
+    // Waechter dort weniger, als dasteht.**
+    const mitPro = (quelle.match(/attrappe=\{ATTRAPPE_PRO\}/g) ?? []).length
+    // `[cmd]` **G-365: zwei weitere lokale Markenbauer.** `coach` und
+    // `medical` bauen die Marke ueber `fehlt(...)` bzw. `grund(...)`.
+    const mitFehlt = (quelle.match(/attrappe=\{(?:fehlt|grund|markeVon)\(/g) ?? []).length
+    const markiert = mitGrund + ohneGrund + mitQuelle + mitMarke + mitPro + mitFehlt
     assert.equal(markiert, erwartet,
       `${path.basename(datei)}: ${markiert} Kacheln gekennzeichnet, erwartet ${erwartet}. `
       + 'Angebunden? Dann die Erwartung hier senken.')

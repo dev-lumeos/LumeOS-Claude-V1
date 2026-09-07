@@ -189,10 +189,20 @@ test('G-189: `SuppInteractions` ist ersatzlos entfernt', () => {
   //
   // `[read]` **G-163-Beschluss:** Rueckfallfassungen bleiben nicht
   // stehen. Sie werden beim naechsten Umbau wiederbelebt.
+  // `[cmd]` **G-365 (E-69) hat den Mockup-Reiter zurueckgebracht** —
+  // aber NICHT als Rueckfall: `SuppInteractionsReferenz` rendert
+  // unbedingt, unter der Trennlinie, als Vergleich.
+  //
+  // `[read]` **Die Zusage bleibt und wird schaerfer:** kein
+  // Sonst-Zweig, der nur bei `regeln.length === 0` greift. **Genau
+  // das prueft der Test jetzt, statt den Namen zu verbieten.**
   for (const p of ['src/app/v2/supplements/tabs.tsx',
     'src/app/v2/supplements/ansicht.tsx']) {
-    assert.doesNotMatch(ohneKommentare(p), /SuppInteractions/,
+    const s = ohneKommentare(p)
+    assert.doesNotMatch(s, /:\s*<SuppInteractions\s*\/>/,
       `${p} fuehrt den toten Rueckfallzweig weiter (G-189).`)
+    assert.doesNotMatch(s, /regeln\.length === 0\s*\?/,
+      `${p} entscheidet wieder ueber die Regelzahl (G-189).`)
   }
 })
 

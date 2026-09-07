@@ -573,6 +573,40 @@ export type TabsProps = {
   onChange: (id: string) => void
 }
 
+/**
+ * Die Unterleiste innerhalb eines Reiters.
+ *
+ * `[cmd]` **Tom, 2026-09-07:** *,,Medical/tracking subnav symptoms &
+ * Medications ghetto, Medical/import subnav ghetto."*
+ *
+ * `[read]` **Dort standen `v2-btn`-Knoepfe in einem handgebauten
+ * Kasten** — mit Inline-Styles, ohne die Schiene, Rundung und
+ * Zaehlerpille der Modulleiste darueber. **Zwei Leisten auf einem
+ * Schirm, die verschieden aussehen, wirken wie zwei Bauzeitpunkte.**
+ *
+ * Dieselben Requisiten wie `Tabs`, nur schmaler gesetzt.
+ */
+export function UnterTabs({ items, active, onChange }: TabsProps) {
+  return (
+    <div className="v2-tabs v2-tabs-sub" role="tablist">
+      {items.map(t => (
+        <button
+          key={t.id}
+          type="button"
+          role="tab"
+          aria-selected={active === t.id}
+          className={`v2-tab ${active === t.id ? 'v2-active' : ''}`.trim()}
+          onClick={() => onChange(t.id)}
+        >
+          {t.icon && <Icon name={t.icon} className="v2-ic v2-ic-sm" />}
+          {t.label}
+          {t.count != null && <span className="v2-count v2-num">{t.count}</span>}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 export function Tabs({ items, active, onChange }: TabsProps) {
   // Gegenueber der Vorlage: <button> statt <div>. Ein div mit onClick
   // ist per Tastatur nicht erreichbar und fuer Hilfsmittel kein

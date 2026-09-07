@@ -457,9 +457,33 @@ function PhasenVorschau({ ph, aktuell, onClose, onEdit }: {
 // eine Historie, die die Funktion nicht fuehrt.
 export function GoalsTDEEView({ tdee }: { tdee?: import('../../../lib/goals/lesen').AdaptiverTdee | null }) {
   const t = TDEE_STATE
-  const wochenZufuhr = t.weeklyIntakeAvg * 7
-  const kalorienDelta = Math.round(t.weightDeltaKg * 7700)
-  const rohTDEE = Math.round((wochenZufuhr - t.weightDeltaKg * 7700) / 7)
+
+  // ══ G-365: der Rechenweg kommt aus `goals.adaptive_tdee` ══════
+  //
+  // `[cmd]` **Gemessen 2026-09-06 fuer `dev@lumeos.app`:** 14 Tage,
+  // Zufuhr 2.379,2 kcal, Gewichtsdelta 0,330 kg, roher TDEE 2.183,7,
+  // `alpha` 1,0, `kcal_per_kg` 7.700, Vertrauen **high**.
+  //
+  // `[cmd]` **Die Prop `tdee` lag an** — `TdeeKopf` benutzt sie seit
+  // GO-16 —, **diese Kachel rechnete daneben mit `TDEE_STATE`.**
+  //
+  // `[read]` **Was die Funktion NICHT liefert, bleibt Entwurf:** die
+  // modeluebergreifenden Korrekturen (Trainingslast,
+  // Erholungsabschlag) — **sie stehen weiter unten im markierten
+  // Block.** **Nicht erfunden** (C-378).
+  const echterWeg = tdee && tdee.avg_intake_kcal != null
+    && tdee.weight_delta_kg != null && tdee.raw_tdee_kcal != null
+    ? tdee : null
+
+  const kcalProKg = echterWeg?.kcal_per_kg ?? 7700
+  const wochenZufuhr = echterWeg
+    ? Math.round(echterWeg.avg_intake_kcal! * 7)
+    : t.weeklyIntakeAvg * 7
+  const gewichtsDelta = echterWeg?.weight_delta_kg ?? t.weightDeltaKg
+  const kalorienDelta = Math.round(gewichtsDelta * kcalProKg)
+  const rohTDEE = echterWeg
+    ? Math.round(echterWeg.raw_tdee_kcal!)
+    : Math.round((wochenZufuhr - t.weightDeltaKg * 7700) / 7)
 
   return (
     <div className="v2-grid-15">
@@ -479,18 +503,25 @@ export function GoalsTDEEView({ tdee }: { tdee?: import('../../../lib/goals/lese
           </div>
         </Card>
 
-        <Card title="Calculation trace" sub="how this week's number was derived" attrappe={ATTRAPPE}>
+        <Card
+          title="Calculation trace"
+          sub={echterWeg
+            ? `${echterWeg.window_days ?? 0} Tage · Vertrauen ${echterWeg.confidence ?? '—'}`
+            : 'how this week\'s number was derived'}
+          attrappe={echterWeg ? undefined : ATTRAPPE}
+          actions={echterWeg ? <Pill variant="pos">echte Daten</Pill> : undefined}
+        >
           {/* Die Herleitung als Text — wie bei Recovery der Beleg, dass
               die Zahl nicht geraten ist. Einrueckung unveraendert. */}
           <pre className="v2-goals-trace">{`weeklyIntake     = ${wochenZufuhr.toLocaleString('en-US')} kcal
-Δweight          = ${t.weightDeltaKg} kg
-caloricDelta     = ${t.weightDeltaKg} × 7700 = ${kalorienDelta} kcal
+Δweight          = ${gewichtsDelta} kg
+caloricDelta     = ${gewichtsDelta} × ${kcalProKg} = ${kalorienDelta} kcal
 rawTDEE          = (${wochenZufuhr.toLocaleString('en-US')} − (${kalorienDelta})) / 7
                  = ${rohTDEE.toLocaleString('en-US')} kcal/day
 
-EMA (α = ${t.alpha})
-  = ${t.alpha} × ${rohTDEE.toLocaleString('en-US')} + ${1 - t.alpha} × ${t.history[t.history.length - 2].toLocaleString('en-US')}
-  = ${t.current.toLocaleString('en-US')} kcal/day
+EMA (α = ${echterWeg?.alpha ?? t.alpha})
+  = ${(echterWeg?.adaptive_tdee_kcal ?? t.current).toLocaleString('en-US')} kcal/day
+  Formel-Grundlage ${(echterWeg?.formula_tdee_kcal ?? t.formulaBaseline).toLocaleString('en-US')} kcal/day
 
 cross-module corrections
   training load    ${t.crossModule.trainingLoad > 0 ? '+' : ''}${t.crossModule.trainingLoad} kcal

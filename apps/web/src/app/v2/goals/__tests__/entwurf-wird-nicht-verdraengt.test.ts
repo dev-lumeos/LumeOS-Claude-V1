@@ -73,7 +73,17 @@ describe('G-359 — der Entwurf bleibt sichtbar (E-68)', () => {
       assert.ok(i > 0, `der Zweig fuer \`${reiter}\` fehlt`)
       // Den Block herausschneiden, sonst sucht man in der ganzen
       // Datei und findet immer irgendwas.
-      const block = t.slice(i, i + 700)
+      //
+      // `[cmd]` **G-365: das Fenster war 700 Zeichen und zu eng.**
+      // Ein Einschub im Reiter (`FehlendePhaseKacheln` samt
+      // Begruendung) schob `<GoalsPhaseView` heraus — **der Waechter
+      // meldete eine Verdraengung, die es nicht gab.**
+      //
+      // `[read]` **Eine Zeichenzahl ist keine Blockgrenze.** Der Block
+      // endet, wo der naechste Reiter beginnt; nur wenn keiner folgt,
+      // gilt der Rest der Datei.
+      const naechster = t.indexOf("tab === '", i + 10)
+      const block = t.slice(i, naechster > 0 ? naechster : undefined)
       assert.ok(block.includes(`<${entwurf}`),
         `${entwurf} wird im Reiter \`${reiter}\` nicht gerendert`)
       // `[cmd]` **Die Sabotageprobe fand die Luecke:** `{null &&

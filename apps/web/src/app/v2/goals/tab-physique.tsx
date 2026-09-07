@@ -21,6 +21,7 @@ import * as React from 'react'
 import { Card, Pill, Icon, Ring, Meter, Row, InEntwicklungKnopf } from '@lumeos/ui'
 
 import { CIRCUMFERENCES, POSE_SETS, calcRatios } from './daten'
+import { GoalsPosesReferenz } from './mockup-referenz'
 import { ATTRAPPE } from './ansicht'
 
 // ═══ PHYSIQUE RATIOS ═════════════════════════════════════════════
@@ -182,10 +183,19 @@ export function GoalsPhysiqueView() {
 // [cmd] module-goals-pro.jsx:808-905.
 export function GoalsPosesView() {
   const [set, setSet] = React.useState('mandatory')
+  // `[cmd]` **G-365: die Zahl kommt aus der Liste, nicht aus der Hand.**
+  // Hier stand `mandatory: '8 IFBB Mandatory'` — `POSE_SETS.mandatory`
+  // fuehrt aber ZEHN Posen (`daten.ts:405`). Die Beschriftung stand
+  // damit ueber einem Raster aus zehn Kacheln und widersprach ihm.
+  //
+  // `[read]` **Die Vorlage traegt denselben Fehler**
+  // (`module-goals-pro.jsx:820`) — sie ist die Quelle fuer das Layout,
+  // nicht fuer eine Zahl, die daneben liegt. `quarter` (4) und
+  // `detail` (9) stimmten und stimmen weiter.
   const sets: Record<string, string> = {
-    mandatory: '8 IFBB Mandatory',
-    quarter: '4 Quarter Turns',
-    detail: '9 Detail Close-Ups',
+    mandatory: `${POSE_SETS.mandatory.length} IFBB Mandatory`,
+    quarter: `${POSE_SETS.quarter.length} Quarter Turns`,
+    detail: `${POSE_SETS.detail.length} Detail Close-Ups`,
   }
   const poses = POSE_SETS[set]
 
@@ -290,6 +300,10 @@ export function GoalsPosesView() {
           </div>
         </Card>
       </div>
+
+      {/* `[cmd]` G-365: die Referenz folgt dem Posensatz — siehe
+          `GoalsPosesReferenz`. */}
+      <GoalsPosesReferenz satz={set} />
     </div>
   )
 }

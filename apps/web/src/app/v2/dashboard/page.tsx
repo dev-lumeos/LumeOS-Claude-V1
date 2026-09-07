@@ -17,6 +17,7 @@
 import type { Metadata } from 'next'
 
 import { ladeDashboard, type DashboardDaten } from '../../../lib/dashboard/lesen'
+import { ReferenzTrenner } from '../../../components/shell/referenz-trenner'
 import { DashboardEcht } from './dashboard-echt'
 import { DashboardEntwurfRest } from './entwurf-rest'
 
@@ -66,6 +67,12 @@ export default async function V2DashboardPage({
         </div>
       )}
       {daten && <DashboardEcht d={daten} />}
+      {/* `[cmd]` G-365: Echt und Entwurf standen untereinander,
+          OHNE Linie — niemand konnte sehen, wo das eine aufhoert.
+          Die Linie steht unbedingt, weil der Entwurf darunter
+          unbedingt steht. */}
+      <ReferenzTrenner reiter="Dashboard"
+                       quelle="theme-v1/module-dashboard.jsx" />
       <DashboardEntwurfRest />
     </>
   )

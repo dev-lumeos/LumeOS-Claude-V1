@@ -125,7 +125,19 @@ test('G-277: der Coaches-Reiter zeigt echte Beziehungen', () => {
     'AthleteCoaches bekommt den Stand nicht — dann bleibt der Entwurf (G-277).')
   assert.match(s, /if \(echt\) return <CoachesEcht stand=\{stand!\} \/>/,
     'Der echte Zweig fehlt (G-277).')
-  assert.match(s, /\{tab === 'coaches' && <AthleteCoaches stand=\{stand\} \/>\}/,
+  // `[cmd]` **G-365: die Prufform war zu eng.** Sie verlangte die
+  // einzeilige Schreibweise `{tab === 'coaches' && <AthleteCoaches
+  // stand={stand} />}`. **Sobald der Reiter eine zweite Komponente
+  // bekam** (die Mockup-Referenz unter der Linie), **stand dort ein
+  // Fragment — und der Waechter fiel, obwohl der Stand weiter
+  // durchgereicht wird.**
+  //
+  // `[read]` **Geprueft wird jetzt die Sache:** im `coaches`-Zweig
+  // steht `<AthleteCoaches` MIT `stand`. Die Zeilenform ist egal.
+  const zweig = s.slice(s.indexOf("tab === 'coaches'"))
+  const bis = zweig.indexOf("tab === '", 10)
+  assert.match(bis > 0 ? zweig.slice(0, bis) : zweig,
+    /<AthleteCoaches\s+stand=\{stand\}/,
     'Der Reiter reicht den Stand nicht durch (G-277).')
 })
 

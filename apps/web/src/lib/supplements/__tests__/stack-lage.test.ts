@@ -107,9 +107,21 @@ test('G-253: keine zweite Compliance-Ansicht', () => {
   // gegen „nichts genommen". `[read]` **Eine zweite daneben waere
   // die vierte Doppelung nach G-249 und G-11.**
   const s = ohneKommentare('src/app/v2/supplements/ansicht.tsx')
-  const zweig = /tab === 'compliance' &&[\s\S]{0,300}?\n {10}\)/.exec(s)
+  // `[cmd]` **C-418/3: Fenster 300 -> 600.** Die Trennlinie hat den
+  // Zweig verlaengert, und das Muster fand ihn nicht mehr — **der Test
+  // fiel mit *„Zweig nicht gefunden"*, nicht mit einer zweiten
+  // Ansicht.** `[read]` **Eine zu enge Fundstelle meldet den falschen
+  // Grund.**
+  const zweig = /tab === 'compliance' &&[\s\S]{0,600}?\n {10}\)/.exec(s)
   assert.ok(zweig, 'Der compliance-Zweig wurde nicht gefunden (G-253).')
   const komponenten = zweig[0].match(/<[A-Z][A-Za-z]+/g) ?? []
-  assert.deepEqual(komponenten, ['<ComplianceEcht', '<SuppCompliance'],
-    `Der Zweig rendert ${komponenten.length} Ansichten: ${komponenten.join(', ')} (G-253).`)
+  // `[cmd]` **C-418/3: `<ReferenzTrenner` steht dazwischen** — die
+  // Linie zwischen Ist und Soll (E-69), keine Ansicht.
+  //
+  // `[read]` **Die Zusage bleibt: genau ZWEI Ansichten** — die echte
+  // und der Entwurf darunter. **Der Trenner traegt keine Daten und
+  // zaehlt deshalb nicht mit.**
+  const ansichten = komponenten.filter(k => k !== '<ReferenzTrenner')
+  assert.deepEqual(ansichten, ['<ComplianceEcht', '<SuppCompliance'],
+    `Der Zweig rendert ${ansichten.length} Ansichten: ${ansichten.join(', ')} (G-253).`)
 })

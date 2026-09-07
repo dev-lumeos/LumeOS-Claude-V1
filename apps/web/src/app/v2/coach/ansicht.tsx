@@ -54,6 +54,12 @@
 import * as React from 'react'
 import { useTabParam } from '../../../lib/tab-url'
 import {
+  CoachOverviewReferenz, CoachCoachesReferenz, CoachPermissionsReferenz,
+  CoachProposalsReferenz, CoachAutonomyReferenz, CoachCheckinsReferenz,
+  CoachMessagesReferenz, CoachNotesReferenz, CoachOhneMockup,
+  FehlendeOverviewKachel, FehlendeAutonomyKacheln, FehlendeCheckinKachel,
+} from './mockup-referenz'
+import {
   Card, Pill, Empty, Icon, Row, Sparkline, Tabs, type TabItem,
 } from '@lumeos/ui'
 
@@ -198,19 +204,74 @@ export function CoachAnsicht({ stand }: { stand?: CoachRechteStand }) {
 
       <Tabs items={tabs(stand)} active={tab} onChange={setTab} />
 
-      {tab === 'overview' && <AthleteOverview stand={stand} />}
-      {tab === 'coaches' && <AthleteCoaches stand={stand} />}
-      {tab === 'permissions' && <AthletePermissionsV2 stand={stand} />}
-      {tab === 'proposals' && <AthleteProposals stand={stand} />}
-      {tab === 'autonomy' && <AthleteAutonomy stand={stand} />}
-      {tab === 'checkins' && <AthleteCheckins stand={stand} />}
-      {tab === 'messages' && <AthleteMessages stand={stand} />}
-      {tab === 'notes' && <AthleteNotes />}
+      {tab === 'overview' && (
+        <>
+          <AthleteOverview stand={stand} />
+          <FehlendeOverviewKachel />
+          <CoachOverviewReferenz />
+        </>
+      )}
+      {tab === 'coaches' && (
+        <>
+          <AthleteCoaches stand={stand} />
+          <CoachCoachesReferenz />
+        </>
+      )}
+      {tab === 'permissions' && (
+        <>
+          <AthletePermissionsV2 stand={stand} />
+          <CoachPermissionsReferenz />
+        </>
+      )}
+      {tab === 'proposals' && (
+        <>
+          <AthleteProposals stand={stand} />
+          <CoachProposalsReferenz />
+        </>
+      )}
+      {tab === 'autonomy' && (
+        <>
+          <AthleteAutonomy stand={stand} />
+          <FehlendeAutonomyKacheln />
+          <CoachAutonomyReferenz />
+        </>
+      )}
+      {tab === 'checkins' && (
+        <>
+          <AthleteCheckins stand={stand} />
+          <FehlendeCheckinKachel />
+          <CoachCheckinsReferenz />
+        </>
+      )}
+      {tab === 'messages' && (
+        <>
+          <AthleteMessages stand={stand} />
+          <CoachMessagesReferenz />
+        </>
+      )}
+      {tab === 'notes' && (
+        <>
+          <AthleteNotes />
+          <CoachNotesReferenz />
+        </>
+      )}
       {/* G-185: echte Einladungen statt Entwurfstabelle. Ohne
           geladenen Stand (keine Sitzung) bleibt der Reiter leer —
           eine erfundene Liste waere schlimmer als nichts. */}
-      {tab === 'invites' && stand && <EinladungenEcht stand={stand} />}
-      {tab === 'onboard' && <CoachOnboardingWizard />}
+      {tab === 'invites' && (
+        <>
+          {stand && <EinladungenEcht stand={stand} />}
+          {/* `[cmd]` G-365: kein Mockup — G-185 hat den Reiter
+              nach dem Entwurf gebaut. */}
+          <CoachOhneMockup reiter="invites" />
+        </>
+      )}
+      {tab === 'onboard' && (
+        <>
+          <CoachOnboardingWizard />
+          <CoachOhneMockup reiter="onboard" />
+        </>
+      )}
 
       <CoachModale zustand={modal} />
     </CoachKontext.Provider>

@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
  * `[cmd]` Es gibt keine `user_inventory`-Tabelle; der Bestand steht in
  * `stack_items.stock_remaining`.
  *
- * @abwesend supplements.stack_items
+ * @abwesend public.user_inventory
  * `[read]` A-62: Diese Begruendung haengt daran, dass es die Tabelle
  * nicht gibt. Legt jemand sie an, faellt `tools/abwesenheit-pruefen.mjs`
  * und nennt diese Zeile — statt dass der Satz still falsch wird.

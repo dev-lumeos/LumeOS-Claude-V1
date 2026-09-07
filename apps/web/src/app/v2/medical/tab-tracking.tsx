@@ -13,7 +13,7 @@
 // `[cmd]` ALLES IST ATTRAPPE.
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, Pill, Icon, Sparkline, InEntwicklungKnopf } from '@lumeos/ui'
+import { Card, Pill, Icon, Sparkline, InEntwicklungKnopf, UnterTabs } from '@lumeos/ui'
 
 import {
   BIOMARKERS, BIOMARKER_CATEGORIES, FLAG_META, SYMPTOMS,
@@ -23,6 +23,7 @@ import {
 import { FlagPill } from './bausteine'
 import { useMedical } from './kontext'
 import { ATTRAPPE } from './ansicht'
+import { MedTrackingReferenz, MedMedicationsReferenz } from './mockup-referenz'
 import type { EchteDaten, MedikationEcht } from './echtdaten'
 // ── G-211: der Erfassungsweg ────────────────────────────────────────
 //
@@ -176,19 +177,17 @@ export function MedTracking({ echt }: { echt: EchteDaten }) {
   return (
     <div>
       <div style={{ display: 'flex', gap: 8, marginBottom: 14, alignItems: 'center', flexWrap: 'wrap' }}>
-        <div style={{
-          display: 'flex', background: 'var(--surface)', border: '1px solid var(--border)',
-          borderRadius: 7, padding: 2, gap: 1, flexWrap: 'wrap',
-        }}>
-          {([
-            ['symptoms', `Symptoms · ${active.length}`],
-            ['medications', `Medications · ${medikationen.length}`],
-          ] as Array<[string, string]>).map(([k, l]) => (
-            <button key={k} type="button" onClick={() => setSub(k)} aria-pressed={sub === k}
-                    className={sub === k ? 'v2-btn v2-btn-primary' : 'v2-btn v2-btn-ghost'}
-                    style={{ height: 24, fontSize: 11, padding: '0 12px', borderRadius: 5 }}>{l}</button>
-          ))}
-        </div>
+        {/* `[cmd]` G-365: hier standen zwei `v2-btn` in einem
+            handgebauten Kasten — Tom: „subnav ghetto". `UnterTabs`
+            traegt dieselbe Gestaltung wie die Modulleiste. */}
+        <UnterTabs
+          items={[
+            { id: 'symptoms', label: 'Symptoms', count: active.length },
+            { id: 'medications', label: 'Medications', count: medikationen.length },
+          ]}
+          active={sub}
+          onChange={setSub}
+        />
         <div className="v2-spacer" />
         {sub === 'symptoms' && (
           <button type="button" className="v2-btn v2-btn-primary" onClick={() => open({ typ: 'logSymptom' })}>
@@ -583,6 +582,19 @@ export function MedTracking({ echt }: { echt: EchteDaten }) {
           </div>
         </div>
       )}
+
+      {/* ══ G-365 · die Referenz folgt dem Unterreiter ══════════
+          **Tom, 2026-09-07:** *,,medical/tracking medications zeigt oben
+          nicht was unten im mockup ist."*
+
+          `[cmd]` **Gemessen mit `backup/g365-unterreiter.mjs`:** unter
+          der Linie stand auf BEIDEN Unterreitern der Symptom-Teil.
+
+          `[read]` **Der Grund:** die Referenz hing in `ansicht.tsx`, und
+          dort ist `sub` nicht bekannt — der Unterreiter steht nicht in
+          der Adresse, er ist Zustand DIESER Komponente. */}
+      {sub === 'symptoms' && <MedTrackingReferenz />}
+      {sub === 'medications' && <MedMedicationsReferenz />}
     </div>
   )
 }

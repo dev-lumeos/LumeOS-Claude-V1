@@ -109,6 +109,22 @@ export function RecModalities({ stand }: { stand?: ModalitaetenStand | null }) {
         </Card>
       </div>
 
+      {/* `[cmd]` G-365: die Tagesliste fehlte auf DIESEM Reiter.
+          Sie steht gebaut auf `today` (als `Modalitäten`), hier
+          nicht — gemessen 2026-09-07 im Titelabgleich oben gegen
+          unten. */}
+      <Card title="Today's modalities" sub="was heute erfasst wurde"
+            attrappe={
+              'Attrappe — theme-v1/module-recovery-v2.jsx · wartet auf: '
+              + 'nichts — der Leseweg liegt an (`Modalitäten` auf `today` '
+              + 'nutzt ihn), diese Kachel nimmt ihn nur nicht'
+            }>
+        <div className="v2-dim" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
+          Der Entwurf fuehrt hier die heute erfassten Modalitaeten als
+          Tagesliste — Art, Uhrzeit, Dauer, Notiz.
+        </div>
+      </Card>
+
       {/* Nicht `v2-grid v2-g-cols-2`: das Paar bricht auf schmalen
           Schirmen NICHT um (v2.css:470 setzt nur die Spalten). Die
           beiden Kacheln hier tragen Tabellen und brauchen den

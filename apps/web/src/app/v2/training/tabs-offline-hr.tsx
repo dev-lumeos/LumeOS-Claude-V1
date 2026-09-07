@@ -29,7 +29,7 @@ const IDB_STORES = [
 ]
 
 // [cmd] module-training-offline-hr.jsx:11-16.
-const OUTBOX = [
+export const OUTBOX = [
   { id: 'op-4821', op: 'PUT', store: 'sets', payload: 'set_id=s_9821 · Bench Press · 117.5kg × 5 · RPE 8', queued: '2 min ago', tries: 0, status: 'pending' },
   { id: 'op-4822', op: 'PUT', store: 'sets', payload: 'set_id=s_9822 · Bench Press · 117.5kg × 5 · RPE 8.5', queued: '1 min ago', tries: 0, status: 'pending' },
   { id: 'op-4823', op: 'PATCH', store: 'sessions', payload: 'session_id=w_412 · duration=+320s', queued: '1 min ago', tries: 0, status: 'pending' },
@@ -37,7 +37,7 @@ const OUTBOX = [
 ]
 
 // [cmd] module-training-offline-hr.jsx:18-25.
-const SYNC_LOG = [
+export const SYNC_LOG = [
   { at: '14:22:08', ev: 'connection lost', detail: 'navigator.onLine → false · switching to local writes', kind: 'warn' },
   { at: '14:20:41', ev: 'flush complete', detail: '6 operations pushed · 0 conflicts · 412 ms', kind: 'ok' },
   { at: '14:20:40', ev: 'connection restored', detail: 'navigator.onLine → true · draining outbox', kind: 'ok' },
@@ -214,8 +214,8 @@ export function TrainingOfflineView() {
 
 // ── HR zone analysis ────────────────────────────────────────────
 // [cmd] module-training-offline-hr.jsx:159-179.
-const HR_MAX = 193
-const HR_ZONES = [
+export const HR_MAX = 193
+export const HR_ZONES = [
   { z: 1, name: 'Recovery', lo: 0.50, hi: 0.60, color: 'var(--fg-dim)', min: 6, desc: 'Warm-up, between-set rest' },
   { z: 2, name: 'Aerobic', lo: 0.60, hi: 0.70, color: 'var(--acc-recov)', min: 18, desc: 'Base endurance, active recovery' },
   { z: 3, name: 'Tempo', lo: 0.70, hi: 0.80, color: 'var(--acc-mkt)', min: 24, desc: 'Sustained effort, most of a lifting session' },
@@ -223,7 +223,7 @@ const HR_ZONES = [
   { z: 5, name: 'Maximum', lo: 0.90, hi: 1.00, color: 'var(--neg)', min: 5, desc: 'All-out effort, near failure' },
 ]
 
-const HR_SETS = [
+export const HR_SETS = [
   { set: 'Bench 1', peak: 148, avg: 132, drop60: 32, zone: 4 },
   { set: 'Bench 2', peak: 154, avg: 138, drop60: 28, zone: 4 },
   { set: 'Bench 3', peak: 158, avg: 141, drop60: 24, zone: 4 },

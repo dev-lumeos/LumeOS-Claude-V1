@@ -31,7 +31,7 @@ import { ATTRAPPE } from './ansicht'
 
 // ── Block A: classification + set types ─────────────────────────
 // [cmd] module-training-spec.jsx:5-17.
-const SET_TYPES = [
+export const SET_TYPES = [
   { id: 'working', label: 'Working', desc: 'Normaler Arbeitssatz', volume: true },
   { id: 'warmup', label: 'Warm-up', desc: 'Aufwärmsatz', volume: false },
   { id: 'dropset', label: 'Drop set', desc: 'Reduziertes Gewicht ohne Pause', volume: true },
@@ -41,7 +41,7 @@ const SET_TYPES = [
 // ── Block B: 5 progression models ───────────────────────────────
 // [cmd] module-training-spec.jsx:20-56. Die deutschen Regeltexte
 // stehen SO in der Vorlage — nicht uebersetzt, nicht angeglichen.
-const PROGRESSION_MODELS = [
+export const PROGRESSION_MODELS = [
   {
     id: 'linear', name: 'Linear Progression', level: 'Beginner', color: 'var(--acc-recov)',
     rule: 'Alle Sets in Rep-Range oder besser → next_weight += weight_increment',
@@ -80,7 +80,7 @@ const PROGRESSION_MODELS = [
 ]
 
 // [cmd] module-training-spec.jsx:58-63.
-const DELOAD_TRIGGERS = [
+export const DELOAD_TRIGGERS = [
   { t: 'Reps fallen 3 Sätze hintereinander ab', hit: false, detail: 'Bench: 5,5,5,4 → kein Abfall über 3 Sätze' },
   { t: 'RPE > 9 in 2+ Sessions in Folge', hit: false, detail: 'Letzte 2 Sessions: RPE 8.0 / 8.5' },
   { t: 'Keine Progression für 3 Sessions (Übung)', hit: true, detail: 'Lateral Raise: 9 kg seit 4 Sessions' },

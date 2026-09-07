@@ -53,7 +53,22 @@ import { GoalsModale } from './modale'
 import { GoalsPhaseView, GoalsTDEEView, GoalsCrossModuleView } from './tab-phase'
 // G-79: die echte Zeitachse.
 import { TimelineTab as ZeitachseTab } from './tab-timeline'
+import { ReferenzTrenner } from '../../../components/shell/referenz-trenner'
+// `[cmd]` G-365: die vier angebundenen Reiter bekommen ihren
+// Mockup-Reiter darunter — sie hatten keine Linie.
+import {
+  GoalsGoalsReferenz, GoalsMetricsReferenz,
+  GoalsMeasureReferenz, GoalsCompReferenz,
+  GoalsTdeeReferenz, GoalsCrossReferenz,
+} from './mockup-referenz'
+import {
+  FehlendePhaseKacheln, FehlendeZielKacheln, FehlendeMetrikKacheln,
+  FehlendeMessKacheln, FehlendePhysiqueKacheln,
+} from './fehlende-kacheln'
 import { GoalsPhysiqueView, GoalsPosesView } from './tab-physique'
+
+/** C-418/3: die Quelle unter der Trennlinie. */
+const QUELLE = 'theme-v1/module-goals-pro.jsx'
 import { PhaseEcht } from './phase-echt'
 import { PhysiqueEcht } from './physique-echt'
 import { CompositionTab, type CompDaten } from './tab-composition'
@@ -213,19 +228,41 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
       ) : (
         <>
           {tab === 'goals' && (
-            <ZielKarten
-              ziele={echt.ziele} meilensteine={echt.meilensteine} stichtag={echt.stichtag} />
+            <>
+              <ZielKarten
+                ziele={echt.ziele} meilensteine={echt.meilensteine} stichtag={echt.stichtag} />
+              <FehlendeZielKacheln />
+              <GoalsGoalsReferenz />
+            </>
           )}
-          {tab === 'tdee' && <GoalsTDEEView tdee={echt.tdee} />}
+          {tab === 'tdee' && (
+            <>
+              <GoalsTDEEView tdee={echt.tdee} />
+              <GoalsTdeeReferenz />
+            </>
+          )}
           {tab === 'metrics' && (
-            <KoerperMetriken
-              messungen={echt.messungen} zukunft={echt.zukunftsmessungen}
-              stichtag={echt.stichtag} />
+            <>
+              <KoerperMetriken
+                messungen={echt.messungen} zukunft={echt.zukunftsmessungen}
+                stichtag={echt.stichtag} />
+              <FehlendeMetrikKacheln />
+              <GoalsMetricsReferenz />
+            </>
           )}
           {tab === 'measure' && (
-            <KoerperUmfaenge saetze={echt.umfaenge} stichtag={echt.stichtag} />
+            <>
+              <KoerperUmfaenge saetze={echt.umfaenge} stichtag={echt.stichtag} />
+              <FehlendeMessKacheln />
+              <GoalsMeasureReferenz />
+            </>
           )}
-          {tab === 'comp' && <CompositionTab d={comp} />}
+          {tab === 'comp' && (
+            <>
+              <CompositionTab d={comp} />
+              <GoalsCompReferenz />
+            </>
+          )}
 
           {/* ══ G-359 / E-68: der Entwurf verdraengt nicht mehr ═══
               **Tom, 2026-09-07:** *„nun sehe ich dass tonnenweise
@@ -247,6 +284,20 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
             <>
               {echt.phase
                 && <PhaseEcht phase={echt.phase} stichtag={echt.stichtag} />}
+              {/* `[cmd]` G-365: die sechs Mockup-Kacheln, die oben
+                  fehlen — OBERHALB der Linie, weil sie zum Soll des
+                  Reiters gehoeren. Tom, 2026-09-07: „oben wird alles
+                  angezeigt das angebunden ist plus attrappen aus dem
+                  mockup welche oben noch fehlen". */}
+              <FehlendePhaseKacheln />
+              {/* `[cmd]` G-365: die Linie stand unter `echt.phase &&`.
+                  Sabotageprobe 2026-09-07 — `phase` auf `null`: die
+                  Linie verschwand, und `GoalsPhaseView` stand
+                  ununterscheidbar da wie eine echte Ansicht.
+
+                  `[read]` Die Linie beschriftet, was DARUNTER steht,
+                  und das steht unbedingt. */}
+              <ReferenzTrenner reiter="Phase engine" quelle={QUELLE} />
               <GoalsPhaseView />
             </>
           )}
@@ -263,13 +314,20 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
             <>
               {echt.umfaenge.length > 0
                 && <PhysiqueEcht saetze={echt.umfaenge} navy={echt.navy} stichtag={echt.stichtag} profil={echt.profil} />}
+              <FehlendePhysiqueKacheln />
+              <ReferenzTrenner reiter="Physique" quelle={QUELLE} />
               <GoalsPhysiqueView />
             </>
           )}
         </>
       )}
 
-      {tab === 'cross' && <GoalsCrossModuleView />}
+      {tab === 'cross' && (
+        <>
+          <GoalsCrossModuleView />
+          <GoalsCrossReferenz />
+        </>
+      )}
       {/* G-79: echte Zeitachse aus Zielen, Phasen und
           Meilensteinen. Der Entwurf bleibt als Rueckfall, wenn
           nichts mit Datum vorliegt. */}
@@ -283,9 +341,14 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
               <ZeitachseTab ziele={echt.ziele} phase={echt.phase}
                             meilensteine={echt.meilensteine} stichtag={echt.stichtag} />
             )}
+          <ReferenzTrenner reiter="Timeline" quelle={QUELLE} />
           <TimelineTab />
         </>
       )}
+      {/* `[cmd]` G-365: die Referenz haengt IN `GoalsPosesView` —
+          der Posensatz ist Zustand der Komponente und steht nicht in
+          der Adresse. Wer sie hier setzt, zeigt unten immer
+          `mandatory`, egal was oben gewaehlt ist. */}
       {tab === 'poses' && <GoalsPosesView />}
 
       <GoalsModale modal={modal} onClose={kontext.close} />

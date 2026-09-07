@@ -51,7 +51,7 @@ export type { Muskel, InjektionsOrt } from './koerperkarte-pfade'
 // --- Geteilte Bausteine -----------------------------------------
 export {
   Card, Pill, Empty, Sparkline, LineChart, RadarChart, KPI, Ring, Meter, Row,
-  ModuleHero, Tabs,
+  ModuleHero, Tabs, UnterTabs,
 } from './primitives'
 export type {
   CardProps, PillProps, PillVariant, EmptyProps, SparklineProps, KPIProps,

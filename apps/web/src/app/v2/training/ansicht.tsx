@@ -37,7 +37,22 @@ import {
   InEntwicklungKnopf, type TabItem,
 } from '@lumeos/ui'
 
+import { ReferenzTrenner } from '../../../components/shell/referenz-trenner'
+import {
+  TrainingTodayReferenz, TrainingPlanReferenz,
+  TrainingLandmarksReferenz, TrainingHRReferenz, TrainingOfflineReferenz,
+  TrainingStandardsReferenz,
+} from './mockup-referenz'
+// `[cmd]` G-365: die Mockup-Kacheln, die OBEN fehlen — sie stehen
+// bereits in `tabs-spec.tsx`, aber nur unter der Linie.
+import {
+  FehlendeHistoryKacheln, FehlendeProgressKacheln,
+  FehlendeStandardsKacheln, FehlendeCalendarKacheln,
+} from './fehlende-kacheln'
 import { TrainingKontext, type ModalTyp } from './kontext'
+
+/** C-418/3: die Quelle unter der Trennlinie. */
+const QUELLE = 'theme-v1/module-training.jsx'
 import { TrainingModale } from './modale'
 import {
   TrainingProgressionView, TrainingLandmarksView,
@@ -164,10 +179,22 @@ export function TrainingAnsicht({
       <Tabs items={tabs(uebungenGesamt)} active={tab} onChange={setTab} />
 
       {tab === 'today' && (
-        <TrainingToday onStart={() => setLiveOpen(true)} verlauf={verlauf}
-                       readiness={readiness} />
+        <>
+          <TrainingToday onStart={() => setLiveOpen(true)} verlauf={verlauf}
+                         readiness={readiness} />
+          {/* `[cmd]` G-365: `TrainingToday` traegt vier Verdraengungen
+              (`echt ? <Echt/> : <Entwurf/>`). Auf einem Konto mit
+              Sitzungen war der Entwurf nie zu sehen — die Referenz
+              steht deshalb unbedingt darunter. */}
+          <TrainingTodayReferenz />
+        </>
       )}
-      {tab === 'plan' && <TrainingPlan />}
+      {tab === 'plan' && (
+        <>
+          <TrainingPlan />
+          <TrainingPlanReferenz />
+        </>
+      )}
       {/* `[cmd]` SEIT G-69 ECHT, mit demselben Rueckfall wie G-64:
           ohne Sitzungen bleibt der Entwurf stehen — samt Marke. Eine
           leere echte Kachel saehe aus wie ein Befund und waere doch
@@ -186,6 +213,17 @@ export function TrainingAnsicht({
       {tab === 'history' && (
         <>
           {verlauf && <TrainingVerlauf d={verlauf} />}
+          {/* `[cmd]` G-365: die Linie stand hier unter `verlauf &&`.
+              Sabotageprobe 2026-09-07 — `verlauf` auf `null` gezwungen:
+              die Linie verschwand auf history, progress, standards und
+              calendar, und der Mockup-Reiter stand ununterscheidbar da
+              wie eine echte Ansicht.
+
+              `[read]` Die Linie gehoert zu dem, was DARUNTER steht,
+              nicht zu dem darueber. Der Mockup-Reiter steht immer —
+              also steht die Linie immer. */}
+          <FehlendeHistoryKacheln />
+          <ReferenzTrenner reiter="History" quelle={QUELLE} />
           <TrainingHistory />
         </>
       )}
@@ -202,12 +240,15 @@ export function TrainingAnsicht({
           )}
           {/* G-359/2: der Entwurf steht jetzt IMMER darunter, nicht
               nur ohne Katalog. */}
+          <ReferenzTrenner reiter="Exercises" quelle={QUELLE} />
           <TrainingLibrary />
         </>
       )}
       {tab === 'progress' && (
         <>
           {verlauf && <TrainingKraftverlauf d={verlauf} />}
+          <FehlendeProgressKacheln />
+          <ReferenzTrenner reiter="Progression" quelle={QUELLE} />
           <TrainingProgressionView />
         </>
       )}
@@ -217,21 +258,40 @@ export function TrainingAnsicht({
           Heuristik beschriftet (crawl_025,
           RP_VOLUME_LANDMARKS_FRAMEWORK). Zahlen je Muskelgruppe
           duerfen als Orientierung stehen, nicht als Messwert. */}
-      {tab === 'landmarks' && <TrainingLandmarksView />}
+      {tab === 'landmarks' && (
+        <>
+          <TrainingLandmarksView />
+          <TrainingLandmarksReferenz />
+        </>
+      )}
       {tab === 'standards' && (
         <>
           {verlauf && <TrainingStandards d={verlauf} />}
+          <FehlendeStandardsKacheln />
+          <TrainingStandardsReferenz />
           <TrainingStandardsView />
         </>
       )}
       {tab === 'calendar' && (
         <>
           {verlauf && <TrainingKalender d={verlauf} />}
+          <FehlendeCalendarKacheln />
+          <ReferenzTrenner reiter="Calendar" quelle={QUELLE} />
           <TrainingCalendarView />
         </>
       )}
-      {tab === 'hrzones' && <TrainingHRAnalysis />}
-      {tab === 'offline' && <TrainingOfflineView />}
+      {tab === 'hrzones' && (
+        <>
+          <TrainingHRAnalysis />
+          <TrainingHRReferenz />
+        </>
+      )}
+      {tab === 'offline' && (
+        <>
+          <TrainingOfflineView />
+          <TrainingOfflineReferenz />
+        </>
+      )}
 
       {/* ══ G-217: hier stand `LiveWorkout`, der Entwurf ════════════
           `[read]` **Der Entwurf zeigte fuenf fest verdrahtete Saetze

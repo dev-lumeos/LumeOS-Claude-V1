@@ -55,6 +55,11 @@ import { MedTracking, MedInsights } from './tab-tracking'
 // G-208: der Wirkstoffkatalog.
 import { MedWirkstoffe } from './tab-wirkstoffe'
 import type { EchteDaten } from './echtdaten'
+import {
+  MedBiomarkersReferenz, MedWirkstoffeOhneMockup,
+  MedDashboardReferenz,
+  MedInsightsReferenz,
+} from './mockup-referenz'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
@@ -216,13 +221,45 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
                         echt.wirkstoffe.length)}
             active={tab} onChange={setTab} />
 
-      {tab === 'dashboard' && <MedDashboard echt={echt} />}
-      {tab === 'biomarkers' && <MedBiomarkers echt={echt} />}
+      {tab === 'dashboard' && (
+        <>
+          <MedDashboard echt={echt} />
+          <MedDashboardReferenz />
+        </>
+      )}
+      {tab === 'biomarkers' && (
+        <>
+          <MedBiomarkers echt={echt} />
+          {/* `[cmd]` G-365: der Mockup-Reiter unter der Linie. */}
+          <MedBiomarkersReferenz />
+        </>
+      )}
+      {/* `[cmd]` G-365: Referenz und Fehlliste haengen IN `MedImport` —
+          der Unterreiter ist Zustand der Komponente und steht nicht in
+          der Adresse. **Standen sie hier, rendern sie zweimal:** einmal
+          hier mit dem Vorgabewert `upload`, einmal drinnen mit dem
+          gewaehlten — gemessen als acht Kacheln unter der Linie
+          statt vier. */}
       {tab === 'import' && <MedImport echt={echt} />}
+      {/* `[cmd]` G-365: die Referenz haengt IN `MedTracking` -- der
+          Unterreiter (Symptoms/Medications) ist Zustand der Komponente
+          und steht nicht in der Adresse. Wer sie hier setzt, zeigt auf
+          beiden Unterreitern denselben Mockup-Teil. */}
       {tab === 'tracking' && <MedTracking echt={echt} />}
       {/* G-208: lesend. `[read]` Kein Erfassungsweg — das ist C-302. */}
-      {tab === 'wirkstoffe' && <MedWirkstoffe liste={echt.wirkstoffe} />}
-      {tab === 'insights' && <MedInsights />}
+      {tab === 'wirkstoffe' && (
+        <>
+          <MedWirkstoffe liste={echt.wirkstoffe} />
+          {/* `[cmd]` G-365: kein Mockup — der Vermerk sagt es. */}
+          <MedWirkstoffeOhneMockup />
+        </>
+      )}
+      {tab === 'insights' && (
+        <>
+          <MedInsights />
+          <MedInsightsReferenz />
+        </>
+      )}
 
       <MedicalModale modal={modal} onClose={kontext.close} />
     </MedicalKontext.Provider>
@@ -233,6 +270,10 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
 // [cmd] module-medical-v2.jsx:114-234.
 function MedDashboard({ echt }: { echt: EchteDaten }) {
   const { open } = useMedical()
+  // `[cmd]` **G-365: dieselbe Zaehlung wie im Kopf** (`zaehleLagen`)
+  // — sie summiert, was die Marker-Liste ohnehin je Zeile zeigt.
+  // **Hier wird nichts neu bestimmt.**
+  const lagen = React.useMemo(() => zaehleLagen(echt.reihen), [echt.reihen])
   // `[cmd]` **Der Score kommt aus `echt.scores`, serverseitig gerechnet.**
   //
   // `[read]` **Was hier NICHT stehen darf:** eine Ableitung aus
@@ -408,14 +449,47 @@ function MedDashboard({ echt }: { echt: EchteDaten }) {
             </div>
           </Card>
 
-          <Card title="Last panel" sub="23 Apr 2026 · MVZ Lab Berlin" attrappe={ATTRAPPE}>
-            <Row label="Markers imported" value="34" />
-            <Row label="Flagged non-optimal"
-                 value={String(BIOMARKERS.filter(b => calcBiomarkerFlag(b.value, b) !== 'optimal').length)} />
-            <Row label="Out of lab range"
-                 value={String(BIOMARKERS.filter(b => ['low', 'high', 'critical_low', 'critical_high'].includes(calcBiomarkerFlag(b.value, b))).length)} />
-            <Row label="Next panel due" value="15 Jul 2026" />
-            <Row label="Days overdue" value="31" />
+          {/* ══ G-365: die Zahlen kommen aus `echt.reihen` ═══════════
+              `[cmd]` **Gemessen 2026-09-06: `medical.lab_result_values`
+              traegt 280 Zeilen fuer `dev@lumeos.app`, `lab_reports`
+              zehn.** `[cmd]` **`echt.reihen` liegt an und wird eine
+              Zeile darueber fuer `lagen` benutzt** — **diese Kachel
+              rechnete daneben mit `BIOMARKERS`, dem Entwurf.**
+
+              `[read]` **Was der Leseweg NICHT fuehrt, steht nicht mehr
+              da:** Labor, Datum des naechsten Befunds und die
+              Ueberfaelligkeit haben keine Spalte. **Gemeldet, nicht
+              erfunden** (C-378). */}
+          <Card
+            title="Last panel"
+            sub={echt.reihen.length > 0
+              ? `${echt.reihen[0]?.aktuell.datum ?? '—'} · aus lab_result_values`
+              : '23 Apr 2026 · MVZ Lab Berlin'}
+            attrappe={echt.reihen.length > 0 ? undefined : ATTRAPPE}
+            actions={echt.reihen.length > 0
+              ? <Pill variant="pos">echte Daten</Pill> : undefined}
+          >
+            {echt.reihen.length > 0 ? (
+              <>
+                <Row label="Marker erfasst" value={String(lagen.marker)} />
+                <Row label="Ausserhalb des Optimums"
+                     value={String(lagen.ausserhalb_optimal)} />
+                <Row label="Ausserhalb des Laborbereichs"
+                     value={String(lagen.ausserhalb_bereich)} />
+                <Row label="Ohne hinterlegten Bereich"
+                     value={String(lagen.ohne_bereich)} />
+              </>
+            ) : (
+              <>
+                <Row label="Markers imported" value="34" />
+                <Row label="Flagged non-optimal"
+                     value={String(BIOMARKERS.filter(b => calcBiomarkerFlag(b.value, b) !== 'optimal').length)} />
+                <Row label="Out of lab range"
+                     value={String(BIOMARKERS.filter(b => ['low', 'high', 'critical_low', 'critical_high'].includes(calcBiomarkerFlag(b.value, b))).length)} />
+                <Row label="Next panel due" value="15 Jul 2026" />
+                <Row label="Days overdue" value="31" />
+              </>
+            )}
           </Card>
 
           <Card title="Non-optimal markers" sub="lab-normal but below optimum" attrappe={ATTRAPPE}>

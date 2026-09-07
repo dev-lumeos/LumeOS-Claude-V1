@@ -70,6 +70,9 @@ import {
 // C-418/2 (E-69): das Mockup als Referenz unter dem Gebauten.
 import {
   RecHRVReferenz, RecSleepReferenz, RecTodayReferenz,
+  MuscleReadinessReferenz, RecMuscleMapReferenz, RecModalitiesReferenz,
+  RecCheckinReferenz, RecOvertrainingReferenz, RecProtocolsReferenz,
+  RecStressReferenz,
 } from './mockup-referenz'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
@@ -209,10 +212,21 @@ export function RecoveryAnsicht({
           <RecToday checkins={checkins} scores={scores} modalitaeten={modalitaeten} />
           <FehlendeAuswertungsKacheln />
           <RecTodayReferenz />
+          <MuscleReadinessReferenz />
         </>
       )}
-      {tab === 'checkin' && <RecCheckin />}
-      {tab === 'muscles' && <RecMuscleMap stand={checkins} />}
+      {tab === 'checkin' && (
+        <>
+          <RecCheckin />
+          <RecCheckinReferenz />
+        </>
+      )}
+      {tab === 'muscles' && (
+        <>
+          <RecMuscleMap stand={checkins} />
+          <RecMuscleMapReferenz />
+        </>
+      )}
       {/* G-160: HRV und Sleep zeigen die erfassten Werte, sobald
           Check-ins geladen sind — der Entwurf ist nur noch Rueckfall. */}
       {/* ══ C-418 / E-68: die elf wirklich fehlenden Kacheln ══════
@@ -242,10 +256,30 @@ export function RecoveryAnsicht({
           <RecSleepReferenz />
         </>
       )}
-      {tab === 'modalities' && <RecModalities stand={modalitaeten} />}
-      {tab === 'overtraining' && <RecOvertraining />}
-      {tab === 'protocols' && <RecProtocols />}
-      {tab === 'stress' && <RecStress />}
+      {tab === 'modalities' && (
+        <>
+          <RecModalities stand={modalitaeten} />
+          <RecModalitiesReferenz />
+        </>
+      )}
+      {tab === 'overtraining' && (
+        <>
+          <RecOvertraining />
+          <RecOvertrainingReferenz />
+        </>
+      )}
+      {tab === 'protocols' && (
+        <>
+          <RecProtocols />
+          <RecProtocolsReferenz />
+        </>
+      )}
+      {tab === 'stress' && (
+        <>
+          <RecStress />
+          <RecStressReferenz />
+        </>
+      )}
 
       <RecoveryModale modal={modal} onClose={kontext.close} />
     </RecoveryKontext.Provider>

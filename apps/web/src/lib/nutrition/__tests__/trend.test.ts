@@ -192,7 +192,18 @@ test('G-249: der Reiter rendert nur noch EINE Ansicht', () => {
   const zweig = /if \(tab === 'nutrients'\)[\s\S]*?return \(([\s\S]*?)\n {4}\)/.exec(s)
   assert.ok(zweig, 'Der nutrients-Zweig wurde nicht gefunden (G-249).')
   const komponenten = zweig[1].match(/<[A-Z][A-Za-z]+/g) ?? []
-  const ansichten = komponenten.filter(k => !/^<(Leer|Icon|Card|Pill|Link)/.test(k))
+  // `[cmd]` **G-365: die Mockup-Referenz ist ausgenommen.**
+  //
+  // `[read]` **Sie ist keine zweite IST-Ansicht** — sie steht unter
+  // der Trennlinie und traegt an jeder Kachel eine Attrappenmarke.
+  // **Genau diese Gegenueberstellung verlangt E-69**; sie zu
+  // verbieten hiesse, den Vergleich zu verbieten.
+  //
+  // `[read]` **Die Regel bleibt scharf:** ausgenommen ist EIN Name,
+  // nicht ein Muster. Eine zweite echte Ansicht faellt weiter auf.
+  const ansichten = komponenten.filter(
+    k => !/^<(Leer|Icon|Card|Pill|Link)/.test(k)
+      && k !== '<NutritionNutrientsReferenz')
   assert.deepEqual(ansichten, ['<NaehrstoffOrdnungTab'],
     `Der Reiter rendert ${ansichten.length} Ansichten statt einer: `
     + `${ansichten.join(', ')} (G-249).`)

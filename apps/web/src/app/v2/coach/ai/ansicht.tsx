@@ -57,6 +57,18 @@ import {
 import { BuddyCoachOverrides } from './tab-overrides'
 import { BuddyVoice } from './tab-stimme'
 import { BuddyClone, BuddyKnowledge, BuddyRules } from './tab-wissen'
+// `[cmd]` G-365: die Mockup-Reiter unter der Linie. Coach hat
+// drei Routen — gemessen wurde lange die falsche (`/v2/coach`).
+import {
+  BuddyChatReferenz, BuddyFeedReferenz, BuddyMemoryReferenz,
+  BuddyDecisionsReferenz, BuddySettingsReferenz, BuddyStatesReferenz,
+  BuddyTiersReferenz, BuddyEnginesReferenz, BuddyJourneyReferenz,
+  BuddyWatcherReferenz,
+  BuddyBSSReferenz, BuddySignatureReferenz, BuddyInterventionsReferenz,
+  BuddySafetyReferenz, BuddyButlerReferenz, BuddyVoiceReferenz,
+  BuddyKnowledgeReferenz, BuddyRulesReferenz, BuddyOverridesReferenz,
+  BuddyCloneReferenz,
+} from './mockup-referenz'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
@@ -135,26 +147,126 @@ export function BuddyAnsicht() {
 
       <Tabs items={tabs()} active={tab} onChange={setTab} />
 
-      {tab === 'chat' && <BuddyChat />}
-      {tab === 'feed' && <BuddyFeed />}
-      {tab === 'memory' && <BuddyMemoryView />}
-      {tab === 'decisions' && <BuddyDecisions />}
-      {tab === 'settings' && <BuddySettings />}
-      {tab === 'states' && <BuddyStatesShowcase />}
-      {tab === 'tiers' && <BuddyTiers />}
-      {tab === 'engines' && <BuddyEngines />}
-      {tab === 'journey' && <BuddyJourney />}
-      {tab === 'watcher' && <BuddyWatcher />}
-      {tab === 'bss' && <BuddyBSS />}
-      {tab === 'signature' && <BuddySignature />}
-      {tab === 'interven' && <BuddyInterventions />}
-      {tab === 'safety' && <BuddySafety />}
-      {tab === 'butler' && <BuddyButler />}
-      {tab === 'voice' && <BuddyVoice />}
-      {tab === 'knowledge' && <BuddyKnowledge />}
-      {tab === 'rules' && <BuddyRules />}
-      {tab === 'overrides' && <BuddyCoachOverrides />}
-      {tab === 'clone' && <BuddyClone />}
+      {tab === 'chat' && (
+        <>
+          <BuddyChat />
+          <BuddyChatReferenz />
+        </>
+      )}
+      {tab === 'feed' && (
+        <>
+          <BuddyFeed />
+          <BuddyFeedReferenz />
+        </>
+      )}
+      {tab === 'memory' && (
+        <>
+          <BuddyMemoryView />
+          <BuddyMemoryReferenz />
+        </>
+      )}
+      {tab === 'decisions' && (
+        <>
+          <BuddyDecisions />
+          <BuddyDecisionsReferenz />
+        </>
+      )}
+      {tab === 'settings' && (
+        <>
+          <BuddySettings />
+          <BuddySettingsReferenz />
+        </>
+      )}
+      {tab === 'states' && (
+        <>
+          <BuddyStatesShowcase />
+          <BuddyStatesReferenz />
+        </>
+      )}
+      {tab === 'tiers' && (
+        <>
+          <BuddyTiers />
+          <BuddyTiersReferenz />
+        </>
+      )}
+      {tab === 'engines' && (
+        <>
+          <BuddyEngines />
+          <BuddyEnginesReferenz />
+        </>
+      )}
+      {tab === 'journey' && (
+        <>
+          <BuddyJourney />
+          <BuddyJourneyReferenz />
+        </>
+      )}
+      {tab === 'watcher' && (
+        <>
+          <BuddyWatcher />
+          <BuddyWatcherReferenz />
+        </>
+      )}
+      {tab === 'bss' && (
+        <>
+          <BuddyBSS />
+          <BuddyBSSReferenz />
+        </>
+      )}
+      {tab === 'signature' && (
+        <>
+          <BuddySignature />
+          <BuddySignatureReferenz />
+        </>
+      )}
+      {tab === 'interven' && (
+        <>
+          <BuddyInterventions />
+          <BuddyInterventionsReferenz />
+        </>
+      )}
+      {tab === 'safety' && (
+        <>
+          <BuddySafety />
+          <BuddySafetyReferenz />
+        </>
+      )}
+      {tab === 'butler' && (
+        <>
+          <BuddyButler />
+          <BuddyButlerReferenz />
+        </>
+      )}
+      {tab === 'voice' && (
+        <>
+          <BuddyVoice />
+          <BuddyVoiceReferenz />
+        </>
+      )}
+      {tab === 'knowledge' && (
+        <>
+          <BuddyKnowledge />
+          <BuddyKnowledgeReferenz />
+        </>
+      )}
+      {tab === 'rules' && (
+        <>
+          <BuddyRules />
+          <BuddyRulesReferenz />
+        </>
+      )}
+      {tab === 'overrides' && (
+        <>
+          <BuddyCoachOverrides />
+          <BuddyOverridesReferenz />
+        </>
+      )}
+      {tab === 'clone' && (
+        <>
+          <BuddyClone />
+          <BuddyCloneReferenz />
+        </>
+      )}
     </BuddyKontext.Provider>
   )
 }

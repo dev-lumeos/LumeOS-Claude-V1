@@ -11,13 +11,14 @@
 //
 // `[cmd]` ALLES IST ATTRAPPE.
 import * as React from 'react'
-import { Card, Pill, Icon, Sparkline, InEntwicklungKnopf } from '@lumeos/ui'
+import { Card, Pill, Icon, Sparkline, InEntwicklungKnopf, UnterTabs } from '@lumeos/ui'
 
 import {
   OCR_EXTRACTED, LAB_REPORTS, UNIT_CONVERSIONS,
 } from './daten'
 import { useMedical } from './kontext'
 import { ATTRAPPE } from './ansicht'
+import { MedImportReferenz, FehlendeImportKacheln } from './mockup-referenz'
 import type { EchteDaten } from './echtdaten'
 import { katalogSuchen } from './aktionen'
 import { KatalogSuche } from './katalog-suche'
@@ -112,19 +113,18 @@ export function MedImport({ echt }: { echt: EchteDaten }) {
   return (
     <div>
       <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
-        <div style={{
-          display: 'flex', background: 'var(--surface)', border: '1px solid var(--border)',
-          borderRadius: 7, padding: 2, gap: 1, flexWrap: 'wrap',
-        }}>
-          {([
-            ['upload', 'OCR upload'], ['manual', 'Manual entry'],
-            ['history', 'Import history'], ['units', 'Unit conversions'],
-          ] as Array<[string, string]>).map(([k, l]) => (
-            <button key={k} type="button" onClick={() => setSub(k)} aria-pressed={sub === k}
-                    className={sub === k ? 'v2-btn v2-btn-primary' : 'v2-btn v2-btn-ghost'}
-                    style={{ height: 24, fontSize: 11, padding: '0 12px', borderRadius: 5 }}>{l}</button>
-          ))}
-        </div>
+        {/* `[cmd]` G-365: dieselbe Bauform wie in `tab-tracking` --
+            Tom: „subnav ghetto". */}
+        <UnterTabs
+          items={[
+            { id: 'upload', label: 'OCR upload' },
+            { id: 'manual', label: 'Manual entry' },
+            { id: 'history', label: 'Import history' },
+            { id: 'units', label: 'Unit conversions' },
+          ]}
+          active={sub}
+          onChange={setSub}
+        />
       </div>
 
       {sub === 'upload' && (
@@ -383,6 +383,20 @@ export function MedImport({ echt }: { echt: EchteDaten }) {
           </div>
         </Card>
       )}
+
+      {/* ══ G-365 · Referenz und Fehlliste folgen dem Unterreiter ════
+          **Tom, 2026-09-07:** *,,da passt oben zu unten auch nicht bei
+          den subnavigationen."*
+
+          `[cmd]` **Gemessen:** unter der Linie standen alle sieben
+          Mockup-Kacheln, oben je nach Unterreiter eine bis vier.
+          **Auf `Manual entry`: oben eine, unten sieben.**
+
+          `[read]` **Der Unterreiter steht nicht in der Adresse** —
+          er ist Zustand DIESER Komponente, und `ansicht.tsx` kannte
+          ihn nicht. */}
+      <FehlendeImportKacheln unter={sub} />
+      <MedImportReferenz unter={sub} />
     </div>
   )
 }

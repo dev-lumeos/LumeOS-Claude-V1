@@ -47,7 +47,24 @@ import { SuppExtended } from './tab-extended'
 import { InteractionsEchtTab, RegelHinweis } from './tab-interactions-echt'
 import { ExtendedGesperrt } from './extended-gate'
 import type { RegelStand, GateStand } from '../../../lib/supplements/regeln-read'
+import { ReferenzTrenner } from '../../../components/shell/referenz-trenner'
+// `[cmd]` G-365: die Mockup-Kacheln, die OBEN fehlen.
+import {
+  FehlendeKostenKacheln, FehlendeIntelKacheln,
+  FehlendeInteraktionsKacheln,
+} from './fehlende-kacheln'
+import {
+  SuppExtendedReferenz, SuppInjectionReferenz,
+} from './mockup-referenz'
+// G-365: die Mockup-Reiter, die im Code nicht mehr stehen.
+import {
+  SuppInteractionsReferenz, SuppStacksReferenz,
+  SuppIntelligenceReferenz,
+} from './mockup-referenz'
 import { SuppCompliance } from './tab-compliance'
+
+/** C-418/3: die Quelle unter der Trennlinie. */
+const QUELLE = 'theme-v1/module-supplements.jsx'
 // G-45: der Injections-Tab mit der Rotationskarte.
 import { SuppInjections } from './tab-injektionen'
 // G-45: die vier Tabs aus -spec.jsx.
@@ -314,6 +331,15 @@ export function SupplementsAnsicht({
             // G-359/3: beides untereinander (E-68).
             <>
               {gate?.offen && <SuppExtended />}
+              {/* `[cmd]` G-365: die Linie stand unter einer
+                  Datenbedingung. Sabotageprobe 2026-09-07 in
+                  training und goals: ohne Daten verschwindet sie,
+                  und der Mockup-Reiter steht ununterscheidbar da
+                  wie eine echte Ansicht.
+
+                  `[read]` Die Linie beschriftet, was DARUNTER
+                  steht — und das steht unbedingt. */}
+              <SuppExtendedReferenz />
               <ExtendedGesperrt g={gate ?? { grad: null, offen: false, fehler: null }} />
             </>
           )}
@@ -329,6 +355,7 @@ export function SupplementsAnsicht({
             <>
               {daten && daten.einnahmen.length > 0
                 && <ComplianceEcht d={daten} heute={stichtag} />}
+              <ReferenzTrenner reiter="Compliance" quelle={QUELLE} />
               <SuppCompliance />
             </>
           )}
@@ -350,10 +377,20 @@ export function SupplementsAnsicht({
               Lesepfad** — dann steht ein Fehler da, kein
               Ersatzinhalt. Das ist ehrlicher. */}
           {tab === 'interactions' && regeln && (
-            <><InteractionsEchtTab d={regeln} /><RegelHinweis /></>
+            <>
+              <InteractionsEchtTab d={regeln} />
+              <RegelHinweis />
+              <FehlendeInteraktionsKacheln />
+              <SuppInteractionsReferenz />
+            </>
           )}
           {tab === 'cost' && <SuppCost />}
-          {tab === 'injection' && <SuppInjections />}
+          {tab === 'injection' && (
+            <>
+              <SuppInjections />
+              <SuppInjectionReferenz />
+            </>
+          )}
           {/* `[cmd]` G-91: Catalog liest `supplement_catalog` — 44
               Eintraege, `evidence_grade` auf allen gefuellt. Ohne
               Katalog bleibt der Entwurf mit seiner Marke, dasselbe
@@ -369,8 +406,19 @@ export function SupplementsAnsicht({
               hing. **Jetzt traegt `Katalog` die 566 Substanzen aus
               `substance_catalog`** (C-229). */}
           {tab === 'catalog' && <SuppDatabase />}
-          {tab === 'stacks' && <SuppStacks />}
-          {tab === 'intel' && <SuppIntelligence />}
+          {tab === 'stacks' && (
+            <>
+              <SuppStacks />
+              <SuppStacksReferenz />
+            </>
+          )}
+          {tab === 'intel' && (
+            <>
+              <SuppIntelligence />
+              <FehlendeIntelKacheln />
+              <SuppIntelligenceReferenz />
+            </>
+          )}
           {/* `[cmd]` G-74: Inventory rechnet die Reichweite aus
               `stock_remaining` gegen die Tagesdosis. Ohne Positionen
               bleibt der Entwurf stehen. */}
@@ -378,6 +426,7 @@ export function SupplementsAnsicht({
             <>
               {daten && daten.positionen.length > 0
                 && <InventoryEcht d={daten} heute={stichtag} />}
+              <ReferenzTrenner reiter="Inventory" quelle={QUELLE} />
               <SuppInventory />
             </>
           )}

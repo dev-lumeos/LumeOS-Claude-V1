@@ -1087,6 +1087,41 @@ a { color: inherit; text-decoration: none; }
 }
 .v2-tabs-rail .v2-tab.v2-active .v2-count { color: var(--acc); background: color-mix(in srgb, var(--acc) 15%, transparent); }
 
+/* Unterleiste eines Reiters: dieselbe Sprache wie die Modulleiste,
+   nur schmaler und ohne eigene Schiene.
+
+   `[cmd]` **Tom, 2026-09-07:** *„Medical/tracking subnav symptoms &
+   Medications ghetto, Medical/import subnav ghetto."* — dort standen
+   zwei `v2-btn`-Knoepfe in einem handgebauten Kasten, waehrend die
+   Modulleiste darueber Schiene, Rundung und Zaehlerpille traegt. */
+.v2-tabs-sub {
+  background: color-mix(in srgb, var(--acc) 3%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--acc) 12%, var(--border));
+  border-radius: 8px;
+  padding: 2px;
+  display: inline-flex;
+  gap: 2px;
+  overflow-x: auto;
+}
+.v2-tabs-sub .v2-tab {
+  border-bottom: none;
+  border-radius: 6px;
+  padding: 5px 11px;
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+.v2-tabs-sub .v2-tab:hover { background: color-mix(in srgb, var(--acc) 7%, transparent); }
+.v2-tabs-sub .v2-tab.v2-active {
+  background: color-mix(in srgb, var(--acc) 16%, var(--bg-elev));
+  color: var(--fg);
+  border-bottom: none;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--acc) 24%, transparent);
+}
+.v2-tabs-sub .v2-tab.v2-active .v2-count {
+  color: var(--acc);
+  background: color-mix(in srgb, var(--acc) 15%, transparent);
+}
+
 :root[data-theme="light"] .v2-module-hero {
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }

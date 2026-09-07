@@ -17,7 +17,11 @@ import {
   InEntwicklungKnopf,
   type ReferenceStatus, type ReferenceDirection, type TabItem,
 } from '@lumeos/ui'
+import { ReferenzTrenner } from '../../../components/shell/referenz-trenner'
 import { Tableiste } from './tableiste'
+
+/** C-418/3: die Quelle unter der Trennlinie. */
+const QUELLE = 'theme-v1/module-nutrition.jsx'
 import {
   // G-263: `SmartSuggestionsCard` ist hier raus — die Kachel ist
   // entfernt, nicht nur abgeschaltet (Begruendung am Renderort).
@@ -91,6 +95,17 @@ import { Kopfknoepfe } from './kopfknoepfe'
 import { EinkaufTab } from './tab-einkauf-echt'
 import type { EinkaufslisteKurz }
   from '../../../lib/nutrition/einkaufsliste-lesen'
+// `[cmd]` G-365: die Mockup-Reiter unter der Linie. Sieben
+// Reiter hatten keine — gemessen 2026-09-07.
+import {
+  NutritionInsightsReferenz, NutritionFoodsReferenz,
+  NutritionPlannerReferenz, NutritionNutrientsReferenz,
+  NutritionPlansReferenz, NutritionPrefsReferenz,
+  NutritionDiaryReferenz,
+} from './mockup-referenz'
+import {
+  FehlendeInsightsKacheln, FehlendePlanKacheln,
+} from './fehlende-kacheln'
 import './nutrition.css'
 
 /** Die vier Makros, die die Vorlage oben zeigt. */
@@ -666,6 +681,15 @@ export async function TagebuchAnsicht({
         </Card>
         </div>
       </div>
+      {/* `[cmd]` G-365: die Linie stand INNERHALB der rechten
+          Spalte — sie trennte eine Kachel, nicht den Reiter.
+
+          **Tom, 2026-09-07:** *,,keine saubere linie nur eine kleine
+          in der rechten spalte und nicht den mockup darunter."*
+
+          `[read]` Eine Trennlinie gehoert ans Ende des Reiters, ueber
+          die volle Breite. Darunter der vollstaendige Mockup-Reiter. */}
+      <NutritionDiaryReferenz />
       </>
       )}
     </>
@@ -762,6 +786,7 @@ function AndererTab({
           : <LeerHinweis
               titel="Nährstoffe"
               grund="Für dieses Konto ist keine Nährstoffordnung geladen. Ohne Sitzung greift die Zeilensicherheit, und es wird nichts gelesen." />}
+        <NutritionNutrientsReferenz />
       </div>
     )
   }
@@ -813,6 +838,8 @@ function AndererTab({
             Duplikat. */}
         <NutritionInsightsTab
           ohneEchte={Boolean(einsichten && (einsichten.bilanz || einsichten.makros))} />
+      <FehlendeInsightsKacheln />
+        <NutritionInsightsReferenz />
       </div>
     )
   }
@@ -834,6 +861,8 @@ function AndererTab({
           allePlaene={allePlaene}
           datum={datum ?? ''}
         />
+      <FehlendePlanKacheln />
+        <NutritionPlansReferenz />
       </div>
     )
   }
@@ -853,6 +882,7 @@ function AndererTab({
           : <LeerHinweis
               titel="Vorlieben"
               grund="Für dieses Konto sind keine Vorlieben geladen. Ohne Sitzung greift die Zeilensicherheit, und es wird nichts gelesen." />}
+        <NutritionPrefsReferenz />
       </div>
     )
   }
@@ -889,7 +919,9 @@ function AndererTab({
 
         {/* G-359/3: der Entwurf steht jetzt darunter, nicht dahinter. */}
         {plan && <PlannerEchtTab d={plan} />}
+        <ReferenzTrenner reiter="Planner" quelle={QUELLE} />
         <NutritionPlannerTab />
+        <NutritionPlannerReferenz />
       </div>
     )
   }
@@ -914,6 +946,27 @@ function AndererTab({
               titel="Rezepte nicht geladen"
               grund="Ohne Sitzung greift die Zeilensicherheit, und es wird nichts gelesen." />
           )}
+
+        {/* `[cmd]` G-365: KEIN Mockup-Reiter, und das ist der Befund.
+            `module-nutrition.jsx` fuehrt sieben Reiter — `diary`,
+            `insights`, `nutrients`, `foods`, `planner`, `plans`,
+            `prefs`. **`rezepte` ist nicht darunter.**
+
+            `[read]` **Der Reiter ist nach dem Entwurf entstanden**
+            (C-372/E-41). Es gibt nichts zu vergleichen — deshalb steht hier
+            keine Linie, sondern dieser Vermerk. */}
+        <Card title="Kein Mockup-Gegenstueck"
+              sub="dieser Reiter entstand nach dem Entwurf"
+              attrappe={
+                'Attrappe — kein Mockup · wartet auf: nichts — '
+                + '`rezepte` steht in keiner theme-v1-Datei, es gibt '
+                + 'keinen Soll-Stand zum Vergleich'
+              }>
+          <div className="v2-dim" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
+            Die uebrigen Reiter zeigen unter einer Linie den
+            Mockup-Entwurf als Vergleich. Fuer diesen gibt es keinen.
+          </div>
+        </Card>
       </div>
     )
   }
@@ -932,6 +985,27 @@ function AndererTab({
               titel="Einkaufslisten nicht geladen"
               grund="Ohne Sitzung greift die Zeilensicherheit, und es wird nichts gelesen." />
           )}
+
+        {/* `[cmd]` G-365: KEIN Mockup-Reiter, und das ist der Befund.
+            `module-nutrition.jsx` fuehrt sieben Reiter — `diary`,
+            `insights`, `nutrients`, `foods`, `planner`, `plans`,
+            `prefs`. **`einkauf` ist nicht darunter.**
+
+            `[read]` **Der Reiter ist nach dem Entwurf entstanden**
+            (G-345/E-64). Es gibt nichts zu vergleichen — deshalb steht hier
+            keine Linie, sondern dieser Vermerk. */}
+        <Card title="Kein Mockup-Gegenstueck"
+              sub="dieser Reiter entstand nach dem Entwurf"
+              attrappe={
+                'Attrappe — kein Mockup · wartet auf: nichts — '
+                + '`einkauf` steht in keiner theme-v1-Datei, es gibt '
+                + 'keinen Soll-Stand zum Vergleich'
+              }>
+          <div className="v2-dim" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
+            Die uebrigen Reiter zeigen unter einer Linie den
+            Mockup-Entwurf als Vergleich. Fuer diesen gibt es keinen.
+          </div>
+        </Card>
       </div>
     )
   }
@@ -946,6 +1020,7 @@ function AndererTab({
     // G-154: Die Unvertraeglichkeiten entscheiden, ob der
     // Einblenden-Schalter ueberhaupt erscheint.
     return (
+      <>
       <NutritionFoodsTab
         start={foodsStart ?? null}
         // G-272: `+ Add` schreibt in DIESEN Tag — denselben, den der
@@ -959,6 +1034,9 @@ function AndererTab({
         datum={datum ?? null}
         unvertraeglichkeiten={unvertraeglichkeiten}
       />
+      {/* `[cmd]` G-365: der Mockup-Reiter unter der Linie. */}
+      <NutritionFoodsReferenz />
+      </>
     )
   }
 

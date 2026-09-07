@@ -23,7 +23,14 @@ import {
   STACK, SLOTS, DAY_LETTERS, EVIDENCE_PALETTE, SUPPLEMENT_DB,
   EXTENDED_STACK, EXTENDED_LABS, type StackItem,
 } from './daten'
+import { ReferenzTrenner } from '../../../components/shell/referenz-trenner'
+import {
+  FehlendeKostenKacheln, FehlendeHeuteKacheln,
+} from './fehlende-kacheln'
 import { useSupp } from './kontext'
+
+/** C-418/3: die Quelle unter der Trennlinie. */
+const QUELLE = 'theme-v1/module-supplements.jsx'
 // G-74: die zwei Kostenkacheln, die das Protokoll brauchen.
 import { CostErgaenzung } from './tab-inventory-echt'
 // C-229: der EINE Katalog — 566er-Substanzdatenbank mit Detail.
@@ -97,6 +104,16 @@ export function SuppToday() {
   return (
     <>
       {daten && <TodayEcht />}
+              {/* `[cmd]` G-365: die Linie stand unter einer
+                  Datenbedingung. Sabotageprobe 2026-09-07 in
+                  training und goals: ohne Daten verschwindet sie,
+                  und der Mockup-Reiter steht ununterscheidbar da
+                  wie eine echte Ansicht.
+
+                  `[read]` Die Linie beschriftet, was DARUNTER
+                  steht — und das steht unbedingt. */}
+      <FehlendeHeuteKacheln />
+      <ReferenzTrenner reiter="Today" quelle={QUELLE} />
       <TodayAttrappe />
     </>
   )
@@ -116,7 +133,7 @@ export function SuppToday() {
  * nicht als erfundene Zahl da — es steht gar nicht da.
  */
 function TodayEcht() {
-  const { daten, takenToday, toggleTaken, open } = useSupp()
+  const { daten, takenToday, toggleTaken, open, stichtag } = useSupp()
   const d = daten!
   const heute = d.einnahmen[0]?.intake_date ?? null
   const heuteZeilen = d.einnahmen.filter(e => e.intake_date === heute)
@@ -148,10 +165,39 @@ function TodayEcht() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
             <Ring value={takenCount} max={dueToday} color="var(--acc-suppl)" label="taken" size={88} stroke={7} />
             <div style={{ flex: 1, minWidth: 180 }}>
-              <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Today&apos;s adherence</div>
-              <div className="v2-num" style={{ fontSize: 26, lineHeight: 1, marginBottom: 4 }}>
-                {takenCount}<span className="v2-dim" style={{ fontSize: 13 }}> / {dueToday}</span>
+              {/* ══ E-72: eine leere Kachel sagt, WARUM sie leer ist ══
+                  **Tom, 2026-09-07:** *„wenn wir was anbinden sollen auch
+                  daten dafuer da sein um es anzuzeigen und nicht einfach
+                  verschwinden und jeder vergisst es."*
+
+                  `[cmd]` **Gemessen 2026-09-06: `dev@lumeos.app` hat 360
+                  Einnahmezeilen — die letzte vom 2026-08-19**, also 18
+                  Tage vor dem Stichtag.
+
+                  `[read]` **`heute` ist der juengste Tag MIT Einnahmen,
+                  nicht der heutige.** **Eine `0 / 9` liest sich wie ein
+                  Ergebnis; sie ist aber die Aussage „fuer heute ist
+                  nichts erfasst".** */}
+              <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
+                {heute === stichtag ? 'Today’s adherence' : 'Letzter erfasster Tag'}
               </div>
+              {heuteZeilen.length === 0 ? (
+                <div className="v2-muted" style={{ fontSize: 13, lineHeight: 1.5, marginBottom: 4 }}>
+                  Keine Einnahmen erfasst.
+                  <span className="v2-dim" style={{ fontSize: 11 }}>
+                    {' '}{d.einnahmen.length > 0
+                      ? `Zuletzt am ${d.einnahmen[0]?.intake_date}.`
+                      : 'Die Tabelle ist fuer dieses Konto leer.'}
+                  </span>
+                </div>
+              ) : (
+                <div className="v2-num" style={{ fontSize: 26, lineHeight: 1, marginBottom: 4 }}>
+                  {takenCount}<span className="v2-dim" style={{ fontSize: 13 }}> / {dueToday}</span>
+                  {heute !== stichtag && (
+                    <span className="v2-dim" style={{ fontSize: 11 }}> · {heute}</span>
+                  )}
+                </div>
+              )}
               <div className="v2-muted" style={{ fontSize: 11.5 }}>
                 {naechste
                   ? <>Next: <span style={{ color: 'var(--fg)', fontWeight: 500 }}>
@@ -572,11 +618,13 @@ export function SuppStack() {
       {view === 'matrix' ? (
         <>
           {daten && <StackMatrixEcht />}
+          <ReferenzTrenner reiter="Stack" quelle={QUELLE} />
           <StackMatrix />
         </>
       ) : (
         <>
           {daten && <StackListeEcht />}
+          <ReferenzTrenner reiter="Stack" quelle={QUELLE} />
           <StackList />
         </>
       )}
@@ -819,6 +867,7 @@ export function SuppDatabase() {
   return (
     <>
       {substanzen.length > 0 && <SubstanzDatenbank />}
+      <ReferenzTrenner reiter="Database" quelle={QUELLE} />
       <DatabaseAttrappe />
     </>
   )
@@ -930,6 +979,10 @@ export function SuppCost() {
   return (
     <>
       {daten && <CostEcht />}
+      {/* `[cmd]` G-365: sieben von acht Mockup-Kacheln fehlten
+          oben — der ganze Kostenreiter war unvertreten. */}
+      <FehlendeKostenKacheln />
+      <ReferenzTrenner reiter="Cost" quelle={QUELLE} />
       <CostAttrappe />
     </>
   )
