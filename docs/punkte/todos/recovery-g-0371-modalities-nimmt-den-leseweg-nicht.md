@@ -9,7 +9,7 @@ kind_von: A-71
 entscheidung: null
 beruehrt:
   dateien:
-    - apps/web/src/app/v2/recovery/tab-modalitaeten.tsx
+    - apps/web/src/app/v2/recovery/modalitaeten-kachel.tsx
 zahlen:
   gemessen: 2026-09-07
 ---
