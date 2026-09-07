@@ -9,6 +9,8 @@ kind_von: G-364
 entscheidung: E-69
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: a880e92b
 beruehrt:
   dateien:
     - apps/web/src/app/v2/training/ansicht.tsx
@@ -123,7 +125,76 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Tom am Schirm.** *,,schirm bis auf ein paar
+kleinigkeiten ok, die regeln wir wenn wir uns daran machen."*
+
+### 85 Reiter, 80 mit Linie
+
+    goals            10   alle
+    training         10   alle
+    recovery          9   alle
+    nutrition         9   7 mit Linie, 2 mit Vermerk
+    supplements      11   alle
+    medical           6   5 mit Linie, 1 mit Vermerk
+    coach/human      10   8 mit Linie, 2 mit Vermerk
+    coach/ai         20   alle
+
+`[cmd]` **Fuenf ohne Linie tragen *Kein Mockup-Gegenstueck*** — am
+Schirm nachgesehen.
+
+`[read]` **Ein Reiter ohne Vergleichsfassung ist ein Befund, kein
+Versaeumnis** — **er sagt jetzt, dass es nichts zu vergleichen
+gibt.**
+
+### Die leeren Rahmen: 61 auf 3
+
+Tom, 2026-09-07: *,,ein rahmen und dann ein bisschen text drin
+bringen mir wohl ersichtlich nicht wirklich was."*
+
+`[cmd]` **Alle uebrigen portiert** — dieselbe Tabelle, dieselben
+Balken, dieselben Zahlen.
+
+### Drei Unternavigationen, alle derselben Klasse
+
+`[cmd]` **Die Referenz hing in `ansicht.tsx`, wo der Unterreiter
+nicht bekannt ist** — **er ist Zustand der Komponente und steht
+nicht in der Adresse.**
+
+    medical/tracking   zeigte auf beiden Unterreitern dasselbe
+    medical/import     auf "Manual entry": oben 1, unten 7
+    goals/poses        zeigte immer mandatory
+
+`[cmd]` **Mit Sabotageprobe belegt.**
+
+### Und er hat seine eigene Luecke offengelegt
+
+> *,,Der vollstaendige Unternavigations-Durchlauf lief in eine
+> Zeitgrenze. Geprueft sind die DREI gemeldeten Faelle."*
+
+`[read]` **Er haette *alle geprueft* schreiben koennen.** **Als
+G-370.**
+
+### Die Pose-Beschriftung
+
+`[cmd]` **`8 IFBB Mandatory` ueber zehn Kacheln** — **das Mockup
+traegt denselben Fehler.**
+
+Tom: *,,steht auf 10, also erledigt."* **Abweichung abgenommen.**
+
+### Von drei gemeldeten Befunden war einer falsch
+
+`[cmd]` **HRV: nachgemessen, die Kachel hat recht.**
+
+    letzte 30 Tage   30 Check-ins, 8 mit HRV   <-- die Kachel
+    letzte 90 Tage   90 Check-ins, 23 mit HRV  <-- sein Befund
+
+`[read]` **Er hat 90 Tage gemessen und mit einer 30-Tage-Anzeige
+verglichen.**
+
+`[cmd]` **Die zwei echten sind C-423 und G-371.**
+
+**Abgenommen.**
+
 
 ## Bericht — training
 

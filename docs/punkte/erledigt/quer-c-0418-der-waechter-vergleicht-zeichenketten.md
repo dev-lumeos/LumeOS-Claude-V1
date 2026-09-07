@@ -9,6 +9,8 @@ kind_von: G-359
 entscheidung: E-70
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: a880e92b
 beruehrt:
   dateien:
     - tools/mockup-deckung.mjs
@@ -733,3 +735,11 @@ Attrappen.
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Abnahme
+
+**2026-09-07, mit G-365 abgenommen.**
+
+`[cmd]` **85 Reiter, 80 mit Linie, 5 mit begruendetem Vermerk.**
+
+Tom am Schirm: *,,schirm bis auf ein paar kleinigkeiten ok."*

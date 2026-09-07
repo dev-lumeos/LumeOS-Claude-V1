@@ -9,6 +9,8 @@ kind_von: G-355
 entscheidung: E-68
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: a880e92b
 beruehrt:
   dateien:
     - apps/web/src/app/v2/goals/tab-phase.tsx
@@ -822,3 +824,11 @@ etwas falsch vorkommt: melden.**
     unangetastet    kein bestehendes Verhalten geaendert
     Bildschirmfoto  vorher / nachher
     Waechter        mockup-deckung.mjs bleibt gruen
+
+## Abnahme
+
+**2026-09-07, mit G-365 abgenommen.**
+
+`[cmd]` **85 Reiter, 80 mit Linie, 5 mit begruendetem Vermerk.**
+
+Tom am Schirm: *,,schirm bis auf ein paar kleinigkeiten ok."*
