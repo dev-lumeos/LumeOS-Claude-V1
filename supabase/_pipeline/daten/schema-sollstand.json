@@ -2086,6 +2086,19 @@
     },
     {
       "schema": "goals",
+      "name": "phase_transition_responses",
+      "schritt": "422_schema",
+      "rls": true,
+      "policies": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+      "grants": {
+        "authenticated": ["SELECT", "INSERT"],
+        "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]
+      },
+      "grants_herkunft": "422_recovery_card_reads_and_phase_proposals.sql vergibt authenticated SELECT/INSERT.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "goals",
       "name": "body_measurements",
       "schritt": "112",
       "rls": true,

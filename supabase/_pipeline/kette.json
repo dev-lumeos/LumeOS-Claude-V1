@@ -1534,6 +1534,16 @@
       ]
     },
     {
+      "id": "422_schema",
+      "path": "supabase/_pipeline/00_querschnitt/422_recovery_card_reads_and_phase_proposals.sql",
+      "kind": "sql",
+      "creates": "C-422/G-363: elf Recovery-Karten-Lesewege mit benannten Leerhinweisen und regelbasierte, widersprechbare Phasenvorschlaege",
+      "depends_on": [
+        "421_schema",
+        "112"
+      ]
+    },
+    {
       "id": "419_schema",
       "path": "supabase/migrations/20260906072641_c419_marketplace_wallet_schema.sql",
       "kind": "sql",

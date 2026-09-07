@@ -20,7 +20,7 @@ port = 54321
 # vergessen — der Exercises-Tab bekam PGRST106 statt der 1.416 Uebungen.
 # C-148: `coach` ergaenzt. Ohne diesen Eintrag sind die sechs Tabellen
 # aus C-119 vorhanden und geschuetzt, aber ueber PostgREST unsichtbar.
-schemas = ["public", "graphql_public", "nutrition", "goals", "supplements", "medical", "recovery", "training", "coach"]
+schemas = ["public", "graphql_public", "nutrition", "goals", "supplements", "medical", "recovery", "training", "coach", "marketplace"]
 # Extra schemas to add to the search_path of every request.
 extra_search_path = ["public", "extensions"]
 # The maximum number of rows returns from a view, table, or stored procedure. Limits payload size
