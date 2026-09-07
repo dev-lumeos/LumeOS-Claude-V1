@@ -22,39 +22,37 @@ zahlen:
 
 Aus G-357, Codex, 2026-09-07.
 
-`[cmd]` **`recommended_next` bleibt bewusst leer** — **vier Fragen
-sind offen:**
+`[cmd]` **`recommended_next` bleibt bewusst leer.**
 
-    Eingaben        woraus wird vorgeschlagen?
-    Logik           Regel oder Modell?
-    Begruendung     was steht in transition_reason?
-    Override        darf der Nutzer widersprechen?
+**Beim Anlegen wurden bereits beantwortet:**
 
-## Die zweite ist halb beantwortet
+`[cmd]` **Logik:** `00_MASTER_VISION.md`, Kernprinzip 3 —
+*,,Rule-first, AI second."* **Die Regel schlaegt vor, das Modell
+formuliert.**
 
-`[cmd]` **`00_MASTER_VISION.md`, Kernprinzip 3:** *,,Rule-first, AI
-second — deterministische Regeln zuerst, AI fuer Packaging."*
+`[cmd]` **Override:** **ja** (E-69) — **ein System, das eine Phase
+erzwingt, waere ein Trainer, kein Werkzeug.**
 
-`[read]` **Also: die Regel schlaegt vor, das Modell formuliert.**
+**Offen bleibt eine Frage: woraus wird vorgeschlagen?**
 
-`[read]` **Dasselbe Muster wie MealCam** (SPEC_11): **die Datenbank
-liefert Kandidaten, das Modell waehlt aus.**
+## Die offene Frage: woraus wird vorgeschlagen?
 
-## Die anderen drei
-
-`[read]` **Eingaben:** `[cmd]` **`goal_phases` traegt
-`projected_end_date` und `actual_end_date`** — **eine Phase, die
-laenger laeuft als geplant, ist ein Anlass.**
+`[cmd]` **`goal_phases` traegt `projected_end_date` und
+`actual_end_date`** — **eine Phase, die laenger laeuft als geplant,
+ist ein Anlass.**
 
 `[cmd]` **Und `body_measurements` mit 362 Zeilen** — **wer sein Ziel
 erreicht hat, braucht eine neue Phase.**
 
-`[read]` **Begruendung:** `[cmd]` **`transition_reason` ist seit
-G-357 Pflicht** — **ein Vorschlag muss also einen mitliefern.**
+`[read]` **Welche der beiden ausloest, und ab welcher Abweichung, ist
+zu messen.**
 
-`[read]` **Override:** `[read]` **die Antwort ist ja** — **E-69:
-Tom entscheidet.** `[read]` **Ein System, das eine Phase erzwingt,
-waere ein Trainer, kein Werkzeug.**
+`[cmd]` **`transition_reason` ist seit G-357 Pflicht** — **ein
+Vorschlag liefert einen mit.** `[read]` **Das ist keine eigene
+Frage, sondern eine Bedingung an die Antwort.**
+
+`[read]` **Dasselbe Muster wie MealCam** (SPEC_11): **die Datenbank
+liefert Kandidaten, das Modell waehlt aus.**
 
 ## Auftrag
 

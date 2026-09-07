@@ -217,6 +217,10 @@ skua.config.json
 backup/schema/*_c43_vor_kettenlauf.sql
 backup/schema/schema-before-*.sql
 
+# C-416: lokaler Status des taeglichen Wegwerf-Kettenlaufs. Der Punktelauf
+# liest ihn, aber er ist Laufzeitstand und kein versionsierter Sollwert.
+backup/_manifests/kettenlauf-status.json
+
 # Schemasicherungen vor Live-Eingriffen. Rund 30.000 Zeilen je Datei
 # und bei jedem Auftrag neu -- sie tauchten am 2026-08-26 zweimal im
 # selben Commit-Lauf auf, weil die zwei Muster darueber nur die alten
