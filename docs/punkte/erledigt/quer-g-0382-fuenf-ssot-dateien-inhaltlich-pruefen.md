@@ -9,6 +9,8 @@ kind_von: G-381
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: OFFEN
 beruehrt:
   dateien:
     - tools/ssot-nachtragen.mjs
@@ -369,4 +371,89 @@ Grenze liegt:** die Struktur ist erzeugbar, **die Begruendung nie**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  5 geprueft, 5 belegt -- je eine gemessene Falschaussage
+    A2  5 Module, 3 mit neuen Tabellen, 0 vollstaendig
+    A3  erzeugbar getrennt von Handarbeit, mit Aufwand
+    A4  docs/ssot/ unveraendert
+
+### A2 ist die wichtigste Messung
+
+`[cmd]` **Von sechs Tabellen aus zwei Tagen nennt die SSOT keine.**
+
+`[cmd]` **Und zwei behauptet sie als nicht gebaut:**
+
+    128-recovery-scores.md:52   `[cmd]` Nicht gebaut wurden ...
+                                `overtraining_alerts`
+    96-recovery-checkins.md:27  [read] Nicht uebernommen wurden ...
+                                `recovery_protocols`
+
+`[cmd]` **Selbst nachgemessen: beide existieren.**
+
+`[read]` **Die erste Zeile ist die schlimmere** ? **sie traegt
+einen `[cmd]`-Marker.** `[read]` **Ein gemessener Beleg, der heute
+falsch ist, und die Marke sagt, man duerfe sich darauf
+verlassen.**
+
+### Und sein Satz ist die Lehre
+
+> *,,Eine fehlende Erwaehnung laedt zum Nachsehen ein; eine
+> behauptete Abwesenheit haelt davon ab."*
+
+`[read]` **Der Suchlauf findet den Namen und haelt die Datei fuer
+abgedeckt** ? **die Falschaussage verhindert ihre eigene
+Entdeckung.**
+
+`[cmd]` **Und sein Suchlauf ist geeicht:** `lab_reports` **kommt
+durch, die sechs neuen liefern nichts.**
+
+### A1 — je eine Messung, nicht je ein Eindruck
+
+`[cmd]` **`10-workspace.md`:** *,,genau ein `@lumeos/*`-Import"* ?
+**205 Dateien, und die genannte ist weg.**
+
+`[cmd]` **`30-datenbank.md`:** **zwei richtige Spaltenzahlen neben
+einer toten Fundstelle** ? **und nichts sagt dem Leser, welcher
+Haelfte er trauen soll.**
+
+`[cmd]` **`32-encoding-schaeden.md`:** **ein *bestaetigter Schaden*,
+dessen Funktion es nicht mehr gibt** ? **eine Notiz, die jemanden
+nach nichts suchen schickt.**
+
+`[cmd]` **`83-dashboard.md`:** **`v2/page.tsx` ist eine
+10-Zeilen-Weiterleitung mit 0 Lesequellen, dokumentiert sind
+fuenf.**
+
+`[read]` **Und er nennt seinen eigenen Fehlalarm aus G-381 mit** ?
+**der `akzent-probe.tsx`-Satz war richtig.**
+
+### A3 — die Warnung ist die Bauvorschrift
+
+> *,,Ein Erzeuger, der nach Dateinamen zaehlt, meldet fuer `goals`
+> null Lesewege, weil `goals` `lesen.ts` heisst statt
+> `*-read.ts`."*
+
+`[read]` **Eine erzeugte Zahl sieht aus wie eine gemessene ? minus
+jemand, der sie nachprueft.**
+
+`[cmd]` **Selbst gemessen: 7 Schemas, 178 Tabellen, 2.513
+Spalten** ? **mehr als seine 167/2.340, die Zahl waechst
+taeglich.**
+
+`[read]` **Genau deshalb erzeugen statt schreiben.**
+
+### Und was Handarbeit bleibt, ist richtig getrennt
+
+`[read]` **Eine Abwesenheit hat keine Zeile** ? **und genau da
+kamen die zwei Falschaussagen her.**
+
+`[cmd]` **Die 58 datierten Auftragsschnappschuesse sind Protokoll**
+? **sie duerfen nicht nachgezogen werden.**
+
+`[read]` **Sein Schlusssatz trifft:** *,,A-74 ist nicht behoben,
+sondern verschoben ? `00-ABGENOMMEN.md` traegt 326 Punkte und
+beantwortet weiter nicht, was gebaut ist."*
+
+**Abgenommen.**
+
