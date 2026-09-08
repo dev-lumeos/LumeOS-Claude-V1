@@ -5,9 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 210 |
+| `todos` | 211 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 1 |
 | `erledigt` | 314 |
 | **gesamt** | **527** |
 
@@ -282,14 +281,14 @@
 | `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](erledigt/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | erledigt | — | — |
 | `G-342` | befund | niedrig | [`nutsettings` hat keinen Aufrufer](erledigt/nutrition-g-0342-nutsettings-hat-keinen-aufrufer.md) | erledigt | — | G-343 |
 | `G-343` | befund | mittel | [Tests messen gegen ueberholte Entwuerfe](erledigt/nutrition-g-0343-tests-messen-gegen-ueberholte-entwuerfe.md) | erledigt | — | G-348 |
-| `G-344` | befund | hoch | [Einkaufslisten koennen mehr, als die Spec sagt](laufend_claudecode/nutrition-g-0344-einkaufslisten-koennen-mehr-als-die-spec-sagt.md) | laeuft (claudecode) | — | C-407, G-345 |
+| `G-344` | befund | hoch | [Einkaufslisten koennen mehr, als die Spec sagt](erledigt/nutrition-g-0344-einkaufslisten-koennen-mehr-als-die-spec-sagt.md) | erledigt | — | C-407, G-345 |
 | `G-345` | feature | hoch | [die Oberflaeche fuer Einkaufslisten](erledigt/nutrition-g-0345-die-oberflaeche-fuer-einkaufslisten.md) | erledigt | — | G-350 |
 | `G-346` | entscheidung | mittel | [Quick-Add braucht eine Mahlzeit](erledigt/nutrition-g-0346-quick-add-braucht-eine-mahlzeit.md) | erledigt | — | — |
 | `G-347` | feature | mittel | [die Anzeige zieht nach](erledigt/nutrition-g-0347-die-anzeige-zieht-nach.md) | erledigt | — | — |
 | `G-348` | befund | mittel | [`wieGestern` ueberspringt manuelle Posten](erledigt/nutrition-g-0348-wiegestern-ueberspringt-manuelle-posten.md) | erledigt | — | C-412, G-351 |
 | `G-350` | befund | mittel | [ein zweiter Schreibweg fuer `is_checked`](erledigt/nutrition-g-0350-ein-zweiter-schreibweg-fuer-is-checked.md) | erledigt | — | — |
 | `G-351` | befund | mittel | [`other` hat keine Karte](erledigt/nutrition-g-0351-other-hat-keine-karte.md) | erledigt | — | — |
-| `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | — |
+| `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](todos/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 62

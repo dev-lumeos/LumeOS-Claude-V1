@@ -7,10 +7,6 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: G-141
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-09-07
-erledigt: 2026-09-07
-commit: e748fbdb
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/ansicht.tsx
@@ -364,66 +360,30 @@ im Auftragstext berichtigt werden kann.**
     test-user           nur gelesen
     gestaged            nichts
 
-## Abnahme
+## Falsch geschlossen am 2026-09-07
 
-**2026-09-07, Orchestrator.**
+`[cmd]` **Claude Code hat es gefunden, 2026-09-08:**
 
-### Toms Verdacht traegt weiter als gedacht
+> *,,nutrition-g-0353 liegt in `erledigt/` mit einer Abnahme vom
+> 2026-09-07 ? aber diese Abnahme misst die vier Zielachsen
+> (`goal_type`, `subtype`, `phase_type`, `difficulty_level`), nicht
+> Setup-Karten, und G-353 kommt in `apps/web/src` nirgends vor."*
 
-`[read]` **Ich hatte geschrieben:** *,,es koennten zwei Ebenen sein,
-nicht drei Skalen."*
+`[read]` **Er hat nichts gebaut, statt zu raten** — richtig.
 
-`[cmd]` **Gemessen: es sind vier Achsen.**
+`[cmd]` **Die Abnahme gehoerte zu G-352.** `[read]` **Der
+Orchestrator hat sie in die falsche Datei geschrieben** —
+**derselbe Fehler wie beim Dateinamen von G-367.**
 
-    goal_type          4 Werte, CHECK
-    subtype            ohne CHECK, zweite Ebene
-    phase_type         9 Werte -- die *zwoelf* des ADR
-    difficulty_level   5 Werte, eigene Achse
+`[read]` **Der Punkt ist wieder offen.** **Die Setup-Karten sind
+entworfen, aber nicht gebaut.**
 
-`[read]` **Die *zwoelf Zielarten* des ADR sind in Wirklichkeit die
-neun `phase_type`-Werte** — **eine Zahl, die niemand nachgezaehlt
-hatte.**
+### Was der Entwurf sagt
 
-`[read]` **Damit ist die Frage nicht *welche von drei gilt*, sondern
-*welche Achse setzt was*.**
+`[read]` **Sie haengen an der Leere, nicht am
+Konfigurationszustand** — **deshalb braucht es keine Spalte fuer
+*weggewischt*.**
 
-### Und er hat sich selbst berichtigt
-
-`[cmd]` **`difficulty_level` hatte er zuerst falsch eingeordnet** —
-**es ist keine Zielskala, sondern eine eigene Achse.**
-
-`[read]` **Ohne dass ich nachgefragt habe.**
-
-### Die Setup-Karten haengen an der Leere
-
-`[read]` **Nicht am Konfigurationszustand.**
-
-`[cmd]` **Damit braucht es keine Spalte fuer *weggewischt*.**
-
-`[read]` **Das ist die elegantere Loesung:** **eine Karte
-verschwindet, weil die Sache erledigt ist** — **nicht, weil jemand
-sie weggeklickt hat.**
-
-`[read]` **Und sie kommt zurueck, wenn der Zustand zurueckkehrt** —
-**das ist richtig so.**
-
-### Vier Schritte: zwei Entscheidungen, zwei Arbeiten
-
-`[read]` **Die Trennung ist die eigentliche Leistung des Berichts** —
-**eine Blockade, die eine Entscheidung ist, wartet auf Tom.** **Eine,
-die Arbeit ist, wartet auf einen Auftrag.**
-
-### G-141 ist leer genug
-
-`[cmd]` **Nach G-353 bleibt nichts uebrig.** **Geschlossen.**
-
-### Und ein Vermerk
-
-`[cmd]` **C-193 stand als Mitauftrag in der Punktdatei, gehoert aber
-Codex.**
-
-`[read]` **Er hat es gemeldet** — **richtig.** `[cmd]` **Mein
-Fehler beim Vorbereiten: ich hatte ihn in zwei Buendel gelegt.**
-
-**Abgenommen.**
+`[read]` **Eine Karte verschwindet, weil die Sache erledigt ist** —
+**und kommt zurueck, wenn der Zustand zurueckkehrt.**
 
