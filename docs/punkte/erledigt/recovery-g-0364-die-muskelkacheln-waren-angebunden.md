@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-69
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: a880e92b
 beruehrt:
   dateien:
     - apps/web/src/app/v2/recovery/tab-messwerte.tsx
@@ -102,7 +104,39 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Tom am Schirm.** `[cmd]` Committet in `57a875ee`.
+
+### Tom hatte recht, und der Vermerk log
+
+Tom: *,,DIE WAREN ANGEBUNDEN UND HABEN VOLLUMFAENGLICH
+FUNKTIONIERT."*
+
+`[cmd]` **`<RecMuscleMap />` wurde ohne Prop gerufen, waehrend der
+Leseweg fuer den Muskelkater ungenutzt danebenlag.**
+
+`[cmd]` **Drei Kacheln angebunden:** Muscle map, Muscle recovery,
+Per-muscle detail.
+
+`[cmd]` **Am Schirm bestaetigt:** *,,echte Daten"*, Muskelkater aus
+dem Check-in 2026-11-06, **und das Detailfenster rechnet
+nachvollziehbar** — Basiskurve, vier Modifikatoren, Ergebnis.
+
+### Der erste von fuenf Faellen
+
+`[read]` **A-71 haelt das Muster fest** — **es kam am 07.09.
+fuenfmal vor.**
+
+`[cmd]` **Und 23 weitere Kandidaten wurden gemeldet** — **daraus
+wurde G-365 ueber acht Module.**
+
+### Was offen bleibt
+
+`[cmd]` **`HOURS` und `SETS` je Muskel kamen weiter aus dem
+Entwurf** — **seit C-421 liefert `public.muscle_training_loads` sie
+echt** (G-367).
+
+**Abgenommen.**
+
 
 ## Bericht
 

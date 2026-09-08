@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-67
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: a880e92b
 beruehrt:
   tabellen: [goals.user_goals]
 zahlen:
@@ -520,7 +522,28 @@ haette.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-07, Orchestrator.** **Ging in G-359 und G-365 auf.**
+
+`[cmd]` **Die Messung war vollstaendig: 110 Spalten, 98 gelesen, 91
+angezeigt, 48 schreibbar.**
+
+`[read]` **Und sie fuehrte zur wichtigsten Erkenntnis des Tages:**
+**die Luecke ist nicht das Lesen, sondern das Eintragen.**
+
+`[cmd]` **Keine der neun Phasenarten hatte einen Schreibweg, die 13
+Umfangspunkte waren tot** — **beide seit G-357 und G-356 gebaut.**
+
+`[cmd]` **Und der Fund, der alles ausloeste:** `modale.tsx:13`
+**behauptete, es gebe weder `goals.user_goals` noch
+`goals.body_measurements`** — **beide gibt es.**
+
+`[read]` **Der Orchestrator hat die falsche Frage gestellt:**
+**Datenbank gegen Schirm statt Mockup gegen Schirm.** `[cmd]` **Die
+richtige Messung dauerte vier Minuten und ergab 105 fehlende
+Elemente allein in `goals`.**
+
+**Abgenommen, aufgegangen in G-359.**
+
 
 ## Nachtrag 2026-09-07 — die Spec liegt in `docs/specs/Goals/`
 

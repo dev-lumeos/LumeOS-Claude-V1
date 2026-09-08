@@ -7,8 +7,7 @@
 |---|---|
 | `todos` | 216 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 306 |
+| `erledigt` | 309 |
 | **gesamt** | **527** |
 
 ## medical — 43
@@ -418,7 +417,7 @@
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
 | `G-243` | befund | mittel | [die Recovery-Schwellen stehen im Mockup, nicht im Punkt](todos/recovery-g-0243-die-recovery-schwellen-stehen-im-mockup-nicht-im-punkt.md) | offen | — | — |
-| `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](laufend_claudecode/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | laeuft (claudecode) | — | G-365, G-367 |
+| `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](erledigt/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | erledigt | — | G-365, G-367 |
 | `G-367` | feature | mittel | [Stunden und Saetze je Muskel](erledigt/recovery-g-0367-per-muscle-stunden-und-saetze.md) | erledigt | — | — |
 | `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](todos/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | offen | — | — |
 
@@ -573,10 +572,10 @@
 | `G-334` | befund | hoch | [`test-user` taugt nicht mehr als Nachweiskonto](erledigt/quer-g-0334-test-user-taugt-nicht-mehr-als-nachweiskonto.md) | erledigt | — | — |
 | `G-352` | entscheidung | hoch | [drei Zielskalen widersprechen sich](erledigt/quer-g-0352-drei-zielskalen-widersprechen-sich.md) | erledigt | — | G-354 |
 | `G-354` | befund | mittel | [ein sechstes Ziellisten-Modal](erledigt/quer-g-0354-ein-sechstes-ziellisten-modal.md) | erledigt | — | — |
-| `G-355` | befund | hoch | [Goals und Body gegen alle Quellen pruefen](laufend_claudecode/quer-g-0355-goals-und-body-gegen-alle-quellen-pruefen.md) | laeuft (claudecode) | — | G-356, G-357, G-358, G-359 |
+| `G-355` | befund | hoch | [Goals und Body gegen alle Quellen pruefen](erledigt/quer-g-0355-goals-und-body-gegen-alle-quellen-pruefen.md) | erledigt | — | G-356, G-357, G-358, G-359 |
 | `G-356` | feature | hoch | [die Umfangserfassung fehlt](erledigt/quer-g-0356-die-umfangserfassung-fehlt.md) | erledigt | — | — |
 | `G-357` | feature | hoch | [kein Weg in eine Phase](erledigt/quer-g-0357-kein-weg-in-eine-phase.md) | erledigt | — | G-363 |
-| `G-358` | befund | mittel | [62 Vermerke ohne Grund](laufend_claudecode/quer-g-0358-62-vermerke-ohne-grund.md) | laeuft (claudecode) | — | — |
+| `G-358` | befund | mittel | [62 Vermerke ohne Grund](erledigt/quer-g-0358-62-vermerke-ohne-grund.md) | erledigt | — | — |
 | `G-359` | befund | hoch | [1.343 Mockup-Elemente fehlen in der UI](erledigt/quer-g-0359-1343-mockup-elemente-fehlen-in-der-ui.md) | erledigt | — | C-417, C-418, G-360 |
 | `G-360` | feature | hoch | [coach, market und admin als eigene Apps](todos/quer-g-0360-coach-market-admin-als-eigene-apps.md) | offen | — | G-361, G-362 |
 | `G-363` | entscheidung | mittel | [wer schlaegt die naechste Phase vor?](laufend_codex/quer-g-0363-wer-schlaegt-die-naechste-phase-vor.md) | laeuft (codex) | — | — |
