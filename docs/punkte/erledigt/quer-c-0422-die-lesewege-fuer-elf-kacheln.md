@@ -9,6 +9,8 @@ kind_von: C-421
 entscheidung: E-72
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-08
+commit: d40e847e
 beruehrt:
   tabellen: [recovery.checkins]
 zahlen:
@@ -132,4 +134,61 @@ Dev-Sicherung vor dem Einspielen:
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+### Live und geprueft
+
+`[cmd]` **Selbst gemessen:**
+
+    recovery.card_read_all
+    goals.phase_transition_recommendation
+    goals.phase_transition_respond
+    goals.phase_transition_responses (Tabelle)
+
+`[cmd]` **`test-user`: 1 / 2 / 7 / 21** — **dieselben Zahlen wie auf
+der Wegwerf-Datenbank.**
+
+`[cmd]` **Sicherung:**
+`backup/vollsicherung/20260908_071955_c422_vor_dev_voll.dump`.
+
+`[read]` **Zum zweiten Mal eine Sicherung vor dem Einspielen** —
+**das ist jetzt seine Gewohnheit, nicht meine Anweisung.**
+
+### 11 von 11 Karten
+
+`[cmd]` **Funktionstest 2/2, alle elf Karten befuellt,
+Leerhinweise geprueft.**
+
+`[read]` **E-72 ist damit belegt:** **keine nackte Null, sondern ein
+benannter Leerhinweis, wo nichts vorliegt.**
+
+### G-363 — und er hat mehr gebaut als beauftragt
+
+`[cmd]` **`phase_transition_respond` und die Tabelle
+`phase_transition_responses`.**
+
+`[read]` **Der Auftrag verlangte den Vorschlag** — **er hat die
+Antwort des Nutzers mitgebaut.**
+
+`[cmd]` **Das ist E-69: Tom entscheidet.** `[read]` **Ein Vorschlag
+ohne Widerspruchsmoeglichkeit waere ein Trainer, kein Werkzeug** —
+**und die Antwort wird jetzt festgehalten, nicht nur ausgefuehrt.**
+
+`[read]` **Damit ist nachvollziehbar, wann jemand einem Vorschlag
+gefolgt ist und wann nicht** — **die Grundlage, um spaeter zu
+messen, ob die Regel taugt.**
+
+### Was offen bleibt
+
+`[cmd]` **Der abschliessende Wegwerf-Kettenlauf laeuft noch auf
+`lumeos_c422_final3`.**
+
+`[read]` **Der Punktelauf meldet den taeglichen Lauf als
+fehlgeschlagen** — **der von gestern 21:00 lief in seinem Bereich
+und ging nicht durch.**
+
+`[cmd]` **Beides derselbe Nachweis** — **wenn der Lauf durchgeht,
+ist es zu.**
+
+**Abgenommen unter dem Vorbehalt des Kettenlaufs.**
+

@@ -6,8 +6,7 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 213 |
-| `laufend_codex` | 2 |
-| `erledigt` | 312 |
+| `erledigt` | 314 |
 | **gesamt** | **527** |
 
 ## medical — 43
@@ -538,7 +537,7 @@
 | `C-418` | befund | hoch | [der Waechter vergleicht Zeichenketten, nicht Inhalte](erledigt/quer-c-0418-der-waechter-vergleicht-zeichenketten.md) | erledigt | — | C-420 |
 | `C-419` | feature | hoch | [das Wallet existiert nicht](erledigt/quer-c-0419-das-wallet-existiert-nicht.md) | erledigt | — | — |
 | `C-420` | befund | hoch | [der Waechter kennt keine Uebersetzung](erledigt/quer-c-0420-der-waechter-kennt-keine-uebersetzung.md) | erledigt | — | — |
-| `C-422` | feature | hoch | [die Lesewege fuer elf Kacheln](laufend_codex/quer-c-0422-die-lesewege-fuer-elf-kacheln.md) | laeuft (codex) | — | — |
+| `C-422` | feature | hoch | [die Lesewege fuer elf Kacheln](erledigt/quer-c-0422-die-lesewege-fuer-elf-kacheln.md) | erledigt | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -578,7 +577,7 @@
 | `G-358` | befund | mittel | [62 Vermerke ohne Grund](erledigt/quer-g-0358-62-vermerke-ohne-grund.md) | erledigt | — | — |
 | `G-359` | befund | hoch | [1.343 Mockup-Elemente fehlen in der UI](erledigt/quer-g-0359-1343-mockup-elemente-fehlen-in-der-ui.md) | erledigt | — | C-417, C-418, G-360 |
 | `G-360` | feature | hoch | [coach, market und admin als eigene Apps](todos/quer-g-0360-coach-market-admin-als-eigene-apps.md) | offen | — | G-361, G-362 |
-| `G-363` | entscheidung | mittel | [wer schlaegt die naechste Phase vor?](laufend_codex/quer-g-0363-wer-schlaegt-die-naechste-phase-vor.md) | laeuft (codex) | — | — |
+| `G-363` | entscheidung | mittel | [wer schlaegt die naechste Phase vor?](erledigt/quer-g-0363-wer-schlaegt-die-naechste-phase-vor.md) | erledigt | — | — |
 | `G-365` | feature | hoch | [vier Schritte je Kachel](erledigt/quer-g-0365-vier-schritte-je-kachel.md) | erledigt | — | C-421, C-423, G-366, G-369, G-370 |
 | `G-368` | befund | mittel | [Attrappen-Vermerke mit falschem Grund](todos/quer-g-0368-attrappen-vermerke-mit-falschem-grund.md) | offen | — | — |
 | `G-370` | befund | mittel | [Unternavigationen vollstaendig pruefen](erledigt/quer-g-0370-unternavigationen-vollstaendig-pruefen.md) | erledigt | — | — |

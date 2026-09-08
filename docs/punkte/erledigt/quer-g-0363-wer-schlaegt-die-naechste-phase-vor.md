@@ -9,6 +9,8 @@ kind_von: G-357
 entscheidung: E-54
 agent: codex
 beauftragt: 2026-09-07
+erledigt: 2026-09-08
+commit: d40e847e
 beruehrt:
   tabellen: [goals.goal_phases]
 zahlen:
@@ -58,3 +60,20 @@ liefert Kandidaten, das Modell waehlt aus.**
 
 **Mitbeauftragt mit C-422 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-08, mit C-422 abgenommen: Vorschlag und Antwort.**
+
+`[cmd]` **`goals.phase_transition_recommendation`** — **die Regel
+schlaegt vor** (Kernprinzip 3: Rule-first).
+
+`[cmd]` **Und `phase_transition_respond` mit
+`phase_transition_responses`** — **mehr als beauftragt.**
+
+`[read]` **Der Auftrag verlangte den Vorschlag, er hat die Antwort
+mitgebaut** — **E-69: Tom entscheidet.**
+
+`[read]` **Damit ist nachvollziehbar, wann jemand einem Vorschlag
+gefolgt ist und wann nicht** — **die Grundlage, um spaeter zu
+messen, ob die Regel taugt.**
