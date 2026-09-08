@@ -7,6 +7,8 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: A-71
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   dateien:
     - apps/web/src/app/v2/recovery/modalitaeten-kachel.tsx
@@ -43,3 +45,8 @@ daneben.**
 
 `[read]` **Und ob dieselbe Ursache vorliegt:** **eine Komponente
 ohne Prop gerufen, waehrend die Funktion daneben steht.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-370 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.

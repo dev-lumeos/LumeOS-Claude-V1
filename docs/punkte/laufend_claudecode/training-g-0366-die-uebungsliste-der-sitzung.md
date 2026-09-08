@@ -7,6 +7,8 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: G-365
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-07
 beruehrt:
   dateien:
     - apps/web/src/app/v2/training/ansicht.tsx
@@ -36,3 +38,8 @@ durchgereicht.**
 
 `[read]` **Und pruefen, ob weitere Ladefunktionen ungenutzt
 danebenliegen** — `[cmd]` **das Muster kam am 07.09. dreimal vor.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-370 am 2026-09-07.** Der Auftragstext
+und der Bericht stehen dort.
