@@ -2842,6 +2842,26 @@ DELETE FROM recovery.score_contributions WHERE user_id IN (${userIds});
 DELETE FROM recovery.stress_logs WHERE user_id IN (${userIds});
 DELETE FROM recovery.recovery_protocols WHERE user_id IN (${userIds});
 DELETE FROM recovery.overtraining_alerts WHERE user_id IN (${userIds});
+DELETE FROM medical.health_events WHERE user_id IN (${userIds});
+DELETE FROM medical.appointments WHERE user_id IN (${userIds});
+-- C-429: Der Nachweisbestand liegt beim separaten Pruefkonto, nicht bei
+-- einem der drei grossen Seedprofile.
+DELETE FROM medical.health_events
+WHERE id IN ('c4290000-0000-0000-0000-000000000031'::uuid,
+             'c4290000-0000-0000-0000-000000000032'::uuid,
+             'c4290000-0000-0000-0000-000000000033'::uuid);
+DELETE FROM medical.appointments
+WHERE id = 'c4290000-0000-0000-0000-000000000021'::uuid;
+DELETE FROM storage.objects
+WHERE bucket_id = 'medical-originals'
+  AND name = '20000000-0000-0000-0000-000000000901/c4290000-0000-0000-0000-000000000011/c429-originalbefund.pdf';
+DELETE FROM medical.lab_reports
+WHERE id = 'c4290000-0000-0000-0000-000000000011'::uuid;
+DELETE FROM storage.objects
+WHERE bucket_id = 'medical-originals'
+  AND split_part(name, '/', 1) IN (
+    SELECT id::text FROM auth.users WHERE id IN (${userIds})
+  );
 DELETE FROM medical.user_conditions WHERE user_id IN (${userIds});
 DELETE FROM medical.user_medications WHERE user_id IN (${userIds});
 DELETE FROM medical.lab_result_values WHERE user_id IN (${userIds});
@@ -3053,6 +3073,14 @@ WHERE stack_id = 'c4230000-0000-0000-0000-000000000001'::uuid;
 INSERT INTO supplements.stack_items (stack_id, supplement_id, dose, dose_unit, timing, frequency, sort_order)
 SELECT 'c4230000-0000-0000-0000-000000000001'::uuid, s.id, 200, 'mg', 'morning', 'daily', 0
 FROM supplements.supplements s WHERE s.is_active ORDER BY s.id LIMIT 1;
+
+-- G-374/E-72: Ein Zyklus ist erst mit allen drei zusammengehoerigen Werten
+-- lesbar. Bestehende NULL bleiben bewusst "kein Zyklus", keine erfundene Zeit.
+UPDATE supplements.stack_items
+SET frequency = 'cycling',
+    cycling = '{"on_weeks":8,"off_weeks":4,"started_on":"2026-09-08"}'::jsonb
+WHERE stack_id = 'c4230000-0000-0000-0000-000000000001'::uuid
+  AND sort_order = 0;
 
 INSERT INTO supplements.stack_templates (id, name_de, description_de, goal, source, is_public, sort_order)
 VALUES
@@ -3801,6 +3829,32 @@ INSERT INTO medical.lab_reports (
 SELECT id, user_id, report_date, report_time, lab_name, title, source, notes
 FROM test_medical_lab_reports;
 
+-- C-429/E-72: Ein Original ist ein privates Storage-Objekt, nicht nur ein
+-- file_ref-Text. Der Seed benutzt denselben Upload-then-attach-Vertrag wie
+-- die Anwendung; die 241 Byte sind bewusst ein harmloser Nachweiswert.
+INSERT INTO medical.lab_reports (id, user_id, report_date, report_time, lab_name, title, source, source_detail, notes)
+VALUES (
+  'c4290000-0000-0000-0000-000000000011'::uuid,
+  '20000000-0000-0000-0000-000000000901'::uuid,
+  DATE '${relDate('2026-08-18')}', TIME '09:20', 'C-429 Testlabor',
+  'C-429 Originalbefund', 'seed', 'C-429 Testdaten: test-user Original mit Herkunft',
+  'C-429 E-72 Nachweisbestand'
+);
+SET LOCAL ROLE authenticated;
+SET LOCAL "request.jwt.claim.sub" = '20000000-0000-0000-0000-000000000901';
+INSERT INTO storage.objects (bucket_id, name, owner_id, metadata)
+VALUES (
+  'medical-originals',
+  '20000000-0000-0000-0000-000000000901/c4290000-0000-0000-0000-000000000011/c429-originalbefund.pdf',
+  '20000000-0000-0000-0000-000000000901',
+  '{"size":241,"mimetype":"application/pdf"}'::jsonb
+);
+SELECT medical.attach_lab_report_original(
+  'c4290000-0000-0000-0000-000000000011'::uuid,
+  '20000000-0000-0000-0000-000000000901/c4290000-0000-0000-0000-000000000011/c429-originalbefund.pdf'
+);
+RESET ROLE;
+
 CREATE TEMP TABLE test_medical_lab_values (
   report_id uuid NOT NULL,
   user_id uuid NOT NULL,
@@ -3908,6 +3962,37 @@ VALUES (
   'seed',
   'C-130 Testdaten, keine Krankengeschichte'
 );
+
+-- C-429/E-74: Diese drei Eintraege sind vom Nutzer festgehaltene Zitate mit
+-- Herkunft, keine medizinische Bewertung des Systems.
+INSERT INTO medical.appointments (
+  id, user_id, appointment_type, starts_at, time_zone, status, title, lab_report_id
+)
+VALUES (
+  'c4290000-0000-0000-0000-000000000021'::uuid,
+  '20000000-0000-0000-0000-000000000901'::uuid,
+  'labor',
+  '${relDate('2026-08-24')} 09:30:00+07'::timestamptz,
+  'Asia/Bangkok',
+  'scheduled',
+  'C-429 Kontrolltermin',
+  'c4290000-0000-0000-0000-000000000011'::uuid
+);
+
+INSERT INTO medical.health_events (
+  id, user_id, event_type, occurred_on, title, source_kind, source_actor,
+  source_recorded_at, source_lab_report_id
+)
+VALUES
+  ('c4290000-0000-0000-0000-000000000031'::uuid, '20000000-0000-0000-0000-000000000901'::uuid, 'diagnosis', DATE '${relDate('2024-10-12')}',
+   'Arztzitat: Kniearthrose', 'clinician', 'Dr. Beispiel', '${relDate('2024-10-12')} 10:00:00+07',
+   'c4290000-0000-0000-0000-000000000011'::uuid),
+  ('c4290000-0000-0000-0000-000000000032'::uuid, '20000000-0000-0000-0000-000000000901'::uuid, 'treatment', DATE '${relDate('2024-10-20')}',
+   'Arztzitat: Physiotherapie verordnet', 'clinician', 'Dr. Beispiel', '${relDate('2024-10-20')} 10:00:00+07',
+   'c4290000-0000-0000-0000-000000000011'::uuid),
+  ('c4290000-0000-0000-0000-000000000033'::uuid, '20000000-0000-0000-0000-000000000901'::uuid, 'operation', DATE '${relDate('2025-01-15')}',
+   'Arztzitat: Knieoperation dokumentiert', 'document', 'OP-Bericht', '${relDate('2025-01-15')} 10:00:00+07',
+   'c4290000-0000-0000-0000-000000000011'::uuid);
 
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '10000000-0000-0000-0000-000000000101', true);

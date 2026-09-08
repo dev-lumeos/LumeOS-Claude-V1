@@ -189,6 +189,44 @@ function installAuthStub(db: string): void {
     AS $$
       SELECT nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
     $$;
+    GRANT USAGE ON SCHEMA auth TO authenticated, service_role;
+    GRANT EXECUTE ON FUNCTION auth.uid() TO authenticated, service_role;
+  `)
+}
+
+// C-429: Storage ist im lokalen Supabase-Dienst an die laufende Datenbank
+// gebunden. Wegwerf-Datenbanken brauchen daher nur fuer Schema-, RLS- und
+// Referenztests das kleine Metadaten-Gegenstueck; es speichert keine Bytes.
+function installStorageStub(db: string): void {
+  sql(db, `
+    CREATE SCHEMA IF NOT EXISTS storage;
+    CREATE TABLE IF NOT EXISTS storage.buckets (
+      id text PRIMARY KEY,
+      name text NOT NULL UNIQUE,
+      public boolean NOT NULL DEFAULT false,
+      file_size_limit bigint,
+      allowed_mime_types text[]
+    );
+    CREATE TABLE IF NOT EXISTS storage.objects (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      bucket_id text NOT NULL REFERENCES storage.buckets(id) ON DELETE CASCADE,
+      name text NOT NULL,
+      owner_id text,
+      metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+      created_at timestamptz NOT NULL DEFAULT now(),
+      updated_at timestamptz NOT NULL DEFAULT now(),
+      UNIQUE (bucket_id, name)
+    );
+    CREATE OR REPLACE FUNCTION storage.foldername(p_name text)
+    RETURNS text[]
+    LANGUAGE sql
+    IMMUTABLE
+    AS $$ SELECT string_to_array(p_name, '/') $$;
+    GRANT USAGE ON SCHEMA storage TO authenticated, service_role;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON storage.objects TO authenticated;
+    GRANT ALL ON storage.buckets, storage.objects TO service_role;
+    ALTER TABLE storage.buckets ENABLE ROW LEVEL SECURITY;
+    ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
   `)
 }
 
@@ -250,6 +288,7 @@ try {
   createDatabase(args.database)
   created = true
   installAuthStub(args.database)
+  installStorageStub(args.database)
   prepareImportFiles()
 
   for (const step of manifest.steps) {

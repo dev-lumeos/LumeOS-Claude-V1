@@ -5433,7 +5433,29 @@
     {"schema":"marketplace","name":"product_reviews","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
     {"schema":"marketplace","name":"promotion_slots","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
     {"schema":"marketplace","name":"fee_schedules","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
-    {"schema":"marketplace","name":"promotion_slot_catalog","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"}
+    {"schema":"marketplace","name":"promotion_slot_catalog","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
+    {
+      "schema": "medical",
+      "name": "appointments",
+      "schritt": "429_schema",
+      "rls": true,
+      "policies": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+      "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260908113000_c429_medical_documents_timeline.sql: eigene Termine sind voll bearbeitbar; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": ["id", "user_id", "appointment_type", "starts_at", "time_zone", "status", "title", "notes", "lab_report_id", "medication_id", "created_at", "updated_at"]
+    },
+    {
+      "schema": "medical",
+      "name": "health_events",
+      "schritt": "429_schema",
+      "rls": true,
+      "policies": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+      "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260908113000_c429_medical_documents_timeline.sql: eigene, herkunftspflichtige Nutzerzitate sind voll bearbeitbar; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": ["id", "user_id", "event_type", "occurred_on", "occurred_at", "title", "details", "source_kind", "source_actor", "source_recorded_at", "source_lab_report_id", "created_at", "updated_at"]
+    }
   ],
   "_fremde_funktionen": "GO-04: Funktionen ausserhalb nutrition. Dieselbe Luecke wie oben.",
   "fremde_funktionen": [
@@ -5598,6 +5620,21 @@
       "schritt": "142"
     },
     {
+      "schema": "medical",
+      "name": "attach_lab_report_original",
+      "schritt": "429_schema"
+    },
+    {
+      "schema": "medical",
+      "name": "appointments_validate_owner_links",
+      "schritt": "429_schema"
+    },
+    {
+      "schema": "medical",
+      "name": "health_events_validate_source_report",
+      "schritt": "429_schema"
+    },
+    {
       "schema": "coach",
       "name": "resolve_invite_user_id",
       "schritt": "155"
@@ -5744,6 +5781,16 @@
     }
   ],
   "fremde_sichten": [
+    {
+      "schema": "medical",
+      "name": "health_timeline",
+      "schritt": "429_schema",
+      "security_invoker": true,
+      "security_barrier": false,
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT"]},
+      "grants_herkunft": "20260908113000_c429_medical_documents_timeline.sql: security-invoker-Zeitachse aus eigenen Nutzerzitaten und Laborbefunden.",
+      "spalten": ["user_id", "entry_id", "entry_type", "occurred_on", "occurred_at", "title", "details", "source_kind", "source_actor", "source_recorded_at", "source_lab_report_id", "created_at"]
+    },
     {
       "schema": "public",
       "name": "muscle_training_loads",

@@ -1579,6 +1579,27 @@
       "depends_on": [
         "419_schema"
       ]
+    },
+    {
+      "id": "429_schema",
+      "path": "supabase/migrations/20260908113000_c429_medical_documents_timeline.sql",
+      "kind": "sql",
+      "creates": "C-429/E-74: privater Medical-Originale-Bucket, Termine, zitierte Ereignisse und abgeleitete Medical-Zeitachse",
+      "depends_on": [
+        "140",
+        "145",
+        "auth_stub"
+      ]
+    },
+    {
+      "id": "430_schema",
+      "path": "supabase/migrations/20260908120000_c430_activity_stream_i18n_and_g374_cycling.sql",
+      "kind": "sql",
+      "creates": "C-430/G-374: dreisprachiger public.activity_stream und vollstaendiger cycling-JSONB-Vertrag mit started_on",
+      "depends_on": [
+        "412",
+        "130"
+      ]
     }
   ]
 }

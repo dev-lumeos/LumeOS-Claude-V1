@@ -33,7 +33,21 @@ SELECT
     WHEN 'dinner' THEN 'Abendessen'
     WHEN 'snack' THEN 'Snack'
     ELSE m.meal_type
-  END AS summary_de
+  END AS summary_de,
+  'Meal logged: ' || CASE m.meal_type
+    WHEN 'breakfast' THEN 'Breakfast'
+    WHEN 'lunch' THEN 'Lunch'
+    WHEN 'dinner' THEN 'Dinner'
+    WHEN 'snack' THEN 'Snack'
+    ELSE m.meal_type
+  END AS summary_en,
+  'บันทึกมื้ออาหาร: ' || CASE m.meal_type
+    WHEN 'breakfast' THEN 'อาหารเช้า'
+    WHEN 'lunch' THEN 'อาหารกลางวัน'
+    WHEN 'dinner' THEN 'อาหารเย็น'
+    WHEN 'snack' THEN 'ของว่าง'
+    ELSE m.meal_type
+  END AS summary_th
 FROM nutrition.meals m
 
 UNION ALL
@@ -46,7 +60,9 @@ SELECT
   'nutrition'::text AS module,
   'water'::text AS event_type,
   w.id AS event_id,
-  'Wasser erfasst: ' || w.amount_ml::text || ' ml' AS summary_de
+  'Wasser erfasst: ' || w.amount_ml::text || ' ml' AS summary_de,
+  'Water logged: ' || w.amount_ml::text || ' ml' AS summary_en,
+  'บันทึกน้ำ: ' || w.amount_ml::text || ' มล.' AS summary_th
 FROM nutrition.water_logs w
 
 UNION ALL
@@ -63,7 +79,17 @@ SELECT
     WHEN 'taken' THEN 'Supplement eingenommen: '
     WHEN 'skipped' THEN 'Supplement ausgelassen: '
     ELSE 'Supplement erfasst: '
-  END || il.supplement_name_snapshot AS summary_de
+  END || il.supplement_name_snapshot AS summary_de,
+  CASE il.status
+    WHEN 'taken' THEN 'Supplement taken: '
+    WHEN 'skipped' THEN 'Supplement skipped: '
+    ELSE 'Supplement logged: '
+  END || il.supplement_name_snapshot AS summary_en,
+  CASE il.status
+    WHEN 'taken' THEN 'รับประทานอาหารเสริม: '
+    WHEN 'skipped' THEN 'ข้ามอาหารเสริม: '
+    ELSE 'บันทึกอาหารเสริม: '
+  END || il.supplement_name_snapshot AS summary_th
 FROM supplements.intake_logs il
 
 UNION ALL
@@ -76,7 +102,9 @@ SELECT
   'training'::text AS module,
   'workout_session'::text AS event_type,
   ws.id AS event_id,
-  'Trainingseinheit: ' || COALESCE(NULLIF(btrim(ws.name), ''), 'ohne Titel') AS summary_de
+  'Trainingseinheit: ' || COALESCE(NULLIF(btrim(ws.name), ''), 'ohne Titel') AS summary_de,
+  'Workout: ' || COALESCE(NULLIF(btrim(ws.name), ''), 'untitled') AS summary_en,
+  'การฝึก: ' || COALESCE(NULLIF(btrim(ws.name), ''), 'ไม่มีชื่อ') AS summary_th
 FROM training.workout_sessions ws
 
 UNION ALL
@@ -90,7 +118,9 @@ SELECT
   'recovery'::text AS module,
   'recovery_checkin'::text AS event_type,
   rc.id AS event_id,
-  'Recovery-Check-in erfasst'::text AS summary_de
+  'Recovery-Check-in erfasst'::text AS summary_de,
+  'Recovery check-in logged'::text AS summary_en,
+  'บันทึกการเช็กอินการฟื้นตัว'::text AS summary_th
 FROM recovery.checkins rc
 
 UNION ALL
@@ -108,12 +138,22 @@ SELECT
     NULLIF(btrim(lr.title), ''),
     NULLIF(btrim(lr.lab_name), ''),
     'ohne Titel'
-  ) AS summary_de
+  ) AS summary_de,
+  'Lab report: ' || COALESCE(
+    NULLIF(btrim(lr.title), ''),
+    NULLIF(btrim(lr.lab_name), ''),
+    'untitled'
+  ) AS summary_en,
+  'รายงานผลแล็บ: ' || COALESCE(
+    NULLIF(btrim(lr.title), ''),
+    NULLIF(btrim(lr.lab_name), ''),
+    'ไม่มีชื่อ'
+  ) AS summary_th
 FROM medical.lab_reports lr;
 
 GRANT SELECT ON public.activity_stream TO authenticated, service_role;
 
 COMMENT ON VIEW public.activity_stream IS
-  'C-414/G-152/E-52: Querschnittssicht im Plattform-Schema public ueber Mahlzeiten, Wasser, Supplements, Training, Recovery und Medical. event_date und event_time sind die fachlichen Zeitwerte; occurred_at bleibt bei fehlender Uhrzeit NULL statt eine Uhrzeit zu erfinden. C-412: Leere Zeitraeume beschreiben nur den Bestand, keine Einnahme- oder Aktivitaetsaussage.';
+  'C-414/C-430/G-152/E-52: Dreisprachige Querschnittssicht im Plattform-Schema public ueber Mahlzeiten, Wasser, Supplements, Training, Recovery und Medical. event_date und event_time sind die fachlichen Zeitwerte; occurred_at bleibt bei fehlender Uhrzeit NULL statt eine Uhrzeit zu erfinden. C-412: Leere Zeitraeume beschreiben nur den Bestand, keine Einnahme- oder Aktivitaetsaussage.';
 
 COMMIT;

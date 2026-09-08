@@ -59,6 +59,22 @@ deleted_recovery_checkins AS (
   WHERE user_id IN (${ids})
   RETURNING 1
 ),
+deleted_medical_health_events AS (
+  DELETE FROM medical.health_events
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
+deleted_medical_appointments AS (
+  DELETE FROM medical.appointments
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
+deleted_medical_originals AS (
+  DELETE FROM storage.objects
+  WHERE bucket_id = 'medical-originals'
+    AND split_part(name, '/', 1) IN (SELECT id::text FROM auth.users WHERE id IN (${ids}))
+  RETURNING 1
+),
 deleted_medical_conditions AS (
   DELETE FROM medical.user_conditions
   WHERE user_id IN (${ids})

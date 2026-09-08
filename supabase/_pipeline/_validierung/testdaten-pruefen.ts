@@ -10,6 +10,7 @@ const IDS = [
   '10000000-0000-0000-0000-000000000103',
 ]
 const COACH_ID = '10000000-0000-0000-0000-000000000901'
+const TEST_USER_ID = '20000000-0000-0000-0000-000000000901'
 const IDS_SQL = IDS.map(id => `'${id}'`).join(', ')
 const SEP = '\u0001'
 const ANCHOR_DATE = '2026-08-02'
@@ -137,6 +138,13 @@ const medicalRanges = numberScalar(`SELECT count(*) FROM medical.biomarker_refer
 const medicalAliases = numberScalar(`SELECT count(*) FROM medical.biomarker_aliases;`)
 const medicalReports = numberScalar(`SELECT count(*) FROM medical.lab_reports WHERE user_id IN (${IDS_SQL});`)
 const medicalValues = numberScalar(`SELECT count(*) FROM medical.lab_result_values WHERE user_id IN (${IDS_SQL});`)
+const medicalAppointments = numberScalar(`SELECT count(*) FROM medical.appointments WHERE user_id = '${TEST_USER_ID}'::uuid;`)
+const medicalHealthEvents = numberScalar(`SELECT count(*) FROM medical.health_events WHERE user_id = '${TEST_USER_ID}'::uuid;`)
+const medicalTimeline = numberScalar(`SELECT count(*) FROM medical.health_timeline WHERE user_id = '${TEST_USER_ID}'::uuid;`)
+const medicalOriginals = numberScalar(`
+  SELECT count(*) FROM storage.objects
+  WHERE bucket_id = 'medical-originals'
+    AND split_part(name, '/', 1) = '${TEST_USER_ID}';`)
 const medicationActiveSubstances = numberScalar(`SELECT count(*) FROM medical.medication_active_substances;`)
 const medicationFormulations = numberScalar(`SELECT count(*) FROM medical.medication_formulations;`)
 const medicationProducts = numberScalar(`SELECT count(*) FROM medical.medication_products;`)
@@ -160,6 +168,12 @@ const supplementStackItems = numberScalar(`
   JOIN supplements.user_stacks us ON us.id = si.stack_id
   WHERE us.user_id IN (${IDS_SQL});`)
 const supplementIntakeLogs = numberScalar(`SELECT count(*) FROM supplements.intake_logs WHERE user_id IN (${IDS_SQL});`)
+const supplementCyclingStarted = numberScalar(`
+  SELECT count(*) FROM supplements.stack_items si
+  JOIN supplements.user_stacks us ON us.id = si.stack_id
+  WHERE us.user_id IN (${IDS_SQL})
+    AND si.cycling ? 'started_on'
+    AND si.cycling ->> 'started_on' = '2026-09-08';`)
 const coachPermissions = numberScalar(`SELECT count(*) FROM coach.client_permissions WHERE client_id IN (${IDS_SQL});`)
 const coachAutonomy = numberScalar(`SELECT count(*) FROM coach.client_autonomy WHERE client_id IN (${IDS_SQL});`)
 const coachPendingActions = numberScalar(`SELECT count(*) FROM coach.pending_actions WHERE client_id IN (${IDS_SQL});`)
@@ -234,6 +248,10 @@ if (MODE === 'clean') {
   if (recoveryCheckins !== 0) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet 0`)
   if (medicalReports !== 0) errors.push(`medical.lab_reports: ${medicalReports}, erwartet 0`)
   if (medicalValues !== 0) errors.push(`medical.lab_result_values: ${medicalValues}, erwartet 0`)
+  if (medicalAppointments !== 0) errors.push(`medical.appointments: ${medicalAppointments}, erwartet 0`)
+  if (medicalHealthEvents !== 0) errors.push(`medical.health_events: ${medicalHealthEvents}, erwartet 0`)
+  if (medicalTimeline !== 0) errors.push(`medical.health_timeline: ${medicalTimeline}, erwartet 0`)
+  if (medicalOriginals !== 0) errors.push(`storage.objects medical-originals: ${medicalOriginals}, erwartet 0`)
   if (userMedications !== 0) errors.push(`medical.user_medications: ${userMedications}, erwartet 0`)
   if (userConditions !== 0) errors.push(`medical.user_conditions: ${userConditions}, erwartet 0`)
   if (medicalCatalog !== 11676) errors.push(`medical.biomarker_catalog: ${medicalCatalog}, erwartet 11676`)
@@ -245,6 +263,7 @@ if (MODE === 'clean') {
   if (supplementStacks !== 0) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 0`)
   if (supplementStackItems !== 0) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 0`)
   if (supplementIntakeLogs !== 0) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 0`)
+  if (supplementCyclingStarted !== 0) errors.push(`supplements.stack_items cycling.started_on: ${supplementCyclingStarted}, erwartet 0`)
   if (coachPermissions !== 0) errors.push(`coach.client_permissions: ${coachPermissions}, erwartet 0`)
   if (coachAutonomy !== 0) errors.push(`coach.client_autonomy: ${coachAutonomy}, erwartet 0`)
   if (coachPendingActions !== 0) errors.push(`coach.pending_actions: ${coachPendingActions}, erwartet 0`)
@@ -401,6 +420,10 @@ if (MODE === 'clean') {
   if (medicalAliases < 292) errors.push(`medical.biomarker_aliases: ${medicalAliases}, erwartet mindestens 292`)
   if (medicalReports !== 5) errors.push(`medical.lab_reports: ${medicalReports}, erwartet 5`)
   if (medicalValues !== 140) errors.push(`medical.lab_result_values: ${medicalValues}, erwartet 140`)
+  if (medicalAppointments !== 1) errors.push(`medical.appointments: ${medicalAppointments}, erwartet 1`)
+  if (medicalHealthEvents !== 3) errors.push(`medical.health_events: ${medicalHealthEvents}, erwartet 3`)
+  if (medicalTimeline !== 4) errors.push(`medical.health_timeline: ${medicalTimeline}, erwartet 4 (Originalbefund + 3 Zitate) auf test-user`)
+  if (medicalOriginals !== 1) errors.push(`storage.objects medical-originals: ${medicalOriginals}, erwartet 1`)
   if (medicationActiveSubstances < 56) errors.push(`medical.medication_active_substances: ${medicationActiveSubstances}, erwartet mindestens 56`)
   if (medicationFormulations < 119) errors.push(`medical.medication_formulations: ${medicationFormulations}, erwartet mindestens 119`)
   if (medicationProducts < 124) errors.push(`medical.medication_products: ${medicationProducts}, erwartet mindestens 124`)
@@ -415,6 +438,7 @@ if (MODE === 'clean') {
   if (supplementStacks !== 1) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 1`)
   if (supplementStackItems !== 4) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 4`)
   if (supplementIntakeLogs !== 360) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 360`)
+  if (supplementCyclingStarted !== 1) errors.push(`supplements.stack_items cycling.started_on: ${supplementCyclingStarted}, erwartet 1`)
   // F-07/C-156: Der Seed-Basisbestand muss vorhanden sein; stabile
   // coach@-Portalbeziehungen duerfen zusaetzlich danebenliegen.
   if (coachPermissions < 2) errors.push(`coach.client_permissions: ${coachPermissions}, erwartet mindestens 2`)
@@ -1418,7 +1442,9 @@ if (MODE === 'clean') {
   console.log(`  Training RIR/PR-Saetze/PR-Uebungen: ${trainingSetsWithRir}/${trainingPrSets}/${trainingPrExercises}`)
   console.log(`  Recovery Check-ins/Scores/Modalitaeten: ${recoveryCheckins}/${recoveryScores}/${recoveryModalities}`)
   console.log(`  Medical Katalog/Bereiche/Aliase/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalAliases}/${medicalReports}/${medicalValues}`)
+  console.log(`  Medical Originale/Termine/Zitate/Zeitachse: ${medicalOriginals}/${medicalAppointments}/${medicalHealthEvents}/${medicalTimeline}`)
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
+  console.log(`  Supplements Cycling mit started_on: ${supplementCyclingStarted}`)
   console.log(`  Supplements Substanzaliase/LumeOS-Kimi-Treffer: ${substanceAliases}/${substanceLocalKimiMatches}`)
   console.log(`  Supplements Regeln warning/gap/medication: ${ruleWarning}/${ruleGap}/${ruleMedication}`)
   console.log(`  Supplements Compliance 30d: ${supplementCompliance30d}%`)
