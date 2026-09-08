@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
-| `laufend_codex` | 1 |
+| `todos` | 207 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 333 |
-| **gesamt** | **544** |
+| `erledigt` | 334 |
+| **gesamt** | **545** |
 
 ## medical — 46
 
@@ -20,7 +20,7 @@
 | `C-85` | befund | mittel | [Kurznamen fehlen bei 11 von 35](todos/medical-c-0085-kurznamen-fehlen-bei-11-von-35.md) | offen | — | — |
 | `C-91` | feature | mittel | [Die Spec nennt LOINC-Codes, die nicht die ueblichen sind](todos/medical-c-0091-die-spec-nennt-loinc-codes-die-nicht-die-ueblichen-sind.md) | offen | — | — |
 | `C-92` | befund | mittel | [Die Spec verwechselt Marker](todos/medical-c-0092-die-spec-verwechselt-marker.md) | offen | — | — |
-| `C-136` | befund | mittel | [Medikamente und Conditions brauchen die Coach-Freigabeschicht](todos/medical-c-0136-medikamente-und-conditions-brauchen-die-coach-freigabeschicht.md) | offen | — | — |
+| `C-136` | befund | mittel | [Medikamente und Conditions brauchen die Coach-Freigabeschicht](laufend_codex/medical-c-0136-medikamente-und-conditions-brauchen-die-coach-freigabeschicht.md) | laeuft (codex) | — | — |
 | `C-171` | befund | mittel | [Medical — neun Konstanten ohne Tabelle](todos/medical-c-0171-medical-neun-konstanten-ohne-tabelle.md) | offen | — | — |
 | `C-176` | befund | mittel | [`biomarkerDetails.ts` im Vorgaengerrepo — 121 KB](todos/medical-c-0176-biomarkerdetails-ts-im-vorgaengerrepo-121-kb.md) | offen | — | — |
 | `C-178` | messung | mittel | [Prolactin und ApoB fehlen dem Health score](todos/medical-c-0178-prolactin-und-apob-fehlen-dem-health-score.md) | offen | — | — |
@@ -429,13 +429,14 @@
 | `G-367` | feature | mittel | [Stunden und Saetze je Muskel](erledigt/recovery-g-0367-per-muscle-stunden-und-saetze.md) | erledigt | — | — |
 | `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](erledigt/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | erledigt | — | — |
 
-## goals — 8
+## goals — 9
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-06` | befund | mittel | [WP-05 erstes Mock-Modul echt machen](todos/goals-c-0006-wp-05-erstes-mock-modul-echt-machen.md) | offen | — | — |
 | `C-425` | befund | mittel | [die Vorgabe von `priority` faellt durch den CHECK](erledigt/goals-c-0425-die-vorgabe-von-priority-faellt-durch-den-check.md) | erledigt | — | C-432 |
-| `C-432` | feature | mittel | [der freie Platz fuer ein neues Ziel](laufend_codex/goals-c-0432-der-freie-platz-fuer-ein-neues-ziel.md) | laeuft (codex) | — | — |
+| `C-432` | feature | mittel | [der freie Platz fuer ein neues Ziel](erledigt/goals-c-0432-der-freie-platz-fuer-ein-neues-ziel.md) | erledigt | — | C-433 |
+| `C-433` | feature | mittel | [C-432 einspielen](laufend_codex/goals-c-0433-c-432-einspielen.md) | laeuft (codex) | — | — |
 | `E-04` | blocker | hoch | [Alte `public`-Tabellen nach `legacy` verschieben](erledigt/goals-e-0004-alte-public-tabellen-nach-legacy-verschieben.md) | erledigt | — | — |
 | `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](erledigt/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | erledigt | — | — |
 | `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — | — |

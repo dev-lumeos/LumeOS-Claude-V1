@@ -8,6 +8,8 @@ braucht: []
 kind_von: C-130
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: ["coach.client_permissions"]
   dateien: []
@@ -41,3 +43,8 @@ zahlen: null
   *„Medizinische Daten verschluesselt gespeichert"* — **das ist bei
   `lab_result_values` bereits nicht umgesetzt**, hier also kein neuer
   Rueckstand, aber ein groesserer.
+
+## Auftrag
+
+**Mitbeauftragt mit C-433 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.
