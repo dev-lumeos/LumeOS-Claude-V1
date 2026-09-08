@@ -63,7 +63,8 @@
     "uhrzeitFehlt": "ohne Uhrzeit",
     "tagebuchNichtLesbar": "Tagebuch nicht lesbar",
     "zucker": "Zucker",
-    "kcalDarueber": "{menge} kcal darueber"
+    "kcalDarueber": "{menge} kcal darueber",
+    "gDarueber": "{menge} g darueber"
   },
   "Supplements": {
     "titel": "Supplements",

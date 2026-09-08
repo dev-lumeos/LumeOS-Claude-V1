@@ -432,7 +432,14 @@ export async function TagebuchAnsicht({
                         </span>
                       </span>
                       <span className="v2-num v2-dim" style={{ fontSize: 10, marginLeft: 'auto' }}>
-                        {wert !== null && ziel !== null ? t('gLeft', { menge: Math.round(ziel - wert) }) : ''}
+                          {wert !== null && ziel !== null
+                            ? (() => {
+                                // `[read]` **Wie beim Ring: negativ heisst *darueber*.**
+                                const rest = Math.round(ziel - wert)
+                                const menge = Math.abs(rest)
+                                return rest < 0 ? t('gDarueber', { menge }) : t('gLeft', { menge })
+                              })()
+                            : ''}
                       </span>
                       <span className="v2-num" style={{
                         fontSize: 11, width: 34, textAlign: 'right',

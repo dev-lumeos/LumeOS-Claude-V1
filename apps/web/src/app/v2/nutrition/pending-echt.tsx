@@ -120,18 +120,30 @@ export function NutritionPendingEcht({
                 width: 3, alignSelf: 'stretch', background: FARBE[lage],
                 borderRadius: 2,
               }} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 12.5, fontWeight: 500 }}>{titelVon(a)}</div>
-                {LAGE_TEXT[lage] && (
-                  <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 2 }}>
-                    {LAGE_TEXT[lage]}
+                {/* `[cmd]` **Tom, 2026-09-08: die Karte brach Wort fuer
+                    Wort um.** `[read]` **Vier Elemente nebeneinander -
+                    Balken, Text, Frist, Pille - passen in die schmale
+                    rechte Spalte nicht.** `[read]` **Zwei Zeilen statt
+                    vier Spalten.** */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                    <span style={{ fontSize: 12.5, fontWeight: 500, minWidth: 0 }}>
+                      {titelVon(a)}
+                    </span>
+                    <span style={{ marginLeft: 'auto', flexShrink: 0 }}>
+                      <Pill variant={PILLE[lage]}>{LAGE_LABEL[lage]}</Pill>
+                    </span>
                   </div>
-                )}
-              </div>
-              <span className="v2-dim v2-num" style={{ fontSize: 9.5 }}>
-                {fristSatz(a, zeit)}
-              </span>
-              <Pill variant={PILLE[lage]}>{LAGE_LABEL[lage]}</Pill>
+                  <div className="v2-dim" style={{
+                    fontSize: 10.5, marginTop: 3,
+                    display: 'flex', gap: 8, flexWrap: 'wrap',
+                  }}>
+                    {LAGE_TEXT[lage] && <span>{LAGE_TEXT[lage]}</span>}
+                    <span className="v2-num" style={{ fontSize: 9.5 }}>
+                      {fristSatz(a, zeit)}
+                    </span>
+                  </div>
+                </div>
             </div>
           ))}
         </div>

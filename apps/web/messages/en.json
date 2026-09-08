@@ -63,7 +63,8 @@
     "uhrzeitFehlt": "no time",
     "tagebuchNichtLesbar": "Diary not readable",
     "zucker": "Sugar",
-    "kcalDarueber": "{menge} kcal over"
+    "kcalDarueber": "{menge} kcal over",
+    "gDarueber": "{menge} g over"
   },
   "Supplements": {
     "titel": "Supplements",
