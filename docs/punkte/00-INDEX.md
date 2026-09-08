@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 209 |
-| `laufend_codex` | 3 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 318 |
+| `erledigt` | 320 |
 | **gesamt** | **531** |
 
 ## medical — 43
@@ -451,7 +451,7 @@
 | `C-173` | befund | mittel | [`MARKETPLACE_PRODUCTS` traegt `inStack` und `evidence`](erledigt/coach-c-0173-marketplace-products-traegt-instack-und-evidence.md) | erledigt | — | — |
 | `C-220` | befund | mittel | [`buddy` — 0 von 16 Tabellen](todos/coach-c-0220-buddy-0-von-16-tabellen.md) | offen | — | — |
 | `C-268` | feature | mittel | [Beim Einladen gibt es keine Namensaufloesung](laufend_codex/coach-c-0268-beim-einladen-gibt-es-keine-namensaufloesung.md) | laeuft (codex) | — | — |
-| `C-269` | feature | mittel | [Eine Einladung laesst sich nicht zuruecknehmen](laufend_codex/coach-c-0269-eine-einladung-laesst-sich-nicht-zuruecknehmen.md) | laeuft (codex) | — | — |
+| `C-269` | feature | mittel | [Eine Einladung laesst sich nicht zuruecknehmen](erledigt/coach-c-0269-eine-einladung-laesst-sich-nicht-zuruecknehmen.md) | erledigt | — | — |
 | `C-318` | befund | hoch | [ADR-Coach-Permissions weicht von der Umsetzung ab](erledigt/coach-c-0318-adr-coach-permissions-weicht-von-der-umsetzung-ab.md) | erledigt | — | — |
 | `C-358` | befund | mittel | [abgelaufene Aktionen bleiben `pending`](erledigt/coach-c-0358-abgelaufene-aktionen-bleiben-pending.md) | erledigt | — | — |
 | `C-362` | feature | mittel | [das Consent-Log ist beschrieben und nicht gebaut](erledigt/coach-c-0362-das-consent-log-ist-beschrieben-und-nicht-gebaut.md) | erledigt | — | — |
@@ -465,7 +465,7 @@
 | `G-244` | befund | mittel | [die rechten Kacheln im Human-Coach-Reiter sind Attrappe](todos/coach-g-0244-die-rechten-kacheln-im-human-coach-reiter-sind-attrappe.md) | offen | — | — |
 | `G-277` | befund | hoch | [der Rechte-Reiter nennt einen Grund, den es nicht gibt](erledigt/coach-g-0277-der-rechte-reiter-nennt-einen-grund-den-es-nicht-gibt.md) | erledigt | — | G-280 |
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
-| `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](laufend_codex/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | laeuft (codex) | — | — |
+| `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](erledigt/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | erledigt | — | — |
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | — |
 
 ## quer — 115

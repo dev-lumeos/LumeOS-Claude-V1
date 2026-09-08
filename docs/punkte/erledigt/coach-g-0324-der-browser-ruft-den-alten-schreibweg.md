@@ -9,6 +9,8 @@ kind_von: C-381
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 0e8cdc8f
 beruehrt:
   tabellen: [coach.pending_actions]
 zahlen:
@@ -191,4 +193,48 @@ Vollkette mit **163 Schritten plus Abschlusspruefung in 299,6 Sekunden**:
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator.**
+
+    A1  alt: direkter pending_actions.update aus dem Browser
+        neu: coach.bestaetige_aktion / lehne_aktion_ab per RPC
+    A2  C-268 -- die Frage war falsch gestellt, siehe dort
+    A3  invited -> withdrawn, withdrawn_at/by, Protokoll +1
+    A4  RLS: Aussenstehender sieht weder Aktion noch Beziehung
+        noch Protokoll. Direkter Update entzogen.
+    A5  Vollkette 163 Schritte, 299,6 s, Schema vollstaendig
+
+### A1 ist ein Sicherheitsfund
+
+`[cmd]` **Vorher schrieb der Browser direkt in `pending_actions`
+und setzte `confirmed_by` selbst.**
+
+`[read]` **Wer bestaetigt hat, kam aus dem Browser** — **das kann
+sich jeder ausdenken.**
+
+`[cmd]` **Jetzt zwei RPCs, und der direkte Update ist entzogen.**
+
+`[cmd]` **`00_MASTER_VISION.md`, Kernprinzip 5:** *,,No direct DB
+writes from UI."* `[read]` **Bei einer Coach-Freigabe ist das keine
+Empfehlung.**
+
+### C-269 — zuruecknehmen heisst nicht loeschen
+
+`[cmd]` **`invited -> withdrawn`, `withdrawn_at` und `withdrawn_by`
+gesetzt, `relationship_change_log` +1.**
+
+`[read]` **Dieselbe Machart wie `withdraw_stack_template`** (C-423)
+**und wie das Archivieren der Einkaufslisten** (E-64).
+
+`[read]` **Die Spur bleibt** — **man sieht, dass jemand eingeladen
+und zurueckgezogen hat.**
+
+### Nachgemessen
+
+`[cmd]` **Live auf `dev`: `bestaetige_aktion`,
+`withdraw_relationship_invite`, `withdrawn_at`, `withdrawn_by`.**
+
+`[cmd]` **`lehne_aktion_ab` fehlt noch** — **im Kettenschritt
+vorhanden, nicht eingespielt.**
+
+**Abgenommen, Einspielen beauftragt.**
+

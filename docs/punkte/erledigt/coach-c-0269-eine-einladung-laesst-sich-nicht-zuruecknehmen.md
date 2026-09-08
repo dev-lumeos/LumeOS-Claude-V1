@@ -10,6 +10,8 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 0e8cdc8f
 beruehrt:
   tabellen: []
   dateien: []
@@ -65,3 +67,16 @@ bestanden.**
 
 **Mitbeauftragt mit G-324 am 2026-09-08.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-08, mit G-324 abgenommen.**
+
+`[cmd]` **`coach.withdraw_relationship_invite`, `withdrawn_at` und
+`withdrawn_by` sind live.**
+
+`[cmd]` **`invited -> withdrawn`, `relationship_change_log` +1.**
+
+`[read]` **Zuruecknehmen heisst nicht loeschen** — **dieselbe
+Machart wie `withdraw_stack_template`** (C-423) **und das
+Archivieren der Einkaufslisten** (E-64).

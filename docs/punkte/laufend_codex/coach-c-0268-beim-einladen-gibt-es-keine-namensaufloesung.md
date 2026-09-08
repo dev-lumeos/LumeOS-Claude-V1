@@ -109,3 +109,41 @@ vorgelegt, die in der Spec steht** — **statt sie nachzulesen.**
 
 `[read]` **Nicht zu bauen: eine Suche nach dem Namen des
 Eingeladenen** — **den gibt es zum Zeitpunkt der Einladung nicht.**
+
+## Auftrag 2 — einspielen und den Coach-Namen mitgeben
+
+**Beauftragt am 2026-09-08.**
+
+### 1 · Einspielen
+
+`[cmd]` **Nachgemessen auf `dev`: `bestaetige_aktion` und
+`withdraw_relationship_invite` sind da, `lehne_aktion_ab` fehlt.**
+
+`[read]` **Vorher Sicherung nach `backup/`, wie bei C-421 bis
+C-424.**
+
+### 2 · Der Coach-Name in der Einladung
+
+`[cmd]` **`SPEC_08_IMPORT_PIPELINE.md:235`:**
+`sendInviteEmail(clientEmail, invite.token, getCoachName(coachId))`
+
+`[read]` **Der Eingeladene soll wissen, wer ihn einlaedt.**
+
+`[cmd]` **`display_name` steht im Coach-Profil** (SPEC_02:39,
+SPEC_06:37).
+
+`[read]` **Miss, ob er beim Einladen mitgeht** — **und wenn nicht,
+gib ihn mit.**
+
+### Abnahmebedingungen
+
+    A1  live: alle drei Funktionen auf dev, gemessen.
+    A2  Sicherung: Pfad und Groesse.
+    A3  eine Einladung erzeugt, der Coach-Name ist drin.
+        Belegt mit der Zeile.
+    A4  Vollkette laeuft durch. Schritte und Sekunden.
+
+### Was nicht zu bauen ist
+
+`[read]` **Keine Suche nach dem Namen des Eingeladenen** — **den
+gibt es zum Zeitpunkt der Einladung nicht.**
