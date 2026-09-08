@@ -256,3 +256,87 @@ export async function legeOriginalAb(
 
   return { pfad, groesse: datei.size }
 }
+
+/**
+ * Ein Original entfernen — G-381.
+ *
+ * `[cmd]` **Warum es das braucht:** ohne diesen Weg ist der Bucket
+ * eine Falle — hochladen ja, zuruecknehmen nie. `[cmd]` **Die
+ * Erlaubnis lag die ganze Zeit da:** `medical_originals_delete_own`
+ * gibt dem Eigentuemer das Recht, seit C-429. **Sie hatte nur keinen
+ * Aufrufer** (A-71).
+ *
+ * `[cmd]` **`storage.protect_delete` sperrt NICHT alles.** Gemessen
+ * in `pg_proc`: die Funktion prueft
+ * `current_setting('storage.allow_delete_query')` und laesst durch,
+ * was die Storage-API setzt. `[read]` **Sie richtet sich gegen das
+ * direkte `DELETE` per SQL, nicht gegen den gebauten Weg** — der
+ * Hinweis sagt es selbst: *„Use the Storage API instead."*
+ *
+ * `[read]` **Kein Dienstschluessel.** Er ist seit 2026-08-03
+ * absichtlich weg. Die Sitzung des Nutzers traegt das Recht selbst —
+ * mehr braucht es nicht, und mehr waere falsch.
+ *
+ * ══ Die Reihenfolge ist umgekehrt zum Ablegen ══════════════════════
+ *
+ * `[read]` **Beim Ablegen zuerst die Datei, dann der Verweis** — sonst
+ * gaebe es einen Verweis ohne Datei. **Beim Entfernen genau
+ * andersherum:** zuerst den Verweis loeschen, dann die Datei.
+ *
+ * `[cmd]` **Der Grund steht im Auftrag:** *ein Verweis auf ein
+ * geloeschtes Objekt ist schlimmer als keiner.* `[read]` **Bricht es
+ * nach dem ersten Schritt ab, bleibt eine verwaiste Datei** — die
+ * sieht niemand, und sie schadet nichts. **Andersherum bliebe ein
+ * Verweis ins Leere** — und der zeigt dem Nutzer einen Knopf, der
+ * jedes Mal scheitert.
+ */
+export async function entferneOriginal(
+  berichtId: string,
+): Promise<{ pfad: string }> {
+  const { client, userId } = await sitzung()
+
+  // `[read]` Den Pfad aus der eigenen Zeile holen, nicht vom Aufrufer
+  // entgegennehmen — sonst liesse sich ein fremder Pfad unterschieben.
+  // `eq('user_id')` ist die zweite Schranke neben dem Zeilenschutz.
+  const { data: zeile, error: leseFehler } = await client
+    .schema('medical')
+    .from('lab_reports')
+    .select('id, file_ref')
+    .eq('id', berichtId)
+    .eq('user_id', userId)
+    .maybeSingle()
+  if (leseFehler) throw new MedicalSchreibFehler('READ_FAILED', leseFehler.message)
+  if (!zeile) {
+    throw new MedicalSchreibFehler('NOT_FOUND', 'Kein eigener Befund mit dieser id.')
+  }
+  const pfad = (zeile as unknown as { file_ref: string | null }).file_ref
+  if (!pfad) {
+    throw new MedicalSchreibFehler('NO_FILE', 'An diesem Befund haengt keine Datei.')
+  }
+
+  // ── 1 · der Verweis ──────────────────────────────────────────────
+  //
+  // `[cmd]` **G-79: PostgREST meldet `ok` fuer ein Update, das der
+  // Zeilenschutz auf null Zeilen gefiltert hat.** Deshalb `select`
+  // und die Zeile zaehlen — sonst hiesse „geloescht" nur „nicht
+  // gescheitert".
+  const { data, error } = await client
+    .schema('medical')
+    .from('lab_reports')
+    .update({ file_ref: null })
+    .eq('id', berichtId)
+    .eq('user_id', userId)
+    .select('id')
+  if (error) throw new MedicalSchreibFehler('WRITE_FAILED', error.message)
+  if (!(data ?? []).length) {
+    throw new MedicalSchreibFehler('NOT_FOUND', 'Kein eigener Befund mit dieser id.')
+  }
+
+  // ── 2 · die Datei ────────────────────────────────────────────────
+  const { error: wegFehler } = await client.storage
+    .from('medical-originals')
+    .remove([pfad])
+  if (wegFehler) throw new MedicalSchreibFehler('DELETE_FAILED', wegFehler.message)
+
+  return { pfad }
+}

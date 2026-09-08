@@ -27,7 +27,7 @@ import {
 } from '../../../lib/medical/original-arten'
 import {
   ereignisAnlegen, terminAnlegen, terminAendern,
-  originalHochladen, originalOeffnen,
+  originalHochladen, originalOeffnen, originalEntfernen,
 } from './dokumente-aktionen'
 
 /** Die drei Arten aus `health_events_event_type_check`. */
@@ -95,6 +95,20 @@ export function MedVerlauf({ stand }: { stand: DokumenteStand }) {
   const [laeuft, setLaeuft] = React.useState(false)
   const [meldung, setMeldung] = React.useState<string | null>(null)
   const [filter, setFilter] = React.useState('alle')
+
+  // ══ G-381: Entfernen fragt einmal nach ══════════════════════
+  //
+  // `[read]` **Ein Original zu entfernen ist nicht umkehrbar** — die
+  // Datei ist danach weg, nicht in einem Papierkorb. **Also zwei
+  // Klicks:** der erste stellt scharf, der zweite fuehrt aus.
+  //
+  // `[read]` **Kein `confirm()`** — das ist ein Fenster des Browsers,
+  // das die Seite anhaelt. **Der Zustand steht hier**, ist sichtbar
+  // und laesst sich wieder verlassen.
+  //
+  // `[read]` **Es haelt die `id` des Befunds, nicht ein `boolean`** —
+  // sonst stuenden bei mehreren Zeilen alle gleichzeitig scharf.
+  const [entfernenScharf, setEntfernenScharf] = React.useState<string | null>(null)
 
   // ══ G-378: das Dateifeld steht AUSSERHALB der Liste ═════════
   //
@@ -394,6 +408,7 @@ export function MedVerlauf({ stand }: { stand: DokumenteStand }) {
                   </span>
                   {d.pfad
                     ? (
+                      <>
                       <button type="button" className="v2-btn v2-btn-sm"
                               disabled={laeuft}
                               onClick={() => void (async () => {
@@ -403,6 +418,35 @@ export function MedVerlauf({ stand }: { stand: DokumenteStand }) {
                               })()}>
                         Öffnen
                       </button>
+                      {/* `[read]` **G-381: der Gegenweg zum Hochladen.**
+                          Der erste Klick stellt scharf, der zweite
+                          entfernt. */}
+                      {entfernenScharf === d.id
+                        ? (
+                          <>
+                          <button type="button" className="v2-btn v2-btn-sm v2-neg"
+                                  disabled={laeuft}
+                                  onClick={() => {
+                                    setEntfernenScharf(null)
+                                    void tue(() => originalEntfernen(d.id))
+                                  }}>
+                            Wirklich entfernen
+                          </button>
+                          <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                                  disabled={laeuft}
+                                  onClick={() => setEntfernenScharf(null)}>
+                            Abbrechen
+                          </button>
+                          </>
+                        )
+                        : (
+                          <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                                  disabled={laeuft}
+                                  onClick={() => setEntfernenScharf(d.id)}>
+                            Entfernen
+                          </button>
+                        )}
+                      </>
                     )
                     : (
                       <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"

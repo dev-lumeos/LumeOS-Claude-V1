@@ -97,6 +97,28 @@ export async function originalHochladen(form: FormData): Promise<MedAntwort> {
 }
 
 /**
+ * Ein Original entfernen — G-381.
+ *
+ * `[read]` **Der Gegenweg zu `originalHochladen`.** Ohne ihn ist der
+ * Bucket eine Falle: hochladen ja, zuruecknehmen nie.
+ *
+ * `[read]` **Nur die `berichtId` geht hinein, kein Pfad** — der Pfad
+ * kommt aus der eigenen Zeile. **Ein Pfad vom Aufrufer waere eine
+ * Einladung**, einen fremden zu nennen.
+ */
+export async function originalEntfernen(berichtId: string): Promise<MedAntwort> {
+  try {
+    if (!berichtId) return { ok: false, fehler: 'Kein Befund gewaehlt.' }
+    const { entferneOriginal } = await import('../../../lib/medical/dokumente-write')
+    const r = await entferneOriginal(berichtId)
+    revalidatePath('/v2/medical')
+    return { ok: true, pfad: r.pfad }
+  } catch (f) {
+    return { ok: false, fehler: satz(f) }
+  }
+}
+
+/**
  * Eine zeitlich begrenzte URL zu einem Original holen — E-75.
  *
  * `[read]` **Sie entsteht beim Lesen und laeuft ab** — sie wird
