@@ -36,6 +36,9 @@ import { ladeSlots, ladeAktivPlanSlots }
 // G-345 / E-64: die Einkaufslisten.
 import { ladeEinkaufslisten }
   from '../../../lib/nutrition/einkaufsliste-lesen'
+// G-353: die eine Setup-Karte, die gerade dran ist.
+import { ladeSetupKarte } from '../../../lib/nutrition/setup-karten'
+import type { SetupKarte } from '../../../lib/nutrition/setup-karten'
 import type { EinkaufslisteKurz }
   from '../../../lib/nutrition/einkaufsliste-lesen'
 import type { MahlzeitSlot } from '../../../lib/nutrition/slots-lage'
@@ -351,6 +354,20 @@ export default async function V2NutritionPage({
   let planLogs: PlanLogZeile[] = []
   let coachFreigabe = false
   let einkaufslisten = 0
+  // ══ G-353: die Setup-Karte ═════════════════════════════
+  //
+  // `[read]` **Eigener Aufruf, nicht im `Promise.all` des Planners** —
+  // das laeuft nur, wenn der Planner offen ist. **Die Karte gilt fuer
+  // jeden Reiter.**
+  //
+  // `[cmd]` **Zwei Zaehlabfragen mit `head: true`** — sie holen die
+  // Zahl, keine Zeilen.
+  //
+  // `[read]` **`.catch(() => null)` heisst: kein Lesefehler erzeugt
+  // eine Karte.** Wer bei einem Fehler einlaedt, laedt vielleicht zum
+  // Anlegen von etwas ein, das schon da ist.
+  const setupKarte: SetupKarte | null =
+    await ladeSetupKarte().catch(() => null)
   // ══ G-345 / E-64: die Listen selbst, fuer den Einkaufsreiter ══
   //
   // `[read]` **Nur wenn der Reiter offen ist** — die uebrigen
@@ -524,7 +541,7 @@ export default async function V2NutritionPage({
       plan={plan}
       planLogs={planLogs}
       coachFreigabe={coachFreigabe}
-      einkaufslisten={einkaufslisten}
+      einkaufslisten={einkaufslisten} setupKarte={setupKarte}
       einkaufsliste={einkaufsliste}
       tagesEintraege={tagesEintraege} slots={slots} mahlzeitSlots={mahlzeitSlots}
       ghostSlots={ghostBenennung}

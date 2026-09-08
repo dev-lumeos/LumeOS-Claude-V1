@@ -30,7 +30,8 @@ import { ladeRegeln, ladeGate, type RegelStand, type GateStand } from '../../../
 // C-224: die Substanzdatenbank und die eigenen Stacks.
 import {
   ladeSubstanzListe, ladeEigeneStacks,
-  type SubstanzListenEintrag, type EigenerStack,
+  type SubstanzListenEintrag, type EigenerStack, type StackVorlage,
+  ladeStackVorlagen,
 } from '../../../lib/supplements/substanz-read'
 
 export const dynamic = 'force-dynamic'
@@ -77,7 +78,8 @@ export default async function V2SupplementsPage() {
   // Ursache steht in `rule_assessment`: `explain (analyze, buffers)`
   // meldet **temp read=9457 written=9457** bei 171 ms in der Datenbank
   // — ein Kreuzprodukt. Das ist ein eigener Befund, siehe Bericht.
-  const [daten, katalog, regeln, gate, substanzen, stacks, belegteSubstanzen]
+  const [daten, katalog, regeln, gate, substanzen, stacks, belegteSubstanzen,
+         vorlagen]
     = await Promise.all([
       ruhig<StackDaten | null>(getStackDaten, null),
       ruhig<KatalogEintrag[]>(getKatalog, []),
@@ -86,6 +88,9 @@ export default async function V2SupplementsPage() {
       ruhig<SubstanzListenEintrag[]>(ladeSubstanzListe, []),
       ruhig<EigenerStack[]>(ladeEigeneStacks, []),
       ruhig<number>(getBelegteSubstanzen, 0),
+      // G-347b: die Vorlagen. Die Kachel stand auf einer fest
+      // verdrahteten Null aus der Zeit, als die Tabelle leer war.
+      ruhig<StackVorlage[]>(ladeStackVorlagen, []),
     ])
 
   // ══ G-275: die Bilanz gilt fuer den ANGESEHENEN Tag ══════════════
@@ -105,7 +110,7 @@ export default async function V2SupplementsPage() {
     <SupplementsAnsicht
       daten={daten} katalog={katalog} heute={stichtag}
       regeln={regeln} gate={gate}
-      substanzen={substanzen} stacks={stacks}
+      substanzen={substanzen} stacks={stacks} vorlagen={vorlagen}
       bilanz={bilanz} belegteSubstanzen={belegteSubstanzen}
       bilanzTag={bilanzTag}
     />

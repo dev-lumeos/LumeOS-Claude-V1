@@ -74,7 +74,7 @@ import { SuppStacks, SuppIntelligence, SuppInventory } from './tab-spec'
 import { ComplianceEcht, InventoryEcht } from './tab-inventory-echt'
 // C-224/C-229: Substanzdatenbank — Liste, Detail und Add getrennt.
 import type {
-  SubstanzListenEintrag, EigenerStack,
+  SubstanzListenEintrag, EigenerStack, StackVorlage,
 } from '../../../lib/supplements/substanz-read'
 import { SupplementsModale } from './modale'
 
@@ -129,6 +129,7 @@ function tabs(
 export function SupplementsAnsicht({
   daten: datenProp = null, katalog = [], heute: heuteProp = null,
   regeln = null, gate = null, substanzen = [], stacks = [],
+  vorlagen = [],
   bilanz = [], belegteSubstanzen = 0, bilanzTag = null,
 }: {
   daten?: StackDaten | null
@@ -140,6 +141,15 @@ export function SupplementsAnsicht({
   /** C-224: die Substanzdatenbank und die eigenen Stacks. */
   substanzen?: SubstanzListenEintrag[]
   stacks?: EigenerStack[]
+  /**
+   * G-347b: die Stack-Vorlagen aus `supplements.stack_templates`.
+   *
+   * `[cmd]` **Die Kachel stand auf `vorlagenLageVon(0)`** — einer
+   * fest verdrahteten Null aus der Zeit, als die Tabelle leer war
+   * (G-253). **C-423/C-424 haben sie gefuellt:** vier kuratierte
+   * und eine vom Nutzer.
+   */
+  vorlagen?: StackVorlage[]
   /** G-275: die Naehrstoffbilanz des angesehenen Tages. */
   bilanz?: BilanzZeile[]
   belegteSubstanzen?: number
@@ -255,14 +265,15 @@ export function SupplementsAnsicht({
   const ctx = React.useMemo(
     () => ({
       takenToday, toggleTaken, open, daten, katalog,
-      substanzen, stacks, gateOffen,
+      substanzen, stacks, vorlagen, gateOffen,
       // G-275: die Bilanz und der Tag, fuer den sie gilt.
       bilanz, belegteSubstanzen,
       stichtag: bilanzTag ?? stichtag,
       laeuft, setFrisch, schreibfehler, setSchreibfehler,
     }),
     [takenToday, toggleTaken, open, daten, katalog,
-     substanzen, stacks, gateOffen, bilanz, belegteSubstanzen, bilanzTag,
+     substanzen, stacks, vorlagen, gateOffen, bilanz, belegteSubstanzen,
+     bilanzTag,
      stichtag, laeuft, schreibfehler],
   )
 

@@ -13,7 +13,9 @@
 import * as React from 'react'
 
 import type { StackDaten, KatalogEintrag } from '../../../lib/supplements/stack-read'
-import type { SubstanzListenEintrag, EigenerStack } from '../../../lib/supplements/substanz-read'
+import type {
+  SubstanzListenEintrag, EigenerStack, StackVorlage,
+} from '../../../lib/supplements/substanz-read'
 import type { BilanzZeile } from '../../../lib/supplements/bilanz-lage'
 
 export type ModalTyp =
@@ -46,6 +48,7 @@ export type SuppKontext = {
   substanzen: SubstanzListenEintrag[]
   /** Die eigenen Stacks — fuer die Stackwahl im Add-Dialog. */
   stacks: EigenerStack[]
+  vorlagen: StackVorlage[]
   /** G-167: ob Peptide/Enhanced sichtbar sind (experience_level). */
   gateOffen: boolean
   // ── G-148: die Schreibwege ──────────────────────────────────────
@@ -83,6 +86,7 @@ export const SuppCtx = React.createContext<SuppKontext>({
   katalog: [],
   substanzen: [],
   stacks: [],
+  vorlagen: [],
   gateOffen: false,
   stichtag: '1970-01-01',
   bilanz: [],

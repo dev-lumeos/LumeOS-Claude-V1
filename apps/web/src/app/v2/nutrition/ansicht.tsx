@@ -107,6 +107,10 @@ import {
 import {
   FehlendeInsightsKacheln, FehlendePlanKacheln,
 } from './fehlende-kacheln'
+// G-353: die eine Setup-Karte.
+import { SetupKarte } from './setup-karte'
+import type { SetupKarte as SetupKarteDaten }
+  from '../../../lib/nutrition/setup-karten'
 import './nutrition.css'
 
 /** Die vier Makros, die die Vorlage oben zeigt. */
@@ -177,6 +181,7 @@ function tabs(mahlzeiten: number | null, einkauf: number | null): TabItem[] {
 export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, lueckenGesamt = null, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
   planLogs = [], coachFreigabe = false, einkaufslisten = 0, einkaufsliste = null, tagesEintraege = [],
+  setupKarte = null,
   wechsel = LEERER_WECHSELSTAND,
   istAdmin = false, slots = null, mahlzeitSlots = [], ghostSlots = [], foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null, rezepte = null, allePlaene = [],
   offeneAktionen = null, sitzung = null,
@@ -192,6 +197,13 @@ export async function TagebuchAnsicht({
   planLogs?: PlanLogZeile[]
   coachFreigabe?: boolean
   einkaufslisten?: number
+  /**
+   * G-353: die eine Setup-Karte, die gerade dran ist — oder `null`.
+   *
+   * `[read]` **Hoechstens eine**, sonst waere es ein zweites
+   * Onboarding, das man nicht ueberspringen kann.
+   */
+  setupKarte?: SetupKarteDaten | null
   /** G-345: die Listen selbst, fuer den Einkaufsreiter. */
   einkaufsliste?: EinkaufslisteKurz[] | null
   tagesEintraege?: TagesEintrag[]
@@ -329,6 +341,15 @@ export async function TagebuchAnsicht({
       )}
       {tab === 'diary' && (
       <>
+      {/* ══ G-353: die Setup-Karte ═════════════════════════
+          `[read]` **Sie steht im Modul, nicht auf dem Dashboard**
+          — eine Karte im Nutrition-Reiter kann ,,Ziel setzen"
+          sagen, weil dort die Zielwerte stehen. **Dieselbe Karte
+          auf dem Dashboard waere ein Hinweis ohne Ort.**
+
+          `[read]` **Ohne Karte rendert sie nichts** — kein
+          Platzhalter, keine leere Huelle. */}
+      <SetupKarte karte={setupKarte} />
 
       {fehler && (
         <div className="v2-insight v2-neg" style={{ marginTop: 16 }}>

@@ -1183,3 +1183,55 @@ export async function ladeEigeneStacks(): Promise<EigenerStack[]> {
     quelle: txt(x.source),
   }))
 }
+
+
+/** Eine Vorlage aus `supplements.stack_templates` — G-347b. */
+export type StackVorlage = {
+  id: string
+  name: string
+  beschreibung: string | null
+  goal: string | null
+  /** `curated` oder `user` — die beiden Herkuenfte aus C-423. */
+  herkunft: string
+  oeffentlich: boolean
+}
+
+/**
+ * Die Stack-Vorlagen — G-347b.
+ *
+ * `[cmd]` **Die Kachel stand auf `vorlagenLageVon(0)`**, einer fest
+ * verdrahteten Null aus der Zeit, als die Tabelle leer war (G-253).
+ * **C-423/C-424 haben sie gefuellt** — vier kuratierte und eine vom
+ * Nutzer.
+ *
+ * `[cmd]` **Die Zeilenrechte lassen genau das durch**, was der
+ * Nutzer sehen darf:
+ * `source <> 'user' OR is_public OR owner_id = auth.uid()`.
+ *
+ * `[read]` **Deshalb zaehlt diese Funktion nicht selbst nach
+ * Sichtbarkeit** — die Datenbank hat es bereits entschieden.
+ */
+export async function ladeStackVorlagen(): Promise<StackVorlage[]> {
+  const client = createSessionClient()
+  const { data: { user } } = await client.auth.getUser()
+  if (!user) return []
+  const { data, error } = await client
+    .schema('supplements')
+    .from('stack_templates')
+    .select('id, name_de, description_de, goal, source, is_public')
+    .order('source', { ascending: true })
+    .order('sort_order', { ascending: true })
+  if (error) return []
+
+  const txt = (v: unknown) =>
+    typeof v === 'string' && v.trim() !== '' ? v : null
+
+  return ((data ?? []) as unknown as Array<Record<string, unknown>>).map(z => ({
+    id: String(z.id),
+    name: String(z.name_de ?? ''),
+    beschreibung: txt(z.description_de),
+    goal: txt(z.goal),
+    herkunft: String(z.source ?? 'curated'),
+    oeffentlich: z.is_public === true,
+  }))
+}

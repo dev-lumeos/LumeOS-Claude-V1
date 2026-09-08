@@ -84,7 +84,7 @@ function Stufe({ g }: { g: string }) {
 // Felder. **Erweitert statt danebengestellt** — G-249 und G-11
 // mussten genau diese Doppelung wieder ausbauen.
 export function SuppStacks() {
-  const { daten, stacks } = useSupp()
+  const { daten, stacks, vorlagen } = useSupp()
   const positionen = React.useMemo(() => daten?.positionen ?? [], [daten?.positionen])
 
   // Die Frequenzen, die im Bestand vorkommen — gezaehlt, nicht
@@ -97,7 +97,22 @@ export function SuppStacks() {
   }, [positionen])
 
   const listenSatz = stackListeSatz(stacks)
-  const vorlagen = vorlagenLageVon(0)   // `stack_templates`: 0 Zeilen (G-253)
+  // ══ G-347b: die Vorlagen sind da ═════════════════════════
+  //
+  // `[cmd]` **Hier stand `vorlagenLageVon(0)`** — eine fest
+  // verdrahtete Null aus der Zeit, als `stack_templates` leer war
+  // (G-253). **Die Kachel konnte deshalb nie etwas anderes zeigen als
+  // ihren Leerhinweis**, auch nachdem die Tabelle gefuellt war.
+  //
+  // `[cmd]` **C-423/C-424 haben sie gefuellt:** vier kuratierte und
+  // eine vom Nutzer geteilte Vorlage.
+  //
+  // `[read]` **Die Lage kommt jetzt aus der Zahl, nicht aus einer
+  // Konstante** — faellt der Bestand wieder auf null, greift
+  // derselbe Leerhinweis von selbst.
+  const vorlagenLage = vorlagenLageVon(vorlagen.length)
+  const kuratiert = vorlagen.filter(v => v.herkunft !== 'user')
+  const vomNutzer = vorlagen.filter(v => v.herkunft === 'user')
 
   return (
     <div className="v2-grid v2-grid-14" style={{ gap: 14 }}>
@@ -151,11 +166,46 @@ export function SuppStacks() {
 
         <Card
           title="Vorlagen"
-          sub="stack_templates"
+          sub={vorlagenLage === 'tabelle_leer'
+            ? 'stack_templates'
+            : `${kuratiert.length} kuratiert · ${vomNutzer.length} vom Nutzer`}
         >
-          {vorlagen === 'tabelle_leer'
+          {vorlagenLage === 'tabelle_leer'
             ? <div className="v2-supp-hinweis">{VORLAGEN_LEER_SATZ}</div>
-            : null}
+            : (
+              <div className="v2-col-gap" style={{ gap: 7 }}>
+                {vorlagen.map(v => (
+                  <div key={v.id} style={{
+                    padding: 10, background: 'var(--surface)',
+                    border: '1px solid var(--border)', borderRadius: 6,
+                  }}>
+                    <div style={{
+                      display: 'flex', alignItems: 'center', gap: 8,
+                      marginBottom: v.beschreibung ? 3 : 0, flexWrap: 'wrap',
+                    }}>
+                      <span style={{ fontSize: 12.5, fontWeight: 600 }}>{v.name}</span>
+                      {/* `[read]` Die Herkunft steht dran, weil sie den
+                          Unterschied macht: kuratiert ist gepflegt,
+                          vom Nutzer geteilt ist es nicht. */}
+                      <Pill variant={v.herkunft === 'user' ? undefined : 'acc'}>
+                        {v.herkunft === 'user' ? 'vom Nutzer' : 'kuratiert'}
+                      </Pill>
+                      {v.goal && (
+                        <span className="v2-dim v2-mono"
+                              style={{ fontSize: 10, marginLeft: 'auto' }}>
+                          {v.goal}
+                        </span>
+                      )}
+                    </div>
+                    {v.beschreibung && (
+                      <div className="v2-muted" style={{ fontSize: 11, lineHeight: 1.45 }}>
+                        {v.beschreibung}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
         </Card>
       </div>
 
