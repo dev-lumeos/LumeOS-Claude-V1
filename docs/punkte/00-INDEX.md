@@ -6,12 +6,12 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 209 |
-| `laufend_codex` | 3 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 327 |
-| **gesamt** | **540** |
+| `erledigt` | 330 |
+| **gesamt** | **541** |
 
-## medical — 44
+## medical — 45
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -52,7 +52,8 @@
 | `C-337` | befund | mittel | [die Medikamenten-Einnahmezeit fehlt](todos/medical-c-0337-die-medikamenten-einnahmezeit-fehlt.md) | offen | — | — |
 | `C-359` | feature | mittel | [Symptome brauchen ein Protokoll je Nutzer](todos/medical-c-0359-symptome-brauchen-ein-protokoll-je-nutzer.md) | offen | — | — |
 | `C-385` | feature | hoch | [das Datenmodell fuer Injektionsstellen](erledigt/medical-c-0385-das-datenmodell-fuer-injektionsstellen.md) | erledigt | — | C-395 |
-| `C-429` | befund | mittel | [die zentrale Zeitachse fehlt](laufend_codex/medical-c-0429-die-zentrale-zeitachse-fehlt.md) | laeuft (codex) | — | — |
+| `C-429` | befund | mittel | [die zentrale Zeitachse fehlt](erledigt/medical-c-0429-die-zentrale-zeitachse-fehlt.md) | erledigt | — | C-431 |
+| `C-431` | feature | hoch | [C-429 einspielen](laufend_codex/medical-c-0431-c-429-einspielen.md) | laeuft (codex) | — | — |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
@@ -362,7 +363,7 @@
 | `G-369` | feature | niedrig | [*Session today* braucht den Sitzungsbezug](todos/supplements-g-0369-session-today-braucht-den-sitzungsbezug.md) | offen | — | — |
 | `G-372` | feature | hoch | [die Stack-Kachel kann nichts](erledigt/supplements-g-0372-die-stack-kachel-kann-nichts.md) | erledigt | — | C-427, G-373 |
 | `G-373` | feature | mittel | [Stacks editieren und anlegen](erledigt/supplements-g-0373-stacks-editieren-und-anlegen.md) | erledigt | — | G-374 |
-| `G-374` | feature | niedrig | [Zyklen brauchen eine eigene Eingabe](laufend_codex/supplements-g-0374-zyklen-brauchen-eine-eingabe.md) | laeuft (codex) | — | — |
+| `G-374` | feature | niedrig | [Zyklen brauchen eine eigene Eingabe](erledigt/supplements-g-0374-zyklen-brauchen-eine-eingabe.md) | erledigt | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -551,7 +552,7 @@
 | `C-420` | befund | hoch | [der Waechter kennt keine Uebersetzung](erledigt/quer-c-0420-der-waechter-kennt-keine-uebersetzung.md) | erledigt | — | — |
 | `C-422` | feature | hoch | [die Lesewege fuer elf Kacheln](erledigt/quer-c-0422-die-lesewege-fuer-elf-kacheln.md) | erledigt | — | — |
 | `C-424` | feature | mittel | [eine Leser-Registry](erledigt/quer-c-0424-eine-leser-registry.md) | erledigt | — | A-72 |
-| `C-430` | befund | mittel | [die Sicht traegt nur Deutsch](laufend_codex/quer-c-0430-die-sicht-traegt-nur-deutsch.md) | laeuft (codex) | — | — |
+| `C-430` | befund | mittel | [die Sicht traegt nur Deutsch](erledigt/quer-c-0430-die-sicht-traegt-nur-deutsch.md) | erledigt | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

@@ -9,6 +9,8 @@ kind_von: G-373
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 9ef63179
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/tab-spec.tsx
@@ -75,3 +77,15 @@ kein Zyklus.**
 
 **Mitbeauftragt mit C-429 am 2026-09-08.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-08, mit C-429 abgenommen: `started_on` steht im Objekt.
+
+`[cmd]` **Seed-Zyklus 2026-09-08, `on_weeks=8`, `off_weeks=4`.**
+`[cmd]` **Ein unvollstaendiges Objekt wird abgewiesen.**
+
+`[cmd]` **Bestehende `cycling = NULL` bleiben gueltig** — **sie
+heissen weiter *kein Zyklus*.**
+
+`[read]` **Die schonende Antwort auf meine Frage.**

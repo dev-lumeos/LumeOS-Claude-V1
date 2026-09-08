@@ -9,6 +9,8 @@ kind_von: G-241
 entscheidung: E-74
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 9ef63179
 beruehrt:
   tabellen: [medical.lab_reports]
 zahlen:
@@ -234,7 +236,80 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator.** **Acht Bedingungen mit Zahlen.**
+
+    A1  Bucket medical-originals, privat. 1 Objekt, 241 B,
+        file_ref zeigt auf denselben Pfad
+    A2  Verschluesselung: nicht Voraussetzung fuer Entwicklung
+        (E-12), fuer Produktion offen
+    A3  appointments 1 Zeile, RLS: Eigentuemer 1, Fremd 0,
+        Fremdschreiben abgewiesen
+    A4  Diagnose 1, Behandlung 1, Operation 1 -- alle mit
+        Herkunft, Akteur, Zeitpunkt, verknuepftem Befund
+        Zeitachse 4 Zeilen
+    A5  die Tabelle heisst user_conditions, nicht conditions
+    A6  Vollkette 367,3 s gruen, Sicherung 1.328.107 B
+    A7  summary_de/_en/_th, 6 von 6 Ereignisarten dreisprachig
+    A8  cycling.started_on im CHECK, unvollstaendig wird
+        abgewiesen
+
+### Der Ort der Migrationen ist richtig
+
+`[read]` **Ich habe zuerst vermutet, er haette am falschen Ort
+geschrieben** — **`supabase/migrations/` statt `_pipeline/`.**
+
+`[cmd]` **`supabase/README.md:19-21`:** *,,Kuenftige
+Strukturaenderungen entstehen als neue Migration in `migrations/`
+UND ? wo sie zur Kette gehoeren ? als Pipeline-Schritt."*
+
+`[cmd]` **Und `kette.json` ruft sie auf:** **zehn Schritte nennen
+`migrations/`, darunter `429_schema` und `430_schema`.**
+
+`[read]` **Struktur nach `migrations/`, Daten nach `_pipeline/`** —
+**er folgt dem Muster von C-396, C-381, C-419, C-421.**
+
+### A5 berichtigt mich zum vierten Mal heute
+
+`[cmd]` **Ich schrieb `medical.conditions` in den Auftrag.**
+`[cmd]` **Sie heisst `medical.user_conditions`** — 11 Spalten, 2
+Zeilen.
+
+`[read]` **Er hat nachgesehen statt eine Tabelle zu bauen, die
+schon da war.**
+
+### A1 — und die Einschraenkung, die er selbst nennt
+
+`[cmd]` **Die Wegwerf-Storage-Nachbildung prueft Metadaten, RLS und
+Referenz** — **nicht die Bytes.**
+
+`[read]` **Er sagt es, statt es zu verschweigen** — **der echte
+Dienst haengt an der laufenden Datenbank, und die war tabu.**
+
+`[read]` **Damit ist belegt: der Weg steht.** **Ob eine Datei
+wirklich ankommt, zeigt erst das Einspielen.**
+
+### A2 — die richtige Trennung
+
+`[cmd]` **E-12: Klartext in der Entwicklung.** `[cmd]` **Fuer
+produktive Originalbefunde bleibt Schluesselverwaltung offen,
+`SPEC_04_FEATURES.md`.**
+
+`[read]` **Er entscheidet nicht, er misst und trennt** — **jetzt
+kein Hindernis, spaeter eine Bedingung.**
+
+`[read]` **Und E-75 sagt es genauso:** **ein privater Bucket
+schuetzt den Zugriff, nicht den Inhalt.**
+
+### A8 — was mit den bestehenden geschieht
+
+`[cmd]` **Bestehende `cycling = NULL` bleiben gueltig** — **sie
+heissen weiter *kein Zyklus*.**
+
+`[read]` **Das ist die Frage, die ich gestellt habe, und die
+Antwort ist die schonende.**
+
+**Abgenommen, Einspielen beauftragt.**
+
 
 ## Nachtrag 2026-09-08 — zwei Grundlagen dazu
 

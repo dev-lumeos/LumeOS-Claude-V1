@@ -9,6 +9,8 @@ kind_von: G-152
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 9ef63179
 beruehrt:
   tabellen: [public.activity_stream]
 zahlen:
@@ -81,3 +83,13 @@ eingestellten Sprache** — **wie ueberall sonst.**
 
 **Mitbeauftragt mit C-429 am 2026-09-08.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-08, mit C-429 abgenommen: drei Sprachspalten stehen.
+
+`[cmd]` **`summary_de`, `summary_en`, `summary_th`** — **6 von 6
+Ereignisarten dreisprachig belegt.**
+
+`[cmd]` **Wie `00-konventionen.md` Abschnitt 1 es verlangt** —
+**das Datenmodell fuehrt Sprachvarianten als Spalten.**
