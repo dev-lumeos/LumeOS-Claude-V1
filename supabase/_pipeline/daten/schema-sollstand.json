@@ -2362,8 +2362,46 @@
     },
     {
       "schema": "coach",
+      "name": "coach_profiles",
+      "schritt": "156",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "156_coach_invite_identity.sql: authenticated verwaltet nur das eigene Coach-Profil; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": [
+        "id",
+        "user_id",
+        "display_name",
+        "email",
+        "is_active",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "schema": "coach",
       "name": "relationships",
-      "schritt": "151/155",
+      "schritt": "151/155/156",
       "rls": true,
       "policies": [
         "SELECT",
@@ -2404,7 +2442,8 @@
         "updated_at",
         "withdrawn_at",
         "withdrawn_by",
-        "withdraw_reason"
+        "withdraw_reason",
+        "coach_display_name"
       ]
     },
     {
@@ -5567,6 +5606,11 @@
       "schema": "coach",
       "name": "withdraw_relationship_invite",
       "schritt": "155"
+    },
+    {
+      "schema": "coach",
+      "name": "create_relationship_invite",
+      "schritt": "156"
     },
     {
       "schema": "marketplace",

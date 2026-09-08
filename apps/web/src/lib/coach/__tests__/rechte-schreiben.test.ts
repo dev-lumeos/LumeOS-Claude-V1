@@ -43,3 +43,16 @@ test('C-269: Die Server-Action nimmt Einladungen nur ueber den Status-RPC zuruec
   assert.doesNotMatch(ruecknahme, /\.from\('relationships'\)[\s\S]*?\.update\(/,
     'Einladungen duerfen nicht direkt aktualisiert werden.')
 })
+
+test('C-268: Einladen holt den Coach-Namen ausschliesslich aus dem Invite-RPC', () => {
+  const source = nachrichtenQuelltext()
+  const start = source.indexOf('export async function ladeCoachEin')
+  const ende = source.indexOf('\n/**', start)
+  const einladung = source.slice(start, ende)
+
+  assert.notEqual(start, -1, 'Der Einlade-Schreibweg fehlt.')
+  assert.match(einladung, /\.rpc\('create_relationship_invite', \{[\s\S]*?p_coach_id: eingabe\.coachId/,
+    'Die Einladung ruft den atomaren Namens-Snapshot-RPC nicht auf.')
+  assert.doesNotMatch(einladung, /\.from\('relationships'\)[\s\S]*?\.insert\(/,
+    'Der Browser darf den Coach-Namen nicht selbst in relationships schreiben.')
+})

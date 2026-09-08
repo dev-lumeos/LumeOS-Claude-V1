@@ -43,11 +43,13 @@ test('G-324/C-269: sicher ablehnen und Einladung als withdrawn protokollieren', 
       '03240000-0000-0000-0000-000000000001'::uuid, '${COACH_ID}'::uuid, '${CLIENT_ID}'::uuid,
       'nutrition', 'adjust_macro_targets', '{}'::jsonb, '{}'::jsonb, now() + interval '1 hour', '${COACH_ID}'::uuid
     );
+    INSERT INTO coach.coach_profiles (user_id, display_name, email)
+    VALUES ('${COACH_ID}'::uuid, 'G324 Coach', 'g324-coach@example.test');
     INSERT INTO coach.relationships (
-      id, coach_id, client_id, status, invited_by, invite_note
+      id, coach_id, client_id, status, invited_by, invite_note, coach_display_name
     ) VALUES (
       '03240000-0000-0000-0000-000000000002'::uuid, '${COACH_ID}'::uuid, '${FOREIGN_ID}'::uuid,
-      'invited', '${COACH_ID}'::uuid, 'G-324 Rollback-Nachweis'
+      'invited', '${COACH_ID}'::uuid, 'G-324 Rollback-Nachweis', 'G324 Coach'
     );
 
     SET LOCAL ROLE authenticated;

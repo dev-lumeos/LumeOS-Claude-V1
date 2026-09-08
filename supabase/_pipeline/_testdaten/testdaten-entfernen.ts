@@ -141,6 +141,11 @@ deleted_profiles AS (
   WHERE id IN (${ids})
   RETURNING 1
 ),
+deleted_coach_profiles AS (
+  DELETE FROM coach.coach_profiles
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
 deleted_users AS (
   DELETE FROM auth.users
   WHERE id IN (${ids})
@@ -171,6 +176,7 @@ SELECT
   (SELECT count(*) FROM deleted_user_goals) AS user_goals,
   (SELECT count(*) FROM deleted_targets) AS nutrition_targets,
   (SELECT count(*) FROM deleted_profiles) AS profiles,
+  (SELECT count(*) FROM deleted_coach_profiles) AS coach_profiles,
   (SELECT count(*) FROM deleted_users) AS users;
 
 COMMIT;

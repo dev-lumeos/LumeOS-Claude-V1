@@ -7,10 +7,9 @@
 --   statt die Zeile zu loeschen. Der relationship_change_log bleibt
 --   damit append-only und nachvollziehbar.
 --
---   Namen gibt es nicht: coach_profiles existiert nicht und
---   public.profiles fuehrt kein Namensfeld. Die kleinste tragende
---   Aufloesung ist E-Mail -> user_id fuer den Invite-Pfad. Die
---   Funktion gibt weder E-Mail noch Metadaten zurueck.
+--   Der historische E-Mail-Resolver loest nur auf eine vorhandene user_id
+--   auf und gibt weder E-Mail noch Metadaten zurueck. C-268 ergaenzt den
+--   Coach-Namenssnapshot getrennt in 156_coach_invite_identity.sql.
 -- =============================================================
 
 BEGIN;

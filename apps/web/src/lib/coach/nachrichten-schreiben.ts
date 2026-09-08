@@ -11,11 +11,10 @@
 //                     Nachrichten lassen sich als gelesen markieren)
 //   relationships_insert  uid ∈ {coach_id, client_id} UND invited_by = uid
 //
-// `[read]` **Eingeladen wird per Kennung (UUID), nicht per Name oder
-// E-Mail.** Es gibt keine Namensquelle (coach_profiles fehlt — im
-// Punkt geklaert), und `auth.users` ist fuer Clients bewusst nicht
-// lesbar. Eine E-Mail-Aufloesung braeuchte eine DB-Funktion — gemeldet,
-// nicht danebengebaut.
+// `[read]` Der bestehende Kennungsweg legt die Einladung ueber die RPC
+// `create_relationship_invite` an. Sie nimmt den Coach-Namen ausschliesslich
+// aus `coach.coach_profiles` und speichert ihn als Snapshot an der Beziehung.
+// Keine Klientensuche und kein Browser-Snapshot.
 import { revalidatePath } from 'next/cache'
 import { createSessionClient } from '@lumeos/shared/session'
 
@@ -82,17 +81,12 @@ export async function ladeCoachEin(eingabe: {
   }
 
   const { data, error } = await client.schema('coach')
-    .from('relationships')
-    .insert({
-      coach_id: eingabe.coachId,
-      client_id: userId,
-      invited_by: userId,
-      status: 'invited',
-      invite_note: eingabe.note?.trim() || null,
+    .rpc('create_relationship_invite', {
+      p_coach_id: eingabe.coachId,
+      p_note: eingabe.note?.trim() || null,
     })
-    .select('id')
   if (error) return { ok: false, fehler: error.message }
-  if (!data?.length) return { ok: false, fehler: 'Nicht geschrieben (Zeilenschutz).' }
+  if (!data) return { ok: false, fehler: 'Nicht geschrieben (Coach-Profil oder Zeilenschutz).' }
   revalidatePath('/v2/coach/human')
   return { ok: true }
 }

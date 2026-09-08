@@ -1211,12 +1211,21 @@
       ]
     },
     {
+      "id": "156",
+      "path": "supabase/_pipeline/15_coach/156_coach_invite_identity.sql",
+      "kind": "sql",
+      "creates": "Coach-Profil als Namensquelle und atomare Einladung mit Coach-Namenssnapshot",
+      "depends_on": [
+        "155"
+      ]
+    },
+    {
       "id": "152",
       "path": "supabase/_pipeline/15_coach/152_coach_lesepfad.sql",
       "kind": "sql",
       "creates": "Coach-Lesepfad: hat_sicht() als eine Sichtregel, 22 full-Policies auf den Nutzerdaten der sechs Module, 6 summary-Funktionen",
       "depends_on": [
-        "155",
+        "156",
         "150",
         "110",
         "111",

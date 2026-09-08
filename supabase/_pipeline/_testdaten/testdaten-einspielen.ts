@@ -3127,6 +3127,14 @@ INSERT INTO public.profiles (id)
 VALUES (${lit(COACH_USER.id)}::uuid)
 ON CONFLICT (id) DO NOTHING;
 
+INSERT INTO coach.coach_profiles (user_id, display_name, email)
+VALUES (${lit(COACH_USER.id)}::uuid, ${lit(COACH_USER.displayName)}, ${lit(COACH_USER.email)})
+ON CONFLICT (user_id) DO UPDATE SET
+  display_name = EXCLUDED.display_name,
+  email = EXCLUDED.email,
+  is_active = true,
+  updated_at = now();
+
 INSERT INTO coach.client_permissions (
   id, coach_id, client_id,
   nutrition_visibility, training_visibility, recovery_visibility, goals_visibility,
@@ -3230,7 +3238,7 @@ VALUES (
 -- ------------------------------------------------------------------
 
 INSERT INTO coach.relationships (
-  id, coach_id, client_id, status, invited_by, invite_note, started_at, changed_by
+  id, coach_id, client_id, status, invited_by, invite_note, coach_display_name, started_at, changed_by
 )
 VALUES
 (
@@ -3240,6 +3248,7 @@ VALUES
   'active',
   ${lit(COACH_USER.id)}::uuid,
   'F-07 Seed: aktive Beziehung seit 120 Tagen',
+  ${lit(COACH_USER.displayName)},
   now() - interval '120 days',
   ${lit(COACH_USER.id)}::uuid
 ),
@@ -3250,6 +3259,7 @@ VALUES
   'active',
   ${lit(COACH_USER.id)}::uuid,
   'F-07 Seed: aktive Beziehung seit 45 Tagen',
+  ${lit(COACH_USER.displayName)},
   now() - interval '45 days',
   ${lit(COACH_USER.id)}::uuid
 ),
@@ -3260,6 +3270,7 @@ VALUES
   'invited',
   ${lit(COACH_USER.id)}::uuid,
   'F-07 Seed: Einladung offen, keine Rechte',
+  ${lit(COACH_USER.displayName)},
   NULL,
   ${lit(COACH_USER.id)}::uuid
 );
@@ -4784,6 +4795,8 @@ DECLARE
   v_checkins integer;
   v_messages integer;
   v_alerts integer;
+  v_coach_profiles integer;
+  v_named_invites integer;
 BEGIN
   SELECT count(*) INTO v_relationships FROM coach.relationships WHERE coach_id = ${lit(COACH_USER.id)}::uuid;
   SELECT count(*) INTO v_rel_logs FROM coach.relationship_change_log WHERE coach_id = ${lit(COACH_USER.id)}::uuid;
@@ -4791,12 +4804,21 @@ BEGIN
   SELECT count(*) INTO v_checkins FROM coach.checkins WHERE coach_id = ${lit(COACH_USER.id)}::uuid;
   SELECT count(*) INTO v_messages FROM coach.messages WHERE coach_id = ${lit(COACH_USER.id)}::uuid;
   SELECT count(*) INTO v_alerts FROM coach.alerts WHERE coach_id = ${lit(COACH_USER.id)}::uuid;
+  SELECT count(*) INTO v_coach_profiles FROM coach.coach_profiles WHERE user_id = ${lit(COACH_USER.id)}::uuid;
+  SELECT count(*) INTO v_named_invites
+  FROM coach.relationships
+  WHERE coach_id = ${lit(COACH_USER.id)}::uuid
+    AND coach_display_name = ${lit(COACH_USER.displayName)};
 
   IF v_relationships <> 3 THEN
     RAISE EXCEPTION 'F-07: % Beziehungen statt 3', v_relationships;
   END IF;
   IF v_rel_logs < 3 THEN
     RAISE EXCEPTION 'F-07: % Beziehungs-Logzeilen statt >= 3', v_rel_logs;
+  END IF;
+  IF v_coach_profiles <> 1 OR v_named_invites <> 3 THEN
+    RAISE EXCEPTION 'F-07/C-268: Coach-Profile %, benannte Beziehungen % statt 1/3',
+      v_coach_profiles, v_named_invites;
   END IF;
   IF v_templates <> 1 OR v_checkins <> 3 OR v_messages <> 3 OR v_alerts <> 3 THEN
     RAISE EXCEPTION 'F-07: Vorlagen %, Check-ins %, Nachrichten %, Alerts % — erwartet 1/3/3/3',

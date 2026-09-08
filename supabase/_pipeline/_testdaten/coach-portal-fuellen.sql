@@ -75,6 +75,15 @@ INSERT INTO public.profiles (id)
 SELECT id FROM auth.users WHERE email = 'coach@lumeos.app'
 ON CONFLICT (id) DO NOTHING;
 
+INSERT INTO coach.coach_profiles (user_id, display_name, email)
+SELECT id, 'Anna Keller', 'coach@lumeos.app'
+FROM auth.users WHERE email = 'coach@lumeos.app'
+ON CONFLICT (user_id) DO UPDATE SET
+  display_name = EXCLUDED.display_name,
+  email = EXCLUDED.email,
+  is_active = true,
+  updated_at = now();
+
 SELECT id AS coach_id FROM auth.users WHERE email = :coach_email \gset
 SELECT id AS ziel_id FROM auth.users WHERE email = :ziel_email \gset
 SELECT id AS max_id FROM auth.users WHERE email = :max_email \gset
@@ -106,14 +115,14 @@ ALTER TABLE coach.client_autonomy ENABLE TRIGGER client_autonomy_change_log;
 ALTER TABLE coach.relationships ENABLE TRIGGER relationships_change_log;
 
 -- 3. Beziehungen: aktiv / aktiv / eingeladen.
-INSERT INTO coach.relationships (coach_id, client_id, status, invited_by, invite_note, started_at, changed_by)
+INSERT INTO coach.relationships (coach_id, client_id, status, invited_by, invite_note, coach_display_name, started_at, changed_by)
 VALUES
 (:'coach'::uuid, :'ziel'::uuid, 'active', :'coach'::uuid,
- 'F-07: aktive Beziehung seit 120 Tagen', now() - interval '120 days', :'coach'::uuid),
+ 'F-07: aktive Beziehung seit 120 Tagen', 'Anna Keller', now() - interval '120 days', :'coach'::uuid),
 (:'coach'::uuid, :'maxu'::uuid, 'active', :'coach'::uuid,
- 'F-07: aktive Beziehung seit 45 Tagen', now() - interval '45 days', :'coach'::uuid),
+ 'F-07: aktive Beziehung seit 45 Tagen', 'Anna Keller', now() - interval '45 days', :'coach'::uuid),
 (:'coach'::uuid, :'sarah'::uuid, 'invited', :'coach'::uuid,
- 'F-07: Einladung offen, keine Rechte', NULL, :'coach'::uuid);
+ 'F-07: Einladung offen, keine Rechte', 'Anna Keller', NULL, :'coach'::uuid);
 
 -- 4. Rechte: Dev nach der C-147-Staffel (erst Ausgangszustand, dann
 -- Update — die Trigger erzeugen so eine echte Historie), Max minimal.
