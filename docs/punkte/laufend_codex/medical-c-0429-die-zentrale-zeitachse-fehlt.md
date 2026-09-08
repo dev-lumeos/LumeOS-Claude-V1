@@ -286,3 +286,27 @@ INNERHALB des bestehenden Objekts** — **keine neue Spalte.**
         belegt. Zahl: Ereignisarten / davon dreisprachig.
     A8  cycling: started_on im CHECK, eine Zeile gesetzt und
         gelesen. Und: was geschieht mit den null bestehenden?
+
+## Nachtrag 2026-09-08 — E-75 entscheidet den Bucket
+
+Tom: *,,nimm einen logischen namen gehoerend zu medical und ja
+natuerlich privat, das sind ernste daten. pfadregel ok."*
+
+    Name          medical-documents
+    Sichtbarkeit  privat, kein oeffentlicher Zugriff
+    Pfadregel     <user_id>/<report_id>.<ext>
+
+`[read]` **Die Zeilensicherheit laeuft ueber das erste Segment.**
+
+`[cmd]` **`lab_reports.file_ref` traegt den PFAD, nicht die URL** —
+**eine URL waere ein Zugriff, ein Pfad ist ein Verweis.**
+
+`[read]` **Die URL entsteht beim Lesen, zeitlich begrenzt.**
+
+### Und A2 bleibt zu messen
+
+`[read]` **Ein privater Bucket schuetzt den Zugriff, nicht den
+Inhalt** — **wer die Datenbank hat, hat die Dateien.**
+
+`[cmd]` **`user_medications` wartet auf Verschluesselung** — **miss,
+ob dasselbe fuer die Originale gilt, und sag es.**

@@ -65,3 +65,18 @@ er braucht keine zusaetzliche Tabelle.**
 
 `[cmd]` **Codex baut den Ablageweg in C-429** — **die beiden
 Entscheidungen gehoeren davor.**
+
+## Entschieden am 2026-09-08 — E-75
+
+    Name          medical-documents
+    Sichtbarkeit  privat
+    Pfadregel     <user_id>/<report_id>.<ext>
+
+`[read]` **Damit sind die zwei blockierenden Entscheidungen
+weg.**
+
+`[cmd]` **Codex baut den Bucket in C-429** — **danach ist die
+Oberflaeche beauftragbar.**
+
+`[cmd]` **`file_ref` traegt den Pfad, nicht die URL** — **die URL
+entsteht beim Lesen, zeitlich begrenzt.**
