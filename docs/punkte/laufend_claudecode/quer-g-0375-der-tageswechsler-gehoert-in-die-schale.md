@@ -350,3 +350,82 @@ vorher war** — **die Mitte bleibt leer, die Aktionen rechts.**
 **Nichts in `@lumeos/ui` aendern** — **deine eigene Lehre.**
 `[read]` **Wenn der Kopf dort liegt: melden, nicht anfassen.**
 Nicht committen, nicht stagen, nicht pushen.
+
+## Gemessen am 2026-09-08 — die Koepfe sind uneinheitlich
+
+Tom: *,,alle module checken, da hat es mehr die nicht mehr richtig
+sind oder gar keine headerbox mehr haben."*
+
+`[cmd]` **Der Orchestrator hat nachgemessen. Er hat recht.**
+
+### Die Klasse macht den Kasten
+
+`[cmd]` **`v2.css:391`:**
+
+    .v2-module-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+`[read]` **Keine Kastenform** — **die kommt von `.v2-module`.**
+
+### Wer welche traegt
+
+    coach          v2-module-header v2-module
+    dashboard      v2-module-header v2-module
+    goals          v2-module-header v2-module
+    nutrition      v2-module-header v2-module
+    supplements    v2-module-header v2-module
+    training       v2-module-header v2-module
+    ------------------------------------------
+    medical        v2-module-header          <- ohne Kasten
+    recovery       v2-module-header          <- ohne Kasten
+    settings       v2-wahl-titel             <- gar keiner
+
+`[cmd]` **Das ist genau, was Tom auf dem Recovery-Bild sieht:
+keine Kopfbox.**
+
+`[read]` **Und der Modulkopf hat kein gemeinsames Bauteil** —
+**jedes Modul baut ihn selbst.** `[cmd]` **`Topbar` in
+`packages/ui` ist die obere Leiste mit Synced und Hell/Dunkel,
+nicht der Modulkopf.**
+
+## Auftrag 3 — alle neun Koepfe
+
+**Beauftragt am 2026-09-08.**
+
+`[read]` **Zusaetzlich zu Auftrag 2** (Wechsler in den Kopf,
+Aktionen rechts).
+
+### Was zu tun ist
+
+`[read]` **`medical` und `recovery` bekommen `v2-module`
+dazu** — **dann haben sie ihren Kasten zurueck.**
+
+`[read]` **`settings` messen:** **hat es je einen Kopf gehabt?**
+`[cmd]` **`git show` vor `b3bb6420`.** `[read]` **Wenn nein: melden,
+nicht erfinden.**
+
+### Und die Frage dahinter
+
+`[read]` **Jedes Modul baut seinen Kopf selbst** — **deshalb driften
+sie auseinander.**
+
+`[read]` **Miss, ob ein gemeinsames Bauteil moeglich waere, und was
+es kosten wuerde** — **nicht bauen.**
+
+`[cmd]` **Es duerfte in `apps/web` liegen, nicht in
+`packages/ui`** — **deine eigene Lehre aus G-17.**
+
+### Abnahmebedingungen
+
+    A1  9 Module / davon mit Kasten / davon ohne, mit Grund.
+        Je Modul ein Bildschirmfoto.
+    A2  medical und recovery: Kasten vorher/nachher, belegt.
+    A3  settings: hatte es je einen? Gemessen gegen git show.
+    A4  Aktionen rechts, Wechsler mittig IM Kopf.
+        Zahl: 9 / davon richtig.
+    A5  ein gemeinsames Bauteil: moeglich? Mit Aufwand, nicht
+        gebaut.
