@@ -123,7 +123,71 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+## G-324 - Der Browser-Schreibweg ist umgestellt
+
+Der alte Weg war `entscheideAktion()` in
+`apps/web/src/lib/coach/rechte-schreiben.ts`: direkter
+`coach.pending_actions`-UPDATE mit Browserwerten fuer Status und beim
+Bestaetigen auch Akteur und Zeitpunkt. C-381 hatte dieses UPDATE-Recht
+bereits entfernt und `coach.bestaetige_aktion(uuid)` als atomaren
+Ausfuehrer bereitgestellt.
+
+Der neue Weg liefert nur noch `p_action_id` an die Datenbank. Bestaetigen
+geht ueber `coach.bestaetige_aktion(uuid)`, Ablehnen ueber den fuer den
+zweiten vorhandenen UI-Zustand ergaenzten, gleich gesicherten RPC
+`coach.lehne_aktion_ab(uuid)`. Beide bestimmen Akteur, Eigentum, Status
+und Ablauf in der Datenbank. Die Server-Action reicht die spezifischen
+RPC-Meldungen weiter (fremd, nicht offen, abgelaufen, beim Bestaetigen
+auch unbekannter Aktionstyp); sie behauptet nicht mehr einen eigenen,
+vorab gelesenen Zustand. `confirmed_by` kommt nicht mehr aus dem Browser.
+
+## C-268 - Namensaufloesung bleibt bewusst blockiert
+
+Die Messung ergibt **0 Treffer bei einer Namensaufloesung**: Es gibt keine
+solche Funktion und keinen Aufrufer. `coach.resolve_invite_user_id(text)`
+loest ausschliesslich E-Mail nach UUID auf und wird vom Einladeweg nicht
+aufgerufen. `public.profiles` hat kein Namensfeld, `coach.coach_profiles`
+existiert nicht. Der vorhandene Coach-Leser `coach.klienten()` formt einen
+Anzeigenamen erst fuer bereits eigene Beziehungen aus
+`auth.users.raw_app_meta_data`; das ist keine entschiedene, allgemein
+suchbare Namensquelle fuer Einladungen.
+
+Damit kann die geforderte Einladung "mit Namen" nicht ehrlich belegt
+werden. Vor dem Bau braucht es Toms Entscheidung, ob ein Name aus einem
+eigenen Profilfeld oder aus Auth-Metadaten stammt und ob der Name schon
+vor Zustimmung der anderen Person gesucht und angezeigt werden darf.
+Ohne diese Entscheidung waere ein Name-zu-UUID-Helfer eine neue
+Existenz-/Personensuche.
+
+## C-269 - Ruecknahme mit Spur erreichbar
+
+`nehmeEinladungZurueck()` ist als Server-Action vorbereitet und ruft
+`coach.withdraw_relationship_invite(uuid, text)`, nie ein DELETE oder
+einen direkten Tabellen-UPDATE. Die Funktion laeuft `SECURITY DEFINER`
+mit leerem Suchpfad; ihre WHERE-Klausel bindet weiterhin an
+`invited_by = auth.uid()`. Das ist noetig, damit der Weg auch in der
+Ketten-Minimal-Auth-Umgebung `auth.uid()` sicher auswerten kann.
+
+Rollback-Gegenprobe: vorher `status='invited'`, nachher
+`status='withdrawn'`, `withdrawn_at` und `withdrawn_by` gesetzt,
+`relationship_change_log` **+1 Zeile**. Ein fremder Klient erhielt
+`false`; die Funktion legt keine Beziehung offen.
+
+## RLS und Kette
+
+- `coach.pending_actions`: Eigentumer kann lesen und per RPC ablehnen;
+  ein Aussenstehender sieht die Aktion nicht. Direkter UPDATE bleibt
+  entzogen.
+- `coach.relationships`: Einladender kann lesen und zuruecknehmen;
+  Aussenstehender sieht die Beziehung nicht, ein eingeladener aber nicht
+  einladender Beteiligter kann sie nicht zuruecknehmen.
+- `coach.relationship_change_log`: Einladender liest die neue Auditzeile;
+  Aussenstehender sieht keine.
+
+Die Proben liefen ausschliesslich transaktional auf
+`lumeos_g324_final` und rollten vollstaendig zurueck. Danach lief die
+Vollkette mit **163 Schritten plus Abschlusspruefung in 299,6 Sekunden**:
+`SCHEMA VOLLSTAENDIG`.
 
 ## Abnahme
 

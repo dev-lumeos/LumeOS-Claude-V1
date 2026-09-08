@@ -7,8 +7,9 @@
 |---|---|
 | `todos` | 209 |
 | `laufend_codex` | 3 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 318 |
-| **gesamt** | **530** |
+| **gesamt** | **531** |
 
 ## medical — 43
 
@@ -288,12 +289,12 @@
 | `G-348` | befund | mittel | [`wieGestern` ueberspringt manuelle Posten](erledigt/nutrition-g-0348-wiegestern-ueberspringt-manuelle-posten.md) | erledigt | — | C-412, G-351 |
 | `G-350` | befund | mittel | [ein zweiter Schreibweg fuer `is_checked`](erledigt/nutrition-g-0350-ein-zweiter-schreibweg-fuer-is-checked.md) | erledigt | — | — |
 | `G-351` | befund | mittel | [`other` hat keine Karte](erledigt/nutrition-g-0351-other-hat-keine-karte.md) | erledigt | — | — |
-| `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | C-425 |
+| `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | C-425, G-372 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 62
+## supplements — 63
 
-### beauftragbar — 61
+### beauftragbar — 62
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -357,6 +358,7 @@
 | `G-275` | feature | hoch | [die Supplement-Tagesbilanz anzeigen](erledigt/supplements-g-0275-die-tagesbilanz-anzeigen.md) | erledigt | — | — |
 | `G-281` | feature | mittel | [der Treffergrund in der Katalogsuche](erledigt/supplements-g-0281-der-treffergrund-in-der-katalogsuche.md) | erledigt | — | — |
 | `G-369` | feature | niedrig | [*Session today* braucht den Sitzungsbezug](todos/supplements-g-0369-session-today-braucht-den-sitzungsbezug.md) | offen | — | — |
+| `G-372` | feature | hoch | [die Stack-Kachel kann nichts](laufend_claudecode/supplements-g-0372-die-stack-kachel-kann-nichts.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
