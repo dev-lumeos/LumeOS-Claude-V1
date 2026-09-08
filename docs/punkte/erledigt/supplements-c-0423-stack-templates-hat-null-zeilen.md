@@ -9,6 +9,8 @@ kind_von: G-365
 entscheidung: E-72
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: a47dbb65
 beruehrt:
   tabellen: [supplements.stack_templates]
 zahlen:
@@ -108,3 +110,63 @@ wie ein Ergebnis.**
     A4  Vollkette laeuft durch. Schritte und Sekunden.
     A5  passt die C-411-Machart? Ja mit Begruendung, oder nein
         mit dem Unterschied.
+
+## Abnahme
+
+**2026-09-08, Orchestrator.** **Alle fuenf Bedingungen mit
+Zahlen.**
+
+    A1  test-user: kuratiert 4, Nutzer 1
+        dazu 1 Kurationskandidat, 5 Seed-Items
+    A2  Fremder sieht oeffentliche 1, private 0
+    A3  veroeffentlichen -> source=user + Kandidat pending
+        zuruecknehmen -> Vorlage unsichtbar, Kandidat withdrawn
+    A4  Vollkette 163 Schritte, 483,1 s, gruen
+        Seed 6,1 s, C-423-Test 3/3
+    A5  C-411-Machart passt, mit einem Unterschied
+
+### A5 ist die beste Antwort im Bericht
+
+`[read]` **Er hat den Unterschied benannt, statt die Machart einfach
+zu kopieren:**
+
+> *,,Die Annahme erzeugt eine neue `source=curated`-Vorlage; der
+> originale Nutzerstack bleibt Eigentum des Nutzers und
+> unveraendert."*
+
+`[cmd]` **Das ist E-70 und C-31:** **ein angenommener Vorschlag wird
+Katalogmaterial, kein privates Objekt** — **und hier zusaetzlich:
+das Original bleibt beim Nutzer.**
+
+`[read]` **Wer seinen Stack teilt, verliert ihn nicht.**
+
+### A3 belegt beide Richtungen
+
+`[cmd]` **Zuruecknehmen setzt den Kandidaten auf `withdrawn`, nicht
+auf geloescht.**
+
+`[read]` **Die Spur bleibt** — **man sieht, dass jemand etwas
+angeboten und zurueckgezogen hat.**
+
+### Und der Vollausbau war die richtige Wahl
+
+Tom, 2026-09-08: *,,vollausbau. falls noetig schraenken wir spaeter
+ein."* (E-73)
+
+`[cmd]` **Beide Herkuenfte stehen jetzt** — **kuratiert und
+Nutzer.**
+
+`[read]` **Haetten wir nur den kuratierten Fall gebaut, waere der
+Kandidatenweg spaeter nachzuruesten gewesen** — **mit allen
+Lesern.**
+
+### Nicht live
+
+`[cmd]` **Nur auf Wegwerf-Datenbanken geprueft** — **wie
+beauftragt.**
+
+`[read]` **Das Einspielen ist der naechste Schritt** — **sonst kann
+Claude Code die Vorlagenkachel nicht anbinden** (E-72: eine Kachel
+ohne Daten zeigt eine Null).
+
+**Abgenommen, Einspielen beauftragt.**

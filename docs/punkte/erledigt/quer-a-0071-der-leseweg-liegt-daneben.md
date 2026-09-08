@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-68
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: a47dbb65
 beruehrt:
   dateien:
     - apps/web/src/app/v2/recovery/ansicht.tsx
@@ -153,3 +155,33 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Abnahme
+
+**2026-09-08, Orchestrator: nicht baubar, mit Grund.**
+
+`[cmd]` **Codex:** *,,Ein korrekter Waechter *Tabelle mit Zeilen
+ohne Leser* laesst sich aus dem aktuellen Bestand nicht beweisbar
+bauen."*
+
+**Drei Gruende, alle konkret:**
+
+`[read]` **Leser koennen ueber Sichten, RPCs und generische
+Funktionen laufen** — **ohne den Tabellennamen im App-Code zu
+tragen.**
+
+`[read]` **Ein reiner Quelltext-Scan wuerde falsche rote Befunde
+erzeugen.**
+
+`[cmd]` **Dieselbe Lehre wie C-415:** **eine Pruefung, die falsch
+rot meldet, ist so schaedlich wie eine, die falsch gruen meldet.**
+
+### Was bliebe
+
+`[cmd]` **Eine gepflegte, testbare Leser-Registry** — **das ist ein
+eigener Punkt, kein Nebenbei.**
+
+`[read]` **Bis dahin bleibt das Muster ein Befund, den ein Mensch
+findet** — **sechsmal am 07.09., jedes Mal von Tom.**
+
+**Geschlossen als nicht baubar.**
