@@ -60,3 +60,52 @@ zugestimmt hat?** `[cmd]` **Seit heute gibt es
 
 **Mitbeauftragt mit G-324 am 2026-09-08.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Die Spec beantwortet es — C-268 ist die falsche Frage
+
+**Nachgelesen am 2026-09-08, `docs/specs/HumanCoach/`.**
+
+`[cmd]` **`SPEC_08_IMPORT_PIPELINE.md:203-236`, Phase 4:**
+
+    async function onboardClient(coachId, clientEmail, settings) {
+      const invite = await createInviteToken(coachId, clientEmail)
+      const cc = await createCoachClient({
+        coach_id: coachId,
+        client_email: clientEmail,
+        status: 'pending',
+      })
+      ...
+      await sendInviteEmail(clientEmail, invite.token,
+                            getCoachName(coachId))
+    }
+
+`[read]` **Der Coach laedt ueber die E-Mail ein.** **Ein Name des
+Klienten kommt nirgends vor.**
+
+`[cmd]` **Der Name flieszt in die ANDERE Richtung:**
+`getCoachName(coachId)` **geht in die Einladungsmail** — **damit der
+Eingeladene weiss, wer ihn einlaedt.**
+
+`[read]` **Und das ergibt Sinn:** **wer eingeladen wird, ist noch
+kein Nutzer.** **Sein Name entsteht, wenn er annimmt.**
+
+`[cmd]` **`display_name` in `SPEC_02_ENTITIES.md:39` und
+`SPEC_06:37` gehoert zum Coach-Profil** — **nicht zum Klienten.**
+
+## Was daraus folgt
+
+`[read]` **Es fehlt keine Namensaufloesung** — **es fehlt der
+Coach-Name in der Einladung.**
+
+`[cmd]` **`coach.relationships` traegt sechs Zeilen** — **zu
+messen, ob der Coach-Name beim Einladen mitgeht.**
+
+`[read]` **Und der Orchestrator hat Tom eine Entscheidung
+vorgelegt, die in der Spec steht** — **statt sie nachzulesen.**
+
+## Neu gefasst
+
+`[read]` **Zu bauen: die Einladung traegt den Coach-Namen.**
+
+`[read]` **Nicht zu bauen: eine Suche nach dem Namen des
+Eingeladenen** — **den gibt es zum Zeitpunkt der Einladung nicht.**
