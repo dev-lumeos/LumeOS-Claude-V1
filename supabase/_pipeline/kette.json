@@ -1068,12 +1068,22 @@
       ]
     },
     {
+      "id": "432_goals",
+      "path": "supabase/migrations/20260908130000_c432_active_goal_create.sql",
+      "kind": "sql",
+      "creates": "C-432: atomarer Schreibweg fuer aktive Ziele mit Freiplatzantwort statt Unique-Fehler",
+      "depends_on": [
+        "111",
+        "auth_stub"
+      ]
+    },
+    {
       "id": "112",
       "path": "supabase/_pipeline/11_goals/112_body_measurements.sql",
       "kind": "sql",
       "creates": "Goals-Koerperdaten: body_measurements, body_circumferences und Profilgewicht-Sync",
       "depends_on": [
-        "111",
+        "432_goals",
         "090",
         "auth_stub"
       ]
