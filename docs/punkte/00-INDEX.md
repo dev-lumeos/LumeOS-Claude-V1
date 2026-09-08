@@ -8,8 +8,8 @@
 | `todos` | 208 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 341 |
-| **gesamt** | **551** |
+| `erledigt` | 342 |
+| **gesamt** | **552** |
 
 ## medical — 47
 
@@ -481,7 +481,7 @@
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | C-426 |
 | `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](erledigt/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | erledigt | — | — |
 
-## quer — 122
+## quer — 123
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -606,7 +606,8 @@
 | `G-375` | feature | hoch | [der Tageswechsler gehoert in die Schale](erledigt/quer-g-0375-der-tageswechsler-gehoert-in-die-schale.md) | erledigt | — | G-377 |
 | `G-377` | entscheidung | mittel | [ein gemeinsames Bauteil fuer den Modulkopf](todos/quer-g-0377-ein-gemeinsames-bauteil-fuer-den-modulkopf.md) | offen | — | — |
 | `G-380` | befund | mittel | [eine tote Zweitfassung und ein fehlender Hinweis](erledigt/quer-g-0380-eine-tote-zweitfassung-und-ein-fehlender-hinweis.md) | erledigt | — | G-381 |
-| `G-381` | befund | mittel | [das verwaiste Speicherobjekt und 135 ungemessene Dateien](laufend_claudecode/quer-g-0381-das-verwaiste-speicherobjekt-und-136-ungemessene.md) | laeuft (claudecode) | — | — |
+| `G-381` | befund | mittel | [das verwaiste Speicherobjekt und 135 ungemessene Dateien](erledigt/quer-g-0381-das-verwaiste-speicherobjekt-und-136-ungemessene.md) | erledigt | — | G-382 |
+| `G-382` | befund | mittel | [fuenf SSOT-Dateien inhaltlich pruefen](laufend_claudecode/quer-g-0382-fuenf-ssot-dateien-inhaltlich-pruefen.md) | laeuft (claudecode) | — | — |
 
 ## market — 1
 
