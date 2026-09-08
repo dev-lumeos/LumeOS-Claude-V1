@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
+| `todos` | 207 |
 | `laufend_codex` | 2 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 336 |
 | **gesamt** | **546** |
 
@@ -60,7 +61,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](erledigt/medical-g-0256-die-originaldatei-zum-laborbericht.md) | erledigt | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
-| `G-378` | befund | hoch | [das Hochladen scheitert](todos/medical-g-0378-das-hochladen-scheitert.md) | offen | — | — |
+| `G-378` | befund | hoch | [das Hochladen scheitert](laufend_claudecode/medical-g-0378-das-hochladen-scheitert.md) | laeuft (claudecode) | — | — |
 
 ## nutrition — 228
 
