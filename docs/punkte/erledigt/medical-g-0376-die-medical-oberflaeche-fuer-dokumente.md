@@ -9,6 +9,8 @@ kind_von: C-431
 entscheidung: E-74
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 1df88b1d
 beruehrt:
   dateien:
     - apps/web/src/app/v2/medical/ansicht.tsx
@@ -324,4 +326,80 @@ gelassen. Nicht committet, nicht gestaget.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  Ansehen belegt, Hochladen scheitert
+    A2  appointments 1 -> 2, scheduled -> cancelled
+    A3  health_events 3 -> 4, alle drei Arten
+        diagnosis 1, operation 2, treatment 1
+    A4  6 Zeilen / 6 mit sichtbarer Herkunft
+    A5  4 Kacheln, alle mit Daten
+    A6  Linie gesetzt, 2 Referenzen portiert
+
+### A4 ist der Kern von E-74
+
+`[cmd]` **Jede Zeile liest sich als *,,wer ? welche Art ? erfasst
+wann"*, plus eine Dokumentmarke, wo eines dahinterliegt.**
+
+`[cmd]` **Und *,,Wer?"* ist ein Pflichtfeld, mit dem Satz:**
+*,,LumeOS stellt keine Diagnose ? es haelt fest, was jemand
+festgestellt hat."*
+
+`[read]` **Damit steht die Regel auf dem Schirm, nicht nur in einer
+Entscheidungsdatei.**
+
+### A6 — zwei Referenzen fuer vier Kacheln, mit Grund
+
+`[cmd]` **`module-medical.jsx:62/96` traegt History und
+Appointments.**
+
+`[read]` **Das Mockup hat keine *Ereignis erfassen*-Form** ? **die
+gibt es, weil E-74 sie verlangt.**
+
+`[read]` **Eine Kachel ohne Mockup-Gegenstueck bekommt keine
+Referenz** ? **richtig, und benannt statt uebergangen.**
+
+### Und die Auswahllisten kommen aus den CHECKs
+
+`[cmd]` **`event_type` 3, `source_kind` 5, `appointment_type` 3,
+`status` 3** ? **alle gemessen, keine aus dem Gedaechtnis.**
+
+`[read]` **Seine eigene Lehre aus G-373, angewandt.**
+
+### A1 — das Hochladen scheitert, und der Grund ist offen
+
+`[cmd]` **Ansehen belegt: signierte URL mit Token, HTTP 200, 55
+Byte, Pfad `<user_id>/<report_id>.pdf` nach E-75.**
+
+`[cmd]` **Hochladen: `TypeError: Failed to fetch`,
+`net::ERR_H2_OR_QUIC_REQUIRED`, kein neues Objekt.**
+
+`[read]` **Seine Erklaerung ? die Bucket-Policy verlange
+`owner_id = auth.uid()`, das der Cookie-Client nicht liefere ?
+passt nicht zum beobachteten Fehler.**
+
+`[cmd]` **`ERR_H2_OR_QUIC_REQUIRED` ist ein Netzwerkfehler des
+Browsers** ? **eine abgewiesene Policy kaeme als HTTP 403
+zurueck, nicht als abgebrochene Verbindung.**
+
+`[read]` **Die Vermutung kann trotzdem stimmen** ? **aber sie ist
+nicht belegt, und zwei Ursachen duerfen nicht zu einer verschmolzen
+werden.**
+
+**Als G-378.**
+
+### Ein Fehler des Orchestrators bei der Abnahme
+
+`[cmd]` **Ich suchte `attach_lab_report` und `FormData` per
+`git grep` und fand nichts** ? **und schrieb, der Weg existiere
+nicht.**
+
+`[cmd]` **Er liegt in `dokumente-aktionen.ts`
+(`originalHochladen`, `originalOeffnen`) und
+`lib/medical/dokumente-write`.**
+
+`[read]` **Ich habe nach dem Wort gesucht statt nach der Sache** ?
+**derselbe Fehler wie heute frueh bei der Marketplace-Spec.**
+
+**Abgenommen.**
+

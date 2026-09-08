@@ -9,6 +9,8 @@ kind_von: G-241
 entscheidung: E-26
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 1df88b1d
 beruehrt:
   tabellen: [medical.lab_reports]
 zahlen: null
@@ -87,3 +89,12 @@ entsteht beim Lesen, zeitlich begrenzt.**
 
 **Mitbeauftragt mit G-376 am 2026-09-08.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-08, mit G-376 abgenommen: Ansehen ja, Hochladen offen.**
+
+`[cmd]` **Signierte URL, HTTP 200, 55 Byte, Pfad nach E-75.**
+
+`[cmd]` **Hochladen scheitert mit `ERR_H2_OR_QUIC_REQUIRED`** ?
+**als G-378 weiterverfolgt.**

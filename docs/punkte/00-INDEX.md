@@ -5,13 +5,12 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 207 |
+| `todos` | 208 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 334 |
-| **gesamt** | **545** |
+| `erledigt` | 336 |
+| **gesamt** | **546** |
 
-## medical — 46
+## medical — 47
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -58,9 +57,10 @@
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
 | `G-241` | entscheidung | hoch | [zwei Reiterschnitte im Medical-Mockup](erledigt/medical-g-0241-zwei-reiterschnitte-im-medical-mockup.md) | erledigt | — | C-429, G-256, G-257 |
-| `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](laufend_claudecode/medical-g-0256-die-originaldatei-zum-laborbericht.md) | laeuft (claudecode) | — | — |
+| `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](erledigt/medical-g-0256-die-originaldatei-zum-laborbericht.md) | erledigt | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
-| `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](laufend_claudecode/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | laeuft (claudecode) | — | — |
+| `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
+| `G-378` | befund | hoch | [das Hochladen scheitert](todos/medical-g-0378-das-hochladen-scheitert.md) | offen | — | — |
 
 ## nutrition — 228
 
