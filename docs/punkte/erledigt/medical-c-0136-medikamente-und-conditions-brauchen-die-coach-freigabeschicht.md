@@ -10,6 +10,8 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: cf1eae2a
 beruehrt:
   tabellen: ["coach.client_permissions"]
   dateien: []
@@ -48,3 +50,19 @@ zahlen: null
 
 **Mitbeauftragt mit C-433 am 2026-09-08.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-08, mit C-433 abgenommen: gemessen, drei Vorschlaege.**
+
+`[cmd]` **`medical_visibility` steht mit `none | summary | full`,
+DEFAULT `none`, 4 von 4 live auf `none`.**
+
+`[cmd]` **Luecke: `appointments` und `health_events` haben keine
+Coach-Policy.**
+
+`[read]` **Und der wichtigste Vorschlag:** **Originaldateien nicht
+implizit mit `full` teilen** ? **wer eine Zusammenfassung
+freigibt, hat nicht den Scan freigegeben.**
+
+`[read]` **Weiterverfolgt als C-434.**

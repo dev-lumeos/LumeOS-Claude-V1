@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 207 |
-| `laufend_codex` | 2 |
+| `todos` | 208 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 336 |
-| **gesamt** | **546** |
+| `erledigt` | 338 |
+| **gesamt** | **548** |
 
 ## medical — 47
 
@@ -20,7 +20,7 @@
 | `C-85` | befund | mittel | [Kurznamen fehlen bei 11 von 35](todos/medical-c-0085-kurznamen-fehlen-bei-11-von-35.md) | offen | — | — |
 | `C-91` | feature | mittel | [Die Spec nennt LOINC-Codes, die nicht die ueblichen sind](todos/medical-c-0091-die-spec-nennt-loinc-codes-die-nicht-die-ueblichen-sind.md) | offen | — | — |
 | `C-92` | befund | mittel | [Die Spec verwechselt Marker](todos/medical-c-0092-die-spec-verwechselt-marker.md) | offen | — | — |
-| `C-136` | befund | mittel | [Medikamente und Conditions brauchen die Coach-Freigabeschicht](laufend_codex/medical-c-0136-medikamente-und-conditions-brauchen-die-coach-freigabeschicht.md) | laeuft (codex) | — | — |
+| `C-136` | befund | mittel | [Medikamente und Conditions brauchen die Coach-Freigabeschicht](erledigt/medical-c-0136-medikamente-und-conditions-brauchen-die-coach-freigabeschicht.md) | erledigt | — | C-434, G-379 |
 | `C-171` | befund | mittel | [Medical — neun Konstanten ohne Tabelle](todos/medical-c-0171-medical-neun-konstanten-ohne-tabelle.md) | offen | — | — |
 | `C-176` | befund | mittel | [`biomarkerDetails.ts` im Vorgaengerrepo — 121 KB](todos/medical-c-0176-biomarkerdetails-ts-im-vorgaengerrepo-121-kb.md) | offen | — | — |
 | `C-178` | messung | mittel | [Prolactin und ApoB fehlen dem Health score](todos/medical-c-0178-prolactin-und-apob-fehlen-dem-health-score.md) | offen | — | — |
@@ -437,14 +437,14 @@
 | `C-06` | befund | mittel | [WP-05 erstes Mock-Modul echt machen](todos/goals-c-0006-wp-05-erstes-mock-modul-echt-machen.md) | offen | — | — |
 | `C-425` | befund | mittel | [die Vorgabe von `priority` faellt durch den CHECK](erledigt/goals-c-0425-die-vorgabe-von-priority-faellt-durch-den-check.md) | erledigt | — | C-432 |
 | `C-432` | feature | mittel | [der freie Platz fuer ein neues Ziel](erledigt/goals-c-0432-der-freie-platz-fuer-ein-neues-ziel.md) | erledigt | — | C-433 |
-| `C-433` | feature | mittel | [C-432 einspielen](laufend_codex/goals-c-0433-c-432-einspielen.md) | laeuft (codex) | — | — |
+| `C-433` | feature | mittel | [C-432 einspielen](erledigt/goals-c-0433-c-432-einspielen.md) | erledigt | — | — |
 | `E-04` | blocker | hoch | [Alte `public`-Tabellen nach `legacy` verschieben](erledigt/goals-e-0004-alte-public-tabellen-nach-legacy-verschieben.md) | erledigt | — | — |
 | `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](erledigt/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | erledigt | — | — |
 | `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — | — |
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 30
+## coach — 32
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -467,6 +467,7 @@
 | `C-381` | befund | hoch | [die Freigaberegel liegt im Browser](erledigt/coach-c-0381-die-freigaberegel-liegt-im-browser.md) | erledigt | — | G-324 |
 | `C-426` | befund | hoch | [acht Autonomieachsen, eine Erlaubnisliste](todos/coach-c-0426-acht-autonomieachsen-eine-erlaubnisliste.md) | offen | — | — |
 | `C-428` | befund | mittel | [das Onboarding fuer Unregistrierte](todos/coach-c-0428-onboarding-fuer-unregistrierte.md) | offen | — | — |
+| `C-434` | feature | mittel | [die Coach-Sicht auf die neuen Tabellen](laufend_codex/coach-c-0434-die-coach-sicht-auf-die-neuen-tabellen.md) | laeuft (codex) | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](erledigt/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | erledigt | — | C-381 |
@@ -478,6 +479,7 @@
 | `G-282` | feature | mittel | [CoachMemory ist spezifiziert und nicht gebaut](todos/coach-g-0282-coachmemory-ist-spezifiziert-und-nicht-gebaut.md) | offen | — | — |
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](erledigt/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | erledigt | — | — |
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | C-426 |
+| `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](todos/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | offen | — | — |
 
 ## quer — 119
 
