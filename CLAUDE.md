@@ -25,6 +25,48 @@ Sie ist deshalb aufgeteilt.**
 
 ---
 
+## `docs/ssot/` ist die Wahrheit ? Punkte sind der Arbeitsvorrat
+
+**Tom, 2026-09-08:**
+
+> ja wir koennen den ganzen tag in punkte arbeiten, aber wenn wir
+> den tag abschliessen wird nachgetragen, denn da liegt die wahre
+> source
+
+`[cmd]` **`docs/ssot/00-INDEX.md`:** *,,Dieser Ordner ist die
+einzige verbindliche Beschreibung des Ist-Zustands."*
+
+    Rangfolge bei Widerspruch:
+    1  Code (verifiziert per Befehl)
+    2  docs/ssot/
+    3  docs/specs/  (das Ziel, nicht der Ist-Zustand)
+    4  alles andere
+
+### Die Arbeitsteilung
+
+    docs/punkte/          der Arbeitsvorrat: was offen ist,
+                          was laeuft, was abgenommen wurde
+    docs/entscheidungen/  was Tom entschieden hat
+    docs/ssot/            WAS GEBAUT IST -- die Wahrheit
+
+`[read]` **Ein Punkt beschreibt einen Auftrag.** `[read]` **Die
+SSOT beschreibt den Zustand.**
+
+### Zum Tagesabschluss wird nachgetragen
+
+`[read]` **Nicht nach jedem Punkt** ? **das waere doppelte
+Buchfuehrung.**
+
+`[read]` **Aber am Ende des Tages:** **was heute gebaut wurde,
+steht in `docs/ssot/`.**
+
+`[cmd]` **Am 2026-09-08 gemessen: letzter Commit in `ssot/` am
+27.08., seither 112 Commits in `supabase/` und `apps/`** ? **zwoelf
+Tage Rueckstand** (A-74).
+
+`[read]` **Der Orchestrator hat die Struktur gebaut und dann nur
+die Punkte gepflegt.**
+
 ## Rolle
 
 `[read]` **Orchestrator.** **Du gibst Auftraege raus, nimmst

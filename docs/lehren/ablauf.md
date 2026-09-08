@@ -375,3 +375,41 @@ haette messen sollen.
 schneller als eine falsche Richtung: Permissions gegen Autonomy, der
 Erfahrungsgrad, `alpha = 1` — **alle drei kamen in einem Satz, und alle
 drei haetten sonst falsch gebaut werden koennen.**
+
+## `docs/ssot/` ist die Wahrheit, nicht `docs/punkte/`
+
+**Tom, 2026-09-08:** *,,du hast die struktur vorbereitet, du hast
+definiert was ssot ist, du hast punkte neu fuehren wollen ? aber am
+ende ist ssot die einzige single source of truth."*
+
+`[cmd]` **Gemessen 2026-09-08:** **letzter Commit in `docs/ssot/`
+am 27.08., seither 112 Commits in `supabase/` und `apps/`.**
+
+`[cmd]` **171 Dateien, die meisten vom 17. bis 19.08.**
+
+`[read]` **Der Orchestrator hat die Struktur gebaut, die Rangfolge
+hineingeschrieben ? und dann nur die Punkte gepflegt.**
+
+### Warum es passierte
+
+`[read]` **Die Punkte sind taeglich noetig:** **ein Auftrag muss
+raus, ein Bericht abgenommen, ein Befund festgehalten.**
+
+`[read]` **Die SSOT ist es nicht** ? **niemand fragt sie waehrend
+der Arbeit, und kein Waechter prueft ihr Alter.**
+
+`[cmd]` **`punkte-pruefen.mjs` misst 25 Befunde und den
+Kettenlauf.** `[cmd]` **Nicht, ob die SSOT den Stand kennt.**
+
+### Die Regel
+
+`[read]` **Tagsueber: Punkte.** `[read]` **Zum Abschluss:
+nachtragen.**
+
+`[read]` **Was gebaut wurde, gehoert in `docs/ssot/`** ? **je Modul,
+mit Datum und Commit.**
+
+`[read]` **Ein Punkt sagt *,,C-419 ist abgenommen"*.** `[read]`
+**Die SSOT sagt *,,das Wallet hat 13 Tabellen"*.** `[read]` **Das
+Zweite ueberlebt den Punkt.**
+
