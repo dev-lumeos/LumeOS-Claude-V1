@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 210 |
+| `todos` | 208 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 331 |
 | **gesamt** | **542** |
@@ -433,7 +434,7 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-06` | befund | mittel | [WP-05 erstes Mock-Modul echt machen](todos/goals-c-0006-wp-05-erstes-mock-modul-echt-machen.md) | offen | — | — |
-| `C-425` | befund | mittel | [die Vorgabe von `priority` faellt durch den CHECK](todos/goals-c-0425-die-vorgabe-von-priority-faellt-durch-den-check.md) | offen | — | — |
+| `C-425` | befund | mittel | [die Vorgabe von `priority` faellt durch den CHECK](laufend_codex/goals-c-0425-die-vorgabe-von-priority-faellt-durch-den-check.md) | laeuft (codex) | — | — |
 | `E-04` | blocker | hoch | [Alte `public`-Tabellen nach `legacy` verschieben](erledigt/goals-e-0004-alte-public-tabellen-nach-legacy-verschieben.md) | erledigt | — | — |
 | `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](erledigt/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | erledigt | — | — |
 | `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — | — |
@@ -461,7 +462,7 @@
 | `C-358` | befund | mittel | [abgelaufene Aktionen bleiben `pending`](erledigt/coach-c-0358-abgelaufene-aktionen-bleiben-pending.md) | erledigt | — | — |
 | `C-362` | feature | mittel | [das Consent-Log ist beschrieben und nicht gebaut](erledigt/coach-c-0362-das-consent-log-ist-beschrieben-und-nicht-gebaut.md) | erledigt | — | — |
 | `C-381` | befund | hoch | [die Freigaberegel liegt im Browser](erledigt/coach-c-0381-die-freigaberegel-liegt-im-browser.md) | erledigt | — | G-324 |
-| `C-426` | befund | hoch | [acht Autonomieachsen, eine Erlaubnisliste](todos/coach-c-0426-acht-autonomieachsen-eine-erlaubnisliste.md) | offen | — | — |
+| `C-426` | befund | hoch | [acht Autonomieachsen, eine Erlaubnisliste](laufend_codex/coach-c-0426-acht-autonomieachsen-eine-erlaubnisliste.md) | laeuft (codex) | — | — |
 | `C-428` | befund | mittel | [das Onboarding fuer Unregistrierte](todos/coach-c-0428-onboarding-fuer-unregistrierte.md) | offen | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |

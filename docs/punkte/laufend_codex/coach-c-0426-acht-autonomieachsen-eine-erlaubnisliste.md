@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-361
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [coach.client_autonomy]
 zahlen:
@@ -98,3 +100,8 @@ die anderen sieben 1 bis 5.**
 
 `[read]` **Sieben Achsen ohne Matrix** — **als Entscheidung an
 Tom.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-425 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.
