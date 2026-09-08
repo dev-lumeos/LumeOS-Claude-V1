@@ -43,6 +43,10 @@ import {
 } from '../../../lib/medical/systemscore'
 import { MedicalAnsicht } from './ansicht'
 import type { LabMarkerEffekt, MedikationEcht } from './echtdaten'
+// G-376: Verlauf, Termine und Dokumente — das Schema stand
+// seit C-431 live, die Oberflaeche kannte es nicht.
+import { ladeDokumente, DOKUMENTE_LEER, type DokumenteStand }
+  from '../../../lib/medical/dokumente-read'
 import './medical.css'
 
 export const metadata: Metadata = {
@@ -255,8 +259,21 @@ export default async function V2MedicalPage() {
     ladefehler = e instanceof Error ? e.message : String(e)
   }
 
+  // `[read]` **Eigener Aufruf, eigener Fehler** — faellt der
+  // Dokumentteil aus, bleiben die uebrigen Reiter gueltig.
+  let dokumente: DokumenteStand = DOKUMENTE_LEER
+  try {
+    dokumente = await ladeDokumente()
+  } catch (e) {
+    dokumente = {
+      ...DOKUMENTE_LEER,
+      fehler: e instanceof Error ? e.message : String(e),
+    }
+  }
+
   return (
     <MedicalAnsicht
+      dokumente={dokumente}
       echt={{
         reihen, befunde, werte, katalogStart, katalogGesamt,
         medikationen, labEffekte, scores, ladefehler, symptome,

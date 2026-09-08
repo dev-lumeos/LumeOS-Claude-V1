@@ -51,6 +51,27 @@ const ATTRAPPE =
   + 'faellt mit Toms Abnahme'
 
 /** `biomarkers`, wie er im Mockup steht — `MedBiomarkers`. */
+/** `module-medical.jsx:62` — die Zeitachse des Entwurfs. */
+const VERLAUF_ENTWURF: Array<[string, string, string, string]> = [
+  ['2025-03-04', 'Diagnosis', 'Right lateral epicondylopathy',
+   'Onset after high-volume pulling block. Confirmed by US ultrasound at PhysioMed.'],
+  ['2024-10-04', 'Medication', 'Started Anastrozole 0.25mg',
+   'E2 sensitive trending 42 pg/mL after 4 weeks of TRT.'],
+  ['2024-09-12', 'Treatment', 'TRT protocol initiated',
+   'Test Cyp 150mg/wk + HCG 500 IU 2x/wk. Trough target 600-800 ng/dL.'],
+  ['2024-08-22', 'Diagnosis', 'Primary hypogonadism diagnosed',
+   'Total T 280 ng/dL on two morning panels 4 weeks apart.'],
+]
+
+/** `module-medical.jsx:96` — die Termine des Entwurfs. */
+const TERMINE_ENTWURF: Array<[string, string, string, string]> = [
+  ['2026-05-21 10:30', 'Sarah Müller · Physio', 'Elbow follow-up', 'upcoming'],
+  ['2026-07-15 09:00', 'Dr. M. Kessler', 'Q3 2026 panel + protocol review', 'upcoming'],
+  ['2026-09-04 11:00', 'Dr. S. Wagner · GP', 'Annual physical', 'upcoming'],
+  ['2026-04-23 08:30', 'MVZ Lab Berlin', 'Q2 2026 lab draw (fasting)', 'done'],
+]
+
+
 export function MedBiomarkersReferenz() {
   const kategorien = ['All', 'Metabolic', 'Lipids', 'Hormones',
                       'Inflammation', 'Vitamins', 'Minerals', 'Organ']
@@ -1032,6 +1053,93 @@ export function MedMedicationsReferenz() {
             </div>
           </Card>
         ))}
+      </div>
+    </>
+  )
+}
+
+
+/**
+ * `verlauf`, wie er im Mockup steht — `module-medical.jsx:398`
+ * (`MedHistory`) und `:96` (Appointments).
+ *
+ * `[cmd]` **Der Entwurf zeigt eine senkrechte Zeitachse mit
+ * Punktmarken**, Kategorie-Pille und einem Verweis auf das
+ * hinterlegte Dokument (`linkedDoc`).
+ *
+ * `[read]` **Der Verweis IST die Herkunft** — das Mockup hatte den
+ * Gedanken schon, E-74 hat ihn benannt und zur Pflicht gemacht.
+ */
+export function MedVerlaufReferenz() {
+  return (
+    <>
+      <ReferenzTrenner reiter="Verlauf" quelle="theme-v1/module-medical.jsx" />
+      <div className="v2-grid v2-grid-14" style={{ gap: 14 }}>
+        <Card title="History" sub="timeline · filterable by category"
+              attrappe={ATTRAPPE}>
+          <div style={{ position: 'relative', paddingLeft: 24 }}>
+            <div style={{
+              position: 'absolute', left: 8, top: 0, bottom: 0,
+              width: 1, background: 'var(--border)',
+            }} />
+            <div className="v2-col-gap" style={{ gap: 12 }}>
+              {VERLAUF_ENTWURF.map(([datum, kat, titel, text]) => (
+                <div key={titel} style={{ position: 'relative' }}>
+                  <div style={{
+                    position: 'absolute', left: -24, top: 8,
+                    width: 16, height: 16, borderRadius: 999,
+                    background: 'var(--bg)',
+                    border: '2px solid var(--warn)',
+                    display: 'grid', placeItems: 'center',
+                  }}>
+                    <Icon name="alert" className="v2-ic" style={{
+                      width: 7, height: 7, color: 'var(--warn)',
+                    }} />
+                  </div>
+                  <div style={{
+                    padding: 12, background: 'var(--bg-elev)',
+                    border: '1px solid var(--border)', borderRadius: 6,
+                  }}>
+                    <div style={{
+                      display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4,
+                    }}>
+                      <span className="v2-num v2-dim" style={{ fontSize: 10 }}>{datum}</span>
+                      <Pill>{kat}</Pill>
+                    </div>
+                    <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>
+                      {titel}
+                    </div>
+                    <div className="v2-muted" style={{ fontSize: 12, lineHeight: 1.5 }}>
+                      {text}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+
+        <Card title="Appointments" sub="upcoming and past" attrappe={ATTRAPPE}>
+          <div className="v2-col-gap" style={{ gap: 6 }}>
+            {TERMINE_ENTWURF.map(([wann, wer, grund, status]) => (
+              <div key={wann} style={{
+                padding: 9, borderRadius: 6, background: 'var(--surface)',
+                border: '1px solid var(--border)',
+              }}>
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap',
+                }}>
+                  <span className="v2-num v2-dim" style={{ fontSize: 10 }}>{wann}</span>
+                  <span style={{ fontSize: 12, flex: 1, minWidth: 0 }}>{wer}</span>
+                  <Pill variant={status === 'upcoming' ? 'acc' : undefined}>{status}</Pill>
+                </div>
+                <div className="v2-muted" style={{ fontSize: 11, marginTop: 3 }}>
+                  {grund}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
       </div>
     </>
   )

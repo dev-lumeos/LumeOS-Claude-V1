@@ -768,7 +768,11 @@ test('das Goals-Modul kennzeichnet jede Kachel', () => {
     // jetzt sein eigenes Gegenstueck** — correlations, supplements,
     // benchmark, export. **Die Korrelations- und Wirksamkeitskarten
     // zaehlen als je EINE Marke**, sie stehen in einer `.map`.
-    [path.join(process.cwd(), 'src/app/v2/medical/mockup-referenz.tsx'), 25],
+    // `[cmd]` **27 seit `MedVerlaufReferenz`** (2026-09-08, G-376):
+    // der neue Reiter `verlauf` bekam sein Gegenstueck — `History`
+    // (die Zeitachse aus `module-medical.jsx:398`) und
+    // `Appointments` (`:96`).
+    [path.join(process.cwd(), 'src/app/v2/medical/mockup-referenz.tsx'), 27],
     // `[cmd]` **G-365: Coach hat DREI Routen** -- `/v2/coach` ist nur
     // die Auswahl. Die zwanzig Reiter liegen unter `human` und `ai`,
     // deshalb wurden sie lange gar nicht gemessen.

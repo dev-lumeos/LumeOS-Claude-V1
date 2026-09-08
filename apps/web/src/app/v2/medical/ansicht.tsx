@@ -54,10 +54,13 @@ import { MedBiomarkers, MedImport } from './tab-biomarker'
 import { MedTracking, MedInsights } from './tab-tracking'
 // G-208: der Wirkstoffkatalog.
 import { MedWirkstoffe } from './tab-wirkstoffe'
+// G-376: Verlauf, Termine, Dokumente.
+import { MedVerlauf } from './tab-verlauf'
+import type { DokumenteStand } from '../../../lib/medical/dokumente-read'
 import type { EchteDaten } from './echtdaten'
 import {
   MedBiomarkersReferenz, MedWirkstoffeOhneMockup,
-  MedDashboardReferenz,
+  MedDashboardReferenz, MedVerlaufReferenz,
 } from './mockup-referenz'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
@@ -73,6 +76,7 @@ export const ATTRAPPE =
 // Tabs es sind.
 function tabs(
   markerZahl: number, medikationen: number, wirkstoffe: number,
+  verlaufZahl: number,
 ): TabItem[] {
   return [
     { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
@@ -94,10 +98,26 @@ function tabs(
     // etwas nachschlaegt, hat meist gerade dort hineingesehen.
     { id: 'wirkstoffe', label: 'Wirkstoffe', icon: 'search', count: wirkstoffe },
     { id: 'insights', label: 'Insights', icon: 'sparkles', count: CORRELATIONS.length },
+    // `[cmd]` **G-376: der History-Reiter des Mockups**
+    // (`module-medical.jsx:145`) — C-429 hat gemessen, dass er
+    // weder Reiter noch Tabelle hatte. Beides steht jetzt.
+    { id: 'verlauf', label: 'Verlauf', icon: 'medical',
+      count: verlaufZahl },
   ]
 }
 
-export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
+export function MedicalAnsicht({ echt, dokumente }: {
+  echt: EchteDaten
+  /**
+   * G-376: Verlauf, Termine und Dokumente.
+   *
+   * `[cmd]` **Das Schema stand seit C-431 live** — `health_events`,
+   * `health_timeline`, `appointments` und der Bucket
+   * `medical-originals`. **Die Oberflaeche kannte nichts davon**
+   * (neunter Fall von A-71).
+   */
+  dokumente: DokumenteStand
+}) {
   // G-117: Tab in der Adresse — Drop-in aus lib/tab-url.
   const [tab, setTab] = useTabParam('dashboard')
   const [modal, setModal] = React.useState<ModalZustand | null>(null)
@@ -221,7 +241,8 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
 
       <Tabs items={tabs(echt.reihen.length,
                         echt.medikationen.filter(m => m.is_active).length,
-                        echt.wirkstoffe.length)}
+                        echt.wirkstoffe.length,
+                        dokumente.zeitachse.length)}
             active={tab} onChange={setTab} />
 
       {tab === 'dashboard' && (
@@ -262,6 +283,13 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
       {tab === 'insights' && (
         <>
           <MedInsights />
+        </>
+      )}
+
+      {tab === 'verlauf' && (
+        <>
+          <MedVerlauf stand={dokumente} />
+          <MedVerlaufReferenz />
         </>
       )}
 
