@@ -3024,6 +3024,91 @@ SELECT u.id, current_date - 2, 'moderate',
   'Light training and recovery protocol', 'acknowledged'
 FROM test_user u;
 
+-- C-423/E-72: Der Katalog hat fuer alle vier Produkt-Zieltypen eine
+-- nichtleere kuratierte Vorlage. Daneben belegt genau ein oeffentlich
+-- teilbarer test-user-Stack die zweite Herkunft samt Katalogvorschlag.
+DELETE FROM supplements.stack_curation_candidate_items
+WHERE candidate_id = 'c4230000-0000-0000-0000-000000000031'::uuid;
+DELETE FROM supplements.stack_curation_candidates
+WHERE id = 'c4230000-0000-0000-0000-000000000031'::uuid;
+DELETE FROM supplements.stack_template_items
+WHERE template_id IN (
+  'c4230000-0000-0000-0000-000000000011'::uuid,
+  'c4230000-0000-0000-0000-000000000012'::uuid,
+  'c4230000-0000-0000-0000-000000000013'::uuid,
+  'c4230000-0000-0000-0000-000000000014'::uuid,
+  'c4230000-0000-0000-0000-000000000021'::uuid
+);
+
+INSERT INTO supplements.user_stacks (id, user_id, name, description, goal, source, is_active)
+SELECT 'c4230000-0000-0000-0000-000000000001'::uuid, u.id,
+       'C423 Test-user teilen', 'E-72 Nachweis fuer einen oeffentlich teilbaren Nutzerstack.',
+       'health', 'user', false
+FROM auth.users u WHERE u.email = 'test-user@lumeos.local'
+ON CONFLICT (id) DO UPDATE SET
+  name = EXCLUDED.name, description = EXCLUDED.description, updated_at = now();
+
+DELETE FROM supplements.stack_items
+WHERE stack_id = 'c4230000-0000-0000-0000-000000000001'::uuid;
+INSERT INTO supplements.stack_items (stack_id, supplement_id, dose, dose_unit, timing, frequency, sort_order)
+SELECT 'c4230000-0000-0000-0000-000000000001'::uuid, s.id, 200, 'mg', 'morning', 'daily', 0
+FROM supplements.supplements s WHERE s.is_active ORDER BY s.id LIMIT 1;
+
+INSERT INTO supplements.stack_templates (id, name_de, description_de, goal, source, is_public, sort_order)
+VALUES
+  ('c4230000-0000-0000-0000-000000000011'::uuid, 'Koerperkomposition Grundlagen', 'Kuratierter Startpunkt fuer Koerperkomposition.', 'body_composition', 'curated', true, 1),
+  ('c4230000-0000-0000-0000-000000000012'::uuid, 'Performance Grundlagen', 'Kuratierter Startpunkt fuer Leistung.', 'performance', 'curated', true, 2),
+  ('c4230000-0000-0000-0000-000000000013'::uuid, 'Gesundheit Grundlagen', 'Kuratierter Startpunkt fuer allgemeine Gesundheit.', 'health', 'curated', true, 3),
+  ('c4230000-0000-0000-0000-000000000014'::uuid, 'Lifestyle Grundlagen', 'Kuratierter Startpunkt fuer den Alltag.', 'lifestyle', 'curated', true, 4)
+ON CONFLICT (id) DO UPDATE SET
+  name_de = EXCLUDED.name_de, description_de = EXCLUDED.description_de, goal = EXCLUDED.goal,
+  source = EXCLUDED.source, is_public = EXCLUDED.is_public, sort_order = EXCLUDED.sort_order, updated_at = now();
+
+INSERT INTO supplements.stack_templates (
+  id, owner_id, origin_stack_id, name_de, description_de, goal, source, is_public, sort_order
+)
+SELECT 'c4230000-0000-0000-0000-000000000021'::uuid, u.id,
+       'c4230000-0000-0000-0000-000000000001'::uuid, 'C423 Test-user teilen',
+       'E-72 Nachweis fuer einen oeffentlich teilbaren Nutzerstack.', 'health', 'user', true, 10
+FROM auth.users u WHERE u.email = 'test-user@lumeos.local'
+ON CONFLICT (id) DO UPDATE SET
+  owner_id = EXCLUDED.owner_id, origin_stack_id = EXCLUDED.origin_stack_id,
+  name_de = EXCLUDED.name_de, description_de = EXCLUDED.description_de, goal = EXCLUDED.goal,
+  source = EXCLUDED.source, is_public = EXCLUDED.is_public, updated_at = now();
+
+WITH source_supplement AS (
+  SELECT id FROM supplements.supplements WHERE is_active ORDER BY id LIMIT 1
+), templates AS (
+  SELECT unnest(ARRAY[
+    'c4230000-0000-0000-0000-000000000011'::uuid,
+    'c4230000-0000-0000-0000-000000000012'::uuid,
+    'c4230000-0000-0000-0000-000000000013'::uuid,
+    'c4230000-0000-0000-0000-000000000014'::uuid,
+    'c4230000-0000-0000-0000-000000000021'::uuid
+  ]) AS template_id
+)
+INSERT INTO supplements.stack_template_items (
+  template_id, supplement_id, dose_amount, dose_unit, timing, frequency, tier, sort_order
+)
+SELECT t.template_id, s.id, 200, 'mg', 'morning', 'daily', 'good', 0
+FROM templates t CROSS JOIN source_supplement s;
+
+INSERT INTO supplements.stack_curation_candidates (
+  id, source_template_id, origin_stack_id, owner_id, name_de, description_de, goal, reason, status
+)
+SELECT 'c4230000-0000-0000-0000-000000000031'::uuid,
+       'c4230000-0000-0000-0000-000000000021'::uuid,
+       'c4230000-0000-0000-0000-000000000001'::uuid, u.id,
+       'C423 Test-user teilen', 'E-72 Nachweis fuer einen oeffentlich teilbaren Nutzerstack.',
+       'health', 'E-72 Seed: freiwillig geteilter Nutzerstack als Katalogvorschlag.', 'pending'
+FROM auth.users u WHERE u.email = 'test-user@lumeos.local';
+
+INSERT INTO supplements.stack_curation_candidate_items (
+  candidate_id, supplement_id, dose_amount, dose_unit, timing, frequency, tier, sort_order
+)
+SELECT 'c4230000-0000-0000-0000-000000000031'::uuid, s.id, 200, 'mg', 'morning', 'daily', 'good', 0
+FROM supplements.supplements s WHERE s.is_active ORDER BY s.id LIMIT 1;
+
 INSERT INTO public.profiles (
   id, birth_date, biological_sex, height_cm, body_weight_kg, activity_level, nutrition_goal
 )

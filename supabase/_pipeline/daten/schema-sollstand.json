@@ -4398,7 +4398,7 @@
     {
       "schema": "supplements",
       "name": "stack_templates",
-      "schritt": "136",
+      "schritt": "423_schema",
       "rls": true,
       "policies": [
         "SELECT"
@@ -4417,13 +4417,13 @@
           "TRUNCATE"
         ]
       },
-      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt authenticated SELECT und service_role ALL explizit; Katalog-/Template-Daten sind lesbar.",
-      "zeilenschutzart": "oeffentlich"
+      "grants_herkunft": "423_stack_template_sources.sql: kuratierte und oeffentliche Nutzer-Vorlagen sind lesbar, private Nutzer-Vorlagen nur fuer den Eigentümer.",
+      "zeilenschutzart": "oeffentlich_oder_eigene_zeilen"
     },
     {
       "schema": "supplements",
       "name": "stack_template_items",
-      "schritt": "136",
+      "schritt": "423_schema",
       "rls": true,
       "policies": [
         "SELECT"
@@ -4442,8 +4442,38 @@
           "TRUNCATE"
         ]
       },
-      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt authenticated SELECT und service_role ALL explizit; Katalog-/Template-Daten sind lesbar.",
-      "zeilenschutzart": "oeffentlich"
+      "grants_herkunft": "423_stack_template_sources.sql: Item-Sicht folgt der Sichtbarkeit ihrer Vorlage.",
+      "zeilenschutzart": "oeffentlich_oder_eigene_zeilen"
+    },
+    {
+      "schema": "supplements",
+      "name": "stack_curation_candidates",
+      "schritt": "423_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "423_stack_template_sources.sql: Eigentümer und Admin lesen den Snapshot; Schreiben nur ueber SECURITY DEFINER Funktionen.",
+      "zeilenschutzart": "eigene_zeilen_oder_admin"
+    },
+    {
+      "schema": "supplements",
+      "name": "stack_curation_candidate_items",
+      "schritt": "423_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "423_stack_template_sources.sql: Sicht folgt dem Eigentümer/Admin-Recht des Kandidaten.",
+      "zeilenschutzart": "eigene_zeilen_oder_admin"
+    },
+    {
+      "schema": "supplements",
+      "name": "stack_curation_decisions",
+      "schritt": "423_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "423_stack_template_sources.sql: Sicht folgt dem Eigentümer/Admin-Recht des Kandidaten.",
+      "zeilenschutzart": "eigene_zeilen_oder_admin"
     },
     {
       "schema": "supplements",

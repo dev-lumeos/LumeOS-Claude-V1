@@ -1544,6 +1544,16 @@
       ]
     },
     {
+      "id": "423_schema",
+      "path": "supabase/_pipeline/13_supplements/423_stack_template_sources.sql",
+      "kind": "sql",
+      "creates": "C-423/E-73: kuratierte Zielvorlagen, oeffentlich teilbare Nutzerstacks und getrennte Kurations-Snapshots",
+      "depends_on": [
+        "138",
+        "061"
+      ]
+    },
+    {
       "id": "419_schema",
       "path": "supabase/migrations/20260906072641_c419_marketplace_wallet_schema.sql",
       "kind": "sql",
