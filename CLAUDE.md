@@ -370,6 +370,25 @@ Recovery fuenf, Coach acht.
 `[read]` **Und *nicht gefunden* ist keine Aussage** — **es heisst
 nur, dass die Suche nichts fand.**
 
+## Eine Sammelfrage misst nichts
+
+**G-370, 2026-09-07.** `[cmd]` **Claude Codes Pruefung fragte:
+*,,aendert sich unten ueberhaupt etwas?"***
+
+`[cmd]` **Drei von vier Zweigen aenderten sich** — **die Pruefung
+blieb gruen, waehrend der vierte kaputt war.**
+
+`[read]` **Die Sabotageprobe hat die Pruefung widerlegt, nicht den
+Code.**
+
+`[read]` **Eine Frage nach dem Ganzen faellt nicht, wenn ein Teil
+faellt.** `[read]` **Sie muss je Fall fragen und den Fall
+benennen.**
+
+`[cmd]` **Geschaerft: *,,erscheint diese Kachel auf JEDEM
+Unterreiter unten, waehrend nur einer sie oben zeigt?"*** — **mit
+Namen der Kachel.**
+
 ## Anbinden heisst mit Daten
 
 **Tom, 2026-09-07:** *,,wenn wir was anbinden sollen auch daten

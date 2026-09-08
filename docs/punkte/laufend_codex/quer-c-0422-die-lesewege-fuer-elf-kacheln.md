@@ -84,7 +84,51 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Codex, 2026-09-08 — Zwischenbericht nach Dev-Einspielung.**
+
+### C-422
+
+`recovery.card_read_all(user_id)` liefert genau elf Karten-Schluessel:
+fuenf Overtraining-, zwei Protokoll-, zwei Stress- und zwei Score-
+Beitrags-Karten. Jede Zeile hat `has_data`, JSON-Zeilen und bei keiner
+Zeile einen benannten `empty_hint`; damit ist E-72 kein Zahlenwert 0.
+
+| Abnahme | Messung |
+| --- | --- |
+| A1 | **11 / 11 angebunden** |
+| A2 | test-user: Alert **1**, Protokolle **2**, Stress **7**, Beitraege **21**; der Wegwerf-Test meldet **11 / 11** befuellte Karten |
+| A3 | Drei Check-in-Karten: Formular/Schreibweg bzw. Erklaerweg fehlen. Phone-camera-HRV: Geraetefunktion fehlt. Sleep: Erklaerweg fehlt. Modality catalog: Register ohne Nutzerbezug bzw. Wirkung je Art fehlt. |
+
+### G-363
+
+`goals.phase_transition_recommendation(user_id, as_of)` schlaegt nur
+bei einer offenen, ueberfaelligen Phase mit mindestens zwei
+Koerpermessungen vor, schreibt `recommended_next` und einen
+`transition_reason`, beendet aber keine Phase. Der Wegwerf-Test erzeugte
+einen Vorschlag samt Grund und bestand.
+
+`goals.phase_transition_respond(phase_id, 'rejected', 'Ich moechte die
+Phase fortsetzen.')` ist der E-69-Widerspruch: Die Funktion akzeptiert
+nur die eigene Phase des angemeldeten Nutzers und schreibt die Antwort
+mit optionalem Grund in `goals.phase_transition_responses`. Sie aendert
+die Phase nicht.
+
+### A4 und A6
+
+Die Vollkette erreichte mit 161 Schritten die Abschlusspruefung. Nach
+dem letzten Grant-Fix pruefte `schema-vollstaendigkeit-pruefen.ts` auf
+`lumeos_c422_final2`: **35/35 Tabellen mit RLS/Policies, 41/41
+Funktionen**. Der funktionale C-422-Test bestand **2/2** in 1,919 s.
+Der komplette Runner wurde nach diesem letzten, ausschliesslichen
+Grant-Fix noch nicht erneut durchlaufen.
+
+Dev-Sicherung vor dem Einspielen:
+`backup/vollsicherung/20260908_071955_c422_vor_dev_voll.dump`
+(26.267.009 Byte). Dev-Einspielung: **1,018 s**. Danach gemessen:
+`recovery.card_read_all(uuid)`,
+`goals.phase_transition_recommendation(uuid,date)`,
+`goals.phase_transition_respond(uuid,text,text)` und
+`goals.phase_transition_responses` vorhanden.
 
 ## Abnahme
 

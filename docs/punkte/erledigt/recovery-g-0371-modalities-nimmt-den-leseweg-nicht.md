@@ -9,6 +9,8 @@ kind_von: A-71
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: 259d7d0f
 beruehrt:
   dateien:
     - apps/web/src/app/v2/recovery/modalitaeten-kachel.tsx
@@ -50,3 +52,20 @@ ohne Prop gerufen, waehrend die Funktion daneben steht.**
 
 **Mitbeauftragt mit G-370 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit G-370 abgenommen: grundlos, mein Befund war falsch.
+
+`[cmd]` **`ModalitaetenKachel` ist angebunden:** `page.tsx:36` laedt,
+`:45` reicht durch, `ansicht.tsx:434` zeigt — **auf `today`.**
+
+`[cmd]` **89 Eintraege, 4 Arten, echte Deltas.**
+
+`[cmd]` **Die 178 aus dem Auftrag sind der Tabellenstand:** `dev`
+**89, `tom.seed` 89** — **RLS, kein Verlust.**
+
+`[read]` **Claude Code hat den Befund in G-365 ohne den
+`today`-Reiter gemeldet und ihn selbst widerlegt.**
+
+**Geschlossen als grundlos.**

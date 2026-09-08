@@ -9,6 +9,8 @@ kind_von: G-365
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-07
+erledigt: 2026-09-07
+commit: 259d7d0f
 beruehrt:
   dateien:
     - apps/web/src/app/v2/training/ansicht.tsx
@@ -43,3 +45,17 @@ danebenliegen** — `[cmd]` **das Muster kam am 07.09. dreimal vor.**
 
 **Mitbeauftragt mit G-370 am 2026-09-07.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-07, mit G-370 abgenommen: die Funktion war schon da.
+
+`[cmd]` **`ladeSitzungsUebungen` wurde bei `page.tsx:82` gerufen** —
+**nur nicht in `VerlaufDaten`.**
+
+`[cmd]` **Zwei Uebungen, Sitzung Pull 7 (2026-09-12), echte Namen,
+Striche fuer Ziel und RIR** — **die Sitzung ist geplant, nicht
+gelaufen.**
+
+`[cmd]` **Sabotage: `uebungen: []` brachte den Entwurfswert
+zurueck.**

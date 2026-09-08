@@ -7,8 +7,7 @@
 |---|---|
 | `todos` | 213 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 309 |
+| `erledigt` | 312 |
 | **gesamt** | **527** |
 
 ## medical — 43
@@ -389,7 +388,7 @@
 | `G-216` | feature | hoch | [Training hat Daten und keinen Schreibweg](erledigt/training-g-0216-training-hat-keinen-schreibweg.md) | erledigt | — | C-330, G-217 |
 | `G-217` | feature | mittel | [der Trainings-Schreibweg hat keine Oberflaeche](erledigt/training-g-0217-trainingsformular-fehlt.md) | erledigt | — | G-219 |
 | `G-219` | entscheidung | niedrig | [`LiveWorkout` hat keinen Aufrufer mehr](todos/training-g-0219-liveworkout-ohne-aufrufer.md) | offen | — | — |
-| `G-366` | feature | mittel | [die Uebungsliste der Sitzung](laufend_claudecode/training-g-0366-die-uebungsliste-der-sitzung.md) | laeuft (claudecode) | — | — |
+| `G-366` | feature | mittel | [die Uebungsliste der Sitzung](erledigt/training-g-0366-die-uebungsliste-der-sitzung.md) | erledigt | — | — |
 
 ## recovery — 26
 
@@ -420,7 +419,7 @@
 | `G-243` | befund | mittel | [die Recovery-Schwellen stehen im Mockup, nicht im Punkt](todos/recovery-g-0243-die-recovery-schwellen-stehen-im-mockup-nicht-im-punkt.md) | offen | — | — |
 | `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](erledigt/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | erledigt | — | G-365, G-367 |
 | `G-367` | feature | mittel | [Stunden und Saetze je Muskel](erledigt/recovery-g-0367-per-muscle-stunden-und-saetze.md) | erledigt | — | — |
-| `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](laufend_claudecode/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | laeuft (claudecode) | — | — |
+| `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](erledigt/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | erledigt | — | — |
 
 ## goals — 6
 
@@ -582,7 +581,7 @@
 | `G-363` | entscheidung | mittel | [wer schlaegt die naechste Phase vor?](laufend_codex/quer-g-0363-wer-schlaegt-die-naechste-phase-vor.md) | laeuft (codex) | — | — |
 | `G-365` | feature | hoch | [vier Schritte je Kachel](erledigt/quer-g-0365-vier-schritte-je-kachel.md) | erledigt | — | C-421, C-423, G-366, G-369, G-370 |
 | `G-368` | befund | mittel | [Attrappen-Vermerke mit falschem Grund](todos/quer-g-0368-attrappen-vermerke-mit-falschem-grund.md) | offen | — | — |
-| `G-370` | befund | mittel | [Unternavigationen vollstaendig pruefen](laufend_claudecode/quer-g-0370-unternavigationen-vollstaendig-pruefen.md) | laeuft (claudecode) | — | — |
+| `G-370` | befund | mittel | [Unternavigationen vollstaendig pruefen](erledigt/quer-g-0370-unternavigationen-vollstaendig-pruefen.md) | erledigt | — | — |
 
 ## market — 1
 
