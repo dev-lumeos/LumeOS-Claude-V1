@@ -5,13 +5,12 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 209 |
-| `laufend_codex` | 1 |
+| `todos` | 210 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 330 |
-| **gesamt** | **541** |
+| `erledigt` | 331 |
+| **gesamt** | **542** |
 
-## medical — 45
+## medical — 46
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -53,13 +52,14 @@
 | `C-359` | feature | mittel | [Symptome brauchen ein Protokoll je Nutzer](todos/medical-c-0359-symptome-brauchen-ein-protokoll-je-nutzer.md) | offen | — | — |
 | `C-385` | feature | hoch | [das Datenmodell fuer Injektionsstellen](erledigt/medical-c-0385-das-datenmodell-fuer-injektionsstellen.md) | erledigt | — | C-395 |
 | `C-429` | befund | mittel | [die zentrale Zeitachse fehlt](erledigt/medical-c-0429-die-zentrale-zeitachse-fehlt.md) | erledigt | — | C-431 |
-| `C-431` | feature | hoch | [C-429 einspielen](laufend_codex/medical-c-0431-c-429-einspielen.md) | laeuft (codex) | — | — |
+| `C-431` | feature | hoch | [C-429 einspielen](erledigt/medical-c-0431-c-429-einspielen.md) | erledigt | — | G-376 |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
 | `G-241` | entscheidung | hoch | [zwei Reiterschnitte im Medical-Mockup](erledigt/medical-g-0241-zwei-reiterschnitte-im-medical-mockup.md) | erledigt | — | C-429, G-256, G-257 |
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
+| `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](todos/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | offen | — | — |
 
 ## nutrition — 228
 

@@ -13,8 +13,7 @@ beauftragt: 2026-09-08
 erledigt: 2026-09-08
 commit: 64937c89
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [public.activity_stream]
 zahlen: null
 ---
 

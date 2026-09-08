@@ -13,8 +13,8 @@ beauftragt: 2026-09-08
 erledigt: 2026-09-08
 commit: b3bb6420
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien:
+    - apps/web/src/app/v2/shell.tsx
 zahlen: null
 ---
 

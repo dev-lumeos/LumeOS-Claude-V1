@@ -13,8 +13,7 @@ beauftragt: 2026-09-08
 erledigt: 2026-09-08
 commit: 0e8cdc8f
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [coach.relationships]
 zahlen: null
 ---
 
