@@ -40,6 +40,8 @@ import { ReferenzTrenner } from '@/components/shell/referenz-trenner'
 import {
   BIOMARKERS, SYSTEM_META, SYSTEM_MARKERS, SYSTEM_WEIGHTS,
   SYMPTOMS, SYMPTOM_BIOMARKER_MAP, MEDICATIONS_V2,
+  CORRELATIONS, BIOMARKER_CATEGORIES, SUPPLEMENT_BIOMARKER_MAP,
+  calcSupplementEffectiveness, type Wirksamkeit,
 } from './daten'
 
 const QUELLE = 'theme-v1/module-medical-v2.jsx'
@@ -548,46 +550,294 @@ export function MedTrackingReferenz() {
 }
 
 /** `insights` — `MedInsights`, 1 Kachel. */
-export function MedInsightsReferenz() {
-  const auffaellig = BIOMARKERS.filter(b => einstufung(b) !== 'optimal').slice(0, 5)
+/** `module-medical-v2.jsx:734` — die acht Perzentilzeilen. */
+const PERZENTILE: Array<[string, string, number, string]> = [
+  ['LDL Cholesterol', '102 mg/dL', 73, 'better than 73% of men 35–45'],
+  ['HDL Cholesterol', '58 mg/dL', 68, 'better than 68%'],
+  ['hs-CRP', '0.6 mg/L', 88, 'better than 88% — low inflammation'],
+  ['Total Testosterone', '712 ng/dL', 84, 'higher than 84% (on TRT)'],
+  ['HbA1c', '5.4%', 52, 'median range'],
+  ['Vitamin D (25-OH)', '48 ng/mL', 91, 'higher than 91%'],
+  ['Ferritin', '142 ng/mL', 76, 'higher than 76%'],
+  ['Hematocrit', '48%', 82, 'higher than 82% — TRT-associated'],
+]
+
+/** `module-medical-v2.jsx:766` — die sechs Berichtsteile. */
+const BERICHTSTEILE: Array<[string, string, string]> = [
+  ['1', 'Executive summary',
+   'current system scores + overall health trajectory'],
+  ['2', 'Critical + flagged values',
+   'all non-optimal flags with context and reference ranges'],
+  ['3', 'Biomarker table',
+   'every value: lab range | optimal range | your value | flag | trend'],
+  ['4', 'Supplement effectiveness',
+   'which supplements demonstrably moved which markers'],
+  ['5', 'Symptom overview', 'last 90 days with severity and duration'],
+  ['6', 'Medication list', 'active medications with monitoring status'],
+]
+
+export function MedInsightsReferenz({ unter = 'correlations' }: { unter?: string }) {
+  // `[cmd]` **G-370, 2026-09-08: der vierte Fall derselben Klasse.**
+  //
+  // `[cmd]` **Gemessen:** die vier Unterreiter tauschen oben
+  // vollstaendig verschiedene Kachelsaetze
+  // (`Correlations` / `Supplement effect` / `Population` /
+  // `Doctor export`), **unten stand immer eine einzige Kachel
+  // ,,Erkenntnisse"** — und die war nicht einmal der Mockup-Stand,
+  // sondern eine eigene Zusammenstellung auffaelliger Marker.
+  //
+  // `[read]` **Der Unterreiter ist Zustand von `MedInsights`** und
+  // steht nicht in der Adresse; die Referenz hing in `ansicht.tsx`.
+  //
+  // `[cmd]` **Die Vorlage teilt selbst** —
+  // `module-medical-v2.jsx:647` (correlations), `:686` (supplements),
+  // `:729` (benchmark), `:762` (export).
+  // `[cmd]` **Aufrufform wie im gebauten Reiter** (`tab-tracking.tsx:606`):
+  // die Funktion nimmt EINEN Eintrag und gibt `null` zurueck, wenn der
+  // Marker fehlt — also ueber `SUPPLEMENT_BIOMARKER_MAP` abbilden und
+  // die Leerwerte wegfiltern.
+  const wirksamkeit = SUPPLEMENT_BIOMARKER_MAP
+    .map(calcSupplementEffectiveness)
+    .filter((e): e is Wirksamkeit => Boolean(e))
   return (
     <>
       <ReferenzTrenner reiter="Insights" quelle={QUELLE} />
-      <Card title="Erkenntnisse" sub={`${auffaellig.length} Marker mit Bewegung`}
-            attrappe={ATTRAPPE}>
-        <div className="v2-col-gap" style={{ gap: 7 }}>
-          {auffaellig.map(b => (
-            <div key={b.id} style={{
-              padding: 10, background: 'var(--bg-elev)',
-              border: '1px solid var(--border)', borderRadius: 6,
-            }}>
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3,
-              }}>
-                <span style={{ fontSize: 12.5, fontWeight: 600 }}>{b.name}</span>
-                <Pill>{einstufung(b)}</Pill>
-                <span className="v2-num" style={{ marginLeft: 'auto' }}>
-                  {b.value} {b.unit}
-                </span>
-              </div>
-              <div className="v2-muted" style={{ fontSize: 11 }}>
-                optimal {b.optimal_min}–{b.optimal_max} {b.unit} · Labor{' '}
-                {b.lab_min}–{b.lab_max}
-              </div>
+
+      {unter === 'correlations' && (
+      <div className="v2-col-gap" style={{ gap: 10 }}>
+        <div style={{
+          padding: 12, borderRadius: 7, display: 'flex',
+          alignItems: 'center', gap: 10,
+          background: 'color-mix(in oklch, var(--acc-buddy) 5%, var(--surface))',
+          border: '1px solid color-mix(in oklch, var(--acc-buddy) 22%, var(--border))',
+        }}>
+          <Icon name="sparkles" className="v2-ic" style={{ color: 'var(--acc-buddy)' }} />
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 12.5, fontWeight: 600 }}>
+              Cross-module correlation engine
             </div>
-          ))}
+            <div className="v2-muted" style={{ fontSize: 11 }}>
+              Biomarker changes matched against Nutrition, Training,
+              Recovery, Supplements. Minimum 3 data points. Association,
+              never causation.
+            </div>
+          </div>
         </div>
-        <div className="v2-divider" />
-        <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.5 }}>
-          Der Entwurf leitet aus dem Verlauf Hinweise ab — was sich
-          bewegt, was zusammenhaengt, was zu beobachten ist.
+        {CORRELATIONS.map(c => {
+          const farbe = c.confidence === 'strong' ? 'var(--pos)'
+            : c.confidence === 'moderate' ? 'var(--acc-recov)' : 'var(--fg-dim)'
+          return (
+            <Card key={c.id} attrappe={ATTRAPPE}>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                <div style={{
+                  width: 3, alignSelf: 'stretch', background: farbe, borderRadius: 2,
+                }} />
+                <div style={{ flex: 1 }}>
+                  <div style={{
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    marginBottom: 5, flexWrap: 'wrap',
+                  }}>
+                    <Pill style={{
+                      borderColor: 'color-mix(in oklch, var(--acc-medic) 35%, var(--border))',
+                      color: 'var(--acc-medic)',
+                    }}>{c.biomarker}</Pill>
+                    <span className="v2-dim">×</span>
+                    <Pill>{c.module} · {c.metric}</Pill>
+                    <span className="v2-dim v2-mono"
+                          style={{ marginLeft: 'auto', fontSize: 10 }}>
+                      n={c.n} · r={c.r} · {c.confidence}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 12.5, lineHeight: 1.55, marginBottom: 8 }}>
+                    {c.finding}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <div style={{
+                      flex: 1, position: 'relative', height: 5,
+                      background: 'var(--surface-2)', borderRadius: 999,
+                    }}>
+                      <div style={{
+                        position: 'absolute', left: '50%', top: -2, bottom: -2,
+                        width: 1, background: 'var(--border-strong)',
+                      }} />
+                      <div style={{
+                        position: 'absolute',
+                        left: c.r < 0 ? `${50 + c.r * 50}%` : '50%',
+                        width: `${Math.abs(c.r) * 50}%`, top: 0, bottom: 0,
+                        background: farbe, borderRadius: 999,
+                      }} />
+                    </div>
+                    <span className="v2-num" style={{
+                      fontSize: 11, color: farbe, width: 52, textAlign: 'right',
+                    }}>r = {c.r}</span>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          )
+        })}
+      </div>
+      )}
+
+      {unter === 'supplements' && (
+      <div>
+        <div className="v2-dim" style={{
+          fontSize: 11.5, marginBottom: 12, lineHeight: 1.55, maxWidth: 760,
+        }}>
+          Automatic before/after comparison for every supplement in your
+          stack that maps to a tracked biomarker. Baseline is the last
+          value before the supplement start date; latest is the most
+          recent result.
+        </div>
+        <div className="v2-grid v2-g-cols-2" style={{ gap: 12 }}>
+          {wirksamkeit.map((e, i) => {
+            const farbe = e.status === 'effective' ? 'var(--pos)'
+              : e.status === 'partial' ? 'var(--acc-recov)'
+              : e.status === 'inconclusive' ? 'var(--warn)' : 'var(--fg-dim)'
+            return (
+              <Card key={i} attrappe={ATTRAPPE}>
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  marginBottom: 8, flexWrap: 'wrap',
+                }}>
+                  <span style={{ fontSize: 13, fontWeight: 600 }}>{e.supplement}</span>
+                  <span className="v2-dim">→</span>
+                  <Pill>{e.biomarkerObj.name}</Pill>
+                  <Pill style={{
+                    marginLeft: 'auto',
+                    borderColor: `color-mix(in oklch, ${farbe} 35%, var(--border))`,
+                    color: farbe,
+                  }}>{e.status.replace(/_/g, ' ')}</Pill>
+                </div>
+                <Row label="Baseline" value={`${e.baseline} ${e.biomarkerObj.unit}`} />
+                <Row label="Latest" value={`${e.latest} ${e.biomarkerObj.unit}`} />
+                <Row label="Change" value={`${e.changePct > 0 ? '+' : ''}${e.changePct}%`} />
+              </Card>
+            )
+          })}
+        </div>
+      </div>
+      )}
+
+      {unter === 'benchmark' && (
+      <Card title="Population benchmark"
+            sub="vs. men 35–45 · NHANES reference distribution"
+            attrappe={ATTRAPPE}>
+        <div style={{ overflowX: 'auto' }}>
+          <table className="v2-tbl">
+            <thead>
+              <tr>
+                <th>Biomarker</th>
+                <th style={{ width: 90, textAlign: 'right' }}>Your value</th>
+                <th style={{ width: 220 }}>Percentile</th>
+                <th style={{ width: 90, textAlign: 'right' }}>Percentile</th>
+                <th>Interpretation</th>
+              </tr>
+            </thead>
+            <tbody>
+              {PERZENTILE.map(([name, wert, p, deutung]) => (
+                <tr key={name}>
+                  <td>{name}</td>
+                  <td className="v2-num" style={{ textAlign: 'right' }}>{wert}</td>
+                  <td>
+                    <div style={{
+                      position: 'relative', height: 6,
+                      background: 'var(--surface-2)', borderRadius: 999,
+                    }}>
+                      <div style={{
+                        position: 'absolute', left: 0, width: `${p}%`,
+                        top: 0, bottom: 0, borderRadius: 999,
+                        background: p >= 75 ? 'var(--pos)'
+                          : p >= 40 ? 'var(--acc-recov)' : 'var(--warn)',
+                      }} />
+                      <div style={{
+                        position: 'absolute', left: '50%', top: -2, bottom: -2,
+                        width: 1, background: 'var(--border-strong)',
+                      }} />
+                    </div>
+                  </td>
+                  <td className="v2-num" style={{ textAlign: 'right' }}>P{p}</td>
+                  <td className="v2-dim" style={{ fontSize: 11 }}>{deutung}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </Card>
+      )}
+
+      {unter === 'export' && (
+      <div className="v2-grid" style={{ gridTemplateColumns: '1.3fr 1fr', gap: 14 }}>
+        <Card title="Doctor export · report structure"
+              sub="6 sections · PDF · legal notice mandatory"
+              attrappe={ATTRAPPE}>
+          <div className="v2-col-gap" style={{ gap: 6 }}>
+            {BERICHTSTEILE.map(([n, titel, d]) => (
+              <div key={n} style={{
+                display: 'flex', gap: 10, padding: 9,
+                background: 'var(--surface)',
+                border: '1px solid var(--border)', borderRadius: 6,
+              }}>
+                <div className="v2-mono" style={{
+                  width: 20, height: 20, borderRadius: 4,
+                  background: 'var(--surface-2)', color: 'var(--fg-muted)',
+                  display: 'grid', placeItems: 'center',
+                  fontSize: 10, fontWeight: 700, flexShrink: 0,
+                }}>{n}</div>
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 2 }}>
+                    {titel}
+                  </div>
+                  <div className="v2-dim" style={{ fontSize: 10.5 }}>{d}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="v2-divider" />
+          <div style={{
+            padding: 11, borderRadius: 6,
+            background: 'color-mix(in oklch, var(--neg) 5%, var(--surface))',
+            border: '1px solid color-mix(in oklch, var(--neg) 24%, var(--border))',
+          }}>
+            <div className="v2-eyebrow" style={{ color: 'var(--neg)', marginBottom: 5 }}>
+              Mandatory legal notice in every report
+            </div>
+            <div style={{
+              fontSize: 11.5, lineHeight: 1.6,
+              color: 'var(--fg-muted)', fontStyle: 'italic',
+            }}>
+              Dieser Report wurde von LumeOS erstellt. Die enthaltenen
+              Informationen stellen keine medizinische Diagnose oder
+              Therapieempfehlung dar. Bitte besprechen Sie alle Befunde
+              mit Ihrem Arzt.
+            </div>
+          </div>
+        </Card>
+        <Card title="Generate report" attrappe={ATTRAPPE}>
+          <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Categories</div>
+          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 12 }}>
+            {BIOMARKER_CATEGORIES.slice(1).map(c => (
+              <Pill key={c.id} variant="acc">{c.label}</Pill>
+            ))}
+          </div>
+          <Row label="From" value="2025-08-15" />
+          <Row label="To" value="2026-08-15" />
+          <Row label="Report type" value="Comprehensive · all sections" />
+          <div className="v2-eyebrow" style={{ marginBottom: 4, marginTop: 10 }}>
+            Format
+          </div>
+          <div style={{ display: 'flex', gap: 6 }}>
+            <Pill variant="acc">PDF</Pill>
+            <Pill>FHIR R4</Pill>
+            <Pill>CSV</Pill>
+          </div>
+        </Card>
+      </div>
+      )}
     </>
   )
 }
 
-/** `import`: die drei Kacheln, die OBEN fehlen. */
 export function FehlendeImportKacheln({ unter = 'upload' }: { unter?: string }) {
   // `[cmd]` **G-365: auch die fehlenden Kacheln folgen dem Unterreiter.**
   // Sonst steht ueber der Linie eine Attrappe zu `Manual entry`,

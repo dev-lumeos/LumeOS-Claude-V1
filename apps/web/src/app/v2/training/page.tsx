@@ -102,6 +102,9 @@ export default async function V2TrainingPage() {
         gewicht,
         // G-86: die sieben Tage um den Stichtag, fuer „This week".
         woche: woche(sitzungen, stichtag),
+        // G-366: die Uebungen waren geladen und wurden nur fuer die
+        // Auswertung benutzt — die Today-Karte kam nicht an sie heran.
+        uebungen,
       }
     }
   } catch {

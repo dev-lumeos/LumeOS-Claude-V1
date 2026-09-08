@@ -58,7 +58,6 @@ import type { EchteDaten } from './echtdaten'
 import {
   MedBiomarkersReferenz, MedWirkstoffeOhneMockup,
   MedDashboardReferenz,
-  MedInsightsReferenz,
 } from './mockup-referenz'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
@@ -254,10 +253,11 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
           <MedWirkstoffeOhneMockup />
         </>
       )}
+      {/* `[cmd]` G-370: die Referenz haengt IN `MedInsights` — der
+          Unterreiter ist Zustand der Komponente. */}
       {tab === 'insights' && (
         <>
           <MedInsights />
-          <MedInsightsReferenz />
         </>
       )}
 

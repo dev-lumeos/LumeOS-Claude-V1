@@ -755,7 +755,14 @@ test('das Goals-Modul kennzeichnet jede Kachel', () => {
     // eigenes Gegenstueck. **Die fuenf Medikamentenkarten zaehlen als
     // EINE Marke** — sie stehen in einer `.map` ueber `MEDICATIONS_V2`,
     // und der Zaehler liest den Quelltext, nicht den Schirm.
-    [path.join(process.cwd(), 'src/app/v2/medical/mockup-referenz.tsx'), 21],
+    // `[cmd]` **25 seit `MedInsightsReferenz`** (2026-09-08, G-370):
+    // der Reiter `insights` fuehrt VIER Unterreiter
+    // (`module-medical-v2.jsx:647/686/729/762`), und unter der Linie
+    // stand fuer alle vier dieselbe eine Kachel. **Jeder Abschnitt hat
+    // jetzt sein eigenes Gegenstueck** — correlations, supplements,
+    // benchmark, export. **Die Korrelations- und Wirksamkeitskarten
+    // zaehlen als je EINE Marke**, sie stehen in einer `.map`.
+    [path.join(process.cwd(), 'src/app/v2/medical/mockup-referenz.tsx'), 25],
     // `[cmd]` **G-365: Coach hat DREI Routen** -- `/v2/coach` ist nur
     // die Auswahl. Die zwanzig Reiter liegen unter `human` und `ai`,
     // deshalb wurden sie lange gar nicht gemessen.

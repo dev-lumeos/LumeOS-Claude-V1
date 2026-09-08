@@ -23,7 +23,9 @@ import {
 import { FlagPill } from './bausteine'
 import { useMedical } from './kontext'
 import { ATTRAPPE } from './ansicht'
-import { MedTrackingReferenz, MedMedicationsReferenz } from './mockup-referenz'
+import {
+  MedTrackingReferenz, MedMedicationsReferenz, MedInsightsReferenz,
+} from './mockup-referenz'
 import type { EchteDaten, MedikationEcht } from './echtdaten'
 // ── G-211: der Erfassungsweg ────────────────────────────────────────
 //
@@ -891,6 +893,11 @@ export function MedInsights() {
           </Card>
         </div>
       )}
+
+      {/* `[cmd]` G-370: vierter Fall der Klasse — die Referenz folgt
+          dem Unterreiter. Sie hing in `ansicht.tsx` und zeigte auf
+          allen vier Unterreitern dieselbe eine Kachel. */}
+      <MedInsightsReferenz unter={sub} />
     </div>
   )
 }

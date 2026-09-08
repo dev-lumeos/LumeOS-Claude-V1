@@ -34,7 +34,7 @@ import type {
   Kennzahlen, Kraftverlauf, MuskelVolumen, Serie, Wochentag,
 } from '../../../lib/training/auswertung'
 import { kraftVerhaeltnis } from '../../../lib/training/auswertung'
-import type { Sitzung } from '../../../lib/training/sitzungen-read'
+import type { Sitzung, SitzungsUebung } from '../../../lib/training/sitzungen-read'
 
 export type VerlaufDaten = {
   stichtag: string
@@ -46,6 +46,15 @@ export type VerlaufDaten = {
   gewicht: { weight_kg: number; measurement_date: string } | null
   /** G-86: die sieben Tage um den Stichtag, fuer „This week". */
   woche: Wochentag[]
+  /**
+   * G-366: die Uebungen aller Sitzungen.
+   *
+   * `[cmd]` **`ladeSitzungsUebungen` wurde in `page.tsx` bereits
+   * aufgerufen** — fuer Kennzahlen, Muskelvolumen und Kraftverlauf.
+   * **Nur durchgereicht wurde sie nicht**, und deshalb zeigte die
+   * Today-Karte eine Entwurfsliste unter einem echten Kopf.
+   */
+  uebungen: SitzungsUebung[]
 }
 
 function z(n: number | null | undefined, stellen = 1): string {

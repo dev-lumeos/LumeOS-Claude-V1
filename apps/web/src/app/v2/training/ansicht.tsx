@@ -367,10 +367,30 @@ function TrainingToday({ onStart, verlauf, readiness }: {
     ],
   }
 
-  // `[read]` **Kopf echt, Uebungsliste Entwurf.** `[cmd]`
-  // **`ladeSitzungsUebungen` gibt es** (`sitzungen-read.ts`),
-  // **wird an diese Ansicht aber nicht durchgereicht** — gemeldet,
-  // nicht gebaut.
+  // ══ G-366: die Uebungen der gezeigten Sitzung ═══════════════
+  //
+  // `[cmd]` **Hier stand: ,,Kopf echt, Uebungsliste Entwurf"** — die
+  // Karte zeigte einen echten Sitzungskopf ueber sieben erfundenen
+  // Uebungen (Bench Press 5×5 @ 117.5kg und so fort).
+  //
+  // `[cmd]` **`ladeSitzungsUebungen` wurde in `page.tsx` laengst
+  // aufgerufen** — fuer Kennzahlen, Muskelvolumen und Kraftverlauf.
+  // **Sie wurde nur nicht durchgereicht.**
+  //
+  // `[cmd]` **Gemessen auf `dev@lumeos.app`:** je Sitzung ZWEI
+  // Uebungen mit Namen und Reihenfolge; `actual_sets` ist 0 und
+  // `max_weight_kg` leer, **weil die Sitzungen `planned` sind** —
+  // Sollwerte stehen dort noch nicht.
+  //
+  // `[read]` **Deshalb: Name und Reihenfolge aus der Tabelle, und wo
+  // nichts steht, ein Strich** — keine erfundene Vorgabe (C-378).
+  const sitzungsUebungen = React.useMemo(() => {
+    if (!naechste) return []
+    return (verlauf?.uebungen ?? [])
+      .filter(u => u.workout_session_id === naechste.id)
+      .sort((a, b) => (a.exercise_order ?? 0) - (b.exercise_order ?? 0))
+  }, [verlauf, naechste])
+
   const session = naechste
     ? {
       name: naechste.name ?? 'Sitzung',
@@ -381,7 +401,21 @@ function TrainingToday({ onStart, verlauf, readiness }: {
       volume: naechste.total_volume_kg
         ? `${(naechste.total_volume_kg / 1000).toFixed(1)} t` : '—',
       duration: naechste.duration_minutes ? `~${naechste.duration_minutes}m` : '—',
-      exercises: entwurf.exercises,
+      // `[read]` Liegen fuer die Sitzung keine Uebungszeilen vor,
+      // bleibt die Entwurfsliste stehen — mit der Marke der Karte.
+      exercises: sitzungsUebungen.length > 0
+        ? sitzungsUebungen.map(u => ({
+          name: u.exercise_name,
+          equip: u.exercise_id ? 'aus dem Katalog' : 'ohne Katalogeintrag',
+          target: u.actual_sets
+            ? `${u.actual_sets}×${u.max_weight_kg ?? '—'}`
+            : '— geplant',
+          rir: '—',
+          lastSession: u.best_estimated_1rm
+            ? `e1RM ${u.best_estimated_1rm} kg` : '—',
+          pr: false,
+        }))
+        : entwurf.exercises,
     }
     : entwurf
 
