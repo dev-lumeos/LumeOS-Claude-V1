@@ -7,8 +7,6 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: G-241
 entscheidung: E-26
-agent: claudecode
-beauftragt: 2026-09-08
 beruehrt:
   tabellen: [medical.lab_reports]
 zahlen: null
@@ -44,3 +42,26 @@ und Briefkopf.
 
 **Mitbeauftragt mit G-17 am 2026-09-08.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-08: blockiert, zwei Entscheidungen offen
+
+`[cmd]` **`storage.buckets` leer, 10 von 10 Laborberichten ohne
+Datei.** `[cmd]` **`file_ref` steht als Zeiger da** — **es fehlt,
+worauf er zeigt.**
+
+`[read]` **Claude Code hat nichts gebaut** — richtig.
+
+### Zwei Entscheidungen vor jeder Oberflaeche
+
+**1 · Name und Sichtbarkeit des Buckets.**
+
+**2 · Die Pfadregel fuer `file_ref`.**
+
+`[read]` **Sein Vorschlag: `<user_id>/<report_id>.<ext>`** —
+**damit laeuft die Zeilensicherheit ueber das erste Segment.**
+
+`[read]` **Das ist der uebliche Weg bei Supabase Storage** — **und
+er braucht keine zusaetzliche Tabelle.**
+
+`[cmd]` **Codex baut den Ablageweg in C-429** — **die beiden
+Entscheidungen gehoeren davor.**

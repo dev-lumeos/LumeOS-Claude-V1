@@ -9,6 +9,8 @@ kind_von: G-336
 entscheidung: E-58
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: b3bb6420
 beruehrt:
   tabellen: [nutrition.meals]
 zahlen:
@@ -52,3 +54,17 @@ hat.**
 
 **Mitbeauftragt mit G-17 am 2026-09-08.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-08, mit G-17 abgenommen: grundlos, gemessen.**
+
+`[cmd]` **`nutrition.meals` hat keine Namensspalte.**
+`[cmd]` **`meal_type` ist NOT NULL mit Sieben-Werte-CHECK.**
+
+`[cmd]` **Am Schirm bietet das Formular elf Punkte** — **vier eigene
+Slots mit Zeiten, sechs Kategorien** — **Vorgabe `slot:1`.**
+
+`[read]` **Eine Mahlzeit kann nicht namenlos entstehen.**
+
+`[cmd]` **Und *,,Sonstiges"* ist weg, G-336 hat es ersetzt.**
