@@ -7,6 +7,8 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: G-241
 entscheidung: E-26
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [medical.lab_reports]
 zahlen: null
@@ -37,3 +39,8 @@ darf sie sehen, was passiert bei Widerruf.
 Klartext.** `[read]` **Ein hochgeladener Arztbericht ist eine andere
 Klasse als ein ausgelesener Laborwert** — er traegt Name, Diagnose
 und Briefkopf.
+
+## Auftrag
+
+**Mitbeauftragt mit G-17 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.

@@ -7,6 +7,8 @@ angelegt: 2026-09-02
 braucht: []
 kind_von: G-336
 entscheidung: E-58
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [nutrition.meals]
 zahlen:
@@ -45,3 +47,8 @@ kennt der Nutzer das Muster.**
 `[cmd]` **Wer regelmaessig um 22:00 isst, haette dann ab dem zweiten
 Mal einen** — **aber das waere eine Automatik, die niemand verlangt
 hat.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-17 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.

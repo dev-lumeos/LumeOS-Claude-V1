@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 211 |
+| `todos` | 208 |
 | `laufend_codex` | 3 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 325 |
 | **gesamt** | **539** |
 
@@ -56,7 +57,7 @@
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
 | `G-241` | entscheidung | hoch | [zwei Reiterschnitte im Medical-Mockup](erledigt/medical-g-0241-zwei-reiterschnitte-im-medical-mockup.md) | erledigt | — | C-429, G-256, G-257 |
-| `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
+| `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](laufend_claudecode/medical-g-0256-die-originaldatei-zum-laborbericht.md) | laeuft (claudecode) | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
 ## nutrition — 228
@@ -162,7 +163,7 @@
 | `C-413` | befund | niedrig | [`tom.seed` traegt `days_count 7` bei 21 Tagen](erledigt/nutrition-c-0413-tom-seed-traegt-days-count-7-bei-21-tagen.md) | erledigt | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
-| `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](todos/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | offen | — | — |
+| `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](laufend_claudecode/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | laeuft (claudecode) | — | — |
 | `G-70` | feature | mittel | [Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab](erledigt/nutrition-g-0070-sortierbare-spalten-und-herkunfts-filter-im-food-db-tab.md) | erledigt | — | C-338, G-251 |
 | `G-72` | feature | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](erledigt/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | erledigt | — | C-392, G-332 |
 | `G-75` | befund | mittel | [Die alte Oberflaeche nennt den BLS ebenfalls](todos/nutrition-g-0075-die-alte-oberflaeche-nennt-den-bls-ebenfalls.md) | offen | — | — |
@@ -276,7 +277,7 @@
 | `G-335` | feature | hoch | [acht Stellen uebersetzen `meal_type` selbst](erledigt/nutrition-g-0335-acht-stellen-uebersetzen-meal-type-selbst.md) | erledigt | — | G-336 |
 | `G-336` | befund | hoch | [das Raster liest `meal_plan_slots` nicht](erledigt/nutrition-g-0336-das-raster-liest-meal-plan-slots-nicht.md) | erledigt | — | C-397, G-338 |
 | `G-337` | befund | mittel | [`strong_avoid` hat keinen Schreibweg](erledigt/nutrition-g-0337-strong-avoid-hat-keinen-schreibweg.md) | erledigt | — | C-406 |
-| `G-338` | entscheidung | mittel | [eine freie Mahlzeit hat keinen Namen](todos/nutrition-g-0338-eine-freie-mahlzeit-hat-keinen-namen.md) | offen | — | — |
+| `G-338` | entscheidung | mittel | [eine freie Mahlzeit hat keinen Namen](laufend_claudecode/nutrition-g-0338-eine-freie-mahlzeit-hat-keinen-namen.md) | laeuft (claudecode) | — | — |
 | `G-339` | befund | mittel | [Quick-Add liest die Namen nicht](erledigt/nutrition-g-0339-quick-add-liest-die-namen-nicht.md) | erledigt | — | G-342 |
 | `G-340` | befund | mittel | [Quick-Add hat keinen Schreibweg](erledigt/nutrition-g-0340-quick-add-hat-keinen-schreibweg.md) | erledigt | — | G-346 |
 | `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](erledigt/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | erledigt | — | — |
