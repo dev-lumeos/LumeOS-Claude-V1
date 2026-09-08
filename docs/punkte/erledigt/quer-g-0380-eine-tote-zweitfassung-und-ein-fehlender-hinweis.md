@@ -9,6 +9,8 @@ kind_von: G-378
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 7b8602e5
 beruehrt:
   dateien:
     - apps/web/src/app/v2/recovery/ansicht.tsx
@@ -344,4 +346,90 @@ ohnehin nur, was einen falschen Bezeichner traegt.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  nichts Eigenes drin: 1 Einfuegung, 4 Loeschungen,
+        die Einfuegung eine kuerzere Fassung desselben Kommentars
+    A2  ja, der Helfer konnte sie wieder erzeugen -- reproduziert
+    A3  .txt bekommt einen benannten Hinweis, nichts geschrieben
+    A4  objects 2 -> 3, 193 B, Pfad nach E-75
+    A5  21 geprueft, 3 ueberholt
+
+`[cmd]` **Selbst gemessen: `schreib()` mit `mkstemp` und `finally`,
+3 Objekte, 2 mit Verweis.**
+
+`[cmd]` **Die `.neu` ist geloescht, die Loeschung liegt
+ungestaged** ? **wie er sagt.**
+
+### A2 ist die Antwort auf meine Frage
+
+`[read]` **Ich fragte: einmal ein Versehen, zweimal ein Fehler im
+Werkzeug?**
+
+`[cmd]` **Es war das Werkzeug** ? **reproduziert.**
+
+> *,,Der Helfer schrieb `pfad + '.neu'` INNERHALB der
+> Wiederholschleife ohne Aufraeumen, also ueberlebt die Nebendatei
+> genau dann, wenn `os.replace` scheitert ? der Fall, fuer den die
+> Schleife da ist."*
+
+`[cmd]` **Und die Geschichte passt: G-375 meldete Fehlschlag, das
+Ziel wurde von Hand berichtigt, niemand sah nach der
+Nebendatei.**
+
+### Und er hat es an einer Stelle behoben
+
+`[cmd]` **`tools/lauf.py`, `schreib()`** ? **eindeutiger Name statt
+`.neu`, `finally` raeumt in jedem Ausgang.**
+
+> *,,Eine Stelle statt jedes Skript, das ihn neu abschreibt ? das
+> war der Weg, auf dem sich der Fehler verbreitet hat."*
+
+`[cmd]` **Gegenprobe in drei Faellen, darunter ein harter
+Absturz** ? **kein Rest, Ziel unversehrt.**
+
+`[read]` **Und dann hat er diesen Bericht damit geschrieben, ohne
+Rest.**
+
+### A3 — gerechnet, nicht danebengeschrieben
+
+`[cmd]` **`original-arten.ts` leitet `accept` UND die *20 MB* aus
+derselben Liste ab** ? **`Math.round(ORIGINAL_GROESSE_MAX / 1024 /
+1024)`.**
+
+`[read]` **Kein Wert steht zweimal da** ? **also kann keiner
+auseinanderlaufen.**
+
+`[read]` **Und der Satz im Code trifft es:** *,,`accept` haelt
+nichts auf, es filtert den Waehler."* `[cmd]` **Deshalb die
+Zweitpruefung mit `DataTransfer`.**
+
+### A4 — die Fehlmessung, die er selbst berichtigt
+
+`[cmd]` **Erst zaehlte er 0 Knoepfe und hielt es fuer einen
+Rueckschritt.**
+
+`[cmd]` **Dann gemessen: `test-user` hat genau 2 Berichte, beide
+schon mit Datei aus G-378** ? **die 12 spannten drei Konten.**
+
+`[read]` **Derselbe Fehler wie meiner mit den 5426 Zeilen des
+Aktivitaetsstroms** ? **eine Gesamtzahl als Kontozahl gelesen.**
+
+### A5 — und die Einschraenkung zaehlt
+
+`[cmd]` **Drei ueberholt: `132-recovery-anzeige.md`,
+`140-supplements-restliche-tabs.md`, `116-goals-anbindung.md`.**
+
+`[cmd]` **Zwei davon sind Folgen seiner eigenen Arbeit von
+gestern.**
+
+`[read]` **Und seine Einschraenkung ist die richtige:**
+
+> *,,Die Methode faengt nur Dokumente mit einem falsifizierbaren
+> Merkmal. Eine Datei kann inhaltlich ueberholt sein, waehrend jeder
+> Name noch stimmt."*
+
+`[cmd]` **135 Dateien sind ungemessen** ? **als G-381.**
+
+**Abgenommen.**
+
