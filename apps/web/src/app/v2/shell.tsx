@@ -9,18 +9,55 @@
 import * as React from 'react'
 import Link from 'next/link'
 import type { Route } from 'next'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { createClient } from '@lumeos/shared'
 import { AppShell } from '@lumeos/ui'
 import { Sprachwahl } from '../../components/shell/sprachwahl'
 import { MODE_COOKIE } from '../../styles/themes/registry'
 
+// ══ G-17: das Datum reist mit ══════════════════════════
+//
+// `[cmd]` **Gemessen 2026-09-08:** im Tagebuch auf gestern
+// geblaettert (`?tab=diary&datum=2026-09-07`), aufs Dashboard
+// gewechselt — **kein Parameter, kein Datum.** Zurueck ins
+// Tagebuch: **wieder heute.**
+//
+// `[read]` **Kein Cookie, kein Browser-Kontext** — der Punkt hat
+// beides geprueft und verworfen: Serverkomponenten je Route wuessten
+// von einem Browser-Zustand nichts, und *,,ein Datum, das sich ueber
+// Tage merkt, ist eines, das man vergisst."*
+//
+// `[read]` **Der Suchparameter ist der Weg**, und `V2Link` ist die
+// EINE Stelle, durch die jeder Modul-Link der Huelle laeuft — die
+// Liste selbst steht in `@lumeos/ui` und gehoert allen Anwendungen.
+
+/** Nur ein Datum in der Form `2026-09-07` reist mit. */
+function sauberesDatum(v: string | null): string | null {
+  return v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null
+}
+
+/**
+ * Haengt das aktuelle Datum an einen Modul-Link.
+ *
+ * `[read]` **Nur an Links OHNE eigenes `datum=`** — wer schon eines
+ * mitbringt, meint es auch. **Und nur an interne `/v2/`-Ziele**, ein
+ * Datum an `https://coach.lumeos.app` waere sinnlos.
+ */
+function mitDatum(href: string, datum: string | null): string {
+  if (!datum) return href
+  if (!href.startsWith('/v2/')) return href
+  if (href.includes('datum=')) return href
+  return href + (href.includes('?') ? '&' : '?') + `datum=${datum}`
+}
+
 // next/link ist in dieser App typisiert (typedRoutes). Die Huelle im
 // Paket kennt diese Typen nicht und reicht href als string. Der Cast
 // sitzt hier an EINER Stelle statt in jedem Navigationseintrag.
-const V2Link = ({ href, ...rest }: { href: string } & Record<string, unknown>) => (
-  <Link href={href as Route} {...rest} />
-)
+function V2Link({ href, ...rest }: { href: string } & Record<string, unknown>) {
+  const params = useSearchParams()
+  const datum = sauberesDatum(params.get('datum'))
+  return <Link href={mitDatum(href, datum) as Route} {...rest} />
+}
 
 export function V2Shell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
