@@ -75,7 +75,7 @@ Medikamente, Symptome, Bedingungen.**
 
 ## Auftrag — Dokumente und Termine
 
-**Mitbeauftragt: C-426.** Bericht in diese Datei.
+**Mitbeauftragt: C-426, C-428.** Bericht in diese Datei.
 
 **Beauftragt am 2026-09-08.**
 
@@ -159,3 +159,27 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Vorab — C-268 einspielen
+
+`[cmd]` **Nachgemessen auf `dev`: `create_relationship_invite`,
+`coach.coach_profiles` und die Snapshot-Spalte fehlen.**
+
+`[read]` **Vorher Sicherung nach `backup/`, wie bei C-421 bis
+C-424.**
+
+`[cmd]` **Und `lehne_aktion_ab` fehlt weiter** — **aus G-324.**
+
+## Und C-428 — das Onboarding fuer Unregistrierte
+
+`[cmd]` **Dein eigener Befund:** `relationships.client_id NOT NULL`
+**verhindert das SPEC-08-Onboarding per E-Mail.**
+
+`[cmd]` **Auf `dev` ist die Spalte bereits nullable** — **zu messen,
+ob die Kette es auch so erzeugt.**
+
+`[read]` **Und was `SPEC_08` fuer den Weg vorsieht:**
+`createInviteToken(coachId, clientEmail)` **erzeugt ein Token,
+`status: 'pending'`.**
+
+`[read]` **Miss, was fehlt, und schlag vor** — **nicht bauen.**

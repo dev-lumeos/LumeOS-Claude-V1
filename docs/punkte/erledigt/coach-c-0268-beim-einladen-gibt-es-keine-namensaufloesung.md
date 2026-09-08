@@ -10,6 +10,8 @@ kinder: []
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 1d5f8785
 beruehrt:
   tabellen: ["auth.users", "public.profiles"]
   dateien: []
@@ -147,3 +149,60 @@ gib ihn mit.**
 
 `[read]` **Keine Suche nach dem Namen des Eingeladenen** — **den
 gibt es zum Zeitpunkt der Einladung nicht.**
+
+## Abnahme
+
+**2026-09-08, Orchestrator.**
+
+`[cmd]` **A1 erfuellt: eine Einladung mit
+`coach_display_name = Dr. Anna Keller`.** `[cmd]` **Seed: offene
+Einladung, Status `invited`, Coach-Name `Coach Seed`, Profil und
+Zeile stimmen ueberein.**
+
+`[cmd]` **164 Aufbauschritte, `SCHEMA VOLLSTAENDIG`, 143/143
+Fremdtabellen, 48/48 Fremdfunktionen.**
+
+### Ein Snapshot statt einer Referenz
+
+`[read]` **Er haette `display_name` beim Anzeigen nachschlagen
+koennen.** `[read]` **Stattdessen liegt der Name unveraenderlich in
+der Einladung.**
+
+`[read]` **Ein Coach aendert seinen Namen, und die alte Einladung
+sagt trotzdem, wer sie geschickt hat.**
+
+`[cmd]` **Dieselbe Machart wie der BLS-Katalog-Snapshot bei C-31**
+— **ein angenommener Zustand friert ein.**
+
+### Und die erste Abschlusspruefung fand den fehlenden Sollstand
+
+`[cmd]` **`coach_profiles`, die Snapshot-Spalte und die RPC fehlten
+im Sollstand** — **die Pruefung meldete es, bevor jemand es
+merkte.**
+
+`[read]` **Das ist der Waechter, der taugt** — **er faellt, wenn
+etwas gebaut und nicht verzeichnet wird.**
+
+### Die letzte Zeile ist die wertvollste
+
+`[cmd]` **`relationships.client_id NOT NULL`** — **das
+SPEC-08-Onboarding per E-Mail fuer noch nicht registrierte
+Klienten braucht einen eigenen Schreibweg.**
+
+> *,,ich habe ihn nicht vorgetaeuscht."*
+
+`[read]` **Er haette einen Weg bauen koennen, der aussieht, als
+ginge er.** `[read]` **Das ist A-71 andersherum** — **und das
+Gegenteil einer Kachel, die *,,angebunden"* behauptet und
+Entwurfszahlen zeigt.**
+
+**Als C-428.**
+
+### Nicht live
+
+`[cmd]` **Nachgemessen auf `dev`: `create_relationship_invite`,
+`coach_profiles` und die Snapshot-Spalte fehlen.**
+
+`[read]` **Richtig so** — **Wegwerf-Datenbank, wie beauftragt.**
+
+**Abgenommen, Einspielen beauftragt.**
