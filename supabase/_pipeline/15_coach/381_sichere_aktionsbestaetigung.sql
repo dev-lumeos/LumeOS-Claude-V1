@@ -178,4 +178,55 @@ GRANT EXECUTE ON FUNCTION coach.bestaetige_aktion(uuid) TO authenticated, servic
 COMMENT ON FUNCTION coach.bestaetige_aktion(uuid) IS
   'C-381/G-151: Atomare Klientenbestaetigung einer erlaubten Coach-Aktion. Der Akteur stammt aus auth.uid(); Ablauf, Zielwert und action_log werden gemeinsam geprueft und geschrieben.';
 
+-- G-324: Nach dem Entzug des Tabellen-UPDATE darf auch das Ablehnen
+-- nicht beim alten Browserweg bleiben. Es ist kein Ausfuehrungsvorgang
+-- und schreibt daher kein action_log; Akteur, Eigentum, Offenheit und
+-- Ablauf kommen trotzdem ausschliesslich aus der Datenbank.
+CREATE OR REPLACE FUNCTION coach.lehne_aktion_ab(p_action_id uuid)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = pg_catalog, pg_temp
+AS $function$
+DECLARE
+  v_actor uuid := auth.uid();
+  v_action coach.pending_actions%ROWTYPE;
+BEGIN
+  IF v_actor IS NULL THEN
+    RAISE EXCEPTION 'Anmeldung erforderlich' USING ERRCODE = '42501';
+  END IF;
+
+  SELECT pa.* INTO v_action
+  FROM coach.pending_actions AS pa
+  WHERE pa.id = p_action_id
+    AND pa.client_id = v_actor
+  FOR UPDATE;
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Aktion ist nicht fuer diesen Klienten ablehnbar'
+      USING ERRCODE = '42501';
+  END IF;
+
+  IF v_action.status <> 'pending' THEN
+    RAISE EXCEPTION 'Aktion ist nicht mehr offen' USING ERRCODE = 'P0001';
+  END IF;
+
+  IF v_action.expires_at <= statement_timestamp() THEN
+    RAISE EXCEPTION 'Aktion ist abgelaufen' USING ERRCODE = 'P0001';
+  END IF;
+
+  UPDATE coach.pending_actions AS pa
+  SET status = 'rejected'
+  WHERE pa.id = v_action.id;
+
+  RETURN v_action.id;
+END;
+$function$;
+
+REVOKE ALL ON FUNCTION coach.lehne_aktion_ab(uuid) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION coach.lehne_aktion_ab(uuid) TO authenticated, service_role;
+
+COMMENT ON FUNCTION coach.lehne_aktion_ab(uuid) IS
+  'G-324: Atomare Klientenablehnung einer offenen Coach-Aktion. Akteur, Eigentum und Ablauf stammen aus auth.uid() und pending_actions; kein direkter Browser-UPDATE.';
+
 COMMIT;

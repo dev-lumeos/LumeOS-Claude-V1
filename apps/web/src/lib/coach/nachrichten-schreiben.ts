@@ -98,6 +98,35 @@ export async function ladeCoachEin(eingabe: {
 }
 
 /**
+ * Eine eigene, noch offene Einladung zuruecknehmen. C-269 ist ein
+ * Statuswechsel mit Auditspur, nie ein DELETE. Fremde, fehlende und bereits
+ * entschiedene Einladungen liefern gleichermassen false und legen damit keine
+ * Beziehung offen.
+ */
+export async function nehmeEinladungZurueck(
+  beziehungsId: string,
+  grund?: string | null,
+): Promise<SchreibErgebnis> {
+  if (!UUID.test(beziehungsId)) {
+    return { ok: false, fehler: 'Die Einladungskennung ist keine gueltige UUID.' }
+  }
+
+  const { client, userId } = await sitzung()
+  if (!userId) return { ok: false, fehler: 'Keine angemeldete Session.' }
+
+  const { data, error } = await client.schema('coach')
+    .rpc('withdraw_relationship_invite', {
+      p_relationship_id: beziehungsId,
+      p_reason: grund?.trim() || null,
+    })
+  if (error) return { ok: false, fehler: error.message }
+  if (!data) return { ok: false, fehler: 'Die offene Einladung wurde nicht gefunden.' }
+
+  revalidatePath('/v2/coach/human')
+  return { ok: true }
+}
+
+/**
  * Eine FREMDE Nachricht als gelesen markieren. `[read]` Die eigene
  * laesst die Policy nicht zu — wer es versucht, bekommt null Zeilen,
  * und genau das wird hier gemeldet statt verschluckt (G-79).

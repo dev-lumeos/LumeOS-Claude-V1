@@ -73,7 +73,7 @@ CREATE OR REPLACE FUNCTION coach.withdraw_relationship_invite(
 )
 RETURNS boolean
 LANGUAGE plpgsql
-SECURITY INVOKER
+SECURITY DEFINER
 SET search_path = ''
 AS $$
 DECLARE
@@ -102,7 +102,7 @@ END;
 $$;
 
 COMMENT ON FUNCTION coach.withdraw_relationship_invite(uuid, text) IS
-  'C-269: nimmt eine eigene offene Einladung per Statuswechsel zurueck. Gibt false fuer nicht gefunden, nicht erlaubt oder nicht invited zurueck.';
+  'C-269: nimmt eine eigene offene Einladung per Statuswechsel zurueck. SECURITY DEFINER ist nur fuer auth.uid() im Ketten-Minimal-Auth noetig; die WHERE-Klausel bindet unveraendert an den Einladenden. Gibt false fuer nicht gefunden, nicht erlaubt oder nicht invited zurueck.';
 
 REVOKE ALL ON FUNCTION coach.resolve_invite_user_id(text) FROM PUBLIC;
 REVOKE ALL ON FUNCTION coach.withdraw_relationship_invite(uuid, text) FROM PUBLIC;
