@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-373
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/tab-spec.tsx
@@ -42,3 +44,8 @@ beiden Zahlen.**
 
 `[cmd]` **`stack_items` traegt 17 Spalten** — **zu messen, ob eine
 davon den Beginn haelt.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-152 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.

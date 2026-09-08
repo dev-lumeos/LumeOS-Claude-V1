@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-100
 kinder: []
 entscheidung: E-52
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: []
   dateien: []
@@ -109,3 +111,95 @@ und der Bericht stehen dort.
 statt querschnittlich** (C-414).
 
 `[read]` **Der Anschluss ist ein UI-Auftrag** — **nach C-414.**
+
+## Gemessen am 2026-09-08, vor der Auftragsvergabe
+
+`[cmd]` **`public.activity_stream` steht seit C-412/C-414.**
+
+    Spalten   user_id, event_date, event_time, occurred_at,
+              module, event_type, event_id, summary_de
+
+    nutrition    4170   bis 2026-11-16
+    supplements   810   bis 2026-09-06
+    recovery      370   bis 2026-11-06
+    training       66   bis 2026-11-11
+    medical        10   bis 2026-06-06
+    ------------------
+    gesamt       5426
+
+`[cmd]` **Und null Dateien in `apps/` lesen sie.**
+
+`[read]` **Achter Fall von A-71** — **der Leseweg steht, niemand
+ruft ihn.**
+
+`[cmd]` **TTFB warm 4,6 ms** (C-412) — **die Sicht ist schnell
+genug.**
+
+## Auftrag — den Aktivitaetsstrom anschliessen
+
+**Mitbeauftragt: G-374.** Bericht in diese Datei.
+
+**Beauftragt am 2026-09-08.**
+
+### Lies zuerst
+
+`[cmd]` **`docs/spezifikation/00-QUELLEN.md`, Abschnitt
+dashboard.** `[cmd]` **Dann die Mockups, die dort genannt sind.**
+
+`[read]` **Und sieh nach, wie das Mockup den Strom zeigt** — **eine
+Liste, ein Verlauf, oder je Modul getrennt.**
+
+### 1 · G-152 — der Strom im Dashboard
+
+`[cmd]` **`dashboard-echt.tsx` und `entwurf.tsx` liegen da.**
+
+`[read]` **Miss zuerst, was die Entwurfsfassung zeigt** — **und ob
+`summary_de` reicht oder je Ereignisart etwas anderes noetig ist.**
+
+`[cmd]` **`summary_de` heisst: die Sicht traegt deutschen Text.**
+`[read]` **Die App ist dreisprachig** (DE/EN/TH) — **das ist zu
+messen und zu melden, nicht zu loesen.**
+
+### 2 · G-374 — Zyklen brauchen ein Startdatum
+
+`[cmd]` **`{on_weeks, off_weeks}` ohne Beginn ergibt kein
+*Wk 5 of 8*.**
+
+`[cmd]` **`stack_items` traegt 17 Spalten** — **miss, ob eine den
+Beginn haelt.**
+
+`[read]` **Wenn nicht: melden, nicht in `supabase/` bauen.**
+
+### Abnahmebedingungen
+
+**Miss jede einzeln, schreib die Zahl in den Bericht.**
+
+    A1  der Strom am Schirm. Zahl: Zeilen gezeigt / 5426.
+        Und: welcher Zeitraum, welche Sortierung.
+    A2  je Modul: erscheint es? Zahl: 5 Module / davon sichtbar.
+    A3  E-72: keine nackte Null. Zahl: Kacheln / mit Daten /
+        mit Leerhinweis.
+    A4  E-69: Referenz unter der Linie. Zahl: angebunden /
+        Referenzen.
+    A5  summary_de gegen DE/EN/TH: was fehlt, gemessen.
+    A6  G-374: haelt eine Spalte den Zyklusbeginn? Ja mit Namen,
+        nein mit Vorschlag.
+
+### Was nicht zu tun ist
+
+**Nichts in `supabase/` aendern.**
+**Nachweise auf `test-user@lumeos.local`.**
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server gehoert dir
+
+`[cmd]` **Er war eben unten** — **`server.py start`, nicht `.next`
+loeschen.**
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
