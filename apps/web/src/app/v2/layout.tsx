@@ -8,6 +8,10 @@
 // data-theme/data-mode und laedt die Tokens. Beide Oberflaechen teilen
 // sich diese Tokens; v2 bringt nur eigene KLASSEN mit (Praefix v2-).
 import '@lumeos/ui/styles.css'
+// G-376: der Modulkopf mit drei Spalten — Titel links, Wechsler
+// mittig, Aktionen rechts. Die Regeln greifen nur, wo ein Modul
+// den Platz stellt (`data-tageswechsler`).
+import './kopf.css'
 import { V2Shell } from './shell'
 
 export default function V2Layout({

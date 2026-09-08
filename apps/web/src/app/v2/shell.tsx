@@ -13,6 +13,9 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import { createClient } from '@lumeos/shared'
 import { AppShell } from '@lumeos/ui'
 import { Sprachwahl } from '../../components/shell/sprachwahl'
+// G-375: der Tageswechsler, oben in der Mitte — aber nur ueber
+// Modulen, die einen Tag fuehren.
+import { Tageswechsler } from './tageswechsler'
 import { MODE_COOKIE } from '../../styles/themes/registry'
 
 // ══ G-17: das Datum reist mit ══════════════════════════
@@ -124,6 +127,24 @@ export function V2Shell({ children }: { children: React.ReactNode }) {
         ],
       }}
     >
+      {/* ══ G-375/G-376: der Tageswechsler ═════════════════════════
+          **Tom, 2026-09-08:** *„der changer soll in den headerteil
+          rein wie es vorher bei nutrition war und die actions die nun
+          mittig sind zurueck nach rechts in diesem header."*
+
+          `[cmd]` **G-375 hat ihn als eigenen Kasten UEBER den Kopf
+          gesetzt** — gemessen: Nutritions Aktionsknoepfe standen
+          danach 221 px vom rechten Rand statt 21. **Der Kopf war
+          zerschossen.**
+
+          `[read]` **Jetzt rendert er per Portal IN den Kopf** — das
+          Modul stellt den Platz (`data-tageswechsler`), die Schale
+          fuellt ihn. **Der Kopf gehoert dem Modul, der Wechsler der
+          Schale**, und keiner baut den anderen nach.
+
+          `[read]` **Hier steht deshalb nur der Anker** — sichtbar
+          wird nichts, wo kein Platz steht (C-426). */}
+      <Tageswechsler />
       {children}
     </AppShell>
   )

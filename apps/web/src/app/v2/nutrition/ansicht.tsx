@@ -69,7 +69,7 @@ import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-as
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 import { Zielhinweis } from './zielhinweis'
 import { Mahlzeiten } from './mahlzeiten'
-import { Datumsnavigation, Zukunftshinweis } from './datumsnavigation'
+import { Zukunftshinweis } from './datumsnavigation'
 import {
   LEERER_WECHSELSTAND,
   type LogZeile as PlanLogZeile, type WechselStand,
@@ -308,12 +308,10 @@ export async function TagebuchAnsicht({
           </div>
         </div>
 
-        {/* G-14: `‹ Heute ›` als Einheit. Vorher zwei blasse Pfeile
-            hier — sichtbar erst, wenn man wusste, dass es sie gibt.
-            G-73: eigene Spalte in der Mitte. */}
-        <div className="v2-nutri-kopf-mitte">
-          <Datumsnavigation datum={datum} istAdmin={istAdmin} />
-        </div>
+        {/* `[cmd]` **G-376: der Platz fuer den Tageswechsler.**
+            Die Schale rendert per Portal hinein — der Kopf
+            gehoert dem Modul, der Wechsler der Schale. */}
+        <div className="v2-kopf-mitte" data-tageswechsler />
 
         <div className="v2-module-actions">
           {/* G-38: Quick-add und MealCam oeffnen jetzt die Fenster der

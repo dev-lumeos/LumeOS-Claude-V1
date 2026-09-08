@@ -76,6 +76,11 @@ export function DashboardEcht({ d }: { d: DashboardDaten }) {
             Alle Zahlen fuer den {tagKurz(d.stichtag)} — aus den sieben Modulen gelesen.
           </div>
         </div>
+
+        {/* `[cmd]` **G-376: der Platz fuer den Tageswechsler.**
+            Die Schale rendert per Portal hinein — der Kopf
+            gehoert dem Modul, der Wechsler der Schale. */}
+        <div className="v2-kopf-mitte" data-tageswechsler />
       </div>
 
       {/* Vier KPI-Kacheln, wie im Entwurf. */}

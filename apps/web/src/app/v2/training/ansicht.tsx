@@ -154,6 +154,11 @@ export function TrainingAnsicht({
           </div>
           <div className="v2-module-sub">PPL · Hypertrophy → Strength · Coach: Anders Lindqvist</div>
         </div>
+
+        {/* `[cmd]` **G-376: der Platz fuer den Tageswechsler.**
+            Die Schale rendert per Portal hinein — der Kopf
+            gehoert dem Modul, der Wechsler der Schale. */}
+        <div className="v2-kopf-mitte" data-tageswechsler />
         <div className="v2-module-actions">
           <button type="button" className="v2-btn" onClick={() => kontext.open('aigen')}>
             <Icon name="zap" className="v2-ic v2-ic-sm" /> Generate

@@ -117,7 +117,11 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
     <MedicalKontext.Provider value={kontext}>
       {/* [cmd] module-medical-v2.jsx:16-31. Die Vorlage benutzt hier
           `module-header` OHNE `module-hero-lite` — wie Recovery. */}
-      <div className="v2-module-header">
+      {/* `[cmd]` **G-376: der Kasten fehlte.** Sechs Module tragen
+          `v2-module-hero-lite` (Rahmen, Radius, Verlauf), medical
+          und recovery nicht — ihr Kopf war nur ein Flex mit
+          Abstand. Gemessen von Tom, 2026-09-08. */}
+      <div className="v2-module-header v2-module-hero-lite">
         <div className="v2-module-title-block">
           <div className="v2-module-title-row">
             <span className="v2-module-title">Medical</span>

@@ -49,12 +49,26 @@ function ruhig<T>(f: () => Promise<T>, rueckfall: T): Promise<T> {
   return f().catch(() => rueckfall)
 }
 
-export default async function V2SupplementsPage() {
+export default async function V2SupplementsPage({
+  searchParams,
+}: {
+  searchParams?: { datum?: string }
+}) {
   // G-74: Compliance und Inventory rechnen gegen ein Datum. Es kommt
   // aus `lib/datum.ts` (ueber Mittag gerechnet) und wird SERVERSEITIG
   // bestimmt — `new Date()` in der Komponente ergaebe im Browser einen
   // anderen Wert als beim Rendern und zerlegte die Hydration.
-  const stichtag = heute()
+  // ══ G-375: der Tag kommt aus der Adresse ════════════════
+  //
+  // `[cmd]` **Hier stand `heute()`, fest.** **Der Tageswechsler
+  // der Schale haette darueber gestanden und nichts bewirkt**
+  // (C-426: kein Regler ohne Wirkung).
+  //
+  // `[read]` **Der Stichtag war schon durchgereicht** — er
+  // wurde nur nicht entgegengenommen.
+  const stichtag = /^\d{4}-\d{2}-\d{2}$/.test(searchParams?.datum ?? '')
+    ? searchParams!.datum!
+    : heute()
 
   // ══ WARUM PARALLEL ══════════════════════════════════════════════
   //
@@ -107,6 +121,19 @@ export default async function V2SupplementsPage() {
     () => getTagesbilanz(bilanzTag), [])
 
   return (
+    <>
+      {/* ══ G-375: KEIN Merkmal — und das ist gemessen ═════════
+          `[cmd]` **Der Reiter zeigt den juengsten Protokolltag**, nicht
+          den gewaehlten: `bilanzTag` faellt auf
+          `daten.einnahmen[0].intake_date` zurueck (G-275, Zeile 119).
+
+          `[cmd]` **Am Schirm gemessen:** mit `?datum=2026-09-06` und
+          mit `?datum=2026-08-15` steht beide Male 2026-09-06 da.
+
+          `[read]` **Der Wechsler waere hier ein Regler ohne sichtbare
+          Wirkung** (C-426). `stichtag` wird zwar entgegengenommen und
+          an `ladeRegeln` gereicht — **aber nichts am Schirm folgt
+          ihm.** Gemeldet, nicht mit einem Merkmal ueberdeckt. */}
     <SupplementsAnsicht
       daten={daten} katalog={katalog} heute={stichtag}
       regeln={regeln} gate={gate}
@@ -114,5 +141,6 @@ export default async function V2SupplementsPage() {
       bilanz={bilanz} belegteSubstanzen={belegteSubstanzen}
       bilanzTag={bilanzTag}
     />
+    </>
   )
 }

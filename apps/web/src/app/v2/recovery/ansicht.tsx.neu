@@ -149,13 +149,13 @@ export function RecoveryAnsicht({
 
   return (
     <RecoveryKontext.Provider value={kontext}>
-      {/* ══ G-376: der Kasten, auf Toms Ansage ═══════════════════════
+      {/* ══ G-376: der Kasten, auf Toms Ansage ═════════════════
           `[cmd]` **Hier stand `module-header` OHNE `hero-lite`** — und
           das war korrekt uebernommen: `module-recovery-v2.jsx:18` macht
           es genauso, `module-medical-v2.jsx:16` ebenso.
 
           `[cmd]` **Tom, 2026-09-08, hat es gemessen und entschieden:**
-          sechs Module tragen den Kasten, zwei nicht — *„medical und
+          sechs Module tragen den Kasten, zwei nicht — *,,medical und
           recovery bekommen v2-module dazu."*
 
           `[read]` **Das weicht bewusst von der Vorlage ab.** Sie ist an

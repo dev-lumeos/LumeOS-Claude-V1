@@ -50,8 +50,22 @@ export const metadata: Metadata = {
 // Werten der Bauzeit, also ohne Session und ohne Zeile.
 export const dynamic = 'force-dynamic'
 
-export default async function V2GoalsPage() {
-  const stichtag = heute()
+export default async function V2GoalsPage({
+  searchParams,
+}: {
+  searchParams?: { datum?: string }
+}) {
+  // ══ G-375: der Tag kommt aus der Adresse ════════════════
+  //
+  // `[cmd]` **Hier stand `heute()`, fest.** **Der Tageswechsler
+  // der Schale haette darueber gestanden und nichts bewirkt**
+  // (C-426: kein Regler ohne Wirkung).
+  //
+  // `[read]` **Der Stichtag war schon durchgereicht** — er
+  // wurde nur nicht entgegengenommen.
+  const stichtag = /^\d{4}-\d{2}-\d{2}$/.test(searchParams?.datum ?? '')
+    ? searchParams!.datum!
+    : heute()
 
   let ziele: ZielFortschritt[] = []
   let meilensteine: Meilenstein[] = []
@@ -92,6 +106,7 @@ export default async function V2GoalsPage() {
   }
 
   return (
+    <>
     <GoalsAnsicht
       echt={{
         stichtag,
@@ -110,5 +125,6 @@ export default async function V2GoalsPage() {
         ladefehler,
       }}
     />
+    </>
   )
 }

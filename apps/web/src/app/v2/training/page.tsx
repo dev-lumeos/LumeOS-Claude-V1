@@ -39,7 +39,11 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic'
 
-export default async function V2TrainingPage() {
+export default async function V2TrainingPage({
+  searchParams,
+}: {
+  searchParams?: { datum?: string }
+}) {
   // Vier getrennte Abfragen, vier getrennte `try` — faellt die
   // Muskelauswahl aus, bleibt die Tabelle gueltig. Dieselbe Linie wie
   // im Tagebuch.
@@ -72,7 +76,17 @@ export default async function V2TrainingPage() {
   // Ein eigener `try`, wie bei den vier darueber: faellt der
   // Sitzungspfad aus, bleibt der Katalog gueltig und die
   // Entwurfskacheln stehen mit ihrer Marke.
-  const stichtag = heute()
+  // ══ G-375: der Tag kommt aus der Adresse ════════════════
+  //
+  // `[cmd]` **Hier stand `heute()`, fest.** **Der Tageswechsler
+  // der Schale haette darueber gestanden und nichts bewirkt**
+  // (C-426: kein Regler ohne Wirkung).
+  //
+  // `[read]` **Der Stichtag war schon durchgereicht** — er
+  // wurde nur nicht entgegengenommen.
+  const stichtag = /^\d{4}-\d{2}-\d{2}$/.test(searchParams?.datum ?? '')
+    ? searchParams!.datum!
+    : heute()
   let verlauf: VerlaufDaten | null = null
 
   try {
@@ -118,6 +132,7 @@ export default async function V2TrainingPage() {
   try { readiness = await ladeReadiness() } catch { readiness = null }
 
   return (
+    <>
     <TrainingAnsicht
       uebungenStart={start}
       uebungenGesamt={gesamt}
@@ -127,5 +142,6 @@ export default async function V2TrainingPage() {
       verlauf={verlauf}
       readiness={readiness}
     />
+    </>
   )
 }
