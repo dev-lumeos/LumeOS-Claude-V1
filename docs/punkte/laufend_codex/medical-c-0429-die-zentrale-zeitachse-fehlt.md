@@ -6,7 +6,9 @@ schwere: mittel
 angelegt: 2026-09-08
 braucht: []
 kind_von: G-241
-entscheidung: E-26
+entscheidung: E-74
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [medical.lab_reports]
 zahlen:
@@ -127,3 +129,110 @@ Zeitachse, Dokumente, Termine.**
 Wiedergabe ein Zitat, keine Aussage.**
 
 `[read]` **Der Punkt ist damit ein Bauauftrag, kein Befund.**
+
+## Auftrag — die Medical-Ablage
+
+**Mitbeauftragt: G-241 (Documents, Appointments).** Bericht in
+diese Datei.
+
+**Beauftragt am 2026-09-08.**
+
+### E-74 gilt
+
+Tom, 2026-09-08: *,,wir sind kein arzt, aber wir koennen daten fuer
+den user sammeln die er zur verfuegung stellt und dessen inhalt mit
+herkunft bei fragen des users wiedergeben."*
+
+`[read]` **Erfassen ist nicht diagnostizieren.** `[read]` **Der
+Vertrag verbietet, dass LumeOS diagnostiziert** — **nicht, dass der
+Nutzer eintraegt, was ein Arzt gesagt hat.**
+
+### Lies zuerst
+
+`[cmd]` **`docs/spezifikation/00-QUELLEN.md`, Abschnitt Medical.**
+`[cmd]` **`SPEC_02_ENTITIES.md`, `SPEC_06_DATABASE_SCHEMA.md`,
+`SPEC_08_IMPORT_PIPELINE.md`.**
+
+`[cmd]` **Und `E-74` selbst** — **die Herkunft traegt die Last.**
+
+### 1 · Documents — der Bucket
+
+`[cmd]` **Gemessen: 10 Laborberichte, alle `file_ref = NULL`,
+`storage.buckets` leer.**
+
+`[cmd]` **`SPEC_04:40`, `SPEC_06:117`, `SPEC_02:151` nennen
+`file_url`/Storage.**
+
+`[read]` **Bau den Ablageweg** — **und miss, ob Verschluesselung
+noetig ist, bevor Originale liegen.**
+
+`[cmd]` **`user_medications` wartet auf Schluesselverwaltung** —
+**fuer Arztbefunde duerfte dasselbe gelten.** `[read]` **Miss es
+und sag es, statt es zu entscheiden.**
+
+### 2 · Appointments
+
+`[cmd]` **Keine Tabelle, keine Entity, kein API-Eintrag** —
+**einziger Fund: der UI-Text *,,Termin vereinbaren"*
+(SPEC_03:151).**
+
+`[cmd]` **Dein eigener Vorschlag aus G-241:** **Nutzer, Typ
+(Arzt/Labor/sonstiges), Zeitpunkt mit Zeitzone, Status, optionale
+Verknuepfung zu Laborbericht oder Medikation, Owner-RLS.**
+
+`[read]` **Bau ihn.**
+
+### 3 · Die vier Ereignisarten
+
+`[cmd]` **Diagnosen, Behandlungen, Operationen, Zeitachse.**
+
+`[read]` **Jeder Eintrag traegt seine Herkunft:** **wer, wann, und
+ob ein Dokument dahinterliegt.**
+
+`[read]` **Damit ist die Wiedergabe ein Zitat, keine Aussage.**
+
+`[cmd]` **Dieselbe Machart wie `measurement_source` und
+`source_detail`** — **und wie der Coach-Namenssnapshot** (C-268):
+**die Herkunft friert ein.**
+
+`[read]` **Miss zuerst, ob `medical.conditions` schon etwas davon
+traegt** — **bevor du eine neue Tabelle baust.**
+
+`[read]` **Und ob die Zeitachse eine eigene Tabelle braucht oder
+aus den anderen entsteht** — **`public.activity_stream` ist der
+Praezedenzfall** (C-414).
+
+### Abnahmebedingungen
+
+**Miss jede einzeln, schreib die Zahl in den Bericht.**
+
+    A1  Bucket steht, ein Original abgelegt und gelesen.
+        Zahl: Dateien / Groesse.
+    A2  Verschluesselung: noetig oder nicht, mit Begruendung
+        und Fundstelle.
+    A3  appointments: Zeilen auf test-user, RLS beide Richtungen.
+    A4  je Ereignisart: Zeilen auf test-user, und die Herkunft
+        je Zeile belegt.
+    A5  conditions: was traegt sie heute? Zahl: Spalten, Zeilen.
+    A6  Vollkette laeuft durch. Schritte und Sekunden.
+
+### Was nicht zu tun ist
+
+**Keine Oberflaeche** — **das sind UI-Auftraege.**
+**Keine Ableitung aus den Daten** — **E-74: kein Wert wird
+bewertet.**
+**Nie gegen die laufende Datenbank testen.**
+`apps/` nicht anfassen — **Claude Code arbeitet an G-152.**
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server gehoert dir nicht
+
+`[cmd]` **Kein `neustart`, kein `start`, kein `aufraeumen`.**
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 212 |
+| `todos` | 211 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 324 |
 | **gesamt** | **538** |
@@ -51,7 +52,7 @@
 | `C-337` | befund | mittel | [die Medikamenten-Einnahmezeit fehlt](todos/medical-c-0337-die-medikamenten-einnahmezeit-fehlt.md) | offen | — | — |
 | `C-359` | feature | mittel | [Symptome brauchen ein Protokoll je Nutzer](todos/medical-c-0359-symptome-brauchen-ein-protokoll-je-nutzer.md) | offen | — | — |
 | `C-385` | feature | hoch | [das Datenmodell fuer Injektionsstellen](erledigt/medical-c-0385-das-datenmodell-fuer-injektionsstellen.md) | erledigt | — | C-395 |
-| `C-429` | befund | mittel | [die zentrale Zeitachse fehlt](todos/medical-c-0429-die-zentrale-zeitachse-fehlt.md) | offen | — | — |
+| `C-429` | befund | mittel | [die zentrale Zeitachse fehlt](laufend_codex/medical-c-0429-die-zentrale-zeitachse-fehlt.md) | laeuft (codex) | — | — |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
