@@ -42,19 +42,35 @@ wirklich** — **weil er `Muscle readiness` gegen
 `[read]` **Hier ist es umgekehrt: die Daten sind deutsch, die
 Oberflaeche kann drei Sprachen.**
 
-## Zwei Wege
+## Die Regel steht schon fest
 
-**1 · Drei Spalten** — `summary_de`, `summary_en`, `summary_th`.
-`[read]` **Wie `supplement_evidence`.** `[read]` **Aber die Sicht
-wuerde jeden Text dreimal zusammensetzen.**
+**Berichtigung 2026-09-08.** `[read]` **Der Orchestrator hat zwei
+Wege zur Wahl gestellt, obwohl die Konvention entschieden ist.**
 
-**2 · Bausteine statt Saetze** — **die Sicht liefert
-`event_type` und die Werte, die Oberflaeche setzt den Satz.**
+`[cmd]` **`docs/spezifikation/10-plattform/konventionen/
+00-konventionen.md`, Abschnitt 1:**
 
-`[read]` **Das ist der uebliche Weg** — **`apps/web/messages`
-traegt die Vorlagen schon.**
+> Nutzeroberflaeche mehrsprachig ? Deutsch, Englisch, Thai; das
+> Datenmodell fuehrt Sprachvarianten als Spalten (`name_de`,
+> `name_en`, `name_th`).
 
-`[cmd]` **Und `event_type` steht bereits in der Sicht.**
+Tom, 2026-09-08: *,,ist es eine datenbankabfrage? dann in der db
+loesen. ist es eine bezeichnung oder sonst was das im code als
+variable steht, dann i18n."*
 
-`[read]` **Der zweite Weg braucht keine Sprachspalte** — **aber er
-verschiebt Arbeit von der Datenbank in die Oberflaeche.**
+`[read]` **Der Aktivitaetsstrom ist eine Datenbankabfrage** —
+**also drei Spalten.**
+
+## Zu bauen
+
+`[cmd]` **`summary_de`, `summary_en`, `summary_th` in der Sicht.**
+
+`[cmd]` **`supplement_evidence` macht es bereits so** — **die
+Sicht ist der Ausreisser, nicht das Vorbild.**
+
+`[read]` **Die deutschen Zeichenketten in der Sichtdefinition
+werden zu drei Faellen je Ereignisart** — `'Mahlzeit erfasst: '`
+neben `'Meal logged: '` und der thailaendischen Fassung.
+
+`[read]` **Und die Oberflaeche waehlt die Spalte nach der
+eingestellten Sprache** — **wie ueberall sonst.**

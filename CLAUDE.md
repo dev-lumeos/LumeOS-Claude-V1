@@ -406,6 +406,19 @@ Dateien, 0,18 GB.** `[cmd]` **Nicht `.next` selbst** (B-18/G-109).
 `[read]` **Vorher pruefen, dass der Server steht** — **und dass
 kein anderer Prozess `apps/web/.next` beruehrt.**
 
+## Sprachen: Datenbank oder i18n, nicht zur Wahl
+
+**Tom, 2026-09-08:** *,,ist es eine datenbankabfrage? dann in der db
+loesen. ist es eine bezeichnung oder sonst was das im code als
+variable steht, dann i18n."*
+
+`[cmd]` **`00-konventionen.md`, Abschnitt 1:** *,,Das Datenmodell
+fuehrt Sprachvarianten als Spalten (`name_de`, `name_en`,
+`name_th`)."*
+
+`[read]` **Die Regel ist entschieden** — **wer sie zur Wahl stellt,
+hat die Konvention nicht gelesen.**
+
 ## Anbinden heisst mit Daten
 
 **Tom, 2026-09-07:** *,,wenn wir was anbinden sollen auch daten
