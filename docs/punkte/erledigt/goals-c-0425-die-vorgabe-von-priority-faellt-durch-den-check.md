@@ -9,6 +9,8 @@ kind_von: G-353
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: OFFEN
 beruehrt:
   tabellen: [goals.user_goals]
 zahlen:
@@ -159,4 +161,63 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  Variante c: 1-10 allgemein, drei aktive Slots
+    A2  die Oberflaeche lebt die Drei, Create goal ist Attrappe
+    A3  niedrigster freier Platz, kein vierter
+    A4  fuenf Stufen des Altrepos, je mit Erlaubnisliste
+    A5  acht Matrizen, mindestens 38 Stufenbeschreibungen
+
+### Er hat meine Variante b widerlegt
+
+`[cmd]` **Ich schrieb: *,,Primary Goal Flag fehlt als Spalte."***
+
+`[cmd]` **Nachgemessen: `is_primary` existiert, und
+`uq_user_goals_one_primary` erlaubt genau ein primaeres aktives
+Ziel je Nutzer.**
+
+`[read]` **Damit ist die Spec vollstaendiger umgesetzt als ich
+dachte** — **die Zehnerskala UND das Hauptziel stehen.**
+
+### Der einzige echte Mangel
+
+`[cmd]` **`DEFAULT 5`** — **ohne ausdrueckliche Prioritaet
+scheitert jedes neue aktive Ziel.**
+
+`[read]` **Nicht die Drei ist falsch, nicht die Zehn** — **nur die
+Vorgabe passt zu keiner von beiden.**
+
+### A3 ist die richtige Regel
+
+> *,,Niedrigster freier Slot aus 1-3. Sind alle drei belegt, darf
+> kein viertes aktives Ziel entstehen; der Nutzer waehlt erst
+> Umpriorisieren, Pausieren oder Abschliessen."*
+
+`[read]` **Das System entscheidet nicht fuer ihn, es zwingt ihn zu
+entscheiden** — **wie E-69.**
+
+`[cmd]` **Und sein Nachsatz zaehlt:** **die Freiplatzsuche gehoert
+atomar in den Schreibweg** — **sonst vergeben zwei gleichzeitige
+Anlagen denselben Platz.**
+
+### A5 — er hat das Kopieren abgelehnt
+
+`[cmd]` **Nicht die Fuenferliste achtmal, sondern acht fachliche
+Matrizen:** `axis x capability -> Mindeststufe x Modus` **(lesen,
+vorschlagen, direkt).**
+
+`[cmd]` **Mindestens 38 Stufenbeschreibungen** — 7x5 plus Safety 3.
+
+`[read]` **Und der wichtigste Satz:** *,,`safety_level` bleibt ein
+dreistufiges Schutz-Gate, keine fuenfte Freiheitsachse."*
+
+`[read]` **Ein Schutz, der wie eine Freiheit aussieht, wird
+irgendwann hochgestellt.**
+
+`[cmd]` **Heute genau ein Leser: `coach.darf_nutrition_plan_aendern`
+bei `nutrition_level >= 5`** — **selbst nachgemessen, es ist die
+einzige `darf_`-Funktion.**
+
+**Abgenommen.**
+

@@ -7,8 +7,6 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-361
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-08
 beruehrt:
   tabellen: [coach.client_autonomy]
 zahlen:
@@ -105,3 +103,41 @@ Tom.**
 
 **Mitbeauftragt mit C-425 am 2026-09-08.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-08 — die Erlaubnisliste des Altrepos
+
+`[cmd]` **`referenz/lumeos-2026/AUTONOMY_ARCHITECTURE.md:172`:**
+
+    L1 Supervised    alles gesperrt, Coach-Freigabe noetig
+    L2 Guided        Wasser- und Schlaferinnerungen,
+                     Hydration, Ruhehinweise
+    L3 Collaborative + Ernaehrung, Mahlzeiten, Supplement-Timing,
+                     Makroanpassungen unter 5 %, Recovery
+    L4 Adaptive      + Deload, Volumen, Trainingslast, Uebungen,
+                     Ruhetage -- kein Programmumbau
+    L5 Autonomous    + Programm, Ziele, grosse Makros,
+                     Trainingsphasen, Stacks
+
+### Codex' Vorschlag: nicht kopieren
+
+> *,,Nicht kopieren, sondern in acht fachliche Matrizen ueberfuehren:
+> `axis x capability -> Mindeststufe x Modus` (lesen, vorschlagen,
+> direkt)."*
+
+`[cmd]` **Mindestens 38 Stufenbeschreibungen** — **7x5 plus
+Safety 3** — **acht Faehigkeitslisten und ein gemeinsamer
+Datenbank-Waechter.**
+
+`[read]` **Und der Satz, der die Achse rettet:** *,,`safety_level`
+bleibt ein dreistufiges Schutz-Gate, keine fuenfte
+Freiheitsachse."*
+
+`[read]` **Ein Schutz, der wie eine Freiheit aussieht, wird
+irgendwann hochgestellt.**
+
+`[cmd]` **Heute genau ein Leser:
+`coach.darf_nutrition_plan_aendern`** — **die einzige
+`darf_`-Funktion im Bestand.**
+
+`[read]` **Das ist Arbeit fuer einen eigenen Tag** — **und eine
+Entscheidung fuer Tom, ob acht Achsen bleiben.**
