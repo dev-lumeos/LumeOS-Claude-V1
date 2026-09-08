@@ -93,6 +93,22 @@ export function MedVerlauf({ stand }: { stand: DokumenteStand }) {
   const [meldung, setMeldung] = React.useState<string | null>(null)
   const [filter, setFilter] = React.useState('alle')
 
+  // ══ G-378: das Dateifeld steht AUSSERHALB der Liste ═════════
+  //
+  // `[cmd]` **Gemessen:** `change` feuerte, der POST ging raus und
+  // wurde `net::ERR_ABORTED` — **er erreichte den Server nie.**
+  // Kein POST im Protokoll, keine Policy-Abweisung, kein 500.
+  //
+  // `[read]` **Die Kachel brach ihre eigene Anfrage ab:** `tue()`
+  // setzt `laeuft`, React zeichnet neu, und das `<label>` mit dem
+  // Dateifeld verschwand aus dem Baum — samt der laufenden Anfrage,
+  // die daraus stammte.
+  //
+  // `[read]` **Deshalb EIN Feld fuer alle Zeilen**, unbedingt
+  // gerendert. Welcher Befund gemeint ist, merkt sich `zielBericht`.
+  const dateiFeld = React.useRef<HTMLInputElement>(null)
+  const zielBericht = React.useRef<string | null>(null)
+
   // Formularfelder — Ereignis
   const [eArt, setEArt] = React.useState('diagnosis')
   const [eDatum, setEDatum] = React.useState('')
@@ -376,20 +392,14 @@ export function MedVerlauf({ stand }: { stand: DokumenteStand }) {
                       </button>
                     )
                     : (
-                      <label className="v2-btn v2-btn-ghost v2-btn-sm"
-                             style={{ cursor: 'pointer' }}>
+                      <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                              disabled={laeuft}
+                              onClick={() => {
+                                zielBericht.current = d.id
+                                dateiFeld.current?.click()
+                              }}>
                         Datei wählen
-                        <input type="file" hidden
-                               aria-label={`Original für ${d.titel ?? d.datum}`}
-                               onChange={e => {
-                                 const f = e.target.files?.[0]
-                                 if (!f) return
-                                 const fd = new FormData()
-                                 fd.set('berichtId', d.id)
-                                 fd.set('datei', f)
-                                 void tue(() => originalHochladen(fd))
-                               }} />
-                      </label>
+                      </button>
                     )}
                 </div>
                 {d.pfad && (
@@ -403,6 +413,27 @@ export function MedVerlauf({ stand }: { stand: DokumenteStand }) {
             ))}
           </div>
         </Card>
+
+        {/* `[read]` **Das eine Dateifeld** — es steht ausserhalb der
+            Liste und ueberlebt jedes Neuzeichnen. */}
+        <input
+          ref={dateiFeld}
+          type="file"
+          style={{ display: 'none' }}
+          aria-label="Original zu einem Befund"
+          onChange={e => {
+            const f = e.target.files?.[0]
+            const id = zielBericht.current
+            // `[read]` Das Feld leeren, damit dieselbe Datei ein
+            // zweites Mal gewaehlt werden kann.
+            e.target.value = ''
+            if (!f || !id) return
+            const fd = new FormData()
+            fd.set('berichtId', id)
+            fd.set('datei', f)
+            void tue(() => originalHochladen(fd))
+          }}
+        />
 
         {meldung && (
           <div className="v2-insight v2-neg">

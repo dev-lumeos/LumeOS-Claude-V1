@@ -135,7 +135,19 @@ export function SuppToday() {
 function TodayEcht() {
   const { daten, takenToday, toggleTaken, open, stichtag } = useSupp()
   const d = daten!
-  const heute = d.einnahmen[0]?.intake_date ?? null
+  // ══ G-378: der angesehene Tag, nicht der juengste ═══════════════
+  //
+  // `[cmd]` **Hier stand `d.einnahmen[0]?.intake_date`** — der
+  // juengste Protokolltag, unabhaengig davon, welcher Tag gewaehlt
+  // ist. **Gemessen:** mit `?datum=2026-09-03` stand weiter der
+  // 06.09. da.
+  //
+  // `[read]` **`stichtag` kommt aus dem Kontext und traegt den
+  // gewaehlten Tag** (er faellt in `page.tsx` selbst auf den
+  // juengsten zurueck, wenn keiner gewaehlt ist). **Also ihn
+  // nehmen** — sonst zeigt die Kachel einen anderen Tag als der
+  // Wechsler darueber.
+  const heute = stichtag ?? d.einnahmen[0]?.intake_date ?? null
   const heuteZeilen = d.einnahmen.filter(e => e.intake_date === heute)
 
   // Faellig ist, was heute im Protokoll steht; ohne Protokoll der

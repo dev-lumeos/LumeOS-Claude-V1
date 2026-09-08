@@ -29,14 +29,29 @@ export const metadata: Metadata = {
   title: 'Recovery · LumeOS',
 }
 
-export default async function V2RecoveryPage() {
+export default async function V2RecoveryPage({
+  searchParams,
+}: {
+  searchParams?: { datum?: string }
+}) {
+  // ══ G-378: recovery fuehrt jetzt einen Tag ════════════════
+  //
+  // `[cmd]` **In G-375 war es nicht anschliessbar:** die drei
+  // Lesewege nahmen kein Datum, sie luden die juengsten Zeilen.
+  // **Deshalb bekam recovery keinen Wechsler** (C-426).
+  //
+  // `[cmd]` **Jetzt nehmen alle drei ein `bis`** — ohne Angabe
+  // verhalten sie sich wie vorher.
+  const stichtag = /^\d{4}-\d{2}-\d{2}$/.test(searchParams?.datum ?? '')
+    ? searchParams!.datum!
+    : undefined
   // Drei getrennte Abfragen, drei getrennte Ergebnisse: faellt eine
   // aus, bleiben die uebrigen gueltig. Dieselbe Linie wie im
   // Tagebuch.
   const [checkins, scores, modalitaeten] = await Promise.all([
-    ladeCheckins(),
-    ladeScores(),
-    ladeModalitaeten(),
+    ladeCheckins(30, stichtag),
+    ladeScores(180, stichtag),
+    ladeModalitaeten(120, stichtag),
   ])
   return (
     <RecoveryAnsicht

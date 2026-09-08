@@ -199,6 +199,13 @@ export function RecoveryAnsicht({
                   action{pending.length === 1 ? '' : 's'}</>}
           </div>
         </div>
+        {/* `[cmd]` **G-378: der Platz fuer den Tageswechsler.**
+            recovery fuehrt jetzt einen Tag — seine drei Lesewege
+            (`ladeCheckins`, `ladeScores`, `ladeModalitaeten`) nehmen
+            ein `bis` entgegen. In G-375 war das der Grund, warum es
+            keinen Wechsler bekam (C-426). */}
+        <div className="v2-kopf-mitte" data-tageswechsler />
+
         <div className="v2-module-actions">
           <button type="button" className="v2-btn" onClick={() => kontext.open({ typ: 'hrvMeasure' })}>
             <Icon name="camera" className="v2-ic v2-ic-sm" />Measure HRV

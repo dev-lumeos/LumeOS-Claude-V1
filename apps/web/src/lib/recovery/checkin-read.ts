@@ -66,7 +66,14 @@ const SPALTEN = [
  * `[cmd]` Kein Service-Client — die Sitzung liest ihre eigenen Zeilen,
  * die Zeilenrechte der Tabelle greifen.
  */
-export async function ladeCheckins(grenze = 30): Promise<CheckinStand> {
+/**
+ * @param bis G-378: der Stichtag — nur Zeilen BIS zu diesem Tag.
+ *   `[read]` **Ohne Angabe wie bisher:** die juengsten Zeilen. Damit
+ *   bleibt jeder Aufrufer gueltig, der keinen Tag kennt.
+ */
+export async function ladeCheckins(
+  grenze = 30, bis?: string,
+): Promise<CheckinStand> {
   const leer: CheckinStand = { zeilen: [], neuster: null, mitHrv: 0, fehler: null }
   try {
     const client = await createSessionClient()
@@ -74,6 +81,7 @@ export async function ladeCheckins(grenze = 30): Promise<CheckinStand> {
       .schema('recovery')
       .from('checkins')
       .select(SPALTEN)
+      .lte('entry_date', bis ?? '9999-12-31')
       .order('entry_date', { ascending: false })
       .limit(grenze)
 

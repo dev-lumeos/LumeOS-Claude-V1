@@ -66,9 +66,15 @@ export default async function V2SupplementsPage({
   //
   // `[read]` **Der Stichtag war schon durchgereicht** — er
   // wurde nur nicht entgegengenommen.
-  const stichtag = /^\d{4}-\d{2}-\d{2}$/.test(searchParams?.datum ?? '')
+  // `[read]` **Zwei Werte, absichtlich getrennt:** `gewaehlterTag`
+  // ist `null`, wenn niemand einen gewaehlt hat — `stichtag` faellt
+  // dann auf heute. Nur so kann `bilanzTag` unterscheiden zwischen
+  // „der Nutzer meint diesen Tag" und „es steht keiner in der
+  // Adresse" (G-378).
+  const gewaehlterTag = /^\d{4}-\d{2}-\d{2}$/.test(searchParams?.datum ?? '')
     ? searchParams!.datum!
-    : heute()
+    : null
+  const stichtag = gewaehlterTag ?? heute()
 
   // ══ WARUM PARALLEL ══════════════════════════════════════════════
   //
@@ -116,24 +122,27 @@ export default async function V2SupplementsPage({
   //
   // `[read]` **Sie laeuft NACH `daten`, weil sie davon abhaengt** —
   // die einzige der sieben Abfragen, die das tut.
-  const bilanzTag = daten?.einnahmen[0]?.intake_date ?? stichtag
+  // ══ G-378: der gewaehlte Tag gewinnt ═══════════════════════════
+  //
+  // `[cmd]` **Hier stand `daten?.einnahmen[0]?.intake_date ??
+  // stichtag`** — der juengste Protokolltag ZUERST, der Stichtag nur
+  // als Rueckfall.
+  //
+  // `[cmd]` **In G-375 gemessen:** mit `?datum=2026-09-06` und mit
+  // `?datum=2026-08-15` stand beide Male 2026-09-06 da. **Der
+  // Tageswechsler waere ein Regler ohne Wirkung gewesen** (C-426),
+  // deshalb bekam supplements keinen.
+  //
+  // `[read]` **Die Umkehr ist klein und traegt weit:** wer einen Tag
+  // WAEHLT, meint ihn. **Wer keinen waehlt, bekommt weiter den
+  // juengsten Protokolltag** — G-275 bleibt damit gueltig, es ist
+  // jetzt nur der zweite Fall statt des ersten.
+  const bilanzTag = gewaehlterTag ?? daten?.einnahmen[0]?.intake_date ?? stichtag
   const bilanz = await ruhig<BilanzZeileRoh[]>(
     () => getTagesbilanz(bilanzTag), [])
 
   return (
     <>
-      {/* ══ G-375: KEIN Merkmal — und das ist gemessen ═════════
-          `[cmd]` **Der Reiter zeigt den juengsten Protokolltag**, nicht
-          den gewaehlten: `bilanzTag` faellt auf
-          `daten.einnahmen[0].intake_date` zurueck (G-275, Zeile 119).
-
-          `[cmd]` **Am Schirm gemessen:** mit `?datum=2026-09-06` und
-          mit `?datum=2026-08-15` steht beide Male 2026-09-06 da.
-
-          `[read]` **Der Wechsler waere hier ein Regler ohne sichtbare
-          Wirkung** (C-426). `stichtag` wird zwar entgegengenommen und
-          an `ladeRegeln` gereicht — **aber nichts am Schirm folgt
-          ihm.** Gemeldet, nicht mit einem Merkmal ueberdeckt. */}
     <SupplementsAnsicht
       daten={daten} katalog={katalog} heute={stichtag}
       regeln={regeln} gate={gate}

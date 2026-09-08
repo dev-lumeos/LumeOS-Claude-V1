@@ -308,6 +308,13 @@ export function SupplementsAnsicht({
             auf einen verborgenen Tab, waehrend `Catalog` einen Entwurf
             zeigte — zwei Einstiege in dieselbe Sache, einer davon
             Vorlage. Die Datenbank steht jetzt auf `Katalog`. */}
+        {/* `[cmd]` **G-378: der Platz fuer den Tageswechsler.**
+            In G-375 blieb er weg, weil `bilanzTag` immer auf den
+            juengsten Protokolltag zurueckfiel — ein Regler ohne
+            Wirkung (C-426). **Jetzt gewinnt der gewaehlte Tag**,
+            und der Rueckfall gilt nur noch ohne Auswahl. */}
+        <div className="v2-kopf-mitte" data-tageswechsler />
+
         <div className="v2-module-actions">
           <InEntwicklungKnopf titel={t('stackExportieren')} className="v2-btn">
             <Icon name="download" className="v2-ic v2-ic-sm" /> {t('stackExportieren')}

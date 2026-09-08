@@ -142,7 +142,14 @@ export type ScoreStand = {
  *
  * `[cmd]` Kein Service-Client — die Zeilenrechte der Tabelle greifen.
  */
-export async function ladeScores(grenze = 180): Promise<ScoreStand> {
+/**
+ * @param bis G-378: der Stichtag — nur Zeilen BIS zu diesem Tag.
+ *   `[read]` **Ohne Angabe wie bisher:** die juengsten Zeilen. Damit
+ *   bleibt jeder Aufrufer gueltig, der keinen Tag kennt.
+ */
+export async function ladeScores(
+  grenze = 180, bis?: string,
+): Promise<ScoreStand> {
   const leer: ScoreStand = { neuster: null, verlauf: [], gesamt: 0, fehler: null }
   try {
     const client = createSessionClient()
@@ -153,6 +160,7 @@ export async function ladeScores(grenze = 180): Promise<ScoreStand> {
       .schema('recovery')
       .from('scores')
       .select(SPALTEN, { count: 'exact' })
+      .lte('entry_date', bis ?? '9999-12-31')
       .order('entry_date', { ascending: false })
       .limit(grenze)
 
@@ -234,7 +242,14 @@ const MOD_SPALTEN = [
  * auf C-124. **Die Anzeige zeigt die 0 und sagt, worauf sie wartet** —
  * einen Wert zu erfinden waere schlimmer.
  */
-export async function ladeModalitaeten(grenze = 120): Promise<ModalitaetenStand> {
+/**
+ * @param bis G-378: der Stichtag — nur Zeilen BIS zu diesem Tag.
+ *   `[read]` **Ohne Angabe wie bisher:** die juengsten Zeilen. Damit
+ *   bleibt jeder Aufrufer gueltig, der keinen Tag kennt.
+ */
+export async function ladeModalitaeten(
+  grenze = 120, bis?: string,
+): Promise<ModalitaetenStand> {
   const leer: ModalitaetenStand = {
     heute: [], zeilen: [], gesamt: 0, jeArt: [], fehler: null,
   }
@@ -247,6 +262,7 @@ export async function ladeModalitaeten(grenze = 120): Promise<ModalitaetenStand>
       .schema('recovery')
       .from('modality_log')
       .select(MOD_SPALTEN, { count: 'exact' })
+      .lte('entry_date', bis ?? '9999-12-31')
       .order('entry_date', { ascending: false })
       .order('logged_time', { ascending: true })
       .limit(grenze)

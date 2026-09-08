@@ -149,13 +149,13 @@ export function RecoveryAnsicht({
 
   return (
     <RecoveryKontext.Provider value={kontext}>
-      {/* ══ G-376: der Kasten, auf Toms Ansage ═════════════════
+      {/* ══ G-376: der Kasten, auf Toms Ansage ═══════════════════════
           `[cmd]` **Hier stand `module-header` OHNE `hero-lite`** — und
           das war korrekt uebernommen: `module-recovery-v2.jsx:18` macht
           es genauso, `module-medical-v2.jsx:16` ebenso.
 
           `[cmd]` **Tom, 2026-09-08, hat es gemessen und entschieden:**
-          sechs Module tragen den Kasten, zwei nicht — *,,medical und
+          sechs Module tragen den Kasten, zwei nicht — *„medical und
           recovery bekommen v2-module dazu."*
 
           `[read]` **Das weicht bewusst von der Vorlage ab.** Sie ist an
@@ -199,6 +199,10 @@ export function RecoveryAnsicht({
                   action{pending.length === 1 ? '' : 's'}</>}
           </div>
         </div>
+        {/* `[cmd]` **G-378: der Platz fuer den Tageswechsler.**
+            recovery fuehrt jetzt einen Tag — seine drei Lesewege
+            nehmen ein `bis` entgegen. */}
+        <div className="v2-kopf-mitte" data-tageswechsler />
         <div className="v2-module-actions">
           <button type="button" className="v2-btn" onClick={() => kontext.open({ typ: 'hrvMeasure' })}>
             <Icon name="camera" className="v2-ic v2-ic-sm" />Measure HRV
