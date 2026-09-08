@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
+| `todos` | 209 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 317 |
-| **gesamt** | **529** |
+| `erledigt` | 318 |
+| **gesamt** | **530** |
 
 ## medical — 43
 
@@ -289,7 +288,7 @@
 | `G-348` | befund | mittel | [`wieGestern` ueberspringt manuelle Posten](erledigt/nutrition-g-0348-wiegestern-ueberspringt-manuelle-posten.md) | erledigt | — | C-412, G-351 |
 | `G-350` | befund | mittel | [ein zweiter Schreibweg fuer `is_checked`](erledigt/nutrition-g-0350-ein-zweiter-schreibweg-fuer-is-checked.md) | erledigt | — | — |
 | `G-351` | befund | mittel | [`other` hat keine Karte](erledigt/nutrition-g-0351-other-hat-keine-karte.md) | erledigt | — | — |
-| `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](laufend_claudecode/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | laeuft (claudecode) | — | — |
+| `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | C-425 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 62
@@ -422,11 +421,12 @@
 | `G-367` | feature | mittel | [Stunden und Saetze je Muskel](erledigt/recovery-g-0367-per-muscle-stunden-und-saetze.md) | erledigt | — | — |
 | `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](erledigt/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | erledigt | — | — |
 
-## goals — 6
+## goals — 7
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-06` | befund | mittel | [WP-05 erstes Mock-Modul echt machen](todos/goals-c-0006-wp-05-erstes-mock-modul-echt-machen.md) | offen | — | — |
+| `C-425` | befund | mittel | [die Vorgabe von `priority` faellt durch den CHECK](todos/goals-c-0425-die-vorgabe-von-priority-faellt-durch-den-check.md) | offen | — | — |
 | `E-04` | blocker | hoch | [Alte `public`-Tabellen nach `legacy` verschieben](erledigt/goals-e-0004-alte-public-tabellen-nach-legacy-verschieben.md) | erledigt | — | — |
 | `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](erledigt/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | erledigt | — | — |
 | `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — | — |
