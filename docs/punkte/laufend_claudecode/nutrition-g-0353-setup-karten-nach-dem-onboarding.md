@@ -7,6 +7,8 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: G-141
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/ansicht.tsx
@@ -387,3 +389,80 @@ Konfigurationszustand** — **deshalb braucht es keine Spalte fuer
 `[read]` **Eine Karte verschwindet, weil die Sache erledigt ist** —
 **und kommt zurueck, wenn der Zustand zurueckkehrt.**
 
+## Auftrag — Setup-Karten und die Vorlagenkachel
+
+**Mitbeauftragt: G-347b.** Bericht in diese Datei.
+
+**Beauftragt am 2026-09-08.**
+
+`[read]` **Der Punkt lag faelschlich in `erledigt/`** — **du hast es
+gefunden, der Orchestrator hatte die G-352-Abnahme in die falsche
+Datei geschrieben.**
+
+### 1 · G-353 — die Setup-Karten bauen
+
+`[read]` **Dein eigener Entwurf vom 07.09.:** **sie haengen an der
+Leere, nicht am Konfigurationszustand.**
+
+`[read]` **Damit braucht es keine Spalte fuer *weggewischt*** —
+**eine Karte verschwindet, weil die Sache erledigt ist, und kommt
+zurueck, wenn der Zustand zurueckkehrt.**
+
+`[cmd]` **G-222 hat das Onboarding entworfen:** **drei Schritte,
+alle ueberspringbar, nichts ist fuer den Betrieb noetig.**
+
+`[read]` **Die Karten sind der Weg fuer den, der uebersprungen
+hat** — **ein Angebot, kein Schritt.**
+
+### 2 · Die Vorlagenkachel in Supplements
+
+`[cmd]` **C-423 ist gebaut:** `supplements.stack_templates`
+**traegt jetzt beide Herkuenfte** — **kuratiert und Nutzer.**
+
+`[cmd]` **Codex spielt gerade ein** (C-424).
+
+`[read]` **Danach ist die Kachel *Vorlagen* anbindbar** — **sie war
+leer, weil die Tabelle 0 Zeilen hatte** (C-423, E-72).
+
+`[read]` **Miss zuerst, ob der Bestand da ist.** `[read]` **Wenn
+nicht: melden und bei G-353 bleiben.**
+
+### Abnahmebedingungen
+
+**Miss jede einzeln, schreib die Zahl in den Bericht.**
+
+    A1  wie viele Setup-Karten, je Karte die Bedingung, unter der
+        sie erscheint. Zahl: Karten / Bedingungen.
+
+    A2  je Karte: erscheint sie auf einem leeren Konto und
+        verschwindet sie, wenn die Sache erledigt ist?
+        Auf `test-user@lumeos.local`, beide Richtungen belegt.
+
+    A3  E-69: jede angebundene Kachel hat ihre Mockup-Referenz
+        unter der Linie. Zahl: angebunden / Referenzen.
+
+    A4  E-72: keine nackte Null. Zahl: Kacheln / mit Daten /
+        mit Leerhinweis.
+
+    A5  Vorlagenkachel: Zeilen je Herkunft am Schirm.
+        Zahl: kuratiert / Nutzer. Oder: Bestand fehlt noch.
+
+### Was nicht zu tun ist
+
+**Kein zweites Onboarding** — **fuenf Karten auf einmal sind eins,
+das man nicht ueberspringen kann.**
+**Nichts in `supabase/` aendern** — **Codex arbeitet dort.**
+**Nichts auf `dev@lumeos.app` schreiben.**
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server gehoert dir
+
+`[cmd]` **`server.py start` bevorzugen.**
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 211 |
+| `todos` | 210 |
 | `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 316 |
 | **gesamt** | **528** |
 
@@ -288,7 +289,7 @@
 | `G-348` | befund | mittel | [`wieGestern` ueberspringt manuelle Posten](erledigt/nutrition-g-0348-wiegestern-ueberspringt-manuelle-posten.md) | erledigt | — | C-412, G-351 |
 | `G-350` | befund | mittel | [ein zweiter Schreibweg fuer `is_checked`](erledigt/nutrition-g-0350-ein-zweiter-schreibweg-fuer-is-checked.md) | erledigt | — | — |
 | `G-351` | befund | mittel | [`other` hat keine Karte](erledigt/nutrition-g-0351-other-hat-keine-karte.md) | erledigt | — | — |
-| `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](todos/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | offen | — | — |
+| `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](laufend_claudecode/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 62
