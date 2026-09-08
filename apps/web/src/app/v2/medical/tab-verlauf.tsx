@@ -23,6 +23,9 @@ import { Card, Pill, Icon } from '@lumeos/ui'
 
 import type { DokumenteStand } from '../../../lib/medical/dokumente-read'
 import {
+  ORIGINAL_ACCEPT, ORIGINAL_ARTEN_KLARTEXT, ORIGINAL_GROESSE_KLARTEXT,
+} from '../../../lib/medical/original-arten'
+import {
   ereignisAnlegen, terminAnlegen, terminAendern,
   originalHochladen, originalOeffnen,
 } from './dokumente-aktionen'
@@ -364,6 +367,16 @@ export function MedVerlauf({ stand }: { stand: DokumenteStand }) {
               da ist.
             </div>
           )}
+          {/* `[cmd]` **G-380: der Hinweis steht VOR der Wahl.**
+              `[read]` Vorher nannte erst der Fehler die erlaubten
+              Arten — nach dem Griff zur falschen Datei. **Einmal
+              ueber der Liste, nicht je Zeile:** die Regel gilt fuer
+              alle Zeilen gleich. */}
+          {stand.dokumente.length > 0 && (
+            <div className="v2-dim" style={{ fontSize: 11, marginBottom: 7 }}>
+              Originale als {ORIGINAL_ARTEN_KLARTEXT}, bis {ORIGINAL_GROESSE_KLARTEXT}.
+            </div>
+          )}
           <div className="v2-col-gap" style={{ gap: 6 }}>
             {stand.dokumente.map(d => (
               <div key={d.id} style={{
@@ -421,6 +434,16 @@ export function MedVerlauf({ stand }: { stand: DokumenteStand }) {
           type="file"
           style={{ display: 'none' }}
           aria-label="Original zu einem Befund"
+          // ══ G-380: der Waehler zeigt nur, was ankommt ═══════════
+          //
+          // `[cmd]` **Vorher liess sich eine `.txt` waehlen** und
+          // scheiterte erst im Speicher: *„mime type text/plain is
+          // not supported"*. `[read]` **Der Fehler kam nach der
+          // Wahl, statt sie zu fuehren.**
+          //
+          // `[read]` **`accept` haelt nichts auf** — es filtert nur
+          // den Waehler. Die Pruefung steht im Schreibweg.
+          accept={ORIGINAL_ACCEPT}
           onChange={e => {
             const f = e.target.files?.[0]
             const id = zielBericht.current

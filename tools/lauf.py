@@ -17,6 +17,9 @@ Benutzung:
 """
 import subprocess
 import shlex
+import io
+import os
+import time
 
 REPO = r"D:\GitHub\LumeOS-Claude-V1"
 DB = "supabase_db_LumeOS-Claude-V1"
@@ -116,3 +119,44 @@ def hole(url, cookies=None):
             return f.status, f.read().decode("utf-8", "replace")
     except urllib.error.HTTPError as e:
         return e.code, e.read().decode("utf-8", "replace")
+
+
+def schreib(pfad, text, versuche=12, pause=0.8):
+    """Eine Datei atomar schreiben, ohne Nebendatei zu hinterlassen.
+
+    `[cmd]` **G-380 gemessen:** die bisherige Fassung, in jedem
+    Skript neu abgeschrieben, legte `pfad + ".neu"` INNERHALB der
+    Wiederholschleife an und raeumte sie nicht weg. `[read]`
+    **Scheitert `os.replace` -- genau der Fall, fuer den die
+    Schleife da ist -- ueberlebt die Nebendatei.** So kam
+    `recovery/ansicht.tsx.neu` in den Baum (84bb575f, G-375): das
+    Skript meldete Fehlschlag, das Ziel wurde von Hand berichtigt,
+    und niemand sah nach der Nebendatei.
+
+    `[read]` **Zwei Aenderungen:** die Nebendatei liegt im selben
+    Verzeichnis mit eindeutigem Namen (nie `.neu`, damit ein Rest
+    nicht wie eine Zweitfassung aussieht), und `finally` raeumt sie
+    in JEDEM Ausgang weg -- auch beim Absturz.
+
+    `[read]` **Gibt True/False zurueck, wirft nicht.** Der Aufrufer
+    prueft den Rueckgabewert -- eine Erfolgsmeldung ohne Pruefung
+    ist keine Messung.
+    """
+    import tempfile
+    pfad = os.path.abspath(pfad)
+    ordner = os.path.dirname(pfad) or "."
+    for _ in range(versuche):
+        tmp = None
+        try:
+            fd, tmp = tempfile.mkstemp(dir=ordner, prefix=".schreib-")
+            with io.open(fd, "w", encoding="utf-8", newline="\n") as f:
+                f.write(text)
+            os.replace(tmp, pfad)
+            tmp = None          # uebernommen, nichts mehr wegzuraeumen
+            return True
+        except PermissionError:
+            time.sleep(pause)
+        finally:
+            if tmp and os.path.exists(tmp):
+                os.unlink(tmp)
+    return False

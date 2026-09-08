@@ -17,6 +17,10 @@
 // **Die Herkunft ist Pflicht, nicht Beiwerk:** `source_kind` und
 // `source_actor` sind NOT NULL, und das ist richtig so.
 import { createSessionClient } from '@lumeos/shared/session'
+import {
+  ORIGINAL_ARTEN, ORIGINAL_ARTEN_KLARTEXT,
+  ORIGINAL_GROESSE_MAX, ORIGINAL_GROESSE_KLARTEXT,
+} from './original-arten'
 
 export class MedicalSchreibFehler extends Error {
   constructor(public code: string, nachricht: string) {
@@ -205,6 +209,30 @@ export async function legeOriginalAb(
   berichtId: string, datei: File,
 ): Promise<{ pfad: string; groesse: number }> {
   const { client, userId } = await sitzung()
+
+  // ══ G-380: der Dateityp, bevor die Datei hochgeht ═══════════════
+  //
+  // `[cmd]` **Vorher meldete der Bucket** *„mime type text/plain is
+  // not supported"* — eine Meldung aus dem Speicher, die dem Nutzer
+  // nicht sagt, was er stattdessen waehlen soll.
+  //
+  // `[read]` **Dieselbe Klasse wie E-72:** nicht der nackte Fehler,
+  // sondern ein benannter Hinweis. **Er nennt die erlaubten Arten**,
+  // damit der naechste Versuch nicht wieder raten muss.
+  if (datei.type && !(ORIGINAL_ARTEN as readonly string[]).includes(datei.type)) {
+    throw new MedicalSchreibFehler(
+      'UNSUPPORTED_TYPE',
+      `Diese Dateiart nimmt der Speicher nicht an (${datei.type}). `
+      + `Erlaubt sind: ${ORIGINAL_ARTEN_KLARTEXT}.`,
+    )
+  }
+
+  if (datei.size > ORIGINAL_GROESSE_MAX) {
+    throw new MedicalSchreibFehler(
+      'TOO_LARGE',
+      `Die Datei ist groesser als ${ORIGINAL_GROESSE_KLARTEXT}.`,
+    )
+  }
 
   const endung = (datei.name.split('.').pop() ?? 'bin').toLowerCase()
   const pfad = `${userId}/${berichtId}.${endung}`
