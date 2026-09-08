@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 207 |
+| `todos` | 208 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 339 |
-| **gesamt** | **548** |
+| **gesamt** | **549** |
 
 ## medical — 47
 
@@ -481,7 +481,7 @@
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | C-426 |
 | `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](erledigt/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | erledigt | — | — |
 
-## quer — 119
+## quer — 120
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -522,6 +522,7 @@
 | `A-71` | befund | hoch | [der Leseweg liegt daneben](erledigt/quer-a-0071-der-leseweg-liegt-daneben.md) | erledigt | — | C-424, G-368, G-371 |
 | `A-72` | entscheidung | mittel | [eine Leser-Deklaration im Code](todos/quer-a-0072-eine-leser-deklaration-im-code.md) | offen | — | — |
 | `A-73` | befund | mittel | [der Webpack-Cache kann den Server toeten](todos/quer-a-0073-der-webpack-cache-kann-den-server-toeten.md) | offen | — | — |
+| `A-74` | befund | hoch | [die SSOT ist zwoelf Tage alt](todos/quer-a-0074-die-ssot-ist-zwoelf-tage-alt.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
