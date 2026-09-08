@@ -113,3 +113,32 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Sitzung abgebrochen, 2026-09-08
+
+`[cmd]` **Codex arbeitete 52 Minuten und brach ohne Bericht ab.**
+
+`[cmd]` **Der Fehler in der Ausgabe:** `psql : Die Benennung
+"psql" wurde nicht als Name eines Cmdlet ... erkannt.`
+
+`[read]` **`psql` liegt nicht im Pfad** ? **der Weg ist
+`from lauf import psql`, das ruft
+`docker exec supabase_db_LumeOS-Claude-V1 psql`.**
+
+`[cmd]` **Und er hat `$env:PGDATABASE` gesetzt** ? **das wirkt auf
+ein `psql`, das es nicht gibt.**
+
+## Was im Baum liegt
+
+    supabase/migrations/20260908140000_c434_coach_medical_provenan...
+    supabase/_pipeline/kette.json
+    supabase/_pipeline/daten/schema-sollstand.json
+    supabase/_pipeline/_testdaten/  (zwei Dateien)
+    supabase/_pipeline/_validierung/medical-c429-...test.ts
+    supabase/_pipeline/_validierung/coach-c434-...test.ts
+
+`[cmd]` **Fuenf Wegwerf-Datenbanken stehen noch:**
+`lumeos_c434_red`, `_legacy`, `_final`, `_final2`, `_final3`.
+
+`[read]` **Nicht abgenommen, nicht committet** ? **der naechste
+Lauf setzt hier an.**
