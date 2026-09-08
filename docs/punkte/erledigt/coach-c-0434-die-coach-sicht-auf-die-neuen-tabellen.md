@@ -9,6 +9,8 @@ kind_von: C-136
 entscheidung: E-74
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 34f1ef09
 beruehrt:
   tabellen: [coach.client_permissions]
 zahlen:
@@ -112,7 +114,68 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  Full: appointments 1, health_events 1
+        Summary: je 0
+    A2  health_timeline: Full 2, Summary 0
+    A3  Herkunftsfelder je Tabelle 0 -> 4
+    A4  Altbestand in der Wegwerf-DB: 0 Zeilen
+    A5  Full-Coach sieht 0 Objekte im Bucket
+    A6  Vollkette 168 Schritte, 650,4 s
+    A7  alle lumeos_c434%-Datenbanken weg
+
+`[cmd]` **Selbst gemessen: nicht live, keine Wegwerf-Datenbank
+uebrig.**
+
+### Die Rotprobe ist die beste Stelle
+
+`[cmd]` **`health_events_coach_read` absichtlich entfernt** ?
+**der Full-Coach sah `events: 0` und Timeline 1.** `[cmd]` **Nach
+erneutem Einspielen gruen.**
+
+`[read]` **Und die Timeline-Zahl beweist mehr als die Null:**
+**sie fiel von 2 auf 1** ? **also folgt sie wirklich ihrer
+Quelltabelle, nicht einer eigenen Regel.**
+
+### A2 belegt die Machart
+
+`[cmd]` **`health_timeline` bei Full: 2 Zeilen ? ein Ereignis und
+ein Laborbefund.**
+
+`[read]` **Sie hat keine eigene Policy und braucht keine** ?
+**`security_invoker` reicht ihre Quelle durch.**
+
+`[read]` **Eine Policy weniger, die auseinanderlaufen kann.**
+
+### A5 ohne neue Storage-Policy
+
+`[cmd]` **Ein Coach mit `full` sieht 0 Objekt-Metadaten.**
+
+`[read]` **Und er hat NICHTS gebaut, um das zu erreichen** ? **die
+bestehende Owner-only-Regel genuegt.**
+
+`[cmd]` **E-76 ist damit ohne eine Zeile Code umgesetzt.**
+
+### A4 hat den leichteren Fall gemessen
+
+`[cmd]` **In der Wegwerf-Datenbank waren die drei Tabellen leer** ?
+**also nichts rueckzubefuellen.**
+
+`[cmd]` **Auf `dev` nachgemessen: `user_medications` 2,
+`user_conditions` 2, `appointments` 3.**
+
+`[read]` **Beim Einspielen stellt sich die Frage also doch** ?
+**sieben Zeilen bekommen vier leere Spalten.**
+
+`[read]` **Das ist richtig so** ? **E-74 verlangt die Herkunft bei
+NEUEN Zeilen.** `[read]` **Eine nachtraeglich erfundene Herkunft
+waere schlimmer als eine leere.**
+
+`[cmd]` **Als Bedingung in C-435.**
+
+**Abgenommen.**
+
 
 ## Sitzung abgebrochen, 2026-09-08
 

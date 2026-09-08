@@ -8,6 +8,8 @@ braucht: []
 kind_von: F-04
 kinder: []
 entscheidung: E-11
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: []
   dateien: []
@@ -57,3 +59,8 @@ zahlen: null
   `[cmd]` **Und die Widerrufshistorie wird gebraucht** — F-03 sagt ja
   mit Begruendung, F-04 misst, dass sie fehlt: **das dokumentierte
   `coach_client_autonomy_log` hat keine Migration.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-435 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.
