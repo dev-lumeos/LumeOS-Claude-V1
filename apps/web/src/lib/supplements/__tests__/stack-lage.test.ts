@@ -12,7 +12,9 @@ import type { EigenerStack } from '../substanz-read'
 
 const z = (p: Partial<EigenerStack> = {}): EigenerStack => ({
   id: 'a', name: 'Muskelaufbau Basics', goal: null, is_active: true,
-  posten: 4, seit: '2026-08-23', quelle: 'custom', ...p,
+  // `[cmd]` G-372: `geteilt` kommt aus `stack_curation_candidates`,
+  // nicht aus `user_stacks` — die Vorgabe hier ist „nicht geteilt".
+  posten: 4, seit: '2026-08-23', quelle: 'custom', geteilt: false, ...p,
 })
 
 // ── System templates: Tabelle da, Inhalt fehlt ───────────────────

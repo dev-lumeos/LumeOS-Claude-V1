@@ -242,6 +242,24 @@ export function SuppStacksReferenz() {
               <Row key={f.id} label={f.label} value={`${f.days} d/mo`} sub={f.id} />
             ))}
           </Card>
+
+          {/* `[cmd]` **G-372: die vierte Kachel hatte kein
+              Gegenstueck.** Am Schirm gemessen: oben vier
+              angebundene Kacheln, unten drei Referenzen.
+              **`module-supplements-spec.jsx:562` fuehrt sie** als
+              `Item customization`. */}
+          <Card title="Item customization" sub="per stack item"
+                attrappe={marke(QUELLE)}>
+            <Row label="Custom name" value={'"Morning Magnesium"'} />
+            <Row label="Own dose" value="can deviate from rec." />
+            <Row label="Own timing" value="any slot" />
+            <Row label="Cycling config" value="{on_weeks, off_weeks}" />
+            <div className="v2-divider" />
+            <div className="v2-dim" style={{ fontSize: 11, lineHeight: 1.5 }}>
+              Cycling config drives intake-log generation: during an off
+              week no log is created at all.
+            </div>
+          </Card>
         </div>
       </div>
     </>

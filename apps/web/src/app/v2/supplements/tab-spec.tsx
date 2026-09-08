@@ -24,6 +24,12 @@
 // C-68 fuenf Tabellen, aber keine fuer Katalog, Stacks, Luecken oder
 // Bestand. Was fehlt, steht im Bericht.
 import * as React from 'react'
+
+// G-372: die Serveraktionen der Kachel.
+import {
+  stackAktivieren, vorlageUebernehmen,
+  stackVeroeffentlichen, stackZurueckziehen,
+} from './stack-aktionen'
 import { Card, Pill, Icon, Row, Meter, InEntwicklungKnopf } from '@lumeos/ui'
 
 import {
@@ -110,6 +116,31 @@ export function SuppStacks() {
   // `[read]` **Die Lage kommt jetzt aus der Zahl, nicht aus einer
   // Konstante** — faellt der Bestand wieder auf null, greift
   // derselbe Leerhinweis von selbst.
+  // ══ G-372: die Kachel bekommt Funktionen ═════════════════
+  //
+  // **Tom, 2026-09-08:** *,,was soll mir eine uebersicht bringen ohne
+  // funktionen? ich kann weder reinschauen, noch editieren, noch
+  // aktivieren."*
+  //
+  // `[cmd]` **Vorher: EIN Knopf** (,,Neuer Stack", und der war eine
+  // Attrappe).
+  const [laeuftId, setLaeuftId] = React.useState<string | null>(null)
+  const [meldung, setMeldung] = React.useState<string | null>(null)
+  const [offen, setOffen] = React.useState<string | null>(null)
+
+  async function tue(id: string, was: () => Promise<{ ok: boolean; fehler?: string }>) {
+    setLaeuftId(id)
+    setMeldung(null)
+    try {
+      const a = await was()
+      // `[read]` **Ein Fehler wird gezeigt, nicht geschluckt** —
+      // sonst sieht ein misslungener Klick aus wie keiner.
+      if (!a.ok) setMeldung(a.fehler ?? 'Hat nicht geklappt.')
+    } finally {
+      setLaeuftId(null)
+    }
+  }
+
   const vorlagenLage = vorlagenLageVon(vorlagen.length)
   const kuratiert = vorlagen.filter(v => v.herkunft !== 'user')
   const vomNutzer = vorlagen.filter(v => v.herkunft === 'user')
@@ -155,12 +186,43 @@ export function SuppStacks() {
                         {s.goal ? ` · ${s.goal}` : ''}
                       </div>
                     </div>
+                    {/* `[cmd]` QUELLE: `module-supplements-spec.jsx:527`
+                        — dort steht ,,Activate" nur an den INAKTIVEN,
+                        und daneben ,,Edit". */}
+                    {!s.is_active && (
+                      <button
+                        type="button"
+                        className="v2-btn v2-btn-sm"
+                        disabled={laeuftId === s.id}
+                        onClick={() => void tue(s.id,
+                          () => stackAktivieren(s.id))}
+                      >
+                        {laeuftId === s.id ? '…' : 'Aktivieren'}
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      className="v2-btn v2-btn-ghost v2-btn-sm"
+                      disabled={laeuftId === s.id}
+                      onClick={() => void tue(s.id, () => s.geteilt
+                        ? stackZurueckziehen(s.id)
+                        : stackVeroeffentlichen(s.id, 'aus der Stack-Kachel'))}
+                    >
+                      {s.geteilt ? 'Zurücknehmen' : 'Teilen'}
+                    </button>
                   </div>
                 ))}
               </div>
             )}
+          {meldung && (
+            <div className="v2-supp-hinweis" style={{ color: 'var(--neg)' }}>
+              {meldung}
+            </div>
+          )}
           <div className="v2-supp-hinweis">
             Einnahme-Einträge entstehen nur aus dem aktiven Stack.
+            Wer einen anderen aktiviert, pausiert den bisherigen
+            (SPEC_03, Flow 2).
           </div>
         </Card>
 
@@ -179,11 +241,19 @@ export function SuppStacks() {
                     padding: 10, background: 'var(--surface)',
                     border: '1px solid var(--border)', borderRadius: 6,
                   }}>
+                    {/* `[cmd]` **Kein `flexWrap`** — mit Umbruch fiel der
+                        Knopf bei langen Zielnamen (`body_composition`)
+                        in die zweite Zeile, waehrend er bei kurzen
+                        oben blieb. **Der Name kuerzt stattdessen.** */}
                     <div style={{
                       display: 'flex', alignItems: 'center', gap: 8,
-                      marginBottom: v.beschreibung ? 3 : 0, flexWrap: 'wrap',
+                      marginBottom: v.beschreibung ? 3 : 0,
                     }}>
-                      <span style={{ fontSize: 12.5, fontWeight: 600 }}>{v.name}</span>
+                      <span style={{
+                        fontSize: 12.5, fontWeight: 600, minWidth: 0,
+                        overflow: 'hidden', textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}>{v.name}</span>
                       {/* `[read]` Die Herkunft steht dran, weil sie den
                           Unterschied macht: kuratiert ist gepflegt,
                           vom Nutzer geteilt ist es nicht. */}
@@ -192,14 +262,59 @@ export function SuppStacks() {
                       </Pill>
                       {v.goal && (
                         <span className="v2-dim v2-mono"
-                              style={{ fontSize: 10, marginLeft: 'auto' }}>
+                              style={{ fontSize: 10, minWidth: 0, overflow: 'hidden',
+                                       textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {v.goal}
                         </span>
                       )}
+                      {/* ══ G-372: uebernehmen ═══════════════════
+                          `[cmd]` QUELLE: `module-supplements-spec.jsx:546`
+                          — dort heisst der Knopf ,,Use template" und
+                          steht rechts in der Kopfzeile der Vorlage.
+
+                          `[cmd]` `SPEC_03`, Flow 2, Schritt 4:
+                          *,,[Template uebernehmen]"*. */}
+                      <button
+                        type="button"
+                        className="v2-btn v2-btn-sm"
+                        style={{ marginLeft: 'auto' }}
+                        disabled={laeuftId === v.id}
+                        onClick={() => void tue(v.id,
+                          () => vorlageUebernehmen(v.id))}
+                      >
+                        {laeuftId === v.id ? '…' : 'Übernehmen'}
+                      </button>
                     </div>
                     {v.beschreibung && (
                       <div className="v2-muted" style={{ fontSize: 11, lineHeight: 1.45 }}>
                         {v.beschreibung}
+                      </div>
+                    )}
+                    {/* ══ G-372: reinschauen ═════════════════════
+                        `[cmd]` QUELLE: `module-supplements-spec.jsx:549`
+                        — die Vorlage zeigt ihre Posten als Pillenreihe.
+
+                        `[read]` **Ohne Posten waere es wieder eine
+                        Zaehlung** — genau das, was Tom bemaengelt hat. */}
+                    {v.posten.length > 0 && (
+                      <div style={{
+                        display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 7,
+                      }}>
+                        {v.posten.map(p => (
+                          <Pill key={p.id} style={{ fontSize: 9.5 }}>
+                            {p.name}
+                            {p.dosis != null && (
+                              <span className="v2-dim" style={{ marginLeft: 4 }}>
+                                {p.dosis} {p.einheit ?? ''}
+                              </span>
+                            )}
+                          </Pill>
+                        ))}
+                      </div>
+                    )}
+                    {v.posten.length === 0 && (
+                      <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 6 }}>
+                        Keine Posten hinterlegt.
                       </div>
                     )}
                   </div>

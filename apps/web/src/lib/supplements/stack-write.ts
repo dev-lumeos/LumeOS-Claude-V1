@@ -337,3 +337,189 @@ export async function setzeBestand(
   }
   return zeile
 }
+
+
+// ══ G-372: aktivieren und uebernehmen ═══════════════════════
+//
+// **Tom, 2026-09-08:** *,,ist ja alles huebsch, aber was soll mir eine
+// uebersicht bringen ohne funktionen? ich kann weder reinschauen, noch
+// editieren, noch aktivieren."*
+//
+// `[cmd]` **Fuenf DB-Funktionen stehen** (C-423) —
+// `create_curated_stack_template`, `publish_stack_template`,
+// `withdraw_stack_template`, `decide_stack_curation_candidate`,
+// `refresh_stack_item_count`. **Keine davon aktiviert einen Stack
+// oder uebernimmt eine Vorlage.**
+//
+// `[cmd]` **Sie werden dafuer auch nicht gebraucht:** `authenticated`
+// hat INSERT, SELECT, UPDATE und DELETE auf `user_stacks` und
+// `stack_items` — gemessen ueber `role_table_grants`. **Beides geht
+// ueber den Sitzungsclient, wie jeder andere Schreibweg hier.**
+
+/**
+ * Einen Stack aktivieren — G-372.
+ *
+ * `[cmd]` **`uq_user_stacks_one_active` ist ein partieller
+ * Eindeutigkeitsindex** (`ON (user_id) WHERE is_active`). **Wer den
+ * neuen aktiviert, bevor der alte abgeschaltet ist, kollidiert.**
+ * Deshalb erst abschalten, dann einschalten.
+ *
+ * `[read]` **Und das ist genau der Ablauf der Spec** (`SPEC_03`,
+ * Flow 2): *,,Dein bisheriger aktiver Stack wird pausiert."*
+ */
+export async function aktiviereStack(
+  stackId: string,
+): Promise<{ aktiviert: string; deaktiviert: number }> {
+  const { userId } = await sitzung()
+
+  // 1 · Gehoert der Stack ueberhaupt der Nutzerin?
+  const { data: ziel, error: zielFehler } = await db()
+    .from('user_stacks')
+    .select('id, is_active')
+    .eq('user_id', userId)
+    .eq('id', stackId)
+    .maybeSingle()
+  if (zielFehler) throw new SupplementSchreibFehler('WRITE_FAILED', zielFehler.message)
+  if (!ziel) throw new SupplementSchreibFehler('NOT_FOUND', 'Kein eigener Stack mit dieser id.')
+
+  // 2 · Die bisherigen abschalten — VOR dem Einschalten.
+  const { data: vorher, error: ausFehler } = await db()
+    .from('user_stacks')
+    .update({ is_active: false })
+    .eq('user_id', userId)
+    .eq('is_active', true)
+    .neq('id', stackId)
+    .select('id')
+  if (ausFehler) throw new SupplementSchreibFehler('WRITE_FAILED', ausFehler.message)
+
+  // 3 · Und den gewaehlten einschalten.
+  const { data: an, error: anFehler } = await db()
+    .from('user_stacks')
+    .update({ is_active: true })
+    .eq('user_id', userId)
+    .eq('id', stackId)
+    .select('id')
+  if (anFehler) throw new SupplementSchreibFehler('WRITE_FAILED', anFehler.message)
+  // `[read]` **Die Nullzeilenpruefung** (G-79): ein `update`, das der
+  // Zeilenschutz leergefiltert hat, meldet trotzdem `ok`.
+  if (!(an ?? []).length) {
+    throw new SupplementSchreibFehler('WRITE_FAILED', 'Update lieferte keine Zeile zurueck.')
+  }
+
+  return { aktiviert: stackId, deaktiviert: (vorher ?? []).length }
+}
+
+// ══ G-372: zwei Ziel-Vokabulare ══════════════════════════
+//
+// `[cmd]` **Gemessen am 2026-09-08, und es ist ein Befund:**
+//
+//     stack_templates.goal   KEIN CHECK — freier Text
+//                            belegt: body_composition, health,
+//                            lifestyle, performance
+//     user_stacks.goal       CHECK auf SIEBEN Werte
+//                            muscle_building, fat_loss,
+//                            recovery_sleep, health, longevity,
+//                            performance, custom
+//
+// `[read]` **Nur `health` und `performance` stehen in beiden.**
+// **`body_composition` und `lifestyle` gibt es im Stack nicht** —
+// die Uebernahme fiel an `user_stacks_goal_check`.
+//
+// `[read]` **Hier wird nicht geraten:** was nicht in der erlaubten
+// Liste steht, wird `custom`. **Eine falsche Zuordnung waere
+// schlimmer als ein ehrliches ,,custom"** — `body_composition`
+// koennte Aufbau ODER Diaet meinen, und das entscheidet der Nutzer,
+// nicht dieser Code.
+//
+// `[read]` **Gemeldet, nicht ausgeglichen** — ob die beiden Listen
+// zusammengefuehrt werden, ist eine Schemafrage (Codex).
+
+/** Die sieben Werte, die `user_stacks_goal_check` zulaesst. */
+const STACK_ZIELE = new Set([
+  'muscle_building', 'fat_loss', 'recovery_sleep', 'health',
+  'longevity', 'performance', 'custom',
+])
+
+function zielFuerStack(vorlagenZiel: string | null): string {
+  if (!vorlagenZiel) return 'custom'
+  return STACK_ZIELE.has(vorlagenZiel) ? vorlagenZiel : 'custom'
+}
+
+/**
+ * Eine Vorlage uebernehmen — sie wird ein eigener Stack (G-372).
+ *
+ * `[cmd]` **`SPEC_03`, Flow 2, Schritt 4:** *,,[Template uebernehmen]
+ * oder [Von Grund auf erstellen]"*.
+ *
+ * `[cmd]` **Die Posten werden KOPIERT, nicht verknuepft** — der
+ * eigene Stack soll aenderbar sein, ohne die Vorlage zu beruehren.
+ *
+ * `[cmd]` **Und die Spalten heissen verschieden:**
+ * `stack_template_items.dose_amount` gegen `stack_items.dose`.
+ * **Eine Uebernahme ist eine Uebersetzung, keine Kopie.**
+ *
+ * `[read]` **Der neue Stack wird NICHT automatisch aktiv** — das
+ * ist ein zweiter Schritt, und die Spec trennt ihn auch.
+ */
+export async function uebernimmVorlage(
+  templateId: string,
+): Promise<{ id: string; name: string; posten: number }> {
+  const { userId } = await sitzung()
+
+  const { data: vorlage, error: vFehler } = await db()
+    .from('stack_templates')
+    .select('id, name_de, goal')
+    .eq('id', templateId)
+    .maybeSingle()
+  if (vFehler) throw new SupplementSchreibFehler('WRITE_FAILED', vFehler.message)
+  if (!vorlage) {
+    throw new SupplementSchreibFehler('NOT_FOUND', 'Keine sichtbare Vorlage mit dieser id.')
+  }
+  const v = vorlage as unknown as { id: string; name_de: string; goal: string | null }
+
+  const { data: posten, error: pFehler } = await db()
+    .from('stack_template_items')
+    .select('supplement_id, custom_name, dose_amount, dose_unit, timing, frequency, sort_order')
+    .eq('template_id', templateId)
+    .order('sort_order', { ascending: true })
+  if (pFehler) throw new SupplementSchreibFehler('WRITE_FAILED', pFehler.message)
+
+  const { data: neu, error: nFehler } = await db()
+    .from('user_stacks')
+    .insert({
+      user_id: userId,
+      name: v.name_de,
+      goal: zielFuerStack(v.goal),
+      // `[read]` **Die Herkunft steht dran** — der Mockup zeigt sie
+      // als eigene Marke neben dem Namen (`module-supplements-spec.jsx:203`).
+      source: 'template',
+      is_active: false,
+    })
+    .select('id, name')
+  if (nFehler) throw new SupplementSchreibFehler('WRITE_FAILED', nFehler.message)
+  const stack = (neu ?? [])[0] as unknown as { id: string; name: string } | undefined
+  if (!stack) {
+    throw new SupplementSchreibFehler('WRITE_FAILED', 'Insert lieferte keine Zeile zurueck.')
+  }
+
+  const zeilen = (posten ?? []) as unknown as Array<Record<string, unknown>>
+  if (zeilen.length === 0) return { id: stack.id, name: stack.name, posten: 0 }
+
+  const { data: kopien, error: kFehler } = await db()
+    .from('stack_items')
+    .insert(zeilen.map((z, i) => ({
+      stack_id: stack.id,
+      supplement_id: (z.supplement_id as string) ?? null,
+      custom_name: (z.custom_name as string) ?? null,
+      // `dose_amount` -> `dose`: die Uebersetzung.
+      dose: Number(z.dose_amount ?? 0),
+      dose_unit: String(z.dose_unit ?? 'mg'),
+      timing: String(z.timing ?? 'morning'),
+      frequency: String(z.frequency ?? 'daily'),
+      sort_order: Number(z.sort_order ?? i),
+    })))
+    .select('id')
+  if (kFehler) throw new SupplementSchreibFehler('WRITE_FAILED', kFehler.message)
+
+  return { id: stack.id, name: stack.name, posten: (kopien ?? []).length }
+}

@@ -356,6 +356,15 @@ export type EigenerStack = {
   seit: string | null
   /** Woher er stammt (`custom`, Vorlage …). */
   quelle: string | null
+  /**
+   * G-372: steht dieser Stack als Vorlage zur Kuratierung?
+   *
+   * `[cmd]` **Gemessen an `stack_curation_candidates`** — ein
+   * Eintrag mit dieser `origin_stack_id` und Status `pending` oder
+   * `approved`. **`withdrawn` heisst zurueckgenommen**, dann ist er
+   * wieder privat.
+   */
+  geteilt: boolean
 }
 
 // C-252: die Luecken stehen serverfrei in `substanz-luecken.ts` —
@@ -1170,6 +1179,24 @@ export async function ladeEigeneStacks(): Promise<EigenerStack[]> {
     jeStack.set(k, (jeStack.get(k) ?? 0) + 1)
   }
 
+  // ══ G-372: welche Stacks sind geteilt? ══════════════════
+  //
+  // `[read]` **Nicht am Stack, sondern am Kandidaten** — ein
+  // `user_stacks`-Feld dafuer gibt es nicht (gemessen). **Die
+  // Veroeffentlichung lebt in `stack_curation_candidates`.**
+  const { data: kandidaten } = await s
+    .from('stack_curation_candidates')
+    .select('origin_stack_id, status')
+    .in('origin_stack_id', zeilen.map(z => String(z.id)))
+  const geteilteStacks = new Set<string>()
+  for (const k of (kandidaten ?? []) as unknown as Array<Record<string, unknown>>) {
+    // `[read]` **`withdrawn` zaehlt nicht** — zurueckgenommen heisst
+    // wieder privat, und genau das soll der Knopf anzeigen.
+    if (k.status === 'pending' || k.status === 'approved') {
+      geteilteStacks.add(String(k.origin_stack_id))
+    }
+  }
+
   const txt = (v: unknown) =>
     typeof v === 'string' && v.trim() !== '' ? v : null
 
@@ -1177,6 +1204,7 @@ export async function ladeEigeneStacks(): Promise<EigenerStack[]> {
     id: String(x.id),
     name: String(x.name),
     is_active: x.is_active === true,
+    geteilt: geteilteStacks.has(String(x.id)),
     goal: txt(x.goal),
     posten: jeStack.get(String(x.id)) ?? 0,
     seit: txt(x.created_at)?.slice(0, 10) ?? null,
@@ -1184,6 +1212,16 @@ export async function ladeEigeneStacks(): Promise<EigenerStack[]> {
   }))
 }
 
+
+/** Ein Posten einer Vorlage — G-372, ,,reinschauen". */
+export type VorlagenPosten = {
+  id: string
+  name: string
+  dosis: number | null
+  einheit: string | null
+  timing: string | null
+  frequenz: string | null
+}
 
 /** Eine Vorlage aus `supplements.stack_templates` — G-347b. */
 export type StackVorlage = {
@@ -1194,6 +1232,13 @@ export type StackVorlage = {
   /** `curated` oder `user` — die beiden Herkuenfte aus C-423. */
   herkunft: string
   oeffentlich: boolean
+  /**
+   * G-372: die Posten der Vorlage.
+   *
+   * **Tom, 2026-09-08:** *,,ich kann weder reinschauen, noch
+   * editieren, noch aktivieren."* — **die Kachel zaehlte nur.**
+   */
+  posten: VorlagenPosten[]
 }
 
 /**
@@ -1226,12 +1271,66 @@ export async function ladeStackVorlagen(): Promise<StackVorlage[]> {
   const txt = (v: unknown) =>
     typeof v === 'string' && v.trim() !== '' ? v : null
 
-  return ((data ?? []) as unknown as Array<Record<string, unknown>>).map(z => ({
+  const vorlagen = (data ?? []) as unknown as Array<Record<string, unknown>>
+  if (vorlagen.length === 0) return []
+
+  // ══ G-372: die Posten, in EINER Abfrage ═══════════════════
+  //
+  // `[read]` **Nicht eine Abfrage je Vorlage** — derselbe Fehler,
+  // den C-189 mit 64 Aufrufen in einer Schleife gemacht hat
+  // (7.641 ms → 144 ms).
+  const { data: posten } = await client
+    .schema('supplements')
+    .from('stack_template_items')
+    .select('id, template_id, supplement_id, custom_name, dose_amount, '
+      + 'dose_unit, timing, frequency, sort_order')
+    .in('template_id', vorlagen.map(v => String(v.id)))
+    .order('sort_order', { ascending: true })
+    .limit(1000)
+
+  const zeilen = (posten ?? []) as unknown as Array<Record<string, unknown>>
+
+  // Die Namen der Katalogeintraege — auch in EINER Abfrage.
+  const ids = Array.from(new Set(
+    zeilen.map(z => z.supplement_id).filter((v): v is string => typeof v === 'string'),
+  ))
+  const namen = new Map<string, string>()
+  if (ids.length > 0) {
+    const { data: subs } = await client
+      .schema('supplements')
+      .from('supplements')
+      .select('id, name_de, name_en')
+      .in('id', ids)
+    for (const s of (subs ?? []) as unknown as Array<Record<string, unknown>>) {
+      namen.set(String(s.id), String(s.name_de ?? s.name_en ?? '—'))
+    }
+  }
+
+  const jeVorlage = new Map<string, VorlagenPosten[]>()
+  for (const z of zeilen) {
+    const k = String(z.template_id)
+    const liste = jeVorlage.get(k) ?? []
+    liste.push({
+      id: String(z.id),
+      // `[read]` **Erst der eigene Name, dann der Katalogname** —
+      // ein Posten ohne beides waere ein Strich, keine Erfindung.
+      name: txt(z.custom_name)
+        ?? namen.get(String(z.supplement_id ?? '')) ?? '—',
+      dosis: z.dose_amount == null ? null : Number(z.dose_amount),
+      einheit: txt(z.dose_unit),
+      timing: txt(z.timing),
+      frequenz: txt(z.frequency),
+    })
+    jeVorlage.set(k, liste)
+  }
+
+  return vorlagen.map(z => ({
     id: String(z.id),
     name: String(z.name_de ?? ''),
     beschreibung: txt(z.description_de),
     goal: txt(z.goal),
     herkunft: String(z.source ?? 'curated'),
     oeffentlich: z.is_public === true,
+    posten: jeVorlage.get(String(z.id)) ?? [],
   }))
 }
