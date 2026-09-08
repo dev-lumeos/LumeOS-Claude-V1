@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 210 |
+| `todos` | 211 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 322 |
-| **gesamt** | **535** |
+| `erledigt` | 323 |
+| **gesamt** | **536** |
 
 ## medical — 43
 
@@ -292,9 +291,9 @@
 | `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | C-425, G-372 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 65
+## supplements — 66
 
-### beauftragbar — 64
+### beauftragbar — 65
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -360,7 +359,8 @@
 | `G-281` | feature | mittel | [der Treffergrund in der Katalogsuche](erledigt/supplements-g-0281-der-treffergrund-in-der-katalogsuche.md) | erledigt | — | — |
 | `G-369` | feature | niedrig | [*Session today* braucht den Sitzungsbezug](todos/supplements-g-0369-session-today-braucht-den-sitzungsbezug.md) | offen | — | — |
 | `G-372` | feature | hoch | [die Stack-Kachel kann nichts](erledigt/supplements-g-0372-die-stack-kachel-kann-nichts.md) | erledigt | — | C-427, G-373 |
-| `G-373` | feature | mittel | [Stacks editieren und anlegen](laufend_claudecode/supplements-g-0373-stacks-editieren-und-anlegen.md) | laeuft (claudecode) | — | — |
+| `G-373` | feature | mittel | [Stacks editieren und anlegen](erledigt/supplements-g-0373-stacks-editieren-und-anlegen.md) | erledigt | — | G-374 |
+| `G-374` | feature | niedrig | [Zyklen brauchen eine eigene Eingabe](todos/supplements-g-0374-zyklen-brauchen-eine-eingabe.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
