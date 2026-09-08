@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **15 Punkte tragen `typ: entscheidung`
+`[cmd]` **16 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -46,6 +46,52 @@ nicht in diese Uebersicht.
   `[cmd]` **F-06 hat gemessen, dass die Freigabe ueberhaupt erst seit
   C-162 wirkt** — 22 `coach_read`-Policies ueber sechs Module. **Eine
   Feinstufe waere sechs mal soviel.**
+
+## A-72 — eine Leser-Deklaration im Code
+
+**Modul:** quer · **angelegt:** 2026-09-08 · **Datei:** `todos/quer-a-0072-eine-leser-deklaration-im-code.md`
+
+## Befund
+
+Aus C-424, Codex, 2026-09-08.
+
+`[cmd]` **Eine Leser-Registry ist aus dem Bestand nicht dauerhaft
+ableitbar:**
+
+    pg_depend    127 Kanten fuer 12 Sichten
+                 NULL fuer drei Funktionen, die lesen
+    App-Code     108 Dateien mit .from(), 22 mit .rpc()
+                 dem Katalog unbekannt
+
+`[cmd]` **176 Tabellen, 12 Sichten, 164 Funktionen** — **eine
+minimale Registry haette 352 Eintraege, ohne Leser-Kanten.**
+
+## Die Frage
+
+`[read]` **Codex' Ausweg:** *,,eine explizite, code-nahe
+Leser-Deklaration oder eine verpflichtende statische Pruefung."*
+
+`[read]` **Das ist eine Arbeitsregel, keine Aufgabe** — **jeder, der
+eine Tabelle liest, muesste es hinschreiben.**
+
+## Was es loesen wuerde
+
+`[cmd]` **A-71: sechsmal am 07.09. lag ein Leseweg ungenutzt
+daneben** — **und jedes Mal hat Tom es gefunden.**
+
+`[read]` **Mit einer Deklaration waere messbar, wer liest und wer
+nicht** — **und eine Kachel mit falschem Attrappen-Vermerk fiele
+auf.**
+
+## Was es kostet
+
+`[read]` **Eine Zeile je Leseweg, gepflegt von jedem Agenten.**
+
+`[read]` **Und ein Waechter, der sie prueft** — **sonst verfaellt
+sie wie jede Handpflege.**
+
+`[cmd]` **Zum Vergleich: `beruehrt:` in den Punktdateien ist
+dieselbe Klasse** — **und `punkte-pruefen.mjs` haelt es gruen.**
 
 ## E-10 — RLS neu bewerten, sobald `main` produktiv wird
 

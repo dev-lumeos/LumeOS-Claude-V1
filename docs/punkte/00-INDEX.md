@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 210 |
-| `laufend_codex` | 1 |
+| `todos` | 211 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 316 |
-| **gesamt** | **528** |
+| `erledigt` | 317 |
+| **gesamt** | **529** |
 
 ## medical — 43
 
@@ -466,7 +465,7 @@
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](todos/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | offen | — | — |
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | — |
 
-## quer — 114
+## quer — 115
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -505,6 +504,7 @@
 | `A-69` | befund | mittel | [26 Abhaengigkeiten mit High Severity](todos/quer-a-0069-26-abhaengigkeiten-mit-high-severity.md) | offen | — | — |
 | `A-70` | feature | hoch | [ein Backupsystem statt eines wachsenden Ordners](erledigt/quer-a-0070-ein-backupsystem-statt-eines-wachsenden-ordners.md) | erledigt | — | — |
 | `A-71` | befund | hoch | [der Leseweg liegt daneben](erledigt/quer-a-0071-der-leseweg-liegt-daneben.md) | erledigt | — | C-424, G-368, G-371 |
+| `A-72` | entscheidung | mittel | [eine Leser-Deklaration im Code](todos/quer-a-0072-eine-leser-deklaration-im-code.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
@@ -540,7 +540,7 @@
 | `C-419` | feature | hoch | [das Wallet existiert nicht](erledigt/quer-c-0419-das-wallet-existiert-nicht.md) | erledigt | — | — |
 | `C-420` | befund | hoch | [der Waechter kennt keine Uebersetzung](erledigt/quer-c-0420-der-waechter-kennt-keine-uebersetzung.md) | erledigt | — | — |
 | `C-422` | feature | hoch | [die Lesewege fuer elf Kacheln](erledigt/quer-c-0422-die-lesewege-fuer-elf-kacheln.md) | erledigt | — | — |
-| `C-424` | feature | mittel | [eine Leser-Registry](laufend_codex/quer-c-0424-eine-leser-registry.md) | laeuft (codex) | — | — |
+| `C-424` | feature | mittel | [eine Leser-Registry](erledigt/quer-c-0424-eine-leser-registry.md) | erledigt | — | A-72 |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
