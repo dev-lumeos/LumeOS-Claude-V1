@@ -132,8 +132,7 @@ Wiedergabe ein Zitat, keine Aussage.**
 
 ## Auftrag — die Medical-Ablage
 
-**Mitbeauftragt: G-241 (Documents, Appointments).** Bericht in
-diese Datei.
+**Mitbeauftragt: G-241, C-430, G-374.** Bericht in diese Datei.
 
 **Beauftragt am 2026-09-08.**
 
@@ -236,3 +235,54 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Nachtrag 2026-09-08 — zwei Grundlagen dazu
+
+Tom: *,,ja klar, das sind grundlagen."*
+
+### C-430 — der Aktivitaetsstrom braucht drei Sprachspalten
+
+`[cmd]` **`public.activity_stream` traegt nur `summary_de`** —
+**und der deutsche Text steht als Zeichenkette IN der
+Sichtdefinition** (`'Mahlzeit erfasst: '`, `'Abendessen'`).
+
+`[cmd]` **`00-konventionen.md`, Abschnitt 1:** *,,Das Datenmodell
+fuehrt Sprachvarianten als Spalten (`name_de`, `name_en`,
+`name_th`)."*
+
+Tom: *,,ist es eine datenbankabfrage? dann in der db loesen."*
+
+`[read]` **Also `summary_de`, `summary_en`, `summary_th`.**
+
+`[cmd]` **`supplement_evidence` macht es bereits so** — **die
+Sicht ist der Ausreisser.**
+
+`[read]` **Je Ereignisart drei Faelle** — `'Mahlzeit erfasst: '`
+neben `'Meal logged: '` und der thailaendischen Fassung.
+
+### G-374 — der Zyklusbeginn
+
+`[cmd]` **Claude Code hat alle 17 Spalten von
+`supplements.stack_items` geprueft:** **keine haelt den Beginn.**
+**`added_at` ist die Zeilenanlage.**
+
+`[cmd]` **`cycling` ist JSONB mit `{on_weeks, off_weeks}`, einem
+*ist ein Objekt*-CHECK und null gefuellten Zeilen.**
+
+`[read]` **Sein Vorschlag, von Tom bestaetigt: `started_on`
+INNERHALB des bestehenden Objekts** — **keine neue Spalte.**
+
+> *,,es ist schon da, hat schon einen CHECK, und die drei Werte sind
+> einzeln bedeutungslos."*
+
+`[read]` **Ohne Beginn gibt es kein *,,Woche 5 von 8"*.**
+
+`[read]` **Den CHECK entsprechend erweitern** — **ein `cycling` mit
+`on_weeks` und ohne `started_on` ist unvollstaendig.**
+
+### Zusaetzliche Abnahmebedingungen
+
+    A7  activity_stream: drei Sprachspalten, je eine Zeile
+        belegt. Zahl: Ereignisarten / davon dreisprachig.
+    A8  cycling: started_on im CHECK, eine Zeile gesetzt und
+        gelesen. Und: was geschieht mit den null bestehenden?

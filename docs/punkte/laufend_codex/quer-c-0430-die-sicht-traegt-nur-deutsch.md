@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-152
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [public.activity_stream]
 zahlen:
@@ -74,3 +76,8 @@ neben `'Meal logged: '` und der thailaendischen Fassung.
 
 `[read]` **Und die Oberflaeche waehlt die Spalte nach der
 eingestellten Sprache** — **wie ueberall sonst.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-429 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.

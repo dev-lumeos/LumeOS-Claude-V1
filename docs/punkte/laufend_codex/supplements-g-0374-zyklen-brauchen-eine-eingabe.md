@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-373
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/tab-spec.tsx
@@ -68,3 +70,8 @@ statt einer neuen Spalte.**
 kein Zyklus.**
 
 `[read]` **Das ist eine Schema-Entscheidung** — **sie gehoert Tom.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-429 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.

@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 213 |
-| `laufend_codex` | 1 |
+| `todos` | 211 |
+| `laufend_codex` | 3 |
 | `erledigt` | 325 |
 | **gesamt** | **539** |
 
@@ -361,7 +361,7 @@
 | `G-369` | feature | niedrig | [*Session today* braucht den Sitzungsbezug](todos/supplements-g-0369-session-today-braucht-den-sitzungsbezug.md) | offen | — | — |
 | `G-372` | feature | hoch | [die Stack-Kachel kann nichts](erledigt/supplements-g-0372-die-stack-kachel-kann-nichts.md) | erledigt | — | C-427, G-373 |
 | `G-373` | feature | mittel | [Stacks editieren und anlegen](erledigt/supplements-g-0373-stacks-editieren-und-anlegen.md) | erledigt | — | G-374 |
-| `G-374` | feature | niedrig | [Zyklen brauchen eine eigene Eingabe](todos/supplements-g-0374-zyklen-brauchen-eine-eingabe.md) | offen | — | — |
+| `G-374` | feature | niedrig | [Zyklen brauchen eine eigene Eingabe](laufend_codex/supplements-g-0374-zyklen-brauchen-eine-eingabe.md) | laeuft (codex) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -550,7 +550,7 @@
 | `C-420` | befund | hoch | [der Waechter kennt keine Uebersetzung](erledigt/quer-c-0420-der-waechter-kennt-keine-uebersetzung.md) | erledigt | — | — |
 | `C-422` | feature | hoch | [die Lesewege fuer elf Kacheln](erledigt/quer-c-0422-die-lesewege-fuer-elf-kacheln.md) | erledigt | — | — |
 | `C-424` | feature | mittel | [eine Leser-Registry](erledigt/quer-c-0424-eine-leser-registry.md) | erledigt | — | A-72 |
-| `C-430` | befund | mittel | [die Sicht traegt nur Deutsch](todos/quer-c-0430-die-sicht-traegt-nur-deutsch.md) | offen | — | — |
+| `C-430` | befund | mittel | [die Sicht traegt nur Deutsch](laufend_codex/quer-c-0430-die-sicht-traegt-nur-deutsch.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
