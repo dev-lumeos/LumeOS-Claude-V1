@@ -157,6 +157,37 @@ laesst einen gesunden 3200er leben.**
 `[cmd]` **Nie `.next` loeschen.** `[cmd]` **Bei `hasStartTime` im
 Log: nur `.next/cache/webpack`.**
 
+### Der Orchestrator sagt, wann ein Neustart noetig ist
+
+**Tom, 2026-09-08:** *,,wenn ich den server halte, dann musst du mir
+sagen wenn es einen neustart braucht, sonst schaue ich womoeglich
+alte staende an."*
+
+`[read]` **Next kompiliert bei jeder Aenderung neu** ? **aber nicht
+bei jeder.**
+
+**Ein Neustart ist noetig nach:**
+
+    Aenderungen in packages/ui        die Schale laedt sie einmal
+    neue Umgebungsvariablen          .env wird beim Start gelesen
+    next.config / tsconfig           beide nur beim Start
+    neue Abhaengigkeiten             pnpm install
+    Schema-Aenderungen mit Typen     generierte Typen
+
+**Kein Neustart noetig bei:**
+
+    Aenderungen in apps/web/src       heisses Nachladen
+    Aenderungen in messages/          desgleichen
+    Datenbankinhalte                  die Abfrage laeuft neu
+
+`[read]` **Nach jeder Abnahme, die eine dieser Sachen beruehrt:
+sagen.** `[cmd]` **Ein Satz reicht:** *,,Neustart noetig ?
+`packages/ui` geaendert."*
+
+`[read]` **Und wenn unklar: sagen.** `[read]` **Ein unnoetiger
+Neustart kostet 40 Sekunden, ein alter Stand kostet eine
+Fehlersuche.**
+
 `? docs/lehren/werkzeuge.md`
 
 ## Befehle
