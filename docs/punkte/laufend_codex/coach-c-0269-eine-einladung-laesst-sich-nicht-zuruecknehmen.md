@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-185
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: []
   dateien: []
@@ -58,3 +60,8 @@ bestanden.**
 
 `[read]` **Damit ist es UI-Arbeit geworden, kein Schemabefund** —
 **und gehoert an einen UI-Agenten, wenn der Coach-Bereich dran ist.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-324 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.

@@ -8,6 +8,8 @@ braucht: []
 kind_von: C-225
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: ["auth.users", "public.profiles"]
   dateien: []
@@ -53,3 +55,8 @@ Kurz-UUID.**
 ein Eingeladener den Namen des Einladenden sehen, bevor er
 zugestimmt hat?** `[cmd]` **Seit heute gibt es
 `coach.client_consent_log`** — der Ort, an dem so etwas stuende.
+
+## Auftrag
+
+**Mitbeauftragt mit G-324 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.
