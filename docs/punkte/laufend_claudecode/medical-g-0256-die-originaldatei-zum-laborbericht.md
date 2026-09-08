@@ -7,6 +7,8 @@ angelegt: 2026-08-29
 braucht: []
 kind_von: G-241
 entscheidung: E-26
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [medical.lab_reports]
 zahlen: null
@@ -80,3 +82,8 @@ Oberflaeche beauftragbar.**
 
 `[cmd]` **`file_ref` traegt den Pfad, nicht die URL** — **die URL
 entsteht beim Lesen, zeitlich begrenzt.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-376 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.

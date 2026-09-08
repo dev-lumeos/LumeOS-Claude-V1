@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 210 |
+| `todos` | 208 |
 | `laufend_codex` | 1 |
+| `laufend_claudecode` | 2 |
 | `erledigt` | 333 |
 | **gesamt** | **544** |
 
@@ -57,9 +58,9 @@
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
 | `G-241` | entscheidung | hoch | [zwei Reiterschnitte im Medical-Mockup](erledigt/medical-g-0241-zwei-reiterschnitte-im-medical-mockup.md) | erledigt | — | C-429, G-256, G-257 |
-| `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
+| `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](laufend_claudecode/medical-g-0256-die-originaldatei-zum-laborbericht.md) | laeuft (claudecode) | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
-| `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](todos/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | offen | — | — |
+| `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](laufend_claudecode/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | laeuft (claudecode) | — | — |
 
 ## nutrition — 228
 
