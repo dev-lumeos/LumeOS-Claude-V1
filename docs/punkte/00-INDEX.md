@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 211 |
+| `todos` | 212 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 324 |
-| **gesamt** | **537** |
+| **gesamt** | **538** |
 
 ## medical — 44
 
@@ -473,7 +473,7 @@
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](erledigt/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | erledigt | — | — |
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | C-426 |
 
-## quer — 115
+## quer — 116
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -513,6 +513,7 @@
 | `A-70` | feature | hoch | [ein Backupsystem statt eines wachsenden Ordners](erledigt/quer-a-0070-ein-backupsystem-statt-eines-wachsenden-ordners.md) | erledigt | — | — |
 | `A-71` | befund | hoch | [der Leseweg liegt daneben](erledigt/quer-a-0071-der-leseweg-liegt-daneben.md) | erledigt | — | C-424, G-368, G-371 |
 | `A-72` | entscheidung | mittel | [eine Leser-Deklaration im Code](todos/quer-a-0072-eine-leser-deklaration-im-code.md) | offen | — | — |
+| `A-73` | befund | mittel | [der Webpack-Cache kann den Server toeten](todos/quer-a-0073-der-webpack-cache-kann-den-server-toeten.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

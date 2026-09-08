@@ -389,6 +389,23 @@ benennen.**
 Unterreiter unten, waehrend nur einer sie oben zeigt?"*** — **mit
 Namen der Kachel.**
 
+## Der Webpack-Cache kann den Server toeten
+
+`[cmd]` **2026-09-08:** `Restoring pack from
+.next/cache/webpack/client-development.pack.gz failed: TypeError:
+Cannot read properties of undefined (reading 'hasStartTime')`
+
+`[read]` **Der Server erreicht *Ready* und stirbt Sekunden spaeter
+beim ersten Kompilieren.** `[read]` **`status` sagt *keiner
+laeuft*, das Log zeigt einen erfolgreichen Start** — **beide haben
+recht.**
+
+`[cmd]` **Behebung: NUR `.next/cache/webpack` loeschen** — **103
+Dateien, 0,18 GB.** `[cmd]` **Nicht `.next` selbst** (B-18/G-109).
+
+`[read]` **Vorher pruefen, dass der Server steht** — **und dass
+kein anderer Prozess `apps/web/.next` beruehrt.**
+
 ## Anbinden heisst mit Daten
 
 **Tom, 2026-09-07:** *,,wenn wir was anbinden sollen auch daten
