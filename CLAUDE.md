@@ -389,6 +389,37 @@ benennen.**
 Unterreiter unten, waehrend nur einer sie oben zeigt?"*** — **mit
 Namen der Kachel.**
 
+## Kein Befehl aus dem Gedaechtnis
+
+**Tom, 2026-09-08:** *,,deine scheissraterei muessen wir abstellen
+und zwar sofort und zu 100%. sowas gibt es nicht, wir entwickeln
+hier."*
+
+`[cmd]` **Am 2026-09-08 hat der Orchestrator
+`python tools/server.py aufraeumen` genannt, um den Server zu
+stoppen.** `[cmd]` **`aufraeumen` laesst Port 3200 absichtlich in
+Ruhe** (`auch_3200=False`) — **es passierte nichts.**
+
+`[cmd]` **Der richtige Befehl steht in derselben Datei:
+`neustart`** (`auch_3200=True`).
+
+`[read]` **Vier Zeilen lesen haetten gereicht.**
+
+### Die Regel
+
+`[read]` **Ein Befehl wird gelesen, bevor er genannt wird** —
+**nicht aus dem Gedaechtnis, nicht nach dem Namen.**
+
+`[read]` **Ein Werkzeug hat eine Datei. Die Datei sagt, was es
+kann.**
+
+`[cmd]` **Dieselbe Klasse wie die Auswahlliste in G-373**, die
+Claude Code aus dem Gedaechtnis schrieb: **`night` stand drin, der
+CHECK lehnte es ab.** `[read]` **Seine Lehre: *,,Eine Auswahlliste
+ist ein Versprechen."***
+
+`[read]` **Ein Befehl auch.**
+
 ## Der Dev-Server stirbt mit der Agentensitzung
 
 **2026-09-08, gemessen.** `[cmd]` **Der Server ist ein Enkel von
