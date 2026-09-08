@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
+| `todos` | 209 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 331 |
-| **gesamt** | **542** |
+| `erledigt` | 332 |
+| **gesamt** | **543** |
 
 ## medical — 46
 
@@ -476,7 +475,7 @@
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](erledigt/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | erledigt | — | — |
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | C-426 |
 
-## quer — 118
+## quer — 119
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -597,7 +596,8 @@
 | `G-365` | feature | hoch | [vier Schritte je Kachel](erledigt/quer-g-0365-vier-schritte-je-kachel.md) | erledigt | — | C-421, C-423, G-366, G-369, G-370 |
 | `G-368` | befund | mittel | [Attrappen-Vermerke mit falschem Grund](todos/quer-g-0368-attrappen-vermerke-mit-falschem-grund.md) | offen | — | — |
 | `G-370` | befund | mittel | [Unternavigationen vollstaendig pruefen](erledigt/quer-g-0370-unternavigationen-vollstaendig-pruefen.md) | erledigt | — | — |
-| `G-375` | feature | hoch | [der Tageswechsler gehoert in die Schale](laufend_claudecode/quer-g-0375-der-tageswechsler-gehoert-in-die-schale.md) | laeuft (claudecode) | — | — |
+| `G-375` | feature | hoch | [der Tageswechsler gehoert in die Schale](erledigt/quer-g-0375-der-tageswechsler-gehoert-in-die-schale.md) | erledigt | — | G-377 |
+| `G-377` | entscheidung | mittel | [ein gemeinsames Bauteil fuer den Modulkopf](todos/quer-g-0377-ein-gemeinsames-bauteil-fuer-den-modulkopf.md) | offen | — | — |
 
 ## market — 1
 
