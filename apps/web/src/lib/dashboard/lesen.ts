@@ -440,3 +440,107 @@ export async function ladeDashboard(stichtag: string): Promise<DashboardDaten> {
 
   return daten
 }
+
+
+// ══ G-152: der Aktivitaetsstrom ═══════════════════════════
+//
+// `[cmd]` **`public.activity_stream` steht seit C-412/C-414** —
+// 5.426 Zeilen ueber fuenf Konten — **und keine Datei in `apps/`
+// hat sie gelesen.** Achter Fall von A-71.
+//
+// `[cmd]` **Es ist eine SICHT, kein Tisch**, mit
+// `security_invoker=true`: **die Zeilenrechte der zugrunde
+// liegenden Tabellen greifen**, jede Nutzerin sieht nur ihre
+// eigenen Zeilen.
+//
+// `[cmd]` **Der Mockup zeigt EINE gemischte Liste**, neueste zuerst
+// (`module-dashboard.jsx:105`) — nicht je Modul getrennt. Zeit,
+// modulfarbenes Zeichen, Text.
+//
+// `[cmd]` **Die Sicht traegt NUR `summary_de`** — kein `_en`, kein
+// `_th`. **Das ist gemessen und gemeldet, nicht hier geloest**
+// (G-152, A5).
+
+/** Ein Ereignis aus `public.activity_stream` — G-152. */
+export type StromEreignis = {
+  datum: string
+  /** `HH:MM`, oder `null` wenn die Zeile nur ein Datum traegt. */
+  zeit: string | null
+  modul: string
+  art: string
+  /** Der deutsche Text der Sicht — die einzige Sprache, die sie hat. */
+  text: string
+}
+
+export type StromStand = {
+  ereignisse: StromEreignis[]
+  /** Wie viele Zeilen die Sicht fuer diese Nutzerin insgesamt fuehrt. */
+  gesamt: number
+  /** Welche Module ueberhaupt vorkommen — fuer den Leerhinweis. */
+  module: string[]
+  fehler: string | null
+}
+
+const STROM_LEER: StromStand = {
+  ereignisse: [], gesamt: 0, module: [], fehler: null,
+}
+
+/**
+ * Der Aktivitaetsstrom — G-152.
+ *
+ * `[read]` **Neueste zuerst, wie der Mockup** — sortiert nach
+ * `occurred_at`, nicht nach `event_date`: zwei Ereignisse am selben
+ * Tag haetten sonst keine Reihenfolge.
+ *
+ * `[read]` **Die Zahl `grenze` ist die ANZEIGE, nicht der Bestand** —
+ * `gesamt` kommt aus einer eigenen Zaehlung, damit die Kachel sagen
+ * kann, wie viel sie NICHT zeigt.
+ */
+// `[cmd]` **Warum 40 und nicht 20:** auf `test-user` erscheint
+// `recovery` erst ab Zeile 23, `training` ab Zeile 30 — gemessen
+// ueber `row_number() over (order by occurred_at desc)`. **Bei 20
+// waeren zwei der vier Module strukturell unsichtbar**, und die
+// Kachel saehe nach ,,nur Ernaehrung und Supplemente" aus.
+//
+// `[read]` **Die Zahl ist die ANZEIGE, nicht der Bestand** —
+// `gesamt` sagt weiter, wie viel dahinter liegt.
+export async function ladeAktivitaetsstrom(grenze = 40): Promise<StromStand> {
+  const client = createSessionClient()
+  const { data: { user } } = await client.auth.getUser()
+  if (!user) return STROM_LEER
+
+  // `[read]` **`user_id` steht trotz `security_invoker` explizit
+  // dabei** — zwei Schloesser sind kein Widerspruch, und die Abfrage
+  // sagt dann selbst, wessen Zeilen sie meint.
+  const [liste, zahl] = await Promise.all([
+    client.from('activity_stream')
+      .select('event_date, event_time, occurred_at, module, event_type, summary_de')
+      .eq('user_id', user.id)
+      .order('occurred_at', { ascending: false })
+      .limit(grenze),
+    client.from('activity_stream')
+      .select('module', { count: 'exact', head: false })
+      .eq('user_id', user.id)
+      .limit(2000),
+  ])
+
+  if (liste.error) return { ...STROM_LEER, fehler: liste.error.message }
+
+  const zeilen = (liste.data ?? []) as unknown as Array<Record<string, unknown>>
+  const alle = (zahl.data ?? []) as unknown as Array<Record<string, unknown>>
+
+  return {
+    ereignisse: zeilen.map(z => ({
+      datum: String(z.event_date ?? ''),
+      // `event_time` kommt als `HH:MM:SS` — die Sekunden traegt der
+      // Mockup nicht.
+      zeit: typeof z.event_time === 'string' ? z.event_time.slice(0, 5) : null,
+      modul: String(z.module ?? ''),
+      art: String(z.event_type ?? ''),
+      text: String(z.summary_de ?? ''),
+    })),
+    gesamt: zahl.count ?? alle.length,
+    module: Array.from(new Set(alle.map(z => String(z.module)))).sort(),
+    fehler: null,
+  }
+}

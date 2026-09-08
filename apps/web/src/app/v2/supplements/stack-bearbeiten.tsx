@@ -26,10 +26,29 @@ import {
   positionErgaenzen, positionEntfernen, bestandSetzen, positionAendern,
 } from './stack-aktionen'
 
-/** Die Zeitpunkte, die `stack_items.timing` kennt. */
-const TIMINGS = ['morning', 'midday', 'evening', 'pre_workout', 'post_workout', 'night']
+/**
+ * Die Zeitpunkte, die `stack_items.timing` kennt.
+ *
+ * `[cmd]` **Aus `stack_items_timing_check` gemessen** (G-152) — in
+ * G-373 stand hier `night`, **das der CHECK nicht kennt**: die
+ * Auswahl haette beim Speichern abgelehnt. **Und drei erlaubte
+ * Werte fehlten** (`bedtime`, `with_meal`, `any`).
+ *
+ * `[read]` **Eine Auswahlliste ist eine Zusage** — was darin steht,
+ * muss die Datenbank annehmen.
+ */
+const TIMINGS = [
+  'morning', 'midday', 'evening', 'pre_workout', 'post_workout',
+  'bedtime', 'with_meal', 'any',
+]
 
-/** Die Frequenzen aus dem Bestand (G-253: nur `daily` ist belegt). */
+/**
+ * Die Frequenzen, die `stack_items_frequency_check` zulaesst.
+ *
+ * `[cmd]` **Fuenf, nicht vier** — `cycling` steht auch im CHECK.
+ * `[read]` **Es waehlbar zu machen ohne Zyklusfelder waere aber eine
+ * halbe Zusage** — siehe den Vermerk zu G-374 unten.
+ */
 const FREQUENZEN = ['daily', 'weekdays', 'training_days', 'custom']
 
 type Lauf = (was: () => Promise<{ ok: boolean; fehler?: string }>) => Promise<void>
@@ -199,8 +218,12 @@ export function StackPosten_Liste({ stack, lauf, laeuft }: {
           (`{on_weeks, off_weeks}`), aber es ist ein Objekt und
           braucht eine eigene Eingabe. Gemeldet in G-373. */}
       <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 2 }}>
-        Cycling (on_weeks/off_weeks) ist noch nicht eingebaut — der
-        Mockup führt es unter „Item customization&ldquo;.
+        Cycling ist noch nicht eingebaut — der Mockup führt es unter
+        „Item customization&ldquo; als <span className="v2-mono">
+        {'{on_weeks, off_weeks}'}</span>. Ohne einen Zyklusbeginn
+        ergibt das kein „Wk 5 of 8&ldquo;: <span className="v2-mono">
+        stack_items</span> hält in keiner der 17 Spalten ein
+        Startdatum (G-374, gemessen).
       </div>
     </div>
   )

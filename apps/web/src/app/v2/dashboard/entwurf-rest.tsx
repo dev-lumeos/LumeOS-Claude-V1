@@ -27,6 +27,48 @@ import { Card, Ring, Meter, LineChart, Icon, InEntwicklungKnopf } from '@lumeos/
  * sie stuende nur in dieser Datei. Deshalb bleibt die Kachel Attrappe,
  * und der echte Wert steht in der Recovery-Kachel darueber.
  */
+// ══ G-152: die Entwurfsdaten des Mockups ═══════════════════
+//
+// `[read]` **Sie stehen hier oben, nicht im Rumpf** — ein
+// mehrzeiliges Listenliteral zwischen JSX-Zweigen bricht den Parser
+// (TS1005).
+
+/** `module-dashboard.jsx:12` — die sechs Eintraege des Feeds. */
+const ENTWURF_FEED = [
+  { t: '08:42', icon: 'nutrition', color: 'var(--acc-nutri)',
+    label: 'Breakfast logged', meta: 'Oats + Whey · 612 kcal · 38g P' },
+  { t: '07:15', icon: 'recovery', color: 'var(--acc-recov)',
+    label: 'HRV captured', meta: '64ms · +2 vs 7d avg' },
+  { t: '06:48', icon: 'supplements', color: 'var(--acc-suppl)',
+    label: 'Morning stack taken', meta: 'Creatine, D3, Omega-3 · 8 items' },
+  { t: '06:30', icon: 'recovery', color: 'var(--acc-recov)',
+    label: 'Sleep ended', meta: '7h 42m · quality 84' },
+  { t: 'Yesterday 21:14', icon: 'training', color: 'var(--acc-train)',
+    label: 'Pull A completed', meta: '12 sets · 5,840 kg volume · 1 PR' },
+  { t: 'Yesterday 18:32', icon: 'nutrition', color: 'var(--acc-nutri)',
+    label: 'Dinner logged', meta: 'Salmon + Rice · 738 kcal · 52g P' },
+] as const
+
+/** `module-dashboard.jsx:98` — die Makros des Entwurfs. */
+const ENTWURF_MAKROS = [
+  { name: 'Protein', cur: 142, tgt: 180, einheit: 'g', farbe: 'var(--acc-nutri)' },
+  { name: 'Carbs', cur: 218, tgt: 260, einheit: 'g', farbe: 'var(--acc-train)' },
+  { name: 'Fat', cur: 61, tgt: 75, einheit: 'g', farbe: 'var(--warn)' },
+] as const
+
+/** `module-dashboard.jsx:283` — die drei Bestleistungen. */
+const ENTWURF_PR = [
+  { lift: 'Bench Press', neu: '120.0kg ×3', date: 'May 10' },
+  { lift: 'Deadlift', neu: '185.0kg ×1', date: 'May 5' },
+  { lift: 'Pull-up wtd', neu: '+30.0kg ×5', date: 'Apr 28' },
+] as const
+
+const GRUND_MAKROS =
+  'Attrappe — theme-v1/module-dashboard.jsx · wartet auf: nichts — '
+  + 'Referenz zum Vergleich, faellt mit Toms Abnahme'
+
+const GRUND_PR = GRUND_MAKROS
+
 const GRUND_READINESS =
   'Ein zweiter Gesamtwert neben `recovery.scores`. Die fuenf Anteile des '
   + 'Entwurfs sind andere als die sieben der Datenbank (G-82), und ihre '
@@ -107,11 +149,64 @@ export function DashboardEntwurfRest() {
             </p>
           </Card>
 
+          {/* `[cmd]` **G-152: hier stand eine Inhaltsangabe** —
+              *,,Der Entwurf zeigt sechs Eintraege …"*. **Das ist die
+              Attrappe der Attrappe**, die Tom abgelehnt hat: sie
+              beschreibt, was zu vergleichen waere, statt es zu zeigen.
+              **Jetzt die sechs Zeilen des Mockups**
+              (`module-dashboard.jsx:12`). */}
           <Card title="Activity" sub="Live" attrappe={GRUND_AKTIVITAET}>
-            <p className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.5 }}>
-              Der Entwurf zeigt sechs Eintraege aus vier Modulen, nach Zeit
-              geordnet.
-            </p>
+            <div className="v2-col-gap" style={{ gap: 0 }}>
+              {ENTWURF_FEED.map((e, i) => (
+                <div key={e.label} style={{
+                  display: 'flex', gap: 10, padding: '9px 0',
+                  borderBottom: i < ENTWURF_FEED.length - 1
+                    ? '1px solid var(--border)' : 'none',
+                }}>
+                  <div className="v2-num" style={{
+                    fontSize: 10, color: 'var(--fg-dim)', width: 64,
+                    paddingTop: 1, flexShrink: 0,
+                  }}>{e.t}</div>
+                  <div style={{
+                    width: 16, height: 16, borderRadius: 4, flexShrink: 0,
+                    display: 'grid', placeItems: 'center',
+                    background: `color-mix(in oklch, ${e.color} 18%, transparent)`,
+                    border: `1px solid color-mix(in oklch, ${e.color} 35%, transparent)`,
+                    color: e.color,
+                  }}>
+                    <Icon name={e.icon} className="v2-ic"
+                          style={{ width: 10, height: 10, strokeWidth: 2 }} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 12 }}>{e.label}</div>
+                    <div className="v2-muted" style={{ fontSize: 11 }}>{e.meta}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* `[cmd]` **G-152: fehlte unter der Linie.** Der Mockup
+              fuehrt SIEBEN Kacheln (`module-dashboard.jsx`), die
+              Referenz zeigte fuenf — `Macros · today` und `PR watch`
+              waren nicht dabei, obwohl beide oben ein angebundenes
+              Gegenstueck haben. */}
+          <Card title="Macros · today" sub="142g of 180g protein"
+                attrappe={GRUND_MAKROS}>
+            <div className="v2-col-gap" style={{ gap: 8 }}>
+              {ENTWURF_MAKROS.map(m => (
+                <div key={m.name}>
+                  <div style={{
+                    display: 'flex', justifyContent: 'space-between',
+                    fontSize: 11, marginBottom: 3,
+                  }}>
+                    <span className="v2-dim">{m.name}</span>
+                    <span className="v2-num">{m.cur} / {m.tgt} {m.einheit}</span>
+                  </div>
+                  <Meter value={m.cur} max={m.tgt} color={m.farbe} />
+                </div>
+              ))}
+            </div>
           </Card>
         </div>
 
@@ -176,6 +271,23 @@ export function DashboardEntwurfRest() {
             </div>
             <div className="v2-muted" style={{ fontSize: 11 }}>
               Assigned by Coach Anders · Block 3 · Week 2
+            </div>
+          </Card>
+
+          {/* `[cmd]` **G-152: die siebte Mockup-Kachel.** */}
+          <Card title="PR watch" sub="Last 30d" attrappe={GRUND_PR}>
+            <div className="v2-col-gap">
+              {ENTWURF_PR.map(p => (
+                <div key={p.lift} className="v2-row">
+                  <span className="v2-row-l">
+                    <Icon name="trend_up" className="v2-ic v2-ic-sm"
+                          style={{ color: 'var(--pos)' }} />
+                    {p.lift}
+                    <span className="v2-dim" style={{ fontSize: 10 }}>{p.date}</span>
+                  </span>
+                  <span className="v2-row-r" style={{ color: 'var(--pos)' }}>{p.neu}</span>
+                </div>
+              ))}
             </div>
           </Card>
         </div>

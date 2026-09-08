@@ -19,6 +19,11 @@ import type { Metadata } from 'next'
 import { ladeDashboard, type DashboardDaten } from '../../../lib/dashboard/lesen'
 import { ReferenzTrenner } from '../../../components/shell/referenz-trenner'
 import { DashboardEcht } from './dashboard-echt'
+// G-152: der Aktivitaetsstrom — `public.activity_stream` stand seit
+// C-412/C-414 und hatte keinen Leser.
+import { ladeAktivitaetsstrom, type StromStand }
+  from '../../../lib/dashboard/lesen'
+import { Aktivitaetsstrom } from './aktivitaetsstrom'
 import { DashboardEntwurfRest } from './entwurf-rest'
 
 export const metadata: Metadata = {
@@ -55,6 +60,18 @@ export default async function V2DashboardPage({
     fehler = e instanceof Error ? e.message : String(e)
   }
 
+  // `[read]` **Eigener Aufruf, eigener Fehler** — faellt der Strom
+  // aus, bleiben die uebrigen Kacheln gueltig. Dieselbe Linie wie
+  // im Leseweg selbst.
+  let strom: StromStand = {
+    ereignisse: [], gesamt: 0, module: [], fehler: null,
+  }
+  try {
+    strom = await ladeAktivitaetsstrom()
+  } catch (e) {
+    strom = { ...strom, fehler: e instanceof Error ? e.message : String(e) }
+  }
+
   return (
     <>
       {fehler !== null && (
@@ -67,6 +84,10 @@ export default async function V2DashboardPage({
         </div>
       )}
       {daten && <DashboardEcht d={daten} />}
+      {/* `[cmd]` G-152: der Strom steht UEBER der Linie — er ist
+          angebunden, und die Entwurfsfassung derselben Kachel
+          (,,Activity") bleibt darunter stehen. */}
+      <Aktivitaetsstrom stand={strom} heute={datum} />
       {/* `[cmd]` G-365: Echt und Entwurf standen untereinander,
           OHNE Linie — niemand konnte sehen, wo das eine aufhoert.
           Die Linie steht unbedingt, weil der Entwurf darunter
