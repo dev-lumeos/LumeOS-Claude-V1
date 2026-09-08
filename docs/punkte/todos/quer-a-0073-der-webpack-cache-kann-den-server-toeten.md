@@ -80,3 +80,38 @@ insgesamt 11 GB.**
 
 `[read]` **Er hat das gemessen, bevor er etwas angefasst hat** —
 **die Behebung war keine Vermutung ueber Speicherdruck.**
+
+## Zweite Ursache, gemessen 2026-09-08
+
+Tom: *,,es geht mir auf den sack dass claude jedesmal den server
+abschiesst und dann 20 minuten den fehler sucht."*
+
+`[cmd]` **Claude Code hat seine eigene frueherer Diagnose
+widerlegt:** **das `&` war es nicht.**
+
+`[cmd]` **Gemessen: das Log endet auf einer normal bedienten
+Anfrage, kein Absturz** — **um 16:45:14, als die Sitzung endete.**
+
+`[cmd]` **Die Prozesskette:** `claude.exe -> bash -> bash -> bash
+-> python` — **alles ein Enkel von `claude.exe`.**
+
+`[cmd]` **`DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP` loest nur
+die Konsole** — **nicht das Job Object, ueber das Windows den Baum
+abraeumt.**
+
+`[cmd]` **44 Startmarken im Log** — **jede Sitzung startete neu.**
+
+### Die Entscheidung
+
+Tom startet ihn einmal in seiner eigenen Konsole:
+
+    python tools/server.py start
+
+`[read]` **Dann lebt er in Toms Baum.**
+
+`[read]` **Keine geplante Aufgabe, kein Dienst** — **eine
+dauerhafte Aenderung an Toms Maschine waere mehr, als das Problem
+kostet.**
+
+`[read]` **Und Claude Code hat es nicht ungefragt installiert** —
+richtig.

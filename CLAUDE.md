@@ -389,6 +389,35 @@ benennen.**
 Unterreiter unten, waehrend nur einer sie oben zeigt?"*** — **mit
 Namen der Kachel.**
 
+## Der Dev-Server stirbt mit der Agentensitzung
+
+**2026-09-08, gemessen.** `[cmd]` **Der Server ist ein Enkel von
+`claude.exe`** — `claude.exe -> bash -> bash -> bash -> python`.
+
+`[cmd]` **Windows raeumt beim Sitzungsende den ganzen Prozessbaum
+ab.** `[cmd]` **`DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP` loest
+nur die Konsole, nicht das Job Object.**
+
+`[cmd]` **44 Startmarken im Log** — **jede Sitzung startete ihn neu.**
+
+### Die Loesung: Tom startet ihn einmal selbst
+
+    python tools/server.py start
+
+`[read]` **In Toms eigener Konsole** — **dann lebt er in dessen
+Baum und ueberlebt jede Agentensitzung.**
+
+### Fuer Agenten
+
+`[read]` **Wenn der Server nicht laeuft: NICHT suchen, sondern
+sagen.**
+
+`[read]` **Ein Neustart aus der Agentensitzung haelt bis zum
+Sitzungsende** — **er ist eine Kruecke, keine Behebung.**
+
+`[cmd]` **Und `.next/cache/webpack` ist eine andere Ursache** —
+**dort steht `hasStartTime` im Log, hier endet es sauber.**
+
 ## Der Webpack-Cache kann den Server toeten
 
 `[cmd]` **2026-09-08:** `Restoring pack from
