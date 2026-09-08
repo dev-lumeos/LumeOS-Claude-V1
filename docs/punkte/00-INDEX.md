@@ -7,8 +7,9 @@
 |---|---|
 | `todos` | 209 |
 | `laufend_codex` | 3 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 327 |
-| **gesamt** | **539** |
+| **gesamt** | **540** |
 
 ## medical — 44
 
@@ -162,7 +163,7 @@
 | `C-413` | befund | niedrig | [`tom.seed` traegt `days_count 7` bei 21 Tagen](erledigt/nutrition-c-0413-tom-seed-traegt-days-count-7-bei-21-tagen.md) | erledigt | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
-| `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](erledigt/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | erledigt | — | — |
+| `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](erledigt/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | erledigt | — | G-375 |
 | `G-70` | feature | mittel | [Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab](erledigt/nutrition-g-0070-sortierbare-spalten-und-herkunfts-filter-im-food-db-tab.md) | erledigt | — | C-338, G-251 |
 | `G-72` | feature | mittel | [Acht Spalten ohne Wirkung und ohne Kachel](erledigt/nutrition-g-0072-acht-spalten-ohne-wirkung-und-ohne-kachel.md) | erledigt | — | C-392, G-332 |
 | `G-75` | befund | mittel | [Die alte Oberflaeche nennt den BLS ebenfalls](todos/nutrition-g-0075-die-alte-oberflaeche-nennt-den-bls-ebenfalls.md) | offen | — | — |
@@ -473,7 +474,7 @@
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](erledigt/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | erledigt | — | — |
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | C-426 |
 
-## quer — 117
+## quer — 118
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -594,6 +595,7 @@
 | `G-365` | feature | hoch | [vier Schritte je Kachel](erledigt/quer-g-0365-vier-schritte-je-kachel.md) | erledigt | — | C-421, C-423, G-366, G-369, G-370 |
 | `G-368` | befund | mittel | [Attrappen-Vermerke mit falschem Grund](todos/quer-g-0368-attrappen-vermerke-mit-falschem-grund.md) | offen | — | — |
 | `G-370` | befund | mittel | [Unternavigationen vollstaendig pruefen](erledigt/quer-g-0370-unternavigationen-vollstaendig-pruefen.md) | erledigt | — | — |
+| `G-375` | feature | hoch | [der Tageswechsler gehoert in die Schale](laufend_claudecode/quer-g-0375-der-tageswechsler-gehoert-in-die-schale.md) | laeuft (claudecode) | — | — |
 
 ## market — 1
 
