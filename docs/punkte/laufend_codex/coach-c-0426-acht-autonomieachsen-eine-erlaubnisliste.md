@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-361
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [coach.client_autonomy]
 zahlen:
@@ -76,3 +78,8 @@ ohne Wirkung.**
 `[read]` **Und deckt sich die Fuenferskala mit der des Altrepos?**
 
 `[cmd]` **Erst danach ist ein UI-Auftrag zu G-361 sinnvoll.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-241 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.

@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 210 |
-| `laufend_codex` | 1 |
+| `todos` | 208 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 320 |
 | **gesamt** | **532** |
@@ -55,7 +55,7 @@
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
-| `G-241` | entscheidung | hoch | [zwei Reiterschnitte im Medical-Mockup](todos/medical-g-0241-zwei-reiterschnitte-im-medical-mockup.md) | offen | — | G-256, G-257 |
+| `G-241` | entscheidung | hoch | [zwei Reiterschnitte im Medical-Mockup](laufend_codex/medical-g-0241-zwei-reiterschnitte-im-medical-mockup.md) | laeuft (codex) | — | G-256, G-257 |
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](todos/medical-g-0256-die-originaldatei-zum-laborbericht.md) | offen | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 
@@ -456,7 +456,7 @@
 | `C-358` | befund | mittel | [abgelaufene Aktionen bleiben `pending`](erledigt/coach-c-0358-abgelaufene-aktionen-bleiben-pending.md) | erledigt | — | — |
 | `C-362` | feature | mittel | [das Consent-Log ist beschrieben und nicht gebaut](erledigt/coach-c-0362-das-consent-log-ist-beschrieben-und-nicht-gebaut.md) | erledigt | — | — |
 | `C-381` | befund | hoch | [die Freigaberegel liegt im Browser](erledigt/coach-c-0381-die-freigaberegel-liegt-im-browser.md) | erledigt | — | G-324 |
-| `C-426` | befund | hoch | [acht Autonomieachsen, eine Erlaubnisliste](todos/coach-c-0426-acht-autonomieachsen-eine-erlaubnisliste.md) | offen | — | — |
+| `C-426` | befund | hoch | [acht Autonomieachsen, eine Erlaubnisliste](laufend_codex/coach-c-0426-acht-autonomieachsen-eine-erlaubnisliste.md) | laeuft (codex) | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](erledigt/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | erledigt | — | C-381 |
