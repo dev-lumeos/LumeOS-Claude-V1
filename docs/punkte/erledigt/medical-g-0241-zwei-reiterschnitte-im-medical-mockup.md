@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-26
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 10a330e4
 beruehrt:
   dateien: [docs/spezifikation/00-MODULSTAND.md]
 zahlen: null
@@ -158,7 +160,83 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator.** **Sechs mit Zahlen, und drei
+Berichtigungen an mir.**
+
+    A1  Documents: Spec fordert Storage, 10/10 file_ref NULL
+    A2  Appointments: keine Spec, nur ein UI-Text. Vorschlag.
+    A3  History: NICHT in tracking aufgegangen -- verteilt
+    A4  C-426: Erlaubnisliste fehlt fuer sieben von acht Achsen
+    A5  C-428: client_id ist NOT NULL, meine Messung war falsch
+    A6  C-268 live, Sicherung 27.003.951 Byte
+
+### Er hat mich dreimal berichtigt
+
+**1 · `client_id`** — `[cmd]` **ich hatte behauptet, es sei auf
+`dev` nullable.** `[cmd]` **Nachgemessen: NOT NULL, in `dev` und in
+der Kette.**
+
+`[read]` **Ich hatte `is_nullable = NO` gelesen und als *nullable*
+verstanden.**
+
+`[cmd]` **Und er hat weiter gemessen als ich gefragt habe:**
+`relationship_change_log.client_id` **ist ebenfalls NOT NULL** —
+**der Ausloeser koennte eine Vorab-Einladung gar nicht
+protokollieren.**
+
+`[read]` **Nullable machen haette nicht gereicht.**
+
+**2 · *achtmal fuenf*** — `[cmd]` **falsch.** `[cmd]` **Gemessen:
+`safety_level` 1 bis 3, die anderen sieben 1 bis 5.**
+
+`[read]` **Steht so falsch in C-426, von mir.**
+
+**3 · History** — `[cmd]` **E-26 vermutete *,,in tracking
+aufgegangen"*.** `[cmd]` **Gemessen: `tracking` enthaelt nur
+Symptome und Medikamente.**
+
+    Biomarker-Verlauf   -> Biomarkers
+    Import-Historie     -> Import
+    Symptome/Medikamente-> Tracking
+    Diagnose, Behandlung, Bildgebung, Operation -> NIRGENDS
+
+`[read]` **Die alte zentrale Zeitachse hat weder Reiter noch
+Tabelle.** `[read]` **E-26 sagte *,,das gehoert gemessen"*** —
+**jetzt ist es gemessen, und die Vermutung war halb falsch.**
+
+### A1 — die Spec fordert es, der Bestand hat nichts
+
+`[cmd]` **`SPEC_04:40`, `SPEC_06:117`, `SPEC_02:151` nennen
+`file_url`/Storage.**
+
+`[cmd]` **10 Laborberichte, alle zehn `file_ref = NULL`,
+`storage.buckets` leer.**
+
+`[read]` **Die Spalte weist auf nichts, und nichts koennte dort
+liegen.**
+
+### A4 — genau ein Leser fuer acht Achsen
+
+`[cmd]` **`nutrition_level >= 5` erlaubt direkte Planbearbeitung**
+— **das ist der einzige fachliche Leser.**
+
+`[read]` **Sieben Achsen ohne Erlaubnismatrix, und ein Regler ohne
+Wirkung.**
+
+### A5 — sein Vorschlag ist der bessere
+
+`[cmd]` **`coach.pending_invites` getrennt von `relationships`:**
+**Coach, normalisierte E-Mail, Token-Hash, Ablauf, Status,
+Rechteentwurf.**
+
+`[read]` **Bei Annahme entsteht atomar die echte Beziehung** —
+**ohne die Invarianten einer aktiven Beziehung zu verwaessern.**
+
+`[read]` **Das ist besser als eine Spalte nullable zu machen:**
+**eine Einladung ist etwas anderes als eine Beziehung.**
+
+**Abgenommen.**
+
 
 ## Vorab — C-268 einspielen
 

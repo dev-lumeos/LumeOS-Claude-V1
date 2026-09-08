@@ -7,8 +7,6 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-361
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-08
 beruehrt:
   tabellen: [coach.client_autonomy]
 zahlen:
@@ -52,8 +50,11 @@ sein.**
 Achse des Altrepos.**
 
 `[read]` **Fuer acht Achsen ist nicht entschieden, was Stufe 2 in
-`medical_level` erlaubt** — **und ob `safety_level` ueberhaupt
-dieselben fuenf Stufen kennt.**
+`medical_level` erlaubt.**
+
+**Berichtigung 2026-09-08:** `[cmd]` **Die Annahme *achtmal fuenf*
+war falsch.** `[cmd]` **Gemessen: `safety_level` geht 1 bis 3, die
+uebrigen sieben 1 bis 5** (`client_autonomy_levels_ck`).
 
 `[cmd]` **`ADR_COACH_PERMISSIONS_V1.md` liegt in
 `docs/specs/Nutrition/04_adrs/`** — **zu pruefen, ob er die acht
@@ -83,3 +84,17 @@ ohne Wirkung.**
 
 **Mitbeauftragt mit G-241 am 2026-09-08.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-08: die Erlaubnisliste fehlt, und meine Annahme war falsch.
+
+`[cmd]` **Nicht *achtmal fuenf*:** **`safety_level` geht 1 bis 3,
+die anderen sieben 1 bis 5.**
+
+`[cmd]` **`SPEC_04:158` rechnet eine einzelne Empfehlung,
+`SPEC_05:18` nennt nur Startwert Stufe 2.**
+
+`[cmd]` **Genau ein fachlicher Leser im Bestand:**
+`nutrition_level >= 5` **erlaubt direkte Planbearbeitung.**
+
+`[read]` **Sieben Achsen ohne Matrix** — **als Entscheidung an
+Tom.**
