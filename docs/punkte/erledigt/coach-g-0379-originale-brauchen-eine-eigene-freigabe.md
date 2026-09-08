@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-136
 entscheidung: E-74
+erledigt: 2026-09-08
+commit: OFFEN
 beruehrt:
   tabellen: [coach.client_permissions]
 zahlen:
@@ -57,3 +59,19 @@ DEFAULT `none`.**
 
 `[read]` **Die Machart steht schon:** **`medical_visibility` hat
 Ablaufzeit und Aenderungsprotokoll.**
+
+## Entschieden am 2026-09-08 — E-76
+
+Tom: *,,ok passt so, die werte reichen einem coach, dann muss er
+nichts suchen."*
+
+`[read]` **Variante a: so lassen.**
+
+`[cmd]` **Keine `medical_originals_visibility`.**
+`[cmd]` **`medical-originals` bleibt Owner-only.**
+
+`[read]` **Seine Begruendung ist die praktische:** **ein Coach, der
+einen Scan bekommt, muesste den Wert darin suchen** ? **den er
+strukturiert schon hat.**
+
+`[read]` **Der Punkt ist geschlossen.**

@@ -77,10 +77,14 @@ bestehenden Zeilen sie fuellen koennen oder leer bleiben muessen.**
 `[read]` **Wer eine Zusammenfassung freigibt, hat nicht den Scan
 freigegeben.**
 
-`[read]` **Nichts bauen** ? **`medical-originals` bleibt Owner-only,
-bis Tom eine eigene Freigabe will.**
+**Entschieden am 2026-09-08, E-76:** Tom: *,,die werte reichen
+einem coach, dann muss er nichts suchen."*
 
-`[cmd]` **Als Entscheidung vermerkt, nicht als Aufgabe.**
+`[cmd]` **Keine `medical_originals_visibility`.** `[cmd]`
+**`medical-originals` bleibt Owner-only, dauerhaft.**
+
+`[read]` **Nichts bauen** ? **A5 bleibt trotzdem als Nachweis:
+ein Coach mit `full` kommt nicht an die Bytes.**
 
 ### Abnahmebedingungen
 
