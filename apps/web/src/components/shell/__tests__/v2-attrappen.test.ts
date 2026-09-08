@@ -1839,12 +1839,41 @@ test('C-225/G-169: die drei Schreibwege und der Check-in-Lesepfad stehen', () =>
   const schreiben = fs.readFileSync(
     path.join(process.cwd(), 'src/lib/coach/nachrichten-schreiben.ts'), 'utf8')
   assert.ok(/from\('messages'\)[\s\S]*?\.insert\(/.test(schreiben), 'Antworten fehlt.')
-  assert.ok(/from\('relationships'\)[\s\S]*?\.insert\(/.test(schreiben), 'Einladen fehlt.')
-  assert.ok(/status: 'invited'/.test(schreiben), 'Einladen setzt nicht invited.')
+  // `[cmd]` **C-268, 2026-09-08: der Einladeweg liegt jetzt in der
+  //     RPC `coach.create_relationship_invite`** - **der Browser
+  //     schreibt nicht mehr selbst.**
+  // `[read]` **Die Pruefung suchte den Tabellenschreibvorgang und
+  //     fiel, obwohl die Wirkung steht** - **das Wort statt der
+  //     Wirkung, wie G-216, G-247, G-246.**
+  // `[read]` **Jetzt: irgendein Weg, der einlaedt** - Tabelle oder
+  //     RPC.
+  assert.ok(
+    /from\('relationships'\)[\s\S]*?\.insert\(/.test(schreiben)
+    || /create_relationship_invite/.test(schreiben),
+    'Einladen fehlt - weder Tabellenschreibweg noch RPC.')
+  assert.ok(
+    /status: 'invited'/.test(schreiben)
+    || /create_relationship_invite/.test(schreiben),
+    'Einladen setzt nicht invited.')
   assert.ok(/\.update\(\{ read_at/.test(schreiben), 'Als-gelesen fehlt.')
   // G-79: jeder Weg prueft auf null Zeilen.
-  assert.equal((schreiben.match(/\.select\('id'\)/g) ?? []).length, 3,
-    'Jeder der drei Wege braucht die Nullzeilenpruefung.')
+  // `[cmd]` **C-268: der Einladeweg liegt in der RPC** - **sie
+  //     prueft serverseitig und braucht kein `.select('id')`.**
+  // `[read]` **Die Zahl 3 zaehlte Tabellenschreibwege** - **es sind
+  //     jetzt zwei, plus ein RPC-Weg.**
+  // `[cmd]` **Gemessen 2026-09-08: vier Wege, nicht drei.**
+  //     `sendeNachricht` und `markiereGelesen` schreiben in Tabellen
+  //     und pruefen mit `.select('id')`; `ladeCoachEin` (C-268) und
+  //     `nehmeEinladungZurueck` (C-269) laufen ueber RPCs, die
+  //     serverseitig pruefen.
+  // `[read]` **Die Drei war ueberholt, nicht falsch gemessen** -
+  //     **C-269 hat den vierten Weg dazugebaut.**
+  const rpcWege = (schreiben.match(/\.rpc\(/g) ?? []).length
+  const tabellenWege = (schreiben.match(/\.select\('id'\)/g) ?? []).length
+  assert.equal(tabellenWege, 2,
+    'Die zwei Tabellenwege brauchen die Nullzeilenpruefung.')
+  assert.equal(rpcWege, 2,
+    'Einladen und Zuruecknehmen laufen ueber RPCs.')
   const ui = fs.readFileSync(
     path.join(process.cwd(), 'src/app/v2/coach/uebersicht-echt.tsx'), 'utf8')
   assert.ok(/sendeNachricht\(/.test(ui) && /ladeCoachEin\(/.test(ui) && /markiereGelesen\(/.test(ui))

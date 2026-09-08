@@ -14,7 +14,11 @@ const z = (p: Partial<EigenerStack> = {}): EigenerStack => ({
   id: 'a', name: 'Muskelaufbau Basics', goal: null, is_active: true,
   // `[cmd]` G-372: `geteilt` kommt aus `stack_curation_candidates`,
   // nicht aus `user_stacks` — die Vorgabe hier ist „nicht geteilt".
-  posten: 4, seit: '2026-08-23', quelle: 'custom', geteilt: false, ...p,
+  // `[cmd]` G-373: `eintraege` sind die Posten selbst — die Zahl
+  // allein reicht zum Editieren nicht. Hier leer, weil die
+  // Lagesaetze sie nicht lesen.
+  posten: 4, seit: '2026-08-23', quelle: 'custom', geteilt: false,
+  eintraege: [], ...p,
 })
 
 // ── System templates: Tabelle da, Inhalt fehlt ───────────────────

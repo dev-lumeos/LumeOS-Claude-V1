@@ -29,8 +29,12 @@ import * as React from 'react'
 import {
   stackAktivieren, vorlageUebernehmen,
   stackVeroeffentlichen, stackZurueckziehen,
+  stackAnlegen,
 } from './stack-aktionen'
-import { Card, Pill, Icon, Row, Meter, InEntwicklungKnopf } from '@lumeos/ui'
+// G-373: die Postenliste eines Stacks — der Aufrufer der drei
+// Schreibwege, die bis hierher keinen hatten.
+import { StackPosten_Liste } from './stack-bearbeiten'
+import { Card, Pill, Icon, Row, Meter } from '@lumeos/ui'
 
 import {
   CATALOG, EVIDENCE_GRADES, gradeMeta, GAP_ROWS, INVENTORY,
@@ -127,6 +131,15 @@ export function SuppStacks() {
   const [laeuftId, setLaeuftId] = React.useState<string | null>(null)
   const [meldung, setMeldung] = React.useState<string | null>(null)
   const [offen, setOffen] = React.useState<string | null>(null)
+  // G-373: das Formular fuer einen neuen Stack.
+  const [neuOffen, setNeuOffen] = React.useState(false)
+  const [neuName, setNeuName] = React.useState('')
+  const [neuZiel, setNeuZiel] = React.useState('custom')
+
+  /** G-373: dieselbe Fehlerbehandlung, ohne eigene Kennung. */
+  async function lauf(was: () => Promise<{ ok: boolean; fehler?: string }>) {
+    await tue('__lauf', was)
+  }
 
   async function tue(id: string, was: () => Promise<{ ok: boolean; fehler?: string }>) {
     setLaeuftId(id)
@@ -152,18 +165,53 @@ export function SuppStacks() {
           title="Meine Stacks"
           sub={`${stacks.length} angelegt · nur einer aktiv (uq_user_stacks_one_active)`}
           actions={(
-            <InEntwicklungKnopf titel="Neuer Stack" className="v2-btn v2-btn-sm">
+            /* `[cmd]` **G-373: war die letzte Attrappe der Kachel.**
+               `authenticated` haelt INSERT auf `user_stacks` — keine
+               Datenbankarbeit noetig (in G-372 gemessen). */
+            <button type="button" className="v2-btn v2-btn-sm"
+                    onClick={() => setNeuOffen(v => !v)}>
               <Icon name="plus" className="v2-ic v2-ic-sm" />Neuer Stack
-            </InEntwicklungKnopf>
+            </button>
           )}
         >
+          {neuOffen && (
+            <div style={{
+              display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10,
+              padding: 10, background: 'var(--surface)',
+              border: '1px solid var(--border)', borderRadius: 7,
+            }}>
+              <input aria-label="Name des Stacks" value={neuName}
+                     onChange={e => setNeuName(e.target.value)}
+                     placeholder="Name des Stacks"
+                     className="v2-feld" style={{ flex: 2, minWidth: 150 }} />
+              {/* `[cmd]` **Die Siebenerliste steht im CHECK**
+                  (`user_stacks_goal_check`). **C-427 ist offen und wird
+                  hier NICHT entschieden** — bis dahin gilt sie, weil
+                  sie in der Datenbank steht und die aeltere ist. */}
+              <select aria-label="Ziel" value={neuZiel} className="v2-feld"
+                      onChange={e => setNeuZiel(e.target.value)}
+                      style={{ flex: 1, minWidth: 150 }}>
+                {['muscle_building', 'fat_loss', 'recovery_sleep', 'health',
+                  'longevity', 'performance', 'custom'].map(x => (
+                    <option key={x} value={x}>{x}</option>
+                  ))}
+              </select>
+              <button type="button" className="v2-btn v2-btn-sm"
+                      disabled={laeuftId === '__neu' || !neuName.trim()}
+                      onClick={() => void tue('__neu',
+                        () => stackAnlegen(neuName, neuZiel))
+                        .then(() => { setNeuName(''); setNeuOffen(false) })}>
+                Anlegen
+              </button>
+            </div>
+          )}
           {listenSatz
             ? <div className="v2-supp-hinweis">{listenSatz}</div>
             : (
               <div className="v2-col-gap" style={{ gap: 6 }}>
                 {stacks.map(s => (
+                  <div key={s.id}>
                   <div
-                    key={s.id}
                     className="v2-supp-stack-zeile"
                     style={{
                       background: s.is_active
@@ -210,6 +258,25 @@ export function SuppStacks() {
                     >
                       {s.geteilt ? 'Zurücknehmen' : 'Teilen'}
                     </button>
+                    {/* ══ G-373: editieren ══════════════════════
+                        `[cmd]` QUELLE: `module-supplements-spec.jsx:530`
+                        — dort heisst der Knopf ,,Edit" und steht als
+                        letzter in der Zeile. */}
+                    <button
+                      type="button"
+                      className="v2-btn v2-btn-ghost v2-btn-sm"
+                      onClick={() => setOffen(v => v === s.id ? null : s.id)}
+                    >
+                      {offen === s.id ? 'Zu' : 'Bearbeiten'}
+                    </button>
+                  </div>
+                  {/* `[read]` **Nur der geoeffnete Stack zeigt seine
+                      Posten** — alle gleichzeitig waeren eine Liste,
+                      keine Uebersicht. */}
+                  {offen === s.id && (
+                    <StackPosten_Liste stack={s} lauf={lauf}
+                                       laeuft={laeuftId !== null} />
+                  )}
                   </div>
                 ))}
               </div>

@@ -347,10 +347,31 @@ export type Unterform = {
   grad: string | null
 }
 
+/** Ein Posten eines eigenen Stacks — G-373. */
+export type StackPosten = {
+  id: string
+  name: string
+  dosis: number | null
+  einheit: string | null
+  timing: string | null
+  frequenz: string | null
+  bestand: number | null
+  bestandEinheit: string | null
+}
+
 export type EigenerStack = {
   id: string; name: string; is_active: boolean
   /** G-253: Posten in diesem Stack — die Kachel zeigt „N Einträge". */
   posten: number
+  /**
+   * G-373: die Posten selbst.
+   *
+   * `[read]` **Die Zahl allein reicht zum Editieren nicht** — wer
+   * eine Position aendern oder entfernen will, braucht ihre
+   * Kennung. **Siebter Fall von A-71:** die Schreibwege standen
+   * bereit, aber die Oberflaeche kannte die Ziele nicht.
+   */
+  eintraege: StackPosten[]
   goal: string | null
   /** Seit wann er besteht, als Datum. */
   seit: string | null
@@ -1167,16 +1188,60 @@ export async function ladeEigeneStacks(): Promise<EigenerStack[]> {
   const zeilen = (data ?? []) as unknown as Array<Record<string, unknown>>
   if (zeilen.length === 0) return []
 
-  // Die Postenzahl je Stack in EINER Abfrage, nicht einer je Stack.
+  // Die Posten je Stack in EINER Abfrage, nicht einer je Stack.
+  //
+  // `[cmd]` **G-373: jetzt mit den Feldern, nicht nur der
+  // `stack_id`** — zum Editieren braucht die Oberflaeche die
+  // Kennung jedes Postens.
   const { data: posten } = await s
     .from('stack_items')
-    .select('stack_id')
+    .select('id, stack_id, supplement_id, custom_name, dose, dose_unit, '
+      + 'timing, frequency, stock_remaining, stock_unit, sort_order')
     .in('stack_id', zeilen.map(z => String(z.id)))
+    .order('sort_order', { ascending: true })
     .limit(1000)
+  const postenZeilen = (posten ?? []) as unknown as Array<Record<string, unknown>>
   const jeStack = new Map<string, number>()
-  for (const p of (posten ?? []) as unknown as Array<Record<string, unknown>>) {
+  for (const p of postenZeilen) {
     const k = String(p.stack_id)
     jeStack.set(k, (jeStack.get(k) ?? 0) + 1)
+  }
+
+  // Die Katalognamen, ebenfalls in EINER Abfrage (C-189).
+  const substanzIds = Array.from(new Set(
+    postenZeilen.map(p => p.supplement_id)
+      .filter((v): v is string => typeof v === 'string'),
+  ))
+  const substanzNamen = new Map<string, string>()
+  if (substanzIds.length > 0) {
+    const { data: subs } = await s
+      .from('supplements')
+      .select('id, name_de, name_en')
+      .in('id', substanzIds)
+    for (const x of (subs ?? []) as unknown as Array<Record<string, unknown>>) {
+      substanzNamen.set(String(x.id), String(x.name_de ?? x.name_en ?? '—'))
+    }
+  }
+
+  const eintraegeJeStack = new Map<string, StackPosten[]>()
+  for (const p of postenZeilen) {
+    const k = String(p.stack_id)
+    const liste = eintraegeJeStack.get(k) ?? []
+    liste.push({
+      id: String(p.id),
+      // `[read]` **Erst der eigene Name, dann der Katalogname** —
+      // ein Posten ohne beides ist ein Strich, keine Erfindung.
+      name: (typeof p.custom_name === 'string' && p.custom_name.trim())
+        ? p.custom_name
+        : substanzNamen.get(String(p.supplement_id ?? '')) ?? '—',
+      dosis: p.dose == null ? null : Number(p.dose),
+      einheit: typeof p.dose_unit === 'string' ? p.dose_unit : null,
+      timing: typeof p.timing === 'string' ? p.timing : null,
+      frequenz: typeof p.frequency === 'string' ? p.frequency : null,
+      bestand: p.stock_remaining == null ? null : Number(p.stock_remaining),
+      bestandEinheit: typeof p.stock_unit === 'string' ? p.stock_unit : null,
+    })
+    eintraegeJeStack.set(k, liste)
   }
 
   // ══ G-372: welche Stacks sind geteilt? ══════════════════
@@ -1205,6 +1270,7 @@ export async function ladeEigeneStacks(): Promise<EigenerStack[]> {
     name: String(x.name),
     is_active: x.is_active === true,
     geteilt: geteilteStacks.has(String(x.id)),
+    eintraege: eintraegeJeStack.get(String(x.id)) ?? [],
     goal: txt(x.goal),
     posten: jeStack.get(String(x.id)) ?? 0,
     seit: txt(x.created_at)?.slice(0, 10) ?? null,

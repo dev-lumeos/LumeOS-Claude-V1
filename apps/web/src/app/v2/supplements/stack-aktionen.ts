@@ -118,3 +118,110 @@ export async function stackZurueckziehen(stackId: string): Promise<StackAntwort>
     return { ok: false, fehler: satz(f) }
   }
 }
+
+
+// ══ G-373: editieren und anlegen ════════════════════════
+//
+// `[cmd]` **Siebter Fall von A-71:** `ergaenzePosition`,
+// `entfernePosition` und `setzeBestand` standen in
+// `stack-write.ts` — **mit null Aufrufern in der Oberflaeche.**
+//
+// `[read]` **Dasselbe Vorgehen wie bei `ladeSitzungsUebungen`**
+// (G-366): der Weg war da, er wurde nur nicht durchgereicht.
+
+/** Eine Position zum Stack ergaenzen. */
+export async function positionErgaenzen(eingabe: {
+  stack_id?: string | null
+  supplement_id?: string | null
+  custom_name?: string | null
+  dose: number
+  dose_unit: string
+  timing: string
+  frequency?: string
+}): Promise<StackAntwort> {
+  try {
+    const { ergaenzePosition } = await import(
+      '../../../lib/supplements/stack-write')
+    const r = await ergaenzePosition(eingabe)
+    revalidatePath('/v2/supplements')
+    return { ok: true, id: r.id }
+  } catch (f) {
+    return { ok: false, fehler: satz(f) }
+  }
+}
+
+/** Eine Position wieder entfernen. */
+export async function positionEntfernen(id: string): Promise<StackAntwort> {
+  try {
+    const { entfernePosition } = await import(
+      '../../../lib/supplements/stack-write')
+    const r = await entfernePosition(id)
+    revalidatePath('/v2/supplements')
+    // `[read]` **Null entfernte Zeilen ist ein Fehler, kein Erfolg** —
+    // der Zeilenschutz macht ,,gibt es nicht" und ,,gehoert jemand
+    // anderem" ununterscheidbar, aber beides ist nicht ,,entfernt".
+    if (r.entfernt === 0) {
+      return { ok: false, fehler: 'Keine eigene Position mit dieser id.' }
+    }
+    return { ok: true }
+  } catch (f) {
+    return { ok: false, fehler: satz(f) }
+  }
+}
+
+/** Den Bestand einer Position setzen. */
+export async function bestandSetzen(
+  id: string, bestand: number, schwelle?: number | null,
+): Promise<StackAntwort> {
+  try {
+    const { setzeBestand } = await import(
+      '../../../lib/supplements/stack-write')
+    await setzeBestand(id, bestand, schwelle)
+    revalidatePath('/v2/supplements')
+    return { ok: true, id }
+  } catch (f) {
+    return { ok: false, fehler: satz(f) }
+  }
+}
+
+/** Eine Position aendern — *Item customization*. */
+export async function positionAendern(
+  id: string,
+  aenderung: {
+    custom_name?: string | null
+    dose?: number
+    dose_unit?: string
+    timing?: string
+    frequency?: string
+  },
+): Promise<StackAntwort> {
+  try {
+    const { aenderePosition } = await import(
+      '../../../lib/supplements/stack-write')
+    await aenderePosition(id, aenderung)
+    revalidatePath('/v2/supplements')
+    return { ok: true, id }
+  } catch (f) {
+    return { ok: false, fehler: satz(f) }
+  }
+}
+
+/**
+ * Einen neuen Stack anlegen.
+ *
+ * `[read]` **`goal` gegen die Siebenerliste des CHECK** — C-427 ist
+ * offen und wird hier NICHT entschieden.
+ */
+export async function stackAnlegen(
+  name: string, goal: string,
+): Promise<StackAntwort> {
+  try {
+    const { legeStackAn } = await import(
+      '../../../lib/supplements/stack-write')
+    const r = await legeStackAn(name, goal)
+    revalidatePath('/v2/supplements')
+    return { ok: true, id: r.id }
+  } catch (f) {
+    return { ok: false, fehler: satz(f) }
+  }
+}

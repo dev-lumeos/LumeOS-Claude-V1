@@ -523,3 +523,115 @@ export async function uebernimmVorlage(
 
   return { id: stack.id, name: stack.name, posten: (kopien ?? []).length }
 }
+
+
+/**
+ * Einen eigenen Stack anlegen — G-373.
+ *
+ * `[cmd]` **Keine Datenbankarbeit noetig:** `authenticated` haelt
+ * INSERT auf `user_stacks` (in G-372 ueber `role_table_grants`
+ * gemessen).
+ *
+ * `[read]` **`goal` gegen die Siebenerliste**, die im CHECK steht —
+ * `STACK_ZIELE`. **C-427 ist offen; bis dahin gilt sie**, weil sie in
+ * der Datenbank steht und die aeltere ist. **Hier wird sie benutzt,
+ * nicht entschieden.**
+ *
+ * `[read]` **Der neue Stack ist NICHT automatisch aktiv** — dieselbe
+ * Trennung wie bei `uebernimmVorlage` (SPEC_03, Flow 2: erst anlegen,
+ * dann aktivieren).
+ */
+export async function legeStackAn(
+  name: string, goal: string,
+): Promise<{ id: string; name: string; goal: string }> {
+  const { userId } = await sitzung()
+
+  const sauber = name.trim()
+  if (!sauber) {
+    throw new SupplementSchreibFehler('VALIDATION_FAILED', 'Der Name fehlt.')
+  }
+  // `[read]` **Der CHECK wuerde es ohnehin abfangen** — aber eine
+  // Meldung, die den Wert nennt, ist brauchbarer als
+  // `user_stacks_goal_check`.
+  if (!STACK_ZIELE.has(goal)) {
+    throw new SupplementSchreibFehler('VALIDATION_FAILED',
+      `Unbekanntes Ziel: ${goal}. Erlaubt sind `
+      + `${Array.from(STACK_ZIELE).join(', ')}.`)
+  }
+
+  const { data, error } = await db()
+    .from('user_stacks')
+    .insert({
+      user_id: userId,
+      name: sauber,
+      goal,
+      source: 'user',
+      is_active: false,
+    })
+    .select('id, name, goal')
+  if (error) throw new SupplementSchreibFehler('WRITE_FAILED', error.message)
+  const zeile = (data ?? [])[0] as unknown as
+    { id: string; name: string; goal: string } | undefined
+  // `[read]` **Die Nullzeilenpruefung** (G-79): ein Schreibversuch,
+  // den der Zeilenschutz leergefiltert hat, meldet trotzdem `ok`.
+  if (!zeile) {
+    throw new SupplementSchreibFehler('WRITE_FAILED', 'Insert lieferte keine Zeile zurueck.')
+  }
+  return zeile
+}
+
+/**
+ * Eine Position aendern — G-373, der Gegenpart zu
+ * *Item customization* (`module-supplements-spec.jsx:562`).
+ *
+ * `[cmd]` **Der Mockup nennt vier Felder:** eigener Name, eigene
+ * Dosis, eigenes Timing, Cycling. **`cycling` bleibt hier aussen
+ * vor** — es ist ein Objekt (`{on_weeks, off_weeks}`) und braucht
+ * eine eigene Eingabe; **gemeldet, nicht halb gebaut.**
+ */
+export async function aenderePosition(
+  id: string,
+  aenderung: {
+    custom_name?: string | null
+    dose?: number
+    dose_unit?: string
+    timing?: string
+    frequency?: string
+  },
+): Promise<{ id: string }> {
+  await sitzung()
+
+  const feld: Record<string, unknown> = {}
+  if (aenderung.custom_name !== undefined) {
+    feld.custom_name = aenderung.custom_name?.trim() || null
+  }
+  if (aenderung.dose !== undefined) {
+    if (!(aenderung.dose > 0)) {
+      throw new SupplementSchreibFehler('VALIDATION_FAILED',
+        'Die Dosis muss groesser als 0 sein.')
+    }
+    feld.dose = aenderung.dose
+  }
+  if (aenderung.dose_unit !== undefined) {
+    if (!aenderung.dose_unit.trim()) {
+      throw new SupplementSchreibFehler('VALIDATION_FAILED', 'Die Einheit fehlt.')
+    }
+    feld.dose_unit = aenderung.dose_unit.trim()
+  }
+  if (aenderung.timing !== undefined) feld.timing = aenderung.timing
+  if (aenderung.frequency !== undefined) feld.frequency = aenderung.frequency
+
+  if (Object.keys(feld).length === 0) {
+    throw new SupplementSchreibFehler('VALIDATION_FAILED', 'Nichts zu aendern.')
+  }
+
+  const { data, error } = await db()
+    .from('stack_items').update(feld).eq('id', id)
+    .select('id')
+  if (error) throw new SupplementSchreibFehler('WRITE_FAILED', error.message)
+  const zeile = (data ?? [])[0] as unknown as { id: string } | undefined
+  if (!zeile) {
+    throw new SupplementSchreibFehler('NOT_FOUND', 'Keine eigene Position mit dieser id.')
+  }
+  return zeile
+}
