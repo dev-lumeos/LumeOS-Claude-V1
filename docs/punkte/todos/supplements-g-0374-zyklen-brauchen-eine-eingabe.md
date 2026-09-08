@@ -7,8 +7,6 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-373
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/tab-spec.tsx
@@ -49,3 +47,24 @@ davon den Beginn haelt.**
 
 **Mitbeauftragt mit G-152 am 2026-09-08.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-08: keine Spalte haelt den Beginn
+
+`[cmd]` **Alle 17 Spalten von `stack_items` geprueft** —
+**`added_at` ist die Zeilenanlage, nicht der Zyklusbeginn.**
+
+`[cmd]` **`cycling` ist JSONB mit einem *ist ein Objekt*-CHECK und
+null gefuellten Zeilen.**
+
+### Claude Codes Vorschlag
+
+`[read]` **`started_on` INNERHALB des bestehenden `cycling`-Objekts,
+statt einer neuen Spalte.**
+
+> *,,es ist schon da, hat schon einen CHECK, und die drei Werte sind
+> einzeln bedeutungslos."*
+
+`[read]` **Richtig: eine Woche-an ohne Woche-aus und ohne Beginn ist
+kein Zyklus.**
+
+`[read]` **Das ist eine Schema-Entscheidung** — **sie gehoert Tom.**

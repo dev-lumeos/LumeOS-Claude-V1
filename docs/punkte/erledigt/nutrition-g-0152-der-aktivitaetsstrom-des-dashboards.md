@@ -10,6 +10,8 @@ kinder: []
 entscheidung: E-52
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 64937c89
 beruehrt:
   tabellen: []
   dateien: []
@@ -402,4 +404,95 @@ schreiben.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator.** **Sechs mit Zahlen, und eine
+Berichtigung an mir.**
+
+    A1  40 gezeigt / 133 dieses Kontos -- nicht von 5426
+    A2  5 Module / 4 sichtbar (medical hat hier keine Zeilen)
+    A3  8 Kacheln / 7 mit Daten / 1 benannter Leerhinweis
+    A4  7 Referenzen, waren 5
+    A5  1 von 3 Sprachen
+    A6  keine Spalte haelt den Zyklusbeginn
+
+### Meine Zahl war falsch
+
+`[cmd]` **Ich schrieb *,,40 von 5426"*.**
+
+`[cmd]` **Nachgemessen: 5426 ist die Summe ueber fuenf Konten.**
+
+    dev@lumeos.app          1657
+    tom.seed@example.com    1651
+    max.seed@example.com    1080
+    sarah.seed@example.com   905
+    test-user@lumeos.local   133
+
+`[cmd]` **Und `activity_stream` traegt `security_invoker=true`** —
+**jeder sieht nur seine eigenen Zeilen.**
+
+`[read]` **Ich hatte eine Gesamtzahl als Kontozahl in den Auftrag
+geschrieben** — **derselbe Fehler wie bei den 178 Zeilen in
+`modality_log`** (G-371).
+
+### Das Mockup beantwortete die Formfrage
+
+`[cmd]` **`module-dashboard.jsx:105`: eine gemischte Liste, neueste
+zuerst** — **Zeit, modulfarbiges Zeichen, Text.** `[read]` **Nicht
+je Modul getrennt.**
+
+`[read]` **Er hat es nachgesehen, statt zu waehlen.**
+
+### Die Messung fing einen strukturellen Fehler
+
+`[cmd]` **Mit 20 Zeilen erschienen nur zwei Module.**
+
+`[cmd]` **Gemessen mit `row_number()`: `recovery` erscheint erst auf
+Rang 23, `training` auf 30.**
+
+`[read]` **Zwanzig verbarg die Haelfte der Module** — **nicht
+zufaellig, sondern der Struktur nach.**
+
+`[cmd]` **Auf 40 gehoben, und die Messung steht als Begruendung im
+Code.**
+
+`[read]` **Eine Zahl mit Grund ist etwas anderes als eine Zahl.**
+
+### A5 — die Sicht traegt nur Deutsch
+
+`[cmd]` **Nachgemessen: `summary_de`, sonst nichts.**
+
+`[cmd]` **Und der deutsche Text steht als Zeichenkette IN der
+Sichtdefinition** — `'Mahlzeit erfasst: '`, `'Abendessen'`.
+
+`[cmd]` **`supplement_evidence` traegt `_de`, `_en`, `_th`** —
+**die Sicht ist der Ausreisser.**
+
+`[read]` **EN/TH heisst: die Sicht aendern.** **Als C-430.**
+
+### A6 — sein Vorschlag ist der bessere
+
+`[cmd]` **Alle 17 Spalten geprueft, `added_at` ist die
+Zeilenanlage.**
+
+`[cmd]` **`cycling` ist JSONB mit einem *ist ein Objekt*-CHECK und
+null gefuellten Zeilen.**
+
+`[read]` **Sein Vorschlag: `started_on` INNERHALB des bestehenden
+Objekts** — **statt einer neuen Spalte.**
+
+> *,,die drei Werte sind einzeln bedeutungslos."*
+
+`[read]` **Richtig: eine Woche-an ohne Woche-aus und ohne Beginn
+ist kein Zyklus.**
+
+### Und ein Fehler in seiner eigenen Vorarbeit
+
+`[cmd]` **Die Zeitpunkt-Auswahl aus G-373 bot `night` an, was der
+CHECK ablehnt** — **und liess drei gueltige Werte weg.**
+
+`[read]` **Seine Lehre:** *,,Eine Auswahlliste ist ein Versprechen;
+ich hatte sie aus dem Gedaechtnis geschrieben statt gemessen."*
+
+`[cmd]` **Berichtigt aus der Bedingung, durchgehend geprueft.**
+
+**Abgenommen.**
+

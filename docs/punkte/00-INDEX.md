@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 211 |
+| `todos` | 213 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 324 |
-| **gesamt** | **538** |
+| `erledigt` | 325 |
+| **gesamt** | **539** |
 
 ## medical — 44
 
@@ -179,7 +178,7 @@
 | `G-136` | feature | mittel | [Zwei Kartenzuordnungen sind Auslegung](erledigt/nutrition-g-0136-zwei-kartenzuordnungen-sind-auslegung.md) | erledigt | — | — |
 | `G-137` | befund | mittel | [Acht Karten — die alten Ansichtsschluessel verfallen](erledigt/nutrition-g-0137-acht-karten-die-alten-ansichtsschluessel-verfallen.md) | erledigt | — | — |
 | `G-140` | feature | mittel | [`display_tier` ist ein Abo-Tier, keine Baumebene](todos/nutrition-g-0140-display-tier-ist-ein-abo-tier-keine-baumebene.md) | offen | — | — |
-| `G-152` | feature | mittel | [Der Aktivitaetsstrom des Dashboards](laufend_claudecode/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | laeuft (claudecode) | — | — |
+| `G-152` | feature | mittel | [Der Aktivitaetsstrom des Dashboards](erledigt/nutrition-g-0152-der-aktivitaetsstrom-des-dashboards.md) | erledigt | — | C-430 |
 | `G-165` | befund | niedrig | [`nutrition-foods` zahlt die Preference-Kosten zweimal](todos/nutrition-g-0165-nutrition-foods-zahlt-die-preference-kosten-zweimal.md) | offen | — | — |
 | `G-220` | entscheidung | hoch | [MealCam Auto-Accept widerspricht ADR_MEALCAM_V1](erledigt/nutrition-g-0220-mealcam-auto-accept-widerspricht-adr-mealcam-v1.md) | erledigt | — | — |
 | `G-221` | entscheidung | hoch | [Food-Tag-Set V1 widersprüchlich definiert](erledigt/nutrition-g-0221-food-tag-set-v1-widerspruechlich-definiert.md) | erledigt | — | G-245 |
@@ -362,7 +361,7 @@
 | `G-369` | feature | niedrig | [*Session today* braucht den Sitzungsbezug](todos/supplements-g-0369-session-today-braucht-den-sitzungsbezug.md) | offen | — | — |
 | `G-372` | feature | hoch | [die Stack-Kachel kann nichts](erledigt/supplements-g-0372-die-stack-kachel-kann-nichts.md) | erledigt | — | C-427, G-373 |
 | `G-373` | feature | mittel | [Stacks editieren und anlegen](erledigt/supplements-g-0373-stacks-editieren-und-anlegen.md) | erledigt | — | G-374 |
-| `G-374` | feature | niedrig | [Zyklen brauchen eine eigene Eingabe](laufend_claudecode/supplements-g-0374-zyklen-brauchen-eine-eingabe.md) | laeuft (claudecode) | — | — |
+| `G-374` | feature | niedrig | [Zyklen brauchen eine eigene Eingabe](todos/supplements-g-0374-zyklen-brauchen-eine-eingabe.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -474,7 +473,7 @@
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](erledigt/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | erledigt | — | — |
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | C-426 |
 
-## quer — 116
+## quer — 117
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -551,6 +550,7 @@
 | `C-420` | befund | hoch | [der Waechter kennt keine Uebersetzung](erledigt/quer-c-0420-der-waechter-kennt-keine-uebersetzung.md) | erledigt | — | — |
 | `C-422` | feature | hoch | [die Lesewege fuer elf Kacheln](erledigt/quer-c-0422-die-lesewege-fuer-elf-kacheln.md) | erledigt | — | — |
 | `C-424` | feature | mittel | [eine Leser-Registry](erledigt/quer-c-0424-eine-leser-registry.md) | erledigt | — | A-72 |
+| `C-430` | befund | mittel | [die Sicht traegt nur Deutsch](todos/quer-c-0430-die-sicht-traegt-nur-deutsch.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
