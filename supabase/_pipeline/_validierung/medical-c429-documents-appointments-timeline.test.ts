@@ -69,10 +69,12 @@ test('C-429: Original, Termine und zitierte Medical-Ereignisse sind privat und v
     );
 
     INSERT INTO medical.appointments (
-      id, user_id, appointment_type, starts_at, time_zone, status, lab_report_id
+      id, user_id, appointment_type, starts_at, time_zone, status, lab_report_id,
+      source_kind, source_actor, source_recorded_at, source_lab_report_id
     ) VALUES (
       '${APPOINTMENT}'::uuid, '${OWNER}'::uuid, 'labor',
-      '2026-09-12 09:30:00+07'::timestamptz, 'Asia/Bangkok', 'scheduled', '${REPORT}'::uuid
+      '2026-09-12 09:30:00+07'::timestamptz, 'Asia/Bangkok', 'scheduled', '${REPORT}'::uuid,
+      'seed', 'C-429 fixture', '2026-09-08 09:00:00+07'::timestamptz, '${REPORT}'::uuid
     );
 
     INSERT INTO medical.health_events (
@@ -110,8 +112,11 @@ test('C-429: Original, Termine und zitierte Medical-Ereignisse sind privat und v
       event_denied boolean := false;
     BEGIN
       BEGIN
-        INSERT INTO medical.appointments (user_id, appointment_type, starts_at, time_zone, status)
-        VALUES ('${OWNER}'::uuid, 'doctor', now(), 'UTC', 'scheduled');
+        INSERT INTO medical.appointments (
+          user_id, appointment_type, starts_at, time_zone, status,
+          source_kind, source_actor, source_recorded_at
+        ) VALUES ('${OWNER}'::uuid, 'doctor', now(), 'UTC', 'scheduled',
+                  'user', 'C-429 foreign fixture', now());
       EXCEPTION WHEN insufficient_privilege THEN appointment_denied := true;
       END;
       BEGIN

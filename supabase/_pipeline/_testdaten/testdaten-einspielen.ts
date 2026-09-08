@@ -3926,7 +3926,8 @@ END $$;
 INSERT INTO medical.user_medications (
   user_id, active_substance_id, name, drug_class, cyp_profile,
   dose_amount, dose_unit, doses_per_day, route, start_date,
-  is_active, indication, notes, measurement_source, source_detail
+  is_active, indication, notes, measurement_source, source_detail,
+  source_kind, source_actor, source_recorded_at, source_lab_report_id
 )
 SELECT
   '10000000-0000-0000-0000-000000000101'::uuid,
@@ -3943,7 +3944,11 @@ SELECT
   'C-130 Szenario: Warfarin fuer spaetere Vitamin-K-Regel',
   'Seed-Medikation fuer Regelpruefung, keine Dosierungsempfehlung',
   'seed',
-  'C-130 Testdaten aus Kimi-Medikamentenkatalog'
+  'C-130 Testdaten aus Kimi-Medikamentenkatalog',
+  'seed',
+  'C-130 Testdaten',
+  now(),
+  NULL
 FROM medical.medication_active_substances s
 WHERE 'anticoagulant:warfarin' = ANY(s.drug_class)
 ORDER BY s.canonical_name
@@ -3951,7 +3956,8 @@ LIMIT 1;
 
 INSERT INTO medical.user_conditions (
   user_id, condition_code, status, start_date, notes,
-  measurement_source, source_detail
+  measurement_source, source_detail,
+  source_kind, source_actor, source_recorded_at, source_lab_report_id
 )
 VALUES (
   '10000000-0000-0000-0000-000000000101'::uuid,
@@ -3960,13 +3966,18 @@ VALUES (
   DATE '${relDate('2026-08-10')}',
   'C-130 Szenario fuer Conditions-Feldvertrag',
   'seed',
-  'C-130 Testdaten, keine Krankengeschichte'
+  'C-130 Testdaten, keine Krankengeschichte',
+  'seed',
+  'C-130 Testdaten',
+  now(),
+  NULL
 );
 
 -- C-429/E-74: Diese drei Eintraege sind vom Nutzer festgehaltene Zitate mit
 -- Herkunft, keine medizinische Bewertung des Systems.
 INSERT INTO medical.appointments (
-  id, user_id, appointment_type, starts_at, time_zone, status, title, lab_report_id
+  id, user_id, appointment_type, starts_at, time_zone, status, title, lab_report_id,
+  source_kind, source_actor, source_recorded_at, source_lab_report_id
 )
 VALUES (
   'c4290000-0000-0000-0000-000000000021'::uuid,
@@ -3976,6 +3987,10 @@ VALUES (
   'Asia/Bangkok',
   'scheduled',
   'C-429 Kontrolltermin',
+  'c4290000-0000-0000-0000-000000000011'::uuid,
+  'seed',
+  'C-429 Testdaten',
+  now(),
   'c4290000-0000-0000-0000-000000000011'::uuid
 );
 

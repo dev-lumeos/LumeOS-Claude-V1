@@ -3547,7 +3547,8 @@
         ]
       },
       "grants_herkunft": "145_medications_schema.sql vergibt authenticated DML und service_role ALL explizit.",
-      "zeilenschutzart": "eigene_zeilen"
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": ["id", "user_id", "active_substance_id", "product_id", "name", "drug_class", "cyp_profile", "dose_amount", "dose_unit", "doses_per_day", "route", "start_date", "end_date", "is_active", "indication", "monitoring", "monitoring_frequency", "last_test", "next_due", "monitoring_overdue", "targets", "side_effects", "physician", "rx", "prescription_ref", "notes", "measurement_source", "source_detail", "frozen_at", "created_at", "updated_at", "source_kind", "source_actor", "source_recorded_at", "source_lab_report_id"]
     },
     {
       "schema": "medical",
@@ -3578,7 +3579,8 @@
         ]
       },
       "grants_herkunft": "145_medications_schema.sql vergibt authenticated DML und service_role ALL explizit.",
-      "zeilenschutzart": "eigene_zeilen"
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": ["id", "user_id", "condition_code", "status", "start_date", "end_date", "notes", "measurement_source", "source_detail", "created_at", "updated_at", "source_kind", "source_actor", "source_recorded_at", "source_lab_report_id"]
     },
     {
       "schema": "supplements",
@@ -5443,7 +5445,7 @@
       "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
       "grants_herkunft": "20260908113000_c429_medical_documents_timeline.sql: eigene Termine sind voll bearbeitbar; service_role ALL.",
       "zeilenschutzart": "eigene_zeilen",
-      "spalten": ["id", "user_id", "appointment_type", "starts_at", "time_zone", "status", "title", "notes", "lab_report_id", "medication_id", "created_at", "updated_at"]
+      "spalten": ["id", "user_id", "appointment_type", "starts_at", "time_zone", "status", "title", "notes", "lab_report_id", "medication_id", "created_at", "updated_at", "source_kind", "source_actor", "source_recorded_at", "source_lab_report_id"]
     },
     {
       "schema": "medical",

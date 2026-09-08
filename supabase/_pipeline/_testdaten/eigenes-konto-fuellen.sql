@@ -689,23 +689,27 @@ INSERT INTO medical.user_medications (
   id, user_id, active_substance_id, product_id, name, drug_class,
   cyp_profile, dose_amount, dose_unit, doses_per_day, route, start_date,
   end_date, is_active, indication, notes, measurement_source,
-  source_detail, frozen_at
+  source_detail, source_kind, source_actor, source_recorded_at,
+  source_lab_report_id, frozen_at
 )
 SELECT
   gen_random_uuid(), :'ziel'::uuid, active_substance_id, product_id, name,
   drug_class, cyp_profile, dose_amount, dose_unit, doses_per_day, route,
   start_date, end_date, is_active, indication, notes, 'seed',
-  'Kopie aus tom.seed@example.com', frozen_at
+  'Kopie aus tom.seed@example.com', 'seed',
+  'Kopie aus tom.seed@example.com', now(), NULL, frozen_at
 FROM medical.user_medications
 WHERE user_id = :'quelle'::uuid;
 
 INSERT INTO medical.user_conditions (
   id, user_id, condition_code, status, start_date, end_date, notes,
-  measurement_source, source_detail
+  measurement_source, source_detail, source_kind, source_actor,
+  source_recorded_at, source_lab_report_id
 )
 SELECT
   gen_random_uuid(), :'ziel'::uuid, condition_code, status, start_date,
-  end_date, notes, 'seed', 'Kopie aus tom.seed@example.com'
+  end_date, notes, 'seed', 'Kopie aus tom.seed@example.com', 'seed',
+  'Kopie aus tom.seed@example.com', now(), NULL
 FROM medical.user_conditions
 WHERE user_id = :'quelle'::uuid;
 

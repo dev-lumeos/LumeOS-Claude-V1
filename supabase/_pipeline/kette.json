@@ -1610,6 +1610,17 @@
         "412",
         "130"
       ]
+    },
+    {
+      "id": "434_schema",
+      "path": "supabase/migrations/20260908140000_c434_coach_medical_provenance.sql",
+      "kind": "sql",
+      "creates": "C-434/E-74: Coach-Full-Lesepfad fuer Termine und Ereignisse sowie verpflichtende Herkunft fuer neue Medical-Zeilen; medical-originals bleibt privat",
+      "depends_on": [
+        "429_schema",
+        "430_schema",
+        "152"
+      ]
     }
   ]
 }
