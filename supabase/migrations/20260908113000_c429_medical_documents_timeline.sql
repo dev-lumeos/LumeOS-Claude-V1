@@ -88,8 +88,11 @@ BEGIN
     RAISE EXCEPTION 'lab report not found' USING ERRCODE = 'P0002';
   END IF;
 
-  IF p_object_name !~ ('^' || v_user_id::text || '/' || p_report_id::text || '/[^/]+$') THEN
-    RAISE EXCEPTION 'object path must be inside the report owner path' USING ERRCODE = '22023';
+  -- E-75: genau ein Nutzersegment und danach report_id.ext. Die RLS-Policy
+  -- bindet den ersten Pfadteil an auth.uid(); die Funktion bindet den Rest
+  -- an genau diesen eigenen Befund.
+  IF p_object_name !~ ('^' || v_user_id::text || '/' || p_report_id::text || '\.[^/]+$') THEN
+    RAISE EXCEPTION 'object path must be user_id/report_id.ext for this report' USING ERRCODE = '22023';
   END IF;
 
   IF NOT EXISTS (

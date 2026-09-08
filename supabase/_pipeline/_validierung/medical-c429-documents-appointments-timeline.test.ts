@@ -58,14 +58,14 @@ test('C-429: Original, Termine und zitierte Medical-Ereignisse sind privat und v
     INSERT INTO storage.objects (bucket_id, name, owner_id, metadata)
     VALUES (
       'medical-originals',
-      '${OWNER}/${REPORT}/c429-originalbefund.pdf',
+      '${OWNER}/${REPORT}.pdf',
       '${OWNER}',
       '{"size":241,"mimetype":"application/pdf"}'::jsonb
     );
 
     SELECT medical.attach_lab_report_original(
       '${REPORT}'::uuid,
-      '${OWNER}/${REPORT}/c429-originalbefund.pdf'
+      '${OWNER}/${REPORT}.pdf'
     );
 
     INSERT INTO medical.appointments (
@@ -95,7 +95,7 @@ test('C-429: Original, Termine und zitierte Medical-Ereignisse sind privat und v
       (SELECT file_ref FROM medical.lab_reports WHERE id = '${REPORT}'::uuid) AS linked_original,
       (SELECT (metadata ->> 'size')::integer FROM storage.objects
        WHERE bucket_id = 'medical-originals'
-         AND name = '${OWNER}/${REPORT}/c429-originalbefund.pdf') AS original_bytes;
+         AND name = '${OWNER}/${REPORT}.pdf') AS original_bytes;
 
     SET LOCAL "request.jwt.claim.sub" = '${OTHER}';
     CREATE TEMP TABLE c429_other AS
@@ -141,7 +141,7 @@ test('C-429: Original, Termine und zitierte Medical-Ereignisse sind privat und v
 
   assert.equal(result.privateBucket, true)
   assert.equal(result.originalBytes, 241)
-  assert.equal(result.linkedOriginal, `${OWNER}/${REPORT}/c429-originalbefund.pdf`)
+  assert.equal(result.linkedOriginal, `${OWNER}/${REPORT}.pdf`)
   assert.equal(result.appointmentRowsOwner, 1)
   assert.equal(result.appointmentRowsOther, 0)
   assert.equal(result.eventRowsOwner, 3)
