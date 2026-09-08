@@ -8,7 +8,7 @@ braucht: []
 kind_von: C-136
 entscheidung: E-74
 erledigt: 2026-09-08
-commit: OFFEN
+commit: c6cd778a
 beruehrt:
   tabellen: [coach.client_permissions]
 zahlen:

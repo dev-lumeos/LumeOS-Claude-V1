@@ -8,8 +8,8 @@
 | `todos` | 208 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 339 |
-| **gesamt** | **549** |
+| `erledigt` | 340 |
+| **gesamt** | **550** |
 
 ## medical — 47
 
@@ -61,7 +61,7 @@
 | `G-256` | feature | mittel | [die Originaldatei zum Laborbericht](erledigt/medical-g-0256-die-originaldatei-zum-laborbericht.md) | erledigt | — | — |
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
-| `G-378` | befund | hoch | [das Hochladen scheitert](laufend_claudecode/medical-g-0378-das-hochladen-scheitert.md) | laeuft (claudecode) | — | — |
+| `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
 ## nutrition — 228
 
@@ -481,7 +481,7 @@
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | C-426 |
 | `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](erledigt/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | erledigt | — | — |
 
-## quer — 120
+## quer — 121
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -605,6 +605,7 @@
 | `G-370` | befund | mittel | [Unternavigationen vollstaendig pruefen](erledigt/quer-g-0370-unternavigationen-vollstaendig-pruefen.md) | erledigt | — | — |
 | `G-375` | feature | hoch | [der Tageswechsler gehoert in die Schale](erledigt/quer-g-0375-der-tageswechsler-gehoert-in-die-schale.md) | erledigt | — | G-377 |
 | `G-377` | entscheidung | mittel | [ein gemeinsames Bauteil fuer den Modulkopf](todos/quer-g-0377-ein-gemeinsames-bauteil-fuer-den-modulkopf.md) | offen | — | — |
+| `G-380` | befund | mittel | [eine tote Zweitfassung und ein fehlender Hinweis](laufend_claudecode/quer-g-0380-eine-tote-zweitfassung-und-ein-fehlender-hinweis.md) | laeuft (claudecode) | — | — |
 
 ## market — 1
 
