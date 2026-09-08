@@ -5,7 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 213 |
+| `todos` | 210 |
+| `laufend_codex` | 2 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 314 |
 | **gesamt** | **527** |
 
@@ -280,7 +282,7 @@
 | `G-341` | befund | mittel | [die Spalte heisst *vollständig* und meint das Gegenteil](erledigt/nutrition-g-0341-die-spalte-heisst-vollstaendig-und-meint-das-gegenteil.md) | erledigt | — | — |
 | `G-342` | befund | niedrig | [`nutsettings` hat keinen Aufrufer](erledigt/nutrition-g-0342-nutsettings-hat-keinen-aufrufer.md) | erledigt | — | G-343 |
 | `G-343` | befund | mittel | [Tests messen gegen ueberholte Entwuerfe](erledigt/nutrition-g-0343-tests-messen-gegen-ueberholte-entwuerfe.md) | erledigt | — | G-348 |
-| `G-344` | befund | hoch | [Einkaufslisten koennen mehr, als die Spec sagt](todos/nutrition-g-0344-einkaufslisten-koennen-mehr-als-die-spec-sagt.md) | offen | — | C-407, G-345 |
+| `G-344` | befund | hoch | [Einkaufslisten koennen mehr, als die Spec sagt](laufend_claudecode/nutrition-g-0344-einkaufslisten-koennen-mehr-als-die-spec-sagt.md) | laeuft (claudecode) | — | C-407, G-345 |
 | `G-345` | feature | hoch | [die Oberflaeche fuer Einkaufslisten](erledigt/nutrition-g-0345-die-oberflaeche-fuer-einkaufslisten.md) | erledigt | — | G-350 |
 | `G-346` | entscheidung | mittel | [Quick-Add braucht eine Mahlzeit](erledigt/nutrition-g-0346-quick-add-braucht-eine-mahlzeit.md) | erledigt | — | — |
 | `G-347` | feature | mittel | [die Anzeige zieht nach](erledigt/nutrition-g-0347-die-anzeige-zieht-nach.md) | erledigt | — | — |
@@ -336,7 +338,7 @@
 | `C-364` | entscheidung | mittel | [die Produktebene ist Wissen, kein Bestand](erledigt/supplements-c-0364-die-produktebene-ist-wissen-kein-bestand.md) | erledigt | — | G-296 |
 | `C-365` | befund | niedrig | [Peptidsequenzen haben kein Ziel im Schema](erledigt/supplements-c-0365-peptidsequenzen-haben-kein-ziel-im-schema.md) | erledigt | — | — |
 | `C-393` | befund | mittel | [`substance_group_memberships` ist leer](erledigt/supplements-c-0393-substance-group-memberships-ist-leer.md) | erledigt | — | — |
-| `C-423` | feature | mittel | [`stack_templates` hat null Zeilen](todos/supplements-c-0423-stack-templates-hat-null-zeilen.md) | offen | — | — |
+| `C-423` | feature | mittel | [`stack_templates` hat null Zeilen](laufend_codex/supplements-c-0423-stack-templates-hat-null-zeilen.md) | laeuft (codex) | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -502,7 +504,7 @@
 | `A-68` | befund | niedrig | [der Waechter fuer leerlaufende Agenten](erledigt/quer-a-0068-der-waechter-fuer-leerlaufende-agenten.md) | erledigt | — | — |
 | `A-69` | befund | mittel | [26 Abhaengigkeiten mit High Severity](todos/quer-a-0069-26-abhaengigkeiten-mit-high-severity.md) | offen | — | — |
 | `A-70` | feature | hoch | [ein Backupsystem statt eines wachsenden Ordners](erledigt/quer-a-0070-ein-backupsystem-statt-eines-wachsenden-ordners.md) | erledigt | — | — |
-| `A-71` | befund | hoch | [der Leseweg liegt daneben](todos/quer-a-0071-der-leseweg-liegt-daneben.md) | offen | — | G-368, G-371 |
+| `A-71` | befund | hoch | [der Leseweg liegt daneben](laufend_codex/quer-a-0071-der-leseweg-liegt-daneben.md) | laeuft (codex) | — | G-368, G-371 |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

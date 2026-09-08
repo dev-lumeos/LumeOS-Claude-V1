@@ -7,6 +7,8 @@ angelegt: 2026-09-07
 braucht: []
 kind_von: G-365
 entscheidung: E-72
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [supplements.stack_templates]
 zahlen:
@@ -52,3 +54,8 @@ user_goals` **traegt vier `goal_type`-Werte** (G-352).
 `[read]` **Vor dem Fuellen: was ist eine Vorlage?** **Ein
 vorgeschlagener Stack fuer ein Ziel, oder eine Sammlung, die ein
 Nutzer teilt?**
+
+## Auftrag
+
+**Mitbeauftragt mit A-71 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.
