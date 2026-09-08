@@ -740,7 +740,13 @@ test('das Goals-Modul kennzeichnet jede Kachel', () => {
     // plans, prefs, insights und nutrients zeigen jetzt die Ansicht
     // statt einer Inhaltsangabe -- Mahlzeiten mit Positionen,
     // Geistereintraege mit Status, Vorlieben mit Punktwerten.
-    [path.join(process.cwd(), 'src/app/v2/nutrition/mockup-referenz.tsx'), 25],
+    // `[cmd]` **27 seit `EinkaufReferenz`** (2026-09-08, G-344): der
+    // Reiter `einkauf` trug den Vermerk „kein Mockup-Gegenstueck" —
+    // **falsch.** Die Begruendung hatte nur `module-nutrition.jsx`
+    // durchsucht; **`module-nutrition-spec.jsx:476` fuehrt ihn** als
+    // Unterreiter von *Meal plans*. Zwei Kacheln: `Shopping list`
+    // (nach Warengruppen) und `Scale list`.
+    [path.join(process.cwd(), 'src/app/v2/nutrition/mockup-referenz.tsx'), 27],
     [path.join(process.cwd(), 'src/app/v2/nutrition/fehlende-kacheln.tsx'), 4],
     // `[cmd]` **5 seit der Berichtigung** (2026-09-07): vier weitere
     // Reiter bekamen eine Referenz. **Die Kacheln von `Ref` und

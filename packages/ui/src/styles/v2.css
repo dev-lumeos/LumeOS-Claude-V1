@@ -608,6 +608,10 @@ a { color: inherit; text-decoration: none; }
      Kreis endet: die Zahl bleibt mittig, das Label steht darunter. */
   top: 0; left: 0; right: 0; bottom: 16px;
   display: flex;
+  /* `[cmd]` **Tom, 2026-09-08: *,,111% soll unter 2777 stehen und
+     nicht nebendran."*** `[read]` **Ohne `column` stellt flex Wert
+     und Prozentzahl nebeneinander** ? gemessen an `2.777 111%`. */
+  flex-direction: column;
   align-items: center; justify-content: center;
 }
 .v2-ring-label .v2-v {

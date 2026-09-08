@@ -102,6 +102,7 @@ import {
   NutritionPlannerReferenz, NutritionNutrientsReferenz,
   NutritionPlansReferenz, NutritionPrefsReferenz,
   NutritionDiaryReferenz,
+  EinkaufReferenz,
 } from './mockup-referenz'
 import {
   FehlendeInsightsKacheln, FehlendePlanKacheln,
@@ -399,7 +400,13 @@ export async function TagebuchAnsicht({
               />
               <div className="v2-num" style={{ fontSize: 10, color: 'var(--fg-dim)' }}>
                 {summe?.macros.enercc.value != null && ziele?.kcal != null
-                  ? t('kcalOffen', { menge: Math.round(ziele.kcal - summe.macros.enercc.value).toLocaleString('de-DE') })
+                  ? (() => {
+                      // `[read]` **Ein negativer Rest ist nicht *uebrig*, er ist
+                      // *darueber*.** Tom, 2026-09-08.
+                      const rest = Math.round(ziele.kcal - summe.macros.enercc.value)
+                      const menge = Math.abs(rest).toLocaleString('de-DE')
+                      return rest < 0 ? t('kcalDarueber', { menge }) : t('kcalOffen', { menge })
+                    })()
                   : t('ohneTagesziel')}
               </div>
             </div>
@@ -986,26 +993,19 @@ function AndererTab({
               grund="Ohne Sitzung greift die Zeilensicherheit, und es wird nichts gelesen." />
           )}
 
-        {/* `[cmd]` G-365: KEIN Mockup-Reiter, und das ist der Befund.
-            `module-nutrition.jsx` fuehrt sieben Reiter — `diary`,
-            `insights`, `nutrients`, `foods`, `planner`, `plans`,
-            `prefs`. **`einkauf` ist nicht darunter.**
+        {/* ══ G-344: der Vermerk war falsch ═════════════════════
+            `[cmd]` **Hier stand ,,Kein Mockup-Gegenstueck"**, begruendet
+            damit, dass `module-nutrition.jsx` sieben Reiter fuehrt und
+            `einkauf` nicht darunter ist. **Das stimmt — es ist nur die
+            falsche Datei.**
 
-            `[read]` **Der Reiter ist nach dem Entwurf entstanden**
-            (G-345/E-64). Es gibt nichts zu vergleichen — deshalb steht hier
-            keine Linie, sondern dieser Vermerk. */}
-        <Card title="Kein Mockup-Gegenstueck"
-              sub="dieser Reiter entstand nach dem Entwurf"
-              attrappe={
-                'Attrappe — kein Mockup · wartet auf: nichts — '
-                + '`einkauf` steht in keiner theme-v1-Datei, es gibt '
-                + 'keinen Soll-Stand zum Vergleich'
-              }>
-          <div className="v2-dim" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
-            Die uebrigen Reiter zeigen unter einer Linie den
-            Mockup-Entwurf als Vergleich. Fuer diesen gibt es keinen.
-          </div>
-        </Card>
+            `[cmd]` **`module-nutrition-spec.jsx:476` fuehrt ihn**, als
+            Unterreiter von *Meal plans*, mit zwei Kacheln: der nach
+            Warengruppen geordneten Liste und *Scale list*.
+
+            `[read]` ***Nicht gefunden* heisst nur, dass die Suche nichts
+            fand** — und kein Modul hat nur eine Mockupdatei. */}
+        <EinkaufReferenz />
       </div>
     )
   }

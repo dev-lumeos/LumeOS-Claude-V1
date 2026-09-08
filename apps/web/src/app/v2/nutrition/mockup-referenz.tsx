@@ -922,3 +922,101 @@ export function NutritionDiaryReferenz() {
     </>
   )
 }
+
+
+// ══ G-344: der Einkaufsreiter hat doch ein Gegenstueck ══════════
+//
+// `[cmd]` **Hier stand ,,Kein Mockup-Gegenstueck"** — der Vermerk
+// stuetzte sich darauf, dass `module-nutrition.jsx` sieben Reiter
+// fuehrt und `einkauf` nicht darunter ist. **Das stimmt, ist aber
+// die falsche Datei.**
+//
+// `[cmd]` **`module-nutrition-spec.jsx:476` fuehrt ihn** — als
+// Unterreiter von *Meal plans*, mit zwei Kacheln: die nach Warengruppen
+// geordnete Liste und *Scale list*.
+//
+// `[read]` **Die Lehre ist die alte:** *nicht gefunden* heisst nur,
+// dass die Suche nichts fand. **Ein Modul hat mehrere Mockupdateien.**
+
+/** `module-nutrition-spec.jsx:480` — die fuenf Warengruppen. */
+const EINKAUF_GRUPPEN: Array<[string, Array<[string, string]>]> = [
+  ['Fleisch & Fisch', [['Hähnchenbrust', '1260 g'], ['Lachsfilet', '1400 g']]],
+  ['Milchprodukte', [['Hüttenkäse', '1400 g'], ['Whey Isolat', '455 g'],
+                     ['Skyr', '1000 g']]],
+  ['Getreide', [['Haferflocken', '560 g'], ['Basmatireis', '1400 g'],
+                ['Reiswaffeln', '280 g']]],
+  ['Gemüse & Obst', [['Brokkoli', '1050 g'], ['Süßkartoffel', '1750 g'],
+                       ['Banane', '840 g'], ['Blaubeeren', '700 g']]],
+  ['Fette & Nüsse', [['Mandeln', '140 g'], ['Olivenöl', '150 ml']]],
+]
+
+/**
+ * `einkauf`, wie er im Mockup steht —
+ * `module-nutrition-spec.jsx:476`.
+ *
+ * `[read]` **Die ersten zwei Posten je Gruppe sind abgehakt** — so
+ * zeigt es die Vorlage (`i < 2`), damit Haken, Durchstreichung und
+ * Abschwaechung sichtbar sind.
+ */
+export function EinkaufReferenz() {
+  const gesamt = EINKAUF_GRUPPEN.reduce((s, [, xs]) => s + xs.length, 0)
+  return (
+    <>
+      <ReferenzTrenner reiter="Einkaufslisten" quelle={QUELLE_SPEC} />
+      <div className="v2-grid" style={{ gridTemplateColumns: '1.4fr 1fr', gap: 14 }}>
+        <Card title="Shopping list"
+              sub="from Recomp 5-Meal Plan · 7 days · 1 serving"
+              attrappe={marke(QUELLE_SPEC)}>
+          {EINKAUF_GRUPPEN.map(([gruppe, posten]) => (
+            <div key={gruppe} style={{ marginBottom: 14 }}>
+              <div className="v2-eyebrow" style={{ marginBottom: 6 }}>{gruppe}</div>
+              <div className="v2-col-gap" style={{ gap: 3 }}>
+                {posten.map(([name, menge], i) => (
+                  <div key={name} style={{
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    padding: '7px 10px', background: 'var(--surface)',
+                    border: '1px solid var(--border)', borderRadius: 5,
+                  }}>
+                    <span style={{
+                      width: 15, height: 15, borderRadius: 4, flexShrink: 0,
+                      display: 'grid', placeItems: 'center',
+                      border: `1px solid ${i < 2 ? 'var(--pos)' : 'var(--border-strong)'}`,
+                      background: i < 2 ? 'var(--pos)' : 'transparent',
+                    }}>
+                      {i < 2 && (
+                        <Icon name="check" className="v2-ic" style={{
+                          width: 10, height: 10, color: 'var(--bg)', strokeWidth: 3,
+                        }} />
+                      )}
+                    </span>
+                    <span style={{
+                      flex: 1, fontSize: 12,
+                      textDecoration: i < 2 ? 'line-through' : 'none',
+                      opacity: i < 2 ? 0.5 : 1,
+                    }}>{name}</span>
+                    <span className="v2-num v2-dim" style={{ fontSize: 11 }}>{menge}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </Card>
+        <Card title="Scale list" attrappe={marke(QUELLE_SPEC)}>
+          <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Servings</div>
+          <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
+            {[1, 2, 3, 4].map(n => (
+              <Pill key={n} variant={n === 1 ? 'acc' : undefined}>{n}×</Pill>
+            ))}
+          </div>
+          <Row label="Total items" value={String(gesamt)} />
+          <Row label="Checked" value={`2 of ${gesamt}`} />
+          <Row label="Est. cost" value="≈ €78" />
+          <div className="v2-divider" />
+          <div className="v2-dim" style={{ fontSize: 11, lineHeight: 1.5 }}>
+            Der Entwurf bietet darunter „Add item manually&ldquo;.
+          </div>
+        </Card>
+      </div>
+    </>
+  )
+}

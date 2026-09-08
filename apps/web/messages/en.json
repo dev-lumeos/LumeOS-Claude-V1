@@ -62,7 +62,8 @@
     "zukunftText": "Nothing logged here yet — that is not an error. As an admin you can look ahead; a day can be logged once it arrives.",
     "uhrzeitFehlt": "no time",
     "tagebuchNichtLesbar": "Diary not readable",
-    "zucker": "Sugar"
+    "zucker": "Sugar",
+    "kcalDarueber": "{menge} kcal over"
   },
   "Supplements": {
     "titel": "Supplements",
