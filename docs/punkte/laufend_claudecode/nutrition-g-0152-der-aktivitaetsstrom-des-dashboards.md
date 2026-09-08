@@ -198,7 +198,207 @@ loeschen.**
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Claude Code, 2026-09-08.** **Alle Nachweise auf
+`test-user@lumeos.local`, im Browser, angemeldet.**
+
+### Gelesen, bevor gebaut
+
+`[cmd]` **`00-QUELLEN.md`, Abschnitt dashboard:** EINE Mockupdatei,
+`module-dashboard.jsx` (15 KB).
+
+`[cmd]` **Die Frage des Auftrags** — *Liste, Verlauf oder je Modul
+getrennt* — **beantwortet `module-dashboard.jsx:105`:**
+
+    Card title="Activity" sub="Live"
+      Zeit (64px) | modulfarbenes Zeichen (16px) | Text + Meta
+      sechs Eintraege, neueste zuerst, gemischt
+
+`[read]` **EINE gemischte Liste, nicht je Modul getrennt** — die
+Module sind an der Farbe unterscheidbar.
+
+### A1 — der Strom am Schirm
+
+**40 gezeigt / 133 fuer dieses Konto** — **nicht von 5.426.**
+
+`[cmd]` **Die 5.426 sind die Summe ueber FUENF Konten:**
+
+    dev@lumeos.app         1657
+    tom.seed@example.com   1651
+    max.seed@example.com   1080
+    sarah.seed@example.com  905
+    test-user@lumeos.local  133
+
+`[read]` **`public.activity_stream` ist eine SICHT mit
+`security_invoker=true`** — die Zeilenrechte der Quelltabellen
+greifen, jede Nutzerin sieht nur ihre eigenen Zeilen. **Die Kachel
+kann also nie 5.426 zeigen.**
+
+**Zeitraum und Sortierung:** `2026-06-09` bis `2026-09-06`,
+**sortiert nach `occurred_at` absteigend** — nicht nach
+`event_date`: zwei Ereignisse am selben Tag haetten sonst keine
+Reihenfolge.
+
+**Die Kachel sagt beides:** *,,40 von 133 · neueste zuerst"* und
+darunter *,,93 weitere Ereignisse in der Sicht"*.
+
+### A2 — je Modul
+
+**5 Module / 4 sichtbar.**
+
+`[cmd]` **Am Schirm gezaehlt:**
+
+    supplements  23
+    recovery      8
+    nutrition     7
+    training      2
+    medical       0
+
+`[cmd]` **`medical` fehlt, weil es fuer dieses Konto NICHT
+existiert** — die zehn Medical-Zeilen der Sicht gehoeren
+`dev@lumeos.app` (5) und `tom.seed@example.com` (5).
+
+`[read]` **Kein Anzeigefehler, ein Datenstand.**
+
+#### Und die Grenze war zuerst falsch gewaehlt
+
+`[cmd]` **Mit `limit 20` waren nur ZWEI Module sichtbar.** Gemessen
+ueber `row_number() over (order by occurred_at desc)`:
+
+    nutrition    ab Zeile  1
+    supplements  ab Zeile  2
+    recovery     ab Zeile 23
+    training     ab Zeile 30
+
+`[read]` **Bei 20 waeren zwei der vier Module strukturell
+unsichtbar** — die Kachel saehe nach *,,nur Ernaehrung und
+Supplemente"* aus, obwohl vier Module Zeilen haben. **Grenze auf 40,
+mit dieser Messung als Begruendung im Code.**
+
+### A3 — E-72: keine nackte Null
+
+**8 Kacheln / 7 mit Daten / 1 mit benanntem Leerhinweis.**
+
+`[cmd]` **`Bestleistungen`:** *,,Keine Bestleistung erfasst."* —
+sagt, WAS leer ist.
+
+`[cmd]` **Der Strom selbst traegt einen eigenen Leerfall**, der auf
+diesem Konto nicht greift: er nennt `activity_stream` beim Namen und
+erklaert, dass der Strom aus den Modulen entsteht.
+
+### A4 — E-69: Referenz unter der Linie
+
+**8 angebunden / 7 Referenzen** — **vorher 5.**
+
+`[cmd]` **Der Mockup fuehrt SIEBEN Kacheln**, unter der Linie
+standen fuenf. **`Macros · today` und `PR watch` fehlten**, obwohl
+beide oben ein angebundenes Gegenstueck haben
+(`Makros · heute`, `Bestleistungen`). **Ergaenzt.**
+
+`[cmd]` **Und die `Activity`-Referenz war eine Inhaltsangabe:**
+*,,Der Entwurf zeigt sechs Eintraege aus vier Modulen."* — **die
+Attrappe der Attrappe.** **Jetzt die sechs Zeilen des Mockups**, mit
+Zeit, Farbe, Text und Meta.
+
+`[read]` **Acht oben gegen sieben unten ist richtig:** vier Kacheln
+(`Ziele`, `Recovery`, `Medical`, `Supplements`) sind ueber den
+Mockup hinaus gebaut, und `Today's flow` hat oben kein
+Gegenstueck.
+
+### A5 — `summary_de` gegen DE/EN/TH
+
+**1 von 3 Sprachen. Es fehlen `summary_en` und `summary_th`.**
+
+`[cmd]` **Die Sicht traegt genau eine Sprachspalte.** **Und der
+Vergleich zeigt, dass es anders geht:**
+
+    public.activity_stream.summary_de              nur DE
+    supplements.supplement_evidence.summary_de     DE
+    supplements.supplement_evidence.summary_en     EN
+    supplements.supplement_evidence.summary_th     TH
+
+`[cmd]` **Der deutsche Text steht als Literal IN der
+Sichtdefinition** — `'Mahlzeit erfasst: '`, `'Wasser erfasst: '`,
+`'Fruehstueck'`, `'Mittagessen'`, `'Abendessen'`, `'Snack'`.
+
+`[read]` **Damit ist es keine Anzeigefrage:** EN und TH brauchen
+eine Aenderung an der Sicht, also an `supabase/`. **Gemessen und
+gemeldet, nicht geloest** — wie beauftragt.
+
+`[cmd]` **Die Kachel sagt es selbst**, damit die Luecke am Schirm
+sichtbar bleibt: *,,Die Texte kommen als `summary_de` aus der Sicht
+— nur auf Deutsch, auch in EN und TH."*
+
+### A6 — G-374: haelt eine Spalte den Zyklusbeginn?
+
+**Nein.** `[cmd]` **Alle 17 Spalten von `stack_items` gepruefet:**
+
+    id, stack_id, supplement_id, custom_name, notes, dose,
+    dose_unit, frequency, timing, cycling, stock_remaining,
+    stock_unit, low_stock_threshold, sort_order, is_active,
+    added_at, updated_at
+
+`[cmd]` **Keine haelt einen Zyklusbeginn.** `added_at` ist der
+Anlagezeitpunkt der ZEILE — wer einen Posten Wochen spaeter auf
+Cycling stellt, haette damit einen falschen Start.
+
+`[cmd]` **`cycling` ist `jsonb` mit genau einem CHECK:**
+*,,ist NULL oder ein Objekt"* — **keine Schluesselvorgabe.**
+`[cmd]` **Und NULL Zeilen sind belegt**, also gibt auch der Bestand
+nichts vor.
+
+**Vorschlag — nicht gebaut, `supabase/` gehoert Codex:**
+
+`[read]` **Der kleinste Weg ist ein Schluessel IM vorhandenen
+`cycling`-Objekt**, kein neue Spalte:
+
+    {"on_weeks": 8, "off_weeks": 4, "started_on": "2026-09-08"}
+
+`[read]` **Warum dort und nicht als Spalte:** `cycling` ist schon
+da, hat schon einen CHECK, und ein Zyklus ohne die drei Werte
+zusammen ergibt ohnehin keinen Sinn. **Eine eigene Spalte waere ein
+zweiter Ort fuer dieselbe Sache.**
+
+`[read]` **Bis dahin bleibt Cycling ungebaut** — die Kachel sagt
+den Grund an der Stelle, statt ein *,,Wk 5 of 8"* zu erfinden
+(C-378).
+
+### Ein Befund an meiner eigenen Arbeit aus G-373
+
+`[cmd]` **Die Timing-Auswahl fuehrte `night`** — **den Wert kennt
+`stack_items_timing_check` nicht.** Wer ihn gewaehlt haette, waere
+beim Speichern abgewiesen worden. **Und drei erlaubte Werte
+fehlten:** `bedtime`, `with_meal`, `any`.
+
+`[cmd]` **Berichtigt aus dem CHECK** und am Schirm gegengeprueft:
+`with_meal` gewaehlt, gespeichert, **in der Datenbank angekommen.**
+
+`[read]` **Eine Auswahlliste ist eine Zusage** — was darin steht,
+muss die Datenbank annehmen. **Aus dem Kopf geschrieben statt
+gemessen; das war der Fehler.**
+
+### Was gebaut wurde
+
+    lib/dashboard/lesen.ts                ladeAktivitaetsstrom
+    v2/dashboard/aktivitaetsstrom.tsx     NEU, die Kachel
+    v2/dashboard/page.tsx                 laedt und zeigt
+    v2/dashboard/entwurf-rest.tsx         Activity portiert,
+                                          Macros + PR watch ergaenzt
+    v2/supplements/stack-bearbeiten.tsx   Timing aus dem CHECK
+
+### Pruefstand
+
+    tsc --noEmit                gruen
+    next lint                   gruen
+    encoding-pruefen            20.923 Dateien, sauber
+    pnpm --filter web test      1503 pass, 0 fail
+
+### Was unberuehrt blieb
+
+`[cmd]` **`dev@lumeos.app`: 1.657 Zeilen — unveraendert.**
+`[read]` **Der Strom ist eine SICHT** — es gibt dort nichts zu
+schreiben.
+
+**Nichts in `supabase/`. Nicht committet, nicht gestaget.**
 
 ## Abnahme
 

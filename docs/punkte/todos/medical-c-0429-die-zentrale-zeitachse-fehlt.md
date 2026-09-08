@@ -109,3 +109,21 @@ die Diagnose modellieren.**
 History-Reiter bleibt als Attrappe sichtbar, mit dem Grund
 *,,widerspricht dem Modulvertrag"*** — **verworfen, nicht
 vergessen.**
+
+## Aufgeloest durch E-74, 2026-09-08
+
+Tom: *,,wir sind kein arzt, aber wir koennen daten fuer den user
+sammeln die er zur verfuegung stellt."*
+
+`[read]` **Die Frage im Abschnitt oben ist beantwortet: ja.**
+
+`[read]` **Der Vertrag verbietet, dass LumeOS diagnostiziert** —
+**nicht, dass der Nutzer eintraegt, was ein Arzt gesagt hat.**
+
+`[cmd]` **Erfassbar: Diagnosen, Behandlungen, Operationen,
+Zeitachse, Dokumente, Termine.**
+
+`[cmd]` **Jeder Eintrag traegt seine Herkunft** — **damit ist die
+Wiedergabe ein Zitat, keine Aussage.**
+
+`[read]` **Der Punkt ist damit ein Bauauftrag, kein Befund.**
