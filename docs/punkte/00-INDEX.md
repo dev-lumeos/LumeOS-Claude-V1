@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
+| `todos` | 209 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 320 |
-| **gesamt** | **532** |
+| `erledigt` | 321 |
+| **gesamt** | **533** |
 
 ## medical — 43
 
@@ -292,9 +291,9 @@
 | `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | C-425, G-372 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 63
+## supplements — 64
 
-### beauftragbar — 62
+### beauftragbar — 63
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -339,6 +338,7 @@
 | `C-365` | befund | niedrig | [Peptidsequenzen haben kein Ziel im Schema](erledigt/supplements-c-0365-peptidsequenzen-haben-kein-ziel-im-schema.md) | erledigt | — | — |
 | `C-393` | befund | mittel | [`substance_group_memberships` ist leer](erledigt/supplements-c-0393-substance-group-memberships-ist-leer.md) | erledigt | — | — |
 | `C-423` | feature | mittel | [`stack_templates` hat null Zeilen](erledigt/supplements-c-0423-stack-templates-hat-null-zeilen.md) | erledigt | — | — |
+| `C-427` | befund | hoch | [zwei Wortschaetze fuer `goal`](todos/supplements-c-0427-zwei-wortschaetze-fuer-goal.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](todos/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | offen | — | — |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -358,7 +358,7 @@
 | `G-275` | feature | hoch | [die Supplement-Tagesbilanz anzeigen](erledigt/supplements-g-0275-die-tagesbilanz-anzeigen.md) | erledigt | — | — |
 | `G-281` | feature | mittel | [der Treffergrund in der Katalogsuche](erledigt/supplements-g-0281-der-treffergrund-in-der-katalogsuche.md) | erledigt | — | — |
 | `G-369` | feature | niedrig | [*Session today* braucht den Sitzungsbezug](todos/supplements-g-0369-session-today-braucht-den-sitzungsbezug.md) | offen | — | — |
-| `G-372` | feature | hoch | [die Stack-Kachel kann nichts](laufend_claudecode/supplements-g-0372-die-stack-kachel-kann-nichts.md) | laeuft (claudecode) | — | — |
+| `G-372` | feature | hoch | [die Stack-Kachel kann nichts](erledigt/supplements-g-0372-die-stack-kachel-kann-nichts.md) | erledigt | — | C-427 |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
