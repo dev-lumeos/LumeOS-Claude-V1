@@ -3,7 +3,7 @@ CREATE OR REPLACE FUNCTION recovery.card_read_all(p_user_id uuid)
 RETURNS TABLE (card_key text, has_data boolean, rows jsonb, empty_hint text)
 LANGUAGE sql STABLE SECURITY INVOKER SET search_path = '' AS $$
   WITH data AS (
-    SELECT 'pending_actions'::text k, coalesce(jsonb_agg(to_jsonb(a) ORDER BY a.alert_date DESC), '[]'::jsonb) v FROM recovery.overtraining_alerts a WHERE a.user_id=p_user_id AND a.status='active'
+    SELECT 'pending_actions'::text k, coalesce(jsonb_agg(to_jsonb(a) ORDER BY a.alert_date DESC), '[]'::jsonb) v FROM recovery.overtraining_alerts a WHERE a.user_id=p_user_id AND a.status <> 'resolved'
     UNION ALL SELECT 'overtraining_watch', coalesce(jsonb_agg(to_jsonb(a) ORDER BY a.alert_date DESC), '[]'::jsonb) FROM recovery.overtraining_alerts a WHERE a.user_id=p_user_id
     UNION ALL SELECT 'overtraining_signals', coalesce(jsonb_agg(jsonb_build_object('alert_date',a.alert_date,'signals',a.signals) ORDER BY a.alert_date DESC), '[]'::jsonb) FROM recovery.overtraining_alerts a WHERE a.user_id=p_user_id
     UNION ALL SELECT 'overtraining_severity', coalesce(jsonb_agg(jsonb_build_object('alert_date',a.alert_date,'severity',a.severity) ORDER BY a.alert_date DESC), '[]'::jsonb) FROM recovery.overtraining_alerts a WHERE a.user_id=p_user_id
@@ -25,8 +25,16 @@ CREATE TABLE IF NOT EXISTS goals.phase_transition_responses (
 );
 ALTER TABLE goals.phase_transition_responses ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS phase_transition_responses_own ON goals.phase_transition_responses;
-CREATE POLICY phase_transition_responses_own ON goals.phase_transition_responses FOR ALL TO authenticated USING ((SELECT auth.uid())=user_id) WITH CHECK ((SELECT auth.uid())=user_id);
+DROP POLICY IF EXISTS phase_transition_responses_select_own ON goals.phase_transition_responses;
+DROP POLICY IF EXISTS phase_transition_responses_insert_own ON goals.phase_transition_responses;
+DROP POLICY IF EXISTS phase_transition_responses_update_own ON goals.phase_transition_responses;
+DROP POLICY IF EXISTS phase_transition_responses_delete_own ON goals.phase_transition_responses;
+CREATE POLICY phase_transition_responses_select_own ON goals.phase_transition_responses FOR SELECT TO authenticated USING ((SELECT auth.uid())=user_id);
+CREATE POLICY phase_transition_responses_insert_own ON goals.phase_transition_responses FOR INSERT TO authenticated WITH CHECK ((SELECT auth.uid())=user_id);
+CREATE POLICY phase_transition_responses_update_own ON goals.phase_transition_responses FOR UPDATE TO authenticated USING ((SELECT auth.uid())=user_id) WITH CHECK ((SELECT auth.uid())=user_id);
+CREATE POLICY phase_transition_responses_delete_own ON goals.phase_transition_responses FOR DELETE TO authenticated USING ((SELECT auth.uid())=user_id);
 GRANT SELECT, INSERT ON goals.phase_transition_responses TO authenticated;
+GRANT ALL ON goals.phase_transition_responses TO service_role;
 
 CREATE OR REPLACE FUNCTION goals.phase_transition_recommendation(p_user_id uuid, p_as_of date DEFAULT CURRENT_DATE)
 RETURNS TABLE (phase_id uuid, recommended_next text, transition_reason text)
