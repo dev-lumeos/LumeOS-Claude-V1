@@ -9,6 +9,8 @@ kind_von: G-387
 entscheidung: E-74
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 9afaa804
 beruehrt:
   tabellen: [coach.relationships]
 zahlen:
@@ -112,3 +114,20 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Abnahme
+
+**2026-09-08, mit C-438 abgenommen: die Quelle ist der Seed.**
+
+`[cmd]` **`testdaten-einspielen.ts:3158` legt *Coach Seed* an,
+Zeile 3268 schreibt den Wert bei drei Beziehungen** ? **die auf
+*vor 120 bzw. 45 Tagen* datiert sind.**
+
+> *,,Es behauptet rueckwirkend den heutigen Seed-Namen."*
+
+`[cmd]` **`dev` bleibt ehrlich: 6 Beziehungen, 0 Snapshots, kein
+Backfill.**
+
+`[read]` **Was daraus folgt, geht als C-439 weiter** ?
+**`coach_profiles` entsteht nur durch Seeds, und C-428 verlangt
+eines.**

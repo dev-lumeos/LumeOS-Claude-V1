@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-09: 171 Funktionen, 413 Policies, 570 CHECKs, 13 Sichten.**
+`[cmd]` **Stand 2026-09-09: 173 Funktionen, 414 Policies, 575 CHECKs, 13 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -14,7 +14,9 @@ ob man sie rufen kann.**
 
 | Modul | Name | Argumente | Art |
 |---|---|---|---|
+| coach | accept_pending_invite | p_token text | Funktion |
 | coach | bestaetige_aktion | p_action_id uuid | Funktion |
+| coach | create_pending_invite | p_client_email text, p_expires_at timestamp with time zone, p_initial_autonomy smallint DEFAULT 2 | Funktion |
 | coach | create_relationship_invite | p_coach_id uuid, p_note text DEFAULT NULL::text | Funktion |
 | coach | darf_nutrition_plan_aendern | p_client uuid | Funktion |
 | coach | hat_sicht | p_client uuid, p_modul text, p_stufe text DEFAULT 'full'::text | Funktion |
@@ -140,8 +142,8 @@ ob man sie rufen kann.**
 | public | is_admin |  | Funktion |
 | public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein | text, text | Funktion |
-| public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
+| public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
 | public | set_limit | real | Funktion |
 | public | show_limit |  | Funktion |
@@ -247,6 +249,11 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | coach | pending_actions | pending_actions_module_check | CHECK ((module = ANY (ARRAY['nutrition'::text, 'training'::text, 'recovery'::text, 'goals'::text, 'supplements'::text, 'medical':: |
 | coach | pending_actions | pending_actions_not_self_ck | CHECK ((coach_id <> client_id)) |
 | coach | pending_actions | pending_actions_status_check | CHECK ((status = ANY (ARRAY['pending'::text, 'confirmed'::text, 'rejected'::text, 'expired'::text, 'cancelled'::text]))) |
+| coach | pending_invites | pending_invites_coach_display_name_check | CHECK ((btrim(coach_display_name) <> ''::text)) |
+| coach | pending_invites | pending_invites_drafts_object_ck | CHECK (((jsonb_typeof(permission_draft) = 'object'::text) AND (jsonb_typeof(autonomy_draft) = 'object'::text))) |
+| coach | pending_invites | pending_invites_email_normalized_check | CHECK (((email_normalized = lower(btrim(email_normalized))) AND (email_normalized ~ '^[^[:space:]@]+@[^[:space:]@]+$'::text))) |
+| coach | pending_invites | pending_invites_state_ck | CHECK ((((status = 'pending'::text) AND (token_hash IS NOT NULL) AND (accepted_at IS NULL) AND (accepted_by IS NULL) AND (accepted |
+| coach | pending_invites | pending_invites_status_check | CHECK ((status = ANY (ARRAY['pending'::text, 'accepted'::text, 'expired'::text]))) |
 | coach | permission_change_log | permission_change_log_change_kind_check | CHECK ((change_kind = ANY (ARRAY['insert'::text, 'update'::text, 'delete'::text]))) |
 | coach | relationship_change_log | relationship_change_log_change_kind_check | CHECK ((change_kind = ANY (ARRAY['insert'::text, 'update'::text, 'delete'::text]))) |
 | coach | relationships | relationships_active_ck | CHECK (((status <> 'active'::text) OR (started_at IS NOT NULL))) |
@@ -824,6 +831,7 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | coach | pending_actions | pending_actions_delete | DELETE | (( SELECT auth.uid() AS uid) = coach_id) |
 | coach | pending_actions | pending_actions_insert | INSERT | (( SELECT auth.uid() AS uid) = coach_id) |
 | coach | pending_actions | pending_actions_select | SELECT | ((( SELECT auth.uid() AS uid) = coach_id) OR (( SELECT auth.uid() AS uid) = client_id)) |
+| coach | pending_invites | pending_invites_select_own | SELECT | (( SELECT auth.uid() AS uid) = coach_id) |
 | coach | permission_change_log | permission_change_log_insert | INSERT | ((( SELECT auth.uid() AS uid) = changed_by) AND ((( SELECT auth.uid() AS uid) = coach_id)  |
 | coach | permission_change_log | permission_change_log_select | SELECT | ((( SELECT auth.uid() AS uid) = coach_id) OR (( SELECT auth.uid() AS uid) = client_id)) |
 | coach | relationship_change_log | relationship_change_log_insert | INSERT | ((( SELECT auth.uid() AS uid) = changed_by) AND ((( SELECT auth.uid() AS uid) = coach_id)  |

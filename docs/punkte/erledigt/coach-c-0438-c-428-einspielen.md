@@ -9,6 +9,8 @@ kind_von: C-428
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 9afaa804
 beruehrt:
   tabellen: [coach.relationships]
 zahlen:
@@ -96,4 +98,70 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  pending_invites live, leer, RLS aktiv
+        anon: kein SELECT, kein EXECUTE
+    A2  Durchlauf mit ROLLBACK: 0->1, 6->7, 4->5, 4->5, 0->1
+        danach wieder 0 / 6 / 4 / 4 / 0
+    A3  Sicherung 1.293.994 B, SHA-256
+    A4  die drei Namen kommen aus dem Seed, Zeile 3268
+    A5  coach_profiles entsteht nur durch Seed und Fixtures
+    A6  Punktelauf gruen, 561 Punkte, 4,0 s
+
+`[cmd]` **Selbst gemessen: Tabelle da, 0 Zeilen, Policy
+`pending_invites_select_own`.** `[cmd]` **Und nach dem Rollback
+unveraendert: 6 Beziehungen, 0 Profile, 0 Snapshots.**
+
+### Der pgcrypto-Fund ist die wertvollste Stelle
+
+`[cmd]` **`dev` hat `pgcrypto` in `extensions`, die Aufbaukette in
+`public`** ? **selbst nachgemessen: `extensions`.**
+
+`[read]` **Er hat es ueber `pg_extension` aufgeloest, statt einen
+Pfad zu raten** ? **und der enge `SECURITY DEFINER`-Suchpfad
+bleibt.**
+
+`[read]` **Ein fest verdrahteter Pfad haette auf `dev` funktioniert
+und aus der Baseline nicht** ? **oder umgekehrt.**
+
+`[cmd]` **Jetzt baut die Vollkette aus beidem.**
+
+### A2 — der Durchlauf mit Rollback
+
+`[read]` **Er hat auf `dev` gemessen, was nur mit echten Daten
+messbar ist** ? **und nichts hinterlassen.**
+
+`[cmd]` **Auch das transaktionale `coach_profiles` 0 -> 1 -> 0.**
+
+`[read]` **Dieselbe Machart wie C-435** ? **sie hat sich zweimal
+bewaehrt.**
+
+### C-437 — beantwortet, und die Antwort ist unbequem
+
+`[cmd]` **`testdaten-einspielen.ts:3158` legt *Coach Seed* an,
+Zeile 3268 schreibt denselben Wert bei drei Beziehungen.**
+
+`[cmd]` **Die sind auf *vor 120 bzw. 45 Tagen* datiert.**
+
+> *,,Es behauptet rueckwirkend den heutigen Seed-Namen."*
+
+`[read]` **Er hat es NICHT geaendert** ? **richtig, das ist eine
+Entscheidung.**
+
+`[cmd]` **Und `dev` bleibt ehrlich: 6 Beziehungen, 0 Snapshots,
+kein Default, kein Backfill.**
+
+### Der Befund, der weitergeht
+
+`[cmd]` **`coach_profiles` entsteht nur durch Seed und
+Test-Fixtures.** `[cmd]` **Und C-428 verlangt ein aktives
+Profil.**
+
+`[read]` **Ein Coach meldet sich an und kann niemanden einladen** ?
+**der Weg ist fuer echte Nutzer verschlossen.**
+
+**Als C-439.**
+
+**Abgenommen.**
+
