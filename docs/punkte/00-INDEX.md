@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 203 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 357 |
-| **gesamt** | **564** |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 360 |
+| **gesamt** | **565** |
 
 ## medical — 47
 
@@ -177,7 +177,7 @@
 | `G-108` | befund | mittel | [Die Filter des Nutrients-Tabs](erledigt/nutrition-g-0108-die-filter-des-nutrients-tabs.md) | erledigt | — | G-260 |
 | `G-112` | befund | mittel | [Der Food-DB-Filter laesst nur einen Wert zu](erledigt/nutrition-g-0112-der-food-db-filter-laesst-nur-einen-wert-zu.md) | erledigt | — | — |
 | `G-116` | entscheidung | mittel | [Generelle Ausschluesse bewerten mit 0, statt zu filtern](erledigt/nutrition-g-0116-generelle-ausschluesse-bewerten-mit-0-statt-zu-filtern.md) | erledigt | — | C-347 |
-| `G-126` | befund | mittel | [Drei Reste aus G-122](laufend_claudecode/nutrition-g-0126-drei-reste-aus-g-122.md) | laeuft (claudecode) | — | C-210, C-211, C-212 |
+| `G-126` | befund | mittel | [Drei Reste aus G-122](erledigt/nutrition-g-0126-drei-reste-aus-g-122.md) | erledigt | — | C-210, C-211, C-212 |
 | `G-134` | feature | mittel | [Die vier Filtergruppen gibt es in den Daten nicht](erledigt/nutrition-g-0134-die-vier-filtergruppen-gibt-es-in-den-daten-nicht.md) | erledigt | — | C-390 |
 | `G-136` | feature | mittel | [Zwei Kartenzuordnungen sind Auslegung](erledigt/nutrition-g-0136-zwei-kartenzuordnungen-sind-auslegung.md) | erledigt | — | — |
 | `G-137` | befund | mittel | [Acht Karten — die alten Ansichtsschluessel verfallen](erledigt/nutrition-g-0137-acht-karten-die-alten-ansichtsschluessel-verfallen.md) | erledigt | — | — |
@@ -296,9 +296,9 @@
 | `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | C-425, G-372 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 67
+## supplements — 68
 
-### beauftragbar — 66
+### beauftragbar — 67
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -345,7 +345,7 @@
 | `C-423` | feature | mittel | [`stack_templates` hat null Zeilen](erledigt/supplements-c-0423-stack-templates-hat-null-zeilen.md) | erledigt | — | — |
 | `C-427` | befund | hoch | [zwei Wortschaetze fuer `goal`](todos/supplements-c-0427-zwei-wortschaetze-fuer-goal.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
-| `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](laufend_claudecode/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | laeuft (claudecode) | — | G-388 |
+| `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
 | `G-118` | befund | mittel | [Der Extended-Code liegt im Buendel](todos/supplements-g-0118-der-extended-code-liegt-im-buendel.md) | offen | — | — |
 | `G-150` | entscheidung | mittel | [Die Volltextsuche findet ueber Erklaertexte](todos/supplements-g-0150-die-volltextsuche-findet-ueber-erklaertexte.md) | offen | — | — |
@@ -366,7 +366,8 @@
 | `G-372` | feature | hoch | [die Stack-Kachel kann nichts](erledigt/supplements-g-0372-die-stack-kachel-kann-nichts.md) | erledigt | — | C-427, G-373 |
 | `G-373` | feature | mittel | [Stacks editieren und anlegen](erledigt/supplements-g-0373-stacks-editieren-und-anlegen.md) | erledigt | — | G-374 |
 | `G-374` | feature | niedrig | [Zyklen brauchen eine eigene Eingabe](erledigt/supplements-g-0374-zyklen-brauchen-eine-eingabe.md) | erledigt | — | — |
-| `G-388` | feature | mittel | [`InjektionsKarte` und die Reste](laufend_claudecode/supplements-g-0388-injektionskarte-ohne-aufrufer.md) | laeuft (claudecode) | — | — |
+| `G-388` | feature | mittel | [`InjektionsKarte` und die Reste](erledigt/supplements-g-0388-injektionskarte-ohne-aufrufer.md) | erledigt | — | G-389 |
+| `G-389` | feature | hoch | [der Schreibweg fuer Injektionen](laufend_claudecode/supplements-g-0389-der-schreibweg-fuer-injektionen.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1

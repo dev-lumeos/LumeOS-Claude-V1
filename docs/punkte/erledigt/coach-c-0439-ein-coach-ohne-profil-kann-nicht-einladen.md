@@ -10,7 +10,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
 erledigt: 2026-09-08
-commit: OFFEN
+commit: c3cd8fe5
 beruehrt:
   tabellen: [coach.relationships]
 zahlen:

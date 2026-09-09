@@ -10,6 +10,8 @@ kinder: []
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: c3cd8fe5
 beruehrt:
   tabellen: []
   dateien: []
@@ -51,3 +53,13 @@ zahlen: null
 
 **Mitbeauftragt mit G-388 am 2026-09-08.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-08, mit G-388 abgenommen.**
+
+`[cmd]` **`InjektionsKarte` hat jetzt einen Aufrufer** ? **die
+Rotationskarte in `tab-injektionen.tsx`.**
+
+`[cmd]` **Und die lokale Zweitzeichnung ist entfernt: 563 -> 513
+Zeilen.**
