@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-443
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/coach/ansicht.tsx
@@ -115,3 +117,108 @@ die eigentliche Arbeit ist** (G-388, A4).
 
 `[cmd]` **Und die Zahlen daraus beantworten die offene Frage aus
 C-443:** **was vom Altrepo bleibt und was nicht.**
+
+## Auftrag
+
+Tom, 2026-09-08: *,,coach mockup erstellen, ueberlagernd mit dem
+bestehenden was schon gebaut ist."*
+
+**Beauftragt am 2026-09-08.**
+
+### Was das heisst
+
+`[read]` **Nicht ersetzen** ? **die 73 Vorlagenkarten neben das
+legen, was heute steht.**
+
+`[cmd]` **Heute: 85 Karten, 59 Attrappen** ? **69 Prozent.**
+
+`[read]` **Nach dem Muster von E-69: die Mockup-Referenz unter der
+Trennlinie** ? **die Karten der Vorlage sichtbar, mit der Frage,
+ob es sie schon gibt.**
+
+### 1 · Die acht Vorlagen lesen
+
+`[cmd]` **`docs/spezifikation/10-plattform/design-system/theme-v1/`:**
+
+    module-coach.jsx                    61 KB, 23 Karten
+    module-coach-extras.jsx             48 KB, 10
+    module-coach-gaps.jsx               35 KB, 14
+    module-coach-athlete.jsx            31 KB, 10
+    module-coach-portal-v2.jsx          23 KB,  6
+    module-coach-portal-workflows.jsx   21 KB,  6
+    module-coach-programs.jsx           13 KB,  4
+    module-coach-meta.jsx               12 KB,  0
+
+`[read]` **Der Orchestrator hat sie nie erwaehnt** ? **in keinem
+Auftrag.**
+
+### 2 · Je Karte die Dreiteilung
+
+    angebunden    eine Tabelle traegt sie
+    baubar        Tabelle da, Leseweg fehlt
+    blockiert     keine Tabelle -- und WELCHE fehlt
+
+`[cmd]` **Der Injektionsplaner hat gezeigt, dass diese Dreiteilung
+die Arbeit ist** (G-388, A4).
+
+`[cmd]` **`docs/ssot/00-MODULTABELLEN.md` sagt, was es gibt** ?
+**15 Coach-Tabellen, 53 Zeilen, 5 leer.**
+
+### 3 · Wo die Vorlage und das Altrepo sich decken
+
+    Rule canvas                  -> CoachRuleBuilder.tsx  30 KB
+    Plan library, Programs,
+    Delivery, Live assignment    -> ProgramBuilder.tsx    49 KB
+    Adherence forecast,
+    Risk indicators,
+    Active interventions         -> buddyWatcher.ts       39 KB
+    The ladder,
+    Athletes by autonomy level   -> AUTONOMY_ARCHITECTURE.md:165
+    Coach efficiency,
+    Business impact              -> research/b2b/  50 KB
+
+`[read]` **Melde je Karte, ob das Altrepo etwas dazu hat** ?
+**nicht uebernehmen, nur nennen.**
+
+`[cmd]` **`docs/lehren/altrepo-karte.md` sagt, wo was liegt.**
+
+### 4 · Was schon steht, bleibt
+
+`[cmd]` **`apps/web/v2/coach`: 20 Dateien, 333 KB** ? **darunter
+`rechte-echt.tsx` und `uebersicht-echt.tsx`.**
+
+`[read]` **Die angebundenen Karten nicht anfassen** ? **die
+Referenz kommt darunter.**
+
+### Abnahmebedingungen
+
+    A1  die 73 Karten der Vorlage, je zugeordnet:
+        angebunden / baubar / blockiert. Zahlen.
+    A2  je blockierter Karte: WELCHE Tabelle fehlt.
+    A3  je Karte: hat das Altrepo etwas dazu? Mit Datei.
+    A4  die Mockup-Referenz unter der Linie, E-69.
+        Bildschirmfoto.
+    A5  E-72: keine nackte Null in den bestehenden Karten.
+    A6  was heute angebunden ist, bleibt angebunden.
+        Zahl vorher/nachher.
+    A7  1545 Tests bleiben gruen.
+
+### Was nicht zu tun ist
+
+**Nichts anbinden** ? **dieser Auftrag zeigt, was es braucht.**
+**Nichts in `packages/ui`** ? **melden.**
+**Nichts in `supabase/`** ? **Codex arbeitet an C-456.**
+**Nachweise auf `test-user@lumeos.local`.**
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server
+
+`[cmd]` **NIE `start`, `neustart`, `aufraeumen`.**
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
-| `laufend_claudecode` | 2 |
+| `todos` | 206 |
+| `laufend_codex` | 1 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 379 |
 | **gesamt** | **589** |
 
@@ -349,7 +350,7 @@
 | `C-453` | befund | hoch | [Peptide haben keinen Injektionsweg](erledigt/supplements-c-0453-peptide-haben-keinen-injektionsweg.md) | erledigt | — | C-454 |
 | `C-454` | befund | hoch | [der Nutzer waehlt seine Punkte](todos/supplements-c-0454-der-nutzer-waehlt-seine-punkte.md) | offen | — | — |
 | `C-455` | feature | hoch | [der Injektionsplaner, vollstaendig](todos/supplements-c-0455-der-injektionsplaner-vollstaendig.md) | offen | — | — |
-| `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](todos/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | offen | — | — |
+| `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](laufend_codex/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | laeuft (codex) | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -502,7 +503,7 @@
 | `G-324` | befund | hoch | [der Browser ruft den alten Schreibweg](erledigt/coach-g-0324-der-browser-ruft-den-alten-schreibweg.md) | erledigt | — | — |
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | C-426 |
 | `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](erledigt/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | erledigt | — | — |
-| `G-391` | feature | hoch | [das Coach-Grundgeruest aus den Vorlagen](todos/coach-g-0391-das-grundgeruest-aus-den-vorlagen.md) | offen | — | — |
+| `G-391` | feature | hoch | [das Coach-Grundgeruest aus den Vorlagen](laufend_claudecode/coach-g-0391-das-grundgeruest-aus-den-vorlagen.md) | laeuft (claudecode) | — | — |
 
 ## quer — 134
 

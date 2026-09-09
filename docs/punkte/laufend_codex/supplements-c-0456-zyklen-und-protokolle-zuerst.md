@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: null
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [supplements.stack_items]
 zahlen:
@@ -245,3 +247,119 @@ Auftrag.**
        -- weeks_start/weeks_end fehlen in
           supplement_protocol_items, MESSEN
     4  intake_schedule aus beidem
+
+## Auftrag
+
+**Beauftragt am 2026-09-08.**
+
+`[read]` **Die Datenbank, vollstaendig** ? **nicht Tabelle fuer
+Tabelle.**
+
+### 1 · Zuerst messen, was die sechs Huellen tragen
+
+`[read]` **Sie sind alle leer, aber die Spalten stehen.**
+
+`[cmd]` **Miss je Tabelle gegen `SCHEMA_NEUAUFBAU.md:315-342` und
+`SPEC_02_ENTITIES.md`** ? **welche Spalte fehlt, welche ist
+zuviel.**
+
+`[cmd]` **Besonders `supplement_protocol_items`:** **das Altrepo
+hat `weeks_start` und `weeks_end` je Position
+(`CyclePlanner.tsx`, `PCT_TEMPLATES`)** ? **die Spaltenliste nennt
+sie nicht.**
+
+`[read]` **Ohne sie kann ein PCT-Protokoll keine Wochen
+abbilden.**
+
+### 2 · Die Grenze zwischen den zwei Zyklusorten
+
+`[cmd]` **`SPEC_02:245-247`:** `cycling` **JSONB am Stack-Eintrag,
+mit `start_date` und `current_phase`.**
+
+`[cmd]` **`SCHEMA_NEUAUFBAU:322`:** `user_supplement_cycles` **mit
+`status`, `source`.**
+
+`[cmd]` **Und `SPEC_09:168-175` rechnet aus `cycling` mit einer
+Formel** ? **ohne Tabellenzugriff.**
+
+`[read]` **Beide sind vorgesehen. Schreib die Grenze in einen
+Kommentar am Schema:**
+
+    stack_items.cycling     der laufende Zustand
+    user_supplement_cycles  der Verlauf mit Ereignissen
+
+`[read]` **Und miss, ob `stack_items.cycling` heute
+`current_phase` traegt** ? **G-374 hat `started_on` ergaenzt, die
+Spec nennt beides.**
+
+### 3 · Die Schreibwege
+
+**a** ? **einen Zyklus starten, pausieren, beenden.**
+
+`[cmd]` **`status`: `active | paused | stopped`** ? **je Wechsel
+eine Zeile in `supplement_cycle_events`.**
+
+`[read]` **Atomar** ? **derselbe Anspruch wie bei
+`active_goal_create` (C-425) und `book_wallet_purchase`
+(C-419).**
+
+**b** ? **ein Protokoll anlegen.**
+
+`[cmd]` **Die drei Vorlagen aus dem Altrepo:**
+
+    Standard Nolva/Clomid   Nolvadex 40/20, Clomid 50/25
+    Nolvadex Only (6 Wo)    40 mg Wo 1-2, 20 mg Wo 3-6
+    HCG + Nolva             HCG 1500 IU Wo 1-2,
+                            Nolvadex 40/20 Wo 3-6
+
+`[read]` **Als Seed oder als Vorlage-Tabelle** ? **miss, was
+`SCHEMA_NEUAUFBAU` dazu sagt (es nennt *,,zwei Vorlagen"* in
+Zeile 122).**
+
+`[read]` **Und `supplement_protocols.schedule` ist JSONB** ?
+**miss, ob die Wochen dorthin gehoeren oder an die Position.**
+
+**c** ? **`intake_schedule` fuellen.**
+
+`[cmd]` **0 Zeilen heute.** `[read]` **Was wann genommen wird** ?
+**aus Stack, Zyklusphase und Protokoll.**
+
+### 4 · Was NICHT gebaut wird
+
+`[cmd]` **`marketplace_product_id`** ? **`SCHEMA_NEUAUFBAU:337`:
+der Vorgaenger hatte es, hier nicht (G-164).**
+
+`[read]` **Und keine Injektionsrotation** ? **das ist C-455 und
+folgt danach.**
+
+### Abnahmebedingungen
+
+    A1  je der sechs Huellen: Spalten gegen die Spec.
+        Zahl: vorhanden / fehlend / zuviel.
+    A2  weeks_start und weeks_end: da oder gebaut?
+    A3  die Grenze im Schema kommentiert, mit Fundstelle.
+    A4  ein Zyklus gestartet, pausiert, beendet.
+        Zahlen je Schritt, mit Ereignis. ROLLBACK.
+    A5  ein Protokoll aus einer Vorlage angelegt.
+        Zeilen vorher/nachher.
+    A6  intake_schedule aus Stack und Zyklus.
+        Zahl: Eintraege fuer einen Tag.
+    A7  RLS je neue Funktion, beide Richtungen.
+    A8  Sicherung, Vollkette, Punktelauf.
+
+### Was nicht zu tun ist
+
+`apps/` nicht anfassen ? **Claude Code arbeitet an G-391.**
+**Keine Injektionsrotation.**
+**Keine Wochenzahl erfinden** ? **die drei Vorlagen stehen im
+Altrepo, mehr nicht.**
+**Den Dev-Server nicht anfassen.**
+Nicht committen, nicht stagen, nicht pushen.
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
