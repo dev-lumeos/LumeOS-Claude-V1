@@ -41,6 +41,15 @@ statt nachgesehen, und wurde fuenfmal von Agenten berichtigt.**
 
 ## 3 · Das Vorgaengerrepo ? `referenz/lumeos-2026/`
 
+**Die vollstaendige Karte: `docs/lehren/altrepo-karte.md`.**
+
+`[read]` **Dort steht, WAS es gibt** ? **fuenf Apps, zwoelf
+Fachmodule, `docs/modules/` mit je sieben Dateien nach gleichem
+Schema, 259 Forschungsdateien.**
+
+`[read]` **Wer wissen will, ob es etwas gibt, sieht dort nach** ?
+**statt zu suchen.**
+
 `[cmd]` **2.863 Markdown-Dateien, 19.654 ts/tsx.**
 
 `[read]` **ACHTUNG: `git grep` findet dort NICHTS** ? **das

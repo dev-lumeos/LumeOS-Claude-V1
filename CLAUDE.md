@@ -186,6 +186,14 @@ ist nicht getrackt.** `[cmd]` **Mit dem Dateisystem suchen.**
 **Die Quellen mit Pfad und Zeilenzahl:
 `docs/lehren/quellen-pflicht.md`.**
 
+**Was im Vorgaengerrepo liegt: `docs/lehren/altrepo-karte.md`** ?
+**fuenf Apps, zwoelf Fachmodule, `docs/modules/<modul>/` mit je
+sieben Dateien (API, COMPONENTS, DATABASE, FEATURES, MIGRATION,
+README, RESEARCH), 259 Forschungsdateien.**
+
+`[read]` **Durchhangeln statt suchen** ? **ein `ls` sieht, was ein
+`grep` nicht findet.**
+
 `[cmd]` **Am 2026-09-08 lag die Antwort dreimal bereit und wurde
 dreimal nicht gelesen** ? **C-426, C-441, C-443.**
 
