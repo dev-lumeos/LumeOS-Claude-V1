@@ -9,6 +9,8 @@ kind_von: C-438
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: OFFEN
 beruehrt:
   tabellen: [coach.relationships]
 zahlen:
@@ -112,4 +114,76 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  beide Wege scheitern sauber, kein leerer Name
+    A2  die Spec-Stelle existiert doch -- SPEC_08:163
+    A3  Variante c, mit Begruendung
+    A4  der Seed: die drei Zeilen sind NICHT gleich
+    A5  Vollkette 169 Schritte, 321,9 s
+
+`[cmd]` **Selbst gemessen: `dev` unveraendert bei 0 Profilen, 6
+Beziehungen, 0 Invites.**
+
+### A2 berichtigt mich
+
+`[read]` **Ich schrieb in den Auftrag: *,,SPEC_02:39 nennt
+`display_name`, aber nicht den Erzeuger ? miss, ob eine andere
+Spec-Stelle es sagt."***
+
+`[cmd]` **Sie sagt es. `SPEC_08_IMPORT_PIPELINE.md:163`:**
+
+    ## Phase 3: Coach Onboarding
+    async function onboardCoach(userId, profileData) {
+
+`[cmd]` **Und `SPEC_07_API.md:10`:** *,,Require `role = coach` in
+JWT + aktive Coach-Profil"*.
+
+`[read]` **Zwei Stellen, beide klar** ? **ich habe an der falschen
+gesucht.**
+
+### A1 — sauber gescheitert ist besser als leer gefuellt
+
+`[cmd]` **`create_relationship_invite`: `P0002: Aktives
+Coach-Profil nicht gefunden`.** `[cmd]`
+**`create_pending_invite`: `active_coach_profile_not_found`.**
+
+`[read]` **Kein leerer Name, kein Platzhalter** ? **der Weg sagt,
+was fehlt.**
+
+`[cmd]` **Transaktional gemessen, vorher wie nachher 0 / 6 / 0.**
+
+### A4 ist der scharfsinnigste Fund
+
+`[read]` **Ich hatte den Seed als EINEN Fall behandelt.**
+`[read]` **Er hat ihn geteilt:**
+
+`[cmd]` **Zwei `active`-Zeilen, auf vor 120 bzw. 45 Tagen
+datiert** ? **ihr Snapshot soll NULL bleiben.**
+
+`[cmd]` **Eine offene `invited`-Einladung ohne `started_at`** ?
+**sie BRAUCHT einen Snapshot.**
+
+`[cmd]` **Selbst nachgemessen, die C-268-Bedingung:**
+
+    relationships_invited_coach_name_ck
+    CHECK (status <> 'invited' OR coach_display_name IS NOT NULL)
+
+`[read]` **Die eine darf den heutigen Namen tragen, weil sie HEUTE
+offen ist.** `[read]` **Die beiden anderen nicht, weil sie von
+damals sind.**
+
+`[read]` **Haette ich meinen Auftrag befolgt** ? *,,der Seed setzt
+den Snapshot NICHT"* ? **waere die Kette an dieser Bedingung
+gescheitert.**
+
+### A3 — Variante c, und der Nachsatz zaehlt
+
+> *,,Die beiden Invite-RPCs bleiben danach korrekt als
+> Schutzschicht."*
+
+`[read]` **Ein Onboarding-Schritt ersetzt die Pruefung nicht** ?
+**er macht sie nur seltener noetig.**
+
+**Abgenommen, C-440 beauftragt.**
+
