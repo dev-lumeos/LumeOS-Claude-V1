@@ -108,3 +108,80 @@ Erlaubnisliste.**
 
 `[read]` **Die Antwort auf C-426 liegt dort vermutlich vollstaendig
 vor** ? **fuer EINE Achse, aber ausgearbeitet.**
+
+## Die Oberflaeche, gemessen 2026-09-08
+
+Tom: *,,die coach plattform war sehr weit ausgebaut, auch die ui ?
+und wenn ich bei unserer variante reinschaue wird mir uebel."*
+
+`[cmd]` **Der Vergleich:**
+
+    Altrepo   78 Bauteile, 428 KB
+      src/modules/human-coach/components   27 Dateien
+      src/modules/coach/components         42
+      src/components/coach                  9
+
+    LumeOS    23 Dateien, 75 KB (apps/coach)
+
+`[cmd]` **Die groessten dort:**
+
+    49 KB  ProgramBuilder.tsx
+    39 KB  ClientDetail.tsx
+    35 KB  BuddyDashboard.tsx
+    30 KB  CoachRuleBuilder.tsx
+    27 KB  CoachDashboard.tsx
+    26 KB  KnowledgeManager.tsx
+    24 KB  CoachRoutineBuilder.tsx
+    23 KB  EnhancedCoachDashboard.tsx
+    15 KB  CoachOverridePanel.tsx
+    12 KB  CoachAutonomyConfig.tsx
+
+`[cmd]` **Die groessten hier:**
+
+    11 KB  src/lib/daten.ts
+    10 KB  src/app/athlet/[id]/page.tsx
+     7 KB  tab-checkins.tsx
+     4 KB  tab-uebersicht.tsx
+     4 KB  tab-autonomie.tsx
+     3 KB  tab-alerts.tsx
+     3 KB  tab-athleten.tsx
+
+`[read]` **Ein Coach-Portal, dessen groesste Oberflaeche 10 KB
+hat** ? **gegen einen 49-KB-Programmbauer.**
+
+`[cmd]` **Und `apps/web/v2/coach` traegt 378 KB, davon 83 KB
+Mockup-Referenzen** ? **Attrappen, keine Funktion.**
+
+## Was dort war und hier fehlt
+
+`[read]` **Nach Dateinamen, nicht nach Inhalt gelesen** ? **das ist
+der naechste Schritt:**
+
+    ProgramBuilder        ein Programm bauen
+    CoachRoutineBuilder   Routinen bauen
+    CoachRuleBuilder      Regeln bauen -- 30 KB, und in
+                          apps/coach/app nochmal
+    KnowledgeManager      Wissen verwalten
+    CoachOverridePanel    Buddy uebersteuern
+    BuddyCommandCenter    Buddy steuern
+    BuddyWatcher          Buddy ueberwachen (39 KB API)
+    executionEngine       Handlungen ausfuehren (53 KB API)
+
+`[cmd]` **LumeOS hat davon: `pending_actions` mit
+`bestaetige_aktion` und `lehne_aktion_ab`.**
+
+`[read]` **Ein Coach kann heute zustimmen oder ablehnen** ? **er
+kann nichts bauen.**
+
+## Die Reihenfolge, die daraus folgt
+
+`[read]` **Nicht: eine Kachel nach der anderen anbinden.**
+
+`[read]` **Sondern: lesen, was dort steht, und entscheiden, was
+davon bleibt.**
+
+`[cmd]` **`docs/modules/human-coach/COMPONENTS.md` im Altrepo, 37
+KB** ? **die Bauteile sind dort beschrieben.**
+
+`[read]` **Und `specs/coach-buddy-killer-feature.md`, 61 KB** ?
+**der groesste Text im ganzen Altrepo.**
