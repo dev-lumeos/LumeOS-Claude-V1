@@ -275,3 +275,71 @@ verletzungsnahe Injektion passt in keinen davon.**
 `oral`, `intramuscular`, `intranasal,subcutaneous` nebeneinander,
 die Spec will `oral | injection_im | injection_subq | topical |
 nasal`.**
+
+## Gelesen 2026-09-08 — die Spec definiert alles
+
+Tom: *,,dann lies die specs und altes repo."*
+
+`[read]` **Der Orchestrator hat vier Runden lang gefragt, was
+definiert ist. Es steht seit Wochen da.**
+
+### `SPEC_06_DATABASE_SCHEMA.md:104-105`
+
+    route TEXT NOT NULL
+      CHECK (route IN ('oral','injection_im','injection_subq',
+                       'topical','nasal','sublingual'))
+
+`[cmd]` **Sechs Werte, verbindlich.**
+
+`[cmd]` **Live: `supplement_pharmacology.route` hat KEINEN
+CHECK** ? **und traegt `intranasal,subcutaneous` als eine
+Zeichenkette.**
+
+### `SPEC_08_IMPORT_PIPELINE.md:161-221`
+
+`[cmd]` **Vier Substanzen als Vorlage, je mit Weg:**
+
+    Testosterone Enanthate   AAS       injection_im
+    Ostarine (MK-2866)       SARM      oral
+    BPC-157                  Peptide   injection_subq
+    Semaglutide              GLP1      injection_subq
+
+`[cmd]` **Und BPC-157 traegt die Warnung:** *,,Oral und SubQ
+verfuegbar"* ? **genau Toms Punkt, in der Spec.**
+
+`[cmd]` **Semaglutide:** `injection_subq`, `0.25`?`2.4 mg`,
+`weekly`, Halbwertszeit `168 h`.
+
+`[read]` **Die Datenbank sagt `oral`** ? **der Import hat die Spec
+nicht befolgt.**
+
+### Die Kategorien
+
+`[cmd]` **`SPEC_06:97`:** `'GLP1','Support','Other'` **? es gibt
+eine Kategorienliste mit CHECK.**
+
+`[read]` **Damit ist auch die Zuordnung Substanz -> Weg nicht
+frei** ? **`AAS` ist `injection_im`, `Peptide` und `GLP1` sind
+`injection_subq`.**
+
+## Was daraus wirklich folgt
+
+`[read]` **KEINE Recherchewelle noetig.**
+
+    1  den CHECK auf supplement_pharmacology.route nachziehen
+       -- sechs Werte aus SPEC_06:105
+    2  die kommaseparierten Werte zerlegen
+       -- 'intranasal,subcutaneous' ist kein gueltiger Wert
+    3  die 93 Peptide auf injection_subq setzen
+       -- SPEC_08 nennt es je Kategorie, nicht je Substanz
+    4  Semaglutid und Tirzepatid berichtigen
+       -- beide oral, beide falsch
+
+`[read]` **Punkt 3 ist der Kern:** **der Weg haengt an der
+KATEGORIE, nicht an jeder einzelnen Substanz.**
+
+`[cmd]` **93 Peptide, eine Regel** ? **statt 93 Recherchen.**
+
+`[read]` **Ausnahmen sind BPC-157 (`SubQ/Oral`) und Selank
+(`Nasal/SubQ`)** ? **die stehen in `compound-taxonomy.md` und in
+der Spec-Warnung.**
