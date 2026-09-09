@@ -7,6 +7,8 @@ angelegt: 2026-08-28
 braucht: []
 kind_von: null
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien: [docs/specs/Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md]
 zahlen: null
@@ -42,3 +44,7 @@ den heutigen Stand geprueft.** `[cmd]` **Sie kennt die Entscheidungen
 vom 27./28.08. nicht** — was sie fordert, kann inzwischen entschieden
 oder erledigt sein.
 
+## Auftrag
+
+**Mitbeauftragt mit G-224 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.

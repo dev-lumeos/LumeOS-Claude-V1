@@ -1,6 +1,6 @@
 # LumeOS — SSOT Index
 
-**Stand:** 2026-08-01
+**Stand:** 2026-09-08
 **Gilt für:** `D:\GitHub\LumeOS-Claude-V1`
 
 ---
@@ -17,6 +17,30 @@ ausser der Code selbst widerspricht.
 2. `docs/ssot/`
 3. `docs/specs/` (beschreibt das Ziel, nicht den Ist-Zustand)
 4. alles andere
+
+---
+
+## Erzeugte Dateien ? nicht von Hand aendern
+
+`[cmd]` **Drei Dateien werden aus der Datenbank und den
+Punktdateien erzeugt:**
+
+| Datei | Inhalt | Erzeuger |
+|---|---|---|
+| `00-MODULTABELLEN.md` | Tabellen, Spalten, Zeilen, Datum | `tools/ssot-modultabellen.mjs` |
+| `00-SCHEMA.md` | Funktionen, Policies, CHECKs, Sichten | `tools/ssot-schema.mjs` |
+| `00-ABGENOMMEN.md` | was wann abgenommen wurde | `tools/ssot-nachtragen.mjs` |
+
+`[read]` **Erst dort nachsehen, dann messen** ? **heisst die
+Tabelle so? Gibt es den Schreibweg? Was erlaubt der CHECK?**
+
+`[cmd]` **Nach jeder Abnahme mit Schema- oder Datenwirkung neu
+erzeugen** (A-74).
+
+`[read]` **Was sie NICHT sagen: wozu etwas da ist, und was bewusst
+nicht gebaut wurde.** `[cmd]` **Das ist Handarbeit** ? **und genau
+dort entstanden am 08.09. fuenf Falschaussagen** (G-382 bis
+G-386).
 
 ---
 

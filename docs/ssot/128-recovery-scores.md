@@ -49,7 +49,7 @@ Stand: 2026-08-20
 
 `[read]` C-124 muss E5 Modalitaeten-Bonuswerte und E8 Motivationsschwelle liefern.
 
-`[cmd]` **Berichtigt 2026-09-08 (G-386):** `overtraining_alerts` **wurde seit C-421 gebaut.** Nicht gebaut sind `hrv_readings`, `sleep_data` und der Stress-Schnitt.ore. Das ist absichtlich: HRV und Schlafdaten haengen am Wearable-Import, Overtraining braucht Wochenverlauf und die offene Recherche, Stress folgt spaeter auf derselben Struktur.
+`[cmd]` **Berichtigt 2026-09-08 (G-386):** `overtraining_alerts` **wurde seit C-421 gebaut.** Nicht gebaut sind `hrv_readings`, `sleep_data` und der Stress-Score. Das ist absichtlich: HRV und Schlafdaten haengen am Wearable-Import, Overtraining braucht Wochenverlauf und die offene Recherche, Stress folgt spaeter auf derselben Struktur.
 <!-- @abwesend recovery.hrv_readings @quelle C-421 -->
 <!-- @abwesend recovery.sleep_data @quelle C-421 -->
 
