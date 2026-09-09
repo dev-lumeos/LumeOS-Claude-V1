@@ -5667,6 +5667,11 @@
     },
     {
       "schema": "coach",
+      "name": "onboard_coach",
+      "schritt": "440_schema"
+    },
+    {
+      "schema": "coach",
       "name": "create_pending_invite",
       "schritt": "428_schema"
     },

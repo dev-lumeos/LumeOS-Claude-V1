@@ -3259,9 +3259,9 @@ VALUES (
 -- ------------------------------------------------------------------
 -- F-07: Beziehungen, Rechte fuer den zweiten Athleten, Check-ins,
 -- Nachrichten und Alerts. Drei Athleten in drei Zustaenden:
---   tom.seed   aktiv, differenzierte Rechte (C-147)
---   max.seed   aktiv, nur summary auf Training/Recovery
---   sarah.seed eingeladen, noch keine Rechte
+--   tom.seed   aktiv, historisch ohne nacherfundenen Namenssnapshot (C-440)
+--   max.seed   aktiv, historisch ohne nacherfundenen Namenssnapshot
+--   sarah.seed eingeladen, noch keine Rechte, aktueller Coach-Namenssnapshot
 -- Daten relativ zu current_date — der Vorrat altert nicht (C-78-Regel).
 -- ------------------------------------------------------------------
 
@@ -3276,7 +3276,7 @@ VALUES
   'active',
   ${lit(COACH_USER.id)}::uuid,
   'F-07 Seed: aktive Beziehung seit 120 Tagen',
-  ${lit(COACH_USER.displayName)},
+  NULL,
   now() - interval '120 days',
   ${lit(COACH_USER.id)}::uuid
 ),
@@ -3287,7 +3287,7 @@ VALUES
   'active',
   ${lit(COACH_USER.id)}::uuid,
   'F-07 Seed: aktive Beziehung seit 45 Tagen',
-  ${lit(COACH_USER.displayName)},
+  NULL,
   now() - interval '45 days',
   ${lit(COACH_USER.id)}::uuid
 ),
@@ -4897,6 +4897,8 @@ DECLARE
   v_alerts integer;
   v_coach_profiles integer;
   v_named_invites integer;
+  v_historical_empty integer;
+  v_historical_named integer;
 BEGIN
   SELECT count(*) INTO v_relationships FROM coach.relationships WHERE coach_id = ${lit(COACH_USER.id)}::uuid;
   SELECT count(*) INTO v_rel_logs FROM coach.relationship_change_log WHERE coach_id = ${lit(COACH_USER.id)}::uuid;
@@ -4908,7 +4910,20 @@ BEGIN
   SELECT count(*) INTO v_named_invites
   FROM coach.relationships
   WHERE coach_id = ${lit(COACH_USER.id)}::uuid
+    AND status = 'invited'
     AND coach_display_name = ${lit(COACH_USER.displayName)};
+  SELECT count(*) INTO v_historical_empty
+  FROM coach.relationships
+  WHERE coach_id = ${lit(COACH_USER.id)}::uuid
+    AND status = 'active'
+    AND started_at IS NOT NULL
+    AND coach_display_name IS NULL;
+  SELECT count(*) INTO v_historical_named
+  FROM coach.relationships
+  WHERE coach_id = ${lit(COACH_USER.id)}::uuid
+    AND status = 'active'
+    AND started_at IS NOT NULL
+    AND coach_display_name IS NOT NULL;
 
   IF v_relationships <> 3 THEN
     RAISE EXCEPTION 'F-07: % Beziehungen statt 3', v_relationships;
@@ -4916,9 +4931,10 @@ BEGIN
   IF v_rel_logs < 3 THEN
     RAISE EXCEPTION 'F-07: % Beziehungs-Logzeilen statt >= 3', v_rel_logs;
   END IF;
-  IF v_coach_profiles <> 1 OR v_named_invites <> 3 THEN
-    RAISE EXCEPTION 'F-07/C-268: Coach-Profile %, benannte Beziehungen % statt 1/3',
-      v_coach_profiles, v_named_invites;
+  IF v_coach_profiles <> 1 OR v_named_invites <> 1
+     OR v_historical_empty <> 2 OR v_historical_named <> 0 THEN
+    RAISE EXCEPTION 'F-07/C-268/C-440: Coach-Profile %, benannte offene Einladungen %, historische leere/benannte Snapshots %/% statt 1/1/2/0',
+      v_coach_profiles, v_named_invites, v_historical_empty, v_historical_named;
   END IF;
   IF v_templates <> 1 OR v_checkins <> 3 OR v_messages <> 3 OR v_alerts <> 3 THEN
     RAISE EXCEPTION 'F-07: Vorlagen %, Check-ins %, Nachrichten %, Alerts % — erwartet 1/3/3/3',

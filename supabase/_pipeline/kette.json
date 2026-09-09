@@ -1632,6 +1632,16 @@
         "151",
         "156"
       ]
+    },
+    {
+      "id": "440_schema",
+      "path": "supabase/migrations/20260909160000_c440_coach_onboarding.sql",
+      "kind": "sql",
+      "creates": "C-440: explizites, auth-gebundenes Coach-Onboarding vor der ersten Einladung; keine Profilautomatik bei Kontoanlage",
+      "depends_on": [
+        "156",
+        "428_schema"
+      ]
     }
   ]
 }
