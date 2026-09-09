@@ -9,6 +9,8 @@ kind_von: C-268
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: cd006c98
 beruehrt:
   tabellen: [coach.relationships]
 zahlen:
@@ -149,4 +151,66 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  unregistrierte E-Mail: pending_invites 0 -> 1
+    A2  Token nur als SHA-256-Hash, 64 Hexzeichen
+    A3  Annahme: je 1 Beziehung, Permissions, Autonomy
+        Invite accepted, Token-Hash NULL
+    A4  erzwungener Fehler: Beziehung 0, Invite weiter pending
+        MIT Hash, keine Autonomy-Zeile
+    A5  fremder Coach sieht 0 Einladungen
+    A6  C-171 bleibt offen, mit Messung
+    A7  Vollkette 169 Schritte, 340,0 s
+
+`[cmd]` **Selbst gemessen: nicht live, und C-171 stimmt genau** ?
+`symptoms`, `symptom_biomarker_map`, `appointments`,
+`health_timeline` **da,** `ocr_extracted` **und** `correlations`
+**fehlen.**
+
+### A4 ist die beste Stelle
+
+`[cmd]` **Erzwungener Fehler NACH dem Beziehungs-Insert:**
+
+    Beziehung        0
+    Invite           weiter pending, MIT Hash
+    Autonomy-Zeile   keine
+
+`[read]` **Der Hash ist der Punkt.** `[read]` **Waere er beim
+Fehlschlag geloescht worden, waere die Einladung unbrauchbar
+geblieben** ? **eine Zeile, die *pending* sagt und keinen Token
+mehr hat.**
+
+`[read]` **Ein halber Rueckbau ist schlimmer als keiner.**
+
+### A2 — der Hash statt des Tokens
+
+`[cmd]` **SHA-256, 64 Hexzeichen.**
+
+`[read]` **Wer die Datenbank liest, kann keine Einladung
+annehmen** ? **das war die Bedingung, und sie ist erfuellt.**
+
+`[cmd]` **Und bei der Annahme wird er NULL** ? **eine angenommene
+Einladung laesst sich nicht zweimal annehmen.**
+
+### Und `client_id` blieb NOT NULL
+
+`[read]` **Dein eigener Befund aus C-268 hat sich durchgesetzt:**
+**nullable machen haette nicht gereicht.**
+
+`[cmd]` **Stattdessen eine eigene Tabelle** ? **eine Einladung ist
+etwas anderes als eine Beziehung.**
+
+### Eine Berichtigung
+
+`[cmd]` **`7b3d7e55` war kein fremder Prozess** ? **das war der
+Orchestrator, ein `docs/`-Commit einer Punktdatei.**
+
+`[cmd]` **Deine zwei Dateien liegen unangetastet offen.**
+
+`[read]` **Aber die Beobachtung war richtig und wichtig** ? **wer
+waehrend seiner Arbeit einen fremden Commit sieht, soll es
+melden.**
+
+**Abgenommen, Einspielen als C-438 beauftragt.**
+

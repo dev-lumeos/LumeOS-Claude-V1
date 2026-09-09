@@ -8,8 +8,6 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-08
 beruehrt:
   tabellen: []
   dateien: []
@@ -38,3 +36,17 @@ zahlen: null
 
 **Mitbeauftragt mit C-428 am 2026-09-08.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Gemessen am 2026-09-08 mit C-428: bleibt offen
+
+`[cmd]` **Vorhanden:** `symptoms`, `symptom_biomarker_map`,
+`appointments`, `health_timeline`, **Dokument- und Originalpfad,
+Diagnoseweg, Einheitenpfad.**
+
+`[cmd]` **Es fehlen:** `medical.ocr_extracted` **und**
+`medical.correlations`.
+
+`[read]` **Selbst nachgemessen, beide bestaetigt.**
+
+`[read]` **Von neun Konstanten sind sieben inzwischen gebaut** ?
+**der Punkt schrumpft, statt zu verschwinden.**
