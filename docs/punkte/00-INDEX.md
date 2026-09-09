@@ -6,10 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 205 |
-| `laufend_codex` | 2 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 351 |
-| **gesamt** | **559** |
+| `laufend_codex` | 3 |
+| `erledigt` | 352 |
+| **gesamt** | **560** |
 
 ## medical — 47
 
@@ -444,7 +443,7 @@
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 34
+## coach — 35
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -470,6 +469,7 @@
 | `C-434` | feature | mittel | [die Coach-Sicht auf die neuen Tabellen](erledigt/coach-c-0434-die-coach-sicht-auf-die-neuen-tabellen.md) | erledigt | — | C-435 |
 | `C-435` | feature | mittel | [C-434 einspielen](erledigt/coach-c-0435-c-434-einspielen.md) | erledigt | — | C-436 |
 | `C-436` | befund | mittel | [der Test scheitert am Schutztrigger](erledigt/coach-c-0436-der-test-scheitert-am-schutztrigger.md) | erledigt | — | — |
+| `C-437` | befund | hoch | [der Snapshot wird nicht gefuellt](laufend_codex/coach-c-0437-der-snapshot-wird-nicht-gefuellt.md) | laeuft (codex) | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](erledigt/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | erledigt | — | C-381 |
@@ -614,7 +614,7 @@
 | `G-384` | feature | hoch | [die Modulbeschreibungen nachziehen](erledigt/quer-g-0384-die-modulbeschreibungen-nachziehen.md) | erledigt | — | G-385 |
 | `G-385` | feature | hoch | [`@abwesend`-Marken in die SSOT](erledigt/quer-g-0385-abwesend-marken-in-die-ssot.md) | erledigt | — | G-386 |
 | `G-386` | feature | hoch | [die SSOT in den Abwesenheitswaechter](erledigt/quer-g-0386-die-ssot-in-den-abwesenheitswaechter.md) | erledigt | — | G-387 |
-| `G-387` | feature | hoch | [die neun Marken in die SSOT](laufend_claudecode/quer-g-0387-die-neun-marken-in-die-ssot.md) | laeuft (claudecode) | — | — |
+| `G-387` | feature | hoch | [die neun Marken in die SSOT](erledigt/quer-g-0387-die-neun-marken-in-die-ssot.md) | erledigt | — | C-437 |
 
 ## market — 1
 
