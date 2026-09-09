@@ -49,6 +49,11 @@ test('C-434: full sieht neue Medical-Zeilen, summary und Storage bleiben gesperr
     DELETE FROM medical.user_medications WHERE user_id = '${CLIENT}'::uuid;
     DELETE FROM medical.user_conditions WHERE user_id = '${CLIENT}'::uuid;
     DELETE FROM medical.lab_reports WHERE id = '${REPORT}'::uuid;
+    -- Die festen C-434-IDs machen den Test wiederholbar. Er loescht nur
+    -- das Objekt, das er unten erneut als Nachweis fuer den privaten
+    -- Originalpfad anlegt. Der Storage-Schutz bleibt aktiv; diese Weiche
+    -- gilt ausschliesslich fuer diese eine psql-Setup-Sitzung.
+    SELECT set_config('storage.allow_delete_query', 'true', false);
     DELETE FROM storage.objects WHERE bucket_id = 'medical-originals' AND name = '${CLIENT}/${REPORT}.pdf';
     ALTER TABLE coach.client_permissions DISABLE TRIGGER client_permissions_change_log;
     DELETE FROM coach.client_permissions WHERE coach_id IN ('${FULL_COACH}'::uuid, '${SUMMARY_COACH}'::uuid);
