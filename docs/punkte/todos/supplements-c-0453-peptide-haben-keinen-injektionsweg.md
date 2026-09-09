@@ -108,3 +108,94 @@ koennte mehr haben.**
 `[read]` **Und was das Altrepo dazu sagt** ?
 `referenz/lumeos-2026/research/enhanced-supplements/`, **13
 Dateien, 95 KB.**
+
+## Berichtigt 2026-09-08 — der Katalog ist dokumentiert
+
+Tom: *,,wir haben den katalog neu aufgebaut, sollte auch
+dokumentiert sein."*
+
+`[read]` **Er ist es. Der Orchestrator hat
+`SCHEMA_NEUAUFBAU.md` in der Trefferliste gesehen und NICHT
+geoeffnet.**
+
+`[cmd]` **`docs/specs/Supplements/SCHEMA_NEUAUFBAU.md`, 470
+Zeilen, *,,gegen vier Quellen geprueft"*.**
+
+### Was oben falsch stand
+
+`[read]` **`enhanced_substances` ist keine Luecke** ? **sie wurde
+BEWUSST abgelehnt** (Zeile 345):
+
+> *,,Das ist eine zweite Substanztabelle ? genau der Fehler, den
+> dieses Dokument behebt. Eine Gruppe ist keine eigene Tabelle."*
+
+`[cmd]` **Und Zeile 368 sagt, wohin `route` gehoert:**
+`supplement_pharmacology` ? **genau dort liegt es.**
+
+`[read]` **Der Orchestrator hat es als Fehler gemeldet, wo eine
+Entscheidung stand.**
+
+## Der echte Befund
+
+`[cmd]` **`supplement_groups`: drei Gruppen.**
+
+    supplement   312
+    enhanced     191
+    peptide       93
+
+`[cmd]` **93 Peptide im Katalog.**
+
+`[cmd]` **Und ihr Injektionsweg:**
+
+    Semaglutid    route = oral
+    Tirzepatid    route = oral
+    die uebrigen 91   kein Eintrag
+
+`[read]` **Zwei haben einen Weg, und BEIDE sind falsch.**
+
+Tom: *,,praktisch alle peptides werden entweder in den bauch oder
+bei bpc157/tb500 an die problemstellen unter die haut injiziert."*
+
+`[cmd]` **Semaglutid und Tirzepatid sind GLP-1-Agonisten** ?
+**subkutan, Bauch, Oberschenkel oder Oberarm.**
+
+`[read]` **`oral` ist bei beiden schlicht falsch.**
+
+## Was daraus folgt
+
+**1** ? **`supplement_pharmacology.route` fuer 93 Peptide fuellen.**
+
+`[cmd]` **Die Spec kennt vier Werte** (`Injection Planner:16`):
+`oral | injection_im | injection_subq | topical | nasal`.
+
+`[cmd]` **Und heute stehen dort `oral`, `intramuscular`,
+`intranasal,subcutaneous`** ? **drei Schreibweisen fuer dasselbe.**
+
+**2** ? **Die Zwei berichtigen.**
+
+**3** ? **Und BPC-157 / TB-500 sind ein Sonderfall.**
+
+Tom: *,,an die problemstellen unter die haut."*
+
+`[read]` **Das ist keine feste Stelle** ? **die Injektion folgt der
+Verletzung, nicht einer Rotation.**
+
+`[read]` **Der Injektionsplaner kann das nicht abbilden** ? **er
+kennt 16 feste Orte.**
+
+`[read]` **Miss, ob die Spec dazu etwas sagt** ? **und wenn nicht,
+ist es eine Entscheidung: eine freie Stelle, oder gar keine
+Rotation fuer diese Mittel.**
+
+## Eine Recherchewelle
+
+Tom: *,,dann muessen wir nochmal eine recherchewelle machen."*
+
+`[cmd]` **Vorhanden:**
+
+    docs/kimi_research/supplement_performance_database/
+    referenz/lumeos-2026/research/enhanced-supplements/  95 KB
+    referenz/lumeos-2026/research/supplements/          312 KB
+
+`[read]` **Erst messen, was davon Wege nennt** ? **bevor neu
+recherchiert wird.**
