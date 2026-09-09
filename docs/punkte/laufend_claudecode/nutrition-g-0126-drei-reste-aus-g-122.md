@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-122
 kinder: []
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: []
   dateien: []
@@ -44,3 +46,8 @@ zahlen: null
   **Zu klaeren:** Bleibt es weg, oder kommt eine zweite Quelle dazu?
   `[cmd]` **BLS ist als alleinige Quelle festgelegt** — das waere eine
   Produktentscheidung.
+
+## Auftrag
+
+**Mitbeauftragt mit G-388 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.

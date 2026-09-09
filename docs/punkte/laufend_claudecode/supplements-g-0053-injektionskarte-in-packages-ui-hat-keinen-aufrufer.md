@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-45
 kinder: []
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: []
   dateien: []
@@ -29,3 +31,8 @@ zahlen: null
   die fehlenden Felder und den Injections-Tab als Aufrufer, **oder sie
   faellt weg.** Ein Baustein ohne Aufrufer wird beim naechsten Mal ein
   zweites Mal gebaut — **das ist bereits passiert.**
+
+## Auftrag
+
+**Mitbeauftragt mit G-388 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.

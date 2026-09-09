@@ -385,4 +385,78 @@ deine.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  die MealCam-Freigabe liegt nirgends
+    A2  die zwei Endpunkte existieren nicht -- kein A-71
+    A3  9065 Zeilen / 9065 vergleichbar / 0 veraltet
+    A4  gebaut ohne neuen Endpunkt, am Schirm belegt
+    A5  17 Kacheln / 10 mit Daten / 3 Leerhinweis / 0 nackte Null
+    A6  Linie da, 17 oben, 10 Referenzen
+
+`[cmd]` **Selbst gemessen: `training_consent` 0 Treffer,
+`meal_items` 9065, veraltet 0.**
+
+### A2 — die Unterscheidung ist nicht kosmetisch
+
+`[read]` **Ich hatte A-71 vermutet.**
+
+`[cmd]` **Er hat es widerlegt: `recalculate` kommt zweimal in
+`apps/web/src` vor, beide in `recovery`.**
+
+> *,,A-71 heisst, der Weg existiert und hat keinen Aufrufer; hier
+> wurde er nie gebaut."*
+
+`[read]` **Beim ersten fehlt eine Zeile, beim zweiten ein
+Auftrag.**
+
+`[cmd]` **Geplant als `nutrition-recalculate-v1`,
+`NUTRITION_WORKORDER_PLAN_V1.md:102`.**
+
+### A4 — gebaut, ohne der Spec zu folgen
+
+`[cmd]` **`PATCH /api/nutrition/diary` friert schon aus dem
+heutigen Bestand neu ein** ? **also ist Neuberechnen derselbe Ruf
+mit unveraenderter Menge.**
+
+> *,,Die zwei SPEC_10-Endpunkte waeren eine zweite Wahrheit neben
+> einem Weg, der dasselbe tut."*
+
+`[read]` **Er hat die Spec gelesen und begruendet nicht befolgt** ?
+**das ist mehr wert als Gehorsam.**
+
+`[cmd]` **Am Schirm: 1 Knopf an der Buehnenzeile, 0 danach.**
+`[cmd]` **In der Datenbank: `frozen_at` 08-01 -> 09-09, `enercc`
+unveraendert bei 877,5** ? **richtig, nur der Zeitstempel war
+alt.**
+
+### A3 — und ein Befund darunter
+
+`[cmd]` **`frozen_at` wird seit C-03 an drei Stellen geschrieben
+und nirgends gelesen** ? **A-71 auf Spaltenebene.**
+
+`[read]` **Das ist eine neue Form:** **bisher lagen Lesewege
+brach, hier eine Spalte.**
+
+### A1 — nichts erfunden
+
+`[cmd]` **Von neun MealCam-Bauteilen existiert eines, und das ist
+eine Attrappe mit drei fest verdrahteten Ergebnissen.**
+
+`[read]` **Ein Widerrufsknopf ohne Zustand waere ein Regler ohne
+Wirkung** ? **C-426.**
+
+`[read]` **G-224 bleibt offen** ? **es ist ein Codex-Auftrag.**
+
+### Und der Waechter, den er nicht geaendert hat
+
+`[cmd]` **G-348 verlangt eine einzelne Zeichenkette im `select`,
+seine Umformatierung brach das.**
+
+> *,,Ich habe meinen Code berichtigt, nicht den Waechter."*
+
+`[read]` **Die Formvorgabe war billig zu erfuellen** ? **also
+bleibt der Waechter, wie er ist.**
+
+**Abgenommen.**
+
