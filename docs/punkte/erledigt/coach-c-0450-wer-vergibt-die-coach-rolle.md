@@ -8,7 +8,7 @@ braucht: []
 kind_von: C-449
 entscheidung: E-78
 erledigt: 2026-09-08
-commit: OFFEN
+commit: 067e58b5
 beruehrt:
   tabellen: [coach.relationships]
 zahlen:
