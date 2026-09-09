@@ -7,6 +7,8 @@ angelegt: 2026-08-19
 braucht: []
 kind_von: null
 kinder: []
+erledigt: 2026-08-19
+commit: d41c841f
 entscheidung: [E-02, E-03, E-04, E-05, E-06, E-07, E-08, E-09, E-10]
 beruehrt:
   tabellen: []
@@ -52,3 +54,23 @@ zahlen: null
   `[cmd]` **Der Entwurf schlug zurueckstellen vor, Tom sagt bauen.**
   `[read]` Stress steht im Check-in und wirkt auf die Erholung — ihn
   wegzulassen hiesse, einen erfassten Wert unbenutzt zu lassen.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgetragen.**
+
+`[read]` **Der Punkt war laengst entschieden** ? **`entscheidung:`
+traegt neun ADR-Nummern, E-02 bis E-10.**
+
+`[cmd]` **Er lag trotzdem in `todos/`** ? **und der Waechter
+`sammelfragen-pruefen.mjs` zaehlte ihn als offene Buendelung.**
+
+`[read]` **Kein Sammelpunkt, der aufzuteilen waere** ? **eine
+Sitzung, in der Tom neun Fragen am Stueck beantwortet hat.**
+
+`[read]` **Die Warnung des Waechters gilt fuer OFFENE Punkte:**
+*,,wer mehrere buendelt, riskiert, dass eine Antwort auf alle
+geschrieben wird."* `[read]` **Hier steht je Frage eine eigene
+Antwort mit eigener Nummer.**
+
+**Abgenommen, nachgetragen.**

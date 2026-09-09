@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
-| `laufend_codex` | 2 |
+| `todos` | 207 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 376 |
+| `erledigt` | 378 |
 | **gesamt** | **588** |
 
 ## medical — 47
@@ -346,7 +346,7 @@
 | `C-427` | befund | hoch | [zwei Wortschaetze fuer `goal`](todos/supplements-c-0427-zwei-wortschaetze-fuer-goal.md) | offen | — | — |
 | `C-441` | befund | hoch | [sechzehn Injektionsorte statt vier](erledigt/supplements-c-0441-sechzehn-injektionsorte-statt-vier.md) | erledigt | — | C-445 |
 | `C-445` | feature | hoch | [C-441 einspielen und die Protokollspalten](erledigt/supplements-c-0445-c-441-einspielen-und-die-protokollspalten.md) | erledigt | — | C-446, C-453, C-455 |
-| `C-453` | befund | hoch | [Peptide haben keinen Injektionsweg](laufend_codex/supplements-c-0453-peptide-haben-keinen-injektionsweg.md) | laeuft (codex) | — | C-454 |
+| `C-453` | befund | hoch | [Peptide haben keinen Injektionsweg](erledigt/supplements-c-0453-peptide-haben-keinen-injektionsweg.md) | erledigt | — | C-454 |
 | `C-454` | befund | hoch | [der Nutzer waehlt seine Punkte](todos/supplements-c-0454-der-nutzer-waehlt-seine-punkte.md) | offen | — | — |
 | `C-455` | feature | hoch | [der Injektionsplaner, vollstaendig](todos/supplements-c-0455-der-injektionsplaner-vollstaendig.md) | offen | — | — |
 | `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](todos/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | offen | — | — |
@@ -416,7 +416,7 @@
 |---|---|---|---|---|---|---|
 | `A-50` | feature | mittel | [Ein `DROP COLUMN` prueft die Lesepfade nicht](erledigt/recovery-a-0050-ein-drop-column-prueft-die-lesepfade-nicht.md) | erledigt | — | — |
 | `C-111` | feature | mittel | [Recovery — neun Entscheidungen und drei Formelfehler](todos/recovery-c-0111-recovery-neun-entscheidungen-und-drei-formelfehler.md) | offen | — | — |
-| `C-123` | entscheidung | mittel | [Recovery — die neun Entscheidungen](todos/recovery-c-0123-recovery-die-neun-entscheidungen.md) | offen | — | — |
+| `C-123` | entscheidung | mittel | [Recovery — die neun Entscheidungen](erledigt/recovery-c-0123-recovery-die-neun-entscheidungen.md) | erledigt | — | — |
 | `C-127` | messung | mittel | [Drei Wearable-Spalten sind leer](erledigt/recovery-c-0127-drei-wearable-spalten-sind-leer.md) | erledigt | — | — |
 | `C-143` | messung | mittel | [Die zwei Erholungsrechnungen weichen ab](erledigt/recovery-c-0143-die-zwei-erholungsrechnungen-weichen-ab.md) | erledigt | — | — |
 | `C-166` | befund | mittel | [Recovery hat 3 Tabellen, der Entwurf 25 Konstanten](erledigt/recovery-c-0166-recovery-hat-3-tabellen-der-entwurf-25-konstanten.md) | erledigt | — | — |

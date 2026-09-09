@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **18 Punkte tragen `typ: entscheidung`
+`[cmd]` **16 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -212,97 +212,6 @@ mehr** — **es ist elf Faelle mit einem gemeinsamen Namen.**
 
 `[read]` **Zu messen waere: wie viel ist wirklich gleich** —
 **nicht wie viel sieht gleich aus.**
-
-## G-395 — sechs Injektionsorte ohne Punkt auf der Figur
-
-**Modul:** quer · **angelegt:** 2026-09-08 · **Datei:** `laufend_claudecode/quer-g-0395-sechs-injektionsorte-ohne-punkt.md`
-
-## Befund
-
-Aus G-393, Claude Code, 2026-09-08. **Selbst nachgemessen.**
-
-    delt_l/r    glute_l/r   lat_l/r   quad_l/r   -> Punkt da
-    vglute_l/r                                   -> heisst vg_l/r
-    abd_l/r     sq_delt_l/r  thigh_sq_l/r        -> kein Punkt
-
-`[cmd]` **10 von 16.**
-
-## Die vier Vorschlaege
-
-**1 ? `vg_l/r` umbenennen zu `vglute_l/r`.**
-
-`[read]` **Die Datenbank folgt der Spec** (`Injection Planner:48`),
-**die Karte ist aelter.**
-
-`[cmd]` **`KARTEN_ORTE` berichtigt es heute** ? **eine
-Umbenennung macht die Zuordnung fuer diesen Fall ueberfluessig.**
-
-**2 ? `sq_delt` und `thigh_sq` als eigene Punkte.**
-
-`[read]` **Versetzt neben den IM-Punkten** ? **subkutan wird
-flacher und weiter aussen gesetzt.**
-
-**3 ? `abd_l/r` neu.**
-
-`[cmd]` **Die Figur hat keinen Bauchpunkt** ? **er waere neu
-anzulegen.**
-
-**4 ? `pec`, `bicep`, `tricep` BLEIBEN.**
-
-`[read]` **Sie sind fuer die Erholungskarte da, nicht fuer
-Injektionen** ? **die Karte hat zwei Verwendungen.**
-
-`[read]` **Das ist der Grund, warum sie nicht *aufgeraeumt* werden
-duerfen.**
-
-## Warum es eine Entscheidung ist
-
-`[cmd]` **`packages/ui` gehoert Admin und Coach mit** ? **jede
-Aenderung dort trifft drei Anwendungen.**
-
-`[read]` **Und eine Umbenennung bricht jeden Aufrufer, der `vg_l`
-kennt** ? **miss zuerst, wie viele es sind.**
-
-## C-123 — Recovery — die neun Entscheidungen
-
-**Modul:** recovery · **angelegt:** 2026-08-19 · **Datei:** `todos/recovery-c-0123-recovery-die-neun-entscheidungen.md`
-
-## Befund
-
-(neu 2026-08-19).
-  **Von Tom entschieden am 2026-08-19.** Grundlage fuer die Bauauftraege.
-
-  | | Entscheidung |
-  |---|---|
-  | **E1** | **Nur `manual`.** *Die Wearables kommen spaeter.* |
-  | **E2** | Soreness: **nur gemeldete Muskeln > 0** |
-  | **E3** | **Sechs Readiness-Stufen**, Texte einzeln abnehmen |
-  | **E4** | **siehe unten** |
-  | **E5** | **Recherchieren** statt setzen |
-  | **E6** | **Stress-Score bauen** — nicht zurueckstellen |
-  | **E7** | **Eine Erholungskurve** |
-  | **E8** | **Recherchieren** |
-  | **E9** | Naehrstoff-Term: **Rueckfall 70**, als Rueckfall markiert |
-
-  ### E4 — die wichtigste Praezisierung
-
-  **Tom:** *„Wichtig: Wir bewerten nur Fakten. Die Empfehlung sehe ich
-  als angebracht, wenn die Datenlage dem entspricht — **aber nicht wegen
-  eines Uebertrainingssymptoms.**"*
-
-  `[read]` **Der Arzt-Hinweis haengt an mehreren Signalen ueber Zeit**,
-  nicht an einem Ausschlag. **Ein schlechter Tag ist kein Befund.**
-
-  `[cmd]` **Was daraus folgt:** Die neun Signale werden gezaehlt und
-  gezeigt — **die Empfehlung erscheint erst, wenn mehrere ueber mehrere
-  Tage zusammenkommen.** Wie viele und wie lange, muss die Recherche
-  aus E5/E8 mitbeantworten.
-
-  ### E6 weicht vom Vorschlag ab
-
-  `[cmd]` **Der Entwurf schlug zurueckstellen vor, Tom sagt bauen.**
-  `[read]` Stress steht im Check-in und wirkt auf die Erholung — ihn
-  wegzulassen hiesse, einen erfassten Wert unbenutzt zu lassen.
 
 ## C-167 — `MODALITY_BONUS` hat elf Modalitaeten, wir kennen vier
 

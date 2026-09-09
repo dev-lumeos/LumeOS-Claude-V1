@@ -184,7 +184,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `supplement_monitoring` | 14 | 46 | ? |
 | `supplement_nutrients` | 10 | 17 | ? |
 | `supplement_organ_risks` | 14 | 1450 | ? |
-| `supplement_pharmacology` | 17 | 566 | ? |
+| `supplement_pharmacology` | 17 | 577 | ? |
 | `supplement_portions` | 11 | 79 | ? |
 | `supplement_protocol_items` | 13 | 0 | ? |
 | `supplement_protocol_requirements` | 13 | 0 | ? |

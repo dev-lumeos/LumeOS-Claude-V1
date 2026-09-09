@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-09: 174 Funktionen, 414 Policies, 581 CHECKs, 13 Sichten.**
+`[cmd]` **Stand 2026-09-09: 174 Funktionen, 414 Policies, 582 CHECKs, 13 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -736,6 +736,7 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | supplement_nutrients | supplement_nutrients_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | supplement_organ_risks | supplement_organ_risks_organ_check | CHECK ((btrim(organ) <> ''::text)) |
 | supplements | supplement_organ_risks | supplement_organ_risks_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
+| supplements | supplement_pharmacology | supplement_pharmacology_route_check | CHECK (((route IS NULL) OR (route = ANY (ARRAY['oral'::text, 'injection_im'::text, 'injection_subq'::text, 'topical'::text, 'nasal |
 | supplements | supplement_pharmacology | supplement_pharmacology_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | supplement_portions | supplement_portions_amount_check | CHECK (((amount IS NULL) OR (amount > (0)::numeric))) |
 | supplements | supplement_protocol_requirements | supplement_protocol_requirements_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |

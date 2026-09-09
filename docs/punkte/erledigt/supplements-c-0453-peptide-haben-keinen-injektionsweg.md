@@ -9,6 +9,8 @@ kind_von: C-445
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: d41c841f
 beruehrt:
   tabellen: [supplements.supplements]
 zahlen:
@@ -462,4 +464,65 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  Kategorie in supplements.category_id
+        supplement 312, enhanced 191, peptide 93
+    A2  vier Werte bereinigt, 298 NULL benannt
+    A3  Mehrwege sind real -- acht Kommasequenzen
+    A4  93 Peptide auf injection_subq
+    A5  der CHECK lehnt intravenous ab
+    A6  Semaglutid und Tirzepatid berichtigt
+    A7  Sicherung 119.332 B, SHA-256
+    A8  Vollkette 176 Schritte, 353,1 s
+
+`[cmd]` **Selbst gemessen: `oral` 204, `injection_subq` 93,
+`injection_im` 10.** `[cmd]` **Und 93 Peptide tragen
+`injection_subq`.**
+
+### A3 — er hat die Frage beantwortet, nicht umgangen
+
+`[read]` **Ich hatte gefragt, ob eine Substanz wirklich zwei Wege
+hat.**
+
+`[cmd]` **Acht Kommasequenzen gemessen** ? **BPC-157 `SubQ/Oral`,
+Selank `Nasal/SubQ`.**
+
+> *,,Mehrwege sind real. Keine zweite Spalte gebaut. Vorschlag:
+> eine eigene 1:n-Route-Tabelle mit explizitem Primaerweg; bis
+> dahin ist `injection_subq` der Planner-Weg fuer Peptide."*
+
+`[read]` **Er hat gemeldet statt gebaut** ? **und einen Weg
+genannt, der heute traegt.**
+
+### Was er nicht erfunden hat
+
+`[cmd]` **298 Routen waren NULL, 30 Substanzen hatten gar keine
+Pharmacology-Zeile.**
+
+`[cmd]` **Elf Peptid-Zeilen ergaenzt** ? **die uebrigen 19 Luecken
+bleiben leer.**
+
+> *,,Die uebrigen 19 Luecken bleiben ehrlich leer."*
+
+`[read]` **Er hat 93 gefuellt, weil die Kategorie es hergab** ?
+**und die 19 nicht, weil sie keiner Kategorie folgen.**
+
+### Der Gate-Blocker war meiner
+
+`[cmd]` **`sammelfragen-pruefen.mjs` stoppte bei zwei
+Sammelpunkten, Soll 1.**
+
+`[cmd]` **`C-123` lag in `todos/` und trug bereits neun
+Entscheidungen** ? **E-02 bis E-10, seit dem 2026-08-19.**
+
+`[read]` **Kein Sammelpunkt, sondern eine Sitzung, in der Tom neun
+Fragen am Stueck beantwortet hat** ? **je Frage eine eigene
+Antwort mit eigener Nummer.**
+
+`[cmd]` **Nach `erledigt/` verschoben, Waechter wieder gruen.**
+
+`[read]` **Er hat es richtig gemeldet: *,,nicht meine Ursache"*.**
+
+**Abgenommen.**
+
