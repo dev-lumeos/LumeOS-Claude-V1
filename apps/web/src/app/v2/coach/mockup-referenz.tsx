@@ -727,20 +727,73 @@ export function CoachNotesReferenz() {
  * `[cmd]` Weder `module-coach.jsx` noch `module-coach-athlete.jsx`
  * fuehrt sie. **Beide sind nach dem Entwurf entstanden.**
  */
+// ══ G-391: der Vermerk war falsch, und zwar zweimal ════════════════
+//
+// `[cmd]` **Hier stand:** *„`invites`/`onboard` steht in keiner
+// theme-v1-Datei, es gibt keinen Soll-Stand zum Vergleich."*
+// **Beides ist gemessen widerlegt:**
+//
+//     onboard   module-coach-meta.jsx:77-147  ONBOARD_STEPS und
+//               CoachOnboardingWizard -- die QUELLE dieses Reiters,
+//               sie steht im Kopf von `tab-onboarding.tsx`
+//     invites   module-coach.jsx:249  "Pending invites"
+//               module-coach.jsx:475  "Invites"
+//
+// `[read]` **Ein Vermerk mit falschem Grund ist schlimmer als eine
+// fehlende Kachel** — er verhindert, dass jemand nachsieht. **Und in
+// einer Suche zaehlt er als Deckung.**
+//
+// `[cmd]` **Was stimmt: unter der Linie stand nichts** — die Funktion
+// setzte eine Karte, aber KEINEN `ReferenzTrenner`. **Gemessen: auf
+// beiden Reitern `Trenner=NEIN`**, waehrend die anderen acht ihn
+// haben. `[read]` **Ohne Linie gibt es kein Oben und Unten** — und
+// genau die verlangt E-69.
+
+/** Woher der Reiter stammt — gemessen, nicht behauptet. */
+const OHNE_MOCKUP: Record<string, { quelle: string, was: string }> = {
+  invites: {
+    quelle: 'theme-v1/module-coach.jsx:249, :475',
+    was: 'Die Vorlage fuehrt „Pending invites" (Uebersicht) und '
+      + '„Invites" (eigene Ansicht). Beide zeigen dieselbe Liste, die '
+      + 'dieser Reiter aus `coach.relationships` liest.',
+  },
+  onboard: {
+    quelle: 'theme-v1/module-coach-meta.jsx:77-147',
+    was: '`ONBOARD_STEPS` und `CoachOnboardingWizard` — die Quelle '
+      + 'dieses Reiters, genannt im Kopf von `tab-onboarding.tsx`. '
+      + 'Der Assistent oben IST die portierte Vorlage.',
+  },
+}
+
 export function CoachOhneMockup({ reiter }: { reiter: string }) {
+  const e = OHNE_MOCKUP[reiter]
   return (
-    <Card title="Kein Mockup-Gegenstueck"
-          sub="dieser Reiter entstand nach dem Entwurf"
-          attrappe={
-            `Attrappe — kein Mockup · wartet auf: nichts — \`${reiter}\` `
-            + 'steht in keiner theme-v1-Datei, es gibt keinen '
-            + 'Soll-Stand zum Vergleich'
-          }>
-      <div className="v2-dim" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
-        Die uebrigen Reiter zeigen unter einer Linie den Mockup-Entwurf
-        als Vergleich. Fuer diesen gibt es keinen.
-      </div>
-    </Card>
+    <>
+      {/* `[read]` **Die Linie gehoert ans Reiterende** — sie trennt
+          das Gebaute von der Referenz, und ohne sie ist die
+          Dreiteilung aus E-69 nicht ablesbar. */}
+      <ReferenzTrenner reiter={reiter} quelle={e?.quelle ?? 'kein Mockup'} />
+      <Card title="Die Vorlage ist bereits portiert"
+            sub={e ? e.quelle : 'dieser Reiter entstand nach dem Entwurf'}>
+        <div className="v2-dim" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
+          {e
+            ? (
+              <>
+                {e.was}{' '}
+                <strong>Deshalb steht hier keine zweite Fassung</strong> —
+                {' '}eine Referenz, die dasselbe zeigt wie die Kachel
+                {' '}darueber, waere eine Verdopplung, kein Vergleich.
+              </>
+            )
+            : (
+              <>
+                Fuer <span className="v2-mono">{reiter}</span> fuehrt keine
+                {' '}theme-v1-Datei ein Gegenstueck.
+              </>
+            )}
+        </div>
+      </Card>
+    </>
   )
 }
 

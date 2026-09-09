@@ -59,6 +59,8 @@ import {
   CoachMessagesReferenz, CoachNotesReferenz, CoachOhneMockup,
   FehlendeOverviewKachel, FehlendeAutonomyKacheln, FehlendeCheckinKachel,
 } from './mockup-referenz'
+// ══ G-391: die zehn Karten ohne Gegenstueck ════════════════════════
+import { CoachPortalReferenz } from './mockup-referenz-portal'
 import {
   Card, Pill, Empty, Icon, Row, Sparkline, Tabs, type TabItem,
 } from '@lumeos/ui'
@@ -209,6 +211,16 @@ export function CoachAnsicht({ stand }: { stand?: CoachRechteStand }) {
           <AthleteOverview stand={stand} />
           <FehlendeOverviewKachel />
           <CoachOverviewReferenz />
+          {/* ══ G-391: die zehn ohne Gegenstueck ═══════════════
+              `[cmd]` **Gemessen 2026-09-09: 62 Vorlagenkarten, 23
+              gebaut, 29 in `bekanntOffen` begruendet** — bleiben
+              zehn, die in keiner der beiden Listen stehen.
+              `[read]` **Auf `overview`, weil sie sechs verschiedene
+              Ansichten betreffen** und zusammen EINE Aussage
+              tragen: was noch keine Zaehlung gesehen hat. **Sie
+              einzeln ueber die Reiter zu streuen zerlegte den
+              Befund in zehn Einzelteile.** */}
+          <CoachPortalReferenz reiter="ohne Gegenstueck" />
         </>
       )}
       {tab === 'coaches' && (
