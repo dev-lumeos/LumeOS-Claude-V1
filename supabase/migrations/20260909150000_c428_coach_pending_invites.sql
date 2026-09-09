@@ -5,7 +5,7 @@
 
 BEGIN;
 
-CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA extensions;
+CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 
 CREATE TABLE IF NOT EXISTS coach.pending_invites (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -133,12 +133,12 @@ BEGIN
 
   -- Eine abgelaufene, nie angenommene Einladung ist kein offener Zugang und
   -- blockiert auch keine erneute Einladung an dieselbe Adresse.
-  UPDATE coach.pending_invites
+  UPDATE coach.pending_invites AS pi
   SET status = 'expired', token_hash = NULL, expired_at = now()
-  WHERE coach_id = v_coach_id
-    AND email_normalized = v_email
-    AND status = 'pending'
-    AND expires_at <= now();
+  WHERE pi.coach_id = v_coach_id
+    AND pi.email_normalized = v_email
+    AND pi.status = 'pending'
+    AND pi.expires_at <= now();
 
   v_autonomy := jsonb_build_object(
     'nutrition_level', p_initial_autonomy,
@@ -150,14 +150,14 @@ BEGIN
     'buddy_level', p_initial_autonomy,
     'safety_level', 1
   );
-  v_token := encode(extensions.gen_random_bytes(32), 'hex');
+  v_token := encode(public.gen_random_bytes(32), 'hex');
 
   INSERT INTO coach.pending_invites (
     coach_id, coach_display_name, email_normalized, token_hash, expires_at,
     permission_draft, autonomy_draft
   ) VALUES (
     v_coach_id, v_coach_name, v_email,
-    encode(extensions.digest(v_token, 'sha256'), 'hex'), p_expires_at,
+    encode(public.digest(v_token, 'sha256'), 'hex'), p_expires_at,
     v_permissions, v_autonomy
   ) RETURNING id INTO v_invite_id;
 
@@ -185,7 +185,7 @@ BEGIN
     RAISE EXCEPTION 'invalid_invite_token' USING ERRCODE = '22023';
   END IF;
 
-  v_token_hash := encode(extensions.digest(p_token, 'sha256'), 'hex');
+  v_token_hash := encode(public.digest(p_token, 'sha256'), 'hex');
   SELECT * INTO v_invite
   FROM coach.pending_invites
   WHERE token_hash = v_token_hash AND status = 'pending'

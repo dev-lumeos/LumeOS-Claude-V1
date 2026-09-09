@@ -107,13 +107,13 @@ test('C-428: Hash-Invite wird atomar zu Beziehung, Rechten und Autonomy', () => 
     SELECT set_config('request.jwt.claim.sub', '${FAILED_CLIENT}', true);
     CREATE TEMP TABLE c428_failure AS
       SELECT false AS raised;
-    DO $$
+    DO \$\$
     BEGIN
       PERFORM coach.accept_pending_invite((SELECT token FROM c428_failed_invite));
       UPDATE c428_failure SET raised = false;
     EXCEPTION WHEN unique_violation THEN
       UPDATE c428_failure SET raised = true;
-    END;
+    END \$\$;
     RESET ROLE;
 
     SELECT json_build_object(
@@ -173,7 +173,8 @@ test('C-428: Hash-Invite wird atomar zu Beziehung, Rechten und Autonomy', () => 
   assert.equal(result.tableExists, true)
   assert.equal(result.functionsExist, true)
   assert.equal(result.accountBeforeInvite, 0)
-  assert.equal(result.pendingAfter, result.pendingBefore + 1)
+  assert.equal(result.pendingBefore, 0)
+  assert.equal(result.pendingAfter, 1)
   assert.equal(result.normalizedEmail, true)
   assert.equal(result.tokenOnlyHashed, true)
   assert.equal(result.medicalDefaultNone, true)
