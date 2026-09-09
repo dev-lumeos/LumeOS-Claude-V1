@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 207 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 380 |
-| **gesamt** | **591** |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 382 |
+| **gesamt** | **592** |
 
 ## medical — 48
 
@@ -504,9 +504,9 @@
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | C-426 |
 | `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](erledigt/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | erledigt | — | — |
 | `G-391` | feature | hoch | [das Coach-Grundgeruest aus den Vorlagen](erledigt/coach-g-0391-das-grundgeruest-aus-den-vorlagen.md) | erledigt | — | G-397, G-398 |
-| `G-398` | befund | hoch | [die Portalkarten gehoeren nach 3220](laufend_claudecode/coach-g-0398-die-portalkarten-gehoeren-nach-3220.md) | laeuft (claudecode) | — | — |
+| `G-398` | befund | hoch | [die Portalkarten gehoeren nach 3220](erledigt/coach-g-0398-die-portalkarten-gehoeren-nach-3220.md) | erledigt | — | G-399 |
 
-## quer — 135
+## quer — 136
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -644,7 +644,8 @@
 | `G-394` | feature | mittel | [sechs Module ohne Ladezustand](laufend_claudecode/quer-g-0394-sechs-module-ohne-ladezustand.md) | laeuft (claudecode) | — | — |
 | `G-395` | entscheidung | mittel | [sechs Injektionsorte ohne Punkt auf der Figur](erledigt/quer-g-0395-sechs-injektionsorte-ohne-punkt.md) | erledigt | — | — |
 | `G-396` | feature | hoch | [die Beschriftung der Koerperkarte](erledigt/quer-g-0396-die-beschriftung-der-koerperkarte.md) | erledigt | — | — |
-| `G-397` | befund | mittel | [zwei Vorlagen kennt die Zaehlung nicht](todos/quer-g-0397-zwei-vorlagen-kennt-die-zaehlung-nicht.md) | offen | — | — |
+| `G-397` | befund | mittel | [zwei Vorlagen kennt die Zaehlung nicht](erledigt/quer-g-0397-zwei-vorlagen-kennt-die-zaehlung-nicht.md) | erledigt | — | — |
+| `G-399` | befund | mittel | [der Trenner steht zweimal, und elf Karten zaehlt niemand](todos/quer-g-0399-der-trenner-steht-zweimal.md) | offen | — | — |
 
 ## market — 3
 

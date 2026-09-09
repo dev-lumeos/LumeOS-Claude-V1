@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-391
 entscheidung: null
+erledigt: 2026-09-08
+commit: 91181203
 beruehrt:
   dateien:
     - tools/vollstaendigkeit.mjs
@@ -117,3 +119,25 @@ unvollstaendig.**
 
 `[read]` **Und Claude Codes zehn gebaute Karten pruefen** ?
 **wenn die drei darunter sind, gehoeren sie wieder weg.**
+
+## Abnahme
+
+**2026-09-08, mit G-398 entschieden.**
+
+`[cmd]` **`module-coach.jsx:948-950` zeigt `PatternAnalysisView`,
+`InterventionEngineView`, `ConsentFlowView` als Portalreiter.**
+
+> *,,Der SSOT hatte recht, `bekanntOffen` hatte recht ? nur mein
+> Schluss in G-391 war falsch."*
+
+`[read]` **Es gab nie einen Widerspruch zwischen den
+Verzeichnissen** ? **nur eine falsche Folgerung des
+Orchestrators.**
+
+`[cmd]` **Alle drei tragen jetzt ihre Referenz in `apps/coach`.**
+
+`[read]` **Was offen bleibt: `module-coach-portal-v2.jsx` und
+`-portal-workflows.jsx` in `vollstaendigkeit.mjs`** ? **elf
+Karten, die keine Zaehlung sieht.**
+
+**Als G-399.**
