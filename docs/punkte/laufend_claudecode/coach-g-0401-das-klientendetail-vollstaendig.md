@@ -20,125 +20,136 @@ zahlen:
 
 # G-401 — das Klientendetail, vollstaendig
 
-## Warum dieser eine
+## Auftrag — die Schale zuerst
 
-Tom, 2026-09-08: *,,bau mir endlich eine vernuenftige coach
-plattform."*
+Tom, 2026-09-08: *,,die coachplattform soll gleich aufgebaut sein
+wie lumeos. genau gleiche strukturen, also ja: sidenav und
+modulnav wie lumeos."*
 
-`[read]` **Sechzehn Reiter halb zu bauen war der Fehler von G-398.**
+`[read]` **Das aendert die Reihenfolge:** **erst die Schale, dann
+die Inhalte.**
 
-`[read]` **Dieser Auftrag baut EINEN vollstaendig** ? **den, an dem
-ein Coach am meisten arbeitet.**
+`[read]` **Sechzehn Reiter in einer Zeile waren falsch** ? **LumeOS
+hat eine Seitenleiste mit Gruppen und darin je Modul eine
+Reiterleiste.**
 
-`[cmd]` **Das Altrepo: `ClientDetail.tsx`, 39,2 KB.**
-`[cmd]` **LumeOS: `athlet/[id]/page.tsx`, 10,2 KB.**
+### Was `apps/web` hat
 
-## Was zuerst zu lesen ist
+`[cmd]` **`apps/web/src/components/shell/app-shell.tsx`, 493
+Zeilen:**
 
-`[cmd]` **`docs/lehren/coach-plattform-altrepo.md`** ? **das
-Ausmass, gemessen.**
+    Z25  moduleNav      die Module
+    Z35  workspaceNav   WORKSPACES
+    Z42  systemNav      SYSTEM
 
-`[cmd]` **Dann, in dieser Reihenfolge:**
+`[cmd]` **Dazu:** `theme-switcher.tsx`, `sprachwahl.tsx`,
+`referenz-trenner.tsx`.
 
-    referenz/lumeos-2026/
-      src/modules/human-coach/components/
-        ClientDetail.tsx            39,2 KB
-        ClientAdherenceDashboard.tsx 8,9
-        AdherenceTrends.tsx          5,6
-        AdherenceCard.tsx            4,2
-      src/api/human-coach/
-        routes/clients.ts           13,4
-        services/adherence.ts       20,8
-      docs/modules/human-coach/
-        COMPONENTS.md               37 KB
-        FEATURES.md
+`[cmd]` **Und je Modul:** `v2/shell.tsx` **(159 Zeilen)** ? **der
+Modulkopf mit `v2-module-header`, `v2-kopf-mitte`, dem
+Tageswechsler-Anker aus G-392.**
 
-    theme-v1/module-coach.jsx
-      athleteDet-Modal
-      module-coach-athlete.jsx      31 KB, 10 Karten
+`[cmd]` **Die Reiterleiste je Modul:** `v2-tabs`.
 
-`[read]` **`COMPONENTS.md` beschreibt die 72 Bauteile** ?
-**ungelesen bis heute.**
+### Was `apps/coach` hat
 
-## Der Massstab
+`[cmd]` **`cp-shell`, `cp-kopf`** ? **eine eigene Fassung, 281
+Zeilen `portal.css`.**
 
-`[read]` **NICHT: gibt es eine Karte mit diesem Namen.**
+`[cmd]` **Keine Seitenleiste. Sechzehn Reiter in einer Zeile.**
 
-`[read]` **SONDERN: welche Felder, welche Handlungen, welche
-Verlaeufe.**
+### 1 · Die Schale uebernehmen
 
-`[cmd]` **Der Orchestrator hat es an einer Karte vorgemacht:**
+`[read]` **Miss zuerst, was `app-shell.tsx` an `apps/web`
+bindet:**
 
-    Athletes needing attention
-      Vorlage: Avatar, Name, Plan, letzte Sitzung,
-               Alertzahl, Compliance farbig,
-               Klick -> Detail-Modal
-      Bau:     Name, Datum
-      fehlt:   5 von 7
+`[cmd]` **`next-intl`? Modus-Cookie? `createClient` aus
+`@lumeos/shared`?**
 
-`[read]` **So misst du jede Karte des Klientendetails.**
+`[read]` **Was gemeinsam sein kann, gehoert nach `packages/ui`** ?
+**melden, nicht einfach kopieren.**
 
-## Was gebaut wird
+`[cmd]` **Der Referenz-Trenner steht heute schon zweimal** ?
+**G-399, derselbe Fehler.**
 
-`[read]` **Die FORM vollstaendig** ? **auch wo die Daten fehlen.**
+### 2 · Die Gruppen des Coach-Portals
 
-`[cmd]` **Mit Attrappenvermerk und dem Namen der fehlenden
-Tabelle** ? **wie in G-398.**
+`[read]` **Nicht die Module von `apps/web`** ? **die Arbeit eines
+Coaches.**
 
-`[read]` **Was Daten hat, wird angebunden.** `[read]` **Was keine
-hat, zeigt die Form und sagt, was fehlt.**
-
-`[cmd]` **Angebunden verfuegbar:** `coach.relationships`,
-`client_permissions` **(22 Spalten),** `client_autonomy`
-**(8 Achsen),** `coach.checkins`, `coach.alerts`,
-`coach.action_log`, `coach.pending_actions`.
-
-`[cmd]` **Plus je Athlet:** `training.workout_sessions` **(66
-Zeilen),** `nutrition`, `recovery`, `supplements` ? **soweit die
-Erlaubnis es zulaesst.**
-
-## Und die Form der Anwendung
-
-`[cmd]` **Das Altrepo hatte eine SEITENNAVIGATION mit
-Live-Zaehlern** (`Sidebar.tsx`), **nicht sechzehn Reiter in einer
-Zeile.**
+`[cmd]` **Das Altrepo hatte vier Gruppen** (`Sidebar.tsx`):
 
     Dashboard
-    Kunden       Klienten (activeClients)
-                 Nachrichten (unread, warn wenn > 0)
-                 Check-ins (pending, warn)
-                 Alerts (unread, critical)
+    Kunden       Klienten, Nachrichten, Check-ins, Alerts
     Programme    Ernaehrung, Training, Feedback
-    ...
+    ...          Regeln, Automatisierung, Autonomie,
+                 Auswertung, Wissen, KI, Buddy, Einstellungen
 
-`[read]` **Miss, ob das fuer LumeOS passt** ? **und melde es, bevor
-du es baust.**
+`[cmd]` **Mit LIVE-ZAEHLERN aus `useCoachStats`, `useAlerts`,
+`useAllThreads`** ? **`warn` wenn ungelesen, `critical` bei
+kritischen Alerts.**
 
-`[read]` **Dieser Auftrag aendert die Navigation NICHT** ? **er
-baut einen Reiter.**
+`[read]` **Die sechzehn Reiter von heute verteilen sich darauf** ?
+**miss, welcher in welche Gruppe gehoert.**
+
+### 3 · Der Modulkopf je Bereich
+
+`[cmd]` **`v2-module-header` mit Titel, Pills, Untertitel,
+Aktionen** ? **wie in der Vorlage
+(`module-coach.jsx`, `CoachPortalStandalone`).**
+
+`[cmd]` **Vier Pills:** `separate platform`, `coach.lumeos.app`,
+Athletenzahl, Alerts.
+`[cmd]` **Zwei Aktionen:** `Broadcast`, `New plan`.
+
+`[read]` **Und darunter die Reiterleiste des Bereichs** ? **nicht
+alle sechzehn.**
+
+### 4 · Die Tokens
+
+`[cmd]` **`apps/coach/src/app/tokens.css` ist eine Kopie, Stand
+2026-08-20.**
+
+`[read]` **Wenn die Schale gemeinsam wird, muessen es die Tokens
+auch** ? **`packages/ui`.**
+
+`[read]` **Melden mit der Messung, was seit dem 20.08.
+auseinandergelaufen ist** ? **G-384 nennt elf
+Modul-Akzenttokens.**
+
+### 5 · Der Modus
+
+`[cmd]` **`apps/coach` nimmt `prefers-color-scheme`, `apps/web`
+einen Cookie** ? **deshalb ist das Portal hell.**
+
+`[read]` **Miss, ob der Cookie teilbar ist** ? **dieselbe
+Domaene?**
 
 ### Abnahmebedingungen
 
-    A1  je Karte des Klientendetails: Felder der Vorlage /
-        Felder im Bau / fehlend. EINE TABELLE mit
-        Feldnamen, nicht mit dem Wort "angebunden".
-    A2  was Daten hat, ist angebunden. Zahl: Felder /
-        davon mit Daten / davon Attrappe.
-    A3  je Attrappe: WELCHE Tabelle fehlt.
-    A4  der Kopf nutzt module-header, nicht cp-kopf.
-        Belegt, ob v2-module-header verfuegbar ist.
-    A5  Bildschirmfoto, DUNKEL, mit einem echten Athleten.
-    A6  was heute steht, bleibt. Titel gegen Titel.
-    A7  apps/coach 13/13, apps/web 1545 unveraendert.
+    A1  was bindet app-shell.tsx an apps/web? Liste.
+        Was kann gemeinsam werden?
+    A2  Seitenleiste mit Gruppen, wie apps/web.
+        Zahl: Gruppen / Eintraege / davon mit Zaehler.
+    A3  je Eintrag ein Modulkopf mit v2-module-header.
+        Kein cp-kopf mehr.
+    A4  die Reiterleiste je Bereich, nicht sechzehn in
+        einer Zeile. Zahl: Bereiche / Reiter je Bereich.
+    A5  dunkel wie apps/web. Bildschirmfoto beider
+        nebeneinander.
+    A6  die Tokens: was ist auseinander? Liste.
+        packages/ui: gemeldet, nicht gebaut.
+    A7  die 44 Referenzkarten aus G-398 bleiben,
+        auf ihre Bereiche verteilt.
+    A8  apps/coach 13/13, apps/web 1545 unveraendert.
 
 ### Was nicht zu tun ist
 
 **`apps/web` NICHT anfassen.**
-**Die Navigation NICHT umbauen** ? **messen und melden.**
+**Nichts in `packages/ui`** ? **melden, mit Messung.**
+**Keine Inhalte bauen** ? **das ist der naechste Auftrag.**
 **Keinen Code aus dem Altrepo uebernehmen** ? **Struktur ja,
 Code nie.**
-**Nichts in `packages/ui` ohne Meldung.**
-**Nichts in `supabase/`** ? **Codex arbeitet an C-456.**
 Nicht committen, nicht stagen, nicht pushen.
 
 ### Der Dev-Server
