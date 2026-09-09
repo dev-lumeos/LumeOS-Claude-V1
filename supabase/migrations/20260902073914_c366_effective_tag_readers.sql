@@ -20,6 +20,11 @@ BEGIN
       'nutrition.food_tags',
       'nutrition.food_tags_effective'
     );
+    -- Der Migrationslauf darf einen bereits umgestellten Leser nicht noch
+    -- einmal ersetzen: sonst entstuende food_tags_effective_effective.
+    IF pg_get_functiondef(reader.oid) LIKE '%nutrition.food_tags_effective%' THEN
+      CONTINUE;
+    END IF;
     EXECUTE definition;
   END LOOP;
 END $$;

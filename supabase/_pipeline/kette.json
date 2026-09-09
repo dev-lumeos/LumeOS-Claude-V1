@@ -411,6 +411,15 @@
       ]
     },
     {
+      "id": "366_effective_tag_readers_migration",
+      "path": "supabase/migrations/20260902073914_c366_effective_tag_readers.sql",
+      "kind": "sql",
+      "creates": "C-366/E-55: food_search, Vorschau und Refresh lesen food_tags_effective",
+      "depends_on": [
+        "366_precedence"
+      ]
+    },
+    {
       "id": "075",
       "path": "supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql",
       "kind": "sql",
@@ -1336,13 +1345,31 @@
       ]
     },
     {
+      "id": "327_substance_group_membership_migration",
+      "path": "supabase/migrations/20260829003109_c327_substance_group_membership.sql",
+      "kind": "sql",
+      "creates": "C-327/C-328: versionierte, wiederholbare Substanzgruppen-Struktur und Regelauswertung",
+      "depends_on": [
+        "327"
+      ]
+    },
+    {
       "id": "327a",
       "path": "supabase/_pipeline/13_supplements/327a_chelation_mineral_membership.sql",
       "kind": "sql",
       "creates": "C-327: acht belegte Zuordnungen der chelatierenden Mineralstoffe aus wr_chelation_timing",
       "depends_on": [
-        "327",
+        "327_substance_group_membership_migration",
         "145"
+      ]
+    },
+    {
+      "id": "327a_chelation_mineral_membership_migration",
+      "path": "supabase/migrations/20260902070117_c327a_chelation_mineral_membership.sql",
+      "kind": "sql",
+      "creates": "C-393: versionierter Hinweis auf den bereits deterministisch in 327a erzeugten chelatierenden Bestand",
+      "depends_on": [
+        "327a"
       ]
     },
     {

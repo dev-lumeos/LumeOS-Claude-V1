@@ -18,12 +18,9 @@ export const KNOWN_NON_CHAIN_MIGRATIONS = new Set([
   '20260826180000_c283_medication_catalog_mapping.sql',
   '20260826190000_c286_medication_enrichments.sql',
   '20260827024026_c293_medication_user_texts.sql',
-  '20260829003109_c327_substance_group_membership.sql',
   '20260829031601_g107_reference_assessment_window.sql',
   '20260901090000_c371_recipe_source_plan_origin_buddy.sql',
   '20260901110000_c362_client_consent_log.sql',
-  '20260902070117_c327a_chelation_mineral_membership.sql',
-  '20260902073914_c366_effective_tag_readers.sql',
   '20260902100000_c381_secure_pending_action_execution.sql',
 ])
 
