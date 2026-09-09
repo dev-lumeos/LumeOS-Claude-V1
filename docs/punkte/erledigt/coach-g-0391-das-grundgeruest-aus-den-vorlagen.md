@@ -655,3 +655,22 @@ Invites.**
 
 **Abgenommen.**
 
+## Zurueckgebaut 2026-09-08
+
+Tom: *,,lass das komplett auf 127.0.0.1:3220 und das andere wieder
+wegmachen."*
+
+`[cmd]` **`a5e8b344` zurueckgebaut in `fbc73a07`** ?
+**`/v2/coach/human` ist wieder wie vorher.**
+
+`[read]` **Die Arbeit war nicht falsch** ? **der Auftrag nannte die
+falsche Anwendung.**
+
+`[cmd]` **`apps/web /v2/coach/human` ist die Klientensicht,
+`apps/coach` auf 3220 der Arbeitsplatz.**
+
+`[read]` **Und die 29 als `bekanntOffen` uebersprungenen Karten
+sind genau der Arbeitsplatz** ? **richtig gemessen, falsch
+geschlossen.**
+
+**Neu als G-398.**

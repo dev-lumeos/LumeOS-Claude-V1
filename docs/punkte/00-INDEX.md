@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
+| `todos` | 207 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 2 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 380 |
 | **gesamt** | **591** |
 
@@ -504,7 +504,7 @@
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | C-426 |
 | `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](erledigt/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | erledigt | — | — |
 | `G-391` | feature | hoch | [das Coach-Grundgeruest aus den Vorlagen](erledigt/coach-g-0391-das-grundgeruest-aus-den-vorlagen.md) | erledigt | — | G-397, G-398 |
-| `G-398` | befund | hoch | [die Portalkarten gehoeren nach 3220](todos/coach-g-0398-die-portalkarten-gehoeren-nach-3220.md) | offen | — | — |
+| `G-398` | befund | hoch | [die Portalkarten gehoeren nach 3220](laufend_claudecode/coach-g-0398-die-portalkarten-gehoeren-nach-3220.md) | laeuft (claudecode) | — | — |
 
 ## quer — 135
 
