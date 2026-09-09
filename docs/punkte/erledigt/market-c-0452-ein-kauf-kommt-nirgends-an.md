@@ -10,7 +10,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
 erledigt: 2026-09-08
-commit: OFFEN
+commit: 2e4d2b04
 beruehrt:
   tabellen: [marketplace.product_licenses]
 zahlen:
