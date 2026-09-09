@@ -213,3 +213,68 @@
 
 .coach-login-fehler { color: var(--neg); font-size: 12px; margin: 0 0 0.75rem; }
 .coach-login-hinweis { margin-top: 1rem; color: var(--fg-subtle); font-size: 0.8rem; }
+
+/* ══ G-398: die Trennlinie und die Referenz darunter ════════════════
+   E-69: oben das Angebundene, darunter die Mockup-Fassung. `[read]`
+   Die Linie braucht die VOLLE Breite -- in einem Spaltenlayout
+   trennt sie sonst nichts, sondern steht in einer Spalte. */
+.cp-trenner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 22px 0 14px;
+  grid-column: 1 / -1;
+}
+
+.cp-trenner-linie {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.cp-trenner-text {
+  font-size: 10.5px;
+  color: var(--fg-subtle);
+}
+
+/* `[read]` Die Referenzkarten gestrichelt, damit sie sich vom
+   Gebauten unterscheiden, ohne dass man den Vermerk lesen muss. */
+.cp-referenz .v2-card {
+  border-style: dashed;
+}
+
+.cp-stufe {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 9.5px;
+}
+
+.cp-vermerk {
+  font-size: 10.5px;
+  line-height: 1.55;
+  color: var(--fg-subtle);
+  margin-bottom: 10px;
+}
+
+.cp-ref-zeile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.cp-ref-balken {
+  flex: 1;
+  height: 6px;
+  background: var(--surface-2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.cp-ref-balken > div {
+  height: 100%;
+  background: var(--acc);
+  border-radius: 3px;
+}

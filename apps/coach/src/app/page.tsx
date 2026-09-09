@@ -14,6 +14,12 @@ import { TabAutonomie } from '../components/tab-autonomie'
 import { TabConsent } from '../components/tab-consent'
 import { TabOnboarding } from '../components/tab-onboarding'
 import { TabLeer, LEERE_TABS } from '../components/tab-leer'
+// ══ G-398: die Mockup-Referenz unter der Linie (E-69) ══════════════
+//
+// `[cmd]` **Vorher: null Referenzen auf 3220** — gemessen ueber alle
+// 16 Reiter. `[read]` **Eine Zeile je Reiter**, weil die Referenz
+// unter dem Gebauten steht und nicht daneben.
+import { TabReferenz } from '../components/tab-referenz'
 
 export const dynamic = 'force-dynamic'
 
@@ -116,6 +122,13 @@ export default async function PortalSeite({
       {tab === 'onboard' && <TabOnboarding stand={stand} />}
       {tab === 'messages' && <TabNachrichten stand={stand} />}
       {tab in LEERE_TABS && <TabLeer tab={tab} />}
+
+      {/* ══ E-69: darunter die Vorlage ═══════════════════════════
+          `[read]` **Je Reiter eine Linie, je Karte eine Referenz** —
+          ein Block liesse sich nicht zaehlen. **Die Kachel traegt
+          ihre Stufe** (angebunden / baubar / blockiert) und den
+          gemessenen Grund. */}
+      <TabReferenz tab={tab} />
     </main>
   )
 }
