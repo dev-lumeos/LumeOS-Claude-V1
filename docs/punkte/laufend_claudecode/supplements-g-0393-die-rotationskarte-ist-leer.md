@@ -141,7 +141,129 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### A1 ? Die Karte zeigt Punkte: 10 von 16
+
+`[cmd]` **Am Schirm gemessen**, `test-user@lumeos.local`:
+
+    Punkte mit data-punkt   10
+    Ids   delt_l delt_r quad_l quad_r glute_l glute_r
+          lat_l lat_r vg_l vg_r
+    Untertitel   10 von 16 Orten auf der Figur
+
+`[cmd]` **Bildschirmfoto: `backup/g388-rotationskarte.png`** ? beide
+Ansichten, zehn beschriftete Punkte, alle grau.
+
+### A2 ? `KARTEN_ORTE` ist weg, der Kommentar berichtigt
+
+`[cmd]` **Die Ursache, wie du sie genannt hast, ist bestaetigt:**
+`KARTEN_ORTE['delt_l']` war `undefined`, `punkte` blieb leer. **Die
+Tabelle bildete REGIONEN auf Paare ab** ? und seit C-445 gibt es
+keine Regionen mehr.
+
+**Ersetzt durch zwei Sachen statt einer Tabelle:**
+
+    PUNKT_UMBENENNUNG   die EINE Ausnahme (vglute -> vg)
+    punktFuerOrt(id)    Zeilen-Id = Punkt-Id, sonst `null`
+
+`[read]` **Der alte Kommentar war am Vormittag richtig und ist
+trotzdem zur Falschaussage geworden.** Der neue nennt beides: was
+dastand, warum es kippte, und die gemessene Deckung. **Ein Kommentar
+schuetzt nicht vor einer Schema-Aenderung ? ein Test schon**, deshalb
+prueft `injektion-karte.test.ts` jetzt, dass `KARTEN_ORTE` nicht
+zurueckkommt.
+
+`[cmd]` **Sabotageprobe, zwei Richtungen:**
+
+    Umbenennung entfernt   -> not ok 2 (vglute), not ok 4 (zehn Orte)
+    KARTEN_ORTE zurueck    -> not ok 11 (alte Regionentabelle)
+
+**Beide zurueckgenommen, 11/11 gruen.**
+
+### A3 ? Die zwei Luecken, mit Vorschlag
+
+`[cmd]` **Gemessen, 16 Zeilen gegen 16 Punkte:**
+
+    decken sich (8)   delt_l/r  glute_l/r  lat_l/r  quad_l/r
+    nur Datenbank     vglute_l/r  abd_l/r  sq_delt_l/r  thigh_sq_l/r
+    nur Karte         pec_l/r  bicep_l/r  vg_l/r  tricep_l/r
+
+`[read]` **Der Auftrag nennt zehn Deckungen ? gemessen sind es
+acht.** Die zehnte und neunte entstehen erst durch die Umbenennung,
+die ich gebaut habe. **Ohne sie waeren es acht.**
+
+#### Luecke 1 ? `vglute` gegen `vg`: behoben, ohne `packages/ui`
+
+`[read]` **Eine reine Schreibweise** ? die Stelle existiert auf der
+Figur, sie heisst nur anders. **In `apps/` abgebildet**
+(`PUNKT_UMBENENNUNG`), damit Admin und Coach unberuehrt bleiben.
+
+**Vorschlag:** so lassen. `[read]` **Ein Umbenennen in
+`packages/ui` waere sauberer**, aber es beruehrt zwei fremde
+Anwendungen fuer eine Schreibweise. **Der Preis ist hoeher als der
+Gewinn**, solange es bei einer Ausnahme bleibt ? und der Test faellt,
+wenn eine zweite dazukommt.
+
+#### Luecke 2 ? sechs SubQ-Stellen ohne Punkt
+
+    abd_l  abd_r  sq_delt_l  sq_delt_r  thigh_sq_l  thigh_sq_r
+
+`[read]` **Das ist keine Schreibweise, sondern eine fehlende Stelle
+auf der Figur.** `INJEKTIONS_ORTE` fuehrt keinen Bauchpunkt und keinen
+fuer den subkutanen Oberschenkel.
+
+**Vorschlag, und er gehoert dir:** `INJEKTIONS_ORTE` in
+`packages/ui/src/koerperkarte-pfade.ts:243-262` um sechs Eintraege
+ergaenzen ? **je zwei fuer Abdomen, SubQ-Deltoid, SubQ-Oberschenkel.**
+`[cmd]` **Vier vorhandene Punkte werden dabei frei:** `pec_l/r` und
+`tricep_l/r` haben keine Zeile in der Datenbank. **Sie zu ueberschreiben
+waere falsch** ? sie gehoeren zur Figur, nicht zu den Injektionen; ein
+anderer Aufrufer (`ErmuedungsKarte`) koennte sie brauchen.
+
+`[read]` **Nichts davon angefasst.** `packages/ui` gehoert Admin und
+Coach mit ? wie bei `.v2-content` in G-392 gemeldet statt geaendert.
+
+### A4 ? Ohne Protokollzeilen: alle Punkte „nie", mit Hinweis
+
+`[cmd]` **`medical.injection_logs`: 0 Zeilen** (gemessen). `[cmd]`
+**Alle zehn Punkte stehen auf `nie`** (`var(--fg-dim)`), wie die
+Legende sie fuehrt.
+
+`[read]` **Und die Kachel sagt, warum** ? sonst sieht Grau aus wie ein
+Fehler:
+
+    Noch keine Injektion erfasst — alle Stellen stehen auf nie.
+    Die 6 SubQ-Stellen (Abdomen, SubQ-Deltoid, SubQ-Oberschenkel)
+    haben keinen Punkt auf der Figur.
+
+`[cmd]` **Der Untertitel nennt beide Zahlen:** *„10 von 16 Orten auf
+der Figur"*. `[read]` **Vorher stand dort `16 Orte`, waehrend zehn
+gezeichnet waren** ? eine nackte Zahl, die nicht zum Bild passt.
+**E-72 gilt auch fuer Zahlen, nicht nur fuer leere Kacheln.**
+
+`[read]` **Beide Saetze stehen bedingt da:** kommt eine Injektion
+dazu, verschwindet der erste; kommen die SubQ-Punkte, der zweite.
+**Kein Text, der stehen bleibt, wenn sein Grund entfaellt.**
+
+### A5 ? 1529 Tests gruen
+
+`[cmd]` **1525 -> 1529** (vier neue: Umbenennung, fehlende Stelle,
+Deckung, alte Tabelle weg). `[cmd]` **tsc** sauber, **`next lint`**
+sauber.
+
+`[cmd]` **Und der Hydrationsfehler aus G-392 bleibt behoben** ?
+`SAUBER (2 Laeufe)` nach allen Aenderungen.
+
+### Was offen bleibt
+
+**1 ? Die sechs SubQ-Punkte in `packages/ui`** (A3). **Deine
+Entscheidung**, mit dem Hinweis, dass vier ungenutzte Punkte
+(`pec`, `tricep`) NICHT dafuer umgewidmet werden sollten.
+
+**2 ? `injection_logs` hat weiter keinen Schreibweg** (G-388/A3).
+**Solange bleibt jeder Punkt grau** ? die Karte ist richtig, sie hat
+nur nichts zu zeigen. **Die Rotation ist erst rechenbar, wenn
+erfasst wird.**
+
 
 ## Abnahme
 

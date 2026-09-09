@@ -235,3 +235,83 @@ haelt.**
         Speichern von Reiter 1 aus, Wert aus Reiter 3
         gemessen.
     A9  die Doppelung mit nutrition/preferences: benannt.
+
+## Was noch kommt — gemessen, nicht vermutet
+
+Tom, 2026-09-08: *,,da wird noch einiges rein kommen in
+settings."*
+
+`[cmd]` **`G-131` hat es am 2026-08-20 gemessen und nie
+weiterverfolgt:**
+
+> *,,`module-completeness.jsx` ist die Settings-Seite ? 837 Zeilen,
+> nie erwaehnt."*
+
+`[cmd]` **Der Name ist irrefuehrend.** `[cmd]` **Die Datei
+enthaelt:**
+
+    ProfileSettingsModal, ProfilePanel   Profildaten
+    UnitsPanel, UnitRow                  Einheiten kg/lb, cm/in
+    ModulesPanel                         welche Module sichtbar
+    PrivacyPanel, PermSelect             Freigaben
+    DataSourcesPanel                     Wearables und Importe
+    BillingPanel                         Abrechnung
+    DangerPanel                          Konto loeschen
+    AnatomyMap, MUSCLE_RECOVERY          Muskelkarte
+
+`[cmd]` **Und `/v2/settings` traegt heute nur die
+Erfahrungsgrad-Kachel** ? **sieben Bereiche fehlen.**
+
+`[read]` **Der Orchestrator hat nach *Reitern* gesucht und keine
+gefunden** ? **die Vorlage nennt sie `Panel`.**
+
+## Und das Altrepo hat ein Onboarding in sieben Schritten
+
+`[cmd]` **`referenz/lumeos-2026/src/modules/onboarding/`, neun
+Dateien:**
+
+    Step1Welcome.tsx     4 KB
+    Step2Body.tsx       11 KB
+    Step4Goal.tsx       11 KB
+    Step5Training.tsx   11 KB
+    Step6Nutrition.tsx  13 KB
+    Step7Summary.tsx    18 KB
+
+`[read]` **Dieselben Felder wie das heutige Formular** ? **nur als
+Weg statt als Seite.**
+
+`[cmd]` **Und `docs/modules/auth/`: 169 KB, sieben Dateien** ?
+**`MIGRATION.md` 44 KB, `FEATURES.md` 35 KB, `DATABASE.md` 35 KB.**
+
+`[read]` **Die groesste Moduldokumentation im Altrepo** ? **und
+niemand hat sie gelesen.**
+
+## Der Schnitt waechst also mit
+
+    Profil        heute da
+    Aktivitaet    heute da
+    Erfahrung     heute da
+    Ernaehrung    heute da
+    Zeitraeume    heute da, bedingt
+
+    Einheiten     G-131, fehlt
+    Module        G-131, fehlt
+    Freigaben     G-131, fehlt
+    Datenquellen  G-131, fehlt
+    Abrechnung    G-131, fehlt
+    Konto         G-131, fehlt
+
+`[read]` **Elf Reiter waeren zu viele fuer eine Zeile** ? **die
+Navigation muss das tragen koennen.**
+
+`[cmd]` **Miss, was die Vorlage tut:** **eine Leiste, eine
+Seitennavigation, oder Gruppen?**
+
+`[read]` **Das entscheidet die Bauform, nicht die Zahl der Reiter
+von heute.**
+
+### Zusaetzliche Abnahmebedingung
+
+    A10  wie traegt die Navigation elf Reiter? Aus der Vorlage
+         gemessen, nicht erfunden. Und: was davon ist heute
+         schon zu bauen, was wartet.
