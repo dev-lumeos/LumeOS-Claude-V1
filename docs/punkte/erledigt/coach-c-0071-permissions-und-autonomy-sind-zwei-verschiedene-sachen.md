@@ -13,8 +13,7 @@ beauftragt: 2026-09-08
 erledigt: 2026-09-08
 commit: 452206f7
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [coach.client_permissions]
 zahlen: null
 ---
 
