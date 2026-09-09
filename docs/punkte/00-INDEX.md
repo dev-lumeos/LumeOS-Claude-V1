@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 206 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 361 |
-| **gesamt** | **569** |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 362 |
+| **gesamt** | **571** |
 
 ## medical — 47
 
@@ -296,9 +296,9 @@
 | `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | C-425, G-372 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 69
+## supplements — 71
 
-### beauftragbar — 68
+### beauftragbar — 70
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -344,7 +344,8 @@
 | `C-393` | befund | mittel | [`substance_group_memberships` ist leer](erledigt/supplements-c-0393-substance-group-memberships-ist-leer.md) | erledigt | — | — |
 | `C-423` | feature | mittel | [`stack_templates` hat null Zeilen](erledigt/supplements-c-0423-stack-templates-hat-null-zeilen.md) | erledigt | — | — |
 | `C-427` | befund | hoch | [zwei Wortschaetze fuer `goal`](todos/supplements-c-0427-zwei-wortschaetze-fuer-goal.md) | offen | — | — |
-| `C-441` | befund | hoch | [sechzehn Injektionsorte statt vier](laufend_codex/supplements-c-0441-sechzehn-injektionsorte-statt-vier.md) | laeuft (codex) | — | — |
+| `C-441` | befund | hoch | [sechzehn Injektionsorte statt vier](erledigt/supplements-c-0441-sechzehn-injektionsorte-statt-vier.md) | erledigt | — | C-445 |
+| `C-445` | feature | hoch | [C-441 einspielen und die Protokollspalten](laufend_codex/supplements-c-0445-c-441-einspielen-und-die-protokollspalten.md) | laeuft (codex) | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -367,8 +368,9 @@
 | `G-372` | feature | hoch | [die Stack-Kachel kann nichts](erledigt/supplements-g-0372-die-stack-kachel-kann-nichts.md) | erledigt | — | C-427, G-373 |
 | `G-373` | feature | mittel | [Stacks editieren und anlegen](erledigt/supplements-g-0373-stacks-editieren-und-anlegen.md) | erledigt | — | G-374 |
 | `G-374` | feature | niedrig | [Zyklen brauchen eine eigene Eingabe](erledigt/supplements-g-0374-zyklen-brauchen-eine-eingabe.md) | erledigt | — | — |
-| `G-388` | feature | mittel | [`InjektionsKarte` und die Reste](erledigt/supplements-g-0388-injektionskarte-ohne-aufrufer.md) | erledigt | — | C-441, G-389 |
+| `G-388` | feature | mittel | [`InjektionsKarte` und die Reste](erledigt/supplements-g-0388-injektionskarte-ohne-aufrufer.md) | erledigt | — | C-441, G-389, G-390 |
 | `G-389` | feature | hoch | [der Schreibweg fuer Injektionen](laufend_claudecode/supplements-g-0389-der-schreibweg-fuer-injektionen.md) | laeuft (claudecode) | — | — |
+| `G-390` | befund | hoch | [`new Date()` zerlegt die Hydration](laufend_claudecode/supplements-g-0390-new-date-zerlegt-die-hydration.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1

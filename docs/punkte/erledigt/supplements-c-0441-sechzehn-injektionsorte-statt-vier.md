@@ -9,6 +9,8 @@ kind_von: G-388
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 7bb3eb7a
 beruehrt:
   tabellen: [medical.injection_sites]
 zahlen:
@@ -127,4 +129,68 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator.**
+
+    A1  4 -> 16 Orte: 10 IM, 6 SC, je mit Seite
+    A2  neun Spec-Spalten fehlen, mit Begruendung je Fall
+    A3  beide TEXT, FK besteht -- delt_l passt
+    A4  die vier alten nur entfernt, wenn nichts sie nutzt
+        gemessen: 0 Logs, 0 Zustaende
+    A5  RLS unveraendert, beide Richtungen
+    A6  Vollkette 414,3 s, SCHEMA VOLLSTAENDIG
+
+### A4 ist die beste Stelle
+
+`[cmd]` **Die vier alten IDs werden entfernt** ? **aber nur unter
+der Bedingung, dass nichts sie referenziert.**
+
+> *,,Der Schutz verhindert historische Umdeutung."*
+
+`[read]` **Ein Protokolleintrag auf `deltoid` haette sonst still
+zu `delt_l` werden koennen** ? **eine Injektion, die die Seite
+wechselt.**
+
+`[cmd]` **Gemessen: 0 Logs, 0 Zustaende** ? **also greift die
+Bedingung heute nicht, aber sie steht.**
+
+### A2 — er hat die Spec nicht ueber eine Regel gestellt
+
+`[cmd]` **Es fehlen `short_code`, `max_volume_ml`, `rest_days`,
+`body_view`, Koordinaten, Nadelgroesse, Landmark, `difficulty`,
+`is_active`.**
+
+`[cmd]` **Aber:** *,,`minimum_rest_days` ist absichtlich kein
+`rest_days`: E-57/C-385 erzwingt dort begruendetes NULL."*
+
+`[read]` **Die Spec verlangt eine Spalte, eine bestehende
+Entscheidung verlangt etwas anderes** ? **er hat beide genannt,
+statt eine zu ueberfahren.**
+
+`[cmd]` **Und: *,,Nadelwissen bleibt quellen- und koerperabhaengig
+getrennt."***
+
+### A3 — die Karte passt technisch
+
+`[cmd]` **`injection_sites.id` und `injection_logs.injection_site_id`
+sind beide TEXT, der Fremdschluessel besteht.**
+
+`[read]` **`delt_l` aus `INJEKTIONS_ORTE` laesst sich also direkt
+verwenden** ? **kein Umweg ueber eine UUID-Zuordnung.**
+
+### Zwei Befunde, beide gemeldet statt geloest
+
+`[cmd]` **Die acht Nadel-Empfehlungen zeigen auf `deltoid`,
+`ventrogluteal`, `vastus_lateralis`, `subcutaneous`** ? **die
+alten Schluessel.**
+
+> *,,Eine seitige Aufloesung waere ein eigener Funktionsauftrag;
+> sie wurde hier nicht erfunden."*
+
+`[cmd]` **Und `measurement_date` in
+`injection_body_measurement_context` ist mehrdeutig** ? **gefunden
+von der C-385-Probe, ausserhalb des Auftrags.**
+
+`[read]` **Beides steht in C-445.**
+
+**Abgenommen.**
+
