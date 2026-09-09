@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
+| `todos` | 207 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 2 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 373 |
 | **gesamt** | **584** |
 
@@ -637,7 +637,7 @@
 | `G-387` | feature | hoch | [die neun Marken in die SSOT](erledigt/quer-g-0387-die-neun-marken-in-die-ssot.md) | erledigt | — | C-437 |
 | `G-394` | feature | mittel | [sechs Module ohne Ladezustand](laufend_claudecode/quer-g-0394-sechs-module-ohne-ladezustand.md) | laeuft (claudecode) | — | — |
 | `G-395` | entscheidung | mittel | [sechs Injektionsorte ohne Punkt auf der Figur](todos/quer-g-0395-sechs-injektionsorte-ohne-punkt.md) | offen | — | — |
-| `G-396` | feature | hoch | [die Beschriftung der Koerperkarte](todos/quer-g-0396-die-beschriftung-der-koerperkarte.md) | offen | — | — |
+| `G-396` | feature | hoch | [die Beschriftung der Koerperkarte](laufend_claudecode/quer-g-0396-die-beschriftung-der-koerperkarte.md) | laeuft (claudecode) | — | — |
 
 ## market — 3
 

@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-393
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - packages/ui/src/koerperkarte.tsx
@@ -88,3 +90,84 @@ ist nutzlos.**
 
 `[read]` **Und kein Aufklappen bei Ueberfahren** ? **die Karte
 soll lesbar sein, nicht erkundbar.**
+
+## Auftrag
+
+**Beauftragt am 2026-09-08.**
+
+### 1 · Zuerst belegen, dass nur ein Aufrufer betroffen ist
+
+`[cmd]` **Drei Aufrufer:** `ErmuedungsKarte`, `AktivierungsKarte`,
+`InjektionsKarte`.
+
+`[read]` **Nur der dritte uebergibt `punkte`** ? **das ist zu
+messen, nicht anzunehmen.**
+
+`[read]` **Wenn einer der anderen zwei doch Punkte zeigt: melden,
+bevor du etwas aenderst.**
+
+### 2 · Die Verteilung ist die Arbeit
+
+`[read]` **Nicht die Linie** ? **die ist eine `<line>`.**
+
+`[cmd]` **Zehn Punkte, verteilt auf zwei Ansichten** ? **fuenf bis
+sechs je Seite.**
+
+`[read]` **Zwei Punkte auf aehnlicher Hoehe brauchen zwei Zeilen,
+sonst ueberlappt der Text wieder, nur weiter aussen.**
+
+`[read]` **Miss zuerst, wie nah sie sich kommen** ? `yPct` **steht
+in `INJEKTIONS_ORTE`.**
+
+`[cmd]` **`delt_l` 0.22, `lat_l` 0.32, `glute_l` 0.52, `vg_l` 0.48,
+`quad_l` 0.65** ? **`vg` und `glute` liegen 0.04 auseinander.**
+
+### 3 · Links und rechts
+
+`[read]` **Ein Punkt links der Mitte bekommt seinen Text links,
+einer rechts davon rechts.**
+
+`[cmd]` **`xPct < 0.5`** ? **die Entscheidung ist einfach, die
+Ausrichtung des Textes folgt** (`textAnchor="end"` links,
+`"start"` rechts).
+
+### 4 · Was mit dem Abstand geschieht
+
+`[cmd]` **Die Ansicht hat heute eine feste Breite** ? **miss sie,
+und ob daneben Platz ist.**
+
+`[read]` **Wenn nicht: die Figur schmaler machen, nicht den Text
+hineinschieben.**
+
+### Abnahmebedingungen
+
+    A1  nur InjektionsKarte uebergibt punkte. Belegt.
+    A2  zehn Beschriftungen, keine ueberlappt.
+        Bildschirmfoto beider Ansichten.
+    A3  je Text eine Linie zum Punkt. Sichtbar im Foto.
+    A4  vg_l und glute_l (0.48 gegen 0.52): beide lesbar.
+    A5  ErmuedungsKarte und AktivierungsKarte unveraendert.
+        Bildschirmfoto von recovery.
+    A6  1529 Tests bleiben gruen.
+
+### Was nicht zu tun ist
+
+**Keine Beschriftung weglassen** ? **ein Punkt ohne Namen ist
+nutzlos.**
+**Kein Aufklappen bei Ueberfahren** ? **die Karte soll lesbar
+sein, nicht erkundbar.**
+**Die sechs fehlenden SubQ-Punkte NICHT anlegen** ? **das ist
+G-395, eine Entscheidung.**
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server
+
+`[cmd]` **NIE `start`, `neustart`, `aufraeumen`.**
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
