@@ -93,9 +93,18 @@ export function ortZustand(id: string): Zustand {
 }
 
 
-export function SuppInjections({ stand = null }: {
+export function SuppInjections({ stand = null, stichtag = '1970-01-01' }: {
   /** G-388: die Orte aus `medical.injection_sites`. */
   stand?: InjektionsStand | null
+  /**
+   * G-390: der Tag, gegen den gerechnet wird — SERVERSEITIG bestimmt.
+   *
+   * `[read]` **Ein `string`, kein `Date`** — wer keinen Zeitpunkt
+   * annimmt, kann keinen falschen annehmen. Die Vorgabe
+   * `'1970-01-01'` ist dieselbe wie in `ansicht.tsx:198`: sie faellt
+   * auf, statt still zu rechnen.
+   */
+  stichtag?: string
 }) {
   const { open } = useSupp()
   // ══ G-388: die echten Orte, aus der Datenbank ═══════════
@@ -107,9 +116,20 @@ export function SuppInjections({ stand = null }: {
   // `[read]` **Ueber `stand` gemerkt, nicht ueber `orte`/`protokoll`**:
   // `stand?.orte ?? []` erzeugt bei jedem Rendern ein NEUES Array, und
   // damit rechnete `useMemo` jedes Mal neu (ESLint sagt es genau so).
+  // ══ G-390: der Stichtag kommt von aussen ════════════════════
+  //
+  // `[cmd]` **Hier stand `new Date()`** — und `ansicht.tsx:193` warnt
+  // woertlich davor: *„nie `new Date()`, das zerlegte die Hydration
+  // und rechnete im Browser anders als beim Rendern."* **G-74 hatte
+  // es behoben, G-388 hat es wieder eingebaut.**
+  //
+  // `[cmd]` **Die Wirkung reichte ueber den Reiter hinaus:**
+  // `tab-injektionen` wird in `ansicht.tsx` importiert, also laeuft
+  // die Rechnung beim Anstrich der SCHALE. **Gemessen: der Fehler
+  // stand auf allen elf Reitern, nicht nur auf `injection`.**
   const kartenPunkte = React.useMemo(
-    () => tageSeitInjektion(stand?.orte ?? [], stand?.protokoll ?? [], new Date()),
-    [stand])
+    () => tageSeitInjektion(stand?.orte ?? [], stand?.protokoll ?? [], stichtag),
+    [stand, stichtag])
   const orte = stand?.orte ?? []
   const protokoll = stand?.protokoll ?? []
   const [sel, setSel] = React.useState('vglute_l')

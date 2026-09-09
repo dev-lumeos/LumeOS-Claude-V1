@@ -64,15 +64,34 @@ export const KARTEN_ORTE: Record<string, readonly string[]> = {
 export function tageSeitInjektion(
   orte: readonly OrtFuerKarte[],
   protokoll: readonly ProtokollFuerKarte[],
-  heute: Date,
+  stichtag: string,
 ): Array<{ id: string; daysSince?: number; label?: string }> {
+  // ══ G-390: ein STICHTAG, kein `new Date()` ═════════════════════════
+  //
+  // `[cmd]` **Hier stand `heute: Date`, und der Aufrufer gab
+  // `new Date()` hinein** — im Browser eine andere Uhr als beim
+  // Rendern auf dem Server. **Gemessen: Hydrationsfehler auf allen
+  // elf Reitern des Moduls**, weil `tab-injektionen` in `ansicht.tsx`
+  // importiert wird und die Rechnung schon beim Anstrich der Schale
+  // laeuft.
+  //
+  // `[cmd]` **G-74 hatte genau das schon behoben**, und die Warnung
+  // stand woertlich in `ansicht.tsx:193`: *„nie `new Date()`, das
+  // zerlegte die Hydration."* **G-388 hat es wieder eingebaut.**
+  //
+  // `[read]` **Ein `string` statt `Date` macht den Fehler
+  // unmoeglich** — wer keinen Zeitpunkt annimmt, kann keinen
+  // falschen annehmen. Der Aufrufer muss einen Tag NENNEN, und der
+  // kommt serverseitig.
+  const heute = Date.parse(`${stichtag}T00:00:00Z`)
+  if (!Number.isFinite(heute)) return []
   const punkte: Array<{ id: string; daysSince?: number; label?: string }> = []
   for (const ort of orte) {
     const ziele = KARTEN_ORTE[ort.id] ?? []
     const letzte = protokoll.find(p => p.site_id === ort.id)
     let tage: number | undefined
     if (letzte) {
-      const ms = heute.getTime() - Date.parse(letzte.injected_at)
+      const ms = heute - Date.parse(letzte.injected_at)
       if (Number.isFinite(ms)) tage = Math.max(0, Math.floor(ms / 86400000))
     }
     for (const ziel of ziele) {

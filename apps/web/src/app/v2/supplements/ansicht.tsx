@@ -416,7 +416,7 @@ export function SupplementsAnsicht({
           {tab === 'cost' && <SuppCost />}
           {tab === 'injection' && (
             <>
-              <SuppInjections stand={injektionen} />
+              <SuppInjections stand={injektionen} stichtag={stichtag} />
               <SuppInjectionReferenz />
             </>
           )}
