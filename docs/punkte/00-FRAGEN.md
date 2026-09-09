@@ -18,73 +18,6 @@ nicht in diese Uebersicht.
 
 ---
 
-# Hoch
-
-## C-450 — wer vergibt die Coach-Rolle?
-
-**Modul:** coach · **angelegt:** 2026-09-08 · **Datei:** `todos/coach-c-0450-wer-vergibt-die-coach-rolle.md`
-
-## Befund
-
-Aus C-449, Codex, 2026-09-08. **Vollstaendig gemessen.**
-
-`[cmd]` **`SPEC_07_API.md:10`:** *,,Coach-Endpoints: Require
-`role = coach` in JWT + aktive Coach-Profil."*
-
-`[cmd]` **Live: 1 admin, 0 coach.**
-
-`[cmd]` **Rollen liegen in `auth.users.raw_app_meta_data.role`.**
-`[cmd]` **Setzbar nur ueber die Supabase-Admin-API mit
-Dienstschluessel, oder von Hand als `postgres`** ?
-`061_rollen_admin.sql:52`.
-
-`[cmd]` **Und nur `public.is_admin()` liest `app_metadata`** ?
-**keine einzige Coach-Funktion prueft eine Rolle.**
-
-## Die Lage
-
-`[read]` **Die halbe Bedingung aus SPEC_07 ist heute
-unerfuellbar** ? **`onboard_coach` verlangt ein Profil, nicht die
-Rolle, und das ist der einzige Weg, der ueberhaupt funktioniert.**
-
-`[cmd]` **Codex' Satz:** *,,Sofort waere es ein Totalschloss bei 0
-Coach-Rollen."*
-
-`[read]` **Eine Sicherung, die niemanden durchlaesst, ist keine
-Sicherung, sondern ein Ausfall.**
-
-## Die Entscheidung
-
-**a** ? **Ein Vergabepfad in der Anwendung.**
-`[read]` **Ein Admin kann eine Rolle setzen, mit Protokoll.**
-`[cmd]` **Aber `061_rollen_admin.sql:52` sagt ausdruecklich:
-ausserhalb der Anwendung** ? **das waere eine Aenderung an einer
-bewussten Entscheidung.**
-
-**b** ? **Von Hand, dokumentiert.** `[read]` **Ein Ablauf in
-`docs/`, den Tom ausfuehrt** ? **Supabase-Admin-API, ein Nutzer,
-ein Protokolleintrag.**
-
-`[read]` **Passt zur bestehenden Entscheidung, kostet aber Toms
-Zeit je Coach.**
-
-**c** ? **Die Rolle fallen lassen.**
-`[read]` **Das aktive Profil IST der Nachweis** ? **wer eines hat,
-ist ein Coach.**
-
-`[cmd]` **Dann waere `SPEC_07:10` zu berichtigen** ? **eine Spec
-zu aendern ist erlaubt, sie stillschweigend zu brechen nicht.**
-
-## Was dafuer spricht, es jetzt zu entscheiden
-
-`[cmd]` **Coach ist zu 69 Prozent Attrappe, 5 von 15 Tabellen
-leer, 0 Profile** (Lagebericht).
-
-`[read]` **Solange niemand Coach sein kann, laesst sich nichts
-davon pruefen.**
-
----
-
 # Mittel
 
 ## A-43 — Coach-Permissions pro Subfunktion
@@ -113,6 +46,65 @@ davon pruefen.**
   `[cmd]` **F-06 hat gemessen, dass die Freigabe ueberhaupt erst seit
   C-162 wirkt** — 22 `coach_read`-Policies ueber sechs Module. **Eine
   Feinstufe waere sechs mal soviel.**
+
+## C-451 — die Aufnahme eines Coaches
+
+**Modul:** coach · **angelegt:** 2026-09-08 · **Datei:** `todos/coach-c-0451-die-aufnahme-eines-coaches.md`
+
+## Befund
+
+Tom, 2026-09-08, zu E-78:
+
+> spaeter wird das durch registrierung/anmeldung eines coaches
+> geregelt und womoeglich nach rulings oder im adminbereich durch
+> uns geprueft. da wird es verschiedenste sachen wie dieses thema
+> geben, zb welche module kriegt ein coach, ist er teil von
+> marketplace etc
+
+`[read]` **Die Rollenfrage aus C-450 war der kleinste Teil
+davon.**
+
+## Was zusammengehoert
+
+    Registrierung   wie wird jemand Coach?
+    Pruefung        wer prueft, nach welchen Regeln?
+    Module          welche bekommt ein Coach?
+    Marketplace     ist er Anbieter, und ab wann?
+    Entzug          was, wenn die Pruefung faellt?
+
+`[read]` **Es beruehrt drei Bereiche:** **`coach`, `market`,
+`admin`** ? **und keiner davon ist fertig.**
+
+## Was schon da ist
+
+`[cmd]` **Das Altrepo:**
+
+    apps/admin/                 319 Dateien
+    docs/modules/auth/          169 KB, sieben Dateien
+                                (API, COMPONENTS, DATABASE,
+                                 FEATURES, MIGRATION, README,
+                                 RESEARCH)
+
+`[cmd]` **`docs/modules/auth/` ist die GROESSTE
+Moduldokumentation** ? **groesser als `human-coach` mit 151 KB.**
+
+`[read]` **Bevor daran gebaut wird: lesen** ?
+`docs/lehren/altrepo-karte.md` **sagt, wo.**
+
+`[cmd]` **Und `docs/specs/HumanCoach/SPEC_08_IMPORT_PIPELINE.md`
+beschreibt das Onboarding** ? **aber die Aufnahme des COACHES, nicht
+des Klienten, steht dort nur als `onboardCoach()`.**
+
+## Warum es wartet
+
+`[cmd]` **Coach ist zu 69 Prozent Attrappe, 0 Profile, 5 von 15
+Tabellen leer.**
+
+`[read]` **Ein Aufnahmeverfahren fuer ein Modul, das noch nichts
+kann, waere die falsche Reihenfolge.**
+
+`[read]` **Erst muss ein Coach etwas TUN koennen** ? **G-391 baut
+das Geruest, das zeigt, was er koennen soll.**
 
 ## A-72 — eine Leser-Deklaration im Code
 

@@ -6,7 +6,9 @@ schwere: hoch
 angelegt: 2026-09-08
 braucht: []
 kind_von: C-449
-entscheidung: null
+entscheidung: E-78
+erledigt: 2026-09-08
+commit: OFFEN
 beruehrt:
   tabellen: [coach.relationships]
 zahlen:
@@ -74,3 +76,17 @@ leer, 0 Profile** (Lagebericht).
 
 `[read]` **Solange niemand Coach sein kann, laesst sich nichts
 davon pruefen.**
+
+## Entschieden am 2026-09-08 — E-78, Variante b
+
+Tom: *,,im moment entwickeln wir und setzen es manuell in der db."*
+
+`[cmd]` **Kein Vergabepfad in der Anwendung.** `[cmd]`
+**`onboard_coach` verlangt die Rolle nicht.** `[cmd]` **`SPEC_07:10`
+bleibt als Zielzustand.**
+
+`[read]` **Und der Nachsatz ist der wichtigere Teil** ? **die
+Aufnahme eines Coaches ist ein eigener Bereich, nicht ein
+Nebenprodukt der Rollenfrage.**
+
+**Als C-451.**
