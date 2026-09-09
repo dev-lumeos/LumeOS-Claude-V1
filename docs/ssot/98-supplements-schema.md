@@ -45,6 +45,20 @@ Stand: 2026-08-17
 
 [read] Nicht uebernommen wurden `enhanced_substances`, `user_supplement_settings`, `user_inventory`, `stack_templates` und `stack_template_items`.
 
+
+**Berichtigt 2026-09-08 (G-383).** `[cmd]` **Der Satz darueber ist
+teilweise ueberholt** ? **diese Tabellen EXISTIEREN inzwischen:**
+
+    `supplements.user_supplement_settings`
+    `nutrition.user_inventory`        seit C-408
+    `supplements.stack_templates`     seit C-423
+    `supplements.stack_template_items`  seit C-423
+
+`[cmd]` **Gemessen gegen `information_schema`.** `[read]` **Die
+uebrigen Namen der Aufzaehlung stimmen weiter** ? **und genau das
+war die Tuecke: wer stichprobenartig prueft, trifft einen wahren
+Namen und haelt die ganze Zeile fuer belegt.**
+
 [annahme] Grund: Der Auftrag wollte Katalog und Stack. Enhanced Substances, Inventar und Templates sind Folgeflaechen. Low-Stock ist fuer den sichtbaren Refill-Fall in `stack_items` enthalten, ohne eine vollstaendige Inventarverwaltung zu bauen.
 
 [read] Nicht uebernommen wurden Protokolle, Erinnerungen, Zyklusereignisse, Coach-Planung und die erweiterten Planungsobjekte aus `047_coach_planning_system.sql`.

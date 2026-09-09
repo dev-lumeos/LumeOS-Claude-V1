@@ -8,8 +8,8 @@
 | `todos` | 207 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 344 |
-| **gesamt** | **554** |
+| `erledigt` | 345 |
+| **gesamt** | **555** |
 
 ## medical — 47
 
@@ -482,7 +482,7 @@
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | C-426 |
 | `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](erledigt/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | erledigt | — | — |
 
-## quer — 124
+## quer — 125
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -609,7 +609,8 @@
 | `G-380` | befund | mittel | [eine tote Zweitfassung und ein fehlender Hinweis](erledigt/quer-g-0380-eine-tote-zweitfassung-und-ein-fehlender-hinweis.md) | erledigt | — | G-381 |
 | `G-381` | befund | mittel | [das verwaiste Speicherobjekt und 135 ungemessene Dateien](erledigt/quer-g-0381-das-verwaiste-speicherobjekt-und-136-ungemessene.md) | erledigt | — | G-382 |
 | `G-382` | befund | mittel | [fuenf SSOT-Dateien inhaltlich pruefen](erledigt/quer-g-0382-fuenf-ssot-dateien-inhaltlich-pruefen.md) | erledigt | — | G-383 |
-| `G-383` | feature | hoch | [der Erzeuger fuer die Modultabellen](laufend_claudecode/quer-g-0383-der-erzeuger-fuer-die-modultabellen.md) | laeuft (claudecode) | — | — |
+| `G-383` | feature | hoch | [der Erzeuger fuer die Modultabellen](erledigt/quer-g-0383-der-erzeuger-fuer-die-modultabellen.md) | erledigt | — | G-384 |
+| `G-384` | feature | hoch | [die Modulbeschreibungen nachziehen](laufend_claudecode/quer-g-0384-die-modulbeschreibungen-nachziehen.md) | laeuft (claudecode) | — | — |
 
 ## market — 1
 

@@ -29,6 +29,17 @@ Stand: 2026-08-18.
 
 [read] Nicht übernommen wurden `user_health_metrics`, `user_symptoms`, `user_medications` und `medical_alerts`. Sie gehören zu Health-Metrics, Symptomtracking, Medikamenten und Bewertung/Benachrichtigung; der Auftrag war Katalog plus Befund.
 
+
+**Berichtigt 2026-09-08 (G-383).** `[cmd]` **Der Satz darueber ist
+teilweise ueberholt** ? **diese Tabellen EXISTIEREN inzwischen:**
+
+    `medical.user_medications`        25 Spalten, live
+
+`[cmd]` **Gemessen gegen `information_schema`.** `[read]` **Die
+uebrigen Namen der Aufzaehlung stimmen weiter** ? **und genau das
+war die Tuecke: wer stichprobenartig prueft, trifft einen wahren
+Namen und haelt die ganze Zeile fuer belegt.**
+
 [read] `UserMedicalInsight` und `UserHealthReport` wurden nicht gebaut, weil sie in `SPEC_06` keine Tabelle haben. Der Widerspruch bleibt notiert, nicht aufgelöst.
 
 [annahme] Eine `latest`-Materialized-View wurde bewusst nicht übernommen. Für den ersten echten Befund reicht die lesbare Befundfunktion; eine aktuelle Snapshot-Sicht wird sinnvoll, wenn die Oberfläche konkrete Abfrageformen vorgibt.

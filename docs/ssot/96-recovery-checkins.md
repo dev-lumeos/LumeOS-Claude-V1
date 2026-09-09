@@ -26,6 +26,19 @@ Stand: 2026-08-17
 
 [read] Nicht übernommen wurden `recovery_scores`, `hrv_measurements`, `hrv_baselines`, `sleep_data`, `recovery_modalities`, `user_recovery_modalities`, `training_load_logs`, `overtraining_alerts`, `recovery_protocols`, `user_protocol_assignments` und die Recovery-Auswertungssichten.
 
+
+**Berichtigt 2026-09-08 (G-383).** `[cmd]` **Der Satz darueber ist
+teilweise ueberholt** ? **diese Tabellen EXISTIEREN inzwischen:**
+
+    `recovery.scores`                34 Spalten, live
+    `recovery.overtraining_alerts`   seit C-421
+    `recovery.recovery_protocols`    seit C-421
+
+`[cmd]` **Gemessen gegen `information_schema`.** `[read]` **Die
+uebrigen Namen der Aufzaehlung stimmen weiter** ? **und genau das
+war die Tuecke: wer stichprobenartig prueft, trifft einen wahren
+Namen und haelt die ganze Zeile fuer belegt.**
+
 [annahme] Der Grund ist jeweils derselbe: Diese Tabellen bauen auf Geräten, Trainingslast, Score-Formeln, Protokollen oder späterer Nutzerführung auf. Der Auftrag sollte nur den manuellen Check-in schaffen, nicht die zehn Tabellen aus der Spec materialisieren.
 
 [read] `SPEC_05_METRICS_ALGORITHMS.md` und `SPEC_09_SCORING.md` beschreiben Formeln. Sie wurden nicht umgesetzt, weil der Auftrag ausdrücklich keine Formeln bauen wollte und der Erholungswert dieselbe offene Gewichtungsfrage wie C-49 hat.
