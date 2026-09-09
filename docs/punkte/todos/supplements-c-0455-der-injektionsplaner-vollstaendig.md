@@ -6,7 +6,7 @@ schwere: hoch
 angelegt: 2026-09-08
 braucht: []
 kind_von: C-445
-entscheidung: null
+entscheidung: E-79
 beruehrt:
   tabellen: [medical.injection_logs]
 zahlen:
@@ -112,7 +112,16 @@ materialisieren, wenn die Geschwindigkeit es verlangt.**
 
 `[read]` **Vier der sieben Regeln sind heute nicht rechenbar.**
 
-## Der Widerspruch, den Tom entscheiden muss
+## Entschieden: E-79
+
+`[cmd]` **`Injection Planner:363` faellt** ? **die Muskelkarte ist
+die Auswahl, die 16 Orte sind Fachwissen.**
+
+`[read]` **Das aendert Punkt 2 und 3 der Reihenfolge:**
+`injection_sites` **braucht keine `user_id`, aber eine Zuordnung
+zur Flaeche** ? **und `injection_logs` zeigt auf die Flaeche.**
+
+## Der urspruengliche Widerspruch
 
 `[cmd]` **`Injection Planner:363`:**
 
