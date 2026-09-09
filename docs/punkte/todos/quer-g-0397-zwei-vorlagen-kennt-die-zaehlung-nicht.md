@@ -68,3 +68,52 @@ erreichbar** (G-02, G-40).
 `[read]` **Wenn das der Grund ist, gehoeren die zwei Dateien in
 `bekanntOffen`, nicht in `dateien`** ? **dann waere die Zaehlung
 richtig und nur unvollstaendig dokumentiert.**
+
+## Nachgemessen 2026-09-08 — die SSOT hat recht
+
+`[cmd]` **`module-coach.jsx:923-940`: die Reiterliste des
+Portalzweigs.**
+
+`[cmd]` **Die drei stehen mitten darin:**
+
+    923  <Tabs items={[
+    924    overview, athletes, analytics, alerts,
+    928    rules, autonomy,
+    930    patterns      <- PatternAnalysisView
+    931    intervene     <- InterventionEngineView
+    932    consent       <- ConsentFlowView
+    933    plans, workflows, onboard, programs,
+    939    messages, revenue, team
+    940  ]}
+
+`[cmd]` **Und Zeile 916 sagt, was dieser Rahmen ist:**
+
+> *,,Coach workspace ? read-only on client data ? every call
+> logged"*
+
+`[cmd]` **Die Nachbarn:** `CoachPortalAnalytics`,
+`CoachPortalSmartAlerts`, `CoachPortalRules`,
+`CoachPortalAutonomy`, `PortalPlans`, `PortalWorkflows` ?
+**ALLE stehen in `bekanntOffen`.**
+
+`[read]` **Die drei sind Reiter DESSELBEN Arbeitsplatzes** ?
+**sie fehlen in `bekanntOffen`, nichts weiter.**
+
+`[cmd]` **`module-coach.jsx:137`: `const side = "athlete"`** ?
+**der ganze Zweig ist im Athletenbereich nie erreichbar.**
+
+**Damit ist es Variante b: die SSOT gilt, das Werkzeug ist
+unvollstaendig.**
+
+## Was zu tun ist
+
+    1  die drei in coach.bekanntOffen nachtragen
+       PatternAnalysisView, InterventionEngineView,
+       ConsentFlowView
+    2  module-coach-portal-v2.jsx und -portal-workflows.jsx
+       in bekanntOffen aufnehmen, NICHT in dateien
+       -- elf Karten, alle Portal
+    3  den Kommentar ergaenzen, warum
+
+`[read]` **Und Claude Codes zehn gebaute Karten pruefen** ?
+**wenn die drei darunter sind, gehoeren sie wieder weg.**
