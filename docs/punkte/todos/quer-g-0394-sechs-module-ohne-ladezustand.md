@@ -59,3 +59,63 @@ Animation eher Unruhe als Auskunft.**
 
 `[read]` **`coach` und `settings` haben andere Koepfe** ? **erst
 messen, ob dieselbe Vorlage passt.**
+
+## Berichtigung 2026-09-08 — es ist kein Modulskelett
+
+Tom: *,,das war doch von anfang an so ?
+topheader/header/modulnavigation/navigationchilds/modulinhalte."*
+
+`[cmd]` **Nachgemessen: acht von neun Modulen tragen
+`v2-module-hero-lite`.** `[cmd]` **Nur `settings` nicht** ? **es
+hat `v2-wahl-titel`, eine eigene Form** (G-384, A3).
+
+`[cmd]` **Und das Skelett baut genau diese Ebenen nach:**
+
+    v2-skel-hero      der Modulkopf
+    v2-skel-reiter    die Modulnavigation, viermal
+    v2-skel-karte     der Inhalt, zweimal
+
+`[read]` **Es ist NICHT modulspezifisch** ? **es ist die
+gemeinsame Struktur.**
+
+`[read]` **Die Datei heisst nur `supplements/loading.tsx`, weil sie
+dort gebaut wurde** ? **nicht, weil sie dorthin gehoert.**
+
+## Also: eine Datei, nicht sechs
+
+`[cmd]` **`apps/web/src/app/v2/loading.tsx`** ? **Next.js nutzt
+sie fuer jede Unterroute, die keine eigene hat.**
+
+`[read]` **Ein Skelett fuer alle, statt sieben, die
+auseinanderlaufen.**
+
+`[cmd]` **Und `supplements/loading.tsx` faellt weg** ? **sie
+enthaelt nichts, was die Schale nicht auch weiss.**
+
+### Was zu messen ist
+
+`[read]` **Der Text *,,Supplements werden geladen"* ist das
+Einzige, was modulspezifisch ist.**
+
+`[cmd]` **Die Schale kennt den Pfad** ? **`usePathname` sagt,
+welches Modul.**
+
+`[read]` **Oder er wird allgemein** ? *,,Wird geladen"* ? **und
+das reicht fuer eine Vorlesehilfe.**
+
+### Und `settings`
+
+`[cmd]` **Es hat keinen `hero-lite`** ? **das Skelett wuerde einen
+Kopf zeigen, den es nicht gibt.**
+
+`[read]` **Miss, ob das stoert** ? **zwei Sekunden ein Kasten zu
+viel ist weniger schlimm als zwei Sekunden Stillstand.**
+
+## Der Auftrag ist damit kleiner
+
+    eine Datei in der Schale
+    supplements/loading.tsx entfernen
+    der Anker aus G-392 traegt sie bereits
+
+`[read]` **Und der Nachweis ist einfach:** **von einem Modul zum
+anderen klicken, das Skelett erscheint.**
