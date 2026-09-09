@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 205 |
+| `todos` | 206 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 361 |
-| **gesamt** | **568** |
+| **gesamt** | **569** |
 
 ## medical — 47
 
@@ -566,7 +566,7 @@
 | `C-416` | feature | hoch | [ein taeglicher Kettenlauf](erledigt/quer-c-0416-ein-taeglicher-kettenlauf.md) | erledigt | — | — |
 | `C-417` | feature | hoch | [der Schirm wird nicht gemessen](erledigt/quer-c-0417-der-schirm-wird-nicht-gemessen.md) | erledigt | — | — |
 | `C-418` | befund | hoch | [der Waechter vergleicht Zeichenketten, nicht Inhalte](erledigt/quer-c-0418-der-waechter-vergleicht-zeichenketten.md) | erledigt | — | C-420 |
-| `C-419` | feature | hoch | [das Wallet existiert nicht](erledigt/quer-c-0419-das-wallet-existiert-nicht.md) | erledigt | — | — |
+| `C-419` | feature | hoch | [das Wallet existiert nicht](erledigt/quer-c-0419-das-wallet-existiert-nicht.md) | erledigt | — | C-444 |
 | `C-420` | befund | hoch | [der Waechter kennt keine Uebersetzung](erledigt/quer-c-0420-der-waechter-kennt-keine-uebersetzung.md) | erledigt | — | — |
 | `C-422` | feature | hoch | [die Lesewege fuer elf Kacheln](erledigt/quer-c-0422-die-lesewege-fuer-elf-kacheln.md) | erledigt | — | — |
 | `C-424` | feature | mittel | [eine Leser-Registry](erledigt/quer-c-0424-eine-leser-registry.md) | erledigt | — | A-72 |
@@ -625,10 +625,11 @@
 | `G-386` | feature | hoch | [die SSOT in den Abwesenheitswaechter](erledigt/quer-g-0386-die-ssot-in-den-abwesenheitswaechter.md) | erledigt | — | G-387 |
 | `G-387` | feature | hoch | [die neun Marken in die SSOT](erledigt/quer-g-0387-die-neun-marken-in-die-ssot.md) | erledigt | — | C-437 |
 
-## market — 1
+## market — 2
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
+| `C-444` | befund | hoch | [das Wallet ist nicht live](todos/market-c-0444-das-wallet-ist-nicht-live.md) | offen | — | — |
 | `G-362` | feature | hoch | [marketplace initialisieren](todos/market-g-0362-marketplace-initialisieren.md) | offen | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`

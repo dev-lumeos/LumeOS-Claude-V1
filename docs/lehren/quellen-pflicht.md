@@ -105,6 +105,49 @@ Tom: *,,wenn ich bei unserer variante reinschaue wird mir uebel."*
 `[read]` **Struktur ja, Code nie** ? **und nachsehen, WARUM es
 ersetzt wurde.**
 
+### Marketplace ? eine eigene Domaene
+
+`[cmd]` **Die Dokumentation ist vollstaendiger als beim Coach:**
+
+    docs/modules/marketplace/DATABASE.md      960 Zeilen, 30 KB
+      14 Tabellen mit vollem CREATE TABLE
+    docs/modules/marketplace/MIGRATION.md      22 KB
+    docs/modules/marketplace/FEATURES.md       21 KB
+    docs/modules/marketplace/API.md            18 KB
+    docs/modules/marketplace/COMPONENTS.md     17 KB
+    docs/modules/marketplace/RESEARCH.md       14 KB
+    docs/user-guide/07-wallet-marketplace.md   15 KB
+
+    research/marketplace/competitive-analysis.md      16 KB
+    research/marketplace/lumeos-marketplace-strategy.md 15 KB
+
+`[cmd]` **Die 14 Tabellen:**
+
+    marketplace_products          marketplace_creators
+    marketplace_purchases         marketplace_wallet_transactions
+    marketplace_categories        marketplace_product_variants
+    marketplace_reviews           marketplace_review_votes
+    marketplace_promotions        marketplace_promotion_usage
+    marketplace_product_analytics + zwei Monatspartitionen
+    marketplace_search_analytics
+
+`[read]` **Auffaellig: Auswertung ist partitioniert nach Monat** ?
+**`_2026_01`, `_2026_02`.** `[read]` **Jemand hat mit Menge
+gerechnet.**
+
+`[cmd]` **Und `seed-marketplace.ts`, 20 KB** ? **es gab Testdaten.**
+
+**Die Oberflaeche:**
+
+    src/modules/marketplace/components/
+      CreatorHub.tsx        18 KB
+      ProductDetail.tsx     16 KB
+      MarketplaceView.tsx   15 KB
+    apps/marketplace/app/    9 Dateien, eigene App
+
+`[cmd]` **LumeOS heute: KEIN `market`-Schema.** `[cmd]` **C-419 hat
+13 Tabellen gebaut und sie sind nicht eingespielt.**
+
 ---
 
 ## Die Regel
