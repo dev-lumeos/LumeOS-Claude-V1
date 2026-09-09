@@ -259,7 +259,7 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | coach | relationship_change_log | relationship_change_log_change_kind_check | CHECK ((change_kind = ANY (ARRAY['insert'::text, 'update'::text, 'delete'::text]))) |
 | coach | relationships | relationships_active_ck | CHECK (((status <> 'active'::text) OR (started_at IS NOT NULL))) |
 | coach | relationships | relationships_ended_ck | CHECK (((status <> 'ended'::text) OR ((ended_at IS NOT NULL) AND (ended_by IS NOT NULL)))) |
-| coach | relationships | relationships_invited_coach_name_ck | CHECK (((status <> 'invited'::text) OR (coach_display_name IS NOT NULL))) NOT VALID |
+| coach | relationships | relationships_invited_coach_name_ck | CHECK (((status <> 'invited'::text) OR (coach_display_name IS NOT NULL))) |
 | coach | relationships | relationships_not_self_ck | CHECK ((coach_id <> client_id)) |
 | coach | relationships | relationships_status_check | CHECK ((status = ANY (ARRAY['invited'::text, 'active'::text, 'ended'::text, 'withdrawn'::text]))) |
 | coach | relationships | relationships_withdrawn_ck | CHECK (((status <> 'withdrawn'::text) OR ((withdrawn_at IS NOT NULL) AND (withdrawn_by IS NOT NULL)))) |

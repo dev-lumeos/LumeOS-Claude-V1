@@ -9,6 +9,8 @@ kind_von: C-419
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: e38078fe
 beruehrt:
   tabellen: [medical.lab_reports]
 zahlen:
@@ -143,4 +145,75 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  13 Tabellen live: Plaene 3, Gebuehren 7, Slots 4,
+        alle uebrigen 0
+    A2  RLS 13/13, Policies 13, Gegenprobe beidseitig
+    A3  book_wallet_purchase atomar, nach ROLLBACK 0/0/0
+    A4  der Abgleich gegen die 14 des Altrepos
+    A5  was RESEARCH.md begruendet und fehlt
+    A6  Sicherung 27.112.106 B, SHA-256
+    A7  Vollkette 176 Schritte, 354,2 s
+
+`[cmd]` **Selbst gemessen: 13 Tabellen, 13 mit RLS, 13 Policies,
+`book_wallet_purchase` vorhanden.**
+
+### Eine Berichtigung an mir
+
+`[read]` **Ich habe in C-444 vom `market`-Schema geschrieben** ?
+**es heisst `marketplace`.**
+
+`[cmd]` **Und dann habe ich danach gesucht und *,,kein Schema"*
+gemessen** ? **eine Minute lang hielt ich seinen Bericht fuer
+falsch.**
+
+`[read]` **Derselbe Fehler wie `conditions` statt
+`user_conditions`** ? **ein Name aus dem Gedaechtnis.**
+
+### A3 — der atomare Nachweis ist vollstaendig
+
+`[cmd]` **900 Cent = Voucher 500 + Revenue 400, Gebuehr 180,
+Verkaeufer 720, zwei Journalzeilen.**
+
+`[read]` **Voucher VOR Revenue** ? **wie C-419 es verlangt, und
+belegt statt behauptet.**
+
+`[cmd]` **Nach ROLLBACK: 0 Fixtures, 0 Wallets, 0 Journalzeilen.**
+
+`[cmd]` **Und `anon` wie `authenticated` haben kein EXECUTE** ?
+**nur `service_role`.** `[read]` **Ein Kauf laeuft nicht aus dem
+Browser.**
+
+### A4 — die Aufteilung ist gemessen, nicht behauptet
+
+`[cmd]` **`purchases` des Altrepos ist bei uns dreigeteilt:**
+`orders`, `order_items`, `product_licenses`.
+
+`[read]` **Das ist kein Fehlen, sondern eine andere Zerlegung** ?
+**er hat es unterschieden.**
+
+`[cmd]` **Und der Hinweis, der eine Verwechslung verhindert:**
+*,,`promotion_slots` sind Werbeplaetze, kein Ersatz fuer
+Rabattcodes."*
+
+`[read]` **Zwei Sachen mit aehnlichem Namen, verschiedener
+Zweck** ? **die Verwechslung war im Namen angelegt.**
+
+### A5 ist der wertvollste Teil
+
+> *,,Der neue Kern traegt Bundle-Komponenten und Gebuehren, aber
+> noch keine Integration gekaufter Inhalte in Fachmodule."*
+
+`[read]` **Ein Marktplatz, dessen Kaeufe nirgends ankommen.**
+
+`[cmd]` **`product_licenses` hat keinen Leser** ? **`training`
+liest sie nicht, `nutrition` auch nicht.**
+
+`[cmd]` **Und die Forschung nennt genau das als Kern:**
+*Cross-Module-Auslieferung*, `RESEARCH.md:36`.
+
+**Als C-452.**
+
+**Abgenommen.**
+

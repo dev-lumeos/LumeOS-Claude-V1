@@ -467,6 +467,185 @@ einzige Modul mit `loading.tsx` ? **die anderen sechs haben gar
 keinen Ladezustand.** Der Befund aus G-376 (*„0 Skeletons im ganzen
 Projekt"*) gilt fuer sie unveraendert.
 
+### Bericht G-392, Auftrag 2: behoben
+
+### A1 ? Die Suspense-Grenze, am Serverstand belegt
+
+`[cmd]` **Gemessen an `/v2/supplements`, Zeichenpositionen im
+Serverausgang:**
+
+     1.560   Schale        v2-sidebar
+     8.277   Schale        v2-topbar
+    10.860   Suspense oeffnet   <!--$?-->
+    10.869   Platzhalter        <template id="B:
+    10.911   Skelett            v2-skel-seite
+   113.671   Nachlieferung      <div hidden id="S:0">
+   113.704   Modulkopf          v2-module-header
+   114.203   Wechslerplatz      data-tageswechsler
+
+`[read]` **Die Reihenfolge beantwortet die Frage:** die Schale steht
+bei 1.560/8.277 ? **vor** der Grenze bei 10.860. Der Modulkopf und
+mit ihm der Wechslerplatz kommen erst bei 113.704, **innerhalb der
+Nachlieferung**.
+
+`[cmd]` **Damit ist die Bedingung des Auftrags erfuellt und
+belegt:** die Schale liegt ausserhalb der Grenze und kann den Anker
+stellen.
+
+### A2 ? Der Anker in der Schale: 11 von 11 Reitern sauber
+
+**Gebaut, drei Dateien:**
+
+    shell.tsx          `<div data-wechsler-anker />` vor
+                       `<Tageswechsler />` ? beide vor `{children}`
+    tageswechsler.tsx  das Portal zielt auf den Anker der Schale
+    kopf.css           der Anker legt sich ueber die Kopfmitte
+
+`[cmd]` **Am Schirm, je Reiter eine frische Seite:**
+
+    today stack extended catalog stacks intel inventory
+    injection compliance interactions cost    alle sauber
+
+    11 Reiter / 11 sauber
+
+`[read]` **Die Trennung ist der Kern:** der Platz des Moduls
+(`data-tageswechsler`) bleibt, wo er war ? er traegt die
+**Ausrichtung** und die **Erlaubnis**. Der Anker der Schale traegt
+das **Portal**. **Zwei Aufgaben, die vorher an einem Knoten hingen.**
+
+`[cmd]` **Bildschirmfoto: `backup/g394-kopf.png`** ? und daneben
+`g394-kopf-VORHER.png` aus dem Ausgangszustand. **Sie sind gleich:**
+Titel, Pillen, Umbruch, Knopfreihe, Wechslerlage.
+
+#### Was die Messung unterwegs berichtigt hat
+
+`[cmd]` **Vier Fassungen, bis die Lage stimmte** ? jede gemessen:
+
+    left: 50%                 Mitte bei 800 statt 750 (Fenster
+                              statt Inhaltsbereich)
+    alle Vorfahren `static`   -> `.v2-app .v2-content` bekommt
+                              `position: relative`
+    top: 48px                 Wechsler bei 92 statt 105 px
+    min-width 220px am Platz  Titelblock brach um
+    max-width am Titelblock   Titel schrumpfte auf 110 px
+
+`[cmd]` **Endstand: `width: 202px` fuer die Spalte, `top: 61px` fuer
+den Anker** ? Mitte 750 (Δ0 zum Kopf), Oberkante 105 px. **Beides
+die Werte des Ausgangszustands.**
+
+`[read]` **Der umgebrochene Titel ist NICHT neu** ? er steht so auch
+im Vorher-Foto. **Ich habe das geprueft, bevor ich weiter daran
+gebaut habe:** alle Aenderungen zurueckgenommen, gemessen, Foto
+gemacht. **Sonst haette ich einen Bestandszustand als eigenen Fehler
+behandelt.**
+
+### A3 ? Gegenprobe: der Fehler kehrt zurueck
+
+`[cmd]` **Das Ziel des Portals zurueck auf den Modulkopf gesetzt**
+(eine Zeile, `[data-wechsler-anker]` -> `[data-tageswechsler]`):
+
+    HYDRATION (2 in 2 Laeufen)
+
+`[cmd]` **Zurueckgebaut:**
+
+    SAUBER (2 Laeufe)
+
+### A4 ? Neun Module geprueft, sechs mit Wechsler
+
+`[cmd]` **Am Schirm:**
+
+    dashboard    sauber   Wechsler=1 Platz=1
+    goals        sauber   Wechsler=1 Platz=1
+    nutrition    sauber   Wechsler=1 Platz=1
+    recovery     sauber   Wechsler=1 Platz=1
+    supplements  sauber   Wechsler=1 Platz=1
+    training     sauber   Wechsler=1 Platz=1
+    medical      sauber   Wechsler=0 Platz=0
+    coach        sauber   Wechsler=0 Platz=0
+    settings     sauber   Wechsler=0 Platz=0
+
+    9 Module / 9 sauber / 6 mit Wechsler
+
+`[cmd]` **Ein Zwischenstand war falsch und ist berichtigt:** mit dem
+Anker allein erschien der Wechsler in **allen neun** Modulen, auch in
+`medical`, `coach` und `settings`. `[read]` **Das waere ein Regler
+ohne Wirkung** (C-426). **Behoben durch zwei Bedingungen:** der
+Anker ist das ZIEL, der Platz des Moduls die ERLAUBNIS ? fehlt er,
+rendert der Wechsler `null`, wie vorher.
+
+### A5 ? `loading.tsx` bleibt, und der Ladezustand ist belegt
+
+`[cmd]` **Die Datei ist unveraendert** ? `git diff --stat` leer.
+
+`[cmd]` **Am Schirm belegt:** von `recovery` nach `supplements`
+geklickt und waehrend des Wechsels beobachtet ?
+
+    Skelett beim Wechsel gesehen: true
+    Endstand geladen: Supplements
+
+`[read]` **Der Befund aus G-376 gilt weiter** (1,9?2,9 s ohne
+Rueckmeldung), und die Loesung dafuer steht unangetastet.
+
+### A6 ? 1525 Tests gruen
+
+`[cmd]` **tsc** sauber, **`next lint`** sauber, **1525 pass / 0
+fail.**
+
+### A7 ? `hole()` warnt jetzt
+
+`[cmd]` **Gemessen, drei Adressen:**
+
+    /login             23.475 Zeichen, 172 Woerter sichtbar
+    /v2/supplements    23.552 Zeichen, 172 Woerter sichtbar
+    /v2/recovery       23.543 Zeichen, 172 Woerter sichtbar
+
+`[read]` **Dieselben 172 Woerter ueberall** ? und **kein
+`v2-sidebar`, kein `v2-module-header`, kein `v2-skel-seite`.** Die
+Antwort traegt gar keine Seitenmarkierung, nur die Startskripte.
+**Deshalb sah ich in G-392 sechs Bisektionsschritte lang immer
+dasselbe.**
+
+`[cmd]` **Eine erste Annahme war falsch und ist berichtigt:** ich
+wollte an `<!--$?-->` und `<template id="B:` erkennen ? **beide
+kommen in dieser Antwort NICHT vor.** Die Erkennung haengt jetzt am
+fehlenden Seitenrumpf.
+
+`[cmd]` **Der Lauf:**
+
+    [hole] WARNUNG: .../v2/supplements traegt keine
+           Seitenmarkierung (23552 Zeichen, nur Startskripte).
+    [hole] Die Oberflaeche entsteht erst im Browser ? was hier
+           steht, ist auf jeder Adresse dasselbe.
+    [hole] Fuer STATUS taugt es, fuer INHALT nicht: Playwright
+           mit waitUntil='networkidle'. Siehe G-392.
+    status 200
+
+`[read]` **Der Rueckgabewert bleibt gleich** ? `hole()` ist weiter
+richtig fuer Status und Erreichbarkeit, und `psql` daneben
+unveraendert. **Es sagt nur nicht mehr nichts.**
+
+### Nichts in `packages/ui`
+
+`[cmd]` **Eine Regel musste dort hin und steht stattdessen in
+`kopf.css`:** `.v2-content` braucht `position: relative`, damit der
+Anker sich am Inhaltsbereich ausrichtet statt am Fenster. `[read]`
+**`v2-content` gehoert allen Anwendungen** (Admin, Coach) ? deshalb
+`.v2-app .v2-content`, was nur in dieser Oberflaeche greift.
+**Gemeldet, nicht dort geaendert.**
+
+### Was offen bleibt
+
+**1 ? Die uebrigen sechs Module haben keinen Ladezustand.**
+`[cmd]` `supplements` ist weiter das einzige mit `loading.tsx`. **Der
+Befund aus G-376 (*„0 Skeletons im ganzen Projekt"*) gilt fuer sie
+unveraendert** ? und jetzt ist auch belegt, dass ein Skelett ohne
+diesen Umbau die Hydration zerlegt haette. **Wer das naechste baut,
+braucht den Anker der Schale, nicht den des Moduls.**
+
+**2 ? Der umgebrochene Titel im Supplements-Kopf** (drei Pillen auf
+348 px). **Bestand, nicht neu** ? aber sichtbar. Ein eigener Punkt,
+wenn er stoeren soll.
+
 ## Abnahme
 
 _(vom Orchestrator)_

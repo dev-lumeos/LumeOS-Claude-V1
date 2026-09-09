@@ -28,14 +28,14 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `checkin_templates` | 10 | 2 | ? |
 | `checkins` | 16 | 6 | ? |
 | `client_autonomy` | 15 | 4 | ? |
-| `client_consent_log` | 9 | 0 | 2026-09-01 |
+| `client_consent_log` | 9 | 0 | ? |
 | `client_permissions` | 22 | 4 | ? |
 | `coach_profiles` | 7 | 0 | ? |
 | `messages` | 7 | 6 | ? |
 | `pending_actions` | 14 | 2 | ? |
 | `pending_invites` | 15 | 0 | 2026-09-09 |
 | `permission_change_log` | 9 | 6 | ? |
-| `relationship_change_log` | 9 | 7 | ? |
+| `relationship_change_log` | 9 | 9 | ? |
 | `relationships` | 17 | 6 | ? |
 
 ## goals — 7 Tabellen, 116 Spalten
@@ -70,15 +70,15 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `lab_reports` | 12 | 12 | ? |
 | `lab_result_values` | 27 | 280 | ? |
 | `medication_active_substances` | 28 | 498 | ? |
-| `medication_clinical_context_evidence` | 5 | 107 | 2026-08-26 |
-| `medication_faq` | 13 | 2313 | 2026-08-27 |
+| `medication_clinical_context_evidence` | 5 | 107 | ? |
+| `medication_faq` | 13 | 2313 | ? |
 | `medication_formulations` | 13 | 453 | ? |
-| `medication_pk_evidence` | 8 | 407 | 2026-08-26 |
+| `medication_pk_evidence` | 8 | 407 | ? |
 | `medication_products` | 11 | 448 | ? |
-| `medication_renal_hepatic_evidence` | 9 | 391 | 2026-08-26 |
-| `medication_reproductive_evidence` | 11 | 498 | 2026-08-26 |
-| `medication_thailand_regulatory_evidence` | 6 | 477 | 2026-08-26 |
-| `medication_user_texts` | 42 | 498 | 2026-08-27 |
+| `medication_renal_hepatic_evidence` | 9 | 391 | ? |
+| `medication_reproductive_evidence` | 11 | 498 | ? |
+| `medication_thailand_regulatory_evidence` | 6 | 477 | ? |
+| `medication_user_texts` | 42 | 498 | ? |
 | `symptom_biomarker_map` | 15 | 102 | ? |
 | `symptoms` | 8 | 34 | ? |
 | `user_conditions` | 15 | 2 | ? |
@@ -126,7 +126,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `recipe_curation_decisions` | 6 | 0 | ? |
 | `recipe_ingredients` | 15 | 22 | ? |
 | `recipes` | 19 | 6 | ? |
-| `search_events` | 9 | 337 | 2026-08-15 |
+| `search_events` | 9 | 337 | ? |
 | `search_synonyms` | 4 | 4877 | ? |
 | `shopping_list_items` | 15 | 33 | ? |
 | `shopping_lists` | 12 | 6 | ? |
