@@ -199,3 +199,79 @@ Tom: *,,dann muessen wir nochmal eine recherchewelle machen."*
 
 `[read]` **Erst messen, was davon Wege nennt** ? **bevor neu
 recherchiert wird.**
+
+## Das Altrepo, gemessen statt vermutet
+
+Tom: *,,das alte repo hat keine peptides, und wenn einzelne."*
+
+`[cmd]` **32 Dateien mit Treffern, aber er hat recht:** **kein
+Katalog.**
+
+`[cmd]` **Die hoechsten Trefferzahlen sind
+Wettbewerbsanalysen** ? `competitive-analysis.md` **(33),**
+`peptiq.md` **(4)** ? **Marktbeobachtung, keine Substanzdaten.**
+
+### Zwei Dateien sind trotzdem brauchbar
+
+**1** ? `supabase/seed.disabled/seed_supplements.sql:140-153`
+
+`[cmd]` **13 Peptide, JE MIT `subcutaneous`:**
+
+    BPC-157      TB-500      Ipamorelin   CJC-1295
+    GHRP-6       GHRP-2      Sermorelin   Tesamorelin
+    PT-141       Melanotan II  AOD-9604   Epitalon
+    GHK-Cu
+
+`[read]` **Mit Halbwertszeit, Dosisbereich, Einheit und
+Frequenz** ? **kein Katalog, aber belastbare Einzeldaten.**
+
+**2** ? `research/enhanced-supplements/data/compound-taxonomy.md`
+
+`[cmd]` **Die vollstaendigere Quelle, mit Route je Verbindung:**
+
+    Performance Peptides (~15)   alle SubQ
+      BPC-157      SubQ/Oral   Tissue Repair, Gut Healing
+      TB-500       SubQ        Tissue Repair
+      CJC-1295, Ipamorelin, GHRP-2/6, Hexarelin,
+      Sermorelin, Tesamorelin, AOD-9604,
+      Melanotan II, PT-141, Selank (Nasal/SubQ)
+
+    GLP-1                       alle SubQ
+      Semaglutide   Ozempic/Wegovy   SubQ  Weekly
+      Tirzepatide   Mounjaro/Zepbound SubQ Weekly
+      Liraglutide, Retatrutide, Survodutide
+
+    HGH                         alle SubQ
+      Somatropin, Genotropin, Norditropin,
+      Omnitrope, Somapacitan
+
+`[cmd]` **Semaglutid und Tirzepatid stehen dort als `SubQ`** ?
+**unsere Datenbank sagt `oral`.**
+
+`[read]` **Die Berichtigung braucht keine neue Recherche** ? **die
+Quelle liegt im Repo.**
+
+### Und BPC-157 ist der Sonderfall, den Tom nennt
+
+`[cmd]` **`SubQ/Oral`** ? **zwei Wege fuer dieselbe Substanz.**
+
+Tom: *,,bei bpc157/tb500 an die problemstellen unter die haut."*
+
+`[read]` **Das ist weder `abd` noch `sq_delt`** ? **es ist die
+Stelle, die weh tut.**
+
+`[read]` **Der Planer kennt 16 feste Orte** ? **eine
+verletzungsnahe Injektion passt in keinen davon.**
+
+## Was daraus folgt
+
+**Die Recherchewelle ist kleiner als gedacht:**
+
+    berichtigen   Semaglutid, Tirzepatid: oral -> injection_subq
+    uebernehmen   ~30 Verbindungen aus compound-taxonomy.md
+    offen         die uebrigen ~60 der 93
+
+`[read]` **Und die Werteliste vereinheitlichen** ? **heute stehen
+`oral`, `intramuscular`, `intranasal,subcutaneous` nebeneinander,
+die Spec will `oral | injection_im | injection_subq | topical |
+nasal`.**
