@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 207 |
+| `todos` | 206 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 4 |
-| `erledigt` | 373 |
+| `erledigt` | 374 |
 | **gesamt** | **586** |
 
 ## medical — 47
@@ -646,7 +646,7 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-444` | befund | hoch | [das Wallet ist nicht live](erledigt/market-c-0444-das-wallet-ist-nicht-live.md) | erledigt | — | C-452 |
-| `C-452` | befund | hoch | [ein Kauf kommt nirgends an](todos/market-c-0452-ein-kauf-kommt-nirgends-an.md) | offen | — | — |
+| `C-452` | befund | hoch | [ein Kauf kommt nirgends an](erledigt/market-c-0452-ein-kauf-kommt-nirgends-an.md) | erledigt | — | — |
 | `G-362` | feature | hoch | [marketplace initialisieren](todos/market-g-0362-marketplace-initialisieren.md) | offen | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`

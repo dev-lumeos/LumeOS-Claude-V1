@@ -32,9 +32,15 @@ Prozent aller Zeilen.**
 **`training`: 5 von 8 leer** ? `exercises`, `exercise_muscles`,
 `muscle_groups`, `equipment`, `exercise_catalog_enrichment`.
 
-`[read]` **Das Trainingsmodul hat keinen Uebungskatalog.**
-`[read]` **456 Zeilen sind Sitzungen und Saetze ? auf was sie sich
-beziehen, steht nirgends.**
+`[cmd]` **BERICHTIGT 2026-09-08 (C-452):** `training.exercises`
+**hat 1.416 Zeilen** ? **die Statistik oben war veraltet.**
+
+`[read]` **Der Katalog ist da.** `[read]` **Was fehlt, ist die
+Ebene darueber: eine Programmvorlage und eine
+Nutzer-Zuweisung.**
+
+`[cmd]` **`workout_sessions`, `workout_exercises`, `workout_sets`
+sind Protokolle** ? **kein Platz fuer ein Programm.**
 
 **`coach`: 5 von 15 leer** ? `coach_profiles`, `pending_invites`,
 `pending_actions`, `action_log`, `client_consent_log`.
