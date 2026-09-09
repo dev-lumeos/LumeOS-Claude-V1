@@ -9,6 +9,8 @@ kind_von: C-445
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: d883ef7e
 beruehrt:
   tabellen: [medical.injection_sites]
 zahlen:
@@ -111,4 +113,70 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Selbst geprueft.**
+
+    A1  C-385-Qualifizierung in der Kette, nach 385_schema
+    A2  frischer Aufbau: 173 Schritte, KETTE OK, 351,7 s
+        C-385-Fachprobe gruen
+    A3  28 Dateien: 6 / 11 / 3 / 8
+    A4  Waechter im Gate, mit eigenen Gegenproben 2/2
+    A5  Punktelauf gruen, 574 Punkte, 25/25
+
+`[cmd]` **Selbst gemessen: Gegenprobe mit einer neuen Migration
+ohne Kettenschritt -> ROT mit Namen, zurueckgebaut -> gruen.**
+`[cmd]` **Und er steht im Gate.**
+
+### Die Ausnahmeliste ist richtig gebaut
+
+`[read]` **Ich hatte Sorge** ? **Claude Code warnte gestern:
+*,,eine Ausnahmeliste altert nur nach oben."***
+
+`[cmd]` **Nachgemessen: `KNOWN_NON_CHAIN_MIGRATIONS` ist auf elf
+feste Namen begrenzt.** `[cmd]` **Zeile 102: `if
+(report.hasNewFindings) process.exit(1)`.**
+
+`[read]` **Sie kann nicht wachsen, ohne dass jemand sie bewusst
+erweitert** ? **eine zwoelfte Luecke macht das Gate rot.**
+
+`[cmd]` **Und die Begruendung steht in Zeile 13-15:**
+
+> *,,Sie bleiben absichtlich als Bestand sichtbar, damit eine neue
+> Luecke nicht hinter einem dauerhaft roten Gate verschwindet."*
+
+`[read]` **Das ist Claude Codes Argument aus G-390, unabhaengig
+gefunden.**
+
+### Die Klassifikation ist die eigentliche Arbeit
+
+`[cmd]` **Sechs Zustaende statt zwei** ? `inChainLive`,
+`inChainNotLive`, `knownNonChainLive`, `knownNonChainNotLive`,
+`newNonChainLive`, `newNonChainNotLive`.
+
+`[read]` **Nur die letzten beiden faerben rot** ? **und die
+Meldung nennt je Datei, ob sie live ist.**
+
+`[read]` **Ein Waechter, der *,,fehlt in der Kette"* sagt, ist
+weniger wert als einer, der sagt *,,fehlt UND ist live"*.**
+
+### A2 — nicht zweimal ausgefuehrt
+
+`[cmd]` **`schema_migrations` enthaelt `20260902070454` genau
+einmal.** `[cmd]` **Der Kettenschritt wirkt nur beim frischen
+Aufbau.**
+
+`[read]` **Er hat die Migration nicht erneut laufen lassen** ?
+**richtig, sie war schon angewandt.**
+
+### Was bleibt
+
+`[cmd]` **Drei Dateien sind live und nicht in der Kette** ?
+**C-327, C-327a, C-366.** `[read]` **Dasselbe Problem, dreimal
+offen.**
+
+`[cmd]` **Und acht ohne Registrierung** ? **darunter
+`C-381 secure_pending_action_execution`.**
+
+**Als C-447.**
+
+**Abgenommen.**
+

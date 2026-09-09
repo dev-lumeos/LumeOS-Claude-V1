@@ -8,8 +8,8 @@
 | `todos` | 207 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 364 |
-| **gesamt** | **574** |
+| `erledigt` | 365 |
+| **gesamt** | **575** |
 
 ## medical — 47
 
@@ -496,7 +496,7 @@
 | `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](erledigt/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | erledigt | — | — |
 | `G-391` | feature | hoch | [das Coach-Grundgeruest aus den Vorlagen](todos/coach-g-0391-das-grundgeruest-aus-den-vorlagen.md) | offen | — | — |
 
-## quer — 129
+## quer — 130
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -575,7 +575,8 @@
 | `C-422` | feature | hoch | [die Lesewege fuer elf Kacheln](erledigt/quer-c-0422-die-lesewege-fuer-elf-kacheln.md) | erledigt | — | — |
 | `C-424` | feature | mittel | [eine Leser-Registry](erledigt/quer-c-0424-eine-leser-registry.md) | erledigt | — | A-72 |
 | `C-430` | befund | mittel | [die Sicht traegt nur Deutsch](erledigt/quer-c-0430-die-sicht-traegt-nur-deutsch.md) | erledigt | — | — |
-| `C-446` | befund | hoch | [eine Migration fehlt in der Kette](laufend_codex/quer-c-0446-eine-migration-fehlt-in-der-kette.md) | laeuft (codex) | — | — |
+| `C-446` | befund | hoch | [eine Migration fehlt in der Kette](erledigt/quer-c-0446-eine-migration-fehlt-in-der-kette.md) | erledigt | — | C-447 |
+| `C-447` | befund | hoch | [die drei Live-Luecken schliessen](laufend_codex/quer-c-0447-die-drei-live-luecken-schliessen.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
