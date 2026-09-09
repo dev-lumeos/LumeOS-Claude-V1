@@ -503,3 +503,154 @@ nur im Pfadnamen steht.**
 hinfaellig.**
 **Keine Muskelpfade aendern** ? **sie sind anatomisch richtig.**
 Nicht committen, nicht stagen, nicht pushen.
+
+## Auftrag 4 — endgueltig, mit Auswahl und Modal
+
+Tom, 2026-09-08: *,,die injektionsorte sollen auch anwaehlbar sein
+wie in muscle soreness, und ein modal mit all den werten betreffs
+punkt und daten dazu, die wir haben oder haben werden. sowie die
+farblichen unterscheidungen logisch nach gebrauch wie in muscle
+soreness."*
+
+`[read]` **Auftrag 1, 2 und 3 sind damit ueberholt** ? **das hier
+gilt.**
+
+### `Koerperkarte` KANN das schon
+
+`[cmd]` **`packages/ui/src/koerperkarte.tsx:205`:**
+
+    onPick?: (id: string, typ: 'muscle' | 'point',
+              daten?: unknown) => void
+
+`[cmd]` **Zeile 313: `onClick` auf der Muskelflaeche.**
+`[cmd]` **Zeile 314-315: `role="button"`, `tabIndex`.**
+`[cmd]` **Zeile 320: Tastaturbedienung.**
+
+`[read]` **Es ist gebaut und wird von der Injektionskachel nicht
+benutzt** ? **fuenfzehnter A-71-Fall.**
+
+### Wie `tab-checkin` es macht — die Vorlage
+
+`[cmd]` **`recovery/tab-checkin.tsx:122-150`:**
+
+    <Koerperkarte
+      muskeln={katerAlsMuskeln(soreness)}
+      ausgewaehlt={sel ? RECOVERY_ZU_KARTE[sel] : null}
+      legende={[
+        { color: 'var(--surface-2)', label: '0 none' },
+        { color: 'var(--acc-recov)', label: '1 mild' },
+        { color: 'var(--warn)',      label: '2 moderate' },
+        { color: 'var(--neg)',       label: '3 severe' },
+      ]}
+      onPick={(id, typ) => {
+        if (typ !== 'muscle') return
+        const slug = KARTE_ZU_RECOVERY[id]
+        if (slug) { cycle(slug); setSel(slug) }
+      }}
+    />
+    {sel && ( ...Detailzeile... )}
+
+`[read]` **Vier Stufen, eine Zuordnungstabelle in beide
+Richtungen, und eine Detailzeile unter der Karte.**
+
+`[cmd]` **Und der Kommentar Zeile 116-121 sagt, warum dort NICHT
+`ErmuedungsKarte` steht:** *,,zwei Legenden nebeneinander, die
+dieselbe Flaeche verschieden benennen, sind schlimmer als
+keine."*
+
+### 1 · Flaechen statt Punkte
+
+`[cmd]` **21 Muskelflaechen sind da** ? `quadriceps`, `gluteal`,
+`deltoids`, `abs`, `obliques`, `trapezius` **und weitere.**
+
+`[cmd]` **Jeder Muskel hat `paths` als Array, `obliques` traegt den
+Kommentar `// right`** ? **eine Seite laesst sich einzeln
+einfaerben.**
+
+**Die Zuordnung, 16 Orte auf Flaechen:**
+
+    delt_l/r      -> deltoids          je Seite
+    sq_delt_l/r   -> deltoids          dieselbe Flaeche
+    quad_l/r      -> quadriceps
+    thigh_sq_l/r  -> quadriceps        dieselbe Flaeche
+    glute_l/r     -> gluteal
+    vglute_l/r    -> gluteal           dieselbe Flaeche
+    abd_l/r       -> abs oder obliques
+    lat_l/r       -> latissimus        FEHLT, messen
+
+`[read]` **Wo zwei Orte eine Flaeche teilen: die dringendere Farbe
+gewinnt** ? **und das Modal zeigt beide.**
+
+### 2 · Die Farben nach Gebrauch
+
+`[cmd]` **`Injection Planner:117-135` nennt vier Zustaende:**
+
+    fresh     nie benutzt
+    ready     rest_remaining < 0
+    soon      rest_remaining >= 0
+    resting   rest_remaining > 1
+
+`[read]` **Dieselbe Machart wie Muscle Soreness** ? **vier Stufen,
+eine Legende, die zur Skala gehoert.**
+
+`[read]` **Und je Ort mit SEINEM `rest_days`** ? **Deltoid 5 Tage,
+Gluteus 7.** `[read]` **Nicht *,,vor 7 Tagen"*, sondern *,,noch 2
+Tage Ruhe"*.**
+
+### 3 · Klick oeffnet ein Modal
+
+`[read]` **Nicht eine Zeile darunter wie im Check-in** ? **Tom
+verlangt ein Modal.**
+
+**Was hineingehoert, aus dem was da ist:**
+
+    aus injection_sites
+      display_name, route (im/sc)
+      minimum_rest_days + _reason
+      rotation_distance_mm
+      rotation_quadrant_interval_days
+
+    aus injection_logs        (0 Zeilen -- dann: nie benutzt)
+      letzter Einstich, volume_ml, pain_score
+      complication, substance_name
+
+    aus injection_needle_recommendations   (8 Zeilen)
+      Nadelgroesse -- ueber die ORTSART, nicht den Ort
+      (C-445, A5)
+
+    aus injection_tissue_condition_guidance (1 Zeile)
+      Gewebehinweis
+
+`[cmd]` **Und `injection_site_conditions` hat 0 Zeilen** ?
+**messen, was sie traegt, und ob sie ins Modal gehoert.**
+
+`[read]` **Was es noch nicht gibt, wird benannt, nicht
+erfunden** ? **E-72: keine nackte Null, aber auch keine
+Attrappe.**
+
+### Abnahmebedingungen — ersetzen ALLE vorherigen
+
+    A1  die Karte faerbt Flaechen, nicht Punkte.
+        Bildschirmfoto beider Ansichten.
+    A2  laesst sich EINE Seite einfaerben? Belegt an
+        deltoids oder quadriceps.
+    A3  die Zuordnung 16 Orte -> Flaechen, je genannt.
+        Und: latissimus vorhanden oder nicht.
+    A4  vier Farbstufen nach siteState, je Ort mit SEINEM
+        rest_days. Zahl: 16 Orte / je Zustand.
+    A5  Klick oeffnet ein Modal. Foto.
+    A6  im Modal: welches Feld aus welcher Tabelle.
+        Zahl: Felder / gefuellt / benannt leer.
+    A7  Tastaturbedienung: Tab zur Flaeche, Enter oeffnet.
+    A8  wo zwei Orte eine Flaeche teilen: beide im Modal.
+    A9  ErmuedungsKarte unveraendert. Foto von recovery.
+    A10 1529 Tests bleiben gruen.
+
+### Was nicht zu tun ist
+
+**Keine Punkte mehr** ? **die 16 Eintraege in `INJEKTIONS_ORTE`
+bleiben stehen, werden aber nicht mehr benutzt. Melden, nicht
+loeschen.**
+**Keine Muskelpfade aendern** ? **sie sind anatomisch richtig.**
+**Nichts erfinden, was die Tabellen nicht tragen.**
+Nicht committen, nicht stagen, nicht pushen.
