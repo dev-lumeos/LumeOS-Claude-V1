@@ -30,6 +30,7 @@ Punktdateien erzeugt:**
 | `00-MODULTABELLEN.md` | Tabellen, Spalten, Zeilen, Datum | `tools/ssot-modultabellen.mjs` |
 | `00-SCHEMA.md` | Funktionen, Policies, CHECKs, Sichten | `tools/ssot-schema.mjs` |
 | `00-ABGENOMMEN.md` | was wann abgenommen wurde | `tools/ssot-nachtragen.mjs` |
+| `00-SPEC-ABGLEICH.md` | was die Spec nennt und das Schema nicht hat, und umgekehrt | `tools/spec-abgleich.mjs` |
 
 `[read]` **Erst dort nachsehen, dann messen** ? **heisst die
 Tabelle so? Gibt es den Schreibweg? Was erlaubt der CHECK?**
