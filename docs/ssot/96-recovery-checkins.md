@@ -25,6 +25,11 @@ Stand: 2026-08-17
 ## Was aus SPEC_06 nicht übernommen wurde
 
 [read] Nicht übernommen wurden `recovery_scores`, `hrv_measurements`, `hrv_baselines`, `sleep_data`, `recovery_modalities`, `user_recovery_modalities`, `training_load_logs`, `overtraining_alerts`, `recovery_protocols`, `user_protocol_assignments` und die Recovery-Auswertungssichten.
+<!-- @abwesend recovery.recovery_scores -->
+<!-- @abwesend recovery.sleep_data -->
+<!-- @abwesend recovery.hrv_readings -->
+<!-- @abwesend training.training_load_logs -->
+<!-- @abwesend recovery.user_protocol_assignments -->
 
 
 **Berichtigt 2026-09-08 (G-383).** `[cmd]` **Der Satz darueber ist

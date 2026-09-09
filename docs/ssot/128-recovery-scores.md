@@ -49,18 +49,8 @@ Stand: 2026-08-20
 
 `[read]` C-124 muss E5 Modalitaeten-Bonuswerte und E8 Motivationsschwelle liefern.
 
-`[cmd]` Nicht gebaut wurden `hrv_readings`, `sleep_data`, `overtraining_alerts` und der Stress-Score. Das ist absichtlich: HRV und Schlafdaten haengen am Wearable-Import, Overtraining braucht Wochenverlauf und die offene Recherche, Stress folgt spaeter auf derselben Struktur.
+`[cmd]` **Berichtigt 2026-09-08 (G-386):** `overtraining_alerts` **wurde seit C-421 gebaut.** Nicht gebaut sind `hrv_readings`, `sleep_data` und der Stress-Schnitt.ore. Das ist absichtlich: HRV und Schlafdaten haengen am Wearable-Import, Overtraining braucht Wochenverlauf und die offene Recherche, Stress folgt spaeter auf derselben Struktur.
 
-
-**Berichtigt 2026-09-08 (G-383).** `[cmd]` **Der Satz darueber ist
-teilweise ueberholt** ? **diese Tabellen EXISTIEREN inzwischen:**
-
-    `recovery.overtraining_alerts`   seit C-421
-
-`[cmd]` **Gemessen gegen `information_schema`.** `[read]` **Die
-uebrigen Namen der Aufzaehlung stimmen weiter** ? **und genau das
-war die Tuecke: wer stichprobenartig prueft, trifft einen wahren
-Namen und haelt die ganze Zeile fuer belegt.**
 
 `[cmd]` Die Tageswerte sind live eingespielt. RLS ist beidseitig belegt: als `dev@lumeos.app` sind 170 Scores und 89 Modalitaeten sichtbar, als `test-user@lumeos.local` keine.
 

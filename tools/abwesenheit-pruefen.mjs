@@ -50,9 +50,35 @@ const NUR_LISTE = process.argv.includes('--liste')
 function dateien() {
   const roh = execFileSync('git', ['ls-files', '--',
     'apps/**/*.ts', 'apps/**/*.tsx', 'packages/**/*.ts',
-    'packages/**/*.tsx', 'tools/*.mjs', 'docs/spezifikation/**/*.md',
+    'packages/**/*.tsx', 'tools/*.mjs',
+    // `[cmd]` **G-386: `docs/ssot/` dazu.** Gemessen in G-385: die
+    // Liste sah **0** Dateien aus `docs/ssot/` ? eine Marke dort war
+    // unsichtbar. `[read]` **Die SSOT beschreibt den Ist-Zustand;
+    // eine Abwesenheit ist ein Teil davon** und kippt still, sobald
+    // Codex die Tabelle baut.
+    //
+    // ══ WARUM OHNE `**` ════════════════════════════════════════════
+    //
+    // `[cmd]` **`docs/ssot/**\/*.md` fand 16 von 174 Dateien** ? nur
+    // die in `70-spec-audit/`. **`git ls-files` behandelt `**\/` als
+    // „mindestens eine Ebene tiefer"**, die 156 Dateien direkt in
+    // `docs/ssot/` fielen durch.
+    //
+    // `[cmd]` **Dasselbe traf `docs/spezifikation/**\/*.md` seit
+    // A-62: 126 von 137** ? **11 flache Dateien wurden nie
+    // gelesen**, darunter `00-QUELLEN.md` und `00-MODULPLAN.md`.
+    //
+    // `[read]` **Ein Verzeichnispfad ohne Muster nimmt beide
+    // Ebenen** ? die Endung prueft die Schleife unten ohnehin.
+    // **Eine stille Null sieht aus wie „keine Marke da".**
+    'docs/spezifikation/', 'docs/ssot/',
   ], { cwd: WURZEL, encoding: 'utf8' })
+  // `[read]` Ein Verzeichnispfad bringt alles mit ? 209 Dateien ohne
+  // `.md` (fast nur `.gitkeep`). **Die Endung hier pruefen**, statt
+  // sie ins Glob zu zwingen und dabei Ebenen zu verlieren.
   return roh.split('\n').map(z => z.trim()).filter(Boolean)
+    .filter(f => !f.startsWith('docs/')
+              || f.endsWith('.md'))
 }
 
 const MARKE = /@abwesend(-spalte|-api)?\s+([A-Za-z_][\w.*]*)/

@@ -1621,6 +1621,17 @@
         "430_schema",
         "152"
       ]
+    },
+    {
+      "id": "428_schema",
+      "path": "supabase/migrations/20260909150000_c428_coach_pending_invites.sql",
+      "kind": "sql",
+      "creates": "C-428: getrennte Coach-Einladungen fuer unregistrierte E-Mails mit Hash-Token, Ablauf und atomarer Annahme in Beziehung, Rechte und Autonomy",
+      "depends_on": [
+        "150",
+        "151",
+        "156"
+      ]
     }
   ]
 }

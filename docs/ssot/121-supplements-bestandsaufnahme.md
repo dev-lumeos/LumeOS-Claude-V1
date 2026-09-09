@@ -31,6 +31,7 @@ gelesen): fünf Tabellen, die Sicht `daily_intake_summary`, zwei
 Funktionen, RLS auf allen fünf, Snapshots im Einnahmeprotokoll.
 `[read]` `SPEC_06` beschreibt **zehn** Tabellen; nicht gebaut sind
 `enhanced_substances`, `user_supplement_settings`, `user_inventory`,
+<!-- @abwesend supplements.enhanced_substances -->
 `stack_templates`, `stack_template_items` (per Grep der `CREATE TABLE`-
 Zeilen gegengeprüft).
 

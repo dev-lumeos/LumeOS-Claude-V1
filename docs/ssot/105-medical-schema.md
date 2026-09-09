@@ -28,6 +28,9 @@ Stand: 2026-08-18.
 [cmd] Übernommen wurden nur Katalog und Befunde: `biomarker_catalog`, `biomarker_reference_ranges`, `lab_reports`, `lab_result_values`.
 
 [read] Nicht übernommen wurden `user_health_metrics`, `user_symptoms`, `user_medications` und `medical_alerts`. Sie gehören zu Health-Metrics, Symptomtracking, Medikamenten und Bewertung/Benachrichtigung; der Auftrag war Katalog plus Befund.
+<!-- @abwesend medical.user_health_metrics -->
+<!-- @abwesend medical.user_symptoms -->
+<!-- @abwesend medical.medical_alerts -->
 
 
 **Berichtigt 2026-09-08 (G-383).** `[cmd]` **Der Satz darueber ist

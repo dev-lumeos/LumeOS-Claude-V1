@@ -2254,6 +2254,20 @@
     },
     {
       "schema": "coach",
+      "name": "pending_invites",
+      "schritt": "428_schema",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {
+        "authenticated": ["SELECT"],
+        "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]
+      },
+      "grants_herkunft": "C-428: Einladungen an unregistrierte E-Mails werden ausschliesslich ueber die atomaren Hash-Token-Funktionen geschrieben; Coaches lesen nur eigene Zeilen.",
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": ["id", "coach_id", "coach_display_name", "email_normalized", "token_hash", "expires_at", "status", "permission_draft", "autonomy_draft", "accepted_at", "accepted_by", "accepted_relationship_id", "expired_at", "created_at", "updated_at"]
+    },
+    {
+      "schema": "coach",
       "name": "permission_change_log",
       "schritt": "150",
       "rls": true,
@@ -5650,6 +5664,16 @@
       "schema": "coach",
       "name": "create_relationship_invite",
       "schritt": "156"
+    },
+    {
+      "schema": "coach",
+      "name": "create_pending_invite",
+      "schritt": "428_schema"
+    },
+    {
+      "schema": "coach",
+      "name": "accept_pending_invite",
+      "schritt": "428_schema"
     },
     {
       "schema": "marketplace",
