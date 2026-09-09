@@ -654,3 +654,100 @@ loeschen.**
 **Keine Muskelpfade aendern** ? **sie sind anatomisch richtig.**
 **Nichts erfinden, was die Tabellen nicht tragen.**
 Nicht committen, nicht stagen, nicht pushen.
+
+## Auftrag 5 — es ist eine Kopie, keine Neuentwicklung
+
+Tom, 2026-09-08: *,,anstatt von trainingsdaten kommen einfach
+injektionsdaten rein, kann ja nicht so schwer sein."*
+
+`[read]` **Er hat recht, und die vorherigen vier Auftraege waren zu
+kompliziert gedacht.**
+
+### Die Vorlage ist vierzehn Zeilen
+
+`[cmd]` **`recovery/muskel-zuordnung.ts:249-270`:**
+
+    const KATER_FARBE = [
+      'var(--surface-2)',   // 0 none
+      'var(--acc-recov)',   // 1 mild
+      'var(--warn)',        // 2 moderate
+      'var(--neg)',         // 3 severe
+    ]
+
+    export function katerAlsMuskeln(werte) {
+      const raus = []
+      for (const [slug, wert] of Object.entries(werte)) {
+        if (wert == null) continue
+        const id = RECOVERY_ZU_KARTE[slug]
+        if (!id || !MUSKELN[id]) continue
+        const stufe = Math.min(Math.max(Math.round(wert), 0), 3)
+        const schon = raus.find(r => r.id === id)
+        // Deltoids: der schlechtere Wert gewinnt.
+        if (schon) {
+          if (stufe > schon.stufe) { ... }
+          continue
+        }
+        raus.push({ id, color: KATER_FARBE[stufe], opacity: 0.85, stufe })
+      }
+      return raus
+    }
+
+`[read]` **Drei Dinge, und alle drei braucht die Injektionskarte
+auch:**
+
+**1** ? **eine Zuordnungstabelle `Wert -> Flaeche`.**
+**2** ? **vier Farben.**
+**3** ? **bei doppelter Belegung gewinnt der dringendere Wert.**
+
+`[cmd]` **Punkt 3 ist genau der Fall `glute`/`vglute`,
+`delt`/`sq_delt`, `quad`/`thigh_sq`** ? **die Loesung steht schon
+da.**
+
+### Also: `injektionAlsMuskeln`
+
+    const ZUSTAND_FARBE = {
+      fresh:   'var(--surface-2)',   // nie benutzt
+      ready:   'var(--pos)',         // frei
+      soon:    'var(--warn)',        // bald frei
+      resting: 'var(--neg)',         // ruht
+    }
+
+    ORT_ZU_KARTE = {
+      delt_l: 'deltoids_l',  sq_delt_l: 'deltoids_l',
+      quad_l: 'quadriceps_l', thigh_sq_l: 'quadriceps_l',
+      glute_l: 'gluteal_l',  vglute_l: 'gluteal_l',
+      abd_l: 'abs',  lat_l: 'latissimus_l',
+      ... je Seite
+    }
+
+`[read]` **Dieselbe Machart, andere Quelle** ? **`siteState` statt
+`soreness`.**
+
+`[cmd]` **`siteState` steht in `Injection Planner:117-135` und
+rechnet je Ort mit SEINEM `rest_days`.**
+
+### Und der Klick ist auch schon gebaut
+
+`[cmd]` **`tab-checkin.tsx:132`:**
+
+    onPick={(id, typ) => {
+      if (typ !== 'muscle') return
+      const slug = KARTE_ZU_RECOVERY[id]
+      if (slug) { cycle(slug); setSel(slug) }
+    }}
+
+`[read]` **Dieselbe Rueckrichtung** ? `KARTE_ZU_ORT`.
+
+`[read]` **Nur der Klick oeffnet ein Modal statt eine Zeile
+darunter** ? **das ist der einzige echte Unterschied.**
+
+### Was das fuer den Aufwand heisst
+
+`[read]` **Eine Zuordnungsdatei nach dem Muster von
+`muskel-zuordnung.ts`, ein Modal, und die Kachel ruft
+`Koerperkarte` mit `muskeln=` statt `punkte=`.**
+
+`[read]` **Die 16 Punkte in `INJEKTIONS_ORTE` werden nicht mehr
+gebraucht** ? **stehen lassen, melden.**
+
+**Die Abnahmebedingungen aus Auftrag 4 bleiben.**
