@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 203 |
-| `laufend_codex` | 2 |
+| `todos` | 204 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 360 |
-| **gesamt** | **566** |
+| `erledigt` | 361 |
+| **gesamt** | **567** |
 
 ## medical — 47
 
@@ -447,7 +447,7 @@
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 38
+## coach — 39
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -476,7 +476,8 @@
 | `C-437` | befund | hoch | [der Snapshot wird nicht gefuellt](erledigt/coach-c-0437-der-snapshot-wird-nicht-gefuellt.md) | erledigt | — | — |
 | `C-438` | feature | hoch | [C-428 einspielen](erledigt/coach-c-0438-c-428-einspielen.md) | erledigt | — | C-439 |
 | `C-439` | befund | hoch | [ein Coach ohne Profil kann nicht einladen](erledigt/coach-c-0439-ein-coach-ohne-profil-kann-nicht-einladen.md) | erledigt | — | C-440 |
-| `C-440` | feature | hoch | [das Coach-Onboarding](laufend_codex/coach-c-0440-das-coach-onboarding.md) | laeuft (codex) | — | — |
+| `C-440` | feature | hoch | [das Coach-Onboarding](erledigt/coach-c-0440-das-coach-onboarding.md) | erledigt | — | C-442 |
+| `C-442` | feature | mittel | [C-440 einspielen](todos/coach-c-0442-c-440-einspielen.md) | offen | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](erledigt/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | erledigt | — | C-381 |

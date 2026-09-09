@@ -9,6 +9,8 @@ kind_von: C-439
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: ed84ca6f
 beruehrt:
   tabellen: [coach.relationships]
 zahlen:
@@ -101,4 +103,60 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  onboard_coach: Profil 0 -> 1
+    A2  danach gelingt die Einladung
+    A3  Rolle liegt in auth.users.raw_app_meta_data
+        live: 7 Nutzer, 6 ohne, 1 admin, 0 coach
+    A4  Seed: 1 benannte, 2 mit leerem Snapshot
+    A5  Gegenprobe mit historischem Namen wird erkannt
+    A6  Vollkette 422,3 s, SCHEMA VOLLSTAENDIG
+
+`[cmd]` **Selbst gemessen: `onboard_coach` nicht live, 6 Nutzer
+ohne Rolle, 1 admin, 0 coach.** `[cmd]` **Nach dem Rollback: 0
+Profile, 0 Invites, 0 Snapshots.**
+
+### A3 ist die wichtigste Zeile
+
+`[cmd]` **`061_rollen_admin.sql:52`: Rollen werden bewusst nur
+AUSSERHALB der Anwendung vergeben.**
+
+> *,,C-440 erfindet daher keine Rollenvergabe."*
+
+`[read]` **Es gibt heute null Coach-Rollen und null Funktionen, die
+sie pruefen** ? **er haette eine erfinden koennen, um `SPEC_07:10`
+zu erfuellen.**
+
+`[read]` **Stattdessen hat er gemessen, wo sie liegt, und die
+Stelle genannt, die es verbietet.**
+
+`[cmd]` **Damit ist `SPEC_07:10` halb umgesetzt** ? **das aktive
+Profil ja, die Rolle nicht** ? **und das ist benannt, nicht
+uebergangen.**
+
+### Die Rotprobe zaehlt
+
+`[cmd]` **Aufbaukette gruen in 460,8 s, der Test scheiterte
+erwartungsgemaess NUR an `coach.onboard_coach(text)`.**
+
+`[read]` **Also faellt er an der Sache, nicht am Aufbau** ? **eine
+Rotprobe, die aus dem falschen Grund rot wird, misst nichts.**
+
+`[cmd]` **Danach gruen in 0,84 s, und C-428 bleibt gruen.**
+
+### A4/A5 — die Dreiteilung ist gebaut
+
+`[cmd]` **Zwei historische ohne Snapshot, eine aktuelle mit
+Namen** ? **die Endpruefung verlangt 1 / 2 / 0.**
+
+`[cmd]` **Und die Gegenprobe: ein historischer Name wird
+erkannt.**
+
+`[read]` **Sein eigener Fund aus C-439, jetzt als Waechter** ?
+**niemand kann den Seed spaeter zurueckdrehen, ohne dass es
+auffaellt.**
+
+**Abgenommen. Einspielen als C-442 erfasst, nicht sofort
+beauftragt.**
+
