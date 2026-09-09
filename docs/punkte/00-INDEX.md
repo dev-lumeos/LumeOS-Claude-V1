@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
+| `todos` | 207 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 366 |
+| `erledigt` | 367 |
 | **gesamt** | **576** |
 
 ## medical — 47
@@ -576,7 +576,7 @@
 | `C-430` | befund | mittel | [die Sicht traegt nur Deutsch](erledigt/quer-c-0430-die-sicht-traegt-nur-deutsch.md) | erledigt | — | — |
 | `C-446` | befund | hoch | [eine Migration fehlt in der Kette](erledigt/quer-c-0446-eine-migration-fehlt-in-der-kette.md) | erledigt | — | C-447 |
 | `C-447` | befund | hoch | [die drei Live-Luecken schliessen](erledigt/quer-c-0447-die-drei-live-luecken-schliessen.md) | erledigt | — | C-448 |
-| `C-448` | entscheidung | mittel | [acht tote Migrationen](todos/quer-c-0448-acht-tote-migrationen.md) | offen | — | — |
+| `C-448` | entscheidung | mittel | [acht tote Migrationen](erledigt/quer-c-0448-acht-tote-migrationen.md) | erledigt | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

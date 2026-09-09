@@ -10,19 +10,14 @@ const MIGRATIONS = path.join(ROOT, 'supabase', 'migrations')
 const MANIFEST = path.join(ROOT, 'supabase', '_pipeline', 'kette.json')
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 
-// 2026-09-09 gemessen: Diese elf Dateien waren bereits vor dem Waechter nicht
-// in der Kette. Sie bleiben absichtlich als Bestand sichtbar, damit eine neue
-// Luecke nicht hinter einem dauerhaft roten Gate verschwindet.
-export const KNOWN_NON_CHAIN_MIGRATIONS = new Set([
-  '20260815180000_search_events.sql',
-  '20260826180000_c283_medication_catalog_mapping.sql',
-  '20260826190000_c286_medication_enrichments.sql',
-  '20260827024026_c293_medication_user_texts.sql',
-  '20260829031601_g107_reference_assessment_window.sql',
-  '20260901090000_c371_recipe_source_plan_origin_buddy.sql',
-  '20260901110000_c362_client_consent_log.sql',
-  '20260902100000_c381_secure_pending_action_execution.sql',
-])
+// `[cmd]` **2026-09-08, C-448: die Liste ist LEER.** Tom hat die acht
+// toten Migrationen nach `backup/tote-migrationen/` verschoben ? sie
+// waren in C-447 einzeln geprueft und alle von der Pipeline abgedeckt.
+//
+// `[read]` **Eine Liste, die es nicht gibt, kann nicht veralten.**
+// **Jede Migrationsdatei ohne Kettenschritt macht das Gate jetzt
+// rot** ? ohne Ausnahme.
+export const KNOWN_NON_CHAIN_MIGRATIONS = new Set([])
 
 function versionOf(file) {
   const match = path.basename(file).match(/^(\d+)_/)

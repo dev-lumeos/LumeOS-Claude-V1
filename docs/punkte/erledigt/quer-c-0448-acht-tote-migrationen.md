@@ -6,7 +6,9 @@ schwere: mittel
 angelegt: 2026-09-08
 braucht: []
 kind_von: C-447
-entscheidung: null
+entscheidung: E-77
+erledigt: 2026-09-08
+commit: OFFEN
 beruehrt:
   dateien:
     - tools/migration-kette-pruefen.mjs
@@ -69,3 +71,28 @@ Frage gestellt wurde** ? **nicht nur, dass eine Datei fehlt.**
 
 `[cmd]` **Und Codex' Nachsatz:** *,,C-381-Schutz bleibt ueber den
 Pipeline-Superset aktiv."*
+
+## Entschieden am 2026-09-08 — Variante c
+
+Tom: *,,ja weg mit den toten migrationen in das backupverzeichnis,
+ich move heute abend."*
+
+`[cmd]` **Acht Dateien nach `backup/tote-migrationen/` verschoben,
+per `git mv`** ? **die Geschichte bleibt.**
+
+`[cmd]` **`00-LIESMICH.md` daneben:** **warum jede tot ist, mit
+der Fundstelle aus C-447.**
+
+`[cmd]` **Und `KNOWN_NON_CHAIN_MIGRATIONS` ist LEER** ? **von 8 auf
+0.**
+
+`[read]` **Eine Liste, die es nicht gibt, kann nicht veralten.**
+
+`[cmd]` **Waechter gruen: 20 Dateien, 9 in Kette und live, 11 in
+Kette und nicht live, 0 Bestand.**
+
+`[cmd]` **Gegenprobe: eine neue Datei ohne Kettenschritt -> ROT,
+zurueckgebaut -> gruen.** `[cmd]` **Eigene Tests 2/2.**
+
+`[read]` **Jede Migrationsdatei ohne Kettenschritt macht das Gate
+jetzt rot** ? **ohne Ausnahme.**
