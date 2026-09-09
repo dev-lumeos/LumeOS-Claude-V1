@@ -11,8 +11,8 @@ erledigt: 2026-08-19
 commit: d41c841f
 entscheidung: [E-02, E-03, E-04, E-05, E-06, E-07, E-08, E-09, E-10]
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien:
+    - apps/web/src/app/v2/recovery/ansicht.tsx
 zahlen: null
 ---
 
