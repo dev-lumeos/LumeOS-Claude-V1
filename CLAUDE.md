@@ -57,9 +57,33 @@ Fragen:**
     00-MODULTABELLEN.md   Tabellen, Spalten, Zeilen, Datum
     00-SCHEMA.md          Funktionen, Policies, CHECKs, Sichten
     00-ABGENOMMEN.md      was wann abgenommen wurde
+    00-SPEC-ABGLEICH.md   was die Spec nennt und das Schema nicht
+                          hat -- und umgekehrt
 
 `[read]` **Heisst die Tabelle so? Gibt es den Schreibweg? Was
 erlaubt der CHECK?** ? **erst dort nachsehen, dann messen.**
+
+### Vor jedem Auftrag: der Abgleich, nicht das Gedaechtnis
+
+**Tom, 2026-09-08:** *,,du fantasierst dich durch themen durch, die
+definiert sind ? und wenn nicht, fragst du mich."*
+
+`[cmd]` **Fuenf Behauptungen an einem Tag, alle von Agenten
+berichtigt:**
+
+    `conditions`                    heisst `user_conditions`
+    `is_primary` gibt es nicht      gibt es, mit eigenem Index
+    `client_id` ist nullable        NOT NULL, zweifach
+    keine Spec nennt den Erzeuger   SPEC_08:163 und SPEC_07:10
+    `supplements.injection_*`       liegt in `medical`, fuenf Tabellen
+
+`[read]` **Vier davon standen in einer Datei, die der Orchestrator
+selbst erzeugt hatte.**
+
+`[cmd]` **`docs/ssot/00-SPEC-ABGLEICH.md` sagt, WO gelesen werden
+muss** ? **bei 159 Spec-Dateien ist das der Unterschied.**
+
+`[read]` **Es ersetzt das Lesen nicht.**
 
 `[cmd]` **Am 2026-09-08 hat der Orchestrator dutzende Male `psql`
 gerufen und wurde dreimal berichtigt** ? `user_conditions` **statt**
@@ -79,6 +103,7 @@ nach `docs/`** ? **sie messen und melden.**
 
     node tools/ssot-modultabellen.mjs --schreiben
     node tools/ssot-schema.mjs --schreiben
+    node tools/spec-abgleich.mjs --schreiben
 
 **Zum Tagesabschluss zusaetzlich:**
 
