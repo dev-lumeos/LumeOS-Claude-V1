@@ -141,3 +141,92 @@ irgendwann hochgestellt.**
 
 `[read]` **Das ist Arbeit fuer einen eigenen Tag** — **und eine
 Entscheidung fuer Tom, ob acht Achsen bleiben.**
+
+## Aus dem Altrepo gelesen, 2026-09-08
+
+Tom: *,,wir haben schon 90% von lumeos gebaut vorher, und das ist
+eine quelle die fast alle fragen beantwortet."*
+
+`[cmd]` **`referenz/lumeos-2026/AUTONOMY_ARCHITECTURE.md`, Zeile
+165-220: die Erlaubnismatrix, vollstaendig.**
+
+    Level 1  Supervised     ALLES gesperrt, Coach-Freigabe noetig
+    Level 2  Guided         Wasser, Schlaf, Hydration, Ruhe
+                            alles andere gesperrt
+    Level 3  Collaborative  + Ernaehrung, Supplement-Timing,
+       DEFAULT              Mahlzeiten, Makros unter 5 %,
+                            Recovery
+                            Trainingsaenderungen gesperrt
+    Level 4  Adaptive       + Deload, Volumen, Trainingslast,
+                            Uebungstausch, Ruhetage
+                            Programmumbau gesperrt
+    Level 5  Autonomous     ALLES erlaubt: Programm, Ziele,
+                            grosse Makros, Trainingsphasen,
+                            Supplement-Stapel
+
+`[read]` **Und jede Stufe nennt ausdruecklich, was gesperrt
+BLEIBT** ? **nicht nur, was dazukommt.**
+
+### Der Empfehlungsalgorithmus, Zeile 224-262
+
+`[cmd]` **Vier Faktoren, je +1, 0 oder -1:**
+
+    Erfahrung       Anfaenger -1, Mittel 0, Fortgeschritten 0,
+                    Elite +1
+    Beziehungsdauer unter 7 Tage -1, 7-90 Tage 0, ueber 90 +1
+    Einhaltung      unter 70 % -1, 70-90 % 0, ueber 90 % +1
+    Komplexitaet    mit Merkern -1, ohne 0
+
+`[cmd]` **Rechnung: Start bei Stufe 3, Faktoren addieren, auf 1-5
+begrenzen, Empfehlung MIT Begruendung zurueckgeben.**
+
+`[read]` **Eine Empfehlung ohne Begruendung waere eine
+Anweisung** ? **dieselbe Regel wie bei `suggestSite`.**
+
+### Was das Altrepo an Datenbank hatte
+
+`[cmd]` **Zeile 71-88:**
+
+    coach_clients               coach_client_autonomy_log
+      coach_id                    id, coach_id, client_id
+      client_id                   old_level, new_level
+      autonomy_level (3)          changed_by, reason
+      created_at, updated_at      created_at
+
+`[read]` **EINE Stufe je Beziehung, mit Protokoll und Grund.**
+
+`[cmd]` **LumeOS hat ACHT Achsen** ? `nutrition_level`,
+`training_level`, `recovery_level`, `goals_level`,
+`supplements_level`, `medical_level`, `buddy_level`,
+`safety_level`.
+
+`[cmd]` **Und `coach.autonomy_change_log` gibt es** ? **das
+Protokoll ist uebernommen, die Matrix nicht.**
+
+### Die API des Altrepos, Zeile 58-65
+
+    GET  /clients/:id/autonomy
+    PUT  /clients/:id/autonomy
+    GET  /clients/:id/autonomy/recommendation
+    GET  /clients/:id/autonomy/history
+    GET  /autonomy/levels
+
+`[cmd]` **`src/api/human-coach/routes/autonomy.ts`, 404 Zeilen.**
+
+## Die Entscheidung, die bleibt
+
+`[read]` **Die Matrix liegt vor ? fuer EINE Achse.**
+
+`[read]` **Codex' Vorschlag aus C-425: acht fachliche Matrizen,
+`axis x capability -> Mindeststufe x Modus`, mindestens 38
+Stufenbeschreibungen.**
+
+`[read]` **Die Altrepo-Matrix ist die Vorlage fuer je eine Spalte**
+? **was in Level 3 unter *Ernaehrung* steht, gehoert in
+`nutrition_level` 3.**
+
+`[cmd]` **`safety_level` hat nur drei Stufen** ? **es ist ein
+Schutz-Gate, keine Freiheitsachse** (C-435).
+
+`[read]` **Damit ist die Arbeit klar umrissen:** **die
+Fuenferliste aufteilen, nicht neu erfinden.**
