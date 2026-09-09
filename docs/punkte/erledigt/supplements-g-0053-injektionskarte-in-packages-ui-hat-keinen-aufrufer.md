@@ -13,8 +13,8 @@ beauftragt: 2026-09-08
 erledigt: 2026-09-08
 commit: c3cd8fe5
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien:
+    - apps/web/src/app/v2/supplements/tab-injektionen.tsx
 zahlen: null
 ---
 
