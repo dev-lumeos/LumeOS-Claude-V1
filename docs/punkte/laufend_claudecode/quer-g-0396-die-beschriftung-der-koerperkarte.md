@@ -751,3 +751,318 @@ darunter** ? **das ist der einzige echte Unterschied.**
 gebraucht** ? **stehen lassen, melden.**
 
 **Die Abnahmebedingungen aus Auftrag 4 bleiben.**
+
+---
+
+## Bericht zu Auftrag 4 und 5
+
+### Vorbemerkung: Auftrag 5 beschreibt, was gebaut ist
+
+`[read]` **Auftrag 5 nennt die Vorlage** ? `katerAlsMuskeln` in
+`recovery/muskel-zuordnung.ts:249-270` ? **und genau nach dem
+Muster ist es gebaut:** eine Zuordnungsdatei, ein Modal, und die
+Kachel ruft `Koerperkarte` mit `muskeln=` statt `punkte=`.
+
+`[cmd]` **Ein Unterschied:** Auftrag 5 schreibt Flaechen wie
+`deltoids_l` und `latissimus_l`. **Die gibt es in `MUSKELN` nicht**
+? sie fuehrt `deltoids` als EINE Flaeche aus mehreren Pfaden, und
+`latissimus` gar nicht (A3). `[read]` **Deshalb Flaeche PLUS Seite
+als Schluessel**, und die Seite entsteht aus der x-Lage des Pfades.
+**Die Wirkung ist dieselbe: eine Haelfte allein einfaerbbar** (A2).
+
+### A1 ? Die Karte faerbt Flaechen, keine Punkte
+
+`[cmd]` **Am Schirm gemessen** (`test-user@lumeos.local`,
+`backup/g396a4-karte.png`):
+
+    Punkte (data-punkt)        0
+    gefaerbte Flaechenhaelften 34
+    Koerperkarten              2   viewBox "0 0 724 1448" / "724 0 724 1448", je 200 px
+
+`[read]` **Die Kachel ruft jetzt `Koerperkarte` mit `muskeln=`**,
+nicht `InjektionsKarte` mit `punkte=`. **Dieselbe Datei, dieselben
+Pfade, anderer Zweig** ? genau der aus `muscle soreness`.
+
+`[cmd]` **34 gefaerbte Haelften bei 10 Flaechenhaelften:** eine
+Flaeche besteht aus mehreren Pfaden (obliques allein aus 16), und
+jeder traegt die Farbe seiner Haelfte.
+
+### A2 ? Eine Seite allein, gemessen
+
+`[cmd]` **`deltoids` liefert vier Haelften mit vier verschiedenen
+x-Werten** (383, 453 vorne; 593, 668 hinten). **Die Zuordnung
+entsteht aus der x-Lage des Pfadanfangs**, `(ersterX % 724) < 362`.
+
+`[cmd]` **Der entscheidende Beleg kam aus einer Probezeile:**
+`vglute_l` bekam einen Protokolleintrag ?
+
+    gluteal links    var(--acc-suppl)     (benutzt)
+    gluteal rechts   var(--fg-dim)        (nie benutzt)
+
+**Eine Haelfte gefaerbt, die andere nicht** ? das war ohne Daten
+nicht zu zeigen.
+
+`[cmd]` **Die Zeile ist gezaehlt zurueckgebaut:** 0 -> 1 -> 0 in
+`medical.injection_logs`.
+
+### A3 ? Die Zuordnung, und `latissimus` gibt es nicht
+
+`[cmd]` **`MUSKELN` fuehrt 21 Flaechen** (gemessen in
+`koerperkarte-pfade.ts`): chest, abs, obliques, biceps, triceps,
+deltoids, trapezius, neck, forearm, adductors, quadriceps, knees,
+tibialis, calves, gluteal, hamstring, head, hair, hands, ankles,
+feet.
+
+`[cmd]` **`latissimus` ist NICHT dabei.** **Die Frage des Auftrags
+ist damit beantwortet: nein.**
+
+    delt_l/r        -> deltoids     quad_l/r      -> quadriceps
+    sq_delt_l/r     -> deltoids     thigh_sq_l/r  -> quadriceps
+    glute_l/r       -> gluteal      abd_l/r       -> obliques
+    vglute_l/r      -> gluteal      lat_l/r       -> trapezius  (Naeherung)
+
+`[read]` **`lat_l/r` faellt auf `trapezius`** ? die naechstliegende
+vorhandene Flaeche, nicht die anatomisch genaue. **Eine eigene
+Latissimus-Flaeche waere neue Pfaddaten in `packages/ui`**, und
+Muskelpfade zu aendern verbietet der Auftrag. `[read]` **Das ist eine
+Naeherung, keine Loesung** ? sie steht hier, statt still zu bleiben.
+
+`[cmd]` **16 von 16 Orten haben eine Flaeche**, mit Waechter und
+Sabotageprobe.
+
+### A4 ? Zwei Farbstufen statt vier, und der Grund ist E-57
+
+`[cmd]` **Der Auftrag verlangt vier Stufen mit je eigenem
+`rest_days`** ? *,,Deltoid 5 Tage, Gluteus 7. Nicht ,vor 7 Tagen',
+sondern ,noch 2 Tage Ruhe'."*
+
+`[cmd]` **Gemessen: `minimum_rest_days` ist bei ALLEN 16 Orten
+NULL**, und `minimum_rest_days_reason` sagt warum:
+
+    E-57: Keine wissenschaftlich validierte Mindest-Ruhezeit
+    fuer wiederholte IM-Injektionen.
+
+`[cmd]` **E-57 ist gueltig** (`status: gueltig`, 18 recherchierte
+Quellen): **keine Leitlinie von WHO, CDC oder einer
+Fachgesellschaft, keine kontrollierte Humanstudie.** *,,Die Zahlen,
+die auf TRT-Seiten und in Foren stehen, sind Praxisregeln ? nicht
+validierte Grenzwerte."* **Sie schreibt `minimum_rest_days = null`
+ausdruecklich vor.**
+
+`[read]` **Die Zahlen der Spec sind genau das, was E-57 nach 18
+Quellen verworfen hat.** **Sie einzusetzen hiesse, eine
+medizinische Empfehlung zu erfinden** ? und der Auftrag sagt
+selbst: *,,NICHTS erfinden, was die Tabellen nicht tragen."*
+
+`[cmd]` **Gebaut sind die zwei Zustaende, die die Daten tragen:**
+
+    nie benutzt   kein Protokolleintrag       var(--fg-dim)
+    benutzt       mit Datum des Einstichs     var(--acc-suppl)
+
+`[cmd]` **Und der Grund steht am Schirm**, nicht nur hier:
+*,,Keine Ampel nach Ruhetagen: `minimum_rest_days` ist bei allen 16
+Orten leer (E-57 ? keine validierte Mindestruhezeit fuer
+wiederholte IM-Injektionen)."*
+
+`[read]` **Das ist der eine Punkt des Auftrags, der nicht wie
+verlangt gebaut ist.** **Wenn du die Praxiszahlen trotzdem willst,
+ist das eine Entscheidung gegen E-57** ? und die gehoert dir, nicht
+mir. **Dann waeren es zwei Zeilen je Ort in `injection_sites` und
+vier Farben statt zwei.**
+
+### A5 ? Der Klick oeffnet ein Modal
+
+`[cmd]` **Gemessen** (`backup/g396a4-modal.png`):
+
+    Modale vorher / nachher    0 / 1
+    aria-label                 "gluteal - links"
+    Bloecke                    3   (2 Orte + Gewebehinweise)
+    Felder                     12
+    Escape schliesst           ja
+
+`[read]` **Ein Modal ueber der Seite**, keine Zeile darunter wie
+beim Check-in ? so stand es im Auftrag.
+
+### A6 ? Welches Feld aus welcher Tabelle
+
+`[cmd]` **Je Ort sechs Felder, jedes mit seiner Quelle unter dem
+Wert** (am Schirm lesbar, nicht nur im Quelltext):
+
+    Zuletzt benutzt      injection_logs.injected_at
+    Mindestruhezeit      injection_sites.minimum_rest_days
+    Volumen letzte Gabe  injection_logs.volume_ml
+    Substanz             injection_logs.substance_name
+    Schmerz              injection_logs.pain_score
+    Komplikation         injection_logs.complication
+
+**Dazu je Ort:**
+
+    Nadelempfehlung      injection_needle_recommendations  (ueber site-ART)
+    Gewebehinweise       injection_tissue_condition_guidance
+
+`[cmd]` **Mit der Probezeile gemessen: 12 Felder, 9 mit benanntem
+Leerhinweis, vier gefuellt** (Datum, Volumen 0,6 ml, Substanz,
+Schmerz 1 bei `vglute_l`). `[cmd]` **Ohne sie: 13 Leerhinweise.**
+
+`[read]` **Kein nackter Strich** (E-72): jedes leere Feld nennt den
+Grund ? *,,nie benutzt, 0 Protokollzeilen"*, *,,kein Eintrag"*, und
+bei der Ruhezeit den Satz aus der Datenbank selbst.
+
+**Was es nicht gibt, ist benannt statt erfunden:**
+
+    Maximalvolumen je Ort   keine Spalte in injection_sites
+    Ruhezeit in Tagen       NULL bei allen 16, Grund E-57
+    Nadelzeile fuer         Gluteus und Latissimus ? die Tabelle
+                            fuehrt nur deltoid, vastus_lateralis,
+                            ventrogluteal, subcutaneous
+
+`[cmd]` **Die Nadelempfehlung haengt an der ORTSART, nicht an der
+Id** (C-445/A5): **8 Zeilen fuer 16 Orte.** `quad` liest
+`vastus_lateralis`, alle vier SubQ-Orte lesen `subcutaneous`.
+
+### A7 ? Tastatur
+
+`[cmd]` **Gemessen:**
+
+    Pfade mit tabindex="0"     34
+    Pfade mit role="button"    34
+    fokussiert                 path gluteal links
+    Enter oeffnet das Modal    ja
+    Escape schliesst           ja
+
+`[read]` **Die Karte kann das seit G-55** ? `onPick`, `role`,
+`tabIndex`, Enter/Space. **Die Injektionskachel hat es nie
+benutzt.** `[cmd]` **Der fuenfzehnte A-71-Fall: Weg vorhanden, kein
+Aufrufer.**
+
+### A8 ? Zwei Orte auf einer Flaeche, beide im Modal
+
+`[cmd]` **`gluteal links` traegt `glute_l` und `vglute_l`.** Am
+Schirm gemessen:
+
+    "Gluteus L"          JA
+    "Ventrogluteal L"    JA
+    "Gluteus R"          nein
+    "Ventrogluteal R"    nein
+
+`[read]` **Die letzten zwei sind das Entscheidende** ? die rechte
+Haelfte gehoert nicht dazu, und der Waechter prueft genau das.
+`[cmd]` **Die erste Fassung des Waechters zaehlte nur (2 Orte) und
+ueberlebte die Sabotage** ? ohne die Seite im Schluessel waeren es
+auch zwei gewesen. **Jetzt vergleicht er die Ids.**
+
+**Welcher Ort die Farbe gibt:** `[read]` **Dringlichkeit waere eine
+Ruhezeitrechnung**, die es nach E-57 nicht gibt. **Also der zuletzt
+benutzte Ort** ? die vorsichtigere Richtung: sie zeigt Gebrauch an,
+statt ihn zu verdecken. **Beide Orte stehen im Modal, jeder mit
+eigenem Datum.**
+
+### A9 ? Die Ermuedungskarte ist unveraendert
+
+`[cmd]` **`recovery` gemessen** (`backup/g396a4-recovery.png`):
+
+    viewBox "0 0 724 1448"    150 px   89 Pfade
+    viewBox "724 0 724 1448"  150 px   69 Pfade
+    (viermal, zwei Karten)
+
+    Punkte                    0
+    Pfade mit data-seite      0
+
+`[read]` **`data-seite` steht nur, wo ein Wert eine Seite nennt** ?
+und das tut nur die Injektionskachel. **Die Muskelkarten bekommen
+kein Attribut und keine Aenderung.**
+
+### A10 ? 1545 Tests gruen
+
+`[cmd]` **tsc sauber, `next lint` sauber, 1545 pass / 0 fail.**
+**Der Stand vor dem Auftrag war 1534** (nicht 1529, wie der Text
+sagt) ? **elf neue Waechter.**
+
+**Sabotageprobe, je Waechter einzeln:**
+
+    Ort ohne Flaeche (lat_r entfernt)      -> ROT
+    erfundene Flaeche (latissimus)         -> ROT
+    Ruhezeitzustand 'resting' zurueck      -> ROT
+    falscher Spaltenname (site_id)         -> ROT
+    Gruppierung ohne Seite                 -> ROT
+    Nadelart fuer Gluteus erfunden         -> ROT
+    Kachel zeichnet selbst                 -> ROT
+    Modal wieder durchsichtig              -> ROT
+    Tabellendeckel zurueck                 -> ROT
+    tabIndex entfernt                      -> ROT
+    Enter entfernt                         -> ROT
+
+**Alle zurueckgenommen, 1545/1545 gruen.**
+
+### Ein Waechter musste weichen ? und warum das richtig ist
+
+`[cmd]` **`tabs-vollstaendig.test.ts` verlangte
+`/<InjektionsKarte/`** und fiel beim Umbau. `[read]` **Der Name war
+nie die Bedingung** ? *,,da will ich dieselbe grafik wie
+recovery/muscle map"* heisst: **aus `@lumeos/ui` zeichnen, nicht
+selbst.**
+
+`[read]` **Ein Namensverbot altert zur Blockade.** `[cmd]` **Jetzt
+prueft er die Sache:** eine der drei Karten aus dem Paket, keine
+lokale `SILHOUETTE`, **und neu: keine Pfaddaten in der Kachel.**
+**Die Sabotage ist dieselbe geblieben und macht rot.**
+
+### Zwei Fehler, die nur der Schirm zeigte
+
+`[cmd]` **1. `--surface-1` gibt es nicht.** Das Modal war
+durchsichtig ? gemessen `rgba(0, 0, 0, 0)`, die Seite schien
+hindurch. `[read]` **Ein unbekanntes CSS-Token faellt stumm auf
+durchsichtig zurueck:** kein Fehler, keine Warnung, kein Typfehler.
+**`lume.css` fuehrt `--bg-elev` und `--surface-2`.**
+
+`[cmd]` **2. `.v2-supp-tbl-wrap` traegt `min-height: 320px`.** Die
+Nadeltabelle ist 135 px hoch ? **185 px Leere mitten im Modal.**
+`[read]` **Die geteilte Regel ist fuer die langen Listen der
+uebrigen Reiter richtig**, also hat das Modal eine eigene bekommen,
+statt vier Reiter mitzuverschieben.
+
+`[read]` **Beide waren im Quelltext unsichtbar und in den Tests
+gruen.** **Gefunden hat sie erst die Messung am gerenderten
+Element.**
+
+### Was nicht angefasst ist
+
+**1 ? Die 16 Eintraege in `INJEKTIONS_ORTE`** stehen unveraendert
+in `packages/ui`. `[cmd]` **Kein Aufrufer mehr** ? gemeldet, nicht
+geloescht, wie verlangt.
+
+**2 ? `tageSeitInjektion`** wird von der Kachel nicht mehr gerufen.
+`[cmd]` **Die Funktion bleibt** ? 11 Proben haengen daran, und
+`injektion-read.ts` reicht sie weiter. **Wenn sie weg soll, ist das
+ein eigener Punkt.**
+
+**3 ? Keine Muskelpfade geaendert.** `[cmd]`
+`koerperkarte-pfade.ts` ist unberuehrt.
+
+**4 ? G-394 ist weiterhin nicht angefasst** (Ladezustand in der
+Schale, settings-Kopf).
+
+### `packages/ui` ? geaendert, mit Begruendung
+
+`[read]` **Ohne ging es nicht.** `[cmd]` **Die Karte konnte je
+Flaeche nur EINEN Wert fuehren** (`Record<string, MuskelWert>`) ?
+und eine Flaeche hat zwei Haelften mit verschiedenen Farben.
+
+**Geaendert ist:**
+
+    MuskelWert       neues Feld `seite?: 'links' | 'rechts'`
+    farben           Record<string, MuskelWert[]> statt <..., MuskelWert>
+    Pfadzweig        waehlt den Wert nach der x-Lage der Haelfte
+                     + data-seite, role, tabIndex, Enter/Space
+
+`[read]` **Rueckwaertsvertraeglich:** ein Wert ohne `seite` faerbt
+weiter beide Haelften. `[cmd]` **A9 belegt es** ? recovery
+unveraendert, mit Sabotageprobe.
+
+`[read]` **Gemeldet, nicht stillschweigend:** Admin und Coach
+nutzen das Paket mit.
+
+### Neustart
+
+`[cmd]` **`packages/ui` ist geaendert ? Neustart noetig**, die
+Schale laedt das Paket einmal.

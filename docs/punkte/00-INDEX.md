@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 207 |
+| `todos` | 208 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 4 |
 | `erledigt` | 373 |
-| **gesamt** | **585** |
+| **gesamt** | **586** |
 
 ## medical — 47
 
@@ -296,9 +296,9 @@
 | `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | C-425, G-372 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 74
+## supplements — 75
 
-### beauftragbar — 73
+### beauftragbar — 74
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -346,7 +346,8 @@
 | `C-427` | befund | hoch | [zwei Wortschaetze fuer `goal`](todos/supplements-c-0427-zwei-wortschaetze-fuer-goal.md) | offen | — | — |
 | `C-441` | befund | hoch | [sechzehn Injektionsorte statt vier](erledigt/supplements-c-0441-sechzehn-injektionsorte-statt-vier.md) | erledigt | — | C-445 |
 | `C-445` | feature | hoch | [C-441 einspielen und die Protokollspalten](erledigt/supplements-c-0445-c-441-einspielen-und-die-protokollspalten.md) | erledigt | — | C-446, C-453 |
-| `C-453` | befund | hoch | [Peptide haben keinen Injektionsweg](todos/supplements-c-0453-peptide-haben-keinen-injektionsweg.md) | offen | — | — |
+| `C-453` | befund | hoch | [Peptide haben keinen Injektionsweg](todos/supplements-c-0453-peptide-haben-keinen-injektionsweg.md) | offen | — | C-454 |
+| `C-454` | befund | hoch | [der Nutzer waehlt seine Punkte](todos/supplements-c-0454-der-nutzer-waehlt-seine-punkte.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
