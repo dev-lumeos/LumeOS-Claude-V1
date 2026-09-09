@@ -140,3 +140,108 @@ niemand erfasst hat, rechnet nichts.**
 `[cmd]` **Und das Altrepo hat `CyclePlanner.tsx`** ? **zwei
 Fundstellen, `src/modules/supplements/` und
 `apps/app/modules/supplements/`.**
+
+## Spec und Altrepo gelesen, 2026-09-08
+
+Tom: *,,und lies die specs und altes repo noch dazu."*
+
+### Der Widerspruch ist keiner — beide Ebenen sind vorgesehen
+
+`[cmd]` **`SPEC_02_ENTITIES.md:245-247`, am STACK-EINTRAG:**
+
+    cycling  JSONB
+      {on_weeks: 8, off_weeks: 4,
+       start_date: "2026-01-01", current_phase: "on"}
+
+`[cmd]` **Und `SCHEMA_NEUAUFBAU.md:322`:**
+
+    user_supplement_cycles  ALT
+      status: active | paused | stopped
+      source: ...
+
+`[read]` **Die Spec will `start_date` UND `current_phase` im
+Stack-Eintrag** ? **also ist die Vermischung Absicht, nicht ein
+Fehler von G-374.**
+
+`[read]` **Der Unterschied:**
+
+    stack_items.cycling     der laufende Zustand,
+                            aus dem die Oberflaeche rechnet
+    user_supplement_cycles  der VERLAUF, mit Ereignissen
+
+`[cmd]` **`SPEC_09_SCORING.md:168-175` rechnet aus `cycling`:**
+
+    cycleLength = (on_weeks + off_weeks) * 7
+    posInCycle  = ((daysDiff % cycleLength) + cycleLength) % cycleLength
+    return posInCycle < onDays
+
+`[read]` **Eine Formel, kein Tabellenzugriff** ? **deshalb steht
+sie am Eintrag.**
+
+**Damit faellt Variante b und c** ? **es ist a, aber anders als
+gedacht: BEIDE bleiben, mit klarer Aufgabe.**
+
+### Was `SCHEMA_NEUAUFBAU:332` klaerstellt
+
+> *,,`supplement_protocols` ist die Antwort auf `requires_pct` /
+> `requires_ai` / `requires_serm`: nicht drei Boolean-Felder,
+> sondern ein Protokoll mit Positionen. Die Boolean sagen OB, das
+> Protokoll sagt WAS."*
+
+`[read]` **Genau Toms *,,add compound non cycle"*.**
+
+`[cmd]` **Und Zeile 337: der Vorgaenger verwies auf
+`marketplace_product_id`** ? **hier nicht (G-164).**
+
+### Das Altrepo: `CyclePlanner.tsx`, 718 Zeilen, 36 KB
+
+`[cmd]` **Die groesste Komponente des alten Moduls** (Zeile 326).
+
+**Drei Konstanten darin:**
+
+`[cmd]` **`FRONT_SITES` / `BACK_SITES`** ? **die Injektionsorte
+liegen IM Zyklusplaner:**
+
+    front  delt_l/r, pec_l/r, bicep_l/r, quad_l/r
+    back   vg_l/r, glute_l/r, lat_l/r, tricep_l/r
+
+`[read]` **Genau die 16 Punkte, die heute in
+`koerperkarte-pfade.ts` stehen** ? **sie stammen von dort.**
+
+`[read]` **Und der Vorgaenger hat die Rotation NICHT getrennt:**
+**wer einen Zyklus plant, waehlt dort die Stellen.**
+
+`[cmd]` **Das stuetzt Toms Reihenfolge:** **Zyklusplaner zuerst,
+Rotation daraus.**
+
+`[cmd]` **`PCT_TEMPLATES`** ? **drei fertige Protokolle:**
+
+    Standard Nolva/Clomid   Nolvadex 40/20, Clomid 50/25
+                            je zwei Wochen
+    Nolvadex Only (6 Wo)    40 mg Wo 1-2, 20 mg Wo 3-6
+    HCG + Nolva             HCG 1500 IU Wo 1-2,
+                            Nolvadex 40/20 Wo 3-6
+
+`[read]` **Mit `weeks_start` und `weeks_end` je Position** ?
+**genau die Form von `supplement_protocol_items`.**
+
+`[cmd]` **`supplement_protocols.schedule` ist JSONB** ? **miss, ob
+es diese Form aufnimmt oder ob die Wochen an die Position
+gehoeren.**
+
+### Was daraus folgt
+
+`[read]` **Die Vorlagen sind da, die Formel ist da, die Tabellen
+sind da.**
+
+`[read]` **Was fehlt, ist der Schreibweg** ? **und das ist der
+Auftrag.**
+
+    1  ein Zyklus starten, pausieren, beenden
+       -- mit Ereignis in supplement_cycle_events
+    2  ein Protokoll anlegen
+       -- aus PCT_TEMPLATES oder frei
+    3  die Wochen je Position
+       -- weeks_start/weeks_end fehlen in
+          supplement_protocol_items, MESSEN
+    4  intake_schedule aus beidem
