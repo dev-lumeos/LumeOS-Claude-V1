@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 207 |
-| `laufend_codex` | 2 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 345 |
-| **gesamt** | **555** |
+| `erledigt` | 347 |
+| **gesamt** | **556** |
 
 ## medical — 47
 
@@ -444,7 +444,7 @@
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 33
+## coach — 34
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -452,7 +452,7 @@
 | `A-36` | befund | mittel | [`module-stubs-replacement.jsx` traegt drei ganze Module](erledigt/coach-a-0036-module-stubs-replacement-jsx-traegt-drei-ganze-module.md) | erledigt | — | — |
 | `A-43` | entscheidung | mittel | [Coach-Permissions pro Subfunktion](todos/coach-a-0043-coach-permissions-pro-subfunktion.md) | offen | — | — |
 | `B-25` | befund | mittel | [Geteilte Sitzung im Produktbereich prüfen](erledigt/coach-b-0025-geteilte-sitzung-im-produktbereich-prufen.md) | erledigt | — | — |
-| `C-71` | entscheidung | mittel | [Permissions und Autonomy sind zwei verschiedene Sachen](laufend_codex/coach-c-0071-permissions-und-autonomy-sind-zwei-verschiedene-sachen.md) | laeuft (codex) | — | — |
+| `C-71` | entscheidung | mittel | [Permissions und Autonomy sind zwei verschiedene Sachen](erledigt/coach-c-0071-permissions-und-autonomy-sind-zwei-verschiedene-sachen.md) | erledigt | — | — |
 | `C-75` | befund | mittel | [BSS und Voice sind Neubau](todos/coach-c-0075-bss-und-voice-sind-neubau.md) | offen | — | — |
 | `C-112` | blocker | hoch | [Buddy, Coach und Marketplace — elf Entscheidungen](erledigt/coach-c-0112-buddy-coach-und-marketplace-elf-entscheidungen.md) | erledigt | — | C-362, C-363, G-282 |
 | `C-114` | befund | mittel | [Was das Vorgaengerrepo beim Coach falsch machte](todos/coach-c-0114-was-das-vorgaengerrepo-beim-coach-falsch-machte.md) | offen | — | — |
@@ -468,7 +468,8 @@
 | `C-426` | befund | hoch | [acht Autonomieachsen, eine Erlaubnisliste](todos/coach-c-0426-acht-autonomieachsen-eine-erlaubnisliste.md) | offen | — | — |
 | `C-428` | befund | mittel | [das Onboarding fuer Unregistrierte](todos/coach-c-0428-onboarding-fuer-unregistrierte.md) | offen | — | — |
 | `C-434` | feature | mittel | [die Coach-Sicht auf die neuen Tabellen](erledigt/coach-c-0434-die-coach-sicht-auf-die-neuen-tabellen.md) | erledigt | — | C-435 |
-| `C-435` | feature | mittel | [C-434 einspielen](laufend_codex/coach-c-0435-c-434-einspielen.md) | laeuft (codex) | — | — |
+| `C-435` | feature | mittel | [C-434 einspielen](erledigt/coach-c-0435-c-434-einspielen.md) | erledigt | — | C-436 |
+| `C-436` | befund | mittel | [der Test scheitert am Schutztrigger](laufend_codex/coach-c-0436-der-test-scheitert-am-schutztrigger.md) | laeuft (codex) | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](erledigt/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | erledigt | — | C-381 |

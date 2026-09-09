@@ -10,6 +10,8 @@ kinder: []
 entscheidung: E-11
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 452206f7
 beruehrt:
   tabellen: []
   dateien: []
@@ -64,3 +66,18 @@ zahlen: null
 
 **Mitbeauftragt mit C-435 am 2026-09-08.** Der Auftragstext
 und der Bericht stehen dort.
+
+## Abnahme
+
+**2026-09-08, mit C-435 abgenommen: die Ueberschneidung ist nur
+begrifflich.**
+
+`[cmd]` **`client_permissions`: 22 Spalten, vom KLIENTEN gepflegt.**
+`[cmd]` **`client_autonomy`: acht Achsen, vom COACH gepflegt.**
+
+> *,,`medical_visibility` steuert Leserechte, `medical_level`
+> steuert keine Medical-Freigabe."*
+
+`[read]` **Damit ist auch C-426 entschaerft:** **die acht Achsen
+sind kein Rechtesystem, sondern ein Reifegrad** ? **ein verstellter
+Regler gibt keine Rechte.**
