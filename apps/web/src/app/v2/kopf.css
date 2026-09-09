@@ -63,3 +63,81 @@
     justify-content: flex-start;
   }
 }
+
+/* ══ G-392: der Wechsler haengt an der Schale, sitzt aber im Kopf ══
+ *
+ * `[cmd]` Gemessen am Serverstand: der Modulkopf liegt INNERHALB der
+ * Suspense-Grenze, die `supplements/loading.tsx` aufspannt (Grenze
+ * bei Zeichen 10.860, Kopf bei 113.704 in `<div hidden id="S:0">`).
+ * Next liefert ihn nach und haengt ihn um — ein Portal, das an
+ * `[data-tageswechsler]` haengt, verliert dabei seinen Knoten und
+ * zerlegt die Hydration.
+ *
+ * `[read]` Der Anker der Schale (`[data-wechsler-anker]`) steht VOR
+ * der Grenze und wird nie ausgetauscht. Er traegt jetzt das Portal.
+ *
+ * `[read]` Die AUSRICHTUNG bleibt beim Modul: `[data-tageswechsler]`
+ * ist weiter ein direktes Kind von `.v2-module-header` und haelt die
+ * mittlere Spalte des Rasters frei. Der Anker legt sich per
+ * `position: absolute` genau darueber — dieselbe Stelle, anderer
+ * Elternknoten.
+ */
+[data-wechsler-anker]:empty { display: none; }
+
+/* `[cmd]` **Der Platz haelt die Spalte frei, so breit wie der
+ * Wechsler.**
+ *
+ * **Drei Fassungen gemessen:** ohne Reservierung lag der Wechsler
+ * ueber dem Titel (Titel 285..734, Wechsler 649..851 — 85 px
+ * Ueberlappung). Mit 220 px brach der Titelblock um. Mit
+ * `max-width` am Titelblock schrumpfte er auf 110 px.
+ *
+ * `[read]` **`fit-content` ist die Antwort:** die Spalte nimmt genau
+ * die Breite des Wechslers, der Titel bekommt den Rest und bricht
+ * erst, wenn es wirklich eng wird. */
+@media (min-width: 901px) {
+  .v2-module-header > [data-tageswechsler] { width: 202px; }
+}
+
+/* `[cmd]` **Gemessen: `left: 50%` traf die Mitte des FENSTERS, nicht
+ * die des Kopfes** — 50 px daneben, weil die Seitenleiste links
+ * Platz nimmt. **Der Anker richtet sich am Inhaltsbereich aus**, und
+ * der ist der naechste positionierte Vorfahr. */
+/* `[cmd]` **Gemessen: alle Vorfahren des Ankers sind `static`** —
+ * `v2-content`, `v2-main`, `v2-app`. Der Anker fiel damit auf das
+ * FENSTER zurueck (0..1600) statt auf den Inhaltsbereich (240..1260),
+ * und sass 50 px zu weit rechts.
+ *
+ * `[read]` **Die Regel steht hier, nicht in `packages/ui`** —
+ * `v2-content` gehoert allen Anwendungen (Admin, Coach). Sie greift
+ * nur unter `.v2-app`, also nur in dieser Oberflaeche. */
+.v2-app .v2-content { position: relative; }
+
+@media (min-width: 901px) {
+  /* `[cmd]` **Gemessen: der Kopf laeuft von 64 bis 159 px, sein
+   * Mittelplatz sitzt bei 112.** Der Anker richtet sich daran aus,
+   * sonst schwebt der Wechsler ueber dem Kasten statt darin. Die
+   * Werte stammen aus `.v2-module-header`: 20 px Innenabstand oben
+   * plus die halbe Kopfhoehe. */
+  [data-wechsler-anker] {
+    position: absolute;
+    /* `[cmd]` **Gemessen am Ausgangszustand:** der Wechsler sass bei
+     * 105 px (supplements), 96 px (nutrition) — die Mitte des
+     * Kopfkastens, der bei 64 beginnt.
+     *
+     * `[cmd]` **Mit 48 px sass er bei 92 — 13 px zu hoch.** Vorher
+     * schwankte die Lage je Modul (105 supplements, 96 nutrition),
+     * weil er im Fluss stand und mit der Kopfhoehe wanderte. **Jetzt
+     * ist sie fest**, und 61 px trifft den Ausgangswert. */
+    top: 61px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 2;
+  }
+  /* `[read]` Nur die Knoepfe sind bedienbar, nicht die ganze Zeile —
+   * sonst laege eine unsichtbare Flaeche ueber dem Kopf. */
+  [data-wechsler-anker] > * { pointer-events: auto; }
+}

@@ -77,8 +77,35 @@ export function Tageswechsler() {
   // **Das Modul stellt einen leeren Platz** (`data-tageswechsler`),
   // **die Schale rendert hinein** — ein Portal, keine zweite
   // Fassung der Komponente.
+  // ══ G-392: der Anker der SCHALE, nicht der des Moduls ═════════════
+  //
+  // `[cmd]` **Gemessen am Serverstand von `/v2/supplements`:**
+  //
+  //     10.860   Suspense oeffnet    <!--$?-->
+  //     10.911   Skelett             v2-skel-seite
+  //    113.671   Nachlieferung       <div hidden id="S:0">
+  //    113.704   Modulkopf           v2-module-header
+  //    114.203   Wechslerplatz       data-tageswechsler
+  //
+  // `[read]` **Der Modulkopf liegt INNERHALB der Suspense-Grenze**,
+  // die `supplements/loading.tsx` aufspannt — als einziges Modul.
+  // **Next liefert ihn in einer versteckten Huelle nach und haengt
+  // ihn um.** Ein Portal an diesem Knoten verliert ihn dabei, und
+  // React meldet *„server HTML to contain a `<div>` in `<div>`"*.
+  //
+  // `[read]` **Also auf einen Knoten zielen, den die Nachlieferung
+  // nicht anfasst:** `[data-wechsler-anker]` steht in `shell.tsx`,
+  // VOR der Grenze.
+  //
+  // `[cmd]` **Der Platz des Moduls bleibt die ERLAUBNIS** — ohne ihn
+  // rendert der Wechsler nichts. **Gemessen: ohne diese Bedingung
+  // erschien er auch in `medical`, `coach` und `settings`**, die
+  // keinen Tag fuehren (C-426).
   React.useEffect(() => {
-    const suchen = () => setPlatz(document.querySelector('[data-tageswechsler]'))
+    const suchen = () => setPlatz(
+      document.querySelector('[data-tageswechsler]')
+        ? document.querySelector('[data-wechsler-anker]')
+        : null)
     suchen()
     // Die Modulansicht kann nach dem ersten Anstrich erscheinen
     // (Serverkomponente, Streaming). Ein Beobachter faengt das,

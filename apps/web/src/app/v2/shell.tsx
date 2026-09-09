@@ -144,6 +144,13 @@ export function V2Shell({ children }: { children: React.ReactNode }) {
 
           `[read]` **Hier steht deshalb nur der Anker** — sichtbar
           wird nichts, wo kein Platz steht (C-426). */}
+      {/* ══ G-392: der Anker der Schale, VOR der Suspense-Grenze ═══
+          `[cmd]` **Gemessen am Serverstand:** Schale bei Zeichen
+          1.560/8.277, Suspense oeffnet bei 10.860 (`<!--$?-->`), der
+          Modulkopf kommt erst bei 113.704 in `<div hidden id="S:0">`
+          nach. **Was hier steht, ist beim ersten Anstrich schon da
+          und wird nicht ausgetauscht.** */}
+      <div data-wechsler-anker />
       <Tageswechsler />
       {children}
     </AppShell>

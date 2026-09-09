@@ -116,9 +116,63 @@ def hole(url, cookies=None):
         req.add_header("Cookie", cookies)
     try:
         with urllib.request.urlopen(req) as f:
-            return f.status, f.read().decode("utf-8", "replace")
+            return f.status, _pruefe_huelle(url, f.read().decode("utf-8", "replace"))
     except urllib.error.HTTPError as e:
         return e.code, e.read().decode("utf-8", "replace")
+
+
+def _pruefe_huelle(url, text):
+    """Warnen, wenn die Antwort nur die Streaming-Huelle ist.
+
+    ══ DER BEFUND, G-392 ═══════════════════════════════════════════
+
+    `[cmd]` **Am 2026-09-09 habe ich sechs Bisektionsschritte lang
+    gegen einen Bau gemessen, der meine Aenderung nie enthielt.**
+    `hole()` gab jedes Mal **23.552 Zeichen** zurueck ? unabhaengig
+    davon, was in der Seite stand. **Der Schluss daraus
+    (*„die ganze Route ist ausgeschlossen"*) war falsch.**
+
+    `[read]` **Der Grund:** Next liefert eine gestreamte Seite in
+    Stuecken. Das ERSTE Stueck ist die Huelle ? Kopf, Schale,
+    Skripte ? und darin steht ein `<template id="B:0">` als
+    Platzhalter. **Der Seitenrumpf kommt danach**, und ein Skript
+    haengt ihn um. `urlopen` liest zwar bis zum Ende, aber der
+    Server SCHLIESST die Antwort bereits nach der Huelle, wenn der
+    Rumpf hinter einer Suspense-Grenze liegt.
+
+    `[read]` **`hole()` bleibt richtig fuer Status und
+    Erreichbarkeit** (`200`, `500`, „antwortet ueberhaupt"). **Fuer
+    den INHALT einer gestreamten Seite taugt es nicht** ? dafuer
+    Playwright mit `waitUntil='networkidle'` und `page.content()`.
+
+    `[cmd]` **Gemessen 2026-09-09, drei Adressen:**
+
+        /login             23.475 Zeichen, 172 Woerter sichtbar
+        /v2/supplements    23.552 Zeichen, 172 Woerter sichtbar
+        /v2/recovery       23.543 Zeichen, 172 Woerter sichtbar
+
+    **Dieselben 172 Woerter ueberall** ? und kein `v2-sidebar`, kein
+    `v2-module-header`, kein `v2-skel-seite`. `[read]` **Die Antwort
+    traegt gar keine Seitenmarkierung**, nur die Startskripte; die
+    Oberflaeche entsteht erst im Browser.
+
+    `[cmd]` **Die Erkennung haengt deshalb nicht an Next-Marken**
+    (`<!--$?-->` und `<template id="B:` kommen in dieser Antwort NICHT
+    vor ? das war meine erste, falsche Annahme), sondern daran, dass
+    ein `<div id="__next">`/`v2-`-Rumpf fehlt.
+    """
+    if "<html" in text and "v2-sidebar" not in text and "v2-module-header" not in text:
+        import sys
+        print(
+            f"[hole] WARNUNG: {url} traegt keine Seitenmarkierung "
+            f"({len(text)} Zeichen, nur Startskripte).\n"
+            "[hole] Die Oberflaeche entsteht erst im Browser ? was hier "
+            "steht, ist auf jeder Adresse dasselbe.\n"
+            "[hole] Fuer STATUS taugt es, fuer INHALT nicht: Playwright "
+            "mit waitUntil='networkidle'. Siehe G-392.",
+            file=sys.stderr,
+        )
+    return text
 
 
 def schreib(pfad, text, versuche=12, pause=0.8):
