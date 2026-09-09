@@ -5,13 +5,12 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 207 |
-| `laufend_codex` | 1 |
+| `todos` | 208 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 378 |
-| **gesamt** | **588** |
+| `erledigt` | 379 |
+| **gesamt** | **589** |
 
-## medical — 47
+## medical — 48
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -21,7 +20,7 @@
 | `C-91` | feature | mittel | [Die Spec nennt LOINC-Codes, die nicht die ueblichen sind](todos/medical-c-0091-die-spec-nennt-loinc-codes-die-nicht-die-ueblichen-sind.md) | offen | — | — |
 | `C-92` | befund | mittel | [Die Spec verwechselt Marker](todos/medical-c-0092-die-spec-verwechselt-marker.md) | offen | — | — |
 | `C-136` | befund | mittel | [Medikamente und Conditions brauchen die Coach-Freigabeschicht](erledigt/medical-c-0136-medikamente-und-conditions-brauchen-die-coach-freigabeschicht.md) | erledigt | — | C-434, G-379 |
-| `C-171` | befund | mittel | [Medical — neun Konstanten ohne Tabelle](laufend_codex/medical-c-0171-medical-neun-konstanten-ohne-tabelle.md) | laeuft (codex) | — | — |
+| `C-171` | befund | mittel | [Medical — neun Konstanten ohne Tabelle](erledigt/medical-c-0171-medical-neun-konstanten-ohne-tabelle.md) | erledigt | — | C-457 |
 | `C-176` | befund | mittel | [`biomarkerDetails.ts` im Vorgaengerrepo — 121 KB](todos/medical-c-0176-biomarkerdetails-ts-im-vorgaengerrepo-121-kb.md) | offen | — | — |
 | `C-178` | messung | mittel | [Prolactin und ApoB fehlen dem Health score](todos/medical-c-0178-prolactin-und-apob-fehlen-dem-health-score.md) | offen | — | — |
 | `C-180` | befund | mittel | [`crawl_025` liefert die Evidenzeinstufung fuer 181 Konstanten](todos/medical-c-0180-crawl-025-liefert-die-evidenzeinstufung-fuer-181-konstanten.md) | offen | — | C-182, C-183 |
@@ -54,6 +53,7 @@
 | `C-385` | feature | hoch | [das Datenmodell fuer Injektionsstellen](erledigt/medical-c-0385-das-datenmodell-fuer-injektionsstellen.md) | erledigt | — | C-395 |
 | `C-429` | befund | mittel | [die zentrale Zeitachse fehlt](erledigt/medical-c-0429-die-zentrale-zeitachse-fehlt.md) | erledigt | — | C-431 |
 | `C-431` | feature | hoch | [C-429 einspielen](erledigt/medical-c-0431-c-429-einspielen.md) | erledigt | — | G-376 |
+| `C-457` | feature | mittel | [OCR fehlt in `lab_reports`](todos/medical-c-0457-ocr-fehlt-in-lab-reports.md) | offen | — | — |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
