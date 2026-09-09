@@ -1696,6 +1696,16 @@
       "depends_on": [
         "441_schema"
       ]
+    },
+    {
+      "id": "453_supplement_routes",
+      "path": "supabase/migrations/20260909190000_c453_supplement_peptide_routes.sql",
+      "kind": "sql",
+      "creates": "C-453: skalare Spec-Routen, kanonischer SubQ-Weg fuer alle Peptide und CHECK gegen Kommawerte",
+      "depends_on": [
+        "141t",
+        "445_schema"
+      ]
     }
   ]
 }
