@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 207 |
+| `todos` | 208 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 382 |
-| **gesamt** | **592** |
+| **gesamt** | **593** |
 
 ## medical — 48
 
@@ -456,7 +456,7 @@
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 45
+## coach — 46
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -504,7 +504,8 @@
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | C-426 |
 | `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](erledigt/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | erledigt | — | — |
 | `G-391` | feature | hoch | [das Coach-Grundgeruest aus den Vorlagen](erledigt/coach-g-0391-das-grundgeruest-aus-den-vorlagen.md) | erledigt | — | G-397, G-398 |
-| `G-398` | befund | hoch | [die Portalkarten gehoeren nach 3220](erledigt/coach-g-0398-die-portalkarten-gehoeren-nach-3220.md) | erledigt | — | G-399 |
+| `G-398` | befund | hoch | [die Portalkarten gehoeren nach 3220](erledigt/coach-g-0398-die-portalkarten-gehoeren-nach-3220.md) | erledigt | — | G-399, G-400 |
+| `G-400` | befund | hoch | [das Portal sieht nicht aus wie LumeOS](todos/coach-g-0400-das-portal-sieht-nicht-aus-wie-lumeos.md) | offen | — | — |
 
 ## quer — 136
 
