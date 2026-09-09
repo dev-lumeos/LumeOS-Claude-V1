@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-398
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/coach/src/app/tokens.css
@@ -213,3 +215,130 @@ Form gilt in beiden Auftraegen als *,,angebunden"*.**
 
 `[read]` **Das ist der Massstab, den beide Auftraege nicht
 hatten.**
+
+## Auftrag
+
+Tom, 2026-09-08: *,,das hat nicht mal 1% etwas mit meiner coaching
+plattform zu tun. weder grafisch noch inhaltlich."*
+
+**Beauftragt am 2026-09-08.**
+
+`[read]` **Der Orchestrator hat in G-391 und G-398 Karten
+gezaehlt. Das war der Fehler.**
+
+`[read]` **Dieser Auftrag misst FELDER.**
+
+### 1 · Zuerst: die Vorlage vollstaendig lesen
+
+`[cmd]` **`theme-v1/module-coach.jsx`, ab
+`CoachPortalStandalone`** ? **und die sieben weiteren Dateien.**
+
+`[read]` **Nicht die Kartentitel** ? **den Inhalt.**
+
+**Je Karte der Vorlage:**
+
+    welche Felder zeigt sie?
+    welche Farben, Pills, Zaehler?
+    ist sie klickbar, und wohin?
+    hat sie eine Sparkline, ein Modal, eine Liste?
+
+`[cmd]` **Beispiel, vom Orchestrator gemessen:**
+
+    Athletes needing attention
+      Vorlage: Avatar, Name, Plan, "last 2d",
+               Pill "2 alerts", Compliance farbig,
+               Klick -> athleteDet-Modal
+      Bau:     Name, Datum
+      fehlt:   5 von 7
+
+`[read]` **So sieht die Messung aus, die dieser Auftrag will** ?
+**je Karte, nicht je Reiter.**
+
+### 2 · Der Kopf
+
+`[cmd]` **Die Vorlage nutzt `module-header`,
+`module-title-block`, `module-title-row`, `module-sub`,
+`module-actions`.**
+
+`[cmd]` **`apps/coach` nutzt `cp-kopf`** ? **eine eigene Fassung.**
+
+`[read]` **Miss, ob `v2-module-header` aus `@lumeos/ui`
+verfuegbar ist** ? **`apps/coach` laedt bereits
+`@lumeos/ui/styles.css`.**
+
+`[read]` **Wenn ja: umstellen.** `[read]` **Wenn nein: melden,
+was fehlt.**
+
+`[cmd]` **Und der Kopf traegt in der Vorlage vier Pills und zwei
+Aktionen** ? `Broadcast`, `New plan`.
+
+### 3 · Die Reiter tragen Zaehler
+
+`[cmd]` **Vorlage:** `Athletes 3`, `Smart alerts 7`, `Rules 6`,
+`Plans 4`, `Workflows 4`, `Programs 4`, `Messages 7`.
+
+`[cmd]` **Gebaut: drei von sechzehn.**
+
+`[read]` **Ein Zaehler, der nicht rechenbar ist, bleibt weg** ?
+**aber messen, welche rechenbar sind.**
+
+### 4 · Die Tokens
+
+`[cmd]` **`apps/coach/src/app/tokens.css` ist eine KOPIE aus
+`apps/web/src/styles/themes/lume.css`, Stand 2026-08-20.**
+
+`[cmd]` **Der Kommentar in Zeile 1-7 schlaegt selbst vor, sie in
+ein Paket zu ziehen.**
+
+`[read]` **Miss, was seit dem 20.08. in `lume.css` dazugekommen
+ist** ? **G-384 nennt elf Modul-Akzenttokens.**
+
+`[read]` **`packages/ui` waere der Ort** ? **melden, bevor du es
+tust, aber diesmal MIT der Messung, was auseinanderlaeuft.**
+
+### 5 · Der helle Modus
+
+`[cmd]` **`layout.tsx`: der Modus kommt aus
+`prefers-color-scheme`, kein Cookie.**
+
+`[cmd]` **`apps/web` liest einen Cookie.**
+
+`[read]` **Wer zwischen den Anwendungen wechselt, sieht zwei
+Produkte** ? **miss, ob der Cookie teilbar ist (dieselbe
+Domaene?).**
+
+### Abnahmebedingungen
+
+    A1  je Karte der Vorlage: Felder der Vorlage /
+        Felder im Bau / fehlend. Eine Tabelle.
+        Nicht "angebunden" -- die ZAHL der Felder.
+    A2  der Kopf: v2-module-header verfuegbar? Belegt.
+        Wenn ja: umgestellt, Bildschirmfoto.
+    A3  die Zaehler: 16 Reiter / davon rechenbar /
+        davon gesetzt.
+    A4  die Tokens: was ist seit 2026-08-20 auseinander?
+        Liste, nicht "eine Kopie".
+    A5  der Modus: Cookie teilbar? Gemessen.
+    A6  ein Bildschirmfoto je Reiter, DUNKEL.
+    A7  apps/coach 13/13, apps/web 1545 unveraendert.
+
+### Was nicht zu tun ist
+
+**`apps/web` NICHT anfassen.**
+**Nichts anbinden, was Daten braucht, die es nicht gibt** ?
+**aber die FORM darf gebaut werden, mit Attrappenvermerk.**
+**Nichts in `packages/ui` ohne Meldung.**
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server
+
+`[cmd]` **Port 3220, Tom startet ihn.**
+`[cmd]` **NIE `start`, `neustart`, `aufraeumen`.**
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

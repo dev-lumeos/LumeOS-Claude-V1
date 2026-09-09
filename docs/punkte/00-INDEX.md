@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
+| `todos` | 207 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 2 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 382 |
 | **gesamt** | **593** |
 
@@ -505,7 +505,7 @@
 | `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](erledigt/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | erledigt | — | — |
 | `G-391` | feature | hoch | [das Coach-Grundgeruest aus den Vorlagen](erledigt/coach-g-0391-das-grundgeruest-aus-den-vorlagen.md) | erledigt | — | G-397, G-398 |
 | `G-398` | befund | hoch | [die Portalkarten gehoeren nach 3220](erledigt/coach-g-0398-die-portalkarten-gehoeren-nach-3220.md) | erledigt | — | G-399, G-400 |
-| `G-400` | befund | hoch | [das Portal sieht nicht aus wie LumeOS](todos/coach-g-0400-das-portal-sieht-nicht-aus-wie-lumeos.md) | offen | — | — |
+| `G-400` | befund | hoch | [das Portal sieht nicht aus wie LumeOS](laufend_claudecode/coach-g-0400-das-portal-sieht-nicht-aus-wie-lumeos.md) | laeuft (claudecode) | — | — |
 
 ## quer — 136
 
