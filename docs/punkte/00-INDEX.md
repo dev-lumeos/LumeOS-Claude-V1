@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 207 |
+| `todos` | 206 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 3 |
+| `laufend_claudecode` | 4 |
 | `erledigt` | 373 |
 | **gesamt** | **584** |
 
@@ -636,7 +636,7 @@
 | `G-386` | feature | hoch | [die SSOT in den Abwesenheitswaechter](erledigt/quer-g-0386-die-ssot-in-den-abwesenheitswaechter.md) | erledigt | — | G-387 |
 | `G-387` | feature | hoch | [die neun Marken in die SSOT](erledigt/quer-g-0387-die-neun-marken-in-die-ssot.md) | erledigt | — | C-437 |
 | `G-394` | feature | mittel | [sechs Module ohne Ladezustand](laufend_claudecode/quer-g-0394-sechs-module-ohne-ladezustand.md) | laeuft (claudecode) | — | — |
-| `G-395` | entscheidung | mittel | [sechs Injektionsorte ohne Punkt auf der Figur](todos/quer-g-0395-sechs-injektionsorte-ohne-punkt.md) | offen | — | — |
+| `G-395` | entscheidung | mittel | [sechs Injektionsorte ohne Punkt auf der Figur](laufend_claudecode/quer-g-0395-sechs-injektionsorte-ohne-punkt.md) | laeuft (claudecode) | — | — |
 | `G-396` | feature | hoch | [die Beschriftung der Koerperkarte](laufend_claudecode/quer-g-0396-die-beschriftung-der-koerperkarte.md) | laeuft (claudecode) | — | — |
 
 ## market — 3

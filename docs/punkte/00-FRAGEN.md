@@ -215,7 +215,7 @@ mehr** — **es ist elf Faelle mit einem gemeinsamen Namen.**
 
 ## G-395 — sechs Injektionsorte ohne Punkt auf der Figur
 
-**Modul:** quer · **angelegt:** 2026-09-08 · **Datei:** `todos/quer-g-0395-sechs-injektionsorte-ohne-punkt.md`
+**Modul:** quer · **angelegt:** 2026-09-08 · **Datei:** `laufend_claudecode/quer-g-0395-sechs-injektionsorte-ohne-punkt.md`
 
 ## Befund
 

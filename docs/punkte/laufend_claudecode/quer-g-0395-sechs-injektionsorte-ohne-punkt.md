@@ -63,3 +63,16 @@ Aenderung dort trifft drei Anwendungen.**
 
 `[read]` **Und eine Umbenennung bricht jeden Aufrufer, der `vg_l`
 kennt** ? **miss zuerst, wie viele es sind.**
+
+## Entschieden am 2026-09-08 — bauen
+
+Tom: *,,wir haben 16 injektionsstellen und gezeigt werden 10."*
+
+`[read]` **Der Punkt war als Entscheidung angelegt** ? **das war zu
+vorsichtig.**
+
+`[cmd]` **Die sechs SubQ-Punkte werden in G-396 gebaut.**
+
+`[read]` **Und der Befund darunter ist groesser:** **`quad` liegt
+am Knie, `lat` am Oberarm** ? **die bestehenden zehn stimmen auch
+nicht.**
