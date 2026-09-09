@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
 erledigt: 2026-09-08
-commit: OFFEN
+commit: c7d1085b
 beruehrt:
   dateien:
     - tools/ssot-nachtragen.mjs
