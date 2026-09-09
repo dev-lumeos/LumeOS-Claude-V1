@@ -8,8 +8,8 @@
 | `todos` | 206 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 368 |
-| **gesamt** | **578** |
+| `erledigt` | 369 |
+| **gesamt** | **579** |
 
 ## medical — 47
 
@@ -451,7 +451,7 @@
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 42
+## coach — 43
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -483,7 +483,8 @@
 | `C-440` | feature | hoch | [das Coach-Onboarding](erledigt/coach-c-0440-das-coach-onboarding.md) | erledigt | — | C-442 |
 | `C-442` | feature | mittel | [C-440 einspielen](erledigt/coach-c-0442-c-440-einspielen.md) | erledigt | — | C-449 |
 | `C-443` | befund | hoch | [das Altrepo hat einen Coach, und zwar einen groesseren](todos/coach-c-0443-das-altrepo-hat-einen-coach.md) | offen | — | G-391 |
-| `C-449` | befund | mittel | [eine offene Einladung ohne Namen](laufend_codex/coach-c-0449-eine-offene-einladung-ohne-namen.md) | laeuft (codex) | — | — |
+| `C-449` | befund | mittel | [eine offene Einladung ohne Namen](erledigt/coach-c-0449-eine-offene-einladung-ohne-namen.md) | erledigt | — | C-450 |
+| `C-450` | entscheidung | hoch | [wer vergibt die Coach-Rolle?](todos/coach-c-0450-wer-vergibt-die-coach-rolle.md) | offen | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](erledigt/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | erledigt | — | C-381 |
@@ -638,7 +639,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `C-444` | befund | hoch | [das Wallet ist nicht live](todos/market-c-0444-das-wallet-ist-nicht-live.md) | offen | — | — |
+| `C-444` | befund | hoch | [das Wallet ist nicht live](laufend_codex/market-c-0444-das-wallet-ist-nicht-live.md) | laeuft (codex) | — | — |
 | `G-362` | feature | hoch | [marketplace initialisieren](todos/market-g-0362-marketplace-initialisieren.md) | offen | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`

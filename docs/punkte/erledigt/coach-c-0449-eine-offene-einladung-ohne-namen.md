@@ -9,6 +9,8 @@ kind_von: C-442
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: fcfecf19
 beruehrt:
   tabellen: [coach.relationships]
 zahlen:
@@ -125,4 +127,70 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  coach@lumeos.app, sarah.seed@example.com, kein Profil
+    A2  zurueckgenommen, kein Name erfunden
+    A3  Constraint validiert
+    A4  0 offene ohne Namen, 5 leere Snapshots erklaert
+    A5  Rollen in raw_app_meta_data, nur ausserhalb setzbar
+    A6  ein Vorschlag mit Bedingung
+    A7  Punktelauf gruen, 578 Punkte
+
+`[cmd]` **Selbst gemessen: 0 offene ohne Namen, `convalidated =
+true`, Status `active 4 / invited 1 / withdrawn 1`.**
+
+### A2 ist die richtige Wahl
+
+`[cmd]` **Der Coach hat KEIN Profil** ? **also konnte die
+Einladung gar nicht angenommen werden.**
+
+`[read]` **Sie zurueckzunehmen ist nicht die zweitbeste Loesung** ?
+**es ist die einzige richtige.** `[read]` **Ein nachgetragener Name
+haette eine Einladung wiederbelebt, die seit dem 20.08. tot war.**
+
+`[cmd]` **Und ueber `withdraw_relationship_invite`** ? **Grund und
+`withdrawn_by` protokolliert, nicht geloescht.**
+
+### A3/A4 — die Bedingung ist jetzt scharf
+
+`[cmd]` **`relationships_invited_coach_name_ck` validiert** ?
+**sie gilt fuer alle Zeilen, nicht nur fuer neue.**
+
+`[cmd]` **Und die fuenf verbleibenden leeren Snapshots sind
+erklaert:** **vier historische `active`, plus die eben
+zurueckgenommene.**
+
+`[read]` **Kein Verstoss** ? **die Bedingung greift nur bei
+`invited`.**
+
+### A6 ist die beste Zeile
+
+> *,,`onboard_coach` sollte die Coach-Rolle kuenftig voraussetzen ?
+> aber erst zusammen mit einem bewusst entschiedenen, auditierbaren
+> Rollenvergabepfad. Sofort waere es ein Totalschloss bei 0
+> Coach-Rollen."*
+
+`[read]` **Er sagt WAS richtig waere UND warum es jetzt nicht
+geht** ? **beides in einem Satz.**
+
+`[read]` **Eine Sicherung, die niemanden durchlaesst, ist keine
+Sicherung, sondern ein Ausfall.**
+
+### A5 — die Rollenvergabe ist gemessen
+
+`[cmd]` **`auth.users.raw_app_meta_data.role`,
+`061_rollen_admin.sql:52`.**
+
+`[cmd]` **Setzbar nur ueber die Supabase-Admin-API mit
+Dienstschluessel** ? **oder von Hand als `postgres`.**
+
+`[cmd]` **Live: 1 admin, 0 coach.** `[cmd]` **Und nur
+`public.is_admin()` liest `app_metadata`** ? **keine
+Coach-Funktion prueft Rollen.**
+
+`[read]` **Damit ist die Luecke vollstaendig beschrieben** ? **als
+Entscheidung fuer Tom, nicht als Auftrag.**
+
+**Abgenommen.**
+
