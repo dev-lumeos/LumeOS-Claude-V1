@@ -9,6 +9,8 @@ kind_von: G-390
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: bde44418
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/ansicht.tsx
@@ -648,7 +650,88 @@ wenn er stoeren soll.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  Schale bei 1.560, Suspense oeffnet bei 10.860,
+        Modulkopf erst bei 113.704 -- die Schale liegt davor
+    A2  11 von 11 Reitern sauber
+    A3  Gegenprobe: Ziel zurueck -> HYDRATION in 2 von 2
+    A4  9 Module sauber, 6 mit Wechsler
+    A5  loading.tsx unveraendert, Skelett belegt
+    A6  1525 Tests gruen
+    A7  hole() warnt
+
+`[cmd]` **Selbst gemessen: `shell.tsx:153` traegt
+`<div data-wechsler-anker />`, und `tageswechsler.tsx:106-107`
+verlangt BEIDES.**
+
+### Die Doppelbedingung ist der Kern
+
+    document.querySelector('[data-tageswechsler]')
+      ? document.querySelector('[data-wechsler-anker]')
+      : null
+
+`[read]` **Der Platz des Moduls sagt *,,hier gehoert er hin und
+ich fuehre einen Tag"*.** `[read]` **Der Anker der Schale sagt
+*,,und hier haengt er, ausserhalb der Suspense-Grenze"*.**
+
+`[read]` **Zwei Aufgaben, die vorher an einem Knoten hingen.**
+
+`[cmd]` **Und A4 belegt, dass es beide braucht:** **mit dem Anker
+allein erschien der Wechsler auch in `medical`, `coach` und
+`settings`** ? **ein Regler ohne Wirkung.**
+
+`[read]` **Er hat den Zwischenstand gemeldet, statt ihn zu
+verschweigen.**
+
+### A1 — der Beleg am Serverstand
+
+    1.560    Schale
+    10.860   Suspense oeffnet   <!--$?-->
+    10.911   Skelett
+    113.704  Modulkopf          in <div hidden id="S:0">
+    114.203  Wechslerplatz
+
+`[read]` **Das ist keine Vermutung ueber Reihenfolge** ? **es sind
+Zeichenpositionen im ausgelieferten Text.**
+
+### Vier verworfene Fassungen, jede gemessen
+
+`[cmd]` **`left: 50%` traf die Fenstermitte (800 statt 750), alle
+Vorfahren waren `static`, `top: 48px` sass 13 px zu hoch, zwei
+Breitenversuche quetschten den Titelblock.**
+
+`[cmd]` **Endstand: Mitte 750, Abweichung 0. Oberkante 105 px.**
+
+`[read]` **Und der Satz, der eine Stunde gespart hat:**
+
+> *,,Der umgebrochene Titel ist Bestand, nicht von mir ? ich habe
+> alle Aenderungen zurueckgenommen und ein Vorher-Foto gemacht,
+> bevor ich weiter daran baute."*
+
+### Die CSS-Regel, die er nicht ins gemeinsame Paket gelegt hat
+
+`[cmd]` **`.v2-app .v2-content { position: relative; }` in
+`kopf.css:114`.**
+
+`[read]` **Sie gehoerte in `packages/ui`** ? **er hat sie
+eingeengt, damit Admin und Coach unberuehrt bleiben, und es
+gemeldet.**
+
+`[read]` **Dieselbe Lehre wie in G-17.**
+
+### A7 — die Messung war aufschlussreicher als die Behebung
+
+`[cmd]` **`/login`, `/v2/supplements` und `/v2/recovery` liefern
+dieselben 172 sichtbaren Woerter** ? **die Antwort traegt gar keine
+Seitenmarkierung.**
+
+`[cmd]` **Seine erste Erkennungsidee (`<!--$?-->`) war falsch** ?
+**er hat sie verworfen und an den fehlenden Seitenrumpf
+gehaengt.**
+
+**Abgenommen.**
+
 
 ## Auftrag 2 — den Anker aus der Suspense-Grenze holen
 
