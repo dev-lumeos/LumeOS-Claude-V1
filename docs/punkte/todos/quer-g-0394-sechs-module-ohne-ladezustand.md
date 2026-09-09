@@ -103,13 +103,40 @@ welches Modul.**
 `[read]` **Oder er wird allgemein** ? *,,Wird geladen"* ? **und
 das reicht fuer eine Vorlesehilfe.**
 
-### Und `settings`
+### Und `settings` bekommt einen Kopf
 
-`[cmd]` **Es hat keinen `hero-lite`** ? **das Skelett wuerde einen
-Kopf zeigen, den es nicht gibt.**
+Tom: *,,dann baut man settings gleich auf, wo liegt das
+problem?"*
 
-`[read]` **Miss, ob das stoert** ? **zwei Sekunden ein Kasten zu
-viel ist weniger schlimm als zwei Sekunden Stillstand.**
+`[cmd]` **Nachgemessen: `settings/page.tsx` hat 50 Zeilen und
+rendert direkt `<ProfilFormular>`** ? **kein Kopf, keine Reiter.**
+
+`[cmd]` **`v2-wahl-titel` ist eine Ueberschrift IM Formular, kein
+Modulkopf** ? **der Orchestrator hat das in G-384 falsch
+gelesen.**
+
+`[read]` **Aber die Seitenleiste fuehrt `Settings` als eigenen
+Eintrag unter SYSTEM** ? **es ist eine Seite wie die anderen.**
+
+`[read]` **Und zwei Sekunden Stillstand hat es genauso.**
+
+**Also: Kopf dazu.**
+
+    v2-module-header v2-module-hero-lite
+      Titel        "Einstellungen"
+      Untertitel   was die Seite tut
+      Mitte        der Wechslerplatz -- LEER lassen
+      Rechts       Aktionen, wenn es welche gibt
+
+`[cmd]` **Kein `data-fuehrt-tag`** ? **Einstellungen haben keinen
+Tag** (C-426: ein Regler ohne Wirkung).
+
+`[cmd]` **Und `ONBOARDING_ADR` sagt:** *,,jedes Modul hat einen
+Settings-Tab, Settings ist immer der letzte Tab."*
+
+`[read]` **Das Profil ist die moduluebergreifende Ecke davon** ?
+`page.tsx:9-10. `[read]` **Ob daraus spaeter Reiter werden, ist
+eine eigene Frage.**
 
 ## Der Auftrag ist damit kleiner
 
