@@ -29,25 +29,59 @@ export type ProtokollFuerKarte = {
 }
 
 /**
- * Welche Punkte der Koerperkarte eine anatomische Region abdeckt.
+ * Die einzige Umbenennung zwischen Zeilen-Id und Punkt-Id.
  *
- * `[cmd]` **`injection_sites` fuehrt REGIONEN ohne Seite** — `deltoid`,
- * `vastus_lateralis`, `ventrogluteal`, `subcutaneous`. **Kein
- * `delt_l`/`delt_r`.**
+ * ══ WAS HIER STAND, UND WARUM ES FALSCH WURDE ═══════════════════════
  *
- * `[cmd]` **Die Ziel-Ids stammen aus `INJEKTIONS_ORTE`**
- * (`packages/ui/src/koerperkarte-pfade.ts:243-262`), nicht aus dem
- * Entwurf. **Geprueft: alle sechs sind dort vorhanden.**
+ * `[cmd]` **Bis C-445 fuehrte `injection_sites` vier REGIONEN ohne
+ * Seite** (`deltoid`, `vastus_lateralis`, `ventrogluteal`,
+ * `subcutaneous`), und `KARTEN_ORTE` bildete jede auf ein
+ * Links/Rechts-Paar ab. **Der Kommentar war am Vormittag richtig.**
  *
- * `[read]` **`subcutaneous` bleibt leer, und das ist richtig:** es ist
- * ein WEG, kein Ort. Es hat keine Stelle auf der Figur, und
- * `INJEKTIONS_ORTE` fuehrt deshalb keine.
+ * `[cmd]` **Seit C-445 heissen die Zeilen selbst `delt_l`, `quad_l`,
+ * `vglute_l`** — 16 Stueck. **`KARTEN_ORTE['delt_l']` ist damit
+ * `undefined`, und die Karte blieb leer.** Genau die Klasse, vor der
+ * ein alter Kommentar nicht schuetzt: er beschrieb einen Zustand, den
+ * es nicht mehr gab.
+ *
+ * `[read]` **Die Zeilen-Id IST jetzt die Punkt-Id** — bis auf einen
+ * Fall. Deshalb keine Zuordnungstabelle mehr, sondern nur die
+ * Ausnahme.
+ *
+ * `[cmd]` **Gemessen, 16 gegen 16:**
+ *
+ *     decken sich (8)   delt_l/r, glute_l/r, lat_l/r, quad_l/r
+ *     nur Datenbank     vglute_l/r, abd_l/r, sq_delt_l/r, thigh_sq_l/r
+ *     nur Karte         pec_l/r, bicep_l/r, vg_l/r, tricep_l/r
+ *
+ * `[read]` **`vglute` gegen `vg` ist eine reine Schreibweise** — der
+ * Punkt existiert, er heisst nur anders. **Das laesst sich hier
+ * abbilden, ohne `packages/ui` anzufassen** (Admin und Coach nutzen
+ * es mit). **Damit sind es zehn.**
+ *
+ * `[read]` **Die sechs SubQ-Orte haben keinen Punkt** — das ist keine
+ * Schreibweise, sondern eine fehlende Stelle auf der Figur. **Steht
+ * im Bericht, nicht hier erfunden.**
  */
-export const KARTEN_ORTE: Record<string, readonly string[]> = {
-  deltoid: ['delt_l', 'delt_r'],
-  vastus_lateralis: ['quad_l', 'quad_r'],
-  ventrogluteal: ['vg_l', 'vg_r'],
-  subcutaneous: [],
+export const PUNKT_UMBENENNUNG: Record<string, string> = {
+  vglute_l: 'vg_l',
+  vglute_r: 'vg_r',
+}
+
+/**
+ * Der Kartenpunkt zu einer Zeilen-Id.
+ *
+ * `[read]` **`null` heisst: dieser Ort hat keine Stelle auf der
+ * Figur** — nicht „unbekannt". Die sechs SubQ-Orte fallen so heraus,
+ * ohne dass jemand sie einzeln auflisten muss.
+ */
+export function punktFuerOrt(
+  id: string,
+  bekannt?: ReadonlySet<string>,
+): string | null {
+  const ziel = PUNKT_UMBENENNUNG[id] ?? id
+  if (bekannt && !bekannt.has(ziel)) return null
+  return ziel
 }
 
 /**
@@ -65,6 +99,18 @@ export function tageSeitInjektion(
   orte: readonly OrtFuerKarte[],
   protokoll: readonly ProtokollFuerKarte[],
   stichtag: string,
+  /**
+   * G-393: welche Punkt-Ids die Figur kennt.
+   *
+   * `[read]` **Ohne diese Menge kommen auch Orte durch, die keine
+   * Stelle auf der Figur haben** — `InjektionsKarte` wirft sie dann
+   * still weg, und die Kachel behauptet mehr Punkte als sie zeigt.
+   * **Mit ihr faellt die Zahl hier, wo sie messbar ist.**
+   *
+   * `[read]` **Ohne Angabe kommt alles durch** — dann entscheidet
+   * die Karte, wie bisher.
+   */
+  bekanntePunkte?: ReadonlySet<string>,
 ): Array<{ id: string; daysSince?: number; label?: string }> {
   // ══ G-390: ein STICHTAG, kein `new Date()` ═════════════════════════
   //
@@ -87,16 +133,19 @@ export function tageSeitInjektion(
   if (!Number.isFinite(heute)) return []
   const punkte: Array<{ id: string; daysSince?: number; label?: string }> = []
   for (const ort of orte) {
-    const ziele = KARTEN_ORTE[ort.id] ?? []
+    // `[cmd]` **G-393: die Zeilen-Id IST die Punkt-Id.** Vorher stand
+    // hier `KARTEN_ORTE[ort.id] ?? []` — eine Zuordnung von REGIONEN
+    // auf Paare, die seit C-445 fuer jede Zeile `undefined` lieferte.
+    // **Die Karte blieb leer, obwohl 16 Zeilen dastanden.**
+    const ziel = punktFuerOrt(ort.id, bekanntePunkte)
+    if (!ziel) continue
     const letzte = protokoll.find(p => p.site_id === ort.id)
     let tage: number | undefined
     if (letzte) {
       const ms = heute - Date.parse(letzte.injected_at)
       if (Number.isFinite(ms)) tage = Math.max(0, Math.floor(ms / 86400000))
     }
-    for (const ziel of ziele) {
-      punkte.push({ id: ziel, daysSince: tage, label: ort.display_name })
-    }
+    punkte.push({ id: ziel, daysSince: tage, label: ort.display_name })
   }
   return punkte
 }

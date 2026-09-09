@@ -34,7 +34,7 @@ import { createSessionClient } from '@lumeos/shared/session'
 // `[read]` **Die Rechnung und die Ortszuordnung stehen in
 // `injektion-karte.ts`** — importfrei, damit die Kachel sie laden
 // kann, ohne dieses Servermodul mitzuziehen (G-388: HTTP 500).
-export { tageSeitInjektion, KARTEN_ORTE } from './injektion-karte'
+export { tageSeitInjektion, punktFuerOrt } from './injektion-karte'
 
 /** Eine Zeile aus `medical.injection_sites`. */
 export type InjektionsOrtZeile = {

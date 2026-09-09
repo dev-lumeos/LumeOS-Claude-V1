@@ -36,7 +36,7 @@ import { Card, Pill, Icon } from '@lumeos/ui'
 
 import { INJ_ORTE, INJ_PROTOKOLL, INJ_PLAN, type InjOrt, type Weg } from './injektion-daten'
 // ══ G-388: dieselbe Figur wie recovery, kein zweiter Umriss ═════
-import { InjektionsKarte } from '@lumeos/ui'
+import { InjektionsKarte, INJEKTIONS_ORTE } from '@lumeos/ui'
 // `[cmd]` **Die Rechnung aus `injektion-karte.ts`, NICHT aus
 // `injektion-read.ts`** — letzteres importiert
 // `@lumeos/shared/session`, und ein Wert-Import daraus ergab HTTP 500
@@ -128,7 +128,11 @@ export function SuppInjections({ stand = null, stichtag = '1970-01-01' }: {
   // die Rechnung beim Anstrich der SCHALE. **Gemessen: der Fehler
   // stand auf allen elf Reitern, nicht nur auf `injection`.**
   const kartenPunkte = React.useMemo(
-    () => tageSeitInjektion(stand?.orte ?? [], stand?.protokoll ?? [], stichtag),
+    // `[cmd]` **G-393: die bekannten Punkte kommen aus der Karte
+    // selbst**, nicht aus einer zweiten Liste hier — sonst altert
+    // sie still, sobald `packages/ui` einen Punkt bekommt.
+    () => tageSeitInjektion(stand?.orte ?? [], stand?.protokoll ?? [],
+      stichtag, new Set(Object.keys(INJEKTIONS_ORTE))),
     [stand, stichtag])
   const orte = stand?.orte ?? []
   const protokoll = stand?.protokoll ?? []
@@ -215,11 +219,31 @@ export function SuppInjections({ stand = null, stichtag = '1970-01-01' }: {
               eine anpasst, verschiebt die andere nicht mit. */}
           <Card title="Rotation map"
                 sub={kartenPunkte.length > 0
-                  ? `${orte.length} Orte aus medical.injection_sites · `
-                    + `${protokoll.length} Protokollzeilen`
+                  ? `${kartenPunkte.length} von ${orte.length} Orten auf der Figur`
                   : 'medical.injection_sites'}>
             {kartenPunkte.length > 0
-              ? <InjektionsKarte daten={kartenPunkte} breite={200} />
+              ? <>
+                <InjektionsKarte daten={kartenPunkte} breite={200} />
+                {/* ══ G-393 / E-72: keine nackte Zahl ══════════════
+                    `[cmd]` **Gemessen: 16 Zeilen, 10 Punkte.** Die
+                    Kachel sagt beides und WARUM sie auseinandergehen —
+                    sonst zaehlt jemand nach und findet sechs Orte
+                    nicht wieder.
+                    `[cmd]` **`injection_logs` hat 0 Zeilen**, also ist
+                    jeder Punkt grau („nie"). **Ohne diesen Satz sieht
+                    das aus wie ein Fehler.** */}
+                <div className="v2-dim" style={{ fontSize: 11, lineHeight: 1.6, marginTop: 8 }}>
+                  {protokoll.length === 0 && (
+                    <>Noch keine Injektion erfasst — alle Stellen stehen auf
+                      {' '}<strong>nie</strong>.{' '}</>
+                  )}
+                  {kartenPunkte.length < orte.length && (
+                    <>Die {orte.length - kartenPunkte.length} SubQ-Stellen
+                      {' '}(Abdomen, SubQ-Deltoid, SubQ-Oberschenkel) haben
+                      {' '}keinen Punkt auf der Figur.</>
+                  )}
+                </div>
+                </>
               : (
                 /* E-72: kein nackter Leerraum, sondern ein benannter
                    Hinweis — und er nennt, WAS fehlt. */
