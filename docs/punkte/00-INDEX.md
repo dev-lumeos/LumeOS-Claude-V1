@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 207 |
-| `laufend_codex` | 1 |
+| `todos` | 205 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 349 |
+| `erledigt` | 350 |
 | **gesamt** | **558** |
 
 ## medical — 47
@@ -21,7 +21,7 @@
 | `C-91` | feature | mittel | [Die Spec nennt LOINC-Codes, die nicht die ueblichen sind](todos/medical-c-0091-die-spec-nennt-loinc-codes-die-nicht-die-ueblichen-sind.md) | offen | — | — |
 | `C-92` | befund | mittel | [Die Spec verwechselt Marker](todos/medical-c-0092-die-spec-verwechselt-marker.md) | offen | — | — |
 | `C-136` | befund | mittel | [Medikamente und Conditions brauchen die Coach-Freigabeschicht](erledigt/medical-c-0136-medikamente-und-conditions-brauchen-die-coach-freigabeschicht.md) | erledigt | — | C-434, G-379 |
-| `C-171` | befund | mittel | [Medical — neun Konstanten ohne Tabelle](todos/medical-c-0171-medical-neun-konstanten-ohne-tabelle.md) | offen | — | — |
+| `C-171` | befund | mittel | [Medical — neun Konstanten ohne Tabelle](laufend_codex/medical-c-0171-medical-neun-konstanten-ohne-tabelle.md) | laeuft (codex) | — | — |
 | `C-176` | befund | mittel | [`biomarkerDetails.ts` im Vorgaengerrepo — 121 KB](todos/medical-c-0176-biomarkerdetails-ts-im-vorgaengerrepo-121-kb.md) | offen | — | — |
 | `C-178` | messung | mittel | [Prolactin und ApoB fehlen dem Health score](todos/medical-c-0178-prolactin-und-apob-fehlen-dem-health-score.md) | offen | — | — |
 | `C-180` | befund | mittel | [`crawl_025` liefert die Evidenzeinstufung fuer 181 Konstanten](todos/medical-c-0180-crawl-025-liefert-die-evidenzeinstufung-fuer-181-konstanten.md) | offen | — | C-182, C-183 |
@@ -466,10 +466,10 @@
 | `C-362` | feature | mittel | [das Consent-Log ist beschrieben und nicht gebaut](erledigt/coach-c-0362-das-consent-log-ist-beschrieben-und-nicht-gebaut.md) | erledigt | — | — |
 | `C-381` | befund | hoch | [die Freigaberegel liegt im Browser](erledigt/coach-c-0381-die-freigaberegel-liegt-im-browser.md) | erledigt | — | G-324 |
 | `C-426` | befund | hoch | [acht Autonomieachsen, eine Erlaubnisliste](todos/coach-c-0426-acht-autonomieachsen-eine-erlaubnisliste.md) | offen | — | — |
-| `C-428` | befund | mittel | [das Onboarding fuer Unregistrierte](todos/coach-c-0428-onboarding-fuer-unregistrierte.md) | offen | — | — |
+| `C-428` | befund | mittel | [das Onboarding fuer Unregistrierte](laufend_codex/coach-c-0428-onboarding-fuer-unregistrierte.md) | laeuft (codex) | — | — |
 | `C-434` | feature | mittel | [die Coach-Sicht auf die neuen Tabellen](erledigt/coach-c-0434-die-coach-sicht-auf-die-neuen-tabellen.md) | erledigt | — | C-435 |
 | `C-435` | feature | mittel | [C-434 einspielen](erledigt/coach-c-0435-c-434-einspielen.md) | erledigt | — | C-436 |
-| `C-436` | befund | mittel | [der Test scheitert am Schutztrigger](laufend_codex/coach-c-0436-der-test-scheitert-am-schutztrigger.md) | laeuft (codex) | — | — |
+| `C-436` | befund | mittel | [der Test scheitert am Schutztrigger](erledigt/coach-c-0436-der-test-scheitert-am-schutztrigger.md) | erledigt | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](erledigt/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | erledigt | — | C-381 |

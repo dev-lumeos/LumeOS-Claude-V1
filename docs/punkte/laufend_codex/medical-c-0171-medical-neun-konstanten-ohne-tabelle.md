@@ -8,6 +8,8 @@ braucht: []
 kind_von: null
 kinder: []
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: []
   dateien: []
@@ -31,3 +33,8 @@ zahlen: null
   `[read]` **Und vier ganze Tabs fehlen** — `MedMedications`,
   `MedHistory`, `MedDocuments`, `MedAppointments`, **mit acht
   Modalen.**
+
+## Auftrag
+
+**Mitbeauftragt mit C-428 am 2026-09-08.** Der Auftragstext
+und der Bericht stehen dort.
