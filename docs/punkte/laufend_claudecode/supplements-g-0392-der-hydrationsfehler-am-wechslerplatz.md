@@ -144,3 +144,91 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Nachtrag 2026-09-08 — die Karte ist leer, und das ist ein zweiter Fehler
+
+Tom, am Schirm: *,,die map hat er nie richtiggestellt, hat das einen
+grund oder hat er das rapportiert?"*
+
+`[read]` **Weder noch** ? **er konnte es nicht wissen: C-445 ist
+erst danach eingespielt worden.**
+
+`[cmd]` **Die Kachel meldet:** *,,Keine Injektionsorte gelesen.
+`medical.injection_sites` ist leer oder nicht lesbar."*
+
+`[cmd]` **Nachgemessen: 16 Zeilen, RLS erlaubt `authenticated`
+alles** (`injection_sites_select`, `USING true`).
+
+`[read]` **Die Meldung ist falsch** ? **die Tabelle ist weder leer
+noch unlesbar.**
+
+## Die Ursache: drei Listen, drei Kennungen
+
+`[cmd]` **`injektion-karte.ts:46`:**
+
+    KARTEN_ORTE = {
+      deltoid:          ['delt_l', 'delt_r'],
+      vastus_lateralis: ['quad_l', 'quad_r'],
+      ventrogluteal:    ['vg_l',   'vg_r'],
+      subcutaneous:     [],
+    }
+
+`[cmd]` **Und der Kommentar darueber sagt es:** *,,`injection_sites`
+fuehrt REGIONEN ohne Seite ? `deltoid`, `vastus_lateralis`,
+`ventrogluteal`, `subcutaneous`. Kein `delt_l`/`delt_r`."*
+
+`[cmd]` **Seit C-445 fuehrt sie aber genau das:**
+
+    abd_l      abd_r      delt_l     delt_r
+    glute_l    glute_r    lat_l      lat_r
+    quad_l     quad_r     sq_delt_l  sq_delt_r
+    thigh_sq_l thigh_sq_r vglute_l   vglute_r
+
+`[read]` **`KARTEN_ORTE['delt_l']` ist `undefined`** ? **die
+Schleife findet nichts, `punkte` bleibt leer, die Kachel meldet
+*leer*.**
+
+## Und zwei Namen weichen weiterhin ab
+
+`[cmd]` **`INJEKTIONS_ORTE` in `packages/ui/src/koerperkarte-pfade.ts`:**
+
+    delt_l/r  pec_l/r   bicep_l/r  quad_l/r     (Vorderseite)
+    glute_l/r vg_l/r    lat_l/r    tricep_l/r   (Rueckseite)
+
+    Datenbank hat  vglute_l/r   Karte hat  vg_l/r
+    Datenbank hat  abd_l/r, sq_delt_l/r, thigh_sq_l/r
+                   -> kein Kartenpunkt
+    Karte hat      pec, bicep, tricep
+                   -> keine Datenbankzeile
+
+`[read]` **Von 16 Orten und 16 Punkten decken sich zehn.**
+
+## Zusaetzlicher Auftrag
+
+### 4 · Die Zuordnung fallen lassen
+
+`[read]` **`KARTEN_ORTE` war eine Bruecke zwischen Regionen und
+Punkten.** `[read]` **Seit C-445 gibt es keine Regionen mehr** ?
+**die Bruecke ist ueberfluessig.**
+
+`[read]` **Die Zeile-Id IST die Punkt-Id** ? **direkt verwenden.**
+
+### 5 · Die zwei Luecken melden
+
+`[cmd]` **`vglute_l/r` gegen `vg_l/r`** ? **eine Umbenennung, aber
+in welcher Richtung?** `[read]` **Die Datenbank folgt der Spec
+(`Injection Planner:48`), die Karte ist aelter** ? **also die
+Karte.**
+
+`[cmd]` **`abd`, `sq_delt`, `thigh_sq` haben keinen Punkt** ?
+**das sind die SubQ-Orte.**
+
+`[read]` **Melden, nicht in `packages/ui` bauen** ? **aber miss,
+wo sie auf der Figur liegen muessten.**
+
+### Zusaetzliche Abnahmebedingungen
+
+    A7  die Karte zeigt Punkte. Zahl: 16 Orte / davon auf
+        der Figur.
+    A8  die zwei Luecken, je mit Vorschlag.
+    A9  KARTEN_ORTE entfernt oder mit Grund behalten.
