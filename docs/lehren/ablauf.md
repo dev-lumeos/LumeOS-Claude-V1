@@ -413,3 +413,47 @@ mit Datum und Commit.**
 **Die SSOT sagt *,,das Wallet hat 13 Tabellen"*.** `[read]` **Das
 Zweite ueberlebt den Punkt.**
 
+## Die SSOT pflegen ist Orchestratorarbeit
+
+**Tom, 2026-09-08:** *,,claude.md muss dir auch sagen, dass du diese
+daten zu pflegen hast."*
+
+`[read]` **Niemand sonst tut es.** `[cmd]` **Agenten schreiben nicht
+nach `docs/`** ? **das steht in jedem Auftrag, und sie halten sich
+daran.**
+
+`[cmd]` **Claude Code hat in G-382 bis G-385 fuenf Falschaussagen
+gefunden und KEINE berichtigt** ? **richtig, das ist meine
+Arbeit.**
+
+### Was erzeugt wird
+
+    ssot-modultabellen.mjs   Tabellen, Spalten, Zeilen, Datum
+    ssot-schema.mjs          Funktionen, Policies, CHECKs, Sichten
+    ssot-nachtragen.mjs      was wann abgenommen wurde
+
+`[read]` **Nach jeder Abnahme mit Schema- oder Datenwirkung die
+ersten beiden** ? **zum Tagesabschluss alle drei.**
+
+### Was Handarbeit bleibt
+
+`[read]` **Wozu eine Tabelle da ist.** `[read]` **Was bewusst nicht
+gebaut wurde.** `[read]` **Die Beurteilung Mockup / angebunden /
+verworfen.**
+
+`[cmd]` **Die fuenf Falschaussagen vom 08.09. waren alle in dieser
+Kategorie** ? **Abwesenheitsbehauptungen, die still falsch wurden.**
+
+`[read]` **Ein Erzeuger haette sie nie geschrieben, aber er
+schreibt auch nicht, wozu etwas da ist.**
+
+### Warum es liegen blieb
+
+`[cmd]` **Zwoelf Tage, 112 Commits, kein Nachtrag** (A-74).
+
+`[read]` **Die Punkte sind taeglich noetig, die SSOT nicht** ?
+**niemand fragt sie waehrend der Arbeit.**
+
+`[read]` **Und genau deshalb muss sie in der Pflichtenliste
+stehen, nicht in der Gewohnheit.**
+

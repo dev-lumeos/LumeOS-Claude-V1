@@ -67,11 +67,42 @@ gerufen und wurde dreimal berichtigt** ? `user_conditions` **statt**
 NULL.** `[read]` **Alle drei standen in der Datenbank, keine in
 einer Datei.**
 
-`[cmd]` **Erzeugen:**
+### Der Orchestrator pflegt sie ? das ist seine Arbeit
+
+**Tom, 2026-09-08:** *,,claude.md muss dir auch sagen, dass du diese
+daten zu pflegen hast."*
+
+`[read]` **Niemand sonst tut es.** `[cmd]` **Agenten schreiben nicht
+nach `docs/`** ? **sie messen und melden.**
+
+**Nach jeder Abnahme, die Schema oder Daten beruehrt:**
 
     node tools/ssot-modultabellen.mjs --schreiben
     node tools/ssot-schema.mjs --schreiben
+
+**Zum Tagesabschluss zusaetzlich:**
+
     node tools/ssot-nachtragen.mjs --schreiben
+
+`[read]` **Das kostet Sekunden** ? **eine erzeugte Datei liest die
+Datenbank, sie fragt niemanden.**
+
+**Und was NICHT erzeugt wird, ist Handarbeit:**
+
+`[read]` **Wozu eine Tabelle da ist.** `[read]` **Was bewusst nicht
+gebaut wurde** ? **eine Abwesenheit hat keine Zeile, und genau da
+entstanden fuenf Falschaussagen** (G-382 bis G-384).
+
+`[read]` **Die Beurteilung Mockup / angebunden / verworfen.**
+
+`[cmd]` **Am 2026-09-08 lag die SSOT zwoelf Tage zurueck** ? **112
+Commits, keiner nachgetragen** (A-74).
+
+`[cmd]` **`tools/ssot-alter-pruefen.mjs` steht deshalb im Gate** ?
+**es meldet, wenn seit dem letzten Nachtrag zu viel gebaut wurde.**
+
+`[read]` **Ein Waechter ersetzt die Pflege nicht** ? **er erinnert
+nur daran.**
 
 `[read]` **Ein Punkt beschreibt einen Auftrag.** `[read]` **Die
 SSOT beschreibt den Zustand.**
