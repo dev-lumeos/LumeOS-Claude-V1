@@ -120,7 +120,7 @@ export default async function V2SupplementsPage({
       // `medical`, und kein Leseweg fuehrte dorthin — die Kachel
       // rechnete aus Entwurfskonstanten.
       ruhig<InjektionsStand>(ladeInjektionsStand, {
-        orte: [], protokoll: [], nadeln: 0, gewebehinweise: 0, fehler: null,
+        orte: [], protokoll: [], nadeln: [], gewebehinweise: [], fehler: null,
       }),
     ])
 

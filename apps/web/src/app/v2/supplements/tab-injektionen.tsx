@@ -36,13 +36,30 @@ import { Card, Pill, Icon } from '@lumeos/ui'
 
 import { INJ_ORTE, INJ_PROTOKOLL, INJ_PLAN, type InjOrt, type Weg } from './injektion-daten'
 // ══ G-388: dieselbe Figur wie recovery, kein zweiter Umriss ═════
-import { InjektionsKarte, INJEKTIONS_ORTE } from '@lumeos/ui'
+// ══ G-396: `Koerperkarte`, nicht `InjektionsKarte` ═════════════════
+//
+// `[cmd]` **`InjektionsKarte` baut PUNKTE** (`punkte={punkte}`,
+// Zeile 604-620) — und Tom will Flaechen: *„die injektionsorte sollen
+// auch anwaehlbar sein wie in muscle soreness."* **`muscle soreness`
+// ist `ErmuedungsKarte`, und die faerbt `muskeln`.**
+//
+// `[read]` **Die Grundkarte kann beides** und nimmt `muskeln` +
+// `onPick` — dieselbe Figur, dieselben Pfade, nur ein anderer Zweig.
+import { Koerperkarte } from '@lumeos/ui'
 // `[cmd]` **Die Rechnung aus `injektion-karte.ts`, NICHT aus
 // `injektion-read.ts`** — letzteres importiert
 // `@lumeos/shared/session`, und ein Wert-Import daraus ergab HTTP 500
 // auf jeder Route (gemessen, `tsc` blieb gruen). **Nur der TYP darf
 // aus dem Leseweg kommen.**
-import { tageSeitInjektion } from '../../../lib/medical/injektion-karte'
+// ══ G-396: Flaechen statt Punkte ═══════════════════════════════════
+//
+// `[read]` **Auch dieses Modul ist import-frei** — dieselbe Regel wie
+// bei `injektion-karte.ts`: ein Wert-Import aus dem Leseweg zieht
+// `@lumeos/shared/session` ueber die `'use client'`-Grenze und ergibt
+// HTTP 500 auf jeder Route, waehrend `tsc` gruen bleibt.
+import { flaechenGruppen, type FlaechenGruppe }
+  from '../../../lib/medical/injektion-flaechen'
+import { InjektionsModal } from './injektion-modal'
 import type { InjektionsStand } from '../../../lib/medical/injektion-read'
 import { useSupp } from './kontext'
 
@@ -127,13 +144,24 @@ export function SuppInjections({ stand = null, stichtag = '1970-01-01' }: {
   // `tab-injektionen` wird in `ansicht.tsx` importiert, also laeuft
   // die Rechnung beim Anstrich der SCHALE. **Gemessen: der Fehler
   // stand auf allen elf Reitern, nicht nur auf `injection`.**
-  const kartenPunkte = React.useMemo(
-    // `[cmd]` **G-393: die bekannten Punkte kommen aus der Karte
-    // selbst**, nicht aus einer zweiten Liste hier — sonst altert
-    // sie still, sobald `packages/ui` einen Punkt bekommt.
-    () => tageSeitInjektion(stand?.orte ?? [], stand?.protokoll ?? [],
-      stichtag, new Set(Object.keys(INJEKTIONS_ORTE))),
+  // `[cmd]` **G-396: `tageSeitInjektion` wird hier nicht mehr
+  // gerufen.** Sie rechnete Tage je PUNKT, und die Kachel zeigt jetzt
+  // Flaechen. **Die Funktion bleibt** — sie ist getestet (11 Proben)
+  // und `injektion-read.ts` reicht sie weiter. **Gemeldet, nicht
+  // geloescht**, wie die 16 Eintraege in `INJEKTIONS_ORTE` auch.
+  // ══ G-396: die Flaechen, aus denselben Daten ═══════════════════
+  //
+  // `[cmd]` **16 Orte auf 5 Flaechen** (deltoids, quadriceps,
+  // gluteal, obliques, trapezius), je Flaeche zwei Haelften — **also
+  // 10 einfaerbbare Haelften.** `[cmd]` **`latissimus` gibt es
+  // nicht**: `MUSKELN` fuehrt 21 Flaechen, keine davon.
+  const gruppen = React.useMemo(
+    () => flaechenGruppen(stand?.orte ?? [], stand?.protokoll ?? [], stichtag),
     [stand, stichtag])
+  const muskelWerte = React.useMemo(
+    () => gruppen.map(g => ({ id: g.flaeche, seite: g.seite, color: g.farbe })),
+    [gruppen])
+  const [offen, setOffen] = React.useState<FlaechenGruppe | null>(null)
   const orte = stand?.orte ?? []
   const protokoll = stand?.protokoll ?? []
   const [sel, setSel] = React.useState('vglute_l')
@@ -218,30 +246,48 @@ export function SuppInjections({ stand = null, stichtag = '1970-01-01' }: {
               map."* **Zwei Figuren waeren zwei Wahrheiten** — wer die
               eine anpasst, verschiebt die andere nicht mit. */}
           <Card title="Rotation map"
-                sub={kartenPunkte.length > 0
-                  ? `${kartenPunkte.length} von ${orte.length} Orten auf der Figur`
+                sub={gruppen.length > 0
+                  ? `${orte.length} Orte auf ${gruppen.length} Flaechenhaelften`
                   : 'medical.injection_sites'}>
-            {kartenPunkte.length > 0
+            {gruppen.length > 0
               ? <>
-                <InjektionsKarte daten={kartenPunkte} breite={200} />
-                {/* ══ G-393 / E-72: keine nackte Zahl ══════════════
-                    `[cmd]` **Gemessen: 16 Zeilen, 10 Punkte.** Die
-                    Kachel sagt beides und WARUM sie auseinandergehen —
-                    sonst zaehlt jemand nach und findet sechs Orte
-                    nicht wieder.
-                    `[cmd]` **`injection_logs` hat 0 Zeilen**, also ist
-                    jeder Punkt grau („nie"). **Ohne diesen Satz sieht
-                    das aus wie ein Fehler.** */}
+                {/* ══ G-396: anwaehlbare Flaechen ══════════════════
+                    `[cmd]` **`onPick` liefert die Flaeche UND den
+                    getroffenen Wert** (`koerperkarte.tsx:352`), und
+                    der traegt `seite`. **Damit ist die Haelfte
+                    bestimmt** — links anklicken oeffnet links. */}
+                <Koerperkarte
+                  muskeln={muskelWerte}
+                  breite={200}
+                  onPick={(id, typ, daten) => {
+                    if (typ !== 'muscle') return
+                    const seite = (daten as { seite?: 'links' | 'rechts' } | undefined)?.seite
+                    const treffer = gruppen.find(g => g.flaeche === id && g.seite === seite)
+                    if (treffer) setOffen(treffer)
+                  }}
+                  legende={[
+                    { color: 'var(--acc-suppl)', label: 'benutzt' },
+                    { color: 'var(--fg-dim)', label: 'nie benutzt' },
+                  ]}
+                />
+                {/* ══ E-72: keine nackte Zahl ══════════════════════
+                    `[cmd]` **`injection_logs` hat 0 Zeilen**, also
+                    steht jede Flaeche auf „nie". **Ohne diesen Satz
+                    sieht das aus wie ein Fehler.**
+                    `[cmd]` **Und die vier Farbstufen des Entwurfs
+                    fehlen** — sie brauchen eine Ruhezeit in Tagen,
+                    die E-57 ausdruecklich nicht gibt. Das steht hier,
+                    statt eine Zahl zu erfinden. */}
                 <div className="v2-dim" style={{ fontSize: 11, lineHeight: 1.6, marginTop: 8 }}>
                   {protokoll.length === 0 && (
-                    <>Noch keine Injektion erfasst — alle Stellen stehen auf
-                      {' '}<strong>nie</strong>.{' '}</>
+                    <>Noch keine Injektion erfasst — alle Flaechen stehen auf
+                      {' '}<strong>nie benutzt</strong>.{' '}</>
                   )}
-                  {kartenPunkte.length < orte.length && (
-                    <>Die {orte.length - kartenPunkte.length} SubQ-Stellen
-                      {' '}(Abdomen, SubQ-Deltoid, SubQ-Oberschenkel) haben
-                      {' '}keinen Punkt auf der Figur.</>
-                  )}
+                  Keine Ampel nach Ruhetagen:
+                  {' '}<span className="v2-mono">minimum_rest_days</span> ist bei allen
+                  {' '}{orte.length} Orten leer (E-57 — keine validierte Mindestruhezeit
+                  {' '}fuer wiederholte IM-Injektionen).
+                  {' '}<strong>Flaeche anklicken</strong> zeigt alle Werte.
                 </div>
                 </>
               : (
@@ -572,6 +618,19 @@ export function SuppInjections({ stand = null, stichtag = '1970-01-01' }: {
             </Card>
           </div>
         </div>
+      )}
+
+      {/* ══ G-396: das Modal der angeklickten Flaeche ═══════════════
+          `[read]` **Ein Modal, keine Zeile darunter** — Tom,
+          2026-09-09: *„und ein modal mit all den werten betreffs
+          punkt und daten dazu."* */}
+      {offen && (
+        <InjektionsModal
+          gruppe={offen}
+          nadeln={stand?.nadeln ?? []}
+          gewebe={stand?.gewebehinweise ?? []}
+          onClose={() => setOffen(null)}
+        />
       )}
     </div>
   )

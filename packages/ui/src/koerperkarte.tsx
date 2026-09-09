@@ -44,6 +44,25 @@ export type MuskelWert = {
   /** Farbe als CSS-Wert — in der Regel ein Token. */
   color?: string
   opacity?: number
+  /**
+   * Nur eine Koerperhaelfte einfaerben — G-396.
+   *
+   * `[cmd]` **Gemessen: jede Flaeche fuehrt ihre Haelften als eigene
+   * Pfade.** `deltoids` hat vier (x = 274, 450 vorne; 981, 1227
+   * hinten), `quadriceps` sechs, `gluteal` vier. **Die Mitte der
+   * Ansicht liegt bei 362** — der erste `M`-Wert eines Pfades sagt,
+   * auf welcher Seite er liegt.
+   *
+   * `[read]` **Ohne das waere `delt_l` nicht von `delt_r` zu
+   * unterscheiden** — beide Injektionsorte teilen sich die Flaeche
+   * `deltoids`, und die Karte haette immer beide Schultern
+   * eingefaerbt.
+   *
+   * `[read]` **`undefined` faerbt die ganze Flaeche** — so verhalten
+   * sich `ErmuedungsKarte` und `AktivierungsKarte` weiter, die keine
+   * Seite angeben.
+   */
+  seite?: 'links' | 'rechts'
 }
 
 /** Ein Punkt auf der Figur (Injektion, Schmerz, beliebig). */
@@ -171,6 +190,26 @@ const KONTUR = 'color-mix(in oklch, var(--fg-subtle) 55%, transparent)'
 const VB_W = 724
 const VB_H = 1448
 
+/**
+ * Wie weit die Ansicht sich fuer die Beschriftung oeffnet — G-396.
+ *
+ * `[cmd]` **Gemessen: die Figur fuellt 49..679 von 724** — links und
+ * rechts bleiben je 45 px, und die Ansicht ist am Schirm nur 200 px
+ * breit. **Fuer Text neben der Figur reicht das nicht.**
+ *
+ * `[read]` **Also den Rahmen verbreitern, nicht den Text
+ * hineinschieben** (so steht es im Auftrag): die Figur wird dadurch
+ * schmaler, die Beschriftung bekommt Platz.
+ *
+ * `[cmd]` **NUR wenn Punkte da sind.** `ErmuedungsKarte` und
+ * `AktivierungsKarte` uebergeben keine — ihre Ansicht bleibt
+ * unveraendert 724 breit.
+ */
+const BESCHRIFTUNGSRAND = 200
+
+/** Abstand des Textes vom Rand der erweiterten Ansicht. */
+const RAND = 8
+
 export type KoerperkarteProps = {
   /** Eingefaerbte Muskeln. Leer lassen fuer eine reine Punktkarte. */
   muskeln?: MuskelWert[]
@@ -201,7 +240,8 @@ function Ansicht({
   ausgewaehlt,
 }: {
   seite: KoerperSeite
-  farben: Record<string, MuskelWert>
+  /** G-396: mehrere Werte je Flaeche — je Koerperhaelfte einer. */
+  farben: Record<string, MuskelWert[]>
   punkte: KoerperPunkt[]
   figurDimmen: boolean
   breite: number
@@ -213,6 +253,8 @@ function Ansicht({
 }) {
   const hinten = seite === 'back'
   const vbX = hinten ? VB_W : 0
+  // G-396: nur eine Punktkarte oeffnet den Rahmen fuer Beschriftung.
+  const hatPunkte = punkte.some(p => p.side === seite)
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 0 }}>
@@ -222,8 +264,28 @@ function Ansicht({
         </div>
       )}
       <svg
-        viewBox={`${vbX} 0 ${VB_W} ${VB_H}`}
-        style={{ width: '100%', maxWidth: breite, display: 'block', overflow: 'visible' }}
+        viewBox={hatPunkte
+          ? `${vbX - BESCHRIFTUNGSRAND} 0 ${VB_W + 2 * BESCHRIFTUNGSRAND} ${VB_H}`
+          : `${vbX} 0 ${VB_W} ${VB_H}`}
+        style={{
+          width: '100%',
+          // ══ G-396: der Rahmen waechst, die FIGUR bleibt gleich gross ══
+          //
+          // `[cmd]` **Gemessen: mit `maxWidth: breite` schrumpfte
+          // alles.** Der Rahmen ging von 724 auf 1324 Einheiten, die
+          // Anzeige blieb bei 200 px ? Faktor 0,151, und die
+          // Beschriftung war **4 px hoch**. Unlesbar.
+          //
+          // `[read]` **Die Breite gilt der FIGUR, nicht dem Rahmen.**
+          // Waechst der Rahmen fuer die Beschriftung, waechst die
+          // erlaubte Breite im selben Verhaeltnis mit ? sonst zahlt
+          // die Figur fuer den Text.
+          maxWidth: hatPunkte
+            ? breite * ((VB_W + 2 * BESCHRIFTUNGSRAND) / VB_W)
+            : breite,
+          display: 'block',
+          overflow: 'visible',
+        }}
         role="img"
         aria-label={hinten ? texte.hinten : texte.vorne}
       >
@@ -248,18 +310,37 @@ function Ansicht({
 
             // Bei gedimmter Figur wird nichts eingefaerbt und nichts
             // anklickbar — die Punkte stehen dann im Vordergrund.
-            const wert = figurDimmen ? undefined : farben[mid]
-            const fuellung = wert?.color ?? muskel.fixedFill ?? GRUNDFLAECHE
-            const deckung = wert?.opacity ?? (muskel.fixedFill ? 1 : 0.85)
-            const klickbar = Boolean(wert && onPick)
+            const werte = figurDimmen ? [] : (farben[mid] ?? [])
             const aktiv = ausgewaehlt === mid
 
             return (
               <g key={mid} data-muskel={mid}>
-                {pfade.map((d, i) => (
+                {pfade.map((d, i) => {
+                  // ══ G-396: welche Haelfte ist dieser Pfad? ════════
+                  //
+                  // `[cmd]` **Der erste `M`-Wert sagt es**, gemessen
+                  // gegen die Mitte der Ansicht (`VB_W / 2`): bei
+                  // `deltoids` liegen die Pfade auf 274/450 vorne und
+                  // 981/1227 hinten. `[read]` **Der Rueckwaerts-Rest
+                  // (`% VB_W`) macht die Rueckansicht vergleichbar** —
+                  // ihre Pfade zaehlen ab 724.
+                  const ersterX = Number(/^M\s*([\d.]+)/.exec(d)?.[1] ?? NaN)
+                  const pfadSeite: 'links' | 'rechts' | null =
+                    Number.isFinite(ersterX)
+                      ? ((ersterX % VB_W) < VB_W / 2 ? 'links' : 'rechts')
+                      : null
+                  // `[read]` **Ein Wert ohne Seite gilt fuer die ganze
+                  // Flaeche** — so bleiben die zwei Muskelkarten
+                  // unveraendert.
+                  const wert = werte.find(w => !w.seite || w.seite === pfadSeite)
+                  const fuellung = wert?.color ?? muskel.fixedFill ?? GRUNDFLAECHE
+                  const deckung = wert?.opacity ?? (muskel.fixedFill ? 1 : 0.85)
+                  const klickbar = Boolean(wert && onPick)
+                  return (
                   <path
                     key={i}
                     d={d}
+                    data-seite={wert?.seite ?? undefined}
                     fill={fuellung}
                     fillOpacity={aktiv ? Math.min(1, deckung + 0.15) : deckung}
                     stroke={aktiv ? 'var(--fg)' : KONTUR}
@@ -269,9 +350,9 @@ function Ansicht({
                       vectorEffect: 'non-scaling-stroke',
                     }}
                     onClick={klickbar ? () => onPick?.(mid, 'muscle', wert) : undefined}
-                    role={klickbar && i === 0 ? 'button' : undefined}
-                    tabIndex={klickbar && i === 0 ? 0 : undefined}
-                    onKeyDown={klickbar && i === 0
+                    role={klickbar ? 'button' : undefined}
+                    tabIndex={klickbar ? 0 : undefined}
+                    onKeyDown={klickbar
                       ? e => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault()
@@ -280,19 +361,63 @@ function Ansicht({
                       }
                       : undefined}
                   >
-                    {i === 0 && <title>{mid}</title>}
+                    <title>{wert?.id ?? mid}</title>
                   </path>
-                ))}
+                  )
+                })}
               </g>
             )
           })}
         </g>
 
-        {punkte.filter(p => p.side === seite).map(p => {
+        {/* ══ G-396: die Beschriftung steht AUSSEN, mit Fuehrungslinie ══
+            **Tom, 2026-09-09:** *„die beschriftung weiter ausserhalb
+            lesbar und mit feinen linien auf den punkt zeigen."*
+
+            `[cmd]` **Vorher: `y + r + 28`, `textAnchor="middle"`** —
+            der Text sass 28 px UNTER dem Punkt und mittig darauf.
+            **Gemessen: Deltoid und Vastus lateralis ueberlappten**,
+            und `vg`/`glute` liegen nur 0.04 auseinander (0.48 gegen
+            0.52) — bei 1448 px Hoehe sind das 58 px, weniger als
+            zwei Zeilen.
+
+            `[read]` **Betroffen ist nur `InjektionsKarte`** —
+            `ErmuedungsKarte` und `AktivierungsKarte` uebergeben
+            `muskeln`, nie `punkte`, und kein Aufrufer tut es
+            (gemessen). **Die zwei Muskelkarten aendern sich nicht.** */}
+        {(() => {
+          const eigene = punkte.filter(p => p.side === seite)
+          // `[read]` **Je Seite getrennt entzerren** — links und
+          // rechts stoeren sich nicht, sie stehen an gegenueber-
+          // liegenden Raendern.
+          const zeilen = new Map<string, number>()
+          for (const lr of ['links', 'rechts'] as const) {
+            const gruppe = eigene
+              .filter(p => (lr === 'links' ? p.xPct < 0.5 : p.xPct >= 0.5))
+              .sort((a, b) => a.yPct - b.yPct)
+            let letzte = -Infinity
+            for (const p of gruppe) {
+              // `[cmd]` **Mindestabstand 46 px** — Schriftgroesse 22
+              // plus Luft. Wer naeher liegt, wird nach unten
+              // geschoben, statt sich zu ueberlagern.
+              const wunsch = p.yPct * VB_H
+              const y = Math.max(wunsch, letzte + 46)
+              zeilen.set(p.id, y)
+              letzte = y
+            }
+          }
+          return eigene.map(p => {
           const x = vbX + p.xPct * VB_W
           const y = p.yPct * VB_H
           const r = p.size ?? 18
           const farbe = p.color ?? 'var(--fg-dim)'
+          // Links vom Punkt -> Text linksbuendig am linken Rand,
+          // rechts vom Punkt -> rechtsbuendig am rechten Rand.
+          const linkeSeite = p.xPct < 0.5
+          const textX = linkeSeite
+            ? vbX - BESCHRIFTUNGSRAND + RAND
+            : vbX + VB_W + BESCHRIFTUNGSRAND - RAND
+          const textY = zeilen.get(p.id) ?? y
           return (
             <g
               key={p.id}
@@ -323,14 +448,40 @@ function Ansicht({
                 </text>
               )}
               {p.label && (
-                <text x={x} y={y + r + 28} textAnchor="middle" fill="var(--fg)" fontSize="22" fontWeight="600">
-                  {p.label}
-                </text>
+                <>
+                  {/* Die Fuehrungslinie: vom Text zum Punkt, fein und
+                      gedaempft — sie soll zeigen, nicht auffallen.
+                      `vector-effect` haelt sie bei jeder Skalierung
+                      duenn, wie beim Umriss. */}
+                  <polyline
+                    points={
+                      `${textX + (linkeSeite ? 6 : -6)},${textY - 6} `
+                      + `${x + (linkeSeite ? -r - 8 : r + 8)},${textY - 6} `
+                      + `${x + (linkeSeite ? -r - 2 : r + 2)},${y}`
+                    }
+                    fill="none"
+                    stroke="var(--fg-dim)"
+                    strokeWidth="1.5"
+                    vectorEffect="non-scaling-stroke"
+                    opacity="0.7"
+                  />
+                  <text
+                    x={textX}
+                    y={textY}
+                    textAnchor={linkeSeite ? 'start' : 'end'}
+                    fill="var(--fg)"
+                    fontSize="34"
+                    fontWeight="600"
+                  >
+                    {p.label}
+                  </text>
+                </>
               )}
               <title>{p.label ?? p.id}</title>
             </g>
           )
-        })}
+          })
+        })()}
       </svg>
     </div>
   )
@@ -343,9 +494,19 @@ export function Koerperkarte({
   ausgewaehlt,
 }: KoerperkarteProps) {
   const id = React.useId().replace(/:/g, '')
+  // ══ G-396: MEHRERE Werte je Flaeche ═══════════════════════════════
+  //
+  // `[cmd]` **Hier stand `k[m.id] = m`** — ein Wert je Muskel, der
+  // letzte gewann. **Zwei Injektionsorte teilen sich aber eine
+  // Flaeche** (`delt_l` und `delt_r` beide `deltoids`), und mit einer
+  // Seite je Wert sind es bis zu zwei.
+  //
+  // `[read]` **`ErmuedungsKarte` und `AktivierungsKarte` geben keine
+  // Seite an** — dort bleibt es bei einem Eintrag je Flaeche, und die
+  // Anzeige aendert sich nicht.
   const farben = React.useMemo(() => {
-    const k: Record<string, MuskelWert> = {}
-    for (const m of muskeln) k[m.id] = m
+    const k: Record<string, MuskelWert[]> = {}
+    for (const m of muskeln) (k[m.id] ??= []).push(m)
     return k
   }, [muskeln])
 

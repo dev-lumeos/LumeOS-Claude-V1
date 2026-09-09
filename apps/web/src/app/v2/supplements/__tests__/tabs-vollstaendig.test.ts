@@ -56,12 +56,26 @@ test('der Injections-Tab bringt seine Rotationskarte mit', () => {
   //
   // `[read]` **Tom, 2026-09-09:** *„da will ich dieselbe grafik wie
   // recovery/muscle map."* **Also auf die SACHE pruefen, nicht auf
-  // den Namen:** die Kachel ruft `InjektionsKarte`, und es steht kein
-  // zweiter Umriss mehr in der Datei.
-  assert.match(inj, /<InjektionsKarte\s/,
-    'die Kachel ruft `InjektionsKarte` nicht — zeichnet sie wieder selbst?')
+  // den Namen:** die Kachel zeichnet aus `@lumeos/ui`, und es steht
+  // kein zweiter Umriss mehr in der Datei.
+  //
+  // ══ G-396: DER NAME WAR NIE DIE BEDINGUNG ════════════════
+  //
+  // `[cmd]` **Hier stand `/<InjektionsKarte\s/`** — und der Waechter
+  // fiel, als die Kachel von Punkten auf Flaechen umgestellt wurde.
+  // **`InjektionsKarte` baut PUNKTE** (`koerperkarte.tsx:604`);
+  // anwaehlbare Flaechen brauchen die Grundkarte mit `muskeln`.
+  //
+  // `[read]` **Beide zeichnen dieselbe Figur aus denselben Pfaden**,
+  // und genau das war gemeint. **Ein Namensverbot altert zur
+  // Blockade** — die Sabotage bleibt dieselbe: eine lokale Silhouette
+  // macht rot.
+  assert.match(inj, /<(Koerperkarte|InjektionsKarte|ErmuedungsKarte)\s/,
+    'die Kachel zeichnet die Figur nicht aus `@lumeos/ui` — zeichnet sie wieder selbst?')
   assert.ok(!/const SILHOUETTE\b/.test(inj),
     'eine zweite Silhouette ist zurueck — zwei Figuren sind zwei Wahrheiten')
+  assert.ok(!/\bd="M\s*\d/.test(inj),
+    'in der Kachel stehen wieder Pfaddaten — die Figur gehoert in `packages/ui`')
   // Die vier Unter-Tabs der Vorlage (Zeile 108).
   for (const t of ['rotation', 'schedule', 'log', 'guide']) {
     assert.ok(inj.includes(`'${t}'`), `Unter-Tab "${t}" fehlt.`)

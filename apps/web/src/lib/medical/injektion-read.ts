@@ -57,18 +57,59 @@ export type InjektionsOrtZeile = {
   rotation_quadrant_interval_days: number | null
 }
 
-/** Eine Zeile aus `medical.injection_logs`. */
+/**
+ * Eine Zeile aus `medical.injection_logs`.
+ *
+ * `[cmd]` **Die Fremdschluesselspalte heisst `injection_site_id`**,
+ * nicht `site_id` — gemessen in `information_schema`. **Der falsche
+ * Name haette stumm nichts geliefert**, weil PostgREST unbekannte
+ * Spalten in `select` mit einem Fehler quittiert, den die Kachel als
+ * „keine Eintraege" gezeigt haette.
+ */
 export type InjektionsProtokollZeile = {
   id: string
-  site_id: string
+  injection_site_id: string
   injected_at: string
+  volume_ml: number | null
+  substance_name: string | null
+  route: string | null
+  pain_score: number | null
+  complication: string | null
+  override_reason: string | null
+}
+
+/**
+ * Eine Zeile aus `medical.injection_needle_recommendations`.
+ *
+ * `[cmd]` **Der Schluessel ist die ORTSART, nicht die Orts-Id**
+ * (C-445/A5): `deltoid`, `vastus_lateralis`, `ventrogluteal`,
+ * `subcutaneous`. **8 Zeilen fuer 16 Orte** — mehrere Orte teilen
+ * sich eine Empfehlung, und ein Ort kann mehrere haben (Deltoid: eine
+ * allgemeine, eine aus der Impfstoffleitlinie).
+ */
+export type NadelZeile = {
+  route: string
+  site: string
+  medication_viscosity: string | null
+  gauge_range: string | null
+  length_range: string | null
+  source_citation: string | null
+}
+
+/** Eine Zeile aus `medical.injection_tissue_condition_guidance`. */
+export type GewebeZeile = {
+  condition_code: string
+  avoidance_min_months: number | null
+  avoidance_max_months: number | null
+  rationale: string | null
+  source_citation: string | null
 }
 
 export type InjektionsStand = {
   orte: InjektionsOrtZeile[]
   protokoll: InjektionsProtokollZeile[]
-  nadeln: number
-  gewebehinweise: number
+  nadeln: NadelZeile[]
+  gewebehinweise: GewebeZeile[]
   fehler: string | null
 }
 
@@ -91,22 +132,38 @@ export async function ladeInjektionsStand(): Promise<InjektionsStand> {
     // `[cmd]` **0 Zeilen, und es gibt keinen Schreibweg** (G-388/A3).
     // `[read]` **Trotzdem gelesen:** kommt der Schreibweg, zeigt die
     // Kachel ohne weitere Aenderung Daten.
+    // `[cmd]` **G-396: die Spalte heisst `injection_site_id`**, nicht
+    // `site_id` — gemessen in `information_schema`. Der alte Name
+    // haette stumm 0 Zeilen geliefert, auch wenn welche da waeren.
+    //
+    // `[cmd]` **Seit C-445 zwoelf Spalten** — `volume_ml`,
+    // `substance_name`, `pain_score`, `complication`,
+    // `override_reason` kamen dazu. **Das Modal zeigt sie.**
     m.from('injection_logs')
-      .select('id, site_id, injected_at')
+      .select('id, injection_site_id, injected_at, volume_ml, '
+        + 'substance_name, route, pain_score, complication, override_reason')
       .order('injected_at', { ascending: false })
-      .limit(50),
+      .limit(200),
+    // `[cmd]` **Die Nadelempfehlung haengt an der ORTSART**
+    // (`deltoid`, `vastus_lateralis`, `ventrogluteal`,
+    // `subcutaneous`), nicht an den 16 Ids — C-445/A5.
     m.from('injection_needle_recommendations')
-      .select('source_key', { count: 'exact', head: true }),
+      .select('route, site, medication_viscosity, gauge_range, '
+        + 'length_range, source_citation'),
     m.from('injection_tissue_condition_guidance')
-      .select('condition_code', { count: 'exact', head: true }),
+      .select('condition_code, avoidance_min_months, avoidance_max_months, '
+        + 'rationale, source_citation'),
   ])
 
   const fehler = orte.error?.message ?? null
   return {
     orte: ((orte.data ?? []) as unknown as InjektionsOrtZeile[]),
     protokoll: ((protokoll.data ?? []) as unknown as InjektionsProtokollZeile[]),
-    nadeln: nadeln.count ?? 0,
-    gewebehinweise: gewebe.count ?? 0,
+    // `[read]` **Zeilen statt Zaehlern** — G-396: das Modal zeigt die
+    // Werte, und eine Zahl allein ist keiner. **Vorher standen hier
+    // `count: 'exact', head: true`**, also nur „es gibt 8".
+    nadeln: ((nadeln.data ?? []) as unknown as NadelZeile[]),
+    gewebehinweise: ((gewebe.data ?? []) as unknown as GewebeZeile[]),
     fehler,
   }
 }

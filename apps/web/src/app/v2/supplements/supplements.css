@@ -1468,3 +1468,79 @@
 .v2-supp-rollen-rolle {
   color: var(--fg-muted);
 }
+
+/* ══ G-396: das Modal einer Injektionsflaeche ═══════════════════════
+   `[read]` **Ueber der Seite, nicht daneben** — Tom, 2026-09-09:
+   *„ein modal mit all den werten"*, nicht eine Zeile darunter wie
+   beim Check-in. */
+.v2-inj-modal-hinter {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.v2-inj-modal {
+  width: min(560px, 100%);
+  max-height: 84vh;
+  display: flex;
+  flex-direction: column;
+  /* `[cmd]` **`--surface-1` gibt es nicht** — gemessen: die Regel
+     ergab `rgba(0, 0, 0, 0)`, und die Seite schien durch das Modal
+     hindurch. **`lume.css` fuehrt `--bg-elev` und `--surface-2`**,
+     kein `--surface-1`. `[read]` **Ein unbekanntes Token faellt
+     stumm auf durchsichtig zurueck** — kein Fehler, keine Warnung,
+     nur ein Modal, das nichts zudeckt. */
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+
+.v2-inj-modal-kopf {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.v2-inj-modal-kopf > button {
+  margin-left: auto;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.v2-inj-modal-rumpf {
+  padding: 14px 16px;
+  overflow-y: auto;
+}
+
+.v2-inj-modal-ort + .v2-inj-modal-ort {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.v2-inj-feld {
+  padding: 8px 10px;
+  background: var(--surface-2);
+  border-radius: 6px;
+}
+
+/* ══ G-396: die Nadeltabelle im Modal ist kein Listenblatt ══════════
+   `[cmd]` **Gemessen: Tabelle 135 px hoch, Huelle 320 px** — die
+   Differenz stand als leere Flaeche mitten im Modal.
+   `[read]` **`.v2-supp-tbl-wrap` traegt `min-height: 320px`**, und das
+   ist fuer die langen Listen der uebrigen Reiter richtig: sie sollen
+   nicht bei jedem Filter die Hoehe wechseln. **Zwei Nadelzeilen sind
+   keine Liste** — also eine eigene Marke, statt die geteilte Regel zu
+   verstellen und vier Reiter mitzuverschieben. */
+.v2-inj-modal .v2-supp-tbl-wrap {
+  min-height: 0;
+  max-height: none;
+}
