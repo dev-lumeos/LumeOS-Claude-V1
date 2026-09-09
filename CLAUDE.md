@@ -177,6 +177,18 @@ wartet, steht still.**
 `[cmd]` **`docs/spezifikation/00-QUELLEN.md` zuerst oeffnen** ?
 **nicht suchen, oeffnen.**
 
+`[read]` **Punkt 4 ist der, der uebersprungen wird** ? **und der,
+der die meisten Fragen beantwortet.**
+
+`[cmd]` **`git grep` findet dort NICHTS** ? **`referenz/lumeos-2026/`
+ist nicht getrackt.** `[cmd]` **Mit dem Dateisystem suchen.**
+
+**Die Quellen mit Pfad und Zeilenzahl:
+`docs/lehren/quellen-pflicht.md`.**
+
+`[cmd]` **Am 2026-09-08 lag die Antwort dreimal bereit und wurde
+dreimal nicht gelesen** ? **C-426, C-441, C-443.**
+
 `[read]` **Eine Luecke in der Datenbank heisst *nicht gebaut*,
 nicht *nicht entschieden*.**
 
