@@ -76,7 +76,22 @@ export async function listOwnMealItems(mealId: string): Promise<StoredMealItem[]
     // G-348: `food_source` und `custom_food_id` kommen mit — ohne
     // sie ist ein manueller Posten von einem eigenen Lebensmittel
     // nicht zu unterscheiden (beide haben `food_id IS NULL`).
-    .select('id, meal_id, food_id, custom_food_id, food_source, food_name, amount_g, enercc, prot625, fat, cho, portion_name, portion_quantity, portion_amount_g')
+    // ══ G-223: der Schnappschuss und sein Bestand ═══════════════════
+    //
+    // `[cmd]` **`frozen_at` stand seit C-03 in der Tabelle und wurde
+    // nie gelesen** ? `diary-model.ts` schreibt sie an drei Stellen,
+    // kein Leseweg nahm sie mit. **Ohne sie kann die Kachel nicht
+    // entscheiden, ob der Schnappschuss ueberholt ist** (SPEC_10).
+    //
+    // `[read]` **`foods!left`, nicht `!inner`** ? ein manueller Posten
+    // und ein eigenes Lebensmittel haben `food_id IS NULL`. **Mit
+    // `!inner` fielen beide aus der Liste**, und das Tagebuch waere
+    // stillschweigend kuerzer (dieselbe Klasse wie G-348).
+    // `[cmd]` **Eine Zeichenkette, nicht zusammengesetzt.** Der
+    // Waechter aus G-348 prueft `/\.select\('[^']*food_source[^']*'\)/`
+    // — **eine Verkettung ueber mehrere Zeilen macht ihn rot**, obwohl
+    // die Felder mitkommen. Gemessen: `not ok 614`.
+    .select('id, meal_id, food_id, custom_food_id, food_source, food_name, amount_g, enercc, prot625, fat, cho, portion_name, portion_quantity, portion_amount_g, frozen_at, foods!left(updated_at)')
     .eq('meal_id', mealId)
     .order('created_at', { ascending: true })
   if (error) {

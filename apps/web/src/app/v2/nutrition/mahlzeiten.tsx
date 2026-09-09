@@ -25,7 +25,13 @@ import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Card, Icon, InEntwicklung } from '@lumeos/ui'
 
-import { MEAL_TYPES, type MealType } from '../../../lib/nutrition/diary-model'
+import {
+  MEAL_TYPES, type MealType,
+  // G-223: die Entscheidung ueber den ueberholten Schnappschuss.
+  // `[read]` Reine Rechnung, kein Serverimport — `diary-model.ts`
+  // laedt nur `zod`, deshalb ist der Wert-Import hier gefahrlos.
+  istSchnappschussVeraltet,
+} from '../../../lib/nutrition/diary-model'
 import { vortag } from '../../../lib/datum'
 import type { NutritionFoodSearchRow } from '../../../lib/nutrition/food-search'
 // G-309: die Plantage erscheinen als Ghost Entries — Flow 3, Schritt 7.
@@ -64,6 +70,10 @@ type Position = {
   cho: number | null
   portion_name?: string | null
   portion_quantity?: number | null
+  /** G-223: wann die Naehrwerte eingefroren wurden. */
+  frozen_at?: string | null
+  /** G-223: `updated_at` des Lebensmittels dahinter. */
+  food_updated_at?: string | null
 }
 
 type Mahlzeit = {
@@ -250,6 +260,7 @@ export function Mahlzeiten({
     router.refresh()
     onGeaendert?.()
   }, [laden_, onGeaendert, router])
+
 
   // G-15: JEDE vorhandene Mahlzeit bekommt eine eigene Karte.
   //
@@ -710,6 +721,46 @@ function MahlzeitKarte({
   const [sucheAuf, setSucheAuf] = React.useState(false)
   const [mealCam, setMealCam] = React.useState(false)
   const [aendern, setAendern] = React.useState<Position | null>(null)
+  // ══ G-223: welche Position gerade neu gerechnet wird ═════════
+  //
+  // `[read]` **Die `id` der Position, nicht ein `boolean`** — sonst
+  // stuenden bei mehreren ueberholten Zeilen alle gleichzeitig auf
+  // „rechnet". Dieselbe Lehre wie beim Entfernen-Knopf in G-381.
+  const [rechnet, setRechnet] = React.useState<string | null>(null)
+  const [rechenFehler, setRechenFehler] = React.useState<string | null>(null)
+
+  // ══ G-223: einen ueberholten Schnappschuss neu einfrieren ════
+  //
+  // `[cmd]` **Kein neuer Schreibweg.** `PATCH /api/nutrition/diary`
+  // ruft `updateMealItemAmount`, und das rechnet die Naehrwerte aus
+  // dem HEUTIGEN Bestand neu und setzt `frozen_at` mit
+  // (`buildMealItemAmountUpdate`). **Mit unveraenderter Menge ist
+  // genau das eine Neuberechnung.**
+  //
+  // `[read]` **SPEC_10 nennt zwei eigene Endpunkte**
+  // (`.../recalculate`). **Sie gibt es nicht** — und sie waeren eine
+  // zweite Wahrheit neben einem Weg, der dasselbe tut. **Der Befund
+  // steht im Bericht, gebaut ist der vorhandene Weg.**
+  const neuBerechnen = React.useCallback(async (it: Position) => {
+    setRechnet(it.id)
+    setRechenFehler(null)
+    try {
+      const a = await fetch('/api/nutrition/diary', {
+        method: 'PATCH',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id: it.id, amount_g: it.amount_g }),
+      })
+      if (!a.ok) {
+        const d = await a.json().catch(() => null)
+        throw new Error(d?.error ?? `HTTP ${a.status}`)
+      }
+      onGeaendert()
+    } catch (e) {
+      setRechenFehler(e instanceof Error ? e.message : String(e))
+    } finally {
+      setRechnet(null)
+    }
+  }, [onGeaendert])
   const [laeuft, setLaeuft] = React.useState(false)
   const [fehler, setFehler] = React.useState<string | null>(null)
 
@@ -954,6 +1005,24 @@ function MahlzeitKarte({
                         {it.portion_quantity ?? 1} × {it.portion_name}
                       </span>
                     )}
+                    {/* ══ G-223: der Knopf, wenn der Stand ueberholt ist ══
+                        `[cmd]` **SPEC_10:** der Knopf erscheint, wenn die
+                        Lebensmitteldaten neuer sind als der Schnappschuss.
+                        `[read]` **Die Entscheidung steht in
+                        `istSchnappschussVeraltet`**, nicht hier — eine
+                        Bedingung im JSX ist nicht messbar.
+                        `[read]` **Kein Knopf heisst nicht „kein Zustand":**
+                        ist der Stand aktuell, gibt es nichts zu tun. */}
+                    {istSchnappschussVeraltet(it) && (
+                      <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                              style={{ marginLeft: 6 }}
+                              disabled={rechnet === it.id}
+                              title={`Eingefroren ${(it.frozen_at ?? '').slice(0, 10)}, `
+                                + `Bestand ${(it.food_updated_at ?? '').slice(0, 10)}`}
+                              onClick={() => void neuBerechnen(it)}>
+                        {rechnet === it.id ? 'rechnet …' : 'Neu berechnen'}
+                      </button>
+                    )}
                   </td>
                   <td className="v2-muted v2-num" style={{ width: 44, textAlign: 'right' }}>
                     {z(it.amount_g)}<span className="v2-dim" style={{ fontSize: 10, marginLeft: 2 }}>g</span>
@@ -980,6 +1049,18 @@ function MahlzeitKarte({
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* `[read]` **G-223 / E-72: ein Fehlschlag wird benannt.** Eine
+          Neuberechnung, die still scheitert, laesst die alten Werte
+          stehen und behauptet damit einen Stand, den es nicht gibt. */}
+      {rechenFehler && (
+        <div className="v2-insight v2-neg" style={{ marginTop: 8 }}>
+          <div className="v2-insight-mark" />
+          <div className="v2-insight-body">
+            Neu berechnen fehlgeschlagen: {rechenFehler}
+          </div>
         </div>
       )}
 

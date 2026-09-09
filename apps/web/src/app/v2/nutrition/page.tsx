@@ -2,9 +2,14 @@
 //
 // Vorlage: module-nutrition.jsx.
 //
-// DIESE SEITE LIEST. [read] Der Auftrag: "Keine Schreibpfade ins
-// Tagebuch. meals und meal_items haben 0 Zeilen; das Erfassen ist C-03
-// und ein eigener Auftrag."
+// DIESE SEITE LIEST. [read] Der Auftrag von G-03: "Keine Schreibpfade
+// ins Tagebuch; das Erfassen ist C-03 und ein eigener Auftrag."
+//
+// [cmd] Berichtigt 2026-09-08 (G-224): der Auftrag nannte "meals und
+// meal_items haben 0 Zeilen". Gemessen sind es 9065 meal_items ueber
+// fuenf Konten. Die Aussage war richtig, als sie geschrieben wurde -
+// C-03 hat seither erfasst. Der Grund fuer "diese Seite liest" bleibt
+// unveraendert: das Erfassen gehoert nicht hierher.
 //
 // Serverkomponente: die Tagessumme und die Referenzbewertung kommen aus
 // der geteilten Datenschicht, beide mit der Identitaet der Sitzung

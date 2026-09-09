@@ -394,6 +394,56 @@ export type StoredMealItem = {
   portion_name: string | null
   portion_quantity: number | null
   portion_amount_g: number | null
+  /**
+   * G-223: wann die Naehrwerte eingefroren wurden.
+   *
+   * `[cmd]` **Die Spalte stand seit C-03 in der Tabelle und wurde nie
+   * gelesen.** `diary-model.ts` SCHREIBT sie an drei Stellen (Insert,
+   * Mengenaenderung, Neueinfrieren) ? **kein Leseweg nahm sie mit.**
+   *
+   * `[read]` **Ohne sie ist nicht entscheidbar, ob der Schnappschuss
+   * noch dem Bestand entspricht.** SPEC_10 verlangt genau diesen
+   * Vergleich fuer den Neuberechnen-Knopf.
+   */
+  frozen_at: string | null
+  /**
+   * G-223: `updated_at` des Lebensmittels, gegen das eingefroren wurde.
+   *
+   * `[read]` **Kommt aus dem Verbund** (`foods!inner(updated_at)`),
+   * nicht aus `meal_items`. **`null` bei manuellen Posten und eigenen
+   * Lebensmitteln** ? die haben kein `food_id`, also keinen Bestand,
+   * gegen den sich vergleichen liesse.
+   */
+  food_updated_at: string | null
+}
+
+/**
+ * Ist der Schnappschuss dieser Zeile ueberholt? ? G-223.
+ *
+ * `[cmd]` **SPEC_10:** *„der Knopf erscheint, wenn die
+ * Lebensmitteldaten neuer sind als der Schnappschuss."*
+ *
+ * `[read]` **Herausgezogen, damit die Entscheidung messbar ist** ?
+ * eine Bedingung im JSX prueft nur das Wort, nicht die Sache.
+ *
+ * `[read]` **Drei Faelle geben `false`, und jeder aus eigenem
+ * Grund:**
+ * - **kein `frozen_at`:** es gibt keinen Schnappschuss, also nichts
+ *   zu vergleichen ? **nicht „aktuell", sondern unbekannt.**
+ * - **kein `food_updated_at`:** manueller Posten oder eigenes
+ *   Lebensmittel; **es gibt keinen Bestand dahinter.**
+ * - **gleich alt:** `>` und nicht `>=` ? wer im selben Augenblick
+ *   einfriert, hat den Stand gerechnet.
+ */
+export function istSchnappschussVeraltet(zeile: {
+  frozen_at?: string | null
+  food_updated_at?: string | null
+}): boolean {
+  if (!zeile.frozen_at || !zeile.food_updated_at) return false
+  const eingefroren = Date.parse(zeile.frozen_at)
+  const bestand = Date.parse(zeile.food_updated_at)
+  if (!Number.isFinite(eingefroren) || !Number.isFinite(bestand)) return false
+  return bestand > eingefroren
 }
 
 function asNumberOrNull(value: unknown): number | null {
@@ -477,9 +527,33 @@ export function parseStoredMealItems(rows: unknown): StoredMealItem[] {
         portion_name: typeof record.portion_name === 'string' ? record.portion_name : null,
         portion_quantity: asNumberOrNull(record.portion_quantity),
         portion_amount_g: asNumberOrNull(record.portion_amount_g),
+        // ══ G-223: der Schnappschuss und der Bestand ════════════════
+        //
+        // `[read]` **`frozen_at` kommt aus der Zeile**, `updated_at`
+        // aus dem verbundenen Lebensmittel. **PostgREST liefert den
+        // Verbund als eingebettetes Objekt** ? bei einem
+        // `!inner`-Verbund ein Objekt, bei `!left` moeglicherweise
+        // `null`. Beide Formen werden hier abgefangen.
+        frozen_at: typeof record.frozen_at === 'string' ? record.frozen_at : null,
+        food_updated_at: eingebettetesDatum(record.foods, 'updated_at'),
       },
     ]
   })
+}
+
+/**
+ * Ein Datumsfeld aus einem eingebetteten PostgREST-Verbund lesen.
+ *
+ * `[read]` **PostgREST liefert `foods!left(updated_at)` als Objekt**,
+ * bei manchen Formen als Array mit einem Element. **Fehlt der
+ * Verbundpartner, steht `null`** ? und genau das ist der Fall bei
+ * manuellen Posten (`food_id IS NULL`).
+ */
+function eingebettetesDatum(wert: unknown, feld: string): string | null {
+  const objekt = Array.isArray(wert) ? wert[0] : wert
+  if (!objekt || typeof objekt !== 'object') return null
+  const v = (objekt as Record<string, unknown>)[feld]
+  return typeof v === 'string' ? v : null
 }
 
 /**
