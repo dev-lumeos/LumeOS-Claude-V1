@@ -182,6 +182,25 @@ Kachel eine bräuchte, bleibt sie Attrappe.
 
 ## Was ohne neues Schema nicht geht
 
+
+**Berichtigt 2026-09-08 (G-384).** `[cmd]` **Der Abschnitt darunter
+ist ueberholt.** `[cmd]` **`recovery` hat SIEBEN Tabellen:**
+
+    checkins            modality_log        overtraining_alerts
+    recovery_protocols  score_contributions scores
+    stress_logs
+
+`[cmd]` **Von den sechs als fehlend gelisteten existieren vier:**
+`modality_log` **(C-124),** `scores` **(C-153),**
+`overtraining_alerts` **und** `recovery_protocols` **(beide
+C-421).**
+
+`[cmd]` **Es fehlen weiter:** `hrv_readings` **und der
+Abhak-Zustand.**
+
+`[read]` **Diese Zeile war die schlimmste der fuenf** ? **sie
+traegt einen `[cmd]`-Marker und nennt eine Zahl.** `[read]` **Wer
+sie liest, hat keinen Anlass nachzusehen.**
 `[cmd]` **`recovery` hat genau eine Tabelle:** `checkins`. Der
 Schemaentwurf nennt sechs weitere als nötig — keine davon existiert.
 
