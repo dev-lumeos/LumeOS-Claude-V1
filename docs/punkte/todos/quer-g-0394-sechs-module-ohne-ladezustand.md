@@ -146,3 +146,92 @@ eine eigene Frage.**
 
 `[read]` **Und der Nachweis ist einfach:** **von einem Modul zum
 anderen klicken, das Skelett erscheint.**
+
+## Und `settings` bekommt eine Navigation
+
+Tom, 2026-09-08: *,,mach bei settings auch eine logische navigation
+rein anstatt planlos darunter kacheln."*
+
+`[cmd]` **`formular.tsx` hat 604 Zeilen** ? **alles untereinander,
+ohne Gliederung ausser Zwischenueberschriften.**
+
+`[cmd]` **Gemessen, was drinsteht:**
+
+    Z168-260   Person und Koerper
+               Geschlecht, Geburtsdatum, Groesse, Gewicht
+               (Zahlenfelder mit Einheit)
+
+    Z264-360   Aktivitaet
+               Aktivitaetsliste mit Faktor
+               (Vorlage: theme-v1/module-onboarding.jsx)
+
+    Z296-380   Erfahrungsgrad
+               vier Stufen (C-118, G-80)
+               plus die Extended-Regel (G-167)
+
+    Z393-440   Mahlzeitenstruktur
+               Hauptmahlzeiten, Snacks, Vorkochen
+               (G-72/E-47, und G-332: dasselbe Formular
+                wie in Preferences)
+
+    Z441-495   Zeitraeume, nur bei `female`
+               Schwangerschaft, Stillzeit
+               ausgeblendet, nicht geloescht
+
+    Z498-540   die Formleiste
+               Speichern, Hinweise
+
+## Der Schnitt
+
+`[read]` **Fuenf Reiter, aus dem was da ist:**
+
+    Profil        Geschlecht, Geburtsdatum, Groesse, Gewicht
+    Aktivitaet    Stufe mit Faktor
+    Erfahrung     vier Stufen, Extended-Regel
+    Ernaehrung    Mahlzeitenstruktur
+    Zeitraeume    Schwangerschaft, Stillzeit -- nur bei female
+
+`[read]` **Der letzte Reiter erscheint nicht, wenn er nicht
+gilt** ? **wie der Tageswechsler bei einem Modul ohne Tag.**
+
+`[cmd]` **Der Block ist heute schon bedingt** (Z441) ? **die Regel
+steht, sie wandert nur eine Ebene hoch.**
+
+### Was NICHT zerschnitten werden darf
+
+`[cmd]` **Die Formleiste mit *Speichern*** ? **sie gehoert unter
+ALLE Reiter, nicht in einen.**
+
+`[read]` **Sonst muesste man je Reiter speichern** ? **und ein
+halb gespeichertes Profil ist schlechter als ein langes
+Formular.**
+
+`[read]` **Ein Formular, fuenf Sichten** ? **nicht fuenf
+Formulare.**
+
+### Und der Settings-Tab je Modul
+
+`[cmd]` **`ONBOARDING_ADR`, zitiert in `page.tsx:9`:** *,,jedes
+Modul hat einen Settings-Tab, Settings ist immer der letzte
+Tab."*
+
+`[read]` **Das ist die andere Richtung** ? **Modul-Einstellungen im
+Modul, Profil hier.**
+
+`[read]` **Miss, ob sich etwas doppelt** ? `[cmd]` **`G-332` sagt:
+die Mahlzeitenstruktur steht in `settings` UND in
+`nutrition/preferences`, aus demselben Baustein.**
+
+`[read]` **Das ist Absicht, kein Fehler** ? **aber es gehoert
+benannt, damit niemand eine der beiden Stellen fuer die falsche
+haelt.**
+
+### Zusaetzliche Abnahmebedingungen
+
+    A6  settings hat einen Kopf wie die anderen. Foto.
+    A7  fuenf Reiter, der letzte nur bei female.
+        Zahl: Reiter / davon sichtbar je Geschlecht.
+    A8  EINE Formleiste, unter allen Reitern.
+        Speichern von Reiter 1 aus, Wert aus Reiter 3
+        gemessen.
+    A9  die Doppelung mit nutrition/preferences: benannt.
