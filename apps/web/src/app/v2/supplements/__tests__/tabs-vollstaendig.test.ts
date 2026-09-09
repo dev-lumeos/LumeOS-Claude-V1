@@ -44,9 +44,24 @@ test('die Platzhalter-Tabelle ist weg', () => {
 
 test('der Injections-Tab bringt seine Rotationskarte mit', () => {
   const inj = lies('tab-injektionen.tsx')
-  for (const k of ['InjKarte', 'ortZustand', 'SuppInjections']) {
+  for (const k of ['ortZustand', 'SuppInjections']) {
     assert.ok(new RegExp(`function ${k}\\b`).test(inj), `"${k}" fehlt.`)
   }
+  // ══ G-388: DIESELBE FIGUR, KEINE ZWEITE ═══════════════════════════
+  //
+  // `[cmd]` **Hier stand `function InjKarte`** — der Name der lokalen
+  // Zweitzeichnung. **Der Waechter verlangte damit genau das, was
+  // G-388 entfernen sollte:** eine eigene Silhouette neben der aus
+  // `packages/ui`.
+  //
+  // `[read]` **Tom, 2026-09-09:** *„da will ich dieselbe grafik wie
+  // recovery/muscle map."* **Also auf die SACHE pruefen, nicht auf
+  // den Namen:** die Kachel ruft `InjektionsKarte`, und es steht kein
+  // zweiter Umriss mehr in der Datei.
+  assert.match(inj, /<InjektionsKarte\s/,
+    'die Kachel ruft `InjektionsKarte` nicht — zeichnet sie wieder selbst?')
+  assert.ok(!/const SILHOUETTE\b/.test(inj),
+    'eine zweite Silhouette ist zurueck — zwei Figuren sind zwei Wahrheiten')
   // Die vier Unter-Tabs der Vorlage (Zeile 108).
   for (const t of ['rotation', 'schedule', 'log', 'guide']) {
     assert.ok(inj.includes(`'${t}'`), `Unter-Tab "${t}" fehlt.`)
@@ -101,8 +116,13 @@ test('die neuen Tabs kennzeichnen jede Kachel', () => {
   // `supplement_nutrient_intake_for_day` und traegt die Trennung
   // belegt / Untergrenze / unbekannt. **Am Schirm gezaehlt: 7
   // Attrappen im `intel`-Reiter vorher, 6 nachher** (A-59).
+  // `[cmd]` **G-388: von 14 auf 13.** Die Marke gehoerte „Rotation
+  // map" — die Kachel liest jetzt `medical.injection_sites` und
+  // zeichnet mit `InjektionsKarte` dieselbe Figur wie recovery.
+  // **Am Schirm gezaehlt: 6 Punkte mit `data-punkt`, Untertitel
+  // „4 Orte aus medical.injection_sites".**
   const dateien: Array<[string, number]> = [
-    ['tab-injektionen.tsx', 14],
+    ['tab-injektionen.tsx', 13],
     ['tab-spec.tsx', 11],
   ]
   for (const [datei, erwartet] of dateien) {

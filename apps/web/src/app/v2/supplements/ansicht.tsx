@@ -67,6 +67,8 @@ import { SuppCompliance } from './tab-compliance'
 const QUELLE = 'theme-v1/module-supplements.jsx'
 // G-45: der Injections-Tab mit der Rotationskarte.
 import { SuppInjections } from './tab-injektionen'
+// G-388: der Typ des Injektionsstands.
+import type { InjektionsStand } from '../../../lib/medical/injektion-read'
 // G-45: die vier Tabs aus -spec.jsx.
 // G-172: `SuppCatalog` ist geloescht — der Tab zeigt `SuppDatabase`.
 import { SuppStacks, SuppIntelligence, SuppInventory } from './tab-spec'
@@ -131,6 +133,7 @@ export function SupplementsAnsicht({
   regeln = null, gate = null, substanzen = [], stacks = [],
   vorlagen = [],
   bilanz = [], belegteSubstanzen = 0, bilanzTag = null,
+  injektionen = null,
 }: {
   daten?: StackDaten | null
   katalog?: KatalogEintrag[]
@@ -155,6 +158,14 @@ export function SupplementsAnsicht({
   belegteSubstanzen?: number
   /** Der Tag, fuer den die Bilanz gilt — der juengste Protokolltag. */
   bilanzTag?: string | null
+  /**
+   * G-388: die Injektionsorte aus `medical`.
+   *
+   * `[read]` **Reine Felder, keine `Map`** — eine `Map` als Prop an
+   * eine `'use client'`-Komponente kommt leer an, ohne Fehler und
+   * ohne Typfehler.
+   */
+  injektionen?: InjektionsStand | null
   /**
    * G-74: Das echte Heute, serverseitig aus `lib/datum.ts`.
    *
@@ -405,7 +416,7 @@ export function SupplementsAnsicht({
           {tab === 'cost' && <SuppCost />}
           {tab === 'injection' && (
             <>
-              <SuppInjections />
+              <SuppInjections stand={injektionen} />
               <SuppInjectionReferenz />
             </>
           )}

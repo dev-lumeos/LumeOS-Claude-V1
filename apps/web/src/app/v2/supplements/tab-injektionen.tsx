@@ -35,18 +35,36 @@ import * as React from 'react'
 import { Card, Pill, Icon } from '@lumeos/ui'
 
 import { INJ_ORTE, INJ_PROTOKOLL, INJ_PLAN, type InjOrt, type Weg } from './injektion-daten'
+// ══ G-388: dieselbe Figur wie recovery, kein zweiter Umriss ═════
+import { InjektionsKarte } from '@lumeos/ui'
+// `[cmd]` **Die Rechnung aus `injektion-karte.ts`, NICHT aus
+// `injektion-read.ts`** — letzteres importiert
+// `@lumeos/shared/session`, und ein Wert-Import daraus ergab HTTP 500
+// auf jeder Route (gemessen, `tsc` blieb gruen). **Nur der TYP darf
+// aus dem Leseweg kommen.**
+import { tageSeitInjektion } from '../../../lib/medical/injektion-karte'
+import type { InjektionsStand } from '../../../lib/medical/injektion-read'
 import { useSupp } from './kontext'
 
-const ATTRAPPE = 'Es gibt keine Tabelle fuer Injektionen — weder Orte noch Protokoll noch Plan. '
-  + 'Die Zahlen stammen aus der Vorlage.'
-
-/** Die Silhouette der Vorlage (Zeile 66) — bewusst einfach gehalten. */
-const SILHOUETTE = 'M 50 4 q -6 0 -8 5 q -2 5 0 9 q 0 4 2 6 q -8 2 -13 6 q -5 4 -6 12 v 12 '
-  + 'q -1 4 -3 9 l -7 14 q -1 4 0 7 l 2 5 q 1 2 3 0 l 3 -7 q 1 -2 1 2 v 18 q 0 4 4 5 h 11 '
-  + 'q 4 -1 5 -5 v -22 q 0 -2 2 -3 q 0 4 0 22 v 24 q 0 4 4 5 q 4 -1 4 -5 v -24 q 0 -18 0 -22 '
-  + 'q 2 1 2 3 v 22 q 1 4 5 5 h 11 q 4 -1 4 -5 v -18 q 0 -4 1 -2 l 3 7 q 2 2 3 0 l 2 -5 '
-  + 'q 1 -3 0 -7 l -7 -14 q -2 -5 -3 -9 v -12 q -1 -8 -6 -12 q -5 -4 -13 -6 q 2 -2 2 -6 '
-  + 'q 2 -4 0 -9 q -2 -5 -8 -5 z'
+// ══ G-388: der Attrappengrund war eine Falschaussage ═══════════
+//
+// `[cmd]` **Hier stand:** *„Es gibt keine Tabelle fuer Injektionen —
+// weder Orte noch Protokoll noch Plan."* **Es gibt fuenf**, gemessen
+// 2026-09-09 gegen die laufende Instanz:
+//
+//     medical.injection_sites                      4 Zeilen
+//     medical.injection_logs                       0 Zeilen
+//     medical.injection_site_conditions            0 Zeilen
+//     medical.injection_needle_recommendations     8 Zeilen
+//     medical.injection_tissue_condition_guidance  1 Zeile
+//
+// `[read]` **Ein Vermerk mit falschem Grund ist schlimmer als eine
+// fehlende Kachel** — er verhindert, dass jemand nachsieht. **Der
+// echte Grund ist ein anderer:** es gibt keinen Schreibweg fuer
+// `injection_logs` (G-388/A3), also keine Rotationsgeschichte.
+const ATTRAPPE = 'Ohne erfasste Injektionen ist die Rotation nicht rechenbar — '
+  + 'medical.injection_logs hat 0 Zeilen und keinen Schreibweg. '
+  + 'Die Zahlen dieser Kachel stammen aus der Vorlage.'
 
 type Zustand = {
   status: 'fresh' | 'resting' | 'soon' | 'ready'
@@ -74,93 +92,26 @@ export function ortZustand(id: string): Zustand {
   return { status: 'ready', c: 'var(--pos)', label: 'ready', daysAgo: last.daysAgo, site, last }
 }
 
-/** Die Koerperkarte des Injections-Tabs (Vorlage Zeile 60-91). */
-function InjKarte({
-  view, gewaehlt, onWahl, filter,
-}: {
-  view: 'front' | 'back'
-  gewaehlt: string
-  onWahl: (id: string) => void
-  filter: Weg | 'all'
+
+export function SuppInjections({ stand = null }: {
+  /** G-388: die Orte aus `medical.injection_sites`. */
+  stand?: InjektionsStand | null
 }) {
-  const orte = INJ_ORTE.filter(s => s.view === view && (filter === 'all' || s.route === filter))
-  return (
-    <div style={{ flex: 1, textAlign: 'center', minWidth: 0 }}>
-      <div className="v2-eyebrow" style={{ marginBottom: 8 }}>
-        {view === 'front' ? 'Front' : 'Back'}
-      </div>
-      <svg viewBox="0 0 100 120" style={{ width: '100%', maxWidth: 210 }} role="img"
-           aria-label={view === 'front' ? 'Injektionsorte Vorderseite' : 'Injektionsorte Rueckseite'}>
-        {/* G-57: Fuellung war `--surface` — derselbe Wert wie der Kartengrund
-            (`.v2-card`, v2.css:435). `[cmd]` Abstand 0,000 in beiden Modi: die
-            Figur war nicht schwach sichtbar, sondern exakt unsichtbar, es
-            standen nur die 16 Punkte frei im Raum.
-
-            `[cmd]` `--border-strong` gemessen: 0,155 dunkel / 0,180 hell —
-            der einzige vorhandene Token ueber 0,15 in beiden Modi. Kein neuer
-            Token.
-
-            `[cmd]` Die Kontur faellt mit der Fuellung zusammen: `--border`
-            liegt nur 0,080/0,090 von `--border-strong` entfernt und ist im
-            Nachtmodus DUNKLER als die Fuellung (0,280 gegen 0,360) — die
-            Kontur haette die Figur nach innen abgeschnitten statt sie
-            abzugrenzen. Die Fuellung allein traegt mit 0,155/0,180 mehr, als
-            die Kontur je beigetragen hat. */}
-        <path d={SILHOUETTE} fill="var(--border-strong)" stroke="var(--border-strong)" strokeWidth="0.6" />
-        {orte.map(s => {
-          const st = ortZustand(s.id)
-          const aktiv = gewaehlt === s.id
-          return (
-            <g
-              key={s.id}
-              onClick={() => onWahl(s.id)}
-              onKeyDown={e => {
-                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onWahl(s.id) }
-              }}
-              role="button"
-              tabIndex={0}
-              aria-label={`${s.name} · ${st.label}`}
-              style={{ cursor: 'pointer' }}
-            >
-              {aktiv && (
-                <circle cx={s.x} cy={s.y} r={7} fill="none" stroke={st.c} strokeWidth="0.8" opacity="0.6" />
-              )}
-              <circle
-                cx={s.x} cy={s.y} r={aktiv ? 4.4 : 3.6}
-                fill={st.c}
-                opacity={st.status === 'resting' ? 0.45 : 0.85}
-                stroke={aktiv ? 'var(--fg)' : st.c}
-                strokeWidth={aktiv ? 0.7 : 0.3}
-              />
-              <text
-                x={s.x} y={s.y + 1.4} textAnchor="middle"
-                style={{
-                  fontFamily: 'var(--font-mono)', fontSize: 3.2, fill: 'var(--bg)',
-                  fontWeight: 700, pointerEvents: 'none',
-                }}
-              >
-                {s.short}
-              </text>
-              {/* Gestrichelter Ring = SubQ. */}
-              {s.route === 'subq' && (
-                <circle
-                  cx={s.x} cy={s.y} r={aktiv ? 6.2 : 5.4} fill="none" stroke={st.c}
-                  strokeWidth="0.35" strokeDasharray="1 1" opacity="0.7"
-                />
-              )}
-              <title>
-                {`${s.name} · ${st.label}${st.daysAgo != null ? ` · last ${st.daysAgo}d ago` : ''}`}
-              </title>
-            </g>
-          )
-        })}
-      </svg>
-    </div>
-  )
-}
-
-export function SuppInjections() {
   const { open } = useSupp()
+  // ══ G-388: die echten Orte, aus der Datenbank ═══════════
+  //
+  // `[cmd]` **Vier Zeilen, anatomische Regionen ohne Seite**
+  // (`deltoid`, `vastus_lateralis`, `ventrogluteal`, `subcutaneous`).
+  // **Die Karte zeigt je Region beide Seiten** — die Zuordnung steht
+  // in `KARTEN_ORTE`, nicht hier.
+  // `[read]` **Ueber `stand` gemerkt, nicht ueber `orte`/`protokoll`**:
+  // `stand?.orte ?? []` erzeugt bei jedem Rendern ein NEUES Array, und
+  // damit rechnete `useMemo` jedes Mal neu (ESLint sagt es genau so).
+  const kartenPunkte = React.useMemo(
+    () => tageSeitInjektion(stand?.orte ?? [], stand?.protokoll ?? [], new Date()),
+    [stand])
+  const orte = stand?.orte ?? []
+  const protokoll = stand?.protokoll ?? []
   const [sel, setSel] = React.useState('vglute_l')
   const [route, setRoute] = React.useState<Weg | 'all'>('all')
   const [tab, setTab] = React.useState('rotation')
@@ -232,17 +183,38 @@ export function SuppInjections() {
 
       {tab === 'rotation' && (
         <div className="v2-grid v2-grid-13" style={{ gap: 14 }}>
-          <Card title="Rotation map" sub="click a site · dashed ring = SubQ · dimmed = resting" attrappe={ATTRAPPE}>
-            <div className="v2-inj-karten">
-              <InjKarte view="front" gewaehlt={sel} onWahl={setSel} filter={route} />
-              <InjKarte view="back" gewaehlt={sel} onWahl={setSel} filter={route} />
-            </div>
-            <div className="v2-inj-legende">
-              <span className="v2-row-gap"><span className="v2-inj-punkt" style={{ background: 'var(--pos)' }} />ready</span>
-              <span className="v2-row-gap"><span className="v2-inj-punkt" style={{ background: 'var(--warn)' }} />ready tomorrow</span>
-              <span className="v2-row-gap"><span className="v2-inj-punkt" style={{ background: 'var(--neg)', opacity: 0.45 }} />resting</span>
-              <span className="v2-row-gap"><span className="v2-inj-punkt" style={{ border: '1px dashed var(--fg-dim)' }} />SubQ</span>
-            </div>
+          {/* ══ G-388: DIESELBE FIGUR WIE RECOVERY ═══════════════
+              `[cmd]` **Hier stand `InjKarte`** — eine ZWEITE Silhouette,
+              lokal gezeichnet (`SILHOUETTE`, 8 Zeilen Pfaddaten).
+              **`packages/ui/src/koerperkarte.tsx` traegt dieselbe Figur
+              schon dreimal**: `ErmuedungsKarte`, `AktivierungsKarte`,
+              `InjektionsKarte`.
+              `[read]` **Tom, 2026-09-09:** *„diese mockup vorlage ist
+              obsolet, da will ich dieselbe grafik wie recovery/muscle
+              map."* **Zwei Figuren waeren zwei Wahrheiten** — wer die
+              eine anpasst, verschiebt die andere nicht mit. */}
+          <Card title="Rotation map"
+                sub={kartenPunkte.length > 0
+                  ? `${orte.length} Orte aus medical.injection_sites · `
+                    + `${protokoll.length} Protokollzeilen`
+                  : 'medical.injection_sites'}>
+            {kartenPunkte.length > 0
+              ? <InjektionsKarte daten={kartenPunkte} breite={200} />
+              : (
+                /* E-72: kein nackter Leerraum, sondern ein benannter
+                   Hinweis — und er nennt, WAS fehlt. */
+                <div className="v2-dim" style={{ fontSize: 11.5, lineHeight: 1.6 }}>
+                  Keine Injektionsorte gelesen.
+                  {' '}<span className="v2-mono">medical.injection_sites</span>
+                  {' '}ist leer oder nicht lesbar.
+                </div>
+              )}
+            {/* `[cmd]` **G-388: die zweite Legende ist weg.**
+                `InjektionsKarte` bringt ihre eigene mit (>14d / 7-14d /
+                3-7d / <3d / nie). **Zwei Legenden unter einer Figur
+                widersprachen sich**: die alte nannte `ready`/`resting`
+                aus Entwurfskonstanten, die echte nennt Tage seit der
+                letzten Injektion. */}
           </Card>
 
           <div className="v2-col-gap" style={{ gap: 14 }}>

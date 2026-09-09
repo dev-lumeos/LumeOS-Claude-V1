@@ -20,6 +20,11 @@ import {
 } from '../../../lib/supplements/stack-read'
 import type { StackDaten, KatalogEintrag } from '../../../lib/supplements/stack-read'
 import { SupplementsAnsicht } from './ansicht'
+// G-388: die Injektionsorte liegen in `medical`, nicht in
+// `supplements` — fuenf Tabellen, gemessen in 00-MODULTABELLEN.md.
+import {
+  ladeInjektionsStand, type InjektionsStand,
+} from '../../../lib/medical/injektion-read'
 
 export const metadata: Metadata = {
   title: 'Supplements · LumeOS',
@@ -99,7 +104,7 @@ export default async function V2SupplementsPage({
   // meldet **temp read=9457 written=9457** bei 171 ms in der Datenbank
   // — ein Kreuzprodukt. Das ist ein eigener Befund, siehe Bericht.
   const [daten, katalog, regeln, gate, substanzen, stacks, belegteSubstanzen,
-         vorlagen]
+         vorlagen, injektionen]
     = await Promise.all([
       ruhig<StackDaten | null>(getStackDaten, null),
       ruhig<KatalogEintrag[]>(getKatalog, []),
@@ -111,6 +116,12 @@ export default async function V2SupplementsPage({
       // G-347b: die Vorlagen. Die Kachel stand auf einer fest
       // verdrahteten Null aus der Zeit, als die Tabelle leer war.
       ruhig<StackVorlage[]>(ladeStackVorlagen, []),
+      // G-388: die Injektionsorte. `[cmd]` Fuenf Tabellen in
+      // `medical`, und kein Leseweg fuehrte dorthin — die Kachel
+      // rechnete aus Entwurfskonstanten.
+      ruhig<InjektionsStand>(ladeInjektionsStand, {
+        orte: [], protokoll: [], nadeln: 0, gewebehinweise: 0, fehler: null,
+      }),
     ])
 
   // ══ G-275: die Bilanz gilt fuer den ANGESEHENEN Tag ══════════════
@@ -149,6 +160,7 @@ export default async function V2SupplementsPage({
       substanzen={substanzen} stacks={stacks} vorlagen={vorlagen}
       bilanz={bilanz} belegteSubstanzen={belegteSubstanzen}
       bilanzTag={bilanzTag}
+      injektionen={injektionen}
     />
     </>
   )
