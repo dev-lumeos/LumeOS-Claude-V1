@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-445
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [supplements.supplements]
 zahlen:
@@ -343,3 +345,121 @@ KATEGORIE, nicht an jeder einzelnen Substanz.**
 `[read]` **Ausnahmen sind BPC-157 (`SubQ/Oral`) und Selank
 (`Nasal/SubQ`)** ? **die stehen in `compound-taxonomy.md` und in
 der Spec-Warnung.**
+
+## Auftrag
+
+Tom, 2026-09-08: *,,bau die grundlagen in der db, bevor du
+irgendwas anbinden willst."*
+
+**Beauftragt am 2026-09-08.**
+
+`[read]` **Nichts an der Oberflaeche. Die Karte wartet, bis die
+Daten stehen.**
+
+### 1 · Der CHECK
+
+`[cmd]` **`SPEC_06_DATABASE_SCHEMA.md:104-105`:**
+
+    route TEXT NOT NULL
+      CHECK (route IN ('oral','injection_im','injection_subq',
+                       'topical','nasal','sublingual'))
+
+`[cmd]` **`supplement_pharmacology.route` hat heute KEINEN
+CHECK.**
+
+`[read]` **Erst die Werte bereinigen, dann den CHECK setzen** ?
+**andersherum faellt er sofort.**
+
+### 2 · Die kommaseparierten Werte
+
+`[cmd]` **Live gemessen:**
+
+    oral                       250
+    intramuscular               10
+    intranasal,subcutaneous      7
+    intravenous,subcutaneous     1
+
+`[read]` **Drei Probleme in vier Zeilen:**
+
+**a** ? **`intramuscular` heisst in der Spec `injection_im`.**
+**b** ? **`intranasal,subcutaneous` ist EIN Feld mit zwei
+Werten.**
+**c** ? **`intravenous` steht nicht in der Werteliste.**
+
+`[read]` **Miss zuerst, ob eine Substanz wirklich zwei Wege hat**
+? **oder ob die Quelle beides genannt hat und einer der uebliche
+ist.**
+
+`[cmd]` **BPC-157 ist der Beleg, dass es zwei geben KANN:**
+`SPEC_08:206` ? *,,Oral und SubQ verfuegbar."*
+
+`[read]` **Wenn zwei Wege noetig sind: eine Spalte reicht nicht.**
+`[read]` **Melde, bevor du eine zweite anlegst** ? **das ist eine
+Entscheidung.**
+
+### 3 · Die 93 Peptide
+
+`[cmd]` **`supplement_groups`: `supplement` 312, `enhanced` 191,
+`peptide` 93.**
+
+`[cmd]` **Und `route` haben zwei davon** ? **Semaglutid und
+Tirzepatid, beide `oral`.**
+
+`[cmd]` **`SPEC_08:218` sagt fuer Semaglutide `injection_subq`.**
+
+`[read]` **Der Weg haengt an der KATEGORIE, nicht an jeder
+Substanz** ? **`SPEC_08` nennt vier Klassen:**
+
+    AAS       injection_im
+    SARM      oral
+    Peptide   injection_subq
+    GLP1      injection_subq
+
+`[read]` **Miss, ob `supplements` eine Kategoriespalte traegt** ?
+`SPEC_06:97` **nennt einen CHECK mit `'GLP1','Support','Other'`.**
+
+`[read]` **Wenn ja: die Regel je Kategorie, nicht 93 Einzelfaelle.**
+
+### 4 · Die Ausnahmen
+
+`[cmd]` **Aus `compound-taxonomy.md` im Altrepo:**
+
+    BPC-157   SubQ/Oral
+    Selank    Nasal/SubQ
+
+`[read]` **Zwei Faelle, beide belegt** ? **die uebrigen folgen der
+Kategorie.**
+
+### Abnahmebedingungen
+
+    A1  hat `supplements` eine Kategoriespalte? Gemessen,
+        mit Werteverteilung.
+    A2  die vier bestehenden route-Werte bereinigt.
+        Zahl vorher/nachher je Wert.
+    A3  zwei Wege je Substanz: noetig? Gemessen, mit
+        Vorschlag -- NICHT gebaut.
+    A4  die 93 Peptide: route gesetzt. Zahl vorher/nachher.
+    A5  der CHECK steht. Gegenprobe: ein ungueltiger Wert
+        wird abgelehnt.
+    A6  Semaglutid und Tirzepatid: injection_subq.
+    A7  Sicherung vor dem Einspielen: Pfad, Groesse,
+        Pruefsumme.
+    A8  Vollkette und Punktelauf gruen.
+
+### Was nicht zu tun ist
+
+**`apps/` NICHT anfassen** ? **die Karte wartet.**
+**Keinen Weg erfinden** ? **was die Spec oder
+`compound-taxonomy.md` nicht nennt, bleibt NULL und wird
+gemeldet.**
+**Keine zweite Spalte fuer den zweiten Weg** ? **melden.**
+**Den Dev-Server nicht anfassen.**
+Nicht committen, nicht stagen, nicht pushen.
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
