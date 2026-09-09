@@ -49,6 +49,30 @@ einzige verbindliche Beschreibung des Ist-Zustands."*
     docs/entscheidungen/  was Tom entschieden hat
     docs/ssot/            WAS GEBAUT IST -- die Wahrheit
 
+### Nachsehen statt messen
+
+`[cmd]` **Drei erzeugte Dateien beantworten die haeufigsten
+Fragen:**
+
+    00-MODULTABELLEN.md   Tabellen, Spalten, Zeilen, Datum
+    00-SCHEMA.md          Funktionen, Policies, CHECKs, Sichten
+    00-ABGENOMMEN.md      was wann abgenommen wurde
+
+`[read]` **Heisst die Tabelle so? Gibt es den Schreibweg? Was
+erlaubt der CHECK?** ? **erst dort nachsehen, dann messen.**
+
+`[cmd]` **Am 2026-09-08 hat der Orchestrator dutzende Male `psql`
+gerufen und wurde dreimal berichtigt** ? `user_conditions` **statt**
+`conditions`, `is_primary` **existiert,** `client_id` **ist NOT
+NULL.** `[read]` **Alle drei standen in der Datenbank, keine in
+einer Datei.**
+
+`[cmd]` **Erzeugen:**
+
+    node tools/ssot-modultabellen.mjs --schreiben
+    node tools/ssot-schema.mjs --schreiben
+    node tools/ssot-nachtragen.mjs --schreiben
+
 `[read]` **Ein Punkt beschreibt einen Auftrag.** `[read]` **Die
 SSOT beschreibt den Zustand.**
 
