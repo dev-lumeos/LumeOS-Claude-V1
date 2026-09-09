@@ -13,8 +13,7 @@ beauftragt: 2026-09-08
 erledigt: 2026-09-08
 commit: 302b6294
 beruehrt:
-  tabellen: []
-  dateien: []
+  tabellen: [medical.lab_reports]
 zahlen: null
 ---
 
