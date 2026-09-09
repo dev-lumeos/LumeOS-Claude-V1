@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-09: 173 Funktionen, 414 Policies, 581 CHECKs, 13 Sichten.**
+`[cmd]` **Stand 2026-09-09: 174 Funktionen, 414 Policies, 581 CHECKs, 13 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -26,6 +26,7 @@ ob man sie rufen kann.**
 | coach | log_permission_change |  | Funktion |
 | coach | log_relationship_change |  | Funktion |
 | coach | offene_aktionen | p_modul text | Funktion |
+| coach | onboard_coach | p_display_name text | Funktion |
 | coach | resolve_invite_user_id | p_email text | Funktion |
 | coach | set_changed_by |  | Funktion |
 | coach | summary_goals | p_client uuid | Funktion |
