@@ -93,3 +93,121 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Berichtigt 2026-09-08 — Tom hat die Vorlage verworfen
+
+Tom: *,,diese mockup vorlage ist obsolet, da will ich dieselbe
+grafik wie recovery/muscle map."*
+
+`[read]` **Und der Auftrag oben war zweimal falsch.**
+
+### Was ich falsch geschrieben habe
+
+`[cmd]` **Die Tabellen liegen in `medical`, nicht `supplements`.**
+
+`[cmd]` **Und es sind FUENF, nicht zwei:**
+
+    medical.injection_sites            10 Sp, 4 Zeilen
+    medical.injection_logs              6 Sp, 0 Zeilen
+    medical.injection_site_conditions
+    medical.injection_needle_recommendations
+    medical.injection_tissue_condition_guidance
+
+`[read]` **Ich haette in `00-MODULTABELLEN.md` nachsehen sollen** ?
+**die Datei, die ich heute selbst gebaut habe.**
+
+### Was heute am Schirm steht
+
+`[cmd]` **`apps/web/src/app/v2/supplements/tab-injektionen.tsx`,
+563 Zeilen, ELF Kacheln, alle `attrappe={ATTRAPPE}`.**
+
+`[cmd]` **Aus `theme-v1/module-supplements-injection.jsx`
+abgeschrieben.**
+
+`[cmd]` **Die Kachel heisst schon *,,Rotation map"***, Untertitel
+*,,click a site ? dashed ring = SubQ ? dimmed = resting"*.
+
+`[read]` **Aber sie zeichnet selbst** ? **`InjektionsKarte` steht
+nur im Kommentar, nicht als Aufruf.**
+
+### Was Tom will
+
+`[read]` **Dieselbe Figur wie `recovery`** ? **nicht eine zweite
+Zeichnung daneben.**
+
+`[cmd]` **`packages/ui/src/koerperkarte.tsx` traegt bereits drei
+Aufrufe derselben Karte:**
+
+    ErmuedungsKarte     Muskeln eingefaerbt
+    AktivierungsKarte   Muskeln eingefaerbt
+    InjektionsKarte     Punkte ueber der Figur
+
+`[cmd]` **`KoerperkarteProps` nimmt `muskeln`, `punkte`,
+`figurDimmen`, `legende`** ? **die Punktkarte ist vorgesehen, nicht
+nachtraeglich.**
+
+`[cmd]` **16 Injektionsorte, links und rechts getrennt:**
+`delt_l`/`delt_r`, `pec_l`/`pec_r`, `bicep_l`/`bicep_r`,
+`quad_l`/`quad_r` ? **genau was eine Rotation braucht.**
+
+## Auftrag 2 — die Rotation auf der echten Figur
+
+**Beauftragt am 2026-09-08.**
+
+### 1 · Die eigene Zeichnung ersetzen
+
+`[read]` **`InjektionsKarte` aufrufen, statt eine zweite Figur zu
+zeichnen.**
+
+`[cmd]` **Miss zuerst, was die Kachel heute zeichnet** ? **und ob
+`punkte` dasselbe ausdruecken kann.**
+
+`[read]` **Wenn `Koerperkarte` etwas nicht kann: melden, nicht in
+`packages/ui` bauen** ? **Admin und Coach nutzen es mit.**
+
+### 2 · Die Rotation ist im Schema, nicht im Bild
+
+`[cmd]` **`medical.injection_sites` traegt:**
+
+    rotation_required
+    rotation_distance_mm
+    rotation_quadrant_interval_days
+    minimum_rest_days + _reason
+
+`[read]` **Also: wie weit muss der naechste Einstich weg sein,
+wann ist derselbe Quadrant wieder frei, wie lange ruht ein Ort.**
+
+`[cmd]` **`injection_logs` hat 0 Zeilen** ? **es wurde nie eine
+Injektion erfasst.**
+
+`[read]` **Miss, ob ein Schreibweg existiert** ? **wenn nicht, ist
+die Rotation nicht berechenbar und das ist der Befund.**
+
+### 3 · Die elf Attrappen
+
+`[read]` **Miss je Kachel, ob die fuenf Tabellen sie tragen
+koennen.**
+
+`[cmd]` **`injection_needle_recommendations` koennte *Needle
+reference* tragen,** `injection_tissue_condition_guidance` **die
+Gewebehinweise.**
+
+`[read]` **Melde je Kachel: baubar, oder was fehlt.**
+
+### Abnahmebedingungen
+
+    A1  die Kachel ruft InjektionsKarte. Belegt.
+    A2  was Koerperkarte nicht kann. Zahl: geprueft / fehlend.
+    A3  gibt es einen Schreibweg fuer injection_logs? Ja mit
+        Namen, nein.
+    A4  je der elf Kacheln: baubar oder was fehlt.
+    A5  E-69: Referenz unter der Linie. Zahl: angebunden /
+        Referenzen.
+    A6  Bildschirmfoto der Kachel.
+
+### Was nicht zu tun ist
+
+**Nichts in `packages/ui` aendern.**
+**Nichts in `supabase/`** ? **Codex arbeitet an C-439.**
+**Keine zweite Figur zeichnen** ? **das ist der Punkt.**
+Nicht committen, nicht stagen, nicht pushen.
