@@ -8,7 +8,7 @@ braucht: []
 kind_von: C-447
 entscheidung: E-77
 erledigt: 2026-09-08
-commit: OFFEN
+commit: 12bf9f2a
 beruehrt:
   dateien:
     - tools/migration-kette-pruefen.mjs
