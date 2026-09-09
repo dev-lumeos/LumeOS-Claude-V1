@@ -8,8 +8,8 @@
 | `todos` | 207 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 348 |
-| **gesamt** | **557** |
+| `erledigt` | 349 |
+| **gesamt** | **558** |
 
 ## medical — 47
 
@@ -483,7 +483,7 @@
 | `G-361` | feature | hoch | [coach lauffaehig nach Mockup](todos/coach-g-0361-coach-lauffaehig-nach-mockup.md) | offen | — | C-426 |
 | `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](erledigt/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | erledigt | — | — |
 
-## quer — 126
+## quer — 127
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -612,7 +612,8 @@
 | `G-382` | befund | mittel | [fuenf SSOT-Dateien inhaltlich pruefen](erledigt/quer-g-0382-fuenf-ssot-dateien-inhaltlich-pruefen.md) | erledigt | — | G-383 |
 | `G-383` | feature | hoch | [der Erzeuger fuer die Modultabellen](erledigt/quer-g-0383-der-erzeuger-fuer-die-modultabellen.md) | erledigt | — | G-384 |
 | `G-384` | feature | hoch | [die Modulbeschreibungen nachziehen](erledigt/quer-g-0384-die-modulbeschreibungen-nachziehen.md) | erledigt | — | G-385 |
-| `G-385` | feature | hoch | [`@abwesend`-Marken in die SSOT](laufend_claudecode/quer-g-0385-abwesend-marken-in-die-ssot.md) | laeuft (claudecode) | — | — |
+| `G-385` | feature | hoch | [`@abwesend`-Marken in die SSOT](erledigt/quer-g-0385-abwesend-marken-in-die-ssot.md) | erledigt | — | G-386 |
+| `G-386` | feature | hoch | [die SSOT in den Abwesenheitswaechter](laufend_claudecode/quer-g-0386-die-ssot-in-den-abwesenheitswaechter.md) | laeuft (claudecode) | — | — |
 
 ## market — 1
 
