@@ -1466,6 +1466,15 @@
       ]
     },
     {
+      "id": "385_context_qualify",
+      "path": "supabase/migrations/20260902070454_c385_qualify_body_measurement_context.sql",
+      "kind": "sql",
+      "creates": "C-385: qualifiziert die Quellspalten des Koerpermess-Kontexts nach seiner Erzeugung gegen die mehrdeutigen Rueckgabespalten",
+      "depends_on": [
+        "385_schema"
+      ]
+    },
+    {
       "id": "385",
       "path": "supabase/_pipeline/14_medical/385_injection_site_seed.sql",
       "kind": "sql",
