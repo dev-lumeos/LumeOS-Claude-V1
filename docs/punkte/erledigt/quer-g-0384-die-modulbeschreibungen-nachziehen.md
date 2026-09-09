@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
 erledigt: 2026-09-08
-commit: OFFEN
+commit: cddc9ce7
 beruehrt:
   dateien:
     - tools/ssot-modultabellen.mjs
