@@ -56,7 +56,19 @@ Schema, 259 Forschungsdateien.**
 Verzeichnis ist nicht getrackt.** `[cmd]` **Mit dem Dateisystem
 suchen, nicht mit git.**
 
-### Coach und Buddy ? 120 Dateien
+### Coach und Buddy ? 277 Dateien, 2,8 MB
+
+**Die vollstaendige Messung:
+`docs/lehren/coach-plattform-altrepo.md`.**
+
+`[cmd]` **`src/api/coach` 119 Dateien, `src/modules/coach` 42
+Bauteile, `src/api/human-coach` 32, `src/modules/human-coach` 30,
+`apps/coach` 40 mit zwanzig Routen.**
+
+`[read]` **LumeOS `apps/coach` heute: 23 Dateien, 75 KB** ?
+**Faktor 37.**
+
+### Coach und Buddy ? Einzelquellen
 
     specs/coach-buddy-killer-feature.md          1591 Zeilen
       Die Produktvision, v1.6, Tom als Co-Autor.

@@ -306,3 +306,38 @@ gilt** — und meldet einen Widerspruch, den es nicht gibt.
 laufen sie ueber ±90 Tage, mit einem Startdatum als einzigem
 Parameter. **Das ist kein Fehler in den Daten, sondern der Vorrat, aus
 dem entwickelt wird.**
+
+## Karten zaehlen misst nichts
+
+`[cmd]` **2026-09-08, G-391 und G-398:** *,,62 Karten, 23 haben ein
+Gegenstueck"* **und** *,,44 Portalkarten, 14 angebunden"*.
+
+`[read]` **Beide Zahlen waren richtig. Beide sagten nichts.**
+
+Tom: *,,das hat nicht mal 1% etwas mit meiner coaching plattform zu
+tun."*
+
+`[cmd]` **Eine Karte namens *Rules* stand neben einem
+30-KB-Regelbauer** ? **und galt als Entsprechung.**
+
+**Der Massstab ist die Faehigkeit, nicht der Titel:**
+
+    falsch   gibt es eine Karte mit diesem Namen?
+    richtig  welche Felder zeigt die Vorlage?
+             welche zeigt der Bau?
+             was KANN der Nutzer damit tun?
+
+`[cmd]` **Beispiel, an einer Karte gemessen:**
+
+    Athletes needing attention
+      Vorlage: Avatar, Name, Plan, letzte Sitzung,
+               Alertzahl, Compliance farbig,
+               Klick -> Detail-Modal
+      Bau:     Name, Datum
+      fehlt:   5 von 7 Feldern
+
+`[read]` **Und auf Modulebene dasselbe:** **ein Coach, der
+zustimmen und ablehnen kann, hat nichts gemein mit einem, der
+Programme baut, Regeln schreibt und Automatisierungen
+einrichtet.**
+

@@ -186,6 +186,11 @@ ist nicht getrackt.** `[cmd]` **Mit dem Dateisystem suchen.**
 **Die Quellen mit Pfad und Zeilenzahl:
 `docs/lehren/quellen-pflicht.md`.**
 
+**Das Ausmass der Coaching-Plattform:
+`docs/lehren/coach-plattform-altrepo.md`** ? **277 Dateien,
+2,8 MB, gegen 75 KB heute.** `[read]` **Wer einen Coach-Auftrag
+schreibt, liest das zuerst.**
+
 **Was im Vorgaengerrepo liegt: `docs/lehren/altrepo-karte.md`** ?
 **fuenf Apps, zwoelf Fachmodule, `docs/modules/<modul>/` mit je
 sieben Dateien (API, COMPONENTS, DATABASE, FEATURES, MIGRATION,
