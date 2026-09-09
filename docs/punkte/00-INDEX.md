@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 207 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 4 |
-| `erledigt` | 374 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 376 |
 | **gesamt** | **587** |
 
 ## medical — 47
@@ -639,8 +639,8 @@
 | `G-386` | feature | hoch | [die SSOT in den Abwesenheitswaechter](erledigt/quer-g-0386-die-ssot-in-den-abwesenheitswaechter.md) | erledigt | — | G-387 |
 | `G-387` | feature | hoch | [die neun Marken in die SSOT](erledigt/quer-g-0387-die-neun-marken-in-die-ssot.md) | erledigt | — | C-437 |
 | `G-394` | feature | mittel | [sechs Module ohne Ladezustand](laufend_claudecode/quer-g-0394-sechs-module-ohne-ladezustand.md) | laeuft (claudecode) | — | — |
-| `G-395` | entscheidung | mittel | [sechs Injektionsorte ohne Punkt auf der Figur](laufend_claudecode/quer-g-0395-sechs-injektionsorte-ohne-punkt.md) | laeuft (claudecode) | — | — |
-| `G-396` | feature | hoch | [die Beschriftung der Koerperkarte](laufend_claudecode/quer-g-0396-die-beschriftung-der-koerperkarte.md) | laeuft (claudecode) | — | — |
+| `G-395` | entscheidung | mittel | [sechs Injektionsorte ohne Punkt auf der Figur](erledigt/quer-g-0395-sechs-injektionsorte-ohne-punkt.md) | erledigt | — | — |
+| `G-396` | feature | hoch | [die Beschriftung der Koerperkarte](erledigt/quer-g-0396-die-beschriftung-der-koerperkarte.md) | erledigt | — | — |
 
 ## market — 3
 

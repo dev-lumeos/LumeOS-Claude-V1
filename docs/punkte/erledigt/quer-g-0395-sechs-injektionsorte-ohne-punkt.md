@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-393
 entscheidung: null
+erledigt: 2026-09-08
+commit: 21c54ef9
 beruehrt:
   dateien:
     - packages/ui/src/koerperkarte-pfade.ts
@@ -76,3 +78,18 @@ vorsichtig.**
 `[read]` **Und der Befund darunter ist groesser:** **`quad` liegt
 am Knie, `lat` am Oberarm** ? **die bestehenden zehn stimmen auch
 nicht.**
+
+## Abnahme
+
+**2026-09-08, mit G-396 abgenommen: hinfaellig.**
+
+`[read]` **Der Punkt fragte nach sechs fehlenden PUNKTEN auf der
+Figur.**
+
+`[cmd]` **E-79: es gibt keine Punkte mehr** ? **die Auswahl sind
+die 21 Muskelflaechen.**
+
+`[cmd]` **Was bleibt, ist `latissimus`** ? **es fehlt unter den
+Flaechen, `lat_l/r` faellt auf `trapezius`.**
+
+**Das geht in C-455.**

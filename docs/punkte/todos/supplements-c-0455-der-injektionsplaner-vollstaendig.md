@@ -156,3 +156,18 @@ dieser Nutzer fuer diese Substanz gewaehlt"* fehlt vollstaendig.**
     7  DANN die Oberflaeche
 
 `[read]` **Punkt 7 ist G-396 und wartet.**
+
+## Nachtrag aus G-396 — `latissimus` fehlt
+
+`[cmd]` **`MUSKELN` in `koerperkarte-pfade.ts` fuehrt 21
+Flaechen** ? **`latissimus` ist NICHT darunter.**
+
+`[cmd]` **`lat_l/r` faellt heute auf `trapezius`** ? **eine
+Naeherung.**
+
+`[read]` **Anatomisch falsch:** **der Latissimus liegt seitlich am
+Ruecken, der Trapezius oben.**
+
+`[read]` **Eine eigene Flaeche waeren neue Pfaddaten in
+`packages/ui`** ? **das gehoert zu den Grundlagen, nicht zur
+Anbindung.**

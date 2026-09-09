@@ -9,6 +9,8 @@ kind_von: G-393
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 21c54ef9
 beruehrt:
   dateien:
     - packages/ui/src/koerperkarte.tsx
@@ -326,7 +328,92 @@ ein Umweg. **Ein Testlauf im Paket waere der gerade Weg.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  0 Punkte, 34 gefaerbte Flaechenhaelften
+    A2  eine Seite allein einfaerbbar, mit Probezeile belegt
+    A3  16 Orte auf 10 Haelften, latissimus fehlt
+    A4  NICHT wie verlangt -- E-57 steht dagegen
+    A5  Klick oeffnet ein Modal
+    A6  vier Tabellen, je Feld mit Quelle
+    A7  34 Pfade mit tabindex und role=button
+    A8  zwei Orte einer Flaeche: beide im Modal
+    A9  recovery unveraendert
+    A10 1545 Tests gruen
+
+`[cmd]` **Selbst gemessen: `minimum_rest_days` ist bei 16 von 16
+NULL, mit dem Grund in der Spalte.** `[cmd]` **Und `latissimus`
+gibt es in `MUSKELN` nicht.**
+
+### A4 ist die wichtigste Stelle des Berichts
+
+`[read]` **Ich hatte vier Farbstufen verlangt, je Ort mit seinem
+`rest_days`.**
+
+`[cmd]` **`minimum_rest_days` ist ueberall NULL** ? **und der Grund
+steht daneben:**
+
+> *,,E-57: Die SC-Quelle belegt Abstand und Zonenrotation, keine
+> Ruhezeit in Tagen."*
+
+`[cmd]` **E-57 ist gueltig, 18 Quellen.**
+
+`[read]` **Die Zahlen der Spec (Deltoid 5, Gluteus 7) sind
+Praxisregeln, die E-57 ausdruecklich verworfen hat.**
+
+`[read]` **Er hat zwei Stufen gebaut ? benutzt / nie benutzt ? und
+den Grund an den Schirm gestellt.**
+
+> *,,Willst du die vier Stufen trotzdem, ist das eine Entscheidung
+> gegen E-57, und die gehoert dir."*
+
+`[read]` **Das ist die richtige Haltung:** **ein Auftrag ist keine
+Entscheidung, und eine gueltige Entscheidung ueberschreibt man
+nicht auf Zuruf.**
+
+### A2 — die Gegenprobe war eine echte Zeile
+
+`[cmd]` **Gluteal links rot, gluteal rechts grau** ? **mit einer
+Probezeile in der Datenbank belegt, 0 -> 1 -> 0.**
+
+`[read]` **Nicht behauptet, dass es geht** ? **gezeigt.**
+
+### Zwei Fehler, die nur der Schirm fand
+
+`[cmd]` **`--surface-1` gibt es nicht** ? **das Modal war
+durchsichtig, ohne Konsolenfehler und ohne Typfehler.**
+
+`[cmd]` **Und `.v2-supp-tbl-wrap` deckelte die Nadeltabelle mit
+185 px Leere.**
+
+`[read]` **Beides haette kein Test gefunden** ? **dieselbe Lehre
+wie *,,bei SVG entscheidet der Browser"*.**
+
+`[cmd]` **Beide behoben, beide mit Waechter.**
+
+### Was offen bleibt
+
+`[cmd]` **`latissimus` fehlt unter den 21 Flaechen** ? **`lat_l/r`
+faellt auf `trapezius`, eine Naeherung.**
+
+`[read]` **Eine eigene Flaeche waeren neue Pfaddaten in
+`packages/ui`** ? **er hat sie nicht erfunden.**
+
+### Und der Rahmen
+
+Tom, 2026-09-08: *,,werden wir nach den grundlagen komplett neu
+machen, und sehr wahrscheinlich zuerst anderes, dass es logisch
+wird."*
+
+`[read]` **Diese Fassung ist ein Zwischenstand** ? **E-79 aendert
+die Auswahl von 16 Katalogorten auf 21 Flaechen, und C-455 nennt
+17 fehlende Spalten.**
+
+`[read]` **Was hier gebaut ist, bleibt als Beleg, dass die Karte es
+kann** ? **die endgueltige Fassung folgt den Grundlagen.**
+
+**Abgenommen.**
+
 
 ## Auftrag 2 — die Punkte liegen falsch
 
