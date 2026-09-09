@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 204 |
+| `todos` | 205 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 361 |
-| **gesamt** | **567** |
+| **gesamt** | **568** |
 
 ## medical — 47
 
@@ -447,7 +447,7 @@
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 39
+## coach — 40
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -478,6 +478,7 @@
 | `C-439` | befund | hoch | [ein Coach ohne Profil kann nicht einladen](erledigt/coach-c-0439-ein-coach-ohne-profil-kann-nicht-einladen.md) | erledigt | — | C-440 |
 | `C-440` | feature | hoch | [das Coach-Onboarding](erledigt/coach-c-0440-das-coach-onboarding.md) | erledigt | — | C-442 |
 | `C-442` | feature | mittel | [C-440 einspielen](todos/coach-c-0442-c-440-einspielen.md) | offen | — | — |
+| `C-443` | befund | hoch | [das Altrepo hat einen Coach, und zwar einen groesseren](todos/coach-c-0443-das-altrepo-hat-einen-coach.md) | offen | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](erledigt/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | erledigt | — | C-381 |
