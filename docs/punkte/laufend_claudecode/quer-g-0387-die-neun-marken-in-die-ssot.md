@@ -101,3 +101,43 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Nachtrag 2026-09-08 — der Waechter ist rot, und das ist richtig
+
+`[cmd]` **Nach dem Commit meldet `abwesenheit-pruefen.mjs`:**
+
+    apps/web/src/app/v2/coach/uebersicht-echt.tsx:17
+    "coach.coach_profiles" steht in der Pipeline.
+
+`[cmd]` **C-268 hat die Tabelle heute nachmittag gebaut.**
+
+`[read]` **Die Marke sagt selbst, was jetzt zu tun ist** ?
+Zeile 18-20:
+
+> *,,Sobald die Tabelle in der Pipeline steht, faellt
+> `tools/abwesenheit-pruefen.mjs` und meldet diese Zeile. **Dann ist
+> der Ersatz aus Rolle und Kennung nicht mehr die richtige
+> Antwort.**"*
+
+### Was zu tun ist
+
+`[cmd]` **`coach.coach_profiles` traegt `display_name`** (SPEC_02:39,
+SPEC_06:37).
+
+`[read]` **Der Coach-Name kann angezeigt werden** ? **statt Rolle
+und gekuerzter Kennung.**
+
+`[cmd]` **Und C-268 legt ihn beim Einladen als Snapshot ab** ?
+**die Beziehung traegt `coach_display_name`.**
+
+`[read]` **Miss, welche Quelle die Uebersicht nehmen soll:** **das
+Profil (aktuell) oder den Snapshot (unveraenderlich).**
+
+`[read]` **Dann die Marke entfernen** ? **sie hat ihren Zweck
+erfuellt.**
+
+### Zusaetzliche Abnahmebedingung
+
+    A6  der Coach-Name steht am Schirm. Zahl: Beziehungen /
+        davon mit Namen. Und: welche Quelle, mit Grund.
+        Die Marke ist entfernt, der Waechter gruen.
