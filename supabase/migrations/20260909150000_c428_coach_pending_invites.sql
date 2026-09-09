@@ -5,7 +5,11 @@
 
 BEGIN;
 
-CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
+-- Dev nutzt extensions, die Aufbaukette kann pgcrypto aber aus der Baseline
+-- bereits in public haben. Die RPCs loesen das registrierte Erweiterungs-
+-- Schema deshalb unten explizit aus pg_extension auf.
+CREATE SCHEMA IF NOT EXISTS extensions;
+CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA extensions;
 
 CREATE TABLE IF NOT EXISTS coach.pending_invites (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -85,13 +89,15 @@ CREATE OR REPLACE FUNCTION coach.create_pending_invite(
 RETURNS TABLE(invite_id uuid, token text, expires_at timestamptz)
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = pg_catalog
 AS $$
 DECLARE
   v_coach_id uuid := auth.uid();
   v_email text := lower(btrim(coalesce(p_client_email, '')));
   v_coach_name text;
+  v_pgcrypto_schema name;
   v_token text;
+  v_token_hash text;
   v_invite_id uuid;
   v_permissions jsonb := jsonb_build_object(
     'nutrition_visibility', 'full',
@@ -150,14 +156,25 @@ BEGIN
     'buddy_level', p_initial_autonomy,
     'safety_level', 1
   );
-  v_token := encode(public.gen_random_bytes(32), 'hex');
+  SELECT n.nspname INTO v_pgcrypto_schema
+  FROM pg_catalog.pg_extension AS e
+  JOIN pg_catalog.pg_namespace AS n ON n.oid = e.extnamespace
+  WHERE e.extname = 'pgcrypto';
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'pgcrypto_not_installed' USING ERRCODE = 'P0002';
+  END IF;
+
+  EXECUTE format('SELECT encode(%I.gen_random_bytes(32), ''hex'')', v_pgcrypto_schema)
+    INTO v_token;
+  EXECUTE format('SELECT encode(%I.digest($1, ''sha256''), ''hex'')', v_pgcrypto_schema)
+    INTO v_token_hash USING v_token;
 
   INSERT INTO coach.pending_invites (
     coach_id, coach_display_name, email_normalized, token_hash, expires_at,
     permission_draft, autonomy_draft
   ) VALUES (
     v_coach_id, v_coach_name, v_email,
-    encode(public.digest(v_token, 'sha256'), 'hex'), p_expires_at,
+    v_token_hash, p_expires_at,
     v_permissions, v_autonomy
   ) RETURNING id INTO v_invite_id;
 
@@ -169,11 +186,12 @@ CREATE OR REPLACE FUNCTION coach.accept_pending_invite(p_token text)
 RETURNS uuid
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = pg_catalog
 AS $$
 DECLARE
   v_client_id uuid := auth.uid();
   v_client_email text;
+  v_pgcrypto_schema name;
   v_token_hash text;
   v_invite coach.pending_invites%ROWTYPE;
   v_relationship_id uuid;
@@ -185,7 +203,16 @@ BEGIN
     RAISE EXCEPTION 'invalid_invite_token' USING ERRCODE = '22023';
   END IF;
 
-  v_token_hash := encode(public.digest(p_token, 'sha256'), 'hex');
+  SELECT n.nspname INTO v_pgcrypto_schema
+  FROM pg_catalog.pg_extension AS e
+  JOIN pg_catalog.pg_namespace AS n ON n.oid = e.extnamespace
+  WHERE e.extname = 'pgcrypto';
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'pgcrypto_not_installed' USING ERRCODE = 'P0002';
+  END IF;
+
+  EXECUTE format('SELECT encode(%I.digest($1, ''sha256''), ''hex'')', v_pgcrypto_schema)
+    INTO v_token_hash USING p_token;
   SELECT * INTO v_invite
   FROM coach.pending_invites
   WHERE token_hash = v_token_hash AND status = 'pending'
