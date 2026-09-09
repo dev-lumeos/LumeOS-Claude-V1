@@ -9,6 +9,8 @@ kind_von: C-446
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 2c53f468
 beruehrt:
   tabellen: [medical.injection_sites]
 zahlen:
@@ -127,4 +129,73 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  die drei in der Kette, frischer Aufbau 176 Schritte,
+        SCHEMA VOLLSTAENDIG, 646,4 s
+    A2  Idempotenz je Datei geprueft
+    A3  die acht: alle tot, je mit Fundstelle
+    A4  Ausnahmeliste 11 -> 8
+    A5  Waechter weiterhin rot bei einer neuen Luecke
+    A6  Punktelauf gruen, 575 Punkte
+
+`[cmd]` **Selbst gemessen: kein `_effective_effective` live,
+`substance_group_memberships` 8 Zeilen, Ausnahmeliste 8
+Eintraege.**
+
+### A2 ist die beste Stelle
+
+`[read]` **Ich fragte nach Idempotenz** ? **er hat je Datei
+gemessen, nicht als Block.**
+
+`[cmd]` **Und C-366 fiel durch:** **der Zweitlauf erzeugte
+`food_tags_effective_effective`.**
+
+`[read]` **Eine Migration, die beim zweiten Lauf einen falschen
+Namen baut** ? **das haette ein frischer Aufbau nach einem
+Teilabbruch erzeugt, und niemand haette es gesehen.**
+
+`[cmd]` **Abgesichert, danach drei Leser-Hashes unveraendert.**
+
+`[read]` **Er hat nicht nur behoben, sondern belegt, dass die
+Wirkung dieselbe bleibt.**
+
+### A3 — je Datei ein Grund, nicht ein Urteil
+
+    search_events   bereits in Pipeline 057
+    C-283           Katalogfelder in Pipeline 283
+    C-286, C-293,
+    G-107           bytegleich zur Pipeline
+    C-371, C-362    Pipeline-Supersets
+    C-381           Pipeline 381 traegt die Revokes UND die
+                    sicheren RPCs
+
+`[read]` **`C-381` war meine Sorge** ? *,,klingt nach einer
+Sicherung, nicht nach Altlast."*
+
+`[cmd]` **Er hat genau nachgesehen:** **keine Update-Policy, keine
+`authenticated`-Schreibrechte auf `action_log`** ? **die Pipeline
+ist strenger als die Migration.**
+
+`[cmd]` **Und sein Nachsatz:** *,,C-381-Schutz bleibt ueber den
+Pipeline-Superset aktiv."*
+
+### A4 — die Liste schrumpft, wie sie soll
+
+`[cmd]` **11 -> 8** ? **was geschlossen wurde, faellt heraus.**
+
+`[read]` **Das ist der Beleg, dass die Liste kein Sammelbecken
+ist** ? **sie war die Sorge, die ich bei der Abnahme von C-446
+hatte.**
+
+### Die acht Toten gehen als C-448 weiter
+
+`[read]` **Sie liegen in `migrations/`, sind nirgends registriert
+und werden nie ausgefuehrt.**
+
+`[read]` **Drei Wege: loeschen, liegen lassen, nach `backup/`.**
+
+**Als Entscheidung fuer Tom.**
+
+**Abgenommen.**
+
