@@ -5158,7 +5158,22 @@
     {
       "schema": "medical",
       "name": "injection_logs",
-      "schritt": "385_schema",
+      "schritt": "445_schema",
+      "spalten": [
+        "id",
+        "user_id",
+        "injection_site_id",
+        "injected_at",
+        "created_at",
+        "updated_at",
+        "volume_ml",
+        "substance_name",
+        "route",
+        "pain_score",
+        "complication",
+        "override_reason"
+      ],
+      "spalten_herkunft": "C-445: Planner-Protokollwerte fuer Volumen, gefrorene Substanz und Route, Schmerz, mehrwertige Komplikation sowie begruendete Block-Uebersteuerung. Sie bleiben bis zum eigenen API-Schreibweg nullable; Altbestand wird nicht nacherfunden.",
       "rls": true,
       "policies": [
         "SELECT",
