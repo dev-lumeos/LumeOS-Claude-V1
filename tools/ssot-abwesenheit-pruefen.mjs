@@ -1,5 +1,58 @@
 // Behauptete Abwesenheit gegen die Datenbank — G-384.
 //
+// ══ NICHT INS GATE. MESSWERKZEUG AUF ZURUF. ═════════════════════════
+//
+// `[cmd]` **Bewusst nicht in `package.json` -> `scripts.gate`, und das
+// bleibt so.** Wer ihn dort einhaengt, macht das Gate schlechter.
+//
+// `[cmd]` **Gemessen 2026-09-09 (G-384/A3): 74 Zeilen Ausgabe, 72
+// Meldungen, davon 2 echt.** Stichprobe von zwoelf Meldungen: **keine
+// einzige ein Befund** — Fremdschluessel-Hinweise, Spaltenbemerkungen,
+// eine positive Aussage (*„UEBERNOMMEN wurden ..."*).
+//
+// `[cmd]` **`83-dashboard.md:189` ist der klarste Fall:** dort steht
+// *„das Tagesziel ... fehlt, die Naehrstoffreferenzen (aus
+// `nutrient_reference_values`) gibt es trotzdem"* — **der Satz sagt
+// ausdruecklich, dass es die Tabelle GIBT**, und dieser Waechter
+// meldet ihn. `[read]` **Die Verneinung gehoert einem anderen
+// Satzglied. Das ist nicht einstellbar, das ist Grammatik.**
+//
+// `[read]` **Ein Waechter mit 2 richtigen auf 72 wird nach zwei Tagen
+// weggeschaut** — **und ein weggeschauter Waechter taeuscht Deckung
+// vor.** Dann ist er schlimmer als keiner.
+//
+// ── DIE RICHTIGE BAUFORM STEHT NEBENAN ──────────────────────────────
+//
+// `[cmd]` **`tools/abwesenheit-pruefen.mjs` (A-62) steht IM GATE** und
+// loest dasselbe Problem umgekehrt: die Aussage traegt eine **Marke**,
+// der Waechter prueft die Marken.
+//
+//     // (at)abwesend recovery.hrv_readings
+//     // `[cmd]` Die Tabelle gibt es nicht - deshalb kein Leseweg.
+//
+// `[cmd]` **Das `(at)` steht hier absichtlich statt `@`:** mit `@`
+// liest `abwesenheit-pruefen.mjs` dieses BEISPIEL als echte Aussage
+// und fuehrt es in `--liste`. **Gemessen — es stand als
+// `tools/ssot-abwesenheit-pruefen.mjs:30` in der Liste.** Ein
+// Waechter, der Beispiele fuer Aussagen haelt, zaehlt falsch (G-186).
+//
+// `[read]` **Eine Marke ist eindeutig, eine Verneinung im Fliesstext
+// ist es nie.** `[cmd]` **A-62 nennt genau den Fall dieses Werkzeugs
+// woertlich:** *„C-175-Kommentar: shopping_lists gibt es nicht"*.
+//
+// ── WOZU ER DANN GUT WAR ────────────────────────────────────────────
+//
+// `[cmd]` **Er hat die fuenf Falschaussagen gefunden** (G-382 bis
+// G-384): `128-recovery-scores.md:52`, `96-recovery-checkins.md:27`,
+// `105-medical-schema.md:30`, `98-supplements-schema.md:46` und
+// `127-recovery-checkins.md:190/193`. **Das war seine Arbeit.**
+//
+// `[read]` **Als Suchlauf auf Zuruf taugt er weiter** — wer eine
+// Vermutung hat, laesst ihn laufen und liest die 72 Zeilen von Hand.
+// **Was er nicht kann, ist unbeaufsichtigt urteilen.**
+//
+// Aufruf: node tools/ssot-abwesenheit-pruefen.mjs
+//
 // `[cmd]` **G-382/G-383 gemessen:** `docs/ssot/` behauptet an fuenf
 // Stellen, eine Tabelle sei nie gebaut worden — **und sie steht in
 // `information_schema`.** `[read]` **Eine fehlende Erwaehnung laedt
