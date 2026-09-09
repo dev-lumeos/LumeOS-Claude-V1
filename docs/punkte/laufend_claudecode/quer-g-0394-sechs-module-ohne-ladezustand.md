@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-392
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/shell.tsx
@@ -315,3 +317,110 @@ von heute.**
     A10  wie traegt die Navigation elf Reiter? Aus der Vorlage
          gemessen, nicht erfunden. Und: was davon ist heute
          schon zu bauen, was wartet.
+
+## Auftrag
+
+**Beauftragt am 2026-09-08.**
+
+### Die Reihenfolge
+
+`[read]` **Erst das Skelett, dann `settings`** ? **das Skelett ist
+eine Datei, `settings` ist ein Umbau.**
+
+### 1 · Eine `loading.tsx` in der Schale
+
+`[cmd]` **`apps/web/src/app/v2/loading.tsx`.**
+
+`[cmd]` **`supplements/loading.tsx` ist die Vorlage** ? **sie baut
+`hero`, vier `reiter`, zwei `karte`.**
+
+`[read]` **Und sie faellt danach weg.**
+
+`[cmd]` **Der Anker aus G-392 traegt sie bereits** ? **die Schale
+liegt bei Zeichen 1.560, die Suspense-Grenze bei 10.860.**
+
+`[read]` **Der Text *,,Supplements werden geladen"* ist das
+Einzige, was modulspezifisch war** ? **miss, ob `usePathname` in
+einer `loading.tsx` verfuegbar ist, oder ob *,,Wird geladen"*
+reicht.**
+
+### 2 · `settings` bekommt Kopf und Navigation
+
+`[cmd]` **Heute: `page.tsx` 50 Zeilen, rendert direkt
+`<ProfilFormular>`** ? **kein Kopf, keine Reiter.**
+
+`[cmd]` **`formular.tsx` hat 604 Zeilen, alles untereinander.**
+
+**Der Schnitt, aus dem gemessen, was drinsteht:**
+
+    Profil        Geschlecht, Geburtsdatum, Groesse, Gewicht
+    Aktivitaet    Stufe mit Faktor
+    Erfahrung     vier Stufen, Extended-Regel
+    Ernaehrung    Mahlzeitenstruktur
+    Zeitraeume    nur bei female
+
+`[cmd]` **Der letzte Block ist heute schon bedingt** (Z441) ?
+**die Regel wandert eine Ebene hoch.**
+
+### 3 · EINE Formleiste
+
+`[read]` **Das Speichern gehoert unter ALLE Reiter, nicht in
+einen.**
+
+`[read]` **Sonst muesste man je Reiter speichern** ? **und ein halb
+gespeichertes Profil ist schlechter als ein langes Formular.**
+
+`[read]` **Ein Formular, fuenf Sichten.**
+
+### 4 · Wie die Navigation elf Reiter traegt
+
+`[cmd]` **`G-131` hat sieben weitere Bereiche gemessen:**
+**Einheiten, Module, Freigaben, Datenquellen, Abrechnung, Konto,
+Muskelkarte.**
+
+`[cmd]` **Die Vorlage ist
+`theme-v1/module-completeness.jsx`, 837 Zeilen** ? **sie nennt sie
+`Panel`, nicht `Tab`.**
+
+`[read]` **Miss, WIE sie sie anordnet** ? **Leiste,
+Seitennavigation, oder Gruppen?**
+
+`[read]` **Das entscheidet die Bauform** ? **nicht die fuenf
+Reiter von heute.**
+
+`[read]` **Und bau nur die fuenf** ? **die anderen sieben sind
+eigene Punkte.**
+
+### Abnahmebedingungen
+
+    A1  eine loading.tsx in der Schale, supplements/ weg.
+        Von Modul zu Modul klicken: das Skelett erscheint.
+        Zahl: 9 Module / davon mit Skelett.
+    A2  0 Hydrationsfehler. Bildschirmfoto.
+    A3  settings hat einen Kopf wie die anderen. Foto.
+    A4  fuenf Reiter, der letzte nur bei female.
+        Zahl: Reiter / sichtbar je Geschlecht.
+    A5  EINE Formleiste: aus Reiter 1 speichern, Wert aus
+        Reiter 3 gemessen vorher/nachher.
+    A6  wie die Vorlage elf Panels traegt. Gemessen.
+    A7  die Doppelung mit nutrition/preferences benannt.
+    A8  1525 Tests bleiben gruen.
+
+### Was nicht zu tun ist
+
+**Die sieben weiteren Bereiche NICHT bauen** ? **eigene Punkte.**
+**Nichts in `packages/ui`** ? **melden.**
+**Nichts in `supabase/`.**
+Nicht committen, nicht stagen, nicht pushen.
+
+### Der Dev-Server
+
+`[cmd]` **NIE `start`, `neustart`, `aufraeumen`.**
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

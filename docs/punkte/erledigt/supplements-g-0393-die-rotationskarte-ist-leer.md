@@ -9,6 +9,8 @@ kind_von: G-392
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: d49c547b
 beruehrt:
   dateien:
     - apps/web/src/lib/medical/injektion-karte.ts
@@ -267,4 +269,63 @@ erfasst wird.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  16 Orte, 10 auf der Figur, 6 ohne Punkt
+    A2  KARTEN_ORTE umgekehrt statt geloescht
+    A3  vier Vorschlaege, packages/ui unberuehrt
+    A4  16 mal "nie", ein benannter Hinweis
+    A5  1525 Tests gruen
+
+`[cmd]` **Selbst gemessen: 16 Punkte in `INJEKTIONS_ORTE`, 10 der
+16 Orte haben einen** ? `abd`, `sq_delt`, `thigh_sq`, `vglute`
+**fehlen.**
+
+### A2 ist die bessere Entscheidung
+
+`[read]` **Ich schrieb: `KARTEN_ORTE` faellt weg, die Zeilen-Id IST
+die Punkt-Id.**
+
+`[cmd]` **Das gilt fuer zwoelf von sechzehn** ? **`vglute_l/r`
+heisst in der Karte `vg_l/r`, und `sq_delt`/`thigh_sq` haben gar
+keinen Punkt.**
+
+> *,,Eine Zuordnung mit vier Eintraegen ist ehrlicher als eine
+> geloeschte, die vier Orte verschwinden laesst."*
+
+`[read]` **Und die Umkehrung ist der Kern:** **vorher verteilte sie
+Regionen auf Punkte, jetzt berichtigt sie nur abweichende Namen.**
+`[read]` **Der Regelfall geht direkt durch.**
+
+### A4 — der Hinweis nennt die Zahl
+
+`[cmd]` **`0 von 16 Orten benutzt ? Rotation beginnt mit dem ersten
+Eintrag.`**
+
+`[read]` **Nicht *,,keine Daten"*** ? **die Zahl sagt, dass die
+Orte da sind und nur die Nutzung fehlt.**
+
+`[cmd]` **Und `daysSince` bleibt `undefined`, nicht 0** ? **wie der
+Kommentar in Zeile 59 es verlangt.**
+
+### A3 — vier Vorschlaege, nichts angefasst
+
+`[cmd]` **`vg_l/r` -> `vglute_l/r`**, mit der Begruendung: **die
+Datenbank folgt der Spec, die Karte ist aelter.**
+
+`[cmd]` **`sq_delt` und `thigh_sq` liegen versetzt neben den
+IM-Punkten** ? **subkutan wird flacher und weiter aussen
+gesetzt.**
+
+`[cmd]` **`abd_l/r` fehlt ganz** ? **die Figur hat keinen
+Bauchpunkt.**
+
+`[read]` **Und `pec`, `bicep`, `tricep` bleiben** ? **sie sind fuer
+die Erholungskarte da, nicht fuer Injektionen.**
+
+`[read]` **Er hat die zwei Verwendungen derselben Karte
+unterschieden** ? **das ist der Grund, warum sie nicht aufgeraeumt
+werden duerfen.**
+
+**Abgenommen.**
+

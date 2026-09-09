@@ -8,8 +8,8 @@
 | `todos` | 207 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 372 |
-| **gesamt** | **582** |
+| `erledigt` | 373 |
+| **gesamt** | **583** |
 
 ## medical — 47
 
@@ -372,7 +372,7 @@
 | `G-389` | feature | hoch | [der Schreibweg fuer Injektionen](laufend_claudecode/supplements-g-0389-der-schreibweg-fuer-injektionen.md) | laeuft (claudecode) | — | — |
 | `G-390` | befund | hoch | [`new Date()` zerlegt die Hydration](erledigt/supplements-g-0390-new-date-zerlegt-die-hydration.md) | erledigt | — | G-392 |
 | `G-392` | befund | hoch | [der Hydrationsfehler am Wechslerplatz](erledigt/supplements-g-0392-der-hydrationsfehler-am-wechslerplatz.md) | erledigt | — | G-393, G-394 |
-| `G-393` | befund | hoch | [die Rotationskarte ist leer](laufend_claudecode/supplements-g-0393-die-rotationskarte-ist-leer.md) | laeuft (claudecode) | — | — |
+| `G-393` | befund | hoch | [die Rotationskarte ist leer](erledigt/supplements-g-0393-die-rotationskarte-ist-leer.md) | erledigt | — | G-395 |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -500,7 +500,7 @@
 | `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](erledigt/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | erledigt | — | — |
 | `G-391` | feature | hoch | [das Coach-Grundgeruest aus den Vorlagen](todos/coach-g-0391-das-grundgeruest-aus-den-vorlagen.md) | offen | — | — |
 
-## quer — 132
+## quer — 133
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -635,7 +635,8 @@
 | `G-385` | feature | hoch | [`@abwesend`-Marken in die SSOT](erledigt/quer-g-0385-abwesend-marken-in-die-ssot.md) | erledigt | — | G-386 |
 | `G-386` | feature | hoch | [die SSOT in den Abwesenheitswaechter](erledigt/quer-g-0386-die-ssot-in-den-abwesenheitswaechter.md) | erledigt | — | G-387 |
 | `G-387` | feature | hoch | [die neun Marken in die SSOT](erledigt/quer-g-0387-die-neun-marken-in-die-ssot.md) | erledigt | — | C-437 |
-| `G-394` | feature | mittel | [sechs Module ohne Ladezustand](todos/quer-g-0394-sechs-module-ohne-ladezustand.md) | offen | — | — |
+| `G-394` | feature | mittel | [sechs Module ohne Ladezustand](laufend_claudecode/quer-g-0394-sechs-module-ohne-ladezustand.md) | laeuft (claudecode) | — | — |
+| `G-395` | entscheidung | mittel | [sechs Injektionsorte ohne Punkt auf der Figur](todos/quer-g-0395-sechs-injektionsorte-ohne-punkt.md) | offen | — | — |
 
 ## market — 3
 
