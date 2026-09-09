@@ -397,3 +397,109 @@ aus G-393).
         Bildschirmfoto.
     A9  ErmuedungsKarte unveraendert -- die Muskelpfade werden
         NICHT angefasst, nur die Punktkoordinaten.
+
+## Auftrag 3 — keine Punkte, sondern Flaechen
+
+Tom, 2026-09-08: *,,diese muskelbildkomponente hat die meisten
+muskeln und die sind sogar beschriftet. was sucht man da stellen on
+top heraus? der bodybuilder weiss schon wo exakt, er muss nur wissen
+welcher bereich dran ist."*
+
+`[read]` **Das macht Auftrag 1 und 2 hinfaellig** ? **die Punkte
+sind der falsche Ansatz.**
+
+### Was die Karte schon hat
+
+`[cmd]` **`koerperkarte-pfade.ts`: 37 Eintraege, davon 21
+Muskelflaechen:**
+
+    chest      abs        obliques    biceps
+    triceps    deltoids   trapezius   neck
+    forearm    adductors  quadriceps  knees
+    tibialis   calves     gluteal     hamstring
+    head       hair       hands       ankles   feet
+
+`[cmd]` **Und die uebrigen 16 sind die Punkte** ? **`delt_l`,
+`quad_l`, `vg_l` und so fort.**
+
+`[read]` **Die Flaechen sind da, beschriftet und anatomisch
+richtig** ? **die Punkte liegen daneben und sind es nicht.**
+
+### Links und rechts geht
+
+`[cmd]` **Jeder Muskel hat `paths` als Array** ? **mehrere Pfade je
+Muskel.**
+
+`[cmd]` **`obliques` traegt sogar den Kommentar `// right`.**
+
+`[read]` **Eine Seite laesst sich also einzeln einfaerben** ?
+**das ist zu belegen, aber es sieht danach aus.**
+
+### Die Zuordnung
+
+`[cmd]` **Die 16 Orte aus `medical.injection_sites`:**
+
+    delt_l/r      -> deltoids, je Seite
+    quad_l/r      -> quadriceps
+    glute_l/r     -> gluteal
+    vglute_l/r    -> gluteal, obere aeussere Ecke
+    lat_l/r       -> latissimus  (FEHLT in den Flaechen)
+    abd_l/r       -> abs oder obliques
+    sq_delt_l/r   -> deltoids
+    thigh_sq_l/r  -> quadriceps
+
+`[read]` **Zwei Orte teilen sich eine Flaeche:** `glute` **und**
+`vglute`, `delt` **und** `sq_delt`, `quad` **und**
+`thigh_sq`.
+
+`[read]` **Das ist kein Problem, sondern der Punkt:** **der
+Bodybuilder sieht, welcher BEREICH dran ist.**
+
+`[cmd]` **Und `latissimus` fehlt unter den Flaechen** ? **messen,
+ob `trapezius` ihn mit abdeckt oder ob eine Flaeche fehlt.**
+
+### Was zu bauen ist
+
+`[read]` **Die Rotationskarte faerbt Flaechen, nicht Punkte.**
+
+`[cmd]` **`ErmuedungsKarte` macht es schon so** ? **dieselbe
+Technik, andere Daten.**
+
+`[read]` **Die Farbe kommt aus `siteState`** (Injection Planner
+5.1): `fresh`, `ready`, `soon`, `resting`.
+
+`[read]` **Und wo zwei Orte eine Flaeche teilen: die dringendere
+Farbe gewinnt** ? **oder es wird geteilt, wenn die Pfade es
+hergeben.**
+
+### Die Beschriftung
+
+`[read]` **Sie ist damit weitgehend erledigt** ? **die Flaechen
+sind schon beschriftet.**
+
+`[cmd]` **Miss, ob die Beschriftung der Flaechen sichtbar ist oder
+nur im Pfadnamen steht.**
+
+### Abnahmebedingungen — ersetzen A1 bis A9
+
+    A1  laesst sich EINE Seite eines Muskels einfaerben?
+        Belegt an deltoids oder quadriceps.
+    A2  die Zuordnung 16 Orte -> Flaechen. Je Ort die
+        Flaeche, und wo zwei sich teilen.
+    A3  latissimus: eigene Flaeche oder von trapezius
+        gedeckt? Gemessen.
+    A4  die Karte faerbt Flaechen. Bildschirmfoto beider
+        Ansichten.
+    A5  ohne Protokollzeilen: alle in "nie"-Farbe, mit
+        benanntem Hinweis.
+    A6  ErmuedungsKarte unveraendert. Foto von recovery.
+    A7  die 16 Punkte in INJEKTIONS_ORTE: noch gebraucht?
+        Wenn nein, melden -- nicht loeschen.
+    A8  1529 Tests bleiben gruen.
+
+### Was nicht zu tun ist
+
+**Keine Punkte mehr verschieben** ? **Auftrag 1 und 2 sind
+hinfaellig.**
+**Keine Muskelpfade aendern** ? **sie sind anatomisch richtig.**
+Nicht committen, nicht stagen, nicht pushen.
