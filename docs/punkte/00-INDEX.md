@@ -8,8 +8,8 @@
 | `todos` | 207 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 363 |
-| **gesamt** | **573** |
+| `erledigt` | 364 |
+| **gesamt** | **574** |
 
 ## medical — 47
 
@@ -345,7 +345,7 @@
 | `C-423` | feature | mittel | [`stack_templates` hat null Zeilen](erledigt/supplements-c-0423-stack-templates-hat-null-zeilen.md) | erledigt | — | — |
 | `C-427` | befund | hoch | [zwei Wortschaetze fuer `goal`](todos/supplements-c-0427-zwei-wortschaetze-fuer-goal.md) | offen | — | — |
 | `C-441` | befund | hoch | [sechzehn Injektionsorte statt vier](erledigt/supplements-c-0441-sechzehn-injektionsorte-statt-vier.md) | erledigt | — | C-445 |
-| `C-445` | feature | hoch | [C-441 einspielen und die Protokollspalten](laufend_codex/supplements-c-0445-c-441-einspielen-und-die-protokollspalten.md) | laeuft (codex) | — | — |
+| `C-445` | feature | hoch | [C-441 einspielen und die Protokollspalten](erledigt/supplements-c-0445-c-441-einspielen-und-die-protokollspalten.md) | erledigt | — | C-446 |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -496,7 +496,7 @@
 | `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](erledigt/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | erledigt | — | — |
 | `G-391` | feature | hoch | [das Coach-Grundgeruest aus den Vorlagen](todos/coach-g-0391-das-grundgeruest-aus-den-vorlagen.md) | offen | — | — |
 
-## quer — 128
+## quer — 129
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -575,6 +575,7 @@
 | `C-422` | feature | hoch | [die Lesewege fuer elf Kacheln](erledigt/quer-c-0422-die-lesewege-fuer-elf-kacheln.md) | erledigt | — | — |
 | `C-424` | feature | mittel | [eine Leser-Registry](erledigt/quer-c-0424-eine-leser-registry.md) | erledigt | — | A-72 |
 | `C-430` | befund | mittel | [die Sicht traegt nur Deutsch](erledigt/quer-c-0430-die-sicht-traegt-nur-deutsch.md) | erledigt | — | — |
+| `C-446` | befund | hoch | [eine Migration fehlt in der Kette](laufend_codex/quer-c-0446-eine-migration-fehlt-in-der-kette.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

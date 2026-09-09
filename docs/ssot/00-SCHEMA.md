@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-09: 173 Funktionen, 414 Policies, 575 CHECKs, 13 Sichten.**
+`[cmd]` **Stand 2026-09-09: 173 Funktionen, 414 Policies, 581 CHECKs, 13 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -316,6 +316,12 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | medical | health_events | health_events_source_actor_check | CHECK ((btrim(source_actor) <> ''::text)) |
 | medical | health_events | health_events_source_kind_check | CHECK ((source_kind = ANY (ARRAY['user'::text, 'clinician'::text, 'document'::text, 'import'::text, 'seed'::text]))) |
 | medical | health_events | health_events_title_check | CHECK ((btrim(title) <> ''::text)) |
+| medical | injection_logs | injection_logs_complication_values_check | CHECK (((complication IS NULL) OR (complication <@ ARRAY['none'::text, 'bleeding'::text, 'lump'::text, 'swelling'::text, 'redness' |
+| medical | injection_logs | injection_logs_override_reason_not_blank_check | CHECK (((override_reason IS NULL) OR (btrim(override_reason) <> ''::text))) |
+| medical | injection_logs | injection_logs_pain_score_check | CHECK (((pain_score IS NULL) OR ((pain_score >= 0) AND (pain_score <= 3)))) |
+| medical | injection_logs | injection_logs_route_check | CHECK (((route IS NULL) OR (route = ANY (ARRAY['im'::text, 'sc'::text])))) |
+| medical | injection_logs | injection_logs_substance_name_not_blank_check | CHECK (((substance_name IS NULL) OR (btrim(substance_name) <> ''::text))) |
+| medical | injection_logs | injection_logs_volume_ml_positive_check | CHECK (((volume_ml IS NULL) OR (volume_ml > (0)::numeric))) |
 | medical | injection_needle_recommendations | injection_needle_recommendations_applicability_check | CHECK ((jsonb_typeof(applicability) = 'object'::text)) |
 | medical | injection_needle_recommendations | injection_needle_recommendations_body_size_modifier_check | CHECK ((btrim(body_size_modifier) <> ''::text)) |
 | medical | injection_needle_recommendations | injection_needle_recommendations_evidence_type_check | CHECK ((evidence_type = ANY (ARRAY['guideline'::text, 'study'::text, 'practice_rule'::text, 'product_label'::text]))) |

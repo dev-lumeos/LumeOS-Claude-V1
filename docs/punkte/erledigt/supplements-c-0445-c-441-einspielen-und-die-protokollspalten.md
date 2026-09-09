@@ -9,6 +9,8 @@ kind_von: C-441
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 9ecba75e
 beruehrt:
   tabellen: [medical.injection_sites]
 zahlen:
@@ -123,4 +125,79 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  live: 16 Orte, alte IDs 0
+    A2  vor und nach dem Loeschen: 0 Referenzen
+    A3  die Regelzuordnung, je Spalte
+    A4  sechs Spalten gebaut, RLS unveraendert
+    A5  Nadelempfehlungen 8 -> 0 direkte Ziele
+    A6  Sicherung 27 MB Dump + 199 MB SQL, beide mit SHA-256
+    A7  Vollkette 172 Schritte, 634,2 s, Punktelauf 25/25
+
+`[cmd]` **Selbst gemessen: 16 Orte, alte IDs weg, alle sechs
+Spalten da.**
+
+### A3 ist die Antwort auf meine Frage
+
+`[read]` **Ich fragte: welche Spalte braucht welche Regel, und
+sind alle sechs noetig?**
+
+    volume_ml        volume_limit + Lastmetrik overuse_30d
+    pain_score       pain_trend
+    complication     complication_repeat + Lastmetrik
+    route            route_mismatch
+    substance_name   gefrorener Snapshot und Regelmeldung
+    override_reason  Begruendung fuer die drei Sperren
+
+`[read]` **Keine ist ueberfluessig, und zwei tragen doppelt.**
+
+`[cmd]` **`substance_name` ist ein Snapshot** ? **dieselbe Machart
+wie der Coach-Name in C-268.**
+
+### Und eine Abweichung, die er begruendet
+
+`[cmd]` **Die Spec schreibt `subq`, der C-385-Datenvertrag nutzt
+`sc`** ? **die neue Spalte nimmt `im|sc`.**
+
+`[read]` **Er hat den bestehenden Vertrag ueber die Spec
+gestellt** ? **richtig, zwei Schreibweisen fuer dieselbe Sache
+waeren schlimmer als eine Abweichung von der Spec.**
+
+`[cmd]` **Und die Werteliste fuer `complication` ist geschlossen:**
+`none, bleeding, lump, swelling, redness, leakage,
+nerve_sensation`.
+
+### A5 — der Vorschlag ist der richtige
+
+`[cmd]` **Nach C-441 zeigen alle acht Nadelempfehlungen ins
+Leere.**
+
+> *,,Seitliche Orte ueber einen separaten anatomischen Typ an die
+> generischen Empfehlungen anbinden, nicht L/R-Nadeln
+> duplizieren."*
+
+`[read]` **Eine Nadel fuer Deltoid links und rechts ist dieselbe**
+? **acht Empfehlungen zu sechzehn zu machen waere die falsche
+Antwort.**
+
+### A6 — zwei Sicherungen statt einer
+
+`[cmd]` **Dump 27 MB und SQL 199 MB, beide mit SHA-256.**
+
+`[read]` **Das SQL ist lesbar, der Dump ist schnell** ? **wer
+etwas nachsehen will, braucht das erste.**
+
+### Der Nebenbefund geht als C-446 weiter
+
+`[cmd]` **`20260902070454_c385_qualify_body_measurement_context.sql`
+existiert, ist live, steht NICHT in `kette.json`** ? **selbst
+nachgemessen, 0 Treffer.**
+
+`[read]` **`dev` und die Kette laufen auseinander.** `[read]` **Und
+die Vollkette meldet trotzdem `SCHEMA VOLLSTAENDIG`.**
+
+`[read]` **Er hat es gemeldet, nicht behoben** ? wie beauftragt.
+
+**Abgenommen.**
+
