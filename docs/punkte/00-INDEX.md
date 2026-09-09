@@ -8,8 +8,8 @@
 | `todos` | 207 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 362 |
-| **gesamt** | **572** |
+| `erledigt` | 363 |
+| **gesamt** | **573** |
 
 ## medical — 47
 
@@ -296,9 +296,9 @@
 | `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | C-425, G-372 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 71
+## supplements — 72
 
-### beauftragbar — 70
+### beauftragbar — 71
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -370,7 +370,8 @@
 | `G-374` | feature | niedrig | [Zyklen brauchen eine eigene Eingabe](erledigt/supplements-g-0374-zyklen-brauchen-eine-eingabe.md) | erledigt | — | — |
 | `G-388` | feature | mittel | [`InjektionsKarte` und die Reste](erledigt/supplements-g-0388-injektionskarte-ohne-aufrufer.md) | erledigt | — | C-441, G-389, G-390 |
 | `G-389` | feature | hoch | [der Schreibweg fuer Injektionen](laufend_claudecode/supplements-g-0389-der-schreibweg-fuer-injektionen.md) | laeuft (claudecode) | — | — |
-| `G-390` | befund | hoch | [`new Date()` zerlegt die Hydration](laufend_claudecode/supplements-g-0390-new-date-zerlegt-die-hydration.md) | laeuft (claudecode) | — | — |
+| `G-390` | befund | hoch | [`new Date()` zerlegt die Hydration](erledigt/supplements-g-0390-new-date-zerlegt-die-hydration.md) | erledigt | — | G-392 |
+| `G-392` | befund | hoch | [der Hydrationsfehler am Wechslerplatz](laufend_claudecode/supplements-g-0392-der-hydrationsfehler-am-wechslerplatz.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
