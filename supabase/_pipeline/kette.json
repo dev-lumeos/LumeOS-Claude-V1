@@ -1642,6 +1642,15 @@
         "156",
         "428_schema"
       ]
+    },
+    {
+      "id": "441_schema",
+      "path": "supabase/migrations/20260909170000_c441_injection_site_catalog.sql",
+      "kind": "sql",
+      "creates": "C-441: sechzehn seitige Injektionsorte nach Planner-Spec; alte unspezifische IDs nur ohne medizinische Referenzen entfernen",
+      "depends_on": [
+        "385_schema"
+      ]
     }
   ]
 }

@@ -5,10 +5,25 @@ import { execFileSync, spawnSync } from 'node:child_process'
 import test from 'node:test'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
-const DB = process.env.PGDATABASE ?? 'postgres'
+const DB = process.env.LUMEOS_C385_DATABASE
+if (!DB || DB === 'postgres') throw new Error('C-385-Test braucht LUMEOS_C385_DATABASE als Wegwerf-Datenbank, nie postgres.')
 const OWNER_ID = '10000000-0000-0000-0000-000000000101'
 const OTHER_ID = '10000000-0000-0000-0000-000000000102'
 const TEST_USER_EMAIL = 'test-user@lumeos.local'
+const FIXTURE_SQL = `
+  INSERT INTO auth.users (id, email, raw_app_meta_data, created_at) VALUES
+    ('${OWNER_ID}'::uuid, 'c385-owner@example.test', '{"provider":"email"}'::jsonb, now()),
+    ('${OTHER_ID}'::uuid, 'c385-other@example.test', '{"provider":"email"}'::jsonb, now()),
+    ('10000000-0000-0000-0000-000000000103'::uuid, '${TEST_USER_EMAIL}', '{"provider":"email"}'::jsonb, now());
+  INSERT INTO public.profiles (id, biological_sex, height_cm, body_weight_kg) VALUES
+    ('${OWNER_ID}'::uuid, 'male', 178, 80),
+    ('${OTHER_ID}'::uuid, 'male', 178, 80),
+    ('10000000-0000-0000-0000-000000000103'::uuid, 'male', 180, 80)
+  ON CONFLICT (id) DO UPDATE SET
+    biological_sex = EXCLUDED.biological_sex,
+    height_cm = EXCLUDED.height_cm,
+    body_weight_kg = EXCLUDED.body_weight_kg;
+`
 
 function one<T>(sql: string): T {
   const output = execFileSync('docker', [
@@ -41,6 +56,7 @@ test('C-385: Quellenvarianten, Rotation und Gewebezustand bleiben getrennt und R
     fallbackContext: { measurementCount: number; measurementDate: string | null; source: string; weightKg: number | null; bmi: number | null }
   }>(`
     BEGIN;
+    ${FIXTURE_SQL}
     INSERT INTO goals.body_measurements (
       id, user_id, measurement_date, measurement_time, weight_kg, height_cm_snapshot, measurement_source
     ) VALUES
@@ -70,13 +86,13 @@ test('C-385: Quellenvarianten, Rotation und Gewebezustand bleiben getrennt und R
         'rotationRequired', rotation_required,
         'rotationDistanceMm', rotation_distance_mm,
         'rotationQuadrantDays', rotation_quadrant_interval_days
-      ) FROM medical.injection_sites WHERE id = 'deltoid'),
+      ) FROM medical.injection_sites WHERE id = 'delt_l'),
       'sc', (SELECT json_build_object(
         'minimumRestDays', minimum_rest_days,
         'rotationRequired', rotation_required,
         'rotationDistanceMm', rotation_distance_mm,
         'rotationQuadrantDays', rotation_quadrant_interval_days
-      ) FROM medical.injection_sites WHERE id = 'subcutaneous'),
+      ) FROM medical.injection_sites WHERE id = 'abd_l'),
       'lipohypertrophy', (SELECT json_build_object(
         'avoidanceMinMonths', avoidance_min_months,
         'avoidanceMaxMonths', avoidance_max_months
@@ -161,10 +177,11 @@ test('C-385: Quellenvarianten, Rotation und Gewebezustand bleiben getrennt und R
 
   const rlsProbe = psql(`
     BEGIN;
+    ${FIXTURE_SQL}
     SET LOCAL ROLE authenticated;
     SELECT set_config('request.jwt.claim.sub', '${OWNER_ID}', true);
     INSERT INTO medical.injection_logs (user_id, injection_site_id, injected_at)
-    VALUES ('${OWNER_ID}'::uuid, 'deltoid', now());
+    VALUES ('${OWNER_ID}'::uuid, 'delt_l', now());
     SELECT count(*) AS own_logs FROM medical.injection_logs WHERE user_id = '${OWNER_ID}'::uuid;
     SELECT set_config('request.jwt.claim.sub', '${OTHER_ID}', true);
     SELECT count(*) AS foreign_logs_visible FROM medical.injection_logs WHERE user_id = '${OWNER_ID}'::uuid;
@@ -181,10 +198,11 @@ test('C-385: Quellenvarianten, Rotation und Gewebezustand bleiben getrennt und R
 
   const foreignInsert = psql(`
     BEGIN;
+    ${FIXTURE_SQL}
     SET LOCAL ROLE authenticated;
     SELECT set_config('request.jwt.claim.sub', '${OTHER_ID}', true);
     INSERT INTO medical.injection_logs (user_id, injection_site_id, injected_at)
-    VALUES ('${OWNER_ID}'::uuid, 'deltoid', now());
+    VALUES ('${OWNER_ID}'::uuid, 'delt_l', now());
     ROLLBACK;
   `)
   assert.notEqual(foreignInsert.status, 0, 'ein Nutzer darf kein fremdes Injektionsprotokoll anlegen')
