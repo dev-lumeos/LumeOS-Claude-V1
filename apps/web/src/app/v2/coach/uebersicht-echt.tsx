@@ -8,16 +8,18 @@
 // begrenzen auf eigene Zeilen: angemeldet als `dev@lumeos.app` kommen
 // 1 Beziehung und 2 Nachrichten an, gemessen gegen die Datenbank.
 //
-// **KEIN NAME AM COACH — mit Absicht sichtbar.** `[cmd]` Es gibt keine
-// Namensquelle: `public.profiles` fuehrt kein Namensfeld, eine Tabelle
-// `coach_profiles` (SPEC_02 HumanCoach) ist nicht gebaut. Statt einen
-// Namen zu erfinden, steht hier die Rolle und die gekuerzte Kennung —
-// der fehlende Unterbau ist ein Befund fuer Codex (C-219).
+// **DER COACH-NAME STEHT SEIT G-387.** `[cmd]` C-268 hat
+// `coach.coach_profiles` gebaut ? die Marke `@abwesend` hat gefallen
+// und ist entfernt, weil die Aussage nachgefuehrt ist.
 //
-// @abwesend coach.coach_profiles
-// `[read]` A-62: Sobald die Tabelle in der Pipeline steht, faellt
-// `tools/abwesenheit-pruefen.mjs` und meldet diese Zeile. **Dann ist
-// der Ersatz aus Rolle und Kennung nicht mehr die richtige Antwort.**
+// `[read]` Die Quellenwahl: **Profil zuerst, Snapshot als
+// Rueckfall.** Der Snapshot in `relationships.coach_display_name`
+// ist die Herkunft der EINLADUNG, nicht die Anzeige der Beziehung ?
+// eine Beziehungsliste behauptet nichts ueber die Vergangenheit.
+//
+// `[cmd]` Auf `dev` sind beide Quellen leer (C-437) ? dann steht
+// weiter die Rolle mit gekuerzter Kennung, statt einer nackten
+// Luecke (E-72).
 //
 // **SEIT C-225 WIRD GESCHRIEBEN:** Antworten (messages INSERT),
 // Einladen (relationships INSERT, status='invited', per Kennung) und
