@@ -11,12 +11,33 @@ import Link from 'next/link'
 import type { Route } from 'next'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { createClient } from '@lumeos/shared'
-import { AppShell } from '@lumeos/ui'
+import { AppShell, Icon } from '@lumeos/ui'
 import { Sprachwahl } from '../../components/shell/sprachwahl'
 // G-375: der Tageswechsler, oben in der Mitte — aber nur ueber
 // Modulen, die einen Tag fuehren.
 import { Tageswechsler } from './tageswechsler'
 import { MODE_COOKIE } from '../../styles/themes/registry'
+
+/**
+ * Der Abmeldeknopf der Nutzerzeile — G-411/A2.
+ *
+ * `[cmd]` **Ein Formular mit `method="post"`, kein `onClick`** —
+ * die Route nimmt nur POST an (`auth/abmelden/route.ts`), und ein
+ * Formular funktioniert auch ohne JavaScript.
+ *
+ * `[cmd]` **Dieselbe Form wie in `apps/coach`**
+ * (`portal-schale.tsx:199`), damit beide Anwendungen sich gleich
+ * verhalten.
+ */
+function AbmeldeKnopf() {
+  return (
+    <form action="/auth/abmelden" method="post">
+      <button type="submit" className="v2-icon-btn" title="Abmelden">
+        <Icon name="arrow_right" className="v2-ic v2-ic-sm" />
+      </button>
+    </form>
+  )
+}
 
 // ══ G-17: das Datum reist mit ══════════════════════════
 //
@@ -101,6 +122,17 @@ export function V2Shell({ children }: { children: React.ReactNode }) {
       version="v0.9.4"
       userName={email}
       userStatus={email ? 'angemeldet' : undefined}
+      // ══ G-411/A2: der Weg hinaus ══════════════════════════════
+      //
+      // `[cmd]` **`sidebar.tsx:87`:** *„Menue rechts unten, z. B.
+      // Abmelden. Ohne Angabe fehlt der Knopf."* `[read]` **Und
+      // genau so war es** — die Zeile zeigte „angemeldet", aber es
+      // gab keinen Ausgang.
+      //
+      // `[read]` **Nur wenn jemand angemeldet ist** — ein
+      // Abmeldeknopf ohne Sitzung waere ein Knopf ohne Wirkung
+      // (C-426).
+      userMenu={email ? <AbmeldeKnopf /> : undefined}
       mode={mode}
       onModeChange={wechsleModus}
       // A-14: die Sprachwahl sitzt neben Nachtmodus und Kontext.

@@ -1181,3 +1181,27 @@
   }
 
 }
+
+/* ══ Die Anmeldung — G-411/A4 ══════════════════════════════════════
+   `[read]` **Nur die Anordnung** — Kasten, Feld und Knopf kommen aus
+   `v2.css`. `[cmd]` **Gemessen, was das Paket traegt:** `v2-card`,
+   `v2-btn`, `v2-btn-primary`, `v2-feld`, `v2-feldfehler`.
+   `[cmd]` **`v2-input` gibt es dort NICHT** — der Auftrag nannte den
+   falschen Namen, das Feld heisst `v2-feld`. */
+
+.v2-anmeldung {
+  margin: 64px auto 0;
+  width: 100%;
+  max-width: 384px;
+}
+
+.v2-anmeldung-sub { font-size: 12px; margin-top: 4px; }
+
+.v2-anmeldung-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.v2-anmeldung-label { display: grid; gap: 4px; }
+.v2-anmeldung-hinweis { font-size: 12px; color: var(--pos); }

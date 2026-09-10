@@ -6,7 +6,16 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Route } from 'next'
-import { createClient } from '../lib/browser-client'
+// ══ G-411: der Client kommt jetzt aus dem Paket ═══════════════════
+//
+// `[cmd]` **F-07 ist in `packages/shared/src/supabase/client.ts`
+// behoben** — die explizite Cookie-Umsetzung steht dort.
+// `[cmd]` **Gemessen: `apps/admin` konnte sich vorher NICHT
+// anmelden** (dieselbe Ausnahme), jetzt schon.
+//
+// `[read]` **Die Kopie in `lib/browser-client.ts` ist damit
+// ueberfluessig** — sie verweist nur noch.
+import { createClient } from '@lumeos/shared'
 
 export function CoachLoginForm({ redirect }: { redirect: string }) {
   const router = useRouter()

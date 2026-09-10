@@ -88,51 +88,72 @@ export function LoginForm({ redirect }: { redirect: string }) {
   }
 
   return (
-    <div className="mx-auto mt-16 w-full max-w-sm rounded-token-lg border border-border bg-surface p-card">
-      <h1 className="text-[16px] font-semibold text-fg">Anmelden</h1>
-      <p className="mt-1 text-[12px] text-fg-muted">
+    // ══ G-411/A4: die Anmeldung auf v2-Bausteinen ═══════════════
+    //
+    // **Tom, 2026-09-08:** *„und das login muss auf v2 normal
+    // laufen. jetzt geht es den umweg ueber v1."*
+    //
+    // `[cmd]` **Vorher: Tailwind-Marken** (`rounded-token`,
+    // `text-fg-muted`, `bg-bg-elev`, `bg-[var(--acc)]`) — **kein
+    // einziger `v2-`-Baustein**, am Schirm gemessen: 0 gegen 8
+    // Tailwind-Marken.
+    //
+    // `[cmd]` **Gemessen, was das Paket traegt:** `v2-card` (12
+    // Regeln), `v2-btn` (15), `v2-btn-primary` (3), `v2-feld` (3).
+    // `[read]` **`v2-input` gibt es NICHT** — das Feld heisst
+    // `v2-feld`. **Der Auftrag nannte den falschen Namen; gebaut
+    // ist der, den es gibt.**
+    //
+    // `[read]` **Die LOGIK bleibt unangetastet** — react-hook-form,
+    // zod und `signUp` sind der Unterschied zu admin und coach, und
+    // dieser Auftrag baut die Form um, nicht das Verhalten.
+    <div className="v2-card v2-anmeldung">
+      <h1 className="v2-card-title">Anmelden</h1>
+      <p className="v2-dim v2-anmeldung-sub">
         Mit E-Mail und Passwort. Weitere Verfahren folgen.
       </p>
 
-      <form className="mt-4 grid gap-3" onSubmit={handleSubmit(signIn)} noValidate>
-        <label className="grid gap-1">
-          <span className="text-[12px] text-fg-muted">E-Mail</span>
+      <form className="v2-anmeldung-form" onSubmit={handleSubmit(signIn)} noValidate>
+        <label className="v2-anmeldung-label">
+          <span className="v2-eyebrow">E-Mail</span>
           <input
             {...register('email')}
             autoComplete="email"
-            className="rounded-token border border-border bg-bg-elev px-3 py-2 text-[13px] text-fg"
+            className="v2-feld"
             type="email"
           />
           {errors.email ? (
-            <span className="text-[12px] text-neg">{errors.email.message}</span>
+            <span className="v2-feldfehler">{errors.email.message}</span>
           ) : null}
         </label>
 
-        <label className="grid gap-1">
-          <span className="text-[12px] text-fg-muted">Passwort</span>
+        <label className="v2-anmeldung-label">
+          <span className="v2-eyebrow">Passwort</span>
           <input
             {...register('password')}
             autoComplete="current-password"
-            className="rounded-token border border-border bg-bg-elev px-3 py-2 text-[13px] text-fg"
+            className="v2-feld"
             type="password"
           />
           {errors.password ? (
-            <span className="text-[12px] text-neg">{errors.password.message}</span>
+            <span className="v2-feldfehler">{errors.password.message}</span>
           ) : null}
         </label>
 
-        {serverError ? <p className="text-[12px] text-neg">{serverError}</p> : null}
-        {notice ? <p className="text-[12px] text-pos">{notice}</p> : null}
+        {serverError ? (
+          <p role="alert" className="v2-feldfehler">{serverError}</p>
+        ) : null}
+        {notice ? <p className="v2-anmeldung-hinweis">{notice}</p> : null}
 
         <button
-          className="rounded-token bg-[var(--acc)] px-3 py-2 text-[13px] font-medium text-[var(--bg)] disabled:opacity-60"
+          className="v2-btn v2-btn-primary"
           disabled={pending !== null}
           type="submit"
         >
           {pending === 'signin' ? 'Wird angemeldet …' : 'Anmelden'}
         </button>
         <button
-          className="rounded-token border border-border px-3 py-2 text-[13px] text-fg disabled:opacity-60"
+          className="v2-btn"
           disabled={pending !== null}
           onClick={handleSubmit(signUp)}
           type="button"
