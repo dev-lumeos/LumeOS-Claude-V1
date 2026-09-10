@@ -1706,6 +1706,34 @@
         "141t",
         "445_schema"
       ]
+    },
+    {
+      "id": "456_supplement_cycles_protocols_schema",
+      "path": "supabase/migrations/20260909200000_c456_supplement_cycles_protocols.sql",
+      "kind": "sql",
+      "creates": "C-456: atomare Supplements-Zyklen mit Verlauf, PCT-Vorlagen mit Wochenintervallen und abgeleitete Tageslisten aus Stack, Zyklus und Protokoll",
+      "depends_on": [
+        "453_supplement_routes",
+        "430_schema"
+      ]
+    },
+    {
+      "id": "456_supplement_cycle_protocol_write_paths",
+      "path": "supabase/_pipeline/13_supplements/456_cycle_protocol_write_paths.sql",
+      "kind": "sql",
+      "creates": "C-456: atomare Schreibwege fuer eigene Zyklen, Vorlagenprotokolle und Tageslisten unter RLS",
+      "depends_on": [
+        "456_supplement_cycles_protocols_schema"
+      ]
+    },
+    {
+      "id": "456_supplement_protocol_templates",
+      "path": "supabase/_pipeline/13_supplements/456_protocol_templates.sql",
+      "kind": "sql",
+      "creates": "C-456: drei belegte CyclePlanner-PCT-Vorlagen mit neun kataloggebundenen Positionen",
+      "depends_on": [
+        "456_supplement_cycle_protocol_write_paths"
+      ]
     }
   ]
 }

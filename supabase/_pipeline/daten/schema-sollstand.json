@@ -4687,6 +4687,56 @@
     },
     {
       "schema": "supplements",
+      "name": "supplement_protocol_templates",
+      "schritt": "456_supplement_cycles_protocols_schema",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "C-456: aktive Systemvorlagen sind fuer angemeldete Nutzer lesbar, ihre Pflege bleibt service_role vorbehalten.",
+      "zeilenschutzart": "oeffentlich_aktiv"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_protocol_template_items",
+      "schritt": "456_supplement_cycles_protocols_schema",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "C-456: Positionen sind nur ueber eine aktive Systemvorlage lesbar; Pflege bleibt service_role vorbehalten.",
+      "zeilenschutzart": "oeffentlich_aktiv"
+    },
+    {
+      "schema": "supplements",
       "name": "entity_cyp",
       "schritt": "142",
       "rls": true,

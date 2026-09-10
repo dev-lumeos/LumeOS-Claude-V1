@@ -16,6 +16,10 @@
 export const KONTEN = {
   'dev@lumeos.app': 'LumeosDev2026',
   'test-user@lumeos.local': 'LumeosTestUser2026',
+  // `[cmd]` **2026-09-08:** das Coach-Portal auf 3220 verlangt ein
+  // Konto MIT Beziehung ? `dev@lumeos.app` ist dort der Klient und
+  // sieht die Absage. Passwort aus dem Seed.
+  'coach@lumeos.app': 'LumeosCoach2026',
 }
 
 /** Das Anmeldewort fuer ein Konto — Umgebung vor Tabelle, sonst Wurf. */
