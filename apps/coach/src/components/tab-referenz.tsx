@@ -10,9 +10,9 @@
 //
 // `[read]` **Je Kachel eine eigene Referenz, kein Block** — sonst
 // laesst es sich nicht zaehlen (E-69).
-import { Card } from '@lumeos/ui'
-
-import { ReferenzTrenner } from './referenz-trenner'
+// G-402: die Trennlinie kommt aus dem Paket — sie stand zweimal
+// im Haus (G-399).
+import { Card, ReferenzTrenner } from '@lumeos/ui'
 import { REFERENZ, type RefKarte } from './mockup-referenz'
 
 /**

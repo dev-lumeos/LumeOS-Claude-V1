@@ -10,7 +10,7 @@
 import * as React from 'react'
 import { accentVar } from '../module-accent'
 import { resolveNav } from './nav'
-import { Sidebar, type LinkComponent } from './sidebar'
+import { Sidebar, type LinkComponent, type SidebarGruppe } from './sidebar'
 import { Topbar, type SyncState } from './topbar'
 import { ContextPanel, type ContextPanelProps } from './context-panel'
 
@@ -24,6 +24,23 @@ export type AppShellProps = {
   userInitials?: string
   userMenu?: React.ReactNode
   version?: string
+
+  // ══ G-402: an die Seitenleiste durchgereicht ═════════════════
+  //
+  // `[read]` **Wahlfrei** — ohne sie zeigt die Leiste wie bisher
+  // Modules/Workspaces/System.
+  gruppen?: SidebarGruppe[]
+  marke?: { kuerzel: string, name: string }
+  ohneSuche?: boolean
+  /**
+   * Ueberschreibt die Brotkrume — G-402/A12.
+   *
+   * `[cmd]` **Ohne sie leitet `resolveNav(pathname)` sie ab**, und
+   * das kennt nur die Module von `apps/web`. `[read]` **Im Portal
+   * stand deshalb „DASHBOARD / Dashboard" ueber jedem Bereich** —
+   * gemessen am Schirm.
+   */
+  bereich?: { tag: string, label: string }
 
   syncState?: SyncState
   mode?: 'light' | 'dark'
@@ -44,6 +61,7 @@ export function AppShell({
   pathname, linkAs, children,
   userName, userStatus, userInitials, userMenu, version,
   syncState, mode, onModeChange, context, density = 'default', topbarActions,
+  gruppen, marke, ohneSuche, bereich,
 }: AppShellProps) {
   const [kontextOffen, setKontextOffen] = React.useState(true)
 
@@ -71,12 +89,15 @@ export function AppShell({
         userInitials={userInitials}
         userMenu={userMenu}
         version={version}
+        gruppen={gruppen}
+        marke={marke}
+        ohneSuche={ohneSuche}
       />
 
       <main className="v2-main">
         <Topbar
-          moduleTag={aktiv.entry.id.toUpperCase()}
-          moduleLabel={label}
+          moduleTag={bereich?.tag ?? aktiv.entry.id.toUpperCase()}
+          moduleLabel={bereich?.label ?? label}
           parentLabel={aktiv.sub ? aktiv.entry.label : undefined}
           syncState={syncState}
           mode={mode}

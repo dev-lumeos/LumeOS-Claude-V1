@@ -16,7 +16,7 @@
 // * `<nav>`/`<button>` statt `<div onClick>`, `aria-current` fuer die
 //   aktive Seite.
 import * as React from 'react'
-import { Icon } from '../icons'
+import { Icon, type IconName } from '../icons'
 import { accentVar, type ModuleId } from '../module-accent'
 import { MODULES, WORKSPACES, SETTINGS_ENTRY, resolveNav } from './nav'
 
@@ -34,6 +34,31 @@ export type LinkComponent = React.ComponentType<{
   title?: string
 }>
 
+/**
+ * Ein Eintrag einer eingespeisten Gruppe — G-402.
+ *
+ * `[read]` **Bewusst schmaler als `NavEntry`:** eine fremde Anwendung
+ * bringt Pfad, Beschriftung, Symbol und hoechstens eine Zahl mit.
+ * **Untereintraege und Kuerzel bleiben der Modulnavigation
+ * vorbehalten.**
+ */
+export type SidebarEintrag = {
+  id: string
+  label: string
+  icon: IconName
+  href: string
+  /** Rechts im Eintrag, nur wenn groesser null (E-72). */
+  zahl?: number
+  /** Faerbt die Zahl — `warn` gelb, `critical` rot. */
+  stufe?: 'warn' | 'critical'
+}
+
+/** Eine Gruppe. Ohne `label` bleibt die Beschriftung weg. */
+export type SidebarGruppe = {
+  label: string | null
+  eintraege: SidebarEintrag[]
+}
+
 export type SidebarProps = {
   /** Aktueller Pfad, z. B. aus `usePathname()`. */
   pathname: string
@@ -47,6 +72,35 @@ export type SidebarProps = {
   /** Menue rechts unten, z. B. Abmelden. Ohne Angabe fehlt der Knopf. */
   userMenu?: React.ReactNode
   version?: string
+
+  // ══ G-402: einspeisbar statt fest verdrahtet ═══════════════════
+  //
+  // **Der Vorschlag stammt aus G-401**, wo gemessen wurde: `Sidebar`
+  // rendert `MODULES.map(...)`, und `SidebarProps` nahm keine
+  // Navigationsliste. **Das Coach-Portal bekam dadurch die Module
+  // des Athleten** — Nutrition, Training, Recovery.
+  //
+  // `[read]` **Beide Requisiten sind wahlfrei, und ohne sie bleibt
+  // alles wie bisher.** `apps/web` uebergibt sie nicht und rendert
+  // Zeichen fuer Zeichen dasselbe wie vorher (Gegenprobe im
+  // Bericht).
+  /**
+   * Ersetzt Modules/Workspaces/System durch eigene Gruppen.
+   *
+   * `[read]` **Ganz oder gar nicht** — eine Anwendung, die eigene
+   * Gruppen mitbringt, will nicht die Module einer anderen daneben.
+   */
+  gruppen?: SidebarGruppe[]
+  /** Ersetzt „L / LumeOS" im Kopf der Leiste. */
+  marke?: { kuerzel: string, name: string }
+  /**
+   * Das Suchfeld ausblenden.
+   *
+   * `[read]` **Es ist eine Attrappe ohne Ziel** (die Befehlspalette
+   * gibt es nicht). **Wer eigene Gruppen einspeist, will das
+   * Versprechen meist nicht mitnehmen.**
+   */
+  ohneSuche?: boolean
 }
 
 function initialen(name: string): string {
@@ -58,15 +112,15 @@ function initialen(name: string): string {
 
 export function Sidebar({
   pathname, linkAs: Link, userName = '', userStatus, userInitials,
-  userMenu, version,
+  userMenu, version, gruppen, marke, ohneSuche,
 }: SidebarProps) {
   const aktiv = resolveNav(pathname)
 
   return (
     <aside className="v2-sidebar">
       <div className="v2-sidebar-brand">
-        <div className="v2-brand-mark">L</div>
-        <div className="v2-brand-name">LumeOS</div>
+        <div className="v2-brand-mark">{marke?.kuerzel ?? 'L'}</div>
+        <div className="v2-brand-name">{marke?.name ?? 'LumeOS'}</div>
         {version && <span className="v2-brand-meta">{version}</span>}
       </div>
 
@@ -74,11 +128,48 @@ export function Sidebar({
           Attrappe ohne Ziel — die Befehlspalette gibt es nicht. Als
           Knopf ohne Funktion waere es ein Versprechen; deshalb bleibt
           die Flaeche, aber deaktiviert und als solche erkennbar. */}
-      <div className="v2-sidebar-search">
-        <input placeholder="Search or jump to…" disabled aria-label="Suche (noch nicht verfuegbar)" />
-        <span className="v2-kbd">⌘K</span>
-      </div>
+      {!ohneSuche && (
+        <div className="v2-sidebar-search">
+          <input placeholder="Search or jump to…" disabled aria-label="Suche (noch nicht verfuegbar)" />
+          <span className="v2-kbd">⌘K</span>
+        </div>
+      )}
 
+      {/* ══ G-402: eingespeiste Gruppen ═══════════════════════════
+          `[read]` **Ganz oder gar nicht** — wer eigene Gruppen
+          mitbringt, bekommt nur diese. **Ohne `gruppen` bleibt der
+          Zweig darunter unveraendert**, und `apps/web` merkt von
+          dieser Aenderung nichts. */}
+      {gruppen ? (
+        <nav className="v2-sidebar-nav" aria-label="Hauptnavigation">
+          {gruppen.map((g, i) => (
+            <div className="v2-nav-group" key={g.label ?? `g${i}`}>
+              {g.label && <div className="v2-nav-group-label">{g.label}</div>}
+              {g.eintraege.map(e => {
+                const istAktiv = pathname === e.href || pathname.startsWith(`${e.href}?`)
+                return (
+                  <Link
+                    key={e.id}
+                    href={e.href}
+                    className={`v2-nav-item ${istAktiv ? 'v2-active' : ''}`.trim()}
+                    aria-current={istAktiv ? 'page' : undefined}
+                  >
+                    <span className="v2-nav-icon"><Icon name={e.icon} /></span>
+                    {e.label}
+                    {/* E-72: eine Null wird nicht gezeichnet — sie
+                        saehe aus wie ein Ergebnis. */}
+                    {typeof e.zahl === 'number' && e.zahl > 0 && (
+                      <span className="v2-nav-zahl" data-stufe={e.stufe ?? undefined}>
+                        {e.zahl}
+                      </span>
+                    )}
+                  </Link>
+                )
+              })}
+            </div>
+          ))}
+        </nav>
+      ) : (
       <nav className="v2-sidebar-nav" aria-label="Hauptnavigation">
         <div className="v2-nav-group">
           <div className="v2-nav-group-label">Modules</div>
@@ -151,6 +242,7 @@ export function Sidebar({
           </Link>
         </div>
       </nav>
+      )}
 
       <div className="v2-sidebar-user">
         <div className="v2-avatar">{userInitials ?? initialen(userName)}</div>

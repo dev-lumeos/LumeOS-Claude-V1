@@ -13,6 +13,10 @@ export function TabUebersicht({ stand }: { stand: PortalStand }) {
   const ungelesen = stand.nachrichten.filter(n => n.read_at === null && n.sender_id !== stand.userId)
   const offeneVorschlaege = stand.pending.filter(p => p.status === 'pending')
   const aktive = stand.klienten.filter(k => k.status === 'active')
+  const eingeladen = stand.klienten.filter(k => k.status === 'invited')
+  // G-400: „n athletes affected" wie in der Vorlage — je Klient
+  // hoechstens einmal gezaehlt, nicht je Alert.
+  const betroffene = new Set(offeneAlerts.map(a => a.client_id)).size
 
   const arbeit: { text: string; ziel: string; wann: string }[] = [
     ...eingereicht.map(c => ({
@@ -34,11 +38,47 @@ export function TabUebersicht({ stand }: { stand: PortalStand }) {
 
   return (
     <div className="cp-stapel">
+      {/* ══ G-400/A1: die Kennzahlen tragen ihre Einordnung ══════
+          `[cmd]` **Die Vorlage gibt jeder Kennzahl DREI Felder**
+          (`module-coach.jsx:507-510`): Beschriftung, Zahl, und eine
+          Zeile darunter, die sie einordnet — *„+2 last 30d"*,
+          *„30-day rolling"*, *„3 athletes affected"*.
+          `[cmd]` **Gebaut waren zwei Felder je Kachel** — die
+          dritte Zeile fehlte durchweg.
+          `[read]` **`KPI` kann sie seit jeher** (`delta`,
+          `deltaVariant`, `spark`) — sie wurde nur nie uebergeben.
+          **Ergaenzt ist, was aus echten Zeilen faellt**; erfunden
+          wird nichts. */}
       <div className="cp-grid cp-grid-4">
-        <KPI label="Aktive Athleten" value={aktive.length} unit={` von ${stand.klienten.length}`} />
-        <KPI label="Check-ins eingereicht" value={eingereicht.length} />
-        <KPI label="Alerts offen" value={offeneAlerts.length} />
-        <KPI label="Vorschlaege offen" value={offeneVorschlaege.length} />
+        <KPI
+          label="Aktive Athleten"
+          value={aktive.length}
+          unit={` von ${stand.klienten.length}`}
+          delta={`${eingeladen.length} eingeladen`}
+        />
+        <KPI
+          label="Check-ins eingereicht"
+          value={eingereicht.length}
+          delta={`von ${stand.checkins.length} gesamt`}
+        />
+        <KPI
+          label="Alerts offen"
+          value={offeneAlerts.length}
+          // `[cmd]` **`deltaVariant` kennt nur `pos` und `neg`**
+          // (`primitives.tsx:397`) — die Vorlage faerbt die ZAHL
+          // gelb, nicht die Zeile darunter. `[read]` **Das waere eine
+          // Aenderung in `packages/ui`** und ist gemeldet, nicht
+          // gebaut: ein `warn` fuer `deltaVariant`.
+          // `[cmd]` **Die Vorlage schreibt „3 athletes affected"** —
+          // aus `alerts` gruppiert nach Klient, hier dieselbe
+          // Rechnung ueber den geladenen Stand.
+          delta={`${betroffene} ${betroffene === 1 ? 'Athlet' : 'Athleten'} betroffen`}
+        />
+        <KPI
+          label="Vorschlaege offen"
+          value={offeneVorschlaege.length}
+          delta={`von ${stand.pending.length} gesamt`}
+        />
       </div>
 
       <div className="cp-grid cp-grid-15">
@@ -61,15 +101,39 @@ export function TabUebersicht({ stand }: { stand: PortalStand }) {
           )}
         </Card>
 
-        <Card title="Athleten" sub="Beziehungsstand">
-          {stand.klienten.map(k => (
-            <div key={k.relationship_id} className="cp-zeile" style={{ padding: '6px 0' }}>
-              <a href={`/athlet/${k.client_id}`}>{k.display_name}</a>
-              <Pill variant={k.status === 'active' ? 'pos' : undefined}>
-                {k.status === 'active' ? `aktiv seit ${datum(k.started_at)}` : k.status === 'invited' ? 'eingeladen' : 'beendet'}
-              </Pill>
-            </div>
-          ))}
+        {/* ══ G-400/A1: „Athletes needing attention" ══════════════
+            `[cmd]` **Die Vorlage zeigt SIEBEN Felder je Zeile**
+            (`module-coach.jsx:502`): Avatar, Name, Plan, letzte
+            Sitzung, Pill „n alerts", Compliance farbig, Klick.
+            `[cmd]` **Gebaut waren zwei: Name und Datum.**
+            **Ergaenzt sind Avatar und Alertzahl** — beide fallen aus
+            Zeilen, die der Stand schon traegt. `[read]` **Plan und
+            Compliance bleiben weg**: es gibt keine Plantabelle und
+            keinen Erfuellungsgrad je Klient. **Die Kachel darunter
+            zeigt, wie es aussaehe.** */}
+        <Card title="Athleten" sub={`${aktive.length} aktiv · ${betroffene} mit offenen Alerts`}>
+          {stand.klienten.map(k => {
+            const eigene = offeneAlerts.filter(a => a.client_id === k.client_id).length
+            return (
+              <div key={k.relationship_id} className="cp-athlet">
+                {/* `[read]` **Initialen statt Bild** — die Vorlage
+                    zeigt genau das (`avatar: "LB"`), und ein Bild
+                    gibt es in keiner Tabelle. */}
+                <span className="cp-avatar" aria-hidden="true">
+                  {k.display_name.split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase()}
+                </span>
+                <a href={`/athlet/${k.client_id}`} style={{ flex: 1, minWidth: 0 }}>
+                  {k.display_name}
+                </a>
+                {eigene > 0 && (
+                  <Pill variant="warn">{`${eigene} ${eigene === 1 ? 'Alert' : 'Alerts'}`}</Pill>
+                )}
+                <Pill variant={k.status === 'active' ? 'pos' : undefined}>
+                  {k.status === 'active' ? `aktiv seit ${datum(k.started_at)}` : k.status === 'invited' ? 'eingeladen' : 'beendet'}
+                </Pill>
+              </div>
+            )
+          })}
         </Card>
       </div>
 

@@ -2,6 +2,9 @@
 // Sortierung nach Zustand (eingereicht zuerst), je Einreichung die
 // Antworten, der Prefill-Schnappschuss, die deterministischen Befunde
 // und der Antwort-Composer — kein Tab-Wechsel noetig.
+// `[cmd]` **KEIN `'use client'`** — siehe `tab-alerts.tsx`: ein
+// Wert-Import aus `lib/aktionen.ts` oder `lib/daten.ts` ueber die
+// Client-Grenze zieht `next/headers` ins Browserbuendel.
 import { Card, Empty, Pill } from '@lumeos/ui'
 import type { Checkin, PortalStand } from '../lib/daten'
 import { checkinBefunde } from '../lib/analyse'
@@ -12,7 +15,27 @@ const REIHENFOLGE: Record<Checkin['status'], number> = {
   submitted: 0, pending: 1, missed: 2, reviewed: 3,
 }
 
-export function TabCheckins({ stand }: { stand: PortalStand }) {
+// ══ G-402/A3: gegen `CheckinList.tsx` gemessen (13.470 B) ══════════
+//
+// `[cmd]` **Das Altrepo fuehrte je Zeile:** `client_name`,
+// `due_date`, `status`, `week_number`, `client_data`, `auto_data`,
+// `coach_notes` — **dazu einen Statusfilter** mit vier Staenden
+// (`all`, `pending`, `client_submitted`, `completed`).
+//
+// `[cmd]` **`coach.checkins` fuehrt 16 Spalten** — **kein
+// `week_number`**, gemessen. `[read]` **Die Woche liesse sich aus
+// `due_date` rechnen**, aber gegen welchen Anfang? **Ohne
+// Programmstart ist „Woche 4" eine Behauptung.**
+//
+// `[read]` **Gebaut ist der Filter** — er fehlte, und er ist der
+// Unterschied zwischen einer Liste und einer Arbeitsliste.
+export function TabCheckins({ stand, heute, filter }: {
+  stand: PortalStand
+  /** Serverseitig bestimmt (G-390) — nie im Browser gerechnet. */
+  heute: string
+  /** Aus `?stand=`. */
+  filter: 'offen' | 'alle' | 'reviewed'
+}) {
   const namen = new Map(stand.klienten.map(k => [k.client_id, k.display_name]))
   const sortiert = [...stand.checkins].sort(
     (a, b) => REIHENFOLGE[a.status] - REIHENFOLGE[b.status] || b.due_date.localeCompare(a.due_date),
@@ -28,15 +51,78 @@ export function TabCheckins({ stand }: { stand: PortalStand }) {
     }
   }
 
+  const gezaehlt = {
+    pending: stand.checkins.filter(c => c.status === 'pending').length,
+    submitted: stand.checkins.filter(c => c.status === 'submitted').length,
+    reviewed: stand.checkins.filter(c => c.status === 'reviewed').length,
+  }
+  // `[read]` **„Offen" heisst: noch nicht durchgesehen** — faellig
+  // ODER eingereicht. **Das ist die Arbeit**, alles andere ist Archiv.
+  const gefiltert = sortiert.filter(c => filter === 'alle'
+    ? true
+    : filter === 'reviewed' ? c.status === 'reviewed' : c.status !== 'reviewed')
+
+  // `[cmd]` **Ueberfaellig heisst: Faelligkeit vor heute und noch
+  // nicht eingereicht.** `[read]` **Gegen den Stichtag vom Server**,
+  // nicht gegen die Uhr des Browsers.
+  const ueberfaellig = stand.checkins.filter(
+    c => c.status === 'pending' && c.due_date < heute).length
+
   return (
     <div className="cp-stapel">
+      <Card
+        title="Check-ins"
+        sub={`${gezaehlt.pending} faellig · ${gezaehlt.submitted} eingereicht · `
+          + `${gezaehlt.reviewed} durchgesehen`}
+        actions={(
+          <div className="cp-filter" role="group" aria-label="Nach Status filtern">
+            {([['offen', `Offen (${gezaehlt.pending + gezaehlt.submitted})`],
+               ['reviewed', `Durchgesehen (${gezaehlt.reviewed})`],
+               ['alle', 'Alle']] as const).map(([k, l]) => (
+              <a
+                key={k}
+                className={`cp-filter-knopf${filter === k ? ' cp-aktiv' : ''}`}
+                href={`/?bereich=checkins&stand=${k}`}
+                aria-current={filter === k ? 'page' : undefined}
+              >
+                {l}
+              </a>
+            ))}
+          </div>
+        )}
+      >
+        {ueberfaellig > 0
+          ? (
+            <div className="cp-hinweis" style={{ color: 'var(--warn)' }}>
+              {`${ueberfaellig} ${ueberfaellig === 1 ? 'Check-in ist' : 'Check-ins sind'} `}
+              ueberfaellig — Faelligkeit vor {heute}, noch nicht eingereicht.
+            </div>
+          )
+          : (
+            <div className="cp-hinweis">
+              Nichts ueberfaellig — alle faelligen Check-ins liegen ab {heute}.
+            </div>
+          )}
+        {/* ══ A3: was die Spalte nicht hergibt ════════════════════ */}
+        <div className="cp-fehlt">
+          Ohne Spalte: <strong>Wochennummer</strong> —
+          {' '}<span className="cp-monospace">coach.checkins</span> fuehrt 16
+          {' '}Spalten, keine davon. Aus <span className="cp-monospace">due_date</span>
+          {' '}liesse sie sich rechnen, aber ohne Programmstart waere &bdquo;Woche 4&ldquo;
+          {' '}eine Behauptung. <strong>Und die Rueckmeldung</strong> schreibt
+          {' '}der Coach heute in <span className="cp-monospace">coach_notes</span>;
+          {' '}<span className="cp-monospace">coach_feedback</span> steht als
+          {' '}Spalte, wird aber von keinem Weg gefuellt.
+        </div>
+      </Card>
+
       {sortiert.length === 0 && (
         <Card title="Check-ins">
           <Empty title="Keine Check-ins" sub="Unten einen neuen anlegen — der Klient fuellt ihn in apps/web aus." />
         </Card>
       )}
 
-      {sortiert.map(c => (
+      {gefiltert.map(c => (
         <CheckinKarte
           key={c.id}
           checkin={c}

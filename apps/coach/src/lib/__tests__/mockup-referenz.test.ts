@@ -10,6 +10,8 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 import { REFERENZ, alleKarten } from '../../components/mockup-referenz'
+import { ABGLEICH, abgleichZahlen } from '../../components/feld-abgleich'
+import { PORTAL_NAV, alleEintraege, bereichFuerReiter } from '../../components/portal-nav'
 
 const HIER = dirname(fileURLToPath(import.meta.url))
 const WURZEL = join(HIER, '..', '..', '..', '..', '..')
@@ -196,19 +198,27 @@ test('baubar heisst: die Tabelle wird NICHT gelesen', () => {
     + '"Today\'s sessions logged" neu zu beurteilen')
 })
 
-test('die Trennlinie steht in apps/coach, nicht importiert aus apps/web', () => {
-  // ══ WARUM EINE EIGENE FASSUNG ══════════════════════════════════
+test('die Trennlinie kommt aus dem Paket — EINE Fassung', () => {
+  // ══ G-402/A6: DIE DOPPELUNG IST AUFGELOEST ═════════════════════
   //
-  // `[cmd]` **`apps/coach/tsconfig.json` loest `@/*` auf `./src/*`
-  // und `@lumeos/*` auf `packages/*`** — fuer `apps/web` gibt es
-  // keinen Alias. `[read]` **Ein Import aus einer fremden Anwendung
-  // waere ein Weg, den der Compiler nicht kennt.**
-  const t = lies(HIER, '..', '..', 'components', 'referenz-trenner.tsx')
+  // `[cmd]` **G-399 meldete sie, G-401 liess sie stehen** (die
+  // eigene Fassung, 30 Zeilen), **G-402 zieht sie ins Paket.**
+  // `[read]` **Jetzt gibt es sie einmal**, und beide Anwendungen
+  // koennen dieselbe benutzen.
+  const t = lies(WURZEL, 'packages', 'ui', 'src', 'referenz-trenner.tsx')
   assert.match(t, /data-referenz-trenner=/,
     'die Marke fehlt — dann misst kein Werkzeug mehr, wo die Linie liegt')
-  assert.ok(!/from '.*apps\/web/.test(t),
-    'die Trennlinie importiert aus `apps/web` — zwei Anwendungen, die '
-    + 'nur ueber `packages/` verbunden sein sollten')
+
+  // `[cmd]` **Und die Kopie in `apps/coach` ist weg.**
+  let kopieDa = true
+  try {
+    lies(HIER, '..', '..', 'components', 'referenz-trenner.tsx')
+  } catch {
+    kopieDa = false
+  }
+  assert.equal(kopieDa, false,
+    'die eigene Fassung in `apps/coach` ist zurueck — dann steht die '
+    + 'Linie wieder zweimal im Haus')
 
   const ref = lies(HIER, '..', '..', 'components', 'tab-referenz.tsx')
   assert.match(ref, /<ReferenzTrenner\s/,
@@ -233,4 +243,424 @@ test('die acht Vorlagen liegen vor, und die Fundstellen stimmen', () => {
       `${datei}:${zeile} traegt nicht mehr "${titel}" — die Fundstellen `
       + 'der Referenz sind veraltet')
   }
+})
+
+// ══════════════════════════════════════════════════════════════════
+// G-400: Kopf, Zaehler, Tokens, Felder
+// ══════════════════════════════════════════════════════════════════
+
+test('der Kopf nutzt v2-module-header aus @lumeos/ui', () => {
+  // ══ A2: DIE KLASSEN SIND DA, GEMESSEN ══════════════════════════
+  //
+  // `[cmd]` **`packages/ui/src/styles/v2.css` fuehrt alle sieben**,
+  // und `layout.tsx:3` laedt genau diese Datei als
+  // `@lumeos/ui/styles.css`. `[read]` **Es fehlte nichts** — das
+  // Portal hat sie nur nie benutzt.
+  const v2 = lies(WURZEL, 'packages', 'ui', 'src', 'styles', 'v2.css')
+  for (const k of ['v2-module-header', 'v2-module-title-block',
+    'v2-module-title-row', 'v2-module-title', 'v2-module-sub',
+    'v2-module-actions', 'v2-module-hero-lite']) {
+    assert.ok(new RegExp(`\\.${k}\\b`).test(v2),
+      `\`${k}\` steht nicht mehr in v2.css — dann traegt der Kopf eine `
+      + 'Klasse ohne Regel')
+  }
+
+  // `[cmd]` **G-401: der Modulkopf ist in die Schale gezogen** —
+  // er braucht den Bereich, die Athletenzahl und die Alerts.
+  // `[read]` **Der Waechter folgt dem Code**, statt auf `page.tsx`
+  // zu zeigen, wo er nicht mehr steht.
+  const seite = lies(HIER, '..', '..', 'components', 'portal-schale.tsx')
+  assert.match(seite, /className="v2-module-header v2-module-hero-lite"/,
+    'der Kopf ist wieder eine eigene Fassung — dann sieht das Portal '
+    + 'anders aus als jedes andere Modul')
+  assert.ok(!/className="cp-kopf"/.test(seite), '`cp-kopf` ist zurueck')
+
+  // `[cmd]` **Die Vorlage traegt VIER Pills und ZWEI Aktionen**
+  // (`module-coach.jsx:910-920`).
+  // `[cmd]` **Am Ende der Funktion schneiden** — die erste Fassung
+  // las bis zum Dateiende und zaehlte den Abmeldeknopf mit, der in
+  // G-402 dazukam. `[read]` **Sie mass drei Aktionen statt zwei** und
+  // meldete einen Fehler, den es nicht gab.
+  const anfang = seite.indexOf('function Modulkopf')
+  // `[cmd]` **Bis zur naechsten Funktion schneiden** — die erste
+  // Fassung nahm die erste schliessende Klammer und traf damit eine
+  // INNERE Verzweigung: der Ausschnitt war leer, die Probe meldete
+  // null Pills.
+  const naechste = seite.indexOf('function Reiterleiste', anfang)
+  const kopf = seite.slice(anfang, naechste > 0 ? naechste : undefined)
+  assert.equal((kopf.match(/<Pill\b/g) ?? []).length, 4,
+    'der Kopf traegt nicht mehr vier Pills wie die Vorlage')
+  assert.equal((kopf.match(/<button\b/g) ?? []).length, 2,
+    'der Kopf traegt nicht mehr zwei Aktionen (Broadcast, New plan)')
+  assert.match(kopf, /v2-module-sub/,
+    'der Untertitel fehlt — die Vorlage hat ihn')
+})
+
+test('Knoepfe ohne Ziel sind abgeschaltet und nennen den Grund', () => {
+  // `[read]` **C-426: kein Bedienelement ohne Wirkung.** `[cmd]`
+  // **Broadcast und New plan haben kein Ziel** — es gibt weder einen
+  // Schreibweg fuer Rundnachrichten noch eine Plantabelle.
+  // `[cmd]` **G-401: der Modulkopf ist in die Schale gezogen** — er
+  // braucht Bereich, Athletenzahl und Alerts. `[read]` **Der
+  // Waechter folgt dem Code**, statt auf eine Datei zu zeigen, in
+  // der die Sache nicht mehr steht.
+  const kopf = lies(HIER, '..', '..', 'components', 'portal-schale.tsx')
+  // `[cmd]` **Am JSX ankern, nicht am Kommentar** — die erste
+  // Fassung schnitt beim ERSTEN Vorkommen von `v2-module-actions`,
+  // und das steht in der Begruendung darueber. **Sie mass den
+  // Kommentar und fand null Knoepfe.**
+  const block = kopf.slice(kopf.indexOf('<div className="v2-module-actions">'))
+    .slice(0, 1600)
+  assert.equal((block.match(/\bdisabled\b/g) ?? []).length, 2,
+    'ein Knopf ohne Ziel ist wieder anklickbar — er sieht dann aus, '
+    + 'als taete er etwas')
+  // `[cmd]` **Beide Schreibweisen zulassen** — `title="…"` und
+  // `title={'…'}`. `[read]` **Die erste Fassung prueft die
+  // SCHREIBWEISE, nicht die Sache:** sie fiel, als der Text zu lang
+  // fuer eine Zeile wurde und in geschweifte Klammern wanderte.
+  assert.equal((block.match(/title=[{"]'?Attrappe —/g) ?? []).length, 2,
+    'ein abgeschalteter Knopf nennt seinen Grund nicht mehr')
+})
+
+test('die Zaehler sind rechenbar, nicht erfunden', () => {
+  // ══ A3: EIN ZAEHLER OHNE DATEN BLEIBT WEG ══════════════════════
+  //
+  // `[cmd]` **Die Vorlage traegt sieben** (Athletes, Smart alerts,
+  // Rules, Plans, Workflows, Programs, Messages). `[cmd]` **Gebaut
+  // sind acht** — vier aus G-398, vier neu, alle aus Zeilen der
+  // laufenden Datenbank.
+  //
+  // `[read]` **Regeln, Plaene und Programme bleiben ohne Zahl** —
+  // fuer sie gibt es keine Tabelle.
+  //
+  // `[cmd]` **G-401: die Schluessel sind jetzt MENGEN, nicht
+  // Reiter-Ids** (`klienten` statt `athletes`) — die Seitenleiste
+  // fragt nach der Sache, nicht nach dem Reiter. **Der Waechter
+  // prueft weiter dieselbe Sache.**
+  const seite = lies(HIER, '..', '..', 'app', 'page.tsx')
+  const anfang = seite.indexOf('const zaehler: PortalZaehler')
+  const block = seite.slice(anfang, seite.indexOf('return (', anfang))
+  for (const tot of ['regeln', 'plaene', 'programme', 'umsatz', 'team',
+    'analytics', 'muster']) {
+    assert.ok(!new RegExp(`^\\s+${tot}:`, 'm').test(block),
+      `"${tot}" hat einen Zaehler bekommen — es gibt keine Tabelle, `
+      + 'aus der er faellt')
+  }
+  for (const da of ['klienten', 'ungelesen', 'checkins', 'alerts',
+    'rechte', 'autonomie', 'einladungen', 'vorschlaege']) {
+    assert.ok(new RegExp(`^\\s+${da}:`, 'm').test(block),
+      `der rechenbare Zaehler "${da}" fehlt`)
+  }
+})
+
+test('die Tokens laufen nicht auseinander', () => {
+  // ══ A4: DREI UNTERSCHIEDE, GEMESSEN ════════════════════════════
+  //
+  // `[cmd]` **`v2.css:574` und `:2184` setzen
+  // `transition: … var(--kurve-aus)`.** `[read]` **Ohne das Token
+  // faellt der Uebergang stumm auf den Vorgabewert zurueck.**
+  const tok = lies(HIER, '..', '..', 'app', 'tokens.css')
+  const v2 = lies(WURZEL, 'packages', 'ui', 'src', 'styles', 'v2.css')
+  const gebraucht = new Set(
+    Array.from(v2.matchAll(/var\((--kurve-[a-z]+)\)/g), m => m[1]))
+  assert.ok(gebraucht.size > 0, 'v2.css benutzt keine Kurven mehr')
+  for (const k of gebraucht) {
+    assert.ok(new RegExp(`^\\s*${k}\\s*:`, 'm').test(tok),
+      `v2.css benutzt \`${k}\`, tokens.css definiert es nicht — der `
+      + 'Uebergang faellt stumm auf den Vorgabewert zurueck')
+  }
+
+  // `[cmd]` **Die elf Modul-Akzenttokens aus G-384, vollstaendig.**
+  const lume = lies(WURZEL, 'apps', 'web', 'src', 'styles', 'themes', 'lume.css')
+  const akzente = Array.from(lume.matchAll(/^\s*(--acc-[a-z]+)\s*:/gm), m => m[1])
+  assert.ok(akzente.length >= 11,
+    `lume.css fuehrt nur ${akzente.length} Akzenttokens`)
+  for (const a of akzente) {
+    assert.ok(new RegExp(`^\\s*${a}\\s*:`, 'm').test(tok),
+      `das Akzenttoken \`${a}\` fehlt im Portal — dann faerbt ein Modul `
+      + 'dort anders als in apps/web')
+  }
+})
+
+test('der Abgleich zaehlt Felder, nicht Karten', () => {
+  // ══ A1: DER MASSSTAB DIESES AUFTRAGS ═══════════════════════════
+  //
+  // `[read]` **G-391 und G-398 haben Karten gezaehlt** — eine Karte
+  // mit richtigem Titel und falscher Form galt als „angebunden".
+  const z = abgleichZahlen()
+  assert.ok(z.vorlage > 50,
+    `der Abgleich fuehrt nur ${z.vorlage} Felder — zu wenig fuer 14 Karten`)
+  assert.equal(z.gebaut + z.fehlt, z.vorlage, 'die Zahlen gehen nicht auf')
+  for (const k of ABGLEICH) {
+    assert.ok(k.felder.length > 0, `"${k.titel}" fuehrt keine Felder`)
+    assert.match(k.quelle, /module-coach[\w-]*\.jsx:\d+/,
+      `"${k.titel}" nennt keine Fundstelle mit Zeilennummer`)
+    for (const f of k.felder) {
+      if (f.da) {
+        assert.ok(!f.grund,
+          `"${k.titel}" / "${f.name}" ist gebaut UND traegt einen Grund`)
+      } else {
+        assert.ok(f.grund,
+          `"${k.titel}" / "${f.name}" fehlt ohne Grund — das ist die `
+          + 'Angabe, um die es in diesem Auftrag geht')
+        if (f.grund === 'keine-daten') {
+          assert.ok(f.fehlt && f.fehlt.length > 10,
+            `"${k.titel}" / "${f.name}" nennt keine fehlende Tabelle`)
+        }
+      }
+    }
+  }
+})
+
+// ══════════════════════════════════════════════════════════════════
+// G-401: die Schale — Seitenleiste, Modulkopf, Reiterleiste
+// ══════════════════════════════════════════════════════════════════
+
+test('alle sechzehn Reiter haben einen Bereich', () => {
+  // ══ A2/A4: KEIN REITER DARF VERLOREN GEHEN ═════════════════════
+  //
+  // `[read]` **Die Navigation hat eine Ebene bekommen** — sechzehn
+  // Reiter liegen jetzt in elf Bereichen. **Wer dabei einen
+  // vergisst, macht eine Ansicht unerreichbar**, ohne dass etwas
+  // rot wird.
+  const seite = lies(HIER, '..', '..', 'app', 'page.tsx')
+  const tabs = Array.from(seite.matchAll(/\{ id: '(\w+)', label: '/g), m => m[1])
+  assert.equal(tabs.length, 16, `page.tsx fuehrt ${tabs.length} Reiter, nicht 16`)
+
+  const inNav = new Set(alleEintraege().flatMap(e => e.reiter.map(r => r.id)))
+  for (const t of tabs) {
+    assert.ok(inNav.has(t),
+      `der Reiter "${t}" steht in keinem Bereich — er waere nicht mehr `
+      + 'erreichbar')
+  }
+  assert.equal(inNav.size, 16,
+    `die Navigation fuehrt ${inNav.size} Reiter, page.tsx aber 16`)
+})
+
+test('die Gruppen folgen dem Altrepo, die Eintraege dem Portal', () => {
+  // `[cmd]` **Das Altrepo fuehrte fuenf Gruppen**
+  // (`Sidebar.tsx:22-48`). `[read]` **Struktur uebernommen, kein
+  // Code** — die Eintraege sind die des Portals.
+  assert.equal(PORTAL_NAV.length, 5,
+    `die Seitenleiste fuehrt ${PORTAL_NAV.length} Gruppen, nicht fuenf`)
+  assert.equal(alleEintraege().length, 11,
+    `die Seitenleiste fuehrt ${alleEintraege().length} Eintraege, nicht elf`)
+  for (const g of PORTAL_NAV) {
+    assert.ok(g.eintraege.length > 0,
+      `die Gruppe "${g.label ?? '(ohne Titel)'}" ist leer — dann steht dort `
+      + 'eine Beschriftung ohne Inhalt')
+  }
+})
+
+test('ein Zaehler ist rechenbar oder er fehlt', () => {
+  // ══ A2: KEINE ERFUNDENE ZAHL IN DER LEISTE ═════════════════════
+  //
+  // `[cmd]` **Sieben Eintraege tragen einen Zaehler**, und jeder
+  // nennt eine Menge, die `PortalZaehler` kennt. `[read]` **Ein
+  // Zaehler ohne Daten waere schlimmer als keiner.**
+  const ERLAUBT = new Set(['klienten', 'ungelesen', 'checkins', 'alerts',
+    'vorschlaege', 'rechte', 'autonomie', 'einladungen'])
+  let mit = 0
+  for (const e of alleEintraege()) {
+    if (e.zaehler === null) {
+      assert.ok(!e.stufe,
+        `"${e.label}" hat keine Zahl, aber eine Stufe — die faerbt nichts`)
+      continue
+    }
+    mit++
+    assert.ok(ERLAUBT.has(e.zaehler),
+      `"${e.label}" zaehlt "${e.zaehler}" — diese Menge gibt es nicht`)
+  }
+  // `[cmd]` **Sechs, nicht sieben** — mein erster Zaehlversuch las die
+  // Typunion in Zeile 79 als Eintrag mit. **Der Waechter hat den
+  // Rechenfehler gemeldet**, bevor er in den Bericht kam.
+  assert.equal(mit, 6, `${mit} Eintraege tragen einen Zaehler, nicht sechs`)
+
+  // `[cmd]` **Und die Seite liefert genau diese Schluessel.**
+  // `[read]` **Der erste Anlauf benutzte Reiter-Ids** (`athletes`
+  // statt `klienten`) — **sechs von sieben Zaehlern blieben leer**,
+  // obwohl alle Zeilen da waren. **Am Schirm gezaehlt, nicht im
+  // Quelltext, sonst waere es nicht aufgefallen.**
+  const seite = lies(HIER, '..', '..', 'app', 'page.tsx')
+  const block = seite.slice(seite.indexOf('const zaehler: PortalZaehler'))
+    .slice(0, 1200)
+  for (const e of alleEintraege()) {
+    if (!e.zaehler) continue
+    assert.ok(new RegExp(`^\\s+${e.zaehler}:`, 'm').test(block),
+      `"${e.label}" zaehlt "${e.zaehler}", aber page.tsx liefert den `
+      + 'Schluessel nicht — die Zahl bliebe leer')
+  }
+})
+
+test('die Schale nutzt die Klassen aus @lumeos/ui, nicht eigene', () => {
+  // ══ A3: KEIN cp-kopf MEHR ══════════════════════════════════════
+  //
+  // `[cmd]` **`v2-app`, `v2-sidebar`, `v2-nav-group`, `v2-nav-item`,
+  // `v2-tabs` stehen in `v2.css`** — der Datei, die `layout.tsx:3`
+  // laedt. `[read]` **Gleiche Struktur, gleiche Optik.**
+  const v2 = lies(WURZEL, 'packages', 'ui', 'src', 'styles', 'v2.css')
+  for (const k of ['v2-app', 'v2-sidebar', 'v2-sidebar-nav', 'v2-nav-group',
+    'v2-nav-group-label', 'v2-nav-item', 'v2-main', 'v2-tabs', 'v2-tab']) {
+    assert.ok(new RegExp(`\\.${k}\\b`).test(v2),
+      `\`${k}\` steht nicht mehr in v2.css — dann traegt die Schale eine `
+      + 'Klasse ohne Regel')
+  }
+
+  // ══ G-402: Raster und Seitenleiste kommen aus `AppShell` ══════
+  //
+  // `[cmd]` **G-401 baute sie selbst nach** (`v2-app`,
+  // `v2-sidebar` von Hand). `[read]` **Jetzt ruft die Schale
+  // `AppShell`** — dieselbe Komponente wie `apps/web`. **Der
+  // Waechter prueft den AUFRUF, nicht den Nachbau.**
+  // `[read]` **Ohne Kommentare** — der Dateikopf erklaert, warum die
+  // eigene `v2-sidebar` entfallen ist, und NENNT sie dabei. **Ein
+  // Waechter, der seine eigene Begruendung liest, urteilt falsch.**
+  // `[read]` **Zwei Sichten auf dieselbe Datei:** `roh` fuer das,
+  // was DA sein muss, `schaleOhne` fuer das, was WEG sein muss.
+  // **Sonst findet die Probe ihre eigene Begruendung** -- der
+  // Dateikopf nennt `v2-sidebar`, um zu erklaeren, warum es die
+  // eigene Leiste nicht mehr gibt.
+  const roh = lies(HIER, '..', '..', 'components', 'portal-schale.tsx')
+  const schaleOhne = roh
+    .split(String.fromCharCode(10))
+    .filter(zeile => !zeile.trimStart().startsWith('//'))
+    .join(String.fromCharCode(10))
+  assert.match(roh, /<AppShell/,
+    'die Schale ruft AppShell nicht mehr - dann baut sie das Raster '
+    + 'wieder selbst nach (vierte Doppelung)')
+  assert.match(roh, /@lumeos/,
+    'die Schale holt nichts mehr aus dem Paket')
+  assert.ok(!/className="v2-sidebar"/.test(schaleOhne),
+    'die Seitenleiste wird wieder von Hand gebaut - sie kommt aus '
+    + 'Sidebar im Paket')
+  assert.match(roh, /className="v2-module-header v2-module-hero-lite"/,
+    'der Modulkopf ist keine v2-Fassung mehr')
+
+  // `[cmd]` **Und nirgends mehr `cp-kopf` oder `cp-tabs`** — A3
+  // verlangt es ohne Ausnahme, auch auf dem Fehlerweg.
+  const seite = lies(HIER, '..', '..', 'app', 'page.tsx')
+  const ohneKommentar = seite.split('\n')
+    .filter(z => !z.trimStart().startsWith('//')).join('\n')
+  for (const alt of ['cp-kopf', 'cp-tabs', 'cp-shell']) {
+    assert.ok(!new RegExp(`className="[^"]*${alt}\\b`).test(ohneKommentar),
+      `\`${alt}\` ist zurueck — dann sieht das Portal wieder anders aus `
+      + 'als jedes andere Modul')
+  }
+})
+
+test('das Raster schaltet die dritte Spalte ab', () => {
+  // `[cmd]` **`v2-app` ist ein Raster mit drei Spalten**
+  // (`v2.css:92-97`: `240px 1fr 340px`). `[cmd]` **Das Portal hat
+  // keine Kontextspalte**, und `[data-rightpanel="hidden"]`
+  // (`v2.css:102-104`) macht daraus `240px 1fr`.
+  //
+  // `[read]` **Ohne das Attribut blieben 340 px leer** — und eine
+  // leere Spalte sieht aus wie ein Fehler.
+  const v2 = lies(WURZEL, 'packages', 'ui', 'src', 'styles', 'v2.css')
+  assert.match(v2, /\[data-rightpanel="hidden"\]/,
+    'das Paket kennt `data-rightpanel` nicht mehr — dann steht im Portal '
+    + 'eine leere 340-px-Spalte')
+  // `[read]` **Ohne Kommentare pruefen** — die Begruendung ueber der
+  // Zeile NENNT `data-rightpanel`, und ein Waechter, der seine eigene
+  // Erklaerung liest, ist immer gruen. `[cmd]` **Gemessen: die
+  // Sabotage (Attribut aus dem JSX entfernt) blieb gruen**, bis die
+  // Probe am Element ankerte.
+  const schale = lies(HIER, '..', '..', 'components', 'portal-schale.tsx')
+    .split('\n').filter(z => !z.trimStart().startsWith('//')).join('\n')
+  // `[cmd]` **G-402: die Spalte ist GEFUELLT, nicht abgeschaltet.**
+  // `AppShell` setzt `data-rightpanel` selbst, je nachdem ob
+  // `context` uebergeben wird. **Der Waechter prueft die
+  // UEBERGABE**, nicht das Attribut.
+  assert.match(schale, /context=\{\{/,
+    'die Schale uebergibt keinen Kontext mehr — dann blendet AppShell '
+    + 'die dritte Spalte aus, und „rechts buddy" fehlt wieder')
+})
+
+test('ein Bereich mit einem Reiter zeigt keine Reiterleiste', () => {
+  // `[read]` **Eine Leiste mit genau einem Eintrag ist ein
+  // Bedienelement ohne Wahl** — C-426 im Kleinen.
+  const schale = lies(HIER, '..', '..', 'components', 'portal-schale.tsx')
+  assert.match(schale, /if \(e\.reiter\.length < 2\) return null/,
+    'die Reiterleiste erscheint wieder bei einem einzigen Reiter')
+
+  // `[cmd]` **Gemessen: vier Bereiche haben mehr als einen Reiter.**
+  const mehrere = alleEintraege().filter(e => e.reiter.length > 1)
+  assert.equal(mehrere.length, 4,
+    `${mehrere.length} Bereiche fuehren mehrere Reiter, nicht vier`)
+})
+
+test('ein altes ?tab= findet weiter seinen Bereich', () => {
+  // `[read]` **Die Navigation hat eine Ebene bekommen** — ein
+  // Lesezeichen auf `?tab=patterns` darf davon nichts merken.
+  for (const [tab, bereich] of [
+    ['overview', 'uebersicht'], ['patterns', 'alerts'],
+    ['revenue', 'auswertung'], ['programs', 'plaene'],
+    ['onboard', 'klienten'], ['team', 'einstellungen'],
+  ] as const) {
+    const e = bereichFuerReiter(tab)
+    assert.ok(e, `der Reiter "${tab}" findet keinen Bereich`)
+    assert.equal(e.id, bereich,
+      `"${tab}" landet in "${e.id}", erwartet "${bereich}"`)
+  }
+  assert.equal(bereichFuerReiter('gibtsnicht'), null,
+    'ein unbekannter Reiter liefert einen Bereich — dann faellt niemand auf')
+})
+
+test('die Schale speist Marke und Gruppen wirklich ein', () => {
+  // ══ G-402/A5: DIE VIERTE DOPPELUNG IST AUFGELOEST ══════════════
+  //
+  // `[cmd]` **`SidebarProps` nimmt seit G-402 `gruppen`, `marke` und
+  // `ohneSuche`** — vorher rendert sie `MODULES.map(...)` fest, und
+  // das Portal bekam die Module des Athleten.
+  //
+  // `[read]` **Ohne diese Probe koennte jemand die Requisiten
+  // weglassen**, und die Leiste zeigte wieder Nutrition und
+  // Training — ohne dass etwas rot wird.
+  const roh = lies(HIER, '..', '..', 'components', 'portal-schale.tsx')
+  assert.match(roh, /marke=\{\{ kuerzel: 'C', name: 'LumeOS Coach' \}\}/,
+    'die Marke ist weg — dann steht im Portal wieder „LumeOS"')
+  assert.match(roh, /gruppen=\{alsGruppen\(/,
+    'die Gruppen werden nicht mehr eingespeist — dann zeigt die '
+    + 'Leiste die Module von apps/web')
+  assert.match(roh, /ohneSuche/,
+    'die Attrappensuche ist zurueck — sie verspricht eine '
+    + 'Befehlspalette, die es nicht gibt')
+
+  // `[cmd]` **Und das Paket kann es wirklich** — sonst waere die
+  // Uebergabe wirkungslos.
+  const sb = lies(WURZEL, 'packages', 'ui', 'src', 'shell', 'sidebar.tsx')
+  // `[read]` **Schlichte Textsuche statt Regex** — die erste Fassung
+  // baute das Muster aus einem Schablonenliteral, und der
+  // Rueckstrich ueberlebte den Weg nicht. **Sie meldete `gruppen`
+  // als fehlend, obwohl es in Zeile 93 steht.**
+  for (const p of ['gruppen?:', 'marke?:', 'ohneSuche?:']) {
+    assert.ok(sb.includes(p),
+      `\`SidebarProps.${p}\` fehlt — dann ist die Uebergabe wirkungslos`)
+  }
+})
+
+test('apps/web bekommt die Vorgabe, nicht die Portalfassung', () => {
+  // ══ DIE GEGENPROBE, ALS WAECHTER ═══════════════════════════════
+  //
+  // `[read]` **Der Auftrag verlangt sie** — `packages/ui` ist
+  // geteilt, und eine Aenderung dort darf `apps/web` nicht
+  // verschieben.
+  //
+  // `[cmd]` **Am Schirm gemessen: „LumeOS", Suchfeld da,
+  // Modules/Workspaces/System, 12 Eintraege, 0 eingespeiste
+  // Zahlen.** `[read]` **Hier steht die Bedingung, die das
+  // sicherstellt:** beide Requisiten sind WAHLFREI und haben die
+  // heutige Anzeige als Vorgabe.
+  const sb = lies(WURZEL, 'packages', 'ui', 'src', 'shell', 'sidebar.tsx')
+  assert.match(sb, /marke\?:/,
+    '`marke` ist Pflicht geworden — dann muesste apps/web sie setzen')
+  assert.match(sb, /gruppen\?:/,
+    '`gruppen` ist Pflicht geworden — dann bricht apps/web')
+  assert.match(sb, /marke\?\.kuerzel \?\? 'L'/,
+    'die Vorgabe „L" ist weg — apps/web zeigte dann etwas anderes')
+  assert.match(sb, /marke\?\.name \?\? 'LumeOS'/,
+    'die Vorgabe „LumeOS" ist weg')
+  assert.match(sb, /\{gruppen \?/,
+    'der Zweig ohne `gruppen` ist weg — dann verliert apps/web seine '
+    + 'Modulnavigation')
 })

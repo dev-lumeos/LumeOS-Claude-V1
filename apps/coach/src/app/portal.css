@@ -1,66 +1,15 @@
 /* Coach-Portal — eigene Klassen unter "cp-", damit keine Regel die
    v2-Bausteine aus @lumeos/ui trifft. */
 
-.cp-shell {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 16px 20px 48px;
-}
+/* ══ G-402/A7: die Schalenregeln sind entfallen ═══════════════════
+   `[cmd]` Hier standen `.cp-shell`, `.cp-kopf`, `.cp-tabs`,
+   `.cp-tab` und `.cp-zaehler` -- die eigene Fassung der Schale.
+   `[read]` Die Schale kommt jetzt aus `@lumeos/ui` (`AppShell`),
+   und der Inhalt rollt in `.cp-inhalt`. Die Zahl an einem
+   Navigationseintrag heisst dort `v2-nav-zahl`.
 
-.cp-kopf {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  padding: 6px 0 14px;
-}
-
-.cp-kopf h1 {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.cp-kopf .cp-konto {
-  margin-left: auto;
-  color: var(--fg-subtle);
-  font-size: 11px;
-}
-
-/* Tab-Leiste als Links: serverseitig gerendert, kein Client-JS. */
-.cp-tabs {
-  display: flex;
-  gap: 2px;
-  flex-wrap: wrap;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 14px;
-}
-
-.cp-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 10px;
-  font-size: 12px;
-  color: var(--fg-muted);
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
-}
-
-.cp-tab:hover { color: var(--fg); background: var(--surface-hover); }
-
-.cp-tab.cp-aktiv {
-  color: var(--fg);
-  border-bottom-color: var(--acc);
-}
-
-.cp-zaehler {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  background: var(--surface-2);
-  border-radius: 999px;
-  padding: 1px 6px;
-}
+   `[read]` `.cp-konto`, `.cp-monospace` und `.cp-hinweis` bleiben --
+   sie sind keine Schalenklassen, sondern Textformen des Portals. */
 
 .cp-grid {
   display: grid;
@@ -277,4 +226,215 @@
   height: 100%;
   background: var(--acc);
   border-radius: 3px;
+}
+
+/* ══ G-400: die Athletenzeile nach der Vorlage ══════════════════════
+   `[cmd]` `module-coach.jsx:502` setzt Avatar 30x30, Radius 6,
+   `--surface-2` als Flaeche und `--fg-muted` als Schrift. Dieselben
+   Werte, damit die Zeile aussieht wie im Entwurf. */
+.cp-athlet {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+}
+
+.cp-athlet + .cp-athlet {
+  border-top: 1px solid var(--border);
+}
+
+.cp-avatar {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--fg-muted);
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* `[read]` Der Kopf traegt jetzt `v2-module-header` aus dem Paket --
+   `cp-konto` steht darin rechts neben den zwei Aktionen. */
+.v2-module-actions .cp-konto {
+  margin-left: 10px;
+  align-self: center;
+}
+
+/* ══ G-401: die Schale ══════════════════════════════════════════════
+   `[read]` Die Schale selbst kommt aus `v2.css` (`v2-app`,
+   `v2-sidebar`, `v2-nav-group`, `v2-topbar`, `v2-main`) -- hier steht
+   nur, was das Portal zusaetzlich braucht.
+
+   `[cmd]` `v2-main` hat `overflow: hidden` (`v2.css:291`): der
+   Inhalt braucht einen eigenen Rollbereich, sonst ist alles unter
+   der ersten Bildschirmhoehe unerreichbar. */
+.cp-inhalt {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 18px 22px 40px;
+}
+
+/* Der Zaehler in der Seitenleiste, mit Stufen wie im Altrepo:
+   ohne Stufe neutral, `warn` bei ungelesenen Nachrichten und offenen
+   Check-ins, `critical` bei Alerts. */
+.cp-nav-zahl {
+  margin-left: auto;
+  min-width: 18px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--fg-muted);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.cp-nav-zahl[data-stufe="warn"] {
+  background: color-mix(in oklch, var(--warn) 22%, var(--surface-2));
+  color: var(--warn);
+}
+
+.cp-nav-zahl[data-stufe="critical"] {
+  background: color-mix(in oklch, var(--neg) 22%, var(--surface-2));
+  color: var(--neg);
+}
+
+/* `[read]` Die alte Reiterzeile mit allen sechzehn Eintraegen ist
+   entfallen. `[cmd]` **G-402 hat auch die Regeln abgeraeumt** --
+   ein Kommentar, der „bleibt unbenutzt stehen" sagt, waere jetzt
+   eine Falschaussage. */
+
+/* ══ G-402: die Athletenliste ═══════════════════════════════════════
+   `[cmd]` Nach `ClientList.tsx` aus dem Vorgaengerrepo: Avatar mit
+   Statuspunkt, Name mit E-Mail darunter, dann die Groessen. Kein
+   Raster mit zwoelf Spalten -- die Spalten, die es dort gab (Ziel,
+   Tags, Gebuehr), haben hier keine Daten. */
+.cp-werkzeug {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cp-suche {
+  width: 190px;
+  padding: 4px 8px;
+  font: inherit;
+  font-size: 11.5px;
+  color: var(--fg);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.cp-suche::placeholder { color: var(--fg-subtle); }
+
+.cp-filter {
+  display: flex;
+  gap: 1px;
+  padding: 2px;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+}
+
+.cp-filter-knopf {
+  padding: 3px 9px;
+  font: inherit;
+  font-size: 10.5px;
+  color: var(--fg-muted);
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cp-filter-knopf:hover { color: var(--fg); }
+.cp-filter-knopf.cp-aktiv { background: var(--bg-elev); color: var(--fg); }
+
+.cp-athleten { display: flex; flex-direction: column; }
+
+.cp-athlet-zeile {
+  display: grid;
+  grid-template-columns: 30px minmax(140px, 1.4fr) minmax(120px, 1fr) auto auto minmax(0, 1.2fr);
+  align-items: center;
+  gap: 12px;
+  padding: 9px 4px;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+.cp-athlet-zeile + .cp-athlet-zeile { border-top: 1px solid var(--border); }
+.cp-athlet-zeile:hover { background: var(--surface-hover); }
+
+.cp-avatar-huelle { position: relative; display: block; width: 30px; height: 30px; }
+
+.cp-status-punkt {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  border: 2px solid var(--bg);
+  background: var(--fg-dim);
+}
+
+/* `[read]` Ein offener Alarm gewinnt gegen den Beziehungsstand --
+   der Punkt zeigt, wo Arbeit liegt, nicht wer aktiv ist. */
+.cp-status-punkt[data-stand="alarm"] { background: var(--neg); }
+.cp-status-punkt[data-stand="active"] { background: var(--pos); }
+.cp-status-punkt[data-stand="invited"] { background: var(--warn); }
+.cp-status-punkt[data-stand="ended"] { background: var(--fg-dim); }
+
+.cp-athlet-name { display: flex; flex-direction: column; min-width: 0; gap: 1px; }
+.cp-athlet-titel { font-size: 12.5px; font-weight: 500; }
+
+.cp-athlet-mail {
+  font-size: 10px;
+  color: var(--fg-subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cp-athlet-sitzung {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 11px;
+}
+
+.cp-dim { color: var(--fg-subtle); font-size: 10px; }
+
+.cp-athlet-sicht { display: flex; flex-wrap: wrap; gap: 3px; justify-content: flex-end; }
+
+/* Die Sichtstufe als Marke: `full` deutlich, `summary` gedaempft.
+   `[read]` `none` wird gar nicht gezeichnet -- eine Marke fuer
+   "nicht freigegeben" waere Rauschen. */
+.cp-sicht-marke {
+  padding: 1px 5px;
+  font-size: 9px;
+  border-radius: 3px;
+  background: var(--surface-2);
+  color: var(--fg-subtle);
+}
+
+.cp-sicht-marke[data-sicht="full"] {
+  background: color-mix(in oklch, var(--pos) 18%, var(--surface-2));
+  color: var(--pos);
+}
+
+.cp-fehlt {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: var(--fg-subtle);
 }

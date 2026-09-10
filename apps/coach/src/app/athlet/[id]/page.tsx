@@ -41,15 +41,26 @@ export default async function AthletSeite({
   const pfad = `/athlet/${klient.client_id}`
 
   return (
-    <main className="cp-shell">
-      <header className="cp-kopf">
-        <a className="cp-knopf" href="/?tab=athletes">← Athleten</a>
-        <h1>{klient.display_name}</h1>
-        <Pill variant={klient.status === 'active' ? 'pos' : undefined}>
-          {klient.status === 'active' ? `aktiv seit ${datum(klient.started_at)}` : klient.status}
-        </Pill>
-        <span className="cp-konto cp-monospace">{klient.email}</span>
-      </header>
+    // ══ G-402/A7: `v2-module-header` statt `cp-shell`/`cp-kopf` ══
+    //
+    // `[read]` **Die Akte ist eine eigene Seite ohne Seitenleiste** —
+    // man kommt ueber „Athleten" zurueck. `[cmd]` **Der Kopf ist
+    // trotzdem der des Hauses**, wie auf allen Bereichen.
+    <main className="cp-inhalt">
+      <div className="v2-module-header v2-module-hero-lite">
+        <div className="v2-module-title-block">
+          <div className="v2-module-title-row">
+            <a className="v2-btn" href="/?bereich=klienten">← Athleten</a>
+            <span className="v2-module-title">{klient.display_name}</span>
+            <Pill variant={klient.status === 'active' ? 'pos' : undefined}>
+              {klient.status === 'active' ? `aktiv seit ${datum(klient.started_at)}` : klient.status}
+            </Pill>
+          </div>
+        </div>
+        <div className="v2-module-actions">
+          <span className="cp-konto cp-monospace">{klient.email}</span>
+        </div>
+      </div>
 
       {searchParams.fehler && (
         <p className="cp-hinweis" role="alert" style={{ color: 'var(--neg)' }}>{searchParams.fehler}</p>

@@ -121,6 +121,16 @@ export type PortalStand = {
   rechteLog: LogZeile[]
   autonomieLog: LogZeile[]
   beziehungsLog: LogZeile[]
+  /**
+   * Die letzte Trainingseinheit je Klient — G-402.
+   *
+   * `[read]` **Nur fuer Klienten, die `training` auf `full`
+   * freigegeben haben** — dieselbe Regel wie in der Akte
+   * (`sicht[modul] === 'full'`). **Wer nicht freigibt, taucht hier
+   * nicht auf**, und die Liste zeigt dann einen benannten Strich
+   * statt eines Datums.
+   */
+  letzteSitzung: Record<string, string>
   fehler: string | null
 }
 
@@ -129,6 +139,7 @@ const LEER: Omit<PortalStand, 'userId' | 'email'> = {
   klienten: [], rechte: [], autonomie: [], checkins: [], templates: [],
   nachrichten: [], alerts: [], pending: [], actionLog: [],
   rechteLog: [], autonomieLog: [], beziehungsLog: [],
+  letzteSitzung: {},
   fehler: null,
 }
 
@@ -169,6 +180,40 @@ export async function portalStand(): Promise<PortalStand | null> {
     }
 
     const kl = (klienten.data ?? []) as Klient[]
+
+    // ══ G-402: die letzte Trainingseinheit je Klient ═══════════════
+    //
+    // `[read]` **Die Liste soll zeigen, wann zuletzt trainiert
+    // wurde** — das Altrepo hatte es, der Bau nicht. `[cmd]`
+    // **`training.workout_sessions` traegt `session_date`.**
+    //
+    // `[read]` **Nur fuer Klienten mit `training_visibility = 'full'`**
+    // — dieselbe Regel wie in der Akte. **Der Coach liest nichts,
+    // was der Klient nicht freigegeben hat**, auch nicht ein Datum.
+    //
+    // `[read]` **Eine Abfrage fuer alle**, nicht eine je Klient: bei
+    // n Klienten waeren es sonst n Rundreisen.
+    const rechteZeilen = (rechte.data ?? []) as RechteZeile[]
+    const trainingFrei = kl
+      .map(k => k.client_id)
+      .filter(id => {
+        const r = rechteZeilen.find(x => x.client_id === id)
+        return r?.['training_visibility'] === 'full'
+      })
+    const letzte: Record<string, string> = {}
+    if (trainingFrei.length > 0) {
+      const { data: sitzungen } = await supabase.schema('training')
+        .from('workout_sessions')
+        .select('user_id, session_date')
+        .in('user_id', trainingFrei)
+        .order('session_date', { ascending: false })
+      for (const s of (sitzungen ?? []) as Array<{ user_id: string, session_date: string }>) {
+        // `[read]` **Absteigend sortiert, also gewinnt der erste** —
+        // jeder weitere Treffer desselben Klienten ist aelter.
+        if (!letzte[s.user_id]) letzte[s.user_id] = s.session_date
+      }
+    }
+
     return {
       userId: uid,
       email: user.email ?? '',
@@ -185,6 +230,7 @@ export async function portalStand(): Promise<PortalStand | null> {
       rechteLog: (rechteLog.data ?? []) as LogZeile[],
       autonomieLog: (autonomieLog.data ?? []) as LogZeile[],
       beziehungsLog: (beziehungsLog.data ?? []) as LogZeile[],
+      letzteSitzung: letzte,
       fehler: null,
     }
   } catch (e) {
