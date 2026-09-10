@@ -1,203 +1,130 @@
-# HumanCoach: die Spec gegen den Live-Stand
+# HumanCoach: Spec gegen Live
 
-**2026-09-08, alle zwoelf Spec-Dateien gelesen.** Tom: *,,lies die
-komplette dokumentation und dann sag mir was noch unklar ist."*
+**2026-09-08, BERICHTIGT.** Tom: *,,deine fehlliste ist absoluter
+quatsch. wenn ich nur schon das im anhang anschaue, weiss ich dass
+du mich anluegst."*
 
-`[cmd]` **`docs/specs/HumanCoach/`, 3.291 Zeilen.**
-
----
-
-## Was Tom entschieden hat
-
-Tom, 2026-09-08: *,,kein toggle. die einen daten sind was der user
-in human coach sieht, und das andere was der coach in seinem
-portal sieht. wir arbeiten jetzt nur am portal."*
-
-`[read]` **`SPEC_11:14` nennt einen Role-Toggle** ? **das gilt
-NICHT.**
-
-    apps/web /v2/coach/human   was der Nutzer sieht
-    apps/coach auf 3220        was der Coach sieht
-
-`[read]` **Zwei Anwendungen, kein Umschalter.**
+`[read]` **Er hat recht. Die erste Fassung dieser Datei war
+falsch.**
 
 ---
 
-## Die Tabellen: andere Namen, teils da
+## Was der Orchestrator falsch gemacht hat
 
-    Spec                        LIVE                    Spalten
-    ----------------------------------------------------------
-    coach_profiles          ->  coach_profiles           4/19
-    coach_clients           ->  relationships            3/19
-    coach_client_permissions -> client_permissions      22 Sp
-    coach_alerts            ->  alerts                   5/23
-    client_autonomy_levels  ->  client_autonomy          2/16
-    client_autonomy_history ->  autonomy_change_log      9 Sp
-    coach_messages          ->  messages                 2/6
+`[read]` **Er hat Spec-Spaltennamen gegen Live-Spaltennamen
+gehalten und JEDE Abweichung als *fehlt* gezaehlt** ? **ohne zu
+pruefen, ob dieselbe Sache anders heisst.**
 
-    FEHLEN GANZ
-    coach_rules                 -
-    coach_rule_templates        -
-    client_adherence_summary    -
+**Drei Beispiele:**
 
-`[read]` **Die Namen weichen ab, weil LumeOS im Schema `coach`
-liegt** ? `coach.relationships` **statt** `coach_clients`.
+    Spec `content`      -> live heisst es `body`
+    Spec `message`      -> live heisst es `detail`
+    Spec `context_data` -> live heisst es `metric`
 
-`[read]` **Aber die SPALTEN fehlen wirklich.**
-
-### `coach_profiles`: 4 von 19
-
-`[cmd]` **Da: `user_id`, `display_name`, `email`, `is_active`.**
-
-`[cmd]` **Fehlt:** `title`, `bio`, `avatar_url`, `certifications[]`,
-`specializations[]`, `years_experience`, `phone`, `timezone`,
-`role` (vier Stufen), `max_clients`, `current_client_count`,
-`working_hours`, `notification_preferences`,
-`is_accepting_clients`, `last_active_at`.
-
-`[read]` **`role` ist der wichtigste:** `trainee_coach | coach |
-senior_coach | head_coach` ? **das ist die Team-Matrix aus
-SPEC_11.**
-
-### `relationships`: 3 von 19
-
-`[cmd]` **Fehlt:** `is_active`, `assignment_type`,
-`coaching_style`, `communication_frequency`, `start_date`,
-`end_date`, `billing_cycle`, `hourly_rate`, `autonomy_level`,
-`intervention_threshold`, `alert_preferences`, `coach_notes`,
-`tags[]`, `satisfaction_rating`, `goal_completion_rate`,
-`last_contact_at`.
-
-`[read]` **`coach_notes` ist privat** ? **der Klient sieht sie
-nicht** (SPEC_02:90).
-
-### `alerts`: 5 von 23
-
-`[cmd]` **Fehlt u.a.:** `type` (neun Werte), `category`,
-`priority` (1-5), `severity` (fuenf Stufen), `context_data`,
-`recommended_actions[]`, `rule_id`, `confidence`,
-`false_positive`.
-
-`[read]` **Genau das, was Claude Code in G-402 fuer den Erzeuger
-verlangt hat** ? **es steht seit Mai in SPEC_02:124.**
-
-### `client_autonomy`: 2 von 16
-
-`[cmd]` **Fehlt:** `current_level`, `level_name`, die vier
-Bewertungen (`consistency`, `knowledge`, `self_correction`,
-`communication`), `overall_score`, `check_in_frequency`,
-`intervention_threshold`, `next_assessment_date`,
-`regression_risk`.
-
-`[read]` **C-426 fragte nach der Erlaubnisliste** ? **die Spec hat
-stattdessen BEWERTUNGEN, aus denen sich die Stufe ergibt.**
-
-### `messages`: 2 von 6
-
-`[cmd]` **Fehlt:** `coach_client_id`, `content`, `message_type`
-(fuenf Werte), `attachment_url`.
+`[read]` **Daraus wurde *,,messages: 2 von 6"*** ? **eine Zahl, die
+nichts misst.**
 
 ---
 
-## Was in SPEC_06 als Warnung steht
+## Was live wirklich steht
 
-`[cmd]` **Zeile 3-18, ein Kasten:**
+    coach_profiles   id, user_id, display_name, email,
+                     is_active, created_at, updated_at
 
-> *,,Die `FOR ALL`-Policies in dieser Datei tragen ein INSERT-Leck
-> und duerfen nicht uebernommen werden. Beim INSERT wertet Postgres
-> `USING` nicht aus ? dafuer ist `WITH CHECK` da."*
+    relationships    coach_id, client_id, status,
+                     invited_by, invite_note,
+                     started_at, ended_at, ended_by,
+                     end_reason, withdrawn_at, withdrawn_by,
+                     withdraw_reason, coach_display_name,
+                     changed_by
 
-`[cmd]` **17 solche Policies in 6 Dateien, keine mit
-`WITH CHECK`.**
+    alerts           coach_id, client_id, module, title,
+                     detail, metric, status, read_at,
+                     done_at, created_by
 
-`[read]` **Verbindlich ist stattdessen
-`docs/spezifikation/10-plattform/konventionen/00-konventionen.md`
-Paragraph 12.**
+    client_autonomy  nutrition_level, training_level,
+                     recovery_level, goals_level,
+                     supplements_level, medical_level,
+                     buddy_level, safety_level,
+                     coach_note, changed_by
 
-`[read]` **Wer SPEC_06 abschreibt, baut das Leck nach.**
+    client_permissions  je Modul ZWEI Spalten:
+                     *_visibility  und  *_auto_apply
+                     fuer nutrition, training, recovery,
+                     goals, supplements, medical, buddy
+                     plus client_note, expires_at
 
----
+    messages         coach_id, client_id, sender_id,
+                     body, sent_at, read_at
 
-## Was SPEC_01 als Grenzen setzt
-
-`[cmd]` **Zeile 18-23, sechs Prinzipien:**
-
-    Client-Ownership   alle Daten gehoeren dem Klienten
-    Read-only Coach    der Coach schreibt NIE direkt,
-                       er schlaegt vor
-    Permission-First   jeder Abruf prueft, keine Ausnahme
-    Medical = sensitiv Vorgabe `none`, explizite Freigabe
-    Schema-Isolation   Schema `coach`, Klientendaten nur
-                       ueber die Permission-API,
-                       NIE via direktem JOIN
-    GDPR               Consent-Log, Widerruf jederzeit
-
-`[cmd]` **Und Zeile 101-104: Human Coach BESITZT NICHT:**
-**Nutzerdaten anderer Module, KI-Empfehlungen (das ist Buddy),
-Bezahlung (das ist Marketplace).**
-
-`[read]` **Die Zugriffsstufen sind DREI** (`full | summary |
-none`) ? **SPEC_11:81 nennt VIER (`full | shared | summary |
-off`).**
-
-`[read]` **Das ist ein Widerspruch in der Spec selbst.**
+    checkins         template_id, due_date, status,
+                     auto_data, client_data, client_note,
+                     coach_feedback, coach_notes,
+                     submitted_at, reviewed_at
 
 ---
 
-## Was ich nach dem Lesen noch nicht weiss
+## Und wo LumeOS WEITER ist als die Spec
 
-**1** ? **Die Zugriffsstufen: drei oder vier?**
+`[cmd]` **`client_permissions`: die Spec kennt drei Stufen
+(`full | summary | none`).**
 
-`[cmd]` **SPEC_01:30 und SPEC_02:112: `full | summary | none`.**
-`[cmd]` **SPEC_11:81: `full | shared | summary | off`.**
-`[cmd]` **LIVE: `client_permissions` hat 22 Spalten** ? **eine je
-Modul und Unterbereich, keine Stufenliste.**
+`[cmd]` **Live gibt es je Modul ZWEI Achsen:** **was der Coach
+SIEHT (`visibility`) und ob seine Vorschlaege AUTOMATISCH
+greifen (`auto_apply`).**
 
-**2** ? **Die Autonomiestufen: Namen und Zahl.**
+`[read]` **Das ist ein reicheres Modell** ? **die Spec hat es
+nicht.**
 
-`[cmd]` **SPEC_02:203: `Novice | Developing | Intermediate |
-Advanced | Expert`.**
-`[cmd]` **SPEC_11:226: `Novice | Beginner | Intermediate |
-Advanced | Expert`.**
-`[cmd]` **Altrepo `AUTONOMY_ARCHITECTURE.md`: `Supervised |
-Guided | Collaborative | Adaptive | Autonomous`.**
+`[cmd]` **`client_autonomy`: die Spec kennt EINE Stufe je
+Beziehung.**
 
-`[read]` **Drei Quellen, drei Namenslisten.**
+`[cmd]` **Live gibt es ACHT Achsen** ? **je Modul eine, plus
+`safety_level`.**
 
-**3** ? **Eine Achse oder acht?**
+`[read]` **Ebenfalls reicher** (C-71, C-435).
 
-`[cmd]` **Die Spec: EINE `autonomy_level` je Beziehung, 1-5.**
-`[cmd]` **LIVE: `client_autonomy` mit ACHT Achsen** (C-71).
+`[cmd]` **`relationships`: die Spec kennt `status` mit drei
+Werten.**
 
-`[read]` **Das ist keine Abweichung im Detail** ? **es ist ein
-anderes Modell.**
+`[cmd]` **Live gibt es den ganzen Verlauf** ? `invited_by`,
+`invite_note`, `withdrawn_at`, `withdrawn_by`,
+`withdraw_reason`, `end_reason`, `coach_display_name`
+**als Snapshot.**
 
-**4** ? **Der Program Builder: was darf er?**
+`[read]` **Der Orchestrator hat das als *,,3 von 19 Spalten"*
+gemeldet.**
 
-`[cmd]` **SPEC_01:99: *,,Program Builder (aber: Assignment =
-Vorschlag, Client bestaetigt)"*.**
-`[cmd]` **SPEC_11:279: Plans-Bibliothek mit Sold-Count und
-Marketplace-Import.**
+---
 
-`[read]` **Verkaufen und Vorschlagen sind zwei Sachen** ? **und
-Marketplace besitzt die Bezahlung (SPEC_01:104).**
+## Was WIRKLICH fehlt
 
-**5** ? **Die Ziel-Endpunkte.**
+`[cmd]` **Drei Tabellen, unter keinem Namen vorhanden:**
 
-`[cmd]` **SPEC_01:53: `POST http://training:5200/api/training/routines`.**
+    coach_rules                 der Regelbauer
+    coach_rule_templates        die zehn Systemvorlagen
+                                aus SPEC_05, Abschnitt 8
+    client_adherence_summary    die taegliche Adhaerenz
 
-`[read]` **Das ist eine Microservice-Architektur mit Ports** ?
-**LumeOS ist ein Monorepo mit Supabase.**
+`[cmd]` **Und in `coach_profiles` fehlen die Profilfelder:**
+`bio`, `certifications[]`, `specializations[]`, `max_clients`,
+`role` **(vier Stufen).**
 
-`[read]` **Miss, was davon uebersetzbar ist** ? **oder ob die
-Endpunkte durch RPCs ersetzt werden.**
+`[read]` **Das ist die ganze Liste** ? **nicht die fuenfzig
+Spalten, die ich vorher gemeldet habe.**
 
-**6** ? **`coach_rules`: JSONB oder Tabellen?**
+---
 
-`[cmd]` **SPEC_02:175: `conditions JSONB`, `actions JSONB`.**
-`[cmd]` **SPEC_11:203: ein visueller Bauer mit `WhenBlock`,
-`OnlyIfBlock`, `ThenBlock`.**
+## Was in dieser Datei NICHT mehr steht
 
-`[read]` **Ein Bauer, der JSONB schreibt, ist machbar** ? **aber
-dann kann niemand nach Regeln suchen, die ein bestimmtes Modul
-betreffen.**
+`[read]` **Die *,,sechs offenen Fragen"* der ersten Fassung waren
+groesstenteils Scheinwidersprueche:**
+
+`[read]` **Drei Stufen gegen vier** ? **live gibt es ein anderes
+Modell, das beide ueberholt.**
+
+`[read]` **Eine Achse gegen acht** ? **live sind es acht, und das
+ist entschieden** (C-71).
+
+`[read]` **Die Microservice-Ports aus SPEC_01** ? **LumeOS ist ein
+Monorepo, das ist bekannt und kein offener Punkt.**
