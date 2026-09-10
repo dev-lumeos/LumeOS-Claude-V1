@@ -38,13 +38,64 @@ import {
   FCR_CLIENT, FCR_MODULES, FCR_TRAINING, FCR_NUTRITION, FCR_RECOVERY,
   FCR_SUPPS, FCR_BODY, FCR_MEDICAL, FCR_TIMELINE,
 } from './daten-portal'
-import { Attrappe, Kasten, KastenKopf, Raster, Stapel, Auge, Haken } from './bausteine'
+import {
+  Attrappe, Kasten, KastenKopf, Raster, Stapel, Auge, Haken, Balkenreihe,
+} from './bausteine'
 
 const FEHLT = 'die Akte der Vorlage zeigt Trainings-, Naehrwert-, '
   + 'Erholungs- und Koerperdaten je Klient — im Schema coach gibt es '
   + 'dafuer keine Tabelle (die Werte liegen beim Klienten)'
 
 const V = (quelle: string) => <Attrappe fehlt={FEHLT} quelle={quelle} />
+
+/**
+ * Die Beschriftungen auf Deutsch — G-410.
+ *
+ * **Tom, 2026-09-08:** *„Deutsch ist erlaubt … *Calories today
+ * 2.180* wird zu *Kalorien heute 2.180*, nicht zu `kcal_schnitt`."*
+ *
+ * `[read]` **Die SPRACHE ist frei, die FORM nicht** — dieselbe
+ * Kachel, dieselbe Zahl, dieselbe Reihenfolge. **Nur das Wort
+ * wechselt.**
+ *
+ * `[cmd]` **Die WERTE bleiben unangetastet** — „2,180" bleibt
+ * „2,180", weil es die Zahl der Vorlage ist.
+ */
+const WORT: Record<string, string> = {
+  // Training
+  'Sessions · 7d': 'Einheiten · 7 Tage',
+  'Volume · week': 'Volumen · Woche',
+  'Avg RPE': 'RPE im Mittel',
+  'Streak': 'Serie',
+  // Nutrition
+  'Calories today': 'Kalorien heute',
+  'Protein': 'Protein',
+  'Adherence · 7d': 'Adhaerenz · 7 Tage',
+  'Water': 'Wasser',
+  'Carbs': 'Kohlenhydrate',
+  'Fat': 'Fett',
+  // Recovery
+  'Recovery score': 'Erholungswert',
+  'Sleep · 7d avg': 'Schlaf · Mittel 7 Tage',
+  'Resting HR': 'Ruhepuls',
+  'Active flags': 'Offene Auffaelligkeiten',
+  // Body
+  'Weight': 'Gewicht',
+  'Body fat': 'Koerperfett',
+  'Lean mass': 'Magermasse',
+  'Weekly change': 'Aenderung je Woche',
+  'Chest': 'Brust',
+  'Waist': 'Taille',
+  'Arm': 'Arm',
+  'Thigh': 'Oberschenkel',
+  // Medical
+  'Clearance status': 'Freigabe',
+  'Last physician contact': 'Letzter Arztkontakt',
+  'Medication interactions': 'Wechselwirkungen',
+}
+
+/** Uebersetzt, wo ein Wort hinterlegt ist — sonst unveraendert. */
+const w = (s: unknown): string => WORT[String(s)] ?? String(s)
 
 /** Die acht Untertabs — `client-record.jsx:139`. */
 const MODULE = [
@@ -59,7 +110,7 @@ function Kennzahlen({ werte }: { werte: ReadonlyArray<readonly [string, string]>
     <Raster spalten="repeat(4, 1fr)" gap={10}>
       {werte.map(([l, v]) => (
         <div key={l} className="dk-kennzahl">
-          <div className="v2-eyebrow">{l}</div>
+          <div className="v2-eyebrow">{w(l)}</div>
           <div className="dk-kennzahl-wert v2-num">{v}</div>
         </div>
       ))}
@@ -166,7 +217,7 @@ export function DraftAkte() {
               <Stapel gap={5}>
                 {rows.map(([l, v]) => (
                   <div key={l} className="v2-row">
-                    <span className="v2-row-l">{l}</span>
+                    <span className="v2-row-l">{w(l)}</span>
                     <span className="v2-row-r v2-num">{v}</span>
                   </div>
                 ))}
@@ -234,11 +285,11 @@ export function DraftAkte() {
         <Stapel gap={12}>
           <Kennzahlen werte={FCR_NUTRITION.kpis} />
           <Raster spalten="1fr 1fr 1fr" gap={12}>
-            <Card title="Today's macros">
+            <Card title="Makros heute">
               {FCR_NUTRITION.macros.map(([l, cur, tgt, c]) => (
                 <div key={String(l)} style={{ marginBottom: 12 }}>
                   <div className="dk-balken-kopf">
-                    <span className="dk-balken-label">{l}</span>
+                    <span className="dk-balken-label">{w(l)}</span>
                     <span className="dk-balken-wert v2-num">{cur} / {tgt} g</span>
                   </div>
                   <Meter value={Number(cur)} max={Number(tgt)} color={String(c)} tall />
@@ -247,21 +298,18 @@ export function DraftAkte() {
               {V('FCR_NUTRITION.macros')}
             </Card>
 
-            <Card title="This week" sub="Kalorien und Eiweiss">
-              {/* `[read]` **Die Vorlage benutzt `BarSeries`** — das
-                  Paket hat keine Balkenreihe, also die Kurve mit
-                  denselben Werten. **Die Zahlen sind dieselben.** */}
-              <Sparkline
+            <Card title="Diese Woche" sub="Kalorien und Eiweiss">
+              {/* `[cmd]` **G-410: die Vorlage zeigt eine
+                  BALKENREIHE** (`client-record.jsx:238`,
+                  `highlight={5}` = Samstag). `[cmd]` **G-409 zeigte
+                  hier eine Kurve** — das war die Abweichung. */}
+              <Balkenreihe
                 data={FCR_NUTRITION.week.map(d => d.kcal)}
-                color="var(--acc-nutri)"
-                w={280}
+                labels={FCR_NUTRITION.week.map(d => d.d)}
                 h={92}
+                color="var(--acc-nutri)"
+                highlight={5}
               />
-              <div className="dk-wochentage">
-                {FCR_NUTRITION.week.map(d => (
-                  <span key={d.d} className="v2-mono">{d.d}</span>
-                ))}
-              </div>
               <div className="dk-balken-note" style={{ marginTop: 9 }}>
                 Samstag 200 kcal darueber, abgesprochenes Refeed. Eiweiss nie
                 unter 208 g.
@@ -269,7 +317,7 @@ export function DraftAkte() {
               {V('FCR_NUTRITION.week')}
             </Card>
 
-            <Card title="Micronutrient gaps" sub="unter Ziel, 30-Tage-Mittel">
+            <Card title="Mikronaehrstoffe" sub="unter Ziel, 30-Tage-Mittel">
               {FCR_NUTRITION.gaps.map(([l, v]) => (
                 <div key={String(l)} style={{ marginBottom: 11 }}>
                   <div className="dk-balken-kopf">
@@ -372,10 +420,10 @@ export function DraftAkte() {
             </Card>
             <Card title="Masse">
               <Stapel gap={5}>
-                {FCR_BODY.measures.map(([l, w]) => (
+                {FCR_BODY.measures.map(([l, x]) => (
                   <div key={String(l)} className="v2-row">
-                    <span className="v2-row-l">{l}</span>
-                    <span className="v2-row-r v2-num">{w}</span>
+                    <span className="v2-row-l">{w(l)}</span>
+                    <span className="v2-row-r v2-num">{x}</span>
                   </div>
                 ))}
               </Stapel>
@@ -392,10 +440,10 @@ export function DraftAkte() {
             {FCR_MEDICAL.note}
           </div>
           <Stapel gap={5}>
-            {FCR_MEDICAL.visible.map(([l, w]) => (
+            {FCR_MEDICAL.visible.map(([l, x]) => (
               <div key={String(l)} className="v2-row">
-                <span className="v2-row-l">{l}</span>
-                <span className="v2-row-r">{w}</span>
+                <span className="v2-row-l">{w(l)}</span>
+                <span className="v2-row-r">{x}</span>
               </div>
             ))}
           </Stapel>

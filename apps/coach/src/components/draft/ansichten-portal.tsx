@@ -13,6 +13,8 @@ import { Card, Pill, Row, KPI, Meter, Ring, Sparkline, Icon } from '@lumeos/ui'
 
 // G-409/A5: die Modale der Vorlage.
 import { ModalKnopf } from './modal-huelle'
+// G-410/A1: der Kalender als Monatsraster, wie die Vorlage.
+import { AnsichtKalender } from './ansicht-kalender'
 
 import {
   CAL_EVENTS, CAL_KIND, CN_NOTES, CN_TAGS, LIB_EX, LIB_MEAL,
@@ -559,51 +561,9 @@ export function AnsichtRezepte() {
 
 // ── calendar · Calendar ─────────────────────────────────────────
 
-export function AnsichtKalender() {
-  // `as const` macht die Listen `readonly` — `Object.entries`
-  // braucht das nicht, also der Umweg ueber den Grundtyp.
-  const tage = Object.entries(CAL_EVENTS) as Array<[string, ReadonlyArray<{
-    t: string, who: string, kind: string, label: string
-  }>]>
-  const anzahl = tage.reduce((s, [, e]) => s + e.length, 0)
-  return (
-    <Stapel>
-      <Card
-        title="Termine"
-        sub={`${anzahl} an ${tage.length} Tagen`}
-        actions={<>
-          <ModalKnopf modal="coachEinladen">Invite coach</ModalKnopf>
-          <ModalKnopf modal="qr">Scan QR</ModalKnopf>
-        </>}
-      >
-        <Stapel gap={12}>
-          {tage.map(([tag, ereignisse]) => (
-            <div key={tag}>
-              <Auge>{tag}</Auge>
-              <Stapel gap={6}>
-                {ereignisse.map((e, i) => {
-                  const k = (CAL_KIND as Record<string, { c: string, l: string }>)[e.kind]
-                  return (
-                    <Row
-                      key={i}
-                      label={<>
-                        <span className="v2-dot" style={{ background: k?.c }} />
-                        <span className="v2-mono">{e.t}</span> {e.label}
-                      </>}
-                      sub={e.who}
-                      value={<Pill>{k?.l ?? e.kind}</Pill>}
-                    />
-                  )
-                })}
-              </Stapel>
-            </div>
-          ))}
-        </Stapel>
-        {V('CAL_EVENTS', KEIN_TERMIN)}
-      </Card>
-    </Stapel>
-  )
-}
+// `[cmd]` **G-410: der Kalender ist eine eigene Datei
+// (`ansicht-kalender.tsx`)** — die Vorlage gibt ihm 129 Zeilen, und
+// G-409 hatte hier eine Liste statt des Monatsrasters.
 
 // ── inbox · Notifications ───────────────────────────────────────
 

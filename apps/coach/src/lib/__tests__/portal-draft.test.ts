@@ -451,3 +451,145 @@ test('kein Knopf im Modal taeuscht einen Schreibweg vor', () => {
   assert.match(t, /disabled\s*\n?\s*title="Attrappe/,
     'Der handelnde Knopf muss disabled sein und seinen Grund nennen.')
 })
+
+// ══ G-410: der Kalender und das Athletendetail ═════════════════════
+
+test('der Kalender ist ein Monatsraster, keine Liste', () => {
+  // **Tom, 2026-09-08:** *„die Vorlage zeigt ein Monatsraster
+  // -> ein Monatsraster."*
+  //
+  // `[cmd]` **G-409 baute hier eine Liste mit neun Ueberschriften.**
+  // `[cmd]` **Die Masse stehen in `portal-tools.jsx:44-81`** und
+  // werden hier gegen die CSS geprueft.
+  const css = readFileSync(
+    join(WURZEL, 'apps', 'coach', 'src', 'app', 'portal.css'), 'utf8')
+  const ohneKommentar = css.replace(/\/\*[\s\S]*?\*\//g, '')
+
+  // `:44` — zwei Spalten 1.5fr / 1fr
+  assert.match(ohneKommentar, /\.dk-kal\s*\{[^}]*grid-template-columns:\s*1\.5fr\s+1fr/)
+  // `:52` — sieben Spalten
+  assert.match(ohneKommentar, /\.dk-kal-raster\s*\{[^}]*grid-template-columns:\s*repeat\(7,\s*1fr\)/)
+  // `:60` — minHeight 62
+  assert.match(ohneKommentar, /\.dk-kal-zelle\s*\{[^}]*min-height:\s*62px/)
+  // `:67` — Strichhoehe 3
+  assert.match(ohneKommentar, /\.dk-kal-strich\s*\{[^}]*height:\s*3px/)
+})
+
+test('das Zellenraster stimmt mit dem September 2026 ueberein', () => {
+  // `[cmd]` **Die Vorlage rechnet es mit `new Date(2026, 8, 1)`**
+  // (`:33-37`). `[cmd]` **Hier steht das Ergebnis fest** (G-390: kein
+  // `new Date()` im Browser).
+  //
+  // `[read]` **Die Probe rechnet nach** — driftet die Liste, faellt
+  // sie. **Sonst waere die feste Liste ein Gedaechtnis, kein Mass.**
+  const quelle = readFileSync(
+    join(WURZEL, 'apps', 'coach', 'src', 'components', 'draft', 'ansicht-kalender.tsx'), 'utf8')
+  const m = /const ZELLEN: Array<number \| null> = \[([\s\S]*?)\]/.exec(quelle)
+  assert.ok(m, 'ZELLEN nicht gefunden')
+  const gebaut = m[1].split(',').map(s => s.trim()).filter(Boolean)
+    .map(s => s === 'null' ? null : Number(s))
+
+  const first = new Date(2026, 8, 1)
+  const startDow = (first.getDay() + 6) % 7
+  const days = new Date(2026, 9, 0).getDate()
+  const soll: Array<number | null> = [
+    ...Array(startDow).fill(null),
+    ...Array.from({ length: days }, (_, i) => i + 1),
+  ]
+  while (soll.length % 7) soll.push(null)
+
+  assert.deepEqual(gebaut, soll,
+    `Raster weicht ab: ${gebaut.length} Zellen gegen ${soll.length}`)
+})
+
+test('CAL_EVENTS ist vollstaendig uebernommen', () => {
+  // `[cmd]` **Neun Tage, vierzehn Termine** — der Auftrag nennt beide
+  // Zahlen, und sie stehen in der Vorlage.
+  const vorlage = readFileSync(join(DRAFT, 'module-coach-portal-tools.jsx'), 'utf8')
+  const block = vorlage.slice(vorlage.indexOf('const CAL_EVENTS'),
+    vorlage.indexOf('const CAL_KIND'))
+  const tageVorlage = (block.match(/"2026-09-\d\d":/g) ?? []).length
+  const termineVorlage = (block.match(/\{ t: "/g) ?? []).length
+
+  const daten = readFileSync(
+    join(WURZEL, 'apps', 'coach', 'src', 'components', 'draft', 'daten-portal.ts'), 'utf8')
+  const dBlock = daten.slice(daten.indexOf('export const CAL_EVENTS'),
+    daten.indexOf('export const CAL_KIND'))
+  const tageGebaut = (dBlock.match(/"2026-09-\d\d":/g) ?? []).length
+  const termineGebaut = (dBlock.match(/\bt:\s*"/g) ?? []).length
+
+  assert.equal(tageGebaut, tageVorlage, `Tage: ${tageGebaut} statt ${tageVorlage}`)
+  assert.equal(termineGebaut, termineVorlage,
+    `Termine: ${termineGebaut} statt ${termineVorlage}`)
+  assert.equal(tageVorlage, 9)
+  assert.equal(termineVorlage, 14)
+})
+
+test('kein Spaltenname steht in der Akte', () => {
+  // **Tom, 2026-09-08:** *„Was heute dort steht — kcal_schnitt,
+  // tage_mit_eintrag, fat_g_schnitt — faellt weg."*
+  //
+  // `[read]` **Die Probe misst den QUELLTEXT der Akte** — am Schirm
+  // ist es in `tools/_g410-akte.mjs` gemessen (0 Treffer). `[cmd]`
+  // **Beides zusammen**: hier faellt auf, wer einen Spaltennamen
+  // einbaut, dort faellt auf, wenn einer aus den Daten kommt.
+  const akte = readFileSync(
+    join(WURZEL, 'apps', 'coach', 'src', 'components', 'draft', 'ansicht-akte.tsx'), 'utf8')
+  const t = akte.split('\n').filter(z => !z.trim().startsWith('//')
+    && !z.trim().startsWith('*')).join('\n')
+  for (const muster of ['_schnitt', 'tage_mit', 'letzter_eintrag']) {
+    assert.ok(!t.includes(muster), `Spaltenname „${muster}" steht in der Akte`)
+  }
+})
+
+test('die Akte fuehrt die acht Reiter der Vorlage', () => {
+  const vorlage = readFileSync(join(DRAFT, 'module-coach-client-record.jsx'), 'utf8')
+  const ausVorlage = [...vorlage.matchAll(/mod === "(\w+)"/g)].map(m => m[1])
+  const akte = readFileSync(
+    join(WURZEL, 'apps', 'coach', 'src', 'components', 'draft', 'ansicht-akte.tsx'), 'utf8')
+  const gebaut = [...akte.matchAll(/mod === '(\w+)'/g)].map(m => m[1])
+  assert.equal(ausVorlage.length, 8)
+  assert.deepEqual(gebaut, ausVorlage)
+})
+
+test('die Woche zeigt eine Balkenreihe, keine Kurve', () => {
+  // `[cmd]` **Die Vorlage ruft `BarSeries … highlight={5}`**
+  // (`client-record.jsx:238`) — Samstag ist hervorgehoben.
+  // `[cmd]` **G-409 zeigte hier eine `Sparkline`.**
+  const akte = readFileSync(
+    join(WURZEL, 'apps', 'coach', 'src', 'components', 'draft', 'ansicht-akte.tsx'), 'utf8')
+  const t = akte.split('\n').filter(z => !z.trim().startsWith('//')).join('\n')
+  const woche = t.slice(t.indexOf('FCR_NUTRITION.week'))
+  assert.match(t, /<Balkenreihe[\s\S]{0,200}FCR_NUTRITION\.week/)
+  assert.match(woche.slice(0, 400), /highlight=\{5\}/,
+    'Samstag muss hervorgehoben sein, wie in der Vorlage')
+})
+
+test('die Beschriftungen sind uebersetzt, die Werte nicht', () => {
+  // **Tom:** *„Die SPRACHE ist frei, die FORM nicht."*
+  //
+  // `[read]` **Ein Wort darf deutsch werden, ein WERT nicht.**
+  //
+  // `[cmd]` **Der erste Anlauf verbot jede Ziffer im Schluessel**
+  // und fiel ueber `Sessions - 7d`, `Adherence - 7d`,
+  // `Sleep - 7d avg`. `[read]` **Das sind Beschriftungen, keine
+  // Werte:** die 7d sagt, WORUEBER gezaehlt wird, nicht WIE VIEL.
+  //
+  // `[cmd]` **Die Probe misst jetzt die richtige Sache:** ein
+  // uebersetzter WERT waere einer, der in der Vorlage als zweites
+  // Glied eines Paares steht.
+  const akte = readFileSync(
+    join(WURZEL, 'apps', 'coach', 'src', 'components', 'draft', 'ansicht-akte.tsx'), 'utf8')
+  const m = /const WORT: Record<string, string> = \{([\s\S]*?)\n\}/.exec(akte)
+  assert.ok(m, 'WORT nicht gefunden')
+  const schluessel = [...m[1].matchAll(/'([^']+)':/g)].map(x => x[1])
+
+  // Die Werte der Vorlage - zweites Glied jedes Paares.
+  const daten = readFileSync(
+    join(WURZEL, 'apps', 'coach', 'src', 'components', 'draft', 'daten-portal.ts'), 'utf8')
+  const werte = new Set([...daten.matchAll(/\["[^"]+",\s*"([^"]+)"\]/g)].map(x => x[1]))
+  const uebersetzteWerte = schluessel.filter(s => werte.has(s))
+  assert.deepEqual(uebersetzteWerte, [],
+    'Diese Eintraege uebersetzen einen WERT, nicht eine Beschriftung.')
+  assert.ok(m[1].includes("'Calories today': 'Kalorien heute'"))
+})

@@ -16,6 +16,8 @@ import { wegZurueck } from '../../../components/draft/wege'
 import { DraftSchale } from '../../../components/portal-draft-schale'
 import { DraftKontextspalte } from '../../../components/portal-draft-kontextspalte'
 import { bereichVon } from '../../../components/portal-draft-nav'
+// G-410/A2: die Akte der Vorlage — acht Reiter, ihre Zahlen.
+import { DraftAkte } from '../../../components/draft/ansicht-akte'
 
 /**
  * Wo die Akte im Draft steht.
@@ -180,6 +182,22 @@ export default async function AthletSeite({
 
   if (!imDraft) return inhalt
 
+  // ══ G-410/A2+A3: im Draft die AKTE DER VORLAGE ════════════════
+  //
+  // **Tom, 2026-09-08:** *„Was heute dort steht — kcal_schnitt,
+  // tage_mit_eintrag, fat_g_schnitt — faellt weg."*
+  //
+  // `[cmd]` **Die Modulkacheln oben rendern Spaltennamen als
+  // Beschriftung** (`:250`: `Object.entries(summary)`) — das ist die
+  // Form einer ABFRAGE, nicht die der Vorlage.
+  //
+  // `[cmd]` **Die Vorlage zeigt acht Reiter mit ihren Kacheln**
+  // (`client-record.jsx:94`). `[read]` **Im Draft steht deshalb
+  // `DraftAkte`** — dieselbe Klientenkarte, dieselben acht Reiter.
+  //
+  // `[read]` **Die alte Fassung behaelt ihre Modulkacheln** — dort
+  // sind sie richtig: sie zeigen, was die Datenbank hergibt.
+
   const bereich = bereichVon('athletes')!
   const kind = bereich.kinder!.find(k => k.id === 'record')!
   const aktive = stand.klienten.filter(k => k.status === 'active').length
@@ -212,7 +230,7 @@ export default async function AthletSeite({
         'Active athletes': String(aktive),
       }} />}
     >
-      {inhalt}
+      <DraftAkte />
     </DraftSchale>
   )
 }

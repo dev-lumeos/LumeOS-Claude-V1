@@ -166,6 +166,52 @@ export function Stapel({ children, gap = 14 }: {
   return <div className="dk-stapel" style={{ gap }}>{children}</div>
 }
 
+/**
+ * Eine Balkenreihe — G-410.
+ *
+ * `[cmd]` **Die Vorlage ruft `BarSeries` an drei Stellen**
+ * (`client-record.jsx:238`, `portal-detail.jsx:128`,
+ * `portal-tools.jsx:400`) — **definiert sie aber nirgends**, genau
+ * wie seinerzeit `Empty`.
+ *
+ * `[cmd]` **Das Paket hat keine** (gemessen in `primitives.tsx`).
+ * `[read]` **Also hier gebaut, nach den Requisiten der Aufrufe:**
+ * `data`, `labels`, `h`, `color`, `highlight`.
+ *
+ * `[read]` **Nicht im Paket** — es gehoert allen Apps, und keine
+ * andere ruft sie.
+ */
+export function Balkenreihe({ data, labels, h = 92, color = 'var(--acc)', highlight }: {
+  data: readonly number[]
+  labels: readonly string[]
+  h?: number
+  color?: string
+  /** Der Balken, den die Vorlage hervorhebt (Index). */
+  highlight?: number
+}) {
+  const max = Math.max(...data, 1)
+  return (
+    <div className="dk-balkenreihe">
+      <div className="dk-balkenreihe-saeulen" style={{ height: h }}>
+        {data.map((w, i) => (
+          <div key={i} className="dk-balkenreihe-spalte" title={String(w)}>
+            <div
+              className="dk-balkenreihe-saeule"
+              data-hell={i === highlight ? 'ja' : undefined}
+              style={{ height: `${(w / max) * 100}%`, background: color }}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="dk-balkenreihe-namen">
+        {labels.map((l, i) => (
+          <span key={i} className="v2-mono" data-hell={i === highlight ? 'ja' : undefined}>{l}</span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 /** Die kleine Ueberschrift ueber einer Liste. */
 export function Auge({ children }: { children: React.ReactNode }) {
   return <div className="v2-eyebrow">{children}</div>
