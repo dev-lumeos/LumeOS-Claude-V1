@@ -6,9 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 209 |
-| `laufend_codex` | 1 |
 | `laufend_claudecode` | 5 |
-| `erledigt` | 383 |
+| `erledigt` | 384 |
 | **gesamt** | **598** |
 
 ## medical — 48
@@ -350,7 +349,7 @@
 | `C-453` | befund | hoch | [Peptide haben keinen Injektionsweg](erledigt/supplements-c-0453-peptide-haben-keinen-injektionsweg.md) | erledigt | — | C-454 |
 | `C-454` | befund | hoch | [der Nutzer waehlt seine Punkte](todos/supplements-c-0454-der-nutzer-waehlt-seine-punkte.md) | offen | — | — |
 | `C-455` | feature | hoch | [der Injektionsplaner, vollstaendig](todos/supplements-c-0455-der-injektionsplaner-vollstaendig.md) | offen | — | — |
-| `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](laufend_codex/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | laeuft (codex) | — | — |
+| `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](erledigt/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | erledigt | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |

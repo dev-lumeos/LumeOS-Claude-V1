@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-09 — 168 Tabellen, 2373 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-10 — 170 Tabellen, 2402 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -30,7 +30,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `client_autonomy` | 15 | 4 | ? |
 | `client_consent_log` | 9 | 0 | ? |
 | `client_permissions` | 22 | 4 | ? |
-| `coach_profiles` | 7 | 0 | ? |
+| `coach_profiles` | 7 | 1 | ? |
 | `messages` | 7 | 6 | ? |
 | `pending_actions` | 14 | 2 | ? |
 | `pending_invites` | 15 | 0 | 2026-09-09 |
@@ -146,7 +146,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `scores` | 34 | 370 | ? |
 | `stress_logs` | 12 | 7 | 2026-09-07 |
 
-## supplements — 57 Tabellen, 845 Spalten
+## supplements — 59 Tabellen, 874 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -156,7 +156,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `entity_renal_hepatic` | 13 | 0 | ? |
 | `entity_transporters` | 15 | 4617 | ? |
 | `intake_logs` | 16 | 810 | ? |
-| `intake_schedule` | 14 | 0 | ? |
+| `intake_schedule` | 18 | 0 | ? |
 | `lab_effect_enrichment_records` | 16 | 47 | ? |
 | `pubchem_conflict_records` | 16 | 20 | ? |
 | `rule_catalog` | 26 | 64 | ? |
@@ -186,9 +186,11 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `supplement_organ_risks` | 14 | 1450 | ? |
 | `supplement_pharmacology` | 17 | 577 | ? |
 | `supplement_portions` | 11 | 79 | ? |
-| `supplement_protocol_items` | 13 | 0 | ? |
+| `supplement_protocol_items` | 15 | 0 | ? |
 | `supplement_protocol_requirements` | 13 | 0 | ? |
-| `supplement_protocols` | 11 | 0 | ? |
+| `supplement_protocol_template_items` | 12 | 9 | 2026-09-09 |
+| `supplement_protocol_templates` | 10 | 3 | 2026-09-09 |
+| `supplement_protocols` | 12 | 0 | ? |
 | `supplement_quality` | 19 | 237 | ? |
 | `supplement_regulatory` | 14 | 1119 | ? |
 | `supplement_reminders` | 11 | 0 | ? |

@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-09: 174 Funktionen, 414 Policies, 582 CHECKs, 13 Sichten.**
+`[cmd]` **Stand 2026-09-10: 178 Funktionen, 416 Policies, 592 CHECKs, 13 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -141,10 +141,10 @@ ob man sie rufen kann.**
 | public | gtrgm_union | internal, internal | Funktion |
 | public | handle_new_user |  | Funktion |
 | public | is_admin |  | Funktion |
-| public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein | text, text | Funktion |
-| public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
+| public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer | Funktion |
+| public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
 | public | set_limit | real | Funktion |
 | public | show_limit |  | Funktion |
@@ -173,12 +173,16 @@ ob man sie rufen kann.**
 | recovery | scoring_constants |  | Funktion |
 | recovery | touch_updated_at |  | Funktion |
 | supplements | create_curated_stack_template | p_name_de text, p_goal text, p_description_de text, p_items jsonb | Funktion |
+| supplements | create_supplement_protocol_from_template | p_template_code text, p_anchor_supplement_id uuid, p_started_at date DEFAULT CURRENT_DATE | Funktion |
 | supplements | decide_stack_curation_candidate | p_candidate_id uuid, p_decision text, p_reason text | Funktion |
 | supplements | platform_input_status | p_user_id uuid, p_entry_date date DEFAULT CURRENT_DATE | Funktion |
 | supplements | publish_stack_template | p_stack_id uuid, p_reason text DEFAULT ''::text | Funktion |
+| supplements | refresh_intake_schedule | p_schedule_date date DEFAULT CURRENT_DATE | Funktion |
 | supplements | refresh_stack_item_count |  | Funktion |
 | supplements | rule_assessment | p_user_id uuid DEFAULT auth.uid(), p_entry_date date DEFAULT CURRENT_DATE | Funktion |
 | supplements | rule_operator_supported | p_rule_id text, p_module text, p_field text, p_operator text | Funktion |
+| supplements | set_supplement_cycle_status | p_cycle_id uuid, p_status text, p_note_de text DEFAULT NULL::text | Funktion |
+| supplements | start_supplement_cycle | p_supplement_id uuid, p_source text DEFAULT 'confirmed_by_user'::text, p_suggestion_source text DEFAULT 'user_manual'::text, p_note_de text DEFAULT NULL::text | Funktion |
 | supplements | supplement_nutrient_intake_for_day | p_user_id uuid, p_entry_date date DEFAULT CURRENT_DATE | Funktion |
 | supplements | touch_updated_at |  | Funktion |
 | supplements | withdraw_stack_template | p_stack_id uuid | Funktion |
@@ -661,6 +665,7 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | intake_logs | intake_logs_measurement_source_ck | CHECK ((measurement_source = ANY (ARRAY['manual'::text, 'device'::text, 'import'::text, 'admin'::text, 'seed'::text]))) |
 | supplements | intake_logs | intake_logs_status_check | CHECK ((status = ANY (ARRAY['planned'::text, 'taken'::text, 'skipped'::text, 'snoozed'::text]))) |
 | supplements | intake_logs | intake_logs_supplement_name_snapshot_check | CHECK ((btrim(supplement_name_snapshot) <> ''::text)) |
+| supplements | intake_schedule | intake_schedule_source_check | CHECK ((((source_kind = 'stack'::text) AND (stack_item_id IS NOT NULL) AND (protocol_item_id IS NULL)) OR ((source_kind = 'protoco |
 | supplements | intake_schedule | intake_schedule_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | rule_catalog | rule_catalog_conditions_check | CHECK ((jsonb_typeof(conditions) = 'array'::text)) |
 | supplements | rule_catalog | rule_catalog_effects_check | CHECK ((jsonb_typeof(effects) = 'array'::text)) |
@@ -739,7 +744,16 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | supplement_pharmacology | supplement_pharmacology_route_check | CHECK (((route IS NULL) OR (route = ANY (ARRAY['oral'::text, 'injection_im'::text, 'injection_subq'::text, 'topical'::text, 'nasal |
 | supplements | supplement_pharmacology | supplement_pharmacology_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | supplement_portions | supplement_portions_amount_check | CHECK (((amount IS NULL) OR (amount > (0)::numeric))) |
+| supplements | supplement_protocol_items | supplement_protocol_items_weeks_check | CHECK ((((weeks_start IS NULL) AND (weeks_end IS NULL)) OR ((weeks_start >= 1) AND (weeks_end >= weeks_start)))) |
 | supplements | supplement_protocol_requirements | supplement_protocol_requirements_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
+| supplements | supplement_protocol_template_items | supplement_protocol_template_items_check | CHECK ((weeks_end >= weeks_start)) |
+| supplements | supplement_protocol_template_items | supplement_protocol_template_items_dose_amount_check | CHECK ((dose_amount > (0)::numeric)) |
+| supplements | supplement_protocol_template_items | supplement_protocol_template_items_dose_unit_check | CHECK ((btrim(dose_unit) <> ''::text)) |
+| supplements | supplement_protocol_template_items | supplement_protocol_template_items_sort_order_check | CHECK ((sort_order >= 0)) |
+| supplements | supplement_protocol_template_items | supplement_protocol_template_items_weeks_start_check | CHECK ((weeks_start >= 1)) |
+| supplements | supplement_protocol_templates | supplement_protocol_templates_code_check | CHECK ((btrim(code) <> ''::text)) |
+| supplements | supplement_protocol_templates | supplement_protocol_templates_name_de_check | CHECK ((btrim(name_de) <> ''::text)) |
+| supplements | supplement_protocol_templates | supplement_protocol_templates_source_check | CHECK ((source = 'legacy_cycleplanner'::text)) |
 | supplements | supplement_protocols | supplement_protocols_status_check | CHECK ((status = ANY (ARRAY['active'::text, 'paused'::text, 'completed'::text]))) |
 | supplements | supplement_quality | supplement_quality_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | supplement_regulatory | supplement_regulatory_jurisdiction_check | CHECK ((btrim(jurisdiction) <> ''::text)) |
@@ -1138,6 +1152,8 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | supplements | supplement_protocol_items | supplement_protocol_items_select | SELECT | (EXISTS ( SELECT 1    FROM supplements.supplement_protocols p   WHERE ((p.id = supplement_ |
 | supplements | supplement_protocol_items | supplement_protocol_items_update | UPDATE | (EXISTS ( SELECT 1    FROM supplements.supplement_protocols p   WHERE ((p.id = supplement_ |
 | supplements | supplement_protocol_requirements | supplement_protocol_requirements_select | SELECT | true |
+| supplements | supplement_protocol_template_items | supplement_protocol_template_items_select | SELECT | (EXISTS ( SELECT 1    FROM supplements.supplement_protocol_templates t   WHERE ((t.id = su |
+| supplements | supplement_protocol_templates | supplement_protocol_templates_select | SELECT | is_active |
 | supplements | supplement_protocols | supplement_protocols_delete | DELETE | (( SELECT auth.uid() AS uid) = user_id) |
 | supplements | supplement_protocols | supplement_protocols_insert | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
 | supplements | supplement_protocols | supplement_protocols_select | SELECT | (( SELECT auth.uid() AS uid) = user_id) |

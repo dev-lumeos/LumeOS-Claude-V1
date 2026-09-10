@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: e6e76606
 beruehrt:
   tabellen: [supplements.stack_items]
 zahlen:
@@ -362,4 +364,80 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  sechs Huellen geprueft, alle weiter leer
+    A2  weeks_start und weeks_end gebaut
+    A3  die Grenze kommentiert
+    A4  created -> paused -> stopped, mit ROLLBACK
+    A5  drei PCT-Vorlagen, 9 Positionen
+    A6  Tagesliste: 4 Eintraege (2 Stack, 2 Protokoll)
+    A7  RLS beidseitig, anon ohne EXECUTE
+    A8  Sicherung 45.349 B, Vollkette 180 Schritte, 366,9 s
+
+`[cmd]` **Selbst gemessen: `weeks_start`/`weeks_end` da, drei
+Funktionen live, drei Vorlagen mit 4/2/3 Positionen.**
+
+### A2 — er hat die Spalten gebaut, nicht die Vorlagen verbogen
+
+`[read]` **Ich hatte gefragt, ob `weeks_start`/`weeks_end`
+fehlen.**
+
+`[cmd]` **Sie fehlten** ? **und er hat sie ergaenzt, plus
+`started_at` am Protokoll und eine datierte
+`intake_schedule`.**
+
+`[read]` **Ohne sie kann ein PCT-Protokoll keine Wochen
+abbilden** ? **das war der Kern.**
+
+### A5 — eigene Vorlagentabellen
+
+`[cmd]` **`supplement_protocol_templates` und
+`_template_items`** ? **zwei Tabellen, die ich nicht verlangt
+hatte.**
+
+> *,,Die vorhandenen zwei Stack-Vorlagen waren dafuer nicht
+> passend."*
+
+`[read]` **Richtig unterschieden:** **eine Stack-Vorlage ist eine
+Zusammenstellung, ein PCT-Protokoll ein Zeitplan mit Wochen.**
+
+`[cmd]` **Drei Vorlagen: Standard Nolva/Clomid (4 Positionen),
+Nolvadex Only (2), HCG + Nolva (3).**
+
+### A3 — die Grenze steht als Kommentar
+
+`[cmd]` **`stack_items.cycling` = laufender Zustand,
+`user_supplement_cycles` = Verlauf.**
+
+> *,,`current_phase` wird weiterhin nicht erzwungen ? bestehender
+> Vertrag verlangt nur `started_on`; nichts wurde erfunden."*
+
+`[read]` **Die Spec nennt `current_phase`, der Vertrag nicht** ?
+**er hat den Vertrag stehen lassen und es benannt.**
+
+### A4 — der Verlauf ist belegt
+
+`[cmd]` **`created -> paused -> stopped`, je mit Ereignis, danach
+0 Testzeilen.**
+
+`[cmd]` **Und die Tagesliste zieht aus BEIDEN Quellen:** **2 aus
+dem Stack, 2 aus aktiven Protokollpositionen in Woche 1.**
+
+`[read]` **Das ist der Beleg, dass `intake_schedule` beides
+tragen kann.**
+
+### Der rote Punktelauf war nicht seiner
+
+`[cmd]` **Selbst gemessen: `punkte-pruefen.mjs` exit=0, 25
+Befunde, genau der Sollstand.**
+
+`[cmd]` **`tools/datenlogik-pruefen.mjs` gibt es nicht** ? **er
+meinte einen anderen Waechter.**
+
+`[read]` **Und er hat es richtig zugeordnet:** *,,16 aeltere
+Migrationstreffer (C-429 bis C-453), C-456 steht nicht in dieser
+Liste."*
+
+**Abgenommen.**
+
