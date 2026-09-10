@@ -53,3 +53,12 @@ brechen auf drei Zeilen um.**
 
 `[read]` **Der Assistent hat dreizehn** ? **das trifft heute nur
 den Draft, aber jedes Modul, das waechst.**
+
+## Entschieden am 2026-09-08
+
+Tom: *,,bau den draft fertig."*
+
+`[read]` **Im Paket beheben, mit Gegenprobe** ? **nicht je
+Anwendung ueberschreiben.**
+
+**Geht in G-407, A3 und A4.**
