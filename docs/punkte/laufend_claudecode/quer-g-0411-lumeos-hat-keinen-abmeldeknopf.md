@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: null
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/shell.tsx
@@ -208,3 +210,89 @@ aber es hat den Scope nicht gesetzt, weil er nirgends steht.**
 
 `[read]` **Und dann greift auch der Abmeldeknopf richtig** ?
 **heute wuerde er beide Anwendungen abmelden.**
+
+## Auftrag
+
+**Beauftragt am 2026-09-08.**
+
+`[cmd]` **Teil 3 (der Cookie) ist ERLEDIGT** ?
+`apps/coach/.env.local` **angelegt mit
+`NEXT_PUBLIC_AUTH_COOKIE_SCOPE=coach`, Server neu gestartet,
+HTTP 200.**
+
+`[read]` **Es bleiben zwei: der Abmeldeknopf und die Anmeldung.**
+
+### 1 - Der Abmeldeknopf in `apps/web`
+
+`[cmd]` **`v2/shell.tsx` uebergibt `userName` und `userStatus`,
+aber NICHT `userMenu`.**
+
+`[cmd]` **`sidebar.tsx:87`:** *,,Menue rechts unten, z. B.
+Abmelden. Ohne Angabe fehlt der Knopf."*
+
+`[cmd]` **Vorlage:**
+`apps/coach/src/app/auth/abmelden/route.ts` ? **POST, nicht
+GET.**
+
+`[read]` **GET waere von einem Bild oder Vorschau-Abruf
+ausloesbar.**
+
+### 2 - Die Anmeldung auf v2
+
+`[cmd]` **`login-form.tsx` nutzt Tailwind:**
+`rounded-token`, `text-fg-muted`, `bg-bg-e`,
+`bg-[var(--acc)]`.
+
+`[cmd]` **Kein `v2-card`, kein `v2-btn`, kein `v2-input`.**
+
+`[cmd]` **Und `apps/coach` hat mit `coach-login-form.tsx` eine
+DRITTE Fassung.**
+
+`[read]` **Drei Anmeldeformulare** ? **dieselbe Lehre wie Tokens,
+Trenner und Seitenleiste.**
+
+`[read]` **Miss, ob eine Fassung in `packages/ui` traegt** ? **mit
+eigenem Titel und eigenem Ziel je Anwendung.**
+
+`[read]` **Oder begruende, warum zwei bleiben muessen.**
+
+### 3 - Und die anderen Anwendungen
+
+`[cmd]` **`apps/admin` setzt den Scope, `apps/coach` jetzt
+auch.**
+
+`[cmd]` **Miss `apps/buddy` und `apps/marketplace`** ? **haben sie
+denselben Mangel?**
+
+## Abnahmebedingungen
+
+    A1  Abmelde-Route in apps/web, POST. Gegenprobe:
+        GET wird abgewiesen.
+    A2  userMenu an AppShell. Bildschirmfoto der
+        Nutzerzeile mit Knopf.
+    A3  abgemeldet -> /login, und der Cookie ist weg.
+        Gemessen, nicht behauptet.
+    A4  die Anmeldung auf v2-Bausteine. Foto vorher/nachher.
+    A5  drei Formulare -> wie viele? Begruendet.
+    A6  apps/buddy und apps/marketplace: Scope gesetzt?
+        Gemessen.
+    A7  apps/web 1545, apps/coach 65/65.
+
+## Was nicht zu tun ist
+
+**Nichts in `supabase/`** ? **Codex arbeitet an C-461.**
+**`?bereich=` und `?draft=` NICHT anfassen.**
+Nicht committen, nicht stagen, nicht pushen.
+
+## Der Dev-Server
+
+`[cmd]` **3200 und 3220 laufen.**
+`[cmd]` **NIE `start`, `neustart`, `aufraeumen`.**
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

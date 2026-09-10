@@ -5,10 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 209 |
-| `laufend_claudecode` | 5 |
+| `todos` | 208 |
+| `laufend_codex` | 3 |
+| `laufend_claudecode` | 6 |
 | `erledigt` | 393 |
-| **gesamt** | **607** |
+| **gesamt** | **610** |
 
 ## medical — 48
 
@@ -385,7 +386,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 20
+## training — 21
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -397,6 +398,7 @@
 | `C-169` | befund | mittel | [Das Trainingsplan-Schema steht im Entwurf](todos/training-c-0169-das-trainingsplan-schema-steht-im-entwurf.md) | offen | — | — |
 | `C-330` | befund | niedrig | [geplante Sitzungen tragen eine Endzeit](todos/training-c-0330-planned-sitzungen-mit-endzeit.md) | offen | — | — |
 | `C-340` | feature | niedrig | [ein Training-Gesamtscore, vorgesehen](todos/training-c-0340-ein-Training-Gesamtscore-vorgesehen.md) | offen | — | — |
+| `C-461` | feature | hoch | [Programme und Plaene](laufend_codex/training-c-0461-programme-und-plaene.md) | laeuft (codex) | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
@@ -410,7 +412,7 @@
 | `G-219` | entscheidung | niedrig | [`LiveWorkout` hat keinen Aufrufer mehr](todos/training-g-0219-liveworkout-ohne-aufrufer.md) | offen | — | — |
 | `G-366` | feature | mittel | [die Uebungsliste der Sitzung](erledigt/training-g-0366-die-uebungsliste-der-sitzung.md) | erledigt | — | — |
 
-## recovery — 26
+## recovery — 27
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -433,6 +435,7 @@
 | `C-238` | blocker | hoch | [`meal_plan_entries` hat keinen Status](erledigt/recovery-c-0238-meal-plan-entries-hat-keinen-status.md) | erledigt | — | — |
 | `C-339` | feature | niedrig | [ein Recovery-Gesamtscore, vorgesehen](todos/recovery-c-0339-ein-Recovery-Gesamtscore-vorgesehen.md) | offen | — | — |
 | `C-421` | feature | hoch | [vier Tabellen fuer die 17 Attrappen](erledigt/recovery-c-0421-vier-tabellen-fuer-die-17-attrappen.md) | erledigt | — | C-422 |
+| `C-462` | feature | hoch | [vier Ansichten ohne Tabelle](laufend_codex/recovery-c-0462-vier-ansichten-ohne-tabelle.md) | laeuft (codex) | — | — |
 | `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](erledigt/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | erledigt | — | — |
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
@@ -441,7 +444,7 @@
 | `G-367` | feature | mittel | [Stunden und Saetze je Muskel](erledigt/recovery-g-0367-per-muscle-stunden-und-saetze.md) | erledigt | — | — |
 | `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](erledigt/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | erledigt | — | — |
 
-## goals — 9
+## goals — 10
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -449,6 +452,7 @@
 | `C-425` | befund | mittel | [die Vorgabe von `priority` faellt durch den CHECK](erledigt/goals-c-0425-die-vorgabe-von-priority-faellt-durch-den-check.md) | erledigt | — | C-432 |
 | `C-432` | feature | mittel | [der freie Platz fuer ein neues Ziel](erledigt/goals-c-0432-der-freie-platz-fuer-ein-neues-ziel.md) | erledigt | — | C-433 |
 | `C-433` | feature | mittel | [C-432 einspielen](erledigt/goals-c-0433-c-432-einspielen.md) | erledigt | — | — |
+| `C-463` | feature | hoch | [drei Modale ohne Ziel](laufend_codex/goals-c-0463-drei-modale-ohne-ziel.md) | laeuft (codex) | — | — |
 | `E-04` | blocker | hoch | [Alte `public`-Tabellen nach `legacy` verschieben](erledigt/goals-e-0004-alte-public-tabellen-nach-legacy-verschieben.md) | erledigt | — | — |
 | `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](erledigt/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | erledigt | — | — |
 | `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — | — |
@@ -659,7 +663,7 @@
 | `G-403` | entscheidung | mittel | [der Trenner und die Tokens, zweite Haelfte](todos/quer-g-0403-der-trenner-und-die-tokens.md) | offen | — | C-458, G-404 |
 | `G-406` | befund | mittel | [`.v2-empty` zweimal definiert](erledigt/quer-g-0406-v2-empty-zweimal-definiert.md) | erledigt | — | — |
 | `G-408` | befund | niedrig | [Bildschirmfotos liegen nur lokal](todos/quer-g-0408-bilder-liegen-nur-lokal.md) | offen | — | — |
-| `G-411` | fehler | hoch | [LumeOS hat keinen Abmeldeknopf](todos/quer-g-0411-lumeos-hat-keinen-abmeldeknopf.md) | offen | — | — |
+| `G-411` | fehler | hoch | [LumeOS hat keinen Abmeldeknopf](laufend_claudecode/quer-g-0411-lumeos-hat-keinen-abmeldeknopf.md) | laeuft (claudecode) | — | — |
 
 ## market — 3
 
