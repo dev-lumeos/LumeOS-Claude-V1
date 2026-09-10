@@ -6,9 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 209 |
-| `laufend_codex` | 1 |
 | `laufend_claudecode` | 5 |
-| `erledigt` | 392 |
+| `erledigt` | 393 |
 | **gesamt** | **607** |
 
 ## medical — 48
@@ -492,7 +491,7 @@
 | `C-450` | entscheidung | hoch | [wer vergibt die Coach-Rolle?](erledigt/coach-c-0450-wer-vergibt-die-coach-rolle.md) | erledigt | — | C-451 |
 | `C-451` | entscheidung | mittel | [die Aufnahme eines Coaches](todos/coach-c-0451-die-aufnahme-eines-coaches.md) | offen | — | — |
 | `C-458` | feature | hoch | [was ein Coach einstellt](todos/coach-c-0458-was-ein-coach-einstellt.md) | offen | — | — |
-| `C-459` | feature | mittel | [der Alarm-Erzeuger](laufend_codex/coach-c-0459-der-alarm-erzeuger.md) | laeuft (codex) | — | — |
+| `C-459` | feature | mittel | [der Alarm-Erzeuger](erledigt/coach-c-0459-der-alarm-erzeuger.md) | erledigt | — | — |
 | `C-460` | feature | hoch | [welcher Coach fuer welches Modul?](todos/coach-c-0460-welcher-coach-fuer-welches-modul.md) | offen | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |

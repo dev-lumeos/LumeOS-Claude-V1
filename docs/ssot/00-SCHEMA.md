@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-10: 185 Funktionen, 423 Policies, 619 CHECKs, 13 Sichten.**
+`[cmd]` **Stand 2026-09-10: 186 Funktionen, 427 Policies, 624 CHECKs, 13 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -27,6 +27,7 @@ ob man sie rufen kann.**
 | coach | log_relationship_change |  | Funktion |
 | coach | offene_aktionen | p_modul text | Funktion |
 | coach | onboard_coach | p_display_name text | Funktion |
+| coach | raise_alert | p_client uuid, p_kind text, p_severity text, p_title text, p_detail text, p_metric jsonb DEFAULT '{}'::jsonb | Funktion |
 | coach | resolve_invite_user_id | p_email text | Funktion |
 | coach | set_changed_by |  | Funktion |
 | coach | summary_goals | p_client uuid | Funktion |
@@ -150,8 +151,8 @@ ob man sie rufen kann.**
 | public | is_admin |  | Funktion |
 | public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein | text, text | Funktion |
-| public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer | Funktion |
+| public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
 | public | set_limit | real | Funktion |
 | public | show_limit |  | Funktion |
@@ -229,10 +230,15 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | Modul | Tabelle | Name | Bedingung |
 |---|---|---|---|
 | coach | action_log | action_log_module_check | CHECK ((module = ANY (ARRAY['nutrition'::text, 'training'::text, 'recovery'::text, 'goals'::text, 'supplements'::text, 'medical':: |
+| coach | alert_settings | alert_settings_activity_threshold_days_check | CHECK ((activity_threshold_days > 0)) |
+| coach | alert_settings | alert_settings_adherence_threshold_pct_check | CHECK (((adherence_threshold_pct >= 0) AND (adherence_threshold_pct <= 100))) |
+| coach | alert_settings | alert_settings_engagement_threshold_days_check | CHECK ((engagement_threshold_days > 0)) |
 | coach | alerts | alerts_done_ck | CHECK (((status <> 'done'::text) OR (done_at IS NOT NULL))) |
+| coach | alerts | alerts_kind_ck | CHECK (((kind IS NULL) OR (kind = ANY (ARRAY['checkin_overdue'::text, 'inactivity'::text, 'adherence_low'::text, 'progress_stagnat |
 | coach | alerts | alerts_metric_check | CHECK ((jsonb_typeof(metric) = 'object'::text)) |
 | coach | alerts | alerts_module_check | CHECK ((module = ANY (ARRAY['nutrition'::text, 'training'::text, 'recovery'::text, 'goals'::text, 'supplements'::text, 'medical':: |
 | coach | alerts | alerts_not_self_ck | CHECK ((coach_id <> client_id)) |
+| coach | alerts | alerts_severity_ck | CHECK (((severity IS NULL) OR (severity = ANY (ARRAY['info'::text, 'low'::text, 'medium'::text, 'high'::text, 'critical'::text]))) |
 | coach | alerts | alerts_status_check | CHECK ((status = ANY (ARRAY['open'::text, 'read'::text, 'done'::text]))) |
 | coach | autonomy_change_log | autonomy_change_log_change_kind_check | CHECK ((change_kind = ANY (ARRAY['insert'::text, 'update'::text, 'delete'::text]))) |
 | coach | checkin_templates | checkin_templates_cadence_check | CHECK ((cadence = ANY (ARRAY['weekly'::text, 'biweekly'::text, 'monthly'::text]))) |
@@ -856,6 +862,10 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | Modul | Tabelle | Policy | Recht | Bedingung |
 |---|---|---|---|---|
 | coach | action_log | action_log_select | SELECT | ((( SELECT auth.uid() AS uid) = coach_id) OR (( SELECT auth.uid() AS uid) = client_id)) |
+| coach | alert_settings | alert_settings_delete | DELETE | (( SELECT auth.uid() AS uid) = coach_id) |
+| coach | alert_settings | alert_settings_insert | INSERT | (( SELECT auth.uid() AS uid) = coach_id) |
+| coach | alert_settings | alert_settings_select | SELECT | (( SELECT auth.uid() AS uid) = coach_id) |
+| coach | alert_settings | alert_settings_update | UPDATE | (( SELECT auth.uid() AS uid) = coach_id) |
 | coach | alerts | alerts_insert | INSERT | (( SELECT auth.uid() AS uid) = coach_id) |
 | coach | alerts | alerts_select | SELECT | ((( SELECT auth.uid() AS uid) = coach_id) OR (( SELECT auth.uid() AS uid) = client_id)) |
 | coach | alerts | alerts_update | UPDATE | (( SELECT auth.uid() AS uid) = coach_id) |

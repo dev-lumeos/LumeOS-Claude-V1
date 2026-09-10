@@ -9,6 +9,8 @@ kind_von: G-402
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: d582052b
 beruehrt:
   tabellen: [coach.relationships]
 zahlen:
@@ -109,3 +111,62 @@ EXECUTE (`backup/c459-final-test.out`).
 
 `node tools/punkte-pruefen.mjs`: **grün**, 607 Punkte und 25/25
 erwartete Befunde; TypeScript-Prüfung ebenfalls grün.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    kind und severity an coach.alerts, beide mit CHECK
+    severity: info | low | medium | high | critical
+    coach.alert_settings, RLS an, vier Policies
+    coach.raise_alert(client, kind, severity, title,
+                      detail, metric)
+    anon ohne EXECUTE
+    Vollkette SCHEMA VOLLSTAENDIG, 367,4 s
+    Sicherung 12.661 B, SHA-256
+
+`[cmd]` **Selbst gemessen: alle sechs Punkte stimmen.**
+
+### `alert_settings` traegt genau, was ein Coach einstellt
+
+`[cmd]` **Sieben Felder:**
+
+    activity_threshold_days
+    adherence_threshold_pct
+    engagement_threshold_days
+    notify_activity
+    notify_adherence
+    notify_progress
+    notify_engagement
+
+`[read]` **Drei Schwellen und vier Schalter** ? **nicht eine
+JSONB-Wolke.**
+
+### Die wichtigste Zeile des Berichts
+
+> *,,Keine erfundenen Regeln: Adherence, Buddy-Engagement und
+> Safety fehlen als belastbare Eingaenge. Medical-/Safety-Erzeugung
+> bleibt wegen E-74 ausgeschlossen."*
+
+`[cmd]` **Der Auftrag nannte fuenf Pruefungen aus dem Altrepo:**
+`checkAdherence`, `checkEngagement`, `checkInactivity`,
+`checkProgressStagnation`, `checkSafetyIssues`.
+
+`[read]` **Er hat gemessen, welche Daten haben** ? **und die
+anderen NICHT gebaut.**
+
+`[cmd]` **`checkSafetyIssues` haette E-74 gebrochen** ? **genau
+der Fall, den ich zu messen verlangt hatte.**
+
+`[read]` **Und die Schwellen stehen trotzdem in
+`alert_settings`** ? **die Einstellung ist da, der Erzeuger
+folgt, wenn die Eingaenge stehen.**
+
+### Die Doppelsperre ist belegt
+
+`[cmd]` **24 Stunden, mit Gegenprobe:** *,,Duplikat bleibt bei
+einer Zeile, fremder Coach und medical werden abgewiesen."*
+
+`[read]` **Drei Bedingungen in einer Probe.**
+
+**Abgenommen.**

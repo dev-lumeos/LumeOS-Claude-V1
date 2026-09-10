@@ -13,17 +13,18 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-10 — 172 Tabellen, 2445 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-10 — 173 Tabellen, 2457 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 
-## coach — 15 Tabellen, 184 Spalten
+## coach — 16 Tabellen, 196 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
 | `action_log` | 12 | 1 | ? |
-| `alerts` | 13 | 6 | ? |
+| `alert_settings` | 10 | 0 | 2026-09-09 |
+| `alerts` | 15 | 6 | ? |
 | `autonomy_change_log` | 9 | 6 | ? |
 | `checkin_templates` | 10 | 2 | ? |
 | `checkins` | 16 | 6 | ? |
