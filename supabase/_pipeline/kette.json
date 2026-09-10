@@ -1782,6 +1782,20 @@
       "kind": "sql",
       "creates": "C-459: faktische Coach-Alerts mit Einstellungen und 24h-Deduplizierung, ohne Medical-Safety-Bewertung",
       "depends_on": ["457_lab_report_ocr", "154"]
+    },
+    {
+      "id": "461_training_programs_plans",
+      "path": "supabase/migrations/20260909250000_c461_training_programs_plans.sql",
+      "kind": "sql",
+      "creates": "C-461: eigene Routinen, mehrwoechige Programme, bestaetigte Zuweisungen und nullable Sitzungsreferenzen",
+      "depends_on": ["106", "459_coach_alert_producer"]
+    },
+    {
+      "id": "461_program_day_owner_guard",
+      "path": "supabase/migrations/20260909251000_c461_program_day_owner_guard.sql",
+      "kind": "sql",
+      "creates": "C-461: Programmtage duerfen nur Routinen desselben Nutzers referenzieren",
+      "depends_on": ["461_training_programs_plans"]
     }
   ]
 }

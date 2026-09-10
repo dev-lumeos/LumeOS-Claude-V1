@@ -2864,6 +2864,76 @@
       "zeilenschutzart": "eigene_zeilen"
     },
     {
+      "schema": "training",
+      "name": "routines",
+      "schritt": "461_training_programs_plans",
+      "rls": true,
+      "policies": ["ALL"],
+      "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": ["id", "user_id", "source", "name", "description", "days_per_week", "is_active", "created_at", "updated_at"]
+    },
+    {
+      "schema": "training",
+      "name": "routine_exercises",
+      "schritt": "461_training_programs_plans",
+      "rls": true,
+      "policies": ["ALL"],
+      "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": ["id", "routine_id", "exercise_id", "exercise_order", "target_sets", "target_reps", "target_weight_kg", "target_percent_1rm", "notes", "created_at"]
+    },
+    {
+      "schema": "training",
+      "name": "routine_schedule_days",
+      "schritt": "461_training_programs_plans",
+      "rls": true,
+      "policies": ["ALL"],
+      "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": ["id", "routine_id", "day_of_week", "week_number", "created_at"]
+    },
+    {
+      "schema": "training",
+      "name": "programs",
+      "schritt": "461_training_programs_plans",
+      "rls": true,
+      "policies": ["ALL"],
+      "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": ["id", "user_id", "source", "name", "description", "duration_weeks", "created_at", "updated_at"]
+    },
+    {
+      "schema": "training",
+      "name": "program_blocks",
+      "schritt": "461_training_programs_plans",
+      "rls": true,
+      "policies": ["ALL"],
+      "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": ["id", "program_id", "week_start", "week_end", "label", "created_at"]
+    },
+    {
+      "schema": "training",
+      "name": "program_days",
+      "schritt": "461_training_programs_plans",
+      "rls": true,
+      "policies": ["ALL"],
+      "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": ["id", "program_id", "routine_id", "week_number", "day_of_week", "label", "created_at"]
+    },
+    {
+      "schema": "training",
+      "name": "program_assignments",
+      "schritt": "461_training_programs_plans",
+      "rls": true,
+      "policies": ["ALL"],
+      "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": ["id", "program_id", "user_id", "status", "proposed_at", "confirmed_at", "started_at", "ended_at", "created_at", "updated_at"]
+    },
+    {
       "schema": "recovery",
       "name": "checkins",
       "schritt": "120",
@@ -5751,6 +5821,16 @@
       "schema": "training",
       "name": "refresh_workout_totals",
       "schritt": "106"
+    },
+    {
+      "schema": "training",
+      "name": "validate_program_session_link",
+      "schritt": "461_training_programs_plans"
+    },
+    {
+      "schema": "training",
+      "name": "validate_program_day_routine_owner",
+      "schritt": "461_program_day_owner_guard"
     },
     {
       "schema": "recovery",
