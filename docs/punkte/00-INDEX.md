@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 207 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 5 |
+| `laufend_claudecode` | 6 |
 | `erledigt` | 390 |
-| **gesamt** | **603** |
+| **gesamt** | **604** |
 
 ## medical — 48
 
@@ -456,7 +456,7 @@
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 53
+## coach — 54
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -512,7 +512,8 @@
 | `G-402` | feature | hoch | [Klienten, Check-ins, Alerts](erledigt/coach-g-0402-klienten-checkins-alerts.md) | erledigt | — | C-459, G-403 |
 | `G-404` | feature | hoch | [Settings und Workspaces im Portal](laufend_claudecode/coach-g-0404-settings-und-workspaces-im-portal.md) | laeuft (claudecode) | — | G-405 |
 | `G-405` | feature | hoch | [Das Portal als Mockup der Vorlage](erledigt/coach-g-0405-das-portal-als-mockup-der-vorlage.md) | erledigt | — | G-406, G-407 |
-| `G-407` | feature | hoch | [den Draft fertigbauen](erledigt/coach-g-0407-den-draft-fertigbauen.md) | erledigt | — | G-408 |
+| `G-407` | feature | hoch | [den Draft fertigbauen](erledigt/coach-g-0407-den-draft-fertigbauen.md) | erledigt | — | G-408, G-409 |
+| `G-409` | feature | hoch | [die Tiefe und jeder Klick](laufend_claudecode/coach-g-0409-die-tiefe-und-jeder-klick.md) | laeuft (claudecode) | — | — |
 
 ## quer — 139
 
