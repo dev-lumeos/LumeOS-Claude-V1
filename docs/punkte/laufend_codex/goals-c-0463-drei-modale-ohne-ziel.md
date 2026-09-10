@@ -107,3 +107,36 @@ Gewicht dort schon steht.**
 
 `[read]` **Und keine Tabelle, die es unter anderem Namen schon
 gibt** ? **das ist heute dreimal passiert.**
+
+## Berichtigt 2026-09-08 — nach dem C-462-Stopp
+
+`[cmd]` **C-462 wurde als ueberholt geschlossen:** **drei der vier
+Tabellen gab es unter anderem Namen, zwei Messungen liegen in
+`checkins`.**
+
+`[read]` **Dasselbe gilt hier moeglicherweise.**
+
+### Zuerst messen, ob es sie schon gibt
+
+`[cmd]` **`goals` hat sieben Tabellen:**
+
+    body_circumferences, body_measurements,
+    goal_milestones, goal_phases, nutrition_targets,
+    phase_transition_responses, user_goals
+
+`[read]` **Miss JE SPALTE, nicht je Tabellenname:**
+
+    progress_photos    -> gibt es eine Fotospalte in
+                          body_measurements?
+                          Oder einen Bucket?
+    phase_transitions  -> goal_phases hat vermutlich
+                          start und ende
+                          phase_transition_responses ist LEER
+                          -- messen, was sie erwartet
+    body_weight_log    -> body_measurements hat 362 Zeilen
+                          -- steht das Gewicht dort?
+
+`[read]` **Wenn eine schon da ist: melden, nicht bauen.**
+
+`[read]` **Wenn nur FELDER fehlen: die Felder, nicht die
+Tabelle.**

@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-10: 186 Funktionen, 427 Policies, 624 CHECKs, 13 Sichten.**
+`[cmd]` **Stand 2026-09-10: 188 Funktionen, 434 Policies, 647 CHECKs, 13 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -151,8 +151,8 @@ ob man sie rufen kann.**
 | public | is_admin |  | Funktion |
 | public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein | text, text | Funktion |
-| public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
+| public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
 | public | set_limit | real | Funktion |
 | public | show_limit |  | Funktion |
@@ -199,6 +199,8 @@ ob man sie rufen kann.**
 | training | refresh_workout_totals |  | Funktion |
 | training | refresh_workout_totals_for_exercise | p_workout_exercise_id uuid | Funktion |
 | training | touch_updated_at |  | Funktion |
+| training | validate_program_day_routine_owner |  | Funktion |
+| training | validate_program_session_link |  | Funktion |
 | wissen | touch_updated_at |  | Funktion |
 
 ## Sichten
@@ -834,6 +836,29 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | training | exercises | exercises_tracking_type_check | CHECK ((tracking_type = ANY (ARRAY['weight_reps'::text, 'reps_only'::text, 'duration'::text, 'distance_duration'::text]))) |
 | training | muscle_groups | muscle_groups_body_region_check | CHECK (((body_region IS NULL) OR (body_region = ANY (ARRAY['chest'::text, 'back'::text, 'shoulders'::text, 'arms'::text, 'core'::t |
 | training | muscle_groups | muscle_groups_parent_not_self | CHECK (((parent_id IS NULL) OR (parent_id <> id))) |
+| training | program_assignments | program_assignments_confirmed_ck | CHECK (((status = 'proposed'::text) OR (confirmed_at IS NOT NULL))) |
+| training | program_assignments | program_assignments_ended_ck | CHECK (((status <> 'ended'::text) OR (ended_at IS NOT NULL))) |
+| training | program_assignments | program_assignments_started_ck | CHECK (((status <> ALL (ARRAY['running'::text, 'ended'::text])) OR (started_at IS NOT NULL))) |
+| training | program_assignments | program_assignments_status_check | CHECK ((status = ANY (ARRAY['proposed'::text, 'confirmed'::text, 'running'::text, 'ended'::text]))) |
+| training | program_blocks | program_blocks_check | CHECK ((week_end >= week_start)) |
+| training | program_blocks | program_blocks_label_check | CHECK ((btrim(label) <> ''::text)) |
+| training | program_blocks | program_blocks_week_start_check | CHECK ((week_start > 0)) |
+| training | program_days | program_days_day_of_week_check | CHECK (((day_of_week >= 0) AND (day_of_week <= 6))) |
+| training | program_days | program_days_week_number_check | CHECK ((week_number > 0)) |
+| training | programs | programs_duration_weeks_check | CHECK ((duration_weeks > 0)) |
+| training | programs | programs_name_check | CHECK ((btrim(name) <> ''::text)) |
+| training | programs | programs_source_check | CHECK ((source = ANY (ARRAY['self'::text, 'coach'::text, 'marketplace'::text]))) |
+| training | routine_exercises | routine_exercises_exercise_order_check | CHECK ((exercise_order > 0)) |
+| training | routine_exercises | routine_exercises_target_percent_1rm_check | CHECK (((target_percent_1rm IS NULL) OR (target_percent_1rm > (0)::numeric))) |
+| training | routine_exercises | routine_exercises_target_reps_check | CHECK ((btrim(target_reps) <> ''::text)) |
+| training | routine_exercises | routine_exercises_target_sets_check | CHECK ((target_sets > 0)) |
+| training | routine_exercises | routine_exercises_target_weight_kg_check | CHECK (((target_weight_kg IS NULL) OR (target_weight_kg >= (0)::numeric))) |
+| training | routine_exercises | routine_exercises_weight_or_percent_ck | CHECK (((target_weight_kg IS NULL) OR (target_percent_1rm IS NULL))) |
+| training | routine_schedule_days | routine_schedule_days_day_of_week_check | CHECK (((day_of_week >= 0) AND (day_of_week <= 6))) |
+| training | routine_schedule_days | routine_schedule_days_week_number_check | CHECK (((week_number IS NULL) OR (week_number > 0))) |
+| training | routines | routines_days_per_week_check | CHECK (((days_per_week IS NULL) OR ((days_per_week >= 1) AND (days_per_week <= 7)))) |
+| training | routines | routines_name_check | CHECK ((btrim(name) <> ''::text)) |
+| training | routines | routines_source_check | CHECK ((source = ANY (ARRAY['self'::text, 'coach'::text, 'marketplace'::text]))) |
 | training | workout_exercises | workout_exercises_exercise_order_check | CHECK ((exercise_order > 0)) |
 | training | workout_exercises | workout_exercises_planned_sets_check | CHECK (((planned_sets IS NULL) OR (planned_sets > 0))) |
 | training | workout_exercises | workout_exercises_planned_weight_kg_check | CHECK (((planned_weight_kg IS NULL) OR (planned_weight_kg >= (0)::numeric))) |
@@ -1263,6 +1288,13 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | training | muscle_groups | muscle_groups_admin_insert | INSERT | is_admin() |
 | training | muscle_groups | muscle_groups_admin_update | UPDATE | is_admin() |
 | training | muscle_groups | muscle_groups_select | SELECT | true |
+| training | program_assignments | program_assignments_owner | ALL | (( SELECT auth.uid() AS uid) = user_id) |
+| training | program_blocks | program_blocks_owner | ALL | (EXISTS ( SELECT 1    FROM training.programs p   WHERE ((p.id = program_blocks.program_id) |
+| training | program_days | program_days_owner | ALL | (EXISTS ( SELECT 1    FROM training.programs p   WHERE ((p.id = program_days.program_id) A |
+| training | programs | programs_owner | ALL | (( SELECT auth.uid() AS uid) = user_id) |
+| training | routine_exercises | routine_exercises_owner | ALL | (EXISTS ( SELECT 1    FROM training.routines r   WHERE ((r.id = routine_exercises.routine_ |
+| training | routine_schedule_days | routine_schedule_days_owner | ALL | (EXISTS ( SELECT 1    FROM training.routines r   WHERE ((r.id = routine_schedule_days.rout |
+| training | routines | routines_owner | ALL | (( SELECT auth.uid() AS uid) = user_id) |
 | training | workout_exercises | workout_exercises_coach_read | SELECT | (EXISTS ( SELECT 1    FROM training.workout_sessions s   WHERE ((s.id = workout_exercises. |
 | training | workout_exercises | workout_exercises_delete | DELETE | (EXISTS ( SELECT 1    FROM training.workout_sessions s   WHERE ((s.id = workout_exercises. |
 | training | workout_exercises | workout_exercises_insert | INSERT | (EXISTS ( SELECT 1    FROM training.workout_sessions s   WHERE ((s.id = workout_exercises. |

@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-10 — 173 Tabellen, 2457 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-10 — 180 Tabellen, 2514 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -101,7 +101,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `food_groups` | 5 | 19 | ? |
 | `food_nutrients` | 5 | 985320 | 2026-08-05 |
 | `food_preference_items` | 13 | 15 | 2026-08-05 |
-| `food_preference_search_targets` | 8 | 39603 | ? |
+| `food_preference_search_targets` | 8 | 18155 | ? |
 | `food_preferences` | 14 | 3 | 2026-08-05 |
 | `food_tags` | 3 | 30797 | 2026-08-05 |
 | `food_tags_kuriert` | 5 | 0 | 2026-09-02 |
@@ -129,7 +129,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `recipe_curation_decisions` | 6 | 0 | ? |
 | `recipe_ingredients` | 15 | 22 | ? |
 | `recipes` | 19 | 6 | ? |
-| `search_events` | 9 | 337 | ? |
+| `search_events` | 9 | 373 | ? |
 | `search_synonyms` | 4 | 4877 | ? |
 | `shopping_list_items` | 15 | 33 | ? |
 | `shopping_lists` | 12 | 6 | ? |
@@ -213,7 +213,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `user_supplement_settings` | 11 | 0 | ? |
 | `wada_conflict_records` | 17 | 8 | ? |
 
-## training — 8 Tabellen, 105 Spalten
+## training — 15 Tabellen, 162 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -222,6 +222,13 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `exercise_muscles` | 3 | 6588 | ? |
 | `exercises` | 17 | 1416 | ? |
 | `muscle_groups` | 7 | 95 | ? |
+| `program_assignments` | 10 | 0 | 2026-09-09 |
+| `program_blocks` | 6 | 0 | 2026-09-09 |
+| `program_days` | 7 | 0 | 2026-09-09 |
+| `programs` | 8 | 0 | 2026-09-09 |
+| `routine_exercises` | 10 | 0 | 2026-09-09 |
+| `routine_schedule_days` | 5 | 0 | 2026-09-09 |
+| `routines` | 9 | 0 | 2026-09-09 |
 | `workout_exercises` | 16 | 132 | ? |
-| `workout_sessions` | 17 | 66 | ? |
+| `workout_sessions` | 19 | 66 | ? |
 | `workout_sets` | 21 | 258 | ? |

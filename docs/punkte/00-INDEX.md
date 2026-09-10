@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 211 |
-| `laufend_codex` | 2 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 5 |
-| `erledigt` | 394 |
-| **gesamt** | **612** |
+| `erledigt` | 396 |
+| **gesamt** | **613** |
 
 ## medical — 48
 
@@ -388,7 +388,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 20
+## training — 21
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -400,6 +400,7 @@
 | `C-169` | befund | mittel | [Das Trainingsplan-Schema steht im Entwurf](todos/training-c-0169-das-trainingsplan-schema-steht-im-entwurf.md) | offen | — | — |
 | `C-330` | befund | niedrig | [geplante Sitzungen tragen eine Endzeit](todos/training-c-0330-planned-sitzungen-mit-endzeit.md) | offen | — | — |
 | `C-340` | feature | niedrig | [ein Training-Gesamtscore, vorgesehen](todos/training-c-0340-ein-Training-Gesamtscore-vorgesehen.md) | offen | — | — |
+| `C-461` | feature | hoch | [Programme und Plaene](erledigt/training-c-0461-programme-und-plaene.md) | erledigt | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
@@ -436,7 +437,7 @@
 | `C-238` | blocker | hoch | [`meal_plan_entries` hat keinen Status](erledigt/recovery-c-0238-meal-plan-entries-hat-keinen-status.md) | erledigt | — | — |
 | `C-339` | feature | niedrig | [ein Recovery-Gesamtscore, vorgesehen](todos/recovery-c-0339-ein-Recovery-Gesamtscore-vorgesehen.md) | offen | — | — |
 | `C-421` | feature | hoch | [vier Tabellen fuer die 17 Attrappen](erledigt/recovery-c-0421-vier-tabellen-fuer-die-17-attrappen.md) | erledigt | — | C-422 |
-| `C-462` | feature | hoch | [vier Ansichten ohne Tabelle](laufend_codex/recovery-c-0462-vier-ansichten-ohne-tabelle.md) | laeuft (codex) | — | — |
+| `C-462` | feature | hoch | [vier Ansichten ohne Tabelle](erledigt/recovery-c-0462-vier-ansichten-ohne-tabelle.md) | erledigt | — | — |
 | `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](erledigt/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | erledigt | — | — |
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
