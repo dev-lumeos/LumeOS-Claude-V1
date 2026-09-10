@@ -1,0 +1,74 @@
+[
+ {
+  "kachel": "Monatsraster",
+  "vorlage": 11,
+  "gebaut": 11,
+  "fehlt": []
+ },
+ {
+  "kachel": "Legende",
+  "vorlage": 5,
+  "gebaut": 5,
+  "fehlt": []
+ },
+ {
+  "kachel": "Als naechstes",
+  "vorlage": 4,
+  "gebaut": 4,
+  "fehlt": []
+ },
+ {
+  "kachel": "Klientenkarte",
+  "vorlage": 11,
+  "gebaut": 11,
+  "fehlt": []
+ },
+ {
+  "kachel": "Akte/Overview",
+  "vorlage": 12,
+  "gebaut": 12,
+  "fehlt": []
+ },
+ {
+  "kachel": "Akte/Training",
+  "vorlage": 9,
+  "gebaut": 9,
+  "fehlt": []
+ },
+ {
+  "kachel": "Akte/Nutrition",
+  "vorlage": 14,
+  "gebaut": 14,
+  "fehlt": []
+ },
+ {
+  "kachel": "Akte/Recovery",
+  "vorlage": 4,
+  "gebaut": 4,
+  "fehlt": []
+ },
+ {
+  "kachel": "Akte/Supplements",
+  "vorlage": 7,
+  "gebaut": 7,
+  "fehlt": []
+ },
+ {
+  "kachel": "Akte/Body",
+  "vorlage": 3,
+  "gebaut": 3,
+  "fehlt": []
+ },
+ {
+  "kachel": "Akte/Medical",
+  "vorlage": 2,
+  "gebaut": 2,
+  "fehlt": []
+ },
+ {
+  "kachel": "Akte/Timeline",
+  "vorlage": 2,
+  "gebaut": 2,
+  "fehlt": []
+ }
+]

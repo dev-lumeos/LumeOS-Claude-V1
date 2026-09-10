@@ -1,0 +1,69 @@
+{
+ "zeilen": [
+  {
+   "reiter": "Overview",
+   "karten": 4,
+   "kennzahlen": 0,
+   "zeilen": 12,
+   "balken": 0,
+   "vermerke": 4
+  },
+  {
+   "reiter": "Training",
+   "karten": 3,
+   "kennzahlen": 4,
+   "zeilen": 0,
+   "balken": 0,
+   "vermerke": 3
+  },
+  {
+   "reiter": "Nutrition",
+   "karten": 4,
+   "kennzahlen": 4,
+   "zeilen": 0,
+   "balken": 6,
+   "vermerke": 4
+  },
+  {
+   "reiter": "Recovery",
+   "karten": 4,
+   "kennzahlen": 4,
+   "zeilen": 0,
+   "balken": 0,
+   "vermerke": 4
+  },
+  {
+   "reiter": "Supplements",
+   "karten": 2,
+   "kennzahlen": 0,
+   "zeilen": 0,
+   "balken": 6,
+   "vermerke": 2
+  },
+  {
+   "reiter": "Body",
+   "karten": 3,
+   "kennzahlen": 4,
+   "zeilen": 4,
+   "balken": 0,
+   "vermerke": 3
+  },
+  {
+   "reiter": "Medical",
+   "karten": 2,
+   "kennzahlen": 0,
+   "zeilen": 4,
+   "balken": 0,
+   "vermerke": 2
+  },
+  {
+   "reiter": "Timeline",
+   "karten": 2,
+   "kennzahlen": 0,
+   "zeilen": 7,
+   "balken": 0,
+   "vermerke": 2
+  }
+ ],
+ "treffer": []
+}

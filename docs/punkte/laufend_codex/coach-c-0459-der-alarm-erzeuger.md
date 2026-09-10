@@ -75,3 +75,37 @@ da sind.**
 
 `[cmd]` **`checkSafetyIssues` koennte genau das sein** ? **messen
 und melden, bevor du es baust.**
+
+---
+
+## Bericht — 2026-09-10
+
+**Erledigt: Erzeuger-Kern, keine erfundenen Fachregeln.**
+
+`coach.alerts` trägt jetzt `kind` und `severity`; bestehende Alerts
+bleiben dort ehrlich leer. `coach.alert_settings` enthält pro Coach
+Schwellen und Schalter für Aktivität, Adherence und Engagement, aber
+keine Abrechnungs-`tier`.
+
+`coach.raise_alert(...)` verlangt eine aktive eigene Beziehung,
+nimmt einen transaktionalen Advisory Lock und dedupliziert gleichen
+Coach, Klient und Kind über 24 Stunden. Nur faktische,
+nichtmedizinische Kinds werden angenommen.
+
+Die fünf Altrepo-Prüfungen: Beziehungen und Check-ins existieren;
+die Quellen für Nutrition-Inaktivität, Buddy-Engagement und
+Buddy-Safety fehlen. Adherence ist ohne Plan gegen Ist nicht
+berechenbar. Daher keine erfundene Prozentzahl oder automatische
+Regel. `checkSafetyIssues` bleibt wegen E-74 ausgeschlossen.
+
+Sicherung: `backup/schema/20260910150000_c459_alerts_vor_einspielen.dump`,
+**12.661 B**, SHA-256
+`20271D23FE842C298243B54E85E788C6C296B75330068B66AC63992E1B571222`.
+
+Frischer Aufbau `lumeos_c459_final3`: **SCHEMA VOLLSTAENDIG**,
+**367,4 s**. Gegenprobe grün: 1 Subtest, **1,00 s**; Duplikat bleibt
+bei 1, fremder Coach und `medical` werden abgewiesen, anon hat kein
+EXECUTE (`backup/c459-final-test.out`).
+
+`node tools/punkte-pruefen.mjs`: **grün**, 607 Punkte und 25/25
+erwartete Befunde; TypeScript-Prüfung ebenfalls grün.

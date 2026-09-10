@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 209 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 6 |
-| `erledigt` | 391 |
+| `laufend_claudecode` | 5 |
+| `erledigt` | 392 |
 | **gesamt** | **607** |
 
 ## medical — 48
@@ -515,7 +515,7 @@
 | `G-405` | feature | hoch | [Das Portal als Mockup der Vorlage](erledigt/coach-g-0405-das-portal-als-mockup-der-vorlage.md) | erledigt | — | G-406, G-407 |
 | `G-407` | feature | hoch | [den Draft fertigbauen](erledigt/coach-g-0407-den-draft-fertigbauen.md) | erledigt | — | G-408, G-409 |
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | C-460, G-410 |
-| `G-410` | feature | hoch | [der Kalender und das Athletendetail](laufend_claudecode/coach-g-0410-kalender-und-athletendetail.md) | laeuft (claudecode) | — | — |
+| `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
 ## quer — 140
 

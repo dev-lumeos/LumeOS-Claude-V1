@@ -9,6 +9,8 @@ kind_von: G-409
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 1deb19b9
 beruehrt:
   dateien:
     - apps/coach/src/components/draft/ansicht-akte.tsx
@@ -358,4 +360,77 @@ Abhaengigkeit.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  Monatsraster, 1.5fr/1fr, 7 Spalten, 35 Zellen,
+        14 Striche, Legende 5, Upcoming 7
+    A2  acht Reiter mit den Kacheln der Vorlage
+    A3  0 Spaltennamen am Schirm
+    A4  84 von 84 Vorlagenwerten gefunden
+    A5  coach 65/65, web 1545/1545
+
+`[cmd]` **`kalender.png` angesehen:** **Monatsraster mit
+Farbstreifen, der 10. gewaehlt, Tagesspalte mit drei Terminen,
+*Als naechstes* mit sieben, Legende mit fuenf Arten.**
+
+`[cmd]` **`akte/nutrition.png` angesehen:** **Kalorien heute
+2.180, Protein 218 g, Adhaerenz 7 Tage 97 %, Wasser 4,2 L** ?
+**darunter Makros mit drei Balken, Diese Woche mit Sa
+hervorgehoben, Mikronaehrstoffe mit drei Balken.**
+
+`[read]` **Das ist die Vorlage.**
+
+### A4 ist die richtige Messung
+
+> *,,Die Werte aus der Vorlage gelesen und im gerenderten Text
+> gesucht ? 84 von 84 gefunden, keine Abweichung."*
+
+`[read]` **Nicht *,,sieht aehnlich aus"*** ? **jeder Wert der
+Vorlage im fertigen Schirm wiedergefunden.**
+
+### Die Sprachregel, richtig getroffen
+
+> *,,Beschriftungen englisch, Untertitel deutsch ? halb und halb
+> ist keine Sprache. 28 Beschriftungen uebersetzt, die Werte
+> unangetastet: *Calories today* -> *Kalorien heute*, aber 2.180
+> bleibt 2.180."*
+
+`[read]` **Genau die Grenze aus dem Auftrag:** **die Sprache ist
+frei, die Form nicht.**
+
+### Zwei Bauteile fehlten in der Vorlage selbst
+
+`[cmd]` **`BarSeries` wird dreimal gerufen und nirgends
+definiert** ? **wie `Empty` in G-407.**
+
+> *,,Nach den Requisiten der Aufrufe gebaut, in `apps/coach`."*
+
+`[read]` **Er hat es nicht durch eine Kurve ersetzt** ? **die
+Vorlage zeigt Balken, also Balken.**
+
+### Und die eine benannte Abweichung
+
+> *,,Die Vorlage rechnet das Raster mit `new Date(2026, 8, 1)`.
+> Hier steht das Ergebnis fest, wegen G-390 ? serverseitig
+> gerendert, und ein `new Date()` im Browser rechnet in anderer
+> Zeitzone. Eine Probe rechnet nach, ob die feste Liste noch
+> stimmt, sonst waere sie ein Gedaechtnis statt ein Mass."*
+
+`[read]` **Eine feste Liste mit einer Probe dahinter** ? **das ist
+kein Erfinden, das ist G-390 angewandt.**
+
+### Der Waechter, der zuerst falsch mass
+
+`[cmd]` **Er verbot jede Ziffer im Uebersetzungsschluessel und
+fiel ueber `Sessions - 7d`** ? **das ist eine Beschriftung, keine
+Zahl.**
+
+> *,,Jetzt misst er die richtige Sache: ein uebersetzter Wert
+> waere einer, der in der Vorlage als zweites Glied eines Paares
+> steht."*
+
+`[read]` **Ein billiger Ersatzmassstab statt der Eigenschaft
+selbst** ? **gemerkt und behoben.**
+
+**Abgenommen.**
+
