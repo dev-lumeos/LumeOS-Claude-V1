@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **17 Punkte tragen `typ: entscheidung`
+`[cmd]` **18 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -659,6 +659,45 @@ nicht.** `[cmd]` **`LAUFEND.md` ist genau daran gestorben.**
 `[read]` **Ein Mittelweg waere, ihn auf Zuruf zu behalten** — er wird
 in jedem UI-Auftrag ohnehin verlangt, **und die Zahl steht dann im
 Bericht statt in einem Lauf, den niemand ansieht.**
+
+## G-414 — admin und coach teilen 65 Prozent
+
+**Modul:** quer · **angelegt:** 2026-09-08 · **Datei:** `todos/quer-g-0414-admin-und-coach-teilen-65-prozent.md`
+
+## Befund
+
+Aus G-411, Claude Code, 2026-09-08:
+
+> *,,Die Formulare selbst bleiben drei: `web` teilt nur 15 % mit
+> den anderen (`signUp`, `react-hook-form/zod` ? eine
+> dokumentierte Entscheidung), `admin`/`coach` 65 %, aber deren
+> Unterschied ist Titel und Hinweistext."*
+
+`[read]` **Zwei Formulare, die sich in zwei Zeichenketten
+unterscheiden.**
+
+## Die Entscheidung
+
+**a** ? **Eine Fassung in `packages/ui`**, **Titel und Hinweis als
+Requisiten.**
+
+`[read]` **Dann sind es zwei statt drei.**
+
+**b** ? **So lassen.**
+
+`[read]` **65 Prozent sind viel, aber die beiden Anwendungen sind
+klein** ? **und eine gemeinsame Fassung bindet sie aneinander.**
+
+## Was dagegen spricht, es jetzt zu tun
+
+`[cmd]` **`web` teilt nur 15 Prozent** ? **eine gemeinsame Fassung
+haette `web` NICHT eingeschlossen.**
+
+`[read]` **Also: eine Doppelung weniger, aber die groesste
+Abweichung bleibt.**
+
+`[read]` **Kein dringender Punkt** ? **er steht hier, damit er
+nicht vergessen wird.**
 
 ## G-219 — `LiveWorkout` hat keinen Aufrufer mehr
 
