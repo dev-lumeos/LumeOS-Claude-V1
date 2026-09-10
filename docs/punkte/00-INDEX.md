@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 207 |
+| `todos` | 208 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 5 |
-| `erledigt` | 382 |
-| **gesamt** | **595** |
+| `laufend_claudecode` | 4 |
+| `erledigt` | 383 |
+| **gesamt** | **596** |
 
 ## medical — 48
 
@@ -507,9 +507,9 @@
 | `G-398` | befund | hoch | [die Portalkarten gehoeren nach 3220](erledigt/coach-g-0398-die-portalkarten-gehoeren-nach-3220.md) | erledigt | — | G-399, G-400 |
 | `G-400` | befund | hoch | [das Portal sieht nicht aus wie LumeOS](laufend_claudecode/coach-g-0400-das-portal-sieht-nicht-aus-wie-lumeos.md) | laeuft (claudecode) | — | G-401 |
 | `G-401` | feature | hoch | [das Klientendetail, vollstaendig](laufend_claudecode/coach-g-0401-das-klientendetail-vollstaendig.md) | laeuft (claudecode) | — | G-402 |
-| `G-402` | feature | hoch | [Klienten, Check-ins, Alerts](laufend_claudecode/coach-g-0402-klienten-checkins-alerts.md) | laeuft (claudecode) | — | — |
+| `G-402` | feature | hoch | [Klienten, Check-ins, Alerts](erledigt/coach-g-0402-klienten-checkins-alerts.md) | erledigt | — | G-403 |
 
-## quer — 136
+## quer — 137
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -649,6 +649,7 @@
 | `G-396` | feature | hoch | [die Beschriftung der Koerperkarte](erledigt/quer-g-0396-die-beschriftung-der-koerperkarte.md) | erledigt | — | — |
 | `G-397` | befund | mittel | [zwei Vorlagen kennt die Zaehlung nicht](erledigt/quer-g-0397-zwei-vorlagen-kennt-die-zaehlung-nicht.md) | erledigt | — | — |
 | `G-399` | befund | mittel | [der Trenner steht zweimal, und elf Karten zaehlt niemand](todos/quer-g-0399-der-trenner-steht-zweimal.md) | offen | — | — |
+| `G-403` | entscheidung | mittel | [der Trenner und die Tokens, zweite Haelfte](todos/quer-g-0403-der-trenner-und-die-tokens.md) | offen | — | — |
 
 ## market — 3
 
