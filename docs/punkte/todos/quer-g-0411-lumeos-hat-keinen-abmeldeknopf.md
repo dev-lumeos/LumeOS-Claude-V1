@@ -138,3 +138,73 @@ darauf** ? **mit eigenem Titel und eigenem Ziel.**
 
 `[cmd]` **`login-form.tsx:27`: `router.push(redirect)`** ?
 **pruefen, wohin `redirect` ohne Parameter zeigt.**
+
+## Nachtrag 2026-09-08 — die Ursache ist EINE ZEILE
+
+Tom: *,,ich vermute da ist ein autologin. ich hab mich im neuen
+fenster neu als coach angemeldet, und der ist jetzt auch wieder in
+lumeos angemeldet."*
+
+`[read]` **Kein Autologin** ? **derselbe Cookie.**
+
+### Der Mechanismus ist gebaut
+
+`[cmd]` **`packages/shared/src/supabase/cookie-name.ts:58-74`:**
+
+    authCookieName()
+      scope = NEXT_PUBLIC_AUTH_COOKIE_SCOPE
+      ohne scope -> undefined (Standardname)
+      mit scope  -> `sb-${ref}-${scope}-auth-token`
+
+`[cmd]` **Zeile 29-30 nennt die Belegung:**
+
+    web    sb-127-auth-token          (kein Suffix)
+    admin  sb-127-admin-auth-token
+
+`[cmd]` **Und `middleware.ts:21` in `apps/coach` erwaehnt es
+sogar:** *,,`NEXT_PUBLIC_AUTH_COOKIE_SCOPE=coach` ->
+`sb-<ref>-coach-auth-token`."*
+
+### Nur gesetzt ist es nicht
+
+`[cmd]` **Gemessen:**
+
+    apps/admin/.env.local   NEXT_PUBLIC_AUTH_COOKIE_SCOPE=admin
+    apps/coach/.env.local   DIE DATEI GIBT ES NICHT
+    apps/coach/.env         gibt es nicht
+    next.config.js          kein SCOPE
+
+`[read]` **`apps/coach` laeuft mit dem Standardnamen** ?
+**demselben wie `apps/web`.**
+
+`[cmd]` **Deshalb hat mein losgeloester Serverstart heute die
+Umgebung von `apps/web` mitgegeben** ? **und das war richtig,
+aber es hat den Scope nicht gesetzt, weil er nirgends steht.**
+
+### Und der Kommentar sagt, warum der Weg richtig ist
+
+`[cmd]` **Zeile 79-84:**
+
+> *,,Bewusst NUR `name` ? kein `domain`. Weg A haette `domain` auf
+> `.lumeos.app` gesetzt, was lokal nicht setzbar ist. Ein Weg, der
+> lokal anders funktioniert als in Produktion, ist ein Weg, den
+> niemand wirklich testet. Ein eigener NAME verhaelt sich ueberall
+> gleich."*
+
+`[read]` **Die Entscheidung ist getroffen und begruendet** ?
+**sie wurde bei `apps/coach` nur nicht angewandt.**
+
+### Was zu tun ist
+
+    1  apps/coach/.env.local anlegen
+       NEXT_PUBLIC_AUTH_COOKIE_SCOPE=coach
+       plus die Supabase-Schluessel
+
+    2  Gegenprobe: auf 3200 und 3220 gleichzeitig
+       verschiedene Konten, beide bleiben angemeldet
+
+    3  pruefen, ob apps/buddy und apps/marketplace
+       denselben Mangel haben
+
+`[read]` **Und dann greift auch der Abmeldeknopf richtig** ?
+**heute wuerde er beide Anwendungen abmelden.**
