@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-10 — 170 Tabellen, 2402 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-10 — 172 Tabellen, 2445 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -50,7 +50,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `phase_transition_responses` | 6 | 0 | ? |
 | `user_goals` | 23 | 11 | ? |
 
-## medical — 29 Tabellen, 457 Spalten
+## medical — 31 Tabellen, 500 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -61,13 +61,14 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `biomarker_reference_ranges` | 19 | 560 | ? |
 | `biomarker_spec_enrichment` | 31 | 51 | ? |
 | `health_events` | 13 | 4 | 2026-09-08 |
-| `injection_logs` | 12 | 0 | 2026-09-02 |
+| `injection_logs` | 20 | 0 | 2026-09-02 |
 | `injection_needle_recommendations` | 12 | 8 | 2026-09-02 |
 | `injection_site_conditions` | 10 | 0 | 2026-09-02 |
-| `injection_sites` | 10 | 16 | 2026-09-02 |
+| `injection_site_overrides` | 9 | 0 | 2026-09-09 |
+| `injection_sites` | 21 | 16 | 2026-09-02 |
 | `injection_tissue_condition_guidance` | 6 | 1 | 2026-09-02 |
 | `lab_marker_catalog` | 13 | 66 | ? |
-| `lab_reports` | 12 | 12 | ? |
+| `lab_reports` | 18 | 12 | ? |
 | `lab_result_values` | 27 | 280 | ? |
 | `medication_active_substances` | 28 | 498 | ? |
 | `medication_clinical_context_evidence` | 5 | 107 | ? |
@@ -82,6 +83,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `symptom_biomarker_map` | 15 | 102 | ? |
 | `symptoms` | 8 | 34 | ? |
 | `user_conditions` | 15 | 2 | ? |
+| `user_injection_site_selections` | 9 | 0 | 2026-09-09 |
 | `user_medications` | 25 | 2 | ? |
 
 ## nutrition — 45 Tabellen, 540 Spalten

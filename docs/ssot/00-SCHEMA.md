@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-10: 178 Funktionen, 416 Policies, 592 CHECKs, 13 Sichten.**
+`[cmd]` **Stand 2026-09-10: 185 Funktionen, 423 Policies, 619 CHECKs, 13 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -61,12 +61,19 @@ ob man sie rufen kann.**
 | medical | appointments_validate_owner_links |  | Funktion |
 | medical | attach_lab_report_original | p_report_id uuid, p_object_name text | Funktion |
 | medical | biomarker_marker_candidates | p_marker_name text, p_unit text DEFAULT NULL::text | Funktion |
+| medical | configured_injection_areas | p_substance_id uuid, p_route text | Funktion |
 | medical | health_events_validate_source_report |  | Funktion |
 | medical | import_lab_report_rows | p_user_id uuid, p_report_date date, p_report_time time without time zone, p_lab_name text, p_title text, p_source text, p_rows jsonb | Funktion |
 | medical | injection_body_measurement_context | p_user_id uuid DEFAULT auth.uid() | Funktion |
 | medical | injection_needle_suggestions | p_site text, p_route text, p_user_id uuid DEFAULT auth.uid() | Funktion |
 | medical | lab_result_values_read | p_user_id uuid, p_report_id uuid DEFAULT NULL::uuid | Funktion |
+| medical | log_injection_site_override |  | Funktion |
+| medical | start_lab_report_ocr | p_report_id uuid | Funktion |
+| medical | store_lab_report_ocr_result | p_report_id uuid, p_ocr_results jsonb, p_extracted_values jsonb | Funktion |
+| medical | suggest_configured_injection_area | p_substance_id uuid, p_route text | Funktion |
 | medical | touch_updated_at |  | Funktion |
+| medical | validate_injection_log_links |  | Funktion |
+| medical | validate_injection_site_selection |  | Funktion |
 | medical | validate_provenance |  | Funktion |
 | nutrition | copy_meal_plan_week | p_week_id uuid, p_target_week_start date | Funktion |
 | nutrition | copy_user_slots_to_new_self_created_plan |  | Funktion |
@@ -141,10 +148,10 @@ ob man sie rufen kann.**
 | public | gtrgm_union | internal, internal | Funktion |
 | public | handle_new_user |  | Funktion |
 | public | is_admin |  | Funktion |
-| public | levenshtein | text, text | Funktion |
 | public | levenshtein | text, text, integer, integer, integer | Funktion |
-| public | levenshtein_less_equal | text, text, integer | Funktion |
+| public | levenshtein | text, text | Funktion |
 | public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
+| public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
 | public | set_limit | real | Funktion |
 | public | show_limit |  | Funktion |
@@ -321,7 +328,12 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | medical | health_events | health_events_source_actor_check | CHECK ((btrim(source_actor) <> ''::text)) |
 | medical | health_events | health_events_source_kind_check | CHECK ((source_kind = ANY (ARRAY['user'::text, 'clinician'::text, 'document'::text, 'import'::text, 'seed'::text]))) |
 | medical | health_events | health_events_title_check | CHECK ((btrim(title) <> ''::text)) |
+| medical | injection_logs | injection_logs_body_area_code_check | CHECK ((btrim(body_area_code) <> ''::text)) |
 | medical | injection_logs | injection_logs_complication_values_check | CHECK (((complication IS NULL) OR (complication <@ ARRAY['none'::text, 'bleeding'::text, 'lump'::text, 'swelling'::text, 'redness' |
+| medical | injection_logs | injection_logs_dose_amount_check | CHECK (((dose_amount IS NULL) OR (dose_amount > (0)::numeric))) |
+| medical | injection_logs | injection_logs_dose_unit_check | CHECK (((dose_unit IS NULL) OR (btrim(dose_unit) <> ''::text))) |
+| medical | injection_logs | injection_logs_needle_gauge_check | CHECK (((needle_gauge IS NULL) OR (btrim(needle_gauge) <> ''::text))) |
+| medical | injection_logs | injection_logs_needle_length_in_check | CHECK (((needle_length_in IS NULL) OR (needle_length_in > (0)::numeric))) |
 | medical | injection_logs | injection_logs_override_reason_not_blank_check | CHECK (((override_reason IS NULL) OR (btrim(override_reason) <> ''::text))) |
 | medical | injection_logs | injection_logs_pain_score_check | CHECK (((pain_score IS NULL) OR ((pain_score >= 0) AND (pain_score <= 3)))) |
 | medical | injection_logs | injection_logs_route_check | CHECK (((route IS NULL) OR (route = ANY (ARRAY['im'::text, 'sc'::text])))) |
@@ -340,12 +352,26 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | medical | injection_site_conditions | injection_site_conditions_avoidance_months_check | CHECK (((avoidance_months >= 3) AND (avoidance_months <= 6))) |
 | medical | injection_site_conditions | injection_site_conditions_check | CHECK ((((status = 'active'::text) AND (resolved_at IS NULL)) OR ((status = 'resolved'::text) AND (resolved_at IS NOT NULL) AND (r |
 | medical | injection_site_conditions | injection_site_conditions_status_check | CHECK ((status = ANY (ARRAY['active'::text, 'resolved'::text]))) |
+| medical | injection_site_overrides | injection_site_overrides_max_volume_ml_check | CHECK (((max_volume_ml IS NULL) OR (max_volume_ml > (0)::numeric))) |
+| medical | injection_site_overrides | injection_site_overrides_physician_note_check | CHECK ((btrim(physician_note) <> ''::text)) |
+| medical | injection_site_overrides | injection_site_overrides_rest_days_check | CHECK (((rest_days IS NULL) OR (rest_days > 0))) |
+| medical | injection_site_overrides | injection_site_overrides_value_check | CHECK (((max_volume_ml IS NOT NULL) OR (rest_days IS NOT NULL))) |
+| medical | injection_sites | injection_sites_body_area_code_check | CHECK (((body_area_code IS NULL) OR (btrim(body_area_code) <> ''::text))) |
+| medical | injection_sites | injection_sites_body_view_check | CHECK (((body_view IS NULL) OR (body_view = ANY (ARRAY['front'::text, 'back'::text])))) |
 | medical | injection_sites | injection_sites_check | CHECK ((((route = 'im'::text) AND (rotation_distance_mm IS NULL) AND (rotation_quadrant_interval_days IS NULL)) OR ((route = 'sc': |
+| medical | injection_sites | injection_sites_difficulty_check | CHECK (((difficulty IS NULL) OR (difficulty = ANY (ARRAY['standard'::text, 'advanced'::text])))) |
 | medical | injection_sites | injection_sites_display_name_check | CHECK ((btrim(display_name) <> ''::text)) |
 | medical | injection_sites | injection_sites_id_check | CHECK ((btrim(id) <> ''::text)) |
+| medical | injection_sites | injection_sites_landmark_note_check | CHECK (((landmark_note IS NULL) OR (btrim(landmark_note) <> ''::text))) |
+| medical | injection_sites | injection_sites_max_volume_ml_check | CHECK (((max_volume_ml IS NULL) OR (max_volume_ml > (0)::numeric))) |
 | medical | injection_sites | injection_sites_minimum_rest_days_check | CHECK ((minimum_rest_days IS NULL)) |
 | medical | injection_sites | injection_sites_minimum_rest_days_reason_check | CHECK ((btrim(minimum_rest_days_reason) <> ''::text)) |
+| medical | injection_sites | injection_sites_needle_gauge_check | CHECK (((needle_gauge IS NULL) OR (btrim(needle_gauge) <> ''::text))) |
+| medical | injection_sites | injection_sites_needle_length_in_check | CHECK (((needle_length_in IS NULL) OR (needle_length_in > (0)::numeric))) |
+| medical | injection_sites | injection_sites_rest_days_check | CHECK (((rest_days IS NULL) OR (rest_days > 0))) |
 | medical | injection_sites | injection_sites_route_check | CHECK ((route = ANY (ARRAY['im'::text, 'sc'::text]))) |
+| medical | injection_sites | injection_sites_x_pct_check | CHECK (((x_pct IS NULL) OR ((x_pct >= 0) AND (x_pct <= 100)))) |
+| medical | injection_sites | injection_sites_y_pct_check | CHECK (((y_pct IS NULL) OR ((y_pct >= 0) AND (y_pct <= 100)))) |
 | medical | injection_tissue_condition_guidance | injection_tissue_condition_guidance_avoidance_max_months_check | CHECK ((avoidance_max_months = 6)) |
 | medical | injection_tissue_condition_guidance | injection_tissue_condition_guidance_avoidance_min_months_check | CHECK ((avoidance_min_months = 3)) |
 | medical | injection_tissue_condition_guidance | injection_tissue_condition_guidance_check | CHECK ((avoidance_min_months <= avoidance_max_months)) |
@@ -356,6 +382,10 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | medical | lab_marker_catalog | lab_marker_catalog_check | CHECK ((((validation_status = 'unresolved_no_unique_loinc'::text) AND (loinc_code IS NULL) AND (unresolved_reason IS NOT NULL)) OR |
 | medical | lab_marker_catalog | lab_marker_catalog_raw_check | CHECK ((jsonb_typeof(raw) = 'object'::text)) |
 | medical | lab_marker_catalog | lab_marker_catalog_validation_status_check | CHECK ((validation_status = ANY (ARRAY['kimi_candidate_validated'::text, 'repo_resolved_without_kimi_candidate'::text, 'unresolved |
+| medical | lab_reports | lab_reports_extracted_values_json_check | CHECK (((extracted_values IS NULL) OR (jsonb_typeof(extracted_values) = 'array'::text))) |
+| medical | lab_reports | lab_reports_ocr_counts_check | CHECK (((total_markers_found >= 0) AND (markers_needs_review >= 0) AND (markers_needs_review <= total_markers_found))) |
+| medical | lab_reports | lab_reports_ocr_results_json_check | CHECK (((ocr_results IS NULL) OR (jsonb_typeof(ocr_results) = ANY (ARRAY['object'::text, 'array'::text])))) |
+| medical | lab_reports | lab_reports_ocr_status_check | CHECK (((ocr_status IS NULL) OR (ocr_status = ANY (ARRAY['pending'::text, 'processing'::text, 'completed'::text, 'failed'::text, ' |
 | medical | lab_reports | lab_reports_report_time_check | CHECK (((report_time IS NULL) OR (EXTRACT(second FROM report_time) = (0)::numeric))) |
 | medical | lab_reports | lab_reports_source_check | CHECK ((source = ANY (ARRAY['manual'::text, 'pdf_upload'::text, 'photo_ocr'::text, 'lab_import'::text, 'seed'::text]))) |
 | medical | lab_result_values | lab_result_values_check | CHECK (((value_numeric IS NOT NULL) OR (value_text IS NOT NULL))) |
@@ -417,6 +447,10 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | medical | user_conditions | user_conditions_condition_code_check | CHECK ((condition_code = ANY (ARRAY['hypertension'::text, 'CKD'::text, 'diabetes'::text, 'pregnancy'::text, 'pregnancy_planned'::t |
 | medical | user_conditions | user_conditions_measurement_source_check | CHECK ((measurement_source = ANY (ARRAY['manual'::text, 'device'::text, 'import'::text, 'admin'::text, 'seed'::text]))) |
 | medical | user_conditions | user_conditions_status_check | CHECK ((status = ANY (ARRAY['active'::text, 'resolved'::text, 'planned'::text, 'unknown'::text]))) |
+| medical | user_injection_site_selections | user_injection_site_selections_body_area_code_check | CHECK ((body_area_code = ANY (ARRAY['chest'::text, 'abs'::text, 'obliques'::text, 'biceps'::text, 'quadriceps'::text, 'knees'::tex |
+| medical | user_injection_site_selections | user_injection_site_selections_needle_gauge_check | CHECK (((needle_gauge IS NULL) OR (btrim(needle_gauge) <> ''::text))) |
+| medical | user_injection_site_selections | user_injection_site_selections_needle_length_in_check | CHECK (((needle_length_in IS NULL) OR (needle_length_in > (0)::numeric))) |
+| medical | user_injection_site_selections | user_injection_site_selections_route_check | CHECK ((route = ANY (ARRAY['injection_im'::text, 'injection_subq'::text]))) |
 | medical | user_medications | user_medications_check | CHECK (((end_date IS NULL) OR (end_date >= start_date))) |
 | medical | user_medications | user_medications_dose_amount_check | CHECK (((dose_amount IS NULL) OR (dose_amount > (0)::numeric))) |
 | medical | user_medications | user_medications_doses_per_day_check | CHECK (((doses_per_day IS NULL) OR (doses_per_day > (0)::numeric))) |
@@ -919,6 +953,9 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | medical | injection_site_conditions | injection_site_conditions_insert | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
 | medical | injection_site_conditions | injection_site_conditions_select | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
 | medical | injection_site_conditions | injection_site_conditions_update | UPDATE | (( SELECT auth.uid() AS uid) = user_id) |
+| medical | injection_site_overrides | injection_site_overrides_insert | INSERT | ((set_by_coach_id = ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1    FROM coach.rela |
+| medical | injection_site_overrides | injection_site_overrides_select | SELECT | ((( SELECT auth.uid() AS uid) = user_id) OR ((EXISTS ( SELECT 1    FROM coach.relationship |
+| medical | injection_site_overrides | injection_site_overrides_update | UPDATE | ((set_by_coach_id = ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1    FROM coach.rela |
 | medical | injection_sites | injection_sites_select | SELECT | true |
 | medical | injection_tissue_condition_guidance | injection_tissue_condition_guidance_select | SELECT | true |
 | medical | lab_marker_catalog | lab_marker_catalog_select | SELECT | true |
@@ -949,6 +986,10 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | medical | user_conditions | user_conditions_insert | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
 | medical | user_conditions | user_conditions_select | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
 | medical | user_conditions | user_conditions_update | UPDATE | (( SELECT auth.uid() AS uid) = user_id) |
+| medical | user_injection_site_selections | user_injection_site_selections_delete | DELETE | (( SELECT auth.uid() AS uid) = user_id) |
+| medical | user_injection_site_selections | user_injection_site_selections_insert | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
+| medical | user_injection_site_selections | user_injection_site_selections_select | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
+| medical | user_injection_site_selections | user_injection_site_selections_update | UPDATE | (( SELECT auth.uid() AS uid) = user_id) |
 | medical | user_medications | user_medications_coach_read | SELECT | (user_id IN ( SELECT p.client_id    FROM coach.client_permissions p   WHERE ((p.coach_id = |
 | medical | user_medications | user_medications_delete | DELETE | (( SELECT auth.uid() AS uid) = user_id) |
 | medical | user_medications | user_medications_insert | INSERT | (( SELECT auth.uid() AS uid) = user_id) |

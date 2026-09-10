@@ -9,6 +9,8 @@ kind_von: C-171
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 2fa1e5fc
 beruehrt:
   tabellen: [medical.lab_reports]
 zahlen:
@@ -58,3 +60,40 @@ Ablage steht (C-429/C-431), das Einlesen kann folgen.**
 C-457 -> C-459.**
 
 `[read]` **Der Kettenauftrag steht in C-455.**
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **Fuenf OCR-Felder in `medical.lab_reports`:**
+
+    ocr_status, ocr_results, extracted_values,
+    review_required, markers_needs_review
+
+`[cmd]` **Zwei Funktionen:** `start_lab_report_ocr`,
+`store_lab_report_ocr_result`.
+
+`[cmd]` **12 Altberichte, alle mit `ocr_status = NULL`.**
+
+### `review_required` ist die richtige Antwort auf E-74
+
+`[read]` **Eine Texterkennung liest Zahlen aus einem Bild** ?
+**das ist keine Bewertung, aber es ist auch keine Messung.**
+
+> *,,Review wird markiert, automatische medizinische Werte bleiben
+> bei 0."*
+
+`[read]` **Also: OCR schlaegt vor, ein Mensch bestaetigt** ?
+**genau E-74.**
+
+`[cmd]` **Und `markers_needs_review` nennt, WELCHE Marker
+zweifelhaft sind** ? **nicht nur, DASS etwas zweifelhaft ist.**
+
+### Die zwoelf Altberichte blieben unberuehrt
+
+`[cmd]` **`ocr_status = NULL` bei allen zwoelf.**
+
+`[read]` **Kein Nachtrag, keine Vermutung** ? **wer nie durch OCR
+lief, hat keinen Status.**
+
+**Abgenommen.**
