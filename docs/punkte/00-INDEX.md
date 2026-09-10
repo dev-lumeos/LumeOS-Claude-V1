@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 209 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 4 |
+| `laufend_claudecode` | 5 |
 | `erledigt` | 383 |
-| **gesamt** | **597** |
+| **gesamt** | **598** |
 
 ## medical — 48
 
@@ -456,7 +456,7 @@
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 49
+## coach — 50
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -509,6 +509,7 @@
 | `G-400` | befund | hoch | [das Portal sieht nicht aus wie LumeOS](laufend_claudecode/coach-g-0400-das-portal-sieht-nicht-aus-wie-lumeos.md) | laeuft (claudecode) | — | G-401 |
 | `G-401` | feature | hoch | [das Klientendetail, vollstaendig](laufend_claudecode/coach-g-0401-das-klientendetail-vollstaendig.md) | laeuft (claudecode) | — | G-402 |
 | `G-402` | feature | hoch | [Klienten, Check-ins, Alerts](erledigt/coach-g-0402-klienten-checkins-alerts.md) | erledigt | — | G-403 |
+| `G-404` | feature | hoch | [Settings und Workspaces im Portal](laufend_claudecode/coach-g-0404-settings-und-workspaces-im-portal.md) | laeuft (claudecode) | — | — |
 
 ## quer — 137
 
@@ -650,7 +651,7 @@
 | `G-396` | feature | hoch | [die Beschriftung der Koerperkarte](erledigt/quer-g-0396-die-beschriftung-der-koerperkarte.md) | erledigt | — | — |
 | `G-397` | befund | mittel | [zwei Vorlagen kennt die Zaehlung nicht](erledigt/quer-g-0397-zwei-vorlagen-kennt-die-zaehlung-nicht.md) | erledigt | — | — |
 | `G-399` | befund | mittel | [der Trenner steht zweimal, und elf Karten zaehlt niemand](todos/quer-g-0399-der-trenner-steht-zweimal.md) | offen | — | — |
-| `G-403` | entscheidung | mittel | [der Trenner und die Tokens, zweite Haelfte](todos/quer-g-0403-der-trenner-und-die-tokens.md) | offen | — | C-458 |
+| `G-403` | entscheidung | mittel | [der Trenner und die Tokens, zweite Haelfte](todos/quer-g-0403-der-trenner-und-die-tokens.md) | offen | — | C-458, G-404 |
 
 ## market — 3
 

@@ -74,3 +74,15 @@ nachsehen** ? **sie nennt `display_name`, vielleicht auch diese.**
 
 `[read]` **Und ob sie kuratiert sind** ? **frei eingetippte
 Fachgebiete lassen sich nicht durchsuchen.**
+
+## Zurueckgestellt 2026-09-08
+
+Tom: *,,noch gar nichts mit db, wir machen nur ein mockup."*
+
+`[read]` **Kein Codex-Auftrag.** `[read]` **Die Spalten kommen,
+wenn die Form steht und Tom sie gesehen hat.**
+
+`[cmd]` **Was hier gemessen ist, bleibt als Vorlage:** **sieben
+fehlende Felder aus `CoachProfile.tsx:8-12`.**
+
+**Der Bau geht als G-404 an die Oberflaeche.**
