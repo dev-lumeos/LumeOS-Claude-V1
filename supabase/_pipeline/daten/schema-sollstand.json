@@ -3329,7 +3329,8 @@
         ]
       },
       "grants_herkunft": "140_medical_schema.sql vergibt authenticated DML und service_role ALL explizit.",
-      "zeilenschutzart": "eigene_zeilen"
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": ["id", "user_id", "report_date", "report_time", "lab_name", "title", "source", "source_detail", "file_ref", "notes", "created_at", "updated_at", "ocr_status", "ocr_results", "extracted_values", "review_required", "total_markers_found", "markers_needs_review"]
     },
     {
       "schema": "medical",
@@ -5133,7 +5134,31 @@
     {
       "schema": "medical",
       "name": "injection_sites",
-      "schritt": "385_schema",
+      "schritt": "455_injection_planner_schema",
+      "spalten": [
+        "id",
+        "route",
+        "display_name",
+        "minimum_rest_days",
+        "minimum_rest_days_reason",
+        "rotation_required",
+        "rotation_distance_mm",
+        "rotation_quadrant_interval_days",
+        "created_at",
+        "updated_at",
+        "max_volume_ml",
+        "rest_days",
+        "body_view",
+        "x_pct",
+        "y_pct",
+        "needle_gauge",
+        "needle_length_in",
+        "landmark_note",
+        "difficulty",
+        "is_active",
+        "body_area_code"
+      ],
+      "spalten_herkunft": "C-455/E-79: Planner-Konfiguration und Flaechenzuordnung des 16er-Fachkatalogs. rest_days ist nicht E-57s absichtlich leere minimum_rest_days.",
       "rls": true,
       "policies": [
         "SELECT"
@@ -5208,7 +5233,7 @@
     {
       "schema": "medical",
       "name": "injection_logs",
-      "schritt": "445_schema",
+      "schritt": "455_injection_planner_schema",
       "spalten": [
         "id",
         "user_id",
@@ -5221,9 +5246,17 @@
         "route",
         "pain_score",
         "complication",
-        "override_reason"
+        "override_reason",
+        "substance_id",
+        "dose_amount",
+        "dose_unit",
+        "needle_gauge",
+        "needle_length_in",
+        "notes",
+        "stack_item_id",
+        "body_area_code"
       ],
-      "spalten_herkunft": "C-445: Planner-Protokollwerte fuer Volumen, gefrorene Substanz und Route, Schmerz, mehrwertige Komplikation sowie begruendete Block-Uebersteuerung. Sie bleiben bis zum eigenen API-Schreibweg nullable; Altbestand wird nicht nacherfunden.",
+      "spalten_herkunft": "C-445/C-455/E-79: beobachtete Planner-Werte, Katalog-/Stack-Verknuepfung und die massgebliche Muskelflaeche. Alte Werte werden nicht nacherfunden; neue Zeilen brauchen eine Flaeche.",
       "rls": true,
       "policies": [
         "SELECT",
@@ -5249,6 +5282,90 @@
         ]
       },
       "grants_herkunft": "20260902070205_c385_injection_site_model.sql: eigene Injektionsprotokolle sind voll bearbeitbar; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "medical",
+      "name": "injection_site_overrides",
+      "schritt": "455_injection_planner_schema",
+      "spalten": [
+        "id",
+        "user_id",
+        "site_id",
+        "max_volume_ml",
+        "rest_days",
+        "physician_note",
+        "set_by_coach_id",
+        "created_at",
+        "updated_at"
+      ],
+      "spalten_herkunft": "C-455: begruendete Coach-Override-Konfiguration je Katalogort; jede Aenderung schreibt coach.action_log.",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "C-455: nur Client oder Coach einer aktiven Medical-full-Beziehung; Coach setzt und aktualisiert eigene begruendete Override-Zeilen, service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen_und_medical_full_coach"
+    },
+    {
+      "schema": "medical",
+      "name": "user_injection_site_selections",
+      "schritt": "454_configured_injection_areas",
+      "spalten": [
+        "id",
+        "user_id",
+        "substance_id",
+        "route",
+        "body_area_code",
+        "needle_gauge",
+        "needle_length_in",
+        "created_at",
+        "updated_at"
+      ],
+      "spalten_herkunft": "C-454/E-79: eigene Auswahl aus 21 Kartenflaechen je injizierbarer Substanz und Route; Nadeldaten koennen bewusst leer bleiben, wenn die Flaeche kein Fachkatalogwissen hat.",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "C-454/E-79: ausschliesslich eigene Flaechenwahl; service_role ALL.",
       "zeilenschutzart": "eigene_zeilen"
     },
     {
@@ -5702,6 +5819,16 @@
     },
     {
       "schema": "medical",
+      "name": "start_lab_report_ocr",
+      "schritt": "457_lab_report_ocr"
+    },
+    {
+      "schema": "medical",
+      "name": "store_lab_report_ocr_result",
+      "schritt": "457_lab_report_ocr"
+    },
+    {
+      "schema": "medical",
       "name": "attach_lab_report_original",
       "schritt": "429_schema"
     },
@@ -5714,6 +5841,16 @@
       "schema": "medical",
       "name": "health_events_validate_source_report",
       "schritt": "429_schema"
+    },
+    {
+      "schema": "medical",
+      "name": "configured_injection_areas",
+      "schritt": "454_configured_injection_areas"
+    },
+    {
+      "schema": "medical",
+      "name": "suggest_configured_injection_area",
+      "schritt": "454_configured_injection_areas"
     },
     {
       "schema": "coach",

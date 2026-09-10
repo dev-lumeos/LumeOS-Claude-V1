@@ -69,7 +69,11 @@ function parseArgs(): Args {
   return { manifest, database, keepDatabase }
 }
 
-function run(command: string, args: string[], options: { input?: string; env?: NodeJS.ProcessEnv } = {}) {
+function run(command: string, args: string[], options: {
+  input?: string
+  env?: NodeJS.ProcessEnv
+  stdio?: 'pipe' | 'inherit'
+} = {}) {
   const useShell = process.platform === 'win32' && command === 'pnpm'
   const result = spawnSync(command, args, {
     cwd: ROOT,
@@ -78,6 +82,7 @@ function run(command: string, args: string[], options: { input?: string; env?: N
     encoding: 'utf8',
     maxBuffer: 512 * 1024 * 1024,
     shell: useShell,
+    stdio: options.stdio,
   })
 
   if (result.stdout) process.stdout.write(result.stdout)
@@ -270,6 +275,7 @@ function runFinalCheck(db: string): void {
       PGDATABASE: db,
       LUMEOS_DB_CONTAINER: CONTAINER,
     },
+    stdio: 'inherit',
   })
 }
 

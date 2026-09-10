@@ -1734,6 +1734,47 @@
       "depends_on": [
         "456_supplement_cycle_protocol_write_paths"
       ]
+    },
+    {
+      "id": "455_injection_planner_schema",
+      "path": "supabase/migrations/20260909210000_c455_injection_planner.sql",
+      "kind": "sql",
+      "creates": "C-455/E-79: fachlicher Injektionskatalog, flaechengenaue Protokolle und auditierte Medical-full-Coach-Overrides ohne gespeicherten Rotationsplan",
+      "depends_on": [
+        "456_supplement_protocol_templates",
+        "445_schema",
+        "150"
+      ]
+    },
+    {
+      "id": "455_injection_planner_catalog_seed",
+      "path": "supabase/_pipeline/14_medical/455_injection_planner_catalog_seed.sql",
+      "kind": "sql",
+      "creates": "C-455: sechzehn belegte Planner-Konfigurationen und Flaechenzuordnungen; E-57-Mindestruhezeit bleibt leer",
+      "depends_on": [
+        "455_injection_planner_schema"
+      ]
+    },
+    {
+      "id": "454_configured_injection_areas",
+      "path": "supabase/migrations/20260909220000_c454_configured_injection_areas.sql",
+      "kind": "sql",
+      "creates": "C-454/E-79: eigene Injektionsflaechen je Substanz und Route sowie lesebasierte Rotation nur innerhalb der Auswahl",
+      "depends_on": [
+        "455_injection_planner_catalog_seed",
+        "453_supplement_routes"
+      ]
+    },
+    {
+      "id": "457_lab_report_ocr",
+      "path": "supabase/migrations/20260909230000_c457_lab_report_ocr.sql",
+      "kind": "sql",
+      "creates": "C-457: privater OCR-Container mit Rohresultat und Reviewzustand direkt am Laborbericht, ohne automatische medizinische Wertuebernahme",
+      "depends_on": [
+        "454_configured_injection_areas",
+        "429_schema",
+        "142"
+      ]
     }
   ]
 }
