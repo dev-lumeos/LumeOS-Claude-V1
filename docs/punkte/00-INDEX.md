@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 206 |
+| `todos` | 207 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 6 |
-| `erledigt` | 389 |
-| **gesamt** | **602** |
+| `laufend_claudecode` | 5 |
+| `erledigt` | 390 |
+| **gesamt** | **603** |
 
 ## medical — 48
 
@@ -512,9 +512,9 @@
 | `G-402` | feature | hoch | [Klienten, Check-ins, Alerts](erledigt/coach-g-0402-klienten-checkins-alerts.md) | erledigt | — | C-459, G-403 |
 | `G-404` | feature | hoch | [Settings und Workspaces im Portal](laufend_claudecode/coach-g-0404-settings-und-workspaces-im-portal.md) | laeuft (claudecode) | — | G-405 |
 | `G-405` | feature | hoch | [Das Portal als Mockup der Vorlage](erledigt/coach-g-0405-das-portal-als-mockup-der-vorlage.md) | erledigt | — | G-406, G-407 |
-| `G-407` | feature | hoch | [den Draft fertigbauen](laufend_claudecode/coach-g-0407-den-draft-fertigbauen.md) | laeuft (claudecode) | — | — |
+| `G-407` | feature | hoch | [den Draft fertigbauen](erledigt/coach-g-0407-den-draft-fertigbauen.md) | erledigt | — | G-408 |
 
-## quer — 138
+## quer — 139
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -656,6 +656,7 @@
 | `G-399` | befund | mittel | [der Trenner steht zweimal, und elf Karten zaehlt niemand](todos/quer-g-0399-der-trenner-steht-zweimal.md) | offen | — | — |
 | `G-403` | entscheidung | mittel | [der Trenner und die Tokens, zweite Haelfte](todos/quer-g-0403-der-trenner-und-die-tokens.md) | offen | — | C-458, G-404 |
 | `G-406` | befund | mittel | [`.v2-empty` zweimal definiert](erledigt/quer-g-0406-v2-empty-zweimal-definiert.md) | erledigt | — | — |
+| `G-408` | befund | niedrig | [Bildschirmfotos liegen nur lokal](todos/quer-g-0408-bilder-liegen-nur-lokal.md) | offen | — | — |
 
 ## market — 3
 

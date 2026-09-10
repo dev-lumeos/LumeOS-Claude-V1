@@ -1,0 +1,353 @@
+[
+ {
+  "bereich": "overview",
+  "kind": null,
+  "karten": 3,
+  "vermerke": 0,
+  "kpi": 4,
+  "tabellen": 2,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "athletes",
+  "kind": "athletes",
+  "karten": 1,
+  "vermerke": 0,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "athletes",
+  "kind": "record",
+  "karten": 1,
+  "vermerke": 0,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "athletes",
+  "kind": "notes",
+  "karten": 1,
+  "vermerke": 1,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "athletes",
+  "kind": "onboard",
+  "karten": 1,
+  "vermerke": 0,
+  "kpi": 0,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "athletes",
+  "kind": "autonomy",
+  "karten": 3,
+  "vermerke": 0,
+  "kpi": 0,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "athletes",
+  "kind": "autohist",
+  "karten": 3,
+  "vermerke": 0,
+  "kpi": 0,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "athletes",
+  "kind": "adherence",
+  "karten": 2,
+  "vermerke": 2,
+  "kpi": 4,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "athletes",
+  "kind": "consent",
+  "karten": 3,
+  "vermerke": 0,
+  "kpi": 0,
+  "tabellen": 3,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "checkins",
+  "kind": "messages",
+  "karten": 3,
+  "vermerke": 0,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 1
+ },
+ {
+  "bereich": "checkins",
+  "kind": "workflows",
+  "karten": 4,
+  "vermerke": 0,
+  "kpi": 0,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "checkins",
+  "kind": "chkedit",
+  "karten": 1,
+  "vermerke": 1,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "assist",
+  "kind": "assist",
+  "karten": 5,
+  "vermerke": 5,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "assist",
+  "kind": "as-clone",
+  "karten": 4,
+  "vermerke": 4,
+  "kpi": 0,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "assist",
+  "kind": "as-client",
+  "karten": 2,
+  "vermerke": 2,
+  "kpi": 0,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "assist",
+  "kind": "as-ident",
+  "karten": 2,
+  "vermerke": 2,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "assist",
+  "kind": "as-dec",
+  "karten": 1,
+  "vermerke": 1,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "assist",
+  "kind": "as-brief",
+  "karten": 2,
+  "vermerke": 2,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "assist",
+  "kind": "as-voice",
+  "karten": 2,
+  "vermerke": 2,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "assist",
+  "kind": "as-method",
+  "karten": 2,
+  "vermerke": 2,
+  "kpi": 0,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "assist",
+  "kind": "as-butler",
+  "karten": 1,
+  "vermerke": 1,
+  "kpi": 0,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "assist",
+  "kind": "as-watch",
+  "karten": 1,
+  "vermerke": 1,
+  "kpi": 3,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "assist",
+  "kind": "as-tone",
+  "karten": 2,
+  "vermerke": 2,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "assist",
+  "kind": "as-guard",
+  "karten": 1,
+  "vermerke": 1,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "assist",
+  "kind": "as-cost",
+  "karten": 2,
+  "vermerke": 2,
+  "kpi": 4,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "calendar",
+  "kind": null,
+  "karten": 1,
+  "vermerke": 1,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "plans",
+  "kind": "plans",
+  "karten": 4,
+  "vermerke": 4,
+  "kpi": 0,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "plans",
+  "kind": "programs",
+  "karten": 2,
+  "vermerke": 2,
+  "kpi": 0,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "plans",
+  "kind": "builder",
+  "karten": 2,
+  "vermerke": 2,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "library",
+  "kind": "lib-ex",
+  "karten": 1,
+  "vermerke": 1,
+  "kpi": 0,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "library",
+  "kind": "lib-meal",
+  "karten": 1,
+  "vermerke": 1,
+  "kpi": 0,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "alerts",
+  "kind": "alerts",
+  "karten": 1,
+  "vermerke": 0,
+  "kpi": 0,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "alerts",
+  "kind": "rules",
+  "karten": 3,
+  "vermerke": 3,
+  "kpi": 4,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "analytics",
+  "kind": "analytics",
+  "karten": 3,
+  "vermerke": 3,
+  "kpi": 4,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "analytics",
+  "kind": "patterns",
+  "karten": 2,
+  "vermerke": 2,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "analytics",
+  "kind": "intervene",
+  "karten": 1,
+  "vermerke": 0,
+  "kpi": 0,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "analytics",
+  "kind": "revenue",
+  "karten": 1,
+  "vermerke": 1,
+  "kpi": 4,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "inbox",
+  "kind": null,
+  "karten": 1,
+  "vermerke": 1,
+  "kpi": 0,
+  "tabellen": 0,
+  "leerOhneGrund": 0
+ },
+ {
+  "bereich": "team",
+  "kind": null,
+  "karten": 3,
+  "vermerke": 3,
+  "kpi": 3,
+  "tabellen": 1,
+  "leerOhneGrund": 0
+ }
+]
