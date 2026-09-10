@@ -1,0 +1,430 @@
+[
+ {
+  "konstante": "COACH_ROLES",
+  "felder": 20,
+  "gebaut": 10,
+  "fehlend": [
+   "billing",
+   "advAnalytics",
+   "assignedPlusTeam",
+   "dataExport",
+   "ownRules",
+   "stdAnalytics",
+   "assignedOnly",
+   "dataExportLimited",
+   "templatesOnly",
+   "basicAnalytics"
+  ]
+ },
+ {
+  "konstante": "COACHES",
+  "felder": 18,
+  "gebaut": 11,
+  "fehlend": [
+   "avatar",
+   "sharedModules",
+   "activePlan",
+   "lastMsg",
+   "lastMsgAt",
+   "bio",
+   "fee"
+  ]
+ },
+ {
+  "konstante": "CAI_QUEUE",
+  "felder": 9,
+  "gebaut": 6,
+  "fehlend": [
+   "avatar",
+   "draft",
+   "est"
+  ]
+ },
+ {
+  "konstante": "PC_CLIENTS",
+  "felder": 10,
+  "gebaut": 8,
+  "fehlend": [
+   "auto",
+   "watch"
+  ]
+ },
+ {
+  "konstante": "PROGRAMS",
+  "felder": 12,
+  "gebaut": 10,
+  "fehlend": [
+   "delivered",
+   "created"
+  ]
+ },
+ {
+  "konstante": "SMART_ALERTS",
+  "felder": 13,
+  "gebaut": 11,
+  "fehlend": [
+   "aid",
+   "expires"
+  ]
+ },
+ {
+  "konstante": "ACTIVE_RULES",
+  "felder": 9,
+  "gebaut": 8,
+  "fehlend": [
+   "template"
+  ]
+ },
+ {
+  "konstante": "AUTONOMY_LEVELS",
+  "felder": 7,
+  "gebaut": 6,
+  "fehlend": [
+   "threshold"
+  ]
+ },
+ {
+  "konstante": "CD_DECISIONS",
+  "felder": 7,
+  "gebaut": 6,
+  "fehlend": [
+   "data"
+  ]
+ },
+ {
+  "konstante": "COACH_KPIS",
+  "felder": 27,
+  "gebaut": 26,
+  "fehlend": [
+   "trend"
+  ]
+ },
+ {
+  "konstante": "COACH_NOTES",
+  "felder": 7,
+  "gebaut": 6,
+  "fehlend": [
+   "coachId"
+  ]
+ },
+ {
+  "konstante": "COACH_PLANS",
+  "felder": 7,
+  "gebaut": 6,
+  "fehlend": [
+   "lastUpdated"
+  ]
+ },
+ {
+  "konstante": "FCR_CLIENT",
+  "felder": 15,
+  "gebaut": 14,
+  "fehlend": [
+   "sex"
+  ]
+ },
+ {
+  "konstante": "FCR_MEDICAL",
+  "felder": 6,
+  "gebaut": 5,
+  "fehlend": [
+   "hidden"
+  ]
+ },
+ {
+  "konstante": "FCR_NUTRITION",
+  "felder": 8,
+  "gebaut": 7,
+  "fehlend": [
+   "logged"
+  ]
+ },
+ {
+  "konstante": "FCR_RECOVERY",
+  "felder": 11,
+  "gebaut": 10,
+  "fehlend": [
+   "sev"
+  ]
+ },
+ {
+  "konstante": "LIB_EX",
+  "felder": 8,
+  "gebaut": 7,
+  "fehlend": [
+   "video"
+  ]
+ },
+ {
+  "konstante": "MODULES",
+  "felder": 5,
+  "gebaut": 4,
+  "fehlend": [
+   "shortcut"
+  ]
+ },
+ {
+  "konstante": "PENDING_INVITES",
+  "felder": 11,
+  "gebaut": 10,
+  "fehlend": [
+   "coachId"
+  ]
+ },
+ {
+  "konstante": "PORTAL_ATHLETES",
+  "felder": 9,
+  "gebaut": 8,
+  "fehlend": [
+   "avatar"
+  ]
+ },
+ {
+  "konstante": "PORTAL_WF_DEFS",
+  "felder": 12,
+  "gebaut": 11,
+  "fehlend": [
+   "fields"
+  ]
+ },
+ {
+  "konstante": "ASSIGNMENT",
+  "felder": 14,
+  "gebaut": 14,
+  "fehlend": []
+ },
+ {
+  "konstante": "CAI_AUTOMATIONS",
+  "felder": 8,
+  "gebaut": 8,
+  "fehlend": []
+ },
+ {
+  "konstante": "CAI_CHAT",
+  "felder": 3,
+  "gebaut": 3,
+  "fehlend": []
+ },
+ {
+  "konstante": "CAI_DELEGATION",
+  "felder": 3,
+  "gebaut": 3,
+  "fehlend": []
+ },
+ {
+  "konstante": "CAI_DIGEST",
+  "felder": 6,
+  "gebaut": 6,
+  "fehlend": []
+ },
+ {
+  "konstante": "CAL_EVENTS",
+  "felder": 4,
+  "gebaut": 4,
+  "fehlend": []
+ },
+ {
+  "konstante": "CAL_KIND",
+  "felder": 8,
+  "gebaut": 8,
+  "fehlend": []
+ },
+ {
+  "konstante": "CB_BRIEFS",
+  "felder": 7,
+  "gebaut": 7,
+  "fehlend": []
+ },
+ {
+  "konstante": "CBU_INTENTS",
+  "felder": 5,
+  "gebaut": 5,
+  "fehlend": []
+ },
+ {
+  "konstante": "CD_PERMS",
+  "felder": 20,
+  "gebaut": 20,
+  "fehlend": []
+ },
+ {
+  "konstante": "CG_LOG",
+  "felder": 4,
+  "gebaut": 4,
+  "fehlend": []
+ },
+ {
+  "konstante": "CLONE_FIDELITY",
+  "felder": 3,
+  "gebaut": 3,
+  "fehlend": []
+ },
+ {
+  "konstante": "CLONE_LOG",
+  "felder": 6,
+  "gebaut": 6,
+  "fehlend": []
+ },
+ {
+  "konstante": "CLONE_SCOPE",
+  "felder": 4,
+  "gebaut": 4,
+  "fehlend": []
+ },
+ {
+  "konstante": "CLONE_SOURCES",
+  "felder": 6,
+  "gebaut": 6,
+  "fehlend": []
+ },
+ {
+  "konstante": "CM_CLIENTS",
+  "felder": 6,
+  "gebaut": 6,
+  "fehlend": []
+ },
+ {
+  "konstante": "CM_METHOD",
+  "felder": 4,
+  "gebaut": 4,
+  "fehlend": []
+ },
+ {
+  "konstante": "CN_NOTES",
+  "felder": 6,
+  "gebaut": 6,
+  "fehlend": []
+ },
+ {
+  "konstante": "CN_TAGS",
+  "felder": 8,
+  "gebaut": 8,
+  "fehlend": []
+ },
+ {
+  "konstante": "COACH_AUDIT",
+  "felder": 4,
+  "gebaut": 4,
+  "fehlend": []
+ },
+ {
+  "konstante": "CVO_NOTES",
+  "felder": 6,
+  "gebaut": 6,
+  "fehlend": []
+ },
+ {
+  "konstante": "CW_RULES",
+  "felder": 6,
+  "gebaut": 6,
+  "fehlend": []
+ },
+ {
+  "konstante": "DELIVERY_LOG",
+  "felder": 5,
+  "gebaut": 5,
+  "fehlend": []
+ },
+ {
+  "konstante": "DELIVERY_MODES",
+  "felder": 11,
+  "gebaut": 11,
+  "fehlend": []
+ },
+ {
+  "konstante": "FCR_BODY",
+  "felder": 5,
+  "gebaut": 5,
+  "fehlend": []
+ },
+ {
+  "konstante": "FCR_MODULES",
+  "felder": 5,
+  "gebaut": 5,
+  "fehlend": []
+ },
+ {
+  "konstante": "FCR_SUPPS",
+  "felder": 6,
+  "gebaut": 6,
+  "fehlend": []
+ },
+ {
+  "konstante": "FCR_TIMELINE",
+  "felder": 3,
+  "gebaut": 3,
+  "fehlend": []
+ },
+ {
+  "konstante": "FCR_TRAINING",
+  "felder": 14,
+  "gebaut": 14,
+  "fehlend": []
+ },
+ {
+  "konstante": "LIB_MEAL",
+  "felder": 9,
+  "gebaut": 9,
+  "fehlend": []
+ },
+ {
+  "konstante": "MESSAGES_THREAD",
+  "felder": 5,
+  "gebaut": 5,
+  "fehlend": []
+ },
+ {
+  "konstante": "NC_ITEMS",
+  "felder": 7,
+  "gebaut": 7,
+  "fehlend": []
+ },
+ {
+  "konstante": "NC_KIND",
+  "felder": 8,
+  "gebaut": 8,
+  "fehlend": []
+ },
+ {
+  "konstante": "PC_LADDER",
+  "felder": 3,
+  "gebaut": 3,
+  "fehlend": []
+ },
+ {
+  "konstante": "PEAK_WEEK",
+  "felder": 6,
+  "gebaut": 6,
+  "fehlend": []
+ },
+ {
+  "konstante": "PORTAL_ONBOARD",
+  "felder": 5,
+  "gebaut": 5,
+  "fehlend": []
+ },
+ {
+  "konstante": "RULE_TEMPLATES",
+  "felder": 7,
+  "gebaut": 7,
+  "fehlend": []
+ },
+ {
+  "konstante": "RULE_TRIGGERS",
+  "felder": 9,
+  "gebaut": 9,
+  "fehlend": []
+ },
+ {
+  "konstante": "STATUS_STYLE",
+  "felder": 12,
+  "gebaut": 12,
+  "fehlend": []
+ },
+ {
+  "konstante": "TEAM_MEMBERS",
+  "felder": 9,
+  "gebaut": 9,
+  "fehlend": []
+ }
+]

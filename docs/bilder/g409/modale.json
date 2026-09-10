@@ -1,0 +1,106 @@
+[
+ {
+  "name": "alarm",
+  "offen": true,
+  "titel": "3-day pattern · recovery 58 + sleep 5.8h + RPE 8.5",
+  "felder": 8,
+  "knoepfe": 4,
+  "vermerk": 1
+ },
+ {
+  "name": "einstellungen",
+  "offen": true,
+  "titel": "Coach settings",
+  "felder": 5,
+  "knoepfe": 2,
+  "vermerk": 1
+ },
+ {
+  "name": "regel",
+  "offen": true,
+  "titel": "Overtraining risk",
+  "felder": 9,
+  "knoepfe": 3,
+  "vermerk": 1
+ },
+ {
+  "name": "teamEinladen",
+  "offen": true,
+  "titel": "Invite team member",
+  "felder": 3,
+  "knoepfe": 2,
+  "vermerk": 1
+ },
+ {
+  "name": "teamMitglied",
+  "offen": true,
+  "titel": "Erik Lange",
+  "felder": 3,
+  "knoepfe": 3,
+  "vermerk": 1
+ },
+ {
+  "name": "coach",
+  "offen": true,
+  "titel": "Anders Lindqvist",
+  "felder": 4,
+  "knoepfe": 3,
+  "vermerk": 1
+ },
+ {
+  "name": "coachEinladen",
+  "offen": true,
+  "titel": "Invite coach",
+  "felder": 1,
+  "knoepfe": 2,
+  "vermerk": 1
+ },
+ {
+  "name": "qr",
+  "offen": true,
+  "titel": "Scan QR",
+  "felder": 0,
+  "knoepfe": 1,
+  "vermerk": 1
+ },
+ {
+  "name": "nachrichten",
+  "offen": true,
+  "titel": "Nachrichten",
+  "felder": 5,
+  "knoepfe": 2,
+  "vermerk": 1
+ },
+ {
+  "name": "athlet",
+  "offen": true,
+  "titel": "Lukas Bauer",
+  "felder": 4,
+  "knoepfe": 2,
+  "vermerk": 1
+ },
+ {
+  "name": "notiz",
+  "offen": true,
+  "titel": "Notiz · Training",
+  "felder": 1,
+  "knoepfe": 2,
+  "vermerk": 1
+ },
+ {
+  "name": "neuerPlan",
+  "offen": true,
+  "titel": "New plan",
+  "felder": 6,
+  "knoepfe": 2,
+  "vermerk": 1
+ },
+ {
+  "name": "vorschlag",
+  "offen": true,
+  "titel": "Vorschlag",
+  "felder": 3,
+  "knoepfe": 2,
+  "vermerk": 1
+ }
+]

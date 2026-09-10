@@ -1,0 +1,1572 @@
+[
+ {
+  "seite": "/?draft=overview",
+  "ziel": "/?draft=checkins&kind=workflows",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=overview",
+  "ziel": "/?draft=checkins&kind=messages",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=overview",
+  "ziel": "/?draft=alerts&kind=alerts",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=overview",
+  "ziel": "/?draft=alerts&kind=alerts",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=overview",
+  "ziel": "/athlet/d15fb34f-62e6-43e5-9d1c-ec8bab6ae1a6?draft=1",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=overview",
+  "ziel": "/athlet/10000000-0000-0000-0000-000000000102?draft=1",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=overview",
+  "ziel": "/athlet/10000000-0000-0000-0000-000000000103?draft=1",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/?draft=athletes&kind=athletes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/?draft=athletes&kind=record",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/?draft=athletes&kind=notes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/?draft=athletes&kind=onboard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/?draft=athletes&kind=autonomy",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/?draft=athletes&kind=autohist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/?draft=athletes&kind=adherence",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/?draft=athletes&kind=consent",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/?draft=athletes&kind=athletes&stand=alle",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/?draft=athletes&kind=athletes&stand=active",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/?draft=athletes&kind=athletes&stand=invited",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/?draft=athletes&kind=athletes&stand=ended",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/athlet/d15fb34f-62e6-43e5-9d1c-ec8bab6ae1a6?draft=1",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/athlet/10000000-0000-0000-0000-000000000102?draft=1",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/athlet/10000000-0000-0000-0000-000000000103?draft=1",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=athletes",
+  "ziel": "/?draft=athletes&kind=athletes&stand=alle",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=record",
+  "ziel": "/?draft=athletes&kind=athletes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=record",
+  "ziel": "/?draft=athletes&kind=record",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=record",
+  "ziel": "/?draft=athletes&kind=notes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=record",
+  "ziel": "/?draft=athletes&kind=onboard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=record",
+  "ziel": "/?draft=athletes&kind=autonomy",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=record",
+  "ziel": "/?draft=athletes&kind=autohist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=record",
+  "ziel": "/?draft=athletes&kind=adherence",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=record",
+  "ziel": "/?draft=athletes&kind=consent",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=notes",
+  "ziel": "/?draft=athletes&kind=athletes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=notes",
+  "ziel": "/?draft=athletes&kind=record",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=notes",
+  "ziel": "/?draft=athletes&kind=notes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=notes",
+  "ziel": "/?draft=athletes&kind=onboard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=notes",
+  "ziel": "/?draft=athletes&kind=autonomy",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=notes",
+  "ziel": "/?draft=athletes&kind=autohist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=notes",
+  "ziel": "/?draft=athletes&kind=adherence",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=notes",
+  "ziel": "/?draft=athletes&kind=consent",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=onboard",
+  "ziel": "/?draft=athletes&kind=athletes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=onboard",
+  "ziel": "/?draft=athletes&kind=record",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=onboard",
+  "ziel": "/?draft=athletes&kind=notes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=onboard",
+  "ziel": "/?draft=athletes&kind=onboard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=onboard",
+  "ziel": "/?draft=athletes&kind=autonomy",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=onboard",
+  "ziel": "/?draft=athletes&kind=autohist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=onboard",
+  "ziel": "/?draft=athletes&kind=adherence",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=onboard",
+  "ziel": "/?draft=athletes&kind=consent",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autonomy",
+  "ziel": "/?draft=athletes&kind=athletes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autonomy",
+  "ziel": "/?draft=athletes&kind=record",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autonomy",
+  "ziel": "/?draft=athletes&kind=notes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autonomy",
+  "ziel": "/?draft=athletes&kind=onboard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autonomy",
+  "ziel": "/?draft=athletes&kind=autonomy",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autonomy",
+  "ziel": "/?draft=athletes&kind=autohist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autonomy",
+  "ziel": "/?draft=athletes&kind=adherence",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autonomy",
+  "ziel": "/?draft=athletes&kind=consent",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autonomy",
+  "ziel": "?$ACTION_ID_c4f318b8feed7ee3315164bd9dfdd05cecdf989f=&client_id=10000000-0000-0000-0000-000000000102&pfad=/?draft=athletes&kind=autonomy",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autonomy",
+  "ziel": "?$ACTION_ID_c4f318b8feed7ee3315164bd9dfdd05cecdf989f=&client_id=d15fb34f-62e6-43e5-9d1c-ec8bab6ae1a6&pfad=/?draft=athletes&kind=autonomy",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autohist",
+  "ziel": "/?draft=athletes&kind=athletes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autohist",
+  "ziel": "/?draft=athletes&kind=record",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autohist",
+  "ziel": "/?draft=athletes&kind=notes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autohist",
+  "ziel": "/?draft=athletes&kind=onboard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autohist",
+  "ziel": "/?draft=athletes&kind=autonomy",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autohist",
+  "ziel": "/?draft=athletes&kind=autohist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autohist",
+  "ziel": "/?draft=athletes&kind=adherence",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autohist",
+  "ziel": "/?draft=athletes&kind=consent",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autohist",
+  "ziel": "?$ACTION_ID_c4f318b8feed7ee3315164bd9dfdd05cecdf989f=&client_id=10000000-0000-0000-0000-000000000102&pfad=/?draft=athletes&kind=autonomy",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=autohist",
+  "ziel": "?$ACTION_ID_c4f318b8feed7ee3315164bd9dfdd05cecdf989f=&client_id=d15fb34f-62e6-43e5-9d1c-ec8bab6ae1a6&pfad=/?draft=athletes&kind=autonomy",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=adherence",
+  "ziel": "/?draft=athletes&kind=athletes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=adherence",
+  "ziel": "/?draft=athletes&kind=record",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=adherence",
+  "ziel": "/?draft=athletes&kind=notes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=adherence",
+  "ziel": "/?draft=athletes&kind=onboard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=adherence",
+  "ziel": "/?draft=athletes&kind=autonomy",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=adherence",
+  "ziel": "/?draft=athletes&kind=autohist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=adherence",
+  "ziel": "/?draft=athletes&kind=adherence",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=adherence",
+  "ziel": "/?draft=athletes&kind=consent",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=consent",
+  "ziel": "/?draft=athletes&kind=athletes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=consent",
+  "ziel": "/?draft=athletes&kind=record",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=consent",
+  "ziel": "/?draft=athletes&kind=notes",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=consent",
+  "ziel": "/?draft=athletes&kind=onboard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=consent",
+  "ziel": "/?draft=athletes&kind=autonomy",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=consent",
+  "ziel": "/?draft=athletes&kind=autohist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=consent",
+  "ziel": "/?draft=athletes&kind=adherence",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=athletes&kind=consent",
+  "ziel": "/?draft=athletes&kind=consent",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=messages",
+  "ziel": "/?draft=checkins&kind=messages",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=messages",
+  "ziel": "/?draft=checkins&kind=workflows",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=messages",
+  "ziel": "/?draft=checkins&kind=chkedit",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=messages",
+  "ziel": "?$ACTION_ID_ad1697a50ba810e9d22b3fbbddcc1c2aba1dbceb=&client_id=d15fb34f-62e6-43e5-9d1c-ec8bab6ae1a6&pfad=/?draft=checkins&kind=messages",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=messages",
+  "ziel": "?$ACTION_ID_ad1697a50ba810e9d22b3fbbddcc1c2aba1dbceb=&client_id=10000000-0000-0000-0000-000000000102&pfad=/?draft=checkins&kind=messages",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=messages",
+  "ziel": "?$ACTION_ID_ad1697a50ba810e9d22b3fbbddcc1c2aba1dbceb=&client_id=10000000-0000-0000-0000-000000000103&pfad=/?draft=checkins&kind=messages",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=workflows",
+  "ziel": "/?draft=checkins&kind=messages",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=workflows",
+  "ziel": "/?draft=checkins&kind=workflows",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=workflows",
+  "ziel": "/?draft=checkins&kind=chkedit",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=workflows",
+  "ziel": "/?draft=checkins&kind=workflows&stand=offen",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=workflows",
+  "ziel": "/?draft=checkins&kind=workflows&stand=reviewed",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=workflows",
+  "ziel": "/?draft=checkins&kind=workflows&stand=alle",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=workflows",
+  "ziel": "?$ACTION_ID_3380a63a373c9cfad4a536d1e65343a302d9ee60=&id=0917d449-358b-4c73-b41a-273a323d0f21&pfad=/?draft=checkins&kind=workflows",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=workflows",
+  "ziel": "?$ACTION_ID_a5ed4cfd9a9274ea0e2e46d8fab69cbcace5c6e7=&pfad=/?draft=checkins&kind=workflows",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=chkedit",
+  "ziel": "/?draft=checkins&kind=messages",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=chkedit",
+  "ziel": "/?draft=checkins&kind=workflows",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=checkins&kind=chkedit",
+  "ziel": "/?draft=checkins&kind=chkedit",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=assist",
+  "ziel": "/?draft=assist&kind=assist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=assist",
+  "ziel": "/?draft=assist&kind=as-clone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=assist",
+  "ziel": "/?draft=assist&kind=as-client",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=assist",
+  "ziel": "/?draft=assist&kind=as-ident",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=assist",
+  "ziel": "/?draft=assist&kind=as-dec",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=assist",
+  "ziel": "/?draft=assist&kind=as-brief",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=assist",
+  "ziel": "/?draft=assist&kind=as-voice",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=assist",
+  "ziel": "/?draft=assist&kind=as-method",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=assist",
+  "ziel": "/?draft=assist&kind=as-butler",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=assist",
+  "ziel": "/?draft=assist&kind=as-watch",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=assist",
+  "ziel": "/?draft=assist&kind=as-tone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=assist",
+  "ziel": "/?draft=assist&kind=as-guard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=assist",
+  "ziel": "/?draft=assist&kind=as-cost",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-clone",
+  "ziel": "/?draft=assist&kind=assist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-clone",
+  "ziel": "/?draft=assist&kind=as-clone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-clone",
+  "ziel": "/?draft=assist&kind=as-client",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-clone",
+  "ziel": "/?draft=assist&kind=as-ident",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-clone",
+  "ziel": "/?draft=assist&kind=as-dec",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-clone",
+  "ziel": "/?draft=assist&kind=as-brief",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-clone",
+  "ziel": "/?draft=assist&kind=as-voice",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-clone",
+  "ziel": "/?draft=assist&kind=as-method",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-clone",
+  "ziel": "/?draft=assist&kind=as-butler",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-clone",
+  "ziel": "/?draft=assist&kind=as-watch",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-clone",
+  "ziel": "/?draft=assist&kind=as-tone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-clone",
+  "ziel": "/?draft=assist&kind=as-guard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-clone",
+  "ziel": "/?draft=assist&kind=as-cost",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-client",
+  "ziel": "/?draft=assist&kind=assist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-client",
+  "ziel": "/?draft=assist&kind=as-clone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-client",
+  "ziel": "/?draft=assist&kind=as-client",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-client",
+  "ziel": "/?draft=assist&kind=as-ident",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-client",
+  "ziel": "/?draft=assist&kind=as-dec",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-client",
+  "ziel": "/?draft=assist&kind=as-brief",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-client",
+  "ziel": "/?draft=assist&kind=as-voice",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-client",
+  "ziel": "/?draft=assist&kind=as-method",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-client",
+  "ziel": "/?draft=assist&kind=as-butler",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-client",
+  "ziel": "/?draft=assist&kind=as-watch",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-client",
+  "ziel": "/?draft=assist&kind=as-tone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-client",
+  "ziel": "/?draft=assist&kind=as-guard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-client",
+  "ziel": "/?draft=assist&kind=as-cost",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-ident",
+  "ziel": "/?draft=assist&kind=assist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-ident",
+  "ziel": "/?draft=assist&kind=as-clone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-ident",
+  "ziel": "/?draft=assist&kind=as-client",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-ident",
+  "ziel": "/?draft=assist&kind=as-ident",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-ident",
+  "ziel": "/?draft=assist&kind=as-dec",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-ident",
+  "ziel": "/?draft=assist&kind=as-brief",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-ident",
+  "ziel": "/?draft=assist&kind=as-voice",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-ident",
+  "ziel": "/?draft=assist&kind=as-method",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-ident",
+  "ziel": "/?draft=assist&kind=as-butler",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-ident",
+  "ziel": "/?draft=assist&kind=as-watch",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-ident",
+  "ziel": "/?draft=assist&kind=as-tone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-ident",
+  "ziel": "/?draft=assist&kind=as-guard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-ident",
+  "ziel": "/?draft=assist&kind=as-cost",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-dec",
+  "ziel": "/?draft=assist&kind=assist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-dec",
+  "ziel": "/?draft=assist&kind=as-clone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-dec",
+  "ziel": "/?draft=assist&kind=as-client",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-dec",
+  "ziel": "/?draft=assist&kind=as-ident",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-dec",
+  "ziel": "/?draft=assist&kind=as-dec",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-dec",
+  "ziel": "/?draft=assist&kind=as-brief",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-dec",
+  "ziel": "/?draft=assist&kind=as-voice",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-dec",
+  "ziel": "/?draft=assist&kind=as-method",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-dec",
+  "ziel": "/?draft=assist&kind=as-butler",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-dec",
+  "ziel": "/?draft=assist&kind=as-watch",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-dec",
+  "ziel": "/?draft=assist&kind=as-tone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-dec",
+  "ziel": "/?draft=assist&kind=as-guard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-dec",
+  "ziel": "/?draft=assist&kind=as-cost",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-brief",
+  "ziel": "/?draft=assist&kind=assist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-brief",
+  "ziel": "/?draft=assist&kind=as-clone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-brief",
+  "ziel": "/?draft=assist&kind=as-client",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-brief",
+  "ziel": "/?draft=assist&kind=as-ident",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-brief",
+  "ziel": "/?draft=assist&kind=as-dec",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-brief",
+  "ziel": "/?draft=assist&kind=as-brief",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-brief",
+  "ziel": "/?draft=assist&kind=as-voice",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-brief",
+  "ziel": "/?draft=assist&kind=as-method",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-brief",
+  "ziel": "/?draft=assist&kind=as-butler",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-brief",
+  "ziel": "/?draft=assist&kind=as-watch",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-brief",
+  "ziel": "/?draft=assist&kind=as-tone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-brief",
+  "ziel": "/?draft=assist&kind=as-guard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-brief",
+  "ziel": "/?draft=assist&kind=as-cost",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-voice",
+  "ziel": "/?draft=assist&kind=assist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-voice",
+  "ziel": "/?draft=assist&kind=as-clone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-voice",
+  "ziel": "/?draft=assist&kind=as-client",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-voice",
+  "ziel": "/?draft=assist&kind=as-ident",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-voice",
+  "ziel": "/?draft=assist&kind=as-dec",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-voice",
+  "ziel": "/?draft=assist&kind=as-brief",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-voice",
+  "ziel": "/?draft=assist&kind=as-voice",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-voice",
+  "ziel": "/?draft=assist&kind=as-method",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-voice",
+  "ziel": "/?draft=assist&kind=as-butler",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-voice",
+  "ziel": "/?draft=assist&kind=as-watch",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-voice",
+  "ziel": "/?draft=assist&kind=as-tone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-voice",
+  "ziel": "/?draft=assist&kind=as-guard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-voice",
+  "ziel": "/?draft=assist&kind=as-cost",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-method",
+  "ziel": "/?draft=assist&kind=assist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-method",
+  "ziel": "/?draft=assist&kind=as-clone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-method",
+  "ziel": "/?draft=assist&kind=as-client",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-method",
+  "ziel": "/?draft=assist&kind=as-ident",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-method",
+  "ziel": "/?draft=assist&kind=as-dec",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-method",
+  "ziel": "/?draft=assist&kind=as-brief",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-method",
+  "ziel": "/?draft=assist&kind=as-voice",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-method",
+  "ziel": "/?draft=assist&kind=as-method",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-method",
+  "ziel": "/?draft=assist&kind=as-butler",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-method",
+  "ziel": "/?draft=assist&kind=as-watch",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-method",
+  "ziel": "/?draft=assist&kind=as-tone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-method",
+  "ziel": "/?draft=assist&kind=as-guard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-method",
+  "ziel": "/?draft=assist&kind=as-cost",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-butler",
+  "ziel": "/?draft=assist&kind=assist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-butler",
+  "ziel": "/?draft=assist&kind=as-clone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-butler",
+  "ziel": "/?draft=assist&kind=as-client",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-butler",
+  "ziel": "/?draft=assist&kind=as-ident",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-butler",
+  "ziel": "/?draft=assist&kind=as-dec",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-butler",
+  "ziel": "/?draft=assist&kind=as-brief",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-butler",
+  "ziel": "/?draft=assist&kind=as-voice",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-butler",
+  "ziel": "/?draft=assist&kind=as-method",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-butler",
+  "ziel": "/?draft=assist&kind=as-butler",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-butler",
+  "ziel": "/?draft=assist&kind=as-watch",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-butler",
+  "ziel": "/?draft=assist&kind=as-tone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-butler",
+  "ziel": "/?draft=assist&kind=as-guard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-butler",
+  "ziel": "/?draft=assist&kind=as-cost",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-watch",
+  "ziel": "/?draft=assist&kind=assist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-watch",
+  "ziel": "/?draft=assist&kind=as-clone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-watch",
+  "ziel": "/?draft=assist&kind=as-client",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-watch",
+  "ziel": "/?draft=assist&kind=as-ident",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-watch",
+  "ziel": "/?draft=assist&kind=as-dec",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-watch",
+  "ziel": "/?draft=assist&kind=as-brief",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-watch",
+  "ziel": "/?draft=assist&kind=as-voice",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-watch",
+  "ziel": "/?draft=assist&kind=as-method",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-watch",
+  "ziel": "/?draft=assist&kind=as-butler",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-watch",
+  "ziel": "/?draft=assist&kind=as-watch",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-watch",
+  "ziel": "/?draft=assist&kind=as-tone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-watch",
+  "ziel": "/?draft=assist&kind=as-guard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-watch",
+  "ziel": "/?draft=assist&kind=as-cost",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-tone",
+  "ziel": "/?draft=assist&kind=assist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-tone",
+  "ziel": "/?draft=assist&kind=as-clone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-tone",
+  "ziel": "/?draft=assist&kind=as-client",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-tone",
+  "ziel": "/?draft=assist&kind=as-ident",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-tone",
+  "ziel": "/?draft=assist&kind=as-dec",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-tone",
+  "ziel": "/?draft=assist&kind=as-brief",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-tone",
+  "ziel": "/?draft=assist&kind=as-voice",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-tone",
+  "ziel": "/?draft=assist&kind=as-method",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-tone",
+  "ziel": "/?draft=assist&kind=as-butler",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-tone",
+  "ziel": "/?draft=assist&kind=as-watch",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-tone",
+  "ziel": "/?draft=assist&kind=as-tone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-tone",
+  "ziel": "/?draft=assist&kind=as-guard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-tone",
+  "ziel": "/?draft=assist&kind=as-cost",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-guard",
+  "ziel": "/?draft=assist&kind=assist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-guard",
+  "ziel": "/?draft=assist&kind=as-clone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-guard",
+  "ziel": "/?draft=assist&kind=as-client",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-guard",
+  "ziel": "/?draft=assist&kind=as-ident",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-guard",
+  "ziel": "/?draft=assist&kind=as-dec",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-guard",
+  "ziel": "/?draft=assist&kind=as-brief",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-guard",
+  "ziel": "/?draft=assist&kind=as-voice",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-guard",
+  "ziel": "/?draft=assist&kind=as-method",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-guard",
+  "ziel": "/?draft=assist&kind=as-butler",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-guard",
+  "ziel": "/?draft=assist&kind=as-watch",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-guard",
+  "ziel": "/?draft=assist&kind=as-tone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-guard",
+  "ziel": "/?draft=assist&kind=as-guard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-guard",
+  "ziel": "/?draft=assist&kind=as-cost",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-cost",
+  "ziel": "/?draft=assist&kind=assist",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-cost",
+  "ziel": "/?draft=assist&kind=as-clone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-cost",
+  "ziel": "/?draft=assist&kind=as-client",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-cost",
+  "ziel": "/?draft=assist&kind=as-ident",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-cost",
+  "ziel": "/?draft=assist&kind=as-dec",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-cost",
+  "ziel": "/?draft=assist&kind=as-brief",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-cost",
+  "ziel": "/?draft=assist&kind=as-voice",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-cost",
+  "ziel": "/?draft=assist&kind=as-method",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-cost",
+  "ziel": "/?draft=assist&kind=as-butler",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-cost",
+  "ziel": "/?draft=assist&kind=as-watch",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-cost",
+  "ziel": "/?draft=assist&kind=as-tone",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-cost",
+  "ziel": "/?draft=assist&kind=as-guard",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=assist&kind=as-cost",
+  "ziel": "/?draft=assist&kind=as-cost",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=plans&kind=plans",
+  "ziel": "/?draft=plans&kind=plans",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=plans&kind=plans",
+  "ziel": "/?draft=plans&kind=programs",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=plans&kind=plans",
+  "ziel": "/?draft=plans&kind=builder",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=plans&kind=programs",
+  "ziel": "/?draft=plans&kind=plans",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=plans&kind=programs",
+  "ziel": "/?draft=plans&kind=programs",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=plans&kind=programs",
+  "ziel": "/?draft=plans&kind=builder",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=plans&kind=builder",
+  "ziel": "/?draft=plans&kind=plans",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=plans&kind=builder",
+  "ziel": "/?draft=plans&kind=programs",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=plans&kind=builder",
+  "ziel": "/?draft=plans&kind=builder",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=library&kind=lib-ex",
+  "ziel": "/?draft=library&kind=lib-ex",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=library&kind=lib-ex",
+  "ziel": "/?draft=library&kind=lib-meal",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=library&kind=lib-meal",
+  "ziel": "/?draft=library&kind=lib-ex",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=library&kind=lib-meal",
+  "ziel": "/?draft=library&kind=lib-meal",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=alerts&kind=alerts",
+  "ziel": "/?draft=alerts&kind=alerts",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=alerts&kind=alerts",
+  "ziel": "/?draft=alerts&kind=rules",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=alerts&kind=alerts",
+  "ziel": "/?draft=alerts&kind=alerts&stand=offen",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=alerts&kind=alerts",
+  "ziel": "/?draft=alerts&kind=alerts&stand=done",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=alerts&kind=alerts",
+  "ziel": "/?draft=alerts&kind=alerts&stand=alle",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=alerts&kind=alerts",
+  "ziel": "?$ACTION_ID_d3397928d46d24de69ddd2f6103a2613361cc1be=&id=9d99ba51-8c50-4b0e-8191-2a31a9c1a724&pfad=/?draft=alerts&kind=alerts",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=alerts&kind=alerts",
+  "ziel": "?$ACTION_ID_d3397928d46d24de69ddd2f6103a2613361cc1be=&id=f2e9045b-54ff-46da-b557-676638691d6c&pfad=/?draft=alerts&kind=alerts",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=alerts&kind=alerts",
+  "ziel": "?$ACTION_ID_d3397928d46d24de69ddd2f6103a2613361cc1be=&id=57f94080-1f6a-42ec-b9da-f54f98b6a537&pfad=/?draft=alerts&kind=alerts",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=alerts&kind=rules",
+  "ziel": "/?draft=alerts&kind=alerts",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=alerts&kind=rules",
+  "ziel": "/?draft=alerts&kind=rules",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=analytics",
+  "ziel": "/?draft=analytics&kind=analytics",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=analytics",
+  "ziel": "/?draft=analytics&kind=patterns",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=analytics",
+  "ziel": "/?draft=analytics&kind=intervene",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=analytics",
+  "ziel": "/?draft=analytics&kind=revenue",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=patterns",
+  "ziel": "/?draft=analytics&kind=analytics",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=patterns",
+  "ziel": "/?draft=analytics&kind=patterns",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=patterns",
+  "ziel": "/?draft=analytics&kind=intervene",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=patterns",
+  "ziel": "/?draft=analytics&kind=revenue",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=intervene",
+  "ziel": "/?draft=analytics&kind=analytics",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=intervene",
+  "ziel": "/?draft=analytics&kind=patterns",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=intervene",
+  "ziel": "/?draft=analytics&kind=intervene",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=intervene",
+  "ziel": "/?draft=analytics&kind=revenue",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=intervene",
+  "ziel": "/?draft=analytics&kind=intervene&stand=offen",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=intervene",
+  "ziel": "/?draft=analytics&kind=intervene&stand=done",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=intervene",
+  "ziel": "/?draft=analytics&kind=intervene&stand=alle",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=intervene",
+  "ziel": "?$ACTION_ID_d3397928d46d24de69ddd2f6103a2613361cc1be=&id=9d99ba51-8c50-4b0e-8191-2a31a9c1a724&pfad=/?draft=alerts&kind=alerts",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=intervene",
+  "ziel": "?$ACTION_ID_d3397928d46d24de69ddd2f6103a2613361cc1be=&id=f2e9045b-54ff-46da-b557-676638691d6c&pfad=/?draft=alerts&kind=alerts",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=intervene",
+  "ziel": "?$ACTION_ID_d3397928d46d24de69ddd2f6103a2613361cc1be=&id=57f94080-1f6a-42ec-b9da-f54f98b6a537&pfad=/?draft=alerts&kind=alerts",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=revenue",
+  "ziel": "/?draft=analytics&kind=analytics",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=revenue",
+  "ziel": "/?draft=analytics&kind=patterns",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=revenue",
+  "ziel": "/?draft=analytics&kind=intervene",
+  "drin": true
+ },
+ {
+  "seite": "/?draft=analytics&kind=revenue",
+  "ziel": "/?draft=analytics&kind=revenue",
+  "drin": true
+ }
+]
