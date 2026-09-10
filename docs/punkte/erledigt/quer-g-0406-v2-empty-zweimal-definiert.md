@@ -8,7 +8,7 @@ braucht: []
 kind_von: G-405
 entscheidung: null
 erledigt: 2026-09-08
-commit: OFFEN
+commit: 8f5709cb
 beruehrt:
   dateien:
     - packages/ui/src/styles/v2.css
