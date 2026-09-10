@@ -1,0 +1,256 @@
+{
+  "bereiche": [
+    {
+      "bereich": "overview",
+      "raster": "222px 1072px 306px",
+      "leisteEintraege": 12,
+      "gruppen": 5,
+      "badges": [
+        "2",
+        "1",
+        "3",
+        "1"
+      ],
+      "unternav": 0,
+      "titel": "Dashboard",
+      "pills": 3,
+      "aktionen": 2,
+      "kontextBreite": 306,
+      "kontextSichtbar": true,
+      "insights": 3,
+      "details": 4,
+      "vermerke": 0,
+      "hg": "oklch(0.155 0.005 270)"
+    },
+    {
+      "bereich": "athletes",
+      "raster": "222px 1072px 306px",
+      "leisteEintraege": 12,
+      "gruppen": 5,
+      "badges": [
+        "2",
+        "1",
+        "3",
+        "1"
+      ],
+      "unternav": 8,
+      "titel": "Athletes",
+      "pills": 3,
+      "aktionen": 2,
+      "kontextBreite": 306,
+      "kontextSichtbar": true,
+      "insights": 3,
+      "details": 4,
+      "vermerke": 0,
+      "hg": "oklch(0.155 0.005 270)"
+    },
+    {
+      "bereich": "checkins",
+      "raster": "222px 1072px 306px",
+      "leisteEintraege": 12,
+      "gruppen": 5,
+      "badges": [
+        "2",
+        "1",
+        "3",
+        "1"
+      ],
+      "unternav": 3,
+      "titel": "Check-ins",
+      "pills": 3,
+      "aktionen": 2,
+      "kontextBreite": 306,
+      "kontextSichtbar": true,
+      "insights": 2,
+      "details": 4,
+      "vermerke": 0,
+      "hg": "oklch(0.155 0.005 270)"
+    },
+    {
+      "bereich": "assist",
+      "raster": "222px 1072px 306px",
+      "leisteEintraege": 12,
+      "gruppen": 5,
+      "badges": [
+        "2",
+        "1",
+        "3",
+        "1"
+      ],
+      "unternav": 13,
+      "titel": "Assistant",
+      "pills": 3,
+      "aktionen": 2,
+      "kontextBreite": 306,
+      "kontextSichtbar": true,
+      "insights": 3,
+      "details": 4,
+      "vermerke": 2,
+      "hg": "oklch(0.155 0.005 270)"
+    },
+    {
+      "bereich": "calendar",
+      "raster": "222px 1072px 306px",
+      "leisteEintraege": 12,
+      "gruppen": 5,
+      "badges": [
+        "2",
+        "1",
+        "3",
+        "1"
+      ],
+      "unternav": 0,
+      "titel": "Calendar",
+      "pills": 2,
+      "aktionen": 1,
+      "kontextBreite": 306,
+      "kontextSichtbar": true,
+      "insights": 2,
+      "details": 4,
+      "vermerke": 2,
+      "hg": "oklch(0.155 0.005 270)"
+    },
+    {
+      "bereich": "plans",
+      "raster": "222px 1072px 306px",
+      "leisteEintraege": 12,
+      "gruppen": 5,
+      "badges": [
+        "2",
+        "1",
+        "3",
+        "1"
+      ],
+      "unternav": 3,
+      "titel": "Plans",
+      "pills": 3,
+      "aktionen": 2,
+      "kontextBreite": 306,
+      "kontextSichtbar": true,
+      "insights": 2,
+      "details": 4,
+      "vermerke": 2,
+      "hg": "oklch(0.155 0.005 270)"
+    },
+    {
+      "bereich": "library",
+      "raster": "222px 1072px 306px",
+      "leisteEintraege": 12,
+      "gruppen": 5,
+      "badges": [
+        "2",
+        "1",
+        "3",
+        "1"
+      ],
+      "unternav": 2,
+      "titel": "Library",
+      "pills": 3,
+      "aktionen": 2,
+      "kontextBreite": 306,
+      "kontextSichtbar": true,
+      "insights": 2,
+      "details": 4,
+      "vermerke": 2,
+      "hg": "oklch(0.155 0.005 270)"
+    },
+    {
+      "bereich": "alerts",
+      "raster": "222px 1072px 306px",
+      "leisteEintraege": 12,
+      "gruppen": 5,
+      "badges": [
+        "2",
+        "1",
+        "3",
+        "1"
+      ],
+      "unternav": 2,
+      "titel": "Alerts",
+      "pills": 3,
+      "aktionen": 1,
+      "kontextBreite": 306,
+      "kontextSichtbar": true,
+      "insights": 2,
+      "details": 4,
+      "vermerke": 0,
+      "hg": "oklch(0.155 0.005 270)"
+    },
+    {
+      "bereich": "analytics",
+      "raster": "222px 1072px 306px",
+      "leisteEintraege": 12,
+      "gruppen": 5,
+      "badges": [
+        "2",
+        "1",
+        "3",
+        "1"
+      ],
+      "unternav": 4,
+      "titel": "Analytics",
+      "pills": 3,
+      "aktionen": 1,
+      "kontextBreite": 306,
+      "kontextSichtbar": true,
+      "insights": 3,
+      "details": 4,
+      "vermerke": 2,
+      "hg": "oklch(0.155 0.005 270)"
+    },
+    {
+      "bereich": "inbox",
+      "raster": "222px 1072px 306px",
+      "leisteEintraege": 12,
+      "gruppen": 5,
+      "badges": [
+        "2",
+        "1",
+        "3",
+        "1"
+      ],
+      "unternav": 0,
+      "titel": "Notifications",
+      "pills": 2,
+      "aktionen": 1,
+      "kontextBreite": 306,
+      "kontextSichtbar": true,
+      "insights": 2,
+      "details": 4,
+      "vermerke": 2,
+      "hg": "oklch(0.155 0.005 270)"
+    },
+    {
+      "bereich": "team",
+      "raster": "222px 1072px 306px",
+      "leisteEintraege": 12,
+      "gruppen": 5,
+      "badges": [
+        "2",
+        "1",
+        "3",
+        "1"
+      ],
+      "unternav": 0,
+      "titel": "Team & audit",
+      "pills": 2,
+      "aktionen": 1,
+      "kontextBreite": 306,
+      "kontextSichtbar": true,
+      "insights": 2,
+      "details": 4,
+      "vermerke": 2,
+      "hg": "oklch(0.155 0.005 270)"
+    }
+  ],
+  "schalter": {
+    "vor": {
+      "n": 1,
+      "raster": "222px 1072px 306px"
+    },
+    "nach": {
+      "n": 0,
+      "raster": "222px 1378px"
+    }
+  }
+}

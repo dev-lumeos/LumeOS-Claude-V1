@@ -427,24 +427,35 @@ test('alle sechzehn Reiter haben einen Bereich', () => {
   const tabs = Array.from(seite.matchAll(/\{ id: '(\w+)', label: '/g), m => m[1])
   assert.equal(tabs.length, 16, `page.tsx fuehrt ${tabs.length} Reiter, nicht 16`)
 
-  const inNav = new Set(alleEintraege().flatMap(e => e.reiter.map(r => r.id)))
+  // `[read]` **`?? []` wegen der Aussenlinks aus G-404** — sie
+  // fuehren keine Reiter, und `flatMap` faellt sonst ueber sie.
+  const inNav = new Set(alleEintraege().flatMap(e => (e.reiter ?? []).map(r => r.id)))
   for (const t of tabs) {
     assert.ok(inNav.has(t),
       `der Reiter "${t}" steht in keinem Bereich — er waere nicht mehr `
       + 'erreichbar')
   }
-  assert.equal(inNav.size, 16,
-    `die Navigation fuehrt ${inNav.size} Reiter, page.tsx aber 16`)
+  // `[cmd]` **G-404: siebzehn** — die sechzehn der Vorlage plus
+  // `settings`, das die Vorlage NICHT fuehrt (A5). `[read]` **Die
+  // Bedingung bleibt dieselbe:** kein Vorlagenreiter darf fehlen.
+  assert.equal(inNav.size, 17,
+    `die Navigation fuehrt ${inNav.size} Reiter, erwartet 17 `
+    + '(16 aus der Vorlage + settings)')
+  assert.ok(inNav.has('settings'),
+    'der Bereich `settings` ist weg — G-404 hat ihn angelegt')
 })
 
 test('die Gruppen folgen dem Altrepo, die Eintraege dem Portal', () => {
   // `[cmd]` **Das Altrepo fuehrte fuenf Gruppen**
   // (`Sidebar.tsx:22-48`). `[read]` **Struktur uebernommen, kein
   // Code** — die Eintraege sind die des Portals.
-  assert.equal(PORTAL_NAV.length, 5,
-    `die Seitenleiste fuehrt ${PORTAL_NAV.length} Gruppen, nicht fuenf`)
-  assert.equal(alleEintraege().length, 11,
-    `die Seitenleiste fuehrt ${alleEintraege().length} Eintraege, nicht elf`)
+  // `[cmd]` **G-404: sieben Gruppen** — die fuenf des Altrepos, dazu
+  // `System` (Einstellungen) und `Workspaces` (drei Wege hinaus).
+  assert.equal(PORTAL_NAV.length, 7,
+    `die Seitenleiste fuehrt ${PORTAL_NAV.length} Gruppen, nicht sieben`)
+  assert.equal(alleEintraege().length, 15,
+    `die Seitenleiste fuehrt ${alleEintraege().length} Eintraege, nicht 15 `
+    + '(11 Bereiche + Einstellungen + drei Aussenlinks)')
   for (const g of PORTAL_NAV) {
     assert.ok(g.eintraege.length > 0,
       `die Gruppe "${g.label ?? '(ohne Titel)'}" ist leer — dann steht dort `
@@ -462,13 +473,20 @@ test('ein Zaehler ist rechenbar oder er fehlt', () => {
     'vorschlaege', 'rechte', 'autonomie', 'einladungen'])
   let mit = 0
   for (const e of alleEintraege()) {
-    if (e.zaehler === null) {
+    // `[read]` **Ein Aussenlink zaehlt nichts** — er fuehrt aus dem
+    // Portal heraus, also gibt es keine Menge dahinter.
+    if (e.extern) {
+      assert.ok(!e.zaehler,
+        `"${e.label}" ist ein Aussenlink UND traegt einen Zaehler`)
+      continue
+    }
+    if (!e.zaehler) {
       assert.ok(!e.stufe,
         `"${e.label}" hat keine Zahl, aber eine Stufe — die faerbt nichts`)
       continue
     }
     mit++
-    assert.ok(ERLAUBT.has(e.zaehler),
+    assert.ok(ERLAUBT.has(e.zaehler!),
       `"${e.label}" zaehlt "${e.zaehler}" — diese Menge gibt es nicht`)
   }
   // `[cmd]` **Sechs, nicht sieben** — mein erster Zaehlversuch las die
@@ -580,11 +598,17 @@ test('ein Bereich mit einem Reiter zeigt keine Reiterleiste', () => {
   // `[read]` **Eine Leiste mit genau einem Eintrag ist ein
   // Bedienelement ohne Wahl** — C-426 im Kleinen.
   const schale = lies(HIER, '..', '..', 'components', 'portal-schale.tsx')
-  assert.match(schale, /if \(e\.reiter\.length < 2\) return null/,
+  // `[cmd]` **G-404: die Bedingung liest jetzt `reiter`** -- eine
+  // oertliche Groesse mit `?? []`, weil ein Aussenlink keine Reiter
+  // fuehrt. `[read]` **Die SACHE ist dieselbe:** unter zwei
+  // Eintraegen keine Leiste.
+  assert.match(schale, /reiter\.length < 2\) return null/,
     'die Reiterleiste erscheint wieder bei einem einzigen Reiter')
 
   // `[cmd]` **Gemessen: vier Bereiche haben mehr als einen Reiter.**
-  const mehrere = alleEintraege().filter(e => e.reiter.length > 1)
+  const mehrere = alleEintraege().filter(e => (e.reiter?.length ?? 0) > 1)
+  // `[cmd]` **Unveraendert vier** — `settings` fuehrt genau einen
+  // Reiter, die drei Aussenlinks keinen.
   assert.equal(mehrere.length, 4,
     `${mehrere.length} Bereiche fuehren mehrere Reiter, nicht vier`)
 })
@@ -663,4 +687,142 @@ test('apps/web bekommt die Vorgabe, nicht die Portalfassung', () => {
   assert.match(sb, /\{gruppen \?/,
     'der Zweig ohne `gruppen` ist weg — dann verliert apps/web seine '
     + 'Modulnavigation')
+})
+
+// ══════════════════════════════════════════════════════════════════
+// G-404: Workspaces und Settings
+// ══════════════════════════════════════════════════════════════════
+
+test('drei Wege hinaus, keiner auf sich selbst', () => {
+  // ══ A1: EIN VERWEIS AUF SICH IST EIN KREIS ═════════════════════
+  //
+  // `[cmd]` **`packages/ui/src/shell/nav.ts` fuehrt „Coach Portal"
+  // in `WORKSPACES`** — aus dem Portal heraus waere das ein Verweis
+  // auf sich selbst. `[read]` **Genau deshalb blieb die Gruppe in
+  // G-402 weg.**
+  const extern = alleEintraege().filter(e => e.extern)
+  assert.equal(extern.length, 3,
+    `${extern.length} Aussenlinks, erwartet drei (LumeOS, Marketplace, Admin)`)
+
+  for (const e of extern) {
+    assert.ok(e.href, `"${e.label}" ist extern, nennt aber kein Ziel`)
+    assert.ok(!e.reiter?.length,
+      `"${e.label}" fuehrt Reiter — ein Aussenlink verlaesst das Portal, `
+      + 'da gibt es nichts zu gliedern')
+    // `[cmd]` **3220 ist das Portal selbst.**
+    assert.ok(!e.href!.includes('3220'),
+      `"${e.label}" zeigt auf 3220 — das ist das Portal selbst, ein Kreis`)
+    assert.ok(!/coach\.lumeos\.app/.test(e.href!),
+      `"${e.label}" zeigt auf coach.lumeos.app — dasselbe im Fernen`)
+  }
+  assert.deepEqual(extern.map(e => e.label), ['LumeOS', 'Marketplace', 'Admin'])
+})
+
+test('ein Aussenlink traegt target und rel', () => {
+  // `[cmd]` **Gemessen an `sidebar.tsx:214-229`**, der
+  // Workspaces-Gruppe von `apps/web`: schlichtes `<a>`,
+  // `target="_blank"`, `rel="noopener noreferrer"`, Akzentpunkt.
+  //
+  // `[read]` **Ohne `noopener` kann die Zielseite auf
+  // `window.opener` zugreifen** — deshalb ist es keine Kosmetik.
+  const sb = lies(WURZEL, 'packages', 'ui', 'src', 'shell', 'sidebar.tsx')
+  const zweig = sb.slice(sb.indexOf('return e.extern ? ('))
+    .slice(0, 700)
+  assert.ok(zweig.length > 100,
+    'der Zweig fuer Aussenlinks ist weg — dann rendert `next/link` einen '
+    + 'fremden Server')
+  assert.match(zweig, /target="_blank"/, '`target` fehlt am Aussenlink')
+  assert.match(zweig, /rel="noopener noreferrer"/,
+    '`rel="noopener noreferrer"` fehlt — die Zielseite kaeme an '
+    + '`window.opener`')
+})
+
+test('Settings sitzt in einer eigenen Gruppe, nicht als Reiter', () => {
+  // ══ A5: DIE BEGRUENDUNG, ALS BEDINGUNG ═════════════════════════
+  //
+  // `[cmd]` **Der Auftrag nimmt einen `settings`-Reiter an** — den
+  // gibt es nicht: die sechzehn aus `module-coach.jsx:923-940`
+  // enden bei `team`. `[read]` **Die sechzehn sind die ARBEIT am
+  // Klienten; die eigenen Stammdaten sind keine.**
+  const q = lies(VORLAGEN, 'module-coach.jsx')
+  const anker = q.indexOf('CoachPortalStandalone')
+  const ids = Array.from(q.slice(anker).matchAll(/\{\s*id:\s*"(\w+)",\s*label:/g),
+    m => m[1])
+  assert.ok(!ids.includes('settings'),
+    'die Vorlage fuehrt jetzt einen `settings`-Reiter — dann waere ein '
+    + 'siebzehnter Bereich neu zu beurteilen')
+
+  const gruppe = PORTAL_NAV.find(g => g.label === 'System')
+  assert.ok(gruppe, 'die Gruppe „System" fehlt')
+  assert.deepEqual(gruppe.eintraege.map(e => e.id), ['settings'],
+    'die Systemgruppe fuehrt nicht genau die Einstellungen')
+})
+
+test('elf Felder, acht ohne Spalte — und jede nennt ihre', () => {
+  // ══ A2: DREI MIT DATEN, ACHT ALS ATTRAPPE ══════════════════════
+  //
+  // `[cmd]` **`coach.coach_profiles` fuehrt sieben Spalten**, davon
+  // drei anzeigbar. `[cmd]` **`CoachProfile.tsx:8-14` nennt sieben
+  // Formularfelder plus `tier`** — acht ohne Zuhause.
+  const t = lies(HIER, '..', '..', 'components', 'tab-settings.tsx')
+
+  // Die acht fehlenden Spalten, je mit Namen.
+  for (const s of ['business_name', 'bio', 'contact_email', 'website',
+    'specialties[]', 'certifications[]', 'max_clients', 'tier']) {
+    assert.ok(t.includes(s),
+      `die fehlende Spalte \`${s}\` wird nicht genannt — dann sucht der `
+      + 'naechste Leser den Fehler im Code')
+  }
+
+  // `[read]` **Kein Schreibweg** — Tom: „noch gar nichts mit db".
+  // `[cmd]` **Ohne Kommentare pruefen:** der Dateikopf NENNT
+  // `formAction`, um zu erklaeren, dass es keinen gibt. **Ein
+  // Waechter, der seine eigene Begruendung liest, urteilt falsch.**
+  const ohneKommentar = t.split(String.fromCharCode(10))
+    .filter(zeile => !zeile.trimStart().startsWith('//'))
+    .join(String.fromCharCode(10))
+  for (const verboten of ['use server', 'formAction', 'revalidatePath']) {
+    assert.ok(!ohneKommentar.includes(verboten),
+      `\`${verboten}\` steht in den Einstellungen — der Auftrag verbietet `
+      + 'jeden Schreibweg')
+  }
+  assert.match(t, /readOnly/,
+    'die Felder sind nicht mehr `readOnly` — dann sehen sie aus, als '
+    + 'liesse sich etwas speichern')
+})
+
+test('die Demo-Listen sagen, dass nichts gespeichert wird', () => {
+  // ══ A3: TOMS VORGABE, WOERTLICH ════════════════════════════════
+  //
+  // **Tom:** *„deklarier Demo, das wird spaeter definiert."*
+  const t = lies(HIER, '..', '..', 'components', 'tab-settings.tsx')
+  assert.match(t, /nichts wird gespeichert/,
+    'der Vermerk „nichts wird gespeichert" fehlt — dann haelt jemand '
+    + 'die Demo-Eintraege fuer Daten')
+  assert.match(t, /werte\.includes\(w\)/,
+    'der doppelte Eintrag wird nicht mehr abgewiesen')
+  assert.match(t, /setWerte\(werte\.filter/,
+    'das Entfernen ist weg')
+})
+
+test('subscription_plans taugen nicht als Anzeige — und das steht da', () => {
+  // ══ A4: GEMESSEN, NICHT GERATEN ════════════════════════════════
+  //
+  // `[cmd]` **Gemessen: drei Zeilen** — `Lumeos Basic` (999 ct),
+  // `Plus` (1999), `Pro` (2999), je Monat, mit `ai_credits_included`
+  // 20/50/100. `[read]` **Das sind Abonnements des ENDNUTZERS**, nicht
+  // die Stufen eines Coaches (`starter` bis `enterprise`).
+  //
+  // `[read]` **Sie zu zeigen hiesse, dem Coach einen Preis zu nennen,
+  // der fuer ihn nicht gilt.**
+  const t = lies(HIER, '..', '..', 'components', 'tab-settings.tsx')
+  assert.match(t, /subscription_plans/,
+    'die Messung zu den Plaenen fehlt — A4 verlangt die Antwort')
+  assert.match(t, /Keine Rechnung, keine Zahlung/,
+    'der Vermerk zur Abrechnung fehlt')
+  // `[read]` **Und sie werden NICHT gelesen** — kein Leseweg dorthin.
+  const daten = lies(HIER, '..', 'daten.ts')
+  assert.ok(!daten.includes('subscription_plans'),
+    'das Portal liest `subscription_plans` — sie gelten aber dem '
+    + 'Endnutzer, nicht dem Coach')
 })

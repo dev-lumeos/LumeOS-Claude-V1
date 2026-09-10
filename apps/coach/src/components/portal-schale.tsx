@@ -148,10 +148,11 @@ function Modulkopf({ titel, athleten, alerts, email }: {
  * Bedienelement ohne Wahl.
  */
 function Reiterleiste({ e, tab }: { e: PortalNavEintrag, tab: string }) {
-  if (e.reiter.length < 2) return null
+  const reiter = e.reiter ?? []
+  if (reiter.length < 2) return null
   return (
     <nav className="v2-tabs" aria-label={`${e.label} — Reiter`}>
-      {e.reiter.map(r => (
+      {reiter.map(r => (
         <Link
           key={r.id}
           href={`/?bereich=${e.id}&tab=${r.id}`}
@@ -178,7 +179,10 @@ function alsGruppen(bereich: string, zaehler: PortalZaehler): SidebarGruppe[] {
       id: e.id,
       label: e.label,
       icon: e.icon,
-      href: `/?bereich=${e.id}`,
+      // `[read]` **G-404: ein Aussenlink bringt sein Ziel mit** —
+      // sonst baut die Schale den Weg in den eigenen Bereich.
+      href: e.href ?? `/?bereich=${e.id}`,
+      extern: e.extern,
       zahl: e.zaehler ? zaehler[e.zaehler] : undefined,
       stufe: e.stufe,
     })),
@@ -214,7 +218,7 @@ function kontextDetails(
   z: PortalZaehler,
 ): Array<{ label: string, value: string }> {
   const raus: Array<{ label: string, value: string }> = [
-    { label: 'Reiter in diesem Bereich', value: String(e.reiter.length) },
+    { label: 'Reiter in diesem Bereich', value: String(e.reiter?.length ?? 0) },
   ]
   if (e.zaehler) {
     const n = z[e.zaehler]

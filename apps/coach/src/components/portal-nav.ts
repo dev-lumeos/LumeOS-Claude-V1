@@ -68,7 +68,10 @@ export type PortalNavEintrag = {
    * `[read]` **Das ist der Kern von A4:** LumeOS zeigt je Modul eine
    * eigene Reiterleiste, nicht eine Zeile mit allem.
    */
-  reiter: Array<{ id: string, label: string }>
+  //
+  // `[read]` **Ein Aussenlink fuehrt keine Reiter** — er verlaesst
+  // das Portal, also gibt es hier nichts zu gliedern.
+  reiter?: Array<{ id: string, label: string }>
   /**
    * Woraus der Zaehler faellt — oder `null`, wenn er nicht rechenbar
    * ist.
@@ -76,10 +79,20 @@ export type PortalNavEintrag = {
    * `[read]` **Ein Zaehler ohne Daten bleibt weg** (G-400/A3): eine
    * erfundene Zahl in der Leiste waere schlimmer als keine.
    */
-  zaehler: 'klienten' | 'ungelesen' | 'checkins' | 'alerts'
+  zaehler?: 'klienten' | 'ungelesen' | 'checkins' | 'alerts'
     | 'vorschlaege' | 'rechte' | 'autonomie' | 'einladungen' | null
   /** Die Stufe, wenn der Zaehler ueber null steht. */
   stufe?: 'warn' | 'critical'
+  /**
+   * Ein Ziel ausserhalb des Portals — G-404.
+   *
+   * `[read]` **Ohne `href` baut die Schale `/?bereich=<id>`** — der
+   * Normalfall. **Mit `href` und `extern` fuehrt der Eintrag
+   * hinaus**, und die Seitenleiste zeichnet ihn als `<a target=
+   * "_blank" rel="noopener noreferrer">`, wie `apps/web` es tut.
+   */
+  href?: string
+  extern?: boolean
 }
 
 export type PortalNavGruppe = {
@@ -207,9 +220,86 @@ export const PORTAL_NAV: PortalNavGruppe[] = [
       {
         id: 'einstellungen',
         label: 'Team & Audit',
-        icon: 'settings',
+        icon: 'shield',
         reiter: [{ id: 'team', label: 'Team & Audit' }],
         zaehler: null,
+      },
+    ],
+  },
+  // ══ G-404/A5: Einstellungen als eigener BEREICH ═══════════════════
+  //
+  // **Der Auftrag sagt:** *„Das Portal hat einen `settings`-Reiter,
+  // er zeigt heute `TabLeer`."*
+  //
+  // `[cmd]` **Gemessen: den Reiter gibt es nicht.** Die sechzehn aus
+  // `module-coach.jsx:923-940` enden bei `team`; `LEERE_TABS` fuehrt
+  // acht, `settings` ist keiner davon. **Die Frage „Reiter oder
+  // Bereich" stellt sich also gar nicht.**
+  //
+  // ══ WARUM EIN EIGENER BEREICH, UND KEIN SIEBZEHNTER REITER ══════
+  //
+  // `[read]` **Die sechzehn Reiter sind die ARBEIT am Klienten** —
+  // sie kommen aus der Vorlage und beschreiben, was ein Coach mit
+  // seinen Athleten tut. **Die eigenen Stammdaten sind keine
+  // Arbeit an einem Klienten.**
+  //
+  // `[read]` **`apps/web` trennt genauso:** Module oben, `Settings`
+  // unten unter SYSTEM — nicht als achtes Modul.
+  //
+  // `[cmd]` **Und ein siebzehnter Reiter waere eine Abweichung von
+  // der Vorlage**, die sich nicht belegen liesse: die Liste in
+  // `module-coach.jsx` ist abgelesen, nicht erfunden (G-401/A2).
+  {
+    label: 'System',
+    eintraege: [
+      {
+        id: 'settings',
+        label: 'Einstellungen',
+        icon: 'settings',
+        reiter: [{ id: 'settings', label: 'Einstellungen' }],
+        zaehler: null,
+      },
+    ],
+  },
+  // ══ G-404/A1: die drei Wege HINAUS ═══════════════════════════════
+  //
+  // **Tom, 2026-09-08:** *„eigenen links zu lumeos, marketplace,
+  // admin."*
+  //
+  // `[cmd]` **NICHT „Coach Portal"** — `packages/ui/src/shell/nav.ts`
+  // fuehrt ihn in `WORKSPACES`, und aus dem Portal waere er ein
+  // Verweis auf sich selbst. **Genau deshalb blieb die Gruppe in
+  // G-402 weg**; jetzt steht sie da, ohne den Kreis.
+  //
+  // `[cmd]` **`nav.ts` bleibt unberuehrt** — die Liste hier ist die
+  // des Portals, und die Requisite `gruppen` aus G-402 traegt sie.
+  {
+    label: 'Workspaces',
+    eintraege: [
+      {
+        id: 'zu-lumeos',
+        label: 'LumeOS',
+        icon: 'dashboard',
+        href: 'http://localhost:3200',
+        extern: true,
+      },
+      {
+        id: 'zu-marketplace',
+        label: 'Marketplace',
+        icon: 'marketplace',
+        // `[cmd]` **Ortlich laeuft kein Marketplace** — gemessen: die
+        // Anwendung gibt es unter `apps/` nicht. `[read]` **Der Link
+        // zeigt deshalb auf die Adresse, die `nav.ts` fuehrt** —
+        // dieselbe Wahrheit wie in `apps/web`, kein zweiter Ort.
+        href: 'https://marketplace.lumeos.app',
+        extern: true,
+      },
+      {
+        id: 'zu-admin',
+        label: 'Admin',
+        icon: 'admin',
+        href: 'http://localhost:3210',
+        extern: true,
       },
     ],
   },
@@ -230,7 +320,9 @@ export function alleEintraege(): PortalNavEintrag[] {
 export function bereichFuerReiter(tab: string): PortalNavEintrag | null {
   for (const g of PORTAL_NAV) {
     for (const e of g.eintraege) {
-      if (e.reiter.some(r => r.id === tab)) return e
+      // `[read]` **Ein Aussenlink hat keine Reiter** — `?.some` statt
+      // `.some`, sonst faellt die Suche ueber ihn.
+      if (e.reiter?.some(r => r.id === tab)) return e
     }
   }
   return null

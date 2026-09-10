@@ -51,6 +51,21 @@ export type SidebarEintrag = {
   zahl?: number
   /** Faerbt die Zahl — `warn` gelb, `critical` rot. */
   stufe?: 'warn' | 'critical'
+  /**
+   * Ein Ziel AUSSERHALB dieser Anwendung — G-404.
+   *
+   * `[cmd]` **Gemessen an der Workspaces-Gruppe** (`:214-229`): sie
+   * nimmt ein schlichtes `<a>` statt `linkAs`, dazu
+   * `target="_blank"` und `rel="noopener noreferrer"` — **ohne
+   * `noopener` kann die Zielseite auf `window.opener` zugreifen** —
+   * und einen Akzentpunkt statt `aria-current`.
+   *
+   * `[read]` **Ein fremder Server ist keine Seite dieser Anwendung**:
+   * `next/link` wuerde ihn vorab laden wollen und den Verlauf
+   * uebernehmen. **Deshalb die andere Form, nicht nur ein anderes
+   * Ziel.**
+   */
+  extern?: boolean
 }
 
 /** Eine Gruppe. Ohne `label` bleibt die Beschriftung weg. */
@@ -146,14 +161,13 @@ export function Sidebar({
             <div className="v2-nav-group" key={g.label ?? `g${i}`}>
               {g.label && <div className="v2-nav-group-label">{g.label}</div>}
               {g.eintraege.map(e => {
-                const istAktiv = pathname === e.href || pathname.startsWith(`${e.href}?`)
-                return (
-                  <Link
-                    key={e.id}
-                    href={e.href}
-                    className={`v2-nav-item ${istAktiv ? 'v2-active' : ''}`.trim()}
-                    aria-current={istAktiv ? 'page' : undefined}
-                  >
+                // `[read]` **Ein Aussenlink ist nie „aktiv"** — er
+                // fuehrt aus der Anwendung heraus, also kann er nicht
+                // die Seite sein, auf der man steht.
+                const istAktiv = !e.extern
+                  && (pathname === e.href || pathname.startsWith(`${e.href}?`))
+                const inhalt = (
+                  <>
                     <span className="v2-nav-icon"><Icon name={e.icon} /></span>
                     {e.label}
                     {/* E-72: eine Null wird nicht gezeichnet — sie
@@ -163,6 +177,32 @@ export function Sidebar({
                         {e.zahl}
                       </span>
                     )}
+                    {/* Der Punkt zeigt: das Ziel liegt ausserhalb —
+                        dieselbe Form wie die Workspaces-Gruppe. */}
+                    {e.extern && <span className="v2-accent-dot" />}
+                  </>
+                )
+                // `[cmd]` **Schlichtes `<a>` statt `linkAs`** — genau
+                // wie `:214-229`. **`next/link` wuerde einen fremden
+                // Server vorab laden wollen.**
+                return e.extern ? (
+                  <a
+                    key={e.id}
+                    href={e.href}
+                    className="v2-nav-item"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {inhalt}
+                  </a>
+                ) : (
+                  <Link
+                    key={e.id}
+                    href={e.href}
+                    className={`v2-nav-item ${istAktiv ? 'v2-active' : ''}`.trim()}
+                    aria-current={istAktiv ? 'page' : undefined}
+                  >
+                    {inhalt}
                   </Link>
                 )
               })}

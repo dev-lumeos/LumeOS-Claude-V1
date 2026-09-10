@@ -438,3 +438,566 @@
   line-height: 1.6;
   color: var(--fg-subtle);
 }
+
+/* ══ G-404: die Einstellungen ═══════════════════════════════════════
+   `[read]` Ein Formular, das NICHT speichert -- die Felder tragen
+   `readOnly`, und unter jedem steht, welche Spalte fehlt. */
+.cp-felder {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.cp-felder + .cp-felder {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.cp-feld { display: flex; flex-direction: column; gap: 5px; }
+
+.cp-feld-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--fg-muted);
+}
+
+.cp-eingabe {
+  padding: 6px 9px;
+  font: inherit;
+  font-size: 12px;
+  color: var(--fg);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+/* `[read]` Ein Feld ohne Schreibweg sieht anders aus als eines mit --
+   sonst versucht jemand, es zu fuellen. */
+.cp-eingabe[readonly] {
+  color: var(--fg-subtle);
+  border-style: dashed;
+  cursor: default;
+}
+
+.cp-eingabe::placeholder { color: var(--fg-subtle); }
+
+.cp-feld-grund {
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--fg-subtle);
+}
+
+/* Die Demo-Listen: Marke mit Entfernen-Kreuz. */
+.cp-marken {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-height: 22px;
+}
+
+.cp-marke {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 4px 2px 8px;
+  font-size: 11px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.cp-marke-weg {
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--fg-subtle);
+  background: none;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.cp-marke-weg:hover { color: var(--neg); background: var(--surface-hover); }
+
+/* Die vier Stufen -- `starter` ist die Vorgabe des Vorgaengers. */
+.cp-stufen { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.cp-stufe-marke {
+  padding: 3px 9px;
+  font-size: 10.5px;
+  color: var(--fg-subtle);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.cp-stufe-marke[data-gewaehlt="ja"] {
+  color: var(--acc);
+  border-color: var(--acc);
+  background: color-mix(in oklch, var(--acc) 12%, var(--surface-2));
+}
+
+/* ══ DIE DRAFT-SCHALE — G-405 ═══════════════════════════════════════
+
+   ABGESCHRIEBEN AUS `module-coach-portal-shell.jsx`, Zeile fuer
+   Zeile. Jede Zahl hier steht dort auch — die Zeilennummer im
+   Kommentar sagt wo.
+
+   WAS HIER NICHT STEHT: alles, was `v2.css` aus `@lumeos/ui` schon
+   traegt. Gemessen 2026-09-10: `v2-nav-item`, `v2-module-header`,
+   `v2-btn`, `v2-eyebrow`, `v2-tabs`, `v2-pill`, `v2-icon-btn`,
+   `v2-nav-group` sind alle vorhanden. Die Schale ruft sie, statt
+   sie nachzubauen — sonst haette das Portal zwei Knopfsorten, die
+   sich unterschiedlich abnutzen.
+
+   Der `dp-`-Praefix beruehrt keinen bestehenden Selektor: portal.css
+   fuehrt `cp-`, das Paket `v2-`. */
+
+/* `:112-117` — die Schale. Der Auftrag zitiert sie woertlich. */
+.dp-app {
+  display: grid;
+  grid-template-columns: 222px 1fr 306px;
+  height: 100vh;
+  width: 100vw;
+  background: var(--bg);
+  overflow: hidden;
+  --acc: var(--acc-coach);
+}
+
+/* `:100` — `rightOpen`. Das Merkmal heisst `data-rechts`, weil die
+   Schale es so schreibt (`portal-draft-schale.tsx:318`). Der erste
+   Anlauf schrieb hier `data-kontext` — die Spalte waere nie
+   verschwunden, und der Knopf haette nichts getan (C-426). */
+.dp-app[data-rechts='zu'] { grid-template-columns: 222px 1fr; }
+
+/* ── Die Leiste — `:119-124` ─────────────────────────────────── */
+
+.dp-leiste {
+  border-right: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 45%, var(--bg));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* `:126` — Marke */
+.dp-marke {
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.dp-marke-zeichen {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: var(--acc-coach);
+  color: var(--bg);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: -0.04em;
+}
+
+.dp-marke-name { font-size: 12.5px; font-weight: 600; letter-spacing: -0.01em; }
+.dp-marke-coach { min-width: 0; }
+
+/* `:135-145` — der angemeldete Nutzer */
+.dp-nutzer-huelle { padding: 9px 11px; border-bottom: 1px solid var(--border); }
+
+.dp-nutzer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.dp-nutzer-zeichen {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--acc-train), var(--acc-recov));
+  color: var(--bg);
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.dp-nutzer-name {
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* `:148` — die Navigation traegt NUR Eltern (`:2` im Draft:
+   „Sidebar carries parents only; children live in the content
+   sub-nav.") */
+.dp-nav { flex: 1; overflow-y: auto; padding: 8px; }
+.dp-gruppe { margin-bottom: 11px; }
+
+.dp-gruppe-titel {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  padding: 0 8px;
+  margin-bottom: 4px;
+}
+
+.dp-eintrag {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--fg-muted);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 120ms var(--kurve-aus), color 120ms var(--kurve-aus);
+}
+
+.dp-eintrag:hover { background: var(--surface-hover); color: var(--fg); }
+
+.dp-eintrag[aria-current='page'] {
+  background: color-mix(in srgb, var(--acc) 12%, transparent);
+  color: var(--acc);
+  font-weight: 500;
+}
+
+/* `dp-aktiv` setzt die Schale zusaetzlich zu `aria-current`. Beide
+   Wege fuehren zur selben Regel — der Zustand darf nicht davon
+   abhaengen, welchen von beiden jemand vergisst. */
+.dp-eintrag.dp-aktiv {
+  background: color-mix(in srgb, var(--acc) 12%, transparent);
+  color: var(--acc);
+  font-weight: 500;
+}
+
+.dp-eintrag-icon { display: grid; place-items: center; width: 15px; flex-shrink: 0; }
+.dp-aussen { margin-left: auto; color: var(--fg-dim); }
+
+/* `:153` — `badge-mini`. Die vier Zahlen aus CP_NAV (14, 7, 7, 12). */
+.dp-badge {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  min-width: 16px;
+  padding: 1px 4px;
+  border-radius: 999px;
+  text-align: center;
+  background: var(--surface-2);
+  color: var(--fg-muted);
+}
+
+.dp-badge[data-variante='warn'] {
+  background: color-mix(in oklch, var(--warn) 16%, transparent);
+  color: var(--warn);
+}
+
+/* `:166-172` — der Fuss: API-Zustand */
+.dp-status {
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dp-punkt { width: 6px; height: 6px; border-radius: 999px; background: var(--pos); flex-shrink: 0; }
+
+/* `:175-189` — zurueck nach LumeOS */
+.dp-zurueck-huelle { padding: 9px; border-top: 1px solid var(--border); }
+
+.dp-zurueck {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.dp-zurueck:hover { background: var(--surface-hover); }
+
+.dp-zurueck-zeichen {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  background: var(--fg);
+  color: var(--bg);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: -0.04em;
+}
+
+.dp-zurueck-name { font-size: 11.5px; font-weight: 500; }
+
+/* ── Der Inhalt — `:193-215` ─────────────────────────────────── */
+
+.dp-inhalt-huelle {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* `:194` — die Kopfzeile ist 40 px hoch, nicht mehr. */
+.dp-kopfzeile {
+  height: 40px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  background: color-mix(in srgb, var(--surface) 30%, var(--bg));
+}
+
+/* `:195` — die Marke COACH */
+.dp-brot {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--acc-coach);
+  background: color-mix(in srgb, var(--acc-coach) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--acc-coach) 28%, var(--border));
+}
+
+.dp-brot-kind { font-size: 11.5px; }
+.dp-spacer { flex: 1; }
+
+/* `:215` — der scrollende Teil */
+.dp-inhalt { flex: 1; overflow-y: auto; padding: 16px 18px 26px; min-width: 0; }
+
+/* ══ Die Unterreiter scrollen, statt zu brechen ═══════════════
+   `[cmd]` **Am Schirm gefunden:** der Assistent traegt 13
+   Unterpunkte, und `.v2-tabs` aus dem Paket hat kein `overflow` —
+   die Reiter wurden gestaucht und brachen auf DREI Zeilen um.
+   `[cmd]` **Der Draft scrollt sie waagerecht** (`Tabs`, eine Zeile).
+
+   `[read]` **Die Regel steht hier und nicht im Paket** — `.v2-tabs`
+   gehoert allen Apps, und apps/web hat nirgends 13 Reiter. **Unter
+   `.dp-inhalt` wirkt sie nur auf die Draft-Fassung.** */
+.dp-inhalt .v2-tabs {
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  scrollbar-width: thin;
+}
+
+.dp-inhalt .v2-tabs .v2-tab {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* Der Punkt am Unterpunkt: diese Kachel ist eine Attrappe.
+   `[read]` Der Titel nennt die fehlende Tabelle — die Marke allein
+   sagt nur DASS, nicht WARUM. */
+.dp-tab-punkt {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--fg-dim);
+  display: inline-block;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+/* Der Attrappenvermerk steht untereinander.
+
+   `[cmd]` **Am Schirm gefunden:** Titel und Grund standen
+   NEBENeinander, und der Grund las sich wie eine Bildunterschrift.
+
+   `[cmd]` **Die Ursache liegt im Paket:** `v2.css:1598` setzt
+   `.v2-empty { display: flex }`, `v2.css:2078` setzt fuer denselben
+   Selektor `text-align: center` — ohne `display` zurueckzusetzen.
+   **Die zweite Regel gewinnt, die Zeilenrichtung bleibt.**
+
+   `[read]` **Nicht im Paket berichtigt** — es gehoert allen Apps,
+   und apps/web haengt an der heutigen Darstellung. **Im Bericht
+   vermerkt.** Hier wirkt es nur auf die Draft-Fassung. */
+.dp-inhalt .v2-empty {
+  display: block;
+  text-align: left;
+  padding: 20px;
+}
+
+.dp-inhalt .v2-empty-icon { margin: 0 0 8px; }
+.dp-inhalt .v2-empty-sub { max-width: 62ch; }
+
+/* ── Die Kontextspalte — `module-coach-portal-context.jsx:148` ── */
+
+.dp-kontext {
+  width: 306px;
+  border-left: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 45%, var(--bg));
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 12px;
+  overflow-y: auto;
+}
+
+.dp-kontext-kopf {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* `:152` — die Kugel, ihre Farbe traegt den Zustand */
+.dp-orb {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  background: radial-gradient(circle at 34% 30%,
+    color-mix(in oklch, var(--acc-buddy) 85%, white),
+    var(--acc-buddy) 70%);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--acc-buddy) 12%, transparent);
+}
+
+.dp-orb[data-state='alert'] {
+  background: radial-gradient(circle at 34% 30%,
+    color-mix(in oklch, var(--warn) 85%, white), var(--warn) 70%);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--warn) 14%, transparent);
+}
+
+.dp-orb[data-state='working'] {
+  background: radial-gradient(circle at 34% 30%,
+    color-mix(in oklch, var(--pos) 85%, white), var(--pos) 70%);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--pos) 12%, transparent);
+}
+
+.dp-kontext-titel { font-size: 12px; font-weight: 600; display: flex; gap: 5px; align-items: baseline; }
+.dp-kontext-msg { font-size: 11.5px; line-height: 1.45; color: var(--fg-muted); }
+
+/* Die Herkunftszeile. `[read]` Ohne sie liest sich „Lukas · peak
+   week Monday" wie eine Messung. */
+.dp-kontext-herkunft {
+  font-size: 9.5px;
+  line-height: 1.4;
+  color: var(--fg-dim);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 6px 7px;
+}
+
+.dp-kontext-aktionen { display: flex; flex-wrap: wrap; gap: 5px; }
+.dp-kontext-aktionen .v2-btn { font-size: 10.5px; padding: 4px 7px; }
+
+.dp-kontext-insights { display: flex; flex-direction: column; gap: 6px; }
+
+/* `:190` — je Erkenntnis ein Streifen in ihrer Farbe */
+.dp-insight {
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--ins, var(--acc-buddy));
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  padding: 7px 8px;
+}
+
+.dp-insight-kopf { display: flex; align-items: flex-start; gap: 6px; }
+.dp-insight-titel { flex: 1; font-size: 11px; font-weight: 600; line-height: 1.3; }
+
+.dp-insight-weg {
+  border: none;
+  background: none;
+  color: var(--fg-dim);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+
+.dp-insight-weg:hover { color: var(--neg); }
+.dp-insight-text { font-size: 10.5px; line-height: 1.4; color: var(--fg-muted); margin-top: 3px; }
+
+.dp-kontext-details { display: flex; flex-direction: column; gap: 3px; }
+
+.dp-detail {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10.5px;
+  padding: 3px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
+}
+
+.dp-detail-label { color: var(--fg-subtle); }
+.dp-detail-wert { color: var(--fg-muted); font-variant-numeric: tabular-nums; }
+
+/* Was gemessen ist, steht in der Vordergrundfarbe — was aus dem
+   Draft stammt, bleibt gedaempft. Der Unterschied ist sichtbar,
+   ohne dass eine Legende ihn erklaeren muss. */
+.dp-detail-wert[data-echt='ja'] { color: var(--fg); font-weight: 600; }
+
+/* ── Gemeinsames ────────────────────────────────────────────── */
+
+.dp-dim { color: var(--fg-subtle); }
+.dp-mono { font-family: var(--font-mono); }
+
+.dp-icon-knopf {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: none;
+  color: var(--fg-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Der Knopf, der die Kontextspalte umschaltet, zeigt seinen
+   Zustand — sonst ist er ein Schalter ohne sichtbare Wirkung
+   (C-426). */
+.dp-icon-knopf.dp-an {
+  background: color-mix(in srgb, var(--acc) 14%, transparent);
+  border-color: color-mix(in srgb, var(--acc) 30%, var(--border));
+  color: var(--acc);
+}
+
+.dp-icon-knopf:hover { background: var(--surface-hover); color: var(--fg); }
+
+/* Unter 1100 px faellt die Kontextspalte weg — sie ist der
+   abschaltbare Teil, das sagt schon `rightOpen`. */
+@media (max-width: 1100px) {
+  .dp-app { grid-template-columns: 222px 1fr; }
+  .dp-kontext { display: none; }
+}

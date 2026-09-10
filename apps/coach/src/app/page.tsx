@@ -14,6 +14,8 @@ import { TabAutonomie } from '../components/tab-autonomie'
 import { TabConsent } from '../components/tab-consent'
 import { TabOnboarding } from '../components/tab-onboarding'
 import { TabLeer, LEERE_TABS } from '../components/tab-leer'
+// ══ G-404: die Einstellungen des Coaches ═══════════════════════════
+import { TabSettings } from '../components/tab-settings'
 // ══ G-398: die Mockup-Referenz unter der Linie (E-69) ══════════════
 //
 // `[cmd]` **Vorher: null Referenzen auf 3220** — gemessen ueber alle
@@ -23,6 +25,8 @@ import { TabReferenz } from '../components/tab-referenz'
 // ══ G-401: die Schale — Seitenleiste, Modulkopf, Reiterleiste ══════
 import { PortalSchale, type PortalZaehler } from '../components/portal-schale'
 import { alleEintraege, bereichFuerReiter } from '../components/portal-nav'
+// ══ G-405: die Schale des Drafts, unter `?draft=` ══════════════════
+import { DraftSeite } from '../components/portal-draft-seite'
 
 export const dynamic = 'force-dynamic'
 
@@ -53,6 +57,8 @@ export default async function PortalSeite({
     // G-402: Suche und Filter reisen in der Adresse, nicht im
     // Browserzustand — die Reiter sind ohnehin Verweise.
     suche?: string; stand?: string
+    // G-405: die Draft-Fassung. Siehe unten.
+    draft?: string; kind?: string
   }
 }) {
   const stand = await portalStand()
@@ -68,12 +74,17 @@ export default async function PortalSeite({
   // `?bereich=alerts` klickt, will den Bereich, nicht den alten
   // Reiter.
   const ausTab = searchParams.tab ? bereichFuerReiter(searchParams.tab) : null
-  const eintrag = alleEintraege().find(e => e.id === searchParams.bereich)
+  // `[read]` **Nur Bereiche MIT Reitern kommen in Frage** — die drei
+  // Aussenlinks (G-404) fuehren aus dem Portal heraus und haben
+  // keinen Inhalt, den `?bereich=` zeigen koennte.
+  const innen = alleEintraege().filter(e => e.reiter && e.reiter.length > 0)
+  const eintrag = innen.find(e => e.id === searchParams.bereich)
     ?? ausTab
-    ?? alleEintraege()[0]
-  const tab = eintrag.reiter.some(r => r.id === searchParams.tab)
+    ?? innen[0]
+  const reiter = eintrag.reiter ?? []
+  const tab = reiter.some(r => r.id === searchParams.tab)
     ? searchParams.tab!
-    : eintrag.reiter[0].id
+    : reiter[0].id
   const bereich = eintrag.id
 
   // ══ G-402: der Stichtag, SERVERSEITIG ═════════════════════════
@@ -117,6 +128,32 @@ export default async function PortalSeite({
           />
         </Card>
       </main>
+    )
+  }
+
+  // ══ G-405: die Draft-Fassung ══════════════════════════════════
+  //
+  // **Tom, 2026-09-10:** *„wie waers wenn du das nun als mockup
+  // erzeugen laesst und nicht irgend eine abhandlung davon. ich habe
+  // den direkten vergleich."*
+  //
+  // `[read]` **`?draft=<bereich>` zeigt die Schale des Drafts** —
+  // eigenes Raster, eigene Seitenleiste, eigene Kontextspalte.
+  // **Die bestehende Fassung bleibt unberuehrt**, sonst gaebe es
+  // nichts zu vergleichen.
+  //
+  // `[read]` **Erst NACH den beiden Absagen oben** — eine Draft-Schale
+  // ueber einem Datenfehler saehe aus, als funktioniere sie.
+  if (searchParams.draft !== undefined) {
+    return (
+      <DraftSeite
+        stand={stand}
+        bereichId={searchParams.draft}
+        kindId={searchParams.kind ?? null}
+        heute={heute}
+        suche={suche}
+        filter={stand_}
+      />
     )
   }
 
@@ -205,6 +242,7 @@ export default async function PortalSeite({
         />}
       {tab === 'onboard' && <TabOnboarding stand={stand} />}
       {tab === 'messages' && <TabNachrichten stand={stand} />}
+      {tab === 'settings' && <TabSettings stand={stand} />}
       {tab in LEERE_TABS && <TabLeer tab={tab} />}
 
       {/* ══ E-69: darunter die Vorlage ═══════════════════════════

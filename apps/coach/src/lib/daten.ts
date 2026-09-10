@@ -131,6 +131,18 @@ export type PortalStand = {
    * statt eines Datums.
    */
   letzteSitzung: Record<string, string>
+  /**
+   * Das eigene Profil — G-404.
+   *
+   * `[cmd]` **`coach.coach_profiles` fuehrt sieben Spalten**, davon
+   * drei anzeigbar: `display_name`, `email`, `is_active`. `[cmd]`
+   * **Eine Zeile fuer `coach@lumeos.app`**, gemessen.
+   *
+   * `[read]` **`null`, wenn keine Zeile existiert** — dann zeigen
+   * die Einstellungen einen benannten Leerhinweis statt eines
+   * leeren Feldes (E-72).
+   */
+  profil: { display_name: string, email: string, is_active: boolean } | null
   fehler: string | null
 }
 
@@ -140,6 +152,7 @@ const LEER: Omit<PortalStand, 'userId' | 'email'> = {
   nachrichten: [], alerts: [], pending: [], actionLog: [],
   rechteLog: [], autonomieLog: [], beziehungsLog: [],
   letzteSitzung: {},
+  profil: null,
   fehler: null,
 }
 
@@ -154,7 +167,7 @@ export async function portalStand(): Promise<PortalStand | null> {
     const [
       klienten, rechte, autonomie, checkins, templates,
       nachrichten, alerts, pending, actionLog,
-      rechteLog, autonomieLog, beziehungsLog,
+      rechteLog, autonomieLog, beziehungsLog, profil,
     ] = await Promise.all([
       c.rpc('klienten'),
       c.from('client_permissions').select('*').eq('coach_id', uid),
@@ -168,6 +181,10 @@ export async function portalStand(): Promise<PortalStand | null> {
       c.from('permission_change_log').select('*').eq('coach_id', uid).order('changed_at', { ascending: false }).limit(50),
       c.from('autonomy_change_log').select('*').eq('coach_id', uid).order('changed_at', { ascending: false }).limit(50),
       c.from('relationship_change_log').select('*').eq('coach_id', uid).order('changed_at', { ascending: false }).limit(50),
+      // G-404: das eigene Profil. NUR LESEN -- kein Schreibweg,
+      // Tom: "noch gar nichts mit db".
+      c.from('coach_profiles').select('display_name, email, is_active')
+        .eq('user_id', uid).maybeSingle(),
     ])
 
     const erster = [
@@ -231,6 +248,7 @@ export async function portalStand(): Promise<PortalStand | null> {
       autonomieLog: (autonomieLog.data ?? []) as LogZeile[],
       beziehungsLog: (beziehungsLog.data ?? []) as LogZeile[],
       letzteSitzung: letzte,
+      profil: (profil.data ?? null) as PortalStand['profil'],
       fehler: null,
     }
   } catch (e) {
