@@ -53,7 +53,9 @@ zeigt** ? **G-405, G-407, G-409.**
       -> ein Monatsraster
 
 `[read]` **KEINE Datenbank.** `[read]` **KEINE Abfrage.**
-`[read]` **KEINE Uebersetzung ins Deutsche.**
+
+`[read]` **Deutsch ist erlaubt** ? **aber *Calories today 2.180*
+wird zu *Kalorien heute 2.180*, nicht zu `kcal_schnitt`.**
 
 `[cmd]` **Die Zahlen stehen in der Vorlage** ? `CAL_EVENTS`,
 `FCR_CLIENT`, `FCR_MODULES`, `ASSIST_*`.
@@ -132,13 +134,31 @@ Training, Recovery, Supplements, Body, Medical, Timeline.**
         sie abweicht, mit Grund.
     A5  apps/coach 61/61 oder mehr, apps/web 1545.
 
+## Der Satz, um den es geht
+
+Tom, 2026-09-08:
+
+> es soll so aussehen wie ich es will und nicht wie du oder der
+> agent es will. ich diskutiere den ganzen tag ueber denselben
+> scheiss und komme keinen centimeter weiter.
+
+`[read]` **Die Vorlage IST, wie er es will.**
+
+`[read]` **Jede Abweichung davon ist eine Entscheidung, die dem
+Agenten nicht zusteht** ? **auch eine, die technisch besser
+waere.**
+
+`[read]` **Wenn etwas nicht baubar ist: melden, nicht ersetzen.**
+
 ## Was nicht zu tun ist
 
 **NICHTS ERFINDEN.** `[read]` **Wo die Vorlage etwas zeigt, wird
 es kopiert.**
 **KEINE eigene Bauform** ? **auch wenn sie besser waere.**
-**KEINE Uebersetzung** ? **die Vorlage ist englisch, das Mockup
-auch.**
+**Deutsch ist erlaubt** ? **Tom: *,,es darf ja deutsch sein, das
+interessiert mich nicht."***
+
+`[read]` **Die SPRACHE ist frei, die FORM nicht.**
 **Keine Abfrage bauen** ? **es wird nichts angebunden.**
 **`?bereich=` NICHT anfassen.**
 Nicht committen, nicht stagen, nicht pushen.
