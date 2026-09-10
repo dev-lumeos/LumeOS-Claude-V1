@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 207 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 4 |
+| `laufend_claudecode` | 5 |
 | `erledigt` | 382 |
-| **gesamt** | **594** |
+| **gesamt** | **595** |
 
 ## medical — 48
 
@@ -456,7 +456,7 @@
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 47
+## coach — 48
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -506,7 +506,8 @@
 | `G-391` | feature | hoch | [das Coach-Grundgeruest aus den Vorlagen](erledigt/coach-g-0391-das-grundgeruest-aus-den-vorlagen.md) | erledigt | — | G-397, G-398 |
 | `G-398` | befund | hoch | [die Portalkarten gehoeren nach 3220](erledigt/coach-g-0398-die-portalkarten-gehoeren-nach-3220.md) | erledigt | — | G-399, G-400 |
 | `G-400` | befund | hoch | [das Portal sieht nicht aus wie LumeOS](laufend_claudecode/coach-g-0400-das-portal-sieht-nicht-aus-wie-lumeos.md) | laeuft (claudecode) | — | G-401 |
-| `G-401` | feature | hoch | [das Klientendetail, vollstaendig](laufend_claudecode/coach-g-0401-das-klientendetail-vollstaendig.md) | laeuft (claudecode) | — | — |
+| `G-401` | feature | hoch | [das Klientendetail, vollstaendig](laufend_claudecode/coach-g-0401-das-klientendetail-vollstaendig.md) | laeuft (claudecode) | — | G-402 |
+| `G-402` | feature | hoch | [Klienten, Check-ins, Alerts](laufend_claudecode/coach-g-0402-klienten-checkins-alerts.md) | laeuft (claudecode) | — | — |
 
 ## quer — 136
 

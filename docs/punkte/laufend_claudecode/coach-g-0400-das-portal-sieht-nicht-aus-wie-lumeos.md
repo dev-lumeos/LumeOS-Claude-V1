@@ -337,7 +337,311 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### A1 — je Karte die Felder, nicht der Titel
+
+`[cmd]` **Gemessen 2026-09-10 durch Lesen der Vorlage, Zeile fuer
+Zeile** — nicht per Muster: eine Regex ueber JSX zaehlt ein `<Pill>`
+in einer Schleife als eins und verfehlt die Spalten einer Tabelle.
+
+    Reiter      Karte                              Vorl.  Bau  fehlt
+    ----------------------------------------------------------------
+    overview    Active athletes (Kennzahl)             3    2      1
+    overview    Median compliance (Kennzahl)           4    0      4
+    overview    Alerts open (Kennzahl)                 4    3      1
+    overview    MRR · 30d (Kennzahl)                   3    0      3
+    overview    Athletes needing attention             7    4      3
+    overview    Today's sessions logged                3    0      3
+    overview    Recent achievements                    3    0      3
+    athletes    Athletenliste                          7    3      4
+    alerts      All open alerts                        6    4      2
+    messages    Recent messages · all athletes         6    3      3
+    consent     Freigaben je Athlet                    5    4      1
+    autonomy    Autonomiestufen                        4    3      1
+    workflows   Check-ins                              5    4      1
+    onboard     Client onboarding                      4    2      2
+    ----------------------------------------------------------------
+    SUMME                                             64   32     32
+
+`[cmd]` **`Athletes needing attention`: 7 Felder in der Vorlage, 4
+gebaut** — die Messung des Orchestrators sagte 7 / 2. **Die zwei
+Zusatzfelder sind in diesem Auftrag entstanden** (Avatar, Alert-Pill).
+
+**Warum ein Feld fehlt — je Feld eingeordnet, nicht pauschal:**
+
+    21x  keine-daten   es fehlt eine Spalte oder eine Tabelle
+     7x  rechenbar     die Zeilen sind da, nur nicht gezeigt
+     4x  form          reine Darstellung, jederzeit baubar
+
+`[read]` **Die Dreiteilung ist der eigentliche Ertrag:** **sieben
+Felder koennte man heute bauen**, ohne dass eine Tabelle entsteht.
+
+**Was fehlt, je Grund (keine-daten):**
+
+    3x  keine Compliance je Klient
+    3x  keine Tabelle fuer Umsatz
+    3x  keine Tabelle fuer Erfolge oder Meilensteine
+    3x  keine Tabelle fuer Ablaeufe
+    2x  keine Tabelle fuer Plaene
+    1x  coach.alerts hat keine Spalte fuer Schweregrad
+    1x  smartPriorityScore braucht severity und confidence
+    1x  coach.client_consent_log ist leer (0 Zeilen)
+    ... und der Vergleichszeitraum „letzte 30 Tage"
+
+`[cmd]` **Die Tabelle steht als Modul in
+`apps/coach/src/components/feld-abgleich.ts`** — nicht als Text im
+Bericht, sondern als Daten, die ein Waechter prueft.
+
+### A2 — der Kopf: alle sieben Klassen sind da
+
+`[cmd]` **Gemessen in `packages/ui/src/styles/v2.css`, derselben
+Datei, die `layout.tsx:3` als `@lumeos/ui/styles.css` laedt:**
+
+    v2-module-header       10 Regeln
+    v2-module-hero-lite     7
+    v2-module-title         6
+    v2-module-title-row     2
+    v2-module-sub           2
+    v2-module-actions       2
+    v2-module-title-block   1
+
+`[read]` **Es fehlte nichts** — das Portal hat sie nur nie benutzt.
+`[cmd]` **Der sechzehnte A-71-Fall: Weg vorhanden, kein Aufrufer.**
+
+**Umgestellt, am Schirm gemessen:**
+
+    Kopf                v2-module-header v2-module-hero-lite
+    Titel               "Coach Portal"
+    Pills               separate platform | coach.lumeos.app |
+                        2 athletes | 3 alerts
+    Untertitel          Coach workspace · read-only on client data
+                        · every call permission-checked
+    Aktionen            Broadcast, New plan  (beide abgeschaltet)
+
+`[cmd]` **Vier Pills und zwei Aktionen wie die Vorlage**
+(`module-coach.jsx:910-920`). `[cmd]` **Bildschirmfoto:
+`backup/g400-overview.png`.**
+
+`[read]` **Die zwei Aktionen sind gebaut, aber ohne Ziel** — es gibt
+weder einen Schreibweg fuer Rundnachrichten noch eine Plantabelle.
+**Sie sind deshalb `disabled` und tragen ihren Grund im `title`**
+(C-426: kein Bedienelement ohne Wirkung). `[cmd]` **Ein Waechter
+prueft beides.**
+
+### A3 — die Zaehler: 16 Reiter, 8 rechenbar, 8 gesetzt
+
+    Reiter        rechenbar   gesetzt   woraus
+    ---------------------------------------------------------
+    athletes         ja         ja      relationships, aktiv
+    alerts           ja         ja      alerts, status<>done
+    workflows        ja         ja      checkins, submitted
+    messages         ja         ja      messages, ungelesen
+    consent          ja         ja      client_permissions
+    autonomy         ja         ja      client_autonomy
+    onboard          ja         ja      relationships, invited
+    intervene        ja         ja      pending_actions, pending
+    ---------------------------------------------------------
+    analytics       nein       nein     keine Metriken-Tabelle
+    rules           nein       nein     keine Tabelle fuer Regeln
+    patterns        nein       nein     keine Tabelle fuer Vorhersagen
+    plans           nein       nein     keine Tabelle fuer Plaene
+    programs        nein       nein     keine Tabelle fuer Programme
+    revenue         nein       nein     keine Tabelle fuer Umsatz
+    team            nein       nein     keine Tabelle fuer Teams
+    overview        —          nein     der Reiter selbst zaehlt nichts
+
+`[cmd]` **Vorher vier gesetzt, jetzt acht.** `[cmd]` **Am Schirm
+sichtbar: SIEBEN** — `onboard` steht bei null (keine offene
+Einladung), und **eine Null wird gar nicht erst gezeichnet**
+(`page.tsx:132`, `zaehler[t.id] ? … : null`).
+
+`[read]` **Der Unterschied zwischen „gesetzt" und „sichtbar" ist
+E-72:** eine Null in der Reiterleiste saehe aus wie ein Ergebnis.
+**Gesetzt 8, sichtbar 7, und der Grund ist gemessen** — nicht die
+Rechnung fehlt, sondern die Zeile.
+
+`[read]` **Ein Zaehler, der nicht rechenbar ist, bleibt weg** — eine
+erfundene Zahl in der Leiste waere schlimmer als keine. `[cmd]` **Ein
+Waechter faellt, wenn `rules`, `plans` oder `programs` eine bekommen.**
+
+### A4 — die Tokens: DREI Unterschiede, nicht „eine Kopie"
+
+`[cmd]` **Token fuer Token gegen `lume.css` verglichen, beide Bloecke
+getrennt:**
+
+    [data-theme='lume']                       34 dort : 32 hier
+    [data-theme='lume'][data-mode='light']    25 : 25, identisch
+
+**Die drei Unterschiede, vollstaendig:**
+
+    --kurve-aus      FEHLTE    v2.css:574 setzt
+                               `transition: … var(--kurve-aus)`
+    --kurve-beides   FEHLTE    das Gegenstueck
+    --acc            ABSICHT   hier var(--acc-coach) statt
+                               var(--acc-dash) — das Portal IST das
+                               Coach-Modul
+
+`[read]` **Der Auftrag nimmt an, es seien elf Modul-Akzenttokens
+auseinandergelaufen (G-384).** `[cmd]` **Gemessen: alle elf sind
+vollstaendig vorhanden** — `--acc-admin`, `--acc-buddy`,
+`--acc-coach`, `--acc-dash`, `--acc-goals`, `--acc-medic`,
+`--acc-mkt`, `--acc-nutri`, `--acc-recov`, `--acc-suppl`,
+`--acc-train`. **Die Kopie war naeher am Original als angenommen.**
+
+`[cmd]` **Die zwei Kurven sind nachgetragen.** `[read]` **Sie waren
+kein Schoenheitsfehler:** `v2.css` setzt sie an zwei Stellen als
+Uebergangsfunktion — **ohne das Token faellt der Uebergang stumm auf
+den Vorgabewert zurueck.** **Kein Fehler, keine Warnung, nur eine
+Animation, die anders aussieht als in `apps/web`.**
+
+`[cmd]` **Ein Waechter liest jetzt aus `v2.css`, welche
+`var(--kurve-*)` gebraucht werden, und prueft sie gegen
+`tokens.css`** — er altert also mit, statt eine feste Liste zu
+pflegen. **Dazu die elf Akzenttokens, aus `lume.css` gelesen.**
+
+### A5 — der Modus: der Cookie ist NICHT teilbar
+
+`[cmd]` **Gemessen:**
+
+    apps/web    liest `lume-mode` serverseitig (layout.tsx:90-94)
+                gesetzt in shell.tsx:79:
+                  `${MODE_COOKIE}=${next}; path=/; max-age=…;
+                   SameSite=Lax`
+                -> KEIN `domain=`-Attribut
+
+    apps/coach  liest keinen Cookie (layout.tsx:29)
+                `prefers-color-scheme` vor dem ersten Paint
+
+`[read]` **Ohne `domain=` ist ein Cookie hostgebunden.**
+`[cmd]` **Und die Hosts sind verschieden:** `app.lumeos.app` gegen
+`coach.lumeos.app` (`app-shell.tsx:36`). **Der Cookie erreicht das
+Portal also nicht.**
+
+`[read]` **Teilbar waere er mit `domain=.lumeos.app`** — das aendert
+`apps/web`, und das verbietet dieser Auftrag. **Gemeldet, nicht
+gebaut.**
+
+`[cmd]` **Ortlich ist es anders:** 3200 und 3220 teilen den Host
+`127.0.0.1`, dort WUERDE der Cookie ankommen — das Portal liest ihn
+nur nicht.
+
+`[read]` **Und genau das erklaert die hellen Fotos aus G-398:** der
+kopflose Browser meldet standardmaessig hell, das Portal folgt ihm.
+**Mit `colorScheme: 'dark'` ist es dunkel** — gemessen:
+`data-mode="dark"`, Hintergrund `oklch(0.155 0.005 270)`.
+
+### A6 — sechzehn Fotos, dunkel
+
+`[cmd]` **`backup/g400-<reiter>.png`**, alle mit
+`colorScheme: 'dark'` aufgenommen, angemeldet als
+`coach@lumeos.app`.
+
+`[cmd]` **Belegt, nicht behauptet:** das Skript liest vor dem ersten
+Foto `data-mode` und die Hintergrundfarbe aus dem gerenderten
+Dokument. **`dark` / `oklch(0.155 0.005 270)`.**
+
+`[cmd]` **0 Konsolenfehler, 0 nackte Nullen** ueber alle sechzehn
+Reiter.
+
+### A7 — Tests
+
+`[cmd]` **`apps/coach`: 18 pass / 0 fail** — fuenf neue Waechter
+(vorher 13). `[cmd]` **tsc sauber in beiden Anwendungen.**
+
+`[cmd]` **`apps/web`: 1544 pass / 1 fail** — und **der Fehlschlag ist
+nicht meiner:**
+
+    not ok 800 — G-317/Z. 371: die eine Zeile fasst Dauer,
+                 Start und Herkunft
+    Datei:       apps/web/src/lib/nutrition/__tests__/
+                 plan-kopfkarte-zeilen.test.ts
+
+`[cmd]` **Belegt:** `git diff HEAD -- apps/web docs/spezifikation
+packages` ist **leer** — die fuenf Dateien, die dieser Test liest
+(`module-nutrition-spec.jsx`, `plans-echt.tsx`,
+`plan-eintraege.tsx`, `plan-lesen.ts`, `primitives.tsx`), sind
+unberuehrt. `[cmd]` **Meine fuenf geaenderten Dateien liegen alle in
+`apps/coach`.**
+
+`[read]` **Der Auftrag nennt 1545 als Sollwert** — der Fehlschlag
+bestand vorher und ist ein eigener Punkt.
+
+**Sabotageprobe, je Waechter einzeln:**
+
+    Kopf wieder cp-kopf                -> ROT
+    eine Pill entfernt                 -> ROT
+    Untertitel entfernt                -> ROT
+    Knopf wieder anklickbar            -> ROT
+    erfundener Zaehler fuer rules      -> ROT
+    rechenbarer Zaehler entfernt       -> ROT
+    Kurventoken entfernt               -> ROT
+    Akzenttoken entfernt               -> ROT
+    Feld ohne Grund im Abgleich        -> ROT
+
+**Alle zurueckgenommen, 18/18 gruen.**
+
+`[cmd]` **Die Akzenttoken-Probe war zunaechst gruen** —
+`--acc-recov` steht ZWEIMAL in `tokens.css` (Nacht- und Tagblock),
+und `replace(…, 1)` traf nur das erste. `[read]` **Das war mein
+Messfehler, kein blinder Waechter**: mit allen Vorkommen wurde er
+rot. **Die Probe belegt seither selbst, dass die Sabotage ankam**,
+bevor sie ein Urteil faellt.
+
+### Was gebaut ist — und was bewusst nicht
+
+**Gebaut, weil die Daten es tragen:**
+
+    Kopf              v2-module-header, 4 Pills, Untertitel,
+                      2 Aktionen (abgeschaltet, mit Grund)
+    Zaehler           vier weitere: consent, autonomy, onboard,
+                      intervene
+    Kennzahlen        die dritte Zeile je Kachel — „n Athleten
+                      betroffen", „von n gesamt", „n eingeladen"
+    Athletenzeile     Avatar aus Initialen (wie `avatar: "LB"`),
+                      Alert-Pill je Klient
+
+**Nicht gebaut, mit Grund:**
+
+    Compliance        keine Spalte, in keiner Tabelle
+    Plan je Athlet    keine Plantabelle
+    MRR / Revenue     Geld gehoert zum Marketplace (F-06 T8)
+    Sparkline         rechenbar, aber sie braucht eine
+                      Tagesreihe aus training.workout_sessions --
+                      ein Leseweg, den dieser Auftrag nicht
+                      anlegen darf
+    Farbe der Zahl    `KPI.deltaVariant` kennt nur `pos` und `neg`
+                      (primitives.tsx:397) -- die Vorlage faerbt
+                      gelb. Das waere eine Aenderung in
+                      `packages/ui`: GEMELDET, nicht gebaut.
+
+### Zwei Punkte fuer `packages/ui`
+
+`[read]` **Beide gemeldet, keiner gebaut** — der Auftrag verlangt
+die Meldung.
+
+**1 — `KPI.deltaVariant` braucht `warn`.** `[cmd]` **Heute nur `pos`
+und `neg`** (`primitives.tsx:397`). **Die Vorlage faerbt „Alerts
+open" gelb**, und das ist mit dem heutigen Baustein nicht
+darstellbar.
+
+**2 — Die Tokens gehoeren ins Paket.** `[cmd]` **Der Kommentar in
+`tokens.css:1-7` schlaegt es selbst vor.** `[read]` **Nach dieser
+Messung ist der Abstand klein** (drei Tokens, einer davon Absicht)
+— **aber er entsteht immer wieder neu, solange zwei Dateien
+dieselbe Wahrheit tragen.** `[cmd]` **Der neue Waechter faengt es
+jetzt wenigstens ab.**
+
+### Was nicht angefasst ist
+
+**1 — `apps/web`:** `git diff HEAD` ist leer.
+**2 — `packages/ui`:** unberuehrt, beide Befunde gemeldet.
+**3 — `supabase/`:** die zwei geaenderten Dateien sind Codex' C-456.
+**4 — Nichts angebunden**, was Daten braucht, die es nicht gibt.
+
+### Neustart
+
+`[read]` **Nicht noetig** — nur `apps/coach/src`, das laedt heiss
+nach. `[cmd]` **`tokens.css` und `portal.css` sind Stylesheets der
+App, keine Paketdateien.**
 
 ## Abnahme
 
