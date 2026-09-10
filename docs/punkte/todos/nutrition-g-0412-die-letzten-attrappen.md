@@ -123,3 +123,102 @@ Block ohne Karten ist eine Linie ohne Inhalt.**
 
 `[read]` **Wenn eine nicht rechenbar ist: melden, nicht
 erfinden.**
+
+## Nachtrag 2026-09-08 — der Insights-Reiter
+
+Tom, aus der Ansicht:
+
+> Macro split - 30d avg: fehlen unten Highest day, Lowest day,
+> Days at target. die verlaufgrafik soll aussehen wie im mockup
+> Calorie balance, farbliche schattierung unter der linie fuer
+> kontrast. Micronutrient trend -> anbinden. Tagesdeckung 2/3 so
+> hoch, und die kachel daneben auch weniger hoch.
+
+### 5 · Macro split — drei Zeilen fehlen unten
+
+`[cmd]` **`module-nutrition.jsx:386-390`, nach der Trennlinie:**
+
+    Avg calories          2,617 kcal
+    Highest day           Tue - 2,890
+    Lowest day            Wed - 2,410
+    Days at target +/-100 9 of 14
+
+`[cmd]` **Die Umsetzung zeigt nur die drei Makrobalken.**
+
+`[read]` **Alle vier sind rechenbar** ? **aus
+`nutrition.daily_summary` ueber den Zeitraum.**
+
+`[read]` **Und *Days at target*: eine Toleranz von +/-100 kcal**
+? **die Zahl steht in der Vorlage, das Ziel im Profil.**
+
+### 6 · Die Verlaufsgrafik — Flaeche unter der Linie
+
+`[cmd]` **`module-charts-pro.jsx:115`,
+`window.LineChart`** ? **die Vorlage ueberschreibt die einfache
+Fassung aus `shared.jsx:213`.**
+
+**Was sie kann:**
+
+    smooth(pts)     quadratische Bezier je Punktpaar,
+                    Kontrollpunkt in der Mitte
+    linearGradient  je Reihe, von 0.22 auf 0 Deckkraft,
+                    senkrecht
+    showArea        nur si === 0, geschlossener Pfad
+                    bis zur Grundlinie
+    Gitter          fuenf Linien, die unterste voll,
+                    die anderen 0.55
+    Punkte          nur bei <= 16 Werten, r=2,
+                    Fuellung var(--bg)
+    zweite Reihe    gestrichelt "3 3", wenn
+                    color === var(--fg-dim)
+
+`[cmd]` **`Calorie balance` ruft sie mit ZWEI Reihen:** **die
+Werte in `var(--acc-nutri)`, das Ziel als flache Linie in
+`var(--fg-dim)`.**
+
+`[read]` **Der Verlauf bekommt also: geglaettete Kurve, Verlauf
+unter der Linie, gestricheltes Ziel.**
+
+`[cmd]` **`range={[1500, 3200]}`, `h={180}`** ? **feste Grenzen,
+nicht aus den Daten.**
+
+### 7 · Micronutrient trend — anbinden
+
+`[cmd]` **`module-nutrition.jsx:393`:**
+
+    <Card title="Micronutrient trend" sub="30 days - top 8"
+          style={{gridColumn: "span 2"}}>
+      <NutrientHeatmap />
+
+`[cmd]` **`NutrientHeatmap`, Zeile 399:** **acht Naehrstoffe x 30
+Tage, Zellhoehe 16, Abstand 2, Beschriftungsspalte 80 px.**
+
+    >= 0.8   var(--pos)
+    >= 0.5   var(--warn)
+    sonst    var(--neg)
+
+`[cmd]` **In der Vorlage sind die Werte `Math.random()`** ?
+**hier nicht.**
+
+`[read]` **Die acht Naehrstoffe stehen schon in der angebundenen
+Snapshot-Kachel** ? **Vitamin C, D, Eisen, Calcium, Magnesium,
+Zink, B12, Omega-3.**
+
+`[read]` **Und der Wert je Tag ist derselbe Anteil, den die
+Kachel heute fuer HEUTE rechnet** ? **ueber 30 Tage.**
+
+`[cmd]` **Miss, ob das je Tag rechenbar ist** ? **oder ob es zu
+teuer wird.**
+
+### 8 · Tagesdeckung — zwei Drittel Hoehe
+
+Tom: *,,Tagesdeckung 2/3 so hoch, und die kachel daneben
+dementsprechend auch weniger hoch."*
+
+`[read]` **Eine reine Hoehenfrage** ? **keine Daten.**
+
+`[cmd]` **Messen, wie hoch sie heute ist, und ob die
+Nachbarkachel ihre Hoehe von ihr nimmt** (Raster) **oder eigene
+hat.**
+
+`[read]` **Wenn das Raster sie koppelt, reicht eine Aenderung.**
