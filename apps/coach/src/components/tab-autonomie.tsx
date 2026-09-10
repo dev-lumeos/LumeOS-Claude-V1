@@ -5,10 +5,16 @@
 // Nicht mit experience_level (Selbstauskunft in profiles) verwechseln.
 import { Card, Empty } from '@lumeos/ui'
 import { MODULE, MODUL_LABEL, levelVon, unterschied, type PortalStand } from '../lib/daten'
+// G-409: auch der Rueckweg nach dem Schreiben bleibt im Draft.
+import { wegZuReiter, type DraftLage } from './draft/wege'
 import { autonomieSetzen } from '../lib/aktionen'
 import { zeitpunkt } from '../lib/format'
 
-export function TabAutonomie({ stand }: { stand: PortalStand }) {
+export function TabAutonomie({ stand, lage = null }: {
+  stand: PortalStand
+  /** In welcher Fassung — G-409. */
+  lage?: DraftLage
+}) {
   const namen = new Map(stand.klienten.map(k => [k.client_id, k.display_name]))
 
   return (
@@ -27,7 +33,8 @@ export function TabAutonomie({ stand }: { stand: PortalStand }) {
         >
           <form action={autonomieSetzen} className="cp-formular">
             <input type="hidden" name="client_id" value={z.client_id} />
-            <input type="hidden" name="pfad" value="/?tab=autonomy" />
+            <input type="hidden" name="pfad"
+                value={wegZuReiter(lage, 'autonomy')} />
             <div className="cp-grid cp-grid-4">
               {MODULE.map(m => (
                 <label key={m}>

@@ -33,6 +33,8 @@ import { Icon, Pill } from '@lumeos/ui'
 import {
   DRAFT_NAV, type DraftBereich, type DraftKind,
 } from './portal-draft-nav'
+// G-409/A5: die Modale der Vorlage.
+import { DraftModal } from './draft/modal-huelle'
 
 /** Die Zaehler, aus echten Zeilen — nie erfunden. */
 export type DraftZaehler = Partial<Record<
@@ -362,6 +364,14 @@ export function DraftSchale({
       </div>
 
       {offen && kontext}
+
+      {/* ══ G-409/A5: die dreizehn Modale ═════════════════════
+          `[read]` **Am Ende der Schale, ueber allem** — genau wie
+          in der Vorlage (`shell.jsx:288`). `[cmd]` **Welches offen
+          ist, sagt `&modal=` in der Adresse.** */}
+      <React.Suspense fallback={null}>
+        <DraftModal />
+      </React.Suspense>
     </div>
   )
 }

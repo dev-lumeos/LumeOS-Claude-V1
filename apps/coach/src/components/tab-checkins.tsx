@@ -7,6 +7,8 @@
 // Client-Grenze zieht `next/headers` ins Browserbuendel.
 import { Card, Empty, Pill } from '@lumeos/ui'
 import type { Checkin, PortalStand } from '../lib/daten'
+// G-409: der Linkhelfer entscheidet, wohin ein Klick fuehrt.
+import { wegZuFilter, wegZuReiter, type DraftLage } from './draft/wege'
 import { checkinBefunde } from '../lib/analyse'
 import { checkinAnlegen, checkinReviewen } from '../lib/aktionen'
 import { datum, zeitpunkt, wert } from '../lib/format'
@@ -29,12 +31,14 @@ const REIHENFOLGE: Record<Checkin['status'], number> = {
 //
 // `[read]` **Gebaut ist der Filter** — er fehlte, und er ist der
 // Unterschied zwischen einer Liste und einer Arbeitsliste.
-export function TabCheckins({ stand, heute, filter }: {
+export function TabCheckins({ stand, heute, filter, lage = null }: {
   stand: PortalStand
   /** Serverseitig bestimmt (G-390) — nie im Browser gerechnet. */
   heute: string
   /** Aus `?stand=`. */
   filter: 'offen' | 'alle' | 'reviewed'
+  /** In welcher Fassung dieser Reiter laeuft — G-409. */
+  lage?: DraftLage
 }) {
   const namen = new Map(stand.klienten.map(k => [k.client_id, k.display_name]))
   const sortiert = [...stand.checkins].sort(
@@ -82,7 +86,7 @@ export function TabCheckins({ stand, heute, filter }: {
               <a
                 key={k}
                 className={`cp-filter-knopf${filter === k ? ' cp-aktiv' : ''}`}
-                href={`/?bereich=checkins&stand=${k}`}
+                href={wegZuFilter(lage, 'checkins', `&stand=${k}`)}
                 aria-current={filter === k ? 'page' : undefined}
               >
                 {l}
@@ -128,12 +132,14 @@ export function TabCheckins({ stand, heute, filter }: {
           checkin={c}
           name={namen.get(c.client_id) ?? c.client_id}
           vorherGewicht={letztesGewicht.get(c.client_id)}
+          lage={lage}
         />
       ))}
 
       <Card title="Check-in anlegen" sub="Faelligkeit ab heute; der Klient bekommt ihn in seiner Ansicht">
         <form action={checkinAnlegen} className="cp-formular cp-grid cp-grid-3">
-          <input type="hidden" name="pfad" value="/?tab=workflows" />
+          <input type="hidden" name="pfad"
+                value={wegZuReiter(lage, 'workflows')} />
           <label>
             Athlet
             <select name="client_id" required>
@@ -163,11 +169,13 @@ export function TabCheckins({ stand, heute, filter }: {
 }
 
 function CheckinKarte({
-  checkin, name, vorherGewicht,
+  checkin, name, vorherGewicht, lage,
 }: {
   checkin: Checkin
   name: string
   vorherGewicht?: number
+  /** G-409: der Rueckweg nach dem Reviewen. */
+  lage: DraftLage
 }) {
   const befunde = checkin.status === 'submitted'
     ? checkinBefunde(checkin.client_data, vorherGewicht)
@@ -224,7 +232,8 @@ function CheckinKarte({
           {checkin.status === 'submitted' ? (
             <form action={checkinReviewen} className="cp-formular">
               <input type="hidden" name="id" value={checkin.id} />
-              <input type="hidden" name="pfad" value="/?tab=workflows" />
+              <input type="hidden" name="pfad"
+                value={wegZuReiter(lage, 'workflows')} />
               <label>
                 Feedback an den Klienten
                 <textarea name="feedback" rows={4} required placeholder="Lief gut · aendern · beobachten" />

@@ -34,6 +34,8 @@ import { Empty } from '@lumeos/ui'
 // Seite mit jeder Ansicht um drei Zeilen, und der Waechter kann
 // nicht zaehlen, welche gebaut sind.
 import { DRAFT_ANSICHTEN } from './draft/ansichten'
+import type { DraftLage } from './draft/wege'
+import { DraftAkte } from './draft/ansicht-akte'
 
 import type { PortalStand } from '../lib/daten'
 import {
@@ -87,6 +89,14 @@ export function DraftSeite({
   // Was gezeigt wird: der Unterpunkt, wenn es welche gibt, sonst der
   // Bereich selbst. Genau `:107` im Draft.
   const sicht = kind?.id ?? bereich.id
+
+  // ══ G-409: die Lage, einmal berechnet ═════════════════════════
+  //
+  // `[read]` **Jeder Reiter bekommt sie** — daran erkennt sein
+  // Linkhelfer, dass er im Draft steckt und die Ziele umschreiben
+  // muss. `[cmd]` **Ohne sie schrieben die Reiter `?bereich=` und
+  // warfen den Benutzer in die alte Fassung.**
+  const lage: DraftLage = { bereich: bereich.id, kind: kind?.id ?? null }
 
   const aktive = stand.klienten.filter(k => k.status === 'active').length
   const offeneAlerts = stand.alerts.filter(a => a.status !== 'done').length
@@ -152,37 +162,41 @@ export function DraftSeite({
           messages 6, alerts 6, checkins 6, client_permissions 4,
           client_autonomy 4, pending_actions 2, action_log 1.
           **Jede dieser Ansichten hat Zeilen.** */}
-      {sicht === 'overview' && <TabUebersicht stand={stand} />}
+      {sicht === 'overview' && <TabUebersicht stand={stand} lage={lage} />}
       {sicht === 'athletes' && <TabAthleten
         stand={stand}
         heute={heute}
         suche={suche}
         filter={(['alle', 'active', 'invited', 'ended'] as const)
           .find(x => x === filter) ?? 'alle'}
+        lage={lage}
       />}
-      {sicht === 'record' && <TabAthleten
-        stand={stand}
-        heute={heute}
-        suche={suche}
-        filter="active"
-      />}
+      {/* ══ G-409/A3: die Akte der Vorlage ════════════════════
+          `[cmd]` **G-407 zeigte hier `TabAthleten`** — eine Liste
+          mit zwei Zeilen. `[cmd]` **Die Vorlage zeigt eine
+          Klientenkarte mit drei Coach-Pills, sechs Access-Pills
+          und acht Untertabs** (`client-record.jsx:101-143`).
+          `[read]` **Das ist Toms Befund 2.** */}
+      {sicht === 'record' && <DraftAkte />}
       {sicht === 'onboard' && <TabOnboarding stand={stand} />}
-      {sicht === 'autonomy' && <TabAutonomie stand={stand} />}
-      {sicht === 'autohist' && <TabAutonomie stand={stand} />}
+      {sicht === 'autonomy' && <TabAutonomie stand={stand} lage={lage} />}
+      {sicht === 'autohist' && <TabAutonomie stand={stand} lage={lage} />}
       {sicht === 'consent' && <TabConsent stand={stand} />}
-      {sicht === 'messages' && <TabNachrichten stand={stand} />}
+      {sicht === 'messages' && <TabNachrichten stand={stand} lage={lage} />}
       {sicht === 'workflows' && <TabCheckins
         stand={stand}
         heute={heute}
         filter={(['offen', 'alle', 'reviewed'] as const)
           .find(x => x === filter) ?? 'offen'}
+        lage={lage}
       />}
       {sicht === 'alerts' && <TabAlerts
+        lage={lage}
         stand={stand}
         filter={(['offen', 'alle', 'done'] as const)
           .find(x => x === filter) ?? 'offen'}
       />}
-      {sicht === 'intervene' && <TabAlerts stand={stand} filter="alle" />}
+      {sicht === 'intervene' && <TabAlerts stand={stand} filter="alle" lage={lage} />}
 
       {/* ══ G-407: die Kacheln der Vorlage ═══════════════════════
           **Tom, 2026-09-08:** *„bau den draft fertig. ich will das

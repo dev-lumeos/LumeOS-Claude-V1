@@ -1078,3 +1078,195 @@
 @media (max-width: 1100px) {
   .dk-raster { grid-template-columns: 1fr !important; }
 }
+
+/* ══ DIE KLIENTENAKTE — G-409/A3 ═══════════════════════════════════
+
+   `[cmd]` **Abgelesen aus `module-coach-client-record.jsx:101-143`**
+   — Zeile fuer Zeile, die Masse stehen dort. */
+
+.dk-akte-kopf { display: flex; align-items: flex-start; gap: 15px; }
+
+/* `:103` */
+.dk-akte-zeichen {
+  width: 46px;
+  height: 46px;
+  border-radius: 11px;
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.dk-akte-namenzeile {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.dk-akte-name { font-size: 15.5px; font-weight: 600; }
+
+/* `:111` — Ziel, Phase, Alter und Groesse in einer Zeile. */
+.dk-akte-ziel {
+  color: var(--fg-muted);
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 7px;
+}
+
+/* `:115` — die drei Coach-Pills. */
+.dk-akte-coaches { display: flex; gap: 5px; flex-wrap: wrap; }
+.dk-akte-coaches .v2-pill { font-size: 9.5px; }
+
+.dk-akte-knoepfe { display: flex; gap: 6px; flex-shrink: 0; }
+
+/* `:124` — die ACCESS-Zeile mit sechs Pills. */
+.dk-akte-access {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.dk-akte-granted { margin-left: auto; font-size: 10px; }
+
+/* `:138` — die acht Untertabs. */
+.dk-modulwahl {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 2px;
+  gap: 1px;
+  flex-wrap: wrap;
+}
+
+.dk-modulwahl .v2-btn {
+  height: 24px;
+  font-size: 11px;
+  padding: 0 11px;
+  border-radius: 5px;
+  border-color: transparent;
+  background: transparent;
+}
+
+.dk-modulwahl .v2-btn:hover { background: var(--surface-hover); }
+
+.dk-modulwahl .v2-btn-primary {
+  background: color-mix(in srgb, var(--acc) 18%, var(--bg-elev));
+  border-color: color-mix(in srgb, var(--acc) 30%, var(--border));
+  color: var(--fg);
+}
+
+/* Die Kennzahl der Vorlage: Beschriftung oben, Zahl darunter. */
+.dk-kennzahl {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 13px;
+}
+
+.dk-kennzahl-wert {
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Die Trennlinie innerhalb einer Kachel — `divider` der Vorlage. */
+.dk-trenner {
+  height: 1px;
+  background: var(--border);
+  margin: 12px 0;
+}
+
+/* Die Wochentage unter der Kurve. */
+.dk-wochentage {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9.5px;
+  color: var(--fg-subtle);
+  margin-top: 3px;
+}
+
+/* ══ DIE MODALE — G-409/A5 ═════════════════════════════════════════
+   `[cmd]` **Abgelesen aus `module-coach.jsx:696` (`KModal`)** — die
+   Huelle, die alle dreizehn benutzen. */
+
+.dk-schleier {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+  backdrop-filter: blur(2px);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.dk-modal {
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 18px 48px rgb(0 0 0 / 0.45);
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.dk-modal-kopf {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.dk-modal-symbol {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: color-mix(in oklch, var(--ton) 18%, transparent);
+  border: 1px solid color-mix(in oklch, var(--ton) 35%, transparent);
+  color: var(--ton);
+  display: grid;
+  place-items: center;
+}
+
+.dk-modal-titel { font-size: 14px; font-weight: 600; }
+
+.dk-modal-rumpf {
+  padding: 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dk-modal-fuss {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  padding: 11px 14px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* Der QR-Platzhalter — die Vorlage zeigt hier das Kamerabild. */
+.dk-qr {
+  width: 180px;
+  height: 180px;
+  margin: 8px auto 0;
+  border-radius: var(--radius);
+  border: 1px dashed var(--border-strong);
+  background:
+    repeating-conic-gradient(var(--surface-2) 0% 25%, var(--surface) 0% 50%)
+    50% / 18px 18px;
+}

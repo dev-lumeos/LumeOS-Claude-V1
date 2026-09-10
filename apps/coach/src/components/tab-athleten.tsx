@@ -58,6 +58,8 @@
 import { Card, Empty, Pill } from '@lumeos/ui'
 
 import { MODULE, MODUL_LABEL, sichtVon, type PortalStand } from '../lib/daten'
+// G-409: der Linkhelfer entscheidet, wohin ein Klick fuehrt.
+import { wegZuFilter, wegZuAthlet, type DraftLage } from './draft/wege'
 import { datum } from '../lib/format'
 
 /** Die Initialen, wie im Altrepo (`Avatar name={client_name}`). */
@@ -83,7 +85,7 @@ function tageSeit(iso: string | undefined, heute: string): number | null {
 
 type Filter = 'alle' | 'active' | 'invited' | 'ended'
 
-export function TabAthleten({ stand, heute, suche, filter }: {
+export function TabAthleten({ stand, heute, suche, filter, lage = null }: {
   stand: PortalStand
   /** Serverseitig bestimmt — nie im Browser gerechnet. */
   heute: string
@@ -91,6 +93,14 @@ export function TabAthleten({ stand, heute, suche, filter }: {
   suche: string
   /** Aus `?stand=`. */
   filter: Filter
+  /**
+   * In welcher Fassung dieser Reiter laeuft — G-409.
+   *
+   * `[read]` **Vorgabe `null` heisst: die bestehende Fassung**, und
+   * die Verweise sehen aus wie vorher. `[cmd]` **`?bereich=` ist
+   * damit Zeichen fuer Zeichen unveraendert.**
+   */
+  lage?: DraftLage
 }) {
 
   if (stand.klienten.length === 0) {
@@ -127,8 +137,23 @@ export function TabAthleten({ stand, heute, suche, filter }: {
               schickt `?suche=` an denselben Bereich zurueck, und der
               Server filtert. **Ohne JavaScript funktioniert es
               auch.** */}
+          {/* ══ G-409: auch das FORMULAR fuehrte hinaus ══════════
+              `[cmd]` **Im Auftrag standen sechs Verweise** — dieses
+              Formular war keiner davon. `[read]` **Es schickt aber
+              genauso fort:** wer im Draft nach einem Namen sucht,
+              landete mit `?bereich=klienten` in der alten Fassung.
+              `[read]` **Ein Formular ist ein Klick wie jeder
+              andere** — es traegt seine Fassung jetzt in verborgenen
+              Feldern mit. */}
           <form className="cp-werkzeug" method="get" action="/">
-            <input type="hidden" name="bereich" value="klienten" />
+            {lage ? (
+              <>
+                <input type="hidden" name="draft" value={lage.bereich} />
+                {lage.kind && <input type="hidden" name="kind" value={lage.kind} />}
+              </>
+            ) : (
+              <input type="hidden" name="bereich" value="klienten" />
+            )}
             <input type="hidden" name="stand" value={filter} />
             <input
               className="cp-suche"
@@ -145,7 +170,8 @@ export function TabAthleten({ stand, heute, suche, filter }: {
               <a
                 key={k}
                 className={`cp-filter-knopf${filter === k ? ' cp-aktiv' : ''}`}
-                href={`/?bereich=klienten&stand=${k}${suche ? `&suche=${encodeURIComponent(suche)}` : ''}`}
+                href={wegZuFilter(lage, 'klienten',
+                  `&stand=${k}${suche ? `&suche=${encodeURIComponent(suche)}` : ''}`)}
                 aria-current={filter === k ? 'page' : undefined}
               >
                 {l}
@@ -170,7 +196,7 @@ export function TabAthleten({ stand, heute, suche, filter }: {
             const tage = tageSeit(sitzung, heute)
             const trainingFrei = sichtVon(rechte, 'training') === 'full'
             return (
-              <a key={k.relationship_id} className="cp-athlet-zeile" href={`/athlet/${k.client_id}`}>
+              <a key={k.relationship_id} className="cp-athlet-zeile" href={wegZuAthlet(lage, k.client_id)}>
                 {/* Avatar mit Statuspunkt — wie ClientList.tsx:145 */}
                 <span className="cp-avatar-huelle">
                   <span className="cp-avatar" aria-hidden="true">{initialen(k.display_name)}</span>

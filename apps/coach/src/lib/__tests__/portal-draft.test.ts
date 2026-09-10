@@ -16,7 +16,7 @@
 // **Eine fest eingetragene 35 waere ein Gedaechtnis, kein Mass.**
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
@@ -26,6 +26,11 @@ import {
 import { DRAFT_KONTEXT } from '../../components/portal-draft-kontext'
 // G-407: das Verzeichnis der gebauten Kachel-Ansichten.
 import { DRAFT_ANSICHTEN } from '../../components/draft/ansichten'
+// G-409: der Linkhelfer und die Modale.
+import {
+  wegZuReiter, wegZuFilter, wegZuAthlet, wegZurueck,
+} from '../../components/draft/wege'
+import { MODALE } from '../../components/draft/modale' 
 
 const HIER = dirname(fileURLToPath(import.meta.url))
 const WURZEL = join(HIER, '..', '..', '..', '..', '..')
@@ -319,4 +324,130 @@ test('der Leerzustand traegt zwei Namen fuer zwei Absichten', () => {
   const prim = readFileSync(join(WURZEL, 'packages', 'ui', 'src', 'primitives.tsx'), 'utf8')
   const p = prim.split('\n').filter(z => !z.trim().startsWith('//')).join('\n')
   assert.match(p, /className="v2-leer"/)
+})
+
+// ══ G-409: die Tiefe und jeder Klick ═══════════════════════════════
+
+test('kein Reiter schreibt sein Klickziel fest', () => {
+  // **Tom, 2026-09-08:** *„dann hat es diverse klicks die in
+  // `?bereich=` zurueckspringen."*
+  //
+  // `[read]` **Die Reiter laufen in ZWEI Fassungen** — sie duerfen
+  // ihr Ziel deshalb nicht festschreiben, sondern fragen den
+  // Linkhelfer. `[cmd]` **Die Probe misst die Abwesenheit fester
+  // Ziele**, nicht die Anwesenheit des Helfers: ein neuer fester
+  // Verweis faellt auch dann auf, wenn er den Helfer daneben
+  // importiert.
+  const REITER = ['tab-uebersicht', 'tab-athleten', 'tab-checkins',
+    'tab-alerts', 'tab-autonomie', 'tab-nachrichten']
+  const fest: string[] = []
+  for (const r of REITER) {
+    const roh = readFileSync(
+      join(WURZEL, 'apps', 'coach', 'src', 'components', `${r}.tsx`), 'utf8')
+    const t = roh.split('\n').filter(z => !z.trim().startsWith('//')
+      && !z.trim().startsWith('*')).join('\n')
+    // `[cmd]` **Drei Formen, nicht zwei.** `[cmd]` **Die Gegenprobe
+    // „ein Reiter schreibt sein Ziel wieder fest" blieb GRUEN**, als
+    // `/athlet/${id}` zurueckgeschrieben wurde: das Muster kannte
+    // nur `?bereich=` und `?tab=`. `[read]` **Ein Waechter, der eine
+    // Schreibform nicht kennt, gilt nur so weit wie sein Muster.**
+    for (const m of t.matchAll(/["'`]\/\?(?:bereich|tab)=/g)) {
+      fest.push(`${r}: ${t.slice(m.index, m.index + 34)}`)
+    }
+    for (const m of t.matchAll(/["'`]\/athlet\//g)) {
+      fest.push(`${r}: ${t.slice(m.index, m.index + 34)}`)
+    }
+  }
+  assert.deepEqual(fest, [],
+    'Diese Stellen schreiben ihr Ziel fest und fuehren aus dem Draft.')
+})
+
+test('der Linkhelfer laesst die alte Fassung unveraendert', () => {
+  // `[cmd]` **Tom: „`?bereich=` NICHT anfassen."**
+  //
+  // `[read]` **Ohne Lage kommt heraus, was vorher dastand** — das
+  // ist die eine Eigenschaft, an der die alte Fassung haengt.
+  assert.equal(wegZuReiter(null, 'alerts'), '/?bereich=alerts')
+  assert.equal(wegZuReiter(null, 'workflows', '&stand=offen'),
+    '/?bereich=workflows&stand=offen')
+  assert.equal(wegZuAthlet(null, 'abc'), '/athlet/abc')
+  assert.equal(wegZurueck(null), '/?bereich=klienten')
+})
+
+test('im Draft fuehrt jeder Weg in den Draft', () => {
+  const lage = { bereich: 'athletes', kind: 'record' }
+  for (const weg of [
+    wegZuReiter(lage, 'alerts'),
+    wegZuReiter(lage, 'gibtesnicht'),
+    wegZuFilter(lage, 'klienten', '&stand=aktiv'),
+    wegZuAthlet(lage, 'abc'),
+    wegZurueck(lage),
+  ]) {
+    assert.ok(weg.includes('draft='), `fuehrt hinaus: ${weg}`)
+  }
+})
+
+test('ein unbekannter Reiter bleibt, wo er ist', () => {
+  // `[read]` **Kennt der Draft den Reiter nicht, waere ein Sprung in
+  // die alte Fassung genau der Fehler**, den G-409 behebt.
+  const lage = { bereich: 'analytics', kind: 'patterns' }
+  assert.equal(wegZuReiter(lage, 'gibtesnicht'),
+    '/?draft=analytics&kind=patterns')
+})
+
+test('die Akte traegt die Klientenkarte der Vorlage', () => {
+  // `[cmd]` **`client-record.jsx:101-135`:** Name, drei Pills,
+  // Zielzeile, DREI Coach-Pills, SECHS Access-Pills, drei Knoepfe.
+  const roh = readFileSync(
+    join(WURZEL, 'apps', 'coach', 'src', 'components', 'draft', 'ansicht-akte.tsx'), 'utf8')
+  const t = roh.split('\n').filter(z => !z.trim().startsWith('//')).join('\n')
+
+  // Die Felder der Vorlage, die auf der Karte stehen muessen.
+  for (const feld of ['FCR_CLIENT.av', 'FCR_CLIENT.name', 'FCR_CLIENT.tier',
+    'FCR_CLIENT.since', 'FCR_CLIENT.goal', 'FCR_CLIENT.phase',
+    'FCR_CLIENT.age', 'FCR_CLIENT.height', 'FCR_CLIENT.coaches',
+    'FCR_CLIENT.granted']) {
+    assert.ok(t.includes(feld), `${feld} fehlt auf der Klientenkarte`)
+  }
+  assert.match(t, /full access granted/)
+  assert.match(t, /revocable any time/)
+
+  // Und die acht Untertabs, in der Reihenfolge der Vorlage.
+  const vorlage = readFileSync(join(DRAFT, 'module-coach-client-record.jsx'), 'utf8')
+  const ausVorlage = [...vorlage.matchAll(/\["(overview|training|nutrition|recovery|supplements|body|medical|timeline)","/g)]
+    .map(m => m[1])
+  const gebaut = [...t.matchAll(/\['(\w+)', '[A-Z]/g)].map(m => m[1])
+  assert.equal(ausVorlage.length, 8, `Vorlage: ${ausVorlage.length} Untertabs`)
+  assert.deepEqual(gebaut, ausVorlage)
+})
+
+test('die dreizehn Modale der Vorlage sind gebaut', () => {
+  // `[cmd]` **Nachgezaehlt ueber alle Vorlagendateien: DREIZEHN** —
+  // `KModal` und `CMod` sind die Huelle, kein Modal.
+  //
+  // `[read]` **Der Auftrag nennt fuenfzehn** — die Zahl stammt aus
+  // meinem eigenen G-407-Bericht und zaehlte die Huellen mit.
+  const dateien = readdirSync(DRAFT).filter(f => f.endsWith('.jsx'))
+  const ausVorlage = new Set<string>()
+  for (const f of dateien) {
+    const t = readFileSync(join(DRAFT, f), 'utf8')
+    for (const m of t.matchAll(/^(?:const|window\.)\s*(\w+Modal)\b/gm)) {
+      if (m[1] !== 'KModal') ausVorlage.add(m[1])
+    }
+  }
+  assert.equal(ausVorlage.size, 13,
+    `Vorlage fuehrt ${ausVorlage.size} Modale: ${[...ausVorlage].join(' ')}`)
+  assert.equal(Object.keys(MODALE).length, 13,
+    `gebaut sind ${Object.keys(MODALE).length}`)
+})
+
+test('kein Knopf im Modal taeuscht einen Schreibweg vor', () => {
+  // `[read]` **C-426: kein Bedienelement ohne Wirkung.** `[cmd]`
+  // **Es gibt keinen Schreibweg** — also ist jeder handelnde Knopf
+  // `disabled` und sagt im Titel, warum.
+  const roh = readFileSync(
+    join(WURZEL, 'apps', 'coach', 'src', 'components', 'draft', 'modale.tsx'), 'utf8')
+  const t = roh.split('\n').filter(z => !z.trim().startsWith('//')).join('\n')
+  assert.match(t, /disabled\s*\n?\s*title="Attrappe/,
+    'Der handelnde Knopf muss disabled sein und seinen Grund nennen.')
 })

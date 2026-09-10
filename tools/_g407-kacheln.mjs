@@ -8,7 +8,7 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { wortFuer } from './konten.mjs'
 
 const BASIS = 'http://localhost:3220'
-const ZIEL = 'docs/bilder/g407'
+const ZIEL = process.argv[2] ?? 'docs/bilder/g407'
 mkdirSync(ZIEL, { recursive: true })
 
 const browser = await chromium.launch()
@@ -58,6 +58,8 @@ for (const b of bereiche) {
         leerOhneGrund: inhalt.querySelectorAll('.v2-leer').length,
       }
     })
+    // G-409/A6: ein Bild JE UNTERPUNKT, nicht nur je Bereich.
+    await p.screenshot({ path: `${ZIEL}/${b}${k ? '--' + k : ''}.png` })
     zeilen.push({ bereich: b, kind: k, ...m })
     console.log(`${b.padEnd(10)} ${(k ?? '—').padEnd(11)}`,
       `Karten=${String(m.karten).padStart(2)}`,

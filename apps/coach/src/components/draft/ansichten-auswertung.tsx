@@ -10,6 +10,9 @@
 import * as React from 'react'
 import { Card, Pill, Row, KPI, Meter, Sparkline } from '@lumeos/ui'
 
+// G-409/A5: die Modale der Vorlage, ueber `&modal=` geoeffnet.
+import { ModalKnopf } from './modal-huelle'
+
 import {
   AUTONOMY_LEVELS, RULE_TRIGGERS, RULE_TEMPLATES, ACTIVE_RULES,
   SMART_ALERTS, COACH_ROLES, TEAM_MEMBERS, COACH_AUDIT, COACH_KPIS,
@@ -138,9 +141,9 @@ export function AnsichtMuster() {
                 key={a.id}
                 label={a.name}
                 sub={a.tags.join(' · ')}
-                value={a.alerts === 0
-                  ? <Pill variant="pos">0</Pill>
-                  : <Pill variant="warn">{a.alerts}</Pill>}
+                value={<ModalKnopf modal="athlet" mid={a.id}>
+                  {a.alerts === 0 ? 'ohne Alarm' : `${a.alerts} Alarme`}
+                </ModalKnopf>}
               />
             ))}
           </Stapel>
@@ -171,7 +174,14 @@ export function AnsichtUmsatz() {
         <KPI label="Ausweitung" value={`€${k.expansion}`} />
         <KPI label="Empfehlungen" value={`${Math.round(k.referralRate * 100)} %`} />
       </Raster>
-      <Card title="Plaene" sub={`${COACH_PLANS.length} · was sich verkauft`}>
+      <Card
+        title="Plaene"
+        sub={`${COACH_PLANS.length} · was sich verkauft`}
+        actions={<>
+          <ModalKnopf modal="coach" mid="c-train">Coach</ModalKnopf>
+          <ModalKnopf modal="vorschlag">Vorschlag</ModalKnopf>
+        </>}
+      >
         <table className="cp-tabelle">
           <thead>
             <tr>
@@ -221,6 +231,7 @@ export function AnsichtRegeln() {
               <th style={{ width: 80, textAlign: 'right' }}>Male</th>
               <th style={{ width: 90, textAlign: 'right' }}>Fehlalarm</th>
               <th style={{ width: 120 }}>Zuletzt</th>
+              <th style={{ width: 110 }} />
             </tr>
           </thead>
           <tbody>
@@ -240,11 +251,51 @@ export function AnsichtRegeln() {
                 <td className="v2-num" style={{ textAlign: 'right' }}>{r.fired}</td>
                 <td className="v2-num" style={{ textAlign: 'right' }}>{r.falsePositives}</td>
                 <td className="v2-mono v2-dim">{r.lastFired}</td>
+                <td><ModalKnopf modal="regel" mid={r.id}>Bearbeiten</ModalKnopf></td>
               </tr>
             ))}
           </tbody>
         </table>
         {V('ACTIVE_RULES', KEINE_REGEL)}
+      </Card>
+
+      {/* ══ G-409: die Alarme mit ihrer Tiefe ═══════════════════
+          `[cmd]` **`SMART_ALERTS` traegt Sicherheit, Fehlalarmrisiko,
+          Vorhersage, aehnliche Faelle und Verfall** — G-407 zeigte
+          keines davon. `[read]` **Das ist die Tiefe, die Tom
+          meint.** */}
+      <Card title="Alarme im Detail" sub={`${SMART_ALERTS.length} · mit Sicherheit und Vorhersage`}>
+        <Stapel gap={10}>
+          {/* `[cmd]` **`expires` traegt nur 2 von 7 Alarmen** — `tsc`
+              hat es gemeldet. `[read]` **Ein fester Zugriff haette
+              „verfaellt undefined" gezeigt.** */}
+          {SMART_ALERTS.map(a => (
+            <Kasten
+              key={a.id}
+              ton={a.severity === 'CRITICAL' ? 'var(--neg)'
+                : a.severity === 'HIGH' ? 'var(--warn)' : 'var(--fg-dim)'}
+            >
+              <KastenKopf
+                name={a.title}
+                marken={<>
+                  <Pill variant={a.severity === 'CRITICAL' ? 'neg' : 'warn'}>{a.severity}</Pill>
+                  <Pill>{a.type}</Pill>
+                </>}
+                rechts={<ModalKnopf modal="alarm" mid={a.id}>Detail</ModalKnopf>}
+              />
+              <div className="dk-streifen-text">{a.athlete} — {a.why}</div>
+              <div className="dk-streifen-text" style={{ marginTop: 6 }}>
+                <strong>Vorhersage:</strong> {a.predicted}
+              </div>
+              <Raster spalten="repeat(3, 1fr)" gap={8}>
+                <Row label="Sicherheit" value={`${Math.round(a.confidence * 100)} %`} />
+                <Row label="Fehlalarmrisiko" value={`${Math.round(a.fpRisk * 100)} %`} />
+                <Row label="aehnliche Faelle" value={a.similarCases} />
+              </Raster>
+            </Kasten>
+          ))}
+        </Stapel>
+        {V('SMART_ALERTS', KEINE_REGEL)}
       </Card>
 
       <Raster spalten="1fr 1.3fr">
@@ -291,7 +342,14 @@ export function AnsichtTeam() {
         <KPI label="Protokollzeilen" value={COACH_AUDIT.length} />
       </Raster>
 
-      <Card title="Das Team" sub={`${TEAM_MEMBERS.length} Mitglieder`}>
+      <Card
+        title="Das Team"
+        sub={`${TEAM_MEMBERS.length} Mitglieder`}
+        actions={<>
+          <ModalKnopf modal="teamEinladen" art="primaer">Invite team member</ModalKnopf>
+          <ModalKnopf modal="einstellungen">Coach settings</ModalKnopf>
+        </>}
+      >
         <table className="cp-tabelle">
           <thead>
             <tr>
@@ -299,6 +357,7 @@ export function AnsichtTeam() {
               <th style={{ width: 90, textAlign: 'right' }}>Athleten</th>
               <th style={{ width: 80, textAlign: 'right' }}>Dabei</th>
               <th style={{ width: 90, textAlign: 'right' }}>Bewertung</th>
+              <th style={{ width: 90 }} />
             </tr>
           </thead>
           <tbody>
@@ -311,6 +370,7 @@ export function AnsichtTeam() {
                   <td className="v2-num" style={{ textAlign: 'right' }}>{m.athletes}</td>
                   <td className="v2-num" style={{ textAlign: 'right' }}>{m.since}</td>
                   <td className="v2-num" style={{ textAlign: 'right' }}>{m.rating}</td>
+                  <td><ModalKnopf modal="teamMitglied" mid={m.id}>Detail</ModalKnopf></td>
                 </tr>
               )
             })}
@@ -325,8 +385,13 @@ export function AnsichtTeam() {
             {COACH_ROLES.map(r => (
               <Kasten key={r.id}>
                 <KastenKopf name={r.label} />
+                {/* `[cmd]` **G-409: die Faehigkeiten mit ihrem WERT** —
+                    vorher stand nur der Name da, und `all: true`
+                    sah aus wie `all: false`. */}
                 <Stapel gap={4}>
-                  {Object.keys(r.caps).map(c => <Haken key={c}>{c}</Haken>)}
+                  {Object.entries(r.caps).map(([c, an]) => (
+                    <Haken key={c} ton={an ? 'pos' : 'neg'}>{c}</Haken>
+                  ))}
                 </Stapel>
               </Kasten>
             ))}

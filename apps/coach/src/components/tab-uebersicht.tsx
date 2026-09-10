@@ -4,9 +4,15 @@
 // nach Zustand und Datum — es gibt keinen Personen-Score (T7).
 import { Card, Empty, KPI, Pill } from '@lumeos/ui'
 import type { PortalStand } from '../lib/daten'
+// G-409: der Linkhelfer entscheidet, wohin ein Klick fuehrt.
+import { wegZuReiter, wegZuAthlet, type DraftLage } from './draft/wege'
 import { datum, zeitpunkt } from '../lib/format'
 
-export function TabUebersicht({ stand }: { stand: PortalStand }) {
+export function TabUebersicht({ stand, lage = null }: {
+  stand: PortalStand
+  /** In welcher Fassung — G-409. */
+  lage?: DraftLage
+}) {
   const namen = new Map(stand.klienten.map(k => [k.client_id, k.display_name]))
   const eingereicht = stand.checkins.filter(c => c.status === 'submitted')
   const offeneAlerts = stand.alerts.filter(a => a.status === 'open')
@@ -21,17 +27,17 @@ export function TabUebersicht({ stand }: { stand: PortalStand }) {
   const arbeit: { text: string; ziel: string; wann: string }[] = [
     ...eingereicht.map(c => ({
       text: `Check-in von ${namen.get(c.client_id) ?? c.client_id} reviewen`,
-      ziel: '/?tab=workflows',
+      ziel: wegZuReiter(lage, 'workflows'),
       wann: zeitpunkt(c.submitted_at),
     })),
     ...ungelesen.map(n => ({
       text: `Nachricht von ${namen.get(n.client_id) ?? n.client_id} beantworten`,
-      ziel: '/?tab=messages',
+      ziel: wegZuReiter(lage, 'messages'),
       wann: zeitpunkt(n.sent_at),
     })),
     ...offeneAlerts.map(a => ({
       text: `Alert: ${a.title} (${namen.get(a.client_id) ?? a.client_id})`,
-      ziel: '/?tab=alerts',
+      ziel: wegZuReiter(lage, 'alerts'),
       wann: zeitpunkt(a.created_at),
     })),
   ]
@@ -122,7 +128,7 @@ export function TabUebersicht({ stand }: { stand: PortalStand }) {
                 <span className="cp-avatar" aria-hidden="true">
                   {k.display_name.split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase()}
                 </span>
-                <a href={`/athlet/${k.client_id}`} style={{ flex: 1, minWidth: 0 }}>
+                <a href={wegZuAthlet(lage, k.client_id)} style={{ flex: 1, minWidth: 0 }}>
                   {k.display_name}
                 </a>
                 {eigene > 0 && (

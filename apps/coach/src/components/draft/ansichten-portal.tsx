@@ -11,6 +11,9 @@
 import * as React from 'react'
 import { Card, Pill, Row, KPI, Meter, Ring, Sparkline, Icon } from '@lumeos/ui'
 
+// G-409/A5: die Modale der Vorlage.
+import { ModalKnopf } from './modal-huelle'
+
 import {
   CAL_EVENTS, CAL_KIND, CN_NOTES, CN_TAGS, LIB_EX, LIB_MEAL,
   NC_ITEMS, NC_KIND, CD_PERMS, PORTAL_WF_DEFS, PEAK_WEEK, PORTAL_ONBOARD,
@@ -39,7 +42,11 @@ export function AnsichtNotizen() {
   const angeheftet = CN_NOTES.filter(n => n.pinned)
   return (
     <Stapel>
-      <Card title="Notizen" sub={`${CN_NOTES.length} · ${angeheftet.length} angeheftet`}>
+      <Card
+        title="Notizen"
+        sub={`${CN_NOTES.length} · ${angeheftet.length} angeheftet`}
+        actions={<ModalKnopf modal="notiz" mid={CN_NOTES[0].id}>Notiz oeffnen</ModalKnopf>}
+      >
         <Stapel gap={10}>
           {CN_NOTES.map(n => (
             <Kasten key={n.id} ton={(CN_TAGS as Record<string, string>)[n.tag]}>
@@ -268,6 +275,38 @@ export function AnsichtVorlagen() {
         </Stapel>
         {V('PORTAL_WF_DEFS', FEHLT)}
       </Card>
+
+      {/* `[cmd]` **G-409: `PEAK_WEEK`** — sieben Tage mit Kohlenhydraten,
+          Wasser, Natrium, Training und Anmerkung. **Die Vorlage zeigt
+          sie im Ablauf „Contest Prep review"; G-407 zeigte sie
+          nicht.** */}
+      <Card title="Peak week" sub={`${PEAK_WEEK.length} Tage · der Ablauf im Detail`}>
+        <table className="cp-tabelle">
+          <thead>
+            <tr>
+              <th style={{ width: 110 }}>Tag</th>
+              <th style={{ width: 130 }}>Kohlenhydrate</th>
+              <th style={{ width: 70 }}>Wasser</th>
+              <th style={{ width: 90 }}>Natrium</th>
+              <th style={{ width: 160 }}>Training</th>
+              <th>Anmerkung</th>
+            </tr>
+          </thead>
+          <tbody>
+            {PEAK_WEEK.map(d => (
+              <tr key={d.day}>
+                <td className="v2-mono">{d.day}</td>
+                <td>{d.carbs}</td>
+                <td className="v2-num">{d.water}</td>
+                <td className="v2-dim">{d.sodium}</td>
+                <td>{d.training}</td>
+                <td className="v2-dim">{d.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {V('PEAK_WEEK', FEHLT)}
+      </Card>
     </Stapel>
   )
 }
@@ -285,7 +324,11 @@ export function AnsichtPlaene() {
           + 'Alarm faellt oder ein Check-in ein Problem zeigt.'}
       />
       <Raster spalten="300px 1fr">
-        <Card title="Programme" sub={`${PROGRAMS.length} · ${PROGRAMS.reduce((s, p) => s + p.assigned, 0)} Zuweisungen`}>
+        <Card
+          title="Programme"
+          sub={`${PROGRAMS.length} · ${PROGRAMS.reduce((s, p) => s + p.assigned, 0)} Zuweisungen`}
+          actions={<ModalKnopf modal="neuerPlan" art="primaer">New plan</ModalKnopf>}
+        >
           <Stapel gap={0}>
             {PROGRAMS.map(p => (
               <Row
@@ -525,7 +568,14 @@ export function AnsichtKalender() {
   const anzahl = tage.reduce((s, [, e]) => s + e.length, 0)
   return (
     <Stapel>
-      <Card title="Termine" sub={`${anzahl} an ${tage.length} Tagen`}>
+      <Card
+        title="Termine"
+        sub={`${anzahl} an ${tage.length} Tagen`}
+        actions={<>
+          <ModalKnopf modal="coachEinladen">Invite coach</ModalKnopf>
+          <ModalKnopf modal="qr">Scan QR</ModalKnopf>
+        </>}
+      >
         <Stapel gap={12}>
           {tage.map(([tag, ereignisse]) => (
             <div key={tag}>
@@ -561,7 +611,11 @@ export function AnsichtBenachrichtigungen() {
   const ungelesen = NC_ITEMS.filter(n => n.unread).length
   return (
     <Stapel>
-      <Card title="Benachrichtigungen" sub={`${NC_ITEMS.length} · ${ungelesen} ungelesen`}>
+      <Card
+        title="Benachrichtigungen"
+        sub={`${NC_ITEMS.length} · ${ungelesen} ungelesen`}
+        actions={<ModalKnopf modal="nachrichten">Verlauf</ModalKnopf>}
+      >
         <Stapel gap={9}>
           {NC_ITEMS.map(n => {
             const k = (NC_KIND as Record<string, { c: string, i: string, l: string }>)[n.kind]

@@ -11,6 +11,19 @@ import {
 } from '../../../lib/daten'
 import { vorschlagSenden } from '../../../lib/aktionen'
 import { datum, wert, zeitpunkt } from '../../../lib/format'
+// ══ G-409/A2: dieselbe Schale, dieselbe Kontextspalte ══════════════
+import { wegZurueck } from '../../../components/draft/wege'
+import { DraftSchale } from '../../../components/portal-draft-schale'
+import { DraftKontextspalte } from '../../../components/portal-draft-kontextspalte'
+import { bereichVon } from '../../../components/portal-draft-nav'
+
+/**
+ * Wo die Akte im Draft steht.
+ *
+ * `[read]` **Unter Athletes/Full record** — dort fuehrt der Klick
+ * hin, und dorthin fuehrt „← Athleten" zurueck.
+ */
+const LAGE_AKTE = { bereich: 'athletes', kind: 'record' } as const
 
 export const dynamic = 'force-dynamic'
 
@@ -18,7 +31,17 @@ export default async function AthletSeite({
   params, searchParams,
 }: {
   params: { id: string }
-  searchParams: { fehler?: string }
+  searchParams: {
+    fehler?: string
+    /**
+     * G-409/A2: die Akte in der Draft-Schale.
+     *
+     * `[read]` **Ohne `?draft=1` bleibt die Seite, was sie war** —
+     * derselbe Inhalt, ohne Seitenleiste. **Mit `?draft=1` steckt
+     * derselbe Inhalt in der Draft-Schale**, samt Kontextspalte.
+     */
+    draft?: string
+  }
 }) {
   const stand = await portalStand()
   if (!stand) redirect('/login')
@@ -38,9 +61,22 @@ export default async function AthletSeite({
 
   const vorschlaege = stand.pending.filter(p => p.client_id === klient.client_id)
   const aktionen = stand.actionLog.filter(a => a.client_id === klient.client_id)
-  const pfad = `/athlet/${klient.client_id}`
+  // `[cmd]` **Der Rueckweg des Formulars traegt die Fassung mit** —
+  // sonst landet man nach dem Senden eines Vorschlags in der alten
+  // Akte, obwohl man aus dem Draft kam.
+  const imDraft = searchParams.draft !== undefined
+  const pfad = `/athlet/${klient.client_id}${imDraft ? '?draft=1' : ''}`
 
-  return (
+  // ══ G-409/A2: derselbe Inhalt, zwei Schalen ═══════════════════
+  //
+  // `[read]` **Der Inhalt wird EINMAL gebaut.** `[cmd]` **Dann
+  // entscheidet `imDraft`, ob er nackt dasteht (wie bisher) oder in
+  // der Draft-Schale mit Seitenleiste und Kontextspalte.**
+  //
+  // `[read]` **Nicht zwei Seiten** — eine zweite Fassung altert ab
+  // dem ersten Tag, und dann zeigen die beiden Akten verschiedene
+  // Daten.
+  const inhalt = (
     // ══ G-402/A7: `v2-module-header` statt `cp-shell`/`cp-kopf` ══
     //
     // `[read]` **Die Akte ist eine eigene Seite ohne Seitenleiste** —
@@ -50,7 +86,7 @@ export default async function AthletSeite({
       <div className="v2-module-header v2-module-hero-lite">
         <div className="v2-module-title-block">
           <div className="v2-module-title-row">
-            <a className="v2-btn" href="/?bereich=klienten">← Athleten</a>
+            <a className="v2-btn" href={wegZurueck(imDraft ? LAGE_AKTE : null)}>← Athleten</a>
             <span className="v2-module-title">{klient.display_name}</span>
             <Pill variant={klient.status === 'active' ? 'pos' : undefined}>
               {klient.status === 'active' ? `aktiv seit ${datum(klient.started_at)}` : klient.status}
@@ -140,6 +176,44 @@ export default async function AthletSeite({
         </Card>
       </div>
     </main>
+  )
+
+  if (!imDraft) return inhalt
+
+  const bereich = bereichVon('athletes')!
+  const kind = bereich.kinder!.find(k => k.id === 'record')!
+  const aktive = stand.klienten.filter(k => k.status === 'active').length
+
+  return (
+    <DraftSchale
+      bereich={bereich}
+      kind={kind}
+      rechtsOffen
+      athleten={aktive}
+      email={stand.email}
+      zaehler={{
+        athletes: aktive,
+        checkins: stand.checkins.filter(c => c.status === 'submitted').length,
+        alerts: stand.alerts.filter(a => a.status !== 'done').length,
+        inbox: stand.nachrichten.filter(
+          n => n.read_at === null && n.sender_id !== stand.userId).length,
+      }}
+      // `[cmd]` **Am Schirm gefunden:** mit `{}` stand im Kopf
+      // „14 active" und „14 active clients" — die Zahlen des Drafts,
+      // direkt ueber echten Messwerten. `[read]` **Dieselben
+      // Ersetzungen wie in `portal-draft-seite.tsx`**, sonst
+      // widerspricht der Kopf dem Inhalt darunter.
+      echtePills={{
+        '14 active': `${aktive} active`,
+        '14 athletes': `${aktive} athletes`,
+        '14 active clients': `${aktive} active clients`,
+      }}
+      kontext={<DraftKontextspalte bereich="athletes" echteDetails={{
+        'Active athletes': String(aktive),
+      }} />}
+    >
+      {inhalt}
+    </DraftSchale>
   )
 }
 

@@ -3,10 +3,16 @@
 // automatisch als gelesen markiert.
 import { Card, Empty, Pill } from '@lumeos/ui'
 import type { PortalStand } from '../lib/daten'
+// G-409: auch der Rueckweg nach dem Schreiben bleibt im Draft.
+import { wegZuReiter, type DraftLage } from './draft/wege'
 import { nachrichtSenden } from '../lib/aktionen'
 import { zeitpunkt } from '../lib/format'
 
-export function TabNachrichten({ stand }: { stand: PortalStand }) {
+export function TabNachrichten({ stand, lage = null }: {
+  stand: PortalStand
+  /** In welcher Fassung — G-409. */
+  lage?: DraftLage
+}) {
   const aktive = stand.klienten.filter(k => k.status !== 'ended')
   if (aktive.length === 0) {
     return (
@@ -47,7 +53,8 @@ export function TabNachrichten({ stand }: { stand: PortalStand }) {
             )}
             <form action={nachrichtSenden} className="cp-formular">
               <input type="hidden" name="client_id" value={k.client_id} />
-              <input type="hidden" name="pfad" value="/?tab=messages" />
+              <input type="hidden" name="pfad"
+                value={wegZuReiter(lage, 'messages')} />
               <label>
                 Antwort
                 <textarea name="body" rows={2} required />

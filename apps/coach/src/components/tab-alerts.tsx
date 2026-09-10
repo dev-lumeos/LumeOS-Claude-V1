@@ -29,16 +29,20 @@
 // deshalb in der Adresse**, wie die Reiter auch.
 import { Card, Empty, Pill } from '@lumeos/ui'
 import type { PortalStand } from '../lib/daten'
+// G-409: der Linkhelfer entscheidet, wohin ein Klick fuehrt.
+import { wegZuFilter, wegZuReiter, type DraftLage } from './draft/wege'
 import { alertStatusSetzen } from '../lib/aktionen'
 import { zeitpunkt } from '../lib/format'
 
 type Filter = 'offen' | 'alle' | 'done'
 
-export function TabAlerts({ stand, filter }: {
+export function TabAlerts({ stand, filter, lage = null }: {
   stand: PortalStand
   /** Aus `?stand=`. Vorgabe „offen" — ein Coach oeffnet die Liste,
    *  um zu sehen, was ansteht, nicht um Erledigtes zu lesen. */
   filter: Filter
+  /** In welcher Fassung dieser Reiter laeuft — G-409. */
+  lage?: DraftLage
 }) {
   const namen = new Map(stand.klienten.map(k => [k.client_id, k.display_name]))
   const reihenfolge = { open: 0, read: 1, done: 2 } as const
@@ -75,7 +79,7 @@ export function TabAlerts({ stand, filter }: {
             <a
               key={k}
               className={`cp-filter-knopf${filter === k ? ' cp-aktiv' : ''}`}
-              href={`/?bereich=alerts&stand=${k}`}
+              href={wegZuFilter(lage, 'alerts', `&stand=${k}`)}
               aria-current={filter === k ? 'page' : undefined}
             >
               {l}
@@ -117,7 +121,8 @@ export function TabAlerts({ stand, filter }: {
                   {a.status !== 'done' && (
                     <form action={alertStatusSetzen} className="cp-zeile">
                       <input type="hidden" name="id" value={a.id} />
-                      <input type="hidden" name="pfad" value="/?tab=alerts" />
+                      <input type="hidden" name="pfad"
+                value={wegZuReiter(lage, 'alerts')} />
                       {a.status === 'open' && (
                         <button className="cp-knopf" name="status" value="read" type="submit">Gelesen</button>
                       )}
