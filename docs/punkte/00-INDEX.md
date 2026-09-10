@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
+| `todos` | 209 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 6 |
 | `erledigt` | 393 |
-| **gesamt** | **610** |
+| **gesamt** | **611** |
 
 ## medical — 48
 
@@ -64,7 +64,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 228
+## nutrition — 229
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -295,6 +295,7 @@
 | `G-350` | befund | mittel | [ein zweiter Schreibweg fuer `is_checked`](erledigt/nutrition-g-0350-ein-zweiter-schreibweg-fuer-is-checked.md) | erledigt | — | — |
 | `G-351` | befund | mittel | [`other` hat keine Karte](erledigt/nutrition-g-0351-other-hat-keine-karte.md) | erledigt | — | — |
 | `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | C-425, G-372 |
+| `G-412` | feature | hoch | [die letzten Attrappen in Nutrition](todos/nutrition-g-0412-die-letzten-attrappen.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 77
