@@ -2074,23 +2074,42 @@ select.v2-feld { cursor: pointer; }
    [cmd] Zur Komponente `Empty` (primitives.tsx). Die Vorlage ruft
    sie fuenfmal auf, definiert sie aber nicht — G-40 hat sie als
    `Leer` modul-maessig nachgebaut, mit Inline-Stilen. Als Klasse
-   steht sie einmal da statt in jedem Modul neu. */
-.v2-empty {
+   steht sie einmal da statt in jedem Modul neu.
+
+   ══ G-407: ZWEI ABSICHTEN, EIN NAME ═══════════════════════════
+   [cmd] Dieser Block hiess bis 2026-09-10 ebenfalls `.v2-empty` —
+   derselbe Name wie der Zeilen-Leerzustand aus Abschnitt 8
+   (`:1598`, `display: flex`). [cmd] Die zweite Regel gewann und
+   setzte `text-align: center`, ohne `display` zurueckzusetzen:
+   Symbol, Titel und Grund standen NEBENeinander, und der Grund las
+   sich wie eine Bildunterschrift.
+
+   [cmd] Gemessen 2026-09-10: VIER rohe `<div className="v2-empty">`
+   in apps/web (nutrition/ansicht.tsx, zielhinweis.tsx 3x) bauen auf
+   die ZEILE — Symbol links, Text rechts. [cmd] 56 Aufrufer der
+   Komponente `Empty` wollen den BLOCK.
+
+   [read] Darum bekommt der Block einen eigenen Namen, statt dass
+   eine der beiden Absichten die andere ueberschreibt. [read] Ein
+   `display: block` auf `.v2-empty` haette die vier Zeilen in
+   apps/web zerlegt. */
+.v2-leer {
+  display: block;
   text-align: center;
   padding: 32px 20px;
 }
-.v2-empty-icon {
+.v2-leer-icon {
   width: 28px;
   height: 28px;
   color: var(--fg-dim);
   margin: 0 auto 10px;
 }
-.v2-empty-title {
+.v2-leer-title {
   font-size: 13.5px;
   font-weight: 600;
   margin-bottom: 4px;
 }
-.v2-empty-sub {
+.v2-leer-sub {
   font-size: 11.5px;
   color: var(--fg-dim);
 }

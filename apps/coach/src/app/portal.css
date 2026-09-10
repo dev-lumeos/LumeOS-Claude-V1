@@ -801,26 +801,11 @@
 /* `:215` — der scrollende Teil */
 .dp-inhalt { flex: 1; overflow-y: auto; padding: 16px 18px 26px; min-width: 0; }
 
-/* ══ Die Unterreiter scrollen, statt zu brechen ═══════════════
-   `[cmd]` **Am Schirm gefunden:** der Assistent traegt 13
-   Unterpunkte, und `.v2-tabs` aus dem Paket hat kein `overflow` —
-   die Reiter wurden gestaucht und brachen auf DREI Zeilen um.
-   `[cmd]` **Der Draft scrollt sie waagerecht** (`Tabs`, eine Zeile).
-
-   `[read]` **Die Regel steht hier und nicht im Paket** — `.v2-tabs`
-   gehoert allen Apps, und apps/web hat nirgends 13 Reiter. **Unter
-   `.dp-inhalt` wirkt sie nur auf die Draft-Fassung.** */
-.dp-inhalt .v2-tabs {
-  overflow-x: auto;
-  overflow-y: hidden;
-  flex-wrap: nowrap;
-  scrollbar-width: thin;
-}
-
-.dp-inhalt .v2-tabs .v2-tab {
-  flex-shrink: 0;
-  white-space: nowrap;
-}
+/* `[read]` **G-405 hat hier `overflow-x` auf `.v2-tabs`
+   nachgebaut** — das war die Behebung am falschen Ort. `[cmd]`
+   **G-407: die Schale ruft jetzt `v2-tabs-rail`**, und die Klasse
+   traegt `overflow-x: auto` seit jeher (`v2.css:1069`). **Die
+   Notloesung ist entfallen.** */
 
 /* Der Punkt am Unterpunkt: diese Kachel ist eine Attrappe.
    `[read]` Der Titel nennt die fehlende Tabelle — die Marke allein
@@ -835,27 +820,15 @@
   vertical-align: middle;
 }
 
-/* Der Attrappenvermerk steht untereinander.
-
-   `[cmd]` **Am Schirm gefunden:** Titel und Grund standen
-   NEBENeinander, und der Grund las sich wie eine Bildunterschrift.
-
-   `[cmd]` **Die Ursache liegt im Paket:** `v2.css:1598` setzt
-   `.v2-empty { display: flex }`, `v2.css:2078` setzt fuer denselben
-   Selektor `text-align: center` — ohne `display` zurueckzusetzen.
-   **Die zweite Regel gewinnt, die Zeilenrichtung bleibt.**
-
-   `[read]` **Nicht im Paket berichtigt** — es gehoert allen Apps,
-   und apps/web haengt an der heutigen Darstellung. **Im Bericht
-   vermerkt.** Hier wirkt es nur auf die Draft-Fassung. */
-.dp-inhalt .v2-empty {
-  display: block;
-  text-align: left;
-  padding: 20px;
-}
-
-.dp-inhalt .v2-empty-icon { margin: 0 0 8px; }
-.dp-inhalt .v2-empty-sub { max-width: 62ch; }
+/* `[read]` **G-405 hat `.v2-empty` hier ueberschrieben**, weil
+   das Paket zwei Absichten unter einem Namen fuehrte. `[cmd]`
+   **G-407 hat das im Paket getrennt** (`.v2-empty` = Zeile,
+   `.v2-leer` = Block). **Die Ueberschreibung ist entfallen** — nur
+   die Breite bleibt, damit der Grund nicht ueber die ganze Spalte
+   laeuft. */
+.dp-inhalt .v2-leer { text-align: left; }
+.dp-inhalt .v2-leer-icon { margin: 0 0 8px; }
+.dp-inhalt .v2-leer-sub { max-width: 62ch; }
 
 /* ── Die Kontextspalte — `module-coach-portal-context.jsx:148` ── */
 
@@ -1000,4 +973,108 @@
 @media (max-width: 1100px) {
   .dp-app { grid-template-columns: 222px 1fr; }
   .dp-kontext { display: none; }
+}
+
+/* ══ DIE BAUSTEINE DER DRAFT-KACHELN — G-407 ═══════════════════════
+
+   `[read]` **Nur was die Vorlage wiederholt und `v2.css` nicht
+   traegt.** `[cmd]` **Card, Pill, KPI, Row, Meter, Ring, Sparkline,
+   LineChart, RadarChart, Empty liegen im Paket** — die werden
+   gerufen, nicht nachgebaut.
+
+   `[cmd]` **Die Masse sind abgelesen**, Datei und Zeile stehen
+   jeweils dabei. */
+
+/* `programs.jsx:71` — der Hinweisstreifen ueber einer Ansicht. */
+.dk-streifen {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--ton, var(--acc-coach)) 5%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--ton, var(--acc-coach)) 22%, var(--border));
+  border-radius: var(--radius);
+  align-items: flex-start;
+}
+
+.dk-streifen-icon { color: var(--ton, var(--acc-coach)); flex-shrink: 0; margin-top: 2px; }
+.dk-streifen-titel { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.dk-streifen-text { color: var(--fg-muted); font-size: 11.5px; line-height: 1.55; }
+
+/* `assistant-layers.jsx:60` — die Aufzaehlung mit Haken. */
+.dk-haken {
+  display: flex;
+  gap: 7px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+
+/* `clone.jsx:CLONE_FIDELITY` — Balken mit Beschriftung. */
+.dk-balken { display: flex; flex-direction: column; gap: 4px; }
+
+.dk-balken-kopf {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.dk-balken-label { font-size: 11.5px; font-weight: 500; }
+.dk-balken-wert { font-size: 11.5px; color: var(--fg-muted); font-variant-numeric: tabular-nums; }
+.dk-balken-note { font-size: 10.5px; line-height: 1.45; color: var(--fg-subtle); }
+
+/* `assistant-layers.jsx:55` — rohe Rede, eingerueckt mit Strich. */
+.dk-zitat {
+  color: var(--fg-muted);
+  font-size: 11.5px;
+  line-height: 1.5;
+  font-style: italic;
+  padding-left: 10px;
+  border-left: 2px solid var(--border);
+}
+
+/* Die Kachel in der Kachel. */
+.dk-kasten {
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+}
+
+.dk-kasten[style*="--ton"] { border-left: 2px solid var(--ton); }
+
+.dk-kasten-kopf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+  flex-wrap: wrap;
+}
+
+.dk-kasten-name { font-size: 12px; font-weight: 600; }
+.dk-kasten-rechts { margin-left: auto; font-size: 10px; color: var(--fg-subtle); }
+
+/* ══ Der Attrappenvermerk IN der Kachel ═══════════════════════════
+   `[read]` **Er steht unter dem Inhalt, nicht statt seiner** — die
+   Zahlen der Vorlage stehen darueber, und darunter steht, warum sie
+   nicht gemessen sind. */
+.dk-attrappe {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-strong);
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--fg-subtle);
+}
+
+.dk-attrappe .v2-pill { flex-shrink: 0; }
+
+.dk-raster { display: grid; }
+.dk-stapel { display: flex; flex-direction: column; }
+
+@media (max-width: 1100px) {
+  .dk-raster { grid-template-columns: 1fr !important; }
 }

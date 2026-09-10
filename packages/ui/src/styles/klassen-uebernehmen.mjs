@@ -4,6 +4,28 @@
 //
 // Erzeugt, nicht abgeschrieben: 1.142 Zeilen von Hand zu uebertragen
 // waere fehleranfaellig, und der Entwurf bleibt die Quelle.
+//
+// ══ ACHTUNG — DIESES SKRIPT IST NICHT MEHR DIE QUELLE ═════════════
+//
+// [cmd] Gemessen 2026-09-10 (G-407): ein Lauf dieses Skripts erzeugt
+// eine v2.css, die sich vom Bestand in mindestens sechs Bloecken
+// unterscheidet — und zwar NACH UNTEN. Er wirft weg:
+//
+//     .v2-btn:active            der Druckzustand (G-303)
+//     .v2-btn transition        Rueckmeldung beim Klick
+//     .v2-fortschritt           240ms statt 0.4s (G-303)
+//     .v2-ring padding-bottom   Platz fuer das Label (G-318)
+//     das Ringlabel selbst      G-318
+//     .v2-leer                  G-407
+//
+// [read] v2.css ist seit der Erzeugung von Hand weitergepflegt
+// worden, dieses Skript nicht. [cmd] WER ES LAEUFT, MACHT DIESE
+// ARBEIT ZUNICHTE — lautlos, denn es meldet nur Erfolg.
+//
+// [read] Es bleibt liegen, weil es zeigt, WIE die Datei entstand.
+// [read] Aber die Wahrheit ist v2.css, nicht dieses Skript.
+// [cmd] Wer eine Klasse aendert, aendert v2.css — und traegt die
+// Aenderung hier nur nach, wenn er sie ohnehin pflegt.
 import fs from 'node:fs'
 import path from 'node:path'
 
@@ -1023,23 +1045,36 @@ select.v2-feld { cursor: pointer; }
    [cmd] Zur Komponente \`Empty\` (primitives.tsx). Die Vorlage ruft
    sie fuenfmal auf, definiert sie aber nicht — G-40 hat sie als
    \`Leer\` modul-maessig nachgebaut, mit Inline-Stilen. Als Klasse
-   steht sie einmal da statt in jedem Modul neu. */
-.v2-empty {
+   steht sie einmal da statt in jedem Modul neu.
+
+   ══ G-407: ZWEI ABSICHTEN, EIN NAME ═════════════════════════
+   [cmd] Dieser Block hiess bis 2026-09-10 ebenfalls \`.v2-empty\` —
+   derselbe Name wie der Zeilen-Leerzustand aus Abschnitt 8
+   (\`display: flex\`). Die zweite Regel gewann und setzte
+   \`text-align: center\`, ohne \`display\` zurueckzusetzen: Symbol,
+   Titel und Grund standen NEBENeinander.
+
+   [cmd] Gemessen: VIER rohe \`<div className="v2-empty">\` in
+   apps/web bauen auf die ZEILE, 56 Aufrufer der Komponente \`Empty\`
+   auf den BLOCK. [read] Darum zwei Namen statt einer, der beides
+   sein soll. */
+.v2-leer {
+  display: block;
   text-align: center;
   padding: 32px 20px;
 }
-.v2-empty-icon {
+.v2-leer-icon {
   width: 28px;
   height: 28px;
   color: var(--fg-dim);
   margin: 0 auto 10px;
 }
-.v2-empty-title {
+.v2-leer-title {
   font-size: 13.5px;
   font-weight: 600;
   margin-bottom: 4px;
 }
-.v2-empty-sub {
+.v2-leer-sub {
   font-size: 11.5px;
   color: var(--fg-dim);
 }

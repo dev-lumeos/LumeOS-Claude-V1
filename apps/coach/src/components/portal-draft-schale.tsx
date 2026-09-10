@@ -294,7 +294,19 @@ function Modulkopf({ b, echt }: { b: DraftBereich, echt: Record<string, string> 
 function Unternav({ b, aktiv }: { b: DraftBereich, aktiv: string }) {
   if (!b.kinder) return null
   return (
-    <nav className="v2-tabs" aria-label={`${b.titel} — Unterpunkte`}>
+    // ══ G-407: `v2-tabs-rail`, nicht `v2-tabs` ═══════════════════
+    //
+    // `[cmd]` **Die Vorlage benutzt die Schiene:** `shared.jsx:197`
+    // rendert `<div className="tabs tabs-rail">`. `[cmd]` **Und
+    // `styles.css:1040` gibt ihr `overflow-x: auto`, `:1050` gibt
+    // dem Reiter `white-space: nowrap`.**
+    //
+    // `[read]` **Die Vorlage beantwortet die Frage also selbst:
+    // waagerecht scrollen, eine Zeile.** `[cmd]` **Und das Paket
+    // traegt es laengst** (`v2.css:1069`) — G-405 hat nur die
+    // falsche der beiden Klassen gerufen und den Mangel dann in
+    // apps/coach nachgebaut.
+    <nav className="v2-tabs v2-tabs-rail" aria-label={`${b.titel} — Unterpunkte`}>
       {b.kinder.map(k => (
         <Link
           key={k.id}

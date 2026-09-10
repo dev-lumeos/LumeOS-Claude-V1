@@ -25,7 +25,15 @@
 // `[read]` **Ein Unterpunkt ohne Tabelle traegt den Vermerk mit dem
 // NAMEN der fehlenden Tabelle** (E-72, wie G-398) — nicht
 // „unbekannt", nicht „noch nicht angebunden".
+import * as React from 'react'
 import { Empty } from '@lumeos/ui'
+
+// ══ G-407: die gebauten Ansichten ══════════════════════════════════
+//
+// `[read]` **Ein Verzeichnis, kein `if`-Turm** — sonst waechst die
+// Seite mit jeder Ansicht um drei Zeilen, und der Waechter kann
+// nicht zaehlen, welche gebaut sind.
+import { DRAFT_ANSICHTEN } from './draft/ansichten'
 
 import type { PortalStand } from '../lib/daten'
 import {
@@ -176,15 +184,40 @@ export function DraftSeite({
       />}
       {sicht === 'intervene' && <TabAlerts stand={stand} filter="alle" />}
 
-      {/* Der Rest: der Vermerk mit dem Namen der fehlenden Tabelle. */}
-      {kind?.art === 'attrappe' && <Vermerk k={kind} />}
+      {/* ══ G-407: die Kacheln der Vorlage ═══════════════════════
+          **Tom, 2026-09-08:** *„bau den draft fertig. ich will das
+          mockup umgesetzt haben."*
+
+          `[read]` **Wo eine Ansicht gebaut ist, steht sie hier** —
+          mit den Zahlen der Vorlage und dem Vermerk JE KACHEL.
+          `[read]` **Der nackte Vermerk darunter bleibt fuer das,
+          was noch keine Ansicht hat** — er verschwindet erst, wenn
+          die letzte gebaut ist, und sagt bis dahin die Wahrheit. */}
+      {/* `[cmd]` **NUR fuer Attrappen.** `[read]` **`record` ist als
+          `gebaut` vermerkt und liest echte Zeilen** — ohne diese
+          Bedingung stuenden echte Daten UND Vorlagenzahlen
+          untereinander auf demselben Schirm, und niemand saehe,
+          welche welche sind. */}
+      {kind?.art === 'attrappe' && DRAFT_ANSICHTEN[kind.id] && (
+        React.createElement(DRAFT_ANSICHTEN[kind.id])
+      )}
+
+      {kind?.art === 'attrappe' && !DRAFT_ANSICHTEN[kind.id] && <Vermerk k={kind} />}
 
       {/* ══ Die Bereiche OHNE Kinder ═════════════════════════════
           `[cmd]` **Vier: `overview`, `calendar`, `inbox`, `team`**
           (gemessen). `[read]` **Dort gibt es kein Kind, das den
           Vermerk traegt** — der Bereich traegt ihn selbst, sonst
           bliebe der Schirm leer ohne Grund (E-72). */}
-      {!bereich.kinder && bereich.art === 'attrappe' && (
+      {/* `[read]` **Auch hier zuerst die gebaute Ansicht** — das
+          Verzeichnis kennt `calendar`, `inbox` und `team` unter
+          derselben Kennung, weil ein Bereich ohne Kinder seine
+          eigene Sicht IST. */}
+      {!bereich.kinder && bereich.art === 'attrappe' && DRAFT_ANSICHTEN[bereich.id] && (
+        React.createElement(DRAFT_ANSICHTEN[bereich.id])
+      )}
+
+      {!bereich.kinder && bereich.art === 'attrappe' && !DRAFT_ANSICHTEN[bereich.id] && (
         <Vermerk k={{ id: bereich.id, label: bereich.titel, art: 'attrappe', fehlt: bereich.fehlt }} />
       )}
     </DraftSchale>

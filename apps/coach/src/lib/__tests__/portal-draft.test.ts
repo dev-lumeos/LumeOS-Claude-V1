@@ -24,6 +24,8 @@ import {
   DRAFT_NAV, alleBereiche, alleKinder, bereichVon,
 } from '../../components/portal-draft-nav'
 import { DRAFT_KONTEXT } from '../../components/portal-draft-kontext'
+// G-407: das Verzeichnis der gebauten Kachel-Ansichten.
+import { DRAFT_ANSICHTEN } from '../../components/draft/ansichten'
 
 const HIER = dirname(fileURLToPath(import.meta.url))
 const WURZEL = join(HIER, '..', '..', '..', '..', '..')
@@ -205,4 +207,116 @@ test('der Schalter der Kontextspalte hat eine sichtbare Wirkung', () => {
     join(WURZEL, 'apps', 'coach', 'src', 'app', 'portal.css'), 'utf8')
   const ohneKommentar = css.replace(/\/\*[\s\S]*?\*\//g, '')
   assert.match(ohneKommentar, /\.dp-icon-knopf\.dp-an\s*\{[^}]*\w/)
+})
+
+// ══ G-407: die Kacheln der Vorlage ═════════════════════════════════
+
+test('jede der 28 Attrappen hat eine gebaute Ansicht', () => {
+  // **Tom, 2026-09-08:** *„bau den draft fertig."*
+  //
+  // `[read]` **Die Probe zaehlt aus dem Verzeichnis, nicht aus einem
+  // Muster** — ein `if`-Turm liesse sich nur mit einem Muster zaehlen,
+  // und ein Muster altert.
+  const attrappen = alleKinder().filter(k => k.art === 'attrappe').map(k => k.id)
+  const bereicheOhne = alleBereiche()
+    .filter(b => !b.kinder?.length && b.art === 'attrappe')
+    .map(b => b.id)
+  const alle = [...attrappen, ...bereicheOhne]
+
+  const ohne = alle.filter(id => !DRAFT_ANSICHTEN[id])
+  assert.deepEqual(ohne, [],
+    'Diese Attrappen zeigen nur einen Vermerk statt der Kacheln der Vorlage.')
+  assert.equal(alle.length, 28, `Attrappen: ${alle.length}, erwartet 28.`)
+})
+
+test('keine Ansicht ueberlagert einen angebundenen Unterpunkt', () => {
+  // `[read]` **`record` liest echte Zeilen.** `[cmd]` **Waere eine
+  // Attrappen-Ansicht dafuer registriert, stuenden gemessene Daten
+  // und Vorlagenzahlen untereinander** — und niemand saehe, welche
+  // welche sind.
+  const gebaut = alleKinder().filter(k => k.art === 'gebaut').map(k => k.id)
+  const kollision = gebaut.filter(id => DRAFT_ANSICHTEN[id])
+  assert.deepEqual(kollision, [])
+})
+
+test('die Zahlen der Kacheln stammen aus der Vorlage', () => {
+  // `[cmd]` **Stichprobe ueber drei Dateien:** die Werte muessen in
+  // der Vorlage stehen, nicht nur im erzeugten TypeScript.
+  //
+  // `[read]` **Sonst waere „aus der Vorlage" eine Behauptung** — und
+  // genau die soll der Vermerk am Schirm belegen.
+  const daten = ['daten-assistent.ts', 'daten-portal.ts', 'daten-auswertung.ts']
+    .map(f => readFileSync(join(WURZEL, 'apps', 'coach', 'src', 'components', 'draft', f), 'utf8'))
+    .join('\n')
+
+  const proben: Array<[string, string]> = [
+    ['module-coach-clone.jsx', '"Vocabulary"'],
+    ['module-coach-clone.jsx', '1,240 messages'],
+    ['module-coach-extras.jsx', 'retention90d'],
+    ['module-coach-programs.jsx', '12-Week Powerbuilding'],
+    ['module-coach-client-record.jsx', 'Lukas Bauer'],
+  ]
+  for (const [datei, wert] of proben) {
+    const vorlage = readFileSync(join(DRAFT, datei), 'utf8')
+    assert.ok(vorlage.includes(wert), `${wert} steht nicht in ${datei}`)
+    assert.ok(daten.includes(wert), `${wert} fehlt in den erzeugten Daten`)
+  }
+})
+
+test('jede Kachel einer Attrappen-Ansicht traegt einen Vermerk', () => {
+  // `[cmd]` **Je Kachel, nicht je Ansicht** (E-69) — sonst liesse
+  // sich nicht zaehlen, WELCHE Kachel woran haengt.
+  //
+  // `[read]` **Die Probe zaehlt `<Card` gegen `V(`/`<Attrappe`** in
+  // denselben Dateien. **Kommentarzeilen fallen vorher weg**, sonst
+  // findet sie ihre eigene Begruendung.
+  for (const f of ['ansichten-assistent.tsx', 'ansichten-portal.tsx', 'ansichten-auswertung.tsx']) {
+    const roh = readFileSync(
+      join(WURZEL, 'apps', 'coach', 'src', 'components', 'draft', f), 'utf8')
+    const t = roh.split('\n').filter(z => !z.trim().startsWith('//')).join('\n')
+    const karten = (t.match(/<Card\b/g) ?? []).length
+    const vermerke = (t.match(/\{V\(/g) ?? []).length
+    assert.ok(karten > 0, `${f} hat keine Kacheln`)
+    assert.equal(vermerke, karten,
+      `${f}: ${karten} Kacheln, aber ${vermerke} Vermerke.`)
+  }
+})
+
+test('die Unterreiter scrollen, statt zu brechen', () => {
+  // `[cmd]` **Die Vorlage benutzt `tabs-rail`** (`shared.jsx:197`),
+  // und `styles.css:1040` gibt ihr `overflow-x: auto`.
+  //
+  // `[read]` **Die Probe misst die KLASSE an der Schale** — die
+  // Regel selbst liegt im Paket und wird dort geprueft.
+  const schale = readFileSync(
+    join(WURZEL, 'apps', 'coach', 'src', 'components', 'portal-draft-schale.tsx'), 'utf8')
+  const t = schale.split('\n').filter(z => !z.trim().startsWith('//')).join('\n')
+  assert.match(t, /className="v2-tabs v2-tabs-rail"/)
+
+  const css = readFileSync(join(WURZEL, 'packages', 'ui', 'src', 'styles', 'v2.css'), 'utf8')
+  const ohneKommentar = css.replace(/\/\*[\s\S]*?\*\//g, '')
+  assert.match(ohneKommentar, /\.v2-tabs-rail\s*\{[^}]*overflow-x:\s*auto/)
+  assert.match(ohneKommentar, /\.v2-tabs-rail \.v2-tab\s*\{[^}]*white-space:\s*nowrap/)
+})
+
+test('der Leerzustand traegt zwei Namen fuer zwei Absichten', () => {
+  // `[cmd]` **Tom, G-407:** *„.v2-empty im Paket beheben."*
+  //
+  // `[cmd]` **`:1598` ist die ZEILE** (Symbol links, Text rechts) —
+  // vier rohe `div.v2-empty` in apps/web bauen darauf.
+  // `[cmd]` **`.v2-leer` ist der BLOCK** — 56 Aufrufer von `Empty`.
+  //
+  // `[read]` **Ein `display: block` auf `.v2-empty` haette die vier
+  // Zeilen in apps/web zerlegt.**
+  const css = readFileSync(join(WURZEL, 'packages', 'ui', 'src', 'styles', 'v2.css'), 'utf8')
+  const ohneKommentar = css.replace(/\/\*[\s\S]*?\*\//g, '')
+
+  assert.match(ohneKommentar, /\.v2-empty\s*\{[^}]*display:\s*flex/,
+    '.v2-empty muss die Zeile bleiben — apps/web haengt daran.')
+  assert.match(ohneKommentar, /\.v2-leer\s*\{[^}]*display:\s*block/,
+    '.v2-leer muss der Block sein.')
+  // Und die Komponente muss den Block rufen, nicht die Zeile.
+  const prim = readFileSync(join(WURZEL, 'packages', 'ui', 'src', 'primitives.tsx'), 'utf8')
+  const p = prim.split('\n').filter(z => !z.trim().startsWith('//')).join('\n')
+  assert.match(p, /className="v2-leer"/)
 })

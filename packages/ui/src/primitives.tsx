@@ -168,10 +168,14 @@ export type EmptyProps = {
  */
 export function Empty({ title, sub, icon = 'search' }: EmptyProps) {
   return (
-    <div className="v2-empty">
-      <Icon name={icon} className="v2-ic v2-empty-icon" />
-      <div className="v2-empty-title">{title}</div>
-      {sub && <div className="v2-empty-sub">{sub}</div>}
+    // G-407: `v2-leer`, nicht `v2-empty`. Beide Namen standen fuer
+    // zwei verschiedene Sachen — die Zeile (Symbol links, Text
+    // rechts) und den Block (mittig, Symbol oben). Die Zeile behaelt
+    // `v2-empty`, weil vier rohe `div`s in apps/web darauf bauen.
+    <div className="v2-leer">
+      <Icon name={icon} className="v2-ic v2-leer-icon" />
+      <div className="v2-leer-title">{title}</div>
+      {sub && <div className="v2-leer-sub">{sub}</div>}
     </div>
   )
 }
