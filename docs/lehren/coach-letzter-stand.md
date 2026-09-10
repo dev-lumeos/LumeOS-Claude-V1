@@ -98,18 +98,47 @@ sechzehn Reiter, sondern Gruppen mit Unterpunkten.**
 
 ---
 
-## Warum das der Anhaltspunkt ist
+## BERICHTIGT 2026-09-08 - keine Vorlage
 
-`[read]` **`apps/coach` (Maerz) zeigt, WIE es aussah.**
+Tom: *,,das sind alte api extractionen."*
 
-`[read]` **`worktrees/coach/navigation` (Mai) zeigt, WOHIN es
-gehen sollte** ? **wer die Zerlegung gemacht hat, hat sie fuer
-einen Neubau gemacht.**
+`[read]` **Die 279 Dateien sind ZWISCHENMATERIAL** - **jemand hat
+alte Endpunkte auseinandergenommen, nicht einen Neubau geplant.**
 
-`[cmd]` **`OLD PATH` je Datei sagt, woher jedes Stueck kam** ?
-**der Rueckweg ist dokumentiert.**
+`[read]` **`STATUS: WIP` und `SALVAGE:` sind Arbeitsmarken einer
+Extraktion, keine Zielbeschreibung.**
 
-`[read]` **Und `STATUS` sagt, was fertig war** ? **120 Complete.**
+`[read]` **Nicht als Vorlage lesen.**
+
+### Was daran trotzdem brauchbar bleibt
+
+`[cmd]` **`OLD PATH` je Datei** - **wenn jemand wissen will, wo
+eine Funktion im alten Code stand, steht es dort mit
+Zeilennummer.**
+
+`[cmd]` **Die 26 Hooks** (`useCoachStats`, `useClients`,
+`useCheckins`, `usePrograms`, ...) - **sie zeigen, welche
+Datenwege das Portal brauchte.**
+
+`[read]` **Beides ist Nachschlagewerk, nicht Bauplan.**
+
+## Der Stand, der gilt
+
+`[cmd]` **`apps/coach` (26.03.) plus `src/modules/human-coach`
+(21.03.)** - **das ist der letzte lauffaehige Stand.**
+
+    apps/coach                  37 Dateien, 257 KB
+      20 Routen, die meisten als Huelle
+      rules/ und automations/ tragen Code selbst
+    src/modules/human-coach     30 Dateien, 454 KB
+      ProgramBuilder 49 KB, ClientDetail 39 KB,
+      CoachDashboard 27 KB, KnowledgeManager 26 KB
+    src/modules/coach           52 Dateien, 403 KB
+
+`[read]` **Zusammen 1.114 KB in 119 Dateien.**
+
+`[read]` **Das ist der Anhaltspunkt** - **nicht zum Kopieren,
+sondern um zu sehen, was ein Coach tun koennen musste.**
 
 ---
 
@@ -122,8 +151,10 @@ einen Neubau gemacht.**
 
 `[cmd]` **Zusammen 2.611 Dateien** ? **nur `coach` ist gemessen.**
 
-`[read]` **Wenn dieselbe Zerlegung fuer alle Module existiert, ist
-das die Struktur des ganzen Neubaus.**
+`[read]` **Vermutlich dieselben API-Extraktionen** - **nach Toms
+Auskunft kein Neubauplan.**
+
+`[read]` **Nur nachsehen, wenn jemand einen alten Endpunkt sucht.**
 
 `[cmd]` **Und `LUMEOS_ANALYSIS/` mit sieben Dateien** ?
 **ungelesen.**
