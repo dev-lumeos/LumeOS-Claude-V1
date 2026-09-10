@@ -90,3 +90,51 @@ eigener Cookie-Name je Anwendung moeglich ist.**
 
 `[cmd]` **Claude Code hat die Frage in G-402 schon gestellt** ?
 **`domain=.lumeos.app` fuer den Modus-Cookie.**
+
+## Nachtrag 2026-09-08 — die Anmeldung laeuft ueber v1
+
+Tom: *,,und das login muss auf v2 normal laufen. jetzt geht es den
+umweg ueber v1."*
+
+`[cmd]` **`apps/web/src/components/auth/login-form.tsx`, 146
+Zeilen.**
+
+`[cmd]` **Die Klassen sind Tailwind, nicht `v2-`:**
+
+    mx-auto mt-16 w-full max-w-sm rounded-token
+    rounded-token border border-border bg-bg-e
+    text-[12px] text-fg-muted
+    rounded-token bg-[var(--acc)] px-3 py-2
+
+`[cmd]` **Kein `v2-card`, kein `v2-btn`, kein `v2-input`.**
+
+`[read]` **Wer sich anmeldet, sieht die alte Bauform** ? **und
+landet danach in v2.**
+
+`[cmd]` **Und `apps/coach` hat mit `coach-login-form.tsx` eine
+DRITTE Fassung.**
+
+`[read]` **Drei Anmeldeformulare im Haus** ? **dieselbe Lehre wie
+Tokens, Trenner und Seitenleiste.**
+
+### Was zu tun ist
+
+**1** ? **die Anmeldung auf `v2-` umstellen.**
+
+`[cmd]` **Miss, welche Bausteine es braucht:** `v2-card`,
+`v2-input`, `v2-btn`, `v2-btn-primary`.
+
+`[read]` **Und ob sie im Paket stehen** ? **`apps/coach` nutzt
+sie, also vermutlich ja.**
+
+**2** ? **die dritte Fassung aufloesen.**
+
+`[read]` **Ein Formular in `packages/ui`, beide Anwendungen
+darauf** ? **mit eigenem Titel und eigenem Ziel.**
+
+`[read]` **Oder begruenden, warum es zwei bleiben muessen.**
+
+**3** ? **Und der Weg nach dem Anmelden.**
+
+`[cmd]` **`login-form.tsx:27`: `router.push(redirect)`** ?
+**pruefen, wohin `redirect` ohne Parameter zeigt.**
