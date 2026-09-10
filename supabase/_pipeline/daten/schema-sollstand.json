@@ -2606,6 +2606,16 @@
       "zeilenschutzart": "eigene_zeilen"
     },
     {
+      "schema": "coach",
+      "name": "alert_settings",
+      "schritt": "459_coach_alert_producer",
+      "rls": true,
+      "policies": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+      "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-459: eigene Alert-Schwellen und Schalter; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
       "schema": "training",
       "name": "muscle_groups",
       "schritt": "100",
@@ -5871,6 +5881,11 @@
       "schema": "coach",
       "name": "onboard_coach",
       "schritt": "440_schema"
+    },
+    {
+      "schema": "coach",
+      "name": "raise_alert",
+      "schritt": "459_coach_alert_producer"
     },
     {
       "schema": "coach",

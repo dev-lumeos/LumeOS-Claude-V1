@@ -1775,6 +1775,13 @@
         "429_schema",
         "142"
       ]
+    },
+    {
+      "id": "459_coach_alert_producer",
+      "path": "supabase/migrations/20260909240000_c459_coach_alert_producer.sql",
+      "kind": "sql",
+      "creates": "C-459: faktische Coach-Alerts mit Einstellungen und 24h-Deduplizierung, ohne Medical-Safety-Bewertung",
+      "depends_on": ["457_lab_report_ocr", "154"]
     }
   ]
 }
