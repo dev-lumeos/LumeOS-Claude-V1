@@ -5,10 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 209 |
+| `todos` | 206 |
+| `laufend_codex` | 4 |
 | `laufend_claudecode` | 5 |
 | `erledigt` | 384 |
-| **gesamt** | **598** |
+| **gesamt** | **599** |
 
 ## medical — 48
 
@@ -53,7 +54,7 @@
 | `C-385` | feature | hoch | [das Datenmodell fuer Injektionsstellen](erledigt/medical-c-0385-das-datenmodell-fuer-injektionsstellen.md) | erledigt | — | C-395 |
 | `C-429` | befund | mittel | [die zentrale Zeitachse fehlt](erledigt/medical-c-0429-die-zentrale-zeitachse-fehlt.md) | erledigt | — | C-431 |
 | `C-431` | feature | hoch | [C-429 einspielen](erledigt/medical-c-0431-c-429-einspielen.md) | erledigt | — | G-376 |
-| `C-457` | feature | mittel | [OCR fehlt in `lab_reports`](todos/medical-c-0457-ocr-fehlt-in-lab-reports.md) | offen | — | — |
+| `C-457` | feature | mittel | [OCR fehlt in `lab_reports`](laufend_codex/medical-c-0457-ocr-fehlt-in-lab-reports.md) | laeuft (codex) | — | — |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
@@ -347,8 +348,8 @@
 | `C-441` | befund | hoch | [sechzehn Injektionsorte statt vier](erledigt/supplements-c-0441-sechzehn-injektionsorte-statt-vier.md) | erledigt | — | C-445 |
 | `C-445` | feature | hoch | [C-441 einspielen und die Protokollspalten](erledigt/supplements-c-0445-c-441-einspielen-und-die-protokollspalten.md) | erledigt | — | C-446, C-453, C-455 |
 | `C-453` | befund | hoch | [Peptide haben keinen Injektionsweg](erledigt/supplements-c-0453-peptide-haben-keinen-injektionsweg.md) | erledigt | — | C-454 |
-| `C-454` | befund | hoch | [der Nutzer waehlt seine Punkte](todos/supplements-c-0454-der-nutzer-waehlt-seine-punkte.md) | offen | — | — |
-| `C-455` | feature | hoch | [der Injektionsplaner, vollstaendig](todos/supplements-c-0455-der-injektionsplaner-vollstaendig.md) | offen | — | — |
+| `C-454` | befund | hoch | [der Nutzer waehlt seine Punkte](laufend_codex/supplements-c-0454-der-nutzer-waehlt-seine-punkte.md) | laeuft (codex) | — | — |
+| `C-455` | feature | hoch | [der Injektionsplaner, vollstaendig](laufend_codex/supplements-c-0455-der-injektionsplaner-vollstaendig.md) | laeuft (codex) | — | — |
 | `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](erledigt/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | erledigt | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
@@ -455,7 +456,7 @@
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 
-## coach — 50
+## coach — 51
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -491,6 +492,7 @@
 | `C-450` | entscheidung | hoch | [wer vergibt die Coach-Rolle?](erledigt/coach-c-0450-wer-vergibt-die-coach-rolle.md) | erledigt | — | C-451 |
 | `C-451` | entscheidung | mittel | [die Aufnahme eines Coaches](todos/coach-c-0451-die-aufnahme-eines-coaches.md) | offen | — | — |
 | `C-458` | feature | hoch | [was ein Coach einstellt](todos/coach-c-0458-was-ein-coach-einstellt.md) | offen | — | — |
+| `C-459` | feature | mittel | [der Alarm-Erzeuger](laufend_codex/coach-c-0459-der-alarm-erzeuger.md) | laeuft (codex) | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](erledigt/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | erledigt | — | C-381 |
@@ -507,7 +509,7 @@
 | `G-398` | befund | hoch | [die Portalkarten gehoeren nach 3220](erledigt/coach-g-0398-die-portalkarten-gehoeren-nach-3220.md) | erledigt | — | G-399, G-400 |
 | `G-400` | befund | hoch | [das Portal sieht nicht aus wie LumeOS](laufend_claudecode/coach-g-0400-das-portal-sieht-nicht-aus-wie-lumeos.md) | laeuft (claudecode) | — | G-401 |
 | `G-401` | feature | hoch | [das Klientendetail, vollstaendig](laufend_claudecode/coach-g-0401-das-klientendetail-vollstaendig.md) | laeuft (claudecode) | — | G-402 |
-| `G-402` | feature | hoch | [Klienten, Check-ins, Alerts](erledigt/coach-g-0402-klienten-checkins-alerts.md) | erledigt | — | G-403 |
+| `G-402` | feature | hoch | [Klienten, Check-ins, Alerts](erledigt/coach-g-0402-klienten-checkins-alerts.md) | erledigt | — | C-459, G-403 |
 | `G-404` | feature | hoch | [Settings und Workspaces im Portal](laufend_claudecode/coach-g-0404-settings-und-workspaces-im-portal.md) | laeuft (claudecode) | — | — |
 
 ## quer — 137

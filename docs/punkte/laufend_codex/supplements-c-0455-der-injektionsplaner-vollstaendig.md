@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-445
 entscheidung: E-79
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [medical.injection_logs]
 zahlen:
@@ -171,3 +173,10 @@ Ruecken, der Trapezius oben.**
 `[read]` **Eine eigene Flaeche waeren neue Pfaddaten in
 `packages/ui`** ? **das gehoert zu den Grundlagen, nicht zur
 Anbindung.**
+
+## Auftrag
+
+**Beauftragt am 2026-09-08, als Teil der Kette C-455 -> C-454 ->
+C-457 -> C-459.**
+
+`[read]` **Der Kettenauftrag steht in C-455.**

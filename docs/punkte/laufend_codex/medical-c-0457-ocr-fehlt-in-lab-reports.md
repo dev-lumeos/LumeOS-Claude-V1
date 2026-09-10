@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-171
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [medical.lab_reports]
 zahlen:
@@ -49,3 +51,10 @@ vergleichbar.**
 
 `[read]` **OCR ist ein Importweg, kein Grundbaustein** ? **die
 Ablage steht (C-429/C-431), das Einlesen kann folgen.**
+
+## Auftrag
+
+**Beauftragt am 2026-09-08, als Teil der Kette C-455 -> C-454 ->
+C-457 -> C-459.**
+
+`[read]` **Der Kettenauftrag steht in C-455.**

@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-453
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [medical.injection_logs]
 zahlen:
@@ -113,3 +115,10 @@ Kataloguntermauerung?**
 `[cmd]` **Die Spec beantwortet das nicht** ? `Injection Planner:33
 **nennt `id` als *,,e.g. `glute_l`, `vglute_r`, `abd_l`"*, ohne zu
 sagen, ob die Liste geschlossen ist.**
+
+## Auftrag
+
+**Beauftragt am 2026-09-08, als Teil der Kette C-455 -> C-454 ->
+C-457 -> C-459.**
+
+`[read]` **Der Kettenauftrag steht in C-455.**
