@@ -170,7 +170,191 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### A1 — der Kalender
+
+`[cmd]` **G-409 zeigte hier eine Liste mit neun Ueberschriften.**
+`[cmd]` **Die Vorlage zeigt ein Monatsraster** — das war die
+Abweichung.
+
+`[cmd]` **Am Schirm gemessen** (`tools/_g410-kalender-mass.mjs`),
+gegen `portal-tools.jsx:44-112`:
+
+    Sache                    Vorlage        gemessen
+    Spalten                  1.5fr / 1fr    613 / 409 px
+    Rasterspalten            7              7
+    Zellen                   35 (5 leer)    30 + 5 leere
+    Zellenhoehe              minHeight 62   62 px
+    Polsterung               6              6px
+    Radius                   6              6px
+    Wochentagskoepfe         7              7
+    Strichhoehe              3              3 px
+    Striche gesamt           14 Termine     14
+    Legende                  5 Arten        5
+    Upcoming                 7 Zeilen       7
+
+`[cmd]` **`CAL_EVENTS` vollstaendig: neun Tage, vierzehn Termine** —
+gegen die Vorlage gezaehlt, nicht behauptet.
+
+**Bild:** `docs/bilder/g410/kalender.png`
+
+**Die eine Abweichung, gemeldet statt versteckt:**
+
+`[cmd]` **Die Vorlage rechnet das Raster mit
+`new Date(2026, 8, 1)`** (`:33-37`). `[cmd]` **Hier steht das
+ERGEBNIS als feste Liste.**
+
+`[read]` **Grund: G-390** — die Seite wird serverseitig gerendert,
+und ein `new Date()` im Browser rechnet in einer anderen Zeitzone
+als der Server. **Dann springt die Hydration.**
+
+`[cmd]` **Eine Probe rechnet nach**, ob die feste Liste noch mit dem
+September 2026 uebereinstimmt — **sonst waere sie ein Gedaechtnis,
+kein Mass.** `[read]` **Am Schirm steht dasselbe Raster**, nur der
+Weg dahin ist ein anderer.
+
+### A2 — die acht Reiter
+
+`[cmd]` **Gemessen je Reiter** (`tools/_g410-akte.mjs`):
+
+    Reiter        Kacheln  Kennzahlen  Zeilen  Balken  Vermerke
+    Overview          4         0        12       0        4
+    Training          3         4         0       0        3
+    Nutrition         4         4         0       6        4
+    Recovery          4         4         0       0        4
+    Supplements       2         0         0       6        2
+    Body              3         4         4       0        3
+    Medical           2         0         4       0        2
+    Timeline          2         0         7       0        2
+
+**Bilder:** `docs/bilder/g410/akte/` — acht Stueck, dunkel.
+
+**Zwei Abweichungen gefunden und behoben:**
+
+`[cmd]` **1 — Die Woche zeigte eine KURVE.** `[cmd]` **Die Vorlage
+zeigt eine BALKENREIHE mit hervorgehobenem Samstag**
+(`client-record.jsx:238`: `BarSeries … highlight={5}`).
+
+`[cmd]` **`BarSeries` ist in der Vorlage nirgends definiert** — sie
+wird dreimal gerufen und nie gebaut, **genau wie seinerzeit
+`Empty`.** `[cmd]` **Das Paket hat auch keine** (gemessen in
+`primitives.tsx`). `[read]` **Also nach den Requisiten der Aufrufe
+gebaut** (`data`, `labels`, `h`, `color`, `highlight`) — **in
+apps/coach, nicht im Paket**, weil keine andere App sie ruft.
+
+`[cmd]` **2 — Die Beschriftungen waren englisch, die Untertitel
+deutsch.** `[read]` **Tom: die SPRACHE ist frei, die FORM nicht** —
+aber halb und halb ist keine Sprache. **28 Beschriftungen
+uebersetzt**, die Werte unangetastet:
+
+    Calories today  -> Kalorien heute      2,180 bleibt 2,180
+    Adherence · 7d  -> Adhaerenz · 7 Tage  97 % bleibt 97 %
+    Today's macros  -> Makros heute
+    This week       -> Diese Woche
+    Micronutrient gaps -> Mikronaehrstoffe
+
+`[read]` **Die Saetze der Vorlage bleiben Wort fuer Wort** —
+„Samstag 200 kcal darueber, abgesprochenes Refeed. Eiweiss nie
+unter 208 g."
+
+### A3 — kein Spaltenname am Schirm
+
+`[cmd]` **Der Befund:** `athlet/[id]/page.tsx:250` rendert
+`Object.entries(summary)` — **die Spaltennamen der Datenbank als
+Beschriftung.** `[read]` **Das ist die Form einer ABFRAGE.**
+
+`[cmd]` **Im Draft steht jetzt die Akte der Vorlage** (`DraftAkte`).
+`[read]` **Die alte Fassung behaelt ihre Modulkacheln** — dort sind
+sie richtig: sie zeigen, was die Datenbank hergibt.
+
+`[cmd]` **Gegenprobe am GERENDERTEN Text**, auf beiden Wegen
+(Unterpunkt und `/athlet/[id]?draft=1`), ueber alle acht Reiter:
+
+    _schnitt          0 Treffer
+    _g_               0 Treffer
+    tage_mit          0 Treffer
+    letzter_eintrag   0 Treffer
+
+### A4 — je Kachel: Zahl der Vorlage gegen Zahl im Bau
+
+`[cmd]` **Die Werte aus der Vorlage gelesen und im gerenderten Text
+gesucht** (`tools/_g410-abgleich.mjs`) — **nicht behauptet, dass
+kopiert wurde:**
+
+    Kachel            Vorlage  gefunden
+    Monatsraster        11        11
+    Legende              5         5
+    Als naechstes        4         4
+    Klientenkarte       11        11
+    Akte/Overview       12        12
+    Akte/Training        9         9
+    Akte/Nutrition      14        14
+    Akte/Recovery        4         4
+    Akte/Supplements     7         7
+    Akte/Body            3         3
+    Akte/Medical         2         2
+    Akte/Timeline        2         2
+    ---------------------------------
+                        84        84
+
+`[cmd]` **84 von 84 Werten der Vorlage stehen am Schirm. Keine
+Abweichung.**
+
+### A5 — die Proben
+
+    apps/coach   65 / 65 gruen   (61 gefordert)
+    apps/web   1545 / 1545 gruen
+    apps/web      0 Zeilen geaendert
+    packages/ui   0 Zeilen geaendert
+
+`[cmd]` **Sieben neue Waechter, zehn Gegenproben** — jede einzeln
+verifiziert, dass die Sabotage ankam UND zurueckgesetzt wurde:
+
+    Raster wird zur Liste            -> ROT
+    Zellenhoehe faellt               -> ROT
+    Spalten werden gleich breit      -> ROT
+    ein Kalendertag faellt weg       -> ROT
+    ein Termin faellt weg            -> ROT
+    ein Reiter der Akte faellt weg   -> ROT
+    Woche wird wieder eine Kurve     -> ROT
+    Samstag nicht mehr hervorgehoben -> ROT
+    ein Spaltenname in der Akte      -> ROT
+    ein WERT wird uebersetzt         -> ROT
+
+**Ein Waechter war zuerst falsch gebaut:**
+
+`[cmd]` **„die Beschriftungen sind uebersetzt, die Werte nicht"
+verbot jede Ziffer im Schluessel** — und fiel ueber
+`'Sessions · 7d'`, `'Adherence · 7d'`, `'Sleep · 7d avg'`.
+
+`[read]` **Das sind Beschriftungen, keine Werte:** die `7d` sagt,
+WORUEBER gezaehlt wird, nicht WIE VIEL. `[cmd]` **Die Probe misst
+jetzt die richtige Sache** — ein uebersetzter Wert waere einer, der
+in der Vorlage als zweites Glied eines Paares steht. `[cmd]`
+**Gegengeprueft mit `'126 days': '126 Tage'` — faellt.**
+
+## Was NICHT gebaut ist
+
+**1 — Die Monatspfeile sind ohne Wirkung.** `[cmd]` **Die Vorlage
+hat sie ebenfalls ohne Funktion** (`:46`, kein `onClick`), **und
+`CAL_EVENTS` fuehrt nur den September 2026.** `[read]` **Sie sind
+`disabled` und nennen den Grund im Titel** — ein Pfeil, der so tut,
+waere schlimmer (C-426).
+
+**2 — Die acht Reiternamen bleiben englisch** (Overview, Training,
+Nutrition …). `[cmd]` **Sie sind die Beschriftungen der VORLAGE
+selbst** (`:139`), nicht Daten. `[read]` **Wer sie uebersetzt,
+aendert die Form** — dafuer braucht es eine Entscheidung, keine
+Annahme.
+
+**3 — Die Saetze im Verlauf bleiben englisch** („Push depletion
+logged · 24 sets, RPE 8.1"). `[read]` **Das ist INHALT der Vorlage,
+keine Beschriftung** — er wird kopiert, nicht uebersetzt.
+
+## Neustart
+
+`[read]` **Nicht noetig** — nur `apps/coach/src` und CSS. `[cmd]`
+**Kein `packages/ui`, keine Umgebungsvariable, keine
+Abhaengigkeit.**
 
 ## Abnahme
 

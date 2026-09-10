@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 208 |
+| `todos` | 209 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 6 |
 | `erledigt` | 391 |
-| **gesamt** | **606** |
+| **gesamt** | **607** |
 
 ## medical — 48
 
@@ -517,7 +517,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | C-460, G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](laufend_claudecode/coach-g-0410-kalender-und-athletendetail.md) | laeuft (claudecode) | — | — |
 
-## quer — 139
+## quer — 140
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -660,6 +660,7 @@
 | `G-403` | entscheidung | mittel | [der Trenner und die Tokens, zweite Haelfte](todos/quer-g-0403-der-trenner-und-die-tokens.md) | offen | — | C-458, G-404 |
 | `G-406` | befund | mittel | [`.v2-empty` zweimal definiert](erledigt/quer-g-0406-v2-empty-zweimal-definiert.md) | erledigt | — | — |
 | `G-408` | befund | niedrig | [Bildschirmfotos liegen nur lokal](todos/quer-g-0408-bilder-liegen-nur-lokal.md) | offen | — | — |
+| `G-411` | fehler | hoch | [LumeOS hat keinen Abmeldeknopf](todos/quer-g-0411-lumeos-hat-keinen-abmeldeknopf.md) | offen | — | — |
 
 ## market — 3
 
