@@ -518,14 +518,43 @@ Exit-Codes werden einzeln abgefragt, nicht über `PIPESTATUS` aus einer
 Pipeline gezogen. Wiederholungsläufe werden als einzelne Aufrufe geschrieben,
 nicht als Schleife.
 
-## Nichts laeuft im Hintergrund
+## Ein Auftrag, ein Bericht ? keine Ketten
 
 Tom, 2026-09-08: *,,ich mag das nicht wenn was im hintergrund
 laeuft, denn dann weiss ich nie ob es feststeckt."*
 
-`[cmd]` **Der Orchestrator hat heute den Coach-Server auf 3220
-losgeloest gestartet** ? `DETACHED_PROCESS |
-CREATE_NEW_PROCESS_GROUP`, **Ausgabe nach `DEVNULL`.**
+`[cmd]` **Gemeint sind KETTENAUFTRAEGE an Codex.**
+
+`[cmd]` **Der Orchestrator hat heute zwei gegeben:**
+
+    C-455 -> C-454 -> C-457 -> C-459
+    C-464 -> C-465 -> C-460
+
+`[read]` **Codex meldet nach jedem Teil und arbeitet dann
+weiter.**
+
+`[read]` **Tom sieht einen Zwischenstand und weiss nicht: laeuft
+der naechste, oder steht er?**
+
+`[cmd]` **Heute passiert: *,,C-464 ist abgeschlossen. C-465 ist
+begonnen."*** ? **und dann Stille.**
+
+**Die Regel:**
+
+    Ein Auftrag, ein Bericht, dann STOP.
+    Der naechste kommt von Tom, nicht aus dem Auftrag.
+
+`[read]` **Wenn mehrere Punkte zusammengehoeren: sie
+NACHEINANDER geben, nicht als Kette.**
+
+`[read]` **Dann ist nach jedem Bericht klar: er ist fertig, und
+wartet.**
+
+## Und nichts laeuft losgeloest
+
+`[cmd]` **Der Orchestrator hat den Coach-Server auf 3220
+losgeloest gestartet** ? `DETACHED_PROCESS`, **Ausgabe nach
+`DEVNULL`.**
 
 `[read]` **Er ueberlebt die Sitzung** ? **und niemand sieht, ob er
 steht oder haengt.**
@@ -547,4 +576,3 @@ Dev-Server bewusst als Dauerprozess, MIT Log
 `[read]` **Der Unterschied: er ist gebaut, benannt und
 nachpruefbar** ? **ein von Hand losgeloester `pnpm dev` ist es
 nicht.**
-
