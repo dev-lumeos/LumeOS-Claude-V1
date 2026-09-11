@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 210 |
-| `laufend_codex` | 2 |
+| `todos` | 211 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 6 |
 | `erledigt` | 399 |
-| **gesamt** | **617** |
+| **gesamt** | **619** |
 
 ## medical — 48
 
@@ -64,7 +64,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 233
+## nutrition — 234
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -165,7 +165,8 @@
 | `C-410` | befund | hoch | [zwei Leser nehmen `food_tags` statt der Sicht](erledigt/nutrition-c-0410-zwei-leser-nehmen-food-tags-statt-der-sicht.md) | erledigt | — | — |
 | `C-411` | feature | mittel | [Rezeptvorschlaege in der Kuration](erledigt/nutrition-c-0411-rezeptvorschlaege-in-der-kuration.md) | erledigt | — | — |
 | `C-413` | befund | niedrig | [`tom.seed` traegt `days_count 7` bei 21 Tagen](erledigt/nutrition-c-0413-tom-seed-traegt-days-count-7-bei-21-tagen.md) | erledigt | — | — |
-| `C-466` | feature | hoch | [Naehrstoffe aus Supplementen in der Nutrients-Ansicht](todos/nutrition-c-0466-naehrstoffe-aus-supplementen.md) | offen | — | — |
+| `C-464` | feature | mittel | [das Ballaststoffziel fehlt](laufend_codex/nutrition-c-0464-das-ballaststoffziel-fehlt.md) | laeuft (codex) | — | — |
+| `C-466` | feature | hoch | [Naehrstoffe aus Supplementen in der Nutrients-Ansicht](todos/nutrition-c-0466-naehrstoffe-aus-supplementen.md) | offen | — | C-467 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](erledigt/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | erledigt | — | G-375 |
@@ -298,13 +299,13 @@
 | `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | C-425, G-372 |
 | `G-412` | feature | hoch | [die letzten Attrappen in Nutrition](erledigt/nutrition-g-0412-die-letzten-attrappen.md) | erledigt | — | G-415, G-416 |
 | `G-413` | fehler | hoch | [reine Filtersuche liefert nichts](todos/nutrition-g-0413-reine-filtersuche-liefert-nichts.md) | offen | — | — |
-| `G-415` | entscheidung | hoch | [die vier Stufen und die Ballaststoffe](erledigt/nutrition-g-0415-die-vier-stufen-und-die-ballaststoffe.md) | erledigt | — | — |
+| `G-415` | entscheidung | hoch | [die vier Stufen und die Ballaststoffe](erledigt/nutrition-g-0415-die-vier-stufen-und-die-ballaststoffe.md) | erledigt | — | C-464 |
 | `G-416` | feature | hoch | [Hoehen, Flaechen, Deckkraft](laufend_claudecode/nutrition-g-0416-hoehen-flaechen-deckkraft.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 77
+## supplements — 78
 
-### beauftragbar — 76
+### beauftragbar — 77
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -356,6 +357,7 @@
 | `C-454` | befund | hoch | [der Nutzer waehlt seine Punkte](erledigt/supplements-c-0454-der-nutzer-waehlt-seine-punkte.md) | erledigt | — | — |
 | `C-455` | feature | hoch | [der Injektionsplaner, vollstaendig](erledigt/supplements-c-0455-der-injektionsplaner-vollstaendig.md) | erledigt | — | — |
 | `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](erledigt/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | erledigt | — | — |
+| `C-467` | feature | hoch | [Lieferantenprodukte als eigene Ebene](todos/supplements-c-0467-lieferantenprodukte.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
