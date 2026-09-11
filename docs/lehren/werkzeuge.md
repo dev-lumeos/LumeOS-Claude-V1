@@ -517,3 +517,34 @@ Der Aufruf ist dann eine gerade Zeile und geht ohne Nachfrage durch.
 Exit-Codes werden einzeln abgefragt, nicht über `PIPESTATUS` aus einer
 Pipeline gezogen. Wiederholungsläufe werden als einzelne Aufrufe geschrieben,
 nicht als Schleife.
+
+## Nichts laeuft im Hintergrund
+
+Tom, 2026-09-08: *,,ich mag das nicht wenn was im hintergrund
+laeuft, denn dann weiss ich nie ob es feststeckt."*
+
+`[cmd]` **Der Orchestrator hat heute den Coach-Server auf 3220
+losgeloest gestartet** ? `DETACHED_PROCESS |
+CREATE_NEW_PROCESS_GROUP`, **Ausgabe nach `DEVNULL`.**
+
+`[read]` **Er ueberlebt die Sitzung** ? **und niemand sieht, ob er
+steht oder haengt.**
+
+**Die Regel:**
+
+    Jeder Prozess laeuft im Vordergrund oder gar nicht.
+    Wer eine Ausgabe hat, zeigt sie.
+    Wer lange laeuft, meldet den Fortschritt.
+
+`[read]` **Und wenn ein Lauf laenger dauert als das
+Werkzeugfenster: melden und Tom entscheiden lassen** ? **nicht
+loesloesen und hoffen.**
+
+`[cmd]` **Ausnahme: `tools/server.py start`** ? **es startet den
+Dev-Server bewusst als Dauerprozess, MIT Log
+(`backup/dev-server.log`) und mit `status` zum Nachsehen.**
+
+`[read]` **Der Unterschied: er ist gebaut, benannt und
+nachpruefbar** ? **ein von Hand losgeloester `pnpm dev` ist es
+nicht.**
+
