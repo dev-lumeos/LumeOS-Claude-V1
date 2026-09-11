@@ -560,6 +560,34 @@ sagt nur, dass etwas laeuft, und das weiss Tom schon.**
     Scheitert einer: STOP und melden -- dann ist der
     Zwischenstand die Nachricht.
 
+### Und was die Regel NICHT heisst
+
+`[cmd]` **2026-09-08, unmittelbar danach:** **Codex meldete drei
+Messungen und eine gefallene Rotprobe** ? **mitten in C-467,
+ohne gebaut zu haben.**
+
+`[read]` **Er hatte *,,ein Bericht am Ende"* als *,,melde, wenn du
+unsicher bist"* gelesen.**
+
+`[read]` **Und der Orchestrator hatte am selben Tag das Gegenteil
+verlangt** ? **Ketten mit Bericht je Punkt.**
+
+**Der Satz, der beides trennt:**
+
+    Melde EINMAL, wenn der Auftrag FERTIG ist.
+    Melde vorher NUR, wenn du blockiert bist und eine
+    Entscheidung brauchst, die Tom gehoert.
+
+`[read]` **Eine gefallene Rotprobe ist kein Meldeanlass** ? **sie
+ist Schritt eins.**
+
+`[read]` **Eine Messung, die eine Frage beantwortet, ist kein
+Meldeanlass** ? **sie steht im Bericht.**
+
+`[read]` **Ein Widerspruch zur Spec, eine fehlende Entscheidung,
+ein Befund, der den Auftrag hinfaellig macht** ? **DAS ist ein
+Meldeanlass.**
+
 `[read]` **Also: die Berichte je Punkt schreibt er weiter** ?
 **sie stehen in den Dateien und ich lese sie beim Abnehmen.**
 
