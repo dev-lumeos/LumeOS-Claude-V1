@@ -470,3 +470,67 @@ Referenz warnt es?**
 
 `[read]` **Das ist keine Anzeigefrage, das ist eine
 Sicherheitsfrage.**
+
+## Nachtrag 2026-09-08 — die Detailansicht auch
+
+Tom: *,,und denk an die detailansichten, da muss natuerlich
+supplements auch rein."*
+
+`[cmd]` **Die Detailansicht existiert:**
+
+    apps/web/src/app/v2/nutrition/naehrstoff-modal.tsx   15,9 KB
+    apps/web/src/lib/nutrition/naehrstoff-detail-read.ts  6,2 KB
+    nutrition.nutrient_details                           Tabelle
+
+`[read]` **Also braucht sie denselben zweiten Anteil wie die
+Uebersicht** ? **aber tiefer.**
+
+### Was die Uebersicht zeigt
+
+    Vitamin D    11,2 ug      Nahrung
+                 25,0 ug      Supplement
+
+### Was das Detail zeigen muss
+
+`[read]` **In der Uebersicht steht eine Zahl** ? **im Detail
+steht, WORAUS sie kommt.**
+
+    aus Nahrung       welche Lebensmittel, welche Menge
+    aus Supplementen  welche Praeparate, welche Dosis
+
+`[cmd]` **Und mit C-467 geht die Kette bis zum Produkt:**
+
+    Produkt (Marke, Packung)
+      -> product_contents (Menge je Portion)
+        -> Substanz
+          -> supplement_nutrients (Naehrstoff, Faktor)
+
+`[read]` **Ein Nutzer sieht also nicht nur *,,25 ug aus
+Supplementen"*** ? **sondern *,,Vitamin D3 5000 IU, eine
+Kapsel"*.**
+
+`[read]` **Und wo kein Produkt hinterlegt ist, nur die Substanz:**
+*,,Vitamin D3, 25 ug"*.
+
+### Was zu messen ist
+
+`[cmd]` **`naehrstoff-detail-read.ts` liest heute nur aus
+`nutrition`** ? **miss, welche Form es zurueckgibt.**
+
+`[read]` **Der Leseweg braucht denselben zweiten Zweig wie die
+Uebersicht** ? **aber mit der Herkunft je Zeile.**
+
+`[cmd]` **`intake_logs` traegt `supplement_name_snapshot`,
+`dose_snapshot`, `dose_unit_snapshot`** ? **der Name zum
+Zeitpunkt der Einnahme.**
+
+`[read]` **Das ist die richtige Quelle fuer eine Ruecksicht** ?
+**wer ein Praeparat spaeter umbenennt, aendert nicht, was er
+genommen hat.**
+
+### Und die Grenze aus C-344 gilt auch hier
+
+`[read]` **Wenn das Detail beide Anteile zeigt, muss es sagen,
+gegen welche Referenz die Warnung laeuft.**
+
+`[read]` **Sonst steht da eine rote Zahl ohne Bezug.**
