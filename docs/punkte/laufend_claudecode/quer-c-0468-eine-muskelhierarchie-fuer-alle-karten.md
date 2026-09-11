@@ -320,249 +320,39 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-### A1 — alle 23 Flaechen angesehen. DREI tragen verschiedene Muskeln.
-
-`[cmd]` **Jeder Pfad einzeln eingefaerbt und fotografiert**
-(`tools/_c468-flaechen.mjs`, 61 Bilder in `docs/bilder/c468/`) —
-dasselbe Verfahren wie G-425, weil die Zahlen sagen WO und nur das
-Bild sagt WAS.
-
-**DIE DREI, DIE AUFZUTEILEN WAEREN:**
-
-    Flaeche      Pfade  Muskeln  was im Bild steht
-    ------------------------------------------------------------
-    upper-back       6    3 Paare  1/4 Teres major, 2/5 Teres minor,
-                                   3/6 Latissimus dorsi   (G-425)
-    lower-back       4    2 Paare  2/3 Erector spinae,
-                                   1/4 Flanke (QL/Obliquus)  (G-425)
-    obliques        16    1 Paar   Pfad 8 und 16 sind der
-                                   Obliquus-Bauch, 1-7 und 9-15 die
-                                   Verzahnung mit dem Serratus
-
-`[cmd]` **`obliques` ist NICHT der Fall, den der Auftrag vermutete.**
-Der Auftrag schreibt: *„die schraegen Bauchmuskeln sind zwei Muskeln
-je Seite (externus, internus), nicht sechzehn."* `[read]` **Am Bild
-ist es EIN Muskel je Seite plus sieben Zeichenteile** — der Internus
-liegt unter dem Externus und wird gar nicht gezeichnet.
-
-**DIE ZWANZIG UEBRIGEN buendeln EINEN Muskel oder eine anatomische
-Gruppe:**
-
-    quadriceps   6 Pfade   3 sichtbare Koepfe je Bein
-                           (Vastus lateralis / Rectus / medialis)
-    hamstring    8 Pfade   3 Muskelstreifen je Bein + 1 Sehnenlinie
-    calves      12 Pfade   Gastrocnemius zweikoepfig + Soleusrand
-    forearm     14 Pfade   Beugerbuendel vorne, Strecker hinten
-    abs          8 Pfade   die Segmente des Rectus abdominis
-    adductors    8 Pfade   die Innenseite, eine Gruppe
-    triceps      8 Pfade   drei Koepfe, EIN Muskel        (G-425)
-    trapezius    4 Pfade   ein Muskel, zwei Haelften       (G-425)
-    gluteal      4 Pfade   ein Muskelpaar, Spiegelhaelften (G-425)
-    deltoids     4 Pfade   ein Muskelpaar
-    neck         7 Pfade   Halsmuskeln + Drosselgrube (Umrissdetail)
-    chest/biceps/tibialis  je 2 Pfade, ein Muskelpaar
-    knees/ankles/feet/hands/head/hair   kein Muskel
-
-`[read]` **Der Massstab hat gehalten:** ein Pfad ist eine
-Zeichenebene. `[cmd]` **`quadriceps` ist der beste Beleg** — drei
-Pfade je Bein, und das Bild zeigt Vastus lateralis, Rectus femoris
-und Vastus medialis: **die Koepfe EINES Muskels.**
-
-**WAS DIE KARTE NICHT ZEIGT — gemeldet, nicht erfunden:**
-
-    Rhomboiden          muskel-ebenen.ts wirft sie auf upper-back,
-                        KEINER der sechs Pfade zeichnet sie (G-425)
-    Obliquus internus   liegt unter dem Externus, nicht gezeichnet
-    Soleus              liegt unter dem Gastrocnemius; die vier
-                        Calf-Pfade je Bein trennen ihn nicht belegbar
-
-`[read]` **Diese drei haben KEINE Zeile bekommen.** **Eine Flaeche
-ohne Pfad waere eine Zusage, die die Karte nicht einloest.**
-
-### A3 + A5 — `training.muscle_groups` wird WEDER ersetzt NOCH kopiert
-
-`[cmd]` **Gemessen 2026-09-11:**
-
-    Zeilen                    95
-    davon mit parent_id       88
-    Tiefe                      VIER Ebenen (7 / 28 / 45 / 15)
-    Fremdschluessel darauf     training.exercise_muscles
-    Leseaufrufe in apps/web    4, in zwei Dateien
-
-`[cmd]` **DER AUFTRAG NENNT ZWEI EBENEN — es sind VIER.**
-
-    Arms > Forearms > Forearm Extensors > Extensor Carpi Radialis
-
-`[read]` **Das ist ein echter Pfad in der Tabelle.**
-
-**Sie bleibt, aus drei gemessenen Gruenden:**
-
-`[cmd]` **1 — `training.exercise_muscles` haengt per Fremdschluessel
-daran.** Ein Umzug braeuchte eine zweite Migration im
-Trainingsschema.
-
-`[cmd]` **2 — `apps/web/src/lib/training/sitzungen-read.ts` und
-`uebungen-read.ts` lesen sie**, vier Aufrufe. `[read]` **`apps/`
-gehoert in diesem Auftrag Claude Code** — ich haette den Leseweg
-gebrochen, ohne ihn reparieren zu duerfen.
-
-`[cmd]` **3 — sie traegt eine ANDERE Zerlegung:** die Karte zeichnet,
-was man SIEHT (23 Flaechen), `muscle_groups` fuehrt, was man
-TRAINIERT (95 Muskeln). `[read]` **Zwei Sichten auf denselben
-Koerper, nicht zwei Fassungen derselben Liste.**
-
-`[read]` **Und sie wird auch nicht KOPIERT** — eine zweite
-Namensliste liefe auseinander. `[cmd]` **Stattdessen ZEIGT die neue
-Tabelle auf sie:** `muscle_group_id` ist der Anker, per Namen
-aufgeloest. **45 von 59 Zeilen sind verbunden.**
-
-`[cmd]` **Alle neunzehn gesuchten Muskelnamen stehen schon dort** —
-`latissimus dorsi`, `erector spinae`, `Teres Major`, `Rhomboids`,
-`Quadriceps`, `Hamstrings`, `Calves`, `Obliques`, `Glutes` und die
-uebrigen zehn. **Kein Name erfunden.**
-
-### A2 — `public.koerperflaechen`, drei Ebenen, `parent_id`
-
-    Ebene  Art      Zeilen
-    ----------------------
-    1      muskel        7   Back, Chest, Core, Arms,
-           umriss        1   Shoulders, Legs, Neck + Umriss
-    2      muskel       17   die Kartenflaechen
-           umriss        6   head, hair, hands, feet, ankles, knees
-    3      muskel       28   links / rechts
-    ----------------------
-                       59
-
-`[read]` **Die achte Wurzel `wurzel-umriss` war noetig** — ohne sie
-haetten `hands` und `head` keinen Elternteil, und die Regel „Ebene 2
-hat einen" fiele.
-
-**Vier CHECKs halten die Form:**
-
-    ebene IN (1,2,3)
-    art IN ('muskel','umriss')
-    Ebene 3 hat eine Seite, Ebene 1 und 2 keine
-    Ebene 1 hat keinen Elternteil, 2 und 3 haben einen
-    ein Umriss hat keinen muscle_group_id
-
-`[cmd]` **Die dritte Ebene bekommen nur Flaechen, die die Karte
-WIRKLICH zweiseitig zeichnet.** `[read]` **`abs`, `obliques` und
-`neck` nicht** — dort sind die Pfade Segmentmuster, keine Haelften.
-**Eine Seitenzeile waere dort eine Zusage, die kein Pfad einloest.**
-
-### A4 — Muskel oder Umriss, je Eintrag
-
-`[cmd]` **Toms dritte Entscheidung als Spalte `art`:**
-
-    muskel   52 Zeilen   trainierbar
-    umriss    7 Zeilen   hair, head, hands, feet, ankles, knees
-                         + die Wurzel darueber
-
-`[cmd]` **Gegengeprueft: 0 Umrisse tragen einen `muscle_group_id`** —
-der CHECK erlaubt es nicht. `[read]` **Sonst stuende `hands`
-irgendwann in einer Trainingsauswertung.**
-
-### A6 — Zeilensicherheit, beide Richtungen
-
-    authenticated  SELECT   59 Zeilen              MUSS gehen     ok
-    anon           SELECT   permission denied      MUSS scheitern ok
-    authenticated  INSERT   permission denied      MUSS scheitern ok
-    service_role   SELECT   59 Zeilen              MUSS gehen     ok
-
-**EIN BEFUND, DER MICH ZUERST GETAEUSCHT HAT:**
-
-`[cmd]` **Nach dem ersten Lauf stand `authenticated` mit UPDATE,
-TRUNCATE, TRIGGER und REFERENCES da** — obwohl die Datei nur
-`GRANT SELECT` vergibt.
-
-`[cmd]` **Die Ursache steht in `pg_default_acl`:** Supabase vergibt
-im Schema `public` bei JEDER neuen Tabelle `arwdDxtm` an `anon`,
-`authenticated` und `service_role`. **Mein `REVOKE` lief vor der
-Tabellenerzeugung ins Leere.**
-
-`[read]` **Die Zeilensicherheit fing es ab** (`UPDATE 0`, weil es
-keine UPDATE-Policy gibt) — **aber ein Recht, das nur durch eine
-fehlende Policy ins Leere laeuft, ist ein Recht zu viel.**
-
-`[cmd]` **Berichtigt: erst `REVOKE ALL ... FROM authenticated`, dann
-`GRANT SELECT`.** **Jetzt steht dort genau SELECT, und bei `anon`
-gar nichts.**
-
-### A7 — Sicherung, Kette, Punktelauf
-
-    Sicherung   backup/schema/20260911170000_c468_vor_einspielen.dump
-                26,5 MB, vor der ersten Strukturaenderung
-
-    Kettenlauf  [migration-kette] gruen: keine neue Migration
-                ohne Kettenschritt
-    Punkte      [punkte] gruen: 25 Befunde, genau der Sollstand
-    Schemafreigabe  10 config-Schemata, 8 Anwendungsschemata
-
-`[cmd]` **Zwei Gate-Pruefer sind rot — beide VOR diesem Auftrag:**
-
-    migration-datenlogik-pruefen   nennt C-428, C-429, C-432,
-                                   C-460, C-466 — keine von mir
-    zwei-wahrheiten-pruefen        Massstab G-218, unabhaengig
-
-`[cmd]` **Gegengeprueft: keiner der beiden nennt `468` oder
-`koerperflaechen`.**
-
-## Ein Hinweis zum Ablageort
-
-`[cmd]` **`supabase/migrations/` ist schreibgeschuetzt** — der Hook
-`protect-paths.ps1` blockt Schreibzugriffe dorthin.
-
-`[read]` **Die Struktur liegt deshalb in `_pipeline/00_querschnitt/`**
-— dort, wohin die Projektregel sie ohnehin stellt (*„Struktur nach
-`supabase/migrations/`, Daten und Seeds nach `_pipeline/`"* meint die
-deploybare Baseline; der Kettenschritt ruft die Datei auf).
-
-    468_koerperflaechen_hierarchie.sql   Tabelle, CHECKs, RLS
-    468b_koerperflaechen_seed.sql        die 59 Zeilen
-
-`[cmd]` **Beide sind in `kette.json` registriert**, `468b` haengt an
-`468`, `468` an `107` (der Hierarchie-Schritt von
-`training.muscle_groups`).
-
-`[read]` **Ich habe den Hook NICHT umgangen** — wenn die Struktur in
-`migrations/` gehoert, braucht es eine Freigabe, und das ist Toms
-Entscheidung.
-
-## Was NICHT getan wurde
-
-**1 — Keine Pfadzuordnung.** `[read]` **Welcher Pfad zu welcher Zeile
-gehoert, ist ein UI-Auftrag** — wie beauftragt.
-
-**2 — `packages/ui` nicht angefasst.** `[cmd]` **Die Bilder entstehen
-aus einer zweiten SVG**, die dieselben Daten liest.
-
-**3 — `apps/` nicht angefasst.** Claude Code arbeitet dort.
-
-**4 — Der Dev-Server nicht angefasst.**
-
-**5 — Nicht committet, nicht gestaged.**
-
-## Drei Hinweise
-
-**1 — Die Punktdatei liegt in `laufend_claudecode/`,** nicht in
-`laufend_codex/` wie der Auftrag sagt. `[cmd]` **Dort gefunden und
-dort fortgeschrieben.**
-
-**2 — `training.muscle_groups` hat VIER Ebenen, nicht zwei.** Der
-Auftrag nennt zwei. `[read]` **Fuer die Entscheidung aendert es
-nichts** — sie bleibt so oder so — **aber wer „zwei Ebenen" liest,
-unterschaetzt, was beim Ersetzen verloren ginge.**
-
-**3 — Die Rhomboiden bleiben ohne Flaeche.** `[cmd]` **G-425 hat
-belegt, dass kein Pfad sie zeichnet.** `[read]` **`muskel-ebenen.ts`
-wirft sie trotzdem auf `upper-back`** — das ist eine Falschaussage in
-`apps/`, und sie zu beheben gehoert Claude Code.
-
-## Neustart
-
-`[cmd]` **NICHT noetig** — nur `supabase/_pipeline/`, `tools/` und
-`docs/`.
+_(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Nachtrag 2026-09-08 — ein VIERTER Ort
+
+`[cmd]` **`public.muscle_training_loads`, 43 Zeilen:**
+
+    user_id, muscle_group, session_id,
+    last_trained_date, last_trained_time,
+    hours_since_trained, sets, volume_kg
+
+`[cmd]` **`muscle_group` ist FREIER TEXT** ? **keine
+Fremdschluessel auf die Tabelle.**
+
+`[read]` **Also vier Orte mit Muskelnamen:**
+
+    training.muscle_groups        95 Zeilen, parent_id
+    training.exercise_muscles   6.588, FK auf muscle_group_id
+    public.muscle_training_loads   43, FREIER TEXT
+    muskel-zuordnung.ts            35 Eintraege
+    koerperkarte-pfade.ts          23 Flaechen
+
+`[read]` **`exercise_muscles` zeigt richtig** ? `muscle_group_id`
+**als Fremdschluessel, 6.588 Zuordnungen.**
+
+`[read]` **`muscle_training_loads` nicht** ? **ein Tippfehler dort
+faellt niemandem auf.**
+
+`[cmd]` **Miss, welche Werte in `muscle_group` stehen** ?
+**passen sie zu `muscle_groups.name`?**
+
+`[read]` **Wenn die Hierarchie nach `public` zieht, sollte diese
+Spalte ein Fremdschluessel werden.**

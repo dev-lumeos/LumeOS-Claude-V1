@@ -7,8 +7,6 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-466
 entscheidung: E-35
-agent: claudecode
-beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx

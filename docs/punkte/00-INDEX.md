@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 217 |
+| `todos` | 218 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 411 |
-| **gesamt** | **630** |
+| **gesamt** | **631** |
 
 ## medical — 48
 
@@ -304,7 +304,7 @@
 | `G-417` | feature | hoch | [zwei Spalten und der Score](erledigt/nutrition-g-0417-zwei-spalten-und-der-score.md) | erledigt | — | G-418, G-419 |
 | `G-418` | befund | niedrig | [Seed-Tage liegen in der Zukunft](todos/nutrition-g-0418-seed-tage-in-der-zukunft.md) | offen | — | — |
 | `G-419` | feature | niedrig | [der Insights-Block ist abgenommen](erledigt/nutrition-g-0419-insights-block-abgenommen.md) | erledigt | — | — |
-| `G-426` | feature | hoch | [die Supplementspalte in Nutrients](laufend_claudecode/nutrition-g-0426-die-supplementspalte-in-nutrients.md) | laeuft (claudecode) | — | — |
+| `G-426` | feature | hoch | [die Supplementspalte in Nutrients](todos/nutrition-g-0426-die-supplementspalte-in-nutrients.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 79
@@ -424,7 +424,7 @@
 | `G-219` | entscheidung | niedrig | [`LiveWorkout` hat keinen Aufrufer mehr](todos/training-g-0219-liveworkout-ohne-aufrufer.md) | offen | — | — |
 | `G-366` | feature | mittel | [die Uebungsliste der Sitzung](erledigt/training-g-0366-die-uebungsliste-der-sitzung.md) | erledigt | — | — |
 
-## recovery — 27
+## recovery — 28
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -448,6 +448,7 @@
 | `C-339` | feature | niedrig | [ein Recovery-Gesamtscore, vorgesehen](todos/recovery-c-0339-ein-Recovery-Gesamtscore-vorgesehen.md) | offen | — | — |
 | `C-421` | feature | hoch | [vier Tabellen fuer die 17 Attrappen](erledigt/recovery-c-0421-vier-tabellen-fuer-die-17-attrappen.md) | erledigt | — | C-422 |
 | `C-462` | feature | hoch | [vier Ansichten ohne Tabelle](erledigt/recovery-c-0462-vier-ansichten-ohne-tabelle.md) | erledigt | — | — |
+| `C-469` | feature | hoch | [die sechsundzwanzig Formeln](laufend_codex/recovery-c-0469-die-sechsundzwanzig-formeln.md) | laeuft (codex) | — | — |
 | `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](erledigt/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | erledigt | — | — |
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
@@ -616,7 +617,7 @@
 | `C-446` | befund | hoch | [eine Migration fehlt in der Kette](erledigt/quer-c-0446-eine-migration-fehlt-in-der-kette.md) | erledigt | — | C-447 |
 | `C-447` | befund | hoch | [die drei Live-Luecken schliessen](erledigt/quer-c-0447-die-drei-live-luecken-schliessen.md) | erledigt | — | C-448 |
 | `C-448` | entscheidung | mittel | [acht tote Migrationen](erledigt/quer-c-0448-acht-tote-migrationen.md) | erledigt | — | — |
-| `C-468` | entscheidung | hoch | [eine Muskelhierarchie fuer alle Karten](laufend_codex/quer-c-0468-eine-muskelhierarchie-fuer-alle-karten.md) | laeuft (codex) | — | — |
+| `C-468` | entscheidung | hoch | [eine Muskelhierarchie fuer alle Karten](laufend_claudecode/quer-c-0468-eine-muskelhierarchie-fuer-alle-karten.md) | laeuft (claudecode) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
