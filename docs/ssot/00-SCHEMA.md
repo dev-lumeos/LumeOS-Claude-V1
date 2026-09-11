@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-11: 188 Funktionen, 438 Policies, 652 CHECKs, 13 Sichten.**
+`[cmd]` **Stand 2026-09-11: 189 Funktionen, 442 Policies, 659 CHECKs, 13 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -149,8 +149,8 @@ ob man sie rufen kann.**
 | public | gtrgm_union | internal, internal | Funktion |
 | public | handle_new_user |  | Funktion |
 | public | is_admin |  | Funktion |
-| public | levenshtein | text, text | Funktion |
 | public | levenshtein | text, text, integer, integer, integer | Funktion |
+| public | levenshtein | text, text | Funktion |
 | public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
@@ -182,6 +182,7 @@ ob man sie rufen kann.**
 | recovery | touch_updated_at |  | Funktion |
 | supplements | create_curated_stack_template | p_name_de text, p_goal text, p_description_de text, p_items jsonb | Funktion |
 | supplements | create_supplement_protocol_from_template | p_template_code text, p_anchor_supplement_id uuid, p_started_at date DEFAULT CURRENT_DATE | Funktion |
+| supplements | create_supplier_product | p_supplier_name text, p_land text, p_product_name text, p_produktform text, p_packungsgroesse text, p_packungseinheit text, p_gtin text, p_artikelnummer text, p_portionsgroesse text, p_portionseinheit text, p_contents jsonb, p_source text | Funktion |
 | supplements | decide_stack_curation_candidate | p_candidate_id uuid, p_decision text, p_reason text | Funktion |
 | supplements | platform_input_status | p_user_id uuid, p_entry_date date DEFAULT CURRENT_DATE | Funktion |
 | supplements | publish_stack_template | p_stack_id uuid, p_reason text DEFAULT ''::text | Funktion |
@@ -714,6 +715,10 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | intake_logs | intake_logs_supplement_name_snapshot_check | CHECK ((btrim(supplement_name_snapshot) <> ''::text)) |
 | supplements | intake_schedule | intake_schedule_source_check | CHECK ((((source_kind = 'stack'::text) AND (stack_item_id IS NOT NULL) AND (protocol_item_id IS NULL)) OR ((source_kind = 'protoco |
 | supplements | intake_schedule | intake_schedule_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
+| supplements | product_content_candidates | product_content_candidates_ingredient_name_check | CHECK ((length(btrim(ingredient_name)) >= 2)) |
+| supplements | product_content_candidates | product_content_candidates_status_check | CHECK ((status = ANY (ARRAY['offen'::text, 'geprueft'::text, 'angereichert'::text, 'abgelehnt'::text]))) |
+| supplements | product_contents | product_contents_amount_per_serving_check | CHECK (((amount_per_serving IS NULL) OR (amount_per_serving >= (0)::numeric))) |
+| supplements | product_contents | product_contents_conversion_factor_check | CHECK (((conversion_factor IS NULL) OR (conversion_factor > (0)::numeric))) |
 | supplements | rule_catalog | rule_catalog_conditions_check | CHECK ((jsonb_typeof(conditions) = 'array'::text)) |
 | supplements | rule_catalog | rule_catalog_effects_check | CHECK ((jsonb_typeof(effects) = 'array'::text)) |
 | supplements | rule_catalog | rule_catalog_evidence_check | CHECK ((jsonb_typeof(evidence) = 'array'::text)) |
@@ -820,6 +825,9 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | supplement_warnings | supplement_warnings_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | supplements | supplements_evidence_grade_check | CHECK (((evidence_grade IS NULL) OR (evidence_grade = ANY (ARRAY['S'::text, 'A'::text, 'B'::text, 'C'::text, 'D'::text, 'E'::text, |
 | supplements | supplements | supplements_slug_check | CHECK ((btrim(slug) <> ''::text)) |
+| supplements | supplier_products | supplier_products_gtin_check | CHECK (((gtin IS NULL) OR (gtin ~ '^[0-9]{8,14}$'::text))) |
+| supplements | supplier_products | supplier_products_name_check | CHECK ((length(btrim(name)) >= 2)) |
+| supplements | suppliers | suppliers_name_check | CHECK ((length(btrim(name)) >= 2)) |
 | supplements | user_inventory | user_inventory_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | user_stacks | user_stacks_goal_check | CHECK ((goal = ANY (ARRAY['muscle_building'::text, 'fat_loss'::text, 'recovery_sleep'::text, 'health'::text, 'longevity'::text, 'p |
 | supplements | user_stacks | user_stacks_item_count_check | CHECK ((item_count >= 0)) |
@@ -1197,6 +1205,8 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | supplements | intake_schedule | intake_schedule_select | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
 | supplements | intake_schedule | intake_schedule_update | UPDATE | (( SELECT auth.uid() AS uid) = user_id) |
 | supplements | lab_effect_enrichment_records | lab_effect_enrichment_records_read | SELECT | true |
+| supplements | product_content_candidates | product_content_candidates_select | SELECT | true |
+| supplements | product_contents | product_contents_select | SELECT | true |
 | supplements | pubchem_conflict_records | pubchem_conflict_records_read | SELECT | true |
 | supplements | rule_catalog | rule_catalog_select | SELECT | true |
 | supplements | stack_curation_candidate_items | stack_curation_candidate_items_select | SELECT | (EXISTS ( SELECT 1    FROM supplements.stack_curation_candidates c   WHERE ((c.id = stack_ |
@@ -1258,6 +1268,8 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | supplements | supplement_wada | supplement_wada_select | SELECT | true |
 | supplements | supplement_warnings | supplement_warnings_select | SELECT | true |
 | supplements | supplements | supplements_select | SELECT | is_active |
+| supplements | supplier_products | supplier_products_select | SELECT | true |
+| supplements | suppliers | suppliers_select | SELECT | true |
 | supplements | thailand_regulatory_records | thailand_regulatory_records_read | SELECT | true |
 | supplements | user_inventory | user_inventory_delete | DELETE | (( SELECT auth.uid() AS uid) = user_id) |
 | supplements | user_inventory | user_inventory_insert | INSERT | (( SELECT auth.uid() AS uid) = user_id) |

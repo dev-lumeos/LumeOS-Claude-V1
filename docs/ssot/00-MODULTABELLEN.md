@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-11 — 181 Tabellen, 2528 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-11 — 185 Tabellen, 2572 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -101,8 +101,8 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `food_curation_decisions` | 6 | 0 | 2026-08-05 |
 | `food_groups` | 5 | 19 | ? |
 | `food_nutrients` | 5 | 985320 | 2026-08-05 |
-| `food_preference_items` | 13 | 15 | 2026-08-05 |
-| `food_preference_search_targets` | 8 | 18155 | ? |
+| `food_preference_items` | 13 | 17 | 2026-08-05 |
+| `food_preference_search_targets` | 8 | 12920 | ? |
 | `food_preferences` | 14 | 3 | 2026-08-05 |
 | `food_tags` | 3 | 30797 | 2026-08-05 |
 | `food_tags_kuriert` | 5 | 0 | 2026-09-02 |
@@ -130,7 +130,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `recipe_curation_decisions` | 6 | 0 | ? |
 | `recipe_ingredients` | 15 | 22 | ? |
 | `recipes` | 19 | 6 | ? |
-| `search_events` | 9 | 388 | ? |
+| `search_events` | 9 | 459 | ? |
 | `search_synonyms` | 4 | 4877 | ? |
 | `shopping_list_items` | 15 | 33 | ? |
 | `shopping_lists` | 12 | 6 | ? |
@@ -150,7 +150,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `scores` | 34 | 370 | ? |
 | `stress_logs` | 12 | 7 | 2026-09-07 |
 
-## supplements — 59 Tabellen, 874 Spalten
+## supplements — 63 Tabellen, 918 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -162,6 +162,8 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `intake_logs` | 16 | 810 | ? |
 | `intake_schedule` | 18 | 0 | ? |
 | `lab_effect_enrichment_records` | 16 | 47 | ? |
+| `product_content_candidates` | 9 | 0 | 2026-09-09 |
+| `product_contents` | 10 | 0 | 2026-09-09 |
 | `pubchem_conflict_records` | 16 | 20 | ? |
 | `rule_catalog` | 26 | 64 | ? |
 | `stack_curation_candidate_items` | 11 | 2 | ? |
@@ -207,6 +209,8 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `supplement_wada` | 22 | 337 | ? |
 | `supplement_warnings` | 14 | 290 | ? |
 | `supplements` | 22 | 596 | ? |
+| `supplier_products` | 15 | 0 | 2026-09-09 |
+| `suppliers` | 10 | 0 | 2026-09-09 |
 | `thailand_regulatory_records` | 18 | 1061 | ? |
 | `user_inventory` | 15 | 0 | ? |
 | `user_stacks` | 12 | 6 | ? |

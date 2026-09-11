@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 212 |
+| `todos` | 211 |
 | `laufend_claudecode` | 6 |
-| `erledigt` | 404 |
+| `erledigt` | 405 |
 | **gesamt** | **622** |
 
 ## medical — 48
@@ -359,7 +359,7 @@
 | `C-454` | befund | hoch | [der Nutzer waehlt seine Punkte](erledigt/supplements-c-0454-der-nutzer-waehlt-seine-punkte.md) | erledigt | — | — |
 | `C-455` | feature | hoch | [der Injektionsplaner, vollstaendig](erledigt/supplements-c-0455-der-injektionsplaner-vollstaendig.md) | erledigt | — | — |
 | `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](erledigt/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | erledigt | — | — |
-| `C-467` | feature | hoch | [Lieferantenprodukte als eigene Ebene](todos/supplements-c-0467-lieferantenprodukte.md) | offen | — | — |
+| `C-467` | feature | hoch | [Lieferantenprodukte](erledigt/supplements-c-0467-lieferantenprodukte.md) | erledigt | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
