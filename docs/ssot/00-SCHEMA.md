@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-11: 189 Funktionen, 442 Policies, 659 CHECKs, 13 Sichten.**
+`[cmd]` **Stand 2026-09-11: 190 Funktionen, 443 Policies, 660 CHECKs, 13 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -30,6 +30,7 @@ ob man sie rufen kann.**
 | coach | raise_alert | p_client uuid, p_kind text, p_severity text, p_title text, p_detail text, p_metric jsonb DEFAULT '{}'::jsonb | Funktion |
 | coach | resolve_invite_user_id | p_email text | Funktion |
 | coach | set_changed_by |  | Funktion |
+| coach | set_relationship_specialties | p_relationship_id uuid, p_specialties text[] | Funktion |
 | coach | summary_goals | p_client uuid | Funktion |
 | coach | summary_medical | p_client uuid | Funktion |
 | coach | summary_nutrition | p_client uuid | Funktion |
@@ -277,6 +278,7 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | coach | pending_invites | pending_invites_status_check | CHECK ((status = ANY (ARRAY['pending'::text, 'accepted'::text, 'expired'::text]))) |
 | coach | permission_change_log | permission_change_log_change_kind_check | CHECK ((change_kind = ANY (ARRAY['insert'::text, 'update'::text, 'delete'::text]))) |
 | coach | relationship_change_log | relationship_change_log_change_kind_check | CHECK ((change_kind = ANY (ARRAY['insert'::text, 'update'::text, 'delete'::text]))) |
+| coach | relationship_specialties | relationship_specialties_specialty_check | CHECK ((specialty = ANY (ARRAY['training'::text, 'nutrition'::text, 'supplement'::text, 'medical'::text]))) |
 | coach | relationships | relationships_active_ck | CHECK (((status <> 'active'::text) OR (started_at IS NOT NULL))) |
 | coach | relationships | relationships_ended_ck | CHECK (((status <> 'ended'::text) OR ((ended_at IS NOT NULL) AND (ended_by IS NOT NULL)))) |
 | coach | relationships | relationships_invited_coach_name_ck | CHECK (((status <> 'invited'::text) OR (coach_display_name IS NOT NULL))) |
@@ -940,6 +942,7 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | coach | permission_change_log | permission_change_log_select | SELECT | ((( SELECT auth.uid() AS uid) = coach_id) OR (( SELECT auth.uid() AS uid) = client_id)) |
 | coach | relationship_change_log | relationship_change_log_insert | INSERT | ((( SELECT auth.uid() AS uid) = changed_by) AND ((( SELECT auth.uid() AS uid) = coach_id)  |
 | coach | relationship_change_log | relationship_change_log_select | SELECT | ((( SELECT auth.uid() AS uid) = coach_id) OR (( SELECT auth.uid() AS uid) = client_id)) |
+| coach | relationship_specialties | relationship_specialties_select | SELECT | (EXISTS ( SELECT 1    FROM coach.relationships r   WHERE ((r.id = relationship_specialties |
 | coach | relationships | relationships_insert | INSERT | (((( SELECT auth.uid() AS uid) = coach_id) OR (( SELECT auth.uid() AS uid) = client_id)) A |
 | coach | relationships | relationships_select | SELECT | ((( SELECT auth.uid() AS uid) = coach_id) OR (( SELECT auth.uid() AS uid) = client_id)) |
 | coach | relationships | relationships_update | UPDATE | ((( SELECT auth.uid() AS uid) = coach_id) OR (( SELECT auth.uid() AS uid) = client_id)) |

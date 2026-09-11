@@ -13,12 +13,12 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-11 — 185 Tabellen, 2572 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-11 — 186 Tabellen, 2576 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 
-## coach — 16 Tabellen, 196 Spalten
+## coach — 17 Tabellen, 200 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -37,6 +37,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `pending_invites` | 15 | 0 | 2026-09-09 |
 | `permission_change_log` | 9 | 6 | ? |
 | `relationship_change_log` | 9 | 9 | ? |
+| `relationship_specialties` | 4 | 0 | 2026-09-09 |
 | `relationships` | 17 | 6 | ? |
 
 ## goals — 8 Tabellen, 130 Spalten
@@ -101,8 +102,8 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `food_curation_decisions` | 6 | 0 | 2026-08-05 |
 | `food_groups` | 5 | 19 | ? |
 | `food_nutrients` | 5 | 985320 | 2026-08-05 |
-| `food_preference_items` | 13 | 17 | 2026-08-05 |
-| `food_preference_search_targets` | 8 | 12920 | ? |
+| `food_preference_items` | 13 | 22 | 2026-08-05 |
+| `food_preference_search_targets` | 8 | 15089 | ? |
 | `food_preferences` | 14 | 3 | 2026-08-05 |
 | `food_tags` | 3 | 30797 | 2026-08-05 |
 | `food_tags_kuriert` | 5 | 0 | 2026-09-02 |
@@ -130,7 +131,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `recipe_curation_decisions` | 6 | 0 | ? |
 | `recipe_ingredients` | 15 | 22 | ? |
 | `recipes` | 19 | 6 | ? |
-| `search_events` | 9 | 459 | ? |
+| `search_events` | 9 | 463 | ? |
 | `search_synonyms` | 4 | 4877 | ? |
 | `shopping_list_items` | 15 | 33 | ? |
 | `shopping_lists` | 12 | 6 | ? |
