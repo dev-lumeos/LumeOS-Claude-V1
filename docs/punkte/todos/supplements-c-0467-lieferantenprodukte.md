@@ -133,7 +133,103 @@ Umrechnungsfaktor.**
 `[cmd]` **Ein Multivitamin rechnet sich aus seinen dreissig
 Zutaten** ? **keine eigene Naehrstoffzeile noetig.**
 
-## Was zu entscheiden ist, bevor gebaut wird
+## Toms Antworten, 2026-09-08
+
+### 1 · Ein Supplier ist ein Supplier
+
+Tom:
+
+> supplier kriegt spaeter einen account zum selber pflegen. uns
+> egal, ob es der hersteller oder ein haendler ist ? fuer uns ein
+> supplier.
+
+`[read]` **Keine Unterscheidung** ? **EINE Tabelle, ein Begriff.**
+
+`[read]` **Und ein `user_id` an `suppliers`** ? **spaeter meldet
+sich der Supplier an und pflegt selbst.**
+
+`[cmd]` **Miss, ob das Coach-Muster passt:**
+`coach.coach_profiles` **verbindet `user_id` mit einem Profil.**
+
+`[read]` **Heute NULL** ? **Tom pflegt ein, ein Konto gibt es noch
+nicht.**
+
+### 2 · Tom pflegt die ersten Daten ein
+
+Tom:
+
+> ich pflege ein, ich organisiere die ersten daten. spaeter wird
+> das ein supplier selber machen, das definieren wir noch.
+
+`[read]` **Also: ein Einpflegeweg fuer den Admin, kein
+Supplier-Portal.**
+
+`[cmd]` **`apps/admin` hat 25 Dateien und laeuft auf 3210**
+(G-411: die Anmeldung war kaputt, ist behoben).
+
+`[read]` **Dort gehoert es hin.**
+
+`[read]` **Und die Form des Einpflegens ist offen** ? **Maske,
+Datei-Import, oder beides.**
+
+`[cmd]` **`supplement_field_sources` traegt schon je Feld eine
+Quelle** ? **dieselbe Spur fuer Produkte.**
+
+### 3 · Unbekannte Substanz -> Meldung im Admin
+
+Tom:
+
+> wenn wir eine substanz nicht kennen, muss das im admin gemeldet
+> werden und wir checken das und reichern daten an.
+
+`[read]` **Kein Ablehnen, kein stilles Anlegen** ? **eine
+Meldung.**
+
+`[cmd]` **Der Weg existiert fuer aehnliche Faelle:**
+
+    alias_resolution_candidates    64 Zeilen
+    stack_curation_candidates       2
+    stack_curation_candidate_items  2
+    pubchem_conflict_records       20
+    wada_conflict_records           8
+
+`[read]` **Fuenf Kandidaten- und Konflikttabellen** ? **die
+Bauform ist da.**
+
+`[read]` **Also: `product_content_candidates`** ? **was ein
+Etikett nennt, aber LumeOS nicht kennt.**
+
+`[cmd]` **Mit Status** ? **offen, geprueft, angereichert,
+abgelehnt.**
+
+`[read]` **Und wenn eine Substanz angereichert ist, wird der
+Kandidat zur Zutat** ? **derselbe Weg wie bei
+`stack_curation_decisions`.**
+
+## Was daraus folgt
+
+`[read]` **Vier Tabellen statt drei:**
+
+    suppliers                   Marke/Haendler, spaeter
+                                mit user_id
+    supplier_products           Produkt, Packung, GTIN
+    product_contents            Zutatenliste je Portion
+    product_content_candidates  was wir nicht kennen
+
+`[read]` **Und ein Einpflegeweg im Admin.**
+
+## Was noch offen ist
+
+`[read]` **Die FORM des Einpflegens** ? **Maske je Produkt, oder
+eine Datei mit vielen?**
+
+`[read]` **Ein Multivitamin hat dreissig Zutaten** ? **die tippt
+niemand einzeln.**
+
+`[cmd]` **Messen, ob `apps/admin` schon einen Importweg hat** ?
+**die Lebensmitteldatenbank hat einen (`food_curation_*`).**
+
+## Was urspruenglich zu entscheiden war
 
 **1** ? **Hersteller oder Haendler?**
 
