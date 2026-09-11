@@ -10,133 +10,61 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
 beruehrt:
-  tabellen: [goals.user_goals]
+  tabellen: [goals.progress_photos, goals.body_measurements, goals.goal_phases, goals.phase_transition_responses, goals.user_goals]
 zahlen:
-  gemessen: 2026-09-08
-  fehlend: 3
+  gemessen: 2026-09-10
+  fehlend: 0
 ---
 
 # C-463 — drei Modale ohne Ziel
 
-## Befund
+## Ergebnis
 
-`[cmd]` **`goals` hat sieben Tabellen:**
+Nur `goals.progress_photos` fehlte wirklich. Es steht jetzt mit einem eigenen privaten Bucket. `body_weight_log` waere eine zweite Wahrheit; `phase_transitions` waere eine zweite Tabelle fuer bereits vorhandene Phasenhistorie und Antworten. Beides wurde nicht gebaut.
 
-    user_goals               11
-    body_measurements       362
-    body_circumferences
-    goal_milestones
-    goal_phases
-    nutrition_targets
-    phase_transition_responses  0
+## A1 — jede Annahme gegen Spalten gemessen
 
-`[cmd]` **Es FEHLEN:**
+| Behauptung | Messung auf dev | Ergebnis |
+|---|---|---|
+| `progress_photos` | Die sieben Goals-Tabellen hatten keine Foto-/URL-/Pose-/Analyse-Spalte; Storage hatte nur `medical-originals` mit einem Objekt. | fehlte wirklich |
+| `phase_transitions` | `goal_phases` hat `gueltig_ab`, `projected_end_date`, `actual_end_date`, `transitioned_from`, `recommended_next`, `transition_reason`; `phase_transition_responses` hat `phase_id`, `user_id`, `accepted/rejected`, `reason`, `created_at`. 5 Phasen, 3 offen, 0 Antworten. | keine Tabelle und kein Feld fehlt |
+| `body_weight_log` | `body_measurements.weight_kg` ist NOT NULL; 362/362 Zeilen tragen Gewicht. Die Tabelle hat Datum, Uhrzeit, Koerperfett, Masse, BMI, FFMI und Herkunft. | keine zweite Gewichtslog-Tabelle |
 
-    progress_photos
-    phase_transitions
-    body_weight_log
+`goal_phase_start` und `goal_phase_end` binden Start bzw. Ende an den angemeldeten Eigentümer; `phase_transition_respond` schreibt die Antwort nur für die eigene Phase. Ein späterer einzelner, atomarer UI/API-Übergang ist keine fehlende Tabelle: Die Spec sagt in `Goals/OPEN_ITEMS.md:75`, dass Transitions manuell via API erfolgen und keinen automatischen DB-Guard haben. Daher wurde kein Ablauf erfunden.
 
-`[cmd]` **Und gebaut sind:** `LogPhotoModal`, `LogWeightModal`,
-`LogMeasureModal`.
+## A2/A3 — gebaut: private Foto-Metadaten und Objektpfad
 
-`[read]` **`LogPhotoModal` schreibt in nichts.**
+Migration: `supabase/migrations/20260909260000_c463_goals_progress_photos.sql`.
 
-## Und vier Reiter fehlen
+`goals.progress_photos` hat 13 Spalten: `id`, `user_id` (FK `auth.users`, CASCADE), `session_date`, `pose_type`, `pose_name`, `pose_number`, `photo_url`, `thumbnail_url`, `ai_analysis`, `ai_analyzed_at`, `notes`, `is_private`, `created_at`.
 
-`[cmd]` **`tools/vollstaendigkeit.mjs`:** `CompTab`
-(+`BodyFatScale`), `GoalsTab` (+`GoalCard`), `MeasureTab`,
-`MetricsTab`.
+Die Quelle ist `docs/specs/Goals/DATABASE.md:310-340`: Pose, Objekt-URL, optionale Thumbnail-URL, Analyse, Privatheit sowie die beiden Indizes. Indizes: `(user_id, session_date DESC)` und `(user_id, pose_name)`. `pose_type` folgt der Spec-Werteliste `mandatory_8`, `quarter_turns`, `detail`, `custom`; die einzelne Pose bleibt absichtlich frei benannt.
 
-`[read]` **Vier von acht Reitern.** `[read]` **Das ist ein
-UI-Auftrag, hier geht es um die Tabellen.**
+Der Draft ist dort widersprüchlich: `module-goals-pro.jsx:158-160` nennt zehn Mandatory-Namen trotz "8 IFBB Mandatory"-Label, daneben vier Quarter Turns und neun Detail-Close-Ups; `module-goals.jsx:864-888` zeigt nur Front/Side/Back. Ein enger Namens-CHECK würde eine dieser Quellen erfinden.
 
-## Was zu lesen ist
+Der neue Bucket `goals-progress-photos` ist privat, 20 MiB, und akzeptiert JPEG, PNG, HEIC. Er wird nicht mit `medical-originals` geteilt: dessen Objekte haben einen medizinischen Zweck und E-76-Privatheit. Auch bei voller Goals-Sicht gibt es keine Coach-Policy für Fotozeilen oder Fotoobjekte; der Draft verlangt ausdrücklich privat bis zu einer späteren, expliziten Freigabe (`module-goals.jsx:884-887`, `Goals/OPEN_ITEMS.md:64`).
 
-`[cmd]` **`docs/specs/Goals/`** ? **zuerst.**
+## A4/A5 — Schreibprobe, RLS und anon
 
-`[cmd]` **Der Draft:** `module-goals.jsx` **50,7 KB,**
-`module-goals-pro.jsx` **52,5,** `module-goals-editor.jsx`
-**35,7.**
+Der Test `supabase/_pipeline/_validierung/goals-c463-progress-photos.test.ts` lief auf `lumeos_c463_final` und rollte vollständig zurück:
 
-## Was gebaut wird
+| Prüfung | Eigentümer | fremder authentifizierter Nutzer | anon |
+|---|---:|---:|---:|
+| Fotozeile lesen/schreiben | 1 / erlaubt | 0 / verweigert | kein SELECT und kein Schema-USAGE |
+| Storage-Objekt lesen/schreiben | 1 / erlaubt | 0 / verweigert | kein SELECT |
 
-**1** ? `progress_photos`.
+Die Tabelle hat RLS und vier Owner-Policies (SELECT, INSERT, UPDATE, DELETE), der Bucket vier gleichartige pfad- und `owner_id`-gebundene Policies. Nach `ROLLBACK`: 0 Fotozeilen und 0 Bucket-Objekte. Keine neue Funktion wurde angelegt; anon hat deshalb auch kein EXECUTE.
 
-`[read]` **Ein Foto ist ein sensibles Datum** ? **wie
-`medical-originals` (C-429).**
+## A6 — Bestand unberührt
 
-`[cmd]` **Miss, ob ein eigener Bucket noetig ist** ? **oder ob
-`goals` in den bestehenden schreibt.**
+Nach dem Einspielen auf dev: 11 Ziele, 362 Messungen, davon 362 mit `weight_kg`; `progress_photos` steht bei 0. Die Migration ergänzt nur leere Foto-Metadaten und einen leeren Bucket.
 
-`[read]` **Und: Vorne, seitlich, hinten?** **Die Vorlage zeigt
-`GoalsPosesView`** ? **miss, welche Posen sie nennt.**
+## A7 — Sicherung und Läufe
 
-**2** ? `phase_transitions`.
+Vor dem Einspielen:
 
-`[cmd]` **`goal_phases` und `phase_transition_responses` gibt es
-schon** ? **`phase_transition_responses` ist LEER.**
+`backup/schema/20260910183913_c463_goals_progress_photos_vor_einspielen.dump` — 26.491.880 Byte, SHA-256 `CEE4AAA420906B86CB6A22559EF7AC38A6D121F0C9385986216A33EF97A984FA`.
 
-`[read]` **Miss, was fehlt** ? **vielleicht ist es nur der
-Uebergang selbst.**
+Der frische Aufbau `lumeos_c463_final` lief mit 188 Schritten in 605,8 s: 35/35 Tabellen, 4/4 Sichten, 41/41 Funktionen, 35/35 RLS/Policies, `SCHEMA VOLLSTAENDIG`.
 
-`[cmd]` **`GoalsPhaseView` zeigt vier Kacheln.**
-
-**3** ? `body_weight_log`.
-
-`[cmd]` **`body_measurements` hat 362 Zeilen** ? **miss, ob das
-Gewicht dort schon steht.**
-
-`[read]` **Wenn ja: keine neue Tabelle** ? **melden.**
-
-## Abnahmebedingungen
-
-    A1  je der drei: braucht es sie wirklich? Gemessen
-        gegen die bestehenden sieben Tabellen.
-    A2  die noetigen gebaut. Je Tabelle: Spalten,
-        Fremdschluessel, Indizes, Fundstelle.
-    A3  progress_photos: Bucket oder bestehender?
-        Entschieden und begruendet.
-    A4  je Tabelle eine Zeile geschrieben. ROLLBACK.
-    A5  RLS je Tabelle, beide Richtungen.
-    A6  die 11 Ziele und 362 Messungen bleiben gueltig.
-    A7  Sicherung, Vollkette, Punktelauf.
-
-## Was NICHT zu bauen ist
-
-`[read]` **Keine Oberflaeche.**
-
-`[read]` **Und keine Tabelle, die es unter anderem Namen schon
-gibt** ? **das ist heute dreimal passiert.**
-
-## Berichtigt 2026-09-08 — nach dem C-462-Stopp
-
-`[cmd]` **C-462 wurde als ueberholt geschlossen:** **drei der vier
-Tabellen gab es unter anderem Namen, zwei Messungen liegen in
-`checkins`.**
-
-`[read]` **Dasselbe gilt hier moeglicherweise.**
-
-### Zuerst messen, ob es sie schon gibt
-
-`[cmd]` **`goals` hat sieben Tabellen:**
-
-    body_circumferences, body_measurements,
-    goal_milestones, goal_phases, nutrition_targets,
-    phase_transition_responses, user_goals
-
-`[read]` **Miss JE SPALTE, nicht je Tabellenname:**
-
-    progress_photos    -> gibt es eine Fotospalte in
-                          body_measurements?
-                          Oder einen Bucket?
-    phase_transitions  -> goal_phases hat vermutlich
-                          start und ende
-                          phase_transition_responses ist LEER
-                          -- messen, was sie erwartet
-    body_weight_log    -> body_measurements hat 362 Zeilen
-                          -- steht das Gewicht dort?
-
-`[read]` **Wenn eine schon da ist: melden, nicht bauen.**
-
-`[read]` **Wenn nur FELDER fehlen: die Felder, nicht die
-Tabelle.**
+Der C-463-Test: 1 Zusicherung, 0 Fehler, 1,224 s. Protokolle: `backup/c463-vollkette-live.out` und `backup/c463-progress-photos-test.out`.
