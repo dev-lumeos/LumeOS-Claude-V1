@@ -8,7 +8,7 @@ braucht: []
 kind_von: G-412
 entscheidung: E-80
 erledigt: 2026-09-08
-commit: OFFEN
+commit: 05af2f75
 beruehrt:
   tabellen: [goals.nutrition_targets]
 zahlen:
