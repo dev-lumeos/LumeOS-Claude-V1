@@ -7,8 +7,6 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-388
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/tab-injektionen.tsx
@@ -253,3 +251,14 @@ sie traegt, und melde, ob sie eine Kachel braucht.**
 **Keine eigene Zustandsberechnung** ? **5.1 steht in der Spec.**
 **Nachweise auf `test-user@lumeos.local`.**
 Nicht committen, nicht stagen, nicht pushen.
+
+## Zurueckgelegt 2026-09-08
+
+`[cmd]` **Lag in `laufend_claudecode/` ohne Bericht und ohne
+Abnahme** ? **aus einer frueheren Sitzung.**
+
+`[read]` **Der Auftrag ging raus, der Bericht kam nie** ? **oder
+er wurde mit einem anderen Punkt miterledigt.**
+
+`[read]` **Vor dem naechsten Auftrag messen, was davon noch
+offen ist.**

@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 213 |
-| `laufend_claudecode` | 6 |
+| `todos` | 218 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 411 |
 | **gesamt** | **630** |
 
@@ -384,7 +384,7 @@
 | `G-373` | feature | mittel | [Stacks editieren und anlegen](erledigt/supplements-g-0373-stacks-editieren-und-anlegen.md) | erledigt | — | G-374 |
 | `G-374` | feature | niedrig | [Zyklen brauchen eine eigene Eingabe](erledigt/supplements-g-0374-zyklen-brauchen-eine-eingabe.md) | erledigt | — | — |
 | `G-388` | feature | mittel | [`InjektionsKarte` und die Reste](erledigt/supplements-g-0388-injektionskarte-ohne-aufrufer.md) | erledigt | — | C-441, G-389, G-390 |
-| `G-389` | feature | hoch | [der Schreibweg fuer Injektionen](laufend_claudecode/supplements-g-0389-der-schreibweg-fuer-injektionen.md) | laeuft (claudecode) | — | — |
+| `G-389` | feature | hoch | [der Schreibweg fuer Injektionen](todos/supplements-g-0389-der-schreibweg-fuer-injektionen.md) | offen | — | — |
 | `G-390` | befund | hoch | [`new Date()` zerlegt die Hydration](erledigt/supplements-g-0390-new-date-zerlegt-die-hydration.md) | erledigt | — | G-392 |
 | `G-392` | befund | hoch | [der Hydrationsfehler am Wechslerplatz](erledigt/supplements-g-0392-der-hydrationsfehler-am-wechslerplatz.md) | erledigt | — | G-393, G-394 |
 | `G-393` | befund | hoch | [die Rotationskarte ist leer](erledigt/supplements-g-0393-die-rotationskarte-ist-leer.md) | erledigt | — | G-395, G-396 |
@@ -524,10 +524,10 @@
 | `G-379` | entscheidung | mittel | [brauchen Originale eine eigene Freigabe?](erledigt/coach-g-0379-originale-brauchen-eine-eigene-freigabe.md) | erledigt | — | — |
 | `G-391` | feature | hoch | [das Coach-Grundgeruest aus den Vorlagen](erledigt/coach-g-0391-das-grundgeruest-aus-den-vorlagen.md) | erledigt | — | G-397, G-398 |
 | `G-398` | befund | hoch | [die Portalkarten gehoeren nach 3220](erledigt/coach-g-0398-die-portalkarten-gehoeren-nach-3220.md) | erledigt | — | G-399, G-400 |
-| `G-400` | befund | hoch | [das Portal sieht nicht aus wie LumeOS](laufend_claudecode/coach-g-0400-das-portal-sieht-nicht-aus-wie-lumeos.md) | laeuft (claudecode) | — | G-401 |
-| `G-401` | feature | hoch | [das Klientendetail, vollstaendig](laufend_claudecode/coach-g-0401-das-klientendetail-vollstaendig.md) | laeuft (claudecode) | — | G-402 |
+| `G-400` | befund | hoch | [das Portal sieht nicht aus wie LumeOS](todos/coach-g-0400-das-portal-sieht-nicht-aus-wie-lumeos.md) | offen | — | G-401 |
+| `G-401` | feature | hoch | [das Klientendetail, vollstaendig](todos/coach-g-0401-das-klientendetail-vollstaendig.md) | offen | — | G-402 |
 | `G-402` | feature | hoch | [Klienten, Check-ins, Alerts](erledigt/coach-g-0402-klienten-checkins-alerts.md) | erledigt | — | C-459, G-403 |
-| `G-404` | feature | hoch | [Settings und Workspaces im Portal](laufend_claudecode/coach-g-0404-settings-und-workspaces-im-portal.md) | laeuft (claudecode) | — | G-405 |
+| `G-404` | feature | hoch | [Settings und Workspaces im Portal](todos/coach-g-0404-settings-und-workspaces-im-portal.md) | offen | — | G-405 |
 | `G-405` | feature | hoch | [Das Portal als Mockup der Vorlage](erledigt/coach-g-0405-das-portal-als-mockup-der-vorlage.md) | erledigt | — | G-406, G-407 |
 | `G-407` | feature | hoch | [den Draft fertigbauen](erledigt/coach-g-0407-den-draft-fertigbauen.md) | erledigt | — | G-408, G-409 |
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
@@ -669,7 +669,7 @@
 | `G-385` | feature | hoch | [`@abwesend`-Marken in die SSOT](erledigt/quer-g-0385-abwesend-marken-in-die-ssot.md) | erledigt | — | G-386 |
 | `G-386` | feature | hoch | [die SSOT in den Abwesenheitswaechter](erledigt/quer-g-0386-die-ssot-in-den-abwesenheitswaechter.md) | erledigt | — | G-387 |
 | `G-387` | feature | hoch | [die neun Marken in die SSOT](erledigt/quer-g-0387-die-neun-marken-in-die-ssot.md) | erledigt | — | C-437 |
-| `G-394` | feature | mittel | [sechs Module ohne Ladezustand](laufend_claudecode/quer-g-0394-sechs-module-ohne-ladezustand.md) | laeuft (claudecode) | — | — |
+| `G-394` | feature | mittel | [sechs Module ohne Ladezustand](todos/quer-g-0394-sechs-module-ohne-ladezustand.md) | offen | — | — |
 | `G-395` | entscheidung | mittel | [sechs Injektionsorte ohne Punkt auf der Figur](erledigt/quer-g-0395-sechs-injektionsorte-ohne-punkt.md) | erledigt | — | — |
 | `G-396` | feature | hoch | [die Beschriftung der Koerperkarte](erledigt/quer-g-0396-die-beschriftung-der-koerperkarte.md) | erledigt | — | — |
 | `G-397` | befund | mittel | [zwei Vorlagen kennt die Zaehlung nicht](erledigt/quer-g-0397-zwei-vorlagen-kennt-die-zaehlung-nicht.md) | erledigt | — | — |

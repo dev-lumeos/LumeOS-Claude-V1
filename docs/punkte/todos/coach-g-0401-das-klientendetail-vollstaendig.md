@@ -7,8 +7,6 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-400
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/coach/src/app/athlet/[id]/page.tsx
@@ -495,3 +493,14 @@ nach.
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Zurueckgelegt 2026-09-08
+
+`[cmd]` **Lag in `laufend_claudecode/` ohne Bericht und ohne
+Abnahme** ? **aus einer frueheren Sitzung.**
+
+`[read]` **Der Auftrag ging raus, der Bericht kam nie** ? **oder
+er wurde mit einem anderen Punkt miterledigt.**
+
+`[read]` **Vor dem naechsten Auftrag messen, was davon noch
+offen ist.**
