@@ -539,16 +539,31 @@ der naechste, oder steht er?**
 `[cmd]` **Heute passiert: *,,C-464 ist abgeschlossen. C-465 ist
 begonnen."*** ? **und dann Stille.**
 
+Tom, 2026-09-08: *,,lass kettenauftraege komplett melden, wir
+brauchen keine zwischenresultate."*
+
 **Die Regel:**
 
-    Ein Auftrag, ein Bericht, dann STOP.
-    Der naechste kommt von Tom, nicht aus dem Auftrag.
+    Eine Kette meldet EINMAL, am Ende.
+    Kein Zwischenstand, kein "X ist fertig, Y beginnt".
 
-`[read]` **Wenn mehrere Punkte zusammengehoeren: sie
-NACHEINANDER geben, nicht als Kette.**
+`[read]` **Ketten bleiben erlaubt** ? **sie sparen Uebergaben.**
 
-`[read]` **Dann ist nach jedem Bericht klar: er ist fertig, und
-wartet.**
+`[read]` **Aber ein Zwischenstand ist keine Information** ? **er
+sagt nur, dass etwas laeuft, und das weiss Tom schon.**
+
+**Was in den Auftrag gehoert:**
+
+    Je Auftrag Sicherung, Vollkette, Punktelauf,
+    eigener Bericht IN DER PUNKTDATEI.
+    Am Ende EIN Bericht an Tom, ueber alle.
+    Scheitert einer: STOP und melden -- dann ist der
+    Zwischenstand die Nachricht.
+
+`[read]` **Also: die Berichte je Punkt schreibt er weiter** ?
+**sie stehen in den Dateien und ich lese sie beim Abnehmen.**
+
+`[read]` **Nur die Meldung an Tom kommt einmal.**
 
 ## Und nichts laeuft losgeloest
 
