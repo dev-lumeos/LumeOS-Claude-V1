@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-388
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/tab-injektionen.tsx
@@ -262,3 +264,98 @@ er wurde mit einem anderen Punkt miterledigt.**
 
 `[read]` **Vor dem naechsten Auftrag messen, was davon noch
 offen ist.**
+
+## Recherchiert 2026-09-08 — der Stand heute
+
+`[cmd]` **`medical.injection_logs`: 0 Zeilen.**
+
+`[cmd]` **Gesucht, wer hineinschreibt** ? **NIEMAND.**
+
+`[cmd]` **`injektion-read.ts:142`: `m.from('injection_logs')`** ?
+**ein LESEweg, sonst nichts.**
+
+`[cmd]` **Der Knopf existiert:** `tab-injektionen.tsx:206`,
+`kontext.tsx:27` (`'logInjection'`), `modale.tsx:258`.
+
+`[read]` **Das ist das Muster aus G-422:** **ein fertiges Modal
+ohne Schreibweg.**
+
+`[cmd]` **Dreimal heute dieselbe Klasse:**
+
+    logPhoto              Modal ohne Ausloeser (G-421, behoben)
+    messungAnlegenAktion  Funktion ohne Aufrufer (offen)
+    logInjection          Modal ohne Schreibweg
+
+## Was die Datenbank bereithaelt
+
+`[cmd]` **C-455, abgenommen:** **`injection_logs` hat sieben neue
+Spalten:**
+
+    substance_id, dose_amount, dose_unit,
+    needle_gauge, needle_length_in, notes, stack_item_id
+
+`[cmd]` **C-454:** **`user_injection_site_selections` mit
+`body_area_code`, und drei Funktionen:**
+
+    validate_injection_site_selection   (Trigger)
+    suggest_configured_injection_area
+    injection_needle_suggestions
+
+`[cmd]` **G-423, heute abgenommen:** **die Nutzerkonfiguration
+ist gebaut** ? **Substanz, Weg, Flaeche, Nadel, geschrieben und
+gelesen.**
+
+`[read]` **Es fehlt nur der Schritt danach: die Injektion
+erfassen.**
+
+## Was zu bauen ist
+
+`[read]` **Der Schreibweg fuer eine erfasste Injektion.**
+
+`[cmd]` **Was das Modal heute zeigt** (`injektion-modal.tsx`):
+**Zuletzt benutzt, Volumen letzte Gabe, Substanz, Schmerz,
+Komplikation.**
+
+`[read]` **Miss, welche Felder `injection_logs` traegt und welche
+das Modal braucht.**
+
+`[cmd]` **`injection_needle_suggestions` gibt die Nadel** ?
+**G-423 hat die Konfiguration gebaut, sie kann vorbelegen.**
+
+`[read]` **Und die Rotation:** `suggest_configured_injection_area`
+**schlaegt die naechste Flaeche vor** ? **eine gewaehlte Flaeche:
+kein Vorschlag (E-79).**
+
+## Abnahmebedingungen
+
+    A1  eine Injektion am Schirm erfasst. Zeile in
+        injection_logs. Bildschirmfoto.
+    A2  die Felder: was das Modal zeigt / was die Tabelle
+        traegt / was fehlt. TABELLE.
+    A3  die Nadel wird aus der Konfiguration vorbelegt.
+        Gemessen.
+    A4  nach dem Erfassen: die Rotationskarte zeigt die
+        Flaeche als benutzt. Zwei Fotos.
+    A5  Gegenprobe: der alte Zustand wiederhergestellt
+        -> faellt sie?
+    A6  apps/web 1600 oder mehr.
+
+## Was nicht zu tun ist
+
+**Nichts in `supabase/`** ? **Codex arbeitet an C-470.**
+**Keine Zahl erfinden** ? **die Tabelle ist leer, das bleibt
+sichtbar.**
+Nicht committen, nicht stagen, nicht pushen.
+
+## Der Dev-Server
+
+`[cmd]` **3200 und 3220 laufen.**
+`[cmd]` **NIE `start`, `neustart`, `aufraeumen`.**
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
