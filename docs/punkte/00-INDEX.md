@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 219 |
+| `todos` | 218 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 413 |
 | **gesamt** | **633** |
@@ -617,7 +618,7 @@
 | `C-447` | befund | hoch | [die drei Live-Luecken schliessen](erledigt/quer-c-0447-die-drei-live-luecken-schliessen.md) | erledigt | — | C-448 |
 | `C-448` | entscheidung | mittel | [acht tote Migrationen](erledigt/quer-c-0448-acht-tote-migrationen.md) | erledigt | — | — |
 | `C-468` | entscheidung | hoch | [eine Muskelhierarchie fuer alle Karten](erledigt/quer-c-0468-eine-muskelhierarchie-fuer-alle-karten.md) | erledigt | — | C-470, C-471 |
-| `C-470` | fehler | hoch | [pg_default_acl vergibt in public alles](todos/quer-c-0470-pg-default-acl-in-public.md) | offen | — | — |
+| `C-470` | fehler | hoch | [pg_default_acl vergibt in public alles](laufend_codex/quer-c-0470-pg-default-acl-in-public.md) | laeuft (codex) | — | — |
 | `C-471` | fehler | hoch | [die Struktur gehoert nach migrations/](laufend_claudecode/quer-c-0471-die-struktur-nach-migrations.md) | laeuft (claudecode) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
