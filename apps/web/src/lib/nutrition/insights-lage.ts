@@ -87,6 +87,46 @@ export function pfadMitLuecken(
   return d.trim()
 }
 
+/**
+ * Die Flaeche unter dem Pfad — G-416/A2.
+ *
+ * **Tom, 2026-09-11:** *„die grafik auch abbilden wie in calorie
+ * balance, aber nicht geglaettet — sprich die untere flaeche
+ * schattiert."*
+ *
+ * `[read]` **Je zusammenhaengendem Stueck eine eigene Flaeche** —
+ * sonst zieht sie ueber eine Luecke hinweg und behauptet Tage, die
+ * es nicht gibt. **Dieselbe Regel wie beim Pfad.**
+ *
+ * `[cmd]` **Eckig, nicht geglaettet** — `L`, wie `pfadMitLuecken`.
+ */
+export function flaecheMitLuecken(
+  werte: Array<number | null>,
+  zuX: (i: number) => number,
+  zuY: (v: number) => number,
+  grundlinie: number,
+): string {
+  let d = ''
+  let stueck: Array<[number, number]> = []
+
+  const schliessen = () => {
+    if (stueck.length < 2) { stueck = []; return }
+    const ersterX = stueck[0][0]
+    const letzterX = stueck[stueck.length - 1][0]
+    d += `M${ersterX.toFixed(1)} ${grundlinie.toFixed(1)} `
+    for (const [x, y] of stueck) d += `L${x.toFixed(1)} ${y.toFixed(1)} `
+    d += `L${letzterX.toFixed(1)} ${grundlinie.toFixed(1)} Z `
+    stueck = []
+  }
+
+  werte.forEach((w, i) => {
+    if (w === null) { schliessen(); return }
+    stueck.push([zuX(i), zuY(w)])
+  })
+  schliessen()
+  return d.trim()
+}
+
 // ══ G-295: DIE HEATMAP ══════════════════════════════════════════════
 //
 // `[cmd]` **`HeatmapView.js` (68 Zeilen): 7x5-Kalendergitter,

@@ -733,13 +733,17 @@ export async function TagebuchAnsicht({
               die Hoehe in `nutrition.css` und blieb wirkungslos, weil
               ein Inline-Stil immer gewinnt. **Am Schirm gemessen:
               `maxHeight` blieb bei 460 px.**
-              `[cmd]` **Zwei Drittel von 616 px sind 411** — und die
-              Kachel besteht nicht nur aus der Liste: Kopf 21 px,
-              Hinweis 77 px, Polsterung. `[cmd]` **Am Schirm
-              nachgemessen:** mit 410 px Liste wurde die Kachel 566.
-              **Fuer 411 bleiben der Liste rund 255 px.** */}
+              `[cmd]` **G-412 stauchte auf 411 px Kachel / 255 px
+              Liste** — **8 von 154 Naehrstoffen sichtbar, gemessen.**
+
+              **Tom, 2026-09-11:** *„Deckung je Naehrstoff 30 %
+              hoeher — dass ein bisschen mehr direkt sehbar sind."*
+
+              `[cmd]` **255 + 30 % = 332.** `[read]` **Mehr Hoehe,
+              NICHT kleinere Zeilen** — eine gestauchte Zeile zeigt
+              nicht mehr, sie ist nur schlechter zu lesen. */}
           {bewertung.length > 0 && (
-            <div style={{ maxHeight: 255, overflowY: 'auto' }}>
+            <div style={{ maxHeight: 332, overflowY: 'auto' }}>
               {bewertung.map(b => (
                 <CoverageRow
                   key={`${b.nutrient_code}-${b.reference_kind ?? 'x'}`}
@@ -918,13 +922,13 @@ function AndererTab({
     return (
       <div style={{ marginTop: 16 }}>
         {einsichten && (einsichten.bilanz || einsichten.makros) && (
-          <div className="v2-grid v2-g-cols-2" style={{ gap: 16, marginBottom: 16 }}>
+          <div className="v2-grid v2-g-cols-2 v2-eigene-hoehe" style={{ gap: 16, marginBottom: 16 }}>
             <KalorienbilanzKachel d={einsichten} fenster={insightsFenster} />
             <MakroschnittKachel d={einsichten} fenster={insightsFenster} />
           </div>
         )}
         {einsichten && (
-          <div className="v2-grid v2-g-cols-2" style={{ gap: 16, marginBottom: 16 }}>
+          <div className="v2-grid v2-g-cols-2 v2-eigene-hoehe" style={{ gap: 16, marginBottom: 16 }}>
             <TrendKachel d={einsichten} heute={datum ?? ''} />
             <HeatmapKachel d={einsichten} heute={datum ?? ''} />
             <MakroDetailKachel d={einsichten} fenster={insightsFenster} />

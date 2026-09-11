@@ -54,7 +54,7 @@ export function NutritionInsightsTab({ ohneEchte = false }: {
   ohneEchte?: boolean
 } = {}) {
   return (
-    <div className="v2-grid v2-g-cols-2" style={{ gap: 16 }}>
+    <div className="v2-grid v2-g-cols-2 v2-eigene-hoehe" style={{ gap: 16 }}>
       {!ohneEchte && (
         <>
       <Card

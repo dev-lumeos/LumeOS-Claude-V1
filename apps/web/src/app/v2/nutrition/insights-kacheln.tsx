@@ -23,7 +23,7 @@ import { Card, Pill, Row, Meter } from '@lumeos/ui'
 
 import type { InsightsStand } from '../../../lib/nutrition/insights-read'
 import {
-  FENSTER, imFenster, schnitt, pfadMitLuecken,
+  FENSTER, imFenster, schnitt, pfadMitLuecken, flaecheMitLuecken,
   deckung, stufeVon, STUFE_FARBE, STUFE_TEXT,
   istVollstaendig, luekenSatz, restVon,
   anteil, belastbarkeit, sortiere, DUENN_SATZ,
@@ -92,6 +92,9 @@ function TrendGrafik({ tage, feld, farbe }: {
   const zuX = (i: number) => pad.l + (n > 1 ? (i / (n - 1)) * iw : iw / 2)
   const zuY = (v: number) => pad.t + ih - ((v - unten) / (oben - unten)) * ih
   const mittel = belegt.reduce((s, v) => s + v, 0) / belegt.length
+  // `[read]` **`useId`, nicht `Math.random()`** — der Server
+  // rendert vor, und eine Zufallszahl waere im Browser eine andere.
+  const uid = React.useId().replace(/:/g, '')
 
   // Erster, mittlerer und letzter Tag — mehr passt auf 375 px nicht.
   const marken = n <= 2 ? [0, n - 1] : [0, Math.floor((n - 1) / 2), n - 1]
@@ -113,6 +116,20 @@ function TrendGrafik({ tage, feld, farbe }: {
           man den einzelnen Tag liest. */}
       <line x1={pad.l} x2={w - pad.r} y1={zuY(mittel)} y2={zuY(mittel)}
             stroke="var(--fg-dim)" strokeWidth="1" strokeDasharray="4 4" />
+      {/* ══ G-416/A2: die Flaeche, ECKIG ═══════════════════════
+          **Tom, 2026-09-11:** *„die grafik auch abbilden wie in
+          calorie balance, aber nicht geglaettet — sprich die untere
+          flaeche schattiert."*
+          `[read]` **Je zusammenhaengendem Stueck eine eigene
+          Flaeche** — sie zieht nicht ueber eine Luecke. */}
+      <defs>
+        <linearGradient id={`${uid}-f`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={farbe} stopOpacity="0.45" />
+          <stop offset="100%" stopColor={farbe} stopOpacity="0.02" />
+        </linearGradient>
+      </defs>
+      <path d={flaecheMitLuecken(werte, zuX, zuY, pad.t + ih)}
+            fill={`url(#${uid}-f)`} />
       <path d={pfadMitLuecken(werte, zuX, zuY)} fill="none" stroke={farbe}
             strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
       {werte.map((v, i) => (
@@ -294,7 +311,9 @@ export function HeatmapKachel({ d, heute }: { d: InsightsStand; heute: string })
         // eine Spalte nicht unter ihre Inhaltsbreite schrumpfen, und
         // das Gitter sprengt die Karte auf schmalen Schirmen.
         gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
-        gap: 4, marginBottom: 8,
+        // `[cmd]` **`:419`: `gap: 2`** — bei 16 px Zellen frassen
+        // 4 px Abstand ein Viertel der Flaeche.
+        gap: 2, marginBottom: 8,
       }}>
         {WOCHENTAG.map(w => (
           <div key={w} className="v2-eyebrow"
@@ -310,9 +329,23 @@ export function HeatmapKachel({ d, heute }: { d: InsightsStand; heute: string })
             key={tag.datum}
             title={`${kurzDatum(tag.datum)} — ${pct === null ? 'kein Eintrag' : `${pct} % des Ziels`}`}
             style={{
-              aspectRatio: '1', borderRadius: 3,
+              // ══ G-416/A4: die Masse der Vorlage ═══════════════
+              //
+              // **Tom, 2026-09-11:** *„Die ZELLHOEHE 16 ist der
+              // Massstab, nicht die Kachelhoehe."*
+              //
+              // `[cmd]` **`module-nutrition.jsx:420`: `height: 16`.**
+              // `[cmd]` **Vorher `aspectRatio: 1`** — die Zelle wuchs
+              // mit der Kachelbreite und wurde rund 50 px hoch.
+              height: 16,
+              borderRadius: 2,
               background: STUFE_FARBE[stufe],
-              border: '1px solid var(--border)',
+              // `[cmd]` **`:422`: `opacity: 0.25 + v * 0.7`.**
+              // `[read]` **Die Deckkraft haengt am WERT** — genau
+              // das fehlte, und deshalb wirkten die Farben schrill.
+              // `[read]` **Ein leeres Feld bleibt blass**, damit es
+              // als Luecke lesbar ist.
+              opacity: pct === null ? 0.3 : 0.25 + Math.min(1, pct / 100) * 0.7,
             }}
           />
         ))}

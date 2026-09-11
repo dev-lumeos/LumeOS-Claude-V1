@@ -483,3 +483,19 @@
    `[read]` **Diese Klasse bleibt als Anker fuer den Waechter** — sie
    sagt, WELCHE Kachel gemeint ist. */
 .v2-deckung-kachel { /* siehe ansicht.tsx: maxHeight 410 */ }
+
+/* ══ G-416/A3: jede Kachel ihre eigene Hoehe ═══════════════════════
+
+   **Tom, 2026-09-11:** *„die sollen nicht mit den anderen kacheln
+   daneben auf die hoehe abgeglichen werden."*
+
+   `[cmd]` **Am Schirm gemessen:** Calorie balance und Macro split
+   beide 461 px, Verlauf und Tagesdeckung beide 514, Makrodetail und
+   Auffaellige beide 733. `[cmd]` **`align-items` stand auf `normal`**
+   — und das heisst im Raster `stretch`.
+
+   `[read]` **NICHT `.v2-grid` selbst geaendert** — die Klasse hat 217
+   Aufrufer im Haus, und eine Kachelreihe, die ihre Hoehe teilt, ist
+   anderswo gewollt. `[read]` **Hier eine eigene Klasse daneben.** */
+
+.v2-eigene-hoehe { align-items: start; }

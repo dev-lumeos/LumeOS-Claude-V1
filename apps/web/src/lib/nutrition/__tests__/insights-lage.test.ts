@@ -210,9 +210,24 @@ test('G-297: das Gitter fuellt die Kachelbreite — ohne sie zu sprengen', () =>
   // schrumpfen, und auf 375 px sprengt das Gitter die Karte.
   assert.doesNotMatch(b, /repeat\(7, 1fr\)/,
     'ohne minmax(0, …) sprengt das Gitter die Karte auf schmalen Schirmen')
-  // Und die Felder bleiben quadratisch — sonst wird aus der Breite
-  // keine Hoehe.
-  assert.match(b, /aspectRatio: '1'/, 'die Felder sind nicht mehr quadratisch')
+  // ══ G-416: DIE ZUSAGE IST ERSETZT ═══════════════════
+  //
+  // `[cmd]` **G-297 verlangte quadratische Felder**, damit aus der
+  // Kachelbreite eine Hoehe wird — die Antwort auf *„wieso
+  // verteilt man dann nicht auf optimale groesse“*.
+  //
+  // **Tom, 2026-09-11:** *„Die ZELLHOEHE 16 ist der Massstab,
+  // nicht die Kachelhoehe.“*
+  //
+  // `[cmd]` **Die Vorlage nennt sie:** `module-nutrition.jsx:420`,
+  // `height: 16`. `[cmd]` **Mit `aspectRatio` wurde das Feld rund
+  // 50 px hoch und die Kachel 514** — gemessen.
+  //
+  // `[read]` **Die BREITE waechst weiter mit der Kachel**
+  // (`minmax(0, 1fr)` oben) — nur die Hoehe ist jetzt fest.
+  assert.match(b, /height: 16,/, 'die Zellhoehe 16 der Vorlage fehlt')
+  assert.doesNotMatch(b, /aspectRatio: '1'/,
+    'das Feld waechst wieder mit der Breite — G-416 setzt 16 px')
 
   // `[cmd]` **A-59: `tagNummer` ist entfernt, nicht nur unbenutzt.**
   const lage = ohneKommentare('apps/web/src/lib/nutrition/insights-lage.ts')

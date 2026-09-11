@@ -18,6 +18,7 @@ import { dirname, join } from 'node:path'
 
 import { stufenFaktor, stufeGilt, nutritionScore }
   from '../stufenfaktor'
+import { flaecheMitLuecken } from '../insights-lage'
 
 const HIER = dirname(fileURLToPath(import.meta.url))
 const WEB = join(HIER, '..', '..', '..')
@@ -105,7 +106,10 @@ test('die Verlaufsgrafik ist die der Vorlage', () => {
   const t = ohneKommentar(
     join(WEB, '..', '..', '..', 'packages', 'ui', 'src', 'primitives.tsx'))
   assert.match(t, /const glatt = /, 'Die Glaettung fehlt')
-  assert.match(t, /stopOpacity="0\.22"/, 'Der Verlauf fehlt')
+  // `[cmd]` **G-416: 0,22 war am Schirm unsichtbar** (gemessen:
+  // 26 RGB-Stufen ueber dem Grund). `[read]` **Die Zusage ist,
+  // DASS ein Verlauf da ist** — nicht welche Zahl er traegt.
+  assert.match(t, /stopOpacity="0\.\d+"/, 'Der Verlauf fehlt')
   assert.match(t, /strokeDasharray=\{gestrichelt \? '3 3'/, 'Die Strichelung fehlt')
   assert.match(t, /pts\.length <= 16/, 'Die Punktgrenze fehlt')
 })
@@ -127,8 +131,14 @@ test('die Tagesdeckung ist auf zwei Drittel begrenzt', () => {
   // `[read]` **Die Hoehe steht INLINE** — eine Regel in
   // `nutrition.css` blieb wirkungslos, weil ein Inline-Stil gewinnt.
   const t = ohneKommentar(join(NUT, 'ansicht.tsx'))
-  assert.match(t, /maxHeight: 255/,
-    'Der Scrollkasten der Tagesdeckung braucht die begrenzte Hoehe')
+  // `[cmd]` **G-416 hat die Liste um 30 % erhoeht** (255 -> 332).
+  // `[read]` **Die Zusage bleibt: die Liste ist BEGRENZT und
+  // scrollt** — die Kachel darf nicht wieder ins Kraut schiessen.
+  // **Die genaue Zahl steht in der G-416-Probe.**
+  const m = /maxHeight: (\d+), overflowY: 'auto'/.exec(t)
+  assert.ok(m, 'Der Scrollkasten der Tagesdeckung fehlt')
+  assert.ok(Number(m[1]) <= 400,
+    `Die Liste ist mit ${m[1]} px wieder ungedeckelt`)
 })
 
 test('Macro split traegt die drei Zeilen der Vorlage', () => {
@@ -160,4 +170,132 @@ test('die Verlaufsgrafik zeigt das Ziel gestrichelt', () => {
   // `[read]` **Ohne Ziel nur EINE Reihe** — eine flache Linie auf
   // einem geratenen Wert waere eine Aussage ueber den Nutzer.
   assert.match(t, /zielKcal === null/)
+})
+
+// ══ G-416: Hoehen, Flaechen, Deckkraft ═════════════════════════════
+
+test('die Flaeche unter der Kurve ist sichtbar', () => {
+  // **Tom, 2026-09-11:** *„bei Calorie balance ist die Linie da …
+  // aber KEIN Farbverlauf darunter."*
+  //
+  // `[cmd]` **Gemessen war sie da** — Bildpunkte unter der Kurve
+  // rgb(48,43,39) gegen rgb(22,23,26) Grund. **26 Stufen auf dunklem
+  // Grund: nicht zu sehen.**
+  //
+  // `[read]` **Die Vorlage nennt 0,22, zeichnet aber auf hellerem
+  // Grund.** `[cmd]` **Hier 0,45 auf 0,02.**
+  const t = ohneKommentar(
+    join(WEB, '..', '..', '..', 'packages', 'ui', 'src', 'primitives.tsx'))
+  const m = /stopOpacity="([\d.]+)"/.exec(t)
+  assert.ok(m, 'Der Verlauf hat keine Deckkraft')
+  assert.ok(Number(m[1]) >= 0.4,
+    `Die Flaeche ist mit ${m[1]} zu blass — gemessen unsichtbar bei 0.22`)
+})
+
+test('LineChart kann eckig zeichnen', () => {
+  // **Tom:** *„die grafik auch abbilden wie in calorie balance, aber
+  // nicht geglaettet."*
+  //
+  // `[read]` **Ein Schalter, keine zweite Komponente** — sonst
+  // laufen zwei Diagramme auseinander.
+  const t = ohneKommentar(
+    join(WEB, '..', '..', '..', 'packages', 'ui', 'src', 'primitives.tsx'))
+  assert.match(t, /smooth\?: boolean/, 'Der Schalter fehlt in den Requisiten')
+  assert.match(t, /smooth = true/, 'Die Vorgabe muss `true` sein (wie die Vorlage)')
+  assert.match(t, /smooth \? glatt\(pts\) : eckig\(pts\)/,
+    'Der Schalter wird nicht angewandt')
+})
+
+test('der Verlauf traegt eine Flaeche, ohne Luecken zu ueberziehen', () => {
+  // `[read]` **Je zusammenhaengendem Stueck eine eigene Flaeche** —
+  // dieselbe Regel wie beim Pfad. **Sonst behauptet sie Tage, die es
+  // nicht gibt.**
+  // ══ GEGENPROBE WAR GRUEN ════════════════════════
+  //
+  // `[cmd]` **Die Sabotage „die Flaeche zieht ueber Luecken“
+  // (`schliessen()` bei `null` entfernt) blieb GRUEN** — die Probe
+  // pruefte nur, DASS es die Funktion gibt.
+  //
+  // `[read]` **Jetzt wird die WIRKUNG gerufen:** eine Reihe mit
+  // einer Luecke muss ZWEI geschlossene Stuecke ergeben, nicht
+  // eines ueber die Luecke hinweg.
+  const lage = ohneKommentar(join(WEB, 'lib', 'nutrition', 'insights-lage.ts'))
+  assert.match(lage, /export function flaecheMitLuecken/)
+  {
+    const d = flaecheMitLuecken([1, 2, null, 4, 5], i => i * 10, v => 100 - v, 100)
+    const stuecke = (d.match(/Z/g) ?? []).length
+    assert.equal(stuecke, 2,
+      `Eine Luecke muss die Flaeche teilen — ${stuecke} Stueck(e) statt 2`)
+    // Und ohne Luecke bleibt es EIN Stueck.
+    const ganz = flaecheMitLuecken([1, 2, 3], i => i * 10, v => 100 - v, 100)
+    assert.equal((ganz.match(/Z/g) ?? []).length, 1)
+  }
+  const k = ohneKommentar(join(NUT, 'insights-kacheln.tsx'))
+  assert.match(k, /flaecheMitLuecken\(werte, zuX, zuY/,
+    'Der Verlauf zeichnet keine Flaeche')
+})
+
+test('die Kacheln gleichen ihre Hoehe nicht mehr ab', () => {
+  // **Tom:** *„die sollen nicht mit den anderen kacheln daneben auf
+  // die hoehe abgeglichen werden."*
+  //
+  // `[cmd]` **Gemessen: 461/461, 514/514, 733/733** — paarweise
+  // gleich, weil `align-items` im Raster `stretch` ist.
+  //
+  // `[read]` **NICHT `.v2-grid` geaendert** — 217 Aufrufer im Haus.
+  const css = readFileSync(join(NUT, 'nutrition.css'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+  assert.match(css, /\.v2-eigene-hoehe\s*\{[^}]*align-items:\s*start/)
+  const t = ohneKommentar(join(NUT, 'ansicht.tsx'))
+  assert.ok(t.includes('v2-eigene-hoehe'),
+    'Die Insights-Raster benutzen die Klasse nicht')
+})
+
+test('die Waermekarten tragen die Deckkraft der Vorlage', () => {
+  // `[cmd]` **`module-nutrition.jsx:422`: `opacity: 0.25 + v * 0.7`.**
+  // `[read]` **Sie haengt am WERT** — G-412 setzte pauschal 0,85,
+  // und deshalb wirkten die Farben schrill.
+  const trend = ohneKommentar(join(NUT, 'mikro-trend.tsx'))
+  assert.match(trend, /0\.25 \+ Math\.min\(1, anteil\) \* 0\.7/,
+    'Micronutrient trend hat nicht die Deckkraft der Vorlage')
+  const kacheln = ohneKommentar(join(NUT, 'insights-kacheln.tsx'))
+  assert.match(kacheln, /0\.25 \+ Math\.min\(1, pct \/ 100\) \* 0\.7/,
+    'Tagesdeckung hat nicht die Deckkraft der Vorlage')
+  // `[cmd]` **Und die Zellhoehe 16** (`:420`) statt `aspectRatio`.
+  assert.match(kacheln, /height: 16,/, 'Die Zellhoehe 16 fehlt')
+  assert.ok(!kacheln.includes("aspectRatio: '1'"),
+    'Das Feld waechst wieder mit der Kachelbreite')
+})
+
+test('Micronutrient trend zeigt den Schnitt je Zeile', () => {
+  // **Tom:** *„rechts fehlt durchschnittsprozentangabe, siehe mockup
+  // referenz."*
+  //
+  // `[read]` **Schnitt ueber die BELEGTEN Tage** — eine Luecke zaehlt
+  // nicht als null, sonst zoege sie den Wert nach unten.
+  // ══ GEGENPROBE WAR GRUEN ════════════════════════
+  //
+  // `[cmd]` **Die Sabotage „die Schnittspalte faellt weg“
+  // (Funktion umbenannt) blieb GRUEN** — die Probe suchte die
+  // Filterzeile, und die ueberlebt jede Umbenennung.
+  //
+  // `[read]` **Jetzt wird der AUFRUF geprueft**, nicht die
+  // Definition — eine Funktion, die niemand ruft, zeigt nichts.
+  const t = ohneKommentar(join(NUT, 'mikro-trend.tsx'))
+  assert.match(t, /function zeilenSchnitt\(/, 'Die Funktion fehlt')
+  assert.match(t, /zeilenSchnitt\(r\.zellen\)/,
+    'Der Schnitt wird nicht gerendert — die Spalte bliebe leer')
+  assert.match(t, /z\.anteil\).filter\(\(n\): n is number => n !== null\)/,
+    'Der Schnitt muss Luecken ausschliessen, nicht als 0 zaehlen')
+})
+
+test('die Deckung je Naehrstoff zeigt mehr Zeilen', () => {
+  // **Tom:** *„dass ein bisschen mehr direkt sehbar sind."*
+  //
+  // `[cmd]` **Am Schirm gemessen: 8 -> 10 von 154 Naehrstoffen**,
+  // Liste 255 -> 332 px (+30 %).
+  // `[read]` **Mehr Hoehe, NICHT kleinere Zeilen.**
+  const t = ohneKommentar(join(NUT, 'ansicht.tsx'))
+  assert.match(t, /maxHeight: 332/,
+    'Die Liste ist nicht um 30 % gewachsen')
 })

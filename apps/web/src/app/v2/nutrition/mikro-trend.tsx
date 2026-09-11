@@ -22,12 +22,35 @@ import { Card } from '@lumeos/ui'
 
 import type { MikroTrendStand } from '../../../lib/nutrition/mikro-trend-read'
 
-/** Die drei Stufen der Vorlage (`:404-406`). */
+/** Die drei Stufen der Vorlage (`:421`). */
 function farbe(anteil: number | null): string {
   if (anteil === null) return 'var(--surface-2)'
   if (anteil >= 0.8) return 'var(--pos)'
   if (anteil >= 0.5) return 'var(--warn)'
   return 'var(--neg)'
+}
+
+/**
+ * Die Deckkraft der Vorlage — G-416/A4.
+ *
+ * `[cmd]` **`module-nutrition.jsx:422`: `opacity: 0.25 + v * 0.7`.**
+ * `[read]` **Sie haengt am WERT** — ein schwacher Tag ist blass, ein
+ * starker kraeftig. `[cmd]` **G-412 setzte pauschal 0,85** — daher
+ * die schrillen Farben.
+ *
+ * `[read]` **Eine leere Zelle bleibt bei 0,35** — sie soll als
+ * Luecke lesbar sein, nicht als schwacher Wert.
+ */
+function deckkraft(anteil: number | null): number {
+  if (anteil === null) return 0.35
+  return 0.25 + Math.min(1, anteil) * 0.7
+}
+
+/** Der Schnitt ueber die belegten Tage einer Zeile. */
+function zeilenSchnitt(zellen: ReadonlyArray<{ anteil: number | null }>): number | null {
+  const da = zellen.map(z => z.anteil).filter((n): n is number => n !== null)
+  if (da.length === 0) return null
+  return da.reduce((s, n) => s + n, 0) / da.length
 }
 
 export function MikroTrendKachel({ d }: { d: MikroTrendStand }) {
@@ -80,19 +103,35 @@ export function MikroTrendKachel({ d }: { d: MikroTrendStand }) {
                       ? 'kein Anteil ermittelbar'
                       : `${Math.round(z.anteil * 100)} %`}`}
                   style={{
-                    // `[cmd]` **Zellhoehe 16, Abstand 2** (`:402`).
+                    // `[cmd]` **Zellhoehe 16, Abstand 2** (`:420`).
                     height: 16,
                     flex: 1,
                     minWidth: 4,
                     borderRadius: 2,
                     background: farbe(z.anteil),
-                    // `[read]` **Leere Zellen ohne Deckkraft** — sie
-                    // sollen als Luecke lesbar sein, nicht als Wert.
-                    opacity: z.anteil === null ? 0.35 : 0.85,
+                    // `[cmd]` **G-416: `0.25 + v * 0.7`, wie die
+                    // Vorlage** — die Deckkraft haengt am Wert.
+                    opacity: deckkraft(z.anteil),
                   }}
                 />
               ))}
             </div>
+            {/* ══ G-416/A5: der Schnitt rechts ══════════════════
+                **Tom, 2026-09-11:** *„rechts fehlt
+                durchschnittsprozentangabe, siehe mockup referenz."*
+                `[read]` **Der Schnitt ueber die BELEGTEN Tage** —
+                eine Luecke zaehlt nicht als null, sonst zoege sie
+                den Wert nach unten. */}
+            <span
+              className="v2-num"
+              style={{ width: 40, flexShrink: 0, fontSize: 10.5, textAlign: 'right' }}
+              title="Schnitt ueber die belegten Tage"
+            >
+              {(() => {
+                const s = zeilenSchnitt(r.zellen)
+                return s === null ? '—' : `${Math.round(s * 100)} %`
+              })()}
+            </span>
           </div>
         ))}
       </div>

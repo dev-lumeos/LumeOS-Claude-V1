@@ -261,6 +261,18 @@ export type LineChartProps = {
   showArea?: boolean
   /** Feste Achse `[min, max]`. Ohne sie aus den Daten abgeleitet. */
   range?: [number, number]
+  /**
+   * Geglaettet zeichnen — G-416/A2.
+   *
+   * **Tom, 2026-09-11:** *„die grafik auch abbilden wie in calorie
+   * balance, aber nicht geglaettet."*
+   *
+   * `[read]` **Vorgabe `true`**, wie die Vorlage: sie glaettet
+   * immer (`module-charts-pro.jsx:127`). `[read]` **`false` zieht
+   * gerade Strecken** — dieselbe Flaeche, dieselbe Achse, nur
+   * eckig.
+   */
+  smooth?: boolean
 }
 
 /**
@@ -272,6 +284,7 @@ export type LineChartProps = {
  */
 export function LineChart({
   series, h = 160, xLabels, color = 'var(--acc)', showArea = true, range,
+  smooth = true,
 }: LineChartProps) {
   const reihen = series.filter(s => s.data.length > 0)
   // Wie bei der Sparkline: eine Kurve aus einem Punkt teilt durch 0 und
@@ -321,8 +334,15 @@ export function LineChart({
       <defs>
         {reihen.map((s, i) => (
           <linearGradient key={i} id={`${uid}-${i}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={s.color ?? color} stopOpacity="0.22" />
-            <stop offset="100%" stopColor={s.color ?? color} stopOpacity="0" />
+            {/* ══ G-416/A1: die Flaeche war da, aber unlesbar ═══
+                `[cmd]` **Bildpunkte gemessen:** unter der Kurve
+                rgb(48,43,39) gegen rgb(22,23,26) Grund — **26 Stufen
+                Unterschied, auf dunklem Grund nicht zu sehen.**
+                `[read]` **Die Vorlage nennt 0,22** — aber sie zeichnet
+                auf hellerem Grund. **Hier 0,45 auf 0,02**, damit
+                dasselbe sichtbar wird, was die Vorlage zeigt. */}
+            <stop offset="0%" stopColor={s.color ?? color} stopOpacity="0.45" />
+            <stop offset="100%" stopColor={s.color ?? color} stopOpacity="0.02" />
           </linearGradient>
         ))}
       </defs>
@@ -340,7 +360,15 @@ export function LineChart({
       ))}
       {reihen.map((s, si) => {
         const pts = s.data.map((v, i): [number, number] => [zuX(i, s.data.length), zuY(v)])
-        const d = pts.length > 1 ? glatt(pts) : `M ${pts[0][0]} ${pts[0][1]}`
+        // `[cmd]` **G-416: `smooth` entscheidet.** `[read]` **Die
+        // Vorlage hat `smooth()` als eigene Funktion** — sie laesst
+        // sich ueberspringen, ohne sonst etwas zu aendern.
+        const eckig = (ps: Array<[number, number]>) => ps
+          .map((pt, i) => `${i === 0 ? 'M' : 'L'} ${pt[0].toFixed(1)} ${pt[1].toFixed(1)}`)
+          .join(' ')
+        const d = pts.length > 1
+          ? (smooth ? glatt(pts) : eckig(pts))
+          : `M ${pts[0][0]} ${pts[0][1]}`
         // `[cmd]` **`:161`:** ausdruecklich gesetzt ODER zweite Reihe
         // in `--fg-dim` — die Ziellinie.
         const gestrichelt = s.dashed
