@@ -1,84 +1,57 @@
-// Der Nutrition score aus echten Zeilen — G-412/A1.
+// Der Nutrition score aus echten Zeilen — G-412/A1, G-417/A1-A3.
 //
 // **Tom, 2026-09-08:** *„aus meiner sicht, was ich in der ui noch
 // nicht angebunden sehe: Nutrition score …"*
 //
-// ══ WAS GEMESSEN WURDE, BEVOR HIER ETWAS STAND ═════════════════════
+// ══ WAS DIESE DATEI NOCH TUT — UND WAS NICHT MEHR ══════════════════
 //
-// `[cmd]` **Die fuenf Anteile der Formel liegen in
-// `nutrition.daily_summary`:** `prot625`, `enercc`, `cho`, `fat`,
-// `fibt`. **181 Tage fuer `dev@lumeos.app`, gemessen 2026-09-10.**
+// `[read]` **Sie LIEST.** `[read]` **Sie rechnet nicht.**
 //
-// `[cmd]` **Die Ziele liegen in `lib/profile/zielwerte-read.ts`** —
-// `kcal`, `protein_g`, `carbs_g`, `fat_g`.
+// `[cmd]` **Bis G-417 stand die Formel hier** — Gewichte, Deckelung,
+// Stufenfaktor. `[cmd]` **Jetzt steht sie in `@lumeos/scoring`**, weil
+// `SPEC_09_SCORING.md:11` genau diesen Ort nennt.
 //
-// `[cmd]` **EIN ZIEL FEHLT: Ballaststoffe.** `[cmd]` **Gemessen
-// ueber alle Schemata nach `fib`:** `daily_summary.fibt`,
-// `foods_custom.fibt`, `meal_items.fibt` — **alles Zufuhr, kein
-// Ziel.**
+// `[read]` **Zwei Orte fuer eine Formel heissen zwei Formeln** —
+// sobald einer nachgezogen wird und der andere nicht.
 //
-// `[read]` **Deshalb rechnet dieser Weg VIER Anteile und meldet den
-// fuenften als offen** — eine geratene Ballaststoffgrenze waere eine
-// Aussage ueber den Nutzer, die niemand getroffen hat.
+// ══ DIE DREI QUELLEN ═══════════════════════════════════════════════
 //
-// ══ UND DIE ERFAHRUNGSSTUFE ════════════════════════════════════════
+// `[cmd]` **Die fuenf Anteile liegen in `nutrition.daily_summary`:**
+// `prot625`, `enercc`, `cho`, `fat`, `fibt`. **181 Tage fuer
+// `dev@lumeos.app`, gemessen 2026-09-10.**
 //
-// `[cmd]` **`public.profiles.experience_level` traegt sie** — live
+// `[cmd]` **Die Ziele kommen aus `goals.zielwerte_am()`** ueber
+// `lib/profile/zielwerte-read.ts`.
+//
+// `[cmd]` **Die Stufe aus `public.profiles.experience_level`** — live
 // `pro` fuer `dev@lumeos.app`.
 //
-// `[cmd]` **Fuer `pro` ist kein Faktor entschieden (G-228).**
-// `[read]` **Die Kachel zeigt dann den Grund statt einer Zahl** —
-// die Entscheidung dazu steht in `diary-entwurf.tsx` und wird hier
-// nur benutzt, nicht neu getroffen.
+// ══ DAS BALLASTSTOFFZIEL: DER VERMERK WAR VERALTET ═════════════════
+//
+// `[cmd]` **G-412 stand hier:** *„kein Ballaststoffziel im Schema"*.
+// `[cmd]` **Das stimmte damals und stimmt seit C-464 nicht mehr:**
+// `goals.nutrition_targets.fiber_g` ist da, **fuenf Nutzer haben einen
+// Wert, `dev@lumeos.app` 30,0 g, Herkunft `formel`.**
+//
+// `[cmd]` **Und `goals.zielwerte_am()` gab die Spalte schon zurueck** —
+// gemessen an `pg_get_function_result`. **Der Leseweg liess sie
+// fallen.**
+//
+// `[read]` **Ein Vermerk mit falschem Grund ist schlimmer als eine
+// fehlende Kachel** — er verhindert, dass jemand nachsieht.
 //
 // Laeuft ausschliesslich serverseitig.
+import { nutritionScore, type ScoreErgebnis } from '@lumeos/scoring'
 import { createSessionClient } from '@lumeos/shared/session'
 
 import { getZielwerteAm } from '../profile/zielwerte-read'
 
-/** Ein Anteil der Formel: Ist gegen Ziel, oder offen mit Grund. */
-export type Anteil = {
-  code: 'protein' | 'calorie' | 'carbs' | 'fat' | 'fiber'
-  label: string
-  gewicht: number
-  /** Ist-Wert des Tages. `null`, wenn der Tag keine Zeile hat. */
-  ist: number | null
-  /** Ziel. `null`, wenn keines hinterlegt ist. */
-  ziel: number | null
-  /** `ist / ziel`, gedeckelt bei 1. `null`, wenn eines von beiden fehlt. */
-  deckung: number | null
-  /** Warum kein Wert — nur gesetzt, wenn `deckung === null`. */
-  grund?: string
-}
+export type { Anteil, ScoreErgebnis } from '@lumeos/scoring'
 
-export type ScoreStand = {
+export type ScoreStand = ScoreErgebnis & {
   datum: string
-  anteile: Anteil[]
-  /** Die Stufe aus dem Profil. `null`, wenn keine hinterlegt ist. */
-  stufe: string | null
-  /** Summe der Gewichte, die wirklich gerechnet werden konnten. */
-  gewichtGerechnet: number
   fehler?: string
 }
-
-/** Die fuenf Anteile, Gewichte aus `module-nutrition-spec.jsx:37-42`. */
-const ANTEILE: Array<{
-  code: Anteil['code']
-  label: string
-  gewicht: number
-  spalte: string
-  zielFeld: 'kcal' | 'protein_g' | 'carbs_g' | 'fat_g' | null
-}> = [
-  { code: 'protein', label: 'protein', gewicht: 0.30, spalte: 'prot625', zielFeld: 'protein_g' },
-  { code: 'calorie', label: 'calorie', gewicht: 0.25, spalte: 'enercc', zielFeld: 'kcal' },
-  { code: 'carbs', label: 'carbs', gewicht: 0.15, spalte: 'cho', zielFeld: 'carbs_g' },
-  { code: 'fat', label: 'fat', gewicht: 0.15, spalte: 'fat', zielFeld: 'fat_g' },
-  // `[cmd]` **Kein Ballaststoffziel im Schema** — gemessen.
-  { code: 'fiber', label: 'fiber', gewicht: 0.15, spalte: 'fibt', zielFeld: null },
-]
-
-const KEIN_FIBT_ZIEL = 'kein Ballaststoffziel im Schema — gemessen ueber '
-  + 'alle Spalten mit „fib": nur Zufuhr (daily_summary.fibt), kein Zielwert'
 
 function zahl(v: unknown): number | null {
   if (v === null || v === undefined) return null
@@ -86,21 +59,19 @@ function zahl(v: unknown): number | null {
   return Number.isFinite(n) ? n : null
 }
 
-export async function getScoreAm(datum: string): Promise<ScoreStand> {
-  const leer: ScoreStand = {
-    datum,
-    anteile: ANTEILE.map(a => ({
-      code: a.code, label: a.label, gewicht: a.gewicht,
-      ist: null, ziel: null, deckung: null, grund: 'kein Tageswert',
-    })),
-    stufe: null,
-    gewichtGerechnet: 0,
-  }
+const OHNE_WERTE = { enercc: null, prot625: null, cho: null, fat: null, fibt: null }
+const OHNE_ZIELE = { kcal: null, protein_g: null, carbs_g: null, fat_g: null, fiber_g: null }
 
+export async function getScoreAm(datum: string): Promise<ScoreStand> {
   const supabase = createSessionClient()
   const { data: sitzung } = await supabase.auth.getUser()
   const nutzer = sitzung?.user?.id
-  if (!nutzer) return { ...leer, fehler: 'keine Sitzung' }
+  if (!nutzer) {
+    return {
+      datum, ...nutritionScore(OHNE_WERTE, OHNE_ZIELE, null),
+      fehler: 'keine Sitzung',
+    }
+  }
 
   const [tag, ziele, profil] = await Promise.all([
     supabase
@@ -118,35 +89,33 @@ export async function getScoreAm(datum: string): Promise<ScoreStand> {
       .maybeSingle(),
   ])
 
-  if (tag.error) return { ...leer, fehler: tag.error.message }
+  if (tag.error) {
+    return {
+      datum, ...nutritionScore(OHNE_WERTE, OHNE_ZIELE, null),
+      fehler: tag.error.message,
+    }
+  }
 
   const zeile = tag.data as Record<string, unknown> | null
   const stufe = (profil.data as { experience_level?: string | null } | null)
     ?.experience_level ?? null
 
-  let gewichtGerechnet = 0
-  const anteile: Anteil[] = ANTEILE.map(a => {
-    const ist = zeile ? zahl(zeile[a.spalte]) : null
-    const ziel = a.zielFeld && ziele ? zahl(ziele[a.zielFeld]) : null
-
-    let grund: string | undefined
-    if (a.zielFeld === null) grund = KEIN_FIBT_ZIEL
-    else if (ist === null) grund = 'kein Tageswert'
-    else if (ziel === null) grund = 'kein Ziel hinterlegt'
-
-    // `[read]` **Gedeckelt bei 1** — wer 120 % Protein isst, hat den
-    // Anteil erfuellt, nicht uebererfuellt. **Ohne Deckel zoege ein
-    // Ausreisser den ganzen Score nach oben.**
-    const deckung = ist !== null && ziel !== null && ziel > 0
-      ? Math.min(1, ist / ziel)
-      : null
-    if (deckung !== null) gewichtGerechnet += a.gewicht
-
-    return {
-      code: a.code, label: a.label, gewicht: a.gewicht,
-      ist, ziel, deckung, ...(grund ? { grund } : {}),
+  const ist = zeile
+    ? {
+      enercc: zahl(zeile.enercc), prot625: zahl(zeile.prot625),
+      cho: zahl(zeile.cho), fat: zahl(zeile.fat), fibt: zahl(zeile.fibt),
     }
-  })
+    : OHNE_WERTE
 
-  return { datum, anteile, stufe, gewichtGerechnet }
+  return {
+    datum,
+    ...nutritionScore(ist, {
+      kcal: ziele?.kcal ?? null,
+      protein_g: ziele?.protein_g ?? null,
+      carbs_g: ziele?.carbs_g ?? null,
+      fat_g: ziele?.fat_g ?? null,
+      // `[cmd]` **Seit C-464 vorhanden** — vorher die fuenfte Sperre.
+      fiber_g: ziele?.fiber_g ?? null,
+    }, stufe),
+  }
 }

@@ -1,73 +1,76 @@
-// Der Stufenfaktor des Nutrition score — G-412.
+// Der Stufenfaktor des Nutrition score — G-412, G-417.
 //
-// ══ WARUM DIESE DATEI ENTSTANDEN IST ═══════════════════════════════
+// ══ DIESE DATEI ENTSCHEIDET NICHTS MEHR ════════════════════════════
 //
-// `[cmd]` **Die Tabelle stand in `diary-entwurf.tsx`, und die traegt
-// `'use client'`.** `[cmd]` **Die angebundene Kachel ist eine
-// SERVER-Komponente** — ein WERT-Import ueber diese Grenze zieht den
-// Client-Baum in den Server und faellt zur Laufzeit um:
+// `[cmd]` **Die Faktoren stehen in `@lumeos/scoring`** — dem Ort, den
+// `SPEC_09_SCORING.md:11` nennt. `[read]` **Hier haengt nur noch der
+// Entwurf dran**, der dieselbe Tabelle fuer seine Attrappenzahlen
+// benutzt.
+//
+// `[cmd]` **Bis G-417 stand hier eine ZWEITE Tabelle** — mit
+// `advanced 1.00` und `pro: null`. **E-80 sagt `advanced 0.90` und
+// `pro 1.00`.**
+//
+// `[read]` **Zwei Tabellen, die sich widersprechen, und eine davon
+// ohne Aufrufer** — genau die Sorte toter Code, die eine alte Regel
+// konserviert, bis sie jemand fuer die geltende haelt.
+//
+// `[read]` **Deshalb wird hier nur noch WEITERGEREICHT.** Wer die
+// Faktoren aendern will, aendert sie im Paket, und beide Seiten
+// folgen.
+//
+// ══ WARUM DIE DATEI TROTZDEM BLEIBT ════════════════════════════════
+//
+// `[cmd]` **`diary-entwurf.tsx` traegt `'use client'`.** `[cmd]` **Ein
+// WERT-Import ueber diese Grenze zieht den Client-Baum in den Server
+// und faellt zur Laufzeit um:**
 //
 //     TypeError: stufenFaktor is not a function
 //
 // `[cmd]` **Am Schirm gemessen: 0 Karten, zweimal dieselbe Ausnahme.**
 // `[read]` **`tsc` blieb dabei gruen** — der Typ stimmt ja.
-// (Dieselbe Klasse wie G-402 und G-388.)
-//
-// `[read]` **Deshalb liegt die Tabelle jetzt in `lib/`** — ohne
-// `'use client'`, von beiden Seiten benutzbar. **Die Entscheidungen
-// darin sind unveraendert aus G-283 uebernommen.**
-//
-// ══ DIE ENTSCHEIDUNG AUS G-283, UNVERAENDERT ═══════════════════════
-//
-// `[cmd]` **Die Datenbank kennt `beginner | advanced | pro | elite`**
-// (CHECK auf `public.profiles.experience_level`).
-//
-// `[read]` **Der alte Rueckfall `?? 0.90` gab einem `pro`-Nutzer den
-// Faktor von `intermediate`** — kein Absturz, keine Meldung, nur ein
-// falscher Wert.
-//
-// `[cmd]` **`pro` hat keinen belegten Faktor** (G-228, gehoert Tom) —
-// deshalb `null` und nicht geraten.
-export const LEVEL_MULT: Record<string, number | null> = {
-  beginner: 0.75,
-  advanced: 1.00,
-  elite: 1.10,
-  // `[read]` **Offen bis G-228.** `null` heisst: der Name gilt, der
-  // Faktor ist nicht entschieden.
-  pro: null,
-}
+import { STUFEN_FAKTOR, stufenFaktor as faktorAusPaket, istStufe } from '@lumeos/scoring'
 
 /**
- * Der Stufenfaktor, oder `null`.
+ * Die Faktoren — **weitergereicht, nicht entschieden.**
  *
- * `[read]` **Drei Faelle, nicht zwei:**
+ * `[cmd]` **E-80:** `beginner 0,75 · advanced 0,90 · pro 1,00 ·
+ * elite 1,10`.
+ */
+export const LEVEL_MULT: Record<string, number | null> = { ...STUFEN_FAKTOR }
+
+/**
+ * Der Stufenfaktor, oder `null` bei unbekanntem Namen.
  *
- *     Zahl    der Name gilt und sein Faktor ist belegt
- *     null    der Name gilt, der Faktor ist offen (`pro`, G-228)
- *     null    der Name ist unbekannt — und dann sagt es die Anzeige
+ * `[read]` **Kein geratener Ersatzwert** — der alte Rueckfall
+ * `?? 0.90` gab einem `pro`-Nutzer den Faktor von `intermediate`
+ * (G-283). **Kein Absturz, keine Meldung, nur ein falscher Wert.**
  */
 export function stufenFaktor(level: string): number | null {
-  return LEVEL_MULT[level] ?? null
+  return faktorAusPaket(level)
 }
 
 /** Kennt die Tabelle den Namen ueberhaupt? */
 export function stufeGilt(level: string): boolean {
-  return Object.prototype.hasOwnProperty.call(LEVEL_MULT, level)
+  return istStufe(level)
 }
 
-export const STUFE_OFFEN_SATZ =
-  'Für diese Erfahrungsstufe ist kein Faktor hinterlegt — der Score '
-  + 'bleibt offen, bis er entschieden ist (G-228).'
+// `[cmd]` **G-417: `STUFE_OFFEN_SATZ` ist entfallen.** `[read]` **Er
+// sagte, fuer eine gueltige Stufe sei kein Faktor entschieden** — seit
+// E-80 gibt es fuer alle vier einen. **Ein Satz fuer einen Fall, den
+// es nicht mehr gibt, wird irgendwann auf einen anderen angewendet.**
 
 export const STUFE_UNBEKANNT_SATZ =
   'Unbekannte Erfahrungsstufe — der Score wird nicht berechnet, '
   + 'statt einen Faktor zu raten.'
 
 /**
- * Der Score, oder `null`.
+ * Der Score des Entwurfs, oder `null`.
  *
- * `[read]` **Kein stiller Ersatzwert** — wer keinen Faktor hat,
- * bekommt keinen Score, und die Anzeige sagt warum.
+ * `[read]` **Dies ist die Rechnung der ATTRAPPE** — sie bekommt fertige
+ * Deckungen und multipliziert den Score. `[cmd]` **Der angebundene Weg
+ * rechnet anders** (`nutritionScore()` im Paket skaliert die ZIELE,
+ * wie `SPEC_09:33-40` es verlangt) — **und er ist der, der zaehlt.**
  */
 export function nutritionScore(
   c: { protein: number; calorie: number; carbs: number; fat: number; fiber: number },

@@ -595,17 +595,20 @@ export async function TagebuchAnsicht({
             `[read]` **Eine ist gebaut, eine erfunden, zwei sind
             Empfehlungen. Keine traegt.** Der Auftrag: *„Wenn nicht: sag
             es, und die Kachel wird entfernt statt gefuellt."* */}
-        {/* ══ G-412/1: der Score ist angebunden ═══════════════
+        {/* ══ G-412/1 + G-417/1: der Score rechnet ════════════
             `[cmd]` **Fuenf Anteile aus `nutrition.daily_summary`,
             Ziele aus `zielwerte-read`, Stufe aus
             `public.profiles.experience_level`.**
-            `[cmd]` **Zwei Grenzen, beide gemessen und in der Kachel
-            sichtbar:** kein Ballaststoffziel im Schema, und fuer
-            `pro` ist kein Stufenfaktor entschieden (G-228). */}
+            `[cmd]` **Die Formel steht in `@lumeos/scoring`** — dem
+            Ort, den `SPEC_09_SCORING.md:11` nennt.
+            `[cmd]` **Beide Grenzen von G-412 sind gefallen:**
+            `goals.nutrition_targets.fiber_g` gibt es seit C-464, und
+            E-80 hat die vier Stufenfaktoren entschieden. */}
         {/* `[read]` **`null` heisst: der Leseweg ist ausgefallen** —
             dann zeigt die Kachel den Grund, keinen Ring auf 0. */}
         <ScoreEcht stand={score ?? {
-          datum, anteile: [], stufe: null, gewichtGerechnet: 0,
+          datum, anteile: [], score: null, status: 'offen',
+          stufe: null, faktor: null, gewichtGerechnet: 0,
           fehler: 'Der Leseweg hat nicht geantwortet.',
         }} />
         {/* G-258/E-29: ANGEBUNDEN an `coach.offene_aktionen('nutrition')`.
@@ -921,18 +924,34 @@ function AndererTab({
     const insightsFenster = 30
     return (
       <div style={{ marginTop: 16 }}>
-        {einsichten && (einsichten.bilanz || einsichten.makros) && (
-          <div className="v2-grid v2-g-cols-2 v2-eigene-hoehe" style={{ gap: 16, marginBottom: 16 }}>
-            <KalorienbilanzKachel d={einsichten} fenster={insightsFenster} />
-            <MakroschnittKachel d={einsichten} fenster={insightsFenster} />
-          </div>
-        )}
+        {/* ══ G-417/2+3: zwei unabhaengige Spalten ═════════════════
+            **Tom, 2026-09-11:** *„das sind zwei unabhaengige
+            spalten."*
+
+            `[cmd]` **Vorher zwei Raster uebereinander** — und ein
+            Raster bindet seine Zeile: Zeile 2 begann erst, wenn beide
+            Kacheln der Zeile 1 fertig waren. **`align-items: start`
+            (G-416) aendert daran nichts**, es richtet nur INNERHALB
+            der Zeile aus.
+
+            `[cmd]` **Jetzt zwei Stapel nebeneinander**, jeder fuellt
+            fuer sich. **Die Anordnung ist die beauftragte.** */}
         {einsichten && (
-          <div className="v2-grid v2-g-cols-2 v2-eigene-hoehe" style={{ gap: 16, marginBottom: 16 }}>
-            <TrendKachel d={einsichten} heute={datum ?? ''} />
-            <HeatmapKachel d={einsichten} heute={datum ?? ''} />
-            <MakroDetailKachel d={einsichten} fenster={insightsFenster} />
-            <WarnungenKachel d={einsichten} fenster={insightsFenster} />
+          <div className="v2-zwei-saeulen" style={{ marginBottom: 16 }}>
+            <div className="v2-saeule">
+              {(einsichten.bilanz || einsichten.makros) && (
+                <KalorienbilanzKachel d={einsichten} fenster={insightsFenster} />
+              )}
+              <TrendKachel d={einsichten} heute={datum ?? ''} />
+              <MakroDetailKachel d={einsichten} fenster={insightsFenster} />
+            </div>
+            <div className="v2-saeule">
+              {(einsichten.bilanz || einsichten.makros) && (
+                <MakroschnittKachel d={einsichten} fenster={insightsFenster} />
+              )}
+              <WarnungenKachel d={einsichten} fenster={insightsFenster} />
+              <HeatmapKachel d={einsichten} heute={datum ?? ''} />
+            </div>
           </div>
         )}
         {/* ══ G-11: nicht zweimal dieselbe Kachel ═══════════════════
@@ -944,17 +963,24 @@ function AndererTab({
             `[read]` Der Entwurf zeigt sie nur noch, wenn die echten
             NICHT stehen — dann ist er der Rueckfall und kein
             Duplikat. */}
+        {/* ══ G-412/7 + G-417/3: der Verlauf, ueber die volle Breite
+            `[cmd]` **Acht Naehrstoffe x 30 Tage aus
+            `nutrition.micronutrient_snapshot`** — dieselbe Funktion,
+            die den Schnappschuss fuellt.
+            `[cmd]` **In der Vorlage sind die Zellen `Math.random()`**
+            (`module-nutrition.jsx:399`); hier nicht.
+            `[cmd]` **Und die Vorlage setzt `gridColumn: "span 2"`**
+            (`module-nutrition.jsx:393`) — **volle Breite ist die
+            Vorlage.** `[read]` **Hier steht die Kachel NEBEN den
+            beiden Saeulen statt in einer** — dann braucht sie keine
+            Spannweite, sie hat die Breite schon. */}
+        {mikroTrend && (
+          <div style={{ marginBottom: 16 }}>
+            <MikroTrendKachel d={mikroTrend} />
+          </div>
+        )}
         <NutritionInsightsTab
           ohneEchte={Boolean(einsichten && (einsichten.bilanz || einsichten.makros))} />
-      {/* ══ G-412/7: der Verlauf ist angebunden ═══════════════
-          `[cmd]` **Acht Naehrstoffe x 30 Tage aus
-          `nutrition.micronutrient_snapshot`** — dieselbe Funktion,
-          die den Schnappschuss fuellt.
-          `[cmd]` **In der Vorlage sind die Zellen `Math.random()`**
-          (`module-nutrition.jsx:399`); hier nicht.
-          `[read]` **Der Entwurf ist damit entfallen** — er zeigte
-          nichts mehr, was oben fehlte. */}
-      {mikroTrend && <MikroTrendKachel d={mikroTrend} />}
         <NutritionInsightsReferenz />
       </div>
     )

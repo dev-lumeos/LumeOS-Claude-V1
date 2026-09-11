@@ -8,7 +8,7 @@ import { execFileSync } from 'node:child_process'
 
 import {
   nutritionScore, stufenFaktor, stufeGilt,
-  STUFE_OFFEN_SATZ, STUFE_UNBEKANNT_SATZ,
+  STUFE_UNBEKANNT_SATZ,
 } from '../../../app/v2/nutrition/diary-entwurf'
 import { EXPERIENCE_LEVELS } from '../../profile/profile-model'
 
@@ -36,7 +36,10 @@ test('G-283: ein unbekannter Name wird nicht stillschweigend zu 0,90', () => {
   // Und die Gegenprobe: bekannte Namen rechnen weiter.
   assert.ok((nutritionScore(C, 'advanced') ?? 0) > 0,
     '`advanced` rechnet nicht mehr (G-283).')
-  assert.equal(stufenFaktor('advanced'), 1.00)
+  // `[cmd]` **G-417: E-80 hat `advanced` auf 0,90 gesetzt** — vorher
+  // stand hier 1,00. `[read]` **Die Zusage ist, dass ein bekannter
+  // Name einen Faktor hat**, nicht welchen. **Welchen, sagt E-80.**
+  assert.equal(stufenFaktor('advanced'), 0.90)
 })
 
 test('G-283: die Namen stimmen mit Datenbank und Profilmodell ueberein', () => {
@@ -59,40 +62,74 @@ test('G-283: die Namen stimmen mit Datenbank und Profilmodell ueberein', () => {
     + 'nicht (G-283/G-228).')
 })
 
-test('G-283: `pro` hat keinen geratenen Faktor', () => {
-  // `[read]` **Welche vier Faktoren gelten, ist G-228 und gehoert
-  // Tom.** `[read]` **Ein geratener Wert waere hier schlimmer als
-  // keiner** — er saehe aus wie eine Antwort.
+test('E-80: `pro` hat einen ENTSCHIEDENEN Faktor', () => {
+  // ══ DIESE ZUSAGE IST ERFUELLT WORDEN (G-417) ═══════════════════
+  //
+  // `[cmd]` **G-283 verlangte `stufenFaktor('pro') === null`** — mit
+  // der Begruendung: *„Welche vier Faktoren gelten, ist G-228 und
+  // gehoert Tom."*
+  //
+  // `[cmd]` **E-80 hat sie entschieden:** `beginner 0,75 ·
+  // advanced 0,90 · pro 1,00 · elite 1,10`.
+  //
+  // `[read]` **Der alte Waechter haette die Entscheidung verboten.**
+  // `[read]` **Die Zusage war nie „`pro` bleibt leer"** — sie war
+  // **„kein geratener Wert"**. **Ein entschiedener ist kein
+  // geratener.**
   assert.equal(stufeGilt('pro'), true, '`pro` ist keine gueltige Stufe mehr.')
-  assert.equal(stufenFaktor('pro'), null,
-    '`pro` hat einen Faktor bekommen — der ist nicht entschieden (G-228).')
-  assert.equal(nutritionScore(C, 'pro'), null,
-    'Ein `pro`-Profil bekommt wieder einen Score (G-283).')
+  assert.equal(stufenFaktor('pro'), 1.00,
+    '`pro` hat nicht den Faktor aus E-80.')
+  assert.ok((nutritionScore(C, 'pro') ?? 0) > 0,
+    'Ein `pro`-Profil bekommt keinen Score — E-80 hat den Faktor entschieden.')
+})
+
+test('E-80: alle vier Faktoren, und nur die vier', () => {
+  // `[cmd]` **Der CHECK auf `public.profiles.experience_level`
+  // erlaubt genau vier Werte.** `[read]` **Jeder braucht einen
+  // Faktor** — sonst zeigt ein Konto einen Grund statt einer Zahl,
+  // obwohl seine Stufe gueltig ist.
+  const erwartet: Record<string, number> = {
+    beginner: 0.75, advanced: 0.90, pro: 1.00, elite: 1.10,
+  }
+  for (const [stufe, faktor] of Object.entries(erwartet)) {
+    assert.equal(stufenFaktor(stufe), faktor,
+      `Die Stufe "${stufe}" hat nicht den Faktor aus E-80.`)
+  }
+  // `[read]` **Und kein fuenfter** — `intermediate` stammt aus der
+  // aelteren Spec und existiert in der Datenbank nicht.
+  assert.equal(stufenFaktor('intermediate'), null,
+    '`intermediate` hat einen Faktor — die Datenbank kennt den Wert nicht.')
 })
 
 test('G-283: die Kachel sagt, warum kein Score dasteht', () => {
   // `[read]` **Ein Ring auf 0 waere eine Aussage ueber den Nutzer,
   // die niemand gemacht hat.**
-  assert.notEqual(STUFE_OFFEN_SATZ, STUFE_UNBEKANNT_SATZ,
-    'Beide Saetze sagen dasselbe — dann tragen sie nichts bei (G-283).')
-  assert.match(STUFE_OFFEN_SATZ, /G-228/,
-    'Der offene Fall nennt den Punkt nicht, der ihn entscheidet (G-283).')
+  //
+  // `[cmd]` **G-417: `STUFE_OFFEN_SATZ` ist entfallen** — er galt dem
+  // Fall *„gueltige Stufe, kein Faktor"*, und den gibt es seit E-80
+  // nicht mehr. `[read]` **Der unbekannte Name bleibt** — DER Fall
+  // ist echt, und er darf G-228 nicht zitieren.
+  assert.match(STUFE_UNBEKANNT_SATZ, /raten/,
+    'Der unbekannte Fall sagt nicht mehr, dass er nicht raet (G-283).')
+  assert.doesNotMatch(STUFE_UNBEKANNT_SATZ, /G-228/,
+    'Ein unbekannter Name hat mit G-228 nichts zu tun (G-283).')
+
   const s = ohneKommentare('apps/web/src/app/v2/nutrition/score-echt.tsx')
   assert.match(s, /score === null/,
     'Die Kachel prueft nicht mehr auf den fehlenden Score (G-283).')
   assert.doesNotMatch(s, /\?\?\s*0\.90/,
     'Der stille Rueckfall auf 0,90 ist zurueck (G-283).')
-  // `[cmd]` **Gemessen am Schirm:** `pro` zeigt „offen (G-228)",
-  // `gibtsnicht` zeigt „unbekannt". `[read]` **Ein unbekannter Name
-  // hat mit G-228 nichts zu tun** — er darf den Punkt nicht zitieren.
-  // `[cmd]` **G-412: die Variable heisst `stufe`** — sie kommt aus
-  // dem Profil, nicht mehr aus einer festen Zuweisung.
-  // `[read]` **`\s*` statt `\s*\n?\s*`** — die Einrueckung der
-  // umgezogenen Kachel ist tiefer, und die Zusage haengt nicht an
-  // der Zeilenlage.
-  assert.match(s, /stufeGilt\(stufe\)\s*\?\s*`\$\{stufe\} · offen \(G-228\)`/,
-    'Die Zeile unterscheidet „offen" nicht mehr von „unbekannt" — dann '
-    + 'zitiert ein Tippfehler den Punkt G-228 (G-283).')
+  // `[cmd]` **Die Kachel unterscheidet weiter drei Faelle:** keine
+  // Stufe, unbekannte Stufe, keine Tageswerte. `[read]` **Ein
+  // gemeinsamer Satz fuer alle drei saehe aus wie ein Befund.**
+  assert.match(s, /Keine Erfahrungsstufe im Profil/,
+    'Der Fall „keine Stufe" hat keinen eigenen Satz mehr (G-283).')
+  assert.match(s, /faktor === null/,
+    'Die Kachel unterscheidet den unbekannten Namen nicht mehr (G-283).')
+  // `[read]` **Und der unbekannte Fall NENNT die gueltigen Namen** —
+  // sonst weiss niemand, was stattdessen dastehen muesste.
+  assert.match(s, /BEKANNTE_STUFEN/,
+    'Der unbekannte Fall nennt die gueltigen Stufen nicht (G-417).')
 })
 
 // ══ G-412: DIESE ZUSAGE HAT SICH UMGEDREHT ═══════════════

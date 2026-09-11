@@ -499,3 +499,46 @@
    anderswo gewollt. `[read]` **Hier eine eigene Klasse daneben.** */
 
 .v2-eigene-hoehe { align-items: start; }
+
+/* --- Zwei UNABHAENGIGE Spalten (G-417/2) --------------------------
+   **Tom, 2026-09-11:** *„das sind zwei unabhaengige spalten."*
+
+   `[cmd]` **`align-items: start` aus G-416 reichte nicht** — am
+   Schirm gemessen endeten Calorie balance und Macro split weiter auf
+   derselben Hoehe.
+
+   `[read]` **Der Grund ist die Rasterzeile, nicht die Dehnung:** in
+   einem zweispaltigen Raster beginnt Zeile 2 erst, wenn BEIDE
+   Kacheln der Zeile 1 fertig sind. `align-items` richtet die Kachel
+   IN ihrer Zeile aus — die Zeile selbst bleibt so hoch wie ihr
+   groesstes Kind.
+
+   `[cmd]` **Deshalb keine Rasterzeilen mehr, sondern zwei Saeulen:**
+   jede ein eigener Stapel, der fuer sich fuellt. **Was links waechst,
+   schiebt rechts nichts.**
+
+   `[read]` **Wieder NICHT `.v2-grid`** — 217 Aufrufer. */
+
+.v2-zwei-saeulen {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+/* Eine Saeule: ihre Kacheln untereinander, mit demselben Abstand. */
+.v2-saeule {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /* `[read]` **`min-width: 0` gegen das Ueberlaufen** — ein Raster-
+     kind ist sonst mindestens so breit wie sein laengster Inhalt, und
+     eine breite Tabelle sprengte die Spalte. */
+  min-width: 0;
+}
+
+/* `[cmd]` **Unter 900 px eine Spalte** — wie die Vorlage, die ihre
+   Kacheln ab dort untereinander legt. */
+@media (max-width: 900px) {
+  .v2-zwei-saeulen { grid-template-columns: 1fr; }
+}

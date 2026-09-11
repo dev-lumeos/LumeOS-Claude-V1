@@ -37,7 +37,7 @@ const ATTRAPPE = 'Aus dem Entwurf uebernommen. Die Zahlen sind erfunden, bis die
 // bestehende Aufrufer nicht brechen.
 export {
   LEVEL_MULT, stufenFaktor, stufeGilt, nutritionScore,
-  STUFE_OFFEN_SATZ, STUFE_UNBEKANNT_SATZ,
+  STUFE_UNBEKANNT_SATZ,
 } from '../../../lib/nutrition/stufenfaktor'
 
 export function NutritionPendingActions() {

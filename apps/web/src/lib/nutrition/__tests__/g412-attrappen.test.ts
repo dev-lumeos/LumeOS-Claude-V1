@@ -55,17 +55,21 @@ test('sieben Referenzbloecke bleiben, der Diary faellt', () => {
 })
 
 test('der Score raet keinen Stufenfaktor', () => {
-  // `[read]` **G-283/G-228: `pro` hat keinen belegten Faktor.**
   // `[cmd]` **Ein Rueckfall auf 0,90 gab `pro` den Wert von
-  // `intermediate`** — kein Absturz, nur eine falsche Zahl.
-  assert.equal(stufenFaktor('pro'), null)
+  // `intermediate`** — kein Absturz, nur eine falsche Zahl (G-283).
+  //
+  // `[cmd]` **G-417: `pro` hat seit E-80 einen Faktor (1,00).**
+  // `[read]` **Die Zusage war nie „`pro` bleibt leer", sondern
+  // „nichts raten"** — ein UNBEKANNTER Name ist der echte Fall.
+  assert.equal(stufenFaktor('pro'), 1.00)
   assert.equal(stufeGilt('pro'), true)
   assert.equal(stufenFaktor('gibtesnicht'), null)
   assert.equal(stufeGilt('gibtesnicht'), false)
   // Ohne Faktor kein Score.
   const voll = { protein: 1, calorie: 1, carbs: 1, fat: 1, fiber: 1 }
-  assert.equal(nutritionScore(voll, 'pro'), null)
-  assert.equal(nutritionScore(voll, 'advanced'), 1)
+  assert.equal(nutritionScore(voll, 'gibtesnicht'), null,
+    'Ein unbekannter Name bekommt wieder einen Score (G-283)')
+  assert.equal(nutritionScore(voll, 'advanced'), 0.90)
 })
 
 test('der Stufenfaktor liegt ausserhalb der Client-Grenze', () => {
@@ -73,28 +77,48 @@ test('der Stufenfaktor liegt ausserhalb der Client-Grenze', () => {
   // `diary-entwurf.tsx` (`'use client'`), die Score-Kachel ist eine
   // Server-Komponente — **`stufenFaktor is not a function`, 0
   // Karten.** `[read]` **`tsc` blieb gruen.**
-  const lib = join(WEB, 'lib', 'nutrition', 'stufenfaktor.ts')
-  assert.ok(existsSync(lib), 'stufenfaktor.ts fehlt')
-  // `[cmd]` **Kommentarzeilen weg** — die Datei ERKLAERT, warum sie
-  // kein `'use client'` traegt, und der erste Anlauf fand genau
-  // diese Erklaerung. `[read]` **Die Marke steht in Zeile 1**, sonst
-  // wirkt sie nicht.
+  // `[cmd]` **G-417: die Tabelle ist nach `packages/scoring`
+  // gezogen** — `SPEC_09_SCORING.md:11` nennt den Ort.
+  // `[read]` **Die ZUSAGE ist dieselbe geblieben:** die Kachel darf
+  // ihren Faktor nicht aus einer `'use client'`-Datei holen. **Nur
+  // der Ort hat sich geaendert, nicht die Gefahr.**
+  const lib = join(WEB, '..', '..', '..', 'packages', 'scoring', 'src', 'nutrition.ts')
+  assert.ok(existsSync(lib), 'packages/scoring/src/nutrition.ts fehlt')
   const ersteZeile = readFileSync(lib, 'utf8').trimStart().slice(0, 40)
   assert.ok(!ersteZeile.includes('use client'),
     'Die Tabelle darf keine Client-Datei sein')
   // Und die Kachel holt sie von dort, nicht aus dem Entwurf.
   const karte = ohneKommentar(join(NUT, 'score-echt.tsx'))
-  assert.match(karte, /from '\.\.\/\.\.\/\.\.\/lib\/nutrition\/stufenfaktor'/)
+  assert.match(karte, /from '@lumeos\/scoring'/,
+    'Die Kachel muss den Faktor aus dem Paket holen')
+  assert.ok(!/from '.*diary-entwurf'/.test(karte),
+    'Kein Wert-Import aus dem Entwurf — der traegt `use client`')
 })
 
-test('kein Ballaststoffziel wird erfunden', () => {
-  // `[cmd]` **Gemessen ueber alle Spalten mit „fib": nur Zufuhr,
-  // kein Ziel.** `[read]` **Der fuenfte Anteil bleibt offen**, und
-  // die Kachel sagt es.
+test('das Ballaststoffziel wird GELESEN, nicht erfunden', () => {
+  // ══ DIESE ZUSAGE WURDE UMGEDREHT (G-417) ═══════════════════════
+  //
+  // `[cmd]` **G-412 verlangte `zielFeld: null`** — damals richtig:
+  // gemessen ueber alle Spalten mit „fib" gab es nur Zufuhr.
+  //
+  // `[cmd]` **Seit C-464 gibt es `goals.nutrition_targets.fiber_g`**
+  // — fuenf Nutzer haben einen Wert, `dev@lumeos.app` 30,0 g.
+  //
+  // `[read]` **Die alte Fassung haette den neuen Wert verboten.**
+  // `[read]` **Die Zusage dahinter bleibt aber dieselbe:** nichts
+  // erfinden. **Nur heisst das jetzt LESEN statt offenlassen.**
   const t = ohneKommentar(join(WEB, 'lib', 'nutrition', 'score-read.ts'))
-  assert.match(t, /zielFeld: null/,
-    'Der Ballaststoffanteil braucht `zielFeld: null` — es gibt kein Ziel')
-  assert.match(t, /KEIN_FIBT_ZIEL/)
+  assert.match(t, /fiber_g:\s*ziele\?\.fiber_g/,
+    'Der Ballaststoffanteil muss `fiber_g` aus den Zielen lesen')
+  // `[cmd]` **Und der Leseweg muss die Spalte ueberhaupt fuehren** —
+  // `goals.zielwerte_am()` gibt sie zurueck, der Typ liess sie fallen.
+  const z = ohneKommentar(join(WEB, 'lib', 'profile', 'zielwerte-read.ts'))
+  assert.match(z, /fiber_g:\s*zahl\(r\.fiber_g\)/,
+    'zielwerte-read muss fiber_g abbilden')
+  // `[read]` **Kein geratener Ersatzwert** — waere hier eine Zahl
+  // eingetragen, waere es eine Aussage ueber den Nutzer.
+  assert.ok(!/fiber_g:\s*\d/.test(t) && !/fiber_g:\s*\d/.test(z),
+    'Kein fest verdrahtetes Ballaststoffziel')
 })
 
 test('die Verlaufsgrafik ist die der Vorlage', () => {
@@ -242,13 +266,39 @@ test('die Kacheln gleichen ihre Hoehe nicht mehr ab', () => {
   // `[cmd]` **Gemessen: 461/461, 514/514, 733/733** — paarweise
   // gleich, weil `align-items` im Raster `stretch` ist.
   //
+  // ══ G-417 HAT DIESE ZUSAGE VERSCHAERFT ═════════════════════════
+  //
+  // **Tom, 2026-09-11:** *„das sind zwei unabhaengige spalten."*
+  //
+  // `[cmd]` **`align-items: start` (G-416) reichte nicht** — am
+  // Schirm endeten Calorie balance und Macro split weiter gleich
+  // hoch. `[read]` **Der Grund ist die RASTERZEILE:** Zeile 2 beginnt
+  // erst, wenn beide Kacheln der Zeile 1 fertig sind.
+  //
+  // `[read]` **Deshalb keine Rasterzeilen mehr, sondern zwei
+  // Stapel** — und der Waechter prueft die neue Mechanik.
+  //
   // `[read]` **NICHT `.v2-grid` geaendert** — 217 Aufrufer im Haus.
   const css = readFileSync(join(NUT, 'nutrition.css'), 'utf8')
     .replace(/\/\*[\s\S]*?\*\//g, '')
-  assert.match(css, /\.v2-eigene-hoehe\s*\{[^}]*align-items:\s*start/)
+  // Die Saeule ist ein eigener Stapel, keine Rasterzeile.
+  assert.match(css, /\.v2-saeule\s*\{[^}]*flex-direction:\s*column/,
+    'Eine Saeule muss ihre Kacheln untereinander stapeln')
+  assert.match(css, /\.v2-zwei-saeulen\s*\{[^}]*grid-template-columns:\s*1fr 1fr/,
+    'Zwei Saeulen nebeneinander')
+
   const t = ohneKommentar(join(NUT, 'ansicht.tsx'))
-  assert.ok(t.includes('v2-eigene-hoehe'),
-    'Die Insights-Raster benutzen die Klasse nicht')
+  assert.ok(t.includes('v2-zwei-saeulen'),
+    'Der Insights-Reiter benutzt die zwei Saeulen nicht')
+  // `[cmd]` **Zwei Saeulen, nicht eine** — sonst stuenden alle
+  // Kacheln untereinander.
+  const saeulen = t.match(/className="v2-saeule"/g) ?? []
+  assert.equal(saeulen.length, 2,
+    `Genau zwei Saeulen erwartet, ${saeulen.length} gefunden`)
+  // `[read]` **Und KEINE Kachel mehr im alten Zweierraster** — sonst
+  // kaeme die Zeilenbindung durch die Hintertuer zurueck.
+  assert.ok(!/v2-g-cols-2 v2-eigene-hoehe/.test(t),
+    'Die Insights-Kacheln duerfen nicht mehr im Zweierraster stehen')
 })
 
 test('die Waermekarten tragen die Deckkraft der Vorlage', () => {

@@ -197,10 +197,17 @@ test('der Nutrition score rechnet mit der Formel der Vorlage', () => {
   // `[read]` **Die Zusage gilt unveraendert:** die Gewichtung
   // stammt aus `module-nutrition-spec.jsx:38-42` und wird nicht
   // erfunden. **Nur die Datei ist eine andere.**
+  // ══ G-417: die Faktoren sind noch einmal umgezogen ═══
+  //
+  // `[cmd]` **Sie stehen jetzt in `packages/scoring`** — dem Ort, den
+  // `SPEC_09_SCORING.md:11` nennt. `[read]` **Die Gewichte der
+  // Attrappe bleiben hier**, weil der Entwurf sie benutzt.
   const quelle = fs.readFileSync(FORMEL, 'utf8')
   assert.ok(/c\.protein \* 0\.30/.test(quelle), 'Protein-Gewicht 0.30 fehlt')
   assert.ok(/c\.calorie \* 0\.25/.test(quelle), 'Kalorien-Gewicht 0.25 fehlt')
-  assert.ok(/beginner: 0\.75/.test(quelle), 'Stufenfaktoren fehlen')
+  const paket = fs.readFileSync(
+    path.join(process.cwd(), '../../packages/scoring/src/nutrition.ts'), 'utf8')
+  assert.ok(/beginner: 0\.75/.test(paket), 'Stufenfaktoren fehlen')
 })
 
 /**

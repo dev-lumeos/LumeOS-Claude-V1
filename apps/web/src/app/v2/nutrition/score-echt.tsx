@@ -1,4 +1,4 @@
-// Der Nutrition score, angebunden — G-412/A1.
+// Der Nutrition score, angebunden — G-412/A1, G-417/A1-A3.
 //
 // ══ DIE FORM IST DIE DER ATTRAPPE ══════════════════════════════════
 //
@@ -7,33 +7,44 @@
 // `[read]` **Was sich aendert, sind die ZAHLEN:** sie kommen aus
 // `nutrition.daily_summary` und dem Profil, nicht aus dem Entwurf.
 //
-// `[cmd]` **Und die Zeile *„Source of level: fest im Entwurf · liest
-// kein Profil"* faellt weg** — hier wird das Profil gelesen.
+// ══ DIESE KARTE RECHNET NICHT ══════════════════════════════════════
 //
-// ══ ZWEI GRENZEN, BEIDE GEMESSEN ═══════════════════════════════════
+// `[cmd]` **Bis G-417 stand hier eine zweite Rechnung** — `roh ×
+// Faktor`, mit eigener Deckelung und eigener Normierung.
+// `[cmd]` **Jetzt kommt das Ergebnis fertig aus `@lumeos/scoring`.**
 //
-// `[cmd]` **1 — Kein Ballaststoffziel.** Der fuenfte Anteil (0,15)
-// ist nicht rechenbar; die Zeile steht da und sagt warum.
+// `[read]` **Eine Anzeige, die selbst rechnet, laeuft irgendwann
+// gegen die Quelle** — und niemand sieht es, weil beide Zahlen
+// plausibel aussehen.
 //
-// `[cmd]` **2 — Fuer `pro` ist kein Stufenfaktor entschieden**
-// (G-228), und `dev@lumeos.app` steht auf `pro`. `[read]` **Dann
-// gibt es keinen Score, sondern den Grund** — die Entscheidung dazu
-// stammt aus G-283 und wird hier nur benutzt.
+// ══ BEIDE SPERREN SIND GEFALLEN ════════════════════════════════════
+//
+// `[cmd]` **1 — Das Ballaststoffziel.** `goals.nutrition_targets.
+// fiber_g` ist seit C-464 da, **`dev@lumeos.app` hat 30,0 g.**
+// `[cmd]` **Gemessen: Gewicht 0,85 -> 1,00.**
+//
+// `[cmd]` **2 — Der Stufenfaktor fuer `pro`.** `[cmd]` **E-80
+// entscheidet ihn:** `beginner 0,75 · advanced 0,90 · pro 1,00 ·
+// elite 1,10`. **Gebaut in `packages/scoring/src/nutrition.ts`**, dem
+// Ort, den `SPEC_09_SCORING.md:11` nennt.
+//
+// `[read]` **Damit zeigt die Karte eine ZAHL** — vorher zwei Gruende.
 import { Card, Pill, Ring, Row } from '@lumeos/ui'
 
-// `[cmd]` **Aus `lib/`, NICHT aus `diary-entwurf.tsx`** — die traegt
-// `'use client'`, und ein Wert-Import ueber diese Grenze wirft zur
-// Laufzeit (gemessen: `stufenFaktor is not a function`, 0 Karten).
-import {
-  stufenFaktor, stufeGilt,
-  STUFE_OFFEN_SATZ, STUFE_UNBEKANNT_SATZ,
-} from '../../../lib/nutrition/stufenfaktor'
+// `[cmd]` **Aus dem Paket, NICHT aus `diary-entwurf.tsx`** — die
+// traegt `'use client'`, und ein Wert-Import ueber diese Grenze wirft
+// zur Laufzeit (gemessen: `stufenFaktor is not a function`, 0 Karten).
+import { STUFEN_FAKTOR } from '@lumeos/scoring'
+
 import type { ScoreStand } from '../../../lib/nutrition/score-read'
 
 /** Zwei Nachkommastellen, wie die Vorlage sie zeigt. */
 function komma(n: number): string {
   return n.toFixed(2)
 }
+
+/** Die vier Stufen als Satz — fuer den Fall, dass eine unbekannt ist. */
+const BEKANNTE_STUFEN = Object.keys(STUFEN_FAKTOR).join(' · ')
 
 export function ScoreEcht({ stand }: { stand: ScoreStand }) {
   if (stand.fehler) {
@@ -46,43 +57,23 @@ export function ScoreEcht({ stand }: { stand: ScoreStand }) {
     )
   }
 
-  const stufe = stand.stufe
-  // `[read]` **Ohne Stufe im Profil gibt es keinen Faktor** — und
-  // damit keinen Score. **Kein Rueckfall auf einen Vorgabewert**
-  // (G-283).
-  const faktor = stufe ? stufenFaktor(stufe) : null
+  const { score, status, stufe, faktor } = stand
 
-  // `[cmd]` **Der Score wird aus den GERECHNETEN Anteilen gebildet
-  // und auf deren Gewicht normiert** — sonst zoege der fehlende
-  // Ballaststoffanteil (0,15) den Wert um 15 Punkte nach unten, ohne
-  // dass der Nutzer etwas falsch gemacht haette.
-  const gerechnet = stand.anteile.filter(a => a.deckung !== null)
-  const roh = stand.gewichtGerechnet > 0
-    ? gerechnet.reduce((s, a) => s + (a.deckung ?? 0) * a.gewicht, 0)
-      / stand.gewichtGerechnet
-    : null
-
-  // `[read]` **`nutritionScore()` erwartet alle fuenf Anteile** — hier
-  // ist einer nicht rechenbar, also waere jeder Aufruf eine Luege
-  // ueber den fuenften. `[cmd]` **Stattdessen dieselbe Rechnung mit
-  // dem normierten Rohwert:** `roh × Faktor`, gerundet wie dort.
-  const score = roh !== null && faktor !== null
-    ? Math.round(roh * faktor * 100) / 100
-    : null
-
-  const band = score === null
+  const band = status === 'offen'
     ? { l: 'offen', c: 'var(--fg-dim)' }
-    : score >= 80
+    : status === 'ok'
       ? { l: 'ok', c: 'var(--pos)' }
-      : score >= 50
+      : status === 'warn'
         ? { l: 'warn', c: 'var(--warn)' }
         : { l: 'block', c: 'var(--neg)' }
 
+  // `[read]` **Wo keine Zahl steht, steht der Grund** — und der Grund
+  // nennt, was fehlt, nicht dass etwas fehlt.
   const offenerGrund = !stufe
     ? 'Keine Erfahrungsstufe im Profil — ohne sie gibt es keinen Faktor '
       + 'und damit keinen Score.'
     : faktor === null
-      ? (stufeGilt(stufe) ? STUFE_OFFEN_SATZ : STUFE_UNBEKANNT_SATZ)
+      ? `Die Stufe „${stufe}" kennt E-80 nicht — bekannt sind ${BEKANNTE_STUFEN}.`
       : 'Für diesen Tag liegen keine Werte vor.'
 
   return (
@@ -107,7 +98,7 @@ export function ScoreEcht({ stand }: { stand: ScoreStand }) {
           )
           : (
             <Ring
-              value={Math.round(score * 100)}
+              value={score}
               max={100}
               color={band.c}
               label="score"
@@ -117,14 +108,14 @@ export function ScoreEcht({ stand }: { stand: ScoreStand }) {
           )}
         <div style={{ flex: 1 }}>
           {/* `[read]` **Die Formelspalte der Vorlage, mit echten
-              Deckungen** — und wo eine fehlt, steht der Grund statt
+              Erfuellungen** — und wo eine fehlt, steht der Grund statt
               einer Zahl. */}
           <div className="v2-dim v2-num" style={{ fontSize: 10.5, lineHeight: 1.7 }}>
             {stand.anteile.map(a => (
-              <div key={a.code}>
-                <span style={{ display: 'inline-block', minWidth: 52 }}>{a.label}</span>
-                {a.deckung !== null
-                  ? `${komma(a.deckung)} × ${komma(a.gewicht)}`
+              <div key={a.makro}>
+                <span style={{ display: 'inline-block', minWidth: 52 }}>{a.makro}</span>
+                {a.erfuellung !== null
+                  ? `${komma(a.erfuellung)} × ${komma(a.gewicht)}`
                   : <span title={a.grund}>— × {komma(a.gewicht)}</span>}
               </div>
             ))}
@@ -132,28 +123,32 @@ export function ScoreEcht({ stand }: { stand: ScoreStand }) {
         </div>
       </div>
 
+      {/* `[cmd]` **E-80, gebaut in `packages/scoring`** — vier Stufen,
+          vier Faktoren, kein Rueckfall auf einen geratenen Wert. */}
       <Row
         label="Level multiplier"
         value={!stufe
           ? 'keine Stufe im Profil'
           : faktor !== null
-            ? `${stufe} · ×${faktor}`
-            : stufeGilt(stufe)
-              ? `${stufe} · offen (G-228)`
-              : `${stufe} · unbekannt`}
+            ? `${stufe} · ×${komma(faktor)}`
+            : `${stufe} · unbekannt`}
+        sub={faktor !== null ? 'E-80 · packages/scoring' : undefined}
       />
       <Row label="Thresholds" value="ok ≥ 80 · warn 50–79 · block < 50" />
       {/* `[cmd]` **G-412: gelesen, nicht fest verdrahtet** —
           `public.profiles.experience_level`. */}
       <Row label="Source of level" value="public.profiles.experience_level" />
-      {/* `[cmd]` **Der fuenfte Anteil ist nicht rechenbar** — und das
-          steht da, statt eine Ballaststoffgrenze zu erfinden. */}
       <Row
         label="Gewicht gerechnet"
         value={`${komma(stand.gewichtGerechnet)} von 1.00`}
-        sub={stand.gewichtGerechnet < 1
-          ? 'Ballaststoffe: kein Ziel im Schema'
-          : undefined}
+        {...(stand.gewichtGerechnet < 1
+          ? {
+            sub: stand.anteile
+              .filter(a => a.erfuellung === null)
+              .map(a => `${a.makro}: ${a.grund}`)
+              .join(' · '),
+          }
+          : {})}
       />
     </Card>
   )

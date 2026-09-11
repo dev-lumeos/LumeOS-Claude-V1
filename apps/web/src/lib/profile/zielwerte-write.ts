@@ -73,7 +73,7 @@ export async function setzeZielwerteAusFormel(): Promise<Zielwerte> {
     .schema('goals')
     .from('nutrition_targets')
     .upsert(zeile, { onConflict: 'user_id,gueltig_ab' })
-    .select('gueltig_ab, kcal, protein_g, carbs_g, fat_g, linoleic_acid_g, alpha_linolenic_acid_g, herkunft, tdee, nutrition_goal')
+    .select('gueltig_ab, kcal, protein_g, carbs_g, fat_g, fiber_g, linoleic_acid_g, alpha_linolenic_acid_g, herkunft, tdee, nutrition_goal')
     .maybeSingle()
 
   if (error) throw new ProfileWriteError('WRITE_FAILED', error.message)
@@ -92,6 +92,9 @@ export async function setzeZielwerteAusFormel(): Promise<Zielwerte> {
     protein_g: zahl(r.protein_g),
     carbs_g: zahl(r.carbs_g),
     fat_g: zahl(r.fat_g),
+    // `[cmd]` **Seit C-464 eine Spalte** — wird zurueckgelesen, damit
+    // die Antwort nicht faelschlich `null` traegt (G-417).
+    fiber_g: zahl(r.fiber_g),
     linoleic_acid_g: zahl(r.linoleic_acid_g),
     alpha_linolenic_acid_g: zahl(r.alpha_linolenic_acid_g),
     herkunft: r.herkunft === 'manuell' ? 'manuell' : 'formel',
