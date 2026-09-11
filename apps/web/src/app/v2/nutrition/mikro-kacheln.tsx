@@ -25,7 +25,7 @@
 //    `incomplete` steht ein Strich statt einer Zahl. **Vitamin C ist
 //    heute genau so ein Fall.**
 import * as React from 'react'
-import { Card, Meter, Icon, Pill } from '@lumeos/ui'
+import { RadarChart, Card, Meter, Icon, Pill } from '@lumeos/ui'
 
 import type { MikroStand, MikroZeile } from '../../../lib/nutrition/mikro-read'
 
@@ -71,6 +71,16 @@ export function MikroSchnappschuss({ d }: { d: MikroStand }) {
     )
   }
 
+  // `[read]` **Gedeckelt bei 1** — das Netz zeichnet Anteile, und
+  // 180 % spraenge aus der Flaeche. **Der Balken darueber zeigt den
+  // vollen Wert**, deshalb geht nichts verloren.
+  const netz = d.zeilen
+    .filter(z => z.prozent !== null)
+    .map(z => ({
+      label: z.label,
+      value: Math.min(1, (z.prozent as number) / 100),
+    }))
+
   return (
     <Card
       title="Micronutrient snapshot"
@@ -83,6 +93,34 @@ export function MikroSchnappschuss({ d }: { d: MikroStand }) {
       <div className="v2-col-gap" style={{ gap: 8 }}>
         {d.zeilen.map(z => <MikroZeileAnzeige key={z.code} z={z} />)}
       </div>
+
+      {/* ══ G-412/3: das Netz UNTER den Balken ═══════════════════
+          **Tom, 2026-09-08:** *„bau die grafik in die obere kachel
+          unter den balken mit rein, dann hat man zwei ansichten."*
+
+          `[cmd]` **Die Attrappe darunter zeigte dieselben acht
+          Naehrstoffe als Netz** — mit erfundenen Werten. `[read]`
+          **Jetzt steht das Netz hier, mit denselben Zahlen wie die
+          Balken darueber**, und die Attrappe ist entfallen.
+
+          `[read]` **Nur Zeilen MIT Prozentwert** — eine Ecke auf 0
+          fuer „nicht ermittelbar" waere eine Aussage ueber den
+          Nutzer, die die Funktion ausdruecklich nicht trifft. */}
+      {netz.length >= 3 && (
+        <>
+          <div className="v2-divider" style={{ margin: '12px 0 4px' }} />
+          <div style={{ display: 'grid', placeItems: 'center' }}>
+            <RadarChart data={netz} h={220} color="var(--acc-nutri)" />
+          </div>
+          {netz.length < d.zeilen.length && (
+            <p className="v2-muted" style={{ fontSize: 10.5, lineHeight: 1.5 }}>
+              {d.zeilen.length - netz.length} von {d.zeilen.length}{' '}
+              Naehrstoffen fehlen im Netz — fuer sie ist kein Anteil
+              ermittelbar (unvollstaendige Tagessumme).
+            </p>
+          )}
+        </>
+      )}
       <p className="v2-muted" style={{ fontSize: 10.5, marginTop: 10, lineHeight: 1.5 }}>
         Der Balken zeigt den Anteil an der jeweiligen Referenz.{' '}
         <strong>Ueber 100 % ist kein Fehler</strong> — bei einer

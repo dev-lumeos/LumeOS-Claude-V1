@@ -31,10 +31,28 @@ const V2 = join(HIER, '..', '..')
 const lies = (p: string) => readFileSync(p, 'utf8')
 
 /** Datei, Entwurf, echter Teil — je eine behobene Verdraengung. */
+//
+// ══ G-412: DREI FAELLE SIND ENTFALLEN — DURCH ENTSCHEIDUNG ═════════
+//
+// **Tom, 2026-09-08:** *„Below threshold — die angebundene Fassung
+// steht direkt darueber. Doppelt: raus."*
+//
+// `[cmd]` **`PreWorkoutOptimizer`, `MicronutrientSnapshot` und
+// `BelowThreshold` sind ENTFERNT**, nicht verdraengt:
+//
+//     PreWorkoutOptimizer    zeigte einen erfundenen Zeitfenster-Ring
+//                            neben der echten Kachel — beide immer,
+//                            nebeneinander, verschiedene Sachen
+//     MicronutrientSnapshot  dieselben acht Naehrstoffe als Netz;
+//                            das Netz sitzt jetzt IN der echten Kachel
+//     BelowThreshold         3 von 117 erfunden neben 7 von 32 echt
+//
+// `[read]` **Die Zusage dieser Probe gilt weiter** — ein Entwurf darf
+// nicht STILL hinter einer Bedingung verschwinden. `[read]` **Eine
+// Entfernung mit Grund ist etwas anderes als eine Verdraengung**, und
+// die drei Namen stehen deshalb nicht mehr in der Liste (A-59: was
+// keinen Aufrufer hat, wird geloescht, nicht stehengelassen).
 const FAELLE = [
-  ['nutrition/ansicht.tsx', 'PreWorkoutOptimizer', 'PreWorkoutEcht'],
-  ['nutrition/ansicht.tsx', 'MicronutrientSnapshot', 'MikroSchnappschuss'],
-  ['nutrition/ansicht.tsx', 'BelowThreshold', 'UnterSchwelle'],
   ['nutrition/ansicht.tsx', 'NutritionPlannerTab', 'PlannerEchtTab'],
   ['supplements/tabs.tsx', 'TodayAttrappe', 'TodayEcht'],
   ['supplements/tabs.tsx', 'StackMatrix', 'StackMatrixEcht'],

@@ -66,6 +66,10 @@ import type { TagesEintrag } from './plan-eintraege'
 import type { LogZeile as PlanLogZeile } from '../../../lib/nutrition/plan-lage'
 // G-101: die zwei Mikronaehrstoff-Kacheln des Diary.
 import { ladeMikro, type MikroStand } from '../../../lib/nutrition/mikro-read'
+// G-412/1: der Score aus daily_summary, Zielen und Profil.
+import { getScoreAm, type ScoreStand } from '../../../lib/nutrition/score-read'
+// G-412/7: acht Naehrstoffe x 30 Tage.
+import { ladeMikroTrend, type MikroTrendStand } from '../../../lib/nutrition/mikro-trend-read'
 // G-101/C-54: die Naehrstoffordnung; seit G-121 mit Zeitfenster
 // (C-157). `[cmd]` G-140: **der Baum kommt aus `parent_code`**
 // (C-161) — hier stand *„aus display_tier"*, und das ist keine
@@ -451,6 +455,35 @@ export default async function V2NutritionPage({
     }
   }
 
+  // ══ G-412/1: der Nutrition score ══════════════════════════════
+  //
+  // `[read]` **Nur fuer das Tagebuch**, wie die Mikronaehrstoffe —
+  // die Kachel steht dort. `[cmd]` **Faellt der Weg aus, zeigt die
+  // Kachel den Grund**, keinen Ring auf 0.
+  let score: ScoreStand | null = null
+  if (tab === 'diary') {
+    try {
+      score = await getScoreAm(datum)
+    } catch (e) {
+      score = null
+    }
+  }
+
+  // ══ G-412/7: der Mikronaehrstoff-Verlauf ══════════════════════
+  //
+  // `[cmd]` **Nur fuer den Insights-Reiter** — dreissig Aufrufe der
+  // Schnappschuss-Funktion, gemessen 645 ms in SQL. `[read]` **Das
+  // ist zu viel fuer das Tagebuch, das man staendig oeffnet**, und
+  // vertretbar fuer einen Reiter, den man absichtlich waehlt.
+  let mikroTrend: MikroTrendStand | null = null
+  if (tab === 'insights') {
+    try {
+      mikroTrend = await ladeMikroTrend(datum, 30)
+    } catch {
+      mikroTrend = null
+    }
+  }
+
   // G-101/C-54: die Naehrstoffordnung. Nur fuer den Nutrients-Tab.
   // G-121: das Zeitfenster steht in der Adresse (`?fenster=7`), damit
   // die Werte serverseitig geladen werden und der Zustand messbar
@@ -552,6 +585,8 @@ export default async function V2NutritionPage({
       ghostSlots={ghostBenennung}
       wechsel={wechsel}
       mikro={mikro}
+      score={score}
+      mikroTrend={mikroTrend}
       ordnung={ordnung}
       einsichten={einsichten}
       rezepte={rezepte}

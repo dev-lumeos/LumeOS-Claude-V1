@@ -77,7 +77,7 @@ test('G-283: die Kachel sagt, warum kein Score dasteht', () => {
     'Beide Saetze sagen dasselbe — dann tragen sie nichts bei (G-283).')
   assert.match(STUFE_OFFEN_SATZ, /G-228/,
     'Der offene Fall nennt den Punkt nicht, der ihn entscheidet (G-283).')
-  const s = ohneKommentare('apps/web/src/app/v2/nutrition/diary-entwurf.tsx')
+  const s = ohneKommentare('apps/web/src/app/v2/nutrition/score-echt.tsx')
   assert.match(s, /score === null/,
     'Die Kachel prueft nicht mehr auf den fehlenden Score (G-283).')
   assert.doesNotMatch(s, /\?\?\s*0\.90/,
@@ -85,22 +85,41 @@ test('G-283: die Kachel sagt, warum kein Score dasteht', () => {
   // `[cmd]` **Gemessen am Schirm:** `pro` zeigt „offen (G-228)",
   // `gibtsnicht` zeigt „unbekannt". `[read]` **Ein unbekannter Name
   // hat mit G-228 nichts zu tun** — er darf den Punkt nicht zitieren.
-  assert.match(s, /stufeGilt\(level\)\s*\n?\s*\?\s*`\$\{level\} · offen \(G-228\)`/,
+  // `[cmd]` **G-412: die Variable heisst `stufe`** — sie kommt aus
+  // dem Profil, nicht mehr aus einer festen Zuweisung.
+  // `[read]` **`\s*` statt `\s*\n?\s*`** — die Einrueckung der
+  // umgezogenen Kachel ist tiefer, und die Zusage haengt nicht an
+  // der Zeilenlage.
+  assert.match(s, /stufeGilt\(stufe\)\s*\?\s*`\$\{stufe\} · offen \(G-228\)`/,
     'Die Zeile unterscheidet „offen" nicht mehr von „unbekannt" — dann '
     + 'zitiert ein Tippfehler den Punkt G-228 (G-283).')
 })
 
-test('G-283: die Kachel behauptet keine Quelle, die sie nicht liest', () => {
+// ══ G-412: DIESE ZUSAGE HAT SICH UMGEDREHT ═══════════════
+//
+// `[cmd]` **G-283 verbot den Satz** *„Source of level:
+// experience_level“*, weil die Kachel `level` fest auf
+// `'advanced'` setzte — eine genannte, aber ungenutzte Quelle ist
+// eine Falschaussage (A-62).
+//
+// `[cmd]` **G-412 bindet die Kachel an** — sie liest
+// `public.profiles.experience_level` wirklich. `[read]` **Damit
+// ist derselbe Satz keine Falschaussage mehr, sondern die
+// Wahrheit**, und die Probe verlangt ihn statt ihn zu verbieten.
+//
+// `[read]` **Geprueft wird beides:** die Zeile nennt die Quelle,
+// UND der Leseweg holt sie.
+test('G-283/G-412: die genannte Quelle ist die gelesene', () => {
   // `[cmd]` **Die Kachel setzt `level` fest auf `'advanced'`** und
   // sagte trotzdem *„Source of level: Auth · experience_level"*.
   // `[read]` **Ein Satz, der eine Quelle nennt, die nicht benutzt
   // wird, ist eine Falschaussage** — dieselbe Klasse wie A-62.
-  const s = ohneKommentare('apps/web/src/app/v2/nutrition/diary-entwurf.tsx')
+  const s = ohneKommentare('apps/web/src/app/v2/nutrition/score-echt.tsx')
   const zeile = /Source of level" value=\{?"([^"]+)"/.exec(s)
   assert.ok(zeile, 'Die Zeile "Source of level" wurde nicht gefunden (G-283).')
-  assert.doesNotMatch(zeile[1], /experience_level/,
-    'Die Kachel nennt wieder `experience_level` als Quelle, liest aber '
-    + 'weiter einen festen Wert (G-283).')
+  assert.match(zeile[1], /experience_level/,
+    'Die Kachel nennt die Quelle nicht mehr, obwohl sie sie liest '
+    + '(G-412: das Profil WIRD gelesen, der Satz ist damit wahr).')
 })
 
 // ══ G-284 ══════════════════════════════════════════════════════════

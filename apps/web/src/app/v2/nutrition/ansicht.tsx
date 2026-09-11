@@ -25,12 +25,16 @@ const QUELLE = 'theme-v1/module-nutrition.jsx'
 import {
   // G-263: `SmartSuggestionsCard` ist hier raus — die Kachel ist
   // entfernt, nicht nur abgeschaltet (Begruendung am Renderort).
-  NutritionScoreCard, NutritionPendingActions,
-  PreWorkoutOptimizer, MicronutrientSnapshot, BelowThreshold,
+  // G-412: vier Entwuerfe sind entfernt — der Score ist angebunden,
+  // die anderen drei standen doppelt (Gruende am Renderort).
+  NutritionPendingActions,
 } from './diary-entwurf'
 import { HydrationKachel } from './hydration'
 // G-101: die zwei Mikronaehrstoff-Kacheln mit echten Werten.
 import { MikroSchnappschuss, UnterSchwelle } from './mikro-kacheln'
+// G-412/1: der angebundene Score.
+import { ScoreEcht } from './score-echt'
+import type { ScoreStand } from '../../../lib/nutrition/score-read'
 import type { MikroStand } from '../../../lib/nutrition/mikro-read'
 // G-101/C-54: die Naehrstoffordnung — der Baum kommt aus `parent_code`
 // (C-161), nicht aus `display_tier`. `[cmd]` G-140: hier stand
@@ -101,12 +105,16 @@ import {
   NutritionInsightsReferenz, NutritionFoodsReferenz,
   NutritionPlannerReferenz, NutritionNutrientsReferenz,
   NutritionPlansReferenz, NutritionPrefsReferenz,
-  NutritionDiaryReferenz,
   EinkaufReferenz,
 } from './mockup-referenz'
 import {
-  FehlendeInsightsKacheln, FehlendePlanKacheln,
+  // G-412/7: `FehlendeInsightsKacheln` ist entfallen — die eine
+  // Kachel darin (Micronutrient trend) ist angebunden.
+  FehlendePlanKacheln,
 } from './fehlende-kacheln'
+// G-412/7: der Verlauf mit echten Anteilen.
+import { MikroTrendKachel } from './mikro-trend'
+import type { MikroTrendStand } from '../../../lib/nutrition/mikro-trend-read'
 // G-353: die eine Setup-Karte.
 import { SetupKarte } from './setup-karte'
 import type { SetupKarte as SetupKarteDaten }
@@ -184,7 +192,7 @@ export async function TagebuchAnsicht({
   setupKarte = null,
   wechsel = LEERER_WECHSELSTAND,
   istAdmin = false, slots = null, mahlzeitSlots = [], ghostSlots = [], foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null, rezepte = null, allePlaene = [],
-  offeneAktionen = null, sitzung = null,
+  offeneAktionen = null, sitzung = null, score = null, mikroTrend = null,
   unvertraeglichkeiten = [],
 }: {
   /** G-154: fuer den Hinweis im Foods-Tab. */
@@ -193,6 +201,10 @@ export async function TagebuchAnsicht({
   offeneAktionen?: OffeneAktionenStand | null
   /** G-262: `null` heisst nicht gelesen — dann bleibt der Entwurf. */
   sitzung?: SitzungStand | null
+  /** G-412/1: der Nutrition score aus echten Zeilen. */
+  score?: ScoreStand | null
+  /** G-412/7: acht Naehrstoffe x 30 Tage. */
+  mikroTrend?: MikroTrendStand | null
   datum: string
   planLogs?: PlanLogZeile[]
   coachFreigabe?: boolean
@@ -335,7 +347,7 @@ export async function TagebuchAnsicht({
       <Zukunftshinweis datum={datum} />
 
       {tab !== 'diary' && (
-        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} rezepte={rezepte} allePlaene={allePlaene} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} planLogs={planLogs} coachFreigabe={coachFreigabe} einkaufslisten={einkaufslisten} einkaufsliste={einkaufsliste} tagesEintraege={tagesEintraege} wechsel={wechsel} />
+        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} mikroTrend={mikroTrend} rezepte={rezepte} allePlaene={allePlaene} bewertung={bewertung} datum={datum} unvertraeglichkeiten={unvertraeglichkeiten} planLogs={planLogs} coachFreigabe={coachFreigabe} einkaufslisten={einkaufslisten} einkaufsliste={einkaufsliste} tagesEintraege={tagesEintraege} wechsel={wechsel} />
       )}
       {tab === 'diary' && (
       <>
@@ -583,7 +595,19 @@ export async function TagebuchAnsicht({
             `[read]` **Eine ist gebaut, eine erfunden, zwei sind
             Empfehlungen. Keine traegt.** Der Auftrag: *„Wenn nicht: sag
             es, und die Kachel wird entfernt statt gefuellt."* */}
-        <NutritionScoreCard />
+        {/* ══ G-412/1: der Score ist angebunden ═══════════════
+            `[cmd]` **Fuenf Anteile aus `nutrition.daily_summary`,
+            Ziele aus `zielwerte-read`, Stufe aus
+            `public.profiles.experience_level`.**
+            `[cmd]` **Zwei Grenzen, beide gemessen und in der Kachel
+            sichtbar:** kein Ballaststoffziel im Schema, und fuer
+            `pro` ist kein Stufenfaktor entschieden (G-228). */}
+        {/* `[read]` **`null` heisst: der Leseweg ist ausgefallen** —
+            dann zeigt die Kachel den Grund, keinen Ring auf 0. */}
+        <ScoreEcht stand={score ?? {
+          datum, anteile: [], stufe: null, gewichtGerechnet: 0,
+          fehler: 'Der Leseweg hat nicht geantwortet.',
+        }} />
         {/* G-258/E-29: ANGEBUNDEN an `coach.offene_aktionen('nutrition')`.
             `[read]` **Muster G-90:** der Entwurf bleibt nur, solange gar
             nichts geladen wurde (kein Prop). Sobald gelesen wurde — auch
@@ -621,7 +645,16 @@ export async function TagebuchAnsicht({
             `[read]` **Der echte Teil bleibt unveraendert** — dieselbe
             Bedingung, nur kein Sonst-Zweig mehr. */}
         {sitzung && <PreWorkoutEcht stand={sitzung} />}
-        <PreWorkoutOptimizer />
+        {/* ══ G-412/2: die Attrappe ist raus ══════════════════
+            `[cmd]` **Gemessen, warum sie trotz `pre-workout-echt.tsx`
+            stand:** sie wurde NICHT als Sonst-Zweig gerendert,
+            sondern IMMER — eine Zeile unter der echten Kachel.
+            `[read]` **Beide zeigten verschiedene Sachen:** die echte
+            sagt, WANN die naechste Einheit ist
+            (`training.workout_sessions`), die Attrappe zeigte einen
+            Zeitfenster-Ring mit erfundenen 68 %.
+            `[read]` **Der Ring braeuchte eine Naehrstoffplanung je
+            Einheit** — dafuer gibt es keine Tabelle. */}
         {/* ANGEBUNDEN: hydration_day. Deshalb keine Marke mehr — und
             zwei Farben, weil die Vorlage die beiden Herkuenfte nicht
             unterscheidet. */}
@@ -631,13 +664,36 @@ export async function TagebuchAnsicht({
             Entwurf mit seiner Marke stehen — dasselbe Muster wie bei
             den Vorlieben (G-65). */}
         {mikro && mikro.zeilen.length > 0 && <MikroSchnappschuss d={mikro} />}
-        <MicronutrientSnapshot />
+        {/* ══ G-412/3: das Netz sitzt jetzt IN der oberen Kachel
+            **Tom:** *„bau die grafik in die obere kachel unter den
+            balken mit rein, dann hat man zwei ansichten."*
+            `[read]` **Damit faellt die Attrappe weg** — sie zeigte
+            dieselben acht Naehrstoffe, nur als Netz. */}
         {mikro && mikro.zeilen.length > 0 && <UnterSchwelle d={mikro} />}
-        <BelowThreshold />
+        {/* ══ G-412/4: doppelt, also raus ═════════════════════
+            `[cmd]` **Die angebundene Fassung steht direkt darueber**
+            (`UnterSchwelle`, echte Werte aus
+            `micronutrient_below_threshold`). `[cmd]` **Die Attrappe
+            zeigte 3 von 117 mit erfundenen Zahlen.** */}
 
+        {/* ══ G-412/8: zwei Drittel Hoehe ═════════════════════════
+            **Tom, 2026-09-08:** *„Tagesdeckung — zwei Drittel Hoehe,
+            und die Kachel daneben entsprechend."*
+
+            `[cmd]` **Am Schirm gemessen: 616 px** — die hoechste
+            Kachel der rechten Spalte.
+            `[cmd]` **Gemessen, ob eine Nachbarkachel ihre Hoehe aus
+            einem Raster nimmt: NEIN** — die Spalte ist `flex`, die
+            Kacheln stapeln sich. **Es gibt keine Nachbarin, die
+            mitwaechst**, also reicht diese eine Aenderung.
+
+            `[read]` **Der Inhalt bleibt vollstaendig** — die Liste
+            scrollt innerhalb der Kachel, statt gekuerzt zu werden.
+            **Eine gekuerzte Liste saehe aus wie weniger Daten.** */}
         <Card
           title={t('deckungTitel')}
           sub={t('bewertet', { anzahl: bewertung.length })}
+          className="v2-deckung-kachel"
           actions={
             bewertbar.length > 0
               ? <Pill variant="acc">{t('mitReferenz', { anzahl: bewertbar.length })}</Pill>
@@ -672,8 +728,18 @@ export async function TagebuchAnsicht({
             </p>
           )}
 
+          {/* `[cmd]` **G-412/8: 460 -> 410.** `[read]` **Hier stand
+              schon ein Scrollkasten** — meine erste Aenderung setzte
+              die Hoehe in `nutrition.css` und blieb wirkungslos, weil
+              ein Inline-Stil immer gewinnt. **Am Schirm gemessen:
+              `maxHeight` blieb bei 460 px.**
+              `[cmd]` **Zwei Drittel von 616 px sind 411** — und die
+              Kachel besteht nicht nur aus der Liste: Kopf 21 px,
+              Hinweis 77 px, Polsterung. `[cmd]` **Am Schirm
+              nachgemessen:** mit 410 px Liste wurde die Kachel 566.
+              **Fuer 411 bleiben der Liste rund 255 px.** */}
           {bewertung.length > 0 && (
-            <div style={{ maxHeight: 460, overflowY: 'auto' }}>
+            <div style={{ maxHeight: 255, overflowY: 'auto' }}>
               {bewertung.map(b => (
                 <CoverageRow
                   key={`${b.nutrient_code}-${b.reference_kind ?? 'x'}`}
@@ -714,15 +780,18 @@ export async function TagebuchAnsicht({
         </Card>
         </div>
       </div>
-      {/* `[cmd]` G-365: die Linie stand INNERHALB der rechten
-          Spalte — sie trennte eine Kachel, nicht den Reiter.
+      {/* ══ G-412/A3: die Diary-Referenz ist entfallen ══════════
+          **Tom, 2026-09-08:** *„und dann kann die
+          mockup-referenz-linie und alles darunter weg."*
 
-          **Tom, 2026-09-07:** *,,keine saubere linie nur eine kleine
-          in der rechten spalte und nicht den mockup darunter."*
+          `[cmd]` **NUR fuer das Tagebuch** — die anderen SIEBEN
+          Bloecke (Nutrients, Insights, Plans, Prefs, Planner,
+          Einkauf, Foods) bleiben unveraendert.
 
-          `[read]` Eine Trennlinie gehoert ans Ende des Reiters, ueber
-          die volle Breite. Darunter der vollstaendige Mockup-Reiter. */}
-      <NutritionDiaryReferenz />
+          `[read]` **Der Grund ist der Fortschritt:** die vier
+          Kacheln, die den Vergleich noetig machten, sind angebunden
+          oder entfallen. **Was darunter stand, zeigte nichts mehr,
+          was oben fehlte.** */}
       </>
       )}
     </>
@@ -742,7 +811,7 @@ export async function TagebuchAnsicht({
  * eingebaut.
  */
 function AndererTab({
-  tab, foodsStart, vorlieben, plan, ordnung, einsichten, rezepte,
+  tab, foodsStart, vorlieben, plan, ordnung, einsichten, mikroTrend, rezepte,
   allePlaene = [], bewertung = [],
   datum,
   planLogs = [], coachFreigabe = false, einkaufslisten = 0, einkaufsliste = null, tagesEintraege = [],
@@ -772,6 +841,8 @@ function AndererTab({
   ordnung?: NaehrstoffOrdnung | null
   /** G-101: Kalorienbilanz und Makroschnitt. */
   einsichten?: InsightsStand | null
+  /** G-412/7: acht Naehrstoffe x 30 Tage. */
+  mikroTrend?: MikroTrendStand | null
   /** G-289: Rezepte und Einkaufslisten. */
   rezepte?: RezeptStand | null
   /** C-372/E-41: alle Plaene, kurz. */
@@ -871,7 +942,15 @@ function AndererTab({
             Duplikat. */}
         <NutritionInsightsTab
           ohneEchte={Boolean(einsichten && (einsichten.bilanz || einsichten.makros))} />
-      <FehlendeInsightsKacheln />
+      {/* ══ G-412/7: der Verlauf ist angebunden ═══════════════
+          `[cmd]` **Acht Naehrstoffe x 30 Tage aus
+          `nutrition.micronutrient_snapshot`** — dieselbe Funktion,
+          die den Schnappschuss fuellt.
+          `[cmd]` **In der Vorlage sind die Zellen `Math.random()`**
+          (`module-nutrition.jsx:399`); hier nicht.
+          `[read]` **Der Entwurf ist damit entfallen** — er zeigte
+          nichts mehr, was oben fehlte. */}
+      {mikroTrend && <MikroTrendKachel d={mikroTrend} />}
         <NutritionInsightsReferenz />
       </div>
     )

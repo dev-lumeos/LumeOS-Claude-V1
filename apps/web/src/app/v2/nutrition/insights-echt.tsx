@@ -16,7 +16,7 @@
 // sie nicht zum Ziel**, es heisst nur, dass der Entwurf plausibel
 // geraten hat.
 import * as React from 'react'
-import { Card, Pill, Row, Meter } from '@lumeos/ui'
+import { Card, Pill, Row, Meter, LineChart } from '@lumeos/ui'
 
 import type { InsightsStand } from '../../../lib/nutrition/insights-read'
 
@@ -53,6 +53,20 @@ export function KalorienbilanzKachel({ d, fenster }: {
     )
   }
 
+  // ══ G-412/6: die Tagesreihe fuer die Grafik ══════════════════
+  //
+  // `[read]` **Nur Tage MIT Wert** — die Vorlage zieht eine
+  // durchgehende Kurve, und eine Luecke als 0 waere ein Absturz auf
+  // dem Papier, den es nicht gab.
+  const kcalReihe = d.reihe
+    .map(r => r.kcal)
+    .filter((n): n is number => n !== null)
+  const xLabels = d.reihe
+    .filter(r => r.kcal !== null)
+    .map((r, i, alle) => (i === 0 || i === alle.length - 1
+      || i === Math.floor(alle.length / 2) ? r.datum.slice(5) : ''))
+  const zielKcal = d.zielKcal
+
   return (
     <Card
       title="Calorie balance"
@@ -77,6 +91,38 @@ export function KalorienbilanzKachel({ d, fenster }: {
       <p className="v2-muted" style={{ fontSize: 11.5, marginBottom: 10 }}>
         Zufuhr minus Verbrauch, gemittelt ueber den Zeitraum.
       </p>
+
+      {/* ══ G-412/6: die Verlaufsgrafik ══════════════════════════
+          `[cmd]` **`module-charts-pro.jsx:115`, `window.LineChart`** —
+          geglaettet, Flaeche unter der ersten Reihe, Ziel als
+          gestrichelte Linie.
+          `[cmd]` **ZWEI Reihen, wie die Vorlage sie ruft:** Zufuhr in
+          `--acc-nutri`, das Ziel flach in `--fg-dim`.
+          `[cmd]` **`range={[1500, 3200]}`, `h={180}`** — feste
+          Grenzen, damit zwei Zeitfenster vergleichbar bleiben.
+          `[read]` **Ohne Ziel nur EINE Reihe** — eine flache Linie
+          auf einem geratenen Wert waere eine Aussage ueber den
+          Nutzer. */}
+      {kcalReihe.length >= 2 && (
+        <div style={{ marginBottom: 10 }}>
+          <LineChart
+            h={180}
+            range={[1500, 3200]}
+            xLabels={xLabels}
+            series={zielKcal === null
+              ? [{ data: kcalReihe, color: 'var(--acc-nutri)' }]
+              : [
+                { data: kcalReihe, color: 'var(--acc-nutri)' },
+                { data: kcalReihe.map(() => zielKcal), color: 'var(--fg-dim)', dashed: true },
+              ]}
+          />
+          {zielKcal === null && (
+            <p className="v2-muted" style={{ fontSize: 10.5, marginTop: 4 }}>
+              Keine Ziellinie — im Profil ist kein Kalorienziel hinterlegt.
+            </p>
+          )}
+        </div>
+      )}
 
       <Row label="Zufuhr" value={`${z(b.zufuhr, 1)} kcal`} />
       <Row label="Verbrauch (adaptiv)" value={`${z(b.verbrauch, 1)} kcal`} />
@@ -105,6 +151,21 @@ const MAKROFARBEN: Array<{
   { schluessel: 'fat', label: 'Fett', farbe: 'var(--acc-goals)' },
 ]
 
+/**
+ * Der Wochentag eines ISO-Datums — G-412/5.
+ *
+ * `[cmd]` **Die Vorlage zeigt `Tue · 2,890`** (`:388`). `[read]`
+ * **Hier deutsch abgekuerzt**, wie die Wochentage der Balkenreihe.
+ *
+ * `[read]` **Kein `new Date()` ohne Zeitzone** — `T00:00:00Z` haelt
+ * den Tag fest, sonst faellt er je nach Zone auf den Vortag (G-390).
+ */
+function tagKurz(datum: string): string {
+  const d = new Date(`${datum}T00:00:00Z`)
+  if (Number.isNaN(d.getTime())) return datum
+  return ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][d.getUTCDay()]
+}
+
 export function MakroschnittKachel({ d, fenster }: {
   d: InsightsStand
   /** G-291: `14d avg` stand fest im Titel - siehe oben. */
@@ -125,6 +186,24 @@ export function MakroschnittKachel({ d, fenster }: {
     protein: m.anteil_protein, carbs: m.anteil_carbs, fat: m.anteil_fat,
   }
   const gramm = { protein: m.protein_g, carbs: m.carbs_g, fat: m.fat_g }
+
+  // ══ G-412/5: hoechster Tag, niedrigster Tag, Tage am Ziel ════
+  //
+  // `[read]` **Nur Tage MIT Kalorienwert** — ein Tag ohne Eintrag ist
+  // kein Tiefstwert, sondern eine Luecke.
+  const mitWert = d.reihe.filter(
+    (r): r is typeof r & { kcal: number } => r.kcal !== null)
+  const hoch = mitWert.length
+    ? mitWert.reduce((a, b) => (b.kcal > a.kcal ? b : a))
+    : null
+  const tief = mitWert.length
+    ? mitWert.reduce((a, b) => (b.kcal < a.kcal ? b : a))
+    : null
+  const zielKcal = d.zielKcal
+  // `[cmd]` **±100 kcal — die Toleranz der Vorlage** (`:390`).
+  const amZiel = zielKcal === null
+    ? 0
+    : mitWert.filter(r => Math.abs(r.kcal - zielKcal) <= 100).length
 
   return (
     <Card title={`Macro split · ${fenster}d avg`} sub={`${m.tage} Tage gemittelt`}>
@@ -147,6 +226,29 @@ export function MakroschnittKachel({ d, fenster }: {
       </div>
       <div className="v2-divider" />
       <Row label="Kalorien im Schnitt" value={`${z(m.kcal, 0)} kcal`} />
+      {/* ══ G-412/5: die drei Zeilen der Vorlage ═════════════════
+          `[cmd]` **`module-nutrition.jsx:386-390`**, nach der
+          Trennlinie: hoechster Tag, niedrigster Tag, Tage am Ziel.
+          `[cmd]` **Alle drei aus `d.reihe`** — dieselbe Tagesreihe,
+          die die Verlaufsgrafik zeichnet.
+          `[read]` **Die Toleranz ±100 steht in der Vorlage**, das
+          Ziel kommt aus dem Profil (`d.zielKcal`). */}
+      <Row
+        label="Hoechster Tag"
+        value={hoch ? `${tagKurz(hoch.datum)} · ${z(hoch.kcal, 0)}` : '—'}
+      />
+      <Row
+        label="Niedrigster Tag"
+        value={tief ? `${tagKurz(tief.datum)} · ${z(tief.kcal, 0)}` : '—'}
+      />
+      {/* `[read]` **Ohne Ziel keine Quote** — die Zeile sagt dann,
+          dass das Ziel fehlt, statt „0 von 14" zu behaupten. */}
+      <Row
+        label="Tage am Ziel ±100"
+        value={zielKcal === null
+          ? 'kein Kalorienziel hinterlegt'
+          : `${amZiel} von ${mitWert.length}`}
+      />
       {/*
         `[read]` **KEINE ZIELVERTEILUNG.** Der Entwurf schreibt
         „Target ratio: 28 / 47 / 25" in den Untertitel — diese Zahlen

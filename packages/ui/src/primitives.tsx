@@ -238,7 +238,19 @@ export function Sparkline({
 // LineChart
 // ---------------------------------------------------------------
 
-export type LineSeries = { data: number[]; color?: string }
+export type LineSeries = {
+  data: number[]
+  color?: string
+  /**
+   * Gestrichelt — G-412/A5.
+   *
+   * `[cmd]` **`module-charts-pro.jsx:161`:** eine zweite Reihe in
+   * `var(--fg-dim)` wird gestrichelt gezeichnet (`"3 3"`). `[read]`
+   * **Das ist die Ziellinie** — sie soll sich von der Messreihe
+   * unterscheiden lassen, auch in Graustufen.
+   */
+  dashed?: boolean
+}
 
 export type LineChartProps = {
   /** Eine Reihe je Kurve. Die erste bekommt die Flaeche. */
@@ -266,52 +278,106 @@ export function LineChart({
   // verschwindet lautlos. Lieber gar nichts zeichnen.
   if (reihen.length === 0 || reihen.every(s => s.data.length < 2)) return null
 
+  // `[read]` **Eine Kennung je Diagramm** — zwei Diagramme auf einer
+  // Seite duerfen sich die Verlaufsdefinition nicht teilen.
+  // `[cmd]` **`React.useId()`, nicht `Math.random()`** wie die
+  // Vorlage: der Server rendert vor, und eine Zufallszahl waere im
+  // Browser eine andere (Hydration).
+  const uid = React.useId().replace(/:/g, '')
+
   const alle = reihen.flatMap(s => s.data)
-  const [min, max] = range ?? [Math.min(...alle) * 0.9, Math.max(...alle) * 1.05]
+  const [min, max] = range ?? [Math.min(...alle) * 0.92, Math.max(...alle) * 1.06]
   const spanne = max - min || 1
   const w = 600
-  const pad = { l: 28, r: 8, t: 8, b: 18 }
+  const pad = { l: 34, r: 10, t: 10, b: xLabels ? 20 : 8 }
   const iw = w - pad.l - pad.r
   const ih = h - pad.t - pad.b
   const zuX = (i: number, n: number) => pad.l + (n > 1 ? (i / (n - 1)) * iw : iw / 2)
   const zuY = (v: number) => pad.t + ih - ((v - min) / spanne) * ih
 
+  /**
+   * Geglaettet — `module-charts-pro.jsx:127-135`.
+   *
+   * `[cmd]` **Je Punktpaar zwei quadratische Bezier**, Kontrollpunkt
+   * in der Mitte. `[read]` **Nicht kubisch** — die Vorlage benutzt
+   * `Q`, und die Kurve laeuft dadurch exakt durch jeden Messpunkt.
+   */
+  const glatt = (pts: Array<[number, number]>) => {
+    let d = `M ${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`
+    for (let i = 1; i < pts.length; i++) {
+      const [x0, y0] = pts[i - 1]
+      const [x1, y1] = pts[i]
+      const mx = (x0 + x1) / 2
+      d += ` Q ${mx.toFixed(1)} ${y0.toFixed(1)} ${mx.toFixed(1)} ${((y0 + y1) / 2).toFixed(1)}`
+        + ` Q ${mx.toFixed(1)} ${y1.toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`
+    }
+    return d
+  }
+
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: h }}
+    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: h, overflow: 'visible' }}
          preserveAspectRatio="none" aria-hidden focusable="false">
-      {[0, 0.25, 0.5, 0.75, 1].map(t => (
-        <g key={t}>
-          <line x1={pad.l} x2={w - pad.r} y1={pad.t + t * ih} y2={pad.t + t * ih}
-                stroke="var(--border)" strokeWidth="1" />
-          <text x={pad.l - 6} y={pad.t + t * ih + 3} textAnchor="end" fontSize="9"
+      {/* `[cmd]` **Je Reihe ein Verlauf, 0,22 bis 0** (`:141-146`). */}
+      <defs>
+        {reihen.map((s, i) => (
+          <linearGradient key={i} id={`${uid}-${i}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={s.color ?? color} stopOpacity="0.22" />
+            <stop offset="100%" stopColor={s.color ?? color} stopOpacity="0" />
+          </linearGradient>
+        ))}
+      </defs>
+      {/* `[cmd]` **Fuenf Linien, die unterste voll, die anderen 0,55**
+          (`:149-151`) — das Gitter tritt nach oben zurueck. */}
+      {[0, 0.25, 0.5, 0.75, 1].map((tt, i) => (
+        <g key={tt}>
+          <line x1={pad.l} x2={w - pad.r} y1={pad.t + tt * ih} y2={pad.t + tt * ih}
+                stroke="var(--border)" strokeWidth="1" strokeOpacity={i === 4 ? 1 : 0.55} />
+          <text x={pad.l - 7} y={pad.t + tt * ih + 3.2} textAnchor="end" fontSize="9"
                 fill="var(--fg-dim)" fontFamily="var(--font-mono)">
-            {Math.round(max - t * spanne)}
+            {Math.round(max - tt * spanne)}
           </text>
         </g>
       ))}
       {reihen.map((s, si) => {
         const pts = s.data.map((v, i): [number, number] => [zuX(i, s.data.length), zuY(v)])
-        const d = pts
-          .map((pt, i) => (i === 0 ? 'M' : 'L') + pt[0].toFixed(1) + ' ' + pt[1].toFixed(1))
-          .join(' ')
-        const flaeche = `${d} L ${pts[pts.length - 1][0]} ${pad.t + ih} L ${pts[0][0]} ${pad.t + ih} Z`
+        const d = pts.length > 1 ? glatt(pts) : `M ${pts[0][0]} ${pts[0][1]}`
+        // `[cmd]` **`:161`:** ausdruecklich gesetzt ODER zweite Reihe
+        // in `--fg-dim` — die Ziellinie.
+        const gestrichelt = s.dashed
+          || (si > 0 && reihen.length > 1 && s.color === 'var(--fg-dim)')
         return (
           <g key={si}>
-            {showArea && si === 0 && <path d={flaeche} fill={s.color ?? color} opacity="0.08" />}
-            <path d={d} fill="none" stroke={s.color ?? color} strokeWidth="1.5"
+            {/* `[cmd]` **Flaeche nur unter der ERSTEN Reihe** (`:164`)
+                — ein gefuelltes Ziel verdeckte die Messung. */}
+            {showArea && si === 0 && (
+              <path
+                d={`${d} L ${pts[pts.length - 1][0].toFixed(1)} ${pad.t + ih}`
+                  + ` L ${pts[0][0].toFixed(1)} ${pad.t + ih} Z`}
+                fill={`url(#${uid}-${si})`}
+              />
+            )}
+            <path d={d} fill="none" stroke={s.color ?? color}
+                  strokeWidth={si === 0 ? 1.8 : 1.2}
+                  strokeLinecap="round" strokeLinejoin="round"
+                  strokeDasharray={gestrichelt ? '3 3' : undefined}
                   vectorEffect="non-scaling-stroke" />
-            {pts.map((pt, i) => (
-              <circle key={i} cx={pt[0]} cy={pt[1]} r="2" fill={s.color ?? color} />
+            {/* `[cmd]` **Punkte nur bei hoechstens 16 Werten** (`:171`)
+                — bei 30 Tagen wird die Kurve sonst zur Perlenkette.
+                **Fuellung `--bg`, damit sie ausgestanzt wirken.** */}
+            {si === 0 && pts.length <= 16 && pts.map((pt, i) => (
+              <circle key={i} cx={pt[0]} cy={pt[1]} r="2" fill="var(--bg)"
+                      stroke={s.color ?? color} strokeWidth="1.4"
+                      vectorEffect="non-scaling-stroke" />
             ))}
           </g>
         )
       })}
-      {xLabels?.map((l, i) => (
+      {xLabels?.map((l, i) => (l ? (
         <text key={l + i} x={zuX(i, xLabels.length)} y={h - 4} textAnchor="middle"
               fontSize="9" fill="var(--fg-dim)" fontFamily="var(--font-mono)">
           {l}
         </text>
-      ))}
+      ) : null))}
     </svg>
   )
 }

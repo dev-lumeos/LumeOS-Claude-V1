@@ -24,6 +24,11 @@ import path from 'node:path'
 const DASHBOARD = path.join(process.cwd(), 'src/app/v2/dashboard/entwurf.tsx')
 const NUTRITION = path.join(process.cwd(), 'src/app/v2/nutrition/ansicht.tsx')
 const DIARY = path.join(process.cwd(), 'src/app/v2/nutrition/diary-entwurf.tsx')
+/** G-412: die Formel und die Stufenfaktoren, ausserhalb der
+ *  Client-Grenze. */
+const FORMEL = path.join(process.cwd(), 'src/lib/nutrition/stufenfaktor.ts')
+/** G-412: die angebundene Score-Kachel. */
+const SCORE = path.join(process.cwd(), 'src/app/v2/nutrition/score-echt.tsx')
 const BAUM = path.join(process.cwd(), 'src/app/v2/nutrition/nutrient-baum.ts')
 const TRAINING = path.join(process.cwd(), 'src/app/v2/training/ansicht.tsx')
 const TRAINING_SPEC = path.join(process.cwd(), 'src/app/v2/training/tabs-spec.tsx')
@@ -152,12 +157,23 @@ test('die Begleitkarten des Diary stehen da', () => {
   // in den Daten, zwei waren Empfehlungen (C-108/F-02). Belege in
   // `lib/nutrition/vorschlags-lage.ts`.
   const quelle = fs.readFileSync(DIARY, 'utf8')
-  for (const karte of [
-    'Nutrition score', 'Pending actions',
-    'Pre-workout window', 'Hydration', 'Micronutrient snapshot', 'Below threshold',
-  ]) {
+  // ══ G-412: VIER KARTEN SIND ENTFALLEN ══════════════════
+  //
+  // `[cmd]` **`Nutrition score` ist ANGEBUNDEN** (`score-echt.tsx`,
+  // aus `nutrition.daily_summary` und dem Profil).
+  // `[cmd]` **`Pre-workout window`, `Micronutrient snapshot` und
+  // `Below threshold` standen DOPPELT** — je eine angebundene
+  // Fassung eine Zeile darueber.
+  //
+  // `[read]` **Was bleibt, ist die Zusage:** eine Karte verschwindet
+  // nicht unbemerkt. **Die vier sind mit Grund entfernt, und der
+  // Grund steht am Renderort.**
+  for (const karte of ['Pending actions', 'Hydration']) {
     assert.ok(quelle.includes(karte), `Die Karte "${karte}" fehlt.`)
   }
+  // Die angebundene Fassung des Scores steht in ihrer eigenen Datei.
+  assert.ok(fs.readFileSync(SCORE, 'utf8').includes('Nutrition score'),
+    'Die angebundene Score-Kachel fehlt (G-412).')
   // Und die entfernte kommt nicht unbemerkt zurueck: wer sie wieder
   // einbaut, muss diese Zeile anfassen und die Begruendung lesen.
   assert.ok(!/export function SmartSuggestionsCard/.test(quelle),
@@ -170,7 +186,18 @@ test('der Nutrition score rechnet mit der Formel der Vorlage', () => {
   // Gewichtung steht in module-nutrition-spec.jsx:38-42 und wird
   // uebernommen, nicht erfunden — der frueher hier stehende leere Ring
   // war die Abweichung.
-  const quelle = fs.readFileSync(DIARY, 'utf8')
+  // ══ G-412: die Formel ist umgezogen ══════════════════
+  //
+  // `[cmd]` **Sie stand in `diary-entwurf.tsx`, und die traegt
+  // `'use client'`.** `[cmd]` **Die angebundene Kachel ist eine
+  // Server-Komponente** — ein Wert-Import ueber diese Grenze warf
+  // zur Laufzeit `stufenFaktor is not a function` (am Schirm
+  // gemessen: 0 Karten).
+  //
+  // `[read]` **Die Zusage gilt unveraendert:** die Gewichtung
+  // stammt aus `module-nutrition-spec.jsx:38-42` und wird nicht
+  // erfunden. **Nur die Datei ist eine andere.**
+  const quelle = fs.readFileSync(FORMEL, 'utf8')
   assert.ok(/c\.protein \* 0\.30/.test(quelle), 'Protein-Gewicht 0.30 fehlt')
   assert.ok(/c\.calorie \* 0\.25/.test(quelle), 'Kalorien-Gewicht 0.25 fehlt')
   assert.ok(/beginner: 0\.75/.test(quelle), 'Stufenfaktoren fehlen')

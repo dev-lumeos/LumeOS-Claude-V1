@@ -467,3 +467,19 @@
 .v2-planner-zelle:nth-child(7n+1) .v2-planner-form {
   margin-left: auto;
 }
+
+/* ══ G-412/8: die Tagesdeckung auf zwei Drittel ════════════════════
+
+   **Tom, 2026-09-08:** *„Tagesdeckung — zwei Drittel Hoehe."*
+
+   `[cmd]` **Gemessen: 616 px.** Zwei Drittel sind rund 410.
+
+   `[cmd]` **Die Hoehe steht NICHT hier, sondern inline in
+   `ansicht.tsx`** — dort stand schon ein Scrollkasten mit
+   `maxHeight: 460`. `[read]` **Eine Regel hier waere wirkungslos
+   gewesen**: ein Inline-Stil gewinnt immer, und die Probe haette
+   trotzdem gruen gemeldet, dass eine Regel existiert.
+
+   `[read]` **Diese Klasse bleibt als Anker fuer den Waechter** — sie
+   sagt, WELCHE Kachel gemeint ist. */
+.v2-deckung-kachel { /* siehe ansicht.tsx: maxHeight 410 */ }
