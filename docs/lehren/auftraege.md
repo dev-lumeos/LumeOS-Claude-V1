@@ -115,3 +115,53 @@ veraltet.**
 `[read]` **Drei Werkzeuge, drei Fallen, alle an einem Tag
 zugeschnappt.**
 
+## Vor jedem Auftrag: `/clear` ja oder nein
+
+Tom, 2026-09-08: *,,ok, von jetzt an sagst du mir vor dem auftrag,
+ob ich /clear machen muss."*
+
+**Die Ansage gehoert IN den Auftrag, als erste Zeile.**
+
+    /clear NEIN  -- der Auftrag baut auf dem auf, was
+                    der Agent gerade gemessen hat
+    /clear JA    -- neues Modul, neuer Gegenstand
+
+### Wann NEIN
+
+`[read]` **Der Auftrag liegt im selben Modul wie der vorige.**
+
+`[read]` **Oder er baut auf einer Messung auf, die der Agent
+gerade gemacht hat** ? **dann waere ein `/clear` teurer, weil er
+sie wiederholen muesste.**
+
+`[cmd]` **Beispiel: G-423 (Injektionskonfiguration) -> G-389
+(Injektion erfassen)** ? **dieselben Tabellen, dieselben
+Funktionen.**
+
+### Wann JA
+
+`[read]` **Der Gegenstand wechselt** ? **von Supplements nach
+Coach, von der Datenbank in die Oberflaeche.**
+
+`[read]` **Oder der Kontext ist lang und der neue Auftrag braucht
+nichts davon.**
+
+**Und dann gehoert der Wiedereinstieg mit in den Auftrag:**
+
+    Lies zuerst docs/sessions/<datum>-uebergabe.md und
+    docs/lehren/ -- besonders auftraege.md, messen.md
+    und werkzeuge.md.
+
+### Was ein `/clear` KOSTET
+
+`[read]` **Der Agent verliert, was er selbst gelernt hat** ?
+**nicht nur, was in den Punktdateien steht.**
+
+`[cmd]` **2026-09-08, Claude Code an einem Tag:** **die
+Konstanten-Falle (`'use client'` zieht `next/headers` mit), die
+Bildpunkt-Messung statt Vermutung, die Gegenprobe in beide
+Richtungen.**
+
+`[read]` **Das steht in seinen Skill-Dateien** ? **aber der
+Zusammenhang, in dem es galt, nicht.**
+
