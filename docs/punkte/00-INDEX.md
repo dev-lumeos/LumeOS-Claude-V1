@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 213 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 6 |
-| `erledigt` | 409 |
+| `laufend_claudecode` | 5 |
+| `erledigt` | 410 |
 | **gesamt** | **629** |
 
 ## medical — 48
@@ -681,7 +681,7 @@
 | `G-414` | entscheidung | niedrig | [admin und coach teilen 65 Prozent](todos/quer-g-0414-admin-und-coach-teilen-65-prozent.md) | offen | — | — |
 | `G-420` | befund | mittel | [Kettenlaeufe setzen Testdaten zurueck](todos/quer-g-0420-kettenlaeufe-setzen-testdaten-zurueck.md) | offen | — | — |
 | `G-424` | befund | mittel | [latissimus ist waehlbar und nicht zeichenbar](todos/quer-g-0424-latissimus-waehlbar-nicht-zeichenbar.md) | offen | — | G-425 |
-| `G-425` | befund | hoch | [die sechs Pfade einzeln sehen](laufend_claudecode/quer-g-0425-die-sechs-pfade-einzeln-sehen.md) | laeuft (claudecode) | — | C-468 |
+| `G-425` | befund | hoch | [die sechs Pfade einzeln sehen](erledigt/quer-g-0425-die-sechs-pfade-einzeln-sehen.md) | erledigt | — | C-468 |
 
 ## market — 3
 

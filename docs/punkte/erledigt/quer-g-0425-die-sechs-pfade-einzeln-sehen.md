@@ -9,6 +9,8 @@ kind_von: G-424
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 879a548e
 beruehrt:
   dateien:
     - packages/ui/src/koerperkarte-pfade.ts
@@ -380,4 +382,76 @@ Leser Klammern.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  sechs Bilder, je ein Pfad allein
+    A2  lower-back 4, trapezius 2, plus gluteal und triceps
+    A3  je Pfad benannt, mit Begruendung aus dem Bild
+    A4  sieben Flaechen mit mehreren Pfaden
+    A5  ein Vorschlag: drei aufteilen, vier nicht
+    A6  1600 unveraendert
+
+`[cmd]` **18 Bilder, alle mit Inhalt** ? **beim ersten Lauf waren
+zehn leer, jetzt keines.**
+
+`[cmd]` **`upper-back-3.png` angesehen:** **grosse Flaeche
+seitlich am Ruecken, von der Achsel zur Taille** ? **das ist der
+Latissimus.**
+
+`[cmd]` **`upper-back-2.png`:** **eine Sichel unter dem Deltoid,
+seitlich** ? **kein Rhomboid, der laege zwischen den
+Schulterblaettern.**
+
+`[read]` **Er nennt es *,,Teres minor / oberer Lat-Rand"*** ?
+**genau das, was zu sehen ist.**
+
+### Der Kern: die Gruppe ist nicht anatomisch
+
+> *,,`upper-back` fuehrt sechs Pfade, die drei verschiedene
+> Muskeln zeigen. Und die Rhomboiden ? die `muskel-ebenen.ts`
+> darauf wirft ? sind in keinem der sechs."*
+
+`[cmd]` **`muskel-ebenen.ts:55-60` wirft SECHS Namen auf die
+Flaeche:** `Back`, `Upper Back`, `Mid Back`, `Rhomboids`,
+`Teres Major`, `latissimus dorsi`.
+
+`[read]` **Zwei davon zeigt die Karte gar nicht.**
+
+### A4 — die Unterscheidung ist die Arbeit
+
+`[cmd]` **Sieben Flaechen mit mehreren Pfaden, drei Faelle:**
+
+    EIN Muskel, mehrere Pfade
+      trapezius, triceps, lower-back
+      -> zusammenlassen
+
+    Spiegelpaare desselben Muskels
+      gluteal (2)
+      -> links/rechts trennen
+
+    VERSCHIEDENE Muskeln
+      upper-back (3 je Seite)
+      -> aufteilen
+
+`[read]` **Ein Pfad ist eine Zeichenebene, kein Muskel** ?
+**`triceps` hat drei Koepfe und ist trotzdem EIN Muskel.**
+
+### Was er NICHT getan hat
+
+> *,,`koerperkarte-pfade.ts` unveraendert ? die Datei gehoert
+> allen vier Modulen."*
+
+`[cmd]` **Und die Zaehlung in `104-muskelkarte.md:526` stimmt** ?
+**er hat sie geprueft, nicht angenommen.**
+
+### Ein Befund, der bleibt
+
+> *,,`lower-back` traegt vier Pfade, die zusammen den Bereich
+> zwischen Lat und Gesaess zeichnen ? anatomisch der Erector
+> spinae, aber die Karte nennt ihn nach der Region."*
+
+`[read]` **Derselbe Fall wie `upper-back`** ? **ein Regionsname
+statt eines Muskelnamens.**
+
+**Abgenommen.**
+

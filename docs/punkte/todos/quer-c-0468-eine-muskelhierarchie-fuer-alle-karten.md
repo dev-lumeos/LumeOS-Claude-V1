@@ -129,3 +129,54 @@ fuer Training.**
 
 `[read]` **Eine Hierarchie mit einem Merkmal *,,ist Muskel"*
 traegt beides.**
+
+## G-425 hat gemessen, was in `upper-back` steckt
+
+`[cmd]` **Sechs Pfade, DREI Muskeln je Seite:**
+
+    Pfad 1 / 4    Teres major        klein, unter dem Deltoid
+    Pfad 2 / 5    Teres minor /      Sichel, seitlich
+                  oberer Lat-Rand
+    Pfad 3 / 6    Latissimus dorsi   gross, Achsel bis Taille
+
+`[cmd]` **Und die Rhomboiden, die `muskel-ebenen.ts` darauf
+wirft, sind in KEINEM der sechs.**
+
+`[read]` **Die Gruppe ist nicht anatomisch** ? **sie fasst drei
+Muskeln zusammen und behauptet zwei weitere, die sie nicht
+zeichnet.**
+
+## Die Unterscheidung, die G-425 gefunden hat
+
+`[cmd]` **Sieben Flaechen haben mehrere Pfade, in drei
+Faellen:**
+
+    EIN Muskel, mehrere Pfade
+      trapezius, triceps, lower-back
+      -> zusammenlassen
+
+    Spiegelpaare desselben Muskels
+      gluteal
+      -> links/rechts trennen
+
+    VERSCHIEDENE Muskeln
+      upper-back
+      -> aufteilen
+
+`[read]` **Ein Pfad ist eine Zeichenebene, kein Muskel** ?
+**`triceps` hat drei Koepfe und bleibt EIN Muskel.**
+
+`[read]` **Das ist der Massstab fuer die Hierarchie: nicht *,,wie
+viele Pfade"*, sondern *,,wie viele Muskeln"*.**
+
+## Und `lower-back` hat denselben Fehler
+
+> *,,Vier Pfade, die zusammen den Bereich zwischen Lat und
+> Gesaess zeichnen ? anatomisch der Erector spinae, aber die
+> Karte nennt ihn nach der Region."*
+
+`[cmd]` **`training.muscle_groups` fuehrt `erector spinae` als
+eigenes Kind von `Back`.**
+
+`[read]` **Die Hierarchie kennt den Muskel, die Karte nennt die
+Region.**
