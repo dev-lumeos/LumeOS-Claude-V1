@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: db75b776
 beruehrt:
   tabellen: [goals.progress_photos, goals.body_measurements, goals.goal_phases, goals.phase_transition_responses, goals.user_goals]
 zahlen:
@@ -68,3 +70,64 @@ Vor dem Einspielen:
 Der frische Aufbau `lumeos_c463_final` lief mit 188 Schritten in 605,8 s: 35/35 Tabellen, 4/4 Sichten, 41/41 Funktionen, 35/35 RLS/Policies, `SCHEMA VOLLSTAENDIG`.
 
 Der C-463-Test: 1 Zusicherung, 0 Fehler, 1,224 s. Protokolle: `backup/c463-vollkette-live.out` und `backup/c463-progress-photos-test.out`.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    progress_photos    13 Spalten, RLS an, vier Policies
+    Bucket             goals-progress-photos, public=false
+    body_weight_log    NICHT gebaut, begruendet
+    phase_transitions  NICHT gebaut, begruendet
+    Vollkette          188 Schritte, 605,8 s
+    Sicherung          26.491.880 B, SHA-256
+
+`[cmd]` **Selbst gemessen: alle sechs.**
+
+### Zwei von drei nicht gebaut — und beide Begruendungen tragen
+
+**1** ? `[cmd]` **`body_measurements`: 362 von 362 Zeilen haben
+`weight_kg`.**
+
+`[read]` **Eine eigene `body_weight_log` waere eine zweite
+Wahrheit ueber dasselbe Gewicht.**
+
+**2** ? `[cmd]` **`goal_phases` traegt:**
+
+    phase_type, variant, parameters,
+    gueltig_ab, projected_end_date, actual_end_date,
+    transitioned_from, recommended_next,
+    transition_reason
+
+`[cmd]` **Und `phase_transition_responses`:** `phase_id`,
+`user_id`, `response`, `reason`.
+
+`[read]` **Der Uebergang IST eine Phase mit Vorgaenger und
+Grund** ? **keine eigene Tabelle noetig.**
+
+`[read]` **Zum zweiten Mal in dieser Kette hat er eine Tabelle
+NICHT gebaut, die mein Auftrag verlangte** ? **und beide Male zu
+Recht.**
+
+### Der Bucket ist privat
+
+`[cmd]` **`public=false`, vier Owner-Policies, KEINE
+Coach-Lesepolicy.**
+
+`[read]` **Ein Fortschrittsfoto ist so sensibel wie ein
+Laborbefund** (C-429) ? **und ein Coach sieht es nur, wenn der
+Klient es freigibt.**
+
+`[read]` **Die Freigabe ist noch nicht gebaut** ? **richtig so,
+das ist eine eigene Entscheidung.**
+
+### `pose_type`, `pose_name`, `pose_number`
+
+`[read]` **Drei Spalten fuer die Pose** ? **die Vorlage
+(`GoalsPosesView`) nennt sie.**
+
+`[cmd]` **Und `ai_analysis` mit `ai_analyzed_at`** ? **eine
+spaetere Auswertung hat ihren Platz, ohne dass heute etwas
+rechnet.**
+
+**Abgenommen.**

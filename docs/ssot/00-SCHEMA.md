@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-10: 188 Funktionen, 434 Policies, 647 CHECKs, 13 Sichten.**
+`[cmd]` **Stand 2026-09-11: 188 Funktionen, 438 Policies, 651 CHECKs, 13 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -306,6 +306,10 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | goals | nutrition_targets | nutrition_targets_linoleic_acid_check | CHECK (((linoleic_acid_g IS NULL) OR ((linoleic_acid_g >= (0)::numeric) AND (linoleic_acid_g <= (200)::numeric)))) |
 | goals | nutrition_targets | nutrition_targets_protein_check | CHECK (((protein_g IS NULL) OR ((protein_g >= (0)::numeric) AND (protein_g <= (500)::numeric)))) |
 | goals | phase_transition_responses | phase_transition_responses_response_check | CHECK ((response = ANY (ARRAY['accepted'::text, 'rejected'::text]))) |
+| goals | progress_photos | progress_photos_ai_analysis_check | CHECK ((jsonb_typeof(ai_analysis) = 'object'::text)) |
+| goals | progress_photos | progress_photos_photo_url_check | CHECK ((btrim(photo_url) <> ''::text)) |
+| goals | progress_photos | progress_photos_pose_name_check | CHECK ((btrim(pose_name) <> ''::text)) |
+| goals | progress_photos | progress_photos_pose_type_check | CHECK ((pose_type = ANY (ARRAY['mandatory_8'::text, 'quarter_turns'::text, 'detail'::text, 'custom'::text]))) |
 | goals | user_goals | user_goals_check | CHECK (((target_date IS NULL) OR (target_date >= gueltig_ab))) |
 | goals | user_goals | user_goals_check1 | CHECK (((status <> 'active'::text) OR ((priority >= 1) AND (priority <= 3)))) |
 | goals | user_goals | user_goals_difficulty_level_check | CHECK (((difficulty_level IS NULL) OR (difficulty_level = ANY (ARRAY['easy'::text, 'moderate'::text, 'challenging'::text, 'aggress |
@@ -959,6 +963,10 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | goals | phase_transition_responses | phase_transition_responses_insert_own | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
 | goals | phase_transition_responses | phase_transition_responses_select_own | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
 | goals | phase_transition_responses | phase_transition_responses_update_own | UPDATE | (( SELECT auth.uid() AS uid) = user_id) |
+| goals | progress_photos | progress_photos_delete_own | DELETE | (( SELECT auth.uid() AS uid) = user_id) |
+| goals | progress_photos | progress_photos_insert_own | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
+| goals | progress_photos | progress_photos_select_own | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
+| goals | progress_photos | progress_photos_update_own | UPDATE | (( SELECT auth.uid() AS uid) = user_id) |
 | goals | user_goals | user_goals_coach_read | SELECT | (user_id IN ( SELECT p.client_id    FROM coach.client_permissions p   WHERE ((p.coach_id = |
 | goals | user_goals | user_goals_delete | DELETE | (( SELECT auth.uid() AS uid) = user_id) |
 | goals | user_goals | user_goals_insert | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
