@@ -6,7 +6,7 @@ Hand aendern.**
 `[read]` **Es ersetzt das Lesen nicht** ? **es sagt, WO gelesen
 werden muss.**
 
-`[cmd]` **Stand 2026-09-09: 176 Tabellen, 103 in Specs genannt, 57 ohne Entsprechung, 129 ohne Erwaehnung.**
+`[cmd]` **Stand 2026-09-11: 189 Tabellen, 103 in Specs genannt, 54 ohne Entsprechung, 139 ohne Erwaehnung.**
 
 ## Die Spec nennt, das Schema hat nicht
 
@@ -27,7 +27,6 @@ ist der gefaehrliche, weil der Name plausibel bleibt.**
 | `coach.coach_rules` | ungebaut | docs\specs\HumanCoach\SPEC_06_DATABASE_SCHEMA.md:165 (+1) |
 | `goals.goal_adjustments` | ungebaut | docs\specs\Goals\CONSOLIDATED_KNOWLEDGE.md:159 (+2) |
 | `goals.goal_contributions` | ungebaut | docs\specs\Goals\CONSOLIDATED_KNOWLEDGE.md:157 (+5) |
-| `goals.progress_photos` | ungebaut | docs\specs\Goals\CONSOLIDATED_KNOWLEDGE.md:162 (+4) |
 | `goals.tdee_settings` | ungebaut | docs\specs\Goals\CONSOLIDATED_KNOWLEDGE.md:158 (+5) |
 | `goals.user_goal_dashboard` | ungebaut | docs\specs\Goals\DATABASE.md:25 |
 | `goals.weekly_contributions_summary` | ungebaut | docs\specs\Goals\DATABASE.md:26 |
@@ -67,8 +66,6 @@ ist der gefaehrliche, weil der Name plausibel bleibt.**
 | `training.muscle_readiness` | ungebaut | docs\specs\Training\SPEC_06_DATABASE_SCHEMA.md:32 |
 | `training.personal_records` | ungebaut | docs\specs\Training\SPEC_06_DATABASE_SCHEMA.md:27 (+2) |
 | `training.post_workout_feedback` | ungebaut | docs\specs\Training\SPEC_06_DATABASE_SCHEMA.md:29 (+2) |
-| `training.routine_exercises` | ungebaut | docs\specs\Training\SPEC_06_DATABASE_SCHEMA.md:22 (+2) |
-| `training.routine_schedule_days` | ungebaut | docs\specs\Training\SPEC_06_DATABASE_SCHEMA.md:23 (+2) |
 | `training.strength_standards` | ungebaut | docs\specs\Training\SPEC_06_DATABASE_SCHEMA.md:20 (+2) |
 | `training.volume_landmarks` | ungebaut | docs\specs\Training\SPEC_06_DATABASE_SCHEMA.md:30 (+3) |
 | `training.weekly_volume_summary` | ungebaut | docs\specs\Training\SPEC_06_DATABASE_SCHEMA.md:31 |
@@ -79,6 +76,7 @@ ist der gefaehrliche, weil der Name plausibel bleibt.**
 beschrieben.**
 
 - `coach.action_log`
+- `coach.alert_settings`
 - `coach.alerts`
 - `coach.autonomy_change_log`
 - `coach.checkin_templates`
@@ -101,6 +99,7 @@ beschrieben.**
 - `medical.injection_logs`
 - `medical.injection_needle_recommendations`
 - `medical.injection_site_conditions`
+- `medical.injection_site_overrides`
 - `medical.injection_sites`
 - `medical.injection_tissue_condition_guidance`
 - `medical.lab_marker_catalog`
@@ -117,6 +116,7 @@ beschrieben.**
 - `medical.symptom_biomarker_map`
 - `medical.symptoms`
 - `medical.user_conditions`
+- `medical.user_injection_site_selections`
 - `nutrition._sortweight_neu`
 - `nutrition.exclusion_preset_rules`
 - `nutrition.exclusion_presets`
@@ -179,6 +179,8 @@ beschrieben.**
 - `supplements.supplement_portions`
 - `supplements.supplement_protocol_items`
 - `supplements.supplement_protocol_requirements`
+- `supplements.supplement_protocol_template_items`
+- `supplements.supplement_protocol_templates`
 - `supplements.supplement_protocols`
 - `supplements.supplement_quality`
 - `supplements.supplement_regulatory`
@@ -198,6 +200,11 @@ beschrieben.**
 - `training.equipment`
 - `training.exercise_catalog_enrichment`
 - `training.exercises`
+- `training.program_assignments`
+- `training.program_blocks`
+- `training.program_days`
+- `training.programs`
+- `training.routines`
 - `wissen.buddy_knowledge_records`
 - `wissen.community_records`
 - `wissen.evidence_register_entries`
