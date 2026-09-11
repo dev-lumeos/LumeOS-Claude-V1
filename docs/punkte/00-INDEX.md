@@ -5,10 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 211 |
+| `todos` | 209 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 6 |
 | `erledigt` | 399 |
-| **gesamt** | **616** |
+| **gesamt** | **617** |
 
 ## medical — 48
 
@@ -164,7 +165,7 @@
 | `C-410` | befund | hoch | [zwei Leser nehmen `food_tags` statt der Sicht](erledigt/nutrition-c-0410-zwei-leser-nehmen-food-tags-statt-der-sicht.md) | erledigt | — | — |
 | `C-411` | feature | mittel | [Rezeptvorschlaege in der Kuration](erledigt/nutrition-c-0411-rezeptvorschlaege-in-der-kuration.md) | erledigt | — | — |
 | `C-413` | befund | niedrig | [`tom.seed` traegt `days_count 7` bei 21 Tagen](erledigt/nutrition-c-0413-tom-seed-traegt-days-count-7-bei-21-tagen.md) | erledigt | — | — |
-| `C-464` | feature | mittel | [das Ballaststoffziel fehlt](todos/nutrition-c-0464-das-ballaststoffziel-fehlt.md) | offen | — | — |
+| `C-464` | feature | mittel | [das Ballaststoffziel fehlt](laufend_codex/nutrition-c-0464-das-ballaststoffziel-fehlt.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](erledigt/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | erledigt | — | G-375 |
@@ -500,7 +501,7 @@
 | `C-451` | entscheidung | mittel | [die Aufnahme eines Coaches](todos/coach-c-0451-die-aufnahme-eines-coaches.md) | offen | — | — |
 | `C-458` | feature | hoch | [was ein Coach einstellt](todos/coach-c-0458-was-ein-coach-einstellt.md) | offen | — | — |
 | `C-459` | feature | mittel | [der Alarm-Erzeuger](erledigt/coach-c-0459-der-alarm-erzeuger.md) | erledigt | — | — |
-| `C-460` | feature | hoch | [welcher Coach fuer welches Modul?](todos/coach-c-0460-welcher-coach-fuer-welches-modul.md) | offen | — | — |
+| `C-460` | feature | hoch | [welcher Coach fuer welches Modul?](laufend_codex/coach-c-0460-welcher-coach-fuer-welches-modul.md) | laeuft (codex) | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](erledigt/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | erledigt | — | C-381 |
@@ -675,8 +676,14 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-444` | befund | hoch | [das Wallet ist nicht live](erledigt/market-c-0444-das-wallet-ist-nicht-live.md) | erledigt | — | C-452 |
-| `C-452` | befund | hoch | [ein Kauf kommt nirgends an](erledigt/market-c-0452-ein-kauf-kommt-nirgends-an.md) | erledigt | — | — |
+| `C-452` | befund | hoch | [ein Kauf kommt nirgends an](erledigt/market-c-0452-ein-kauf-kommt-nirgends-an.md) | erledigt | — | C-465 |
 | `G-362` | feature | hoch | [marketplace initialisieren](todos/market-g-0362-marketplace-initialisieren.md) | offen | — | — |
+
+## marketplace — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `C-465` | feature | hoch | [die Auslieferung bauen](laufend_codex/marketplace-c-0465-die-auslieferung-bauen.md) | laeuft (codex) | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-409
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [coach.relationships]
 zahlen:
@@ -70,3 +72,10 @@ zustaendig ist** ? **ohne Typ ist die Karte nicht baubar.**
 
 `[cmd]` **G-409 hat sie mit den Vorlagenwerten gebaut** ? **als
 Attrappe mit Vermerk.**
+
+## Auftrag
+
+**Beauftragt am 2026-09-08, als Teil der Kette C-464 -> C-452 ->
+C-460.**
+
+`[read]` **Der Kettenauftrag steht in C-464.**

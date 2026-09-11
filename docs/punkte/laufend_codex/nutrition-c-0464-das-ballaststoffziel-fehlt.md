@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-415
 entscheidung: E-80
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [goals.nutrition_targets]
 zahlen:
@@ -66,3 +68,13 @@ Ballaststoffwert?**
 `[read]` **Miss, ob `packages/scoring/` der richtige Ort ist**
 (`SPEC_09_SCORING.md` legt Coach-Formeln dorthin) ? **oder ob
 eine Tabelle im Modul reicht.**
+
+## Auftrag
+
+**Beauftragt am 2026-09-08, als Teil der Kette C-464 -> C-452 ->
+C-460.**
+
+`[read]` **Erster von drei: C-464 -> C-465 -> C-460.**
+
+`[read]` **Je Auftrag Sicherung, Vollkette, Punktelauf, eigener
+Bericht.** `[read]` **Scheitert einer: STOP.**
