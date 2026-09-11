@@ -6,9 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 212 |
-| `laufend_codex` | 1 |
 | `laufend_claudecode` | 6 |
-| `erledigt` | 403 |
+| `erledigt` | 404 |
 | **gesamt** | **622** |
 
 ## medical — 48
@@ -688,7 +687,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `C-465` | feature | hoch | [die Auslieferung bauen](laufend_codex/marketplace-c-0465-die-auslieferung-bauen.md) | laeuft (codex) | — | — |
+| `C-465` | feature | hoch | [die Auslieferung bauen](erledigt/marketplace-c-0465-die-auslieferung-bauen.md) | erledigt | — | — |
 
 ## Verweise ausserhalb von `docs/punkte/`
 

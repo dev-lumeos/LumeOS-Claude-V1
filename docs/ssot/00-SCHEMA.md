@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-11: 188 Funktionen, 438 Policies, 651 CHECKs, 13 Sichten.**
+`[cmd]` **Stand 2026-09-11: 188 Funktionen, 438 Policies, 652 CHECKs, 13 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -149,8 +149,8 @@ ob man sie rufen kann.**
 | public | gtrgm_union | internal, internal | Funktion |
 | public | handle_new_user |  | Funktion |
 | public | is_admin |  | Funktion |
-| public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein | text, text | Funktion |
+| public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
@@ -301,6 +301,7 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | goals | nutrition_targets | nutrition_targets_alpha_linolenic_acid_check | CHECK (((alpha_linolenic_acid_g IS NULL) OR ((alpha_linolenic_acid_g >= (0)::numeric) AND (alpha_linolenic_acid_g <= (50)::numeric |
 | goals | nutrition_targets | nutrition_targets_carbs_check | CHECK (((carbs_g IS NULL) OR ((carbs_g >= (0)::numeric) AND (carbs_g <= (1500)::numeric)))) |
 | goals | nutrition_targets | nutrition_targets_fat_check | CHECK (((fat_g IS NULL) OR ((fat_g >= (0)::numeric) AND (fat_g <= (500)::numeric)))) |
+| goals | nutrition_targets | nutrition_targets_fiber_check | CHECK (((fiber_g IS NULL) OR ((fiber_g >= (0)::numeric) AND (fiber_g <= (100)::numeric)))) |
 | goals | nutrition_targets | nutrition_targets_herkunft_check | CHECK ((herkunft = ANY (ARRAY['formel'::text, 'manuell'::text]))) |
 | goals | nutrition_targets | nutrition_targets_kcal_check | CHECK (((kcal IS NULL) OR ((kcal >= (500)::numeric) AND (kcal <= (10000)::numeric)))) |
 | goals | nutrition_targets | nutrition_targets_linoleic_acid_check | CHECK (((linoleic_acid_g IS NULL) OR ((linoleic_acid_g >= (0)::numeric) AND (linoleic_acid_g <= (200)::numeric)))) |
