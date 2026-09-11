@@ -1831,6 +1831,13 @@
       "kind": "sql",
       "creates": "C-460: mehrere der vier Coach-Faecher pro aktiver Coach-Klient-Beziehung, getrennt von sieben Berechtigungsmodulen",
       "depends_on": ["467_supplier_products", "151"]
+    },
+    {
+      "id": "466_nutrient_supplement_sources",
+      "path": "supabase/migrations/20260909310000_c466_nutrient_supplement_sources.sql",
+      "kind": "sql",
+      "creates": "C-466/E-35: getrennte Supplements-Tagesbilanz, lesbare Nahrungs- und Praeparateherkunft sowie C-344-konforme Obergrenzen",
+      "depends_on": ["460_relationship_specialties", "467_supplier_products", "059a", "135"]
     }
   ]
 }

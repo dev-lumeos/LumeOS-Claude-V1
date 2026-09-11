@@ -1698,6 +1698,22 @@
       "schritt": "059a"
     },
     {
+      "name": "nutrient_intake_source_totals_for_day",
+      "schritt": "466_nutrient_supplement_sources"
+    },
+    {
+      "name": "nutrient_upper_limit_assessment_with_supplements",
+      "schritt": "466_nutrient_supplement_sources"
+    },
+    {
+      "name": "micronutrient_snapshot_with_supplements",
+      "schritt": "466_nutrient_supplement_sources"
+    },
+    {
+      "name": "nutrient_intake_detail_for_day",
+      "schritt": "466_nutrient_supplement_sources"
+    },
+    {
       "name": "micronutrient_below_threshold",
       "schritt": "059a"
     },
@@ -6137,6 +6153,16 @@
       "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT"]},
       "grants_herkunft": "20260908113000_c429_medical_documents_timeline.sql: security-invoker-Zeitachse aus eigenen Nutzerzitaten und Laborbefunden.",
       "spalten": ["user_id", "entry_id", "entry_type", "occurred_on", "occurred_at", "title", "details", "source_kind", "source_actor", "source_recorded_at", "source_lab_report_id", "created_at"]
+    },
+    {
+      "schema": "supplements",
+      "name": "daily_nutrient_summary_long",
+      "schritt": "466_nutrient_supplement_sources",
+      "security_invoker": true,
+      "security_barrier": false,
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT"]},
+      "grants_herkunft": "C-466/E-35: eigene Tagesbilanz aus taken intake_logs und belegten supplement_nutrients.",
+      "spalten": ["user_id", "entry_date", "nutrient_code", "nutrient_unit", "total_amount", "taken_log_count", "skipped_log_count", "mapped_taken_log_count", "unmapped_taken_log_count"]
     },
     {
       "schema": "public",
