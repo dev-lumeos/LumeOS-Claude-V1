@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-425
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [training.muscle_groups]
 zahlen:
@@ -180,3 +182,146 @@ eigenes Kind von `Back`.**
 
 `[read]` **Die Hierarchie kennt den Muskel, die Karte nennt die
 Region.**
+
+## Toms Entscheidungen, 2026-09-08
+
+**1** ? **Wo lebt die Hierarchie?**
+
+> ja, das ist eine public komponente, wenn sie von mehreren
+> modulen benutzt wird
+
+`[read]` **Schema `public`** ? **nicht `training`.**
+
+**2** ? **Wie tief?**
+
+> ok, eine dritte
+
+`[read]` **Drei Ebenen:**
+
+    Wurzel   Back
+    Muskel   latissimus dorsi
+    Seite    links / rechts
+
+**3** ? **Was wird aus `hair`, `head`, `hands`, `feet`,
+`ankles`?**
+
+> brauchen wir, dass wir einen mensch erkennen
+
+`[read]` **Sie bleiben** ? **als Umriss, nicht als Muskel.**
+
+`[read]` **Ein Merkmal unterscheidet sie** ? **`ist_muskel` oder
+eine Art (`muskel | umriss`).**
+
+## ALLE 23 Flaechen, gemessen
+
+`[cmd]` **`koerperkarte-pfade.ts`, `MUSKELN`:**
+
+    Flaeche        side    front  back
+    ---------------------------------
+    chest          front       2     -
+    abs            front       8     -
+    obliques       front      16     -
+    biceps         front       2     -
+    triceps        both        2     6
+    deltoids       both        2     2
+    trapezius      both        2     2
+    neck           both        5     2
+    forearm        both        6     8
+    adductors      both        6     2
+    quadriceps     front       6     -
+    knees          front       4     -
+    tibialis       front       2     -
+    calves         both        4     8
+    upper-back     back        -     6
+    lower-back     back        -     4
+    gluteal        back        -     4
+    hamstring      back        -     8
+    head           both        1     1
+    hair           both        1     1
+    hands          both       12    11
+    ankles         both        4     2
+    feet           both        4     2
+
+`[read]` **G-425 hat nur `upper-back`, `lower-back`, `gluteal`,
+`trapezius` und `triceps` angesehen.**
+
+`[read]` **ACHTZEHN Flaechen sind ungeprueft** ? **darunter
+`obliques` mit 16 Pfaden, `hands` mit 23, `hamstring` mit 8,
+`calves` mit 12.**
+
+`[cmd]` **`obliques`: 16 Pfade auf EINER Flaeche** ? **die
+schraegen Bauchmuskeln sind zwei Muskeln je Seite (externus,
+internus), nicht sechzehn.**
+
+`[cmd]` **`hamstring`: 8 Pfade** ? **drei Muskeln je Seite
+(biceps femoris, semitendinosus, semimembranosus).**
+
+`[cmd]` **`calves`: 12 Pfade** ? **zwei Muskeln je Seite
+(gastrocnemius, soleus).**
+
+`[read]` **Jede Flaeche mit mehr als zwei Pfaden je Ansicht ist
+zu pruefen.**
+
+## Der Massstab aus G-425
+
+    EIN Muskel, mehrere Pfade     zusammenlassen
+    Spiegelpaare                  links/rechts trennen
+    VERSCHIEDENE Muskeln          aufteilen
+
+`[read]` **Ein Pfad ist eine Zeichenebene, kein Muskel.**
+
+## Was gebaut wird
+
+`[read]` **Eine Tabelle in `public`, drei Ebenen, mit
+`parent_id`.**
+
+`[cmd]` **`training.muscle_groups` traegt heute 7 Wurzeln und 88
+Kinder** ? **die Namen stehen schon, samt `latissimus dorsi`,
+`Rhomboids`, `Teres Major`, `erector spinae`.**
+
+`[read]` **Miss, ob sie uebernommen oder ersetzt wird.**
+
+`[read]` **Und je Eintrag ein Merkmal, ob es ein Muskel ist oder
+Umriss.**
+
+## Was NICHT gebaut wird
+
+`[read]` **Keine Pfadzuordnung** ? **welcher Pfad zu welchem
+Muskel gehoert, ist G-425 und ein UI-Auftrag.**
+
+`[read]` **`koerperkarte-pfade.ts` bleibt unberuehrt** ? **sie
+gehoert `packages/ui` und allen vier Modulen.**
+
+## Abnahmebedingungen
+
+    A1  alle 23 Flaechen gemessen: wie viele MUSKELN
+        stecken darin? TABELLE mit Begruendung.
+    A2  die Tabelle in public, drei Ebenen, parent_id.
+    A3  wird training.muscle_groups uebernommen oder
+        ersetzt? Gemessen, begruendet.
+    A4  je Eintrag: Muskel oder Umriss.
+    A5  die 95 Zeilen in training.muscle_groups bleiben
+        gueltig, oder der Umzug ist belegt.
+    A6  RLS beide Richtungen, anon ohne EXECUTE.
+    A7  Sicherung, Vollkette, Punktelauf.
+
+## Was nicht zu tun ist
+
+**`packages/ui` NICHT anfassen.**
+**Keine Oberflaeche.**
+**Keinen Muskel erfinden** ? **was die Karte nicht zeigt, wird
+gemeldet.**
+Nicht committen, nicht stagen, nicht pushen.
+
+## Der Dev-Server
+
+`[cmd]` **3200 und 3220 laufen.**
+`[cmd]` **NIE `start`, `neustart`, `aufraeumen`.**
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
