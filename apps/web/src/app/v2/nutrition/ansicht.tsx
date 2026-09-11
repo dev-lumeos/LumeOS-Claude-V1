@@ -102,7 +102,7 @@ import type { EinkaufslisteKurz }
 // `[cmd]` G-365: die Mockup-Reiter unter der Linie. Sieben
 // Reiter hatten keine — gemessen 2026-09-07.
 import {
-  NutritionInsightsReferenz, NutritionFoodsReferenz,
+  NutritionFoodsReferenz,
   NutritionPlannerReferenz, NutritionNutrientsReferenz,
   NutritionPlansReferenz, NutritionPrefsReferenz,
   EinkaufReferenz,
@@ -979,9 +979,13 @@ function AndererTab({
             <MikroTrendKachel d={mikroTrend} />
           </div>
         )}
+        {/* `[cmd]` **G-419, 2026-09-08: der Insights-Block ist ABGENOMMEN.**
+            Tom: *,,insights kann die mockuplinie und das darunter weg."*
+            Die drei Karten darunter (Nutrition score, Pre-workout window,
+            Micronutrient snapshot) sind seit G-412 angebunden, die Kurve
+            und die Heatmap seit G-416/G-417. */}
         <NutritionInsightsTab
           ohneEchte={Boolean(einsichten && (einsichten.bilanz || einsichten.makros))} />
-        <NutritionInsightsReferenz />
       </div>
     )
   }

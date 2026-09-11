@@ -39,19 +39,27 @@ test('die vier Attrappen sind entfallen', () => {
   assert.match(t, /<ScoreEcht\b/)
 })
 
-test('sieben Referenzbloecke bleiben, der Diary faellt', () => {
-  // **Tom:** *„und dann kann die mockup-referenz-linie und alles
-  // darunter weg."* — `[cmd]` **NUR im Diary-Block.**
+test('sechs Referenzbloecke bleiben, Diary und Insights fallen', () => {
+  // **Tom, 2026-09-08:** *,,und dann kann die mockup-referenz-linie
+  // und alles darunter weg."* ? `[cmd]` **zuerst NUR im Diary-Block
+  // (G-412).**
+  //
+  // **Tom, spaeter am selben Tag:** *,,ok insights kann die
+  // mockuplinie und das darunter weg."* ? `[cmd]` **G-419.**
+  //
+  // `[read]` **Ein Block faellt, wenn Tom ihn ABGENOMMEN hat** ?
+  // nicht, wenn der Orchestrator ihn fuer fertig haelt.
   const t = ohneKommentar(join(NUT, 'ansicht.tsx'))
-  assert.ok(!t.includes('<NutritionDiaryReferenz'),
-    'Der Diary-Referenzblock steht noch')
-  const uebrig = ['NutritionNutrientsReferenz', 'NutritionInsightsReferenz',
+  for (const weg of ['NutritionDiaryReferenz', 'NutritionInsightsReferenz']) {
+    assert.ok(!t.includes(`<${weg}`), `${weg} steht noch`)
+  }
+  const uebrig = ['NutritionNutrientsReferenz',
     'NutritionPlansReferenz', 'NutritionPrefsReferenz',
     'NutritionPlannerReferenz', 'EinkaufReferenz', 'NutritionFoodsReferenz']
   for (const n of uebrig) {
-    assert.ok(t.includes(`<${n}`), `${n} fehlt — die sieben bleiben`)
+    assert.ok(t.includes(`<${n}`), `${n} fehlt ? die sechs bleiben`)
   }
-  assert.equal(uebrig.length, 7)
+  assert.equal(uebrig.length, 6)
 })
 
 test('der Score raet keinen Stufenfaktor', () => {
