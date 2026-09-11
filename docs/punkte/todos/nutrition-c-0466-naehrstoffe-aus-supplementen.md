@@ -149,7 +149,155 @@ sieht eine Zeile, nicht drei.**
 `[cmd]` **E-35 bleibt gewahrt:** **die beiden Bilanzen werden
 getrennt GERECHNET, in der Ansicht zusammengefuehrt.**
 
-### 2 · Die Supplementdaten sind noch nicht entschieden
+### 1a · Berichtigt: keine Summe in der Uebersicht
+
+Tom, 2026-09-08:
+
+> nein. uebereinander ohne summe ? die summe haben wir weiter
+> hinten schon in der auflistung. wir haben noch nicht von der
+> detailansicht geredet.
+
+    Vitamin D    11,2 ug      Nahrung
+                 25,0 ug      Supplement
+
+`[read]` **Zwei Zeilen, keine dritte.**
+
+`[cmd]` **`nutrition.micronutrient_overview_items` traegt heute:**
+`nutrient_code`, `label_de`, `display_order`, `value_source`,
+`source_note`.
+
+`[cmd]` **`value_source` steht auf `daily_reference_assessment`**
+? **eine Quelle je Naehrstoff.**
+
+`[read]` **Die Uebersicht braucht also eine ZWEITE Quelle je
+Zeile** ? **nicht eine zweite Zeile in derselben Tabelle.**
+
+`[read]` **Die Detailansicht ist noch nicht besprochen.**
+
+### 2 · Was die Datenbank heute ueber Supplemente weiss
+
+Tom: *,,deklariere mir das besser, zeig mir was fuer daten die db
+beinhaltet."*
+
+`[cmd]` **63 Tabellen im Schema `supplements`.**
+
+#### Der Kern: 596 SUBSTANZEN, keine Produkte
+
+`[cmd]` **`supplements.supplements`, 22 Spalten:**
+
+    slug, group_id, category_id, parent_id
+    name_de / _en / _th
+    description_de / _en / _th
+    form, form_note_de / _en / _th
+    evidence_grade, source, is_active, im_katalog
+
+`[read]` **Keine Marke. Keine Packungsgroesse. Kein Preis. Kein
+Barcode.**
+
+`[cmd]` **`form` beschreibt die Darreichung** ? **Kapsel, Pulver
+? aber nicht, von wem.**
+
+#### Was daran haengt (die wichtigsten)
+
+    supplement_dosing         596   offizielle Etikettdosis,
+                                    Leitliniendosis, studierte
+                                    Bereiche, Obergrenze
+    supplement_evidence       596   Evidenzlage
+    supplement_pharmacology   577   Aufnahme, Halbwertszeit,
+                                    Weg (route)
+    supplement_regulatory   1.119   Zulassung je Land
+    supplement_organ_risks  1.450   Organrisiken
+    supplement_faq          1.970   Fragen und Antworten
+    supplement_identifiers  1.259   CAS, PubChem, DSLD
+    supplement_aliases      2.843   Namensvarianten
+    supplement_field_sources 2.815  je Feld die Quelle
+    entity_transporters     4.617   Transportproteine
+    entity_cyp              3.001   Leberenzyme
+    thailand_regulatory     1.061   Thailand
+    supplement_wada           337   Dopingliste
+    supplement_interactions    78   Wechselwirkungen
+    supplement_lab_effects    271   Wirkung auf Laborwerte
+    supplement_nutrients       17   <- die Naehrstoffbruecke
+
+`[read]` **Das ist eine SUBSTANZDATENBANK** ? **tief, mehrsprachig,
+mit Quellenangabe je Feld.**
+
+#### Und was ein Produkt braeuchte
+
+`[cmd]` **`supplement_dosing.official_label_dose`** ? **die
+Etikettdosis steht da, aber je SUBSTANZ, nicht je Produkt.**
+
+`[cmd]` **`supplement_portions`, 79 Zeilen:**
+
+    "Belegte Studiengroesse" 1500 mg
+    "Belegte Studiengroesse"  250 mg
+    Quelle: c257_from_studied_dose_ranges
+
+`[read]` **Auch das sind Studienmengen, keine Packungsangaben.**
+
+`[read]` **Ein Produkt haette:**
+
+    Marke              Now Foods
+    Produktname        Zinc Picolinate
+    Packung            120 Kapseln
+    je Portion         50 mg Zink
+    Zutatenliste       Zink 50 mg, Reismehl, Gelatine
+    Barcode / GTIN
+    Preis, Haendler
+
+`[cmd]` **Davon hat die Datenbank: NICHTS.**
+
+`[cmd]` **`supplement_quality` (237 Zeilen) traegt
+`counterfeit_risk` und `contamination_risk`** ? **also
+Faelschungsrisiko je Substanz, aber keine Marke, gegen die man
+das haelt.**
+
+#### Was das fuer die Naehrstoffbruecke heisst
+
+`[cmd]` **`supplement_nutrients` zeigt auf
+`supplements.supplements(id)`** ? **auf eine SUBSTANZ.**
+
+    Zink (Substanz) -> ZN 15 mg
+
+`[read]` **Aber ein Nutzer nimmt kein *,,Zink"*** ? **er nimmt ein
+Praeparat mit 50 mg Zinkpicolinat, und das sind 10 mg
+elementares Zink.**
+
+`[cmd]` **`conversion_factor` in `supplement_nutrients` ist genau
+dafuer da** ? **die Salzform in den Elementgehalt umrechnen.**
+
+`[read]` **Solange die Datenbank Substanzen fuehrt, muss der
+Nutzer die Dosis selbst eintragen** ? **und `stack_items.dose`
+traegt sie.**
+
+`[cmd]` **12 Stack-Positionen heute.**
+
+#### Die Frage, die daraus folgt
+
+`[read]` **Zwei Wege:**
+
+    a  Substanzen bleiben, der Nutzer traegt die Dosis ein
+       -> supplement_nutrients sagt nur, WELCHER Naehrstoff
+          in welcher Umrechnung
+       -> die Menge kommt aus stack_items.dose
+
+    b  Produkte kommen dazu, als eigene Ebene
+       -> supplements (Substanz)
+          + products (Marke, Packung, je Portion)
+          + intake zeigt auf das Produkt
+       -> Herstellerdaten, Barcode, Etikett
+
+`[read]` **Weg a geht heute** ? **und braucht nur, dass die 596
+Substanzen ihre Naehrstoffzuordnung bekommen.**
+
+`[read]` **Weg b ist ein eigenes Datenmodell** ? **und die Frage,
+woher die Herstellerdaten kommen (DSLD? OpenFoodFacts? von
+Hand?).**
+
+`[cmd]` **`supplement_identifiers` traegt schon `DSLD`** ? **die
+amerikanische Etikettdatenbank. Messen, was dort steht.**
+
+### 2b · Die urspruengliche Notiz
 
 Tom:
 
