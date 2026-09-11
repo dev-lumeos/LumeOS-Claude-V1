@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 213 |
+| `todos` | 212 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 5 |
+| `laufend_claudecode` | 6 |
 | `erledigt` | 403 |
 | **gesamt** | **622** |
 
@@ -298,7 +298,7 @@
 | `G-351` | befund | mittel | [`other` hat keine Karte](erledigt/nutrition-g-0351-other-hat-keine-karte.md) | erledigt | — | — |
 | `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | C-425, G-372 |
 | `G-412` | feature | hoch | [die letzten Attrappen in Nutrition](erledigt/nutrition-g-0412-die-letzten-attrappen.md) | erledigt | — | G-415, G-416 |
-| `G-413` | fehler | hoch | [reine Filtersuche liefert nichts](todos/nutrition-g-0413-reine-filtersuche-liefert-nichts.md) | offen | — | — |
+| `G-413` | fehler | hoch | [reine Filtersuche liefert nichts](laufend_claudecode/nutrition-g-0413-reine-filtersuche-liefert-nichts.md) | laeuft (claudecode) | — | — |
 | `G-415` | entscheidung | hoch | [die vier Stufen und die Ballaststoffe](erledigt/nutrition-g-0415-die-vier-stufen-und-die-ballaststoffe.md) | erledigt | — | C-464 |
 | `G-416` | feature | hoch | [Hoehen, Flaechen, Deckkraft](erledigt/nutrition-g-0416-hoehen-flaechen-deckkraft.md) | erledigt | — | G-417 |
 | `G-417` | feature | hoch | [zwei Spalten und der Score](erledigt/nutrition-g-0417-zwei-spalten-und-der-score.md) | erledigt | — | G-418, G-419 |
