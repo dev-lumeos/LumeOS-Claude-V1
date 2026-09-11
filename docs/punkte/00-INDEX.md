@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 211 |
+| `todos` | 212 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 6 |
-| `erledigt` | 406 |
-| **gesamt** | **624** |
+| `laufend_claudecode` | 5 |
+| `erledigt` | 407 |
+| **gesamt** | **625** |
 
 ## medical — 48
 
@@ -454,7 +454,7 @@
 | `G-367` | feature | mittel | [Stunden und Saetze je Muskel](erledigt/recovery-g-0367-per-muscle-stunden-und-saetze.md) | erledigt | — | — |
 | `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](erledigt/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | erledigt | — | — |
 
-## goals — 11
+## goals — 12
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -468,7 +468,8 @@
 | `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — | — |
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
-| `G-421` | feature | hoch | [die vier fehlenden Reiter in Goals & Body](laufend_claudecode/goals-g-0421-die-vier-fehlenden-reiter.md) | laeuft (claudecode) | — | — |
+| `G-421` | feature | hoch | [die vier fehlenden Reiter in Goals & Body](erledigt/goals-g-0421-die-vier-fehlenden-reiter.md) | erledigt | — | G-422 |
+| `G-422` | befund | mittel | [Schreibwege ohne Aufrufer](todos/goals-g-0422-zwei-schreibwege-ohne-aufrufer.md) | offen | — | — |
 
 ## coach — 56
 
