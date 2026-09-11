@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 211 |
-| `laufend_claudecode` | 6 |
-| `erledigt` | 405 |
-| **gesamt** | **622** |
+| `todos` | 212 |
+| `laufend_claudecode` | 5 |
+| `erledigt` | 406 |
+| **gesamt** | **623** |
 
 ## medical — 48
 
@@ -297,7 +297,7 @@
 | `G-351` | befund | mittel | [`other` hat keine Karte](erledigt/nutrition-g-0351-other-hat-keine-karte.md) | erledigt | — | — |
 | `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | C-425, G-372 |
 | `G-412` | feature | hoch | [die letzten Attrappen in Nutrition](erledigt/nutrition-g-0412-die-letzten-attrappen.md) | erledigt | — | G-415, G-416 |
-| `G-413` | fehler | hoch | [reine Filtersuche liefert nichts](laufend_claudecode/nutrition-g-0413-reine-filtersuche-liefert-nichts.md) | laeuft (claudecode) | — | — |
+| `G-413` | fehler | hoch | [reine Filtersuche liefert nichts](erledigt/nutrition-g-0413-reine-filtersuche-liefert-nichts.md) | erledigt | — | G-420 |
 | `G-415` | entscheidung | hoch | [die vier Stufen und die Ballaststoffe](erledigt/nutrition-g-0415-die-vier-stufen-und-die-ballaststoffe.md) | erledigt | — | C-464 |
 | `G-416` | feature | hoch | [Hoehen, Flaechen, Deckkraft](erledigt/nutrition-g-0416-hoehen-flaechen-deckkraft.md) | erledigt | — | G-417 |
 | `G-417` | feature | hoch | [zwei Spalten und der Score](erledigt/nutrition-g-0417-zwei-spalten-und-der-score.md) | erledigt | — | G-418, G-419 |
@@ -529,7 +529,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | C-460, G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 141
+## quer — 142
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -674,6 +674,7 @@
 | `G-408` | befund | niedrig | [Bildschirmfotos liegen nur lokal](todos/quer-g-0408-bilder-liegen-nur-lokal.md) | offen | — | — |
 | `G-411` | fehler | hoch | [LumeOS hat keinen Abmeldeknopf](erledigt/quer-g-0411-lumeos-hat-keinen-abmeldeknopf.md) | erledigt | — | G-414 |
 | `G-414` | entscheidung | niedrig | [admin und coach teilen 65 Prozent](todos/quer-g-0414-admin-und-coach-teilen-65-prozent.md) | offen | — | — |
+| `G-420` | befund | mittel | [Kettenlaeufe setzen Testdaten zurueck](todos/quer-g-0420-kettenlaeufe-setzen-testdaten-zurueck.md) | offen | — | — |
 
 ## market — 3
 

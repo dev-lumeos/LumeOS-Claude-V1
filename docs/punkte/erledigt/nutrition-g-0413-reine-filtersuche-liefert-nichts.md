@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 93509aac
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-foods.tsx
@@ -400,4 +402,83 @@ stehen auf `omnivore`.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  drei von vier Faellen gingen schon
+    A2  die Ursache liegt im Konto, nicht im Code
+    A3  alle vier zeigen Treffer
+    A4  fuenf Gegenproben, alle rot
+    A5  1575/1575
+
+`[read]` **Mein Auftrag hat die falsche Ursache vermutet.**
+
+`[cmd]` **Er hat sie widerlegt und die richtige gemessen.**
+
+### Der Verdacht trug nicht
+
+`[cmd]` **`tab-foods.tsx:560`: `kategorie` und `tags` STEHEN in
+der Abhaengigkeitsliste.**
+
+`[cmd]` **Und `start` ist nicht ungefiltert** ? **`total = 1.294`,
+dieselbe Zahl wie mit `prefs=1`.**
+
+`[read]` **Beide Annahmen meines Auftrags waren falsch** ? **und
+er hat sie einzeln gemessen, statt die erstbeste zu nehmen.**
+
+### Die Ursache
+
+`[cmd]` **`dev@lumeos.app` stand auf `diet_type = 'vegan'`** ?
+**Fleisch, Fisch und Milch fallen auf null.**
+
+`[read]` **Die Null war richtig, der SATZ war falsch:**
+
+> *,,Kein Lebensmittel passt zu dieser Auswahl."*
+
+`[read]` **Er zeigt auf die AUSWAHL** ? **also aendert man die
+Auswahl, und nichts passiert.**
+
+### Und die Zahl lag bereit
+
+`[cmd]` **`preferences_hidden` wird seit C-94 berechnet, kam im
+Browser an (1.449)** ? **und hatte KEINEN LESER.**
+
+> *,,Eine berechnete Zahl ohne Verbraucher ist wie eine fehlende ?
+> nur teurer, weil sie einen zweiten Datenbankaufruf kostet."*
+
+`[cmd]` **Drei Treffer im Haus, alle in `food-search.ts`: Typ,
+Vorgabewert, Berechnung.**
+
+### Die Lehre stand schon darueber
+
+`[cmd]` **G-251: *,,leer ist nicht gleich leer."***
+
+> *,,Der dritte Leerfall war dort nur noch nicht bekannt."*
+
+### Und seine erste Probe log
+
+> *,,Meine erste Probe meldete fuer den entscheidenden Fall *50
+> Zeilen*, wo 0 standen ? feste Wartezeit statt auf die Antwort
+> zu warten, plus *die groesste Tabelle* als Trefferliste. Beide
+> Fehler melden zu viel, also GRUEN."*
+
+`[read]` **Er hat sie nachgeprueft** ? **sonst waere der Befund
+verdeckt geblieben.**
+
+### Was ich heute anders messe
+
+`[cmd]` **`dev` steht JETZT auf `omnivore`, seit 07:27.**
+
+`[cmd]` **Die Kettenlaeufe von heute (C-464 um 08:24, C-465 um
+13:07) haben die Testdaten neu gesetzt.**
+
+`[cmd]` **Fleisch heute: 1.449 ohne, 1.073 mit Vorlieben** ?
+**nicht null.**
+
+`[read]` **Seine Zahlen stimmten, als er sie mass** ? **und der
+Befund gilt weiter: der Satz nennt den Grund nicht.**
+
+`[read]` **Der neue Satz ist auch bei `omnivore` richtig** ?
+**376 werden ausgeblendet, und das steht jetzt da.**
+
+**Abgenommen.**
+
