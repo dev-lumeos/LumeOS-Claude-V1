@@ -141,3 +141,54 @@ export const LEER_SATZ: Record<SuchHerkunft, string> = {
   eigene: 'Es gibt noch keine eigenen Lebensmittel. Was hier erscheint, '
     + 'legst du selbst an — der BLS-Katalog bleibt davon unberührt.',
 }
+
+// ══ G-413: DIE VORLIEBEN SIND DER DRITTE LEERE FALL ═════════════════
+//
+// **Tom, 2026-09-08:** *„food db zeigt nichts mehr an, wenn nichts in
+// der suche ist … sprich: reine filtersuche geht nicht."*
+//
+// `[cmd]` **Gemessen: die Filtersuche GEHT.** `dev@lumeos.app` steht
+// auf `diet_type = 'vegan'` (`nutrition.food_preferences`), und damit
+// ist die Null richtig:
+//
+//     Kategorie             ohne Vorlieben   mit Vorlieben
+//     fleisch-gefluegel           1.449             0
+//     fisch-meeresfruechte          520             0
+//     milch-kaese                   279             0
+//     gemuese                       717           694
+//     obst                          275           272
+//
+// `[read]` **Fleisch, Fisch und Milch fallen weg** — auf einem veganen
+// Konto ist das die Antwort, nicht der Fehler.
+//
+// `[read]` **Der Fehler ist der SATZ.** *„Kein Lebensmittel passt zu
+// dieser Auswahl"* zeigt auf die Auswahl — also aendert man die
+// Auswahl, und es aendert sich nichts. **Der Grund liegt woanders,
+// und er steht nirgends.**
+//
+// `[cmd]` **Die Zahl war schon da:** `preferences_hidden` wird seit
+// C-94 berechnet (`food-search.ts:814`, zweiter Aufruf ohne
+// `p_user_id`) **und kam im Browser an — 1.449 — ohne dass sie jemand
+// gelesen hat.**
+//
+// `[read]` **Dieselbe Lehre wie G-251** (*„leer ist nicht gleich
+// leer"*), nur fuer den Fall, den G-251 nicht kannte.
+
+/**
+ * Der Satz, wenn die VORLIEBEN die Treffer weggenommen haben.
+ *
+ * `[read]` **Er nennt die Zahl und den Ort, an dem sie sich aendern
+ * laesst** — sonst sucht der Nutzer den Fehler bei sich.
+ *
+ * `[read]` **`null`, wenn die Vorlieben NICHTS verbergen** — dann ist
+ * die Auswahl wirklich leer, und der allgemeine Satz stimmt. **Ein
+ * Hinweis auf Vorlieben waere dort eine Falschaussage.**
+ */
+export function vorliebenLeerSatz(
+  verborgen: number | null | undefined,
+): string | null {
+  if (typeof verborgen !== 'number' || verborgen <= 0) return null
+  return `Deine Ernährungsvorlieben blenden hier ${verborgen.toLocaleString('de-DE')} `
+    + 'Lebensmittel aus. Ohne sie gäbe es Treffer — die Vorlieben werden '
+    + 'unter Preferences gepflegt.'
+}

@@ -40,7 +40,8 @@ import { ErfassenModal } from './erfassen-modal'
 // G-251: die Herkunfts-Filter. `[read]` A-30: nur Typen und
 // Konstanten, kein Leseweg — die Datei ist serverfrei.
 import {
-  FILTER_LAGE, LEER_SATZ, SUCH_HERKUNFT, type SuchHerkunft,
+  FILTER_LAGE, LEER_SATZ, SUCH_HERKUNFT, vorliebenLeerSatz,
+  type SuchHerkunft,
 } from '../../../lib/nutrition/herkunft-filter'
 
 /**
@@ -1048,12 +1049,22 @@ export function NutritionFoodsTab({
             waehlt, bekommt garantiert nichts, und das liegt nicht an
             seinem Suchbegriff. `[read]` **Ein allgemeines „passt
             nichts" liesse ihn die Suche aendern, was nichts aendern
-            wuerde.** Deshalb nennt der Satz den Grund. */}
+            wuerde.** Deshalb nennt der Satz den Grund.
+
+            ══ G-413: DER DRITTE LEERE FALL ═══════════════════════
+            **Tom, 2026-09-08:** *„reine filtersuche geht nicht."*
+            `[cmd]` **Gemessen: sie geht** — `dev` steht auf `vegan`,
+            und „Meat" hat dann 0 Treffer von 1.449. `[read]` **Die
+            Null ist richtig, der SATZ war falsch** — er zeigte auf
+            die Auswahl, waehrend der Grund die Vorlieben waren.
+            `[cmd]` **`preferences_hidden` kam im Browser an (1.449)
+            und wurde nicht gelesen.** */}
         {zeilen.length === 0 && !laeuft && !fehler && (
           <div className="v2-muted" style={{ fontSize: 12, padding: '14px 0', textAlign: 'center' }}>
             {herkunft
               ? LEER_SATZ[herkunft]
-              : 'Kein Lebensmittel passt zu dieser Auswahl.'}
+              : vorliebenLeerSatz(payload?.preferences_hidden)
+                ?? 'Kein Lebensmittel passt zu dieser Auswahl.'}
           </div>
         )}
 
