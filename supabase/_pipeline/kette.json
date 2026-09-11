@@ -1817,6 +1817,13 @@
       "kind": "sql",
       "creates": "C-465: getrennte, idempotente Training-Programmauslieferung mit referenzieller Zuweisung und widerrufbarer Lizenz",
       "depends_on": ["464_nutrition_fiber_target", "419", "461_program_day_owner_guard"]
+    },
+    {
+      "id": "467_supplier_products",
+      "path": "supabase/migrations/20260909290000_c467_supplier_products.sql",
+      "kind": "sql",
+      "creates": "C-467: Lieferantenprodukte, etikettengetreue Inhaltsstoffe und produktbezogene Katalogkandidaten mit agententauglichem Schreibweg",
+      "depends_on": ["465_marketplace_training_delivery", "136"]
     }
   ]
 }

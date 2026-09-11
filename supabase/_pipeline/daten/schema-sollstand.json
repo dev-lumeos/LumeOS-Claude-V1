@@ -4438,6 +4438,10 @@
       "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
       "zeilenschutzart": "oeffentlich"
     },
+    {"schema":"supplements","name":"suppliers","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
+    {"schema":"supplements","name":"supplier_products","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
+    {"schema":"supplements","name":"product_contents","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
+    {"schema":"supplements","name":"product_content_candidates","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
     {
       "schema": "supplements",
       "name": "intake_schedule",
