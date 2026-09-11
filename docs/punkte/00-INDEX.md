@@ -5,10 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 212 |
-| `laufend_claudecode` | 5 |
+| `todos` | 211 |
+| `laufend_codex` | 1 |
+| `laufend_claudecode` | 6 |
 | `erledigt` | 406 |
-| **gesamt** | **623** |
+| **gesamt** | **624** |
 
 ## medical — 48
 
@@ -453,7 +454,7 @@
 | `G-367` | feature | mittel | [Stunden und Saetze je Muskel](erledigt/recovery-g-0367-per-muscle-stunden-und-saetze.md) | erledigt | — | — |
 | `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](erledigt/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | erledigt | — | — |
 
-## goals — 10
+## goals — 11
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -467,6 +468,7 @@
 | `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — | — |
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
+| `G-421` | feature | hoch | [die vier fehlenden Reiter in Goals & Body](laufend_claudecode/goals-g-0421-die-vier-fehlenden-reiter.md) | laeuft (claudecode) | — | — |
 
 ## coach — 56
 
@@ -505,7 +507,7 @@
 | `C-451` | entscheidung | mittel | [die Aufnahme eines Coaches](todos/coach-c-0451-die-aufnahme-eines-coaches.md) | offen | — | — |
 | `C-458` | feature | hoch | [was ein Coach einstellt](todos/coach-c-0458-was-ein-coach-einstellt.md) | offen | — | — |
 | `C-459` | feature | mittel | [der Alarm-Erzeuger](erledigt/coach-c-0459-der-alarm-erzeuger.md) | erledigt | — | — |
-| `C-460` | feature | hoch | [welcher Coach fuer welches Modul?](todos/coach-c-0460-welcher-coach-fuer-welches-modul.md) | offen | — | — |
+| `C-460` | feature | hoch | [welcher Coach für welches Modul](laufend_codex/coach-c-0460-welcher-coach-fuer-welches-modul.md) | laeuft (codex) | — | — |
 | `G-95` | befund | mittel | [Sieben Module, aber nicht dieselben sieben](todos/coach-g-0095-sieben-module-aber-nicht-dieselben-sieben.md) | offen | — | — |
 | `G-96` | befund | mittel | [Der Bestaetigungspfad wechselt nur den Zustand](todos/coach-g-0096-der-bestaetigungspfad-wechselt-nur-den-zustand.md) | offen | — | — |
 | `G-151` | befund | mittel | [Der Ausfuehrer fuer bestaetigte Vorschlaege](erledigt/coach-g-0151-der-ausfuehrer-fuer-bestaetigte-vorschlaege.md) | erledigt | — | C-381 |
@@ -526,7 +528,7 @@
 | `G-404` | feature | hoch | [Settings und Workspaces im Portal](laufend_claudecode/coach-g-0404-settings-und-workspaces-im-portal.md) | laeuft (claudecode) | — | G-405 |
 | `G-405` | feature | hoch | [Das Portal als Mockup der Vorlage](erledigt/coach-g-0405-das-portal-als-mockup-der-vorlage.md) | erledigt | — | G-406, G-407 |
 | `G-407` | feature | hoch | [den Draft fertigbauen](erledigt/coach-g-0407-den-draft-fertigbauen.md) | erledigt | — | G-408, G-409 |
-| `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | C-460, G-410 |
+| `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
 ## quer — 142
