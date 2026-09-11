@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-11
+erledigt: 2026-09-08
+commit: 7d9181f4
 beruehrt:
   tabellen: [recovery.checkins, recovery.scores, recovery.modality_log, recovery.recovery_protocols]
 zahlen:
@@ -109,7 +111,71 @@ weder `packages/scoring` noch eine Datenbanktabelle geaendert.
 
 ### Pruefung
 
-Die Sicherung, der frische Kettenlauf und der Punktelauf stehen im
-Abschluss unter diesem Bericht. Es gab keinen Schema- oder
-Anwendungscode-Change; insbesondere keine neue Tabelle, keine
-Oberflaeche und keine erfundene Formel.
+- Sicherung: `backup/schema/20260911172239_c469_recovery_formeln_vor_pruefung.dump`,
+  50.662.510 Byte, SHA-256
+  `59B169B13EA4FB715D0E10A525A7FD2C673C85B0A6F279BAAAF7FA2486E97CB4`.
+- Frischer Aufbau: 195 Schritte, 801,0 s, `SCHEMA VOLLSTAENDIG`.
+- Punktelauf: grün, 633 Punkte, 25/25 Befunde, kein neuer Schaden.
+- Es gab keinen Schema- oder Anwendungscode-Change; insbesondere keine
+  neue Tabelle, keine Oberflaeche und keine erfundene Formel.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    21 von 26 existieren
+    5 werden bewusst NICHT gebaut
+    keine neue Tabelle (7 wie vorher)
+    RLS: 170 eigene, 0 fremde, anon ohne Zugriff
+    Vollkette 195 Schritte, 801,0 s
+
+`[read]` **Der Satz, der den Punkt traegt:**
+
+> *,,Die 26 fehlenden sind 26 gezaehlte NAMEN, nicht 26
+> Luecken."*
+
+### Beide Verweigerungen sind belegt
+
+**1** ? `[cmd]` **C-181, abgenommen:** `acwr_decision =
+implement:no`, **mit drei Quellen.**
+
+`[cmd]` **`motor.ts:335` traegt `ACWR_DATA = { acute_7d: 2142,
+chronic_28d: 1980, acwr: 1.08 }`** ? **Attrappenzahlen.**
+
+`[read]` **ACWR soll RAUS, nicht gebaut werden.**
+
+`[cmd]` **56 Treffer auf `ACWR` im Baum** ? **das ist ein eigener
+Abbau-Auftrag.**
+
+**2** ? `[cmd]` **C-167 (nicht C-124, wie im Bericht):**
+
+> *,,C-124 fuehrt die Werte als unbelegt ? das bleibt richtig,
+> sie sind Entwurfswerte. Aber die Liste ist laenger als gedacht,
+> und der Deckel von 5,0 ist eine Entscheidung, die niemand
+> kennt."*
+
+`[cmd]` **Der Entwurf nennt ELF Modalitaeten mit Punktwerten,
+`recovery.modality_log` kennt VIER** ? **Sauna, Dehnen, Massage,
+Eisbad.**
+
+`[read]` **Er haette die Formel erfinden muessen, um sie zu
+bauen.**
+
+### Und was er offen benannt hat
+
+> *,,HRV-Baseline, Wearable-Schlaf und echte Muskel-Leser bleiben
+> klar als spaetere Datenpfade benannt."*
+
+`[read]` **Drei Luecken mit Namen statt einer Zahl ohne
+Grundlage.**
+
+### Zum dritten Mal hat er nichts gebaut, und zum dritten Mal zu Recht
+
+    C-462  drei Tabellen gab es unter anderem Namen
+    C-463  body_weight_log und phase_transitions
+    C-469  fuenf Formeln ohne belegte Werte
+
+`[read]` **Und jedes Mal mit einer Fundstelle, nicht mit einer
+Meinung.**
+
+**Abgenommen.**
