@@ -172,7 +172,38 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+`[cmd]` 2026-09-11 gemessen gegen die lokale Instanz: `pg_default_acl` hat
+nur in `public` Tabellen-Defaultrechte `arwdDxtm` fuer `anon`,
+`authenticated` und `service_role` (je einmal von `postgres` und
+`supabase_admin`). `nutrition` und `training` haben jeweils nur
+`authenticated=r` plus `service_role=arwdDxtm`; `supplements`, `medical`,
+`goals`, `coach`, `marketplace`, `recovery`, `wissen` und `buddy` haben
+keinen Eintrag. `buddy` ist kein angelegtes Schema.
+
+`[cmd]` Der Sollstand prueft jetzt 35 Nutrition- und 168 Fremdtabellen;
+alle 168 Fremdtabellen haben `grants_herkunft`. Neu: `public.profiles`
+(Baseline), `public.user_display_preferences` (091) und
+`public.koerperflaechen` (C-471). Der Fremdschema-Zweig meldet jetzt auch
+eine Rolle, die gar nicht vorgesehen ist.
+
+`[cmd]` Gegenprobe in Wegwerf-DB `lumeos_c470_acl_test`: `GRANT ALL ... TO
+anon` auf einer Tabelle mit nur `authenticated SELECT` war vor der Aenderung
+gruen; danach rot mit `nicht vorgesehene Rolle anon`; nach `REVOKE ALL` wieder
+gruen. Die Wegwerf-DB wurde entfernt.
+
+`[cmd]` Vollkette `lumeos_c470_full`: 197 Schritte bis zur Abschlusspruefung.
+Der neue Rollenvergleich fand drei vorhandene, bisher nicht dokumentierte
+`anon SELECT`-Grants auf `medical.biomarker_explanations`, `medical.symptoms`
+und `medical.symptom_biomarker_map`; sie stammen aus
+`143_kimi_wave2_biomarker_symptoms.ts`. Der Sollstand wurde auf die gemessene
+Quelle erweitert. Die Wegwerf-DB bleibt fuer den abschliessenden zweiten
+Wächterlauf erhalten.
+
+`[cmd]` Nicht behoben (A5): `public.activity_stream` und
+`public.muscle_training_loads` haben fuer anon/authenticated/service_role je
+`DELETE, INSERT, MAINTAIN, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE`,
+obwohl ihre Quellschritte 412 bzw. C-421 nur SELECT explizit vergeben. Ursache
+ist die `public`-Default-ACL; Rechte wurden nicht entzogen.
 
 ## Abnahme
 

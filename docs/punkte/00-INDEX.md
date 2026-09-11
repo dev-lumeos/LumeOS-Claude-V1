@@ -7,8 +7,9 @@
 |---|---|
 | `todos` | 219 |
 | `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 415 |
-| **gesamt** | **635** |
+| **gesamt** | **636** |
 
 ## medical — 48
 
@@ -306,9 +307,9 @@
 | `G-426` | feature | hoch | [die Supplementspalte in Nutrients](todos/nutrition-g-0426-die-supplementspalte-in-nutrients.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 79
+## supplements — 80
 
-### beauftragbar — 78
+### beauftragbar — 79
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -384,11 +385,12 @@
 | `G-373` | feature | mittel | [Stacks editieren und anlegen](erledigt/supplements-g-0373-stacks-editieren-und-anlegen.md) | erledigt | — | G-374 |
 | `G-374` | feature | niedrig | [Zyklen brauchen eine eigene Eingabe](erledigt/supplements-g-0374-zyklen-brauchen-eine-eingabe.md) | erledigt | — | — |
 | `G-388` | feature | mittel | [`InjektionsKarte` und die Reste](erledigt/supplements-g-0388-injektionskarte-ohne-aufrufer.md) | erledigt | — | C-441, G-389, G-390 |
-| `G-389` | feature | hoch | [der Schreibweg fuer Injektionen](erledigt/supplements-g-0389-der-schreibweg-fuer-injektionen.md) | erledigt | — | G-427 |
+| `G-389` | feature | hoch | [der Schreibweg fuer Injektionen](erledigt/supplements-g-0389-der-schreibweg-fuer-injektionen.md) | erledigt | — | G-427, G-428 |
 | `G-390` | befund | hoch | [`new Date()` zerlegt die Hydration](erledigt/supplements-g-0390-new-date-zerlegt-die-hydration.md) | erledigt | — | G-392 |
 | `G-392` | befund | hoch | [der Hydrationsfehler am Wechslerplatz](erledigt/supplements-g-0392-der-hydrationsfehler-am-wechslerplatz.md) | erledigt | — | G-393, G-394 |
 | `G-393` | befund | hoch | [die Rotationskarte ist leer](erledigt/supplements-g-0393-die-rotationskarte-ist-leer.md) | erledigt | — | G-395, G-396 |
 | `G-423` | feature | hoch | [Zyklen, Protokolle und die Injektionskarte](erledigt/supplements-g-0423-zyklen-und-injektionen.md) | erledigt | — | G-424 |
+| `G-428` | fehler | hoch | [der Injektionsreiter ist leer](laufend_claudecode/supplements-g-0428-injektionsreiter-ist-leer.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
