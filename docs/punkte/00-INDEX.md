@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 212 |
+| `todos` | 213 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 6 |
 | `erledigt` | 409 |
-| **gesamt** | **628** |
+| **gesamt** | **629** |
 
 ## medical — 48
 
@@ -533,7 +533,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 144
+## quer — 145
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -615,6 +615,7 @@
 | `C-446` | befund | hoch | [eine Migration fehlt in der Kette](erledigt/quer-c-0446-eine-migration-fehlt-in-der-kette.md) | erledigt | — | C-447 |
 | `C-447` | befund | hoch | [die drei Live-Luecken schliessen](erledigt/quer-c-0447-die-drei-live-luecken-schliessen.md) | erledigt | — | C-448 |
 | `C-448` | entscheidung | mittel | [acht tote Migrationen](erledigt/quer-c-0448-acht-tote-migrationen.md) | erledigt | — | — |
+| `C-468` | entscheidung | hoch | [eine Muskelhierarchie fuer alle Karten](todos/quer-c-0468-eine-muskelhierarchie-fuer-alle-karten.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -680,7 +681,7 @@
 | `G-414` | entscheidung | niedrig | [admin und coach teilen 65 Prozent](todos/quer-g-0414-admin-und-coach-teilen-65-prozent.md) | offen | — | — |
 | `G-420` | befund | mittel | [Kettenlaeufe setzen Testdaten zurueck](todos/quer-g-0420-kettenlaeufe-setzen-testdaten-zurueck.md) | offen | — | — |
 | `G-424` | befund | mittel | [latissimus ist waehlbar und nicht zeichenbar](todos/quer-g-0424-latissimus-waehlbar-nicht-zeichenbar.md) | offen | — | G-425 |
-| `G-425` | befund | hoch | [die sechs Pfade einzeln sehen](laufend_claudecode/quer-g-0425-die-sechs-pfade-einzeln-sehen.md) | laeuft (claudecode) | — | — |
+| `G-425` | befund | hoch | [die sechs Pfade einzeln sehen](laufend_claudecode/quer-g-0425-die-sechs-pfade-einzeln-sehen.md) | laeuft (claudecode) | — | C-468 |
 
 ## market — 3
 
