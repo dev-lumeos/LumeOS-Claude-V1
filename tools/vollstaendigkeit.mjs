@@ -212,6 +212,26 @@ const UMBENANNT = {
       warum: 'modale.tsx — eigene Komponente, weil sie Zustand braucht '
         + '(Ort, Menge und Schmerz aendern die Pruefung live). G-45.',
     },
+    // G-423: die zwei, die das Werkzeug als fehlend meldete.
+    // `[read]` **Beide sind gebaut und eingehaengt** — nur anders
+    // benannt. **Gemessen, nicht geraten.**
+    SuppInteractions: {
+      ziel: 'InteractionsEchtTab',
+      warum: 'tab-interactions-echt.tsx:45 — nimmt `d: RegelStand` und '
+        + 'rendert den `interactions`-Reiter (ansicht.tsx:410). '
+        + 'Gleiche Rolle wie SuppInteractions (module-supplements.jsx:886): '
+        + 'die Wechselwirkungen des Stacks, nach Schwere geordnet. '
+        + '`[cmd]` UNTERSCHIED: die Vorlage zaehlt die Konstante '
+        + '`INTERACTIONS`, die Umsetzung wertet das Regelwerk aus '
+        + '(`zustand: fulfilled | missing_input`) — mehr, nicht weniger.',
+    },
+    ExtendedGate: {
+      ziel: 'ExtendedGesperrt',
+      warum: 'extended-gate.tsx:39 — nimmt `g: GateStand` und zeigt den '
+        + 'gesperrten Zustand des Extended-Reiters (ansicht.tsx:372). '
+        + 'Gleiche Rolle wie das Gate der Vorlage: ohne Freigabe kein '
+        + 'Inhalt. Deutscher Name wie in allen v2-Modulen.',
+    },
   },
   training: {
     TrainingToolLauncher: {

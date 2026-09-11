@@ -167,3 +167,183 @@ export async function ladeInjektionsStand(): Promise<InjektionsStand> {
     fehler,
   }
 }
+
+// ── E-79: DIE KONFIGURIERTEN FLAECHEN ───────────────────────────────
+//
+// **Tom, 2026-09-08:** *„der user waehlt: peptide oder enhanced,
+// wieviel, nadel, moegliche injektionspunkte — und wir verwalten es.
+// rotationsplaene gemaess KONFIGURIERTEN injektionspunkten. wenn er
+// triceps waehlt weil er lokal ein tendonproblem hat, dann zeigen wir
+// den triceps und keinen rotationsvorschlag, weil nur triceps
+// vorhanden ist."*
+//
+// `[cmd]` **C-455 hat `medical.user_injection_site_selections`
+// gebaut** — `(user_id, substance_id, route, body_area_code)` eindeutig,
+// dazu `needle_gauge` und `needle_length_in`.
+//
+// `[cmd]` **`body_area_code` ist auf 21 Werte beschraenkt** (CHECK,
+// gemessen) — dieselben 21 Flaechen, die
+// `packages/ui/src/koerperkarte-pfade.ts` zeichnet. **Das IST E-79.**
+//
+// `[cmd]` **Und die Rotation steht in der Datenbank, nicht hier:**
+// `medical.suggest_configured_injection_area(p_substance_id, p_route)`
+// gibt die am laengsten geruhte KONFIGURIERTE Flaeche —
+// **mit `WHERE (SELECT count(*) FROM selected) > 1`.**
+//
+// `[read]` **Eine Flaeche heisst: kein Vorschlag** — die Regel steht im
+// SQL, und diese Datei erfindet sie nicht noch einmal daneben.
+
+// `[read]` **Weitergereicht, nicht zweimal gefuehrt** — zwei Listen
+// fuer denselben CHECK heissen zwei Listen.
+export { INJEKTIONSWEGE, type Injektionsweg } from './koerperflaechen'
+import type { Injektionsweg } from './koerperflaechen'
+
+/** Eine konfigurierte Flaeche fuer eine Substanz. */
+export type KonfigurierteFlaeche = {
+  id: string
+  substance_id: string
+  substanz_name: string | null
+  route: string
+  body_area_code: string
+  needle_gauge: string | null
+  needle_length_in: number | null
+}
+
+/** Was die Datenbank als naechste Flaeche vorschlaegt — oder nichts. */
+export type Rotationsvorschlag = {
+  body_area_code: string
+  suggestion_reason: string
+}
+
+export type KonfigurationsStand = {
+  flaechen: KonfigurierteFlaeche[]
+  /** `null` heisst: kein Vorschlag — bei genau EINER Flaeche so gewollt. */
+  vorschlag: Rotationsvorschlag | null
+  fehler: string | null
+}
+
+/**
+ * Die konfigurierten Flaechen des Nutzers, und was daraus folgt.
+ *
+ * `[read]` **Der Vorschlag wird NUR geholt, wenn eine Substanz gemeint
+ * ist** — `suggest_configured_injection_area` fragt je Substanz und
+ * Weg, nicht global.
+ */
+export async function ladeKonfiguration(
+  substanzId?: string, weg?: Injektionsweg,
+): Promise<KonfigurationsStand> {
+  const db = createSessionClient()
+  const { data, error } = await db
+    .schema('medical')
+    .from('user_injection_site_selections')
+    .select('id, substance_id, route, body_area_code, needle_gauge, needle_length_in')
+    .order('body_area_code', { ascending: true })
+
+  if (error) return { flaechen: [], vorschlag: null, fehler: error.message }
+
+  const zeilen = (data ?? []) as unknown as Array<Record<string, unknown>>
+
+  // Die Namen der Substanzen in EINER Abfrage — nicht je Zeile eine.
+  // `[read]` **`filter` statt `Set` ausbreiten** — ein `Set` laesst
+  // sich beim Ziel dieses Pakets nicht ausbreiten (TS2802).
+  const alleIds = zeilen.map(z => String(z.substance_id))
+  const ids = alleIds.filter((v, i) => alleIds.indexOf(v) === i)
+  const namen = new Map<string, string>()
+  if (ids.length > 0) {
+    const { data: subs } = await db
+      .schema('supplements')
+      .from('supplements')
+      .select('id, name_de, name_en')
+      .in('id', ids)
+    for (const s of (subs ?? []) as unknown as Array<Record<string, unknown>>) {
+      const n = (s.name_de || s.name_en) as string | null
+      if (n) namen.set(String(s.id), n)
+    }
+  }
+
+  const flaechen: KonfigurierteFlaeche[] = zeilen.map(z => ({
+    id: String(z.id),
+    substance_id: String(z.substance_id),
+    substanz_name: namen.get(String(z.substance_id)) ?? null,
+    route: String(z.route),
+    body_area_code: String(z.body_area_code),
+    needle_gauge: z.needle_gauge == null ? null : String(z.needle_gauge),
+    needle_length_in: z.needle_length_in == null ? null : Number(z.needle_length_in),
+  }))
+
+  // ══ WELCHE SUBSTANZ IST GEMEINT? ══════════════════════════════════
+  //
+  // `[cmd]` **Am Schirm gemessen (2026-09-11): zwei konfigurierte
+  // Flaechen, und trotzdem kein Vorschlag.** `[read]` **Der Grund war
+  // hier:** die Seite ruft `ladeKonfiguration()` ohne Argumente, und
+  // ohne Substanz wurde die Funktion nie gefragt.
+  //
+  // `[read]` **Ohne Angabe die erste konfigurierte Substanz nehmen** —
+  // sie ist die einzige, zu der es ueberhaupt etwas vorzuschlagen
+  // gibt. **Eine leere Anzeige waere hier kein Leerzustand, sondern
+  // eine verschluckte Antwort.**
+  const erste = flaechen[0]
+  const fuerSubstanz = substanzId ?? erste?.substance_id
+  const fuerWeg = weg ?? (erste?.route as Injektionsweg | undefined)
+
+  let vorschlag: Rotationsvorschlag | null = null
+  if (fuerSubstanz && fuerWeg) {
+    // `[read]` **Die Funktion entscheidet, nicht diese Datei** — sie
+    // gibt bei EINER konfigurierten Flaeche gar keine Zeile zurueck.
+    const { data: v } = await db
+      .schema('medical')
+      .rpc('suggest_configured_injection_area', {
+        p_substance_id: fuerSubstanz, p_route: fuerWeg,
+      })
+    const zeile = (Array.isArray(v) ? v[0] : null) as Record<string, unknown> | null
+    if (zeile?.body_area_code) {
+      vorschlag = {
+        body_area_code: String(zeile.body_area_code),
+        suggestion_reason: String(zeile.suggestion_reason ?? ''),
+      }
+    }
+  }
+
+  return { flaechen, vorschlag, fehler: null }
+}
+
+/** Eine Substanz, die laut Katalog gespritzt wird. */
+export type InjizierbareSubstanz = {
+  id: string
+  name: string
+  /** Die Wege, die `supplement_pharmacology` fuer sie belegt. */
+  wege: string[]
+}
+
+/**
+ * Die Substanzen, fuer die sich eine Flaeche konfigurieren laesst.
+ *
+ * `[read]` **Der Trigger `validate_injection_site_selection` verlangt
+ * genau das:** eine im Katalog belegte Injektionsroute. **Eine Liste,
+ * die mehr anboete, waere eine Falle** — jeder Versuch schluege fehl.
+ */
+export async function ladeInjizierbareSubstanzen(): Promise<InjizierbareSubstanz[]> {
+  const { data, error } = await createSessionClient()
+    .schema('supplements')
+    .from('supplement_pharmacology')
+    .select('route, supplement_id, supplements!inner(id, name_de, name_en)')
+    .in('route', ['injection_im', 'injection_subq'])
+  if (error) return []
+
+  const nach = new Map<string, InjizierbareSubstanz>()
+  for (const z of (data ?? []) as unknown as Array<Record<string, unknown>>) {
+    const s = z.supplements as Record<string, unknown> | null
+    if (!s) continue
+    const id = String(s.id)
+    const name = (s.name_de || s.name_en) as string | null
+    // `[read]` **Ohne Namen keine Auswahl** — eine Zeile, die als
+    // Kennung dastuende, koennte niemand lesen.
+    if (!name) continue
+    const vorhanden = nach.get(id)
+    if (vorhanden) vorhanden.wege.push(String(z.route))
+    else nach.set(id, { id, name, wege: [String(z.route)] })
+  }
+  const liste: InjizierbareSubstanz[] = []
+  nach.forEach(v => { liste.push(v) })
+  return liste.sort((a, b) => a.name.localeCompare(b.name))
+}

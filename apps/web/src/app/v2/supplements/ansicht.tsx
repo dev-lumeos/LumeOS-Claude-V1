@@ -68,7 +68,14 @@ const QUELLE = 'theme-v1/module-supplements.jsx'
 // G-45: der Injections-Tab mit der Rotationskarte.
 import { SuppInjections } from './tab-injektionen'
 // G-388: der Typ des Injektionsstands.
-import type { InjektionsStand } from '../../../lib/medical/injektion-read'
+import type {
+  InjektionsStand, KonfigurationsStand, InjizierbareSubstanz,
+} from '../../../lib/medical/injektion-read'
+// G-423: Zyklen, Protokolle und die Injektionskonfiguration.
+import type { ZyklusStand } from '../../../lib/supplements/zyklus-read'
+import {
+  ZyklusKarte, ProtokollKarte, InjektionsKonfigKarte,
+} from './zyklus-karten'
 // G-45: die vier Tabs aus -spec.jsx.
 // G-172: `SuppCatalog` ist geloescht — der Tab zeigt `SuppDatabase`.
 import { SuppStacks, SuppIntelligence, SuppInventory } from './tab-spec'
@@ -134,6 +141,9 @@ export function SupplementsAnsicht({
   vorlagen = [],
   bilanz = [], belegteSubstanzen = 0, bilanzTag = null,
   injektionen = null,
+  zyklen = null,
+  konfig = null,
+  injizierbare = [],
 }: {
   daten?: StackDaten | null
   katalog?: KatalogEintrag[]
@@ -166,6 +176,12 @@ export function SupplementsAnsicht({
    * ohne Typfehler.
    */
   injektionen?: InjektionsStand | null
+  /** `[cmd]` **G-423: C-456, fuenf Schreibwege ohne Aufrufer.** */
+  zyklen?: ZyklusStand | null
+  /** `[cmd]` **G-423/E-79: die konfigurierten Flaechen (C-455).** */
+  konfig?: KonfigurationsStand | null
+  /** `[cmd]` **Was der Katalog als injizierbar belegt.** */
+  injizierbare?: InjizierbareSubstanz[]
   /**
    * G-74: Das echte Heute, serverseitig aus `lib/datum.ts`.
    *
@@ -359,6 +375,24 @@ export function SupplementsAnsicht({
             // vorher war es ein `useState` im Browser (G-92).
             // G-359/3: beides untereinander (E-68).
             <>
+              {/* ══ G-423: Zyklen und Protokolle ═══════════════════
+                  `[cmd]` **C-456 hat sie gebaut** — und keiner der
+                  fuenf Schreibwege hatte einen Aufrufer.
+                  `[read]` **Sie stehen im Extended-Reiter**, weil ein
+                  PCT-Protokoll dorthin gehoert: es faengt einen
+                  Zyklus ab, den der Grundreiter gar nicht kennt.
+                  `[read]` **Und nur hinter dem Gate** — dieselbe
+                  Schranke wie fuer den uebrigen Inhalt. */}
+              {gate?.offen && (
+                <>
+                  <ZyklusKarte
+                    d={zyklen ?? { zyklen: [], protokolle: [], vorlagen: [], fehler: null }}
+                    substanzen={substanzen.map(x => ({ id: x.id, name: x.name }))} />
+                  <ProtokollKarte
+                    d={zyklen ?? { zyklen: [], protokolle: [], vorlagen: [], fehler: null }}
+                    substanzen={substanzen.map(x => ({ id: x.id, name: x.name }))} />
+                </>
+              )}
               {gate?.offen && <SuppExtended />}
               {/* `[cmd]` G-365: die Linie stand unter einer
                   Datenbedingung. Sabotageprobe 2026-09-07 in
@@ -416,6 +450,15 @@ export function SupplementsAnsicht({
           {tab === 'cost' && <SuppCost />}
           {tab === 'injection' && (
             <>
+              {/* ══ G-423/E-79: die Konfiguration steht OBEN ═════
+                  **Tom:** *„der user waehlt … moegliche
+                  injektionspunkte — und wir verwalten es."*
+                  `[read]` **Erst die Auswahl, dann die Karte** — eine
+                  Rotation ueber nicht gewaehlte Punkte waere ein
+                  Vorschlag, den niemand bestellt hat. */}
+              <InjektionsKonfigKarte
+                k={konfig ?? { flaechen: [], vorschlag: null, fehler: null }}
+                substanzen={injizierbare} />
               <SuppInjections stand={injektionen} stichtag={stichtag} />
               <SuppInjectionReferenz />
             </>

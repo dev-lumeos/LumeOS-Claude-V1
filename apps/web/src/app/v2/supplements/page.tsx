@@ -23,8 +23,14 @@ import { SupplementsAnsicht } from './ansicht'
 // G-388: die Injektionsorte liegen in `medical`, nicht in
 // `supplements` — fuenf Tabellen, gemessen in 00-MODULTABELLEN.md.
 import {
-  ladeInjektionsStand, type InjektionsStand,
+  ladeInjektionsStand, ladeKonfiguration, ladeInjizierbareSubstanzen,
+  type InjektionsStand, type KonfigurationsStand,
+  type InjizierbareSubstanz,
 } from '../../../lib/medical/injektion-read'
+// G-423: Zyklen und Protokolle (C-456).
+import {
+  ladeZyklusStand, type ZyklusStand,
+} from '../../../lib/supplements/zyklus-read'
 
 export const metadata: Metadata = {
   title: 'Supplements · LumeOS',
@@ -104,7 +110,7 @@ export default async function V2SupplementsPage({
   // meldet **temp read=9457 written=9457** bei 171 ms in der Datenbank
   // — ein Kreuzprodukt. Das ist ein eigener Befund, siehe Bericht.
   const [daten, katalog, regeln, gate, substanzen, stacks, belegteSubstanzen,
-         vorlagen, injektionen]
+         vorlagen, injektionen, zyklen, konfig, injizierbare]
     = await Promise.all([
       ruhig<StackDaten | null>(getStackDaten, null),
       ruhig<KatalogEintrag[]>(getKatalog, []),
@@ -122,6 +128,20 @@ export default async function V2SupplementsPage({
       ruhig<InjektionsStand>(ladeInjektionsStand, {
         orte: [], protokoll: [], nadeln: [], gewebehinweise: [], fehler: null,
       }),
+      // G-423: Zyklen und Protokolle. `[cmd]` **C-456 hat die
+      // Tabellen und fuenf Schreibwege gebaut** — und keiner hatte
+      // einen Aufrufer.
+      ruhig<ZyklusStand>(ladeZyklusStand, {
+        zyklen: [], protokolle: [], vorlagen: [], fehler: null,
+      }),
+      // G-423/E-79: die konfigurierten Injektionsflaechen.
+      ruhig<KonfigurationsStand>(() => ladeKonfiguration(), {
+        flaechen: [], vorschlag: null, fehler: null,
+      }),
+      // `[read]` **Nur was der Katalog als injizierbar belegt** — der
+      // Trigger weist alles andere ab, und eine laengere Liste waere
+      // eine Falle.
+      ruhig<InjizierbareSubstanz[]>(ladeInjizierbareSubstanzen, []),
     ])
 
   // ══ G-275: die Bilanz gilt fuer den ANGESEHENEN Tag ══════════════
@@ -161,6 +181,9 @@ export default async function V2SupplementsPage({
       bilanz={bilanz} belegteSubstanzen={belegteSubstanzen}
       bilanzTag={bilanzTag}
       injektionen={injektionen}
+      zyklen={zyklen}
+      konfig={konfig}
+      injizierbare={injizierbare}
     />
     </>
   )
