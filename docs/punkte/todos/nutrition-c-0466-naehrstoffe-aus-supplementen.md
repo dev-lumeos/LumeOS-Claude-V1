@@ -122,7 +122,118 @@ Naehrstoffe"*** ? **nachsehen, was dort entschieden wurde.**
 
 ---
 
-## Was ich wissen muss, bevor ein Auftrag rausgeht
+## Toms Antworten, 2026-09-08
+
+`[read]` **Kein Auftrag** ? **Tom: *,,mach erst nur ein todo
+daraus, ich will das noch genauer ueberlegen."***
+
+### 1 · Die Uebersicht zeigt beide uebereinander
+
+Tom:
+
+> uebersicht haben wir schnitt/tag. darin koennten wir in der
+> auflistung beide werte uebereinander zeigen ? oben food,
+> untendran supplements wo vorhanden, total zusammengerechnet.
+
+    Vitamin D    11,2 ug      Nahrung
+                 25,0 ug      Supplement
+                 -------
+                 36,2 ug      gesamt
+
+`[read]` **Das ist Variante a und b zugleich:** **beide Werte
+sichtbar, UND die Summe.**
+
+`[read]` **Und *,,wo vorhanden"*** ? **wer kein Praeparat nimmt,
+sieht eine Zeile, nicht drei.**
+
+`[cmd]` **E-35 bleibt gewahrt:** **die beiden Bilanzen werden
+getrennt GERECHNET, in der Ansicht zusammengefuehrt.**
+
+### 2 · Die Supplementdaten sind noch nicht entschieden
+
+Tom:
+
+> ich werde mir supplements nochmal ueberdenken. ich denke, da
+> muessen herstellerdaten rein und nicht von uns
+> zusammengewuerfelte, recherchierte supplements.
+
+`[read]` **Das aendert die Grundlage.**
+
+`[cmd]` **Heute: 596 Substanzen, 17 mit Naehrstoffzuordnung** ?
+**recherchiert, nicht vom Hersteller.**
+
+`[read]` **Ein Praeparat hat eine Marke, eine Packungsgroesse, eine
+Zutatenliste je Portion** ? **das ist ein anderes Datenmodell als
+*,,Substanz mit Wirkung"*.**
+
+`[cmd]` **`supplements.supplements` traegt heute Substanzen**
+(Zink, Folat), **nicht Produkte** (*,,Now Foods Zinc Picolinate
+50 mg, 120 Kapseln"*).
+
+`[read]` **WARTET auf Toms Entscheidung** ? **ohne sie ist die
+Datenfrage nicht beantwortbar.**
+
+### 3 · Genommen ist genommen
+
+Tom: *,,was fuer eine frage, genommen ist genommen."*
+
+`[cmd]` **`intake_logs.status`** ? **nur der genommene Zustand
+zaehlt.**
+
+`[read]` **Meine Frage war ueberfluessig.**
+
+### 4 · Zusammenzaehlen, und bei Ueberschreitung entscheiden
+
+Tom:
+
+> natuerlich zusammengezaehlt. wenn zu hoch, muss entschieden
+> werden was sinn macht ? entweder supplementdosis runter oder
+> ganz weg, oder kleine schritte mit foodanpassungen.
+
+`[read]` **Die Warnung gilt der SUMME, nicht dem
+Supplementanteil allein.**
+
+`[read]` **Und sie ist kein Alarm, sondern der Anfang einer
+Entscheidung:**
+
+    Dosis runter
+    Praeparat weg
+    Ernaehrung anpassen
+
+`[cmd]` **Das ist genau, was Tom eingangs beschrieb:** *,,buddy
+wird bei unterziel massnahmen ergreifen und entweder ernaehrung
+umstellen oder supplements empfehlen."*
+
+`[read]` **Dieselbe Maschine, beide Richtungen** ? **Luecke
+fuellen und Ueberschuss abbauen.**
+
+`[cmd]` **Aber C-344 gilt weiter:** **die Obergrenzen fuer
+Magnesium, Niacin und Folsaeure gelten NUR fuer Supplemente.**
+
+`[read]` **Also: die SUMME wird gezeigt, die Grenze wird gegen
+den richtigen Anteil geprueft** ? **je nach Naehrstoff die Summe
+oder nur das Praeparat.**
+
+`[read]` **Das ist die eine Stelle, die beim Bauen genau
+gelesen werden muss.**
+
+---
+
+## Was offen bleibt
+
+`[read]` **Punkt 2** ? **Herstellerdaten statt recherchierter
+Substanzen.**
+
+`[read]` **Ohne diese Entscheidung ist nicht klar, WORAUF die
+Naehrstoffzuordnung zeigt** ? **auf eine Substanz oder auf ein
+Produkt.**
+
+`[read]` **Die Ansicht (Punkt 1) und die Rechenregel (Punkt 4)
+sind entschieden** ? **die Datengrundlage nicht.**
+
+---
+
+## Urspruengliche Fragen (beantwortet)
 
 `[read]` **Vier Fragen. Sie stehen in `00-FRAGEN.md`.**
 
