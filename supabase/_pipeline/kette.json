@@ -1824,6 +1824,13 @@
       "kind": "sql",
       "creates": "C-467: Lieferantenprodukte, etikettengetreue Inhaltsstoffe und produktbezogene Katalogkandidaten mit agententauglichem Schreibweg",
       "depends_on": ["465_marketplace_training_delivery", "136"]
+    },
+    {
+      "id": "460_relationship_specialties",
+      "path": "supabase/migrations/20260909300000_c460_relationship_specialties.sql",
+      "kind": "sql",
+      "creates": "C-460: mehrere der vier Coach-Faecher pro aktiver Coach-Klient-Beziehung, getrennt von sieben Berechtigungsmodulen",
+      "depends_on": ["467_supplier_products", "151"]
     }
   ]
 }

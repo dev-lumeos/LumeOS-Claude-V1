@@ -4442,6 +4442,7 @@
     {"schema":"supplements","name":"supplier_products","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
     {"schema":"supplements","name":"product_contents","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
     {"schema":"supplements","name":"product_content_candidates","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
+    {"schema":"coach","name":"relationship_specialties","schritt":"460_relationship_specialties","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"beziehungszeilen"},
     {
       "schema": "supplements",
       "name": "intake_schedule",
