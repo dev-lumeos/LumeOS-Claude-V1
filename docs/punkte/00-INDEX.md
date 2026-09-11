@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 212 |
+| `todos` | 213 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 6 |
-| `erledigt` | 401 |
-| **gesamt** | **620** |
+| `laufend_claudecode` | 5 |
+| `erledigt` | 402 |
+| **gesamt** | **621** |
 
 ## medical — 48
 
@@ -64,7 +64,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 235
+## nutrition — 236
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -301,7 +301,8 @@
 | `G-413` | fehler | hoch | [reine Filtersuche liefert nichts](todos/nutrition-g-0413-reine-filtersuche-liefert-nichts.md) | offen | — | — |
 | `G-415` | entscheidung | hoch | [die vier Stufen und die Ballaststoffe](erledigt/nutrition-g-0415-die-vier-stufen-und-die-ballaststoffe.md) | erledigt | — | C-464 |
 | `G-416` | feature | hoch | [Hoehen, Flaechen, Deckkraft](erledigt/nutrition-g-0416-hoehen-flaechen-deckkraft.md) | erledigt | — | G-417 |
-| `G-417` | feature | hoch | [zwei Spalten und der Score](laufend_claudecode/nutrition-g-0417-zwei-spalten-und-der-score.md) | laeuft (claudecode) | — | — |
+| `G-417` | feature | hoch | [zwei Spalten und der Score](erledigt/nutrition-g-0417-zwei-spalten-und-der-score.md) | erledigt | — | G-418 |
+| `G-418` | befund | niedrig | [Seed-Tage liegen in der Zukunft](todos/nutrition-g-0418-seed-tage-in-der-zukunft.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 78
