@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 209 |
-| `laufend_codex` | 3 |
+| `todos` | 210 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 6 |
 | `erledigt` | 399 |
 | **gesamt** | **617** |
@@ -165,7 +165,7 @@
 | `C-410` | befund | hoch | [zwei Leser nehmen `food_tags` statt der Sicht](erledigt/nutrition-c-0410-zwei-leser-nehmen-food-tags-statt-der-sicht.md) | erledigt | — | — |
 | `C-411` | feature | mittel | [Rezeptvorschlaege in der Kuration](erledigt/nutrition-c-0411-rezeptvorschlaege-in-der-kuration.md) | erledigt | — | — |
 | `C-413` | befund | niedrig | [`tom.seed` traegt `days_count 7` bei 21 Tagen](erledigt/nutrition-c-0413-tom-seed-traegt-days-count-7-bei-21-tagen.md) | erledigt | — | — |
-| `C-464` | feature | mittel | [das Ballaststoffziel fehlt](laufend_codex/nutrition-c-0464-das-ballaststoffziel-fehlt.md) | laeuft (codex) | — | — |
+| `C-466` | feature | hoch | [Naehrstoffe aus Supplementen in der Nutrients-Ansicht](todos/nutrition-c-0466-naehrstoffe-aus-supplementen.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](erledigt/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | erledigt | — | G-375 |
@@ -298,7 +298,7 @@
 | `G-353` | feature | mittel | [Setup-Karten nach dem Onboarding](erledigt/nutrition-g-0353-setup-karten-nach-dem-onboarding.md) | erledigt | — | C-425, G-372 |
 | `G-412` | feature | hoch | [die letzten Attrappen in Nutrition](erledigt/nutrition-g-0412-die-letzten-attrappen.md) | erledigt | — | G-415, G-416 |
 | `G-413` | fehler | hoch | [reine Filtersuche liefert nichts](todos/nutrition-g-0413-reine-filtersuche-liefert-nichts.md) | offen | — | — |
-| `G-415` | entscheidung | hoch | [die vier Stufen und die Ballaststoffe](erledigt/nutrition-g-0415-die-vier-stufen-und-die-ballaststoffe.md) | erledigt | — | C-464 |
+| `G-415` | entscheidung | hoch | [die vier Stufen und die Ballaststoffe](erledigt/nutrition-g-0415-die-vier-stufen-und-die-ballaststoffe.md) | erledigt | — | — |
 | `G-416` | feature | hoch | [Hoehen, Flaechen, Deckkraft](laufend_claudecode/nutrition-g-0416-hoehen-flaechen-deckkraft.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
