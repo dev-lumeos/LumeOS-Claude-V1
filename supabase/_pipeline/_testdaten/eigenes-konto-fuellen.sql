@@ -249,12 +249,12 @@ WHERE p.id = :'ziel'::uuid AND q.id = :'quelle'::uuid;
 -- vorwaerts, ein frueheres Datum wuerde die aelteren Tage falsch bewerten.
 INSERT INTO goals.nutrition_targets (
   user_id, gueltig_ab, kcal, protein_g, carbs_g, fat_g, herkunft, tdee,
-  nutrition_goal, notiz, linoleic_acid_g, alpha_linolenic_acid_g
+  nutrition_goal, notiz, fiber_g, linoleic_acid_g, alpha_linolenic_acid_g
 )
 SELECT
   :'ziel'::uuid, gueltig_ab, kcal, protein_g, carbs_g, fat_g, herkunft, tdee,
   nutrition_goal, 'Kopie aus Seed-Konto fuer dev@lumeos.app',
-  linoleic_acid_g, alpha_linolenic_acid_g
+  fiber_g, linoleic_acid_g, alpha_linolenic_acid_g
 FROM goals.nutrition_targets
 WHERE user_id = :'quelle'::uuid;
 

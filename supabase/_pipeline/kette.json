@@ -1803,6 +1803,13 @@
       "kind": "sql",
       "creates": "C-463: private Fortschrittsfoto-Metadaten mit posebasiertem, eigentuemergebundenem Storage; keine zweite Gewichtsliste oder Transition-Tabelle",
       "depends_on": ["461_program_day_owner_guard", "111"]
+    },
+    {
+      "id": "464_nutrition_fiber_target",
+      "path": "supabase/migrations/20260909270000_c464_nutrition_fiber_target.sql",
+      "kind": "sql",
+      "creates": "C-464: fiber_g als gespeichertes Goals-Tagesziel, in Formel, Zielwert-Leser und Coach-Fortschreibung; vorhandene Formel-Ziele erhalten den SPEC_01-Fallback 30 g/Tag",
+      "depends_on": ["463_goals_progress_photos", "381"]
     }
   ]
 }
