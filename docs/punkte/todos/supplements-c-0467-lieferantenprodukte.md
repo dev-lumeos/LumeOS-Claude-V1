@@ -218,16 +218,63 @@ Kandidat zur Zutat** ? **derselbe Weg wie bei
 
 `[read]` **Und ein Einpflegeweg im Admin.**
 
+## Toms Nachtrag, 2026-09-08
+
+### Ein Supplier IST ein Nutzer
+
+Tom: *,,ja, auch ein supplier wird ein user sein, der verknuepfte
+rechte hat."*
+
+`[read]` **Also `user_id` an `suppliers`, wie bei
+`coach_profiles`** ? **und Rechte daran.**
+
+`[cmd]` **`coach.coach_profiles` hat `user_id`, `display_name`,
+`is_active`** ? **dieselbe Bauform.**
+
+`[read]` **Die RECHTE sind noch nicht definiert** ? **ein
+Supplier sieht nur seine eigenen Produkte, mehr steht nicht
+fest.**
+
+### Der Admin-Einpflegeweg kommt spaeter
+
+Tom: *,,ja, aber nicht jetzt."*
+
+`[read]` **Kein Auftrag fuer `apps/admin`.**
+
+### Wie heute eingepflegt wird
+
+Tom:
+
+> das wird importvorlagen geben, die supplier haben die daten.
+> oder ocr. nicht so wichtig im moment. momentan geht einpflege:
+> ich liefere daten und du oder die agents pflegen ein.
+
+`[read]` **Der Weg ist HEUTE: Tom liefert, ein Agent schreibt.**
+
+`[read]` **Das heisst fuer den Bau:**
+
+    die vier Tabellen                  JA
+    ein Admin-Formular                 NEIN, spaeter
+    eine Importvorlage                 NEIN, spaeter
+    OCR vom Etikett                    NEIN, spaeter
+
+`[read]` **Was es braucht, ist ein SCHREIBWEG, den ein Agent
+benutzen kann** ? **eine Funktion, keine Maske.**
+
+`[cmd]` **Dieselbe Bauform wie `onboard_coach` (C-440) oder
+`book_wallet_purchase`** ? **RPC mit Pruefung.**
+
+`[read]` **Und die Kandidatentabelle faengt auf, was Tom nicht
+zuordnen kann** ? **die Meldung ist dann eine Zeile, die jemand
+liest, kein Bildschirm.**
+
 ## Was noch offen ist
 
-`[read]` **Die FORM des Einpflegens** ? **Maske je Produkt, oder
-eine Datei mit vielen?**
+`[read]` **Die Rechte eines Suppliers** ? **wenn er sich anmeldet,
+was darf er?**
 
-`[read]` **Ein Multivitamin hat dreissig Zutaten** ? **die tippt
-niemand einzeln.**
-
-`[cmd]` **Messen, ob `apps/admin` schon einen Importweg hat** ?
-**die Lebensmitteldatenbank hat einen (`food_curation_*`).**
+`[read]` **Das ist dieselbe Frage wie bei C-451 (die Aufnahme
+eines Coaches)** ? **und sie wartet auf dasselbe.**
 
 ## Was urspruenglich zu entscheiden war
 
