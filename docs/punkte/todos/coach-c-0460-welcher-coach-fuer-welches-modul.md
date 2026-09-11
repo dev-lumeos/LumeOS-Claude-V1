@@ -7,8 +7,6 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-409
 entscheidung: null
-agent: codex
-beauftragt: 2026-09-08
 beruehrt:
   tabellen: [coach.relationships]
 zahlen:
@@ -79,3 +77,14 @@ Attrappe mit Vermerk.**
 C-460.**
 
 `[read]` **Der Kettenauftrag steht in C-464.**
+
+## Zurueckgenommen 2026-09-08
+
+Tom: *,,lass kettenauftraege komplett melden, wir brauchen keine
+zwischenresultate."*
+
+`[read]` **Die Kette C-464 -> C-465 -> C-460 ist aufgeloest.**
+
+`[cmd]` **C-464 ist abgenommen, C-465 laeuft als Einzelauftrag.**
+
+`[read]` **C-460 wartet auf Toms Entscheidung.**

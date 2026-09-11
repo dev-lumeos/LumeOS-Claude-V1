@@ -9,6 +9,8 @@ kind_von: G-415
 entscheidung: E-80
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: c5efd107
 beruehrt:
   tabellen: [goals.nutrition_targets]
 zahlen:
@@ -87,3 +89,33 @@ Scoring-Paket, nicht in Datenbankzustand.
 
 Apps, UI-Pakete und Dev-Server blieben unberührt. Nichts wurde committed,
 gestaged oder gepusht.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    fiber_g in goals.nutrition_targets
+    5 von 5 Formel-Zielwerten mit 30 g
+    dev: kcal 2500, protein 170, fiber 30, herkunft formel
+    Vollkette 881,4 s, Punktelauf gruen
+
+`[cmd]` **Selbst gemessen: `fiber_g` da, fuenf Nutzer mit 30,0 g,
+`dev@lumeos.app` dabei.**
+
+### Die Bauform folgt den Fettsaeuren
+
+`[cmd]` **`linoleic_acid_g` und `alpha_linolenic_acid_g` standen
+schon mit `herkunft: formel`** ? **`fiber_g` genauso.**
+
+`[read]` **Kein neuer Weg, kein neuer Begriff** ? **die dritte
+Spalte derselben Art.**
+
+### Was noch nicht wirkt
+
+`[cmd]` **Die Score-Kachel zeigt weiter *,,Ballaststoffe: kein Ziel
+im Schema"*** ? **sie liest die neue Spalte nicht.**
+
+`[read]` **Das ist kein Fehler dieses Punktes** ? **die Kachel
+gehoert Claude Code, und steht in G-417.**
+
+**Abgenommen.**
