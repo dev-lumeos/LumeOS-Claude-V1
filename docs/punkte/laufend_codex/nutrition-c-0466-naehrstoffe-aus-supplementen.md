@@ -534,3 +534,41 @@ genommen hat.**
 gegen welche Referenz die Warnung laeuft.**
 
 `[read]` **Sonst steht da eine rote Zahl ohne Bezug.**
+
+---
+
+## Umsetzung und Messung, 2026-09-11
+
+### Gebaut
+
+- `supplements.daily_nutrient_summary_long`: getrennte Tagesbilanz aus `intake_logs.status = 'taken'`, Stack, Substanz und `supplement_nutrients`; keine Nutrition-Zeilen.
+- `nutrition.micronutrient_snapshot_with_supplements`: liefert `food_amount` und `supplement_amount` getrennt, ohne eine dritte Summe zu speichern.
+- `nutrition.nutrient_intake_detail_for_day`: liefert je Zeile Nahrung (`food_name`, Menge) oder Supplement (`supplement_name_snapshot`, Dosis-Snapshot), optional mit C-467-Produktname.
+- `nutrition.nutrient_upper_limit_assessment_with_supplements`: liefert Obergrenze, Prüfmenge, Status und Prüfbereich.
+- `supplements.intake_logs.supplier_product_id` ist optional: Der historische Einnahme-Snapshot bleibt die Quelle, der FK verfeinert nur die Rücksicht um das konkrete Produkt.
+- Die 17 Katalogzuordnungen tragen nun `amount_original` und `unit_original`; damit ist etwa `5.000 IU * 0,025 = 125 ug` nachvollziehbar.
+
+### Abnahme
+
+**A1 / A2 — Tagesbilanz und zwei Anteile.** Die transaktionale Wegwerfprobe legte für einen Tag Nahrung mit Vitamin D 10 ug und Magnesium 50 mg sowie zwei `taken`-Logs an. Der Leser gab Vitamin D als Nahrung 10 ug / Supplement 125 ug und Magnesium als Nahrung 50 mg / Supplement 400 mg zurück. Kein Wert wird in der Modultabelle zur gemischten Summe verdichtet; die Probe endet mit `ROLLBACK`.
+
+**A3 — C-344.** Magnesium (`MG`) und Folat/Folsäure (`FOLAC`) prüfen nur den Supplementanteil. Niacin (`NIA`) prüft laut C-344 Supplemente plus angereicherte Nahrung; da die heutige Nahrungsaufzeichnung angereicherte Nahrung nicht markieren kann, liefert der Leser ehrlich `supplements_plus_fortified_foods_unresolved`, keine scheinbar sichere Warnung. Alle übrigen Obergrenzen prüfen die vollständig dokumentierte Aufnahme aus Nahrung und Präparaten.
+
+**A4 — nicht zugeordnete Stoffe.** Live bleiben 579 von 596 Substanzen ohne Nährstoffzuordnung unsichtbar in dieser Bilanz. Von 741 `taken`-Logs sind 331 zugeordnet und 410 nicht zugeordnet. Es wurde keine Zuordnung erfunden.
+
+**A5 — Zugriff.** Die RLS-Probe sah als Eigentümer die eigenen Detailzeilen und als anderer angemeldeter Nutzer 0. `anon` hat für `supplement_nutrient_intake_for_day`, `nutrient_intake_source_totals_for_day`, `micronutrient_snapshot_with_supplements`, `nutrient_intake_detail_for_day` und die Obergrenzenfunktion kein `EXECUTE`.
+
+**A7 / A8 — Detailherkunft.** Die Probe belegt beide Varianten: Vitamin D liefert Nahrung `C466 Lebensmittel` und die Supplement-Zeile `Vitamin D3`, Dosis `5000 IU`, Produkt `C466 Vitamin D3 5000 IU`; die Magnesium-Zeile hat denselben historischen Snapshot (`C466 Magnesium`, 400 mg), aber absichtlich `product = NULL`. Jede Detailzeile enthält zusätzlich Bereich, Prüfmenge und Status der passenden Obergrenzenprüfung.
+
+### Live-Stand nach Einspielen
+
+- `supplement_nutrients`: 17 Zeilen, 17/17 mit Originalportion.
+- `intake_logs`: die neue optionale Spalte `supplier_product_id` ist vorhanden; bestehende Logs wurden nicht nachträglich umgedeutet.
+- Am 2026-09-06 liefert die Supplements-Bilanz FAPUN3 2 g, Magnesium 400 mg und Vitamin D 125 ug (vier `taken`, drei zugeordnet, eine ehrliche Lücke).
+- Sicherung vor dem Einspielen: `backup/schema/20260911163113_c466_nutrient_supplement_sources_vor_einspielen.dump`, 50.602.792 Byte, SHA-256 `FD1343FF934EA95250CE40E36C65E6A6C7F630F6670206DC1728981E86E82856`.
+
+### Pruefung
+
+- Frischer Kettenaufbau: 193 Schritte, 408,9 s, `SCHEMA VOLLSTAENDIG`.
+- RLS-/Herkunftsprobe: `nutrition-c466-supplement-nutrients.test.ts`, 1/1 grün, 1,52 s, mit `ROLLBACK`.
+- Keine Oberflaeche, keine Zuordnung für die 579 Lücken und kein Entwicklungsserver wurden berührt.

@@ -5,10 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 213 |
-| `laufend_claudecode` | 5 |
+| `todos` | 212 |
+| `laufend_codex` | 1 |
+| `laufend_claudecode` | 6 |
 | `erledigt` | 409 |
-| **gesamt** | **627** |
+| **gesamt** | **628** |
 
 ## medical — 48
 
@@ -165,7 +166,7 @@
 | `C-411` | feature | mittel | [Rezeptvorschlaege in der Kuration](erledigt/nutrition-c-0411-rezeptvorschlaege-in-der-kuration.md) | erledigt | — | — |
 | `C-413` | befund | niedrig | [`tom.seed` traegt `days_count 7` bei 21 Tagen](erledigt/nutrition-c-0413-tom-seed-traegt-days-count-7-bei-21-tagen.md) | erledigt | — | — |
 | `C-464` | feature | mittel | [das Ballaststoffziel fehlt](erledigt/nutrition-c-0464-das-ballaststoffziel-fehlt.md) | erledigt | — | — |
-| `C-466` | feature | hoch | [Naehrstoffe aus Supplementen in der Nutrients-Ansicht](todos/nutrition-c-0466-naehrstoffe-aus-supplementen.md) | offen | — | C-467 |
+| `C-466` | feature | hoch | [Naehrstoffe aus Supplementen in der Nutrients-Ansicht](laufend_codex/nutrition-c-0466-naehrstoffe-aus-supplementen.md) | laeuft (codex) | — | C-467 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](erledigt/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | erledigt | — | G-375 |
@@ -532,7 +533,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 143
+## quer — 144
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -678,7 +679,8 @@
 | `G-411` | fehler | hoch | [LumeOS hat keinen Abmeldeknopf](erledigt/quer-g-0411-lumeos-hat-keinen-abmeldeknopf.md) | erledigt | — | G-414 |
 | `G-414` | entscheidung | niedrig | [admin und coach teilen 65 Prozent](todos/quer-g-0414-admin-und-coach-teilen-65-prozent.md) | offen | — | — |
 | `G-420` | befund | mittel | [Kettenlaeufe setzen Testdaten zurueck](todos/quer-g-0420-kettenlaeufe-setzen-testdaten-zurueck.md) | offen | — | — |
-| `G-424` | befund | mittel | [latissimus ist waehlbar und nicht zeichenbar](todos/quer-g-0424-latissimus-waehlbar-nicht-zeichenbar.md) | offen | — | — |
+| `G-424` | befund | mittel | [latissimus ist waehlbar und nicht zeichenbar](todos/quer-g-0424-latissimus-waehlbar-nicht-zeichenbar.md) | offen | — | G-425 |
+| `G-425` | befund | hoch | [die sechs Pfade einzeln sehen](laufend_claudecode/quer-g-0425-die-sechs-pfade-einzeln-sehen.md) | laeuft (claudecode) | — | — |
 
 ## market — 3
 
