@@ -325,3 +325,34 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Nachtrag 2026-09-08 — ein VIERTER Ort
+
+`[cmd]` **`public.muscle_training_loads`, 43 Zeilen:**
+
+    user_id, muscle_group, session_id,
+    last_trained_date, last_trained_time,
+    hours_since_trained, sets, volume_kg
+
+`[cmd]` **`muscle_group` ist FREIER TEXT** ? **keine
+Fremdschluessel auf die Tabelle.**
+
+`[read]` **Also vier Orte mit Muskelnamen:**
+
+    training.muscle_groups        95 Zeilen, parent_id
+    training.exercise_muscles   6.588, FK auf muscle_group_id
+    public.muscle_training_loads   43, FREIER TEXT
+    muskel-zuordnung.ts            35 Eintraege
+    koerperkarte-pfade.ts          23 Flaechen
+
+`[read]` **`exercise_muscles` zeigt richtig** ? `muscle_group_id`
+**als Fremdschluessel, 6.588 Zuordnungen.**
+
+`[read]` **`muscle_training_loads` nicht** ? **ein Tippfehler dort
+faellt niemandem auf.**
+
+`[cmd]` **Miss, welche Werte in `muscle_group` stehen** ?
+**passen sie zu `muscle_groups.name`?**
+
+`[read]` **Wenn die Hierarchie nach `public` zieht, sollte diese
+Spalte ein Fremdschluessel werden.**
