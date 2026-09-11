@@ -1869,10 +1869,10 @@
       ]
     },
     {
-      "id": "468_koerperflaechen",
-      "path": "supabase/_pipeline/00_querschnitt/468_koerperflaechen_hierarchie.sql",
+      "id": "471_koerperflaechen_struktur",
+      "path": "supabase/migrations/20260911180000_c471_koerperflaechen_struktur.sql",
       "kind": "sql",
-      "creates": "C-468/G-425: public.koerperflaechen als Hierarchie (Wurzel/Flaeche/Seite) mit parent_id, art muskel|umriss und Bruecke auf training.muscle_groups",
+      "creates": "C-471/D-17: public.koerperflaechen - Tabelle, CHECKs, Indizes, Trigger, RLS, Policy, REVOKE+GRANT (C-470). Keine Daten.",
       "depends_on": [
         "107"
       ]
@@ -1881,9 +1881,9 @@
       "id": "468b_koerperflaechen_seed",
       "path": "supabase/_pipeline/00_querschnitt/468b_koerperflaechen_seed.sql",
       "kind": "sql",
-      "creates": "C-468: die 23 Kartenflaechen als Zeilen, acht Wurzeln, Seitenebene fuer zweiseitig gezeichnete Flaechen",
+      "creates": "C-468/C-471: die 23 Kartenflaechen als Zeilen, acht Wurzeln, Seitenebene fuer zweiseitig gezeichnete Flaechen. Die Tabelle legt die Migration an.",
       "depends_on": [
-        "468_koerperflaechen"
+        "471_koerperflaechen_struktur"
       ]
     }
   ]
