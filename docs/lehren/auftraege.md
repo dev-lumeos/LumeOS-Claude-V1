@@ -60,3 +60,58 @@ geraten** ? `scores`, `lab_result_values`, `modality_log`,
 `[read]` **Das ist die richtige Rollenverteilung ? aber sie
 kostet einen Durchlauf, den man sparen kann.**
 
+## Vor jedem Auftrag: die Punkte durchsuchen
+
+Tom, 2026-09-08: *,,und wieso passiert sowas? beschaeftigungs-
+therapie, weil du nicht sauber recherchierst?"*
+
+`[cmd]` **C-469: der Auftrag verlangte 26 Formeln.**
+
+`[cmd]` **21 existierten. Fuenf waren ENTSCHIEDEN:**
+
+    ACWR, calcTrainingLoadScore
+      -> C-181, abgenommen, acwr_decision = implement:no
+    MODALITY_BONUS, MAX_DAILY_BONUS, calcModalityBonus
+      -> C-167, die Werte sind unbelegte Entwurfswerte
+
+`[read]` **Beide Punkte lagen im Repo. Beide hatte der
+Orchestrator am selben Tag gelesen.**
+
+`[cmd]` **Eine Suche nach `ACWR` haette C-181 gefunden** ? **zwei
+Minuten gegen zwanzig Minuten Agentenzeit.**
+
+### Dasselbe Muster, vier Mal an einem Tag
+
+    C-462   vier Tabellen "fehlen"   drei unter anderem Namen
+    G-421   vier Reiter "fehlen"     alles Umbenennungen
+    C-468   "zwei Ebenen"            es sind vier
+    C-469   26 Formeln "fehlen"      21 da, 5 entschieden
+
+`[read]` **Immer dieselbe Quelle: ein Werkzeug zaehlt NAMEN, der
+Orchestrator liest das Ergebnis als BESTAND.**
+
+### Die Regel
+
+    Vor jedem Auftrag: jeden genannten Namen in
+    docs/punkte/ suchen.
+
+    Ein Treffer in erledigt/ heisst: es gibt eine
+    Entscheidung. Sie gilt.
+
+    Ein Treffer in todos/ heisst: die Frage ist bekannt
+    und offen. Sie gehoert in den Auftrag.
+
+`[cmd]` **`git grep -l "<Name>" -- docs/punkte/`** ? **ein
+Aufruf.**
+
+`[read]` **Und wenn ein Werkzeug eine Zahl nennt: die Zahl
+NICHT in den Auftrag schreiben, ohne zwei Stichproben davon
+selbst geprueft zu haben.**
+
+`[cmd]` **`vollstaendigkeit.mjs` misst Namen. `104-muskelkarte.md`
+zaehlt Muskeln, nicht Pfade. `pg_stat_user_tables` ist
+veraltet.**
+
+`[read]` **Drei Werkzeuge, drei Fallen, alle an einem Tag
+zugeschnappt.**
+
