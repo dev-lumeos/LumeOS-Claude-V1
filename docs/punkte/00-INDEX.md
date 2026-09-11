@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 212 |
-| `laufend_claudecode` | 6 |
-| `erledigt` | 408 |
-| **gesamt** | **626** |
+| `todos` | 213 |
+| `laufend_claudecode` | 5 |
+| `erledigt` | 409 |
+| **gesamt** | **627** |
 
 ## medical — 48
 
@@ -387,7 +387,7 @@
 | `G-390` | befund | hoch | [`new Date()` zerlegt die Hydration](erledigt/supplements-g-0390-new-date-zerlegt-die-hydration.md) | erledigt | — | G-392 |
 | `G-392` | befund | hoch | [der Hydrationsfehler am Wechslerplatz](erledigt/supplements-g-0392-der-hydrationsfehler-am-wechslerplatz.md) | erledigt | — | G-393, G-394 |
 | `G-393` | befund | hoch | [die Rotationskarte ist leer](erledigt/supplements-g-0393-die-rotationskarte-ist-leer.md) | erledigt | — | G-395, G-396 |
-| `G-423` | feature | hoch | [Zyklen, Protokolle und die Injektionskarte](laufend_claudecode/supplements-g-0423-zyklen-und-injektionen.md) | laeuft (claudecode) | — | — |
+| `G-423` | feature | hoch | [Zyklen, Protokolle und die Injektionskarte](erledigt/supplements-g-0423-zyklen-und-injektionen.md) | erledigt | — | G-424 |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -532,7 +532,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 142
+## quer — 143
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -678,6 +678,7 @@
 | `G-411` | fehler | hoch | [LumeOS hat keinen Abmeldeknopf](erledigt/quer-g-0411-lumeos-hat-keinen-abmeldeknopf.md) | erledigt | — | G-414 |
 | `G-414` | entscheidung | niedrig | [admin und coach teilen 65 Prozent](todos/quer-g-0414-admin-und-coach-teilen-65-prozent.md) | offen | — | — |
 | `G-420` | befund | mittel | [Kettenlaeufe setzen Testdaten zurueck](todos/quer-g-0420-kettenlaeufe-setzen-testdaten-zurueck.md) | offen | — | — |
+| `G-424` | befund | mittel | [latissimus ist waehlbar und nicht zeichenbar](todos/quer-g-0424-latissimus-waehlbar-nicht-zeichenbar.md) | offen | — | — |
 
 ## market — 3
 
