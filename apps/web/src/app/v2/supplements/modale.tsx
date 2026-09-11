@@ -21,6 +21,14 @@ import { STACK, type StackItem } from './daten'
 import { INJ_ORTE, INJ_PROTOKOLL } from './injektion-daten'
 import { ortZustand } from './tab-injektionen'
 import { useSupp, type ModalTyp } from './kontext'
+// G-389: der Schreibweg fuer Injektionen.
+// `[read]` **Die Serveraktion, nicht der Schreibweg selbst** - ein
+// Wert-Import aus `lib/medical/injektion-write` zoege `next/headers`
+// ueber die `'use client'`-Grenze (die Lehre aus C-468: HTTP 500 auf
+// JEDER Seite, `tsc` bleibt gruen).
+import { injektionAnlegenAktion } from './injektion-aktionen'
+import { ORT_ZU_FLAECHE } from '../../../lib/medical/injektion-flaechen'
+import type { KonfigurierteFlaeche } from '../../../lib/medical/injektion-read'
 
 /** Rahmen fuer alle Modale — Vorlage: `SuppModal` in -modals.jsx. */
 function Rahmen({
@@ -135,10 +143,13 @@ function NichtsZuSpeichern() {
 }
 
 export function SupplementsModale({
-  modal, onClose,
+  modal, onClose, konfig = [],
 }: {
   modal: { type: ModalTyp; payload?: unknown } | null
   onClose: () => void
+  /** `[cmd]` **G-389/G-423: die konfigurierten Flaechen** - das
+      Erfassungsfenster belegt die Nadel daraus vor. */
+  konfig?: KonfigurierteFlaeche[]
 }) {
   // G-172: VOR dem fruehen `return` — ein Hook nach einer Bedingung
   // laeuft nicht bei jedem Rendern und bricht die Hook-Regel.
@@ -256,7 +267,7 @@ export function SupplementsModale({
     // Uebernommen samt Sperre — ein Fenster, das die Grenze zeigt und
     // trotzdem speichern liesse, waere schlechter als keines.
     case 'logInjection':
-      return <LogInjektionFenster onClose={onClose} />
+      return <LogInjektionFenster onClose={onClose} konfig={konfig} />
 
     default:
       return null
@@ -832,12 +843,96 @@ function ReorderFenster({
   )
 }
 
-function LogInjektionFenster({ onClose }: { onClose: () => void }) {
+function LogInjektionFenster({ onClose, konfig }: {
+  onClose: () => void
+  /** `[cmd]` **Die Nutzerkonfiguration aus G-423** - fuer die Nadel. */
+  konfig: KonfigurierteFlaeche[]
+}) {
   const [ort, setOrt] = React.useState('vglute_l')
   const [ml, setMl] = React.useState(0.6)
   const [schmerz, setSchmerz] = React.useState(1)
 
+  // ══ G-389: DER SCHREIBWEG ═══════════════════════════════════════
+  //
+  // `[cmd]` **Bis heute war der Speichern-Knopf ein
+  // `InEntwicklungKnopf`** — neun Felder, und nichts landete in
+  // `medical.injection_logs` (0 Zeilen, kein Schreibweg).
+  //
+  // `[read]` **Die Felder waren schon da** (G-45, aus der Vorlage) —
+  // es fehlte nur der Weg dahinter.
+  const [substanz, setSubstanz] = React.useState('')
+  const [datum, setDatum] = React.useState(
+    () => new Date().toISOString().slice(0, 10))
+  const [uhrzeit, setUhrzeit] = React.useState(
+    () => new Date().toTimeString().slice(0, 5))
+  const [dosis, setDosis] = React.useState('150')
+  const [nadel, setNadel] = React.useState('')
+  const [notiz, setNotiz] = React.useState('')
+  const [laeuft, setLaeuft] = React.useState(false)
+  const [fehler, setFehler] = React.useState<string | null>(null)
+  const [fertig, setFertig] = React.useState<string | null>(null)
+
   const s = INJ_ORTE.find(x => x.id === ort)!
+
+  // ══ A3: DIE NADEL KOMMT AUS DER KONFIGURATION ═══════════════════
+  //
+  // `[cmd]` **G-423 hat die Nutzerkonfiguration gebaut** — Substanz,
+  // Weg, Flaeche, Nadelstaerke, Nadellaenge.
+  //
+  // `[read]` **Passt eine Konfiguration zu Flaeche und Weg, gewinnt
+  // sie** — sie ist die Wahl des Nutzers. **Sonst bleibt die
+  // Empfehlung des Entwurfs stehen**, und der Unterschied ist
+  // sichtbar.
+  const flaeche = ORT_ZU_FLAECHE[ort]
+  const wegKonfig = s.route === 'im' ? 'injection_im' : 'injection_subq'
+  const konfiguriert = React.useMemo(
+    () => konfig.find(k => k.body_area_code === flaeche && k.route === wegKonfig),
+    [konfig, flaeche, wegKonfig],
+  )
+  // `[read]` **Beim Ortswechsel neu vorbelegen** — aber nur, solange
+  // niemand von Hand getippt hat.
+  const [nadelBeruehrt, setNadelBeruehrt] = React.useState(false)
+  React.useEffect(() => {
+    if (nadelBeruehrt) return
+    setNadel(konfiguriert
+      ? [konfiguriert.needle_gauge, konfiguriert.needle_length_in
+        ? `${konfiguriert.needle_length_in}"` : null].filter(Boolean).join(' × ')
+      : s.needle)
+  }, [konfiguriert, s.needle, nadelBeruehrt])
+
+  async function speichern() {
+    setLaeuft(true); setFehler(null)
+    // `[cmd]` **`im | sc` fuer `injection_logs`**, nicht
+    // `injection_im` — zwei Vokabulare, siehe `injektion-vokabular.ts`.
+    const r = await injektionAnlegenAktion({
+      body_area_code: flaeche ?? '',
+      datum, uhrzeit,
+      ort_id: ort,
+      route: s.route === 'im' ? 'im' : 'sc',
+      substanz_name: substanz,
+      substance_id: '',
+      volume_ml: String(ml),
+      dose_amount: dosis,
+      dose_unit: dosis.trim() ? 'mg' : '',
+      // `[read]` **Nur die Staerke in die Spalte** — `needle_gauge`
+      // ist ein Text, die Laenge hat eine eigene Zahlspalte.
+      needle_gauge: nadel.split('×')[0]?.trim() ?? '',
+      needle_length_in: (nadel.match(/([\d.]+)\s*"/) ?? [])[1] ?? '',
+      pain_score: String(schmerz),
+      komplikationen: [],
+      notes: notiz,
+    })
+    setLaeuft(false)
+    if (!r.ok) {
+      setFehler(r.felder.length > 0
+        ? r.felder.map(f => `${f.feld}: ${f.text}`).join(' · ')
+        : r.text)
+    } else {
+      setFertig(r.zeile.body_area_code)
+      setTimeout(onClose, 1100)
+    }
+  }
+
   const st = ortZustand(ort)
   const ueberGrenze = ml > s.maxMl
   const zuFrueh = st.status === 'resting'
@@ -865,21 +960,32 @@ function LogInjektionFenster({ onClose }: { onClose: () => void }) {
               er verhindert das Speichern bei ueberschrittener Menge
               oder laufendem Ruhefenster. Der Knopf oeffnet dann auch
               das Attrappenfenster nicht. */}
-          <InEntwicklungKnopf
-            titel="Log injection"
-            grund={OHNE_SCHEMA}
+          {/* ══ G-389: ECHT, NICHT MEHR IN ENTWICKLUNG ═══════════
+              `[cmd]` **Hier stand ein `InEntwicklungKnopf`** mit dem
+              Grund *„ohne Schema"* - `medical.injection_logs` gibt es
+              seit C-429, die vier Policies seit G-388, und sieben
+              weitere Spalten seit C-455.
+              `[read]` **Die Sperre bleibt** - sie ist der Kern dieses
+              Fensters: ueber der Ortsgrenze oder im Ruhefenster wird
+              nicht gespeichert. */}
+          <button
+            type="button"
             className="v2-btn v2-btn-primary"
-            disabled={gesperrt}
+            disabled={gesperrt || laeuft}
+            onClick={() => { void speichern() }}
           >
-            <Icon name="check" className="v2-ic v2-ic-sm" />Log injection
-          </InEntwicklungKnopf>
+            <Icon name="check" className="v2-ic v2-ic-sm" />
+            {laeuft ? 'Speichert …' : 'Log injection'}
+          </button>
         </>
       )}
     >
       <div className="v2-grid v2-g-cols-3" style={{ gap: 10, marginBottom: 12 }}>
         <div>
           <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Compound</div>
-          <select className="v2-feld" aria-label="Compound">
+          <select className="v2-feld" aria-label="Compound"
+                  value={substanz} onChange={e => setSubstanz(e.target.value)}>
+            <option value="">Substanz wählen …</option>
             {INJ_PROTOKOLL.map(l => l.compound)
               .filter((c, i, a) => a.indexOf(c) === i)
               .map(c => <option key={c}>{c}</option>)}
@@ -887,11 +993,13 @@ function LogInjektionFenster({ onClose }: { onClose: () => void }) {
         </div>
         <div>
           <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Date</div>
-          <input className="v2-feld v2-mono" type="date" defaultValue="2026-08-15" aria-label="Date" />
+          <input className="v2-feld v2-mono" type="date" aria-label="Date"
+                 value={datum} onChange={e => setDatum(e.target.value)} />
         </div>
         <div>
           <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Time</div>
-          <input className="v2-feld v2-mono" type="time" defaultValue="07:15" aria-label="Time" />
+          <input className="v2-feld v2-mono" type="time" aria-label="Time"
+                 value={uhrzeit} onChange={e => setUhrzeit(e.target.value)} />
         </div>
       </div>
 
@@ -949,11 +1057,20 @@ function LogInjektionFenster({ onClose }: { onClose: () => void }) {
               es halb zu uebersetzen waere schlechter als gar nicht.
               Als Befund gemeldet. */}
           <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Dose</div>
-          <input className="v2-feld v2-mono" defaultValue="150" aria-label="Dose" />
+          <input className="v2-feld v2-mono" aria-label="Dose"
+                 value={dosis} onChange={e => setDosis(e.target.value)} />
         </div>
         <div>
-          <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Needle · recommended</div>
-          <input className="v2-feld v2-mono" defaultValue={s.needle} aria-label="Needle" />
+          {/* `[cmd]` **A3: aus der Konfiguration, wenn es eine
+               gibt** (G-423) - sonst die Empfehlung des Entwurfs.
+               `[read]` **Der Unterschied steht dran**, sonst weiss
+               niemand, woher die Nadel kommt. */}
+          <div className="v2-eyebrow" style={{ marginBottom: 4 }}>
+            Needle · {konfiguriert ? 'konfiguriert' : 'recommended'}
+          </div>
+          <input className="v2-feld v2-mono" aria-label="Needle"
+                 value={nadel}
+                 onChange={e => { setNadelBeruehrt(true); setNadel(e.target.value) }} />
         </div>
       </div>
 
@@ -977,8 +1094,20 @@ function LogInjektionFenster({ onClose }: { onClose: () => void }) {
         className="v2-feld"
         placeholder="Bleeding, lump, unusual soreness…"
         aria-label="Notes"
+        value={notiz}
+        onChange={e => setNotiz(e.target.value)}
         style={{ marginBottom: 12 }}
       />
+      {fehler && (
+        <div style={{ fontSize: 11.5, color: 'var(--neg)', marginBottom: 10 }}>
+          Nicht gespeichert: {fehler}
+        </div>
+      )}
+      {fertig && (
+        <div style={{ fontSize: 11.5, color: 'var(--pos)', marginBottom: 10 }}>
+          In medical.injection_logs gespeichert · Fläche {fertig}
+        </div>
+      )}
 
       {gesperrt ? (
         <div className="v2-inj-pruefung-rot">

@@ -509,7 +509,8 @@ export function SupplementsAnsicht({
             Vorgabewert (`daten: null`), und jedes schreibende Fenster
             meldete „Es sind keine Daten gelesen", obwohl die Seite
             daneben 360 Einnahmen zeigte. */}
-        <SupplementsModale modal={modal} onClose={close} />
+        <SupplementsModale modal={modal} onClose={close}
+          konfig={konfig?.flaechen ?? []} />
       </SuppCtx.Provider>
     </>
   )
