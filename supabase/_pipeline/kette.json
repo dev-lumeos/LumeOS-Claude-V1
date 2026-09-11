@@ -1781,63 +1781,110 @@
       "path": "supabase/migrations/20260909240000_c459_coach_alert_producer.sql",
       "kind": "sql",
       "creates": "C-459: faktische Coach-Alerts mit Einstellungen und 24h-Deduplizierung, ohne Medical-Safety-Bewertung",
-      "depends_on": ["457_lab_report_ocr", "154"]
+      "depends_on": [
+        "457_lab_report_ocr",
+        "154"
+      ]
     },
     {
       "id": "461_training_programs_plans",
       "path": "supabase/migrations/20260909250000_c461_training_programs_plans.sql",
       "kind": "sql",
       "creates": "C-461: eigene Routinen, mehrwoechige Programme, bestaetigte Zuweisungen und nullable Sitzungsreferenzen",
-      "depends_on": ["106", "459_coach_alert_producer"]
+      "depends_on": [
+        "106",
+        "459_coach_alert_producer"
+      ]
     },
     {
       "id": "461_program_day_owner_guard",
       "path": "supabase/migrations/20260909251000_c461_program_day_owner_guard.sql",
       "kind": "sql",
       "creates": "C-461: Programmtage duerfen nur Routinen desselben Nutzers referenzieren",
-      "depends_on": ["461_training_programs_plans"]
+      "depends_on": [
+        "461_training_programs_plans"
+      ]
     },
     {
       "id": "463_goals_progress_photos",
       "path": "supabase/migrations/20260909260000_c463_goals_progress_photos.sql",
       "kind": "sql",
       "creates": "C-463: private Fortschrittsfoto-Metadaten mit posebasiertem, eigentuemergebundenem Storage; keine zweite Gewichtsliste oder Transition-Tabelle",
-      "depends_on": ["461_program_day_owner_guard", "111"]
+      "depends_on": [
+        "461_program_day_owner_guard",
+        "111"
+      ]
     },
     {
       "id": "464_nutrition_fiber_target",
       "path": "supabase/migrations/20260909270000_c464_nutrition_fiber_target.sql",
       "kind": "sql",
       "creates": "C-464: fiber_g als gespeichertes Goals-Tagesziel, in Formel, Zielwert-Leser und Coach-Fortschreibung; vorhandene Formel-Ziele erhalten den SPEC_01-Fallback 30 g/Tag",
-      "depends_on": ["463_goals_progress_photos", "381"]
+      "depends_on": [
+        "463_goals_progress_photos",
+        "381"
+      ]
     },
     {
       "id": "465_marketplace_training_delivery",
       "path": "supabase/migrations/20260909280000_c465_marketplace_training_delivery.sql",
       "kind": "sql",
       "creates": "C-465: getrennte, idempotente Training-Programmauslieferung mit referenzieller Zuweisung und widerrufbarer Lizenz",
-      "depends_on": ["464_nutrition_fiber_target", "419", "461_program_day_owner_guard"]
+      "depends_on": [
+        "464_nutrition_fiber_target",
+        "419",
+        "461_program_day_owner_guard"
+      ]
     },
     {
       "id": "467_supplier_products",
       "path": "supabase/migrations/20260909290000_c467_supplier_products.sql",
       "kind": "sql",
       "creates": "C-467: Lieferantenprodukte, etikettengetreue Inhaltsstoffe und produktbezogene Katalogkandidaten mit agententauglichem Schreibweg",
-      "depends_on": ["465_marketplace_training_delivery", "136"]
+      "depends_on": [
+        "465_marketplace_training_delivery",
+        "136"
+      ]
     },
     {
       "id": "460_relationship_specialties",
       "path": "supabase/migrations/20260909300000_c460_relationship_specialties.sql",
       "kind": "sql",
       "creates": "C-460: mehrere der vier Coach-Faecher pro aktiver Coach-Klient-Beziehung, getrennt von sieben Berechtigungsmodulen",
-      "depends_on": ["467_supplier_products", "151"]
+      "depends_on": [
+        "467_supplier_products",
+        "151"
+      ]
     },
     {
       "id": "466_nutrient_supplement_sources",
       "path": "supabase/migrations/20260909310000_c466_nutrient_supplement_sources.sql",
       "kind": "sql",
       "creates": "C-466/E-35: getrennte Supplements-Tagesbilanz, lesbare Nahrungs- und Praeparateherkunft sowie C-344-konforme Obergrenzen",
-      "depends_on": ["460_relationship_specialties", "467_supplier_products", "059a", "135"]
+      "depends_on": [
+        "460_relationship_specialties",
+        "467_supplier_products",
+        "059a",
+        "135"
+      ]
+    },
+    {
+      "id": "468_koerperflaechen",
+      "path": "supabase/_pipeline/00_querschnitt/468_koerperflaechen_hierarchie.sql",
+      "kind": "sql",
+      "creates": "C-468/G-425: public.koerperflaechen als Hierarchie (Wurzel/Flaeche/Seite) mit parent_id, art muskel|umriss und Bruecke auf training.muscle_groups",
+      "depends_on": [
+        "107"
+      ]
+    },
+    {
+      "id": "468b_koerperflaechen_seed",
+      "path": "supabase/_pipeline/00_querschnitt/468b_koerperflaechen_seed.sql",
+      "kind": "sql",
+      "creates": "C-468: die 23 Kartenflaechen als Zeilen, acht Wurzeln, Seitenebene fuer zweiseitig gezeichnete Flaechen",
+      "depends_on": [
+        "468_koerperflaechen"
+      ]
     }
   ]
 }
