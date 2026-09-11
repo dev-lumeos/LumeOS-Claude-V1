@@ -6,7 +6,9 @@ schwere: hoch
 angelegt: 2026-09-08
 braucht: []
 kind_von: G-412
-entscheidung: null
+entscheidung: E-80
+erledigt: 2026-09-08
+commit: OFFEN
 beruehrt:
   tabellen: [goals.nutrition_targets]
 zahlen:
@@ -128,3 +130,26 @@ aus einer Formel, oder aus einem Referenzwert.**
 
 `[read]` **Das ist ein Codex-Auftrag, sobald die Stufenfrage
 entschieden ist.**
+
+## Entschieden am 2026-09-08 — E-80
+
+Tom: *,,Datenbank: beginner 0.75 / advanced 0.9 / pro 1 /
+elite 1.1"*
+
+`[read]` **Die Datenbank gilt, die Spec ist ueberholt.**
+
+`[read]` **`intermediate` gibt es nicht** ? **und `pro` ist der
+Bezugspunkt mit 1.00, nicht `advanced`.**
+
+`[cmd]` **Damit ist auch G-228 beantwortet.**
+
+## Was offen bleibt: die Ballaststoffe
+
+`[cmd]` **`daily_summary.fibt` ist da, `nutrition_targets.fiber_g`
+fehlt.**
+
+`[read]` **Das ist ein Codex-Auftrag** ? **eine Spalte, gefuellt
+wie `linoleic_acid_g`.**
+
+`[cmd]` **Messen, WIE die beiden Fettsaeuren gefuellt werden** ?
+**von Hand, aus einer Formel, oder aus einem Referenzwert.**
