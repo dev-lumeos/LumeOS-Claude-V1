@@ -4,10 +4,15 @@ typ: feature
 modul: coach
 schwere: hoch
 angelegt: 2026-09-08
+erledigt: 2026-09-08
+commit: 68b626d9
 braucht: []
 kind_von: null
-entscheidung: umgesetzt
+entscheidung: null
 agent: codex
+beauftragt: 2026-09-08
+beruehrt:
+  tabellen: [coach.relationships]
 zahlen:
   gemessen: 2026-09-11
 ---
