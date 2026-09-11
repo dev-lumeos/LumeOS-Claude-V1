@@ -1796,6 +1796,13 @@
       "kind": "sql",
       "creates": "C-461: Programmtage duerfen nur Routinen desselben Nutzers referenzieren",
       "depends_on": ["461_training_programs_plans"]
+    },
+    {
+      "id": "463_goals_progress_photos",
+      "path": "supabase/migrations/20260909260000_c463_goals_progress_photos.sql",
+      "kind": "sql",
+      "creates": "C-463: private Fortschrittsfoto-Metadaten mit posebasiertem, eigentuemergebundenem Storage; keine zweite Gewichtsliste oder Transition-Tabelle",
+      "depends_on": ["461_program_day_owner_guard", "111"]
     }
   ]
 }

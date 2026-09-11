@@ -2099,6 +2099,19 @@
     },
     {
       "schema": "goals",
+      "name": "progress_photos",
+      "schritt": "463_goals_progress_photos",
+      "rls": true,
+      "policies": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+      "grants": {
+        "authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+        "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]
+      },
+      "grants_herkunft": "20260909260000_c463_goals_progress_photos.sql: vier Owner-Operationen, privater Storage-Pfad ohne Coach-Lesepolicy.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "goals",
       "name": "body_measurements",
       "schritt": "112",
       "rls": true,
