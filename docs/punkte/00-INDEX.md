@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 211 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 6 |
-| `erledigt` | 399 |
+| `laufend_claudecode` | 5 |
+| `erledigt` | 400 |
 | **gesamt** | **619** |
 
 ## medical — 48
@@ -300,7 +300,7 @@
 | `G-412` | feature | hoch | [die letzten Attrappen in Nutrition](erledigt/nutrition-g-0412-die-letzten-attrappen.md) | erledigt | — | G-415, G-416 |
 | `G-413` | fehler | hoch | [reine Filtersuche liefert nichts](todos/nutrition-g-0413-reine-filtersuche-liefert-nichts.md) | offen | — | — |
 | `G-415` | entscheidung | hoch | [die vier Stufen und die Ballaststoffe](erledigt/nutrition-g-0415-die-vier-stufen-und-die-ballaststoffe.md) | erledigt | — | C-464 |
-| `G-416` | feature | hoch | [Hoehen, Flaechen, Deckkraft](laufend_claudecode/nutrition-g-0416-hoehen-flaechen-deckkraft.md) | laeuft (claudecode) | — | — |
+| `G-416` | feature | hoch | [Hoehen, Flaechen, Deckkraft](erledigt/nutrition-g-0416-hoehen-flaechen-deckkraft.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 78

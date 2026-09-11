@@ -9,6 +9,8 @@ kind_von: G-412
 entscheidung: E-80
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 937bd02e
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/tab-insights.tsx
@@ -378,4 +380,116 @@ Aenderung.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  die Flaeche war DA, nur zu schwach
+    A2  smooth-Schalter, flaecheMitLuecken
+    A3  Hoehen vorher identisch, nachher verschieden
+    A4  height 16, opacity 0.25 + v * 0.7
+    A5  Durchschnittsspalte in mikro-trend.tsx:121
+    A6  Liste 255 -> 332 px, 8 -> 10 Naehrstoffe
+    A7  beide Zahlen stimmen, an ihrem Tag
+    A8  web 1559/1559
+
+`[cmd]` **Selbst gemessen:** `height: 16` **in beiden Heatmaps,**
+`opacity: 0.25 + Math.min(1, pct/100) * 0.7` **wie die Vorlage.**
+
+`[cmd]` **Bildschirmfoto angesehen:** **die Flaeche ist sichtbar,
+`Verlauf` ist eckig mit Flaeche, die Kacheln haben eigene
+Hoehen, die Tagesdeckung ist kompakt.**
+
+### A1 ist die beste Messung des Tages
+
+`[read]` **Ich hatte gemeldet: *,,die Flaeche fehlt ganz"*.**
+
+> *,,Nicht geraten, sondern Bildpunkte gelesen: unter der Kurve
+> rgb(48,43,39) gegen rgb(22,23,26) Grund ? der Verlauf wurde
+> gemalt, aber nur 26 RGB-Stufen ueber dem Hintergrund."*
+
+`[read]` **Sie war da. Ich konnte sie nicht sehen.**
+
+> *,,Kein Baufehler: die Vorlage nennt 0,22, zeichnet aber auf
+> hellerem Grund. Jetzt 0,45 auf 0,02."*
+
+`[read]` **Und er hat nicht einfach die Zahl der Vorlage
+uebernommen** ? **er hat gemessen, WARUM sie dort reicht und hier
+nicht.**
+
+### A4 — die fehlende Zutat
+
+`[cmd]` **Der Befund war `aspectRatio: '1'`** ? **die Zelle wuchs
+mit der Kachelbreite auf ~50 px.**
+
+`[cmd]` **Und G-412 setzte `opacity` pauschal auf 0,85** ? **daher
+die schrillen Farben.**
+
+`[cmd]` **Die Vorlage: `opacity: 0.25 + v * 0.7`** ? **die
+Deckkraft haengt am WERT.**
+
+`[read]` **Ein niedriger Anteil ist blass, ein hoher kraeftig** ?
+**die Farbe traegt zwei Informationen.**
+
+`[cmd]` **Tagesdeckung 514 -> 255 px.**
+
+### A2 — Luecken brechen die Flaeche
+
+> *,,Der Verlauf ist eine eigene SVG, die Luecken bricht ?
+> deshalb `flaecheMitLuecken()`: je zusammenhaengendem Stueck
+> eine eigene Flaeche, sonst behauptet sie Tage, die es nicht
+> gibt."*
+
+`[read]` **Eine durchgezogene Flaeche ueber einer Luecke waere
+eine Behauptung.**
+
+### A3 — `.v2-grid` nicht angefasst
+
+`[cmd]` **217 Aufrufer im Haus.**
+
+`[read]` **Er hat die Aenderung im Modul gemacht, nicht im
+Paket** ? **richtig bei dieser Zahl.**
+
+### A7 — beide Zahlen stimmten
+
+`[cmd]` **Am 10.9.: 8 von 30. Am 11.9.: 7.**
+
+> *,,12.8. (2.428 kcal, am Ziel) verliess das Fenster, 11.9.
+> (2.178) kam hinein. Das Fenster wandert taeglich."*
+
+`[read]` **Keine der beiden war falsch** ? **ich hatte an
+verschiedenen Tagen gemessen.**
+
+### Zwei blinde Waechter
+
+`[cmd]` **Einer prueft nur, dass `flaecheMitLuecken` EXISTIERT**
+? **nicht ihre Wirkung.**
+
+`[cmd]` **Der andere suchte eine Filterzeile, die jede
+Umbenennung ueberlebt.**
+
+`[read]` **Beide nach der Berichtigung rot, dieselbe Sabotage
+wiederholt.**
+
+### Und drei aeltere ersetzt
+
+`[cmd]` **Darunter G-297, der QUADRATISCHE Felder verlangte.**
+
+> *,,Diese Zusage ist durch Toms Massstab *Zellhoehe 16*
+> abgeloest."*
+
+`[read]` **Ein Waechter, der eine ueberholte Entscheidung
+schuetzt, haelt den Fortschritt auf** ? **er hat ihn ersetzt und
+es benannt.**
+
+### E-80 bleibt offen
+
+> *,,Der Stufenfaktor steht nicht unter den sieben Punkten und
+> gehoert einem eigenen Auftrag."*
+
+`[cmd]` **`beginner 0.75 / advanced 0.90 / pro 1.00 / elite
+1.10`** ? **entschieden, nicht gebaut.**
+
+`[read]` **Geht in C-464** ? **Codex misst dort schon, wo die
+Faktoren hingehoeren.**
+
+**Abgenommen.**
+
