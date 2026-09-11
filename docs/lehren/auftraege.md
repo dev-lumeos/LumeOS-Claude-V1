@@ -120,11 +120,25 @@ zugeschnappt.**
 Tom, 2026-09-08: *,,ok, von jetzt an sagst du mir vor dem auftrag,
 ob ich /clear machen muss."*
 
-**Die Ansage gehoert IN den Auftrag, als erste Zeile.**
+**Die Ansage gehoert AN TOM, VOR den Auftragstext** ? **NICHT
+in den Codeblock.**
 
-    /clear NEIN  -- der Auftrag baut auf dem auf, was
-                    der Agent gerade gemessen hat
-    /clear JA    -- neues Modul, neuer Gegenstand
+`[cmd]` **2026-09-08 falsch gemacht:** **`/clear NEIN` stand als
+erste Zeile IM Auftrag.**
+
+`[read]` **Claude Code liest das als Anweisung an sich selbst** ?
+**und weiss nicht, was er damit soll.**
+
+**Richtig:**
+
+    Orchestrator an Tom, vor dem Codeblock:
+      "Kein /clear -- er kommt direkt aus G-423."
+      oder
+      "Mach /clear -- neues Modul."
+
+    Im Codeblock steht NICHTS davon.
+
+`[read]` **Der Auftrag enthaelt nur, was der Agent tun soll.**
 
 ### Wann NEIN
 
