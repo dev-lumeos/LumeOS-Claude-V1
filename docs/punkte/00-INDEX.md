@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 218 |
+| `todos` | 219 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 414 |
-| **gesamt** | **634** |
+| `erledigt` | 415 |
+| **gesamt** | **635** |
 
 ## medical — 48
 
@@ -385,7 +384,7 @@
 | `G-373` | feature | mittel | [Stacks editieren und anlegen](erledigt/supplements-g-0373-stacks-editieren-und-anlegen.md) | erledigt | — | G-374 |
 | `G-374` | feature | niedrig | [Zyklen brauchen eine eigene Eingabe](erledigt/supplements-g-0374-zyklen-brauchen-eine-eingabe.md) | erledigt | — | — |
 | `G-388` | feature | mittel | [`InjektionsKarte` und die Reste](erledigt/supplements-g-0388-injektionskarte-ohne-aufrufer.md) | erledigt | — | C-441, G-389, G-390 |
-| `G-389` | feature | hoch | [der Schreibweg fuer Injektionen](laufend_claudecode/supplements-g-0389-der-schreibweg-fuer-injektionen.md) | laeuft (claudecode) | — | — |
+| `G-389` | feature | hoch | [der Schreibweg fuer Injektionen](erledigt/supplements-g-0389-der-schreibweg-fuer-injektionen.md) | erledigt | — | G-427 |
 | `G-390` | befund | hoch | [`new Date()` zerlegt die Hydration](erledigt/supplements-g-0390-new-date-zerlegt-die-hydration.md) | erledigt | — | G-392 |
 | `G-392` | befund | hoch | [der Hydrationsfehler am Wechslerplatz](erledigt/supplements-g-0392-der-hydrationsfehler-am-wechslerplatz.md) | erledigt | — | G-393, G-394 |
 | `G-393` | befund | hoch | [die Rotationskarte ist leer](erledigt/supplements-g-0393-die-rotationskarte-ist-leer.md) | erledigt | — | G-395, G-396 |
@@ -535,7 +534,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 148
+## quer — 149
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -687,6 +686,7 @@
 | `G-420` | befund | mittel | [Kettenlaeufe setzen Testdaten zurueck](todos/quer-g-0420-kettenlaeufe-setzen-testdaten-zurueck.md) | offen | — | — |
 | `G-424` | befund | mittel | [latissimus ist waehlbar und nicht zeichenbar](todos/quer-g-0424-latissimus-waehlbar-nicht-zeichenbar.md) | offen | — | G-425 |
 | `G-425` | befund | hoch | [die sechs Pfade einzeln sehen](erledigt/quer-g-0425-die-sechs-pfade-einzeln-sehen.md) | erledigt | — | C-468 |
+| `G-427` | befund | hoch | [sechzehn Orte gegen einundzwanzig Flaechen](todos/quer-g-0427-sechzehn-orte-gegen-einundzwanzig-flaechen.md) | offen | — | — |
 
 ## market — 3
 
