@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-11: 194 Funktionen, 443 Policies, 661 CHECKs, 14 Sichten.**
+`[cmd]` **Stand 2026-09-11: 195 Funktionen, 444 Policies, 666 CHECKs, 14 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -154,6 +154,7 @@ ob man sie rufen kann.**
 | public | gtrgm_union | internal, internal | Funktion |
 | public | handle_new_user |  | Funktion |
 | public | is_admin |  | Funktion |
+| public | koerperflaechen_touch |  | Funktion |
 | public | levenshtein | text, text | Funktion |
 | public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
@@ -640,6 +641,11 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | nutrition | water_logs | water_logs_amount_ml_check | CHECK ((amount_ml > (0)::numeric)) |
 | nutrition | water_logs | water_logs_measurement_source_ck | CHECK ((measurement_source = ANY (ARRAY['manual'::text, 'device'::text, 'import'::text, 'admin'::text, 'seed'::text]))) |
 | nutrition | water_logs | water_logs_source_check | CHECK ((source = ANY (ARRAY['manual'::text, 'quick_add'::text]))) |
+| public | koerperflaechen | koerperflaechen_art_ck | CHECK ((art = ANY (ARRAY['muskel'::text, 'umriss'::text]))) |
+| public | koerperflaechen | koerperflaechen_ebene_ck | CHECK ((ebene = ANY (ARRAY[1, 2, 3]))) |
+| public | koerperflaechen | koerperflaechen_seite_ck | CHECK ((((ebene = 3) AND (seite = ANY (ARRAY['links'::text, 'rechts'::text]))) OR ((ebene <> 3) AND (seite IS NULL)))) |
+| public | koerperflaechen | koerperflaechen_umriss_ck | CHECK (((art = 'muskel'::text) OR (muscle_group_id IS NULL))) |
+| public | koerperflaechen | koerperflaechen_wurzel_ck | CHECK ((((ebene = 1) AND (parent_id IS NULL)) OR ((ebene > 1) AND (parent_id IS NOT NULL)))) |
 | public | profiles | profiles_activity_level_check | CHECK (((activity_level IS NULL) OR (activity_level = ANY (ARRAY['sedentary'::text, 'light'::text, 'moderate'::text, 'active'::tex |
 | public | profiles | profiles_biological_sex_check | CHECK (((biological_sex IS NULL) OR (biological_sex = ANY (ARRAY['male'::text, 'female'::text])))) |
 | public | profiles | profiles_birth_date_check | CHECK (((birth_date IS NULL) OR ((birth_date >= '1900-01-01'::date) AND (birth_date <= CURRENT_DATE)))) |
@@ -1160,6 +1166,7 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | nutrition | water_logs | water_logs_insert | INSERT | (auth.uid() = user_id) |
 | nutrition | water_logs | water_logs_select | SELECT | (auth.uid() = user_id) |
 | nutrition | water_logs | water_logs_update | UPDATE | (auth.uid() = user_id) |
+| public | koerperflaechen | koerperflaechen_select | SELECT | true |
 | public | profiles | profiles_delete | DELETE | (auth.uid() = id) |
 | public | profiles | profiles_insert | INSERT | (auth.uid() = id) |
 | public | profiles | profiles_select | SELECT | (auth.uid() = id) |

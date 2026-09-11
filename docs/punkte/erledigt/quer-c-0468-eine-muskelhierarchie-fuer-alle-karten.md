@@ -9,6 +9,8 @@ kind_von: G-425
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: a824cf95
 beruehrt:
   tabellen: [training.muscle_groups]
 zahlen:
@@ -324,7 +326,91 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    public.koerperflaechen    13 Spalten
+    Ebenen                    1: 8, 2: 23, 3: 28  = 59
+    art                       muskel 52, umriss 7
+    muscle_group_id           45 von 59 verbunden
+    Rechte                    authenticated SELECT,
+                              anon nichts
+    RLS                       an
+
+`[cmd]` **Selbst gemessen: alle sechs.**
+
+### Der Sicherheitsbefund ist der wichtigste Teil
+
+> *,,Nach dem ersten Lauf hatte `authenticated` UPDATE und
+> TRUNCATE ? obwohl die Datei nur `GRANT SELECT` vergibt.
+> Ursache: `pg_default_acl` vergibt in `public` bei jeder neuen
+> Tabelle `arwdDxtm` an alle drei Rollen."*
+
+`[cmd]` **Nachgemessen, andere Tabellen in `public`:**
+
+    user_display_preferences   INSERT, SELECT, UPDATE, DELETE
+    profiles                   INSERT, SELECT, UPDATE
+    koerperflaechen            SELECT
+
+`[read]` **Der Unterschied kommt vom vorangestellten `REVOKE
+ALL`.**
+
+> *,,RLS fing es ab, aber aus dem falschen Grund."*
+
+`[read]` **Zwei Schutzschichten, und eine war offen** ? **er hat
+nicht die wirksame gezaehlt, sondern beide geprueft.**
+
+`[cmd]` **`public` ist das einzige Schema mit dieser Vorgabe** ?
+**und Tom hat heute entschieden, dass die Hierarchie dorthin
+gehoert.**
+
+### A1 — `obliques` war NICHT der vermutete Fall
+
+`[read]` **Mein Auftrag erwartete Externus + Internus.**
+
+> *,,Im Bild ist es EIN Muskel je Seite plus sieben Zeichenteile
+> ? der Internus liegt darunter und wird gar nicht
+> gezeichnet."*
+
+`[read]` **Sechzehn Pfade, zwei Muskeln** ? **die restlichen
+vierzehn sind Schattierung.**
+
+### Und drei Muskeln haben KEINE Zeile
+
+`[cmd]` **Rhomboiden, Obliquus internus, Soleus** ? **nicht
+gezeichnet, also nicht eingetragen.**
+
+> *,,Gemeldet, nicht erfunden."*
+
+`[read]` **Und `muskel-ebenen.ts` wirft die Rhomboiden trotzdem
+auf `upper-back`** ? **eine Falschaussage, die jetzt benannt
+ist.**
+
+### `training.muscle_groups` bleibt
+
+> *,,Die Karte zeichnet, was man sieht (23 Flaechen), die
+> Hierarchie fuehrt, was man trainiert (95 Muskeln)."*
+
+`[read]` **Zwei verschiedene Zerlegungen desselben Koerpers** ?
+**er hat sie verbunden statt zusammengelegt.**
+
+`[cmd]` **45 von 59 Zeilen tragen eine `muscle_group_id`, alle
+Namen existierten schon.**
+
+### Zwei Korrekturen zum Auftrag
+
+`[cmd]` **`training.muscle_groups` hat VIER Ebenen, nicht zwei:**
+
+    Arms > Forearms > Forearm Extensors
+         > Extensor Carpi Radialis
+
+`[read]` **Ich hatte zwei gezaehlt** ? **wer das liest,
+unterschaetzt, was beim Ersetzen verloren ginge.**
+
+`[cmd]` **Und die Punktdatei lag in `laufend_claudecode/`** ?
+**mein Fehler, ich hatte sie dreimal verschoben.**
+
+**Abgenommen.**
+
 
 ## Nachtrag 2026-09-08 — ein VIERTER Ort
 
