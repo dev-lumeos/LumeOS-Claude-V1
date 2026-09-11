@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-11: 190 Funktionen, 443 Policies, 660 CHECKs, 13 Sichten.**
+`[cmd]` **Stand 2026-09-11: 194 Funktionen, 443 Policies, 661 CHECKs, 14 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -102,10 +102,14 @@ ob man sie rufen kann.**
 | nutrition | meal_plans_status_compatibility |  | Funktion |
 | nutrition | micronutrient_below_threshold | p_user_id uuid, p_entry_date date, p_threshold_pct numeric DEFAULT 75 | Funktion |
 | nutrition | micronutrient_snapshot | p_user_id uuid, p_entry_date date | Funktion |
+| nutrition | micronutrient_snapshot_with_supplements | p_user_id uuid, p_entry_date date | Funktion |
 | nutrition | nrf93_daily | p_user_id uuid, p_entry_date date DEFAULT CURRENT_DATE | Funktion |
 | nutrition | nrf93_score_from_amounts | p_protein_g numeric, p_fiber_g numeric, p_vitamin_a_iu numeric, p_vitamin_c_mg numeric, p_vitamin_e_mg_alpha_tocopherol numeric, p_calcium_mg numeric, p_iron_mg numeric, p_magnesium_mg numeric, p_potassium_mg numeric, p_saturated_fat_g numeric, p_total_sugar_g numeric, p_sodium_mg numeric | Funktion |
+| nutrition | nutrient_intake_detail_for_day | p_user_id uuid, p_entry_date date, p_nutrient_code text | Funktion |
+| nutrition | nutrient_intake_source_totals_for_day | p_user_id uuid, p_entry_date date | Funktion |
 | nutrition | nutrient_summary_window | p_user_id uuid, p_end_date date, p_days integer DEFAULT 30 | Funktion |
 | nutrition | nutrient_tree_value_anomalies | p_user_id uuid, p_entry_date date | Funktion |
+| nutrition | nutrient_upper_limit_assessment_with_supplements | p_user_id uuid, p_entry_date date | Funktion |
 | nutrition | preference_search_preview | p_query text, p_normalized_query text, p_tokens text[], p_excluded_category_slugs text[], p_liked_category_slugs text[], p_disliked_category_slugs text[], p_liked_tags text[], p_disliked_tags text[], p_sort text, p_limit integer, p_offset integer, p_liked_food_ids uuid[] DEFAULT ARRAY[]::uuid[], p_disliked_food_ids uuid[] DEFAULT ARRAY[]::uuid[], p_excluded_food_ids uuid[] DEFAULT ARRAY[]::uuid[] | Funktion |
 | nutrition | pruef_objektliste |  | Funktion |
 | nutrition | recipe_ingredients_owner_guard |  | Funktion |
@@ -150,8 +154,8 @@ ob man sie rufen kann.**
 | public | gtrgm_union | internal, internal | Funktion |
 | public | handle_new_user |  | Funktion |
 | public | is_admin |  | Funktion |
-| public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein | text, text | Funktion |
+| public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
@@ -224,6 +228,7 @@ Rechten des Lesers, nicht des Erzeugers.**
 | public | muscle_training_loads | security_invoker |
 | supplements | community_anzeige | definer |
 | supplements | daily_intake_summary | security_invoker |
+| supplements | daily_nutrient_summary_long | security_invoker |
 | supplements | substance_alias_matches | security_invoker |
 
 ## CHECK-Bedingungen
@@ -792,6 +797,7 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | supplement_interactions | supplement_interactions_timing_recommendation_check | CHECK (((timing_recommendation IS NULL) OR (timing_recommendation = ANY (ARRAY['separate_2h'::text, 'separate_4h'::text, 'separate |
 | supplements | supplement_lab_effects | supplement_lab_effects_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | supplement_monitoring | supplement_monitoring_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
+| supplements | supplement_nutrients | supplement_nutrients_original_amount_unit_ck | CHECK ((((amount_original IS NULL) AND (unit_original IS NULL)) OR ((amount_original IS NOT NULL) AND (amount_original > (0)::nume |
 | supplements | supplement_nutrients | supplement_nutrients_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | supplement_organ_risks | supplement_organ_risks_organ_check | CHECK ((btrim(organ) <> ''::text)) |
 | supplements | supplement_organ_risks | supplement_organ_risks_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |

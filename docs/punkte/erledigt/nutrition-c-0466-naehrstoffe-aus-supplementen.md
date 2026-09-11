@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: null
 entscheidung: E-35
+erledigt: 2026-09-08
+commit: c7cf2d91
 beruehrt:
   tabellen: [supplements.supplement_nutrients]
 zahlen:
@@ -572,3 +574,70 @@ gegen welche Referenz die Warnung laeuft.**
 - Frischer Kettenaufbau: 193 Schritte, 408,9 s, `SCHEMA VOLLSTAENDIG`.
 - RLS-/Herkunftsprobe: `nutrition-c466-supplement-nutrients.test.ts`, 1/1 grün, 1,52 s, mit `ROLLBACK`.
 - Keine Oberflaeche, keine Zuordnung für die 579 Lücken und kein Entwicklungsserver wurden berührt.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    supplements.daily_nutrient_summary_long      Sicht, 331 Z
+    nutrition.daily_nutrient_summary_long        Sicht, 100.740
+    nutrient_intake_source_totals_for_day        die Zusammenfuehrung
+    nutrient_upper_limit_assessment_with_supplements
+    supplement_nutrient_intake_for_day
+    Vollkette 193 Schritte, 408,9 s
+
+`[cmd]` **Selbst gemessen: alle fuenf.**
+
+### E-35 ist gewahrt
+
+`[read]` **ZWEI Sichten, nicht eine.**
+
+    supplements  331 Zeilen     eigene Tagesbilanz
+    nutrition    100.740        eigene Tagesbilanz
+
+`[cmd]` **Und `nutrient_intake_source_totals_for_day` fuehrt sie
+zusammen** ? **nicht die Bilanz selbst.**
+
+`[read]` **Genau die Regel:** *,,jedes Modul rechnet seine eigene
+Tagesbilanz, summiert wird oben."*
+
+### Die Luecke bleibt sichtbar
+
+`[cmd]` **`supplements.daily_nutrient_summary_long` traegt:**
+
+    mapped_taken_log_count
+    unmapped_taken_log_count
+
+`[read]` **Eine Einnahme ohne Naehrstoffzuordnung verschwindet
+nicht** ? **sie wird gezaehlt.**
+
+> *,,579 von 596 Substanzen bleiben bewusst ohne erfundene
+> Zuordnung."*
+
+`[cmd]` **17 Zuordnungen unveraendert.**
+
+`[read]` **Er hat nicht gefuellt, was er nicht wusste** ? **und
+die Bilanz sagt, wie viel ihr fehlt.**
+
+### Das Detail traegt die Herkunft
+
+> *,,Mit Produkt-FK Produktname, ohne FK ehrlich nur Substanz."*
+
+`[read]` **Toms Vorgabe:** *,,Vitamin D3 5000 IU, eine Kapsel"*
+**statt** *,,25 ug aus Supplementen"* ? **und wo kein Produkt
+hinterlegt ist, die Substanz.**
+
+`[cmd]` **Beide Faelle im Test belegt.**
+
+### C-344 hat eine eigene Funktion
+
+`[cmd]` **`nutrient_upper_limit_assessment_with_supplements(user,
+datum)`.**
+
+`[read]` **Die Grenze steht an EINER Stelle** ? **nicht in jeder
+Kachel nachgebaut.**
+
+`[cmd]` **Im Test: 10/125 ug Vitamin D, 50/400 mg Magnesium** ?
+**zwei Naehrstoffe mit Obergrenze, beide gerechnet.**
+
+**Abgenommen.**

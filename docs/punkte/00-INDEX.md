@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 212 |
-| `laufend_codex` | 2 |
+| `todos` | 213 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 5 |
-| `erledigt` | 410 |
-| **gesamt** | **629** |
+| `erledigt` | 411 |
+| **gesamt** | **630** |
 
 ## medical — 48
 
@@ -64,7 +64,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 237
+## nutrition — 238
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -166,7 +166,7 @@
 | `C-411` | feature | mittel | [Rezeptvorschlaege in der Kuration](erledigt/nutrition-c-0411-rezeptvorschlaege-in-der-kuration.md) | erledigt | — | — |
 | `C-413` | befund | niedrig | [`tom.seed` traegt `days_count 7` bei 21 Tagen](erledigt/nutrition-c-0413-tom-seed-traegt-days-count-7-bei-21-tagen.md) | erledigt | — | — |
 | `C-464` | feature | mittel | [das Ballaststoffziel fehlt](erledigt/nutrition-c-0464-das-ballaststoffziel-fehlt.md) | erledigt | — | — |
-| `C-466` | feature | hoch | [Naehrstoffe aus Supplementen in der Nutrients-Ansicht](laufend_codex/nutrition-c-0466-naehrstoffe-aus-supplementen.md) | laeuft (codex) | — | C-467 |
+| `C-466` | feature | hoch | [Naehrstoffe aus Supplementen in der Nutrients-Ansicht](erledigt/nutrition-c-0466-naehrstoffe-aus-supplementen.md) | erledigt | — | C-467, G-426 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](erledigt/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | erledigt | — | G-375 |
@@ -304,6 +304,7 @@
 | `G-417` | feature | hoch | [zwei Spalten und der Score](erledigt/nutrition-g-0417-zwei-spalten-und-der-score.md) | erledigt | — | G-418, G-419 |
 | `G-418` | befund | niedrig | [Seed-Tage liegen in der Zukunft](todos/nutrition-g-0418-seed-tage-in-der-zukunft.md) | offen | — | — |
 | `G-419` | feature | niedrig | [der Insights-Block ist abgenommen](erledigt/nutrition-g-0419-insights-block-abgenommen.md) | erledigt | — | — |
+| `G-426` | feature | hoch | [die Supplementspalte in Nutrients](todos/nutrition-g-0426-die-supplementspalte-in-nutrients.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 79
