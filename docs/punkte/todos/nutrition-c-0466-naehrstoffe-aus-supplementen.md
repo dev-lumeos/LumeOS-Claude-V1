@@ -294,8 +294,50 @@ Substanzen ihre Naehrstoffzuordnung bekommen.**
 woher die Herstellerdaten kommen (DSLD? OpenFoodFacts? von
 Hand?).**
 
-`[cmd]` **`supplement_identifiers` traegt schon `DSLD`** ? **die
-amerikanische Etikettdatenbank. Messen, was dort steht.**
+`[cmd]` **BERICHTIGT 2026-09-08: `supplement_identifiers` traegt
+KEIN DSLD.**
+
+`[cmd]` **Gemessen, 1.259 Zeilen, sieben Arten:**
+
+    UNII                272   FDA-Substanzkennung
+    molecular_formula   242
+    PubChem_CID         241
+    InChIKey            239
+    ChEMBL_ID           155
+    cas_candidates       77
+    CAS                  33
+
+`[read]` **Alle sieben kennzeichnen MOLEKUELE, nicht Produkte.**
+
+`[cmd]` **`UNII` sagt *,,das ist Zinkpicolinat"*** ? **nicht
+*,,das ist Now Foods Artikel 1234"*.**
+
+`[read]` **Der Orchestrator hatte `DSLD` vermutet** ? **es gibt
+keinen einzigen Eintrag.**
+
+`[read]` **Damit ist Weg b ohne jede Vorarbeit:** **es gibt keine
+Produktkennung, an die man anknuepfen koennte.**
+
+### Woher Herstellerdaten kaemen
+
+`[read]` **Drei Quellen sind denkbar, keine ist gemessen:**
+
+    DSLD (NIH)        amerikanische Etikettdatenbank,
+                      ~150.000 Produkte, frei
+                      -- aber nur USA
+    OpenFoodFacts     hat einen Supplement-Zweig,
+                      von Nutzern gepflegt
+    Barcode + Foto    der Nutzer fotografiert das Etikett
+                      -- dieselbe Bauform wie MealCam
+
+`[read]` **Und die Frage dahinter: fuer Thailand.**
+
+`[cmd]` **`thailand_regulatory_records` hat 1.061 Zeilen** ?
+**die Zulassung ist gemessen, aber das sind Substanzen, keine
+Produkte.**
+
+`[read]` **Ein thailaendisches Praeparat steht in keiner dieser
+Quellen.****
 
 ### 2b · Die urspruengliche Notiz
 
