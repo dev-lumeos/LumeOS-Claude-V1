@@ -225,6 +225,62 @@ const UMBENANNT = {
         + 'technische Anpassung, nicht weniger Funktion.',
     },
   },
+  // G-421: die vier Reiter und zwei Bausteine, die das Werkzeug als
+  // fehlend meldete. `[cmd]` **Am Schirm gemessen (2026-09-11): alle
+  // zehn Goals-Reiter rendern**, mit echten Kacheln ueber der
+  // Mockup-Linie. **Sie heissen nur anders.**
+  //
+  // `[read]` **Die Namen wurden NICHT geraten** — je Eintrag steht,
+  // welche Datei, welche Zeile und was die Komponente TUT.
+  goals: {
+    GoalsTab: {
+      ziel: 'ZielKarten',
+      warum: 'ziel-karten.tsx:186 — nimmt ziele/meilensteine/stichtag '
+        + 'und rendert die Zielliste des `goals`-Reiters; '
+        + 'ansicht.tsx:237 haengt sie unter `tab === "goals"`. '
+        + 'Dieselbe Rolle wie GoalsTab (module-goals.jsx:209), das '
+        + 'ACTIVE_GOALS ueber <GoalCard> ausgibt.',
+    },
+    GoalCard: {
+      ziel: 'ZielKarte',
+      warum: 'ziel-karten.tsx:77 — nimmt `g`, `stichtag` und '
+        + '`onBearbeiten`; die einzelne Karte in der Schleife von '
+        + 'ZielKarten, mit Fortschrittsbalken und Frist. Gleiche Rolle '
+        + 'wie GoalCard (module-goals.jsx:257), das `g` und `onClick` '
+        + 'nimmt.',
+    },
+    MetricsTab: {
+      ziel: 'KoerperMetriken',
+      warum: 'tab-koerper.tsx:90 — nimmt messungen/zukunft/stichtag und '
+        + 'rendert den `metrics`-Reiter (ansicht.tsx:251). Gleiche '
+        + 'Rolle wie MetricsTab (module-goals.jsx:410): Gewichts- und '
+        + 'Koerperfettverlauf aus `body_measurements` (362 Zeilen).',
+    },
+    MeasureTab: {
+      ziel: 'KoerperUmfaenge',
+      warum: 'tab-koerper.tsx:167 — nimmt saetze/stichtag und rendert '
+        + 'den `measure`-Reiter (ansicht.tsx:260) mit Umfaengen und '
+        + 'Seitenvergleich aus `body_circumferences` (54 Zeilen). '
+        + 'Gleiche Rolle wie MeasureTab (module-goals.jsx:477). '
+        + '`[cmd]` BEIDE Reiter liegen in EINER Datei — eine Zaehlung '
+        + 'je Datei haette sie gleich gemeldet.',
+    },
+    CompTab: {
+      ziel: 'CompositionTab',
+      warum: 'tab-composition.tsx:169 — nimmt `d: CompDaten` und '
+        + 'rendert den `comp`-Reiter (ansicht.tsx:267). `[cmd]` Vier '
+        + 'Kacheltitel WOERTLICH wie die Vorlage: `Body composition '
+        + 'calculators`, `Body fat estimate · visual`, `Energy balance '
+        + '· today`, `Profile · inputs` (module-goals.jsx:547).',
+    },
+    BodyFatScale: {
+      ziel: 'KoerperfettSkala',
+      warum: 'tab-composition.tsx:91 — nimmt `k: Koerperzusammensetzung` '
+        + 'und zeichnet die Skala in `Body fat estimate · visual` '
+        + '(Zeile 240). Gleiche Rolle und gleicher Ort wie BodyFatScale '
+        + '(module-goals.jsx:623), das CompTab bei :577 einhaengt.',
+    },
+  },
   'coach-ai': {
     BuddyOrbModule: {
       ziel: 'BuddyOrb',

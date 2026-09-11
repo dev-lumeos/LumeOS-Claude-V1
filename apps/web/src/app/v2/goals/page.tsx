@@ -29,10 +29,12 @@ import type { Metadata } from 'next'
 import { heute } from '../../../lib/datum'
 import {
   alterAm, angemeldeteNutzerin, ladeAdaptivenTdee, ladeKoerperzusammensetzung,
-  ladeMeilensteine, ladeMessungen, ladePhase, ladeProfil, ladeUmfaenge, ladeZiele,
+  ladeFotosessions, ladeMeilensteine, ladeMessungen, ladePhase, ladeProfil,
+  ladeUmfaenge, ladeZiele,
   zaehleZukunftsmessungen,
   type AdaptiverTdee, type Koerpermessung, type Koerperzusammensetzung,
-  type Meilenstein, type Phase, type ProfilEingaben, type Umfangssatz,
+  type Fotosession, type Meilenstein, type Phase, type ProfilEingaben,
+  type Umfangssatz,
   type ZielFortschritt,
 } from '../../../lib/goals/lesen'
 import {
@@ -78,11 +80,14 @@ export default async function V2GoalsPage({
   let messungen: Koerpermessung[] = []
   let zukunftsmessungen = 0
   let umfaenge: Umfangssatz[] = []
+  // `[cmd]` **G-421: `goals.progress_photos` gibt es seit C-463.**
+  let fotosessions: Fotosession[] = []
   let ladefehler: string | null = null
 
   try {
     const userId = await angemeldeteNutzerin()
-    ;[ziele, meilensteine, phase, navy, tdee, messungen, zukunftsmessungen, umfaenge, profil]
+    ;[ziele, meilensteine, phase, navy, tdee, messungen, zukunftsmessungen, umfaenge,
+      profil, fotosessions]
       = await Promise.all([
         ladeZiele(userId, stichtag),
         ladeMeilensteine(userId, stichtag),
@@ -93,6 +98,7 @@ export default async function V2GoalsPage({
         zaehleZukunftsmessungen(userId, stichtag),
         ladeUmfaenge(userId, stichtag),
         ladeProfil(userId),
+        ladeFotosessions(userId, stichtag),
       ])
 
     // Die zwei Zielwert-Funktionen kommen aus dem bestehenden Lesepfad
@@ -122,6 +128,7 @@ export default async function V2GoalsPage({
         messungen,
         zukunftsmessungen,
         umfaenge,
+        fotosessions,
         ladefehler,
       }}
     />

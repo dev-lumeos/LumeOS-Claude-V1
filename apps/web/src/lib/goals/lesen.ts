@@ -553,3 +553,89 @@ export function alterAm(geburtsdatum: string | null, stichtag: string): number |
   if (vorGeburtstag) jahre -= 1
   return jahre >= 0 ? jahre : null
 }
+
+// ── Die Fotosessions, für „Photo progression" ───────────────────
+//
+// ══ G-421: DER VERMERK WAR UEBERHOLT ════════════════════════════════
+//
+// `[cmd]` **Die Attrappe sagte:** *„weder Tabelle noch Ablage im
+// Repo, `lesen.ts` kennt kein Foto"*.
+//
+// `[cmd]` **C-463 hat beides gebaut**, gemessen 2026-09-11:
+// `goals.progress_photos` (13 Spalten) und der private Bucket
+// `goals-progress-photos`. **Jetzt kennt `lesen.ts` das Foto.**
+//
+// `[read]` **Der Bucket ist PRIVAT** — `photo_url` traegt den Pfad,
+// keine oeffentliche Adresse. **Die Anzeige braucht eine signierte
+// URL**, und die hat eine Laufzeit.
+
+export type Fotosession = {
+  session_date: string
+  /** Die Posen dieses Tages, nach `pose_number` sortiert. */
+  posen: Array<{
+    pose_name: string
+    pose_number: number | null
+    /** Der Pfad im Bucket — NICHT anzeigbar ohne Signatur. */
+    pfad: string
+    /** Die signierte Adresse, oder `null`, wenn sie nicht entstand. */
+    url: string | null
+  }>
+}
+
+/** Wie lange eine signierte Adresse gilt — eine Stunde. */
+const SIGNATUR_SEKUNDEN = 3600
+
+/**
+ * Die Fotosessions eines Nutzers, jüngste zuerst.
+ *
+ * `[read]` **Eine Zeile je Pose, eine Session je Datum** — die
+ * Tabelle hat kein `session_id`, sie gruppiert über `session_date`.
+ */
+export async function ladeFotosessions(
+  userId: string, bis: string, limit = 10,
+): Promise<Fotosession[]> {
+  const { data, error } = await goalsDb()
+    .from('progress_photos')
+    .select('session_date, pose_name, pose_number, photo_url')
+    .eq('user_id', userId)
+    .lte('session_date', bis)
+    .order('session_date', { ascending: false })
+    .order('pose_number', { ascending: true })
+    .limit(limit * 8)
+  if (error) throw new GoalsLeseFehler('READ_FAILED', `progress_photos: ${error.message}`)
+
+  const zeilen = (data ?? []) as unknown as Array<Record<string, unknown>>
+  if (zeilen.length === 0) return []
+
+  // `[read]` **Die Signaturen in EINEM Aufruf** — je Pfad einzeln
+  // wären es bei fünf Sessions fünfzehn Rundreisen (die Lehre aus
+  // G-179: `Promise.all` statt Schleife, hier sogar ein Stapelruf).
+  const pfade = zeilen.map(z => text(z.photo_url) ?? '').filter(Boolean)
+  const signiert = new Map<string, string>()
+  if (pfade.length > 0) {
+    const { data: urls } = await createSessionClient().storage
+      .from('goals-progress-photos')
+      .createSignedUrls(pfade, SIGNATUR_SEKUNDEN)
+    for (const u of urls ?? []) {
+      if (u.path && u.signedUrl) signiert.set(u.path, u.signedUrl)
+    }
+  }
+
+  const nachDatum = new Map<string, Fotosession>()
+  for (const z of zeilen) {
+    const datum = text(z.session_date) ?? ''
+    const pfad = text(z.photo_url) ?? ''
+    if (!nachDatum.has(datum)) nachDatum.set(datum, { session_date: datum, posen: [] })
+    nachDatum.get(datum)!.posen.push({
+      pose_name: text(z.pose_name) ?? '',
+      pose_number: zahl(z.pose_number),
+      pfad,
+      url: signiert.get(pfad) ?? null,
+    })
+  }
+  // `[read]` **`forEach` statt Ausbreiten** — ein `MapIterator` laesst
+  // sich beim Ziel dieses Pakets nicht ausbreiten (TS2802).
+  const sessions: Fotosession[] = []
+  nachDatum.forEach(s => { sessions.push(s) })
+  return sessions.slice(0, limit)
+}

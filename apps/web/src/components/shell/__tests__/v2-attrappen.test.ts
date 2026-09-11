@@ -754,7 +754,26 @@ test('das Goals-Modul kennzeichnet jede Kachel', () => {
     // Phasenkopfs stehen in einer Schleife), goals 2, metrics 2.
     // `[cmd]` **10 seit dem Vollstaendigkeitslauf:** dazu kamen
     // `Photo progression` (measure) und `FFMI` (physique).
-    [path.join(process.cwd(), 'src/app/v2/goals/fehlende-kacheln.tsx'), 10],
+    //
+    // `[cmd]` **9 seit G-421:** `Photo progression` IST angebunden —
+    // `goals.progress_photos` (C-463) traegt die Zeilen, der private
+    // Bucket `goals-progress-photos` die Bilder. **Gemessen: eine
+    // Klickprobe schrieb eine Zeile und die Kachel zeigte sie mit
+    // signierter Adresse wieder an.**
+    //
+    // `[read]` **Die Marke faellt, weil die Kachel liest** — nicht,
+    // weil jemand sie fuer fertig haelt.
+    //
+    // `[cmd]` **7 seit G-421, zweiter Durchgang:** auch `Body fat
+    // trend` und `Lean mass` sind angebunden. **Ihr Vermerk nannte
+    // eine fehlende Verlaufsfunktion** — gemessen sind
+    // `body_fat_pct` und `lean_mass_kg` SPALTEN auf
+    // `body_measurements`, auf allen 362 Zeilen gefuellt, und
+    // `ladeMessungen()` gibt die ganze Reihe zurueck.
+    //
+    // `[read]` **Der Leseweg lag daneben** (dieselbe Klasse wie die
+    // neun Faelle aus G-355).
+    [path.join(process.cwd(), 'src/app/v2/goals/fehlende-kacheln.tsx'), 7],
     // `[cmd]` **Dieselbe Hilfskomponenten-Bauform wie in training:**
     // 2 Marken im Quelltext, 9 Kacheln am Schirm (cost).
     [path.join(process.cwd(), 'src/app/v2/supplements/fehlende-kacheln.tsx'), 12],

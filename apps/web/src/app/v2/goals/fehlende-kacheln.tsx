@@ -38,8 +38,13 @@ import * as React from 'react'
 import { Card, Pill, Icon, LineChart } from '@lumeos/ui'
 
 import {
-  PHASE_STATE, GOAL_PHASES, BODY_METRICS, PHOTO_PROGRESSION,
+  PHASE_STATE, GOAL_PHASES, BODY_METRICS,
 } from './daten'
+import { useGoals } from './kontext'
+// `[read]` **Nur der TYP** — `lesen.ts` ist serverseitig, ein
+// Wert-Import zoege den Server-Baum ueber die `'use client'`-Grenze
+// (die Lehre aus G-412).
+import type { Fotosession, Koerpermessung } from '../../../lib/goals/lesen'
 
 const QUELLE = 'theme-v1/module-goals-pro.jsx'
 
@@ -149,12 +154,27 @@ export function FehlendePhaseKacheln() {
 
       {/* [cmd] module-goals-pro.jsx:261-317 — die sieben Phasen zum
           Umschalten. Die Vorschau beim Anklicken ist Teil derselben
-          Kachel. */}
+          Kachel.
+
+          ══ G-421: DER GRUND WAR UEBERHOLT ═══════════════════════
+          `[cmd]` **Hier stand:** *„goal_phases wird gelesen, aber
+          nirgends geschrieben (G-357)"*.
+          `[cmd]` **Gemessen 2026-09-11 gegen `pg_proc`:** die
+          Schreibfunktionen GIBT es — `goals.goal_phase_start(…)`,
+          `goal_phase_end(p_phase_id, p_transition_reason, …)` und
+          `phase_transition_respond(…)`. **Sie stammen aus
+          `_pipeline/11_goals/111_goals_ziele_phasen.sql` und haben
+          eine eigene Pruefung** (`goals-g357-…test.ts`).
+          `[read]` **G-357 hat den Mangel BEHOBEN** — der Vermerk
+          nannte den Punkt, der ihn abgeschafft hat.
+          `[cmd]` **Was fehlt, ist der AUFRUF:** kein
+          `apps/web`-Pfad ruft eine der drei. */}
       <Card title="Phase state machine"
             sub="7 phases · click any phase to preview or switch"
             attrappe={marke(
-              'einen Schreibweg fuer den Phasenwechsel — goal_phases wird '
-              + 'gelesen, aber nirgends geschrieben (G-357)')}>
+              'einen Aufrufer fuer den Phasenwechsel — die Funktionen '
+              + '`goals.goal_phase_start/_end` gibt es seit G-357, die '
+              + 'Oberflaeche ruft sie nur noch nicht')}>
         <div style={{
           display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8,
         }}>
@@ -296,111 +316,238 @@ export function FehlendeZielKacheln() {
 }
 
 /**
- * Die zwei Mockup-Kacheln des `metrics`-Reiters, die oben fehlen.
+ * `Body fat trend` und `Lean mass · 30 days` — ANGEBUNDEN seit G-421.
  *
- * `[cmd]` Gebaut ist `Messungen` — der Gewichtsverlauf, also das
- * Gegenstueck zu `Weight · 6 months`. **`Body fat trend` und
- * `Lean mass · 30 days` fehlen.**
+ * ══ DER GRUND WAR UEBERHOLT ═══════════════════════════════════════
  *
- * `[cmd]` **Der Grund ist derselbe fuer beide:**
- * `body_composition_navy` ist eine Funktion je STICHTAG — sie
- * liefert einen Wert, keinen Verlauf. Fuer eine Kurve braeuchte es
- * einen Aufruf je Tag oder eine Verlaufsfunktion.
+ * `[cmd]` **Hier stand:** *„wartet auf eine Verlaufsfunktion —
+ * `body_composition_navy` liefert einen Wert je Stichtag, keine
+ * Reihe"*. **Und in der zweiten Kachel:** *„`lean_mass_kg` liegt im
+ * Leseweg — aber nur fuer den Stichtag, nicht als Reihe."*
+ *
+ * `[cmd]` **Gemessen 2026-09-11:** beide Werte sind SPALTEN auf
+ * `goals.body_measurements`, und zwar auf JEDER Zeile —
+ *
+ *     Zeilen gesamt      362
+ *     mit body_fat_pct   362
+ *     mit lean_mass_kg   362
+ *
+ * `[cmd]` **`ladeMessungen()` gibt die ganze Reihe zurueck**, und
+ * `KoerperMetriken` zeigt beide bereits als Kennzahlkachel mit
+ * Sparkline. **Die Reihe lag die ganze Zeit daneben.**
+ *
+ * `[read]` **Der Leseweg liegt oft daneben** — und ein Vermerk mit
+ * falschem Grund verhindert, dass jemand nachsieht.
+ *
+ * `[cmd]` **`body_composition_navy` ist eine andere Sache:** das
+ * Umfangsverfahren fuer den `comp`-Reiter, nicht die Messreihe.
  */
-export function FehlendeMetrikKacheln() {
-  const grund = 'eine Verlaufsfunktion — `body_composition_navy` liefert '
-    + 'einen Wert je Stichtag, keine Reihe'
+export function FehlendeMetrikKacheln({ messungen }: {
+  messungen: Koerpermessung[]
+}) {
+  /** Die Reihe eines Feldes, Luecken heraus. */
+  const reihe = (feld: 'body_fat_pct' | 'lean_mass_kg') => messungen
+    .map(m => m[feld])
+    .filter((v): v is number => v != null)
+
+  const fett = reihe('body_fat_pct')
+  const mager = reihe('lean_mass_kg')
+
+  /** Erster und letzter Wert, plus Differenz. */
+  const spanne = (r: number[]) => r.length >= 2
+    ? { erst: r[0], letzt: r[r.length - 1], delta: r[r.length - 1] - r[0] }
+    : null
+
+  const fettSpanne = spanne(fett)
+  const magerSpanne = spanne(mager)
+
+  /** Die Achsenbeschriftung: erstes, mittleres, letztes Datum. */
+  const achsen = (n: number) => {
+    if (messungen.length === 0) return []
+    const l: string[] = new Array(Math.min(n, messungen.length)).fill('')
+    const d = (i: number) => messungen[i]?.measurement_date.slice(5) ?? ''
+    l[0] = d(0)
+    l[l.length - 1] = d(messungen.length - 1)
+    if (l.length > 2) l[Math.floor(l.length / 2)] = d(Math.floor(messungen.length / 2))
+    return l
+  }
+
   return (
     <>
       {/* [cmd] module-goals.jsx, MetricsTab */}
-      <Card title="Body fat trend" sub="bi-weekly · DXA + smart scale"
-            attrappe={marke(grund)}>
-        <LineChart h={160} range={[12, 16]}
-          xLabels={['Mar 15', '', '', 'Apr', '', '', 'May 16']}
-          series={[
-            { data: BODY_METRICS.bodyfat.history, color: 'var(--acc-suppl)' },
-            {
-              data: Array(BODY_METRICS.bodyfat.history.length).fill(12),
-              color: 'var(--fg-dim)',
-            },
-          ]} />
-        <div style={{
-          display: 'flex', gap: 12, marginTop: 8,
-          fontSize: 11, color: 'var(--fg-muted)',
-        }}>
-          <span>Current <span className="v2-num" style={{ color: 'var(--fg)' }}>
-            {BODY_METRICS.bodyfat.current} %
-          </span></span>
-          <span>Target <span className="v2-num" style={{ color: 'var(--acc-suppl)' }}>
-            12.0 %
-          </span></span>
-          <span className="v2-dim">−1.6 ueber 60 Tage · auf Kurs</span>
-        </div>
+      <Card title="Body fat trend"
+            sub={`${fett.length} Messungen · aus body_measurements.body_fat_pct`}>
+        {fett.length < 2
+          ? (
+            // `[read]` **Ein benannter Leerhinweis, keine Null** (E-72).
+            <div className="v2-muted" style={{ fontSize: 11.5, padding: '14px 0' }}>
+              Weniger als zwei Messungen mit Körperfettwert — eine Kurve
+              braucht mindestens zwei Punkte.
+            </div>
+          )
+          : (
+            <>
+              <LineChart h={160}
+                range={[Math.min(...fett) - 0.5, Math.max(...fett) + 0.5]}
+                xLabels={achsen(7)}
+                series={[{ data: fett, color: 'var(--acc-suppl)' }]} />
+              <div style={{
+                display: 'flex', gap: 16, marginTop: 8,
+                fontSize: 11, color: 'var(--fg-muted)',
+              }}>
+                <span>Current <span className="v2-num" style={{ color: 'var(--fg)' }}>
+                  {fettSpanne?.letzt.toFixed(1)} %
+                </span></span>
+                <span>Delta <span className="v2-num">
+                  {fettSpanne && fettSpanne.delta > 0 ? '+' : ''}
+                  {fettSpanne?.delta.toFixed(1)} %
+                </span></span>
+                <span className="v2-dim">
+                  über {fett.length} Messungen
+                </span>
+              </div>
+              {/* `[cmd]` **Die Vorlage zeigt eine Ziellinie bei 12,0 %**
+                  (`module-goals.jsx`, MetricsTab). `[read]` **Ein
+                  Koerperfettziel gibt es in `goals.user_goals` nur als
+                  Zielwert EINES Ziels** — welches gemeint ist, steht
+                  nirgends. **Deshalb keine erfundene Linie.** */}
+            </>
+          )}
       </Card>
 
       {/* [cmd] module-goals.jsx, MetricsTab */}
-      <Card title="Lean mass · 30 days" sub="estimated from weight × (1 − BF%)"
-            attrappe={marke(grund)}>
-        <LineChart h={150} range={[67, 69]}
-          xLabels={['Apr 16', '', '', '', '', 'May 1', '', '', '', '', 'May 16']}
-          series={[{ data: BODY_METRICS.leanMass.history, color: 'var(--acc-train)' }]} />
-        <div style={{
-          display: 'flex', gap: 16, marginTop: 8,
-          fontSize: 11, color: 'var(--fg-muted)',
-        }}>
-          <span>Current <span className="v2-num" style={{ color: 'var(--fg)' }}>
-            {BODY_METRICS.leanMass.current} kg
-          </span></span>
-          <span>Delta 30d <span className="v2-num" style={{ color: 'var(--pos)' }}>
-            +0.5 kg
-          </span></span>
-        </div>
-        <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 6, lineHeight: 1.5 }}>
-          `lean_mass_kg` liegt im Leseweg — aber nur fuer den Stichtag,
-          nicht als Reihe.
-        </div>
+      <Card title="Lean mass"
+            sub={`${mager.length} Messungen · body_measurements.lean_mass_kg`}>
+        {mager.length < 2
+          ? (
+            <div className="v2-muted" style={{ fontSize: 11.5, padding: '14px 0' }}>
+              Weniger als zwei Messungen mit Magermasse.
+            </div>
+          )
+          : (
+            <>
+              <LineChart h={150}
+                range={[Math.min(...mager) - 0.5, Math.max(...mager) + 0.5]}
+                xLabels={achsen(7)}
+                series={[{ data: mager, color: 'var(--acc-train)' }]} />
+              <div style={{
+                display: 'flex', gap: 16, marginTop: 8,
+                fontSize: 11, color: 'var(--fg-muted)',
+              }}>
+                <span>Current <span className="v2-num" style={{ color: 'var(--fg)' }}>
+                  {magerSpanne?.letzt.toFixed(1)} kg
+                </span></span>
+                <span>Delta <span className="v2-num" style={{
+                  color: magerSpanne && magerSpanne.delta >= 0 ? 'var(--pos)' : 'var(--fg)',
+                }}>
+                  {magerSpanne && magerSpanne.delta > 0 ? '+' : ''}
+                  {magerSpanne?.delta.toFixed(1)} kg
+                </span></span>
+              </div>
+              {/* `[cmd]` **Die Vorlage nennt „30 days"** — dieser
+                  Titel nicht. `[read]` **Die Kachel zeigt, was
+                  `ladeMessungen()` liefert**, und das ist die ganze
+                  Reihe bis zum Stichtag. **Ein Titel mit einer
+                  Fensterzahl, die niemand einhaelt, waere eine
+                  Falschaussage.** */}
+            </>
+          )}
       </Card>
     </>
   )
 }
 
 /**
- * Die Mockup-Kachel des `measure`-Reiters, die oben fehlt.
+ * `Photo progression` — ANGEBUNDEN seit G-421.
  *
- * `[cmd]` Gemessen 2026-09-07: `Circumferences` und `Seitenvergleich`
- * sind gebaut (letzteres ist `Symmetry · left vs right`).
- * **`Photo progression` fehlt.**
+ * ══ DER VERMERK WAR UEBERHOLT ═════════════════════════════════════
+ *
+ * `[cmd]` **Hier stand:** *„wartet auf einen Leseweg fuer
+ * Fortschrittsfotos — weder Tabelle noch Ablage im Repo, `lesen.ts`
+ * kennt kein Foto"*.
+ *
+ * `[cmd]` **C-463 hat beides gebaut**, gemessen 2026-09-11:
+ * `goals.progress_photos` (13 Spalten) und der private Bucket
+ * `goals-progress-photos` mit vier Owner-Policies.
+ *
+ * `[read]` **Ein Vermerk mit falschem Grund ist schlimmer als eine
+ * fehlende Kachel** — er verhindert, dass jemand nachsieht.
+ *
+ * `[read]` **Der Knopf „New session" fehlte ebenfalls** — das
+ * `LogPhotoModal` war gebaut, aber NICHTS schickte
+ * `{ typ: 'logPhoto' }`. **Eine Attrappe hatte den Auslöser der
+ * Vorlage nicht mitkopiert** (`module-goals.jsx:516`).
  */
-export function FehlendeMessKacheln() {
+export function FehlendeMessKacheln({ sessions }: { sessions: Fotosession[] }) {
+  const { open } = useGoals()
   return (
-    <Card title="Photo progression" sub="sessions · front · side · back"
-          attrappe={marke(
-            'einen Leseweg fuer Fortschrittsfotos — weder Tabelle noch '
-            + 'Ablage im Repo, `lesen.ts` kennt kein Foto')}>
-      <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 5,
-        }}>
-          {PHOTO_PROGRESSION.map(p => (
-            <div key={p.date} style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-              <div style={{
-                aspectRatio: '9/16', border: '1px dashed var(--border)',
-                borderRadius: 4, background: 'var(--surface-2)',
-                display: 'grid', placeItems: 'center',
-              }}>
-                <div className="v2-dim" style={{
-                  fontSize: 8.5, textAlign: 'center', lineHeight: 1.4,
-                }}>front<br />side<br />back</div>
-              </div>
-              <div style={{ textAlign: 'center' }}>
-                <div className="v2-num v2-dim" style={{ fontSize: 9.5 }}>
-                  {p.date.slice(5)}
+    <Card title="Photo progression"
+          sub={`${sessions.length} ${sessions.length === 1 ? 'session' : 'sessions'} · front · side · back`}
+          actions={(
+            <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                    onClick={() => open({ typ: 'logPhoto' })}>
+              <Icon name="camera" className="v2-ic v2-ic-sm" />New session
+            </button>
+          )}>
+      {sessions.length === 0
+        ? (
+          // `[read]` **Ein benannter Leerhinweis, keine Null** (E-72)
+          // — die Tabelle ist da und leer, das ist etwas anderes als
+          // „gibt es nicht".
+          <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
+            Noch keine Fotosession. Über „New session" wird die erste
+            angelegt — die Bilder liegen im privaten Ablagefach
+            <code> goals-progress-photos</code> und verlassen es nur
+            über eine signierte Adresse.
+          </div>
+        )
+        : (
+          <div style={{
+            display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 5,
+          }}>
+            {sessions.map(s => (
+              <div key={s.session_date}
+                   style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <div style={{
+                  aspectRatio: '9/16', border: '1px solid var(--border)',
+                  borderRadius: 4, background: 'var(--surface-2)',
+                  display: 'grid', placeItems: 'center', overflow: 'hidden',
+                }}>
+                  {/* `[read]` **Das erste Bild der Session** — der
+                      Bucket ist privat, die Adresse ist signiert und
+                      gilt eine Stunde. */}
+                  {s.posen[0]?.url
+                    ? <img src={s.posen[0].url} alt={s.posen[0].pose_name}
+                           style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    : (
+                      <div className="v2-dim" style={{
+                        fontSize: 8.5, textAlign: 'center', lineHeight: 1.4,
+                      }}>
+                        {s.posen.map(p => p.pose_name.toLowerCase()).join(' · ')}
+                      </div>
+                    )}
                 </div>
-                <div className="v2-num" style={{ fontSize: 10.5 }}>{p.weight}</div>
-                <div className="v2-num v2-dim" style={{ fontSize: 9 }}>{p.bf}%</div>
+                <div style={{ textAlign: 'center' }}>
+                  <div className="v2-num v2-dim" style={{ fontSize: 9.5 }}>
+                    {s.session_date.slice(5)}
+                  </div>
+                  <div className="v2-num" style={{ fontSize: 10.5 }}>
+                    {s.posen.length} {s.posen.length === 1 ? 'Pose' : 'Posen'}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
+      {/* `[cmd]` **Gewicht und Koerperfett zeigt die Vorlage je
+          Session** (`module-goals.jsx:516-530`). `[read]` **Sie haben
+          in `progress_photos` keine Spalte** — sie liegen in
+          `body_measurements`, und eine Zuordnung ueber das Datum
+          waere eine Behauptung. **Deshalb hier nicht.** */}
+      <div className="v2-dim" style={{ fontSize: 10, marginTop: 8 }}>
+        Gewicht und Körperfett je Session: <code>progress_photos</code> führt
+        sie nicht — sie stehen in <code>body_measurements</code>.
+      </div>
     </Card>
   )
 }

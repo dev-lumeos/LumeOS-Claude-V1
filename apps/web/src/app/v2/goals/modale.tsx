@@ -24,6 +24,11 @@
 import * as React from 'react'
 import { Card, Pill, Icon, LineChart, InEntwicklungKnopf } from '@lumeos/ui'
 
+// `[read]` **Die Serveraktion, nicht der Schreibweg selbst** — ein
+// Wert-Import aus `lib/goals/fotosession-write` zoege den Server-Baum
+// ueber die `'use client'`-Grenze (die Lehre aus G-412).
+import { fotosessionAnlegenAktion } from './fotosession-aktionen'
+
 import {
   zielArtAuswahl, AKTIVE_PLAETZE, type ZielArt,
 } from '../../../lib/goals/ziel-arten'
@@ -425,34 +430,119 @@ function LogMeasureModal({ onClose }: { onClose: () => void }) {
 
 // ── LOG PHOTO ───────────────────────────────────────────────────
 // [cmd] module-goals.jsx:864-884.
+//
+// ══ G-421: DER VERMERK WAR UEBERHOLT ═══════════════════════════════
+//
+// `[cmd]` **Hier stand:** *„Fotosessions brauchen eine Dateiablage —
+// der Umsetzungsplan fuehrt sie unter ,Was nicht gebaut wird'."*
+//
+// `[cmd]` **C-463 hat beides gebaut**, gemessen 2026-09-11:
+// `goals.progress_photos` (13 Spalten) und der private Bucket
+// `goals-progress-photos` mit vier Owner-Policies.
+//
+// `[read]` **Ein Vermerk mit falschem Grund ist schlimmer als eine
+// fehlende Kachel** — er verhindert, dass jemand nachsieht.
+//
+// `[read]` **Die drei Ansichten sind Vierteldrehungen** —
+// `pose_type = 'quarter_turns'`, nicht `mandatory_8`: das sind die
+// acht Pflichtposen, und drei davon sind keine acht.
 function LogPhotoModal({ onClose }: { onClose: () => void }) {
+  const [dateien, setDateien] = React.useState<Record<string, File>>({})
+  const [datum, setDatum] = React.useState(
+    () => new Date().toISOString().slice(0, 10))
+  const [notiz, setNotiz] = React.useState('')
+  const [laeuft, setLaeuft] = React.useState(false)
+  const [fehler, setFehler] = React.useState<string | null>(null)
+  const [fertig, setFertig] = React.useState<number | null>(null)
+
+  const gewaehlt = Object.keys(dateien).length
+
+  async function speichern() {
+    setLaeuft(true)
+    setFehler(null)
+    const daten = new FormData()
+    daten.set('session_date', datum)
+    // `[cmd]` **Der Wert stammt aus dem CHECK** (`POSE_ARTEN`), nicht
+    // aus dem Kopf.
+    daten.set('pose_type', 'quarter_turns')
+    daten.set('notes', notiz)
+    for (const [name, datei] of Object.entries(dateien)) {
+      daten.append(`pose-${name}`, datei)
+    }
+    const r = await fotosessionAnlegenAktion(daten)
+    setLaeuft(false)
+    if (r.ok) {
+      setFertig(r.zeilen.length)
+      // `[read]` **Erst schliessen, wenn die Zeilen da sind** — sonst
+      // sieht ein Fehlschlag aus wie Erfolg.
+      setTimeout(onClose, 900)
+    } else {
+      setFehler(r.felder.length > 0
+        ? r.felder.map(f => `${f.feld}: ${f.text}`).join(' · ')
+        : r.text)
+    }
+  }
+
   return (
     <GModal title="New photo session" subtitle="Front · side · back · same lighting"
             eyebrow="camera" onClose={onClose}
             footer={
               <>
                 <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
-                <InEntwicklungKnopf titel="Save session" className="v2-btn v2-btn-primary"
-                                    grund={'Fotosessions brauchen eine Dateiablage — der Umsetzungsplan fuehrt sie unter „Was nicht gebaut wird".'}>
-                  <Icon name="download" className="v2-ic v2-ic-sm" />Save session
-                </InEntwicklungKnopf>
+                <button type="button" className="v2-btn v2-btn-primary"
+                        disabled={laeuft || gewaehlt === 0}
+                        onClick={() => { void speichern() }}>
+                  <Icon name="download" className="v2-ic v2-ic-sm" />
+                  {laeuft ? 'Speichert …' : 'Save session'}
+                </button>
               </>
             }>
       <div className="v2-grid v2-g-cols-3" style={{ gap: 8, marginBottom: 14 }}>
         {['Front', 'Side', 'Back'].map(p => (
-          <div key={p} className="v2-placeholder-img"
-               style={{ aspectRatio: '9/16', borderRadius: 6, border: '1px dashed var(--border)' }}>
+          <label key={p} className="v2-placeholder-img"
+                 style={{
+                   aspectRatio: '9/16', borderRadius: 6, cursor: 'pointer',
+                   border: `1px dashed ${dateien[p] ? 'var(--pos)' : 'var(--border)'}`,
+                   display: 'grid', placeItems: 'center',
+                 }}>
+            <input type="file" accept="image/*" aria-label={p}
+                   style={{ display: 'none' }}
+                   onChange={e => {
+                     const f = e.target.files?.[0]
+                     if (f) setDateien(d => ({ ...d, [p]: f }))
+                   }} />
             <div style={{ fontSize: 10, textAlign: 'center', color: 'var(--fg-dim)' }}>
-              {p}<br />tap to upload
+              {p}<br />{dateien[p] ? '✓ gewählt' : 'tap to upload'}
             </div>
-          </div>
+          </label>
         ))}
       </div>
       <div className="v2-grid v2-g-cols-3" style={{ gap: 10 }}>
-        <GField label="Date"><GInput type="date" aria-label="Date" defaultValue="2026-05-16" /></GField>
-        <GField label="Weight"><GInput type="number" aria-label="Weight" defaultValue="79.4" /></GField>
-        <GField label="Body fat"><GInput type="number" aria-label="Body fat" defaultValue="13.8" /></GField>
+        <GField label="Date">
+          <GInput type="date" aria-label="Date" value={datum}
+                  onChange={e => setDatum(e.target.value)} />
+        </GField>
+        {/* `[read]` **Gewicht und Koerperfett haben in
+            `progress_photos` KEINE Spalte** — sie gehoeren zu
+            `body_measurements`. **Der Entwurf zeigt sie, dieser
+            Schreibweg traegt sie nicht**, und das steht hier statt
+            zwei Felder anzubieten, die nichts tun. */}
+        <GField label="Note (optional)" sub="landet in notes">
+          <GInput aria-label="Note" value={notiz}
+                  onChange={e => setNotiz(e.target.value)}
+                  placeholder="Time of day, pump state, etc." />
+        </GField>
       </div>
+      {fehler && (
+        <div style={{ marginTop: 10, fontSize: 11.5, color: 'var(--neg)' }}>
+          Nicht gespeichert: {fehler}
+        </div>
+      )}
+      {fertig !== null && (
+        <div style={{ marginTop: 10, fontSize: 11.5, color: 'var(--pos)' }}>
+          {fertig} {fertig === 1 ? 'Foto' : 'Fotos'} in goals.progress_photos gespeichert.
+        </div>
+      )}
       <div style={{ padding: 10, background: 'var(--surface)', borderRadius: 6, fontSize: 11.5, color: 'var(--fg-muted)', lineHeight: 1.55 }}>
         <Icon name="check" className="v2-ic v2-ic-sm" style={{ display: 'inline', color: 'var(--pos)', marginRight: 4 }} />
         Photos are stored encrypted, never shared with coaches unless you explicitly add them to a goal share.

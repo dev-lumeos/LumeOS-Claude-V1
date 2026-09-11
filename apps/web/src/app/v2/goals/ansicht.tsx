@@ -75,8 +75,8 @@ import { CompositionTab, type CompDaten } from './tab-composition'
 import { KoerperMetriken, KoerperUmfaenge } from './tab-koerper'
 import { ZielKarten } from './ziel-karten'
 import type {
-  AdaptiverTdee, Koerpermessung, Koerperzusammensetzung, Meilenstein,
-  Phase, ProfilEingaben, Umfangssatz, ZielFortschritt,
+  AdaptiverTdee, Fotosession, Koerpermessung, Koerperzusammensetzung,
+  Meilenstein, Phase, ProfilEingaben, Umfangssatz, ZielFortschritt,
 } from '../../../lib/goals/lesen'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 
@@ -149,6 +149,8 @@ export type EchteDaten = {
   /** Wie viele Messungen NACH dem Stichtag liegen — sie fehlen bewusst. */
   zukunftsmessungen: number
   umfaenge: Umfangssatz[]
+  /** `[cmd]` **G-421: `goals.progress_photos`, seit C-463.** */
+  fotosessions: Fotosession[]
   ladefehler: string | null
 }
 
@@ -251,14 +253,14 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
               <KoerperMetriken
                 messungen={echt.messungen} zukunft={echt.zukunftsmessungen}
                 stichtag={echt.stichtag} />
-              <FehlendeMetrikKacheln />
+              <FehlendeMetrikKacheln messungen={echt.messungen} />
               <GoalsMetricsReferenz />
             </>
           )}
           {tab === 'measure' && (
             <>
               <KoerperUmfaenge saetze={echt.umfaenge} stichtag={echt.stichtag} />
-              <FehlendeMessKacheln />
+              <FehlendeMessKacheln sessions={echt.fotosessions} />
               <GoalsMeasureReferenz />
             </>
           )}
