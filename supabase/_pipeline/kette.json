@@ -1810,6 +1810,13 @@
       "kind": "sql",
       "creates": "C-464: fiber_g als gespeichertes Goals-Tagesziel, in Formel, Zielwert-Leser und Coach-Fortschreibung; vorhandene Formel-Ziele erhalten den SPEC_01-Fallback 30 g/Tag",
       "depends_on": ["463_goals_progress_photos", "381"]
+    },
+    {
+      "id": "465_marketplace_training_delivery",
+      "path": "supabase/migrations/20260909280000_c465_marketplace_training_delivery.sql",
+      "kind": "sql",
+      "creates": "C-465: getrennte, idempotente Training-Programmauslieferung mit referenzieller Zuweisung und widerrufbarer Lizenz",
+      "depends_on": ["464_nutrition_fiber_target", "419", "461_program_day_owner_guard"]
     }
   ]
 }
