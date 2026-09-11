@@ -7,7 +7,7 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-425
 entscheidung: null
-agent: codex
+agent: claudecode
 beauftragt: 2026-09-08
 beruehrt:
   tabellen: [training.muscle_groups]

@@ -6,8 +6,7 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 213 |
-| `laufend_codex` | 1 |
-| `laufend_claudecode` | 5 |
+| `laufend_claudecode` | 6 |
 | `erledigt` | 411 |
 | **gesamt** | **630** |
 
@@ -616,7 +615,7 @@
 | `C-446` | befund | hoch | [eine Migration fehlt in der Kette](erledigt/quer-c-0446-eine-migration-fehlt-in-der-kette.md) | erledigt | — | C-447 |
 | `C-447` | befund | hoch | [die drei Live-Luecken schliessen](erledigt/quer-c-0447-die-drei-live-luecken-schliessen.md) | erledigt | — | C-448 |
 | `C-448` | entscheidung | mittel | [acht tote Migrationen](erledigt/quer-c-0448-acht-tote-migrationen.md) | erledigt | — | — |
-| `C-468` | entscheidung | hoch | [eine Muskelhierarchie fuer alle Karten](laufend_codex/quer-c-0468-eine-muskelhierarchie-fuer-alle-karten.md) | laeuft (codex) | — | — |
+| `C-468` | entscheidung | hoch | [eine Muskelhierarchie fuer alle Karten](laufend_claudecode/quer-c-0468-eine-muskelhierarchie-fuer-alle-karten.md) | laeuft (claudecode) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
