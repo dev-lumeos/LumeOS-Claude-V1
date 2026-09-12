@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 220 |
+| `todos` | 226 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 416 |
-| **gesamt** | **637** |
+| **gesamt** | **643** |
 
 ## medical — 48
 
@@ -398,7 +398,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 21
+## training — 25
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -411,6 +411,9 @@
 | `C-330` | befund | niedrig | [geplante Sitzungen tragen eine Endzeit](todos/training-c-0330-planned-sitzungen-mit-endzeit.md) | offen | — | — |
 | `C-340` | feature | niedrig | [ein Training-Gesamtscore, vorgesehen](todos/training-c-0340-ein-Training-Gesamtscore-vorgesehen.md) | offen | — | — |
 | `C-461` | feature | hoch | [Programme und Plaene](erledigt/training-c-0461-programme-und-plaene.md) | erledigt | — | — |
+| `C-474` | feature | hoch | [Progressionsregeln fuer Programme](todos/training-c-0474-progressionsregeln.md) | offen | — | — |
+| `C-476` | befund | hoch | [hat LumeOS dieselben Katalogfehler?](todos/training-c-0476-die-exercise-ontologie-pruefen.md) | offen | — | — |
+| `C-477` | feature | hoch | [Provenienz je Uebungsasset](todos/training-c-0477-provenienz-je-asset.md) | offen | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
@@ -423,6 +426,7 @@
 | `G-217` | feature | mittel | [der Trainings-Schreibweg hat keine Oberflaeche](erledigt/training-g-0217-trainingsformular-fehlt.md) | erledigt | — | G-219 |
 | `G-219` | entscheidung | niedrig | [`LiveWorkout` hat keinen Aufrufer mehr](todos/training-g-0219-liveworkout-ohne-aufrufer.md) | offen | — | — |
 | `G-366` | feature | mittel | [die Uebungsliste der Sitzung](erledigt/training-g-0366-die-uebungsliste-der-sitzung.md) | erledigt | — | — |
+| `G-429` | befund | mittel | [wer rechnet estimated_1rm, und verweigert er?](todos/training-g-0429-einrm-mit-verweigerung.md) | offen | — | — |
 
 ## recovery — 28
 
@@ -535,7 +539,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 150
+## quer — 151
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -622,6 +626,7 @@
 | `C-471` | fehler | hoch | [die Struktur gehoert nach migrations/](erledigt/quer-c-0471-die-struktur-nach-migrations.md) | erledigt | — | C-472 |
 | `C-472` | fehler | hoch | [der Datenlogik-Waechter ist rot](todos/quer-c-0472-der-datenlogik-waechter-ist-rot.md) | offen | — | — |
 | `C-473` | befund | hoch | [fuenf Abweichungen, die der Waechter jetzt sieht](todos/quer-c-0473-fuenf-abweichungen-im-waechter.md) | offen | — | — |
+| `C-478` | befund | hoch | [hat LumeOS ein Mehrgeraete-Problem?](todos/quer-c-0478-mehrgeraete-synchronisation.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -689,6 +694,12 @@
 | `G-424` | befund | mittel | [latissimus ist waehlbar und nicht zeichenbar](todos/quer-g-0424-latissimus-waehlbar-nicht-zeichenbar.md) | offen | — | G-425 |
 | `G-425` | befund | hoch | [die sechs Pfade einzeln sehen](erledigt/quer-g-0425-die-sechs-pfade-einzeln-sehen.md) | erledigt | — | C-468 |
 | `G-427` | befund | hoch | [sechzehn Orte gegen einundzwanzig Flaechen](todos/quer-g-0427-sechzehn-orte-gegen-einundzwanzig-flaechen.md) | offen | — | — |
+
+## buddy — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `C-475` | entscheidung | hoch | [Guardrails fuer den KI-Coach](todos/buddy-c-0475-guardrails-fuer-den-coach.md) | offen | — | — |
 
 ## market — 3
 

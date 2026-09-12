@@ -20,282 +20,98 @@ nicht in diese Uebersicht.
 
 # Hoch
 
-## C-468 — eine Muskelhierarchie fuer alle Karten
+## C-475 — Guardrails fuer den KI-Coach
 
-**Modul:** quer · **angelegt:** 2026-09-08 · **Datei:** `laufend_codex/quer-c-0468-eine-muskelhierarchie-fuer-alle-karten.md`
+**Modul:** buddy · **angelegt:** 2026-09-08 · **Datei:** `todos/buddy-c-0475-guardrails-fuer-den-coach.md`
 
-## Toms Vorgabe
+## Woher
 
-Tom, 2026-09-08:
+`[cmd]` **Due Diligence openGym, Abschnitt 09.**
 
-> ich denke, wenn wir gruppieren, dann muessen wir mit
-> parent/child arbeiten ? denn ein bodybuilder nutzt uebungen fuer
-> einzelne muskeln sowie gebuendelt.
+`[read]` **Das Fremdprojekt bekommt 7/10 fuer KI-Safety und 3/10
+fuer Wissensqualitaet** ? **die Muster sind gut, die Grundlage
+nicht.**
 
-> das gilt auch fuer recovery, ueberall wo wir die maps
-> einsetzen.
+## Die acht Muster
 
-## Die Hierarchie EXISTIERT schon
+    1  Allowlist-Payload
+       Plan, Training, Koerpergewicht, Einschraenkungen,
+       Praeferenzen -- NUR nach Kategorie-Einwilligung
 
-`[cmd]` **`training.muscle_groups`: 95 Zeilen, 7 Wurzeln, 88
-Kinder, mit `parent_id`.**
+    2  pseudonymer Handle
+       Nutzer-ID, Name, Passkeys, Push-Daten, andere
+       Profile ausgeschlossen
 
-    Back, Chest, Core, Arms, Legs,
-    Neck Muscles, Shoulders
+    3  striktes JSON-Schema
+       geschlossene Liste von 18 Aenderungstypen
 
-`[cmd]` **Unter `Back` haengen NEUN:**
+    4  nur bekannte IDs
+       eine unbekannte Exercise-ID macht den GANZEN
+       Vorschlag ungueltig
 
-    Mid Back, Upper Back, Lower Back,
-    Trapezius, Rhomboids, Teres Major,
-    levator scapulae, erector spinae,
-    latissimus dorsi
+    5  All-or-nothing
+       genau EIN Repair-Versuch
 
-`[read]` **Genau die Muskeln, die `muskel-ebenen.ts` auf EINE
-Flaeche wirft.**
+    6  Plan-Fingerprint
+       gegen Vorschlaege auf veraltetem Stand
 
-## Drei Beschreibungen desselben Koerpers
+    7  Snapshot und Undo
 
-    training.muscle_groups     7 Wurzeln, 88 Kinder
-                               echte Hierarchie
-    muskel-zuordnung.ts       18 Gruppen, 17 Teilstuecke
-                               EINE Ebene
-    koerperkarte-pfade.ts     21 Flaechen
-                               flach
+    8  begrenzte Reichweite
+       der Coach aendert Plan und Routinen,
+       NICHT Historie, Koerpergewicht oder Einstellungen
 
-`[cmd]` **Und `muskel-zuordnung.ts` nennt `upper-back` woertlich
-*,,Oberer Ruecken (mit Latissimus)"*** ? **der Name gibt zu, dass
-er zwei Sachen zusammenfasst.**
+## Was LumeOS heute hat
 
-## Wo die Karte ueberall steht
+`[cmd]` **`coach.pending_actions`** ? **Vorschlag mit
+10-Minuten-Frist, wartet auf Bestaetigung des Klienten.**
 
-`[cmd]` **Gemessen, 19 Dateien:**
+`[cmd]` **F-06 4.3:** *,,Der Coach schreibt nie direkt."*
 
-    packages/ui/koerperkarte-pfade.ts    64,8 KB
-    packages/ui/koerperkarte.tsx         25,2
-    recovery/motor.ts                    34,2
-    recovery/mockup-referenz.tsx         63,6
-    recovery/muskel-zuordnung.ts         12,2
-    recovery/muskel-ebenen.ts             8,7
-    recovery/koerperkarte.tsx             5,6
-    recovery/tab-checkin.tsx             13,7
-    supplements/tab-injektionen.tsx      31,8
-    lib/medical/injektion-flaechen.ts     9,8
-    lib/medical/koerperflaechen.ts        2,6
-    coach/ai/orb.tsx                      2,8
+`[read]` **Das deckt Muster 8 ab** ? **die Reichweite ist
+begrenzt.**
 
-`[read]` **Recovery, Supplements, Medical, Coach** ? **vier
-Module an derselben Karte.**
+`[read]` **Die anderen sieben fehlen.**
 
-## Was der Bodybuilder braucht
+## Was besonders zaehlt
 
-    "Ruecken trainiert"       -> Back            Elternteil
-    "Latissimus trainiert"    -> latissimus dorsi  Kind
-    "Rhomboiden verspannt"    -> Rhomboids         Kind
+**Muster 4** ? **eine unbekannte ID macht den ganzen Vorschlag
+ungueltig.**
 
-`[read]` **Mit `parent_id` geht beides aus derselben Quelle** ?
-**die Karte faerbt das Kind, die Auswertung summiert ueber den
-Elternteil.**
+`[read]` **Nicht *,,die eine Uebung weglassen"*** ? **der ganze
+Vorschlag faellt.**
 
-## Was fehlt: die Bruecke
+`[read]` **Weil ein halb angewandter Plan schlimmer ist als
+keiner.**
 
-`[cmd]` **`muscle_groups` hat keine Pfade.**
-`[cmd]` **`koerperkarte-pfade.ts` hat keine Hierarchie.**
+**Muster 6** ? **der Fingerprint.**
 
-`[read]` **Jeder Pfad muesste auf eine `muscle_groups.id`
-zeigen.**
+`[read]` **Ein Vorschlag, der auf einem alten Plan beruht, darf
+nicht auf den neuen angewandt werden.**
 
-`[cmd]` **G-425 liefert gerade, WELCHER Pfad welcher Muskel
-ist** ? **danach ist die Zuordnung machbar.**
+`[cmd]` **`pending_actions` hat eine FRIST (10 Minuten), aber
+keinen Fingerprint** ? **wer in der Frist den Plan aendert,
+bekommt den Vorschlag trotzdem.**
+
+## Und die Schmerzregel
+
+`[cmd]` **Das Fremdprojekt:** *,,konservativ bleiben, schmerzhafte
+Bewegung meiden, professionelle Hilfe empfehlen, NICHT
+diagnostizieren."*
+
+`[cmd]` **LumeOS E-74** ? **dieselbe Regel, fuer Medical.**
+
+`[read]` **Sie gilt auch fuer Training.**
 
 ## Was zu entscheiden ist
 
-**1** ? **Wo lebt die Hierarchie?**
+`[read]` **Welche der acht Muster gelten fuer Buddy?**
 
-`[cmd]` **`training.muscle_groups` traegt sie heute** ? **aber die
-Karte gehoert `packages/ui`, und Recovery, Supplements und
-Medical lesen sie auch.**
+`[cmd]` **Buddy ist heute 42 von 42 Bauteilen** ? **alles
+Attrappe, keine Modellanbindung.**
 
-`[read]` **Ein Schema `training` als Quelle fuer Recovery ist ein
-Modulbruch** (SPEC_01: Schema-Isolation).
-
-`[read]` **Oder gehoert sie nach `public`?**
-
-**2** ? **Wie tief?**
-
-`[cmd]` **`muscle_groups` hat ZWEI Ebenen (Wurzel, Kind).**
-
-`[read]` **Die Karte braucht eine dritte: links und rechts.**
-
-`[cmd]` **`lat_l`/`lat_r` sind heute Punkte, keine Flaechen.**
-
-**3** ? **Was wird aus den 21 Flaechen?**
-
-`[read]` **`hair`, `head`, `hands`, `feet`, `ankles` sind keine
-Muskeln** ? **sie stehen in der Karte fuer Muskelkater, nicht
-fuer Training.**
-
-`[read]` **Eine Hierarchie mit einem Merkmal *,,ist Muskel"*
-traegt beides.**
-
-## G-425 hat gemessen, was in `upper-back` steckt
-
-`[cmd]` **Sechs Pfade, DREI Muskeln je Seite:**
-
-    Pfad 1 / 4    Teres major        klein, unter dem Deltoid
-    Pfad 2 / 5    Teres minor /      Sichel, seitlich
-                  oberer Lat-Rand
-    Pfad 3 / 6    Latissimus dorsi   gross, Achsel bis Taille
-
-`[cmd]` **Und die Rhomboiden, die `muskel-ebenen.ts` darauf
-wirft, sind in KEINEM der sechs.**
-
-`[read]` **Die Gruppe ist nicht anatomisch** ? **sie fasst drei
-Muskeln zusammen und behauptet zwei weitere, die sie nicht
-zeichnet.**
-
-## Die Unterscheidung, die G-425 gefunden hat
-
-`[cmd]` **Sieben Flaechen haben mehrere Pfade, in drei
-Faellen:**
-
-    EIN Muskel, mehrere Pfade
-      trapezius, triceps, lower-back
-      -> zusammenlassen
-
-    Spiegelpaare desselben Muskels
-      gluteal
-      -> links/rechts trennen
-
-    VERSCHIEDENE Muskeln
-      upper-back
-      -> aufteilen
-
-`[read]` **Ein Pfad ist eine Zeichenebene, kein Muskel** ?
-**`triceps` hat drei Koepfe und bleibt EIN Muskel.**
-
-`[read]` **Das ist der Massstab fuer die Hierarchie: nicht *,,wie
-viele Pfade"*, sondern *,,wie viele Muskeln"*.**
-
-## Und `lower-back` hat denselben Fehler
-
-> *,,Vier Pfade, die zusammen den Bereich zwischen Lat und
-> Gesaess zeichnen ? anatomisch der Erector spinae, aber die
-> Karte nennt ihn nach der Region."*
-
-`[cmd]` **`training.muscle_groups` fuehrt `erector spinae` als
-eigenes Kind von `Back`.**
-
-`[read]` **Die Hierarchie kennt den Muskel, die Karte nennt die
-Region.**
-
-## Toms Entscheidungen, 2026-09-08
-
-**1** ? **Wo lebt die Hierarchie?**
-
-> ja, das ist eine public komponente, wenn sie von mehreren
-> modulen benutzt wird
-
-`[read]` **Schema `public`** ? **nicht `training`.**
-
-**2** ? **Wie tief?**
-
-> ok, eine dritte
-
-`[read]` **Drei Ebenen:**
-
-    Wurzel   Back
-    Muskel   latissimus dorsi
-    Seite    links / rechts
-
-**3** ? **Was wird aus `hair`, `head`, `hands`, `feet`,
-`ankles`?**
-
-> brauchen wir, dass wir einen mensch erkennen
-
-`[read]` **Sie bleiben** ? **als Umriss, nicht als Muskel.**
-
-`[read]` **Ein Merkmal unterscheidet sie** ? **`ist_muskel` oder
-eine Art (`muskel | umriss`).**
-
-## ALLE 23 Flaechen, gemessen
-
-`[cmd]` **`koerperkarte-pfade.ts`, `MUSKELN`:**
-
-    Flaeche        side    front  back
-    ---------------------------------
-    chest          front       2     -
-    abs            front       8     -
-    obliques       front      16     -
-    biceps         front       2     -
-    triceps        both        2     6
-    deltoids       both        2     2
-    trapezius      both        2     2
-    neck           both        5     2
-    forearm        both        6     8
-    adductors      both        6     2
-    quadriceps     front       6     -
-    knees          front       4     -
-    tibialis       front       2     -
-    calves         both        4     8
-    upper-back     back        -     6
-    lower-back     back        -     4
-    gluteal        back        -     4
-    hamstring      back        -     8
-    head           both        1     1
-    hair           both        1     1
-    hands          both       12    11
-    ankles         both        4     2
-    feet           both        4     2
-
-`[read]` **G-425 hat nur `upper-back`, `lower-back`, `gluteal`,
-`trapezius` und `triceps` angesehen.**
-
-`[read]` **ACHTZEHN Flaechen sind ungeprueft** ? **darunter
-`obliques` mit 16 Pfaden, `hands` mit 23, `hamstring` mit 8,
-`calves` mit 12.**
-
-`[cmd]` **`obliques`: 16 Pfade auf EINER Flaeche** ? **die
-schraegen Bauchmuskeln sind zwei Muskeln je Seite (externus,
-internus), nicht sechzehn.**
-
-`[cmd]` **`hamstring`: 8 Pfade** ? **drei Muskeln je Seite
-(biceps femoris, semitendinosus, semimembranosus).**
-
-`[cmd]` **`calves`: 12 Pfade** ? **zwei Muskeln je Seite
-(gastrocnemius, soleus).**
-
-`[read]` **Jede Flaeche mit mehr als zwei Pfaden je Ansicht ist
-zu pruefen.**
-
-## Der Massstab aus G-425
-
-    EIN Muskel, mehrere Pfade     zusammenlassen
-    Spiegelpaare                  links/rechts trennen
-    VERSCHIEDENE Muskeln          aufteilen
-
-`[read]` **Ein Pfad ist eine Zeichenebene, kein Muskel.**
-
-## Was gebaut wird
-
-`[read]` **Eine Tabelle in `public`, drei Ebenen, mit
-`parent_id`.**
-
-`[cmd]` **`training.muscle_groups` traegt heute 7 Wurzeln und 88
-Kinder** ? **die Namen stehen schon, samt `latissimus dorsi`,
-`Rhomboids`, `Teres Major`, `erector spinae`.**
-
-`[read]` **Miss, ob sie uebernommen oder ersetzt wird.**
-
-`[read]` **Und je Eintrag ein Merkmal, ob es ein Muskel ist oder
-Umriss.**
-
-## Was NICHT gebaut wird
-
-`[read]` **Keine Pfadzuordnung** ? **welcher Pfad zu welchem
-Muskel gehoert, ist G-425 und ein UI-Auftrag.**
-
-`[read]` **`koerperkarte-pfade.ts` bleibt unberuehrt** ? **sie
-gehoert `packages/ui` und allen vier Modulen.**
+`[read]` **Die Guardrails gehoeren VOR die Anbindung** ? **nicht
+danach.**
 
 ---
 
