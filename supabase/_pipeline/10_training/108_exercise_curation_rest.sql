@@ -98,8 +98,8 @@ BEGIN
   IF v_exercises <> 1416 THEN
     RAISE EXCEPTION 'exercises: % statt 1416', v_exercises;
   END IF;
-  IF v_groups <> 95 THEN
-    RAISE EXCEPTION 'Muskelgruppen: % statt 95', v_groups;
+  IF v_groups <> 105 THEN
+    RAISE EXCEPTION 'Muskelgruppen: % statt 105', v_groups;
   END IF;
   IF v_links <> 6588 THEN
     RAISE EXCEPTION 'exercise_muscles: % statt 6588', v_links;

@@ -63,6 +63,29 @@ END $$;
 CREATE INDEX IF NOT EXISTS idx_muscle_groups_parent
   ON training.muscle_groups(parent_id);
 
+-- C-482: Die Grafik trennt diese zehn anatomisch benannten Straenge.
+-- `training.muscle_groups` ist ihr Katalog; es bleiben reine Sehnen und
+-- regionsbezogene Flaechen bewusst ausserhalb dieses Muskelkatalogs.
+--
+-- `Posterior Neck Muscles` benennt die zusammen gezeichnete
+-- Nackenmuskulatur. Eine Zuordnung nur auf Scalenes oder splenius capitis
+-- waere falsch praezise, weil die Vorlage diese Muskeln nicht trennt.
+INSERT INTO training.muscle_groups (name, name_display_en, body_region)
+VALUES
+  ('Vastus Lateralis', 'Vastus lateralis', 'legs'),
+  ('Vastus Medialis', 'Vastus medialis', 'legs'),
+  ('Gastrocnemius Lateral Head', 'Gastrocnemius lateral head', 'legs'),
+  ('Gastrocnemius Medial Head', 'Gastrocnemius medial head', 'legs'),
+  ('Triceps Brachii Long Head', 'Triceps brachii long head', 'arms'),
+  ('Triceps Brachii Lateral Head', 'Triceps brachii lateral head', 'arms'),
+  ('Triceps Brachii Medial Head', 'Triceps brachii medial head', 'arms'),
+  ('External Oblique', 'External oblique', 'core'),
+  ('Serratus Anterior', 'Serratus anterior', 'shoulders'),
+  ('Posterior Neck Muscles', 'Posterior neck muscles', NULL)
+ON CONFLICT (name) DO UPDATE
+  SET name_display_en = EXCLUDED.name_display_en,
+      body_region = EXCLUDED.body_region;
+
 CREATE TEMP TABLE muscle_group_merge (
   old_name TEXT PRIMARY KEY,
   canonical_name TEXT NOT NULL
@@ -248,6 +271,7 @@ INSERT INTO muscle_group_parent (child_name, parent_name) VALUES
   ('Infraspinatus', 'Rotator Cuff'),
   ('Subscapularis', 'Rotator Cuff'),
   ('Teres Minor', 'Rotator Cuff'),
+  ('Serratus Anterior', 'Shoulders'),
 
   -- chest
   ('Pectoralis Major', 'Chest'),
@@ -273,11 +297,15 @@ INSERT INTO muscle_group_parent (child_name, parent_name) VALUES
   ('Transverse Abdominis', 'Core'),
   ('Obliques', 'Core'),
   ('Internal Oblique', 'Obliques'),
+  ('External Oblique', 'Obliques'),
 
   -- arms
   ('Biceps', 'Arms'),
   ('Brachialis', 'Biceps'),
   ('Triceps', 'Arms'),
+  ('Triceps Brachii Long Head', 'Triceps'),
+  ('Triceps Brachii Lateral Head', 'Triceps'),
+  ('Triceps Brachii Medial Head', 'Triceps'),
   ('Forearms', 'Arms'),
   ('Brachioradialis', 'Forearms'),
   ('Forearm Flexors', 'Forearms'),
@@ -299,12 +327,16 @@ INSERT INTO muscle_group_parent (child_name, parent_name) VALUES
   -- legs
   ('Quadriceps', 'Legs'),
   ('Rectus Femoris', 'Quadriceps'),
+  ('Vastus Lateralis', 'Quadriceps'),
+  ('Vastus Medialis', 'Quadriceps'),
   ('Hamstrings', 'Legs'),
   ('Biceps Femoris', 'Hamstrings'),
   ('Semimembranosus', 'Hamstrings'),
   ('Semitendinosus', 'Hamstrings'),
   ('Calves', 'Lower Legs'),
   ('Soleus', 'Calves'),
+  ('Gastrocnemius Lateral Head', 'Calves'),
+  ('Gastrocnemius Medial Head', 'Calves'),
   ('Lower Legs', 'Legs'),
   ('Anterior Tibialis', 'Lower Legs'),
   ('Tibialis', 'Lower Legs'),
@@ -341,7 +373,8 @@ INSERT INTO muscle_group_parent (child_name, parent_name) VALUES
   -- neck: no body_region exists in the allowed list, but hierarchy still helps.
   ('Scalenes', 'Neck Muscles'),
   ('Sternocleidomastoid', 'Neck Muscles'),
-  ('splenius capitis', 'Neck Muscles')
+  ('splenius capitis', 'Neck Muscles'),
+  ('Posterior Neck Muscles', 'Neck Muscles')
 ON CONFLICT (child_name) DO UPDATE
 SET parent_name = EXCLUDED.parent_name;
 
@@ -363,6 +396,7 @@ DECLARE
   v_rotator_children int;
   v_delt_children int;
   v_quad_children int;
+  v_c482_children int;
   v_bad_regions int;
 BEGIN
   SELECT COUNT(*) INTO v_groups FROM training.muscle_groups;
@@ -400,6 +434,22 @@ BEGIN
   JOIN training.muscle_groups parent ON parent.id = child.parent_id
   WHERE parent.name = 'Quadriceps'
     AND child.name = 'Rectus Femoris';
+  SELECT COUNT(*) INTO v_c482_children
+  FROM (VALUES
+    ('Vastus Lateralis', 'Quadriceps'),
+    ('Vastus Medialis', 'Quadriceps'),
+    ('Gastrocnemius Lateral Head', 'Calves'),
+    ('Gastrocnemius Medial Head', 'Calves'),
+    ('Triceps Brachii Long Head', 'Triceps'),
+    ('Triceps Brachii Lateral Head', 'Triceps'),
+    ('Triceps Brachii Medial Head', 'Triceps'),
+    ('External Oblique', 'Obliques'),
+    ('Serratus Anterior', 'Shoulders'),
+    ('Posterior Neck Muscles', 'Neck Muscles')
+  ) AS erwartet(kind_name, eltern_name)
+  JOIN training.muscle_groups kind ON kind.name = erwartet.kind_name
+  JOIN training.muscle_groups eltern ON eltern.id = kind.parent_id
+    AND eltern.name = erwartet.eltern_name;
   SELECT COUNT(*) INTO v_bad_regions
   FROM training.muscle_groups
   WHERE (name = 'Biceps Femoris' AND body_region <> 'legs')
@@ -408,8 +458,8 @@ BEGIN
      OR (name = 'Hip Rotators' AND body_region <> 'legs')
      OR (name = 'Rear Deltoids' AND body_region <> 'shoulders');
 
-  IF v_groups <> 96 THEN
-    RAISE EXCEPTION 'Muskelgruppen: % statt 96', v_groups;
+  IF v_groups <> 106 THEN
+    RAISE EXCEPTION 'Muskelgruppen: % statt 106', v_groups;
   END IF;
   IF v_links <> 6624 THEN
     RAISE EXCEPTION 'exercise_muscles: % statt 6624', v_links;
@@ -435,11 +485,14 @@ BEGIN
   IF v_quad_children <> 1 THEN
     RAISE EXCEPTION 'Quadrizeps-Kinder: % statt 1', v_quad_children;
   END IF;
+  IF v_c482_children <> 10 THEN
+    RAISE EXCEPTION 'C-482-Elternbeziehungen: % statt 10', v_c482_children;
+  END IF;
   IF v_bad_regions <> 0 THEN
     RAISE EXCEPTION 'Regionskorrekturen unvollstaendig: %', v_bad_regions;
   END IF;
 
-  RAISE NOTICE 'OK: 96 Gruppen, 6624 Zuordnungen, % Hierarchiezeilen, 0 Waisen', v_parent_rows;
+  RAISE NOTICE 'OK: 106 Gruppen, 6624 Zuordnungen, % Hierarchiezeilen, 0 Waisen', v_parent_rows;
 END $$;
 
 COMMIT;
