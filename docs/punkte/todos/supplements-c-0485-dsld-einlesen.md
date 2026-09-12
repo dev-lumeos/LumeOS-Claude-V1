@@ -396,3 +396,59 @@ einem Seed oder aus DSLD kommt** ? **er will es finden.**
 `[cmd]` **Aber `Katalog 412` steht heute als Zahl im Reiter** ?
 **nach dem Import waeren es 220.000, und dann braucht die Suche
 ohnehin Filter.**
+
+## Marke UND Hersteller, 2026-09-08
+
+Tom: *,,hersteller oder brandname natuerlich auch."*
+
+`[cmd]` **DSLD fuehrt BEIDES, und sie unterscheiden sich:**
+
+    Product Overview.Brand Name     Vitamin World
+    Company Information.Company     Vitamin World, Inc.
+                        Country     U.S.
+                        Manufacturer  yes
+
+`[read]` **Die Marke steht auf der Packung, die Firma im
+Impressum** ? **oft derselbe Name mit Rechtsform, manchmal
+nicht.**
+
+`[cmd]` **Und je Produkt koennen MEHRERE Firmen stehen** ?
+Hersteller, Haendler, Packer, Wiederverkaeufer.
+
+### Was C-467 braucht
+
+`[cmd]` **`suppliers` hat heute:** `name`, `land`, `website`,
+`notiz`, `is_active`, `source`.
+
+`[read]` **Toms fruehere Antwort war:** *,,uns egal, ob
+hersteller oder haendler ? fuer uns ein supplier."*
+
+`[read]` **Das bleibt richtig fuer die TABELLE** ? **eine Firma
+ist eine Firma.**
+
+`[read]` **Aber die ROLLE gehoert an die Verbindung:**
+
+    supplier_products
+      marke            "Vitamin World"      <- NEU
+      supplier_id      -> Vitamin World, Inc.
+
+    product_suppliers  (Verbindungstabelle)  <- NEU?
+      product_id, supplier_id, rolle
+      rolle: hersteller | haendler | packer |
+             wiederverkaeufer | sonst
+
+`[cmd]` **Miss, wie oft ein Produkt mehr als eine Firma hat** ?
+**wenn es selten ist, reicht ein `supplier_id` plus `rolle`.**
+
+### Die Filter daraus
+
+    Marke        "Now Foods", "Thorne", ...
+    Firma        "Now Foods, Inc."
+    Rolle        Hersteller | Haendler
+    Land         U.S., ...
+
+`[read]` **Und die Marke ist der Filter, den ein NUTZER
+braucht** ? **niemand sucht nach *Vitamin World, Inc.*.**
+
+`[read]` **Die Firma ist der Filter fuer die Entwicklung** ?
+**und fuer die Frage, wer wirklich herstellt.**
