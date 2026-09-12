@@ -5378,9 +5378,10 @@
         "needle_length_in",
         "notes",
         "stack_item_id",
-        "body_area_code"
+        "body_area_code",
+        "seite"
       ],
-      "spalten_herkunft": "C-445/C-455/E-79: beobachtete Planner-Werte, Katalog-/Stack-Verknuepfung und die massgebliche Muskelflaeche. Alte Werte werden nicht nacherfunden; neue Zeilen brauchen eine Flaeche.",
+      "spalten_herkunft": "C-445/C-455/E-79/C-484: beobachtete Planner-Werte, Katalog-/Stack-Verknuepfung, massgebliche Muskelflaeche und seitige Messung. Alte Werte werden nicht nacherfunden; neue Zeilen brauchen eine Flaeche.",
       "rls": true,
       "policies": [
         "SELECT",
@@ -5462,9 +5463,10 @@
         "needle_gauge",
         "needle_length_in",
         "created_at",
-        "updated_at"
+        "updated_at",
+        "seite"
       ],
-      "spalten_herkunft": "C-454/E-79: eigene Auswahl aus 21 Kartenflaechen je injizierbarer Substanz und Route; Nadeldaten koennen bewusst leer bleiben, wenn die Flaeche kein Fachkatalogwissen hat.",
+      "spalten_herkunft": "C-454/E-79/C-484: eigene Auswahl aus 21 Kartenflaechen je injizierbarer Substanz und Route; die Seite ist Teil der Auswahl, Nadeldaten koennen bewusst leer bleiben, wenn die Flaeche kein Fachkatalogwissen hat.",
       "rls": true,
       "policies": [
         "SELECT",

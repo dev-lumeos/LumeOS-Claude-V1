@@ -58,7 +58,7 @@ test('C-455: sechzehn Katalogorte tragen Planner-Konfiguration und Flächenzuord
       'mappings', (SELECT json_agg(ARRAY[id, body_area_code] ORDER BY id) FROM medical.injection_sites),
       'logColumns', (SELECT json_agg(column_name ORDER BY column_name)
         FROM information_schema.columns WHERE table_schema = 'medical' AND table_name = 'injection_logs'
-          AND column_name IN ('substance_id', 'dose_amount', 'dose_unit', 'needle_gauge', 'needle_length_in', 'notes', 'stack_item_id', 'body_area_code')),
+          AND column_name IN ('substance_id', 'dose_amount', 'dose_unit', 'needle_gauge', 'needle_length_in', 'notes', 'stack_item_id', 'body_area_code', 'seite')),
       'injectionSiteNullable', (SELECT is_nullable FROM information_schema.columns
         WHERE table_schema = 'medical' AND table_name = 'injection_logs' AND column_name = 'injection_site_id'),
       'logIndices', (SELECT json_agg(indexname ORDER BY indexname) FROM pg_indexes
@@ -73,7 +73,7 @@ test('C-455: sechzehn Katalogorte tragen Planner-Konfiguration und Flächenzuord
   assert.equal(result.allConfigured, 16)
   assert.equal(result.minimumRestStillNull, 16)
   assert.deepEqual(result.mappings, SITES)
-  assert.deepEqual(result.logColumns, ['body_area_code', 'dose_amount', 'dose_unit', 'needle_gauge', 'needle_length_in', 'notes', 'stack_item_id', 'substance_id'])
+  assert.deepEqual(result.logColumns, ['body_area_code', 'dose_amount', 'dose_unit', 'needle_gauge', 'needle_length_in', 'notes', 'seite', 'stack_item_id', 'substance_id'])
   assert.equal(result.injectionSiteNullable, 'YES')
   assert.deepEqual(result.logIndices, [
     'injection_logs_pkey', 'injection_logs_user_injected_at_idx',

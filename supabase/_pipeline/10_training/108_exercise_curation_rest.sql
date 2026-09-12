@@ -123,7 +123,8 @@ BEGIN
     RAISE EXCEPTION 'Primary/Secondary-Doppelrollen noch vorhanden: %', v_dual_roles;
   END IF;
 
-  RAISE NOTICE 'OK: 1416 Uebungen, 95 Gruppen, 6588 Zuordnungen, 0 Waisen, 0 Doppelrollen';
+  RAISE NOTICE 'OK: % Uebungen, % Gruppen, % Zuordnungen, 0 Waisen, 0 Doppelrollen',
+    v_exercises, v_groups, v_links;
 END $$;
 
 COMMIT;

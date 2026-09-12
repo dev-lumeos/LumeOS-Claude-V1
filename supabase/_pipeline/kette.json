@@ -1915,6 +1915,26 @@
       "depends_on": [
         "479_koerperflaechen_aufteilung_struktur"
       ]
+    },
+    {
+      "id": "484_koerperflaechen_e81_struktur",
+      "path": "supabase/migrations/20260912001700_c484_koerperflaechen_e81.sql",
+      "kind": "sql",
+      "creates": "C-484/E-81: parent_id statt fester Ebene, art-Vertrag inklusive kopf sowie seitige Auswahl- und Injektionsmesswerte; keine Katalogdaten.",
+      "depends_on": [
+        "479_koerperflaechen_aufteilung_daten",
+        "454_configured_injection_areas"
+      ]
+    },
+    {
+      "id": "484_koerperflaechen_e81_daten",
+      "path": "supabase/_pipeline/00_querschnitt/484_koerperflaechen_e81.sql",
+      "kind": "sql",
+      "creates": "C-484/E-81: 43 Kartenflaechen, acht Wurzeln und keine 34 Seitenzeilen; zehn C-482-Muskelgruppen werden vorausgesetzt.",
+      "depends_on": [
+        "484_koerperflaechen_e81_struktur",
+        "108"
+      ]
     }
   ]
 }

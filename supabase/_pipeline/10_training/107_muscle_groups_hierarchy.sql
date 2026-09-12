@@ -398,6 +398,7 @@ DECLARE
   v_quad_children int;
   v_c482_children int;
   v_bad_regions int;
+  v_achilles int;
 BEGIN
   SELECT COUNT(*) INTO v_groups FROM training.muscle_groups;
   SELECT COUNT(*) INTO v_links FROM training.exercise_muscles;
@@ -458,11 +459,18 @@ BEGIN
      OR (name = 'Hip Rotators' AND body_region <> 'legs')
      OR (name = 'Rear Deltoids' AND body_region <> 'shoulders');
 
-  IF v_groups <> 106 THEN
-    RAISE EXCEPTION 'Muskelgruppen: % statt 106', v_groups;
-  END IF;
-  IF v_links <> 6624 THEN
-    RAISE EXCEPTION 'exercise_muscles: % statt 6624', v_links;
+  -- 107 steht in der Kette vor 108. Fuer den gezielten Live-Nachzug
+  -- von C-482 laeuft er aber nach 108 erneut: Dann fehlen Achilles
+  -- Tendon und seine 36 bereinigten Zuordnungen bereits, ohne dass die
+  -- Hierarchie selbst unvollstaendig waere.
+  SELECT count(*) INTO v_achilles
+  FROM training.muscle_groups WHERE name = 'Achilles Tendon';
+
+  IF (v_achilles = 1 AND (v_groups <> 106 OR v_links <> 6624))
+     OR (v_achilles = 0 AND (v_groups <> 105 OR v_links <> 6588))
+     OR v_achilles > 1 THEN
+    RAISE EXCEPTION '107: Achilles %, Muskelgruppen %, exercise_muscles %',
+      v_achilles, v_groups, v_links;
   END IF;
   IF v_orphans <> 0 THEN
     RAISE EXCEPTION 'Waisen in exercise_muscles: %', v_orphans;
@@ -492,7 +500,8 @@ BEGIN
     RAISE EXCEPTION 'Regionskorrekturen unvollstaendig: %', v_bad_regions;
   END IF;
 
-  RAISE NOTICE 'OK: 106 Gruppen, 6624 Zuordnungen, % Hierarchiezeilen, 0 Waisen', v_parent_rows;
+  RAISE NOTICE 'OK: Achilles %, % Gruppen, % Zuordnungen, % Hierarchiezeilen, 0 Waisen',
+    v_achilles, v_groups, v_links, v_parent_rows;
 END $$;
 
 COMMIT;
