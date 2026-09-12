@@ -105,6 +105,17 @@ export type AstMitWert = Omit<Ast, 'kinder'> & {
   /** Der eigene Wert, `null` wenn keiner zugeordnet ist. */
   wert: number | null
   /**
+   * Ist `wert` von einer GRUPPE geliehen? Dann steht hier deren
+   * Name, sonst `null`.
+   *
+   * **Tom (G-438):** *„‚Wert von Triceps' steht AM KIND, nicht nur
+   * die Zahl. Sonst sieht es aus wie eine eigene Messung."*
+   *
+   * `[cmd]` **Ein geliehener Wert geht WEDER in den Schnitt NOCH
+   * in den Engpass** — beides waere eine Scheinaussage.
+   */
+  vonGruppe: string | null
+  /**
    * Der Schnitt ueber die Kinder MIT Wert — `null`, wenn keines
    * einen hat.
    *
@@ -138,18 +149,31 @@ export type AstMitWert = Omit<Ast, 'kinder'> & {
  * Kinder — ein Engpass zwei Ebenen tiefer ist derselbe Engpass.
  */
 export function mitWerten(
-  aeste: Ast[], wertVon: (a: Ast) => number | null,
+  aeste: Ast[],
+  wertVon: (a: Ast) => number | null | { wert: number; vonGruppe: string },
 ): AstMitWert[] {
   function rechne(a: Ast): AstMitWert {
     const kinder = a.kinder.map(rechne)
-    const wert = wertVon(a)
+    const roh = wertVon(a)
+    // `[read]` **Ein Zahlwert ist gemessen, ein Objekt geliehen.**
+    const wert = typeof roh === 'number' ? roh : roh?.wert ?? null
+    const vonGruppe = typeof roh === 'object' && roh ? roh.vonGruppe : null
 
     // ══ Der Schnitt: nur direkte Kinder MIT Wert ═════════════════
     //
     // `[read]` **Ueber die DIREKTEN Kinder**, nicht ueber alle
     // Nachfahren — sonst zaehlte ein tief verzweigter Zweig
     // schwerer als ein flacher.
+    // ══ AUFLAGE 2 (Tom, G-438): geliehene Werte zaehlen NICHT ═══
+    //
+    // **Tom:** *„Triceps Ø ueber drei Koepfe, die alle 41% von
+    // Triceps geliehen haben, gibt 41% — eine Scheinrechnung."*
+    //
+    // `[read]` **Ein geliehener Wert ist keine eigene Messung** —
+    // er in den Schnitt zu nehmen hiesse, den Wert der Gruppe
+    // gegen sich selbst zu mitteln.
     const mitZahl = kinder
+      .filter(k => !k.vonGruppe)
       .map(k => k.wert ?? k.schnitt)
       .filter((z): z is number => z != null)
     const schnitt = mitZahl.length > 0
@@ -161,8 +185,17 @@ export function mitWerten(
     for (const k of kinder) {
       // Der eigene Wert des Kindes zaehlt, und der Engpass, den es
       // selbst meldet — so faellt ein Enkel nicht durch.
+      // ══ AUFLAGE 3 (Tom, G-438): geliehen ist KEIN Engpass ═══
+      //
+      // **Tom:** *„Wenn die Trizepskoepfe 41% geliehen tragen,
+      // duerfen sie nicht als ‚schwaechstes: Triceps Br. Long
+      // Head' erscheinen."*
+      //
+      // `[read]` **Ein Engpass ist eine Aussage ueber einen
+      // gemessenen Muskel** — ein geliehener Wert sagt nur, dass
+      // die GRUPPE dort steht, und die meldet sich selbst.
       const kandidaten = [
-        k.wert != null ? { name: k.name, wert: k.wert } : null,
+        k.wert != null && !k.vonGruppe ? { name: k.name, wert: k.wert } : null,
         k.engpass,
       ].filter((x): x is { name: string; wert: number } => x != null)
       for (const c of kandidaten) {
@@ -170,7 +203,10 @@ export function mitWerten(
       }
     }
 
-    return { ...a, kinder, wert, schnitt, schnittAus: mitZahl.length, engpass }
+    return {
+      ...a, kinder, wert, vonGruppe, schnitt,
+      schnittAus: mitZahl.length, engpass,
+    }
   }
   return aeste.map(rechne)
 }

@@ -43,8 +43,12 @@ test('G-436: die drei Zustaende sind gezaehlt, nicht geschaetzt', () => {
 
   // `[cmd]` **Gemessen 2026-09-12** — wer diese Zahlen aendert,
   // aendert die Ansicht.
-  assert.equal(gezeichnet, 22,
-    `${gezeichnet} Muskelnamen sind gezeichnet, erwartet 22. `
+  // `[cmd]` **G-438: 22 -> 31.** **C-482 lieferte neun Namen**, die
+  // in `ebenen.ts` als `name: null` standen — solange sie namenlos
+  // waren, faerbte die Karte sie und die Liste hatte keine Zeile
+  // dafuer (Toms Befund).
+  assert.equal(gezeichnet, 31,
+    `${gezeichnet} Muskelnamen sind gezeichnet, erwartet 31. `
     + 'Neue Flaeche in `ebenen.ts`? Dann hier nachziehen.')
   assert.ok(mitWert > 0,
     'KEIN gezeichneter Muskel faellt auf ein Kuerzel mit Wert — '

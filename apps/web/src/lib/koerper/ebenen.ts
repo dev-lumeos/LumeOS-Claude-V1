@@ -180,14 +180,16 @@ export const EBENEN: Record<string, Ebene> = {
     art: 'muskel', kinder: [],
   },
   'vastus-lateralis': {
-    name: null, weg: [], art: 'muskel', kinder: [],
-    grund: 'Die Grafik zeichnet ihn getrennt, muscle_groups führt ihn '
-      + 'nicht — Lücke im Katalog, kein Grund zusammenzulassen.',
+    name: 'Vastus Lateralis',
+    weg: ['Legs', 'Quadriceps', 'Vastus Lateralis'],
+    art: 'muskel', kinder: [],
+    grund: 'C-482 hat diesen Namen geliefert — der frühere Vermerk „hat in muscle_groups keinen Namen" ist überholt. Eigenes Volumen: 0 (C-487), der Wert wird deshalb von der Gruppe geliehen und in der Liste als solcher ausgewiesen.',
   },
   'vastus-medialis': {
-    name: null, weg: [], art: 'muskel', kinder: [],
-    grund: 'Die Grafik zeichnet ihn getrennt, muscle_groups führt ihn '
-      + 'nicht — Lücke im Katalog, kein Grund zusammenzulassen.',
+    name: 'Vastus Medialis',
+    weg: ['Legs', 'Quadriceps', 'Vastus Medialis'],
+    art: 'muskel', kinder: [],
+    grund: 'C-482 hat diesen Namen geliefert — der frühere Vermerk „hat in muscle_groups keinen Namen" ist überholt. Eigenes Volumen: 0 (C-487), der Wert wird deshalb von der Gruppe geliehen und in der Liste als solcher ausgewiesen.',
   },
   'adductor-longus': {
     name: 'Adductor Longus', weg: ['Legs', 'Adductors', 'Adductor Longus'],
@@ -202,14 +204,16 @@ export const EBENEN: Record<string, Ebene> = {
     art: 'muskel', kinder: [],
   },
   'gastrocnemius-lateralis': {
-    name: null, weg: [], art: 'muskel', kinder: [],
-    grund: 'Der laterale Gastrocnemius-Kopf — muscle_groups führt nur '
-      + '`Calves` und `Soleus`, die Köpfe nicht.',
+    name: 'Gastrocnemius Lateral Head',
+    weg: ['Legs', 'Lower Legs', 'Calves', 'Gastrocnemius Lateral Head'],
+    art: 'muskel', kinder: [],
+    grund: 'C-482 hat diesen Namen geliefert — der frühere Vermerk „hat in muscle_groups keinen Namen" ist überholt. Eigenes Volumen: 0 (C-487), der Wert wird deshalb von der Gruppe geliehen und in der Liste als solcher ausgewiesen.',
   },
   'gastrocnemius-medialis': {
-    name: null, weg: [], art: 'muskel', kinder: [],
-    grund: 'Der mediale Gastrocnemius-Kopf — muscle_groups führt nur '
-      + '`Calves` und `Soleus`, die Köpfe nicht.',
+    name: 'Gastrocnemius Medial Head',
+    weg: ['Legs', 'Lower Legs', 'Calves', 'Gastrocnemius Medial Head'],
+    art: 'muskel', kinder: [],
+    grund: 'C-482 hat diesen Namen geliefert — der frühere Vermerk „hat in muscle_groups keinen Namen" ist überholt. Eigenes Volumen: 0 (C-487), der Wert wird deshalb von der Gruppe geliehen und in der Liste als solcher ausgewiesen.',
   },
   // `[read]` **Eine SEHNE, kein Muskel** — Tom: *„sehnen brauchen wir
   // dann anwaehlbar fuer painpoints."*
@@ -229,14 +233,16 @@ export const EBENEN: Record<string, Ebene> = {
       + 'Painpoints, kein eigener Muskel.',
   },
   'serratus-anterior': {
-    name: null, weg: [], art: 'muskel', kinder: [],
-    grund: 'Die Grafik zeichnet ihn getrennt (Toms Zuordnung), '
-      + 'muscle_groups führt ihn nicht.',
+    name: 'Serratus Anterior',
+    weg: ['Shoulders', 'Serratus Anterior'],
+    art: 'muskel', kinder: [],
+    grund: 'C-482 hat diesen Namen geliefert — der frühere Vermerk „hat in muscle_groups keinen Namen" ist überholt. Eigenes Volumen: 0 (C-487), der Wert wird deshalb von der Gruppe geliehen und in der Liste als solcher ausgewiesen.',
   },
   'external-oblique': {
-    name: null, weg: [], art: 'muskel', kinder: [],
-    grund: 'muscle_groups führt `Obliques` als Gruppe und `Internal '
-      + 'Oblique` als Kind — der Externus fehlt als eigener Name.',
+    name: 'External Oblique',
+    weg: ['Core', 'Obliques', 'External Oblique'],
+    art: 'muskel', kinder: [],
+    grund: 'C-482 hat diesen Namen geliefert — der frühere Vermerk „hat in muscle_groups keinen Namen" ist überholt. Eigenes Volumen: 0 (C-487), der Wert wird deshalb von der Gruppe geliehen und in der Liste als solcher ausgewiesen.',
   },
 
   // ══ G-433 Nachtrag: Arme und Hals ══════════════════════════════
@@ -250,19 +256,22 @@ export const EBENEN: Record<string, Ebene> = {
   // drei Koepfe haben dort keinen Namen. **Die Grafik trennt sie
   // trotzdem**, also werden sie getrennt und die Luecke ausgewiesen.
   'triceps-longum': {
-    name: null, weg: [], art: 'muskel', kinder: [],
-    grund: 'Caput longum — muscle_groups führt `Triceps` als Blatt, '
-      + 'die drei Köpfe haben dort keinen Namen.',
+    name: 'Triceps Brachii Long Head',
+    weg: ['Arms', 'Triceps', 'Triceps Brachii Long Head'],
+    art: 'muskel', kinder: [],
+    grund: 'C-482 hat diesen Namen geliefert — der frühere Vermerk „hat in muscle_groups keinen Namen" ist überholt. Eigenes Volumen: 0 (C-487), der Wert wird deshalb von der Gruppe geliehen und in der Liste als solcher ausgewiesen.',
   },
   'triceps-lateralis': {
-    name: null, weg: [], art: 'muskel', kinder: [],
-    grund: 'Caput laterale — muscle_groups führt `Triceps` als Blatt, '
-      + 'die drei Köpfe haben dort keinen Namen.',
+    name: 'Triceps Brachii Lateral Head',
+    weg: ['Arms', 'Triceps', 'Triceps Brachii Lateral Head'],
+    art: 'muskel', kinder: [],
+    grund: 'C-482 hat diesen Namen geliefert — der frühere Vermerk „hat in muscle_groups keinen Namen" ist überholt. Eigenes Volumen: 0 (C-487), der Wert wird deshalb von der Gruppe geliehen und in der Liste als solcher ausgewiesen.',
   },
   'triceps-mediale': {
-    name: null, weg: [], art: 'muskel', kinder: [],
-    grund: 'Caput mediale — muscle_groups führt `Triceps` als Blatt, '
-      + 'die drei Köpfe haben dort keinen Namen.',
+    name: 'Triceps Brachii Medial Head',
+    weg: ['Arms', 'Triceps', 'Triceps Brachii Medial Head'],
+    art: 'muskel', kinder: [],
+    grund: 'C-482 hat diesen Namen geliefert — der frühere Vermerk „hat in muscle_groups keinen Namen" ist überholt. Eigenes Volumen: 0 (C-487), der Wert wird deshalb von der Gruppe geliehen und in der Liste als solcher ausgewiesen.',
   },
   // `[cmd]` **Hier fuehrt `muscle_groups` die Namen** — Beuger und
   // Strecker als Untergruppen von `Forearms`.

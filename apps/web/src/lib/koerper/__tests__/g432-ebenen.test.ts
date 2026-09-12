@@ -81,17 +81,35 @@ test('G-433: wo der Name fehlt, steht der GRUND', () => {
   }
 })
 
-test('G-432: die drei Vastus stehen NICHT in EBENEN', () => {
-  // `[cmd]` **Die Gegenprobe zum Test darueber** — sie fangen
-  // einander: der eine verbietet Erfundenes, dieser nennt die
-  // konkreten Namen, um die es ging.
+test('G-438: nur Namen, die `muscle_groups` WIRKLICH fuehrt', () => {
+  // ══ G-438: die Zusage ist umgedreht, nicht gestrichen ═════════
+  //
+  // `[cmd]` **Hier stand: „die drei Vastus stehen NICHT in
+  // EBENEN"** — mit der Begruendung *„muscle_groups fuehrt ihn
+  // nicht, also gibt es ihn fuer LumeOS nicht."*
+  //
+  // `[cmd]` **C-482 hat `Vastus Lateralis` und `Vastus Medialis`
+  // geliefert** (gemessen `tools/_g438-zuordnung.mjs`,
+  // 2026-09-12). **Die Begruendung stimmt fuer sie nicht mehr** —
+  // und solange sie `name: null` trugen, waren ihre Flaechen
+  // gefaerbt und in der Liste leer. **Das war Toms Befund.**
+  //
+  // `[read]` **Die Regel dahinter gilt weiter und wird schaerfer:**
+  // **in `EBENEN` steht ein Name genau dann, wenn `muscle_groups`
+  // ihn fuehrt.** `[read]` **Der dritte Vastus zeigt, dass die
+  // Zusage noch beisst** — ihn gibt es dort NICHT.
   const alle = JSON.stringify(EBENEN).toLowerCase()
-  for (const erfunden of ['vastus lateralis', 'vastus medialis',
-    'vastus intermedius']) {
-    assert.ok(!alle.includes(erfunden),
-      `"${erfunden}" steht in EBENEN — muscle_groups fuehrt ihn nicht, `
-      + 'also gibt es ihn fuer LumeOS nicht.')
-  }
+
+  // Diese beiden MUESSEN jetzt dastehen.
+  assert.equal(EBENEN['vastus-lateralis']?.name, 'Vastus Lateralis',
+    'C-482 fuehrt den Namen — ohne ihn ist die Flaeche gefaerbt '
+    + 'und hat keine Listenzeile.')
+  assert.equal(EBENEN['vastus-medialis']?.name, 'Vastus Medialis')
+
+  // Dieser NICHT — `muscle_groups` kennt ihn nicht.
+  assert.ok(!alle.includes('vastus intermedius'),
+    '"Vastus Intermedius" steht in EBENEN — `muscle_groups` fuehrt '
+    + 'ihn NICHT (gemessen 2026-09-12), also waere er erfunden.')
 })
 
 test('G-432: `art` folgt den KINDERN, nicht der Tiefe', () => {
@@ -134,7 +152,10 @@ test('G-433: quadriceps ist in seine Straenge zerlegt', () => {
   // `[read]` **Nur der Rectus femoris hat einen Namen** — die zwei
   // Vastus sind ausgewiesene Luecken, keine erfundenen Namen.
   assert.equal(EBENEN['rectus-femoris']?.name, 'Rectus Femoris')
-  assert.equal(EBENEN['vastus-lateralis']?.name, null,
+  // `[cmd]` **G-438: hier stand `null`** — C-482 hat den Namen
+  // geliefert, und ohne ihn blieb die gefaerbte Flaeche ohne
+  // Listenzeile (Toms Befund).
+  assert.equal(EBENEN['vastus-lateralis']?.name, 'Vastus Lateralis',
     'Vastus lateralis steht NICHT in muscle_groups — der Name darf '
     + 'nicht erfunden werden.')
   assert.ok(EBENEN['vastus-lateralis']?.grund,
@@ -167,12 +188,29 @@ test('G-433: der Trizeps ist in seine drei Koepfe zerlegt', () => {
   //
   // `[cmd]` **Am Bild sind es drei getrennte Straenge je Arm** —
   // und der fehlende Name ist eine Luecke im Katalog, kein Grund.
-  for (const neu of ['triceps-longum', 'triceps-lateralis', 'triceps-mediale']) {
+  // ══ G-438: die Zusage ist umgedreht ═════════════════════════
+  //
+  // `[cmd]` **Hier stand `name: null`** mit der Begruendung
+  // *„muscle_groups fuehrt `Triceps` als Blatt."* **C-482 hat die
+  // drei Koepfe geliefert** — seither hat `Triceps` drei Kinder
+  // (gemessen 2026-09-12).
+  //
+  // `[read]` **Solange sie namenlos waren, faerbte die Karte sie
+  // und die Liste hatte keine Zeile dafuer** — genau Toms Befund
+  // *„arms triceps ist orange, zeigt aber keine werte"*.
+  const KOEPFE: Record<string, string> = {
+    'triceps-longum': 'Triceps Brachii Long Head',
+    'triceps-lateralis': 'Triceps Brachii Lateral Head',
+    'triceps-mediale': 'Triceps Brachii Medial Head',
+  }
+  for (const [neu, name] of Object.entries(KOEPFE)) {
     assert.ok(MUSKELN[neu], `Die Flaeche "${neu}" fehlt in der Karte.`)
-    assert.equal(EBENEN[neu]?.name, null,
-      `"${neu}" darf keinen erfundenen Namen tragen — muscle_groups `
-      + 'fuehrt `Triceps` als Blatt.')
-    assert.ok(EBENEN[neu]?.grund, 'Wo der Name fehlt, gehoert der Grund dazu.')
+    assert.equal(EBENEN[neu]?.name, name,
+      `"${neu}" traegt nicht den Namen aus muscle_groups — dann ist `
+      + 'die Flaeche gefaerbt und hat keine Listenzeile.')
+    assert.ok(EBENEN[neu]?.grund, 'Der Grund gehoert weiterhin dazu.')
+    assert.ok((EBENEN[neu]?.weg ?? []).includes('Triceps'),
+      `"${neu}" haengt im Baum nicht unter \`Triceps\`.`)
   }
   assert.ok(!MUSKELN.triceps,
     '`triceps` steht noch als eine Flaeche da — sie ist in G-433 zerlegt.')

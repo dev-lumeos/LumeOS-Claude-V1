@@ -42,6 +42,9 @@ import {
   baueBaum, mitWerten, type AstMitWert, type MuskelbaumStand,
 } from '../../../lib/koerper/muskelbaum'
 import { EBENEN } from '../../../lib/koerper/ebenen'
+// `[cmd]` **G-438: die fehlende Uebersetzung** —
+// motor.ts-Schluessel -> muscle_groups-Name.
+import { wertKommtVonGruppe } from '../../../lib/koerper/schluessel-gruppe'
 
 // ═══ MUSCLE MAP ══════════════════════════════════════════════════
 // [cmd] module-recovery-v2.jsx:378-443.
@@ -177,12 +180,24 @@ export function RecMuscleMap({ stand, muskelbaum }: {
             if (!st) return null
             const kater = echterKater?.[slug] ?? st.soreness
             const guete = echteSchlafguete ?? CHECKIN.sleep_quality
-            return calcMuscleRecovery({
+            const wert = calcMuscleRecovery({
               hours: st.hours, sets: st.sets, sleepQuality: guete,
               proteinPct: NUTRITION_INPUT.proteinPct,
               caloriePct: NUTRITION_INPUT.caloriePct,
               soreness: kater,
             }).value
+            // ══ G-438: woher kommt dieser Wert? ══════════════════
+            //
+            // **Tom:** *„arms triceps ist orange, zeigt aber keine
+            // werte in der liste."*
+            //
+            // `[cmd]` **Die Karte faerbt die drei KOEPFE, gemessen
+            // ist der ELTERNTEIL `Triceps`.** `[read]` **Wo der
+            // gezeichnete Muskel nicht die Gruppe IST, an der die
+            // Messung haengt, ist der Wert geliehen** — und die
+            // Zeile sagt es dazu.
+            const gruppe = wertKommtVonGruppe(a.name, slug)
+            return gruppe ? { wert, vonGruppe: gruppe } : wert
           })
 
           function zeile(a: AstMitWert): React.ReactNode {
@@ -216,10 +231,23 @@ export function RecMuscleMap({ stand, muskelbaum }: {
                   onClick={oeffne}
                   style={{
                     display: 'flex', alignItems: 'baseline', gap: 8,
-                    paddingTop: 3, paddingBottom: 3,
+                    // ══ G-438/A4: die Hauptgruppen abgrenzen ═════
+                    //
+                    // **Tom:** *„hauptgruppen sollen besser
+                    // ersichtlich sein und gegen naechste
+                    // hauptgruppe unterteilt sein."*
+                    //
+                    // `[read]` **Acht Wurzeln** — sie standen in
+                    // derselben Groesse wie ihre Kinder, `Arms` und
+                    // `Biceps` sahen gleich wichtig aus.
+                    paddingTop: a.ebene === 1 ? 10 : 3,
+                    paddingBottom: 3,
                     paddingLeft: (a.ebene - 1) * 14,
-                    fontSize: a.ebene <= 2 ? 12 : 11.5,
-                    fontWeight: a.kinder.length > 0 ? 600 : 400,
+                    fontSize: a.ebene === 1 ? 13.5 : a.ebene === 2 ? 12 : 11.5,
+                    fontWeight: a.ebene === 1 ? 700
+                      : a.kinder.length > 0 ? 600 : 400,
+                    letterSpacing: a.ebene === 1 ? '0.02em' : undefined,
+                    textTransform: a.ebene === 1 ? 'uppercase' as const : undefined,
                     cursor: oeffne ? 'pointer' : 'default',
                     // `[read]` **Nicht gezeichnet = grau** — der
                     // dritte Zustand, sichtbar verschieden von „--".
@@ -249,10 +277,20 @@ export function RecMuscleMap({ stand, muskelbaum }: {
                   {a.wert != null && (
                     <>
                       <span className="v2-num" style={{
-                        fontSize: 11, color: farbe, fontWeight: 600,
+                        fontSize: 11,
+                        color: a.vonGruppe ? 'var(--fg-muted)' : farbe,
+                        fontWeight: a.vonGruppe ? 400 : 600,
                         minWidth: 34, textAlign: 'right',
                       }}>{a.wert}%</span>
-                      {st && (
+                      {/* ══ G-438, Auflage 1 (Tom) ═══════════════
+                          *„‚Wert von Triceps' steht AM KIND, nicht
+                          nur die Zahl. Sonst sieht es aus wie eine
+                          eigene Messung."* */}
+                      {a.vonGruppe ? (
+                        <span className="v2-dim" style={{ fontSize: 9.5 }}>
+                          Wert von {a.vonGruppe}
+                        </span>
+                      ) : st && (
                         <span className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>
                           {sore != null ? `${sore}/3 · ` : ''}{st.hours} h
                         </span>
@@ -272,7 +310,19 @@ export function RecMuscleMap({ stand, muskelbaum }: {
                         fontSize: 11, minWidth: 34, textAlign: 'right',
                       }}>--</span>
                       <span className="v2-dim" style={{ fontSize: 9.5 }}>
-                        {a.flaeche ? 'kein Volumen zugeordnet' : 'nicht gezeichnet'}
+                        {/* ══ G-438: der VIERTE Grund ═══════════════
+                            `[cmd]` **Auflage 2 hat eine Nebenwirkung:**
+                            eine Gruppe, deren Kinder ihren Wert alle
+                            von ihr GELIEHEN haben, hat keinen Schnitt
+                            — richtig so, es waere eine Scheinrechnung.
+                            `[read]` **Aber dann stuende sie stumm da.**
+                            **Der Grund wird benannt**, nicht
+                            verschwiegen (E-72). */}
+                        {a.flaeche
+                          ? 'kein Volumen zugeordnet'
+                          : a.kinder.length > 0 && a.kinder.some(k => k.vonGruppe)
+                            ? 'Kinder ohne eigene Messung'
+                            : 'nicht gezeichnet'}
                       </span>
                     </>
                   )}
@@ -284,7 +334,15 @@ export function RecMuscleMap({ stand, muskelbaum }: {
 
           return (
             <div className="v2-col-gap" style={{ gap: 0 }}>
-              {werte.map(a => zeile(a))}
+              {/* `[read]` **Eine Linie ZWISCHEN den Wurzeln** —
+                  nicht vor der ersten, sonst haengt sie unter der
+                  Kachelkante. */}
+              {werte.map((a, i) => (
+                <React.Fragment key={a.name}>
+                  {i > 0 && <div className="v2-divider" style={{ margin: '8px 0 0' }} />}
+                  {zeile(a)}
+                </React.Fragment>
+              ))}
             </div>
           )
         })()}

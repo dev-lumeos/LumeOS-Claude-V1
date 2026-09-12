@@ -104,8 +104,13 @@ test('G-432/A6: die Deckung kommt aus EBENEN', () => {
   }
   // `[cmd]` **Gemessen: 21 Namen** — `flanke` hat keinen.
   const anzahl = Object.keys(zeigt).length
-  assert.ok(anzahl >= 20 && anzahl <= 24,
-    `${anzahl} gezeichnete Namen — erwartet um 21. Weicht die Zahl `
+  // `[cmd]` **G-438: 21 -> 31.** **C-482 hat neun Namen geliefert**
+  // (drei Trizepskoepfe, zwei Vastus, zwei Gastrocnemius, Serratus,
+  // External Oblique), **die vorher als `name: null` in `EBENEN`
+  // standen.** `[read]` **Die Spanne bleibt eng** — sie soll einen
+  // Rechenfehler fangen, nicht jede neue Flaeche durchwinken.
+  assert.ok(anzahl >= 29 && anzahl <= 34,
+    `${anzahl} gezeichnete Namen — erwartet um 31. Weicht die Zahl `
     + 'stark ab, ist die Deckung falsch berechnet.')
 
   const k = baum()
