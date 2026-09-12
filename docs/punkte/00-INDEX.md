@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 225 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 432 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 433 |
 | **gesamt** | **663** |
 
 ## medical — 48
@@ -468,7 +468,7 @@
 | `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](erledigt/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | erledigt | — | — |
 | `G-433` | fehler | hoch | [Per-muscle detail liest motor.ts](laufend_claudecode/recovery-g-0433-per-muscle-detail-liest-motor-ts.md) | laeuft (claudecode) | — | C-482 |
 | `G-436` | feature | hoch | [die Hierarchie als Ansicht](erledigt/recovery-g-0436-die-hierarchie-als-ansicht.md) | erledigt | — | G-438 |
-| `G-438` | fehler | hoch | [Karte und Liste widersprechen sich](laufend_claudecode/recovery-g-0438-karte-und-liste-widersprechen-sich.md) | laeuft (claudecode) | — | — |
+| `G-438` | fehler | hoch | [Karte und Liste widersprechen sich](erledigt/recovery-g-0438-karte-und-liste-widersprechen-sich.md) | erledigt | — | — |
 
 ## goals — 12
 

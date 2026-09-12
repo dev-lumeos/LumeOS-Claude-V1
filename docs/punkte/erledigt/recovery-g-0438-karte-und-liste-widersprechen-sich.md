@@ -9,6 +9,8 @@ kind_von: G-436
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 29c1a23e
 beruehrt:
   dateien:
     - apps/web/src/app/v2/recovery/ansicht.tsx
@@ -383,4 +385,87 @@ Nicht committet, nicht gestaget.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  17 zugeordnet, 1 gemeldet (abductors)
+    A2  43 gefaerbt, 0 ohne Listenwert
+    A3  27 Zeilen "Wert von ...", gedaempft
+    A4  13.5px/700/uppercase, 8 Trennlinien
+    A5  8 Sabotagen, alle rot
+    A7  web 1689/1693, coach 65/65
+
+`[cmd]` **`_g438-sabotage.mjs` selbst gelaufen:** *,,ALLE
+SABOTAGEN ROT."*
+
+`[cmd]` **`a4-nachher.png` angesehen:**
+
+    Triceps Brachii Lateral Head  52%  Wert von Triceps
+    Triceps Brachii Long Head     52%  Wert von Triceps
+    Triceps Brachii Medial Head   52%  Wert von Triceps
+
+`[read]` **Toms Befund ist behoben** ? **orange auf der Karte,
+Zahl in der Liste, Herkunft dabei.**
+
+### Die Ursache lag tiefer als meine Diagnose
+
+> *,,Neun Flaechen trugen `name: null` mit dem Vermerk
+> *muscle_groups fuehrt Triceps als Blatt* ? seit C-482 falsch.
+> Eine Flaeche OHNE NAMEN hat keine Listenzeile, also faerbte die
+> Karte und die Liste kannte sie nicht. Die Uebersetzung war nur
+> die zweite Haelfte."*
+
+`[read]` **Ich hatte nur die fehlende Uebersetzung
+gesehen.**
+
+`[cmd]` **`ebenen.ts`: 13 mal `name: null`, die neun Namen sind
+eingetragen, `Vastus Intermedius` bleibt draussen.**
+
+### Die drei Auflagen sitzen in der RECHNUNG
+
+> *,,Sonst koennte die Ansicht sie umgehen."*
+
+`[cmd]` **Handgerechnet:** **drei Trizepskoepfe mit geliehenen 41
+ergeben Schnitt NULL, nicht 41** ? **und der Engpass unter `Arms`
+ist `Triceps` selbst, kein Kopf.**
+
+> *,,Die Gegenrichtung habe ich mitgeprueft: ein GEMESSENER Bizeps
+> mit 12 bleibt Engpass neben geliehenen 90ern."*
+
+`[read]` **Beide Richtungen** ? **die Regel unterdrueckt nicht
+einfach alles Geliehene.**
+
+### Sieben Wurzeln, nicht acht
+
+`[cmd]` **Selbst nachgemessen:** `Back`, `Chest`, `Core`,
+`Shoulders`, `Arms`, `Legs`, `Neck Muscles`.
+
+`[read]` **Mein Auftrag nannte acht** ? **er hat gemessen und
+gemeldet, nicht korrigiert.**
+
+### Vier fremde Waechter umgedreht
+
+> *,,Drei zementierten `name: null` mit der ueberholten
+> Begruendung *muscle_groups fuehrt ihn nicht* ? solange die
+> galten, war dein Befund UNBEHEBBAR."*
+
+`[read]` **Ein Waechter kann die Behebung verbieten** ? **wenn
+seine Begruendung ein Datum traegt, das abgelaufen ist.**
+
+`[cmd]` **Umgedreht statt gestrichen:** *,,ein Name steht in
+EBENEN genau dann, wenn die Datenbank ihn fuehrt."*
+
+`[cmd]` **Und `Vastus Intermedius` belegt, dass die Regel noch
+beisst** ? **die Datenbank fuehrt ihn nicht.**
+
+`[read]` **Die schaerfere Regel statt der aufgehobenen** ? **das
+ist der Unterschied zum Lockern.**
+
+### Und ein Nebenbefund
+
+`[cmd]` **`CORE -- NICHT GEZEICHNET`, die Kinder tragen Werte.**
+
+`[read]` **Die Wurzel selbst hat keine Flaeche** ? **die Ansicht
+sagt es, statt eine Zahl zu erfinden.**
+
+**Abgenommen.**
+
