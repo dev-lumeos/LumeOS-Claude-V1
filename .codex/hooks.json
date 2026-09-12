@@ -2,20 +2,21 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash|bash",
+        "matcher": "Bash|bash|shell",
         "hooks": [
           {
             "type": "command",
-            "command": "C:/Users/User/AppData/Roaming/npm/lean-ctx.cmd hook rewrite"
+            "command": "node D:/GitHub/LumeOS-Claude-V1/.codex/lean-ctx-huelle.mjs codex-pretooluse"
           }
         ]
-      },
+      }
+    ],
+    "SessionStart": [
       {
-        "matcher": "Read|read|ReadFile|read_file|View|view|Grep|grep|Search|search|ListFiles|list_files|ListDirectory|list_directory",
         "hooks": [
           {
             "type": "command",
-            "command": "C:/Users/User/AppData/Roaming/npm/lean-ctx.cmd hook redirect"
+            "command": "node D:/GitHub/LumeOS-Claude-V1/.codex/lean-ctx-huelle.mjs codex-session-start"
           }
         ]
       }

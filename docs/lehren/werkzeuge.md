@@ -619,3 +619,61 @@ Dev-Server bewusst als Dauerprozess, MIT Log
 `[read]` **Der Unterschied: er ist gebaut, benannt und
 nachpruefbar** ? **ein von Hand losgeloester `pnpm dev` ist es
 nicht.**
+
+## lean-ctx und Codex: der leere Hook
+
+`[cmd]` **2026-09-12: Codex brach ab mit *,,hook returned invalid
+pre-tool-use JSON output"*.**
+
+`[cmd]` **Ursache gemessen:**
+
+    .codex/hooks.json rief   lean-ctx hook rewrite
+                             lean-ctx hook redirect
+
+`[cmd]` **`lean-ctx hook --help` nennt SECHS Unterbefehle:**
+
+    rewrite | redirect | copilot
+    codex-pretooluse | codex-session-start | rewrite-inline
+
+`[read]` **`rewrite` und `redirect` sind fuer Claude und
+Cursor.** `[read]` **Fuer Codex heissen sie anders.**
+
+`[cmd]` **Aber auch `codex-pretooluse` gibt LEER zurueck**
+? **bei jedem geprueften Eingabeformat, exit 0.**
+
+`[read]` **Leer heisst bei lean-ctx: keine Aenderung noetig.**
+`[read]` **Codex liest es als kaputtes JSON und bricht ab.**
+
+### Die Huelle
+
+`[cmd]` **`.codex/lean-ctx-huelle.mjs`:**
+
+    lean-ctx gibt etwas zurueck  -> unveraendert durchreichen
+    lean-ctx gibt LEER zurueck   -> {"continue": true}
+    lean-ctx startet nicht       -> {"continue": true}
+
+`[read]` **Eine Huelle, die nie blockiert** ? **ein Werkzeug zur
+Kontextkuerzung darf keine Sitzung anhalten.**
+
+`[cmd]` **In beide Richtungen belegt:** **leer ->
+`{"continue":true}`, `codex-session-start` -> 174 B
+durchgereicht.**
+
+### Und eine Windows-Falle
+
+`[cmd]` **`spawn('lean-ctx.cmd')` faellt mit `EINVAL`
+(errno -4071)** ? **Node startet `.cmd` nicht ohne
+`shell: true`.**
+
+`[read]` **Die Huelle ruft die `.js` direkt ueber
+`process.execPath`** ? **kein `shell: true`, keine
+Befehlszeileninterpretation.**
+
+### Der zweite Teil
+
+`[cmd]` **`config.toml` Zeile 97: `codex_hooks = true`** ?
+**veraltet, heisst jetzt `hooks`.**
+
+`[read]` **Das gehoert Tom** ? **die Datei liegt unter
+`C:\Users\User\.codex\`, nicht im Repo.**
+
