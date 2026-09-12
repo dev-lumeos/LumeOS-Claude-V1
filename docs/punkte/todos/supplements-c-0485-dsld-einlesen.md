@@ -295,3 +295,104 @@ den groessten Anteil hat.**
 **eine Zeile, keine Kinder.**
 
 `[cmd]` **Miss, wie oft das vorkommt.**
+
+## Teil 2 ? der Quellenschalter
+
+Tom, 2026-09-08:
+
+> danach will ich waehrend der entwicklung irgendwo einen
+> schalter oder filter haben fuer seeddaten oder dsld daten,
+> dass ich beide sources ansehen kann. bei dsld daten brauch ich
+> die zusaetzlichen daten und filters.
+
+### Was schon da ist
+
+`[cmd]` **`supplements.supplements.source`, fuenf Werte:**
+
+    kimi_supplement             216
+    f05_substance_candidate     149
+    kimi_performance            124
+    kimi_peptide                 79
+    lumeos_supplement_catalog    28
+
+`[cmd]` **Und `supplier_products` hat `source` (C-467)** ?
+**`dsld` waere der sechste Wert.**
+
+`[cmd]` **`im_katalog`: 412 ja, 184 nein** ? **ein Schalter,
+der schon filtert.**
+
+`[read]` **Der Filter braucht also keine neue Spalte** ? **nur
+eine Bedienung.**
+
+### Was DSLD zusaetzlich mitbringt
+
+`[cmd]` **Aus `Product Overview`:**
+
+    Product Type [LanguaL]      Vitamin [A1302]
+    Supplement Form [LanguaL]   Tablet or Pill [E0155]
+    Market Status               On Market
+    Date Entered into DSLD      2011-11-25
+    Net Contents                100 Easy To Swallow Coated Tablets
+    Suggested Use               DIRECTIONS: For adults, take one...
+
+`[cmd]` **Aus `Dietary Supplement Facts`:**
+
+    DSLD Ingredient Categories  16 Werte
+    % Daily Value per Serving   5882
+    Daily Value Target Group    Adults and children 4+
+
+`[cmd]` **Aus `Company Information`:**
+
+    Company Name, Address, City, State, ZIP, Country
+    Manufacturer / Distributor / Packager / Reseller / Other
+      je ja oder nein
+
+`[read]` **Die letzte Gruppe beantwortet die Frage aus C-467:**
+*,,Hersteller oder Haendler?"* ? **DSLD sagt es je Firma.**
+
+`[cmd]` **Toms Antwort war:** *,,uns egal, fuer uns ein
+supplier"* ? **aber das Merkmal kommt gratis mit und kann ein
+Filter werden.**
+
+### Die Filter, die daraus folgen
+
+    Quelle           seed | dsld | alle
+    Marktstatus      On Market | Off Market | alle
+    Produkttyp       Vitamin, Mineral, Botanical, ...
+    Darreichung      Tablette, Kapsel, Pulver, Fluessig
+    Firmenrolle      Hersteller | Haendler | beide
+    Land             US, ... (aus Company Information)
+    Zutatenkategorie 16 Werte aus DSLD
+
+`[read]` **Und einer, den nur die Entwicklung braucht:**
+
+    mit Naehrstoffzuordnung | ohne
+
+`[cmd]` **C-466 misst heute 17 von 596** ? **nach DSLD sieht
+man sofort, was der Import gebracht hat.**
+
+### Wo der Schalter hingehoert
+
+`[cmd]` **`apps/web/v2/supplements`, Reiter `Katalog`** ?
+**er zeigt heute 412.**
+
+`[read]` **Und die Suche im Reiter `Stack`** ? **wer ein
+Praeparat hinzufuegt, sucht dort.**
+
+`[read]` **Nicht in `Settings`** ? **es ist kein
+Nutzerwunsch, es ist ein Entwicklungswerkzeug.**
+
+`[cmd]` **Vergleich: `tab-foods.tsx` hat die Filterleiste fuer
+7.140 Lebensmittel** ? **dieselbe Bauform.**
+
+### Was zu entscheiden ist
+
+`[read]` **Bleibt der Schalter drin, wenn LumeOS ausgeliefert
+wird?**
+
+`[read]` **Ein Nutzer will nicht wissen, ob ein Praeparat aus
+einem Seed oder aus DSLD kommt** ? **er will es finden.**
+
+`[cmd]` **Aber `Katalog 412` steht heute als Zahl im Reiter** ?
+**nach dem Import waeren es 220.000, und dann braucht die Suche
+ohnehin Filter.**
