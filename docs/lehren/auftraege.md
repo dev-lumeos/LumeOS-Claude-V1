@@ -179,3 +179,51 @@ Richtungen.**
 `[read]` **Das steht in seinen Skill-Dateien** ? **aber der
 Zusammenhang, in dem es galt, nicht.**
 
+## Ein Waechter gehoert zum Auftrag, nicht danach
+
+Tom, 2026-09-08: *,,ich muss nicht verstehen, dass wir immer und
+immer wieder an waechtern rumbasteln. das ist part eines jeden
+einzelnen jobs ? wenn ein waechter gebraucht wird, dass der
+sauber laeuft und den auftrag damit abschliesst."*
+
+`[cmd]` **Was heute passiert ist:**
+
+    C-470  baut den Rechte-Waechter
+           -> er meldet fuenf Abweichungen
+    C-473  raeumt vier davon weg
+           -> eine bleibt
+    C-480  liegt bei Tom
+
+`[cmd]` **Und `migration-datenlogik-pruefen.mjs` ist seit C-428
+rot** ? **fuenfzehn Migrationen lang hat ihn niemand gruen
+hinterlassen.**
+
+**Die Regel:**
+
+    Wer einen Waechter baut oder anfasst, laesst ihn GRUEN
+    zurueck.
+
+    Wer eine Abweichung findet, die er nicht beheben darf,
+    traegt sie in den SOLLSTAND ein -- mit Grund.
+
+    Ein Auftrag ist nicht fertig, solange sein Waechter rot
+    ist.
+
+`[read]` **Ein roter Waechter meldet nichts mehr** ? **wer ihn
+laufen laesst, sieht ohnehin eine Liste und liest sie nicht.**
+
+`[cmd]` **`punkte-pruefen.mjs` zeigt die richtige Bauform:**
+**25 Befunde als Sollstand, gruen, und JEDER neue faellt auf.**
+
+### Was das fuer den Auftragstext heisst
+
+`[read]` **Die Abnahmebedingung heisst nicht mehr *,,der Waechter
+laeuft"*.**
+
+`[read]` **Sie heisst:** *,,der Waechter ist GRUEN, oder jede
+rote Zeile steht mit Grund im Sollstand."*
+
+`[read]` **Und wenn eine Abweichung Toms Entscheidung braucht:
+melden UND in den Sollstand** ? **nicht rot liegenlassen, bis
+jemand entscheidet.**
+
