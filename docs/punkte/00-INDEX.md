@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 223 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 3 |
+| `laufend_claudecode` | 4 |
 | `erledigt` | 428 |
-| **gesamt** | **657** |
+| **gesamt** | **658** |
 
 ## medical — 48
 
@@ -431,7 +431,7 @@
 | `G-366` | feature | mittel | [die Uebungsliste der Sitzung](erledigt/training-g-0366-die-uebungsliste-der-sitzung.md) | erledigt | — | — |
 | `G-429` | befund | mittel | [wer rechnet estimated_1rm, und verweigert er?](todos/training-g-0429-einrm-mit-verweigerung.md) | offen | — | — |
 
-## recovery — 29
+## recovery — 30
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -464,6 +464,7 @@
 | `G-367` | feature | mittel | [Stunden und Saetze je Muskel](erledigt/recovery-g-0367-per-muscle-stunden-und-saetze.md) | erledigt | — | — |
 | `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](erledigt/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | erledigt | — | — |
 | `G-433` | fehler | hoch | [Per-muscle detail liest motor.ts](laufend_claudecode/recovery-g-0433-per-muscle-detail-liest-motor-ts.md) | laeuft (claudecode) | — | C-482 |
+| `G-436` | feature | hoch | [die Hierarchie als Ansicht](laufend_claudecode/recovery-g-0436-die-hierarchie-als-ansicht.md) | laeuft (claudecode) | — | — |
 
 ## goals — 12
 
@@ -708,7 +709,7 @@
 | `G-431` | feature | hoch | [die restlichen Buendel und die Modale](erledigt/quer-g-0431-die-restlichen-buendel-und-die-modale.md) | erledigt | — | C-481, G-432 |
 | `G-432` | feature | hoch | [jeder gezeichnete Muskel ist anwaehlbar](erledigt/quer-g-0432-jeder-muskel-anwaehlbar.md) | erledigt | — | G-433, G-434, G-435 |
 | `G-434` | feature | hoch | [die Karte, direkt mit Tom erledigt](erledigt/quer-g-0434-die-karte-direkt-mit-tom.md) | erledigt | — | — |
-| `G-435` | feature | hoch | [die Hierarchie an den richtigen Ort](laufend_claudecode/quer-g-0435-hierarchie-an-den-richtigen-ort.md) | laeuft (claudecode) | — | — |
+| `G-435` | feature | hoch | [die Hierarchie an den richtigen Ort](laufend_claudecode/quer-g-0435-hierarchie-an-den-richtigen-ort.md) | laeuft (claudecode) | — | G-436 |
 
 ## buddy — 1
 
