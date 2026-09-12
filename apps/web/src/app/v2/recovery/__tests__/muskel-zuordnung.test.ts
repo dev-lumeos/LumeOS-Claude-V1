@@ -72,9 +72,11 @@ test('alle 18 Recovery-Kuerzel bis auf die benannte Luecke landen auf der Karte'
   // auf eine Gruppe zusammen (17 - 1 = 16), **aber `upper_back`
   // faerbt jetzt drei Flaechen und `lower_back` zwei** — statt je
   // einer. **16 + 2 + 1 = 19.**
-  assert.equal(raus.length, 19,
-    `${raus.length} Gruppen eingefaerbt, erwartet 19 (16 wie bisher, `
-    + 'plus die drei zusaetzlichen Ruecken-Muskeln aus G-430).')
+  // `[cmd]` **G-431: 19 -> 21.** `hamstring` und `gluteal` faerben
+  // seit der Aufteilung je zwei Flaechen statt einer. **19 + 2 = 21.**
+  assert.equal(raus.length, 21,
+    `${raus.length} Gruppen eingefaerbt, erwartet 21 (16 urspruenglich, `
+    + '+3 Ruecken aus G-430, +2 Bein/Gesaess aus G-431).')
 })
 
 test('Bereitschaft wird zu Ermuedung umgedreht', () => {

@@ -795,3 +795,91 @@ ersetzen:**
 `Lower Back`, `Core`, `Arms`, `Legs`** — wer heute umstellt, verliert
 36 Muskeln, die heute Farbe bekommen. **Die Tabelle trägt die
 Hierarchie, die Handliste die Abdeckung.**
+
+
+---
+
+## 2026-09-12 — G-431: die restlichen Bündel, zwölf geprüft
+
+`[cmd]` **Vierzehn Flächen trugen mehr als zwei Pfade je Ansicht.**
+Zwei waren entschieden (`triceps` in G-425, `obliques` in C-468),
+**zwölf wurden geprüft — je Pfad ein Bild** (`docs/bilder/g431/`).
+
+### Das Urteil je Fläche
+
+| Fläche | Pfade | Urteil | Begründung aus dem Bild |
+|---|---|---|---|
+| `gluteal` | 4 | **geteilt** | große Masse + kleine Kappe oben außen — Maximus und Medius |
+| `hamstring` | 8 | **geteilt** | je Seite zwei breite Stränge nebeneinander — Biceps femoris außen, Semitendinosus innen |
+| `quadriceps` | 6 | zusammen | eine große Masse mit zwei schmalen Rändern — vier Köpfe, EIN Muskel |
+| `calves` | 8 | zusammen | zwei Bäuche nebeneinander + zwei Sehnenläufer — Gastrocnemius hat zwei Köpfe |
+| `adductors` | 6 | zusammen | drei überlappende Streifen aus der Leiste — EINE Gruppe |
+| `forearm` | 8 | zusammen | Beuger vorne, Strecker hinten — die Ansicht trennt sie schon |
+| `abs` | 8 | zusammen | 2×4-Raster auf EINER Platte — Sehnenzwischenstücke des Rectus |
+| `neck` | 5 | zusammen | zwei Stränge je Seite, am Brustbein zusammenlaufend |
+| `knees` | 4 | zusammen | Umriss, kein Muskel |
+| `hands` | 12 | zusammen | Umriss, kein Muskel |
+| `ankles` | 4 | zusammen | Umriss, kein Muskel |
+| `feet` | 4 | zusammen | Umriss, kein Muskel |
+
+`[read]` **Zwei von zwölf geteilt** — die Regel aus G-425 hat
+gehalten: **ein Muskel mit mehreren Köpfen bleibt ein Muskel.**
+
+### Die neuen Zahlen
+
+    Flächen-IDs der Karte        26  ->  28
+    davon Muskelgruppen          22  (20 + 4 - 2)
+    Einordnung gesamt            44
+    eingefärbte Gruppen          21
+    Muskelnamen (C-73)           96      unverändert
+    Zuordnungen Name -> Fläche  100      (4 Namen decken zwei Flächen)
+    Pfade gesamt                158      unverändert seit G-425
+
+### Die Verteilung je Fläche (2026-09-12)
+
+| Fläche | Muskeln | Fläche | Muskeln |
+|---|---|---|---|
+| `forearm` | 17 | `biceps` | 3 |
+| `calves` | 10 | `semitendinosus` | 3 |
+| `quadriceps` | 9 | `trapezius` | 3 |
+| `adductors` | 8 | `biceps-femoris` | 2 |
+| `deltoids` | 7 | `erector-spinae` | 2 |
+| `gluteus-medius` | 6 | `obliques` | 2 |
+| `abs` | 5 | `tibialis` | 2 |
+| `chest` | 5 | `flanke` | 1 |
+| `gluteus-maximus` | 4 | `teres-major` | 1 |
+| `latissimus` | 4 | `teres-minor` | 1 |
+| `neck` | 4 | `triceps` | 1 |
+
+### Fünf Lücken, zwei davon neu
+
+| Muskel | Elternteil | warum kein Pfad |
+|---|---|---|
+| `Rhomboids` | Upper Back | liegt unter dem Trapezmuskel |
+| `Soleus` | Calves | liegt unter dem Gastrocnemius |
+| `Internal oblique` | Obliques | nur die äußere Schicht ist gezeichnet |
+| `Gluteus Minimus` | Glutes | liegt unter dem Medius |
+| `Semimembranosus` | Hamstrings | liegt unter dem Semitendinosus |
+
+`[cmd]` **`Vastus Intermedius` stand kurz auf der Liste und ist
+entfernt** — `107_muscle_groups_hierarchy.sql` führt ihn nicht.
+**Eine Lücke für einen Muskel, den die Datenbank nicht kennt, wäre
+ein erfundener Name.**
+
+### Das Modal
+
+`[cmd]` **Gemessen, woher die Liste kam:** aus `MUSKEL_ZU_FLAECHE`
+(`muskelnZurFlaeche`), nicht aus `koerperflaechen` — eine flache
+Namensreihe. **Das war Toms Befund.**
+
+`[read]` **Jetzt: je Fläche ein Block mit eigenem Wert.** Bei einem
+Gruppen-Kürzel steht `Group · N muscles`, bei einem Kind `Muscle ·`.
+**Die Farbe kommt weiter aus der Handliste** — sie deckt 96 Namen,
+die Tabelle 60.
+
+### C-479 ist angekommen
+
+`[cmd]` **Gemessen nach Codex' C-479:** die fünf Flächen aus G-430
+stehen jetzt in `public.koerperflaechen` unter `wurzel-ruecken`.
+**Die vier aus G-431 noch nicht** — für sie greift weiter
+`AUS_AUFTEILUNG`, und das Modal schreibt es sichtbar hin.

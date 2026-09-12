@@ -36,6 +36,10 @@ function baum(): Flaeche[] {
     f('3', 'upper-back-l', '2', 'Oberer Rücken links'),
     f('4', 'lower-back', '1', 'Unterer Rücken'),
     f('5', 'trapezius', '1', 'Trapezmuskel'),
+    // `[cmd]` **G-431: `gluteal` und `hamstring`** — die Tabelle
+    // fuehrt sie weiter, die Karte hat sie aufgeteilt.
+    f('7', 'gluteal', '1', 'Gesaess'),
+    f('8', 'hamstring', '1', 'Beinbeuger'),
     f('6', 'wurzel-umriss', null, 'Umriss', 'umriss'),
   ]
 }
@@ -43,8 +47,11 @@ function baum(): Flaeche[] {
 test('G-430: kinderVon liefert ALLE Nachfahren, nicht nur die erste Ebene', () => {
   const b = baum()
   const kinder = kinderVon(b, 'wurzel-ruecken').map(f => f.code).sort()
+  // `[cmd]` **G-431: `gluteal` und `hamstring` kamen im Probenbaum
+  // dazu** — sie haengen dort ebenfalls an der Wurzel.
   assert.deepEqual(kinder,
-    ['lower-back', 'trapezius', 'upper-back', 'upper-back-l'],
+    ['gluteal', 'hamstring', 'lower-back', 'trapezius',
+      'upper-back', 'upper-back-l'],
     'Ein Klick auf den Elternteil muss auch die ENKEL faerben — '
     + '`upper-back-l` haengt an `upper-back`, nicht an der Wurzel.')
 
@@ -141,8 +148,12 @@ test('G-430: die fuenf neuen Flaechen erben ihren Elternteil', () => {
     const r = elternteilMitAufteilung(b, neu)
     assert.ok(r.eltern,
       `"${neu}" bekommt keinen Elternteil — dann bleibt das Detail leer.`)
+    // `[cmd]` **G-431: der Elternteil ist der der ALTEN Flaeche** —
+    // im Probenbaum haengen `upper-back`, `lower-back`, `gluteal` und
+    // `hamstring` alle an `wurzel-ruecken`. **Der Test prueft die
+    // BRUECKE, nicht die echte Anatomie** — die steht in der Tabelle.
     assert.equal(r.eltern?.code, 'wurzel-ruecken',
-      `"${neu}" muss unter dem Ruecken haengen (ueber "${alt}").`)
+      `"${neu}" muss ueber "${alt}" an dessen Elternteil kommen.`)
     assert.equal(r.ueberBruecke, true,
       `"${neu}" wird geerbt — das MUSS als solches gemeldet werden, `
       + 'sonst sieht es aus wie eine Zeile in der Datenbank.')
@@ -211,12 +222,16 @@ test('G-430: kein Pfad ist verloren gegangen', () => {
     'Ein Pfad steht in zwei Flaechen — dann wird er zweimal gezeichnet.')
 })
 
-test('G-430/A6: die drei Luecken sind benannt, nicht erfunden', () => {
+test('G-430/A6: die Luecken sind benannt, nicht erfunden', () => {
   // `[cmd]` **Rhomboids, Soleus, Internal oblique** stehen in
   // `training.muscle_groups`, die Karte zeichnet sie nicht.
-  assert.equal(LUECKEN.length, 3,
-    'Erwartet sind genau drei Luecken (Rhomboids, Soleus, '
-    + 'Internal oblique). Kommt eine dazu, gehoert sie in den Bericht.')
+  // `[cmd]` **G-431: 3 -> 5.** Beim Pruefen der zwoelf Buendel kamen
+  // `Gluteus Minimus` und `Semimembranosus` dazu — beide stehen in
+  // `training.muscle_groups` und haben keinen Pfad.
+  assert.equal(LUECKEN.length, 5,
+    `Erwartet sind fuenf Luecken, gefunden ${LUECKEN.length}: `
+    + `${LUECKEN.map(l => l.muskel).join(', ')}. Kommt eine dazu, `
+    + 'gehoert sie in den Bericht.')
   for (const l of LUECKEN) {
     assert.ok(l.muskel && l.elternteil && l.grund,
       `Die Luecke "${l.muskel}" hat keinen Grund — eine Abwesenheit `

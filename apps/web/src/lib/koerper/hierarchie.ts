@@ -124,11 +124,32 @@ export function elternteilVon(flaechen: Flaeche[], code: string): Flaeche | null
 // Aufteilung im Code doppelt steht** — sie faellt weg, sobald die
 // Zeilen in der Datenbank sind. **Der Waechter dazu nennt sie.**
 export const AUS_AUFTEILUNG: Record<string, string> = {
+  // ══ G-431: diese fuenf sind seit C-479 in der Tabelle ═══════════
+  //
+  // `[cmd]` **Gemessen 2026-09-12** (`tools/_g430-eltern.mjs`), nach
+  // Codex' C-479: `latissimus`, `teres-major`, `teres-minor`,
+  // `erector-spinae` und `flanke` stehen jetzt in
+  // `public.koerperflaechen`, je unter `wurzel-ruecken`.
+  //
+  // `[read]` **Die Bruecke greift fuer sie nicht mehr** —
+  // `elternteilMitAufteilung` nimmt den direkten Elternteil, sobald es
+  // einen gibt. **Die Eintraege bleiben als Rueckfall stehen**, bis
+  // jemand sie misst und entfernt; sie zu loeschen waere eine
+  // Aenderung ohne Messung.
   latissimus: 'upper-back',
   'teres-major': 'upper-back',
   'teres-minor': 'upper-back',
   'erector-spinae': 'lower-back',
   flanke: 'lower-back',
+  // ══ G-431: Bein und Gesaess ═══════════════════════════════════
+  //
+  // `[cmd]` **Dieselbe Lage wie oben** — die Karte zeichnet sie seit
+  // G-431, `public.koerperflaechen` fuehrt weiter `gluteal` und
+  // `hamstring`.
+  'gluteus-maximus': 'gluteal',
+  'gluteus-medius': 'gluteal',
+  'biceps-femoris': 'hamstring',
+  semitendinosus: 'hamstring',
 }
 
 /**
@@ -183,4 +204,17 @@ export const LUECKEN: Array<{ muskel: string; elternteil: string; grund: string 
     grund: 'liegt unter dem Gastrocnemius — die Wade ist ein Pfadsatz' },
   { muskel: 'Internal oblique', elternteil: 'Obliques',
     grund: 'liegt unter dem Obliquus externus — gezeichnet ist nur die äußere Schicht' },
+  // ══ G-431: drei weitere, beim Pruefen der zwoelf gefunden ═══════
+  //
+  // `[cmd]` **Je Pfad ein Bild** (`docs/bilder/g431/`) — diese drei
+  // stehen in `training.muscle_groups` und haben KEINEN Pfad:
+  { muskel: 'Gluteus Minimus', elternteil: 'Glutes',
+    grund: 'liegt unter dem Gluteus medius — die Vorlage zeichnet zwei Flächen, nicht drei' },
+  { muskel: 'Semimembranosus', elternteil: 'Hamstrings',
+    grund: 'liegt unter dem Semitendinosus — der mediale Strang ist EIN Pfadsatz' },
+  // `[cmd]` **`Vastus Intermedius` stand hier kurz** — und ist
+  // entfernt: **`107_muscle_groups_hierarchy.sql` fuehrt ihn NICHT.**
+  // `[read]` **Eine Luecke fuer einen Muskel, den die Datenbank nicht
+  // kennt, waere ein erfundener Name** — genau das verbietet der
+  // Auftrag. **Nachgesehen, nicht angenommen.**
 ]

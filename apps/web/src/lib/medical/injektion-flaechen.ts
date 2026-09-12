@@ -97,10 +97,20 @@ export const ORT_ZU_FLAECHE: Record<string, string> = {
   quad_r: 'quadriceps',
   thigh_sq_l: 'quadriceps',
   thigh_sq_r: 'quadriceps',
-  glute_l: 'gluteal',
-  glute_r: 'gluteal',
-  vglute_l: 'gluteal',
-  vglute_r: 'gluteal',
+  // ══ G-431: `gluteal` ist in zwei Muskeln zerfallen ══════════════
+  //
+  // `[cmd]` **Am Bild bestimmt** (`tafel-gluteal-back.png`): eine
+  // grosse Masse (Maximus) und eine kleine Kappe oben aussen
+  // (Medius). **Beide Namen fuehrt `training.muscle_groups`.**
+  //
+  // `[read]` **Die Injektion geht in den MAXIMUS** — das ist die
+  // grosse Masse des oberen aeusseren Quadranten.
+  glute_l: 'gluteus-maximus',
+  glute_r: 'gluteus-maximus',
+  // `[read]` **Ventrogluteal liegt ueber dem MEDIUS** — genau
+  // deshalb gilt die Stelle als sicher: dort laeuft kein Ischias.
+  vglute_l: 'gluteus-medius',
+  vglute_r: 'gluteus-medius',
   abd_l: 'obliques',
   abd_r: 'obliques',
   // `[cmd]` **Naeherung, siehe oben** — `latissimus` gibt es nicht.

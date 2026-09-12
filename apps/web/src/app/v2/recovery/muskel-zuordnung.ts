@@ -72,8 +72,19 @@ export const EINORDNUNG: Record<string, Einordnung> = {
   latissimus: { art: 'gruppe', name: 'Latissimus dorsi' },
   'erector-spinae': { art: 'gruppe', name: 'Rueckenstrecker' },
   flanke: { art: 'gruppe', name: 'Flanke' },
-  gluteal: { art: 'gruppe', name: 'Gesaess' },
-  hamstring: { art: 'gruppe', name: 'Beinbeuger' },
+  // ══ G-431: Gesaess und Beinbeuger aufgeteilt ════════════════════
+  //
+  // `[cmd]` **Am Bild bestimmt** (`tafel-gluteal-back.png`,
+  // `tafel-hamstring-back.png`): **je Seite zwei verschiedene
+  // Muskeln**, nicht ein Muskel mit mehreren Koepfen.
+  //
+  // `[read]` **Der Gegenbeweis ist `quadriceps`:** dort liegt EINE
+  // grosse Masse mit zwei schmalen Raendern — vier Koepfe, EIN
+  // Muskel. **Er bleibt zusammen.**
+  'gluteus-maximus': { art: 'gruppe', name: 'Gesaessmuskel (gross)' },
+  'gluteus-medius': { art: 'gruppe', name: 'Gesaessmuskel (mittel)' },
+  'biceps-femoris': { art: 'gruppe', name: 'Zweikoepfiger Schenkelmuskel' },
+  semitendinosus: { art: 'gruppe', name: 'Halbsehnenmuskel' },
   // `[cmd]` DIE EINZIGE GRUPPE OHNE RECOVERY-KUERZEL. Die Karte
   // zeichnet den Schienbeinmuskel, `MUSCLE_GROUPS_BODYMAP` (motor.ts:28)
   // fuehrt ihn nicht — deshalb bleibt er grau. **Kein Zuordnungsfehler,
@@ -108,14 +119,18 @@ export const EINORDNUNG: Record<string, Einordnung> = {
   bicep_r: { art: 'teilstueck', von: 'biceps', name: 'Bizeps rechts' },
   quad_l: { art: 'teilstueck', von: 'quadriceps', name: 'Oberschenkel links' },
   quad_r: { art: 'teilstueck', von: 'quadriceps', name: 'Oberschenkel rechts' },
-  glute_l: { art: 'teilstueck', von: 'gluteal', name: 'Gesaess links' },
-  glute_r: { art: 'teilstueck', von: 'gluteal', name: 'Gesaess rechts' },
+  // `[cmd]` **G-431: auf die GROSSE Masse** — die Injektion geht in
+  // den Gluteus maximus, nicht in die Kappe darueber.
+  glute_l: { art: 'teilstueck', von: 'gluteus-maximus', name: 'Gesaess links' },
+  glute_r: { art: 'teilstueck', von: 'gluteus-maximus', name: 'Gesaess rechts' },
   // `[cmd]` „Ventrogluteal" ist eine anerkannte Injektionsstelle in der
   // Gesaessregion (vorderer oberer Anteil), **kein Vastus und keine
   // Wade** — die Vermutung im Auftrag traf nicht zu. Die Vorlage
   // beschriftet sie selbst so (koerperkarte-pfade.ts:256).
-  vg_l: { art: 'teilstueck', von: 'gluteal', name: 'Ventrogluteal links' },
-  vg_r: { art: 'teilstueck', von: 'gluteal', name: 'Ventrogluteal rechts' },
+  // `[cmd]` **Ventrogluteal liegt ueber dem MEDIUS** — das ist
+  // gerade der Grund, warum die Stelle als sicher gilt.
+  vg_l: { art: 'teilstueck', von: 'gluteus-medius', name: 'Ventrogluteal links' },
+  vg_r: { art: 'teilstueck', von: 'gluteus-medius', name: 'Ventrogluteal rechts' },
   // ══ G-430: der Latissimus HAT jetzt eine eigene Flaeche ══════════
   //
   // `[cmd]` **Hier stand:** *„Der Latissimus hat KEINE eigene Flaeche
@@ -156,8 +171,10 @@ export const RECOVERY_ZU_KARTE: Record<string, string | string[] | null> = {
   triceps: 'triceps',
   forearm: 'forearm',
   quadriceps: 'quadriceps',
-  hamstring: 'hamstring',
-  gluteal: 'gluteal',
+  // `[cmd]` **G-431: ein Kuerzel, zwei Flaechen** — Recovery misst
+  // „Beinbeuger" und „Gesaess" als je EINE Gruppe.
+  hamstring: ['biceps-femoris', 'semitendinosus'],
+  gluteal: ['gluteus-maximus', 'gluteus-medius'],
   calves: 'calves',
   neck: 'neck',
   trapezius: 'trapezius',

@@ -9,32 +9,33 @@ import assert from 'node:assert/strict'
 import { MUSKEL_ZU_FLAECHE, FLAECHEN, muskelnZurFlaeche, flaechenVonMuskel } from '../muskel-ebenen'
 
 /**
- * `[cmd]` **Am 2026-09-12 gezaehlt** (G-430), vorher 2026-08-18.
+ * `[cmd]` **Am 2026-09-12 gezaehlt** (G-431), vorher G-430.
  *
- * `[read]` **Summe 97 bei 96 Namen** — `Obliques` deckt zwei Flaechen
- * (Bauchseite und Flanke), alle uebrigen genau eine.
+ * `[read]` **Summe 100 bei 96 Namen** — VIER Namen decken zwei
+ * Flaechen: `Obliques` (Bauchseite + Flanke), `Hamstrings`, `Glutes`
+ * und `Buttocks` (je beide Teile ihrer Gruppe).
  *
- * **Was G-430 geaendert hat:**
+ * **Was G-431 geaendert hat:**
  *
- *     upper-back  6  ->  latissimus 4, teres-major 1, teres-minor 1
- *     lower-back  2  ->  erector-spinae 2, flanke 1
- *     deltoids    8  ->  7   (Teres Minor hat eine eigene Flaeche)
- *     trapezius   2  ->  3   (Rhomboids, der keinen Pfad hat)
+ *     gluteal    8  ->  gluteus-medius 6, gluteus-maximus 4
+ *     hamstring  4  ->  semitendinosus 3, biceps-femoris 2
  */
 const ERWARTET: Record<string, number> = {
   forearm: 17,
   calves: 10,
   quadriceps: 9,
   adductors: 8,
-  gluteal: 8,
   deltoids: 7,
+  'gluteus-medius': 6,
   abs: 5,
   chest: 5,
-  hamstring: 4,
+  'gluteus-maximus': 4,
   latissimus: 4,
   neck: 4,
   biceps: 3,
+  semitendinosus: 3,
   trapezius: 3,
+  'biceps-femoris': 2,
   'erector-spinae': 2,
   obliques: 2,
   tibialis: 2,

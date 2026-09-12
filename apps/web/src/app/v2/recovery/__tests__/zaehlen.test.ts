@@ -22,10 +22,12 @@ test('die Aufteilung der 39 IDs steht fest', () => {
   //
   // `[read]` **Die Injektionsorte und Nicht-Muskeln sind
   // unberuehrt** — die Aufteilung betraf nur Flaechen.
-  assert.equal(nachArt('gruppe').length, 20, 'einfaerbbare Muskelgruppen')
+  // `[cmd]` **G-431: 20 -> 22.** `gluteal` und `hamstring` sind je
+  // in zwei Muskeln zerfallen: **20 - 2 + 4 = 22**, **42 - 2 + 4 = 44**.
+  assert.equal(nachArt('gruppe').length, 22, 'einfaerbbare Muskelgruppen')
   assert.equal(nachArt('teilstueck').length, 16, 'Injektionsorte')
   assert.equal(nachArt('nicht-muskel').length, 6, 'Kniescheibe, Kopf, Haare, Haende, Knoechel, Fuesse')
-  assert.equal(Object.keys(EINORDNUNG).length, 42, 'Summe')
+  assert.equal(Object.keys(EINORDNUNG).length, 44, 'Summe')
 })
 
 test('so viele Gruppen faerbt die Karte tatsaechlich ein', () => {
@@ -47,8 +49,10 @@ test('so viele Gruppen faerbt die Karte tatsaechlich ein', () => {
   // `[cmd]` **G-430: 16 -> 19.** **Die Rechnung:** `upper_back` faerbt
   // jetzt drei Flaechen statt einer, `lower_back` zwei statt einer.
   // **16 - 2 + 5 = 19.**
-  assert.equal(eingefaerbt.length, 19,
-    'Am Bildschirm sind 19 Gruppen farbig. Weicht die Zahl ab, ist '
+  // `[cmd]` **G-431: 19 -> 21** — `hamstring` und `gluteal` faerben
+  // jetzt je zwei Flaechen statt einer. **19 - 2 + 4 = 21.**
+  assert.equal(eingefaerbt.length, 21,
+    'Am Bildschirm sind 21 Gruppen farbig. Weicht die Zahl ab, ist '
     + 'entweder eine Zuordnung dazugekommen oder eine weggefallen.')
   // 1 Gruppe ohne Kuerzel (tibialis) + 6 Nicht-Muskeln = 7 IDs ohne
   // Zustandsfarbe. Davon tragen `head` und `hair` einen festen Ton,
@@ -63,7 +67,8 @@ test('so viele Gruppen faerbt die Karte tatsaechlich ein', () => {
   assert.equal(eingefaerbt.length + grauGruppen.length + nachArt('nicht-muskel').length,
     muskelIds, 'Jede Muskel-ID ist entweder eingefaerbt oder nicht.')
   // `[cmd]` **G-430: 23 -> 26** — dieselbe Rechnung wie oben.
-  assert.equal(muskelIds, 26, 'Die Karte zeichnet 26 Flaechen-IDs.')
+  // `[cmd]` **G-431: 26 -> 28** — dieselbe Rechnung.
+  assert.equal(muskelIds, 28, 'Die Karte zeichnet 28 Flaechen-IDs.')
 })
 
 test('nur tibialis ist eine Gruppe ohne Recovery-Kuerzel', () => {

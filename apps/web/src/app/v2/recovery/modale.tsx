@@ -33,7 +33,7 @@ import {
   type Protocol,
 } from './motor'
 // G-55: die dritte Ebene — welche Muskeln auf eine Flaeche fallen.
-import { flaechenFuer } from './muskel-zuordnung'
+import { flaechenFuer, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
 // ══ G-430: NUR aus `hierarchie.ts`, nie aus `hierarchie-read.ts` ══
 //
 // `[cmd]` **Der erste Versuch importierte von `-read`** — und ergab
@@ -504,24 +504,80 @@ function MuscleDetailModal({ slug, onClose, hierarchie }: {
         // der Aufteilung traegt `upper_back` drei, und die Muskeln
         // der zwei uebrigen waeren sonst verschwunden.
         const flaechen = flaechenFuer(slug)
+        // `[read]` **Der Baum noch einmal** — er steckt im Block
+        // darueber in einer eigenen IIFE.
+        const baum = hierarchie?.flaechen ?? []
         // `[read]` **Ohne `Set`** — das Ziel dieses Pakets kann es
         // nicht iterieren (`TS2802`), dieselbe Falle wie in G-428.
         const muskeln = flaechen.flatMap(f => muskelnZurFlaeche(f))
           .filter((n, i, a) => a.indexOf(n) === i).sort()
         if (muskeln.length === 0) return null
+
+        // ══ G-431/A4+A5: Gruppe aufschluesseln, Kind nur dieses ═════
+        //
+        // **Tom, 2026-09-08:** *„wenn gruppe, wird im modal
+        // aufgeschluesselt, und wenn child, dann nur dieses."*
+        //
+        // `[cmd]` **Gemessen: die Liste kam aus `MUSKEL_ZU_FLAECHE`**
+        // (`muskelnZurFlaeche`, Zeile 509) — eine flache Reihe von
+        // Namen, ohne Hierarchie. **Das ist Toms Befund
+        // *„werden die alten gelistet"*.**
+        //
+        // `[read]` **Die FARBE kommt weiter aus der Handliste** — sie
+        // deckt 96 Namen, die Tabelle nur 60 (G-430). **Die LISTE
+        // zeigt jetzt die Hierarchie:** je Flaeche ihre Muskeln, mit
+        // dem Elternteil darueber.
+        const istGruppe = flaechen.length > 1
         return (
           <>
             <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
-              Muscles on this area · {muskeln.length} of 96 (C-73)
+              {istGruppe
+                ? `Group · ${flaechen.length} muscles · ${muskeln.length} of 96 (C-73)`
+                : `Muscle · ${muskeln.length} of 96 (C-73)`}
             </div>
             <Card className="v2-card-tight" style={{ padding: 12, marginBottom: 14 }}>
-              <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                {muskeln.map(m => <Pill key={m} style={{ fontSize: 9.5 }}>{m}</Pill>)}
+              {/* `[read]` **Je Flaeche ein Block** — bei einer einzigen
+                  Flaeche ist das genau ein Block, also „nur dieses". */}
+              <div className="v2-col-gap" style={{ gap: 10 }}>
+                {flaechen.map(f => {
+                  const eigene = muskelnZurFlaeche(f)
+                  const eintrag = baum.find(x => x.code === f)
+                  const wert = MUSCLE_STATE[KARTE_ZU_RECOVERY[f] ?? '']
+                  return (
+                    <div key={f}>
+                      <div style={{
+                        display: 'flex', alignItems: 'baseline', gap: 6,
+                        marginBottom: 5, flexWrap: 'wrap',
+                      }}>
+                        <span style={{ fontSize: 12, fontWeight: 600 }}>
+                          {eintrag ? nameVon(eintrag) : f}
+                        </span>
+                        <span className="v2-dim v2-mono" style={{ fontSize: 10 }}>{f}</span>
+                        {/* `[read]` **Je Kind sein eigener Wert** — das
+                            ist der Unterschied zu einer blossen Liste. */}
+                        {wert && (
+                          <span className="v2-num" style={{ fontSize: 11, marginLeft: 'auto' }}>
+                            {wert.soreness}/3 · {wert.hours} h
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                        {eigene.map(m => (
+                          <Pill key={m} style={{ fontSize: 9.5 }}>{m}</Pill>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
               <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 8, lineHeight: 1.5 }}>
-                Die Flaeche traegt das Mittel dieser Muskeln, nicht ihr
-                Maximum — sonst faerbte ein einzelner platter Muskel die
-                ganze Flaeche rot.
+                {istGruppe
+                  ? 'Diese Gruppe fasst mehrere Muskeln zusammen — je Muskel '
+                    + 'sein eigener Wert. Die Flaeche traegt das Mittel, nicht '
+                    + 'ihr Maximum.'
+                  : 'Die Flaeche traegt das Mittel dieser Muskeln, nicht ihr '
+                    + 'Maximum — sonst faerbte ein einzelner platter Muskel die '
+                    + 'ganze Flaeche rot.'}
               </div>
             </Card>
           </>

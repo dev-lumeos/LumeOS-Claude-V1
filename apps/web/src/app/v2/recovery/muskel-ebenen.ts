@@ -163,18 +163,37 @@ export const MUSKEL_ZU_FLAECHE: Record<string, string | string[]> = {
   Thighs: 'quadriceps',
   Quadriceps: 'quadriceps',
   'Rectus Femoris': 'quadriceps',
-  Hamstrings: 'hamstring',
-  'Biceps Femoris': 'hamstring',
-  Semimembranosus: 'hamstring',
-  Semitendinosus: 'hamstring',
-  Glutes: 'gluteal',
-  'Gluteus Maximus': 'gluteal',
-  'Gluteus Medius': 'gluteal',
-  'Gluteus Minimus': 'gluteal',
-  Buttocks: 'gluteal',
-  Hips: 'gluteal',
-  'Hip Rotators': 'gluteal',
-  piriformis: 'gluteal',
+  // ══ G-431: Beinbeuger und Gesaess sind aufgeteilt ═══════════════
+  //
+  // `[cmd]` **Am Bild bestimmt** (`docs/bilder/g431/`):
+  // `hamstring` **traegt je Seite ZWEI breite Straenge** — aussen der
+  // Biceps femoris, innen Semitendinosus/Semimembranosus.
+  // `gluteal` **eine grosse Masse und eine kleine Kappe oben aussen**
+  // — Maximus und Medius.
+  //
+  // `[read]` **Die Namen standen schon in `training.muscle_groups`** —
+  // keiner ist erfunden.
+  //
+  // `[read]` **`Hamstrings` und `Glutes` sind GRUPPEN**, kein
+  // einzelner Muskel — sie faerben beide Teile.
+  Hamstrings: ['biceps-femoris', 'semitendinosus'],
+  'Biceps Femoris': 'biceps-femoris',
+  // `[cmd]` **Semimembranosus und Semitendinosus liegen
+  // uebereinander** — die Vorlage zeichnet EINEN medialen Strang.
+  // **Beide fallen darauf**, wie `Rotator Cuff` auf `deltoids`.
+  Semimembranosus: 'semitendinosus',
+  Semitendinosus: 'semitendinosus',
+  Glutes: ['gluteus-maximus', 'gluteus-medius'],
+  'Gluteus Maximus': 'gluteus-maximus',
+  'Gluteus Medius': 'gluteus-medius',
+  // `[cmd]` **Gluteus minimus liegt UNTER dem Medius** — die Vorlage
+  // zeichnet ihn nicht. **Er faellt auf den Medius**, unter dem er
+  // liegt; die Luecke steht in `LUECKEN`.
+  'Gluteus Minimus': 'gluteus-medius',
+  Buttocks: ['gluteus-maximus', 'gluteus-medius'],
+  Hips: 'gluteus-medius',
+  'Hip Rotators': 'gluteus-medius',
+  piriformis: 'gluteus-maximus',
   // Die Karte kennt nur die Innenseite (`adductors`). Huefte und
   // Beuger liegen anatomisch daneben und fallen deshalb dorthin —
   // **nicht** auf `gluteal`, das ist ein anderer Muskel.

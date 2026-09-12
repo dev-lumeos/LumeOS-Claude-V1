@@ -49,19 +49,41 @@ test('jede genannte Flaeche gibt es wirklich', () => {
   // weniger, ohne Fehler und ohne Meldung.**
   const pfade = readFileSync(
     join(WURZEL, 'packages', 'ui', 'src', 'koerperkarte-pfade.ts'), 'utf8')
+  // `[cmd]` **G-431: der Schluessel kann in Anfuehrungszeichen
+  // stehen** — ein Bindestrich verlangt es (`'gluteus-maximus':`).
+  // **Die erste Fassung suchte nur `^\s*name:` und meldete
+  // `gluteus-maximus` als fehlend, obwohl er in Zeile 153 steht.**
+  //
+  // `[read]` **Dieselbe Falle wie in G-425:** *„wer nach nackten
+  // Schluesseln sucht, findet 21 statt 23."*
   for (const flaeche of Array.from(new Set(Object.values(ORT_ZU_FLAECHE)))) {
-    assert.ok(new RegExp(`^\\s*${flaeche}:`, 'm').test(pfade),
+    assert.ok(new RegExp(`^\\s*'?${flaeche}'?\\s*:`, 'm').test(pfade),
       `"${flaeche}" steht nicht in MUSKELN — diese Orte faerben nichts ein`)
   }
 })
 
-test('latissimus gibt es nicht, und lat_l weicht bewusst aus', () => {
+test('G-430/G-431: latissimus GIBT es, lat_l weicht trotzdem aus', () => {
+  // ══ Die Zusage hat sich umgedreht ══════════════════════════════
+  //
+  // `[cmd]` **Hier stand `assert.ok(!/^\s*latissimus:/m.test(pfade))`**
+  // — *„latissimus ist da, dann gehoert lat_l darauf"*.
+  // **G-430 hat ihn gebaut**, und die Zusage wurde damit zur
+  // Falschaussage.
+  //
+  // `[read]` **Ein Verbot-Waechter ueber eine Abwesenheit blockiert
+  // spaeter genau deren Behebung** — deshalb ist er umgedreht, nicht
+  // geloescht.
   const pfade = readFileSync(
     join(WURZEL, 'packages', 'ui', 'src', 'koerperkarte-pfade.ts'), 'utf8')
-  assert.ok(!/^\s*latissimus:/m.test(pfade),
-    'latissimus ist da — dann gehoert lat_l/lat_r darauf, nicht auf trapezius')
+  assert.ok(/^\s*'latissimus'\s*:/m.test(pfade),
+    'latissimus fehlt — G-430 hat ihn aus `upper-back` geloest')
+  // `[cmd]` **`lat_l` zeigt weiter auf `trapezius`** — die
+  // Injektionsstelle liegt ueber dem oberen Rand, nicht auf dem
+  // breiten Teil. **Das zu aendern ist ein eigener Auftrag**, kein
+  // Nebenbei in G-431.
   assert.equal(ORT_ZU_FLAECHE.lat_l, 'trapezius',
-    'die Naeherung fuer lat_l hat sich geaendert, ohne dass latissimus existiert')
+    'die Naeherung fuer lat_l hat sich geaendert — dann gehoert sie '
+    + 'begruendet, nicht nebenbei')
 })
 
 test('die Seite kommt aus der Id', () => {
@@ -129,41 +151,67 @@ test('die Spalte heisst injection_site_id, nicht site_id', () => {
 })
 
 test('zwei Orte auf einer Flaechenhaelfte werden zusammengefasst', () => {
-  // `[cmd]` **`glute_l` und `vglute_l` faerben beide `gluteal` links**,
-  // `delt_l` und `sq_delt_l` beide `deltoids` links. **Die Flaeche hat
-  // eine Farbe, das Modal beide Orte** (A8).
+  // ══ G-431: die Glutealorte liegen auf ZWEI Flaechen ════════════
+  //
+  // `[cmd]` **Hier stand `glute_l` + `vglute_l` auf `gluteal` links.**
+  // **Seit der Aufteilung ist das falsch:** die Injektion geht in den
+  // Maximus, die ventrogluteale Stelle liegt ueber dem Medius — und
+  // genau deshalb gilt sie als sicher.
+  //
+  // `[read]` **Die Mechanik, die der Test bewacht, ist dieselbe** —
+  // zwei Orte auf EINER Haelfte, und die Seite gehoert zum
+  // Schluessel. **`deltoids` traegt sie weiter:** `delt_l` und
+  // `sq_delt_l` faerben beide die linke Schulter.
   const gruppen = flaechenGruppen(
-    [ort('glute_l'), ort('vglute_l'), ort('glute_r')], [], '2026-09-09')
-  const links = gruppen.find(g => g.flaeche === 'gluteal' && g.seite === 'links')
-  assert.ok(links, 'gluteal links fehlt')
-  assert.deepEqual(links.orte.map(z => z.ort.id).sort(), ['glute_l', 'vglute_l'],
-    'die zwei Orte auf gluteal links stehen nicht beide in der Gruppe — '
+    [ort('delt_l'), ort('sq_delt_l'), ort('delt_r')], [], '2026-09-09')
+  const links = gruppen.find(g => g.flaeche === 'deltoids' && g.seite === 'links')
+  assert.ok(links, 'deltoids links fehlt')
+  assert.deepEqual(links.orte.map(z => z.ort.id).sort(), ['delt_l', 'sq_delt_l'],
+    'die zwei Orte auf deltoids links stehen nicht beide in der Gruppe — '
     + 'dann zeigt das Modal nur einen')
 
   // ══ DIE SEITE IST TEIL DES SCHLUESSELS ═════════════════════════
   //
-  // `[cmd]` **Ohne sie faellt `glute_r` in dieselbe Gruppe** — die
+  // `[cmd]` **Ohne sie faellt `delt_r` in dieselbe Gruppe** — die
   // Karte faerbte dann beide Haelften gleich, und das Modal zeigte
   // rechts die linken Orte mit. `[read]` **Eine Zaehlung allein merkt
   // das nicht** (zwei Orte links, zwei Orte gesamt): **also die Ids
   // vergleichen und die Haelften zaehlen.**
-  const rechts = gruppen.find(g => g.flaeche === 'gluteal' && g.seite === 'rechts')
-  assert.ok(rechts, 'gluteal rechts fehlt — wird die Seite im Schluessel ignoriert?')
-  assert.deepEqual(rechts.orte.map(z => z.ort.id), ['glute_r'],
+  const rechts = gruppen.find(g => g.flaeche === 'deltoids' && g.seite === 'rechts')
+  assert.ok(rechts, 'deltoids rechts fehlt — wird die Seite im Schluessel ignoriert?')
+  assert.deepEqual(rechts.orte.map(z => z.ort.id), ['delt_r'],
     'die rechte Haelfte traegt fremde Orte')
   assert.equal(gruppen.length, 2,
-    'gluteal bildet nicht zwei Haelften — links und rechts sind zusammengefallen')
+    'deltoids bildet nicht zwei Haelften — links und rechts sind zusammengefallen')
+})
+
+test('G-431: die Glutealorte liegen auf ZWEI verschiedenen Muskeln', () => {
+  // `[read]` **Der Befund, der den Test oben umgebaut hat** — er
+  // steht hier als eigene Aussage, statt nur als Randnotiz.
+  //
+  // `[cmd]` **Am Bild bestimmt:** `gluteal` war eine grosse Masse
+  // (Maximus) plus eine kleine Kappe oben aussen (Medius).
+  const gruppen = flaechenGruppen(
+    [ort('glute_l'), ort('vglute_l')], [], '2026-09-09')
+  const flaechen = gruppen.map(g => g.flaeche).sort()
+  assert.deepEqual(flaechen, ['gluteus-maximus', 'gluteus-medius'],
+    'Die intramuskulaere Stelle gehoert in den Maximus, die '
+    + 'ventrogluteale ueber den Medius — sie duerfen nicht wieder '
+    + 'auf einer Flaeche zusammenfallen.')
 })
 
 test('der zuletzt benutzte Ort gibt der Flaeche die Farbe', () => {
   // `[read]` **Dringlichkeit waere eine Ruhezeitrechnung** — die gibt
   // es nach E-57 nicht. **Also die Ordnung, die die Daten tragen.**
+  // `[cmd]` **G-431: `deltoids` statt `gluteal`** — seit der
+  // Aufteilung liegen `glute_l` und `vglute_l` auf zwei verschiedenen
+  // Muskeln, und der Test braucht ZWEI Orte auf EINER Flaeche.
   const gruppen = flaechenGruppen(
-    [ort('glute_l'), ort('vglute_l')],
-    [{ injection_site_id: 'vglute_l', injected_at: '2026-09-07T10:00:00Z' }],
+    [ort('delt_l'), ort('sq_delt_l')],
+    [{ injection_site_id: 'sq_delt_l', injected_at: '2026-09-07T10:00:00Z' }],
     '2026-09-09')
   const g = gruppen[0]
-  assert.equal(g.orte[0].ort.id, 'vglute_l',
+  assert.equal(g.orte[0].ort.id, 'sq_delt_l',
     'der benutzte Ort steht nicht oben — dann faerbt die Flaeche falsch')
   assert.equal(g.farbe, zustandsFarbe(g.orte[0]))
   assert.notEqual(g.farbe, zustandsFarbe(g.orte[1]),
