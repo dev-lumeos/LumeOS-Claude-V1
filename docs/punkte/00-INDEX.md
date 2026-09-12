@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 223 |
+| `todos` | 224 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 4 |
-| `erledigt` | 428 |
-| **gesamt** | **658** |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 430 |
+| **gesamt** | **659** |
 
 ## medical — 48
 
@@ -307,9 +307,9 @@
 | `G-426` | feature | hoch | [die Supplementspalte in Nutrients](todos/nutrition-g-0426-die-supplementspalte-in-nutrients.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 81
+## supplements — 82
 
-### beauftragbar — 80
+### beauftragbar — 81
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -392,6 +392,7 @@
 | `G-393` | befund | hoch | [die Rotationskarte ist leer](erledigt/supplements-g-0393-die-rotationskarte-ist-leer.md) | erledigt | — | G-395, G-396 |
 | `G-423` | feature | hoch | [Zyklen, Protokolle und die Injektionskarte](erledigt/supplements-g-0423-zyklen-und-injektionen.md) | erledigt | — | G-424 |
 | `G-428` | fehler | hoch | [der Injektionsreiter ist leer](laufend_claudecode/supplements-g-0428-injektionsreiter-ist-leer.md) | laeuft (claudecode) | — | — |
+| `G-437` | fehler | hoch | [tabs.tsx hat vierzehn Karten verloren](todos/supplements-g-0437-tabs-tsx-verlorene-karten.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -464,7 +465,7 @@
 | `G-367` | feature | mittel | [Stunden und Saetze je Muskel](erledigt/recovery-g-0367-per-muscle-stunden-und-saetze.md) | erledigt | — | — |
 | `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](erledigt/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | erledigt | — | — |
 | `G-433` | fehler | hoch | [Per-muscle detail liest motor.ts](laufend_claudecode/recovery-g-0433-per-muscle-detail-liest-motor-ts.md) | laeuft (claudecode) | — | C-482 |
-| `G-436` | feature | hoch | [die Hierarchie als Ansicht](laufend_claudecode/recovery-g-0436-die-hierarchie-als-ansicht.md) | laeuft (claudecode) | — | — |
+| `G-436` | feature | hoch | [die Hierarchie als Ansicht](erledigt/recovery-g-0436-die-hierarchie-als-ansicht.md) | erledigt | — | — |
 
 ## goals — 12
 
@@ -636,7 +637,7 @@
 | `C-481` | feature | mittel | [vier Flaechen und lat_l](erledigt/quer-c-0481-vier-flaechen-und-lat-l.md) | erledigt | — | — |
 | `C-482` | feature | hoch | [Muskelnamen zur aufgeteilten Karte](erledigt/quer-c-0482-muskelnamen-zur-aufgeteilten-karte.md) | erledigt | — | C-483 |
 | `C-483` | entscheidung | hoch | [die fuenfte Ebene](erledigt/quer-c-0483-die-fuenfte-ebene.md) | erledigt | — | C-484 |
-| `C-484` | feature | hoch | [koerperflaechen nach E-81](erledigt/quer-c-0484-koerperflaechen-nach-e81.md) | erledigt | — | C-486 |
+| `C-484` | feature | hoch | [koerperflaechen nach E-81](erledigt/quer-c-0484-koerperflaechen-nach-e81.md) | erledigt | — | C-486, G-437 |
 | `C-486` | fehler | hoch | [UTF-8 beim Einspielen verloren](laufend_codex/quer-c-0486-utf8-beim-einspielen-verloren.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
@@ -709,7 +710,7 @@
 | `G-431` | feature | hoch | [die restlichen Buendel und die Modale](erledigt/quer-g-0431-die-restlichen-buendel-und-die-modale.md) | erledigt | — | C-481, G-432 |
 | `G-432` | feature | hoch | [jeder gezeichnete Muskel ist anwaehlbar](erledigt/quer-g-0432-jeder-muskel-anwaehlbar.md) | erledigt | — | G-433, G-434, G-435 |
 | `G-434` | feature | hoch | [die Karte, direkt mit Tom erledigt](erledigt/quer-g-0434-die-karte-direkt-mit-tom.md) | erledigt | — | — |
-| `G-435` | feature | hoch | [die Hierarchie an den richtigen Ort](laufend_claudecode/quer-g-0435-hierarchie-an-den-richtigen-ort.md) | laeuft (claudecode) | — | G-436 |
+| `G-435` | feature | hoch | [die Hierarchie an den richtigen Ort](erledigt/quer-g-0435-hierarchie-an-den-richtigen-ort.md) | erledigt | — | G-436 |
 
 ## buddy — 1
 

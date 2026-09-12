@@ -9,6 +9,8 @@ kind_von: G-432
 entscheidung: E-81
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: e22f4d49
 beruehrt:
   dateien:
     - apps/web/src/app/v2/recovery/modale.tsx
@@ -376,7 +378,45 @@ ein Eingriff in einen abgenommenen Commit — nicht ohne Tom.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator.**
+
+    A1  Recovery laeuft, 0 Seitenfehler
+    A2  drei Zeilen plus g430-Testattrappen
+    A3  null Leser der Seitenzeilen
+    A5  Modal geraeumt, 83 -> 0
+    A6  4 Einrueckungsstufen
+    A7  14 Sabotagen, alle rot
+    A9  web 1666/1670, coach 65/65
+
+### Der wichtigste Teil des Berichts
+
+> *,,Ich habe bei der C-484-Konfliktloesung Schaden angerichtet.
+> Nicht *RUECKFALL zu ATTRAPPE berichtigt* ? gemessen an
+> `934d2ae1`: vorher 1 Attrappe + 19 RUECKFALL, nachher 17
+> Attrappen + 0 RUECKFALL, 58 Zeilen raus, 14 `<Card>`-Bloecke
+> weg. Ich habe die FALSCHE Stash-Haelfte behalten."*
+
+`[read]` **Er hat seine eigene abgenommene Arbeit gemessen und
+widerlegt** ? **und die Waechterzahlen NICHT angepasst, damit der
+Schaden sichtbar bleibt.**
+
+`[cmd]` **Ich hatte es abgenommen mit *,,er hat die alte Haelfte
+verworfen, nicht die neue"*** ? **falsch, ich habe seinen Bericht
+geglaubt statt gemessen.**
+
+`[read]` **`tabs.tsx` ist ein eigener Punkt.**
+
+### Der blinde Fleck
+
+> *,,`seite` in den `select`-String zurueckzuschreiben blieb gegen
+> `tsc` GRUEN ? die Spaltenliste ist eine Zeichenkette. Am Schirm
+> faellt dafuer ganz Recovery aus."*
+
+`[cmd]` **Dafuer gibt es jetzt einen Waechter, der die Liste
+zerlegt.**
+
+**Abgenommen.**
+
 
 ## Berichtigt 2026-09-08 -- Codex baut zuerst
 

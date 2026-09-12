@@ -641,7 +641,102 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+Stand 2026-09-12: gebaut, vollgekettet und in `postgres` eingespielt.
+
+### A1 — Struktur und Fundstellen
+
+`20260912001800_c485_dsld_import.sql` schreibt keine Daten und ergaenzt:
+
+- `supplier_products.marke` aus `Product Overview.Brand Name`; `dsld_id`
+  (eigenstaendige, eindeutige DSLD-Kennung), `product_type` aus `Product
+  Type [LanguaL]`, `market_status`, `date_entered`, `suggested_use`.
+  Das vorhandene `produktform` wird aus `Supplement Form [LanguaL]` gefuellt.
+- `suppliers.name_normalized` dedupliziert technisch, der erste originale
+  Firmenname bleibt `name`. `product_suppliers(product_id, supplier_id, rolle)`
+  bildet Manufacturer, Distributor, Packager, Reseller und Other aus
+  `Company Information` ab.
+- `product_contents` erhaelt Etikettentext/-kategorie, `blend_id`,
+  `reihenfolge`, Rohwert und Mengenoperator; unbekannte Zutaten duerfen kein
+  `supplement_id` haben. Kandidaten zeigen auf die konkrete Inhaltszeile.
+- `supplement_field_sources.supplier_product_id` plus `source='dsld'`
+  dokumentiert 2.743.617 feldgenaue Produkt-Herkunften.
+
+### A2 — Firmenrolle
+
+253.514 Company-Zeilen, davon 26.009 ohne Name, ergeben nach
+Leerraum-/Grosskleinschreibungs-Normalisierung 6.419 Firmen und 235.618
+Produkt-Firmenrollen. 13.070 von 214.780 Produkten (6,09 %) haben mehrere
+Firmen: 13.007 zwei, 57 drei, 6 vier. Die Verbindungstabelle ist daher
+notwendig; `supplier_id + rolle` am Produkt waere nicht verlustfrei.
+
+### A3 — Blends
+
+38.666 `blend`-Zeilen haben keine Kinder und bleiben einzelne mengenbelegte
+Blend-Zeilen. Die Messung ist kategorie-bewusst, damit eine nachfolgende,
+selbst mengenlose Blend nicht faelschlich als Kind gilt. Importiert sind 0
+erfundene Einzelmengen an `blend_id`-Kindern.
+
+### A4 und A6 — Zutaten
+
+2.020.128 Facts-Zeilen enthalten 70.593 normalisierte eindeutige Zutaten.
+Gegen 596 `supplements` und 2.843 Aliase treffen 377 Namen eindeutig; 43
+sind mehrdeutig, 70.173 treffen nicht. Nur die 302.293 eindeutig gemappten
+Zeilen haben `supplement_id`; 1.717.835 Wirkstoffzeilen bleiben als
+`product_content_candidates` erhalten. Keine Zutat wurde erfunden.
+
+### A5 — Etappen, Zeilen und Live-Laufzeit
+
+Gesamtlauf auf `postgres`: 399,441 s.
+
+- Firmen: 6.419 Firmen, 235.618 Rollen, 60,913 s.
+- Produkte: 214.780, davon 121.959 On Market und 92.821 Off Market,
+  57,926 s; nichts wurde nach Marktstatus ausgesiebt.
+- Zutaten: 2.020.128 Facts plus 980.854 einzeln erhaltene `Other
+  Ingredients` = 3.000.982 Inhaltszeilen, 252,215 s; Feldherkuenfte:
+  25,804 s.
+
+Die XLSX bleiben unter `docs/ssot/daten/`; CSV ist nur der gestreamte
+`COPY`-Draht, keine zweite Multi-Millionen-Datei.
+
+### A7 — RLS und Rechte
+
+Auf `suppliers`, `supplier_products`, `product_suppliers`,
+`product_contents`, `product_content_candidates` und
+`supplement_field_sources` hat `authenticated` genau `SELECT`, `anon` kein
+`SELECT`. RLS ist auch auf der neuen Verbindungstabelle aktiv.
+
+### A8 — D-17
+
+Struktur: `supabase/migrations/20260912001800_c485_dsld_import.sql`.
+Daten: `supabase/_pipeline/13_supplements/485_dsld_import.ts` mit
+`485_dsld_import.py` als COPY-Stream; beide stehen in `kette.json`.
+
+### A9 — Waechter
+
+`migration-datenlogik-pruefen.mjs` ist gruen: 44 historische Operationen,
+exakt Sollstand, keine neue Datenlogik. Der C-485-Strukturtest besteht 5/5.
+Die Vollkette `lumeos_c485_vollkette` ist gruen: 202 Schritte,
+`KETTE OK: 820,7 s`; neue Mindestzeilen, Rechte und RLS sind ok.
+
+Der Live-Schemacheck hat genau eine C-485-fremde rote Zeile:
+`medical.user_medications` hat die bekannte abweichende Spaltenreihenfolge
+(C-480, bewusst nicht hier gebaut). Der nicht blockierende
+`shopping_lists DELETE`-Hinweis ist ein bestehender C-473-Live-/Kettenstand-
+Unterschied; C-485 aendert keine `nutrition`-Rechte. Alle C-485-Pruefungen
+sind gruen.
+
+`pnpm gate` erreicht den Punktelauf grün, bricht danach aber an der
+bestehenden, C-485-fremden G-261-Sollabweichung ab:
+`goals.nutrition_targets` hat 7 Naehrstoffspalten bei Soll 6
+(`zwei-wahrheiten-pruefen.mjs`). C-485 beruehrt weder `goals` noch diese
+Sollzahl; der Befund wird nicht verdeckt oder in diesem Auftrag umgebaut.
+
+### A10 — Sicherung, Vollkette, Punktelauf
+
+Vor dem Einspielen: `backup/data/20260912110500_c485_vor_live.dump`
+(26.533.262 Bytes). Vor dem Kettenaufbau:
+`backup/schema/20260912105238_c43_vor_kettenlauf.sql`. Der Punktelauf ist
+gruen: 25 Befunde, exakt Sollstand.
 
 ## Abnahme
 
