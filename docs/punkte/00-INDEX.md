@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 222 |
+| `todos` | 223 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 428 |
-| **gesamt** | **656** |
+| **gesamt** | **657** |
 
 ## medical — 48
 
@@ -400,7 +400,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 25
+## training — 26
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -416,6 +416,7 @@
 | `C-474` | feature | hoch | [Progressionsregeln fuer Programme](todos/training-c-0474-progressionsregeln.md) | offen | — | — |
 | `C-476` | befund | hoch | [hat LumeOS dieselben Katalogfehler?](todos/training-c-0476-die-exercise-ontologie-pruefen.md) | offen | — | — |
 | `C-477` | feature | hoch | [Provenienz je Uebungsasset](todos/training-c-0477-provenienz-je-asset.md) | offen | — | — |
+| `C-487` | feature | hoch | [exercise_muscles auf Blattebene](todos/training-c-0487-exercise-muscles-auf-blattebene.md) | offen | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
