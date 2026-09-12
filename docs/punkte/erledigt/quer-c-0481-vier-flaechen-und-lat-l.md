@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-431
 entscheidung: null
+erledigt: 2026-09-08
+commit: 10ff0c83
 beruehrt:
   tabellen: [public.koerperflaechen]
 zahlen:
@@ -69,3 +71,11 @@ Injektionsort** ? **miss, ob die Umstellung dort ankommt.**
 
 `[read]` **Reihenfolge: erst die Flaechen, dann die
 Umstellung.**
+
+## Aufgeloest 2026-09-08 in C-482
+
+`[read]` **Die vier Flaechen gehoeren unter ihre GRUPPE** ?
+**`Glutes` und `Hamstrings`.**
+
+`[cmd]` **Die gibt es in `koerperflaechen` noch nicht** ? **erst
+die vierte Ebene, dann die vier.**
