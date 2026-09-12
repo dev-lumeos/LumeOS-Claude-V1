@@ -2899,6 +2899,7 @@
       "rls": true,
       "policies": ["ALL"],
       "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260909250000_c461_training_programs_plans.sql: authenticated DML und service_role ALL fuer alle sieben Programm- und Routinentabellen.",
       "zeilenschutzart": "eigene_zeilen",
       "spalten": ["id", "user_id", "source", "name", "description", "days_per_week", "is_active", "created_at", "updated_at"]
     },
@@ -2909,6 +2910,7 @@
       "rls": true,
       "policies": ["ALL"],
       "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260909250000_c461_training_programs_plans.sql: authenticated DML und service_role ALL fuer alle sieben Programm- und Routinentabellen.",
       "zeilenschutzart": "eigene_zeilen",
       "spalten": ["id", "routine_id", "exercise_id", "exercise_order", "target_sets", "target_reps", "target_weight_kg", "target_percent_1rm", "notes", "created_at"]
     },
@@ -2919,6 +2921,7 @@
       "rls": true,
       "policies": ["ALL"],
       "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260909250000_c461_training_programs_plans.sql: authenticated DML und service_role ALL fuer alle sieben Programm- und Routinentabellen.",
       "zeilenschutzart": "eigene_zeilen",
       "spalten": ["id", "routine_id", "day_of_week", "week_number", "created_at"]
     },
@@ -2929,6 +2932,7 @@
       "rls": true,
       "policies": ["ALL"],
       "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260909250000_c461_training_programs_plans.sql: authenticated DML und service_role ALL fuer alle sieben Programm- und Routinentabellen.",
       "zeilenschutzart": "eigene_zeilen",
       "spalten": ["id", "user_id", "source", "name", "description", "duration_weeks", "created_at", "updated_at"]
     },
@@ -2939,6 +2943,7 @@
       "rls": true,
       "policies": ["ALL"],
       "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260909250000_c461_training_programs_plans.sql: authenticated DML und service_role ALL fuer alle sieben Programm- und Routinentabellen.",
       "zeilenschutzart": "eigene_zeilen",
       "spalten": ["id", "program_id", "week_start", "week_end", "label", "created_at"]
     },
@@ -2949,6 +2954,7 @@
       "rls": true,
       "policies": ["ALL"],
       "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260909250000_c461_training_programs_plans.sql: authenticated DML und service_role ALL fuer alle sieben Programm- und Routinentabellen.",
       "zeilenschutzart": "eigene_zeilen",
       "spalten": ["id", "program_id", "routine_id", "week_number", "day_of_week", "label", "created_at"]
     },
@@ -2959,6 +2965,7 @@
       "rls": true,
       "policies": ["ALL"],
       "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260909250000_c461_training_programs_plans.sql: authenticated DML und service_role ALL fuer alle sieben Programm- und Routinentabellen.",
       "zeilenschutzart": "eigene_zeilen",
       "spalten": ["id", "program_id", "user_id", "status", "proposed_at", "confirmed_at", "started_at", "ended_at", "created_at", "updated_at"]
     },
@@ -4454,11 +4461,11 @@
       "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
       "zeilenschutzart": "oeffentlich"
     },
-    {"schema":"supplements","name":"suppliers","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
-    {"schema":"supplements","name":"supplier_products","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
-    {"schema":"supplements","name":"product_contents","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
-    {"schema":"supplements","name":"product_content_candidates","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
-    {"schema":"coach","name":"relationship_specialties","schritt":"460_relationship_specialties","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"beziehungszeilen"},
+    {"schema":"supplements","name":"suppliers","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260909290000_c467_supplier_products.sql: authenticated SELECT und service_role ALL fuer Lieferanten und Produktinhalte.","zeilenschutzart":"oeffentlich"},
+    {"schema":"supplements","name":"supplier_products","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260909290000_c467_supplier_products.sql: authenticated SELECT und service_role ALL fuer Lieferanten und Produktinhalte.","zeilenschutzart":"oeffentlich"},
+    {"schema":"supplements","name":"product_contents","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260909290000_c467_supplier_products.sql: authenticated SELECT und service_role ALL fuer Lieferanten und Produktinhalte.","zeilenschutzart":"oeffentlich"},
+    {"schema":"supplements","name":"product_content_candidates","schritt":"467_supplier_products","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260909290000_c467_supplier_products.sql: authenticated SELECT und service_role ALL fuer Lieferanten und Produktinhalte.","zeilenschutzart":"oeffentlich"},
+    {"schema":"coach","name":"relationship_specialties","schritt":"460_relationship_specialties","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260909300000_c460_relationship_specialties.sql: authenticated SELECT und service_role ALL explizit.","zeilenschutzart":"beziehungszeilen"},
     {
       "schema": "supplements",
       "name": "intake_schedule",
@@ -4959,6 +4966,7 @@
         "SELECT"
       ],
       "grants": {
+        "anon": ["SELECT"],
         "authenticated": [
           "SELECT"
         ],
@@ -4972,7 +4980,7 @@
           "TRUNCATE"
         ]
       },
-      "grants_herkunft": "143_kimi_wave2_biomarker_symptoms.ts: authenticated SELECT, service_role ALL; Marker-Erklaerungen sind Katalogdaten.",
+      "grants_herkunft": "143_kimi_wave2_biomarker_symptoms.ts: anon/authenticated SELECT und service_role ALL; Marker-Erklaerungen sind Katalogdaten.",
       "zeilenschutzart": "oeffentlich"
     },
     {
@@ -4984,6 +4992,7 @@
         "SELECT"
       ],
       "grants": {
+        "anon": ["SELECT"],
         "authenticated": [
           "SELECT"
         ],
@@ -4997,7 +5006,7 @@
           "TRUNCATE"
         ]
       },
-      "grants_herkunft": "143_kimi_wave2_biomarker_symptoms.ts: authenticated SELECT, service_role ALL; Symptomkatalog ist Katalogdaten.",
+      "grants_herkunft": "143_kimi_wave2_biomarker_symptoms.ts: anon/authenticated SELECT und service_role ALL; Symptomkatalog ist Katalogdaten.",
       "zeilenschutzart": "oeffentlich"
     },
     {
@@ -5009,6 +5018,7 @@
         "SELECT"
       ],
       "grants": {
+        "anon": ["SELECT"],
         "authenticated": [
           "SELECT"
         ],
@@ -5022,7 +5032,7 @@
           "TRUNCATE"
         ]
       },
-      "grants_herkunft": "143_kimi_wave2_biomarker_symptoms.ts: authenticated SELECT, service_role ALL; Symptom-Marker-Kanten sind Katalogdaten.",
+      "grants_herkunft": "143_kimi_wave2_biomarker_symptoms.ts: anon/authenticated SELECT und service_role ALL; Symptom-Marker-Kanten sind Katalogdaten.",
       "zeilenschutzart": "oeffentlich"
     },
     {
@@ -5733,20 +5743,20 @@
       "grants_herkunft": "273_wissen_schema.sql: Wissen ist nicht fuer anon/authenticated freigegeben; nur service_role kann importieren/lesen.",
       "zeilenschutzart": "service_role_only"
     },
-    {"schema":"marketplace","name":"wallets","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
-    {"schema":"marketplace","name":"wallet_transactions","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
-    {"schema":"marketplace","name":"subscription_plans","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
-    {"schema":"marketplace","name":"creators","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
-    {"schema":"marketplace","name":"products","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
-    {"schema":"marketplace","name":"product_bundles","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
-    {"schema":"marketplace","name":"orders","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
-    {"schema":"marketplace","name":"order_items","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
-    {"schema":"marketplace","name":"product_licenses","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
-    {"schema":"marketplace","name":"delivery_results","schritt":"465_marketplace_training_delivery","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
-    {"schema":"marketplace","name":"product_reviews","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
-    {"schema":"marketplace","name":"promotion_slots","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"eigene_zeilen"},
-    {"schema":"marketplace","name":"fee_schedules","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
-    {"schema":"marketplace","name":"promotion_slot_catalog","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"zeilenschutzart":"oeffentlich"},
+    {"schema":"marketplace","name":"wallets","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260906072641_c419_marketplace_wallet_schema.sql: REVOKE fuer PUBLIC/anon/authenticated, dann authenticated SELECT und service_role ALL im ganzen Schema.","zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"wallet_transactions","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260906072641_c419_marketplace_wallet_schema.sql: REVOKE fuer PUBLIC/anon/authenticated, dann authenticated SELECT und service_role ALL im ganzen Schema.","zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"subscription_plans","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260906072641_c419_marketplace_wallet_schema.sql: REVOKE fuer PUBLIC/anon/authenticated, dann authenticated SELECT und service_role ALL im ganzen Schema.","zeilenschutzart":"oeffentlich"},
+    {"schema":"marketplace","name":"creators","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260906072641_c419_marketplace_wallet_schema.sql: REVOKE fuer PUBLIC/anon/authenticated, dann authenticated SELECT und service_role ALL im ganzen Schema.","zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"products","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260906072641_c419_marketplace_wallet_schema.sql: REVOKE fuer PUBLIC/anon/authenticated, dann authenticated SELECT und service_role ALL im ganzen Schema.","zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"product_bundles","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260906072641_c419_marketplace_wallet_schema.sql: REVOKE fuer PUBLIC/anon/authenticated, dann authenticated SELECT und service_role ALL im ganzen Schema.","zeilenschutzart":"oeffentlich"},
+    {"schema":"marketplace","name":"orders","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260906072641_c419_marketplace_wallet_schema.sql: REVOKE fuer PUBLIC/anon/authenticated, dann authenticated SELECT und service_role ALL im ganzen Schema.","zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"order_items","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260906072641_c419_marketplace_wallet_schema.sql: REVOKE fuer PUBLIC/anon/authenticated, dann authenticated SELECT und service_role ALL im ganzen Schema.","zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"product_licenses","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260906072641_c419_marketplace_wallet_schema.sql: REVOKE fuer PUBLIC/anon/authenticated, dann authenticated SELECT und service_role ALL im ganzen Schema.","zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"delivery_results","schritt":"465_marketplace_training_delivery","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260909280000_c465_marketplace_training_delivery.sql: authenticated SELECT und service_role ALL explizit.","zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"product_reviews","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260906072641_c419_marketplace_wallet_schema.sql: REVOKE fuer PUBLIC/anon/authenticated, dann authenticated SELECT und service_role ALL im ganzen Schema.","zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"promotion_slots","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260906072641_c419_marketplace_wallet_schema.sql: REVOKE fuer PUBLIC/anon/authenticated, dann authenticated SELECT und service_role ALL im ganzen Schema.","zeilenschutzart":"eigene_zeilen"},
+    {"schema":"marketplace","name":"fee_schedules","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260906072641_c419_marketplace_wallet_schema.sql: REVOKE fuer PUBLIC/anon/authenticated, dann authenticated SELECT und service_role ALL im ganzen Schema.","zeilenschutzart":"oeffentlich"},
+    {"schema":"marketplace","name":"promotion_slot_catalog","schritt":"419_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"20260906072641_c419_marketplace_wallet_schema.sql: REVOKE fuer PUBLIC/anon/authenticated, dann authenticated SELECT und service_role ALL im ganzen Schema.","zeilenschutzart":"oeffentlich"},
     {
       "schema": "medical",
       "name": "appointments",
@@ -5768,6 +5778,36 @@
       "grants_herkunft": "20260908113000_c429_medical_documents_timeline.sql: eigene, herkunftspflichtige Nutzerzitate sind voll bearbeitbar; service_role ALL.",
       "zeilenschutzart": "eigene_zeilen",
       "spalten": ["id", "user_id", "event_type", "occurred_on", "occurred_at", "title", "details", "source_kind", "source_actor", "source_recorded_at", "source_lab_report_id", "created_at", "updated_at"]
+    },
+    {
+      "schema": "public",
+      "name": "profiles",
+      "schritt": "Baseline",
+      "rls": true,
+      "policies": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+      "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260805120000_baseline_structure.sql: GRANT SELECT, INSERT, UPDATE an authenticated und ALL an service_role.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "public",
+      "name": "user_display_preferences",
+      "schritt": "091",
+      "rls": true,
+      "policies": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+      "grants": {"authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "091_user_display_preferences.sql: REVOKE ALL, dann authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "public",
+      "name": "koerperflaechen",
+      "schritt": "471",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "20260911180000_c471_koerperflaechen_struktur.sql: REVOKE ALL fuer PUBLIC, anon und authenticated; danach authenticated SELECT und service_role ALL.",
+      "zeilenschutzart": "oeffentlich"
     }
   ],
   "_fremde_funktionen": "GO-04: Funktionen ausserhalb nutrition. Dieselbe Luecke wie oben.",

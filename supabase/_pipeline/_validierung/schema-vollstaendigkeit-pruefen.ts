@@ -666,6 +666,13 @@ if (Array.isArray(SOLL.fremde_schemata) && SOLL.fremde_schemata.length) {
         grOk = false
       }
     }
+    for (const rolle of grIst.keys()) {
+      if (!(rolle in (t.grants as Record<string, string[]>))) {
+        fehler.push(`GRANT: ${voll} traegt Rechte fuer die nicht vorgesehene Rolle ` +
+          `${rolle} (${[...grIst.get(rolle)!].join(',')}) — Schritt ${t.schritt}`)
+        grOk = false
+      }
+    }
     if (grOk) fremdOk++
   }
   console.log(`Fremde Tab. ${fremdOk}/${SOLL.fremde_schemata.length} vollstaendig`)
