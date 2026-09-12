@@ -50,6 +50,10 @@ import { RecoveryKontext, useRecovery, type ModalZustand, type ScoreModus } from
 // Karte steht in packages/ui, weil drei Module sie brauchen.
 import { alsErmuedung, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
 import { RecoveryModale } from './modale'
+// G-430: der Muskelbaum — parent/child aus der Datenbank.
+// `[read]` **Der TYP aus der Rechnung, nicht aus dem Leseweg** —
+// `ansicht.tsx` ist `'use client'`.
+import type { HierarchieStand } from '../../../lib/koerper/hierarchie'
 // G-55: die erfassten Check-ins.
 import type { CheckinStand } from '../../../lib/recovery/checkin-read'
 // G-82: der Erholungswert kommt aus `recovery.scores`, nicht mehr aus
@@ -110,11 +114,19 @@ function tabs(muskelzahl: number, modalitaeten: number, otZahl: number): TabItem
 }
 
 export function RecoveryAnsicht({
-  checkins, scores, modalitaeten,
+  checkins, scores, modalitaeten, hierarchie,
 }: {
   checkins?: CheckinStand
   scores?: ScoreStand
   modalitaeten?: ModalitaetenStand
+  /**
+   * G-430: der Muskelbaum aus `public.koerperflaechen`.
+   *
+   * `[read]` **Reine Felder, keine `Map`** — eine `Map` als Prop an
+   * eine `'use client'`-Komponente kommt leer an, ohne Fehler und
+   * ohne Typfehler (die Lehre aus G-388).
+   */
+  hierarchie?: HierarchieStand
 }) {
   // G-117: Tab in der Adresse — Drop-in aus lib/tab-url.
   const [tab, setTab] = useTabParam('today')
@@ -297,7 +309,8 @@ export function RecoveryAnsicht({
         </>
       )}
 
-      <RecoveryModale modal={modal} onClose={kontext.close} />
+      <RecoveryModale modal={modal} onClose={kontext.close}
+                      hierarchie={hierarchie} />
     </RecoveryKontext.Provider>
   )
 }

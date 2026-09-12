@@ -56,8 +56,22 @@ export const EINORDNUNG: Record<string, Einordnung> = {
   adductors: { art: 'gruppe', name: 'Adduktoren (Innenseite)' },
   quadriceps: { art: 'gruppe', name: 'Quadrizeps' },
   calves: { art: 'gruppe', name: 'Waden' },
-  'upper-back': { art: 'gruppe', name: 'Oberer Ruecken (mit Latissimus)' },
-  'lower-back': { art: 'gruppe', name: 'Unterer Ruecken' },
+  // ══ G-430: der Ruecken ist aufgeteilt ════════════════════════════
+  //
+  // `[cmd]` **Hier standen zwei Gruppen:** `'upper-back'` (*,,Oberer
+  // Ruecken (mit Latissimus)"*) und `'lower-back'`.
+  //
+  // `[cmd]` **G-425 hat jeden Pfad einzeln eingefaerbt und
+  // fotografiert:** `upper-back` **buendelte DREI Muskelpaare**,
+  // `lower-back` **ZWEI** — als einzige zwei der 23 Flaechen.
+  // **`triceps` ist der Gegenbeweis: 8 Pfade, EIN Muskel.**
+  //
+  // `[read]` **Die Pfade sind unveraendert** — nur ihre Zuordnung.
+  'teres-minor': { art: 'gruppe', name: 'Teres minor' },
+  'teres-major': { art: 'gruppe', name: 'Teres major' },
+  latissimus: { art: 'gruppe', name: 'Latissimus dorsi' },
+  'erector-spinae': { art: 'gruppe', name: 'Rueckenstrecker' },
+  flanke: { art: 'gruppe', name: 'Flanke' },
   gluteal: { art: 'gruppe', name: 'Gesaess' },
   hamstring: { art: 'gruppe', name: 'Beinbeuger' },
   // `[cmd]` DIE EINZIGE GRUPPE OHNE RECOVERY-KUERZEL. Die Karte
@@ -102,11 +116,17 @@ export const EINORDNUNG: Record<string, Einordnung> = {
   // beschriftet sie selbst so (koerperkarte-pfade.ts:256).
   vg_l: { art: 'teilstueck', von: 'gluteal', name: 'Ventrogluteal links' },
   vg_r: { art: 'teilstueck', von: 'gluteal', name: 'Ventrogluteal rechts' },
-  // `[cmd]` Der Latissimus hat KEINE eigene Flaeche — er steckt in
-  // `upper-back` (6 Pfade ueber den ganzen oberen Ruecken). Die beiden
-  // Punkte liegen darueber.
-  lat_l: { art: 'teilstueck', von: 'upper-back', name: 'Latissimus links' },
-  lat_r: { art: 'teilstueck', von: 'upper-back', name: 'Latissimus rechts' },
+  // ══ G-430: der Latissimus HAT jetzt eine eigene Flaeche ══════════
+  //
+  // `[cmd]` **Hier stand:** *„Der Latissimus hat KEINE eigene Flaeche
+  // — er steckt in `upper-back` (6 Pfade ueber den ganzen oberen
+  // Ruecken)."* `[cmd]` **Das war der Grund fuer G-424** (*,,waehlbar,
+  // nicht zeichenbar"*).
+  //
+  // `[read]` **Die zwei Punkte liegen jetzt ueber IHREM Muskel**,
+  // nicht ueber einem Buendel aus dreien.
+  lat_l: { art: 'teilstueck', von: 'latissimus', name: 'Latissimus links' },
+  lat_r: { art: 'teilstueck', von: 'latissimus', name: 'Latissimus rechts' },
   tricep_l: { art: 'teilstueck', von: 'triceps', name: 'Trizeps links' },
   tricep_r: { art: 'teilstueck', von: 'triceps', name: 'Trizeps rechts' },
 }
@@ -122,7 +142,12 @@ export function nachArt(art: Einordnung['art']): string[] {
  * benachbarten Muskel gelegt. Eine erfundene Zuordnung waere eine
  * Falschaussage ueber den Koerper.
  */
-export const RECOVERY_ZU_KARTE: Record<string, string | null> = {
+// `[cmd]` **G-430: der Wert darf eine LISTE sein.** `[read]` **Ein
+// Kuerzel, das mehrere Muskeln misst, faerbt mehrere Flaechen** —
+// seit `upper-back` in drei Muskeln zerfaellt. **Die alten
+// Einzelwerte bleiben gueltig**, `flaechenFuer()` macht aus beidem
+// eine Liste.
+export const RECOVERY_ZU_KARTE: Record<string, string | string[] | null> = {
   // Deckungsgleich — gleicher Name, gleiche Gruppe.
   chest: 'chest',
   abs: 'abs',
@@ -156,13 +181,41 @@ export const RECOVERY_ZU_KARTE: Record<string, string | null> = {
   // Bindestrich nicht traf. Am Bildschirm waeren zwei Muskelgruppen
   // dauerhaft grau geblieben, ohne Fehlermeldung. Aufgefallen ist es
   // erst, als die gerenderten Gruppen im Browser gezaehlt wurden.
-  upper_back: 'upper-back',
-  lower_back: 'lower-back',
+  // ══ G-430: ein Kuerzel, MEHRERE Flaechen ═════════════════════════
+  //
+  // `[cmd]` **Hier stand `upper_back: 'upper-back'`** — eine Flaeche,
+  // ein Kuerzel. **Seit der Aufteilung gibt es `upper-back` nicht
+  // mehr**, sondern drei Muskeln.
+  //
+  // `[read]` **Recovery misst weiter den oberen Ruecken als EINE
+  // Gruppe** — es fragt „wie erholt ist dein oberer Ruecken", nicht
+  // „wie erholt ist dein Teres minor". **Also faerbt ein Wert alle
+  // drei Teile**, statt willkuerlich einen zu waehlen.
+  //
+  // `[read]` **Die Alternative waere gewesen, `upper_back` auf
+  // `latissimus` zu legen** — dann blieben Teres major und minor
+  // dauerhaft grau, ohne Fehlermeldung. **Genau der Fehler, den der
+  // Kommentar darueber beschreibt.**
+  upper_back: ['latissimus', 'teres-major', 'teres-minor'],
+  lower_back: ['erector-spinae', 'flanke'],
 
   // `abductors` — die Karte fuehrt nur `adductors` (Innenseite). Die
   // Aussenseite fehlt ihr. Nicht auf `gluteal` legen: das ist ein
   // anderer Muskel.
   abductors: null,
+}
+
+/**
+ * G-430: die Flaechen eines Kuerzels — IMMER als Liste.
+ *
+ * `[read]` **Eine Stelle, die den Unterschied zwischen `'chest'` und
+ * `['latissimus', …]` aufloest** — sonst muesste jeder Aufrufer es
+ * selbst tun, und wer es vergisst, faerbt nichts.
+ */
+export function flaechenFuer(slug: string): string[] {
+  const v = RECOVERY_ZU_KARTE[slug]
+  if (!v) return []
+  return Array.isArray(v) ? v : [v]
 }
 
 /** Die Kuerzel, die die Karte nicht darstellen kann. */
@@ -187,10 +240,15 @@ export const OHNE_ENTSPRECHUNG = Object.entries(RECOVERY_ZU_KARTE)
  */
 export const KARTE_ZU_RECOVERY: Record<string, string> = (() => {
   const k: Record<string, string> = {}
-  for (const [slug, id] of Object.entries(RECOVERY_ZU_KARTE)) {
-    if (!id) continue
-    if (k[id]) continue // erster gewinnt — front_deltoids vor back_deltoids
-    k[id] = slug
+  for (const slug of Object.keys(RECOVERY_ZU_KARTE)) {
+    // `[cmd]` **G-430: ueber `flaechenFuer`, nicht ueber den Rohwert**
+    // — `upper_back` traegt jetzt drei Flaechen, und alle drei
+    // muessen zurueckfinden. **Sonst oeffnete ein Klick auf den
+    // Latissimus ein leeres Fenster.**
+    for (const id of flaechenFuer(slug)) {
+      if (k[id]) continue // erster gewinnt — front_deltoids vor back_deltoids
+      k[id] = slug
+    }
   }
   return k
 })()
@@ -214,19 +272,23 @@ export function alsErmuedung(
   const gesehen = new Set<string>()
   for (const [slug, wert] of Object.entries(werte)) {
     if (wert == null) continue
-    const id = RECOVERY_ZU_KARTE[slug]
-    if (!id || !MUSKELN[id]) continue
-    // Beide Deltoid-Kuerfel zeigen auf dieselbe Gruppe. Der schlechtere
-    // Wert gewinnt — eine Karte, die den besseren zeigt, beruhigt
-    // faelschlich.
-    const ermuedung = 100 - wert
-    const schon = raus.find(r => r.id === id)
-    if (schon) {
-      schon.fatigue = Math.max(schon.fatigue, ermuedung)
-      continue
+    // `[cmd]` **G-430: ein Kuerzel kann MEHRERE Flaechen faerben** —
+    // `upper_back` misst den oberen Ruecken als Gruppe und faerbt
+    // Latissimus, Teres major und Teres minor.
+    for (const id of flaechenFuer(slug)) {
+      if (!MUSKELN[id]) continue
+      // Beide Deltoid-Kuerfel zeigen auf dieselbe Gruppe. Der schlechtere
+      // Wert gewinnt — eine Karte, die den besseren zeigt, beruhigt
+      // faelschlich.
+      const ermuedung = 100 - wert
+      const schon = raus.find(r => r.id === id)
+      if (schon) {
+        schon.fatigue = Math.max(schon.fatigue, ermuedung)
+        continue
+      }
+      gesehen.add(id)
+      raus.push({ id, fatigue: ermuedung })
     }
-    gesehen.add(id)
-    raus.push({ id, fatigue: ermuedung })
   }
   return raus
 }
@@ -252,19 +314,21 @@ export function katerAlsMuskeln(
   const raus: Array<{ id: string; color: string; opacity: number; stufe: number }> = []
   for (const [slug, wert] of Object.entries(werte)) {
     if (wert == null) continue
-    const id = RECOVERY_ZU_KARTE[slug]
-    if (!id || !MUSKELN[id]) continue
-    const stufe = Math.min(Math.max(Math.round(wert), 0), 3)
-    const schon = raus.find(r => r.id === id)
-    // Deltoids: der schlechtere Wert gewinnt, wie oben.
-    if (schon) {
-      if (stufe > schon.stufe) {
-        schon.stufe = stufe
-        schon.color = KATER_FARBE[stufe]
+    // `[cmd]` **G-430: wie oben — ein Kuerzel, mehrere Flaechen.**
+    for (const id of flaechenFuer(slug)) {
+      if (!MUSKELN[id]) continue
+      const stufe = Math.min(Math.max(Math.round(wert), 0), 3)
+      const schon = raus.find(r => r.id === id)
+      // Deltoids: der schlechtere Wert gewinnt, wie oben.
+      if (schon) {
+        if (stufe > schon.stufe) {
+          schon.stufe = stufe
+          schon.color = KATER_FARBE[stufe]
+        }
+        continue
       }
-      continue
+      raus.push({ id, color: KATER_FARBE[stufe], opacity: 0.85, stufe })
     }
-    raus.push({ id, color: KATER_FARBE[stufe], opacity: 0.85, stufe })
   }
   return raus.map(({ id, color, opacity }) => ({ id, color, opacity }))
 }

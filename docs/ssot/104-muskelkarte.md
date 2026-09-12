@@ -688,3 +688,110 @@ Fünf Wegwerf-Skripte liegen noch im Wurzelverzeichnis
 Die Löschung wurde abgelehnt — bitte selbst entfernen.
 
 **Nichts ist committet oder gestaged.**
+
+
+---
+
+## 2026-09-12 — G-430: der Rücken ist aufgeteilt
+
+`[cmd]` **Die Zahlen oben gelten bis zum 2026-09-11.** Ab G-430 ist
+`upper-back` in drei und `lower-back` in zwei Muskeln zerlegt — **die
+Pfade sind unverändert, nur ihre Zuordnung.**
+
+### Was sich geändert hat
+
+    vorher                     nachher
+    ---------------------------------------------------------------
+    'upper-back'  6 Pfade      teres-minor      Pfad 1, 4
+                               teres-major      Pfad 2, 5
+                               latissimus       Pfad 3, 6
+    'lower-back'  4 Pfade      flanke           Pfad 1, 4
+                               erector-spinae   Pfad 2, 3
+
+`[cmd]` **Grundlage ist G-425** — dort wurde jeder Pfad einzeln
+eingefärbt und fotografiert (`docs/bilder/g425/`). **Die Bilder 1, 2
+und 3 wurden für G-430 erneut angesehen:** Pfad 1 ist das Dreieck
+oben am Schulterblatt, Pfad 2 die Sichel am Außenrand, Pfad 3 das
+breite Dreieck von der Achsel zur Taille.
+
+`[read]` **Die Zuordnung im Auftrag lautete anders** (*„Pfad 1/4 Teres
+major"*) — **am Bild ist es umgekehrt**, und G-425 hatte genau davor
+gewarnt: bei einer gespiegelten Figur sagt das größere x nicht
+„weiter außen".
+
+### Die neuen Zahlen
+
+    Flächen-IDs der Karte        23  ->  26
+    davon Muskelgruppen          17  ->  20
+    Einordnung gesamt            39  ->  42
+    eingefärbte Gruppen          16  ->  19
+    Muskelnamen (C-73)           96      unverändert
+    Zuordnungen Name -> Fläche   96  ->  97
+
+`[read]` **97 bei 96 Namen:** `Obliques` deckt seit G-430 zwei Flächen
+— die Bauchseite und die Flanke.
+
+### Die Verteilung je Fläche (2026-09-12)
+
+| Fläche | Muskeln | Fläche | Muskeln |
+|---|---|---|---|
+| `forearm` | 17 | `biceps` | 3 |
+| `calves` | 10 | `trapezius` | 3 |
+| `quadriceps` | 9 | `erector-spinae` | 2 |
+| `adductors` | 8 | `obliques` | 2 |
+| `gluteal` | 8 | `tibialis` | 2 |
+| `deltoids` | 7 | `flanke` | 1 |
+| `abs` | 5 | `teres-major` | 1 |
+| `chest` | 5 | `teres-minor` | 1 |
+| `hamstring` | 4 | `triceps` | 1 |
+| `latissimus` | 4 | | |
+| `neck` | 4 | | |
+
+`[cmd]` **`deltoids` verliert einen** (`Teres Minor` hat jetzt eine
+eigene Fläche), **`trapezius` gewinnt einen** (`Rhomboids`, der keinen
+eigenen Pfad hat).
+
+### Was die Tabelle NICHT trägt
+
+`[cmd]` **`public.koerperflaechen` kennt die fünf neuen Flächen nicht**
+— gemessen 2026-09-12 gegen die laufende Instanz:
+
+    latissimus · teres-major · teres-minor      FEHLT
+    erector-spinae · flanke                     FEHLT
+    upper-back · lower-back                     stehen noch drin
+
+`[read]` **Die Zeilen zu ergänzen hieße `supabase/` anzufassen** — der
+Auftrag verbot es. **Solange überbrückt `AUS_AUFTEILUNG`
+(`apps/web/src/lib/koerper/hierarchie.ts`) die Lücke**, und das
+Per-muscle-Detail schreibt sichtbar *„geerbt — diese Fläche steht noch
+nicht in public.koerperflaechen"*.
+
+`[read]` **Das ist die einzige Stelle, an der die Aufteilung doppelt
+steht.** Sie fällt weg, sobald die Zeilen in der Datenbank sind.
+
+### Drei Muskeln ohne Pfad (A6)
+
+`[cmd]` **Gemessen gegen `training.muscle_groups`:**
+
+| Muskel | Elternteil | warum kein Pfad |
+|---|---|---|
+| `Rhomboids` | Upper Back | liegt unter dem Trapezmuskel |
+| `Soleus` | Calves | liegt unter dem Gastrocnemius |
+| `Internal oblique` | Obliques | nur die äußere Schicht ist gezeichnet |
+
+`[read]` **Sie sind NICHT erfunden worden.** Sie stehen in `LUECKEN`
+und werden im Per-muscle-Detail genannt.
+
+### Die Abdeckung der Tabelle
+
+`[cmd]` **`koerperflaechen` kann `MUSKEL_ZU_FLAECHE` heute NICHT
+ersetzen:**
+
+    muskel-ebenen.ts führt              96 Muskelnamen
+    davon über die Tabelle erreichbar   60
+    NICHT erreichbar                    36
+
+`[read]` **Darunter `Back`, `Rhomboids`, `Teres Major`, `Upper Back`,
+`Lower Back`, `Core`, `Arms`, `Legs`** — wer heute umstellt, verliert
+36 Muskeln, die heute Farbe bekommen. **Die Tabelle trägt die
+Hierarchie, die Handliste die Abdeckung.**

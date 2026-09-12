@@ -38,7 +38,31 @@ const z = (v: unknown) => {
   return typeof n === 'number' && Number.isFinite(n) ? n : 0
 }
 
-export function SuppExtended() {
+export function SuppExtended({ protokolle = null, zyklen = null }: {
+  // ══ G-428: die zwei Schreibwege gehoeren IN die Vorlage ══════════
+  //
+  // **Tom, 2026-09-08:** *„supplements/Extended — nach modulmenu
+  // Zyklen und Protokolle halbherzig eingebaut, was ist das?"*
+  //
+  // `[cmd]` **Gemessen VOR dieser Aenderung**
+  // (`tools/_g428-extended.mjs`): **die Kacheln `Zyklen` und
+  // `Protokolle` lagen VOR dem Raster** (`.v2-grid-14`), nicht darin
+  // — zwei nackte Bedienleisten ueber der ganzen Breite.
+  //
+  // `[read]` **Sie kommen als Fuellung herein, nicht als Nachbar** —
+  // die Vorlage hat fuer beide eine Stelle:
+  //
+  //     Active protocols            module-supplements.jsx:1207
+  //     Cycle timeline · 16 weeks   module-supplements.jsx:1212/1381
+  //
+  // `[read]` **`null` heisst: die Entwurfsfassung bleibt stehen** —
+  // so bleibt der Reiter ohne Gate unveraendert, und kein Aufrufer
+  // muss etwas uebergeben, das er nicht hat.
+  /** Die echte Protokollkachel — steht ANSTELLE von `Active protocols`. */
+  protokolle?: React.ReactNode
+  /** Die echte Zyklenkachel — steht UEBER `Cycle timeline`. */
+  zyklen?: React.ReactNode
+} = {}) {
   const { open } = useSupp()
   const [drawer, setDrawer] = React.useState<string | null>(null)
 
@@ -63,6 +87,12 @@ export function SuppExtended() {
       <ExtendedHeader />
       <div className="v2-grid-14" style={{ marginTop: 16 }}>
         <div className="v2-col-gap" style={{ gap: 14 }}>
+          {/* ══ G-428: das Echte an der Stelle der Vorlage ═══════════
+              `[read]` **`Active protocols` IST die Protokollansicht**
+              — sie stand als Attrappe da, waehrend darueber eine
+              nackte Bedienleiste anlegte. **Jetzt steht das Echte an
+              ihrer Stelle, die Attrappe darunter** (E-68). */}
+          {protokolle}
           <Card
             title="Active protocols"
             sub={`${liste.length} compounds · physician-supervised`}
@@ -81,6 +111,15 @@ export function SuppExtended() {
             </div>
           </Card>
 
+          {/* ══ G-428/A5: die Vorlage HAT einen Zyklenbereich ════════
+              `[cmd]` **Gemessen, nicht erfunden:**
+              `module-supplements.jsx:1212` rendert `<CycleTimeline/>`
+              direkt unter `Active protocols`, die Kachel selbst steht
+              in Zeile **1381-1425** und heisst *„Cycle timeline · 16
+              weeks"*.
+              `[read]` **Also gehoert die echte Zyklenkachel hierhin**
+              — ueber die Entwurfsfassung, wie bei den Protokollen. */}
+          {zyklen}
           <CycleTimeline />
 
           <Card

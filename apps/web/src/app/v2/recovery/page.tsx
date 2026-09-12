@@ -23,6 +23,12 @@ import type { Metadata } from 'next'
 import { ladeCheckins } from '../../../lib/recovery/checkin-read'
 import { ladeScores, ladeModalitaeten } from '../../../lib/recovery/scores-read'
 import { RecoveryAnsicht } from './ansicht'
+// ══ G-430: die Muskelhierarchie aus `public.koerperflaechen` ══════
+//
+// `[cmd]` **C-468 hat die Tabelle gebaut — und NIEMAND hat sie
+// gelesen** (gemessen 2026-09-11). **Das hier ist der erste
+// Leseweg.**
+import { ladeHierarchie } from '../../../lib/koerper/hierarchie-read'
 import './recovery.css'
 
 export const metadata: Metadata = {
@@ -48,16 +54,20 @@ export default async function V2RecoveryPage({
   // Drei getrennte Abfragen, drei getrennte Ergebnisse: faellt eine
   // aus, bleiben die uebrigen gueltig. Dieselbe Linie wie im
   // Tagebuch.
-  const [checkins, scores, modalitaeten] = await Promise.all([
+  const [checkins, scores, modalitaeten, hierarchie] = await Promise.all([
     ladeCheckins(30, stichtag),
     ladeScores(180, stichtag),
     ladeModalitaeten(120, stichtag),
+    // `[read]` **Stammdaten, kein Nutzerbezug** — aber derselbe
+    // Weg: faellt sie aus, bleiben die drei uebrigen gueltig.
+    ladeHierarchie(),
   ])
   return (
     <RecoveryAnsicht
       checkins={checkins}
       scores={scores}
       modalitaeten={modalitaeten}
+      hierarchie={hierarchie}
     />
   )
 }

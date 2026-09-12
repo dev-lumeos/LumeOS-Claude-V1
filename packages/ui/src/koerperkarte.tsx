@@ -232,7 +232,18 @@ export type KoerperkarteProps = {
    * Check-in benutzt es: man tippt einen Muskel an und sieht, welcher
    * gerade gemeint ist. Ergaenzt, statt es beim Umbau zu verlieren.
    */
-  ausgewaehlt?: string | null
+  // ══ G-430: MEHRERE Flaechen koennen ausgewaehlt sein ════════════
+  //
+  // **Tom, 2026-09-08:** *„ein bodybuilder nutzt uebungen fuer
+  // einzelne muskeln sowie gebuendelt."*
+  //
+  // `[read]` **Ein Klick auf `Back` waehlt alle Kinder**, ein Klick
+  // auf `Latissimus` nur ihn. **Eine Zeichenkette kann das nicht
+  // ausdruecken** — deshalb auch eine Liste.
+  //
+  // `[read]` **Der Einzelwert bleibt gueltig** — kein Aufrufer muss
+  // geaendert werden, der heute einen String uebergibt.
+  ausgewaehlt?: string | string[] | null
 }
 
 function Ansicht({
@@ -249,7 +260,7 @@ function Ansicht({
   onPick?: KoerperkarteProps['onPick']
   id: string
   texte: { vorne: string; hinten: string }
-  ausgewaehlt?: string | null
+  ausgewaehlt?: string | string[] | null
 }) {
   const hinten = seite === 'back'
   const vbX = hinten ? VB_W : 0
@@ -311,7 +322,11 @@ function Ansicht({
             // Bei gedimmter Figur wird nichts eingefaerbt und nichts
             // anklickbar — die Punkte stehen dann im Vordergrund.
             const werte = figurDimmen ? [] : (farben[mid] ?? [])
-            const aktiv = ausgewaehlt === mid
+            // `[cmd]` **G-430: `includes` statt `===`** — bei einer
+            // Liste ist jede genannte Flaeche aktiv.
+            const aktiv = Array.isArray(ausgewaehlt)
+              ? ausgewaehlt.includes(mid)
+              : ausgewaehlt === mid
 
             return (
               <g key={mid} data-muskel={mid}>

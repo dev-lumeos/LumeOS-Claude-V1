@@ -102,6 +102,26 @@ import { SupplementsModale } from './modale'
 //
 // `[cmd]` **`Extended` bleibt unuebersetzt** — Eigenname, in G-167 so
 // festgelegt.
+// ══ G-428: die Reiter-Ids, EINMAL ════════════════════════════════
+//
+// `[cmd]` **`/v2/supplements?tab=injektionen` zeigte 1 Kachel und 801
+// Zeichen** — der deutsche Name trifft keinen Zweig, denn alle Zweige
+// unten fragen `tab === 'injection'`. **Gemessen auf beiden Konten,
+// und dieselbe Zahl VOR G-389** (`git checkout 05425238^`): **der
+// Reiter war nie kaputt.**
+//
+// `[read]` **Die Liste wird NICHT abgeschrieben, sondern aus `tabs()`
+// abgeleitet** — `reiterIds()` ruft dieselbe Funktion, die die Leiste
+// rendert. **Eine zweite, von Hand gepflegte Liste waere genau die
+// Drift, vor der `tab-url.ts` gewarnt hat**: wer einen Reiter
+// ergaenzt und die Liste vergisst, haette ihn stumm geklammert.
+//
+// `[read]` **Die Argumente sind egal** — sie bestimmen Beschriftung
+// und Zahl, nie die Menge der Ids.
+function reiterIds(): string[] {
+  return tabs(s => s, 0, null, 0).map(x => x.id)
+}
+
 function tabs(
   t: (s: string) => string,
   stackAnzahl: number,
@@ -203,7 +223,12 @@ export function SupplementsAnsicht({
   // G-172: die Beschriftungen aus `messages/`. Clientkomponente,
   // also `useTranslations` — `getTranslations` waere serverseitig.
   const t = useTranslations('Supplements')
-  const [tab, setTab] = useTabParam('today')
+  // G-428: unbekannte Reiter fallen auf `today` statt ins Leere.
+  // `[read]` **Ueber `useMemo`, weil `reiterIds()` bei jedem Anstrich
+  // ein NEUES Array gaebe** — dieselbe Falle wie bei `stand?.orte ??
+  // []` in `tab-injektionen.tsx:133`.
+  const bekannteReiter = React.useMemo(() => reiterIds(), [])
+  const [tab, setTab] = useTabParam('today', bekannteReiter)
   const [modal, setModal] = React.useState<ModalZustand>(null)
 
   // G-74: Der Stichtag der Rechnungen. Kommt serverseitig; ohne ihn
@@ -382,18 +407,31 @@ export function SupplementsAnsicht({
                   PCT-Protokoll dorthin gehoert: es faengt einen
                   Zyklus ab, den der Grundreiter gar nicht kennt.
                   `[read]` **Und nur hinter dem Gate** — dieselbe
-                  Schranke wie fuer den uebrigen Inhalt. */}
+                  Schranke wie fuer den uebrigen Inhalt.
+
+                  ══ G-428: sie stehen jetzt IN der Vorlage ══════════
+                  **Tom:** *„nach modulmenu Zyklen und Protokolle
+                  halbherzig eingebaut, was ist das?"*
+                  `[cmd]` **Hier standen sie als eigene Geschwister
+                  VOR `<SuppExtended/>`** — gemessen: zwei Kacheln vor
+                  dem Raster `.v2-grid-14`, ueber die ganze Breite,
+                  ohne Rahmen der Vorlage.
+                  `[read]` **Die Schreibwege sind NICHT entfernt** —
+                  sie sind dieselben Kacheln, nur an der Stelle, die
+                  die Vorlage fuer sie hat. */}
               {gate?.offen && (
-                <>
-                  <ZyklusKarte
-                    d={zyklen ?? { zyklen: [], protokolle: [], vorlagen: [], fehler: null }}
-                    substanzen={substanzen.map(x => ({ id: x.id, name: x.name }))} />
-                  <ProtokollKarte
-                    d={zyklen ?? { zyklen: [], protokolle: [], vorlagen: [], fehler: null }}
-                    substanzen={substanzen.map(x => ({ id: x.id, name: x.name }))} />
-                </>
+                <SuppExtended
+                  protokolle={(
+                    <ProtokollKarte
+                      d={zyklen ?? { zyklen: [], protokolle: [], vorlagen: [], fehler: null }}
+                      substanzen={substanzen.map(x => ({ id: x.id, name: x.name }))} />
+                  )}
+                  zyklen={(
+                    <ZyklusKarte
+                      d={zyklen ?? { zyklen: [], protokolle: [], vorlagen: [], fehler: null }}
+                      substanzen={substanzen.map(x => ({ id: x.id, name: x.name }))} />
+                  )} />
               )}
-              {gate?.offen && <SuppExtended />}
               {/* `[cmd]` G-365: die Linie stand unter einer
                   Datenbedingung. Sabotageprobe 2026-09-07 in
                   training und goals: ohne Daten verschwindet sie,

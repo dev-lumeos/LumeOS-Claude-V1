@@ -18,7 +18,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
 import { MUSKELN, INJEKTIONS_ORTE } from '@lumeos/ui'
-import { EINORDNUNG, RECOVERY_ZU_KARTE } from '../muskel-zuordnung'
+import { EINORDNUNG, RECOVERY_ZU_KARTE, flaechenFuer } from '../muskel-zuordnung'
 
 test('jede ID der Karte ist eingeordnet', () => {
   const alle = [...Object.keys(MUSKELN), ...Object.keys(INJEKTIONS_ORTE)]
@@ -44,11 +44,14 @@ test('die Einordnung erfindet keine IDs', () => {
 test('jede Recovery-Zuordnung zeigt auf eine Gruppe, kein Teilstueck', () => {
   // `[cmd]` Ein Teilstueck wie `bicep_l` einzufaerben ergaebe einen
   // halben Muskel. Recovery darf nur auf `art: 'gruppe'` zeigen.
-  for (const [slug, id] of Object.entries(RECOVERY_ZU_KARTE)) {
-    if (id === null) continue
-    const e = EINORDNUNG[id]
-    assert.ok(e, `"${slug}" zeigt auf "${id}" — nicht eingeordnet.`)
-    assert.equal(e.art, 'gruppe',
-      `"${slug}" zeigt auf "${id}", das ist "${e.art}", keine Gruppe.`)
+  // `[cmd]` **G-430: je Kuerzel ALLE Flaechen** — `upper_back` traegt
+  // seit der Aufteilung drei, und jede einzelne muss eine Gruppe sein.
+  for (const slug of Object.keys(RECOVERY_ZU_KARTE)) {
+    for (const id of flaechenFuer(slug)) {
+      const e = EINORDNUNG[id]
+      assert.ok(e, `"${slug}" zeigt auf "${id}" — nicht eingeordnet.`)
+      assert.equal(e.art, 'gruppe',
+        `"${slug}" zeigt auf "${id}", das ist "${e.art}", keine Gruppe.`)
+    }
   }
 })

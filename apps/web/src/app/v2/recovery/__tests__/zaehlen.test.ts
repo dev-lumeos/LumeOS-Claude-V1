@@ -10,13 +10,22 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { EINORDNUNG, nachArt, RECOVERY_ZU_KARTE } from '../muskel-zuordnung'
+import { EINORDNUNG, nachArt, RECOVERY_ZU_KARTE, flaechenFuer } from '../muskel-zuordnung'
 
 test('die Aufteilung der 39 IDs steht fest', () => {
-  assert.equal(nachArt('gruppe').length, 17, 'einfaerbbare Muskelgruppen')
+  // ══ G-430: 17 -> 20 Gruppen, 39 -> 42 IDs ══════════════════════
+  //
+  // `[cmd]` **Die Rechnung, nicht geraten:** `upper-back` und
+  // `lower-back` (2) sind zu fuenf Muskeln geworden
+  // (`teres-minor`, `teres-major`, `latissimus`, `erector-spinae`,
+  // `flanke`). **17 - 2 + 5 = 20**, und **39 - 2 + 5 = 42**.
+  //
+  // `[read]` **Die Injektionsorte und Nicht-Muskeln sind
+  // unberuehrt** — die Aufteilung betraf nur Flaechen.
+  assert.equal(nachArt('gruppe').length, 20, 'einfaerbbare Muskelgruppen')
   assert.equal(nachArt('teilstueck').length, 16, 'Injektionsorte')
   assert.equal(nachArt('nicht-muskel').length, 6, 'Kniescheibe, Kopf, Haare, Haende, Knoechel, Fuesse')
-  assert.equal(Object.keys(EINORDNUNG).length, 39, 'Summe')
+  assert.equal(Object.keys(EINORDNUNG).length, 42, 'Summe')
 })
 
 test('so viele Gruppen faerbt die Karte tatsaechlich ein', () => {
@@ -27,13 +36,19 @@ test('so viele Gruppen faerbt die Karte tatsaechlich ein', () => {
   // `[read]` Der Auftrag: „Im Browser gezaehlt, nicht in der Datei
   // gelesen." Das ist hier die Bruecke: die Zahl aus dem Browser wird
   // gegen die Zuordnung gerechnet, damit sie nicht auseinanderlaufen.
-  const belegt = new Set(Object.values(RECOVERY_ZU_KARTE).filter(Boolean))
+  // `[cmd]` **G-430: ueber `flaechenFuer`** — ein Kuerzel belegt seit
+  // der Aufteilung mehrere Flaechen.
+  const belegt = new Set(
+    Object.keys(RECOVERY_ZU_KARTE).flatMap(slug => flaechenFuer(slug)))
   const gruppen = nachArt('gruppe')
   const eingefaerbt = gruppen.filter(id => belegt.has(id))
   const grauGruppen = gruppen.filter(id => !belegt.has(id))
 
-  assert.equal(eingefaerbt.length, 16,
-    'Am Bildschirm sind 16 Gruppen farbig. Weicht die Zahl ab, ist '
+  // `[cmd]` **G-430: 16 -> 19.** **Die Rechnung:** `upper_back` faerbt
+  // jetzt drei Flaechen statt einer, `lower_back` zwei statt einer.
+  // **16 - 2 + 5 = 19.**
+  assert.equal(eingefaerbt.length, 19,
+    'Am Bildschirm sind 19 Gruppen farbig. Weicht die Zahl ab, ist '
     + 'entweder eine Zuordnung dazugekommen oder eine weggefallen.')
   // 1 Gruppe ohne Kuerzel (tibialis) + 6 Nicht-Muskeln = 7 IDs ohne
   // Zustandsfarbe. Davon tragen `head` und `hair` einen festen Ton,
@@ -47,7 +62,8 @@ test('so viele Gruppen faerbt die Karte tatsaechlich ein', () => {
   const muskelIds = gruppen.length + nachArt('nicht-muskel').length
   assert.equal(eingefaerbt.length + grauGruppen.length + nachArt('nicht-muskel').length,
     muskelIds, 'Jede Muskel-ID ist entweder eingefaerbt oder nicht.')
-  assert.equal(muskelIds, 23, 'Die Karte zeichnet 23 Flaechen-IDs.')
+  // `[cmd]` **G-430: 23 -> 26** — dieselbe Rechnung wie oben.
+  assert.equal(muskelIds, 26, 'Die Karte zeichnet 26 Flaechen-IDs.')
 })
 
 test('nur tibialis ist eine Gruppe ohne Recovery-Kuerzel', () => {
@@ -55,7 +71,11 @@ test('nur tibialis ist eine Gruppe ohne Recovery-Kuerzel', () => {
   // `MUSCLE_GROUPS_BODYMAP` fuehrt ihn nicht — er bleibt grau. Das ist
   // eine Luecke auf der DATENSEITE, kein Zuordnungsfehler. Wer ein
   // Kuerzel ergaenzt, faellt hier auf und traegt es im Bericht nach.
-  const belegt = new Set(Object.values(RECOVERY_ZU_KARTE).filter(Boolean))
+  // `[cmd]` **G-430: ueber `flaechenFuer`** — ein Kuerzel kann
+  // mehrere Flaechen belegen, und `Object.values` saehe die Liste
+  // als einen Wert.
+  const belegt = new Set(
+    Object.keys(RECOVERY_ZU_KARTE).flatMap(slug => flaechenFuer(slug)))
   const ohne = nachArt('gruppe').filter(id => !belegt.has(id))
   assert.deepEqual(ohne, ['tibialis'],
     `Gruppen ohne Recovery-Kuerzel: ${ohne.join(', ')}. `

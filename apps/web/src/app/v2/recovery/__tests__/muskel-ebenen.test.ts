@@ -16,7 +16,7 @@ import path from 'node:path'
 import { MUSKELN } from '@lumeos/ui'
 import { EINORDNUNG } from '../muskel-zuordnung'
 import {
-  MUSKEL_ZU_FLAECHE, OHNE_FARBE, FLAECHEN,
+  MUSKEL_ZU_FLAECHE, flaechenVonMuskel, OHNE_FARBE, FLAECHEN,
   verdichte, gruppenZurFlaeche, muskelnZurFlaeche,
 } from '../muskel-ebenen'
 
@@ -58,13 +58,17 @@ test('jede der 96 Gruppen hat eine Flaeche', () => {
 
 test('jedes Flaechenziel gibt es in der Karte wirklich', () => {
   // [cmd] Ein Tippfehler wie `quadricep` faellt sonst nicht auf.
-  for (const [name, id] of Object.entries(MUSKEL_ZU_FLAECHE)) {
+  // `[cmd]` **G-430: je Name ALLE Flaechen** — `Obliques` deckt seit
+  // der Aufteilung die Bauchseite und die Flanke.
+  for (const name of Object.keys(MUSKEL_ZU_FLAECHE)) {
+    for (const id of flaechenVonMuskel(name)) {
     assert.ok(MUSKELN[id], `"${name}" zeigt auf "${id}" — gibt es nicht.`)
     const e = EINORDNUNG[id]
     assert.ok(e, `"${id}" ist nicht eingeordnet.`)
     assert.equal(e.art, 'gruppe',
       `"${name}" zeigt auf "${id}", das ist "${e.art}" — nur Gruppen `
       + 'lassen sich einfaerben.')
+    }
   }
 })
 
@@ -85,8 +89,8 @@ test('sechs Formen bekommen nie Farbe', () => {
       `"${id}" muss als Nicht-Muskel eingeordnet sein.`)
   }
   // Keine davon darf Ziel einer Zuordnung sein.
-  const falsch = Object.entries(MUSKEL_ZU_FLAECHE)
-    .filter(([, id]) => OHNE_FARBE.includes(id))
+  const falsch = Object.keys(MUSKEL_ZU_FLAECHE)
+    .filter(name => flaechenVonMuskel(name).some(id => OHNE_FARBE.includes(id)))
   assert.deepEqual(falsch, [],
     'Ein Muskel zeigt auf eine Flaeche, die nie Farbe bekommt.')
 })
@@ -117,7 +121,15 @@ test('der Klick trennt Flaeche in Gruppen und Muskeln auf', () => {
 
   const muskeln = muskelnZurFlaeche('deltoids')
   assert.ok(muskeln.includes('Rotator Cuff'), 'Rotatorenmanschette fehlt')
-  assert.ok(muskeln.length >= 8, `${muskeln.length} Muskeln, erwartet mindestens 8`)
+  // `[cmd]` **G-430: 8 -> 7.** **`Teres Minor` ist weg** — er hat seit
+  // der Aufteilung eine eigene Flaeche (`teres-minor`, Pfad 1/4) und
+  // faellt nicht mehr ersatzweise auf die Schulter.
+  //
+  // `[read]` **Genau gleich, nicht `>=`** — eine Untergrenze liesse
+  // das Entfernen eines weiteren Muskels durch.
+  assert.equal(muskeln.length, 7, `${muskeln.length} Muskeln, erwartet 7`)
+  assert.ok(!muskeln.includes('Teres Minor'),
+    'Teres Minor gehoert seit G-430 auf `teres-minor`, nicht auf die Schulter.')
 })
 
 test('jede faerbbare Flaeche traegt mindestens einen Muskel', () => {

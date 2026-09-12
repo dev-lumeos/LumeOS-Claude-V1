@@ -16,7 +16,7 @@
 // nicht die laufende Datenbank.
 import { MUSKELN } from '@lumeos/ui'
 
-import { EINORDNUNG, RECOVERY_ZU_KARTE } from './muskel-zuordnung'
+import { EINORDNUNG, RECOVERY_ZU_KARTE, flaechenFuer } from './muskel-zuordnung'
 
 /**
  * Muskelname (C-73) -> Flaechen-ID der Karte.
@@ -30,7 +30,10 @@ import { EINORDNUNG, RECOVERY_ZU_KARTE } from './muskel-zuordnung'
  * fuer die Mittelung: `Quadriceps`, `Rectus Femoris` und `Thighs`
  * teilen sich `quadriceps`.
  */
-export const MUSKEL_ZU_FLAECHE: Record<string, string> = {
+// `[cmd]` **G-430: der Wert darf eine LISTE sein** — `Obliques` deckt
+// die Bauchseite UND die Flanke. **Die Einzelwerte bleiben
+// gueltig**, `flaechenVonMuskel()` macht aus beidem eine Liste.
+export const MUSKEL_ZU_FLAECHE: Record<string, string | string[]> = {
   // ── Schultern (8) ────────────────────────────────────────────────
   Shoulders: 'deltoids',
   Deltoids: 'deltoids',
@@ -39,10 +42,17 @@ export const MUSKEL_ZU_FLAECHE: Record<string, string> = {
   // Die Rotatorenmanschette liegt unter dem Deltoid — die Karte hat
   // keine eigene Flaeche dafuer. Sie faellt auf die Schulter, weil
   // dort ihre Wirkung sichtbar ist.
+  // `[cmd]` **G-430: `Teres Minor` ist die AUSNAHME** — er gehoert
+  // zur Manschette, hat aber seit der Aufteilung einen eigenen Pfad
+  // und steht deshalb unten bei den Ruecken-Muskeln.
   'Rotator Cuff': 'deltoids',
   Infraspinatus: 'deltoids',
   Subscapularis: 'deltoids',
-  'Teres Minor': 'deltoids',
+  // `[cmd]` **G-430: `Teres Minor` hat seit der Aufteilung eine
+  // eigene Flaeche.** **Hier stand `'deltoids'`** — mit der
+  // Begruendung *„die Karte hat keine eigene Flaeche dafuer"*.
+  // **Jetzt hat sie eine** (Pfad 1/4 von `upper-back`).
+  'Teres Minor': 'teres-minor',
 
   // ── Brust (5) ────────────────────────────────────────────────────
   Chest: 'chest',
@@ -52,16 +62,44 @@ export const MUSKEL_ZU_FLAECHE: Record<string, string> = {
   'Upper Chest': 'chest',
 
   // ── Ruecken (10) ─────────────────────────────────────────────────
-  Back: 'upper-back',
-  'Upper Back': 'upper-back',
-  'Mid Back': 'upper-back',
-  Rhomboids: 'upper-back',
-  'Teres Major': 'upper-back',
-  'latissimus dorsi': 'upper-back',
+  //
+  // ══ G-430: sechs Namen fielen auf EINE Flaeche ═══════════════════
+  //
+  // `[cmd]` **Hier stand sechsmal `'upper-back'`** — und Tom hat es
+  // benannt: *„muskel-ebenen.ts wirft heute sechs Namen auf
+  // upper-back."*
+  //
+  // `[cmd]` **G-425 hat gemessen, dass `upper-back` DREI Muskelpaare
+  // buendelte.** **Jetzt zeigt jeder Name auf seinen Muskel:**
+  //
+  //     latissimus dorsi -> latissimus     (Pfad 3/6)
+  //     Teres Major      -> teres-major    (Pfad 2/5)
+  //     erector spinae   -> erector-spinae (Pfad 2/3 unten)
+  //
+  // `[read]` **`Back`, `Upper Back` und `Mid Back` sind GRUPPEN, kein
+  // einzelner Muskel** — sie bleiben auf dem Latissimus, weil er die
+  // groesste und namensgebende Flaeche des oberen Ruecken ist.
+  // `[annahme]` **Genauer waere, sie ueber `parent_id` auf alle
+  // Kinder zu verteilen** — das kann `verdichte` heute nicht, und es
+  // waere eine zweite Aenderung im selben Durchgang.
+  Back: 'latissimus',
+  'Upper Back': 'latissimus',
+  'Mid Back': 'latissimus',
+  // `[cmd]` **Rhomboids hat KEINEN Pfad** (A6) — er liegt unter dem
+  // Trapezmuskel, und die Vorlage zeichnet ihn nicht. **Er faellt auf
+  // den Trapez, weil dort seine Wirkung sichtbar ist** — dieselbe
+  // Begruendung wie bei der Rotatorenmanschette oben.
+  // `[read]` **Die Luecke steht in `LUECKEN`** (`lib/koerper/
+  // hierarchie-read.ts`) und wird am Schirm genannt, statt zu fehlen.
+  Rhomboids: 'trapezius',
+  'Teres Major': 'teres-major',
+  'latissimus dorsi': 'latissimus',
   'levator scapulae': 'trapezius',
   Trapezius: 'trapezius',
-  'Lower Back': 'lower-back',
-  'erector spinae': 'lower-back',
+  // `[read]` **Die Flanke ist nicht der Rueckenstrecker** (G-425) —
+  // `Lower Back` ist die Gruppe, `erector spinae` der Muskel.
+  'Lower Back': 'erector-spinae',
+  'erector spinae': 'erector-spinae',
 
   // ── Rumpf (7) ────────────────────────────────────────────────────
   Core: 'abs',
@@ -69,7 +107,25 @@ export const MUSKEL_ZU_FLAECHE: Record<string, string> = {
   'Lower Abs': 'abs',
   'Rectus Abdominis': 'abs',
   'Transverse Abdominis': 'abs',
-  Obliques: 'obliques',
+  // ══ G-430: die Flanke gehoert zum Rumpf, nicht zum Ruecken ═══════
+  //
+  // `[cmd]` **G-425 am Bild:** *„kleiner Fleck seitlich ueber der
+  // Huefte -> Flanke (Obliquus externus / QL)"* — **und ausdruecklich:
+  // *„Die Flanke hat keinen [Namen]."***
+  //
+  // `[cmd]` **Nachgezaehlt in `107_muscle_groups_hierarchy.sql`: die
+  // 96 kennen genau ZWEI schraege Bauchmuskeln** — `Obliques` und
+  // `Internal Oblique`. **Kein `Quadratus Lumborum`, kein `Flank`,
+  // kein `Obliquus externus`.**
+  //
+  // `[read]` **Also wird KEIN Name erfunden** — `Obliques` ist die
+  // Gruppe, und sie deckt beide Flaechen: die Bauchseite vorne und
+  // die Flanke hinten. **Der Obliquus externus zieht wirklich
+  // dorthin**, das ist keine Naeherung zweier fremder Muskeln.
+  //
+  // `[read]` **Ohne diesen Eintrag bliebe `flanke` fuer immer grau** —
+  // eine Flaeche, die als faerbbar gilt und nie Farbe bekommt.
+  Obliques: ['obliques', 'flanke'],
   'Internal Oblique': 'obliques',
 
   // ── Arme (21) ────────────────────────────────────────────────────
@@ -164,6 +220,13 @@ export const MUSKEL_ZU_FLAECHE: Record<string, string> = {
  */
 export const OHNE_FARBE = ['head', 'hair', 'hands', 'feet', 'ankles', 'knees']
 
+/** G-430: die Flaechen eines Muskelnamens — immer als Liste. */
+export function flaechenVonMuskel(name: string): string[] {
+  const v = MUSKEL_ZU_FLAECHE[name]
+  if (!v) return []
+  return Array.isArray(v) ? v : [v]
+}
+
 /** Die faerbbaren Flaechen — alles, was nicht Nicht-Muskel ist. */
 export const FLAECHEN = Object.entries(EINORDNUNG)
   .filter(([, e]) => e.art === 'gruppe')
@@ -186,12 +249,14 @@ export function verdichte(
   const summe: Record<string, { s: number; n: number }> = {}
   for (const [name, wert] of Object.entries(werte)) {
     if (wert == null) continue
-    const flaeche = MUSKEL_ZU_FLAECHE[name]
-    if (!flaeche || !MUSKELN[flaeche]) continue
-    const e = summe[flaeche] ?? { s: 0, n: 0 }
-    e.s += wert
-    e.n += 1
-    summe[flaeche] = e
+    // `[cmd]` **G-430: ein Muskelname kann mehrere Flaechen faerben.**
+    for (const flaeche of flaechenVonMuskel(name)) {
+      if (!MUSKELN[flaeche]) continue
+      const e = summe[flaeche] ?? { s: 0, n: 0 }
+      e.s += wert
+      e.n += 1
+      summe[flaeche] = e
+    }
   }
   return Object.entries(summe).map(([id, e]) => ({
     id,
@@ -207,14 +272,14 @@ export function verdichte(
  * dahinterliegenden Gruppen mitgeben."
  */
 export function gruppenZurFlaeche(flaeche: string): string[] {
-  return Object.entries(RECOVERY_ZU_KARTE)
-    .filter(([, id]) => id === flaeche)
-    .map(([slug]) => slug)
+  return Object.keys(RECOVERY_ZU_KARTE)
+    .filter(slug => flaechenFuer(slug).includes(flaeche))
 }
 
 export function muskelnZurFlaeche(flaeche: string): string[] {
-  return Object.entries(MUSKEL_ZU_FLAECHE)
-    .filter(([, id]) => id === flaeche)
-    .map(([name]) => name)
+  // `[cmd]` **G-430: ueber `flaechenVonMuskel`** — ein Vergleich
+  // `id === flaeche` saehe eine Liste nie als Treffer.
+  return Object.keys(MUSKEL_ZU_FLAECHE)
+    .filter(name => flaechenVonMuskel(name).includes(flaeche))
     .sort()
 }

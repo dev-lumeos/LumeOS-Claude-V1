@@ -33,7 +33,17 @@ import {
   type Protocol,
 } from './motor'
 // G-55: die dritte Ebene — welche Muskeln auf eine Flaeche fallen.
-import { RECOVERY_ZU_KARTE } from './muskel-zuordnung'
+import { flaechenFuer } from './muskel-zuordnung'
+// ══ G-430: NUR aus `hierarchie.ts`, nie aus `hierarchie-read.ts` ══
+//
+// `[cmd]` **Der erste Versuch importierte von `-read`** — und ergab
+// **HTTP 500 auf jeder Route**, weil `createSessionClient` dort
+// `next/headers` mitzieht. **`tsc` blieb gruen.** **Nur der Typ darf
+// aus dem Leseweg kommen; hier kommt auch er aus der Rechnung.**
+import {
+  elternteilMitAufteilung, nameVon, LUECKEN,
+  type HierarchieStand,
+} from '../../../lib/koerper/hierarchie'
 import { muskelnZurFlaeche } from './muskel-ebenen'
 import type { ModalZustand } from './kontext'
 
@@ -95,15 +105,18 @@ const FELD: React.CSSProperties = {
 }
 
 // ── Die Verteilung ──────────────────────────────────────────────
-export function RecoveryModale({ modal, onClose }: {
+export function RecoveryModale({ modal, onClose, hierarchie }: {
   modal: ModalZustand | null
   onClose: () => void
+  /** G-430: der Muskelbaum — fuer „Per-muscle detail zeigt den Elternteil". */
+  hierarchie?: HierarchieStand
 }) {
   if (!modal) return null
   switch (modal.typ) {
     case 'hrvMeasure': return <HRVMeasureModal onClose={onClose} />
     case 'logModality': return <LogModalityModal onClose={onClose} />
-    case 'muscle': return <MuscleDetailModal slug={modal.slug} onClose={onClose} />
+    case 'muscle': return <MuscleDetailModal slug={modal.slug} onClose={onClose}
+                                             hierarchie={hierarchie} />
     case 'protocol': return <ProtocolDetailModal p={modal.protokoll} onClose={onClose} />
     default: return null
   }
@@ -353,7 +366,11 @@ function LogModalityModal({ onClose }: { onClose: () => void }) {
 
 // ── Muskeldetail ────────────────────────────────────────────────
 // [cmd] module-recovery-modals2.jsx:163-235.
-function MuscleDetailModal({ slug, onClose }: { slug: string; onClose: () => void }) {
+function MuscleDetailModal({ slug, onClose, hierarchie }: {
+  slug: string
+  onClose: () => void
+  hierarchie?: HierarchieStand
+}) {
   const st = MUSCLE_STATE[slug]
   if (!st) return null
 
@@ -379,6 +396,86 @@ function MuscleDetailModal({ slug, onClose }: { slug: string; onClose: () => voi
               </a>
             </>
           }>
+      {/* ══ G-430/A5: der Elternteil, aus der Datenbank ═══════════
+          **Tom, 2026-09-08:** *„ein bodybuilder nutzt uebungen fuer
+          einzelne muskeln sowie gebuendelt."* — und ausdruecklich:
+          *„Per-muscle detail zeigt den Elternteil."*
+
+          `[cmd]` **Die Kette kommt aus `public.koerperflaechen`**
+          (C-468), nicht aus einer Liste im Code. */}
+      {(() => {
+        const baum = hierarchie?.flaechen ?? []
+        if (baum.length === 0) return null
+        const flaechen = flaechenFuer(slug)
+        const zeilen = flaechen
+          .map(code => ({ code, ...elternteilMitAufteilung(baum, code) }))
+          .filter(z => z.eltern)
+        if (zeilen.length === 0) return null
+        return (
+          <div style={{
+            marginBottom: 14, padding: 10, borderRadius: 6,
+            background: 'var(--bg-elev)', border: '1px solid var(--border)',
+          }}>
+            <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
+              Parent · public.koerperflaechen
+            </div>
+            <div className="v2-col-gap" style={{ gap: 4 }}>
+              {zeilen.map(z => {
+                const eigen = baum.find(f => f.code === z.code)
+                return (
+                  <div key={z.code} style={{
+                    display: 'flex', alignItems: 'center', gap: 6,
+                    fontSize: 11.5, flexWrap: 'wrap',
+                  }}>
+                    <Pill>{nameVon(z.eltern!)}</Pill>
+                    <Icon name="chevron_right" className="v2-ic v2-ic-sm"
+                          style={{ color: 'var(--fg-dim)' }} />
+                    <span style={{ fontWeight: 600 }}>
+                      {eigen ? nameVon(eigen) : z.code}
+                    </span>
+                    <span className="v2-dim v2-mono" style={{ fontSize: 10 }}>
+                      {z.code}
+                    </span>
+                    {/* `[read]` **Ehrlich benannt, wenn geerbt** —
+                        die fuenf Flaechen aus der Aufteilung stehen
+                        noch nicht in `koerperflaechen`. */}
+                    {z.ueberBruecke && (
+                      <span className="v2-dim" style={{ fontSize: 10 }}>
+                        · geerbt — diese Fläche steht noch nicht in
+                        {' '}public.koerperflaechen
+                      </span>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+            {/* ══ G-430/A6: die Luecke, sichtbar statt erfunden ════
+                `[read]` **Drei Muskeln haben keinen Pfad** — sie
+                werden NICHT gezeichnet, und das steht hier, statt
+                stillschweigend zu fehlen. */}
+            {(() => {
+              const offen = LUECKEN.filter(l =>
+                zeilen.some(z => nameVon(z.eltern!) === l.elternteil
+                  || z.eltern!.name_en === l.elternteil))
+              if (offen.length === 0) return null
+              return (
+                <div className="v2-muted" style={{
+                  fontSize: 10.5, marginTop: 8, paddingTop: 8,
+                  borderTop: '1px solid var(--border)', lineHeight: 1.5,
+                }}>
+                  {offen.map(l => (
+                    <div key={l.muskel}>
+                      <strong>{l.muskel}</strong> gehört hierher, hat aber
+                      keinen Pfad auf der Karte — {l.grund}
+                    </div>
+                  ))}
+                </div>
+              )
+            })()}
+          </div>
+        )
+      })()}
+
       <div className="v2-rec-ring-zeile" style={{ marginBottom: 16 }}>
         <Ring value={c.value} max={100} color={col} label="recovered" size={104} stroke={8} />
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -403,8 +500,14 @@ function MuscleDetailModal({ slug, onClose }: { slug: string; onClose: () => voi
           ihre Muskeln." Hier steht das Ende der Kette — welche der 96
           aus C-73 auf diese Flaeche fallen. */}
       {(() => {
-        const flaeche = RECOVERY_ZU_KARTE[slug]
-        const muskeln = flaeche ? muskelnZurFlaeche(flaeche) : []
+        // `[cmd]` **G-430: ueber alle Flaechen des Kuerzels** — seit
+        // der Aufteilung traegt `upper_back` drei, und die Muskeln
+        // der zwei uebrigen waeren sonst verschwunden.
+        const flaechen = flaechenFuer(slug)
+        // `[read]` **Ohne `Set`** — das Ziel dieses Pakets kann es
+        // nicht iterieren (`TS2802`), dieselbe Falle wie in G-428.
+        const muskeln = flaechen.flatMap(f => muskelnZurFlaeche(f))
+          .filter((n, i, a) => a.indexOf(n) === i).sort()
         if (muskeln.length === 0) return null
         return (
           <>

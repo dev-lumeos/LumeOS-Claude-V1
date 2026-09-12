@@ -23,7 +23,7 @@ import {
   READINESS_LEVELS,
 } from './motor'
 // G-26: die anatomische Karte kommt jetzt aus packages/ui.
-import { katerAlsMuskeln, RECOVERY_ZU_KARTE, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
+import { katerAlsMuskeln, flaechenFuer, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
 import { ATTRAPPE } from './ansicht'
 // G-82: die Vorschau rechnet mit denselben Gewichten wie alles andere.
 import { vorschauScore } from '../../../lib/recovery/score'
@@ -119,10 +119,13 @@ export function RecCheckin() {
               dieselbe Flaeche verschieden benennen, sind schlimmer als
               keine. Deshalb die Grundkomponente mit der Legende, die
               zu dieser Skala gehoert. */}
+          {/* `[cmd]` **G-430: `flaechenFuer` statt Rohwert** — wer
+              `upper_back` antippt, sieht seit der Aufteilung DREI
+              Muskeln hervorgehoben, nicht einen willkuerlichen. */}
           <Koerperkarte
             muskeln={katerAlsMuskeln(soreness)}
             breite={160}
-            ausgewaehlt={sel ? RECOVERY_ZU_KARTE[sel] : null}
+            ausgewaehlt={sel ? flaechenFuer(sel) : null}
             legende={[
               { color: 'var(--surface-2)', label: '0 none' },
               { color: 'var(--acc-recov)', label: '1 mild' },

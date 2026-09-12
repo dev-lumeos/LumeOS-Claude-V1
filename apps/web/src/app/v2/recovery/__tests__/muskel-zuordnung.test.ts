@@ -10,7 +10,7 @@ import assert from 'node:assert/strict'
 import { MUSKELN } from '@lumeos/ui'
 import { MUSCLE_GROUPS_BODYMAP } from '../motor'
 import {
-  RECOVERY_ZU_KARTE, KARTE_ZU_RECOVERY, OHNE_ENTSPRECHUNG,
+  RECOVERY_ZU_KARTE, KARTE_ZU_RECOVERY, OHNE_ENTSPRECHUNG, flaechenFuer,
   alsErmuedung, katerAlsMuskeln,
 } from '../muskel-zuordnung'
 
@@ -25,11 +25,13 @@ test('jedes Recovery-Kuerzel steht in der Zuordnung', () => {
 test('jede zugeordnete ID gibt es in der Karte wirklich', () => {
   // [cmd] Das ist der Kern: ein Tippfehler wie `quadricep` statt
   // `quadriceps` faellt am Bildschirm nicht auf.
-  for (const [slug, id] of Object.entries(RECOVERY_ZU_KARTE)) {
-    if (id === null) continue
-    assert.ok(MUSKELN[id],
-      `"${slug}" zeigt auf "${id}" — diese Gruppe gibt es in der `
-      + 'Koerperkarte nicht. Vertippt?')
+  // `[cmd]` **G-430: je Kuerzel ALLE Flaechen.**
+  for (const slug of Object.keys(RECOVERY_ZU_KARTE)) {
+    for (const id of flaechenFuer(slug)) {
+      assert.ok(MUSKELN[id],
+        `"${slug}" zeigt auf "${id}" — diese Gruppe gibt es in der `
+        + 'Koerperkarte nicht. Vertippt?')
+    }
   }
 })
 
@@ -61,13 +63,18 @@ test('alle 18 Recovery-Kuerzel bis auf die benannte Luecke landen auf der Karte'
   // Ein stillschweigend auf `null` gesetztes Kuerzel faellt hier auf.
   const werte = Object.fromEntries(MUSCLE_GROUPS_BODYMAP.map(s => [s, 50]))
   const raus = alsErmuedung(werte)
-  const zugeordnet = MUSCLE_GROUPS_BODYMAP.filter(s => RECOVERY_ZU_KARTE[s])
+  const zugeordnet = MUSCLE_GROUPS_BODYMAP.filter(s => flaechenFuer(s).length > 0)
   assert.equal(zugeordnet.length, 17,
     `${zugeordnet.length} von 18 Kuerzeln sind zugeordnet, erwartet 17.`)
-  // Die beiden Deltoid-Kuerzel fallen auf eine Gruppe zusammen.
-  assert.equal(raus.length, 16,
-    `${raus.length} Gruppen eingefaerbt, erwartet 16 (17 minus die `
-    + 'zusammenfallenden Deltoids).')
+  // ══ G-430: 16 -> 19 ════════════════════════════════════════════
+  //
+  // `[cmd]` **Die Rechnung:** die zwei Deltoid-Kuerzel fallen weiter
+  // auf eine Gruppe zusammen (17 - 1 = 16), **aber `upper_back`
+  // faerbt jetzt drei Flaechen und `lower_back` zwei** — statt je
+  // einer. **16 + 2 + 1 = 19.**
+  assert.equal(raus.length, 19,
+    `${raus.length} Gruppen eingefaerbt, erwartet 19 (16 wie bisher, `
+    + 'plus die drei zusaetzlichen Ruecken-Muskeln aus G-430).')
 })
 
 test('Bereitschaft wird zu Ermuedung umgedreht', () => {
@@ -103,8 +110,20 @@ test('der Ruecken landet auf den Bindestrich-Gruppen der Karte', () => {
   // [cmd] Die Regressionswache zum beinahe-Fehler: Recovery schreibt
   // `upper_back`, die Karte `upper-back`. Wer das wieder auf `null`
   // setzt, laesst zwei Gruppen grau — ohne Fehlermeldung.
+  // ══ G-430: der Ruecken ist aufgeteilt ══════════════════════════
+  //
+  // `[cmd]` **Hier stand `['lower-back', 'upper-back']`** — zwei
+  // Flaechen. **G-425 hat gemessen, dass sie FUENF Muskeln
+  // buendelten**, und die Aufteilung macht daraus fuenf Flaechen.
+  //
+  // `[read]` **Die Wache bleibt dieselbe:** wer den Ruecken wieder
+  // auf `null` setzt, laesst ihn grau — nur ist die erwartete Menge
+  // jetzt groesser.
   const raus = alsErmuedung({ upper_back: 40, lower_back: 30 })
-  assert.deepEqual(raus.map(r => r.id).sort(), ['lower-back', 'upper-back'])
+  assert.deepEqual(raus.map(r => r.id).sort(),
+    ['erector-spinae', 'flanke', 'latissimus', 'teres-major', 'teres-minor'],
+    'Ein Recovery-Wert fuer den Ruecken muss ALLE seine Muskeln '
+    + 'faerben — sonst bleiben Teile grau, ohne Fehlermeldung.')
 })
 
 test('der Muskelkater behaelt seine Richtung', () => {
