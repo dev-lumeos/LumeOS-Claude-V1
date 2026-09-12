@@ -106,3 +106,44 @@ test('G-431/A4: jedes Recovery-Kuerzel findet seinen Wert zurueck', () => {
   assert.ok(mitWert >= 20,
     `Nur ${mitWert} Flaechen tragen einen Wert — erwartet mindestens 20.`)
 })
+
+
+test('G-432/A4: der Klick waehlt den MUSKEL, nicht die Gruppe', () => {
+  // ══ Toms Abgrenzung, als Zusage ═══════════════════════════════
+  //
+  // **„auf der grafik muss jeder angezeigte muskel anwaehlbar sein
+  // (NICHT die gruppe)."**
+  //
+  // `[cmd]` **Am Schirm belegt** (`tools/_g432-anwaehlbar.mjs`,
+  // 2026-09-12): ein Klick auf `latissimus` hebt GENAU
+  // `["latissimus"]` hervor — **vorher waren es drei**, weil
+  // `flaechenFuer('upper_back')` die ganze Gruppe zurueckgab.
+  //
+  // `[read]` **Ohne diesen Waechter blieb die Sabotage
+  // *„der Klick waehlt wieder die GRUPPE"* GRUEN** — die
+  // Schirmprobe faengt sie, aber keine Probe im Gate.
+  const fs = require('node:fs') as typeof import('node:fs')
+  const path = require('node:path') as typeof import('node:path')
+  const roh = fs.readFileSync(
+    path.join(process.cwd(), 'src/app/v2/recovery/tab-checkin.tsx'), 'utf8')
+  // Kommentarzeilen weg — sonst faende die Suche ihre eigene
+  // Begruendung (die Lehre aus G-389).
+  const code = roh.split(String.fromCharCode(10))
+    .filter(z => !z.trim().startsWith('//') && !z.trim().startsWith('*'))
+    .join(String.fromCharCode(10))
+
+  // `[cmd]` **Der Klick setzt die GEKLICKTE Flaeche** — `[id]`,
+  // nicht die Gruppe des Kuerzels.
+  assert.match(code, /setSelFlaeche\(\[id\]\)/,
+    'Der Klick setzt nicht mehr die geklickte Flaeche — dann faerbt '
+    + 'er wieder die ganze Gruppe (Toms Befund aus G-432).')
+  // `[read]` **Und die Hervorhebung nimmt sie VOR dem Kuerzel.**
+  assert.match(code, /ausgewaehlt=\{selFlaeche \?\?/,
+    'Die Hervorhebung liest `selFlaeche` nicht mehr zuerst — dann '
+    + 'gewinnt wieder die Gruppe.')
+  // `[cmd]` **Die Gegenrichtung:** `flaechenFuer(sel)` darf NICHT
+  // mehr allein die Auswahl bestimmen.
+  assert.ok(!/ausgewaehlt=\{sel \? flaechenFuer\(sel\) : null\}/.test(code),
+    'Die alte Fassung ist zurueck — ein Klick faerbt damit die ganze '
+    + 'Gruppe statt des Muskels.')
+})

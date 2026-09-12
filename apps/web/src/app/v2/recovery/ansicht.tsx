@@ -54,6 +54,8 @@ import { RecoveryModale } from './modale'
 // `[read]` **Der TYP aus der Rechnung, nicht aus dem Leseweg** —
 // `ansicht.tsx` ist `'use client'`.
 import type { HierarchieStand } from '../../../lib/koerper/hierarchie'
+// G-432: der Muskelbaum — der TYP aus der Rechnung, nicht aus dem Leseweg.
+import type { MuskelbaumStand } from '../../../lib/koerper/muskelbaum'
 // G-55: die erfassten Check-ins.
 import type { CheckinStand } from '../../../lib/recovery/checkin-read'
 // G-82: der Erholungswert kommt aus `recovery.scores`, nicht mehr aus
@@ -114,7 +116,7 @@ function tabs(muskelzahl: number, modalitaeten: number, otZahl: number): TabItem
 }
 
 export function RecoveryAnsicht({
-  checkins, scores, modalitaeten, hierarchie,
+  checkins, scores, modalitaeten, hierarchie, muskelbaum,
 }: {
   checkins?: CheckinStand
   scores?: ScoreStand
@@ -127,6 +129,8 @@ export function RecoveryAnsicht({
    * ohne Typfehler (die Lehre aus G-388).
    */
   hierarchie?: HierarchieStand
+  /** G-432/A6: alle 95 Muskelgruppen, fuer die vollstaendige Hierarchie. */
+  muskelbaum?: MuskelbaumStand
 }) {
   // G-117: Tab in der Adresse — Drop-in aus lib/tab-url.
   const [tab, setTab] = useTabParam('today')
@@ -310,7 +314,8 @@ export function RecoveryAnsicht({
       )}
 
       <RecoveryModale modal={modal} onClose={kontext.close}
-                      hierarchie={hierarchie} />
+                      hierarchie={hierarchie}
+                      muskelbaum={muskelbaum} />
     </RecoveryKontext.Provider>
   )
 }

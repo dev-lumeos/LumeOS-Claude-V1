@@ -45,6 +45,12 @@ import {
   type HierarchieStand,
 } from '../../../lib/koerper/hierarchie'
 import { muskelnZurFlaeche } from './muskel-ebenen'
+// G-432: welche Ebene der Hierarchie eine Flaeche zeigt.
+import { EBENEN } from '../../../lib/koerper/ebenen'
+// G-432/A5+A6: die Zugehoerigkeit und die vollstaendige Hierarchie.
+import {
+  baueBaum, wurzelVon, deckung, type Ast, type MuskelbaumStand,
+} from '../../../lib/koerper/muskelbaum'
 import type { ModalZustand } from './kontext'
 
 // ── Der Rahmen ──────────────────────────────────────────────────
@@ -105,18 +111,21 @@ const FELD: React.CSSProperties = {
 }
 
 // ── Die Verteilung ──────────────────────────────────────────────
-export function RecoveryModale({ modal, onClose, hierarchie }: {
+export function RecoveryModale({ modal, onClose, hierarchie, muskelbaum }: {
   modal: ModalZustand | null
   onClose: () => void
-  /** G-430: der Muskelbaum — fuer „Per-muscle detail zeigt den Elternteil". */
+  /** G-430: der Flaechenbaum — fuer „Per-muscle detail zeigt den Elternteil". */
   hierarchie?: HierarchieStand
+  /** G-432/A6: alle 95 Muskelgruppen, fuer die vollstaendige Hierarchie. */
+  muskelbaum?: MuskelbaumStand
 }) {
   if (!modal) return null
   switch (modal.typ) {
     case 'hrvMeasure': return <HRVMeasureModal onClose={onClose} />
     case 'logModality': return <LogModalityModal onClose={onClose} />
     case 'muscle': return <MuscleDetailModal slug={modal.slug} onClose={onClose}
-                                             hierarchie={hierarchie} />
+                                             hierarchie={hierarchie}
+                                             muskelbaum={muskelbaum} />
     case 'protocol': return <ProtocolDetailModal p={modal.protokoll} onClose={onClose} />
     default: return null
   }
@@ -366,10 +375,11 @@ function LogModalityModal({ onClose }: { onClose: () => void }) {
 
 // ── Muskeldetail ────────────────────────────────────────────────
 // [cmd] module-recovery-modals2.jsx:163-235.
-function MuscleDetailModal({ slug, onClose, hierarchie }: {
+function MuscleDetailModal({ slug, onClose, hierarchie, muskelbaum }: {
   slug: string
   onClose: () => void
   hierarchie?: HierarchieStand
+  muskelbaum?: MuskelbaumStand
 }) {
   const st = MUSCLE_STATE[slug]
   if (!st) return null
@@ -495,6 +505,50 @@ function MuscleDetailModal({ slug, onClose, hierarchie }: {
         </div>
       </div>
 
+      {/* ══ G-432/A5: die Zugehoerigkeit ═══════════════════════════
+          **Tom:** *„die details zeigen die zugehoerigkeit."*
+
+              Latissimus dorsi
+              gehoert zu: Ruecken
+
+          `[cmd]` **Die Wurzel kommt aus `training.muscle_groups`** —
+          nicht aus einer Liste im Code. */}
+      {(() => {
+        const knoten = muskelbaum?.knoten ?? []
+        if (knoten.length === 0) return null
+        const zeilen = flaechenFuer(slug)
+          .map(f => ({ f, name: EBENEN[f]?.name ?? null }))
+          .filter(z => z.name)
+          .map(z => ({ ...z, wurzel: wurzelVon(knoten, z.name!) }))
+          .filter(z => z.wurzel)
+        if (zeilen.length === 0) return null
+        return (
+          <div style={{
+            marginBottom: 14, padding: 10, borderRadius: 6,
+            background: 'var(--bg-elev)', border: '1px solid var(--border)',
+          }}>
+            <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
+              Zugehörigkeit · training.muscle_groups
+            </div>
+            {/* `[read]` **Je Muskel eine eigene Zeile** — die erste
+                Fassung setzte sie ohne Abstand aneinander, und am
+                Schirm stand `BackTeres Major`. */}
+            <div className="v2-col-gap" style={{ gap: 5 }}>
+              {zeilen.map(z => (
+                <div key={z.f} style={{
+                  display: 'flex', alignItems: 'baseline', gap: 6,
+                  fontSize: 12, flexWrap: 'wrap',
+                }}>
+                  <strong>{z.name}</strong>
+                  <span className="v2-dim">gehört zu:</span>
+                  <Pill>{z.wurzel}</Pill>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      })()}
+
       {/* G-55: die dritte Ebene. `[read]` Der Auftrag: „Der Klick auf
           eine Flaeche zeigt ihre Gruppen, der Klick auf eine Gruppe
           ihre Muskeln." Hier steht das Ende der Kette — welche der 96
@@ -553,6 +607,18 @@ function MuscleDetailModal({ slug, onClose, hierarchie }: {
                           {eintrag ? nameVon(eintrag) : f}
                         </span>
                         <span className="v2-dim v2-mono" style={{ fontSize: 10 }}>{f}</span>
+                        {/* ══ G-432: welche EBENE zeigt diese Flaeche? ══
+                            **Tom:** *„quadrizeps ist eine muskelgruppe
+                            und hat x muskeln."* `[cmd]` **Gemessen gegen
+                            `training.muscle_groups`** — die Marke sagt,
+                            ob hier eine Gruppe oder ein einzelner
+                            Muskel steht. */}
+                        {EBENEN[f] && EBENEN[f].name && (
+                          <Pill variant={EBENEN[f].art === 'gruppe' ? 'acc' : undefined}
+                                style={{ fontSize: 9 }}>
+                            {EBENEN[f].art === 'gruppe' ? 'Gruppe' : 'Muskel'}
+                          </Pill>
+                        )}
                         {/* `[read]` **Je Kind sein eigener Wert** — das
                             ist der Unterschied zu einer blossen Liste. */}
                         {wert && (
@@ -566,6 +632,22 @@ function MuscleDetailModal({ slug, onClose, hierarchie }: {
                           <Pill key={m} style={{ fontSize: 9.5 }}>{m}</Pill>
                         ))}
                       </div>
+                      {/* ══ G-432/A3: der Elternteil und die Kinder ═══
+                          `[read]` **Wo NICHT geteilt wird, steht hier
+                          WARUM** — und welche Kinder `muscle_groups`
+                          fuehrt, die die Vorlage nicht zeichnet. */}
+                      {EBENEN[f]?.weg && EBENEN[f].weg.length > 1 && (
+                        <div className="v2-dim v2-mono" style={{ fontSize: 9.5, marginTop: 4 }}>
+                          {EBENEN[f].weg.join(' › ')}
+                        </div>
+                      )}
+                      {EBENEN[f]?.kinder.length > 0 && (
+                        <div className="v2-muted" style={{ fontSize: 10, marginTop: 4, lineHeight: 1.45 }}>
+                          <strong>Nicht gezeichnet:</strong>{' '}
+                          {EBENEN[f].kinder.join(', ')}
+                          {EBENEN[f].grund ? ` — ${EBENEN[f].grund}` : ''}
+                        </div>
+                      )}
                     </div>
                   )
                 })}
@@ -636,6 +718,86 @@ function MuscleDetailModal({ slug, onClose, hierarchie }: {
           <span className="v2-mono" style={{ color: 'var(--fg)' }}>{trainingName}</span> via MUSCLE_SLUG_MAP.
         </div>
       )}
+
+      {/* ══ G-432/A6: ALLE Gruppen und Kinder ══════════════════════
+          **Tom:** *„per muscle detail bildet ALLE muskelgruppen und
+          deren childs ab."* **Und:** *„Was nicht gezeichnet ist,
+          steht als Luecke drin — nicht weggelassen."*
+
+          `[cmd]` **95 Namen in vier Ebenen**, aus
+          `training.muscle_groups`. `[cmd]` **21 davon zeichnet die
+          Karte, 74 nicht** — gemessen 2026-09-12. */}
+      {(() => {
+        const knoten = muskelbaum?.knoten ?? []
+        if (knoten.length === 0) return null
+        // ══ G-432: „gezeichnet" kommt aus EBENEN, NICHT aus
+        //    MUSKEL_ZU_FLAECHE ══════════════════════════════════════
+        //
+        // `[cmd]` **Die erste Fassung nahm `MUSKEL_ZU_FLAECHE`** — und
+        // meldete *„95 von 95 gezeichnet, 0 Luecken"*. **Gemessen sind
+        // es 21 von 95.**
+        //
+        // `[read]` **Der Grund:** jene Abbildung sagt, WELCHE Flaeche
+        // der Wert eines Muskels faerbt — `Rhomboids` faellt auf
+        // `trapezius`, obwohl er nicht gezeichnet ist. **Sie
+        // beantwortet eine andere Frage.**
+        //
+        // `[read]` **`EBENEN` nennt je Flaeche den Muskel, den sie
+        // WIRKLICH zeigt** — das ist die Deckung.
+        const zeigt: Record<string, string> = {}
+        for (const [code, e] of Object.entries(EBENEN)) {
+          if (e.name) zeigt[e.name] = code
+        }
+        const baum = baueBaum(knoten, zeigt)
+        const d = deckung(knoten, zeigt)
+        const eigene = flaechenFuer(slug)
+
+        function zeile(a: Ast): React.ReactNode {
+          const hier = a.flaeche && eigene.includes(a.flaeche)
+          const wert = a.flaeche ? MUSCLE_STATE[KARTE_ZU_RECOVERY[a.flaeche] ?? ''] : null
+          return (
+            <div key={`${a.name}-${a.ebene}`}>
+              <div style={{
+                display: 'flex', alignItems: 'baseline', gap: 6,
+                paddingLeft: (a.ebene - 1) * 14, fontSize: 11.5,
+                lineHeight: 1.7,
+                color: a.flaeche ? 'var(--fg)' : 'var(--fg-dim)',
+                fontWeight: hier ? 600 : 400,
+              }}>
+                <span>{a.name}</span>
+                {/* `[read]` **Die Luecke wird BENANNT, nicht
+                    weggelassen** — das ist der Kern von A6. */}
+                {!a.flaeche && (
+                  <span className="v2-dim" style={{ fontSize: 10 }}>
+                    (nicht gezeichnet)
+                  </span>
+                )}
+                {hier && <Pill variant="acc" style={{ fontSize: 9 }}>hier</Pill>}
+                {wert && (
+                  <span className="v2-num" style={{ fontSize: 10.5, marginLeft: 'auto' }}>
+                    {wert.soreness}/3
+                  </span>
+                )}
+              </div>
+              {a.kinder.map(k => zeile(k))}
+            </div>
+          )
+        }
+
+        return (
+          <>
+            <div className="v2-eyebrow" style={{ marginTop: 16, marginBottom: 6 }}>
+              Alle Muskelgruppen · {d.gezeichnet} von {d.gesamt} gezeichnet
+              · {d.luecken} Lücken
+            </div>
+            <Card className="v2-card-tight" style={{ padding: 12 }}>
+              <div className="v2-col-gap" style={{ gap: 8 }}>
+                {baum.map(a => zeile(a))}
+              </div>
+            </Card>
+          </>
+        )
+      })()}
     </RMod>
   )
 }

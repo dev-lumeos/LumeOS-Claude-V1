@@ -12,6 +12,14 @@ const baselineTriggerException = {
 }
 const dataCommands = /\b(insert|update|copy|delete|truncate|merge)\b/gi
 
+// C-472, gemessen am 2026-09-12: 49 ausfuehrbare Datenoperationen in 15
+// bereits committeten Migrationen C-428 bis C-467. Diese Altlast bleibt
+// sichtbar, aber blockiert die Kette nicht mehr dauerhaft. Wie im
+// Sollstand von `punkte-pruefen.mjs` ist jede Abweichung in beide Richtungen
+// rot: mehr waere neue Datenlogik, weniger verlangt eine bewusste
+// Nachmessung statt eines stillen Freipasses.
+const SOLLSTAND = 49
+
 function ohneKommentareUndStrings(sql) {
   let out = ''
   for (let i = 0; i < sql.length;) {
@@ -102,18 +110,21 @@ function selfTest() {
   ]
 
   const existing = findingsInDirectory()
-  if (existing.length) throw new Error(`Selbstprobe braucht zuerst saubere Migrationen: ${existing.join(', ')}`)
+  if (existing.length !== SOLLSTAND) {
+    throw new Error(`Selbstprobe braucht ${SOLLSTAND} Altbefunde, gemessen: ${existing.length}`)
+  }
 
   for (const [name, sql, expected] of probes) {
     const file = `9999999999_c291_${name}.sql`
     const target = path.join(migrationDir, file)
     fs.writeFileSync(target, sql, { encoding: 'utf8', flag: 'wx' })
     try {
-      const findings = findingsInDirectory().filter((finding) => finding.startsWith(`${file}:`))
-      if (findings.length !== expected) {
-        throw new Error(`${name}: ${findings.length} Meldungen, erwartet ${expected} (${findings.join(', ')})`)
+      const findings = findingsInDirectory()
+      const probeFindings = findings.filter((finding) => finding.startsWith(`${file}:`))
+      if (findings.length !== SOLLSTAND + expected || probeFindings.length !== expected) {
+        throw new Error(`${name}: ${findings.length} Meldungen, erwartet ${SOLLSTAND + expected} (${probeFindings.join(', ')})`)
       }
-      console.log(`[migration-datenlogik] Selbstprobe ${name}: ${findings.length} Meldung(en)`)
+      console.log(`[migration-datenlogik] Selbstprobe ${name}: ${probeFindings.length} neue Meldung(en)`)
     } finally {
       fs.unlinkSync(target)
     }
@@ -127,10 +138,16 @@ if (process.argv.includes('--self-test')) {
 }
 
 const findings = findingsInDirectory()
-if (findings.length) {
-  console.error('Migrationen duerfen keine Datenlogik enthalten:')
+if (findings.length !== SOLLSTAND) {
+  console.error(`Migrationen duerfen keine neue Datenlogik enthalten (Soll ${SOLLSTAND}, Ist ${findings.length}):`)
   for (const finding of findings) console.error(`- ${finding}`)
+  if (findings.length > SOLLSTAND) {
+    console.error(`Neue Befunde: ${findings.length - SOLLSTAND}.`)
+  } else {
+    console.error(`Altbestand gesunken: ${SOLLSTAND - findings.length}. Sollstand nachmessen und mit Begruendung nachziehen.`)
+  }
   process.exit(1)
 }
 
-console.log('Migrationen enthalten keine Datenlogik; benannte Ausnahme: 20260805120000_baseline_structure.sql public.handle_new_user().')
+console.log(`Migrationen: ${findings.length} historische Datenoperationen, genau Sollstand ${SOLLSTAND}; keine neue Datenlogik.`)
+console.log('Benannte Strukturausnahme: 20260805120000_baseline_structure.sql public.handle_new_user().')

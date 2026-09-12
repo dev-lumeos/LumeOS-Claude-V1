@@ -38,6 +38,8 @@ export function RecCheckin() {
   const [mood, setMood] = React.useState(CHECKIN.mood)
   const [soreness, setSoreness] = React.useState<Record<string, number>>({ ...CHECKIN.soreness })
   const [sel, setSel] = React.useState<string | null>(null)
+  // G-432/A4: welche FLAECHE geklickt wurde — nicht welche Gruppe.
+  const [selFlaeche, setSelFlaeche] = React.useState<string[] | null>(null)
   const [more, setMore] = React.useState(false)
 
   const cycle = (slug: string) =>
@@ -125,7 +127,7 @@ export function RecCheckin() {
           <Koerperkarte
             muskeln={katerAlsMuskeln(soreness)}
             breite={160}
-            ausgewaehlt={sel ? flaechenFuer(sel) : null}
+            ausgewaehlt={selFlaeche ?? (sel ? flaechenFuer(sel) : null)}
             legende={[
               { color: 'var(--surface-2)', label: '0 none' },
               { color: 'var(--acc-recov)', label: '1 mild' },
@@ -135,7 +137,20 @@ export function RecCheckin() {
             onPick={(id, typ) => {
               if (typ !== 'muscle') return
               const slug = KARTE_ZU_RECOVERY[id]
+              // ══ G-432/A4: der Klick trifft den MUSKEL ═══════════
+              //
+              // **Tom:** *„auf der grafik muss jeder angezeigte muskel
+              // anwaehlbar sein (nicht die gruppe)."*
+              //
+              // `[cmd]` **Vorher faerbte ein Klick auf den Latissimus
+              // DREI Flaechen** — `flaechenFuer('upper_back')` gibt
+              // `['latissimus','teres-major','teres-minor']`.
+              //
+              // `[read]` **Der Wert haengt weiter am Kuerzel** (Recovery
+              // misst den oberen Ruecken als eine Gruppe), **die
+              // Hervorhebung am geklickten Muskel.**
               if (slug) { cycle(slug); setSel(slug) }
+              setSelFlaeche([id])
             }}
           />
           {sel && (

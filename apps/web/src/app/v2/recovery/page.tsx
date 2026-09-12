@@ -29,6 +29,9 @@ import { RecoveryAnsicht } from './ansicht'
 // gelesen** (gemessen 2026-09-11). **Das hier ist der erste
 // Leseweg.**
 import { ladeHierarchie } from '../../../lib/koerper/hierarchie-read'
+// G-432/A6: der ganze Muskelbaum — fuer die vollstaendige Hierarchie
+// im Per-muscle-Detail, Luecken eingeschlossen.
+import { ladeMuskelbaum } from '../../../lib/koerper/muskelbaum-read'
 import './recovery.css'
 
 export const metadata: Metadata = {
@@ -54,13 +57,14 @@ export default async function V2RecoveryPage({
   // Drei getrennte Abfragen, drei getrennte Ergebnisse: faellt eine
   // aus, bleiben die uebrigen gueltig. Dieselbe Linie wie im
   // Tagebuch.
-  const [checkins, scores, modalitaeten, hierarchie] = await Promise.all([
+  const [checkins, scores, modalitaeten, hierarchie, muskelbaum] = await Promise.all([
     ladeCheckins(30, stichtag),
     ladeScores(180, stichtag),
     ladeModalitaeten(120, stichtag),
     // `[read]` **Stammdaten, kein Nutzerbezug** — aber derselbe
     // Weg: faellt sie aus, bleiben die drei uebrigen gueltig.
     ladeHierarchie(),
+    ladeMuskelbaum(),
   ])
   return (
     <RecoveryAnsicht
@@ -68,6 +72,7 @@ export default async function V2RecoveryPage({
       scores={scores}
       modalitaeten={modalitaeten}
       hierarchie={hierarchie}
+      muskelbaum={muskelbaum}
     />
   )
 }
