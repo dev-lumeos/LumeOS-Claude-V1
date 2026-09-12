@@ -1897,6 +1897,24 @@
         "421_schema",
         "468b_koerperflaechen_seed"
       ]
+    },
+    {
+      "id": "479_koerperflaechen_aufteilung_struktur",
+      "path": "supabase/migrations/20260912001600_c479_koerperflaechen_aufteilung.sql",
+      "kind": "sql",
+      "creates": "C-479/D-17: seiteneindeutige Ebene-3-Struktur sowie RLS- und REVOKE-then-GRANT-Vertrag fuer public.koerperflaechen; keine Daten.",
+      "depends_on": [
+        "473_guardian_abweichungen"
+      ]
+    },
+    {
+      "id": "479_koerperflaechen_aufteilung_daten",
+      "path": "supabase/_pipeline/00_querschnitt/479_koerperflaechen_aufteilung.sql",
+      "kind": "sql",
+      "creates": "C-479: fuenf Rueckenflaechen, zehn Seitenzeilen, Abschied von upper-back/lower-back und kanonische Kartenbruecken.",
+      "depends_on": [
+        "479_koerperflaechen_aufteilung_struktur"
+      ]
     }
   ]
 }
