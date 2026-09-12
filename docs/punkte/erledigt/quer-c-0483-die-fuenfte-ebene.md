@@ -6,7 +6,9 @@ schwere: hoch
 angelegt: 2026-09-08
 braucht: []
 kind_von: C-482
-entscheidung: null
+entscheidung: E-81
+erledigt: 2026-09-08
+commit: OFFEN
 beruehrt:
   tabellen: [public.koerperflaechen]
 zahlen:
@@ -81,3 +83,14 @@ plus 34 Seiten.**
 
 `[read]` **Je laenger die beiden auseinanderlaufen, desto mehr
 Bruecken wie `AUS_AUFTEILUNG`.**
+
+## Entschieden am 2026-09-08 — E-81
+
+Tom: *,,die trainings muessen bis auf die kleinsten muskeln
+runterbrechen koennen."*
+
+`[read]` **b plus c:** `parent_id` **fuer die Tiefe,** `art`
+**fuer die Bedeutung,** `seite` **als Spalte am Messwert.**
+
+`[cmd]` **Der Umbau ist C-484 (Codex) und G-435 (Claude
+Code).**
