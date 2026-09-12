@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 224 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
+| `laufend_claudecode` | 2 |
 | `erledigt` | 421 |
-| **gesamt** | **647** |
+| **gesamt** | **648** |
 
 ## medical — 48
 
@@ -540,7 +540,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 155
+## quer — 156
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -698,7 +698,8 @@
 | `G-425` | befund | hoch | [die sechs Pfade einzeln sehen](erledigt/quer-g-0425-die-sechs-pfade-einzeln-sehen.md) | erledigt | — | C-468 |
 | `G-427` | befund | hoch | [sechzehn Orte gegen einundzwanzig Flaechen](erledigt/quer-g-0427-sechzehn-orte-gegen-einundzwanzig-flaechen.md) | erledigt | — | — |
 | `G-430` | feature | hoch | [die Muskelhierarchie zu Ende bringen](erledigt/quer-g-0430-die-muskelhierarchie-zu-ende.md) | erledigt | — | C-479, G-431 |
-| `G-431` | feature | hoch | [die restlichen Buendel und die Modale](erledigt/quer-g-0431-die-restlichen-buendel-und-die-modale.md) | erledigt | — | C-481 |
+| `G-431` | feature | hoch | [die restlichen Buendel und die Modale](erledigt/quer-g-0431-die-restlichen-buendel-und-die-modale.md) | erledigt | — | C-481, G-432 |
+| `G-432` | fehler | hoch | [die Regel war falsch](laufend_claudecode/quer-g-0432-die-regel-war-falsch.md) | laeuft (claudecode) | — | — |
 
 ## buddy — 1
 
