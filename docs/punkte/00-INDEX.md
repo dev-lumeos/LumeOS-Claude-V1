@@ -699,7 +699,7 @@
 | `G-427` | befund | hoch | [sechzehn Orte gegen einundzwanzig Flaechen](erledigt/quer-g-0427-sechzehn-orte-gegen-einundzwanzig-flaechen.md) | erledigt | — | — |
 | `G-430` | feature | hoch | [die Muskelhierarchie zu Ende bringen](erledigt/quer-g-0430-die-muskelhierarchie-zu-ende.md) | erledigt | — | C-479, G-431 |
 | `G-431` | feature | hoch | [die restlichen Buendel und die Modale](erledigt/quer-g-0431-die-restlichen-buendel-und-die-modale.md) | erledigt | — | C-481, G-432 |
-| `G-432` | fehler | hoch | [die Regel war falsch](laufend_claudecode/quer-g-0432-die-regel-war-falsch.md) | laeuft (claudecode) | — | — |
+| `G-432` | feature | hoch | [jeder gezeichnete Muskel ist anwaehlbar](laufend_claudecode/quer-g-0432-jeder-muskel-anwaehlbar.md) | laeuft (claudecode) | — | — |
 
 ## buddy — 1
 
