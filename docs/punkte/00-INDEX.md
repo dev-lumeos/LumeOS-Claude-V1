@@ -6,9 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 224 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 420 |
-| **gesamt** | **646** |
+| `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 421 |
+| **gesamt** | **647** |
 
 ## medical — 48
 
@@ -539,7 +540,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 154
+## quer — 155
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -627,7 +628,8 @@
 | `C-472` | fehler | hoch | [der Datenlogik-Waechter ist rot](todos/quer-c-0472-der-datenlogik-waechter-ist-rot.md) | offen | — | — |
 | `C-473` | befund | hoch | [fuenf Abweichungen, die der Waechter jetzt sieht](erledigt/quer-c-0473-fuenf-abweichungen-im-waechter.md) | erledigt | — | — |
 | `C-478` | befund | hoch | [hat LumeOS ein Mehrgeraete-Problem?](todos/quer-c-0478-mehrgeraete-synchronisation.md) | offen | — | — |
-| `C-479` | feature | hoch | [fuenf Flaechen und achtundsiebzig Muskeln](todos/quer-c-0479-fuenf-flaechen-und-achtundsiebzig-muskeln.md) | offen | — | — |
+| `C-479` | feature | hoch | [fuenf Flaechen und achtundsiebzig Muskeln](laufend_codex/quer-c-0479-fuenf-flaechen-und-achtundsiebzig-muskeln.md) | laeuft (codex) | — | — |
+| `C-481` | feature | mittel | [vier Flaechen und lat_l](todos/quer-c-0481-vier-flaechen-und-lat-l.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -696,7 +698,7 @@
 | `G-425` | befund | hoch | [die sechs Pfade einzeln sehen](erledigt/quer-g-0425-die-sechs-pfade-einzeln-sehen.md) | erledigt | — | C-468 |
 | `G-427` | befund | hoch | [sechzehn Orte gegen einundzwanzig Flaechen](erledigt/quer-g-0427-sechzehn-orte-gegen-einundzwanzig-flaechen.md) | erledigt | — | — |
 | `G-430` | feature | hoch | [die Muskelhierarchie zu Ende bringen](erledigt/quer-g-0430-die-muskelhierarchie-zu-ende.md) | erledigt | — | C-479, G-431 |
-| `G-431` | feature | hoch | [die restlichen Buendel und die Modale](laufend_claudecode/quer-g-0431-die-restlichen-buendel-und-die-modale.md) | laeuft (claudecode) | — | — |
+| `G-431` | feature | hoch | [die restlichen Buendel und die Modale](erledigt/quer-g-0431-die-restlichen-buendel-und-die-modale.md) | erledigt | — | C-481 |
 
 ## buddy — 1
 
