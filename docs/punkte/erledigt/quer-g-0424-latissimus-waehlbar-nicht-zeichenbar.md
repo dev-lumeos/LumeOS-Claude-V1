@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-423
 entscheidung: null
+erledigt: 2026-09-08
+commit: 8a60059a
 beruehrt:
   dateien:
     - packages/ui/src/koerperkarte-pfade.ts
@@ -86,3 +88,10 @@ Flaechen noch nicht ein.**
 zueinander passen.**
 
 `[read]` **Wer c entscheidet, loest beides.**
+
+## Aufgeloest 2026-09-08 in G-430
+
+`[read]` **Dieser Punkt war eine Ecke** ? **er geht in den
+Durchgang ueber alle vier Module.**
+
+`[cmd]` **G-430: die Muskelhierarchie zu Ende bringen.**

@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 226 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 416 |
-| **gesamt** | **643** |
+| `todos` | 224 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 418 |
+| **gesamt** | **644** |
 
 ## medical — 48
 
@@ -539,7 +539,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 151
+## quer — 152
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -621,7 +621,7 @@
 | `C-446` | befund | hoch | [eine Migration fehlt in der Kette](erledigt/quer-c-0446-eine-migration-fehlt-in-der-kette.md) | erledigt | — | C-447 |
 | `C-447` | befund | hoch | [die drei Live-Luecken schliessen](erledigt/quer-c-0447-die-drei-live-luecken-schliessen.md) | erledigt | — | C-448 |
 | `C-448` | entscheidung | mittel | [acht tote Migrationen](erledigt/quer-c-0448-acht-tote-migrationen.md) | erledigt | — | — |
-| `C-468` | entscheidung | hoch | [eine Muskelhierarchie fuer alle Karten](erledigt/quer-c-0468-eine-muskelhierarchie-fuer-alle-karten.md) | erledigt | — | C-470, C-471 |
+| `C-468` | entscheidung | hoch | [eine Muskelhierarchie fuer alle Karten](erledigt/quer-c-0468-eine-muskelhierarchie-fuer-alle-karten.md) | erledigt | — | C-470, C-471, G-430 |
 | `C-470` | fehler | hoch | [- pg_default_acl vergibt in public alles](erledigt/quer-c-0470-pg-default-acl-in-public.md) | erledigt | — | C-473 |
 | `C-471` | fehler | hoch | [die Struktur gehoert nach migrations/](erledigt/quer-c-0471-die-struktur-nach-migrations.md) | erledigt | — | C-472 |
 | `C-472` | fehler | hoch | [der Datenlogik-Waechter ist rot](todos/quer-c-0472-der-datenlogik-waechter-ist-rot.md) | offen | — | — |
@@ -691,9 +691,10 @@
 | `G-411` | fehler | hoch | [LumeOS hat keinen Abmeldeknopf](erledigt/quer-g-0411-lumeos-hat-keinen-abmeldeknopf.md) | erledigt | — | G-414 |
 | `G-414` | entscheidung | niedrig | [admin und coach teilen 65 Prozent](todos/quer-g-0414-admin-und-coach-teilen-65-prozent.md) | offen | — | — |
 | `G-420` | befund | mittel | [Kettenlaeufe setzen Testdaten zurueck](todos/quer-g-0420-kettenlaeufe-setzen-testdaten-zurueck.md) | offen | — | — |
-| `G-424` | befund | mittel | [latissimus ist waehlbar und nicht zeichenbar](todos/quer-g-0424-latissimus-waehlbar-nicht-zeichenbar.md) | offen | — | G-425 |
+| `G-424` | befund | mittel | [latissimus ist waehlbar und nicht zeichenbar](erledigt/quer-g-0424-latissimus-waehlbar-nicht-zeichenbar.md) | erledigt | — | G-425 |
 | `G-425` | befund | hoch | [die sechs Pfade einzeln sehen](erledigt/quer-g-0425-die-sechs-pfade-einzeln-sehen.md) | erledigt | — | C-468 |
-| `G-427` | befund | hoch | [sechzehn Orte gegen einundzwanzig Flaechen](todos/quer-g-0427-sechzehn-orte-gegen-einundzwanzig-flaechen.md) | offen | — | — |
+| `G-427` | befund | hoch | [sechzehn Orte gegen einundzwanzig Flaechen](erledigt/quer-g-0427-sechzehn-orte-gegen-einundzwanzig-flaechen.md) | erledigt | — | — |
+| `G-430` | feature | hoch | [die Muskelhierarchie zu Ende bringen](laufend_claudecode/quer-g-0430-die-muskelhierarchie-zu-ende.md) | laeuft (claudecode) | — | — |
 
 ## buddy — 1
 

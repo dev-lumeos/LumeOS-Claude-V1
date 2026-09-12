@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-389
 entscheidung: null
+erledigt: 2026-09-08
+commit: 8a60059a
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/tab-injektionen.tsx
@@ -87,3 +89,10 @@ Stelle, die die Karte nicht zeigt.**
 
 `[read]` **Und jede kuenftige Ansicht, die eine erfasste
 Injektion auf der Karte zeigen will.**
+
+## Aufgeloest 2026-09-08 in G-430
+
+`[read]` **Dieser Punkt war eine Ecke** ? **er geht in den
+Durchgang ueber alle vier Module.**
+
+`[cmd]` **G-430: die Muskelhierarchie zu Ende bringen.**
