@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-467
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [supplements.supplier_products]
 zahlen:
@@ -452,3 +454,195 @@ braucht** ? **niemand sucht nach *Vitamin World, Inc.*.**
 
 `[read]` **Die Firma ist der Filter fuer die Entwicklung** ?
 **und fuer die Frage, wer wirklich herstellt.**
+
+## Der Auftrag, 2026-09-08
+
+`[read]` **Zwei Teile: die Tabellen anpassen, dann den Import
+in Etappen.**
+
+### Was heute steht
+
+`[cmd]` **C-467, alle vier Tabellen LEER:**
+
+    suppliers                  id, user_id, name, land,
+                               website, notiz, is_active, source
+    supplier_products          supplier_id, name, produktform,
+                               packungsgroesse/-einheit, gtin,
+                               artikelnummer, portionsgroesse/
+                               -einheit, im_katalog, is_active,
+                               source
+    product_contents           product_id, supplement_id,
+                               amount_per_serving, unit,
+                               conversion_factor, ist_wirkstoff,
+                               source
+    product_content_candidates product_id, ingredient_name,
+                               amount_per_serving, unit, status,
+                               source
+
+`[cmd]` **Und der Bestand:** `supplements` 596,
+`supplement_aliases` 2.843.
+
+### Teil 1 ? die Tabellen anpassen
+
+**a** ? **`supplier_products.marke`**
+
+`[cmd]` **DSLD fuehrt beides:** `Brand Name = Vitamin World`,
+`Company Name = Vitamin World, Inc.`
+
+`[read]` **Die Marke steht auf der Packung, die Firma im
+Impressum.**
+
+`[read]` **Der Nutzer sucht die MARKE.**
+
+**b** ? **die Firmenrolle**
+
+`[cmd]` **`Company Information` traegt je Firma:**
+`Manufacturer`, `Distributor`, `Packager`, `Reseller`, `Other`
+? **je ja oder nein.**
+
+`[cmd]` **Miss, wie oft ein Produkt MEHR ALS EINE Firma hat.**
+
+`[read]` **Selten -> `supplier_id` plus `rolle` am Produkt.**
+`[read]` **Haeufig -> eine Verbindungstabelle.**
+
+**c** ? **`blend`**
+
+`[cmd]` **DSLD ID 554 zeigt die Loesung:**
+
+    Echinacea/Goldenseal Blend   450   mg   blend
+      Echinacea                  NULL  NULL botanical
+      Goldenseal                 NULL  NULL botanical
+      Burdock                    NULL  NULL botanical
+
+`[read]` **Die Mischung traegt die Gesamtmenge, die Zutaten
+folgen ohne Menge, in Etikettreihenfolge.**
+
+`[read]` **`product_contents` braucht:**
+
+    blend_id      zeigt auf die Mischungszeile
+    reihenfolge   die Position auf dem Etikett
+
+`[cmd]` **Und miss, wie oft eine Mischung OHNE Zutatenzeilen
+dasteht** (`Proprietary Blend 5 mg`).
+
+**d** ? **die DSLD-Felder**
+
+    Product Type [LanguaL]      Vitamin [A1302]
+    Supplement Form [LanguaL]   Tablet or Pill [E0155]
+    Market Status               On Market
+    Date Entered into DSLD
+    Suggested Use
+    DSLD ID                     542
+
+`[read]` **Miss, welche davon `supplier_products` schon traegt
+und welche eine Spalte brauchen.**
+
+`[cmd]` **`artikelnummer` koennte die DSLD-ID aufnehmen** ?
+**oder sie bekommt eine eigene Spalte, damit ein Abgleich
+moeglich bleibt.**
+
+### Teil 2 ? der Import, in Etappen
+
+**Etappe 1: die Zutaten.**
+
+`[cmd]` **Gemessen an `batch1`: 200.650 Zeilen -> 14.677
+EINDEUTIGE Zutaten.**
+
+`[read]` **Ueber elf Dateien vermutlich 30.000 bis 50.000** ?
+**nicht 2,2 Mio.**
+
+`[read]` **Gegen `supplements` (596) und `supplement_aliases`
+(2.843) abgleichen.**
+
+    trifft        -> supplement_id steht
+    trifft nicht  -> product_content_candidates
+
+`[cmd]` **Miss, wie viele treffen** ? **das ist die Zahl, die
+zaehlt.**
+
+**Etappe 2: die Firmen.**
+
+`[cmd]` **`Company Information`, 30.505 Zeilen je Datei** ?
+**eindeutige Firmen zaehlen.**
+
+**Etappe 3: die Produkte.**
+
+`[cmd]` **20.000 je Datei, 220.000 gesamt.**
+
+Tom: *,,alle, was wir haben, das haben wir und kostet uns ja
+nichts."*
+
+`[read]` **Keine Auswahl** ? **`Market Status` bleibt als Feld,
+die Ansicht filtert.**
+
+**Etappe 4: die Zutatenzeilen.**
+
+`[cmd]` **2,2 Mio** ? **die groesste Menge.**
+
+`[read]` **Miss, wie lange eine Datei braucht, bevor du alle
+elf laeufst.**
+
+`[cmd]` **Zum Vergleich: `nutrition` traegt 1,04 Mio Zeilen** ?
+**die Groessenordnung ist bekannt.**
+
+### Wohin die Daten gehoeren
+
+`[cmd]` **D-17, Weg B:** **Struktur nach `migrations/`, Daten
+in einen nummerierten Schritt unter `_pipeline/`.**
+
+`[read]` **268 MB XLSX gehoeren NICHT in die Kette** ? **miss,
+ob ein Zwischenformat (CSV, COPY) noetig ist.**
+
+`[cmd]` **`nutrition` hat einen CSV-Import** ? **dieselbe
+Bauform.**
+
+### Die Lizenz
+
+Tom: *,,ist lizenzfrei."*
+
+`[cmd]` **Trotzdem die Herkunft eintragen:**
+`supplement_field_sources` **traegt sie je Feld,
+`source = dsld` am Produkt.**
+
+## Abnahmebedingungen
+
+    A1  die Tabellenanpassungen: marke, Firmenrolle,
+        blend_id, reihenfolge, DSLD-Felder.
+        Je Spalte die Fundstelle aus den Daten.
+    A2  wie oft hat ein Produkt mehrere Firmen? Gemessen.
+    A3  wie oft steht eine Mischung ohne Zutaten? Gemessen.
+    A4  Etappe 1: eindeutige Zutaten gezaehlt, gegen
+        supplements und aliases abgeglichen. WIE VIELE
+        TREFFEN?
+    A5  Etappe 2 bis 4: je Etappe die Zeilenzahl und
+        die Laufzeit.
+    A6  was NICHT zugeordnet werden konnte, steht als
+        Kandidat. Zahl.
+    A7  RLS und Rechte: authenticated SELECT, anon nichts.
+    A8  Struktur nach migrations/, Daten in _pipeline/.
+    A9  Waechter GRUEN -- oder jede rote Zeile mit Grund
+        im Sollstand.
+    A10 Sicherung, Vollkette, Punktelauf.
+
+## Was nicht zu tun ist
+
+**KEINE Zutat erfinden** ? **was nicht trifft, wird ein
+Kandidat.**
+
+**KEINE Einzelmenge fuer eine Mischung erfinden** ? **DSLD hat
+sie nicht, der Hersteller nennt sie nicht.**
+
+**Keine Oberflaeche** ? **der Quellenschalter ist ein eigener
+Auftrag.**
+
+**`apps/` nicht anfassen** ? **Claude Code arbeitet an G-435.**
+
+Nicht committen, nicht stagen, nicht pushen.
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
