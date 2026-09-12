@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 219 |
-| `laufend_codex` | 1 |
+| `todos` | 220 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 415 |
-| **gesamt** | **636** |
+| `erledigt` | 416 |
+| **gesamt** | **637** |
 
 ## medical — 48
 
@@ -536,7 +535,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 149
+## quer — 150
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -619,9 +618,10 @@
 | `C-447` | befund | hoch | [die drei Live-Luecken schliessen](erledigt/quer-c-0447-die-drei-live-luecken-schliessen.md) | erledigt | — | C-448 |
 | `C-448` | entscheidung | mittel | [acht tote Migrationen](erledigt/quer-c-0448-acht-tote-migrationen.md) | erledigt | — | — |
 | `C-468` | entscheidung | hoch | [eine Muskelhierarchie fuer alle Karten](erledigt/quer-c-0468-eine-muskelhierarchie-fuer-alle-karten.md) | erledigt | — | C-470, C-471 |
-| `C-470` | fehler | hoch | [pg_default_acl vergibt in public alles](laufend_codex/quer-c-0470-pg-default-acl-in-public.md) | laeuft (codex) | — | — |
+| `C-470` | fehler | hoch | [- pg_default_acl vergibt in public alles](erledigt/quer-c-0470-pg-default-acl-in-public.md) | erledigt | — | C-473 |
 | `C-471` | fehler | hoch | [die Struktur gehoert nach migrations/](erledigt/quer-c-0471-die-struktur-nach-migrations.md) | erledigt | — | C-472 |
 | `C-472` | fehler | hoch | [der Datenlogik-Waechter ist rot](todos/quer-c-0472-der-datenlogik-waechter-ist-rot.md) | offen | — | — |
+| `C-473` | befund | hoch | [fuenf Abweichungen, die der Waechter jetzt sieht](todos/quer-c-0473-fuenf-abweichungen-im-waechter.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
