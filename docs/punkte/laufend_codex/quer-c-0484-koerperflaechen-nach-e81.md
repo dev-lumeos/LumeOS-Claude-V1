@@ -128,3 +128,55 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Berichtigt 2026-09-08 -- die Abhaengigkeit war mein Fehler
+
+Tom: *,,codex konnte nicht weiterarbeiten, weil claude code nicht
+durch war."*
+
+`[read]` **Richtig.** **C-484 verlangte, dass Claude Code erst
+meldet** ? **G-435 verlangte, dass er meldet, BEVOR Codex baut.**
+
+`[read]` **Beide warteten aufeinander.**
+
+## Der Vertrag, ausgeschrieben
+
+`[cmd]` **Codex hat die drei Zeilen gemessen:**
+
+    hierarchie-read.ts:59
+      .select('...,ebene,art,seite,muscle_group_id')
+
+    hierarchie.ts:35   ebene: number | null
+    hierarchie.ts:38   seite: string | null
+
+`[read]` **Nachher:** **`ebene` und `seite` fallen aus dem
+Select und aus dem Typ** ? **das ist der ganze Vertrag.**
+
+## Die Reihenfolge
+
+`[read]` **CODEX BAUT ZUERST.**
+
+`[cmd]` **Grund: die Oberflaeche bricht erst, wenn die Spalten
+weg sind** ? **umgekehrt braeuchte Claude Code eine Tabelle, die
+es noch nicht gibt.**
+
+    1  Codex baut C-484 vollstaendig
+    2  Claude Code zieht die drei Zeilen nach (G-435)
+    3  und raeumt das Modal
+
+`[read]` **Zwischen 1 und 2 ist Recovery kurz kaputt** ? **das
+ist ein Entwicklungsstand, kein Befund.**
+
+## Und die Injektionsorte
+
+`[cmd]` **Codex hat gemessen: Flaechenbezug in DREI
+Medical-Tabellen** ? `user_injection_site_selections`,
+`injection_logs`, `injection_sites`.
+
+`[cmd]` **Alle 16 Katalogorte sind bereits seitlich codiert
+(`*_l`/`*_r`), Selections und Logs haben je 0 Zeilen.**
+
+`[read]` **`injection_sites` ist ein KATALOG, kein Messwert** ?
+**miss, ob E-81 dort ueberhaupt gilt.**
+
+`[read]` **Wenn nicht: melden und so lassen.**

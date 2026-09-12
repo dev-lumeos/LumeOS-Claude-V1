@@ -116,3 +116,31 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Berichtigt 2026-09-08 -- Codex baut zuerst
+
+`[read]` **Der Auftrag verlangte, BEVOR Codex baut zu melden** ?
+**und C-484 verlangte, auf die Meldung zu warten.**
+
+`[read]` **Beide warteten. Mein Fehler.**
+
+## Die neue Reihenfolge
+
+    1  Codex baut C-484 vollstaendig
+    2  DU ziehst drei Zeilen nach
+    3  und raeumst das Modal
+
+`[cmd]` **Die drei Zeilen, von Codex gemessen:**
+
+    hierarchie-read.ts:59   ebene und seite aus dem .select()
+    hierarchie.ts:35        ebene: number | null   -> weg
+    hierarchie.ts:38        seite: string | null   -> weg
+
+`[read]` **Zwischen 1 und 2 ist Recovery kaputt** ? **erwartet,
+kein Befund.**
+
+## Teil 1 kannst du SOFORT
+
+`[read]` **Das Modal raeumen haengt an nichts.**
+
+`[cmd]` **G-433 laeuft dafuer** ? **stimme dich ab.**
