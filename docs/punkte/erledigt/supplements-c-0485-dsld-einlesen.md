@@ -9,6 +9,8 @@ kind_von: C-467
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 7f57ac48
 beruehrt:
   tabellen: [supplements.supplier_products]
 zahlen:
@@ -740,4 +742,76 @@ gruen: 25 Befunde, exakt Sollstand.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    supplier_products            214.780
+    suppliers                      6.419
+    product_suppliers            (Rollentabelle, gebaut)
+    product_contents           3.000.982
+    product_content_candidates 1.717.835
+    marke                        gebaut
+    blend_id, reihenfolge        gebaut
+    Rechte                       authenticated SELECT
+
+`[cmd]` **Selbst gemessen: alle acht.**
+
+### Die Wirkung ist groesser als gemeldet
+
+`[cmd]` **Er meldete 377 gemappte Bezeichnungen** ? **gemessen:**
+
+    Zeilen mit supplement_id      302.293
+    eindeutige Substanzen             243
+
+`[read]` **C-466 hat 17 von 596 Substanzen mit
+Naehrstoffzuordnung gemessen** ? **jetzt haben 243 einen
+Produktbezug.**
+
+`[read]` **Das ist die Zahl, die zaehlt.**
+
+### Die Mischungen
+
+`[cmd]` **71.195 Mischungen mit Kindern, 473.803 Zeilen darin.**
+
+`[cmd]` **Und 38.666 Mischungen OHNE Kinder** ? **der Fall
+`Proprietary Blend 5 mg`, den ich zu messen verlangt hatte.**
+
+> *,,0 erfundene Blend-Einzelmengen"*
+
+`[read]` **Er hat keine Menge erfunden** ? **wie DSLD selbst.**
+
+### 1,7 Mio Kandidaten
+
+`[cmd]` **`product_content_candidates`: 1.717.835.**
+
+`[read]` **Mehr als die Haelfte aller Inhaltszeilen** ? **das ist
+die Luecke, sichtbar gemacht statt gefuellt.**
+
+`[cmd]` **C-467 hat die Tabelle dafuer gebaut:** *,,unbekannte
+Zutaten -> Kandidat, nie still angelegt."*
+
+`[read]` **Sie erfuellt jetzt ihren Zweck.**
+
+### Die Rollentabelle
+
+`[cmd]` **`product_suppliers` existiert** ? **235.618
+Firmenrollen.**
+
+`[read]` **Er hat gemessen, dass ein Produkt mehrere Firmen hat,
+und die Verbindungstabelle gebaut** ? **statt eine Spalte zu
+nehmen.**
+
+### G-261 ist nicht seine Abweichung
+
+`[cmd]` **`goals.nutrition_targets` hat 15 Spalten, darunter
+`fiber_g`.**
+
+`[cmd]` **C-464 hat sie HEUTE gebaut** ? **der Sollstand wurde
+nicht nachgezogen.**
+
+`[read]` **Er hat sie richtig als fremd erkannt** ? **und nicht
+angefasst.**
+
+`[cmd]` **Als G-439 festgehalten.**
+
+**Abgenommen.**
+

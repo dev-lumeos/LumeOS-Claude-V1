@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-12 — 186 Tabellen, 2591 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-12 — 187 Tabellen, 2615 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -151,7 +151,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `scores` | 34 | 370 | ? |
 | `stress_logs` | 12 | 7 | 2026-09-07 |
 
-## supplements — 63 Tabellen, 921 Spalten
+## supplements — 64 Tabellen, 945 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -163,8 +163,9 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `intake_logs` | 17 | 810 | ? |
 | `intake_schedule` | 18 | 0 | ? |
 | `lab_effect_enrichment_records` | 16 | 47 | ? |
-| `product_content_candidates` | 9 | 0 | 2026-09-09 |
-| `product_contents` | 10 | 0 | 2026-09-09 |
+| `product_content_candidates` | 12 | 1717835 | 2026-09-09 |
+| `product_contents` | 16 | 3000982 | 2026-09-09 |
+| `product_suppliers` | 6 | 235618 | 2026-09-12 |
 | `pubchem_conflict_records` | 16 | 20 | ? |
 | `rule_catalog` | 26 | 64 | ? |
 | `stack_curation_candidate_items` | 11 | 2 | ? |
@@ -182,7 +183,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `supplement_dosing` | 24 | 596 | ? |
 | `supplement_evidence` | 23 | 596 | ? |
 | `supplement_faq` | 13 | 1970 | ? |
-| `supplement_field_sources` | 12 | 2815 | ? |
+| `supplement_field_sources` | 14 | 2746432 | ? |
 | `supplement_groups` | 10 | 3 | ? |
 | `supplement_human_evidence_flags` | 17 | 293 | ? |
 | `supplement_identifiers` | 9 | 1259 | ? |
@@ -210,8 +211,8 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `supplement_wada` | 22 | 337 | ? |
 | `supplement_warnings` | 14 | 290 | ? |
 | `supplements` | 22 | 596 | ? |
-| `supplier_products` | 15 | 0 | 2026-09-09 |
-| `suppliers` | 10 | 0 | 2026-09-09 |
+| `supplier_products` | 21 | 214780 | 2026-09-09 |
+| `suppliers` | 11 | 6419 | 2026-09-09 |
 | `thailand_regulatory_records` | 18 | 1061 | ? |
 | `user_inventory` | 15 | 0 | ? |
 | `user_stacks` | 12 | 6 | ? |
