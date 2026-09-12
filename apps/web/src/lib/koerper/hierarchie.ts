@@ -32,10 +32,18 @@ export type Flaeche = {
   code: string
   name_de: string | null
   name_en: string | null
-  ebene: number | null
-  /** `muskel` oder `umriss` — Umrisse tragen nie einen Zustand. */
+  // ══ C-484: `ebene` und `seite` sind entfallen ══════════════════
+  //
+  // `[cmd]` **`ebene` war redundant** — die Tiefe steht in
+  // `parent_id` und wird gerechnet (`muskelbaum.ts`).
+  //
+  // `[cmd]` **`seite` war falsch verortet** (E-81): sie gehoert an
+  // die MESSUNG, nicht an den Muskel. Es gab `latissimus-l` und
+  // `latissimus-r`; jetzt gibt es `latissimus`, und der Messwert
+  // sagt, welche Seite. `[read]` **Wer sie hier wieder einfuehrt,
+  // baut die geloeschten Zeilen zurueck.**
+  /** `wurzel`, `gruppe`, `muskel`, `umriss` oder `kopf`. */
   art: string | null
-  seite: string | null
   muscle_group_id: string | null
 }
 

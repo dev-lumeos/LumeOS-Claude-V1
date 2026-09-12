@@ -255,7 +255,11 @@ export function RecoveryAnsicht({
       )}
       {tab === 'muscles' && (
         <>
-          <RecMuscleMap stand={checkins} />
+          {/* `[cmd]` **G-435/A6: der Baum geht an die Kachel** —
+              **Tom:** *„da will ich parent und darunter childs
+              sehen."* `[read]` **Er liegt hier schon bereit**, die
+              Kachel bekam ihn nur nicht gereicht. */}
+          <RecMuscleMap stand={checkins} muskelbaum={muskelbaum} />
           <RecMuscleMapReferenz />
         </>
       )}

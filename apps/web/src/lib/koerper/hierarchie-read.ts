@@ -56,7 +56,14 @@ export async function ladeHierarchie(): Promise<HierarchieStand> {
     const s = createSessionClient()
     const { data, error } = await s
       .from('koerperflaechen')
-      .select('id,parent_id,code,name_de,name_en,ebene,art,seite,muscle_group_id')
+      // ══ C-484: `ebene` und `seite` gibt es nicht mehr ═══════════
+      //
+      // `[cmd]` **Die Tiefe kommt aus `parent_id`, die Bedeutung aus
+      // `art`.** `[read]` **Die Seite ist eine Eigenschaft der
+      // MESSUNG, nicht des Muskels** (E-81) — es gibt keine
+      // `latissimus-l`-Zeile mehr, sondern `latissimus` und einen
+      // Messwert, der die Seite traegt.
+      .select('id,parent_id,code,name_de,name_en,art,muscle_group_id')
       .order('sortierung', { ascending: true })
     if (error) return { ...LEER, fehler: error.message }
     return { flaechen: (data ?? []) as Flaeche[], fehler: null }

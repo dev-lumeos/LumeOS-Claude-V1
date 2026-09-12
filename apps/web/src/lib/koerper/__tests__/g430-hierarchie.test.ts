@@ -27,8 +27,10 @@ import {
 function baum(): Flaeche[] {
   const f = (id: string, code: string, parent: string | null,
     de: string, art = 'muskel'): Flaeche => ({
+    // `[cmd]` **C-484: `ebene` und `seite` sind entfallen** — die
+    // Tiefe kommt aus `parent_id`, die Seite aus dem Messwert (E-81).
     id, code, parent_id: parent, name_de: de, name_en: code,
-    ebene: null, art, seite: null, muscle_group_id: null,
+    art, muscle_group_id: null,
   })
   return [
     f('1', 'wurzel-ruecken', null, 'Rücken'),
@@ -77,8 +79,7 @@ test('G-430: kinderVon haengt sich an einem Zyklus nicht auf', () => {
   const b = baum()
   const k = (id: string, parent: string): Flaeche => ({
     id, code: `ring-${id}`, parent_id: parent, name_de: 'Ring',
-    name_en: 'ring', ebene: null, art: 'muskel', seite: null,
-    muscle_group_id: null,
+    name_en: 'ring', art: 'muskel', muscle_group_id: null,
   })
   b.push(k('91', '92'), k('92', '91'), k('93', '91'))
 

@@ -32,10 +32,24 @@ import { useRecovery } from './kontext'
 import { ATTRAPPE } from './ansicht'
 // G-160: die erfassten Werte aus `recovery.checkins`.
 import type { CheckinStand, CheckinZeile } from '../../../lib/recovery/checkin-read'
+// `[cmd]` **G-435/A6: die Hierarchie fuer `Per-muscle detail`.**
+// `[read]` **`baueBaum` rechnet nur** — keine Importe, also faellt es
+// nicht ueber die `'use client'`-Grenze.
+// `[cmd]` **G-436: `deckung` ist raus** — die Ansicht zeigt die
+// Luecken je Zeile („nicht gezeichnet"), nicht mehr als Summe in
+// einer Ueberschrift. **Geloescht wird die Funktion NICHT.**
+import {
+  baueBaum, mitWerten, type AstMitWert, type MuskelbaumStand,
+} from '../../../lib/koerper/muskelbaum'
+import { EBENEN } from '../../../lib/koerper/ebenen'
 
 // ═══ MUSCLE MAP ══════════════════════════════════════════════════
 // [cmd] module-recovery-v2.jsx:378-443.
-export function RecMuscleMap({ stand }: { stand?: CheckinStand | null }) {
+export function RecMuscleMap({ stand, muskelbaum }: {
+  stand?: CheckinStand | null
+  /** G-435/A6: die Hierarchie fuer `Per-muscle detail`. */
+  muskelbaum?: MuskelbaumStand
+}) {
   const { open } = useRecovery()
 
   // ══ G-364: der Muskelkater kommt aus dem Check-in ════════════
@@ -109,52 +123,171 @@ export function RecMuscleMap({ stand }: { stand?: CheckinStand | null }) {
         </div>
       </Card>
 
+      {/* ══ G-436: die Liste IST die Hierarchie ═══════════════════
+          **Tom:** *„wir haben eine schoene auflistung und die soll
+          aufgebohrt werden auf die hierarchie darunter im style von
+          parent/childs, immer offen, und jedes teil anwaehlbar fuer
+          details — gruppen und einzelmuskel."*
+
+          `[cmd]` **Hier standen ZWEI Listen** — eine flache Tabelle
+          mit 18 Kuerzeln und darunter mein Notbehelf aus G-435.
+          **Jetzt eine.**
+
+          `[read]` **Immer offen, kein Aufklappen** — 105 Namen in
+          vier Ebenen. **Das ist lang, aber vollstaendig.** */}
       <Card
         title="Per-muscle detail"
         sub={echterKater
-          ? 'nach Bereitschaft · Muskelkater erfasst, Volumen aus dem Entwurf'
-          : 'sorted by readiness · lowest first'}
+          ? 'Hierarchie · Muskelkater erfasst, Volumen aus dem Entwurf'
+          : 'Hierarchie · Gruppe, Schnitt und schwaechstes Glied'}
         actions={echterKater ? <Pill variant="pos">echte Daten</Pill> : undefined}
       >
-        <div className="v2-tbl-wrap">
-          <table className="v2-tbl">
-            <thead>
-              <tr>
-                <th>Muscle</th>
-                <th style={{ width: 60, textAlign: 'right' }}>Hours</th>
-                <th style={{ width: 50, textAlign: 'right' }}>Sets</th>
-                <th style={{ width: 56, textAlign: 'right' }}>Sore</th>
-                <th style={{ width: 130 }}>Recovery</th>
-                <th style={{ width: 56, textAlign: 'right' }}>%</th>
-                <th style={{ width: 24 }} />
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map(r => {
-                if (r.value == null) return null
-                const c = r.value >= 80 ? 'var(--pos)' : r.value >= 50 ? 'var(--warn)' : 'var(--neg)'
-                return (
-                  <tr key={r.slug} style={{ cursor: 'pointer' }}
-                      onClick={() => open({ typ: 'muscle', slug: r.slug })}>
-                    <td>
-                      <div style={{ fontSize: 12 }}>{MUSCLE_LABEL[r.slug]}</div>
-                      <div className="v2-dim v2-mono" style={{ fontSize: 9 }}>{'lastSession' in r ? r.lastSession : ''}</div>
-                    </td>
-                    <td className="v2-num" style={{ textAlign: 'right' }}>{'hours' in r ? r.hours : ''}</td>
-                    <td className="v2-num v2-muted" style={{ textAlign: 'right' }}>{'sets' in r ? r.sets : ''}</td>
-                    <td className="v2-num" style={{
-                      textAlign: 'right',
-                      color: ('soreness' in r && r.soreness >= 2) ? 'var(--warn)' : 'var(--fg-muted)',
-                    }}>{'soreness' in r ? `${r.soreness}/3` : ''}</td>
-                    <td><Meter value={r.value} color={c} tall /></td>
-                    <td className="v2-num" style={{ textAlign: 'right', color: c, fontWeight: 600 }}>{r.value}</td>
-                    <td><Icon name="chevron_right" className="v2-ic v2-ic-sm" style={{ color: 'var(--fg-dim)' }} /></td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+        {(() => {
+          const knoten = muskelbaum?.knoten ?? []
+          if (knoten.length === 0) {
+            // `[read]` **Kein Strich, sondern ein benannter
+            // Leerhinweis** (E-72/G-161) — ein Strich hiesse „leer",
+            // und hier ist „nicht gelesen" gemeint.
+            return (
+              <Empty title="Muskelbaum nicht gelesen"
+                     sub="training.muscle_groups war beim Laden nicht erreichbar." />
+            )
+          }
+
+          // `[cmd]` **`EBENEN` sagt, welchen Muskel eine Flaeche
+          // WIRKLICH zeigt** — nicht `MUSKEL_ZU_FLAECHE`, das
+          // beantwortet eine andere Frage (die Lehre aus G-432).
+          const zeigt: Record<string, string> = {}
+          for (const [code, e] of Object.entries(EBENEN)) {
+            if (e.name) zeigt[e.name] = code
+          }
+
+          // ══ Der Wert je Knoten ═════════════════════════════════
+          //
+          // `[cmd]` **Gemessen** (`g436-zustaende.test.ts`,
+          // 2026-09-12): **22 Namen gezeichnet, 21 davon mit Wert,
+          // 1 ohne (`tibialis`), 83 ueberhaupt nicht gezeichnet.**
+          //
+          // `[read]` **Ein Muskel ohne Volumenzuordnung KANN keinen
+          // Wert haben** — das ist C-487, nicht mein Fehler.
+          const werte = mitWerten(baueBaum(knoten, zeigt), a => {
+            if (!a.flaeche) return null
+            const slug = KARTE_ZU_RECOVERY[a.flaeche]
+            const st = slug ? MUSCLE_STATE[slug] : null
+            if (!st) return null
+            const kater = echterKater?.[slug] ?? st.soreness
+            const guete = echteSchlafguete ?? CHECKIN.sleep_quality
+            return calcMuscleRecovery({
+              hours: st.hours, sets: st.sets, sleepQuality: guete,
+              proteinPct: NUTRITION_INPUT.proteinPct,
+              caloriePct: NUTRITION_INPUT.caloriePct,
+              soreness: kater,
+            }).value
+          })
+
+          function zeile(a: AstMitWert): React.ReactNode {
+            const slug = a.flaeche ? KARTE_ZU_RECOVERY[a.flaeche] : null
+            const st = slug ? MUSCLE_STATE[slug] : null
+            const kater = slug && echterKater ? echterKater[slug] : undefined
+            const sore = kater ?? st?.soreness
+            const farbe = a.wert == null ? 'var(--fg-dim)'
+              : a.wert >= 80 ? 'var(--pos)'
+              : a.wert >= 50 ? 'var(--warn)' : 'var(--neg)'
+
+            // ══ Anwaehlbar: Gruppe UND Muskel ════════════════════
+            //
+            // `[read]` **Tom:** *„jedes teil anwaehlbar fuer details
+            // — gruppen und einzelmuskel."*
+            //
+            // `[cmd]` **Gemessen: ein Klick auf `Arms` oeffnete
+            // NICHTS** — eine Gruppe hat keine Kartenflaeche, also
+            // kein Kuerzel. **Deshalb zwei Ziele:** ein Muskel
+            // oeffnet sein Detail, eine Gruppe ihr eigenes Fenster.
+            const oeffne = slug
+              ? () => open({ typ: 'muscle', slug })
+              : a.kinder.length > 0
+                ? () => open({ typ: 'muskelgruppe', name: a.name })
+                : undefined
+
+            return (
+              <div key={`${a.name}-${a.ebene}`}>
+                <div
+                  data-muskelzeile={a.name}
+                  onClick={oeffne}
+                  style={{
+                    display: 'flex', alignItems: 'baseline', gap: 8,
+                    paddingTop: 3, paddingBottom: 3,
+                    paddingLeft: (a.ebene - 1) * 14,
+                    fontSize: a.ebene <= 2 ? 12 : 11.5,
+                    fontWeight: a.kinder.length > 0 ? 600 : 400,
+                    cursor: oeffne ? 'pointer' : 'default',
+                    // `[read]` **Nicht gezeichnet = grau** — der
+                    // dritte Zustand, sichtbar verschieden von „--".
+                    color: a.flaeche ? 'var(--fg)' : 'var(--fg-dim)',
+                    borderRadius: 3,
+                  }}
+                >
+                  <span style={{ flex: 1 }}>{a.name}</span>
+
+                  {/* ══ Gruppe: Schnitt UND Engpass ═══════════════
+                      **Tom:** *„wieso waehlen wenn man beides haben
+                      kann?"* */}
+                  {a.kinder.length > 0 && a.schnitt != null && (
+                    <>
+                      <span className="v2-num" style={{ fontSize: 11 }}>
+                        Ø {a.schnitt}%
+                      </span>
+                      {a.engpass && (
+                        <span className="v2-dim" style={{ fontSize: 10 }}>
+                          · schwächstes: {a.engpass.name} {a.engpass.wert}%
+                        </span>
+                      )}
+                    </>
+                  )}
+
+                  {/* ══ Blatt mit Wert ════════════════════════════ */}
+                  {a.wert != null && (
+                    <>
+                      <span className="v2-num" style={{
+                        fontSize: 11, color: farbe, fontWeight: 600,
+                        minWidth: 34, textAlign: 'right',
+                      }}>{a.wert}%</span>
+                      {st && (
+                        <span className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>
+                          {sore != null ? `${sore}/3 · ` : ''}{st.hours} h
+                        </span>
+                      )}
+                    </>
+                  )}
+
+                  {/* ══ Die beiden Leerzustaende, benannt ═════════
+                      `[cmd]` **„-- ist die Antwort, nicht 0"** —
+                      eine Null saehe aus wie „voellig unerholt".
+                      `[read]` **Und die beiden Gruende sind
+                      VERSCHIEDEN**: kein Volumen (C-487) gegen
+                      nicht gezeichnet. */}
+                  {a.wert == null && a.schnitt == null && (
+                    <>
+                      <span className="v2-num v2-dim" style={{
+                        fontSize: 11, minWidth: 34, textAlign: 'right',
+                      }}>--</span>
+                      <span className="v2-dim" style={{ fontSize: 9.5 }}>
+                        {a.flaeche ? 'kein Volumen zugeordnet' : 'nicht gezeichnet'}
+                      </span>
+                    </>
+                  )}
+                </div>
+                {a.kinder.map(k => zeile(k))}
+              </div>
+            )
+          }
+
+          return (
+            <div className="v2-col-gap" style={{ gap: 0 }}>
+              {werte.map(a => zeile(a))}
+            </div>
+          )
+        })()}
       </Card>
     </div>
   )

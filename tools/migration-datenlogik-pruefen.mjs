@@ -10,15 +10,18 @@ const baselineTriggerException = {
   // Profil an. Das ist Strukturverhalten, kein Katalog-Backfill.
   requiredSql: 'INSERT INTO public.profiles (id)',
 }
-const dataCommands = /\b(insert|update|copy|delete|truncate|merge)\b/gi
+// Im Funktionskoerper zaehlt nur der Anfang einer ausfuehrbaren SQL-Anweisung.
+// `FOR UPDATE` sperrt, schreibt aber nicht; ebenso ist `ON DELETE` Teil einer
+// Fremdschluesseldefinition. Beide duerfen keinen Befund erzeugen.
+const dataCommands = /(?:^|;|\b(?:begin|then|else|loop)\b)\s*(?:with\b[\s\S]*?\b)?(insert|update|copy|delete|truncate|merge)\b/gi
 
-// C-472, gemessen am 2026-09-12: 49 ausfuehrbare Datenoperationen in 15
+// C-472, gemessen am 2026-09-12: 44 ausfuehrbare Datenoperationen in 15
 // bereits committeten Migrationen C-428 bis C-467. Diese Altlast bleibt
 // sichtbar, aber blockiert die Kette nicht mehr dauerhaft. Wie im
 // Sollstand von `punkte-pruefen.mjs` ist jede Abweichung in beide Richtungen
 // rot: mehr waere neue Datenlogik, weniger verlangt eine bewusste
 // Nachmessung statt eines stillen Freipasses.
-const SOLLSTAND = 49
+const SOLLSTAND = 44
 
 function ohneKommentareUndStrings(sql) {
   let out = ''
@@ -106,6 +109,7 @@ function selfTest() {
     ['truncate', 'TRUNCATE c291_probe;', 1],
     ['merge', 'MERGE INTO c291_probe AS target USING c291_source AS source ON false WHEN NOT MATCHED THEN INSERT VALUES (1);', 1],
     ['do_insert', 'DO $$ BEGIN INSERT INTO c291_probe VALUES (1); END $$;', 1],
+    ['do_for_update', 'DO $$ BEGIN PERFORM 1 FROM c291_probe FOR UPDATE; END $$;', 0],
     ['alter', 'ALTER TABLE c291_probe ADD COLUMN c291_marker text;', 0],
   ]
 

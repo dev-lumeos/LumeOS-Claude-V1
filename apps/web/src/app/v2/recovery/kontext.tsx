@@ -35,6 +35,16 @@ export type ModalZustand =
   | { typ: 'hrvMeasure' }
   | { typ: 'logModality' }
   | { typ: 'muscle'; slug: string }
+  // ══ G-436: eine GRUPPE hat kein Recovery-Kuerzel ═══════════════
+  //
+  // **Tom:** *„jedes teil anwaehlbar fuer details — gruppen und
+  // einzelmuskel."*
+  //
+  // `[cmd]` **Gemessen:** ein Klick auf `Arms` oeffnete NICHTS —
+  // die Gruppe hat keine Kartenflaeche, also kein `slug`, also kein
+  // Ziel. `[read]` **Deshalb ein eigener Fall, der den BAUMNAMEN
+  // traegt** statt eines Kuerzels, das es nicht gibt.
+  | { typ: 'muskelgruppe'; name: string }
   | { typ: 'protocol'; protokoll: Protocol }
 
 export type ScoreModus = 'manual' | 'hrv'
