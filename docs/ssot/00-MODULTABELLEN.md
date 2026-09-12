@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-12 — 187 Tabellen, 2615 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-12 — 187 Tabellen, 2660 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -53,16 +53,16 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `progress_photos` | 13 | 0 | 2026-09-09 |
 | `user_goals` | 23 | 11 | ? |
 
-## medical — 31 Tabellen, 512 Spalten
+## medical — 31 Tabellen, 538 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
 | `appointments` | 16 | 3 | 2026-09-08 |
 | `biomarker_aliases` | 12 | 292 | ? |
 | `biomarker_catalog` | 34 | 11676 | ? |
-| `biomarker_explanations` | 21 | 66 | ? |
+| `biomarker_explanations` | 41 | 66 | ? |
 | `biomarker_reference_ranges` | 19 | 560 | ? |
-| `biomarker_spec_enrichment` | 31 | 51 | ? |
+| `biomarker_spec_enrichment` | 33 | 51 | ? |
 | `health_events` | 13 | 4 | 2026-09-08 |
 | `injection_logs` | 21 | 0 | 2026-09-02 |
 | `injection_needle_recommendations` | 12 | 8 | 2026-09-02 |
@@ -83,24 +83,24 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `medication_reproductive_evidence` | 11 | 498 | ? |
 | `medication_thailand_regulatory_evidence` | 6 | 477 | ? |
 | `medication_user_texts` | 42 | 498 | ? |
-| `symptom_biomarker_map` | 15 | 102 | ? |
+| `symptom_biomarker_map` | 19 | 102 | ? |
 | `symptoms` | 8 | 34 | ? |
 | `user_conditions` | 15 | 2 | ? |
 | `user_injection_site_selections` | 10 | 0 | 2026-09-09 |
 | `user_medications` | 35 | 2 | ? |
 
-## nutrition — 45 Tabellen, 540 Spalten
+## nutrition — 45 Tabellen, 550 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
 | `_sortweight_neu` | 2 | 7140 | ? |
 | `exclusion_preset_rules` | 6 | 33 | ? |
-| `exclusion_presets` | 8 | 11 | ? |
+| `exclusion_presets` | 11 | 11 | ? |
 | `food_aliases` | 4 | 32845 | 2026-08-05 |
 | `food_categories` | 11 | 518 | 2026-08-05 |
 | `food_curation_candidates` | 12 | 0 | 2026-08-05 |
 | `food_curation_decisions` | 6 | 0 | 2026-08-05 |
-| `food_groups` | 5 | 19 | ? |
+| `food_groups` | 7 | 19 | ? |
 | `food_nutrients` | 5 | 985320 | 2026-08-05 |
 | `food_preference_items` | 13 | 22 | 2026-08-05 |
 | `food_preference_search_targets` | 8 | 15089 | ? |
@@ -119,23 +119,23 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `meal_plans` | 21 | 10 | ? |
 | `meal_slots` | 4 | 14 | ? |
 | `meals` | 10 | 2906 | ? |
-| `micronutrient_overview_items` | 8 | 8 | ? |
+| `micronutrient_overview_items` | 9 | 8 | ? |
 | `nutrient_aliases` | 7 | 98 | ? |
 | `nutrient_defs` | 20 | 138 | 2026-08-05 |
 | `nutrient_details` | 31 | 110 | ? |
 | `nutrient_reference_values` | 25 | 166 | ? |
 | `nutrient_unit_conversion_factors` | 13 | 10 | ? |
-| `preparation_kinds` | 6 | 11 | ? |
+| `preparation_kinds` | 8 | 11 | ? |
 | `recipe_curation_candidate_ingredients` | 13 | 0 | ? |
 | `recipe_curation_candidates` | 18 | 0 | ? |
 | `recipe_curation_decisions` | 6 | 0 | ? |
 | `recipe_ingredients` | 15 | 22 | ? |
-| `recipes` | 19 | 6 | ? |
+| `recipes` | 20 | 6 | ? |
 | `search_events` | 9 | 463 | ? |
 | `search_synonyms` | 4 | 4877 | ? |
 | `shopping_list_items` | 15 | 33 | ? |
 | `shopping_lists` | 12 | 6 | ? |
-| `tag_definitions` | 10 | 14 | 2026-08-05 |
+| `tag_definitions` | 11 | 14 | 2026-08-05 |
 | `user_inventory` | 9 | 0 | ? |
 | `water_logs` | 10 | 1264 | ? |
 
@@ -151,7 +151,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `scores` | 34 | 370 | ? |
 | `stress_logs` | 12 | 7 | 2026-09-07 |
 
-## supplements — 64 Tabellen, 945 Spalten
+## supplements — 64 Tabellen, 951 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -167,7 +167,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `product_contents` | 16 | 3000982 | 2026-09-09 |
 | `product_suppliers` | 6 | 235618 | 2026-09-12 |
 | `pubchem_conflict_records` | 16 | 20 | ? |
-| `rule_catalog` | 26 | 64 | ? |
+| `rule_catalog` | 28 | 64 | ? |
 | `stack_curation_candidate_items` | 11 | 2 | ? |
 | `stack_curation_candidates` | 12 | 2 | ? |
 | `stack_curation_decisions` | 6 | 0 | ? |
@@ -187,7 +187,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `supplement_groups` | 10 | 3 | ? |
 | `supplement_human_evidence_flags` | 17 | 293 | ? |
 | `supplement_identifiers` | 9 | 1259 | ? |
-| `supplement_interactions` | 22 | 78 | ? |
+| `supplement_interactions` | 24 | 78 | ? |
 | `supplement_lab_effects` | 26 | 271 | ? |
 | `supplement_monitoring` | 14 | 46 | ? |
 | `supplement_nutrients` | 12 | 17 | ? |
@@ -197,7 +197,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `supplement_protocol_items` | 15 | 0 | ? |
 | `supplement_protocol_requirements` | 13 | 0 | ? |
 | `supplement_protocol_template_items` | 12 | 9 | 2026-09-09 |
-| `supplement_protocol_templates` | 10 | 3 | 2026-09-09 |
+| `supplement_protocol_templates` | 12 | 3 | 2026-09-09 |
 | `supplement_protocols` | 12 | 0 | ? |
 | `supplement_quality` | 19 | 237 | ? |
 | `supplement_regulatory` | 14 | 1119 | ? |
@@ -220,11 +220,11 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `user_supplement_settings` | 11 | 0 | ? |
 | `wada_conflict_records` | 17 | 8 | ? |
 
-## training — 15 Tabellen, 162 Spalten
+## training — 15 Tabellen, 165 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
-| `equipment` | 7 | 58 | ? |
+| `equipment` | 10 | 58 | ? |
 | `exercise_catalog_enrichment` | 17 | 1407 | ? |
 | `exercise_muscles` | 3 | 6588 | ? |
 | `exercises` | 17 | 1416 | ? |
