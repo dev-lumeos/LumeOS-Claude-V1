@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-12: 195 Funktionen, 444 Policies, 667 CHECKs, 14 Sichten.**
+`[cmd]` **Stand 2026-09-12: 195 Funktionen, 444 Policies, 666 CHECKs, 14 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -359,6 +359,7 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | medical | injection_logs | injection_logs_override_reason_not_blank_check | CHECK (((override_reason IS NULL) OR (btrim(override_reason) <> ''::text))) |
 | medical | injection_logs | injection_logs_pain_score_check | CHECK (((pain_score IS NULL) OR ((pain_score >= 0) AND (pain_score <= 3)))) |
 | medical | injection_logs | injection_logs_route_check | CHECK (((route IS NULL) OR (route = ANY (ARRAY['im'::text, 'sc'::text])))) |
+| medical | injection_logs | injection_logs_seite_ck | CHECK (((seite IS NULL) OR (seite = ANY (ARRAY['links'::text, 'rechts'::text])))) |
 | medical | injection_logs | injection_logs_substance_name_not_blank_check | CHECK (((substance_name IS NULL) OR (btrim(substance_name) <> ''::text))) |
 | medical | injection_logs | injection_logs_volume_ml_positive_check | CHECK (((volume_ml IS NULL) OR (volume_ml > (0)::numeric))) |
 | medical | injection_needle_recommendations | injection_needle_recommendations_applicability_check | CHECK ((jsonb_typeof(applicability) = 'object'::text)) |
@@ -473,6 +474,7 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | medical | user_injection_site_selections | user_injection_site_selections_needle_gauge_check | CHECK (((needle_gauge IS NULL) OR (btrim(needle_gauge) <> ''::text))) |
 | medical | user_injection_site_selections | user_injection_site_selections_needle_length_in_check | CHECK (((needle_length_in IS NULL) OR (needle_length_in > (0)::numeric))) |
 | medical | user_injection_site_selections | user_injection_site_selections_route_check | CHECK ((route = ANY (ARRAY['injection_im'::text, 'injection_subq'::text]))) |
+| medical | user_injection_site_selections | user_injection_site_selections_seite_ck | CHECK (((seite IS NULL) OR (seite = ANY (ARRAY['links'::text, 'rechts'::text])))) |
 | medical | user_medications | user_medications_check | CHECK (((end_date IS NULL) OR (end_date >= start_date))) |
 | medical | user_medications | user_medications_dose_amount_check | CHECK (((dose_amount IS NULL) OR (dose_amount > (0)::numeric))) |
 | medical | user_medications | user_medications_doses_per_day_check | CHECK (((doses_per_day IS NULL) OR (doses_per_day > (0)::numeric))) |
@@ -642,11 +644,8 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | nutrition | water_logs | water_logs_amount_ml_check | CHECK ((amount_ml > (0)::numeric)) |
 | nutrition | water_logs | water_logs_measurement_source_ck | CHECK ((measurement_source = ANY (ARRAY['manual'::text, 'device'::text, 'import'::text, 'admin'::text, 'seed'::text]))) |
 | nutrition | water_logs | water_logs_source_check | CHECK ((source = ANY (ARRAY['manual'::text, 'quick_add'::text]))) |
-| public | koerperflaechen | koerperflaechen_art_ck | CHECK ((art = ANY (ARRAY['muskel'::text, 'umriss'::text]))) |
-| public | koerperflaechen | koerperflaechen_ebene_ck | CHECK ((ebene = ANY (ARRAY[1, 2, 3]))) |
-| public | koerperflaechen | koerperflaechen_seite_ck | CHECK ((((ebene = 3) AND (seite = ANY (ARRAY['links'::text, 'rechts'::text]))) OR ((ebene <> 3) AND (seite IS NULL)))) |
-| public | koerperflaechen | koerperflaechen_umriss_ck | CHECK (((art = 'muskel'::text) OR (muscle_group_id IS NULL))) |
-| public | koerperflaechen | koerperflaechen_wurzel_ck | CHECK ((((ebene = 1) AND (parent_id IS NULL)) OR ((ebene > 1) AND (parent_id IS NOT NULL)))) |
+| public | koerperflaechen | koerperflaechen_art_ck | CHECK ((art = ANY (ARRAY['wurzel'::text, 'gruppe'::text, 'muskel'::text, 'umriss'::text, 'kopf'::text]))) |
+| public | koerperflaechen | koerperflaechen_umriss_ck | CHECK (((art <> ALL (ARRAY['umriss'::text, 'kopf'::text])) OR (muscle_group_id IS NULL))) |
 | public | profiles | profiles_activity_level_check | CHECK (((activity_level IS NULL) OR (activity_level = ANY (ARRAY['sedentary'::text, 'light'::text, 'moderate'::text, 'active'::tex |
 | public | profiles | profiles_biological_sex_check | CHECK (((biological_sex IS NULL) OR (biological_sex = ANY (ARRAY['male'::text, 'female'::text])))) |
 | public | profiles | profiles_birth_date_check | CHECK (((birth_date IS NULL) OR ((birth_date >= '1900-01-01'::date) AND (birth_date <= CURRENT_DATE)))) |

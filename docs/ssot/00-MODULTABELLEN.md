@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-12 — 186 Tabellen, 2589 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-12 — 186 Tabellen, 2591 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -53,7 +53,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `progress_photos` | 13 | 0 | 2026-09-09 |
 | `user_goals` | 23 | 11 | ? |
 
-## medical — 31 Tabellen, 510 Spalten
+## medical — 31 Tabellen, 512 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -64,7 +64,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `biomarker_reference_ranges` | 19 | 560 | ? |
 | `biomarker_spec_enrichment` | 31 | 51 | ? |
 | `health_events` | 13 | 4 | 2026-09-08 |
-| `injection_logs` | 20 | 0 | 2026-09-02 |
+| `injection_logs` | 21 | 0 | 2026-09-02 |
 | `injection_needle_recommendations` | 12 | 8 | 2026-09-02 |
 | `injection_site_conditions` | 10 | 0 | 2026-09-02 |
 | `injection_site_overrides` | 9 | 0 | 2026-09-09 |
@@ -86,7 +86,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `symptom_biomarker_map` | 15 | 102 | ? |
 | `symptoms` | 8 | 34 | ? |
 | `user_conditions` | 15 | 2 | ? |
-| `user_injection_site_selections` | 9 | 0 | 2026-09-09 |
+| `user_injection_site_selections` | 10 | 0 | 2026-09-09 |
 | `user_medications` | 35 | 2 | ? |
 
 ## nutrition — 45 Tabellen, 540 Spalten
@@ -227,7 +227,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `exercise_catalog_enrichment` | 17 | 1407 | ? |
 | `exercise_muscles` | 3 | 6588 | ? |
 | `exercises` | 17 | 1416 | ? |
-| `muscle_groups` | 7 | 95 | ? |
+| `muscle_groups` | 7 | 105 | ? |
 | `program_assignments` | 10 | 0 | 2026-09-09 |
 | `program_blocks` | 6 | 0 | 2026-09-09 |
 | `program_days` | 7 | 0 | 2026-09-09 |
