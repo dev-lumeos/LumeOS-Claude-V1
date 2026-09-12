@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 225 |
-| `laufend_codex` | 2 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 431 |
-| **gesamt** | **661** |
+| **gesamt** | **662** |
 
 ## medical — 48
 
@@ -547,7 +547,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 162
+## quer — 163
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -625,7 +625,7 @@
 | `C-420` | befund | hoch | [der Waechter kennt keine Uebersetzung](erledigt/quer-c-0420-der-waechter-kennt-keine-uebersetzung.md) | erledigt | — | — |
 | `C-422` | feature | hoch | [die Lesewege fuer elf Kacheln](erledigt/quer-c-0422-die-lesewege-fuer-elf-kacheln.md) | erledigt | — | — |
 | `C-424` | feature | mittel | [eine Leser-Registry](erledigt/quer-c-0424-eine-leser-registry.md) | erledigt | — | A-72 |
-| `C-430` | befund | mittel | [die Sicht traegt nur Deutsch](erledigt/quer-c-0430-die-sicht-traegt-nur-deutsch.md) | erledigt | — | — |
+| `C-430` | befund | mittel | [die Sicht traegt nur Deutsch](erledigt/quer-c-0430-die-sicht-traegt-nur-deutsch.md) | erledigt | — | C-488 |
 | `C-446` | befund | hoch | [eine Migration fehlt in der Kette](erledigt/quer-c-0446-eine-migration-fehlt-in-der-kette.md) | erledigt | — | C-447 |
 | `C-447` | befund | hoch | [die drei Live-Luecken schliessen](erledigt/quer-c-0447-die-drei-live-luecken-schliessen.md) | erledigt | — | C-448 |
 | `C-448` | entscheidung | mittel | [acht tote Migrationen](erledigt/quer-c-0448-acht-tote-migrationen.md) | erledigt | — | — |
@@ -641,6 +641,7 @@
 | `C-483` | entscheidung | hoch | [die fuenfte Ebene](erledigt/quer-c-0483-die-fuenfte-ebene.md) | erledigt | — | C-484 |
 | `C-484` | feature | hoch | [koerperflaechen nach E-81](erledigt/quer-c-0484-koerperflaechen-nach-e81.md) | erledigt | — | C-486, G-437 |
 | `C-486` | fehler | hoch | [UTF-8 beim Einspielen verloren](laufend_codex/quer-c-0486-utf8-beim-einspielen-verloren.md) | laeuft (codex) | — | — |
+| `C-488` | fehler | hoch | [sechzehn Tabellen ohne Thai](laufend_codex/quer-c-0488-sechzehn-tabellen-ohne-thai.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

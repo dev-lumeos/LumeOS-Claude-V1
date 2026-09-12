@@ -227,3 +227,35 @@ rote Zeile steht mit Grund im Sollstand."*
 melden UND in den Sollstand** ? **nicht rot liegenlassen, bis
 jemand entscheidet.**
 
+## Die Sprachregel gehoert in jeden Tabellenauftrag
+
+Tom, 2026-09-08: *,,und wo sind unsere sprachregeln? db immer
+de/en/th spalten anlegen und nur de und en einfuegen."*
+
+`[cmd]` **Die Regel steht in
+`docs/spezifikation/10-plattform/konventionen/00-konventionen.md`,
+Abschnitt 1** ? **seit langem.**
+
+`[cmd]` **Der Orchestrator hat sie in VIER Auftraegen nicht
+genannt:** **C-468, C-479, C-484, C-485.**
+
+`[cmd]` **Folge: `public.koerperflaechen` hat `name_de` und
+`name_en`, kein `name_th`** ? **an drei Tagen dreimal
+angefasst.**
+
+`[cmd]` **Und im ganzen Schema:** `_de` 123, `_en` 101, `_th`
+91.
+
+**Die Regel:**
+
+    Jeder Auftrag, der eine Tabelle mit Nutzertext baut,
+    nennt die drei Spalten.
+
+    de und en werden gefuellt, th bleibt leer.
+
+    Eine leere Spalte ist eine sichtbare Luecke.
+    Eine fehlende Spalte ist ein Umbau.
+
+`[read]` **Und wo eine Tabelle KEINEN Nutzertext traegt: in den
+Sollstand, mit Grund** ? **nicht stillschweigend weglassen.**
+
