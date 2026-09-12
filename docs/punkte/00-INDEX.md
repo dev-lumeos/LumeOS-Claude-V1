@@ -8,8 +8,8 @@
 | `todos` | 223 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 425 |
-| **gesamt** | **651** |
+| `erledigt` | 426 |
+| **gesamt** | **652** |
 
 ## medical — 48
 
@@ -461,7 +461,7 @@
 | `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](erledigt/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | erledigt | — | G-365, G-367 |
 | `G-367` | feature | mittel | [Stunden und Saetze je Muskel](erledigt/recovery-g-0367-per-muscle-stunden-und-saetze.md) | erledigt | — | — |
 | `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](erledigt/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | erledigt | — | — |
-| `G-433` | fehler | hoch | [Per-muscle detail liest motor.ts](laufend_claudecode/recovery-g-0433-per-muscle-detail-liest-motor-ts.md) | laeuft (claudecode) | — | — |
+| `G-433` | fehler | hoch | [Per-muscle detail liest motor.ts](laufend_claudecode/recovery-g-0433-per-muscle-detail-liest-motor-ts.md) | laeuft (claudecode) | — | C-482 |
 
 ## goals — 12
 
@@ -541,7 +541,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 158
+## quer — 159
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -631,7 +631,8 @@
 | `C-478` | befund | hoch | [hat LumeOS ein Mehrgeraete-Problem?](todos/quer-c-0478-mehrgeraete-synchronisation.md) | offen | — | — |
 | `C-479` | feature | hoch | [fuenf Flaechen und achtundsiebzig Muskeln](erledigt/quer-c-0479-fuenf-flaechen-und-achtundsiebzig-muskeln.md) | erledigt | — | — |
 | `C-481` | feature | mittel | [vier Flaechen und lat_l](erledigt/quer-c-0481-vier-flaechen-und-lat-l.md) | erledigt | — | — |
-| `C-482` | feature | hoch | [die vierte Ebene](todos/quer-c-0482-die-vierte-ebene.md) | offen | — | — |
+| `C-482` | feature | hoch | [Muskelnamen zur aufgeteilten Karte](erledigt/quer-c-0482-muskelnamen-zur-aufgeteilten-karte.md) | erledigt | — | C-483 |
+| `C-483` | entscheidung | hoch | [die fuenfte Ebene](todos/quer-c-0483-die-fuenfte-ebene.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -701,7 +702,7 @@
 | `G-427` | befund | hoch | [sechzehn Orte gegen einundzwanzig Flaechen](erledigt/quer-g-0427-sechzehn-orte-gegen-einundzwanzig-flaechen.md) | erledigt | — | — |
 | `G-430` | feature | hoch | [die Muskelhierarchie zu Ende bringen](erledigt/quer-g-0430-die-muskelhierarchie-zu-ende.md) | erledigt | — | C-479, G-431 |
 | `G-431` | feature | hoch | [die restlichen Buendel und die Modale](erledigt/quer-g-0431-die-restlichen-buendel-und-die-modale.md) | erledigt | — | C-481, G-432 |
-| `G-432` | feature | hoch | [jeder gezeichnete Muskel ist anwaehlbar](erledigt/quer-g-0432-jeder-muskel-anwaehlbar.md) | erledigt | — | C-482, G-433, G-434 |
+| `G-432` | feature | hoch | [jeder gezeichnete Muskel ist anwaehlbar](erledigt/quer-g-0432-jeder-muskel-anwaehlbar.md) | erledigt | — | G-433, G-434 |
 | `G-434` | feature | hoch | [die Karte, direkt mit Tom erledigt](erledigt/quer-g-0434-die-karte-direkt-mit-tom.md) | erledigt | — | — |
 
 ## buddy — 1
