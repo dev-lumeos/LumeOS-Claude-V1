@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-11: 195 Funktionen, 444 Policies, 666 CHECKs, 14 Sichten.**
+`[cmd]` **Stand 2026-09-12: 195 Funktionen, 444 Policies, 667 CHECKs, 14 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -477,6 +477,7 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | medical | user_medications | user_medications_dose_amount_check | CHECK (((dose_amount IS NULL) OR (dose_amount > (0)::numeric))) |
 | medical | user_medications | user_medications_doses_per_day_check | CHECK (((doses_per_day IS NULL) OR (doses_per_day > (0)::numeric))) |
 | medical | user_medications | user_medications_measurement_source_check | CHECK ((measurement_source = ANY (ARRAY['manual'::text, 'device'::text, 'import'::text, 'admin'::text, 'seed'::text]))) |
+| medical | user_medications | user_medications_monitoring_frequency_check | CHECK (((monitoring_frequency IS NULL) OR (monitoring_frequency = ANY (ARRAY['weekly'::text, 'monthly'::text, 'quarterly'::text, ' |
 | medical | user_medications | user_medications_name_check | CHECK ((btrim(name) <> ''::text)) |
 | nutrition | exclusion_preset_rules | exclusion_preset_rules_rule_kind_check | CHECK ((rule_kind = ANY (ARRAY['category'::text, 'bls_prefix'::text, 'name'::text, 'name_not'::text, 'raw_animal'::text]))) |
 | nutrition | exclusion_preset_rules | exclusion_preset_rules_rule_value_check | CHECK ((btrim(rule_value) <> ''::text)) |

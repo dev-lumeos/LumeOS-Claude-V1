@@ -7,6 +7,9 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-470
 entscheidung: null
+agent: codex
+erledigt: 2026-09-08
+commit: af742778
 beruehrt:
   tabellen: [public.muscle_training_loads]
 zahlen:
@@ -81,3 +84,58 @@ wieder.**
 `[read]` **Das ist der eigentliche Punkt: entweder
 `ALTER DEFAULT PRIVILEGES` in `public` aendern, oder jede Sicht
 einzeln beschneiden.**
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    1  medical.user_medications   35 Spalten, monitoring da
+    2  shopping_lists             nur service_role und
+                                  postgres haben DELETE
+    3  activity_stream            authenticated:SELECT
+       muscle_training_loads      authenticated:SELECT
+                                  anon: NICHTS
+    4  pg_default_acl public      nur noch
+                                  postgres=arwdDxtm/postgres
+
+`[cmd]` **Mein erster Blick war zu grob** ? **ich sah `r postgres`
+und `r supabase_admin` und hielt sie fuer unveraendert.**
+
+`[cmd]` **Der Inhalt zeigt es:** `{postgres=arwdDxtm/postgres}`
+? **der Eigentuemer sich selbst; `anon`, `authenticated` und
+`service_role` sind raus.**
+
+### Der vierte Punkt ist der wichtigste
+
+`[read]` **C-468 hat den Mechanismus gefunden:** `pg_default_acl`
+**vergab in `public` bei JEDER neuen Tabelle alles.**
+
+`[cmd]` **Jetzt nicht mehr** ? **neue Probeobjekte beider
+Eigentuemer erhielten 0 App-Rechte.**
+
+> *,,Funktions-/Sequenz-Defaults blieben bewusst
+> unangetastet."*
+
+`[read]` **Richtig** ? **eine Funktion ohne EXECUTE fuer
+`authenticated` waere ein Ausfall.**
+
+### Und er hat C-471 verteidigt
+
+> *,,C-471 bleibt sinnvoll: Sein REVOKE ist beim Aufbau weiterhin
+> noetig, da C-473 in der Kette SPAETER laeuft."*
+
+`[read]` **Zwei Schutzschichten, in der richtigen Reihenfolge
+gedacht.**
+
+### Die Restabweichung
+
+`[cmd]` **Die zehn Spalten stehen am Tabellenende statt nach
+`indication`.**
+
+> *,,Das Beheben erfordert Tabellenrebuild/Kopie/Swap und damit
+> Toms explizite Freigabe. Nicht gebaut."*
+
+`[read]` **Eine Spaltenreihenfolge ist kosmetisch** ? **ein
+Rebuild auf einer Tabelle mit Nutzerdaten ist es nicht.**
+
+**Abgenommen.**
