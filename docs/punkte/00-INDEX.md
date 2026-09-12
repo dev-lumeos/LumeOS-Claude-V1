@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 225 |
-| `laufend_codex` | 2 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 432 |
-| **gesamt** | **662** |
+| **gesamt** | **663** |
 
 ## medical — 48
 
@@ -308,9 +308,9 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](todos/nutrition-g-0439-sollstand-fiber-g.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 82
+## supplements — 83
 
-### beauftragbar — 81
+### beauftragbar — 82
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -364,6 +364,7 @@
 | `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](erledigt/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | erledigt | — | — |
 | `C-467` | feature | hoch | [Lieferantenprodukte](erledigt/supplements-c-0467-lieferantenprodukte.md) | erledigt | — | C-485 |
 | `C-485` | feature | hoch | [die DSLD-Datenbank einlesen](erledigt/supplements-c-0485-dsld-einlesen.md) | erledigt | — | — |
+| `C-489` | fehler | mittel | [der Produktname ist englisch und heisst `name`](laufend_codex/supplements-c-0489-produktname-nach-name-en.md) | laeuft (codex) | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -641,7 +642,7 @@
 | `C-483` | entscheidung | hoch | [die fuenfte Ebene](erledigt/quer-c-0483-die-fuenfte-ebene.md) | erledigt | — | C-484 |
 | `C-484` | feature | hoch | [koerperflaechen nach E-81](erledigt/quer-c-0484-koerperflaechen-nach-e81.md) | erledigt | — | C-486, G-437 |
 | `C-486` | fehler | hoch | [UTF-8 beim Einspielen verloren](laufend_codex/quer-c-0486-utf8-beim-einspielen-verloren.md) | laeuft (codex) | — | — |
-| `C-488` | fehler | hoch | [sechzehn Tabellen ohne Thai](erledigt/quer-c-0488-sechzehn-tabellen-ohne-thai.md) | erledigt | — | — |
+| `C-488` | fehler | hoch | [sechzehn Tabellen ohne Thai](erledigt/quer-c-0488-sechzehn-tabellen-ohne-thai.md) | erledigt | — | C-489 |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
