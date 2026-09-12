@@ -8,8 +8,8 @@
 | `todos` | 223 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 424 |
-| **gesamt** | **650** |
+| `erledigt` | 425 |
+| **gesamt** | **651** |
 
 ## medical — 48
 
@@ -541,7 +541,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 157
+## quer — 158
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -701,7 +701,8 @@
 | `G-427` | befund | hoch | [sechzehn Orte gegen einundzwanzig Flaechen](erledigt/quer-g-0427-sechzehn-orte-gegen-einundzwanzig-flaechen.md) | erledigt | — | — |
 | `G-430` | feature | hoch | [die Muskelhierarchie zu Ende bringen](erledigt/quer-g-0430-die-muskelhierarchie-zu-ende.md) | erledigt | — | C-479, G-431 |
 | `G-431` | feature | hoch | [die restlichen Buendel und die Modale](erledigt/quer-g-0431-die-restlichen-buendel-und-die-modale.md) | erledigt | — | C-481, G-432 |
-| `G-432` | feature | hoch | [jeder gezeichnete Muskel ist anwaehlbar](erledigt/quer-g-0432-jeder-muskel-anwaehlbar.md) | erledigt | — | C-482, G-433 |
+| `G-432` | feature | hoch | [jeder gezeichnete Muskel ist anwaehlbar](erledigt/quer-g-0432-jeder-muskel-anwaehlbar.md) | erledigt | — | C-482, G-433, G-434 |
+| `G-434` | feature | hoch | [die Karte, direkt mit Tom erledigt](erledigt/quer-g-0434-die-karte-direkt-mit-tom.md) | erledigt | — | — |
 
 ## buddy — 1
 
