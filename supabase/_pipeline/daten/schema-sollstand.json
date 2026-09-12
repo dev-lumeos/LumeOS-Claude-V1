@@ -3230,7 +3230,9 @@
         "partner_label",
         "mechanism",
         "direction",
-        "status"
+        "status",
+        "description_th",
+        "recommendation_th"
       ]
     },
     {

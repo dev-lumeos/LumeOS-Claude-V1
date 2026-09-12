@@ -1,0 +1,22 @@
+{
+  "ausnahmen": [
+    {
+      "schema": "nutrition",
+      "table": "recipe_curation_candidates",
+      "column": "name_de",
+      "grund": "Admin-only MealCam-Kurationssnapshot; kein App-Leseweg zeigt den Namen als Sprachtext."
+    },
+    {
+      "schema": "supplements",
+      "table": "stack_curation_candidates",
+      "column": "name_de",
+      "grund": "Nutzer-zu-Admin-Kurationssnapshot; der produktive Leseweg fragt nur origin_stack_id und status ab."
+    },
+    {
+      "schema": "supplements",
+      "table": "stack_curation_candidates",
+      "column": "description_de",
+      "grund": "Nutzer-zu-Admin-Kurationssnapshot; der produktive Leseweg fragt nur origin_stack_id und status ab."
+    }
+  ]
+}

@@ -37,8 +37,8 @@ const SABOTAGEN = [
   {
     name: 'der Schnitt rechnet AUCH ueber Kinder OHNE Wert (als 0)',
     datei: 'baum',
-    von: '    const mitZahl = kinder\n      .map(k => k.wert ?? k.schnitt)\n      .filter((z): z is number => z != null)',
-    nach: '    const mitZahl = kinder.map(k => k.wert ?? k.schnitt ?? 0)',
+    von: '      .map(k => k.wert ?? k.schnitt)\n      .filter((z): z is number => z != null)',
+    nach: '      .map(k => k.wert ?? k.schnitt ?? 0)',
   },
   {
     name: 'der Schnitt ist eine Summe statt eines Mittels',

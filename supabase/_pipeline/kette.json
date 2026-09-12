@@ -1955,6 +1955,15 @@
         "485_dsld_struktur",
         "137"
       ]
+    },
+    {
+      "id": "488_sprachspalten",
+      "path": "supabase/migrations/20260912001900_c488_sprachspalten.sql",
+      "kind": "sql",
+      "creates": "C-488: leere EN/TH-Spalten fuer Nutzer- und Katalogtexte sowie Sprachdurchlass in den beiden Lesesichten; keine Uebersetzungsdaten.",
+      "depends_on": [
+        "485_dsld_import"
+      ]
     }
   ]
 }
