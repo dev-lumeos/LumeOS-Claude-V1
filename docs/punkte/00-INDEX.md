@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 225 |
-| `laufend_claudecode` | 1 |
+| `laufend_claudecode` | 2 |
 | `erledigt` | 419 |
-| **gesamt** | **645** |
+| **gesamt** | **646** |
 
 ## medical — 48
 
@@ -539,7 +539,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 153
+## quer — 154
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -695,7 +695,8 @@
 | `G-424` | befund | mittel | [latissimus ist waehlbar und nicht zeichenbar](erledigt/quer-g-0424-latissimus-waehlbar-nicht-zeichenbar.md) | erledigt | — | G-425 |
 | `G-425` | befund | hoch | [die sechs Pfade einzeln sehen](erledigt/quer-g-0425-die-sechs-pfade-einzeln-sehen.md) | erledigt | — | C-468 |
 | `G-427` | befund | hoch | [sechzehn Orte gegen einundzwanzig Flaechen](erledigt/quer-g-0427-sechzehn-orte-gegen-einundzwanzig-flaechen.md) | erledigt | — | — |
-| `G-430` | feature | hoch | [die Muskelhierarchie zu Ende bringen](erledigt/quer-g-0430-die-muskelhierarchie-zu-ende.md) | erledigt | — | C-479 |
+| `G-430` | feature | hoch | [die Muskelhierarchie zu Ende bringen](erledigt/quer-g-0430-die-muskelhierarchie-zu-ende.md) | erledigt | — | C-479, G-431 |
+| `G-431` | feature | hoch | [die restlichen Buendel und die Modale](laufend_claudecode/quer-g-0431-die-restlichen-buendel-und-die-modale.md) | laeuft (claudecode) | — | — |
 
 ## buddy — 1
 
