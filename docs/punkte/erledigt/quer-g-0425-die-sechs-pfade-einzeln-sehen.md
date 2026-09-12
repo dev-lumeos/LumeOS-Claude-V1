@@ -419,6 +419,21 @@ Flaeche:** `Back`, `Upper Back`, `Mid Back`, `Rhomboids`,
 
 ### A4 — die Unterscheidung ist die Arbeit
 
+> ⚠️ **BERICHTIGT DURCH G-432 (2026-09-12).**
+>
+> **Die Regel unten ist falsch.** *„EIN Muskel, mehrere Pfade ->
+> zusammenlassen"* mit der Begruendung *„triceps hat drei Koepfe und
+> bleibt EIN Muskel"* verwechselt Muskel und Muskelgruppe.
+>
+> **Tom:** *„quadrizeps ist eine muskelgruppe und hat x muskeln."*
+>
+> **Die richtige Frage lautet:** *„welche EBENE der Hierarchie zeigt
+> dieser Pfad?"* — **und der Pruefstein ist, ob
+> `training.muscle_groups` einen Namen dafuer fuehrt.**
+>
+> `[read]` **Die Urteile dieses Punktes bleiben gueltig** — der
+> Pruefstein traegt sie. **Die Begruendung nicht.**
+
 `[cmd]` **Sieben Flaechen mit mehreren Pfaden, drei Faelle:**
 
     EIN Muskel, mehrere Pfade
@@ -435,6 +450,11 @@ Flaeche:** `Back`, `Upper Back`, `Mid Back`, `Rhomboids`,
 
 `[read]` **Ein Pfad ist eine Zeichenebene, kein Muskel** ?
 **`triceps` hat drei Koepfe und ist trotzdem EIN Muskel.**
+
+`[cmd]` **G-432: der zweite Halbsatz ist falsch.** **`Arms >
+Triceps` ist ein BLATT in `muscle_groups`** ? **das Urteil
+*,,zusammenlassen"* war richtig, weil die drei Koepfe dort KEINEN
+Namen haben, nicht weil ein Muskel mit Koepfen ein Muskel bleibt.**
 
 ### Was er NICHT getan hat
 

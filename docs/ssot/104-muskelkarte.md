@@ -811,7 +811,7 @@ Zwei waren entschieden (`triceps` in G-425, `obliques` in C-468),
 |---|---|---|---|
 | `gluteal` | 4 | **geteilt** | große Masse + kleine Kappe oben außen — Maximus und Medius |
 | `hamstring` | 8 | **geteilt** | je Seite zwei breite Stränge nebeneinander — Biceps femoris außen, Semitendinosus innen |
-| `quadriceps` | 6 | zusammen | eine große Masse mit zwei schmalen Rändern — vier Köpfe, EIN Muskel |
+| `quadriceps` | 6 | zusammen | eine große Masse mit zwei schmalen Rändern — **die Begründung war falsch, siehe G-432** |
 | `calves` | 8 | zusammen | zwei Bäuche nebeneinander + zwei Sehnenläufer — Gastrocnemius hat zwei Köpfe |
 | `adductors` | 6 | zusammen | drei überlappende Streifen aus der Leiste — EINE Gruppe |
 | `forearm` | 8 | zusammen | Beuger vorne, Strecker hinten — die Ansicht trennt sie schon |
@@ -822,8 +822,11 @@ Zwei waren entschieden (`triceps` in G-425, `obliques` in C-468),
 | `ankles` | 4 | zusammen | Umriss, kein Muskel |
 | `feet` | 4 | zusammen | Umriss, kein Muskel |
 
-`[read]` **Zwei von zwölf geteilt** — die Regel aus G-425 hat
-gehalten: **ein Muskel mit mehreren Köpfen bleibt ein Muskel.**
+`[read]` **Zwei von zwölf geteilt.**
+
+> ⚠️ **Die Begründungen dieser Tabelle folgen einer FALSCHEN Regel.**
+> **G-432 hat sie berichtigt** — siehe den Abschnitt vom 2026-09-12
+> weiter unten. **Die Urteile bleiben gültig, die Gründe nicht.**
 
 ### Die neuen Zahlen
 
@@ -883,3 +886,89 @@ die Tabelle 60.
 stehen jetzt in `public.koerperflaechen` unter `wurzel-ruecken`.
 **Die vier aus G-431 noch nicht** — für sie greift weiter
 `AUS_AUFTEILUNG`, und das Modal schreibt es sichtbar hin.
+
+
+---
+
+## 2026-09-12 — G-432: die Regel war falsch
+
+**Tom:** *„quadrizeps ist eine muskelgruppe und hat x muskeln. was
+ist daran so schwer zu verstehen?"*
+
+`[cmd]` **G-425 formulierte:** *„EIN Muskel, mehrere Pfade →
+zusammenlassen"*, begründet mit *„triceps hat drei Köpfe und bleibt
+EIN Muskel"*. **Das ist anatomisch falsch**, und es wurde dreimal
+weitergereicht: **G-425 → C-468 → G-431.**
+
+`[read]` **Die Messungen waren richtig, die Urteile folgten einer
+falschen Regel.**
+
+### Die richtige Frage
+
+**Nicht** *„ist das ein Muskel?"* **sondern** *„welche EBENE der
+Hierarchie zeigt dieser Pfad?"*
+
+    ein Pfad zeigt eine Gruppe     -> die Gruppe ist die Fläche,
+                                      die Kinder sind Kinder
+    ein Pfad zeigt einen Muskel    -> der Muskel ist die Fläche
+    mehrere Pfade, derselbe Muskel -> zusammenlassen
+      (Seiten, Segmente)
+
+`[cmd]` **DER PRÜFSTEIN: führt `training.muscle_groups` einen Namen
+dafür?** Wenn nein, wird nicht geteilt — sonst entstünde ein Name,
+den LumeOS nicht kennt.
+
+### Die Ebene je Fläche (gemessen 2026-09-12)
+
+`[cmd]` Gegen die laufende `training.muscle_groups` (95 Namen),
+nicht gegen die Anatomie. **Jede Zeile ist per
+`tools/_g432-pruefen.mjs` gegen die Datenbank belegt.**
+
+| Fläche | Weg in muscle_groups | Ebene | Art | Kinder (nicht gezeichnet) |
+|---|---|---|---|---|
+| `quadriceps` | Legs › Quadriceps | 2 | **Gruppe** | Rectus Femoris |
+| `calves` | Legs › Lower Legs › Calves | 3 | **Gruppe** | Soleus |
+| `tibialis` | Legs › Lower Legs › Tibialis | 3 | Muskel | — |
+| `adductors` | Legs › Adductors | 2 | **Gruppe** | Adductor Longus, magnus, brevis, Hip Adductors, Inner Thigh |
+| `triceps` | Arms › Triceps | 2 | Muskel | — |
+| `biceps` | Arms › Biceps | 2 | **Gruppe** | Brachialis |
+| `forearm` | Arms › Forearms | 2 | **Gruppe** | Brachioradialis, Forearm Flexors, Forearm Extensors |
+| `abs` | Core › Abdominals | 2 | **Gruppe** | Rectus Abdominis, Lower Abs |
+| `obliques` | Core › Obliques | 2 | **Gruppe** | Internal Oblique |
+| `neck` | Neck Muscles | 1 | **Gruppe** | Sternocleidomastoid, Scalenes, splenius capitis |
+| `chest` | Chest | 1 | **Gruppe** | Pectoralis Major, Upper Chest |
+| `deltoids` | Shoulders › Deltoids | 2 | **Gruppe** | Front Shoulders, Rear Deltoids |
+| `trapezius` | Back › Upper Back › Trapezius | 3 | Muskel | — |
+| `knees`, `hands`, `ankles`, `feet` | — | — | Umriss | kein Name in muscle_groups |
+
+`[read]` **Die meisten Flächen der Karte sind GRUPPEN, keine
+einzelnen Muskeln** — genau das, was Tom gesagt hat.
+
+### Was sich am Bau geändert hat
+
+`[read]` **Keine neue Aufteilung** — die Urteile aus G-431 bleiben,
+weil der Prüfstein sie trägt: wo `muscle_groups` keinen Namen für
+die gezeichneten Teile führt, wird nicht geteilt.
+
+`[cmd]` **Neu ist die EINORDNUNG:** `apps/web/src/lib/koerper/ebenen.ts`
+führt je Fläche Weg, Art, Kinder und den Grund. **Das Per-muscle-Detail
+zeigt sie:** eine Marke `Gruppe`/`Muskel`, den Weg, und
+*„Nicht gezeichnet: …"* mit Begründung.
+
+### `triceps` — richtig entschieden, falsch begründet
+
+`[cmd]` **`Arms › Triceps` ist ein BLATT** — keine Kinder in
+`muscle_groups`. **Die drei Köpfe haben dort keinen Namen.**
+
+`[read]` **Das Urteil *„zusammenlassen"* war also richtig** — aber
+nicht, weil ein Muskel mit Köpfen ein Muskel bleibt, sondern **weil
+die Köpfe keinen Namen haben.** `[read]` **Aus einem richtigen
+Einzelfall wurde eine falsche allgemeine Regel.**
+
+### Die drei Vastus
+
+`[cmd]` **`Vastus Lateralis`, `Vastus Medialis`, `Vastus Intermedius`
+stehen NICHT in `muscle_groups`** — gemessen. **Für LumeOS gibt es
+sie nicht**, und sie werden nicht erfunden. `[read]` **Die Fläche
+`quadriceps` bleibt deshalb ganz — als Gruppe mit einem benannten
+Kind.**

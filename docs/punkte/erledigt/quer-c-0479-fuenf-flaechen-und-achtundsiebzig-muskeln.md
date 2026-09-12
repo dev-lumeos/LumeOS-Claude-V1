@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-430
 entscheidung: null
+erledigt: 2026-09-08
+commit: 4d95d7f7
 beruehrt:
   tabellen: [public.koerperflaechen]
 zahlen:
@@ -158,3 +160,68 @@ endete ohne Befund frueh mit Windows-Exit 4294967295.
 eigenen Muskelnamen.**
 
 `[read]` **Die bleiben Luecken** ? **sie werden nicht erfunden.**
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    68 Zeilen      E1: 8, E2: 26, E3: 34
+    Legacy         upper-back/lower-back: keine
+    fuenf neue     je mit -l und -r
+    Bruecken       19 Gruppen
+    Rechte         authenticated: SELECT, anon nichts
+
+`[cmd]` **Selbst gemessen: alle fuenf.**
+
+### upper-back war ein Uebergangselternteil
+
+> *,,`upper-back`/`lower-back` waren nur G-430-Uebergangseltern.
+> Recovery ist der EINZIGE Tabellenleser; neue Flaechen haengen
+> direkt unter `wurzel-ruecken`."*
+
+`[read]` **Er hat gemessen, wer liest, bevor er entfernt hat** ?
+**bei einer Tabelle mit genau einem Leser ist das billig, bei
+vier waere es anders.**
+
+### Die Bruecken, mit Einordnung
+
+`[cmd]` **19 kanonische Gruppen verbunden:** **Brachialis,
+Gluteus Maximus, Pectoralis Major, Rectus Abdominis, Anterior
+Tibialis, Latissimus, Teres, Erector.**
+
+`[read]` **Und die 78er-Einordnung steht in der Punktdatei** ?
+**nicht als Zahl, sondern je Name.**
+
+### Vier Luecken bleiben
+
+`[cmd]` **Rhomboids, Internal Oblique, Soleus, und die
+namenslose Flanke.**
+
+`[read]` **Viertes Mal gemeldet, viertes Mal nicht erfunden.**
+
+### Die Teilung stimmt
+
+`[cmd]` **Struktur:**
+`migrations/20260912001600_c479_koerperflaechen_aufteilung.sql`
+
+`[cmd]` **Daten:**
+`_pipeline/00_querschnitt/479_koerperflaechen_aufteilung.sql`
+
+`[read]` **D-17, Weg B** ? **und das `REVOKE ALL` bleibt, wie in
+C-473 begruendet.**
+
+### Ein Befund, der offen bleibt
+
+> *,,Ihr nachgelagerter Waechterprozess endete frueh mit
+> Windows-Exit 4294967295 ohne Fachbefund."*
+
+`[cmd]` **4294967295 ist `0xFFFFFFFF`** ? **kein
+Anwendungsfehler, ein abgebrochener Prozess.**
+
+`[read]` **Er hat es gemeldet statt zu wiederholen, bis es
+gruen war.**
+
+`[read]` **Und der aktive Waechter ist gruen** ? **der Abbruch
+lag im Wiederholungslauf, nicht in der Sache.**
+
+**Abgenommen.**

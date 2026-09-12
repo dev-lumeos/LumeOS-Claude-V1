@@ -6,9 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 224 |
-| `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 421 |
+| `erledigt` | 422 |
 | **gesamt** | **648** |
 
 ## medical — 48
@@ -628,7 +627,7 @@
 | `C-472` | fehler | hoch | [der Datenlogik-Waechter ist rot](todos/quer-c-0472-der-datenlogik-waechter-ist-rot.md) | offen | — | — |
 | `C-473` | befund | hoch | [fuenf Abweichungen, die der Waechter jetzt sieht](erledigt/quer-c-0473-fuenf-abweichungen-im-waechter.md) | erledigt | — | — |
 | `C-478` | befund | hoch | [hat LumeOS ein Mehrgeraete-Problem?](todos/quer-c-0478-mehrgeraete-synchronisation.md) | offen | — | — |
-| `C-479` | feature | hoch | [fuenf Flaechen und achtundsiebzig Muskeln](laufend_codex/quer-c-0479-fuenf-flaechen-und-achtundsiebzig-muskeln.md) | laeuft (codex) | — | — |
+| `C-479` | feature | hoch | [fuenf Flaechen und achtundsiebzig Muskeln](erledigt/quer-c-0479-fuenf-flaechen-und-achtundsiebzig-muskeln.md) | erledigt | — | — |
 | `C-481` | feature | mittel | [vier Flaechen und lat_l](todos/quer-c-0481-vier-flaechen-und-lat-l.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |

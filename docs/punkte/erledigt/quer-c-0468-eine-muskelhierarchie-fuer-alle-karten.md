@@ -155,6 +155,22 @@ zeichnet.**
 `[cmd]` **Sieben Flaechen haben mehrere Pfade, in drei
 Faellen:**
 
+
+> ⚠️ **BERICHTIGT DURCH G-432 (2026-09-12).**
+>
+> **Die Regel unten ist falsch.** *„EIN Muskel, mehrere Pfade ->
+> zusammenlassen"* mit der Begruendung *„triceps hat drei Koepfe und
+> bleibt EIN Muskel"* verwechselt Muskel und Muskelgruppe.
+>
+> **Tom:** *„quadrizeps ist eine muskelgruppe und hat x muskeln."*
+>
+> **Die richtige Frage lautet:** *„welche EBENE der Hierarchie zeigt
+> dieser Pfad?"* — **und der Pruefstein ist, ob
+> `training.muscle_groups` einen Namen dafuer fuehrt.**
+>
+> `[read]` **Die Urteile dieses Punktes bleiben gueltig** — der
+> Pruefstein traegt sie. **Die Begruendung nicht.**
+
     EIN Muskel, mehrere Pfade
       trapezius, triceps, lower-back
       -> zusammenlassen
