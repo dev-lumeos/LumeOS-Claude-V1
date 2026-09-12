@@ -8,7 +8,7 @@ braucht: []
 kind_von: C-482
 entscheidung: E-81
 erledigt: 2026-09-08
-commit: OFFEN
+commit: e6e4eda0
 beruehrt:
   tabellen: [public.koerperflaechen]
 zahlen:
