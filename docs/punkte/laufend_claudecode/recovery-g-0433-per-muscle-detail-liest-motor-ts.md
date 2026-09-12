@@ -151,3 +151,53 @@ _(vom Agenten anzuhaengen)_
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## Nachgemessen 2026-09-08 — braucht es Codex zuerst?
+
+Tom: *,,bist du sicher? denn ich glaube dir nichts mehr. er meinte,
+codex muesse zuerst anlegen."*
+
+`[cmd]` **Gemessen: NEIN.**
+
+`[cmd]` **`muskelbaum-read.ts` liest `training.muscle_groups`:**
+
+    .schema('training').from('muscle_groups')
+    .select('id,name,parent_id')
+
+`[cmd]` **95 Namen, vier Ebenen** ? **`koerperflaechen` kommt
+darin nicht vor.**
+
+`[read]` **Die LISTE braucht Codex nicht.**
+
+## Was Codex braucht, trifft die FARBE
+
+`[cmd]` **`public.koerperflaechen` traegt heute noch:**
+
+    gluteal, gluteal-l, gluteal-r
+    hamstring, hamstring-l, hamstring-r
+    quadriceps, quadriceps-l, quadriceps-r
+    calves, calves-l, calves-r
+    tibialis, tibialis-l, tibialis-r
+
+`[cmd]` **Die KARTE hat seit G-431:**
+
+    gluteus-maximus, gluteus-medius
+    biceps-femoris, semitendinosus
+
+`[read]` **Die vier fehlen in der Tabelle** ? **das ist C-482,
+und es trifft, welche Flaeche sich faerbt.**
+
+`[read]` **Nicht, welche Namen die Liste zeigt.**
+
+## Also: dieser Auftrag geht JETZT
+
+`[read]` **`Per-muscle detail` kann sofort auf `muskelbaum`
+umgestellt werden.**
+
+`[read]` **Die Farbe bleibt, wie sie ist, bis C-482 durch ist.**
+
+`[cmd]` **Und `E1: 8, E2: 26, E3: 34`** ? **die dritte Ebene
+steht, die vierte fehlt (C-482).**
+
+`[read]` **Die Liste zeigt die vier Ebenen aus `muscle_groups`**
+? **sie ist nicht auf `koerperflaechen` angewiesen.**
