@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 222 |
-| `laufend_codex` | 2 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 428 |
-| **gesamt** | **655** |
+| **gesamt** | **656** |
 
 ## medical — 48
 
@@ -542,7 +542,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 161
+## quer — 162
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -634,7 +634,8 @@
 | `C-481` | feature | mittel | [vier Flaechen und lat_l](erledigt/quer-c-0481-vier-flaechen-und-lat-l.md) | erledigt | — | — |
 | `C-482` | feature | hoch | [Muskelnamen zur aufgeteilten Karte](erledigt/quer-c-0482-muskelnamen-zur-aufgeteilten-karte.md) | erledigt | — | C-483 |
 | `C-483` | entscheidung | hoch | [die fuenfte Ebene](erledigt/quer-c-0483-die-fuenfte-ebene.md) | erledigt | — | C-484 |
-| `C-484` | feature | hoch | [koerperflaechen nach E-81](erledigt/quer-c-0484-koerperflaechen-nach-e81.md) | erledigt | — | — |
+| `C-484` | feature | hoch | [koerperflaechen nach E-81](erledigt/quer-c-0484-koerperflaechen-nach-e81.md) | erledigt | — | C-486 |
+| `C-486` | fehler | hoch | [UTF-8 beim Einspielen verloren](laufend_codex/quer-c-0486-utf8-beim-einspielen-verloren.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
