@@ -209,3 +209,89 @@ welcher Bedingung.**
 
 `[read]` **Die openGym-Analyse hat gezeigt, was passiert, wenn
 das niemand prueft.**
+
+## Toms Antworten, 2026-09-08
+
+**1** ? *,,alle, was wir haben, das haben wir und kostet uns ja
+nichts."*
+
+`[read]` **Keine Auswahl** ? **auch was nicht mehr im Handel
+ist, steht bei jemandem im Schrank.**
+
+`[cmd]` **`Market Status` bleibt als Feld** ? **die Ansicht kann
+filtern, der Katalog traegt alles.**
+
+**3** ? *,,ist lizenzfrei."*
+
+`[read]` **Keine Provenienzfrage** ? **anders als bei den
+Uebungsbildern (C-477).**
+
+`[cmd]` **`supplement_field_sources` traegt die Herkunft
+trotzdem** ? `src_dsld_<id>` ? **damit man weiss, woher eine
+Zahl stammt.**
+
+## 2 ? die Loesung fuer `blend`, von DSLD selbst
+
+Tom: *,,find eine loesung, die haben es ja auch geloest."*
+
+`[cmd]` **Gemessen an DSLD ID 554,
+*Echinacea With Goldenseal Root*:**
+
+    Echinacea/Goldenseal Blend    450   mg    blend
+      Echinacea                   NULL  NULL  botanical
+      Goldenseal                  NULL  NULL  botanical
+      Burdock                     NULL  NULL  botanical
+      Gentian                     NULL  NULL  botanical
+      Cayenne Pepper              NULL  NULL  botanical
+      Wood Betony                 NULL  NULL  botanical
+
+`[read]` **Die Mischung traegt die GESAMTMENGE, die Zutaten
+folgen OHNE Menge** ? **in der Reihenfolge des Etiketts.**
+
+`[read]` **Das ist keine Notloesung, das ist die Wirklichkeit:**
+**der Hersteller nennt die Einzelmengen nicht.**
+
+### Wie LumeOS es abbildet
+
+`[cmd]` **`product_contents` hat schon:** `amount_per_serving`,
+`unit`, `ist_wirkstoff`.
+
+`[read]` **Es fehlt die Zugehoerigkeit zur Mischung:**
+
+    blend_id      zeigt auf die Mischungszeile
+    reihenfolge   die Position auf dem Etikett
+
+`[read]` **Dann gilt:**
+
+    Mischungszeile   amount_per_serving = 450 mg
+                     blend_id = NULL
+    Zutatenzeile     amount_per_serving = NULL
+                     blend_id -> die Mischung
+                     reihenfolge = 1, 2, 3 ...
+
+### Was das fuer die Naehrstoffbilanz heisst
+
+`[cmd]` **C-466 rechnet aus `product_contents` die
+Naehrstoffmengen.**
+
+`[read]` **Eine Zutat ohne Menge kann nicht rechnen** ? **sie
+faellt aus der Bilanz.**
+
+`[cmd]` **Und die Bilanz sagt es:** `unmapped_taken_log_count`
+**ist dafuer gebaut.**
+
+`[read]` **Die Reihenfolge traegt trotzdem Information:**
+**auf einem Etikett steht die groesste Menge zuerst.**
+
+`[read]` **Das ist keine Zahl, aber es ist mehr als nichts** ?
+**wer 450 mg einer Sechsermischung nimmt, weiss, dass Echinacea
+den groessten Anteil hat.**
+
+### Und der zweite Fall
+
+`[cmd]` **`Proprietary Blend 5 mg` ohne jede Zutatenzeile.**
+
+`[read]` **Dann ist die Mischung das Einzige, was dasteht** ?
+**eine Zeile, keine Kinder.**
+
+`[cmd]` **Miss, wie oft das vorkommt.**
