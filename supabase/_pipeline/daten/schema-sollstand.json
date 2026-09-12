@@ -6185,6 +6185,15 @@
   ],
   "fremde_sichten": [
     {
+      "schema": "public",
+      "name": "activity_stream",
+      "schritt": "430_schema",
+      "security_invoker": true,
+      "security_barrier": false,
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT"]},
+      "grants_herkunft": "20260908120000_c430_activity_stream_i18n_and_g374_cycling.sql: security-invoker-Querschnittssicht mit explizitem Lesezugriff."
+    },
+    {
       "schema": "medical",
       "name": "health_timeline",
       "schritt": "429_schema",

@@ -1885,6 +1885,18 @@
       "depends_on": [
         "471_koerperflaechen_struktur"
       ]
+    },
+    {
+      "id": "473_guardian_abweichungen",
+      "path": "supabase/migrations/20260912001541_c473_guardian_abweichungen.sql",
+      "kind": "sql",
+      "creates": "C-473: zehn Medical-Monitoring-Spalten, exakte Sichtrechte und least-privilege-Default fuer neue public-Objekte von postgres und supabase_admin",
+      "depends_on": [
+        "145",
+        "407",
+        "421_schema",
+        "468b_koerperflaechen_seed"
+      ]
     }
   ]
 }
