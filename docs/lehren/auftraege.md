@@ -259,3 +259,51 @@ angefasst.**
 `[read]` **Und wo eine Tabelle KEINEN Nutzertext traegt: in den
 Sollstand, mit Grund** ? **nicht stillschweigend weglassen.**
 
+## Ein Etikett ist eine Aussage ueber die Quelle
+
+Tom, 2026-09-08: *,,oben steht echte daten... das ist verarschend
+gegenueber mich. ich rackere mich hier ab und mir wird irgendwas
+serviert aus den haenden gezogen und als echte daten verkauft."*
+
+`[cmd]` **`recovery`, Reiter *Muscle map*: die Kachel traegt
+`echte Daten`.**
+
+`[cmd]` **`motor.ts:135` traegt achtzehn FESTE Zeilen, im Code
+selbst als `module-recovery-engine.jsx:135-154` ausgewiesen.**
+
+`[read]` **Der Muskelkater kommt aus `checkins`, die Stunden und
+Saetze aus dem Mockup** ? **ein gemischter Zustand, der sich als
+echt ausgibt.**
+
+### Warum der Waechter es nicht sah
+
+`[cmd]` **Der Attrappenwaechter sucht `ATTRAPPE`-Marken in der
+ANSICHT.**
+
+`[read]` **Eine feste Tabelle im RECHENWEG traegt keine Marke** ?
+**sie sieht aus wie Code.**
+
+`[read]` **Und G-438 hat die Zahlen sogar noch VERTEILT** ?
+**geliehene Werte an Kinder, mit Herkunftsangabe.**
+
+`[read]` **Die Herkunft war `Wert von Triceps`** ? **nicht *,,aus
+einer Mockup-Tabelle"*.**
+
+### Die Regel
+
+    Ein Etikett "echte Daten" ist eine Aussage ueber die
+    QUELLE, nicht ueber die Ansicht.
+
+    Wer es setzt, belegt den Weg von der Tabelle bis zur
+    Zahl.
+
+    Ist ein Teil des Wegs geschaetzt oder fest, sagt das
+    Etikett es.
+
+`[read]` **Und beim Abnehmen: nicht die Marke zaehlen, sondern
+den Rechenweg lesen.**
+
+`[cmd]` **Der Orchestrator hat G-433, G-435, G-436 und G-438
+abgenommen, ohne zu fragen, woher `MUSCLE_STATE` kommt** ? **vier
+Auftraege lang.**
+

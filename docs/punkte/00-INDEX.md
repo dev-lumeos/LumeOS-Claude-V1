@@ -7,9 +7,9 @@
 |---|---|
 | `todos` | 225 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 2 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 433 |
-| **gesamt** | **663** |
+| **gesamt** | **664** |
 
 ## medical — 48
 
@@ -434,7 +434,7 @@
 | `G-366` | feature | mittel | [die Uebungsliste der Sitzung](erledigt/training-g-0366-die-uebungsliste-der-sitzung.md) | erledigt | — | — |
 | `G-429` | befund | mittel | [wer rechnet estimated_1rm, und verweigert er?](todos/training-g-0429-einrm-mit-verweigerung.md) | offen | — | — |
 
-## recovery — 31
+## recovery — 32
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -469,6 +469,7 @@
 | `G-433` | fehler | hoch | [Per-muscle detail liest motor.ts](laufend_claudecode/recovery-g-0433-per-muscle-detail-liest-motor-ts.md) | laeuft (claudecode) | — | C-482 |
 | `G-436` | feature | hoch | [die Hierarchie als Ansicht](erledigt/recovery-g-0436-die-hierarchie-als-ansicht.md) | erledigt | — | G-438 |
 | `G-438` | fehler | hoch | [Karte und Liste widersprechen sich](erledigt/recovery-g-0438-karte-und-liste-widersprechen-sich.md) | erledigt | — | — |
+| `G-440` | fehler | hoch | [MUSCLE_STATE ist eine Attrappe, die Kachel sagt „echte Daten"](laufend_claudecode/recovery-g-0440-muscle-state-ist-eine-attrappe.md) | laeuft (claudecode) | — | — |
 
 ## goals — 12
 
