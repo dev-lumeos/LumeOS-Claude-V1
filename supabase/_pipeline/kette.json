@@ -1935,6 +1935,26 @@
         "484_koerperflaechen_e81_struktur",
         "108"
       ]
+    },
+    {
+      "id": "485_dsld_struktur",
+      "path": "supabase/migrations/20260912001800_c485_dsld_import.sql",
+      "kind": "sql",
+      "creates": "C-485/D-17: DSLD-Produktfelder, mehrwertige Firmenrollen, Blend- und Reihenfolgenbezug sowie produktgenaue Feldherkunft; keine Daten.",
+      "depends_on": [
+        "467_supplier_products",
+        "466_nutrient_supplement_sources"
+      ]
+    },
+    {
+      "id": "485_dsld_import",
+      "path": "supabase/_pipeline/13_supplements/485_dsld_import.ts",
+      "kind": "tsx",
+      "creates": "C-485: alle elf DSLD-Arbeitsmappen als Produkte, Firmenrollen, Labelzeilen, Kandidaten und Produktfeld-Herkunft; XLSX wird per COPY-Stream gelesen.",
+      "depends_on": [
+        "485_dsld_struktur",
+        "137"
+      ]
     }
   ]
 }
