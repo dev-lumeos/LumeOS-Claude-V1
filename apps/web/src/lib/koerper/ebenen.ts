@@ -58,7 +58,7 @@ export type Ebene = {
    * *„ist es ein Kind?"* und *„hat es Kinder?"* sind zwei Fragen.
    * **`art` beantwortet nur die zweite**; die erste steht in `weg`.
    */
-  art: 'gruppe' | 'muskel' | 'umriss'
+  art: 'gruppe' | 'muskel' | 'sehne' | 'umriss'
   /**
    * Die Ebene im Baum — `weg.length`.
    *
@@ -96,13 +96,6 @@ export const EBENEN: Record<string, Ebene> = {
   // eine grosse Masse (der Rectus femoris) und zwei schmale Raender.
   // `[read]` **Die Raender haben keinen Namen** — also bleibt die
   // Flaeche ganz, aber sie ist eine GRUPPE, kein Muskel.
-  quadriceps: {
-    name: 'Quadriceps', weg: ['Legs', 'Quadriceps'], art: 'gruppe',
-    kinder: ['Rectus Femoris'],
-    grund: 'Die Vorlage zeichnet die grosse Masse und zwei schmale '
-      + 'Ränder; nur der Rectus femoris hat einen Namen, die drei '
-      + 'Vastus fehlen in muscle_groups.',
-  },
   // `[cmd]` **`Calves` ist ein KIND** — Ebene 3 unter
   // `Legs > Lower Legs`. **Die Gruppe ist `Lower Legs`**, und sie
   // fuehrt ausserdem `Anterior Tibialis`, `Tibialis Posterior`,
@@ -113,23 +106,9 @@ export const EBENEN: Record<string, Ebene> = {
   // `[read]` **`calves` ist BEIDES** — Kind von `Lower Legs` (Ebene 3)
   // und Gruppe ueber `Soleus`. **`art` nennt die Kinder, `weg` den
   // Elternteil.**
-  calves: {
-    name: 'Calves', weg: ['Legs', 'Lower Legs', 'Calves'], art: 'gruppe',
-    ebene: 3,
-    kinder: ['Soleus'],
-    grund: 'Soleus liegt unter dem Gastrocnemius — die Vorlage '
-      + 'zeichnet zwei Bäuche und zwei Sehnenläufer, keine zweite Schicht.',
-  },
   tibialis: {
     name: 'Tibialis', weg: ['Legs', 'Lower Legs', 'Tibialis'], art: 'muskel',
     kinder: [],
-  },
-  adductors: {
-    name: 'Adductors', weg: ['Legs', 'Adductors'], art: 'gruppe',
-    kinder: ['Adductor Longus', 'adductor magnus', 'adductor brevis',
-      'Hip Adductors', 'Inner Thigh'],
-    grund: 'Am Bild drei überlappende Streifen aus der Leiste, je Seite '
-      + '— die Vorlage trennt longus/magnus/brevis nicht.',
   },
   // ══ Arme ═══════════════════════════════════════════════════════
   //
@@ -141,9 +120,6 @@ export const EBENEN: Record<string, Ebene> = {
   // ausgerechnet hier war das Urteil richtig, aus dem falschen Grund:
   // **nicht weil ein Muskel mit Koepfen ein Muskel bleibt, sondern
   // weil die Koepfe keinen Namen haben.**
-  triceps: {
-    name: 'Triceps', weg: ['Arms', 'Triceps'], art: 'muskel', kinder: [],
-  },
   biceps: {
     name: 'Biceps', weg: ['Arms', 'Biceps'], art: 'gruppe',
     kinder: ['Brachialis'],
@@ -157,13 +133,6 @@ export const EBENEN: Record<string, Ebene> = {
   // Beuger liegen vorne, die Strecker hinten. `[read]` **Die
   // einzelnen Namen zeichnet sie nicht** — vier Streifen je Arm sind
   // Schattierung, kein `Extensor Carpi Ulnaris`.
-  forearm: {
-    name: 'Forearms', weg: ['Arms', 'Forearms'], art: 'gruppe',
-    kinder: ['Brachioradialis', 'Forearm Flexors', 'Forearm Extensors'],
-    grund: 'Beuger vorne, Strecker hinten — die Ansicht trennt die zwei '
-      + 'Untergruppen bereits; die 13 einzelnen Namen zeichnet die '
-      + 'Vorlage nicht.',
-  },
   // ══ Rumpf ══════════════════════════════════════════════════════
   //
   // `[cmd]` **`Abdominals` ist eine GRUPPE** — Ebene 2 unter `Core`,
@@ -174,29 +143,11 @@ export const EBENEN: Record<string, Ebene> = {
   // Sehnenzwischenstuecke des Rectus** — sie haben keinen eigenen
   // Namen. **Das ist der Fall, den der Auftrag selbst als richtig
   // benennt.**
-  abs: {
-    name: 'Abdominals', weg: ['Core', 'Abdominals'], art: 'gruppe',
-    kinder: ['Rectus Abdominis', 'Lower Abs'],
-    grund: 'Die acht Felder sind Sehnenzwischenstücke EINES Rectus '
-      + 'abdominis — sie haben keinen eigenen Namen in muscle_groups.',
-  },
-  obliques: {
-    name: 'Obliques', weg: ['Core', 'Obliques'], art: 'gruppe',
-    kinder: ['Internal Oblique'],
-    grund: 'Der Internus liegt unter dem Externus — gezeichnet ist nur '
-      + 'die äußere Schicht (C-468).',
-  },
   // ══ Hals, Brust, Schulter ══════════════════════════════════════
   //
   // `[cmd]` **`Neck Muscles` ist eine WURZEL** — Ebene 1, mit drei
   // Kindern. **Am Bild zwei Straenge je Seite, die am Brustbein
   // zusammenlaufen** — das ist der Sternocleidomastoideus.
-  neck: {
-    name: 'Neck Muscles', weg: ['Neck Muscles'], art: 'gruppe',
-    kinder: ['Sternocleidomastoid', 'Scalenes', 'splenius capitis'],
-    grund: 'Die Vorlage zeichnet den Sternocleidomastoideus; Scalenes '
-      + 'und splenius capitis liegen darunter.',
-  },
   chest: {
     name: 'Chest', weg: ['Chest'], art: 'gruppe',
     kinder: ['Pectoralis Major', 'Upper Chest'],
@@ -211,6 +162,149 @@ export const EBENEN: Record<string, Ebene> = {
   trapezius: {
     name: 'Trapezius', weg: ['Back', 'Upper Back', 'Trapezius'],
     art: 'muskel', kinder: [],
+  },
+
+  // ══ G-433: die Aufteilung nach Toms Auftrag ════════════════════
+  //
+  // **Tom, 2026-09-12:** *„ja alles trennen was unsere grafik
+  // hergibt."*
+  //
+  // `[cmd]` **Fuenf Flaechen wurden zu vierzehn** — je Strang eine
+  // eigene, anwaehlbare Flaeche. **Kein Pfad neu gezeichnet.**
+  //
+  // `[read]` **Wo `muscle_groups` den Namen fuehrt, steht er.
+  // Wo nicht, ist `name: null`** — die Luecke wird ausgewiesen,
+  // nicht erfunden (Codex traegt sie nach).
+  'rectus-femoris': {
+    name: 'Rectus Femoris', weg: ['Legs', 'Quadriceps', 'Rectus Femoris'],
+    art: 'muskel', kinder: [],
+  },
+  'vastus-lateralis': {
+    name: null, weg: [], art: 'muskel', kinder: [],
+    grund: 'Die Grafik zeichnet ihn getrennt, muscle_groups führt ihn '
+      + 'nicht — Lücke im Katalog, kein Grund zusammenzulassen.',
+  },
+  'vastus-medialis': {
+    name: null, weg: [], art: 'muskel', kinder: [],
+    grund: 'Die Grafik zeichnet ihn getrennt, muscle_groups führt ihn '
+      + 'nicht — Lücke im Katalog, kein Grund zusammenzulassen.',
+  },
+  'adductor-longus': {
+    name: 'Adductor Longus', weg: ['Legs', 'Adductors', 'Adductor Longus'],
+    art: 'muskel', kinder: [],
+  },
+  'adductor-magnus': {
+    name: 'adductor magnus', weg: ['Legs', 'Adductors', 'adductor magnus'],
+    art: 'muskel', kinder: [],
+  },
+  'adductor-brevis': {
+    name: 'adductor brevis', weg: ['Legs', 'Adductors', 'adductor brevis'],
+    art: 'muskel', kinder: [],
+  },
+  'gastrocnemius-lateralis': {
+    name: null, weg: [], art: 'muskel', kinder: [],
+    grund: 'Der laterale Gastrocnemius-Kopf — muscle_groups führt nur '
+      + '`Calves` und `Soleus`, die Köpfe nicht.',
+  },
+  'gastrocnemius-medialis': {
+    name: null, weg: [], art: 'muskel', kinder: [],
+    grund: 'Der mediale Gastrocnemius-Kopf — muscle_groups führt nur '
+      + '`Calves` und `Soleus`, die Köpfe nicht.',
+  },
+  // `[read]` **Eine SEHNE, kein Muskel** — Tom: *„sehnen brauchen wir
+  // dann anwaehlbar fuer painpoints."*
+  achillessehne: {
+    name: null, weg: [], art: 'sehne', kinder: [],
+    grund: 'Sehne, kein Muskel — anwählbar für Painpoints.',
+  },
+  'rectus-abdominis': {
+    name: 'Rectus Abdominis', weg: ['Core', 'Abdominals', 'Rectus Abdominis'],
+    art: 'muskel', kinder: [],
+  },
+  // `[cmd]` **Toms Zuordnung:** die sechs oberen Kaestchen sind
+  // Sehnenzwischenstuecke, kein eigener Muskel.
+  'tendinous-inscriptions': {
+    name: null, weg: [], art: 'sehne', kinder: [],
+    grund: 'Sehnenzwischenstücke des Rectus abdominis — anwählbar für '
+      + 'Painpoints, kein eigener Muskel.',
+  },
+  'serratus-anterior': {
+    name: null, weg: [], art: 'muskel', kinder: [],
+    grund: 'Die Grafik zeichnet ihn getrennt (Toms Zuordnung), '
+      + 'muscle_groups führt ihn nicht.',
+  },
+  'external-oblique': {
+    name: null, weg: [], art: 'muskel', kinder: [],
+    grund: 'muscle_groups führt `Obliques` als Gruppe und `Internal '
+      + 'Oblique` als Kind — der Externus fehlt als eigener Name.',
+  },
+
+  // ══ G-433 Nachtrag: Arme und Hals ══════════════════════════════
+  //
+  // **Tom:** *„triceps, forearms, neck sind nicht getrennt."*
+  //
+  // `[cmd]` **Am Bild: je Arm drei Trizeps-Koepfe, drei Beuger-
+  // und vier Streckerstraenge, am Hals zwei Straenge je Seite.**
+  //
+  // `[cmd]` **`Triceps` ist in `muscle_groups` ein BLATT** — die
+  // drei Koepfe haben dort keinen Namen. **Die Grafik trennt sie
+  // trotzdem**, also werden sie getrennt und die Luecke ausgewiesen.
+  'triceps-longum': {
+    name: null, weg: [], art: 'muskel', kinder: [],
+    grund: 'Caput longum — muscle_groups führt `Triceps` als Blatt, '
+      + 'die drei Köpfe haben dort keinen Namen.',
+  },
+  'triceps-lateralis': {
+    name: null, weg: [], art: 'muskel', kinder: [],
+    grund: 'Caput laterale — muscle_groups führt `Triceps` als Blatt, '
+      + 'die drei Köpfe haben dort keinen Namen.',
+  },
+  'triceps-mediale': {
+    name: null, weg: [], art: 'muskel', kinder: [],
+    grund: 'Caput mediale — muscle_groups führt `Triceps` als Blatt, '
+      + 'die drei Köpfe haben dort keinen Namen.',
+  },
+  // `[cmd]` **Hier fuehrt `muscle_groups` die Namen** — Beuger und
+  // Strecker als Untergruppen von `Forearms`.
+  'forearm-flexors': {
+    name: 'Forearm Flexors', weg: ['Arms', 'Forearms', 'Forearm Flexors'],
+    art: 'gruppe', kinder: ['Wrist Flexors', 'Flexor Carpi Radialis',
+      'Flexor Carpi Ulnaris', 'Flexor Digitorum Profundus',
+      'Fingers Flexors', 'Grip Muscles', 'Palmaris Longus', 'Pronator Teres'],
+    grund: 'Die Vorlage zeichnet die Beugerseite als Bündel — die acht '
+      + 'einzelnen Namen trennt sie nicht.',
+  },
+  brachioradialis: {
+    name: 'Brachioradialis', weg: ['Arms', 'Forearms', 'Brachioradialis'],
+    art: 'muskel', kinder: [],
+  },
+  'forearm-extensors': {
+    name: 'Forearm Extensors', weg: ['Arms', 'Forearms', 'Forearm Extensors'],
+    art: 'gruppe', kinder: ['Wrist Extensors', 'Extensor Carpi Radialis',
+      'Extensor Carpi Radialis Brevis', 'Extensor Carpi Radialis Longus',
+      'Extensor Carpi Ulnaris'],
+    grund: 'Die Vorlage zeichnet die Streckerseite als Bündel — die fünf '
+      + 'einzelnen Namen trennt sie nicht.',
+  },
+  'forearm-extensors-ulnar': {
+    name: null, weg: [], art: 'muskel', kinder: [],
+    grund: 'Der ulnare Streckerstrang — die Vorlage zeichnet ihn '
+      + 'getrennt, muscle_groups führt ihn nicht einzeln.',
+  },
+  // `[cmd]` **Am Hals: zwei Straenge je Seite** — die zwei Koepfe
+  // des Sternocleidomastoideus, plus das Kehlstueck dazwischen.
+  sternocleidomastoid: {
+    name: 'Sternocleidomastoid', weg: ['Neck Muscles', 'Sternocleidomastoid'],
+    art: 'muskel', kinder: [],
+  },
+  kehle: {
+    name: null, weg: [], art: 'umriss', kinder: [],
+    grund: 'Das Kehlstück zwischen den Strängen — kein Muskel.',
+  },
+  nacken: {
+    name: null, weg: [], art: 'muskel', kinder: [],
+    grund: 'Die Nackenansicht — muscle_groups führt `Scalenes` und '
+      + '`splenius capitis`, die Vorlage trennt sie nicht.',
   },
   // ══ Umrisse — kein Muskel, kein Name ═══════════════════════════
   //

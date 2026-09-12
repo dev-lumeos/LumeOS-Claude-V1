@@ -101,8 +101,8 @@ test('verdichtet wird gemittelt, nicht maximiert', () => {
   // DER UNTERSCHIED IST NICHT AKADEMISCH: Ein Maximum liesse die
   // Flaeche rot aussehen, weil EIN Muskel von zwoelf platt ist.
   const raus = verdichte({ Quadriceps: 90, 'Rectus Femoris': 10, Thighs: 50 })
-  const quad = raus.find(r => r.id === 'quadriceps')
-  assert.ok(quad, 'quadriceps fehlt')
+  const quad = raus.find(r => r.id === 'rectus-femoris')
+  assert.ok(quad, 'rectus-femoris fehlt')
   assert.equal(quad.fatigue, 50, '(90+10+50)/3 = 50, nicht 90')
   assert.equal(quad.anzahl, 3, 'drei Muskeln zusammengefasst')
 })

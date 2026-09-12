@@ -45,17 +45,50 @@ export type Einordnung =
 export const EINORDNUNG: Record<string, Einordnung> = {
   // ── 17 Muskelgruppen (einfaerbbar) ────────────────────────────────
   chest: { art: 'gruppe', name: 'Brust' },
-  abs: { art: 'gruppe', name: 'Bauch' },
-  obliques: { art: 'gruppe', name: 'Seitliche Bauchmuskeln' },
+  // ══ G-433: Bauch und Flanke aufgeteilt ══════════════════════════
+  //
+  // **Tom:** *„abs sind die unteren 2 Rectus abdominis, die oberen 6
+  // Tendinous Inscriptions / obliques gibt es Serratus Anterior die
+  // oberen 3, darunter 5 External Oblique."*
+  'rectus-abdominis': { art: 'gruppe', name: 'Gerader Bauchmuskel' },
+  'tendinous-inscriptions': { art: 'gruppe', name: 'Sehnenzwischenstuecke' },
+  'serratus-anterior': { art: 'gruppe', name: 'Saegemuskel' },
+  'external-oblique': { art: 'gruppe', name: 'Aeusserer schraeger Bauchmuskel' },
   biceps: { art: 'gruppe', name: 'Bizeps' },
-  triceps: { art: 'gruppe', name: 'Trizeps' },
+  // ══ G-433 Nachtrag: die drei Trizeps-Koepfe ════════════════════
+  'triceps-longum': { art: 'gruppe', name: 'Trizeps (langer Kopf)' },
+  'triceps-lateralis': { art: 'gruppe', name: 'Trizeps (aeusserer Kopf)' },
+  'triceps-mediale': { art: 'gruppe', name: 'Trizeps (innerer Kopf)' },
   deltoids: { art: 'gruppe', name: 'Schultern' },
   trapezius: { art: 'gruppe', name: 'Trapezmuskel' },
-  neck: { art: 'gruppe', name: 'Nacken' },
-  forearm: { art: 'gruppe', name: 'Unterarm' },
-  adductors: { art: 'gruppe', name: 'Adduktoren (Innenseite)' },
-  quadriceps: { art: 'gruppe', name: 'Quadrizeps' },
-  calves: { art: 'gruppe', name: 'Waden' },
+  // ══ G-433 Nachtrag: Hals ═══════════════════════════════════════
+  sternocleidomastoid: { art: 'gruppe', name: 'Kopfwender' },
+  nacken: { art: 'gruppe', name: 'Nacken' },
+  // `[read]` **Das Kehlstueck ist kein Muskel** — es traegt keinen
+  // Zustand, wie Kopf und Haende.
+  kehle: { art: 'nicht-muskel', name: 'Kehle' },
+  // ══ G-433 Nachtrag: Beuger und Strecker ════════════════════════
+  'forearm-flexors': { art: 'gruppe', name: 'Unterarmbeuger' },
+  brachioradialis: { art: 'gruppe', name: 'Oberarmspeichenmuskel' },
+  'forearm-extensors': { art: 'gruppe', name: 'Unterarmstrecker' },
+  'forearm-extensors-ulnar': { art: 'gruppe', name: 'Unterarmstrecker (ulnar)' },
+  // ══ G-433: die Adduktorengruppe in ihre drei ═══════════════════
+  'adductor-longus': { art: 'gruppe', name: 'Langer Anzieher' },
+  'adductor-magnus': { art: 'gruppe', name: 'Grosser Anzieher' },
+  'adductor-brevis': { art: 'gruppe', name: 'Kurzer Anzieher' },
+  // ══ G-433: Quadrizeps in seine Straenge ═════════════════════════
+  //
+  // `[cmd]` **Drei Straenge je Schenkel** — am Bild getrennt, auch
+  // wenn `muscle_groups` nur `Rectus Femoris` fuehrt.
+  'rectus-femoris': { art: 'gruppe', name: 'Gerader Schenkelmuskel' },
+  'vastus-lateralis': { art: 'gruppe', name: 'Aeusserer Schenkelmuskel' },
+  'vastus-medialis': { art: 'gruppe', name: 'Innerer Schenkelmuskel' },
+  // ══ G-433: Wade in zwei Koepfe plus Sehne ═══════════════════════
+  'gastrocnemius-lateralis': { art: 'gruppe', name: 'Wadenmuskel (aussen)' },
+  'gastrocnemius-medialis': { art: 'gruppe', name: 'Wadenmuskel (innen)' },
+  // `[read]` **Eine SEHNE** — Tom: *„sehnen brauchen wir dann
+  // anwaehlbar fuer painpoints."*
+  achillessehne: { art: 'gruppe', name: 'Achillessehne' },
   // ══ G-430: der Ruecken ist aufgeteilt ════════════════════════════
   //
   // `[cmd]` **Hier standen zwei Gruppen:** `'upper-back'` (*,,Oberer
@@ -165,18 +198,19 @@ export function nachArt(art: Einordnung['art']): string[] {
 export const RECOVERY_ZU_KARTE: Record<string, string | string[] | null> = {
   // Deckungsgleich — gleicher Name, gleiche Gruppe.
   chest: 'chest',
-  abs: 'abs',
-  obliques: 'obliques',
+  abs: ['rectus-abdominis', 'tendinous-inscriptions'],
+  obliques: ['serratus-anterior', 'external-oblique'],
   biceps: 'biceps',
-  triceps: 'triceps',
-  forearm: 'forearm',
-  quadriceps: 'quadriceps',
+  triceps: ['triceps-longum', 'triceps-lateralis', 'triceps-mediale'],
+  forearm: ['forearm-flexors', 'brachioradialis', 'forearm-extensors',
+    'forearm-extensors-ulnar'],
+  quadriceps: ['rectus-femoris', 'vastus-lateralis', 'vastus-medialis'],
   // `[cmd]` **G-431: ein Kuerzel, zwei Flaechen** — Recovery misst
   // „Beinbeuger" und „Gesaess" als je EINE Gruppe.
   hamstring: ['biceps-femoris', 'semitendinosus'],
   gluteal: ['gluteus-maximus', 'gluteus-medius'],
-  calves: 'calves',
-  neck: 'neck',
+  calves: ['gastrocnemius-lateralis', 'gastrocnemius-medialis', 'achillessehne'],
+  neck: ['sternocleidomastoid', 'nacken'],
   trapezius: 'trapezius',
 
   // Recovery trennt vorne/hinten, die Karte fuehrt `deltoids` mit
@@ -188,7 +222,7 @@ export const RECOVERY_ZU_KARTE: Record<string, string | string[] | null> = {
 
   // `adductor` (Recovery, Einzahl) und `adductors` (Karte, Mehrzahl).
   // Dieselbe Gruppe, anderer Numerus.
-  adductor: 'adductors',
+  adductor: ['adductor-longus', 'adductor-magnus', 'adductor-brevis'],
 
   // `[cmd]` UNTERSTRICH GEGEN BINDESTRICH. Die Karte schreibt diese
   // beiden mit Bindestrich (`upper-back`), Recovery mit Unterstrich.

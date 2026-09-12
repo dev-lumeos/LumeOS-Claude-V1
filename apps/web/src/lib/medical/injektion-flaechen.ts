@@ -93,10 +93,18 @@ export const ORT_ZU_FLAECHE: Record<string, string> = {
   delt_r: 'deltoids',
   sq_delt_l: 'deltoids',
   sq_delt_r: 'deltoids',
-  quad_l: 'quadriceps',
-  quad_r: 'quadriceps',
-  thigh_sq_l: 'quadriceps',
-  thigh_sq_r: 'quadriceps',
+  // ══ G-433: `quadriceps` ist in drei Straenge zerlegt ════════════
+  //
+  // `[cmd]` **Die intramuskulaere Oberschenkelinjektion geht in den
+  // VASTUS LATERALIS** — den aeusseren Strang. **Das ist der
+  // anerkannte Ort**, gerade weil er weit vom Nerv liegt.
+  //
+  // `[read]` **Die subkutane Stelle liegt ueber dem Rectus femoris**
+  // — vorne mittig, wo sich eine Hautfalte greifen laesst.
+  quad_l: 'vastus-lateralis',
+  quad_r: 'vastus-lateralis',
+  thigh_sq_l: 'rectus-femoris',
+  thigh_sq_r: 'rectus-femoris',
   // ══ G-431: `gluteal` ist in zwei Muskeln zerfallen ══════════════
   //
   // `[cmd]` **Am Bild bestimmt** (`tafel-gluteal-back.png`): eine
@@ -111,8 +119,11 @@ export const ORT_ZU_FLAECHE: Record<string, string> = {
   // deshalb gilt die Stelle als sicher: dort laeuft kein Ischias.
   vglute_l: 'gluteus-medius',
   vglute_r: 'gluteus-medius',
-  abd_l: 'obliques',
-  abd_r: 'obliques',
+  // `[cmd]` **G-433: `obliques` ist geteilt** — die subkutane
+  // Bauchstelle liegt auf dem AEUSSEREN schraegen Bauchmuskel,
+  // nicht auf der Serratus-Verzahnung darueber.
+  abd_l: 'external-oblique',
+  abd_r: 'external-oblique',
   // `[cmd]` **Naeherung, siehe oben** — `latissimus` gibt es nicht.
   lat_l: 'trapezius',
   lat_r: 'trapezius',

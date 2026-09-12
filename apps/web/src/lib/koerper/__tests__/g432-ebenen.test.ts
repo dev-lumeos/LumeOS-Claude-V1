@@ -65,6 +65,22 @@ test('G-432: KEIN Name in EBENEN ist erfunden', () => {
   }
 })
 
+test('G-433: wo der Name fehlt, steht der GRUND', () => {
+  // ══ Die Sabotage, die gruen blieb ═════════════════════════════
+  //
+  // `[cmd]` **`grund:` zu `ungenutzt:` umbenannt — alle Proben
+  // blieben GRUEN.** `[read]` **Eine Luecke ohne Begruendung ist
+  // eine Falschaussage in Wartestellung:** am Schirm steht dann
+  // „kein Name", ohne dass jemand weiss warum.
+  for (const [code, e] of Object.entries(EBENEN)) {
+    if (e.name !== null) continue
+    if (e.art === 'umriss') continue // Umrisse brauchen keinen
+    assert.ok(e.grund && e.grund.length > 20,
+      `"${code}" hat keinen Namen in muscle_groups und KEINEN Grund. `
+      + 'Wo der Katalog schweigt, muss die Einordnung sagen warum.')
+  }
+})
+
 test('G-432: die drei Vastus stehen NICHT in EBENEN', () => {
   // `[cmd]` **Die Gegenprobe zum Test darueber** — sie fangen
   // einander: der eine verbietet Erfundenes, dieser nennt die
@@ -98,48 +114,68 @@ test('G-432: `art` folgt den KINDERN, nicht der Tiefe', () => {
   }
 })
 
-test('G-432: quadriceps ist eine GRUPPE, kein Muskel', () => {
-  // ══ Toms Befund, als Zusage ═══════════════════════════════════
+test('G-433: quadriceps ist in seine Straenge zerlegt', () => {
+  // ══ Das Urteil aus G-432 ist widerrufen ═══════════════════════
   //
-  // **„quadrizeps ist eine muskelgruppe und hat x muskeln."**
-  const q = EBENEN.quadriceps
-  assert.ok(q, 'die Flaeche `quadriceps` fehlt in EBENEN')
-  assert.equal(q.art, 'gruppe',
-    'quadriceps ist eine Muskelgruppe (Legs > Quadriceps), kein '
-    + 'einzelner Muskel — das war der Fehler aus G-425/G-431.')
-  assert.deepEqual(q.kinder, ['Rectus Femoris'],
-    'muscle_groups fuehrt genau ein Kind unter Quadriceps.')
-  assert.ok(q.grund && q.grund.length > 20,
-    'Wo nicht geteilt wird, gehoert der Grund dazu (A4).')
-  // `[cmd]` **Und die Flaeche ist NICHT geteilt** — der Pruefstein
-  // traegt das Urteil, nur nicht die alte Begruendung.
-  assert.ok(MUSKELN.quadriceps,
-    'quadriceps ist aus der Karte verschwunden — die drei Vastus '
-    + 'haben keinen Namen, also darf nicht geteilt werden.')
+  // **Tom:** *„ja alles trennen was unsere grafik hergibt."*
+  //
+  // `[cmd]` **G-432 liess `quadriceps` ganz**, weil `muscle_groups`
+  // die drei Vastus nicht fuehrt. **Das war der alte Denkfehler:**
+  // ob die Grafik trennt, entscheidet das BILD — ob es einen Namen
+  // gibt, die DATENBANK.
+  //
+  // `[cmd]` **Am Bild: drei Straenge je Schenkel.**
+  for (const neu of ['rectus-femoris', 'vastus-lateralis', 'vastus-medialis']) {
+    assert.ok(MUSKELN[neu], `Die Flaeche "${neu}" fehlt in der Karte.`)
+  }
+  assert.ok(!MUSKELN.quadriceps,
+    '`quadriceps` steht noch als eine Flaeche da — sie ist in G-433 '
+    + 'in ihre drei Straenge zerlegt worden.')
+  // `[read]` **Nur der Rectus femoris hat einen Namen** — die zwei
+  // Vastus sind ausgewiesene Luecken, keine erfundenen Namen.
+  assert.equal(EBENEN['rectus-femoris']?.name, 'Rectus Femoris')
+  assert.equal(EBENEN['vastus-lateralis']?.name, null,
+    'Vastus lateralis steht NICHT in muscle_groups — der Name darf '
+    + 'nicht erfunden werden.')
+  assert.ok(EBENEN['vastus-lateralis']?.grund,
+    'Wo der Name fehlt, gehoert der Grund dazu.')
 })
 
-test('G-432: calves ist ein KIND von Lower Legs', () => {
-  const c = EBENEN.calves
-  assert.deepEqual(c.weg, ['Legs', 'Lower Legs', 'Calves'],
-    'Der Weg muss die ganze Kette nennen — `Lower Legs` ist die Gruppe.')
-  assert.equal(c.weg.length, 3, 'calves steht auf Ebene 3.')
-  assert.deepEqual(c.kinder, ['Soleus'],
-    'muscle_groups fuehrt Soleus unter Calves.')
-  assert.ok(MUSKELN.calves,
-    'calves ist aus der Karte verschwunden — Soleus liegt darunter '
-    + 'und wird nicht gezeichnet, also wird nicht geteilt.')
+test('G-433: calves ist in zwei Koepfe plus Sehne zerlegt', () => {
+  for (const neu of ['gastrocnemius-lateralis', 'gastrocnemius-medialis',
+    'achillessehne']) {
+    assert.ok(MUSKELN[neu], `Die Flaeche "${neu}" fehlt in der Karte.`)
+  }
+  assert.ok(!MUSKELN.calves,
+    '`calves` steht noch als eine Flaeche da — sie ist in G-433 zerlegt.')
+  // `[read]` **Die Sehne ist KEIN Muskel** — Tom: *„sehnen brauchen
+  // wir dann anwaehlbar fuer painpoints."*
+  assert.equal(EBENEN.achillessehne?.art, 'sehne',
+    'Die Achillessehne ist eine Sehne, kein Muskel.')
 })
 
-test('G-432: triceps ist ein BLATT — richtig, aus dem richtigen Grund', () => {
-  // `[read]` **Hier lag der Ursprung der falschen Regel.** `[cmd]`
-  // **Das Urteil war richtig, die Begruendung nicht:** nicht weil ein
-  // Muskel mit Koepfen ein Muskel bleibt, sondern **weil die Koepfe
-  // keinen Namen haben.**
-  const t = EBENEN.triceps
-  assert.equal(t.art, 'muskel')
-  assert.deepEqual(t.kinder, [],
-    'muscle_groups fuehrt KEINE Kinder unter Triceps — genau deshalb '
-    + 'wird nicht geteilt.')
+
+test('G-433: der Trizeps ist in seine drei Koepfe zerlegt', () => {
+  // ══ Das Urteil aus G-425/G-432 ist widerrufen ═════════════════
+  //
+  // **Tom, 2026-09-12:** *„triceps, forearms, neck sind nicht
+  // getrennt."*
+  //
+  // `[cmd]` **G-425 nahm `triceps` als Beleg fuer die falsche
+  // Regel** (*„drei Koepfe und bleibt EIN Muskel"*), **G-432 liess
+  // ihn zusammen, weil `muscle_groups` die Koepfe nicht fuehrt.**
+  //
+  // `[cmd]` **Am Bild sind es drei getrennte Straenge je Arm** —
+  // und der fehlende Name ist eine Luecke im Katalog, kein Grund.
+  for (const neu of ['triceps-longum', 'triceps-lateralis', 'triceps-mediale']) {
+    assert.ok(MUSKELN[neu], `Die Flaeche "${neu}" fehlt in der Karte.`)
+    assert.equal(EBENEN[neu]?.name, null,
+      `"${neu}" darf keinen erfundenen Namen tragen — muscle_groups `
+      + 'fuehrt `Triceps` als Blatt.')
+    assert.ok(EBENEN[neu]?.grund, 'Wo der Name fehlt, gehoert der Grund dazu.')
+  }
+  assert.ok(!MUSKELN.triceps,
+    '`triceps` steht noch als eine Flaeche da — sie ist in G-433 zerlegt.')
 })
 
 test('G-432: jede gezeichnete Flaeche ist eingeordnet', () => {

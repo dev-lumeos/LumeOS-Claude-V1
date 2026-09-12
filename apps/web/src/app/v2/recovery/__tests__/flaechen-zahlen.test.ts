@@ -9,40 +9,52 @@ import assert from 'node:assert/strict'
 import { MUSKEL_ZU_FLAECHE, FLAECHEN, muskelnZurFlaeche, flaechenVonMuskel } from '../muskel-ebenen'
 
 /**
- * `[cmd]` **Am 2026-09-12 gezaehlt** (G-431), vorher G-430.
+ * `[cmd]` **Am 2026-09-12 gezaehlt** (G-433, mit Nachtrag).
  *
- * `[read]` **Summe 100 bei 96 Namen** — VIER Namen decken zwei
- * Flaechen: `Obliques` (Bauchseite + Flanke), `Hamstrings`, `Glutes`
- * und `Buttocks` (je beide Teile ihrer Gruppe).
+ * `[read]` **Summe 132 bei 96 Namen** — 25 Namen decken mehrere
+ * Flaechen, seit die Gruppen in ihre Straenge zerfallen sind.
  *
- * **Was G-431 geaendert hat:**
- *
- *     gluteal    8  ->  gluteus-medius 6, gluteus-maximus 4
- *     hamstring  4  ->  semitendinosus 3, biceps-femoris 2
+ * **Was G-433 geaendert hat:** acht Flaechen wurden zu
+ * dreiundzwanzig — `quadriceps`, `adductors`, `calves`, `abs`,
+ * `obliques`, `triceps`, `forearm`, `neck`.
  */
 const ERWARTET: Record<string, number> = {
-  forearm: 17,
-  calves: 10,
-  quadriceps: 9,
-  adductors: 8,
+  'forearm-flexors': 10,
+  'gastrocnemius-lateralis': 9,
+  'gastrocnemius-medialis': 9,
+  'vastus-lateralis': 8,
   deltoids: 7,
+  'adductor-longus': 6,
+  'forearm-extensors': 6,
   'gluteus-medius': 6,
-  abs: 5,
   chest: 5,
+  'rectus-abdominis': 5,
+  'rectus-femoris': 5,
+  'adductor-brevis': 4,
+  'adductor-magnus': 4,
   'gluteus-maximus': 4,
   latissimus: 4,
-  neck: 4,
+  'vastus-medialis': 4,
   biceps: 3,
+  nacken: 3,
   semitendinosus: 3,
   trapezius: 3,
   'biceps-femoris': 2,
+  brachioradialis: 2,
   'erector-spinae': 2,
-  obliques: 2,
+  'external-oblique': 2,
+  'forearm-extensors-ulnar': 2,
+  sternocleidomastoid: 2,
+  'tendinous-inscriptions': 2,
   tibialis: 2,
+  achillessehne: 1,
   flanke: 1,
+  'serratus-anterior': 1,
   'teres-major': 1,
   'teres-minor': 1,
-  triceps: 1,
+  'triceps-lateralis': 1,
+  'triceps-longum': 1,
+  'triceps-mediale': 1,
 }
 
 test('die Zahl je Flaeche stimmt mit dem Bericht ueberein', () => {
@@ -80,10 +92,16 @@ test('jeder der 96 Muskeln landet auf mindestens einer Flaeche', () => {
     + 'Ein Muskel ohne Flaeche wird am Bildschirm nie sichtbar.')
 
   // Und die Summe bleibt nachpruefbar — nur als Folge, nicht als Regel.
+  //
+  // `[cmd]` **G-433: `96 + Anzahl Mehrfache` stimmt nicht mehr.**
+  // **Die Rechnung galt, solange ein Name HOECHSTENS zwei Flaechen
+  // traf.** Seit der Aufteilung faerbt `Quadriceps` DREI, `Adductors`
+  // drei, `Calves` zwei — **also wird die Summe der Flaechen je Name
+  // gezaehlt, nicht die Zahl der Namen mit mehr als einer.**
   const summe = Object.values(ERWARTET).reduce((a, b) => a + b, 0)
-  const mehrfach = Object.keys(MUSKEL_ZU_FLAECHE)
-    .filter(name => flaechenVonMuskel(name).length > 1)
-  assert.equal(summe, 96 + mehrfach.length,
-    `Summe ${summe}: erwartet 96 plus ${mehrfach.length} Mehrfach-`
-    + `zuordnung(en) (${mehrfach.join(', ') || '—'}).`)
+  const zuordnungen = Object.keys(MUSKEL_ZU_FLAECHE)
+    .reduce((a, name) => a + flaechenVonMuskel(name).length, 0)
+  assert.equal(summe, zuordnungen,
+    `Summe der Verteilung ${summe}, Summe der Zuordnungen `
+    + `${zuordnungen} — sie sind auseinandergelaufen.`)
 })

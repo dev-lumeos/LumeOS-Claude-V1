@@ -59,7 +59,12 @@ test('G-431/A4: ein Gruppen-Kuerzel wird aufgeschluesselt', () => {
 test('G-431/A4: ein Kind-Kuerzel zeigt NUR sich selbst', () => {
   // `[read]` **Die Gegenrichtung** — ohne sie waere eine Fassung
   // gruen, die ALLES aufschluesselt.
-  for (const slug of ['chest', 'biceps', 'triceps', 'abs', 'calves']) {
+  // `[cmd]` **G-433: `abs` und `calves` sind KEINE Kind-Kuerzel
+  // mehr** — sie tragen seit der Aufteilung mehrere Flaechen.
+  // **Geblieben sind die, die je EINE Flaeche faerben.**
+  // `[cmd]` **G-433 Nachtrag: `triceps` und `neck` sind jetzt
+  // GRUPPEN** — sie tragen mehrere Flaechen.
+  for (const slug of ['chest', 'biceps', 'trapezius']) {
     const a = aufschluesselung(slug)
     assert.equal(a.flaechen.length, 1,
       `"${slug}" traegt ${a.flaechen.length} Flaechen, erwartet genau 1.`)

@@ -102,11 +102,11 @@ export const MUSKEL_ZU_FLAECHE: Record<string, string | string[]> = {
   'erector spinae': 'erector-spinae',
 
   // ── Rumpf (7) ────────────────────────────────────────────────────
-  Core: 'abs',
-  Abdominals: 'abs',
-  'Lower Abs': 'abs',
-  'Rectus Abdominis': 'abs',
-  'Transverse Abdominis': 'abs',
+  Core: ['rectus-abdominis', 'tendinous-inscriptions'],
+  Abdominals: ['rectus-abdominis', 'tendinous-inscriptions'],
+  'Lower Abs': 'rectus-abdominis',
+  'Rectus Abdominis': 'rectus-abdominis',
+  'Transverse Abdominis': 'rectus-abdominis',
   // ══ G-430: die Flanke gehoert zum Rumpf, nicht zum Ruecken ═══════
   //
   // `[cmd]` **G-425 am Bild:** *„kleiner Fleck seitlich ueber der
@@ -125,44 +125,45 @@ export const MUSKEL_ZU_FLAECHE: Record<string, string | string[]> = {
   //
   // `[read]` **Ohne diesen Eintrag bliebe `flanke` fuer immer grau** —
   // eine Flaeche, die als faerbbar gilt und nie Farbe bekommt.
-  Obliques: ['obliques', 'flanke'],
-  'Internal Oblique': 'obliques',
+  Obliques: ['external-oblique', 'serratus-anterior', 'flanke'],
+  'Internal Oblique': 'external-oblique',
 
   // ── Arme (21) ────────────────────────────────────────────────────
   Arms: 'biceps',
   Biceps: 'biceps',
   Brachialis: 'biceps',
-  Triceps: 'triceps',
-  Forearms: 'forearm',
-  Brachioradialis: 'forearm',
-  'Forearm Flexors': 'forearm',
-  'Forearm Extensors': 'forearm',
-  'Wrist Flexors': 'forearm',
-  'Wrist Extensors': 'forearm',
-  'Flexor Carpi Radialis': 'forearm',
-  'Flexor Carpi Ulnaris': 'forearm',
-  'Flexor Digitorum Profundus': 'forearm',
-  'Fingers Flexors': 'forearm',
-  'Grip Muscles': 'forearm',
-  'Palmaris Longus': 'forearm',
-  'Pronator Teres': 'forearm',
-  'Extensor Carpi Radialis': 'forearm',
-  'Extensor Carpi Radialis Brevis': 'forearm',
-  'Extensor Carpi Radialis Longus': 'forearm',
-  'Extensor Carpi Ulnaris': 'forearm',
+  Triceps: ['triceps-longum', 'triceps-lateralis', 'triceps-mediale'],
+  Forearms: ['forearm-flexors', 'brachioradialis', 'forearm-extensors',
+    'forearm-extensors-ulnar'],
+  Brachioradialis: 'brachioradialis',
+  'Forearm Flexors': 'forearm-flexors',
+  'Forearm Extensors': 'forearm-extensors',
+  'Wrist Flexors': 'forearm-flexors',
+  'Wrist Extensors': 'forearm-extensors',
+  'Flexor Carpi Radialis': 'forearm-flexors',
+  'Flexor Carpi Ulnaris': 'forearm-flexors',
+  'Flexor Digitorum Profundus': 'forearm-flexors',
+  'Fingers Flexors': 'forearm-flexors',
+  'Grip Muscles': 'forearm-flexors',
+  'Palmaris Longus': 'forearm-flexors',
+  'Pronator Teres': 'forearm-flexors',
+  'Extensor Carpi Radialis': 'forearm-extensors',
+  'Extensor Carpi Radialis Brevis': 'forearm-extensors',
+  'Extensor Carpi Radialis Longus': 'forearm-extensors',
+  'Extensor Carpi Ulnaris': 'forearm-extensors-ulnar',
 
   // ── Nacken (4) ───────────────────────────────────────────────────
-  'Neck Muscles': 'neck',
-  Scalenes: 'neck',
-  Sternocleidomastoid: 'neck',
-  'splenius capitis': 'neck',
+  'Neck Muscles': ['sternocleidomastoid', 'nacken'],
+  Scalenes: 'nacken',
+  Sternocleidomastoid: 'sternocleidomastoid',
+  'splenius capitis': 'nacken',
 
   // ── Beine (41) ───────────────────────────────────────────────────
-  Legs: 'quadriceps',
-  'Upper Legs': 'quadriceps',
-  Thighs: 'quadriceps',
-  Quadriceps: 'quadriceps',
-  'Rectus Femoris': 'quadriceps',
+  Legs: ['rectus-femoris', 'vastus-lateralis', 'vastus-medialis'],
+  'Upper Legs': ['rectus-femoris', 'vastus-lateralis', 'vastus-medialis'],
+  Thighs: ['rectus-femoris', 'vastus-lateralis', 'vastus-medialis'],
+  Quadriceps: ['rectus-femoris', 'vastus-lateralis', 'vastus-medialis'],
+  'Rectus Femoris': 'rectus-femoris',
   // ══ G-431: Beinbeuger und Gesaess sind aufgeteilt ═══════════════
   //
   // `[cmd]` **Am Bild bestimmt** (`docs/bilder/g431/`):
@@ -197,35 +198,36 @@ export const MUSKEL_ZU_FLAECHE: Record<string, string | string[]> = {
   // Die Karte kennt nur die Innenseite (`adductors`). Huefte und
   // Beuger liegen anatomisch daneben und fallen deshalb dorthin —
   // **nicht** auf `gluteal`, das ist ein anderer Muskel.
-  Adductors: 'adductors',
-  'Hip Adductors': 'adductors',
-  'Adductor Longus': 'adductors',
-  'adductor brevis': 'adductors',
-  'adductor magnus': 'adductors',
-  'Inner Thigh': 'adductors',
-  'Hip Flexors': 'adductors',
-  Iliopsoas: 'adductors',
+  Adductors: ['adductor-longus', 'adductor-magnus', 'adductor-brevis'],
+  'Hip Adductors': ['adductor-longus', 'adductor-magnus', 'adductor-brevis'],
+  'Adductor Longus': 'adductor-longus',
+  'adductor brevis': 'adductor-brevis',
+  'adductor magnus': 'adductor-magnus',
+  'Inner Thigh': ['adductor-longus', 'adductor-magnus', 'adductor-brevis'],
+  'Hip Flexors': 'adductor-longus',
+  Iliopsoas: 'adductor-longus',
   // `[cmd]` DIE AUSSENSEITE HAT KEINE EIGENE FLAECHE. Die Karte fuehrt
   // `adductors` (innen), nicht `abductors` (aussen) — in G-26 gemessen
   // und seither so gefuehrt. Sie fallen auf den Quadrizeps, weil das
   // die naechstliegende sichtbare Flaeche der Oberschenkelaussenseite
   // ist. `[annahme]` Das ist eine Naeherung; genauer waere eine eigene
   // Flaeche, die es in der Vorlage nicht gibt.
-  Abductors: 'quadriceps',
-  'Hip Abductors': 'quadriceps',
-  'Outer Thigh': 'quadriceps',
-  'Tensor Fasciae Latae': 'quadriceps',
+  Abductors: 'vastus-lateralis',
+  'Hip Abductors': 'vastus-lateralis',
+  'Outer Thigh': 'vastus-lateralis',
+  'Tensor Fasciae Latae': 'vastus-lateralis',
   // Unterschenkel: Wade gegen Schienbein.
-  'Lower Legs': 'calves',
-  Calves: 'calves',
-  Soleus: 'calves',
-  Peroneals: 'calves',
-  'Peroneus Brevis': 'calves',
-  'Fibularis Muscles': 'calves',
-  'Achilles Tendon': 'calves',
-  'Flexor Digitorum Longus': 'calves',
-  'Tibialis Posterior': 'calves',
-  'Foot Muscles': 'calves',
+  'Lower Legs': ['gastrocnemius-lateralis', 'gastrocnemius-medialis'],
+  Calves: ['gastrocnemius-lateralis', 'gastrocnemius-medialis'],
+  Soleus: ['gastrocnemius-lateralis', 'gastrocnemius-medialis'],
+  Peroneals: ['gastrocnemius-lateralis', 'gastrocnemius-medialis'],
+  'Peroneus Brevis': ['gastrocnemius-lateralis', 'gastrocnemius-medialis'],
+  'Fibularis Muscles': ['gastrocnemius-lateralis', 'gastrocnemius-medialis'],
+  // `[read]` **Die Sehne auf die Sehne** — dafuer ist sie da.
+  'Achilles Tendon': 'achillessehne',
+  'Flexor Digitorum Longus': ['gastrocnemius-lateralis', 'gastrocnemius-medialis'],
+  'Tibialis Posterior': ['gastrocnemius-lateralis', 'gastrocnemius-medialis'],
+  'Foot Muscles': ['gastrocnemius-lateralis', 'gastrocnemius-medialis'],
   Tibialis: 'tibialis',
   'Anterior Tibialis': 'tibialis',
 }

@@ -28,26 +28,35 @@ import { AUS_AUFTEILUNG } from '../hierarchie'
  * Entscheidung.
  */
 const URTEIL: Array<[string, 'geteilt' | 'zusammen', string]> = [
-  ['quadriceps', 'zusammen', 'eine grosse Masse mit zwei schmalen Raendern — vier Koepfe, EIN Muskel'],
-  ['calves', 'zusammen', 'zwei Baeuche nebeneinander plus zwei Sehnenlaeufer — der Gastrocnemius hat zwei Koepfe'],
-  ['adductors', 'zusammen', 'drei ueberlappende Streifen aus der Leiste — EINE Gruppe, die Vorlage trennt sie nicht'],
-  ['forearm', 'zusammen', 'Beuger vorne, Strecker hinten — die Ansicht trennt sie schon'],
-  ['abs', 'zusammen', 'ein 2x4-Raster auf EINER Bauchplatte — Sehnenzwischenstuecke des Rectus'],
-  ['neck', 'zusammen', 'zwei Straenge je Seite, die am Brustbein zusammenlaufen — EIN Muskelpaar'],
-  ['triceps', 'zusammen', 'G-425: acht Pfade, EIN Muskel mit drei Koepfen'],
-  ['obliques', 'zusammen', 'C-468: ein Muskel je Seite plus Zeichenteile'],
+  ['rectus-femoris', 'geteilt', 'G-433: drei Straenge je Schenkel, am Bild getrennt'],
+  ['gastrocnemius-lateralis', 'geteilt', 'G-433: zwei Baeuche plus Achillessehne'],
+  ['adductor-longus', 'geteilt', 'G-433: drei Streifen je Seite, am Bild getrennt'],
+  ['forearm-flexors', 'geteilt', 'G-433: Beuger und Strecker, je Ansicht getrennt'],
+  ['rectus-abdominis', 'geteilt', 'G-433/Tom: untere 2 Rectus, obere 6 Tendinous Inscriptions'],
+  ['sternocleidomastoid', 'geteilt', 'G-433: zwei Straenge je Seite plus Kehlstueck'],
+  ['triceps-longum', 'geteilt', 'G-433: drei Koepfe je Arm, am Bild getrennt'],
+  ['external-oblique', 'geteilt', 'G-433/Tom: obere 3 Serratus, untere 5 External Oblique'],
   ['knees', 'zusammen', 'Umriss, kein Muskel'],
   ['hands', 'zusammen', 'Umriss, kein Muskel'],
   ['ankles', 'zusammen', 'Umriss, kein Muskel'],
   ['feet', 'zusammen', 'Umriss, kein Muskel'],
 ]
 
-test('G-431: die zusammengelassenen Flaechen sind NICHT geteilt', () => {
+test('G-431/G-433: die genannten Flaechen sind gezeichnet', () => {
+  // ══ G-433: das Urteil ist widerrufen ═══════════════════════════
+  //
+  // **Tom, 2026-09-12:** *„ja alles trennen was unsere grafik
+  // hergibt."* **Und vorher:** *„wurde bei hamstring auch gesagt und
+  // nun hat es jeden der muskeln einzeln anwaehlbar."*
+  //
+  // `[cmd]` **Gemessen: die Grafik trennt sie laengst** — drei
+  // Straenge je Schenkel (`quadriceps`, `adductors`), zwei Baeuche je
+  // Wade. **Der fehlende Name in `muscle_groups` war kein Grund,
+  // zusammenzulassen.**
+
   for (const [code, urteil, grund] of URTEIL) {
-    if (urteil !== 'zusammen') continue
     assert.ok(MUSKELN[code],
-      `Die Flaeche "${code}" fehlt in der Karte — wurde sie geteilt? `
-      + `Sie sollte zusammenbleiben: ${grund}`)
+      `Die Flaeche "${code}" fehlt in der Karte. ${urteil}: ${grund}`)
   }
 })
 

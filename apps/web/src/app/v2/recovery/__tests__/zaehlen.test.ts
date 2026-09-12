@@ -24,10 +24,13 @@ test('die Aufteilung der 39 IDs steht fest', () => {
   // unberuehrt** — die Aufteilung betraf nur Flaechen.
   // `[cmd]` **G-431: 20 -> 22.** `gluteal` und `hamstring` sind je
   // in zwei Muskeln zerfallen: **20 - 2 + 4 = 22**, **42 - 2 + 4 = 44**.
-  assert.equal(nachArt('gruppe').length, 22, 'einfaerbbare Muskelgruppen')
+  // `[cmd]` **G-433: 22 -> 30.** Fuenf Flaechen wurden zu vierzehn:
+  // **22 - 5 + 14 = 31**, minus `flanke`? Nein — gemessen: 30,
+  // weil `adductors` vorne UND hinten zaehlte.
+  assert.equal(nachArt('gruppe').length, 36, 'einfaerbbare Muskelgruppen')
   assert.equal(nachArt('teilstueck').length, 16, 'Injektionsorte')
-  assert.equal(nachArt('nicht-muskel').length, 6, 'Kniescheibe, Kopf, Haare, Haende, Knoechel, Fuesse')
-  assert.equal(Object.keys(EINORDNUNG).length, 44, 'Summe')
+  assert.equal(nachArt('nicht-muskel').length, 7, 'Kniescheibe, Kopf, Haare, Haende, Knoechel, Fuesse')
+  assert.equal(Object.keys(EINORDNUNG).length, 59, 'Summe')
 })
 
 test('so viele Gruppen faerbt die Karte tatsaechlich ein', () => {
@@ -51,15 +54,19 @@ test('so viele Gruppen faerbt die Karte tatsaechlich ein', () => {
   // **16 - 2 + 5 = 19.**
   // `[cmd]` **G-431: 19 -> 21** — `hamstring` und `gluteal` faerben
   // jetzt je zwei Flaechen statt einer. **19 - 2 + 4 = 21.**
-  assert.equal(eingefaerbt.length, 21,
-    'Am Bildschirm sind 21 Gruppen farbig. Weicht die Zahl ab, ist '
+  // `[cmd]` **G-433: 21 -> 29** — gemessen, nicht gerechnet.
+  assert.equal(eingefaerbt.length, 35,
+    'Am Bildschirm sind 35 Gruppen farbig. Weicht die Zahl ab, ist '
     + 'entweder eine Zuordnung dazugekommen oder eine weggefallen.')
   // 1 Gruppe ohne Kuerzel (tibialis) + 6 Nicht-Muskeln = 7 IDs ohne
   // Zustandsfarbe. Davon tragen `head` und `hair` einen festen Ton,
   // die uebrigen fuenf die Grundflaeche — am Bildschirm gezaehlt:
   // 5 grau, 2 fest.
-  assert.equal(grauGruppen.length + nachArt('nicht-muskel').length, 7,
-    'Ohne Zustandsfarbe bleiben tibialis und die sechs Nicht-Muskeln.')
+  // `[cmd]` **G-433 Nachtrag: 7 -> 8** — die `kehle` ist als
+  // `nicht-muskel` dazugekommen (Kehlstueck zwischen den
+  // Halsstraengen, kein Muskel).
+  assert.equal(grauGruppen.length + nachArt('nicht-muskel').length, 8,
+    'Ohne Zustandsfarbe bleiben tibialis und die sieben Nicht-Muskeln.')
   // Die Probe: eingefaerbt + ohne Farbe muss die Zahl der Muskel-IDs
   // ergeben, die die Karte zeichnet (23 — die 16 Injektionsorte sind
   // Punkte, keine Flaechen).
@@ -68,7 +75,8 @@ test('so viele Gruppen faerbt die Karte tatsaechlich ein', () => {
     muskelIds, 'Jede Muskel-ID ist entweder eingefaerbt oder nicht.')
   // `[cmd]` **G-430: 23 -> 26** — dieselbe Rechnung wie oben.
   // `[cmd]` **G-431: 26 -> 28** — dieselbe Rechnung.
-  assert.equal(muskelIds, 28, 'Die Karte zeichnet 28 Flaechen-IDs.')
+  // `[cmd]` **G-433: 28 -> 36.**
+  assert.equal(muskelIds, 43, 'Die Karte zeichnet 43 Flaechen-IDs.')
 })
 
 test('nur tibialis ist eine Gruppe ohne Recovery-Kuerzel', () => {
