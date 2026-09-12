@@ -111,15 +111,29 @@ Mischung ohne Einzelmengen.**
 
 ## Der Vorschlag
 
-### 1 — NICHT alles einlesen
+### 1 — die Produkte SIND der Wert
 
-`[read]` **220.000 Produkte sind ein US-Katalog.**
+Tom, 2026-09-08:
 
-`[cmd]` **LumeOS laeuft in Thailand** ? **ein thailaendisches
-Praeparat steht dort nicht.**
+> was denkst du, was in thailand gekauft wird? worldbrands oder
+> chinesische billigkopien? also hoer auf mit *wertlos*.
 
-`[read]` **Was der Katalog WERT ist, ist die
-ZUTATENZUORDNUNG** ? **nicht die Produktliste.**
+`[read]` **Richtig** ? **mein Schluss war falsch.**
+
+`[cmd]` **Wer in Thailand Supplemente kauft, kauft Now Foods,
+Optimum Nutrition, Thorne, Solgar, Nature's Bounty** ? **dieselben
+Marken, die in DSLD stehen.**
+
+`[cmd]` **`batch1` fuehrt `Vitamin World`** ? **eine Weltmarke,
+kein US-Nischenprodukt.**
+
+`[read]` **Und iHerb liefert nach Thailand** ? **die Lieferkette
+ist dieselbe.**
+
+`[read]` **Also: die Produktliste ist NICHT das Nebenprodukt** ?
+**sie ist der Katalog, den ein Nutzer durchsucht.**
+
+`[read]` **Und die Zutatenzuordnung kommt gratis mit.**
 
 `[cmd]` **C-466 hat gemessen: 17 von 596 Substanzen haben eine
 Naehrstoffzuordnung, 579 nicht.**
@@ -145,17 +159,25 @@ Zutaten ziehen:**
 `[read]` **Was nicht trifft, wird ein Kandidat** ?
 `product_content_candidates` **ist dafuer gebaut.**
 
-### 3 — Dann eine Auswahl an Produkten
+### 3 — Die Produkte einlesen
 
-`[read]` **Nicht alle 220.000** ? **die, deren Zutaten LumeOS
-kennt.**
+`[read]` **Alle, die auf dem Markt sind.**
 
-`[cmd]` **Oder die mit `Market Status = On Market`.**
+`[cmd]` **`Market Status = On Market`** ? **miss, wie viele das
+sind.**
 
-`[read]` **Oder die, die ein Nutzer sucht** ? **ein Barcode-Scan
-holt das Produkt bei Bedarf.**
+`[read]` **Ein Nutzer sucht nach *Now Foods Zinc Picolinate* und
+findet es** ? **statt es von Hand einzutragen.**
 
-`[cmd]` **`gtin` ist gebaut** ? **der Weg steht.**
+`[cmd]` **Und `gtin` ist gebaut** ? **ein Barcode-Scan trifft
+direkt.**
+
+`[cmd]` **Zum Vergleich: `nutrition` traegt 1,04 Mio Zeilen** ?
+**220.000 Produkte sind keine Groessenordnung, die LumeOS
+sprengt.**
+
+`[read]` **Was es braucht, ist ein Einlesen in Etappen** ?
+**nicht eine Entscheidung gegen die Menge.**
 
 ### 4 — Die Herkunft
 
@@ -166,9 +188,12 @@ Quelle** ? **`src_dsld_542` waere die Form.**
 
 ## Was zu entscheiden ist
 
-**1** ? **Wie viele Produkte?**
+**1** ? **Alle oder nur `On Market`?**
 
-`[read]` **Alle, eine Auswahl, oder auf Abruf?**
+`[cmd]` **Messen, wie viele der 220.000 noch im Handel sind.**
+
+`[read]` **Ein Produkt, das es nicht mehr gibt, ist im Katalog
+Rauschen** ? **aber jemand koennte es noch im Schrank haben.**
 
 **2** ? **Was mit `blend`?**
 
