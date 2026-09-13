@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 227 |
+| `todos` | 226 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 444 |
+| `erledigt` | 445 |
 | **gesamt** | **675** |
 
 ## medical — 48
@@ -405,8 +405,6 @@
 
 ## training — 30
 
-### beauftragbar — 29
-
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-08` | befund | mittel | [ADR Medienort](todos/training-a-0008-adr-medienort.md) | offen | — | — |
@@ -424,6 +422,7 @@
 | `C-487` | feature | hoch | [exercise_muscles auf Blattebene](erledigt/training-c-0487-exercise-muscles-auf-blattebene.md) | erledigt | — | C-490, C-491 |
 | `C-490` | feature | hoch | [der Faktor an der Zuordnung](erledigt/training-c-0490-der-faktor-an-der-zuordnung.md) | erledigt | — | — |
 | `C-491` | befund | hoch | [die Zuordnungen zeigen auf die falsche Ebene](erledigt/training-c-0491-zuordnungen-auf-die-richtige-ebene.md) | erledigt | — | G-447 |
+| `C-493` | feature | hoch | [Seed-Sitzungen, die die Karte fuellen](laufend_codex/training-c-0493-seed-sitzungen-fuer-die-karte.md) | laeuft (codex) | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
@@ -438,12 +437,6 @@
 | `G-366` | feature | mittel | [die Uebungsliste der Sitzung](erledigt/training-g-0366-die-uebungsliste-der-sitzung.md) | erledigt | — | — |
 | `G-429` | befund | mittel | [wer rechnet estimated_1rm, und verweigert er?](todos/training-g-0429-einrm-mit-verweigerung.md) | offen | — | — |
 | `G-447` | befund | mittel | [vier gezeichnete Muskeln, die keine Uebung trifft](todos/training-g-0447-vier-muskeln-ohne-jede-zuordnung.md) | offen | — | — |
-
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `C-493` | feature | hoch | [Seed-Sitzungen, die die Karte fuellen](laufend_codex/training-c-0493-seed-sitzungen-fuer-die-karte.md) | laeuft (codex) | G-445 | — |
 
 ## recovery — 38
 
@@ -486,8 +479,8 @@
 | `G-440` | fehler | hoch | [MUSCLE_STATE ist eine Attrappe, die Kachel sagt „echte Daten"](erledigt/recovery-g-0440-muscle-state-ist-eine-attrappe.md) | erledigt | — | G-441, G-445 |
 | `G-441` | fehler | hoch | [die Today-Kachel rechnet weiter aus der Attrappe](todos/recovery-g-0441-die-today-kachel-rechnet-aus-der-attrappe.md) | offen | — | — |
 | `G-443` | fehler | mittel | [zehn Muskeln ohne Flaechenziel](erledigt/recovery-g-0443-zehn-muskeln-ohne-flaechenziel.md) | erledigt | — | — |
-| `G-445` | fehler | hoch | [ein nie trainierter Muskel ist ERHOLT, nicht unbekannt](laufend_claudecode/recovery-g-0445-nie-trainiert-ist-erholt.md) | laeuft (claudecode) | — | G-446, G-448 |
-| `G-446` | fehler | hoch | [die Vererbung laeuft nur nach unten](todos/recovery-g-0446-die-vererbung-laeuft-nur-nach-unten.md) | offen | — | — |
+| `G-445` | fehler | hoch | [ein nie trainierter Muskel ist ERHOLT, nicht unbekannt](erledigt/recovery-g-0445-nie-trainiert-ist-erholt.md) | erledigt | — | G-446, G-448 |
+| `G-446` | fehler | hoch | [die Vererbung laeuft nur nach unten](laufend_claudecode/recovery-g-0446-die-vererbung-laeuft-nur-nach-unten.md) | laeuft (claudecode) | — | — |
 
 ### wartet auf Blocker — 1
 

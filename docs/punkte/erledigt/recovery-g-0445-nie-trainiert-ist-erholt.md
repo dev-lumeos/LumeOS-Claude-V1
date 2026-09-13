@@ -9,6 +9,8 @@ kind_von: G-440
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 74a2fdfc
 beruehrt:
   dateien:
     - apps/web/src/app/v2/recovery/tab-messwerte.tsx
@@ -383,5 +385,82 @@ Nachladen.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    Proben        1717/1717, apps/coach 65/65
+    Marken        unbelastet in drei Dateien
+    "kein Volumen" nur noch in Kommentaren,
+                  die den alten Zustand beschreiben
+
+### Der Beweis, dass 100 % nicht erfunden ist
+
+> *,,`baseRecoveryCurve(Infinity) = 100`, gemessen.
+`base(hours)` ist Stunden seit der letzten Belastung; nie
+belastet = unendlich. Der Wert FAELLT AUS DERSELBEN FORMEL wie
+jeder andere ? nichts wird irgendwo gesetzt."*
+
+`[read]` **Genau die Auflage** ? **kein Sonderfall, keine
+Ausnahme im Code.**
+
+`[cmd]` **Und die Formel bleibt heil: ein gemeldeter Muskelkater
+von 2 gibt weiter 83, nicht 100.**
+
+### A5 zeichengenau
+
+> *,,Die drei gerechneten Zeilen sind ZEICHENIDENTISCH: Biceps
+1327 h - 6 Saetze - Pull 4, Forearms 1327 h - 3 Saetze - Pull 4,
+Triceps 607 h - 7 Saetze - Push 6."*
+
+`[read]` **Er hat die zwei Bilder nebeneinander gelesen** ?
+**nicht behauptet, dass sich nichts geaendert hat.**
+
+### A2 war an ZWEI Stellen
+
+`[cmd]` **`tab-messwerte.tsx:423` UND `modale.tsx:265`** ?
+**mein Auftrag nannte eine.**
+
+### A3 maschinenlesbar
+
+`[cmd]` **`Herkunft = gerechnet | unbelastet |
+nicht-im-katalog`.**
+
+`[read]` **Nicht drei Texte, die gleich aussehen** ? **drei
+Werte, die ein Waechter unterscheiden kann.**
+
+### A4: 15 von 105
+
+`[cmd]` **15 Muskelgruppen kommen in KEINER Uebung vor
+(90 tun es, 6.744 Zuordnungen).**
+
+> *,,Neun der fuenfzehn sind genau die C-482-Namen, denen G-443
+gestern Flaechen gegeben hat ? gezeichnet, aber noch in keiner
+Uebung."*
+
+`[cmd]` **Als G-447.**
+
+### Ein Waechter gelockert, mit Gegenprobe
+
+> *,,`g440-datenquellen.test.ts` suchte die Zeichenkette
+`muskelzustand?.zustaende[`; meine Aenderung geht ueber
+`muskelLage(...)`, also hielt die Verdrahtung, aber der Text
+nicht ? die Zeilenform-statt-Sache-Falle."*
+
+`[cmd]` **Umgeschrieben auf die FRAGE, dann belegt, dass er
+nicht blind wurde: `zustaende` -> `MUSCLE_STATE` faellt weiter
+durch.**
+
+### Und ein Befund, den er NICHT behoben hat
+
+`[cmd]` **`modale.tsx:171`: das Gruppenfenster rechnet weiter
+aus `MUSCLE_STATE`** ? **es bekommt `muskelzustand` gar nicht
+uebergeben.**
+
+`[read]` **Der G-440/G-441-Befund in einer DRITTEN Stelle.**
+
+> *,,Ich habe nur seinen Text ehrlich gemacht: *in diesem
+Fenster nicht gerechnet (G-441)* statt einer erfundenen
+Ursache."*
+
+**Abgenommen.**
+
 
