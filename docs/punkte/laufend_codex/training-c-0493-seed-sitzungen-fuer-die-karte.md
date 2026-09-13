@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: [G-445]
 kind_von: null
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [training.workout_sessions]
 zahlen:

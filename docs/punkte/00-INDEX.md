@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 225 |
-| `laufend_codex` | 2 |
+| `todos` | 224 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 3 |
-| `erledigt` | 442 |
+| `erledigt` | 444 |
 | **gesamt** | **672** |
 
 ## medical — 48
@@ -442,7 +442,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `C-493` | feature | hoch | [Seed-Sitzungen, die die Karte fuellen](todos/training-c-0493-seed-sitzungen-fuer-die-karte.md) | offen | G-445 | — |
+| `C-493` | feature | hoch | [Seed-Sitzungen, die die Karte fuellen](laufend_codex/training-c-0493-seed-sitzungen-fuer-die-karte.md) | laeuft (codex) | G-445 | — |
 
 ## recovery — 36
 
@@ -648,7 +648,7 @@
 | `C-468` | entscheidung | hoch | [eine Muskelhierarchie fuer alle Karten](erledigt/quer-c-0468-eine-muskelhierarchie-fuer-alle-karten.md) | erledigt | — | C-470, C-471, G-430 |
 | `C-470` | fehler | hoch | [- pg_default_acl vergibt in public alles](erledigt/quer-c-0470-pg-default-acl-in-public.md) | erledigt | — | C-473 |
 | `C-471` | fehler | hoch | [die Struktur gehoert nach migrations/](erledigt/quer-c-0471-die-struktur-nach-migrations.md) | erledigt | — | C-472 |
-| `C-472` | fehler | hoch | [der Datenlogik-Waechter ist rot](laufend_codex/quer-c-0472-der-datenlogik-waechter-ist-rot.md) | laeuft (codex) | — | — |
+| `C-472` | fehler | hoch | [der Datenlogik-Waechter ist rot](erledigt/quer-c-0472-der-datenlogik-waechter-ist-rot.md) | erledigt | — | — |
 | `C-473` | befund | hoch | [fuenf Abweichungen, die der Waechter jetzt sieht](erledigt/quer-c-0473-fuenf-abweichungen-im-waechter.md) | erledigt | — | — |
 | `C-478` | befund | hoch | [hat LumeOS ein Mehrgeraete-Problem?](todos/quer-c-0478-mehrgeraete-synchronisation.md) | offen | — | — |
 | `C-479` | feature | hoch | [fuenf Flaechen und achtundsiebzig Muskeln](erledigt/quer-c-0479-fuenf-flaechen-und-achtundsiebzig-muskeln.md) | erledigt | — | — |
@@ -656,7 +656,7 @@
 | `C-482` | feature | hoch | [Muskelnamen zur aufgeteilten Karte](erledigt/quer-c-0482-muskelnamen-zur-aufgeteilten-karte.md) | erledigt | — | C-483, G-443 |
 | `C-483` | entscheidung | hoch | [die fuenfte Ebene](erledigt/quer-c-0483-die-fuenfte-ebene.md) | erledigt | — | C-484 |
 | `C-484` | feature | hoch | [koerperflaechen nach E-81](erledigt/quer-c-0484-koerperflaechen-nach-e81.md) | erledigt | — | C-486, G-437 |
-| `C-486` | fehler | hoch | [UTF-8 beim Einspielen verloren](laufend_codex/quer-c-0486-utf8-beim-einspielen-verloren.md) | laeuft (codex) | — | — |
+| `C-486` | fehler | hoch | [UTF-8 beim Einspielen verloren](erledigt/quer-c-0486-utf8-beim-einspielen-verloren.md) | erledigt | — | — |
 | `C-488` | fehler | hoch | [sechzehn Tabellen ohne Thai](erledigt/quer-c-0488-sechzehn-tabellen-ohne-thai.md) | erledigt | — | C-489 |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |

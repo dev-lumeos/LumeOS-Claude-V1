@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-471
 entscheidung: Sollstand 44 fuer 15 bereits committete Migrationsdateien; neue Datenlogik bleibt rot.
+erledigt: 2026-09-08
+commit: b31cb284
 beruehrt:
   dateien:
     - tools/migration-datenlogik-pruefen.mjs
@@ -72,3 +74,25 @@ Temporär angelegt: `99999999999999_c472_gegenprobe.sql` mit `INSERT`. Der Waech
 ### A6 - Vollkette, Sicherung, Punktelauf
 
 Die Wegwerf-Vollkette lief mit `lumeos_c472_vollkette`: **198 Schritte, KETTE OK: 747.6 s**, danach geloescht. Vorher entstand die Sicherung `backup/schema/20260912024526_c43_vor_kettenlauf.sql`. Die isolierte C-441-Gegenprobe verwendete `lumeos_c472_ohne_c441`, brach absichtlich ab und wurde danach ebenfalls geloescht. `node tools/punkte-pruefen.mjs` ist gruen: 649 Punkte, 25 Befunde bei Soll 25.
+
+## Abnahme
+
+**2026-09-08, Orchestrator.**
+
+> *,,C-472 war BEREITS IM BESTAND umgesetzt: 15 Migrationen /
+44 echte historische Datenoperationen als begruendeter
+Sollstand."*
+
+`[cmd]` **Parser-Selbstprobe und Datenlogik-Waechter gruen.**
+
+`[read]` **Er hat gemessen, dass der Punkt erledigt war, statt
+ihn nochmal zu bauen.**
+
+`[cmd]` **44 Datenoperationen in 15 Migrationen** ? **die Zahl
+aus C-471 war *,,fuenfzehn Migrationen"*, die echte Menge ist
+groesser.**
+
+`[read]` **Und sie stehen als BEGRUENDETER Sollstand** ? **nicht
+als Liste ohne Grund, wie ich es verboten hatte.**
+
+**Abgenommen.**

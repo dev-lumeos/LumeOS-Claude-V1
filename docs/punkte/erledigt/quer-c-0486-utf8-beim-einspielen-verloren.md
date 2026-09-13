@@ -9,6 +9,8 @@ kind_von: C-484
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: b31cb284
 beruehrt:
   tabellen: [public.koerperflaechen]
 zahlen:
@@ -199,4 +201,48 @@ Migrationsketten-Waechter gruen.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **Der Hex-Dump entscheidet:**
+
+    vorher   47726f7373657220476573 3f3f 736d75736b656c
+    jetzt    47726f7373657220476573 c3a4 736d75736b656c
+                                    ^^^^
+
+`[read]` **`c3a4` ist `ae` in UTF-8** ? **behoben.**
+
+`[cmd]` **Und null Zeilen mit `??` in `koerperflaechen`.**
+
+### Die Ursache, gemessen statt geraten
+
+> *,,Ausschliesslich die PowerShell-Text-Pipe vor Docker/psql
+zerstoert Umlaute. Datei, `lauf.py` und Kettenlauf bleiben
+bytegenau."*
+
+`[read]` **Mein Verdacht war Codepage 850 in `lauf.py` oder
+`docker exec`** ? **beide unschuldig.**
+
+`[cmd]` **Er hat jeden Weg einzeln durchgeschickt, wie
+verlangt.**
+
+### Der Waechter, erweitert statt neu gebaut
+
+`[cmd]` **`encoding-pruefen.mjs`, 323 Zeilen** ? **prueft jetzt
+auch `psql`, `docker`, `name_de` und `??`.**
+
+`[read]` **Ich hatte einen NEUEN Waechter verlangt** ? **er hat
+den bestehenden erweitert.**
+
+`[read]` **Richtig: ein zweiter Waechter fuer dieselbe Sache
+ist eine zweite Wahrheit.**
+
+`[cmd]` **121 `_de`-Spalten gemessen, nur diese vier trugen
+`??`.**
+
+### Und die Berichtigung im Kettenschritt
+
+`[read]` **Nicht von Hand** ? **beim naechsten Aufbau waeren sie
+wieder gekippt.**
+
+**Abgenommen.**
+
