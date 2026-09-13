@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-12: 195 Funktionen, 444 Policies, 666 CHECKs, 14 Sichten.**
+`[cmd]` **Stand 2026-09-13: 197 Funktionen, 451 Policies, 691 CHECKs, 15 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -157,8 +157,8 @@ ob man sie rufen kann.**
 | public | koerperflaechen_touch |  | Funktion |
 | public | levenshtein | text, text | Funktion |
 | public | levenshtein | text, text, integer, integer, integer | Funktion |
-| public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer | Funktion |
+| public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
 | public | set_limit | real | Funktion |
 | public | show_limit |  | Funktion |
@@ -181,6 +181,8 @@ ob man sie rufen kann.**
 | public | word_similarity_op | text, text | Funktion |
 | recovery | card_read_all | p_user_id uuid | Funktion |
 | recovery | modality_bonus_value | p_modality_type text | Funktion |
+| recovery | muscle_recovery_progress | p_muscle_group_id uuid, p_hours_since numeric, p_rir smallint DEFAULT NULL::smallint, p_rpe numeric DEFAULT NULL::numeric | Funktion |
+| recovery | muscle_recovery_target_hours | p_muscle_group_id uuid, p_rir smallint DEFAULT NULL::smallint, p_rpe numeric DEFAULT NULL::numeric | Funktion |
 | recovery | recalculate_score | p_user_id uuid, p_entry_date date | Funktion |
 | recovery | refresh_modality_deltas | p_user_id uuid, p_entry_date date | Funktion |
 | recovery | refresh_scores_for_user | p_user_id uuid | Funktion |
@@ -231,6 +233,7 @@ Rechten des Lesers, nicht des Erzeugers.**
 | supplements | daily_intake_summary | security_invoker |
 | supplements | daily_nutrient_summary_long | security_invoker |
 | supplements | substance_alias_matches | security_invoker |
+| supplements | supplement_forms_read | security_invoker |
 
 ## CHECK-Bedingungen
 
@@ -684,9 +687,17 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | recovery | modality_log | modality_log_measurement_source_check | CHECK ((measurement_source = ANY (ARRAY['manual'::text, 'device'::text, 'import'::text, 'admin'::text, 'seed'::text]))) |
 | recovery | modality_log | modality_log_modality_type_check | CHECK ((modality_type = ANY (ARRAY['sauna'::text, 'cold_plunge'::text, 'contrast_therapy'::text, 'massage'::text, 'foam_rolling':: |
 | recovery | modality_log | modality_log_next_day_effect_check | CHECK (((next_day_effect IS NULL) OR ((next_day_effect >= 1) AND (next_day_effect <= 10)))) |
+| recovery | muscle_recovery_profiles | muscle_recovery_profiles_base_recovery_hours_check | CHECK ((base_recovery_hours > (0)::numeric)) |
+| recovery | muscle_recovery_profiles | muscle_recovery_profiles_evidence_class_check | CHECK ((evidence_class = ANY (ARRAY['A'::text, 'B'::text, 'C'::text]))) |
+| recovery | muscle_recovery_profiles | muscle_recovery_profiles_note_check | CHECK ((btrim(note) <> ''::text)) |
+| recovery | muscle_recovery_profiles | muscle_recovery_profiles_source_id_check | CHECK ((btrim(source_id) <> ''::text)) |
 | recovery | overtraining_alerts | overtraining_alerts_severity_check | CHECK ((severity = ANY (ARRAY['normal'::text, 'moderate'::text, 'high'::text, 'critical'::text]))) |
 | recovery | overtraining_alerts | overtraining_alerts_signals_check | CHECK ((jsonb_typeof(signals) = 'array'::text)) |
 | recovery | overtraining_alerts | overtraining_alerts_status_check | CHECK ((status = ANY (ARRAY['active'::text, 'acknowledged'::text, 'resolved'::text]))) |
+| recovery | recovery_effort_factors | recovery_effort_factors_evidence_class_check | CHECK ((evidence_class = ANY (ARRAY['A'::text, 'B'::text, 'C'::text]))) |
+| recovery | recovery_effort_factors | recovery_effort_factors_factor_check | CHECK ((factor > (0)::numeric)) |
+| recovery | recovery_effort_factors | recovery_effort_factors_note_check | CHECK ((btrim(note) <> ''::text)) |
+| recovery | recovery_effort_factors | recovery_effort_factors_source_id_check | CHECK ((btrim(source_id) <> ''::text)) |
 | recovery | recovery_protocols | recovery_protocols_completed_days_check | CHECK ((completed_days >= 0)) |
 | recovery | recovery_protocols | recovery_protocols_daily_activities_check | CHECK ((jsonb_typeof(daily_activities) = 'array'::text)) |
 | recovery | recovery_protocols | recovery_protocols_duration_days_check | CHECK (((duration_days >= 1) AND (duration_days <= 31))) |
@@ -728,10 +739,15 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | intake_logs | intake_logs_supplement_name_snapshot_check | CHECK ((btrim(supplement_name_snapshot) <> ''::text)) |
 | supplements | intake_schedule | intake_schedule_source_check | CHECK ((((source_kind = 'stack'::text) AND (stack_item_id IS NOT NULL) AND (protocol_item_id IS NULL)) OR ((source_kind = 'protoco |
 | supplements | intake_schedule | intake_schedule_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
-| supplements | product_content_candidates | product_content_candidates_ingredient_name_check | CHECK ((length(btrim(ingredient_name)) >= 2)) |
+| supplements | product_content_candidates | product_content_candidates_amount_qualifier_check | CHECK ((amount_qualifier = ANY (ARRAY['exact'::text, 'less_than'::text, 'greater_than'::text, 'not_stated'::text]))) |
+| supplements | product_content_candidates | product_content_candidates_ingredient_name_check | CHECK ((length(btrim(ingredient_name)) >= 1)) |
 | supplements | product_content_candidates | product_content_candidates_status_check | CHECK ((status = ANY (ARRAY['offen'::text, 'geprueft'::text, 'angereichert'::text, 'abgelehnt'::text]))) |
 | supplements | product_contents | product_contents_amount_per_serving_check | CHECK (((amount_per_serving IS NULL) OR (amount_per_serving >= (0)::numeric))) |
+| supplements | product_contents | product_contents_amount_qualifier_check | CHECK ((amount_qualifier = ANY (ARRAY['exact'::text, 'less_than'::text, 'greater_than'::text, 'not_stated'::text]))) |
 | supplements | product_contents | product_contents_conversion_factor_check | CHECK (((conversion_factor IS NULL) OR (conversion_factor > (0)::numeric))) |
+| supplements | product_contents | product_contents_reihenfolge_ck | CHECK (((reihenfolge IS NULL) OR (reihenfolge > 0))) |
+| supplements | product_suppliers | product_suppliers_rolle_check | CHECK ((rolle = ANY (ARRAY['manufacturer'::text, 'distributor'::text, 'packager'::text, 'reseller'::text, 'other'::text]))) |
+| supplements | product_suppliers | product_suppliers_source_check | CHECK ((btrim(source) <> ''::text)) |
 | supplements | rule_catalog | rule_catalog_conditions_check | CHECK ((jsonb_typeof(conditions) = 'array'::text)) |
 | supplements | rule_catalog | rule_catalog_effects_check | CHECK ((jsonb_typeof(effects) = 'array'::text)) |
 | supplements | rule_catalog | rule_catalog_evidence_check | CHECK ((jsonb_typeof(evidence) = 'array'::text)) |
@@ -789,6 +805,7 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | supplement_faq | supplement_faq_frage_en_check | CHECK ((btrim(frage_en) <> ''::text)) |
 | supplements | supplement_field_sources | supplement_field_sources_field_name_check | CHECK ((btrim(field_name) <> ''::text)) |
 | supplements | supplement_field_sources | supplement_field_sources_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
+| supplements | supplement_field_sources | supplement_field_sources_subject_ck | CHECK ((num_nonnulls(supplement_id, supplier_product_id) = 1)) |
 | supplements | supplement_groups | supplement_groups_code_check | CHECK ((btrim(code) <> ''::text)) |
 | supplements | supplement_groups | supplement_groups_min_experience_level_check | CHECK (((min_experience_level IS NULL) OR (min_experience_level = ANY (ARRAY['beginner'::text, 'advanced'::text, 'pro'::text, 'eli |
 | supplements | supplement_identifiers | supplement_identifiers_identifier_type_check | CHECK ((btrim(identifier_type) <> ''::text)) |
@@ -839,8 +856,9 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | supplement_warnings | supplement_warnings_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | supplements | supplements_evidence_grade_check | CHECK (((evidence_grade IS NULL) OR (evidence_grade = ANY (ARRAY['S'::text, 'A'::text, 'B'::text, 'C'::text, 'D'::text, 'E'::text, |
 | supplements | supplements | supplements_slug_check | CHECK ((btrim(slug) <> ''::text)) |
+| supplements | supplier_products | supplier_products_dsld_id_ck | CHECK (((dsld_id IS NULL) OR (dsld_id > 0))) |
 | supplements | supplier_products | supplier_products_gtin_check | CHECK (((gtin IS NULL) OR (gtin ~ '^[0-9]{8,14}$'::text))) |
-| supplements | supplier_products | supplier_products_name_check | CHECK ((length(btrim(name)) >= 2)) |
+| supplements | supplier_products | supplier_products_name_en_check | CHECK ((length(btrim(name_en)) >= 1)) |
 | supplements | suppliers | suppliers_name_check | CHECK ((length(btrim(name)) >= 2)) |
 | supplements | user_inventory | user_inventory_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | user_stacks | user_stacks_goal_check | CHECK ((goal = ANY (ARRAY['muscle_building'::text, 'fat_loss'::text, 'recovery_sleep'::text, 'health'::text, 'longevity'::text, 'p |
@@ -854,6 +872,13 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | user_supplement_settings | user_supplement_settings_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | training | equipment | equipment_group_known | CHECK (((equipment_group IS NULL) OR (equipment_group = ANY (ARRAY['free_weights'::text, 'cables_bands'::text, 'machines_benches': |
 | training | exercise_catalog_enrichment | exercise_catalog_enrichment_match_status_check | CHECK ((match_status = ANY (ARRAY['unique'::text, 'duplicate_identical'::text, 'duplicate_one_filled'::text]))) |
+| training | exercise_muscle_resolution_notes | exercise_muscle_resolution_notes_check | CHECK ((((resolution = 'resolved'::text) AND (cardinality(resolved_muscle_group_ids) > 0)) OR ((resolution = 'unresolved'::text) A |
+| training | exercise_muscle_resolution_notes | exercise_muscle_resolution_notes_reason_check | CHECK ((btrim(reason) <> ''::text)) |
+| training | exercise_muscle_resolution_notes | exercise_muscle_resolution_notes_resolution_check | CHECK ((resolution = ANY (ARRAY['resolved'::text, 'unresolved'::text]))) |
+| training | exercise_muscle_resolution_notes | exercise_muscle_resolution_notes_role_check | CHECK ((role = ANY (ARRAY['primary'::text, 'secondary'::text]))) |
+| training | exercise_muscle_resolution_notes | exercise_muscle_resolution_notes_source_id_check | CHECK ((btrim(source_id) <> ''::text)) |
+| training | exercise_muscles | exercise_muscles_evidence_class_check | CHECK (((evidence_class IS NULL) OR (evidence_class = ANY (ARRAY['A'::text, 'C'::text])))) |
+| training | exercise_muscles | exercise_muscles_faktor_positive | CHECK (((faktor IS NULL) OR (faktor > (0)::numeric))) |
 | training | exercise_muscles | exercise_muscles_role_check | CHECK ((role = ANY (ARRAY['primary'::text, 'secondary'::text, 'stabilizer'::text]))) |
 | training | exercises | exercises_category_check | CHECK ((category = ANY (ARRAY['Bodyweight'::text, 'Free Weights'::text, 'Resistance'::text, 'Cardio'::text, 'Stretching'::text]))) |
 | training | exercises | exercises_difficulty_check | CHECK ((difficulty = ANY (ARRAY['beginner'::text, 'intermediate'::text, 'advanced'::text]))) |
@@ -861,6 +886,9 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | training | exercises | exercises_exercise_type_check | CHECK ((exercise_type = ANY (ARRAY['strength'::text, 'cardio'::text, 'stretching'::text, 'yoga'::text, 'calisthenics'::text, 'plyo |
 | training | exercises | exercises_sort_weight_check | CHECK (((sort_weight >= 0) AND (sort_weight <= 1000))) |
 | training | exercises | exercises_tracking_type_check | CHECK ((tracking_type = ANY (ARRAY['weight_reps'::text, 'reps_only'::text, 'duration'::text, 'distance_duration'::text]))) |
+| training | muscle_group_level_decisions | muscle_group_level_decisions_decision_check | CHECK ((decision = ANY (ARRAY['keep_group'::text, 'map_to_child'::text]))) |
+| training | muscle_group_level_decisions | muscle_group_level_decisions_reason_check | CHECK ((btrim(reason) <> ''::text)) |
+| training | muscle_group_level_decisions | muscle_group_level_decisions_source_id_check | CHECK ((btrim(source_id) <> ''::text)) |
 | training | muscle_groups | muscle_groups_body_region_check | CHECK (((body_region IS NULL) OR (body_region = ANY (ARRAY['chest'::text, 'back'::text, 'shoulders'::text, 'arms'::text, 'core'::t |
 | training | muscle_groups | muscle_groups_parent_not_self | CHECK (((parent_id IS NULL) OR (parent_id <> id))) |
 | training | program_assignments | program_assignments_confirmed_ck | CHECK (((status = 'proposed'::text) OR (confirmed_at IS NOT NULL))) |
@@ -1185,10 +1213,14 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | recovery | modality_log | recovery_modality_log_insert | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
 | recovery | modality_log | recovery_modality_log_select | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
 | recovery | modality_log | recovery_modality_log_update | UPDATE | (( SELECT auth.uid() AS uid) = user_id) |
+| recovery | muscle_recovery_profiles | muscle_recovery_profiles_select | SELECT | true |
+| recovery | muscle_recovery_profiles | muscle_recovery_profiles_service_role | ALL | true |
 | recovery | overtraining_alerts | recovery_overtraining_alerts_delete | DELETE | (( SELECT auth.uid() AS uid) = user_id) |
 | recovery | overtraining_alerts | recovery_overtraining_alerts_insert | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
 | recovery | overtraining_alerts | recovery_overtraining_alerts_select | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
 | recovery | overtraining_alerts | recovery_overtraining_alerts_update | UPDATE | (( SELECT auth.uid() AS uid) = user_id) |
+| recovery | recovery_effort_factors | recovery_effort_factors_select | SELECT | true |
+| recovery | recovery_effort_factors | recovery_effort_factors_service_role | ALL | true |
 | recovery | recovery_protocols | recovery_protocols_delete | DELETE | (( SELECT auth.uid() AS uid) = user_id) |
 | recovery | recovery_protocols | recovery_protocols_insert | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
 | recovery | recovery_protocols | recovery_protocols_select | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
@@ -1223,6 +1255,7 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | supplements | lab_effect_enrichment_records | lab_effect_enrichment_records_read | SELECT | true |
 | supplements | product_content_candidates | product_content_candidates_select | SELECT | true |
 | supplements | product_contents | product_contents_select | SELECT | true |
+| supplements | product_suppliers | product_suppliers_select | SELECT | true |
 | supplements | pubchem_conflict_records | pubchem_conflict_records_read | SELECT | true |
 | supplements | rule_catalog | rule_catalog_select | SELECT | true |
 | supplements | stack_curation_candidate_items | stack_curation_candidate_items_select | SELECT | (EXISTS ( SELECT 1    FROM supplements.stack_curation_candidates c   WHERE ((c.id = stack_ |
@@ -1313,6 +1346,7 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | training | exercise_catalog_enrichment | exercise_catalog_enrichment_admin_insert | INSERT | is_admin() |
 | training | exercise_catalog_enrichment | exercise_catalog_enrichment_admin_update | UPDATE | is_admin() |
 | training | exercise_catalog_enrichment | exercise_catalog_enrichment_select | SELECT | true |
+| training | exercise_muscle_resolution_notes | exercise_muscle_resolution_notes_service_role | ALL | true |
 | training | exercise_muscles | exercise_muscles_admin_delete | DELETE | is_admin() |
 | training | exercise_muscles | exercise_muscles_admin_insert | INSERT | is_admin() |
 | training | exercise_muscles | exercise_muscles_admin_update | UPDATE | is_admin() |
@@ -1321,6 +1355,7 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | training | exercises | exercises_admin_insert | INSERT | is_admin() |
 | training | exercises | exercises_admin_update | UPDATE | is_admin() |
 | training | exercises | exercises_select | SELECT | (is_active OR is_admin()) |
+| training | muscle_group_level_decisions | muscle_group_level_decisions_service_role | ALL | true |
 | training | muscle_groups | muscle_groups_admin_delete | DELETE | is_admin() |
 | training | muscle_groups | muscle_groups_admin_insert | INSERT | is_admin() |
 | training | muscle_groups | muscle_groups_admin_update | UPDATE | is_admin() |

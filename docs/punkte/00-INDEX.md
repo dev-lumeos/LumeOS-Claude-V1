@@ -5,10 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 227 |
+| `todos` | 228 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 446 |
+| `erledigt` | 447 |
 | **gesamt** | **676** |
 
 ## medical — 48
@@ -393,7 +392,7 @@
 | `G-392` | befund | hoch | [der Hydrationsfehler am Wechslerplatz](erledigt/supplements-g-0392-der-hydrationsfehler-am-wechslerplatz.md) | erledigt | — | G-393, G-394 |
 | `G-393` | befund | hoch | [die Rotationskarte ist leer](erledigt/supplements-g-0393-die-rotationskarte-ist-leer.md) | erledigt | — | G-395, G-396 |
 | `G-423` | feature | hoch | [Zyklen, Protokolle und die Injektionskarte](erledigt/supplements-g-0423-zyklen-und-injektionen.md) | erledigt | — | G-424 |
-| `G-428` | fehler | hoch | [der Injektionsreiter ist leer](laufend_claudecode/supplements-g-0428-injektionsreiter-ist-leer.md) | laeuft (claudecode) | — | — |
+| `G-428` | fehler | hoch | [der Injektionsreiter ist leer](erledigt/supplements-g-0428-injektionsreiter-ist-leer.md) | erledigt | — | — |
 | `G-437` | fehler | hoch | [tabs.tsx hat vierzehn Karten verloren](erledigt/supplements-g-0437-tabs-tsx-verlorene-karten.md) | erledigt | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
@@ -473,7 +472,7 @@
 | `G-364` | befund | hoch | [die Muskelkacheln waren angebunden](erledigt/recovery-g-0364-die-muskelkacheln-waren-angebunden.md) | erledigt | — | G-365, G-367 |
 | `G-367` | feature | mittel | [Stunden und Saetze je Muskel](erledigt/recovery-g-0367-per-muscle-stunden-und-saetze.md) | erledigt | — | — |
 | `G-371` | befund | mittel | [`modalities` nimmt den Leseweg nicht](erledigt/recovery-g-0371-modalities-nimmt-den-leseweg-nicht.md) | erledigt | — | — |
-| `G-433` | fehler | hoch | [Per-muscle detail liest motor.ts](laufend_claudecode/recovery-g-0433-per-muscle-detail-liest-motor-ts.md) | laeuft (claudecode) | — | C-482 |
+| `G-433` | fehler | hoch | [Per-muscle detail liest motor.ts](todos/recovery-g-0433-per-muscle-detail-liest-motor-ts.md) | offen | — | C-482 |
 | `G-436` | feature | hoch | [die Hierarchie als Ansicht](erledigt/recovery-g-0436-die-hierarchie-als-ansicht.md) | erledigt | — | G-438 |
 | `G-438` | fehler | hoch | [Karte und Liste widersprechen sich](erledigt/recovery-g-0438-karte-und-liste-widersprechen-sich.md) | erledigt | — | — |
 | `G-440` | fehler | hoch | [MUSCLE_STATE ist eine Attrappe, die Kachel sagt „echte Daten"](erledigt/recovery-g-0440-muscle-state-ist-eine-attrappe.md) | erledigt | — | G-441, G-445 |

@@ -240,6 +240,6 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `routine_exercises` | 10 | 0 | 2026-09-09 |
 | `routine_schedule_days` | 5 | 0 | 2026-09-09 |
 | `routines` | 9 | 0 | 2026-09-09 |
-| `workout_exercises` | 16 | 132 | ? |
-| `workout_sessions` | 19 | 66 | ? |
-| `workout_sets` | 21 | 258 | ? |
+| `workout_exercises` | 16 | 153 | ? |
+| `workout_sessions` | 19 | 76 | ? |
+| `workout_sets` | 21 | 390 | ? |

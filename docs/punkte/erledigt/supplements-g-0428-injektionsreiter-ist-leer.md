@@ -9,6 +9,8 @@ kind_von: G-389
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: OFFEN
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/tab-injektionen.tsx
@@ -426,4 +428,40 @@ Server.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator, nachgetragen.**
+
+`[cmd]` **Der Punkt lag seit dem Vormittag mit fertigem Bericht
+in `laufend_claudecode`** ? **die Abnahme ist mir
+durchgerutscht.**
+
+### Mein Befund war falsch
+
+> *,,Die Adresse traf keinen Zweig. Der Reiter war nie
+kaputt."*
+
+`[cmd]` **Gemessen, beide Konten:**
+
+    ?tab=injektionen    1 Kachel,     801 Zeichen
+    ?tab=injection     14 Kacheln,  6.605 Zeichen
+    (Standard)         17 Kacheln,  4.925 Zeichen
+
+`[read]` **Die Reiter-Id heisst `injection`, `injektionen` ist
+die BESCHRIFTUNG.**
+
+`[cmd]` **Ich habe die deutsche Beschriftung fuer die Id
+gehalten** ? **und daraus *,,der Reiter ist leer"*
+geschlossen.**
+
+`[cmd]` **Und `lib/tab-url.ts` nahm den Wert ungeprueft
+entgegen** ? **der alte Kommentar sagte es woertlich:** *,,Ein
+von Hand getippter unbekannter Wert wird NICHT geklammert ? die
+Ansicht zeigt dann ihren Kopf ohne Inhalt."*
+
+`[read]` **Der Code kannte den Fehler, bevor ich ihn
+meldete.**
+
+`[cmd]` **Und eine Testdatei liegt vor:
+`g428-reiter-und-vorlage.test.ts`.**
+
+**Abgenommen.**
+

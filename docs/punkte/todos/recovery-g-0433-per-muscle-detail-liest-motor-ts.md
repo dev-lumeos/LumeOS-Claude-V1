@@ -7,8 +7,6 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-432
 entscheidung: null
-agent: claudecode
-beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/recovery/motor.ts
@@ -201,3 +199,23 @@ steht, die vierte fehlt (C-482).**
 
 `[read]` **Die Liste zeigt die vier Ebenen aus `muscle_groups`**
 ? **sie ist nicht auf `koerperflaechen` angewiesen.**
+
+## Zurueckgelegt 2026-09-08
+
+`[cmd]` **Lag ohne Bericht in `laufend_claudecode`** ? **der
+Auftrag ging raus, der Agent hat ihn nie bearbeitet.**
+
+`[read]` **Ueberholt durch G-440 und G-441:**
+
+`[cmd]` **G-440 hat `MUSCLE_STATE` aus dem Rechenweg der
+Muscle-map-Kachel entfernt** ? **das war der Kern dieses
+Punktes.**
+
+`[cmd]` **G-441 traegt den Rest: die Today-Kachel rechnet
+weiter aus der Attrappe.**
+
+`[cmd]` **Und 22 `MUSCLE_STATE`-Treffer stehen noch in
+`recovery/`** ? **`ansicht.tsx:357` und `:521`.**
+
+`[read]` **Vor einem neuen Auftrag messen, was G-440 und G-441
+davon schon erledigt haben.**
