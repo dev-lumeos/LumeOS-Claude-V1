@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 223 |
+| `todos` | 224 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 4 |
-| `erledigt` | 440 |
-| **gesamt** | **669** |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 442 |
+| **gesamt** | **670** |
 
 ## medical — 48
 
@@ -305,7 +305,7 @@
 | `G-418` | befund | niedrig | [Seed-Tage liegen in der Zukunft](todos/nutrition-g-0418-seed-tage-in-der-zukunft.md) | offen | — | — |
 | `G-419` | feature | niedrig | [der Insights-Block ist abgenommen](erledigt/nutrition-g-0419-insights-block-abgenommen.md) | erledigt | — | — |
 | `G-426` | feature | hoch | [die Supplementspalte in Nutrients](todos/nutrition-g-0426-die-supplementspalte-in-nutrients.md) | offen | — | — |
-| `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](laufend_claudecode/nutrition-g-0439-sollstand-fiber-g.md) | laeuft (claudecode) | — | — |
+| `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 83
@@ -415,7 +415,7 @@
 | `C-169` | befund | mittel | [Das Trainingsplan-Schema steht im Entwurf](todos/training-c-0169-das-trainingsplan-schema-steht-im-entwurf.md) | offen | — | — |
 | `C-330` | befund | niedrig | [geplante Sitzungen tragen eine Endzeit](todos/training-c-0330-planned-sitzungen-mit-endzeit.md) | offen | — | — |
 | `C-340` | feature | niedrig | [ein Training-Gesamtscore, vorgesehen](todos/training-c-0340-ein-Training-Gesamtscore-vorgesehen.md) | offen | — | — |
-| `C-461` | feature | hoch | [Programme und Plaene](erledigt/training-c-0461-programme-und-plaene.md) | erledigt | — | — |
+| `C-461` | feature | hoch | [Programme und Plaene](erledigt/training-c-0461-programme-und-plaene.md) | erledigt | — | G-444 |
 | `C-474` | feature | hoch | [Progressionsregeln fuer Programme](todos/training-c-0474-progressionsregeln.md) | offen | — | — |
 | `C-476` | befund | hoch | [hat LumeOS dieselben Katalogfehler?](todos/training-c-0476-die-exercise-ontologie-pruefen.md) | offen | — | — |
 | `C-477` | feature | hoch | [Provenienz je Uebungsasset](todos/training-c-0477-provenienz-je-asset.md) | offen | — | — |
@@ -474,7 +474,7 @@
 | `G-438` | fehler | hoch | [Karte und Liste widersprechen sich](erledigt/recovery-g-0438-karte-und-liste-widersprechen-sich.md) | erledigt | — | — |
 | `G-440` | fehler | hoch | [MUSCLE_STATE ist eine Attrappe, die Kachel sagt „echte Daten"](erledigt/recovery-g-0440-muscle-state-ist-eine-attrappe.md) | erledigt | — | G-441 |
 | `G-441` | fehler | hoch | [die Today-Kachel rechnet weiter aus der Attrappe](todos/recovery-g-0441-die-today-kachel-rechnet-aus-der-attrappe.md) | offen | — | — |
-| `G-443` | fehler | mittel | [zehn Muskeln ohne Flaechenziel](laufend_claudecode/recovery-g-0443-zehn-muskeln-ohne-flaechenziel.md) | laeuft (claudecode) | — | — |
+| `G-443` | fehler | mittel | [zehn Muskeln ohne Flaechenziel](erledigt/recovery-g-0443-zehn-muskeln-ohne-flaechenziel.md) | erledigt | — | — |
 
 ## goals — 12
 
@@ -554,7 +554,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 163
+## quer — 164
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -721,6 +721,7 @@
 | `G-432` | feature | hoch | [jeder gezeichnete Muskel ist anwaehlbar](erledigt/quer-g-0432-jeder-muskel-anwaehlbar.md) | erledigt | — | G-433, G-434, G-435 |
 | `G-434` | feature | hoch | [die Karte, direkt mit Tom erledigt](erledigt/quer-g-0434-die-karte-direkt-mit-tom.md) | erledigt | — | — |
 | `G-435` | feature | hoch | [die Hierarchie an den richtigen Ort](erledigt/quer-g-0435-hierarchie-an-den-richtigen-ort.md) | erledigt | — | G-436 |
+| `G-444` | fehler | mittel | [drei Abwesenheitsbehauptungen, die C-461 ueberholt hat](todos/quer-g-0444-drei-abwesenheitsbehauptungen.md) | offen | — | — |
 
 ## buddy — 1
 
