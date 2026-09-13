@@ -6,7 +6,9 @@ schwere: hoch
 angelegt: 2026-09-08
 braucht: []
 kind_von: null
-entscheidung: null
+entscheidung: E-82
+erledigt: 2026-09-08
+commit: OFFEN
 beruehrt:
   tabellen: [training.exercise_muscles]
 zahlen:
@@ -196,3 +198,21 @@ Quadrizeps.**
 **C-476 misst das.**
 
 **Keine Oberflaeche.**
+
+## Aufgeloest 2026-09-08 in C-490 und C-491
+
+`[read]` **Die EMG-Forderung war zu hoch gegriffen.**
+
+`[cmd]` **`docs/ssot/180` hat es recherchiert:** **EMG-Studien
+gibt es fuer Grundzuege, nicht fuer 1.416 Uebungen** ? **und
+`74 +- 30 %MVIC` ist als Faktor unbrauchbar.**
+
+`[cmd]` **Die Trainingswissenschaft nimmt die fraktionierte
+Satzzaehlung** (Pelland et al. 2026, 67 Studien): **direkt 1,0,
+indirekt 0,5.**
+
+`[read]` **Eine Zahl fuer alle Uebungen, mit Meta-Analyse
+belegt.**
+
+    C-490   der Faktor an der Zuordnung
+    C-491   die Zuordnungen auf die richtige Ebene

@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 226 |
+| `todos` | 227 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 434 |
-| **gesamt** | **665** |
+| `erledigt` | 435 |
+| **gesamt** | **667** |
 
 ## medical — 48
 
@@ -403,7 +403,9 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 26
+## training — 28
+
+### beauftragbar — 27
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -419,7 +421,8 @@
 | `C-474` | feature | hoch | [Progressionsregeln fuer Programme](todos/training-c-0474-progressionsregeln.md) | offen | — | — |
 | `C-476` | befund | hoch | [hat LumeOS dieselben Katalogfehler?](todos/training-c-0476-die-exercise-ontologie-pruefen.md) | offen | — | — |
 | `C-477` | feature | hoch | [Provenienz je Uebungsasset](todos/training-c-0477-provenienz-je-asset.md) | offen | — | — |
-| `C-487` | feature | hoch | [exercise_muscles auf Blattebene](todos/training-c-0487-exercise-muscles-auf-blattebene.md) | offen | — | — |
+| `C-487` | feature | hoch | [exercise_muscles auf Blattebene](erledigt/training-c-0487-exercise-muscles-auf-blattebene.md) | erledigt | — | C-490, C-491 |
+| `C-490` | feature | hoch | [der Faktor an der Zuordnung](todos/training-c-0490-der-faktor-an-der-zuordnung.md) | offen | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
@@ -433,6 +436,12 @@
 | `G-219` | entscheidung | niedrig | [`LiveWorkout` hat keinen Aufrufer mehr](todos/training-g-0219-liveworkout-ohne-aufrufer.md) | offen | — | — |
 | `G-366` | feature | mittel | [die Uebungsliste der Sitzung](erledigt/training-g-0366-die-uebungsliste-der-sitzung.md) | erledigt | — | — |
 | `G-429` | befund | mittel | [wer rechnet estimated_1rm, und verweigert er?](todos/training-g-0429-einrm-mit-verweigerung.md) | offen | — | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `C-491` | befund | hoch | [die Zuordnungen zeigen auf die falsche Ebene](todos/training-c-0491-zuordnungen-auf-die-richtige-ebene.md) | offen | C-490 | — |
 
 ## recovery — 33
 
