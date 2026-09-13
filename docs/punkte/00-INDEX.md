@@ -5,10 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 228 |
-| `laufend_codex` | 1 |
-| `erledigt` | 447 |
-| **gesamt** | **676** |
+| `todos` | 230 |
+| `erledigt` | 448 |
+| **gesamt** | **678** |
 
 ## medical — 48
 
@@ -421,7 +420,7 @@
 | `C-487` | feature | hoch | [exercise_muscles auf Blattebene](erledigt/training-c-0487-exercise-muscles-auf-blattebene.md) | erledigt | — | C-490, C-491 |
 | `C-490` | feature | hoch | [der Faktor an der Zuordnung](erledigt/training-c-0490-der-faktor-an-der-zuordnung.md) | erledigt | — | — |
 | `C-491` | befund | hoch | [die Zuordnungen zeigen auf die falsche Ebene](erledigt/training-c-0491-zuordnungen-auf-die-richtige-ebene.md) | erledigt | — | G-447 |
-| `C-493` | feature | hoch | [Seed-Sitzungen, die die Karte fuellen](laufend_codex/training-c-0493-seed-sitzungen-fuer-die-karte.md) | laeuft (codex) | — | — |
+| `C-493` | feature | hoch | [Seed-Sitzungen, die die Karte fuellen](erledigt/training-c-0493-seed-sitzungen-fuer-die-karte.md) | erledigt | — | G-450, G-451 |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
@@ -437,9 +436,7 @@
 | `G-429` | befund | mittel | [wer rechnet estimated_1rm, und verweigert er?](todos/training-g-0429-einrm-mit-verweigerung.md) | offen | — | — |
 | `G-447` | befund | mittel | [vier gezeichnete Muskeln, die keine Uebung trifft](todos/training-g-0447-vier-muskeln-ohne-jede-zuordnung.md) | offen | — | — |
 
-## recovery — 39
-
-### beauftragbar — 38
+## recovery — 40
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -480,13 +477,9 @@
 | `G-443` | fehler | mittel | [zehn Muskeln ohne Flaechenziel](erledigt/recovery-g-0443-zehn-muskeln-ohne-flaechenziel.md) | erledigt | — | — |
 | `G-445` | fehler | hoch | [ein nie trainierter Muskel ist ERHOLT, nicht unbekannt](erledigt/recovery-g-0445-nie-trainiert-ist-erholt.md) | erledigt | — | G-446, G-448 |
 | `G-446` | fehler | hoch | [die Vererbung laeuft nur nach unten](erledigt/recovery-g-0446-die-vererbung-laeuft-nur-nach-unten.md) | erledigt | — | G-449 |
+| `G-448` | befund | niedrig | [der Schnitt und der Engpass sind aussagelos](todos/recovery-g-0448-der-schnitt-ist-aussagelos.md) | offen | — | — |
 | `G-449` | befund | niedrig | [wertKommtVonGruppe hat keinen Aufrufer](todos/recovery-g-0449-wertkommtvongruppe-ohne-aufrufer.md) | offen | — | — |
-
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `G-448` | befund | niedrig | [der Schnitt und der Engpass sind aussagelos](todos/recovery-g-0448-der-schnitt-ist-aussagelos.md) | offen | C-493 | — |
+| `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](todos/recovery-g-0450-tageswechsler-rechnet-nicht.md) | offen | — | — |
 
 ## goals — 12
 
@@ -566,7 +559,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 164
+## quer — 165
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -734,6 +727,7 @@
 | `G-434` | feature | hoch | [die Karte, direkt mit Tom erledigt](erledigt/quer-g-0434-die-karte-direkt-mit-tom.md) | erledigt | — | — |
 | `G-435` | feature | hoch | [die Hierarchie an den richtigen Ort](erledigt/quer-g-0435-hierarchie-an-den-richtigen-ort.md) | erledigt | — | G-436 |
 | `G-444` | fehler | mittel | [drei Abwesenheitsbehauptungen, die C-461 ueberholt hat](todos/quer-g-0444-drei-abwesenheitsbehauptungen.md) | offen | — | — |
+| `G-451` | fehler | mittel | [der Testdatenlauf scheitert vor C-493](todos/quer-g-0451-testdatenlauf-scheitert-vorher.md) | offen | — | — |
 
 ## buddy — 1
 
