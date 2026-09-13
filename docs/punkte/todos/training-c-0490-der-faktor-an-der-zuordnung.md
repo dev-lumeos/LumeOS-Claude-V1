@@ -83,3 +83,47 @@ belegten Werte, alles andere braucht eine Quelle.**
         ohne source_id.
     A5  Struktur nach migrations/, Daten in _pipeline/.
     A6  Sicherung, Vollkette, Punktelauf.
+
+## Berichtigt 2026-09-08 — belegt schlaegt Rueckfall
+
+`[cmd]` **`docs/ssot/182` hat vier Quellen geprueft.**
+
+`[read]` **Die 1,0/0,5 aus Pelland sind der RUECKFALL, nicht das
+Ziel.**
+
+### Belegte Zahlen gibt es
+
+`[cmd]` **Bankdruecken, EMG:**
+
+    Pectoralis major     0,95
+    Anterior deltoid     0,79
+    Triceps brachii      0,67
+
+`[cmd]` **Brust, ACE, neun Uebungen auf die beste
+normalisiert:** **Langhantel 1,00, Pec-Deck 0,98, Kabelzug
+0,93.**
+
+`[cmd]` **PMC7112217: sechs Beinmuskeln ueber drei Uebungen.**
+
+`[read]` **Der Kunstgriff von ACE: sie normalisieren auf die
+BESTE Uebung, nicht auf MVIC** ? **relative Anteile statt
+%MVIC mit 30 Punkt Streuung.**
+
+### Also zwei Klassen
+
+    evidence_class A   aus einer EMG-Studie, source_id gesetzt
+    evidence_class C   Rueckfall aus role: 1,0 / 0,5
+
+`[read]` **Und die Kachel sagt, welche welche ist.**
+
+### Wo die Zahlen liegen
+
+    acefitness.org/certifiednewsarticle/
+      je Muskelgruppe eine Studie mit Tabelle
+    PMC (NCBI)
+      Einzelstudien mit Mehrmuskelmessung
+    PLOS One 2020, Kreuzheben
+      systematische Uebersicht, sieben Studien
+
+`[read]` **Fang mit den Uebungen an, die im Seed vorkommen** ?
+**sechs Stueck.**

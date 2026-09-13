@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 227 |
+| `todos` | 228 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 435 |
-| **gesamt** | **667** |
+| **gesamt** | **668** |
 
 ## medical — 48
 
@@ -443,7 +443,7 @@
 |---|---|---|---|---|---|---|
 | `C-491` | befund | hoch | [die Zuordnungen zeigen auf die falsche Ebene](todos/training-c-0491-zuordnungen-auf-die-richtige-ebene.md) | offen | C-490 | — |
 
-## recovery — 33
+## recovery — 34
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -468,6 +468,7 @@
 | `C-421` | feature | hoch | [vier Tabellen fuer die 17 Attrappen](erledigt/recovery-c-0421-vier-tabellen-fuer-die-17-attrappen.md) | erledigt | — | C-422 |
 | `C-462` | feature | hoch | [vier Ansichten ohne Tabelle](erledigt/recovery-c-0462-vier-ansichten-ohne-tabelle.md) | erledigt | — | — |
 | `C-469` | messung | hoch | [die sechsundzwanzig Recovery-Formeln](erledigt/recovery-c-0469-die-sechsundzwanzig-formeln.md) | erledigt | — | — |
+| `C-492` | feature | hoch | [Basiszeit je Muskel und der RPE-Faktor](todos/recovery-c-0492-basiszeit-je-muskel-und-rpe.md) | offen | — | — |
 | `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](erledigt/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | erledigt | — | — |
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
