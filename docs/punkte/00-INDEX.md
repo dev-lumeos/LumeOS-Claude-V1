@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 225 |
+| `todos` | 224 |
 | `laufend_codex` | 5 |
-| `laufend_claudecode` | 2 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 436 |
 | **gesamt** | **668** |
 
@@ -394,7 +394,7 @@
 | `G-393` | befund | hoch | [die Rotationskarte ist leer](erledigt/supplements-g-0393-die-rotationskarte-ist-leer.md) | erledigt | — | G-395, G-396 |
 | `G-423` | feature | hoch | [Zyklen, Protokolle und die Injektionskarte](erledigt/supplements-g-0423-zyklen-und-injektionen.md) | erledigt | — | G-424 |
 | `G-428` | fehler | hoch | [der Injektionsreiter ist leer](laufend_claudecode/supplements-g-0428-injektionsreiter-ist-leer.md) | laeuft (claudecode) | — | — |
-| `G-437` | fehler | hoch | [tabs.tsx hat vierzehn Karten verloren](todos/supplements-g-0437-tabs-tsx-verlorene-karten.md) | offen | — | — |
+| `G-437` | fehler | hoch | [tabs.tsx hat vierzehn Karten verloren](laufend_claudecode/supplements-g-0437-tabs-tsx-verlorene-karten.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
