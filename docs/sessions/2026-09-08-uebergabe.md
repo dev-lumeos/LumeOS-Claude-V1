@@ -468,3 +468,56 @@ openGym? 1.416 Uebungen, ungeprueft.**
     676 Punkte: 227 offen, 446 erledigt
     25 Befunde, genau der Sollstand
     apps/web 1728, apps/coach 65
+
+---
+
+# ZUERST AM NAECHSTEN TAG
+
+Tom, 2026-09-08, zum Schluss:
+
+> ok merken fuer morgen, das muessen wir loesen, ich will das
+> testen koennen
+
+## G-450 — der Tageswechsler rechnet nicht
+
+`[cmd]` **Er aendert das Datum, aber nicht die
+Kartenberechnung.**
+
+`[cmd]` **Sieben Bildschirmfotos von verschiedenen Tagen:
+dieselben Werte** ? `x-c493-tag-1`, `-3`, `-7`, `-13`,
+`x-c493-dev-tag-8`, `-12`, `-13`.
+
+`[read]` **Das ist TOMS PRUEFUNG:** *,,wir koennen ja
+dayswitcher oben nutzen und schauen, was sich aendert."*
+
+`[read]` **Solange er nicht rechnet, kann Tom nicht pruefen, ob
+die Erholung ueber die Zeit stimmt.**
+
+### Was zu messen ist
+
+`[cmd]` **`base(hours)` = Stunden seit der letzten Belastung** ?
+**gegen WELCHEN Zeitpunkt?**
+
+`[read]` **Vermutlich gegen `Date.now()` statt gegen den
+gewaehlten Tag** ? **aber GEMESSEN ist es nicht.**
+
+### Die Gegenprobe liegt vor
+
+`[cmd]` **C-493 hat Sitzungen mit Abstaenden von 1, 2, 3 und
+7 Tagen gebaut.**
+
+`[read]` **Ein Muskel, der an Tag 1 rot ist, muss an Tag 7 gelb
+und an Tag 13 gruen sein** ? **oder er hat zwischendurch einen
+neuen Reiz bekommen.**
+
+## Und was daneben liegt
+
+`[cmd]` **G-451: der Testdatenlauf scheitert VOR C-493** ?
+`shopping_lists_source_target_check`, **dann ein**
+`recovery.score_contributions`-Duplikat.
+
+`[read]` **Solange er faellt, kann niemand pruefen, ob ein
+Frischaufbau die Karte fuellt.**
+
+`[read]` **Die beiden haengen zusammen: G-450 macht das Testen
+moeglich, G-451 das Wiederherstellen.**
