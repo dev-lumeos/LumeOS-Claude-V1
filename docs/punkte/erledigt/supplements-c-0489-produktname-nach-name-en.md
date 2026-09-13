@@ -9,6 +9,8 @@ kind_von: C-488
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 25364531
 beruehrt:
   tabellen: [supplements.supplier_products]
 zahlen:
@@ -166,4 +168,38 @@ Vor dem Live-Nachzug wurde `backup/data/20260913000500_c489_vor_live.dump` erste
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    name_en gefuellt   214.780 von 214.780
+    name_de gefuellt   0
+    name_th            angelegt, leer
+    marke              214.780, unveraendert
+    suppliers.name     unveraendert
+    Vollkette          205 Schritte, 929,6 s
+
+`[cmd]` **Selbst gemessen: alle fuenf.**
+
+`[cmd]` **Beispiel:** `Vitamin World | B-2 100 mg` ? **Marke und
+Produktname getrennt.**
+
+### Keine Lesestelle in apps/
+
+> *,,Keine direkte `supplier_products`-Lesestelle in `apps/`;
+Apps nicht angefasst."*
+
+`[read]` **Die Oberflaeche liest die Tabelle noch nicht** ?
+**C-467 hat sie gebaut, C-485 gefuellt, niemand zeigt sie.**
+
+`[read]` **Die Umbenennung war deshalb folgenlos** ? **das ist
+Glueck, kein Verdienst, und er hat es gemessen statt
+angenommen.**
+
+### Und G-261 zum dritten Mal
+
+`[cmd]` **`pnpm gate` stoppt am `fiber_g`-Befund aus C-464** ?
+**G-439, ein Sollstandeintrag.**
+
+`[read]` **Dreimal richtig als fremd erkannt.**
+
+**Abgenommen.**
+

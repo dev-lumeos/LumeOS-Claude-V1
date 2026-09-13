@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: [C-490]
 kind_von: C-487
 entscheidung: E-82
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [training.exercise_muscles]
 zahlen:

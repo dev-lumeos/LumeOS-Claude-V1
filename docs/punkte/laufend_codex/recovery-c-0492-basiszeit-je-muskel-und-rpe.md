@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: null
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [recovery.scores]
 zahlen:

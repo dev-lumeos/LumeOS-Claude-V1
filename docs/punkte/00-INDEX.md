@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 228 |
-| `laufend_codex` | 3 |
+| `todos` | 225 |
+| `laufend_codex` | 5 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 435 |
+| `erledigt` | 436 |
 | **gesamt** | **668** |
 
 ## medical — 48
@@ -364,7 +364,7 @@
 | `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](erledigt/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | erledigt | — | — |
 | `C-467` | feature | hoch | [Lieferantenprodukte](erledigt/supplements-c-0467-lieferantenprodukte.md) | erledigt | — | C-485 |
 | `C-485` | feature | hoch | [die DSLD-Datenbank einlesen](erledigt/supplements-c-0485-dsld-einlesen.md) | erledigt | — | — |
-| `C-489` | fehler | mittel | [der Produktname ist englisch und heisst `name`](laufend_codex/supplements-c-0489-produktname-nach-name-en.md) | laeuft (codex) | — | — |
+| `C-489` | fehler | mittel | [der Produktname ist englisch und heisst `name`](erledigt/supplements-c-0489-produktname-nach-name-en.md) | erledigt | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -422,7 +422,7 @@
 | `C-476` | befund | hoch | [hat LumeOS dieselben Katalogfehler?](todos/training-c-0476-die-exercise-ontologie-pruefen.md) | offen | — | — |
 | `C-477` | feature | hoch | [Provenienz je Uebungsasset](todos/training-c-0477-provenienz-je-asset.md) | offen | — | — |
 | `C-487` | feature | hoch | [exercise_muscles auf Blattebene](erledigt/training-c-0487-exercise-muscles-auf-blattebene.md) | erledigt | — | C-490, C-491 |
-| `C-490` | feature | hoch | [der Faktor an der Zuordnung](todos/training-c-0490-der-faktor-an-der-zuordnung.md) | offen | — | — |
+| `C-490` | feature | hoch | [der Faktor an der Zuordnung](laufend_codex/training-c-0490-der-faktor-an-der-zuordnung.md) | laeuft (codex) | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
@@ -441,7 +441,7 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `C-491` | befund | hoch | [die Zuordnungen zeigen auf die falsche Ebene](todos/training-c-0491-zuordnungen-auf-die-richtige-ebene.md) | offen | C-490 | — |
+| `C-491` | befund | hoch | [die Zuordnungen zeigen auf die falsche Ebene](laufend_codex/training-c-0491-zuordnungen-auf-die-richtige-ebene.md) | laeuft (codex) | C-490 | — |
 
 ## recovery — 34
 
@@ -468,7 +468,7 @@
 | `C-421` | feature | hoch | [vier Tabellen fuer die 17 Attrappen](erledigt/recovery-c-0421-vier-tabellen-fuer-die-17-attrappen.md) | erledigt | — | C-422 |
 | `C-462` | feature | hoch | [vier Ansichten ohne Tabelle](erledigt/recovery-c-0462-vier-ansichten-ohne-tabelle.md) | erledigt | — | — |
 | `C-469` | messung | hoch | [die sechsundzwanzig Recovery-Formeln](erledigt/recovery-c-0469-die-sechsundzwanzig-formeln.md) | erledigt | — | — |
-| `C-492` | feature | hoch | [Basiszeit je Muskel und der RPE-Faktor](todos/recovery-c-0492-basiszeit-je-muskel-und-rpe.md) | offen | — | — |
+| `C-492` | feature | hoch | [Basiszeit je Muskel und der RPE-Faktor](laufend_codex/recovery-c-0492-basiszeit-je-muskel-und-rpe.md) | laeuft (codex) | — | — |
 | `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](erledigt/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | erledigt | — | — |
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
