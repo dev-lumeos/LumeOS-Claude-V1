@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 224 |
+| `todos` | 227 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 444 |
-| **gesamt** | **672** |
+| **gesamt** | **675** |
 
 ## medical — 48
 
@@ -403,9 +403,9 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 29
+## training — 30
 
-### beauftragbar — 28
+### beauftragbar — 29
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -423,7 +423,7 @@
 | `C-477` | feature | hoch | [Provenienz je Uebungsasset](todos/training-c-0477-provenienz-je-asset.md) | offen | — | — |
 | `C-487` | feature | hoch | [exercise_muscles auf Blattebene](erledigt/training-c-0487-exercise-muscles-auf-blattebene.md) | erledigt | — | C-490, C-491 |
 | `C-490` | feature | hoch | [der Faktor an der Zuordnung](erledigt/training-c-0490-der-faktor-an-der-zuordnung.md) | erledigt | — | — |
-| `C-491` | befund | hoch | [die Zuordnungen zeigen auf die falsche Ebene](erledigt/training-c-0491-zuordnungen-auf-die-richtige-ebene.md) | erledigt | — | — |
+| `C-491` | befund | hoch | [die Zuordnungen zeigen auf die falsche Ebene](erledigt/training-c-0491-zuordnungen-auf-die-richtige-ebene.md) | erledigt | — | G-447 |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
@@ -437,6 +437,7 @@
 | `G-219` | entscheidung | niedrig | [`LiveWorkout` hat keinen Aufrufer mehr](todos/training-g-0219-liveworkout-ohne-aufrufer.md) | offen | — | — |
 | `G-366` | feature | mittel | [die Uebungsliste der Sitzung](erledigt/training-g-0366-die-uebungsliste-der-sitzung.md) | erledigt | — | — |
 | `G-429` | befund | mittel | [wer rechnet estimated_1rm, und verweigert er?](todos/training-g-0429-einrm-mit-verweigerung.md) | offen | — | — |
+| `G-447` | befund | mittel | [vier gezeichnete Muskeln, die keine Uebung trifft](todos/training-g-0447-vier-muskeln-ohne-jede-zuordnung.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
 
@@ -444,7 +445,9 @@
 |---|---|---|---|---|---|---|
 | `C-493` | feature | hoch | [Seed-Sitzungen, die die Karte fuellen](laufend_codex/training-c-0493-seed-sitzungen-fuer-die-karte.md) | laeuft (codex) | G-445 | — |
 
-## recovery — 36
+## recovery — 38
+
+### beauftragbar — 37
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -483,7 +486,14 @@
 | `G-440` | fehler | hoch | [MUSCLE_STATE ist eine Attrappe, die Kachel sagt „echte Daten"](erledigt/recovery-g-0440-muscle-state-ist-eine-attrappe.md) | erledigt | — | G-441, G-445 |
 | `G-441` | fehler | hoch | [die Today-Kachel rechnet weiter aus der Attrappe](todos/recovery-g-0441-die-today-kachel-rechnet-aus-der-attrappe.md) | offen | — | — |
 | `G-443` | fehler | mittel | [zehn Muskeln ohne Flaechenziel](erledigt/recovery-g-0443-zehn-muskeln-ohne-flaechenziel.md) | erledigt | — | — |
-| `G-445` | fehler | hoch | [ein nie trainierter Muskel ist ERHOLT, nicht unbekannt](laufend_claudecode/recovery-g-0445-nie-trainiert-ist-erholt.md) | laeuft (claudecode) | — | — |
+| `G-445` | fehler | hoch | [ein nie trainierter Muskel ist ERHOLT, nicht unbekannt](laufend_claudecode/recovery-g-0445-nie-trainiert-ist-erholt.md) | laeuft (claudecode) | — | G-446, G-448 |
+| `G-446` | fehler | hoch | [die Vererbung laeuft nur nach unten](todos/recovery-g-0446-die-vererbung-laeuft-nur-nach-unten.md) | offen | — | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-448` | befund | niedrig | [der Schnitt und der Engpass sind aussagelos](todos/recovery-g-0448-der-schnitt-ist-aussagelos.md) | offen | C-493 | — |
 
 ## goals — 12
 
