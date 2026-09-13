@@ -143,6 +143,27 @@ test('G-438/A3: die Liste schreibt die Herkunft AN DIE ZEILE', () => {
   assert.match(kachel, /Wert von \{a\.vonGruppe\}/,
     'Die Zeile nennt die Herkunft des geliehenen Werts nicht — '
     + 'dann sieht er aus wie eine eigene Messung (Auflage 1).')
-  assert.match(kachel, /wertKommtVonGruppe\(/,
-    'Die Kachel bestimmt die Herkunft gar nicht erst.')
+  // ══ G-446: die SACHE, nicht der Funktionsname ═══════════════
+  //
+  // `[cmd]` **Hier stand `/wertKommtVonGruppe\(/`.** `[cmd]` **G-446
+  // hat die Herkunft von der KARTENflaeche auf den BAUM umgestellt**
+  // — `wertKommtVonGruppe` wird nicht mehr gerufen, die Entscheidung
+  // trifft `muskelLage` ueber die Sippe.
+  //
+  // `[read]` **Die Probe blieb trotzdem gruen** — der Name steht
+  // noch in einem Kommentar, und `assert.match` sucht die ganze
+  // Datei ab (die Lehre `waechter-liest-die-eigene-begruendung`).
+  // **Sie war also blind, nicht erfuellt.**
+  //
+  // `[read]` **Die Frage ist: bestimmt die Kachel die Herkunft
+  // ueberhaupt?** **Nicht: ruft sie diese eine Funktion?**
+  const ohneKommentare = kachel
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .split('\n')
+    .filter(z => !z.trim().startsWith('//') && !z.trim().startsWith('*'))
+    .join('\n')
+  assert.match(ohneKommentare, /vonGruppe:\s*\w/,
+    'Die Kachel bestimmt die Herkunft gar nicht erst — dann sieht '
+    + 'ein geliehener Wert aus wie eine eigene Messung.')
 })

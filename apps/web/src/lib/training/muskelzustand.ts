@@ -229,45 +229,10 @@ export function muskelzustaende(
 // `[read]` **Das ist ein KATALOGbefund, kein Erholungswert** — er
 // wird gemeldet, nicht mit 100 % zugedeckt.
 
-/** Warum ein Muskel den Wert hat, den er hat. */
-export type Herkunft = 'gerechnet' | 'unbelastet' | 'nicht-im-katalog'
-
-/**
- * Der Zustand EINES Muskels, einschliesslich der Faelle ohne Satz.
- *
- * `[read]` **`zustand` ist `null`, wo nie belastet wurde** — es
- * gibt keine Sitzung, auf die `hours`/`sets`/`lastSession` zeigen
- * koennten. **Die Herkunft sagt, warum.**
- */
-export type MuskelLage = {
-  herkunft: Herkunft
-  zustand: Muskelzustand | null
-}
-
-/**
- * Je Muskel: gerechnet, unbelastet oder gar nicht im Katalog.
- *
- * `[read]` **Reine Rechnung, keine Importe** — dieselbe Auflage wie
- * `muskelzustaende` (die `'use client'`-Grenze, G-430).
- *
- * `imKatalog` ist die Menge der `muscle_group_id`, die ueberhaupt
- * in `exercise_muscles` vorkommen. **Sie wird hereingereicht, nicht
- * hier gelesen** — sonst waere die Funktion nicht pruefbar.
- */
-export function muskelLage(
-  muskelId: string,
-  zustaende: Record<string, Muskelzustand>,
-  imKatalog: ReadonlySet<string>,
-): MuskelLage {
-  const st = zustaende[muskelId]
-  if (st) return { herkunft: 'gerechnet', zustand: st }
-  // `[read]` **Die Reihenfolge ist nicht beliebig:** wer Saetze hat,
-  // IST im Katalog — die Katalogfrage stellt sich erst danach.
-  if (!imKatalog.has(muskelId)) {
-    return { herkunft: 'nicht-im-katalog', zustand: null }
-  }
-  return { herkunft: 'unbelastet', zustand: null }
-}
+// `[cmd]` **G-446 hat `Herkunft`, `MuskelLage` und `muskelLage`
+// hier abgeloest** — sie stehen weiter unten, jetzt mit `geliehen`
+// und `verdichtet`. `[read]` **Der Grund oben gilt unveraendert**,
+// die Entscheidung ist nur um zwei Faelle reicher.
 
 /**
  * Welche Muskelgruppen ueberhaupt von einer Uebung getroffen werden.
@@ -289,6 +254,215 @@ export function katalogMuskeln(
     if (gesehen[z.muscle_group_id]) continue
     gesehen[z.muscle_group_id] = true
     aus.push(z.muscle_group_id)
+  }
+  return aus
+}
+
+// ══ G-446: die Vererbung laeuft in BEIDE Richtungen ═════════════
+//
+// **Tom, 2026-09-13:** *„schau zuerst selber, was die liste
+// betrifft, vorallem child vom triceps."*
+//
+// `[read]` **Drei Widersprueche, ein gemeinsamer Nenner: ein
+// Elternteil weiss nicht, was seine Kinder tun.**
+//
+// `[cmd]` **Gemessen 2026-09-13, `training`-Schema:**
+//
+//     Triceps          309 Zuordnungen, 109 Saetze
+//       die drei Koepfe  0 Zuordnungen   -> zeigten „--"
+//     Lower Back         0 Zuordnungen,   0 Saetze
+//       erector spinae 204 Zuordnungen,  77 Saetze
+//                                        -> lieh vom Elternteil OHNE Wert
+//     Chest              1 Zuordnung,     0 Saetze
+//       Pectoralis Major 211 Zuordnungen, 109 Saetze
+//                                        -> Elternteil „unbelastet"
+//
+// ══ DIE REIHENFOLGE ═════════════════════════════════════════════
+//
+//     1  eigene Saetze?          -> rechnen
+//     2  Elternteil hat Saetze?  -> leihen        (nach unten)
+//     3  Kinder haben Saetze?    -> verdichten    (nach oben, NEU)
+//     4  weder noch              -> Marke
+//
+// `[read]` **Schritt 3 fehlte, und Schritt 4 wurde zu frueh
+// erreicht.**
+//
+// ══ WIE VERDICHTET WIRD — UND WARUM SO ══════════════════════════
+//
+// `[cmd]` **Der Auftrag gibt keine Formel vor.** `[cmd]` **Gemessen,
+// welche Eltern ueberhaupt betroffen sind:**
+//
+//     Chest       1 gemessenes Kind  (Pectoralis Major)
+//     Lower Back  1 gemessenes Kind  (erector spinae)
+//     Glutes / Hamstrings / Adductors / Calves
+//                 0 gemessene Kinder -> bleiben unbelastet
+//
+// `[read]` **Es ist der SCHNITT ueber die gemessenen Kinder.**
+//
+// **Warum nicht das Maximum oder das Minimum:** `[cmd]` **Tom hat
+// die Frage fuer die Gruppenzeile schon entschieden** (G-436) —
+// *„dem Total/Anzahl zusammenfassender Muskeln die Farbe"*.
+// `[read]` **Dieselbe Grosse an derselben Stelle darf nicht zwei
+// Rechenarten haben** — sonst zeigte `Ø` etwas anderes als der
+// Wert daneben.
+//
+// **Warum nicht die Summe:** `[read]` **Erholung ist ein Prozentsatz,
+// keine Menge** — zwei Kinder zu 100 % ergeben nicht 200 %.
+//
+// `[read]` **Und der Schnitt zaehlt NUR gemessene Kinder** — ein
+// Kind, das selbst geliehen oder verdichtet hat, zieht ihn nicht
+// mit (sonst mittelte man einen Wert gegen sich selbst, die
+// Auflage aus G-438).
+
+/** Woher der Wert eines Muskels stammt. */
+export type Herkunft =
+  | 'gerechnet'
+  | 'geliehen'
+  | 'verdichtet'
+  | 'unbelastet'
+  | 'nicht-im-katalog'
+
+/**
+ * Der Zustand EINES Muskels, einschliesslich der Faelle ohne Satz.
+ *
+ * `[read]` **`zustand` ist `null`, wo nie belastet wurde** — es
+ * gibt keine Sitzung, auf die `hours`/`sets`/`lastSession` zeigen
+ * koennten. **Die Herkunft sagt, warum.**
+ */
+export type MuskelLage = {
+  herkunft: Herkunft
+  zustand: Muskelzustand | null
+  /** Bei `geliehen`: von wem. Bei `verdichtet`: aus wievielen. */
+  quelle?: string
+  /** Bei `verdichtet`: die Zahl der eingegangenen Kinder. */
+  ausKindern?: number
+}
+
+/** Die Verwandtschaft eines Muskels — Eltern und direkte Kinder. */
+export type Sippe = {
+  elternId: string | null
+  kinderIds: string[]
+}
+
+/**
+ * Je Muskel: rechnen, leihen, verdichten — oder die Marke.
+ *
+ * `[read]` **Reine Rechnung, keine Importe** — dieselbe Auflage wie
+ * `muskelzustaende` (die `'use client'`-Grenze, G-430).
+ *
+ * `imKatalog` ist die Menge der `muscle_group_id`, die ueberhaupt
+ * in `exercise_muscles` vorkommen. **Sie wird hereingereicht, nicht
+ * hier gelesen** — sonst waere die Funktion nicht pruefbar.
+ */
+export function muskelLage(
+  muskelId: string,
+  zustaende: Record<string, Muskelzustand>,
+  imKatalog: ReadonlySet<string>,
+  sippe?: Sippe,
+  /** Nur fuer die Meldung: Id -> Name. */
+  namen?: Record<string, string>,
+): MuskelLage {
+  // ── 1 · eigene Saetze schlagen alles ──────────────────────────
+  const st = zustaende[muskelId]
+  if (st) return { herkunft: 'gerechnet', zustand: st }
+
+  // ── 2 · nach unten: vom Elternteil leihen ─────────────────────
+  //
+  // `[cmd]` **G-446/Befund 2: NUR wenn der Elternteil wirklich
+  // einen Wert HAT.** `[read]` **`Lower Back` hatte keinen, und
+  // `erector spinae` lieh trotzdem von ihm** — ein Wert aus dem
+  // Nichts.
+  const elternZustand = sippe?.elternId
+    ? zustaende[sippe.elternId] : undefined
+  if (elternZustand) {
+    return {
+      herkunft: 'geliehen',
+      zustand: elternZustand,
+      quelle: sippe?.elternId ? namen?.[sippe.elternId] : undefined,
+    }
+  }
+
+  // ── 3 · nach oben: aus den Kindern verdichten ─────────────────
+  //
+  // `[cmd]` **G-446/Befund 3: `Chest` galt als unbelastet, waehrend
+  // `Pectoralis Major` darunter 109 Saetze trug.**
+  const kinderZustaende = (sippe?.kinderIds ?? [])
+    .map(k => zustaende[k])
+    .filter((z): z is Muskelzustand => z != null)
+  if (kinderZustaende.length > 0) {
+    return {
+      herkunft: 'verdichtet',
+      // `[read]` **Der juengste Reiz zaehlt** — wer ein Kind vor
+      // zwei Stunden trainiert hat, ist als Gruppe nicht erholt,
+      // auch wenn ein anderes Kind seit Wochen ruht.
+      // `[cmd]` **Die Saetze werden SUMMIERT** — sie sind eine
+      // Menge, anders als die Erholung selbst.
+      zustand: {
+        hours: Math.min(...kinderZustaende.map(z => z.hours)),
+        sets: kinderZustaende.reduce((s, z) => s + z.sets, 0),
+        lastSession: juengste(kinderZustaende).lastSession,
+        datum: juengste(kinderZustaende).datum,
+        rollen: {
+          primary: kinderZustaende.reduce((s, z) => s + z.rollen.primary, 0),
+          secondary: kinderZustaende.reduce((s, z) => s + z.rollen.secondary, 0),
+        },
+      },
+      ausKindern: kinderZustaende.length,
+    }
+  }
+
+  // ── 4 · die Marke ─────────────────────────────────────────────
+  //
+  // `[cmd]` **Der Auftrag sagt es woertlich:** *„keine Uebung trifft
+  // ihn"* **nur noch, wenn WEDER Muskel NOCH Eltern NOCH Kinder
+  // getroffen werden.**
+  //
+  // `[cmd]` **Am Bildschirm gefunden, nachdem Schritt 3 stand:**
+  //
+  //     Calves                      100%  unbelastet
+  //       Soleus                    100%  unbelastet
+  //       Gastrocnemius Lat. Head     --  keine Uebung trifft ihn
+  //
+  // `[read]` **Alle drei sind gleich untrainiert** — `Calves` hat
+  // 199 Zuordnungen, aber NULL Saetze. **Die Koepfe standen nur
+  // deshalb anders da, weil sie selbst nicht im Katalog stehen.**
+  //
+  // `[read]` **Die Katalogfrage ist eine Frage an die SIPPE, nicht
+  // an den einzelnen Knoten** — wer erreichbare Verwandte hat, ist
+  // erreichbar.
+  const sippeImKatalog = imKatalog.has(muskelId)
+    || (sippe?.elternId != null && imKatalog.has(sippe.elternId))
+    || (sippe?.kinderIds ?? []).some(k => imKatalog.has(k))
+  if (!sippeImKatalog) {
+    return { herkunft: 'nicht-im-katalog', zustand: null }
+  }
+  return { herkunft: 'unbelastet', zustand: null }
+}
+
+/** Der Zustand mit den wenigsten Stunden — der juengste Reiz. */
+function juengste(liste: Muskelzustand[]): Muskelzustand {
+  let aus = liste[0]
+  for (const z of liste) if (z.hours < aus.hours) aus = z
+  return aus
+}
+
+/**
+ * Die Sippe je Muskel aus der Knotenliste — Eltern und Kinder.
+ *
+ * `[read]` **Aus denselben Zeilen, die der Baum ohnehin hat** —
+ * keine zweite Abfrage.
+ */
+export function sippen(
+  knoten: Array<{ id: string; parent_id: string | null }>,
+): Record<string, Sippe> {
+  // `[read]` **ZWEI Durchlaeufe, nicht einer** — im Einzeldurchlauf
+  // haengt das Ergebnis an der Reihenfolge der Zeilen: ein Knoten,
+  // der erst als ELTERNTEIL auftaucht, bekaeme `elternId: null` und
+  // behielte es, wenn seine eigene Zeile spaeter kaeme.
+  const aus: Record<string, Sippe> = {}
+  for (const k of knoten) aus[k.id] = { elternId: k.parent_id, kinderIds: [] }
+  for (const k of knoten) {
+    if (k.parent_id && aus[k.parent_id]) aus[k.parent_id].kinderIds.push(k.id)
   }
   return aus
 }

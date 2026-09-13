@@ -44,9 +44,11 @@ import {
 import { EBENEN } from '../../../lib/koerper/ebenen'
 // `[cmd]` **G-438: die fehlende Uebersetzung** —
 // motor.ts-Schluessel -> muscle_groups-Name.
-import {
-  wertKommtVonGruppe, SCHLUESSEL_ZU_GRUPPE,
-} from '../../../lib/koerper/schluessel-gruppe'
+// `[cmd]` **G-446: `wertKommtVonGruppe` ist hier raus** — die
+// Herkunft kommt jetzt aus der SIPPE (`muskelLage`), nicht aus der
+// Kartenflaeche. `[read]` **`SCHLUESSEL_ZU_GRUPPE` bleibt** — die
+// KARTE braucht weiter den Weg vom Kuerzel zur Muskelgruppe.
+import { SCHLUESSEL_ZU_GRUPPE } from '../../../lib/koerper/schluessel-gruppe'
 // `[cmd]` **G-440: der gerechnete Zustand je Muskel.**
 // `[read]` **Nur der TYP aus dem Leseweg** — ein Wert-Import
 // zoege `next/headers` mit (G-430).
@@ -54,7 +56,7 @@ import type { MuskelzustandStand } from '../../../lib/training/muskelzustand-rea
 // `[cmd]` **G-445: `muskelLage` kommt aus `muskelzustand.ts`, NICHT
 // aus `-read.ts`** — die Rechendatei ist importfrei, der Leseweg
 // zoege `next/headers` mit (dieselbe Falle wie oben, G-430).
-import { muskelLage } from '../../../lib/training/muskelzustand'
+import { muskelLage, sippen } from '../../../lib/training/muskelzustand'
 
 /**
  * Das Etikett einer Kachel — und was daran noch geschaetzt ist.
@@ -158,6 +160,17 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
     () => new Set(muskelzustand?.imKatalog ?? []),
     [muskelzustand])
 
+  // `[cmd]` **G-446: Eltern und Kinder je Muskel** — aus denselben
+  // Knoten, aus denen die Liste gebaut wird. `[read]` **Ohne sie
+  // kann `muskelLage` weder leihen noch verdichten.**
+  const sippschaft = React.useMemo(
+    () => sippen(muskelbaum?.knoten ?? []), [muskelbaum])
+  const namenNachId = React.useMemo(() => {
+    const aus: Record<string, string> = {}
+    for (const k of muskelbaum?.knoten ?? []) aus[k.id] = k.name
+    return aus
+  }, [muskelbaum])
+
   // ══ G-440: die KARTE rechnet aus denselben Daten wie die Liste ═
   //
   // **Tom, 2026-09-13:** *„es korrespondiert von der grafik nicht
@@ -185,8 +198,12 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
       // **die Flaeche blieb grau.** `[read]` **Grau hiess
       // „unbekannt", gemeint war „unbelastet"** — zwei
       // verschiedene Sachen.
+      // `[cmd]` **G-446: dieselbe Sippe wie die Liste** — sonst
+      // faerbte die Karte wieder anders, als die Liste rechnet
+      // (der Befund aus G-440).
       const lage = id
-        ? muskelLage(id, muskelzustand?.zustaende ?? {}, katalog)
+        ? muskelLage(id, muskelzustand?.zustaende ?? {}, katalog,
+            sippschaft[id], namenNachId)
         : { herkunft: 'nicht-im-katalog' as const, zustand: null }
       // `[read]` **Nicht im Katalog bleibt grau** — ihn kann keine
       // Uebung treffen, „erholt" waere dort eine Aussage ueber
@@ -213,7 +230,8 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
       return { slug, ...(st ?? {}), soreness: kater, ...calc,
         herkunft: lage.herkunft }
     }).sort((a, b) => (a.value ?? 999) - (b.value ?? 999))
-  }, [echterKater, echteSchlafguete, muskelbaum, muskelzustand, katalog])
+  }, [echterKater, echteSchlafguete, muskelbaum, muskelzustand, katalog,
+      sippschaft, namenNachId])
 
   // ══ G-440: das Etikett sagt, was gemessen ist ════════════════
   const etikett = datenEtikett(muskelzustand?.deckung, !!echterKater)
@@ -309,8 +327,14 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
             // die Zeile zeigte „--  kein Volumen zugeordnet".
             // `[read]` **Ein nie trainierter Muskel ist erholt, nicht
             // unbekannt** (Tom, G-445).
+            // ══ G-446: die Sippe entscheidet mit ════════════════
+            //
+            // `[cmd]` **Ohne sie kannte `muskelLage` nur den Muskel
+            // selbst** — und die drei Trizepskoepfe zeigten „--",
+            // waehrend ihr Elternteil 109 Saetze trug.
             const lage = id
-              ? muskelLage(id, muskelzustand?.zustaende ?? {}, katalog)
+              ? muskelLage(id, muskelzustand?.zustaende ?? {}, katalog,
+                  sippschaft[id], namenNachId)
               : { herkunft: 'nicht-im-katalog' as const, zustand: null }
             if (lage.herkunft === 'nicht-im-katalog') return null
             const st = lage.zustand
@@ -335,8 +359,22 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
             // gezeichnete Muskel nicht die Gruppe IST, an der die
             // Messung haengt, ist der Wert geliehen** — und die
             // Zeile sagt es dazu.
-            const gruppe = wertKommtVonGruppe(a.name, slug)
-            return gruppe ? { wert, vonGruppe: gruppe } : wert
+            // ══ G-446: die HERKUNFT sagt es, nicht der Slug ═════
+            //
+            // `[cmd]` **Hier stand `wertKommtVonGruppe(a.name,
+            // slug)`** — **eine Vermutung aus der KARTENflaeche.**
+            // `[read]` **Sie traf nur die Muskeln, die gezeichnet
+            // sind** — die drei Trizepskoepfe haben zwar eine
+            // Flaeche, aber `Vastus Medialis` lieh trotzdem
+            // nicht, weil die Zuordnung ueber den Slug lief und
+            // nicht ueber den BAUM.
+            //
+            // `[read]` **Jetzt entscheidet die Verwandtschaft** —
+            // dieselbe Quelle, aus der die Liste gebaut wird.
+            if (lage.herkunft === 'geliehen') {
+              return { wert, vonGruppe: lage.quelle ?? 'der Gruppe' }
+            }
+            return wert
           })
 
           function zeile(a: AstMitWert): React.ReactNode {
@@ -347,7 +385,8 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
             // wer nachsieht, muss erkennen koennen, ob ein Wert
             // gerechnet oder unbelastet ist.
             const lage = id
-              ? muskelLage(id, muskelzustand?.zustaende ?? {}, katalog)
+              ? muskelLage(id, muskelzustand?.zustaende ?? {}, katalog,
+                  sippschaft[id], namenNachId)
               : { herkunft: 'nicht-im-katalog' as const, zustand: null }
             const st = lage.zustand
             // `[read]` **Der Kater kommt aus `recovery.checkins`** —
@@ -437,6 +476,19 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
                       {a.vonGruppe ? (
                         <span className="v2-dim" style={{ fontSize: 9.5 }}>
                           Wert von {a.vonGruppe}
+                        </span>
+                      ) : lage.herkunft === 'verdichtet' && st ? (
+                        // ══ G-446: verdichtet ist KEINE eigene Messung
+                        //
+                        // `[read]` **Ohne diesen Zweig saehe die Zeile
+                        // aus wie gemessen** — `st` ist ja gefuellt.
+                        // **Aber die Stunden und Saetze stammen aus den
+                        // KINDERN**, und das gehoert dazugesagt (E-72),
+                        // genau wie „Wert von Triceps" beim Leihen.
+                        <span className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>
+                          aus {lage.ausKindern} Kind
+                          {lage.ausKindern === 1 ? '' : 'ern'} verdichtet
+                          {' · '}{st.hours} h{' · '}{st.sets} Sätze
                         </span>
                       ) : st ? (
                         <span className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>
