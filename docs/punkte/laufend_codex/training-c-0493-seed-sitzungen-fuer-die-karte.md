@@ -140,3 +140,58 @@ ueberschreiben Toms gespeicherte Einstellungen.**
     A6  nur test-user, dev und tom.seed unveraendert.
     A7  Sicherung, Vollkette, Punktelauf.
 
+## Berichtigt 2026-09-08 — meine Behauptung war falsch
+
+Codex: *,,061_rollen_admin.sql legt dev@lumeos.app NICHT an;
+dort steht nur ein Kommentar dazu."*
+
+`[cmd]` **Selbst nachgemessen:**
+
+    061_rollen_admin.sql, Zeile 154 und 164:
+      --    WHERE email = 'dev@lumeos.app';
+    INSERT INTO auth.users:  NEIN
+
+`[read]` **Zwei auskommentierte Zeilen** ? **ich habe
+`git grep -l` gelesen und daraus geschlossen, dass der Schritt
+den Nutzer anlegt.**
+
+`[read]` **Dieselbe Falle wie bei `vollstaendigkeit.mjs`:
+Treffer gezaehlt statt Sachen gemessen.**
+
+## Und der zweite Befund ist schwerer
+
+`[cmd]` **`eigenes-konto-fuellen.sql:115`:**
+
+    DELETE FROM training.workout_sessions
+    WHERE user_id = :'ziel'::uuid;
+
+`[read]` **Der Testdatenpfad LOESCHT alle Trainingssitzungen von
+`dev`, bevor er sie neu schreibt.**
+
+`[read]` **Wer davor schreibt, verliert seine Daten** ? **das
+ist die Reihenfolge, die zaehlt.**
+
+`[cmd]` **Und `eigenes-konto-fuellen.sql` ist KEIN nummerierter
+Kettenschritt** ? **es liegt unter `_testdaten/`.**
+
+## Was das heisst
+
+`[read]` **C-493 gehoert NACH `eigenes-konto-fuellen.sql`** ?
+**nicht in die nummerierte Kette.**
+
+`[cmd]` **Miss, wie `testdaten-einspielen.ts` seine Schritte
+ordnet** ? **`testdaten-register.json` hat 24 Eintraege.**
+
+`[read]` **Dort gehoert C-493 hin, als weiterer Eintrag.**
+
+## Die Abnahmebedingung, berichtigt
+
+`[read]` **NICHT: *,,beim Frischaufbau der Kette entstehen die
+Sitzungen"*** ? **das kann nicht gehen, der Nutzer existiert
+dort nicht.**
+
+`[read]` **SONDERN: nach `testdaten-einspielen.ts` stehen sie
+da, und ein zweiter Lauf loescht sie nicht.**
+
+`[cmd]` **G-420 hat gemessen, dass Kettenlaeufe Testdaten
+zuruecksetzen** ? **das gilt hier doppelt.**
