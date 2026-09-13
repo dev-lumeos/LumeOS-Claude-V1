@@ -10,7 +10,7 @@ entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
 erledigt: 2026-09-08
-commit: OFFEN
+commit: 9b8cd692
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/tab-injektionen.tsx
