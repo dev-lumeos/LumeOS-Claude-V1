@@ -190,5 +190,13 @@
     "date": "(Anker = quelle_max - 75 Tage, 30 Tage rueckwaerts)",
     "case": "C-236: das Nachweiskonto traegt eigene Daten",
     "expected": "30 Check-ins + 30 Scores, 6 Sitzungen mit 36 Saetzen, 1 Stack mit 2 Positionen und 24 Einnahmen — genug fuer einen Nachweis, nicht so viel wie dev. Weiterhin 0 meal_plans, 0 user_medications, keine Coach-Beziehung (Zeilenschutz-Pruefungen erwarten das)."
+  },
+  {
+    "user": "Dev-Demokonto",
+    "email": "dev@lumeos.app",
+    "user_id": "(live: per E-Mail aufgeloest)",
+    "date": "2026-09-03 bis 2026-09-13",
+    "case": "C-493: Kartenlasten auf zehn nahen Tagen",
+    "expected": "Nach testdaten-einspielen.ts, eigenes-konto-fuellen.sql und 493_seed_sitzungen_karte.sql hat dev zehn zusaetzliche C-493-Sitzungen mit 132 Saetzen, RIR 0-5 und RPE 6-10. Der Folgeschritt ist idempotent und laesst test-user sowie tom.seed unveraendert."
   }
 ]
