@@ -44,14 +44,81 @@ import {
 import { EBENEN } from '../../../lib/koerper/ebenen'
 // `[cmd]` **G-438: die fehlende Uebersetzung** —
 // motor.ts-Schluessel -> muscle_groups-Name.
-import { wertKommtVonGruppe } from '../../../lib/koerper/schluessel-gruppe'
+import {
+  wertKommtVonGruppe, SCHLUESSEL_ZU_GRUPPE,
+} from '../../../lib/koerper/schluessel-gruppe'
+// `[cmd]` **G-440: der gerechnete Zustand je Muskel.**
+// `[read]` **Nur der TYP aus dem Leseweg** — ein Wert-Import
+// zoege `next/headers` mit (G-430).
+import type { MuskelzustandStand } from '../../../lib/training/muskelzustand-read'
+
+/**
+ * Das Etikett einer Kachel — und was daran noch geschaetzt ist.
+ *
+ * **Tom, 2026-09-13:** *„oben steht echte daten … das ist alles
+ * dreck was hier geliefert wird und verarschend gegenueber mich."*
+ *
+ * `[cmd]` **Das alte Etikett haengte allein am Muskelkater** —
+ * `echterKater ? 'echte Daten' : undefined`. **Stunden und Saetze
+ * kamen aus 18 festen Mockup-Zeilen, und die Kachel behauptete
+ * trotzdem „echte Daten".**
+ *
+ * `[read]` **Solange ein Teil geschaetzt ist, steht das dran.**
+ * `[cmd]` **C-466 macht es vor:** `unmapped_taken_log_count` zaehlt,
+ * was fehlt, statt es zu verschweigen.
+ */
+function datenEtikett(
+  deckung: { gemessen: number; gesamt: number; rollenUngewichtet: boolean } | undefined,
+  katerEcht: boolean,
+): { marke: string; ton: 'pos' | 'warn'; erklaerung: string } {
+  if (!deckung || deckung.gemessen === 0) {
+    return {
+      marke: 'keine Trainingsdaten',
+      ton: 'warn',
+      erklaerung: 'Kein Satz in `training.workout_sets` trifft einen '
+        + 'dieser Muskeln — deshalb steht überall „--".',
+    }
+  }
+  const teile: string[] = []
+  // `[read]` **Jede Einschraenkung wird BENANNT**, nicht gezaehlt
+  // und weggelassen.
+  teile.push(`${deckung.gemessen} von ${deckung.gesamt} Muskeln `
+    + 'aus workout_sets gerechnet')
+  if (deckung.rollenUngewichtet) {
+    teile.push('ein Satz zählt für jeden zugeordneten Muskel gleich '
+      + '(primary wie secondary — C-487)')
+  }
+  if (!katerEcht) {
+    teile.push('kein Check-in erfasst, Muskelkater fehlt')
+  }
+  teile.push('Schlaf und Ernährung aus dem Entwurf')
+
+  return {
+    // `[read]` **„teilweise gemessen" ist die ehrliche Marke** —
+    // nicht „echte Daten", solange die Formel Entwurfszahlen
+    // bekommt.
+    marke: 'teilweise gemessen',
+    ton: 'warn',
+    erklaerung: teile.join(' · '),
+  }
+}
 
 // ═══ MUSCLE MAP ══════════════════════════════════════════════════
 // [cmd] module-recovery-v2.jsx:378-443.
-export function RecMuscleMap({ stand, muskelbaum }: {
+export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
   stand?: CheckinStand | null
   /** G-435/A6: die Hierarchie fuer `Per-muscle detail`. */
   muskelbaum?: MuskelbaumStand
+  /**
+   * G-440: der GERECHNETE Trainingszustand je Muskel.
+   *
+   * `[cmd]` **Hier stand `MUSCLE_STATE`** — 18 feste Zeilen aus
+   * `module-recovery-engine.jsx:135-154`, mit `Push B · Wed` als
+   * „letzter Sitzung". **Tom, 2026-09-13:** *„mir wird irgendwas
+   * serviert aus den haenden gezogen und als echte daten
+   * verkauft."*
+   */
+  muskelzustand?: MuskelzustandStand
 }) {
   const { open } = useRecovery()
 
@@ -80,21 +147,44 @@ export function RecMuscleMap({ stand, muskelbaum }: {
   const echterKater = neuster?.soreness ?? null
   const echteSchlafguete = neuster?.sleep_quality ?? null
 
-  const rows = React.useMemo(() => MUSCLE_GROUPS_BODYMAP.map(slug => {
-    const st = MUSCLE_STATE[slug]
-    if (!st) return { slug, value: null as number | null }
-    // `[read]` **Der erfasste Wert schlaegt den Entwurfswert** — und
-    // `0` ist eine Angabe, kein fehlender Wert (`??`, nicht `||`).
-    const kater = echterKater?.[slug] ?? st.soreness
-    const guete = echteSchlafguete ?? CHECKIN.sleep_quality
-    const calc = calcMuscleRecovery({
-      hours: st.hours, sets: st.sets, sleepQuality: guete,
-      proteinPct: NUTRITION_INPUT.proteinPct, caloriePct: NUTRITION_INPUT.caloriePct,
-      soreness: kater,
-    })
-    return { slug, ...st, soreness: kater, ...calc }
-  }).sort((a, b) => (a.value ?? 999) - (b.value ?? 999)),
-  [echterKater, echteSchlafguete])
+  // ══ G-440: die KARTE rechnet aus denselben Daten wie die Liste ═
+  //
+  // **Tom, 2026-09-13:** *„es korrespondiert von der grafik nicht
+  // in die liste."*
+  //
+  // `[cmd]` **Hier stand `MUSCLE_STATE[slug]`** — die Karte faerbte
+  // aus 18 festen Mockup-Zeilen, waehrend die Liste daneben aus
+  // `workout_sets` rechnete. **Zwei Quellen, ein Bild.**
+  //
+  // `[cmd]` **Der Weg vom Kuerzel zum Muskel steht in G-438:**
+  // `SCHLUESSEL_ZU_GRUPPE` nennt die Muskelgruppe, an der die
+  // Messung haengt.
+  const rows = React.useMemo(() => {
+    const nachName = new Map(
+      (muskelbaum?.knoten ?? []).map(k => [k.name.toLowerCase(), k.id]))
+    return MUSCLE_GROUPS_BODYMAP.map(slug => {
+      const gruppe = SCHLUESSEL_ZU_GRUPPE[slug]
+      const id = gruppe ? nachName.get(gruppe.toLowerCase()) : undefined
+      const st = id ? muskelzustand?.zustaende[id] : undefined
+      // `[read]` **Kein Satz auf diesen Muskel heisst KEIN Wert** —
+      // die Flaeche bleibt grau, statt eine Zahl zu erfinden.
+      if (!st) return { slug, value: null as number | null }
+      // `[read]` **Der Kater kommt aus dem Check-in**; ohne
+      // Check-in ist er `0` — eine Angabe, kein geratener Wert.
+      const kater = echterKater?.[slug] ?? 0
+      const guete = echteSchlafguete ?? CHECKIN.sleep_quality
+      const calc = calcMuscleRecovery({
+        hours: st.hours, sets: st.sets, sleepQuality: guete,
+        proteinPct: NUTRITION_INPUT.proteinPct,
+        caloriePct: NUTRITION_INPUT.caloriePct,
+        soreness: kater,
+      })
+      return { slug, ...st, soreness: kater, ...calc }
+    }).sort((a, b) => (a.value ?? 999) - (b.value ?? 999))
+  }, [echterKater, echteSchlafguete, muskelbaum, muskelzustand])
+
+  // ══ G-440: das Etikett sagt, was gemessen ist ════════════════
+  const etikett = datenEtikett(muskelzustand?.deckung, !!echterKater)
 
   const values = Object.fromEntries(rows.map(r => [r.slug, r.value]))
 
@@ -102,10 +192,8 @@ export function RecMuscleMap({ stand, muskelbaum }: {
     <div className="v2-rec-grid-1135">
       <Card
         title="Muscle recovery"
-        sub={echterKater
-          ? `18 Gruppen · Muskelkater aus dem Check-in ${neuster?.entry_date ?? ''}`
-          : '18 groups · click for the breakdown'}
-        actions={echterKater ? <Pill variant="pos">echte Daten</Pill> : undefined}
+        sub={etikett.erklaerung}
+        actions={<Pill variant={etikett.ton}>{etikett.marke}</Pill>}
       >
         {/* G-26: die anatomische Karte. Sie bringt ihre Legende mit —
             die drei Zeilen, die hier standen, sind entfallen. */}
@@ -140,10 +228,8 @@ export function RecMuscleMap({ stand, muskelbaum }: {
           vier Ebenen. **Das ist lang, aber vollstaendig.** */}
       <Card
         title="Per-muscle detail"
-        sub={echterKater
-          ? 'Hierarchie · Muskelkater erfasst, Volumen aus dem Entwurf'
-          : 'Hierarchie · Gruppe, Schnitt und schwaechstes Glied'}
-        actions={echterKater ? <Pill variant="pos">echte Daten</Pill> : undefined}
+        sub={etikett.erklaerung}
+        actions={<Pill variant={etikett.ton}>{etikett.marke}</Pill>}
       >
         {(() => {
           const knoten = muskelbaum?.knoten ?? []
@@ -174,11 +260,21 @@ export function RecMuscleMap({ stand, muskelbaum }: {
           // `[read]` **Ein Muskel ohne Volumenzuordnung KANN keinen
           // Wert haben** — das ist C-487, nicht mein Fehler.
           const werte = mitWerten(baueBaum(knoten, zeigt), a => {
-            if (!a.flaeche) return null
-            const slug = KARTE_ZU_RECOVERY[a.flaeche]
-            const st = slug ? MUSCLE_STATE[slug] : null
+            // ══ G-440: der Zustand kommt aus `workout_sets` ══════
+            //
+            // `[cmd]` **Hier stand `MUSCLE_STATE[slug]`** — eine von
+            // 18 festen Zeilen. **Jetzt je `muscle_group_id` aus
+            // dem Trainingstagebuch gerechnet.**
+            //
+            // `[read]` **Kein Eintrag heisst KEIN Wert** — nicht 0.
+            // **Wo kein Satz auf einen Muskel zeigt, hat er
+            // keinen.**
+            const id = knoten.find(
+              k => k.name.toLowerCase() === a.name.toLowerCase())?.id
+            const st = id ? muskelzustand?.zustaende[id] : undefined
             if (!st) return null
-            const kater = echterKater?.[slug] ?? st.soreness
+            const slug = a.flaeche ? KARTE_ZU_RECOVERY[a.flaeche] : null
+            const kater = slug ? echterKater?.[slug] ?? 0 : 0
             const guete = echteSchlafguete ?? CHECKIN.sleep_quality
             const wert = calcMuscleRecovery({
               hours: st.hours, sets: st.sets, sleepQuality: guete,
@@ -202,9 +298,12 @@ export function RecMuscleMap({ stand, muskelbaum }: {
 
           function zeile(a: AstMitWert): React.ReactNode {
             const slug = a.flaeche ? KARTE_ZU_RECOVERY[a.flaeche] : null
-            const st = slug ? MUSCLE_STATE[slug] : null
-            const kater = slug && echterKater ? echterKater[slug] : undefined
-            const sore = kater ?? st?.soreness
+            const id = knoten.find(
+              k => k.name.toLowerCase() === a.name.toLowerCase())?.id
+            const st = id ? muskelzustand?.zustaende[id] : undefined
+            // `[read]` **Der Kater kommt aus `recovery.checkins`** —
+            // die EINZIGE Groesse, die schon vorher echt war.
+            const sore = slug && echterKater ? echterKater[slug] : undefined
             const farbe = a.wert == null ? 'var(--fg-dim)'
               : a.wert >= 80 ? 'var(--pos)'
               : a.wert >= 50 ? 'var(--warn)' : 'var(--neg)'
@@ -293,6 +392,8 @@ export function RecMuscleMap({ stand, muskelbaum }: {
                       ) : st && (
                         <span className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>
                           {sore != null ? `${sore}/3 · ` : ''}{st.hours} h
+                          {' · '}{st.sets} Sätze
+                          {' · '}{st.lastSession}
                         </span>
                       )}
                     </>

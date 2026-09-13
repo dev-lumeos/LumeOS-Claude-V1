@@ -32,6 +32,12 @@ import { ladeHierarchie } from '../../../lib/koerper/hierarchie-read'
 // G-432/A6: der ganze Muskelbaum — fuer die vollstaendige Hierarchie
 // im Per-muscle-Detail, Luecken eingeschlossen.
 import { ladeMuskelbaum } from '../../../lib/koerper/muskelbaum-read'
+// ══ G-440: der Trainingszustand je Muskel ════════════════════════
+//
+// `[cmd]` **`MUSCLE_STATE` waren 18 FESTE Zeilen aus dem Mockup**
+// (`module-recovery-engine.jsx:135-154`). **Jetzt gerechnet aus
+// `workout_sets` x `exercise_muscles`.**
+import { ladeMuskelzustand } from '../../../lib/training/muskelzustand-read'
 import './recovery.css'
 
 export const metadata: Metadata = {
@@ -57,7 +63,8 @@ export default async function V2RecoveryPage({
   // Drei getrennte Abfragen, drei getrennte Ergebnisse: faellt eine
   // aus, bleiben die uebrigen gueltig. Dieselbe Linie wie im
   // Tagebuch.
-  const [checkins, scores, modalitaeten, hierarchie, muskelbaum] = await Promise.all([
+  const [checkins, scores, modalitaeten, hierarchie, muskelbaum,
+    muskelzustand] = await Promise.all([
     ladeCheckins(30, stichtag),
     ladeScores(180, stichtag),
     ladeModalitaeten(120, stichtag),
@@ -65,6 +72,9 @@ export default async function V2RecoveryPage({
     // Weg: faellt sie aus, bleiben die drei uebrigen gueltig.
     ladeHierarchie(),
     ladeMuskelbaum(),
+    // `[read]` **105 ist die Zahl der Muskelnamen** (gemessen
+    // 2026-09-13) — sie geht in den Deckungsbericht ein.
+    ladeMuskelzustand(105),
   ])
   return (
     <RecoveryAnsicht
@@ -73,6 +83,7 @@ export default async function V2RecoveryPage({
       modalitaeten={modalitaeten}
       hierarchie={hierarchie}
       muskelbaum={muskelbaum}
+      muskelzustand={muskelzustand}
     />
   )
 }

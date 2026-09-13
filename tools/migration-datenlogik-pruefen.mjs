@@ -10,6 +10,19 @@ const baselineTriggerException = {
   // Profil an. Das ist Strukturverhalten, kein Katalog-Backfill.
   requiredSql: 'INSERT INTO public.profiles (id)',
 }
+const structuralFunctionExceptions = [
+  baselineTriggerException,
+  {
+    file: '20260913001900_c489_produktname_name_en.sql',
+    functionName: 'supplements.create_supplier_product',
+    command: 'INSERT',
+    count: 4,
+    // C-489 benennt die Spalte eines bestehenden Service-Role-Schreibwegs
+    // um. Sein Funktionskoerper schreibt nur bei einem spaeteren RPC-Aufruf,
+    // nicht beim Einspielen der Migration, keine Katalogdaten.
+    requiredSql: 'INSERT INTO supplements.supplier_products(supplier_id,name_en',
+  },
+]
 // Im Funktionskoerper zaehlt nur der Anfang einer ausfuehrbaren SQL-Anweisung.
 // `FOR UPDATE` sperrt, schreibt aber nicht; ebenso ist `ON DELETE` Teil einer
 // Fremdschluesseldefinition. Beide duerfen keinen Befund erzeugen.
@@ -78,11 +91,13 @@ function commandsInDollarBlocks(sql, file) {
       .map((entry) => entry[1].toUpperCase())
     if (!commands.length) continue
 
-    const isNamedBaselineException = file === baselineTriggerException.file &&
-      new RegExp(`CREATE FUNCTION ${baselineTriggerException.functionName.replace('.', '\\.')}`, 'i').test(prefix) &&
-      commands.length === 1 && commands[0] === baselineTriggerException.command &&
-      sanitizedBody.includes(baselineTriggerException.requiredSql)
-    if (!isNamedBaselineException) blocks.push(...commands)
+    const structuralException = structuralFunctionExceptions.some((exception) =>
+      file === exception.file &&
+      new RegExp(`CREATE (OR REPLACE )?FUNCTION ${exception.functionName.replace('.', '\\.')}`, 'i').test(prefix) &&
+      commands.length === (exception.count ?? 1) &&
+      commands.every((command) => command === exception.command) &&
+      sanitizedBody.includes(exception.requiredSql))
+    if (!structuralException) blocks.push(...commands)
   }
   return blocks
 }

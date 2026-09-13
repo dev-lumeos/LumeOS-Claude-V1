@@ -56,6 +56,9 @@ import { RecoveryModale } from './modale'
 import type { HierarchieStand } from '../../../lib/koerper/hierarchie'
 // G-432: der Muskelbaum — der TYP aus der Rechnung, nicht aus dem Leseweg.
 import type { MuskelbaumStand } from '../../../lib/koerper/muskelbaum'
+// `[cmd]` **G-440: der TYP aus der Rechnung, nicht aus dem
+// Leseweg** — `ansicht.tsx` ist `'use client'` (G-430).
+import type { MuskelzustandStand } from '../../../lib/training/muskelzustand-read'
 // G-55: die erfassten Check-ins.
 import type { CheckinStand } from '../../../lib/recovery/checkin-read'
 // G-82: der Erholungswert kommt aus `recovery.scores`, nicht mehr aus
@@ -116,7 +119,7 @@ function tabs(muskelzahl: number, modalitaeten: number, otZahl: number): TabItem
 }
 
 export function RecoveryAnsicht({
-  checkins, scores, modalitaeten, hierarchie, muskelbaum,
+  checkins, scores, modalitaeten, hierarchie, muskelbaum, muskelzustand,
 }: {
   checkins?: CheckinStand
   scores?: ScoreStand
@@ -131,6 +134,8 @@ export function RecoveryAnsicht({
   hierarchie?: HierarchieStand
   /** G-432/A6: alle 95 Muskelgruppen, fuer die vollstaendige Hierarchie. */
   muskelbaum?: MuskelbaumStand
+  /** G-440: der gerechnete Trainingszustand je Muskel. */
+  muskelzustand?: MuskelzustandStand
 }) {
   // G-117: Tab in der Adresse — Drop-in aus lib/tab-url.
   const [tab, setTab] = useTabParam('today')
@@ -259,7 +264,8 @@ export function RecoveryAnsicht({
               **Tom:** *„da will ich parent und darunter childs
               sehen."* `[read]` **Er liegt hier schon bereit**, die
               Kachel bekam ihn nur nicht gereicht. */}
-          <RecMuscleMap stand={checkins} muskelbaum={muskelbaum} />
+          <RecMuscleMap stand={checkins} muskelbaum={muskelbaum}
+                        muskelzustand={muskelzustand} />
           <RecMuscleMapReferenz />
         </>
       )}
