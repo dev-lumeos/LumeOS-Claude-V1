@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 // Zwei Wahrheiten je Naehrstoff - Waechter statt Anbindung.
 //
-// G-250/G-261, 2026-08-29: goals.nutrition_targets traegt sechs
-// Naehrstoffspalten. Drei davon haben zusaetzlich eine wissenschaftliche
-// Referenz, und genau eine geht auseinander: F18:3CN3 ist gegen das
-// persoenliche Ziel gedeckt und gegen EFSA zu wenig.
+// G-250/G-261, 2026-08-29: goals.nutrition_targets traegt sieben
+// Naehrstoffspalten (bis G-439: sechs). Drei davon haben zusaetzlich eine
+// wissenschaftliche Referenz, und genau eine geht auseinander: F18:3CN3 ist
+// gegen das persoenliche Ziel gedeckt und gegen EFSA zu wenig.
 //
 // Nach dem G-218-Massstab ist das "selten" - eine Achse mit Vermerk genuegt.
 // Die Vergleichsfunktionen sind gebaut und an nichts gehaengt.
@@ -17,7 +17,25 @@
 
 import { execFileSync } from 'node:child_process';
 
-const SOLL_NAEHRSTOFFSPALTEN = 6;
+// `[cmd]` **G-439: 6 -> 7.** **`fiber_g` kam mit C-464** (abgenommen,
+// `c5efd107`) — **30 g Ziel, 5 von 5 Zeilen gefuellt, 5 Nutzer.**
+//
+// `[cmd]` **Gemessen, nicht geschaetzt** — die sieben, die diese
+// Abfrage heute zaehlt:
+//
+//     kcal · protein_g · carbs_g · fat_g
+//     linoleic_acid_g · alpha_linolenic_acid_g · fiber_g
+//
+// `[read]` **Die beiden Fettsaeuren waren SCHON in der alten Sechs**
+// — sie sind aelter als C-464 und keine Abweichung. **Genau eine
+// Spalte ist neu, und die Zahl steigt um genau eins.**
+//
+// `[read]` **Und die Frage, die der Waechter stellt, bleibt offen:**
+// `fiber_g` **traegt ein persoenliches Ziel. Ob es eine
+// wissenschaftliche Referenz danebenstellt, entscheidet G-261** —
+// **das Anheben hier beantwortet sie nicht, es haelt nur fest, dass
+// die Zunahme bekannt ist.**
+const SOLL_NAEHRSTOFFSPALTEN = 7;
 
 const SQL = `
 select count(*)

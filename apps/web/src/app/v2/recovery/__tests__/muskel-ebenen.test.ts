@@ -37,18 +37,35 @@ function namenAusC73(): string[] {
   return namen
 }
 
-test('C-73 fuehrt 96 Namen und 89 Beziehungen', () => {
+// `[cmd]` **G-443: 89 -> 99 Beziehungen, 96 -> 106 Namen.**
+//
+// `[cmd]` **C-482 hat zehn Namen angelegt** — Serratus Anterior,
+// External Oblique, drei Trizepskoepfe, zwei Vasti, zwei
+// Gastrocnemius-Koepfe, Posterior Neck Muscles — **und je eine
+// Elternbeziehung dazu.** `[cmd]` **Die zehnte Zeile im selben
+// `INSERT` ist `('splenius capitis', 'Neck Muscles')`** — ein
+// bestehender Name, der seine Beziehung erst dort bekam. **Zehn neue
+// Namen, zehn neue Beziehungen: 96+10 und 89+10.**
+//
+// `[read]` **Die Zahl wurde NICHT auf gruen gedreht, sondern gemessen**
+// — `107_muscle_groups_hierarchy.sql` prueft sich selbst gegen
+// `106` Gruppen (`v_groups <> 106`), dieselbe Zahl aus der Quelle.
+//
+// `[cmd]` **Und die zweite Zusicherung lief bis G-443 NIE** — sie
+// steht hinter der ersten, und die fiel schon bei 99 != 89. **Die 96
+// war damit seit C-482 unbemerkt falsch.**
+test('C-73 fuehrt 106 Namen und 99 Beziehungen', () => {
   // [cmd] Die Zahlen aus dem Auftrag, hier gegen die Quelle geprueft.
   const p = path.join(process.cwd(), '../../supabase/_pipeline/10_training/107_muscle_groups_hierarchy.sql')
   const sql = fs.readFileSync(p, 'utf8')
   const a = sql.indexOf('INSERT INTO muscle_group_parent')
   const b = sql.indexOf(';', a)
   const paare = sql.slice(a, b).match(/\('[^']+',\s*'[^']+'\)/g) ?? []
-  assert.equal(paare.length, 89, `${paare.length} Beziehungen statt 89`)
-  assert.equal(namenAusC73().length, 96, 'Namen')
+  assert.equal(paare.length, 99, `${paare.length} Beziehungen statt 99`)
+  assert.equal(namenAusC73().length, 106, `${namenAusC73().length} Namen statt 106`)
 })
 
-test('jede der 96 Gruppen hat eine Flaeche', () => {
+test('jede der 106 Gruppen hat eine Flaeche', () => {
   const ohne = namenAusC73().filter(n => !MUSKEL_ZU_FLAECHE[n])
   assert.deepEqual(ohne, [],
     `Ohne Flaechenziel: ${ohne.join(', ')}. Ein Muskel ohne Ziel `

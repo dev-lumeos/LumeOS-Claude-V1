@@ -21,6 +21,7 @@
 // Exit 0 = sauber, Exit 1 = Befund.
 import fs from 'node:fs'
 import path from 'node:path'
+import { execFileSync } from 'node:child_process'
 
 const WURZEL = process.cwd()
 
@@ -125,6 +126,30 @@ function zeileVon(buf, versatz) {
 const befunde = []
 const freigestellt = []
 let geprueft = 0
+
+// C-486: Eine Datei kann bytegenau UTF-8 sein, waehrend eine Windows-
+// Textpipeline dieselben Zeichen beim Einspielen bereits zu `?` gemacht hat.
+// Deshalb hier der Datenbankgegencheck fuer die deutschen Muskelkartennamen.
+function pruefeMuskelkartenDb() {
+  const container = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
+  const database = process.env.PGDATABASE ?? 'postgres'
+  const sql = `
+    SELECT code || '|' || encode(convert_to(name_de, 'UTF8'), 'hex')
+    FROM public.koerperflaechen
+    WHERE art = 'muskel' AND name_de LIKE '%?%'
+    ORDER BY code;
+  `
+  try {
+    const out = execFileSync('docker', [
+      'exec', container, 'psql', '-X', '-q', '-v', 'ON_ERROR_STOP=1',
+      '-U', 'postgres', '-d', database, '-t', '-A', '-c', sql,
+    ], { encoding: 'utf8' }).trim()
+    return out ? out.split(/\r?\n/) : []
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error)
+    return [`Datenbankabfrage fehlgeschlagen: ${detail}`]
+  }
+}
 
 /**
  * Nimmt einen Befund auf — es sei denn, die Datei traegt die Marke und
@@ -246,6 +271,7 @@ const FEHLERARTEN = new Set(['doppelt', 'kein-utf8', 'utf16', 'fffd'])
 
 const fehler = befunde.filter(b => FEHLERARTEN.has(b.art))
 const warnungen = befunde.filter(b => !FEHLERARTEN.has(b.art))
+const dbMuskelBefunde = pruefeMuskelkartenDb()
 
 const jeDatei = new Map()
 for (const b of fehler) {
@@ -266,8 +292,9 @@ function warnungenZeigen() {
   if (dateien.length > 12) console.log(`             … und ${dateien.length - 12} weitere`)
 }
 
-if (fehler.length === 0) {
+if (fehler.length === 0 && dbMuskelBefunde.length === 0) {
   console.log(`[encoding] ${geprueft} Dateien geprueft, sauber.${freiText}`)
+  console.log('[encoding] Datenbank: deutsche Muskelkartennamen ohne Fragezeichen.')
   warnungenZeigen()
   process.exit(0)
 }
@@ -283,6 +310,10 @@ for (const [rel, liste] of [...jeDatei].sort()) {
     console.error(`      Z${b.zeile}: ${b.text}`)
   }
   if (liste.length > 3) console.error(`      … und ${liste.length - 3} weitere`)
+}
+if (dbMuskelBefunde.length) {
+  console.error(`[encoding] Datenbank ROT — ${dbMuskelBefunde.length} deutscher Muskelkartenname(n) mit Fragezeichen:`)
+  for (const befund of dbMuskelBefunde) console.error(`  ${befund}`)
 }
 console.error('')
 console.error('[encoding] Doppelte Kodierung ist umkehrbar, solange ALLE')

@@ -48,6 +48,12 @@ export const MUSKEL_ZU_FLAECHE: Record<string, string | string[]> = {
   'Rotator Cuff': 'deltoids',
   Infraspinatus: 'deltoids',
   Subscapularis: 'deltoids',
+  // `[cmd]` **G-443: `Serratus Anterior` kam mit C-482** — er haengt
+  // dort unter `Shoulders`, hat aber seit G-430 einen EIGENEN Pfad.
+  // `[read]` **Ueber die Eltern faerbte er `deltoids` mit** — den
+  // Deltoid, unter dem er gar nicht liegt. **Jetzt zeigt er auf seine
+  // eigene Flaeche**, wie `Teres Minor` oben.
+  'Serratus Anterior': 'serratus-anterior',
   // `[cmd]` **G-430: `Teres Minor` hat seit der Aufteilung eine
   // eigene Flaeche.** **Hier stand `'deltoids'`** — mit der
   // Begruendung *„die Karte hat keine eigene Flaeche dafuer"*.
@@ -127,12 +133,23 @@ export const MUSKEL_ZU_FLAECHE: Record<string, string | string[]> = {
   // eine Flaeche, die als faerbbar gilt und nie Farbe bekommt.
   Obliques: ['external-oblique', 'serratus-anterior', 'flanke'],
   'Internal Oblique': 'external-oblique',
+  // `[cmd]` **G-443: `External Oblique` kam mit C-482.** **Die Flaeche
+  // `external-oblique` traegt seinen Namen seit G-430** — er bekommt
+  // sie einzeln, nicht die Dreierliste der Gruppe darueber.
+  'External Oblique': 'external-oblique',
 
   // ── Arme (21) ────────────────────────────────────────────────────
   Arms: 'biceps',
   Biceps: 'biceps',
   Brachialis: 'biceps',
   Triceps: ['triceps-longum', 'triceps-lateralis', 'triceps-mediale'],
+  // `[cmd]` **G-443: die drei Trizepskoepfe kamen mit C-482** — und
+  // die drei Flaechen gibt es seit G-430 einzeln. `[read]` **Ueber die
+  // Eltern faerbte jeder Kopf ALLE DREI** — der Zweck der Aufteilung
+  // war das Gegenteil.
+  'Triceps Brachii Long Head': 'triceps-longum',
+  'Triceps Brachii Lateral Head': 'triceps-lateralis',
+  'Triceps Brachii Medial Head': 'triceps-mediale',
   Forearms: ['forearm-flexors', 'brachioradialis', 'forearm-extensors',
     'forearm-extensors-ulnar'],
   Brachioradialis: 'brachioradialis',
@@ -157,6 +174,16 @@ export const MUSKEL_ZU_FLAECHE: Record<string, string | string[]> = {
   Scalenes: 'nacken',
   Sternocleidomastoid: 'sternocleidomastoid',
   'splenius capitis': 'nacken',
+  // `[cmd]` **G-443: `Posterior Neck Muscles` ist die AUSNAHME unter
+  // den zehn aus C-482** — **eine GRUPPE, kein einzelner Muskel.**
+  // `[cmd]` **Codex hat sie in C-482 bewusst so benannt,** *„statt
+  // faelschlich nur Scalenes oder Splenius zu behaupten"*.
+  //
+  // `[read]` **Sie bekommt deshalb KEINE eigene Flaeche** — es gaebe
+  // keine zu zeichnen. **Sie faellt auf `nacken`**, wie `Scalenes` und
+  // `splenius capitis`, ihre beiden Geschwister: dieselbe Bauform wie
+  // `Back`/`Upper Back` auf dem Latissimus.
+  'Posterior Neck Muscles': 'nacken',
 
   // ── Beine (41) ───────────────────────────────────────────────────
   Legs: ['rectus-femoris', 'vastus-lateralis', 'vastus-medialis'],
@@ -164,6 +191,11 @@ export const MUSKEL_ZU_FLAECHE: Record<string, string | string[]> = {
   Thighs: ['rectus-femoris', 'vastus-lateralis', 'vastus-medialis'],
   Quadriceps: ['rectus-femoris', 'vastus-lateralis', 'vastus-medialis'],
   'Rectus Femoris': 'rectus-femoris',
+  // `[cmd]` **G-443: die zwei Vasti kamen mit C-482.** **Beide Flaechen
+  // gibt es seit G-430** — und `Rectus Femoris` daneben zeigt seit je
+  // einzeln. **Dieselbe Bauform, dritter und vierter Kopf.**
+  'Vastus Lateralis': 'vastus-lateralis',
+  'Vastus Medialis': 'vastus-medialis',
   // ══ G-431: Beinbeuger und Gesaess sind aufgeteilt ═══════════════
   //
   // `[cmd]` **Am Bild bestimmt** (`docs/bilder/g431/`):
@@ -219,6 +251,10 @@ export const MUSKEL_ZU_FLAECHE: Record<string, string | string[]> = {
   // Unterschenkel: Wade gegen Schienbein.
   'Lower Legs': ['gastrocnemius-lateralis', 'gastrocnemius-medialis'],
   Calves: ['gastrocnemius-lateralis', 'gastrocnemius-medialis'],
+  // `[cmd]` **G-443: die zwei Gastrocnemius-Koepfe kamen mit C-482** —
+  // die beiden Flaechen gibt es seit G-430 einzeln.
+  'Gastrocnemius Lateral Head': 'gastrocnemius-lateralis',
+  'Gastrocnemius Medial Head': 'gastrocnemius-medialis',
   Soleus: ['gastrocnemius-lateralis', 'gastrocnemius-medialis'],
   Peroneals: ['gastrocnemius-lateralis', 'gastrocnemius-medialis'],
   'Peroneus Brevis': ['gastrocnemius-lateralis', 'gastrocnemius-medialis'],

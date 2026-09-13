@@ -1937,13 +1937,23 @@
       ]
     },
     {
+      "id": "486_koerperflaechen_utf8_korrektur",
+      "path": "supabase/_pipeline/00_querschnitt/486_koerperflaechen_utf8_korrektur.sql",
+      "kind": "sql",
+      "creates": "C-486: vier durch eine Windows-Textpipeline verlorene Umlaute in deutschen Muskelkartenamen aus der UTF-8-Quelle wiederherstellen.",
+      "depends_on": [
+        "484_koerperflaechen_e81_daten"
+      ]
+    },
+    {
       "id": "485_dsld_struktur",
       "path": "supabase/migrations/20260912001800_c485_dsld_import.sql",
       "kind": "sql",
       "creates": "C-485/D-17: DSLD-Produktfelder, mehrwertige Firmenrollen, Blend- und Reihenfolgenbezug sowie produktgenaue Feldherkunft; keine Daten.",
       "depends_on": [
         "467_supplier_products",
-        "466_nutrient_supplement_sources"
+        "466_nutrient_supplement_sources",
+        "486_koerperflaechen_utf8_korrektur"
       ]
     },
     {

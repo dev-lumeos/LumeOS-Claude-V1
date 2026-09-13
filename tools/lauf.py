@@ -41,7 +41,7 @@ def _aufloesen(name):
     return shutil.which(name + ".cmd") or shutil.which(name) or name
 
 
-def lauf(befehl, cwd=REPO):
+def lauf(befehl, cwd=REPO, input_bytes=None):
     """Fuehrt einen Befehl ohne Konsolenfenster aus.
 
     `befehl` als Liste (bevorzugt) oder als Zeichenkette, die mit
@@ -50,7 +50,7 @@ def lauf(befehl, cwd=REPO):
     argv = list(befehl if isinstance(befehl, (list, tuple)) else shlex.split(befehl))
     if argv and argv[0] in ("npm", "npx", "pnpm", "yarn", "tsx"):
         argv[0] = _aufloesen(argv[0])
-    r = subprocess.run(argv, cwd=cwd, capture_output=True,
+    r = subprocess.run(argv, cwd=cwd, capture_output=True, input=input_bytes,
                        startupinfo=_SI, creationflags=_FLAGS, shell=False)
     return (r.stdout + r.stderr).decode("utf-8", "replace").strip()
 
@@ -64,6 +64,20 @@ def psql(sql):
     """SQL gegen die laufende Datenbank, ohne Fenster."""
     return lauf(["docker", "exec", DB, "psql", "-U", "postgres",
                  "-d", "postgres", "-t", "-c", sql])
+
+
+def psql_datei(pfad, database="postgres"):
+    """Fuehrt eine UTF-8-SQL-Datei bytegenau im Container aus.
+
+    Niemals ``Get-Content ... | docker exec`` verwenden: Windows
+    serialisiert die Pipeline sonst in der aktiven Codepage und kann Umlaute
+    irreversibel zu ``?`` machen. C-486 belegt den Schaden mit Hex-Dumps.
+    """
+    with open(pfad, "rb") as f:
+        payload = f.read()
+    return lauf(["docker", "exec", "-i", DB, "psql", "-U", "postgres",
+                 "-d", database, "-v", "ON_ERROR_STOP=1", "-f", "-"],
+                input_bytes=payload)
 
 
 def _wo(name):

@@ -1,4 +1,4 @@
-// Wieviele der 96 auf jede Flaeche fallen (G-55).
+// Wieviele der 106 auf jede Flaeche fallen (G-55; bis G-443: 96).
 //
 // `[read]` Der Auftrag verlangt „die Zahl je Flaeche" im Bericht.
 // Eine Zahl im Bericht veraltet still — diese hier faellt auf, sobald
@@ -9,20 +9,44 @@ import assert from 'node:assert/strict'
 import { MUSKEL_ZU_FLAECHE, FLAECHEN, muskelnZurFlaeche, flaechenVonMuskel } from '../muskel-ebenen'
 
 /**
- * `[cmd]` **Am 2026-09-12 gezaehlt** (G-433, mit Nachtrag).
+ * `[cmd]` **Am 2026-09-13 gezaehlt** (G-443; davor G-433, 2026-09-12).
  *
- * `[read]` **Summe 132 bei 96 Namen** — 25 Namen decken mehrere
+ * `[read]` **Summe 142 bei 106 Namen** — Namen decken mehrere
  * Flaechen, seit die Gruppen in ihre Straenge zerfallen sind.
  *
  * **Was G-433 geaendert hat:** acht Flaechen wurden zu
  * dreiundzwanzig — `quadriceps`, `adductors`, `calves`, `abs`,
  * `obliques`, `triceps`, `forearm`, `neck`.
+ *
+ * ══ G-443: 132 -> 142, bei 96 -> 106 Namen ═══════════════════════
+ *
+ * `[cmd]` **C-482 hat zehn Namen angelegt, und jeder bekam hier
+ * seine EIGENE Flaeche** — neun anatomische Einzelmuskeln plus
+ * `Posterior Neck Muscles` auf `nacken`.
+ *
+ * `[cmd]` **Genau +10, je Name +1** — keine dieser zehn deckt
+ * mehrere Flaechen:
+ *
+ *     gastrocnemius-lateralis  9 -> 10   Lateral Head
+ *     gastrocnemius-medialis   9 -> 10   Medial Head
+ *     vastus-lateralis         8 ->  9   Vastus Lateralis
+ *     vastus-medialis          4 ->  5   Vastus Medialis
+ *     nacken                   3 ->  4   Posterior Neck Muscles
+ *     external-oblique         2 ->  3   External Oblique
+ *     serratus-anterior        1 ->  2   Serratus Anterior
+ *     triceps-longum           1 ->  2   Long Head
+ *     triceps-lateralis        1 ->  2   Lateral Head
+ *     triceps-mediale          1 ->  2   Medial Head
+ *
+ * `[read]` **Keine Flaeche kam hinzu und keine fiel weg** — die
+ * Pfade gab es seit G-430 alle. **Erreichbar waren sie bis G-443
+ * nur ueber die Elterngruppe, die alle Geschwister mitfaerbte.**
  */
 const ERWARTET: Record<string, number> = {
   'forearm-flexors': 10,
-  'gastrocnemius-lateralis': 9,
-  'gastrocnemius-medialis': 9,
-  'vastus-lateralis': 8,
+  'gastrocnemius-lateralis': 10,
+  'gastrocnemius-medialis': 10,
+  'vastus-lateralis': 9,
   deltoids: 7,
   'adductor-longus': 6,
   'forearm-extensors': 6,
@@ -30,31 +54,31 @@ const ERWARTET: Record<string, number> = {
   chest: 5,
   'rectus-abdominis': 5,
   'rectus-femoris': 5,
+  'vastus-medialis': 5,
   'adductor-brevis': 4,
   'adductor-magnus': 4,
   'gluteus-maximus': 4,
   latissimus: 4,
-  'vastus-medialis': 4,
+  nacken: 4,
   biceps: 3,
-  nacken: 3,
+  'external-oblique': 3,
   semitendinosus: 3,
   trapezius: 3,
   'biceps-femoris': 2,
   brachioradialis: 2,
   'erector-spinae': 2,
-  'external-oblique': 2,
   'forearm-extensors-ulnar': 2,
+  'serratus-anterior': 2,
   sternocleidomastoid: 2,
   'tendinous-inscriptions': 2,
   tibialis: 2,
+  'triceps-lateralis': 2,
+  'triceps-longum': 2,
+  'triceps-mediale': 2,
   achillessehne: 1,
   flanke: 1,
-  'serratus-anterior': 1,
   'teres-major': 1,
   'teres-minor': 1,
-  'triceps-lateralis': 1,
-  'triceps-longum': 1,
-  'triceps-mediale': 1,
 }
 
 test('die Zahl je Flaeche stimmt mit dem Bericht ueberein', () => {
@@ -68,7 +92,7 @@ test('die Zahl je Flaeche stimmt mit dem Bericht ueberein', () => {
     + '(docs/ssot/104-muskelkarte.md) nachziehen.')
 })
 
-test('jeder der 96 Muskeln landet auf mindestens einer Flaeche', () => {
+test('jeder der 106 Muskeln landet auf mindestens einer Flaeche', () => {
   // [cmd] Die Gegenprobe: keine verloren.
   //
   // ══ G-430: 96 -> 97 Zuordnungen bei 96 Namen ═══════════════════
@@ -82,8 +106,9 @@ test('jeder der 96 Muskeln landet auf mindestens einer Flaeche', () => {
   // faellt ein Muskel durch?** — und die wird jetzt direkt
   // gestellt, statt ueber eine Summe, die aus zwei Gruenden
   // abweichen kann.
-  assert.equal(Object.keys(MUSKEL_ZU_FLAECHE).length, 96,
-    'Die Zuordnung selbst muss 96 Eintraege fuehren.')
+  // `[cmd]` **G-443: 96 -> 106** — die zehn Namen aus C-482.
+  assert.equal(Object.keys(MUSKEL_ZU_FLAECHE).length, 106,
+    'Die Zuordnung selbst muss 106 Eintraege fuehren.')
 
   const ohne = Object.keys(MUSKEL_ZU_FLAECHE)
     .filter(name => flaechenVonMuskel(name).length === 0)
