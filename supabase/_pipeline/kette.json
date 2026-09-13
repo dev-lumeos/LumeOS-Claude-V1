@@ -1947,13 +1947,31 @@
       ]
     },
     {
+      "id": "489_produktname_name_en",
+      "path": "supabase/migrations/20260913001900_c489_produktname_name_en.sql",
+      "kind": "sql",
+      "creates": "C-489: DSLD-Produktname als name_en mit bewusst leeren name_de/name_th; Firmen- und Markenname unveraendert.",
+      "depends_on": [
+        "485_dsld_struktur"
+      ]
+    },
+    {
       "id": "485_dsld_import",
       "path": "supabase/_pipeline/13_supplements/485_dsld_import.ts",
       "kind": "tsx",
       "creates": "C-485: alle elf DSLD-Arbeitsmappen als Produkte, Firmenrollen, Labelzeilen, Kandidaten und Produktfeld-Herkunft; XLSX wird per COPY-Stream gelesen.",
       "depends_on": [
-        "485_dsld_struktur",
+        "489_produktname_name_en",
         "137"
+      ]
+    },
+    {
+      "id": "489_produktname_name_en_daten",
+      "path": "supabase/_pipeline/13_supplements/489_produktname_name_en.sql",
+      "kind": "sql",
+      "creates": "C-489: Feldherkunft bereits importierter DSLD-Produktnamen von name auf name_en nachgezogen.",
+      "depends_on": [
+        "485_dsld_import"
       ]
     },
     {
@@ -1962,7 +1980,7 @@
       "kind": "sql",
       "creates": "C-488: leere EN/TH-Spalten fuer Nutzer- und Katalogtexte sowie Sprachdurchlass in den beiden Lesesichten; keine Uebersetzungsdaten.",
       "depends_on": [
-        "485_dsld_import"
+        "489_produktname_name_en_daten"
       ]
     }
   ]

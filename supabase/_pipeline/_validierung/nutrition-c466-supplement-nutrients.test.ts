@@ -30,7 +30,7 @@ test('C-466: Nahrung und genommene Praeparate bleiben getrennt, mit Herkunft und
     VALUES ('46600000-0000-0000-0000-000000000003', '46600000-0000-0000-0000-000000000010', 'C466 Stack', false);
     INSERT INTO supplements.suppliers (id, name, source)
     VALUES ('46600000-0000-0000-0000-000000000004', 'C466 Supplier', 'test:c466');
-    INSERT INTO supplements.supplier_products (id, supplier_id, name, produktform, portionsgroesse, portionseinheit, source)
+    INSERT INTO supplements.supplier_products (id, supplier_id, name_en, produktform, portionsgroesse, portionseinheit, source)
     VALUES ('46600000-0000-0000-0000-000000000005', '46600000-0000-0000-0000-000000000004', 'C466 Vitamin D3 5000 IU', 'capsule', 1, 'capsule', 'test:c466');
     INSERT INTO supplements.product_contents (product_id, supplement_id, amount_per_serving, unit, conversion_factor, source)
     SELECT '46600000-0000-0000-0000-000000000005', id, 5000, 'IU', 1, 'test:c466'

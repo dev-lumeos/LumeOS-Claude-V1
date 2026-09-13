@@ -239,10 +239,10 @@ def run(database: str, source: Path) -> None:
     stage_started = time.perf_counter()
     copy(database, """
       BEGIN;
-      CREATE TEMP TABLE tmp_c485 (dsld_id bigint, name text, marke text, gtin text, net_size numeric, net_unit text, serving_size numeric, serving_unit text, product_type text, produktform text, date_entered date, market_status text, is_active boolean, suggested_use text) ON COMMIT DROP;
-    """, ['dsld_id','name','marke','gtin','net_size','net_unit','serving_size','serving_unit','product_type','produktform','date_entered','market_status','is_active','suggested_use'], product_rows(files), """
-      INSERT INTO supplements.supplier_products (name, marke, dsld_id, gtin, packungsgroesse, packungseinheit, portionsgroesse, portionseinheit, product_type, produktform, date_entered, market_status, is_active, im_katalog, suggested_use, source)
-      SELECT name, nullif(marke,''), dsld_id, nullif(gtin,''), net_size, nullif(net_unit,''), serving_size, nullif(serving_unit,''), nullif(product_type,''), nullif(produktform,''), date_entered, nullif(market_status,''), is_active, true, nullif(suggested_use,''), 'dsld'
+      CREATE TEMP TABLE tmp_c485 (dsld_id bigint, name_en text, marke text, gtin text, net_size numeric, net_unit text, serving_size numeric, serving_unit text, product_type text, produktform text, date_entered date, market_status text, is_active boolean, suggested_use text) ON COMMIT DROP;
+    """, ['dsld_id','name_en','marke','gtin','net_size','net_unit','serving_size','serving_unit','product_type','produktform','date_entered','market_status','is_active','suggested_use'], product_rows(files), """
+      INSERT INTO supplements.supplier_products (name_en, marke, dsld_id, gtin, packungsgroesse, packungseinheit, portionsgroesse, portionseinheit, product_type, produktform, date_entered, market_status, is_active, im_katalog, suggested_use, source)
+      SELECT name_en, nullif(marke,''), dsld_id, nullif(gtin,''), net_size, nullif(net_unit,''), serving_size, nullif(serving_unit,''), nullif(product_type,''), nullif(produktform,''), date_entered, nullif(market_status,''), is_active, true, nullif(suggested_use,''), 'dsld'
       FROM tmp_c485;
       COMMIT;
     """)
@@ -305,7 +305,7 @@ def run(database: str, source: Path) -> None:
       SELECT p.id, 'bekannt', f.field_name, 'dsld', 'dsld:' || p.dsld_id::text, p.date_entered, 'dsld', 'DSLD Product Overview'
       FROM supplements.supplier_products p
       CROSS JOIN LATERAL (VALUES
-        ('name', p.name), ('marke', p.marke), ('dsld_id', p.dsld_id::text), ('gtin', p.gtin),
+        ('name_en', p.name_en), ('marke', p.marke), ('dsld_id', p.dsld_id::text), ('gtin', p.gtin),
         ('packungsgroesse', p.packungsgroesse::text), ('packungseinheit', p.packungseinheit),
         ('portionsgroesse', p.portionsgroesse::text), ('portionseinheit', p.portionseinheit),
         ('product_type', p.product_type), ('produktform', p.produktform), ('market_status', p.market_status),
