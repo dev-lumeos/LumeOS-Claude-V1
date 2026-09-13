@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 224 |
+| `todos` | 225 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 3 |
 | `erledigt` | 442 |
-| **gesamt** | **671** |
+| **gesamt** | **672** |
 
 ## medical — 48
 
@@ -403,7 +403,9 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 28
+## training — 29
+
+### beauftragbar — 28
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -435,6 +437,12 @@
 | `G-219` | entscheidung | niedrig | [`LiveWorkout` hat keinen Aufrufer mehr](todos/training-g-0219-liveworkout-ohne-aufrufer.md) | offen | — | — |
 | `G-366` | feature | mittel | [die Uebungsliste der Sitzung](erledigt/training-g-0366-die-uebungsliste-der-sitzung.md) | erledigt | — | — |
 | `G-429` | befund | mittel | [wer rechnet estimated_1rm, und verweigert er?](todos/training-g-0429-einrm-mit-verweigerung.md) | offen | — | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `C-493` | feature | hoch | [Seed-Sitzungen, die die Karte fuellen](todos/training-c-0493-seed-sitzungen-fuer-die-karte.md) | offen | G-445 | — |
 
 ## recovery — 36
 

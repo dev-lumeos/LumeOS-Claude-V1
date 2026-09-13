@@ -141,7 +141,61 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### A1-A3 - Ursache und Gegenprobe
+
+Die Quelle und PostgreSQL waren korrekt UTF-8. Die Probe `Größer ÄÖÜ äöü ß`
+hat als Soll-Hex `4772c3b6c39f657220c384c396c39c20c3a4c3b6c3bc20c39f`.
+
+| Einspielweg | Ergebnis | Hex |
+|---|---|---|
+| Datei im Container mit `psql -f` | heil | Soll-Hex |
+| `tools/lauf.py` mit `docker exec ... psql -c` | heil | Soll-Hex |
+| Kettenlauf (`readFileSync`/`spawnSync` mit UTF-8-Input) | heil | die vier C-484-Namen korrekt |
+| PowerShell: `Get-Content -Raw ... | docker exec -i ... psql -f -` | kaputt | alle Umlaute und ss wurden zu `3f` |
+
+Der Verlust entsteht somit vor Docker/psql bei der Text-Serialisierung der
+PowerShell-Pipe, nicht in `lauf.py`, im Container oder in der Kette.
+
+### A2 - Behebung
+
+`tools/lauf.py` hat `psql_datei()` erhalten: SQL-Dateien werden als Bytes
+geöffnet und mit `subprocess.run(input=...)` bytegenau an `docker exec -i`
+übergeben. Der Kettenlauf war bereits byteerhaltend; er wurde nicht durch
+eine unnötige zweite Kodierungslogik ersetzt. Die Kettendaten liegen in
+`00_querschnitt/486_koerperflaechen_utf8_korrektur.sql`; kein Strukturumbau
+war erforderlich.
+
+### A4-A6 - Daten, Waechter und Umfang
+
+Der neue Datenbankteil von `tools/encoding-pruefen.mjs` verlangt fuer jeden
+Muskelkarten-Namen ohne legitime Fragezeichen `name_de NOT LIKE '%?%'` und
+gibt bei einem Befund Code und UTF-8-Hex aus. Die zugehoerige
+`c486-koerperflaechen-utf8.test.ts` war vor der Korrektur mit vier Befunden
+rot und ist danach gruen.
+
+| Code | im Kettenschritt wiederhergestellt |
+|---|---|
+| `biceps-femoris` | `Zweiköpfiger Oberschenkelmuskel` |
+| `external-oblique` | `Aeussere schräge Bauchmuskeln` |
+| `gluteus-maximus` | `Grosser Gesässmuskel` |
+| `gluteus-medius` | `Mittlerer Gesässmuskel` |
+
+Alle 121 `_de`-Spalten in Basistabellen wurden gemessen. `??` gab es nur in
+diesen vier Zeilen von `public.koerperflaechen`; die 4.292 einzelnen
+Fragezeichen stehen in legitimen Fragetexten (vor allem FAQ) und sind kein
+Encoding-Befund. Gegenprobe auf der Wegwerf-Datenbank: nur
+`gluteus-maximus` absichtlich auf `Ges??ssmuskel` gesetzt - der Waechter war
+rot mit `47726f73736572204765733f3f73736d75736b656c`; anschliessend den
+nummerierten C-486-Schritt erneut ausgefuehrt, wieder gruen.
+
+### A7 - Lauf
+
+Sicherung vor der Live-Korrektur:
+`backup/data/20260913131110_c486_c472_vor_live.dump`.
+Vollkette auf `lumeos_c486_c472_final`: 212 Schritte, `SCHEMA VOLLSTAENDIG`,
+`KETTE OK` in 1209,0 s. Anschliessend auf dieser Wegwerf-Datenbank: C-486-Test,
+Encoding-Waechter, Datenlogik-Waechter samt Selbstprobe und
+Migrationsketten-Waechter gruen.
 
 ## Abnahme
 
