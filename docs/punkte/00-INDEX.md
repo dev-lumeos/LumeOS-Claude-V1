@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 224 |
+| `todos` | 225 |
 | `laufend_codex` | 5 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 436 |
-| **gesamt** | **668** |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 437 |
+| **gesamt** | **669** |
 
 ## medical — 48
 
@@ -394,7 +394,7 @@
 | `G-393` | befund | hoch | [die Rotationskarte ist leer](erledigt/supplements-g-0393-die-rotationskarte-ist-leer.md) | erledigt | — | G-395, G-396 |
 | `G-423` | feature | hoch | [Zyklen, Protokolle und die Injektionskarte](erledigt/supplements-g-0423-zyklen-und-injektionen.md) | erledigt | — | G-424 |
 | `G-428` | fehler | hoch | [der Injektionsreiter ist leer](laufend_claudecode/supplements-g-0428-injektionsreiter-ist-leer.md) | laeuft (claudecode) | — | — |
-| `G-437` | fehler | hoch | [tabs.tsx hat vierzehn Karten verloren](laufend_claudecode/supplements-g-0437-tabs-tsx-verlorene-karten.md) | laeuft (claudecode) | — | — |
+| `G-437` | fehler | hoch | [tabs.tsx hat vierzehn Karten verloren](erledigt/supplements-g-0437-tabs-tsx-verlorene-karten.md) | erledigt | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -443,7 +443,7 @@
 |---|---|---|---|---|---|---|
 | `C-491` | befund | hoch | [die Zuordnungen zeigen auf die falsche Ebene](laufend_codex/training-c-0491-zuordnungen-auf-die-richtige-ebene.md) | laeuft (codex) | C-490 | — |
 
-## recovery — 34
+## recovery — 35
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -481,6 +481,7 @@
 | `G-438` | fehler | hoch | [Karte und Liste widersprechen sich](erledigt/recovery-g-0438-karte-und-liste-widersprechen-sich.md) | erledigt | — | — |
 | `G-440` | fehler | hoch | [MUSCLE_STATE ist eine Attrappe, die Kachel sagt „echte Daten"](erledigt/recovery-g-0440-muscle-state-ist-eine-attrappe.md) | erledigt | — | G-441 |
 | `G-441` | fehler | hoch | [die Today-Kachel rechnet weiter aus der Attrappe](todos/recovery-g-0441-die-today-kachel-rechnet-aus-der-attrappe.md) | offen | — | — |
+| `G-443` | fehler | mittel | [zehn Muskeln ohne Flaechenziel](todos/recovery-g-0443-zehn-muskeln-ohne-flaechenziel.md) | offen | — | — |
 
 ## goals — 12
 
@@ -650,7 +651,7 @@
 | `C-478` | befund | hoch | [hat LumeOS ein Mehrgeraete-Problem?](todos/quer-c-0478-mehrgeraete-synchronisation.md) | offen | — | — |
 | `C-479` | feature | hoch | [fuenf Flaechen und achtundsiebzig Muskeln](erledigt/quer-c-0479-fuenf-flaechen-und-achtundsiebzig-muskeln.md) | erledigt | — | — |
 | `C-481` | feature | mittel | [vier Flaechen und lat_l](erledigt/quer-c-0481-vier-flaechen-und-lat-l.md) | erledigt | — | — |
-| `C-482` | feature | hoch | [Muskelnamen zur aufgeteilten Karte](erledigt/quer-c-0482-muskelnamen-zur-aufgeteilten-karte.md) | erledigt | — | C-483 |
+| `C-482` | feature | hoch | [Muskelnamen zur aufgeteilten Karte](erledigt/quer-c-0482-muskelnamen-zur-aufgeteilten-karte.md) | erledigt | — | C-483, G-443 |
 | `C-483` | entscheidung | hoch | [die fuenfte Ebene](erledigt/quer-c-0483-die-fuenfte-ebene.md) | erledigt | — | C-484 |
 | `C-484` | feature | hoch | [koerperflaechen nach E-81](erledigt/quer-c-0484-koerperflaechen-nach-e81.md) | erledigt | — | C-486, G-437 |
 | `C-486` | fehler | hoch | [UTF-8 beim Einspielen verloren](laufend_codex/quer-c-0486-utf8-beim-einspielen-verloren.md) | laeuft (codex) | — | — |

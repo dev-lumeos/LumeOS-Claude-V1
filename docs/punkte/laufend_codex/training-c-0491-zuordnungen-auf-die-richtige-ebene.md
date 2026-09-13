@@ -93,6 +93,41 @@ ZUORDNUNG schon.**
 `[read]` **Solche Faelle gibt es hier vermutlich auch** ?
 **C-476 misst das.**
 
+## Bericht
+
+Die sechs Seed-Uebungen zeigen nun nur noch auf zaehlbare Gruppen: Band
+Deadlift auf Hamstrings, Quadriceps und erector spinae; Band Lat Pulldown
+auf Latissimus dorsi, Upper Back und Biceps; Back Squat auf Glutes,
+Quadriceps, Hamstrings und erector spinae; Bench Press auf Pectoralis Major,
+Front Shoulders und Triceps; Incline Bench auf dieselben drei Gruppen; die
+pronierte Barbell Row auf Latissimus dorsi, Upper Back, Biceps und Forearms.
+
+| Befund | vorher | nachher | Entscheidung |
+| --- | ---: | ---: | --- |
+| Wurzelzuordnungen | 1.105 | 4 | 1.101 anhand rollenbezogenen Rohtexts auf Gruppen aufgeloest |
+| einzeln unklar | 0 | 4 | erhalten und mit Grund dokumentiert |
+| Zwischenebenen | 3.331 | gemessen | 21 Gruppen bleiben sinnvoll; Lower Back -> erector spinae |
+| referenzierte Muskelgruppen | 95 | 90 | keine Erfindung, sondern E-82-geeignete Verdichtung |
+
+Die vier erhaltenen Wurzeln sind: *Incline diamond push up on bench* / Chest
+(primary), *Resistance Band Lying Hyperextension Abduction* / Core
+(secondary), *Barbell Deadlift High Pull* / Shoulders (primary) und
+*Resistance Band Kneeling Cross Body Single Straight Arm Supinated Pulldown*
+/ Shoulders (secondary). Keiner hat rollenbezogenen Rohtext; jeder steht in
+`training.exercise_muscle_resolution_notes` mit `unresolved` und Grund.
+Die 22 Gruppenentscheidungen stehen separat in
+`training.muscle_group_level_decisions`.
+
+Struktur: `20260913002100_c491_exercise_muscle_levels.sql`; Daten:
+`491_exercise_muscle_levels.sql`. Beide Nachweistabellen haben RLS,
+service_role-only Rechte und explizite service_role-Policy. Der Test
+`training-c491-muscle-levels.test.ts` lief auf `postgres` gruen.
+
+Sicherung vor dem Live-Einspielen:
+`backup/data/20260913084507_c490_c492_vor_live.dump` (704.4 MB). Vollkette
+auf `lumeos_c492_vollkette_final3`: 211 Schritte, `SCHEMA VOLLSTAENDIG`,
+Exit 0. Ketten-, Datenlogik- und Sprachwaechter sowie Punktelauf sind gruen.
+
 ## Abnahmebedingungen
 
     A1  die sechs Seed-Uebungen: je Muskel mit Faktor,

@@ -93,6 +93,37 @@ einer eigenen Tabelle.**
         schneller als einer mit 60 h. Gerechnet.
     A6  Sicherung, Vollkette, Punktelauf.
 
+## Bericht
+
+`recovery.muscle_recovery_profiles` fuehrt 105 Profile; 51 stehen auf
+36 h, 52 auf 48 h und 2 auf 60 h (erector spinae und Lower Back). Die
+vorgegebenen Gruppenzeiten haben keine gefundene belastbare Studie als
+allgemeingueltige Muskeluhr: alle Profilwerte sind deshalb explizit
+`evidence_class C`, `source_id blog_recovery_guidelines_c492`, mit diesem
+Grund im Feld `note`. Es wurde keine Zahl als Studienwert ausgegeben.
+
+`recovery.recovery_effort_factors` trennt den Failure-Faktor davon:
+RIR 0 beziehungsweise nur bei fehlendem RIR RPE 10 multipliziert die
+Basiszeit mit 1,37. `evidence_class B` macht sichtbar, dass die
+Primaerliteratur langsamere Erholung nach Failure stuetzt, die konkrete
+37-%-Zahl aber aus der in `docs/ssot/182` dokumentierten Sekundaerquelle
+kommt. Die neue Rechnung bleibt eine Komponente; die bestehende Kurve wurde
+nicht umgebaut.
+
+Messung in `postgres`: 258/258 Saetze haben RPE, 258/258 RIR,
+258/258 mindestens eines der beiden und 0 sind derzeit als Failure markiert.
+Die Gegenprobe liefert nach 36 Stunden Biceps = 1,00, erector spinae = 0,60.
+
+Struktur: `20260913002200_c492_muscle_recovery_profiles.sql`; Daten:
+`492_muscle_recovery_profiles.sql`. Authenticated hat nur SELECT auf beide
+Katalogtabellen, anon keinen Zugriff; der Test
+`recovery-c492-muscle-recovery.test.ts` lief gruen auf `postgres`.
+
+Sicherung vor dem Live-Einspielen:
+`backup/data/20260913084507_c490_c492_vor_live.dump` (704.4 MB). Vollkette
+auf `lumeos_c492_vollkette_final3`: 211 Schritte, `SCHEMA VOLLSTAENDIG`,
+Exit 0. Ketten-, Datenlogik- und Sprachwaechter sowie Punktelauf sind gruen.
+
 ## Was nicht zu tun ist
 
 **KEINE Basiszeit erfinden** ? **eine Blogzahl ist

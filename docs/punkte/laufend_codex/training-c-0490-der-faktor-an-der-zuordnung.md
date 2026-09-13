@@ -74,6 +74,35 @@ belegten Werte, alles andere braucht eine Quelle.**
 
 **`role` nicht loeschen.**
 
+## Bericht
+
+Struktur: `faktor numeric(4,2)`, `source_id` und `evidence_class`
+stehen in `training.exercise_muscles`; `role` blieb unveraendert. Die
+Struktur liegt in `20260913002000_c490_exercise_muscle_factors.sql`, die
+6.588 Ausgangszeilen wurden im Kettenschritt `490_exercise_muscle_factors.sql`
+befuellt. Nach C-491 sind es 6.744 Zuordnungen; alle 6.744 tragen Faktor,
+Quelle und Evidenzklasse.
+
+| Fall | Faktor | source_id | Klasse |
+| --- | ---: | --- | --- |
+| Rueckfall `primary` | 1,00 | `pelland_2026_fractional_sets` | C |
+| Rueckfall `secondary` | 0,50 | `pelland_2026_fractional_sets` | C |
+| Barbell Bench Press: Pectoralis Major | 0,95 | `pmc4327372_bench_press_emg` | A |
+| Barbell Bench Press: Front Shoulders | 0,79 | `pmc4327372_bench_press_emg` | A |
+| Barbell Bench Press: Triceps | 0,67 | `pmc4327372_bench_press_emg` | A |
+
+Pelland belegt das Satzzaehl-Prinzip, aber keine individuelle EMG-Zahl je
+Uebung-Muskel-Paar; der Rollenrueckfall ist deshalb sichtbar Klasse C,
+nicht irrefuehrend A. Die drei Bankdrueckwerte sind die einzigen direkt
+uebernommenen A-Werte. Der Test
+`training-c490-exercise-muscle-factors.test.ts` prueft jede Zuordnung und
+lief auf `postgres` gruen.
+
+Sicherung vor dem Live-Einspielen:
+`backup/data/20260913084507_c490_c492_vor_live.dump` (704.4 MB). Vollkette
+auf `lumeos_c492_vollkette_final3`: 211 Schritte, `SCHEMA VOLLSTAENDIG`,
+Exit 0. Ketten-, Datenlogik- und Sprachwaechter sowie Punktelauf sind gruen.
+
 ## Abnahmebedingungen
 
     A1  faktor, source_id, evidence_class angelegt.
