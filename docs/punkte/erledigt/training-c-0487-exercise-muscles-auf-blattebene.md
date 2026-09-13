@@ -8,7 +8,7 @@ braucht: []
 kind_von: null
 entscheidung: E-82
 erledigt: 2026-09-08
-commit: OFFEN
+commit: 0e8969e8
 beruehrt:
   tabellen: [training.exercise_muscles]
 zahlen:
