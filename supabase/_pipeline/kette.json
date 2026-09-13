@@ -1982,6 +1982,62 @@
       "depends_on": [
         "489_produktname_name_en_daten"
       ]
+    },
+    {
+      "id": "490_exercise_muscle_factors_struktur",
+      "path": "supabase/migrations/20260913002000_c490_exercise_muscle_factors.sql",
+      "kind": "sql",
+      "creates": "C-490: faktor, Quellenkennung und Evidenzklasse an Training-Uebung-Muskel-Zuordnungen; keine Katalogdaten.",
+      "depends_on": [
+        "488_sprachspalten",
+        "108"
+      ]
+    },
+    {
+      "id": "490_exercise_muscle_factors_daten",
+      "path": "supabase/_pipeline/10_training/490_exercise_muscle_factors.sql",
+      "kind": "sql",
+      "creates": "C-490: Pelland-Rueckfall fuer alle Zuordnungen sowie drei direkte Bankdruecken-EMG-Faktoren.",
+      "depends_on": [
+        "490_exercise_muscle_factors_struktur"
+      ]
+    },
+    {
+      "id": "491_exercise_muscle_levels_struktur",
+      "path": "supabase/migrations/20260913002100_c491_exercise_muscle_levels.sql",
+      "kind": "sql",
+      "creates": "C-491: interne Nachweis-Tabellen fuer Wurzelaufloesung und Satzzaehlungsebene; keine Katalogdaten.",
+      "depends_on": [
+        "490_exercise_muscle_factors_daten"
+      ]
+    },
+    {
+      "id": "491_exercise_muscle_levels_daten",
+      "path": "supabase/_pipeline/10_training/491_exercise_muscle_levels.sql",
+      "kind": "sql",
+      "creates": "C-491: 1.105 Wurzelzuordnungen anhand vorhandener Katalog-Rohtexte aufloesen oder einzeln begruenden; sechs Seedbewegungen und 22 Zwischenebenen pruefen.",
+      "depends_on": [
+        "491_exercise_muscle_levels_struktur"
+      ]
+    },
+    {
+      "id": "492_muscle_recovery_profiles_struktur",
+      "path": "supabase/migrations/20260913002200_c492_muscle_recovery_profiles.sql",
+      "kind": "sql",
+      "creates": "C-492: Recovery-Profile und Failure-Faktoren mit RLS-geschuetzten Lesefunktionen; keine Parameterdaten.",
+      "depends_on": [
+        "491_exercise_muscle_levels_daten",
+        "421_schema"
+      ]
+    },
+    {
+      "id": "492_muscle_recovery_profiles_daten",
+      "path": "supabase/_pipeline/12_recovery/492_muscle_recovery_profiles.sql",
+      "kind": "sql",
+      "creates": "C-492: sichtbare C-Basiszeitprofile und dokumentierter Failure-Faktor ohne zweite Erholungskomponente.",
+      "depends_on": [
+        "492_muscle_recovery_profiles_struktur"
+      ]
     }
   ]
 }

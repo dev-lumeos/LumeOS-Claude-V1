@@ -5815,6 +5815,46 @@
       "zeilenschutzart": "eigene_zeilen"
     },
     {
+      "schema": "training",
+      "name": "exercise_muscle_resolution_notes",
+      "schritt": "491_exercise_muscle_levels_struktur",
+      "rls": true,
+      "policies": ["ALL"],
+      "grants": {"service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-491: Import-Nachweis, explizit ausschliesslich service_role; keine Client-Lesestelle.",
+      "zeilenschutzart": "intern"
+    },
+    {
+      "schema": "training",
+      "name": "muscle_group_level_decisions",
+      "schritt": "491_exercise_muscle_levels_struktur",
+      "rls": true,
+      "policies": ["ALL"],
+      "grants": {"service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-491: E-82-Entscheidungsnachweis, explizit ausschliesslich service_role; keine Client-Lesestelle.",
+      "zeilenschutzart": "intern"
+    },
+    {
+      "schema": "recovery",
+      "name": "muscle_recovery_profiles",
+      "schritt": "492_muscle_recovery_profiles_struktur",
+      "rls": true,
+      "policies": ["SELECT", "ALL"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-492: Katalogleseweg fuer authenticated, Datenpflege ausschliesslich service_role.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "recovery",
+      "name": "recovery_effort_factors",
+      "schritt": "492_muscle_recovery_profiles_struktur",
+      "rls": true,
+      "policies": ["SELECT", "ALL"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-492: Katalogleseweg fuer authenticated, Datenpflege ausschliesslich service_role.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
       "schema": "public",
       "name": "koerperflaechen",
       "schritt": "471",

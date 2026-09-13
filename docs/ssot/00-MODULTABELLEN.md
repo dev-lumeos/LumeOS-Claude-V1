@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-13 — 187 Tabellen, 2662 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-13 — 191 Tabellen, 2691 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -139,13 +139,15 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `user_inventory` | 9 | 0 | ? |
 | `water_logs` | 10 | 1264 | ? |
 
-## recovery — 7 Tabellen, 126 Spalten
+## recovery — 9 Tabellen, 138 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
 | `checkins` | 29 | 370 | ? |
 | `modality_log` | 17 | 178 | ? |
+| `muscle_recovery_profiles` | 6 | 105 | 2026-09-13 |
 | `overtraining_alerts` | 11 | 1 | 2026-09-07 |
+| `recovery_effort_factors` | 6 | 2 | 2026-09-13 |
 | `recovery_protocols` | 12 | 2 | 2026-09-07 |
 | `score_contributions` | 11 | 21 | 2026-09-07 |
 | `scores` | 34 | 370 | ? |
@@ -220,14 +222,16 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `user_supplement_settings` | 11 | 0 | ? |
 | `wada_conflict_records` | 17 | 8 | ? |
 
-## training — 15 Tabellen, 165 Spalten
+## training — 17 Tabellen, 182 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
 | `equipment` | 10 | 58 | ? |
 | `exercise_catalog_enrichment` | 17 | 1407 | ? |
-| `exercise_muscles` | 3 | 6588 | ? |
+| `exercise_muscle_resolution_notes` | 9 | 1105 | 2026-09-13 |
+| `exercise_muscles` | 6 | 6744 | ? |
 | `exercises` | 17 | 1416 | ? |
+| `muscle_group_level_decisions` | 5 | 22 | 2026-09-13 |
 | `muscle_groups` | 7 | 105 | ? |
 | `program_assignments` | 10 | 0 | 2026-09-09 |
 | `program_blocks` | 6 | 0 | 2026-09-09 |
