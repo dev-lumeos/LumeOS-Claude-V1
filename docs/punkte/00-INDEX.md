@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 226 |
+| `todos` | 227 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 445 |
-| **gesamt** | **675** |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 446 |
+| **gesamt** | **676** |
 
 ## medical — 48
 
@@ -438,9 +438,9 @@
 | `G-429` | befund | mittel | [wer rechnet estimated_1rm, und verweigert er?](todos/training-g-0429-einrm-mit-verweigerung.md) | offen | — | — |
 | `G-447` | befund | mittel | [vier gezeichnete Muskeln, die keine Uebung trifft](todos/training-g-0447-vier-muskeln-ohne-jede-zuordnung.md) | offen | — | — |
 
-## recovery — 38
+## recovery — 39
 
-### beauftragbar — 37
+### beauftragbar — 38
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -480,7 +480,8 @@
 | `G-441` | fehler | hoch | [die Today-Kachel rechnet weiter aus der Attrappe](todos/recovery-g-0441-die-today-kachel-rechnet-aus-der-attrappe.md) | offen | — | — |
 | `G-443` | fehler | mittel | [zehn Muskeln ohne Flaechenziel](erledigt/recovery-g-0443-zehn-muskeln-ohne-flaechenziel.md) | erledigt | — | — |
 | `G-445` | fehler | hoch | [ein nie trainierter Muskel ist ERHOLT, nicht unbekannt](erledigt/recovery-g-0445-nie-trainiert-ist-erholt.md) | erledigt | — | G-446, G-448 |
-| `G-446` | fehler | hoch | [die Vererbung laeuft nur nach unten](laufend_claudecode/recovery-g-0446-die-vererbung-laeuft-nur-nach-unten.md) | laeuft (claudecode) | — | — |
+| `G-446` | fehler | hoch | [die Vererbung laeuft nur nach unten](erledigt/recovery-g-0446-die-vererbung-laeuft-nur-nach-unten.md) | erledigt | — | G-449 |
+| `G-449` | befund | niedrig | [wertKommtVonGruppe hat keinen Aufrufer](todos/recovery-g-0449-wertkommtvongruppe-ohne-aufrufer.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
 
