@@ -194,3 +194,101 @@ ist.**
 
     Israetel M, Hoffmann J, Smith CW. Scientific Principles
     of Hypertrophy Training. (Volumenmarken)
+
+## Nachtrag 2026-09-08 -- es GIBT Zahlen je Uebung je Muskel
+
+Tom: *,,wissenschaftliche belege, welche uebung im bodybuilding
+welchen muskel wieviel beansprucht."*
+
+`[read]` **Die erste Recherche hat zu frueh aufgegeben.**
+
+### Die ACE-Studienreihe
+
+`[cmd]` **Das American Council on Exercise laesst je Muskelgruppe
+acht bis neun gaengige Uebungen mit EMG messen:**
+
+    14-20 Trainierte, 1RM bestimmt
+    dann 5-7 Wiederholungen je Uebung bei 70-80 % 1RM
+    zufaellige Reihenfolge, 5 min Pause
+    Elektroden auf JEDEM gemessenen Muskel
+
+`[read]` **Der entscheidende Kunstgriff: sie normalisieren auf
+die BESTE Uebung, nicht auf MVIC.**
+
+`[cmd]` **Trizeps, Porcari et al.: Dreieck-Liegestuetz = 100 %,
+alle anderen als Prozent davon.**
+
+`[read]` **Das ist, was eine App braucht** ? **RELATIVE Anteile,
+keine %MVIC mit 30 Punkt Streuung.**
+
+### Konkrete Zahlen, gemessen
+
+`[cmd]` **Bankdruecken:**
+
+    Pectoralis major     95 % MVC
+    Anterior deltoid     79 %
+    Triceps brachii      67 %
+
+`[read]` **DREI Muskeln, DREI Zahlen** ? **nicht
+*,,primaer/sekundaer"*.**
+
+`[cmd]` **Brust, ACE, 14 Maenner, 80 % 1RM, neun Uebungen:**
+
+    Langhantel-Bankdruecken   100 %  (Bezug)
+    Pec-Deck                   98 %
+    Kabelzug vorgebeugt        93 %
+    die uebrigen signifikant tiefer
+
+`[cmd]` **Trizeps-Dips: 85-90 % Aktivierung.**
+
+`[cmd]` **Bizeps, ACE: Konzentrationscurl fuehrt ? gemessen
+wurden Bizeps, vorderer Deltoid UND Brachioradialis.**
+
+`[cmd]` **PMC7112217: einbeinige Kniebeuge, Ausfallschritt,
+Seitstep ? SECHS Muskeln gleichzeitig gemessen (Gluteus medius,
+maximus, Biceps femoris, Vastus lateralis, medialis, Rectus
+femoris).**
+
+### Was das fuer LumeOS heisst
+
+`[read]` **Die Faktoren aus Pelland (1,0 / 0,5) sind der
+RUECKFALL, nicht das Ziel.**
+
+    belegt      aus einer EMG-Studie, je Muskel eine Zahl
+                Bankdruecken: Brust 0,95, Front-Delt 0,79,
+                Trizeps 0,67
+    geschaetzt  aus der Rolle: primary 1,0, secondary 0,5
+
+`[cmd]` **E-82 traegt es schon: der Faktor ist eine ZAHL,
+`source_id` und `evidence_class` sagen, woher sie kommt.**
+
+`[read]` **Also: die Grundzuege bekommen belegte Zahlen, der
+Rest den Rueckfall** ? **und die Kachel sagt, welche welche
+ist.**
+
+### Wo die Zahlen liegen
+
+    acefitness.org/certifiednewsarticle/
+      je Muskelgruppe eine Studie mit Tabelle
+      Trizeps, Bizeps, Brust, Gluteus, Bauch, Ruecken
+
+    PMC (NCBI)
+      Einzelstudien mit Mehrmuskelmessung
+      PMC7112217: sechs Beinmuskeln, drei Uebungen
+
+    PLOS One 2020, Kreuzheben
+      systematische Uebersicht, sieben Studien mit %MVIC
+
+    strongerbyscience.com/master-list/
+      kuratierte Liste der Meta-Analysen
+
+### Die Grenze bleibt
+
+`[read]` **ACE misst pro Studie EINE Muskelgruppe mit acht
+Uebungen** ? **nicht 1.416 Uebungen mit allen Muskeln.**
+
+`[cmd]` **Aber die Grundzuege sind abgedeckt** ? **und die
+machen den Grossteil des Volumens aus.**
+
+`[read]` **Eine Uebung ohne Studie bekommt den Rueckfall und ein
+Merkmal, das es sagt.**
