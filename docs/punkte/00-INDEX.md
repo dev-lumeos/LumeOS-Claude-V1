@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 225 |
-| `laufend_codex` | 5 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 437 |
+| `todos` | 223 |
+| `laufend_codex` | 2 |
+| `laufend_claudecode` | 4 |
+| `erledigt` | 440 |
 | **gesamt** | **669** |
 
 ## medical — 48
@@ -305,7 +305,7 @@
 | `G-418` | befund | niedrig | [Seed-Tage liegen in der Zukunft](todos/nutrition-g-0418-seed-tage-in-der-zukunft.md) | offen | — | — |
 | `G-419` | feature | niedrig | [der Insights-Block ist abgenommen](erledigt/nutrition-g-0419-insights-block-abgenommen.md) | erledigt | — | — |
 | `G-426` | feature | hoch | [die Supplementspalte in Nutrients](todos/nutrition-g-0426-die-supplementspalte-in-nutrients.md) | offen | — | — |
-| `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](todos/nutrition-g-0439-sollstand-fiber-g.md) | offen | — | — |
+| `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](laufend_claudecode/nutrition-g-0439-sollstand-fiber-g.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 83
@@ -405,8 +405,6 @@
 
 ## training — 28
 
-### beauftragbar — 27
-
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `A-08` | befund | mittel | [ADR Medienort](todos/training-a-0008-adr-medienort.md) | offen | — | — |
@@ -422,7 +420,8 @@
 | `C-476` | befund | hoch | [hat LumeOS dieselben Katalogfehler?](todos/training-c-0476-die-exercise-ontologie-pruefen.md) | offen | — | — |
 | `C-477` | feature | hoch | [Provenienz je Uebungsasset](todos/training-c-0477-provenienz-je-asset.md) | offen | — | — |
 | `C-487` | feature | hoch | [exercise_muscles auf Blattebene](erledigt/training-c-0487-exercise-muscles-auf-blattebene.md) | erledigt | — | C-490, C-491 |
-| `C-490` | feature | hoch | [der Faktor an der Zuordnung](laufend_codex/training-c-0490-der-faktor-an-der-zuordnung.md) | laeuft (codex) | — | — |
+| `C-490` | feature | hoch | [der Faktor an der Zuordnung](erledigt/training-c-0490-der-faktor-an-der-zuordnung.md) | erledigt | — | — |
+| `C-491` | befund | hoch | [die Zuordnungen zeigen auf die falsche Ebene](erledigt/training-c-0491-zuordnungen-auf-die-richtige-ebene.md) | erledigt | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
@@ -436,12 +435,6 @@
 | `G-219` | entscheidung | niedrig | [`LiveWorkout` hat keinen Aufrufer mehr](todos/training-g-0219-liveworkout-ohne-aufrufer.md) | offen | — | — |
 | `G-366` | feature | mittel | [die Uebungsliste der Sitzung](erledigt/training-g-0366-die-uebungsliste-der-sitzung.md) | erledigt | — | — |
 | `G-429` | befund | mittel | [wer rechnet estimated_1rm, und verweigert er?](todos/training-g-0429-einrm-mit-verweigerung.md) | offen | — | — |
-
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `C-491` | befund | hoch | [die Zuordnungen zeigen auf die falsche Ebene](laufend_codex/training-c-0491-zuordnungen-auf-die-richtige-ebene.md) | laeuft (codex) | C-490 | — |
 
 ## recovery — 35
 
@@ -468,7 +461,7 @@
 | `C-421` | feature | hoch | [vier Tabellen fuer die 17 Attrappen](erledigt/recovery-c-0421-vier-tabellen-fuer-die-17-attrappen.md) | erledigt | — | C-422 |
 | `C-462` | feature | hoch | [vier Ansichten ohne Tabelle](erledigt/recovery-c-0462-vier-ansichten-ohne-tabelle.md) | erledigt | — | — |
 | `C-469` | messung | hoch | [die sechsundzwanzig Recovery-Formeln](erledigt/recovery-c-0469-die-sechsundzwanzig-formeln.md) | erledigt | — | — |
-| `C-492` | feature | hoch | [Basiszeit je Muskel und der RPE-Faktor](laufend_codex/recovery-c-0492-basiszeit-je-muskel-und-rpe.md) | laeuft (codex) | — | — |
+| `C-492` | feature | hoch | [Basiszeit je Muskel und der RPE-Faktor](erledigt/recovery-c-0492-basiszeit-je-muskel-und-rpe.md) | erledigt | — | — |
 | `G-102` | befund | mittel | [Zwei SVG-Pfade der Muskelkarte sind abgeschnitten](erledigt/recovery-g-0102-zwei-svg-pfade-der-muskelkarte-sind-abgeschnitten.md) | erledigt | — | — |
 | `G-106` | entscheidung | mittel | [Der Readiness-Komposit waere ein zweiter Gesamtwert](todos/recovery-g-0106-der-readiness-komposit-waere-ein-zweiter-gesamtwert.md) | offen | — | — |
 | `G-174` | befund | mittel | [Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig](todos/recovery-g-0174-die-g-160-bildschirmfotos-sind-jetzt-erst-aussagekraeftig.md) | offen | — | — |
@@ -481,7 +474,7 @@
 | `G-438` | fehler | hoch | [Karte und Liste widersprechen sich](erledigt/recovery-g-0438-karte-und-liste-widersprechen-sich.md) | erledigt | — | — |
 | `G-440` | fehler | hoch | [MUSCLE_STATE ist eine Attrappe, die Kachel sagt „echte Daten"](erledigt/recovery-g-0440-muscle-state-ist-eine-attrappe.md) | erledigt | — | G-441 |
 | `G-441` | fehler | hoch | [die Today-Kachel rechnet weiter aus der Attrappe](todos/recovery-g-0441-die-today-kachel-rechnet-aus-der-attrappe.md) | offen | — | — |
-| `G-443` | fehler | mittel | [zehn Muskeln ohne Flaechenziel](todos/recovery-g-0443-zehn-muskeln-ohne-flaechenziel.md) | offen | — | — |
+| `G-443` | fehler | mittel | [zehn Muskeln ohne Flaechenziel](laufend_claudecode/recovery-g-0443-zehn-muskeln-ohne-flaechenziel.md) | laeuft (claudecode) | — | — |
 
 ## goals — 12
 

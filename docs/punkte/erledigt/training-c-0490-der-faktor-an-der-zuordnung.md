@@ -9,6 +9,8 @@ kind_von: C-487
 entscheidung: E-82
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 299be535
 beruehrt:
   tabellen: [training.exercise_muscles]
 zahlen:
@@ -158,3 +160,29 @@ BESTE Uebung, nicht auf MVIC** ? **relative Anteile statt
 
 `[read]` **Fang mit den Uebungen an, die im Seed vorkommen** ?
 **sechs Stueck.**
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    Spalten   faktor, source_id, evidence_class
+    Zeilen    6.744, KEINE ohne Faktor
+    Klassen   A: 3, C: 6.741
+
+`[cmd]` **Die drei A-Werte selbst gemessen:**
+
+    Pectoralis Major   0.95
+    Front Shoulders    0.79
+    Triceps            0.67
+
+`[read]` **Genau die EMG-Zahlen aus `docs/ssot/180`.**
+
+`[read]` **Drei von 6.744** ? **das ist ehrlich: nur
+Bankdruecken hat belegte Werte, alles andere traegt den
+Rueckfall und sagt es (Klasse C).**
+
+`[cmd]` **Und die Zahl ist gewachsen: 6.588 -> 6.744** ?
+**C-491 hat Wurzelzuordnungen aufgeloest, dabei entstehen
+mehr Zeilen.**
+
+**Abgenommen.**

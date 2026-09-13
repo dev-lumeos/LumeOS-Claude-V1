@@ -9,6 +9,8 @@ kind_von: C-487
 entscheidung: E-82
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 299be535
 beruehrt:
   tabellen: [training.exercise_muscles]
 zahlen:
@@ -141,3 +143,25 @@ Exit 0. Ketten-, Datenlogik- und Sprachwaechter sowie Punktelauf sind gruen.
     A5  wie viele der 105 Muskeln haben danach eine
         Zuordnung? Vorher gemessen, nachher gemessen.
     A6  Sicherung, Vollkette, Punktelauf.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    vorher    Wurzel 1.105 | Gruppe 3.331 | Blatt 2.152
+    jetzt     Wurzel     4 | Gruppe 4.206 | Blatt 2.534
+
+`[cmd]` **1.101 Wurzelzuordnungen aufgeloest.**
+
+> *,,4 einzeln begruendete unklare Faelle belassen"*
+
+`[read]` **Vier von 1.105 stehen geblieben, mit Grund** ?
+**statt sie zu raten.**
+
+`[cmd]` **Und referenzierte Muskelgruppen 95 -> 90** ? **fuenf
+Wurzeln werden nicht mehr angesprochen.**
+
+`[read]` **Das ist die Wirkung: eine Kniebeuge zeigt nicht mehr
+auf `Legs`.**
+
+**Abgenommen.**

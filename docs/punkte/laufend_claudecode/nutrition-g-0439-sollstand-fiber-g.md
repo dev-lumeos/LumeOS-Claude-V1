@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-464
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [goals.nutrition_targets]
 zahlen:

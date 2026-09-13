@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 299be535
 beruehrt:
   tabellen: [recovery.scores]
 zahlen:
@@ -132,3 +134,29 @@ Exit 0. Ketten-, Datenlogik- und Sprachwaechter sowie Punktelauf sind gruen.
 **Die Kurve NICHT auf zwei Komponenten umbauen** ? **erst
 messen, ob eine reicht.**
 
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    recovery.muscle_recovery_profiles   105 Zeilen
+    36 h: 51   48 h: 52   60 h: 2
+    Evidenzklasse   C fuer alle 105
+
+`[cmd]` **Die zwei 60-Stunden-Faelle:** `Lower Back`,
+`erector spinae`.
+
+`[read]` **Die Basiszeiten sind alle Klasse C** ? **er hat
+recherchiert und KEINE Studie gefunden, wie ich verlangt
+hatte.**
+
+`[cmd]` **Der Failure-Faktor 1,37 traegt Klasse B** ?
+**Beardsley zitiert die Literatur, aber es ist keine
+Primaerquelle.**
+
+`[read]` **Drei Klassen im selben Punkt, je nach Beleglage** ?
+**genau die Bauform, die C-466 vorgemacht hat.**
+
+`[cmd]` **Gegenprobe: Bizeps nach 36 h = 1,00, Erector spinae
+= 0,60.**
+
+**Abgenommen.**
