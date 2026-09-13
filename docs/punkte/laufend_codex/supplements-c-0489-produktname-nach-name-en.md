@@ -115,7 +115,54 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+### Ergebnis
+
+`supplements.supplier_products.name` ist zu `name_en` geworden.
+`name_de` und `name_th` sind vorhanden und in allen 214.780 DSLD-Produkten leer. Es wurde keine Uebersetzung geschrieben.
+
+### A1 — die 58 Treffer
+
+Die 58 breiten `name`-Treffer wurden einzeln nach ihrer Bedeutung geprueft. Nur folgende Stellen meinten die Produktspalte:
+
+| Stelle | meint `supplier_products.name`? | Ergebnis |
+| --- | --- | --- |
+| C-467-Schema und `create_supplier_product` | ja | Committete Migration unveraendert; C-489 benennt die Spalte um und ersetzt die RPC mit Zielspalte `name_en`. |
+| C-485-Constraint | ja | Constraint bei der Umbenennung zu `supplier_products_name_en_check` umbenannt. |
+| `485_dsld_import.py` | ja | Staging-Feld, COPY-Kopf, INSERT-Ziel, SELECT und Feldherkunft auf `name_en` umgestellt. |
+| C-466-Lesefunktion `nutrient_intake_detail_for_day` | ja | Sie liest nun `sp.name_en`; der C-466-Test ist gruen. |
+| C-466-Testfixture | ja | INSERT-Feld auf `name_en` umgestellt. |
+| C-467-Testargument `p_product_name` | nein | RPC-Parameter, keine Tabellen- oder Ergebnisfeldreferenz; bleibt fachlich korrekt. |
+| `suppliers.name` | nein | Firmenname; unveraendert. |
+| `supplement_name_snapshot` | nein | Historischer Text am Einnahmelog, kein Lieferproduktfeld; unveraendert. |
+| weitere `name`-Felder, Kommentare und Dokumentation | nein | Andere Objekte bzw. Text, keine Aenderung. |
+
+Die bestehende DSLD-Herkunft wurde ebenfalls nachgezogen: 214.780 Produkt-Feldquellen heissen jetzt `name_en`, keine mehr `name`.
+
+### A2 bis A4 — Sprach- und Markenfelder
+
+Die Strukturmigration `20260913001900_c489_produktname_name_en.sql` benennt die Spalte um und legt `name_de text` sowie `name_th text` an. Der Frischaufbau misst: 214.780 Produkte, 214.780 `name_en`, 0 nichtleere `name_de`, 0 nichtleere `name_th`, 214.780 nichtleere `marke`.
+
+`suppliers.name` existiert unveraendert weiter; `marke` wurde weder umbenannt noch beschrieben. Keine Uebersetzung wurde eingefuegt.
+
+### A5 — Leseseite
+
+`rg -F supplier_products apps/web apps/coach` hat **keinen direkten Treffer** ergeben. Die vorhandenen App-Treffer fuer `supplement_name_snapshot` gehoeren zu `supplements.intake_logs` und sind nicht vom Feldwechsel betroffen. `apps/` wurde nicht angefasst; es gibt daher keinen nachzuziehenden Oberflaechenvertrag zu melden.
+
+### A6 — Waechter
+
+`node tools/sprachspalten-pruefen.mjs` gegen `lumeos_c489_vollkette_final`: gruen, 128 `_de`-Spalten und drei begruendete interne Ausnahmen. Der neue C-489-Test prueft zudem Spalten, Leere der DE/TH-Werte, erhaltenen Firmen-/Markennamen und die DSLD-Feldherkunft; gruen. Die Datenlogik-Selbstprobe ist gruen.
+
+Die erneuerte Schreib-RPC aus C-467 ist im Datenlogik-Waechter als enge Strukturausnahme benannt: vier konkrete INSERTs innerhalb von `create_supplier_product`, die erst bei einem Service-RPC-Aufruf schreiben, nicht beim Einspielen der Migration. Alle absichtlich eingebauten neuen DML-Proben werden weiter rot erkannt.
+
+### A7 — Trennung Struktur/Daten
+
+Struktur liegt in der C-489-Migration. Die bestehende DSLD-Importstufe schreibt neue Produkte direkt mit `name_en`; die nummerierte Pipeline-Stufe `13_supplements/489_produktname_name_en.sql` zieht vorhandene DSLD-Feldherkunft von `name` auf `name_en` nach. Im Frischaufbau war sie idempotent (`UPDATE 0`), im Live-Nachzug wurden 214.780 Feldherkunftszeilen umgestellt.
+
+### A8 — Sicherung und Lauf
+
+Vor dem Live-Nachzug wurde `backup/data/20260913000500_c489_vor_live.dump` erstellt. Die Vollkette mit 205 Schritten lief auf der behaltenen Wegwerf-Datenbank `lumeos_c489_vollkette_final` vollstaendig gruen in 929,6 Sekunden; die Abschlusspruefung meldet `SCHEMA VOLLSTAENDIG`. Der DSLD-Import lief darin mit 214.780 Produkten und 3.000.982 Inhaltszeilen.
+
+`node tools/punkte-pruefen.mjs` ist gruen (25 Befunde, Soll 25), `git diff --check` ohne Fehler. `pnpm gate` erreicht danach die bekannte, fremde G-261-Abweichung in `zwei-wahrheiten-pruefen` (7 statt Soll 6 Naehrstoffspalten) und stoppt vor dem Sprachwaechter; C-489-Test, Sprachwaechter und Datenlogik-Waechter wurden deshalb direkt erfolgreich ausgefuehrt. Nichts wurde committed, gestaged oder in `apps/` geaendert.
 
 ## Abnahme
 
