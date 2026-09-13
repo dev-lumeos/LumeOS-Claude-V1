@@ -173,3 +173,157 @@ gemeldet.**
 
 `[cmd]` **Und der Plan fuer die fuenf Module steht in
 `docs/sessions/2026-09-08-plan-fuenf-module.md`.**
+
+---
+
+# Zweiter Teil des Tages
+
+**In einem Satz:** die Muskelkarte wurde von 23 Buendeln auf 43
+einzelne Muskeln aufgeloest, DSLD mit 214.780 Produkten
+eingelesen ? und dabei kam heraus, dass die Erholungskachel ihre
+Zahlen aus einer Mockup-Tabelle nahm und `echte Daten` daran
+schrieb.
+
+`[cmd]` **103 Commits, ungepusht.**
+
+## Neue Entscheidungen
+
+    E-81  parent_id fuer die Tiefe, KEINE Ebenenzahl
+          Seite als SPALTE am Messwert, nicht als Zeile
+    E-82  die tiefste sinnvolle Ebene
+          Faktor an der ZUORDNUNG, nicht an der Rolle
+
+## Die Muskelkarte, in sieben Schritten
+
+`[cmd]` **G-425:** **jeden Ruecken-Pfad einzeln fotografiert** ?
+`upper-back` **waren DREI Muskelpaare, nicht eine Gruppe.**
+
+`[cmd]` **C-468:** **`public.koerperflaechen`, 59 Zeilen, drei
+Ebenen** ? **und ein Sicherheitsbefund: `pg_default_acl` vergibt
+in `public` bei JEDER neuen Tabelle alles.**
+
+`[cmd]` **C-471:** **Struktur nach `migrations/`, Daten in den
+Kettenschritt** ? **D-17, Weg B.**
+
+`[cmd]` **G-430, G-431, G-434:** **23 -> 26 -> 28 -> 43
+Flaechen.** `[read]` **Der letzte Schritt lief direkt zwischen
+Tom und Claude Code, ohne Orchestrator.**
+
+`[cmd]` **C-484:** **`ebene` und `seite` raus, 68 -> 51 Zeilen,
+`art` erlaubt `kopf`.**
+
+`[cmd]` **G-436, G-438:** **die Hierarchie als EINE Liste,
+immer offen, mit Schnitt und Engpass je Gruppe** ? **und
+geliehene Werte mit Herkunft (*,,Wert von Triceps"*).**
+
+## Der Befund, der den Tag traegt
+
+`[cmd]` **G-440: `MUSCLE_STATE` in `motor.ts` war eine
+ATTRAPPE** ? **achtzehn feste Zeilen, aus dem Mockup
+abgeschrieben, und die Kachel trug `echte Daten`.**
+
+Tom: *,,das ist alles dreck was hier geliefert wird und
+verarschend gegenueber mich."*
+
+`[read]` **Der Orchestrator hat G-433, G-435, G-436 und G-438
+abgenommen, OHNE zu fragen, woher die Zahlen kommen.**
+
+`[cmd]` **Behoben: die Werte kommen jetzt aus `workout_sets` x
+`workout_exercises` x `exercise_muscles`.**
+
+`[cmd]` **Und der eigentliche Befund: SECHS verschiedene
+Uebungen im Seed, 1.416 im Katalog.**
+
+## Die Recherche
+
+`[cmd]` **`docs/ssot/180, 181, 182`** ? **drei Dateien, auf
+Toms Ansage:** *,,vielleicht mal online recherchieren, ob es
+irgendwelche wissenschaftlichen formeln gibt."*
+
+**Geprueft und ABGELEHNT:**
+
+    wger              845 Uebungen, 16 Muskeln
+                      kleiner als unsere 1.416 auf 105
+    MuscleWiki        kommerziell, dieselben zwei Stufen
+    Alpha Progression Zahlen ohne Beleg
+    OpenSim           braucht Motion Capture
+
+**Geprueft und BRAUCHBAR:**
+
+    Pelland et al. 2026   direkt 1,0 / indirekt 0,5
+      Sports Med 56(2)    67 Studien, 2.058 Teilnehmer
+                          Bayes-Faktor 9,48
+
+    ACE-Studienreihe      je Muskelgruppe 8-9 Uebungen,
+                          auf die BESTE normalisiert
+      Bankdruecken        Brust 0,95, Front-Delt 0,79,
+                          Trizeps 0,67
+
+    Beardsley             das PRINZIP (neuromechanisches
+                          Matching), keine Tabelle
+                          Versagen = +37 % Erholungszeit
+
+## Supplements: DSLD
+
+`[cmd]` **C-485:** **214.780 Produkte, 6.419 Firmen, 3,0 Mio
+Inhaltszeilen, 1,7 Mio Kandidaten.**
+
+`[read]` **Die Kandidaten sind die sichtbare Luecke** ? **nicht
+erfundene Zuordnungen.**
+
+`[cmd]` **Und die `blend`-Loesung von DSLD selbst:** **die
+Mischung traegt die Gesamtmenge, die Zutaten folgen OHNE Menge,
+in Etikettreihenfolge.**
+
+## Sprachspalten
+
+`[cmd]` **C-488: `_de` 123 -> 126, `_en` 101 -> 125, `_th`
+91 -> 123** ? **keine Uebersetzung erfunden, drei begruendete
+Ausnahmen.**
+
+`[cmd]` **C-489: `supplier_products.name` -> `name_en`,
+`name_de` und `name_th` leer angelegt.**
+
+`[read]` **Die Regel stand seit langem in den Konventionen** ?
+**der Orchestrator hat sie in vier Auftraegen nicht genannt.**
+
+## Fehler des Orchestrators, zweiter Teil
+
+**1** ? **Eine Regel erfunden und dreimal weitergereicht:**
+*,,triceps hat drei Koepfe und bleibt EIN Muskel"* ?
+**anatomisch falsch.**
+
+**2** ? **`training.muscle_groups` nicht gelesen** ? **die
+Hierarchie stand die ganze Zeit da, 105 Namen, vier Ebenen.**
+
+**3** ? **Zwei Agenten aufeinander warten lassen** ? **C-484
+und G-435 verlangten beide, dass der andere zuerst meldet.**
+
+**4** ? **Einen Bericht geglaubt statt gemessen** ? **die
+C-484-Konfliktloesung, die `tabs.tsx` beschaedigte.**
+
+**5** ? **Bei Schritt 4 angefangen statt bei Schritt 1** ?
+**Tom musste die sechs Schritte selbst aufschreiben.**
+
+## Was laeuft
+
+    Codex        C-490, C-491, C-492
+                 (Faktor, Zuordnung, Basiszeit)
+    Claude Code  G-437 (tabs.tsx wiederherstellen)
+
+## Was offen ist und zaehlt
+
+`[cmd]` **C-472:** **der Datenlogik-Waechter ist seit C-428 rot
+? fuenfzehn Migrationen.**
+
+`[cmd]` **C-486:** **UTF-8 kippt beim Einspielen, Hex zeigt
+`3f3f`.**
+
+`[cmd]` **G-439:** **`fiber_g` fehlt im Sollstand** ? **`pnpm
+gate` stoppt daran, dreimal gemeldet.**
+
+`[cmd]` **G-441:** **die Today-Kachel rechnet weiter aus
+`MUSCLE_STATE`.**
+
+`[cmd]` **C-476:** **hat LumeOS dieselben Katalogfehler wie
+openGym? 1.416 Uebungen, ungeprueft.**
