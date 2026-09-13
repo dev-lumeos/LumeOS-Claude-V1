@@ -57,9 +57,27 @@ test('G-440/A5: die Muskelkacheln rechnen NICHT aus einer festen Tabelle', () =>
     + '`workout_sets` (G-440).')
 
   // Und sie muss die gerechnete Quelle wirklich benutzen.
-  assert.match(kachel, /muskelzustand\?\.zustaende\[/,
+  //
+  // ══ G-445: die FRAGE, nicht die Zeilenform ══════════════════
+  //
+  // `[cmd]` **Hier stand `/muskelzustand\?\.zustaende\[/`** — der
+  // genaue Zugriff. `[cmd]` **G-445 leitet ihn ueber `muskelLage(id,
+  // muskelzustand?.zustaende ?? {}, katalog)`**, damit „nie
+  // trainiert" von „nicht im Katalog" getrennt wird. **Die
+  // Verdrahtung blieb, die Zeichenkette nicht** — und der Waechter
+  // fiel, ohne dass etwas kaputt war.
+  //
+  // `[read]` **Die Frage ist: kommt der gerechnete Zustand in der
+  // Kachel an?** **Nicht: steht er in dieser einen Schreibweise
+  // da?** (die Lehre `waechter-prueft-zeilenform-statt-sache`).
+  assert.match(kachel, /muskelzustand\?\.zustaende/,
     'Die Kachel liest den gerechneten Zustand nicht — dann zeigt '
     + 'sie entweder nichts oder wieder Entwurfszahlen.')
+  // `[cmd]` **Und er muss in die FORMEL gehen**, nicht nur gelesen
+  // werden — sonst haengt die Zahl wieder in der Luft.
+  assert.match(kachel, /calcMuscleRecovery\(\{/,
+    'Die Kachel rechnet nicht mehr mit `calcMuscleRecovery` — dann '
+    + 'ist der gelesene Zustand ohne Wirkung.')
 })
 
 test('G-440/A3: keine Kachel behauptet „echte Daten"', () => {

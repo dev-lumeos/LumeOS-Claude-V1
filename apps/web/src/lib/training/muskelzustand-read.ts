@@ -7,7 +7,7 @@
 import { createSessionClient } from '@lumeos/shared/session'
 
 import {
-  muskelzustaende, deckungsbericht,
+  muskelzustaende, deckungsbericht, katalogMuskeln,
   type Muskelzustand, type RohSatz, type RohUebung,
   type RohSitzung, type RohZuordnung,
 } from './muskelzustand'
@@ -15,6 +15,22 @@ import {
 export type MuskelzustandStand = {
   /** Je `muscle_group_id` der gerechnete Zustand. */
   zustaende: Record<string, Muskelzustand>
+  /**
+   * `[cmd]` **G-445: welche `muscle_group_id` ueberhaupt von einer
+   * Uebung getroffen werden koennen** — aus denselben
+   * `exercise_muscles`-Zeilen, ohne zweite Abfrage.
+   *
+   * `[read]` **Wer hier fehlt, kann nie trainiert werden** — das ist
+   * ein Katalogbefund und wird eigens benannt, nicht mit 100 %
+   * zugedeckt.
+   *
+   * `[cmd]` **Eine LISTE, kein `Set`** — dieser Stand geht von
+   * `page.tsx` (Server) als Prop nach `ansicht.tsx` (`'use
+   * client'`), **und ein `Set` kommt dort als `{}` an** (die Lehre
+   * `map-ueberlebt-die-client-grenze-nicht`). **Die Empfaengerseite
+   * macht daraus wieder ein `Set`.**
+   */
+  imKatalog: string[]
   deckung: ReturnType<typeof deckungsbericht>
   /** `null`, wenn gelesen wurde; sonst der Grund. */
   fehler: string | null
@@ -22,6 +38,7 @@ export type MuskelzustandStand = {
 
 const LEER: MuskelzustandStand = {
   zustaende: {},
+  imKatalog: [],
   deckung: { gemessen: 0, gesamt: 0, ohneDaten: 0, rollenUngewichtet: true },
   fehler: null,
 }
@@ -97,6 +114,7 @@ export async function ladeMuskelzustand(
       saetze, uebungen, sitzungen, zuordnungen, jetzt)
     return {
       zustaende,
+      imKatalog: katalogMuskeln(zuordnungen),
       deckung: deckungsbericht(zustaende, muskelnGesamt),
       fehler: null,
     }

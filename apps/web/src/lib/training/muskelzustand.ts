@@ -201,6 +201,98 @@ export function muskelzustaende(
   return aus
 }
 
+// ══ G-445: nie belastet ist ERHOLT, nicht unbekannt ═════════════
+//
+// **Tom, 2026-09-13:** *„selbst wenn es nur 6 uebungen sind, wo
+// liegt die logik, dass dann nur die muskeln der uebungen gruen
+// gezeigt werden? dann sollten alle nicht verwendeten muskeln
+// zumindest sicher mal gruen sein."*
+//
+// `[read]` **Das ist ein Denkfehler in der Rechnung, kein
+// Datenproblem.** `[cmd]` **Die Formel beantwortet die Frage
+// selbst:** `base(hours)` **sind die Stunden seit der letzten
+// Belastung** — **nie belastet heisst unendlich, und
+// `baseRecoveryCurve` gibt ab 96 h glatt `100`.**
+//
+// `[read]` **100 % ist also KEIN erfundener Wert** — es ist die
+// Antwort der bestehenden Formel auf „nie belastet". **Hier wird
+// nichts geschaetzt, nur eine Luecke geschlossen, die als
+// „unbekannt" gelesen wurde.**
+//
+// ══ WO DIE GRENZE BLEIBT ════════════════════════════════════════
+//
+// `[cmd]` **Gemessen 2026-09-13:** `exercise_muscles` **hat 6.744
+// Zuordnungen auf 90 Muskelgruppen; `training.muscle_groups`
+// fuehrt 105.** `[read]` **Die 15 Rest-Gruppen kann KEINE Uebung
+// treffen** — wer dort nicht vorkommt, kann nie trainiert werden.
+//
+// `[read]` **Das ist ein KATALOGbefund, kein Erholungswert** — er
+// wird gemeldet, nicht mit 100 % zugedeckt.
+
+/** Warum ein Muskel den Wert hat, den er hat. */
+export type Herkunft = 'gerechnet' | 'unbelastet' | 'nicht-im-katalog'
+
+/**
+ * Der Zustand EINES Muskels, einschliesslich der Faelle ohne Satz.
+ *
+ * `[read]` **`zustand` ist `null`, wo nie belastet wurde** — es
+ * gibt keine Sitzung, auf die `hours`/`sets`/`lastSession` zeigen
+ * koennten. **Die Herkunft sagt, warum.**
+ */
+export type MuskelLage = {
+  herkunft: Herkunft
+  zustand: Muskelzustand | null
+}
+
+/**
+ * Je Muskel: gerechnet, unbelastet oder gar nicht im Katalog.
+ *
+ * `[read]` **Reine Rechnung, keine Importe** — dieselbe Auflage wie
+ * `muskelzustaende` (die `'use client'`-Grenze, G-430).
+ *
+ * `imKatalog` ist die Menge der `muscle_group_id`, die ueberhaupt
+ * in `exercise_muscles` vorkommen. **Sie wird hereingereicht, nicht
+ * hier gelesen** — sonst waere die Funktion nicht pruefbar.
+ */
+export function muskelLage(
+  muskelId: string,
+  zustaende: Record<string, Muskelzustand>,
+  imKatalog: ReadonlySet<string>,
+): MuskelLage {
+  const st = zustaende[muskelId]
+  if (st) return { herkunft: 'gerechnet', zustand: st }
+  // `[read]` **Die Reihenfolge ist nicht beliebig:** wer Saetze hat,
+  // IST im Katalog — die Katalogfrage stellt sich erst danach.
+  if (!imKatalog.has(muskelId)) {
+    return { herkunft: 'nicht-im-katalog', zustand: null }
+  }
+  return { herkunft: 'unbelastet', zustand: null }
+}
+
+/**
+ * Welche Muskelgruppen ueberhaupt von einer Uebung getroffen werden.
+ *
+ * `[cmd]` **Aus denselben `exercise_muscles`-Zeilen, die der
+ * Leseweg ohnehin holt** — keine zweite Abfrage.
+ *
+ * `[cmd]` **Gibt eine LISTE zurueck, kein `Set`** — zwei Gruende:
+ * die Ziel-Version erlaubt keine Set-Iteration (TS2802, wie bei
+ * `Map` oben), **und der Wert muss ueber die `'use
+ * client'`-Grenze**, wo ein `Set` als `{}` ankaeme.
+ */
+export function katalogMuskeln(
+  zuordnungen: RohZuordnung[],
+): string[] {
+  const gesehen: Record<string, true> = {}
+  const aus: string[] = []
+  for (const z of zuordnungen) {
+    if (gesehen[z.muscle_group_id]) continue
+    gesehen[z.muscle_group_id] = true
+    aus.push(z.muscle_group_id)
+  }
+  return aus
+}
+
 /**
  * Wieviel ist gemessen, wieviel fehlt — fuer das ehrliche Etikett.
  *

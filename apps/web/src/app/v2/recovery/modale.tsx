@@ -262,7 +262,26 @@ function GruppenDetailModal({ name, onClose, muskelbaum }: {
                     <>
                       <span className="v2-num v2-dim" style={{ fontSize: 11 }}>--</span>
                       <span className="v2-dim" style={{ fontSize: 9.5 }}>
-                        {k.flaeche ? 'kein Volumen zugeordnet' : 'nicht gezeichnet'}
+                        {/* ══ G-445: „kein Volumen zugeordnet" ist
+                            auch hier weg ═════════════════════════
+                            `[read]` **Der Satz behauptete einen
+                            Zustand, den es nicht gibt** — ein
+                            Muskel ohne Satz ist unbelastet, nicht
+                            unbekannt.
+
+                            `[cmd]` **ABER: dieses Fenster rechnet
+                            noch aus `MUSCLE_STATE`** (Zeile 173) —
+                            **18 feste Mockup-Zeilen, derselbe
+                            Befund wie G-440/G-441.** `[read]` **Es
+                            bekommt `muskelzustand` gar nicht als
+                            Prop.** **Solange das so ist, ist „--"
+                            hier eine Luecke der ANZEIGE, nicht der
+                            Daten** — und genau das sagt der Satz
+                            jetzt, statt eine Ursache zu erfinden
+                            (E-72). **Gemeldet in G-445.** */}
+                        {k.flaeche
+                          ? 'in diesem Fenster nicht gerechnet (G-441)'
+                          : 'nicht gezeichnet'}
                       </span>
                     </>
                   )}

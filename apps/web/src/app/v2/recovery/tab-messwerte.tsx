@@ -51,6 +51,10 @@ import {
 // `[read]` **Nur der TYP aus dem Leseweg** — ein Wert-Import
 // zoege `next/headers` mit (G-430).
 import type { MuskelzustandStand } from '../../../lib/training/muskelzustand-read'
+// `[cmd]` **G-445: `muskelLage` kommt aus `muskelzustand.ts`, NICHT
+// aus `-read.ts`** — die Rechendatei ist importfrei, der Leseweg
+// zoege `next/headers` mit (dieselbe Falle wie oben, G-430).
+import { muskelLage } from '../../../lib/training/muskelzustand'
 
 /**
  * Das Etikett einer Kachel — und was daran noch geschaetzt ist.
@@ -147,6 +151,13 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
   const echterKater = neuster?.soreness ?? null
   const echteSchlafguete = neuster?.sleep_quality ?? null
 
+  // `[cmd]` **G-445: aus der Liste wieder ein `Set`** — sie kommt
+  // als Array ueber die `'use client'`-Grenze, weil ein `Set` dort
+  // als `{}` ankaeme.
+  const katalog = React.useMemo(
+    () => new Set(muskelzustand?.imKatalog ?? []),
+    [muskelzustand])
+
   // ══ G-440: die KARTE rechnet aus denselben Daten wie die Liste ═
   //
   // **Tom, 2026-09-13:** *„es korrespondiert von der grafik nicht
@@ -165,23 +176,44 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
     return MUSCLE_GROUPS_BODYMAP.map(slug => {
       const gruppe = SCHLUESSEL_ZU_GRUPPE[slug]
       const id = gruppe ? nachName.get(gruppe.toLowerCase()) : undefined
-      const st = id ? muskelzustand?.zustaende[id] : undefined
-      // `[read]` **Kein Satz auf diesen Muskel heisst KEIN Wert** —
-      // die Flaeche bleibt grau, statt eine Zahl zu erfinden.
-      if (!st) return { slug, value: null as number | null }
+      // ══ G-445: nie belastet ist ERHOLT ═══════════════════════
+      //
+      // **Tom:** *„dann sollten alle nicht verwendeten muskeln
+      // zumindest sicher mal gruen sein."*
+      //
+      // `[cmd]` **Hier stand `if (!st) return { value: null }`** —
+      // **die Flaeche blieb grau.** `[read]` **Grau hiess
+      // „unbekannt", gemeint war „unbelastet"** — zwei
+      // verschiedene Sachen.
+      const lage = id
+        ? muskelLage(id, muskelzustand?.zustaende ?? {}, katalog)
+        : { herkunft: 'nicht-im-katalog' as const, zustand: null }
+      // `[read]` **Nicht im Katalog bleibt grau** — ihn kann keine
+      // Uebung treffen, „erholt" waere dort eine Aussage ueber
+      // etwas, das nie stattfinden kann.
+      if (lage.herkunft === 'nicht-im-katalog') {
+        return { slug, value: null as number | null, herkunft: lage.herkunft }
+      }
       // `[read]` **Der Kater kommt aus dem Check-in**; ohne
       // Check-in ist er `0` — eine Angabe, kein geratener Wert.
       const kater = echterKater?.[slug] ?? 0
       const guete = echteSchlafguete ?? CHECKIN.sleep_quality
+      const st = lage.zustand
+      // `[cmd]` **Unbelastet: `hours` unendlich, `sets` 0** — und
+      // `baseRecoveryCurve` gibt ab 96 h glatt 100. **Die Zahl
+      // kommt aus derselben Formel wie jede andere.**
       const calc = calcMuscleRecovery({
-        hours: st.hours, sets: st.sets, sleepQuality: guete,
+        hours: st ? st.hours : Number.POSITIVE_INFINITY,
+        sets: st ? st.sets : 0,
+        sleepQuality: guete,
         proteinPct: NUTRITION_INPUT.proteinPct,
         caloriePct: NUTRITION_INPUT.caloriePct,
         soreness: kater,
       })
-      return { slug, ...st, soreness: kater, ...calc }
+      return { slug, ...(st ?? {}), soreness: kater, ...calc,
+        herkunft: lage.herkunft }
     }).sort((a, b) => (a.value ?? 999) - (b.value ?? 999))
-  }, [echterKater, echteSchlafguete, muskelbaum, muskelzustand])
+  }, [echterKater, echteSchlafguete, muskelbaum, muskelzustand, katalog])
 
   // ══ G-440: das Etikett sagt, was gemessen ist ════════════════
   const etikett = datenEtikett(muskelzustand?.deckung, !!echterKater)
@@ -271,13 +303,24 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
             // keinen.**
             const id = knoten.find(
               k => k.name.toLowerCase() === a.name.toLowerCase())?.id
-            const st = id ? muskelzustand?.zustaende[id] : undefined
-            if (!st) return null
+            // ══ G-445: dieselbe Entscheidung wie auf der Karte ═══
+            //
+            // `[cmd]` **Hier stand `if (!st) return null`** — und
+            // die Zeile zeigte „--  kein Volumen zugeordnet".
+            // `[read]` **Ein nie trainierter Muskel ist erholt, nicht
+            // unbekannt** (Tom, G-445).
+            const lage = id
+              ? muskelLage(id, muskelzustand?.zustaende ?? {}, katalog)
+              : { herkunft: 'nicht-im-katalog' as const, zustand: null }
+            if (lage.herkunft === 'nicht-im-katalog') return null
+            const st = lage.zustand
             const slug = a.flaeche ? KARTE_ZU_RECOVERY[a.flaeche] : null
             const kater = slug ? echterKater?.[slug] ?? 0 : 0
             const guete = echteSchlafguete ?? CHECKIN.sleep_quality
             const wert = calcMuscleRecovery({
-              hours: st.hours, sets: st.sets, sleepQuality: guete,
+              hours: st ? st.hours : Number.POSITIVE_INFINITY,
+              sets: st ? st.sets : 0,
+              sleepQuality: guete,
               proteinPct: NUTRITION_INPUT.proteinPct,
               caloriePct: NUTRITION_INPUT.caloriePct,
               soreness: kater,
@@ -300,7 +343,13 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
             const slug = a.flaeche ? KARTE_ZU_RECOVERY[a.flaeche] : null
             const id = knoten.find(
               k => k.name.toLowerCase() === a.name.toLowerCase())?.id
-            const st = id ? muskelzustand?.zustaende[id] : undefined
+            // `[cmd]` **G-445: die Herkunft gehoert AN DIE ZEILE** —
+            // wer nachsieht, muss erkennen koennen, ob ein Wert
+            // gerechnet oder unbelastet ist.
+            const lage = id
+              ? muskelLage(id, muskelzustand?.zustaende ?? {}, katalog)
+              : { herkunft: 'nicht-im-katalog' as const, zustand: null }
+            const st = lage.zustand
             // `[read]` **Der Kater kommt aus `recovery.checkins`** —
             // die EINZIGE Groesse, die schon vorher echt war.
             const sore = slug && echterKater ? echterKater[slug] : undefined
@@ -389,11 +438,22 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
                         <span className="v2-dim" style={{ fontSize: 9.5 }}>
                           Wert von {a.vonGruppe}
                         </span>
-                      ) : st && (
+                      ) : st ? (
                         <span className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>
                           {sore != null ? `${sore}/3 · ` : ''}{st.hours} h
                           {' · '}{st.sets} Sätze
                           {' · '}{st.lastSession}
+                        </span>
+                      ) : lage.herkunft === 'unbelastet' && (
+                        // ══ G-445/A3: gerechnet ODER unbelastet ═══
+                        //
+                        // `[read]` **Die 100 % ohne diesen Zusatz
+                        // saehen aus wie eine Messung.** **Sie sind
+                        // die Antwort der Formel auf „nie belastet"**
+                        // — und die Zeile sagt es, statt es zu
+                        // verschweigen (E-72).
+                        <span className="v2-dim" style={{ fontSize: 9.5 }}>
+                          unbelastet · nie trainiert
                         </span>
                       )}
                     </>
@@ -419,8 +479,20 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
                             `[read]` **Aber dann stuende sie stumm da.**
                             **Der Grund wird benannt**, nicht
                             verschwiegen (E-72). */}
-                        {a.flaeche
-                          ? 'kein Volumen zugeordnet'
+                        {/* ══ G-445/A2: „kein Volumen zugeordnet"
+                            ist WEG ══════════════════════════════
+                            `[read]` **Er war nie ein Zustand,
+                            sondern eine fehlende Antwort** — ein
+                            Muskel ohne Satz ist unbelastet und
+                            damit erholt, nicht unbekannt.
+                            `[cmd]` **Was bleibt, ist der
+                            KATALOGbefund:** 15 der 105
+                            Muskelgruppen kommen in
+                            `exercise_muscles` gar nicht vor
+                            (gemessen 2026-09-13) — **die kann
+                            keine Uebung treffen.** */}
+                        {lage.herkunft === 'nicht-im-katalog' && a.flaeche
+                          ? 'keine Uebung trifft ihn'
                           : a.kinder.length > 0 && a.kinder.some(k => k.vonGruppe)
                             ? 'Kinder ohne eigene Messung'
                             : 'nicht gezeichnet'}
