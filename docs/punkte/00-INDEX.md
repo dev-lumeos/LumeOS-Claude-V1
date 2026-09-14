@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 230 |
+| `todos` | 231 |
 | `erledigt` | 448 |
-| **gesamt** | **678** |
+| **gesamt** | **679** |
 
 ## medical — 48
 
@@ -481,7 +481,7 @@
 | `G-449` | befund | niedrig | [wertKommtVonGruppe hat keinen Aufrufer](todos/recovery-g-0449-wertkommtvongruppe-ohne-aufrufer.md) | offen | — | — |
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](todos/recovery-g-0450-tageswechsler-rechnet-nicht.md) | offen | — | — |
 
-## goals — 12
+## goals — 13
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -490,6 +490,7 @@
 | `C-432` | feature | mittel | [der freie Platz fuer ein neues Ziel](erledigt/goals-c-0432-der-freie-platz-fuer-ein-neues-ziel.md) | erledigt | — | C-433 |
 | `C-433` | feature | mittel | [C-432 einspielen](erledigt/goals-c-0433-c-432-einspielen.md) | erledigt | — | — |
 | `C-463` | feature | hoch | [drei Modale ohne Ziel](erledigt/goals-c-0463-drei-modale-ohne-ziel.md) | erledigt | — | — |
+| `C-494` | feature | hoch | [die zehn Posen auf alle IFBB-Klassen aufschluesseln](todos/goals-c-0494-ifbb-klassen-und-pflichtposen.md) | offen | — | — |
 | `E-04` | blocker | hoch | [Alte `public`-Tabellen nach `legacy` verschieben](erledigt/goals-e-0004-alte-public-tabellen-nach-legacy-verschieben.md) | erledigt | — | — |
 | `G-83` | befund | mittel | [Das Onboarding ist entworfen, aber nicht gebaut](erledigt/goals-g-0083-das-onboarding-ist-entworfen-aber-nicht-gebaut.md) | erledigt | — | — |
 | `G-139` | befund | mittel | [Goals — Fortschrittsfotos mit Posen-Sets](todos/goals-g-0139-goals-fortschrittsfotos-mit-posen-sets.md) | offen | — | — |
