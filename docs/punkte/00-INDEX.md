@@ -7,8 +7,9 @@
 |---|---|
 | `todos` | 231 |
 | `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 449 |
-| **gesamt** | **681** |
+| **gesamt** | **682** |
 
 ## medical — 48
 
@@ -307,9 +308,9 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 85
+## supplements — 86
 
-### beauftragbar — 83
+### beauftragbar — 84
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -395,6 +396,7 @@
 | `G-423` | feature | hoch | [Zyklen, Protokolle und die Injektionskarte](erledigt/supplements-g-0423-zyklen-und-injektionen.md) | erledigt | — | G-424 |
 | `G-428` | fehler | hoch | [der Injektionsreiter ist leer](erledigt/supplements-g-0428-injektionsreiter-ist-leer.md) | erledigt | — | — |
 | `G-437` | fehler | hoch | [tabs.tsx hat vierzehn Karten verloren](erledigt/supplements-g-0437-tabs-tsx-verlorene-karten.md) | erledigt | — | — |
+| `G-453` | feature | hoch | [die Produkttafel](laufend_claudecode/supplements-g-0453-die-produkttafel.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 2
@@ -402,7 +404,7 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
-| `G-452` | feature | hoch | [der Produkte-Reiter](erledigt/supplements-g-0452-der-produkte-reiter.md) | erledigt | C-495 | — |
+| `G-452` | feature | hoch | [der Produkte-Reiter](erledigt/supplements-g-0452-der-produkte-reiter.md) | erledigt | C-495 | G-453 |
 
 ## training — 30
 

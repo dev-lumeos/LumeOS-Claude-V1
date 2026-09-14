@@ -114,7 +114,102 @@ Nicht committen, nicht stagen, nicht pushen.
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Ergaenzt 2026-09-14 -- jetzt in der laufenden lokalen Supabase-Datenbank eingespielt und nachgemessen.**
+
+Vor dem Einspielen liegt die Sicherung unter
+`backup/schema/20260914160018_c495_supplier_product_catalog_read_vor_einspielen.sql`
+(1.587.226 Bytes). Danach wurde
+`20260914080541_c495_supplier_product_catalog_read.sql` erfolgreich ausgefuehrt
+und als angewendet in der lokalen Supabase-Migrationshistorie vermerkt.
+
+### Live-Nachweis
+
+`[cmd]` Alle drei Lesewege existieren jetzt:
+
+    supplements.search_supplier_products(text, text, text, integer)
+    supplements.supplier_product_detail(uuid)
+    supplements.supplier_product_brands
+
+`[cmd]` Beide erwarteten GIN-Indizes existieren jetzt:
+
+    supplier_products_name_en_trgm_idx
+    supplier_products_marke_trgm_idx
+
+`[cmd]` Die Markenansicht liefert **4.907** Marken mit mindestens einem
+On-Market-Produkt.
+
+`[cmd]` Die drei Fehlerschreibungen liefern jeweils unter den 50 Treffern ein
+Gold Standard Whey:
+
+    gold standart wey                    50 Treffer, hoechste Aehnlichkeit 0.666667
+    optimum nutriton gold standart       50 Treffer, hoechste Aehnlichkeit 0.483871
+    optimum nutrtion gold standrad whey  50 Treffer, hoechste Aehnlichkeit 0.384615
+
+`[cmd]` Die Gegenprobe `qzvwxjplk` liefert **0** Treffer.
+
+Die gewaehlte Schwelle ist `pg_trgm.word_similarity_threshold = 0.30`.
+`word_similarity` ist fuer Wortfehler robuster als eine reine
+Gesamtstring-Aehnlichkeit; 0.35 wuerde die dritte Fehlerschreibung nicht mehr
+zuverlaessig einschliessen.
+
+`[cmd]` Der Live-Plan fuer `gold standart wey` ueber 214.780 Produkte nutzt
+beide GIN-Indizes per `BitmapOr`; `EXPLAIN (ANALYZE, BUFFERS)` misst
+**14.104 ms** Ausfuehrungszeit (833 Buffer-Hits, 9 Reads). Damit bleibt die
+Laufzeit bei rund 14 ms.
+
+### Vollstaendiger Produktleser
+
+`[cmd]` `supplier_product_detail('7bd745e2-6822-42d5-bbd9-8e5820b7e36a')`
+liefert fuer Dr. Mercola **Miracle Whey Protein Powder Original**:
+
+    Portion: 40.0000 Gram(s) [2 scoops]
+    Inhaltszeilen: 18
+    Calories: 160 {Calories}
+    Protein: 32 g
+
+Der JSON-Leser liefert den geforderten Kopf, alle Inhaltsfelder samt optionalem
+`supplements.name_en` und die Firmen mit Name, Land und Rolle.
+
+### Rechte- und Default-ACL-Befund
+
+Die Behauptung am Punktende, in der Migration fehle ein `REVOKE`, traf auf die
+vorliegende Datei nicht zu: Sie enthaelt fuer beide Funktionen
+`REVOKE ALL ... FROM PUBLIC, anon` und fuer die Markenansicht
+`REVOKE ALL ... FROM PUBLIC, anon`, anschliessend ausschliesslich die
+`authenticated`-Grants.
+
+`[cmd]` Die Live-ACL-Pruefung bestaetigt dies:
+
+    Rolle            Suche Execute   Detail Execute   Marken Select
+    anon             nein            nein             nein
+    authenticated    ja              ja               ja
+
+Ein echter `SET ROLE anon`-Zugriffsversuch auf Funktion und Ansicht endet
+jeweils mit `permission denied for schema supplements`; `authenticated` kann
+beide Leser verwenden (4.907 Marken, 50 Suchtreffer).
+
+`[cmd]` Der Befund aus C-468 bleibt fuer **neue Objekte in `public`** relevant:
+`pg_default_acl` des Owners `postgres` gibt dort `anon=X`. Diese C-495-Objekte
+liegen jedoch in `supplements`; fuer diese Kombination gibt es keine passende
+Function-Default-ACL, und die expliziten Revokes verhindern eine geerbte
+PUBLIC-Ausfuehrung. Die Ansicht nutzt zusaetzlich `security_invoker = true`.
+
+### Kette und Validierung
+
+Die Migration ist in `supabase/_pipeline/kette.json` eingetragen; der
+reproduzierbare Nachweistest liegt unter
+`supabase/_pipeline/_validierung/supplements-c495-supplier-product-catalog.test.ts`.
+
+`[cmd]` Vollkette in der Wegwerf-Datenbank `c495_final`: bestanden.
+`[cmd]` C-495-Nachweistest: 3/3 bestanden.
+`[cmd]` `node tools/migration-kette-pruefen.mjs`: gruen.
+`[cmd]` `node tools/punkte-pruefen.mjs`: gruen (681 Punkte; die bekannten
+25 `kind_von`-Befunde unveraendert).
+
+`pnpm gate` erreicht die C-495-Pruefungen, bleibt jedoch wegen zwei
+vorbestehender A-62-Abwesenheitsmeldungen in Training/SSOT rot. Diese Dateien
+wurden nicht angefasst. Ebenso wurden weder `apps/` noch ein Dev-Server
+angefasst. Nichts wurde gestaged, committed oder gepusht.
 
 ## Abnahme
 
