@@ -7,8 +7,7 @@
 |---|---|
 | `todos` | 231 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 448 |
+| `erledigt` | 449 |
 | **gesamt** | **681** |
 
 ## medical — 48
@@ -403,7 +402,7 @@
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
-| `G-452` | feature | hoch | [der Produkte-Reiter](laufend_claudecode/supplements-g-0452-der-produkte-reiter.md) | laeuft (claudecode) | C-495 | — |
+| `G-452` | feature | hoch | [der Produkte-Reiter](erledigt/supplements-g-0452-der-produkte-reiter.md) | erledigt | C-495 | — |
 
 ## training — 30
 

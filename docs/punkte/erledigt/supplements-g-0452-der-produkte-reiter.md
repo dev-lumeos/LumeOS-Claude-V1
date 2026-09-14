@@ -9,6 +9,8 @@ kind_von: C-485
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 6ddc968e
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/ansicht.tsx
@@ -513,5 +515,97 @@ Moduls, auch im Vorher-Stand.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    A1  Reiter links neben Katalog 412
+    A2  On Market 121.959 | Off Market 92.821 | Alle 214.780
+    A4  Markenfilter
+    A5  Dr. Mercola, 18 Zeilen, Portion 40 g [2 scoops]
+    A6  "1 von 18 Zutaten kennt LumeOS"
+    A8  elf Reiter zeichengleich
+    A10 web 1739 (Grundstand 1728), coach 65
+
+`[cmd]` **Drei Fotos angesehen.**
+
+### A3 ist offen und nicht behebbar
+
+`[cmd]` **Die drei Funktionen fehlen in der laufenden
+Datenbank** ? **Codex hat gegen `c495_final` gemessen.**
+
+`[read]` **Seine Meldung *,,die Migration ist 0 Byte"* war ein
+ZEITPROBLEM** ? `[cmd]` **sie ist jetzt 4.567 Byte, 142
+Zeilen.** **Er hat gemessen, waehrend Codex sie schrieb.**
+
+`[read]` **Der Befund selbst stimmt: nicht eingespielt.**
+
+### Und die Oberflaeche SAGT es
+
+> *,,Kein Produktname enthaelt *gold standart wey*. Die
+Smartsuche, die Fehleingaben versteht, ist noch nicht
+eingespielt (C-495) ? bis dahin wird auf genauen Text
+gesucht."*
+
+> *,,62 von 4.907 On-Market-Marken ? die vollstaendige Liste
+kommt mit C-495."*
+
+`[read]` **Kein leerer Bildschirm, keine erfundene Ursache** ?
+**der Grund steht da, mit Punktnummer.**
+
+`[cmd]` **Und der Rueckfall ist ein ILIKE, kein Nachbau:**
+*,,Sobald C-495 da ist, greift der erste Zweig OHNE
+Codeaenderung."*
+
+### Drei Befunde, die der Auftrag nicht kennen konnte
+
+**1** ? `[cmd]` **`Dr. Mercola Miracle Whey` ist OFF
+Market.**
+
+`[read]` **A2 (nur On Market) und A5 (Foto davon) schliessen
+sich in einem Bild aus** ? **er hat zwei Fotos gemacht und es
+gesagt.**
+
+**2** ? `[cmd]` **`blend_id` zeigt auf die `id` der KOPFZEILE
+derselben Tabelle** ? **keine eigene Mischungstabelle.**
+
+> *,,Damit braucht die Einrueckung keine Heuristik, und
+Sortieren nach `reihenfolge` stellt die Packung allein her."*
+
+`[cmd]` **Gemessen an `N.O. Black Powder`: 54 Zeilen, 28
+eingerueckt** ? **per `getComputedStyle`, nicht per
+Klassenname.**
+
+`[read]` **Die Wirkung gemessen, nicht die Zeile.**
+
+**3** ? `[cmd]` **Der Katalog haelt 566 Zeilen im Browser** ?
+**G-176 hat es gemessen und dazugeschrieben:** *,,bei Tausenden
+neu messen"*.
+
+> *,,214.780 ist das 380-fache ? Aussehen der Vorlage ja,
+Mechanik nein."*
+
+`[read]` **Toms Vorgabe war *,,soll aussehen wie die
+mockupvorlage von katalog"*** ? **er hat das Aussehen genommen
+und die Mechanik gemessen.**
+
+### Ein Waechter berichtigt
+
+> *,,`deutsch-und-scroll.test.ts` verlangte genau ELF
+uebersetzte Reiterbeschriftungen. Die Zusage ist *jeder Reiter
+uebersetzt*, nicht *es gibt elf*."*
+
+`[cmd]` **Jetzt gegen die Reiteranzahl gezaehlt, Sabotageprobe:
+ein `label: 'Produkte'` laesst sie weiter fallen.**
+
+`[read]` **Die Regel praeziser statt aufgehoben.**
+
+### Und eine Sabotage, die die Probe geformt hat
+
+> *,,Die dritte hat die Probe geformt ? mit `p < c` waere sie
+gruen geblieben, deshalb `p === c - 1`."*
+
+`[read]` **Die Gegenprobe hat den Waechter verbessert, nicht
+nur bestaetigt.**
+
+**Abgenommen, A3 offen bis C-495 eingespielt ist.**
+
 
