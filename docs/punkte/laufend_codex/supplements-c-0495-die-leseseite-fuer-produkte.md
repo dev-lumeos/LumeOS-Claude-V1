@@ -120,3 +120,59 @@ _(vom Agenten anzuhaengen)_
 
 _(vom Orchestrator)_
 
+## Zwischenstand 2026-09-08 — die Migration ist nicht live
+
+`[cmd]` **Nachgemessen in der LAUFENDEN Datenbank:**
+
+    search_supplier_products    FEHLT
+    supplier_product_detail     FEHLT
+    supplier_product_brands     FEHLT
+    GIN-Indizes                 keine
+
+`[cmd]` **Die Migration LIEGT vor:**
+`20260914080541_c495_supplier_product_catalog_read.sql`, **142
+Zeilen, alle drei Funktionen, `gin_trgm_ops`, `word_similarity`,
+`0.30`, `authenticated`.**
+
+`[read]` **Er hat gegen `c495_final` gemessen** ? **eine
+Wegwerf-Datenbank.**
+
+`[cmd]` **Bei C-485 und C-486 stand *,,live eingespielt"* im
+Bericht, hier nicht** ? **er hat es nicht behauptet.**
+
+## Was daran haengt
+
+`[cmd]` **Claude Code hat G-452 gebaut und der Reiter laeuft** ?
+**aber ohne die Funktionen.**
+
+`[read]` **Er hat es gemessen und HINGESCHRIEBEN:**
+
+> *,,62 von 4.907 On-Market-Marken ? die vollstaendige Liste
+kommt mit C-495."*
+
+> *,,Kein Produktname enthaelt *gold standart wey*. Die
+Smartsuche, die Fehleingaben versteht, ist noch nicht
+eingespielt (C-495) ? bis dahin wird auf genauen Text
+gesucht."*
+
+`[read]` **Die Oberflaeche sagt dem Nutzer, was fehlt und
+warum** ? **statt eine leere Liste zu zeigen.**
+
+## Was zu tun ist
+
+`[read]` **Die Migration einspielen.**
+
+`[cmd]` **Danach nachmessen:**
+
+    die drei Funktionen sind da
+    die Markenliste zeigt 4.907 statt 62
+    "gold standart wey" findet Gold Standard Whey
+    die Laufzeit bleibt bei rund 14 ms
+
+`[read]` **Und ein `revoke` fehlt in der Migration** ? **er
+schreibt *,,anon hat weder RPC-Execute noch View-Select"*,
+aber das Wort steht nicht drin.**
+
+`[cmd]` **Miss, ob `anon` die Rechte ueber die
+Vorgabe-Berechtigungen doch bekommt** ? **C-468 hat genau das
+als Sicherheitsbefund gemeldet (`pg_default_acl`).**
