@@ -2048,6 +2048,15 @@
       "depends_on": [
         "492_muscle_recovery_profiles_struktur"
       ]
+    },
+    {
+      "id": "495_supplier_product_catalog_read",
+      "path": "supabase/migrations/20260914080541_c495_supplier_product_catalog_read.sql",
+      "kind": "sql",
+      "creates": "C-495: trigramindizierte On-Market-Produktsuche, vollstaendlicher Label-Detailweg und Markenfilterliste mit authenticated-only Zugriff.",
+      "depends_on": [
+        "489_produktname_name_en_daten"
+      ]
     }
   ]
 }
