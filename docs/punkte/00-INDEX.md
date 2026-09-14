@@ -6,8 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 231 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 448 |
-| **gesamt** | **679** |
+| **gesamt** | **680** |
 
 ## medical — 48
 
@@ -306,9 +307,9 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 83
+## supplements — 84
 
-### beauftragbar — 82
+### beauftragbar — 83
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -361,7 +362,7 @@
 | `C-455` | feature | hoch | [der Injektionsplaner, vollstaendig](erledigt/supplements-c-0455-der-injektionsplaner-vollstaendig.md) | erledigt | — | — |
 | `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](erledigt/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | erledigt | — | — |
 | `C-467` | feature | hoch | [Lieferantenprodukte](erledigt/supplements-c-0467-lieferantenprodukte.md) | erledigt | — | C-485 |
-| `C-485` | feature | hoch | [die DSLD-Datenbank einlesen](erledigt/supplements-c-0485-dsld-einlesen.md) | erledigt | — | — |
+| `C-485` | feature | hoch | [die DSLD-Datenbank einlesen](erledigt/supplements-c-0485-dsld-einlesen.md) | erledigt | — | G-452 |
 | `C-489` | fehler | mittel | [der Produktname ist englisch und heisst `name`](erledigt/supplements-c-0489-produktname-nach-name-en.md) | erledigt | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
@@ -393,6 +394,7 @@
 | `G-423` | feature | hoch | [Zyklen, Protokolle und die Injektionskarte](erledigt/supplements-g-0423-zyklen-und-injektionen.md) | erledigt | — | G-424 |
 | `G-428` | fehler | hoch | [der Injektionsreiter ist leer](erledigt/supplements-g-0428-injektionsreiter-ist-leer.md) | erledigt | — | — |
 | `G-437` | fehler | hoch | [tabs.tsx hat vierzehn Karten verloren](erledigt/supplements-g-0437-tabs-tsx-verlorene-karten.md) | erledigt | — | — |
+| `G-452` | feature | hoch | [der Produkte-Reiter](laufend_claudecode/supplements-g-0452-der-produkte-reiter.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -752,6 +754,6 @@
 
 ## Verweise ausserhalb von `docs/punkte/`
 
-61 Nummern werden genannt, liegen aber in keinem Punktordner — erledigte Punkte sind noch nicht migriert:
+62 Nummern werden genannt, liegen aber in keinem Punktordner — erledigte Punkte sind noch nicht migriert:
 
-`A-14` · `A-28` · `B-12` · `C-100` · `C-124` · `C-128` · `C-130` · `C-157` · `C-158` · `C-164` · `C-165` · `C-225` · `C-235` · `C-25` · `C-252` · `C-28` · `C-291` · `C-296` · `C-315` · `C-83` · `C-84` · `G-100` · `G-101` · `G-110` · `G-123` · `G-129` · `G-13` · `G-135` · `G-14` · `G-147` · `G-148` · `G-154` · `G-157` · `G-158` · `G-16` · `G-160` · `G-161` · `G-185` · `G-187` · `G-190` · `G-203` · `G-207` · `G-208` · `G-212` · `G-42` · `G-45` · `G-57` · `G-60` · `G-64` · `G-65` · `G-73` · `G-74` · `G-76` · `G-82` · `G-84` · `G-85` · `G-86` · `G-87` · `G-90` · `G-91` · `G-97`
+`A-14` · `A-28` · `B-12` · `C-100` · `C-124` · `C-128` · `C-130` · `C-157` · `C-158` · `C-164` · `C-165` · `C-225` · `C-235` · `C-25` · `C-252` · `C-28` · `C-291` · `C-296` · `C-315` · `C-495` · `C-83` · `C-84` · `G-100` · `G-101` · `G-110` · `G-123` · `G-129` · `G-13` · `G-135` · `G-14` · `G-147` · `G-148` · `G-154` · `G-157` · `G-158` · `G-16` · `G-160` · `G-161` · `G-185` · `G-187` · `G-190` · `G-203` · `G-207` · `G-208` · `G-212` · `G-42` · `G-45` · `G-57` · `G-60` · `G-64` · `G-65` · `G-73` · `G-74` · `G-76` · `G-82` · `G-84` · `G-85` · `G-86` · `G-87` · `G-90` · `G-91` · `G-97`
