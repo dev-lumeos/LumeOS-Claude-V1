@@ -193,3 +193,106 @@ Pro** ? **`Fit Model` gibt es dort auch.**
 `[read]` **Die Reihenfolge ist Teil der Regel** ? **sie gehoert
 in die Tabelle.**
 
+## Brainstorm 2026-09-08 — wofuer ist die Pose-Session da?
+
+`[read]` **Das entscheidet alles andere.**
+
+    a  Fotodokumentation     dieselbe Pose alle 4 Wochen,
+                             Fortschritt sichtbar
+    b  Posing-Training       die Klasse ueben, Haltezeit,
+                             Reihenfolge, Zeitlimit
+    c  Wettkampfvorbereitung Countdown, Kuer, Musik, Ablauf
+
+`[cmd]` **Heute ist es `a`** ? `fotosession-aktionen.ts`,
+`goals.progress_photos` **aus C-463.**
+
+### Was aus b folgt und heute fehlt
+
+`[read]` **Wer Classic Physique macht, uebt FUENF Posen in
+fester Reihenfolge, 60 Sekunden.**
+
+`[read]` **Das ist ein Timer mit Ablauf, kein Fotoraster:**
+
+    Pose 1   Front double biceps      12 s
+    Pose 2   Side chest               12 s
+    Pose 3   Back double biceps       12 s
+    Pose 4   Abdominals and thighs    12 s
+    Pose 5   Favorite classic pose    12 s
+
+`[read]` **OFFENE FRAGE an Tom: uebt man so?** ? **oder haelt
+man eine Pose 30 Sekunden und macht Pause?**
+
+### Die Verbindung zur Muskelkarte
+
+`[read]` **Eine Pose ZEIGT Muskeln.**
+
+    Front lat spread   Latissimus, Teres
+    Side triceps       Trizeps
+    Abdominals and thighs  Rectus abdominis, Quadriceps
+
+`[cmd]` **Seit heute: 105 Muskeln mit Hierarchie, 43
+Kartenflaechen, 45 davon mit gerechnetem Erholungswert.**
+
+`[read]` **Daraus liesse sich bauen:**
+
+    Pose -> welche Muskeln zeigt sie
+         -> wie ist deren Erholung heute
+         -> "Front lat spread waere heute schlecht,
+             dein Lat ist bei 14 %"
+
+`[read]` **Oder umgekehrt: welche Pose zeigt die Muskeln, die du
+vernachlaessigst.**
+
+`[cmd]` **Die Tabelle dafuer waere `pose_muscles`** ? **dieselbe
+Bauform wie `exercise_muscles` (C-490: `faktor`, `source_id`,
+`evidence_class`).**
+
+### Was das Foto leisten koennte
+
+`[cmd]` **`goals.progress_photos` hat 13 Spalten, der Bucket ist
+privat (C-463).**
+
+    dieselbe Pose, zwei Daten, nebeneinander
+    dieselbe Pose ueber 12 Wochen als Reihe
+    die 13 Umfaenge daneben (CIRCUMFERENCES)
+
+`[read]` **Ein Coach sieht die REIHE, nicht das Einzelbild** ?
+**und C-459 hat die Coach-Freigabe je Modul gebaut.**
+
+### Fuenf Klassen haben GAR KEINE Pflichtposen
+
+`[cmd]` **Gemessen an `ifbbpro.com/rules`:**
+
+    Men's Physique    nur front/back turns
+    Fitness           quarter turns + Routine
+    Figure            quarter turns
+    Bikini            front/back + Model Walk
+    Wellness          quarter turns + Model Walk
+    Fit Model         front/back poses, 10 s
+
+`[read]` **Fuer die ist eine POSENLISTE die falsche Form** ?
+**sie brauchen Drehungen, Gang und Zeitfenster.**
+
+`[read]` **Das ist ein Argument gegen *,,dreizehn Klassen mit je
+einer Posenliste"* und fuer eine Bauform, die BEIDES traegt.**
+
+### Und die Mengenfrage
+
+`[read]` **Dreizehn Klassen anzulegen ist Arbeit fuer einen
+Nutzer, der EINE davon macht.**
+
+    a  alle dreizehn anlegen
+       vollstaendig, ein Nutzer sieht eine davon
+    b  nur die, die jemand waehlt
+       weniger Arbeit, aber die Auswahl braucht die Liste
+
+`[read]` **Die Klassen selbst sind 13 Zeilen** ? **die POSEN je
+Klasse sind die Arbeit.**
+
+`[cmd]` **Und acht Posen kommen in mehreren Klassen vor** ?
+`Front double biceps` **in Open, 212, Classic, Wheelchair,
+Women's BB, Women's Physique.**
+
+`[read]` **Also: Posen einmal, Klassen zeigen darauf** ?
+**das ist die Verbindungstabelle, und sie traegt Reihenfolge
+und Vorgabe.**
