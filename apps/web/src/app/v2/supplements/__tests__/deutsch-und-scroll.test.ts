@@ -75,12 +75,28 @@ test('keine englischen Sichttexte mehr fest im Quelltext', () => {
 test('die Tab-Beschriftungen kommen aus messages, nicht aus Zeichenketten', () => {
   const quelle = fs.readFileSync(path.join(V2, 'ansicht.tsx'), 'utf8')
     .replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '')
-  // `[cmd]` Elf Tabs, elf `t(...)`-Aufrufe in `tabs()`.
   const block = quelle.slice(quelle.indexOf('function tabs('),
                              quelle.indexOf('export function SupplementsAnsicht'))
+  // ══ G-452: gezaehlt wird gegen die Reiter, nicht gegen eine Elf ══
+  //
+  // `[cmd]` **Hier stand `assert.equal(treffer.length, 11)`.** **Der
+  // zwoelfte Reiter (`produkte`, G-452) liess ihn fallen** — obwohl
+  // seine Beschriftung ordentlich aus `messages/` kommt.
+  //
+  // `[read]` **Die Zusage dieser Probe ist *„JEDER Reiter uebersetzt"*,
+  // nicht *„es gibt elf"*.** Eine feste Zahl altert nur nach oben: sie
+  // wird bei jedem neuen Reiter rot und muss dann von Hand
+  // nachgezogen — und wer sie nachzieht, prueft nichts, er passt an.
+  //
+  // `[cmd]` **Gegengeprobt am 2026-09-14:** ein `label: 'Produkte'`
+  // statt `t('tabProdukte')` laesst BEIDE Zusicherungen fallen — die
+  // Zahl (12 `id:` gegen 11 `t(`) und die zweite darunter.
+  const reiter = block.match(/\{\s*id:\s*'/g) ?? []
   const treffer = block.match(/label:\s*t\('/g) ?? []
-  assert.equal(treffer.length, 11,
-    `Erwartet elf uebersetzte Tab-Beschriftungen, gefunden ${treffer.length}. `
+  assert.ok(reiter.length >= 11,
+    `Die Leiste hat nur ${reiter.length} Reiter — erwartet mindestens elf.`)
+  assert.equal(treffer.length, reiter.length,
+    `${reiter.length} Reiter, aber ${treffer.length} uebersetzte Beschriftungen. `
     + 'Steht wieder ein `label: \'…\'` da, faellt es hier auf.')
   assert.ok(!/label:\s*'/.test(block),
     'Ein Tab traegt wieder eine feste Zeichenkette statt `t(…)`.')

@@ -62,6 +62,8 @@ import {
   SuppIntelligenceReferenz,
 } from './mockup-referenz'
 import { SuppCompliance } from './tab-compliance'
+// G-452: die 214.780 Lieferantenprodukte (C-467/C-485).
+import { SuppProdukte } from './tab-produkte'
 
 /** C-418/3: die Quelle unter der Trennlinie. */
 const QUELLE = 'theme-v1/module-supplements.jsx'
@@ -132,6 +134,33 @@ function tabs(
     { id: 'today', label: t('tabHeute'), icon: 'check' },
     { id: 'stack', label: t('tabStack'), icon: 'supplements', count: stackAnzahl },
     { id: 'extended', label: t('tabExtended'), icon: 'medical', count: EXTENDED_STACK.length },
+    // ══ G-452: der Produkte-Reiter, LINKS NEBEN `catalog` ═══════════
+    //
+    // **Tom, 2026-09-08, mit Tobias:** *„die supplier produkte
+    // inklusive details in supplements links neben katalog."*
+    //
+    // `[cmd]` **`supplements.supplier_products`: 214.780 Zeilen**
+    // (121.959 On Market), gemessen 2026-09-14. **C-467 hat die
+    // Tabelle gebaut, C-485 gefuellt** — und bis hierher fuehrte kein
+    // Leseweg in `apps/` dorthin.
+    //
+    // ══ WARUM KEINE ZAHL AN DER LEISTE ══════════════════════════════
+    //
+    // `[cmd]` **Ein erster Versuch trug `count: 121959`** und stand im
+    // Foto als **`121959`** da — ohne Tausenderpunkte.
+    //
+    // `[cmd]` **`Tabs` rendert `count` roh** (`packages/ui`,
+    // `primitives.tsx:701`, `{t.count}`), und `count` ist dort ein
+    // `number`. **Ein `toLocaleString` braeuchte eine Aenderung in
+    // `packages/ui`** — das Paket gehoert allen Apps, und eine
+    // sechsstellige Zahl ist ein Problem dieses einen Reiters: **alle
+    // uebrigen Zaehler liegen unter 566.**
+    //
+    // `[read]` **Also keine Zahl hier, statt einer unlesbaren.** Sie
+    // steht ohnehin dreimal formatiert im Reiter selbst — an den
+    // Marktpillen (121.959 / 92.821 / 214.780) und in der Fusszeile.
+    // **Eine vierte, schlechter gesetzte Stelle waere kein Gewinn.**
+    { id: 'produkte', label: t('tabProdukte'), icon: 'marketplace' },
     // G-172: Der Katalog-Tab traegt jetzt die echte Substanzdatenbank
     // (C-229) — die Zahl ist deren Laenge, nicht die der Vorlage.
     { id: 'catalog', label: t('tabKatalog'), icon: 'search',
@@ -515,6 +544,15 @@ export function SupplementsAnsicht({
               stand neben der echten Datenbank, die am `Database`-Knopf
               hing. **Jetzt traegt `Katalog` die 566 Substanzen aus
               `substance_catalog`** (C-229). */}
+          {/* ══ G-452: die 214.780 Lieferantenprodukte ══════════════
+              `[read]` **KEINE Mockup-Referenz darunter** — E-70 kennt
+              drei Zustaende, und dieser Reiter ist angebunden, ohne je
+              eine Entwurfsfassung gehabt zu haben. **Die Vorlage
+              `module-supplements.jsx` hat ihn nicht**; er entsteht aus
+              Toms Vorgabe vom 2026-09-08, nicht aus einem Mockup.
+              `[read]` **Eine Referenz auf etwas, das es nie gab, waere
+              eine erfundene Herkunft.** */}
+          {tab === 'produkte' && <SuppProdukte />}
           {tab === 'catalog' && <SuppDatabase />}
           {tab === 'stacks' && (
             <>
