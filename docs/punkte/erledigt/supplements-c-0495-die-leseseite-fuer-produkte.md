@@ -9,6 +9,8 @@ kind_von: C-485
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: ce10f276
 beruehrt:
   tabellen: [supplements.supplier_products]
 zahlen:
@@ -213,7 +215,73 @@ angefasst. Nichts wurde gestaged, committed oder gepusht.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen, LIVE.**
+
+    search_supplier_products   da
+    supplier_product_detail    da
+    supplier_product_brands    4.907 Marken
+    GIN-Indizes                name_en_trgm, marke_trgm
+
+### Die Suche selbst getestet
+
+`[cmd]` **`gold standart wey`:**
+
+    Optimum Nutrition | 100% Gold Standard Whey Chocolate Malt
+    ON Optimum Nutrition | Gold Standard 100% Casein Choc Creme
+    Optimum Nutrition | Gold Standard 100% Casein Choc Peanut
+
+`[cmd]` **`optimum nutriton`** ? **findet `Nature's Optimal
+Nutrition`, `Maximum Nutrition`** ? **plausible Nachbarn.**
+
+`[cmd]` **`qzvwxjplk`: 0 Treffer.**
+
+`[read]` **Drei Tippfehler, die Schwelle 0,30 traegt.**
+
+`[cmd]` **Live-Plan 14,1 ms, beide GIN-Indizes per `BitmapOr`.**
+
+### Mein revoke-Befund war falsch
+
+> *,,Der vermutete fehlende REVOKE war in der vorliegenden
+Migration nicht tatsaechlich fehlend."*
+
+`[cmd]` **Selbst nachgemessen, Zeilen 126, 127, 131:**
+
+    REVOKE ALL ON FUNCTION ... FROM PUBLIC, anon
+    REVOKE ALL ON FUNCTION ... FROM PUBLIC, anon
+    REVOKE ALL ON supplier_product_brands FROM PUBLIC, anon
+
+`[read]` **Ich habe nach `revoke` in KLEINSCHREIBUNG gesucht,
+die Datei schreibt `REVOKE`.**
+
+`[read]` **Achter falscher Befund heute** ? **und wieder
+derselbe Fehler: ein Werkzeug gelesen, das Ergebnis nicht
+geprueft.**
+
+### Und die Default-ACL
+
+> *,,Die problematische Default-ACL besteht weiter fuer neue
+Funktionen in `public`, betrifft diese Objekte in
+`supplements` aber nicht."*
+
+`[cmd]` **C-468 hatte sie in `public` gemeldet, C-470 und C-473
+haben sie entschaerft** ? **fuer FUNKTIONEN besteht sie noch.**
+
+`[read]` **Er hat die Grenze gemessen, statt sie zu
+behaupten.**
+
+### Was daran haengt
+
+`[cmd]` **G-452 ist abgenommen mit offenem A3** ? **die
+Smartsuche laeuft jetzt.**
+
+`[read]` **Sein Rueckfall greift ohne Codeaenderung** ?
+*,,sobald C-495 da ist, greift der erste Zweig."*
+
+`[cmd]` **Zu pruefen: zeigt der Reiter jetzt 4.907 Marken statt
+62, und findet die Suche Tippfehler?**
+
+**Abgenommen.**
+
 
 ## Zwischenstand 2026-09-08 — die Migration ist nicht live
 

@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-13: 197 Funktionen, 451 Policies, 691 CHECKs, 15 Sichten.**
+`[cmd]` **Stand 2026-09-14: 199 Funktionen, 451 Policies, 691 CHECKs, 16 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -155,8 +155,8 @@ ob man sie rufen kann.**
 | public | handle_new_user |  | Funktion |
 | public | is_admin |  | Funktion |
 | public | koerperflaechen_touch |  | Funktion |
-| public | levenshtein | text, text | Funktion |
 | public | levenshtein | text, text, integer, integer, integer | Funktion |
+| public | levenshtein | text, text | Funktion |
 | public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
@@ -198,9 +198,11 @@ ob man sie rufen kann.**
 | supplements | refresh_stack_item_count |  | Funktion |
 | supplements | rule_assessment | p_user_id uuid DEFAULT auth.uid(), p_entry_date date DEFAULT CURRENT_DATE | Funktion |
 | supplements | rule_operator_supported | p_rule_id text, p_module text, p_field text, p_operator text | Funktion |
+| supplements | search_supplier_products | p_query text, p_market_status text DEFAULT 'On Market'::text, p_marke text DEFAULT NULL::text, p_limit integer DEFAULT 50 | Funktion |
 | supplements | set_supplement_cycle_status | p_cycle_id uuid, p_status text, p_note_de text DEFAULT NULL::text | Funktion |
 | supplements | start_supplement_cycle | p_supplement_id uuid, p_source text DEFAULT 'confirmed_by_user'::text, p_suggestion_source text DEFAULT 'user_manual'::text, p_note_de text DEFAULT NULL::text | Funktion |
 | supplements | supplement_nutrient_intake_for_day | p_user_id uuid, p_entry_date date DEFAULT CURRENT_DATE | Funktion |
+| supplements | supplier_product_detail | p_product_id uuid | Funktion |
 | supplements | touch_updated_at |  | Funktion |
 | supplements | withdraw_stack_template | p_stack_id uuid | Funktion |
 | training | calc_workout_set_metrics |  | Funktion |
@@ -234,6 +236,7 @@ Rechten des Lesers, nicht des Erzeugers.**
 | supplements | daily_nutrient_summary_long | security_invoker |
 | supplements | substance_alias_matches | security_invoker |
 | supplements | supplement_forms_read | security_invoker |
+| supplements | supplier_product_brands | security_invoker |
 
 ## CHECK-Bedingungen
 
