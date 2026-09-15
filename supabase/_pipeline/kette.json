@@ -2057,6 +2057,26 @@
       "depends_on": [
         "489_produktname_name_en_daten"
       ]
+    },
+    {
+      "id": "496_supplier_product_nutrients",
+      "path": "supabase/migrations/20260915004915_c496_supplier_product_nutrients.sql",
+      "kind": "sql",
+      "creates": "C-496: belegte DSLD-Labelnamen auf LumeOS-Naehrstoffcodes und eine berechnete Naehrwertsicht je Produkt und Portion, ohne foods-Kopie.",
+      "depends_on": [
+        "495_supplier_product_catalog_read",
+        "015"
+      ]
+    },
+    {
+      "id": "497_supplier_product_preferences",
+      "path": "supabase/migrations/20260915004916_c497_supplier_product_preferences.sql",
+      "kind": "sql",
+      "creates": "C-497: eigene liked/disliked-Produktvorlieben in der vorhandenen Nutrition-Praeferenzbauform und Vorrang fuer liked Treffer in der Produktsuche.",
+      "depends_on": [
+        "496_supplier_product_nutrients",
+        "074"
+      ]
     }
   ]
 }
