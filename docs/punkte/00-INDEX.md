@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 231 |
-| `laufend_codex` | 3 |
+| `todos` | 232 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 457 |
-| **gesamt** | **692** |
+| `erledigt` | 460 |
+| **gesamt** | **693** |
 
 ## medical — 48
 
@@ -572,9 +571,7 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 168
-
-### beauftragbar — 167
+## quer — 169
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -659,7 +656,7 @@
 | `C-468` | entscheidung | hoch | [eine Muskelhierarchie fuer alle Karten](erledigt/quer-c-0468-eine-muskelhierarchie-fuer-alle-karten.md) | erledigt | — | C-470, C-471, G-430 |
 | `C-470` | fehler | hoch | [- pg_default_acl vergibt in public alles](erledigt/quer-c-0470-pg-default-acl-in-public.md) | erledigt | — | C-473 |
 | `C-471` | fehler | hoch | [die Struktur gehoert nach migrations/](erledigt/quer-c-0471-die-struktur-nach-migrations.md) | erledigt | — | C-472 |
-| `C-472` | fehler | hoch | [der Datenlogik-Waechter ist rot](erledigt/quer-c-0472-der-datenlogik-waechter-ist-rot.md) | erledigt | — | — |
+| `C-472` | fehler | hoch | [der Datenlogik-Waechter ist rot](erledigt/quer-c-0472-der-datenlogik-waechter-ist-rot.md) | erledigt | — | G-458 |
 | `C-473` | befund | hoch | [fuenf Abweichungen, die der Waechter jetzt sieht](erledigt/quer-c-0473-fuenf-abweichungen-im-waechter.md) | erledigt | — | — |
 | `C-478` | befund | hoch | [hat LumeOS ein Mehrgeraete-Problem?](todos/quer-c-0478-mehrgeraete-synchronisation.md) | offen | — | — |
 | `C-479` | feature | hoch | [fuenf Flaechen und achtundsiebzig Muskeln](erledigt/quer-c-0479-fuenf-flaechen-und-achtundsiebzig-muskeln.md) | erledigt | — | — |
@@ -670,6 +667,7 @@
 | `C-486` | fehler | hoch | [UTF-8 beim Einspielen verloren](erledigt/quer-c-0486-utf8-beim-einspielen-verloren.md) | erledigt | — | — |
 | `C-488` | fehler | hoch | [sechzehn Tabellen ohne Thai](erledigt/quer-c-0488-sechzehn-tabellen-ohne-thai.md) | erledigt | — | C-489 |
 | `C-498` | feature | hoch | [Allergien global, nicht in food_preferences](erledigt/quer-c-0498-allergien-global.md) | erledigt | — | — |
+| `C-501` | feature | hoch | [Seed fuer die leeren Module](erledigt/quer-c-0501-seed-fuer-leere-module.md) | erledigt | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -742,15 +740,10 @@
 | `G-432` | feature | hoch | [jeder gezeichnete Muskel ist anwaehlbar](erledigt/quer-g-0432-jeder-muskel-anwaehlbar.md) | erledigt | — | G-433, G-434, G-435 |
 | `G-434` | feature | hoch | [die Karte, direkt mit Tom erledigt](erledigt/quer-g-0434-die-karte-direkt-mit-tom.md) | erledigt | — | — |
 | `G-435` | feature | hoch | [die Hierarchie an den richtigen Ort](erledigt/quer-g-0435-hierarchie-an-den-richtigen-ort.md) | erledigt | — | G-436 |
-| `G-444` | fehler | mittel | [drei Abwesenheitsbehauptungen, die C-461 ueberholt hat](laufend_codex/quer-g-0444-drei-abwesenheitsbehauptungen.md) | laeuft (codex) | — | — |
-| `G-451` | fehler | mittel | [der Testdatenlauf scheitert vor C-493](laufend_codex/quer-g-0451-testdatenlauf-scheitert-vorher.md) | laeuft (codex) | — | — |
+| `G-444` | fehler | mittel | [drei Abwesenheitsbehauptungen, die C-461 ueberholt hat](erledigt/quer-g-0444-drei-abwesenheitsbehauptungen.md) | erledigt | — | — |
+| `G-451` | fehler | mittel | [der Testdatenlauf scheitert vor C-493](erledigt/quer-g-0451-testdatenlauf-scheitert-vorher.md) | erledigt | — | — |
 | `G-455` | feature | hoch | [Allergien in Settings, Filter in Produkten](laufend_claudecode/quer-g-0455-allergien-und-filter.md) | laeuft (claudecode) | — | — |
-
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `C-501` | feature | hoch | [Seed fuer die leeren Module](laufend_codex/quer-c-0501-seed-fuer-leere-module.md) | laeuft (codex) | G-451 | — |
+| `G-458` | fehler | hoch | [neun Migrationen schreiben Daten](todos/quer-g-0458-neun-migrationen-schreiben-daten.md) | offen | — | — |
 
 ## buddy — 1
 
