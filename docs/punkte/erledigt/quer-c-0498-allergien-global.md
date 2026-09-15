@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 68c69158
 beruehrt:
   tabellen: [public.profiles]
 zahlen:
@@ -143,9 +145,76 @@ Nutzer eintraegt.**
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+2026-09-15 — umgesetzt und in die laufende Datenbank eingespielt.
+
+- `public.user_allergies` ist die einzige Nutzerquelle mit `art` und
+  `schwere`; `nutrition.food_preferences.allergies` ist entfernt. Vorher
+  gab es drei Preference-Zeilen (`tree_nuts`, `lactose`, leer); zwei echte
+  Allergien wurden mit `quelle = nutrition_preferences` uebernommen, die
+  leere Liste erzeugt keinen Scheindatensatz.
+- Der Alias-Katalog enthaelt die drei nachgemessenen Varianten
+  `Magnesium Stearate` (36.381), `Magnesium Stearate (Mg Stearate)`
+  (11.502) und `Vegetable Magnesium Stearate` (9.020): zusammen 56.903
+  Inhaltszeilen. Die Zahl 36.316 in der Ausgangsnotiz war nicht mehr der
+  aktuelle Datenstand.
+- Coach-Sicht ist bewusst eine eigene Freigabe:
+  `coach.allergy_permissions`, nicht die allgemeine Nutrition-Freigabe.
+  Aenderungen schreibt ein append-only Trigger in
+  `coach.allergy_permission_change_log`. RLS-Test: Nutzer und explizit
+  freigegebener Coach sehen die Treffer; ein dritter Coach sieht 0.
+- Die bestehenden Preference-Lese-, Schreib- und Suchfunktionen verwenden
+  nun die globale Quelle. Die Live-Upgrade-Migration ersetzt ihre alte
+  Spaltenreferenz, bevor die Spalte wegfaellt.
+- Rechte nachgemessen: `anon` hat weder Tabellen-SELECT noch RPC-Execute;
+  `authenticated` darf die Match-RPC ausfuehren, RLS begrenzt sie auf den
+  Nutzer bzw. seine explizite Coach-Freigabe.
+
+Sicherung vor Einspielen:
+`backup/schema/20260915151306_c498_c500_vor_einspielen.sql`.
+Vollkette im Wegwerfstand und die vier C-498--C-500-Tests: gruen.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen, LIVE.**
+
+    public.user_allergies      2 Zeilen
+      id, user_id, stoff_code, stoff_text, art,
+      schwere, quelle, seit, notiz
+    food_preferences.allergies WEG
+    public.allergen_aliases    3 Aliase
+    vier Policies: SELECT, INSERT, UPDATE, DELETE
+
+`[cmd]` **Drei Aliase treffen 56.903 Zeilen** ? **die
+Magnesiumstearat-Schreibweisen.**
+
+`[read]` **Zwei echte Werte aus drei Zeilen migriert** ? **die
+dritte war `{}`.**
+
+### Meine Suche war falsch
+
+`[cmd]` **Ich habe in `coach.client_permissions` gesucht:**
+**sieben Spalten, keine `allergies_visibility`** ? **und daraus
+geschlossen, die Freigabe fehle.**
+
+`[cmd]` **Sie liegt in EIGENEN Tabellen:**
+
+    coach.allergy_permissions
+      coach_id, client_id, visibility, expires_at,
+      changed_by
+    coach.allergy_permission_change_log
+      permission_id, change_kind, old_value,
+      new_value, changed_by, changed_at
+
+`[read]` **Genau *,,eigene Freigabe, im Protokoll"*** ? **nicht
+als achte Spalte an die bestehenden sieben gehaengt.**
+
+`[read]` **Neunter falscher Befund heute, wieder derselbe
+Fehler.**
+
+`[cmd]` **Und `old_value`/`new_value` im Protokoll** ?
+**Toms Begruendung war** *,,auch als sicherheit gegenueber
+seinem kunden"*.
+
+**Abgenommen.**
+
 

@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-15: 199 Funktionen, 451 Policies, 691 CHECKs, 16 Sichten.**
+`[cmd]` **Stand 2026-09-15: 206 Funktionen, 462 Policies, 710 CHECKs, 18 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -19,9 +19,11 @@ ob man sie rufen kann.**
 | coach | create_pending_invite | p_client_email text, p_expires_at timestamp with time zone, p_initial_autonomy smallint DEFAULT 2 | Funktion |
 | coach | create_relationship_invite | p_coach_id uuid, p_note text DEFAULT NULL::text | Funktion |
 | coach | darf_nutrition_plan_aendern | p_client uuid | Funktion |
+| coach | hat_allergie_sicht | p_client uuid | Funktion |
 | coach | hat_sicht | p_client uuid, p_modul text, p_stufe text DEFAULT 'full'::text | Funktion |
 | coach | klienten |  | Funktion |
 | coach | lehne_aktion_ab | p_action_id uuid | Funktion |
+| coach | log_allergy_permission_change |  | Funktion |
 | coach | log_autonomy_change |  | Funktion |
 | coach | log_permission_change |  | Funktion |
 | coach | log_relationship_change |  | Funktion |
@@ -37,6 +39,7 @@ ob man sie rufen kann.**
 | coach | summary_recovery | p_client uuid | Funktion |
 | coach | summary_supplements | p_client uuid | Funktion |
 | coach | summary_training | p_client uuid | Funktion |
+| coach | touch_allergy_permission_updated_at |  | Funktion |
 | coach | touch_updated_at |  | Funktion |
 | coach | withdraw_relationship_invite | p_relationship_id uuid, p_reason text DEFAULT NULL::text | Funktion |
 | goals | active_goal_create | p_goal_type text, p_title text, p_gueltig_ab date DEFAULT CURRENT_DATE, p_subtype text DEFAULT NULL::text, p_description text DEFAULT NULL::text, p_target_value numeric DEFAULT NULL::numeric, p_target_unit text DEFAULT NULL::text, p_target_date date DEFAULT NULL::date | Funktion |
@@ -157,8 +160,8 @@ ob man sie rufen kann.**
 | public | koerperflaechen_touch |  | Funktion |
 | public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein | text, text | Funktion |
-| public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
+| public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
 | public | set_limit | real | Funktion |
 | public | show_limit |  | Funktion |
@@ -172,8 +175,11 @@ ob man sie rufen kann.**
 | public | strict_word_similarity_dist_commutator_op | text, text | Funktion |
 | public | strict_word_similarity_dist_op | text, text | Funktion |
 | public | strict_word_similarity_op | text, text | Funktion |
+| public | supplier_product_allergy_matches | p_user_id uuid | Funktion |
 | public | text_soundex | text | Funktion |
 | public | touch_updated_at |  | Funktion |
+| public | touch_user_allergy_updated_at |  | Funktion |
+| public | user_allergy_codes | p_user_id uuid | Funktion |
 | public | word_similarity | text, text | Funktion |
 | public | word_similarity_commutator_op | text, text | Funktion |
 | public | word_similarity_dist_commutator_op | text, text | Funktion |
@@ -203,6 +209,7 @@ ob man sie rufen kann.**
 | supplements | start_supplement_cycle | p_supplement_id uuid, p_source text DEFAULT 'confirmed_by_user'::text, p_suggestion_source text DEFAULT 'user_manual'::text, p_note_de text DEFAULT NULL::text | Funktion |
 | supplements | supplement_nutrient_intake_for_day | p_user_id uuid, p_entry_date date DEFAULT CURRENT_DATE | Funktion |
 | supplements | supplier_product_detail | p_product_id uuid | Funktion |
+| supplements | supplier_product_preference_write | p_product_id uuid, p_preference text | Funktion |
 | supplements | touch_updated_at |  | Funktion |
 | supplements | withdraw_stack_template | p_stack_id uuid | Funktion |
 | training | calc_workout_set_metrics |  | Funktion |
@@ -234,9 +241,11 @@ Rechten des Lesers, nicht des Erzeugers.**
 | supplements | community_anzeige | definer |
 | supplements | daily_intake_summary | security_invoker |
 | supplements | daily_nutrient_summary_long | security_invoker |
+| supplements | produkt_naehrwerte | security_invoker |
 | supplements | substance_alias_matches | security_invoker |
 | supplements | supplement_forms_read | security_invoker |
 | supplements | supplier_product_brands | security_invoker |
+| supplements | supplier_product_nutrients | security_invoker |
 
 ## CHECK-Bedingungen
 
@@ -256,6 +265,9 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | coach | alerts | alerts_not_self_ck | CHECK ((coach_id <> client_id)) |
 | coach | alerts | alerts_severity_ck | CHECK (((severity IS NULL) OR (severity = ANY (ARRAY['info'::text, 'low'::text, 'medium'::text, 'high'::text, 'critical'::text]))) |
 | coach | alerts | alerts_status_check | CHECK ((status = ANY (ARRAY['open'::text, 'read'::text, 'done'::text]))) |
+| coach | allergy_permission_change_log | allergy_permission_change_log_change_kind_check | CHECK ((change_kind = ANY (ARRAY['insert'::text, 'update'::text, 'delete'::text]))) |
+| coach | allergy_permissions | allergy_permissions_not_self_ck | CHECK ((coach_id <> client_id)) |
+| coach | allergy_permissions | allergy_permissions_visibility_check | CHECK ((visibility = ANY (ARRAY['none'::text, 'full'::text]))) |
 | coach | autonomy_change_log | autonomy_change_log_change_kind_check | CHECK ((change_kind = ANY (ARRAY['insert'::text, 'update'::text, 'delete'::text]))) |
 | coach | checkin_templates | checkin_templates_cadence_check | CHECK ((cadence = ANY (ARRAY['weekly'::text, 'biweekly'::text, 'monthly'::text]))) |
 | coach | checkin_templates | checkin_templates_fields_check | CHECK ((jsonb_typeof(fields) = 'array'::text)) |
@@ -496,9 +508,10 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | nutrition | food_curation_candidates | food_curation_candidates_target_type_check | CHECK ((target_type = ANY (ARRAY['category_assignment'::text, 'display_name'::text, 'alias'::text, 'preference_item_mapping'::text |
 | nutrition | food_curation_decisions | food_curation_decisions_decision_check | CHECK ((decision = ANY (ARRAY['accepted'::text, 'rejected'::text, 'superseded'::text]))) |
 | nutrition | food_nutrients | food_nutrients_bls_value_status_ck | CHECK ((bls_value_status = ANY (ARRAY['measured'::text, 'censored'::text, 'missing'::text, 'logical_zero'::text, 'trace'::text]))) |
-| nutrition | food_preference_items | food_preference_items_exactly_one_target | CHECK (((((((((food_id IS NOT NULL))::integer + ((category_id IS NOT NULL))::integer) + ((tag_code IS NOT NULL))::integer) + ((NUL |
+| nutrition | food_preference_items | food_preference_items_exactly_one_target | CHECK ((((((((((food_id IS NOT NULL))::integer + ((category_id IS NOT NULL))::integer) + ((tag_code IS NOT NULL))::integer) + ((NU |
 | nutrition | food_preference_items | food_preference_items_preference_check | CHECK ((preference = ANY (ARRAY['liked'::text, 'disliked'::text, 'hard_exclude'::text]))) |
 | nutrition | food_preference_items | food_preference_items_strength_check | CHECK ((strength = ANY (ARRAY['hard_exclude'::text, 'soft_dislike'::text, 'neutral'::text, 'like'::text, 'boost'::text]))) |
+| nutrition | food_preference_items | food_preference_items_target_matches_column | CHECK ((((target_type = 'food'::text) AND (food_id IS NOT NULL)) OR ((target_type = 'category'::text) AND (category_id IS NOT NULL |
 | nutrition | food_preference_items | food_preference_items_target_type_check | CHECK ((target_type = ANY (ARRAY['food'::text, 'category'::text, 'tag'::text, 'cuisine'::text, 'exclusion_preset'::text, 'catalog_ |
 | nutrition | food_preference_search_targets | food_preference_search_targets_constraint_level_check | CHECK ((constraint_level = ANY (ARRAY['hard'::text, 'strong'::text, 'soft'::text, 'boost'::text]))) |
 | nutrition | food_preferences | food_preferences_budget_level_check | CHECK ((budget_level = ANY (ARRAY['low'::text, 'medium'::text, 'high'::text, 'no_limit'::text]))) |
@@ -650,6 +663,8 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | nutrition | water_logs | water_logs_amount_ml_check | CHECK ((amount_ml > (0)::numeric)) |
 | nutrition | water_logs | water_logs_measurement_source_ck | CHECK ((measurement_source = ANY (ARRAY['manual'::text, 'device'::text, 'import'::text, 'admin'::text, 'seed'::text]))) |
 | nutrition | water_logs | water_logs_source_check | CHECK ((source = ANY (ARRAY['manual'::text, 'quick_add'::text]))) |
+| public | allergen_aliases | allergen_aliases_evidence_class_check | CHECK ((evidence_class = ANY (ARRAY['A'::text, 'B'::text, 'C'::text]))) |
+| public | allergen_aliases | allergen_aliases_source_id_check | CHECK ((btrim(source_id) <> ''::text)) |
 | public | koerperflaechen | koerperflaechen_art_ck | CHECK ((art = ANY (ARRAY['wurzel'::text, 'gruppe'::text, 'muskel'::text, 'umriss'::text, 'kopf'::text]))) |
 | public | koerperflaechen | koerperflaechen_umriss_ck | CHECK (((art <> ALL (ARRAY['umriss'::text, 'kopf'::text])) OR (muscle_group_id IS NULL))) |
 | public | profiles | profiles_activity_level_check | CHECK (((activity_level IS NULL) OR (activity_level = ANY (ARRAY['sedentary'::text, 'light'::text, 'moderate'::text, 'active'::tex |
@@ -662,6 +677,10 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | public | profiles | profiles_locale_check | CHECK (((locale IS NULL) OR (locale = ANY (ARRAY['de'::text, 'en'::text, 'th'::text])))) |
 | public | profiles | profiles_nutrition_goal_check | CHECK (((nutrition_goal IS NULL) OR (nutrition_goal = ANY (ARRAY['lose_weight'::text, 'maintain'::text, 'gain_muscle'::text, 'reco |
 | public | profiles | profiles_pregnancy_period_check | CHECK (((pregnancy_started_on IS NULL) OR (pregnancy_ended_on IS NULL) OR (pregnancy_ended_on >= pregnancy_started_on))) |
+| public | user_allergies | user_allergies_art_check | CHECK ((art = ANY (ARRAY['nahrung'::text, 'supplement'::text, 'medikament'::text, 'umwelt'::text, 'sonstiges'::text]))) |
+| public | user_allergies | user_allergies_quelle_check | CHECK ((btrim(quelle) <> ''::text)) |
+| public | user_allergies | user_allergies_schwere_check | CHECK ((schwere = ANY (ARRAY['unvertraeglichkeit'::text, 'allergie'::text, 'anaphylaxie'::text]))) |
+| public | user_allergies | user_allergies_stoff_text_check | CHECK ((btrim(stoff_text) <> ''::text)) |
 | public | user_display_preferences | user_display_preferences_key_check | CHECK ((preference_key ~ '^[a-z0-9_.:-]{3,120}$'::text)) |
 | public | user_display_preferences | user_display_preferences_value_object_check | CHECK ((jsonb_typeof(value) = 'object'::text)) |
 | recovery | checkins | checkins_alcohol_units_check | CHECK (((alcohol_units IS NULL) OR (alcohol_units >= (0)::numeric))) |
@@ -859,6 +878,15 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | supplement_warnings | supplement_warnings_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | supplements | supplements_evidence_grade_check | CHECK (((evidence_grade IS NULL) OR (evidence_grade = ANY (ARRAY['S'::text, 'A'::text, 'B'::text, 'C'::text, 'D'::text, 'E'::text, |
 | supplements | supplements | supplements_slug_check | CHECK ((btrim(slug) <> ''::text)) |
+| supplements | supplier_product_nutrient_name_mappings | supplier_product_nutrient_name_mappings_conversion_rule_check | CHECK ((conversion_rule = ANY (ARRAY['mass_or_label'::text, 'vitamin_d_iu_to_ug'::text, 'iu_form_required'::text, 'equivalent_not_ |
+| supplements | supplier_product_nutrient_name_mappings | supplier_product_nutrient_name_mappings_evidence_class_check | CHECK ((evidence_class = ANY (ARRAY['A'::text, 'B'::text, 'C'::text]))) |
+| supplements | supplier_product_nutrient_name_mappings | supplier_product_nutrient_name_mappings_target_column_check | CHECK ((target_column = ANY (ARRAY['enercc'::text, 'prot625'::text, 'fat'::text, 'cho'::text, 'fibt'::text, 'sugar'::text, 'fasat' |
+| supplements | supplier_product_nutrient_name_mappings | supplier_product_nutrient_name_mappings_target_unit_check | CHECK ((target_unit = ANY (ARRAY['kcal'::text, 'g'::text, 'mg'::text, 'ug'::text]))) |
+| supplements | supplier_product_vitamin_e_forms | supplier_product_vitamin_e_forms_evidence_class_check | CHECK ((evidence_class = ANY (ARRAY['A'::text, 'B'::text, 'C'::text]))) |
+| supplements | supplier_product_vitamin_e_forms | supplier_product_vitamin_e_forms_evidence_text_check | CHECK ((btrim(evidence_text) <> ''::text)) |
+| supplements | supplier_product_vitamin_e_forms | supplier_product_vitamin_e_forms_source_id_check | CHECK ((btrim(source_id) <> ''::text)) |
+| supplements | supplier_product_vitamin_e_forms | supplier_product_vitamin_e_forms_vitamin_e_form_check | CHECK ((vitamin_e_form = ANY (ARRAY['natuerlich'::text, 'synthetisch'::text, 'unbekannt'::text]))) |
+| supplements | supplier_product_vitamin_e_forms | vitamin_e_form_not_unbekannt_ck | CHECK ((vitamin_e_form <> 'unbekannt'::text)) |
 | supplements | supplier_products | supplier_products_dsld_id_ck | CHECK (((dsld_id IS NULL) OR (dsld_id > 0))) |
 | supplements | supplier_products | supplier_products_gtin_check | CHECK (((gtin IS NULL) OR (gtin ~ '^[0-9]{8,14}$'::text))) |
 | supplements | supplier_products | supplier_products_name_en_check | CHECK ((length(btrim(name_en)) >= 1)) |
@@ -952,6 +980,12 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | coach | alerts | alerts_insert | INSERT | (( SELECT auth.uid() AS uid) = coach_id) |
 | coach | alerts | alerts_select | SELECT | ((( SELECT auth.uid() AS uid) = coach_id) OR (( SELECT auth.uid() AS uid) = client_id)) |
 | coach | alerts | alerts_update | UPDATE | (( SELECT auth.uid() AS uid) = coach_id) |
+| coach | allergy_permission_change_log | allergy_permission_change_log_insert | INSERT | ((auth.uid() = changed_by) AND ((auth.uid() = coach_id) OR (auth.uid() = client_id))) |
+| coach | allergy_permission_change_log | allergy_permission_change_log_select | SELECT | ((auth.uid() = coach_id) OR (auth.uid() = client_id)) |
+| coach | allergy_permissions | allergy_permissions_delete | DELETE | (auth.uid() = client_id) |
+| coach | allergy_permissions | allergy_permissions_insert | INSERT | (auth.uid() = client_id) |
+| coach | allergy_permissions | allergy_permissions_select | SELECT | ((auth.uid() = coach_id) OR (auth.uid() = client_id)) |
+| coach | allergy_permissions | allergy_permissions_update | UPDATE | (auth.uid() = client_id) |
 | coach | autonomy_change_log | autonomy_change_log_insert | INSERT | ((( SELECT auth.uid() AS uid) = changed_by) AND ((( SELECT auth.uid() AS uid) = coach_id)  |
 | coach | autonomy_change_log | autonomy_change_log_select | SELECT | ((( SELECT auth.uid() AS uid) = coach_id) OR (( SELECT auth.uid() AS uid) = client_id)) |
 | coach | checkin_templates | checkin_templates_delete | DELETE | (( SELECT auth.uid() AS uid) = coach_id) |
@@ -1197,11 +1231,16 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | nutrition | water_logs | water_logs_insert | INSERT | (auth.uid() = user_id) |
 | nutrition | water_logs | water_logs_select | SELECT | (auth.uid() = user_id) |
 | nutrition | water_logs | water_logs_update | UPDATE | (auth.uid() = user_id) |
+| public | allergen_aliases | allergen_aliases_select | SELECT | true |
 | public | koerperflaechen | koerperflaechen_select | SELECT | true |
 | public | profiles | profiles_delete | DELETE | (auth.uid() = id) |
 | public | profiles | profiles_insert | INSERT | (auth.uid() = id) |
 | public | profiles | profiles_select | SELECT | (auth.uid() = id) |
 | public | profiles | profiles_update | UPDATE | (auth.uid() = id) |
+| public | user_allergies | user_allergies_delete | DELETE | (auth.uid() = user_id) |
+| public | user_allergies | user_allergies_insert | INSERT | (auth.uid() = user_id) |
+| public | user_allergies | user_allergies_select | SELECT | ((auth.uid() = user_id) OR coach.hat_allergie_sicht(user_id)) |
+| public | user_allergies | user_allergies_update | UPDATE | (auth.uid() = user_id) |
 | public | user_display_preferences | user_display_preferences_delete | DELETE | (auth.uid() = user_id) |
 | public | user_display_preferences | user_display_preferences_insert | INSERT | (auth.uid() = user_id) |
 | public | user_display_preferences | user_display_preferences_select | SELECT | (auth.uid() = user_id) |

@@ -13,18 +13,20 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-15 — 191 Tabellen, 2691 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-15 — 195 Tabellen, 2724 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 
-## coach — 17 Tabellen, 200 Spalten
+## coach — 19 Tabellen, 217 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
 | `action_log` | 12 | 1 | ? |
 | `alert_settings` | 10 | 0 | 2026-09-09 |
 | `alerts` | 15 | 6 | ? |
+| `allergy_permission_change_log` | 9 | 0 | 2026-09-15 |
+| `allergy_permissions` | 8 | 0 | 2026-09-15 |
 | `autonomy_change_log` | 9 | 6 | ? |
 | `checkin_templates` | 10 | 2 | ? |
 | `checkins` | 16 | 6 | ? |
@@ -102,9 +104,9 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `food_curation_decisions` | 6 | 0 | 2026-08-05 |
 | `food_groups` | 7 | 19 | ? |
 | `food_nutrients` | 5 | 985320 | 2026-08-05 |
-| `food_preference_items` | 13 | 24 | 2026-08-05 |
+| `food_preference_items` | 14 | 24 | 2026-08-05 |
 | `food_preference_search_targets` | 8 | 15532 | ? |
-| `food_preferences` | 14 | 3 | 2026-08-05 |
+| `food_preferences` | 13 | 3 | 2026-08-05 |
 | `food_tags` | 3 | 30797 | 2026-08-05 |
 | `food_tags_kuriert` | 5 | 0 | 2026-09-02 |
 | `foods` | 14 | 7140 | 2026-08-05 |
@@ -153,7 +155,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `scores` | 34 | 370 | ? |
 | `stress_logs` | 12 | 7 | 2026-09-07 |
 
-## supplements — 64 Tabellen, 953 Spalten
+## supplements — 66 Tabellen, 969 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -213,6 +215,8 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `supplement_wada` | 22 | 337 | ? |
 | `supplement_warnings` | 14 | 290 | ? |
 | `supplements` | 22 | 596 | ? |
+| `supplier_product_nutrient_name_mappings` | 8 | 39 | 2026-09-15 |
+| `supplier_product_vitamin_e_forms` | 8 | 1433 | 2026-09-15 |
 | `supplier_products` | 23 | 214780 | 2026-09-09 |
 | `suppliers` | 11 | 6419 | 2026-09-09 |
 | `thailand_regulatory_records` | 18 | 1061 | ? |

@@ -9,6 +9,8 @@ kind_von: C-496
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 68c69158
 beruehrt:
   tabellen: [supplements.product_contents]
 zahlen:
@@ -115,9 +117,68 @@ Marke buendeln.**
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+2026-09-15 — umgesetzt und in die laufende Datenbank eingespielt.
+
+- Ausgangsmessung: 15.011 Vitamin-E-IU-Zeilen an 13.954 Produkten. Die
+  Zutatenzeile loeste 1.409 Produkte eindeutig auf (`d-alpha` natuerlich,
+  `dl-alpha` synthetisch); unqualifiziertes `tocopheryl acetate` bleibt
+  absichtlich offen.
+- Die groessten offenen Marken vor der Aufloesung waren Douglas
+  Laboratories (548), NOW (424), Nature's Plus (353), Nature's Way (285)
+  und Carlson (278). Online wurde markenweise, nicht zeilenweise,
+  recherchiert. Fuer NOW belegen offizielle Produktseiten mit explizitem
+  `d-alpha-tocopherol` die Form; 24 exakte Produktnachweise wurden
+  uebernommen. Douglas-Produktunterlagen nennen zwar Formen, liessen sich
+  bei den geprueften DSLD-GTINs nicht eindeutig zuordnen und wurden daher
+  nicht geraten.
+- `supplements.supplier_product_vitamin_e_forms` enthaelt 1.433 belegte
+  Formen. 12.521 Vitamin-E-IU-Produkte bleiben offen. Die Sicht
+  `produkt_naehrwerte` schreibt dafuer sichtbar
+  `vitamin_e_iu_form_unknown`/`vitamin_e_form: unbekannt`, statt eine
+  mg-Zahl zu erfinden.
+- Belegte Formen rechnen Vitamin E wie verlangt: natuerlich mit 0,67 mg/IU,
+  synthetisch mit 0,45 mg/IU. Eine erfundene oder widerspruechliche Form
+  scheitert an Constraint bzw. konservativer Evidenzregel.
+- `anon` hat keinen SELECT auf der Evidenztabelle; `authenticated` hat
+  nur SELECT, `service_role` pflegt den Katalog.
+
+Sicherung vor Einspielen:
+`backup/schema/20260915151306_c498_c500_vor_einspielen.sql`.
+Vollkette im Wegwerfstand und die C-500-Tests: gruen.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **`supplements.supplier_product_vitamin_e_forms`:**
+
+    synthetisch   846  (evidence_class A)
+    natuerlich    587  (evidence_class A)
+    zusammen    1.433
+
+`[read]` **Beide Klasse A** ? **aus der Zutatenzeile oder vom
+Hersteller, nichts geschaetzt.**
+
+> *,,1.409 Formen aus Zutatenzeilen und 24 exakte
+NOW-Herstellerbelege."*
+
+`[read]` **Toms Ansage war:** *,,ich bin mir sicher, dass man
+das einfach mal kurz online recherchieren kann"* ? **er hat es
+getan, nach Marke gebuendelt, und 24 Produkte damit belegt.**
+
+### Und die Luecke bleibt sichtbar
+
+`[cmd]` **12.521 Vitamin-E-IU-Produkte ohne Form.**
+
+> *,,bleiben korrekt als sichtbare Form-Luecke offen; keine
+Schaetzung."*
+
+`[read]` **Die Auflage war:** *,,KEINE Form raten ? weder
+*meistens synthetisch* noch *meistens natuerlich*."*
+
+`[read]` **1.433 von 13.954 sind elf Prozent** ? **und die
+uebrigen 89 stehen als Luecke da, nicht als Zahl.**
+
+**Abgenommen.**
+
 
