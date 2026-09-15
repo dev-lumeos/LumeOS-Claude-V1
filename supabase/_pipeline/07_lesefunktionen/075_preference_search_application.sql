@@ -239,7 +239,7 @@ BEGIN
     SELECT
       fp.user_id,
       COALESCE(fp.diet_type, 'omnivore') AS diet_type,
-      COALESCE(fp.allergies, '{}'::text[]) AS allergies,
+      public.user_allergy_codes(fp.user_id) AS allergies,
       COALESCE(fp.intolerances, '{}'::text[]) AS intolerances,
       COALESCE(fp.general_exclusions, '{}'::text[]) AS general_exclusions
     FROM nutrition.food_preferences fp
@@ -811,7 +811,7 @@ user_preference AS (
   SELECT
     fp.user_id,
     COALESCE(fp.diet_type, 'omnivore') AS diet_type,
-    COALESCE(fp.allergies, '{}'::text[]) AS allergies,
+    public.user_allergy_codes(fp.user_id) AS allergies,
     COALESCE(fp.intolerances, '{}'::text[]) AS intolerances,
     COALESCE(fp.general_exclusions, '{}'::text[]) AS general_exclusions
   FROM nutrition.food_preferences fp

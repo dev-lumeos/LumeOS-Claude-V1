@@ -172,10 +172,21 @@ JOIN values_per_product v ON v.product_id = p.id;
 COMMENT ON VIEW supplements.produkt_naehrwerte IS
   'C-496: berechnete DSLD-Etikettnaehrwerte je Produkt und Portion; keine Kopie nach nutrition.foods. luecken nennt nicht umgerechnete Mengen samt Grund.';
 
+CREATE OR REPLACE VIEW supplements.supplier_product_nutrients
+WITH (security_invoker = true)
+AS
+SELECT *
+FROM supplements.produkt_naehrwerte;
+
+COMMENT ON VIEW supplements.supplier_product_nutrients IS
+  'C-496: englische Lese-Schnittstelle fuer supplements.produkt_naehrwerte.';
+
 REVOKE ALL ON TABLE supplements.supplier_product_nutrient_name_mappings FROM PUBLIC, anon;
 GRANT SELECT ON TABLE supplements.supplier_product_nutrient_name_mappings TO authenticated;
 GRANT ALL ON TABLE supplements.supplier_product_nutrient_name_mappings TO service_role;
 REVOKE ALL ON TABLE supplements.produkt_naehrwerte FROM PUBLIC, anon;
 GRANT SELECT ON TABLE supplements.produkt_naehrwerte TO authenticated;
+REVOKE ALL ON TABLE supplements.supplier_product_nutrients FROM PUBLIC, anon;
+GRANT SELECT ON TABLE supplements.supplier_product_nutrients TO authenticated;
 
 COMMIT;

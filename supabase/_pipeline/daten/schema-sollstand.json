@@ -5864,7 +5864,12 @@
       "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
       "grants_herkunft": "20260911180000_c471_koerperflaechen_struktur.sql: REVOKE ALL fuer PUBLIC, anon und authenticated; danach authenticated SELECT und service_role ALL.",
       "zeilenschutzart": "oeffentlich"
-    }
+    },
+    {"schema":"public","name":"user_allergies","schritt":"498_global_allergies","rls":true,"policies":["SELECT","INSERT","UPDATE","DELETE"],"grants":{"authenticated":["SELECT","INSERT","UPDATE","DELETE"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-498: REVOKE PUBLIC/anon; Nutzer-DML, Coach-Lesen nur ueber eigene allergy_permissions.","zeilenschutzart":"eigene_zeilen_oder_explizit_freigegebener_coach"},
+    {"schema":"public","name":"allergen_aliases","schritt":"498_global_allergies","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-498: kuratierter Alias-Katalog, authenticated SELECT, keine anon-Rechte.","zeilenschutzart":"oeffentlich"},
+    {"schema":"coach","name":"allergy_permissions","schritt":"498_global_allergies","rls":true,"policies":["SELECT","INSERT","UPDATE","DELETE"],"grants":{"authenticated":["SELECT","INSERT","UPDATE","DELETE"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-498: eigene, vom Klienten steuerbare Allergie-Freigabe fuer Coaches.","zeilenschutzart":"coach_und_client"},
+    {"schema":"coach","name":"allergy_permission_change_log","schritt":"498_global_allergies","rls":true,"policies":["SELECT","INSERT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-498: append-only Triggerprotokoll; authenticated kann nur lesen.","zeilenschutzart":"coach_und_client"},
+    {"schema":"supplements","name":"supplier_product_vitamin_e_forms","schritt":"500_vitamin_e_form_evidence","rls":false,"policies":[],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-500: belegte Produktform als globaler Lesekatalog; PUBLIC/anon explizit widerrufen.","zeilenschutzart":"oeffentlich"}
   ],
   "_fremde_funktionen": "GO-04: Funktionen ausserhalb nutrition. Dieselbe Luecke wie oben.",
   "fremde_funktionen": [

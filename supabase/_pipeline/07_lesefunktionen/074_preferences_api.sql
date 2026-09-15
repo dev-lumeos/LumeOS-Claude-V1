@@ -34,7 +34,7 @@ WITH prefs AS (
   SELECT
     fp.user_id,
     fp.diet_type,
-    COALESCE(fp.allergies, '{}'::text[]) AS allergies,
+    public.user_allergy_codes(fp.user_id) AS allergies,
     COALESCE(fp.intolerances, '{}'::text[]) AS intolerances,
     COALESCE(fp.general_exclusions, '{}'::text[]) AS general_exclusions,
     COALESCE(fp.preferred_cuisines, '{}'::text[]) AS preferred_cuisines,
@@ -211,7 +211,6 @@ BEGIN
   INSERT INTO nutrition.food_preferences (
     user_id,
     diet_type,
-    allergies,
     intolerances,
     general_exclusions,
     preferred_cuisines,
@@ -227,7 +226,6 @@ BEGIN
   VALUES (
     p_user_id,
     COALESCE(NULLIF(p_preferences->>'diet_type', ''), 'omnivore'),
-    COALESCE(ARRAY(SELECT jsonb_array_elements_text(COALESCE(p_preferences->'allergies', '[]'::jsonb))), '{}'::text[]),
     COALESCE(ARRAY(SELECT jsonb_array_elements_text(COALESCE(p_preferences->'intolerances', '[]'::jsonb))), '{}'::text[]),
     COALESCE(ARRAY(SELECT jsonb_array_elements_text(COALESCE(p_preferences->'general_exclusions', '[]'::jsonb))), '{}'::text[]),
     COALESCE(ARRAY(SELECT jsonb_array_elements_text(COALESCE(p_preferences->'preferred_cuisines', '[]'::jsonb))), '{}'::text[]),
@@ -242,7 +240,6 @@ BEGIN
   )
   ON CONFLICT (user_id) DO UPDATE SET
     diet_type = EXCLUDED.diet_type,
-    allergies = EXCLUDED.allergies,
     intolerances = EXCLUDED.intolerances,
     general_exclusions = EXCLUDED.general_exclusions,
     preferred_cuisines = EXCLUDED.preferred_cuisines,
@@ -259,6 +256,24 @@ BEGIN
   IF v_preference_rows <> 1 THEN
     RAISE EXCEPTION 'food_preferences_write: no preference row written for %', p_user_id;
   END IF;
+
+  DELETE FROM public.user_allergies
+  WHERE user_id = p_user_id
+    AND art = 'nahrung'
+    AND quelle = 'nutrition_preferences';
+
+  INSERT INTO public.user_allergies (
+    user_id, stoff_code, stoff_text, art, schwere, quelle
+  )
+  SELECT
+    p_user_id,
+    lower(btrim(value)),
+    replace(lower(btrim(value)), '_', ' '),
+    'nahrung',
+    'allergie',
+    'nutrition_preferences'
+  FROM jsonb_array_elements_text(COALESCE(p_preferences->'allergies', '[]'::jsonb)) AS allergy(value)
+  WHERE btrim(value) <> '';
 
   IF to_regclass('pg_temp.food_preferences_write_items') IS NOT NULL THEN
     DROP TABLE pg_temp.food_preferences_write_items;

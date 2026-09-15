@@ -302,6 +302,15 @@
       ]
     },
     {
+      "id": "498_global_allergies",
+      "path": "supabase/migrations/20260915142000_c498_global_allergies.sql",
+      "kind": "sql",
+      "creates": "C-498: globale Nutzerallergien, Alias-Katalog und eigenstaendige, protokollierte Coach-Freigabe vor dem Nutrition-Leseweg.",
+      "depends_on": [
+        "054"
+      ]
+    },
+    {
       "id": "055",
       "path": "supabase/_pipeline/05_user_tabellen/055_water_logs.sql",
       "kind": "sql",
@@ -2076,6 +2085,45 @@
       "depends_on": [
         "496_supplier_product_nutrients",
         "074"
+      ]
+    },
+    {
+      "id": "498_allergy_product_matches",
+      "path": "supabase/migrations/20260915142001_c498_allergy_product_matches.sql",
+      "kind": "sql",
+      "creates": "C-498: aliasaufgeloeste DSLD-Inhaltszeilen je eigener oder explizit freigegebener Allergie.",
+      "depends_on": [
+        "498_global_allergies",
+        "497_supplier_product_preferences"
+      ]
+    },
+    {
+      "id": "498_live_preference_function_patch",
+      "path": "supabase/migrations/20260915142002_c498_live_preference_function_patch.sql",
+      "kind": "sql",
+      "creates": "C-498: aktualisiert auf bestehenden Datenbanken die Nutrition-Preference-Funktionen vor dem Entfernen der alten Allergiespalte.",
+      "depends_on": [
+        "498_global_allergies",
+        "075"
+      ]
+    },
+    {
+      "id": "499_deactivate_off_market_supplier_products",
+      "path": "supabase/migrations/20260915142100_c499_deactivate_off_market_supplier_products.sql",
+      "kind": "sql",
+      "creates": "C-499: Off-Market-Lieferantenprodukte bleiben erhalten, sind aber inaktiv und nicht suchbar.",
+      "depends_on": [
+        "497_supplier_product_preferences"
+      ]
+    },
+    {
+      "id": "500_vitamin_e_form_evidence",
+      "path": "supabase/migrations/20260915142200_c500_vitamin_e_form_evidence.sql",
+      "kind": "sql",
+      "creates": "C-500: belegte Vitamin-E-Formen aus Zutatenzeilen und Herstellerseiten fuer die IU-Umrechnung; Unbekanntes bleibt Luecke.",
+      "depends_on": [
+        "496_supplier_product_nutrients",
+        "499_deactivate_off_market_supplier_products"
       ]
     }
   ]

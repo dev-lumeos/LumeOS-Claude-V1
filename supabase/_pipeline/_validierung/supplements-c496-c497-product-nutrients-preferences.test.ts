@@ -19,6 +19,7 @@ function one<T>(sql: string): T {
 test('C-496: DSLD-Labelwerte werden je Portion in LumeOS-Naehrwerte gerechnet, ohne IU zu raten', () => {
   const result = one<{
     mappingCount: number
+    supplierProductNutrientsExists: boolean
     drMercola: { portionsgroesse_g: number | null; enercc: number | null; prot625: number | null; luecken: unknown[] } | null
     vitaminDIu: number
     vitaminEIu: number
@@ -26,6 +27,7 @@ test('C-496: DSLD-Labelwerte werden je Portion in LumeOS-Naehrwerte gerechnet, o
   }>(`
     SELECT json_build_object(
       'mappingCount', (SELECT count(*) FROM supplements.supplier_product_nutrient_name_mappings),
+      'supplierProductNutrientsExists', to_regclass('supplements.supplier_product_nutrients') IS NOT NULL,
       'drMercola', (
         SELECT json_build_object(
           'portionsgroesse_g', n.portionsgroesse_g,
@@ -68,6 +70,7 @@ test('C-496: DSLD-Labelwerte werden je Portion in LumeOS-Naehrwerte gerechnet, o
   `)
 
   assert.ok(result.mappingCount >= 30)
+  assert.equal(result.supplierProductNutrientsExists, true)
   assert.ok(result.drMercola)
   assert.equal(Number(result.drMercola.portionsgroesse_g), 40)
   assert.equal(Number(result.drMercola.enercc), 160)

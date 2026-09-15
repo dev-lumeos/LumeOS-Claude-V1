@@ -397,7 +397,15 @@ BEGIN
 
   SELECT count(*) INTO v_policies
   FROM pg_policies
-  WHERE schemaname = 'coach';
+  WHERE schemaname = 'coach'
+    AND tablename IN (
+      'client_permissions',
+      'client_autonomy',
+      'permission_change_log',
+      'autonomy_change_log',
+      'pending_actions',
+      'action_log'
+    );
 
   IF v_policies <> 19 THEN
     RAISE EXCEPTION 'coach: % Policies statt 19', v_policies;
