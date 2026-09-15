@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 232 |
-| `laufend_codex` | 2 |
+| `todos` | 233 |
+| `laufend_codex` | 3 |
 | `erledigt` | 451 |
-| **gesamt** | **685** |
+| **gesamt** | **687** |
 
 ## medical — 48
 
@@ -567,7 +567,9 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 165
+## quer — 167
+
+### beauftragbar — 166
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -662,6 +664,7 @@
 | `C-484` | feature | hoch | [koerperflaechen nach E-81](erledigt/quer-c-0484-koerperflaechen-nach-e81.md) | erledigt | — | C-486, G-437 |
 | `C-486` | fehler | hoch | [UTF-8 beim Einspielen verloren](erledigt/quer-c-0486-utf8-beim-einspielen-verloren.md) | erledigt | — | — |
 | `C-488` | fehler | hoch | [sechzehn Tabellen ohne Thai](erledigt/quer-c-0488-sechzehn-tabellen-ohne-thai.md) | erledigt | — | C-489 |
+| `C-498` | feature | hoch | [Allergien global, nicht in food_preferences](laufend_codex/quer-c-0498-allergien-global.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -736,6 +739,12 @@
 | `G-435` | feature | hoch | [die Hierarchie an den richtigen Ort](erledigt/quer-g-0435-hierarchie-an-den-richtigen-ort.md) | erledigt | — | G-436 |
 | `G-444` | fehler | mittel | [drei Abwesenheitsbehauptungen, die C-461 ueberholt hat](todos/quer-g-0444-drei-abwesenheitsbehauptungen.md) | offen | — | — |
 | `G-451` | fehler | mittel | [der Testdatenlauf scheitert vor C-493](todos/quer-g-0451-testdatenlauf-scheitert-vorher.md) | offen | — | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-455` | feature | hoch | [Allergien in Settings, Filter in Produkten](todos/quer-g-0455-allergien-und-filter.md) | offen | C-498 | — |
 
 ## buddy — 1
 
