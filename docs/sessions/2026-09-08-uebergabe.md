@@ -521,3 +521,110 @@ Frischaufbau die Karte fuellt.**
 
 `[read]` **Die beiden haengen zusammen: G-450 macht das Testen
 moeglich, G-451 das Wiederherstellen.**
+
+---
+
+# Vierter Teil - die Supplementprodukte werden sichtbar
+
+**In einem Satz:** 214.780 DSLD-Produkte haben einen Reiter, eine
+Smartsuche, eine Tafel nach Medical-Vorbild und eine
+Naehrwertrechnung mit belegten Einheiten.
+
+`[cmd]` **22 Commits, ungepusht.**
+
+## Der Anlass
+
+`[read]` **Tom sass mit Tobias (IFBB-Profi) zusammen und fragte,
+wie ein Fruehstueck aus BLS-Zutaten UND Whey zusammengeht.**
+
+`[cmd]` **Er hat das Etikett eines Optimum Nutrition Gold
+Standard gegen unsere Daten geprueft:** *,,exakt die daten auf
+der verpackung, kontrolliert und bestaetigt."*
+
+## Was gebaut wurde
+
+    C-495  Smartsuche (pg_trgm), Produktsicht,
+           4.907 Marken, 14,1 ms
+    C-496  39 DSLD-Namen auf LumeOS-Naehrstoffe,
+           Einheiten mit vier IU-Regeln
+    C-497  Vorlieben an food_preference_items
+           (catalog_item war unbenutzt: 0 Zeilen)
+    G-452  der Produkte-Reiter, 18 Zeilen je Produkt
+    G-453  Filterleiste wie foodsdb, Tafel nach
+           Medical-Vorbild, kein Blaettern
+
+## Die Entscheidungen des Tages
+
+`[cmd]` **Kategorienfilter auf PRODUKTE, nicht auf Zeilen** ?
+**wer ein Produkt aufmacht, will das ganze Etikett.**
+
+`[cmd]` **Fuenf Kategorien raus** (`other ingredient`,
+`botanical`, `non-nutrient/non-botanical`, `other`,
+`animal part or source`) ? **Toms Grund: sie sagen nichts
+aus.**
+
+`[cmd]` **Allergien gehoeren nach `public`, nicht in
+`food_preferences`** ? **mit EIGENER Coach-Freigabe.**
+
+`[cmd]` **Off Market stilllegen** ? **Tom hat seine
+C-485-Entscheidung geaendert, 92.821 Produkte.**
+
+## Die IU-Luecke, bewusst offen
+
+`[cmd]` **46.807 IU-Zeilen:**
+
+    Vitamin E     15.011   iu_form_required   LUECKE
+    Vitamin A     13.727   equivalent_not_mass
+    Vitamin D/D3  16.069   0,025 ug/IU
+
+`[read]` **Natuerlich 0,67 mg, synthetisch 0,45 mg** ? **das
+Etikett sagt es nicht.**
+
+`[cmd]` **C-500 recherchiert es nach Marke gebuendelt** ? **Toms
+Ansage:** *,,ich bin mir sicher, dass man das einfach mal kurz
+online recherchieren kann."*
+
+## Fehler des Orchestrators, vierter Teil
+
+**8** ? `[cmd]` **`revoke` in Kleinschreibung gesucht, die Datei
+schreibt `REVOKE`** ? **Befund erfunden, Codex hat ihn
+widerlegt.**
+
+**9** ? `[cmd]` **`061_rollen_admin.sql` als Nutzeranleger
+behauptet** ? **zwei auskommentierte Zeilen.**
+
+**10** ? `[cmd]` **Einen Auftrag gegeben, ohne die Punktdatei
+anzulegen** ? **der Punktelauf hat es gefangen.**
+
+**11** ? `[cmd]` **Die Daumen-Datenfrage an Claude Code
+delegiert** ? **sie gehoerte zu Codex, Tom hat es gemerkt.**
+
+`[read]` **Alle vier derselbe Fehler: ein Werkzeug gelesen, das
+Ergebnis nicht geprueft.**
+
+## Was laeuft
+
+    Codex        einspielen (C-495/496/497),
+                 dann C-498, C-499, C-500
+    Claude Code  G-450 (der Tageswechsler)
+
+## Was offen ist
+
+`[cmd]` **G-455** ? **Allergien in Settings, wartet auf
+C-498.**
+
+`[cmd]` **Der Daumen in der Oberflaeche** ? **wartet darauf,
+dass C-497 live ist.**
+
+`[cmd]` **G-454** ? **Suche und Filter schliessen sich aus,
+`search_supplier_products` hat keine Parameter fuer Kategorie
+und Form.**
+
+## Stand
+
+    191 Tabellen, 2.691 Spalten
+    199 Funktionen, 451 Policies, 691 CHECKs
+    689 Punkte: 232 offen, 453 erledigt
+    25 Befunde, genau der Sollstand
+    apps/web 1759, apps/coach 65
+
