@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-13 — 191 Tabellen, 2691 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-15 — 191 Tabellen, 2691 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -102,15 +102,15 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `food_curation_decisions` | 6 | 0 | 2026-08-05 |
 | `food_groups` | 7 | 19 | ? |
 | `food_nutrients` | 5 | 985320 | 2026-08-05 |
-| `food_preference_items` | 13 | 22 | 2026-08-05 |
-| `food_preference_search_targets` | 8 | 15089 | ? |
+| `food_preference_items` | 13 | 24 | 2026-08-05 |
+| `food_preference_search_targets` | 8 | 15532 | ? |
 | `food_preferences` | 14 | 3 | 2026-08-05 |
 | `food_tags` | 3 | 30797 | 2026-08-05 |
 | `food_tags_kuriert` | 5 | 0 | 2026-09-02 |
 | `foods` | 14 | 7140 | 2026-08-05 |
 | `foods_custom` | 46 | 0 | ? |
 | `foods_portions` | 12 | 23402 | ? |
-| `meal_items` | 26 | 9065 | ? |
+| `meal_items` | 26 | 9067 | ? |
 | `meal_plan_days` | 8 | 224 | ? |
 | `meal_plan_entries` | 18 | 728 | ? |
 | `meal_plan_logs` | 14 | 8 | ? |
@@ -118,7 +118,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `meal_plan_weeks` | 8 | 32 | ? |
 | `meal_plans` | 21 | 10 | ? |
 | `meal_slots` | 4 | 14 | ? |
-| `meals` | 10 | 2906 | ? |
+| `meals` | 10 | 2909 | ? |
 | `micronutrient_overview_items` | 9 | 8 | ? |
 | `nutrient_aliases` | 7 | 98 | ? |
 | `nutrient_defs` | 20 | 138 | 2026-08-05 |
@@ -131,7 +131,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `recipe_curation_decisions` | 6 | 0 | ? |
 | `recipe_ingredients` | 15 | 22 | ? |
 | `recipes` | 20 | 6 | ? |
-| `search_events` | 9 | 463 | ? |
+| `search_events` | 9 | 523 | ? |
 | `search_synonyms` | 4 | 4877 | ? |
 | `shopping_list_items` | 15 | 33 | ? |
 | `shopping_lists` | 12 | 6 | ? |

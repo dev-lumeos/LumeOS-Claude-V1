@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 233 |
+| `todos` | 232 |
 | `laufend_codex` | 3 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 453 |
 | **gesamt** | **689** |
 
@@ -488,7 +489,7 @@
 | `G-446` | fehler | hoch | [die Vererbung laeuft nur nach unten](erledigt/recovery-g-0446-die-vererbung-laeuft-nur-nach-unten.md) | erledigt | — | G-449 |
 | `G-448` | befund | niedrig | [der Schnitt und der Engpass sind aussagelos](todos/recovery-g-0448-der-schnitt-ist-aussagelos.md) | offen | — | — |
 | `G-449` | befund | niedrig | [wertKommtVonGruppe hat keinen Aufrufer](todos/recovery-g-0449-wertkommtvongruppe-ohne-aufrufer.md) | offen | — | — |
-| `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](todos/recovery-g-0450-tageswechsler-rechnet-nicht.md) | offen | — | — |
+| `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](laufend_claudecode/recovery-g-0450-tageswechsler-rechnet-nicht.md) | laeuft (claudecode) | — | — |
 
 ## goals — 13
 
