@@ -9,6 +9,8 @@ kind_von: G-452
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 09541b5e
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/tab-produkte.tsx
@@ -556,7 +558,378 @@ naechsten DSLD-Import ? **wer den faehrt, misst neu.**
 *,,Extra attributes from the server: data-mode"* aus `RootLayout` ?
 **nicht von diesem Reiter**, sie stehen auf jeder Seite des Moduls.
 
+---
+
+# Nachtrag — die vier Punkte vom 2026-09-15
+
+**Claude Code, 2026-09-15.**
+
+### Der Stand in einem Satz
+
+`[read]` **Drei der vier Punkte gebaut, der vierte
+(Daumen) auf Toms Weisung NICHT** — er haengt an C-497.
+
+### 1 — die Daumen: nicht gebaut, aber gemessen
+
+**Tom, 2026-09-15 (Korrektur):** *„Das war falsch aufgeteilt. Die
+Frage ist eine DATENfrage, sie liegt jetzt bei Codex als C-497. Bau
+die Daumen NOCH NICHT."*
+
+`[read]` **Nicht gebaut. Keine Attrappe, kein freigehaltener Platz**
+— Tom hat ihn erlaubt, aber ein leerer Spaltenkopf ohne Funktion ist
+eine Zusage, die niemand eingeloest hat. **Wenn C-497 durch ist,
+kostet die Spalte fuenf Zeilen.**
+
+`[cmd]` **Was VOR der Korrektur schon gemessen war, gehoert nach
+C-497** — es beantwortet genau die Frage, die dort ansteht:
+
+**Die nutrition-Bauform kann es NICHT tragen.** Gemessen gegen die
+laufende Instanz:
+
+    nutrition.food_preference_items
+      food_id -> FOREIGN KEY nutrition.foods(id)
+
+    INSERT ... food_id = '6ef78e94...' (ein supplier_product)
+    ERROR: insert or update on table "food_preference_items"
+           violates foreign key constraint
+           "food_preference_items_food_id_fkey"
+    DETAIL: Key (food_id)=(6ef78e94-...) is not present
+            in table "foods".
+
+`[cmd]` **Die id liegt in `supplements.supplier_products` (1 Zeile),
+nicht in `nutrition.foods` (0 Zeilen).**
+
+`[cmd]` **Und `supplements` hat keine Tabelle, die es koennte:**
+
+    supplement_aas_ratings        supplement_id
+    user_supplement_settings      supplement_id
+      -> FK supplements.supplements(id), NICHT supplier_products
+
+`[cmd]` **Fuenf Tabellen zeigen ueberhaupt auf `supplier_products`** —
+`intake_logs`, `product_contents`, `product_content_candidates`,
+`product_suppliers`, `supplement_field_sources`. **Keine davon traegt
+eine Nutzerbewertung.**
+
+`[read]` **Damit ist die C-497-Frage entschiedener, als sie
+aussieht:** `target_type = 'supplement_product'` allein genuegt
+nicht — **der `food_id`-FK zeigt auf `nutrition.foods` und muesste
+mitgeaendert werden** (eigene Spalte oder gelockerter CHECK).
+
+### 2 — die Leiste wie in foodsdb
+
+`[cmd]` **Die Bauform ist `tab-foods.tsx:661-700`** —
+`.v2-train-lib-filter` aus `packages/ui`, also geteilt und nicht
+kopiert:
+
+    [ Suche ]  [ Filter (N) ]  [ + Custom Supplement ]
+    KATEGORIE  Alle · mineral 39.960 · vitamin 39.523 · …
+    ┌ Filter ──────────────────────────────────────────┐
+    │ MARKT              DARREICHUNGSFORM      MARKE   │
+    └──────────────────────────────────────────────────┘
+
+`[cmd]` **Gemessen: die drei Teile in Toms Reihenfolge** (Suche,
+Filter, Aktion) — **ein Waechter prueft die Reihenfolge, nicht nur
+das Vorhandensein**, sonst bliebe er gruen, wenn die Aktion nach vorn
+rutscht.
+
+`[read]` **`Custom Supplement` ist ein `InEntwicklungKnopf`** — der
+Weg ist nicht gebaut, und ein Knopf, der nichts tut, waere schlechter
+als einer, der es sagt (G-182).
+
+`[cmd]` **Die Zahl am Filterknopf zaehlt den Standard-Markt NICHT
+mit** — sonst stuende beim Oeffnen schon eine 1 da, und die Zahl
+hiesse nichts.
+
+### 2b — fuenf Kategorien raus
+
+**Tom:** *„WEG: diese Kategorien ganz raus, sie sagen nichts aus."*
+
+`[cmd]` **Von 19 auf 14.** `[read]` **Drei der fuenf hatte die
+G-453-Messung NICHT auffaellig gefunden** — `other` (27,6 %),
+`non-nutrient/non-botanical` (31,9 %), `animal part or source`
+(3,0 %).
+
+`[read]` **Der Grund ist nicht die Trennschaerfe, sondern die
+Aussage.** **Eine Kategorie namens `other` beantwortet keine Frage,
+auch wenn sie nur jedes vierte Produkt trifft.** `[read]`
+**Trennschaerfe ist notwendig, nicht hinreichend** — das ist die
+Lehre, und sie steht jetzt im Code.
+
+`[cmd]` **Damit sind der Zusatz *„fast alle"* und die 50-%-Schwelle
+gegenstandslos und entfernt** (G-163: keine Notloesung stehen
+lassen). **Keine der verbliebenen 14 liegt ueber einem Drittel.**
+
+`[cmd]` **Die fuenf bleiben in den DATEN** — ein Waechter prueft, dass
+`other ingredient` weiter im Buendel *Hilfsstoffe* landet. **Kein
+Filter heisst nicht kein Inhalt.**
+
+### 3 — nicht blaetterbar
+
+**Tom:** *„Ergebnisse NICHT blaetterbar. Miss, was stattdessen
+traegt."*
+
+`[cmd]` **In der Datenbank** (`EXPLAIN ANALYZE`, On Market nach
+`name_en`):
+
+    LIMIT 50                    17,4 ms
+    LIMIT 500                   23,0 ms
+    OFFSET 100.000 LIMIT 50    113,1 ms
+
+`[cmd]` **Im Browser** (echte Zeilenform, fuenf Zellen je Zeile):
+
+    Zeilen   DOM-Knoten   Anstrich      Hoehe
+        50          302      20 ms    1.849 px
+       200        1.202      27 ms    7.399 px
+       500        3.002      68 ms   18.499 px
+     1.000        6.002     140 ms   36.999 px
+     2.000       12.002     273 ms   73.999 px
+
+`[read]` **Zwei Befunde, die zusammen die Bauform bestimmen:**
+
+**1** — **500 Zeilen kosten in der Datenbank kaum mehr als 50** (23
+gegen 17 ms), **im Browser 3.002 Knoten** — **unter den 4.713, die
+G-176 gemessen und als unauffaellig eingestuft hat.** `[read]` **Die
+dort verlangte Wiederholung der Messung ist damit erbracht.**
+
+**2** — **Teuer ist das TIEFE BLAETTERN, nicht die Menge:**
+`OFFSET 100.000` kostet das Sechsfache. `[read]` **Genau der Weg
+faellt weg.**
+
+`[cmd]` **Gebaut: ein WACHSENDES Fenster, kein wanderndes.**
+`.range(0, (seite+1)*SEITE-1)` statt `.range(seite*SEITE, …)`.
+
+`[cmd]` **Gemessen, dass es anhaengt statt zu ersetzen:**
+
+    vorher    500 Zeilen, erste „.30-06",     500 von 121.959
+    Klick     „500 weitere laden"
+    nachher 1.000 Zeilen, erste „.30-06",   1.000 von 121.959
+    Seitenzahl im Text: keine
+
+`[read]` **Die erste Zeile bleibt** — ein wanderndes Fenster haette
+sie ersetzt, und der Nutzer haette seine Stelle verloren.
+
+### 4 — Form- und Markenfilter
+
+**FORM, ohne E-Codes.** `[cmd]` **Die Spalte traegt den Code IM
+Text** (`Capsule [E0159]`). `[read]` **Gefiltert wird MIT Code,
+angezeigt ohne** — zwei Felder, nicht eines.
+
+`[cmd]` **Gemessen: 0 E-Codes auf dem Schirm**, weder in der
+Filterleiste noch in der Trefferliste noch in der Tafel. **Drei
+Stellen mussten berichtigt werden**, nicht eine — die Listenspalte und
+die Tafelpille zeigten `Capsule [E0159]` weiter.
+
+`[cmd]` **Die runde Klammer bleibt:** `Other (e.g. tea bag) [E0172]`
+wird zu `Other (e.g. tea bag)`, nicht zu `Other`. **Ein
+`replace(/\(.*\)/)` haette daraus `Other` gemacht** — und `Other` gab
+es als Kategorie schon. **Eine Sabotageprobe bewacht genau das.**
+
+`[cmd]` **Zwei Zahlensaetze, beide richtig:** der Auftrag nennt
+`Capsule 79.822` (alle Marktstatus), **On Market sind es 43.301**.
+`[read]` **Der Reiter oeffnet auf On Market** — die Facetten tragen
+beide Zahlen, und die Anzeige nimmt die zum eingestellten Status.
+**Dieselbe Falle wie 6.012 gegen 4.907 Marken in G-452.**
+
+`[cmd]` **Gegengeprobt:** Softgel Capsule schraenkt **121.959 ->
+9.957** ein, Datenbank sagt **9.957**.
+
+**MARKE: Pulldown UND Eingabefeld.** `[cmd]` **Das Pulldown traegt
+die 25 haeufigsten** — gemessen, dass sie **28,6 % der 121.959
+On-Market-Produkte** decken. `[read]` **Alle 4.907 waeren genau das
+Scrollen, gegen das Punkt 1 gebaut wurde.** **Die Zeile darunter sagt
+es**, und ein Waechter prueft, dass sie es sagt.
+
+### Die Kontraste, noch einmal gemessen
+
+`[cmd]` **Die neue Filterleiste hatte den Fehler geerbt:**
+
+    v2-eyebrow („Markt", „Darreichungsform", „Marke")
+      2,88:1   Soll 4,5:1
+
+`[read]` **Die Berichtigung aus G-453 galt nur fuer
+`.v2-supp-prod-tafel`** — die Leiste gab es damals nicht. **Ein neuer
+Baustein erbt die Berichtigung nicht; er erbt den Fehler.**
+
+`[cmd]` **Nach der Ergaenzung:**
+
+    Tafel            0 von 11 unter der Schwelle
+    Filterleiste     0 von  6 unter der Schwelle
+
+`[cmd]` **Beide Orte einzeln benannt, nicht global** — die Klasse
+gehoert `packages/ui`.
+
+### Sabotage — vierzehn Proben, alle rot
+
+    Mischung nach eigener Kategorie zerrissen        ROT
+    blend landet bei den Naehrwerten                 ROT
+    Markensuche nur auf den Wortanfang               ROT
+    v2-dim zurueck in die Tafel                      ROT
+    Kategorie geht nicht an die Datenbank            ROT
+    gestrichene Kategorie wieder als Filter          ROT
+    E-Code bleibt in der Anzeige                     ROT
+    formLabel frisst auch die runde Klammer          ROT
+    Fenster auf 50 verkleinert                       ROT
+    Fenster wandert statt zu wachsen                 ROT
+    Pulldown fuehrt alle 4.907 Marken                ROT
+    Formfilter geht nicht an die Datenbank           ROT
+    Standard-Markt zaehlt als aktiver Filter         ROT
+    Kontrastberichtigung deckt die Leiste nicht      ROT
+
+### Zweimal dieselbe Falle an einem Tag
+
+`[cmd]` **Die Seite gab zweimal 500 zurueck** — *„You're importing a
+component that needs next/headers."*
+
+    gestern   KATEGORIEN aus produkte-read importiert
+    heute     SEITE      aus produkte-read importiert
+
+`[read]` **Beide Male ein WERT-Import aus der Serverdatei** (A-30).
+**Die Warnung steht seit G-180 in `substanz-tafel.tsx`, seit gestern
+im Kopf von `produkt-etikett.ts` — und ich bin trotzdem
+hineingelaufen.**
+
+`[read]` **Die Zahl liegt jetzt als `FENSTER` in der serverfreien
+Datei, und `produkte-read` nimmt sie von dort** (`SEITE = FENSTER`).
+**Nur EIN Ort** — eine Zahl an zwei Stellen waere Drift.
+
+`[cmd]` **Und der Waechter dazu musste nachgezogen werden:** er
+suchte `export const SEITE = 500` im Quelltext und fiel, als der Wert
+umzog. **Jetzt prueft er den importierten WERT** — die Zusage ist die
+gemessene Groesse, nicht die Zeile, in der sie steht.
+
+### Die Zahlen
+
+    apps/web     1759 (Grundstand 1751, +8)
+    apps/coach     65 (unveraendert)
+    tsc --noEmit   ohne Meldung
+    elf Reiter     zeichengleich mit dem G-452-Stand
+
+### Was gebaut wurde
+
+    GEAENDERT
+      apps/web/src/lib/supplements/produkt-etikett.ts
+        KATEGORIEN 19 -> 14, KATEGORIEN_OHNE_AUSSAGE,
+        FORMEN, formLabel, MARKEN_PULLDOWN, FENSTER
+      apps/web/src/lib/supplements/produkte-read.ts
+        Formfilter, wachsendes Fenster, SUCH_GRENZE
+      apps/web/src/app/v2/supplements/tab-produkte.tsx
+        foodsdb-Leiste, Filterpanel, mehr laden
+      apps/web/src/app/v2/supplements/produkt-tafel.tsx
+        Form ohne E-Code
+      apps/web/src/app/v2/supplements/supplements.css
+        Filterpanel, Kontrast auch fuer die Leiste
+      .../__tests__/g453-produkttafel.test.ts   20 Proben
+
+    NEU  tools/_g453b-leiste.mjs    Leiste + Kontrast
+         tools/_g453b-mehr.mjs      der Nachladeknopf
+         tools/_g453b-last.mjs      die DOM-Last je Zeilenzahl
+
+`[cmd]` **Nichts in `supabase/`. Nichts committet, nichts gestaged.**
+`[cmd]` **Der Dev-Server wurde nicht angefasst.**
+
+### Was offen bleibt
+
+**1** — `[cmd]` **Die Daumen warten auf C-497.** Die Messung oben
+gehoert in diesen Auftrag: **der `food_id`-FK zeigt auf
+`nutrition.foods`** und muesste mitgeaendert werden.
+
+**2** — `[cmd]` **C-495 kennt weder Kategorie noch Form.** `[read]`
+**Wer einen der beiden Filter setzt UND eine Fehleingabe tippt,
+bekommt keine Fehlertoleranz** — die Fusszeile sagt es. **Zwei
+Parameter mehr braechten beides zusammen.**
+
+**3** — `[cmd]` **Die Zahlen der 14 Kategorien und 10 Formen sind
+fest eingetragen**, mit Stichtag. `[read]` **Wer den DSLD-Import
+wiederholt, misst neu** — die Abfragen stehen in den Dateikoepfen.
+
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **`x-g453b-filter-offen.png` angesehen:**
+
+    Suchfeld | Filter | + Custom Supplement
+    KATEGORIE  14 Werte, die fuenf sind weg
+    MARKT      On Market 121.959 | Off 92.821 | Alle
+    DARREICHUNGSFORM  ohne E-Codes:
+      Capsule 43.301 | Powder 24.074 | Liquid 20.534
+      Tablet or Pill 16.798 | Softgel 9.957
+      Other (e.g. tea bag) 3.569 | Gummy 3.007
+      Lozenge 496 | Unknown 183 | Bar 40
+    MARKE      Eingabefeld + Pulldown
+
+`[cmd]` **Die ehrliche Zeile:** *,,4.907 Marken - im Pulldown
+die 25 haeufigsten, alle uebrigen ueber das Eingabefeld."*
+
+`[cmd]` **Proben: web 1759, coach 65, elf Reiter zeichengleich,
+14 Sabotagen rot.**
+
+### Punkt 1 nicht gebaut, und der Grund gehoert zu C-497
+
+> *,,`food_preference_items.food_id` hat einen FK auf
+`nutrition.foods`, und der INSERT einer `supplier_product`-id
+faellt an der Datenbank. `target_type = supplement_product`
+allein genuegt also nicht ? der FK muesste mit."*
+
+`[cmd]` **Selbst nachgemessen:**
+`food_preference_items_food_id_fkey: FOREIGN KEY (food_id)
+REFERENCES nutrition.foods(id)`.
+
+`[read]` **Er hat vor meiner Korrektur gemessen und das
+Ergebnis WEITERGEGEBEN, statt es wegzuwerfen.**
+
+### Mein Grund war ein anderer als seine Messung
+
+> *,,Drei davon hatte meine G-453-Messung fuer brauchbar
+gehalten ? dein Grund war ein anderer: sie sagen nichts aus.
+Trennschaerfe ist NOTWENDIG, nicht hinreichend; damit fallen
+auch *fast alle* und die 50-%-Schwelle weg."*
+
+`[read]` **Ich hatte die Kategorien nach Haeufigkeit
+aussortiert, Tom nach Aussagekraft** ? **er hat den Unterschied
+benannt und seine eigene Regel verworfen.**
+
+### Nicht blaetterbar, gemessen
+
+> *,,`OFFSET 100.000` kostet 113 ms gegen 17 ms ? teuer ist das
+TIEFE BLAETTERN, nicht die Menge."*
+
+`[cmd]` **500 Zeilen sind 3.002 DOM-Knoten, unter den 4.713 aus
+G-176** ? **die dort verlangte Wiederholung ist erbracht.**
+
+`[read]` **Ein wachsendes Fenster, 500 -> 1.000** ? **die erste
+Zeile bleibt `.30-06`.**
+
+### Und zweimal dieselbe Falle
+
+> *,,KATEGORIEN gestern, SEITE heute ? beide Male ein
+Wert-Import aus der Serverdatei, beide Male 500. Die Warnung
+stand im Kopf der eigenen Datei."*
+
+`[read]` **Er hat den Fehler zweimal gemacht und beim zweiten
+Mal das Muster erkannt.**
+
+### Die Kontraste, mit einem geerbten Fehler
+
+`[cmd]` **Tafel 0 von 11, Filterleiste 0 von 6.**
+
+> *,,Die neue Leiste hatte den `--fg-dim`-Fehler GEERBT, weil
+meine G-453-Berichtigung nur auf die Tafel zeigte."*
+
+`[read]` **Eine Berichtigung, die zu eng gefasst war** ? **er
+hat es beim Messen gefunden.**
+
+### Was offen bleibt
+
+`[cmd]` **`search_supplier_products(p_query, p_market_status,
+p_marke, p_limit)`** ? **keine Parameter fuer Kategorie und
+Form.**
+
+> *,,Smartsuche und diese Filter schliessen sich heute noch
+aus."*
+
+`[cmd]` **Als G-454.**
+
+**Abgenommen, Punkt 1 wartet auf C-497.**
+
 

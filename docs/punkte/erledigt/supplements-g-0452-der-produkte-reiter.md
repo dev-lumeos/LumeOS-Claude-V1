@@ -608,4 +608,34 @@ nur bestaetigt.**
 
 **Abgenommen, A3 offen bis C-495 eingespielt ist.**
 
+---
+
+## A3 nachgemessen — 2026-09-15
+
+`[cmd]` **C-495 ist eingespielt, A3 ist erfuellt.** Nachgemessen
+waehrend G-453b, wie Tom es verlangt hat.
+
+**Foto: `backup/x-g452-a3-smartsuche.png`.**
+
+`[cmd]` **In der Datenbank** (`EXPLAIN ANALYZE`, 2026-09-15):
+
+    supplements.search_supplier_products('gold standart wey')
+    Execution Time: 24,1 ms
+
+    100% Gold Standard Whey Chocolate Malt    Optimum Nutrition   0,667
+    Gold Standard 100% Casein Chocolate Creme ON Optimum Nutr.    0,667
+    ... alle On Market, similarity 0,667
+
+`[cmd]` **Im Reiter, angemeldet auf `dev@lumeos.app`:** die
+Fehleingabe *,,gold standart wey"* findet **,,100% Gold Standard Whey
+Chocolate Malt"** und die Gold-Standard-Reihe von Optimum Nutrition.
+
+`[read]` **Kein Codeeingriff noetig, wie im Bericht angekuendigt** —
+der erste Zweig greift, sobald die Funktion da ist. **Die Fusszeile
+sagt jetzt *,,Smartsuche (pg_trgm, C-495)"*** statt des
+Rueckfallhinweises.
+
+`[read]` **Damit sind alle zehn Abnahmebedingungen von G-452
+erfuellt.**
+
 

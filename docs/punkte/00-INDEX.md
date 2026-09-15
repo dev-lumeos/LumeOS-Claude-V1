@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 231 |
+| `todos` | 232 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 450 |
-| **gesamt** | **684** |
+| `erledigt` | 451 |
+| **gesamt** | **685** |
 
 ## medical — 48
 
@@ -308,9 +307,9 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 88
+## supplements — 89
 
-### beauftragbar — 87
+### beauftragbar — 88
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -399,7 +398,8 @@
 | `G-428` | fehler | hoch | [der Injektionsreiter ist leer](erledigt/supplements-g-0428-injektionsreiter-ist-leer.md) | erledigt | — | — |
 | `G-437` | fehler | hoch | [tabs.tsx hat vierzehn Karten verloren](erledigt/supplements-g-0437-tabs-tsx-verlorene-karten.md) | erledigt | — | — |
 | `G-452` | feature | hoch | [der Produkte-Reiter](erledigt/supplements-g-0452-der-produkte-reiter.md) | erledigt | — | G-453 |
-| `G-453` | feature | hoch | [die Produkttafel](laufend_claudecode/supplements-g-0453-die-produkttafel.md) | laeuft (claudecode) | — | — |
+| `G-453` | feature | hoch | [die Produkttafel](erledigt/supplements-g-0453-die-produkttafel.md) | erledigt | — | G-454 |
+| `G-454` | befund | mittel | [Suche und Filter schliessen sich aus](todos/supplements-g-0454-suche-und-filter.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
