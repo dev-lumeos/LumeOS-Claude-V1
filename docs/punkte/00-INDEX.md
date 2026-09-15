@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 233 |
-| `laufend_codex` | 1 |
+| `laufend_codex` | 3 |
 | `erledigt` | 453 |
-| **gesamt** | **687** |
+| **gesamt** | **689** |
 
 ## medical — 48
 
@@ -307,9 +307,9 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 89
+## supplements — 91
 
-### beauftragbar — 88
+### beauftragbar — 90
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -362,11 +362,13 @@
 | `C-455` | feature | hoch | [der Injektionsplaner, vollstaendig](erledigt/supplements-c-0455-der-injektionsplaner-vollstaendig.md) | erledigt | — | — |
 | `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](erledigt/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | erledigt | — | — |
 | `C-467` | feature | hoch | [Lieferantenprodukte](erledigt/supplements-c-0467-lieferantenprodukte.md) | erledigt | — | C-485 |
-| `C-485` | feature | hoch | [die DSLD-Datenbank einlesen](erledigt/supplements-c-0485-dsld-einlesen.md) | erledigt | — | C-495, C-496, G-452 |
+| `C-485` | feature | hoch | [die DSLD-Datenbank einlesen](erledigt/supplements-c-0485-dsld-einlesen.md) | erledigt | — | C-495, C-496, C-499, G-452 |
 | `C-489` | fehler | mittel | [der Produktname ist englisch und heisst `name`](erledigt/supplements-c-0489-produktname-nach-name-en.md) | erledigt | — | — |
 | `C-495` | feature | hoch | [die Leseseite fuer 214.780 Produkte](erledigt/supplements-c-0495-die-leseseite-fuer-produkte.md) | erledigt | — | — |
-| `C-496` | feature | hoch | [die Naehrwerte auf unsere Makros und Mikros](erledigt/supplements-c-0496-naehrwerte-auf-unsere-makros.md) | erledigt | — | — |
+| `C-496` | feature | hoch | [die Naehrwerte auf unsere Makros und Mikros](erledigt/supplements-c-0496-naehrwerte-auf-unsere-makros.md) | erledigt | — | C-500 |
 | `C-497` | feature | mittel | [Daumen hoch und runter fuer Supplementprodukte](erledigt/supplements-c-0497-daumen-fuer-produkte.md) | erledigt | — | — |
+| `C-499` | feature | mittel | [Off-Market-Produkte stilllegen](laufend_codex/supplements-c-0499-off-market-stilllegen.md) | laeuft (codex) | — | — |
+| `C-500` | feature | mittel | [die Vitamin-E-Form herausfinden](laufend_codex/supplements-c-0500-vitamin-e-form.md) | laeuft (codex) | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
