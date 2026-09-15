@@ -1544,3 +1544,458 @@
   min-height: 0;
   max-height: none;
 }
+
+/* ═══ G-453: die Produkttafel ══════════════════════════════════════
+ *
+ * Tom, 2026-09-08: „das sind keine sauberen details ... nicht so
+ * verstreut auf die breite und lesbar (check kontraste), zb wie
+ * medical sauber strukturiert."
+ *
+ * [read] Die Bauform ist `medical.css` / `.v2-med-wirk-*` — Kacheln
+ * fester Breite, Abschnitte mit `v2-eyebrow`, Fuss mit Trennlinie.
+ * [cmd] NICHT uebernommen: die Reiterleiste (ein Produkt hat keine
+ * Rechtslage).
+ *
+ * ══ DIE KONTRASTE ═════════════════════════════════════════════════
+ *
+ * [cmd] Gemessen 2026-09-14 (tools/_g453-kontrast.mjs), VOR dem
+ * Umbau — drei von sieben Textfarben unter WCAG AA:
+ *
+ *     v2-eyebrow  2,88:1 | th  2,88:1 | v2-dim  2,88:1   Soll 4,5:1
+ *
+ * [cmd] Alle drei sind `--fg-dim` = oklch(0.68 0.005 270) auf Weiss.
+ * [read] `--fg-dim` wird NICHT geaendert — er steht in
+ * `styles/themes/lume.css` und gilt fuer jedes Modul. Eine Farbe dort
+ * zu drehen waere eine Entscheidung ueber die ganze Anwendung.
+ *
+ * [read] Stattdessen traegt hier jeder Fliesstext `--fg-muted`
+ * (oklch(0.40 0.005 270), gemessen 9,19:1). `--fg-dim` kommt in
+ * dieser Tafel nicht mehr vor. */
+
+.v2-supp-prod-tafel {
+  padding: 14px 16px 16px;
+  background: color-mix(in oklch, var(--acc-suppl) 3%, var(--bg-elev));
+  border-top: 1px solid var(--border);
+}
+
+/* --- Kopf ------------------------------------------------------- */
+.v2-supp-prod-kopf { margin-bottom: 12px; }
+
+.v2-supp-prod-name {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  /* [read] Der Name ist die Ueberschrift der Tafel — volle Farbe,
+   * nicht gedaempft. */
+  color: var(--fg);
+  /* [read] Auch die Ueberschrift wird begrenzt: ein Produktname kann
+   * 52 Zeichen lang sein (#Shatter SX-7 Black Onyx Ripped Cherry
+   * Limeade Twist), und ueber 1.600 px gezogen liest ihn niemand. */
+  max-width: 60ch;
+}
+
+.v2-supp-prod-marken {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 7px;
+}
+
+/* --- Die Kacheln: Medical-Vorbild ------------------------------- */
+.v2-supp-prod-kacheln {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+/* [read] Feste Breite, kein `1fr` — dieselbe Zusage wie G-181:
+ * „nicht dass sich ploetzlich eine kachel dynamisch auf 1600 pixel
+ * vergroessert." Bleibt Platz uebrig, bleibt er leer. */
+.v2-supp-prod-kachel {
+  flex: 0 0 auto;
+  width: 216px;
+  min-height: 68px;
+  padding: 9px 11px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+@media (max-width: 520px) { .v2-supp-prod-kachel { width: 100%; } }
+
+.v2-supp-prod-kachel-label {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  /* [cmd] Im Medical-Vorbild steht hier `--fg-subtle`. [read] Das
+   * ist die Farbe, die Tom als unlesbar gemeldet hat — deshalb
+   * `--fg-muted`, gemessen 9,19:1. */
+  color: var(--fg-muted);
+  margin-bottom: 4px;
+}
+
+.v2-supp-prod-kachel-wert {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+/* [read] Die leere Kachel traegt KEINEN Strich — ein Strich saehe aus
+ * wie eine Angabe. Sie traegt einen Satz in normaler Schrift, weil er
+ * eine Aussage ist und kein Wert (G-191/G-208). */
+.v2-supp-prod-kachel-leer {
+  display: block;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--fg-muted);
+  font-style: italic;
+}
+.v2-supp-prod-kachel[data-zustand="leer"] {
+  border-style: dashed;
+}
+
+.v2-supp-prod-bilanz {
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  margin-bottom: 14px;
+}
+
+/* --- Das Etikett ------------------------------------------------ */
+.v2-supp-prod-etikettkopf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+/* ══ DIE BUENDEL NEBENEINANDER, NICHT UNTEREINANDER ════════════════
+ *
+ * [cmd] Vier Buendel untereinander waeren bei 28 Zeilen wieder eine
+ * lange Spalte. [read] Als Raster mit fester Mindestbreite stehen
+ * Naehrwerte und Wirkstoffe nebeneinander — und JEDE Spalte ist
+ * schmal genug, dass Name und Menge in einem Blick liegen.
+ *
+ * [read] Das ist die eigentliche Antwort auf „nicht so verstreut auf
+ * die breite": nicht weniger Inhalt, sondern schmalere Spalten. */
+.v2-supp-prod-buendel {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px 18px;
+  align-items: start;
+}
+
+.v2-supp-prod-abschnitt { margin-bottom: 12px; }
+
+.v2-supp-prod-liste {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  /* [read] Die Begrenzung ist die Zusage — 52ch statt 78ch, weil hier
+   * keine Saetze stehen, sondern Name-Menge-Paare. */
+  max-width: 52ch;
+}
+
+/* [read] Eine Zeile ist ein Raster aus Name und Menge, NICHT vier
+ * Tabellenspalten ueber die Fensterbreite. Die Menge steht rechts
+ * neben dem Namen, nicht am anderen Ende des Schirms. */
+.v2-supp-prod-zutat {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding: 3px 0;
+  border-bottom: 1px solid color-mix(in oklch, var(--border) 45%, transparent);
+}
+.v2-supp-prod-zutat:last-child { border-bottom: none; }
+
+.v2-supp-prod-zutat-name {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+/* [cmd] Eine Mischung traegt ihre Zutaten unter sich (blend_id zeigt
+ * auf die id der Kopfzeile, G-452) — der Kopf wird fett gesetzt. */
+.v2-supp-prod-zutat[data-mischung] .v2-supp-prod-zutat-name {
+  font-weight: 600;
+}
+
+/* [read] Die Einrueckung des Kindes. Gemessen wird sie ueber
+ * `getComputedStyle(...).paddingLeft` — deshalb steht sie als
+ * padding, nicht als margin. */
+.v2-supp-prod-zutat.ist-kind { padding-left: 22px; }
+
+.v2-supp-prod-ast {
+  color: var(--fg-muted);
+  margin-right: 5px;
+}
+
+.v2-supp-prod-zutat-menge {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+/* [cmd] `not_stated` bei 1.591.063 von 3.000.982 Zeilen — die
+ * Mehrheit. [read] Sie ist gedaempft, aber LESBAR: `--fg-muted`
+ * (9,19:1), nicht `--fg-dim` (2,88:1). Das war Toms Befund. */
+.v2-supp-prod-zutat-ohne {
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  font-style: italic;
+  white-space: nowrap;
+}
+
+/* Die Marke „auswertbar" steht unter dem Namen, in der ersten Spalte. */
+.v2-supp-prod-zutat-marke {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9.5px;
+  /* [read] Gegen den Tafelhintergrund gemischt, damit die
+   * Bestaetigungsfarbe lesbar bleibt — gemessen, siehe Bericht. */
+  color: color-mix(in oklch, var(--pos) 62%, var(--fg));
+}
+
+/* --- Saetze und Fuss -------------------------------------------- */
+.v2-supp-prod-satz {
+  max-width: 78ch;
+  margin: 5px 0 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+
+/* [read] Der Einnahmehinweis ist ein ZITAT vom Etikett, keine
+ * Empfehlung von LumeOS — die Linie links sagt das, ohne ein Wort zu
+ * brauchen. */
+.v2-supp-prod-zitat {
+  padding-left: 10px;
+  border-left: 2px solid color-mix(in oklch, var(--acc-suppl) 45%, var(--border));
+}
+
+.v2-supp-prod-fuss {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.v2-supp-prod-firmen {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.v2-supp-prod-firma {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: baseline;
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.v2-supp-prod-firma-name { color: var(--fg); font-weight: 500; }
+.v2-supp-prod-firma-rolle { font-size: 10.5px; }
+
+/* ═══ G-453: der Markenfilter als Eingabe ══════════════════════════
+ *
+ * Tom: „marken filter per eingabe oben, dass man nicht 2 meter
+ * scrollen muss"
+ *
+ * [cmd] 4.907 Marken nach C-495 (gemessen 2026-09-14; im Rueckfall
+ * davor waren es 62). [read] Ein `select` mit 4.907 Eintraegen ist
+ * genau das Scrollen, das Tom meint. */
+.v2-supp-prod-markenfeld { position: relative; max-width: 280px; }
+
+.v2-supp-prod-markenliste {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  /* [read] Die Liste ist gedeckelt und rollt — sonst waere sie bei
+   * 4.907 Treffern wieder zwei Meter lang. */
+  max-height: 260px;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 22px color-mix(in oklch, var(--fg) 12%, transparent);
+  padding: 4px;
+}
+
+.v2-supp-prod-markenknopf {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 5px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--fg);
+  cursor: pointer;
+}
+.v2-supp-prod-markenknopf:hover,
+.v2-supp-prod-markenknopf:focus-visible {
+  background: color-mix(in oklch, var(--acc-suppl) 12%, transparent);
+}
+.v2-supp-prod-markenknopf[aria-selected="true"] {
+  background: color-mix(in oklch, var(--acc-suppl) 18%, transparent);
+  font-weight: 600;
+}
+
+.v2-supp-prod-markenleer {
+  padding: 8px;
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+
+/* [read] Die Kategorienpillen tragen ihre Trennschaerfe im Titel —
+ * eine, die 91 % trifft, sieht aus wie jede andere, ist aber keine.
+ * [cmd] Der Hinweis steht als Text daneben, nicht nur als Farbe
+ * (A-31: nie nur Farbe). */
+.v2-supp-prod-kat-schwach { opacity: 0.72; }
+
+/* ═══ G-453/A3: die beiden geerbten Farben, NUR in dieser Tafel ════
+ *
+ * [cmd] Nach dem Umbau gemessen (tools/_g453-kontrast.mjs): neun von
+ * elf Textfarben bestehen WCAG AA, zwei nicht — und beide kommen aus
+ * `packages/ui/src/styles/v2.css`, nicht aus dieser Datei:
+ *
+ *     .v2-eyebrow        2,76:1   color: var(--fg-dim)
+ *     .v2-pill-acc       4,49:1   color: var(--acc)
+ *
+ * [read] Beide Klassen gehoeren ALLEN Apps. Sie dort zu drehen waere
+ * eine Entscheidung ueber jedes Modul — `v2-eyebrow` kommt allein in
+ * `apps/web` hundertfach vor.
+ *
+ * [read] Deshalb wird hier nur ueberschrieben, was IN der Produkttafel
+ * steht. Der Geltungsbereich ist die Zusage: ausserhalb bleibt alles,
+ * wie es war.
+ *
+ * [cmd] Gegengeprobt, dass die Ueberschreibung noetig ist: ohne diese
+ * beiden Regeln meldet der Waechter 2 von 11 rot, mit ihnen 0 von 11.
+ *
+ * [read] `--fg-muted` statt `--fg-dim`: gemessen 9,19:1 bei gleicher
+ * Rolle. Die Ueberschrift wird dunkler, nicht groesser — die Bauform
+ * des Medical-Vorbilds bleibt. */
+/* [cmd] Gemessen 2026-09-15, NACH dem Umbau der Leiste: die
+ * Ueberschriften der neuen Filtergruppen (Markt, Darreichungsform,
+ * Marke) standen bei 2,88:1 — dieselbe `--fg-dim`-Farbe, die Tom in
+ * der Tafel beanstandet hat.
+ *
+ * [read] Die Berichtigung von G-453 galt nur fuer `.v2-supp-prod-tafel`
+ * — die Filterleiste gab es damals noch nicht. Ein NEUER Baustein
+ * erbt die Berichtigung nicht; er erbt den Fehler.
+ *
+ * [read] Deshalb beide Orte, je einzeln benannt. NICHT global: die
+ * Klasse gehoert `packages/ui` und gilt fuer jede App. */
+.v2-supp-prod-tafel .v2-eyebrow,
+.v2-supp-prod-filter .v2-eyebrow { color: var(--fg-muted); }
+
+/* [cmd] `--acc` misst auf dem 8-%-Untergrund der Pille 4,49:1 — knapp
+ * unter 4,5. [read] Nicht die Schriftfarbe wird gedreht, sondern der
+ * Untergrund aufgehellt: die Akzentfarbe IST die Aussage der Pille
+ * (die Marke), und sie soll die Marke bleiben. */
+.v2-supp-prod-tafel .v2-pill-acc {
+  background: color-mix(in oklch, var(--acc) 4%, var(--surface));
+}
+
+/* ═══ G-453: die aufklappbare Filterleiste ═════════════════════════
+ *
+ * Tom, 2026-09-15: „Suchfeld und Filter wie in foodsdb ... Darunter
+ * die Kategorien schoener dargestellt."
+ *
+ * [cmd] Die Bauform ist `nutrition.css` / `.v2-food-filter*`. [read]
+ * Sie wird PORTIERT, nicht importiert: `nutrition.css` wird vom
+ * Supplements-Modul nicht geladen, und ein Querimport zoege ein ganzes
+ * fremdes Stylesheet mit.
+ *
+ * [read] Die Lehre dahinter ist G-73 (Tom, 2026-08-18): „Wir haben so
+ * viel Platz — lass die Filter einfach logisch darunter aufbauen, und
+ * der Filterknopf ist das Setup zum Filter ein- oder ausblenden."
+ * Die Filter stehen UNTER der Leiste, nicht hinter dem Knopf. */
+.v2-supp-prod-filter {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.v2-supp-prod-filter-kopf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+/* Mehrere Gruppen nebeneinander, solange Platz ist. */
+.v2-supp-prod-filter-gruppen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px 20px;
+}
+
+.v2-supp-prod-filter-reihe {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+/* [cmd] Bei 375 px wird die Leiste ein Vollbild-Fenster — drei
+ * Gruppen nebeneinander waeren dort unbedienbar. Dieselbe Grenze wie
+ * in `nutrition.css`. */
+@media (max-width: 560px) {
+  .v2-supp-prod-filter {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    padding: 16px;
+    overflow-y: auto;
+  }
+}
+
+/* [read] Das X der Suche sitzt jetzt in der foodsdb-Leiste statt im
+ * alten `.v2-supp-suche` — es braucht seinen eigenen Anker. */
+.v2-train-lib-filter .v2-supp-suche-x {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--fg-muted);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+}
+.v2-train-lib-filter .v2-supp-suche-x:hover {
+  background: color-mix(in oklch, var(--fg) 8%, transparent);
+  color: var(--fg);
+}

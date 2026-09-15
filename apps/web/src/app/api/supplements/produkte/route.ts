@@ -26,9 +26,17 @@ export async function GET(request: NextRequest) {
   const status = rohStatus === 'alle' ? null : (rohStatus?.trim() || 'On Market')
   const seiteRoh = Number(p.get('seite') ?? '0')
   const seite = Number.isFinite(seiteRoh) && seiteRoh > 0 ? Math.trunc(seiteRoh) : 0
+  // G-453: die Kategorie filtert PRODUKTE (Toms Antwort vom 2026-09-14).
+  // `[read]` **Nicht gegen die Liste der 19 geprueft** — die Datenbank
+  // vergleicht gegen `ingredient_category`, ein unbekannter Wert
+  // liefert schlicht keinen Treffer. Dasselbe Muster wie `p_groups`
+  // in `food-search.ts`.
+  const kategorie = p.get('kategorie')?.trim() || null
+  // G-453: die Darreichungsform, MIT E-Code — die Spalte traegt ihn.
+  const form = p.get('form')?.trim() || null
 
   try {
-    const liste = await sucheProdukte(frage, marke, status, seite)
+    const liste = await sucheProdukte(frage, marke, status, seite, kategorie, form)
     return NextResponse.json({ ...liste, seite, seiteGroesse: SEITE })
   } catch (e) {
     return NextResponse.json(

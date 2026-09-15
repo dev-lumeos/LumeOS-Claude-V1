@@ -56,8 +56,76 @@
 // Laeuft ausschliesslich serverseitig.
 import { createSessionClient } from '@lumeos/shared/session'
 
-/** Wie viele Treffer eine Seite traegt. */
-export const SEITE = 50
+// G-453/3: die gemessene Fenstergroesse — serverfrei, siehe dort.
+import { FENSTER } from './produkt-etikett'
+
+// ══ G-453/3: NICHT BLAETTERBAR ══════════════════════════════════════
+//
+// **Tom, 2026-09-15:** *„Ergebnisse NICHT blaetterbar. Miss, was
+// stattdessen traegt — die Liste haelt heute 566 Zeilen (G-176), bei
+// 121.959 Treffern brauchst du etwas anderes."*
+//
+// ══ DIE MESSUNG ═════════════════════════════════════════════════════
+//
+// `[cmd]` **In der Datenbank** (`EXPLAIN ANALYZE`, On Market nach
+// `name_en` sortiert, 2026-09-15):
+//
+//     LIMIT 50                    17,4 ms
+//     LIMIT 500                   23,0 ms
+//     OFFSET 100.000 LIMIT 50    113,1 ms
+//
+// `[cmd]` **Im Browser** (echte Zeilenform, fuenf Zellen je Zeile):
+//
+//     Zeilen   DOM-Knoten   Anstrich   Hoehe
+//         50          302      20 ms    1.849 px
+//        200        1.202      27 ms    7.399 px
+//        500        3.002      68 ms   18.499 px
+//      1.000        6.002     140 ms   36.999 px
+//      2.000       12.002     273 ms   73.999 px
+//
+// `[read]` **Zwei Befunde, die zusammen die Bauform bestimmen:**
+//
+// **1** — **500 Zeilen kosten in der Datenbank kaum mehr als 50**
+// (23 gegen 17 ms), **im Browser 3.002 Knoten** — **unter den 4.713,
+// die G-176 gemessen und ausdruecklich als unauffaellig eingestuft
+// hat.** `[read]` **Die G-176-Messung ist damit wiederholt**, wie sie
+// es verlangt hat.
+//
+// **2** — **Tiefes Blaettern ist das Teure, nicht die Menge**:
+// `OFFSET 100.000` kostet das Sechsfache. `[read]` **Genau der Weg
+// faellt weg**, und mit ihm der Grund fuer Seitenzahlen.
+//
+// `[read]` **Also: ein grosses Fenster und ein Knopf *,,mehr laden"*.**
+// **Keine Seitenzahlen, kein `OFFSET` in die Tiefe** — wer mehr als
+// 500 Treffer durchsieht, sucht nicht, sondern blaettert, und dafuer
+// sind die Filter da.
+//
+// `[cmd]` **1.000 waere die naechste Stufe und kostet 140 ms Anstrich
+// plus 37.000 px Rollweg** — die Grenze ist gemessen, nicht geraten.
+//
+// ══ WO DIE ZAHL STEHT ══════════════════════════════════════════════
+//
+// `[read]` **Der WERT steht in `produkt-etikett.ts`**, nicht hier —
+// der Reiter braucht ihn fuer den Nachladeknopf, und ein Wert-Import
+// von HIER zoege `next/headers` ins Browserbuendel. `[cmd]` **A-30,
+// in diesem Auftrag zweimal passiert** (erst `KATEGORIEN`, dann
+// `SEITE`).
+//
+// `[read]` **Nur EIN Ort, nicht zwei** — eine Zahl an zwei Stellen
+// waere Drift: der Reiter rechnete mit 500, waehrend die Abfrage 200
+// holt, und niemand saehe es.
+export const SEITE = FENSTER
+
+/**
+ * Wie viele Treffer die Smartsuche hoechstens liefert.
+ *
+ * `[cmd]` **C-495 nimmt `p_limit`** — und eine
+ * Aehnlichkeitssuche, die 500 Zeilen zurueckgibt, liefert am Ende
+ * Namen, die mit dem Begriff nichts mehr zu tun haben. `[read]`
+ * **Bei einer Suche ist die Rangfolge die Aussage**, nicht die
+ * Vollstaendigkeit.
+ */
+export const SUCH_GRENZE = 200
 
 /**
  * Welcher Weg geantwortet hat.
@@ -196,29 +264,56 @@ function zeileAus(r: Record<string, unknown>): ProduktZeile | null {
  * @param frage    der getippte Begriff
  * @param marke    Markenfilter, `null` heisst alle
  * @param status   `'On Market'` als Vorgabe (Toms Antwort), `null` alle
- * @param seite    0-basiert
+ * @param seite    0-basiert. `[read]` **Heisst seit G-453/3 nicht mehr
+ *                 „Seite", sondern „wie oft nachgeladen"** — es gibt
+ *                 keinen Weg zurueck auf Seite 1, nur ein laengeres
+ *                 Fenster.
+ * @param kategorie G-453: nur Produkte, die eine Zeile dieser
+ *                  Kategorie tragen. `null` heisst alle.
+ * @param form     G-453: die Darreichungsform, MIT E-Code
+ *                 (`Capsule [E0159]`) — die Spalte traegt ihn.
  */
 export async function sucheProdukte(
   frage: string,
   marke: string | null = null,
   status: string | null = 'On Market',
   seite = 0,
+  kategorie: string | null = null,
+  form: string | null = null,
 ): Promise<ProduktListe> {
   const c = createSessionClient().schema('supplements')
   const q = frage.trim()
 
   // ── Der Weg aus C-495 ────────────────────────────────────────────
   //
+  // `[cmd]` **C-495 ist seit 2026-09-14, 15:31 Uhr eingespielt** —
+  // gemessen: `search_supplier_products('gold standart wey')` gibt 50
+  // Treffer, `supplier_product_brands` 4.907 Zeilen.
+  //
   // `[read]` **Nur bei einem Begriff** — eine Aehnlichkeitssuche ohne
   // Begriff hat nichts, wogegen sie messen koennte. Die leere Liste
   // beim Oeffnen des Reiters kommt deshalb immer aus dem Tabellenweg.
-  if (q) {
+  //
+  // `[cmd]` **UND nur ohne Kategorie- und Formfilter.** **Die Funktion
+  // nimmt vier Argumente** (`p_query, p_market_status, p_marke,
+  // p_limit`) — **weder Kategorie noch Form sind darunter.** `[read]`
+  // **Sie nachtraeglich auf der geladenen Menge zu filtern waere die
+  // Falle aus G-133:** die Ausgefilterten fehlten, `gesamt` waere
+  // gelogen, und beim Nachladen kaemen wieder ungefilterte Zeilen.
+  // **Also: einer der beiden gewaehlt -> der Tabellenweg, der in der
+  // Datenbank filtert.**
+  //
+  // `[cmd]` **Und nur auf der ersten Ladung** — die Funktion kennt
+  // kein `OFFSET`. `[read]` **Wer nachlaedt, bekommt den Tabellenweg**;
+  // bei einer Aehnlichkeitssuche ist das kein Verlust, denn `p_limit`
+  // deckelt ohnehin nach Rang.
+  if (q && !kategorie && !form && seite === 0) {
     try {
       const { data, error } = await c.rpc('search_supplier_products', {
         p_query: q,
         p_marke: marke,
         p_market_status: status,
-        p_limit: SEITE,
+        p_limit: SUCH_GRENZE,
       })
       if (!error && Array.isArray(data)) {
         const zeilen = (data as Array<Record<string, unknown>>)
@@ -226,9 +321,9 @@ export async function sucheProdukte(
         return { zeilen, gesamt: zeilen.length, weg: 'smart', fehler: null }
       }
     } catch {
-      // `[read]` **Bewusst stumm weiter zum Rueckfall.** Solange C-495
-      // nicht eingespielt ist, ist „Funktion gibt es nicht" der
-      // Normalfall und kein Fehler, den jemand lesen muesste.
+      // `[read]` **Bewusst stumm weiter zum Rueckfall** — der
+      // Tabellenweg beantwortet dieselbe Frage, nur ohne
+      // Fehlertoleranz.
     }
   }
 
@@ -239,15 +334,55 @@ export async function sucheProdukte(
   // die Seitengroesse. Die Gesamtzahl kommt aus dem Zaehler, nicht aus
   // dem Array.
   try {
-    let f = c.from('supplier_products')
-      .select('id,name_en,marke,market_status,produktform,portionsgroesse,portionseinheit',
-              { count: 'exact' })
+    // ══ G-453: die Kategorie filtert PRODUKTE ══════════════════════
+    //
+    // **Tom, 2026-09-14, auf die Rueckfrage:** *„Kategorienfilter: auf
+    // PRODUKTE. Trefferliste einschraenken, Tafel zeigt weiter ALLE
+    // Zeilen. Der Filter ist ein Suchwerkzeug."*
+    //
+    // `[cmd]` **`!inner` ist der Unterschied zwischen Filtern und
+    // Anhaengen:** ohne das `!inner` liefert PostgREST jedes Produkt
+    // und haengt eine leere Zutatenliste an — der Filter waere
+    // wirkungslos und `count` unveraendert.
+    //
+    // `[read]` **Und `select` statt zweier Abfragen**, weil die
+    // Datenbank die Einschraenkung ohnehin macht; eine Vorabliste von
+    // Produkt-Ids waere bei 111.522 Treffern (`other ingredient`)
+    // nicht uebertragbar.
+    const spalten = 'id,name_en,marke,market_status,produktform,'
+      + 'portionsgroesse,portionseinheit'
+    let f = kategorie
+      ? c.from('supplier_products')
+          .select(`${spalten},product_contents!inner(ingredient_category)`,
+                  { count: 'exact' })
+          .eq('product_contents.ingredient_category', kategorie)
+      : c.from('supplier_products').select(spalten, { count: 'exact' })
     if (status) f = f.eq('market_status', status)
     if (marke) f = f.eq('marke', marke)
+    // `[cmd]` **G-453: die Form kommt MIT E-Code** — die Spalte traegt
+    // `Capsule [E0159]`, und ein Vergleich gegen `Capsule` traefe
+    // nichts. `[read]` **Ohne Code steht sie nur auf dem Schirm**
+    // (`formLabel`).
+    if (form) f = f.eq('produktform', form)
     if (q) f = f.ilike('name_en', `%${q}%`)
+    // ══ G-453/3: EIN WACHSENDES FENSTER, KEINE SEITE ═══════════════
+    //
+    // `[cmd]` **Hier stand `.range(seite * SEITE, seite * SEITE +
+    // SEITE - 1)`** — ein Fenster, das WANDERT. `[read]` **Jetzt eines,
+    // das WAECHST:** immer von 0 bis `(seite + 1) * SEITE`.
+    //
+    // `[read]` **Der Unterschied ist der Knopf.** *„Mehr laden"* haengt
+    // die naechsten 500 an die vorhandenen an; ein wanderndes Fenster
+    // haette sie ersetzt, und der Nutzer haette seine Stelle verloren.
+    //
+    // `[cmd]` **Die Kosten sind gemessen** (siehe `SEITE`): das erste
+    // Fenster 23 ms / 3.002 Knoten, das zweite bleibt flach, weil
+    // `OFFSET 0` nie in die Tiefe geht. **Teuer ist tiefes Blaettern,
+    // nicht die Menge** — und genau das gibt es hier nicht mehr.
+    const bis = (seite + 1) * SEITE - 1
     const { data, error, count } = await f
       .order('name_en', { ascending: true })
-      .range(seite * SEITE, seite * SEITE + SEITE - 1)
+      .range(0, bis)
     if (error) {
       return { zeilen: [], gesamt: 0, weg: 'einfach', fehler: error.message }
     }
@@ -275,14 +410,41 @@ export async function sucheProdukte(
 export async function ladeMarken(): Promise<{ marken: string[]; vollstaendig: boolean }> {
   const c = createSessionClient().schema('supplements')
   try {
-    const { data, error } = await c.from('supplier_product_brands').select('marke')
-    if (!error && Array.isArray(data)) {
-      const marken = (data as Array<Record<string, unknown>>)
+    // ══ G-453: POSTGREST DECKELT BEI 1.000 ═══════════════════════
+    //
+    // `[cmd]` **Hier stand ein blosses `.select('marke')`, und der
+    // Reiter zeigte *„1.000 Marken"*** — gemessen 2026-09-14 im
+    // Browser, waehrend die Sicht in der Datenbank **4.907** Zeilen
+    // hat.
+    //
+    // `[read]` **Die Grenze ist eine Voreinstellung von PostgREST,
+    // kein Fehler der Sicht** — und `.limit(20000)` hebt sie NICHT
+    // auf. **Was hilft, ist geblaettertes Lesen mit `range`.**
+    //
+    // `[cmd]` **Fuenf Seiten a 1.000 reichen** (4.907); die Schleife
+    // hoert auf, sobald eine Seite kuerzer als die Seitengroesse
+    // zurueckkommt. **Die Obergrenze von zehn Runden ist eine
+    // Reissleine**, kein erwarteter Fall — sie verhindert eine
+    // Endlosschleife, wenn die Sicht einmal wachsen sollte.
+    const GROESSE = 1000
+    const alle: string[] = []
+    for (let runde = 0; runde < 10; runde++) {
+      const von = runde * GROESSE
+      const { data, error } = await c.from('supplier_product_brands')
+        .select('marke').range(von, von + GROESSE - 1)
+      if (error) break
+      const stueck = (Array.isArray(data) ? data as Array<Record<string, unknown>> : [])
         .flatMap(r => s(r.marke) ?? [])
-      if (marken.length > 0) return { marken: marken.sort(), vollstaendig: true }
+      alle.push(...stueck)
+      if (stueck.length < GROESSE) break
+    }
+    if (alle.length > 0) {
+      return { marken: Array.from(new Set(alle)).sort(), vollstaendig: true }
     }
   } catch {
-    // siehe `sucheProdukte` — der Rueckfall ist der Normalfall bis C-495.
+    // `[read]` **Stumm weiter zum Rueckfall** — faellt die Sicht aus,
+    // liefert die Tabelle einen Ausschnitt, und die Oberflaeche sagt
+    // es.
   }
 
   try {
@@ -323,46 +485,51 @@ function inhaltAus(r: Record<string, unknown>): InhaltsZeile | null {
 /**
  * Ein Produkt vollstaendig — Kopf, Etikett, Firmen.
  *
- * `[read]` **Zuerst `supplements.supplier_product_detail` (C-495)**,
- * die alles in EINER Antwort liefert. Der Rueckfall braucht drei
- * Abfragen; sie laufen parallel, weil keine auf einer anderen aufbaut.
+ * ══ WARUM HIER NICHT C-495 GERUFEN WIRD ═════════════════════════════
+ *
+ * `[cmd]` **Hier stand `rpc('supplier_product_detail', { p_id: id })`
+ * — und der Aufruf ist NIE durchgegangen.** Die Funktion heisst ihr
+ * Argument `p_product_id`; Postgres meldet *„No function matches the
+ * given name and argument types"*, der `catch` schluckte es, und
+ * gelesen wurde immer der Tabellenweg darunter. **Die Anzeige war
+ * richtig, der Grund war falsch** — genau die Art Fehler, die erst in
+ * Monaten auffaellt.
+ *
+ * `[cmd]` **Beim Berichtigen gemessen, warum der Name nicht das
+ * einzige Problem war** (2026-09-14, gegen `21cfe048` und
+ * `6ef78e94`):
+ *
+ *     contents-Felder   amount_per_serving, amount_qualifier,
+ *                       blend_id, ingredient_category,
+ *                       ingredient_name, reihenfolge,
+ *                       supplement_name_en, unit
+ *     -> KEIN `id`
+ *     header-Felder     gtin, marke, market_status, name_en,
+ *                       packungs*, portions*
+ *     -> KEIN `suggested_use`, KEIN `produktform`
+ *
+ * `[read]` **Beides bricht eine Abnahmebedingung.**
+ *
+ * **1** — `[cmd]` **`blend_id` zeigt auf die `id` der Kopfzeile**
+ * (G-452). **C-495 liefert das `blend_id`, aber nicht die `id`, auf
+ * die es zeigt** — 28 von 54 Zeilen bei `21cfe048` tragen einen
+ * Zeiger ohne Ziel. **Die Einrueckung waere nicht herstellbar** (A5).
+ *
+ * **2** — `[cmd]` **`suggested_use` fehlt im Kopf**, und A6 verlangt
+ * den Einnahmehinweis.
+ *
+ * `[read]` **Deshalb liest das Detail die drei Tabellen.** **Das ist
+ * kein Nachbauen einer C-495-Funktion** — es ist dieselbe Leseart, die
+ * schon vor C-495 lief, und sie bleibt, bis die Funktion `id` und
+ * `suggested_use` mitliefert. **Such- und Markenweg nutzen C-495
+ * sehr wohl**, dort ist sie der bessere Weg.
+ *
+ * `[read]` **Die drei Abfragen laufen parallel** — keine baut auf
+ * einer anderen auf.
  */
 export async function ladeProdukt(id: string): Promise<ProduktSatz | null> {
   const c = createSessionClient().schema('supplements')
 
-  try {
-    const { data, error } = await c.rpc('supplier_product_detail', { p_id: id })
-    if (!error && data && typeof data === 'object') {
-      const d = data as Record<string, unknown>
-      const kopf = (d.header ?? {}) as Record<string, unknown>
-      if (s(kopf.name_en)) {
-        return {
-          id,
-          name_en: s(kopf.name_en) ?? '',
-          marke: s(kopf.marke),
-          market_status: s(kopf.market_status),
-          produktform: s(kopf.produktform),
-          packungsgroesse: n(kopf.packungsgroesse),
-          packungseinheit: s(kopf.packungseinheit),
-          portionsgroesse: n(kopf.portionsgroesse),
-          portionseinheit: s(kopf.portionseinheit),
-          gtin: s(kopf.gtin),
-          suggested_use: s(kopf.suggested_use),
-          inhalt: (Array.isArray(d.contents) ? d.contents as Array<Record<string, unknown>> : [])
-            .flatMap(r => inhaltAus(r) ?? []),
-          firmen: (Array.isArray(d.suppliers) ? d.suppliers as Array<Record<string, unknown>> : [])
-            .flatMap(r => {
-              const name = s(r.name)
-              return name ? [{ name, land: s(r.land), rolle: s(r.rolle) ?? '' }] : []
-            }),
-        }
-      }
-    }
-  } catch {
-    // siehe `sucheProdukte`.
-  }
-
-  // ── Der Rueckfall: die drei Tabellen ─────────────────────────────
   try {
     const [kopfA, inhaltA, firmenA] = await Promise.all([
       c.from('supplier_products')
