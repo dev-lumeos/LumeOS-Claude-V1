@@ -9,6 +9,8 @@ kind_von: C-485
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: ad775929
 beruehrt:
   tabellen: [supplements.product_contents]
 zahlen:
@@ -162,3 +164,104 @@ umrechenbar, und das ist eine Antwort.**
 
 **`apps/` nicht anfassen.**
 
+## Bericht 2026-09-15
+
+Die Migration `20260915004915_c496_supplier_product_nutrients.sql` erzeugt die
+belegte Namenszuordnung und die berechnete Sicht
+`supplements.produkt_naehrwerte`. Es wird nichts nach `nutrition.foods`
+kopiert; der kanonische Food-Bestand liegt ohnehin in
+`nutrition.food_nutrients`.
+
+`[cmd]` Gemessen wurden **39** wirklich vorkommende DSLD-Namen, jeweils mit
+`source_id = dsld_product_label` und Evidenzklasse A. Die haeufigsten sind:
+
+    Calories -> enercc                 52.285
+    Vitamin C -> vitc_mg               41.042
+    Total Carbohydrates -> cho         40.117
+    Calcium -> ca_mg                   39.647
+    Vitamin B6 -> vitb6_ug             30.767
+    Magnesium -> mg_mg                 30.349
+    Vitamin B12 -> vitb12_ug           29.518
+    Zinc -> zn_mg                      28.148
+    Sodium -> na_mg                    27.808
+    Total Fat -> fat                   27.119
+    Vitamin E -> vite_mg               26.401
+    Water -> water_g                   25.467
+    Vitamin A -> vita_ug               25.023
+    Potassium -> k_mg                  23.757
+    Niacin -> nia_mg                   22.812
+    Protein -> prot625                 18.921
+
+Die restlichen gemessenen Namen sind Riboflavin, Sugar, Iron, Thiamine,
+Vitamin D/D3, Manganese, Folic Acid, Iodine, Dietary Fiber, Folate,
+Saturated Fat, Copper, Total Sugars, Phosphorus, Vitamin K/K2, Vitamin B1/B2/B3,
+Alcohol, Salt und Total Carbohydrate; alle stehen als explizite Zeilen in der
+Mappingtabelle.
+
+`[cmd]` Einheiten: g/Gram(s)/grams/gm, mg und mcg/ug werden nur als Masse
+umgerechnet; Calorie(s), {Calories}, Calories und Kcal sind kcal.
+Von **46.807** IU-Zeilen sind **16.069** Vitamin D/D3 und werden mit
+1 IU = 0,025 ug gerechnet. Vitamin-E-IU (**15.011**) bleibt wegen unbekannter
+natuerlicher/synthetischer Form als `vitamin_e_iu_form_unknown` in `luecken`.
+Insgesamt bleiben **30.738** Nicht-Vitamin-D-IU unkonvertiert. DFE, RAE und NE
+bleiben Aequivalente, keine erfundene Masse.
+
+`[cmd]` Dr. Mercola Miracle Whey, die 160-kcal-Variante: 40 g, 160 kcal und
+32 g Protein pro Portion, also **400 kcal** und **80 g Protein** je 100 g.
+
+`[cmd]` anon hat keinen SELECT auf Mapping oder Sicht; authenticated hat
+SELECT, die Sicht ist `security_invoker`.
+
+Sicherung: `backup/schema/20260915011641_c43_vor_kettenlauf.sql`.
+Vollkette (215 Schritte, Wegwerf-DB `c496_final`), Schema-Vollstaendigkeit und
+der C-496/C-497-Nachweistest (2/2) sind gruen. Nicht live eingespielt; `apps/`,
+Dev-Server, Stage, Commit und Push blieben unangetastet.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    Migration   12.566 B, liegt vor
+    LIVE        noch nicht -- er sagt es selbst
+
+`[cmd]` **39 DSLD-Namen gemappt.**
+
+### Die IU-Behandlung ist der Kern
+
+`[cmd]` **46.807 IU-Zeilen, gemessen:**
+
+    Vitamin E            15.011
+    Vitamin A            13.727
+    Vitamin D             8.381
+    Vitamin D3            7.688
+    Beta-Carotene           563
+    Vitamin A Palmitate     359
+    Vitamin D2              144
+
+`[cmd]` **Und die vier Regeln in der Migration:**
+
+    Vitamin D, D3   vitamin_d_iu_to_ug     (0,025)
+    Vitamin E       iu_form_required       LUECKE
+    Vitamin A       equivalent_not_mass
+    sonst           iu_not_convertible_for_nutrient
+
+`[read]` **`Vitamin E` ist die GROESSTE IU-Gruppe und bleibt
+bewusst offen** ? **natuerlich 0,67 mg, synthetisch 0,45 mg,
+und das Etikett sagt es nicht.**
+
+`[read]` **Genau die Auflage:** *,,wo die Form unbekannt ist:
+NICHT umrechnen, sondern als nicht umrechenbar melden."*
+
+`[cmd]` **Und `jsonb_build_object(not_convertible, ...) AS
+luecken`** ? **die Luecke steht in der Sicht, nicht im
+Bericht.**
+
+### Die Gegenprobe
+
+`[cmd]` **Dr. Mercola: 40 g, 160 kcal, 32 g Protein -> 400 kcal
+/ 80 g Protein je 100 g.**
+
+`[read]` **Rechnet, kopiert nicht** ? **der Kommentar sagt es:**
+*,,keine Kopie."*
+
+**Abgenommen. Einspielen steht aus.**

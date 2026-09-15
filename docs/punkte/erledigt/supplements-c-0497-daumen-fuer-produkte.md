@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: ad775929
 beruehrt:
   tabellen: [nutrition.food_preference_items]
 zahlen:
@@ -114,3 +116,78 @@ loest dasselbe Problem, entweder erweitern oder kopieren.**
 **`apps/` nicht anfassen** ? **Claude Code baut die Oberflaeche
 (G-453).**
 
+## Bericht 2026-09-15
+
+Entscheidung: die vorhandene Bauform `nutrition.food_preference_items`
+erweitern, keine zweite Tabelle in `supplements` schaffen.
+
+`[cmd]` `catalog_item` ist heute unbenutzt: **0** Zeilen und **0** verschiedene
+Codes. Die bestehende Tabelle besitzt bereits alle Vorliebestufen und
+eigentuemergepruefte RLS. Die Migration
+`20260915004916_c497_supplier_product_preferences.sql` fuegt
+`target_type = supplement_product`, die FK
+`supplement_product_id -> supplements.supplier_products(id)` sowie einen
+partiellen Unique-Index je Nutzer/Produkt hinzu. Das ist eine echte
+Schemagrenze mit FK, keine duplizierte Nutzerwahrheit.
+
+`supplier_product_preference_write(product_id, preference)` setzt oder loescht
+nur den eigenen liked/disliked-Daumen und ist `SECURITY INVOKER`. Die vorhandenen
+vier RLS-Policies bleiben: `auth.uid() = user_id`.
+
+`[cmd]` Zwei Auth-Nutzer wurden isoliert geprueft: Nutzer 1 sieht zwei eigene
+Produktdaumen, Nutzer 2 einen eigenen und **0** von Nutzer 1. anon hat kein
+Execute, authenticated hat Execute.
+
+Die Suche sortiert jetzt nur vor der bisherigen Trefferrangfolge:
+
+    liked (0) -> neutral (1) -> disliked (2)
+    danach Name-Treffer -> similarity -> name_en
+
+`[cmd]` Ein bewusst nicht zuerst stehendes Gold-Standard-Whey wurde geliked und
+war danach erster Treffer. Ohne Vorliebe liegt `gold standart wey` bei
+**14,834 ms** und damit weiter im rund-14-ms-Bereich.
+
+Sicherung: `backup/schema/20260915011641_c43_vor_kettenlauf.sql`.
+Vollkette (215 Schritte, Wegwerf-DB `c496_final`), Schema-Vollstaendigkeit und
+der C-496/C-497-Nachweistest (2/2) sind gruen. Nicht live eingespielt; `apps/`,
+Dev-Server, Stage, Commit und Push blieben unangetastet.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+    Migration   6.068 B, liegt vor
+    LIVE        noch nicht
+
+### Die Entscheidung, gemessen statt geraten
+
+> *,,`catalog_item` ist tatsaechlich unbenutzt: 0 Zeilen, 0
+Codes."*
+
+`[cmd]` **Selbst nachgemessen: 0 Zeilen.**
+
+`[read]` **Er hat die bestehende Tabelle erweitert, statt eine
+zweite zu bauen** ? **und das war die Frage, die ich ihm
+gestellt hatte.**
+
+`[cmd]` **Und Claude Codes FK-Befund aus G-453 traegt:**
+`food_preference_items.food_id` **zeigt auf** `nutrition.foods`
+? **`target_type` allein genuegte nicht.**
+
+### Die Reihenfolge
+
+    liked -> neutral -> disliked
+    danach die bisherige Namens-/Similarity-Rangfolge
+
+`[cmd]` **Suche ohne Vorliebe: 14,8 ms** ? **gegen 14,1 ms
+vorher.**
+
+`[read]` **Die Auflage war *,,ohne die Suche zu
+verschlechtern"*** ? **0,7 ms.**
+
+### RLS
+
+> *,,RLS trennt zwei Nutzer korrekt; `anon` hat keinen
+Schreibzugriff."*
+
+**Abgenommen. Einspielen steht aus.**

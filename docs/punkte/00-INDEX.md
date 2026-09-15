@@ -6,8 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 233 |
-| `laufend_codex` | 3 |
-| `erledigt` | 451 |
+| `laufend_codex` | 1 |
+| `erledigt` | 453 |
 | **gesamt** | **687** |
 
 ## medical — 48
@@ -365,8 +365,8 @@
 | `C-485` | feature | hoch | [die DSLD-Datenbank einlesen](erledigt/supplements-c-0485-dsld-einlesen.md) | erledigt | — | C-495, C-496, G-452 |
 | `C-489` | fehler | mittel | [der Produktname ist englisch und heisst `name`](erledigt/supplements-c-0489-produktname-nach-name-en.md) | erledigt | — | — |
 | `C-495` | feature | hoch | [die Leseseite fuer 214.780 Produkte](erledigt/supplements-c-0495-die-leseseite-fuer-produkte.md) | erledigt | — | — |
-| `C-496` | feature | hoch | [die Naehrwerte auf unsere Makros und Mikros](laufend_codex/supplements-c-0496-naehrwerte-auf-unsere-makros.md) | laeuft (codex) | — | — |
-| `C-497` | feature | mittel | [Daumen hoch und runter fuer Supplementprodukte](laufend_codex/supplements-c-0497-daumen-fuer-produkte.md) | laeuft (codex) | — | — |
+| `C-496` | feature | hoch | [die Naehrwerte auf unsere Makros und Mikros](erledigt/supplements-c-0496-naehrwerte-auf-unsere-makros.md) | erledigt | — | — |
+| `C-497` | feature | mittel | [Daumen hoch und runter fuer Supplementprodukte](erledigt/supplements-c-0497-daumen-fuer-produkte.md) | erledigt | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
