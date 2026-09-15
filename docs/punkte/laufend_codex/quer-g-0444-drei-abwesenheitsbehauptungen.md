@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-461
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - docs/ssot/93-trainingssitzungen.md

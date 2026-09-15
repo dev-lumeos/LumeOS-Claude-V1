@@ -5,9 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 234 |
+| `todos` | 231 |
+| `laufend_codex` | 3 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 457 |
-| **gesamt** | **691** |
+| **gesamt** | **692** |
 
 ## medical — 48
 
@@ -428,7 +430,7 @@
 | `C-487` | feature | hoch | [exercise_muscles auf Blattebene](erledigt/training-c-0487-exercise-muscles-auf-blattebene.md) | erledigt | — | C-490, C-491 |
 | `C-490` | feature | hoch | [der Faktor an der Zuordnung](erledigt/training-c-0490-der-faktor-an-der-zuordnung.md) | erledigt | — | — |
 | `C-491` | befund | hoch | [die Zuordnungen zeigen auf die falsche Ebene](erledigt/training-c-0491-zuordnungen-auf-die-richtige-ebene.md) | erledigt | — | G-447 |
-| `C-493` | feature | hoch | [Seed-Sitzungen, die die Karte fuellen](erledigt/training-c-0493-seed-sitzungen-fuer-die-karte.md) | erledigt | — | G-450, G-451 |
+| `C-493` | feature | hoch | [Seed-Sitzungen, die die Karte fuellen](erledigt/training-c-0493-seed-sitzungen-fuer-die-karte.md) | erledigt | — | C-501, G-450, G-451 |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
@@ -570,7 +572,9 @@
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 
-## quer — 167
+## quer — 168
+
+### beauftragbar — 167
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -738,9 +742,15 @@
 | `G-432` | feature | hoch | [jeder gezeichnete Muskel ist anwaehlbar](erledigt/quer-g-0432-jeder-muskel-anwaehlbar.md) | erledigt | — | G-433, G-434, G-435 |
 | `G-434` | feature | hoch | [die Karte, direkt mit Tom erledigt](erledigt/quer-g-0434-die-karte-direkt-mit-tom.md) | erledigt | — | — |
 | `G-435` | feature | hoch | [die Hierarchie an den richtigen Ort](erledigt/quer-g-0435-hierarchie-an-den-richtigen-ort.md) | erledigt | — | G-436 |
-| `G-444` | fehler | mittel | [drei Abwesenheitsbehauptungen, die C-461 ueberholt hat](todos/quer-g-0444-drei-abwesenheitsbehauptungen.md) | offen | — | — |
-| `G-451` | fehler | mittel | [der Testdatenlauf scheitert vor C-493](todos/quer-g-0451-testdatenlauf-scheitert-vorher.md) | offen | — | — |
-| `G-455` | feature | hoch | [Allergien in Settings, Filter in Produkten](todos/quer-g-0455-allergien-und-filter.md) | offen | — | — |
+| `G-444` | fehler | mittel | [drei Abwesenheitsbehauptungen, die C-461 ueberholt hat](laufend_codex/quer-g-0444-drei-abwesenheitsbehauptungen.md) | laeuft (codex) | — | — |
+| `G-451` | fehler | mittel | [der Testdatenlauf scheitert vor C-493](laufend_codex/quer-g-0451-testdatenlauf-scheitert-vorher.md) | laeuft (codex) | — | — |
+| `G-455` | feature | hoch | [Allergien in Settings, Filter in Produkten](laufend_claudecode/quer-g-0455-allergien-und-filter.md) | laeuft (claudecode) | — | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `C-501` | feature | hoch | [Seed fuer die leeren Module](laufend_codex/quer-c-0501-seed-fuer-leere-module.md) | laeuft (codex) | G-451 | — |
 
 ## buddy — 1
 
