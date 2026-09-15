@@ -120,6 +120,7 @@ function tabs(muskelzahl: number, modalitaeten: number, otZahl: number): TabItem
 
 export function RecoveryAnsicht({
   checkins, scores, modalitaeten, hierarchie, muskelbaum, muskelzustand,
+  zukunft = false, stichtag,
 }: {
   checkins?: CheckinStand
   scores?: ScoreStand
@@ -136,6 +137,16 @@ export function RecoveryAnsicht({
   muskelbaum?: MuskelbaumStand
   /** G-440: der gerechnete Trainingszustand je Muskel. */
   muskelzustand?: MuskelzustandStand
+  /**
+   * G-450/A6: liegt der angesehene Tag in der Zukunft?
+   *
+   * `[read]` **Die Zahlen werden NICHT unterdrueckt** — sie sind die
+   * richtige Antwort der Formel auf *„angenommen, es waere so weit"*.
+   * **Aber die Karte sagt, dass es eine Annahme ist.**
+   */
+  zukunft?: boolean
+  /** G-450: der angesehene Tag, fuer die Herkunftsangabe. */
+  stichtag?: string
 }) {
   // G-117: Tab in der Adresse — Drop-in aus lib/tab-url.
   const [tab, setTab] = useTabParam('today')
@@ -265,7 +276,8 @@ export function RecoveryAnsicht({
               sehen."* `[read]` **Er liegt hier schon bereit**, die
               Kachel bekam ihn nur nicht gereicht. */}
           <RecMuscleMap stand={checkins} muskelbaum={muskelbaum}
-                        muskelzustand={muskelzustand} />
+                        muskelzustand={muskelzustand}
+                        zukunft={zukunft} stichtag={stichtag} />
           <RecMuscleMapReferenz />
         </>
       )}

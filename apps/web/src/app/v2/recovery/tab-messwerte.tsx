@@ -76,6 +76,15 @@ import { muskelLage, sippen } from '../../../lib/training/muskelzustand'
 function datenEtikett(
   deckung: { gemessen: number; gesamt: number; rollenUngewichtet: boolean } | undefined,
   katerEcht: boolean,
+  // ══ G-450: gegen WELCHEN Tag gerechnet wurde ═══════════════════
+  //
+  // `[read]` **Die wichtigste Zeile des Etiketts, seit der Wechsler
+  // rechnet.** `[cmd]` **Bis G-450 stand die Erholung immer gegen
+  // `Date.now()`** — wer den 1. September ansah, bekam die Stunden
+  // bis HEUTE. **Jetzt steht der Bezugstag dabei, damit man es
+  // sieht.**
+  stichtag?: string,
+  zukunft = false,
 ): { marke: string; ton: 'pos' | 'warn'; erklaerung: string } {
   if (!deckung || deckung.gemessen === 0) {
     return {
@@ -98,6 +107,25 @@ function datenEtikett(
     teile.push('kein Check-in erfasst, Muskelkater fehlt')
   }
   teile.push('Schlaf und Ernährung aus dem Entwurf')
+  // G-450: der Bezugstag gehoert dazu — er entscheidet jede Zahl.
+  if (stichtag) teile.push(`gerechnet gegen den ${stichtag}`)
+
+  // ══ G-450/A6: ein Tag in der ZUKUNFT ═════════════════════════
+  //
+  // `[read]` **Die Zahlen werden NICHT unterdrueckt** — sie sind die
+  // richtige Antwort der Formel auf *„angenommen, es waere so weit"*.
+  // **Aber eine Erholungsfarbe fuer ein Training, das noch nicht
+  // stattgefunden hat, darf nicht aussehen wie eine Messung.**
+  if (zukunft) {
+    return {
+      marke: 'angenommener Tag',
+      ton: 'warn',
+      erklaerung: `Der ${stichtag} liegt in der Zukunft. Die Werte `
+        + 'zeigen, wie die Erholung an diesem Tag stünde, wenn bis '
+        + 'dahin nichts mehr trainiert wird — gemessen ist daran '
+        + `nichts. · ${teile.join(' · ')}`,
+    }
+  }
 
   return {
     // `[read]` **„teilweise gemessen" ist die ehrliche Marke** —
@@ -111,7 +139,9 @@ function datenEtikett(
 
 // ═══ MUSCLE MAP ══════════════════════════════════════════════════
 // [cmd] module-recovery-v2.jsx:378-443.
-export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
+export function RecMuscleMap({
+  stand, muskelbaum, muskelzustand, zukunft = false, stichtag,
+}: {
   stand?: CheckinStand | null
   /** G-435/A6: die Hierarchie fuer `Per-muscle detail`. */
   muskelbaum?: MuskelbaumStand
@@ -125,6 +155,10 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
    * verkauft."*
    */
   muskelzustand?: MuskelzustandStand
+  /** G-450/A6: der angesehene Tag liegt in der Zukunft. */
+  zukunft?: boolean
+  /** G-450: der angesehene Tag — steht in der Herkunftsangabe. */
+  stichtag?: string
 }) {
   const { open } = useRecovery()
 
@@ -234,7 +268,8 @@ export function RecMuscleMap({ stand, muskelbaum, muskelzustand }: {
       sippschaft, namenNachId])
 
   // ══ G-440: das Etikett sagt, was gemessen ist ════════════════
-  const etikett = datenEtikett(muskelzustand?.deckung, !!echterKater)
+  const etikett = datenEtikett(
+    muskelzustand?.deckung, !!echterKater, stichtag, zukunft)
 
   const values = Object.fromEntries(rows.map(r => [r.slug, r.value]))
 

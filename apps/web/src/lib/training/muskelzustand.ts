@@ -495,3 +495,97 @@ export function deckungsbericht(
     rollenUngewichtet: true,
   }
 }
+
+// ══ G-450: der gewaehlte Tag als Bezugszeitpunkt ════════════════
+//
+// **Codex, C-493:** *„Der Tageswechsler aendert das Datum, aber
+// nicht die Kartenberechnung; die Bizepsfarbe bleibt gleich."*
+//
+// `[cmd]` **Gemessen 2026-09-15, die ganze Kette:**
+//
+//     recovery/page.tsx:60   stichtag  aus ?datum=
+//     recovery/page.tsx:68   ladeCheckins(30, stichtag)      nutzt ihn
+//     recovery/page.tsx:69   ladeScores(180, stichtag)       nutzt ihn
+//     recovery/page.tsx:70   ladeModalitaeten(120, stichtag) nutzt ihn
+//     recovery/page.tsx:77   ladeMuskelzustand(105)          NICHT
+//
+//     muskelzustand-read.ts:93   jetzt: Date = new Date()
+//
+// `[read]` **Ein Vorgabewert hat den Fehler zugedeckt** — kein
+// Typfehler, keine Meldung, nur eine Zahl, die sich nie ruehrte.
+//
+// ══ WELCHE UHRZEIT EIN DATUM MEINT ══════════════════════════════
+//
+// `[read]` **Ein Tag ist kein Zeitpunkt, die Formel braucht aber
+// einen.** `[cmd]` **`session_date` traegt ebenfalls keine Uhrzeit**
+// und wird in `muskelzustaende` auf `T00:00:00Z` gesetzt.
+//
+// `[read]` **Genommen wird der Tagesbeginn, NICHT die Mitte** — zwei
+// Gruende:
+//
+// **1** — `[cmd]` **Dieselbe Bezugsgroesse auf beiden Seiten.** Ein
+// Mittagswert gegen einen Tagesbeginn ergaebe fuer „heute trainiert,
+// heute angesehen" **12 Stunden statt 0** — und `base(12)` ist 30
+// statt 10.
+//
+// **2** — `[read]` **Die Differenz bleibt ein glattes Vielfaches von
+// 24.** Wer den Wechsler um einen Tag bewegt, sieht genau 24 Stunden
+// mehr; jede andere Wahl streute die Zahl ohne Gewinn.
+//
+// ══ OHNE AUSWAHL BLEIBT ES BEI JETZT ════════════════════════════
+//
+// `[read]` **`undefined` heisst „kein Tag in der Adresse"** — dann
+// gilt der echte Augenblick, wie vor G-450. **Sonst haette der
+// Grundzustand der Seite plötzlich eine andere Rechnung.**
+
+/**
+ * Der Zeitpunkt, gegen den die Erholung gerechnet wird.
+ *
+ * @param stichtag `YYYY-MM-DD` aus der Adresse, oder `undefined`
+ * @param jetzt    der echte Augenblick — hereingereicht, damit die
+ *                 Funktion pruefbar ist (dieselbe Auflage wie bei
+ *                 `muskelzustaende`)
+ */
+export function bezugszeitpunkt(
+  stichtag: string | undefined, jetzt: Date = new Date(),
+): Date {
+  if (!stichtag || !/^\d{4}-\d{2}-\d{2}$/.test(stichtag)) return jetzt
+  const d = new Date(`${stichtag}T00:00:00Z`)
+  // `[read]` **Ein unmoegliches Datum faellt auf jetzt zurueck**, statt
+  // `Invalid Date` in die Rechnung zu tragen — dort wuerde daraus
+  // stillschweigend `NaN` und am Ende eine leere Karte.
+  return Number.isNaN(d.getTime()) ? jetzt : d
+}
+
+// ══ G-450/A6: ein Tag in der ZUKUNFT ════════════════════════════
+//
+// `[cmd]` **Gemessen 2026-09-15: der Wechsler laesst kuenftige Tage
+// zu**, und `dev@lumeos.app` traegt Sitzungen bis 2026-11-11.
+//
+// `[read]` **Die Rechnung selbst haelt das aus:** `muskelzustaende`
+// klemmt mit `Math.max(0, …)`, eine Sitzung nach dem Bezugstag ergibt
+// also 0 Stunden — „gerade eben trainiert".
+//
+// `[read]` **Aber das ist eine AUSSAGE ueber die Zukunft**, und die
+// hat niemand gemessen. **Wer den 2026-12-01 ansieht, bekommt eine
+// Erholungsfarbe fuer ein Training, das noch nicht stattgefunden
+// hat.**
+//
+// `[read]` **Die Zahl wird nicht unterdrueckt** — sie ist die
+// richtige Antwort der Formel auf „angenommen, es waere so weit".
+// **Aber die Anzeige sagt, dass es eine Annahme ist**, so wie die
+// Kachel sagt, dass die Rollen ungewichtet sind.
+
+/**
+ * Liegt der angesehene Tag in der Zukunft?
+ *
+ * `[read]` **Verglichen wird auf TAGESEBENE, nicht auf Millisekunden**
+ * — „heute" ist nie Zukunft, auch wenn der Bezugszeitpunkt auf den
+ * Tagesbeginn gesetzt wurde und `jetzt` mittags ist.
+ */
+export function istZukunft(
+  stichtag: string | undefined, jetzt: Date = new Date(),
+): boolean {
+  if (!stichtag || !/^\d{4}-\d{2}-\d{2}$/.test(stichtag)) return false
+  return stichtag > jetzt.toISOString().slice(0, 10)
+}

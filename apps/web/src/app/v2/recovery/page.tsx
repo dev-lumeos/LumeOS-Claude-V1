@@ -38,6 +38,13 @@ import { ladeMuskelbaum } from '../../../lib/koerper/muskelbaum-read'
 // (`module-recovery-engine.jsx:135-154`). **Jetzt gerechnet aus
 // `workout_sets` x `exercise_muscles`.**
 import { ladeMuskelzustand } from '../../../lib/training/muskelzustand-read'
+// ══ G-450: der gewaehlte Tag als Bezugszeitpunkt ══════════════════
+//
+// `[read]` **Aus `muskelzustand.ts`, nicht aus `-read.ts`** — die
+// Datei ist serverfrei (reine Rechnung, keine Importe), und die
+// Ansicht darunter ist `'use client'`. **Ein Wert-Import aus dem
+// Leseweg zoege `next/headers` ins Browserbuendel** (A-30).
+import { bezugszeitpunkt, istZukunft } from '../../../lib/training/muskelzustand'
 import './recovery.css'
 
 export const metadata: Metadata = {
@@ -72,9 +79,27 @@ export default async function V2RecoveryPage({
     // Weg: faellt sie aus, bleiben die drei uebrigen gueltig.
     ladeHierarchie(),
     ladeMuskelbaum(),
-    // `[read]` **105 ist die Zahl der Muskelnamen** (gemessen
-    // 2026-09-13) — sie geht in den Deckungsbericht ein.
-    ladeMuskelzustand(105),
+    // ══ G-450: DER GEWAEHLTE TAG GEHT IN DIE RECHNUNG ═══════════
+    //
+    // **Codex, C-493:** *„Der Tageswechsler aendert das Datum, aber
+    // nicht die Kartenberechnung; die Bizepsfarbe bleibt gleich."*
+    //
+    // `[cmd]` **Hier stand `ladeMuskelzustand(105)`** — mit EINEM
+    // Argument. **Das zweite hat einen Vorgabewert:**
+    // `jetzt: Date = new Date()` (`muskelzustand-read.ts:93`).
+    //
+    // `[read]` **Damit rechnete die Karte immer gegen JETZT**,
+    // waehrend `stichtag` drei Zeilen darueber schon dastand und von
+    // `ladeCheckins`, `ladeScores` und `ladeModalitaeten` benutzt
+    // wurde. **Die Kopfzeile wechselte, die Muskelwerte nicht.**
+    //
+    // `[read]` **Die Rechnung selbst war nie falsch** —
+    // `muskelzustaende(…, jetzt)` nimmt den Zeitpunkt seit G-440 als
+    // Parameter, ausdruecklich damit sie pruefbar ist. **Der Fehler
+    // war ein nicht uebergebenes Argument**, und ein Vorgabewert hat
+    // ihn zugedeckt: kein Typfehler, keine Meldung, nur eine Zahl,
+    // die sich nie ruehrte.
+    ladeMuskelzustand(105, bezugszeitpunkt(stichtag)),
   ])
   return (
     <RecoveryAnsicht
@@ -84,6 +109,10 @@ export default async function V2RecoveryPage({
       hierarchie={hierarchie}
       muskelbaum={muskelbaum}
       muskelzustand={muskelzustand}
+      // G-450: gegen welchen Tag gerechnet wurde — und ob er in der
+      // Zukunft liegt (A6).
+      stichtag={stichtag}
+      zukunft={istZukunft(stichtag)}
     />
   )
 }
