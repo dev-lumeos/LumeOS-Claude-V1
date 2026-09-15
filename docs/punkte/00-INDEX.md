@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 231 |
+| `todos` | 232 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 450 |
-| **gesamt** | **682** |
+| **gesamt** | **683** |
 
 ## medical — 48
 
@@ -307,9 +307,9 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 86
+## supplements — 87
 
-### beauftragbar — 85
+### beauftragbar — 86
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -362,9 +362,10 @@
 | `C-455` | feature | hoch | [der Injektionsplaner, vollstaendig](erledigt/supplements-c-0455-der-injektionsplaner-vollstaendig.md) | erledigt | — | — |
 | `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](erledigt/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | erledigt | — | — |
 | `C-467` | feature | hoch | [Lieferantenprodukte](erledigt/supplements-c-0467-lieferantenprodukte.md) | erledigt | — | C-485 |
-| `C-485` | feature | hoch | [die DSLD-Datenbank einlesen](erledigt/supplements-c-0485-dsld-einlesen.md) | erledigt | — | C-495, G-452 |
+| `C-485` | feature | hoch | [die DSLD-Datenbank einlesen](erledigt/supplements-c-0485-dsld-einlesen.md) | erledigt | — | C-495, C-496, G-452 |
 | `C-489` | fehler | mittel | [der Produktname ist englisch und heisst `name`](erledigt/supplements-c-0489-produktname-nach-name-en.md) | erledigt | — | — |
 | `C-495` | feature | hoch | [die Leseseite fuer 214.780 Produkte](erledigt/supplements-c-0495-die-leseseite-fuer-produkte.md) | erledigt | — | — |
+| `C-496` | feature | hoch | [die Naehrwerte auf unsere Makros und Mikros](todos/supplements-c-0496-naehrwerte-auf-unsere-makros.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
