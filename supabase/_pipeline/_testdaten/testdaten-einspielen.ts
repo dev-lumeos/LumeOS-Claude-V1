@@ -2767,6 +2767,14 @@ const mealPlanEntryValues = mealPlanEntryRows.map(entry => tuple([
 const sql = `
 BEGIN;
 
+-- Der Testdatenlauf besitzt nur seine festen Seedobjekte. Die lokale
+-- Freigabe gilt ausschliesslich bis COMMIT/ROLLBACK und ist noetig, weil
+-- Storage direkte Tabellen-Deletes sonst bewusst blockiert.
+SELECT set_config('storage.allow_delete_query', 'true', true);
+
+-- Eine meal_plan-Liste darf wegen ihres CHECK nicht durch das FK-SET-NULL
+-- ihrer Planwoche entkoppelt werden. Sie gehoert deshalb vor die Wochen.
+DELETE FROM nutrition.shopping_lists WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meal_plan_entries WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meal_plan_days WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meal_plan_weeks WHERE user_id IN (${userIds});
@@ -2779,6 +2787,8 @@ WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local
 DELETE FROM nutrition.meal_plan_entries
 WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
 DELETE FROM nutrition.meal_plan_days
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM nutrition.shopping_lists
 WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
 DELETE FROM nutrition.meal_plan_weeks
 WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
@@ -2839,6 +2849,14 @@ DELETE FROM recovery.modality_log WHERE user_id IN (${userIds});
 DELETE FROM recovery.scores WHERE user_id IN (${userIds});
 DELETE FROM recovery.checkins WHERE user_id IN (${userIds});
 DELETE FROM recovery.score_contributions WHERE user_id IN (${userIds});
+DELETE FROM recovery.score_contributions
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM recovery.stress_logs
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM recovery.recovery_protocols
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
+DELETE FROM recovery.overtraining_alerts
+WHERE user_id = (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local');
 DELETE FROM recovery.stress_logs WHERE user_id IN (${userIds});
 DELETE FROM recovery.recovery_protocols WHERE user_id IN (${userIds});
 DELETE FROM recovery.overtraining_alerts WHERE user_id IN (${userIds});
@@ -2854,7 +2872,10 @@ DELETE FROM medical.appointments
 WHERE id = 'c4290000-0000-0000-0000-000000000021'::uuid;
 DELETE FROM storage.objects
 WHERE bucket_id = 'medical-originals'
-  AND name = '20000000-0000-0000-0000-000000000901/c4290000-0000-0000-0000-000000000011.pdf';
+  AND name = concat(
+    (SELECT id::text FROM auth.users WHERE email = 'test-user@lumeos.local'),
+    '/c4290000-0000-0000-0000-000000000011.pdf'
+  );
 DELETE FROM medical.lab_reports
 WHERE id = 'c4290000-0000-0000-0000-000000000011'::uuid;
 DELETE FROM storage.objects
@@ -2984,6 +3005,12 @@ BEGIN
 
   RAISE NOTICE 'G-175: Pruefkonto-Passwort gesetzt (test-user@lumeos.local).';
 END $$;
+
+-- C-429 schaltet fuer den Storage-Teil auf die authenticated-Rolle um.
+-- Die ID des Pruefkontos muss deshalb vorher unter der Besitzerrolle
+-- aufgeloest werden; auth.users ist danach fuer authenticated nicht lesbar.
+SELECT set_config('app.test_user_id',
+  (SELECT id::text FROM auth.users WHERE email = 'test-user@lumeos.local'), true);
 
 -- C-421/E-72: Das Nachweiskonto existiert jetzt und braucht bis heute
 -- lesbare Zeilen fuer jede neue Recovery-Grundlage; leere Karten sind kein Ergebnis.
@@ -3836,23 +3863,29 @@ FROM test_medical_lab_reports;
 INSERT INTO medical.lab_reports (id, user_id, report_date, report_time, lab_name, title, source, source_detail, notes)
 VALUES (
   'c4290000-0000-0000-0000-000000000011'::uuid,
-  '20000000-0000-0000-0000-000000000901'::uuid,
+  (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'),
   DATE '${relDate('2026-08-18')}', TIME '09:20', 'C-429 Testlabor',
   'C-429 Originalbefund', 'seed', 'C-429 Testdaten: test-user Original mit Herkunft',
   'C-429 E-72 Nachweisbestand'
 );
 SET LOCAL ROLE authenticated;
-SET LOCAL "request.jwt.claim.sub" = '20000000-0000-0000-0000-000000000901';
+SELECT set_config(
+  'request.jwt.claim.sub',
+  current_setting('app.test_user_id'),
+  true
+);
 INSERT INTO storage.objects (bucket_id, name, owner_id, metadata)
 VALUES (
   'medical-originals',
-  '20000000-0000-0000-0000-000000000901/c4290000-0000-0000-0000-000000000011.pdf',
-  '20000000-0000-0000-0000-000000000901',
+  concat(current_setting('app.test_user_id'),
+         '/c4290000-0000-0000-0000-000000000011.pdf'),
+  current_setting('app.test_user_id')::uuid,
   '{"size":241,"mimetype":"application/pdf"}'::jsonb
 );
 SELECT medical.attach_lab_report_original(
   'c4290000-0000-0000-0000-000000000011'::uuid,
-  '20000000-0000-0000-0000-000000000901/c4290000-0000-0000-0000-000000000011.pdf'
+  concat(current_setting('app.test_user_id'),
+         '/c4290000-0000-0000-0000-000000000011.pdf')
 );
 RESET ROLE;
 
@@ -3982,7 +4015,7 @@ INSERT INTO medical.appointments (
 )
 VALUES (
   'c4290000-0000-0000-0000-000000000021'::uuid,
-  '20000000-0000-0000-0000-000000000901'::uuid,
+  (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'),
   'labor',
   '${relDate('2026-08-24')} 09:30:00+07'::timestamptz,
   'Asia/Bangkok',
@@ -4000,13 +4033,13 @@ INSERT INTO medical.health_events (
   source_recorded_at, source_lab_report_id
 )
 VALUES
-  ('c4290000-0000-0000-0000-000000000031'::uuid, '20000000-0000-0000-0000-000000000901'::uuid, 'diagnosis', DATE '${relDate('2024-10-12')}',
+  ('c4290000-0000-0000-0000-000000000031'::uuid, (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'), 'diagnosis', DATE '${relDate('2024-10-12')}',
    'Arztzitat: Kniearthrose', 'clinician', 'Dr. Beispiel', '${relDate('2024-10-12')} 10:00:00+07',
    'c4290000-0000-0000-0000-000000000011'::uuid),
-  ('c4290000-0000-0000-0000-000000000032'::uuid, '20000000-0000-0000-0000-000000000901'::uuid, 'treatment', DATE '${relDate('2024-10-20')}',
+  ('c4290000-0000-0000-0000-000000000032'::uuid, (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'), 'treatment', DATE '${relDate('2024-10-20')}',
    'Arztzitat: Physiotherapie verordnet', 'clinician', 'Dr. Beispiel', '${relDate('2024-10-20')} 10:00:00+07',
    'c4290000-0000-0000-0000-000000000011'::uuid),
-  ('c4290000-0000-0000-0000-000000000033'::uuid, '20000000-0000-0000-0000-000000000901'::uuid, 'operation', DATE '${relDate('2025-01-15')}',
+  ('c4290000-0000-0000-0000-000000000033'::uuid, (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'), 'operation', DATE '${relDate('2025-01-15')}',
    'Arztzitat: Knieoperation dokumentiert', 'document', 'OP-Bericht', '${relDate('2025-01-15')} 10:00:00+07',
    'c4290000-0000-0000-0000-000000000011'::uuid);
 
@@ -4729,13 +4762,6 @@ BEGIN
       UNION ALL
       SELECT user_id, 'subjective_feeling', entry_date::text, subjective_feeling
         FROM recovery.checkins WHERE user_id IN (${USERS.map(user => `'${user.id}'::uuid`).join(', ')}) AND subjective_feeling IS NOT NULL
-      UNION ALL
-      SELECT ws.user_id, 'gewicht:' || we.exercise_name,
-             ws.session_date::text || '#' || st.set_number, st.weight_kg
-        FROM training.workout_sets st
-        JOIN training.workout_exercises we ON we.id = st.workout_exercise_id
-        JOIN training.workout_sessions ws ON ws.id = we.workout_session_id
-       WHERE st.set_type = 'working'
     ),
     nummeriert AS (
       SELECT user_id, reihe, wert,
