@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-493
 entscheidung: null
+erledigt: 2026-09-08
+commit: 1ce1e8c2
 beruehrt:
   dateien:
     - apps/web/src/app/v2/recovery/ansicht.tsx
@@ -319,4 +321,87 @@ Gegenstand dieses Auftrags.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **Zwei Fotos nebeneinander gelesen:**
+
+    04. Sept   Brachioradialis  10%   0 h   rot
+               "gerechnet gegen den 2026-09-04"
+               Score 62,2
+
+    11. Sept   Brachioradialis  87%  72 h   gruen
+               "gerechnet gegen den 2026-09-11"
+               Score 71,2
+
+`[cmd]` **Am 04. fast alles rot, am 11. Schultern, Arme und
+Nacken gruen, Brust und Ruecken noch rot.**
+
+`[cmd]` **Zwoelf Tagesfotos liegen vor, 09-03 bis 12-01.**
+
+### Die Ursache, selbst nachgemessen
+
+`[cmd]` **`muskelzustand-read.ts:93`:** `jetzt: Date = new
+Date()`
+
+> *,,Der Fehler war ein VERGESSENES ARGUMENT, und ein Default
+hat ihn unsichtbar gemacht ? kein Typfehler, keine Meldung."*
+
+`[read]` **Ein Vorgabewert, der eine fehlende Uebergabe
+verdeckt** ? **`tsc` sieht nichts, der Schirm zeigt falsche
+Zahlen.**
+
+> *,,Der wirksame `new Date()` steht in `lib/training/`, nicht
+im Recovery-Modul ? ein `grep` dort findet ihn nicht."*
+
+`[cmd]` **Und die Rechnung war nie falsch:** `muskelzustaende(
+..., jetzt)` **nimmt den Zeitpunkt seit G-440 als Parameter,
+ausdruecklich damit sie pruefbar ist.**
+
+### Warum Biceps nicht den ganzen Weg geht
+
+> *,,20 Saetze ergeben `volumeMod 0.70`, das deckelt bei 70 %.
+Das ist die FORMEL, kein Fehler; deshalb der zweite Muskel fuer
+den vollen Weg."*
+
+`[read]` **Er hat gemessen, warum der naheliegende Beleg nicht
+taugt, und einen zweiten gesucht** ? `Trapezius`: **0 h Rest,
+24 h Caution, 168 h Ready.**
+
+### Die Gegenprobe erklaert, warum es so lange unsichtbar war
+
+> *,,Mit `Date.now()` zurueckgebaut: 55 h an allen drei Tagen.
+Die PROZENTE schwankten trotzdem, weil Schlaf und Kater aus dem
+Check-in DES TAGES kommen."*
+
+`[read]` **Die Zahlen bewegten sich ? nur die falschen.**
+
+### Und der siebte Sabotagefall
+
+> *,,Die siebte blieb gruen, weil mein Waechter die
+ZEICHENKETTE statt der BEDINGUNG suchte. Derselbe blinde Fleck
+wie in G-453; nachgezogen, dann rot."*
+
+### Zwei Befunde nebenbei
+
+**1** ? `[cmd]` **Er meldet zehn Sitzungen ohne Saetze, ich
+messe FUENFZEHN.**
+
+`[read]` **Der Befund ist groesser als gemeldet** ? **als
+G-456.**
+
+**2** ? **Die Karte zeigt ERMUEDUNG, nicht Erholung.**
+
+`[cmd]` **`Ready <=25%`** ? **eine niedrige Zahl ist gut.**
+
+`[read]` **Beim Lesen der Zahlen ist das der Unterschied
+zwischen *,,rot"* und *,,gut"*** ? **als G-457.**
+
+### Und ein eigener Fehler, gemeldet
+
+> *,,Ein versehentlich wiederholter Skriptaufruf duplizierte
+102 Zeilen in `supplements/produkt-etikett.ts`. Aus `git`
+zurueckgeholt, Reihe nachgemessen ? die Datei ist wieder
+unveraendert."*
+
+**Abgenommen.**
+

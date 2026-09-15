@@ -5,10 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 232 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 456 |
-| **gesamt** | **689** |
+| `todos` | 234 |
+| `erledigt` | 457 |
+| **gesamt** | **691** |
 
 ## medical — 48
 
@@ -410,7 +409,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 30
+## training — 31
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -444,8 +443,9 @@
 | `G-366` | feature | mittel | [die Uebungsliste der Sitzung](erledigt/training-g-0366-die-uebungsliste-der-sitzung.md) | erledigt | — | — |
 | `G-429` | befund | mittel | [wer rechnet estimated_1rm, und verweigert er?](todos/training-g-0429-einrm-mit-verweigerung.md) | offen | — | — |
 | `G-447` | befund | mittel | [vier gezeichnete Muskeln, die keine Uebung trifft](todos/training-g-0447-vier-muskeln-ohne-jede-zuordnung.md) | offen | — | — |
+| `G-456` | befund | niedrig | [fuenfzehn Sitzungen ohne Saetze](todos/training-g-0456-sitzungen-ohne-saetze.md) | offen | — | — |
 
-## recovery — 40
+## recovery — 41
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -488,7 +488,8 @@
 | `G-446` | fehler | hoch | [die Vererbung laeuft nur nach unten](erledigt/recovery-g-0446-die-vererbung-laeuft-nur-nach-unten.md) | erledigt | — | G-449 |
 | `G-448` | befund | niedrig | [der Schnitt und der Engpass sind aussagelos](todos/recovery-g-0448-der-schnitt-ist-aussagelos.md) | offen | — | — |
 | `G-449` | befund | niedrig | [wertKommtVonGruppe hat keinen Aufrufer](todos/recovery-g-0449-wertkommtvongruppe-ohne-aufrufer.md) | offen | — | — |
-| `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](laufend_claudecode/recovery-g-0450-tageswechsler-rechnet-nicht.md) | laeuft (claudecode) | — | — |
+| `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
+| `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
 ## goals — 13
 
