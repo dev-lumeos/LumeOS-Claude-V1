@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-503
 entscheidung: null
+erledigt: 2026-09-08
+commit: 96e80560
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/insights-kacheln.tsx
@@ -41,3 +43,17 @@ faellt erst auf, wenn die Bedingung wechselt.**
 
 `[read]` **Dieselbe Klasse wie der Vorgabewert in G-450:**
 **kein Typfehler, keine Meldung, falsches Verhalten.**
+
+## Erledigt durch G-461, 2026-09-08
+
+`[cmd]` **Claude Code hat ihn beim Aufraeumen der
+Anfuehrungszeichen gefunden:**
+
+> *,,Nach der Behebung stand ein vierter Fehler allein da:
+`React.useId` nach einem fruehen Return (aus G-416)."*
+
+`[read]` **Zwei Wege, dieselbe Stelle** ? **Codex meldete ihn
+aus dem Gate-Lauf, Claude Code fand ihn beim Beheben.**
+
+`[cmd]` **Lint gruen in beiden Apps.**
+
