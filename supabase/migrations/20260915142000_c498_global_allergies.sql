@@ -30,12 +30,6 @@ CREATE TABLE public.allergen_aliases (
   PRIMARY KEY (stoff_code, alias_text)
 );
 
-INSERT INTO public.allergen_aliases (stoff_code, alias_text, source_id, evidence_class) VALUES
-  ('magnesium_stearate', 'Magnesium Stearate', 'dsld_product_contents', 'A'),
-  ('magnesium_stearate', 'Magnesium Stearate (Mg Stearate)', 'dsld_product_contents', 'A'),
-  ('magnesium_stearate', 'Vegetable Magnesium Stearate', 'dsld_product_contents', 'A')
-ON CONFLICT (stoff_code, alias_text) DO NOTHING;
-
 CREATE TABLE coach.allergy_permissions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   coach_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -204,21 +198,6 @@ GRANT EXECUTE ON FUNCTION coach.hat_allergie_sicht(uuid) TO authenticated;
 GRANT EXECUTE ON FUNCTION public.user_allergy_codes(uuid) TO authenticated;
 GRANT ALL ON TABLE public.user_allergies, public.allergen_aliases TO service_role;
 GRANT ALL ON TABLE coach.allergy_permissions, coach.allergy_permission_change_log TO service_role;
-
-INSERT INTO public.user_allergies (user_id, stoff_code, stoff_text, art, schwere, quelle)
-SELECT
-  fp.user_id,
-  lower(btrim(allergy.stoff_code)),
-  replace(lower(btrim(allergy.stoff_code)), '_', ' '),
-  'nahrung',
-  'allergie',
-  'nutrition_preferences'
-FROM nutrition.food_preferences fp
-CROSS JOIN LATERAL unnest(COALESCE(fp.allergies, '{}'::text[])) AS allergy(stoff_code)
-WHERE btrim(allergy.stoff_code) <> ''
-ON CONFLICT (user_id, stoff_code, art) WHERE stoff_code IS NOT NULL DO NOTHING;
-
-ALTER TABLE nutrition.food_preferences DROP COLUMN allergies;
 
 COMMENT ON TABLE public.user_allergies IS
   'C-498: globale, vom Nutzer gepflegte Allergien fuer alle Module. Coach-Lesen braucht die eigene Freigabe in coach.allergy_permissions.';

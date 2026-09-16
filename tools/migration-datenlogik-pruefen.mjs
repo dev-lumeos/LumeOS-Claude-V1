@@ -22,6 +22,26 @@ const structuralFunctionExceptions = [
     // nicht beim Einspielen der Migration, keine Katalogdaten.
     requiredSql: 'INSERT INTO supplements.supplier_products(supplier_id,name_en',
   },
+  {
+    file: '20260915004916_c497_supplier_product_preferences.sql',
+    functionName: 'supplements.supplier_product_preference_write',
+    commands: ['DELETE', 'INSERT'],
+    // C-497 definiert den authenticated-only RPC-Schreibweg. Er fuehrt beim
+    // Einspielen keine Datenoperation aus; die bestehende RLS entscheidet
+    // erst beim spaeteren Nutzeraufruf ueber die eigene Vorliebe.
+    requiredSql: [
+      'DELETE FROM nutrition.food_preference_items',
+      'INSERT INTO nutrition.food_preference_items',
+    ],
+  },
+  {
+    file: '20260915142000_c498_global_allergies.sql',
+    functionName: 'coach.log_allergy_permission_change',
+    command: 'INSERT',
+    // C-498 definiert nur einen AFTER-Trigger fuer kuenftige
+    // Freigabeaenderungen; beim Migrationseinspielen wird kein Log erzeugt.
+    requiredSql: 'INSERT INTO coach.allergy_permission_change_log',
+  },
 ]
 // Im Funktionskoerper zaehlt nur der Anfang einer ausfuehrbaren SQL-Anweisung.
 // `FOR UPDATE` sperrt, schreibt aber nicht; ebenso ist `ON DELETE` Teil einer
@@ -91,12 +111,15 @@ function commandsInDollarBlocks(sql, file) {
       .map((entry) => entry[1].toUpperCase())
     if (!commands.length) continue
 
-    const structuralException = structuralFunctionExceptions.some((exception) =>
-      file === exception.file &&
-      new RegExp(`CREATE (OR REPLACE )?FUNCTION ${exception.functionName.replace('.', '\\.')}`, 'i').test(prefix) &&
-      commands.length === (exception.count ?? 1) &&
-      commands.every((command) => command === exception.command) &&
-      sanitizedBody.includes(exception.requiredSql))
+    const structuralException = structuralFunctionExceptions.some((exception) => {
+      const expectedCommands = exception.commands ?? Array(exception.count ?? 1).fill(exception.command)
+      const requiredSql = Array.isArray(exception.requiredSql) ? exception.requiredSql : [exception.requiredSql]
+      return file === exception.file &&
+        new RegExp(`CREATE (OR REPLACE )?FUNCTION ${exception.functionName.replace('.', '\\.')}`, 'i').test(prefix) &&
+        commands.length === expectedCommands.length &&
+        commands.every((command, index) => command === expectedCommands[index]) &&
+        requiredSql.every((fragment) => sanitizedBody.includes(fragment))
+    })
     if (!structuralException) blocks.push(...commands)
   }
   return blocks

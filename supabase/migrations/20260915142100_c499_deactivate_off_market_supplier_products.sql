@@ -1,10 +1,5 @@
 BEGIN;
 
-UPDATE supplements.supplier_products
-SET is_active = false
-WHERE market_status = 'Off Market'
-  AND is_active IS DISTINCT FROM false;
-
 CREATE OR REPLACE FUNCTION supplements.search_supplier_products(
   p_query text,
   p_market_status text DEFAULT 'On Market',

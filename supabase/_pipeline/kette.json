@@ -311,6 +311,24 @@
       ]
     },
     {
+      "id": "498_global_allergies_daten",
+      "path": "supabase/_pipeline/05_user_tabellen/498_global_allergies_daten.sql",
+      "kind": "sql",
+      "creates": "C-498/G-458: drei Alias-Katalogzeilen und die idempotente Uebernahme vorhandener Nutrition-Allergien vor dem strukturellen Wegfall der Altspalte.",
+      "depends_on": [
+        "498_global_allergies"
+      ]
+    },
+    {
+      "id": "g458_drop_legacy_food_preference_allergies",
+      "path": "supabase/migrations/20260916070000_g458_drop_legacy_food_preference_allergies.sql",
+      "kind": "sql",
+      "creates": "G-458: entfernt die bereits uebernommene Altspalte nutrition.food_preferences.allergies strukturell.",
+      "depends_on": [
+        "498_global_allergies_daten"
+      ]
+    },
+    {
       "id": "055",
       "path": "supabase/_pipeline/05_user_tabellen/055_water_logs.sql",
       "kind": "sql",
@@ -2124,6 +2142,35 @@
       "depends_on": [
         "496_supplier_product_nutrients",
         "499_deactivate_off_market_supplier_products"
+      ]
+    },
+    {
+      "id": "496_supplier_product_nutrients_daten",
+      "path": "supabase/_pipeline/13_supplements/496_supplier_product_nutrients_daten.sql",
+      "kind": "sql",
+      "creates": "C-496/G-458: 39 kuratierte DSLD-Naehrstoffnamen als Katalogdaten nach der Struktur.",
+      "depends_on": [
+        "496_supplier_product_nutrients",
+        "485_dsld_import"
+      ]
+    },
+    {
+      "id": "499_deactivate_off_market_supplier_products_daten",
+      "path": "supabase/_pipeline/13_supplements/499_deactivate_off_market_supplier_products_daten.sql",
+      "kind": "sql",
+      "creates": "C-499/G-458: 92.821 Off-Market-Lieferantenprodukte als inaktiv markiert.",
+      "depends_on": [
+        "499_deactivate_off_market_supplier_products"
+      ]
+    },
+    {
+      "id": "500_vitamin_e_form_evidence_daten",
+      "path": "supabase/_pipeline/13_supplements/500_vitamin_e_form_evidence_daten.sql",
+      "kind": "sql",
+      "creates": "C-500/G-458: 1.433 belegte Vitamin-E-Formen aus DSLD-Zutatenzeilen und NOW-Herstellerseiten.",
+      "depends_on": [
+        "500_vitamin_e_form_evidence",
+        "496_supplier_product_nutrients_daten"
       ]
     }
   ]
