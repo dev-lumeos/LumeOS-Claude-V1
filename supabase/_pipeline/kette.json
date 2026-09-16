@@ -2172,6 +2172,26 @@
         "500_vitamin_e_form_evidence",
         "496_supplier_product_nutrients_daten"
       ]
+    },
+    {
+      "id": "503_allergy_catalog_suggestions",
+      "path": "supabase/migrations/20260916074600_c503_allergy_catalog_suggestions.sql",
+      "kind": "sql",
+      "creates": "C-503: kataloggebundene Allergiecodes, Vorschlaege und Treffer fuer Nahrung und Supplements; Medikamentenkatalogluecke bleibt sichtbar.",
+      "depends_on": [
+        "498_allergy_product_matches",
+        "500_vitamin_e_form_evidence"
+      ]
+    },
+    {
+      "id": "503_allergy_catalog_data",
+      "path": "supabase/_pipeline/05_user_tabellen/503_allergy_catalog_data.sql",
+      "kind": "sql",
+      "creates": "C-503: belegte Milchzucker-Bruecke, Soja-Tag aus Nutrition-Spec und kanonische Bindung der drei dev-Allergien.",
+      "depends_on": [
+        "503_allergy_catalog_suggestions",
+        "498_global_allergies_daten"
+      ]
     }
   ]
 }

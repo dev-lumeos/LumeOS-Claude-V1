@@ -31,7 +31,7 @@ test('C-498: globale Allergien haben eigene Coach-Freigabe, Log und alle Magnesi
       'coachPermission', to_regclass('coach.allergy_permissions') IS NOT NULL,
       'log', to_regclass('coach.allergy_permission_change_log') IS NOT NULL,
       'matcher', to_regprocedure('public.supplier_product_allergy_matches(uuid)') IS NOT NULL,
-      'aliasNames', COALESCE((SELECT json_agg(alias_text ORDER BY alias_text) FROM public.allergen_aliases WHERE stoff_code = 'magnesium_stearate'), '[]'::json)
+      'aliasNames', COALESCE((SELECT json_agg(alias_text ORDER BY alias_text) FROM public.allergen_aliases WHERE stoff_code = 'supplements:magnesium_stearate'), '[]'::json)
     );
   `)
 
@@ -78,7 +78,7 @@ test('C-498: nur der Nutzer oder sein eigens freigegebener Coach sieht Allergien
     SET LOCAL ROLE authenticated;
     SELECT set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-000000000498', true);
     INSERT INTO public.user_allergies (user_id, stoff_code, stoff_text, art, schwere, quelle)
-    VALUES ('00000000-0000-0000-0000-000000000498', 'magnesium_stearate', 'Magnesium Stearate', 'supplement', 'allergie', 'test');
+    VALUES ('00000000-0000-0000-0000-000000000498', 'supplements:magnesium_stearate', 'Magnesium Stearate', 'supplement', 'allergie', 'test');
     INSERT INTO coach.allergy_permissions (coach_id, client_id, visibility)
     VALUES ('00000000-0000-0000-0000-000000000499', '00000000-0000-0000-0000-000000000498', 'full');
     INSERT INTO c498_result SELECT 'own', count(*)::integer FROM public.supplier_product_allergy_matches('00000000-0000-0000-0000-000000000498');
