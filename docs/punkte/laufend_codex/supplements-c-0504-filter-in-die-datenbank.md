@@ -103,7 +103,29 @@ wenn die Funktion steht.**
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+`[cmd]` 2026-09-16: Die Such-RPC hat jetzt zehn Parameter. Die vier neuen
+Parameter sind `p_allergien_ausblenden`, `p_meidestoffe`, `p_marken` und
+`p_nur_bewertet`; Kategorie und Form bleiben `EXISTS`-Produktfilter.
+
+`[cmd]` Meidestoffe kommen als `meidestoff_treffer text[]` zurueck und
+entfernen kein Produkt. Allergietreffer werden vor der Rueckgabe
+ausgeschlossen. Der C-504-Test belegt beides, mehrere Marken, bewertete
+Produkte und eine erfundene Marke mit 0 Treffern.
+
+`[cmd]` `user_display_preferences` war geeignet: PK
+`(user_id, preference_key)`, JSON-Objekt, Owner-RLS und authenticated-DML.
+Die neuen authenticated-only RPCs lesen/schreiben nur
+`supplements.products_filters` mit Marktstatus, Kategorie, Form, deduplizierten
+Marken und Allergieschalter. Die Sucheingabe wird nicht gespeichert.
+
+`[cmd]` Laufzeit auf der laufenden DB mit `dev@lumeos.app`, `whey`, Limit 100:
+43,6 ms ohne Allergieausschluss; 196,4 ms mit Ausschluss von 56.934
+Produkt-IDs. Der neue B-Tree auf gefaltetem Zutatenname plus Produkt-ID stuetzt
+den exakten C-503-Aliasjoin. `anon` hat kein Execute, `authenticated` schon.
+
+`[cmd]` Sicherung: `backup/schema/20260916165000_c504_c506_vorher.sql`.
+Vollkette `c506_final`: `SCHEMA VOLLSTAENDIG`, 937,1 s. C-495, G-454 und die
+neuen C-504-Vertragstests sind gruen.
 
 ## Abnahme
 

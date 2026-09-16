@@ -106,7 +106,24 @@ ist.**
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+`[cmd]` Der Katalog ist belegt: 498 Wirkstoffe, davon 498 mit
+`generic_names`, 457 mit `synonyms`; 453 von 453 Formulierungen zeigen auf
+einen Wirkstoff. `contraindications` und `precautions` bleiben unveraendert
+und werden hier nicht ausgewertet.
+
+`[cmd]` `allergy_catalog_suggestions('medikament', ...)` sucht nun in
+kanonischem Namen, Generika und Synonymen. `penicillin` liefert 3,
+`ibuprofen` 1 und `aspirin` 1 Katalogtreffer; `qzvwxjplk` liefert 0.
+Ibuprofen kommt als `medical:drug_10daca0041` mit 2 zugeordneten
+Formulierungen zurueck.
+
+`[cmd]` `medical:<wirkstoff-id>` ist durch
+`allergy_catalog_code_is_valid('medikament', ...)` und die bestehende
+Alias-Validierung abgesichert. Die Vorschlags- und Validierungsfunktionen
+sind `authenticated`-only; es gibt keine neue Freigabe fuer `anon` und keine
+Auswertung von Wechselwirkungen oder Kontraindikationen.
+
+`[cmd]` Sicherung und Vollkette wie C-504; C-506-Vertragstest gruen.
 
 ## Abnahme
 

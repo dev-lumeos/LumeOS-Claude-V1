@@ -98,3 +98,31 @@ Allergiepruefung ihn findet.**
     A6  KEINE Zuordnung raten -- was nicht trifft,
         bleibt Kandidat.
     A7  Sicherung, Vollkette, ALLE Waechter.
+
+## Bericht
+
+`[cmd]` `ist_wirkstoff` stammt eindeutig aus dem DSLD-Import: Facts werden
+mit `true`, die getrennte DSLD-Liste `Other Ingredients` mit `false` geladen.
+Im Bestand stehen 2.020.128 true und 980.854 false; die Spalte ist daher eine
+Quellenklassifikation, kein frei erfundener Stoffname.
+
+`[cmd]` `supplier_product_content_catalog` liefert jede Zeile als
+`naehrwert`, `wirkstoff`, `hilfsstoff` oder `kandidat`. Naehrwerte folgen nur
+den 39 C-496-Labelmappings; Hilfsstoffe folgen den DSLD-Other-Ingredients und
+fliessen nicht in die Naehrwertsicht ein. Nur aktive Facts mit exakt einem
+normalisierten Namen oder Alias aus dem vorhandenen 596/2.843-Katalog erhalten
+einen nachgezogenen `supplement_id`; Mehrdeutiges bleibt Kandidat.
+
+`[cmd]` Verknuepfte Inhaltszeilen: 302.293 vorher, 305.080 nachher. Die
+Pipeline hat 2.785 eindeutige, belegte Nachzuege geschrieben. Klassen danach:
+748.687 Naehrwerte, 171.422 Wirkstoffe, 945.316 Hilfsstoffe und 1.135.557
+Kandidaten. Die Kandidatenliste beginnt mit Pantothenic Acid (19.793 Produkte),
+Selenium (16.857), Chromium (16.381), Calories from Fat (14.782) und
+Cholesterol (13.761) — keine davon wurde geraten.
+
+`[cmd]` Gegenprobe in den Details: Dr.-Mercola-ID
+`7bd745e2-6822-42d5-bbd9-8e5820b7e36a` kennt 15/18 Zeilen; N.O. Black Powder
+kennt 23/54. Damit sind Hilfsstoffe sichtbar erkannt statt faelschlich als
+Wirkstoffe zu erscheinen; offene aktive Facts bleiben sichtbar Kandidat.
+
+`[cmd]` Sicherung und Vollkette wie C-504; C-505-Vertragstest gruen.
