@@ -9,7 +9,7 @@ kind_von: C-503
 entscheidung: null
 beruehrt:
   dateien:
-    - apps/web/src/app/v2/dashboard/insights-kacheln.tsx
+    - apps/web/src/app/v2/nutrition/insights-kacheln.tsx
 zahlen:
   gemessen: 2026-09-08
 ---
