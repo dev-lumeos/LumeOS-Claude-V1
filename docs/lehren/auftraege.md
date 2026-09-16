@@ -307,3 +307,61 @@ den Rechenweg lesen.**
 abgenommen, ohne zu fragen, woher `MUSCLE_STATE` kommt** ? **vier
 Auftraege lang.**
 
+## Der Auftrag beschreibt das ZIEL, nicht den Befund
+
+Tom, 2026-09-08:
+
+> ich bin es echt leid, immer und immer wieder deine auftraege
+> korrigieren zu muessen
+
+`[cmd]` **Zwei Belege vom selben Tag:**
+
+    G-454   Kategorie und Form gebaut
+            -- die Allergien vergessen, obwohl sie im
+               SELBEN Filterkasten stehen
+    C-496   nur die Makros gemappt
+            -- Wirkstoffe und Hilfsstoffe nicht genannt,
+               obwohl die Tafel sie zeigt
+
+`[read]` **Beide Male: gefragt *,,was ist kaputt?"* statt
+*,,was muss am Ende funktionieren?"*.**
+
+### Die Regel
+
+    Vor jedem Auftrag steht EIN Satz, was der Nutzer
+    danach tun koennen muss.
+
+`[read]` **Bei G-454 waere das gewesen:** *,,Tom filtert auf
+Protein, Kapsel, ohne seine Allergene, und es ist schnell."*
+
+`[read]` **Dann faellt auf, was fehlt** ? **die Allergien,
+mehrere Marken, die Speicherung.**
+
+`[read]` **Der Befund ist der ANLASS, nicht der Umfang.**
+
+## Die Grenze: Filter gehoeren in die Datenbank
+
+Tom, 2026-09-08:
+
+> die filter gehoeren in supabase rein und nicht in die ui,
+> die ui fuehrt nur aus
+
+`[cmd]` **Gemessen, was daraus wurde:** **`tab-produkte.tsx`
+filtert an drei Stellen selbst, die Oberflaeche holt Treffer
+und wirft sie weg.**
+
+`[read]` **Folge:** *,,er sucht sich dumm und daemlich fuer
+resultate, das ist alles viel zu lahm"*.
+
+### Die Regel
+
+    Jeder Filter ist ein PARAMETER der Datenbankfunktion.
+    Die Oberflaeche setzt ihn und zeigt das Ergebnis.
+    Sie filtert nie selbst.
+
+`[read]` **Und was der Nutzer einstellt, wird gespeichert** ?
+**sonst faengt er nach jedem `Strg-F5` von vorn an.**
+
+`[read]` **Das ist keine Auftragsfrage mehr** ? **es steht hier,
+damit es nicht von der Tageslaune abhaengt.**
+
