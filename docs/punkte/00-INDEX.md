@@ -5,10 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 232 |
+| `todos` | 233 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 467 |
-| **gesamt** | **700** |
+| **gesamt** | **702** |
 
 ## medical — 48
 
@@ -307,9 +308,9 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 92
+## supplements — 94
 
-### beauftragbar — 91
+### beauftragbar — 93
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -365,10 +366,12 @@
 | `C-485` | feature | hoch | [die DSLD-Datenbank einlesen](erledigt/supplements-c-0485-dsld-einlesen.md) | erledigt | — | C-495, C-496, C-499, G-452 |
 | `C-489` | fehler | mittel | [der Produktname ist englisch und heisst `name`](erledigt/supplements-c-0489-produktname-nach-name-en.md) | erledigt | — | — |
 | `C-495` | feature | hoch | [die Leseseite fuer 214.780 Produkte](erledigt/supplements-c-0495-die-leseseite-fuer-produkte.md) | erledigt | — | — |
-| `C-496` | feature | hoch | [die Naehrwerte auf unsere Makros und Mikros](erledigt/supplements-c-0496-naehrwerte-auf-unsere-makros.md) | erledigt | — | C-500 |
+| `C-496` | feature | hoch | [die Naehrwerte auf unsere Makros und Mikros](erledigt/supplements-c-0496-naehrwerte-auf-unsere-makros.md) | erledigt | — | C-500, C-505 |
 | `C-497` | feature | mittel | [Daumen hoch und runter fuer Supplementprodukte](erledigt/supplements-c-0497-daumen-fuer-produkte.md) | erledigt | — | — |
 | `C-499` | feature | mittel | [Off-Market-Produkte stilllegen](erledigt/supplements-c-0499-off-market-stilllegen.md) | erledigt | — | — |
 | `C-500` | feature | mittel | [die Vitamin-E-Form herausfinden](erledigt/supplements-c-0500-vitamin-e-form.md) | erledigt | — | — |
+| `C-504` | fehler | hoch | [die Filter gehoeren in die Datenbank](laufend_codex/supplements-c-0504-filter-in-die-datenbank.md) | laeuft (codex) | — | — |
+| `C-505` | befund | hoch | [die Mehrheit der Zutaten ist nicht verknuepft](todos/supplements-c-0505-zutaten-nicht-verknuepft.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -401,7 +404,7 @@
 | `G-437` | fehler | hoch | [tabs.tsx hat vierzehn Karten verloren](erledigt/supplements-g-0437-tabs-tsx-verlorene-karten.md) | erledigt | — | — |
 | `G-452` | feature | hoch | [der Produkte-Reiter](erledigt/supplements-g-0452-der-produkte-reiter.md) | erledigt | — | G-453 |
 | `G-453` | feature | hoch | [die Produkttafel](erledigt/supplements-g-0453-die-produkttafel.md) | erledigt | — | G-454 |
-| `G-454` | befund | mittel | [Suche und Filter schliessen sich aus](erledigt/supplements-g-0454-suche-und-filter.md) | erledigt | — | G-463 |
+| `G-454` | befund | mittel | [Suche und Filter schliessen sich aus](erledigt/supplements-g-0454-suche-und-filter.md) | erledigt | — | C-504, G-463 |
 | `G-463` | fehler | hoch | [die Suche deckelt bei 100, die Liste will 500](todos/supplements-g-0463-suche-deckelt-bei-100.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
