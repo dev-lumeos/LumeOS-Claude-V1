@@ -2192,6 +2192,16 @@
         "503_allergy_catalog_suggestions",
         "498_global_allergies_daten"
       ]
+    },
+    {
+      "id": "454_supplier_product_search_filters",
+      "path": "supabase/migrations/20260916084000_g454_supplier_product_search_filters.sql",
+      "kind": "sql",
+      "creates": "G-454: Produktsuche kann Kategorie ueber Inhaltszeilen und DSLD-Form gemeinsam mit der Trigrammsuche filtern.",
+      "depends_on": [
+        "499_deactivate_off_market_supplier_products",
+        "497_supplier_product_preferences"
+      ]
     }
   ]
 }
