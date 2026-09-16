@@ -495,7 +495,7 @@ export function FehlendeMessKacheln({ sessions }: { sessions: Fotosession[] }) {
           // — die Tabelle ist da und leer, das ist etwas anderes als
           // „gibt es nicht".
           <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
-            Noch keine Fotosession. Über „New session" wird die erste
+            Noch keine Fotosession. Über „New session“ wird die erste
             angelegt — die Bilder liegen im privaten Ablagefach
             <code> goals-progress-photos</code> und verlassen es nur
             über eine signierte Adresse.

@@ -526,7 +526,7 @@ export function ModalVorschlag({ onClose }: { onClose: () => void }) {
       </Stapel>
       <div className="dk-streifen-text" style={{ marginTop: 10 }}>
         Dieses Modal ist die Attrappe. Der ECHTE Schreibweg steht in der
-        Akte unter „Vorschlag senden" — er legt eine `pending_action` an.
+        Akte unter „Vorschlag senden“ — er legt eine `pending_action` an.
       </div>
       {V('athlete.jsx:340')}
     </Huelle>

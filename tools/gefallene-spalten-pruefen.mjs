@@ -102,13 +102,73 @@ function ohneKommentare(t) {
     .replace(/^[ \t]*\/\/.*$/gm, '')
 }
 
+// ══ G-460: GESUCHT WIRD DER ZUGRIFF, NICHT DAS WORT ═════════════════
+//
+// **Der Kopf dieser Datei sagt, worum es geht:** *„Ein `.select()` auf
+// eine fehlende Spalte laesst JEDE Zeile scheitern."*
+//
+// `[cmd]` **Gemessen 2026-09-16: der Waechter meldete ACHT Stellen,
+// und KEINE davon greift auf eine Spalte zu.**
+//
+//     such-wortschatz.ts    'ebene' ist ein deutsches WORT -- es
+//                           steht zwischen 'ebenbild' und 'ebenheit'
+//                           in einem 21.890-Woerter-Verzeichnis
+//     muskelbaum.ts         `ebene` ist ein REKURSIONSZAEHLER,
+//                           gerechnet aus `parent_id` -- genau das,
+//                           was E-81 wollte
+//     koerper/ebenen.ts     `ebene?: number` ist ein Feldtyp,
+//                           dokumentiert als `weg.length`
+//     recovery/tab-messwerte  liest den gerechneten Wert
+//     vier x `allergies`    kommen aus `food_preferences_read`,
+//                           das sie weiterhin liefert (aus
+//                           `public.user_allergies`, C-498)
+//
+// `[cmd]` **Gegengeprobt am Schirm:** die Muskelliste traegt 105
+// Zeilen mit Einrueckungen 0/14/28/42 — also `(ebene-1)*14` fuer die
+// Ebenen 1 bis 4 — und **0 NaN**. **Und die Vorlieben zeigen drei
+// Allergien**, obwohl die Spalte seit heute 07:05 weg ist.
+//
+// `[cmd]` **Kein einziges `.select()` im Code nennt eine der beiden
+// Spalten** (geprueft ueber alle Lesewege in `lib/koerper/`).
+//
+// `[read]` **Ein Waechter, der das Wort sucht, meldet jede
+// gleichnamige Eigenschaft** — und acht Falschmeldungen erziehen dazu,
+// ihn abzuschalten. **Das ist schaedlicher als keine Pruefung:** wer
+// die Meldung gewohnt ist, uebersieht die echte.
+//
+// `[read]` **Deshalb wird jetzt die SPALTENFORM gesucht:** der Name
+// in einer `.select(...)`-Liste, in `.eq/.neq/.in/.order/...` oder als
+// `->>`-Zugriff auf ein jsonb. **Das sind die Stellen, an denen eine
+// fehlende Spalte die Zeile scheitern laesst.**
+
+/**
+ * Formen, in denen ein Spaltenname eine SPALTE meint.
+ *
+ * `[read]` **Jede ist ein Zugriff auf die Datenbank** — eine
+ * gleichnamige Eigenschaft im gerechneten Objekt trifft keine davon.
+ */
+function spaltenzugriffe(name) {
+  const n = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  return [
+    // `.select('id,ebene,name')` — irgendwo in der Spaltenliste.
+    new RegExp(`\\.select\\(\\s*\`?['"\`][^'"\`]*(?<![A-Za-z0-9_])${n}(?![A-Za-z0-9_])`),
+    // `.eq('ebene', …)`, `.order('ebene')`, `.in('ebene', …)` …
+    new RegExp(`\\.(eq|neq|gt|gte|lt|lte|like|ilike|is|in|contains|order|filter|not)\\(\\s*['"\`]${n}['"\`]`),
+    // jsonb: `->>'ebene'` oder `->'ebene'`
+    new RegExp(`->>?\\s*['"\`]${n}['"\`]`),
+  ]
+}
+
 const funde = []
 for (const { spalte, datei } of gefallen) {
-  const rx = wort(spalte)
+  const formen = spaltenzugriffe(spalte)
   for (const rel of code) {
     const t = lies(rel)
-    if (!t || !rx.test(t)) continue
-    if (rx.test(ohneKommentare(t))) funde.push({ spalte, quelle: datei, wo: rel })
+    if (!t) continue
+    const rein = ohneKommentare(t)
+    if (formen.some(rx => rx.test(rein))) {
+      funde.push({ spalte, quelle: datei, wo: rel })
+    }
   }
 }
 

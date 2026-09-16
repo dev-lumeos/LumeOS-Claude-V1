@@ -70,6 +70,26 @@ const FELDER: Array<{ feld: Feld; label: string; farbe: string; einheit: string 
 function TrendGrafik({ tage, feld, farbe }: {
   tage: readonly TrendTag[]; feld: Feld; farbe: string
 }) {
+  // ══ G-461: DER HOOK STEHT VOR DEM FRUEHEN RETURN ══════════════════
+  //
+  // `[cmd]` **Er stand darunter, und der Lint fiel darauf:** *„React
+  // Hook `React.useId` is called conditionally"*
+  // (`react-hooks/rules-of-hooks`).
+  //
+  // `[cmd]` **Gefunden, weil zwei ANDERE Fehler ihn verdeckt hatten**
+  // — `next lint` meldet, was es findet, und die beiden unmaskierten
+  // Anfuehrungszeichen standen davor. **Nach ihrer Behebung stand er
+  // allein da** (gemessen 2026-09-16).
+  //
+  // `[read]` **Die Regel ist keine Formsache:** ein Hook nach einem
+  // frueheren `return` wird in manchen Anstrichen gerufen und in
+  // anderen nicht — React zaehlt sie der Reihe nach, und die
+  // Reihenfolge verschiebt sich. **Bei EINEM Hook faellt es nicht
+  // auf; beim zweiten bekommt er den Zustand des ersten.**
+  //
+  // `[read]` **Hochziehen kostet nichts** — `useId` liest keine der
+  // Groessen darunter.
+  const uid = React.useId().replace(/:/g, '')
   const werte = tage.map(t => t[feld])
   const belegt = werte.filter((w): w is number => w !== null)
   if (belegt.length < 2) {
@@ -94,7 +114,8 @@ function TrendGrafik({ tage, feld, farbe }: {
   const mittel = belegt.reduce((s, v) => s + v, 0) / belegt.length
   // `[read]` **`useId`, nicht `Math.random()`** — der Server
   // rendert vor, und eine Zufallszahl waere im Browser eine andere.
-  const uid = React.useId().replace(/:/g, '')
+  // `[cmd]` **G-461: der Aufruf steht jetzt oben**, vor dem fruehen
+  // `return` — die Begruendung dort.
 
   // Erster, mittlerer und letzter Tag — mehr passt auf 375 px nicht.
   const marken = n <= 2 ? [0, n - 1] : [0, Math.floor((n - 1) / 2), n - 1]

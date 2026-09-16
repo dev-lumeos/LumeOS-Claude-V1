@@ -100,7 +100,7 @@ export function ZyklusKarte({ d, substanzen }: {
           // `[read]` **Ein benannter Leerhinweis, keine Null** (E-72).
           <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
             Noch kein Zyklus. Die Tabelle <code>user_supplement_cycles</code> ist
-            seit C-456 da und leer — über „Zyklus starten" entsteht der erste.
+            seit C-456 da und leer — über „Zyklus starten“ entsteht der erste.
           </div>
         )
         : (
