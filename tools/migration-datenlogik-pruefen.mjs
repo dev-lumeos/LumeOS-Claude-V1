@@ -42,6 +42,15 @@ const structuralFunctionExceptions = [
     // Freigabeaenderungen; beim Migrationseinspielen wird kein Log erzeugt.
     requiredSql: 'INSERT INTO coach.allergy_permission_change_log',
   },
+  {
+    file: '20260916160500_c504_supplier_product_database_filters.sql',
+    functionName: 'supplements.supplier_product_filter_preferences_write',
+    command: 'INSERT',
+    // C-504 definiert den ownergebundenen RPC fuer eine einzelne
+    // Anzeigeeinstellung. Das INSERT liegt im Funktionskoerper, wird beim
+    // Einspielen nicht ausgefuehrt und schreibt weder Katalog- noch Seed-Daten.
+    requiredSql: 'INSERT INTO public.user_display_preferences',
+  },
 ]
 // Im Funktionskoerper zaehlt nur der Anfang einer ausfuehrbaren SQL-Anweisung.
 // `FOR UPDATE` sperrt, schreibt aber nicht; ebenso ist `ON DELETE` Teil einer

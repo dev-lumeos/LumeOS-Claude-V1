@@ -95,7 +95,7 @@ test('C-495: nur authenticated darf Such-, Detail- und Markenleseweg nutzen', ()
     SELECT json_build_object(
       'authenticated', (SELECT json_build_object('search', search_rows, 'detail', detail_rows, 'brands', brand_rows) FROM c495_access),
       'anon', json_build_object(
-        'search', has_function_privilege('anon', 'supplements.search_supplier_products(text,text,text,integer,text,text)', 'EXECUTE'),
+        'search', has_function_privilege('anon', 'supplements.search_supplier_products(text,text,text,integer,text,text,boolean,text[],text[],boolean)', 'EXECUTE'),
         'detail', has_function_privilege('anon', 'supplements.supplier_product_detail(uuid)', 'EXECUTE'),
         'brands', has_table_privilege('anon', 'supplements.supplier_product_brands', 'SELECT')
       )

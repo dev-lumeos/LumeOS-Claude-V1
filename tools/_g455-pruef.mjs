@@ -20,7 +20,12 @@ await s.waitForTimeout(2500)
 const m = await s.evaluate(() => ({
   kachel: !!document.querySelector('.v2-allergie-form'),
   zeilen: Array.from(document.querySelectorAll('.v2-allergie-zeile'))
-    .map(z => z.textContent.trim().replace(/\s+/g, ' ').slice(0, 70)),
+    .map(z => ({
+      stoff: z.querySelector('.v2-allergie-stoff')?.textContent.trim(),
+      // G-459/A8: die Reichweite je Zeile — ungekuerzt, denn 56.948
+      // ist genau die Zahl, an der ein PostgREST-Deckel auffiele.
+      reichweite: z.querySelector('.v2-allergie-reichweite')?.textContent.trim(),
+    })),
   leerhinweis: document.body.textContent.includes('LumeOS leitet keine ab'),
 }))
 if (FOTO) {

@@ -19,7 +19,7 @@ function one<T>(sql: string): T {
 function augmentedSearchExists() {
   return one<{ exists: boolean }>(`
     SELECT json_build_object(
-      'exists', to_regprocedure('supplements.search_supplier_products(text,text,text,integer,text,text)') IS NOT NULL
+      'exists', to_regprocedure('supplements.search_supplier_products(text,text,text,integer,text,text,boolean,text[],text[],boolean)') IS NOT NULL
     );
   `).exists
 }
@@ -79,8 +79,8 @@ test('G-454: nur authenticated darf den erweiterten Suchweg ausfuehren', () => {
 
   const result = one<{ anon: boolean; authenticated: boolean }>(`
     SELECT json_build_object(
-      'anon', has_function_privilege('anon', 'supplements.search_supplier_products(text,text,text,integer,text,text)', 'EXECUTE'),
-      'authenticated', has_function_privilege('authenticated', 'supplements.search_supplier_products(text,text,text,integer,text,text)', 'EXECUTE')
+      'anon', has_function_privilege('anon', 'supplements.search_supplier_products(text,text,text,integer,text,text,boolean,text[],text[],boolean)', 'EXECUTE'),
+      'authenticated', has_function_privilege('authenticated', 'supplements.search_supplier_products(text,text,text,integer,text,text,boolean,text[],text[],boolean)', 'EXECUTE')
     );
   `)
   assert.deepEqual(result, { anon: false, authenticated: true })

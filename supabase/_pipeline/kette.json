@@ -2202,6 +2202,46 @@
         "499_deactivate_off_market_supplier_products",
         "497_supplier_product_preferences"
       ]
+    },
+    {
+      "id": "504_supplier_product_database_filters",
+      "path": "supabase/migrations/20260916160500_c504_supplier_product_database_filters.sql",
+      "kind": "sql",
+      "creates": "C-504: Allergien, Meidestoffe, Mehrfachmarken und Bewertungen liegen im Produktsuch-RPC; dauerhafte Filter werden pro Nutzer gespeichert.",
+      "depends_on": [
+        "454_supplier_product_search_filters",
+        "503_allergy_catalog_suggestions"
+      ]
+    },
+    {
+      "id": "505_supplier_product_ingredient_catalog",
+      "path": "supabase/migrations/20260916162000_c505_supplier_product_ingredient_catalog.sql",
+      "kind": "sql",
+      "creates": "C-505: lesbare Klassifikation jeder DSLD-Zutat als Naehrwert, Wirkstoff, Hilfsstoff oder offener Kandidat.",
+      "depends_on": [
+        "496_supplier_product_nutrients",
+        "485_dsld_import"
+      ]
+    },
+    {
+      "id": "505_supplier_product_wirkstoff_links",
+      "path": "supabase/_pipeline/13_supplements/505_supplier_product_wirkstoff_links.sql",
+      "kind": "sql",
+      "creates": "C-505: exakte, eindeutige Katalognamen verknuepfen vorhandene DSLD-Wirkstoffzeilen; Hilfsstoffe und Mehrdeutiges bleiben unveraendert.",
+      "depends_on": [
+        "505_supplier_product_ingredient_catalog",
+        "496_supplier_product_nutrients_daten"
+      ]
+    },
+    {
+      "id": "506_medication_allergy_catalog",
+      "path": "supabase/migrations/20260916164000_c506_medication_allergy_catalog.sql",
+      "kind": "sql",
+      "creates": "C-506: Medikamentenallergien schlagen vorhandene Wirkstoffe samt Anzahl zugeordneter Formulierungen vor, ohne medizinische Interaktionsbewertung.",
+      "depends_on": [
+        "503_allergy_catalog_suggestions",
+        "145"
+      ]
     }
   ]
 }
