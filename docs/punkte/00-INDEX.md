@@ -5,9 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 236 |
-| `erledigt` | 462 |
-| **gesamt** | **698** |
+| `todos` | 234 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 463 |
+| **gesamt** | **699** |
 
 ## medical — 48
 
@@ -569,11 +570,9 @@
 | `G-407` | feature | hoch | [den Draft fertigbauen](erledigt/coach-g-0407-den-draft-fertigbauen.md) | erledigt | — | G-408, G-409 |
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
-| `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](todos/coach-g-0461-lint-anfuehrungszeichen.md) | offen | — | — |
+| `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](laufend_claudecode/coach-g-0461-lint-anfuehrungszeichen.md) | laeuft (claudecode) | — | — |
 
-## quer — 173
-
-### beauftragbar — 172
+## quer — 174
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -671,7 +670,7 @@
 | `C-498` | feature | hoch | [Allergien global, nicht in food_preferences](erledigt/quer-c-0498-allergien-global.md) | erledigt | — | C-502, C-503 |
 | `C-501` | feature | hoch | [Seed fuer die leeren Module](erledigt/quer-c-0501-seed-fuer-leere-module.md) | erledigt | — | — |
 | `C-502` | fehler | hoch | [die Allergene ohne Aliase treffen nichts](todos/quer-c-0502-allergene-ohne-aliase.md) | offen | — | — |
-| `C-503` | feature | hoch | [die Vorschlaege kommen aus den Katalogen](todos/quer-c-0503-keine-stoffliste.md) | offen | — | — |
+| `C-503` | feature | hoch | [die Vorschlaege kommen aus den Katalogen](erledigt/quer-c-0503-keine-stoffliste.md) | erledigt | — | G-462 |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -748,13 +747,9 @@
 | `G-451` | fehler | mittel | [der Testdatenlauf scheitert vor C-493](erledigt/quer-g-0451-testdatenlauf-scheitert-vorher.md) | erledigt | — | — |
 | `G-455` | feature | hoch | [Allergien in Settings, Filter in Produkten](erledigt/quer-g-0455-allergien-und-filter.md) | erledigt | — | G-459 |
 | `G-458` | fehler | hoch | [neun Migrationen schreiben Daten](erledigt/quer-g-0458-neun-migrationen-schreiben-daten.md) | erledigt | — | G-460, G-461 |
-| `G-460` | fehler | mittel | [vier Lesestellen auf die gefallene Spalte ebene](todos/quer-g-0460-vier-ebene-lesestellen.md) | offen | — | — |
-
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `G-459` | feature | mittel | [die Allergiekachel aufraeumen](todos/quer-g-0459-allergiekachel-aufraeumen.md) | offen | C-503 | — |
+| `G-459` | feature | mittel | [die Allergiekachel aufraeumen](todos/quer-g-0459-allergiekachel-aufraeumen.md) | offen | — | — |
+| `G-460` | fehler | mittel | [vier Lesestellen auf die gefallene Spalte ebene](laufend_claudecode/quer-g-0460-vier-ebene-lesestellen.md) | laeuft (claudecode) | — | — |
+| `G-462` | fehler | niedrig | [bedingtes React.useId](todos/quer-g-0462-bedingtes-useid.md) | offen | — | — |
 
 ## buddy — 1
 

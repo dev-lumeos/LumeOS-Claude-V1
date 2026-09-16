@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-15: 206 Funktionen, 462 Policies, 710 CHECKs, 18 Sichten.**
+`[cmd]` **Stand 2026-09-16: 211 Funktionen, 462 Policies, 710 CHECKs, 18 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -136,6 +136,8 @@ ob man sie rufen kann.**
 | nutrition | user_inventory_owner_guard |  | Funktion |
 | nutrition | user_inventory_set_state |  | Funktion |
 | nutrition | vitamin_a_iu_daily | p_user_id uuid, p_entry_date date | Funktion |
+| public | allergy_catalog_code_is_valid | p_art text, p_stoff_code text | Funktion |
+| public | allergy_catalog_suggestions | p_art text, p_query text, p_limit integer DEFAULT 20 | Funktion |
 | public | daitch_mokotoff | text | Funktion |
 | public | difference | text, text | Funktion |
 | public | dmetaphone | text | Funktion |
@@ -158,10 +160,10 @@ ob man sie rufen kann.**
 | public | handle_new_user |  | Funktion |
 | public | is_admin |  | Funktion |
 | public | koerperflaechen_touch |  | Funktion |
-| public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein | text, text | Funktion |
-| public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
+| public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer | Funktion |
+| public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
 | public | set_limit | real | Funktion |
 | public | show_limit |  | Funktion |
@@ -179,7 +181,10 @@ ob man sie rufen kann.**
 | public | text_soundex | text | Funktion |
 | public | touch_updated_at |  | Funktion |
 | public | touch_user_allergy_updated_at |  | Funktion |
+| public | user_allergy_catalog_matches | p_user_id uuid | Funktion |
 | public | user_allergy_codes | p_user_id uuid | Funktion |
+| public | validate_allergen_alias_catalog_code |  | Funktion |
+| public | validate_user_allergy_catalog_code |  | Funktion |
 | public | word_similarity | text, text | Funktion |
 | public | word_similarity_commutator_op | text, text | Funktion |
 | public | word_similarity_dist_commutator_op | text, text | Funktion |
