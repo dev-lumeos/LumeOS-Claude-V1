@@ -72,6 +72,14 @@ import { useFoodSuche, LEERE_LAGE }
 import { SlotsFormular } from './slots-formular'
 import { vorliebenSpeichern, type VorliebeEingabe } from './vorlieben-aktionen'
 import { daumenSpeichern } from './daumen-aktion'
+// ══ G-455: die Allergienpflege — ein Baustein, zwei Orte ═══════════
+//
+// `[read]` **Der TYP aus der serverfreien Datei, die KACHEL aus
+// `settings/`** — beide ohne Serverimport (A-30). `[cmd]` Die Kachel
+// bringt ihre eigene Serveraktion mit; dieser Reiter reicht nur die
+// Zeilen durch.
+import type { Allergie } from '../../../lib/allergien/allergie-lage'
+import { AllergienKachel } from '../settings/allergien-kachel'
 
 export type VorliebenDaten = {
   stand: VorliebenStand
@@ -86,6 +94,14 @@ export type VorliebenDaten = {
   presets: AusschlussPreset[]
   tags: TagDefinition[]
   ladefehler: string | null
+  /**
+   * G-455: die Allergien aus `public.user_allergies` (C-498).
+   *
+   * `[read]` **Dieselben Zeilen wie in Settings** — ein Baustein,
+   * zwei Orte. **Leer ist ein gueltiger Zustand**, kein Fehler.
+   */
+  allergien?: Allergie[]
+  allergienFehler?: string | null
 }
 
 /** Die acht Ernaehrungsformen der Vorlage (Zeile 215). */
@@ -1056,6 +1072,35 @@ export function VorliebenTab({ d }: { d: VorliebenDaten }) {
             </div>
           </Card>
         </div>
+      </div>
+
+      {/* ══ G-455: die Allergien, derselbe Baustein wie in Settings ══
+          **Tom:** *„dargestellt kann es ja trotzdem zusaetzlich in
+          foods/preferences bleiben und auch da editierbar."*
+
+          `[cmd]` **C-498 hat `food_preferences.allergies` entfernt**
+          (gemessen 2026-09-15: die Spalte gibt es nicht mehr) — **die
+          Daten liegen jetzt in `public.user_allergies`.**
+
+          `[read]` **Fuer den Nutzer aendert sich NICHTS an der
+          Allergenreihe darueber:** `[cmd]` `food_preferences_read`
+          liefert `allergies` weiterhin, jetzt aus der neuen Tabelle,
+          und `food_preferences_write` schreibt dorthin zurueck (beides
+          im Funktionsrumpf gemessen).
+
+          `[read]` **Was DIESE Kachel hinzufuegt, ist das, was die
+          Reihe oben nicht kann:** Art und Schwere. **Die Reihe kennt
+          nur Nahrungsmittelallergene und nur zwei Stufen; hier stehen
+          fuenf Arten und drei Schweren** — Medikamente eingeschlossen.
+
+          `[cmd]` **Beide Wege schreiben in dieselbe Tabelle und
+          vertragen sich:** `food_preferences_write` loescht nur
+          `art='nahrung' AND quelle='nutrition_preferences'`, eine hier
+          angelegte Zeile traegt `quelle='settings'` und ueberlebt. */}
+      <div style={{ marginTop: 16 }}>
+        <AllergienKachel allergien={d.allergien ?? []}
+                         fehler={d.allergienFehler ?? null}
+                         ort="preferences" />
       </div>
     </div>
   )

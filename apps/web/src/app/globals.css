@@ -1205,3 +1205,106 @@
 
 .v2-anmeldung-label { display: grid; gap: 4px; }
 .v2-anmeldung-hinweis { font-size: 12px; color: var(--pos); }
+
+/* ═══ G-455: die Allergienpflege ═══════════════════════════════════
+ *
+ * Tom: „dargestellt kann es ja trotzdem zusaetzlich in
+ * foods/preferences bleiben und auch da editierbar."
+ *
+ * [read] EIN Baustein, ZWEI Orte (Settings und Nutrition/Preferences)
+ * — deshalb stehen die Regeln in `globals.css` und nicht in einem
+ * Modul-Stylesheet. Ein `settings.css`, das nutrition mitladen muesste,
+ * waere die falsche Richtung.
+ *
+ * [cmd] Die Kontrastregel aus G-453 gilt weiter: Fliesstext traegt
+ * `--fg-muted` (gemessen 9,19:1), nicht `--fg-dim` (2,88:1). */
+
+.v2-allergie-liste {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+}
+
+/* [read] Eine Zeile ist ein Raster, keine Tabelle — der Stoff traegt
+ * die Breite, alles andere bleibt so schmal wie noetig. So liegen
+ * Name und Schwere in einem Blick beieinander (die Lehre aus G-453:
+ * nicht ueber die ganze Breite verstreuen). */
+.v2-allergie-zeile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 7px 0;
+  border-bottom: 1px solid color-mix(in oklch, var(--border) 45%, transparent);
+}
+.v2-allergie-zeile:last-child { border-bottom: none; }
+
+.v2-allergie-stoff {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg);
+  flex: 1 1 140px;
+  min-width: 120px;
+  overflow-wrap: anywhere;
+}
+
+.v2-allergie-art {
+  font-size: 10.5px;
+  color: var(--fg-muted);
+  min-width: 78px;
+}
+
+.v2-allergie-schwere {
+  font-size: 11px;
+  padding: 3px 6px;
+  max-width: 150px;
+}
+
+/* [read] Die Anlegezeile bricht um, statt zu schrumpfen — auf 375 px
+ * steht jedes Feld auf eigener Zeile, und das Eingabefeld behaelt
+ * seine Mindestbreite. */
+.v2-allergie-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* ═══ G-455: die zwei Filter in den Produkten ══════════════════════
+ *
+ * Tom: „Eine Nussallergie gilt ueberall. ‚Keine Farbstoffe' ist eine
+ * Haltung, keine Diagnose."
+ *
+ * [read] Die HAERTE ist der Unterschied, und sie muss man sehen:
+ * der harte Filter nimmt Zeilen weg (dafuer braucht es keine Farbe),
+ * der weiche markiert sie — und genau die Markierung steht hier. */
+
+/* [read] Eine markierte Zeile wird NICHT rot eingefaerbt — sie ist
+ * nicht gefaehrlich, nur unerwuenscht. Ein zurueckhaltender Streifen
+ * links sagt „sieh hin", ohne zu warnen. */
+.v2-tbl tbody tr.v2-prod-gemieden td:first-child {
+  box-shadow: inset 3px 0 0 color-mix(in oklch, var(--warn) 65%, transparent);
+}
+
+.v2-prod-meide-marke {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 8px;
+  font-size: 9.5px;
+  /* [cmd] Gegen den Tafelhintergrund gemischt, damit die Marke lesbar
+   * bleibt — gemessen, siehe Bericht. */
+  color: color-mix(in oklch, var(--warn) 55%, var(--fg));
+}
+
+/* [read] Der Hinweis, wieviel der harte Filter entfernt hat. Er steht
+ * IMMER da, wenn der Filter laeuft — auch bei null Treffern, denn
+ * „nichts entfernt" ist eine Auskunft (E-72). */
+.v2-prod-filterhinweis {
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  margin-top: 6px;
+}

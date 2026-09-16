@@ -19,6 +19,9 @@ import { EMPTY_PROFILE, type StoredProfile } from '../../../lib/profile/profile-
 import { ladeSlots } from '../../../lib/nutrition/slots-lesen'
 import type { MahlzeitSlot } from '../../../lib/nutrition/slots-lage'
 import { ProfilFormular } from './formular'
+// G-455: die Allergienpflege — derselbe Baustein wie in Preferences.
+import { ladeAllergien } from '../../../lib/allergien/allergie-read'
+import { AllergienKachel } from './allergien-kachel'
 
 export const metadata: Metadata = {
   title: 'Einstellungen · LumeOS',
@@ -45,5 +48,25 @@ export default async function V2SettingsPage() {
     slots = []
   }
 
-  return <ProfilFormular start={profil} ladefehler={fehler} slots={slots} />
+  // ══ G-455: die Allergien ═══════════════════════════════════════
+  //
+  // `[read]` **Eigener Abfangblock** — faellt der Leseweg aus, bleibt
+  // das Profilformular nutzbar. Dieselbe Linie wie bei den Slots.
+  //
+  // `[cmd]` **C-498 hat `public.user_allergies` gebaut** (gemessen
+  // 2026-09-15: 2 Zeilen, vier RLS-Policies auf `auth.uid()`).
+  const allergien = await ladeAllergien()
+
+  return (
+    <>
+      <ProfilFormular start={profil} ladefehler={fehler} slots={slots} />
+      {/* `[read]` **Unter dem Profil, nicht darin** — das Formular
+          gehoert einem anderen Auftrag, und die Allergien haben einen
+          eigenen Schreibweg (Serveraktion statt Formularabsendung). */}
+      <div style={{ marginTop: 16 }}>
+        <AllergienKachel allergien={allergien.allergien}
+                         fehler={allergien.fehler} ort="settings" />
+      </div>
+    </>
+  )
 }

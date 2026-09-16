@@ -154,6 +154,36 @@ export type ProduktListe = {
   gesamt: number
   weg: Suchweg
   fehler: string | null
+  /**
+   * G-455: wie viele Zeilen der harte Allergiefilter entfernt hat.
+   *
+   * `[read]` **Die Zahl gehoert auf den Schirm** — wer nicht sieht,
+   * dass gefiltert wurde, haelt eine kurze Liste fuer den ganzen
+   * Bestand. **Auch die Null ist eine Auskunft** (E-72).
+   */
+  hartEntfernt?: number
+  /**
+   * G-455: ist `gesamt` genau?
+   *
+   * `[cmd]` **Bei mehr als 150 ausgeschlossenen Produkten filtert die
+   * Datenbank nicht mehr mit** (die Adresse waere zu lang, G-64) —
+   * dann ist `gesamt` eine OBERGRENZE. `[read]` **Eine Zahl, die zu
+   * gross ist, muss sich als solche zeigen.**
+   */
+  gesamtUnscharf?: boolean
+  /**
+   * G-455: wie viele Produkte insgesamt ein Allergen enthalten.
+   *
+   * `[read]` **Die Route ergaenzt sie**, nicht dieser Leseweg — sie
+   * haengt an der Sitzung, nicht an der Suche. `[cmd]` **`0` ist eine
+   * echte Auskunft:** die Trefferfunktion braucht einen Alias oder
+   * einen exakt gleichen Zutatnamen.
+   */
+  allergieProdukte?: number
+  /** G-455: lief der Filter, oder ist er abgeschaltet? */
+  allergienAn?: boolean
+  /** G-455: ein Fehler beim Lesen der Allergien — NICHT verschwiegen. */
+  allergieFehler?: string | null
 }
 
 /** Eine Zeile des Etiketts. */
@@ -272,17 +302,49 @@ function zeileAus(r: Record<string, unknown>): ProduktZeile | null {
  *                  Kategorie tragen. `null` heisst alle.
  * @param form     G-453: die Darreichungsform, MIT E-Code
  *                 (`Capsule [E0159]`) — die Spalte traegt ihn.
+ *
+ * ══ G-455: MEHRERE MARKEN ═══════════════════════════════════════════
+ *
+ * **Tom, G-453:** *„marken muessen noch besser geloest werden, dass
+ * ein user seine filtermasken mit marken setzen kann und nicht nur
+ * eine marke waehlen."*
+ *
+ * `[cmd]` **`marke` ist jetzt eine LISTE, ODER-verknuepft.**
+ * `[cmd]` **Gemessen 2026-09-15: `search_supplier_products` nimmt
+ * weiterhin `p_marke text`** — EINE Marke. **Also kann die Smartsuche
+ * mehrere Marken nicht**, und der Tabellenweg uebernimmt (`.in()`).
+ *
+ * `[read]` **Bei genau EINER Marke bleibt die Smartsuche zustaendig**
+ * — sonst verlöre man die Fehlertoleranz fuer den haeufigen Fall.
  */
+/**
+ * Wie viele Ausschluesse die Datenbank noch mitfiltern kann.
+ *
+ *  **G-64 hat gemessen, dass  um rund 200 Ids mit
+ * *,,URI too long"* kippt** — und die Bibliothek reicht das als LEERE
+ * Liste weiter. **150 ist der Abstand dazu.**
+ */
+const HART_GRENZE = 150
+
 export async function sucheProdukte(
   frage: string,
-  marke: string | null = null,
+  marken: readonly string[] = [],
   status: string | null = 'On Market',
   seite = 0,
   kategorie: string | null = null,
   form: string | null = null,
+  /**
+   * G-455: die Produkt-Ids, die wegen einer Allergie HART ausfallen.
+   *
+   * `[read]` **Sie werden ABGEZOGEN, nicht markiert** — eine
+   * Nussallergie gilt ueberall (Toms Entscheidung).
+   */
+  harteIds: readonly string[] = [],
 ): Promise<ProduktListe> {
   const c = createSessionClient().schema('supplements')
   const q = frage.trim()
+  // `[read]` **Eine Marke: der Smartweg kann es. Mehrere: nicht.**
+  const marke = marken.length === 1 ? marken[0] : null
 
   // ── Der Weg aus C-495 ────────────────────────────────────────────
   //
@@ -307,7 +369,10 @@ export async function sucheProdukte(
   // kein `OFFSET`. `[read]` **Wer nachlaedt, bekommt den Tabellenweg**;
   // bei einer Aehnlichkeitssuche ist das kein Verlust, denn `p_limit`
   // deckelt ohnehin nach Rang.
-  if (q && !kategorie && !form && seite === 0) {
+  //
+  // `[cmd]` **G-455: und nur bei HOECHSTENS EINER Marke** — die
+  // Funktion nimmt `p_marke text`, kein Array (gemessen 2026-09-15).
+  if (q && !kategorie && !form && seite === 0 && marken.length <= 1) {
     try {
       const { data, error } = await c.rpc('search_supplier_products', {
         p_query: q,
@@ -316,9 +381,27 @@ export async function sucheProdukte(
         p_limit: SUCH_GRENZE,
       })
       if (!error && Array.isArray(data)) {
-        const zeilen = (data as Array<Record<string, unknown>>)
+        const roh = (data as Array<Record<string, unknown>>)
           .flatMap(r => zeileAus(r) ?? [])
-        return { zeilen, gesamt: zeilen.length, weg: 'smart', fehler: null }
+        // ══ G-455: der harte Filter gilt AUCH hier ════════════════
+        //
+        // `[cmd]` **`search_supplier_products` kennt die Allergien
+        // nicht** — sie nimmt vier Argumente, keine Ausschlussliste.
+        // `[read]` **Also wird nach dem Lesen abgezogen.**
+        //
+        // `[read]` **Das ist hier VERTRETBAR, anders als beim
+        // Kategoriefilter** (G-133/G-453): die Funktion liefert
+        // hoechstens `SUCH_GRENZE` Zeilen, es gibt kein Nachladen, und
+        // `gesamt` ist die Laenge der gezeigten Liste. **Es entsteht
+        // also keine gelogene Gesamtzahl und keine zweite Seite mit
+        // ungefilterten Zeilen.**
+        const zeilen = harteIds.length > 0
+          ? roh.filter(z => !harteIds.includes(z.id))
+          : roh
+        return {
+          zeilen, gesamt: zeilen.length, weg: 'smart', fehler: null,
+          hartEntfernt: roh.length - zeilen.length,
+        }
       }
     } catch {
       // `[read]` **Bewusst stumm weiter zum Rueckfall** — der
@@ -358,7 +441,29 @@ export async function sucheProdukte(
           .eq('product_contents.ingredient_category', kategorie)
       : c.from('supplier_products').select(spalten, { count: 'exact' })
     if (status) f = f.eq('market_status', status)
-    if (marke) f = f.eq('marke', marke)
+    // ══ G-455: MEHRERE MARKEN, ODER-verknuepft ═══════════════════
+    //
+    // **Tom:** *„dass ein user seine filtermasken mit marken setzen
+    // kann und nicht nur eine marke waehlen."*
+    //
+    // `[read]` **`.in()` statt `.eq()`** — und es filtert in der
+    // DATENBANK, also stimmt `count` auch bei drei Marken.
+    if (marken.length === 1) f = f.eq('marke', marken[0])
+    else if (marken.length > 1) f = f.in('marke', [...marken])
+    // ══ G-455: der harte Allergiefilter ═════════════════════════
+    //
+    // `[read]` **In der Datenbank abgezogen, nicht auf der Seite** —
+    // die Lehre aus G-133: clientseitig blieben die Ausgefilterten
+    // beim Nachladen stehen, und `gesamt` waere gelogen.
+    //
+    // `[cmd]` **`not in` vertraegt keine beliebig lange Liste** — die
+    // Adresse waere sonst zu lang (G-64: `.in()` kippt um 200 Ids mit
+    // *„URI too long"*, und die Bibliothek meldet das als LEERE
+    // Liste). **Deshalb gedeckelt, und der Rest wird nach dem Lesen
+    // abgezogen; die Oberflaeche sagt, wenn das passiert.**
+    if (harteIds.length > 0 && harteIds.length <= HART_GRENZE) {
+      f = f.not('id', 'in', `(${harteIds.join(',')})`)
+    }
     // `[cmd]` **G-453: die Form kommt MIT E-Code** — die Spalte traegt
     // `Capsule [E0159]`, und ein Vergleich gegen `Capsule` traefe
     // nichts. `[read]` **Ohne Code steht sie nur auf dem Schirm**
@@ -386,9 +491,26 @@ export async function sucheProdukte(
     if (error) {
       return { zeilen: [], gesamt: 0, weg: 'einfach', fehler: error.message }
     }
-    const zeilen = (Array.isArray(data) ? data as Array<Record<string, unknown>> : [])
+    const roh = (Array.isArray(data) ? data as Array<Record<string, unknown>> : [])
       .flatMap(r => zeileAus(r) ?? [])
-    return { zeilen, gesamt: count ?? zeilen.length, weg: 'einfach', fehler: null }
+    // `[read]` **Nur der Rest oberhalb der Deckelung** — bis
+    // `HART_GRENZE` hat die Datenbank schon gefiltert, und `count`
+    // stimmt dann. `[cmd]` **Darueber wird nachgezogen, und `gesamt`
+    // traegt die Unschaerfe**: die Oberflaeche sagt es.
+    const zeilen = harteIds.length > HART_GRENZE
+      ? roh.filter(z => !harteIds.includes(z.id))
+      : roh
+    return {
+      zeilen,
+      gesamt: count ?? zeilen.length,
+      weg: 'einfach',
+      fehler: null,
+      hartEntfernt: roh.length - zeilen.length,
+      // `[read]` **Die Oberflaeche muss wissen, ob `gesamt` genau ist**
+      // — bei mehr als `HART_GRENZE` Ausschluessen ist es eine
+      // Obergrenze, keine Zahl.
+      gesamtUnscharf: harteIds.length > HART_GRENZE,
+    }
   } catch (e) {
     return {
       zeilen: [], gesamt: 0, weg: 'einfach',

@@ -262,7 +262,13 @@ test('A1: die Marke hat BEIDES — Eingabefeld und Pulldown', () => {
   assert.match(q, /aria-label="Marke auswählen"/, 'Das Pulldown fehlt.')
   // `[cmd]` **Das Pulldown speist sich aus `MARKEN_PULLDOWN`, NICHT
   // aus `marken`** — letzteres waeren wieder alle 4.907.
-  assert.match(q, /\{MARKEN_PULLDOWN\.map\(m => <option/,
+  // `[cmd]` **G-455: das Pulldown filtert die schon gewaehlten
+  // heraus** — es FUEGT HINZU, statt zu ersetzen. `[read]` Die Zusage
+  // bleibt dieselbe: es fuehrt `MARKEN_PULLDOWN`, nicht alle 4.907.
+  // `[read]` **Ueber Zeilenumbrueche hinweg** — der Ausdruck steht
+  // seit G-455 dreizeilig da. `[cmd]` **`[\s\S]` statt `.`**, weil
+  // `.` kein `\n` trifft.
+  assert.match(q, /MARKEN_PULLDOWN[\s\S]{0,60}\.filter\([\s\S]{0,60}\.map\(m => <option/,
     'Das Pulldown fuehrt wieder die ganze Markenliste — genau das '
     + 'Scrollen, gegen das Punkt 1 gebaut wurde.')
   assert.doesNotMatch(q, /\{marken\.map\(m => <option/,
@@ -379,12 +385,47 @@ test('A4: der Kategoriefilter geht an die Datenbank, nicht an die geladene Seite
   // `[read]` **Und beide stehen im Schluessel, gegen den der Effekt
   // laeuft** — ein Filter, der keine neue Abfrage ausloest, ist ein
   // Regler ohne Wirkung (C-426).
-  assert.match(q, /\[frage, marke, status, seite, kategorie, form\]/,
-    'Ein Kategorie- oder Formwechsel loest keine neue Abfrage aus.')
+  // `[cmd]` **G-455: `gewaehlteMarken` und `allergienAn` kamen dazu.**
+  // `[read]` **`marken` heisst seit G-453 die Liste der VERFUEGBAREN
+  // Marken** — die AUSWAHL heisst `gewaehlteMarken`, damit nicht zwei
+  // Listen einen Namen teilen.
+  assert.match(q,
+    /\[frage, gewaehlteMarken, status, seite, kategorie, form, allergienAn\]/,
+    'Ein Kategorie-, Form- oder Markenwechsel loest keine neue Abfrage aus.')
   // `[read]` **Ein Filterwechsel faengt das Fenster neu an** — sonst
   // haette man 1.500 Zeilen geladen und saehe die ersten 500 einer
   // ganz anderen Menge.
-  assert.match(q, /setSeite\(0\) \}, \[frage, marke, status, kategorie, form\]/,
+  // ══ DIE SACHE, NICHT DIE ZEILENFORM ══════════════════════════════
+  //
+  // `[cmd]` **Hier stand die Abhaengigkeitsliste woertlich** — und sie
+  // fiel, als G-455 sie durch einen abgeleiteten Schluessel ersetzte.
+  //
+  // `[cmd]` **Der Grund war ein FEHLER, den diese Liste verursacht
+  // hat:** ein Array als Abhaengigkeit ist bei jedem Anstrich ein
+  // neues Objekt, der Effekt lief endlos und brach seine eigene
+  // Anfrage ab (gemessen 2026-09-15).
+  //
+  // `[read]` **Die Zusage ist *„ein Filterwechsel setzt das Fenster
+  // zurueck"*, nicht *„die Liste sieht so aus"*.** **Geprueft wird
+  // deshalb, dass ein Schluessel aus ALLEN Filtern gebildet wird und
+  // der Effekt an ihm haengt.**
+  assert.match(q, /const filterSchluessel = \[/,
+    'Der Filterschluessel fehlt.')
+  // `[read]` **Der Block wird herausgeschnitten und darin gesucht** —
+  // ein `RegExp` mit `{0,260}` ueber Zeilen hinweg ist schwerer zu
+  // lesen als zwei `indexOf`.
+  // `[cmd]` **Bis `].join`, nicht bis zur ersten `]`** — die erste
+  // gehoert zum Spread `[...gewaehlteMarken]`, und der Block waere
+  // nach zwei Eintraegen zu Ende.
+  const blockVon = q.indexOf('const filterSchluessel = [')
+  const block = q.slice(blockVon, q.indexOf('].join', blockVon))
+  for (const teil of ['frage', 'gewaehlteMarken', 'status', 'kategorie',
+    'form', 'allergienAn']) {
+    assert.ok(block.includes(teil),
+      `\`${teil}\` geht nicht in den Filterschluessel ein — ein Wechsel `
+      + 'setzt das Fenster dann nicht zurueck.')
+  }
+  assert.match(q, /setSeite\(0\) \}, \[filterSchluessel\]\)/,
     'Ein Filterwechsel setzt das Fenster nicht zurueck — dann stuenden '
     + 'nachgeladene Zeilen einer anderen Filtermenge in der Liste.')
 })

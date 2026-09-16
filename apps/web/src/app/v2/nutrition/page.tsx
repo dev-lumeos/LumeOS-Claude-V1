@@ -51,6 +51,8 @@ import type { MahlzeitSlot } from '../../../lib/nutrition/slots-lage'
 // im Planner, kein zweiter Wortlaut.
 import { rasterZeilen, SLOTS, type Slot } from '../../../lib/nutrition/plan-model'
 import type { VorliebenDaten } from './tab-vorlieben'
+// G-455: die Allergien (C-498) -- derselbe Leseweg wie in Settings.
+import { ladeAllergien } from '../../../lib/allergien/allergie-read'
 // G-97: der Wochenplan aus den C-150-Tabellen.
 import {
   ladePlan, ladePlanLogs, ladeCoachFreigabe, ladeEinkaufslistenZahl,
@@ -328,15 +330,27 @@ export default async function V2NutritionPage({
   if (tab === 'prefs') {
     try {
       const userId = await angemeldeteNutzerin()
-      const [stand, kategorien, tags, presets, slots] = await Promise.all([
+      const [stand, kategorien, tags, presets, slots, allergien] = await Promise.all([
         ladeVorlieben(userId),
         ladeKategorien(),
         ladeTags(),
         ladePresets(),
         // G-332: die Mahlzeiten-Slots (C-392).
         ladeSlots(),
+        // ══ G-455: die Allergien aus `public.user_allergies` ═══════
+        //
+        // **Tom:** *„dargestellt kann es ja trotzdem zusaetzlich in
+        // foods/preferences bleiben und auch da editierbar."*
+        //
+        // `[read]` **Dieselben Zeilen wie in Settings** — ein
+        // Baustein, zwei Orte (G-332: *„Ein Formular, zwei Orte"*).
+        ladeAllergien(),
       ])
-      vorlieben = { stand, kategorien, tags, presets, slots, ladefehler: null }
+      vorlieben = {
+        stand, kategorien, tags, presets, slots, ladefehler: null,
+        allergien: allergien.allergien,
+        allergienFehler: allergien.fehler,
+      }
     } catch (e) {
       // Ohne Sitzung ist der Leerzustand richtig, kein Fehlerkasten:
       // „noch nichts eingestellt" ist ein gueltiger Zustand.

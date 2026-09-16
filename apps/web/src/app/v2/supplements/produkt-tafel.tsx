@@ -61,6 +61,8 @@ import * as React from 'react'
 import { Pill, Icon } from '@lumeos/ui'
 
 import type { ProduktSatz } from '../../../lib/supplements/produkte-read'
+// G-455: der weiche Meidestoff-Abgleich — serverfreie Rechnung (A-30).
+import { meideTreffer } from '../../../lib/allergien/allergie-lage'
 import {
   etikettBuendel, mengeText, bekanntZaehlen, portionText, formLabel,
   type EtikettZeile,
@@ -179,11 +181,38 @@ function Buendel(
   )
 }
 
-export function ProduktTafel({ satz }: { satz: ProduktSatz }) {
+export function ProduktTafel({ satz, meidestoffe = [] }: {
+  satz: ProduktSatz
+  /**
+   * G-455: die Meidestoffe — der WEICHE Filter.
+   *
+   * **Tom:** *„MEIDESTOFFE … WEICH: Produkt wird markiert. ‚Keine
+   * Farbstoffe' ist eine Haltung, keine Diagnose."*
+   *
+   * ══ WARUM DIE MARKE IN DER TAFEL STEHT, NICHT IN DER LISTE ═══════
+   *
+   * `[cmd]` **Gemessen 2026-09-15:** eine Abfrage *„welche Produkte
+   * enthalten <Stoff>"* kostet **291 ms** (`DISTINCT product_id` ueber
+   * `product_contents`, `LIKE '%lactose%'`). **Bei drei Meidestoffen
+   * und jedem Tastendruck waere das knapp eine Sekunde extra** — und
+   * der harte Allergiefilter laeuft daneben schon.
+   *
+   * `[read]` **Die Tafel hat die Zutaten ohnehin** — dort kostet die
+   * Pruefung nichts. **Und sie ist der Ort, an dem die Frage
+   * aufkommt:** wer wissen will, ob etwas drin ist, macht das Produkt
+   * auf.
+   */
+  meidestoffe?: string[]
+}) {
   const buendel = React.useMemo(
     () => etikettBuendel(satz.inhalt), [satz.inhalt])
   const { bekannt, gesamt } = React.useMemo(
     () => bekanntZaehlen(satz.inhalt), [satz.inhalt])
+
+  // G-455: trifft ein Meidestoff eine der Zutaten?
+  const gemieden = React.useMemo(
+    () => meideTreffer(satz.inhalt.map(z => z.ingredient_name), meidestoffe),
+    [satz.inhalt, meidestoffe])
 
   return (
     <div className="v2-supp-prod-tafel">
@@ -196,6 +225,29 @@ export function ProduktTafel({ satz }: { satz: ProduktSatz }) {
           {/* `[cmd]` **G-453/4: ohne E-Code** — Tom: *„der E-Code
               (E0159 etc.) gehoert NICHT in die Anzeige."* */}
           {satz.produktform && <Pill>{formLabel(satz.produktform)}</Pill>}
+          {/* ══ G-455: der WEICHE Filter markiert ═══════════════════
+              **Tom:** *„MEIDESTOFFE … WEICH: Produkt wird markiert."*
+
+              `[read]` **Eine Marke, kein Verschwinden** — und sie
+              nennt die Zutat, die getroffen hat. **„Enthaelt etwas,
+              das du meidest" ohne das Wort waere eine Behauptung, der
+              man nicht nachgehen kann.**
+
+              `[read]` **`warn`, nicht `neg`** — es ist keine Gefahr,
+              nur unerwuenscht. Die Farbordnung aus G-196 gilt. */}
+          {/* `[cmd]` **`Pill` nimmt kein `title`** (`packages/ui`,
+              `PillProps`) — und das Paket gehoert allen Apps.
+              `[read]` **Also ein `<span>` darum**, statt die
+              Schnittstelle fuer einen Reiter zu erweitern. */}
+          {gemieden && (
+            <span title={`„${gemieden}" steht auf deiner Meideliste — `
+              + 'markiert, nicht entfernt.'}>
+              <Pill variant="warn">
+                <Icon name="alert" className="v2-ic v2-ic-sm" />
+                Meidestoff: {gemieden}
+              </Pill>
+            </span>
+          )}
         </div>
       </div>
 

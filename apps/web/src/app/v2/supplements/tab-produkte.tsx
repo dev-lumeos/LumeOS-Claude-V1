@@ -76,6 +76,69 @@ import {
 } from '../../../lib/supplements/produkt-etikett'
 // G-453: die strukturierte Tafel nach Medical-Vorbild.
 import { ProduktTafel } from './produkt-tafel'
+// ══ G-455: der Daumen je Produkt ═══════════════════════════════════
+//
+// `[read]` **Die Rechnung serverfrei, der Schreibweg als
+// Serveraktion** — dieselbe Teilung wie in nutrition (G-67) und
+// dieselbe A-30-Grenze wie ueberall in diesem Reiter.
+import {
+  naechsterProduktDaumen, nachDaumen, type Daumen,
+} from '../../../lib/supplements/produkt-daumen-lage'
+import { produktDaumenSpeichern } from './daumen-aktion'
+
+/**
+ * Zwei Knoepfe, drei Zustaende — die Bauform aus `nutrition/daumen.tsx`.
+ *
+ * `[cmd]` **Dieselben Zeichen wie dort:** `check` und `x`, gruen bzw.
+ * rot. **`packages/ui` fuehrt kein `thumb_up`/`thumb_down`**, und das
+ * Vorgaengerrepo benutzt genau diese beiden (G-67).
+ *
+ * `[read]` **KEINE Sicherheitsabfrage beim Abwerten** — anders als bei
+ * den Lebensmitteln. `[cmd]` **Dort verschwindet die Zeile aus der
+ * Liste**, ein Fehlklick ist also nicht mehr zu finden. **Hier bleibt
+ * das Produkt stehen und rutscht nur nach unten** — ein zweiter Klick
+ * hebt auf.
+ */
+function ProduktDaumen({ zustand, name, onKlick }: {
+  zustand: Daumen
+  name: string
+  onKlick: (richtung: 'liked' | 'disliked') => void
+}) {
+  const knopf = (richtung: 'liked' | 'disliked') => {
+    const aktiv = zustand === richtung
+    const farbe = richtung === 'liked' ? 'var(--pos)' : 'var(--neg)'
+    return (
+      <button
+        type="button"
+        aria-pressed={aktiv}
+        aria-label={richtung === 'liked'
+          ? `${name} mag ich${aktiv ? ' — Bewertung aufheben' : ''}`
+          : `${name} mag ich nicht${aktiv ? ' — Bewertung aufheben' : ''}`}
+        title={richtung === 'liked' ? 'Mag ich' : 'Mag ich nicht'}
+        onClick={e => { e.stopPropagation(); e.preventDefault(); onKlick(richtung) }}
+        style={{
+          width: 22, height: 22, padding: 0,
+          display: 'grid', placeItems: 'center',
+          borderRadius: 6, cursor: 'pointer',
+          background: aktiv
+            ? `color-mix(in oklch, ${farbe} 16%, transparent)` : 'transparent',
+          border: `1px solid ${aktiv ? farbe : 'var(--border)'}`,
+          // `[read]` **`--fg-muted`, nicht `--fg-dim`** — die
+          // Kontrastmessung aus G-453 gilt weiter (9,19:1 gegen 2,88:1).
+          color: aktiv ? farbe : 'var(--fg-muted)',
+        }}
+      >
+        <Icon name={richtung === 'liked' ? 'check' : 'x'}
+              className="v2-ic v2-ic-sm" />
+      </button>
+    )
+  }
+  return (
+    <span style={{ display: 'inline-flex', gap: 4 }}>
+      {knopf('liked')}{knopf('disliked')}
+    </span>
+  )
+}
 
 /**
  * Der Marktstatus, den der Reiter beim Oeffnen zeigt.
@@ -211,13 +274,42 @@ function MarkenFeld(
 
 export function SuppProdukte() {
   const [frage, setFrage] = React.useState('')
-  const [marke, setMarke] = React.useState<string | null>(null)
+  // ══ G-455: MEHRERE MARKEN ═══════════════════════════════════════
+  //
+  // **Tom (G-453):** *„marken muessen noch besser geloest werden, dass
+  // ein user seine filtermasken mit marken setzen kann und nicht nur
+  // eine marke waehlen."*
+  //
+  // `[cmd]` **Hier stand `useState<string | null>`.** `[read]` **Jetzt
+  // eine Liste, ODER-verknuepft** — und der Leseweg filtert damit in
+  // der DATENBANK (`.in()`), nicht auf der geladenen Seite.
+  // `[read]` **`gewaehlteMarken`, nicht `marken`** — letzteres ist
+  // seit G-453 die Liste der VERFUEGBAREN Marken (4.907 aus C-495).
+  // **Zwei Listen mit einem Namen waeren die naechste Falle.**
+  const [gewaehlteMarken, setGewaehlteMarken] = React.useState<string[]>([])
+
+  /** Eine Marke dazu oder weg — derselbe Knopf in beide Richtungen. */
+  const markeSchalten = React.useCallback((m: string | null) => {
+    if (m === null) { setGewaehlteMarken([]); return }
+    setGewaehlteMarken(alt => alt.includes(m)
+      ? alt.filter(x => x !== m)
+      : [...alt, m].sort())
+  }, [])
   // Toms Vorgabe: nur On Market als Standard. `null` heisst „alle".
   const [status, setStatus] = React.useState<string | null>(STANDARD_STATUS)
   // G-453: die Kategorie filtert PRODUKTE (Toms Antwort).
   const [kategorie, setKategorie] = React.useState<string | null>(null)
   // G-453: die Darreichungsform, MIT E-Code — die Spalte traegt ihn.
   const [form, setForm] = React.useState<string | null>(null)
+  // ══ G-455: der harte Allergiefilter ═══════════════════════════════
+  //
+  // **Tom:** *„MEINE ALLERGIEN … HART: Produkt verschwindet."*
+  //
+  // `[read]` **Vorgabe AN** — eine Allergie ist keine Einstellung, die
+  // man erst suchen muss. **Abschaltbar bleibt sie trotzdem**: wer
+  // nachsehen will, was der Filter wegnimmt, braucht den Schalter
+  // (und die Gegenprobe A8 auch).
+  const [allergienAn, setAllergienAn] = React.useState(true)
   // G-73: der Filterknopf ist das Setup zum Ein- und Ausblenden.
   const [filterOffen, setFilterOffen] = React.useState(false)
   // `[read]` **Heisst nicht mehr „Seite"** — es zaehlt, wie oft
@@ -227,6 +319,33 @@ export function SuppProdukte() {
   const [laeuft, setLaeuft] = React.useState(false)
   const [marken, setMarken] = React.useState<string[]>([])
   const [markenVoll, setMarkenVoll] = React.useState(true)
+
+  // ══ G-455: der Daumen je Produkt ══════════════════════════════════
+  //
+  // **Tom:** *„Der Daumen je Produkt, gruene zuoberst."*
+  //
+  // `[cmd]` **C-497 hat `food_preference_items.supplement_product_id`
+  // gebaut** — in G-453 war genau das noch unmoeglich (der `food_id`-FK
+  // zeigte auf `nutrition.foods`, und ein Produkt-Insert fiel an der
+  // Datenbank). **Der Befund ging als Messung an C-497.**
+  const [daumen, setDaumen] = React.useState<Record<string, Daumen>>({})
+  const [daumenFehler, setDaumenFehler] = React.useState<string | null>(null)
+
+  // ══ G-455: die Meidestoffe — der WEICHE Filter ══════════════════
+  //
+  // `[read]` **Einmal geholt, nicht je Suchlauf** — sie aendern sich
+  // nur in den Vorlieben.
+  const [meidestoffe, setMeidestoffe] = React.useState<string[]>([])
+  React.useEffect(() => {
+    void (async () => {
+      try {
+        const a = await fetch('/api/supplements/meidestoffe')
+        if (!a.ok) return
+        const j = await a.json() as { codes?: string[] }
+        setMeidestoffe(j.codes ?? [])
+      } catch { /* ohne Meidestoffe wird nichts markiert */ }
+    })()
+  }, [])
 
   const [offeneZeile, setOffeneZeile] = React.useState<string | null>(null)
   const [satz, setSatz] = React.useState<ProduktSatz | null>(null)
@@ -240,20 +359,44 @@ export function SuppProdukte() {
   // `food-suche-hook.ts` (G-320): `[cmd]` **ohne Abbruch ueberholt eine
   // langsame aeltere Antwort die neuere**, und im Feld steht ein Wort,
   // waehrend die Liste ein anderes zeigt.
-  React.useEffect(() => {
+  //
+  // ══ G-455: DIE ADRESSE IST DER SCHLUESSEL ═════════════════════════
+  //
+  // `[cmd]` **Die Abhaengigkeitsliste enthielt `gewaehlteMarken`** —
+  // ein ARRAY, und damit bei jedem Anstrich ein NEUES Objekt.
+  // **Gemessen 2026-09-15: die Anfrage ging mit `marken=NOW` hinaus
+  // und wurde abgebrochen**, `requestfinished` feuerte nie, die Liste
+  // blieb bei 458 — waehrend die Pillen oben richtig dastanden.
+  // **Der Filter sah aus, als griffe er nicht.**
+  //
+  // `[read]` **Dieselbe Falle steht schon in `food-suche-hook.ts`
+  // (G-320):** *„ein `Set` ist bei jedem Rendern ein neues Objekt und
+  // wuerde den Effekt endlos ausloesen."* **Dort ist die Antwort
+  // dieselbe: die Adresse als Zeichenkette.**
+  const schluessel = React.useMemo(() => {
     const p = new URLSearchParams({ q: frage.trim(), seite: String(seite) })
-    if (marke) p.set('marke', marke)
+    // `[read]` **Sortiert und kommagetrennt** — dieselbe Auswahl
+    // ergibt immer dieselbe Adresse (G-112), sonst liefe der
+    // Zwischenspeicher doppelt.
+    if (gewaehlteMarken.length > 0) {
+      p.set('marken', [...gewaehlteMarken].sort().join(','))
+    }
+    if (!allergienAn) p.set('allergien', '0')
     if (kategorie) p.set('kategorie', kategorie)
     if (form) p.set('form', form)
     p.set('status', status ?? 'alle')
+    return p.toString()
+  }, [frage, gewaehlteMarken, status, seite, kategorie, form, allergienAn])
 
+  React.useEffect(() => {
     const zeit = setTimeout(async () => {
       laufend.current?.abort()
       const ctrl = new AbortController()
       laufend.current = ctrl
       setLaeuft(true)
       try {
-        const a = await fetch(`/api/supplements/produkte?${p}`, { signal: ctrl.signal })
+        const a = await fetch(`/api/supplements/produkte?${schluessel}`,
+          { signal: ctrl.signal })
         if (!a.ok) throw new Error(`HTTP ${a.status}`)
         setListe(await a.json() as ProduktListe)
       } catch (e) {
@@ -267,7 +410,7 @@ export function SuppProdukte() {
       }
     }, 180)
     return () => clearTimeout(zeit)
-  }, [frage, marke, status, seite, kategorie, form])
+  }, [schluessel])
 
   // Die Markenliste — einmal.
   React.useEffect(() => {
@@ -287,7 +430,26 @@ export function SuppProdukte() {
   // `[read]` **Ein Filterwechsel faengt das Fenster neu an** — sonst
   // haette man 1.500 Zeilen geladen und saehe die ersten 500 einer
   // ganz anderen Menge.
-  React.useEffect(() => { setSeite(0) }, [frage, marke, status, kategorie, form])
+  //
+  // ══ G-455: AUCH HIER EINE ZEICHENKETTE ════════════════════════════
+  //
+  // `[cmd]` **Hier stand `gewaehlteMarken` (ein Array) in der
+  // Abhaengigkeitsliste** — bei jedem Anstrich ein neues Objekt.
+  // **Der Effekt lief also bei JEDEM Rendern, rief `setSeite(0)`,
+  // loeste damit den naechsten Anstrich aus** — und der Suchlauf
+  // daneben brach seine eigene Anfrage ab, bevor sie ankam.
+  //
+  // `[cmd]` **Gemessen 2026-09-15: die Anfrage ging mit `marken=NOW`
+  // hinaus, `requestfinished` feuerte nie, die Liste blieb bei 458.**
+  //
+  // `[read]` **Zwei Effekte, dieselbe Falle** — und die zweite war
+  // die eigentliche Ursache. **Ein Array als Abhaengigkeit ist immer
+  // ein Verdacht.**
+  const filterSchluessel = [
+    frage, [...gewaehlteMarken].sort().join(','), status ?? '',
+    kategorie ?? '', form ?? '', allergienAn ? '1' : '0',
+  ].join('|')
+  React.useEffect(() => { setSeite(0) }, [filterSchluessel])
 
   /**
    * Wie viele Filter gesetzt sind — die Zahl am Filterknopf.
@@ -296,12 +458,19 @@ export function SuppProdukte() {
    * Vorgabe steht.** `[cmd]` Sonst stuende beim Oeffnen des Reiters
    * schon eine 1 am Knopf, und die Zahl hiesse nichts mehr.
    */
-  const aktiveFilter = (marke ? 1 : 0) + (kategorie ? 1 : 0) + (form ? 1 : 0)
+  // `[read]` **Jede gewaehlte Marke zaehlt einzeln** — wer drei
+  // gesetzt hat, soll die Drei am Knopf sehen.
+  const aktiveFilter = gewaehlteMarken.length + (kategorie ? 1 : 0)
+    + (form ? 1 : 0)
+    + (allergienAn ? 0 : 1)
     + (status === STANDARD_STATUS ? 0 : 1)
 
   const filterZuruecksetzen = React.useCallback(() => {
-    setMarke(null); setKategorie(null); setForm(null)
+    setGewaehlteMarken([]); setKategorie(null); setForm(null)
     setStatus(STANDARD_STATUS)
+    // `[read]` **Der Allergiefilter geht NICHT mit zurueck** — er ist
+    // kein Suchfilter, sondern ein Schutz. **„Alles zuruecksetzen"
+    // darf ihn nicht stillschweigend abschalten.**
   }, [])
 
   async function oeffne(id: string) {
@@ -323,7 +492,74 @@ export function SuppProdukte() {
     void oeffne(id)
   }
 
-  const zeilen = liste?.zeilen ?? []
+  const rohZeilen = React.useMemo(() => liste?.zeilen ?? [], [liste])
+
+  // ── Den Daumenstand zu den gezeigten Produkten holen ─────────────
+  //
+  // `[read]` **Nach jeder Suche neu** — die Liste wechselt, und ein
+  // alter Stand faerbte die falschen Zeilen.
+  React.useEffect(() => {
+    if (rohZeilen.length === 0) { setDaumen({}); return }
+    let verworfen = false
+    void (async () => {
+      try {
+        // `[cmd]` **POST, nicht GET** — 500 Ids sind 18.500 Zeichen
+        // Adresse, und Node deckelt Kopfzeilen bei 16.384. **Die
+        // erste Fassung bekam HTTP 431 und riss die Produktsuche
+        // daneben mit** (gemessen 2026-09-15).
+        const a = await fetch('/api/supplements/daumen', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ ids: rohZeilen.map(z => z.id) }),
+        })
+        if (!a.ok) throw new Error(`HTTP ${a.status}`)
+        const j = await a.json() as { stand: Record<string, Daumen> }
+        if (!verworfen) { setDaumen(j.stand ?? {}); setDaumenFehler(null) }
+      } catch (e) {
+        // `[read]` **Gemeldet, nicht verschluckt** — sonst saehe der
+        // Nutzer seine Bewertungen verschwinden und hielte sie fuer
+        // geloescht.
+        if (!verworfen) {
+          setDaumenFehler(e instanceof Error ? e.message : String(e))
+        }
+      }
+    })()
+    return () => { verworfen = true }
+  }, [rohZeilen])
+
+  /**
+   * Die Liste, gruene zuoberst.
+   *
+   * **Tom:** *„Der Daumen je Produkt, gruene zuoberst."*
+   *
+   * `[cmd]` **Die Sortierung steht laut Auftrag in
+   * `search_supplier_products`** (liked → neutral → disliked).
+   * `[read]` **Aber nur dort** — der Tabellenweg sortiert nach
+   * `name_en`, und der laeuft, sobald ein Kategorie- oder Formfilter
+   * gesetzt ist oder kein Suchbegriff dasteht (G-453).
+   *
+   * `[read]` **Deshalb hier nachsortiert, STABIL** — die Reihenfolge
+   * innerhalb einer Gruppe bleibt die der Datenbank. **Sonst
+   * sprangen die Zeilen bei jedem Klick.**
+   */
+  const zeilen = React.useMemo(
+    () => nachDaumen(rohZeilen, daumen), [rohZeilen, daumen])
+
+  /** Ein Klick auf den Daumen — der Zustand wandert sofort mit. */
+  const daumenKlick = React.useCallback(async (
+    id: string, richtung: 'liked' | 'disliked',
+  ) => {
+    const neu = naechsterProduktDaumen(daumen[id] ?? 'neutral', richtung)
+    // `[read]` **Erst zeigen, dann schreiben** — ein Daumen, der eine
+    // Netzrunde lang nichts tut, wird zweimal geklickt.
+    setDaumen(d => ({ ...d, [id]: neu }))
+    const a = await produktDaumenSpeichern(id, neu)
+    if (!a.ok) {
+      // Zurueckdrehen und sagen, was war.
+      setDaumen(d => ({ ...d, [id]: daumen[id] ?? 'neutral' }))
+      setDaumenFehler(a.fehler)
+    }
+  }, [daumen])
   const gesamt = liste?.gesamt ?? 0
 
   /**
@@ -354,14 +590,17 @@ export function SuppProdukte() {
     // `[read]` **Zwei Filter, zwei Saetze** — wer Marke UND Kategorie
     // gesetzt hat, soll wissen, dass beide gelten. `[cmd]` Ein Satz
     // mit nur einem der beiden liesse den anderen unsichtbar wirken.
-    if (marke && kategorie) {
-      return `„${marke}“ hat kein Produkt mit einer Zeile der Kategorie `
+    const markeText = gewaehlteMarken.length === 1
+      ? `„${gewaehlteMarken[0]}“`
+      : `den ${gewaehlteMarken.length} gewählten Marken`
+    if (gewaehlteMarken.length > 0 && kategorie) {
+      return `${markeText} hat kein Produkt mit einer Zeile der Kategorie `
         + `„${kategorie}“.`
     }
-    if (marke) return `Unter „${marke}“ steht nichts.`
+    if (gewaehlteMarken.length > 0) return `Unter ${markeText} steht nichts.`
     if (kategorie) return `Kein Produkt trägt eine Zeile der Kategorie „${kategorie}“.`
     return 'Keine Treffer.'
-  }, [frage, marke, kategorie, liste])
+  }, [frage, gewaehlteMarken, kategorie, liste])
 
   return (
     <div>
@@ -507,6 +746,78 @@ export function SuppProdukte() {
                 gemessen 2026-09-14. **Toms Vorgabe aus G-452 bleibt
                 die Vorauswahl.** */}
             <div>
+              {/* ══ G-455: MEINE ALLERGIEN — der HARTE Filter ══════
+                  **Tom:** *„MEINE ALLERGIEN … HART: Produkt
+                  verschwindet. Eine Nussallergie gilt ueberall."*
+
+                  `[cmd]` **Die Treffer kommen aus
+                  `public.supplier_product_allergy_matches` (C-498)**
+                  — sie loest die Aliase auf, und sie wird GERUFEN,
+                  nicht nachgebaut.
+
+                  `[read]` **Vorgabe AN.** Eine Allergie ist keine
+                  Einstellung, die man erst suchen muss. **Der
+                  Schalter bleibt trotzdem** — wer sehen will, was
+                  weggefiltert wird, braucht ihn. */}
+              <div style={{ marginBottom: 14 }}>
+                <span className="v2-eyebrow">Meine Allergien</span>
+                <div className="v2-supp-prod-filter-reihe">
+                  <button
+                    type="button" onClick={() => setAllergienAn(true)}
+                    aria-pressed={allergienAn}
+                    style={{ background: 'none', border: 0, padding: 0,
+                      cursor: 'pointer' }}
+                  >
+                    <Pill variant={allergienAn ? 'acc' : undefined}>
+                      <Icon name="check" className="v2-ic v2-ic-sm" />
+                      Ausblenden
+                    </Pill>
+                  </button>
+                  <button
+                    type="button" onClick={() => setAllergienAn(false)}
+                    aria-pressed={!allergienAn}
+                    style={{ background: 'none', border: 0, padding: 0,
+                      cursor: 'pointer' }}
+                  >
+                    <Pill variant={!allergienAn ? 'acc' : undefined}>
+                      Alle zeigen
+                    </Pill>
+                  </button>
+                </div>
+                {/* ══ WAS DER FILTER TUT — IMMER SICHTBAR ═══════════
+                    `[read]` **Auch die Null ist eine Auskunft** (E-72):
+                    *„0 Produkte betroffen"* heisst etwas anderes als
+                    ein fehlender Satz.
+
+                    `[cmd]` **Und sie hat einen gemessenen Grund:** die
+                    Trefferfunktion braucht einen Alias oder einen
+                    exakt gleichen Zutatnamen. **`lactose` hat keinen
+                    Alias und trifft deshalb nichts**, obwohl 418
+                    Zutatzeilen woertlich so heissen (gemessen
+                    2026-09-15). */}
+                <div className="v2-prod-filterhinweis">
+                  {!allergienAn
+                    ? 'Der Allergiefilter ist aus — die Liste zeigt auch '
+                      + 'Produkte mit deinen Allergenen.'
+                    : liste?.allergieProdukte === undefined
+                      ? 'Allergien werden geprüft…'
+                      : liste.allergieProdukte === 0
+                        ? 'Keine deiner Allergien trifft ein Produkt. '
+                          + 'Getroffen wird über die Zutatenliste — ein Stoff '
+                          + 'ohne hinterlegte Schreibweisen findet nichts.'
+                        : `${liste.allergieProdukte.toLocaleString('de-DE')} `
+                          + 'Produkte enthalten eines deiner Allergene'
+                          + (liste.hartEntfernt
+                            ? ` · ${liste.hartEntfernt} davon aus dieser Liste entfernt`
+                            : '')}
+                  {liste?.allergieFehler && (
+                    <span style={{ color: 'var(--warn)' }}>
+                      {' '}· {liste.allergieFehler}
+                    </span>
+                  )}
+                </div>
+              </div>
+
               <span className="v2-eyebrow">Markt</span>
               <div className="v2-supp-prod-filter-reihe">
                 {[
@@ -595,32 +906,72 @@ export function SuppProdukte() {
               <span className="v2-eyebrow">Marke</span>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap',
                 alignItems: 'center', marginTop: 6 }}>
-                <MarkenFeld marken={marken} gewaehlt={marke} onWaehlen={setMarke}
+                {/* `[read]` **Beide Wege setzen dieselbe Liste** —
+                    das Feld fuer den, der den Namen kennt, das
+                    Pulldown fuer den, der stoebert. */}
+                <MarkenFeld marken={marken} gewaehlt={null}
+                            onWaehlen={markeSchalten}
                             vollstaendig={markenVoll} />
                 <select
                   className="v2-feld"
-                  value={marke ?? ''}
-                  onChange={e => setMarke(e.target.value || null)}
+                  value=""
+                  onChange={e => {
+                    if (e.target.value) markeSchalten(e.target.value)
+                  }}
                   aria-label="Marke auswählen"
                   style={{ fontSize: 11.5, padding: '4px 8px', maxWidth: 220 }}
                 >
-                  <option value="">Alle Marken</option>
-                  {/* `[read]` Eine gewaehlte Marke, die nicht unter den
-                      haeufigsten ist, muss trotzdem dastehen — sonst
-                      zeigte das Pulldown „Alle Marken", waehrend
-                      gefiltert wird. */}
-                  {marke && !MARKEN_PULLDOWN.includes(marke) && (
-                    <option value={marke}>{marke}</option>
-                  )}
-                  {MARKEN_PULLDOWN.map(m => <option key={m} value={m}>{m}</option>)}
+                  {/* `[cmd]` **G-455: das Pulldown FUEGT HINZU, es
+                      ersetzt nicht.** `[read]` Deshalb steht es immer
+                      auf der Aufforderung und nie auf einem Wert — ein
+                      Pulldown, das eine von drei Marken anzeigt, waere
+                      eine Falschaussage. */}
+                  <option value="">Marke hinzufügen…</option>
+                  {MARKEN_PULLDOWN
+                    .filter(m => !gewaehlteMarken.includes(m))
+                    .map(m => <option key={m} value={m}>{m}</option>)}
                 </select>
               </div>
+
+              {/* ══ G-455: die gewaehlten Marken als Pillen ═════════
+                  **Tom:** *„dass ein user seine filtermasken mit
+                  marken setzen kann und nicht nur eine marke waehlen."*
+
+                  `[read]` **Jede Pille ist ihr eigener
+                  Entfernen-Knopf** — G-181 Punkt 6b: *„diverse filter
+                  haengen wenn man sie abwaehlt."* Der Weg zurueck muss
+                  sichtbar sein, je Marke. */}
+              {gewaehlteMarken.length > 0 && (
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap',
+                  marginTop: 8, alignItems: 'center' }}>
+                  {gewaehlteMarken.map(m => (
+                    <button
+                      key={m} type="button"
+                      onClick={() => markeSchalten(m)}
+                      aria-label={`${m} entfernen`}
+                      title={`${m} entfernen`}
+                      style={{ background: 'none', border: 0, padding: 0,
+                        cursor: 'pointer' }}
+                    >
+                      <Pill variant="acc">{m} ×</Pill>
+                    </button>
+                  ))}
+                  <button type="button" className="v2-btn v2-btn-sm v2-btn-ghost"
+                          onClick={() => markeSchalten(null)}>
+                    Alle Marken
+                  </button>
+                </div>
+              )}
+
               <div className="v2-muted" style={{ fontSize: 10, marginTop: 5 }}>
-                {markenVoll
-                  ? `${marken.length.toLocaleString('de-DE')} Marken · `
-                    + `im Pulldown die ${MARKEN_PULLDOWN.length} häufigsten, `
-                    + 'alle übrigen über das Eingabefeld'
-                  : `${marken.length} Marken — nur ein Ausschnitt`}
+                {gewaehlteMarken.length > 1
+                  ? `${gewaehlteMarken.length} Marken — ODER-verknüpft, `
+                    + 'ein Produkt genügt einer davon'
+                  : markenVoll
+                    ? `${marken.length.toLocaleString('de-DE')} Marken · `
+                      + `im Pulldown die ${MARKEN_PULLDOWN.length} häufigsten, `
+                      + 'alle übrigen über das Eingabefeld'
+                    : `${marken.length} Marken — nur ein Ausschnitt`}
               </div>
             </div>
           </div>
@@ -636,6 +987,11 @@ export function SuppProdukte() {
                 <th style={{ width: 190 }}>Marke</th>
                 <th style={{ width: 120 }}>Form</th>
                 <th style={{ width: 110 }}>Portion</th>
+                {/* `[read]` **Der Daumen bekommt KEINE Ueberschrift** —
+                    dieselbe Linie wie die Aktionsspalte im Katalog:
+                    ein Wort darueber sagt nichts, was die zwei Knoepfe
+                    nicht selbst sagen. */}
+                <th style={{ width: 62 }} />
                 <th style={{ width: 90, textAlign: 'right' }} />
               </tr>
             </thead>
@@ -681,6 +1037,18 @@ export function SuppProdukte() {
                       <td>
                         {portion && <span style={{ fontSize: 11 }}>{portion}</span>}
                       </td>
+                      {/* ══ G-455: der Daumen ═══════════════════════
+                          `[read]` **Die Zeile fuehrt ins Detail, der
+                          Daumen nicht** — ohne `stopPropagation`
+                          bewertet man, was man ansehen wollte (die
+                          Lehre aus G-67). */}
+                      <td onClick={e => e.stopPropagation()}>
+                        <ProduktDaumen
+                          zustand={daumen[p.id] ?? 'neutral'}
+                          name={p.name_en}
+                          onKlick={r => void daumenKlick(p.id, r)}
+                        />
+                      </td>
                       <td style={{ textAlign: 'right' }}>
                         <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
                                 onClick={e => { e.stopPropagation(); schalteZeile(p.id) }}>
@@ -696,9 +1064,9 @@ export function SuppProdukte() {
                         einer Zelle genauso sitzt wie ausserhalb. */}
                     {istOffen && satz && satz.id === p.id && (
                       <tr className="v2-supp-tafel-zeile">
-                        <td colSpan={5} style={{ padding: 0 }}
+                        <td colSpan={6} style={{ padding: 0 }}
                             onClick={e => e.stopPropagation()}>
-                          <ProduktTafel satz={satz} />
+                          <ProduktTafel satz={satz} meidestoffe={meidestoffe} />
                         </td>
                       </tr>
                     )}
@@ -719,8 +1087,8 @@ export function SuppProdukte() {
               </p>
               <button type="button" className="v2-btn v2-btn-sm"
                       onClick={() => {
-                        setFrage(''); setMarke(null); setKategorie(null)
-                        setStatus(STANDARD_STATUS)
+                        setFrage(''); setKategorie(null); setForm(null)
+                        setGewaehlteMarken([]); setStatus(STANDARD_STATUS)
                       }}>
                 Filter zurücksetzen
               </button>

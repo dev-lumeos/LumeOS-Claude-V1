@@ -10,7 +10,12 @@
 // serverseitig weiter.
 import { NextRequest, NextResponse } from 'next/server'
 
+import { createSessionClient } from '@lumeos/shared/session'
+
 import { sucheProdukte, SEITE } from '../../../../lib/supplements/produkte-read'
+// G-455: der harte Allergiefilter — die Trefferfunktion aus C-498.
+import { ladeAllergieTreffer } from '../../../../lib/allergien/allergie-read'
+import { harteIds as ids } from '../../../../lib/allergien/allergie-lage'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -18,7 +23,23 @@ export const runtime = 'nodejs'
 export async function GET(request: NextRequest) {
   const p = request.nextUrl.searchParams
   const frage = p.get('q') ?? ''
-  const marke = p.get('marke')?.trim() || null
+  // ══ G-455: MEHRERE MARKEN ═══════════════════════════════════════
+  //
+  // **Tom (G-453):** *„dass ein user seine filtermasken mit marken
+  // setzen kann und nicht nur eine marke waehlen."*
+  //
+  // `[read]` **Kommagetrennt und sortiert** — dieselbe Form wie die
+  // Tags in `food-suche-hook.ts` (G-112): **sortiert, damit dieselbe
+  // Auswahl immer dieselbe Adresse ergibt.** Sonst waeren zwei
+  // gleichwertige Links verschieden und der Zwischenspeicher liefe
+  // doppelt.
+  //
+  // `[cmd]` **`marke` bleibt als Einzelwert erlaubt** — alte Links
+  // (`?marke=NOW`) sollen nicht ins Leere zeigen.
+  const marken = Array.from(new Set([
+    ...(p.get('marken') ?? '').split(',').map(m => m.trim()).filter(Boolean),
+    ...[p.get('marke')?.trim()].filter((m): m is string => !!m),
+  ])).sort()
   // `[read]` **`status=alle` schaltet den Filter ab, alles andere ist
   // ein Wert.** Toms Vorgabe ist „On Market" als Standard — die Route
   // setzt ihn deshalb, wenn nichts kommt, statt ungefiltert zu suchen.
@@ -35,9 +56,50 @@ export async function GET(request: NextRequest) {
   // G-453: die Darreichungsform, MIT E-Code — die Spalte traegt ihn.
   const form = p.get('form')?.trim() || null
 
+  // ══ G-455: der harte Allergiefilter ═══════════════════════════════
+  //
+  // **Tom:** *„Eine Nussallergie gilt ueberall."*
+  //
+  // `[read]` **Die Kennung kommt aus der SITZUNG, nie aus der
+  // Anfrage** — dieselbe Regel wie bei `p_user_id` in
+  // `food-search.ts`: **Allergien sind Gesundheitsdaten.** Wer sie
+  // durchreichen liesse, koennte eine fremde Kennung schicken und aus
+  // der Differenz der Trefferzahlen fremde Allergien ablesen.
+  //
+  // `[cmd]` **`an=0` schaltet ihn ab** — fuer die Gegenprobe und fuer
+  // den Nutzer, der bewusst alles sehen will.
+  const allergienAn = p.get('allergien') !== '0'
+  let harteIds: string[] = []
+  let allergieFehler: string | null = null
+  if (allergienAn) {
+    try {
+      const c = createSessionClient()
+      const { data: { user } } = await c.auth.getUser()
+      if (user) {
+        const t = await ladeAllergieTreffer(user.id)
+        harteIds = ids(t.treffer)
+        allergieFehler = t.fehler
+      }
+    } catch (e) {
+      // `[read]` **Ein Fehler hier darf die Suche NICHT umwerfen** —
+      // aber er darf auch nicht als „keine Allergien" durchgehen.
+      // **Die Oberflaeche bekommt ihn und sagt es.**
+      allergieFehler = e instanceof Error ? e.message : String(e)
+    }
+  }
+
   try {
-    const liste = await sucheProdukte(frage, marke, status, seite, kategorie, form)
-    return NextResponse.json({ ...liste, seite, seiteGroesse: SEITE })
+    const liste = await sucheProdukte(
+      frage, marken, status, seite, kategorie, form, harteIds)
+    return NextResponse.json({
+      ...liste, seite, seiteGroesse: SEITE,
+      allergienAn, allergieFehler,
+      // `[read]` **Wie viele Produkte der Filter ueberhaupt kennt** —
+      // `[cmd]` **0 ist eine echte Auskunft:** die Trefferfunktion
+      // braucht einen Alias oder einen exakt gleichen Zutatnamen, und
+      // gemessen 2026-09-15 hat `lactose` keinen Alias.
+      allergieProdukte: harteIds.length,
+    })
   } catch (e) {
     return NextResponse.json(
       { error: e instanceof Error ? e.message : String(e), code: 'READ_FAILED' },
