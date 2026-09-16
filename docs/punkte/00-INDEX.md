@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 232 |
-| `laufend_codex` | 1 |
-| `erledigt` | 466 |
-| **gesamt** | **699** |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 467 |
+| **gesamt** | **700** |
 
 ## medical — 48
 
@@ -307,9 +307,9 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 91
+## supplements — 92
 
-### beauftragbar — 90
+### beauftragbar — 91
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -401,7 +401,8 @@
 | `G-437` | fehler | hoch | [tabs.tsx hat vierzehn Karten verloren](erledigt/supplements-g-0437-tabs-tsx-verlorene-karten.md) | erledigt | — | — |
 | `G-452` | feature | hoch | [der Produkte-Reiter](erledigt/supplements-g-0452-der-produkte-reiter.md) | erledigt | — | G-453 |
 | `G-453` | feature | hoch | [die Produkttafel](erledigt/supplements-g-0453-die-produkttafel.md) | erledigt | — | G-454 |
-| `G-454` | befund | mittel | [Suche und Filter schliessen sich aus](laufend_codex/supplements-g-0454-suche-und-filter.md) | laeuft (codex) | — | — |
+| `G-454` | befund | mittel | [Suche und Filter schliessen sich aus](erledigt/supplements-g-0454-suche-und-filter.md) | erledigt | — | G-463 |
+| `G-463` | fehler | hoch | [die Suche deckelt bei 100, die Liste will 500](todos/supplements-g-0463-suche-deckelt-bei-100.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -747,7 +748,7 @@
 | `G-451` | fehler | mittel | [der Testdatenlauf scheitert vor C-493](erledigt/quer-g-0451-testdatenlauf-scheitert-vorher.md) | erledigt | — | — |
 | `G-455` | feature | hoch | [Allergien in Settings, Filter in Produkten](erledigt/quer-g-0455-allergien-und-filter.md) | erledigt | — | G-459 |
 | `G-458` | fehler | hoch | [neun Migrationen schreiben Daten](erledigt/quer-g-0458-neun-migrationen-schreiben-daten.md) | erledigt | — | G-460, G-461 |
-| `G-459` | feature | mittel | [die Allergiekachel aufraeumen](todos/quer-g-0459-allergiekachel-aufraeumen.md) | offen | — | — |
+| `G-459` | feature | mittel | [die Allergiekachel aufraeumen](laufend_claudecode/quer-g-0459-allergiekachel-aufraeumen.md) | laeuft (claudecode) | — | — |
 | `G-460` | fehler | mittel | [vier Lesestellen auf die gefallene Spalte ebene](erledigt/quer-g-0460-vier-ebene-lesestellen.md) | erledigt | — | — |
 | `G-462` | fehler | niedrig | [bedingtes React.useId](erledigt/quer-g-0462-bedingtes-useid.md) | erledigt | — | — |
 
