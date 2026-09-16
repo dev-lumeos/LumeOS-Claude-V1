@@ -1,6 +1,6 @@
 ---
 nr: C-503
-typ: fehler
+typ: feature
 modul: quer
 schwere: hoch
 angelegt: 2026-09-08
@@ -15,114 +15,164 @@ zahlen:
   gemessen: 2026-09-08
 ---
 
-# C-503 - es gibt keine Stoffliste hinter stoff_code
+# C-503 - die Vorschlaege kommen aus den Katalogen
 
-## Toms Befund
+## Toms Befund und seine Loesung
 
 Tom, 2026-09-08, beim Ansehen der Settings:
 
 > wie wird der abgleich aus menschlicher eingabe gegen reale
 > eintraege in der db gemacht, sprich der match auf unsere id?
-> ich denke, das sollte eine smartsearch mit vorschlaegen im
-> pulldown sein, live bei der eingabe, dass der user auch das
-> richtige eintraegt
 
-## Der Befund stimmt
-
-`[cmd]` **`public.user_allergies.stoff_code` ist NULL-faehig.**
-
-`[cmd]` **`allergie-read.ts:85`:**
-
-    Zweig 1   stoff_code -> allergen_aliases
-    Zweig 2   stoff_code IS NULL -> stoff_text
-
-`[cmd]` **Und es gibt KEINE Stoffliste** ? **nur
-`allergen_aliases`, die auf Codes zeigt, die nirgends definiert
+`[cmd]` **Der Befund stimmt:** `stoff_code` **ist NULL-faehig,
+`allergen_aliases` zeigt auf Codes, die nirgends definiert
 sind.**
 
-`[read]` **Der Nutzer tippt Freitext, und ob er trifft,
-entscheidet der Zufall.**
+`[cmd]` **Beleg aus G-455:** `lactose` **hat 418 woertliche
+Zutatzeilen und trifft null.**
 
-`[cmd]` **Beleg aus G-455: `lactose` hat 418 woertliche
-Zutatzeilen und trifft null** ? **weil kein Alias existiert.**
+### Und sein Loesungsweg
 
-## Zwei Sachen fehlen
+> user gibt ein, ob es um nahrung/supplement/medikament geht,
+> dementsprechend wissen wir, welche produktkataloge SSOT sind.
+> also koennen wir anhand der eingabe gezielt auf die richtigen
+> punkte leiten
 
-**1** ? **Eine Stoffliste.**
+> produktkatalog sollte doch in allen modulen entweder direkt
+> in den eintraegen allergien etc haben oder zumindest
+> verlinkung zu einer allergie table, dann koennen wir auch
+> laut eingabe matches fuer den user generieren, die er
+> anwaehlen kann
 
-    public.allergens
-      code, name_de, name_en, name_th,
-      art, hinweis, quelle
+`[read]` **Keine neue Stoffliste** ? **die KATALOGE sind die
+Stoffliste.**
 
-`[read]` **`allergen_aliases.stoff_code` bekommt einen
-Fremdschluessel darauf** ? **heute zeigt er ins Leere.**
+`[read]` **Mein erster Vorschlag war eine neue
+`public.allergens`-Tabelle** ? **ohne zu messen, was die
+Kataloge tragen. Toms Weg ist besser.**
 
-**2** ? **Eine Suchfunktion fuer die Eingabe.**
+## Was die drei Kataloge tragen, gemessen
 
-`[read]` **Wie `search_supplier_products` (C-495):
-`pg_trgm`, Fehleingaben verstehen.**
+**NAHRUNG** ? `[cmd]` **`nutrition.tag_definitions`, 14 Tags:**
 
-`[cmd]` **`laktose`, `lactoseintoleranz`, `milchzucker` muessen
-alle `lactose` finden.**
+    high_protein, low_carb, low_fat, high_fiber,
+    whole_food, ultra_processed, vegan, vegetarian,
+    contains_nuts, contains_gluten, contains_lactose,
+    thai_food, halal, kosher
 
-`[read]` **Und die deutschen Namen** ? **ein Nutzer tippt
-*,,Nuesse"*, nicht `tree_nuts`.**
+`[cmd]` **Spalten:** `code`, `name_de`, `name_en`, `name_th`,
+`tag_type`, `is_exclusion_relevant`, `icon`, `filter_group`.
 
-## Was in die Liste gehoert
+`[read]` **`is_exclusion_relevant` sagt schon, welcher Tag zum
+Ausschliessen taugt.**
 
-`[read]` **Die 14 EU-Kennzeichnungspflichtigen sind der
-Anfang:**
+`[cmd]` **`food_tags`: 7.109 von 7.140 Lebensmitteln
+getaggt.**
 
-    glutenhaltiges Getreide, Krebstiere, Eier, Fische,
-    Erdnuesse, Soja, Milch (Laktose), Schalenfruechte,
-    Sellerie, Senf, Sesam, Schwefeldioxid/Sulfite,
-    Lupinen, Weichtiere
+**SUPPLEMENT** ? `[cmd]` **`supplements.supplement_warnings`,
+`supplement_interactions`, und `product_contents` selbst.**
 
-`[read]` **Dazu die Supplementfaelle aus der Messung:**
+`[cmd]` **Die haeufigsten Zutaten: `Magnesium Stearate`
+56.903, `Sucralose` 11.674.**
 
-`[cmd]` **`magnesium_stearate` 56.903 Zeilen, `Titanium
-Dioxide`, `Sucralose`, `FD&C`-Farbstoffe, `Gelatine`.**
+**MEDIKAMENT** ? `[cmd]` **NICHTS.**
 
-`[read]` **Und Medikamentenallergien** ? **Penicillin,
-Sulfonamide, NSAR.**
+`[read]` **Eine Penicillin-Allergie kann heute nirgends gegen
+etwas geprueft werden.**
 
-`[cmd]` **MISS, welche Stoffe in `product_contents` und
-`nutrition.foods` ueberhaupt vorkommen** ? **eine Liste ohne
-Treffer nuetzt nichts.**
+## Was zu bauen ist
 
-## Und der Freitext bleibt
+**1** ? **Eine Vorschlagsfunktion je Art.**
 
-`[read]` **Wer etwas hat, das nicht in der Liste steht, muss es
-trotzdem eintragen koennen.**
+    vorschlaege(art, eingabe)
+
+      art = nahrung
+        -> tag_definitions WHERE is_exclusion_relevant
+        -> plus die Tags, die auch getaggt SIND
+
+      art = supplement
+        -> product_contents, haeufigste ingredient_name
+        -> plus supplement_warnings
+
+      art = medikament
+        -> MELDEN, dass nichts da ist
+
+`[read]` **Ein Tag ohne getaggte Lebensmittel wird gar nicht
+angeboten.**
+
+`[cmd]` **Mit `pg_trgm`, wie `search_supplier_products`
+(C-495)** ? `laktose`, `milchzucker`, `nuesse` **muessen
+treffen.**
+
+**2** ? **`allergen_aliases` wird die Bruecke.**
+
+`[read]` **Heute zeigt `stoff_code` ins Leere** ? **er soll auf
+den KATALOGEINTRAG zeigen.**
+
+    stoff_code = "nutrition:contains_lactose"
+    stoff_code = "supplements:magnesium_stearate"
+
+`[read]` **MISS, ob ein Praefix taugt oder eine eigene Spalte
+besser ist** ? **die Entscheidung begruenden.**
+
+**3** ? **Die drei bestehenden Allergien anbinden.**
+
+`[cmd]` **`dev@lumeos.app`: `lactose` (nahrung),
+`magnesium_stearate` (supplement), `soja` (nahrung).**
+
+`[read]` **Sie sollen danach treffen** ? **`lactose` gegen
+`contains_lactose` (7.109 getaggte Lebensmittel).**
+
+## Zwei Befunde, die dabei herauskommen
+
+`[cmd]` **`nutrition.foods` hat KEINE Allergenspalte** ? **nur
+`foods_custom.custom_allergens`.**
+
+`[read]` **Die Tags haengen an `food_tags`, nicht am
+Lebensmittel** ? **miss, ob die 31 ohne Tag wirklich keins
+brauchen.**
+
+`[cmd]` **Und `medical` hat nichts** ? **das ist ein eigener
+Punkt, nicht dieser.**
+
+`[read]` **MELDEN, nicht bauen.**
+
+## Der Freitext bleibt
+
+`[read]` **Wer etwas hat, das in keinem Katalog steht, traegt
+es ein.**
 
 `[cmd]` **`stoff_text` bleibt** ? **aber die Oberflaeche sagt,
 dass es dann NICHT gegen Produkte prueft.**
 
-`[read]` **Das ist der Unterschied zwischen *,,ich habe es
-notiert"* und *,,LumeOS schuetzt mich davor"*.**
+`[read]` **Der Unterschied zwischen *,,ich habe es notiert"*
+und *,,LumeOS schuetzt mich davor"*.**
 
 ## Abnahmebedingungen
 
-    A1  public.allergens mit den 14 EU-Allergenen
-        plus den gemessenen Supplementfaellen.
-    A2  je Eintrag name_de, name_en, name_th leer
-        (Sprachregel).
-    A3  allergen_aliases bekommt den Fremdschluessel.
-    A4  eine Suchfunktion: "laktose", "milchzucker",
-        "nuesse" finden das Richtige. Drei Belege.
-    A5  MISS, welche Stoffe in product_contents und
-        nutrition.foods vorkommen. Je Allergen die
-        Trefferzahl.
-    A6  die drei bestehenden Allergien von dev
-        bekommen ihren Code.
+    A1  je Art: welcher Katalog, wie viele Eintraege
+        taugen als Vorschlag? TABELLE.
+    A2  eine Vorschlagsfunktion, die "laktose",
+        "milchzucker", "nuesse" trifft. Drei Belege.
+    A3  ein Tag ohne getaggte Lebensmittel wird NICHT
+        vorgeschlagen. Belegt.
+    A4  allergen_aliases zeigt auf Katalogeintraege.
+        Die Form begruendet.
+    A5  die drei Allergien von dev treffen danach.
+        Zahl je Allergie.
+    A6  medikament: gemeldet, dass nichts da ist.
     A7  Gegenprobe: ein erfundener Code faellt auf.
     A8  Sicherung, Vollkette, ALLE Waechter.
 
 ## Was nicht zu tun ist
 
+**KEINE neue Stoffliste** ? **die Kataloge sind sie.**
+
 **KEINEN Alias raten** ? **C-502 hat die Grenze gezogen:
-`Milk Protein Isolate` enthaelt Laktose, `Whey Protein Isolate`
-weitgehend nicht.**
+`Milk Protein Isolate` enthaelt Laktose, `Whey Protein
+Isolate` weitgehend nicht.**
+
+**`medical` NICHT bauen** ? **melden.**
 
 **`apps/` nicht anfassen** ? **G-459 baut die Oberflaeche.**
 

@@ -73,3 +73,27 @@ schon benannt:** *,,nicht so verstreut auf die breite"*.
     A6  Kontraste gemessen, nicht geschaetzt.
     A7  die drei bestehenden Allergien bleiben.
     A8  apps/web 1780 oder mehr.
+
+## Berichtigt 2026-09-08 - die Vorschlaege kommen aus den Katalogen
+
+`[read]` **Mein erster C-503 wollte eine neue Stoffliste** ?
+**Tom hat widersprochen:**
+
+> user gibt ein, ob es um nahrung/supplement/medikament geht,
+> dementsprechend wissen wir, welche produktkataloge SSOT sind
+
+`[cmd]` **Gemessen:**
+
+    NAHRUNG     tag_definitions, 14 Tags
+                contains_nuts, contains_gluten,
+                contains_lactose
+                7.109 von 7.140 getaggt
+    SUPPLEMENT  product_contents, supplement_warnings
+    MEDIKAMENT  nichts
+
+`[read]` **Die Oberflaeche fragt ZUERST die Art, dann schlaegt
+sie aus dem passenden Katalog vor.**
+
+`[read]` **Bei `medikament` sagt sie, dass es noch keinen
+Katalog gibt** ? **statt ins Leere zu suchen.**
+

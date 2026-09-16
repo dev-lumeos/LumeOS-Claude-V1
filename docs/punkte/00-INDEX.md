@@ -671,7 +671,7 @@
 | `C-498` | feature | hoch | [Allergien global, nicht in food_preferences](erledigt/quer-c-0498-allergien-global.md) | erledigt | — | C-502, C-503 |
 | `C-501` | feature | hoch | [Seed fuer die leeren Module](erledigt/quer-c-0501-seed-fuer-leere-module.md) | erledigt | — | — |
 | `C-502` | fehler | hoch | [die Allergene ohne Aliase treffen nichts](todos/quer-c-0502-allergene-ohne-aliase.md) | offen | — | — |
-| `C-503` | fehler | hoch | [es gibt keine Stoffliste hinter stoff_code](todos/quer-c-0503-keine-stoffliste.md) | offen | — | — |
+| `C-503` | feature | hoch | [die Vorschlaege kommen aus den Katalogen](todos/quer-c-0503-keine-stoffliste.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
