@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: [C-498]
 kind_von: null
 entscheidung: null
+erledigt: 2026-09-08
+commit: 5b98ac0c
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/tab-produkte.tsx
@@ -401,4 +403,99 @@ Menge, und der Hinweis daneben nennt die entfernten.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **`x-g455-a4-allergiefilter.png` angesehen:**
+
+    MEINE ALLERGIEN  [Ausblenden] [Alle zeigen]
+    "56.909 Produkte enthalten eines deiner Allergene
+     - 42 davon aus dieser Liste entfernt"
+    MARKE  [Marke tippen...] [Marke hinzufuegen]
+    je Zeile Haken und Kreuz
+
+`[cmd]` **Auf `dev@lumeos.app`: drei Allergien (`lactose`,
+`magnesium_stearate`, `soja`), vier Daumen.**
+
+`[cmd]` **Proben: web 1780 (Grundstand 1766), coach 65.**
+
+### Der Befund, der den Auftrag traegt
+
+> *,,Der Markenfilter setzte die Pillen richtig, baute die
+Adresse richtig, die API antwortete korrekt ? und die Liste
+blieb bei 458."*
+
+> *,,Ich habe DREI plausible Ursachen vermutet und behoben.
+Alle drei waren ECHTE Fehler, keiner war dieser."*
+
+`[read]` **Drei Treffer, die das Problem nicht loesten** ?
+**und er hat weitergemessen, statt sich mit dem Aufraeumen zu
+begnuegen.**
+
+> *,,Dann die Konsole gelesen: HTTP 431. Mein Daumen-Leseweg
+schickte 500 Produkt-Ids in der ADRESSE ? 18.500 Zeichen gegen
+Nodes 16.384. Die Anfrage starb und riss die nebenstehende
+Produktsuche mit, weil beide dieselbe Verbindung nutzten."*
+
+`[read]` **Ein Weg toetete den anderen, und nur der andere war
+sichtbar.**
+
+`[cmd]` **Jetzt POST** ? **dieselbe Familie wie G-64, eine
+Ebene hoeher.**
+
+### Ein zweiter Deckel
+
+> *,,`supplier_product_allergy_matches` gab 1.000 statt 56.909
+Zeilen ? PostgREST. Von den ersten 500 Produkten sind 42
+betroffen, entfernt wurden 0, weil die abgeschnittenen 1.000
+keines davon enthielten."*
+
+`[read]` **Ein stiller Deckel, der zufaellig das Richtige
+verschwieg** ? **geblaettert gelesen, ein Abschneiden wird
+jetzt gemeldet.**
+
+### Und die Trennung haelt
+
+> *,,Der Write loescht nur `quelle=nutrition_preferences`, also
+ueberlebt eine in Settings angelegte Medikamentenallergie jedes
+Speichern in den Vorlieben."*
+
+`[cmd]` **C-498 hatte `food_preferences_read/_write` schon
+umgestellt** ? **Oberflaeche 2 war datenseitig erledigt, bevor
+er anfing.**
+
+`[read]` **Toms Vorgabe war:** *,,fuer den Nutzer aendert sich
+nichts"* ? **eingehalten.**
+
+### Die Sabotagen mit Kontrollprobe
+
+> *,,15 Sabotagen rot, plus eine KONTROLLPROBE, die gruen
+bleiben musste ? sonst misst man nur, dass jemand die Datei
+angefasst hat."*
+
+`[cmd]` **Und ein Waechter fing sich selbst: er suchte
+`food_preferences_write` und fand die Erklaerung im eigenen
+Dateikopf.**
+
+### Was er hinterlassen hat, genannt
+
+> *,,drei Allergien und drei Daumen auf `dev@lumeos.app`, davon
+ein Daumen aus einem Fehlversuch (HerbaGreen Tea) ? genannt,
+nicht heimlich geloescht."*
+
+`[cmd]` **Ich messe VIER Daumen, nicht drei** ? **kleine
+Abweichung, der Fehlversuch ist im Bild sichtbar.**
+
+### Und ein Befund fuer C-498
+
+> *,,`lactose` und `tree_nuts` haben keine Aliase und treffen
+deshalb nichts, obwohl 418 Zutatzeilen woertlich `lactose`
+heissen."*
+
+`[cmd]` **Selbst nachgemessen: nur `magnesium_stearate` hat
+Aliase (3), `lactose` hat 418 woertliche Zeilen und trifft
+null.**
+
+`[cmd]` **Als C-502.**
+
+**Abgenommen.**
+
