@@ -10,6 +10,10 @@ import * as React from 'react'
 // G-72: der Verweis auf die Vorlieben.
 // G-332: ein Formular, zwei Orte — derselbe Baustein wie Preferences.
 import { SlotsFormular } from '../nutrition/slots-formular'
+// G-459: dieselbe Linie — die Kachel gehoert in die Spalte, ihr
+// Leseweg bleibt in `page.tsx`.
+import { AllergienKachel } from './allergien-kachel'
+import type { Allergie } from '../../../lib/allergien/allergie-lage'
 import type { MahlzeitSlot } from '../../../lib/nutrition/slots-lage'
 import Link from 'next/link'
 import type { Route } from 'next'
@@ -73,10 +77,26 @@ type Zustand =
   | { art: 'fehler'; text: string; felder?: Record<string, string> }
 
 export function ProfilFormular({
-  start, ladefehler, slots = [],
+  start, ladefehler, slots = [], allergien = [], allergieFehler = null,
+  allergieTreffer = {},
 }: {
   start: StoredProfile
   ladefehler: string | null
+  /**
+   * G-459 — die Allergien, gelesen in `page.tsx`.
+   *
+   * **Tom, 2026-09-08:** *„das kann eine kleinere kachel links neben
+   * erfahrungsgrad sein."*
+   *
+   * `[read]` **Als Eigenschaft hereingereicht, nicht hier gelesen** —
+   * dieses Formular ist ein Client-Baustein, und ein Leseweg darin
+   * zoege `next/headers` in das Browserbuendel (A-30, dreimal
+   * getroffen).
+   */
+  allergien?: Allergie[]
+  allergieFehler?: string | null
+  /** A8 — je Allergie die Zahl getroffener Katalogzeilen. */
+  allergieTreffer?: Record<string, number>
   /**
    * G-332: die Mahlzeiten-Slots (C-392).
    *
@@ -166,6 +186,19 @@ export function ProfilFormular({
 
       <form onSubmit={absenden}>
         <div className="v2-grid v2-g-cols-2" style={{ marginTop: 16, alignItems: 'start' }}>
+          {/* ══ G-459/A1: die LINKE Spalte ist jetzt ein Stapel ══════
+              `[cmd]` **Ein erster Versuch setzte die Allergiekachel als
+              zweites Kind direkt ins Raster** — und genau das ging
+              schief: bei `grid-template-columns: 480px 480px` wurde
+              sie zur zweiten SPALTE, der rechte Stapel rutschte in
+              Zeile 2, und der Erfahrungsgrad stand am Ende UNTER
+              allem. **Gemessen: Kachel rechts (x=756), Erfahrungsgrad
+              links (x=264), Hoehenueberschneidung 0.**
+
+              `[read]` **Die rechte Spalte war immer schon ein Stapel**
+              — die linke muss es auch sein, sonst kann nichts
+              „nebeneinander" stehen. */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <Card title={t('koerper')} sub={t('koerperSub')}>
             <div style={{ marginBottom: 14 }}>
               <Meter value={stand.gesetzt} max={stand.gesamt} />
@@ -258,6 +291,23 @@ export function ProfilFormular({
               </select>
             </Feld>
           </Card>
+
+          {/* ══ G-459/A1: LINKS NEBEN ERFAHRUNGSGRAD ═════════════════
+              **Tom:** *„das kann eine kleinere kachel links neben
+              erfahrungsgrad sein."*
+
+              `[cmd]` **Sie stand unter dem ganzen Formular** ueber die
+              volle Breite (G-455) — `page.tsx` haengte sie hinter den
+              `<ProfilFormular>`. `[read]` **Jetzt ist sie das zweite
+              Kind der linken Rasterspalte**, also unter „Körper" und
+              damit auf derselben Hoehe wie die rechte Spalte, in der
+              der Erfahrungsgrad steht.
+
+              `[read]` **Kleiner ist sie dadurch von selbst** — die
+              Spalte ist halb so breit wie vorher die ganze Zeile. */}
+          <AllergienKachel allergien={allergien} fehler={allergieFehler}
+                           treffer={allergieTreffer} ort="settings" />
+          </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <Card title={t('aktivitaet')} sub={t('aktivitaetSub')}>

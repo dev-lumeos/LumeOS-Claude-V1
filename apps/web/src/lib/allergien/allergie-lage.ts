@@ -264,3 +264,65 @@ export function gruende(
   }
   return aus
 }
+
+// ══ G-459: die Katalogvorschlaege ═══════════════════════════════════
+//
+// **Tom, 2026-09-08:** *„smartsearch mit vorschlaegen im pulldown,
+// live bei der eingabe"* — **und die Reihenfolge:** *„user gibt ein,
+// ob es um nahrung/supplement/medikament geht, dementsprechend wissen
+// wir, welche produktkataloge SSOT sind."*
+//
+// `[read]` **Die Art steht deshalb VOR dem Suchfeld** — sie
+// entscheidet, welcher Katalog gefragt wird. **Umgekehrt waere die
+// Suche eine Frage ohne Adresse.**
+
+/** Ein Vorschlag aus `public.allergy_catalog_suggestions` (C-503). */
+export type Vorschlag = {
+  /** `nutrition:contains_lactose` — geht als `stoff_code` in die Zeile. */
+  code: string
+  name: string
+  /** Wie viele Katalogzeilen ihn tragen. */
+  treffer: number
+  /** `nutrition.tag_definitions`, `supplements.…`, `medical`. */
+  quelle: string
+  /** Steht dahinter ein Produktabgleich? */
+  prueftProdukte: boolean
+  /** Bei Synonymen: das Wort, das getroffen hat. */
+  treffertext: string | null
+}
+
+// ══ G-459: notiert oder geschuetzt ══════════════════════════════════
+//
+// **Der Auftrag nennt den Unterschied woertlich:** *„Der Unterschied
+// zwischen ‚ich habe es notiert' und ‚LumeOS schuetzt mich davor'."*
+//
+// `[cmd]` **Die Datenbank zieht dieselbe Grenze** — gemessen
+// 2026-09-16 am Trigger `validate_user_allergy_catalog_code`:
+//
+//     stoff_code IS NULL          -> geht durch  (Freitext)
+//     stoff_code aus dem Katalog  -> geht durch
+//     stoff_code erfunden         -> EXCEPTION
+//
+// `[read]` **Freitext ist also erlaubt, aber er traegt keinen Code** —
+// und ohne Code findet `supplier_product_allergy_matches` nichts.
+// **Die Oberflaeche muss das sagen**, sonst haelt jemand eine Notiz
+// fuer einen Schutz.
+
+/** Traegt die Zeile einen Katalogcode — prueft sie also Produkte? */
+export function prueftProdukte(a: Pick<Allergie, 'stoff_code'>): boolean {
+  return typeof a.stoff_code === 'string' && a.stoff_code.trim().length > 0
+}
+
+/**
+ * Der Satz, der den Unterschied benennt.
+ *
+ * `[read]` **Kein Warnton fuer den Freitext** — er ist kein Fehler,
+ * sondern eine gueltige Eingabe mit geringerer Reichweite. **Die
+ * Marke sagt, was sie leistet, nicht dass etwas falsch ist.**
+ */
+export function reichweiteSatz(a: Pick<Allergie, 'stoff_code'>): string {
+  return prueftProdukte(a)
+    ? 'Wird gegen die Produktkataloge geprüft.'
+    : 'Nur notiert — ohne Katalogeintrag prüft LumeOS keine Produkte '
+      + 'dagegen.'
+}

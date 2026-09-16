@@ -1219,6 +1219,31 @@
  * [cmd] Die Kontrastregel aus G-453 gilt weiter: Fliesstext traegt
  * `--fg-muted` (gemessen 9,19:1), nicht `--fg-dim` (2,88:1). */
 
+/* ══ G-459: der Kopf der Kachel in einer halben Spalte ════════════
+ *
+ * [cmd] `.v2-card-h` (packages/ui) ist eine `flex`-Reihe ohne
+ * Umbruch. Bei voller Breite passt „Allergien und
+ * Unvertraeglichkeiten" neben den Untertitel — in der 480-px-Spalte
+ * aus A1 nicht mehr, und beide lagen uebereinander.
+ *
+ * [read] Geaendert wird HIER, nicht in `packages/ui`: das Paket
+ * gehoert allen Apps, das Problem hat nur diese Kachel.
+ */
+.v2-allergie-kachel > .v2-card-h {
+  flex-wrap: wrap;
+  align-items: baseline;
+  row-gap: 2px;
+}
+
+.v2-allergie-kachel > .v2-card-h > .v2-card-title { flex: 0 0 auto; }
+
+/* [read] Der Untertitel darf umbrechen und die ganze Zeile nehmen —
+ * er ist die Erklaerung, nicht die Ueberschrift. */
+.v2-allergie-kachel > .v2-card-h > .v2-card-sub {
+  flex: 1 1 100%;
+  line-height: 1.4;
+}
+
 .v2-allergie-liste {
   list-style: none;
   margin: 0 0 14px;
@@ -1229,12 +1254,26 @@
  * die Breite, alles andere bleibt so schmal wie noetig. So liegen
  * Name und Schwere in einem Blick beieinander (die Lehre aus G-453:
  * nicht ueber die ganze Breite verstreuen). */
+/* ══ G-459: die Zeile traegt jetzt eine halb so breite Spalte ══════
+ *
+ * [cmd] Hier stand `display: flex; flex-wrap: wrap` — gebaut fuer die
+ * volle Inhaltsbreite. Seit A1 steht die Kachel in einer 480-px-
+ * Spalte, und auf dem Foto vom 2026-09-16 brach „Entfernen" in eine
+ * eigene Zeile, bei „Magnesium Stearate" auch die Reichweite.
+ *
+ * [read] Ein Umbruch ist kein Fehler — aber ein UNGEORDNETER ist
+ * einer: mal zwei Zeilen, mal drei, und die Knoepfe standen nicht
+ * untereinander. Deshalb ein festes Raster aus zwei Zeilen:
+ *
+ *     Zeile 1   Stoff ........................ Schwere
+ *     Zeile 2   Art · Reichweite · Herkunft ... Entfernen
+ */
 .v2-allergie-zeile {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  padding: 7px 0;
+  gap: 4px 8px;
+  padding: 8px 0;
   border-bottom: 1px solid color-mix(in oklch, var(--border) 45%, transparent);
 }
 .v2-allergie-zeile:last-child { border-bottom: none; }
@@ -1243,34 +1282,174 @@
   font-size: 13px;
   font-weight: 500;
   color: var(--fg);
-  flex: 1 1 140px;
-  min-width: 120px;
+  min-width: 0;
   overflow-wrap: anywhere;
+}
+
+/* Die zweite Zeile: alles Erklaerende links, der Knopf rechts. */
+.v2-allergie-unten {
+  grid-column: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .v2-allergie-art {
   font-size: 10.5px;
   color: var(--fg-muted);
-  min-width: 78px;
 }
 
 .v2-allergie-schwere {
   font-size: 11px;
   padding: 3px 6px;
   max-width: 150px;
+  justify-self: end;
 }
 
-/* [read] Die Anlegezeile bricht um, statt zu schrumpfen — auf 375 px
- * steht jedes Feld auf eigener Zeile, und das Eingabefeld behaelt
- * seine Mindestbreite. */
+/* ═══ G-459: das Anlegen ist eine Tabelle, keine Reihe ══════════════
+ *
+ * Tom, 2026-09-08: „kann man tabellarisch schoener machen, dass die
+ * eingabe schoen alles in derselben spalte erfolgt."
+ *
+ * [cmd] Hier stand `display: flex; flex-wrap: wrap` — vier Felder
+ * nebeneinander, jedes in seiner eigenen Breite, und beim Umbruch
+ * sprang der Knopf unter das Auswahlfeld.
+ *
+ * [read] Jetzt ZWEI Spalten: Beschriftung und Feld. Die zweite Spalte
+ * ist `1fr`, also beginnt JEDES Feld an derselben Kante — das ist
+ * genau die „dieselbe spalte", die Tom meint. */
 .v2-allergie-form {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
+  display: grid;
+  gap: 10px 12px;
   padding-top: 12px;
   border-top: 1px solid var(--border);
 }
+
+.v2-allergie-zeile-neu {
+  display: grid;
+  /* [read] Die Beschriftungsspalte ist FEST, nicht `auto` — bei `auto`
+   * bestimmte das laengste Wort die Kante, und ein neues Feld haette
+   * alle anderen verschoben. */
+  grid-template-columns: 86px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.v2-allergie-label {
+  font-size: 11.5px;
+  /* [read] --fg-muted, nicht --fg-dim: --fg-dim misst 2,88:1 und
+   * faellt unter WCAG AA (G-453). */
+  color: var(--fg-muted);
+  text-align: right;
+}
+
+/* Auf schmalem Schirm faellt die Beschriftung ueber das Feld — sie
+ * bleibt links, das Feld ebenso, die Spalte also erhalten. */
+@media (max-width: 520px) {
+  .v2-allergie-zeile-neu { grid-template-columns: 1fr; gap: 4px; }
+  .v2-allergie-label { text-align: left; }
+}
+
+/* ═══ Die Vorschlagsliste ═══════════════════════════════════════════
+ *
+ * Tom: „smartsearch mit vorschlaegen im pulldown, live bei der
+ * eingabe."
+ *
+ * [read] Das Feld traegt die Liste, deshalb `position: relative` —
+ * sonst haengt sie am naechsten positionierten Vorfahren und wandert
+ * beim Scrollen der Kachel weg. */
+.v2-allergie-suchfeld { position: relative; }
+
+.v2-allergie-vorschlaege {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  max-height: 260px;
+  overflow-y: auto;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  /* [cmd] Hier stand ein festes Schwarz mit 28 % Deckung — und
+   * `theme-contract` wurde
+   * rot: Farben gehoeren in die Theme-Dateien, nicht hierher. Die
+   * Datei nutzt ueberall `color-mix(… transparent)`, und der Schatten
+   * folgt damit auch dem Hell/Dunkel-Wechsel. */
+  box-shadow: 0 8px 24px color-mix(in oklch, var(--bg) 72%, transparent);
+  display: flex;
+  flex-direction: column;
+}
+
+.v2-allergie-vorschlag {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding: 7px 10px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  cursor: pointer;
+}
+
+.v2-allergie-vorschlag:last-child { border-bottom: none; }
+.v2-allergie-vorschlag:hover,
+.v2-allergie-vorschlag:focus-visible { background: var(--surface-hover); }
+
+.v2-allergie-vorschlag-name {
+  font-size: 12.5px;
+  color: var(--fg);
+}
+
+/* [read] Die Trefferzahl rechts, tabellarische Ziffern — sonst
+ * springt die Spalte zwischen 1.021 und 56.948. */
+.v2-allergie-vorschlag-zahl {
+  font-size: 11px;
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.v2-allergie-vorschlag-grund {
+  grid-column: 1 / -1;
+  font-size: 10.5px;
+  color: var(--fg-muted);
+}
+
+/* [cmd] Die Kataloglucke kommt aus C-503 (`notice`), nicht von hier —
+ * sie ist eine Auskunft, kein anklickbarer Eintrag. */
+.v2-allergie-katalogluecke {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 8px 10px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--fg-muted);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+
+/* ═══ Notiert oder geschuetzt ═══════════════════════════════════════
+ *
+ * „Der Unterschied zwischen ‚ich habe es notiert' und ‚LumeOS
+ * schuetzt mich davor'."
+ *
+ * [read] Kein Warnton fuer den Freitext — er ist keine Fehleingabe. */
+.v2-allergie-reichweite {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--fg-muted);
+}
+
+.v2-allergie-reichweite.ist-geprueft { color: var(--pos); }
 
 /* ═══ G-455: die zwei Filter in den Produkten ══════════════════════
  *

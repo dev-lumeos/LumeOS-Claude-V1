@@ -36,6 +36,14 @@ export async function allergieAnlegen(e: {
   stoff_text: string
   art: ArtCode
   schwere: SchwereCode
+  /**
+   * G-459 — der Katalogcode des gewaehlten Vorschlags, sonst `null`.
+   *
+   * `[read]` **Er wird durchgereicht, nicht hier gebildet** — welcher
+   * Code zu welchem Wort gehoert, weiss `allergy_catalog_suggestions`
+   * (C-503), und der Trigger der Tabelle weist jeden anderen ab.
+   */
+  stoff_code?: string | null
   seit?: string | null
   notiz?: string | null
 }): Promise<AktionsErgebnis> {

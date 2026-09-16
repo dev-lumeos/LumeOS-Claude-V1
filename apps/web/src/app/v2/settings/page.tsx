@@ -21,7 +21,8 @@ import type { MahlzeitSlot } from '../../../lib/nutrition/slots-lage'
 import { ProfilFormular } from './formular'
 // G-455: die Allergienpflege — derselbe Baustein wie in Preferences.
 import { ladeAllergien } from '../../../lib/allergien/allergie-read'
-import { AllergienKachel } from './allergien-kachel'
+// G-459/A8: wie weit jede Allergie reicht — aus C-503.
+import { ladeTrefferzahlen } from '../../../lib/allergien/vorschlaege-read'
 
 export const metadata: Metadata = {
   title: 'Einstellungen · LumeOS',
@@ -57,16 +58,35 @@ export default async function V2SettingsPage() {
   // 2026-09-15: 2 Zeilen, vier RLS-Policies auf `auth.uid()`).
   const allergien = await ladeAllergien()
 
+  // ══ G-459/A8: die Trefferzahlen ════════════════════════════════
+  //
+  // **Der Auftrag:** *„Die drei bestehenden Allergien … muessen
+  // bleiben"* — mit ihren Zahlen.
+  //
+  // `[cmd]` **`user_allergy_catalog_matches` (C-503)** sagt je
+  // Allergie, wie viele Katalogzeilen sie trifft. `[read]` **Eigener
+  // Abfangblock, eigener Fehler** — faellt sie aus, steht die Liste
+  // trotzdem; nur die Zahlen fehlen.
+  const treffer = await ladeTrefferzahlen()
+
   return (
     <>
-      <ProfilFormular start={profil} ladefehler={fehler} slots={slots} />
-      {/* `[read]` **Unter dem Profil, nicht darin** — das Formular
-          gehoert einem anderen Auftrag, und die Allergien haben einen
-          eigenen Schreibweg (Serveraktion statt Formularabsendung). */}
-      <div style={{ marginTop: 16 }}>
-        <AllergienKachel allergien={allergien.allergien}
-                         fehler={allergien.fehler} ort="settings" />
-      </div>
+      {/* ══ G-459/A1 ══════════════════════════════════════════════
+          **Tom:** *„das kann eine kleinere kachel links neben
+          erfahrungsgrad sein."*
+
+          `[cmd]` **Hier stand sie UNTER dem Formular**, in einem
+          eigenen `<div>` ueber die volle Breite. `[read]` **Jetzt
+          gereicht sie das Formular durch** — in die linke Spalte
+          seines Rasters, neben den Erfahrungsgrad.
+
+          `[read]` **Gelesen wird weiter HIER** — `page.tsx` ist der
+          Server, das Formular ist `'use client'`. **Ein Leseweg dort
+          zoege `next/headers` ins Browserbuendel** (A-30). */}
+      <ProfilFormular start={profil} ladefehler={fehler} slots={slots}
+                      allergien={allergien.allergien}
+                      allergieFehler={allergien.fehler}
+                      allergieTreffer={treffer.zahlen} />
     </>
   )
 }

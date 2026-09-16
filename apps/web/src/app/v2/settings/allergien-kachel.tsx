@@ -31,7 +31,8 @@ import { Card, Pill, Icon } from '@lumeos/ui'
 import {
   ARTEN, SCHWEREN, artLabel, schwereLabel, schwereTon,
   QUELLE_SETTINGS, QUELLE_VORLIEBEN,
-  type Allergie, type ArtCode, type SchwereCode,
+  prueftProdukte, reichweiteSatz,
+  type Allergie, type ArtCode, type SchwereCode, type Vorschlag,
 } from '../../../lib/allergien/allergie-lage'
 import {
   allergieAnlegen, allergieLoeschen, allergieAendern,
@@ -68,10 +69,20 @@ function HerkunftsMarke({ quelle }: { quelle: string }) {
 }
 
 export function AllergienKachel({
-  allergien, fehler, ort = 'settings',
+  allergien, fehler, treffer = {}, ort = 'settings',
 }: {
   allergien: Allergie[]
   fehler?: string | null
+  /**
+   * G-459/A8 — je Allergie die Zahl getroffener Katalogzeilen.
+   *
+   * `[cmd]` **Aus `user_allergy_catalog_matches` (C-503)**, gelesen in
+   * `page.tsx`. `[read]` **Fehlt eine Kennung, fehlt nur die Zahl** —
+   * die Zeile steht trotzdem. **Eine `0` waere hier falsch:** sie
+   * saehe aus wie *„trifft nichts"*, und das ist etwas anderes als
+   * *„nicht gemessen"* (E-72).
+   */
+  treffer?: Record<string, number>
   /** Nur fuer den Untertitel — die Mechanik ist an beiden Orten gleich. */
   ort?: 'settings' | 'preferences'
 }) {
@@ -85,13 +96,83 @@ export function AllergienKachel({
   // Sicherheitsangabe, und ein Fehlklick entfernt einen Schutz.
   const [frage, setFrage] = React.useState<Allergie | null>(null)
 
-  async function anlegen(e: React.FormEvent) {
-    e.preventDefault()
+  // ══ G-459: die Vorschlaege aus C-503 ═══════════════════════════════
+  //
+  // **Tom:** *„smartsearch mit vorschlaegen im pulldown, live bei der
+  // eingabe."*
+  //
+  // `[read]` **Entprellt und abbrechbar** — dieselbe Mechanik wie in
+  // `food-suche-hook.ts` (G-320) und im Produktreiter. `[cmd]` **Ohne
+  // Abbruch ueberholt eine langsame aeltere Antwort die neuere**, und
+  // im Feld steht ein Wort, waehrend die Liste ein anderes zeigt.
+  const [vorschlaege, setVorschlaege] = React.useState<Vorschlag[]>([])
+  const [katalogHinweis, setKatalogHinweis] = React.useState<string | null>(null)
+  const [listeOffen, setListeOffen] = React.useState(false)
+  /** Der angeklickte Vorschlag — er traegt den `stoff_code`. */
+  const [gewaehlt, setGewaehlt] = React.useState<Vorschlag | null>(null)
+  const laufend = React.useRef<AbortController | null>(null)
+  const feld = React.useRef<HTMLDivElement>(null)
+
+  // `[read]` **Die Adresse ist der Schluessel** — eine Zeichenkette,
+  // kein Objekt. `[cmd]` **G-455: ein Array als Abhaengigkeit liess
+  // den Effekt endlos laufen und seine eigene Anfrage abbrechen.**
+  const schluessel = `${art}|${stoff.trim()}`
+
+  React.useEffect(() => {
+    const [a, q] = schluessel.split('|')
+    // `[read]` **Auch OHNE Begriff gefragt** — bei `medikament` ist
+    // die Kataloglucke die Antwort, und die soll man sehen, bevor man
+    // tippt.
+    const zeit = setTimeout(async () => {
+      laufend.current?.abort()
+      const ctrl = new AbortController()
+      laufend.current = ctrl
+      try {
+        const r = await fetch(
+          `/api/allergien/vorschlaege?art=${encodeURIComponent(a)}`
+          + `&q=${encodeURIComponent(q)}`, { signal: ctrl.signal })
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        const j = await r.json() as {
+          vorschlaege?: Vorschlag[]; hinweis?: string | null
+        }
+        setVorschlaege(j.vorschlaege ?? [])
+        setKatalogHinweis(j.hinweis ?? null)
+      } catch (e) {
+        if (e instanceof Error && e.name === 'AbortError') return
+        // `[read]` **Ohne Vorschlaege bleibt der Freitext** — die
+        // Kachel ist nicht kaputt, sie kann nur weniger.
+        setVorschlaege([])
+      }
+    }, 180)
+    return () => clearTimeout(zeit)
+  }, [schluessel])
+
+  // Ein Klick daneben schliesst die Liste.
+  React.useEffect(() => {
+    if (!listeOffen) return
+    function daneben(e: MouseEvent) {
+      if (feld.current && !feld.current.contains(e.target as Node)) {
+        setListeOffen(false)
+      }
+    }
+    document.addEventListener('mousedown', daneben)
+    return () => document.removeEventListener('mousedown', daneben)
+  }, [listeOffen])
+
+  async function anlegen() {
+    if (laeuft || !stoff.trim()) return
     setLaeuft(true); setMeldung(null)
-    const a = await allergieAnlegen({ stoff_text: stoff, art, schwere })
+    // `[cmd]` **Der Code geht mit, wenn ein Vorschlag gewaehlt wurde**
+    // — sonst `null`, und die Zeile ist Freitext. **C-503 prueft ihn
+    // per Trigger:** ein erfundener Code faellt an der Datenbank
+    // (gemessen 2026-09-16).
+    const a = await allergieAnlegen({
+      stoff_text: stoff, art, schwere,
+      stoff_code: gewaehlt?.code ?? null,
+    })
     setLaeuft(false)
     if (!a.ok) { setMeldung(a.fehler); return }
-    setStoff('')
+    setStoff(''); setGewaehlt(null); setListeOffen(false)
   }
 
   async function loeschen(id: string) {
@@ -110,6 +191,13 @@ export function AllergienKachel({
 
   return (
     <Card
+      // `[read]` **Eine eigene Klasse statt `packages/ui` anfassen** —
+      // `.v2-card-h` ist eine `flex`-Reihe ohne Umbruch, und in der
+      // halb so breiten Spalte (A1) lagen Titel und Untertitel
+      // uebereinander (Foto 2026-09-16). `[cmd]` **`packages/ui`
+      // gehoert allen Apps** — eine Aenderung dort traefe jede Kachel
+      // im Produkt, fuer ein Problem, das nur diese hat.
+      className="v2-allergie-kachel"
       title="Allergien und Unverträglichkeiten"
       sub={ort === 'settings'
         ? 'Gilt in allen Modulen — Lebensmittel, Supplemente, Medikamente.'
@@ -142,7 +230,6 @@ export function AllergienKachel({
             {allergien.map(a => (
               <li key={a.id} className="v2-allergie-zeile">
                 <span className="v2-allergie-stoff">{a.stoff_text}</span>
-                <span className="v2-allergie-art">{artLabel(a.art)}</span>
                 {/* `[read]` **Die Schwere ist klickbar** — sie aendert
                     sich haeufiger als der Stoff, und ein eigener
                     Bearbeitungsdialog fuer ein Feld waere zu viel. */}
@@ -158,10 +245,47 @@ export function AllergienKachel({
                     <option key={s.code} value={s.code}>{s.label}</option>
                   ))}
                 </select>
+
+                {/* ══ G-459: die zweite Zeile ══════════════════════
+                    `[read]` **Alles Erklaerende zusammen** — Art,
+                    Reichweite, Herkunft. `[cmd]` **Vorher standen sie
+                    in derselben `flex`-Reihe wie der Knopf**, und in
+                    der halb so breiten Spalte brach diese Reihe
+                    ungeordnet um (Foto 2026-09-16). */}
+                <div className="v2-allergie-unten">
                 <Pill variant={schwereTon(a.schwere)}>
                   {schwereLabel(a.schwere)}
                 </Pill>
+                <span className="v2-allergie-art">{artLabel(a.art)}</span>
+                {/* ══ A8: WIE WEIT DIE ZEILE REICHT ═════════════
+                    `[read]` **Drei Faelle, drei verschiedene Saetze**
+                    — und keiner von ihnen ist eine nackte Null:
+
+                      Katalogcode + Zahl   „prüft N Einträge"
+                      Katalogcode, keine   nur der Code steht
+                      Freitext             „nicht gegen Produkte"
+
+                    `[cmd]` **`magnesium_stearate` trifft 56.948
+                    Produkte, `contains_lactose` 1.021** (gemessen
+                    2026-09-16) — **die Zahl ist die Auskunft.** */}
+                {prueftProdukte(a)
+                  ? (
+                    <span className="v2-allergie-reichweite ist-geprueft"
+                          style={{ fontSize: 10 }}>
+                      {typeof treffer[a.id] === 'number'
+                        ? `prüft ${treffer[a.id].toLocaleString('de-DE')} Einträge`
+                        : 'aus dem Katalog'}
+                    </span>
+                    )
+                  : (
+                    <span className="v2-allergie-reichweite"
+                          style={{ fontSize: 10 }}
+                          title={reichweiteSatz(a)}>
+                      Freitext
+                    </span>
+                    )}
                 <HerkunftsMarke quelle={a.quelle} />
+                </div>
                 <button
                   type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
                   disabled={laeuft}
@@ -176,32 +300,190 @@ export function AllergienKachel({
           )}
 
       {/* ── Anlegen ────────────────────────────────────────────────── */}
-      <form onSubmit={anlegen} className="v2-allergie-form">
-        <input
-          className="v2-feld"
-          value={stoff}
-          onChange={e => setStoff(e.target.value)}
-          placeholder="Stoff — z. B. Laktose, Erdnuss, Penicillin"
-          aria-label="Stoff"
-          disabled={laeuft}
-          style={{ flex: '1 1 200px', minWidth: 160 }}
-        />
-        <select className="v2-feld" value={art} disabled={laeuft}
-                aria-label="Art"
-                onChange={e => setArt(e.target.value as ArtCode)}>
-          {ARTEN.map(a => <option key={a.code} value={a.code}>{a.label}</option>)}
-        </select>
-        <select className="v2-feld" value={schwere} disabled={laeuft}
-                aria-label="Schwere"
-                onChange={e => setSchwere(e.target.value as SchwereCode)}>
-          {SCHWEREN.map(s => <option key={s.code} value={s.code}>{s.label}</option>)}
-        </select>
-        <button type="submit" className="v2-btn v2-btn-primary"
-                disabled={laeuft || !stoff.trim()}>
-          <Icon name="plus" className="v2-ic v2-ic-sm" />
-          {laeuft ? 'Speichert…' : 'Hinzufügen'}
-        </button>
-      </form>
+      {/* ══ G-459: TABELLARISCH, EINE SPALTE ════════════════════════
+          **Tom, 2026-09-08:** *„kann man tabellarisch schoener machen,
+          dass die eingabe schoen alles in derselben spalte erfolgt."*
+
+          `[cmd]` **Hier stand eine `flex`-Reihe** — Stoff, Art,
+          Schwere und der Knopf nebeneinander, jedes Feld in einer
+          anderen Breite. `[read]` **Dieselbe Falle wie in G-453**
+          (*„nicht so verstreut auf die breite"*): die Beschriftung
+          stand links, das Feld irgendwo rechts daneben.
+
+          `[read]` **Jetzt ein Raster aus zwei Spalten** — Beschriftung
+          und Feld —, und **alle Felder beginnen an derselben Kante.**
+
+          ══ DIE ART STEHT ZUERST ════════════════════════════════════
+
+          **Tom:** *„user gibt ein, ob es um nahrung/supplement/
+          medikament geht, dementsprechend wissen wir, welche
+          produktkataloge SSOT sind."*
+
+          `[read]` **Sie entscheidet, welcher Katalog gefragt wird** —
+          eine Suche davor waere eine Frage ohne Adresse. */}
+      {/* ══ EIN <div>, KEIN <form> ═══════════════════════════════
+          `[cmd]` **Hier stand `<form onSubmit={anlegen}>`.** Seit die
+          Kachel in der Spalte des Profilformulars steht (A1), lag sie
+          damit INNERHALB von dessen `<form>` — **und ein `<form>` im
+          `<form>` ist ungueltiges HTML.**
+
+          `[cmd]` **Der Browser zieht das innere beim Einlesen heraus**,
+          der Server hatte es aber verschachtelt ausgeliefert:
+          **neunmal `Hydration failed` je Seitenaufruf** (gemessen
+          2026-09-16).
+
+          `[read]` **Der Knopf leistet dasselbe ohne `<form>`** — er
+          traegt den Aufruf selbst. **Was dabei verloren geht, ist die
+          Eingabetaste**, und die wird unten eigens wiederhergestellt. */}
+      <div className="v2-allergie-form">
+        <label className="v2-allergie-zeile-neu">
+          <span className="v2-allergie-label">Art</span>
+          <select className="v2-feld" value={art} disabled={laeuft}
+                  aria-label="Art"
+                  onChange={e => {
+                    setArt(e.target.value as ArtCode)
+                    // `[read]` **Der gewaehlte Vorschlag faellt mit**
+                    // — ein `nutrition:`-Code unter `supplement`
+                    // waere ein Code der falschen Art, und der
+                    // Trigger von C-503 wiese ihn ab.
+                    setGewaehlt(null)
+                  }}>
+            {ARTEN.map(a => <option key={a.code} value={a.code}>{a.label}</option>)}
+          </select>
+        </label>
+
+        <div className="v2-allergie-zeile-neu">
+          <span className="v2-allergie-label">Stoff</span>
+          <div className="v2-allergie-suchfeld" ref={feld}>
+            <input
+              className="v2-feld"
+              value={stoff}
+              onChange={e => { setStoff(e.target.value); setGewaehlt(null) }}
+              onFocus={() => setListeOffen(true)}
+              // `[read]` **Die Eingabetaste kam vom `<form>`** — ohne
+              // es muss sie hier stehen, sonst verliert die Kachel eine
+              // Bedienung, die vorher da war.
+              onKeyDown={e => {
+                if (e.key !== 'Enter') return
+                e.preventDefault()
+                void anlegen()
+              }}
+              placeholder="Tippen — z. B. Laktose, Erdnuss, Magnesium"
+              aria-label="Stoff"
+              role="combobox"
+              aria-expanded={listeOffen}
+              aria-controls="v2-allergie-vorschlaege"
+              disabled={laeuft}
+              style={{ width: '100%' }}
+            />
+
+            {/* ══ DIE VORSCHLAEGE ══════════════════════════════════
+                `[cmd]` **Aus `public.allergy_catalog_suggestions`
+                (C-503)** — gerufen, nicht nachgebaut.
+                `[cmd]` **Gemessen:** *laktose* und *milchzucker*
+                finden beide `nutrition:contains_lactose` mit 1.021
+                Treffern. **Die Synonymaufloesung ist die Leistung
+                der Funktion.** */}
+            {listeOffen && (vorschlaege.length > 0 || katalogHinweis) && (
+              <div className="v2-allergie-vorschlaege"
+                   id="v2-allergie-vorschlaege" role="listbox">
+                {/* `[read]` **Die Kataloglucke steht OBEN und ist
+                    kein Eintrag** — wer sie anklicken koennte,
+                    waehlte eine Abwesenheit. */}
+                {katalogHinweis && (
+                  <div className="v2-allergie-katalogluecke">
+                    <Icon name="alert" className="v2-ic v2-ic-sm" />
+                    {katalogHinweis}
+                  </div>
+                )}
+                {vorschlaege.map(v => (
+                  <button
+                    key={v.code} type="button" role="option"
+                    aria-selected={gewaehlt?.code === v.code}
+                    className="v2-allergie-vorschlag"
+                    onClick={() => {
+                      setGewaehlt(v)
+                      setStoff(v.name)
+                      setListeOffen(false)
+                    }}
+                  >
+                    <span className="v2-allergie-vorschlag-name">{v.name}</span>
+                    {/* `[read]` **Die Trefferzahl ist die Auskunft,
+                        die den Vorschlag traegt** — sie sagt, wie
+                        weit die Allergie reicht. */}
+                    <span className="v2-allergie-vorschlag-zahl">
+                      {v.treffer.toLocaleString('de-DE')}
+                    </span>
+                    {/* `[cmd]` **Bei einem Synonym stand ein anderes
+                        Wort im Feld** — dann wird es genannt, sonst
+                        sieht der Vorschlag wie ein Zufall aus. */}
+                    {v.treffertext
+                      && v.treffertext.toLowerCase() !== v.name.toLowerCase() && (
+                      <span className="v2-allergie-vorschlag-grund">
+                        Treffer über „{v.treffertext}“
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="v2-allergie-zeile-neu">
+          <span className="v2-allergie-label">Schwere</span>
+          <select className="v2-feld" value={schwere} disabled={laeuft}
+                  aria-label="Schwere"
+                  onChange={e => setSchwere(e.target.value as SchwereCode)}>
+            {SCHWEREN.map(s => <option key={s.code} value={s.code}>{s.label}</option>)}
+          </select>
+        </div>
+
+        {/* ══ NOTIERT ODER GESCHUETZT ═══════════════════════════════
+            **Der Auftrag nennt es woertlich:** *„Der Unterschied
+            zwischen ‚ich habe es notiert' und ‚LumeOS schuetzt mich
+            davor'."*
+
+            `[cmd]` **Die Datenbank zieht dieselbe Grenze** — der
+            Trigger `validate_user_allergy_catalog_code` laesst
+            `stoff_code IS NULL` durch und weist einen erfundenen Code
+            ab (beide 2026-09-16 gemessen).
+
+            `[read]` **Kein Warnton fuer den Freitext** — er ist keine
+            Fehleingabe, sondern eine mit geringerer Reichweite. */}
+        <div className="v2-allergie-zeile-neu">
+          <span className="v2-allergie-label" />
+          <div className={gewaehlt
+            ? 'v2-allergie-reichweite ist-geprueft'
+            : 'v2-allergie-reichweite'}>
+            {gewaehlt
+              ? (
+                <>
+                  <Icon name="check" className="v2-ic v2-ic-sm" />
+                  Aus dem Katalog — wird gegen{' '}
+                  {gewaehlt.treffer.toLocaleString('de-DE')} Einträge
+                  geprüft.
+                </>
+                )
+              : (
+                <>
+                  Freitext: LumeOS notiert den Stoff, prüft aber keine
+                  Produkte dagegen. Ein Vorschlag aus der Liste tut es.
+                </>
+                )}
+          </div>
+        </div>
+
+        <div className="v2-allergie-zeile-neu">
+          <span className="v2-allergie-label" />
+          <button type="button" className="v2-btn v2-btn-primary"
+                  onClick={() => void anlegen()}
+                  disabled={laeuft || !stoff.trim()}>
+            <Icon name="plus" className="v2-ic v2-ic-sm" />
+            {laeuft ? 'Speichert…' : 'Hinzufügen'}
+          </button>
+        </div>
+      </div>
 
       {meldung && (
         <p style={{ fontSize: 11.5, color: 'var(--warn)', marginTop: 8 }}>

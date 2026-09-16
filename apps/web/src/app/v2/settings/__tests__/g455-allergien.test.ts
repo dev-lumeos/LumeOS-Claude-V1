@@ -92,9 +92,28 @@ test('A2: Settings UND Preferences zeigen dieselbe Kachel', () => {
   //
   // `[read]` **Eine ZWEITE Fassung waere die Drift, die Tom vermeiden
   // wollte** — dieselbe Linie wie die Mahlzeiten-Slots (G-332).
-  const settings = lies('app/v2/settings/page.tsx')
+  // ══ G-459: NICHT MEHR AUF EINE DATEI FESTGENAGELT ════════════════
+  //
+  // `[cmd]` **Hier stand `lies('app/v2/settings/page.tsx')`** — und
+  // die Probe wurde rot, als G-459 die Kachel in die Spalte des
+  // Profilformulars zog (A1, *„links neben erfahrungsgrad"*).
+  //
+  // `[read]` **Die Kachel wurde dabei nicht entfernt, nur verschoben**
+  // — die Probe hat also die DATEI bewacht, nicht die SACHE. **Ein
+  // fester Dateiname altert nur nach unten:** er wird rot, wenn sich
+  // etwas Erlaubtes aendert, und bleibt gruen, wenn die Kachel in
+  // einer anderen Datei der Route verschwindet.
+  //
+  // `[read]` **Jetzt gilt die ganze Route** — gezeigt wird sie, wenn
+  // IRGENDEINE Datei unter `app/v2/settings/` sie rendert.
+  const settingsDateien = fs.readdirSync(
+    path.join(WEB, 'src', 'app', 'v2', 'settings'))
+    .filter(d => d.endsWith('.tsx'))
+    .map(d => lies(`app/v2/settings/${d}`))
+  const settings = settingsDateien.join('\n')
   const prefs = lies('app/v2/nutrition/tab-vorlieben.tsx')
-  assert.match(settings, /<AllergienKachel/, 'Settings zeigt sie nicht.')
+  assert.match(settings, /<AllergienKachel/,
+    'Keine Datei der Settings-Route rendert die Kachel.')
   assert.match(prefs, /<AllergienKachel/, 'Preferences zeigt sie nicht.')
   // `[cmd]` **Und BEIDE aus derselben Datei** — nicht kopiert.
   assert.match(prefs, /from '\.\.\/settings\/allergien-kachel'/,

@@ -29,7 +29,7 @@
 import { createSessionClient } from '@lumeos/shared/session'
 
 import {
-  QUELLE_SETTINGS, sortiere, stoffCode,
+  QUELLE_SETTINGS, sortiere,
   type Allergie, type AllergieTreffer, type ArtCode, type SchwereCode,
 } from './allergie-lage'
 
@@ -167,14 +167,38 @@ export type SchreibErgebnis = { ok: true } | { ok: false; fehler: string }
  * angelegte Zeile traegt eine andere Quelle und ueberlebt** (gemessen
  * im Funktionsrumpf).
  *
- * `[read]` **Der `stoff_code` wird nach derselben Regel gebildet wie
- * dort** (`lower`, Leerzeichen zu `_`) — sonst stuenden „Tree Nuts"
- * und „tree_nuts" als zwei Eintraege da.
+ * ══ G-459: DER CODE WIRD NICHT MEHR GEBILDET, SONDERN GEWAEHLT ══════
+ *
+ * `[cmd]` **Hier stand `stoff_code: stoffCode(text)`** — aus dem
+ * eingetippten Wort ein Kleinbuchstaben-Slug. `[cmd]` **Seit C-503
+ * (eingespielt 2026-09-16) prueft der Trigger
+ * `validate_user_allergy_catalog_code` die Spalte gegen den Katalog
+ * der Art** — gemessen:
+ *
+ *     stoff_code IS NULL                   -> geht durch (Freitext)
+ *     stoff_code aus dem Katalog           -> geht durch
+ *     stoff_code 'nutrition:gibt_es_nicht' -> EXCEPTION
+ *
+ * `[read]` **Ein gebildeter Slug ist genau der dritte Fall.**
+ * `[cmd]` **„Enthält Laktose" waere zu `enthält_laktose` geworden** —
+ * und die Zeile haette die Datenbank nicht mehr angenommen.
+ *
+ * `[read]` **Deshalb kommt der Code jetzt von aussen** — aus dem
+ * angeklickten Vorschlag, oder gar nicht. **Ohne Code ist die Zeile
+ * Freitext, und die Oberflaeche sagt das auch** (`reichweiteSatz`).
  */
 export async function legeAllergieAn(e: {
   stoff_text: string
   art: ArtCode
   schwere: SchwereCode
+  /**
+   * Der Katalogcode aus dem gewaehlten Vorschlag — oder `null`.
+   *
+   * `[read]` **Nicht optional-mit-Vorgabe, sondern optional-ohne** —
+   * wer ihn weglaesst, bekommt Freitext. **Das ist das sichere Ende:**
+   * ein fehlender Code kostet Reichweite, ein falscher die Zeile.
+   */
+  stoff_code?: string | null
   seit?: string | null
   notiz?: string | null
 }): Promise<SchreibErgebnis> {
@@ -185,7 +209,7 @@ export async function legeAllergieAn(e: {
     const text = e.stoff_text.trim()
     const { error } = await c.from('user_allergies').insert({
       user_id: user.id,
-      stoff_code: stoffCode(text),
+      stoff_code: e.stoff_code?.trim() || null,
       stoff_text: text,
       art: e.art,
       schwere: e.schwere,
