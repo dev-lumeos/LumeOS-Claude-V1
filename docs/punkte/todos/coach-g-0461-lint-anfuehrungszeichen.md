@@ -9,7 +9,7 @@ kind_von: G-458
 entscheidung: null
 beruehrt:
   dateien:
-    - apps/coach/src/app/v2/medical/modale.tsx
+    - apps/coach/src/components/draft/modale.tsx
 zahlen:
   gemessen: 2026-09-08
 ---
@@ -21,7 +21,7 @@ zahlen:
 Aus G-458, Codex, 2026-09-08:
 
 > *,,Lint: nicht maskiertes Anfuehrungszeichen in
-`apps/coach/.../modale.tsx:529`."*
+`apps/coach/src/components/draft/modale.tsx:529`."*
 
 `[read]` **Klein, aber es haelt `pnpm gate` auf.**
 
