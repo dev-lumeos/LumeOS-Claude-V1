@@ -155,3 +155,79 @@ Nutrition-Feature.**
     D  wie viele Suchbegriffe haben ueberhaupt so
        viele Varianten? Die zehn groessten Gruppen.
 
+## Toms Entscheidung, 2026-09-08
+
+Tom:
+
+> ein anfaenger isst und protokolliert, der gibt keine
+> raw daten ein
+
+> ich wuerde sagen, wir legen anfaengergruppen an. da wird der
+> PARENT, zb haehnchenbrust gegrillt, als vorgabe angezeigt,
+> aber er kann die CHILD anwaehlen, wenn er will. dann ist er
+> nicht ueberwaeltigt von 31 resultaten
+
+### Damit faellt meine Frage 2 weg
+
+`[read]` **Ich hatte gefragt, was *,,der Mittelwert"* sein
+soll** ? **die Antwort: gar keiner.**
+
+`[read]` **Der Parent ist eine ECHTE Zeile, keine gerechnete.**
+
+    Haehnchenbrust, gegrillt        <- Vorgabe, echt
+      Brust ohne Haut, roh
+      Brust ohne Haut, gebraten (Ofen)
+      Brust ohne Haut, gebraten (Pfanne)
+      Brustfilet, gekocht
+      ... 30 weitere
+
+`[read]` **Und *,,ein Anfaenger gibt keine roh-Daten ein"* ist
+die Begruendung fuer die Wahl des Parents** ? **nicht die
+BLS-Grundform, sondern die, die man ISST.**
+
+### Und es ist dieselbe Bauform wie die Muskelhierarchie
+
+`[cmd]` **`public.koerperflaechen` und
+`training.muscle_groups` haben beide `parent_id`.**
+
+`[cmd]` **`nutrition.foods` hat sie NICHT.**
+
+`[read]` **E-81 gilt hier auch: `parent_id` traegt die Tiefe,
+keine Ebenenzahl.**
+
+`[read]` **Und G-446 hat gezeigt, wie die Vererbung laufen
+muss** ? **in beide Richtungen.**
+
+### Nichts wird weggenommen
+
+`[read]` **Toms Satz: *,,aber er kann die child anwaehlen, wenn
+er will"*.**
+
+`[read]` **Also KEIN Filter nach Erfahrungsgrad** ? **eine
+Gruppierung, die eingeklappt startet.**
+
+`[cmd]` **Der Erfahrungsgrad entscheidet nur, ob sie
+EINGEKLAPPT oder OFFEN startet** ? **nicht, ob sie da ist.**
+
+`[read]` **Das ist wichtig fuer den Coach: er sieht, was sein
+Kunde gewaehlt hat, auch wenn der Kunde `beginner` ist.**
+
+## Was jetzt zu messen ist
+
+    A  wie viele Gruppen gibt es ueberhaupt?
+       Die zehn groessten.
+    B  welcher Eintrag ist je Gruppe der Parent?
+       "die, die man isst" -- woran erkennbar?
+    C  trennt is_prepared_dish die Fertiggerichte
+       (Clubsandwich) von den Grundformen?
+    D  wie weit liegen die Naehrwerte auseinander?
+       Nicht mehr fuer den Mittelwert -- sondern um
+       zu wissen, ob die Wahl des Parents zaehlt.
+
+`[read]` **Punkt B ist die eigentliche Arbeit** ? **7.140
+Lebensmittel, und je Gruppe muss einer als Vorgabe
+ausgezeichnet werden.**
+
+`[cmd]` **Automatisch geht es vermutlich nicht** ? **miss, ob
+`processing_level` und der Name reichen.**
+
