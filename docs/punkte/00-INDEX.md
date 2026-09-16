@@ -6,9 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 235 |
-| `laufend_codex` | 2 |
-| `erledigt` | 468 |
-| **gesamt** | **705** |
+| `erledigt` | 471 |
+| **gesamt** | **706** |
 
 ## medical — 49
 
@@ -54,7 +53,7 @@
 | `C-429` | befund | mittel | [die zentrale Zeitachse fehlt](erledigt/medical-c-0429-die-zentrale-zeitachse-fehlt.md) | erledigt | — | C-431 |
 | `C-431` | feature | hoch | [C-429 einspielen](erledigt/medical-c-0431-c-429-einspielen.md) | erledigt | — | G-376 |
 | `C-457` | feature | mittel | [OCR fehlt in `lab_reports`](erledigt/medical-c-0457-ocr-fehlt-in-lab-reports.md) | erledigt | — | — |
-| `C-506` | fehler | hoch | [der Medikamentenkatalog IST da](laufend_codex/medical-c-0506-medikamentenkatalog-ist-da.md) | laeuft (codex) | — | — |
+| `C-506` | fehler | hoch | [der Medikamentenkatalog IST da](erledigt/medical-c-0506-medikamentenkatalog-ist-da.md) | erledigt | — | — |
 | `G-124` | befund | mittel | [Die Medikamentenkachel braucht zehn Spalten](todos/medical-g-0124-die-medikamentenkachel-braucht-zehn-spalten.md) | offen | — | — |
 | `G-146` | befund | mittel | [Zehn Marker in `enrichment` ohne `system_groups`](todos/medical-g-0146-zehn-marker-in-enrichment-ohne-system-groups.md) | offen | — | — |
 | `G-218` | messung | hoch | [kommt die `critical`-Warnung auf den Bildschirm?](erledigt/medical-g-0218-kommt-die-critical-warnung-auf-den-bildschirm.md) | erledigt | — | — |
@@ -309,9 +308,9 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 94
+## supplements — 95
 
-### beauftragbar — 93
+### beauftragbar — 94
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -371,8 +370,9 @@
 | `C-497` | feature | mittel | [Daumen hoch und runter fuer Supplementprodukte](erledigt/supplements-c-0497-daumen-fuer-produkte.md) | erledigt | — | — |
 | `C-499` | feature | mittel | [Off-Market-Produkte stilllegen](erledigt/supplements-c-0499-off-market-stilllegen.md) | erledigt | — | — |
 | `C-500` | feature | mittel | [die Vitamin-E-Form herausfinden](erledigt/supplements-c-0500-vitamin-e-form.md) | erledigt | — | — |
-| `C-504` | fehler | hoch | [die Filter gehoeren in die Datenbank](laufend_codex/supplements-c-0504-filter-in-die-datenbank.md) | laeuft (codex) | — | — |
-| `C-505` | befund | hoch | [die Mehrheit der Zutaten ist nicht verknuepft](todos/supplements-c-0505-zutaten-nicht-verknuepft.md) | offen | — | — |
+| `C-504` | fehler | hoch | [die Filter gehoeren in die Datenbank](erledigt/supplements-c-0504-filter-in-die-datenbank.md) | erledigt | — | — |
+| `C-505` | befund | hoch | [die Mehrheit der Zutaten ist nicht verknuepft](erledigt/supplements-c-0505-zutaten-nicht-verknuepft.md) | erledigt | — | C-509 |
+| `C-509` | befund | hoch | [der Substanzkatalog ist zu klein](todos/supplements-c-0509-substanzkatalog-zu-klein.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |

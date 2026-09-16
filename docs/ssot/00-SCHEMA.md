@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-16: 211 Funktionen, 462 Policies, 710 CHECKs, 18 Sichten.**
+`[cmd]` **Stand 2026-09-16: 213 Funktionen, 462 Policies, 710 CHECKs, 19 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -160,8 +160,8 @@ ob man sie rufen kann.**
 | public | handle_new_user |  | Funktion |
 | public | is_admin |  | Funktion |
 | public | koerperflaechen_touch |  | Funktion |
-| public | levenshtein | text, text | Funktion |
 | public | levenshtein | text, text, integer, integer, integer | Funktion |
+| public | levenshtein | text, text | Funktion |
 | public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
@@ -209,11 +209,13 @@ ob man sie rufen kann.**
 | supplements | refresh_stack_item_count |  | Funktion |
 | supplements | rule_assessment | p_user_id uuid DEFAULT auth.uid(), p_entry_date date DEFAULT CURRENT_DATE | Funktion |
 | supplements | rule_operator_supported | p_rule_id text, p_module text, p_field text, p_operator text | Funktion |
-| supplements | search_supplier_products | p_query text, p_market_status text DEFAULT 'On Market'::text, p_marke text DEFAULT NULL::text, p_limit integer DEFAULT 50 | Funktion |
+| supplements | search_supplier_products | p_query text, p_market_status text DEFAULT 'On Market'::text, p_marke text DEFAULT NULL::text, p_limit integer DEFAULT 50, p_kategorie text DEFAULT NULL::text, p_form text DEFAULT NULL::text, p_allergien_ausblenden boolean DEFAULT true, p_meidestoffe text[] DEFAULT NULL::text[], p_marken text[] DEFAULT NULL::text[], p_nur_bewertet boolean DEFAULT false | Funktion |
 | supplements | set_supplement_cycle_status | p_cycle_id uuid, p_status text, p_note_de text DEFAULT NULL::text | Funktion |
 | supplements | start_supplement_cycle | p_supplement_id uuid, p_source text DEFAULT 'confirmed_by_user'::text, p_suggestion_source text DEFAULT 'user_manual'::text, p_note_de text DEFAULT NULL::text | Funktion |
 | supplements | supplement_nutrient_intake_for_day | p_user_id uuid, p_entry_date date DEFAULT CURRENT_DATE | Funktion |
 | supplements | supplier_product_detail | p_product_id uuid | Funktion |
+| supplements | supplier_product_filter_preferences_read |  | Funktion |
+| supplements | supplier_product_filter_preferences_write | p_marktstatus text DEFAULT 'On Market'::text, p_kategorie text DEFAULT NULL::text, p_form text DEFAULT NULL::text, p_marken text[] DEFAULT '{}'::text[], p_allergien_ausblenden boolean DEFAULT true | Funktion |
 | supplements | supplier_product_preference_write | p_product_id uuid, p_preference text | Funktion |
 | supplements | touch_updated_at |  | Funktion |
 | supplements | withdraw_stack_template | p_stack_id uuid | Funktion |
@@ -250,6 +252,7 @@ Rechten des Lesers, nicht des Erzeugers.**
 | supplements | substance_alias_matches | security_invoker |
 | supplements | supplement_forms_read | security_invoker |
 | supplements | supplier_product_brands | security_invoker |
+| supplements | supplier_product_content_catalog | security_invoker |
 | supplements | supplier_product_nutrients | security_invoker |
 
 ## CHECK-Bedingungen

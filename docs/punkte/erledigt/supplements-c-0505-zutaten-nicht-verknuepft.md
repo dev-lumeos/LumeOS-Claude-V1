@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-496
 entscheidung: null
+erledigt: 2026-09-08
+commit: 5e970b18
 beruehrt:
   tabellen: [supplements.product_contents]
 zahlen:
@@ -126,3 +128,39 @@ kennt 23/54. Damit sind Hilfsstoffe sichtbar erkannt statt faelschlich als
 Wirkstoffe zu erscheinen; offene aktive Facts bleiben sichtbar Kandidat.
 
 `[cmd]` Sicherung und Vollkette wie C-504; C-505-Vertragstest gruen.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **305.080 von 3.000.982 verknuepft** ? **vorher
+302.293.**
+
+`[read]` **2.787 dazu** ? **er meldet 2.785 eindeutige exakte
+Treffer.**
+
+### Die Zurueckhaltung ist der Kern
+
+> *,,Nur 2.785 eindeutige, EXAKTE Katalogtreffer wurden
+nachverknuepft; keine Zuordnung geraten."*
+
+`[read]` **Von 2,7 Mio offenen Zeilen hat er 2.785 belegt** ?
+**ein Zehntel Prozent.**
+
+`[read]` **Die Auflage war:** *,,KEINE Zuordnung raten ? was
+nicht trifft, bleibt Kandidat."*
+
+`[cmd]` **Und die Klassifikation steht:** **Naehrwert,
+Wirkstoff, Hilfsstoff, offener Kandidat.**
+
+`[read]` **Damit ist Toms Befund BENANNT, aber nicht
+geloest** ? **die Mehrheit bleibt unverknuepft, und das ist
+ehrlich.**
+
+`[read]` **Was fehlt, ist eine QUELLE fuer die uebrigen** ?
+**596 Substanzen reichen fuer 14.677 eindeutige Zutaten
+nicht.**
+
+`[cmd]` **Als C-509.**
+
+**Abgenommen.**

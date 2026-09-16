@@ -9,6 +9,8 @@ kind_von: G-454
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 5e970b18
 beruehrt:
   tabellen: [supplements.supplier_products]
 zahlen:
@@ -129,5 +131,40 @@ neuen C-504-Vertragstests sind gruen.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen, LIVE.**
+
+`[cmd]` **Zehn Parameter:**
+
+    p_query, p_market_status, p_marke, p_limit,
+    p_kategorie, p_form,
+    p_allergien_ausblenden  boolean DEFAULT true,
+    p_meidestoffe           text[],
+    p_marken                text[],
+    p_nur_bewertet          boolean
+
+`[cmd]` **Und `public.user_display_preferences` als
+Speicher** ? **nicht eine neue Tabelle, die bestehende.**
+
+### Die Laufzeit, gemessen
+
+> *,,whey: 43,6 ms ohne, 196,4 ms MIT Ausschluss von 56.934
+Allergie-Produkten."*
+
+`[read]` **Vorher lief der Ausschluss im Browser, nach dem
+Holen** ? **Toms *,,viel zu lahm"*.**
+
+`[read]` **196 ms fuer 56.934 ausgeschlossene Produkte ist der
+Preis, den die Datenbank verlangt** ? **statt 500 Zeilen zu
+holen und 458 wegzuwerfen.**
+
+### Und die Trennung haelt
+
+`[cmd]` **`p_allergien_ausblenden` ENTFERNT,
+`p_meidestoffe` MARKIERT** ? **Toms Trennung aus G-455.**
+
+`[cmd]` **`p_allergien_ausblenden DEFAULT true`** ? **im
+Zweifel schuetzen.**
+
+**Abgenommen.**
+
 

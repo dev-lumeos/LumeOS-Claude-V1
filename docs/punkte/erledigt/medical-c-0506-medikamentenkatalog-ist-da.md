@@ -9,6 +9,8 @@ kind_von: C-503
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 5e970b18
 beruehrt:
   tabellen: [medical.medication_active_substances]
 zahlen:
@@ -127,5 +129,28 @@ Auswertung von Wechselwirkungen oder Kontraindikationen.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Selbst getestet.**
+
+    "penicillin"  medical:drug_9b962cf7aa | Penicillin V | 1
+    "ibuprofen"   medical:drug_10daca0041 | Ibuprofen    | 2
+    "aspirin"     medical:drug_90ea1eeaf3 | Aspirin      | 2
+    "qzvwxjplk"   0 Treffer
+
+`[cmd]` **Herkunft: `medical.medication_active_substances`.**
+
+`[read]` **Die Trefferzahl ist die FORMULIERUNGSZAHL** ? **nicht
+*,,wie viele Lebensmittel"*, sondern *,,wie viele Praeparate
+enthalten diesen Wirkstoff"*.**
+
+`[read]` **`penicillin` findet auch `Ampicillin Trihydrate`** ?
+**derselbe Wirkstoffstamm, ueber `synonyms`.**
+
+### Die Meldung aus C-503 ist damit weg
+
+`[read]` **Tom hatte sie am Schirm gesehen:** *,,Kein
+Medikamentenkatalog vorhanden"* ? **er war die ganze Zeit da,
+498 Wirkstoffe.**
+
+**Abgenommen.**
+
 
