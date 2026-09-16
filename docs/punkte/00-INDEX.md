@@ -5,10 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 234 |
-| `laufend_codex` | 1 |
-| `erledigt` | 461 |
-| **gesamt** | **696** |
+| `todos` | 236 |
+| `erledigt` | 462 |
+| **gesamt** | **698** |
 
 ## medical — 48
 
@@ -510,7 +509,7 @@
 | `G-421` | feature | hoch | [die vier fehlenden Reiter in Goals & Body](erledigt/goals-g-0421-die-vier-fehlenden-reiter.md) | erledigt | — | G-422 |
 | `G-422` | befund | mittel | [Schreibwege ohne Aufrufer](todos/goals-g-0422-zwei-schreibwege-ohne-aufrufer.md) | offen | — | — |
 
-## coach — 56
+## coach — 57
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -570,10 +569,11 @@
 | `G-407` | feature | hoch | [den Draft fertigbauen](erledigt/coach-g-0407-den-draft-fertigbauen.md) | erledigt | — | G-408, G-409 |
 | `G-409` | feature | hoch | [die Tiefe und jeder Klick](erledigt/coach-g-0409-die-tiefe-und-jeder-klick.md) | erledigt | — | G-410 |
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
+| `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](todos/coach-g-0461-lint-anfuehrungszeichen.md) | offen | — | — |
 
-## quer — 172
+## quer — 173
 
-### beauftragbar — 171
+### beauftragbar — 172
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -747,7 +747,8 @@
 | `G-444` | fehler | mittel | [drei Abwesenheitsbehauptungen, die C-461 ueberholt hat](erledigt/quer-g-0444-drei-abwesenheitsbehauptungen.md) | erledigt | — | — |
 | `G-451` | fehler | mittel | [der Testdatenlauf scheitert vor C-493](erledigt/quer-g-0451-testdatenlauf-scheitert-vorher.md) | erledigt | — | — |
 | `G-455` | feature | hoch | [Allergien in Settings, Filter in Produkten](erledigt/quer-g-0455-allergien-und-filter.md) | erledigt | — | G-459 |
-| `G-458` | fehler | hoch | [neun Migrationen schreiben Daten](laufend_codex/quer-g-0458-neun-migrationen-schreiben-daten.md) | laeuft (codex) | — | — |
+| `G-458` | fehler | hoch | [neun Migrationen schreiben Daten](erledigt/quer-g-0458-neun-migrationen-schreiben-daten.md) | erledigt | — | G-460, G-461 |
+| `G-460` | fehler | mittel | [vier Lesestellen auf die gefallene Spalte ebene](todos/quer-g-0460-vier-ebene-lesestellen.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
 

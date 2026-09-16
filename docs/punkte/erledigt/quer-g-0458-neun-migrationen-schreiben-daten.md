@@ -8,6 +8,8 @@ braucht: []
 kind_von: C-472
 entscheidung: null
 agent: codex
+erledigt: 2026-09-08
+commit: c685ea16
 beruehrt:
   dateien:
     - tools/migration-datenlogik-pruefen.mjs
@@ -118,3 +120,103 @@ Pflichtfragmente. Jeder weitere Schreibbefehl bleibt rot.
 Datenoperationen. Seine Selbstprobe hat eine temporaere neue Migration mit
 `INSERT`, `UPDATE`, `COPY`, `DELETE`, `TRUNCATE`, `MERGE` und `DO ... INSERT`
 jeweils erkannt; `FOR UPDATE` und `ALTER` bleiben korrekt ohne Befund.
+
+## Abschluss — 2026-09-16
+
+Die Vollkette auf der frischen Wegwerf-Datenbank `g458_final` ist gruen:
+`SCHEMA VOLLSTAENDIG`, `KETTE OK: 969.1s`. Die vier bestehenden
+C-496--C-500-Integrationspruefungen bestehen dort ebenfalls mit 6/6 Tests.
+
+Alle Waechter wurden einzeln ausgefuehrt, damit ein frueher Fehler keinen
+spaeteren verdeckt. Gruen sind alle Gate-Statikwaechter einschliesslich
+`migration-datenlogik-pruefen`, die Kern-/Kennungswaechter,
+`serverimport-pruefen` sowie `turbo run typecheck test build` (18/18).
+Rot bleiben ausschliesslich fremde Befunde:
+
+| Waechter | Befund | Einordnung |
+|---|---|---|
+| `abwesenheit-pruefen` | 3 ueberholte Aussagen zu `training.routines`, `routine_exercises`, `routine_schedule_days` | G-444, in `apps/` und SSOT; nicht angefasst |
+| `gefallene-spalten-pruefen` | 4 Leser der gefallenen Spalte `ebene` | bestehender C-484-Nachzug, nicht angefasst |
+| `turbo run lint` | `apps/coach/src/components/draft/modale.tsx:529`, nicht maskiertes `"` | fremde App-Aenderung, nicht angefasst |
+| `testdaten-pruefen` | exakt 15 bekannte aeltere Szenarioabweichungen | der im Auftrag genannte Altbefund; unveraendert |
+
+Die Sicherung und die kompletten Laufprotokolle liegen unter `backup/`:
+`20260916065959_g458_vorher.sql`, `_g458_vollkette_20260916.log`,
+`_g458_alle_waechter_20260916.log` und
+`_g458_korrigierte_waechter_20260916.log`.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **`migration-datenlogik-pruefen.mjs` selbst gelaufen:**
+
+    exit 0
+    "44 historische Datenoperationen, genau Sollstand 44;
+     keine neue Datenlogik."
+
+`[cmd]` **Vier neue Kettenschritte, richtig einsortiert:**
+
+    05_user_tabellen/498_global_allergies_daten.sql
+    13_supplements/496_supplier_product_nutrients_daten.sql
+    13_supplements/499_deactivate_off_market_..._daten.sql
+    13_supplements/500_vitamin_e_form_evidence_daten.sql
+
+`[read]` **C-498 nach `05_user_tabellen`, weil die Allergien in
+`public` liegen** ? **nach Schema sortiert, nicht nach
+Punktnummer.**
+
+### Die zwei Ausnahmen sind EXAKT gefasst
+
+`[cmd]` **Im Waechter, je mit `requiredSql`:**
+
+    c497   supplements.supplier_product_preference_write
+           DELETE FROM nutrition.food_preference_items
+           INSERT INTO nutrition.food_preference_items
+
+    c498   coach.log_allergy_permission_change
+           INSERT INTO coach.allergy_permission_change_log
+
+`[read]` **Nicht *,,diese Datei ist ausgenommen"*, sondern
+*,,diese FUNKTION mit GENAU DIESER Anweisung"*.**
+
+`[read]` **Wer die Funktion aendert, faellt wieder durch.**
+
+`[cmd]` **Und die Begruendung steht je Ausnahme:** *,,fuehrt
+beim Einspielen keine Datenoperation aus; die bestehende RLS
+entscheidet erst beim spaeteren Nutzeraufruf"*.
+
+### Und die Zeilenerkennung wurde praeziser
+
+`[cmd]` **Zeile 46-48:** *,,`FOR UPDATE` sperrt, schreibt aber
+nicht; ebenso ist `ON DELETE` Teil einer
+Fremdschluesseldefinition. Beide duerfen keinen Befund
+erzeugen."*
+
+`[read]` **Genau die Warnung aus meinem Auftrag** ?
+**Schluesselwoerter zaehlen ist nicht Anweisungen zaehlen.**
+
+### Die Gegenprobe
+
+> *,,Temporaere Migrationen mit INSERT, UPDATE, COPY, DELETE,
+TRUNCATE, MERGE und `DO ... INSERT` werden jeweils erkannt."*
+
+`[read]` **Sieben Befehle, nicht einer.**
+
+### Und A6 erfuellt
+
+`[cmd]` **Alle Gate-Schritte einzeln gelaufen. Rot bleiben vier
+FREMDE Befunde:**
+
+    abwesenheit-pruefen        die drei G-444-Aussagen
+    gefallene-spalten-pruefen  vier ebene-Lesestellen (C-484)
+    Lint                       ein Anfuehrungszeichen in
+                               apps/coach/modale.tsx:529
+    testdaten-pruefen          die bekannten 15
+
+`[read]` **Zwei davon kannte ich nicht** ?
+`gefallene-spalten-pruefen` **und der Lint-Fehler.**
+
+`[cmd]` **Als G-460 und G-461.**
+
+**Abgenommen.**
