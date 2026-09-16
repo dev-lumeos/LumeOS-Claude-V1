@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: [C-503]
 kind_von: G-455
 entscheidung: null
+erledigt: 2026-09-08
+commit: 43ecac13
 beruehrt:
   dateien:
     - apps/web/src/app/v2/settings/formular.tsx
@@ -427,4 +429,77 @@ gedreht** ? es ist eine Geschmacksfrage, und Tom sieht das Foto.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **`x-g459-a1-nachher.png` angesehen:**
+
+    Kachel LINKS neben Erfahrungsgrad
+    Soja                Anaphylaxie  Nahrung     60
+    lactose             Allergie     Nahrung  1.021
+    Magnesium Stearate  Unvertraegl. Suppl.  56.948
+    Art | Stoff | Schwere untereinander
+
+`[cmd]` **Proben selbst gelaufen: web 1793/1793, coach 65/65.**
+
+`[cmd]` **Und die Codes stimmen:**
+`nutrition:contains_lactose`, `nutrition:contains_soy`,
+`supplements:magnesium_stearate`.
+
+### Drei Fehler, die mein Auftrag nicht nannte
+
+**1** ? **`<form>` im `<form>`.**
+
+> *,,Seit A1 lag die Kachel im Profilformular. 9
+Hydrationsfehler je Aufruf -> 0. Die Eingabetaste ist eigens
+ersetzt."*
+
+`[read]` **Der Umzug hat ihn erzeugt** ? **er hat ihn beim
+Messen gefunden, nicht beim Bauen.**
+
+**2** ? **A8 kostete 27 Sekunden.**
+
+> *,,57 Runden a 1.000 Zeilen. Die Gegenprobe grenzte es allein
+auf diese Funktion ein (27.700 ms gegen 730 ms); mit
+`head: true, count: exact` jetzt rund 2.100 ms bei IDENTISCHEN
+Zahlen."*
+
+`[read]` **Derselbe PostgREST-Deckel wie in G-455** ? **dort
+verschwieg er 42 Treffer, hier kostete er 27 Sekunden.**
+
+**3** ? **Das Foto zeigte, was die Zahlen nicht sagten.**
+
+> *,,Titel ueber Untertitel, *Entfernen* im ungeordneten
+Umbruch. Behoben, OHNE `packages/ui` anzufassen (gehoert allen
+Apps) ? eigene Klasse stattdessen."*
+
+`[read]` **Alle Messwerte gruen, und das Bild trotzdem
+falsch** ? **er hat beides angesehen.**
+
+### Ein fremder Waechter, zu Recht rot
+
+> *,,`g455-allergien` A2 las `page.tsx`, die Kachel war nur
+VERSCHOBEN. Jetzt gilt die ganze Route ? mit Sabotageprobe
+belegt."*
+
+`[read]` **Eine Probe, die an einer Datei haengt statt an der
+Wirkung** ? **dieselbe Klasse wie in G-453, G-455, G-460.**
+
+### Was offen bleibt
+
+> *,,Die Zahlen kosten weiter rund 1,4 s (eine Anfrage je
+Allergie); eine Zaehlfunktion in der DB waere ein
+Codex-Auftrag."*
+
+`[cmd]` **Als C-508.**
+
+### Und eine Beobachtung
+
+`[cmd]` **`stoff_text` traegt die Schreibweise des Nutzers:**
+**`lactose` klein (aus der Migration), `Soja` gross (getippt),
+`Magnesium Stearate` gross.**
+
+`[read]` **Kein Fehler** ? **aber die Anzeige koennte den
+KATALOGNAMEN nehmen, wo ein Code da ist.**
+
+**Abgenommen.**
+

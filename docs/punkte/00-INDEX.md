@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 234 |
+| `todos` | 235 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 467 |
-| **gesamt** | **704** |
+| `erledigt` | 468 |
+| **gesamt** | **705** |
 
 ## medical — 49
 
@@ -578,7 +577,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 174
+## quer — 175
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -677,6 +676,7 @@
 | `C-501` | feature | hoch | [Seed fuer die leeren Module](erledigt/quer-c-0501-seed-fuer-leere-module.md) | erledigt | — | — |
 | `C-502` | fehler | hoch | [die Allergene ohne Aliase treffen nichts](todos/quer-c-0502-allergene-ohne-aliase.md) | offen | — | — |
 | `C-503` | feature | hoch | [die Vorschlaege kommen aus den Katalogen](erledigt/quer-c-0503-keine-stoffliste.md) | erledigt | — | C-506, G-462 |
+| `C-508` | feature | mittel | [eine Zaehlfunktion fuer die Allergietreffer](todos/quer-c-0508-zaehlfunktion-allergietreffer.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -753,7 +753,7 @@
 | `G-451` | fehler | mittel | [der Testdatenlauf scheitert vor C-493](erledigt/quer-g-0451-testdatenlauf-scheitert-vorher.md) | erledigt | — | — |
 | `G-455` | feature | hoch | [Allergien in Settings, Filter in Produkten](erledigt/quer-g-0455-allergien-und-filter.md) | erledigt | — | G-459 |
 | `G-458` | fehler | hoch | [neun Migrationen schreiben Daten](erledigt/quer-g-0458-neun-migrationen-schreiben-daten.md) | erledigt | — | G-460, G-461 |
-| `G-459` | feature | mittel | [die Allergiekachel aufraeumen](laufend_claudecode/quer-g-0459-allergiekachel-aufraeumen.md) | laeuft (claudecode) | — | — |
+| `G-459` | feature | mittel | [die Allergiekachel aufraeumen](erledigt/quer-g-0459-allergiekachel-aufraeumen.md) | erledigt | — | C-508 |
 | `G-460` | fehler | mittel | [vier Lesestellen auf die gefallene Spalte ebene](erledigt/quer-g-0460-vier-ebene-lesestellen.md) | erledigt | — | — |
 | `G-462` | fehler | niedrig | [bedingtes React.useId](erledigt/quer-g-0462-bedingtes-useid.md) | erledigt | — | — |
 
