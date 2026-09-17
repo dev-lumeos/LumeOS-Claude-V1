@@ -9,7 +9,7 @@ kind_von: G-470
 entscheidung: null
 beruehrt:
   dateien:
-    - apps/web/src/components/app-shell.tsx
+    - apps/web/src/components/shell/app-shell.tsx
 zahlen:
   gemessen: 2026-09-08
 ---
