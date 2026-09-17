@@ -419,3 +419,61 @@ Speichern in den Vorlieben.**
 `[read]` **Das ist die Bauform** ? **nicht *,,eine Flaeche
 darf es"*, sondern *,,jede Flaeche darf es, solange der
 Speicher derselbe ist"*.**
+
+## Keine Vermutungen in den Auftrag
+
+Tom, 2026-09-08:
+
+> lass deine vermutungen weg und lass das den agenten tun,
+> es reicht ihm zu sagen WAS und was die abnahmebedingungen
+> sind
+
+`[cmd]` **Vier geratene Pfade an einem Tag, jeder vom
+Punktewaechter gefangen:**
+
+    G-461   apps/coach/src/app/v2/medical/modale.tsx
+            -> src/components/draft/
+    G-462   v2/dashboard/insights-kacheln.tsx
+            -> v2/nutrition/
+    G-470   lib/supabase/server.ts
+            -> middleware.ts
+    G-471   components/app-shell.tsx
+            -> components/shell/app-shell.tsx
+
+`[read]` **Jeder kostete einen zusaetzlichen Lauf und eine
+Berichtigung.**
+
+### Und die Vermutungen im Auftragstext sind schlimmer
+
+`[cmd]` **G-465: ich schrieb *,,fuenf fetch, nacheinander"*** ?
+**sie liefen bereits parallel.**
+
+> Claude Code: *,,Meine Vermutungen ? Sammelanfrage, Entprellen,
+weniger Anfragen ? waeren ALLE falsch gewesen."*
+
+`[cmd]` **G-464: ich schrieb *,,die Marke haengt an
+supplement_id"*** ? **die Ursache war die REIHENFOLGE der
+Pruefung.**
+
+`[cmd]` **G-460: ich fragte *,,wirksam oder tot?"*** ? **die
+Antwort war die dritte Moeglichkeit.**
+
+`[read]` **Eine Vermutung im Auftrag laesst den Agenten in
+meine Richtung suchen** ? **und er findet die Ursache
+TROTZDEM, aber spaeter.**
+
+### Die Regel
+
+    Der Auftrag nennt:
+      WAS kaputt ist -- woertlich, mit Beleg
+      WAS danach gelten muss -- die Abnahmebedingungen
+
+    Der Auftrag nennt NICHT:
+      wo es liegt
+      warum es passiert
+      wie man es behebt
+
+`[read]` **Gemessene Zahlen gehoeren hinein** ? **Vermutungen
+nicht. Der Unterschied: eine Zahl ist gepruefbar, eine
+Vermutung lenkt.**
+
