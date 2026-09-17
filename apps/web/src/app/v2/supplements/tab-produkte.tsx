@@ -76,6 +76,12 @@ import {
 } from '../../../lib/supplements/produkt-etikett'
 // G-453: die strukturierte Tafel nach Medical-Vorbild.
 import { ProduktTafel } from './produkt-tafel'
+// ══ G-467: die gespeicherten Filter ═════════════════════════════════
+import {
+  VORGABE, ausJson, trefferSatz,
+  STANDARD_STATUS as FILTER_STANDARD_STATUS,
+  type ProduktFilter,
+} from '../../../lib/supplements/produkt-filter-lage'
 // ══ G-455: der Daumen je Produkt ═══════════════════════════════════
 //
 // `[read]` **Die Rechnung serverfrei, der Schreibweg als
@@ -149,7 +155,10 @@ function ProduktDaumen({ zustand, name, onKlick }: {
  * `[cmd]` **Gemessen 2026-09-14: 121.959 von 214.780 sind On Market**,
  * 92.821 Off Market.
  */
-const STANDARD_STATUS = 'On Market'
+// `[cmd]` **G-467: liegt jetzt in `produkt-filter-lage.ts`** — der
+// gespeicherte Filter und dieser Reiter muessen sich ueber DENSELBEN
+// Wert einig sein, sonst zaehlt der Knopf anders als der Speicher.
+const STANDARD_STATUS = FILTER_STANDARD_STATUS
 
 /** `[cmd]` **Die gemessene Gesamtzahl** — der Nenner in der Fusszeile. */
 const GESAMT_BESTAND = 214780
@@ -310,8 +319,19 @@ export function SuppProdukte() {
   // nachsehen will, was der Filter wegnimmt, braucht den Schalter
   // (und die Gegenprobe A8 auch).
   const [allergienAn, setAllergienAn] = React.useState(true)
-  // G-73: der Filterknopf ist das Setup zum Ein- und Ausblenden.
-  const [filterOffen, setFilterOffen] = React.useState(false)
+  // ══ G-467: DIE LEISTE STARTET OFFEN ═══════════════════════════
+  //
+  // **Tom, 2026-09-08:** *„die zusatzfilter sollen bei start
+  // eingeblendet sein."* Und, mit dem Grund: *„das wuerde schon
+  // massiv an daten weniger geben zum anzeigen."*
+  //
+  // `[cmd]` **Hier stand `useState(false)`.** `[read]` **Wer die
+  // Leiste sieht, filtert** — **wer sie nicht sieht, bekommt 214.780
+  // Produkte und weiss nicht, warum es dauert.**
+  //
+  // `[read]` **Der gespeicherte Stand ueberschreibt das gleich** —
+  // wer sie zuklappt, findet sie morgen zu.
+  const [filterOffen, setFilterOffen] = React.useState(VORGABE.leisteOffen)
   // `[read]` **Heisst nicht mehr „Seite"** — es zaehlt, wie oft
   // nachgeladen wurde. Das Fenster waechst, es wandert nicht (G-453/3).
   const [seite, setSeite] = React.useState(0)
@@ -346,6 +366,76 @@ export function SuppProdukte() {
       } catch { /* ohne Meidestoffe wird nichts markiert */ }
     })()
   }, [])
+
+  // ══ G-467: DIE GESPEICHERTEN FILTER ═══════════════════════════════
+  //
+  // **Tom:** *„meine filtereinstellungen werden nicht gespeichert"*
+  //
+  // `[cmd]` **`user_display_preferences` (C-504) gibt es seit dem
+  // 16.09., und bis jetzt hat sie niemand gelesen** — gemessen: null
+  // Treffer fuer `display_pref` in `app/v2/supplements` und
+  // `lib/supplements`.
+  //
+  // `[read]` **`geladen` sperrt das Speichern, bis gelesen ist** —
+  // `[cmd]` **sonst schreibt der erste Anstrich die VORGABE ueber den
+  // gespeicherten Stand**, und der Filter waere nach jedem Aufruf
+  // weg. **Das ist die Falle bei dieser Bauform.**
+  const [geladen, setGeladen] = React.useState(false)
+
+  React.useEffect(() => {
+    void (async () => {
+      try {
+        const a = await fetch('/api/supplements/filter')
+        if (a.ok) {
+          const j = await a.json() as { filter?: unknown }
+          const f = ausJson(j.filter)
+          setStatus(f.status)
+          setKategorie(f.kategorie)
+          setForm(f.form)
+          setGewaehlteMarken(f.marken)
+          setAllergienAn(f.allergienAn)
+          setFilterOffen(f.leisteOffen)
+        }
+      } catch {
+        // `[read]` **Ohne gespeicherten Stand gilt die Vorgabe** —
+        // die schon im `useState` steht. **Der Reiter ist nicht
+        // kaputt, er ist nur unpersoenlich.**
+      } finally {
+        setGeladen(true)
+      }
+    })()
+  }, [])
+
+  // ── Speichern, sobald sich ein Filter aendert ────────────────────
+  //
+  // `[read]` **Die SUCHEINGABE ist nicht dabei** (A3) — sie steht
+  // weder in den Abhaengigkeiten noch im geschickten Objekt.
+  // **Ein Suchwort ist eine Frage, ein Filter eine Einstellung.**
+  //
+  // `[read]` **Entprellt** — wer drei Marken anklickt, soll nicht
+  // dreimal schreiben.
+  React.useEffect(() => {
+    if (!geladen) return
+    const stand: ProduktFilter = {
+      status, kategorie, form,
+      marken: gewaehlteMarken,
+      allergienAn,
+      leisteOffen: filterOffen,
+    }
+    const zeit = setTimeout(() => {
+      void fetch('/api/supplements/filter', {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(stand),
+        // `[read]` **Kein `await`, kein Fehlerhinweis** — das
+        // Speichern ist eine Nebenwirkung. **Faellt es aus, bleibt
+        // die Sitzung brauchbar**, und der naechste Klick versucht
+        // es erneut.
+      }).catch(() => {})
+    }, 400)
+    return () => clearTimeout(zeit)
+  }, [geladen, status, kategorie, form, gewaehlteMarken, allergienAn,
+      filterOffen])
 
   const [offeneZeile, setOffeneZeile] = React.useState<string | null>(null)
   const [satz, setSatz] = React.useState<ProduktSatz | null>(null)
@@ -389,6 +479,17 @@ export function SuppProdukte() {
   }, [frage, gewaehlteMarken, status, seite, kategorie, form, allergienAn])
 
   React.useEffect(() => {
+    // ══ G-467: ERST DIE FILTER, DANN DIE SUCHE ════════════════════
+    //
+    // `[read]` **Ohne diese Sperre laeuft die Suche ZWEIMAL:** einmal
+    // mit der Vorgabe, dann noch einmal mit dem geladenen Stand.
+    // `[cmd]` **Der erste Lauf ist der teure** — er sucht ungefiltert
+    // ueber 214.780 Produkte, also genau das, was Tom vermeiden will:
+    // *„dann wuerden auch kalt viel weniger daten kommen."*
+    //
+    // `[read]` **Die 180 ms Entprellung fangen das NICHT ab** — der
+    // Ladeweg ist langsamer als sie.
+    if (!geladen) return
     const zeit = setTimeout(async () => {
       laufend.current?.abort()
       const ctrl = new AbortController()
@@ -410,7 +511,7 @@ export function SuppProdukte() {
       }
     }, 180)
     return () => clearTimeout(zeit)
-  }, [schluessel])
+  }, [schluessel, geladen])
 
   // Die Markenliste — einmal.
   React.useEffect(() => {
@@ -1106,9 +1207,22 @@ export function SuppProdukte() {
           fontSize: 10.5, padding: '8px 14px',
           display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center',
         }}>
+          {/* ══ G-467/A4: DIE ZAHLEN ERKLAERT ══════════════════════
+              **Aus meinem eigenen G-465-Bericht:** *„Die Leiste zeigt
+              weiterhin 214.780, die Trefferliste sind 445 — das ist
+              richtig, aber ohne Erklaerung verwirrend."*
+
+              `[cmd]` **Hier standen DREI Zahlen nebeneinander**
+              (`445 von 214.780 Treffern · 214.780 Produkte`) — **und
+              keine sagte, was sie bedeutet.**
+
+              `[read]` **Drei verschiedene Fragen:** was ist geladen,
+              wie viele passen zum Filter, wie gross ist der Katalog.
+              **`trefferSatz` beantwortet die ersten beiden in einem
+              Satz**, der Katalog steht getrennt daneben. */}
+          <span>{trefferSatz(zeilen.length, gesamt, liste?.gesamtUnscharf)}</span>
           <span>
-            {zeilen.length} von {gesamt.toLocaleString('de-DE')} Treffern
-            {' · '}
+            {'Katalog: '}
             {GESAMT_BESTAND.toLocaleString('de-DE')} Produkte
             {' · supplements.supplier_products'}
           </span>

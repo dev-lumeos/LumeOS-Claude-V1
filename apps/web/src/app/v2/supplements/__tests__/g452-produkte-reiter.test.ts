@@ -217,7 +217,24 @@ test('A2: der Reiter oeffnet auf On Market, und die Zahl ist die gemessene', () 
   // `[read]` **Der Standard wird als Konstante gesetzt und als
   // Anfangszustand benutzt** — beides wird geprueft, weil eine
   // Konstante ohne Verwender nichts entscheidet.
-  assert.match(quelle, /const STANDARD_STATUS = 'On Market'/)
+  // ══ G-467: DER WERT LIEGT JETZT IN DER LAGEDATEI ═══════════════
+  //
+  // `[cmd]` **Hier stand `/const STANDARD_STATUS = 'On Market'/`** —
+  // und die Probe wurde rot, als G-467 den Wert nach
+  // `produkt-filter-lage.ts` zog. **Der gespeicherte Filter und der
+  // Reiter muessen sich ueber DENSELBEN Wert einig sein.**
+  //
+  // `[read]` **Die Sache ist unveraendert:** der Reiter oeffnet auf
+  // *On Market*. `[read]` **Die Probe hat die ZEILE bewacht, nicht
+  // den WERT** — jetzt wird der Wert gelesen, wo er steht.
+  const lage = fs.readFileSync(
+    path.join(process.cwd(), 'src/lib/supplements/produkt-filter-lage.ts'),
+    'utf8')
+  assert.match(lage, /export const STANDARD_STATUS = 'On Market'/,
+    'Der Standard-Marktstatus ist nicht mehr On Market.')
+  assert.match(quelle, /const STANDARD_STATUS = FILTER_STANDARD_STATUS/,
+    'Der Reiter hat wieder einen eigenen Wert — dann driftet er '
+    + 'gegen den gespeicherten Filter.')
   assert.match(quelle, /React\.useState<string \| null>\(STANDARD_STATUS\)/,
     'Der Anfangszustand des Marktfilters ist nicht STANDARD_STATUS.')
   // `[cmd]` **Die drei gemessenen Zahlen** (2026-09-14).
