@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 235 |
+| `todos` | 236 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 471 |
-| **gesamt** | **709** |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 472 |
+| **gesamt** | **710** |
 
 ## medical — 49
 
@@ -310,9 +310,9 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 98
+## supplements — 99
 
-### beauftragbar — 97
+### beauftragbar — 98
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -365,7 +365,7 @@
 | `C-455` | feature | hoch | [der Injektionsplaner, vollstaendig](erledigt/supplements-c-0455-der-injektionsplaner-vollstaendig.md) | erledigt | — | — |
 | `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](erledigt/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | erledigt | — | — |
 | `C-467` | feature | hoch | [Lieferantenprodukte](erledigt/supplements-c-0467-lieferantenprodukte.md) | erledigt | — | C-485 |
-| `C-485` | feature | hoch | [die DSLD-Datenbank einlesen](erledigt/supplements-c-0485-dsld-einlesen.md) | erledigt | — | C-495, C-496, C-499, G-452 |
+| `C-485` | feature | hoch | [die DSLD-Datenbank einlesen](erledigt/supplements-c-0485-dsld-einlesen.md) | erledigt | — | C-495, C-496, C-499, G-452, G-466 |
 | `C-489` | fehler | mittel | [der Produktname ist englisch und heisst `name`](erledigt/supplements-c-0489-produktname-nach-name-en.md) | erledigt | — | — |
 | `C-495` | feature | hoch | [die Leseseite fuer 214.780 Produkte](erledigt/supplements-c-0495-die-leseseite-fuer-produkte.md) | erledigt | — | — |
 | `C-496` | feature | hoch | [die Naehrwerte auf unsere Makros und Mikros](erledigt/supplements-c-0496-naehrwerte-auf-unsere-makros.md) | erledigt | — | C-500, C-505 |
@@ -410,8 +410,9 @@
 | `G-453` | feature | hoch | [die Produkttafel](erledigt/supplements-g-0453-die-produkttafel.md) | erledigt | — | G-454, G-464, G-465 |
 | `G-454` | befund | mittel | [Suche und Filter schliessen sich aus](erledigt/supplements-g-0454-suche-und-filter.md) | erledigt | — | C-504, G-463 |
 | `G-463` | fehler | hoch | [die Suche deckelt bei 100, die Liste will 500](todos/supplements-g-0463-suche-deckelt-bei-100.md) | offen | — | — |
-| `G-464` | fehler | hoch | [die Tafel fragt die falsche Spalte](laufend_claudecode/supplements-g-0464-tafel-fragt-falsche-spalte.md) | laeuft (claudecode) | — | — |
+| `G-464` | fehler | hoch | [die Tafel fragt die falsche Spalte](erledigt/supplements-g-0464-tafel-fragt-falsche-spalte.md) | erledigt | — | — |
 | `G-465` | fehler | hoch | [fuenf Anfragen je Suche](laufend_claudecode/supplements-g-0465-fuenf-anfragen-je-suche.md) | laeuft (claudecode) | — | — |
+| `G-466` | fehler | mittel | [amount_qualifier wird nicht gelesen](todos/supplements-g-0466-amount-qualifier.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
