@@ -6,8 +6,7 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 238 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 473 |
+| `erledigt` | 474 |
 | **gesamt** | **712** |
 
 ## medical — 49
@@ -411,7 +410,7 @@
 | `G-454` | befund | mittel | [Suche und Filter schliessen sich aus](erledigt/supplements-g-0454-suche-und-filter.md) | erledigt | — | C-504, G-463 |
 | `G-463` | fehler | hoch | [die Suche deckelt bei 100, die Liste will 500](todos/supplements-g-0463-suche-deckelt-bei-100.md) | offen | — | — |
 | `G-464` | fehler | hoch | [die Tafel fragt die falsche Spalte](erledigt/supplements-g-0464-tafel-fragt-falsche-spalte.md) | erledigt | — | — |
-| `G-465` | fehler | hoch | [fuenf Anfragen je Suche](laufend_claudecode/supplements-g-0465-fuenf-anfragen-je-suche.md) | laeuft (claudecode) | — | — |
+| `G-465` | fehler | hoch | [fuenf Anfragen je Suche](erledigt/supplements-g-0465-fuenf-anfragen-je-suche.md) | erledigt | — | — |
 | `G-466` | fehler | mittel | [amount_qualifier wird nicht gelesen](todos/supplements-g-0466-amount-qualifier.md) | offen | — | — |
 | `G-467` | fehler | hoch | [die Filter werden nicht gespeichert](todos/supplements-g-0467-filter-werden-nicht-gespeichert.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
