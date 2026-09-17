@@ -24,6 +24,16 @@ const distDir = process.env.LUMEOS_DIST_DIR || '.next'
 
 const nextConfig = {
   distDir,
+  // G-473: Quellkarten NUR auf Anforderung.
+  //
+  // [cmd] Der Reiter stirbt im Produktionsbau ohne Ausnahme und ohne
+  // Stapel (G-471). Im verkleinerten Buendel ist der Absturzpunkt
+  // nicht lesbar; mit Karte schon.
+  //
+  // [read] Ueber eine Umgebungsvariable, NICHT fest an: Karten
+  // kosten Bauzeit und Plattenplatz, und der normale Bau soll
+  // unveraendert bleiben. Ohne die Variable ist dieser Zweig aus.
+  productionBrowserSourceMaps: process.env.LUMEOS_SOURCEMAPS === '1',
   // Lint laeuft einmal explizit im Root-Gate, nicht erneut pro Build.
   eslint: { ignoreDuringBuilds: true },
   transpilePackages: ['@lumeos/shared'],
