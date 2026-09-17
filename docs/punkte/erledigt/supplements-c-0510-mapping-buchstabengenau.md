@@ -9,6 +9,8 @@ kind_von: C-505
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 7f42bc6b
 beruehrt:
   tabellen: [supplements.product_contents]
 zahlen:
@@ -257,5 +259,51 @@ Die Gegenprobe `C510 erfundener Nährstoff` hat **0** Mappings.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen, LIVE.**
+
+    Mappings          40 (vorher 39)
+    Thiamine -> THIA  und  Thiamin -> THIA
+    verknuepft       639.122 von 3.000.982
+
+`[read]` **Vorher 305.080** ? **mehr als verdoppelt.**
+
+### Toms acht Beispiele, alle behoben
+
+`[cmd]` **Selbst gemessen:**
+
+    Biotin       supp_id ja
+    Calcium      supp_id ja   (vorher NEIN)
+    Iron         supp_id ja   (vorher NEIN)
+    Magnesium    supp_id ja   (vorher NEIN)
+    Thiamin      supp_id ja
+    Vitamin B6   supp_id ja   (vorher NEIN)
+    Vitamin C    supp_id ja   (vorher NEIN)
+    Zinc         supp_id ja   (vorher NEIN)
+
+`[read]` **Toms Satz war:** *,,das ist schwachsinn und garantiert
+nicht schwer zu matchen."* ? **er hatte recht.**
+
+### Ein Beleg an einem echten Produkt
+
+> *,,Spectra (62 Zeilen): `supplement_id` 13 -> 25, beide
+Verknuepfungen 6 -> 19."*
+
+`[read]` **Genau das Produkt aus Toms Befund** ? **von 62
+Wirkstoffzeilen sind jetzt 25 verknuepft statt 13.**
+
+### Und die Zurueckhaltung bleibt
+
+> *,,313.585 fehlende `supplement_id`-Werte NUR bei
+EINDEUTIGEM Katalogwurzelziel ergaenzt."*
+
+> *,,19/31 Naehrstoffspalten haben ein belegtes Substanzziel;
+fehlende Ziele bleiben bewusst offen."*
+
+`[read]` **Zwoelf der 31 haben keinen Substanzeintrag** ?
+**gemeldet, nicht erfunden.**
+
+`[cmd]` **Und die Idempotenz geprueft: zweiter Lauf UPDATE 0.**
+
+**Abgenommen.**
+
 
