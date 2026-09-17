@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 235 |
-| `laufend_codex` | 1 |
-| `erledigt` | 479 |
+| `todos` | 234 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 480 |
 | **gesamt** | **715** |
 
 ## medical — 49
@@ -311,7 +311,7 @@
 
 ## supplements — 103
 
-### beauftragbar — 101
+### beauftragbar — 102
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -375,7 +375,7 @@
 | `C-505` | befund | hoch | [die Mehrheit der Zutaten ist nicht verknuepft](erledigt/supplements-c-0505-zutaten-nicht-verknuepft.md) | erledigt | — | C-509, C-510 |
 | `C-509` | befund | hoch | [der Substanzkatalog ist zu klein](todos/supplements-c-0509-substanzkatalog-zu-klein.md) | offen | — | — |
 | `C-510` | fehler | hoch | [das Mapping ist buchstabengenau](erledigt/supplements-c-0510-mapping-buchstabengenau.md) | erledigt | — | — |
-| `C-511` | feature | hoch | [Supplement-Vorlieben, mit Lieblingsmarken](laufend_codex/supplements-c-0511-lieblingsmarken.md) | laeuft (codex) | — | — |
+| `C-511` | feature | hoch | [Supplement-Vorlieben, mit Lieblingsmarken](erledigt/supplements-c-0511-lieblingsmarken.md) | erledigt | — | — |
 | `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](todos/supplements-c-0512-naehrwerte-werden-summiert.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
@@ -415,14 +415,14 @@
 | `G-465` | fehler | hoch | [fuenf Anfragen je Suche](erledigt/supplements-g-0465-fuenf-anfragen-je-suche.md) | erledigt | — | — |
 | `G-466` | fehler | mittel | [amount_qualifier wird nicht gelesen](erledigt/supplements-g-0466-amount-qualifier.md) | erledigt | — | C-512 |
 | `G-467` | fehler | hoch | [die Filter werden nicht gespeichert](erledigt/supplements-g-0467-filter-werden-nicht-gespeichert.md) | erledigt | — | G-469 |
+| `G-468` | feature | hoch | [der Vorlieben-Reiter fuer Supplements](todos/supplements-g-0468-vorlieben-reiter.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
-| `G-468` | feature | hoch | [der Vorlieben-Reiter fuer Supplements](todos/supplements-g-0468-vorlieben-reiter.md) | offen | C-511 | — |
 
 ## training — 31
 
@@ -765,7 +765,7 @@
 | `G-459` | feature | mittel | [die Allergiekachel aufraeumen](erledigt/quer-g-0459-allergiekachel-aufraeumen.md) | erledigt | — | C-508 |
 | `G-460` | fehler | mittel | [vier Lesestellen auf die gefallene Spalte ebene](erledigt/quer-g-0460-vier-ebene-lesestellen.md) | erledigt | — | — |
 | `G-462` | fehler | niedrig | [bedingtes React.useId](erledigt/quer-g-0462-bedingtes-useid.md) | erledigt | — | — |
-| `G-469` | befund | hoch | [7,7 Sekunden, und die Daten sind es nicht](todos/quer-g-0469-sieben-sekunden.md) | offen | — | — |
+| `G-469` | befund | hoch | [7,7 Sekunden, und die Daten sind es nicht](laufend_claudecode/quer-g-0469-sieben-sekunden.md) | laeuft (claudecode) | — | — |
 
 ## buddy — 1
 

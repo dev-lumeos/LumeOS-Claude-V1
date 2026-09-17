@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-16: 213 Funktionen, 462 Policies, 710 CHECKs, 19 Sichten.**
+`[cmd]` **Stand 2026-09-17: 218 Funktionen, 466 Policies, 712 CHECKs, 19 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -183,6 +183,7 @@ ob man sie rufen kann.**
 | public | touch_user_allergy_updated_at |  | Funktion |
 | public | user_allergy_catalog_matches | p_user_id uuid | Funktion |
 | public | user_allergy_codes | p_user_id uuid | Funktion |
+| public | user_allergy_treffer | p_user_id uuid | Funktion |
 | public | validate_allergen_alias_catalog_code |  | Funktion |
 | public | validate_user_allergy_catalog_code |  | Funktion |
 | public | word_similarity | text, text | Funktion |
@@ -212,11 +213,15 @@ ob man sie rufen kann.**
 | supplements | search_supplier_products | p_query text, p_market_status text DEFAULT 'On Market'::text, p_marke text DEFAULT NULL::text, p_limit integer DEFAULT 50, p_kategorie text DEFAULT NULL::text, p_form text DEFAULT NULL::text, p_allergien_ausblenden boolean DEFAULT true, p_meidestoffe text[] DEFAULT NULL::text[], p_marken text[] DEFAULT NULL::text[], p_nur_bewertet boolean DEFAULT false | Funktion |
 | supplements | set_supplement_cycle_status | p_cycle_id uuid, p_status text, p_note_de text DEFAULT NULL::text | Funktion |
 | supplements | start_supplement_cycle | p_supplement_id uuid, p_source text DEFAULT 'confirmed_by_user'::text, p_suggestion_source text DEFAULT 'user_manual'::text, p_note_de text DEFAULT NULL::text | Funktion |
+| supplements | supplement_brand_options | p_user_id uuid DEFAULT auth.uid(), p_query text DEFAULT NULL::text, p_limit integer DEFAULT 25 | Funktion |
 | supplements | supplement_nutrient_intake_for_day | p_user_id uuid, p_entry_date date DEFAULT CURRENT_DATE | Funktion |
+| supplements | supplement_preferences_read | p_user_id uuid DEFAULT auth.uid() | Funktion |
+| supplements | supplement_preferences_write | p_user_id uuid, p_source text, p_preferences jsonb | Funktion |
 | supplements | supplier_product_detail | p_product_id uuid | Funktion |
 | supplements | supplier_product_filter_preferences_read |  | Funktion |
 | supplements | supplier_product_filter_preferences_write | p_marktstatus text DEFAULT 'On Market'::text, p_kategorie text DEFAULT NULL::text, p_form text DEFAULT NULL::text, p_marken text[] DEFAULT '{}'::text[], p_allergien_ausblenden boolean DEFAULT true | Funktion |
 | supplements | supplier_product_preference_write | p_product_id uuid, p_preference text | Funktion |
+| supplements | supplier_product_search_meta | p_query text, p_market_status text DEFAULT 'On Market'::text, p_marke text DEFAULT NULL::text, p_kategorie text DEFAULT NULL::text, p_form text DEFAULT NULL::text, p_allergien_ausblenden boolean DEFAULT true, p_meidestoffe text[] DEFAULT NULL::text[], p_marken text[] DEFAULT NULL::text[], p_nur_bewertet boolean DEFAULT false | Funktion |
 | supplements | touch_updated_at |  | Funktion |
 | supplements | withdraw_stack_template | p_stack_id uuid | Funktion |
 | training | calc_workout_set_metrics |  | Funktion |
@@ -857,6 +862,8 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | supplement_pharmacology | supplement_pharmacology_route_check | CHECK (((route IS NULL) OR (route = ANY (ARRAY['oral'::text, 'injection_im'::text, 'injection_subq'::text, 'topical'::text, 'nasal |
 | supplements | supplement_pharmacology | supplement_pharmacology_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | supplement_portions | supplement_portions_amount_check | CHECK (((amount IS NULL) OR (amount > (0)::numeric))) |
+| supplements | supplement_preferences | supplement_preferences_field_sources_object_check | CHECK ((jsonb_typeof(field_sources) = 'object'::text)) |
+| supplements | supplement_preferences | supplement_preferences_note_length_check | CHECK ((char_length(note) <= 2000)) |
 | supplements | supplement_protocol_items | supplement_protocol_items_weeks_check | CHECK ((((weeks_start IS NULL) AND (weeks_end IS NULL)) OR ((weeks_start >= 1) AND (weeks_end >= weeks_start)))) |
 | supplements | supplement_protocol_requirements | supplement_protocol_requirements_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | supplement_protocol_template_items | supplement_protocol_template_items_check | CHECK ((weeks_end >= weeks_start)) |
@@ -1341,6 +1348,10 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | supplements | supplement_organ_risks | supplement_organ_risks_select | SELECT | true |
 | supplements | supplement_pharmacology | supplement_pharmacology_select | SELECT | true |
 | supplements | supplement_portions | supplement_portions_select | SELECT | true |
+| supplements | supplement_preferences | supplement_preferences_delete_own | DELETE | (auth.uid() = user_id) |
+| supplements | supplement_preferences | supplement_preferences_insert_own | INSERT | (auth.uid() = user_id) |
+| supplements | supplement_preferences | supplement_preferences_select_own | SELECT | (auth.uid() = user_id) |
+| supplements | supplement_preferences | supplement_preferences_update_own | UPDATE | (auth.uid() = user_id) |
 | supplements | supplement_protocol_items | supplement_protocol_items_delete | DELETE | (EXISTS ( SELECT 1    FROM supplements.supplement_protocols p   WHERE ((p.id = supplement_ |
 | supplements | supplement_protocol_items | supplement_protocol_items_insert | INSERT | (EXISTS ( SELECT 1    FROM supplements.supplement_protocols p   WHERE ((p.id = supplement_ |
 | supplements | supplement_protocol_items | supplement_protocol_items_select | SELECT | (EXISTS ( SELECT 1    FROM supplements.supplement_protocols p   WHERE ((p.id = supplement_ |
