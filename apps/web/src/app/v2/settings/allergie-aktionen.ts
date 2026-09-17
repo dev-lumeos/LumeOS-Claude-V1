@@ -15,6 +15,8 @@ import { revalidatePath } from 'next/cache'
 
 import {
   legeAllergieAn, loescheAllergie, aendereAllergie,
+  // G-465: den Kurzspeicher der Trefferliste raeumen.
+  vergissAllergieTreffer,
 } from '../../../lib/allergien/allergie-read'
 import {
   pruefeEingabe, type ArtCode, type SchwereCode,
@@ -24,6 +26,17 @@ export type AktionsErgebnis = { ok: boolean; fehler: string | null }
 
 /** `[read]` **Beide Orte** — sonst driften sie auseinander. */
 function frischen(): void {
+  // ══ G-465: den Kurzspeicher raeumen ═══════════════════════════════
+  //
+  // `[read]` **Die Trefferliste je Nutzer liegt 60 Sekunden im
+  // Speicher** (G-465, sonst kostet jeder Tastendruck 15 Sekunden).
+  // **Wer hier etwas aendert, muss die Wirkung SOFORT sehen** —
+  // `revalidatePath` allein raeumt ihn nicht, er liegt im Modul.
+  //
+  // `[read]` **Ohne Kennung: alle raeumen.** Das trifft im
+  // schlechtesten Fall fremde Eintraege, die dann neu geholt werden —
+  // **eine Sekunde Arbeit gegen eine falsche Allergieanzeige.**
+  vergissAllergieTreffer()
   revalidatePath('/v2/settings')
   revalidatePath('/v2/nutrition')
   // `[read]` **Und die Produkte** — der harte Filter liest dieselbe

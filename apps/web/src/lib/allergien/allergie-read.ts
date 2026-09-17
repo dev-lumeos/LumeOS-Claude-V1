@@ -96,9 +96,68 @@ export async function ladeAllergien(): Promise<AllergieStand> {
  * und er wird gemeldet, nicht zugedeckt (die Oberflaeche sagt, wenn
  * ein Filter nichts findet, WARUM).
  */
+// ══ G-465: DER KURZSPEICHER JE NUTZER ═══════════════════════════════
+//
+// **Tom, 2026-09-08:** *„miss die suche in supplement produkte, das
+// ist nicht bedienbar mit diesen wartezeiten."*
+//
+// `[cmd]` **Gemessen 2026-09-17, im Browser:**
+//
+//     Suche MIT Allergiefilter    15.804 ms
+//     dieselbe mit `allergien=0`     353 ms
+//
+// `[read]` **Der Unterschied ist diese Funktion** — und sie liefert
+// bei jedem Tastendruck DIESELBEN 56.934 Produkte.
+//
+// `[read]` **Die Liste aendert sich nur, wenn der Nutzer seine
+// Allergien aendert** — und dafuer gibt es einen Schreibweg, der sie
+// raeumt (`allergie-aktionen.ts`).
+//
+// ══ WARUM NICHT `unstable_cache` ════════════════════════════════════
+//
+// `[read]` **Allergien sind Gesundheitsdaten.** `unstable_cache`
+// haelt EINEN Eintrag je Schluessel fuer den ganzen Server; ein
+// Fehler im Schluessel gaebe die Liste eines Nutzers an einen
+// anderen. **Hier liegt sie je `userId`, und der Schluessel IST die
+// Kennung** — es gibt keinen Weg, den falschen zu treffen.
+const TREFFER_SPEICHER = new Map<string, {
+  stand: { treffer: AllergieTreffer[]; fehler: string | null }
+  bis: number
+}>()
+
+/**
+ * Wie lange die Liste gilt.
+ *
+ * `[read]` **60 Sekunden ist kurz genug, dass eine Aenderung von
+ * aussen nicht lange nachhallt, und lang genug fuer eine
+ * Tippsitzung.** `[cmd]` **Der Schreibweg raeumt ohnehin sofort** —
+ * die Frist faengt nur ab, was an ihm vorbei geschieht (ein Import,
+ * ein zweites Fenster).
+ */
+const SPEICHER_MS = 60_000
+
+/**
+ * Den Kurzspeicher eines Nutzers raeumen.
+ *
+ * `[read]` **Wird vom Schreibweg gerufen** — wer eine Allergie
+ * anlegt oder loescht, soll die Wirkung sofort sehen, nicht in einer
+ * Minute.
+ */
+export function vergissAllergieTreffer(userId?: string): void {
+  if (userId) TREFFER_SPEICHER.delete(userId)
+  else TREFFER_SPEICHER.clear()
+}
+
 export async function ladeAllergieTreffer(
   userId: string,
 ): Promise<{ treffer: AllergieTreffer[]; fehler: string | null }> {
+  // `[read]` **Erst nachsehen, dann holen.** `[cmd]` **Ein Fehlschlag
+  // wird NICHT gespeichert** — sonst haelt eine kurze Stoerung eine
+  // Minute lang an, und der Filter saehe aus, als griffe er nicht
+  // (genau die Wirkung aus G-455).
+  const gemerkt = TREFFER_SPEICHER.get(userId)
+  if (gemerkt && gemerkt.bis > Date.now()) return gemerkt.stand
+
   try {
     const c = createSessionClient()
     // ══ POSTGREST DECKELT BEI 1.000 ═══════════════════════════════
@@ -119,29 +178,59 @@ export async function ladeAllergieTreffer(
     // `[cmd]` **Gedeckelt bei 60 Runden a 1.000** — das traegt 60.000
     // Produkte und damit die gemessenen 56.909. **Die Reissleine
     // meldet sich, statt stumm abzuschneiden.**
+    // ══ G-465: DIE RUNDEN LAUFEN GLEICHZEITIG ═════════════════════
+    //
+    // `[cmd]` **Hier stand eine `for`-Schleife mit `await` IM
+    // Rumpf** — 57 Anfragen nacheinander, jede wartet auf die
+    // vorige. **Gemessen 2026-09-17 im Browser: 15.804 ms**, gegen
+    // **353 ms** fuer dieselbe Suche mit `allergien=0`.
+    //
+    // `[read]` **Die Datenbank war nie das Problem** — sie
+    // beantwortet die Funktion in 40 ms (psql, `	iming`). **Die
+    // Zeit lag im Weg dorthin, 57 mal.**
+    //
+    // `[read]` **Gleichzeitig statt nacheinander** — die Runden
+    // haengen nicht voneinander ab, jede kennt ihren Bereich aus
+    // ihrem Index. `[cmd]` **Dieselbe Lehre wie G-133
+    // (OFFSET-Blaettern kostet je Seite voll).**
     const GROESSE = 1000
     const RUNDEN = 60
     const alle: AllergieTreffer[] = []
     let abgeschnitten = false
-    for (let runde = 0; runde < RUNDEN; runde++) {
-      const von = runde * GROESSE
-      const { data, error } = await c.rpc('supplier_product_allergy_matches',
-        { p_user_id: userId }).range(von, von + GROESSE - 1)
-      if (error) return { treffer: alle, fehler: error.message }
-      const stueck = (Array.isArray(data) ? data : []) as Array<Record<string, unknown>>
-      for (const r of stueck) {
-        const pid = s(r.product_id)
-        if (!pid) continue
-        alle.push({
-          product_id: pid,
-          ingredient_name: s(r.ingredient_name) ?? '',
-          stoff_text: s(r.stoff_text) ?? '',
-        })
+
+    // `[read]` **In Buendeln, nicht alle 60 auf einmal** — sonst
+    // stehen 60 gleichzeitige Anfragen gegen PostgREST, und der
+    // Engpass wandert nur woanders hin.
+    const BUENDEL = 10
+    let fertig = false
+    for (let start = 0; start < RUNDEN && !fertig; start += BUENDEL) {
+      const dieseRunde = Array.from(
+        { length: Math.min(BUENDEL, RUNDEN - start) },
+        (_, i) => start + i)
+      const antworten = await Promise.all(dieseRunde.map(runde => {
+        const von = runde * GROESSE
+        return c.rpc('supplier_product_allergy_matches',
+          { p_user_id: userId }).range(von, von + GROESSE - 1)
+      }))
+      for (const { data, error } of antworten) {
+        if (error) return { treffer: alle, fehler: error.message }
+        const stueck = (Array.isArray(data) ? data : []) as Array<Record<string, unknown>>
+        for (const r of stueck) {
+          const pid = s(r.product_id)
+          if (!pid) continue
+          alle.push({
+            product_id: pid,
+            ingredient_name: s(r.ingredient_name) ?? '',
+            stoff_text: s(r.stoff_text) ?? '',
+          })
+        }
+        // `[read]` **Eine unvolle Seite heisst: das war die
+        // letzte.** Die restlichen Buendel entfallen.
+        if (stueck.length < GROESSE) fertig = true
       }
-      if (stueck.length < GROESSE) break
-      if (runde === RUNDEN - 1) abgeschnitten = true
     }
-    return {
+    if (!fertig) abgeschnitten = true
+    const stand = {
       treffer: alle,
       // `[read]` **Abschneiden wird GEMELDET, nicht verschwiegen** —
       // ein Filter, der nur teilweise greift, ist gefaehrlicher als
@@ -151,6 +240,11 @@ export async function ladeAllergieTreffer(
           + 'ist unvollständig.'
         : null,
     }
+    // Nur ein vollstaendiger Stand wird gemerkt.
+    if (!abgeschnitten) {
+      TREFFER_SPEICHER.set(userId, { stand, bis: Date.now() + SPEICHER_MS })
+    }
+    return stand
   } catch (e) {
     return { treffer: [], fehler: e instanceof Error ? e.message : String(e) }
   }

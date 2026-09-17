@@ -2252,6 +2252,45 @@
         "505_supplier_product_wirkstoff_links",
         "496_supplier_product_nutrients_daten"
       ]
+    },
+    {
+      "id": "502_allergen_alias_product_matches",
+      "path": "supabase/migrations/20260917093000_c502_allergen_alias_product_matches.sql",
+      "kind": "sql",
+      "creates": "C-502: Kataloggebundene Nahrungsallergien treffen belegte, exakte DSLD-Zutatenzeilen; unsichere Zutaten bleiben offen.",
+      "depends_on": [
+        "503_allergy_catalog_suggestions"
+      ]
+    },
+    {
+      "id": "502_allergen_aliases_daten",
+      "path": "supabase/_pipeline/05_user_tabellen/502_allergen_aliases_daten.sql",
+      "kind": "sql",
+      "creates": "C-502: Belegte Aliasbruecken fuer Laktose, Baumnuesse und Soja, ohne unsichere Sammel- oder Oelbegriffe.",
+      "depends_on": [
+        "502_allergen_alias_product_matches",
+        "503_allergy_catalog_data"
+      ]
+    },
+    {
+      "id": "508_user_allergy_treffer",
+      "path": "supabase/migrations/20260917094000_c508_user_allergy_treffer.sql",
+      "kind": "sql",
+      "creates": "C-508: Eine RLS-gebundene Abfrage zaehlt Lebensmittel-, Supplement- und Medikamententreffer aller eigenen Katalogallergien.",
+      "depends_on": [
+        "502_allergen_alias_product_matches",
+        "506_medication_allergy_catalog"
+      ]
+    },
+    {
+      "id": "463_supplier_product_search_window",
+      "path": "supabase/migrations/20260917095000_g463_supplier_product_search_window.sql",
+      "kind": "sql",
+      "creates": "G-463: Produktsuche liefert bis 500 Ergebnisse; eine Metafunktion liefert Gesamt- und mitgefilterte Kategorienzahlen.",
+      "depends_on": [
+        "504_supplier_product_database_filters",
+        "502_allergen_alias_product_matches"
+      ]
     }
   ]
 }
