@@ -2333,6 +2333,16 @@
         "512_serving_size_provenance",
         "485_dsld_import"
       ]
+    },
+    {
+      "id": "513_supplement_product_meals",
+      "path": "supabase/migrations/20260917143500_c513_supplement_product_meals.sql",
+      "kind": "sql",
+      "creates": "C-513: DSLD-Supplementprodukte als explizite Mahlzeitenpositionen mit eingefrorenen Naehrwerten, getrennten Tagesquellen und einer produktgenauen 60-Minuten-Nachfrageerkennung.",
+      "depends_on": [
+        "512_serving_size_provenance",
+        "466_nutrient_supplement_sources"
+      ]
     }
   ]
 }

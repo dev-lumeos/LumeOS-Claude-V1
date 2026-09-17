@@ -598,9 +598,13 @@
         "portion_quantity",
         "portion_amount_g",
         "measurement_source",
-        "source_detail"
+        "source_detail",
+        "supplement_product_id",
+        "supplement_serving_size",
+        "supplement_serving_quantity",
+        "supplement_nutrient_status"
       ],
-      "spalten_herkunft": "[cmd] 2026-08-16 gegen information_schema.columns geprueft. 052_diary_foundation.sql erzeugt die Tagebuchspalten, 058_custom_foods.sql ergaenzt custom_food_id, 058a_meal_item_portions.sql ergaenzt die Portions-Snapshot-Spalten. [cmd] 2026-08-18: 017_datenherkunft.sql ergaenzt measurement_source und source_detail."
+      "spalten_herkunft": "[cmd] 2026-08-16 gegen information_schema.columns geprueft. 052_diary_foundation.sql erzeugt die Tagebuchspalten, 058_custom_foods.sql ergaenzt custom_food_id, 058a_meal_item_portions.sql ergaenzt die Portions-Snapshot-Spalten. [cmd] 2026-08-18: 017_datenherkunft.sql ergaenzt measurement_source und source_detail. C-513 ergaenzt den produktgenauen Supplement-Snapshot samt expliziter Facts-Portion und sichtbarem Datenlueckenstatus."
     },
     {
       "name": "water_logs",
@@ -1226,6 +1230,11 @@
       "schritt": "407"
     },
     {
+      "tabelle": "meal_items",
+      "name": "meal_items_supplement_snapshot_guard_trg",
+      "schritt": "513_supplement_product_meals"
+    },
+    {
       "tabelle": "user_inventory",
       "name": "user_inventory_owner_guard_trg",
       "schritt": "407"
@@ -1343,6 +1352,12 @@
       "tabelle": "meal_items",
       "zeigt_auf": "foods",
       "schritt": "052"
+    },
+    {
+      "name": "meal_items_supplement_product_id_fkey",
+      "tabelle": "meal_items",
+      "zeigt_auf": "supplier_products",
+      "schritt": "513_supplement_product_meals"
     },
     {
       "name": "search_events_selected_food_id_fkey",
@@ -1702,6 +1717,18 @@
       "schritt": "466_nutrient_supplement_sources"
     },
     {
+      "name": "add_supplement_product_to_meal",
+      "schritt": "513_supplement_product_meals"
+    },
+    {
+      "name": "nutrient_intake_source_breakdown_for_day",
+      "schritt": "513_supplement_product_meals"
+    },
+    {
+      "name": "supplement_product_meal_stack_overlap_candidates_for_day",
+      "schritt": "513_supplement_product_meals"
+    },
+    {
       "name": "nutrient_upper_limit_assessment_with_supplements",
       "schritt": "466_nutrient_supplement_sources"
     },
@@ -1796,6 +1823,10 @@
     {
       "name": "meal_items_inventory_deduct",
       "schritt": "407"
+    },
+    {
+      "name": "meal_items_supplement_snapshot_guard",
+      "schritt": "513_supplement_product_meals"
     }
   ],
   "mindestzeilen": {
