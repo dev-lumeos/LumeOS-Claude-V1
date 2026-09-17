@@ -1993,12 +1993,22 @@
       ]
     },
     {
+      "id": "512_source_serving_size_column",
+      "path": "supabase/migrations/20260917111900_c512_source_serving_size_column.sql",
+      "kind": "sql",
+      "creates": "C-512: speichert die bereits vorhandene DSLD-Facts-Spalte Serving Size, bevor C-485 die Etikettzeilen importiert.",
+      "depends_on": [
+        "485_dsld_struktur"
+      ]
+    },
+    {
       "id": "485_dsld_import",
       "path": "supabase/_pipeline/13_supplements/485_dsld_import.ts",
       "kind": "tsx",
       "creates": "C-485: alle elf DSLD-Arbeitsmappen als Produkte, Firmenrollen, Labelzeilen, Kandidaten und Produktfeld-Herkunft; XLSX wird per COPY-Stream gelesen.",
       "depends_on": [
         "489_produktname_name_en",
+        "512_source_serving_size_column",
         "137"
       ]
     },
@@ -2301,6 +2311,27 @@
         "504_supplier_product_database_filters",
         "498_global_allergies",
         "463_supplier_product_search_window"
+      ]
+    },
+    {
+      "id": "512_serving_size_provenance",
+      "path": "supabase/migrations/20260917112000_c512_serving_size_provenance.sql",
+      "kind": "sql",
+      "creates": "C-512: DSLD-Facts-Portionsherkunft, getrennte Mehrportionen und sichtbare Luecke statt falscher Summe.",
+      "depends_on": [
+        "496_supplier_product_nutrients",
+        "500_vitamin_e_form_evidence",
+        "510_supplier_product_nutrient_exact_mappings"
+      ]
+    },
+    {
+      "id": "512_dsld_serving_size_backfill",
+      "path": "supabase/_pipeline/13_supplements/512_dsld_serving_size_backfill.ts",
+      "kind": "tsx",
+      "creates": "C-512: schreibt die vorhandene DSLD-Facts-Spalte Serving Size feldgenau an die Produktinhaltszeilen.",
+      "depends_on": [
+        "512_serving_size_provenance",
+        "485_dsld_import"
       ]
     }
   ]

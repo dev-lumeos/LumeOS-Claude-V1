@@ -192,7 +192,7 @@ def fact_rows(files, aliases: dict[str, set[str]], counts: dict[str, int], metri
             metrics['candidate_rows'] += int(not supplement_id)
             yield (
                 str(uuid.uuid4()), product, supplement_id, ingredient, category, amount_value, amount_qualifier,
-                amount_raw, text(row['Amount Per Serving Unit']), blend_order, str(order), 'true',
+                amount_raw, text(row['Amount Per Serving Unit']), text(row['Serving Size']), blend_order, str(order), 'true',
             )
 
 
@@ -213,7 +213,7 @@ def other_ingredient_rows(files, counts: dict[str, int], metrics: dict[str, int]
                 metrics['other_ingredient_rows'] += 1
                 yield (
                     str(uuid.uuid4()), product, '', ingredient, 'other ingredient', '', 'not_stated', '', '', '',
-                    str(counts[product]), 'false',
+                    '', str(counts[product]), 'false',
                 )
 
 
@@ -277,10 +277,10 @@ def run(database: str, source: Path) -> None:
         yield from other_ingredient_rows(files, counts, metrics)
     copy(database, """
       BEGIN;
-      CREATE TEMP TABLE tmp_c485 (id uuid, product_dsld_id bigint, supplement_id uuid, ingredient_name text, ingredient_category text, amount_per_serving numeric, amount_qualifier text, amount_raw text, unit text, blend_reihenfolge integer, reihenfolge integer, ist_wirkstoff boolean) ON COMMIT DROP;
-    """, ['id','product_dsld_id','supplement_id','ingredient_name','ingredient_category','amount_per_serving','amount_qualifier','amount_raw','unit','blend_reihenfolge','reihenfolge','ist_wirkstoff'], all_contents(), """
-      INSERT INTO supplements.product_contents (id, product_id, supplement_id, ingredient_name, ingredient_category, amount_per_serving, amount_qualifier, amount_raw, unit, ist_wirkstoff, source, reihenfolge)
-      SELECT t.id, p.id, t.supplement_id, t.ingredient_name, nullif(t.ingredient_category,''), t.amount_per_serving, t.amount_qualifier, nullif(t.amount_raw,''), nullif(t.unit,''), t.ist_wirkstoff, 'dsld', t.reihenfolge
+      CREATE TEMP TABLE tmp_c485 (id uuid, product_dsld_id bigint, supplement_id uuid, ingredient_name text, ingredient_category text, amount_per_serving numeric, amount_qualifier text, amount_raw text, unit text, source_serving_size text, blend_reihenfolge integer, reihenfolge integer, ist_wirkstoff boolean) ON COMMIT DROP;
+    """, ['id','product_dsld_id','supplement_id','ingredient_name','ingredient_category','amount_per_serving','amount_qualifier','amount_raw','unit','source_serving_size','blend_reihenfolge','reihenfolge','ist_wirkstoff'], all_contents(), """
+      INSERT INTO supplements.product_contents (id, product_id, supplement_id, ingredient_name, ingredient_category, amount_per_serving, amount_qualifier, amount_raw, unit, source_serving_size, ist_wirkstoff, source, reihenfolge)
+      SELECT t.id, p.id, t.supplement_id, t.ingredient_name, nullif(t.ingredient_category,''), t.amount_per_serving, t.amount_qualifier, nullif(t.amount_raw,''), nullif(t.unit,''), nullif(t.source_serving_size,''), t.ist_wirkstoff, 'dsld', t.reihenfolge
       FROM tmp_c485 t
       JOIN supplements.supplier_products p ON p.dsld_id = t.product_dsld_id;
       UPDATE supplements.product_contents child

@@ -6247,6 +6247,16 @@
   ],
   "fremde_sichten": [
     {
+      "schema": "supplements",
+      "name": "supplier_product_nutrient_serving_options",
+      "schritt": "512_serving_size_provenance",
+      "security_invoker": true,
+      "security_barrier": false,
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-512: explizite DSLD-Facts-Portionen statt einer geratenen Produktauswahl; PUBLIC und anon sind widerrufen.",
+      "spalten": ["product_id", "serving_size", "enercc", "prot625", "fat", "cho", "fibt", "sugar", "fasat", "nacl", "water_g", "alc", "vita_ug", "vitd_ug", "vite_mg", "vitk_ug", "vitc_mg", "thia_mg", "ribf_mg", "nia_mg", "vitb6_ug", "fol_ug", "vitb12_ug", "na_mg", "k_mg", "ca_mg", "mg_mg", "p_mg", "fe_mg", "zn_mg", "id_ug", "cu_ug", "mn_ug"]
+    },
+    {
       "schema": "public",
       "name": "activity_stream",
       "schritt": "430_schema",
