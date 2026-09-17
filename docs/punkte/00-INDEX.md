@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 234 |
+| `todos` | 235 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 485 |
-| **gesamt** | **720** |
+| `erledigt` | 486 |
+| **gesamt** | **722** |
 
 ## medical — 49
 
@@ -64,7 +64,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 240
+## nutrition — 241
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -307,6 +307,7 @@
 | `G-419` | feature | niedrig | [der Insights-Block ist abgenommen](erledigt/nutrition-g-0419-insights-block-abgenommen.md) | erledigt | — | — |
 | `G-426` | feature | hoch | [die Supplementspalte in Nutrients](todos/nutrition-g-0426-die-supplementspalte-in-nutrients.md) | offen | — | — |
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
+| `G-475` | feature | hoch | [Supplemente in die Mahlzeit, in der Oberflaeche](todos/nutrition-g-0475-supplement-in-mahlzeit-ui.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 104
@@ -376,7 +377,7 @@
 | `C-509` | befund | hoch | [der Substanzkatalog ist zu klein](todos/supplements-c-0509-substanzkatalog-zu-klein.md) | offen | — | — |
 | `C-510` | fehler | hoch | [das Mapping ist buchstabengenau](erledigt/supplements-c-0510-mapping-buchstabengenau.md) | erledigt | — | — |
 | `C-511` | feature | hoch | [Supplement-Vorlieben, mit Lieblingsmarken](erledigt/supplements-c-0511-lieblingsmarken.md) | erledigt | — | — |
-| `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](erledigt/supplements-c-0512-naehrwerte-werden-summiert.md) | erledigt | — | G-472 |
+| `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](erledigt/supplements-c-0512-naehrwerte-werden-summiert.md) | erledigt | — | C-513, G-472 |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -587,7 +588,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 180
+## quer — 181
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -687,6 +688,7 @@
 | `C-502` | fehler | hoch | [die Allergene ohne Aliase treffen nichts](erledigt/quer-c-0502-allergene-ohne-aliase.md) | erledigt | — | — |
 | `C-503` | feature | hoch | [die Vorschlaege kommen aus den Katalogen](erledigt/quer-c-0503-keine-stoffliste.md) | erledigt | — | C-506, G-462 |
 | `C-508` | feature | mittel | [eine Zaehlfunktion fuer die Allergietreffer](erledigt/quer-c-0508-zaehlfunktion-allergietreffer.md) | erledigt | — | — |
+| `C-513` | feature | hoch | [ein Supplement in eine Mahlzeit](erledigt/quer-c-0513-supplement-in-mahlzeit.md) | erledigt | — | G-475 |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
