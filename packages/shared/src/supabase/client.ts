@@ -42,7 +42,40 @@ type CookieOptionen = {
   secure?: boolean
 }
 
+// ══ G-470: OHNE `document` GIBT ES KEINE KEKSE ══════════════════════
+//
+// **BEFUND, gemessen 2026-09-17 am Produktionsbau:**
+//
+// `[cmd]` **Der Produktionsbau war NICHT anmeldefaehig.** Jeder
+// Seitenaufruf warf serverseitig:
+//
+//     ReferenceError: document is not defined
+//       at Object.s [as get]        <- `lesen` hier
+//       at Object.getItem
+//       at rL.__loadSession / rL._recoverAndRefresh
+//       at rL._initialize
+//
+// `[cmd]` **Der Weg dorthin:** `app-shell.tsx:257` ruft
+// `createClient()` in einem `useMemo` — **und `useMemo` laeuft beim
+// Serveranstrich MIT**, anders als `useEffect`. `[cmd]` **`AppShell`
+// steht im Wurzel-Layout**, also traf es JEDE Seite.
+//
+// `[read]` **Im Entwicklungsmodus fiel es nicht auf** — Next.js
+// buendelt dort anders, und die Ausnahme blieb aus.
+//
+// `[read]` **Die Behebung ist NICHT, den Aufruf zu verschieben** —
+// `useMemo` ist dort richtig, und ein Client, der auf dem Server
+// keine Kekse findet, ist ein gueltiger Zustand: **es gibt dort
+// keine Sitzung im Browser, die er lesen koennte.**
+//
+// `[cmd]` **`typeof document === 'undefined'` ist die Pruefung, nicht
+// `typeof window`** — gemessen wird genau das Objekt, das benutzt
+// wird.
 function lesen(name: string): string | undefined {
+  // `[read]` **Auf dem Server gibt es keinen Keks zu lesen** — und
+  // `undefined` ist genau das, was der Aufrufer dann erwartet:
+  // *keine Sitzung*.
+  if (typeof document === 'undefined') return undefined
   const treffer = document.cookie
     .split('; ')
     .find(teil => teil.startsWith(`${name}=`))
@@ -50,6 +83,12 @@ function lesen(name: string): string | undefined {
 }
 
 function schreiben(name: string, value: string, optionen: CookieOptionen): void {
+  // `[read]` **Auf dem Server wird NICHT geschrieben** — die Sitzung
+  // setzt dort die Middleware ueber `NextResponse.cookies`
+  // (`middleware.ts`), nicht dieser Klient. `[cmd]` **Ein stiller
+  // Rueckfall ist hier richtig:** der Serveranstrich soll keine
+  // Kekse setzen, er soll nur nicht abstuerzen.
+  if (typeof document === 'undefined') return
   const teile = [`${name}=${encodeURIComponent(value)}`]
   teile.push(`Path=${optionen.path ?? '/'}`)
   if (optionen.maxAge !== undefined) teile.push(`Max-Age=${optionen.maxAge}`)
