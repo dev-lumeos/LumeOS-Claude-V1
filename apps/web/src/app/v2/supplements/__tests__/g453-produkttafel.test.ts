@@ -42,6 +42,8 @@ function zeile(z: Partial<InhaltsZeile> & { id: string }): InhaltsZeile {
     reihenfolge: null,
     ist_wirkstoff: true,
     bekannt: false,
+    // G-464: die Einstufung aus C-505. `null` = wie vor G-464.
+    content_class: null,
     ...z,
   }
 }

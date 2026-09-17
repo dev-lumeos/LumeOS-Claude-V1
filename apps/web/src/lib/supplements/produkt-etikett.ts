@@ -329,6 +329,38 @@ export function buendelFuer(kategorie: string | null): BuendelId {
   }
 }
 
+/**
+ * Das Buendel einer Zeile — G-464.
+ *
+ * `[read]` **Die Einstufung aus C-505 fuehrt, die Kategorie faengt
+ * auf.** `[cmd]` **Ohne Einstufung (`null`) gruppiert die Tafel wie
+ * vor G-464** — das ist der Rueckfall, wenn die Sicht ausfaellt, und
+ * er ist besser als eine Zeile, die verschwindet.
+ *
+ * `[cmd]` **Die vier Klassen sind gemessen** (C-505, 2026-09-17):
+ *
+ *     naehrwert    nm.dsld_name IS NOT NULL      -> Naehrwerte
+ *     hilfsstoff   NOT ist_wirkstoff             -> Hilfsstoffe
+ *     wirkstoff    supplement_id IS NOT NULL     -> Wirkstoffe
+ *     kandidat     weder noch                    -> nach Kategorie
+ *
+ * `[read]` **`kandidat` bekommt KEIN eigenes Buendel** — der Auftrag
+ * nennt vier Ueberschriften, und eine fuenfte waere eine Entscheidung,
+ * die Tom nicht getroffen hat. **Er wird einsortiert wie bisher**, und
+ * die fehlende Marke sagt, dass LumeOS ihn nicht auswerten kann.
+ */
+export function buendelFuerZeile(
+  z: Pick<InhaltsZeile, 'ingredient_category' | 'content_class'>,
+): BuendelId {
+  switch (z.content_class) {
+    case 'naehrwert': return 'naehrwerte'
+    case 'wirkstoff': return 'wirkstoffe'
+    case 'hilfsstoff': return 'hilfsstoffe'
+    // `kandidat` und `null`: die Kategorie entscheidet.
+    default: return buendelFuer(z.ingredient_category)
+  }
+}
+
 export type EtikettBuendel = {
   id: BuendelId
   titel: string
@@ -379,7 +411,23 @@ export function etikettBuendel(
     const massgeblich = kopf ?? z
     const ziel = massgeblich.istMischung
       ? 'mischungen'
-      : buendelFuer(massgeblich.ingredient_category)
+      // ══ G-464: DIE EINSTUFUNG FUEHRT, NICHT DIE KATEGORIE ══════
+      //
+      // `[cmd]` **Hier stand `buendelFuer(ingredient_category)`
+      // allein** — und `vitamin`/`mineral` landeten bei den
+      // Wirkstoffen. **Toms Befund: `Vitamin A`, `Calcium`, `Iron`
+      // standen unter WIRKSTOFFE, obwohl es Naehrwerte sind.**
+      //
+      // `[cmd]` **Gemessen an `Serious Mass Vanilla` (2026-09-17):
+      // 40 Zeilen tragen `vitamin` oder `mineral` und sind nach
+      // C-505 `naehrwert`** — sie standen alle in der falschen
+      // Gruppe.
+      //
+      // `[read]` **Die Kategorie sagt, WORAUS die Zutat ist; die
+      // Einstufung sagt, WIE LumeOS sie auswertet.** **Die Tafel
+      // gruppiert nach der zweiten Frage** — deshalb steht `Calcium`
+      // jetzt bei `Total Fat` und `Protein`.
+      : buendelFuerZeile(massgeblich)
     faecher.get(ziel)!.push(z)
   }
 

@@ -221,15 +221,44 @@ export type InhaltsZeile = {
   /**
    * Kennt LumeOS die Zutat?
    *
-   * `[cmd]` **`supplement_id` ist bei 2.698.689 von 3.000.982 Zeilen
-   * null** (89,9 %, gemessen 2026-09-14) — die Zutat steht auf dem
-   * Etikett, aber keine Substanz im Katalog entspricht ihr.
+   * ══ G-464: AN BEIDEM, NICHT AN EINER SPALTE ═══════════════════════
    *
-   * `[read]` **Der Auftrag verlangt, dass man das sieht:** wer ein
-   * Produkt ansieht, soll wissen, welche Zutaten LumeOS auswerten
-   * kann.
+   * `[cmd]` **Hier hing die Marke an `supplement_id` allein** — und
+   * Tom sah am Schirm einen Widerspruch (2026-09-08):
+   *
+   *     Calcium 1440 mg   ohne Marke     nutrient_code CA
+   *     Vitamin C 65 mg   ohne Marke     nutrient_code VITC
+   *     Iron 5.3 mg       ohne Marke     nutrient_code FE
+   *     Zinc 18 mg        ohne Marke     nutrient_code ZN
+   *     Thiamin 5.1 mg    auswertbar     supplement_id
+   *     Biotin 300 mcg    auswertbar     supplement_id
+   *
+   * `[read]` **Calcium hat ein gueltiges Naehrstoff-Mapping und
+   * stand trotzdem als *nicht im Katalog* da.** `[cmd]` **Gemessen an
+   * `Serious Mass Vanilla` (2026-09-17): 22 von 85 Zeilen tragen eine
+   * `supplement_id`, aber 62 tragen `supplement_id` ODER
+   * `nutrient_code`.**
+   *
+   * `[read]` **Es sind zwei Wege, dieselbe Zeile auszuwerten:**
+   *
+   *     supplement_id   als Wirkstoff  (Biotin, Thiamin)
+   *     nutrient_code   als Naehrwert  (Calcium, Vitamin C)
+   *     beides null     Kandidat       (23 Zeilen)
    */
   bekannt: boolean
+  /**
+   * Naehrwert, Wirkstoff, Hilfsstoff oder Kandidat — aus C-505.
+   *
+   * `[cmd]` **`supplements.supplier_product_content_catalog`** traegt
+   * die Einstufung selbst. `[read]` **Sie wird GELESEN, nicht
+   * nachgerechnet** — eine zweite Fassung hier waere genau die Drift,
+   * vor der C-495/G-452 gewarnt hat.
+   *
+   * `[read]` **`null` heisst: der Rueckfall lief** (die Sicht war
+   * nicht erreichbar) — dann gruppiert die Tafel wie vor G-464, und
+   * sie sagt es.
+   */
+  content_class: 'naehrwert' | 'wirkstoff' | 'hilfsstoff' | 'kandidat' | null
 }
 
 export type FirmenZeile = {
@@ -583,8 +612,23 @@ export async function ladeMarken(): Promise<{ marken: string[]; vollstaendig: bo
   }
 }
 
+/**
+ * Die vier Klassen aus C-505 — und nur die vier.
+ *
+ * `[read]` **Ein unbekannter Wert wird `null`, nicht geraten.**
+ * `[cmd]` **Kaeme eine fuenfte Klasse dazu, gruppierte die Tafel sie
+ * wie vor G-464** — sichtbar falsch ist besser als stumm falsch
+ * einsortiert.
+ */
+export function pruefeKlasse(v: unknown): InhaltsZeile['content_class'] {
+  return v === 'naehrwert' || v === 'wirkstoff'
+    || v === 'hilfsstoff' || v === 'kandidat'
+    ? v
+    : null
+}
+
 function inhaltAus(r: Record<string, unknown>): InhaltsZeile | null {
-  const id = s(r.id)
+  const id = s(r.id) ?? s(r.product_content_id)
   const name = s(r.ingredient_name) ?? s(r.supplement_name_en)
   if (!id || !name) return null
   return {
@@ -597,10 +641,18 @@ function inhaltAus(r: Record<string, unknown>): InhaltsZeile | null {
     blend_id: s(r.blend_id),
     reihenfolge: n(r.reihenfolge),
     ist_wirkstoff: r.ist_wirkstoff === true,
-    // `[read]` **Der Rueckfall liest `supplement_id`, C-495 liefert
-    // `supplement_name_en`** — beides beantwortet dieselbe Frage:
-    // kennt LumeOS die Zutat?
-    bekannt: s(r.supplement_id) !== null || s(r.supplement_name_en) !== null,
+    // ══ G-464: DIE MARKE HAENGT AN BEIDEM ════════════════════════
+    //
+    // `[cmd]` **Hier stand nur `supplement_id`** — und `Calcium` mit
+    // dem gueltigen Mapping `CA` galt als unbekannt (Toms Befund).
+    //
+    // `[read]` **`nutrient_code` ist der zweite Weg:** die Zeile ist
+    // als NAEHRWERT auswertbar, auch wenn keine Substanz im
+    // Wirkstoffkatalog ihr entspricht.
+    bekannt: s(r.supplement_id) !== null
+      || s(r.nutrient_code) !== null
+      || s(r.supplement_name_en) !== null,
+    content_class: pruefeKlasse(r.content_class),
   }
 }
 
@@ -649,16 +701,72 @@ function inhaltAus(r: Record<string, unknown>): InhaltsZeile | null {
  * `[read]` **Die drei Abfragen laufen parallel** — keine baut auf
  * einer anderen auf.
  */
+/**
+ * Die Etikettenzeilen aus Sicht (C-505) und Tabelle.
+ *
+ * `[read]` **Die Ordnung fuehrt, nicht die Sicht** — sonst stuenden
+ * die Zeilen in der Reihenfolge, die Postgres gerade liefert, und das
+ * Etikett verloere seine eigene Abfolge.
+ *
+ * `[cmd]` **Ist die Sicht leer, traegt die Tabelle allein** — dann
+ * fehlt die Einstufung, und `content_class` bleibt `null`.
+ */
+function zeilenVerbinden(
+  ausSicht: unknown, ausTabelle: unknown,
+): InhaltsZeile[] {
+  const sicht = (Array.isArray(ausSicht) ? ausSicht : []) as Array<Record<string, unknown>>
+  const ordnung = (Array.isArray(ausTabelle) ? ausTabelle : []) as Array<Record<string, unknown>>
+
+  const nachId = new Map<string, Record<string, unknown>>()
+  for (const r of sicht) {
+    const k = s(r.product_content_id)
+    if (k) nachId.set(k, r)
+  }
+
+  // `[read]` **Die Tabelle gibt die Reihenfolge vor** — jede ihrer
+  // Zeilen einmal, angereichert um das, was die Sicht dazu weiss.
+  if (ordnung.length > 0) {
+    return ordnung.flatMap(o => {
+      const k = s(o.id)
+      const dazu = k ? nachId.get(k) : undefined
+      // `[cmd]` **Ohne Gegenstueck in der Sicht bleibt die Zeile
+      // trotzdem stehen** — eine fehlende Einstufung darf keine
+      // Etikettenzeile verschlucken.
+      return inhaltAus({ ...(dazu ?? {}), ...o }) ?? []
+    })
+  }
+
+  // Rueckfall: nur die Sicht.
+  return sicht.flatMap(r => inhaltAus(r) ?? [])
+}
+
 export async function ladeProdukt(id: string): Promise<ProduktSatz | null> {
   const c = createSessionClient().schema('supplements')
 
   try {
-    const [kopfA, inhaltA, firmenA] = await Promise.all([
+    const [kopfA, inhaltA, ordnungA, firmenA] = await Promise.all([
       c.from('supplier_products')
         .select('id,name_en,marke,market_status,produktform,packungsgroesse,packungseinheit,portionsgroesse,portionseinheit,gtin,suggested_use')
         .eq('id', id).maybeSingle(),
+      // ══ G-464: DIE SICHT AUS C-505, NICHT DIE ROHTABELLE ═══════
+      //
+      // `[cmd]` **Hier stand `from('product_contents')`** — und die
+      // Tabelle traegt weder `nutrient_code` noch die Einstufung.
+      // **Deshalb konnte die Tafel die Marke nur an `supplement_id`
+      // haengen und musste die Gruppe aus `ingredient_category`
+      // raten.**
+      //
+      // `[cmd]` **`supplier_product_content_catalog` (C-505) traegt
+      // beides** — gemessen 2026-09-17, `authenticated` hat SELECT.
+      //
+      // `[read]` **`blend_id` fehlt der Sicht** (gemessen) — die
+      // Einrueckung kommt weiter aus `product_contents`, und beide
+      // Abfragen werden ueber `product_content_id` zusammengefuehrt.
+      c.from('supplier_product_content_catalog')
+        .select('product_content_id,ingredient_name,ingredient_category,amount_per_serving,unit,amount_qualifier,ist_wirkstoff,supplement_id,nutrient_code,content_class')
+        .eq('product_id', id),
       c.from('product_contents')
-        .select('id,ingredient_name,ingredient_category,amount_per_serving,unit,amount_qualifier,blend_id,reihenfolge,ist_wirkstoff,supplement_id')
+        .select('id,blend_id,reihenfolge')
         .eq('product_id', id).order('reihenfolge', { ascending: true, nullsFirst: false }),
       c.from('product_suppliers')
         .select('rolle,suppliers(name,land)').eq('product_id', id),
@@ -677,8 +785,18 @@ export async function ladeProdukt(id: string): Promise<ProduktSatz | null> {
       portionseinheit: s(k.portionseinheit),
       gtin: s(k.gtin),
       suggested_use: s(k.suggested_use),
-      inhalt: (Array.isArray(inhaltA.data) ? inhaltA.data as Array<Record<string, unknown>> : [])
-        .flatMap(r => inhaltAus(r) ?? []),
+      // ══ G-464: Sicht und Tabelle zusammenfuehren ═══════════════
+      //
+      // `[read]` **Die Sicht sagt WAS die Zeile ist, die Tabelle WO
+      // sie steht** — `blend_id` (Einrueckung) und `reihenfolge`
+      // (Etikettenordnung) gibt es nur in `product_contents`.
+      //
+      // `[cmd]` **Faellt die Sicht aus, traegt die Tabelle allein**:
+      // dann fehlen `nutrient_code` und `content_class`, die Marke
+      // haengt wieder an `supplement_id`, und die Tafel gruppiert wie
+      // vor G-464. `[read]` **Ein Rueckfall, der WENIGER kann, ist
+      // besser als eine leere Tafel** — aber er muss sichtbar sein.
+      inhalt: zeilenVerbinden(inhaltA.data, ordnungA.data),
       firmen: (Array.isArray(firmenA.data) ? firmenA.data as Array<Record<string, unknown>> : [])
         .flatMap(r => {
           const f = (r as Record<string, unknown>).suppliers as Record<string, unknown> | null
