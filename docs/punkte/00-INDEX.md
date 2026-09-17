@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 234 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 480 |
-| **gesamt** | **715** |
+| `laufend_codex` | 1 |
+| `erledigt` | 481 |
+| **gesamt** | **716** |
 
 ## medical — 49
 
@@ -376,7 +376,7 @@
 | `C-509` | befund | hoch | [der Substanzkatalog ist zu klein](todos/supplements-c-0509-substanzkatalog-zu-klein.md) | offen | — | — |
 | `C-510` | fehler | hoch | [das Mapping ist buchstabengenau](erledigt/supplements-c-0510-mapping-buchstabengenau.md) | erledigt | — | — |
 | `C-511` | feature | hoch | [Supplement-Vorlieben, mit Lieblingsmarken](erledigt/supplements-c-0511-lieblingsmarken.md) | erledigt | — | — |
-| `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](todos/supplements-c-0512-naehrwerte-werden-summiert.md) | offen | — | — |
+| `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](laufend_codex/supplements-c-0512-naehrwerte-werden-summiert.md) | laeuft (codex) | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -586,7 +586,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 176
+## quer — 177
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -765,7 +765,8 @@
 | `G-459` | feature | mittel | [die Allergiekachel aufraeumen](erledigt/quer-g-0459-allergiekachel-aufraeumen.md) | erledigt | — | C-508 |
 | `G-460` | fehler | mittel | [vier Lesestellen auf die gefallene Spalte ebene](erledigt/quer-g-0460-vier-ebene-lesestellen.md) | erledigt | — | — |
 | `G-462` | fehler | niedrig | [bedingtes React.useId](erledigt/quer-g-0462-bedingtes-useid.md) | erledigt | — | — |
-| `G-469` | befund | hoch | [7,7 Sekunden, und die Daten sind es nicht](laufend_claudecode/quer-g-0469-sieben-sekunden.md) | laeuft (claudecode) | — | — |
+| `G-469` | befund | hoch | [7,7 Sekunden, und die Daten sind es nicht](erledigt/quer-g-0469-sieben-sekunden.md) | erledigt | — | G-470 |
+| `G-470` | fehler | hoch | [der Produktionsbau ist nicht anmeldefaehig](todos/quer-g-0470-produktionsbau-nicht-anmeldefaehig.md) | offen | — | — |
 
 ## buddy — 1
 
