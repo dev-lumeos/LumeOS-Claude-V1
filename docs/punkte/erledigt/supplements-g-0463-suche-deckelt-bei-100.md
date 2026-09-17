@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-454
 entscheidung: null
+erledigt: 2026-09-08
+commit: 8ec84645
 beruehrt:
   tabellen: [supplements.supplier_products]
 zahlen:
@@ -81,3 +83,58 @@ Teil uebrig ist.**
     A5  Gegenprobe: eine Suche mit genau 100 Treffern
         -> steht "100 von 100"?
     A6  Sicherung, Vollkette, ALLE Waechter.
+
+## Bericht
+
+**Entscheidung c umgesetzt:** Das Suchfenster ist auf 500 erhoeht und
+`supplements.supplier_product_search_meta(...)` liefert mit exakt
+denselben Datenbankfiltern `total_count` und mitwandernde
+`category_counts`. Die UI kann damit ehrlich etwa "500 von 1.618"
+zeigen; sie muss die neue Metafunktion nur noch konsumieren (nicht
+Teil dieses Auftrags).
+
+| `p_limit` bei `whey` + `protein` | vorher | nachher |
+|---|---:|---:|
+| 100 | 100 | 100 |
+| 500 | 100 | 500 |
+| 1.500 | 100 | 500 |
+| 5.000 | 100 | 500 |
+
+Die Treffermenge ist **1.618**. Die Suche mit 500 Ergebnissen kostet
+**33,6 ms**; die Metafunktion mit Kategorien **59,2 ms**. Bei aktivem
+Filter `protein` meldet sie `protein = 1.618`, nicht mehr den alten
+festen Browserwert fuer Mineralien. Die Gegenprobe `CVS` plus Marke
+`CVS Pharmacy` ergibt exakt **100 von 100**.
+
+Beide RPCs sind `authenticated`-only; `anon` hat kein EXECUTE.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Selbst getestet.**
+
+    p_limit  100  ->  100
+    p_limit  500  ->  500
+    p_limit 2000  ->  500
+
+`[read]` **Der Deckel steht bei 500 statt 100** ? **genau das,
+was G-453 als tragbar gemessen hat (3.002 DOM-Knoten von
+4.713).**
+
+`[cmd]` **`whey` + `protein`: 500 von 1.618, Suche 33,6 ms,
+Meta 59,2 ms.**
+
+`[cmd]` **Gegenprobe CVS Pharmacy: 100 von 100** ? **die
+Gesamtzahl stimmt auch, wenn sie unter dem Deckel liegt.**
+
+### Und die zweite Wahrheit ist geloest
+
+> *,,Metafunktion fuer Gesamt- und MITGEFILTERTE
+Kategorienzahlen."*
+
+`[read]` **Er hatte sie in G-454 selbst gemeldet: *,,feste
+Browserwerte, wandern nicht mit"*.**
+
+`[cmd]` **Offen: *,,Die UI muss die Meta-RPC noch
+konsumieren"*** ? **das gehoert zu G-467.**
+
+**Abgenommen.**

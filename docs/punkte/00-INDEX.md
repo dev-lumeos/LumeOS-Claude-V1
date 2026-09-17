@@ -5,9 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 238 |
-| `erledigt` | 474 |
-| **gesamt** | **712** |
+| `todos` | 234 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 478 |
+| **gesamt** | **713** |
 
 ## medical — 49
 
@@ -308,9 +309,9 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 101
+## supplements — 102
 
-### beauftragbar — 100
+### beauftragbar — 101
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -375,6 +376,7 @@
 | `C-509` | befund | hoch | [der Substanzkatalog ist zu klein](todos/supplements-c-0509-substanzkatalog-zu-klein.md) | offen | — | — |
 | `C-510` | fehler | hoch | [das Mapping ist buchstabengenau](erledigt/supplements-c-0510-mapping-buchstabengenau.md) | erledigt | — | — |
 | `C-511` | feature | hoch | [Lieblingsmarken statt einer Suche](todos/supplements-c-0511-lieblingsmarken.md) | offen | — | — |
+| `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](todos/supplements-c-0512-naehrwerte-werden-summiert.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -408,11 +410,11 @@
 | `G-452` | feature | hoch | [der Produkte-Reiter](erledigt/supplements-g-0452-der-produkte-reiter.md) | erledigt | — | G-453 |
 | `G-453` | feature | hoch | [die Produkttafel](erledigt/supplements-g-0453-die-produkttafel.md) | erledigt | — | G-454, G-464, G-465 |
 | `G-454` | befund | mittel | [Suche und Filter schliessen sich aus](erledigt/supplements-g-0454-suche-und-filter.md) | erledigt | — | C-504, G-463 |
-| `G-463` | fehler | hoch | [die Suche deckelt bei 100, die Liste will 500](todos/supplements-g-0463-suche-deckelt-bei-100.md) | offen | — | — |
+| `G-463` | fehler | hoch | [die Suche deckelt bei 100, die Liste will 500](erledigt/supplements-g-0463-suche-deckelt-bei-100.md) | erledigt | — | — |
 | `G-464` | fehler | hoch | [die Tafel fragt die falsche Spalte](erledigt/supplements-g-0464-tafel-fragt-falsche-spalte.md) | erledigt | — | — |
 | `G-465` | fehler | hoch | [fuenf Anfragen je Suche](erledigt/supplements-g-0465-fuenf-anfragen-je-suche.md) | erledigt | — | — |
-| `G-466` | fehler | mittel | [amount_qualifier wird nicht gelesen](todos/supplements-g-0466-amount-qualifier.md) | offen | — | — |
-| `G-467` | fehler | hoch | [die Filter werden nicht gespeichert](todos/supplements-g-0467-filter-werden-nicht-gespeichert.md) | offen | — | — |
+| `G-466` | fehler | mittel | [amount_qualifier wird nicht gelesen](erledigt/supplements-g-0466-amount-qualifier.md) | erledigt | — | C-512 |
+| `G-467` | fehler | hoch | [die Filter werden nicht gespeichert](laufend_claudecode/supplements-g-0467-filter-werden-nicht-gespeichert.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -680,9 +682,9 @@
 | `C-488` | fehler | hoch | [sechzehn Tabellen ohne Thai](erledigt/quer-c-0488-sechzehn-tabellen-ohne-thai.md) | erledigt | — | C-489 |
 | `C-498` | feature | hoch | [Allergien global, nicht in food_preferences](erledigt/quer-c-0498-allergien-global.md) | erledigt | — | C-502, C-503 |
 | `C-501` | feature | hoch | [Seed fuer die leeren Module](erledigt/quer-c-0501-seed-fuer-leere-module.md) | erledigt | — | — |
-| `C-502` | fehler | hoch | [die Allergene ohne Aliase treffen nichts](todos/quer-c-0502-allergene-ohne-aliase.md) | offen | — | — |
+| `C-502` | fehler | hoch | [die Allergene ohne Aliase treffen nichts](erledigt/quer-c-0502-allergene-ohne-aliase.md) | erledigt | — | — |
 | `C-503` | feature | hoch | [die Vorschlaege kommen aus den Katalogen](erledigt/quer-c-0503-keine-stoffliste.md) | erledigt | — | C-506, G-462 |
-| `C-508` | feature | mittel | [eine Zaehlfunktion fuer die Allergietreffer](todos/quer-c-0508-zaehlfunktion-allergietreffer.md) | offen | — | — |
+| `C-508` | feature | mittel | [eine Zaehlfunktion fuer die Allergietreffer](erledigt/quer-c-0508-zaehlfunktion-allergietreffer.md) | erledigt | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
