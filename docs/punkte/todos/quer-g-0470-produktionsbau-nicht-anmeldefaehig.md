@@ -9,7 +9,7 @@ kind_von: G-469
 entscheidung: null
 beruehrt:
   dateien:
-    - apps/web/src/lib/supabase/server.ts
+    - apps/web/src/lib/__tests__/abmelden.test.ts
 zahlen:
   gemessen: 2026-09-08
 ---
