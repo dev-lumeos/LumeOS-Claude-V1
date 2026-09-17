@@ -9,7 +9,7 @@ kind_von: G-469
 entscheidung: null
 beruehrt:
   dateien:
-    - apps/web/src/lib/__tests__/abmelden.test.ts
+    - apps/web/src/middleware.ts
 zahlen:
   gemessen: 2026-09-08
 ---
@@ -57,3 +57,20 @@ Next.js dort anders buendelt.**
     A4  Gegenprobe: der Dev-Server bleibt unveraendert.
     A5  vier Module unveraendert.
     A6  NIE .next loeschen, nie next build direkt.
+
+## Gemessen 2026-09-08 - es gibt schon einen Waechter
+
+`[cmd]` **Drei Stellen erzeugen einen Supabase-Client:**
+
+    apps/web/src/middleware.ts
+    apps/web/src/lib/__tests__/client-grenze.test.ts
+    apps/web/src/lib/__tests__/abmelden.test.ts
+
+`[read]` **`client-grenze.test.ts` heisst, dass jemand die
+Trennung schon einmal bewacht hat** ? **lies sie, bevor du
+baust.**
+
+`[cmd]` **MISS, ob sie den Fall abdeckt oder ob sie ihn
+verpasst** ? **wenn sie ihn verpasst, ist das der eigentliche
+Befund.**
+
