@@ -168,3 +168,26 @@ _(vom Agenten anzuhaengen)_
 
 _(vom Orchestrator)_
 
+## Nachtrag 2026-09-08 - der Speicher entscheidet
+
+Tom:
+
+> modul preferences schliesst nicht aus, dass wir die
+> wichtigsten sachen auch parallel in user settings/profile
+> haben koennen, solange es an DENSELBEN ORT geschrieben
+> wird
+
+`[read]` **Damit ist Punkt 3 keine Ausnahme, sondern die
+Regel.**
+
+    zwei Flaechen, EIN Speicher     richtig
+    zwei Flaechen, ZWEI Speicher    zwei Wahrheiten
+
+`[cmd]` **Die Bauform steht schon: C-498s Write loescht nur
+`quelle=nutrition_preferences`** ? **eine in Settings
+angelegte Allergie ueberlebt.**
+
+`[read]` **Fuer die Lieblingsmarken heisst das: wenn sie
+spaeter auch in Settings stehen sollen, schreiben beide in
+DIESELBE Tabelle** ? **bau sie so, dass das geht.**
+

@@ -395,3 +395,27 @@ den Allergien (G-455), ohne sie zu kopieren.**
 
 `[read]` **Zeigen ist nicht Speichern.**
 
+### Toms Formulierung, praeziser als meine
+
+> modul preferences schliesst nicht aus, dass wir die
+> wichtigsten sachen auch parallel in user settings/profile
+> haben koennen, SOLANGE ES AN DENSELBEN ORT GESCHRIEBEN WIRD
+
+`[read]` **Die Frage ist nicht, WO etwas steht** ? **sondern,
+wohin es geschrieben wird.**
+
+    zwei Flaechen, EIN Speicher     richtig
+    zwei Flaechen, ZWEI Speicher    zwei Wahrheiten
+
+`[cmd]` **Beleg: die Allergien stehen in Settings UND in
+`nutrition/preferences`** ? **beide schreiben nach
+`public.user_allergies` (C-498, G-455).**
+
+`[cmd]` **Und C-498 hat den Trick dafuer gebaut: der Write
+loescht nur `quelle=nutrition_preferences`** ? **eine in
+Settings angelegte Medikamentenallergie ueberlebt jedes
+Speichern in den Vorlieben.**
+
+`[read]` **Das ist die Bauform** ? **nicht *,,eine Flaeche
+darf es"*, sondern *,,jede Flaeche darf es, solange der
+Speicher derselbe ist"*.**
