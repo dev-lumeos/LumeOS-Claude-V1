@@ -74,6 +74,27 @@ function ohneKommentare(q: string): string {
 const GLOBALE = ['document', 'window', 'localStorage', 'sessionStorage']
 
 /**
+ * Die HUELLEN — sie laufen auf JEDER Seite.
+ *
+ * ══ G-471 ═══════════════════════════════════════════════════════════
+ *
+ * `[cmd]` **Gemessen 2026-09-17 am Produktionsbau:** ein Reiter, der
+ * sich gerade angemeldet hat, STIRBT beim Aufruf von `/v2`
+ * (`Inspector.targetCrashed`, keine Ausnahme, kein Stapel, 10 MB
+ * Speicher). **Ein frischer Reiter ueberlebt dieselbe Route, und die
+ * alten Routen ueberleben im selben Reiter.**
+ *
+ * `[read]` **Die Ursache ist NICHT gefunden** (siehe Bericht G-471).
+ * **Aber diese beiden Dateien laufen auf jeder `/v2`-Seite**, und ein
+ * Browserzugriff beim Anstrich waere genau die Klasse Fehler, die
+ * G-470 ausgeloest hat. **Deshalb werden sie mitbewacht.**
+ */
+const HUELLEN = [
+  'apps/web/src/app/v2/shell.tsx',
+  'apps/web/src/components/shell/app-shell.tsx',
+]
+
+/**
  * Greift die Funktion um `treffer` herum auf ein Global zu, ohne es
  * vorher zu pruefen?
  *
@@ -127,6 +148,53 @@ test('G-470: kein ungesicherter Zugriff auf Browser-Objekte in packages/', () =>
     + 'nicht mehr anmeldefaehig (G-470). Mit '
     + "`if (typeof document === 'undefined') return` absichern. "
     + 'Gefunden:\n  ' + funde.join('\n  '))
+})
+
+test('G-471: die Huellen fassen Browser-Objekte nur in Effekten an', () => {
+  // `[read]` **`'use client'` heisst NICHT „nur im Browser"** — beim
+  // ersten Anstrich laeuft die Komponente auf dem SERVER. `[cmd]`
+  // **Genau so ist G-470 entstanden:** `createClient()` in einem
+  // `useMemo`, und der Produktionsbau war nicht mehr anmeldefaehig.
+  //
+  // `[cmd]` **Die LISTE wird zuerst geprueft** — eine Sabotage, die
+  // einen Eintrag entfernt, liess die Probe sonst gruen: **was nicht
+  // in der Liste steht, wird nicht gelesen.**
+  assert.equal(HUELLEN.length, 2,
+    `Nur ${HUELLEN.length} Huelle(n) in der Liste — erwartet sind `
+    + 'zwei (v2/shell.tsx und components/shell/app-shell.tsx).')
+  for (const h of HUELLEN) {
+    assert.ok(fs.existsSync(path.join(WURZEL, h)),
+      `Die Huelle ${h} gibt es nicht mehr — die Liste ist veraltet.`)
+  }
+
+  // `[read]` **Geprueft wird der ORT des Zugriffs:** in einem
+  // `useEffect`/`useCallback` oder einer Ereignisbehandlung ist er
+  // richtig — im Rumpf der Komponente oder in einem `useMemo` nicht.
+  const funde: string[] = []
+  for (const rel of HUELLEN) {
+    const text = ohneKommentare(lies(rel))
+    for (const g of GLOBALE) {
+      const rx = new RegExp(`(?<![A-Za-z0-9_.'"\`])${g}\\s*\\.`, 'g')
+      let m: RegExpExecArray | null
+      while ((m = rx.exec(text)) !== null) {
+        const davor = text.slice(Math.max(0, m.index - 900), m.index)
+        const inEffekt = /use(Effect|Callback|LayoutEffect)\s*\(/.test(davor)
+          || /function\s+\w*[Hh]andle/.test(davor)
+          || /on[A-Z]\w*\s*[:=]/.test(davor)
+        if (inEffekt) continue
+        if (abgesichert(text, m.index, g)) continue
+        const zeile = text.slice(0, m.index).split('\n').length
+        funde.push(`${rel}:${zeile} — ${g}. ausserhalb eines Effekts`)
+      }
+    }
+  }
+  assert.deepEqual(funde, [],
+    'Eine Huelle fasst ein Browser-Objekt beim ANSTRICH an. Die '
+    + 'Huellen laufen auf jeder Seite, und beim ersten Anstrich laeuft '
+    + 'der Code auf dem SERVER — dort gibt es das Objekt nicht '
+    + '(G-470). In einen `useEffect` verschieben oder mit '
+    + "`typeof X === 'undefined'` absichern. Gefunden:\n  "
+    + funde.join('\n  '))
 })
 
 test('G-470: der Waechter misst etwas — Gegenprobe', () => {
