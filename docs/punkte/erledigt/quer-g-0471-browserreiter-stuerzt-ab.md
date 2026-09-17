@@ -353,4 +353,21 @@ der Absturzpunkt im unverkleinerten Code** ? **als G-473.**
 
 **Teilabnahme. A1, A2, A4 bis A7 erfuellt, A3 offen.**
 
+## BERICHTIGT durch G-473, 2026-09-08
+
+`[cmd]` **Die Eingrenzung in diesem Punkt ist FALSCH.**
+
+    hier stand      "angemeldeter Reiter UND /v2 UND
+                     Produktionsbau"
+    gemessen ist    JEDE zweite Navigation stirbt,
+                     egal wohin
+
+`[cmd]` **`/login`, `/dashboard`, `/v2/dashboard`: je 200,
+dann TOT.**
+
+> Claude Code in G-473: *,,Meine Anmeldeprobe NAVIGIERT SELBST.
+*Angemeldet* hiess in Wahrheit *hat schon einmal navigiert*."*
+
+`[read]` **Und meine Abnahme hat die falsche Tabelle
+uebernommen, ohne zu fragen, wie sie zustande kam.**
 
