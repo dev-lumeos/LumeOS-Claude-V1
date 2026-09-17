@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 234 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 483 |
-| **gesamt** | **718** |
+| `erledigt` | 484 |
+| **gesamt** | **719** |
 
 ## medical — 49
 
@@ -587,7 +587,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 178
+## quer — 179
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -768,7 +768,8 @@
 | `G-462` | fehler | niedrig | [bedingtes React.useId](erledigt/quer-g-0462-bedingtes-useid.md) | erledigt | — | — |
 | `G-469` | befund | hoch | [7,7 Sekunden, und die Daten sind es nicht](erledigt/quer-g-0469-sieben-sekunden.md) | erledigt | — | G-470 |
 | `G-470` | fehler | hoch | [der Produktionsbau ist nicht anmeldefaehig](erledigt/quer-g-0470-produktionsbau-nicht-anmeldefaehig.md) | erledigt | — | G-471 |
-| `G-471` | fehler | hoch | [der Browserreiter stuerzt im Produktionsbau ab](laufend_claudecode/quer-g-0471-browserreiter-stuerzt-ab.md) | laeuft (claudecode) | — | — |
+| `G-471` | fehler | hoch | [der Browserreiter stuerzt im Produktionsbau ab](erledigt/quer-g-0471-browserreiter-stuerzt-ab.md) | erledigt | — | G-473 |
+| `G-473` | fehler | hoch | [der Absturzpunkt im unverkleinerten Code](laufend_claudecode/quer-g-0473-absturzpunkt.md) | laeuft (claudecode) | — | — |
 
 ## buddy — 1
 
