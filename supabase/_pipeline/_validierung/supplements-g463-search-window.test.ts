@@ -36,7 +36,11 @@ test('G-463: Suche liefert bis 500 Treffer und die Datenbank meldet die Gesamt- 
       )
     ), exact_rows AS (
       SELECT * FROM supplements.search_supplier_products(
-        'whey', 'On Market', NULL, 100, 'protein', NULL, false, NULL, NULL, false
+        'CVS', 'On Market', 'CVS Pharmacy', 500, NULL, NULL, false, NULL, NULL, false
+      )
+    ), exact_meta AS (
+      SELECT * FROM supplements.supplier_product_search_meta(
+        'CVS', 'On Market', 'CVS Pharmacy', NULL, NULL, false, NULL, NULL, false
       )
     ), capped_rows AS (
       SELECT * FROM supplements.search_supplier_products(
@@ -48,7 +52,7 @@ test('G-463: Suche liefert bis 500 Treffer und die Datenbank meldet die Gesamt- 
       'total', (SELECT total_count FROM meta),
       'protein', (SELECT coalesce((category_counts ->> 'protein')::bigint, 0) FROM meta),
       'exactHundredShown', (SELECT count(*) FROM exact_rows),
-      'exactHundredTotal', (SELECT total_count FROM meta),
+      'exactHundredTotal', (SELECT total_count FROM exact_meta),
       'capped1500', (SELECT count(*) FROM capped_rows),
       'anonCanExecuteMeta', has_function_privilege(
         'anon',
@@ -62,7 +66,7 @@ test('G-463: Suche liefert bis 500 Treffer und die Datenbank meldet die Gesamt- 
   assert.ok(result.total >= result.shown)
   assert.equal(result.protein, result.total)
   assert.equal(result.exactHundredShown, 100)
-  assert.ok(result.exactHundredTotal >= 100)
+  assert.equal(result.exactHundredTotal, 100)
   assert.equal(result.capped1500, 500)
   assert.equal(result.anonCanExecuteMeta, false)
 })
