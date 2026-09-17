@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 236 |
+| `todos` | 238 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 473 |
-| **gesamt** | **710** |
+| **gesamt** | **712** |
 
 ## medical — 49
 
@@ -309,9 +309,9 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 99
+## supplements — 101
 
-### beauftragbar — 98
+### beauftragbar — 100
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -371,10 +371,11 @@
 | `C-497` | feature | mittel | [Daumen hoch und runter fuer Supplementprodukte](erledigt/supplements-c-0497-daumen-fuer-produkte.md) | erledigt | — | — |
 | `C-499` | feature | mittel | [Off-Market-Produkte stilllegen](erledigt/supplements-c-0499-off-market-stilllegen.md) | erledigt | — | — |
 | `C-500` | feature | mittel | [die Vitamin-E-Form herausfinden](erledigt/supplements-c-0500-vitamin-e-form.md) | erledigt | — | — |
-| `C-504` | fehler | hoch | [die Filter gehoeren in die Datenbank](erledigt/supplements-c-0504-filter-in-die-datenbank.md) | erledigt | — | — |
+| `C-504` | fehler | hoch | [die Filter gehoeren in die Datenbank](erledigt/supplements-c-0504-filter-in-die-datenbank.md) | erledigt | — | C-511, G-467 |
 | `C-505` | befund | hoch | [die Mehrheit der Zutaten ist nicht verknuepft](erledigt/supplements-c-0505-zutaten-nicht-verknuepft.md) | erledigt | — | C-509, C-510 |
 | `C-509` | befund | hoch | [der Substanzkatalog ist zu klein](todos/supplements-c-0509-substanzkatalog-zu-klein.md) | offen | — | — |
 | `C-510` | fehler | hoch | [das Mapping ist buchstabengenau](erledigt/supplements-c-0510-mapping-buchstabengenau.md) | erledigt | — | — |
+| `C-511` | feature | hoch | [Lieblingsmarken statt einer Suche](todos/supplements-c-0511-lieblingsmarken.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -412,6 +413,7 @@
 | `G-464` | fehler | hoch | [die Tafel fragt die falsche Spalte](erledigt/supplements-g-0464-tafel-fragt-falsche-spalte.md) | erledigt | — | — |
 | `G-465` | fehler | hoch | [fuenf Anfragen je Suche](laufend_claudecode/supplements-g-0465-fuenf-anfragen-je-suche.md) | laeuft (claudecode) | — | — |
 | `G-466` | fehler | mittel | [amount_qualifier wird nicht gelesen](todos/supplements-g-0466-amount-qualifier.md) | offen | — | — |
+| `G-467` | fehler | hoch | [die Filter werden nicht gespeichert](todos/supplements-g-0467-filter-werden-nicht-gespeichert.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
