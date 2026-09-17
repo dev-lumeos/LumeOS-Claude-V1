@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-15 — 195 Tabellen, 2724 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-17 — 196 Tabellen, 2735 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -33,12 +33,12 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `client_autonomy` | 15 | 4 | ? |
 | `client_consent_log` | 9 | 0 | ? |
 | `client_permissions` | 22 | 4 | ? |
-| `coach_profiles` | 7 | 1 | ? |
+| `coach_profiles` | 7 | 2 | ? |
 | `messages` | 7 | 6 | ? |
 | `pending_actions` | 14 | 2 | ? |
 | `pending_invites` | 15 | 0 | 2026-09-09 |
 | `permission_change_log` | 9 | 6 | ? |
-| `relationship_change_log` | 9 | 9 | ? |
+| `relationship_change_log` | 9 | 8 | ? |
 | `relationship_specialties` | 4 | 0 | 2026-09-09 |
 | `relationships` | 17 | 6 | ? |
 
@@ -59,13 +59,13 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
-| `appointments` | 16 | 3 | 2026-09-08 |
+| `appointments` | 16 | 4 | 2026-09-08 |
 | `biomarker_aliases` | 12 | 292 | ? |
 | `biomarker_catalog` | 34 | 11676 | ? |
 | `biomarker_explanations` | 41 | 66 | ? |
 | `biomarker_reference_ranges` | 19 | 560 | ? |
 | `biomarker_spec_enrichment` | 33 | 51 | ? |
-| `health_events` | 13 | 4 | 2026-09-08 |
+| `health_events` | 13 | 7 | 2026-09-08 |
 | `injection_logs` | 21 | 0 | 2026-09-02 |
 | `injection_needle_recommendations` | 12 | 8 | 2026-09-02 |
 | `injection_site_conditions` | 10 | 0 | 2026-09-02 |
@@ -73,7 +73,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `injection_sites` | 21 | 16 | 2026-09-02 |
 | `injection_tissue_condition_guidance` | 6 | 1 | 2026-09-02 |
 | `lab_marker_catalog` | 13 | 66 | ? |
-| `lab_reports` | 18 | 12 | ? |
+| `lab_reports` | 18 | 13 | ? |
 | `lab_result_values` | 27 | 280 | ? |
 | `medication_active_substances` | 28 | 498 | ? |
 | `medication_clinical_context_evidence` | 5 | 107 | ? |
@@ -89,7 +89,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `symptoms` | 8 | 34 | ? |
 | `user_conditions` | 15 | 2 | ? |
 | `user_injection_site_selections` | 10 | 0 | 2026-09-09 |
-| `user_medications` | 35 | 2 | ? |
+| `user_medications` | 35 | 5 | ? |
 
 ## nutrition — 45 Tabellen, 550 Spalten
 
@@ -104,10 +104,10 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `food_curation_decisions` | 6 | 0 | 2026-08-05 |
 | `food_groups` | 7 | 19 | ? |
 | `food_nutrients` | 5 | 985320 | 2026-08-05 |
-| `food_preference_items` | 14 | 24 | 2026-08-05 |
+| `food_preference_items` | 14 | 28 | 2026-08-05 |
 | `food_preference_search_targets` | 8 | 15532 | ? |
 | `food_preferences` | 13 | 3 | 2026-08-05 |
-| `food_tags` | 3 | 30797 | 2026-08-05 |
+| `food_tags` | 3 | 30857 | 2026-08-05 |
 | `food_tags_kuriert` | 5 | 0 | 2026-09-02 |
 | `foods` | 14 | 7140 | 2026-08-05 |
 | `foods_custom` | 46 | 0 | ? |
@@ -135,9 +135,9 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `recipes` | 20 | 6 | ? |
 | `search_events` | 9 | 523 | ? |
 | `search_synonyms` | 4 | 4877 | ? |
-| `shopping_list_items` | 15 | 33 | ? |
-| `shopping_lists` | 12 | 6 | ? |
-| `tag_definitions` | 11 | 14 | 2026-08-05 |
+| `shopping_list_items` | 15 | 23 | ? |
+| `shopping_lists` | 12 | 4 | ? |
+| `tag_definitions` | 11 | 15 | 2026-08-05 |
 | `user_inventory` | 9 | 0 | ? |
 | `water_logs` | 10 | 1264 | ? |
 
@@ -155,7 +155,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `scores` | 34 | 370 | ? |
 | `stress_logs` | 12 | 7 | 2026-09-07 |
 
-## supplements — 66 Tabellen, 969 Spalten
+## supplements — 67 Tabellen, 980 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -168,20 +168,20 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `intake_schedule` | 18 | 0 | ? |
 | `lab_effect_enrichment_records` | 16 | 47 | ? |
 | `product_content_candidates` | 12 | 1717835 | 2026-09-09 |
-| `product_contents` | 16 | 3000982 | 2026-09-09 |
+| `product_contents` | 17 | 3000982 | 2026-09-09 |
 | `product_suppliers` | 6 | 235618 | 2026-09-12 |
 | `pubchem_conflict_records` | 16 | 20 | ? |
 | `rule_catalog` | 28 | 64 | ? |
 | `stack_curation_candidate_items` | 11 | 2 | ? |
 | `stack_curation_candidates` | 12 | 2 | ? |
 | `stack_curation_decisions` | 6 | 0 | ? |
-| `stack_items` | 17 | 12 | ? |
+| `stack_items` | 17 | 10 | ? |
 | `stack_template_items` | 13 | 6 | ? |
 | `stack_templates` | 17 | 6 | ? |
 | `substance_aliases` | 11 | 1541 | ? |
 | `substance_group_memberships` | 5 | 8 | 2026-08-29 |
 | `supplement_aas_ratings` | 11 | 0 | ? |
-| `supplement_aliases` | 8 | 2843 | ? |
+| `supplement_aliases` | 8 | 2845 | ? |
 | `supplement_categories` | 12 | 23 | ? |
 | `supplement_cycle_events` | 11 | 0 | ? |
 | `supplement_dosing` | 24 | 596 | ? |
@@ -198,6 +198,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `supplement_organ_risks` | 14 | 1450 | ? |
 | `supplement_pharmacology` | 17 | 577 | ? |
 | `supplement_portions` | 11 | 79 | ? |
+| `supplement_preferences` | 10 | 0 | 2026-09-17 |
 | `supplement_protocol_items` | 15 | 0 | ? |
 | `supplement_protocol_requirements` | 13 | 0 | ? |
 | `supplement_protocol_template_items` | 12 | 9 | 2026-09-09 |
@@ -215,13 +216,13 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `supplement_wada` | 22 | 337 | ? |
 | `supplement_warnings` | 14 | 290 | ? |
 | `supplements` | 22 | 596 | ? |
-| `supplier_product_nutrient_name_mappings` | 8 | 39 | 2026-09-15 |
+| `supplier_product_nutrient_name_mappings` | 8 | 40 | 2026-09-15 |
 | `supplier_product_vitamin_e_forms` | 8 | 1433 | 2026-09-15 |
 | `supplier_products` | 23 | 214780 | 2026-09-09 |
 | `suppliers` | 11 | 6419 | 2026-09-09 |
 | `thailand_regulatory_records` | 18 | 1061 | ? |
 | `user_inventory` | 15 | 0 | ? |
-| `user_stacks` | 12 | 6 | ? |
+| `user_stacks` | 12 | 4 | ? |
 | `user_supplement_cycles` | 14 | 0 | ? |
 | `user_supplement_settings` | 11 | 0 | ? |
 | `wada_conflict_records` | 17 | 8 | ? |
@@ -246,4 +247,4 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `routines` | 9 | 0 | 2026-09-09 |
 | `workout_exercises` | 16 | 153 | ? |
 | `workout_sessions` | 19 | 76 | ? |
-| `workout_sets` | 21 | 390 | ? |
+| `workout_sets` | 21 | 396 | ? |

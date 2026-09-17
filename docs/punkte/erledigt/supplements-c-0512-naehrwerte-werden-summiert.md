@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-466
 entscheidung: null
+erledigt: 2026-09-08
+commit: 8a1588bb
 beruehrt:
   tabellen: [supplements.product_contents]
 zahlen:
@@ -99,3 +101,53 @@ Produkte falsch** ? **und sie sollen in Mahlzeiten einfliessen
     A4  der gewaehlte Weg, BEGRUENDET.
     A5  wo unsicher: gemeldet, nicht geraten.
     A6  Sicherung, Vollkette, ALLE Waechter.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen, LIVE.**
+
+    source_serving_size   2.020.128 Zeilen gefuellt
+    Produkte mit mehreren Portionen   3.273
+    supplier_product_nutrient_serving_options   da
+
+`[cmd]` **Mary Ruths Vegan Liquid Iron, selbst gemessen:**
+
+     5 mL   ->   6 mg Eisen
+    10 mL   ->  12 mg
+    15 mL   ->  18 mg
+
+`[read]` **Linear** ? **und vorher waren es 42 mg, die Summe
+aller drei.**
+
+### Der Weg war a, und die Quelle traegt es
+
+> *,,Die XLSX enthaelt die Spalte `Serving Size`."*
+
+`[read]` **Ich hatte drei Wege angeboten** ? **die Herkunft
+nachtragen, die erste Zeile nehmen, oder melden.**
+
+`[read]` **Er hat den einzigen genommen, der nichts raet** ?
+**die Quelle hatte die Antwort.**
+
+### Und die Luecke bleibt sichtbar
+
+> *,,Die Standardsicht zeigt stattdessen
+`luecken.multiple_serving_sizes`."*
+
+`[cmd]` **Fuer Mary Ruths: `["10 mL","15 mL","5 mL"]`** ?
+**keine kcal-Summe, keine Eisensumme.**
+
+`[read]` **Dieselbe Bauform wie bei Vitamin E (C-500): eine
+sichtbare Luecke statt einer falschen Zahl.**
+
+`[read]` **Und wer die Werte braucht, ruft die neue Sicht** ?
+**je Portion getrennt.**
+
+### Damit ist Toms Whey-Fall rechenbar
+
+`[cmd]` **1.409.919 Facts-Mengen tragen jetzt Herkunft.**
+
+`[read]` **Ein Produkt mit einer Portion rechnet wie bisher,
+eines mit dreien meldet die Wahl** ? **statt zu addieren.**
+
+**Abgenommen.**

@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 234 |
-| `laufend_codex` | 1 |
-| `erledigt` | 482 |
-| **gesamt** | **717** |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 483 |
+| **gesamt** | **718** |
 
 ## medical — 49
 
@@ -309,9 +309,9 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 103
+## supplements — 104
 
-### beauftragbar — 102
+### beauftragbar — 103
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -376,7 +376,7 @@
 | `C-509` | befund | hoch | [der Substanzkatalog ist zu klein](todos/supplements-c-0509-substanzkatalog-zu-klein.md) | offen | — | — |
 | `C-510` | fehler | hoch | [das Mapping ist buchstabengenau](erledigt/supplements-c-0510-mapping-buchstabengenau.md) | erledigt | — | — |
 | `C-511` | feature | hoch | [Supplement-Vorlieben, mit Lieblingsmarken](erledigt/supplements-c-0511-lieblingsmarken.md) | erledigt | — | — |
-| `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](laufend_codex/supplements-c-0512-naehrwerte-werden-summiert.md) | laeuft (codex) | — | — |
+| `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](erledigt/supplements-c-0512-naehrwerte-werden-summiert.md) | erledigt | — | G-472 |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -416,6 +416,7 @@
 | `G-466` | fehler | mittel | [amount_qualifier wird nicht gelesen](erledigt/supplements-g-0466-amount-qualifier.md) | erledigt | — | C-512 |
 | `G-467` | fehler | hoch | [die Filter werden nicht gespeichert](erledigt/supplements-g-0467-filter-werden-nicht-gespeichert.md) | erledigt | — | G-469 |
 | `G-468` | feature | hoch | [der Vorlieben-Reiter fuer Supplements](todos/supplements-g-0468-vorlieben-reiter.md) | offen | — | — |
+| `G-472` | feature | mittel | [die Tafel zeigt die Portionswahl nicht](todos/supplements-g-0472-portionswahl-in-der-tafel.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -767,7 +768,7 @@
 | `G-462` | fehler | niedrig | [bedingtes React.useId](erledigt/quer-g-0462-bedingtes-useid.md) | erledigt | — | — |
 | `G-469` | befund | hoch | [7,7 Sekunden, und die Daten sind es nicht](erledigt/quer-g-0469-sieben-sekunden.md) | erledigt | — | G-470 |
 | `G-470` | fehler | hoch | [der Produktionsbau ist nicht anmeldefaehig](erledigt/quer-g-0470-produktionsbau-nicht-anmeldefaehig.md) | erledigt | — | G-471 |
-| `G-471` | fehler | hoch | [der Browserreiter stuerzt im Produktionsbau ab](todos/quer-g-0471-browserreiter-stuerzt-ab.md) | offen | — | — |
+| `G-471` | fehler | hoch | [der Browserreiter stuerzt im Produktionsbau ab](laufend_claudecode/quer-g-0471-browserreiter-stuerzt-ab.md) | laeuft (claudecode) | — | — |
 
 ## buddy — 1
 
