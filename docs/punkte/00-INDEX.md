@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 234 |
+| `todos` | 235 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 478 |
-| **gesamt** | **713** |
+| **gesamt** | **714** |
 
 ## medical — 49
 
@@ -309,7 +309,7 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 102
+## supplements — 103
 
 ### beauftragbar — 101
 
@@ -375,7 +375,7 @@
 | `C-505` | befund | hoch | [die Mehrheit der Zutaten ist nicht verknuepft](erledigt/supplements-c-0505-zutaten-nicht-verknuepft.md) | erledigt | — | C-509, C-510 |
 | `C-509` | befund | hoch | [der Substanzkatalog ist zu klein](todos/supplements-c-0509-substanzkatalog-zu-klein.md) | offen | — | — |
 | `C-510` | fehler | hoch | [das Mapping ist buchstabengenau](erledigt/supplements-c-0510-mapping-buchstabengenau.md) | erledigt | — | — |
-| `C-511` | feature | hoch | [Lieblingsmarken statt einer Suche](todos/supplements-c-0511-lieblingsmarken.md) | offen | — | — |
+| `C-511` | feature | hoch | [Supplement-Vorlieben, mit Lieblingsmarken](todos/supplements-c-0511-lieblingsmarken.md) | offen | — | — |
 | `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](todos/supplements-c-0512-naehrwerte-werden-summiert.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
@@ -417,11 +417,12 @@
 | `G-467` | fehler | hoch | [die Filter werden nicht gespeichert](laufend_claudecode/supplements-g-0467-filter-werden-nicht-gespeichert.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
-### wartet auf Blocker — 1
+### wartet auf Blocker — 2
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
+| `G-468` | feature | hoch | [der Vorlieben-Reiter fuer Supplements](todos/supplements-g-0468-vorlieben-reiter.md) | offen | C-511 | — |
 
 ## training — 31
 

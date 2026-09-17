@@ -365,3 +365,33 @@ resultate, das ist alles viel zu lahm"*.
 `[read]` **Das ist keine Auftragsfrage mehr** ? **es steht hier,
 damit es nicht von der Tageslaune abhaengt.**
 
+## Modul-Vorlieben sind keine zweite Wahrheit
+
+Tom, 2026-09-08:
+
+> jetzt sind wir wieder an dem punkt, wo ich vor tagen gesagt
+> habe, jedes modul braucht seine preferences und du nein
+> gesagt hast
+
+`[read]` **Mein Argument war *,,zwei Orte, zwei Wahrheiten"*.**
+
+`[read]` **Das gilt fuer DIESELBE Sache** ? **nicht fuer
+modulspezifische Einstellungen, die es nur dort gibt.**
+
+`[cmd]` **`nutrition.food_preferences` traegt `diet_type`,
+`cooking_skill`, `prep_time_max_min`, `budget_level`** ? **die
+gibt es in keinem anderen Modul.**
+
+### Die Unterscheidung
+
+    dieselbe Sache    -> EIN Ort, alle lesen ihn
+                         (Allergien: public.user_allergies)
+    modulspezifisch   -> je Modul eine Vorliebentabelle
+                         (Kochzeit, Lieblingsmarken)
+
+`[read]` **Und eine Flaeche darf eine fremde Wahrheit ZEIGEN
+und aendern lassen** ? **`nutrition/preferences` tut das mit
+den Allergien (G-455), ohne sie zu kopieren.**
+
+`[read]` **Zeigen ist nicht Speichern.**
+
