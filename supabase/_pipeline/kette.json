@@ -2291,6 +2291,17 @@
         "504_supplier_product_database_filters",
         "502_allergen_alias_product_matches"
       ]
+    },
+    {
+      "id": "511_supplement_preferences",
+      "path": "supabase/migrations/20260917100000_c511_supplement_preferences.sql",
+      "kind": "sql",
+      "creates": "C-511: dauerhafte Supplement-Vorlieben, Lieblingsmarken-Vorauswahl und supplementbezogene Allergieanzeige je Nutzer.",
+      "depends_on": [
+        "504_supplier_product_database_filters",
+        "498_global_allergies",
+        "463_supplier_product_search_window"
+      ]
     }
   ]
 }
