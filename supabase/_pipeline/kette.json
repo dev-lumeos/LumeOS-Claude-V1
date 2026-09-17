@@ -2242,6 +2242,16 @@
         "503_allergy_catalog_suggestions",
         "145"
       ]
+    },
+    {
+      "id": "510_supplier_product_nutrient_exact_mappings",
+      "path": "supabase/_pipeline/13_supplements/510_supplier_product_nutrient_exact_mappings.sql",
+      "kind": "sql",
+      "creates": "C-510: Thiamin als belegte DSLD-Schreibvariante sowie Wirkstofflinks fuer Nährstoffzeilen mit eindeutigem Katalogwurzelziel.",
+      "depends_on": [
+        "505_supplier_product_wirkstoff_links",
+        "496_supplier_product_nutrients_daten"
+      ]
     }
   ]
 }
