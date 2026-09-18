@@ -705,3 +705,30 @@ Werkzeug meldet die noetigen Befehle statt zu handeln.**
 `[cmd]` **Und `netstat` statt PowerShell** ? **letzteres
 brauchte ueber 60 Sekunden.**
 
+## Nichts in backup/ verschieben, ohne git zu fragen
+
+Tom, 2026-09-08:
+
+> backups haben in git nichts zu suchen
+
+`[cmd]` **Aber sie SIND dort: 610 lose Dateien verfolgt.**
+
+`[read]` **Ich habe 701 davon in einen Tagesordner verschoben
+und damit 608 Loeschungen erzeugt.**
+
+`[cmd]` **Claude Code hat es gemeldet:** *,,git status meldet
+hunderte geloeschte Dateien in `backup/` ? nicht von mir."*
+
+### Die Regel
+
+    Vor jeder Bewegung in backup/:
+      git ls-files backup/
+    Verfolgte Dateien werden nicht verschoben.
+
+`[read]` **Und Toms Regel gilt weiter:** *,,kein untracked
+Verzeichnis wird dem Namen nach geloescht"* ? **jetzt ergaenzt
+um: keine verfolgte Datei wird verschoben.**
+
+`[cmd]` **Die Wiederherstellung: `git checkout backup/` fuer
+die 608, `F:\My Backups` fuer die 93 untracken.**
+
