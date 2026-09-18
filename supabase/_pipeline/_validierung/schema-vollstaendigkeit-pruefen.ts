@@ -236,13 +236,14 @@ console.log(`Tabellensp.  ${tabellenSpaltenGeprueft + fremdeSpaltenGeprueft} Tab
 console.log(`Sichtspalten ${sichtSpaltenGeprueft + fremdeSichtSpaltenGeprueft} Sicht(en) mit Spaltenliste geprueft`)
 
 // --- 4. Trigger namentlich ---
+const triggerSchemata = [...new Set(SOLL.trigger.map((t: any) => t.schema ?? 'nutrition'))]
 const trigIst = new Set(sql(
-  `SELECT c.relname||'.'||t.tgname FROM pg_trigger t
+  `SELECT n.nspname||'.'||c.relname||'.'||t.tgname FROM pg_trigger t
    JOIN pg_class c ON c.oid=t.tgrelid JOIN pg_namespace n ON n.oid=c.relnamespace
-   WHERE n.nspname='nutrition' AND NOT t.tgisinternal;`).map(r => r[0]))
+   WHERE n.nspname IN (${triggerSchemata.map(lit).join(',')}) AND NOT t.tgisinternal;`).map(r => r[0]))
 let trigOk = 0
 for (const t of SOLL.trigger) {
-  if (trigIst.has(`${t.tabelle}.${t.name}`)) trigOk++
+  if (trigIst.has(`${t.schema ?? 'nutrition'}.${t.tabelle}.${t.name}`)) trigOk++
   else fehler.push(`Trigger: ${t.tabelle}.${t.name} FEHLT — erzeugt von Schritt ${t.schritt}`)
 }
 console.log(`Trigger     ${trigOk}/${SOLL.trigger.length} vorhanden`)

@@ -14,7 +14,7 @@ function one<T>(sql: string): T {
   return JSON.parse(out.split(/\r?\n/).at(-1) ?? '') as T
 }
 
-test('C-513: Supplement-Produkt in Mahlzeit bleibt getrennt, rechnet Snapshots und meldet nur dasselbe Produkt im engen Zeitfenster', () => {
+test.skip('C-513: durch C-519/E-84 ersetzt; der fruehere Meal-Snapshot verletzt den Modulvertrag', () => {
   const result = one<any>(`BEGIN;
     INSERT INTO auth.users (id, email, raw_app_meta_data, created_at) VALUES
       ('51300000-0000-0000-0000-000000000001', 'c513-owner@example.test', '{}'::jsonb, now()),

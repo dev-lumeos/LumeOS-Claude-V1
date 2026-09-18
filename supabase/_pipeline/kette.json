@@ -2384,6 +2384,34 @@
         "515_curated_dsld_active_substances",
         "505_supplier_product_wirkstoff_links"
       ]
+    },
+    {
+      "id": "519_supplement_intake_references_schema",
+      "path": "supabase/migrations/20260918193000_c519_supplement_intake_references.sql",
+      "kind": "sql",
+      "creates": "C-519/E-84: Produkt-Supplemente und ihre historischen Snapshots bleiben in supplements.intake_logs; Meals und Rezepte halten nur Verweise.",
+      "depends_on": [
+        "513_supplement_product_meals",
+        "516_additional_supplier_product_nutrients_schema"
+      ]
+    },
+    {
+      "id": "519_migrate_meal_supplement_references",
+      "path": "supabase/_pipeline/13_supplements/519_migrate_meal_supplement_references.sql",
+      "kind": "sql",
+      "creates": "C-519: verschiebt vorhandene C-513-Mahlzeit-Snapshots idempotent nach supplements.intake_logs und verknuepft die Mahlzeit.",
+      "depends_on": [
+        "519_supplement_intake_references_schema"
+      ]
+    },
+    {
+      "id": "519_remove_meal_product_snapshots",
+      "path": "supabase/migrations/20260918194000_c519_remove_meal_product_snapshots.sql",
+      "kind": "sql",
+      "creates": "C-519: entfernt die C-513-Produkt- und Nahrwert-Snapshots aus nutrition.meal_items nach dem gesicherten Pipeline-Umzug.",
+      "depends_on": [
+        "519_migrate_meal_supplement_references"
+      ]
     }
   ]
 }

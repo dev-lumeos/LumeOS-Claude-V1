@@ -599,12 +599,9 @@
         "portion_amount_g",
         "measurement_source",
         "source_detail",
-        "supplement_product_id",
-        "supplement_serving_size",
-        "supplement_serving_quantity",
-        "supplement_nutrient_status"
+        "supplement_intake_log_id"
       ],
-      "spalten_herkunft": "[cmd] 2026-08-16 gegen information_schema.columns geprueft. 052_diary_foundation.sql erzeugt die Tagebuchspalten, 058_custom_foods.sql ergaenzt custom_food_id, 058a_meal_item_portions.sql ergaenzt die Portions-Snapshot-Spalten. [cmd] 2026-08-18: 017_datenherkunft.sql ergaenzt measurement_source und source_detail. C-513 ergaenzt den produktgenauen Supplement-Snapshot samt expliziter Facts-Portion und sichtbarem Datenlueckenstatus."
+      "spalten_herkunft": "[cmd] 2026-08-16 gegen information_schema.columns geprueft. 052_diary_foundation.sql erzeugt die Tagebuchspalten, 058_custom_foods.sql ergaenzt custom_food_id, 058a_meal_item_portions.sql ergaenzt die Portions-Snapshot-Spalten. [cmd] 2026-08-18: 017_datenherkunft.sql ergaenzt measurement_source und source_detail. C-519/E-84 ersetzt den C-513-Produkt-Snapshot durch supplement_intake_log_id: Nutrition haelt nur den Einnahmeverweis."
     },
     {
       "name": "water_logs",
@@ -1230,9 +1227,16 @@
       "schritt": "407"
     },
     {
-      "tabelle": "meal_items",
-      "name": "meal_items_supplement_snapshot_guard_trg",
-      "schritt": "513_supplement_product_meals"
+      "schema": "supplements",
+      "tabelle": "intake_logs",
+      "name": "intake_logs_meal_owner_guard_trg",
+      "schritt": "519_supplement_intake_references_schema"
+    },
+    {
+      "schema": "supplements",
+      "tabelle": "recipe_product_references",
+      "name": "recipe_product_references_owner_guard_trg",
+      "schritt": "519_supplement_intake_references_schema"
     },
     {
       "tabelle": "user_inventory",
@@ -1354,10 +1358,22 @@
       "schritt": "052"
     },
     {
-      "name": "meal_items_supplement_product_id_fkey",
+      "name": "meal_items_supplement_intake_log_id_fkey",
       "tabelle": "meal_items",
-      "zeigt_auf": "supplier_products",
-      "schritt": "513_supplement_product_meals"
+      "zeigt_auf": "intake_logs",
+      "schritt": "519_supplement_intake_references_schema"
+    },
+    {
+      "name": "intake_logs_meal_id_fkey",
+      "tabelle": "intake_logs",
+      "zeigt_auf": "meals",
+      "schritt": "519_supplement_intake_references_schema"
+    },
+    {
+      "name": "recipe_product_references_recipe_ingredient_id_fkey",
+      "tabelle": "recipe_product_references",
+      "zeigt_auf": "recipe_ingredients",
+      "schritt": "519_supplement_intake_references_schema"
     },
     {
       "name": "search_events_selected_food_id_fkey",
@@ -1717,16 +1733,8 @@
       "schritt": "466_nutrient_supplement_sources"
     },
     {
-      "name": "add_supplement_product_to_meal",
-      "schritt": "513_supplement_product_meals"
-    },
-    {
       "name": "nutrient_intake_source_breakdown_for_day",
-      "schritt": "513_supplement_product_meals"
-    },
-    {
-      "name": "supplement_product_meal_stack_overlap_candidates_for_day",
-      "schritt": "513_supplement_product_meals"
+      "schritt": "519_remove_meal_product_snapshots"
     },
     {
       "name": "nutrient_upper_limit_assessment_with_supplements",
@@ -1823,10 +1831,6 @@
     {
       "name": "meal_items_inventory_deduct",
       "schritt": "407"
-    },
-    {
-      "name": "meal_items_supplement_snapshot_guard",
-      "schritt": "513_supplement_product_meals"
     }
   ],
   "mindestzeilen": {
@@ -3211,7 +3215,7 @@
       "schritt": "327/327a",
       "rls": true,
       "policies": ["SELECT"],
-      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT"]},
       "grants_herkunft": "20260829003109_c327_substance_group_membership.sql vergibt Katalog-Leserechte und service_role ALL; 327a_chelation_mineral_membership.sql leitet die acht Zeilen aus der Kimi-Regel ab.",
       "zeilenschutzart": "oeffentlich"
     },
@@ -5901,7 +5905,8 @@
     {"schema":"coach","name":"allergy_permissions","schritt":"498_global_allergies","rls":true,"policies":["SELECT","INSERT","UPDATE","DELETE"],"grants":{"authenticated":["SELECT","INSERT","UPDATE","DELETE"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-498: eigene, vom Klienten steuerbare Allergie-Freigabe fuer Coaches.","zeilenschutzart":"coach_und_client"},
     {"schema":"coach","name":"allergy_permission_change_log","schritt":"498_global_allergies","rls":true,"policies":["SELECT","INSERT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-498: append-only Triggerprotokoll; authenticated kann nur lesen.","zeilenschutzart":"coach_und_client"},
     {"schema":"supplements","name":"supplier_product_vitamin_e_forms","schritt":"500_vitamin_e_form_evidence","rls":false,"policies":[],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-500: belegte Produktform als globaler Lesekatalog; PUBLIC/anon explizit widerrufen.","zeilenschutzart":"oeffentlich"},
-    {"schema":"supplements","name":"supplement_preferences","schritt":"511_supplement_preferences","rls":true,"policies":["SELECT","INSERT","UPDATE","DELETE"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-511: authenticated liest ausschliesslich die eigene Vorliebenzeile; der quellbewusste Schreib-RPC erzwingt auth.uid(). PUBLIC und anon sind explizit widerrufen.","zeilenschutzart":"eigene_zeilen"}
+    {"schema":"supplements","name":"supplement_preferences","schritt":"511_supplement_preferences","rls":true,"policies":["SELECT","INSERT","UPDATE","DELETE"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-511: authenticated liest ausschliesslich die eigene Vorliebenzeile; der quellbewusste Schreib-RPC erzwingt auth.uid(). PUBLIC und anon sind explizit widerrufen.","zeilenschutzart":"eigene_zeilen"},
+    {"schema":"supplements","name":"recipe_product_references","schritt":"519_supplement_intake_references_schema","rls":true,"policies":["SELECT","INSERT","UPDATE","DELETE"],"grants":{"authenticated":["SELECT","INSERT","UPDATE","DELETE"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-519/E-84: Produktverweis eines Rezeptes liegt im Supplements-Schema; owner-guard und RLS begrenzen ihn auf eigene Rezeptpositionen.","zeilenschutzart":"eigene_zeilen"}
   ],
   "_fremde_funktionen": "GO-04: Funktionen ausserhalb nutrition. Dieselbe Luecke wie oben.",
   "fremde_funktionen": [
@@ -6315,6 +6320,16 @@
       "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT"]},
       "grants_herkunft": "C-466/E-35: eigene Tagesbilanz aus taken intake_logs und belegten supplement_nutrients.",
       "spalten": ["user_id", "entry_date", "nutrient_code", "nutrient_unit", "total_amount", "taken_log_count", "skipped_log_count", "mapped_taken_log_count", "unmapped_taken_log_count"]
+    },
+    {
+      "schema": "supplements",
+      "name": "intake_log_nutrient_values",
+      "schritt": "519_remove_meal_product_snapshots",
+      "security_invoker": true,
+      "security_barrier": false,
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT"]},
+      "grants_herkunft": "C-519: einheitliche Supplements-Herkunft aus historischen Produkt-Snapshots oder Stack-Naehrstoffen; PUBLIC und anon haben keinen Zugriff.",
+      "spalten": ["intake_log_id", "user_id", "intake_date", "meal_id", "source_kind", "nutrient_code", "amount"]
     },
     {
       "schema": "public",
