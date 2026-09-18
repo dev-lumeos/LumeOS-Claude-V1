@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 238 |
+| `todos` | 239 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 497 |
-| **gesamt** | **736** |
+| **gesamt** | **737** |
 
 ## medical — 49
 
@@ -64,7 +64,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 244
+## nutrition — 245
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -311,6 +311,7 @@
 | `G-478` | feature | hoch | [die Kacheln fuer Supplemente in der Mahlzeit](erledigt/nutrition-g-0478-kacheln-supplement-mahlzeit.md) | erledigt | — | G-479 |
 | `G-480` | feature | hoch | [ein Modal statt zwei](erledigt/nutrition-g-0480-ein-modal-statt-zwei.md) | erledigt | — | G-481 |
 | `G-481` | fehler | hoch | [die Suche benutzt die Suche nicht](laufend_claudecode/nutrition-g-0481-suche-benutzt-suche-nicht.md) | laeuft (claudecode) | — | — |
+| `G-482` | fehler | hoch | [die Planeintraege sind da und werden nicht gezeigt](todos/nutrition-g-0482-planeintraege-nicht-gezeigt.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 108

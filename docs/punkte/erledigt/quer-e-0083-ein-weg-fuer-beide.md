@@ -683,3 +683,20 @@ getan.**
 `[read]` **G-475 und G-478 stehen darauf.**
 
 **Abgenommen. Zwei Entscheidungen liegen bei Tom.**
+
+## BERICHTIGT 2026-09-08 - die Ghostentry-Zahlen stimmen nicht
+
+`[cmd]` **Der Bericht sagte:** *,,0 Eintraege heute, 4
+morgen."*
+
+`[cmd]` **Selbst gemessen, heute ist der 2026-09-18:**
+
+    2026-09-18    4 Eintraege   <- HEUTE
+    2026-09-19   12             <- morgen
+
+`[read]` **Beide Zahlen falsch** ? **und ich habe sie
+uebernommen, ohne zu messen.**
+
+`[cmd]` **Als G-482** ? **die Eintraege sind da, Tom sieht
+sie nicht.**
+
