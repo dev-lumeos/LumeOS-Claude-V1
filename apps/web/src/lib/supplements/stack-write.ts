@@ -635,3 +635,64 @@ export async function aenderePosition(
   }
   return zeile
 }
+
+// ══ G-475/A6: die Nachfrage beim Doppeleintrag ══════════════════════
+//
+// **Der Auftrag:** *„dasselbe Produkt im Stack UND in der Mahlzeit
+// innerhalb 60 Minuten -> die Nachfrage aus C-513."*
+//
+// `[read]` **Diese Lesestelle steht HIER, nicht im Nutrition-Weg** —
+// `[cmd]` **G-138 verlangt, dass `intake_logs` nur an EINER Stelle
+// beruehrt wird**, und die Probe zaehlt je Datei, nicht je Aufruf.
+// **Ein Leseweg daneben liess sie fallen** (gemessen 2026-09-18).
+//
+// ══ WARUM UEBER DEN NAMEN UND NICHT UEBER DIE PRODUKT-ID ════════════
+//
+// `[cmd]` **GEMESSEN: es gibt keine Bruecke.**
+//
+//     intake_logs       -> stack_item_id
+//     stack_items       -> supplement_id   (SUBSTANZ)
+//     supplier_products -> KEINE Substanzspalte
+//
+// `[read]` **Der Stack fuehrt Substanzen, das Tagebuch PRODUKTE.**
+// `[cmd]` **Entscheidbar ist der Name** (`supplement_name_snapshot`,
+// gemessen: *Magnesium*, *Creatine Monohydrate*, *Vitamin D3*).
+// **Die fehlende Bruecke ist gemeldet, nicht gebaut.**
+export async function letzteEinnahmen(): Promise<
+  Array<{ name: string; minutenHer: number }>
+> {
+  try {
+    // `[read]` **Dieselbe Sitzungspruefung wie die Schreibwege** —
+    // `sitzung()` wirft ohne Anmeldung, und der `catch` unten
+    // macht daraus eine leere Liste: keine Warnung, kein Abbruch.
+    await sitzung()
+    const supabase = createSessionClient()
+    const jetzt = new Date()
+    const heute = jetzt.toISOString().slice(0, 10)
+    const gestern = new Date(jetzt.getTime() - 86_400_000).toISOString().slice(0, 10)
+    const { data, error } = await supabase
+      .schema('supplements')
+      .from('intake_logs')
+      .select('supplement_name_snapshot,intake_date,intake_time,status')
+      .gte('intake_date', gestern)
+      .lte('intake_date', heute)
+      .eq('status', 'taken')
+    if (error) return []
+    const roh = (Array.isArray(data) ? data : []) as unknown as Array<Record<string, unknown>>
+    return roh.flatMap((r) => {
+      const name = typeof r.supplement_name_snapshot === 'string'
+        ? r.supplement_name_snapshot : null
+      const tag = typeof r.intake_date === 'string' ? r.intake_date : null
+      const zeit = typeof r.intake_time === 'string' ? r.intake_time : '00:00:00'
+      if (!name || !tag) return []
+      const min = Math.round(
+        (jetzt.getTime() - new Date(`${tag}T${zeit}`).getTime()) / 60_000)
+      if (!Number.isFinite(min) || min < 0 || min > 60) return []
+      return [{ name, minutenHer: min }]
+    })
+  } catch {
+    // `[read]` **Ohne Spur keine Nachfrage** — der Posten entsteht
+    // trotzdem. Eine fehlende Warnung ist besser als ein Abbruch.
+    return []
+  }
+}
