@@ -2343,6 +2343,17 @@
         "512_serving_size_provenance",
         "466_nutrient_supplement_sources"
       ]
+    },
+    {
+      "id": "515_curated_dsld_active_substances",
+      "path": "supabase/_pipeline/13_supplements/515_wirkstoffe_kuratieren.sql",
+      "kind": "sql",
+      "creates": "C-515: 21 fachlich kuratierte DSLD-Wirkstoffwurzeln, belegte Labelherkunft und ausschliesslich exakte Produktinhaltsverknuepfungen; Hilfsstoffe bleiben Textaliase.",
+      "depends_on": [
+        "505_supplier_product_wirkstoff_links",
+        "510_supplier_product_nutrient_exact_mappings",
+        "502_allergen_aliases_daten"
+      ]
     }
   ]
 }

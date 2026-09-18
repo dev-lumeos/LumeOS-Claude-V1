@@ -12,9 +12,28 @@
 //
 // [cmd] Es fasst `.next` NICHT an — `next start` liest nur, und
 // `LUMEOS_DIST_DIR=.next-gate` zeigt auf das Gate-Verzeichnis (B-18).
-// Der Dev-Server auf 3200 laeuft unberuehrt weiter.
+//
+// ══ G-476: WIE DIESES WERKZEUG TOMS DEV-SERVER GETOETET HAT ═════════
+//
+// [cmd] Hier stand am Ende:
+//
+//     taskkill /F /T /PID <pid der cmd-Huelle>
+//
+// [cmd] GEMESSEN 2026-09-18: die `cmd`-Huelle aus `shell: true` lebt
+// rund fuenf Sekunden und stirbt DANN — der Server laeuft weiter:
+//
+//     1s..5s  huelleLebt=true   portOffen=true
+//     6s      huelleLebt=FALSE  portOffen=true
+//
+// [read] Am Ende des Laufs war `kind.pid` also ein TOTER PID. Windows
+// vergibt PIDs neu — und `/T` nimmt den ganzen Baum unter dieser
+// Nummer mit. Getroffen hat es Toms Dev-Server auf 3200.
+//
+// [read] DESHALB: niemals eine gemerkte PID toeten, niemals `/T`.
+// Beendet wird genau der Prozess, der auf MEINEM Port hoert — und
+// nur, wenn ICH ihn gestartet habe.
 import { chromium } from '@playwright/test'
-import { spawn } from 'node:child_process'
+import { spawn, execFileSync } from 'node:child_process'
 import net from 'node:net'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -41,6 +60,32 @@ function portBelegt(port) {
   })
 }
 
+/**
+ * Wer hoert auf diesem Port? — G-476.
+ *
+ * `[read]` **Der Port ist die einzige verlaessliche Kennung.** Eine
+ * gemerkte PID kann tot und neu vergeben sein; der Port sagt, wer
+ * JETZT dort antwortet.
+ *
+ * `[cmd]` **Ueber `netstat`, nicht ueber PowerShell** —
+ * `Get-NetTCPConnection` brauchte hier ueber 60 Sekunden.
+ */
+function pidAmPort(port) {
+  try {
+    const o = execFileSync('netstat', ['-ano'], { encoding: 'utf8', timeout: 20000 })
+    const zeilen = o.split(String.fromCharCode(10))
+    for (const z of zeilen) {
+      if (z.indexOf(":" + port + " ") === -1) continue
+      // Deutsch `ABHOEREN`, englisch `LISTENING`.
+      if (!/ABH|LISTEN/i.test(z)) continue
+      const t = z.trim().split(/\s+/)
+      const pid = t[t.length - 1]
+      if (/^[0-9]+$/.test(pid) && pid !== '0') return pid
+    }
+  } catch { /* nichts gefunden */ }
+  return null
+}
+
 async function warteAufServer(ms = 45000) {
   const bis = Date.now() + ms
   while (Date.now() < bis) {
@@ -53,6 +98,32 @@ async function warteAufServer(ms = 45000) {
 // ── Den Produktionsbau starten, wenn er nicht laeuft ─────────────
 let eigenerServer = null
 let schonGelaufen = await portBelegt(PORT)
+
+// ══ A4: DIESES WERKZEUG STARTET KEINEN SERVER ══════════════════════
+//
+// [read] **Die Regel lautet „nie start, neustart, aufraeumen"** —
+// Tom besitzt die Server. [cmd] **Ein Werkzeug, das selbst startet,
+// muss auch selbst beenden — und genau dabei ist 3200 gestorben.**
+//
+// [read] **Deshalb ist Starten jetzt die AUSNAHME**, nicht die
+// Vorgabe: ohne `LUMEOS_START=1` sagt das Werkzeug nur, dass der
+// Server fehlt, und hoert auf. **Kein `?`, kein stiller Fehlschlag.**
+const DARF_STARTEN = process.env.LUMEOS_START === "1"
+
+if (!schonGelaufen && !DARF_STARTEN) {
+  console.log(JSON.stringify({
+    fehler: `Kein Produktionsbau auf Port ${PORT}.`,
+    sowirdsgemacht: [
+      `1. pnpm --filter @lumeos/web build`,
+      `2. cd apps/web && LUMEOS_DIST_DIR=.next-gate npx next start -p ${PORT}`,
+      `3. node tools/_g474-anstrich.mjs`,
+    ],
+    hinweis: "Mit LUMEOS_START=1 startet dieses Werkzeug den Bau "
+      + "selbst und beendet NUR ihn (ueber den Port, ohne /T).",
+  }, null, 2))
+  process.exit(1)
+}
+
 if (!schonGelaufen) {
   if (!fs.existsSync(path.join(WEB, '.next-gate', 'BUILD_ID'))) {
     console.log(JSON.stringify({
@@ -139,9 +210,21 @@ console.log(JSON.stringify({
   faelle: aus,
 }, null, 2))
 
+// ══ A2: NUR DEN EIGENEN BAU BEENDEN ════════════════════════════════
+//
+// [read] Drei Sicherungen, jede einzeln noetig:
+//   1  nur wenn dieses Werkzeug den Server gestartet hat
+//   2  der Prozess wird ueber den PORT gesucht, nicht ueber eine
+//      gemerkte PID (die kann tot und neu vergeben sein)
+//   3  OHNE `/T` — kein Baum, genau ein Prozess
 if (eigenerServer) {
+  const pid = pidAmPort(PORT)
+  if (pid) {
+    try {
+      execFileSync('taskkill', ['/F', '/PID', pid], { stdio: 'ignore' })
+    } catch { /* schon weg — dann ist nichts zu tun */ }
+  }
+  // [read] Die Huelle nur ueber das Handle, nie ueber `taskkill`:
+  // `kill()` trifft genau diesen Prozess, auch wenn er schon weg ist.
   eigenerServer.kill()
-  // Windows: der Kindprozess haengt an cmd, deshalb hart nachsetzen.
-  spawn('taskkill', ['/F', '/T', '/PID', String(eigenerServer.pid)],
-    { shell: true, stdio: 'ignore' })
 }

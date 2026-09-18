@@ -51,6 +51,27 @@ const structuralFunctionExceptions = [
     // Einspielen nicht ausgefuehrt und schreibt weder Katalog- noch Seed-Daten.
     requiredSql: 'INSERT INTO public.user_display_preferences',
   },
+  {
+    file: '20260917100000_c511_supplement_preferences.sql',
+    functionName: 'supplements.supplement_preferences_write',
+    commands: ['INSERT', 'UPDATE'],
+    // C-511 definiert den authenticated-only Schreibweg fuer genau eine
+    // eigene Vorliebenzeile. Das INSERT liegt im RPC-Koerper, laeuft nicht
+    // beim Einspielen und schreibt weder Katalog- noch Seed-Daten.
+    requiredSql: [
+      'INSERT INTO supplements.supplement_preferences',
+      'UPDATE supplements.supplement_preferences',
+    ],
+  },
+  {
+    file: '20260917143500_c513_supplement_product_meals.sql',
+    functionName: 'nutrition.add_supplement_product_to_meal',
+    command: 'INSERT',
+    // C-513 definiert den RLS-gebundenen Schreibweg für eine eigene
+    // Mahlzeitenposition. Der Snapshot wird erst beim späteren Nutzeraufruf
+    // erzeugt; beim Einspielen schreibt die Migration keine Katalogdaten.
+    requiredSql: 'INSERT INTO nutrition.meal_items',
+  },
 ]
 // Im Funktionskoerper zaehlt nur der Anfang einer ausfuehrbaren SQL-Anweisung.
 // `FOR UPDATE` sperrt, schreibt aber nicht; ebenso ist `ON DELETE` Teil einer

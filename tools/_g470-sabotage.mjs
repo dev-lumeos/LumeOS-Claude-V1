@@ -36,6 +36,16 @@ const FAELLE = [
   { probe: 'Abgrenzung', datei: path.join(WEB, 'src/lib/__tests__/client-grenze.test.ts'),
     von: '// A-60: eine `Map` ueber die Server-Client-Grenze kommt leer an.',
     nach: '// A-60 — betrifft auch document und window.' },
+  // ══ G-471: die Huellenprobe ══════════════════════════════════════
+  // [read] Ein Browserzugriff im RUMPF der Komponente — genau die
+  // Form, die G-470 ausgeloest hat (dort `useMemo`).
+  { probe: 'G-471 Huelle', datei: path.join(WEB, 'src/app/v2/shell.tsx'),
+    von: '  const pathname = usePathname()',
+    nach: "  const pathname = usePathname(); "
+      + "const modus = document.documentElement.getAttribute('data-mode')" },
+  // [read] Und die Liste selbst: leer heisst „nichts zu pruefen".
+  { probe: 'G-471 Liste', datei: path.join(WEB, 'src/lib/__tests__/browser-global-grenze.test.ts'),
+    von: "  'apps/web/src/app/v2/shell.tsx',", nach: '' },
   // ══ DIE KONTROLLE ════════════════════════════════════════════════
   // [read] Ein Kommentar, der die bewachten Woerter ENTHAELT.
   { probe: 'KONTROLLE', kontrolle: true, datei: CLIENT,
