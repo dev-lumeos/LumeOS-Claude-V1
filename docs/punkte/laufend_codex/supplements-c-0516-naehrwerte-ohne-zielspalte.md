@@ -1,6 +1,6 @@
 ---
 nr: C-516
-typ: befund
+typ: fehler
 modul: supplements
 schwere: hoch
 angelegt: 2026-09-08
@@ -10,12 +10,13 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
 beruehrt:
-  tabellen: [nutrition.foods_custom]
+  tabellen: [nutrition.nutrient_defs]
 zahlen:
   gemessen: 2026-09-08
+  naehrstoffe: 138
 ---
 
-# C-516 - Naehrwerte ohne Zielspalte
+# C-516 - Naehrwerte ohne Mapping
 
 ## Toms Befund
 
@@ -34,36 +35,54 @@ Tom, 2026-09-08:
     Soluble Fiber            1.231            KEIN Mapping
     Insoluble Fiber            545            KEIN Mapping
 
-`[cmd]` **Was gemappt IST:** `Dietary Fiber` **14.602 -> FIBT,**
+`[cmd]` **Gemappt sind:** `Dietary Fiber` **14.602 -> FIBT,**
 `Saturated Fat` **13.908 -> FASAT,** `Total Sugars` **10.576 ->
 SUGAR.**
 
-## Die Ursache ist tiefer als ein fehlendes Mapping
+## Die Ziele EXISTIEREN
 
-`[cmd]` **`nutrition.foods_custom` hat fuer Fette und
-Ballaststoffe NUR:** `fat`, `fibt`, `sugar`, `fasat`.
+`[cmd]` **`nutrition.nutrient_defs`, 138 Naehrstoffe:**
 
-`[read]` **Es gibt keine Cholesterinspalte, keine
-Transfettspalte, keine Spalte fuer einfach- oder mehrfach
-ungesaettigte Fette.**
+    CHORL     Cholesterin
+    FAMS      Fettsaeuren, einfach ungesaettigt, gesamt
+    FAPU      Fettsaeuren, mehrfach ungesaettigt, gesamt
+    FAPUN3    Omega-3-Fettsaeuren, gesamt
+    FAPUN6    Omega-6-Fettsaeuren, gesamt
+    FIBINS    Ballaststoffe, wasserunloeslich
+    FIBSOL    Ballaststoffe, wasserloeslich
 
-`[read]` **Zwei verschiedene Faelle:**
+`[read]` **Es fehlt nur das Mapping** ? **derselbe Fall wie
+`Thiamin` in C-510.**
 
-    a  der Stoff hat eine Zielspalte, das Mapping fehlt
-       -> nachtragen, wie C-510 es getan hat
-    b  der Stoff hat KEINE Zielspalte
-       -> eine Entscheidung, keine Zuordnung
+`[cmd]` **Und `nutrition.daily_summary` traegt `chorl` und
+`chorl_missing`** ? **die Tagesbilanz kennt es schon.**
 
-## Und der Schreibweisenschwanz
+### Ein Orchestratorfehler
 
-`[cmd]` **44 verschiedene Schreibungen gemessen:**
+`[read]` **Ich hatte die Spalten von `foods_custom` gemessen
+und geschlossen, LumeOS kenne Cholesterin nicht.**
+
+`[cmd]` **Die Naehrstoffe stehen in `nutrient_defs`, nicht als
+Spalten.**
+
+## Was zu tun ist
+
+`[read]` **Die Mappings nachtragen, wie C-510 es getan hat.**
+
+`[cmd]` **Die Mappingtabelle traegt `nutrient_code`,
+`target_column`, `target_unit`, `conversion_rule`,
+`source_id`, `evidence_class`** ? **MISS, welche Kombination
+fuer diese Stoffe stimmt.**
+
+### Und der Schreibweisenschwanz
+
+`[cmd]` **44 Schreibungen gemessen:**
 
     Trans Fat, Trans Fats, Trans fat, Trans Fatty Acids
     Monounsaturated, Monounsaturated Fat,
       Monounsaturated {Fat}, Monounsaturated Fats,
       Monounsaturated Fatty Acids
-    Saturated Fatty Acids, Saturated Fats,
-      Saturated fatty acids
+    Saturated Fatty Acids, Saturated Fats
 
 `[read]` **Und Artefakte, die KEINE Naehrwerte sind:**
 
@@ -75,44 +94,28 @@ ungesaettigte Fette.**
 `[read]` **Dieselbe Falle wie in C-509** ? **der Name enthaelt
 den Stoff, die Zeile meint eine Mischung.**
 
-## Was zu tun ist
+## Und was WIRKLICH fehlen koennte
 
-`[read]` **MESSEN und TRENNEN, nicht bauen:**
+`[cmd]` **MISS: gibt es fuer `Trans Fat` und `Added Sugars`
+einen Code in `nutrient_defs`?**
 
-    A  welche DSLD-Naehrwertnamen haben eine
-       LumeOS-Zielspalte und kein Mapping?
-       -> die nachtragen
-    B  welche haben KEINE Zielspalte?
-       -> TABELLE mit Produktzahl, fuer Toms
-          Entscheidung
-    C  welche sind Mischungsnamen, keine Naehrwerte?
-       -> aussortieren, mit Grund
-
-`[cmd]` **Fuer B: was wuerde eine neue Spalte kosten?**
-**`foods`, `foods_custom`, `supplier_product_nutrients` und
-die Tagesbilanz haengen daran ? miss es.**
-
-`[read]` **Cholesterin ist fuer einen Bodybuilder eine Zahl,
-die zaehlt** ? **13.762 Produkte fuehren sie.**
+`[read]` **Wenn nein, ist DAS der Fall b** ? **melden, nicht
+anlegen.**
 
 ## Abnahmebedingungen
 
-    A1  Fall a: nachgetragen. Zahl vorher/nachher.
-    A2  Fall b: TABELLE mit Produktzahl, und was eine
-        neue Spalte kosten wuerde. KEINE Spalte
-        angelegt.
-    A3  Fall c: aussortiert, je mit Grund.
-    A4  die Schreibvarianten zusammengefuehrt ? eine
+    A1  je der offenen Namen: gibt es einen Code in
+        nutrient_defs? TABELLE.
+    A2  wo ja: Mapping nachgetragen, mit Quelle und
+        Evidenzklasse.
+    A3  wo nein: GEMELDET, nicht angelegt.
+    A4  Artefakte aussortiert, je mit Grund.
+    A5  Schreibvarianten zusammengefuehrt -- eine
         Variante ist kein Raten.
-    A5  Gegenprobe: ein zweiter Lauf aendert nichts.
-    A6  Sicherung, Vollkette, ALLE Waechter.
-
-## Was nicht zu tun ist
-
-**KEINE neue Naehrstoffspalte anlegen** ? **das entscheidet
-Tom, nachdem er die Zahlen sieht.**
-
-**`apps/` nicht anfassen.**
+    A6  wie viele Zeilen sind nachher verknuepft?
+        Vorher 790.378.
+    A7  Gegenprobe: ein zweiter Lauf aendert nichts.
+    A8  Sicherung, Vollkette, ALLE Waechter.
 
 ## Bericht
 

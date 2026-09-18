@@ -381,7 +381,7 @@
 | `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](erledigt/supplements-c-0512-naehrwerte-werden-summiert.md) | erledigt | — | C-513, G-472 |
 | `C-514` | fehler | hoch | [vier Stoffe stehen im Katalog und sind offen](laufend_codex/supplements-c-0514-vier-stoffe-offen.md) | laeuft (codex) | — | — |
 | `C-515` | feature | hoch | [die Wirkstoffe kuratieren](erledigt/supplements-c-0515-wirkstoffe-kuratieren.md) | erledigt | — | — |
-| `C-516` | befund | hoch | [Naehrwerte ohne Zielspalte](laufend_codex/supplements-c-0516-naehrwerte-ohne-zielspalte.md) | laeuft (codex) | — | — |
+| `C-516` | fehler | hoch | [Naehrwerte ohne Mapping](laufend_codex/supplements-c-0516-naehrwerte-ohne-zielspalte.md) | laeuft (codex) | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
