@@ -9,6 +9,8 @@ kind_von: E-84
 entscheidung: E-84
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 6fb06234
 beruehrt:
   tabellen: [supplements.intake_logs]
 ---
@@ -55,4 +57,59 @@ Der Pipeline-Schritt verschiebt die eine bestehende C-513-Zeile idempotent in ei
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Gebaut ? NICHT live.**
+
+`[cmd]` **In der laufenden Datenbank:**
+
+    intake_logs.meal_id           FEHLT
+    meal_items: die vier Spalten  NOCH DA
+    stack_item_id                 war schon NULL-faehig
+
+`[read]` **Er schreibt *,,im frischen Vollketten-Scratch
+geprueft, aber NICHT live eingespielt"*** ? **ehrlich.**
+
+`[cmd]` **Was vorliegt:**
+
+    migrations/20260918193000_c519_supplement_intake_
+      references.sql
+    migrations/20260918194000_c519_remove_meal_product_
+      snapshots.sql
+    _pipeline/13_supplements/519_migrate_meal_supplement_
+      references.sql
+    _validierung/quer-c519-supplement-intake-references.test
+
+### Toms Regel ist umgesetzt
+
+> *,,Supplements bleiben SSOT: Meal und Rezept speichern nur
+VERWEISE."*
+
+`[read]` **Damit stimmt der Modulvertrag wieder** ?
+**der Widerspruch W1 aus E-83 ist aufgeloest.**
+
+`[cmd]` **`intake_logs` bekommt `meal_id` (optional), der Stack
+ist optional** ? **Toms zwei Antworten.**
+
+### Der Umzug ist idempotent
+
+> *,,C-513-Snapshots werden per idempotenter Pipeline aus
+`meal_items` nach `intake_logs` verschoben und anschliessend
+entfernt."*
+
+`[read]` **Zwei Migrationen: erst verschieben, dann
+entfernen** ? **nicht in einem Schritt.**
+
+### Und die Zahlen halten
+
+`[cmd]` **Whey-Fruehstueck bleibt bei 557,5 kcal / 40,022 g
+Protein.**
+
+`[cmd]` **Geprueft: Rezept-Whey, Einnahme ohne
+Stack/Mahlzeit, getrennte Supplementbilanz, RLS und
+anon-Gegenproben.**
+
+`[read]` **A4 und A5 sind damit belegt** ? **ein Rezept darf
+Supplemente, und eine Einnahme braucht weder Stack noch
+Mahlzeit.**
+
+**Abgenommen. Einspielen steht aus.**
+
