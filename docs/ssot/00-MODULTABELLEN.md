@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-17 — 196 Tabellen, 2739 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-18 — 196 Tabellen, 2739 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -113,11 +113,11 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `foods_custom` | 46 | 0 | ? |
 | `foods_portions` | 12 | 23402 | ? |
 | `meal_items` | 30 | 9067 | ? |
-| `meal_plan_days` | 8 | 224 | ? |
-| `meal_plan_entries` | 18 | 728 | ? |
+| `meal_plan_days` | 8 | 231 | ? |
+| `meal_plan_entries` | 18 | 756 | ? |
 | `meal_plan_logs` | 14 | 8 | ? |
 | `meal_plan_slots` | 7 | 38 | 2026-09-02 |
-| `meal_plan_weeks` | 8 | 32 | ? |
+| `meal_plan_weeks` | 8 | 33 | ? |
 | `meal_plans` | 21 | 10 | ? |
 | `meal_slots` | 4 | 14 | ? |
 | `meals` | 10 | 2909 | ? |
@@ -133,7 +133,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `recipe_curation_decisions` | 6 | 0 | ? |
 | `recipe_ingredients` | 15 | 22 | ? |
 | `recipes` | 20 | 6 | ? |
-| `search_events` | 9 | 523 | ? |
+| `search_events` | 9 | 525 | ? |
 | `search_synonyms` | 4 | 4877 | ? |
 | `shopping_list_items` | 15 | 23 | ? |
 | `shopping_lists` | 12 | 4 | ? |
@@ -181,13 +181,13 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `substance_aliases` | 11 | 1541 | ? |
 | `substance_group_memberships` | 5 | 8 | 2026-08-29 |
 | `supplement_aas_ratings` | 11 | 0 | ? |
-| `supplement_aliases` | 8 | 2845 | ? |
+| `supplement_aliases` | 8 | 2868 | ? |
 | `supplement_categories` | 12 | 23 | ? |
 | `supplement_cycle_events` | 11 | 0 | ? |
 | `supplement_dosing` | 24 | 596 | ? |
 | `supplement_evidence` | 23 | 596 | ? |
 | `supplement_faq` | 13 | 1970 | ? |
-| `supplement_field_sources` | 14 | 2746432 | ? |
+| `supplement_field_sources` | 14 | 2746455 | ? |
 | `supplement_groups` | 10 | 3 | ? |
 | `supplement_human_evidence_flags` | 17 | 293 | ? |
 | `supplement_identifiers` | 9 | 1259 | ? |
@@ -215,8 +215,8 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `supplement_user_texts` | 48 | 446 | ? |
 | `supplement_wada` | 22 | 337 | ? |
 | `supplement_warnings` | 14 | 290 | ? |
-| `supplements` | 22 | 596 | ? |
-| `supplier_product_nutrient_name_mappings` | 8 | 40 | 2026-09-15 |
+| `supplements` | 22 | 617 | ? |
+| `supplier_product_nutrient_name_mappings` | 8 | 54 | 2026-09-15 |
 | `supplier_product_vitamin_e_forms` | 8 | 1433 | 2026-09-15 |
 | `supplier_products` | 23 | 214780 | 2026-09-09 |
 | `suppliers` | 11 | 6419 | 2026-09-09 |

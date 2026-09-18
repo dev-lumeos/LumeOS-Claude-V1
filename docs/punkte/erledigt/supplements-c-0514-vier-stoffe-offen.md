@@ -76,3 +76,33 @@ Kandidaten.**
 
 **Abgenommen, Einspielen steht aus.**
 
+## Nachtrag: LIVE eingespielt, 2026-09-08
+
+`[cmd]` **Selbst nachgemessen:**
+
+    verknuepft   815.463 von 3.000.982  (vorher 790.378)
+    Glycerin      25.230 Zeilen, 25.195 Produkte
+    Gelatin          176 von 40.651 -- bleibt offen
+
+`[cmd]` **Die 14 Mappings sind da:**
+
+    {Cholesterol}, Cholesterol, Cholesterols,
+      Total Cholesterol            -> CHORL
+    Monounsaturated, Monounsaturated {Fat},
+      Monounsaturated Fat, Monounsaturated Fats,
+      Monounsaturated Fatty Acids  -> FAMS
+    Polyunsaturated {Fat}, Polyunsaturated Fat,
+      Polyunsaturated Fatty Acids  -> FAPU
+    Insoluble Fiber                -> FIBINS
+    Soluble Fiber                  -> FIBSOL
+
+`[read]` **Die Schreibvarianten sauber zusammengefuehrt** ?
+**vier Schreibungen von Cholesterin, fuenf von
+einfach ungesaettigt.**
+
+`[cmd]` **Und die Probe lief transaktional:** *,,Produkt mit
+10 mg CHORL pro Softgel ergibt bei zwei Portionen 20 mg CHORL
+im Snapshot"* ? **nach ROLLBACK ist der Testnutzer weg.**
+
+`[cmd]` **Sicherung:**
+`backup/schema/20260918175140_c514_c516_vor_einspielen.sql`
