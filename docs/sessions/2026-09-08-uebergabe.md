@@ -628,3 +628,109 @@ und Form.**
     25 Befunde, genau der Sollstand
     apps/web 1759, apps/coach 65
 
+---
+
+# Fuenfter Teil - die Supplemente kommen ins Essen
+
+**In einem Satz:** Toms Fruehstueck mit Tobias rechnet ?
+557,5 kcal, 40,022 g Protein, das Whey mit 120/24 ? und der
+Weg dorthin hat drei meiner Auftraege als falsch entlarvt.
+
+`[cmd]` **21 Commits, ungepusht. 739 Punkte.**
+
+## Was gebaut wurde
+
+    C-513  Supplemente in Mahlzeiten, Snapshot, Trigger
+    C-514  Glycerin verknuepft (25.230 Zeilen)
+    C-515  21 Wirkstoffe kuratiert (790.378 Zeilen)
+    C-516  CHORL, FAMS, FAPU, FIBINS, FIBSOL
+    C-519  Supplements bleiben SSOT -- GEBAUT, nicht live
+    G-478  die Kacheln im Diary
+    G-480  eine Suche statt zwei Modale
+
+## Die Entscheidungen
+
+`[cmd]` **E-83: ein Weg fuer Lebensmittel UND Supplemente** ?
+**das Mockup hatte die Antwort die ganze Zeit
+(`module-nutrition.jsx:557`).**
+
+`[cmd]` **E-84: ein Supplement bleibt ein Supplement** ?
+**auch im Meal, gespeichert im Stack.**
+
+`[read]` **Toms Formregel:** *,,powder/liquid/bar koennen
+untergemischt werden ? pillen gehoeren in den stack, der wird
+nicht eine tablette zerhacken."*
+
+`[read]` **Und das Argument, das alles entschied:** *,,er kann
+keinen shake in den stack legen, weil wir da milch nicht
+kennen."*
+
+## Fehler des Orchestrators, fuenfter Teil
+
+**12** ? `[cmd]` **Vier geratene Dateipfade** (G-461, G-462,
+G-470, G-471) ? **jeder vom Punktewaechter gefangen.**
+
+**13** ? `[cmd]` **Drei Auftraege ohne Punktdatei** (C-495,
+C-501, C-513).
+
+**14** ? `[cmd]` **G-475 und G-478 ohne Spec und Mockup
+geschrieben** ? **zwei von vier Quellen ausgelassen. Ein
+zweites Modal gebaut, das es schon gab.**
+
+**15** ? `[cmd]` **`backup/` aufgeraeumt ohne `git ls-files`**
+? **608 Loeschungen, von Claude Code gemeldet.**
+
+**16** ? `[cmd]` **Toms Ghostentry-Befund als *,,Datumsproblem"*
+abgetan** ? **selbst gemessen: 4 Eintraege heute, nicht 0.**
+
+**17** ? `[cmd]` **Vier Beanstandungen liegen gelassen** ?
+**als Notiz statt als Punkt.**
+
+`[read]` **Toms Satz dazu:** *,,ich mach das nicht aus spass,
+um dich zu verarschen, ich bin der mensch, der es prueft und
+rapportiert."*
+
+## Neue Regeln in docs/lehren/
+
+    Der Auftrag beschreibt das ZIEL, nicht den Befund
+    Keine Vermutungen in den Auftrag
+    Filter gehoeren in die Datenbank
+    Modul-Vorlieben: nicht WO, sondern WOHIN geschrieben
+    Ein Werkzeug beendet nur, was es selbst gestartet hat
+    Vor jeder Bewegung in backup/: git ls-files
+    Eine Beanstandung versandet nie
+
+## Was laeuft
+
+    Codex        C-518  (Messauftrag, Produkt-Substanz)
+    Claude Code  G-481  (die Suche benutzt die Suche nicht)
+
+## ZUERST AM NAECHSTEN TAG
+
+`[read]` **G-481 muss durch, bevor C-519 eingespielt werden
+kann.**
+
+`[cmd]` **Codex hat gestoppt:** *,,`mahlzeiten.tsx` liest
+`supplement_serving_size`, `supplement-posten-read.ts` schreibt
+alle vier alten Spalten."*
+
+`[cmd]` **Die Sicherung liegt:**
+`backup/schema/20260918205352_c519_vor_einspielen.sql`
+
+### Danach, aus Toms Beanstandungen
+
+    G-482  die Planeintraege sind da und werden nicht
+           gezeigt (4 heute, Tom sieht null)
+    G-483  Planner und Rezepte kennen keine Supplemente
+    G-484  keine Aktion im Produkte-Reiter
+
+`[read]` **Alle drei warten auf C-519.**
+
+## Stand
+
+    196 Tabellen, 2.739 Spalten
+    222 Funktionen, 466 Policies
+    739 Punkte: 240 offen, 497 erledigt
+    25 Befunde, genau der Sollstand
+    apps/web 1876, apps/coach 65
+
