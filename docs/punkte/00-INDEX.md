@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 241 |
+| `todos` | 240 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 497 |
 | **gesamt** | **739** |
@@ -386,7 +387,7 @@
 | `C-514` | fehler | hoch | [vier Stoffe stehen im Katalog und sind offen](erledigt/supplements-c-0514-vier-stoffe-offen.md) | erledigt | — | — |
 | `C-515` | feature | hoch | [die Wirkstoffe kuratieren](erledigt/supplements-c-0515-wirkstoffe-kuratieren.md) | erledigt | — | — |
 | `C-516` | fehler | hoch | [Naehrwerte ohne Mapping](erledigt/supplements-c-0516-naehrwerte-ohne-zielspalte.md) | erledigt | — | — |
-| `C-518` | befund | hoch | [keine Bruecke zwischen Produkt und Substanz](todos/supplements-c-0518-keine-produkt-substanz-bruecke.md) | offen | — | — |
+| `C-518` | befund | hoch | [keine Bruecke zwischen Produkt und Substanz](laufend_codex/supplements-c-0518-keine-produkt-substanz-bruecke.md) | laeuft (codex) | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |

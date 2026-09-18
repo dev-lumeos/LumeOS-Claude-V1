@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-17: 218 Funktionen, 466 Policies, 712 CHECKs, 19 Sichten.**
+`[cmd]` **Stand 2026-09-18: 222 Funktionen, 466 Policies, 713 CHECKs, 20 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -80,6 +80,7 @@ ob man sie rufen kann.**
 | medical | validate_injection_log_links |  | Funktion |
 | medical | validate_injection_site_selection |  | Funktion |
 | medical | validate_provenance |  | Funktion |
+| nutrition | add_supplement_product_to_meal | p_meal_id uuid, p_supplier_product_id uuid, p_serving_quantity numeric DEFAULT 1, p_serving_size text DEFAULT NULL::text | Funktion |
 | nutrition | copy_meal_plan_week | p_week_id uuid, p_target_week_start date | Funktion |
 | nutrition | copy_user_slots_to_new_self_created_plan |  | Funktion |
 | nutrition | curate_food_tag | p_food_id uuid, p_tag_code text, p_action text | Funktion |
@@ -95,6 +96,7 @@ ob man sie rufen kann.**
 | nutrition | hydration_day | p_user_id uuid, p_entry_date date | Funktion |
 | nutrition | meal_items_inventory_deduct |  | Funktion |
 | nutrition | meal_items_owner_guard |  | Funktion |
+| nutrition | meal_items_supplement_snapshot_guard |  | Funktion |
 | nutrition | meal_plan_day_to_diary | p_day_id uuid, p_entry_date date DEFAULT NULL::date | Funktion |
 | nutrition | meal_plan_days_owner_guard |  | Funktion |
 | nutrition | meal_plan_entries_owner_guard |  | Funktion |
@@ -109,6 +111,7 @@ ob man sie rufen kann.**
 | nutrition | nrf93_daily | p_user_id uuid, p_entry_date date DEFAULT CURRENT_DATE | Funktion |
 | nutrition | nrf93_score_from_amounts | p_protein_g numeric, p_fiber_g numeric, p_vitamin_a_iu numeric, p_vitamin_c_mg numeric, p_vitamin_e_mg_alpha_tocopherol numeric, p_calcium_mg numeric, p_iron_mg numeric, p_magnesium_mg numeric, p_potassium_mg numeric, p_saturated_fat_g numeric, p_total_sugar_g numeric, p_sodium_mg numeric | Funktion |
 | nutrition | nutrient_intake_detail_for_day | p_user_id uuid, p_entry_date date, p_nutrient_code text | Funktion |
+| nutrition | nutrient_intake_source_breakdown_for_day | p_user_id uuid, p_entry_date date | Funktion |
 | nutrition | nutrient_intake_source_totals_for_day | p_user_id uuid, p_entry_date date | Funktion |
 | nutrition | nutrient_summary_window | p_user_id uuid, p_end_date date, p_days integer DEFAULT 30 | Funktion |
 | nutrition | nutrient_tree_value_anomalies | p_user_id uuid, p_entry_date date | Funktion |
@@ -132,6 +135,7 @@ ob man sie rufen kann.**
 | nutrition | such_alias_treffer | p_groups jsonb | Funktion |
 | nutrition | such_rang_wortgrenze | p_name text, p_groups jsonb | Funktion |
 | nutrition | such_rang_zubereitung | p_bls_code text | Funktion |
+| nutrition | supplement_product_meal_stack_overlap_candidates_for_day | p_user_id uuid, p_entry_date date, p_window_minutes integer DEFAULT 60 | Funktion |
 | nutrition | touch_updated_at |  | Funktion |
 | nutrition | user_inventory_owner_guard |  | Funktion |
 | nutrition | user_inventory_set_state |  | Funktion |
@@ -162,8 +166,8 @@ ob man sie rufen kann.**
 | public | koerperflaechen_touch |  | Funktion |
 | public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein | text, text | Funktion |
-| public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
+| public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
 | public | set_limit | real | Funktion |
 | public | show_limit |  | Funktion |
@@ -258,6 +262,7 @@ Rechten des Lesers, nicht des Erzeugers.**
 | supplements | supplement_forms_read | security_invoker |
 | supplements | supplier_product_brands | security_invoker |
 | supplements | supplier_product_content_catalog | security_invoker |
+| supplements | supplier_product_nutrient_serving_options | security_invoker |
 | supplements | supplier_product_nutrients | security_invoker |
 
 ## CHECK-Bedingungen
@@ -572,11 +577,12 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | nutrition | foods_custom | foods_custom_water_g_check | CHECK ((water_g >= (0)::numeric)) |
 | nutrition | foods_custom | foods_custom_zn_mg_check | CHECK ((zn_mg >= (0)::numeric)) |
 | nutrition | foods_portions | foods_portions_amount_g_check | CHECK ((amount_g > (0)::numeric)) |
-| nutrition | meal_items | meal_items_amount_g_check | CHECK ((amount_g > (0)::numeric)) |
-| nutrition | meal_items | meal_items_food_source_check | CHECK ((food_source = ANY (ARRAY['bls'::text, 'manual'::text, 'custom'::text]))) |
+| nutrition | meal_items | meal_items_amount_g_check | CHECK ((((food_source = 'supplement'::text) AND (amount_g IS NULL)) OR ((food_source <> 'supplement'::text) AND (amount_g > (0)::n |
+| nutrition | meal_items | meal_items_food_source_check | CHECK ((food_source = ANY (ARRAY['bls'::text, 'manual'::text, 'custom'::text, 'supplement'::text]))) |
 | nutrition | meal_items | meal_items_measurement_source_ck | CHECK ((measurement_source = ANY (ARRAY['manual'::text, 'device'::text, 'import'::text, 'admin'::text, 'seed'::text]))) |
 | nutrition | meal_items | meal_items_portion_input_check | CHECK ((((portion_name IS NULL) AND (portion_quantity IS NULL) AND (portion_amount_g IS NULL)) OR ((portion_name IS NOT NULL) AND  |
-| nutrition | meal_items | meal_items_source_target_check | CHECK ((((food_source = 'bls'::text) AND (food_id IS NOT NULL) AND (custom_food_id IS NULL)) OR ((food_source = 'custom'::text) AN |
+| nutrition | meal_items | meal_items_source_target_check | CHECK ((((food_source = 'bls'::text) AND (food_id IS NOT NULL) AND (custom_food_id IS NULL) AND (supplement_product_id IS NULL)) O |
+| nutrition | meal_items | meal_items_supplement_snapshot_check | CHECK ((((food_source = 'supplement'::text) AND (supplement_serving_quantity IS NOT NULL) AND (supplement_serving_quantity > (0):: |
 | nutrition | meal_plan_days | meal_plan_days_day_index_check | CHECK (((day_index >= 1) AND (day_index <= 7))) |
 | nutrition | meal_plan_entries | meal_plan_entries_amount_g_check | CHECK (((amount_g IS NULL) OR (amount_g > (0)::numeric))) |
 | nutrition | meal_plan_entries | meal_plan_entries_entry_type_check | CHECK ((entry_type = ANY (ARRAY['recipe'::text, 'bls'::text, 'custom'::text]))) |

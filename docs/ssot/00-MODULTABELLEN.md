@@ -133,7 +133,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `recipe_curation_decisions` | 6 | 0 | ? |
 | `recipe_ingredients` | 15 | 22 | ? |
 | `recipes` | 20 | 6 | ? |
-| `search_events` | 9 | 525 | ? |
+| `search_events` | 9 | 539 | ? |
 | `search_synonyms` | 4 | 4877 | ? |
 | `shopping_list_items` | 15 | 23 | ? |
 | `shopping_lists` | 12 | 4 | ? |

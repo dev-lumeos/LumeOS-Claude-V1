@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-475
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [supplements.supplier_products]
 zahlen:
