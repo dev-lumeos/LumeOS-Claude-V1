@@ -6,8 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 238 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 495 |
-| **gesamt** | **733** |
+| **gesamt** | **734** |
 
 ## medical — 49
 
@@ -63,7 +64,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 242
+## nutrition — 243
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -308,6 +309,7 @@
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `G-475` | feature | hoch | [Supplemente in die Mahlzeit, in der Oberflaeche](erledigt/nutrition-g-0475-supplement-in-mahlzeit-ui.md) | erledigt | — | C-518, G-478 |
 | `G-478` | feature | hoch | [die Kacheln fuer Supplemente in der Mahlzeit](erledigt/nutrition-g-0478-kacheln-supplement-mahlzeit.md) | erledigt | — | G-479 |
+| `G-480` | feature | hoch | [ein Modal statt zwei](laufend_claudecode/nutrition-g-0480-ein-modal-statt-zwei.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 108
@@ -697,7 +699,7 @@
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
-| `E-83` | entscheidung | hoch | [ein Weg fuer Lebensmittel UND Supplemente](erledigt/quer-e-0083-ein-weg-fuer-beide.md) | erledigt | — | E-84 |
+| `E-83` | entscheidung | hoch | [ein Weg fuer Lebensmittel UND Supplemente](erledigt/quer-e-0083-ein-weg-fuer-beide.md) | erledigt | — | E-84, G-480 |
 | `E-84` | entscheidung | hoch | [ein Supplement bleibt ein Supplement](todos/quer-e-0084-supplement-bleibt-supplement.md) | offen | — | — |
 | `F-01` | befund | mittel | [Schnittstellenvertrag zuerst](todos/quer-f-0001-schnittstellenvertrag-zuerst.md) | offen | — | C-111 |
 | `F-02` | befund | mittel | [Ablageort festlegen](todos/quer-f-0002-ablageort-festlegen.md) | offen | — | C-109, C-110 |
