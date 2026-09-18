@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 235 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 486 |
-| **gesamt** | **722** |
+| `erledigt` | 487 |
+| **gesamt** | **723** |
 
 ## medical — 49
 
@@ -310,9 +310,9 @@
 | `G-475` | feature | hoch | [Supplemente in die Mahlzeit, in der Oberflaeche](todos/nutrition-g-0475-supplement-in-mahlzeit-ui.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 104
+## supplements — 105
 
-### beauftragbar — 103
+### beauftragbar — 104
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -374,10 +374,11 @@
 | `C-500` | feature | mittel | [die Vitamin-E-Form herausfinden](erledigt/supplements-c-0500-vitamin-e-form.md) | erledigt | — | — |
 | `C-504` | fehler | hoch | [die Filter gehoeren in die Datenbank](erledigt/supplements-c-0504-filter-in-die-datenbank.md) | erledigt | — | C-511, G-467 |
 | `C-505` | befund | hoch | [die Mehrheit der Zutaten ist nicht verknuepft](erledigt/supplements-c-0505-zutaten-nicht-verknuepft.md) | erledigt | — | C-509, C-510 |
-| `C-509` | befund | hoch | [der Substanzkatalog ist zu klein](todos/supplements-c-0509-substanzkatalog-zu-klein.md) | offen | — | — |
+| `C-509` | befund | hoch | [der Substanzkatalog ist zu klein](erledigt/supplements-c-0509-substanzkatalog-zu-klein.md) | erledigt | — | C-514 |
 | `C-510` | fehler | hoch | [das Mapping ist buchstabengenau](erledigt/supplements-c-0510-mapping-buchstabengenau.md) | erledigt | — | — |
 | `C-511` | feature | hoch | [Supplement-Vorlieben, mit Lieblingsmarken](erledigt/supplements-c-0511-lieblingsmarken.md) | erledigt | — | — |
 | `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](erledigt/supplements-c-0512-naehrwerte-werden-summiert.md) | erledigt | — | C-513, G-472 |
+| `C-514` | fehler | hoch | [vier Stoffe stehen im Katalog und sind offen](todos/supplements-c-0514-vier-stoffe-offen.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
