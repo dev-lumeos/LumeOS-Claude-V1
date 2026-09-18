@@ -677,3 +677,31 @@ Befehlszeileninterpretation.**
 `[read]` **Das gehoert Tom** ? **die Datei liegt unter
 `C:\Users\User\.codex\`, nicht im Repo.**
 
+## Ein Werkzeug beendet nur, was es selbst gestartet hat
+
+`[cmd]` **G-476, 2026-09-08: `_g474-anstrich.mjs` hat Toms
+Dev-Server auf 3200 getoetet.**
+
+### Warum
+
+> *,,Die cmd-Huelle aus `shell: true` stirbt nach ~5 s, der
+Server laeuft weiter. Am Ende des Laufs war die gemerkte PID
+also TOT ? Windows vergibt freie PIDs NEU, und `/T` nimmt den
+ganzen Baum unter der Nummer mit."*
+
+    1s-5s   huelleLebt=true    portOffen=true
+    6s      huelleLebt=FALSE   portOffen=true
+
+### Die Regel
+
+    Ein Werkzeug beendet nur, was es selbst gestartet hat
+      ueber den PORT, nie ueber eine gemerkte PID
+      nie mit /T
+      und nur, wenn es selbst gestartet hat
+
+`[read]` **Ohne `LUMEOS_START=1` startet gar nichts** ? **das
+Werkzeug meldet die noetigen Befehle statt zu handeln.**
+
+`[cmd]` **Und `netstat` statt PowerShell** ? **letzteres
+brauchte ueber 60 Sekunden.**
+
