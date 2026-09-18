@@ -477,3 +477,35 @@ TROTZDEM, aber spaeter.**
 nicht. Der Unterschied: eine Zahl ist gepruefbar, eine
 Vermutung lenkt.**
 
+## Eine Beanstandung versandet nie
+
+Tom, 2026-09-08:
+
+> fuer was beanstande ich etwas, wenn du es nicht checken
+> laesst und dann entsprechend loesen?
+
+> ich will nie mehr sehen, dass irgendwas, was ich beanstande,
+> einfach versandet. ich mach das nicht aus spass, um dich zu
+> verarschen, ich bin der mensch, der es prueft und
+> rapportiert
+
+`[cmd]` **Der Anlass: sechs Beanstandungen am 2026-09-08,
+davon vier unbearbeitet liegen geblieben** ? **Meal Plans,
+Planner, Rezepte, die Aktion im Produkte-Reiter.**
+
+`[read]` **Ich hatte sie in E-83 NOTIERT und danach nur das
+Modal gegeben.**
+
+### Die Regel
+
+    Jede Beanstandung wird SOFORT ein Punkt.
+    Kein Sammeln, kein "spaeter".
+    Und der Punkt geht raus, sobald ein Agent frei ist.
+
+`[read]` **Eine Notiz in einer Entscheidungsdatei ist kein
+Punkt** ? **sie erscheint in keiner Liste, die abgearbeitet
+wird.**
+
+`[read]` **Und beim naechsten Bericht wird gefragt: was ist
+aus den offenen Beanstandungen geworden?**
+

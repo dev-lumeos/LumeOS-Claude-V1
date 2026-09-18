@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 239 |
+| `todos` | 241 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 497 |
-| **gesamt** | **737** |
+| **gesamt** | **739** |
 
 ## medical — 49
 
@@ -64,7 +64,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 245
+## nutrition — 246
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -312,11 +312,12 @@
 | `G-480` | feature | hoch | [ein Modal statt zwei](erledigt/nutrition-g-0480-ein-modal-statt-zwei.md) | erledigt | — | G-481 |
 | `G-481` | fehler | hoch | [die Suche benutzt die Suche nicht](laufend_claudecode/nutrition-g-0481-suche-benutzt-suche-nicht.md) | laeuft (claudecode) | — | — |
 | `G-482` | fehler | hoch | [die Planeintraege sind da und werden nicht gezeigt](todos/nutrition-g-0482-planeintraege-nicht-gezeigt.md) | offen | — | — |
+| `G-483` | feature | hoch | [Planner und Rezepte kennen keine Supplemente](todos/nutrition-g-0483-planner-und-rezepte.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 108
+## supplements — 109
 
-### beauftragbar — 107
+### beauftragbar — 108
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -426,6 +427,7 @@
 | `G-467` | fehler | hoch | [die Filter werden nicht gespeichert](erledigt/supplements-g-0467-filter-werden-nicht-gespeichert.md) | erledigt | — | G-469 |
 | `G-468` | feature | hoch | [der Vorlieben-Reiter fuer Supplements](todos/supplements-g-0468-vorlieben-reiter.md) | offen | — | — |
 | `G-472` | feature | mittel | [die Tafel zeigt die Portionswahl nicht](todos/supplements-g-0472-portionswahl-in-der-tafel.md) | offen | — | — |
+| `G-484` | feature | hoch | [keine Aktion im Produkte-Reiter](todos/supplements-g-0484-aktion-im-produkte-reiter.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -702,7 +704,7 @@
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
-| `E-83` | entscheidung | hoch | [ein Weg fuer Lebensmittel UND Supplemente](erledigt/quer-e-0083-ein-weg-fuer-beide.md) | erledigt | — | E-84, G-480 |
+| `E-83` | entscheidung | hoch | [ein Weg fuer Lebensmittel UND Supplemente](erledigt/quer-e-0083-ein-weg-fuer-beide.md) | erledigt | — | E-84, G-480, G-483, G-484 |
 | `E-84` | entscheidung | hoch | [ein Supplement bleibt ein Supplement](todos/quer-e-0084-supplement-bleibt-supplement.md) | offen | — | C-519 |
 | `F-01` | befund | mittel | [Schnittstellenvertrag zuerst](todos/quer-f-0001-schnittstellenvertrag-zuerst.md) | offen | — | C-111 |
 | `F-02` | befund | mittel | [Ablageort festlegen](todos/quer-f-0002-ablageort-festlegen.md) | offen | — | C-109, C-110 |
