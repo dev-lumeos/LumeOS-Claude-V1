@@ -8,7 +8,7 @@ braucht: []
 kind_von: null
 entscheidung: null
 erledigt: 2026-09-08
-commit: OFFEN
+commit: 452590fd
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/food-such-modal.tsx

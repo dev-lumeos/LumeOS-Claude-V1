@@ -11,105 +11,48 @@ agent: codex
 beauftragt: 2026-09-08
 beruehrt:
   tabellen: [supplements.intake_logs]
-zahlen:
-  gemessen: 2026-09-08
 ---
 
-# C-519 - ein Supplement bleibt ein Supplement
+# C-519 – ein Supplement bleibt ein Supplement
 
-## Toms Entscheidung (E-84)
+## Entscheidung E-84
 
-> ich bin der meinung, dass ein supplement, selbst wenn es in
-> einem meal gelistet ist, immer noch ein supplement ist und
-> mit dem stack gespeichert wird. das macht es sowieso
-> einfacher zu sagen, woher die daten kommen
+Ein Produkt-Supplement bleibt im Schema `supplements`. Eine Mahlzeit oder ein Rezept hat lediglich einen Verweis; der Produktname und die historischen Nährwerte liegen nie in `nutrition`.
 
-    Wo es steht        supplements  -- EINE Wahrheit
-    Wo es erscheint    Meal, Rezept, Plan -- als VERWEIS
-    Woher die Zahl     immer "aus Supplement"
+## Bericht (2026-09-18)
 
-`[read]` **Damit stimmt der Modulvertrag wieder** ?
-`SPEC_01_MODULE_CONTRACT.md:84`: *,,Nutrition speichert KEINE
-Supplement-Produkte."* ? **der Widerspruch W1 aus E-83 loest
-sich auf.**
+**Nicht live eingespielt.** Der Stand liegt als zwei Migrationen und ein idempotenter Pipeline-Schritt vor; geprüft wurde die frische Scratch-Datenbank `lumeos_c519_verify`. Die Live-Zeile aus C-513 bleibt bis zu einem ausdrücklichen Einspielen unverändert.
 
-## Was schon da ist
+### Bauform
 
-`[cmd]` **`supplements.intake_logs` traegt
-`supplier_product_id`** ? **810 Zeilen.**
+- `supplements.intake_logs.meal_id` ist optional; `stack_item_id` ist optional. Der Owner-Guard erzwingt bei einer verknüpften Mahlzeit denselben Nutzer und dasselbe Datum.
+- Der historische Produkt-Snapshot liegt in `intake_logs`: Produkt, gewählte Portionsgröße, Menge, Datenstatus und Nährwerte. Das passt zu den vorhandenen Namens- und Dosis-Snapshots: eine tatsächliche Einnahme bleibt bei späterer Rezepturänderung historisch korrekt.
+- `nutrition.meal_items` trägt nur `supplement_intake_log_id`. Die fünf C-513-Produkt-/Snapshotfelder werden nach dem Pipeline-Umzug entfernt.
+- Rezepte nutzen eine `nutrition.recipe_ingredients`-Position mit `food_source='supplement'`; der Produktverweis liegt ausschließlich in `supplements.recipe_product_references`. Ein Rezept rechnet aktuelle, evidenzierte Produktwerte und ist kein Einnahmesnapshot.
 
-`[cmd]` **`stack_items.timing`:** `morning`, `midday`,
-`evening`, `pre_workout`, `post_workout`, `bedtime`,
-`with_meal`, `any`.
+### Nachweis
 
-## Was C-513 stattdessen gebaut hat
+Der C-519-Test in der frischen Vollkette ist grün:
 
-`[cmd]` **`nutrition.meal_items`:** `supplement_product_id`,
-`supplement_serving_size`, `supplement_serving_quantity`,
-`supplement_nutrient_status`, `nutrients`.
+- Mahlzeit- und Stack-Verweis sind beide NULL-fähig.
+- Eine Produkt-Einnahme mit Mahlzeit erzeugt einen Supplements-Log mit `120 kcal` und `24 g Protein`; der Meal-Posten enthält nur den Log-Verweis, keine Nährwerte und kein Produktfeld.
+- Das Frühstück bleibt rechnerisch `557,5 kcal` und `40,022 g Protein` (Nahrungsanteil `437,5/16,022`, Whey `120/24`).
+- Ein Whey-Rezept mit einer Referenz rechnet `120 kcal`, `24 g Protein`.
+- Eine Einnahme ohne Stack und ohne Mahlzeit ist möglich und erzeugt keinen Meal-Posten.
+- Die Tagesbilanz führt Nahrung und Supplemente getrennt: Mahlzeiten-Supplement, eigenständige/Stack-Einnahme und Gesamtsupplement bleiben separat sichtbar.
+- Fremde Mahlzeit ist über RLS nicht lesbar und damit nicht verknüpfbar; `anon` hat kein EXECUTE auf beide Schreibfunktionen.
 
-`[cmd]` **1 Zeile Daten betroffen** ? **jetzt ist die
-Umstellung billig.**
+Der Pipeline-Schritt verschiebt die eine bestehende C-513-Zeile idempotent in einen neuen Intake-Log und leert dort die Nutrition-Snapshots. In der frischen Vollkette gab es keine C-513-Testzeile, daher war der Schritt erwartungsgemäß `0`; die echte eine Live-Zeile wird **nicht** ohne Einspielauftrag verändert.
 
-## Toms zwei Antworten
+### Sicherung und Prüfungen
 
-**1** ? **Kein Abhaken.**
-
-> ein whey im fruehstueck ist nicht teil des stacks, den er
-> abhaken muss. er bestaetigt die einnahme ja mit dem meal
-
-**2** ? **Einnahme ohne Stackeintrag ist erlaubt.**
-
-`[cmd]` **`intake_logs.stack_item_id` muss NULL-faehig
-werden.**
-
-### Und das Argument, das alles entscheidet
-
-> er kann keinen shake in den stack legen, weil wir da milch
-> nicht kennen
-
-`[read]` **Der Stack fuehrt Substanzen und Produkte, keine
-Lebensmittel** ? **ein Shake aus Milch, Blaubeeren und Whey
-kann dort nicht liegen.**
-
-`[read]` **Also: Rezept mit Whey drin, einmal ins
-Fruehstueck.**
-
-## Zu bauen
-
-    supplements.intake_logs
-      + meal_id (welche Mahlzeit, darf leer sein)
-      stack_item_id wird NULL-faehig
-    nutrition.meal_items
-      die fuenf Spalten werden zu EINEM Verweis
-    nutrition.recipe_ingredients
-      dieselbe Bauform -- ein Rezept darf Supplemente
-      enthalten
-
-`[cmd]` **MISS, ob der Snapshot in `intake_logs` gehoert** ?
-**dort stehen schon `supplement_name_snapshot`,
-`dose_snapshot`, `dose_unit_snapshot`.**
-
-## Abnahmebedingungen
-
-    A1  intake_logs.meal_id, stack_item_id NULL-faehig.
-    A2  die eine bestehende meal_items-Zeile umgezogen.
-    A3  Toms Fruehstueck rechnet weiter: 557,5 kcal,
-        40,022 g.
-    A4  ein Rezept mit Whey: gebaut und gerechnet.
-    A5  eine Einnahme OHNE Stackeintrag und OHNE
-        Mahlzeit ist moeglich.
-    A6  die Bilanz weist Supplemente weiter separat
-        aus (C-466).
-    A7  Gegenprobe: eine Einnahme, die zu keiner
-        Mahlzeit gehoert, taucht nicht im Meal auf.
-    A8  Sicherung, Vollkette, ALLE Waechter.
-
-## Bericht
-
-_(vom Agenten anzuhaengen)_
+- Vor der Vollkette: [Schema-Sicherung](D:/GitHub/LumeOS-Claude-V1/backup/schema/20260918121553_c43_vor_kettenlauf.sql).
+- Vollkette: alle C-519-Schritte grün (`Schema → Pipeline → Bereinigung`) auf `lumeos_c519_verify`.
+- `quer-c519-supplement-intake-references.test.ts`: grün.
+- `migration-kette-pruefen` und die Selbstprobe von `migration-datenlogik-pruefen`: grün.
+- Die wiederholte Schema-Abschlussprüfung hat keine C-519-Abweichung; rot bleibt ein bestehender, fremder Befund: `supplements.substance_group_memberships` hat bei `service_role` mehr Rechte als der C-327-Sollstand erwartet.
+- `pnpm gate` stoppt vor den späteren Wächtern am bekannten, fremden Sammelfragen-Befund: `3` statt Soll `1` (C-507, E-84, G-377). Der Dev-Server wurde nicht gestartet, gestoppt oder verändert.
 
 ## Abnahme
 
 _(vom Orchestrator)_
-

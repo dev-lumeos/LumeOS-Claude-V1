@@ -47,3 +47,17 @@ Trennlinie, nicht fuer Text, den jemand lesen soll.**
     A4  vier Module unveraendert -- oder BENANNT,
         was sich aendert und warum.
     A5  Kontraste nachher gemessen.
+
+## Zweiter Beleg aus G-480, 2026-09-08
+
+> *,,Der Tabellenkopf misst 2,88:1 ? belegt als ALTBEFUND,
+weil dieselbe Messung am unangetasteten Food-DB-Reiter
+denselben Wert liefert. Die Regel liegt in `packages/ui` und
+betrifft 57 Dateien."*
+
+`[cmd]` **`.v2-tbl th`** ? **dazu `.v2-dim` und
+`.v2-eyebrow` aus G-478 (1.565-fach benutzt).**
+
+`[read]` **Drei Klassen, ein Befund** ? **er betrifft jedes
+Modul.**
+
