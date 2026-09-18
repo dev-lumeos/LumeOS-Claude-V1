@@ -60,3 +60,20 @@ Stack Produkte fuehren soll, ist eine Entscheidung.**
         Begruendet, nicht gebaut.
     A3  reicht der Name? Mit Zahl belegt.
     A4  eine Empfehlung fuer Toms Entscheidung.
+
+## BERICHTIGT durch E-83, 2026-09-08
+
+`[cmd]` **Die Bruecke GIBT es:** `product_contents`, **3,0 Mio
+Zeilen, 66,7 % der On-Market-Produkte haben mindestens eine
+aufgeloeste Substanz.**
+
+> *,,Aber bei Toms Whey loest sie Kalium, Kalzium, Lactase
+auf und VERFEHLT Protein ? sie trifft die Spurenstoffe, nicht
+den Zweck."*
+
+`[read]` **Die Frage ist also nicht *,,gibt es eine
+Bruecke?"*, sondern *,,welche Substanz MEINT das Produkt?"*.**
+
+`[read]` **Ein Whey-Produkt hat zwanzig Zutaten und EINEN
+Zweck.**
+

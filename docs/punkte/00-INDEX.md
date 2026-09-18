@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 238 |
-| `erledigt` | 494 |
+| `todos` | 237 |
+| `erledigt` | 495 |
 | **gesamt** | **732** |
 
 ## medical — 49
@@ -697,7 +697,7 @@
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
-| `E-83` | entscheidung | hoch | [ein Weg fuer Lebensmittel UND Supplemente](todos/quer-e-0083-ein-weg-fuer-beide.md) | offen | — | — |
+| `E-83` | entscheidung | hoch | [ein Weg fuer Lebensmittel UND Supplemente](erledigt/quer-e-0083-ein-weg-fuer-beide.md) | erledigt | — | — |
 | `F-01` | befund | mittel | [Schnittstellenvertrag zuerst](todos/quer-f-0001-schnittstellenvertrag-zuerst.md) | offen | — | C-111 |
 | `F-02` | befund | mittel | [Ablageort festlegen](todos/quer-f-0002-ablageort-festlegen.md) | offen | — | C-109, C-110 |
 | `F-03` | befund | mittel | [obsidian-skills einbinden](todos/quer-f-0003-obsidian-skills-einbinden.md) | offen | — | C-112 |
