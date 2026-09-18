@@ -517,19 +517,53 @@ Mahlzeit** ? **dieselbe Bauform.**
 **dort stehen schon `supplement_name_snapshot`,
 `dose_snapshot`, `dose_unit_snapshot`.**
 
-## Was zu klaeren ist
+## Toms Antworten, 2026-09-08
 
-`[read]` **Ein Whey im Fruehstueck IST eine Einnahme.**
+**1** ? **Kein Abhaken.**
 
-    a  es taucht im Stack-Reiter auf, abgehakt
-    b  es zaehlt nur in der Bilanz
+> ein whey im fruehstueck ist nicht teil des stacks, den er
+> abhaken muss. er bestaetigt die einnahme ja mit dem meal
 
-`[cmd]` **`intake_logs.status` gibt es** ? **miss, welche Werte
-er traegt.**
+`[read]` **Die Mahlzeit IST die Bestaetigung** ? **keine
+zweite Handlung.**
 
-`[read]` **Und: braucht ein Supplement im Meal ueberhaupt einen
-`stack_item_id`?** **Wer ein Whey einmalig ins Fruehstueck tut,
-hat es nicht im Stack.**
+**2** ? **Einnahme ohne Stackeintrag ist erlaubt.**
+
+> ja darf es, siehe 1. der user hat selbst die wahl, was fuer
+> ihn einfacher ist
+
+`[cmd]` **`intake_logs.stack_item_id` muss NULL-faehig
+werden.**
+
+### Und das Argument, das alles entscheidet
+
+> einfacher weg: er macht sich ein rezept eines shakes und
+> packt es zum meal. komplizierter weg: sein shake ohne whey
+> als meal und whey als stackposition
+
+> ueberleg selber, was er logischerweise tun wird, denn er kann
+> keinen shake in den stack legen, weil wir da milch nicht
+> kennen
+
+`[read]` **Der Stack fuehrt Substanzen und Produkte** ? **keine
+Lebensmittel.**
+
+`[read]` **Ein Shake aus Milch, Blaubeeren und Whey kann dort
+nicht liegen.**
+
+`[read]` **Also: Rezept mit Whey drin, einmal ins Fruehstueck.
+Der komplizierte Weg zwingt den Nutzer, seinen eigenen Shake zu
+zerlegen.**
+
+### Was daraus folgt
+
+    Rezept       darf Supplemente enthalten  (Frage D: JA)
+    Meal         desgleichen
+    Stack        bleibt fuer das, was man schluckt
+    intake_logs  stack_item_id NULL-faehig
+                 meal_id neu, darf leer sein
+
+`[read]` **Damit ist Frage D aus E-83 beantwortet.**
 
 ---
 
