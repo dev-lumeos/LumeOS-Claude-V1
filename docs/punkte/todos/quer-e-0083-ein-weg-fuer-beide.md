@@ -132,3 +132,50 @@ habe daneben ein zweites Modal bauen lassen.**
 `[read]` **Und die Abnahme hat Fotos gezaehlt, nicht
 Bedienbarkeit.**
 
+## Toms Regel, 2026-09-08
+
+> wie bringt man was in essen rein? antwort: powder/liquid/bar
+> und allfaellige andere formen, die man daruntermischen kann
+
+> pillen/tablet/capsule/etc gehoeren nicht in meals, der user
+> kann die in einen stack einbauen, der wird nicht eine
+> tablette zerhacken, nur dass es in einen shake rein passt.
+> der trinkt den shake und spuelt die pille/capsule etc aus dem
+> stack damit runter (und ja, auch diese kalorien / makros
+> mikros gehoeren als zugenommen aus supplement)
+
+### Die Regel
+
+    Meal    was man UNTERMISCHT    Powder, Liquid, Bar, Gummy
+    Stack   was man SCHLUCKT       Capsule, Tablet, Softgel
+    beide   zaehlen in die Bilanz  C-466 fuehrt sie getrennt
+
+`[read]` **Das loest meinen Einwand auf** ? **ich hatte
+argumentiert, Fischoelkapseln haetten Kalorien und duerften
+nicht ausgeschlossen werden. Sie werden nicht ausgeschlossen,
+sie stehen nur im Stack.**
+
+## Gemessen, On Market
+
+    Capsule           43.301    davon 14.689 mit Naehrwerten
+    Powder            24.074           14.123
+    Liquid            20.534            4.732
+    Tablet or Pill    16.798           12.301
+    Softgel Capsule    9.957            7.137
+    Other (tea bag)    3.569
+    Gummy or Jelly     3.007            3.006
+    Lozenge              496
+    Unknown              183
+    Bar                   40
+
+`[read]` **Nach Toms Regel: Powder, Liquid, Bar, Gummy =
+47.655 von 121.959 (39 %) koennen in eine Mahlzeit.**
+
+`[cmd]` **Und `Bar` hat nur 40 Produkte** ? **die
+Proteinriegel sind offenbar nicht als `Bar` erfasst. MISS,
+wo sie stehen.**
+
+`[read]` **`Other (e.g. tea bag)` und `Lozenge` sind
+ungeklaert** ? **Tee zieht man auf, eine Lutschtablette
+schluckt man nicht.**
+
