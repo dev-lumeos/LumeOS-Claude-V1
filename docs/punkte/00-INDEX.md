@@ -5,11 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 236 |
-| `laufend_codex` | 2 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 491 |
-| **gesamt** | **730** |
+| `todos` | 237 |
+| `erledigt` | 494 |
+| **gesamt** | **731** |
 
 ## medical — 49
 
@@ -309,7 +307,7 @@
 | `G-426` | feature | hoch | [die Supplementspalte in Nutrients](todos/nutrition-g-0426-die-supplementspalte-in-nutrients.md) | offen | — | — |
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `G-475` | feature | hoch | [Supplemente in die Mahlzeit, in der Oberflaeche](erledigt/nutrition-g-0475-supplement-in-mahlzeit-ui.md) | erledigt | — | C-518, G-478 |
-| `G-478` | feature | hoch | [die Kacheln fuer Supplemente in der Mahlzeit](laufend_claudecode/nutrition-g-0478-kacheln-supplement-mahlzeit.md) | laeuft (claudecode) | — | — |
+| `G-478` | feature | hoch | [die Kacheln fuer Supplemente in der Mahlzeit](erledigt/nutrition-g-0478-kacheln-supplement-mahlzeit.md) | erledigt | — | G-479 |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 108
@@ -380,9 +378,9 @@
 | `C-510` | fehler | hoch | [das Mapping ist buchstabengenau](erledigt/supplements-c-0510-mapping-buchstabengenau.md) | erledigt | — | C-516 |
 | `C-511` | feature | hoch | [Supplement-Vorlieben, mit Lieblingsmarken](erledigt/supplements-c-0511-lieblingsmarken.md) | erledigt | — | — |
 | `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](erledigt/supplements-c-0512-naehrwerte-werden-summiert.md) | erledigt | — | C-513, G-472 |
-| `C-514` | fehler | hoch | [vier Stoffe stehen im Katalog und sind offen](laufend_codex/supplements-c-0514-vier-stoffe-offen.md) | laeuft (codex) | — | — |
+| `C-514` | fehler | hoch | [vier Stoffe stehen im Katalog und sind offen](erledigt/supplements-c-0514-vier-stoffe-offen.md) | erledigt | — | — |
 | `C-515` | feature | hoch | [die Wirkstoffe kuratieren](erledigt/supplements-c-0515-wirkstoffe-kuratieren.md) | erledigt | — | — |
-| `C-516` | fehler | hoch | [Naehrwerte ohne Mapping](laufend_codex/supplements-c-0516-naehrwerte-ohne-zielspalte.md) | laeuft (codex) | — | — |
+| `C-516` | fehler | hoch | [Naehrwerte ohne Mapping](erledigt/supplements-c-0516-naehrwerte-ohne-zielspalte.md) | erledigt | — | — |
 | `C-518` | befund | hoch | [keine Bruecke zwischen Produkt und Substanz](todos/supplements-c-0518-keine-produkt-substanz-bruecke.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
@@ -594,7 +592,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 184
+## quer — 185
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -782,6 +780,7 @@
 | `G-474` | fehler | hoch | [der Absturz auf der Anstrichebene](erledigt/quer-g-0474-anstrichebene.md) | erledigt | — | G-476, G-477 |
 | `G-476` | fehler | hoch | [der Produktionsbau nimmt den Dev-Server mit](erledigt/quer-g-0476-dev-server-mitgenommen.md) | erledigt | — | — |
 | `G-477` | fehler | mittel | [Playwright ist anderthalb Jahre alt](todos/quer-g-0477-playwright-anheben.md) | offen | — | — |
+| `G-479` | fehler | mittel | [zwei Klassen mit 2,88:1 in packages/ui](todos/quer-g-0479-kontraste-in-packages-ui.md) | offen | — | — |
 
 ## buddy — 1
 
