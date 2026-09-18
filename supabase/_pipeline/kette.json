@@ -2354,6 +2354,36 @@
         "510_supplier_product_nutrient_exact_mappings",
         "502_allergen_aliases_daten"
       ]
+    },
+    {
+      "id": "516_additional_supplier_product_nutrients_schema",
+      "path": "supabase/migrations/20260918113000_c516_additional_supplier_product_nutrients.sql",
+      "kind": "sql",
+      "creates": "C-516: vorhandene nutrition.nutrient_defs ausserhalb der 31 breiten Altspalten werden portionsgenau in nutrients gefuehrt und als Mahlzeit-Snapshot bewahrt.",
+      "depends_on": [
+        "512_serving_size_provenance",
+        "513_supplement_product_meals"
+      ]
+    },
+    {
+      "id": "516_additional_supplier_product_nutrients_daten",
+      "path": "supabase/_pipeline/13_supplements/516_supplier_product_additional_nutrients.sql",
+      "kind": "sql",
+      "creates": "C-516: 14 exakte DSLD-Schreibweisen fuer Cholesterin, einfach/mehrfach ungesaettigte Fette und loesliche/unloesliche Ballaststoffe auf vorhandene nutrition-Codes abbilden.",
+      "depends_on": [
+        "516_additional_supplier_product_nutrients_schema",
+        "510_supplier_product_nutrient_exact_mappings"
+      ]
+    },
+    {
+      "id": "514_existing_catalog_exact_backlinks",
+      "path": "supabase/_pipeline/13_supplements/514_existing_catalog_exact_backlinks.sql",
+      "kind": "sql",
+      "creates": "C-514: eindeutiges Glycerin auf das vorhandene Glycerol-Katalogziel rueckverknuepfen; mehrdeutiges Gelatin bleibt offen.",
+      "depends_on": [
+        "515_curated_dsld_active_substances",
+        "505_supplier_product_wirkstoff_links"
+      ]
     }
   ]
 }

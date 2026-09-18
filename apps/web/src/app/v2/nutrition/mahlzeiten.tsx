@@ -74,6 +74,15 @@ type Position = {
   frozen_at?: string | null
   /** G-223: `updated_at` des Lebensmittels dahinter. */
   food_updated_at?: string | null
+  // ══ G-478: der Supplementposten ═══════════════════════════════
+  //
+  // `[cmd]` **Bei `food_source = 'supplement'` ist `amount_g` NULL**
+  // (CHECK, gemessen) — **Gramm sind dort die falsche Einheit.**
+  // `[read]` **Die Zeile zeigt stattdessen die Portion.**
+  food_source?: string | null
+  supplement_serving_size?: string | null
+  supplement_serving_quantity?: number | null
+  supplement_nutrient_status?: string | null
 }
 
 type Mahlzeit = {
@@ -790,6 +799,26 @@ function MahlzeitKarte({
     { g: 0, kcal: 0, p: 0, k: 0, f: 0 },
   )
 
+  // ── A2: der Anteil der Supplemente, SEPARAT ──────────────────────
+  //
+  // `[cmd]` **Gemessen am 2026-09-18:** `nutrition.daily_summary`
+  // zaehlt Supplemente bereits mit — 2.127,53 kcal in der Sicht,
+  // 2.127,53 kcal ueber die Posten, davon 120 aus dem Whey.
+  // `[read]` **Die Tagessumme ist also richtig; was fehlte, war die
+  // Auskunft, WIEVIEL davon nicht aus Lebensmitteln kam.**
+  //
+  // `[read]` **Deshalb keine zweite Summe, sondern eine Zerlegung** —
+  // eine Zahl neben der Gesamtzahl erklaert nicht, ob sie darin
+  // enthalten ist oder dazukommt.
+  const supp = items.reduce(
+    (a, it) => it.food_source !== 'supplement' ? a : {
+      anzahl: a.anzahl + 1,
+      kcal: a.kcal + (it.enercc ?? 0),
+      p: a.p + (it.prot625 ?? 0),
+    },
+    { anzahl: 0, kcal: 0, p: 0 },
+  )
+
   /** Mahlzeit anlegen, falls es sie noch nicht gibt. Liefert die id. */
   async function sicherstellen(): Promise<string> {
     if (mahlzeit) return mahlzeit.id
@@ -944,6 +973,15 @@ function MahlzeitKarte({
             ))}
           </span>
         )}
+        {/* A2: der Supplement-Anteil, neben der Summe und als Teil
+            davon lesbar — „davon" sagt genau das. */}
+        {supp.anzahl > 0 && (
+          <span data-probe="kopf-supplement-anteil"
+                className="v2-supp-anteil v2-num">
+            davon {z(supp.kcal)} kcal · {z(supp.p)} P aus{' '}
+            {supp.anzahl === 1 ? '1 Supplement' : `${supp.anzahl} Supplementen`}
+          </span>
+        )}
         <button
           type="button" className="v2-icon-btn" aria-label="Position hinzufuegen"
           onClick={e => { e.stopPropagation(); setSucheAuf(true) }}
@@ -1005,6 +1043,19 @@ function MahlzeitKarte({
                         {it.portion_quantity ?? 1} × {it.portion_name}
                       </span>
                     )}
+                    {/* `[read]` **A2: die Marke sagt, dass es kein
+                        Lebensmittel ist** — sonst saehe „1 ×" aus wie
+                        eine fehlende Menge. */}
+                    {it.food_source === 'supplement' && (
+                      <span className="v2-supp-posten-marke"
+                            style={{ marginLeft: 6 }}
+                            data-probe="supplement-marke">
+                        Supplement
+                        {it.supplement_serving_size
+                          ? ` · ${it.supplement_serving_size}`
+                          : ' · ohne Nährwerte'}
+                      </span>
+                    )}
                     {/* ══ G-223: der Knopf, wenn der Stand ueberholt ist ══
                         `[cmd]` **SPEC_10:** der Knopf erscheint, wenn die
                         Lebensmitteldaten neuer sind als der Schnappschuss.
@@ -1024,8 +1075,24 @@ function MahlzeitKarte({
                       </button>
                     )}
                   </td>
+                  {/* ══ G-478/A2: Supplemente stehen erkennbar da ══
+                      `[cmd]` **`amount_g` ist bei Supplementen NULL**
+                      — `z(null)` schriebe eine leere Zelle mit einem
+                      `g` daneben. `[read]` **Stattdessen die
+                      Anzahl der Portionen.** */}
                   <td className="v2-muted v2-num" style={{ width: 44, textAlign: 'right' }}>
-                    {z(it.amount_g)}<span className="v2-dim" style={{ fontSize: 10, marginLeft: 2 }}>g</span>
+                    {it.food_source === 'supplement'
+                      ? (
+                        <span data-probe="supplement-menge" style={{ fontSize: 10 }}>
+                          {it.supplement_serving_quantity ?? 1} ×
+                        </span>
+                        )
+                      : (
+                        <>
+                          {z(it.amount_g)}
+                          <span className="v2-dim" style={{ fontSize: 10, marginLeft: 2 }}>g</span>
+                        </>
+                        )}
                   </td>
                   <td className="v2-num" style={{ width: 58, textAlign: 'right' }}>
                     {z(it.enercc)}<span className="v2-dim" style={{ fontSize: 10, marginLeft: 2 }}>kcal</span>

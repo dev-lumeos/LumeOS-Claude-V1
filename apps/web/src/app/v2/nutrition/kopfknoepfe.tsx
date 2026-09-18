@@ -42,6 +42,17 @@ export function Kopfknoepfe({ datum, kinder }: {
         <Icon name="zap" className="v2-ic v2-ic-sm" /> Quick-add
       </button>
 
+      {/* ══ G-478: Supplemente in die Mahlzeit ═══════════════════
+          **Tom:** *„dass ich in nutrition diary auch supplements wie
+          whey hinzufuegen kann"* — `[read]` **neben Quick-Add, weil
+          beides dasselbe tut: einen Posten ohne Katalogsuche
+          anlegen.** */}
+      <button type="button" className="v2-btn"
+              data-probe="knopf-supplement"
+              onClick={() => setModal('supplement')}>
+        <Icon name="zap" className="v2-ic v2-ic-sm" /> Supplement
+      </button>
+
       <InEntwicklungKnopf
         titel="Recalc macros"
         grund="Die Zielwerte werden im Profil berechnet und gesetzt — ein Weg von hier aus fehlt."

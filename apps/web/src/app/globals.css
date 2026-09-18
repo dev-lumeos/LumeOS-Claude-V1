@@ -1244,6 +1244,125 @@
   line-height: 1.4;
 }
 
+/* ═══ G-478: Supplemente in der Mahlzeit ═══════════════════════════
+ *
+ * Tom: „dass ich in nutrition diary auch supplements wie whey
+ * hinzufuegen kann."
+ *
+ * [read] Dieselbe Bauform wie die Allergievorschlaege (G-459) — eine
+ * zweite Erfindung fuer dieselbe Sache waere Drift. */
+.v2-supp-trefferliste {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  max-height: 240px;
+  overflow-y: auto;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px color-mix(in oklch, var(--bg) 72%, transparent);
+  display: flex;
+  flex-direction: column;
+}
+
+.v2-supp-treffer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 10px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  cursor: pointer;
+}
+
+.v2-supp-treffer:last-child { border-bottom: none; }
+.v2-supp-treffer:hover,
+.v2-supp-treffer:focus-visible { background: var(--surface-hover); }
+
+.v2-supp-treffer-name {
+  font-size: 12.5px;
+  color: var(--fg);
+}
+
+/* ── A2: der Supplement-Anteil an der Mahlzeitensumme ────────────
+ *
+ * `[cmd]` **Gemessen: `nutrition.daily_summary` zaehlt Supplemente
+ * schon mit** (2.127,53 kcal in Sicht wie Posten, davon 120 aus dem
+ * Whey). `[read]` **Die Zeile korrigiert also nichts — sie zerlegt.**
+ *
+ * `[read]` **`--fg-muted` (9,19:1), nicht `--fg-dim` (2,88:1).** */
+.v2-supp-anteil {
+  font-size: 11px;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+
+/* ── A6: die geerbten Blassklassen im Modal ──────────────────────
+ *
+ * `[cmd]` **Gemessen mit `_g478-kontrast.mjs`: `.v2-dim` und
+ * `.v2-eyebrow` kommen auf 2,88:1** — beide fallen unter WCAG AA
+ * (4,5:1 fuer kleine Schrift). `[read]` **Sie stammen aus
+ * `packages/ui/src/styles/v2.css` und werden 1.565 mal in `v2`
+ * benutzt** — dort zu greifen hiesse, jede App zu aendern; das ist
+ * nicht dieser Auftrag (A7: vier Module unveraendert).
+ *
+ * `[read]` **Deshalb hier, auf die eigene Flaeche begrenzt** — wie es
+ * `supplements.css:1910` fuer den Produktfilter schon tut.
+ * `[cmd]` **`--fg-muted` misst 9,19:1.** */
+[data-probe='supplement-add'] .v2-dim,
+[data-probe='supplement-add'] .v2-eyebrow {
+  color: var(--fg-muted);
+}
+
+/* [read] --fg-muted, nicht --fg-dim: --fg-dim misst 2,88:1 und faellt
+ * unter WCAG AA (gemessen in G-453). */
+.v2-supp-treffer-rand {
+  font-size: 10.5px;
+  color: var(--fg-muted);
+}
+
+/* ── A5: das Produkt ohne Naehrwerte ─────────────────────────────
+ *
+ * [read] Kein Warnton — ein Produkt ohne hinterlegte Werte ist keine
+ * Fehleingabe, sondern eines mit weniger Auskunft. */
+.v2-supp-ohne-werte {
+  padding: 8px 10px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--fg-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.v2-supp-fehler {
+  padding: 8px 10px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--warn);
+  background: color-mix(in oklch, var(--warn) 8%, transparent);
+  border-radius: 8px;
+}
+
+/* ── A2: die Supplementzeile in der Mahlzeit und in der Bilanz ───
+ *
+ * [read] Sie muss sich vom Lebensmittel UNTERSCHEIDEN — sonst sieht
+ * „1 Portion" aus wie „1 Gramm". */
+.v2-supp-posten-marke {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px;
+  font-size: 9.5px;
+  color: var(--fg-muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
 .v2-allergie-liste {
   list-style: none;
   margin: 0 0 14px;

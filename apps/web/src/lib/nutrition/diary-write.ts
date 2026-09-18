@@ -91,7 +91,7 @@ export async function listOwnMealItems(mealId: string): Promise<StoredMealItem[]
     // Waechter aus G-348 prueft `/\.select\('[^']*food_source[^']*'\)/`
     // — **eine Verkettung ueber mehrere Zeilen macht ihn rot**, obwohl
     // die Felder mitkommen. Gemessen: `not ok 614`.
-    .select('id, meal_id, food_id, custom_food_id, food_source, food_name, amount_g, enercc, prot625, fat, cho, portion_name, portion_quantity, portion_amount_g, frozen_at, foods!left(updated_at)')
+    .select('id, meal_id, food_id, custom_food_id, food_source, food_name, amount_g, enercc, prot625, fat, cho, portion_name, portion_quantity, portion_amount_g, frozen_at, supplement_serving_size, supplement_serving_quantity, supplement_nutrient_status, foods!left(updated_at)')
     .eq('meal_id', mealId)
     .order('created_at', { ascending: true })
   if (error) {

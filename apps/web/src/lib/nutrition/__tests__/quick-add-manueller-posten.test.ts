@@ -201,10 +201,20 @@ test('G-340: die Route kennt die dritte art', () => {
   assert.match(r, /addManualItem\(geprueft\.data\)/,
     'die Route ruft den Schreibweg nicht')
 
-  // `[read]` **Die Fehlermeldung nennt alle drei** — sonst raet der
+  // `[read]` **Die Fehlermeldung nennt JEDE art** — sonst raet der
   // naechste Aufrufer.
-  assert.match(r, /"mahlzeit", "position" oder "manuell"/,
-    'die Fehlermeldung nennt die dritte art nicht')
+  //
+  // `[cmd]` **Geprueft wird, dass jede vorkommt, nicht ein fester
+  // Satz.** `[read]` **G-478 hing die vierte an (`supplement`), und
+  // die Zusicherung fiel** — nicht weil die Meldung schlechter wurde,
+  // sondern weil sie die Wortfolge `"mahlzeit", "position" oder
+  // "manuell"` woertlich verlangte. **Eine Liste, die waechst, darf
+  // nicht an ihrer Reihenfolge gemessen werden.**
+  const meldung = (r.match(/'art muss[^']*'/) ?? [''])[0]
+  for (const art of ['mahlzeit', 'position', 'manuell', 'supplement']) {
+    assert.ok(meldung.includes(`"${art}"`),
+      `die Fehlermeldung nennt die art "${art}" nicht: ${meldung}`)
+  }
 })
 
 test('G-340: der Schreibweg friert NICHT ein', () => {

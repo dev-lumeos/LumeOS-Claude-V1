@@ -385,7 +385,14 @@ export type StoredMealItem = {
   food_source: string
   custom_food_id: string | null
   food_name: string
-  amount_g: number
+  /**
+   * ══ G-478: bei Supplementen NULL ══════════════════════════════
+   *
+   * `[cmd]` **`meal_items_amount_g_check` VERLANGT NULL**, wenn
+   * `food_source = 'supplement'` — **Gramm sind dort die falsche
+   * Einheit**, ein Scoop ist eine Portion.
+   */
+  amount_g: number | null
   enercc: number | null
   prot625: number | null
   fat: number | null
@@ -394,6 +401,10 @@ export type StoredMealItem = {
   portion_name: string | null
   portion_quantity: number | null
   portion_amount_g: number | null
+  /** G-478: die Portion des Supplements, z. B. `31 Gram(s)`. */
+  supplement_serving_size?: string | null
+  supplement_serving_quantity?: number | null
+  supplement_nutrient_status?: string | null
   /**
    * G-223: wann die Naehrwerte eingefroren wurden.
    *
@@ -492,8 +503,19 @@ export function parseStoredMealItems(rows: unknown): StoredMealItem[] {
     ) {
       return []
     }
+    // ══ G-478: eine NULL-Menge ist kein Grund zu verwerfen ═══════
+    //
+    // `[cmd]` **Hier stand `if (amount === null) return []`** — und
+    // weil `amount_g` bei Supplementen NULL sein MUSS (CHECK), waere
+    // JEDER Supplementposten still aus dem Tagebuch gefallen.
+    // **Kein Fehler, keine Meldung, nur nichts** — die
+    // gefaehrlichste Klasse (A-60).
+    //
+    // `[read]` **Verworfen wird nur noch, was WEDER eine Menge NOCH
+    // ein Supplement ist.**
     const amount = asNumberOrNull(record.amount_g)
-    if (amount === null) return []
+    const istSupplement = record.food_source === 'supplement'
+    if (amount === null && !istSupplement) return []
     return [
       {
         id: record.id,
@@ -527,6 +549,16 @@ export function parseStoredMealItems(rows: unknown): StoredMealItem[] {
         portion_name: typeof record.portion_name === 'string' ? record.portion_name : null,
         portion_quantity: asNumberOrNull(record.portion_quantity),
         portion_amount_g: asNumberOrNull(record.portion_amount_g),
+        // G-478: der Supplementposten — die Zeile zeigt die Portion
+        // statt der Gramm.
+        supplement_serving_size:
+          typeof record.supplement_serving_size === 'string'
+            ? record.supplement_serving_size : null,
+        supplement_serving_quantity:
+          asNumberOrNull(record.supplement_serving_quantity),
+        supplement_nutrient_status:
+          typeof record.supplement_nutrient_status === 'string'
+            ? record.supplement_nutrient_status : null,
         // ══ G-223: der Schnappschuss und der Bestand ════════════════
         //
         // `[read]` **`frozen_at` kommt aus der Zeile**, `updated_at`

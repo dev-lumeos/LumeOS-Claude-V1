@@ -12,6 +12,11 @@
 // diary-model.ts — diese Datei uebersetzt nur HTTP.
 import { NextRequest, NextResponse } from 'next/server'
 
+// G-478: der Supplementposten — Pruefung serverfrei, Schreibweg
+// serverseitig.
+import { pruefePosten } from '../../../../lib/nutrition/supplement-posten-lage'
+import { legeSupplementPostenAn } from '../../../../lib/nutrition/supplement-posten-read'
+
 import {
   DiaryWriteError,
   httpStatusForDiaryError,
@@ -165,7 +170,45 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  return ungueltig('art muss "mahlzeit", "position" oder "manuell" sein.')
+  // ══ G-478: der Supplementposten ══════════════════════════════
+  //
+  // **Tom, 2026-09-18:** *„wann kommt eigentlich das todo, dass ich
+  // in nutrition diary auch supplements wie whey hinzufuegen kann?"*
+  //
+  // `[read]` **Eine vierte `art`, kein vierter Endpunkt** — dieselbe
+  // Begruendung wie bei `manuell` (G-340).
+  //
+  // `[cmd]` **Der Unterschied: die Naehrwerte kommen NICHT aus der
+  // Anfrage.** Der Leseweg holt sie zur gewaehlten Portion aus
+  // `supplier_product_nutrient_serving_options` — **der Browser
+  // koennte sie sonst frei erfinden, und der Trigger wiese die
+  // Zeile ab** (C-513).
+  if (art === 'supplement') {
+    const o = roh as Record<string, unknown>
+    const posten = {
+      meal_id: typeof o.meal_id === 'string' ? o.meal_id : '',
+      product_id: typeof o.product_id === 'string' ? o.product_id : '',
+      serving_size: typeof o.serving_size === 'string' ? o.serving_size : null,
+      serving_quantity: typeof o.serving_quantity === 'number'
+        ? o.serving_quantity : Number(o.serving_quantity),
+      nutrient_status: o.nutrient_status === 'no_nutrients_available'
+        ? 'no_nutrients_available' as const : 'available' as const,
+      food_name: typeof o.food_name === 'string' ? o.food_name : '',
+    }
+    // `[read]` **Dieselbe Pruefung wie die Oberflaeche** — der Nutzer
+    // soll denselben Satz sehen, egal wo er haengenbleibt.
+    const fehler = pruefePosten(posten)
+    if (fehler) return ungueltig(fehler)
+    const a = await legeSupplementPostenAn(posten)
+    if (!a.ok) {
+      return NextResponse.json({ error: a.fehler, code: 'WRITE_FAILED' },
+        { status: 400 })
+    }
+    return NextResponse.json({ id: a.id })
+  }
+
+  return ungueltig(
+    'art muss "mahlzeit", "position", "manuell" oder "supplement" sein.')
 }
 
 /** Menge einer Position aendern — die Naehrwerte werden neu eingefroren. */
