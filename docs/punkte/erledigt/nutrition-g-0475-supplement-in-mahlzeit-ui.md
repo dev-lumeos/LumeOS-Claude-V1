@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-513
 entscheidung: null
+erledigt: 2026-09-08
+commit: e21a7a13
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/ansicht.tsx
@@ -260,6 +262,77 @@ vermuten.**
 `[read]` **Ein Neustart ist NICHT noetig** ? nur
 `apps/web/src`.
 
-## Abnahme
+## Teilabnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Unterbau ja, Oberflaeche nein.**
+
+`[cmd]` **Drei neue Dateien:** `supplement-posten-read.ts`,
+`supplement-posten-lage.ts`,
+`__tests__/g475-supplement-posten.test.ts`.
+
+`[cmd]` **Proben: web 1857/1857, coach 65/65.**
+
+### Zwei meiner Auftragspraemissen waren falsch
+
+**1** ? `[cmd]` **Selbst nachgemessen: 0 Zeilen mit
+`food_source=supplement`.**
+
+> *,,Toms Fruehstueck steht nicht in der Datenbank. Die 557,5
+kcal sind eine RECHNUNG, kein erfasster Tag."*
+
+`[read]` **Ich habe C-513s Rechenbeispiel als erfasste Daten
+in den Auftrag geschrieben.**
+
+**2** ? **Der Trigger rechnet nicht, er PRUEFT.**
+
+> *,,Mein erster Versuch schickte nur Produkt, Portion und
+Anzahl und fiel: *snapshot differs from its evidenced product
+serving*. Der Aufrufer muss den GANZEN Schnappschuss schreiben
+? neun Makros plus 22 Mikronaehrstoffe."*
+
+`[read]` **Er hat es durch einen Einfuegeversuch gefunden, nicht
+durch Lesen.**
+
+### Was belegt ist, mit ROLLBACK
+
+    1 x 31 Gram(s)   120 kcal, 24 g   genau Toms Etikett
+    2 x 31 Gram(s)   240 kcal, 48 g
+
+`[read]` **Nichts steht in der Datenbank** ? **beide Laeufe
+zurueckgerollt.**
+
+### A5 ist gebaut, und der Satz ist richtig
+
+> *,,Fuer dieses Produkt sind keine Naehrwerte hinterlegt. Es
+wird erfasst, zaehlt aber nicht in die Tagesbilanz."*
+
+`[read]` **Kein *,,0 kcal"*, kein Strich** ? **derselbe Gedanke
+wie bei den Luecken in C-500 und C-512.**
+
+### A6 ist nicht baubar, und das ist ein Befund
+
+> *,,Die Bruecke, die der Auftrag voraussetzt, gibt es nicht ?
+`intake_logs` -> `stack_items.supplement_id` fuehrt SUBSTANZEN,
+das Tagebuch fuehrt PRODUKTE, und `supplier_products` hat keine
+Substanzspalte. *Dasselbe Produkt* ist nicht entscheidbar;
+entscheidbar ist nur der Name."*
+
+`[cmd]` **Selbst nachgemessen: `supplier_products` hat keine
+Spalte mit `supplement` oder `substan`.**
+
+`[read]` **C-513s A7 hat eine Nachfragefunktion gebaut, die
+auf `supplier_product_id` vergleicht** ? **im Stack steht
+aber keine.**
+
+`[cmd]` **Als C-518.**
+
+### Und ein fremder Waechter, richtig behandelt
+
+> *,,G-138 verlangt, dass nur EINE Datei `intake_logs`
+beruehrt. Statt ihn aufzuweichen, ist die Lesestelle nach
+`stack-write.ts` gezogen ? 11/11 wieder gruen."*
+
+`[read]` **Die Regel eingehalten, nicht die Regel geaendert.**
+
+**Teilabnahme. Der Unterbau steht, die Oberflaeche fehlt.**
+

@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 235 |
+| `todos` | 236 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 490 |
-| **gesamt** | **728** |
+| `erledigt` | 491 |
+| **gesamt** | **730** |
 
 ## medical — 49
 
@@ -65,7 +65,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 241
+## nutrition — 242
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -308,12 +308,13 @@
 | `G-419` | feature | niedrig | [der Insights-Block ist abgenommen](erledigt/nutrition-g-0419-insights-block-abgenommen.md) | erledigt | — | — |
 | `G-426` | feature | hoch | [die Supplementspalte in Nutrients](todos/nutrition-g-0426-die-supplementspalte-in-nutrients.md) | offen | — | — |
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
-| `G-475` | feature | hoch | [Supplemente in die Mahlzeit, in der Oberflaeche](laufend_claudecode/nutrition-g-0475-supplement-in-mahlzeit-ui.md) | laeuft (claudecode) | — | — |
+| `G-475` | feature | hoch | [Supplemente in die Mahlzeit, in der Oberflaeche](erledigt/nutrition-g-0475-supplement-in-mahlzeit-ui.md) | erledigt | — | C-518, G-478 |
+| `G-478` | feature | hoch | [die Kacheln fuer Supplemente in der Mahlzeit](laufend_claudecode/nutrition-g-0478-kacheln-supplement-mahlzeit.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 107
+## supplements — 108
 
-### beauftragbar — 106
+### beauftragbar — 107
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -382,6 +383,7 @@
 | `C-514` | fehler | hoch | [vier Stoffe stehen im Katalog und sind offen](laufend_codex/supplements-c-0514-vier-stoffe-offen.md) | laeuft (codex) | — | — |
 | `C-515` | feature | hoch | [die Wirkstoffe kuratieren](erledigt/supplements-c-0515-wirkstoffe-kuratieren.md) | erledigt | — | — |
 | `C-516` | fehler | hoch | [Naehrwerte ohne Mapping](laufend_codex/supplements-c-0516-naehrwerte-ohne-zielspalte.md) | laeuft (codex) | — | — |
+| `C-518` | befund | hoch | [keine Bruecke zwischen Produkt und Substanz](todos/supplements-c-0518-keine-produkt-substanz-bruecke.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
