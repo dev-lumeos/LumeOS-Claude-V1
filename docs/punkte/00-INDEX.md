@@ -5,9 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 237 |
+| `todos` | 236 |
+| `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 488 |
-| **gesamt** | **725** |
+| **gesamt** | **726** |
 
 ## medical — 49
 
@@ -309,9 +311,9 @@
 | `G-475` | feature | hoch | [Supplemente in die Mahlzeit, in der Oberflaeche](todos/nutrition-g-0475-supplement-in-mahlzeit-ui.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 105
+## supplements — 106
 
-### beauftragbar — 104
+### beauftragbar — 105
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -373,11 +375,12 @@
 | `C-500` | feature | mittel | [die Vitamin-E-Form herausfinden](erledigt/supplements-c-0500-vitamin-e-form.md) | erledigt | — | — |
 | `C-504` | fehler | hoch | [die Filter gehoeren in die Datenbank](erledigt/supplements-c-0504-filter-in-die-datenbank.md) | erledigt | — | C-511, G-467 |
 | `C-505` | befund | hoch | [die Mehrheit der Zutaten ist nicht verknuepft](erledigt/supplements-c-0505-zutaten-nicht-verknuepft.md) | erledigt | — | C-509, C-510 |
-| `C-509` | befund | hoch | [der Substanzkatalog ist zu klein](erledigt/supplements-c-0509-substanzkatalog-zu-klein.md) | erledigt | — | C-514 |
+| `C-509` | befund | hoch | [der Substanzkatalog ist zu klein](erledigt/supplements-c-0509-substanzkatalog-zu-klein.md) | erledigt | — | C-514, C-515 |
 | `C-510` | fehler | hoch | [das Mapping ist buchstabengenau](erledigt/supplements-c-0510-mapping-buchstabengenau.md) | erledigt | — | — |
 | `C-511` | feature | hoch | [Supplement-Vorlieben, mit Lieblingsmarken](erledigt/supplements-c-0511-lieblingsmarken.md) | erledigt | — | — |
 | `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](erledigt/supplements-c-0512-naehrwerte-werden-summiert.md) | erledigt | — | C-513, G-472 |
 | `C-514` | fehler | hoch | [vier Stoffe stehen im Katalog und sind offen](todos/supplements-c-0514-vier-stoffe-offen.md) | offen | — | — |
+| `C-515` | feature | hoch | [die Wirkstoffe kuratieren](laufend_codex/supplements-c-0515-wirkstoffe-kuratieren.md) | laeuft (codex) | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -773,7 +776,7 @@
 | `G-471` | fehler | hoch | [der Browserreiter stuerzt im Produktionsbau ab](erledigt/quer-g-0471-browserreiter-stuerzt-ab.md) | erledigt | — | G-473 |
 | `G-473` | fehler | hoch | [der Absturzpunkt im unverkleinerten Code](erledigt/quer-g-0473-absturzpunkt.md) | erledigt | — | G-474 |
 | `G-474` | fehler | hoch | [der Absturz auf der Anstrichebene](erledigt/quer-g-0474-anstrichebene.md) | erledigt | — | G-476, G-477 |
-| `G-476` | fehler | hoch | [der Produktionsbau nimmt den Dev-Server mit](todos/quer-g-0476-dev-server-mitgenommen.md) | offen | — | — |
+| `G-476` | fehler | hoch | [der Produktionsbau nimmt den Dev-Server mit](laufend_claudecode/quer-g-0476-dev-server-mitgenommen.md) | laeuft (claudecode) | — | — |
 | `G-477` | fehler | mittel | [Playwright ist anderthalb Jahre alt](todos/quer-g-0477-playwright-anheben.md) | offen | — | — |
 
 ## buddy — 1
