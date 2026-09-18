@@ -371,3 +371,16 @@ dann TOT.**
 `[read]` **Und meine Abnahme hat die falsche Tabelle
 uebernommen, ohne zu fragen, wie sie zustande kam.**
 
+## KEIN Anwendungsfehler ? G-474, 2026-09-08
+
+`[cmd]` **Die Ursache war das MESSWERKZEUG:**
+**Playwright 1.41.2 bringt Chromium 121 von Anfang 2024.**
+
+`[cmd]` **Chrome 150 und Edge 150 sterben NICHT.**
+
+`[read]` **Der hier beschriebene Absturz betrifft keinen
+Nutzer** ? **er betrifft einen Browser, den niemand hat.**
+
+`[read]` **Und meine Auftraege haben nie gefragt, WOMIT
+gemessen wird.**
+

@@ -10,7 +10,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-09-17
 erledigt: 2026-09-08
-commit: OFFEN
+commit: 43654699
 beruehrt:
   tabellen: [supplements.supplements]
 zahlen:

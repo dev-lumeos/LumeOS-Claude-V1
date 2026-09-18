@@ -9,6 +9,8 @@ kind_von: G-473
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 43654699
 beruehrt:
   dateien:
     - apps/web/next.config.js
@@ -271,5 +273,69 @@ Anwendungscode geaendert.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Die Anwendung war nie kaputt.**
+
+> *,,Chromium 121 stirbt, Chrome 150 und Edge 150 nicht."*
+
+`[cmd]` **Playwright 1.41.2 bringt Chromium 121 von Anfang
+2024** ? **anderthalb Jahre alt.**
+
+`[cmd]` **`/v2/dashboard` zweimal in Chrome 150: 200/200,
+77.031 Zeichen, 16 Kacheln, keine Fehler.**
+
+### Die Belegkette, fuenf Messungen in einem Lauf
+
+    unveraendert                        stirbt
+    CSS blockiert                       lebt
+    CSS abgefangen, unveraendert
+      durchgereicht                     lebt
+    Cache aus                           lebt
+    nur Network.enable                  stirbt
+
+> *,,Zeile 3 war der Schluessel ? DIESELBEN BYTES, nur nicht
+aus dem Zwischenspeicher. Zeile 5 schliesst das Messwerkzeug
+als Ursache aus."*
+
+`[read]` **Eine Halbierung, die den Unterschied auf den
+Zwischenspeicher eingrenzt, ohne die Bytes zu aendern.**
+
+### Und A2 war eine Falle
+
+> *,,`--single-process`: scheinbar ja, in Wahrheit nein ? das
+Ueberleben war keins: der GANZE Browser stirbt statt nur des
+Reiters."*
+
+`[read]` **Die Probe meldete Erfolg, weil sie den Reiter
+pruefte und der Browser mitstarb.**
+
+### Nichts behoben, und das ist die Leistung
+
+> *,,Eine Umgehung ? etwa `immutable` aus den Kopfzeilen ?
+haette die Auslieferung fuer ALLE Nutzer verschlechtert, um
+einen Fehler in einem Browser zu umgehen, den NIEMAND hat."*
+
+`[cmd]` **Vier Auftraege, achtzehn ausgeschlossene
+Verdaechtige** ? **und das Messwerkzeug war die Ursache.**
+
+`[read]` **Meine Auftraege haben nie gefragt, WOMIT gemessen
+wird** ? **G-471, G-473, G-474 alle drei nicht.**
+
+### Damit sind zwei Punkte als Browserfehler zu markieren
+
+`[cmd]` **G-471 und G-473 sind KEINE Anwendungsfehler.**
+
+### Und mein Hinweis ist eingebaut
+
+> *,,`_g474-anstrich.mjs` startet den Produktionsbau selbst und
+sagt im Klartext, wenn der Bau fehlt ? statt `?` zu melden."*
+
+### Ein Befund fuer Tom
+
+`[cmd]` **`3200` horcht nicht mehr, `3220` laeuft.**
+
+`[read]` **Der Produktionsbau-Lauf hat den Dev-Server
+mitgenommen** ? **als G-476.**
+
+**Abgenommen.**
+
 

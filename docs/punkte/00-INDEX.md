@@ -5,10 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 235 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 487 |
-| **gesamt** | **723** |
+| `todos` | 237 |
+| `erledigt` | 488 |
+| **gesamt** | **725** |
 
 ## medical — 49
 
@@ -589,7 +588,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 181
+## quer — 183
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -773,7 +772,9 @@
 | `G-470` | fehler | hoch | [der Produktionsbau ist nicht anmeldefaehig](erledigt/quer-g-0470-produktionsbau-nicht-anmeldefaehig.md) | erledigt | — | G-471 |
 | `G-471` | fehler | hoch | [der Browserreiter stuerzt im Produktionsbau ab](erledigt/quer-g-0471-browserreiter-stuerzt-ab.md) | erledigt | — | G-473 |
 | `G-473` | fehler | hoch | [der Absturzpunkt im unverkleinerten Code](erledigt/quer-g-0473-absturzpunkt.md) | erledigt | — | G-474 |
-| `G-474` | fehler | hoch | [der Absturz auf der Anstrichebene](laufend_claudecode/quer-g-0474-anstrichebene.md) | laeuft (claudecode) | — | — |
+| `G-474` | fehler | hoch | [der Absturz auf der Anstrichebene](erledigt/quer-g-0474-anstrichebene.md) | erledigt | — | G-476, G-477 |
+| `G-476` | fehler | hoch | [der Produktionsbau nimmt den Dev-Server mit](todos/quer-g-0476-dev-server-mitgenommen.md) | offen | — | — |
+| `G-477` | fehler | mittel | [Playwright ist anderthalb Jahre alt](todos/quer-g-0477-playwright-anheben.md) | offen | — | — |
 
 ## buddy — 1
 
