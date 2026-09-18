@@ -97,7 +97,12 @@ test('G-478/A2: der Anteil wird aus den Posten gezogen, nicht geschaetzt', () =>
 test('G-478/A5: der Satz ohne Naehrwerte hat genau eine Quelle', () => {
   const lage = lies(path.join('lib', 'nutrition', 'supplement-posten-lage.ts'))
   assert.match(lage, /OHNE_NAEHRWERTE_SATZ/)
-  const modal = lies(path.join('app', 'v2', 'nutrition', 'supplement-modal.tsx'))
+  // `[cmd]` **G-480: die Datei heisst jetzt anders.**
+  // `supplement-modal.tsx` ist entfernt — der Weg fuehrt ueber die
+  // EINE Suche (`module-nutrition.jsx:557`). `[read]` **Die
+  // Zusicherung selbst bleibt unveraendert**: der Satz wird
+  // IMPORTIERT, nicht abgeschrieben.
+  const modal = lies(path.join('app', 'v2', 'nutrition', 'food-such-modal.tsx'))
   assert.match(modal, /OHNE_NAEHRWERTE_SATZ/,
     'das Modal muss den Satz IMPORTIEREN — abgeschrieben altern zwei Fassungen auseinander')
   assert.doesNotMatch(modal, /keine N[äa]hrwerte hinterlegt/,

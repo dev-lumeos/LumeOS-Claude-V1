@@ -66,6 +66,23 @@ import {
   vorschauFuer, tagesLage, mengeAusPortion,
   type Portion, type Vorschau,
 } from '../../../lib/nutrition/menge-rechnen'
+// ══ G-480: die zweite Quelle ════════════════════════════════════════
+//
+// `[cmd]` **`module-nutrition.jsx:557` listet `Supplements` als
+// Filterpille DIESER Suche** — nicht als zweites Modal.
+// `[cmd]` **Und Zeile 581 zeigt die Quelle je Zeile:**
+// `<Pill>{f.src}</Pill>`.
+//
+// `[read]` **G-475/G-478 haben daneben gebaut, weil die Vorlage nicht
+// gelesen wurde** (E-83).
+import {
+  FILTER, FILTER_TEXT, QUELLE_TEXT, NUR_UNTERMISCHBAR_SATZ,
+  zeigt, type Filter, type Quelle,
+} from '../../../lib/nutrition/such-quellen-lage'
+import {
+  OHNE_NAEHRWERTE_SATZ, hatNaehrwerte,
+  type SupplementTreffer,
+} from '../../../lib/nutrition/supplement-posten-lage'
 
 // ══ G-323: zwei Kontexte, nicht einer mit leeren Feldern ════════════
 //
@@ -313,13 +330,34 @@ export function FoodAmountInput({
  * seinen Schreibweg kennt, ist an ihn gebunden.
  */
 export function FoodSuchModal({
-  kontext, onWaehlen, onClose,
+  kontext, onWaehlen, onClose, onSupplement,
 }: {
   kontext: SuchKontext
   /** Wird mit Lebensmittel und Menge gerufen; das Modal schreibt nicht. */
   onWaehlen: (food: NutritionFoodSearchRow, mengeG: number) => Promise<void>
   onClose: () => void
+  /**
+   * G-480: der Schreibweg fuer Supplemente — fehlt er, bleibt die
+   * Suche reine Lebensmittelsuche.
+   *
+   * `[cmd]` **Dieses Modal hat VIER Aufrufer** — Mahlzeit, Ghost,
+   * Planeintrag, Rezept. `[cmd]` **Nur die Mahlzeit kann Supplemente
+   * schreiben:** `meal_plan_entries` hat kein
+   * `supplement_product_id`, und `recipe_ingredients.food_source`
+   * erlaubt nur `bls` und `custom` (E-83).
+   *
+   * `[read]` **Deshalb wird die Quelle FREIGESCHALTET, nicht
+   * vorausgesetzt** — ein Aufrufer, der nicht schreiben kann, zeigt
+   * die Pille gar nicht erst.
+   */
+  onSupplement?: (treffer: SupplementTreffer, portion: string | null) => Promise<void>
 }) {
+  // `[read]` **Ohne Schreibweg keine Pille** — eine Filterpille, die
+  // zu einem Fehler fuehrt, waere schlimmer als keine.
+  const kannSupplement = typeof onSupplement === 'function'
+  const [filter, setFilter] = React.useState<Filter>('alle')
+  const [supps, setSupps] = React.useState<SupplementTreffer[]>([])
+  const [suppLaeuft, setSuppLaeuft] = React.useState(false)
   const [lage, setLage] = React.useState<SuchLage>(LEERE_LAGE)
   const [gewaehlt, setGewaehlt] = React.useState<NutritionFoodSearchRow | null>(null)
   const [portionen, setPortionen] = React.useState<Portion[]>([])
@@ -352,6 +390,58 @@ export function FoodSuchModal({
     window.addEventListener('keydown', auf)
     return () => window.removeEventListener('keydown', auf)
   }, [onClose])
+
+  // ══ G-480: die Supplemente, neben derselben Frage ═══════════════
+  //
+  // `[read]` **Dieselbe Schwelle wie die Lebensmittelsuche** (zwei
+  // Zeichen) **und dieselbe Entprellung** — sonst laufen zwei Listen
+  // zu verschiedenen Zeitpunkten ein und die Tabelle springt.
+  //
+  // `[cmd]` **`food_search` kennt keinen Quellenparameter, und
+  // `supabase/` gehoert Codex** (E-83) — **die Vereinigung gehoert
+  // deshalb hierher, ueber die Abfrage, nicht in eine neue
+  // Datenbankfunktion.**
+  React.useEffect(() => {
+    if (!kannSupplement) return
+    const q = lage.suche.trim()
+    if (q.length < 2 || !zeigt(filter, 'supplement')) { setSupps([]); return }
+    const ab = new AbortController()
+    setSuppLaeuft(true)
+    const t = setTimeout(() => {
+      fetch(`/api/nutrition/supplement-suche?q=${encodeURIComponent(q)}`,
+            { signal: ab.signal })
+        .then(a => a.ok ? a.json() : { treffer: [] })
+        .then(d => setSupps(Array.isArray(d?.treffer) ? d.treffer : []))
+        .catch(() => { /* Abbruch ist kein Fehler */ })
+        .finally(() => setSuppLaeuft(false))
+    }, 200)
+    return () => { clearTimeout(t); ab.abort() }
+  }, [lage.suche, filter, kannSupplement])
+
+  // `[read]` **Was tatsaechlich in der Tabelle steht** — der Filter
+  // wirkt am Anzeigeort, damit Umschalten nichts neu laedt.
+  const suppSichtbar = kannSupplement && zeigt(filter, 'supplement') ? supps : []
+  const [suppLaeuftSchreiben, setSuppLaeuftSchreiben] = React.useState(false)
+
+  /**
+   * G-480: ein Supplement waehlen.
+   *
+   * `[read]` **Die erste Portion, nicht ,,keine"** — wer eine Wahl
+   * braucht, trifft sie im Schreibweg. `[read]` **Das Modal schreibt
+   * nicht selbst** (wie bei Lebensmitteln auch).
+   */
+  async function waehleSupplement(t: SupplementTreffer) {
+    if (!onSupplement) return
+    setSuppLaeuftSchreiben(true)
+    setFehler(null)
+    try {
+      await onSupplement(t, t.portionen[0]?.serving_size ?? null)
+    } catch (e) {
+      setFehler(e instanceof Error ? e.message : String(e))
+    } finally {
+      setSuppLaeuftSchreiben(false)
+    }
+  }
 
   async function waehle(f: NutritionFoodSearchRow) {
     setGewaehlt(f)
@@ -406,7 +496,12 @@ export function FoodSuchModal({
               <span style={{ fontSize: 13, fontWeight: 600 }}>
                 {gewaehlt.name_display_de || gewaehlt.name_de}
               </span>
-              <Pill>BLS</Pill>
+              {/* `[read]` **Schritt 2 wird nur fuer Lebensmittel
+                  erreicht** — ein Supplement geht ohne Mengenfeld
+                  direkt in die Mahlzeit. `[read]` **Trotzdem aus der
+                  einen Liste**, damit die Schreibweise nicht an zwei
+                  Orten gepflegt werden muss. */}
+              <Pill>{QUELLE_TEXT.bls}</Pill>
               <span className="v2-muted" style={{ fontSize: 10.5 }}>
                 {gewaehlt.category_name_de || '—'}
               </span>
@@ -447,6 +542,30 @@ export function FoodSuchModal({
               onChange={e => setLage(l => ({ ...l, suche: e.target.value, seite: 0 }))}
             />
 
+            {/* ══ G-480: die Quellenpillen ═════════════════════════
+                `[cmd]` **`module-nutrition.jsx:557`:** `["All", …,
+                "Supplements"]` — **eine Suche, die Quelle als
+                Filter.**
+
+                `[read]` **Nur wenn der Aufrufer Supplemente auch
+                schreiben kann** — sonst führte die Pille zu einer
+                Liste, aus der man nichts wählen darf. */}
+            {kannSupplement && (
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {FILTER.map(f => (
+                  <button
+                    key={f} type="button"
+                    data-probe={`quelle-pille-${f}`}
+                    className={`v2-btn v2-btn-sm${filter === f ? ' v2-btn-primary' : ''}`}
+                    aria-pressed={filter === f}
+                    onClick={() => setFilter(f)}
+                  >
+                    {FILTER_TEXT[f]}
+                  </button>
+                ))}
+              </div>
+            )}
+
             {/* ══ Sortierung — dieselben Werte wie in Food DB ═══════
                 `[cmd]` **`ALLE_SORTIERUNGEN` aus `food-sortierung.ts`**
                 — keine eigene Liste, sonst gäbe es zwei Wahrheiten
@@ -473,9 +592,52 @@ export function FoodSuchModal({
             {lage.suche.trim().length >= 2 && !laeuft && (
               <div className="v2-muted" data-probe="trefferzahl"
                    style={{ fontSize: 10.5 }}>
-                {gesamt === 0
+                {/* `[read]` **G-480: die Zahl nennt beide Quellen
+                    getrennt** — eine addierte Summe waere eine neue
+                    Zahl, und *,,12 von 21"* meint die Lebensmittel.
+                    **Wer Supplemente dazuzaehlt, ohne es zu sagen,
+                    macht aus einer Auskunft eine Behauptung.** */}
+                {/* `[cmd]` **,,Keine Treffer" erst, wenn BEIDE
+                    Quellen geantwortet haben** — sonst stand da
+                    *,,Keine Treffer. · sucht Supplemente…"*, und das
+                    widerspricht sich selbst. */}
+                {gesamt === 0 && suppSichtbar.length === 0 && !suppLaeuft
                   ? 'Keine Treffer.'
-                  : `${sortiert.length} von ${gesamt} Treffern`}
+                  : [
+                      zeigt(filter, 'bls') ? `${sortiert.length} von ${gesamt} Lebensmitteln` : null,
+                      suppSichtbar.length > 0
+                        ? `${suppSichtbar.length} Supplement${suppSichtbar.length === 1 ? '' : 'e'}`
+                        : null,
+                    ].filter(Boolean).join(' · ')}
+                {suppLaeuft && ' · sucht Supplemente…'}
+              </div>
+            )}
+
+            {/* ══ G-480: die Regel steht da, nicht nur wirkt sie ════
+                **Tom:** *„pillen/tablet/capsule gehoeren nicht in
+                meals."*
+
+                `[read]` **Ohne diesen Satz sucht jemand seine
+                Vitamin-D-Kapsel, findet sie nicht und haelt die
+                Suche fuer kaputt.** */}
+            {kannSupplement && zeigt(filter, 'supplement')
+              && lage.suche.trim().length >= 2 && (
+              <div className="v2-supp-regelsatz" data-probe="formregel">
+                {NUR_UNTERMISCHBAR_SATZ}
+              </div>
+            )}
+
+            {/* ══ G-478/A5 bleibt gueltig ══════════════════════════
+                `[read]` **Ein Produkt ohne hinterlegte Naehrwerte ist
+                keine Fehleingabe** — es traegt nur weniger Auskunft.
+                **Der Satz muss stehen, sonst sieht die Zeile mit
+                lauter ,,—" wie ein Fehler aus.**
+
+                `[cmd]` **Derselbe Satz aus derselben Quelle** —
+                `OHNE_NAEHRWERTE_SATZ`, nicht abgeschrieben. */}
+            {suppSichtbar.some(t => !hatNaehrwerte(t)) && (
+              <div className="v2-supp-ohne-werte" data-probe="supplement-ohne-werte">
+                {OHNE_NAEHRWERTE_SATZ}
               </div>
             )}
 
@@ -506,7 +668,7 @@ export function FoodSuchModal({
                 `[read]` **`overflowX` bleibt** — nicht als Ursache,
                 sondern damit schmale Fenster die Tabelle rollen
                 können statt die Seite. */}
-            {sortiert.length > 0 && (
+            {(sortiert.length > 0 || suppSichtbar.length > 0) && (
               <div style={{ overflowX: 'auto' }}>
                 <table className="v2-tbl">
                   <thead>
@@ -521,7 +683,7 @@ export function FoodSuchModal({
                     </tr>
                   </thead>
                   <tbody>
-                    {sortiert.map(f => (
+                    {(zeigt(filter, 'bls') ? sortiert : []).map(f => (
                       <tr key={f.id}>
                         <td>
                           <div style={{ fontSize: 12, fontWeight: 500 }}>
@@ -531,7 +693,9 @@ export function FoodSuchModal({
                             {f.category_name_de || '—'}
                           </div>
                         </td>
-                        <td><Pill>BLS</Pill></td>
+                        {/* G-480: die Quelle steht je Zeile, wie im
+                            Mockup (`<Pill>{f.src}</Pill>`). */}
+                        <td><Pill>{QUELLE_TEXT.bls}</Pill></td>
                         <td className="v2-num" style={{ textAlign: 'right' }}>
                           {Number.isFinite(Number(f.enercc))
                             ? Math.round(Number(f.enercc)) : '—'}
@@ -548,6 +712,58 @@ export function FoodSuchModal({
                         </td>
                       </tr>
                     ))}
+
+                    {/* ══ G-480: dieselbe Tabelle, zweite Quelle ════
+                        `[read]` **Keine eigene Sektion mit
+                        Ueberschrift** — der Mockup zeigt die Quelle
+                        JE ZEILE, und wer sortiert, mischt Sektionen.
+                        **Eine Ueberschrift beschriftete dann die
+                        falschen Zeilen.**
+
+                        `[cmd]` **Die Werte sind die der ERSTEN
+                        Portion** — bei mehreren waehlt der zweite
+                        Schritt. */}
+                    {suppSichtbar.map(t => {
+                      const p = t.portionen[0] ?? null
+                      return (
+                        <tr key={`supp-${t.product_id}`} data-probe="treffer-supplement"
+                            // A3: die Form am Knoten — so laesst sich
+                            // am Schirm PRUEFEN, dass keine Kapsel
+                            // durchkommt, statt es zu glauben.
+                            data-form={t.produktform ?? ''}>
+                          <td>
+                            <div style={{ fontSize: 12, fontWeight: 500 }}>
+                              {t.name}
+                            </div>
+                            <div className="v2-muted" style={{ fontSize: 10 }}>
+                              {t.marke ?? '—'}
+                              {p ? ` · ${p.serving_size}` : ' · ohne Nährwerte'}
+                            </div>
+                          </td>
+                          <td><Pill>{QUELLE_TEXT.supplement}</Pill></td>
+                          <td className="v2-num" style={{ textAlign: 'right' }}>
+                            {p?.enercc != null ? Math.round(p.enercc) : '—'}
+                          </td>
+                          <td className="v2-num" style={{ textAlign: 'right' }}>
+                            {p?.prot625 != null ? p.prot625.toFixed(1) : '—'}
+                          </td>
+                          <td className="v2-num" style={{ textAlign: 'right' }}>
+                            {p?.cho != null ? p.cho.toFixed(1) : '—'}
+                          </td>
+                          <td className="v2-num" style={{ textAlign: 'right' }}>
+                            {p?.fat != null ? p.fat.toFixed(1) : '—'}
+                          </td>
+                          <td style={{ textAlign: 'right' }}>
+                            <button type="button" className="v2-btn v2-btn-sm"
+                                    disabled={suppLaeuftSchreiben}
+                                    onClick={() => waehleSupplement(t)}
+                                    aria-label={`${t.name} wählen`}>
+                              Wählen
+                            </button>
+                          </td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>

@@ -24,7 +24,6 @@ import * as React from 'react'
 
 // G-478: die Supplementkachel liegt in einer eigenen Datei —
 // `modale.tsx` traegt schon 622 Zeilen.
-import { SupplementModal } from './supplement-modal'
 import { Card, Pill, Icon, InEntwicklungKnopf, type IconName } from '@lumeos/ui'
 
 import { EU14_ALLERGENS } from './tabs-daten'
@@ -34,10 +33,19 @@ import { KATEGORIE_TEXT } from '../../../lib/nutrition/slots-lage'
 // Mahlzeiten-Modal (G-336) — keine dritte Ziehlogik.
 import { ZiehModal } from './zieh-modal'
 
+// ══ G-480: `supplement` ist entfernt ═════════════════════
+//
+// `[cmd]` **G-478 hatte ein zweites Modal gebaut** — Freitextfeld,
+// keine Sortierung, keine Trefferzahl. `[cmd]` **Die Vorlage nennt
+// aber EINE Suche mit `Supplements` als Filterpille**
+// (`module-nutrition.jsx:557`), **und die Quelle je Zeile**
+// (Zeile 581).
+//
+// `[read]` **Der Weg fuehrt jetzt ueber `FoodSuchModal`** — Plus an
+// der Mahlzeit, Pille `Supplemente`. `[read]` **Kein Umleitungstyp,
+// der ins Leere zeigt** (wie G-342 es fuer `nutsettings` gemacht hat).
 export type NutritionModalTyp =
   | 'mealcam' | 'customfood' | 'quickadd' | 'recipe'
-  // G-478: Supplemente in die Mahlzeit.
-  | 'supplement'
 
 // ══ G-340: die Kategorie-Auswahl ist weg ═════════════════
 //
@@ -610,10 +618,6 @@ export function NutritionModale({ modal, datum, onClose }: {
   if (modal === 'mealcam') return <MealCamModal onClose={onClose} />
   if (modal === 'customfood') return <CustomFoodModal onClose={onClose} />
   if (modal === 'quickadd') return <QuickAddModal datum={datum} onClose={onClose} />
-  // `[read]` **G-478** — derselbe Verteiler, dieselbe Bauform.
-  if (modal === 'supplement') {
-    return <SupplementModal datum={datum} onClose={onClose} />
-  }
   // ══ G-342: `nutsettings` ist entfernt ══════════════════
   //
   // `[cmd]` **Es hatte keinen Aufrufer** — der Typ stand hier, der

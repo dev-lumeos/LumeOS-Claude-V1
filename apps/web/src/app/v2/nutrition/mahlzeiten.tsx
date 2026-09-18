@@ -1190,6 +1190,38 @@ function MahlzeitKarte({
             setSucheAuf(false)
             onGeaendert()
           }}
+          // ══ G-480: derselbe Weg, zweite Quelle ══════════════════
+          //
+          // `[read]` **Nur DIESER Aufrufer bekommt ihn** — der
+          // Planeintrag und das Rezept koennen Supplemente
+          // datenseitig nicht tragen (E-83), und eine Pille, die ins
+          // Leere fuehrt, waere schlimmer als keine.
+          //
+          // `[read]` **Der Schreibweg bleibt hier**, wie bei den
+          // Lebensmitteln — das Modal gibt Treffer und Portion
+          // zurueck, mehr nicht.
+          onSupplement={async (t, portion) => {
+            const mealId = await sicherstellen()
+            const a = await fetch('/api/nutrition/diary', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: JSON.stringify({
+                art: 'supplement', meal_id: mealId,
+                product_id: t.product_id,
+                serving_size: portion,
+                serving_quantity: 1,
+                nutrient_status: t.portionen.length > 0
+                  ? 'available' : 'no_nutrients_available',
+                food_name: t.name,
+              }),
+            })
+            if (!a.ok) {
+              const k = await a.json().catch(() => null)
+              throw new Error(k?.error ?? `Fehler ${a.status}`)
+            }
+            setSucheAuf(false)
+            onGeaendert()
+          }}
         />
       )}
       {aendern && (

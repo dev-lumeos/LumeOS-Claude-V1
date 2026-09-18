@@ -1288,6 +1288,22 @@
   color: var(--fg);
 }
 
+/* ── G-480: die Formregel unter der Trefferliste ─────────────────
+ *
+ * `[read]` **Kein Warnton** — es ist eine Auskunft, kein Fehler:
+ * Kapseln gehoeren in den Stack, nicht in die Mahlzeit.
+ *
+ * `[read]` **`--fg-muted` (9,19:1), nicht `--fg-dim` (2,88:1).** */
+.v2-supp-regelsatz {
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
 /* ── A2: der Supplement-Anteil an der Mahlzeitensumme ────────────
  *
  * `[cmd]` **Gemessen: `nutrition.daily_summary` zaehlt Supplemente

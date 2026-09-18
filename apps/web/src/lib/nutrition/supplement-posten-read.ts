@@ -12,6 +12,8 @@ import {
   type NaehrwertStand, type PortionsWahl,
   type SupplementPosten, type SupplementTreffer,
 } from './supplement-posten-lage'
+// G-480: die Formenregel — eine Liste fuer Filter und Pruefung.
+import { mealFormenFilter } from './such-quellen-lage'
 
 function s(v: unknown): string | null {
   return typeof v === 'string' && v.trim() ? v : null
@@ -78,11 +80,24 @@ export async function sucheSupplemente(
   if (!q) return { treffer: [], fehler: null }
   try {
     const c = createSessionClient().schema('supplements')
+    // ══ G-480: NUR, was man untermischen kann ═══════════════════════
+    //
+    // **Tom:** *„pillen/tablet/capsule gehoeren nicht in meals."*
+    //
+    // `[cmd]` **Der Filter trifft 47.655 von 121.959 On-Market-
+    // Produkten** (gemessen 2026-09-18). `[cmd]` **`produktform`
+    // traegt einen DSLD-Code — `Powder [E0162]`, nicht `Powder`** —
+    // deshalb `like ...%` und nie `eq`.
+    //
+    // `[read]` **Die Formenliste steht in `such-quellen-lage.ts`** —
+    // dieselbe, die `darfInMahlzeit` prueft. **Zwei Listen waeren
+    // zwei Wahrheiten.**
     const { data, error } = await c
       .from('supplier_products')
-      .select('id,name_en,marke')
+      .select('id,name_en,marke,produktform')
       .ilike('name_en', `%${q}%`)
       .eq('market_status', 'On Market')
+      .or(mealFormenFilter())
       .order('name_en', { ascending: true })
       .limit(grenze)
     if (error) return { treffer: [], fehler: error.message }
@@ -122,6 +137,9 @@ export async function sucheSupplemente(
           product_id: id,
           name,
           marke: s(r.marke),
+          // G-480: die Form kommt mit — sie belegt am Schirm, dass
+          // nur Untermischbares erscheint (A3).
+          produktform: s(r.produktform),
           // `[read]` **Leer heisst: keine gemessenen Naehrwerte** —
           // das ist eine Auskunft, kein Fehler (A5).
           portionen: (nachProdukt.get(id) ?? [])

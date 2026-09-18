@@ -42,16 +42,18 @@ export function Kopfknoepfe({ datum, kinder }: {
         <Icon name="zap" className="v2-ic v2-ic-sm" /> Quick-add
       </button>
 
-      {/* ══ G-478: Supplemente in die Mahlzeit ═══════════════════
-          **Tom:** *„dass ich in nutrition diary auch supplements wie
-          whey hinzufuegen kann"* — `[read]` **neben Quick-Add, weil
-          beides dasselbe tut: einen Posten ohne Katalogsuche
-          anlegen.** */}
-      <button type="button" className="v2-btn"
-              data-probe="knopf-supplement"
-              onClick={() => setModal('supplement')}>
-        <Icon name="zap" className="v2-ic v2-ic-sm" /> Supplement
-      </button>
+      {/* ══ G-480: der Supplement-Knopf ist weg ═══════════════════
+          `[cmd]` **G-478 hatte hier einen zweiten Knopf zu einem
+          zweiten Modal.** **Tom:** *„wo kann der tom das eingeben?
+          auf diesem laecherlichen modal?"*
+
+          `[read]` **Der Weg fuehrt jetzt dorthin, wo man auch
+          Lebensmittel eintraegt** — Plus an der Mahlzeit, dann die
+          Pille `Supplemente`. `[cmd]` **So zeigt es die Vorlage**
+          (`module-nutrition.jsx:557`).
+
+          `[read]` **Ein eigener Knopf hier waere wieder der zweite
+          Weg** — genau der Fehler, den E-83 benannt hat. */}
 
       <InEntwicklungKnopf
         titel="Recalc macros"

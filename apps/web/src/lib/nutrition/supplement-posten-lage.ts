@@ -75,6 +75,14 @@ export type SupplementTreffer = {
   product_id: string
   name: string
   marke: string | null
+  /**
+   * Die Darreichungsform, mit DSLD-Code — `Powder [E0162]`.
+   *
+   * `[read]` **G-480: sie belegt, dass nur Untermischbares
+   * erscheint** (A3). `[read]` **Optional, weil die Treffer aus
+   * G-475 sie noch nicht trugen.**
+   */
+  produktform?: string | null
   /** Leer heisst: keine gemessenen Naehrwerte (A5). */
   portionen: PortionsWahl[]
 }
