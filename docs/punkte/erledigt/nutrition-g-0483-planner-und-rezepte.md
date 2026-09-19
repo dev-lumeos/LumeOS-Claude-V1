@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: [C-519]
 kind_von: E-83
 entscheidung: null
+erledigt: 2026-09-08
+commit: 79dbc910
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/plan-eintraege.tsx
@@ -230,3 +232,63 @@ Planeintrag bietet Supplemente an"* — **wird rot.**
 ### Neustart noetig?
 
 `[read]` **Nein** — nur `apps/web/src`.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **A3 selbst gemessen: `meal_plan_entries` hat KEINE
+Supplementspalte.**
+
+`[cmd]` **Und was C-519 fuer Rezepte mitbrachte:**
+`add_supplier_product_to_recipe`,
+`supplements.recipe_product_references`,
+`recipe_ingredients.food_source` **erlaubt `supplement`.**
+
+`[read]` **Die Verweistabelle liegt im SUPPLEMENT-Schema** ?
+**genau Toms Regel aus E-84.**
+
+`[cmd]` **Proben: web 1887/1887, coach 65/65.**
+
+### Toms Shake steht
+
+    H-Vollmilch 3,5 %    515 g    325 kcal  16,4 P
+    Heidelbeere roh      100 g     61 kcal   0,5 P
+    Gold Standard Whey  1 x 31 g  120 kcal  24,0 P
+    -----------------------------------------------
+                                505,45 kcal  40,88 g
+
+`[cmd]` **Vorher in einer Transaktion belegt: 493,20 -> 613,20
+kcal.**
+
+### A4 ist nicht gebaut, und das ist richtig
+
+> *,,Gemessen, wer den Schreibweg durchreicht: Mahlzeit ja,
+Rezept ja (neu), Planeintrag nein, Ghost nein. Das ist die
+Regel aus G-480 ? anbieten nur, wo geschrieben werden kann."*
+
+`[read]` **Er haette eine Pille anbieten koennen, die ins
+Leere fuehrt** ? **stattdessen gemeldet.**
+
+`[cmd]` **Und nebenbei gemessen: der Planeintrag-Editor zeigt
+bei einem vorhandenen Eintrag GAR KEINE Lebensmittelsuche** ?
+*,,Quelle bleibt, nur Menge und Mahlzeit sind hier
+aenderbar."*
+
+### Eine Null, die wie eine Messung aussah
+
+> *,,Die Zutatzeile zeigte zuerst 0 g und vier Striche, weil
+`amount_g` bei Supplementen NULL sein muss. Eine Null sieht aus
+wie eine MESSUNG ? jetzt steht dort `1 x`."*
+
+`[read]` **Dieselbe Klasse wie die 438 kcal in G-485: eine
+Zahl, die stimmig aussieht und falsch ist.**
+
+### Drei Waechter nachgezogen, keiner gelockert
+
+`[cmd]` **G-480 (die Liste der Schreibfaehigen ist gewachsen,
+die Regel blieb), G-325 (ein Supplement hat keine
+100-g-Werte), G-326 (ein 1.400-Zeichen-Fenster ist keine
+Blockgrenze).**
+
+**Abgenommen. Die fehlende Spalte als C-524.**

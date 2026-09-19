@@ -3,98 +3,88 @@ nr: C-523
 typ: befund
 modul: quer
 schwere: hoch
-angelegt: 2026-09-08
-braucht: []
-kind_von: C-522
-entscheidung: null
+angelegt: 2026-09-19
+braucht: [C-521]
 agent: codex
-beauftragt: 2026-09-08
-beruehrt:
-  tabellen: [public.allergen_aliases]
-zahlen:
-  gemessen: 2026-09-08
+beauftragt: 2026-09-19
 ---
 
 # C-523 - welche Aliase fehlen noch?
 
-## Der Anlass
+## Ergebnis
 
-`[cmd]` **Tom hat *,,brot"* in die Allergieeingabe getippt und
-nichts bekommen (C-522):**
+Dies ist ein Messauftrag. Es wurde nichts gebaut und nichts in `supabase/`
+veraendert.
 
-    "gluten"      -> contains_gluten, 622 Treffer
-    "brot"        -> 0
-    "weizen"      -> 0
-    "glutenfrei"  -> 0
+Der Anlass ist bestaetigt: `allergy_catalog_suggestions('nahrung', ...)`
+findet `gluten` und `milch`, aber nicht `brot`, `weizen` oder `glutenfrei`.
+Die vorhandenen Food-Aliase helfen hier nicht, weil dieser Suchweg sie nicht
+liest.
 
-Tom, 2026-09-08:
+## A - Aliasquellen im Funktionsrumpf
 
-> mach fuer codex einen messauftrag, welche aliasse sonst noch
-> fehlen
+| Suchweg | tatsaechliche Quelle | Aliasverwendung |
+|---|---|---|
+| `nutrition.food_search` | Foods und `nutrition.food_aliases` | ja |
+| `nutrition.preference_search_preview` | Food-Suchziel | ja, ueber Food-Aliase |
+| `public.allergy_catalog_suggestions('nahrung')` | exclusion-relevante `tag_definitions`, `food_tags`, `allergen_aliases` | ja, aber nur `allergen_aliases` |
+| `public.allergy_catalog_suggestions('supplement')` | `product_contents`, `supplement_warnings` | nein |
+| `public.allergy_catalog_suggestions('medikament')` | `canonical_name`, `generic_names`, `synonyms` in `medication_active_substances` | keine Aliastabelle |
+| `supplements.search_supplier_products` | Produktname und Marke | keine der drei Substanz-Aliastabellen |
 
-## Der Bestand, gemessen
+## B - Ziele ohne Alias
 
-    nutrition.food_aliases           32.845  zu 7.140 Foods
-    supplements.supplement_aliases    2.868  zu   617
-    supplements.substance_aliases     1.541
-    medical.biomarker_aliases           292
-    nutrition.nutrient_aliases           98  zu   138
-    nutrition.nutrient_search_aliases    50
-    public.allergen_aliases              29  zu     6 Tags
+| Aliasbestand | Ziele ohne Alias | Ziele gesamt | Hinweis |
+|---|---:|---:|---|
+| `nutrition.food_aliases` | 0 | 7.140 Foods | vollstaendig, 32.845 Zeilen |
+| `supplements.supplement_aliases` | 0 | 617 Supplements | vollstaendig, 2.868 Zeilen |
+| `nutrition.nutrient_aliases` | 88 | 138 Naehrstoffcodes | 98 Zeilen |
+| `nutrition.nutrient_search_aliases` | 88 | 138 Naehrstoffcodes | 50 Suchalias-Ziele |
+| `public.allergen_aliases` fuer sechs relevante Food-Tags | 3 | 6 Tags | 29 Zeilen, nur vier Codes belegt |
+| Medikamente | 498 | 498 Wirkstoffe | keine eigene Aliastabelle |
+| `medical.biomarker_aliases` | 11.620 | 11.676 LOINC-Biomarker | 292 Zeilen; kein Allergievorschlagsweg |
 
-    medical.medication_active_substances 498
-      -- KEINE Aliastabelle
+`substance_aliases` ist kein einheitlicher 617er-Zielkatalog: 1.541 Zeilen
+verteilen sich auf 320 F05-Kandidaten, 290 Kimi-Substanzen und 44 LumeOS-
+Katalogeintraege. Es ist deshalb keine verlaessliche Abdeckungszahl fuer die
+Produkt- oder Allergiesuche.
 
-`[read]` **Lebensmittel: 4,6 Aliase je Eintrag. Naehrstoffe:
-0,7. Medikamente: keine.**
+## C und D - menschliche Stichprobe
 
-## Zu messen
+| Eingabe | Weg | Ergebnis | Befund |
+|---|---|---|---|
+| Brot | Nahrung-Allergie | 0 | Suchbegriff fuer Gluten fehlt |
+| Milch | Nahrung-Allergie | 1 | findet Lactose |
+| Kopfschmerztablette | Medikament-Allergie | 0 | kein Wirkstoffname und keine semantische Bruecke |
+| Eisen | Nahrung-Allergie | 0 | kein exclusion-relevanter Tagbegriff |
+| Blutzucker | Medikament-Allergie | 0 | kein Wirkstoffname und keine semantische Bruecke |
+| Gluten | Nahrung-Allergie | 1 | `nutrition:contains_gluten` |
+| Penicillin | Medikament-Allergie | 3 | vorhandene Katalogfelder treffen |
+| Ibuprofen | Medikament-Allergie | 1 | vorhandene Katalogfelder treffen |
 
-    A  welche Suchfunktion nutzt welche Aliastabelle?
-       Am FUNKTIONSRUMPF messen, nicht am Namen.
-    B  wie viele Ziele haben KEINEN Alias?
-       Je Tabelle eine Zahl.
-    C  welche Suchwege haben GAR KEINE Aliastabelle?
-       Kandidat: allergy_catalog_suggestions mit
-       art=medikament -- 498 Wirkstoffe, kein Alias.
-    D  eine Stichprobe je Suchweg: fuenf Woerter, die
-       ein Mensch tippen wuerde, und was sie treffen.
-       "brot", "milch", "kopfschmerztablette",
-       "eisen", "blutzucker".
-    E  wo Aliase existieren: decken sie SUCHBEGRIFFE
-       ab oder nur SCHREIBVARIANTEN?
+## E - Varianten oder Suchbegriffe
 
-`[read]` **Der Unterschied aus E ist der Kern:**
+Die Food- und Supplement-Aliase sind vorwiegend Namens-/Schreibvarianten.
+`nutrient_search_aliases` ist der einzige klar als Suchwortschatz benannte
+Bestand, deckt aber nur 50 von 138 Naehrstoffzielen ab.
 
-`[cmd]` **C-510 hat `Thiamin` neben `Thiamine` gesetzt** ?
-**das ist eine VARIANTE.**
+`allergen_aliases` sind fuer die Produktpruefung vorwiegend Etikettbegriffe:
+beispielsweise `Lactose`, `Laktose`, `Milchzucker` und `Milk Protein Isolate`.
+Sie enthalten kein konzeptionelles Vokabular wie `Brot -> contains_gluten` oder
+`Weizen -> contains_gluten`. Genau diese zweite Kategorie fehlt in der
+Allergievorschlagsfunktion.
 
-`[read]` **`Brot` fuer Gluten ist ein SUCHBEGRIFF** ? **ein
-anderes Wort fuer dieselbe Sache, nicht dieselbe Schreibung.**
+Bei Medikamenten gibt es keine Aliastabelle: `generic_names` und `synonyms`
+sind Schreib- und Handelsnamen zum Wirkstoff. Begriffe wie
+`Kopfschmerztablette` oder `Blutzucker` beschreiben Anwendung bzw. Wirkung,
+nicht denselben Katalogeintrag.
 
-`[read]` **Miss, welche Art wo fehlt.**
+## Empfehlung fuer Tom
 
-## Was NICHT zu tun ist
+Zuerst die sechs Nahrungsausschluss-Tags um einen getrennten, kuratierten
+Suchwortschatz erweitern. Das schliesst die sichtbare Luecke `Brot`, `Weizen`
+und `glutenfrei` ohne die Food-Aliase zweckzuentfremden. Medikamente sind eine
+andere Produktentscheidung: Eine Anwendung-zu-Wirkstoff-Bruecke waere keine
+Alias-Ergaenzung und darf nicht geraten werden.
 
-**Keine Umsetzung** ? **welche Luecke zuerst geschlossen wird,
-ist Toms Entscheidung.**
-
-## Abnahmebedingungen
-
-    A1  je Suchweg: welche Aliastabelle? TABELLE.
-    A2  je Tabelle: wie viele Ziele ohne Alias?
-    A3  welche Suchwege haben keine Tabelle?
-    A4  fuenf Stichproben je Suchweg, mit Trefferzahl.
-    A5  Varianten gegen Suchbegriffe getrennt gezaehlt.
-    A6  eine Empfehlung: welche Luecke zuerst?
-    A7  KEINE Umsetzung. git status supabase/ bleibt
-        unveraendert.
-
-## Bericht
-
-_(vom Agenten anzuhaengen)_
-
-## Abnahme
-
-_(vom Orchestrator)_
-
+Keine Umsetzung. `git status -- supabase/` blieb unveraendert.
