@@ -277,4 +277,24 @@ Tagen, oder auch nicht-aktive Plaene zeigen"*
 
 **Abgenommen, die Entscheidung steht aus.**
 
+## Die Abnahme war zu kurz - 2026-09-08
+
+Tom, am selben Tag:
+
+> die ghostentries sind schon wieder verschwunden
+> zuerst mal: das haben wir heute schonmal messen und
+> beheben lassen!!
+
+`[read]` **Ich habe *,,kein Anzeigefehler"* abgenommen und
+die offene Frage als Entscheidung liegen lassen.**
+
+`[cmd]` **Claude Codes Satz stand im Bericht:** *,,Tom sah
+einen leeren Tag und wusste nicht, warum ? das ist der
+eigentliche Befund."*
+
+`[read]` **Das WAR der Auftrag, und ich habe ihn nicht
+gegeben.**
+
+`[cmd]` **Als G-486, mit Toms Entscheidung: erfuellte
+Ghosts bleiben stehen, gruener Rahmen, abgehakt.**
 

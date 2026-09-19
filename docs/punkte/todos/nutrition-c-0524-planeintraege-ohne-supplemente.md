@@ -10,67 +10,91 @@ entscheidung: E-84
 beruehrt:
   tabellen: [nutrition.meal_plan_entries]
 zahlen:
-  gemessen: 2026-09-08
+  gemessen: 2026-09-19
 ---
 
 # C-524 - Planeintraege koennen keine Supplemente
 
 ## Befund
 
-Aus G-483, Claude Code, 2026-09-08:
+`nutrition.meal_plan_entries` trägt kein Supplementfeld. Sein
+`entry_type_check` erlaubt ausschließlich `recipe`, `bls` und `custom`; der
+`target_check` verlangt dazu jeweils genau ein Rezept, BLS-Food oder Custom
+Food. Ein Supplement kann daher heute weder als eigener Planeintrag noch als
+zulässiges Ziel gespeichert werden.
 
-> *,,`nutrition.meal_plan_entries` hat keine
-Supplementspalte."*
+Live: 756 Planeinträge, 7 Rezepte, ein Supplement-Rezeptbestandteil und eine
+`recipe_product_references`-Zeile. Es gibt acht Planlogs und drei Einnahmen
+mit Mahlzeitenbezug.
 
-`[cmd]` **Selbst gemessen: KEINE.**
+## Messung der zwei Bauformen
 
-`[cmd]` **Die Spalten heute:** `entry_type`, `recipe_id`,
-`food_id`, `custom_food_id`, `amount_g`, `planned_servings`,
-`portion_name`, `portion_quantity`, `portion_amount_g`.
+| Bauform | Semantik | Befund für den Plan |
+|---|---|---|
+| `meal_items.supplement_intake_log_id` | erfolgte Einnahme mit historischem Snapshot | ungeeignet: ein Planeintrag ist nur Absicht; ein Intake vor der Bestätigung würde die Einnahme behaupten |
+| `recipe_ingredients` + `supplements.recipe_product_references` | Produktabsicht mit Menge, noch ohne Einnahme | passend als Vorbild |
 
-## Was C-519 fuer die anderen Wege gebaut hat
+Die vorhandene Referenztabelle kann nicht direkt wiederverwendet werden: ihr
+pflichtiger und eindeutiger Fremdschlüssel ist
+`recipe_ingredient_id -> nutrition.recipe_ingredients(id)`. Sie hat keinen
+Bezug zu `meal_plan_entries`.
 
-    meal_items           supplement_intake_log_id
-    recipe_ingredients   food_source = supplement
-                         plus supplements.
-                         recipe_product_references
+## Empfehlung, keine Umsetzung
 
-`[read]` **Zwei Bauformen, beide nach E-84: der Verweis zeigt
-ins Supplement-Schema.**
+Die passende Form ist eine parallele Absichts-Referenz im Supplements-Schema,
+zum Beispiel `supplements.meal_plan_product_references`, mit einem eindeutigen
+Verweis auf `nutrition.meal_plan_entries` sowie Produkt, Portion und Anzahl.
+Sie folgt der Rezept-Bauform, erzeugt aber bis zur Bestätigung keinen
+`intake_logs`-Satz. Das hält das Produkt im Supplements-Schema und vermeidet
+eine vorgetäuschte Einnahme.
 
-`[cmd]` **MISS, welche fuer Planeintraege passt** ? **ein
-geplanter Eintrag ist noch keine Einnahme.**
+Diese Messung baut keine Tabelle und ändert keine Daten.
 
-### Der Unterschied
+## Ghost-Bestätigung heute
 
-`[read]` **`meal_items` verweist auf einen `intake_log`** ?
-**eine Einnahme, die stattgefunden hat.**
+Der aktuelle Weg bestätigt nur Lebensmittel:
 
-`[read]` **Ein Planeintrag ist eine ABSICHT** ? **er braucht
-das Produkt und die Portion, aber keinen Einnahmeeintrag.**
+1. `planEintragBestaetigen` liest bei direkten Positionen `food_id` und
+   `amount_g`; bei Rezepten liest es aus `recipe_ingredients` ebenfalls nur
+   `food_id, amount_g`.
+2. Es erstellt bzw. nutzt die Mahlzeit und schreibt jeden Lebensmittelposten
+   mit `addMealItem`.
+3. Danach schreibt es `nutrition.meal_plan_logs` mit `actual_meal_id`.
 
-`[cmd]` **`recipe_product_references` ist die naehere
-Bauform** ? **miss sie.**
+Der Weg liest keine `supplements.recipe_product_references` und ruft weder
+`supplements.record_supplier_product_intake` noch eine äquivalente
+Einnahmefunktion auf. Ein künftiger Supplement-Planeintrag würde deshalb
+heute weder im Ghost erscheinen noch beim Bestätigen einen `intake_log`
+erzeugen. Genau diese zwei Erweiterungen wären mit der späteren Umsetzung
+nötig; die Reihenfolge bleibt: tatsächliche Mahlzeit, tatsächlicher Intake mit
+`meal_id`, dann Planlog.
 
-## Und die Ghostentries
+`nutrition.meal_plan_day_to_diary` ist keine Alternative: Die Funktion ist
+ein Seed-Werkzeug ohne Aufrufer aus `apps/`, schreibt nur BLS/Custom-Foods und
+setzt `entry_source = 'seed'`.
 
-`[cmd]` **G-482 hat gemessen: Ghostentries funktionieren, sie
-zeigen den Plan des Tages.**
+## Kapsel-Gegenprobe
 
-`[read]` **Wenn ein Plan ein Supplement enthaelt, muss der
-Ghost es zeigen** ? **und das Bestaetigen muss daraus eine
-Einnahme machen.**
-
-`[cmd]` **MISS, wie das Bestaetigen heute arbeitet.**
+Der Bestand kennt am Planeintrag keine Supplementform. Auch
+`supplements.add_supplier_product_to_recipe` akzeptiert jedes
+`supplier_product_id`; die gemessenen Constraints enthalten keine Formregel.
+Eine Kapsel kann daher heute nicht als Planeintrag auftreten, und die Regel
+„nur untermischbare“ ist datenseitig noch nicht entscheidbar. Sie darf bei der
+späteren Umsetzung nicht still geraten werden; dafür braucht es eine von Tom
+festgelegte, überprüfbare Formregel.
 
 ## Abnahmebedingungen
 
-    A1  welche Bauform passt? Begruendet.
-    A2  ein Supplement in einem Planeintrag.
-    A3  der Ghost zeigt es.
-    A4  Bestaetigen macht eine Einnahme daraus,
-        mit intake_log.
-    A5  ein Plan ohne Supplemente bleibt unveraendert.
-    A6  Gegenprobe: eine Kapsel im Plan -> was passiert?
-        (Toms Formregel: nur untermischbare)
-    A7  Sicherung, Vollkette, ALLE Waechter.
+| Kriterium | Stand |
+|---|---|
+| A1 | Absichts-Referenz als passende Bauform gemessen und begründet |
+| A2 | offen, benötigt Toms Entscheidung und Umsetzung |
+| A3 | offen; heutiger Ghost kennt keine Supplemente |
+| A4 | offen; heutige Bestätigung erzeugt keinen Intake für Supplemente |
+| A5 | heutiger Lebensmittelplan unverändert gemessen |
+| A6 | keine Formregel im Datenmodell; gemeldet, nicht geraten |
+| A7 | nicht ausgelöst: Messauftrag ohne Schemaänderung |
+
+## Bericht
+
+**2026-09-19. Gemessen und empfohlen, nicht gebaut.**

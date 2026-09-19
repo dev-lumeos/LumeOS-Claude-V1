@@ -9,7 +9,7 @@ kind_von: C-519
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
-erledigt: 2026-09-08
+erledigt: 2026-09-19
 commit: a26c2c4b
 beruehrt:
   tabellen: [nutrition.daily_summary]
@@ -23,99 +23,62 @@ zahlen:
 
 Nach C-519 sind die vier alten Produktsnapshot-Spalten in
 `nutrition.meal_items` absichtlich leer. `nutrition.daily_summary` summierte
-weiter die dortigen Makrospalten und verlor dadurch alle Meal-Supplemente.
+weiter deren Makrospalten und verlor damit Meal-Supplemente.
 
-Live gemessen bei `dev@lumeos.app`:
-
-| Tag | Supplementzeilen | verlorene Energie | verlorenes Protein |
+| Tag | Supplementzeilen | fehlende Energie | fehlendes Protein |
 |---|---:|---:|---:|
 | 2026-09-18 | 1 | 120 kcal | 24 g |
 | 2026-09-19 | 2 | 260 kcal | 48 g |
 
-Damit sind drei Zeilen betroffen, nicht eine.
+Damit waren drei Zeilen betroffen, nicht eine.
 
-## Gebaut, noch nicht live eingespielt
+## Live eingespielt
 
-`20260919013000_c521_daily_summary_supplement_snapshots.sql` ersetzt die
-Quelle der Tagesansicht nach C-519: fuer `food_source='supplement'` kommen
-Makro- und Mikrowerte aus
-`intake_logs.supplier_product_nutrients_snapshot`; alle anderen Positionen
-bleiben bei ihrem eingefrorenen `meal_items`-Snapshot. Fehlwerte bleiben
-Fehlwerte und werden weiterhin in `<wert>_missing` gezaehlt.
+`20260919013000_c521_daily_summary_supplement_snapshots.sql` ist am
+2026-09-19 nach der vorhandenen Sicherung eingespielt worden. Die Ansicht
+liest fuer `food_source = 'supplement'` Makro- und Mikrowerte aus
+`supplements.intake_logs.supplier_product_nutrients_snapshot`; alle anderen
+Positionen bleiben beim eingefrorenen Snapshot in `nutrition.meal_items`.
+Fehlwerte bleiben Fehlwerte und werden weiterhin in `<wert>_missing` gezählt.
 
-Der Schritt steht nach C-519 in `supabase/_pipeline/kette.json`. Der fruehe
-Basis-Schritt 053 blieb absichtlich unveraendert, weil `intake_logs` zu diesem
-Zeitpunkt der Vollkette noch nicht existiert.
+## Nachmessung live
+
+| Tag | Tagesenergie | Tagesprotein | Supplementanteil | fehlende Energie/Protein |
+|---|---:|---:|---:|---:|
+| 2026-09-18 | 2.127,53 kcal | 166,4322 g | 120 kcal / 24 g | 0 / 0 |
+| 2026-09-19 | 2.599,05 kcal | 199,31 g | 260 kcal / 48 g | 0 / 0 |
+
+Die Ansicht enthält `supplier_product_nutrients_snapshot`; am 18.09. stimmt
+sie mit der Mahlzeitensumme überein. C-466 bleibt richtig getrennt:
+Nahrung liefert dort 2.007,53 kcal und 142,4322 g Protein, Meal-Supplemente
+120 kcal und 24 g. Ein Tag ohne Supplemente (2026-11-16) blieb unverändert:
+2.391,74 kcal und 179,8534 g Protein entsprechen der Rohsumme der
+`meal_items`.
+
+Toms Frühstück bleibt in der Meal-Bilanz bei 557,5 kcal und 40,022 g Protein.
 
 ## Nachweise
 
-- Sicherung vor der Arbeit:
-  [`20260919012500_c521_vorher.sql`](D:/GitHub/LumeOS-Claude-V1/backup/schema/20260919012500_c521_vorher.sql).
-- Der neue Vertragstest war vor der Korrektur rot: `2.007,53` statt
-  `2.367,53 kcal`, drei fehlende Energie- und Proteinwerte.
-- Danach gruen: drei Whey-Logs plus Nahrung ergeben `2.367,53 kcal`,
-  `214,4322 g Protein`, vier Positionen und keine fehlenden Werte.
-- Ein Tag ohne Supplement bleibt `437,5 kcal`, `16,022 g Protein` und eine
-  Position.
-- C-466 ist nicht betroffen: `nutrient_intake_source_breakdown_for_day`
-  liefert fuer den 18.09. Nahrung `2.007,53 kcal/142,4322 g` und Meal-Whey
-  `120 kcal/24 g` getrennt.
-- Toms Fruehstueck bleibt in der Meal-Bilanz `557,5 kcal` und `40,022 g
-  Protein`.
-
-## Vollkette und Waechter
-
-Die frische Vollkette `lumeos_c521_vollkette` erreichte C-521 und fuehrte den
-Schritt gruen aus. Der C-521-Vertragstest ist dort gruen. Der Abschluss bleibt
-am bestehenden, fachfremden C-327-Sollstand rot: `service_role` hat auf
-`supplements.substance_group_memberships` mehr Rechte als erwartet.
-
-`migration-kette-pruefen` und `migration-datenlogik-pruefen` sind gruen.
-Der Punktelauf hat 25/25 Sollbefunde und ist nur wegen dieses fehlgeschlagenen
-Tagesketten-Nachweises rot. Der Dev-Server wurde nicht angefasst.
+- Sicherung: [20260919012500_c521_vorher.sql](D:/GitHub/LumeOS-Claude-V1/backup/schema/20260919012500_c521_vorher.sql).
+- Der C-521-Vertragstest war vor der Korrektur rot und danach in der frischen
+  Vollkette grün.
+- Die Vollkette erreichte C-521. Ihr Abschluss bleibt ausschließlich am
+  bestehenden C-327-Rechtestand rot: `service_role` hat auf
+  `supplements.substance_group_memberships` mehr Rechte als erwartet.
+- `migration-kette-pruefen` und `migration-datenlogik-pruefen` sind grün.
+  Der Dev-Server wurde nicht angefasst.
 
 ## Abnahmebedingungen
 
 | Kriterium | Stand |
 |---|---|
-| A1 | gebaut: Tagesansicht liest Supplement-Snapshots aus `intake_logs` |
-| A2 | im Vertragstest belegt; Live-Einspielung steht aus |
-| A3 | drei Zeilen im Vertragstest und live gemessene drei Zeilen |
-| A4 | C-466 gemessen, nicht betroffen |
-| A5 | Tag ohne Supplement unveraendert im Vertragstest |
-| A6 | Sicherung, Vollkette und Waechter gelaufen; C-327-Fremdbefund dokumentiert |
+| A1 | Live: Tagesansicht liest Supplement-Snapshots aus `intake_logs` |
+| A2 | Live-Nachmessung stimmt mit der Mahlzeitensumme überein |
+| A3 | Alle drei Supplementzeilen zählen |
+| A4 | C-466 gemessen und nicht betroffen |
+| A5 | Tag ohne Supplement unverändert |
+| A6 | Sicherung, Vollkette und Wächter dokumentiert; C-327-Fremdbefund offen |
 
 ## Abnahme
 
-**2026-09-08, Orchestrator. Gebaut ? NICHT live.**
-
-`[cmd]` **Selbst gemessen: `daily_summary` liest noch
-`sum(mi.enercc)`.**
-
-`[cmd]` **Was vorliegt:**
-`migrations/20260919013000_c521_daily_summary_supplement_snapshots`,
-`_validierung/nutrition-c521-daily-summary-supplements`.
-
-### Drei verlorene Zeilen, und die Summe ist groesser
-
-> *,,Drei verlorene Zeilen belegt: 120 kcal/24 g am 18.09.
-sowie 260 kcal/48 g am 19.09."*
-
-`[read]` **Ich hatte drei Zeilen gemessen, er hat sie
-datiert** ? **380 kcal und 72 g Protein fehlten insgesamt.**
-
-`[cmd]` **Vertragstest: drei Whey-Logs ergeben 2.367,53 kcal
-und 214,4322 g Protein.**
-
-### Und A4 hat er beantwortet
-
-> *,,C-466 ist nicht betroffen; seine Quellbilanz rechnet
-Meal-Supplemente bereits korrekt."*
-
-`[read]` **Eine Sicht war falsch, die andere nicht** ?
-**gemessen, nicht angenommen.**
-
-`[cmd]` **Die Vollkette lief 250 Schritte und endet am
-bekannten C-327-Rechtestand** ? **fremd, nicht von C-521.**
-
-**Abgenommen. Einspielen steht aus.**
+**2026-09-19. Live eingespielt und nachgemessen.**

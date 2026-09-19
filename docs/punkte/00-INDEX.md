@@ -7,8 +7,9 @@
 |---|---|
 | `todos` | 241 |
 | `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 504 |
-| **gesamt** | **746** |
+| **gesamt** | **747** |
 
 ## medical — 49
 
@@ -64,7 +65,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 249
+## nutrition — 250
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -313,9 +314,10 @@
 | `G-478` | feature | hoch | [die Kacheln fuer Supplemente in der Mahlzeit](erledigt/nutrition-g-0478-kacheln-supplement-mahlzeit.md) | erledigt | — | G-479 |
 | `G-480` | feature | hoch | [ein Modal statt zwei](erledigt/nutrition-g-0480-ein-modal-statt-zwei.md) | erledigt | — | G-481 |
 | `G-481` | fehler | hoch | [die Suche benutzt die Suche nicht](erledigt/nutrition-g-0481-suche-benutzt-suche-nicht.md) | erledigt | — | C-520 |
-| `G-482` | fehler | hoch | [die Planeintraege sind da und werden nicht gezeigt](erledigt/nutrition-g-0482-planeintraege-nicht-gezeigt.md) | erledigt | — | — |
+| `G-482` | fehler | hoch | [die Planeintraege sind da und werden nicht gezeigt](erledigt/nutrition-g-0482-planeintraege-nicht-gezeigt.md) | erledigt | — | G-486 |
 | `G-483` | feature | hoch | [Planner und Rezepte kennen keine Supplemente](erledigt/nutrition-g-0483-planner-und-rezepte.md) | erledigt | — | C-524 |
 | `G-485` | fehler | hoch | [das Tagebuch ist nicht lesbar](erledigt/nutrition-g-0485-tagebuch-nicht-lesbar.md) | erledigt | — | — |
+| `G-486` | fehler | hoch | [erfuellte Ghostentries bleiben stehen](laufend_claudecode/nutrition-g-0486-erfuellte-ghosts-bleiben.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 110
