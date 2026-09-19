@@ -471,6 +471,25 @@ function asNumberOrNull(value: unknown): number | null {
   return typeof parsed === 'number' && Number.isFinite(parsed) ? parsed : null
 }
 
+/**
+ * G-485: ein Makro aus dem Einnahme-Schnappschuss.
+ *
+ * `[cmd]` **Seit C-519 traegt die Supplementzeile keine Makros mehr**
+ * — sie stehen als JSON in
+ * `intake_logs.supplier_product_nutrients_snapshot`.
+ *
+ * `[read]` **Kein Wert heisst `null`, nicht 0** — dieselbe Regel wie
+ * ueberall im Diary: *nicht gemessen* ist nicht *enthaelt nichts*.
+ */
+function ausSchnappschuss(
+  einnahme: Record<string, unknown> | null | undefined,
+  code: string,
+): number | null {
+  const roh = einnahme?.supplier_product_nutrients_snapshot
+  if (!roh || typeof roh !== 'object') return null
+  return asNumberOrNull((roh as Record<string, unknown>)[code])
+}
+
 /** Rohzeilen defensiv auf das Modell filtern (Muster aus preferences-model). */
 export function parseStoredMeals(rows: unknown): StoredMeal[] {
   if (!Array.isArray(rows)) return []
@@ -503,10 +522,28 @@ export function parseStoredMealItems(rows: unknown): StoredMealItem[] {
   return rows.flatMap(row => {
     if (!row || typeof row !== 'object') return []
     const record = row as Record<string, unknown>
+    // ══ G-485: ein NULL-Name ist kein Grund zu verwerfen ═════════
+    //
+    // `[cmd]` **C-519 hat `food_name` nullable gemacht** und den
+    // Namen nach `intake_logs.supplement_name_snapshot` verlegt.
+    //
+    // `[cmd]` **Hier stand `typeof record.food_name !== 'string'`** —
+    // und damit fiel jede Supplementzeile aus dem Tagebuch, **bevor
+    // der Name aus der Einnahme ueberhaupt gelesen wurde.**
+    //
+    // `[read]` **Dieselbe Klasse wie G-478 mit `amount_g`, ein Feld
+    // weiter** — eine Pflichtpruefung, die eine Spalte voraussetzt,
+    // die es so nicht mehr gibt. **Gemessen: 438 statt 557,5 kcal,
+    // ohne jede Meldung.**
+    const hatNamen = typeof record.food_name === 'string'
+    const ausEinnahme = record.intake_logs
+    const nameInEinnahme = typeof (Array.isArray(ausEinnahme)
+      ? ausEinnahme[0]?.supplement_name_snapshot
+      : (ausEinnahme as Record<string, unknown> | null)?.supplement_name_snapshot) === 'string'
     if (
       typeof record.id !== 'string' ||
       typeof record.meal_id !== 'string' ||
-      typeof record.food_name !== 'string'
+      (!hatNamen && !nameInEinnahme)
     ) {
       return []
     }
@@ -556,12 +593,39 @@ export function parseStoredMealItems(rows: unknown): StoredMealItem[] {
           ? record.food_source : 'bls',
         custom_food_id: typeof record.custom_food_id === 'string'
           ? record.custom_food_id : null,
-        food_name: record.food_name,
+        // ══ G-485: der Name steht seit C-519 in der Einnahme ══════
+        //
+        // `[cmd]` **Gemessen am 2026-09-19:** die Supplementzeile in
+        // `meal_items` traegt `food_name = NULL` — C-519 hat die
+        // Spalte nullable gemacht und den Namen in
+        // `intake_logs.supplement_name_snapshot` gelegt.
+        //
+        // `[read]` **Ohne diesen Rueckgriff verwirft der Leser die
+        // Zeile** (ein Posten ohne Namen ist keiner), **und die
+        // Tagessumme unterschlaegt ihn stillschweigend.**
+        food_name: typeof record.food_name === 'string'
+          ? record.food_name
+          : typeof einnahme?.supplement_name_snapshot === 'string'
+            ? einnahme.supplement_name_snapshot
+            // `[read]` **Unerreichbar** — die Pruefung oben laesst nur
+            // Zeilen durch, die einen der beiden Namen tragen.
+            : '',
         amount_g: amount,
-        enercc: asNumberOrNull(record.enercc),
-        prot625: asNumberOrNull(record.prot625),
-        fat: asNumberOrNull(record.fat),
-        cho: asNumberOrNull(record.cho),
+        // ══ G-485: die Naehrwerte stehen seit C-519 im Schnappschuss ═
+        //
+        // `[cmd]` **Gemessen:** die Supplementzeile traegt `enercc =
+        // NULL`, `prot625 = NULL` — die Werte liegen in
+        // `intake_logs.supplier_product_nutrients_snapshot`
+        // (`{"ENERCC": 120.0000, "PROT625": 24.0000, …}`).
+        //
+        // `[read]` **Ohne diesen Rueckgriff zeigte das Fruehstueck
+        // 438 statt 557,5 kcal** — die Summe sah stimmig aus und
+        // unterschlug 120 kcal. **Eine falsche Zahl ohne Fehlermeldung
+        // ist schlimmer als eine Fehlermeldung.**
+        enercc: asNumberOrNull(record.enercc) ?? ausSchnappschuss(einnahme, 'ENERCC'),
+        prot625: asNumberOrNull(record.prot625) ?? ausSchnappschuss(einnahme, 'PROT625'),
+        fat: asNumberOrNull(record.fat) ?? ausSchnappschuss(einnahme, 'FAT'),
+        cho: asNumberOrNull(record.cho) ?? ausSchnappschuss(einnahme, 'CHO'),
         // G-12: der Schnappschuss der gewaehlten Portion (C-51).
         // Fehlt er, wurde direkt in Gramm erfasst.
         portion_name: typeof record.portion_name === 'string' ? record.portion_name : null,

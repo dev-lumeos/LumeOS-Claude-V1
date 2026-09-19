@@ -366,18 +366,18 @@ export async function legeSupplementPostenAn(
           ? null : p.serving_size,
         p_meal_id: p.meal_id,
       })
-    // Rueckfall, solange C-519 nicht eingespielt ist
+    // ══ G-485: der Rueckfall ist ENTFERNT ═══════════════════════
     //
-    // `[cmd]` **GEMESSEN am 2026-09-18:** die vier alten Spalten
-    // stehen noch, `record_supplier_product_intake` gibt es nicht.
-    // `[read]` **Ohne Rueckfall koennte niemand ein Supplement
-    // erfassen, bis Codex eingespielt hat** — und Codex wartet auf
-    // diesen Auftrag. **Beide Richtungen offen zu halten loest die
-    // Verklemmung.**
-    if (error && /record_supplier_product_intake|schema cache|function/i
-        .test(error.message)) {
-      return await legeAltenPostenAn(c, p, user.id)
-    }
+    // `[cmd]` **C-519 ist seit 2026-09-19 eingespielt** — die vier
+    // Altspalten gibt es nicht mehr, und ein Weg, der sie schreibt,
+    // kann nur noch scheitern.
+    //
+    // `[read]` **Toter Code konserviert alte Regeln** (A-59) — und
+    // hier war er schlimmer als tot: **er hat den echten Fehler
+    // verdeckt.** `[cmd]` **Gemessen:** der neue Weg scheiterte, der
+    // Rueckfall sprang an, und die Meldung, die beim Nutzer ankam,
+    // war die des ALTEN Weges — *„column
+    // meal_items.supplement_serving_size does not exist"*.
     if (error) {
       // `[read]` **Die Meldung der Datenbank ist fuer Entwickler** —
       // der Nutzer bekommt einen Satz.
@@ -387,99 +387,6 @@ export async function legeSupplementPostenAn(
           // `[cmd]` **Die Rohmeldung gehoert dazu** — ohne sie hat
           // eine Probe nichts zum Nachsehen, und derselbe Satz
           // erschien fuer drei verschiedene Ursachen.
-          fehler: 'Die Nährwerte passen nicht zur gewählten Portion. '
-            + 'Bitte Portionsgröße neu wählen.',
-        }
-      }
-      return { ok: false, fehler: error.message }
-    }
-    const id = s((data as Record<string, unknown> | null)?.id)
-    return id ? { ok: true, id } : { ok: false, fehler: 'Kein Posten angelegt.' }
-  } catch (e) {
-    return { ok: false, fehler: e instanceof Error ? e.message : String(e) }
-  }
-}
-
-/**
- * Der Weg VOR C-519 — die vier Spalten in `meal_items`.
- *
- * `[read]` **Nur noch Rueckfall.** `[cmd]` **Er faellt weg, sobald
- * `record_supplier_product_intake` existiert** — dann ist er tot,
- * und toter Code konserviert alte Regeln (A-59).
- */
-async function legeAltenPostenAn(
-  c: ReturnType<typeof createSessionClient>,
-  p: SupplementPosten,
-  userId: string,
-): Promise<SchreibErgebnis> {
-  try {
-    const grund: Record<string, unknown> = {
-      meal_id: p.meal_id,
-      user_id: userId,
-      food_source: 'supplement',
-      food_name: p.food_name,
-      // `[cmd]` **MUSS NULL sein** — `meal_items_amount_g_check`.
-      amount_g: null,
-      food_id: null,
-      custom_food_id: null,
-      portion_name: null, portion_quantity: null, portion_amount_g: null,
-      supplement_product_id: p.product_id,
-      supplement_serving_size: p.serving_size,
-      supplement_serving_quantity: p.serving_quantity,
-      supplement_nutrient_status: p.nutrient_status,
-    }
-
-    if (p.nutrient_status === 'no_nutrients_available') {
-      // `[cmd]` **Der Trigger verlangt: kein `serving_size`, KEIN
-      // Naehrwert, `nutrients = {}`** — sonst *„must remain visibly
-      // unknown"*.
-      grund.supplement_serving_size = null
-      for (const m of MAKROS) grund[m] = null
-      grund.nutrients = {}
-    } else {
-      const { data: opt, error } = await c.schema('supplements')
-        .from('supplier_product_nutrient_serving_options')
-        .select(OPTION_SPALTEN)
-        .eq('product_id', p.product_id)
-        .eq('serving_size', p.serving_size ?? '')
-        .maybeSingle()
-      if (error) return { ok: false, fehler: error.message }
-      if (!opt) {
-        return { ok: false, fehler: 'Diese Portionsgröße gibt es für das Produkt nicht.' }
-      }
-      const o = opt as unknown as Record<string, unknown>
-      const mal = (v: unknown) => {
-        const z = n(v)
-        return z === null ? null : z * p.serving_quantity
-      }
-      for (const m of MAKROS) grund[m] = mal(o[m])
-      // `[cmd]` **`jsonb_strip_nulls` im Trigger** — also duerfen
-      // hier keine `null` stehen, sonst weicht das Objekt ab.
-      const mikro: Record<string, number> = {}
-      for (const [spalte, schluessel] of MIKRO) {
-        const z = mal(o[spalte])
-        if (z !== null) mikro[schluessel] = z
-      }
-      // `[cmd]` **Der Trigger haengt `v_option.nutrients` AN**
-      // (`|| v_generic_nutrients`) — dieselben Werte, mal der
-      // Anzahl. `[read]` **Ohne sie fehlt z. B. `CHORL`, und die
-      // Datenbank weist die ganze Zeile zurueck.**
-      const frei = (o.nutrients ?? {}) as Record<string, unknown>
-      for (const [schluessel, wert] of Object.entries(frei)) {
-        const z = mal(wert)
-        if (z !== null) mikro[schluessel] = z
-      }
-      grund.nutrients = mikro
-    }
-
-    const { data, error } = await c.schema('nutrition')
-      .from('meal_items').insert(grund).select('id').maybeSingle()
-    if (error) {
-      // `[read]` **Die Meldung des Triggers ist fuer Entwickler** —
-      // der Nutzer bekommt einen Satz.
-      if (error.message.includes('C513')) {
-        return {
-          ok: false,
           fehler: 'Die Nährwerte passen nicht zur gewählten Portion. '
             + 'Bitte Portionsgröße neu wählen.',
         }

@@ -6,6 +6,9 @@
 // Läuft ausschliesslich serverseitig (Route mit runtime 'nodejs').
 
 import { createSessionClient } from '@lumeos/shared/session'
+// G-485: der Zugriff auf `intake_logs` gehoert nach G-138 in EINE
+// Datei -- `stack-write.ts` besitzt die Tabelle.
+import { einnahmenZuPosten } from '../supplements/stack-write'
 import { isDbUnavailableMessage } from '@lumeos/shared/nutrition/db'
 import {
   DiaryWriteError,
@@ -65,75 +68,71 @@ export async function listOwnMeals(entryDate: string): Promise<StoredMeal[]> {
 }
 
 /** Positionen einer eigenen Mahlzeit. */
-// ══ G-481/A12: zwei Schemata, ein Leseweg ═══════════════════════════
+// G-485: C-519 ist live -- EIN Leseweg, zwei Abfragen
 //
-// `[cmd]` **C-519 entfernt vier Spalten aus `nutrition.meal_items`
-// und ersetzt sie durch `supplement_intake_log_id`**
-// (`20260918194000_...:292`).
+// **Tom, 2026-09-19:** *,,wieso sehe ich keine meals mehr in diary?
+// column meal_items.supplement_serving_size does not exist"*
 //
-// `[cmd]` **GEMESSEN am 2026-09-18, 21:0x:** die vier alten Spalten
-// stehen noch, `supplement_intake_log_id` gibt es nicht — C-519 ist
-// NICHT eingespielt. `[cmd]` **Ein Leseweg, der die Einbettung fest
-// verlangt, antwortet dann mit 500:** *„Could not find a relationship
-// between 'meal_items' and 'intake_logs'"* — **gemessen, nicht
-// vermutet: das Tagebuch war leer.**
+// `[cmd]` **GEMESSEN am 2026-09-19:** `nutrition.meal_items` traegt
+// nur noch `supplement_intake_log_id` -- die vier Altspalten sind weg.
 //
-// `[read]` **Deshalb wird BEIDES versucht** — erst der neue Weg, bei
-// fehlender Beziehung der alte. **So bleibt die Anwendung vor und
-// nach dem Einspielen bedienbar**, und Codex kann einspielen, ohne
-// auf einen Anwendungsstand zu warten.
-const SPALTEN_ALT = 'id, meal_id, food_id, custom_food_id, food_source, food_name, amount_g, enercc, prot625, fat, cho, portion_name, portion_quantity, portion_amount_g, frozen_at, supplement_serving_size, supplement_serving_quantity, supplement_nutrient_status, foods!left(updated_at)'
-const SPALTEN_C519 = 'id, meal_id, food_id, custom_food_id, food_source, food_name, amount_g, enercc, prot625, fat, cho, portion_name, portion_quantity, portion_amount_g, frozen_at, supplement_intake_log_id, intake_logs!left(supplier_product_serving_size,supplier_product_serving_quantity,supplier_product_nutrient_status), foods!left(updated_at)'
-
-/** Fehlt die Beziehung, ist C-519 noch nicht eingespielt. */
-function ohneC519(meldung: string): boolean {
-  return /relationship between|supplement_intake_log_id|schema cache/i.test(meldung)
-}
-
+// WARUM DER RUECKFALL AUS G-481 TOEDLICH WAR
+//
+// `[read]` **Ein `.select()`, das eine entfernte Spalte nennt, laesst
+// JEDE Zeile scheitern** -- nicht nur die Supplemente. **Das Tagebuch
+// war komplett leer.**
+//
+// `[cmd]` **Und der Rueckfall wurde ERREICHT:** `ohneC519()` traf auf
+// die Meldung des neuen Weges, und der alte Weg starb an den
+// Altspalten. **Zwei Wege offen zu halten hat den Fehler nicht
+// abgefedert, sondern verdoppelt.**
+//
+// WARUM KEINE EINBETTUNG
+//
+// `[cmd]` **Der Fremdschluessel zeigt nach `supplements.intake_logs`**
+// (gemessen: `confrelid` liegt im Schema `supplements`).
+// `[cmd]` **PostgREST bettet nur innerhalb des angefragten Schemas
+// ein** -- `.schema('nutrition')` erreicht die Tabelle nicht.
+//
+// `[read]` **Deshalb zwei Abfragen statt einer Einbettung**: erst die
+// Posten, dann die Einnahmen zu den gefundenen Verweisen.
+// `[read]` **Nur wenn es Verweise gibt** -- ein Tag ohne Supplement
+// kostet keine zweite Rundreise.
 export async function listOwnMealItems(mealId: string): Promise<StoredMealItem[]> {
   const { supabase } = await requireSession()
-  const neu = await supabase
-    .schema('nutrition')
-    .from('meal_items')
-    .select(SPALTEN_C519)
-    .eq('meal_id', mealId)
-    .order('created_at', { ascending: true })
-  if (!neu.error) return parseStoredMealItems(neu.data)
-  if (!ohneC519(neu.error.message)) {
-    throw classifyDbError(neu.error.message, 'WRITE_FAILED')
-  }
-
   const { data, error } = await supabase
     .schema('nutrition')
     .from('meal_items')
-    // G-12: die Portionsspalten kommen mit. Sie stehen seit C-51 in
-    // der Tabelle und wurden nie gelesen — ohne sie ist in der Zeile
-    // nicht erkennbar, ob „2 Scheiben" gemeint waren oder 60 g.
-    // G-348: `food_source` und `custom_food_id` kommen mit — ohne
-    // sie ist ein manueller Posten von einem eigenen Lebensmittel
-    // nicht zu unterscheiden (beide haben `food_id IS NULL`).
-    // ══ G-223: der Schnappschuss und sein Bestand ═══════════════════
-    //
-    // `[cmd]` **`frozen_at` stand seit C-03 in der Tabelle und wurde
-    // nie gelesen** ? `diary-model.ts` schreibt sie an drei Stellen,
-    // kein Leseweg nahm sie mit. **Ohne sie kann die Kachel nicht
-    // entscheiden, ob der Schnappschuss ueberholt ist** (SPEC_10).
-    //
-    // `[read]` **`foods!left`, nicht `!inner`** ? ein manueller Posten
-    // und ein eigenes Lebensmittel haben `food_id IS NULL`. **Mit
-    // `!inner` fielen beide aus der Liste**, und das Tagebuch waere
-    // stillschweigend kuerzer (dieselbe Klasse wie G-348).
-    // `[cmd]` **Eine Zeichenkette, nicht zusammengesetzt.** Der
-    // Waechter aus G-348 prueft `/\.select\('[^']*food_source[^']*'\)/`
-    // — **eine Verkettung ueber mehrere Zeilen macht ihn rot**, obwohl
-    // die Felder mitkommen. Gemessen: `not ok 614`.
-    .select('id, meal_id, food_id, custom_food_id, food_source, food_name, amount_g, enercc, prot625, fat, cho, portion_name, portion_quantity, portion_amount_g, frozen_at, supplement_serving_size, supplement_serving_quantity, supplement_nutrient_status, foods!left(updated_at)')
+    // `[cmd]` **Die Liste steht IM Aufruf, nicht in einer
+    // Konstanten** — die Waechter aus G-348 und G-223 pruefen
+    // `/\.select\('[^']*food_source[^']*'\)/`. `[read]` **Eine
+    // Konstante macht sie rot, obwohl die Felder mitkommen** —
+    // gemessen: `not ok 942`, `not ok 1287`.
+    .select('id, meal_id, food_id, custom_food_id, food_source, food_name, amount_g, enercc, prot625, fat, cho, portion_name, portion_quantity, portion_amount_g, frozen_at, supplement_intake_log_id, foods!left(updated_at)')
     .eq('meal_id', mealId)
     .order('created_at', { ascending: true })
   if (error) {
     throw classifyDbError(error.message, 'WRITE_FAILED')
   }
-  return parseStoredMealItems(data)
+
+  // `[read]` **Die Einnahmen nachlesen** -- Portion, Anzahl und Stand
+  // stehen seit C-519 dort, nicht mehr am Posten.
+  const zeilen = (Array.isArray(data) ? data : []) as Array<Record<string, unknown>>
+  const verweise = zeilen
+    .map(z => z.supplement_intake_log_id)
+    .filter((v): v is string => typeof v === 'string' && v.length > 0)
+  if (verweise.length === 0) return parseStoredMealItems(zeilen)
+
+  // `[cmd]` **Der Zugriff liegt in `stack-write.ts`** -- G-138
+  // verlangt genau EINE Datei fuer `intake_logs`, und der Waechter
+  // prueft die Datei, nicht die Zeile. `[read]` **Verschoben, nicht
+  // den Waechter gelockert** (wie in G-475).
+  const ausLog = await einnahmenZuPosten(verweise)
+  return parseStoredMealItems(zeilen.map(z => {
+    const v = z.supplement_intake_log_id
+    const l = typeof v === 'string' ? ausLog.get(v) : undefined
+    return l ? { ...z, intake_logs: l } : z
+  }))
 }
 
 /**

@@ -696,3 +696,46 @@ export async function letzteEinnahmen(): Promise<
     return []
   }
 }
+
+/**
+ * G-485: die Einnahmeangaben zu Mahlzeitposten.
+ *
+ * ══ WARUM DIESE FUNKTION HIER STEHT ═════════════════════════════════
+ *
+ * `[cmd]` **G-138 verlangt: genau EINE Datei fasst `intake_logs` an**
+ * — und der Waechter prueft die DATEI, nicht die Zeile. `[read]`
+ * **`diary-write.ts` schreibt auf andere Tabellen; ein `.from(
+ * 'intake_logs')` dort machte sie zur zweiten Schreibstelle**, auch
+ * wenn dieser Zugriff nur liest.
+ *
+ * `[read]` **Dieselbe Loesung wie in G-475 bei `letzteEinnahmen`** —
+ * verschoben, nicht den Waechter gelockert.
+ *
+ * `[cmd]` **C-519 hat Portion, Anzahl, Stand, NAME und Naehrwerte aus
+ * `nutrition.meal_items` entfernt** — sie stehen jetzt hier.
+ */
+export async function einnahmenZuPosten(
+  ids: readonly string[],
+): Promise<Map<string, Record<string, unknown>>> {
+  const aus = new Map<string, Record<string, unknown>>()
+  if (ids.length === 0) return aus
+  try {
+    await sitzung()
+    const c = createSessionClient().schema('supplements')
+    const { data, error } = await c
+      .from('intake_logs')
+      .select('id, supplement_name_snapshot, supplier_product_serving_size, supplier_product_serving_quantity, supplier_product_nutrient_status, supplier_product_nutrients_snapshot')
+      .in('id', ids as string[])
+    // `[read]` **Ein Fehler darf das Tagebuch NICHT leeren** — genau
+    // das ist am 2026-09-19 passiert. **Dann fehlt die Portion, und
+    // der Rest steht.**
+    if (error) return aus
+    for (const l of (Array.isArray(data) ? data : []) as Array<Record<string, unknown>>) {
+      const id = typeof l.id === 'string' ? l.id : null
+      if (id) aus.set(id, l)
+    }
+    return aus
+  } catch {
+    return aus
+  }
+}

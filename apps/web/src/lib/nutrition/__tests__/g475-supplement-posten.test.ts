@@ -170,47 +170,43 @@ test('A9: die Frage ist eine FRAGE, keine Fehlermeldung', () => {
 
 // ══ 5 — der Schreibweg haelt sich an die CHECKs ═════════════════════
 
-test('A10: der Schreibweg setzt amount_g auf NULL', () => {
-  // `[cmd]` **`meal_items_amount_g_check`:** bei `'supplement'` MUSS
-  // `amount_g` NULL sein. `[read]` **Gramm sind die falsche Einheit**
-  // — ein Scoop ist keine Menge in Gramm, sondern eine Portion.
+// G-485: A10 bis A12 pruefen jetzt den C-519-Vertrag
+//
+// `[cmd]` **C-519 hat den Schreibweg in die Datenbank verlegt**:
+// `supplements.record_supplier_product_intake(...)` schreibt die
+// Einnahme UND den Verweis, **und rechnet den Schnappschuss selbst**
+// (`supplier_product_nutrient_snapshot`).
+//
+// `[read]` **Die drei Zusicherungen gelten weiter, nur woanders:**
+// `amount_g` NULL, der Schnappschuss vollstaendig, und ohne
+// Naehrwerte bleibt alles leer. `[cmd]` **Die Datenbank erzwingt sie
+// jetzt** -- die Anwendung darf sie nicht mehr selbst bauen.
+//
+// `[read]` **Nicht geloescht, sondern umgehaengt** -- eine entfallene
+// Zusicherung waere eine stille Lockerung.
+test('A10-A12: der Schreibweg ruft die C-519-Funktion', () => {
   const q = ohneKommentare(lies('lib/nutrition/supplement-posten-read.ts'))
-  // `[cmd]` **Der Wortanfang MUSS mit** — `/amount_g:\s*null/` traf
-  // auch `portion_amount_g: null` in derselben Datei, und eine
-  // Sabotage auf `amount_g: 1` blieb gruen (gemessen 2026-09-18).
-  assert.match(q, /(?<![A-Za-z_])amount_g:\s*null/,
-    'Der Schreibweg setzt `amount_g` nicht auf NULL — der CHECK '
-    + 'weist die Zeile ab.')
-  assert.match(q, /portion_name:\s*null/,
-    'Die Portionsspalten muessen NULL bleiben (CHECK).')
+  assert.match(q, /record_supplier_product_intake/,
+    'Der Schreibweg ruft die C-519-Funktion nicht.')
+  // `[cmd]` **Das Datum MUSS zum Mahlzeittag passen** -- sonst wirft
+  // die Funktion *,,intake date must match meal date"*.
+  assert.match(q, /p_intake_date/,
+    'Ohne Datum nimmt die Funktion current_date — das trifft einen '
+    + 'nachgetragenen Tag nicht.')
+  assert.match(q, /p_meal_id: p\.meal_id/,
+    'Ohne meal_id entsteht kein Posten in der Mahlzeit.')
 })
 
-test('A11: der Schnappschuss wird GESCHRIEBEN, nicht dem Trigger ueberlassen', () => {
-  // ══ DER GEMESSENE GRUND ══════════════════════════════════════════
-  //
-  // `[cmd]` **Ein erster Versuch schickte nur Produkt, Portion und
-  // Anzahl** — die Datenbank wies ihn ab: *„snapshot differs from
-  // its evidenced product serving"*. **Der Trigger ist ein
-  // Waechter, kein Rechner.**
+test('A10-A12: die Anwendung baut den Schnappschuss NICHT mehr selbst', () => {
+  // `[read]` **Das ist die Gegenrichtung** -- wer die vier
+  // entfernten Spalten wieder schreibt, bekommt einen Fehler von der
+  // Datenbank, und zwar bei JEDER Erfassung.
   const q = ohneKommentare(lies('lib/nutrition/supplement-posten-read.ts'))
-  assert.match(q, /for \(const m of MAKROS\) grund\[m\] = mal\(o\[m\]\)/,
-    'Die Makros werden nicht aus der Option uebernommen.')
-  assert.match(q, /grund\.nutrients = mikro/,
-    'Die Mikronaehrstoffe fehlen — der Trigger vergleicht sie mit.')
-  // `[cmd]` **`jsonb_strip_nulls` im Trigger** — `null` im Objekt
-  // waere eine Abweichung.
-  assert.match(q, /if \(z !== null\) mikro\[schluessel\] = z/,
-    'Nullwerte landen im nutrients-Objekt — dann weicht es ab.')
-})
-
-test('A12: ohne Naehrwerte bleibt ALLES leer', () => {
-  const q = ohneKommentare(lies('lib/nutrition/supplement-posten-read.ts'))
-  const zweig = q.slice(q.indexOf("if (p.nutrient_status === 'no_nutrients_available')"))
-    .slice(0, 400)
-  assert.match(zweig, /supplement_serving_size = null/)
-  assert.match(zweig, /grund\[m\] = null/)
-  assert.match(zweig, /grund\.nutrients = \{\}/,
-    'Ohne Naehrwerte muss `nutrients` ein leeres Objekt sein.')
+  for (const spalte of ['supplement_product_id', 'supplement_serving_size',
+    'supplement_serving_quantity', 'supplement_nutrient_status']) {
+    assert.doesNotMatch(q, new RegExp(spalte + ':'),
+      spalte + ' wird geschrieben -- C-519 hat die Spalte entfernt.')
+  }
 })
 
 // ══ 6 — die Kontrollprobe ═══════════════════════════════════════════
