@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 240 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 500 |
-| **gesamt** | **741** |
+| `laufend_codex` | 1 |
+| `erledigt` | 501 |
+| **gesamt** | **742** |
 
 ## medical — 49
 
@@ -64,7 +64,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 247
+## nutrition — 248
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -168,6 +168,7 @@
 | `C-464` | feature | mittel | [das Ballaststoffziel fehlt](erledigt/nutrition-c-0464-das-ballaststoffziel-fehlt.md) | erledigt | — | G-439 |
 | `C-466` | feature | hoch | [Naehrstoffe aus Supplementen in der Nutrients-Ansicht](erledigt/nutrition-c-0466-naehrstoffe-aus-supplementen.md) | erledigt | — | C-467, G-426 |
 | `C-507` | entscheidung | hoch | [die Suchtiefe nach Erfahrungsgrad](todos/nutrition-c-0507-suchtiefe-nach-erfahrungsgrad.md) | offen | — | — |
+| `C-521` | fehler | hoch | [die Tagessumme uebersieht die Supplemente](laufend_codex/nutrition-c-0521-tagessumme-uebersieht-supplemente.md) | laeuft (codex) | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](erledigt/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | erledigt | — | G-375 |
@@ -313,7 +314,7 @@
 | `G-481` | fehler | hoch | [die Suche benutzt die Suche nicht](erledigt/nutrition-g-0481-suche-benutzt-suche-nicht.md) | erledigt | — | C-520 |
 | `G-482` | fehler | hoch | [die Planeintraege sind da und werden nicht gezeigt](erledigt/nutrition-g-0482-planeintraege-nicht-gezeigt.md) | erledigt | — | — |
 | `G-483` | feature | hoch | [Planner und Rezepte kennen keine Supplemente](todos/nutrition-g-0483-planner-und-rezepte.md) | offen | — | — |
-| `G-485` | fehler | hoch | [das Tagebuch ist nicht lesbar](laufend_claudecode/nutrition-g-0485-tagebuch-nicht-lesbar.md) | laeuft (claudecode) | — | — |
+| `G-485` | fehler | hoch | [das Tagebuch ist nicht lesbar](erledigt/nutrition-g-0485-tagebuch-nicht-lesbar.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 110
@@ -702,7 +703,7 @@
 | `C-508` | feature | mittel | [eine Zaehlfunktion fuer die Allergietreffer](erledigt/quer-c-0508-zaehlfunktion-allergietreffer.md) | erledigt | — | — |
 | `C-513` | feature | hoch | [ein Supplement in eine Mahlzeit](erledigt/quer-c-0513-supplement-in-mahlzeit.md) | erledigt | — | G-475 |
 | `C-517` | entscheidung | hoch | [Backups gehoeren nicht in git](todos/quer-c-0517-backups-nicht-in-git.md) | offen | — | — |
-| `C-519` | feature | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-c-0519-supplement-bleibt-supplement.md) | erledigt | — | G-485 |
+| `C-519` | feature | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-c-0519-supplement-bleibt-supplement.md) | erledigt | — | C-521, G-485 |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
