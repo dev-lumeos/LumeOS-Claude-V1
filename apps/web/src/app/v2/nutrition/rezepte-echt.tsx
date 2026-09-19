@@ -33,6 +33,7 @@ import {
   summeVon, jePortion, quellenEtikett, skaliert, mengeAnzeige, fortschritt,
   KOENNEN, KOENNEN_LABEL, KOENNEN_VORGABE, UNVOLLSTAENDIG_SATZ,
   type ZutatEntwurf, type Koennen, type Naehrwerte,
+  istSupplementEntwurf,
 } from '../../../lib/nutrition/rezept-lage'
 // G-323: dasselbe Suchmodal wie im Planner — keine zweite Suche.
 import { FoodSuchModal } from './food-such-modal'
@@ -63,14 +64,24 @@ function z(v: number | null, nach = 0): string {
   })
 }
 
-async function senden(koerper: unknown): Promise<{ ok: boolean; fehler?: string }> {
+async function senden(koerper: unknown): Promise<{
+  ok: boolean; fehler?: string
+  /**
+   * G-483: die Antwort der Route.
+   *
+   * `[read]` **Hier wurde sie bisher weggeworfen** — und damit die Id
+   * eines NEU angelegten Rezepts. **Eine Supplementzutat braucht sie:
+   * die Funktion aus C-519 nimmt `p_recipe_id`.**
+   */
+  daten?: Record<string, unknown> | null
+}> {
   const antwort = await fetch('/api/nutrition/rezept', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(koerper),
   })
-  if (antwort.ok) return { ok: true }
   const k = await antwort.json().catch(() => null)
+  if (antwort.ok) return { ok: true, daten: k }
   return { ok: false, fehler: k?.error ?? `Fehler ${antwort.status}` }
 }
 
@@ -268,13 +279,46 @@ export function RezeptBauer({ vorhanden, onFertig, onAbbruch }: {
       prep_time_min: zahlOderNull(vorzeit),
       cook_time_min: zahlOderNull(garzeit),
       cooking_skill: koennen,
-      zutaten: zutaten.map(x => ({ food_id: x.food_id, amount_g: x.amount_g })),
+      // ══ G-483: nur Lebensmittel in den Rezeptsatz ═══════════════
+      //
+      // `[cmd]` **Eine Supplementzutat hat kein `food_id` und
+      // `amount_g IS NULL`** (CHECK) — sie durch denselben Vertrag zu
+      // schicken hiesse, ihn zu belügen.
+      //
+      // `[read]` **Sie kommt danach, ueber die Funktion, die C-519
+      // mitbringt** — sie schreibt Zutat UND Produktverweis.
+      zutaten: zutaten.filter(x => !istSupplementEntwurf(x))
+        .map(x => ({ food_id: x.food_id, amount_g: x.amount_g })),
     }
     const r = await senden(vorhanden
       ? { art: 'rezept_aendern', id: vorhanden.id, ...felder }
       : { art: 'rezept', ...felder })
+    if (!r.ok) { setLaeuft(false); setFehler(r.fehler ?? 'Fehler'); return }
+
+    // `[read]` **Erst wenn das Rezept steht, kennt die Funktion seine
+    // Id** — beim Anlegen kommt sie aus der Antwort.
+    const rezeptId = vorhanden?.id
+      ?? (typeof r.daten?.id === 'string' ? r.daten.id : null)
+    const supps = zutaten.filter(istSupplementEntwurf)
+    if (rezeptId && supps.length > 0) {
+      for (const sup of supps) {
+        const a = await senden({
+          art: 'supplement_zutat',
+          recipe_id: rezeptId,
+          product_id: sup.product_id,
+          serving_quantity: sup.serving_quantity ?? 1,
+          serving_size: sup.serving_size ?? null,
+        })
+        // `[read]` **Ein Fehler hier darf das gespeicherte Rezept
+        // nicht verschweigen** — er wird genannt, das Rezept bleibt.
+        if (!a.ok) {
+          setLaeuft(false)
+          setFehler(a.fehler ?? 'Die Supplementzutat wurde nicht gespeichert.')
+          return
+        }
+      }
+    }
     setLaeuft(false)
-    if (!r.ok) { setFehler(r.fehler ?? 'Fehler'); return }
     onFertig()
   }
 
@@ -488,6 +532,32 @@ export function RezeptBauer({ vorhanden, onFertig, onAbbruch }: {
                 prot625_100: zahlOderNull(f.prot625),
                 fat_100: zahlOderNull(f.fat),
                 cho_100: zahlOderNull(f.cho),
+              }])
+              setSuchen(false)
+            }}
+            // ══ G-483: dieselbe Suche, zweite Quelle ══════════════
+            //
+            // `[cmd]` **C-519 erlaubt Supplemente als Rezeptzutat** —
+            // **also darf die Pille hier erscheinen.** `[read]` **Der
+            // Planeintrag bekommt sie weiterhin NICHT:
+            // `meal_plan_entries` hat keine Spalte** (gemessen
+            // 2026-09-19).
+            //
+            // `[read]` **Der Entwurf traegt sie, gespeichert wird
+            // beim Sichern** — wie bei jeder anderen Zutat auch.
+            onSupplement={async (t, portion) => {
+              setZutaten(alt => [...alt, {
+                food_id: '',
+                name: t.name,
+                // `[cmd]` **`amount_g` MUSS bei Supplementen NULL
+                // sein** (CHECK) — die 0 steht nur im Entwurf und
+                // wird beim Sichern nicht mitgeschickt.
+                amount_g: 0,
+                enercc_100: null, prot625_100: null,
+                fat_100: null, cho_100: null,
+                product_id: t.product_id,
+                serving_size: portion,
+                serving_quantity: 1,
               }])
               setSuchen(false)
             }}
@@ -839,17 +909,51 @@ function RezeptKarte({ r, offen, onOeffnen, onBearbeiten, onLoggen, onListe }: {
               zweiter Rechenweg.** */}
           <div className="v2-col-gap" style={{ gap: 2 }}>
             {r.zutaten.map(zt => {
-              const m = vorschauFuer({
-                enercc: zt.enercc_100, prot625: zt.prot625_100,
-                fat: zt.fat_100, cho: zt.cho_100,
-              }, zt.amount_g)
+              // ══ G-483: ein Supplement rechnet nicht je 100 g ═════
+              //
+              // `[cmd]` **Seine Werte gelten JE PORTION** — der
+              // Leseweg liefert sie bereits mal Anzahl. `[read]`
+              // **`vorschauFuer(…, 0)` gaebe vier Nullen**, und die
+              // saehen aus wie gemessene Nullwerte.
+              const m = zt.food_source === 'supplement'
+                ? {
+                  kcal: zt.supplement?.enercc ?? null,
+                  protein: zt.supplement?.prot625 ?? null,
+                  fett: zt.supplement?.fat ?? null,
+                  kh: zt.supplement?.cho ?? null,
+                }
+                : vorschauFuer({
+                  enercc: zt.enercc_100, prot625: zt.prot625_100,
+                  fat: zt.fat_100, cho: zt.cho_100,
+                }, zt.amount_g)
               return (
                 <div key={zt.id} data-probe="detail-zutat" style={{
                   display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5,
                 }}>
-                  <span style={{ flex: 1, minWidth: 0 }}>{zt.name}</span>
+                  <span style={{ flex: 1, minWidth: 0 }}>
+                    {zt.name}
+                    {/* ══ G-483: die Marke einer Supplementzutat ═══
+                        `[read]` **Sie muss sich vom Lebensmittel
+                        unterscheiden** — sonst sieht „1 ×" aus wie
+                        „1 g". **Dieselbe Marke wie in der
+                        Mahlzeitenliste** (G-478). */}
+                    {zt.food_source === 'supplement' && (
+                      <span className="v2-supp-posten-marke"
+                            data-probe="rezept-supplement-marke">
+                        Supplement
+                        {zt.supplement?.serving_size
+                          ? ` · ${zt.supplement.serving_size}` : ' · ohne Nährwerte'}
+                      </span>
+                    )}
+                  </span>
                   <span className="v2-num v2-dim" style={{ width: 56, textAlign: 'right' }}>
-                    {mengeAnzeige(zt.amount_g)}
+                    {/* `[cmd]` **Bei `supplement` ist `amount_g` NULL**
+                        (CHECK) — `mengeAnzeige` schriebe „0 g", und
+                        das ist eine Behauptung. `[read]` **Die Menge
+                        ist die Anzahl der Portionen.** */}
+                    {zt.food_source === 'supplement'
+                      ? `${z(zt.supplement?.serving_quantity ?? 1, 0)} ×`
+                      : mengeAnzeige(zt.amount_g)}
                   </span>
                   {/* `[read]` **Vier Werte, feste Breite** — sonst
                       springen die Spalten, sobald eine Zahl

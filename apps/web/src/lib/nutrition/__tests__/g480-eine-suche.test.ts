@@ -153,7 +153,23 @@ test('G-480: nur der Mahlzeitweg schaltet Supplemente frei', () => {
   const mahl = lies(path.join('app', 'v2', 'nutrition', 'mahlzeiten.tsx'))
   assert.match(mahl, /onSupplement=\{/,
     'der Mahlzeitweg reicht den Schreibweg nicht durch')
-  for (const datei of ['plan-eintrag-editor.tsx', 'rezepte-echt.tsx', 'ghost-eintrag.tsx']) {
+  // ══ G-483: das Rezept kann es jetzt AUCH ════════════════════════
+  //
+  // `[cmd]` **C-519 erlaubt `supplement` in
+  // `recipe_ingredients.food_source`** und bringt
+  // `add_supplier_product_to_recipe` mit (gemessen 2026-09-19).
+  //
+  // `[read]` **Die Zusicherung bleibt dieselbe:** anbieten nur, wo
+  // geschrieben werden kann. **Nur die Liste hat sich geaendert** —
+  // nicht die Regel.
+  const rez = lies(path.join('app', 'v2', 'nutrition', 'rezepte-echt.tsx'))
+  assert.match(rez, /onSupplement=\{/,
+    'das Rezept reicht den Schreibweg nicht durch (C-519)')
+
+  // `[cmd]` **`nutrition.meal_plan_entries` hat KEINE
+  // Supplementspalte** — gemessen am 2026-09-19. `[read]` **Dort
+  // bleibt die Pille weg.**
+  for (const datei of ['plan-eintrag-editor.tsx', 'ghost-eintrag.tsx']) {
     const d = lies(path.join('app', 'v2', 'nutrition', datei))
     assert.doesNotMatch(d, /onSupplement=/,
       `${datei} bietet Supplemente an, kann sie aber nicht schreiben`)

@@ -80,6 +80,7 @@ export function quellenEtikett(q: Quelle, detail?: string | null): string | null
 
 /** Eine Zutat im Entwurf — was die Suche liefert plus die Menge. */
 export type ZutatEntwurf = {
+  /** Leer bei einem Supplement — dort zaehlt `product_id`. */
   food_id: string
   name: string
   amount_g: number
@@ -88,6 +89,31 @@ export type ZutatEntwurf = {
   prot625_100: number | null
   fat_100: number | null
   cho_100: number | null
+  // ══ G-483: eine Supplementzutat ══════════════════════════════════
+  //
+  // **Tom:** *„ja klar kann ich zb 500ml milch/blaubeeren und whey
+  // protein ein rezept fuer meinen eigenen shake machen"*
+  //
+  // `[cmd]` **C-519 erlaubt `supplement` in
+  // `recipe_ingredients.food_source`** — **und verlangt dort
+  // `amount_g IS NULL`** (CHECK). `[read]` **Die Menge ist eine
+  // Portion, kein Gewicht.**
+  //
+  // `[read]` **Optional, weil der Bestandsweg sie nicht kennt** — ein
+  // Entwurf ohne `product_id` ist weiterhin ein Lebensmittel.
+  product_id?: string
+  serving_size?: string | null
+  serving_quantity?: number
+}
+
+/**
+ * G-483: ist dieser Entwurf ein Supplement?
+ *
+ * `[read]` **Eine Stelle entscheidet es** — `product_id` gesetzt.
+ * **Zwei Vergleiche waeren zwei Wahrheiten.**
+ */
+export function istSupplementEntwurf(z: ZutatEntwurf): boolean {
+  return typeof z.product_id === 'string' && z.product_id.length > 0
 }
 
 export type Naehrwerte = {

@@ -185,8 +185,18 @@ test('G-325: der Leseweg liefert die Werte je 100 g', () => {
   const r = ohneKommentare(REZEPTE)
   assert.match(r, /enercc_100: x\.enercc_100/,
     'das Formular verwirft die gelesenen Nährwerte')
-  assert.doesNotMatch(r, /enercc_100: null, prot625_100: null/,
-    'das Formular setzt die Nährwerte wieder auf null')
+  // ══ G-483: der Supplementzweig darf null setzen ═════════════════
+  //
+  // `[cmd]` **Ein Supplement hat keine Werte je 100 g** — seine
+  // Naehrwerte gelten JE PORTION und stehen am Produkt. `[read]`
+  // **Die Zusicherung gilt weiter fuer LEBENSMITTEL:** wer dort die
+  // gelesenen Werte wegwirft, zeigt vier Striche beim Bearbeiten.
+  //
+  // `[cmd]` **Geprueft wird deshalb der Zweig, der aus der SUCHE
+  // kommt** (`onWaehlen`), nicht die ganze Datei.
+  const ausSuche = r.slice(r.indexOf('onWaehlen={async (f'), r.indexOf('onSupplement='))
+  assert.doesNotMatch(ausSuche, /enercc_100: null, prot625_100: null/,
+    'das Formular setzt die Nährwerte eines Lebensmittels wieder auf null')
 })
 
 // ══ Die Rechnung ═════════════════════════════════════════════════════

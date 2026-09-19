@@ -30,6 +30,9 @@
 // hinterliesse sonst zwei Wahrheiten.
 //
 // Laeuft ausschliesslich serverseitig.
+// G-483: die Produktverweise der Supplementzutaten -- der Zugriff
+// auf `supplements` liegt in EINER Datei (G-138).
+import { produktverweise, type ProduktVerweis } from '../supplements/stack-write'
 import { createSessionClient } from '@lumeos/shared/session'
 
 import { quelleVon, type Quelle } from './rezept-lage'
@@ -66,6 +69,19 @@ export type RezeptZutat = {
   prot625_100: number | null
   fat_100: number | null
   cho_100: number | null
+  /**
+   * G-483: woher die Zutat stammt — `bls`, `custom` oder
+   * `supplement` (C-519).
+   */
+  food_source: string
+  /**
+   * G-483: der Produktverweis, wenn es ein Supplement ist.
+   *
+   * `[read]` **`null` bei Lebensmitteln** — und bei einem Supplement
+   * traegt er Portion und Anzahl, weil `amount_g` dort NULL sein
+   * MUSS (CHECK).
+   */
+  supplement: ProduktVerweis | null
 }
 
 export type RezeptNaehrwerte = {
@@ -153,12 +169,35 @@ export async function ladeRezepte(): Promise<RezeptStand> {
     const ids = zeilen.map(r => String(r.id))
 
     // Die Zutaten aller Rezepte in EINER Abfrage.
+    // ══ G-483: `food_source` kommt mit ═══════════════════════════
+    //
+    // **Tom:** *„ja klar kann ich zb 500ml milch/blaubeeren und whey
+    // protein ein rezept fuer meinen eigenen shake machen"*
+    //
+    // `[cmd]` **C-519 erlaubt `supplement` in
+    // `recipe_ingredients.food_source`** (CHECK gemessen 2026-09-19).
+    // `[cmd]` **Fuer diese Zeilen ist `amount_g` NULL und
+    // `food_name_snapshot` leer** — Produkt, Portion und Name stehen
+    // in `supplements.recipe_product_references`.
+    //
+    // `[read]` **Ohne `food_source` waere eine Supplementzutat eine
+    // namenlose Zeile ohne Menge** — genau die Klasse Fehler aus
+    // G-485: sie faellt nicht auf, sie sieht nur leer aus.
     const { data: zRoh } = ids.length > 0
       ? await db.from('recipe_ingredients')
-        .select('id, recipe_id, food_id, amount_g, sort_order, food_name_snapshot')
+        .select('id, recipe_id, food_id, amount_g, sort_order, food_name_snapshot, food_source')
         .in('recipe_id', ids).order('sort_order')
       : { data: [] }
     const zutaten = (zRoh ?? []) as unknown as Array<Record<string, unknown>>
+
+    // `[read]` **Die Produktverweise der Supplementzutaten** — nur
+    // wenn es welche gibt, sonst keine zweite Rundreise.
+    const suppIds = zutaten
+      .filter(z => z.food_source === 'supplement')
+      .map(z => String(z.id))
+    const suppVon = suppIds.length > 0
+      ? await produktverweise(suppIds)
+      : new Map<string, ProduktVerweis>()
 
     // Die Namen der Lebensmittel — ebenfalls in einer Abfrage.
     const foodIds = Array.from(new Set(
@@ -239,10 +278,26 @@ export async function ladeRezepte(): Promise<RezeptStand> {
           .map(z => ({
             id: String(z.id),
             food_id: (z.food_id as string | null) ?? null,
-            name: (typeof z.food_id === 'string' ? namen.get(z.food_id) : null)
+            // ══ G-483: der Name einer Supplementzutat ══════════════
+            //
+            // `[cmd]` **`add_supplier_product_to_recipe` setzt
+            // `food_name_snapshot` NICHT** (gemessen am Rumpf) — der
+            // Name steht am Produkt.
+            //
+            // `[read]` **Ohne diesen Zweig hiesse jede Supplement-
+            // zutat „Unbenannt"** — eine Zeile, die aussieht wie ein
+            // Datenfehler, obwohl alles da ist.
+            name: suppVon.get(String(z.id))?.name
+              || (typeof z.food_id === 'string' ? namen.get(z.food_id) : null)
               || (z.food_name_snapshot as string | null) || 'Unbenannt',
+            // `[cmd]` **`recipe_ingredients_amount_g_check`: bei
+            // `supplement` MUSS `amount_g` NULL sein** — die Menge ist
+            // eine Portion, kein Gewicht.
             amount_g: zahl(z.amount_g) ?? 0,
             sort_order: zahl(z.sort_order) ?? 0,
+            // G-483: die Quelle und, wenn Supplement, die Portion.
+            food_source: typeof z.food_source === 'string' ? z.food_source : 'bls',
+            supplement: suppVon.get(String(z.id)) ?? null,
             // G-325: `null` heisst nicht ermittelbar, nicht 0.
             enercc_100: typeof z.food_id === 'string'
               ? (je100.get(z.food_id)?.enercc ?? null) : null,

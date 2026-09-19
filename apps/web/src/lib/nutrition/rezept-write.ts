@@ -376,3 +376,55 @@ export async function listeAusRezept(eingabe: ListeAusRezept): Promise<{
 // `[read]` **Zwei Wege auf dieselbe Spalte laufen auseinander**
 // (G-335, dasselbe Muster bei den Namenslisten). `[cmd]` **A-59:
 // entfernt, nicht auskommentiert.**
+
+// ══ G-483: ein Supplement als Rezeptzutat ═══════════════════════════
+//
+// **Tom, 2026-09-19:** *„ja klar kann ich zb 500ml milch/blaubeeren
+// und whey protein ein rezept fuer meinen eigenen shake machen"* —
+// und die Begruendung, warum es nicht in den Stack gehoert: *„er kann
+// keinen shake in den stack legen, weil wir da milch nicht kennen"*.
+//
+// `[cmd]` **C-519 bringt den ganzen Weg mit:**
+// `supplements.add_supplier_product_to_recipe(...)` **schreibt die
+// Zutat UND den Produktverweis**, und rechnet den Schnappschuss
+// selbst.
+//
+// `[read]` **Gerufen, nicht nachgebaut** — dieselbe Lehre wie G-481:
+// die Funktion existiert, also wird sie benutzt.
+export const supplementInsRezeptSchema = z.object({
+  recipe_id: z.string().uuid('recipe_id muss eine UUID sein.'),
+  product_id: z.string().uuid('product_id muss eine UUID sein.'),
+  serving_quantity: z.number().positive('Die Anzahl muss groesser als 0 sein.').finite(),
+  /** `null` heisst: ohne hinterlegte Naehrwerte (A5 aus G-478). */
+  serving_size: z.string().min(1).nullable(),
+})
+export type SupplementInsRezept = z.infer<typeof supplementInsRezeptSchema>
+
+export async function supplementInsRezept(
+  e: SupplementInsRezept,
+): Promise<{ id: string }> {
+  const c = createSessionClient()
+  const { data: { user } } = await c.auth.getUser()
+  if (!user) throw new DiaryWriteError('NO_SESSION', 'Keine angemeldete Session.')
+
+  const { data, error } = await c.schema('supplements')
+    .rpc('add_supplier_product_to_recipe', {
+      p_recipe_id: e.recipe_id,
+      p_supplier_product_id: e.product_id,
+      p_serving_quantity: e.serving_quantity,
+      p_serving_size: e.serving_size,
+    })
+  if (error) {
+    // `[read]` **Die Meldung der Datenbank ist fuer Entwickler** — der
+    // Nutzer bekommt einen Satz.
+    if (error.message.includes('C519') || error.message.includes('C513')) {
+      throw new DiaryWriteError('WRITE_FAILED',
+        'Die Nährwerte passen nicht zur gewählten Portion. '
+        + 'Bitte Portionsgröße neu wählen.')
+    }
+    throw new DiaryWriteError('WRITE_FAILED', error.message)
+  }
+  const id = typeof data === 'string' ? data : null
+  if (!id) throw new DiaryWriteError('WRITE_FAILED', 'Keine Zutat angelegt.')
+  return { id }
+}

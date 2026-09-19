@@ -14,6 +14,7 @@ import {
 import {
   rezeptAnlegen, rezeptAnlegenSchema,
   rezeptAendern, rezeptAendernSchema,
+  supplementInsRezept, supplementInsRezeptSchema,
   rezeptLoggen, rezeptLoggenSchema,
   listeAusRezept, listeAusRezeptSchema,
 } from '../../../../lib/nutrition/rezept-write'
@@ -82,6 +83,19 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // G-483: ein Supplement als Zutat (C-519).
+  if (art === 'supplement_zutat') {
+    const g = supplementInsRezeptSchema.safeParse(roh)
+    if (!g.success) {
+      return ungueltig(g.error.issues[0]?.message ?? 'Eingabe ungueltig.',
+        g.error.issues.map(i => ({ feld: i.path.join('.'), meldung: i.message })))
+    }
+    try {
+      return NextResponse.json(await supplementInsRezept(g.data))
+    } catch (error) {
+      return errorResponse(error)
+    }
+  }
   // Flow 7, Schritt 5 — als Mahlzeit loggen.
   if (art === 'rezept_loggen') {
     const g = rezeptLoggenSchema.safeParse(roh)

@@ -165,7 +165,14 @@ test('G-326: die Detailansicht zeigt Makros je Zutat', () => {
     'die Detailmakros werden nicht mit vorschauFuer gerechnet')
 
   // `[read]` **Alle vier, und ein Strich bei `null`.**
-  const block = r.slice(i, i + 1400)
+  //
+  // `[cmd]` **G-483: das Fenster war 1.400 Zeichen** — die
+  // Supplementmarke und der Portionszweig schoben die Makrospalten
+  // darueber hinaus, und die Zusicherung fiel, **obwohl alle vier
+  // Werte weiter dastehen.** `[read]` **Ein Zeichenfenster ist keine
+  // Blockgrenze** — bis zum Ende der Zeile lesen.
+  const ende = r.indexOf('</div>', r.indexOf('detail-makros', i))
+  const block = r.slice(i, ende > i ? ende + 400 : i + 2600)
   for (const w of ['m.kcal', 'm.protein', 'm.fett', 'm.kh']) {
     assert.ok(block.includes(w), `${w} fehlt in der Detailzeile`)
   }

@@ -739,3 +739,117 @@ export async function einnahmenZuPosten(
     return aus
   }
 }
+
+/** G-483: ein Produktverweis einer Rezeptzutat. */
+export type ProduktVerweis = {
+  supplier_product_id: string
+  name: string
+  marke: string | null
+  serving_size: string | null
+  serving_quantity: number | null
+  nutrient_status: string | null
+  /**
+   * G-483: die Naehrwerte DIESER Portion, mal Anzahl.
+   *
+   * `[cmd]` **`recipe_product_references` traegt sie nicht** —
+   * `recipe_nutrition` rechnet sie aus dem Produkt. `[read]` **Fuer
+   * die Zeile werden sie nachgelesen**, sonst stuenden dort vier
+   * Striche, obwohl die Gesamtsumme sie enthaelt.
+   */
+  enercc: number | null
+  prot625: number | null
+  fat: number | null
+  cho: number | null
+}
+
+/**
+ * G-483: die Produktverweise zu Rezeptzutaten.
+ *
+ * `[cmd]` **C-519 legt Supplementzutaten in
+ * `supplements.recipe_product_references`** — `recipe_ingredients`
+ * traegt nur `food_source = 'supplement'`, sonst nichts.
+ *
+ * `[read]` **Hier, nicht im Rezept-Leseweg** — dieselbe Regel wie bei
+ * `einnahmenZuPosten` (G-138/G-485): die `supplements`-Tabellen
+ * gehoeren einer Datei. **Verschoben, nicht den Waechter gelockert.**
+ */
+export async function produktverweise(
+  zutatIds: readonly string[],
+): Promise<Map<string, ProduktVerweis>> {
+  const aus = new Map<string, ProduktVerweis>()
+  if (zutatIds.length === 0) return aus
+  try {
+    await sitzung()
+    const c = createSessionClient().schema('supplements')
+    const { data, error } = await c
+      .from('recipe_product_references')
+      .select('recipe_ingredient_id, supplier_product_id, serving_size, serving_quantity, nutrient_status')
+      .in('recipe_ingredient_id', zutatIds as string[])
+    if (error || !Array.isArray(data)) return aus
+
+    const zeilen = data as Array<Record<string, unknown>>
+    // `[read]` **Den Namen holt der Katalog** — der Verweis traegt ihn
+    // nicht, und eine Zutat ohne Namen ist keine.
+    const produktIds = Array.from(new Set(zeilen
+      .map(z => z.supplier_product_id)
+      .filter((x): x is string => typeof x === 'string')))
+    const { data: pRoh } = produktIds.length > 0
+      ? await c.from('supplier_products')
+        .select('id, name_en, marke').in('id', produktIds)
+      : { data: [] }
+    const namen = new Map<string, { name: string; marke: string | null }>()
+    for (const p of (Array.isArray(pRoh) ? pRoh : []) as Array<Record<string, unknown>>) {
+      const id = typeof p.id === 'string' ? p.id : null
+      if (id) {
+        namen.set(id, {
+          name: typeof p.name_en === 'string' ? p.name_en : '',
+          marke: typeof p.marke === 'string' ? p.marke : null,
+        })
+      }
+    }
+
+    // `[read]` **Die Naehrwerte der gewaehlten Portionen** — eine
+    // Abfrage fuer alle, nicht je Zutat (G-252).
+    const { data: oRoh } = produktIds.length > 0
+      ? await c.from('supplier_product_nutrient_serving_options')
+        .select('product_id, serving_size, enercc, prot625, fat, cho')
+        .in('product_id', produktIds)
+      : { data: [] }
+    const werte = new Map<string, Record<string, unknown>>()
+    for (const o of (Array.isArray(oRoh) ? oRoh : []) as Array<Record<string, unknown>>) {
+      werte.set(`${String(o.product_id)}|${String(o.serving_size)}`, o)
+    }
+    const mal = (v: unknown, n: number): number | null => {
+      const x = Number(v)
+      return Number.isFinite(x) ? x * n : null
+    }
+
+    for (const z of zeilen) {
+      const zutat = typeof z.recipe_ingredient_id === 'string' ? z.recipe_ingredient_id : null
+      const produkt = typeof z.supplier_product_id === 'string' ? z.supplier_product_id : null
+      if (!zutat || !produkt) continue
+      const n = namen.get(produkt)
+      const anzahl = Number.isFinite(Number(z.serving_quantity))
+        ? Number(z.serving_quantity) : 1
+      const o = werte.get(`${produkt}|${String(z.serving_size)}`)
+      aus.set(zutat, {
+        supplier_product_id: produkt,
+        name: n?.name ?? '',
+        marke: n?.marke ?? null,
+        serving_size: typeof z.serving_size === 'string' ? z.serving_size : null,
+        serving_quantity: Number.isFinite(Number(z.serving_quantity))
+          ? Number(z.serving_quantity) : null,
+        nutrient_status: typeof z.nutrient_status === 'string' ? z.nutrient_status : null,
+        // `[read]` **`null` heisst nicht ermittelbar, nicht 0** —
+        // dieselbe Regel wie ueberall im Diary.
+        enercc: o ? mal(o.enercc, anzahl) : null,
+        prot625: o ? mal(o.prot625, anzahl) : null,
+        fat: o ? mal(o.fat, anzahl) : null,
+        cho: o ? mal(o.cho, anzahl) : null,
+      })
+    }
+    return aus
+  } catch {
+    return aus
+  }
+}
