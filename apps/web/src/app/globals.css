@@ -1288,6 +1288,36 @@
   color: var(--fg);
 }
 
+/* ── G-481: die Filterleiste mit GRUPPENTITELN ───────────────────
+ *
+ * **Tom, 2026-09-08:** *„anstaendige filter mit gruppentitel und
+ * nicht nur irgendwelche buttons verteilt"*.
+ *
+ * `[cmd]` **Dieselbe Bauform wie im Produkte-Reiter**
+ * (`supplements.css:1950`, G-453): ein Raster aus Gruppen, je Gruppe
+ * ein `v2-eyebrow` und eine Reihe Pillen.
+ *
+ * `[read]` **Nachgebaut, nicht importiert** — `supplements.css` wird
+ * nur von `v2/supplements/page.tsx` geladen, nicht global.
+ * **Gemeinsame Klassen gehoerten nach `packages/ui`, und das waere
+ * eine Aenderung an allen Apps.** */
+.v2-such-filter-gruppen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px 16px;
+  padding: 10px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+.v2-such-filter-reihe {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
 /* ── G-480: die Formregel unter der Trefferliste ─────────────────
  *
  * `[read]` **Kein Warnton** — es ist eine Auskunft, kein Fehler:

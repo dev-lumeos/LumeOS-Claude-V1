@@ -77,6 +77,7 @@ import {
 // gelesen wurde** (E-83).
 import {
   FILTER, FILTER_TEXT, QUELLE_TEXT, NUR_UNTERMISCHBAR_SATZ,
+  SUPPLEMENT_SEITE, formKurz, portionText,
   zeigt, type Filter, type Quelle,
 } from '../../../lib/nutrition/such-quellen-lage'
 import {
@@ -358,6 +359,10 @@ export function FoodSuchModal({
   const [filter, setFilter] = React.useState<Filter>('alle')
   const [supps, setSupps] = React.useState<SupplementTreffer[]>([])
   const [suppLaeuft, setSuppLaeuft] = React.useState(false)
+  /** G-481/A3: wie viele die Datenbank kennt, nicht wie viele hier liegen. */
+  const [suppGesamt, setSuppGesamt] = React.useState(0)
+  /** G-481/A4: welche Seite geladen ist. */
+  const [suppSeite, setSuppSeite] = React.useState(0)
   const [lage, setLage] = React.useState<SuchLage>(LEERE_LAGE)
   const [gewaehlt, setGewaehlt] = React.useState<NutritionFoodSearchRow | null>(null)
   const [portionen, setPortionen] = React.useState<Portion[]>([])
@@ -404,19 +409,32 @@ export function FoodSuchModal({
   React.useEffect(() => {
     if (!kannSupplement) return
     const q = lage.suche.trim()
-    if (q.length < 2 || !zeigt(filter, 'supplement')) { setSupps([]); return }
+    if (q.length < 2 || !zeigt(filter, 'supplement')) {
+      setSupps([]); setSuppGesamt(0); setSuppSeite(0); return
+    }
     const ab = new AbortController()
     setSuppLaeuft(true)
     const t = setTimeout(() => {
-      fetch(`/api/nutrition/supplement-suche?q=${encodeURIComponent(q)}`,
-            { signal: ab.signal })
-        .then(a => a.ok ? a.json() : { treffer: [] })
-        .then(d => setSupps(Array.isArray(d?.treffer) ? d.treffer : []))
+      fetch(`/api/nutrition/supplement-suche?q=${encodeURIComponent(q)}`
+            + `&seite=${suppSeite}`, { signal: ab.signal })
+        .then(a => a.ok ? a.json() : { treffer: [], gesamt: 0 })
+        .then(d => {
+          const neu = Array.isArray(d?.treffer) ? d.treffer : []
+          // `[read]` **G-481/A4: nachladen HAENGT AN, ersetzt nicht**
+          // — sonst waere „mehr laden" ein Seitenwechsel, und die
+          // ersten 150 verschwaenden beim Klick.
+          setSupps(v => suppSeite === 0 ? neu : [...v, ...neu])
+          setSuppGesamt(typeof d?.gesamt === 'number' ? d.gesamt : 0)
+        })
         .catch(() => { /* Abbruch ist kein Fehler */ })
         .finally(() => setSuppLaeuft(false))
     }, 200)
     return () => { clearTimeout(t); ab.abort() }
-  }, [lage.suche, filter, kannSupplement])
+  }, [lage.suche, filter, kannSupplement, suppSeite])
+
+  // `[read]` **Eine neue Frage faengt bei Seite 0 an** — sonst zeigte
+  // die zweite Suche die zweite Seite der ersten.
+  React.useEffect(() => { setSuppSeite(0) }, [lage.suche, filter])
 
   // `[read]` **Was tatsaechlich in der Tabelle steht** — der Filter
   // wirkt am Anzeigeort, damit Umschalten nichts neu laedt.
@@ -550,37 +568,59 @@ export function FoodSuchModal({
                 `[read]` **Nur wenn der Aufrufer Supplemente auch
                 schreiben kann** — sonst führte die Pille zu einer
                 Liste, aus der man nichts wählen darf. */}
-            {kannSupplement && (
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                {FILTER.map(f => (
-                  <button
-                    key={f} type="button"
-                    data-probe={`quelle-pille-${f}`}
-                    className={`v2-btn v2-btn-sm${filter === f ? ' v2-btn-primary' : ''}`}
-                    aria-pressed={filter === f}
-                    onClick={() => setFilter(f)}
-                  >
-                    {FILTER_TEXT[f]}
-                  </button>
-                ))}
-              </div>
-            )}
+            {/* ══ G-481/A5: eine Leiste mit GRUPPENTITELN ═══════════
+                **Tom, 2026-09-08:** *„anstaendige filter mit
+                gruppentitel und nicht nur irgendwelche buttons
+                verteilt"*.
 
-            {/* ══ Sortierung — dieselben Werte wie in Food DB ═══════
-                `[cmd]` **`ALLE_SORTIERUNGEN` aus `food-sortierung.ts`**
-                — keine eigene Liste, sonst gäbe es zwei Wahrheiten
-                darüber, wonach sich sortieren lässt. */}
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-              {ALLE_SORTIERUNGEN.map(s => (
-                <button
-                  key={s} type="button"
-                  className={`v2-btn v2-btn-sm${lage.sortierung === s ? ' v2-btn-primary' : ''}`}
-                  aria-pressed={lage.sortierung === s}
-                  onClick={() => setLage(l => ({ ...l, sortierung: s as Sortierung, seite: 0 }))}
-                >
-                  {SORT_TEXT[s]}
-                </button>
-              ))}
+                `[cmd]` **Dieselbe Bauform wie der Produkte-Reiter**
+                (G-453): Raster, je Gruppe ein `v2-eyebrow`, darunter
+                eine Pillenreihe. `[read]` **G-480 hatte lose Knoepfe
+                nebeneinander** — man sah nicht, was wozu gehoert. */}
+            <div className="v2-such-filter-gruppen" data-probe="filtergruppen">
+              {kannSupplement && (
+                <div>
+                  <span className="v2-eyebrow" data-probe="gruppentitel-quelle">
+                    Quelle
+                  </span>
+                  <div className="v2-such-filter-reihe">
+                    {FILTER.map(f => (
+                      <button
+                        key={f} type="button"
+                        data-probe={`quelle-pille-${f}`}
+                        className={`v2-btn v2-btn-sm${filter === f ? ' v2-btn-primary' : ''}`}
+                        aria-pressed={filter === f}
+                        onClick={() => setFilter(f)}
+                      >
+                        {FILTER_TEXT[f]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ══ Sortierung — dieselben Werte wie in Food DB ═════
+                  `[cmd]` **`ALLE_SORTIERUNGEN` aus
+                  `food-sortierung.ts`** — keine eigene Liste, sonst
+                  gäbe es zwei Wahrheiten darüber, wonach sich
+                  sortieren lässt. */}
+              <div>
+                <span className="v2-eyebrow" data-probe="gruppentitel-sortierung">
+                  Sortierung
+                </span>
+                <div className="v2-such-filter-reihe">
+                  {ALLE_SORTIERUNGEN.map(s => (
+                    <button
+                      key={s} type="button"
+                      className={`v2-btn v2-btn-sm${lage.sortierung === s ? ' v2-btn-primary' : ''}`}
+                      aria-pressed={lage.sortierung === s}
+                      onClick={() => setLage(l => ({ ...l, sortierung: s as Sortierung, seite: 0 }))}
+                    >
+                      {SORT_TEXT[s]}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {suchFehler && (
@@ -605,8 +645,18 @@ export function FoodSuchModal({
                   ? 'Keine Treffer.'
                   : [
                       zeigt(filter, 'bls') ? `${sortiert.length} von ${gesamt} Lebensmitteln` : null,
+                      // ══ G-481/A3: geladen VON gesamt ════════════
+                      //
+                      // **Tom:** *„whey bringt wohl tausende und es
+                      // werden vielleicht 20 angezeigt"*.
+                      //
+                      // `[cmd]` **`gesamt` kommt aus
+                      // `supplier_product_search_meta`** (G-463),
+                      // nicht aus der Laenge der Liste. `[read]`
+                      // **Ohne die zweite Zahl liest sich eine Seite
+                      // wie der ganze Bestand.**
                       suppSichtbar.length > 0
-                        ? `${suppSichtbar.length} Supplement${suppSichtbar.length === 1 ? '' : 'e'}`
+                        ? `${suppSichtbar.length} von ${suppGesamt.toLocaleString('de-DE')} Supplementen`
                         : null,
                     ].filter(Boolean).join(' · ')}
                 {suppLaeuft && ' · sucht Supplemente…'}
@@ -735,9 +785,26 @@ export function FoodSuchModal({
                             <div style={{ fontSize: 12, fontWeight: 500 }}>
                               {t.name}
                             </div>
+                            {/* ══ G-481/A6: mehr Infos je Zeile ════
+                                **Tom:** *„vielzuwenig infos dazu"*.
+
+                                `[cmd]` **Marke, Form und Portion
+                                standen schon in der Antwort** —
+                                `search_supplier_products` liefert
+                                `portionsgroesse` und
+                                `portionseinheit`, sie wurden nur
+                                weggeworfen.
+
+                                `[read]` **Die Form gehoert dazu**:
+                                sie ist der Grund, warum diese Zeile
+                                ueberhaupt erscheinen darf. */}
                             <div className="v2-muted" style={{ fontSize: 10 }}>
-                              {t.marke ?? '—'}
-                              {p ? ` · ${p.serving_size}` : ' · ohne Nährwerte'}
+                              {[
+                                t.marke,
+                                formKurz(t.produktform),
+                                portionText(t),
+                                p ? null : 'ohne Nährwerte',
+                              ].filter(Boolean).join(' · ') || '—'}
                             </div>
                           </td>
                           <td><Pill>{QUELLE_TEXT.supplement}</Pill></td>
@@ -766,6 +833,47 @@ export function FoodSuchModal({
                     })}
                   </tbody>
                 </table>
+              </div>
+            )}
+
+            {/* ══ G-481/A4: mehr als eine Seite ════════════════════
+                **Tom:** *„es werden vielleicht 20 angezeigt, nicht
+                scrollbar"*.
+
+                `[cmd]` **`search_supplier_products` kennt kein
+                `OFFSET`** — die naechste Seite wird mitgeladen und
+                abgeschnitten. `[cmd]` **Der Deckel der Funktion liegt
+                bei 500** (G-463), **die Ladung bei 150** (`.in()`
+                kippt um 200 Ids, G-64).
+
+                `[read]` **Der Knopf sagt, wie viele noch kommen** —
+                „mehr laden" ohne Zahl ist eine Zumutung. */}
+            {suppSichtbar.length > 0 && suppSichtbar.length < suppGesamt
+              && (suppSeite + 1) * SUPPLEMENT_SEITE < 500 && (
+              <button
+                type="button" className="v2-btn v2-btn-sm"
+                data-probe="mehr-laden"
+                disabled={suppLaeuft}
+                onClick={() => setSuppSeite(v => v + 1)}
+              >
+                {suppLaeuft
+                  ? 'Lädt…'
+                  : `Weitere ${Math.min(SUPPLEMENT_SEITE,
+                      suppGesamt - suppSichtbar.length).toLocaleString('de-DE')}`
+                    + ' Supplemente laden'}
+              </button>
+            )}
+
+            {/* `[read]` **Die Grenze wird BENANNT, nicht verschwiegen**
+                — wer bei 500 anlangt und keinen Knopf mehr sieht,
+                haelt das fuer das Ende des Bestands. */}
+            {suppSichtbar.length > 0
+              && (suppSeite + 1) * SUPPLEMENT_SEITE >= 500
+              && suppSichtbar.length < suppGesamt && (
+              <div className="v2-supp-regelsatz" data-probe="deckel-hinweis">
+                Die Suche liefert höchstens 500 Produkte. Für einen
+                engeren Treffer die Suche verfeinern — etwa mit Marke
+                oder Geschmacksrichtung.
               </div>
             )}
 

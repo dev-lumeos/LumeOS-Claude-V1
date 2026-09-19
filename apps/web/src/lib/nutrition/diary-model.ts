@@ -402,6 +402,13 @@ export type StoredMealItem = {
   portion_quantity: number | null
   portion_amount_g: number | null
   /** G-478: die Portion des Supplements, z. B. `31 Gram(s)`. */
+  /**
+   * G-481/A12: der Verweis auf die Einnahme (C-519).
+   *
+   * `[read]` **Der Posten traegt die Angaben nicht mehr selbst** —
+   * sie stehen in `supplements.intake_logs`.
+   */
+  supplement_intake_log_id?: string | null
   supplement_serving_size?: string | null
   supplement_serving_quantity?: number | null
   supplement_nutrient_status?: string | null
@@ -516,6 +523,17 @@ export function parseStoredMealItems(rows: unknown): StoredMealItem[] {
     const amount = asNumberOrNull(record.amount_g)
     const istSupplement = record.food_source === 'supplement'
     if (amount === null && !istSupplement) return []
+
+    // ══ G-481/A12: die eingebettete Einnahme ═══════════════════════
+    //
+    // `[cmd]` **PostgREST liefert eine Einbettung als OBJEKT bei
+    // 1:1 und als LISTE bei 1:n** — je nachdem, wie es den
+    // Fremdschluessel deutet. `[read]` **Beides annehmen ist
+    // billiger als sich auf eine Deutung zu verlassen** (dieselbe
+    // Falle wie beim `foods!left`-Verbund darunter).
+    const einnahmeRoh = record.intake_logs
+    const einnahme = (Array.isArray(einnahmeRoh)
+      ? einnahmeRoh[0] : einnahmeRoh) as Record<string, unknown> | null | undefined
     return [
       {
         id: record.id,
@@ -549,16 +567,44 @@ export function parseStoredMealItems(rows: unknown): StoredMealItem[] {
         portion_name: typeof record.portion_name === 'string' ? record.portion_name : null,
         portion_quantity: asNumberOrNull(record.portion_quantity),
         portion_amount_g: asNumberOrNull(record.portion_amount_g),
-        // G-478: der Supplementposten — die Zeile zeigt die Portion
-        // statt der Gramm.
+        // ══ G-481/A12: C-519 — die Portion steht in der EINNAHME ═══
+        //
+        // **Toms Entscheidung E-84:** *„ein Supplement bleibt ein
+        // Supplement und wird im Stack gespeichert."*
+        //
+        // `[cmd]` **C-519 entfernt `supplement_serving_size`,
+        // `_serving_quantity`, `_nutrient_status` und
+        // `supplement_product_id` aus `nutrition.meal_items`**
+        // (`20260918194000_c519_remove_meal_product_snapshots.sql:292`).
+        //
+        // `[read]` **Der Posten traegt nur noch einen Verweis** —
+        // `supplement_intake_log_id`. **Die Angaben kommen ueber den
+        // Fremdschluessel aus `supplements.intake_logs`.**
+        //
+        // `[read]` **Die FELDNAMEN bleiben** — die Zeile fragt
+        // weiterhin nach `supplement_serving_size`, und nur dieser
+        // Leser weiss, woher sie kommt. **Sonst muesste jede Kachel
+        // nachgezogen werden.**
+        supplement_intake_log_id:
+          typeof record.supplement_intake_log_id === 'string'
+            ? record.supplement_intake_log_id : null,
+        // `[read]` **Erst der Verweis, dann die Zeile** — vor C-519
+        // stehen die Angaben in `meal_items`, danach in der
+        // Einnahme. **Beides zu lesen haelt die Anwendung ueber das
+        // Einspielen hinweg bedienbar.**
         supplement_serving_size:
-          typeof record.supplement_serving_size === 'string'
-            ? record.supplement_serving_size : null,
+          typeof einnahme?.supplier_product_serving_size === 'string'
+            ? einnahme.supplier_product_serving_size
+            : typeof record.supplement_serving_size === 'string'
+              ? record.supplement_serving_size : null,
         supplement_serving_quantity:
-          asNumberOrNull(record.supplement_serving_quantity),
+          asNumberOrNull(einnahme?.supplier_product_serving_quantity)
+          ?? asNumberOrNull(record.supplement_serving_quantity),
         supplement_nutrient_status:
-          typeof record.supplement_nutrient_status === 'string'
-            ? record.supplement_nutrient_status : null,
+          typeof einnahme?.supplier_product_nutrient_status === 'string'
+            ? einnahme.supplier_product_nutrient_status
+            : typeof record.supplement_nutrient_status === 'string'
+              ? record.supplement_nutrient_status : null,
         // ══ G-223: der Schnappschuss und der Bestand ════════════════
         //
         // `[read]` **`frozen_at` kommt aus der Zeile**, `updated_at`

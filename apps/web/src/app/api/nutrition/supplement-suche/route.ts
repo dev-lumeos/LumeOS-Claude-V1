@@ -17,8 +17,15 @@ export const runtime = 'nodejs'
 
 export async function GET(request: NextRequest) {
   const frage = request.nextUrl.searchParams.get('q') ?? ''
-  if (!frage.trim()) return NextResponse.json({ treffer: [], fehler: null })
-  const stand = await sucheSupplemente(frage)
+  if (!frage.trim()) {
+    return NextResponse.json({ treffer: [], gesamt: 0, fehler: null })
+  }
+  // G-481/A4: nachladen. `[read]` **Eine Zahl, kein Offset in
+  // Zeilen** — die Seitengroesse gehoert in den Leseweg, nicht in
+  // die Adresse.
+  const roh = Number(request.nextUrl.searchParams.get('seite') ?? '0')
+  const seite = Number.isFinite(roh) && roh >= 0 ? Math.floor(roh) : 0
+  const stand = await sucheSupplemente(frage, seite)
   if (stand.fehler) {
     return NextResponse.json(
       { error: stand.fehler, code: 'READ_FAILED' }, { status: 500 })

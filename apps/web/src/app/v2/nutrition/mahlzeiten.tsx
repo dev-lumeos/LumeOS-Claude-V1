@@ -80,6 +80,21 @@ type Position = {
   // (CHECK, gemessen) — **Gramm sind dort die falsche Einheit.**
   // `[read]` **Die Zeile zeigt stattdessen die Portion.**
   food_source?: string | null
+  // ══ G-481/A12: C-519 — diese drei stehen NICHT in der Zeile ══════
+  //
+  // `[cmd]` **C-519 entfernt `supplement_serving_size`,
+  // `_serving_quantity` und `_nutrient_status` aus
+  // `nutrition.meal_items`** — der Posten traegt nur noch
+  // `supplement_intake_log_id`.
+  //
+  // `[cmd]` **Codex hatte das Einspielen deshalb gestoppt**, mit
+  // genau dieser Datei als Grund.
+  //
+  // `[read]` **Die Felder bleiben trotzdem hier** — `diary-model.ts`
+  // loest den Verweis auf und fuellt sie aus
+  // `supplements.intake_logs`. **Die Kachel fragt weiter dasselbe,
+  // nur die Herkunft hat sich geaendert.**
+  supplement_intake_log_id?: string | null
   supplement_serving_size?: string | null
   supplement_serving_quantity?: number | null
   supplement_nutrient_status?: string | null

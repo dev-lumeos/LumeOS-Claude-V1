@@ -83,6 +83,22 @@ export type SupplementTreffer = {
    * G-475 sie noch nicht trugen.**
    */
   produktform?: string | null
+  /**
+   * G-481/A6: die Portion laut Etikett — `33.5` + `Gram(s) [1 scoop]`.
+   *
+   * **Tom:** *„vielzuwenig infos dazu"*. `[cmd]`
+   * **`search_supplier_products` liefert beides**, es wurde nur nicht
+   * angezeigt.
+   */
+  portionsgroesse?: number | null
+  portionseinheit?: string | null
+  /**
+   * G-481: der Rang der Aehnlichkeitssuche.
+   *
+   * `[read]` **Er erklaert die Reihenfolge** — ohne ihn sieht eine
+   * nach Aehnlichkeit sortierte Liste willkuerlich aus.
+   */
+  similarity?: number | null
   /** Leer heisst: keine gemessenen Naehrwerte (A5). */
   portionen: PortionsWahl[]
 }

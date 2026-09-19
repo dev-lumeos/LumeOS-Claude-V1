@@ -122,6 +122,37 @@ export function zeigt(filter: Filter, quelle: Quelle): boolean {
 }
 
 /**
+ * Die Form ohne DSLD-Code — `Powder [E0162]` wird zu `Powder`.
+ *
+ * **G-481/A6, Tom:** *„vielzuwenig infos dazu"*.
+ *
+ * `[read]` **Der Code gehoert in die Datenbank, nicht auf den
+ * Schirm** — er beantwortet keine Frage, die ein Mensch hat.
+ */
+export function formKurz(produktform: string | null | undefined): string | null {
+  if (!produktform) return null
+  const ohne = produktform.replace(/\s*\[[^\]]*\]\s*$/, '').trim()
+  return ohne || null
+}
+
+/**
+ * Die Portion laut Etikett — `33.5 Gram(s) [1 scoop]`.
+ *
+ * `[cmd]` **Beide Felder kommen aus `search_supplier_products`**
+ * (`portionsgroesse`, `portionseinheit`). `[read]` **Fehlt eines,
+ * steht nichts da** — eine halbe Angabe ist schlechter als keine.
+ */
+export function portionText(t: {
+  portionsgroesse?: number | null
+  portionseinheit?: string | null
+}): string | null {
+  const g = t.portionsgroesse
+  if (g === null || g === undefined || !Number.isFinite(g)) return null
+  const zahl = Number.isInteger(g) ? String(g) : String(Number(g.toFixed(2)))
+  return t.portionseinheit ? `${zahl} ${t.portionseinheit}` : zahl
+}
+
+/**
  * Der Hinweis unter der Trefferliste, wenn Supplemente dabei sind.
  *
  * `[read]` **Die Regel muss dastehen, nicht nur wirken** — sonst
@@ -131,3 +162,17 @@ export function zeigt(filter: Filter, quelle: Quelle): boolean {
 export const NUR_UNTERMISCHBAR_SATZ =
   'Nur Formen, die sich untermischen lassen (Pulver, Flüssig, Riegel, '
   + 'Gummi). Kapseln und Tabletten gehören in den Stack.'
+
+/**
+ * Wie viele Supplemente je Ladung — G-481/A4.
+ *
+ * `[cmd]` **150, nicht 500.** `[read]` **Die Grenze ist NICHT der
+ * Geschmack, sondern `.in()`:** Form und Portionen werden je
+ * Treffer-Id nachgelesen, und **eine Adresse mit 500 UUIDs waere
+ * 18.560 Zeichen lang** — `.in()` kippt um rund 200 Ids (G-64).
+ *
+ * `[read]` **Hier, nicht im Leseweg** — die Kachel braucht sie, und
+ * ein Wert-Import aus einem Servermodul zieht `next/headers` mit
+ * (A-30).
+ */
+export const SUPPLEMENT_SEITE = 150

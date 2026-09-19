@@ -48,11 +48,59 @@ test('G-478/A1: eine Supplement-Zeile ohne amount_g ueberlebt den Leser', () => 
   assert.equal(gelesen[0].food_source, 'supplement')
 })
 
+// ══ G-481/A12: dieselbe Zeile NACH C-519 ═══════════════════════════
+//
+// `[cmd]` **C-519 entfernt die vier Spalten und ersetzt sie durch
+// `supplement_intake_log_id`** — die Angaben stehen dann in
+// `supplements.intake_logs` und kommen als Einbettung mit.
+//
+// `[read]` **Beide Formen werden geprueft** — die Anwendung muss vor
+// UND nach dem Einspielen lesen koennen, sonst gibt es ein Fenster,
+// in dem das Tagebuch leer ist. **Genau das ist am 2026-09-18
+// passiert** (gemessen: 500, *„Could not find a relationship"*).
+const SUPPLEMENT_ZEILE_C519 = {
+  id: ITEM_ID,
+  meal_id: MEAL_ID,
+  food_id: null,
+  food_name: 'Gold Standard 100% Whey Vanilla Ice Cream',
+  food_source: 'supplement',
+  amount_g: null,
+  supplement_intake_log_id: '55555555-5555-5555-5555-555555555555',
+  intake_logs: {
+    supplier_product_serving_size: '31 Gram(s)',
+    supplier_product_serving_quantity: 1,
+    supplier_product_nutrient_status: 'available',
+  },
+  enercc: 120,
+  prot625: 24,
+}
+
 test('G-478/A1: Portion, Anzahl und Stand kommen mit', () => {
   const [p] = parseStoredMealItems([SUPPLEMENT_ZEILE])
   assert.equal(p.supplement_serving_size, '31 Gram(s)')
   assert.equal(p.supplement_serving_quantity, 1)
   assert.equal(p.supplement_nutrient_status, 'available')
+})
+
+test('G-481/A12: dieselben Angaben, aus dem Einnahme-Verweis', () => {
+  const [p] = parseStoredMealItems([SUPPLEMENT_ZEILE_C519])
+  assert.equal(p.supplement_serving_size, '31 Gram(s)',
+    'nach C-519 kommt die Portion aus intake_logs')
+  assert.equal(p.supplement_serving_quantity, 1)
+  assert.equal(p.supplement_nutrient_status, 'available')
+  assert.equal(p.supplement_intake_log_id,
+    '55555555-5555-5555-5555-555555555555')
+})
+
+test('G-481/A12: die Einbettung wird auch als LISTE angenommen', () => {
+  // `[cmd]` **PostgREST liefert 1:1 als Objekt, 1:n als Liste** — je
+  // nachdem, wie es den Fremdschluessel deutet. `[read]` **Beides
+  // anzunehmen ist billiger als sich auf eine Deutung zu verlassen.**
+  const [p] = parseStoredMealItems([{
+    ...SUPPLEMENT_ZEILE_C519,
+    intake_logs: [SUPPLEMENT_ZEILE_C519.intake_logs],
+  }])
+  assert.equal(p.supplement_serving_size, '31 Gram(s)')
 })
 
 test('G-478: ein Lebensmittel OHNE amount_g faellt weiter weg', () => {

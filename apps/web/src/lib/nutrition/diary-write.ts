@@ -65,8 +65,44 @@ export async function listOwnMeals(entryDate: string): Promise<StoredMeal[]> {
 }
 
 /** Positionen einer eigenen Mahlzeit. */
+// ══ G-481/A12: zwei Schemata, ein Leseweg ═══════════════════════════
+//
+// `[cmd]` **C-519 entfernt vier Spalten aus `nutrition.meal_items`
+// und ersetzt sie durch `supplement_intake_log_id`**
+// (`20260918194000_...:292`).
+//
+// `[cmd]` **GEMESSEN am 2026-09-18, 21:0x:** die vier alten Spalten
+// stehen noch, `supplement_intake_log_id` gibt es nicht — C-519 ist
+// NICHT eingespielt. `[cmd]` **Ein Leseweg, der die Einbettung fest
+// verlangt, antwortet dann mit 500:** *„Could not find a relationship
+// between 'meal_items' and 'intake_logs'"* — **gemessen, nicht
+// vermutet: das Tagebuch war leer.**
+//
+// `[read]` **Deshalb wird BEIDES versucht** — erst der neue Weg, bei
+// fehlender Beziehung der alte. **So bleibt die Anwendung vor und
+// nach dem Einspielen bedienbar**, und Codex kann einspielen, ohne
+// auf einen Anwendungsstand zu warten.
+const SPALTEN_ALT = 'id, meal_id, food_id, custom_food_id, food_source, food_name, amount_g, enercc, prot625, fat, cho, portion_name, portion_quantity, portion_amount_g, frozen_at, supplement_serving_size, supplement_serving_quantity, supplement_nutrient_status, foods!left(updated_at)'
+const SPALTEN_C519 = 'id, meal_id, food_id, custom_food_id, food_source, food_name, amount_g, enercc, prot625, fat, cho, portion_name, portion_quantity, portion_amount_g, frozen_at, supplement_intake_log_id, intake_logs!left(supplier_product_serving_size,supplier_product_serving_quantity,supplier_product_nutrient_status), foods!left(updated_at)'
+
+/** Fehlt die Beziehung, ist C-519 noch nicht eingespielt. */
+function ohneC519(meldung: string): boolean {
+  return /relationship between|supplement_intake_log_id|schema cache/i.test(meldung)
+}
+
 export async function listOwnMealItems(mealId: string): Promise<StoredMealItem[]> {
   const { supabase } = await requireSession()
+  const neu = await supabase
+    .schema('nutrition')
+    .from('meal_items')
+    .select(SPALTEN_C519)
+    .eq('meal_id', mealId)
+    .order('created_at', { ascending: true })
+  if (!neu.error) return parseStoredMealItems(neu.data)
+  if (!ohneC519(neu.error.message)) {
+    throw classifyDbError(neu.error.message, 'WRITE_FAILED')
+  }
+
   const { data, error } = await supabase
     .schema('nutrition')
     .from('meal_items')
