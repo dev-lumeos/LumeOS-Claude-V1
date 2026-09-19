@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 240 |
-| `laufend_codex` | 2 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 501 |
+| `erledigt` | 502 |
 | **gesamt** | **744** |
 
 ## medical — 49
@@ -169,7 +169,7 @@
 | `C-464` | feature | mittel | [das Ballaststoffziel fehlt](erledigt/nutrition-c-0464-das-ballaststoffziel-fehlt.md) | erledigt | — | G-439 |
 | `C-466` | feature | hoch | [Naehrstoffe aus Supplementen in der Nutrients-Ansicht](erledigt/nutrition-c-0466-naehrstoffe-aus-supplementen.md) | erledigt | — | C-467, G-426 |
 | `C-507` | entscheidung | hoch | [die Suchtiefe nach Erfahrungsgrad](todos/nutrition-c-0507-suchtiefe-nach-erfahrungsgrad.md) | offen | — | — |
-| `C-521` | fehler | hoch | [die Tagessumme uebersieht die Supplemente](laufend_codex/nutrition-c-0521-tagessumme-uebersieht-supplemente.md) | laeuft (codex) | — | — |
+| `C-521` | fehler | hoch | [die Tagessumme uebersieht die Supplemente](erledigt/nutrition-c-0521-tagessumme-uebersieht-supplemente.md) | erledigt | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](erledigt/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | erledigt | — | G-375 |
