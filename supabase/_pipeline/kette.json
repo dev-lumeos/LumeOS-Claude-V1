@@ -2412,6 +2412,15 @@
       "depends_on": [
         "519_migrate_meal_supplement_references"
       ]
+    },
+    {
+      "id": "521_daily_summary_supplement_snapshots",
+      "path": "supabase/migrations/20260919013000_c521_daily_summary_supplement_snapshots.sql",
+      "kind": "sql",
+      "creates": "C-521: nutrition.daily_summary liest Meal-Supplementwerte aus den C-519-Intake-Snapshots statt aus geleerten meal_items-Spalten.",
+      "depends_on": [
+        "519_remove_meal_product_snapshots"
+      ]
     }
   ]
 }
