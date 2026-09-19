@@ -9,107 +9,74 @@ kind_von: E-84
 entscheidung: E-84
 agent: codex
 beauftragt: 2026-09-08
-erledigt: 2026-09-08
+erledigt: 2026-09-19
 commit: 6fb06234
 beruehrt:
-  tabellen: [supplements.intake_logs]
+  tabellen: [supplements.intake_logs, nutrition.meal_items]
 ---
 
-# C-519 – ein Supplement bleibt ein Supplement
+# C-519 - ein Supplement bleibt ein Supplement
 
 ## Entscheidung E-84
 
-Ein Produkt-Supplement bleibt im Schema `supplements`. Eine Mahlzeit oder ein Rezept hat lediglich einen Verweis; der Produktname und die historischen Nährwerte liegen nie in `nutrition`.
+Ein Produkt-Supplement bleibt im Schema `supplements`. Mahlzeiten und Rezepte
+tragen nur einen Verweis. Der Produktname und die historischen Naehrwerte
+liegen beim Einnahmelog, nicht in `nutrition`.
 
-## Bericht (2026-09-18)
+## Live eingespielt - 2026-09-19
 
-**Nicht live eingespielt.** Der Stand liegt als zwei Migrationen und ein idempotenter Pipeline-Schritt vor; geprüft wurde die frische Scratch-Datenbank `lumeos_c519_verify`. Die Live-Zeile aus C-513 bleibt bis zu einem ausdrücklichen Einspielen unverändert.
+Die drei Schritte wurden in dieser Reihenfolge gegen die laufende Datenbank
+eingespielt:
 
-### Bauform
+1. `20260918193000_c519_supplement_intake_references.sql`
+2. `519_migrate_meal_supplement_references.sql`
+3. `20260918194000_c519_remove_meal_product_snapshots.sql`
 
-- `supplements.intake_logs.meal_id` ist optional; `stack_item_id` ist optional. Der Owner-Guard erzwingt bei einer verknüpften Mahlzeit denselben Nutzer und dasselbe Datum.
-- Der historische Produkt-Snapshot liegt in `intake_logs`: Produkt, gewählte Portionsgröße, Menge, Datenstatus und Nährwerte. Das passt zu den vorhandenen Namens- und Dosis-Snapshots: eine tatsächliche Einnahme bleibt bei späterer Rezepturänderung historisch korrekt.
-- `nutrition.meal_items` trägt nur `supplement_intake_log_id`. Die fünf C-513-Produkt-/Snapshotfelder werden nach dem Pipeline-Umzug entfernt.
-- Rezepte nutzen eine `nutrition.recipe_ingredients`-Position mit `food_source='supplement'`; der Produktverweis liegt ausschließlich in `supplements.recipe_product_references`. Ein Rezept rechnet aktuelle, evidenzierte Produktwerte und ist kein Einnahmesnapshot.
+Vorher lag die verlangte Sicherung vor:
+[`20260918205352_c519_vor_einspielen.sql`](D:/GitHub/LumeOS-Claude-V1/backup/schema/20260918205352_c519_vor_einspielen.sql).
 
-### Nachweis
+### Ergebnis live
 
-Der C-519-Test in der frischen Vollkette ist grün:
+- `supplements.intake_logs.meal_id` ist vorhanden.
+- `supplements.intake_logs.stack_item_id` ist NULL-faehig.
+- Die vier C-513-Altspalten sind aus `nutrition.meal_items` entfernt:
+  `supplement_product_id`, `supplement_serving_size`,
+  `supplement_serving_quantity`, `supplement_nutrient_status`.
+- Der idempotente Pipeline-Schritt hat die historische C-513-Zeile in einen
+  Intake-Log ueberfuehrt; danach gab es keine verbliebene Alt-Referenz.
+- `meal_items` verweist jetzt mit `supplement_intake_log_id` auf den
+  Supplements-Log. Zum Abschluss bestanden drei Meal-zu-Intake-Verweise und
+  drei Intake-Logs mit `meal_id`.
 
-- Mahlzeit- und Stack-Verweis sind beide NULL-fähig.
-- Eine Produkt-Einnahme mit Mahlzeit erzeugt einen Supplements-Log mit `120 kcal` und `24 g Protein`; der Meal-Posten enthält nur den Log-Verweis, keine Nährwerte und kein Produktfeld.
-- Das Frühstück bleibt rechnerisch `557,5 kcal` und `40,022 g Protein` (Nahrungsanteil `437,5/16,022`, Whey `120/24`).
-- Ein Whey-Rezept mit einer Referenz rechnet `120 kcal`, `24 g Protein`.
-- Eine Einnahme ohne Stack und ohne Mahlzeit ist möglich und erzeugt keinen Meal-Posten.
-- Die Tagesbilanz führt Nahrung und Supplemente getrennt: Mahlzeiten-Supplement, eigenständige/Stack-Einnahme und Gesamtsupplement bleiben separat sichtbar.
-- Fremde Mahlzeit ist über RLS nicht lesbar und damit nicht verknüpfbar; `anon` hat kein EXECUTE auf beide Schreibfunktionen.
+### Toms Whey-Fruehstueck
 
-Der Pipeline-Schritt verschiebt die eine bestehende C-513-Zeile idempotent in einen neuen Intake-Log und leert dort die Nutrition-Snapshots. In der frischen Vollkette gab es keine C-513-Testzeile, daher war der Schritt erwartungsgemäß `0`; die echte eine Live-Zeile wird **nicht** ohne Einspielauftrag verändert.
+Das konkrete Fruehstueck bleibt unveraendert nachvollziehbar:
 
-### Sicherung und Prüfungen
+| Naehrstoff | Nahrung | Whey aus Supplement-Log | Summe |
+|---|---:|---:|---:|
+| ENERCC | 437,5 kcal | 120 kcal | **557,5 kcal** |
+| PROT625 | 16,022 g | 24 g | **40,022 g** |
 
-- Vor der Vollkette: [Schema-Sicherung](D:/GitHub/LumeOS-Claude-V1/backup/schema/20260918121553_c43_vor_kettenlauf.sql).
-- Vollkette: alle C-519-Schritte grün (`Schema → Pipeline → Bereinigung`) auf `lumeos_c519_verify`.
-- `quer-c519-supplement-intake-references.test.ts`: grün.
-- `migration-kette-pruefen` und die Selbstprobe von `migration-datenlogik-pruefen`: grün.
-- Die wiederholte Schema-Abschlussprüfung hat keine C-519-Abweichung; rot bleibt ein bestehender, fremder Befund: `supplements.substance_group_memberships` hat bei `service_role` mehr Rechte als der C-327-Sollstand erwartet.
-- `pnpm gate` stoppt vor den späteren Wächtern am bekannten, fremden Sammelfragen-Befund: `3` statt Soll `1` (C-507, E-84, G-377). Der Dev-Server wurde nicht gestartet, gestoppt oder verändert.
+Damit stammt das Whey weiterhin getrennt und sichtbar aus `supplements`.
 
-## Abnahme
+### Gegenprobe
 
-**2026-09-08, Orchestrator. Gebaut ? NICHT live.**
+Unter der authentifizierten Identitaet von `dev@lumeos.app` wurde in einer
+zurueckgerollten Transaktion `record_supplier_product_intake` fuer das Whey
+aufgerufen. Der erzeugte Log hatte sowohl `stack_item_id IS NULL` als auch
+`meal_id IS NULL`. Es wurde kein Testdatensatz behalten.
 
-`[cmd]` **In der laufenden Datenbank:**
+## Vollkette und Waechter
 
-    intake_logs.meal_id           FEHLT
-    meal_items: die vier Spalten  NOCH DA
-    stack_item_id                 war schon NULL-faehig
+Die frische Tageskette `lumeos_tageskette_20260919` lief alle C-519-Schritte
+in der Reihenfolge Schema -> Pipeline -> Bereinigung erfolgreich durch. Die
+Abschlusspruefung ist anschliessend an einem bestehenden, fachfremden
+C-327-Sollstandsfehler stehen geblieben:
+`supplements.substance_group_memberships` hat fuer `service_role` mehr Rechte
+als der Sollstand erwartet. C-519 selbst hat keine Abweichung verursacht.
 
-`[read]` **Er schreibt *,,im frischen Vollketten-Scratch
-geprueft, aber NICHT live eingespielt"*** ? **ehrlich.**
-
-`[cmd]` **Was vorliegt:**
-
-    migrations/20260918193000_c519_supplement_intake_
-      references.sql
-    migrations/20260918194000_c519_remove_meal_product_
-      snapshots.sql
-    _pipeline/13_supplements/519_migrate_meal_supplement_
-      references.sql
-    _validierung/quer-c519-supplement-intake-references.test
-
-### Toms Regel ist umgesetzt
-
-> *,,Supplements bleiben SSOT: Meal und Rezept speichern nur
-VERWEISE."*
-
-`[read]` **Damit stimmt der Modulvertrag wieder** ?
-**der Widerspruch W1 aus E-83 ist aufgeloest.**
-
-`[cmd]` **`intake_logs` bekommt `meal_id` (optional), der Stack
-ist optional** ? **Toms zwei Antworten.**
-
-### Der Umzug ist idempotent
-
-> *,,C-513-Snapshots werden per idempotenter Pipeline aus
-`meal_items` nach `intake_logs` verschoben und anschliessend
-entfernt."*
-
-`[read]` **Zwei Migrationen: erst verschieben, dann
-entfernen** ? **nicht in einem Schritt.**
-
-### Und die Zahlen halten
-
-`[cmd]` **Whey-Fruehstueck bleibt bei 557,5 kcal / 40,022 g
-Protein.**
-
-`[cmd]` **Geprueft: Rezept-Whey, Einnahme ohne
-Stack/Mahlzeit, getrennte Supplementbilanz, RLS und
-anon-Gegenproben.**
-
-`[read]` **A4 und A5 sind damit belegt** ? **ein Rezept darf
-Supplemente, und eine Einnahme braucht weder Stack noch
-Mahlzeit.**
-
-**Abgenommen. Einspielen steht aus.**
-
+- `migration-kette-pruefen.mjs`: gruen.
+- `migration-datenlogik-pruefen.mjs`: gruen (44/44 historische Operationen).
+- `punkte-pruefen.mjs`: fachliche Punkte 25/25 Sollbefunde; rot ausschliesslich
+  wegen des genannten fehlgeschlagenen Tagesketten-Nachweises.
+- Der Dev-Server wurde nicht gestartet, gestoppt oder veraendert.

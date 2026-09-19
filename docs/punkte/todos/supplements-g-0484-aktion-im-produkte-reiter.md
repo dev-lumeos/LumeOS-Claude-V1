@@ -63,3 +63,30 @@ fehlt.**
     A5  Gegenprobe: was passiert bei einem Produkt
         ohne Naehrwerte?
     A6  die elf anderen Reiter unveraendert.
+
+## Toms Praezisierung, 2026-09-08
+
+> das muss natuerlich so gebaut werden, dass man waehlen
+> kann, in welchen stack / in welches heutige meal
+
+`[read]` **Nicht *,,in den Stack"*, sondern *,,in WELCHEN
+Stack"*.**
+
+`[cmd]` **MISS, ob ein Nutzer mehrere Stacks haben kann** ?
+`supplements.stacks` **oder nur `stack_items`.**
+
+`[read]` **Und *,,in welches heutige Meal"*** ? **die
+Mahlzeiten des Tages stehen zur Wahl: Fruehstueck,
+Mittagessen, Nachmittagssnack, Abendessen.**
+
+`[cmd]` **`meal_items.meal_id` zeigt auf `nutrition.meals`,
+`meal_type` traegt die Art** ? **miss, welche es heute
+gibt.**
+
+### Die Abnahmebedingungen dazu
+
+    A+  die Stackwahl steht, wenn es mehrere gibt.
+        Foto.
+    A+  die Mahlzeitwahl zeigt die HEUTIGEN Mahlzeiten.
+        Foto.
+
