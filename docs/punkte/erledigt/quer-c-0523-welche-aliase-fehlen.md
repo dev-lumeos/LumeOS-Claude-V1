@@ -88,3 +88,58 @@ andere Produktentscheidung: Eine Anwendung-zu-Wirkstoff-Bruecke waere keine
 Alias-Ergaenzung und darf nicht geraten werden.
 
 Keine Umsetzung. `git status -- supabase/` blieb unveraendert.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Ein Messauftrag, kein Bau.**
+
+`[cmd]` **Selbst nachgemessen:**
+
+    contains_gluten      0 Aliase
+    vegan                0
+    vegetarian           0
+    contains_lactose     6
+    contains_soy         7
+    contains_nuts       13
+
+    Naehrstoffe         88 von 138 ohne Alias
+    food_search nutzt food_aliases: JA
+
+`[read]` **Genau die drei, die er nennt** ? **und
+`contains_gluten` ist der, den Tom getippt hat.**
+
+### Der Kernbefund
+
+> *,,`food_search` nutzt Food-Aliase, die Allergievorschlaege
+aber nur `allergen_aliases` plus Tagnamen. Deshalb findet
+*gluten* den Tag, *brot*, *weizen* und *glutenfrei* jedoch
+nicht."*
+
+`[read]` **Zwei Suchwege, zwei Aliaspools** ? **einer voll,
+einer fast leer.**
+
+### Und die Unterscheidung, die ich verlangt hatte
+
+> *,,Medikamente: 498 Wirkstoffe ohne eigene Aliastabelle;
+Namenfelder treffen *Penicillin*/*Ibuprofen*, nicht aber
+ANWENDUNGSSPRACHE wie *Kopfschmerztablette*."*
+
+`[read]` **Er hat den Unterschied zwischen Variante und
+Suchbegriff auf die Medikamente uebertragen** ? **dort heisst
+er Anwendungssprache.**
+
+### Seine Empfehlung
+
+> *,,Einen getrennten, kuratierten Suchwortschatz fuer die
+sechs Nahrungsausschluss-Tags schaffen ? NICHT Food-Aliase
+umwidmen."*
+
+`[read]` **Die Food-Aliase sagen, wie ein Lebensmittel noch
+heisst** ? **nicht, welches Allergen darin steckt.**
+
+> *,,Medikament-Anwendung -> Wirkstoff waere eine separate,
+NICHT ZU RATENDE Bruecke."*
+
+`[cmd]` **Tom hat zugestimmt:** *,,ja das passt so fuer mich"*.
+
+**Abgenommen.**

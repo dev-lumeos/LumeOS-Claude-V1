@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 241 |
 | `laufend_codex` | 1 |
-| `erledigt` | 503 |
-| **gesamt** | **745** |
+| `erledigt` | 504 |
+| **gesamt** | **746** |
 
 ## medical — 49
 
@@ -602,7 +602,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 190
+## quer — 191
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -706,7 +706,8 @@
 | `C-517` | entscheidung | hoch | [Backups gehoeren nicht in git](todos/quer-c-0517-backups-nicht-in-git.md) | offen | — | — |
 | `C-519` | feature | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-c-0519-supplement-bleibt-supplement.md) | erledigt | — | C-521, G-485 |
 | `C-522` | fehler | hoch | [die Allergiesuche kennt nur den Tagnamen](todos/quer-c-0522-allergiesuche-kennt-nur-tagnamen.md) | offen | — | — |
-| `C-523` | befund | hoch | [welche Aliase fehlen noch?](laufend_codex/quer-c-0523-welche-aliase-fehlen.md) | laeuft (codex) | — | — |
+| `C-523` | befund | hoch | [welche Aliase fehlen noch?](erledigt/quer-c-0523-welche-aliase-fehlen.md) | erledigt | — | C-525 |
+| `C-525` | feature | hoch | [ein Suchwortschatz fuer die Ausschluss-Tags](laufend_codex/quer-c-0525-suchwortschatz-ausschluss-tags.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
