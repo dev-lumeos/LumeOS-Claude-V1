@@ -7,8 +7,9 @@
 |---|---|
 | `todos` | 240 |
 | `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 501 |
-| **gesamt** | **742** |
+| **gesamt** | **743** |
 
 ## medical — 49
 
@@ -313,7 +314,7 @@
 | `G-480` | feature | hoch | [ein Modal statt zwei](erledigt/nutrition-g-0480-ein-modal-statt-zwei.md) | erledigt | — | G-481 |
 | `G-481` | fehler | hoch | [die Suche benutzt die Suche nicht](erledigt/nutrition-g-0481-suche-benutzt-suche-nicht.md) | erledigt | — | C-520 |
 | `G-482` | fehler | hoch | [die Planeintraege sind da und werden nicht gezeigt](erledigt/nutrition-g-0482-planeintraege-nicht-gezeigt.md) | erledigt | — | — |
-| `G-483` | feature | hoch | [Planner und Rezepte kennen keine Supplemente](todos/nutrition-g-0483-planner-und-rezepte.md) | offen | — | — |
+| `G-483` | feature | hoch | [Planner und Rezepte kennen keine Supplemente](laufend_claudecode/nutrition-g-0483-planner-und-rezepte.md) | laeuft (claudecode) | — | — |
 | `G-485` | fehler | hoch | [das Tagebuch ist nicht lesbar](erledigt/nutrition-g-0485-tagebuch-nicht-lesbar.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
@@ -601,7 +602,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 188
+## quer — 189
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -699,11 +700,12 @@
 | `C-498` | feature | hoch | [Allergien global, nicht in food_preferences](erledigt/quer-c-0498-allergien-global.md) | erledigt | — | C-502, C-503 |
 | `C-501` | feature | hoch | [Seed fuer die leeren Module](erledigt/quer-c-0501-seed-fuer-leere-module.md) | erledigt | — | — |
 | `C-502` | fehler | hoch | [die Allergene ohne Aliase treffen nichts](erledigt/quer-c-0502-allergene-ohne-aliase.md) | erledigt | — | — |
-| `C-503` | feature | hoch | [die Vorschlaege kommen aus den Katalogen](erledigt/quer-c-0503-keine-stoffliste.md) | erledigt | — | C-506, G-462 |
+| `C-503` | feature | hoch | [die Vorschlaege kommen aus den Katalogen](erledigt/quer-c-0503-keine-stoffliste.md) | erledigt | — | C-506, C-522, G-462 |
 | `C-508` | feature | mittel | [eine Zaehlfunktion fuer die Allergietreffer](erledigt/quer-c-0508-zaehlfunktion-allergietreffer.md) | erledigt | — | — |
 | `C-513` | feature | hoch | [ein Supplement in eine Mahlzeit](erledigt/quer-c-0513-supplement-in-mahlzeit.md) | erledigt | — | G-475 |
 | `C-517` | entscheidung | hoch | [Backups gehoeren nicht in git](todos/quer-c-0517-backups-nicht-in-git.md) | offen | — | — |
 | `C-519` | feature | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-c-0519-supplement-bleibt-supplement.md) | erledigt | — | C-521, G-485 |
+| `C-522` | fehler | hoch | [die Allergiesuche kennt nur den Tagnamen](todos/quer-c-0522-allergiesuche-kennt-nur-tagnamen.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
