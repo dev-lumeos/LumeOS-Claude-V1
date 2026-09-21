@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-483
 entscheidung: E-84
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [nutrition.meal_plan_entries]
 zahlen:
@@ -98,3 +100,39 @@ festgelegte, überprüfbare Formregel.
 ## Bericht
 
 **2026-09-19. Gemessen und empfohlen, nicht gebaut.**
+
+## Gemessen von Codex, 2026-09-08
+
+> *,,Fuer Planeintraege passt eine eigene ABSICHTS-Referenz im
+Supplements-Schema, analog zu Rezepten, NICHT `meal_items ->
+intake_logs`."*
+
+`[read]` **Genau die Unterscheidung aus diesem Punkt: ein
+Planeintrag ist eine Absicht, keine Einnahme.**
+
+> *,,Die vorhandene Rezept-Referenz kann technisch nicht
+wiederverwendet werden, weil sie zwingend auf
+`recipe_ingredients` zeigt."*
+
+`[read]` **Also eine eigene Tabelle, nicht die bestehende
+erweitern.**
+
+### Und die Ghost-Bestaetigung
+
+> *,,Die Ghost-Bestaetigung verarbeitet heute nur Foods und
+ruft keine Supplement-Intake-Funktion auf. Ein kuenftiger
+Supplement-Planeintrag braucht daher Ghost-Anzeige plus
+Erzeugung eines `intake_log` bei Bestaetigung."*
+
+`[cmd]` **Damit ist A3 und A4 vorgemessen.**
+
+> *,,Eine Kapselregel ist derzeit nicht modelliert und bleibt
+offen."*
+
+`[read]` **A6 bleibt also zu klaeren** ? **Toms Formregel
+(nur untermischbare) steht in E-83, ist aber nirgends in der
+Datenbank hinterlegt.**
+
+`[cmd]` **G-480 hat sie in der Oberflaeche gebaut** ? **MISS,
+ob sie in die Datenbank gehoert.**
+
