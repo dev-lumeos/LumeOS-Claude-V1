@@ -802,7 +802,7 @@
 | `G-476` | fehler | hoch | [der Produktionsbau nimmt den Dev-Server mit](erledigt/quer-g-0476-dev-server-mitgenommen.md) | erledigt | — | — |
 | `G-477` | fehler | mittel | [Playwright ist anderthalb Jahre alt](todos/quer-g-0477-playwright-anheben.md) | offen | — | — |
 | `G-479` | fehler | mittel | [zwei Klassen mit 2,88:1 in packages/ui](todos/quer-g-0479-kontraste-in-packages-ui.md) | offen | — | — |
-| `G-487` | fehler | hoch | [der Tageswechsler startet nicht auf heute](erledigt/nutrition-g-0487-planschirm-falscher-tag.md) | erledigt | — | — |
+| `G-487` | fehler | hoch | [der Tageswechsler startet nicht auf heute](erledigt/quer-g-0487-tageswechsler-startet-nicht-auf-heute.md) | erledigt | — | — |
 
 ## buddy — 1
 
