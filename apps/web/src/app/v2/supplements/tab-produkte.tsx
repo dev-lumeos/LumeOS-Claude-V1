@@ -79,6 +79,9 @@ import { ProduktTafel } from './produkt-tafel'
 // ══ G-467: die gespeicherten Filter ═════════════════════════════════
 import {
   VORGABE, ausJson, trefferSatz,
+  // `[cmd]` **G-491: der Leersatz kommt aus der Lage**, nicht aus dem
+  // JSX — **eine Regel im JSX ist nicht pruefbar.**
+  grundFuerLeer as leerSatz,
   STANDARD_STATUS as FILTER_STANDARD_STATUS,
   type ProduktFilter,
 } from '../../../lib/supplements/produkt-filter-lage'
@@ -666,42 +669,49 @@ export function SuppProdukte() {
   /**
    * Warum die Liste leer ist — in einem Satz (G-182, Punkt 1).
    *
-   * `[read]` **Der Grund wird benannt, nicht geraten**, und in der
-   * Reihenfolge geprueft, in der ein Filter greift.
+   * `[read]` **Der Grund wird benannt, nicht geraten.**
    *
-   * `[cmd]` **Der Suchweg gehoert in den Satz:** solange C-495 nicht
-   * eingespielt ist, laeuft der `ILIKE`-Rueckfall, und der findet eine
-   * Fehleingabe nicht. **Ein blosses „keine Treffer" liesse offen, ob
-   * es das Produkt nicht gibt oder die Smartsuche fehlt.**
+   * ══ G-491: DER SATZ NANNTE NUR DIE KATEGORIE ══════════════════
+   *
+   * `[cmd]` **Gemessen am 2026-09-21, je Filter einzeln angelegt**
+   * (`tools/_g491-anteile.mjs`):
+   *
+   *     "Micronized Creatine Monohydrate"
+   *       200  smart    ohne Filter
+   *         0  einfach  + kategorie=protein
+   *        10  einfach  + form=Powder [E0162]
+   *         2  smart    + marke=Optimum Nutrition
+   *         0  einfach  ALLE VIER
+   *
+   * `[cmd]` **Alle 18 Zeilen dieses Namens SIND Powder** — es war
+   * die MARKE, die sie nahm. `[read]` **Der Satz behauptete die
+   * Kategorie.** `[read]` **Ein Vermerk mit falschem Grund ist
+   * schlimmer als keiner** — er schickt den Leser zum falschen
+   * Regler.
+   *
+   * `[cmd]` **`form` und `status` kamen ueberhaupt nicht vor**,
+   * obwohl `form` der Filter ist, der am haeufigsten greift.
+   *
+   * `[cmd]` **Deshalb zaehlt der Satz jetzt JEDEN wirkenden Filter
+   * auf**, statt einen auszusuchen.
+   *
+   * `[read]` **Der Satz wird NICHT hier gebaut**, sondern in
+   * `produkt-filter-lage.ts` — **dort steht schon `aktiveFilter`,
+   * die Zaehlregel fuer die Zahl am Knopf.** `[cmd]` **Zwei Stellen
+   * mit zwei Regeln liessen die Zahl am Knopf und den Satz darunter
+   * auseinanderlaufen**, und eine Regel im JSX ist nicht pruefbar.
    */
-  const grundFuerLeer = React.useMemo(() => {
-    const q = frage.trim()
-    if (liste?.fehler) return `Die Abfrage ist fehlgeschlagen: ${liste.fehler}`
-    // `[cmd]` **G-453: der Satz ist nachgezogen.** In G-452 hiess
-    // `einfach`, dass C-495 fehlt; **seit dem 2026-09-14 ist die
-    // Funktion da**, und `einfach` heisst jetzt: **diese Abfrage
-    // nutzt sie nicht** (Kategoriefilter gesetzt).
-    if (q && liste?.weg === 'einfach' && kategorie) {
-      return `Kein Produktname enthält „${q}“ in der Kategorie `
-        + `„${kategorie}“. Mit einem Kategoriefilter sucht LumeOS auf `
-        + 'genauen Text — die Smartsuche, die Fehleingaben versteht, '
-        + 'kennt keinen Kategorieparameter.'
-    }
-    if (q) return `Keine Treffer für „${q}“.`
-    // `[read]` **Zwei Filter, zwei Saetze** — wer Marke UND Kategorie
-    // gesetzt hat, soll wissen, dass beide gelten. `[cmd]` Ein Satz
-    // mit nur einem der beiden liesse den anderen unsichtbar wirken.
-    const markeText = gewaehlteMarken.length === 1
-      ? `„${gewaehlteMarken[0]}“`
-      : `den ${gewaehlteMarken.length} gewählten Marken`
-    if (gewaehlteMarken.length > 0 && kategorie) {
-      return `${markeText} hat kein Produkt mit einer Zeile der Kategorie `
-        + `„${kategorie}“.`
-    }
-    if (gewaehlteMarken.length > 0) return `Unter ${markeText} steht nichts.`
-    if (kategorie) return `Kein Produkt trägt eine Zeile der Kategorie „${kategorie}“.`
-    return 'Keine Treffer.'
-  }, [frage, gewaehlteMarken, kategorie, liste])
+  const grundFuerLeer = React.useMemo(
+    () => leerSatz(
+      frage,
+      { status, kategorie, form, marken: gewaehlteMarken,
+        allergienAn, leisteOffen: filterOffen },
+      liste?.weg ?? null,
+      liste?.fehler,
+    ),
+    [frage, gewaehlteMarken, kategorie, form, status, allergienAn,
+     filterOffen, liste],
+  )
 
   return (
     <div>

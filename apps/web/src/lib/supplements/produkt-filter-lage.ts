@@ -155,6 +155,77 @@ export function aktiveFilter(f: ProduktFilter): number {
 }
 
 /**
+ * Welche Filter gerade WIRKEN — je einer in Worten.
+ *
+ * ══ G-491: DER LEERSATZ NANNTE NUR DIE KATEGORIE ════════════════
+ *
+ * `[cmd]` **Gemessen am 2026-09-21** (`tools/_g491-anteile.mjs`,
+ * jeder Filter einzeln angelegt):
+ *
+ *     "Micronized Creatine Monohydrate"
+ *       200  smart    ohne Filter
+ *         0  einfach  + kategorie=protein
+ *        10  einfach  + form=Powder [E0162]
+ *         2  smart    + marke=Optimum Nutrition
+ *
+ * `[cmd]` **Alle 18 Zeilen dieses Namens SIND Powder** — es war die
+ * MARKE, die sie nahm. `[read]` **Der Satz behauptete die Kategorie,
+ * und `form` kam ueberhaupt nicht vor.** `[read]` **Ein Vermerk mit
+ * falschem Grund schickt den Leser zum falschen Regler.**
+ *
+ * `[read]` **Hier zaehlt die WIRKUNG, nicht die Abweichung von der
+ * Vorgabe** — anders als bei `aktiveFilter`. `[cmd]` **Eine
+ * eingeschaltete Allergenmeidung nimmt Zeilen weg**, auch wenn sie
+ * die Vorgabe ist; **ein Status auf der Vorgabe steht dagegen fuer
+ * „noch nichts eingegrenzt" und gehoert nicht in den Satz.**
+ */
+export function wirkendeFilter(f: ProduktFilter): string[] {
+  const aus: string[] = []
+  if (f.kategorie) aus.push(`Kategorie „${f.kategorie}“`)
+  if (f.form) aus.push(`Darreichungsform „${f.form}“`)
+  if (f.marken.length === 1) aus.push(`Marke „${f.marken[0]}“`)
+  else if (f.marken.length > 1) aus.push(`${f.marken.length} gewählte Marken`)
+  if (f.status !== VORGABE.status) {
+    aus.push(f.status ? `Status „${f.status}“` : 'Status „alle“')
+  }
+  if (f.allergienAn) aus.push('deine Allergenmeidung')
+  return aus
+}
+
+/**
+ * Warum die Liste leer ist — in einem Satz (G-182, G-491).
+ *
+ * `[read]` **Er nennt JEDEN wirkenden Filter, nicht einen
+ * ausgesuchten** — und den Suchweg dazu, wenn er gefallen ist.
+ *
+ * `[cmd]` **`weg === 'einfach'` heisst: diese Abfrage nutzt C-495
+ * nicht.** `[cmd]` **Gemessen: der Weg kippt von `smart` auf
+ * `einfach`, sobald EIN Filter gesetzt ist** — *„Ultraplex Vitamin
+ * D3"* findet ohne Filter 200 Zeilen, mit jedem einzelnen 0.
+ * `[read]` **Ohne diesen Satz sieht es aus, als gaebe es das Produkt
+ * nicht.**
+ */
+export function grundFuerLeer(
+  frage: string, f: ProduktFilter, weg: string | null, fehler?: string | null,
+): string {
+  if (fehler) return `Die Abfrage ist fehlgeschlagen: ${fehler}`
+  const q = frage.trim()
+  const aktiv = wirkendeFilter(f)
+  if (aktiv.length === 0) {
+    return q ? `Keine Treffer für „${q}“.` : 'Keine Treffer.'
+  }
+  const liste = aktiv.length === 1
+    ? aktiv[0]
+    : `${aktiv.slice(0, -1).join(', ')} und ${aktiv[aktiv.length - 1]}`
+  if (!q) return `Kein Produkt passt zu ${liste}.`
+  const wegSatz = weg === 'einfach'
+    ? ' Mit gesetztem Filter sucht LumeOS auf genauen Text — die '
+      + 'Smartsuche, die Fehleingaben versteht, läuft nur ohne Filter.'
+    : ''
+  return `Kein Produkt enthält „${q}“ und passt zugleich zu ${liste}.${wegSatz}`
+}
+
+/**
  * Der Satz unter der Trefferzahl — G-467, Toms Befund aus G-465.
  *
  * **Aus meinem eigenen Bericht:** *„Die Leiste zeigt weiterhin
