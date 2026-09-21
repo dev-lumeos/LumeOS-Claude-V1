@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 242 |
-| `laufend_codex` | 1 |
+| `todos` | 243 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 507 |
-| **gesamt** | **751** |
+| `erledigt` | 508 |
+| **gesamt** | **752** |
 
 ## medical — 49
 
@@ -65,7 +64,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 252
+## nutrition — 253
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -170,7 +169,7 @@
 | `C-466` | feature | hoch | [Naehrstoffe aus Supplementen in der Nutrients-Ansicht](erledigt/nutrition-c-0466-naehrstoffe-aus-supplementen.md) | erledigt | — | C-467, G-426 |
 | `C-507` | entscheidung | hoch | [die Suchtiefe nach Erfahrungsgrad](todos/nutrition-c-0507-suchtiefe-nach-erfahrungsgrad.md) | offen | — | — |
 | `C-521` | fehler | hoch | [die Tagessumme uebersieht die Supplemente](erledigt/nutrition-c-0521-tagessumme-uebersieht-supplemente.md) | erledigt | — | — |
-| `C-524` | feature | hoch | [Planeinträge können Supplemente vorsehen](laufend_codex/nutrition-c-0524-planeintraege-ohne-supplemente.md) | laeuft (codex) | — | — |
+| `C-524` | feature | hoch | [Planeinträge können Supplemente vorsehen](erledigt/nutrition-c-0524-planeintraege-ohne-supplemente.md) | erledigt | — | G-489 |
 | `C-526` | fehler | hoch | [keine Ueberlappungspruefung bei Plaenen](todos/nutrition-c-0526-keine-ueberlappungspruefung.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
@@ -320,6 +319,7 @@
 | `G-485` | fehler | hoch | [das Tagebuch ist nicht lesbar](erledigt/nutrition-g-0485-tagebuch-nicht-lesbar.md) | erledigt | — | — |
 | `G-486` | fehler | hoch | [erfuellte Ghostentries bleiben stehen](erledigt/nutrition-g-0486-erfuellte-ghosts-bleiben.md) | erledigt | — | C-526 |
 | `G-488` | fehler | mittel | [drei Zahlen zum Plan, keine zwei passen](todos/nutrition-g-0488-drei-zahlen-zum-plan.md) | offen | — | — |
+| `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](todos/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 111

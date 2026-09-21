@@ -9,6 +9,8 @@ kind_von: G-483
 entscheidung: E-84
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: ee5d7733
 beruehrt:
   tabellen:
     - nutrition.meal_plan_entries
@@ -126,3 +128,42 @@ Sicherung vor den Arbeiten:
 Die Datenbankmigration ist nicht live eingespielt. Vor einer Live-Einspielung
 braucht die Oberfläche den beschriebenen Lese- und Bestätigungsweg; so bleibt
 ein Planeintrag eine Absicht und ein Intake eine bestätigte Einnahme.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Gebaut ? NICHT live.**
+
+`[cmd]` **Keine Tabelle fuer Plan-Supplemente in der laufenden
+Datenbank.**
+
+`[cmd]` **Vorliegend:**
+`migrations/20260921093000_c524_meal_plan_supplements.sql`
+
+### Die Formregel ist jetzt in der Datenbank
+
+> *,,Powder/Liquid/Bar/Gummy duerfen in den Plan;
+Capsule/Tablet/Softgel/Lozenge werden datenbankseitig dem
+Stack zugeordnet und im Plan ABGEWIESEN."*
+
+`[read]` **A6 war offen** ? **er hat entschieden, die Regel in
+die Datenbank zu legen, statt sie zweimal zu fuehren.**
+
+`[cmd]` **Vertragsprobe 4/4 gruen, inklusive RLS und
+Capsule-Gegenprobe.**
+
+### Und die Ghost-UI ist ehrlich gemeldet
+
+> *,,Die Ghost-UI bleibt unveraendert: Sie stuerzt nicht ab,
+kann Supplement-Planeintraege aber noch nicht anzeigen oder
+bestaetigen."*
+
+`[read]` **A3 und A4 sind damit NICHT erfuellt** ? **aber sie
+gehoeren zur Oberflaeche.**
+
+`[cmd]` **Der Weg steht:** *,,die Referenz lesen und nach dem
+Anlegen der Mahlzeit `record_supplier_product_intake(...,
+meal_id)` aufrufen."*
+
+`[cmd]` **Als G-489.**
+
+**Teilabnahme. Einspielen und Oberflaeche stehen aus.**
