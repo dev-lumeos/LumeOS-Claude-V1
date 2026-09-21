@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 244 |
-| `laufend_codex` | 1 |
+| `todos` | 245 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 512 |
-| **gesamt** | **758** |
+| `erledigt` | 513 |
+| **gesamt** | **759** |
 
 ## medical — 49
 
@@ -449,7 +448,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 33
+## training — 34
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -470,7 +469,8 @@
 | `C-491` | befund | hoch | [die Zuordnungen zeigen auf die falsche Ebene](erledigt/training-c-0491-zuordnungen-auf-die-richtige-ebene.md) | erledigt | — | G-447 |
 | `C-493` | feature | hoch | [Seed-Sitzungen, die die Karte fuellen](erledigt/training-c-0493-seed-sitzungen-fuer-die-karte.md) | erledigt | — | C-501, G-450, G-451 |
 | `C-528` | befund | hoch | [die Muskelhierarchie ist unsauber](erledigt/training-c-0528-muskelhierarchie-unsauber.md) | erledigt | — | C-530 |
-| `C-530` | feature | hoch | [die Muskelhierarchie bereinigen und vervollstaendigen](laufend_codex/training-c-0530-muskelhierarchie-bereinigen.md) | laeuft (codex) | — | — |
+| `C-530` | feature | hoch | [die Muskelhierarchie bereinigen und vervollstaendigen](erledigt/training-c-0530-muskelhierarchie-bereinigen.md) | erledigt | — | C-531 |
+| `C-531` | fehler | mittel | [Muskel-Aliase sind nicht als Aliase erkennbar](todos/training-c-0531-muskel-aliase-nicht-erkennbar.md) | offen | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |

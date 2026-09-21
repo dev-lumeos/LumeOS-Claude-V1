@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-18 — 196 Tabellen, 2739 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-21 — 199 Tabellen, 2766 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -91,7 +91,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `user_injection_site_selections` | 10 | 0 | 2026-09-09 |
 | `user_medications` | 35 | 5 | ? |
 
-## nutrition — 45 Tabellen, 554 Spalten
+## nutrition — 45 Tabellen, 551 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -112,10 +112,10 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `foods` | 14 | 7140 | 2026-08-05 |
 | `foods_custom` | 46 | 0 | ? |
 | `foods_portions` | 12 | 23402 | ? |
-| `meal_items` | 30 | 9067 | ? |
+| `meal_items` | 27 | 9082 | ? |
 | `meal_plan_days` | 8 | 231 | ? |
 | `meal_plan_entries` | 18 | 756 | ? |
-| `meal_plan_logs` | 14 | 8 | ? |
+| `meal_plan_logs` | 14 | 13 | ? |
 | `meal_plan_slots` | 7 | 38 | 2026-09-02 |
 | `meal_plan_weeks` | 8 | 33 | ? |
 | `meal_plans` | 21 | 10 | ? |
@@ -131,9 +131,9 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `recipe_curation_candidate_ingredients` | 13 | 0 | ? |
 | `recipe_curation_candidates` | 18 | 0 | ? |
 | `recipe_curation_decisions` | 6 | 0 | ? |
-| `recipe_ingredients` | 15 | 22 | ? |
-| `recipes` | 20 | 6 | ? |
-| `search_events` | 9 | 539 | ? |
+| `recipe_ingredients` | 15 | 25 | ? |
+| `recipes` | 20 | 7 | ? |
+| `search_events` | 9 | 563 | ? |
 | `search_synonyms` | 4 | 4877 | ? |
 | `shopping_list_items` | 15 | 23 | ? |
 | `shopping_lists` | 12 | 4 | ? |
@@ -147,7 +147,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 |---|---|---|---|
 | `checkins` | 29 | 370 | ? |
 | `modality_log` | 17 | 178 | ? |
-| `muscle_recovery_profiles` | 6 | 105 | 2026-09-13 |
+| `muscle_recovery_profiles` | 6 | 112 | 2026-09-13 |
 | `overtraining_alerts` | 11 | 1 | 2026-09-07 |
 | `recovery_effort_factors` | 6 | 2 | 2026-09-13 |
 | `recovery_protocols` | 12 | 2 | 2026-09-07 |
@@ -155,7 +155,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `scores` | 34 | 370 | ? |
 | `stress_logs` | 12 | 7 | 2026-09-07 |
 
-## supplements — 67 Tabellen, 980 Spalten
+## supplements — 70 Tabellen, 1009 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -164,18 +164,21 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `entity_pk` | 14 | 0 | ? |
 | `entity_renal_hepatic` | 13 | 0 | ? |
 | `entity_transporters` | 15 | 4617 | ? |
-| `intake_logs` | 17 | 810 | ? |
+| `intake_logs` | 22 | 815 | ? |
 | `intake_schedule` | 18 | 0 | ? |
 | `lab_effect_enrichment_records` | 16 | 47 | ? |
+| `meal_plan_product_references` | 9 | 0 | 2026-09-21 |
 | `product_content_candidates` | 12 | 1717835 | 2026-09-09 |
 | `product_contents` | 17 | 3000982 | 2026-09-09 |
+| `product_form_placement_rules` | 6 | 10 | 2026-09-21 |
 | `product_suppliers` | 6 | 235618 | 2026-09-12 |
 | `pubchem_conflict_records` | 16 | 20 | ? |
+| `recipe_product_references` | 9 | 1 | 2026-09-18 |
 | `rule_catalog` | 28 | 64 | ? |
 | `stack_curation_candidate_items` | 11 | 2 | ? |
 | `stack_curation_candidates` | 12 | 2 | ? |
 | `stack_curation_decisions` | 6 | 0 | ? |
-| `stack_items` | 17 | 10 | ? |
+| `stack_items` | 17 | 11 | ? |
 | `stack_template_items` | 13 | 6 | ? |
 | `stack_templates` | 17 | 6 | ? |
 | `substance_aliases` | 11 | 1541 | ? |
@@ -222,22 +225,22 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `suppliers` | 11 | 6419 | 2026-09-09 |
 | `thailand_regulatory_records` | 18 | 1061 | ? |
 | `user_inventory` | 15 | 0 | ? |
-| `user_stacks` | 12 | 4 | ? |
+| `user_stacks` | 12 | 5 | ? |
 | `user_supplement_cycles` | 14 | 0 | ? |
 | `user_supplement_settings` | 11 | 0 | ? |
 | `wada_conflict_records` | 17 | 8 | ? |
 
-## training — 17 Tabellen, 182 Spalten
+## training — 17 Tabellen, 183 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
 | `equipment` | 10 | 58 | ? |
 | `exercise_catalog_enrichment` | 17 | 1407 | ? |
 | `exercise_muscle_resolution_notes` | 9 | 1105 | 2026-09-13 |
-| `exercise_muscles` | 6 | 6744 | ? |
+| `exercise_muscles` | 6 | 6726 | ? |
 | `exercises` | 17 | 1416 | ? |
-| `muscle_group_level_decisions` | 5 | 22 | 2026-09-13 |
-| `muscle_groups` | 7 | 105 | ? |
+| `muscle_group_level_decisions` | 5 | 24 | 2026-09-13 |
+| `muscle_groups` | 8 | 112 | ? |
 | `program_assignments` | 10 | 0 | 2026-09-09 |
 | `program_blocks` | 6 | 0 | 2026-09-09 |
 | `program_days` | 7 | 0 | 2026-09-09 |
