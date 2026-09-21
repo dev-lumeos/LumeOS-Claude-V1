@@ -6,8 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 245 |
+| `laufend_codex` | 1 |
 | `erledigt` | 511 |
-| **gesamt** | **756** |
+| **gesamt** | **757** |
 
 ## medical — 49
 
@@ -446,7 +447,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 32
+## training — 33
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -466,7 +467,8 @@
 | `C-490` | feature | hoch | [der Faktor an der Zuordnung](erledigt/training-c-0490-der-faktor-an-der-zuordnung.md) | erledigt | — | — |
 | `C-491` | befund | hoch | [die Zuordnungen zeigen auf die falsche Ebene](erledigt/training-c-0491-zuordnungen-auf-die-richtige-ebene.md) | erledigt | — | G-447 |
 | `C-493` | feature | hoch | [Seed-Sitzungen, die die Karte fuellen](erledigt/training-c-0493-seed-sitzungen-fuer-die-karte.md) | erledigt | — | C-501, G-450, G-451 |
-| `C-528` | befund | hoch | [die Muskelhierarchie ist unsauber](erledigt/training-c-0528-muskelhierarchie-unsauber.md) | erledigt | — | — |
+| `C-528` | befund | hoch | [die Muskelhierarchie ist unsauber](erledigt/training-c-0528-muskelhierarchie-unsauber.md) | erledigt | — | C-530 |
+| `C-530` | feature | hoch | [die Muskelhierarchie bereinigen und vervollstaendigen](laufend_codex/training-c-0530-muskelhierarchie-bereinigen.md) | laeuft (codex) | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
