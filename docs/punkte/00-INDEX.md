@@ -7,8 +7,9 @@
 |---|---|
 | `todos` | 245 |
 | `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 511 |
-| **gesamt** | **757** |
+| **gesamt** | **758** |
 
 ## medical — 49
 
@@ -322,7 +323,7 @@
 | `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](todos/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 113
+## supplements — 114
 
 ### beauftragbar — 112
 
@@ -437,15 +438,16 @@
 | `G-467` | fehler | hoch | [die Filter werden nicht gespeichert](erledigt/supplements-g-0467-filter-werden-nicht-gespeichert.md) | erledigt | — | G-469 |
 | `G-468` | feature | hoch | [der Vorlieben-Reiter fuer Supplements](todos/supplements-g-0468-vorlieben-reiter.md) | offen | — | — |
 | `G-472` | feature | mittel | [die Tafel zeigt die Portionswahl nicht](todos/supplements-g-0472-portionswahl-in-der-tafel.md) | offen | — | — |
-| `G-484` | feature | hoch | [keine Aktion im Produkte-Reiter](erledigt/supplements-g-0484-aktion-im-produkte-reiter.md) | erledigt | — | C-529, G-491 |
-| `G-491` | fehler | hoch | [die Produkttabelle bleibt im Browser leer](todos/supplements-g-0491-produkttabelle-bleibt-leer.md) | offen | — | — |
+| `G-484` | feature | hoch | [keine Aktion im Produkte-Reiter](erledigt/supplements-g-0484-aktion-im-produkte-reiter.md) | erledigt | — | C-529, G-491, G-492 |
+| `G-491` | fehler | hoch | [die Produkttabelle bleibt im Browser leer](laufend_claudecode/supplements-g-0491-produkttabelle-bleibt-leer.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
-### wartet auf Blocker — 1
+### wartet auf Blocker — 2
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
+| `G-492` | feature | hoch | [Hinzufuegen ist eine Aktion, keine Detailseite](todos/supplements-g-0492-hinzufuegen-als-modal.md) | offen | G-491 | — |
 
 ## training — 33
 
