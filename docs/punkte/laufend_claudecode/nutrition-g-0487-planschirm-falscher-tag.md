@@ -1,7 +1,7 @@
 ---
 nr: G-487
 typ: fehler
-modul: nutrition
+modul: quer
 schwere: hoch
 angelegt: 2026-09-08
 braucht: []
@@ -16,96 +16,92 @@ zahlen:
   gemessen: 2026-09-08
 ---
 
-# G-487 - der Planschirm zeigt den falschen Tag
+# G-487 - der Tageswechsler steht auf einem alten Tag
 
 ## Toms Befund
 
-Tom, 2026-09-08, mit dem Schirm:
+Tom, 2026-09-08:
 
-> bevor ich diesen auftrag rausgebe: wo sehe ich, dass der
-> letzte auftrag erfuellt ist? ich sehe nichts davon, und es
-> ist nicht wahr betreffs startdatum
+> ich hab den fehler gefunden: der daychooser war auf 18.9. und
+> nicht heute, sprich das ist eine boesartige falle
 
-```
-Aufbau-Wochenplan  aktiv  rollover
-Tag 3 von 35 - Start 19.9.2026
-noch nichts entschieden - 0 offen
-Today's ghost entries  2026-09-18 - kein Eintrag
-Fuer diesen Tag fuehrt der Plan keine Eintraege.
-Days count       28
-Started          19.9.2026
-Laeuft bis       23.10.2026
-Dauer            28 Tage
-```
+> nach einem F5 oder neustart oder refresh muss initialisiert
+> werden auf jetzt
 
-## Gemessen
+`[cmd]` **Heute ist der 2026-09-21, der Schirm zeigte den
+18.09.**
 
-`[cmd]` **Heute ist der 2026-09-21.**
+## Warum es eine Falle ist
 
-### Drei Widersprueche
+`[read]` **Der Schirm zeigt einen alten Tag, und NICHTS sagt
+es.**
 
-**1** ? **Der Tag ist drei Tage zu frueh.**
+`[cmd]` **Am 18.09. hat der aktive Plan null Eintraege, am
+21.09. hat er vier** ? **Tom sah *,,kein Eintrag"* und hielt es
+fuer einen Fehler.**
 
-    Flaeche:  "Today's ghost entries  2026-09-18"
-    gemessen: heute ist 2026-09-21
+`[read]` **Und jede Messung auf diesem Schirm ist falsch,
+ohne dass jemand es merkt** ? **das ist die Bosheit.**
 
-`[cmd]` **Und am 21.09. hat der Plan VIER Eintraege** ?
-**die Flaeche zeigt den 18., wo keine sind.**
+`[cmd]` **Viermal hat Tom gemeldet, die Ghostentries seien
+verschwunden** ? **mindestens einmal war es das.**
 
-**2** ? **28 oder 35 Tage?**
+## Die Umkehrung von G-467
 
-    meal_plans.days_count:  28
-    Flaeche oben:           "Tag 3 von 35"
-    Flaeche unten:          "Dauer 28 Tage"
+`[read]` **Dort war Speichern RICHTIG: ein Filter soll den
+Neuaufbau ueberleben.**
 
-**3** ? **Der Plan hat 63 Tage in der Datenbank.**
+`[read]` **Hier ist es FALSCH: ein Tag soll es nicht.**
 
-`[cmd]` **`meal_plan_days`: 63 Tage, von 2026-06-18 bis
-2026-10-23** ? **weder 28 noch 35.**
+`[cmd]` **Codex hat die Regel in C-511 formuliert:** *,,der
+Filter ist eine ANSICHTSSACHE, die Lieblingsmarke eine
+HALTUNG."*
 
-`[read]` **`Laeuft bis 23.10.2026` stimmt** ? **es ist das
-groesste `plan_date`.**
+`[read]` **Ein gewaehlter Tag ist noch weniger als eine
+Ansichtssache** ? **er ist ein Moment.**
 
-`[cmd]` **Aber 19.09. + 28 Tage = 17.10., nicht 23.10.**
+## Gemessen, wo er NICHT steht
 
-## Warum G-486 nicht sichtbar ist
+    public.user_display_preferences   kein Tageseintrag
+    localStorage / sessionStorage     0 Treffer in
+                                      nutrition/
+    Tageswechsler im Code             nur in
+                                      supplements/page.tsx
 
-`[cmd]` **Claude Code hat A4 auf dem 18.09. gemessen** ?
-**dort ist der Satz richtig.**
+`[read]` **Also kommt der Tag woanders her** ? **MISS es.**
 
-`[read]` **Aber die Flaeche zeigt den 18. als HEUTE, obwohl
-der 21. ist** ? **also sieht Tom den Zustand von vor drei
-Tagen.**
+`[cmd]` **Kandidaten: die URL, ein React-Zustand ueber die
+Navigation, ein Elternbauteil.**
 
-`[read]` **Und der A4-Satz erscheint nicht:** *,,Fuer diesen
-Tag fuehrt der Plan keine Eintraege"* **statt** *,,Dein Plan
-beginnt erst am 19.09."*
+## Und die zwei anderen Widersprueche bleiben
 
-## Der Verdacht
+`[cmd]` **Gemessen am selben Schirm:**
 
-`[read]` **Ein eingefrorener Tagesbezug** ? **dieselbe Klasse
-wie G-450 (`jetzt: Date = new Date()` als Vorgabewert).**
+    Flaeche oben:    "Tag 3 von 35"
+    Flaeche unten:   "Dauer 28 Tage"
+    meal_plans:      days_count 28
+    meal_plan_days:  63 Tage, 2026-06-18 bis 2026-10-23
 
-`[cmd]` **MISS, woher der Schirm sein Datum nimmt** ? **und ob
-es beim Laden oder beim Bauen gesetzt wird.**
+`[cmd]` **Und `Laeuft bis 23.10.`** ? **19.09. + 28 Tage =
+17.10.**
 
-`[read]` **Das erklaert alle vier Male, in denen Tom nichts
-gesehen hat.**
+`[read]` **Drei Zahlen, keine zwei passen zusammen.**
 
 ## Abnahmebedingungen
 
-    A1  der Schirm zeigt HEUTE. Foto mit Datum.
-    A2  woher kommt das Datum? Gemessen.
-    A3  "Tag 3 von 35" gegen "28 Tage": welche Zahl
-        stimmt? Gemessen und berichtigt.
-    A4  63 Tage in der Datenbank, 28 im Plan --
-        was gilt? GEMELDET, wenn es ein Datenfehler
-        ist.
-    A5  "Laeuft bis": gerechnet oder gelesen?
-    A6  der A4-Satz aus G-486 erscheint, wo er soll.
-        Foto.
-    A7  ein Waechter faengt einen eingefrorenen
-        Tagesbezug. Sabotageprobe.
+    A1  woher kommt der Tag? Gemessen.
+    A2  nach F5 steht er auf HEUTE. Foto vorher
+        (alter Tag) und nachher.
+    A3  das gilt fuer JEDEN Tageswechsler --
+        miss, welche es gibt. Nutrition, Supplements,
+        Recovery, Training.
+    A4  "Tag 3 von 35" gegen "28 Tage": welche Zahl
+        stimmt? Berichtigt.
+    A5  63 Tage in der Datenbank gegen 28 im Plan:
+        GEMELDET, wenn es ein Datenfehler ist.
+    A6  "Laeuft bis": gerechnet oder gelesen?
+    A7  ein Waechter faengt einen Tageswechsler, der
+        nicht auf heute startet. Sabotageprobe.
     A8  vier Module unveraendert.
     A9  apps/web 1893 oder mehr, apps/coach 65.
 
