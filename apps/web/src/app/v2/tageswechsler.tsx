@@ -33,6 +33,8 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Icon } from '@lumeos/ui'
 
 import { folgetag, heute, istHeute, vortag } from '../../lib/datum'
+// G-487: nach einem Neuladen auf heute -- EIN Wechsler, alle Module.
+import { useHeuteNachF5 } from '../../lib/heute-nach-f5'
 
 /** Nur ein Datum in der Form `2026-09-07` gilt. */
 function sauber(v: string | null): string | null {
@@ -114,6 +116,23 @@ export function Tageswechsler() {
     b.observe(document.body, { childList: true, subtree: true })
     return () => b.disconnect()
   }, [pathname])
+
+  // ══ G-487: nach F5 auf heute ═══════════════════════════════════
+  //
+  // **Tom, 2026-09-21:** *„der daychooser war auf 18.9. und nicht
+  // heute, sprich das ist eine boesartige falle"* — **und die
+  // Regel:** *„der tageswechsler muss bloss auf heute gestellt
+  // werden, wenn ein refresh/server restart/F5/ctrl F5 gemacht
+  // wird"*.
+  //
+  // `[read]` **VOR dem fruehen Ausstieg** — ein Hook nach `return
+  // null` liefe nicht, und React verlangt ohnehin dieselbe
+  // Reihenfolge bei jedem Rendern.
+  //
+  // `[cmd]` **Hier, nicht in `datumsnavigation.tsx`** — die Datei hat
+  // seit G-376 keinen Aufrufer mehr; **dieser Wechsler steht ueber
+  // ALLEN Modulen** (A2).
+  useHeuteNachF5(sauber(suche?.get('datum') ?? null) ?? heute(), pathname, suche)
 
   // `[read]` **Kein Platz, kein Wechsler** — und kein ausgegrauter:
   // wo kein Tag gefuehrt wird, gibt es nichts, was gehen koennte
