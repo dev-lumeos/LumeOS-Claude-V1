@@ -1999,3 +1999,70 @@
   background: color-mix(in oklch, var(--fg) 8%, transparent);
   color: var(--fg);
 }
+
+/* ── G-484: was man mit einem Produkt tun kann ───────────────────
+ *
+ * **Tom:** *„wenn ich ein produkt suche und waehlen will, muss die
+ * funktion her, dass ich es einem stack zuweisen kann ... oder einem
+ * meal hinzufuegen kann"*
+ *
+ * `[read]` **Abgesetzt gegen die Tafel** — die Tafel beschreibt, der
+ * Block handelt. */
+.v2-supp-aktion {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.v2-supp-aktion-knoepfe {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* `[read]` **Die Felder nebeneinander, aber umbrechend** — bei 375 px
+ * steht jedes auf einer Zeile. */
+.v2-supp-aktion-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  padding: 10px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+.v2-supp-aktion-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 10px;
+  min-width: 110px;
+}
+
+/* `[read]` **`--fg-muted` (9,19:1), nicht `--fg-dim` (2,88:1).** */
+.v2-supp-aktion-grund {
+  margin: 0;
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  flex: 1;
+  min-width: 200px;
+}
+
+.v2-supp-aktion-fertig {
+  margin: 0;
+  font-size: 11px;
+  color: var(--pos);
+}
+
+.v2-supp-aktion-fehler {
+  margin: 0;
+  font-size: 11px;
+  color: var(--neg);
+}

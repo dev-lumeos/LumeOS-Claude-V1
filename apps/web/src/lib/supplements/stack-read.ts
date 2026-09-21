@@ -11,6 +11,8 @@
 //
 // Laeuft ausschliesslich serverseitig.
 import { createSessionClient } from '@lumeos/shared/session'
+// G-484: EINE Namensquelle fuer die Mahlzeitart (E-58).
+import { KATEGORIE_TEXT } from '../nutrition/slots-lage'
 
 // G-187: die Wechselwirkungen der Stack-Positionen — serverfrei
 // gerechnet, damit die Regel ohne Browser pruefbar ist.
@@ -577,4 +579,85 @@ export async function getBelegteSubstanzen(): Promise<number> {
     .select('supplement_id', { count: 'exact', head: true })
   if (error || count === null) return 0
   return count
+}
+
+// ══ G-484: wohin ein Produkt kann ═══════════════════════════════════
+//
+// **Tom, 2026-09-19:** *„das muss natuerlich so gebaut werden, dass
+// man waehlen kann, in welchen stack / in welches heutige meal"*
+//
+// `[cmd]` **Gemessen am 2026-09-21:** `user_stacks` erlaubt mehrere je
+// Nutzer, aber **nur EINEN aktiven** (`uq_user_stacks_one_active`).
+// `[read]` **Deshalb ALLE laden, nicht nur den aktiven** — die Wahl
+// ist der Punkt.
+
+export type StackWahl = { id: string; name: string; aktiv: boolean }
+export type MahlzeitWahl = {
+  id: string; typ: string; name: string; zeit: string | null
+}
+
+/**
+ * Die Stacks des Nutzers und seine HEUTIGEN Mahlzeiten.
+ *
+ * `[read]` **Beide in einer Antwort** — die Tafel braucht sie
+ * gemeinsam, und zwei Rundreisen fuer eine Wahl waeren eine zu viel.
+ */
+export async function ladeProduktZiele(datum: string | null): Promise<{
+  stacks: StackWahl[]; mahlzeiten: MahlzeitWahl[]
+}> {
+  const leer = { stacks: [], mahlzeiten: [] }
+  try {
+    const client = createSessionClient()
+    const { data: { user } } = await client.auth.getUser()
+    if (!user) return leer
+
+    // `[read]` **Der Tag kommt vom Aufrufer** — der Server kennt die
+    // Zeitzone des Browsers nicht (dieselbe Lehre wie `lib/datum.ts`).
+    const tag = datum ?? new Date().toISOString().slice(0, 10)
+
+    // `[cmd]` **Gleichzeitig** — die beiden Listen haengen nicht
+    // voneinander ab (G-252).
+    const [sAntwort, mAntwort] = await Promise.all([
+      client.schema('supplements').from('user_stacks')
+        .select('id,name,is_active')
+        .eq('user_id', user.id)
+        .order('is_active', { ascending: false })
+        .order('name'),
+      client.schema('nutrition').from('meals')
+        .select('id,meal_type,meal_time')
+        .eq('user_id', user.id)
+        .eq('entry_date', tag)
+        .order('meal_time', { ascending: true, nullsFirst: false }),
+    ])
+
+    const stacks = ((sAntwort.data ?? []) as Array<Record<string, unknown>>)
+      .flatMap(r => {
+        const id = typeof r.id === 'string' ? r.id : null
+        if (!id) return []
+        return [{
+          id,
+          name: typeof r.name === 'string' && r.name.trim()
+            ? r.name : 'Ohne Namen',
+          aktiv: r.is_active === true,
+        }]
+      })
+
+    const mahlzeiten = ((mAntwort.data ?? []) as Array<Record<string, unknown>>)
+      .flatMap(r => {
+        const id = typeof r.id === 'string' ? r.id : null
+        const typ = typeof r.meal_type === 'string' ? r.meal_type : null
+        if (!id || !typ) return []
+        return [{
+          id, typ,
+          // `[read]` **Der Name kommt aus der EINEN Quelle** (E-58) —
+          // `meal_type` ist eine Kategorie, keine Beschriftung.
+          name: KATEGORIE_TEXT[typ as keyof typeof KATEGORIE_TEXT] ?? typ,
+          zeit: typeof r.meal_time === 'string' ? r.meal_time : null,
+        }]
+      })
+
+    return { stacks, mahlzeiten }
+  } catch {
+    return leer
+  }
 }

@@ -67,6 +67,8 @@ import {
   etikettBuendel, mengeText, bekanntZaehlen, portionText, formLabel,
   type EtikettZeile,
 } from '../../../lib/supplements/produkt-etikett'
+// G-484: die Aktionen am Produkt — Stack oder Mahlzeit.
+import { ProduktAktion } from './produkt-aktion'
 
 function da(v: string | null | undefined): v is string {
   return typeof v === 'string' && v.trim().length > 0
@@ -331,6 +333,22 @@ export function ProduktTafel({ satz, meidestoffe = [] }: {
             </p>
             )}
       </div>
+
+      {/* ══ G-484: was man mit dem Produkt tun kann ═══════════════
+          **Tom:** *„wenn ich ein produkt suche und waehlen will,
+          muss die funktion her, dass ich es einem stack zuweisen
+          kann ... oder einem meal hinzufuegen kann"*
+
+          `[read]` **Ganz unten** — erst sieht man, WAS es ist, dann
+          entscheidet man. */}
+      <ProduktAktion
+        produktId={satz.id}
+        name={satz.name_en}
+        marke={satz.marke}
+        produktform={satz.produktform}
+        portionseinheit={satz.portionseinheit}
+        portionen={satz.portionen}
+      />
     </div>
   )
 }

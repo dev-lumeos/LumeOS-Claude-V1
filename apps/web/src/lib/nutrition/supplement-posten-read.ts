@@ -393,7 +393,19 @@ export async function legeSupplementPostenAn(
       }
       return { ok: false, fehler: error.message }
     }
-    const id = s((data as Record<string, unknown> | null)?.id)
+    // ══ G-484: die Funktion gibt eine UUID zurueck, kein Objekt ═════
+    //
+    // `[cmd]` **`record_supplier_product_intake` ist `RETURNS uuid`**
+    // (gemessen am Rumpf) — **`data` ist die Id selbst.**
+    //
+    // `[cmd]` **Hier stand `data.id`**, und das ergab bei jedem
+    // Schreibversuch *„Kein Posten angelegt"* — **obwohl die Zeile
+    // entstanden war.** `[read]` **Eine Fehlermeldung ueber einen
+    // Erfolg ist schlimmer als eine ueber einen Fehler.**
+    //
+    // `[read]` **Beide Formen annehmen** — falls die Funktion einmal
+    // eine Zeile liefert.
+    const id = s(data) ?? s((data as Record<string, unknown> | null)?.id)
     return id ? { ok: true, id } : { ok: false, fehler: 'Kein Posten angelegt.' }
   } catch (e) {
     return { ok: false, fehler: e instanceof Error ? e.message : String(e) }

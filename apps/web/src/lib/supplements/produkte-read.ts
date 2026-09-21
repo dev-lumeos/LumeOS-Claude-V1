@@ -281,6 +281,17 @@ export type ProduktSatz = {
   suggested_use: string | null
   inhalt: InhaltsZeile[]
   firmen: FirmenZeile[]
+  /**
+   * G-484: die Portionsgroessen MIT Naehrwerten.
+   *
+   * `[cmd]` **Ueber die Id geholt, nicht ueber den Namen** —
+   * gemessen: fuenf Produkte heissen *,,Gold Standard 100% Whey
+   * Vanilla Ice Cream"*, und eine Namenssuche traf die falsche Id.
+   *
+   * `[read]` **Leer heisst: keine hinterlegten Naehrwerte** (A7) —
+   * das ist eine Auskunft, kein Fehler.
+   */
+  portionen: Array<{ serving_size: string; enercc: number | null }>
 }
 
 function s(v: unknown): string | null {
@@ -744,7 +755,7 @@ export async function ladeProdukt(id: string): Promise<ProduktSatz | null> {
   const c = createSessionClient().schema('supplements')
 
   try {
-    const [kopfA, inhaltA, ordnungA, firmenA] = await Promise.all([
+    const [kopfA, inhaltA, ordnungA, firmenA, portionenA] = await Promise.all([
       c.from('supplier_products')
         .select('id,name_en,marke,market_status,produktform,packungsgroesse,packungseinheit,portionsgroesse,portionseinheit,gtin,suggested_use')
         .eq('id', id).maybeSingle(),
@@ -770,11 +781,22 @@ export async function ladeProdukt(id: string): Promise<ProduktSatz | null> {
         .eq('product_id', id).order('reihenfolge', { ascending: true, nullsFirst: false }),
       c.from('product_suppliers')
         .select('rolle,suppliers(name,land)').eq('product_id', id),
+      // G-484: die Portionen -- ueber die ID, nicht den Namen.
+      c.from('supplier_product_nutrient_serving_options')
+        .select('serving_size,enercc')
+        .eq('product_id', id)
+        .order('serving_size', { ascending: true }),
     ])
     const k = kopfA.data as Record<string, unknown> | null
     if (!k || !s(k.name_en)) return null
     return {
       id,
+      // G-484: leer heisst: keine hinterlegten Naehrwerte (A7).
+      portionen: ((portionenA.data ?? []) as Array<Record<string, unknown>>)
+        .flatMap(r => {
+          const g = s(r.serving_size)
+          return g === null ? [] : [{ serving_size: g, enercc: n(r.enercc) }]
+        }),
       name_en: s(k.name_en) ?? '',
       marke: s(k.marke),
       market_status: s(k.market_status),
