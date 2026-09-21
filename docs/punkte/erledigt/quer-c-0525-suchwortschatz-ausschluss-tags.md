@@ -12,7 +12,7 @@ beauftragt: 2026-09-08
 erledigt: 2026-09-21
 commit: nicht-committet
 beruehrt:
-  tabellen: [public.allergy_search_terms, nutrition.tag_definitions, nutrition.food_tags]
+  tabellen: [nutrition.tag_definitions, nutrition.food_tags]
   dateien:
     - supabase/migrations/20260921092000_c525_allergy_search_terms.sql
     - supabase/_pipeline/05_user_tabellen/525_allergy_search_terms_data.sql

@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 243 |
+| `todos` | 242 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 506 |
+| `erledigt` | 507 |
 | **gesamt** | **751** |
 
 ## medical — 49
@@ -170,7 +170,7 @@
 | `C-466` | feature | hoch | [Naehrstoffe aus Supplementen in der Nutrients-Ansicht](erledigt/nutrition-c-0466-naehrstoffe-aus-supplementen.md) | erledigt | — | C-467, G-426 |
 | `C-507` | entscheidung | hoch | [die Suchtiefe nach Erfahrungsgrad](todos/nutrition-c-0507-suchtiefe-nach-erfahrungsgrad.md) | offen | — | — |
 | `C-521` | fehler | hoch | [die Tagessumme uebersieht die Supplemente](erledigt/nutrition-c-0521-tagessumme-uebersieht-supplemente.md) | erledigt | — | — |
-| `C-524` | feature | hoch | [Planeintraege koennen keine Supplemente](laufend_codex/nutrition-c-0524-planeintraege-ohne-supplemente.md) | laeuft (codex) | — | — |
+| `C-524` | feature | hoch | [Planeinträge können Supplemente vorsehen](laufend_codex/nutrition-c-0524-planeintraege-ohne-supplemente.md) | laeuft (codex) | — | — |
 | `C-526` | fehler | hoch | [keine Ueberlappungspruefung bei Plaenen](todos/nutrition-c-0526-keine-ueberlappungspruefung.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
@@ -436,7 +436,7 @@
 | `G-467` | fehler | hoch | [die Filter werden nicht gespeichert](erledigt/supplements-g-0467-filter-werden-nicht-gespeichert.md) | erledigt | — | G-469 |
 | `G-468` | feature | hoch | [der Vorlieben-Reiter fuer Supplements](todos/supplements-g-0468-vorlieben-reiter.md) | offen | — | — |
 | `G-472` | feature | mittel | [die Tafel zeigt die Portionswahl nicht](todos/supplements-g-0472-portionswahl-in-der-tafel.md) | offen | — | — |
-| `G-484` | feature | hoch | [keine Aktion im Produkte-Reiter](todos/supplements-g-0484-aktion-im-produkte-reiter.md) | offen | — | — |
+| `G-484` | feature | hoch | [keine Aktion im Produkte-Reiter](laufend_claudecode/supplements-g-0484-aktion-im-produkte-reiter.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -802,7 +802,7 @@
 | `G-476` | fehler | hoch | [der Produktionsbau nimmt den Dev-Server mit](erledigt/quer-g-0476-dev-server-mitgenommen.md) | erledigt | — | — |
 | `G-477` | fehler | mittel | [Playwright ist anderthalb Jahre alt](todos/quer-g-0477-playwright-anheben.md) | offen | — | — |
 | `G-479` | fehler | mittel | [zwei Klassen mit 2,88:1 in packages/ui](todos/quer-g-0479-kontraste-in-packages-ui.md) | offen | — | — |
-| `G-487` | fehler | hoch | [der Tageswechsler startet nicht auf heute](laufend_claudecode/nutrition-g-0487-planschirm-falscher-tag.md) | laeuft (claudecode) | — | — |
+| `G-487` | fehler | hoch | [der Tageswechsler startet nicht auf heute](erledigt/nutrition-g-0487-planschirm-falscher-tag.md) | erledigt | — | — |
 
 ## buddy — 1
 
