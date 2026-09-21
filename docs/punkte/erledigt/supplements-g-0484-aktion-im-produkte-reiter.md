@@ -9,6 +9,8 @@ kind_von: E-83
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 00e94b7c
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/tab-produkte.tsx
@@ -259,3 +261,77 @@ Foto.** `[read]` **Das ist der ehrliche Stand.**
 ### Neustart noetig?
 
 `[read]` **Nein** — nur `apps/web/src` und `supplements.css`.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **Beide Zeilen selbst in der Datenbank gesehen:**
+
+    Stack    Cut-Phase | Optimum Nutrition Gold Standard
+             100% Whey Vanilla Ice Cream | 1.000 Scoop |
+             post_workout
+    Mahlzeit lunch | 2026-09-21
+
+`[read]` **Beides in die NICHT erste Wahl geschrieben** ?
+**Cut-Phase ist nicht der aktive Stack, Mittagessen nicht die
+erste Mahlzeit. So ist die WAHL belegt, nicht nur die
+Aktion.**
+
+`[cmd]` **Proben: web 1910/1910, coach 65/65.**
+
+### C-518 haelt, blockiert aber nicht
+
+> *,,Der CHECK laesst `custom_name` zu ? in einer Transaktion
+belegt. Der Eintrag traegt daher den Produktnamen; eine
+Substanz aus 1.478 bis 29.004 Kandidaten zu raten waere eine
+BEHAUPTUNG."*
+
+`[read]` **Und was fehlt, ist gemeldet:** *,,der Stackeintrag
+weiss nicht, welches Produkt gemeint war (die Id steht als
+KRUECKE in `notes`)."*
+
+`[cmd]` **Als C-529.**
+
+### Zwei Fehler, die nur die Messung fand
+
+**1** ? **Jeder Supplement-Schreibweg meldete *,,Kein Posten
+angelegt"*, obwohl die Zeile entstand.**
+
+> *,,`record_supplier_product_intake` ist `RETURNS uuid`, der
+Code las `data.id`. Das traf JEDE Erfassung seit C-519, nicht
+nur diesen Auftrag."*
+
+`[read]` **Eine Fehlermeldung bei Erfolg** ? **der Nutzer
+haette nachgetragen und doppelt erfasst.**
+
+**2** ? **Die Kachel behauptete *,,keine Naehrwerte"* fuer ein
+Produkt mit Portion.**
+
+> *,,Fuenf Produkte tragen denselben Namen, und meine
+Suche-ueber-den-Namen traf die falsche Id."*
+
+`[cmd]` **Jetzt ueber `ladeProdukt(id)`: 31 Gram(s), 120
+kcal.**
+
+### Und die Sabotage lehrte etwas
+
+> *,,Nicht jeder gruene Schaden ist ein blinder Waechter."*
+
+`[read]` **Eine zu weiche Sabotage (`if (false && ...)`) fiel auf
+eine spaetere Regel durch** ? **er hat den Unterschied
+benannt statt den Waechter zu verschaerfen.**
+
+### Offen, ehrlich benannt
+
+> *,,Meine Browserprobe konnte nur den Whey oeffnen ? die API
+liefert fuer andere Produkte 200 mit 200 Zeilen, im Browser
+blieb die Tabelle leer. Ursache nicht gefunden; A5/A6 sind
+ueber den Waechter belegt, nicht ueber ein Foto."*
+
+`[read]` **A5 und A6 sind damit schwaecher belegt als die
+anderen** ? **Waechter statt Foto.**
+
+`[cmd]` **Als G-491.**
+
+**Abgenommen, A5/A6 mit Vorbehalt.**

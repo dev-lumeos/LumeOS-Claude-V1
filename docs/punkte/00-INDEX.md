@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 243 |
+| `todos` | 245 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 509 |
-| **gesamt** | **754** |
+| `erledigt` | 510 |
+| **gesamt** | **756** |
 
 ## medical — 49
 
@@ -323,9 +322,9 @@
 | `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](todos/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 111
+## supplements — 113
 
-### beauftragbar — 110
+### beauftragbar — 112
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -397,6 +396,7 @@
 | `C-518` | befund | hoch | [keine Produkt-Substanz-Brücke](erledigt/supplements-c-0518-keine-produkt-substanz-bruecke.md) | erledigt | — | — |
 | `C-520` | fehler | hoch | [drei Luecken in search_supplier_products](todos/supplements-c-0520-luecken-in-der-suche.md) | offen | — | — |
 | `C-527` | feature | hoch | [die DSLD-Quelle traegt mehr als wir lesen](todos/supplements-c-0527-dsld-quelle-traegt-mehr.md) | offen | — | — |
+| `C-529` | feature | hoch | [der Stackeintrag kennt sein Produkt nicht](todos/supplements-c-0529-stack-kennt-produkt-nicht.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -437,7 +437,8 @@
 | `G-467` | fehler | hoch | [die Filter werden nicht gespeichert](erledigt/supplements-g-0467-filter-werden-nicht-gespeichert.md) | erledigt | — | G-469 |
 | `G-468` | feature | hoch | [der Vorlieben-Reiter fuer Supplements](todos/supplements-g-0468-vorlieben-reiter.md) | offen | — | — |
 | `G-472` | feature | mittel | [die Tafel zeigt die Portionswahl nicht](todos/supplements-g-0472-portionswahl-in-der-tafel.md) | offen | — | — |
-| `G-484` | feature | hoch | [keine Aktion im Produkte-Reiter](laufend_claudecode/supplements-g-0484-aktion-im-produkte-reiter.md) | laeuft (claudecode) | — | — |
+| `G-484` | feature | hoch | [keine Aktion im Produkte-Reiter](erledigt/supplements-g-0484-aktion-im-produkte-reiter.md) | erledigt | — | C-529, G-491 |
+| `G-491` | fehler | hoch | [die Produkttabelle bleibt im Browser leer](todos/supplements-g-0491-produkttabelle-bleibt-leer.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
