@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 241 |
+| `todos` | 242 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 505 |
-| **gesamt** | **749** |
+| **gesamt** | **750** |
 
 ## medical — 49
 
@@ -65,7 +65,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 251
+## nutrition — 252
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -318,7 +318,8 @@
 | `G-482` | fehler | hoch | [die Planeintraege sind da und werden nicht gezeigt](erledigt/nutrition-g-0482-planeintraege-nicht-gezeigt.md) | erledigt | — | G-486 |
 | `G-483` | feature | hoch | [Planner und Rezepte kennen keine Supplemente](erledigt/nutrition-g-0483-planner-und-rezepte.md) | erledigt | — | C-524 |
 | `G-485` | fehler | hoch | [das Tagebuch ist nicht lesbar](erledigt/nutrition-g-0485-tagebuch-nicht-lesbar.md) | erledigt | — | — |
-| `G-486` | fehler | hoch | [erfuellte Ghostentries bleiben stehen](erledigt/nutrition-g-0486-erfuellte-ghosts-bleiben.md) | erledigt | — | C-526, G-487 |
+| `G-486` | fehler | hoch | [erfuellte Ghostentries bleiben stehen](erledigt/nutrition-g-0486-erfuellte-ghosts-bleiben.md) | erledigt | — | C-526 |
+| `G-488` | fehler | mittel | [drei Zahlen zum Plan, keine zwei passen](todos/nutrition-g-0488-drei-zahlen-zum-plan.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 110
@@ -800,7 +801,7 @@
 | `G-476` | fehler | hoch | [der Produktionsbau nimmt den Dev-Server mit](erledigt/quer-g-0476-dev-server-mitgenommen.md) | erledigt | — | — |
 | `G-477` | fehler | mittel | [Playwright ist anderthalb Jahre alt](todos/quer-g-0477-playwright-anheben.md) | offen | — | — |
 | `G-479` | fehler | mittel | [zwei Klassen mit 2,88:1 in packages/ui](todos/quer-g-0479-kontraste-in-packages-ui.md) | offen | — | — |
-| `G-487` | fehler | hoch | [der Tageswechsler steht auf einem alten Tag](laufend_claudecode/nutrition-g-0487-planschirm-falscher-tag.md) | laeuft (claudecode) | — | — |
+| `G-487` | fehler | hoch | [der Tageswechsler startet nicht auf heute](laufend_claudecode/nutrition-g-0487-planschirm-falscher-tag.md) | laeuft (claudecode) | — | — |
 
 ## buddy — 1
 
