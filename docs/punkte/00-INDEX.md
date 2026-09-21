@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 242 |
-| `laufend_codex` | 2 |
+| `todos` | 243 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 505 |
-| **gesamt** | **750** |
+| `erledigt` | 506 |
+| **gesamt** | **751** |
 
 ## medical — 49
 
@@ -322,9 +322,9 @@
 | `G-488` | fehler | mittel | [drei Zahlen zum Plan, keine zwei passen](todos/nutrition-g-0488-drei-zahlen-zum-plan.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 110
+## supplements — 111
 
-### beauftragbar — 109
+### beauftragbar — 110
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -377,7 +377,7 @@
 | `C-455` | feature | hoch | [der Injektionsplaner, vollstaendig](erledigt/supplements-c-0455-der-injektionsplaner-vollstaendig.md) | erledigt | — | — |
 | `C-456` | feature | hoch | [Zyklen und Protokolle zuerst](erledigt/supplements-c-0456-zyklen-und-protokolle-zuerst.md) | erledigt | — | — |
 | `C-467` | feature | hoch | [Lieferantenprodukte](erledigt/supplements-c-0467-lieferantenprodukte.md) | erledigt | — | C-485 |
-| `C-485` | feature | hoch | [die DSLD-Datenbank einlesen](erledigt/supplements-c-0485-dsld-einlesen.md) | erledigt | — | C-495, C-496, C-499, G-452, G-466 |
+| `C-485` | feature | hoch | [die DSLD-Datenbank einlesen](erledigt/supplements-c-0485-dsld-einlesen.md) | erledigt | — | C-495, C-496, C-499, C-527, G-452, G-466 |
 | `C-489` | fehler | mittel | [der Produktname ist englisch und heisst `name`](erledigt/supplements-c-0489-produktname-nach-name-en.md) | erledigt | — | — |
 | `C-495` | feature | hoch | [die Leseseite fuer 214.780 Produkte](erledigt/supplements-c-0495-die-leseseite-fuer-produkte.md) | erledigt | — | — |
 | `C-496` | feature | hoch | [die Naehrwerte auf unsere Makros und Mikros](erledigt/supplements-c-0496-naehrwerte-auf-unsere-makros.md) | erledigt | — | C-500, C-505 |
@@ -395,6 +395,7 @@
 | `C-516` | fehler | hoch | [Naehrwerte ohne Mapping](erledigt/supplements-c-0516-naehrwerte-ohne-zielspalte.md) | erledigt | — | — |
 | `C-518` | befund | hoch | [keine Produkt-Substanz-Brücke](erledigt/supplements-c-0518-keine-produkt-substanz-bruecke.md) | erledigt | — | — |
 | `C-520` | fehler | hoch | [drei Luecken in search_supplier_products](todos/supplements-c-0520-luecken-in-der-suche.md) | offen | — | — |
+| `C-527` | feature | hoch | [die DSLD-Quelle traegt mehr als wir lesen](todos/supplements-c-0527-dsld-quelle-traegt-mehr.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -711,7 +712,7 @@
 | `C-519` | feature | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-c-0519-supplement-bleibt-supplement.md) | erledigt | — | C-521, G-485 |
 | `C-522` | fehler | hoch | [die Allergiesuche kennt nur den Tagnamen](todos/quer-c-0522-allergiesuche-kennt-nur-tagnamen.md) | offen | — | — |
 | `C-523` | befund | hoch | [welche Aliase fehlen noch?](erledigt/quer-c-0523-welche-aliase-fehlen.md) | erledigt | — | C-525 |
-| `C-525` | feature | hoch | [ein Suchwortschatz fuer die Ausschluss-Tags](laufend_codex/quer-c-0525-suchwortschatz-ausschluss-tags.md) | laeuft (codex) | — | — |
+| `C-525` | feature | hoch | [ein Suchwortschatz fuer die Ausschluss-Tags](erledigt/quer-c-0525-suchwortschatz-ausschluss-tags.md) | erledigt | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
