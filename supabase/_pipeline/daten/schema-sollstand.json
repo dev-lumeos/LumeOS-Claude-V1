@@ -1257,6 +1257,16 @@
       "tabelle": "food_preference_items",
       "name": "food_preference_items_search_targets_refresh",
       "schritt": "075"
+    },
+    {
+      "tabelle": "meal_plans",
+      "name": "meal_plans_active_overlap_guard_trg",
+      "schritt": "526_one_active_meal_plan_per_day"
+    },
+    {
+      "tabelle": "meal_plan_days",
+      "name": "meal_plan_days_active_overlap_guard_trg",
+      "schritt": "526_one_active_meal_plan_per_day"
     }
   ],
   "_fremdschluessel": "Namentlich, weil beim Ausfall 2026-08-16 meal_items_meal_id_fkey mitverschwand. Ein fehlender Fremdschluessel faellt sonst erst auf, wenn verwaiste Zeilen entstanden sind.",
@@ -1779,6 +1789,10 @@
     {
       "name": "meal_plan_entries_owner_guard",
       "schritt": "058b"
+    },
+    {
+      "name": "meal_plan_active_overlap_guard",
+      "schritt": "526_one_active_meal_plan_per_day"
     },
     {
       "name": "shopping_lists_owner_guard",
