@@ -2421,6 +2421,44 @@
       "depends_on": [
         "519_remove_meal_product_snapshots"
       ]
+    },
+    {
+      "id": "525_allergy_search_terms_schema",
+      "path": "supabase/migrations/20260921092000_c525_allergy_search_terms.sql",
+      "kind": "sql",
+      "creates": "C-525: getrennte, RLS-geschuetzte Suchbegriffe fuer getaggte Food-Allergene; Diaet-Tags bleiben aus der Allergievorschlagssuche heraus.",
+      "depends_on": [
+        "503_allergy_catalog_suggestions",
+        "502_allergen_aliases_daten"
+      ]
+    },
+    {
+      "id": "525_allergy_search_terms_daten",
+      "path": "supabase/_pipeline/05_user_tabellen/525_allergy_search_terms_data.sql",
+      "kind": "sql",
+      "creates": "C-525: 23 kuratierte, belegte Suchbegriffe fuer Gluten, Laktose, Baumnuesse und Soja; Erdnuss bleibt bewusst getrennt.",
+      "depends_on": [
+        "525_allergy_search_terms_schema"
+      ]
+    },
+    {
+      "id": "524_meal_plan_supplements_schema",
+      "path": "supabase/migrations/20260921093000_c524_meal_plan_supplements.sql",
+      "kind": "sql",
+      "creates": "C-524/E-84: supplement-Planeintraege halten nur Produktabsichten in supplements; E-83-Formregeln werden datenbankseitig durchgesetzt.",
+      "depends_on": [
+        "519_supplement_intake_references_schema",
+        "525_allergy_search_terms_schema"
+      ]
+    },
+    {
+      "id": "524_product_form_placement_rules_daten",
+      "path": "supabase/_pipeline/13_supplements/524_product_form_placement_rules.sql",
+      "kind": "sql",
+      "creates": "C-524/E-83: die zehn gemessenen DSLD-Produktformen sind einmalig als Meal, Stack oder offen kuratiert.",
+      "depends_on": [
+        "524_meal_plan_supplements_schema"
+      ]
     }
   ]
 }
