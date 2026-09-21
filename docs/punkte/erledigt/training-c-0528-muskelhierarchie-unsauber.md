@@ -10,7 +10,7 @@ entscheidung: Tom
 agent: codex
 beauftragt: 2026-09-08
 erledigt: 2026-09-08
-commit: OFFEN
+commit: d47e68cb
 beruehrt:
   tabellen: [training.muscle_groups, training.exercise_muscles, public.koerperflaechen]
 zahlen:

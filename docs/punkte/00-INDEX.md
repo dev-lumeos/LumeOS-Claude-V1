@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 245 |
+| `todos` | 244 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 511 |
+| `erledigt` | 512 |
 | **gesamt** | **758** |
 
 ## medical — 49
@@ -325,7 +325,7 @@
 
 ## supplements — 114
 
-### beauftragbar — 112
+### beauftragbar — 113
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -439,15 +439,15 @@
 | `G-468` | feature | hoch | [der Vorlieben-Reiter fuer Supplements](todos/supplements-g-0468-vorlieben-reiter.md) | offen | — | — |
 | `G-472` | feature | mittel | [die Tafel zeigt die Portionswahl nicht](todos/supplements-g-0472-portionswahl-in-der-tafel.md) | offen | — | — |
 | `G-484` | feature | hoch | [keine Aktion im Produkte-Reiter](erledigt/supplements-g-0484-aktion-im-produkte-reiter.md) | erledigt | — | C-529, G-491, G-492 |
-| `G-491` | fehler | hoch | [die Produkttabelle bleibt im Browser leer](laufend_claudecode/supplements-g-0491-produkttabelle-bleibt-leer.md) | laeuft (claudecode) | — | — |
+| `G-491` | fehler | hoch | [die Produkttabelle bleibt im Browser leer](erledigt/supplements-g-0491-produkttabelle-bleibt-leer.md) | erledigt | — | — |
+| `G-492` | feature | hoch | [Hinzufuegen ist eine Aktion, keine Detailseite](laufend_claudecode/supplements-g-0492-hinzufuegen-als-modal.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
-| `G-492` | feature | hoch | [Hinzufuegen ist eine Aktion, keine Detailseite](todos/supplements-g-0492-hinzufuegen-als-modal.md) | offen | G-491 | — |
 
 ## training — 33
 

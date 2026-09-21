@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: [G-491]
 kind_von: G-484
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/tab-produkte.tsx

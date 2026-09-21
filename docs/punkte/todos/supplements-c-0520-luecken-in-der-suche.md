@@ -58,3 +58,16 @@ funktioniert hat.**
     A5  Laufzeit vorher/nachher.
     A6  Gegenprobe: eine erfundene Form -> 0.
     A7  Sicherung, Vollkette, ALLE Waechter.
+
+## Sichtbar geworden, 2026-09-08
+
+`[cmd]` **Im G-491-Foto: die Spalte `FORM` der Produktliste ist
+in ALLEN Zeilen leer.**
+
+`[read]` **Das ist die Folge von Luecke 1: `produktform` fehlt
+in der Rueckgabe.**
+
+`[read]` **Und G-492 braucht die Form in der Liste** ? **der
+Knopf in der Zeile soll wissen, ob er Stack oder beides
+anbietet.**
+
