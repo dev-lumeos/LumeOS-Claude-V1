@@ -181,3 +181,56 @@ oben** ? **eine Bauform fuer beide Tafeln.**
     A14 beide Tafeln nutzen DIESELBE Subnav-Bauform --
         nicht zweimal gebaut. Belegt.
 
+## Toms Entscheidung zu den Reitern, 2026-09-08
+
+> einbauen und ausdokumentieren, sobald daten da sind
+> einbinden. plus einen reiter fuer die etikette, den bildpfad
+> werden wir mit den 527 daten auch haben. ueberblick und
+> inhaltsstoffe auf den ersten reiter, das ist was man sehen
+> will
+
+### Die Reiter
+
+    1  Ueberblick     Marke, Form, Portion, Markt
+                     UND die Inhaltsstoffe (C-505)
+                     -- das, was man sehen will
+    2  Anwendung      Suggested Use (schon importiert)
+    3  Hinweise       Precautions, Formulation
+                     -> Daten kommen mit C-527
+    4  Etikett        das Etikettenbild
+                     -> Bildpfad kommt mit C-527
+
+    rechts in der Subnav-Zeile:  [+ Add]
+
+`[read]` **Das ersetzt den Vorschlag aus dem Nachtrag oben** ?
+**Inhaltsstoffe sind kein eigener Reiter, sondern Teil des
+ersten.**
+
+### Vorbereitete Reiter sagen, warum sie leer sind
+
+`[read]` **Die Lehre aus G-482 und G-486: eine leere Flaeche
+ohne Grund sieht aus wie ein Fehler.**
+
+`[read]` **Hinweise und Etikett zeigen bis C-527 einen Satz,
+KEIN leeres Feld** ? **etwa:** *,,Die Warnhinweise vom Etikett
+werden noch uebernommen."*
+
+`[cmd]` **Und im Code dokumentiert: welche Spalte den Reiter
+fuellen wird, und welcher Punkt sie liefert (C-527).**
+
+### C-527 bekommt den Gegenzug
+
+`[read]` **Wenn C-527 die Daten liefert, zieht ein Auftrag die
+zwei Reiter nach** ? **das steht in C-527 als Folge.**
+
+### Zusaetzliche Abnahmebedingungen
+
+    A15 vier Reiter: Ueberblick (mit Inhaltsstoffen),
+        Anwendung, Hinweise, Etikett. Foto.
+    A16 der erste Reiter zeigt die Inhaltsstoffe ohne
+        Wechsel. Foto.
+    A17 Hinweise und Etikett: ein Satz statt eines
+        leeren Felds. Foto beider.
+    A18 im Code dokumentiert: welche Datenquelle, welcher
+        Punkt (C-527). Belegt.
+

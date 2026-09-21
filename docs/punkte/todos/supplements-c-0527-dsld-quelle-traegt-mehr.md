@@ -120,3 +120,18 @@ werden, ist Toms Entscheidung.**
     A5  Company Information: was fehlt?
     A6  eine Empfehlung: welche Felder zuerst?
     A7  KEINE Umsetzung.
+
+## Folge: zwei Reiter warten auf diese Daten
+
+`[cmd]` **G-492 baut die Produkt-Tafel mit vier Reitern.**
+
+    Hinweise   wartet auf Precautions, Formulation
+    Etikett    wartet auf den Bildpfad (URL)
+
+Tom, 2026-09-08: *,,einbauen und ausdokumentieren, sobald
+daten da sind einbinden"*
+
+`[read]` **Wenn dieser Punkt importiert, zieht ein
+Oberflaechenauftrag die zwei Reiter nach** ? **nicht
+vergessen.**
+
