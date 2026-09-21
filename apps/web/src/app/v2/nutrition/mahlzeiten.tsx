@@ -36,6 +36,9 @@ import { vortag } from '../../../lib/datum'
 import type { NutritionFoodSearchRow } from '../../../lib/nutrition/food-search'
 // G-309: die Plantage erscheinen als Ghost Entries — Flow 3, Schritt 7.
 import { GhostEintragKarte, type GhostEintrag } from './ghost-eintrag'
+// G-486/A4: warum an diesem Tag kein Plan steht.
+import { planLeerGrund, planLeerSatz, type PlanFenster }
+  from '../../../lib/nutrition/plan-eintrag-lage'
 // G-331: dasselbe Suchmodal wie Planner (G-320), Rezept (G-323)
 // und Ghost-Eintrag (G-329) — keine fuenfte Suche.
 import { FoodSuchModal } from './food-such-modal'
@@ -230,6 +233,9 @@ export function Mahlzeiten({
   const [mahlzeiten, setMahlzeiten] = React.useState<Mahlzeit[]>([])
   // G-309: die Plantage des Tages, sofern ein Plan aktiv ist.
   const [ghosts, setGhosts] = React.useState<GhostEintrag[]>([])
+  // G-486/A4: das Fenster des aktiven Plans -- es begruendet einen
+  // leeren Tag.
+  const [fenster, setFenster] = React.useState<PlanFenster | null>(null)
   // ══ G-332 Punkt 5: eine Mahlzeit ausserhalb der Slots ═══════
   //
   // **Tom, 2026-09-02:** *,,ein user kann auch jederzeit im diary
@@ -265,7 +271,11 @@ export function Mahlzeiten({
       setMahlzeiten(d.meals ?? [])
       // `[read]` **Ein Planfehler darf das Tagebuch nicht leeren** —
       // ohne aktiven Plan gibt es schlicht keine Ghost Entries.
-      setGhosts(aG.ok ? ((await aG.json())?.eintraege ?? []) : [])
+      // G-486/A4: das Planfenster kommt mit — es sagt, WARUM ein Tag
+      // leer ist.
+      const planDaten = aG.ok ? await aG.json() : null
+      setGhosts(planDaten?.eintraege ?? [])
+      setFenster(planDaten?.fenster ?? null)
       setFehler(null)
     } catch (e) {
       setFehler(e instanceof Error ? e.message : String(e))
@@ -326,8 +336,33 @@ export function Mahlzeiten({
   //
   // `[read]` **Kein Expiry:** ein `pending` von vorgestern steht
   // weiter da — Flow 4, *,,auch retroaktiv"*.
-  const offeneGhosts = ghosts.filter(g => g.status === 'pending')
-  const ghostTypen = new Set(offeneGhosts.map(g => g.meal_type))
+  // ══ G-486: erfuellte bleiben stehen ══════════════════════════════
+  //
+  // **Tom, 2026-09-20, zum VIERTEN Mal:** *„die ghostentries sind
+  // schon wieder verschwunden"* — **und die Entscheidung:** *„ja die
+  // sollen einen gruenen rahmen kriegen und abgehakt stehenbleiben
+  // als erfuellt"*.
+  //
+  // `[cmd]` **Hier stand `filter(g => g.status === 'pending')`.**
+  // `[cmd]` **GEMESSEN am 2026-09-20:** nach vier Bestaetigungen
+  // liefert die Route weiter 4 Eintraege, der Schirm zeigte **0
+  // Ghostkarten**.
+  //
+  // `[read]` **Das war Absicht** (G-309: *„waere derselbe Tag
+  // zweimal"*) — **und genau diese Absicht hat Tom viermal als
+  // Fehler gelesen.** `[read]` **Ein erledigter Punkt, der
+  // verschwindet, sieht aus wie ein verlorener.**
+  //
+  // `[read]` **`skipped` bleibt weg** — ausgelassen heisst
+  // entschieden UND nicht gegessen; ein abgehakter Rahmen waere dort
+  // eine Falschaussage.
+  const sichtbareGhosts = ghosts.filter(
+    g => g.status === 'pending' || g.status === 'confirmed' || g.status === 'deviated')
+  const offeneGhosts = sichtbareGhosts
+  // `[read]` **Nur OFFENE unterdruecken die leere Karte** — ein
+  // erfuellter Slot traegt bereits die erfasste Mahlzeit darueber.
+  const ghostTypen = new Set(
+    sichtbareGhosts.filter(g => g.status === 'pending').map(g => g.meal_type))
 
   // `[read]` **Ein Slot mit Ghost Entry bekommt keine leere Karte** —
   // sonst stuenden „Empty" und der Plan-Vorschlag nebeneinander.
@@ -379,6 +414,20 @@ export function Mahlzeiten({
           onGeaendert={neuLaden}
         />
       ))}
+
+      {/* ══ G-486/A4: ein leerer Tag sagt WARUM ═══════════════════
+          **Tom hat viermal gemeldet, dass Ghosts fehlen** — dreimal
+          war der Grund ein anderer, und keiner stand am Schirm.
+
+          `[cmd]` **Gemessen:** ein Tag nach dem Planende zeigte nur
+          *,,Zukunft"* — nichts ueber den Plan. `[read]` **Ein leerer
+          Tag ohne Grund ist genau der Fehler, der viermal gemeldet
+          wurde.** */}
+      {sichtbareGhosts.length === 0 && fenster && (
+        <p className="v2-plan-leer-satz" data-probe="plan-leer-grund">
+          {planLeerSatz(planLeerGrund(datum, fenster), fenster)}
+        </p>
+      )}
 
       {/* G-309: dann, was der Plan fuer den Tag vorsieht — gestrichelt,
           noch nicht erfasst. `[read]` **Zwischen dem Erfassten und den

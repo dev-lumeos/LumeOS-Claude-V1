@@ -261,24 +261,73 @@ export function GhostEintragKarte({
   const summeBekannt = posten.some(p => p.enercc_100 !== null)
   const summe = summen.kcal
 
+  // ══ G-486: erfuellt bleibt stehen ═══════════════════════════════
+  //
+  // **Tom, 2026-09-20, zum vierten Mal:** *„die ghostentries sind
+  // schon wieder verschwunden"* — **und seine Entscheidung:** *„ja
+  // die sollen einen gruenen rahmen kriegen und abgehakt
+  // stehenbleiben als erfuellt"*.
+  //
+  // `[cmd]` **GEMESSEN am 2026-09-20:** vier Planeintraege,
+  // `meal_plan_logs` LEER, alle vier `pending` — **also sichtbar.**
+  // **Nach vier Bestaetigungen: Route weiter 4 Eintraege, Schirm
+  // 0 Ghostkarten.**
+  //
+  // `[read]` **Verschwinden war ABSICHT** (G-309: *„ihn daneben
+  // nochmal als Vorschlag zu zeigen, waere derselbe Tag zweimal"*) —
+  // **und genau das hat Tom viermal als Fehler gelesen.**
+  //
+  // `[read]` **Ein erledigter Punkt, der verschwindet, sieht aus wie
+  // ein verlorener.** `[cmd]` **Jetzt bleibt er, abgehakt.**
+  const erledigt = eintrag.status === 'confirmed' || eintrag.status === 'deviated'
+  const ausgelassen = eintrag.status === 'skipped'
+
   return (
     <Card
-      className="v2-card-tight"
+      className={`v2-card-tight ${erledigt ? 'v2-ghost-erfuellt' : 'v2-ghost-offen'}`}
+      // `[cmd]` **`Card` reicht `data-probe` NICHT durch** — es nimmt
+      // nur benannte Props (`primitives.tsx:61`), und ein
+      // unbekanntes Attribut faellt still weg. `[cmd]` **Gemessen:
+      // die Probe fand 0 Karten, obwohl 4 dastanden.**
+      //
+      // `[read]` **Die Klasse traegt den Zustand** — sie kommt durch,
+      // und der Waechter kann sie lesen.
       style={{
         padding: 0,
-        border: '1px dashed var(--fg-dim)',
+        // `[read]` **Durchgezogen statt gestrichelt** — gestrichelt
+        // heisst *noch nicht*, und das stimmt hier nicht mehr.
+        border: erledigt
+          ? '1px solid var(--pos)'
+          : '1px dashed var(--fg-dim)',
         background: 'transparent',
       }}
     >
       <div style={{
         padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10,
       }}>
+        {/* `[read]` **Der Haken steht VOR dem Namen** — er beantwortet
+            die Frage, die man zuerst stellt. */}
+        {/* `[cmd]` **Die Marke steht am `span`, nicht am `Icon`** —
+            `Icon` reicht `data-probe` so wenig durch wie `Card`
+            (beide nehmen nur benannte Props). **Gemessen: das SVG
+            war da, die Marke nicht.** */}
+        {erledigt && (
+          <span data-probe="ghost-haken"
+                style={{ display: 'inline-flex', color: 'var(--pos)' }}>
+            <Icon name="check" className="v2-ic v2-ic-sm" />
+          </span>
+        )}
         <span style={{ fontSize: 13, fontWeight: 600 }}>
           {mahlzeitName(eintrag.meal_type, {
             zeit: eintrag.planned_time, slots,
           })}
         </span>
-        <span className="v2-dim" style={{ fontSize: 11 }}>· aus deinem Plan</span>
+        <span className="v2-dim" style={{ fontSize: 11 }}>
+          {erledigt
+            ? (eintrag.status === 'deviated'
+              ? '· erfüllt, mit Abweichung' : '· erfüllt')
+            : ausgelassen ? '· ausgelassen' : '· aus deinem Plan'}
+        </span>
         <div className="v2-spacer" />
         {/* `[read]` **Dieselbe Form wie im Tagebuch** (G-330) —
             fuenf Werte, Gewicht zuerst. **Die Beschriftung steht in
@@ -460,6 +509,22 @@ export function GhostEintragKarte({
         </div>
       )}
 
+      {/* ══ G-486: ein erfuellter Eintrag wird nicht nochmal
+          bestaetigt ═══════════════════════════════════════════════
+          `[read]` **Die Knoepfe fallen weg, nicht nur der erste** —
+          *Auslassen* nach dem Essen waere eine Falschaussage, und
+          *MealCam* fuehrte in eine Attrappe fuer etwas Erledigtes.
+          `[read]` **Stattdessen steht dort, was gilt.** */}
+      {erledigt ? (
+        <div style={{ padding: '0 14px 12px' }}>
+          <p className="v2-ghost-erfuellt-satz" data-probe="ghost-erfuellt-satz">
+            {eintrag.status === 'deviated'
+              ? 'Erfüllt — die Mengen weichen vom Plan ab. Die erfasste '
+                + 'Mahlzeit steht oben.'
+              : 'Erfüllt — die erfasste Mahlzeit steht oben.'}
+          </p>
+        </div>
+      ) : (
       <div style={{
         padding: '0 14px 12px', display: 'flex', gap: 8,
       }}>
@@ -502,6 +567,7 @@ export function GhostEintragKarte({
           Auslassen
         </button>
       </div>
+      )}
 
       {/* `[cmd]` **G-276: kein Modell** — der Vermerk sagt es, statt
           einen Ablauf zu zeigen, der nicht existiert. */}

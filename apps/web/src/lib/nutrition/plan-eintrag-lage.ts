@@ -247,3 +247,68 @@ export function deutsch(iso: string): string {
   const [j, m, t] = iso.split('-')
   return t && m && j ? `${Number(t)}.${Number(m)}.${j}` : iso
 }
+
+// ══ G-486/A4: warum an diesem Tag kein Plan steht ═══════════════════
+//
+// **Tom, zum vierten Mal:** *„die ghostentries sind schon wieder
+// verschwunden"* — **und dreimal war der Grund ein anderer.**
+//
+// `[read]` **Ein leerer Tag, der nicht sagt warum, ist genau der
+// Fehler, den Tom viermal gemeldet hat.** `[cmd]` **Drei Gruende sind
+// gemessen:**
+//
+//     1  der aktive Plan beginnt spaeter        (G-482)
+//     2  der aktive Plan ist zu Ende
+//     3  es gibt gar keinen aktiven Plan
+//
+// `[read]` **Die Software weiss alle drei** — sie hat es nur nie
+// gesagt.
+
+/** Warum an einem Tag kein Planvorschlag steht. */
+export type PlanLeerGrund =
+  | 'kein_plan'
+  | 'beginnt_spaeter'
+  | 'beendet'
+  | 'kein_eintrag'
+
+export type PlanFenster = {
+  /** `null` heisst: kein aktiver Plan. */
+  name: string | null
+  von: string | null
+  bis: string | null
+}
+
+/**
+ * Der Grund, warum an `datum` kein Ghost steht.
+ *
+ * `[read]` **Reine Regel, ohne Datenbank** — pruefbar ohne Server.
+ */
+export function planLeerGrund(datum: string, f: PlanFenster): PlanLeerGrund {
+  if (!f.name || !f.von || !f.bis) return 'kein_plan'
+  if (datum < f.von) return 'beginnt_spaeter'
+  if (datum > f.bis) return 'beendet'
+  return 'kein_eintrag'
+}
+
+/**
+ * Der Satz dazu.
+ *
+ * `[read]` **Er nennt das Datum** — *,,beginnt spaeter"* ohne Tag
+ * laesst den Nutzer weitersuchen. `[cmd]` **Genau das war G-482:**
+ * der Plan begann am naechsten Tag, und nichts sagte es.
+ */
+export function planLeerSatz(grund: PlanLeerGrund, f: PlanFenster): string {
+  switch (grund) {
+    case 'kein_plan':
+      return 'Kein aktiver Mahlzeitplan — deshalb stehen hier keine '
+        + 'Vorschläge. Einen Plan aktivierst du im Reiter Meal plans.'
+    case 'beginnt_spaeter':
+      return `Dein Plan „${f.name}" beginnt erst am ${f.von} — `
+        + 'deshalb steht für diesen Tag noch nichts.'
+    case 'beendet':
+      return `Dein Plan „${f.name}" endete am ${f.bis} — `
+        + 'deshalb steht für diesen Tag nichts mehr.'
+    case 'kein_eintrag':
+      return `Dein Plan „${f.name}" sieht für diesen Tag nichts vor.`
+  }
+}

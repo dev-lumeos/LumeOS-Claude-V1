@@ -20,6 +20,8 @@
 //
 // Laeuft ausschliesslich serverseitig.
 import { createSessionClient } from '@lumeos/shared/session'
+// G-486/A4: der Grund, warum ein Tag leer ist.
+import type { PlanFenster } from './plan-eintrag-lage'
 // G-309: Typ und Schwellen stehen serverfrei in `plan-lage.ts`
 // — die Kachel ist eine Client-Komponente (A-30).
 import {
@@ -1427,3 +1429,47 @@ export async function ladeWechselbefunde(
 export type { Wechselbefund, WechselStand } from './plan-lage'
 export { LEERER_WECHSELSTAND, WECHSEL_AB_MAL, WECHSEL_AB_QUOTE }
   from './plan-lage'
+
+/**
+ * G-486/A4: das Fenster des aktiven Plans.
+ *
+ * `[cmd]` **Gemessen am 2026-09-20:** der aktive Plan laeuft vom
+ * 2026-09-19 bis 2026-10-23. `[read]` **Ohne diese Zahlen kann die
+ * Oberflaeche nicht sagen, WARUM ein Tag leer ist** — und genau das
+ * hat Tom viermal gemeldet.
+ */
+export async function aktivesPlanFenster(): Promise<PlanFenster> {
+  const leer: PlanFenster = { name: null, von: null, bis: null }
+  try {
+    const client = createSessionClient()
+    const { data: { user } } = await client.auth.getUser()
+    if (!user) return leer
+    const db = client.schema('nutrition')
+
+    const { data: p } = await db.from('meal_plans')
+      .select('id, name')
+      .eq('user_id', user.id).eq('status', 'active')
+      .limit(1).maybeSingle()
+    const plan = p as Record<string, unknown> | null
+    const id = text(plan?.id)
+    if (!id) return leer
+
+    // `[read]` **Das Fenster sind die TAGE, nicht `start_date`** — ein
+    // Plan kann verschoben werden, und die Tage tragen die Wahrheit.
+    const { data: tage } = await db.from('meal_plan_days')
+      .select('plan_date, meal_plan_weeks!inner(plan_id)')
+      .eq('meal_plan_weeks.plan_id', id)
+      .order('plan_date', { ascending: true })
+      .limit(400)
+    const liste = (tage ?? []) as unknown as Array<Record<string, unknown>>
+    const daten = liste.map(t => text(t.plan_date)).filter((v): v is string => v !== null)
+    if (daten.length === 0) return { name: text(plan?.name), von: null, bis: null }
+    return {
+      name: text(plan?.name),
+      von: daten[0],
+      bis: daten[daten.length - 1],
+    }
+  } catch {
+    return leer
+  }
+}

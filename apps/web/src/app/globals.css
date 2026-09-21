@@ -1288,6 +1288,35 @@
   color: var(--fg);
 }
 
+/* ── G-486/A4: warum an diesem Tag kein Plan steht ───────────────
+ *
+ * `[read]` **Kein Warnton** — ein Tag ohne Plan ist kein Fehler.
+ * `[read]` **`--fg-muted` (9,19:1), nicht `--fg-dim` (2,88:1).** */
+.v2-plan-leer-satz {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+/* ── G-486: der Satz am erfuellten Ghost ─────────────────────────
+ *
+ * **Tom:** *„ja die sollen einen gruenen rahmen kriegen und abgehakt
+ * stehenbleiben als erfuellt"*.
+ *
+ * `[read]` **Kein Warnton** — erfuellt ist der gute Ausgang.
+ * `[read]` **`--fg-muted` (9,19:1), nicht `--fg-dim` (2,88:1).** */
+.v2-ghost-erfuellt-satz {
+  margin: 0;
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+
 /* ── G-481: die Filterleiste mit GRUPPENTITELN ───────────────────
  *
  * **Tom, 2026-09-08:** *„anstaendige filter mit gruppentitel und

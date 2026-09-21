@@ -32,7 +32,7 @@ import {
   wocheKopierenSchema,
 } from '../../../../lib/nutrition/plan-write'
 // G-309: die Ghost Entries eines Tages — Flow 3, Schritt 7.
-import { ladeGhostEintraege, ladePlan } from '../../../../lib/nutrition/plan-lesen'
+import { ladeGhostEintraege, aktivesPlanFenster, ladePlan } from '../../../../lib/nutrition/plan-lesen'
 // G-274: der Bestaetigungsweg — Flow 4.
 import {
   bestaetigenSchema,
@@ -106,7 +106,12 @@ export async function GET(request: NextRequest) {
     return ungueltig('Erwartet ?datum=YYYY-MM-DD oder ?vorschau=<uuid>.')
   }
   try {
-    return NextResponse.json({ eintraege: await ladeGhostEintraege(datum) })
+    // G-486/A4: das Planfenster kommt mit -- ohne es kann die
+    // Oberflaeche nicht sagen, WARUM ein Tag leer ist.
+    const [eintraege, fenster] = await Promise.all([
+      ladeGhostEintraege(datum), aktivesPlanFenster(),
+    ])
+    return NextResponse.json({ eintraege, fenster })
   } catch (error) {
     return errorResponse(error)
   }
