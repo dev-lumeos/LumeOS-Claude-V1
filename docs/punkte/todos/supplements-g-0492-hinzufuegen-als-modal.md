@@ -119,3 +119,65 @@ Modal.**
         ging. Foto.
     A9  die elf anderen Reiter unveraendert.
     A10 apps/web 1910 oder mehr, apps/coach 65.
+
+## Nachtrag 2026-09-08 - die Vorlage steht schon im Code
+
+Tom, mit Bildschirmfoto des Substanzen-Reiters:
+
+> oder wir gehen nochmal logisch ueber die darstellung, wenn
+> details geoeffnet sind, und bauen das wie bei supplements mit
+> subnav, dann muss man nicht mehr soviel runternavigieren
+
+### Was der Substanzen-Reiter schon hat
+
+    Zeile      [+ Add]  -- ganz rechts, in der Liste
+    Detail     Subnav: Ueberblick | Dosierung | Sicherheit |
+                       Fragen | Rechtslage
+    unten      [Zum Stack hinzufuegen]
+
+`[cmd]` **Gemessen: `substanz-tafel.tsx` und
+`substanz-abschnitte.tsx`.**
+
+`[cmd]` **`produkt-tafel.tsx` existiert daneben, OHNE
+Subnav.**
+
+### Und dasselbe Problem steht auch dort
+
+`[read]` **`Zum Stack hinzufuegen` steht bei den Substanzen
+ganz UNTEN** ? **Toms Pfeile zeigen genau darauf.**
+
+## Was sich damit am Auftrag aendert
+
+**1** ? **Die Produkt-Detailansicht bekommt eine Subnav, wie
+die Substanzen.**
+
+    Ueberblick     Marke, Form, Portion, Markt
+    Inhaltsstoffe  die Tafel (C-505)
+    Anwendung      Suggested Use (schon importiert)
+    Hinweise       Precautions, Formulation -- erst nach
+                   C-527, dann nachziehen
+
+`[read]` **Die Abschnitte sind ein Vorschlag** ? **MISS, was
+die Produkt-Tafel heute zeigt, und gruppiere danach.**
+
+**2** ? **Die Aktion steht OBEN, in der Subnav-Zeile.**
+
+`[read]` **Nicht unten, nicht im Abschnitt** ? **sichtbar, egal
+welcher Reiter offen ist.**
+
+**3** ? **Dasselbe fuer die Substanzen.**
+
+`[read]` **`Zum Stack hinzufuegen` wandert dort ebenfalls nach
+oben** ? **eine Bauform fuer beide Tafeln.**
+
+### Zusaetzliche Abnahmebedingungen
+
+    A11 die Produkt-Tafel hat eine Subnav wie die
+        Substanz-Tafel. Foto.
+    A12 die Aktion steht in der Subnav-Zeile, in JEDEM
+        Reiter sichtbar. Foto aus zwei Reitern.
+    A13 die Substanz-Tafel: Zum Stack hinzufuegen oben
+        statt unten. Foto vorher/nachher.
+    A14 beide Tafeln nutzen DIESELBE Subnav-Bauform --
+        nicht zweimal gebaut. Belegt.
+
