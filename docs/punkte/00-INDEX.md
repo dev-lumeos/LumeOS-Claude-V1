@@ -8,8 +8,8 @@
 | `todos` | 243 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 508 |
-| **gesamt** | **753** |
+| `erledigt` | 509 |
+| **gesamt** | **754** |
 
 ## medical — 49
 
@@ -171,7 +171,7 @@
 | `C-507` | entscheidung | hoch | [die Suchtiefe nach Erfahrungsgrad](todos/nutrition-c-0507-suchtiefe-nach-erfahrungsgrad.md) | offen | — | — |
 | `C-521` | fehler | hoch | [die Tagessumme uebersieht die Supplemente](erledigt/nutrition-c-0521-tagessumme-uebersieht-supplemente.md) | erledigt | — | — |
 | `C-524` | feature | hoch | [Planeinträge können Supplemente vorsehen](erledigt/nutrition-c-0524-planeintraege-ohne-supplemente.md) | erledigt | — | G-489 |
-| `C-526` | fehler | hoch | [keine Ueberlappungspruefung bei Plaenen](todos/nutrition-c-0526-keine-ueberlappungspruefung.md) | offen | — | — |
+| `C-526` | fehler | hoch | [aktive Meal-Pläne dürfen nicht überlappen](erledigt/nutrition-c-0526-keine-ueberlappungspruefung.md) | erledigt | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](erledigt/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | erledigt | — | G-375 |
@@ -609,7 +609,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 192
+## quer — 193
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -714,7 +714,7 @@
 | `C-519` | feature | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-c-0519-supplement-bleibt-supplement.md) | erledigt | — | C-521, G-485 |
 | `C-522` | fehler | hoch | [die Allergiesuche kennt nur den Tagnamen](todos/quer-c-0522-allergiesuche-kennt-nur-tagnamen.md) | offen | — | — |
 | `C-523` | befund | hoch | [welche Aliase fehlen noch?](erledigt/quer-c-0523-welche-aliase-fehlen.md) | erledigt | — | C-525 |
-| `C-525` | feature | hoch | [ein Suchwortschatz fuer die Ausschluss-Tags](erledigt/quer-c-0525-suchwortschatz-ausschluss-tags.md) | erledigt | — | — |
+| `C-525` | feature | hoch | [Suchwortschatz für Ausschluss-Tags](erledigt/quer-c-0525-suchwortschatz-ausschluss-tags.md) | erledigt | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -794,7 +794,7 @@
 | `G-455` | feature | hoch | [Allergien in Settings, Filter in Produkten](erledigt/quer-g-0455-allergien-und-filter.md) | erledigt | — | G-459 |
 | `G-458` | fehler | hoch | [neun Migrationen schreiben Daten](erledigt/quer-g-0458-neun-migrationen-schreiben-daten.md) | erledigt | — | G-460, G-461 |
 | `G-459` | feature | mittel | [die Allergiekachel aufraeumen](erledigt/quer-g-0459-allergiekachel-aufraeumen.md) | erledigt | — | C-508 |
-| `G-460` | fehler | mittel | [vier Lesestellen auf die gefallene Spalte ebene](erledigt/quer-g-0460-vier-ebene-lesestellen.md) | erledigt | — | — |
+| `G-460` | fehler | mittel | [vier Lesestellen auf die gefallene Spalte ebene](erledigt/quer-g-0460-vier-ebene-lesestellen.md) | erledigt | — | G-490 |
 | `G-462` | fehler | niedrig | [bedingtes React.useId](erledigt/quer-g-0462-bedingtes-useid.md) | erledigt | — | — |
 | `G-469` | befund | hoch | [7,7 Sekunden, und die Daten sind es nicht](erledigt/quer-g-0469-sieben-sekunden.md) | erledigt | — | G-470 |
 | `G-470` | fehler | hoch | [der Produktionsbau ist nicht anmeldefaehig](erledigt/quer-g-0470-produktionsbau-nicht-anmeldefaehig.md) | erledigt | — | G-471 |
@@ -805,6 +805,7 @@
 | `G-477` | fehler | mittel | [Playwright ist anderthalb Jahre alt](todos/quer-g-0477-playwright-anheben.md) | offen | — | — |
 | `G-479` | fehler | mittel | [zwei Klassen mit 2,88:1 in packages/ui](todos/quer-g-0479-kontraste-in-packages-ui.md) | offen | — | — |
 | `G-487` | fehler | hoch | [der Tageswechsler startet nicht auf heute](erledigt/quer-g-0487-tageswechsler-startet-nicht-auf-heute.md) | erledigt | — | — |
+| `G-490` | fehler | mittel | [der Spaltenwaechter kennt die Tabelle nicht](todos/quer-g-0490-spaltenwaechter-kennt-tabelle-nicht.md) | offen | — | — |
 
 ## buddy — 1
 

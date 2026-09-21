@@ -9,11 +9,17 @@ kind_von: G-483
 entscheidung: E-84
 agent: codex
 beauftragt: 2026-09-08
-erledigt: 2026-09-08
-commit: ee5d7733
+erledigt: 2026-09-21
+commit: nicht-committet
 beruehrt:
   tabellen:
     - nutrition.meal_plan_entries
+    - supplements.meal_plan_product_references
+    - supplements.product_form_placement_rules
+  dateien:
+    - supabase/migrations/20260921093000_c524_meal_plan_supplements.sql
+    - supabase/_pipeline/13_supplements/524_product_form_placement_rules.sql
+    - supabase/_pipeline/_validierung/nutrition-c524-meal-plan-supplements.test.ts
 zahlen:
   gemessen: 2026-09-21
 ---
@@ -22,148 +28,52 @@ zahlen:
 
 ## Ergebnis
 
-Der Datenbankvertrag ist gebaut, aber nicht live eingespielt. Ein
-Planeintrag ist weiterhin nur eine Absicht: Er verweist über
-`supplements.meal_plan_product_references` auf ein Produkt und erzeugt dabei
-keinen `supplements.intake_logs`-Satz. Die Tabelle ist bewusst getrennt von
-`supplements.recipe_product_references`, weil deren zwingender Fremdschlüssel
-auf `nutrition.recipe_ingredients` zeigt und ein Planeintrag kein Rezept ist.
+**2026-09-21 live eingespielt.** Ein Supplement-Planeintrag ist eine
+Produktabsicht, keine vorgezogene Einnahme. Die neue Tabelle
+`supplements.meal_plan_product_references` verweist eindeutig auf einen
+`meal_plan_entries`-Satz; sie ist absichtlich nicht die Rezept-Referenztabelle,
+deren zwingender Fremdschlüssel auf `recipe_ingredients` zeigt.
 
-Die bestehende Ghost-Oberfläche verarbeitet weiterhin nur Foods. Sie würde an
-den neuen Spalten nicht abstürzen, zeigt einen Supplement-Planeintrag heute
-aber leer und bestätigt ihn mit der vorhandenen Meldung, dass keine
-Lebensmittel hinterlegt seien. Daher wurden weder der Food-Ghost noch
-`apps/` verändert. A3 und A4 benötigen die anschließende UI-Erweiterung:
-Referenz lesen/anzeigen und nach dem Anlegen der realen Mahlzeit
-`record_supplier_product_intake(..., meal_id)` aufrufen.
+`entry_type = 'supplement'` hat kein Food-, Rezept- oder Custom-Ziel. Ein
+Intake entsteht erst nach Bestätigung durch
+`record_supplier_product_intake(..., meal_id)`.
 
-## Bauform und Beleg
-
-| Bauform | Semantik | Entscheidung |
-|---|---|---|
-| `meal_items.supplement_intake_log_id` | bereits erfolgte Einnahme mit Snapshot | ungeeignet für einen Plan |
-| `recipe_product_references` | Produktabsicht, aber zwingend an Rezeptzutat | Vorbild, technisch nicht wiederverwendbar |
-| `meal_plan_product_references` | Produktabsicht zu genau einem Planeintrag | gebaut |
-
-`nutrition.meal_plan_entries.entry_type` kennt zusätzlich `supplement`. Der
-zugehörige Target-Check verbietet dafür Food-, Rezept- und Custom-Ziele; die
-Produktabsicht liegt ausschließlich in der neuen Supplements-Tabelle.
-`meal_plan_product_references` hat einen eindeutigen Verweis auf den
-Planeintrag, Produkt, optionale Portionsgröße sowie positive Portionsanzahl.
-Ein Trigger prüft Planbesitzer, `entry_type = 'supplement'` und die Formregel.
-
-## Formregel: einmal in der Datenbank
-
-Die Formregel gehört in die Datenbank, weil G-480 sie sonst zusätzlich in der
-Oberfläche führen müsste. `supplements.product_form_placement_rules` ist für
-`authenticated` lesbar; `supplier_product_meal_eligibility(product_id)` gibt
-Rohform, Formcode, Platzierung, `allowed_in_meal` und einen Hinweis zurück.
-
-| Formcode | Form | Platzierung |
-|---|---|---|
-| E0162 | Powder | meal |
-| E0165 | Liquid | meal |
-| E0164 | Bar | meal |
-| E0176 | Gummy or Jelly | meal |
-| E0159 | Capsule | stack |
-| E0155 | Tablet or Pill | stack |
-| E0161 | Softgel Capsule | stack |
-| E0174 | Lozenge | stack |
-| E0172 | Other (e.g. tea bag) | unsupported |
-| E0177 | Unknown | unsupported |
-
-Gemessen im Katalog: 36.485 Powder, 32.532 Liquid, 59 Bar, 4.677 Gummy,
-79.822 Capsule, 33.717 Tablet/Pill, 19.924 Softgel und 994 Lozenge-Produkte.
-Eine Capsule-Referenz wird durch den Datenbank-Trigger mit `check_violation`
-abgewiesen; sie kann deshalb nicht stillschweigend im Plan landen.
-
-## Ghost-Bestätigung und G-486-Gegenprobe
-
-Der aktuelle Leser in `apps/web/src/lib/nutrition/plan-lesen.ts` liest
-generische Planeintragsfelder und bricht an `entry_type = 'supplement'` nicht
-ab. Er bildet jedoch nur Food- und Rezeptposten. Der aktuelle Schreiber in
-`plan-log-write.ts` legt nur Food-Posten an und ruft keine Supplement-RPC auf.
-Ein neuer Supplementeintrag wäre also leer und kontrolliert nicht
-bestätigbar, nicht ein erneuter fehlender-Spalten-Absturz wie G-485.
-
-Die uncommitteten G-486-Änderungen in `apps/web` ändern nur die Darstellung
-erfüllter Ghostentries. C-524 hat keine dieser Dateien geändert. Der
-notwendige UI-Vertrag lautet: Produktreferenz lesen, im Ghost als Supplement
-anzeigen, reale Mahlzeit anlegen, anschließend
-`supplements.record_supplier_product_intake` mit dieser `meal_id` aufrufen und
-erst danach den Planlog schreiben.
-
-## Prüfungen
-
-Die Vertragsprobe lief gegen die frische Wegwerf-Datenbank
-`lumeos_c524_vollkette` und rollt ihre Testdaten zurück:
-
-| Kriterium | Ergebnis |
+| Form | Platzierung |
 |---|---|
-| A1 | eigene Absichts-Referenz gebaut und durch FK/Check belegt |
-| A2 | Powder-Planeintrag mit Referenz angelegt; kein Intake vor Bestätigung |
-| A3 | Backend-Vertrag vorhanden; Ghost-Anzeige noch UI-offen |
-| A4 | vorhandene Intake-RPC mit `meal_id` erzeugt Intake; UI-Aufruf noch offen |
-| A5 | BLS-Planeintrag bleibt unverändert lesbar und bestätigbar |
-| A6 | Regel zentral in Datenbank; Capsule wird abgewiesen |
-| RLS | `authenticated` liest Regeln und bearbeitet eigene Referenzen; `anon` nicht |
+| Powder, Liquid, Bar, Gummy | Meal |
+| Capsule, Tablet/Pill, Softgel, Lozenge | Stack |
+| Other, Unknown | nicht automatisch einplanbar |
 
-`nutrition-c524-meal-plan-supplements.test.ts`: 4/4 grün.
-`quer-c525-allergy-search-terms.test.ts`: 2/2 grün.
-`migration-kette-pruefen.mjs`: grün, 71 Dateien.
-`migration-datenlogik-pruefen.mjs`: grün, exakt 44 historische
-Datenoperationen.
+Die Regel liegt einmalig in
+`supplements.product_form_placement_rules`; die lesbare Funktion
+`supplier_product_meal_eligibility(product_id)` liefert Form, Platzierung und
+Zulässigkeit. In der Live-Transaktionsprobe wurde ein Powder-Planeintrag samt
+Produktreferenz erzeugt; eine Capsule endete mit `check_violation`.
 
-Die gemeinsame Vollkette führte C-525 und C-524 einschließlich beider
-Datenimporte aus. Ihre alleinige Abweichung ist der bekannte fremde
-C-327-Grantbefund: `supplements.substance_group_memberships` hat für
-`service_role` zu viele Rechte. C-524/C-525 selbst sind in der
-Schema-Abschlussprüfung vollständig (35/35 RLS, 39/39 Grants, 64/64 FKs).
+## G-484-/Ghost-Gegenprobe
 
-Sicherung vor den Arbeiten:
-`backup/schema/20260921090000_c525_c524_vorher.sql`.
+G-484 liest Produkt- und Stackdaten, keinen C-524-Planvertrag. C-524 entfernt
+keine Spalte und bricht deshalb keinen bestehenden Leseweg. Der aktuelle
+Food-Ghost liest Supplement-Referenzen noch nicht; Anzeige und Bestätigung in
+der Oberfläche bleiben der ausdrücklich getrennte G-489-Folgeweg. Ein
+Supplement-Planeintrag kann die bestehende Food-Bestätigung daher nicht
+fälschen.
 
-## Nächster Schritt
+## Nachweise
 
-Die Datenbankmigration ist nicht live eingespielt. Vor einer Live-Einspielung
-braucht die Oberfläche den beschriebenen Lese- und Bestätigungsweg; so bleibt
-ein Planeintrag eine Absicht und ein Intake eine bestätigte Einnahme.
+- Live: 23 C-525-Suchbegriffe, C-524-Referenztabelle und zehn Formregeln.
+- Bestehende Planeinträge: 756 vor/nach Einspielung; davon 0
+  Supplement-Planeinträge.
+- Vertragsprobe: 4/4 grün, inklusive BLS-Gegenplan und RLS:
+  `authenticated` darf Regeln lesen/eigene Referenzen bearbeiten, `anon` nicht.
+- Frische Vollkette: C-524 grün. Der Abschlussfehler ist ausschließlich der
+  bekannte C-327-Grantbefund.
 
-## Abnahme
+Sicherung: `backup/schema/20260921090000_c525_c524_vorher.sql`.
 
-**2026-09-08, Orchestrator. Gebaut ? NICHT live.**
+## Nachtrag: LIVE eingespielt, 2026-09-08
 
-`[cmd]` **Keine Tabelle fuer Plan-Supplemente in der laufenden
-Datenbank.**
+`[cmd]` **10 Formregeln live: Powder im Plan erlaubt, Capsule
+datenbankseitig abgewiesen.**
 
-`[cmd]` **Vorliegend:**
-`migrations/20260921093000_c524_meal_plan_supplements.sql`
-
-### Die Formregel ist jetzt in der Datenbank
-
-> *,,Powder/Liquid/Bar/Gummy duerfen in den Plan;
-Capsule/Tablet/Softgel/Lozenge werden datenbankseitig dem
-Stack zugeordnet und im Plan ABGEWIESEN."*
-
-`[read]` **A6 war offen** ? **er hat entschieden, die Regel in
-die Datenbank zu legen, statt sie zweimal zu fuehren.**
-
-`[cmd]` **Vertragsprobe 4/4 gruen, inklusive RLS und
-Capsule-Gegenprobe.**
-
-### Und die Ghost-UI ist ehrlich gemeldet
-
-> *,,Die Ghost-UI bleibt unveraendert: Sie stuerzt nicht ab,
-kann Supplement-Planeintraege aber noch nicht anzeigen oder
-bestaetigen."*
-
-`[read]` **A3 und A4 sind damit NICHT erfuellt** ? **aber sie
-gehoeren zur Oberflaeche.**
-
-`[cmd]` **Der Weg steht:** *,,die Referenz lesen und nach dem
-Anlegen der Mahlzeit `record_supplier_product_intake(...,
-meal_id)` aufrufen."*
-
-`[cmd]` **Als G-489.**
-
-**Teilabnahme. Einspielen und Oberflaeche stehen aus.**
+`[cmd]` **Selbst gemessen: 756 Planeintraege, unveraendert.**

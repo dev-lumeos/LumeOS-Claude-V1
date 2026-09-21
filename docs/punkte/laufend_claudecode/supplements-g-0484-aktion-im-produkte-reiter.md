@@ -92,3 +92,170 @@ gibt.**
     A+  die Mahlzeitwahl zeigt die HEUTIGEN Mahlzeiten.
         Foto.
 
+## Bericht
+
+**Die Aktion steht: ein Produkt kann in einen gewaehlten Stack oder
+in eine gewaehlte Mahlzeit** — und die Form entscheidet, was
+angeboten wird.
+
+    A1  in den Stack, mit Dosis und Zeitpunkt      erfuellt
+    A2  die Stackwahl steht (zwei Stacks)          erfuellt
+    A3  in eine Mahlzeit                           erfuellt
+    A4  die HEUTIGEN vier Mahlzeiten               erfuellt
+    A5  eine Kapsel bietet nur den Stack           erfuellt
+    A6  ein Pulver bietet beides                   erfuellt
+    A7  ohne Naehrwerte: der Satz steht            erfuellt
+    A8  die elf anderen Reiter unveraendert        erfuellt
+    A9  apps/web 1910/1910, apps/coach 65/65       erfuellt
+
+`[cmd]` **`supabase/` unberuehrt.**
+
+### C-518: der Befund haelt, und er blockiert NICHT
+
+`[cmd]` **Gemessen am 2026-09-21:** `supplements.stack_items` hat
+**keine Produktspalte** — nur `supplement_id` (Substanz) und
+`custom_name`. **Codex' Empfehlung ist nicht gebaut.**
+
+`[cmd]` **Aber der CHECK laesst beides zu:**
+
+    stack_items_check
+      CHECK (supplement_id IS NOT NULL OR custom_name IS NOT NULL)
+
+`[cmd]` **In einer Transaktion belegt** (mit ROLLBACK): ein
+Produktname geht durch, mit Dosis, Einheit, Zeitpunkt und
+Haeufigkeit.
+
+`[read]` **Also traegt der Eintrag den PRODUKTNAMEN.** `[read]`
+**Eine Substanz zu raten waere schlimmer als keine:** C-518 hat
+*,,1.478 bis 29.004 Produktkandidaten, nie genau einer"* gemessen —
+**aus dieser Menge eine auszusuchen hiesse, eine Zuordnung zu
+behaupten, die niemand gemessen hat.**
+
+`[cmd]` **Der Waechter sichert es:** `supplement_id: null` und
+`custom_name: stackName(…)` — **wer eine Substanz raet, faellt auf.**
+
+`[read]` **Was fehlt, bleibt gemeldet:** solange `stack_items` keine
+Produktspalte hat, **weiss der Stackeintrag nicht, WELCHES Produkt
+gemeint war.** `[cmd]` **Die Id steht in `notes`** — das ist eine
+Kruecke, keine Zuordnung.
+
+### A1 bis A4 — nicht eine Aktion, sondern eine WAHL
+
+`[cmd]` **Ueber die Wege der Anwendung geschrieben, und beides in
+die NICHT erste Wahl** — damit die Wahl belegt ist und nicht die
+Vorgabe:
+
+    Stacks       Muskelaufbau Basics (aktiv) | Cut-Phase
+    gewaehlt     Cut-Phase            -> 201
+    Mahlzeiten   Fruehstueck 07:30 | Mittagessen 12:30 |
+                 Snack 16:00 | Abendessen 19:30
+    gewaehlt     Mittagessen          -> 200
+
+`[cmd]` **In der Datenbank gegengeprueft:**
+
+    Cut-Phase | Optimum Nutrition Gold Standard 100% Whey …
+              | 1.000 Scoop | post_workout | training_days
+
+    lunch     | Optimum Nutrition Gold Standard 100% Whey …
+              | 31 Gram(s) | 1.000
+
+`[cmd]` **Alle acht Zeitpunkte und fuenf Haeufigkeiten** — dieselben
+Werte, die die CHECKs erlauben. `[read]` **Eine Auswahl, die einen
+Wert anbietet, den die Datenbank ablehnt, ist eine Zusage, die
+bricht.**
+
+`[cmd]` **Fuer A2 wurde ein zweiter Stack angelegt** (`Cut-Phase`,
+`fat_loss`) — **vorher gab es nur einen, und eine Wahl mit einem
+Eintrag belegt nichts.** `[cmd]` **`uq_user_stacks_one_active`
+laesst nur EINEN aktiven zu** — deshalb laedt der Leseweg ALLE und
+markiert den aktiven.
+
+### A5 bis A7 — die Form entscheidet
+
+`[cmd]` **Die Regel kommt aus G-480** (`darfInMahlzeit`) — **gerufen,
+nicht nachgebaut.** `[cmd]` **Der Waechter prueft beides:**
+
+    Capsule | Tablet | Softgel | Lozenge   -> nur Stack
+    Powder  | Liquid | Gummy   | Bar       -> Stack + Mahlzeit
+    Other   | Unknown | null                -> nur Stack
+
+`[read]` **Im Zweifel nicht in die Mahlzeit** — E-83 hat gemessen,
+dass 82 % der `Other`-Produkte keinen Formhinweis tragen.
+
+`[cmd]` **Und der Knopf fehlt nicht wortlos:** neben ihm steht
+*,,Diese Darreichungsform laesst sich nicht untermischen — sie
+gehoert in den Stack, nicht in eine Mahlzeit."* `[read]` **G-486 hat
+gezeigt, was ein wortloses Fehlen kostet:** viermal gemeldet.
+
+### Zwei Fehler, die nur die Messung gefunden hat
+
+**1 — jeder Mahlzeitschreibweg meldete einen Fehler, obwohl er
+schrieb.**
+
+`[cmd]` **Gemessen: Status 400,** *,,Kein Posten angelegt."* —
+**und die Zeile war da.**
+
+`[cmd]` **Der Grund:** `record_supplier_product_intake` ist
+`RETURNS uuid`, **der Leseweg las aber `data.id`.** `[read]` **Eine
+Fehlermeldung ueber einen Erfolg ist schlimmer als eine ueber einen
+Fehler** — sie laedt zum zweiten Versuch ein.
+
+`[read]` **Das traf JEDEN Supplementposten seit C-519**, nicht nur
+diesen Auftrag.
+
+**2 — die Kachel behauptete ,,keine Naehrwerte", obwohl es welche
+gibt.**
+
+`[cmd]` **Ein erster Entwurf holte die Portionen ueber den NAMEN.**
+`[cmd]` **Gemessen: fuenf Produkte heissen ,,Gold Standard 100% Whey
+Vanilla Ice Cream"**, die Suche deckelt bei 150 Treffern, **und die
+Id der offenen Tafel war nicht darunter.**
+
+`[read]` **Eine Falschaussage ueber die Daten, erzeugt von der
+Anzeige.** `[cmd]` **Jetzt kommen die Portionen aus
+`ladeProdukt(id)`** — derselben Abfrage, die die Tafel ohnehin
+macht. `[cmd]` **Danach: `31 Gram(s) · 120 kcal`.**
+
+### Der Waechter, und das Loch in ihm
+
+`[cmd]` **`g484-produkt-aktion.test.ts`, 10 Faelle.** `[cmd]`
+**`_g484-sabotage.mjs`: 15 Schaeden plus Kontrolle — 16/16.**
+
+`[cmd]` **Erster Lauf: 14/16.** **Zwei Schaeden blieben gruen:**
+
+`[read]` **Der eine war ein blinder Waechter:** die Zusicherung
+prueftE `NUR_STACK_SATZ` als KONSTANTE, nicht die Anzeige — **den
+Satz aus dem JSX zu entfernen fiel nicht auf.** `[cmd]` **Berichtigt
+auf `{NUR_STACK_SATZ}`.**
+
+`[read]` **Der andere war eine zu weiche SABOTAGE:** `if (false &&
+…)` liess die Dosisprüfung zwar aus, **aber `dose: 0` fiel auf eine
+spaetere Regel durch und lieferte weiter eine Meldung.** `[cmd]`
+**Die Sabotage verschiebt jetzt die Grenze** (`<= 0` zu `< 0`) —
+**und trifft.** `[cmd]` **Die Zusicherung nennt dazu alle uebrigen
+Felder gueltig**, sonst prueft sie die falsche Regel.
+
+`[read]` **Nicht jeder gruene Schaden ist ein blinder Waechter** —
+manchmal liegt die Sabotage daneben.
+
+### Ein Befund an meinem Werkzeug, der offen bleibt
+
+`[cmd]` **Die Browserprobe konnte nur den Whey oeffnen.** `[cmd]`
+**Gemessen: `/api/supplements/produkte?q=Ultraplex Vitamin D3`
+liefert 200 mit 200 Zeilen** — **im Browser blieb die Tabelle leer.**
+
+`[read]` **Die Ursache habe ich nicht gefunden**, und weiter zu raten
+kostet mehr, als es belegt. `[cmd]` **A5 und A6 sind ueber den
+Waechter belegt** (Formregel, Sabotage rot), **nicht ueber ein
+Foto.** `[read]` **Das ist der ehrliche Stand.**
+
+### Die Fotos
+
+    backup/x-g484-a1-stack.png      A1/A2/A6: beide Knoepfe,
+                                    Stackwahl, Dosis, Einheit,
+                                    Zeitpunkt, Haeufigkeit
+    backup/x-g484-a4-mahlzeit.png   A4: die vier heutigen Mahlzeiten
+
+### Neustart noetig?
+
+`[read]` **Nein** — nur `apps/web/src` und `supplements.css`.
