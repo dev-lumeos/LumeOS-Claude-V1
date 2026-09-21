@@ -62,7 +62,7 @@ test('C-490: jede Uebung-Muskel-Zuordnung hat belegten Faktor und Herkunft', () 
   assert.equal(result.invalid, 0)
   assert.ok(result.fallback > 0)
   assert.deepEqual(result.bench, [
-    { muscle: 'Front Shoulders', factor: 0.79, evidence_class: 'A', source_id: 'pmc4327372_bench_press_emg' },
+    { muscle: 'Anterior Deltoid', factor: 0.79, evidence_class: 'A', source_id: 'pmc4327372_bench_press_emg' },
     { muscle: 'Pectoralis Major', factor: 0.95, evidence_class: 'A', source_id: 'pmc4327372_bench_press_emg' },
     { muscle: 'Triceps', factor: 0.67, evidence_class: 'A', source_id: 'pmc4327372_bench_press_emg' },
   ])

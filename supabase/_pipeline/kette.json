@@ -2468,6 +2468,27 @@
       "depends_on": [
         "524_meal_plan_supplements_schema"
       ]
+    },
+    {
+      "id": "530_muscle_group_aliases_schema",
+      "path": "supabase/migrations/20260921101500_c530_muscle_group_aliases.sql",
+      "kind": "sql",
+      "creates": "C-530: vorhandene Muskelgruppen koennen als erhaltene Aliaszeilen strukturiert auf ihren kanonischen Muskel zeigen.",
+      "depends_on": [
+        "491_exercise_muscle_levels_daten",
+        "492_muscle_recovery_profiles_struktur"
+      ]
+    },
+    {
+      "id": "530_muscle_hierarchy_curation_daten",
+      "path": "supabase/_pipeline/10_training/530_muscle_hierarchy_curation.sql",
+      "kind": "sql",
+      "creates": "C-530: anatomisch belegte Muskelkinder, Alias-Kuration, korrigierte Eltern und geerbte Recovery-Profile ohne neue Uebungszuordnungen.",
+      "depends_on": [
+        "530_muscle_group_aliases_schema",
+        "491_exercise_muscle_levels_daten",
+        "492_muscle_recovery_profiles_daten"
+      ]
     }
   ]
 }
