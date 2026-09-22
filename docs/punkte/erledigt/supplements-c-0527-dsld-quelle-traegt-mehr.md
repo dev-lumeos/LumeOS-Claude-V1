@@ -7,7 +7,7 @@ angelegt: 2026-09-08
 gemessen: 2026-09-22
 agent: codex
 erledigt: 2026-09-08
-commit: OFFEN
+commit: 3ed2eac5
 beruehrt:
   tabellen: []
 entscheidung: offen

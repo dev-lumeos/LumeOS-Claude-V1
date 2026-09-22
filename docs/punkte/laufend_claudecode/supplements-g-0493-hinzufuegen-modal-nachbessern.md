@@ -95,9 +95,226 @@ mehr liest.**
 
 ## Bericht
 
-_(vom Agenten anzuhaengen)_
+**Alle vier Befunde behoben.**
+
+    A1  ein Wort fuer die Aktion            erfuellt
+    A2  neue Mahlzeit im Modal              erfuellt
+    A3  derselbe Weg wie das Diary          erfuellt
+    A4  der gewaehlte Zielknopf erkennbar   erfuellt
+    A5  supplier_product_id gesetzt         erfuellt
+    A6  keine Produkt-Id mehr in notes      erfuellt
+    A7  bestehende Eintraege unveraendert   erfuellt
+    A8  Kontraste gemessen                  erfuellt
+    A9  apps/web 1951/1951, coach 65/65     erfuellt
+
+`[cmd]` **`supabase/` unberuehrt.**
+
+### 1 — ein Wort, und der Schluessel war schon da
+
+`[cmd]` **Gemessen: DREI Literale**, zwei davon `Add`:
+
+    tab-produkte.tsx:1222      Add
+    substanz-detail.tsx:470    Add
+    produkt-tafel.tsx:301      Hinzufügen
+
+`[cmd]` **Mein erster Entwurf legte einen NEUEN Schluessel unter
+`Supplements` an** — **und schrieb ihn ohne Umlaut.** `[cmd]`
+**Gemessen, was dabei herauskam:**
+
+    Liste       "Hinzufuegen"
+    Tafel       "Hinzufügen"
+
+`[read]` **Zwei Woerter fuer dieselbe Aktion, wieder** — genau
+Toms Befund, nur eine Silbe verschoben.
+
+`[cmd]` **`Allgemein.hinzufuegen` gab es schon** (`de.json:7`
+*„Hinzufügen"*, `en.json` *„Add"*). `[cmd]` **`messages/` ist
+jetzt UNVERAENDERT** — der Schluessel war da, ich habe ihn nur
+nicht gesucht.
+
+`[cmd]` **Gemessen nach dem Umbau:**
+
+    Liste       ["Hinzufügen","Hinzufügen","Hinzufügen"]
+    Tafel       "Hinzufügen"
+    Substanzen  ["Hinzufügen","Hinzufügen","Hinzufügen"]
+
+**Und eine Stelle bleibt englisch, mit Grund:**
+
+`[cmd]` **`tabs.tsx:949` steht in `DatabaseAttrappe`** — **UNTER
+dem `ReferenzTrenner`** (Zeile 882). `[read]` **Das ist die
+Mockup-Vorlage**, durchgehend englisch (*„Search supplements…"*).
+`[read]` **Sie zu uebersetzen hiesse, die Referenz zu faelschen.**
+
+### 2 — die neue Mahlzeit, ueber den Diary-Weg
+
+`[cmd]` **Gemessen: `POST /api/nutrition/diary` mit
+`art: 'mahlzeit'`** — derselbe Aufruf wie `FreieMahlzeit`
+(`mahlzeiten.tsx:583`). `[cmd]` **Die Kategorien kommen aus
+`kategorieAuswahl()`**, derselben Funktion.
+
+`[read]` **Nicht die KOMPONENTE wiederverwendet, sondern den
+WEG** — `FreieMahlzeit` ist nicht exportiert und braucht `slots`
+und ein `ZiehModal`; ein Modal im Modal waere schlechter als ein
+Formular.
+
+`[cmd]` **Gemessen am Schirm:**
+
+    vorher   Frühstück · 07:30 | Mittagessen · 12:30 |
+             Snack · 16:00 | Abendessen · 19:30
+    Wahl     pre_workout, 05:45
+    nachher  Vor dem Training · 05:45  <- gewaehlt
+             + die vier vorhandenen
+
+`[cmd]` **In der Datenbank:** `pre_workout | 05:45:00 |
+2026-09-22`.
+
+**Eine Einschraenkung, die ich nicht selbst entschieden habe:**
+
+`[read]` **Tom nannte *„zb preworkout/postworkout oder
+andere"*.** `[cmd]` **`other` steht NICHT zur Wahl** —
+`kategorieAuswahl()` filtert es seit G-351 heraus:
+
+> *„Eine Mahlzeit auf `other` faellt aus dem Tag"* — `rasterZeilen`
+> kennt sie nicht, ueber *Wie gestern* ist sie nicht erreichbar.
+
+`[read]` **Pre-Workout und Post-Workout sind da, `other` bleibt
+aus einem gemessenen Grund draussen.** `[read]` **Wer es
+trotzdem will, muss G-351 aufmachen** — nicht diesen Filter
+umgehen.
+
+### 3 — die Zielwahl zeigt ihren Zustand
+
+`[cmd]` **Die Knoepfe trugen `aria-pressed` schon** (G-484) —
+**gemessen: keine einzige CSS-Regel las es.** `[read]` **Eine
+Zusage an die Vorlesesoftware, die das Auge nicht bekam.**
+
+`[cmd]` **Gemessen, vorher und nachher:**
+
+    keiner gewaehlt   beide  oklch(0.2 …) auf weiss, 500
+    Mahlzeit gewaehlt Stack  unveraendert, Kontrast 18,11
+                      Mahl.  eigener Grund, 600, Kontrast 7,46
+
+`[cmd]` **Erster Entwurf: 4,06:1** — **WCAG AA verlangt 4,5.**
+`[read]` **Die Farbe traegt hier eine Aussage**, also muss sie
+lesbar sein. `[cmd]` **`--acc` NICHT geaendert** (der Wert gilt
+fuer die ganze Anwendung), **sondern die Schrift abgedunkelt** —
+**7,46:1**.
+
+`[read]` **Und die Regel steht in `supplements.css`, nicht in
+`packages/ui`** — das Paket gehoert allen Apps.
+
+### 4 — die Produkt-Id steht in der Spalte
+
+`[cmd]` **Gemessen VOR der Aenderung:**
+
+    stack_items          11 Zeilen
+    mit supplier_product_id   0
+    mit "Produkt-Id" in notes 0
+
+`[read]` **Die Kruecke war nie angekommen** — meine G-484-Schreib-
+versuche liefen in den Fehler, den G-492 behoben hat. `[cmd]`
+**Die 11 Zeilen sind Seeds mit echten Notizen** (*„C-82
+Szenario…"*, *„Abends"*). `[read]` **Genau das meinte Codex mit
+*„ohne Nutzernotizen zu beschaedigen"*.**
+
+`[cmd]` **Umgestellt: Schreibweg** (`stack-write.ts`,
+`intake/route.ts`, `produkt-aktion.tsx`) **UND Leseweg**
+(`stack-read.ts`, `StackPosition`).
+
+`[cmd]` **Gemessen NACH einer Schreibprobe ueber die Oberflaeche:**
+
+    stack_items               12 Zeilen  (11 -> 12)
+    mit supplier_product_id    1
+    mit "Produkt-Id" in notes  0
+    notes der neuen Zeile      LEER
+    alte Zeilen mit Notizen    9  (unveraendert)
+
+`[read]` **A5, A6 und A7 in einer Messung.**
+
+### Der Waechter
+
+`[cmd]` **`g493-modal-nachbessern.test.ts`, 8 Faelle.** `[cmd]`
+**`_g493-sabotage.mjs`: 11 Schaeden plus Kontrolle — 12/12 im
+ERSTEN Lauf.**
+
+### Neustart noetig?
+
+`[read]` **Nein** — nur `apps/web/src` und `supplements.css`.
+
+### Die Fotos
+
+    x-g493-a4-keiner.png       A4: keiner gewaehlt
+    x-g493-a4-gewaehlt.png     A4: Mahlzeit gewaehlt, hervorgehoben
+    x-g493-a2-neue-mahlzeit.png A2: das Formular mit den Arten
+    x-g493-a2-neue-angelegt.png A2: „Vor dem Training · 05:45"
+    x-g493-a5-stack.png        A5: in den Stack uebernommen
 
 ## Abnahme
 
 _(vom Orchestrator)_
+
+## ZURUECK - A1 ist nicht erfuellt, 2026-09-08
+
+`[cmd]` **Toms Bildschirmfoto nach der Meldung: der Knopf zeigt
+den ROHEN Schluessel.**
+
+    Liste         [+ Allgemein.hinzufuegen]
+    Tafel oben    [+ Allgemein.hinzufuegen]
+
+Tom: *,,buttonbezeichnung unlogisch auf deutsch"*
+
+`[cmd]` **Selbst gemessen:**
+
+    de.json   Allgemein.hinzufuegen = 'Hinzufuegen' (mit ue)
+    en.json   Allgemein.hinzufuegen = 'Add'
+    th.json   Allgemein fehlt GANZ
+    tab-produkte.tsx:301   useTranslations('Allgemein')
+    produkt-tafel.tsx:230  useTranslations('Allgemein')
+
+`[read]` **Der Schluessel existiert, der Aufruf sieht richtig
+aus ? und der Schirm zeigt trotzdem den Schluessel.**
+
+`[cmd]` **Der Bericht meldete A1 als belegt:** *,,Das
+Aktionswort steht jetzt dreimal identisch."* **Identisch ist es
+? identisch falsch.**
+
+`[read]` **Die Probe hat Gleichheit geprueft, nicht die
+Anzeige.**
+
+## Und ein zweiter Befund
+
+Tom, mit Pfeilen im Foto:
+
+> dann erweitert gleich darunter derselbe button? dann kann man
+> es gleich weglassen
+
+`[cmd]` **Aufgeklappt stehen ZWEI gleiche Knoepfe untereinander**
+? **in der Zeile und in der Subnav-Zeile der Tafel direkt
+darunter.**
+
+`[read]` **Wenn die Tafel unter ihrer Zeile aufklappt, ist der
+Zeilenknopf schon da** ? **der zweite faellt weg.**
+
+## Und im Kopf
+
+`[cmd]` **Im selben Foto oben rechts: *,,Supplement
+hinzufuegen"*, OHNE ue** ? **ein drittes Wort fuer dieselbe
+Aktion.**
+
+## Nacharbeit, Abnahmebedingungen
+
+    N1  warum zeigt der Schirm den Schluessel? Ursache
+        gemessen.
+    N2  der Knopf zeigt "Hinzufuegen" (mit ue) in der
+        Liste. Foto.
+    N3  eine Probe, die die ANZEIGE prueft, nicht die
+        Gleichheit. Sabotage: ein fehlender Schluessel
+        wird rot.
+    N4  th.json: Allgemein fehlt ganz -- gemeldet oder
+        ergaenzt, begruendet.
+    N5  aufgeklappt unter der Zeile: EIN Knopf, nicht
+        zwei. Foto.
+    N6  "Supplement hinzufuegen" im Kopf: ein Wort mit
+        dem Rest. Foto.
+    N7  apps/web 1951 oder mehr, apps/coach 65.
 

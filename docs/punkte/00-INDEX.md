@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 243 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 517 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 518 |
 | **gesamt** | **763** |
 
 ## medical — 49
@@ -320,7 +320,7 @@
 | `G-485` | fehler | hoch | [das Tagebuch ist nicht lesbar](erledigt/nutrition-g-0485-tagebuch-nicht-lesbar.md) | erledigt | — | — |
 | `G-486` | fehler | hoch | [erfuellte Ghostentries bleiben stehen](erledigt/nutrition-g-0486-erfuellte-ghosts-bleiben.md) | erledigt | — | C-526 |
 | `G-488` | fehler | mittel | [drei Zahlen zum Plan, keine zwei passen](todos/nutrition-g-0488-drei-zahlen-zum-plan.md) | offen | — | — |
-| `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](laufend_claudecode/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | laeuft (claudecode) | — | — |
+| `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](erledigt/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 118
