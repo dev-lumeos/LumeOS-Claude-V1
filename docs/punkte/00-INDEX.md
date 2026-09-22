@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 243 |
+| `todos` | 242 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 515 |
 | **gesamt** | **760** |
@@ -394,7 +395,7 @@
 | `C-515` | feature | hoch | [die Wirkstoffe kuratieren](erledigt/supplements-c-0515-wirkstoffe-kuratieren.md) | erledigt | — | — |
 | `C-516` | fehler | hoch | [Naehrwerte ohne Mapping](erledigt/supplements-c-0516-naehrwerte-ohne-zielspalte.md) | erledigt | — | — |
 | `C-518` | befund | hoch | [keine Produkt-Substanz-Brücke](erledigt/supplements-c-0518-keine-produkt-substanz-bruecke.md) | erledigt | — | — |
-| `C-520` | fehler | hoch | [drei Luecken in search_supplier_products](todos/supplements-c-0520-luecken-in-der-suche.md) | offen | — | — |
+| `C-520` | fehler | hoch | [drei Luecken in search_supplier_products](laufend_codex/supplements-c-0520-luecken-in-der-suche.md) | laeuft (codex) | — | — |
 | `C-527` | feature | hoch | [die DSLD-Quelle traegt mehr als wir lesen](todos/supplements-c-0527-dsld-quelle-traegt-mehr.md) | offen | — | — |
 | `C-529` | feature | hoch | [der Stackeintrag kennt sein Produkt nicht](erledigt/supplements-c-0529-stack-kennt-produkt-nicht.md) | erledigt | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |

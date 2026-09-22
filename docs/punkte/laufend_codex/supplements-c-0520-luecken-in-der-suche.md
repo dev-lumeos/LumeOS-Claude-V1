@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-481
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [supplements.supplier_products]
 zahlen:
@@ -70,4 +72,20 @@ in der Rueckgabe.**
 `[read]` **Und G-492 braucht die Form in der Liste** ? **der
 Knopf in der Zeile soll wissen, ob er Stack oder beides
 anbietet.**
+
+## Die Kruecke steht jetzt im Code, 2026-09-08
+
+`[cmd]` **G-492 hat eine serverseitige Nachlese gebaut:
+`produkte-read.ts`, 2,8 ms je 500 Zeilen, gestueckelt zu
+150.**
+
+> *,,Da die Formregel entscheidet, ob der Knopf Stack oder
+beides anbietet, waere JEDES Pulver auf *nur Stack*
+gefallen."*
+
+`[cmd]` **Markiert zum Entfernen, sobald dieser Punkt
+`produktform` zurueckgibt.**
+
+`[read]` **Nach dem Einspielen: Claude Code entfernt die
+Nachlese** ? **als Folgeauftrag.**
 
