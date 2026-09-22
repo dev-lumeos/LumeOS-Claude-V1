@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-527
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [supplements.supplier_products]
 zahlen:
@@ -48,3 +50,11 @@ widersprechen vorhandenen *Soy Lecithin*-Zutaten.**
         stehen roh drin, die Allergiepruefung warnt
         weiter.
     A6  Sicherung, Vollkette, ALLE Waechter.
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
