@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-485
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [supplements.supplier_products]
 zahlen:
