@@ -9,6 +9,8 @@ kind_von: G-484
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-22
+erledigt: 2026-09-08
+commit: c2ef18dc
 beruehrt:
   tabellen: [supplements.stack_items]
 zahlen:
@@ -53,4 +55,25 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. LIVE.**
+
+`[cmd]` **`stack_items.supplier_product_id` optional, selbst
+gesehen.**
+
+`[cmd]` **0 von 11 Eintraegen haben ein Produkt** ? **weil der
+Code aus G-484 noch in `notes` schreibt.**
+
+> *,,Die alte G-484-Notiz wird ausschliesslich bei EXAKTER,
+existierender Produkt-ID migriert. Live gab es davon 0."*
+
+> *,,`notes` wurde bewusst NICHT entfernt; Claude Code kann
+jetzt auf die neue Spalte umstellen, ohne Nutzernotizen zu
+beschaedigen."*
+
+`[read]` **Die Warnung aus G-485 beachtet** ? **erst die
+Spalte, dann den Leser, dann die Kruecke.**
+
+`[cmd]` **Sicherung: `backup/schema/20260922070000_c529_vorher.sql`.**
+
+**Abgenommen. Die Umstellung liegt in G-493.**
+

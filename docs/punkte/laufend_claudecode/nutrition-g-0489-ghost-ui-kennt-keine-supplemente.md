@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: [C-524]
 kind_von: C-524
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/plan-eintraege.tsx

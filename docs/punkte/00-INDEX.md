@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 245 |
-| `laufend_codex` | 1 |
-| `erledigt` | 514 |
+| `todos` | 243 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 515 |
 | **gesamt** | **760** |
 
 ## medical — 49
@@ -319,7 +319,7 @@
 | `G-485` | fehler | hoch | [das Tagebuch ist nicht lesbar](erledigt/nutrition-g-0485-tagebuch-nicht-lesbar.md) | erledigt | — | — |
 | `G-486` | fehler | hoch | [erfuellte Ghostentries bleiben stehen](erledigt/nutrition-g-0486-erfuellte-ghosts-bleiben.md) | erledigt | — | C-526 |
 | `G-488` | fehler | mittel | [drei Zahlen zum Plan, keine zwei passen](todos/nutrition-g-0488-drei-zahlen-zum-plan.md) | offen | — | — |
-| `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](todos/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | offen | — | — |
+| `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](laufend_claudecode/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
 ## supplements — 115
@@ -396,7 +396,7 @@
 | `C-518` | befund | hoch | [keine Produkt-Substanz-Brücke](erledigt/supplements-c-0518-keine-produkt-substanz-bruecke.md) | erledigt | — | — |
 | `C-520` | fehler | hoch | [drei Luecken in search_supplier_products](todos/supplements-c-0520-luecken-in-der-suche.md) | offen | — | — |
 | `C-527` | feature | hoch | [die DSLD-Quelle traegt mehr als wir lesen](todos/supplements-c-0527-dsld-quelle-traegt-mehr.md) | offen | — | — |
-| `C-529` | feature | hoch | [der Stackeintrag kennt sein Produkt nicht](laufend_codex/supplements-c-0529-stack-kennt-produkt-nicht.md) | laeuft (codex) | — | — |
+| `C-529` | feature | hoch | [der Stackeintrag kennt sein Produkt nicht](erledigt/supplements-c-0529-stack-kennt-produkt-nicht.md) | erledigt | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -440,7 +440,7 @@
 | `G-484` | feature | hoch | [keine Aktion im Produkte-Reiter](erledigt/supplements-g-0484-aktion-im-produkte-reiter.md) | erledigt | — | C-529, G-491, G-492 |
 | `G-491` | fehler | hoch | [die Produkttabelle bleibt im Browser leer](erledigt/supplements-g-0491-produkttabelle-bleibt-leer.md) | erledigt | — | — |
 | `G-492` | feature | hoch | [Hinzufuegen ist eine Aktion, keine Detailseite](erledigt/supplements-g-0492-hinzufuegen-als-modal.md) | erledigt | — | G-493 |
-| `G-493` | fehler | niedrig | [die Zielwahl im Modal zeigt ihren Zustand nicht](todos/supplements-g-0493-zielwahl-zeigt-zustand-nicht.md) | offen | — | — |
+| `G-493` | fehler | hoch | [das Hinzufuegen-Modal nachbessern](laufend_claudecode/supplements-g-0493-hinzufuegen-modal-nachbessern.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
