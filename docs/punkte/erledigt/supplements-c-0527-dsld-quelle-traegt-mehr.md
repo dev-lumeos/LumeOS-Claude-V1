@@ -227,3 +227,21 @@ berechnen; keine automatische Allergen-Entwarnung aus
 Formulation ableiten."*
 
 **Abgenommen. Die Etikett-Frage liegt bei Tom.**
+
+## BERICHTIGT durch C-532, 2026-09-08
+
+`[cmd]` **Die Artenzahlen oben sind NICHT massgeblich.**
+
+> C-532: *,,Der dortige XLSX-Analysator behandelte ausgelassene
+Zwischenzellen als Spaltenverschiebung. Der C-532-Importer liest
+die Tabellen korrekt."*
+
+    Arten          11, nicht 10
+                   (Formulation re: Homeopathic fehlte)
+    Statements     1.467.176
+    Produkte       214.759
+    Dateien        11, nicht 14
+
+`[read]` **Auch meine eigene Zaehlung (batch1) im Auftragstext
+war betroffen, und die *,,14 Dateien"* waren falsch geschrieben.**
+

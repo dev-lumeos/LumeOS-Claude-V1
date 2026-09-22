@@ -6,9 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 243 |
-| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 518 |
+| `erledigt` | 519 |
 | **gesamt** | **763** |
 
 ## medical — 49
@@ -398,7 +397,7 @@
 | `C-520` | fehler | hoch | [drei Luecken in search_supplier_products](erledigt/supplements-c-0520-luecken-in-der-suche.md) | erledigt | — | G-494 |
 | `C-527` | messauftrag | hoch | [die DSLD-Quelle trägt mehr als wir lesen](erledigt/supplements-c-0527-dsld-quelle-traegt-mehr.md) | erledigt | — | C-532, G-495 |
 | `C-529` | feature | hoch | [der Stackeintrag kennt sein Produkt nicht](erledigt/supplements-c-0529-stack-kennt-produkt-nicht.md) | erledigt | — | — |
-| `C-532` | feature | hoch | [die Label Statements roh importieren](laufend_codex/supplements-c-0532-label-statements-roh-importieren.md) | laeuft (codex) | — | — |
+| `C-532` | feature | hoch | [die Label Statements roh importieren](erledigt/supplements-c-0532-label-statements-roh-importieren.md) | erledigt | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
