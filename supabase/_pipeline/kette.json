@@ -2508,6 +2508,16 @@
         "529_stack_item_product_reference_schema",
         "485_dsld_import"
       ]
+    },
+    {
+      "id": "520_supplier_product_search_forms",
+      "path": "supabase/migrations/20260922073000_c520_supplier_product_search_forms.sql",
+      "kind": "sql",
+      "creates": "C-520: kompatible Produktform-Rueckgabe und Mehrfach-Formfilter; die DSLD-Kennung [E....] wird beim Formvergleich ignoriert.",
+      "depends_on": [
+        "463_supplier_product_search_window",
+        "529_stack_item_product_reference_schema"
+      ]
     }
   ]
 }
