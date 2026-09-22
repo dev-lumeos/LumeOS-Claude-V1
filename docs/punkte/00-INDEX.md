@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 242 |
+| `todos` | 244 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 517 |
-| **gesamt** | **761** |
+| **gesamt** | **763** |
 
 ## medical — 49
 
@@ -322,9 +322,9 @@
 | `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](laufend_claudecode/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | laeuft (claudecode) | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 116
+## supplements — 118
 
-### beauftragbar — 115
+### beauftragbar — 117
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -395,8 +395,9 @@
 | `C-516` | fehler | hoch | [Naehrwerte ohne Mapping](erledigt/supplements-c-0516-naehrwerte-ohne-zielspalte.md) | erledigt | — | — |
 | `C-518` | befund | hoch | [keine Produkt-Substanz-Brücke](erledigt/supplements-c-0518-keine-produkt-substanz-bruecke.md) | erledigt | — | — |
 | `C-520` | fehler | hoch | [drei Luecken in search_supplier_products](erledigt/supplements-c-0520-luecken-in-der-suche.md) | erledigt | — | G-494 |
-| `C-527` | messauftrag | hoch | [die DSLD-Quelle trägt mehr als wir lesen](erledigt/supplements-c-0527-dsld-quelle-traegt-mehr.md) | erledigt | — | — |
+| `C-527` | messauftrag | hoch | [die DSLD-Quelle trägt mehr als wir lesen](erledigt/supplements-c-0527-dsld-quelle-traegt-mehr.md) | erledigt | — | C-532, G-495 |
 | `C-529` | feature | hoch | [der Stackeintrag kennt sein Produkt nicht](erledigt/supplements-c-0529-stack-kennt-produkt-nicht.md) | erledigt | — | — |
+| `C-532` | feature | hoch | [die Label Statements roh importieren](todos/supplements-c-0532-label-statements-roh-importieren.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
@@ -442,6 +443,7 @@
 | `G-492` | feature | hoch | [Hinzufuegen ist eine Aktion, keine Detailseite](erledigt/supplements-g-0492-hinzufuegen-als-modal.md) | erledigt | — | G-493 |
 | `G-493` | fehler | hoch | [das Hinzufuegen-Modal nachbessern](laufend_claudecode/supplements-g-0493-hinzufuegen-modal-nachbessern.md) | laeuft (claudecode) | — | — |
 | `G-494` | aufraeumen | mittel | [die Form-Nachlese aus G-492 entfernen](todos/supplements-g-0494-form-nachlese-entfernen.md) | offen | — | — |
+| `G-495` | feature | hoch | [das Etikettenbild beim Oeffnen abrufen](todos/supplements-g-0495-etikettenbild-beim-oeffnen.md) | offen | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
