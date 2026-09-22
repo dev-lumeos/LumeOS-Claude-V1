@@ -580,6 +580,13 @@
   gap: 2px;
   margin-bottom: 12px;
   border-bottom: 1px solid var(--border);
+  /* G-492: die Leiste traegt rechts die Aktion (A12). Ohne
+   * `align-items` zoege ein Knopf sich auf die volle Hoehe der
+   * Leiste, und seine Unterkante lief in die Trennlinie. */
+  align-items: center;
+  /* Die Aktion darf nicht in eine zweite Zeile rutschen — dann
+   * stuende sie unter den Reitern statt neben ihnen. */
+  flex-wrap: nowrap;
 }
 
 .v2-supp-reiter-knopf {
@@ -2015,6 +2022,24 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+/* ══ G-492: IM MODAL OHNE ABTRENNUNG ═══════════════════════════════
+ *
+ * `[read]` **Die Linie und das Polster oben waren richtig, solange
+ * der Block am FUSS der Tafel sass** — er musste sich von den
+ * Firmen darueber absetzen.
+ *
+ * `[cmd]` **Im Modal ist er der einzige Inhalt**, und die Linie
+ * erzeugte ein leeres Band unter der Kopfzeile — **auf dem Foto
+ * `x-g492-a2-modal-pulver.png` deutlich sichtbar.**
+ *
+ * `[read]` **Eine Trennlinie, die nichts trennt, sieht aus wie ein
+ * fehlender Inhalt.** */
+.v2-inj-modal-rumpf .v2-supp-aktion {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
 }
 
 .v2-supp-aktion-knoepfe {

@@ -22,7 +22,7 @@ import { Icon } from '@lumeos/ui'
 
 import {
   FREQUENZEN, FREQUENZ_TEXT, NUR_STACK_SATZ, TIMINGS, TIMING_TEXT,
-  dosisEinheitVorgabe, pruefeStackEingabe, stackName, zieleFuer,
+  dosisEinheitVorgabe, pruefeStackEingabe, stackName, vorschauSatz, zieleFuer,
   type Frequenz, type Timing,
 } from '../../../lib/supplements/produkt-aktion-lage'
 
@@ -30,7 +30,12 @@ export type StackWahl = { id: string; name: string; aktiv: boolean }
 export type MahlzeitWahl = { id: string; typ: string; name: string; zeit: string | null }
 
 /** Die Portionen des Produkts — fuer die Mahlzeit (A7). */
-export type PortionWahl = { serving_size: string; enercc: number | null }
+export type PortionWahl = {
+  serving_size: string
+  enercc: number | null
+  /** G-492/A5: aus `prot625` — fuer die Vorschau. */
+  prot: number | null
+}
 
 export function ProduktAktion({
   produktId, name, marke, produktform, portionseinheit, portionen,
@@ -76,6 +81,45 @@ export function ProduktAktion({
   const [mahlzeitId, setMahlzeitId] = React.useState('')
   const [portion, setPortion] = React.useState(portionen[0]?.serving_size ?? '')
   const [anzahl, setAnzahl] = React.useState('1')
+
+  // ══ G-492: DIE PORTION NACHZIEHEN ════════════════════════════════
+  //
+  // `[cmd]` **Gemessen 2026-09-22:** das Pulldown zeigte
+  // `32 Gram(s)`, der Server antwortete *„Bitte eine Portionsgroesse
+  // waehlen."* — **und die Vorschau blieb leer.**
+  //
+  // `[read]` **Der Grund ist der neue ORT:** in der Tafel stand die
+  // Portionsliste beim ersten Anstrich schon da (`ladeProdukt` lief
+  // vorher). **Aus der ZEILE heraus mountet das Modal sofort und
+  // laedt sie nach** — `React.useState(portionen[0]…)` lief also
+  // gegen eine LEERE Liste und blieb `''`.
+  //
+  // `[read]` **Ein `<select>` mit einem Wert, den keine Option
+  // traegt, zeigt trotzdem die erste** — der Schirm sah richtig aus,
+  // der Zustand war leer. **Genau die Luecke, die ein Foto nicht
+  // findet und eine Schreibprobe schon.**
+  //
+  // `[cmd]` **Die Abhaengigkeit ist eine ZEICHENKETTE, kein Array** —
+  // `portionen` kommt als neues Objekt bei jedem Anstrich des
+  // Elternteils, und der Effekt liefe endlos. **Dieselbe Falle wie
+  // in `tab-produkte.tsx`** (G-455: `marken` im Abhaengigkeitsfeld)
+  // **und in `food-suche-hook.ts`** (G-320).
+  const portionsSchluessel = portionen.map(p => p.serving_size).join('|')
+  React.useEffect(() => {
+    if (portionen.length === 0) return
+    // `[cmd]` **Nur setzen, wenn die Wahl UNGUELTIG ist** — sonst
+    // ueberschriebe der Effekt bei jedem Anstrich, was der Nutzer
+    // gerade gewaehlt hat.
+    setPortion(v => portionen.some(p => p.serving_size === v)
+      ? v : portionen[0].serving_size)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [portionsSchluessel])
+
+  // G-492/A5: was die Wahl ergibt — vor dem Eintragen.
+  const vorschau = React.useMemo(
+    () => vorschauSatz(
+      portionen.find(p => p.serving_size === portion) ?? null, anzahl),
+    [portionen, portion, anzahl])
 
   // `[read]` **Erst laden, wenn jemand die Wahl oeffnet** — der
   // Produkte-Reiter zeigt 214.780 Zeilen; eine Abfrage je Tafel waere
@@ -306,6 +350,18 @@ export function ProduktAktion({
                        value={anzahl} aria-label="Anzahl" data-probe="mahlzeit-anzahl"
                        onChange={e => setAnzahl(e.target.value)} />
               </label>
+              {/* ══ G-492/A5: DIE VORSCHAU RECHNET MIT ════════════
+                  **Der Auftrag:** *„Portion [31 g v] Anzahl [1] ->
+                  ,ergibt 120 kcal, 24 g Protein'"*
+
+                  `[read]` **Sie steht NEBEN den Feldern, nicht im
+                  Pulldown** — dort zeigte sie den Wert EINER
+                  Portion und rechnete die Anzahl nicht mit. */}
+              {vorschau && (
+                <span className="v2-supp-aktion-grund" data-probe="mahlzeit-vorschau">
+                  {vorschau}
+                </span>
+              )}
             </>
           ) : (
             <p className="v2-supp-aktion-grund" data-probe="ohne-naehrwerte">
@@ -325,6 +381,88 @@ export function ProduktAktion({
       {fehler && (
         <p className="v2-supp-aktion-fehler" data-probe="aktion-fehler">{fehler}</p>
       )}
+    </div>
+  )
+}
+
+/**
+ * Dieselbe Aktion, aber als Modal — G-492.
+ *
+ * ══ WARUM EIN MODAL ═════════════════════════════════════════════════
+ *
+ * **Tom, 2026-09-08:** *„es ist nicht die richtige richtung, dass man
+ * ein produkt oeffnen muss, dann runterscrollen, um irgendwo
+ * hinzuzufuegen. es ist eine aktion, und aktionen sollten wir mit
+ * modals loesen"*
+ *
+ * `[cmd]` **Gemessen VOR dem Umbau** (`_g492-vorher.mjs`): der
+ * Aktionsblock lag bei **y=1625**, ausserhalb des Schirms.
+ *
+ * ══ WAS HIER NICHT PASSIERT ═════════════════════════════════════════
+ *
+ * `[read]` **A7: derselbe Schreibweg, nicht nachgebaut.** `[cmd]`
+ * **Diese Huelle enthaelt KEINE Schreiblogik** — kein `fetch`, keine
+ * Formregel, keine Dosispruefung. **Sie rendert `ProduktAktion`**,
+ * also genau den Baustein aus G-484.
+ *
+ * `[read]` **Die Alternative waere gewesen, die Felder ins Modal zu
+ * kopieren** — und damit zwei Schreibwege zu haben, die
+ * auseinanderlaufen. **Die Lehre aus G-478:** zweimal derselbe Rest
+ * heisst, den Fehler zweimal zu pflegen.
+ */
+export function ProduktAktionModal({
+  produktId, name, marke, produktform, portionseinheit, portionen, onSchliessen,
+}: {
+  produktId: string
+  name: string
+  marke: string | null
+  produktform: string | null
+  portionseinheit: string | null
+  portionen: PortionWahl[]
+  onSchliessen: () => void
+}) {
+  // `[read]` **Escape schliesst** — ein Modal ohne Tastaturausgang
+  // sperrt den Nutzer ein (Bauform aus `injektion-modal.tsx`).
+  React.useEffect(() => {
+    const auf = (e: KeyboardEvent) => { if (e.key === 'Escape') onSchliessen() }
+    window.addEventListener('keydown', auf)
+    return () => window.removeEventListener('keydown', auf)
+  }, [onSchliessen])
+
+  const titel = stackName(name, marke)
+  return (
+    <div className="v2-inj-modal-hinter" role="presentation"
+         data-probe="produkt-modal"
+         // `[read]` **Nur der Hintergrund schliesst**, nicht ein
+         // Klick im Modal — sonst verliert ein Fehlklick auf ein
+         // Pulldown die ganze Eingabe.
+         onClick={e => { if (e.target === e.currentTarget) onSchliessen() }}>
+      <div className="v2-inj-modal" role="dialog" aria-modal="true"
+           aria-label={`${titel} hinzufügen`}
+           // `[cmd]` **Der Klick darf nicht zur Zeile durchschlagen**
+           // — die Tafel sitzt IN einer `<tr>`, und ein Klick dort
+           // klappt sie zu (gemessen in `tab-produkte.tsx`).
+           onClick={e => e.stopPropagation()}>
+        <div className="v2-inj-modal-kopf">
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 600 }}>Hinzufügen</div>
+            <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 2 }}>
+              {titel}
+            </div>
+          </div>
+          <button type="button" className="v2-icon-btn" onClick={onSchliessen}
+                  aria-label="Schliessen" data-probe="produkt-modal-zu">
+            ×
+          </button>
+        </div>
+        <div className="v2-inj-modal-rumpf">
+          <ProduktAktion
+            produktId={produktId} name={name} marke={marke}
+            produktform={produktform} portionseinheit={portionseinheit}
+            portionen={portionen}
+          />
+        </div>
+      </div>
     </div>
   )
 }

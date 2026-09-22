@@ -148,3 +148,46 @@ export function stackName(name: string, marke: string | null): string {
   const m = (marke ?? '').trim()
   return m.length > 0 && !name.startsWith(m) ? `${m} ${name}` : name
 }
+
+/**
+ * Was die gewaehlte Menge ergibt — G-492/A5.
+ *
+ * **Der Auftrag skizziert:** *„Wieviel? Portion [31 g v] Anzahl [1]
+ * -> ,ergibt 120 kcal, 24 g Protein'"*
+ *
+ * `[read]` **Die Vorschau rechnet VOR dem Eintragen** — wer zwei
+ * Portionen waehlt, soll sehen, dass es zwei sind, bevor sie in der
+ * Tagesbilanz stehen.
+ *
+ * `[cmd]` **`null` heisst: nichts zu zeigen.** `[read]` **Eine
+ * hingeschriebene Null waere schlimmer als nichts** — sie saehe aus
+ * wie ein gemessener Naehrwert (die Lehre aus C-107: 258 Zeilen
+ * trugen das Literal `null`, und „null kcal" ist eine Aussage).
+ *
+ * `[cmd]` **Fehlt der Naehrwert, fehlt er im Satz** — steht nur
+ * `enercc`, nennt die Vorschau nur die Kalorien.
+ */
+export function vorschauSatz(
+  portion: { enercc: number | null; prot: number | null } | null,
+  anzahl: string | number,
+): string | null {
+  if (!portion) return null
+  const n = typeof anzahl === 'number'
+    ? anzahl : Number(String(anzahl).replace(',', '.'))
+  // `[read]` **Eine ungueltige oder nicht-positive Anzahl ergibt
+  // nichts** — die Dosispruefung meldet sie beim Absenden; hier
+  // stuende sonst „ergibt 0 kcal".
+  if (!Number.isFinite(n) || n <= 0) return null
+  const teile: string[] = []
+  if (portion.enercc !== null) {
+    teile.push(`${Math.round(portion.enercc * n)} kcal`)
+  }
+  if (portion.prot !== null) {
+    // `[read]` **Eine Nachkommastelle** — `24 g` statt `24,4 g` waere
+    // genauer gesagt als gemessen, `24,40 g` genauer als noetig.
+    const p = Math.round(portion.prot * n * 10) / 10
+    teile.push(`${p.toLocaleString('de-DE')} g Protein`)
+  }
+  if (teile.length === 0) return null
+  return `ergibt ${teile.join(', ')}`
+}

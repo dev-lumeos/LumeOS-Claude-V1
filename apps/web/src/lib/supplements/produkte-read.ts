@@ -291,7 +291,10 @@ export type ProduktSatz = {
    * `[read]` **Leer heisst: keine hinterlegten Naehrwerte** (A7) —
    * das ist eine Auskunft, kein Fehler.
    */
-  portionen: Array<{ serving_size: string; enercc: number | null }>
+  // G-492/A5: `prot` fuer die Vorschau — aus `prot625` der Sicht.
+  portionen: Array<{
+    serving_size: string; enercc: number | null; prot: number | null
+  }>
 }
 
 function s(v: unknown): string | null {
@@ -321,6 +324,77 @@ function zeileAus(r: Record<string, unknown>): ProduktZeile | null {
     portionseinheit: s(r.portionseinheit),
     similarity: n(r.similarity),
   }
+}
+
+/**
+ * Die Darreichungsform zu Suchtreffern nachlesen.
+ *
+ * ══ G-492: WARUM ES DIESE FUNKTION GIBT ════════════════════════════
+ *
+ * `[cmd]` **Gemessen 2026-09-22:**
+ *
+ *     SELECT pg_get_function_result(oid) FROM pg_proc
+ *      WHERE proname='search_supplier_products';
+ *     -> TABLE(id, marke, name_en, portionsgroesse, portionseinheit,
+ *              packungsgroesse, packungseinheit, market_status,
+ *              gtin, similarity, meidestoff_treffer)
+ *
+ * `[read]` **Elf Spalten, `produktform` ist keine davon** — der
+ * Tabellenweg liefert sie (Zeile 475), der Smartweg nicht.
+ *
+ * `[cmd]` **Die Folge im Schirm:** die Spalte FORM war in allen acht
+ * gemessenen Zeilen leer. `[read]` **Und fuer G-492 waere sie
+ * schlimmer als leer:** die Formregel (C-524) entscheidet, ob der
+ * Knopf Stack oder beides anbietet — **ohne Form faellt jedes Pulver
+ * auf „nur Stack".**
+ *
+ * `[cmd]` **Die Nachlese ist billig:** 500 Zeilen in **2,8 ms**
+ * (`EXPLAIN ANALYZE`, Index Only Scan ueber den Primaerschluessel).
+ *
+ * `[cmd]` **Aber sie wird GESTUECKELT.** `SUCH_GRENZE` ist 200, und
+ * G-64 hat gemessen, dass `.in()` um 200 Ids mit *„URI too long"*
+ * kippt — **und die Bibliothek meldet das als LEERE Liste**, nicht
+ * als Fehler. `[read]` **Ein stiller Totalverlust waere genau der
+ * Fall, den niemand bemerkt.**
+ *
+ * `[read]` **Faellt die Nachlese aus, bleibt die Zeile ohne Form** —
+ * das ist der Zustand von vorher, nicht schlechter. **Sie darf die
+ * Suche nicht mitreissen.**
+ *
+ * `[cmd]` **Zu entfernen, sobald C-520 `produktform` zurueckgibt** —
+ * dann traegt `zeileAus` den Wert wieder selbst.
+ */
+const NACHLESE_STUECK = 150
+
+type SupplementsClient = ReturnType<ReturnType<typeof createSessionClient>['schema']>
+
+async function formNachlesen(
+  c: SupplementsClient, zeilen: ProduktZeile[],
+): Promise<ProduktZeile[]> {
+  // `[read]` **Nur die Zeilen ohne Form** — traegt C-520 sie eines
+  // Tages, laeuft hier nichts mehr.
+  const offen = zeilen.filter(z => z.produktform === null).map(z => z.id)
+  if (offen.length === 0) return zeilen
+  const formen = new Map<string, string>()
+  try {
+    for (let i = 0; i < offen.length; i += NACHLESE_STUECK) {
+      const stueck = offen.slice(i, i + NACHLESE_STUECK)
+      const { data, error } = await c.from('supplier_products')
+        .select('id,produktform').in('id', stueck)
+      if (error) return zeilen
+      for (const r of (data ?? []) as Array<Record<string, unknown>>) {
+        const id = s(r.id); const f = s(r.produktform)
+        if (id && f) formen.set(id, f)
+      }
+    }
+  } catch {
+    // `[read]` **Stumm zurueck mit dem, was da ist** — eine fehlende
+    // Form ist ein Schoenheitsfehler, eine leere Trefferliste nicht.
+    return zeilen
+  }
+  return zeilen.map(z => (z.produktform === null && formen.has(z.id))
+    ? { ...z, produktform: formen.get(z.id) ?? null }
+    : z)
 }
 
 /**
@@ -439,7 +513,26 @@ export async function sucheProdukte(
           ? roh.filter(z => !harteIds.includes(z.id))
           : roh
         return {
-          zeilen, gesamt: zeilen.length, weg: 'smart', fehler: null,
+          // ══ G-492: DIE FORM NACHLESEN ═══════════════════════════
+          //
+          // `[cmd]` **Gemessen 2026-09-22:**
+          // `pg_get_function_result('search_supplier_products')`
+          // nennt **elf Spalten und `produktform` ist nicht
+          // darunter** — `zeileAus` liest `r.produktform` und bekommt
+          // jedes Mal `null`. `[cmd]` **Im Schirm war die Spalte
+          // FORM in allen acht gemessenen Zeilen leer.**
+          //
+          // `[read]` **Fuer G-492 ist das keine Schoenheitsfrage:**
+          // der Knopf in der Zeile muss wissen, ob er Stack oder
+          // beides anbietet — **ohne Form faellt jede Zeile auf
+          // „nur Stack", auch ein Pulver.**
+          //
+          // `[cmd]` **Bis C-520 die Spalte zurueckgibt, wird sie
+          // nachgelesen** — hier, nicht im Browser: die Abfrage
+          // laeuft serverseitig, und 500 Zeilen kosten **2,8 ms**
+          // (`EXPLAIN ANALYZE`, Index Only Scan).
+          zeilen: await formNachlesen(c, zeilen),
+          gesamt: zeilen.length, weg: 'smart', fehler: null,
           hartEntfernt: roh.length - zeilen.length,
         }
       }
@@ -782,8 +875,12 @@ export async function ladeProdukt(id: string): Promise<ProduktSatz | null> {
       c.from('product_suppliers')
         .select('rolle,suppliers(name,land)').eq('product_id', id),
       // G-484: die Portionen -- ueber die ID, nicht den Namen.
+      // `[cmd]` **G-492/A5: `prot625` kommt dazu** — die Vorschau
+      // soll rechnen, was der Auftrag skizziert
+      // (*„ergibt 120 kcal, 24 g Protein"*). `[cmd]` **Gemessen: die
+      // Sicht traegt die Spalte** (`\d …nutrient_serving_options`).
       c.from('supplier_product_nutrient_serving_options')
-        .select('serving_size,enercc')
+        .select('serving_size,enercc,prot625')
         .eq('product_id', id)
         .order('serving_size', { ascending: true }),
     ])
@@ -795,7 +892,9 @@ export async function ladeProdukt(id: string): Promise<ProduktSatz | null> {
       portionen: ((portionenA.data ?? []) as Array<Record<string, unknown>>)
         .flatMap(r => {
           const g = s(r.serving_size)
-          return g === null ? [] : [{ serving_size: g, enercc: n(r.enercc) }]
+          return g === null ? [] : [{
+            serving_size: g, enercc: n(r.enercc), prot: n(r.prot625),
+          }]
         }),
       name_en: s(k.name_en) ?? '',
       marke: s(k.marke),

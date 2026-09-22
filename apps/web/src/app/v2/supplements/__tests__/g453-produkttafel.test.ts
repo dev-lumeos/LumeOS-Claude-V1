@@ -308,11 +308,27 @@ test('A2: die Tafel ist strukturiert und nicht mehr die Vierspaltentabelle', () 
   assert.doesNotMatch(q, /<th\b/,
     'In der Tafel steht wieder eine Tabelle mit Spaltenkoepfen.')
 
-  // `[cmd]` **Die Reiterleiste des Vorbilds wurde NICHT uebernommen** —
-  // der Auftrag verbietet sie ausdruecklich (ein Produkt hat keine
-  // Rechtslage).
-  assert.doesNotMatch(q, /role="tablist"/,
-    'Die Tafel hat eine Reiterleiste — der Auftrag schliesst sie aus.')
+  // ══ G-492: DIESE ZUSICHERUNG IST UMGEDREHT ═══════════════════════
+  //
+  // `[cmd]` **Hier stand:** `assert.doesNotMatch(q, /role="tablist"/)`
+  // — *„der Auftrag verbietet sie ausdruecklich (ein Produkt hat
+  // keine Rechtslage)"*.
+  //
+  // `[cmd]` **Tom hat das am 2026-09-08 ausdruecklich umgedreht:**
+  // *„oder wir gehen nochmal logisch ueber die darstellung, wenn
+  // details geoeffnet sind, und bauen das wie bei supplements mit
+  // subnav, dann muss man nicht mehr soviel runternavigieren"* —
+  // **und nennt vier Reiter** (Ueberblick, Anwendung, Hinweise,
+  // Etikett).
+  //
+  // `[read]` **Die alte Begruendung war nicht falsch, sie war
+  // ueberholt:** G-453 kannte nur zwei moegliche Reiter, Tom nennt
+  // jetzt vier — **zwei davon vorbereitet fuer C-527.**
+  //
+  // `[read]` **Die Zusicherung wird nicht geloescht, sondern
+  // umgedreht** — sonst waere die Leiste ab jetzt unbewacht.
+  assert.match(q, /role="tablist"|TafelReiterleiste/,
+    'Die Produkt-Tafel hat keine Reiterleiste mehr (G-492/A11).')
 })
 
 test('A3: die Tafel benutzt kein `v2-dim` fuer Text, der gelesen werden soll', () => {

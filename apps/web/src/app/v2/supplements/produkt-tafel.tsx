@@ -67,8 +67,16 @@ import {
   etikettBuendel, mengeText, bekanntZaehlen, portionText, formLabel,
   type EtikettZeile,
 } from '../../../lib/supplements/produkt-etikett'
-// G-484: die Aktionen am Produkt — Stack oder Mahlzeit.
-import { ProduktAktion } from './produkt-aktion'
+// G-492: dieselbe Aktion wie G-484, nur als Modal (A7).
+import { ProduktAktionModal } from './produkt-aktion'
+// G-492/A14: die geteilte Reiterleiste — dieselbe wie bei den
+// Substanzen, nicht nachgebaut.
+import { TafelReiterleiste } from './tafel-reiterleiste'
+// G-492/A15-A18: welche Reiter es gibt und was die wartenden sagen.
+import {
+  produktReiter, ersterProduktReiter, WARTET_AUF,
+  type ProduktReiterId,
+} from '../../../lib/supplements/produkt-reiter-lage'
 
 function da(v: string | null | undefined): v is string {
   return typeof v === 'string' && v.trim().length > 0
@@ -216,6 +224,25 @@ export function ProduktTafel({ satz, meidestoffe = [] }: {
     () => meideTreffer(satz.inhalt.map(z => z.ingredient_name), meidestoffe),
     [satz.inhalt, meidestoffe])
 
+  // ══ G-492/A15: die vier Reiter ═══════════════════════════════════
+  //
+  // `[read]` **Der Zustand liegt in der Tafel, nicht im Reiter
+  // darueber** — jede Tafel hat ihren eigenen offenen Reiter, und
+  // wer ein zweites Produkt aufklappt, faengt wieder beim Ueberblick
+  // an. `[cmd]` **Das ist die Bauform der Substanz-Tafel nicht** —
+  // dort haelt `substanz-detail.tsx` den Reiter fuer ALLE Zeilen,
+  // damit er beim Durchklicken stehenbleibt. `[read]` **Hier waere
+  // das falsch:** der Ueberblick ist der Reiter, den man sehen will.
+  const [reiterOffen, setReiter] =
+    React.useState<ProduktReiterId>(ersterProduktReiter())
+  const reiter = React.useMemo(
+    () => produktReiter({ etikettZeilen: gesamt }), [gesamt])
+  const aktiv = reiter.some(r => r.id === reiterOffen)
+    ? reiterOffen : ersterProduktReiter()
+
+  // G-492: das Modal statt des Blocks am Fuss.
+  const [modalOffen, setModalOffen] = React.useState(false)
+
   return (
     <div className="v2-supp-prod-tafel">
       {/* ── Kopf: Name, Marken, Kacheln ───────────────────────────── */}
@@ -253,6 +280,30 @@ export function ProduktTafel({ satz, meidestoffe = [] }: {
         </div>
       </div>
 
+      {/* ══ G-492/A11+A12: DIE REITERLEISTE MIT DER AKTION ════════
+          **Tom, 2026-09-08:** *„bauen das wie bei supplements mit
+          subnav, dann muss man nicht mehr soviel runternavigieren"*
+
+          `[cmd]` **Gemessen VOR dem Umbau** (`_g492-vorher.mjs`):
+          **keine Leiste, Aktionsblock bei y=1625** — ausserhalb des
+          Schirms. `[read]` **Die Aktion steht jetzt in der Leiste
+          und bleibt sichtbar, egal welcher Reiter offen ist (A12).**
+
+          `[cmd]` **Dieselbe Bauform wie die Substanz-Tafel** (A14) —
+          `TafelReiterleiste`, nicht nachgebaut. */}
+      <TafelReiterleiste
+        reiter={reiter} offen={aktiv} onWaehlen={setReiter}
+        aktion={
+          <button type="button" className="v2-btn v2-btn-primary v2-btn-sm"
+                  data-probe="produkt-add"
+                  onClick={e => { e.stopPropagation(); setModalOffen(true) }}>
+            <Icon name="plus" className="v2-ic v2-ic-sm" />
+            Hinzufügen
+          </button>
+        }
+      />
+
+      {aktiv === 'ueberblick' && <>
       <KopfKacheln satz={satz} />
 
       {/* ── Das Etikett, nach Kategorie gebuendelt ────────────────── */}
@@ -286,7 +337,13 @@ export function ProduktTafel({ satz, meidestoffe = [] }: {
           </p>
           )}
 
-      {/* ── Der Einnahmehinweis des Herstellers ───────────────────── */}
+      </>}
+
+      {/* ══ REITER 2: ANWENDUNG ═══════════════════════════════════
+          `[read]` **Der Einnahmehinweis stand bisher mitten in der
+          Tafel** — jetzt traegt er einen eigenen Reiter, weil er die
+          einzige Angabe ist, die man LIEST statt ueberfliegt. */}
+      {aktiv === 'anwendung' && (
       <section className="v2-supp-prod-abschnitt">
         <span className="v2-eyebrow">Einnahmehinweis des Herstellers</span>
         {da(satz.suggested_use)
@@ -308,8 +365,28 @@ export function ProduktTafel({ satz, meidestoffe = [] }: {
             </p>
             )}
       </section>
+      )}
+
+      {/* ══ REITER 3 UND 4: VORBEREITET, NICHT LEER ═══════════════
+          **Tom:** *„einbauen und ausdokumentieren, sobald daten da
+          sind einbinden."*
+
+          `[read]` **A17: ein SATZ, kein leeres Feld** — die Lehre
+          aus G-482 und G-486: eine leere Flaeche ohne Grund sieht
+          aus wie ein Fehler, und G-486 wurde deshalb VIERMAL
+          gemeldet.
+
+          `[cmd]` **A18: Quelle und Punkt stehen in
+          `produkt-reiter-lage.ts`** — gemessen, nicht geraten:
+          `information_schema` kennt die Spalten heute nicht (0
+          Zeilen), und C-527 ist ein Recherchepunkt ohne
+          festgelegte Namen. */}
+      {(aktiv === 'hinweise' || aktiv === 'etikett') && (
+        <WartenderReiter welcher={aktiv} />
+      )}
 
       {/* ── Der Fuss: die Firmen ──────────────────────────────────── */}
+      {aktiv === 'ueberblick' && (
       <div className="v2-supp-prod-fuss">
         <span className="v2-eyebrow">Firmen</span>
         {satz.firmen.length > 0
@@ -333,22 +410,61 @@ export function ProduktTafel({ satz, meidestoffe = [] }: {
             </p>
             )}
       </div>
+      )}
 
-      {/* ══ G-484: was man mit dem Produkt tun kann ═══════════════
-          **Tom:** *„wenn ich ein produkt suche und waehlen will,
-          muss die funktion her, dass ich es einem stack zuweisen
-          kann ... oder einem meal hinzufuegen kann"*
+      {/* ══ G-492: DIE AKTION IST EIN MODAL ═══════════════════════
+          **Tom, 2026-09-08:** *„es ist nicht die richtige richtung,
+          dass man ein produkt oeffnen muss, dann runterscrollen, um
+          irgendwo hinzuzufuegen. es ist eine aktion, und aktionen
+          sollten wir mit modals loesen"*
 
-          `[read]` **Ganz unten** — erst sieht man, WAS es ist, dann
-          entscheidet man. */}
-      <ProduktAktion
-        produktId={satz.id}
-        name={satz.name_en}
-        marke={satz.marke}
-        produktform={satz.produktform}
-        portionseinheit={satz.portionseinheit}
-        portionen={satz.portionen}
-      />
+          `[cmd]` **Hier stand `<ProduktAktion …>` als Block am Fuss
+          der Tafel** (G-484) — gemessen bei **y=1625**, ausserhalb
+          des Schirms.
+
+          `[read]` **Der Block ist nicht nachgebaut, sondern
+          umgezogen** (A7): derselbe Schreibweg, dieselbe Formregel,
+          dieselben Pulldowns, dieselbe Dosispruefung — **nur in
+          einem Modal statt am Fuss.** */}
+      {modalOffen && (
+        <ProduktAktionModal
+          produktId={satz.id}
+          name={satz.name_en}
+          marke={satz.marke}
+          produktform={satz.produktform}
+          portionseinheit={satz.portionseinheit}
+          portionen={satz.portionen}
+          onSchliessen={() => setModalOffen(false)}
+        />
+      )}
     </div>
+  )
+}
+
+/**
+ * Ein Reiter, der auf Daten wartet — A17.
+ *
+ * `[read]` **Er sagt, WAS kommt und WOHER** — nicht nur „noch
+ * nichts". `[cmd]` **Die Lehre aus G-486:** ein wortloses Fehlen
+ * wurde viermal als Fehler gemeldet.
+ */
+function WartenderReiter({ welcher }: { welcher: 'hinweise' | 'etikett' }) {
+  const w = WARTET_AUF[welcher]
+  return (
+    <section className="v2-supp-prod-abschnitt" data-probe={`wartet-${welcher}`}>
+      <p className="v2-muted v2-supp-prod-satz">{w.satz}</p>
+      {/* `[read]` **Die Quelle steht MIT auf dem Schirm**, nicht nur
+          im Quelltext — wer den Reiter offen hat, soll sehen, dass
+          das Warten einen Grund und eine Adresse hat.
+
+          `[cmd]` **`v2-muted`, nicht `v2-dim`** — der G-453-Waechter
+          hat das gefangen: `v2-dim` misst **2,88:1**, WCAG AA
+          verlangt **4,5:1**; `v2-muted` liegt bei **9,19:1**.
+          `[read]` **Die Quelle SOLL gelesen werden** — sonst braucht
+          sie nicht dazustehen. */}
+      <p className="v2-muted v2-supp-prod-satz" style={{ fontSize: 10.5 }}>
+        Quelle: {w.quelle} · {w.punkt}
+      </p>
+    </section>
   )
 }

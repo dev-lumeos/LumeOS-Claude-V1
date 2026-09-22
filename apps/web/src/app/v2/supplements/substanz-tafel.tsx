@@ -58,6 +58,9 @@ import {
   Abschnitt, AufgeteilterAbschnitt, Aussagen, Stichpunkte, Formen, Fragen,
   BlockTitel,
 } from './substanz-abschnitte'
+// G-492/A14: die geteilte Reiterleiste — dieselbe wie in der
+// Produkt-Tafel, nicht zweimal gebaut.
+import { TafelReiterleiste } from './tafel-reiterleiste'
 
 function da(v: string | null | undefined): v is string {
   return typeof v === 'string' && v.trim().length > 0
@@ -844,36 +847,28 @@ export function ReiterInhalt(
   return <Fragen fragen={fragen} />
 }
 
-/**
- * Die Reiterleiste.
+/*
+ * `Reiterleiste` stand hier bis G-492 und ist GELOESCHT, nicht
+ * auskommentiert.
  *
- * `[read]` **Die Zahl steht nur, wo es eine gibt** — „Formen · 7",
- * „Fragen · 5". Bei Ueberblick waere sie bedeutungslos.
+ * ══ SIE IST JETZT GETEILT ══════════════════════════════════════════
+ *
+ * `[cmd]` **A14: beide Tafeln nutzen DIESELBE Bauform** — sie steht
+ * in `tafel-reiterleiste.tsx` als `TafelReiterleiste`.
+ *
+ * `[read]` **Ein Rueckfall bliebe nicht stehen** (G-163): zwei
+ * Leisten nebeneinander laden dazu ein, die eine zu aendern und die
+ * andere zu vergessen — **und genau so sind hier drei Abschriften
+ * entstanden.**
+ *
+ * `[cmd]` **Zwei Unterschiede zur alten Fassung:**
+ *
+ *     rechts ein Platz fuer die Aktion (A12)
+ *     KEIN `reiter.length <= 1 -> null` mehr
+ *
+ * `[read]` **Das zweite folgt aus dem ersten:** eine Leiste mit einem
+ * Reiter ist trotzdem noetig, wenn sie die Aktion traegt.
  */
-export function Reiterleiste(
-  { reiter, offen, onWaehlen }: {
-    reiter: Array<{ id: ReiterId; titel: string; zahl: number | null }>
-    offen: ReiterId | null
-    onWaehlen: (id: ReiterId) => void
-  },
-) {
-  if (reiter.length <= 1) return null
-  return (
-    <div className="v2-supp-reiter" role="tablist">
-      {reiter.map(r => (
-        <button
-          key={r.id} type="button" role="tab"
-          aria-selected={r.id === offen}
-          className={`v2-supp-reiter-knopf${r.id === offen ? ' ist-offen' : ''}`}
-          onClick={e => { e.stopPropagation(); onWaehlen(r.id) }}
-        >
-          {r.titel}
-          {r.zahl !== null && <span className="v2-supp-reiter-zahl">{r.zahl}</span>}
-        </button>
-      ))}
-    </div>
-  )
-}
 
 /*
  * `Quellenknopf` stand hier bis G-194 und ist GELOESCHT.
@@ -982,7 +977,25 @@ export function SubstanzTafel(
 
   return (
     <div className="v2-supp-tafel">
-      <Reiterleiste reiter={reiter} offen={aktiv} onWaehlen={onReiter} />
+      {/* ══ G-492/A13: DIE AKTION STEHT OBEN ═══════════════════════
+          **Tom, 2026-09-08:** *„kann drin bleiben, aber auch da sehe
+          ich es nicht am ende, denn soweit runter scrollt einer nur,
+          wenn er anweisungen lesen will"*
+
+          `[cmd]` **Gemessen VOR dem Umbau** (`_g492-vorher.mjs`):
+          **Leiste y=560, Knopf y=1228** — 668 px darunter und
+          ausserhalb des Schirms (`scrollNoetig: true`). */}
+      <TafelReiterleiste
+        reiter={reiter} offen={aktiv} onWaehlen={onReiter}
+        aktion={<>
+          {imStack && <Pill variant="pos" style={{ fontSize: 9 }}>Im Stack</Pill>}
+          <button type="button" className="v2-btn v2-btn-primary v2-btn-sm"
+                  data-probe="substanz-add"
+                  onClick={e => { e.stopPropagation(); onAdd() }}>
+            Zum Stack hinzufügen
+          </button>
+        </>}
+      />
       <div className="v2-supp-tafel-inhalt">
         {aktiv
           ? <ReiterInhalt
@@ -1005,17 +1018,12 @@ export function SubstanzTafel(
             </p>
           )}
       </div>
-      <div style={{
-        display: 'flex', gap: 8, alignItems: 'center',
-        marginTop: 12, paddingTop: 10, borderTop: '1px solid var(--border)',
-      }}>
-        {imStack && <Pill variant="pos" style={{ fontSize: 9 }}>Im Stack</Pill>}
-        <button type="button" className="v2-btn v2-btn-primary v2-btn-sm"
-                style={{ marginLeft: 'auto' }}
-                onClick={e => { e.stopPropagation(); onAdd() }}>
-          Zum Stack hinzufügen
-        </button>
-      </div>
+      {/* `[cmd]` **G-492/A13: hier stand die Fusszeile mit
+          `Zum Stack hinzufügen`** — sie ist nach OBEN in die
+          Reiterleiste gewandert, samt der „Im Stack"-Marke.
+          `[read]` **Nicht kopiert, sondern verschoben:** stuende der
+          Knopf an beiden Stellen, waere die obere eine Dublette und
+          die untere weiter der Grund zum Scrollen. */}
     </div>
   )
 }

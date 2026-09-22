@@ -76,6 +76,8 @@ import {
 } from '../../../lib/supplements/produkt-etikett'
 // G-453: die strukturierte Tafel nach Medical-Vorbild.
 import { ProduktTafel } from './produkt-tafel'
+// G-492/A1+A2: das Hinzufuegen-Modal, direkt aus der Zeile.
+import { ProduktAktionModal } from './produkt-aktion'
 // ══ G-467: die gespeicherten Filter ═════════════════════════════════
 import {
   VORGABE, ausJson, trefferSatz,
@@ -443,6 +445,38 @@ export function SuppProdukte() {
   const [offeneZeile, setOffeneZeile] = React.useState<string | null>(null)
   const [satz, setSatz] = React.useState<ProduktSatz | null>(null)
   const [ladeFehler, setLadeFehler] = React.useState<string | null>(null)
+
+  // ══ G-492/A1+A2: das Modal AUS DER ZEILE ═════════════════════════
+  //
+  // `[read]` **Die Zeile traegt nur, was die Liste weiss** — Name,
+  // Marke, Form, Portionsgroesse. `[cmd]` **Die Portionsliste fuer
+  // die Mahlzeit kommt aus `ladeProdukt(id)`** (G-484: ueber die ID,
+  // nicht den Namen) — **also wird sie beim Oeffnen nachgeladen.**
+  //
+  // `[read]` **Solange sie laeuft, steht das Modal schon offen** —
+  // mit den Angaben aus der Zeile. **Ein Modal, das erst nach einer
+  // Rundreise erscheint, fuehlt sich wie ein toter Klick an.**
+  const [addZeile, setAddZeile] = React.useState<ProduktZeile | null>(null)
+  const [addSatz, setAddSatz] = React.useState<ProduktSatz | null>(null)
+
+  React.useEffect(() => {
+    if (!addZeile) { setAddSatz(null); return }
+    let abgebrochen = false
+    void (async () => {
+      try {
+        const a = await fetch(
+          `/api/supplements/produkt?id=${encodeURIComponent(addZeile.id)}`)
+        if (!a.ok || abgebrochen) return
+        const j = await a.json() as { satz?: ProduktSatz }
+        if (!abgebrochen && j.satz) setAddSatz(j.satz)
+      } catch {
+        // `[read]` **Stumm** — ohne Portionsliste bleibt der Stackweg
+        // offen, und der Mahlzeitweg sagt selbst, dass keine
+        // Naehrwerte hinterlegt sind (G-484/A7).
+      }
+    })()
+    return () => { abgebrochen = true }
+  }, [addZeile])
 
   const laufend = React.useRef<AbortController | null>(null)
 
@@ -1103,6 +1137,16 @@ export function SuppProdukte() {
                     ein Wort darueber sagt nichts, was die zwei Knoepfe
                     nicht selbst sagen. */}
                 <th style={{ width: 62 }} />
+                {/* ══ G-492/A1: DIE AKTIONSSPALTE ════════════════
+                    **Tom, 2026-09-08:** *„meiner meinung nach
+                    gehoert in die auflistung als zweithinterste
+                    spalte action rein, sprich benutzen oder
+                    hinzufuegen, und wohin/wieviel etc gehoert ins
+                    modal"*
+
+                    `[read]` **Auch sie ohne Ueberschrift** —
+                    dieselbe Linie wie der Daumen daneben. */}
+                <th style={{ width: 78 }} />
                 <th style={{ width: 90, textAlign: 'right' }} />
               </tr>
             </thead>
@@ -1160,6 +1204,24 @@ export function SuppProdukte() {
                           onKlick={r => void daumenKlick(p.id, r)}
                         />
                       </td>
+                      {/* ══ G-492/A1+A2: HINZUFUEGEN OHNE UMWEG ═══
+                          `[read]` **Ein Klick oeffnet das Modal,
+                          OHNE die Liste zu verlassen** (A2) — die
+                          Zeile klappt nicht auf, die Trefferliste
+                          bleibt stehen.
+
+                          `[cmd]` **`stopPropagation`**, sonst
+                          klappte die Zeile mit auf — dieselbe Falle
+                          wie beim Daumen (G-67). */}
+                      <td onClick={e => e.stopPropagation()}>
+                        <button type="button" className="v2-btn v2-btn-sm"
+                                data-probe="zeile-add"
+                                aria-label={`${p.name_en} hinzufügen`}
+                                onClick={() => setAddZeile(p)}>
+                          <Icon name="plus" className="v2-ic v2-ic-sm" />
+                          Add
+                        </button>
+                      </td>
                       <td style={{ textAlign: 'right' }}>
                         <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
                                 onClick={e => { e.stopPropagation(); schalteZeile(p.id) }}>
@@ -1175,7 +1237,9 @@ export function SuppProdukte() {
                         einer Zelle genauso sitzt wie ausserhalb. */}
                     {istOffen && satz && satz.id === p.id && (
                       <tr className="v2-supp-tafel-zeile">
-                        <td colSpan={6} style={{ padding: 0 }}
+                        {/* G-492: sieben Spalten, seit die
+                            Aktionsspalte dazugekommen ist. */}
+                        <td colSpan={7} style={{ padding: 0 }}
                             onClick={e => e.stopPropagation()}>
                           <ProduktTafel satz={satz} meidestoffe={meidestoffe} />
                         </td>
@@ -1307,6 +1371,31 @@ export function SuppProdukte() {
             {gesamt.toLocaleString('de-DE')} geladen
           </span>
         </div>
+      )}
+
+      {/* ══ G-492/A2: DAS MODAL AUS DER ZEILE ════════════════════
+          `[read]` **Es haengt am Reiter, nicht an der Zeile** —
+          eine `<tr>` ist kein Ort fuer ein `position: fixed`, und
+          beim Nachladen der Liste wuerde es mit verschwinden.
+
+          `[cmd]` **Die Formregel bekommt die Form aus der ZEILE**
+          (`addZeile.produktform`), nicht aus dem nachgeladenen
+          Satz — **sie muss sofort stimmen, sonst zeigte das Modal
+          fuer einen Moment die falschen Knoepfe.**
+
+          `[cmd]` **Und die Zeile TRAEGT die Form**, seit die
+          Nachlese in `produkte-read.ts` sie fuellt: gemessen
+          2026-09-22 ueber drei Suchen **0 Zeilen ohne Form**. */}
+      {addZeile && (
+        <ProduktAktionModal
+          produktId={addZeile.id}
+          name={addZeile.name_en}
+          marke={addZeile.marke}
+          produktform={addZeile.produktform}
+          portionseinheit={addZeile.portionseinheit}
+          portionen={addSatz?.portionen ?? []}
+          onSchliessen={() => setAddZeile(null)}
+        />
       )}
     </div>
   )
