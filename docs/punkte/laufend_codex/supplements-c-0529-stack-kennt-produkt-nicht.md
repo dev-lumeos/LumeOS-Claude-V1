@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-484
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-22
 beruehrt:
   tabellen: [supplements.stack_items]
 zahlen:
@@ -44,3 +46,11 @@ Produkte in den Stack.**
         Naehrwerte.
     A4  bestehende Eintraege unveraendert.
     A5  Sicherung, Vollkette, ALLE Waechter.
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
