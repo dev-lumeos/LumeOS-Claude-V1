@@ -117,6 +117,9 @@ function imStackIds(
 export function SubstanzDatenbank() {
   // G-172: Spaltenkoepfe und Knopftexte aus `messages/`.
   const t = useTranslations('Supplements')
+  // G-493/A1: das Aktionswort steht in `Allgemein` — dieselbe Zeile
+  // wie in der Produktliste und in der Tafel.
+  const tA = useTranslations('Allgemein')
   const { substanzen, daten, gateOffen, open } = useSupp()
   const [frage, setFrage] = React.useState('')
   const [gruppe, setGruppe] = React.useState<Gruppe | null>(null)
@@ -467,7 +470,14 @@ export function SubstanzDatenbank() {
                                     e.stopPropagation()
                                     open('add', { name: s.name, substanzId: s.slug || s.id })
                                   }}>
-                            <Icon name="plus" className="v2-ic v2-ic-sm" />Add
+                            {/* `[cmd]` **G-493/A1: EIN Wort.** Tom:
+                                *„in der auflistung heisst es + Add
+                                und aufgeklappt + hinzufuegen"* —
+                                **hier stand `Add` als Literal**, und
+                                damit ein englisches Wort in einer
+                                deutschen Oberflaeche. */}
+                            <Icon name="plus" className="v2-ic v2-ic-sm" />
+                            {tA('hinzufuegen')}
                           </button>}
                     </td>
                   </tr>

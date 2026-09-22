@@ -50,10 +50,20 @@ test('G-298: das Mengenfeld folgt dem Typ, nicht dem Geschmack', () => {
   assert.equal(feldFuer('recipe'), 'planned_servings')
   assert.equal(feldFuer('bls'), 'amount_g')
   assert.equal(feldFuer('custom'), 'amount_g')
-  // Jeder Typ hat Beschriftung UND Einheit — sonst steht ein Feld
-  // ohne Angabe da.
+  // ══ G-489: `supplement` kam mit C-524 dazu ═══════════════════════
+  //
+  // `[cmd]` **Der CHECK verlangt fuer ihn `amount_g IS NULL AND
+  // planned_servings IS NULL`** — **er hat kein Mengenfeld**, und
+  // `feldFuer` gibt `keines` zurueck.
+  //
+  // `[read]` **Die Zusicherung bleibt, was sie war:** wo ein Feld
+  // STEHT, braucht es Beschriftung und Einheit. `[read]` **Sie gilt
+  // jetzt fuer die Typen mit Feld, statt fuer alle** — ein Typ ohne
+  // Feld kann keine Einheit ohne Angabe zeigen.
+  assert.equal(feldFuer('supplement'), 'keines')
   for (const t of EINTRAG_TYPEN) {
     const f = feldFuer(t)
+    if (f === 'keines') continue
     assert.ok(FELD_LABEL[f], `${t}: keine Beschriftung`)
     assert.ok(FELD_EINHEIT[f], `${t}: keine Einheit`)
   }

@@ -60,6 +60,13 @@ import {
   type MahlzeitSlot, type RasterZeile, type ZeilenQuelle,
 } from './slots-lage'
 import { ladeSlots } from './slots-lesen'
+// ══ G-489: die C-524-Referenz ═════════════════════════════════════
+//
+// `[cmd]` **G-138: die `supplements`-Tabellen gehoeren EINER Datei.**
+// `[read]` **Der Waechter prueft die DATEI, nicht die Zeile** — die
+// Abfrage steht deshalb in `stack-write.ts`, wie schon bei
+// `einnahmenZuPosten` (G-485) und `produktverweise` (G-483).
+import { planProduktverweise } from '../supplements/stack-write'
 
 export { SLOTS, SLOT_LABEL, rasterZeilen } from './plan-model'
 export type { Slot } from './plan-model'
@@ -1189,6 +1196,14 @@ export async function ladeGhostEintraege(datum: string): Promise<GhostEintrag[]>
     planned_time: string | null
     posten: Array<{ food_id: string; name: string; amount_g: number }>
     status: string
+    /** G-489: `supplement` traegt sein Produkt in der C-524-Referenz. */
+    entry_type: string
+    supplement?: {
+      serving_size: string | null
+      serving_quantity: number
+      enercc: number | null
+      prot625: number | null
+    }
   }> = []
   for (const r of zeilen) {
     const id = text(r.id)
@@ -1237,7 +1252,42 @@ export async function ladeGhostEintraege(datum: string): Promise<GhostEintrag[]>
       rezept: text(rezept?.name_de),
       posten,
       status: zustand.get(id) ?? 'pending',
+      entry_type: text(r.entry_type) ?? 'bls',
     })
+  }
+
+  // ══ G-489: DIE SUPPLEMENT-EINTRAEGE ══════════════════════════════
+  //
+  // **Tom:** *„meal plans sollte das ebenfalls moeglich sein,
+  // supplements mit einzubinden"*
+  //
+  // `[cmd]` **Ein Supplementeintrag traegt weder `food_id` noch
+  // `recipe_id`** — er kam oben mit LEERER Postenliste durch und
+  // haette *„(ohne Namen)"* gezeigt.
+  //
+  // `[cmd]` **Das Produkt steht in
+  // `supplements.meal_plan_product_references`** (C-524) — **in
+  // einem anderen SCHEMA**, und PostgREST bettet ueber Schemagrenzen
+  // nicht ein (G-485). `[read]` **Also nachgelesen, ueber die eine
+  // Datei, der die `supplements`-Tabellen gehoeren** (G-138).
+  const suppIds = roh.filter(e => e.entry_type === 'supplement').map(e => e.id)
+  if (suppIds.length > 0) {
+    const verweise = await planProduktverweise(suppIds)
+    for (const e of roh) {
+      const v = verweise.get(e.id)
+      if (!v) continue
+      // `[read]` **Der Name steht in `rezept`** — dasselbe Feld, das
+      // die Karte ohnehin ueber den Posten zeigt. `[cmd]` **Marke
+      // davor, wie im Stack** (`stackName`, G-484).
+      e.rezept = v.marke && !v.name.startsWith(v.marke)
+        ? `${v.marke} ${v.name}` : v.name
+      e.supplement = {
+        serving_size: v.serving_size,
+        serving_quantity: v.serving_quantity,
+        enercc: v.enercc,
+        prot625: v.prot625,
+      }
+    }
   }
 
   // `[cmd]` **Die kcal ueber `food_nutrient_snapshot`** \u2014 dieselbe
@@ -1321,10 +1371,22 @@ export async function ladeGhostEintraege(datum: string): Promise<GhostEintrag[]>
       planned_time: e.planned_time,
       rezept: e.rezept,
       posten,
-      kcal: bekannt.length === 0
-        ? null
-        : Math.round(bekannt.reduce((s, p) => s + (p.kcal ?? 0), 0) * 10) / 10,
+      // ══ G-489: die kcal eines Supplementeintrags ═══════════════
+      //
+      // `[read]` **Sie kommen aus der Referenz, nicht aus den
+      // Posten** — ein Supplementeintrag hat keine. `[cmd]` **`null`
+      // bleibt `null`:** ein Produkt ohne hinterlegte Naehrwerte
+      // (`nutrient_status = no_nutrients_available`) zeigt keine
+      // Zahl, und eine hingeschriebene 0 saehe aus wie eine
+      // gemessene (C-107).
+      kcal: e.supplement
+        ? e.supplement.enercc
+        : bekannt.length === 0
+          ? null
+          : Math.round(bekannt.reduce((s, p) => s + (p.kcal ?? 0), 0) * 10) / 10,
       status: e.status as GhostEintrag['status'],
+      entry_type: e.entry_type,
+      supplement: e.supplement ?? null,
     }
   })
 }

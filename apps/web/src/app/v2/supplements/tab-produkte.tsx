@@ -59,6 +59,7 @@
 // Zeilen. Der Filter ist ein Suchwerkzeug. Wer ein Produkt aufmacht,
 // will das ganze Etikett."*
 import * as React from 'react'
+import { useTranslations } from 'next-intl'
 import { Card, Pill, Icon, InEntwicklungKnopf } from '@lumeos/ui'
 
 import type {
@@ -287,6 +288,17 @@ function MarkenFeld(
 }
 
 export function SuppProdukte() {
+  // ══ G-493/A1: EIN WORT, EINE QUELLE ══════════════════════════════
+  //
+  // `[cmd]` **`Allgemein.hinzufuegen` gab es schon** (`de.json:7`,
+  // *„Hinzufügen"*; `en.json`, *„Add"*). `[cmd]` **Mein erster
+  // Entwurf legte einen ZWEITEN Schluessel unter `Supplements` an** —
+  // **und schrieb ihn ohne Umlaut**, womit die Liste *„Hinzufuegen"*
+  // und die Tafel *„Hinzufügen"* gezeigt haette. **Zwei Woerter fuer
+  // dieselbe Aktion, wieder** — genau Toms Befund.
+  //
+  // `[read]` **Deshalb der vorhandene Schluessel, kein neuer.**
+  const tA = useTranslations('Allgemein')
   const [frage, setFrage] = React.useState('')
   // ══ G-455: MEHRERE MARKEN ═══════════════════════════════════════
   //
@@ -1218,8 +1230,17 @@ export function SuppProdukte() {
                                 data-probe="zeile-add"
                                 aria-label={`${p.name_en} hinzufügen`}
                                 onClick={() => setAddZeile(p)}>
+                          {/* `[cmd]` **G-493/A1: EIN Wort.** Tom:
+                              *„in der auflistung heisst es + Add und
+                              aufgeklappt + hinzufuegen"* —
+                              **`ansicht.tsx:404` gegen
+                              `produkt-tafel.tsx:301`.** `[read]`
+                              **Ueber i18n, nicht als Literal**: das
+                              Datenmodell traegt Sprachvarianten, und
+                              Bezeichner im Code gehoeren in
+                              `messages/` (00-konventionen.md). */}
                           <Icon name="plus" className="v2-ic v2-ic-sm" />
-                          Add
+                          {tA('hinzufuegen')}
                         </button>
                       </td>
                       <td style={{ textAlign: 'right' }}>

@@ -56,6 +56,8 @@ const TYP_LABEL: Record<EintragTyp, string> = {
   recipe: 'Rezept',
   bls: 'Lebensmittel',
   custom: 'Eigenes',
+  // G-489: seit C-524 kann ein Planeintrag ein Produkt meinen.
+  supplement: 'Supplement',
 }
 
 // ══ G-335: die eigene Namensliste ist weg ═════════════════

@@ -25,6 +25,16 @@ import {
   dosisEinheitVorgabe, pruefeStackEingabe, stackName, vorschauSatz, zieleFuer,
   type Frequenz, type Timing,
 } from '../../../lib/supplements/produkt-aktion-lage'
+// ══ G-493/A3: DIESELBE AUSWAHL WIE DAS DIARY ═══════════════════════
+//
+// `[cmd]` **`kategorieAuswahl` ist die Funktion, die
+// `FreieMahlzeit` benutzt** (`mahlzeiten.tsx:512`). `[read]`
+// **G-335 hat gemessen, was zwei eigene Listen anrichten:** *„Pre-
+// workout"* gegen *„Vor dem Training"* fuer denselben Wert.
+//
+// `[read]` **Serverfrei** (A-30) — `slots-lage.ts` zieht kein
+// `next/headers`.
+import { kategorieAuswahl } from '../../../lib/nutrition/slots-lage'
 
 export type StackWahl = { id: string; name: string; aktiv: boolean }
 export type MahlzeitWahl = { id: string; typ: string; name: string; zeit: string | null }
@@ -115,6 +125,66 @@ export function ProduktAktion({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [portionsSchluessel])
 
+  // ══ G-493/A2: eine neue Mahlzeit, ohne Slot ═════════════════════
+  const [neueOffen, setNeueOffen] = React.useState(false)
+  const [neuTyp, setNeuTyp] = React.useState(
+    // `[read]` **Der erste Eintrag der Auswahl** — dieselbe Vorgabe
+    // wie im Diary (`FreieMahlzeit`, G-351).
+    kategorieAuswahl()[0]?.code ?? 'breakfast')
+  const [neuZeit, setNeuZeit] = React.useState('')
+
+  /**
+   * Die neue Mahlzeit anlegen — G-493/A2, A3.
+   *
+   * `[cmd]` **DERSELBE Weg wie im Diary**
+   * (`mahlzeiten.tsx:583`): `POST /api/nutrition/diary` mit
+   * `art: 'mahlzeit'`. `[read]` **Nicht nachgebaut** — die Lehre aus
+   * G-478: zweimal derselbe Rest heisst, den Fehler zweimal zu
+   * pflegen.
+   *
+   * `[read]` **Danach wird die Liste neu geladen und die neue
+   * Mahlzeit gewaehlt** — wer sie anlegt, will sie benutzen.
+   */
+  async function legeMahlzeitAn() {
+    setLaeuft(true); setFehler(null)
+    try {
+      const a = await fetch('/api/nutrition/diary', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          art: 'mahlzeit',
+          entry_date: new Date().toISOString().slice(0, 10),
+          meal_type: neuTyp,
+          meal_time: neuZeit,
+        }),
+      })
+      if (!a.ok) {
+        const d = await a.json().catch(() => null)
+        setFehler(d?.error ?? `Fehler ${a.status}`)
+        return
+      }
+      // `[read]` **Die Liste neu holen, statt die Antwort zu raten** —
+      // `produkt-ziele` liefert Namen und Zeit in der Form, die das
+      // Pulldown braucht.
+      const b = await fetch(
+        `/api/supplements/produkt-ziele?datum=${new Date().toISOString().slice(0, 10)}`)
+      if (b.ok) {
+        const d = await b.json() as { mahlzeiten?: MahlzeitWahl[] }
+        const liste = d.mahlzeiten ?? []
+        setMahlzeiten(liste)
+        // `[cmd]` **Die NEUE waehlen** — sie ist die, die vorher
+        // nicht da war. `[read]` Ueber die Id, nicht ueber die
+        // Stellung: die Liste ist nach Zeit sortiert, und eine neue
+        // Mahlzeit um 07:00 stuende vorn.
+        const alt = new Set((mahlzeiten ?? []).map(m => m.id))
+        const neu = liste.find(m => !alt.has(m.id))
+        if (neu) setMahlzeitId(neu.id)
+      }
+      setNeueOffen(false)
+    } catch (e) {
+      setFehler(e instanceof Error ? e.message : String(e))
+    } finally { setLaeuft(false) }
+  }
+
   // G-492/A5: was die Wahl ergibt — vor dem Eintragen.
   const vorschau = React.useMemo(
     () => vorschauSatz(
@@ -170,7 +240,21 @@ export function ProduktAktion({
           supplement_id: null,
           custom_name: stackName(name, marke),
           ...eingabe,
-          notes: `Produkt-Id ${produktId}`,
+          // ══ G-493/A5+A6: DIE SPALTE STATT DER KRUECKE ═══════════
+          //
+          // `[cmd]` **Hier stand `notes: \`Produkt-Id ${produktId}\``**
+          // — G-484 hatte keine Wahl: `stack_items` trug keine
+          // Produktspalte (C-518). **Der Bericht nannte es selbst
+          // eine Kruecke.**
+          //
+          // `[cmd]` **C-529 ist live** (gemessen 2026-09-22:
+          // `supplier_product_id uuid`, nullable).
+          //
+          // `[read]` **`notes` bleibt frei fuer den Nutzer** —
+          // Codex: *„notes wurde bewusst NICHT entfernt; Claude Code
+          // kann jetzt auf die neue Spalte umstellen, ohne
+          // Nutzernotizen zu beschaedigen."*
+          supplier_product_id: produktId,
         }),
       })
       if (!a.ok) {
@@ -326,6 +410,65 @@ export function ProduktAktion({
               ))}
             </select>
           </label>
+
+          {/* ══ G-493/A2: EINE NEUE MAHLZEIT, OHNE SLOT ═══════════
+              **Tom, 2026-09-08:** *„im modal, wenn man mahlzeit
+              waehlt, kommen die definierten standards, da muss noch
+              mahlzeit hinzufuegen wie in diary rein, dass man ohne
+              slot hinzufuegen kann, zb preworkout/postworkout oder
+              andere"*
+
+              `[cmd]` **Die Kategorien kommen aus `kategorieAuswahl()`**
+              — **derselben Funktion, die das Diary benutzt** (A3).
+              `[read]` **Nicht nachgebaut:** G-335 hat gemessen, was
+              zwei eigene Tupel-Listen anrichten — *„Pre-workout"*
+              gegen *„Vor dem Training"* fuer denselben Wert.
+
+              `[cmd]` **`other` steht NICHT zur Wahl** — G-351:
+              *„Eine Mahlzeit auf `other` faellt aus dem Tag"*,
+              `rasterZeilen` kennt sie nicht. `[read]` **Toms
+              „oder andere" ist damit beantwortet, aber nicht
+              woertlich erfuellt** — pre_workout und post_workout
+              sind da, `other` bleibt aus einem gemessenen Grund
+              draussen. */}
+          {!neueOffen ? (
+            <button type="button" className="v2-btn v2-btn-sm"
+                    data-probe="neue-mahlzeit-oeffnen"
+                    onClick={() => { setNeueOffen(true); setFehler(null) }}>
+              <Icon name="plus" className="v2-ic v2-ic-sm" />
+              Mahlzeit hinzufügen
+            </button>
+          ) : (
+            <div className="v2-supp-aktion-form" data-probe="neue-mahlzeit">
+              <label>
+                <span className="v2-eyebrow">Art</span>
+                <select className="v2-feld" value={neuTyp} data-probe="neue-art"
+                        aria-label="Art der Mahlzeit"
+                        onChange={e => setNeuTyp(e.target.value)}>
+                  {kategorieAuswahl().map(k => (
+                    <option key={k.code} value={k.code}>{k.label}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                <span className="v2-eyebrow">Uhrzeit</span>
+                <input className="v2-feld" type="time" value={neuZeit}
+                       aria-label="Uhrzeit der Mahlzeit" data-probe="neue-zeit"
+                       style={{ width: 120 }}
+                       onChange={e => setNeuZeit(e.target.value)} />
+              </label>
+              <button type="button" className="v2-btn v2-btn-sm"
+                      disabled={laeuft} data-probe="neue-anlegen"
+                      onClick={legeMahlzeitAn}>
+                {laeuft ? 'Legt an…' : 'Anlegen'}
+              </button>
+              <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                      disabled={laeuft} data-probe="neue-abbrechen"
+                      onClick={() => setNeueOffen(false)}>
+                Abbrechen
+              </button>
+            </div>
+          )}
 
           {/* A7: ohne Naehrwerte keine Portionswahl — und der Satz
               sagt es (derselbe wie im Suchmodal, G-478/A5). */}

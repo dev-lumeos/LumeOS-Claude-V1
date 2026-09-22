@@ -35,7 +35,10 @@ function position(name: string, katalogId: string | null): StackPosition {
           priority: 'unknown', benefits: [],
         }
       : null,
-    notes: null, portionen_pro_tag: null, kosten_pro_tag: null,
+    // G-493: `supplier_product_id` kam mit C-529 dazu — dieser Bau
+    // prueft Wechselwirkungen, nicht die Produktzuordnung.
+    notes: null, supplier_product_id: null,
+    portionen_pro_tag: null, kosten_pro_tag: null,
     tage_bis_leer: null, unter_schwelle: null,
   }
 }

@@ -73,6 +73,9 @@ export async function POST(request: NextRequest) {
         // C-224: Zuteilung zum GEWAEHLTEN Stack + Substanz-Anker.
         stack_id: (b.stack_id as string | null) ?? null,
         notes: (b.notes as string | null) ?? null,
+        // G-493/A5: WELCHES Produkt gemeint war — seit C-529 eine
+        // eigene Spalte statt einer Zeile in `notes`.
+        supplier_product_id: (b.supplier_product_id as string | null) ?? null,
       })
       return NextResponse.json({ angelegt, daten: await getStackDaten() }, { status: 201 })
     }

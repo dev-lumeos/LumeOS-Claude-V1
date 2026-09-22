@@ -58,6 +58,7 @@
 // Fliesstext gilt hier durchweg `v2-muted`; `v2-dim` bleibt nur dort,
 // wo es keine Aussage traegt.**
 import * as React from 'react'
+import { useTranslations } from 'next-intl'
 import { Pill, Icon } from '@lumeos/ui'
 
 import type { ProduktSatz } from '../../../lib/supplements/produkte-read'
@@ -224,6 +225,10 @@ export function ProduktTafel({ satz, meidestoffe = [] }: {
     () => meideTreffer(satz.inhalt.map(z => z.ingredient_name), meidestoffe),
     [satz.inhalt, meidestoffe])
 
+  // G-493/A1: das Aktionswort aus `messages/` — dieselbe Zeile wie
+  // in der Liste und bei den Substanzen.
+  const tA = useTranslations('Allgemein')
+
   // ══ G-492/A15: die vier Reiter ═══════════════════════════════════
   //
   // `[read]` **Der Zustand liegt in der Tafel, nicht im Reiter
@@ -297,8 +302,12 @@ export function ProduktTafel({ satz, meidestoffe = [] }: {
           <button type="button" className="v2-btn v2-btn-primary v2-btn-sm"
                   data-probe="produkt-add"
                   onClick={e => { e.stopPropagation(); setModalOffen(true) }}>
+            {/* `[cmd]` **G-493/A1: aus `messages/`, nicht als
+                Literal** — solange das Wort an drei Orten
+                abgeschrieben steht, laufen sie wieder auseinander.
+                **Genau das war Toms Befund.** */}
             <Icon name="plus" className="v2-ic v2-ic-sm" />
-            Hinzufügen
+            {tA('hinzufuegen')}
           </button>
         }
       />

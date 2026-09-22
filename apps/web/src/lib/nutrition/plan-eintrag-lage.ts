@@ -25,8 +25,30 @@
 // entscheidet der Typ, welches Feld ueberhaupt erscheint**, und
 // `feldFuer()` ist die eine Stelle, die das weiss.
 
-/** Die drei Eintragsarten, wie der CHECK sie fuehrt. */
-export const EINTRAG_TYPEN = ['recipe', 'bls', 'custom'] as const
+/**
+ * Die Eintragsarten, wie der CHECK sie fuehrt.
+ *
+ * ══ G-489: `supplement` KAM MIT C-524 DAZU ═══════════════════════
+ *
+ * `[cmd]` **Gemessen 2026-09-22:**
+ *
+ *     meal_plan_entries_entry_type_check
+ *       CHECK (entry_type = ANY (ARRAY['recipe','bls','custom',
+ *                                      'supplement']))
+ *
+ * `[cmd]` **Und der Zielcheck verlangt fuer `supplement` das
+ * Gegenteil der anderen drei:**
+ *
+ *     (entry_type = 'supplement') AND recipe_id IS NULL
+ *       AND food_id IS NULL AND custom_food_id IS NULL
+ *       AND amount_g IS NULL AND planned_servings IS NULL
+ *
+ * `[read]` **Alle anderen tragen GENAU EINE Quelle-Id — dieser
+ * KEINE.** `[cmd]` **Das Produkt steht in
+ * `supplements.meal_plan_product_references`** (C-524), nicht in
+ * `meal_plan_entries`.
+ */
+export const EINTRAG_TYPEN = ['recipe', 'bls', 'custom', 'supplement'] as const
 export type EintragTyp = (typeof EINTRAG_TYPEN)[number]
 
 /**
@@ -51,20 +73,31 @@ export type MahlzeitTyp = (typeof MAHLZEIT_TYPEN)[number]
  * die Datenbank ablehnt — und der Fehler erschiene als *„WRITE_FAILED"*
  * ohne Hinweis auf die Ursache.
  */
-export type Mengenfeld = 'planned_servings' | 'amount_g'
+/**
+ * `[cmd]` **G-489: `keines` kam dazu.** Ein Supplementeintrag traegt
+ * WEDER `amount_g` NOCH `planned_servings` — der CHECK verlangt
+ * beide `NULL`. `[read]` **Die Menge steht in der Referenz**
+ * (`serving_size`, `serving_quantity`), nicht im Planeintrag.
+ */
+export type Mengenfeld = 'planned_servings' | 'amount_g' | 'keines'
 
 export function feldFuer(typ: EintragTyp): Mengenfeld {
+  if (typ === 'supplement') return 'keines'
   return typ === 'recipe' ? 'planned_servings' : 'amount_g'
 }
 
 export const FELD_LABEL: Record<Mengenfeld, string> = {
   planned_servings: 'Portionen',
   amount_g: 'Menge',
+  // G-489: ein Supplementeintrag hat kein Mengenfeld im Plan.
+  keines: '—',
 }
 
 export const FELD_EINHEIT: Record<Mengenfeld, string> = {
   planned_servings: '×',
   amount_g: 'g',
+  // G-489: die Portion steht in der Referenz, nicht im Eintrag.
+  keines: '',
 }
 
 /**
@@ -124,6 +157,24 @@ export function bauEintrag(e: EintragEntwurf): EintragFelder {
 export function verletztCheck(f: EintragFelder): string | null {
   const kennungen = [f.recipe_id, f.food_id, f.custom_food_id]
   const gesetzt = kennungen.filter(k => k !== null).length
+  // ══ G-489: ein Supplementeintrag traegt KEINE Quelle-Id ══════════
+  //
+  // `[cmd]` **Der CHECK verlangt genau das:** `recipe_id IS NULL AND
+  // food_id IS NULL AND custom_food_id IS NULL AND amount_g IS NULL
+  // AND planned_servings IS NULL`.
+  //
+  // `[read]` **Das Produkt steht in der Referenz** (C-524), nicht im
+  // Eintrag. `[read]` **Ohne diesen Zweig meldete die Probe
+  // *„Genau eine Quelle muss gesetzt sein, gesetzt sind 0"*** — und
+  // ein Supplement kaeme nie in einen Plan.
+  if (f.entry_type === 'supplement') {
+    if (gesetzt !== 0) {
+      return `Ein Supplementeintrag traegt keine Quelle-Id, gesetzt sind ${gesetzt}.`
+    }
+    if (f.amount_g !== null) return 'Ein Supplementeintrag traegt keine Menge in g.'
+    if (f.planned_servings !== null) return 'Ein Supplementeintrag traegt keine Portionen.'
+    return null
+  }
   if (gesetzt !== 1) {
     return `Genau eine Quelle muss gesetzt sein, gesetzt sind ${gesetzt}.`
   }

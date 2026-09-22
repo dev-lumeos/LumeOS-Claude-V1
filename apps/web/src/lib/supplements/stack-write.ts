@@ -228,6 +228,24 @@ export type PositionEingabe = {
   stack_id?: string | null
   /** C-224: der Anker zur Substanzdatenbank, z. B. `substance_catalog:sub_…`. */
   notes?: string | null
+  /**
+   * G-493/A5: WELCHES Produkt gemeint war — seit C-529.
+   *
+   * ══ WARUM DIESE SPALTE DIE KRUECKE ABLOEST ══════════════════════
+   *
+   * `[cmd]` **G-484 musste die Id in `notes` schreiben**, weil
+   * `stack_items` keine Produktspalte hatte: *„die Id steht in
+   * `notes` — das ist eine Kruecke, keine Zuordnung."*
+   *
+   * `[cmd]` **C-529 bringt die Spalte, optional** (gemessen
+   * 2026-09-22: `supplier_product_id uuid`, nullable).
+   *
+   * `[read]` **`notes` bleibt, was es war: eine Notiz.** `[cmd]`
+   * **Gemessen: 11 Zeilen, davon 0 mit `Produkt-Id` in `notes`** —
+   * dort stehen echte Nutzer- und Seed-Notizen (*„C-82 Szenario…"*,
+   * *„Abends"*). **Sie anzufassen waere Schaden ohne Nutzen.**
+   */
+  supplier_product_id?: string | null
 }
 
 /**
@@ -281,8 +299,10 @@ export async function ergaenzePosition(
       timing: eingabe.timing,
       frequency: eingabe.frequency ?? 'daily',
       notes: eingabe.notes?.trim() || null,
+      // G-493/A5: die Zuordnung steht in der Spalte, nicht im Text.
+      supplier_product_id: eingabe.supplier_product_id ?? null,
     })
-    .select('id, custom_name, supplement_id')
+    .select('id, custom_name, supplement_id, supplier_product_id')
 
   if (error) throw new SupplementSchreibFehler('WRITE_FAILED', error.message)
   const zeile = (data ?? [])[0] as unknown as {
@@ -852,4 +872,208 @@ export async function produktverweise(
   } catch {
     return aus
   }
+}
+
+// ══════════════════════════════════════════════════════════════════
+// G-489: SUPPLEMENTE IM MAHLZEITENPLAN — C-524
+// ══════════════════════════════════════════════════════════════════
+//
+// **Tom, seit zwei Tagen offen:** *„meal plans sollte das ebenfalls
+// moeglich sein, supplements mit einzubinden"*
+//
+// `[cmd]` **Gemessen 2026-09-22, VOR diesem Auftrag:**
+//
+//     nutrition.meal_plan_entries               648 bls, 108 recipe
+//                                               0 supplement
+//     supplements.meal_plan_product_references   0 Zeilen
+//
+// `[read]` **Es fehlte nicht nur das Bestaetigen** — es gab keinen
+// Weg hinein. `[cmd]` **`EINTRAG_TYPEN` in `plan-eintrag-lage.ts`
+// nannte drei Typen**, und `verletztCheck` verlangte GENAU EINE
+// Quelle-Id — **ein Supplementeintrag traegt keine.**
+//
+// `[read]` **Alle Zugriffe auf `supplements`-Tabellen stehen in
+// DIESER Datei** (G-138) — verschoben, nicht den Waechter gelockert.
+
+/** G-489: ein Produktverweis eines Planeintrags (C-524). */
+export type PlanProduktVerweis = {
+  meal_plan_entry_id: string
+  supplier_product_id: string
+  name: string
+  marke: string | null
+  serving_size: string | null
+  serving_quantity: number
+  nutrient_status: string
+  /** Die Naehrwerte DIESER Portion, mal Anzahl. `null` = unbekannt. */
+  enercc: number | null
+  prot625: number | null
+}
+
+/**
+ * Die Produktverweise zu Planeintraegen — G-489.
+ *
+ * `[cmd]` **PostgREST kann NICHT ueber Schemagrenzen einbetten**
+ * (G-485): der Fremdschluessel `meal_plan_product_references ->
+ * meal_plan_entries` steht, aber `.schema('nutrition')` loest
+ * `references!left(…)` nicht auf. **Also zwei Abfragen.**
+ *
+ * `[read]` **Ein Fehler darf den Plan NICHT leeren** — die Lehre aus
+ * G-485: dort liess ein Fehler im Nachlesen das ganze Tagebuch
+ * verschwinden. **Faellt das hier aus, fehlt der Supplementname, und
+ * der Rest des Plans steht.**
+ */
+export async function planProduktverweise(
+  eintragIds: readonly string[],
+): Promise<Map<string, PlanProduktVerweis>> {
+  const aus = new Map<string, PlanProduktVerweis>()
+  if (eintragIds.length === 0) return aus
+  try {
+    await sitzung()
+    const c = createSessionClient().schema('supplements')
+    const { data, error } = await c
+      .from('meal_plan_product_references')
+      .select('meal_plan_entry_id, supplier_product_id, serving_size, serving_quantity, nutrient_status')
+      .in('meal_plan_entry_id', eintragIds as string[])
+    if (error || !Array.isArray(data)) return aus
+
+    const zeilen = data as Array<Record<string, unknown>>
+    const produktIds = Array.from(new Set(zeilen
+      .map(z => z.supplier_product_id)
+      .filter((x): x is string => typeof x === 'string')))
+    if (produktIds.length === 0) return aus
+
+    const { data: pRoh } = await c.from('supplier_products')
+      .select('id, name_en, marke').in('id', produktIds)
+    const namen = new Map<string, { name: string; marke: string | null }>()
+    for (const p of (Array.isArray(pRoh) ? pRoh : []) as Array<Record<string, unknown>>) {
+      const id = typeof p.id === 'string' ? p.id : null
+      if (id) {
+        namen.set(id, {
+          name: typeof p.name_en === 'string' ? p.name_en : '',
+          marke: typeof p.marke === 'string' ? p.marke : null,
+        })
+      }
+    }
+
+    // `[read]` **Eine Abfrage fuer alle Portionen, nicht je Eintrag**
+    // (G-252).
+    const { data: oRoh } = await c
+      .from('supplier_product_nutrient_serving_options')
+      .select('product_id, serving_size, enercc, prot625')
+      .in('product_id', produktIds)
+    const werte = new Map<string, Record<string, unknown>>()
+    for (const o of (Array.isArray(oRoh) ? oRoh : []) as Array<Record<string, unknown>>) {
+      werte.set(`${String(o.product_id)}|${String(o.serving_size)}`, o)
+    }
+    const mal = (v: unknown, n: number): number | null => {
+      const x = Number(v)
+      return Number.isFinite(x) ? Math.round(x * n * 10) / 10 : null
+    }
+
+    for (const z of zeilen) {
+      const eintrag = typeof z.meal_plan_entry_id === 'string' ? z.meal_plan_entry_id : null
+      const produkt = typeof z.supplier_product_id === 'string' ? z.supplier_product_id : null
+      if (!eintrag || !produkt) continue
+      const n = namen.get(produkt)
+      const anzahl = Number.isFinite(Number(z.serving_quantity))
+        ? Number(z.serving_quantity) : 1
+      const o = werte.get(`${produkt}|${String(z.serving_size)}`)
+      aus.set(eintrag, {
+        meal_plan_entry_id: eintrag,
+        supplier_product_id: produkt,
+        name: n?.name ?? '',
+        marke: n?.marke ?? null,
+        serving_size: typeof z.serving_size === 'string' ? z.serving_size : null,
+        serving_quantity: anzahl,
+        nutrient_status: typeof z.nutrient_status === 'string'
+          ? z.nutrient_status : 'no_nutrients_available',
+        enercc: o ? mal(o.enercc, anzahl) : null,
+        prot625: o ? mal(o.prot625, anzahl) : null,
+      })
+    }
+    return aus
+  } catch {
+    return aus
+  }
+}
+
+/**
+ * Einen Produktverweis an einen Planeintrag haengen — G-489.
+ *
+ * `[cmd]` **Die Formregel prueft die DATENBANK** (C-524): der Trigger
+ * `meal_plan_product_references_guard` ruft
+ * `supplier_product_meal_eligibility` und weist Capsule, Tablet,
+ * Softgel und Lozenge ab.
+ *
+ * `[read]` **Die Oberflaeche prueft es NICHT noch einmal** — sie soll
+ * es ERKLAEREN. `[cmd]` **Die Meldung der Datenbank wird deshalb
+ * durchgereicht**, nicht durch eine eigene ersetzt: sie ist die
+ * Wahrheit ueber den Grund.
+ */
+export async function planVerweisAnlegen(eingabe: {
+  meal_plan_entry_id: string
+  supplier_product_id: string
+  serving_size: string | null
+  serving_quantity: number
+  nutrient_status: 'available' | 'no_nutrients_available'
+}): Promise<{ id: string }> {
+  const { userId } = await sitzung()
+  const c = createSessionClient().schema('supplements')
+  const { data, error } = await c
+    .from('meal_plan_product_references')
+    .insert({
+      meal_plan_entry_id: eingabe.meal_plan_entry_id,
+      user_id: userId,
+      supplier_product_id: eingabe.supplier_product_id,
+      serving_size: eingabe.serving_size,
+      serving_quantity: eingabe.serving_quantity,
+      nutrient_status: eingabe.nutrient_status,
+    })
+    .select('id')
+  if (error) throw new SupplementSchreibFehler('WRITE_FAILED', error.message)
+  const zeile = (data ?? [])[0] as unknown as { id: string } | undefined
+  if (!zeile) {
+    throw new SupplementSchreibFehler('WRITE_FAILED', 'Insert lieferte keine Zeile zurueck.')
+  }
+  return { id: zeile.id }
+}
+
+/**
+ * Aus der ABSICHT eine EINNAHME machen — G-489/A3.
+ *
+ * **Codex, C-524:** *„die Referenz LESEN und nach dem Anlegen der
+ * Mahlzeit `record_supplier_product_intake(…, meal_id)` aufrufen."*
+ *
+ * `[read]` **Ein Planeintrag ist eine ABSICHT, das Bestaetigen macht
+ * daraus eine EINNAHME.**
+ *
+ * `[cmd]` **`record_supplier_product_intake` ist `RETURNS uuid`** —
+ * `data` IST die Id (die Lehre aus G-484: `data.id` war `undefined`,
+ * und der Code meldete einen Fehler ueber einen Erfolg).
+ */
+export async function planVerweisEinloesen(eingabe: {
+  supplier_product_id: string
+  intake_date: string
+  serving_quantity: number
+  serving_size: string | null
+  meal_id: string
+}): Promise<{ id: string }> {
+  await sitzung()
+  const c = createSessionClient().schema('supplements')
+  const { data, error } = await c.rpc('record_supplier_product_intake', {
+    p_supplier_product_id: eingabe.supplier_product_id,
+    p_intake_date: eingabe.intake_date,
+    p_intake_time: null,
+    p_serving_quantity: eingabe.serving_quantity,
+    p_serving_size: eingabe.serving_size,
+    p_meal_id: eingabe.meal_id,
+  })
+  if (error) throw new SupplementSchreibFehler('WRITE_FAILED', error.message)
+  const id = typeof data === 'string'
+    ? data
+    : (data as Record<string, unknown> | null)?.id
+  if (typeof id !== 'string') {
+    throw new SupplementSchreibFehler('WRITE_FAILED', 'Kein Einnahmeeintrag angelegt.')
+  }
+  return { id }
 }

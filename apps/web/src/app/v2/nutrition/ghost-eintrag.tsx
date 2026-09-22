@@ -71,6 +71,20 @@ export type GhostEintrag = {
   posten: GhostPosten[]
   kcal: number | null
   status: 'pending' | 'confirmed' | 'deviated' | 'skipped'
+  /**
+   * G-489: `supplement` seit C-524 — der Eintrag meint ein Produkt.
+   *
+   * `[read]` **Er traegt KEINE Posten** (der CHECK verlangt
+   * `food_id IS NULL AND recipe_id IS NULL`); Name und Portion
+   * kommen aus `supplements.meal_plan_product_references`.
+   */
+  entry_type?: string
+  supplement?: {
+    serving_size: string | null
+    serving_quantity: number
+    enercc: number | null
+    prot625: number | null
+  } | null
 }
 
 // G-315: die Tabelle steht in `plan-model.ts` — sie stand hier
@@ -375,7 +389,38 @@ export function GhostEintragKarte({
           Unterschied: **ein Ghost-Eintrag ist ein Vorschlag, den man
           aendern darf, bevor man ihn bestaetigt.** */}
       <div style={{ padding: '0 14px 12px' }}>
-        {posten.length === 0 && (
+        {/* ══ G-489: EIN SUPPLEMENT HAT KEINE POSTEN ═══════════════
+            `[cmd]` **Der CHECK verlangt es so:** ein
+            `entry_type = 'supplement'` traegt `food_id IS NULL AND
+            recipe_id IS NULL`. `[read]` **Er faellt also in den
+            Leerfall** — und der Satz *„keine Lebensmittel
+            hinterlegt"* waere ein Vermerk mit falschem Grund
+            (G-491): **es IST etwas hinterlegt, nur kein
+            Lebensmittel.**
+
+            `[cmd]` **Die Portion steht in der C-524-Referenz**
+            (`serving_size`, `serving_quantity`). */}
+        {posten.length === 0 && eintrag.supplement && (
+          <p className="v2-muted" style={{ fontSize: 12 }}
+             data-probe="ghost-supplement">
+            {eintrag.supplement.serving_quantity}
+            {' × '}
+            {eintrag.supplement.serving_size ?? 'Portion'}
+            {eintrag.supplement.enercc !== null
+              ? ` · ${Math.round(eintrag.supplement.enercc)} kcal`
+              : ''}
+            {eintrag.supplement.prot625 !== null
+              ? `, ${eintrag.supplement.prot625} g Protein`
+              : ''}
+            {/* `[read]` **Ohne Naehrwerte ein benannter
+                Leerhinweis** (E-72) — nicht schweigen und nicht
+                null zeigen. */}
+            {eintrag.supplement.enercc === null
+              ? ' · ohne hinterlegte Nährwerte'
+              : ''}
+          </p>
+        )}
+        {posten.length === 0 && !eintrag.supplement && (
           <p className="v2-muted" style={{ fontSize: 12 }}>
             Für diese Planposition sind keine Lebensmittel hinterlegt.
           </p>
@@ -528,9 +573,21 @@ export function GhostEintragKarte({
       <div style={{
         padding: '0 14px 12px', display: 'flex', gap: 8,
       }}>
+        {/* ══ G-489: EIN SUPPLEMENT HAT KEINE POSTEN ═══════════════
+            `[cmd]` **Hier stand `posten.length === 0`** — und ein
+            Supplementeintrag traegt keine Posten (der CHECK verlangt
+            `food_id IS NULL AND recipe_id IS NULL`).
+
+            `[cmd]` **Gemessen 2026-09-22: der Knopf war `disabled`**,
+            die Karte stand da und liess sich nicht bestaetigen.
+            `[read]` **Ein Ghost, den man nicht einloesen kann, ist
+            schlimmer als keiner** — er sieht aus wie ein Angebot.
+
+            `[read]` **Die Bedingung fragt jetzt nach dem INHALT,
+            nicht nach der Postenzahl:** Posten ODER ein Produkt. */}
         <button
           type="button" className="v2-btn v2-btn-sm"
-          disabled={laeuft || posten.length === 0}
+          disabled={laeuft || (posten.length === 0 && !eintrag.supplement)}
           onClick={bestaetigen}
         >
           Bestätigen

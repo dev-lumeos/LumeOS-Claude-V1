@@ -92,6 +92,15 @@ export type StackPosition = {
    * dort zugeteilt wurde (`substance_catalog:<id>`), sonst frei.
    */
   notes: string | null
+  /**
+   * G-493/A5: WELCHES Produkt gemeint war — seit C-529.
+   *
+   * `[read]` **`null` heisst: die Position nennt eine Substanz oder
+   * einen freien Namen, kein Katalogprodukt.** `[cmd]` **Gemessen
+   * 2026-09-22: 11 Zeilen, 0 mit Produkt** — die Spalte war neu und
+   * niemand schrieb hinein.
+   */
+  supplier_product_id: string | null
   /** Portionen je Tag = Dosis / Portionsgroesse. `null` ohne Portionsgroesse. */
   portionen_pro_tag: number | null
   /** Kosten je Tag in Euro. `null`, wenn Preis oder Portionsgroesse fehlt. */
@@ -366,10 +375,15 @@ export async function getStackDaten(): Promise<StackDaten | null> {
   if (stack) {
     const { data: items, error: itemFehler } = await s
       .from('stack_items')
+      // `[cmd]` **G-493/A5: `supplier_product_id` kommt mit** — seit
+      // C-529 steht dort, WELCHES Produkt gemeint war. `[read]`
+      // **Ein Leseweg, der die Spalte nicht holt, macht die
+      // Umstellung unpruefbar:** die Zuordnung waere geschrieben und
+      // nirgends sichtbar.
       .select(`
         id, dose, dose_unit, timing, frequency, sort_order, is_active,
         stock_remaining, stock_unit, low_stock_threshold, custom_name, notes,
-        supplement_id
+        supplement_id, supplier_product_id
       `)
       .eq('stack_id', stack.id)
       // ══ G-138: warum inaktive Positionen hier herausfallen ═════════
@@ -431,6 +445,8 @@ export async function getStackDaten(): Promise<StackDaten | null> {
         low_stock_threshold: schwelle,
         katalog,
         notes: (roh.notes as string) ?? null,
+        // G-493/A5: die Produktzuordnung aus C-529.
+        supplier_product_id: (roh.supplier_product_id as string) ?? null,
         // Die Einheiten entscheiden ueber die Reichweite — siehe
         // `ableiten`. Ohne sie rechnete Kreatin 30 statt 6 Tage.
         ...ableiten(

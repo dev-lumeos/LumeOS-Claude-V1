@@ -2049,6 +2049,40 @@
   align-items: center;
 }
 
+/* ══ G-493/A4: DIE ZIELWAHL ZEIGT IHREN ZUSTAND ════════════════════
+ *
+ * `[cmd]` **Toms Befund:** *„In den Stack" und „Zu einer Mahlzeit"
+ * sehen gleich aus, ob gewaehlt oder nicht.*
+ *
+ * `[cmd]` **Die Knoepfe trugen `aria-pressed` schon** (G-484) —
+ * **gemessen: keine einzige CSS-Regel las es.** `[read]` **Eine
+ * Zusage an die Vorlesesoftware, die das Auge nicht bekam.**
+ *
+ * `[read]` **Die Aenderung steht HIER, nicht in `packages/ui`** —
+ * das Paket gehoert allen Apps, und `aria-pressed` an einem
+ * beliebigen `.v2-btn` einzufaerben waere eine Entscheidung ueber
+ * die ganze Anwendung.
+ *
+ * `[cmd]` **`v2-btn-accent` als Vorbild**, nicht `v2-btn-primary`:
+ * der gewaehlte Zielknopf ist keine Bestaetigung, sondern ein
+ * Zustand — **und daneben steht ein echter `v2-btn-primary`
+ * („Uebernehmen"), der sich davon abheben muss.** */
+/* `[cmd]` **Gemessen 2026-09-22, erster Entwurf:** `var(--acc)` auf
+ * dem 18-%-Grund ergab **4,06:1** — WCAG AA verlangt **4,5:1**.
+ * `[read]` **Die Farbe traegt hier eine Aussage** („dieses Ziel ist
+ * gewaehlt"), **also muss sie lesbar sein.**
+ *
+ * `[cmd]` **Nicht `--acc` geaendert** — der Wert steht in
+ * `themes/lume.css` und gilt fuer die ganze Anwendung (die Lehre aus
+ * G-453). `[cmd]` **Stattdessen die Schrift abgedunkelt**, der Grund
+ * bleibt. */
+.v2-supp-aktion-knoepfe .v2-btn[aria-pressed='true'] {
+  background: color-mix(in oklch, var(--acc) 14%, var(--surface));
+  border-color: color-mix(in oklch, var(--acc) 50%, var(--border));
+  color: color-mix(in oklch, var(--acc) 62%, var(--fg));
+  font-weight: 600;
+}
+
 /* `[read]` **Die Felder nebeneinander, aber umbrechend** — bei 375 px
  * steht jedes auf einer Zeile. */
 .v2-supp-aktion-form {

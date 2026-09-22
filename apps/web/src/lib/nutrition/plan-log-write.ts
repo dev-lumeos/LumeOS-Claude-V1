@@ -36,6 +36,16 @@ import { createSessionClient } from '@lumeos/shared/session'
 import { DiaryWriteError } from './diary-model'
 import { addMealItem, createMeal } from './diary-write'
 import { zustandVon, type Bestaetigungsart } from './plan-bestaetigung'
+// ══ G-489: DIE SUPPLEMENT-TABELLEN GEHOEREN EINER DATEI ═══════════
+//
+// `[cmd]` **G-138: genau EINE Datei darf `supplements`-Tabellen
+// anfassen** (`stack-write.ts`). `[read]` **Der Waechter prueft die
+// DATEI, nicht die Zeile** — die Abfrage wird also dorthin
+// verschoben, nicht hier aufgemacht. **Dieselbe Loesung wie in
+// G-475 und G-485.**
+import {
+  planProduktverweise, planVerweisEinloesen,
+} from '../supplements/stack-write'
 
 export const bestaetigenSchema = z.object({
   art: z.literal('bestaetigen'),
@@ -167,6 +177,8 @@ async function eintragLesen(planEntryId: string) {
     mealType: String(e.meal_type ?? 'other'),
     planDate: typeof tag?.plan_date === 'string' ? tag.plan_date : null,
     posten,
+    // G-489: `supplement` entscheidet ueber den Bestaetigungsweg.
+    entryType: String(e.entry_type ?? 'bls'),
   }
 }
 
@@ -236,6 +248,23 @@ export async function planEintragBestaetigen(
 ): Promise<LogErgebnis> {
   const { db, user } = await sitzung()
   const eintrag = await eintragLesen(eingabe.plan_entry_id)
+
+  // ══ G-489/A3: AUS DER ABSICHT EINE EINNAHME ══════════════════════
+  //
+  // **Codex, C-524:** *„die Referenz LESEN und nach dem Anlegen der
+  // Mahlzeit `record_supplier_product_intake(…, meal_id)` aufrufen."*
+  //
+  // `[read]` **Ein Planeintrag ist eine ABSICHT, das Bestaetigen
+  // macht daraus eine EINNAHME.**
+  //
+  // `[read]` **Der Zweig steht VOR der Postenpruefung** — ein
+  // Supplementeintrag traegt weder `food_id` noch `recipe_id`, und
+  // die Meldung *„Fuer diesen Eintrag sind keine Lebensmittel
+  // hinterlegt"* waere ein Vermerk mit falschem Grund (G-491).
+  if (eintrag.entryType === 'supplement') {
+    return await supplementBestaetigen(eingabe, eintrag, db, user.id)
+  }
+
   if (eintrag.posten.length === 0) {
     throw new DiaryWriteError(
       'VALIDATION_FAILED',
@@ -276,6 +305,82 @@ export async function planEintragBestaetigen(
       confirmation_mode: eingabe.confirmation_mode satisfies Bestaetigungsart,
       deviation_kcal: z.status === 'deviated' ? z.kcal : null,
       deviation_pct: z.status === 'deviated' ? z.pct : null,
+      confirmed_at: jetzt,
+      skipped_at: null,
+    }, { onConflict: 'plan_entry_id,execution_date' })
+    .select('id, status, actual_meal_id, deviation_kcal, deviation_pct')
+    .single()
+  if (error) throw new DiaryWriteError('WRITE_FAILED', error.message)
+  return data as unknown as LogErgebnis
+}
+
+/**
+ * Einen SUPPLEMENT-Planeintrag bestaetigen — G-489/A3.
+ *
+ * ══ WARUM EIN EIGENER WEG ═══════════════════════════════════════════
+ *
+ * `[cmd]` **Ein Supplementeintrag traegt weder `food_id` noch
+ * `recipe_id`** — der CHECK verlangt beide `NULL`. `[read]` **Der
+ * Lebensmittelweg kann ihn also nicht verarbeiten**, und seine
+ * Meldung *„keine Lebensmittel hinterlegt"* waere ein Vermerk mit
+ * falschem Grund.
+ *
+ * **Codex, C-524:** *„die Referenz LESEN und nach dem Anlegen der
+ * Mahlzeit `record_supplier_product_intake(…, meal_id)` aufrufen."*
+ *
+ * `[read]` **Die Reihenfolge ist dieselbe wie beim Essen:** Mahlzeit,
+ * Posten, Zustand, Log — **nur dass der Posten ueber C-519 kommt.**
+ *
+ * `[cmd]` **Der Zustand ist immer `confirmed`, nie `deviated`** —
+ * eine Abweichung setzt einen kcal-Vergleich voraus, und eine
+ * Kapsel hat keinen. `[read]` **G-486 haengt „erfuellt" am Status**:
+ * `confirmed` laesst den Ghost gruen und abgehakt stehen.
+ */
+async function supplementBestaetigen(
+  eingabe: Bestaetigen,
+  eintrag: { planId: string; mealType: string },
+  db: Awaited<ReturnType<typeof sitzung>>['db'],
+  userId: string,
+): Promise<LogErgebnis> {
+  const verweise = await planProduktverweise([eingabe.plan_entry_id])
+  const v = verweise.get(eingabe.plan_entry_id)
+  if (!v) {
+    // `[read]` **Der Satz nennt die SACHE, nicht den Weg** — wer das
+    // liest, soll wissen, dass der Eintrag unvollstaendig ist.
+    throw new DiaryWriteError(
+      'VALIDATION_FAILED',
+      'Zu diesem Planeintrag ist kein Produkt hinterlegt.',
+    )
+  }
+
+  // Schritt 6: die Mahlzeit — dieselbe Regel wie beim Essen.
+  const mealId = await mahlzeitSicherstellen(eingabe.execution_date, eintrag.mealType)
+
+  // `[cmd]` **C-519 schreibt BEIDES:** die Einnahme in
+  // `supplements.intake_logs` UND den Verweis in
+  // `nutrition.meal_items`. `[read]` **Ein eigener `addMealItem`
+  // waere ein zweiter Schreibweg** — die Lehre aus G-478.
+  await planVerweisEinloesen({
+    supplier_product_id: v.supplier_product_id,
+    intake_date: eingabe.execution_date,
+    serving_quantity: v.serving_quantity,
+    serving_size: v.serving_size,
+    meal_id: mealId,
+  })
+
+  const jetzt = new Date().toISOString()
+  const { data, error } = await db
+    .from('meal_plan_logs')
+    .upsert({
+      plan_id: eintrag.planId,
+      plan_entry_id: eingabe.plan_entry_id,
+      user_id: userId,
+      execution_date: eingabe.execution_date,
+      status: 'confirmed',
+      actual_meal_id: mealId,
+      confirmation_mode: eingabe.confirmation_mode satisfies Bestaetigungsart,
+      deviation_kcal: null,
+      deviation_pct: null,
       confirmed_at: jetzt,
       skipped_at: null,
     }, { onConflict: 'plan_entry_id,execution_date' })
