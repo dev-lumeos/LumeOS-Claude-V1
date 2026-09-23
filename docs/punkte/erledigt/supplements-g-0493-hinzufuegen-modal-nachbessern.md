@@ -9,6 +9,8 @@ kind_von: G-492
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 2ff9be65
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/produkt-aktion.tsx
@@ -514,3 +516,57 @@ mit Umlaut), **und die Sprachdatei wird beim Start in ein
 Servermodul uebersetzt.** `[cmd]` **Ohne Neustart zeigt der Schirm
 weiter den alten Stand — samt des `hinzufuegenX` aus meiner
 Sabotage.**
+
+## Abnahme der Nacharbeit
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **`de.json`: `Hinzufuegen` mit ue, kein `hinzufuegenX`
+mehr.**
+
+### Die Ursache war sein eigenes Werkzeug
+
+> *,,Der String kam aus meinem eigenen `_g493-sabotage.mjs`,
+das den Schluessel umbenannte und die Datei danach
+wiederherstellte ? aber Next uebersetzt die Nachrichtendatei in
+ein SERVERMODUL und haelt es je Prozess. Eine Sabotage gegen
+eine zwischengespeicherte Datei UEBERLEBT die Wiederherstellung
+und sieht dann aus wie ein Codefehler."*
+
+`[cmd]` **Auf der Platte: 0 Treffer. In
+`.next/server/_rsc_messages_de_json.js`: vorhanden, 15:43.**
+
+`[read]` **Er hat den Fall HALBIERT statt weiter zu raten:
+drei Schluessel desselben Raums, zwei loesen auf, einer
+nicht.**
+
+### Und warum seine erste Probe nicht rot werden konnte
+
+> *,,Sie verglich die drei Knopftexte MITEINANDER. Gleichheit
+ohne SOLL-Wert kann nicht rot werden."*
+
+> *,,`i18n-pruefen.mjs` half auch nicht; es liest DATEIEN,
+nicht den SCHIRM, und der Fehler sass genau dazwischen."*
+
+`[cmd]` **N3: `_g493n-anzeige.mjs` nimmt den Sollwert aus
+`de.json` und vergleicht ihn mit dem angezeigten Text,
+Sabotage 4/4.**
+
+### N6 war breiter als der Kopf
+
+`[cmd]` **Vier deutsche Werte, DREI ohne Umlaut** ? **alle
+berichtigt, der Schluessel bleibt ASCII.**
+
+`[cmd]` **N5: der doppelte Knopf ist weg, samt seinem
+unerreichbaren Modalzustand.**
+
+`[cmd]` **N4: `th.json = {}` ist der dokumentierte Sollzustand
+(Tom, 2026-08-17)** ? **Thai faellt auf deutschen Text zurueck,
+nicht auf rohe Schluessel. Gemessen, nicht gefuellt.**
+
+### Und ein echtes Waechterloch
+
+> *,,`supplier_product_id: eingabe...` kommt seit G-489 DREIMAL
+vor, der Schaden wurde vom Geschwister aufgefangen."*
+
+**Abgenommen.**

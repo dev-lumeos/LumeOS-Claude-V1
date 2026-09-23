@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-527
 entscheidung: null
+erledigt: 2026-09-08
+commit: 2ff9be65
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/produkt-tafel.tsx
@@ -274,3 +276,50 @@ die Quelle.
 ### Neustart noetig?
 
 `[read]` **Nein** — nur `apps/web/src` und `supplements.css`.
+
+## Teilabnahme
+
+**2026-09-08, Orchestrator. A2 ist nicht erreichbar.**
+
+### Die Messung
+
+    20 DSLD-Ids      20/20 antworten 200
+    thumbnail        11/20 tragen einen
+    Median           288 ms
+
+`[read]` **Das Doku-Beispiel mit zwei leeren Feldern war
+nicht stellvertretend** ? **er hat es an echten Ids
+gemessen.**
+
+### Warum A2 nicht geht
+
+> *,,`thumbnail` ist ein BLANKER DATEINAME, und sieben
+Grundadressen fallen alle ? 403 oder die HTML-Dokuseite der
+Schnittstelle selbst. Die Dokumentation listet sieben
+Endpunkte, keinen fuer Bilder."*
+
+`[read]` **Und er hat KEINE Adresse erfunden** ? **die
+Auflage.**
+
+`[cmd]` **Ich habe selbst nachgemessen: die XLSX hat fuenf
+Tafeln, und KEINE traegt einen Bildpfad** ? **`URL`,
+`DSLD ID`, `Product Name`, `Brand Name`, `Bar Code`,
+`Net Contents`, `Serving Size`, ... kein `Thumbnail`.**
+
+`[read]` **C-527 kann ihn also nicht mitbringen** ? **die
+Frage aus seinem Bericht ist damit beantwortet.**
+
+### Was steht
+
+`[cmd]` **Das Rueckfallfeld mit Toms Satz plus dem gemessenen
+Grund, und der NIH-Link aus `dsld_id`** ? **er faellt nie aus,
+weil nichts abgerufen wird.**
+
+### Eine Messung, kein Urteil
+
+> *,,`dsld.od.nih.gov` antwortet auch einem echten
+kopflosen Browser mit 403 (*Just a moment...*, Cloudflare).
+Ob es DICH blockiert, kann ich von hier nicht beweisen."*
+
+**Teilabnahme. A2 bleibt offen, die Entscheidung liegt bei
+Tom.**

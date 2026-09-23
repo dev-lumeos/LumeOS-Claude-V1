@@ -6,8 +6,7 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 242 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 520 |
+| `erledigt` | 522 |
 | **gesamt** | **764** |
 
 ## medical — 49
@@ -441,9 +440,9 @@
 | `G-484` | feature | hoch | [keine Aktion im Produkte-Reiter](erledigt/supplements-g-0484-aktion-im-produkte-reiter.md) | erledigt | — | C-529, G-491, G-492 |
 | `G-491` | fehler | hoch | [die Produkttabelle bleibt im Browser leer](erledigt/supplements-g-0491-produkttabelle-bleibt-leer.md) | erledigt | — | — |
 | `G-492` | feature | hoch | [Hinzufuegen ist eine Aktion, keine Detailseite](erledigt/supplements-g-0492-hinzufuegen-als-modal.md) | erledigt | — | G-493 |
-| `G-493` | fehler | hoch | [das Hinzufuegen-Modal nachbessern](laufend_claudecode/supplements-g-0493-hinzufuegen-modal-nachbessern.md) | laeuft (claudecode) | — | — |
+| `G-493` | fehler | hoch | [das Hinzufuegen-Modal nachbessern](erledigt/supplements-g-0493-hinzufuegen-modal-nachbessern.md) | erledigt | — | — |
 | `G-494` | aufraeumen | mittel | [die Form-Nachlese aus G-492 entfernen](todos/supplements-g-0494-form-nachlese-entfernen.md) | offen | — | — |
-| `G-495` | feature | hoch | [das Etikettenbild beim Oeffnen abrufen](laufend_claudecode/supplements-g-0495-etikettenbild-beim-oeffnen.md) | laeuft (claudecode) | — | — |
+| `G-495` | feature | hoch | [das Etikettenbild beim Oeffnen abrufen](erledigt/supplements-g-0495-etikettenbild-beim-oeffnen.md) | erledigt | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
