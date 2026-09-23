@@ -11,53 +11,44 @@ agent: codex
 beauftragt: 2026-09-08
 beruehrt:
   dateien:
+    - apps/web/src/app/v2/training/modale.tsx
     - docs/ssot/93-trainingssitzungen.md
 zahlen:
-  gemessen: 2026-09-08
+  gemessen: 2026-09-23
 ---
 
 # C-536 - drei Abwesenheitsaussagen sind ueberholt
 
 ## Befund
 
-`[cmd]` **Der Abwesenheitswaechter ist seit Tagen rot und
-blockiert `pnpm gate`:**
+Alle drei Tabellen existieren seit C-461. Falsch waren nicht die Daten,
+sondern die Aussagen, die ihr Fehlen weiter als Begrundung verwendeten.
 
-    apps/web/src/app/v2/training/modale.tsx:202
-      "training.routines" steht in der Pipeline
-    docs/ssot/93-trainingssitzungen.md:66
-      "training.routine_exercises" steht in der Pipeline
-    docs/ssot/93-trainingssitzungen.md:67
-      "training.routine_schedule_days" steht in der Pipeline
+| Ort | Alte Aussage | Gemessener Ist-Zustand | Nachfuehrung |
+|---|---|---|---|
+| `training/modale.tsx` | `training.routines` fehle | Tabelle existiert | Der deaktivierte Knopf nennt jetzt wahr: Der Schreibweg dieses Editors ist noch nicht angebunden. |
+| `93-trainingssitzungen.md` | `routine_exercises` fehle | Tabelle existiert | C-461 als Nachtrag von Routinen und Uebungen dokumentiert. |
+| `93-trainingssitzungen.md` | `routine_schedule_days` fehle | Tabelle existiert | C-461 als Nachtrag des Wochenbezugs dokumentiert. |
 
-`[cmd]` **Selbst nachgemessen: ALLE DREI Tabellen existieren.**
+Der App-Eingriff wurde vorher gegen den Arbeitsbaum gemessen: `training/modale.tsx`
+war unveraendert; G-488 aendert `nutrition/plans-echt.tsx`, nicht diese Datei.
+Der Eingriff beschraenkt sich auf Kommentar und Sperrgrund; kein Funktionscode
+wurde veraendert.
 
-`[read]` **Nicht die Daten sind falsch, die AUSSAGE ist es** ?
-**dieselbe Klasse wie C-533, wo der Sollstand falsch war und
-nicht die Rechte.**
+## Ergebnis
 
-`[cmd]` **Jeder Codex-Bericht nennt sie seit Tagen als
-*,,bekannt"*** ? **ein Waechter, der immer rot ist, beweist
-nichts mehr.**
+`node tools/abwesenheit-pruefen.mjs` ist gruen: 19 markierte Aussagen
+gelten noch.
 
-## Was zu tun ist
-
-> Der Waechter selbst: *,,Die Aussage nachfuehren, dann die
-Marke entfernen oder umschreiben."*
-
-`[read]` **Die Aussagen stammen aus der Zeit vor C-461** ?
-**lies, was sie behaupten, und schreib hin, was gilt.**
-
-`[cmd]` **Eine der drei liegt in `apps/`** ? **`modale.tsx:202`
-ist ein Kommentar, kein Code. MISS es, bevor du ihn
-anfasst** ? **Claude Code arbeitet dort.**
+Die Gegenprobe ist gefuehrt: Eine temporaer in `docs/ssot/93-trainingssitzungen.md`
+gesetzte erfundene Marke `@abwesend training.routines` liess den Waechter mit
+genau diesem Ort und einer geendeten Abwesenheit fehlschlagen. Die Marke wurde
+anschliessend wieder entfernt.
 
 ## Abnahmebedingungen
 
-    A1  je Aussage: was behauptet sie, was gilt?
-    A2  nachgefuehrt, nicht geloescht.
-    A3  der Abwesenheitswaechter ist gruen.
-    A4  Gegenprobe: eine erfundene Abwesenheit wird
-        weiter rot.
-    A5  wenn eine Aussage in apps/ liegt: mit Claude
-        Code abgestimmt oder GEMELDET.
+    A1  je Aussage: was behauptet sie, was gilt? -- Tabelle oben.
+    A2  nachgefuehrt, nicht geloescht. -- erfuellt.
+    A3  der Abwesenheitswaechter ist gruen. -- erfuellt.
+    A4  Gegenprobe: eine erfundene Abwesenheit wird weiter rot. -- erfuellt.
+    A5  App-Kollision gemessen: G-488 beruehrt eine andere Datei. -- erfuellt.

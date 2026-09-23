@@ -6,10 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 241 |
-| `laufend_codex` | 1 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 527 |
-| **gesamt** | **771** |
+| `laufend_codex` | 2 |
+| `erledigt` | 529 |
+| **gesamt** | **772** |
 
 ## medical — 49
 
@@ -65,9 +64,9 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 256
+## nutrition — 257
 
-### beauftragbar — 254
+### beauftragbar — 255
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -174,7 +173,8 @@
 | `C-521` | fehler | hoch | [die Tagessumme uebersieht die Supplemente](erledigt/nutrition-c-0521-tagessumme-uebersieht-supplemente.md) | erledigt | — | — |
 | `C-524` | feature | hoch | [Planeinträge können Supplemente vorsehen](erledigt/nutrition-c-0524-planeintraege-ohne-supplemente.md) | erledigt | — | G-489 |
 | `C-526` | fehler | hoch | [aktive Meal-Pläne dürfen nicht überlappen](erledigt/nutrition-c-0526-keine-ueberlappungspruefung.md) | erledigt | — | — |
-| `C-534` | befund | hoch | [welche Lebensmittelgruppen gibt es?](todos/nutrition-c-0534-welche-lebensmittelgruppen.md) | offen | — | — |
+| `C-534` | befund | hoch | [welche Lebensmittelgruppen gibt es?](laufend_codex/nutrition-c-0534-welche-lebensmittelgruppen.md) | laeuft (codex) | — | — |
+| `E-87` | entscheidung | mittel | [was bedeutet days_count nach einem Rollover?](todos/nutrition-e-0087-days-count-nach-rollover.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](erledigt/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | erledigt | — | G-375 |
@@ -322,7 +322,7 @@
 | `G-483` | feature | hoch | [Planner und Rezepte kennen keine Supplemente](erledigt/nutrition-g-0483-planner-und-rezepte.md) | erledigt | — | C-524 |
 | `G-485` | fehler | hoch | [das Tagebuch ist nicht lesbar](erledigt/nutrition-g-0485-tagebuch-nicht-lesbar.md) | erledigt | — | — |
 | `G-486` | fehler | hoch | [erfuellte Ghostentries bleiben stehen](erledigt/nutrition-g-0486-erfuellte-ghosts-bleiben.md) | erledigt | — | C-526 |
-| `G-488` | fehler | mittel | [drei Zahlen zum Plan, keine zwei passen](laufend_claudecode/nutrition-g-0488-drei-zahlen-zum-plan.md) | laeuft (claudecode) | — | — |
+| `G-488` | fehler | mittel | [drei Zahlen zum Plan, keine zwei passen](erledigt/nutrition-g-0488-drei-zahlen-zum-plan.md) | erledigt | — | E-87 |
 | `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](erledigt/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
@@ -454,7 +454,7 @@
 | `G-491` | fehler | hoch | [die Produkttabelle bleibt im Browser leer](erledigt/supplements-g-0491-produkttabelle-bleibt-leer.md) | erledigt | — | — |
 | `G-492` | feature | hoch | [Hinzufuegen ist eine Aktion, keine Detailseite](erledigt/supplements-g-0492-hinzufuegen-als-modal.md) | erledigt | — | G-493 |
 | `G-493` | fehler | hoch | [das Hinzufuegen-Modal nachbessern](erledigt/supplements-g-0493-hinzufuegen-modal-nachbessern.md) | erledigt | — | — |
-| `G-494` | aufraeumen | mittel | [die Form-Nachlese aus G-492 entfernen](laufend_claudecode/supplements-g-0494-form-nachlese-entfernen.md) | laeuft (claudecode) | — | — |
+| `G-494` | aufraeumen | mittel | [die Form-Nachlese aus G-492 entfernen](erledigt/supplements-g-0494-form-nachlese-entfernen.md) | erledigt | — | — |
 | `G-495` | feature | hoch | [das Etikettenbild beim Oeffnen abrufen](erledigt/supplements-g-0495-etikettenbild-beim-oeffnen.md) | erledigt | — | G-496 |
 | `G-496` | feature | hoch | [das Etikett als PDF, Toms Fund](erledigt/supplements-g-0496-etikett-als-pdf.md) | erledigt | — | E-85 |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |

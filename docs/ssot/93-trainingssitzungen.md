@@ -62,9 +62,7 @@
 
 ## Was aus der Spec nicht uebernommen wurde
 
-`[read]` Nicht uebernommen wurden `training.routines`, `routine_exercises` und `routine_schedule_days`. Grund: C-66 baut absolvierte Sitzungen, keinen Trainingsplan.
-<!-- @abwesend training.routine_exercises @quelle C-66 -->
-<!-- @abwesend training.routine_schedule_days @quelle C-66 -->
+`[read]` C-66 baute nur absolvierte Sitzungen, keinen Trainingsplan. Die damals noch fehlenden Tabellen `training.routines`, `routine_exercises` und `routine_schedule_days` hat C-461 nachgezogen; sie bilden heute wiederverwendbare Routinen, deren Uebungen und ihren Wochenbezug ab.
 
 `[read]` Nicht uebernommen wurden `personal_records`, Progression-Konfigurationen und die Engine aus dem Vorgaengerrepo (`workout_events`, `exercise_prs`). Grund: PRs und Progression brauchen geloggte Sitzungen als Grundlage und sind Folgeauftraege.
 

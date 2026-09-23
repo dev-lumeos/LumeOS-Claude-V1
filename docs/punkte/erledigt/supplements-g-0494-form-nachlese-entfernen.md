@@ -9,6 +9,8 @@ kind_von: C-520
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: a6bdeecf
 beruehrt:
   dateien:
     - apps/web/src/lib/supplements/produkte-read.ts
@@ -145,10 +147,77 @@ fehler** — derselbe wie in G-492, G-493 und G-496, jetzt einzeilig.
     x-g494-a2-form.png     A2: zwoelf Zeilen, jede mit Form
     x-g494-a3-pulver.png   A3: das Pulver bietet beides
 
+### Zwei Befunde, die mir nicht gehoeren
+
+`[cmd]` **Die Gesamtprobe meldet 1965/1966** — **der eine
+Fehlschlag ist C-536:** Codex hat in `training/modale.tsx` die
+Marke `@abwesend training.routines` entfernt (die Tabelle gibt es
+seit C-461), **und der G-278-Waechter verlangt sie.**
+
+`[cmd]` **Ebenso `[abwesenheit]` im Gate:** drei Aussagen sichern
+eine Abwesenheit, die geendet hat — `training.routines`,
+`training.routine_exercises`, `training.routine_schedule_days`,
+alle aus der C-531-Pipeline.
+
+`[read]` **Beides liegt in `training/` und `docs/ssot/`** — nicht
+in diesem Auftrag. **Gemeldet, nicht angefasst.**
+
+`[cmd]` **Meine eigenen Waechter: 6/6, Sabotage 7/7 und 8/8.**
+
+### Und ein Fehler von mir, der behoben ist
+
+`[cmd]` **Beim Eingrenzen eines Gate-Befunds habe ich
+`git stash push` benutzt, um meine zwei Punktdateien
+herauszunehmen** — **und danach `git stash drop` auf `stash@{0}`
+gerufen.**
+
+`[read]` **Das war der falsche Eintrag:** dort lag Toms
+Sicherung *„G-97: veralteter tabs.tsx-Stand vor G-91"*.
+
+`[cmd]` **Sofort wiederhergestellt** (`git stash store` mit
+derselben Kennung und demselben Text) — **der Eintrag steht
+wieder als `stash@{0}`.**
+
+`[cmd]` **Und der `pop` hatte den alten `tabs.tsx`-Stand in den
+Arbeitsbaum gelegt** (106 Zeilen, die ich nicht geschrieben
+habe). `[cmd]` **Mit `git checkout --` auf den Commit-Stand
+zurueckgesetzt.**
+
+`[read]` **Die Lehre steht in meinem Gedaechtnis:** `git stash`
+zum Eingrenzen ist gefaehrlich — **dieselbe Warnung, die dort
+schon stand**, und ich habe sie ueberfahren.
+
 ### Neustart noetig?
 
 `[read]` **Nein** — nur `apps/web/src`.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator.**
+
+> *,,Ich habe C-520 selbst geprueft: `pg_get_function_result`
+zeigt, dass BEIDE Signaturen jetzt `produktform` liefern, auch
+die alte mit Vorgaben."*
+
+`[read]` **Mein Vorbehalt loeste sich damit selbst** ? **der
+Aufruf bleibt, wie er war, und der Waechter faellt, wenn jemand
+`p_formen` hinzufuegt.**
+
+`[cmd]` **Geloescht, nicht auskommentiert: `formNachlesen`,
+`NACHLESE_STUECK`, `SupplementsClient` und der Aufruf.**
+
+`[cmd]` **Nachher: 0 Zeilen ohne Form ueber drei Suchen,
+12 von 12 Zeilen gefuellt.**
+
+### Und eine Erwartung berichtigt
+
+> *,,Die Laufzeit hat sich NICHT verbessert (4,7 s -> 5,4 s).
+Die Nachlese kostete 2,8 ms; die RPC selbst laeuft in 1,2 ms.
+Die ~5 s sind Dev-Server. Der Gewinn ist EINE QUELLE weniger,
+nicht Zeit."*
+
+`[read]` **Er haette 2,8 ms als Erfolg verkaufen koennen** ?
+**stattdessen hat er den Unterschied als Rauschen benannt.**
+
+**Abgenommen.**
+

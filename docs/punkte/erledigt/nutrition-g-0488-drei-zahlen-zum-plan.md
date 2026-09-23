@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: a6bdeecf
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/plan-eintraege.tsx
@@ -179,10 +181,87 @@ darf nicht dorthin wandern.
     x-g488-drei-zahlen.png   alle drei Zahlen auf einem Schirm,
                              dazu der Hinweis
 
+### Zwei Befunde, die mir nicht gehoeren
+
+`[cmd]` **Die Gesamtprobe meldet 1965/1966** — **der eine
+Fehlschlag ist C-536:** Codex hat in `training/modale.tsx` die
+Marke `@abwesend training.routines` entfernt (die Tabelle gibt es
+seit C-461), **und der G-278-Waechter verlangt sie.**
+
+`[cmd]` **Ebenso `[abwesenheit]` im Gate:** drei Aussagen sichern
+eine Abwesenheit, die geendet hat — `training.routines`,
+`training.routine_exercises`, `training.routine_schedule_days`,
+alle aus der C-531-Pipeline.
+
+`[read]` **Beides liegt in `training/` und `docs/ssot/`** — nicht
+in diesem Auftrag. **Gemeldet, nicht angefasst.**
+
+`[cmd]` **Meine eigenen Waechter: 6/6, Sabotage 7/7 und 8/8.**
+
+### Und ein Fehler von mir, der behoben ist
+
+`[cmd]` **Beim Eingrenzen eines Gate-Befunds habe ich
+`git stash push` benutzt, um meine zwei Punktdateien
+herauszunehmen** — **und danach `git stash drop` auf `stash@{0}`
+gerufen.**
+
+`[read]` **Das war der falsche Eintrag:** dort lag Toms
+Sicherung *„G-97: veralteter tabs.tsx-Stand vor G-91"*.
+
+`[cmd]` **Sofort wiederhergestellt** (`git stash store` mit
+derselben Kennung und demselben Text) — **der Eintrag steht
+wieder als `stash@{0}`.**
+
+`[cmd]` **Und der `pop` hatte den alten `tabs.tsx`-Stand in den
+Arbeitsbaum gelegt** (106 Zeilen, die ich nicht geschrieben
+habe). `[cmd]` **Mit `git checkout --` auf den Commit-Stand
+zurueckgesetzt.**
+
+`[read]` **Die Lehre steht in meinem Gedaechtnis:** `git stash`
+zum Eingrenzen ist gefaehrlich — **dieselbe Warnung, die dort
+schon stand**, und ich habe sie ueberfahren.
+
 ### Neustart noetig?
 
 `[read]` **Nein** — nur `apps/web/src`.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+### Meine Auftragspraemisse war falsch
+
+> *,,Der aktive Plan hat 35 Tage in 5 Wochen (19.09.-23.10.),
+nicht 63; jeder andere Plan passt exakt zu seinem
+`days_count`."*
+
+`[cmd]` **Selbst nachgemessen ? DREI Plaene tragen
+`status=active`:**
+
+    Aufbau-Wochenplan  days_count 28  rollover 1  35 Tage
+    Nachweiswoche      days_count  7  rollover 0   7 Tage
+    Aufbau-Wochenplan  days_count 21  rollover 0  21 Tage
+                                                 = 63 Tage
+
+`[read]` **Meine 63 waren die SUMME dreier Plaene** ? **er hat
+je Plan gemessen.**
+
+### Zwei der drei Zahlen stimmten
+
+`[cmd]` **,,Tag 5 von 35" und ,,Laeuft bis 23.10." sind
+richtig** ? **und A3 ist beantwortet: *,,Laeuft bis"* wird aus
+`plan_date` GELESEN, nie gerechnet.**
+
+### Die Ursache
+
+> *,,`ablaufKlaeren` verschiebt bei einem Rollover die Wochen
+und erhoeht `rollover_count`, fuehrt aber `days_count` NIE
+nach ? `rollover_count 1` passt exakt zur 7-Tage-Luecke."*
+
+`[cmd]` **28 + 7 = 35.**
+
+`[read]` **Und er hat die Daten NICHT angefasst** ? **der
+Schirm zeigt die gezaehlten Tage und nennt die Abweichung.**
+
+**Abgenommen. Eine Entscheidung liegt bei Tom.**
+
