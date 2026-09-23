@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 241 |
 | `laufend_codex` | 2 |
-| `erledigt` | 529 |
-| **gesamt** | **772** |
+| `erledigt` | 530 |
+| **gesamt** | **773** |
 
 ## medical — 49
 
@@ -64,9 +64,9 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 257
+## nutrition — 258
 
-### beauftragbar — 255
+### beauftragbar — 256
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -174,7 +174,8 @@
 | `C-524` | feature | hoch | [Planeinträge können Supplemente vorsehen](erledigt/nutrition-c-0524-planeintraege-ohne-supplemente.md) | erledigt | — | G-489 |
 | `C-526` | fehler | hoch | [aktive Meal-Pläne dürfen nicht überlappen](erledigt/nutrition-c-0526-keine-ueberlappungspruefung.md) | erledigt | — | — |
 | `C-534` | befund | hoch | [welche Lebensmittelgruppen gibt es?](laufend_codex/nutrition-c-0534-welche-lebensmittelgruppen.md) | laeuft (codex) | — | — |
-| `E-87` | entscheidung | mittel | [was bedeutet days_count nach einem Rollover?](todos/nutrition-e-0087-days-count-nach-rollover.md) | offen | — | — |
+| `C-537` | fehler | mittel | [days_count zieht beim Rollover mit](todos/nutrition-c-0537-days-count-zieht-mit.md) | offen | — | — |
+| `E-87` | entscheidung | mittel | [was bedeutet days_count nach einem Rollover?](erledigt/nutrition-e-0087-days-count-nach-rollover.md) | erledigt | — | C-537 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](erledigt/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | erledigt | — | G-375 |

@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-488
 entscheidung: null
+erledigt: 2026-09-08
+commit: entschieden
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -54,3 +56,38 @@ ein Export) traut der Spalte.**
 
 `[read]` **Eine Zahl, die falsch aussieht und stimmt, ist
 dasselbe Problem wie eine, die stimmt und falsch aussieht.**
+
+## Entschieden, 2026-09-08, Orchestrator
+
+Tom: *,,loes es einfach logisch und funktionierend, wenn ich
+mich um solche lappalien kuemmern muss, brauche ich dich als
+orchestrator nicht"*
+
+### Weg a: `days_count` zieht mit
+
+`[read]` **Der Plan IST nach dem Rollover 35 Tage lang.**
+
+`[read]` **Zwei Zahlen fuer dieselbe Sache sind der Fehler,
+nicht die falsche davon.**
+
+`[cmd]` **`ablaufKlaeren` verschiebt die Wochen ohnehin** ?
+**dort steht die Zahl schon, sie muss nur geschrieben
+werden.**
+
+### Warum nicht b
+
+`[read]` **`Laenge beim Anlegen` muesste ueberall so heissen** ?
+**im Schirm, im Bericht, im Export, beim Coach.**
+
+`[read]` **Eine Spalte, deren Name eine Fussnote braucht, wird
+falsch gelesen** ? **so wie `client-grenze.test.ts` (G-470)
+und `status_compatibility` (C-526).**
+
+### Und ein Waechter
+
+`[cmd]` **`days_count` muss gleich der Zahl der
+materialisierten Tage sein** ? **das ist pruefbar und faengt
+den naechsten Rollover, der es vergisst.**
+
+`[cmd]` **Umsetzung als C-537.**
+
