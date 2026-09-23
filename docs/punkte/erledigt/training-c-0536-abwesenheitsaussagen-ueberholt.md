@@ -10,7 +10,7 @@ entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
 erledigt: 2026-09-08
-commit: OFFEN
+commit: e1532050
 beruehrt:
   dateien:
     - apps/web/src/app/v2/training/modale.tsx
