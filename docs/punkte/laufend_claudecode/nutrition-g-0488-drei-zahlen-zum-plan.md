@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: null
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/plan-eintraege.tsx
@@ -36,3 +38,11 @@ zahlen:
         GEMELDET, wenn es ein Datenfehler ist.
     A3  "Laeuft bis": gerechnet oder gelesen?
     A4  vier Module unveraendert.
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

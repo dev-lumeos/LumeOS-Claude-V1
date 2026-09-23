@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-520
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/lib/supplements/produkte-read.ts
@@ -44,3 +46,11 @@ alte.**
         Foto.
     A4  Laufzeit vorher/nachher.
     A5  vier Module unveraendert.
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

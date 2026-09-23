@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 242 |
-| `erledigt` | 524 |
+| `todos` | 239 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 525 |
 | **gesamt** | **766** |
 
 ## medical — 49
@@ -317,7 +318,7 @@
 | `G-483` | feature | hoch | [Planner und Rezepte kennen keine Supplemente](erledigt/nutrition-g-0483-planner-und-rezepte.md) | erledigt | — | C-524 |
 | `G-485` | fehler | hoch | [das Tagebuch ist nicht lesbar](erledigt/nutrition-g-0485-tagebuch-nicht-lesbar.md) | erledigt | — | — |
 | `G-486` | fehler | hoch | [erfuellte Ghostentries bleiben stehen](erledigt/nutrition-g-0486-erfuellte-ghosts-bleiben.md) | erledigt | — | C-526 |
-| `G-488` | fehler | mittel | [drei Zahlen zum Plan, keine zwei passen](todos/nutrition-g-0488-drei-zahlen-zum-plan.md) | offen | — | — |
+| `G-488` | fehler | mittel | [drei Zahlen zum Plan, keine zwei passen](laufend_claudecode/nutrition-g-0488-drei-zahlen-zum-plan.md) | laeuft (claudecode) | — | — |
 | `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](erledigt/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
@@ -442,7 +443,7 @@
 | `G-491` | fehler | hoch | [die Produkttabelle bleibt im Browser leer](erledigt/supplements-g-0491-produkttabelle-bleibt-leer.md) | erledigt | — | — |
 | `G-492` | feature | hoch | [Hinzufuegen ist eine Aktion, keine Detailseite](erledigt/supplements-g-0492-hinzufuegen-als-modal.md) | erledigt | — | G-493 |
 | `G-493` | fehler | hoch | [das Hinzufuegen-Modal nachbessern](erledigt/supplements-g-0493-hinzufuegen-modal-nachbessern.md) | erledigt | — | — |
-| `G-494` | aufraeumen | mittel | [die Form-Nachlese aus G-492 entfernen](todos/supplements-g-0494-form-nachlese-entfernen.md) | offen | — | — |
+| `G-494` | aufraeumen | mittel | [die Form-Nachlese aus G-492 entfernen](laufend_claudecode/supplements-g-0494-form-nachlese-entfernen.md) | laeuft (claudecode) | — | — |
 | `G-495` | feature | hoch | [das Etikettenbild beim Oeffnen abrufen](erledigt/supplements-g-0495-etikettenbild-beim-oeffnen.md) | erledigt | — | G-496 |
 | `G-496` | feature | hoch | [das Etikett als PDF, Toms Fund](erledigt/supplements-g-0496-etikett-als-pdf.md) | erledigt | — | E-85 |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
@@ -729,7 +730,7 @@
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
 | `E-83` | entscheidung | hoch | [ein Weg fuer Lebensmittel UND Supplemente](erledigt/quer-e-0083-ein-weg-fuer-beide.md) | erledigt | — | E-84, G-480, G-483, G-484 |
-| `E-84` | entscheidung | hoch | [ein Supplement bleibt ein Supplement](todos/quer-e-0084-supplement-bleibt-supplement.md) | offen | — | C-519 |
+| `E-84` | entscheidung | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-e-0084-supplement-bleibt-supplement.md) | erledigt | — | C-519 |
 | `F-01` | befund | mittel | [Schnittstellenvertrag zuerst](todos/quer-f-0001-schnittstellenvertrag-zuerst.md) | offen | — | C-111 |
 | `F-02` | befund | mittel | [Ablageort festlegen](todos/quer-f-0002-ablageort-festlegen.md) | offen | — | C-109, C-110 |
 | `F-03` | befund | mittel | [obsidian-skills einbinden](todos/quer-f-0003-obsidian-skills-einbinden.md) | offen | — | C-112 |

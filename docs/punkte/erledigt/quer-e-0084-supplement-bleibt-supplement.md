@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: E-83
 entscheidung: null
+erledigt: 2026-09-08
+commit: entschieden
 beruehrt:
   tabellen: [supplements.intake_logs]
 zahlen:
@@ -158,4 +160,19 @@ zerlegen.**
                  meal_id neu, darf leer sein
 
 `[read]` **Damit ist Frage D aus E-83 beantwortet.**
+
+## Abschluss
+
+**2026-09-08, Orchestrator.**
+
+`[cmd]` **Toms Entscheidung ist getroffen und umgesetzt:**
+
+    C-519  Supplements bleiben SSOT, Meal und Rezept
+           verweisen -- LIVE
+    C-524  Planeintraege mit Absichtsreferenz -- LIVE
+    G-483  Rezepte duerfen Supplemente
+    G-489  der Ghost zeigt und bestaetigt sie
+
+`[read]` **Die Entscheidung ist damit kein offener Punkt
+mehr.**
 
