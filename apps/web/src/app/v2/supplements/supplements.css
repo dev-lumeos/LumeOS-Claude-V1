@@ -2125,3 +2125,26 @@
   font-size: 11px;
   color: var(--neg);
 }
+
+/* ══ G-495: DAS RUECKFALLBILD ══════════════════════════════════════
+ *
+ * **Tom, 2026-09-08:** *„sicherheitshalber ein not available bild
+ * anlegen, das wir zeigen koennen, wenn nichts kommt"*
+ *
+ * `[read]` **Gezeichnet, nicht geladen** — eine Bilddatei fuer einen
+ * Satz waere ein zweiter Ort fuer denselben Text, und sie muesste
+ * uebersetzt werden.
+ *
+ * `[read]` **Ein ruhiges Feld, kein Alarm:** dass ein Etikettbild
+ * fehlt, ist kein Fehler des Nutzers. */
+.v2-supp-prod-etikett-leer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 26px 18px;
+  text-align: center;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}

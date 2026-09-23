@@ -29,10 +29,39 @@ test('G-493/A1: das Aktionswort kommt aus messages, nicht als Literal', () => {
   //
   // `[read]` **Solange das Wort abgeschrieben dasteht, laufen die
   // Orte wieder auseinander.**
-  for (const datei of [LISTE, TAFEL, SUBSTANZ]) {
+  // `[cmd]` **G-493/N5: die TAFEL traegt keinen Knopf mehr** — die
+  // Zeile hat ihn schon, und die Tafel klappt direkt darunter auf.
+  // **Sie faellt deshalb aus dieser Aufzaehlung.**
+  for (const datei of [LISTE, SUBSTANZ]) {
     const q = ohneKommentare(lies(datei))
     assert.match(q, /tA\('hinzufuegen'\)/,
       `${datei}: das Aktionswort kommt nicht aus \`messages/\`.`)
+  }
+})
+
+test('G-493/N2: die Sprachdatei schreibt Hinzufuegen mit Umlaut', () => {
+  // **Tom:** *„buttonbezeichnung unlogisch auf deutsch"*
+  //
+  // `[cmd]` **Gemessen 2026-09-22: DREI deutsche Werte ohne Umlaut**
+  // — *„Supplement hinzufuegen"*, *„Zum Stack hinzufuegen"*,
+  // *„Zu {slot} hinzufuegen"* — **neben `Allgemein.hinzufuegen =
+  // „Hinzufügen"`.**
+  //
+  // `[read]` **Der SCHLUESSEL bleibt ASCII** (er steht so im Code),
+  // **der angezeigte WERT bekommt den Umlaut.**
+  const de = JSON.parse(readFileSync(path.join(MESSAGES, 'de.json'), 'utf8')) as
+    Record<string, Record<string, string>>
+  for (const [ns, key] of [
+    ['Allgemein', 'hinzufuegen'],
+    ['Supplements', 'supplementHinzufuegen'],
+    ['Supplements', 'zumStackHinzufuegen'],
+    ['Nutrition', 'hinzufuegenZu'],
+  ]) {
+    const wert = de[ns]?.[key]
+    assert.ok(typeof wert === 'string', `${ns}.${key} fehlt`)
+    assert.doesNotMatch(wert, /hinzufuegen/,
+      `${ns}.${key} = \`${wert}\` — deutscher Text mit „ue" statt „ü".`)
+    assert.match(wert, /[Hh]inzufügen/, `${ns}.${key} nennt die Aktion nicht`)
   }
 })
 
@@ -90,8 +119,20 @@ test('G-493/A5: der Schreibweg kennt supplier_product_id', () => {
   const q = ohneKommentare(lies(SCHREIB))
   // `[cmd]` **C-529 ist live** (gemessen 2026-09-22:
   // `stack_items.supplier_product_id uuid`, nullable).
-  assert.match(q, /supplier_product_id: eingabe\.supplier_product_id/,
-    'Der Insert schreibt die Produktspalte nicht.')
+  //
+  // `[cmd]` **Der Ausdruck steht DREIMAL in der Datei**, seit G-489
+  // `planVerweisAnlegen` und `planVerweisEinloesen` dazukamen.
+  // `[read]` **Eine Zusicherung auf den blossen Text war deshalb zu
+  // weit:** die Sabotage am Stack-Insert blieb gruen, weil die
+  // Planfunktionen sie weiter erfuellten.
+  //
+  // `[cmd]` **Geprueft wird der INSERT in `stack_items`** — der
+  // Block, um den es geht.
+  const i = q.indexOf(".from('stack_items')\n    .insert({")
+  assert.ok(i >= 0, 'Der Insert in `stack_items` ist nicht auffindbar.')
+  const block = q.slice(i, q.indexOf('.select(', i))
+  assert.match(block, /supplier_product_id: eingabe\.supplier_product_id/,
+    'Der Insert in `stack_items` schreibt die Produktspalte nicht.')
 })
 
 test('G-493/A5: der Leseweg holt die Spalte', () => {

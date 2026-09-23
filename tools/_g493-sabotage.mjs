@@ -24,13 +24,34 @@ const SCHAEDEN = [
   [LISTE, 'die Liste sagt wieder Add',
    "                          {tA('hinzufuegen')}",
    '                          Add'],
-  [TAFEL, 'die Tafel schreibt das Wort wieder hin',
-   "            {tA('hinzufuegen')}", '            Hinzufügen'],
+  // [cmd] G-493/N5: die Tafel traegt keinen Knopf mehr -- der
+  // Schaden dort haette kein Ziel. Stattdessen die ZEILE, die ihn
+  // jetzt allein traegt.
+  [LISTE, 'die Liste schreibt das Wort wieder als Literal',
+   "                          {tA('hinzufuegen')}",
+   '                          Hinzufügen'],
   [SUBSTANZ, 'die Substanzen sagen wieder Add',
    "                            {tA('hinzufuegen')}",
    '                            Add'],
-  [DE, 'der deutsche Schluessel faellt weg',
-   '    "hinzufuegen": "Hinzufügen",', '    "hinzufuegenX": "Hinzufügen",'],
+  // ══ G-493/N1: DIESER SCHADEN VERGIFTET DEN LAUFENDEN SERVER ═════
+  //
+  // `[cmd]` **Gemessen 2026-09-22:** nach diesem Lauf zeigte der
+  // Schirm `Allgemein.hinzufuegen` statt *„Hinzufügen"* — **die Datei
+  // war wiederhergestellt, aber `.next/server/_rsc_messages_de_json.js`
+  // trug weiter `hinzufuegenX`.** `[read]` **Next kompiliert die
+  // Sprachdatei in ein Servermodul und laedt es je Prozess EINMAL.**
+  //
+  // `[read]` **Ein Schaden an einer Datei, die der Dev-Server
+  // zwischenspeichert, ueberlebt die Wiederherstellung** — und sieht
+  // danach aus wie ein Codefehler.
+  //
+  // `[cmd]` **Deshalb wird die Sprachdatei NICHT mehr sabotiert.**
+  // `[read]` **Die Zusicherung „der Schluessel steht in beiden
+  // Sprachen" prueft ohnehin die DATEI** — sie liest `de.json` und
+  // `en.json` direkt, und eine Sabotage daran belegt nur, dass
+  // `JSON.parse` funktioniert. **Der Waechter, der die ANZEIGE
+  // prueft, steht in `_g493n-anzeige.mjs`** (N3) und kommt ohne
+  // Dateischaden aus.
   [AKTION, 'die neue Mahlzeit laeuft NICHT ueber den Diary-Weg',
    "          art: 'mahlzeit',", "          art: 'mahlzeitX',"],
   [AKTION, 'die Kategorien werden nachgebaut',
@@ -42,9 +63,12 @@ const SCHAEDEN = [
   [AKTION, 'dem Formular fehlt der Oeffner',
    '                    data-probe="neue-mahlzeit-oeffnen"',
    '                    data-probe="neue-mahlzeit-oeffnenX"'],
+  // [read] Der Ausdruck steht DREIMAL in der Datei (G-489 kam
+  // dazu). Der Schaden muss die Stelle treffen, die die Zusicherung
+  // meint -- sonst erfuellt ein zweites Vorkommen sie weiter.
   [SCHREIB, 'der Insert schreibt die Produktspalte nicht',
-   '      supplier_product_id: eingabe.supplier_product_id ?? null,',
-   '      supplier_product_id: null,'],
+   'supplier_product_id: eingabe.supplier_product_id ?? null,',
+   'supplier_product_id: null,'],
   [LESEN, 'der Leseweg holt die Spalte nicht',
    '        supplement_id, supplier_product_id', '        supplement_id'],
   [AKTION, 'die Kruecke kehrt zurueck',

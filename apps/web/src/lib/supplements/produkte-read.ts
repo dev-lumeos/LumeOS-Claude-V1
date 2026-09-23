@@ -278,6 +278,14 @@ export type ProduktSatz = {
   portionsgroesse: number | null
   portionseinheit: string | null
   gtin: string | null
+  /**
+   * G-495: die DSLD-Kennung — aus ihr wird die Etikettadresse.
+   *
+   * `[cmd]` **`bigint` in der Datenbank**, und PostgREST liefert das
+   * als Zahl. `[read]` **`null` heisst: dieses Produkt stammt nicht
+   * aus dem DSLD-Import** — dann gibt es auch keine Etikettseite.
+   */
+  dsld_id: number | null
   suggested_use: string | null
   inhalt: InhaltsZeile[]
   firmen: FirmenZeile[]
@@ -850,7 +858,10 @@ export async function ladeProdukt(id: string): Promise<ProduktSatz | null> {
   try {
     const [kopfA, inhaltA, ordnungA, firmenA, portionenA] = await Promise.all([
       c.from('supplier_products')
-        .select('id,name_en,marke,market_status,produktform,packungsgroesse,packungseinheit,portionsgroesse,portionseinheit,gtin,suggested_use')
+        // `[cmd]` **G-495: `dsld_id` kommt mit** — aus ihr wird der
+        // Link zur NIH-Etikettseite berechnet. `[read]` **Er faellt
+        // nie aus**, anders als das Bild.
+        .select('id,name_en,marke,market_status,produktform,packungsgroesse,packungseinheit,portionsgroesse,portionseinheit,gtin,suggested_use,dsld_id')
         .eq('id', id).maybeSingle(),
       // ══ G-464: DIE SICHT AUS C-505, NICHT DIE ROHTABELLE ═══════
       //
@@ -905,6 +916,7 @@ export async function ladeProdukt(id: string): Promise<ProduktSatz | null> {
       portionsgroesse: n(k.portionsgroesse),
       portionseinheit: s(k.portionseinheit),
       gtin: s(k.gtin),
+      dsld_id: n(k.dsld_id),
       suggested_use: s(k.suggested_use),
       // ══ G-464: Sicht und Tabelle zusammenfuehren ═══════════════
       //

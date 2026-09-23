@@ -169,7 +169,21 @@ test('G-492/A12: die Aktion steht IN der Reiterleiste', () => {
   // `[read]` **Gemessen wird deshalb der PROP:** der Knopf muss im
   // `aktion={…}` der Leiste stehen. **Nimmt ihn jemand da heraus,
   // faellt die Zusicherung** — egal, wo er danach landet.
-  for (const [datei, probe] of [[TAFEL, 'produkt-add'], [SUBSTANZ, 'substanz-add']]) {
+  //
+  // ══ G-493/N5: DIE PRODUKT-TAFEL TRAEGT IHN NICHT MEHR ═══════
+  //
+  // **Tom, 2026-09-08:** *„dann erweitert gleich darunter derselbe
+  // button? dann kann man es gleich weglassen"*
+  //
+  // `[cmd]` **Gemessen: die Tafel klappt DIREKT unter ihrer Zeile
+  // auf**, und die Zeile traegt den Knopf seit G-492/A1 — **zwei
+  // gleiche Knoepfe untereinander.**
+  //
+  // `[read]` **Die Zusicherung gilt weiter fuer die SUBSTANZ-Tafel**
+  // (A13: der Knopf wanderte dort von unten nach oben). `[read]`
+  // **Fuer die Produkt-Tafel ist sie umgedreht** — und das wird
+  // ebenfalls geprueft, sonst kaeme der zweite Knopf still zurueck.
+  for (const [datei, probe] of [[SUBSTANZ, 'substanz-add']]) {
     const q = ohneKommentare(lies(datei))
     const i = q.indexOf('<TafelReiterleiste')
     assert.ok(i >= 0, `${datei}: keine geteilte Reiterleiste.`)
@@ -181,6 +195,11 @@ test('G-492/A12: die Aktion steht IN der Reiterleiste', () => {
     assert.ok(block.slice(j).includes(`data-probe="${probe}"`),
       `${datei}: „${probe}" steht nicht in der Aktion der Reiterleiste.`)
   }
+
+  // `[cmd]` **G-493/N5: und die Produkt-Tafel traegt KEINEN.**
+  const t = ohneKommentare(lies(TAFEL))
+  assert.doesNotMatch(t, /data-probe="produkt-add"/,
+    'Die Produkt-Tafel hat wieder einen eigenen Knopf — er steht schon in der Zeile (N5).')
 })
 
 test('G-492/A13: die Substanz-Aktion steht NICHT mehr am Fuss', () => {

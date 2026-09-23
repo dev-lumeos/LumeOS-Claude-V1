@@ -58,7 +58,6 @@
 // Fliesstext gilt hier durchweg `v2-muted`; `v2-dim` bleibt nur dort,
 // wo es keine Aussage traegt.**
 import * as React from 'react'
-import { useTranslations } from 'next-intl'
 import { Pill, Icon } from '@lumeos/ui'
 
 import type { ProduktSatz } from '../../../lib/supplements/produkte-read'
@@ -68,8 +67,6 @@ import {
   etikettBuendel, mengeText, bekanntZaehlen, portionText, formLabel,
   type EtikettZeile,
 } from '../../../lib/supplements/produkt-etikett'
-// G-492: dieselbe Aktion wie G-484, nur als Modal (A7).
-import { ProduktAktionModal } from './produkt-aktion'
 // G-492/A14: die geteilte Reiterleiste — dieselbe wie bei den
 // Substanzen, nicht nachgebaut.
 import { TafelReiterleiste } from './tafel-reiterleiste'
@@ -192,8 +189,22 @@ function Buendel(
   )
 }
 
-export function ProduktTafel({ satz, meidestoffe = [] }: {
+export function ProduktTafel({ satz, meidestoffe = [], aktion }: {
   satz: ProduktSatz
+  /**
+   * G-493/N5: was rechts in der Reiterleiste steht — meist NICHTS.
+   *
+   * **Tom:** *„dann erweitert gleich darunter derselbe button? dann
+   * kann man es gleich weglassen"*
+   *
+   * `[read]` **Die Tafel klappt unter ihrer Zeile auf, und die Zeile
+   * traegt den Knopf schon.** `[cmd]` **Der einzige Aufrufer
+   * (`tab-produkte.tsx:1265`) setzt ihn deshalb nicht.**
+   *
+   * `[read]` **Das Prop bleibt** — ein Aufrufer ohne eigene Zeile
+   * braeuchte es. **Es wird nur nicht belegt.**
+   */
+  aktion?: React.ReactNode
   /**
    * G-455: die Meidestoffe — der WEICHE Filter.
    *
@@ -225,9 +236,6 @@ export function ProduktTafel({ satz, meidestoffe = [] }: {
     () => meideTreffer(satz.inhalt.map(z => z.ingredient_name), meidestoffe),
     [satz.inhalt, meidestoffe])
 
-  // G-493/A1: das Aktionswort aus `messages/` — dieselbe Zeile wie
-  // in der Liste und bei den Substanzen.
-  const tA = useTranslations('Allgemein')
 
   // ══ G-492/A15: die vier Reiter ═══════════════════════════════════
   //
@@ -245,8 +253,6 @@ export function ProduktTafel({ satz, meidestoffe = [] }: {
   const aktiv = reiter.some(r => r.id === reiterOffen)
     ? reiterOffen : ersterProduktReiter()
 
-  // G-492: das Modal statt des Blocks am Fuss.
-  const [modalOffen, setModalOffen] = React.useState(false)
 
   return (
     <div className="v2-supp-prod-tafel">
@@ -296,20 +302,28 @@ export function ProduktTafel({ satz, meidestoffe = [] }: {
 
           `[cmd]` **Dieselbe Bauform wie die Substanz-Tafel** (A14) —
           `TafelReiterleiste`, nicht nachgebaut. */}
+      {/* ══ G-493/N5: EIN KNOPF, NICHT ZWEI ═══════════════════════
+          **Tom, 2026-09-08, mit Pfeilen im Foto:** *„dann erweitert
+          gleich darunter derselbe button? dann kann man es gleich
+          weglassen"*
+
+          `[cmd]` **Gemessen: die Tafel klappt DIREKT unter ihrer
+          Zeile auf** — und die Zeile traegt den Knopf schon
+          (`tab-produkte.tsx`, Aktionsspalte aus G-492/A1).
+          **Zwei gleiche Knoepfe untereinander, 4 px auseinander.**
+
+          `[read]` **Der zweite faellt weg** — nicht der erste: die
+          Zeile ist der Ort, an dem man die Aktion sucht, ohne
+          aufzuklappen.
+
+          `[cmd]` **`aktion` bleibt ein PROP der Leiste** — die
+          Substanz-Tafel braucht ihn weiter (A13/A14), und ein
+          Aufrufer, der die Tafel ohne eigene Zeile zeigt, koennte
+          ihn wieder setzen. `[read]` **Hier wird er nur nicht
+          belegt.** */}
       <TafelReiterleiste
         reiter={reiter} offen={aktiv} onWaehlen={setReiter}
-        aktion={
-          <button type="button" className="v2-btn v2-btn-primary v2-btn-sm"
-                  data-probe="produkt-add"
-                  onClick={e => { e.stopPropagation(); setModalOffen(true) }}>
-            {/* `[cmd]` **G-493/A1: aus `messages/`, nicht als
-                Literal** — solange das Wort an drei Orten
-                abgeschrieben steht, laufen sie wieder auseinander.
-                **Genau das war Toms Befund.** */}
-            <Icon name="plus" className="v2-ic v2-ic-sm" />
-            {tA('hinzufuegen')}
-          </button>
-        }
+        aktion={aktion}
       />
 
       {aktiv === 'ueberblick' && <>
@@ -390,9 +404,17 @@ export function ProduktTafel({ satz, meidestoffe = [] }: {
           `information_schema` kennt die Spalten heute nicht (0
           Zeilen), und C-527 ist ein Recherchepunkt ohne
           festgelegte Namen. */}
-      {(aktiv === 'hinweise' || aktiv === 'etikett') && (
-        <WartenderReiter welcher={aktiv} />
-      )}
+      {aktiv === 'hinweise' && <WartenderReiter welcher="hinweise" />}
+
+      {/* ══ G-495: DER ETIKETT-REITER ═════════════════════
+          **Tom, 2026-09-08:** *„beim aufruf des produktes den link
+          abrufen und sicherheitshalber ein not available bild
+          anlegen, das wir zeigen koennen, wenn nichts kommt"*
+
+          `[read]` **Der LINK steht immer** — er wird aus `dsld_id`
+          berechnet und faellt nie aus. `[read]` **Das BILD steht
+          nicht**, und warum, sagt die Flaeche selbst. */}
+      {aktiv === 'etikett' && <EtikettReiter dsldId={satz.dsld_id} />}
 
       {/* ── Der Fuss: die Firmen ──────────────────────────────────── */}
       {aktiv === 'ueberblick' && (
@@ -421,31 +443,17 @@ export function ProduktTafel({ satz, meidestoffe = [] }: {
       </div>
       )}
 
-      {/* ══ G-492: DIE AKTION IST EIN MODAL ═══════════════════════
-          **Tom, 2026-09-08:** *„es ist nicht die richtige richtung,
-          dass man ein produkt oeffnen muss, dann runterscrollen, um
-          irgendwo hinzuzufuegen. es ist eine aktion, und aktionen
-          sollten wir mit modals loesen"*
+      {/* ══ G-493/N5: DAS MODAL HAENGT AN DER ZEILE ═════════
+          `[cmd]` **Hier stand `{modalOffen && <ProduktAktionModal
+          …>}`** — erreichbar nur ueber den Knopf in der
+          Reiterleiste, und der ist mit N5 weggefallen.
 
-          `[cmd]` **Hier stand `<ProduktAktion …>` als Block am Fuss
-          der Tafel** (G-484) — gemessen bei **y=1625**, ausserhalb
-          des Schirms.
+          `[read]` **Ein Zustand, den nichts mehr setzen kann, ist
+          kein Rueckfall, sondern eine Attrappe** (G-163): er laedt
+          dazu ein, ihn fuer gebaut zu halten.
 
-          `[read]` **Der Block ist nicht nachgebaut, sondern
-          umgezogen** (A7): derselbe Schreibweg, dieselbe Formregel,
-          dieselben Pulldowns, dieselbe Dosispruefung — **nur in
-          einem Modal statt am Fuss.** */}
-      {modalOffen && (
-        <ProduktAktionModal
-          produktId={satz.id}
-          name={satz.name_en}
-          marke={satz.marke}
-          produktform={satz.produktform}
-          portionseinheit={satz.portionseinheit}
-          portionen={satz.portionen}
-          onSchliessen={() => setModalOffen(false)}
-        />
-      )}
+          `[cmd]` **Das Modal steht weiter — in `tab-produkte.tsx`**,
+          am Knopf der Zeile (G-492/A2). **Ein Modal, ein Ort.** */}
     </div>
   )
 }
@@ -473,6 +481,119 @@ function WartenderReiter({ welcher }: { welcher: 'hinweise' | 'etikett' }) {
           sie nicht dazustehen. */}
       <p className="v2-muted v2-supp-prod-satz" style={{ fontSize: 10.5 }}>
         Quelle: {w.quelle} · {w.punkt}
+      </p>
+    </section>
+  )
+}
+
+/**
+ * Der Etikett-Reiter — G-495.
+ *
+ * ══ WAS GEMESSEN WURDE, BEVOR HIER ETWAS ENTSTAND ═══════════════════
+ *
+ * **Tom, 2026-09-08:** *„beim aufruf des produktes den link abrufen
+ * und sicherheitshalber ein not available bild anlegen, das wir
+ * zeigen koennen, wenn nichts kommt"*
+ *
+ * `[cmd]` **Zwanzig echte DSLD-Ids gegen
+ * `api.ods.od.nih.gov/dsld/v9/label/<id>` gemessen**
+ * (`tools/_g495-messen.mjs`, 2026-09-22):
+ *
+ *     Antworten 200        20/20
+ *     MIT thumbnail        11/20
+ *     Median               288 ms   (279 bis 1.069 ms)
+ *
+ * `[cmd]` **Die Punktdatei nannte das Doku-Beispiel mit BEIDEN
+ * Feldern leer** — `"pdf": "", "thumbnail": ""`. `[read]` **Das war
+ * nicht der Regelfall:** 11 von 20 tragen einen Wert.
+ *
+ * ══ UND DANN DIE LUECKE, DIE DAS BAUEN STOPPT ═══════════════════════
+ *
+ * `[cmd]` **`thumbnail` ist ein DATEINAME, keine Adresse:**
+ * `"296171_thumbnail.jpg"`.
+ *
+ * `[cmd]` **Sieben Grundadressen gemessen, keine liefert ein Bild:**
+ *
+ *     api.ods.od.nih.gov/dsld/s3/thumbnails/…   403
+ *     dsld.od.nih.gov/api/label/<id>/thumbnail  403
+ *     dsld.od.nih.gov/images/…                  403
+ *     api…/v9/label/<id>/thumbnail              200, aber text/html
+ *     api…/v9/thumbnail/…                       200, aber text/html
+ *     api…/v9/images/…                          200, aber text/html
+ *     dsld-assets.od.nih.gov                    kein DNS
+ *
+ * `[cmd]` **Die Schnittstellenbeschreibung nennt sieben Endpunkte**
+ * (`/v9/label/{id}`, `/v9/search-filter`, `/v9/browse-*`, …) —
+ * **KEINEN fuer Bilder.**
+ *
+ * `[cmd]` **Auch die Etikettseite selbst antwortet unserem Aufruf mit
+ * 403** (Botschutz), waehrend die Schnittstelle 200 gibt.
+ *
+ * `[read]` **Ohne Grundadresse gibt es kein Bild zu zeigen** —
+ * **A2 („ein Produkt MIT Bild") ist mit dieser Quelle nicht
+ * erfuellbar.** `[read]` **Gemeldet, nicht geraten:** eine
+ * zusammengebaute Adresse waere eine Behauptung, die bei jedem
+ * Produkt bricht.
+ *
+ * ══ WAS DESHALB HIER STEHT ══════════════════════════════════════════
+ *
+ * `[read]` **Der Link — er ist aus `dsld_id` berechnet und faellt
+ * nie aus** (A5). **Und der Rueckfallsatz, den Tom verlangt hat.**
+ *
+ * `[cmd]` **Kein `fetch` beim Oeffnen:** solange es keine Bildadresse
+ * gibt, waere ein Abruf je Tafel eine Rundreise fuer nichts —
+ * 288 ms Median, ohne Ergebnis.
+ */
+function EtikettReiter({ dsldId }: { dsldId: number | null }) {
+  // `[read]` **Ohne `dsld_id` gibt es keine Etikettseite** — das
+  // Produkt stammt dann nicht aus dem DSLD-Import.
+  if (dsldId === null) {
+    return (
+      <section className="v2-supp-prod-abschnitt" data-probe="etikett-ohne-id">
+        <p className="v2-muted v2-supp-prod-satz">
+          Dieses Produkt stammt nicht aus dem DSLD-Katalog — es gibt
+          keine Etikettseite dazu.
+        </p>
+      </section>
+    )
+  }
+  const seite = `https://dsld.od.nih.gov/label/${dsldId}`
+  return (
+    <section className="v2-supp-prod-abschnitt" data-probe="etikett">
+      {/* ══ DAS RUECKFALLBILD ═══════════════════════════════════════
+          **Tom:** *„ein not available bild"*
+
+          `[read]` **Ein ruhiges Feld mit einem Satz, KEIN leeres** —
+          die Lehre aus den Ghostentries (G-482, G-486): eine leere
+          Flaeche ohne Grund sieht aus wie ein Fehler.
+
+          `[cmd]` **Gezeichnet, nicht geladen** — eine Bilddatei fuer
+          einen Satz waere ein zweiter Ort fuer denselben Text. */}
+      <div className="v2-supp-prod-etikett-leer" data-probe="etikett-rueckfall">
+        <Icon name="alert" className="v2-ic" />
+        <p className="v2-muted v2-supp-prod-satz" style={{ margin: 0 }}>
+          Für dieses Produkt liegt kein Etikettenbild vor.
+        </p>
+        {/* `[read]` **Der Grund steht dabei** — nicht nur die
+            Abwesenheit. */}
+        <p className="v2-muted" style={{ fontSize: 10.5, margin: 0 }}>
+          Die NIH-Schnittstelle nennt zwar einen Dateinamen, aber
+          keine Adresse, unter der das Bild abrufbar wäre
+          (gemessen 2026-09-22 · G-495).
+        </p>
+      </div>
+
+      {/* `[read]` **Der Link steht IMMER** (A5) — er ist berechnet,
+          nicht abgerufen. `[cmd]` **`rel="noreferrer"`**: ein fremder
+          Ort braucht unsere Herkunft nicht. */}
+      <p className="v2-supp-prod-satz" style={{ marginTop: 10 }}>
+        <a href={seite} target="_blank" rel="noreferrer noopener"
+           data-probe="etikett-link">
+          Etikett bei der NIH ansehen
+        </a>
+        <span className="v2-muted" style={{ fontSize: 10.5, marginLeft: 8 }}>
+          dsld.od.nih.gov/label/{dsldId}
+        </span>
       </p>
     </section>
   )
