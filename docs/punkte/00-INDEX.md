@@ -6,8 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 242 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 522 |
-| **gesamt** | **764** |
+| **gesamt** | **765** |
 
 ## medical — 49
 
@@ -321,9 +322,9 @@
 | `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](erledigt/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 118
+## supplements — 119
 
-### beauftragbar — 117
+### beauftragbar — 118
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -442,7 +443,8 @@
 | `G-492` | feature | hoch | [Hinzufuegen ist eine Aktion, keine Detailseite](erledigt/supplements-g-0492-hinzufuegen-als-modal.md) | erledigt | — | G-493 |
 | `G-493` | fehler | hoch | [das Hinzufuegen-Modal nachbessern](erledigt/supplements-g-0493-hinzufuegen-modal-nachbessern.md) | erledigt | — | — |
 | `G-494` | aufraeumen | mittel | [die Form-Nachlese aus G-492 entfernen](todos/supplements-g-0494-form-nachlese-entfernen.md) | offen | — | — |
-| `G-495` | feature | hoch | [das Etikettenbild beim Oeffnen abrufen](erledigt/supplements-g-0495-etikettenbild-beim-oeffnen.md) | erledigt | — | — |
+| `G-495` | feature | hoch | [das Etikettenbild beim Oeffnen abrufen](erledigt/supplements-g-0495-etikettenbild-beim-oeffnen.md) | erledigt | — | G-496 |
+| `G-496` | feature | hoch | [das Etikett als PDF, Toms Fund](laufend_claudecode/supplements-g-0496-etikett-als-pdf.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
