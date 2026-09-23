@@ -2491,6 +2491,15 @@
       ]
     },
     {
+      "id": "531_muscle_alias_read_model",
+      "path": "supabase/migrations/20260923015540_c531_muscle_alias_read_model.sql",
+      "kind": "sql",
+      "creates": "C-531: aliasbereinigter Muskelbaum und kanonische Namensauflösung; erhaltene C-530-Aliaszeilen bleiben ausserhalb des Baumlesewegs.",
+      "depends_on": [
+        "530_muscle_hierarchy_curation_daten"
+      ]
+    },
+    {
       "id": "529_stack_item_product_reference_schema",
       "path": "supabase/migrations/20260922065000_c529_stack_item_product_reference.sql",
       "kind": "sql",

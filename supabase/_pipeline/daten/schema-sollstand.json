@@ -6015,6 +6015,11 @@
     },
     {
       "schema": "training",
+      "name": "search_muscle_groups",
+      "schritt": "531_muscle_alias_read_model"
+    },
+    {
+      "schema": "training",
       "name": "validate_program_session_link",
       "schritt": "461_training_programs_plans"
     },
@@ -6309,6 +6314,16 @@
       "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
       "grants_herkunft": "C-512/C-516: explizite DSLD-Facts-Portionen und weitere vorhandene nutrition-Codes; PUBLIC und anon sind widerrufen.",
       "spalten": ["product_id", "serving_size", "enercc", "prot625", "fat", "cho", "fibt", "sugar", "fasat", "nacl", "water_g", "alc", "vita_ug", "vitd_ug", "vite_mg", "vitk_ug", "vitc_mg", "thia_mg", "ribf_mg", "nia_mg", "vitb6_ug", "fol_ug", "vitb12_ug", "na_mg", "k_mg", "ca_mg", "mg_mg", "p_mg", "fe_mg", "zn_mg", "id_ug", "cu_ug", "mn_ug", "nutrients"]
+    },
+    {
+      "schema": "training",
+      "name": "muscle_group_tree",
+      "schritt": "531_muscle_alias_read_model",
+      "security_invoker": true,
+      "security_barrier": false,
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT"]},
+      "grants_herkunft": "C-531: security-invoker-Leseweg auf die kanonischen Muskelgruppen; PUBLIC und anon haben keinen Zugriff.",
+      "spalten": ["id", "name", "name_display_en", "parent_id", "body_region", "display_order", "created_at"]
     },
     {
       "schema": "public",
