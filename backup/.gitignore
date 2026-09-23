@@ -1,5 +1,6 @@
 # Datendumps nicht versionieren - zu gross, wachsen mit jedem Lauf.
-# Schema-, Rescue- und Rollen-Dumps bleiben getrackt.
+# Schema-Sicherungen sind nach der Abnahme Geschichte -
+# siehe docs/lehren/werkzeuge.md.
 data/*
 !data/.gitkeep
 
@@ -13,3 +14,8 @@ _c*.mjs
 # Taegliche Laeufe und Protokolle - wachsen mit jedem Lauf.
 _taeglich/
 logs/
+
+# Sicherungen vor dem Einspielen. Tom, 2026-09-08:
+# "du nimmst ab und entscheidest ok, dann werden die backups
+#  nicht mehr gebraucht und koennen in mein backuplaufwerk"
+schema/*.sql

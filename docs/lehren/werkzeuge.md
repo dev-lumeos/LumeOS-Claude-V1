@@ -732,3 +732,33 @@ um: keine verfolgte Datei wird verschoben.**
 `[cmd]` **Die Wiederherstellung: `git checkout backup/` fuer
 die 608, `F:\My Backups` fuer die 93 untracken.**
 
+## Eine Sicherung ist nach der Abnahme Geschichte
+
+Tom, 2026-09-08:
+
+> die backups vor edit versteh ich ja, du nimmst dann ab und
+> entscheidest ok, dann werden die backups meiner meinung nach
+> nicht mehr gebraucht und koennen in mein backuplaufwerk
+
+`[cmd]` **Gemessen: 160 Sicherungen, 1.920 MB, seit
+2026-08-01.**
+
+### Die Regel
+
+    vor dem Einspielen   der Agent legt sie an
+    nach der Abnahme     der Orchestrator verschiebt sie
+                         nach F:\My Backups\
+                         lumeos-schema-sicherungen
+
+`[read]` **Solange ein Punkt laeuft, bleibt seine Sicherung
+liegen** ? **danach nicht mehr.**
+
+`[cmd]` **`backup/schema/*.sql` ist jetzt ignoriert** ? **sie
+entstehen bei jedem Lauf neu und wandern nach der Abnahme
+hinaus.**
+
+`[cmd]` **2026-09-08 verschoben: 143 Dateien, 172 MB.** **46
+davon waren verfolgt und wurden mit `git rm --cached` aus dem
+Index genommen** ? **die Historie behaelt sie, der Baum
+nicht.**
+
