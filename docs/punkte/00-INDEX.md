@@ -6,9 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 241 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 527 |
-| **gesamt** | **770** |
+| **gesamt** | **771** |
 
 ## medical — 49
 
@@ -464,7 +465,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 34
+## training — 35
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -487,6 +488,7 @@
 | `C-528` | befund | hoch | [die Muskelhierarchie ist unsauber](erledigt/training-c-0528-muskelhierarchie-unsauber.md) | erledigt | — | C-530 |
 | `C-530` | feature | hoch | [die Muskelhierarchie bereinigen und vervollstaendigen](erledigt/training-c-0530-muskelhierarchie-bereinigen.md) | erledigt | — | C-531 |
 | `C-531` | fehler | mittel | [Muskel-Aliase sind nicht als Aliase erkennbar](erledigt/training-c-0531-muskel-aliase-nicht-erkennbar.md) | erledigt | — | — |
+| `C-536` | fehler | mittel | [drei Abwesenheitsaussagen sind ueberholt](laufend_codex/training-c-0536-abwesenheitsaussagen-ueberholt.md) | laeuft (codex) | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
@@ -811,7 +813,7 @@
 | `G-432` | feature | hoch | [jeder gezeichnete Muskel ist anwaehlbar](erledigt/quer-g-0432-jeder-muskel-anwaehlbar.md) | erledigt | — | G-433, G-434, G-435 |
 | `G-434` | feature | hoch | [die Karte, direkt mit Tom erledigt](erledigt/quer-g-0434-die-karte-direkt-mit-tom.md) | erledigt | — | — |
 | `G-435` | feature | hoch | [die Hierarchie an den richtigen Ort](erledigt/quer-g-0435-hierarchie-an-den-richtigen-ort.md) | erledigt | — | G-436 |
-| `G-444` | fehler | mittel | [drei Abwesenheitsbehauptungen, die C-461 ueberholt hat](erledigt/quer-g-0444-drei-abwesenheitsbehauptungen.md) | erledigt | — | — |
+| `G-444` | fehler | mittel | [drei Abwesenheitsbehauptungen, die C-461 ueberholt hat](erledigt/quer-g-0444-drei-abwesenheitsbehauptungen.md) | erledigt | — | C-536 |
 | `G-451` | fehler | mittel | [der Testdatenlauf scheitert vor C-493](erledigt/quer-g-0451-testdatenlauf-scheitert-vorher.md) | erledigt | — | — |
 | `G-455` | feature | hoch | [Allergien in Settings, Filter in Produkten](erledigt/quer-g-0455-allergien-und-filter.md) | erledigt | — | G-459 |
 | `G-458` | fehler | hoch | [neun Migrationen schreiben Daten](erledigt/quer-g-0458-neun-migrationen-schreiben-daten.md) | erledigt | — | G-460, G-461 |

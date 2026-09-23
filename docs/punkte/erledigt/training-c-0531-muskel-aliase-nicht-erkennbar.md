@@ -95,3 +95,19 @@ mehr, wer den alten Namen sucht, findet den neuen.**
 `service_role` nur SELECT.**
 
 **Abgenommen. Einspielen steht aus.**
+
+## Nachtrag: LIVE eingespielt, 2026-09-08
+
+`[cmd]` **Selbst nachgemessen:**
+
+    muscle_group_tree   108 Knoten
+    Peroneals    -> Fibularis Muscles
+    Upper Chest  -> Clavicular Head of Pectoralis Major
+
+`[cmd]` **Und die bestehenden Lesewege bleiben:** *,,sie lesen
+weiter direkt `muscle_groups`; die neuen Leseobjekte werden
+bislang nirgends aufgerufen."*
+
+`[read]` **Ein Leseweg, den noch niemand nutzt** ? **G-497
+wird der erste sein.**
+

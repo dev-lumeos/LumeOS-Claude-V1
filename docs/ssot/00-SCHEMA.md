@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-18: 222 Funktionen, 466 Policies, 713 CHECKs, 20 Sichten.**
+`[cmd]` **Stand 2026-09-23: 230 Funktionen, 477 Policies, 728 CHECKs, 22 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -80,7 +80,6 @@ ob man sie rufen kann.**
 | medical | validate_injection_log_links |  | Funktion |
 | medical | validate_injection_site_selection |  | Funktion |
 | medical | validate_provenance |  | Funktion |
-| nutrition | add_supplement_product_to_meal | p_meal_id uuid, p_supplier_product_id uuid, p_serving_quantity numeric DEFAULT 1, p_serving_size text DEFAULT NULL::text | Funktion |
 | nutrition | copy_meal_plan_week | p_week_id uuid, p_target_week_start date | Funktion |
 | nutrition | copy_user_slots_to_new_self_created_plan |  | Funktion |
 | nutrition | curate_food_tag | p_food_id uuid, p_tag_code text, p_action text | Funktion |
@@ -96,7 +95,7 @@ ob man sie rufen kann.**
 | nutrition | hydration_day | p_user_id uuid, p_entry_date date | Funktion |
 | nutrition | meal_items_inventory_deduct |  | Funktion |
 | nutrition | meal_items_owner_guard |  | Funktion |
-| nutrition | meal_items_supplement_snapshot_guard |  | Funktion |
+| nutrition | meal_plan_active_overlap_guard |  | Funktion |
 | nutrition | meal_plan_day_to_diary | p_day_id uuid, p_entry_date date DEFAULT NULL::date | Funktion |
 | nutrition | meal_plan_days_owner_guard |  | Funktion |
 | nutrition | meal_plan_entries_owner_guard |  | Funktion |
@@ -135,7 +134,6 @@ ob man sie rufen kann.**
 | nutrition | such_alias_treffer | p_groups jsonb | Funktion |
 | nutrition | such_rang_wortgrenze | p_name text, p_groups jsonb | Funktion |
 | nutrition | such_rang_zubereitung | p_bls_code text | Funktion |
-| nutrition | supplement_product_meal_stack_overlap_candidates_for_day | p_user_id uuid, p_entry_date date, p_window_minutes integer DEFAULT 60 | Funktion |
 | nutrition | touch_updated_at |  | Funktion |
 | nutrition | user_inventory_owner_guard |  | Funktion |
 | nutrition | user_inventory_set_state |  | Funktion |
@@ -164,10 +162,10 @@ ob man sie rufen kann.**
 | public | handle_new_user |  | Funktion |
 | public | is_admin |  | Funktion |
 | public | koerperflaechen_touch |  | Funktion |
-| public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein | text, text | Funktion |
-| public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
+| public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer | Funktion |
+| public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
 | public | set_limit | real | Funktion |
 | public | show_limit |  | Funktion |
@@ -189,6 +187,7 @@ ob man sie rufen kann.**
 | public | user_allergy_codes | p_user_id uuid | Funktion |
 | public | user_allergy_treffer | p_user_id uuid | Funktion |
 | public | validate_allergen_alias_catalog_code |  | Funktion |
+| public | validate_allergy_search_term_tag |  | Funktion |
 | public | validate_user_allergy_catalog_code |  | Funktion |
 | public | word_similarity | text, text | Funktion |
 | public | word_similarity_commutator_op | text, text | Funktion |
@@ -204,17 +203,22 @@ ob man sie rufen kann.**
 | recovery | refresh_scores_for_user | p_user_id uuid | Funktion |
 | recovery | scoring_constants |  | Funktion |
 | recovery | touch_updated_at |  | Funktion |
+| supplements | add_supplier_product_to_recipe | p_recipe_id uuid, p_supplier_product_id uuid, p_serving_quantity numeric DEFAULT 1, p_serving_size text DEFAULT NULL::text | Funktion |
 | supplements | create_curated_stack_template | p_name_de text, p_goal text, p_description_de text, p_items jsonb | Funktion |
 | supplements | create_supplement_protocol_from_template | p_template_code text, p_anchor_supplement_id uuid, p_started_at date DEFAULT CURRENT_DATE | Funktion |
 | supplements | create_supplier_product | p_supplier_name text, p_land text, p_product_name text, p_produktform text, p_packungsgroesse text, p_packungseinheit text, p_gtin text, p_artikelnummer text, p_portionsgroesse text, p_portionseinheit text, p_contents jsonb, p_source text | Funktion |
 | supplements | decide_stack_curation_candidate | p_candidate_id uuid, p_decision text, p_reason text | Funktion |
+| supplements | intake_logs_meal_owner_guard |  | Funktion |
 | supplements | platform_input_status | p_user_id uuid, p_entry_date date DEFAULT CURRENT_DATE | Funktion |
 | supplements | publish_stack_template | p_stack_id uuid, p_reason text DEFAULT ''::text | Funktion |
+| supplements | recipe_product_references_owner_guard |  | Funktion |
+| supplements | record_supplier_product_intake | p_supplier_product_id uuid, p_intake_date date DEFAULT CURRENT_DATE, p_intake_time time without time zone DEFAULT NULL::time without time zone, p_serving_quantity numeric DEFAULT 1, p_serving_size text DEFAULT NULL::text, p_meal_id uuid DEFAULT NULL::uuid | Funktion |
 | supplements | refresh_intake_schedule | p_schedule_date date DEFAULT CURRENT_DATE | Funktion |
 | supplements | refresh_stack_item_count |  | Funktion |
 | supplements | rule_assessment | p_user_id uuid DEFAULT auth.uid(), p_entry_date date DEFAULT CURRENT_DATE | Funktion |
 | supplements | rule_operator_supported | p_rule_id text, p_module text, p_field text, p_operator text | Funktion |
 | supplements | search_supplier_products | p_query text, p_market_status text DEFAULT 'On Market'::text, p_marke text DEFAULT NULL::text, p_limit integer DEFAULT 50, p_kategorie text DEFAULT NULL::text, p_form text DEFAULT NULL::text, p_allergien_ausblenden boolean DEFAULT true, p_meidestoffe text[] DEFAULT NULL::text[], p_marken text[] DEFAULT NULL::text[], p_nur_bewertet boolean DEFAULT false | Funktion |
+| supplements | search_supplier_products | p_query text, p_market_status text, p_marke text, p_limit integer, p_kategorie text, p_form text, p_allergien_ausblenden boolean, p_meidestoffe text[], p_marken text[], p_nur_bewertet boolean, p_formen text[] | Funktion |
 | supplements | set_supplement_cycle_status | p_cycle_id uuid, p_status text, p_note_de text DEFAULT NULL::text | Funktion |
 | supplements | start_supplement_cycle | p_supplement_id uuid, p_source text DEFAULT 'confirmed_by_user'::text, p_suggestion_source text DEFAULT 'user_manual'::text, p_note_de text DEFAULT NULL::text | Funktion |
 | supplements | supplement_brand_options | p_user_id uuid DEFAULT auth.uid(), p_query text DEFAULT NULL::text, p_limit integer DEFAULT 25 | Funktion |
@@ -224,14 +228,18 @@ ob man sie rufen kann.**
 | supplements | supplier_product_detail | p_product_id uuid | Funktion |
 | supplements | supplier_product_filter_preferences_read |  | Funktion |
 | supplements | supplier_product_filter_preferences_write | p_marktstatus text DEFAULT 'On Market'::text, p_kategorie text DEFAULT NULL::text, p_form text DEFAULT NULL::text, p_marken text[] DEFAULT '{}'::text[], p_allergien_ausblenden boolean DEFAULT true | Funktion |
+| supplements | supplier_product_meal_eligibility | p_supplier_product_id uuid | Funktion |
+| supplements | supplier_product_nutrient_snapshot | p_supplier_product_id uuid, p_serving_quantity numeric DEFAULT 1, p_serving_size text DEFAULT NULL::text | Funktion |
 | supplements | supplier_product_preference_write | p_product_id uuid, p_preference text | Funktion |
 | supplements | supplier_product_search_meta | p_query text, p_market_status text DEFAULT 'On Market'::text, p_marke text DEFAULT NULL::text, p_kategorie text DEFAULT NULL::text, p_form text DEFAULT NULL::text, p_allergien_ausblenden boolean DEFAULT true, p_meidestoffe text[] DEFAULT NULL::text[], p_marken text[] DEFAULT NULL::text[], p_nur_bewertet boolean DEFAULT false | Funktion |
 | supplements | touch_updated_at |  | Funktion |
+| supplements | validate_meal_plan_product_reference |  | Funktion |
 | supplements | withdraw_stack_template | p_stack_id uuid | Funktion |
 | training | calc_workout_set_metrics |  | Funktion |
 | training | fill_workout_exercise_snapshot |  | Funktion |
 | training | refresh_workout_totals |  | Funktion |
 | training | refresh_workout_totals_for_exercise | p_workout_exercise_id uuid | Funktion |
+| training | search_muscle_groups | p_query text | Funktion |
 | training | touch_updated_at |  | Funktion |
 | training | validate_program_day_routine_owner |  | Funktion |
 | training | validate_program_session_link |  | Funktion |
@@ -257,6 +265,7 @@ Rechten des Lesers, nicht des Erzeugers.**
 | supplements | community_anzeige | definer |
 | supplements | daily_intake_summary | security_invoker |
 | supplements | daily_nutrient_summary_long | security_invoker |
+| supplements | intake_log_nutrient_values | security_invoker |
 | supplements | produkt_naehrwerte | security_invoker |
 | supplements | substance_alias_matches | security_invoker |
 | supplements | supplement_forms_read | security_invoker |
@@ -264,6 +273,7 @@ Rechten des Lesers, nicht des Erzeugers.**
 | supplements | supplier_product_content_catalog | security_invoker |
 | supplements | supplier_product_nutrient_serving_options | security_invoker |
 | supplements | supplier_product_nutrients | security_invoker |
+| training | muscle_group_tree | security_invoker |
 
 ## CHECK-Bedingungen
 
@@ -581,11 +591,10 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | nutrition | meal_items | meal_items_food_source_check | CHECK ((food_source = ANY (ARRAY['bls'::text, 'manual'::text, 'custom'::text, 'supplement'::text]))) |
 | nutrition | meal_items | meal_items_measurement_source_ck | CHECK ((measurement_source = ANY (ARRAY['manual'::text, 'device'::text, 'import'::text, 'admin'::text, 'seed'::text]))) |
 | nutrition | meal_items | meal_items_portion_input_check | CHECK ((((portion_name IS NULL) AND (portion_quantity IS NULL) AND (portion_amount_g IS NULL)) OR ((portion_name IS NOT NULL) AND  |
-| nutrition | meal_items | meal_items_source_target_check | CHECK ((((food_source = 'bls'::text) AND (food_id IS NOT NULL) AND (custom_food_id IS NULL) AND (supplement_product_id IS NULL)) O |
-| nutrition | meal_items | meal_items_supplement_snapshot_check | CHECK ((((food_source = 'supplement'::text) AND (supplement_serving_quantity IS NOT NULL) AND (supplement_serving_quantity > (0):: |
+| nutrition | meal_items | meal_items_source_target_check | CHECK ((((food_source = 'bls'::text) AND (food_id IS NOT NULL) AND (custom_food_id IS NULL) AND (supplement_intake_log_id IS NULL) |
 | nutrition | meal_plan_days | meal_plan_days_day_index_check | CHECK (((day_index >= 1) AND (day_index <= 7))) |
 | nutrition | meal_plan_entries | meal_plan_entries_amount_g_check | CHECK (((amount_g IS NULL) OR (amount_g > (0)::numeric))) |
-| nutrition | meal_plan_entries | meal_plan_entries_entry_type_check | CHECK ((entry_type = ANY (ARRAY['recipe'::text, 'bls'::text, 'custom'::text]))) |
+| nutrition | meal_plan_entries | meal_plan_entries_entry_type_check | CHECK ((entry_type = ANY (ARRAY['recipe'::text, 'bls'::text, 'custom'::text, 'supplement'::text]))) |
 | nutrition | meal_plan_entries | meal_plan_entries_meal_type_check | CHECK ((meal_type = ANY (ARRAY['breakfast'::text, 'lunch'::text, 'dinner'::text, 'snack'::text, 'pre_workout'::text, 'post_workout |
 | nutrition | meal_plan_entries | meal_plan_entries_planned_servings_check | CHECK (((planned_servings IS NULL) OR (planned_servings > (0)::numeric))) |
 | nutrition | meal_plan_entries | meal_plan_entries_portion_check | CHECK ((((portion_name IS NULL) AND (portion_quantity IS NULL) AND (portion_amount_g IS NULL)) OR ((entry_type = ANY (ARRAY['bls': |
@@ -645,9 +654,9 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | nutrition | recipe_curation_candidates | recipe_curation_candidates_status_check | CHECK ((status = ANY (ARRAY['pending'::text, 'accepted'::text, 'rejected'::text, 'superseded'::text]))) |
 | nutrition | recipe_curation_candidates | recipe_curation_candidates_submitted_via_check | CHECK ((submitted_via = 'mealcam'::text)) |
 | nutrition | recipe_curation_decisions | recipe_curation_decisions_decision_check | CHECK ((decision = ANY (ARRAY['accepted'::text, 'rejected'::text, 'superseded'::text]))) |
-| nutrition | recipe_ingredients | recipe_ingredients_amount_g_check | CHECK ((amount_g > (0)::numeric)) |
-| nutrition | recipe_ingredients | recipe_ingredients_food_source_check | CHECK ((food_source = ANY (ARRAY['bls'::text, 'custom'::text]))) |
-| nutrition | recipe_ingredients | recipe_ingredients_portion_check | CHECK ((((portion_name IS NULL) AND (portion_quantity IS NULL) AND (portion_amount_g IS NULL)) OR ((portion_name IS NOT NULL) AND  |
+| nutrition | recipe_ingredients | recipe_ingredients_amount_g_check | CHECK ((((food_source = 'supplement'::text) AND (amount_g IS NULL)) OR ((food_source <> 'supplement'::text) AND (amount_g > (0)::n |
+| nutrition | recipe_ingredients | recipe_ingredients_food_source_check | CHECK ((food_source = ANY (ARRAY['bls'::text, 'custom'::text, 'supplement'::text]))) |
+| nutrition | recipe_ingredients | recipe_ingredients_portion_check | CHECK ((((food_source = 'supplement'::text) AND (portion_name IS NULL) AND (portion_quantity IS NULL) AND (portion_amount_g IS NUL |
 | nutrition | recipe_ingredients | recipe_ingredients_sort_order_check | CHECK ((sort_order >= 0)) |
 | nutrition | recipe_ingredients | recipe_ingredients_source_target_check | CHECK ((((food_source = 'bls'::text) AND (food_id IS NOT NULL) AND (custom_food_id IS NULL)) OR ((food_source = 'custom'::text) AN |
 | nutrition | recipes | recipes_cook_time_min_check | CHECK (((cook_time_min IS NULL) OR (cook_time_min >= 0))) |
@@ -684,6 +693,9 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | nutrition | water_logs | water_logs_source_check | CHECK ((source = ANY (ARRAY['manual'::text, 'quick_add'::text]))) |
 | public | allergen_aliases | allergen_aliases_evidence_class_check | CHECK ((evidence_class = ANY (ARRAY['A'::text, 'B'::text, 'C'::text]))) |
 | public | allergen_aliases | allergen_aliases_source_id_check | CHECK ((btrim(source_id) <> ''::text)) |
+| public | allergy_search_terms | allergy_search_terms_evidence_class_check | CHECK ((evidence_class = ANY (ARRAY['A'::text, 'B'::text, 'C'::text]))) |
+| public | allergy_search_terms | allergy_search_terms_search_term_check | CHECK ((btrim(search_term) <> ''::text)) |
+| public | allergy_search_terms | allergy_search_terms_source_id_check | CHECK ((btrim(source_id) <> ''::text)) |
 | public | koerperflaechen | koerperflaechen_art_ck | CHECK ((art = ANY (ARRAY['wurzel'::text, 'gruppe'::text, 'muskel'::text, 'umriss'::text, 'kopf'::text]))) |
 | public | koerperflaechen | koerperflaechen_umriss_ck | CHECK (((art <> ALL (ARRAY['umriss'::text, 'kopf'::text])) OR (muscle_group_id IS NULL))) |
 | public | profiles | profiles_activity_level_check | CHECK (((activity_level IS NULL) OR (activity_level = ANY (ARRAY['sedentary'::text, 'light'::text, 'moderate'::text, 'active'::tex |
@@ -778,8 +790,11 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | intake_logs | intake_logs_measurement_source_ck | CHECK ((measurement_source = ANY (ARRAY['manual'::text, 'device'::text, 'import'::text, 'admin'::text, 'seed'::text]))) |
 | supplements | intake_logs | intake_logs_status_check | CHECK ((status = ANY (ARRAY['planned'::text, 'taken'::text, 'skipped'::text, 'snoozed'::text]))) |
 | supplements | intake_logs | intake_logs_supplement_name_snapshot_check | CHECK ((btrim(supplement_name_snapshot) <> ''::text)) |
+| supplements | intake_logs | intake_logs_supplier_product_snapshot_check | CHECK ((((supplier_product_id IS NULL) AND (supplier_product_serving_size IS NULL) AND (supplier_product_serving_quantity IS NULL) |
 | supplements | intake_schedule | intake_schedule_source_check | CHECK ((((source_kind = 'stack'::text) AND (stack_item_id IS NOT NULL) AND (protocol_item_id IS NULL)) OR ((source_kind = 'protoco |
 | supplements | intake_schedule | intake_schedule_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
+| supplements | meal_plan_product_references | meal_plan_product_references_nutrient_status_check | CHECK ((nutrient_status = ANY (ARRAY['available'::text, 'no_nutrients_available'::text]))) |
+| supplements | meal_plan_product_references | meal_plan_product_references_serving_quantity_check | CHECK ((serving_quantity > (0)::numeric)) |
 | supplements | product_content_candidates | product_content_candidates_amount_qualifier_check | CHECK ((amount_qualifier = ANY (ARRAY['exact'::text, 'less_than'::text, 'greater_than'::text, 'not_stated'::text]))) |
 | supplements | product_content_candidates | product_content_candidates_ingredient_name_check | CHECK ((length(btrim(ingredient_name)) >= 1)) |
 | supplements | product_content_candidates | product_content_candidates_status_check | CHECK ((status = ANY (ARRAY['offen'::text, 'geprueft'::text, 'angereichert'::text, 'abgelehnt'::text]))) |
@@ -787,8 +802,14 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | product_contents | product_contents_amount_qualifier_check | CHECK ((amount_qualifier = ANY (ARRAY['exact'::text, 'less_than'::text, 'greater_than'::text, 'not_stated'::text]))) |
 | supplements | product_contents | product_contents_conversion_factor_check | CHECK (((conversion_factor IS NULL) OR (conversion_factor > (0)::numeric))) |
 | supplements | product_contents | product_contents_reihenfolge_ck | CHECK (((reihenfolge IS NULL) OR (reihenfolge > 0))) |
+| supplements | product_form_placement_rules | product_form_placement_rules_form_code_check | CHECK ((btrim(form_code) <> ''::text)) |
+| supplements | product_form_placement_rules | product_form_placement_rules_form_label_check | CHECK ((btrim(form_label) <> ''::text)) |
+| supplements | product_form_placement_rules | product_form_placement_rules_placement_check | CHECK ((placement = ANY (ARRAY['meal'::text, 'stack'::text, 'unsupported'::text]))) |
+| supplements | product_form_placement_rules | product_form_placement_rules_source_id_check | CHECK ((btrim(source_id) <> ''::text)) |
 | supplements | product_suppliers | product_suppliers_rolle_check | CHECK ((rolle = ANY (ARRAY['manufacturer'::text, 'distributor'::text, 'packager'::text, 'reseller'::text, 'other'::text]))) |
 | supplements | product_suppliers | product_suppliers_source_check | CHECK ((btrim(source) <> ''::text)) |
+| supplements | recipe_product_references | recipe_product_references_nutrient_status_check | CHECK ((nutrient_status = ANY (ARRAY['available'::text, 'no_nutrients_available'::text]))) |
+| supplements | recipe_product_references | recipe_product_references_serving_quantity_check | CHECK ((serving_quantity > (0)::numeric)) |
 | supplements | rule_catalog | rule_catalog_conditions_check | CHECK ((jsonb_typeof(conditions) = 'array'::text)) |
 | supplements | rule_catalog | rule_catalog_effects_check | CHECK ((jsonb_typeof(effects) = 'array'::text)) |
 | supplements | rule_catalog | rule_catalog_evidence_check | CHECK ((jsonb_typeof(evidence) = 'array'::text)) |
@@ -801,7 +822,7 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | stack_curation_candidates | stack_curation_candidates_name_de_check | CHECK ((length(btrim(name_de)) >= 2)) |
 | supplements | stack_curation_candidates | stack_curation_candidates_status_check | CHECK ((status = ANY (ARRAY['pending'::text, 'accepted'::text, 'rejected'::text, 'withdrawn'::text]))) |
 | supplements | stack_curation_decisions | stack_curation_decisions_decision_check | CHECK ((decision = ANY (ARRAY['accepted'::text, 'rejected'::text]))) |
-| supplements | stack_items | stack_items_check | CHECK (((supplement_id IS NOT NULL) OR (custom_name IS NOT NULL))) |
+| supplements | stack_items | stack_items_check | CHECK (((supplement_id IS NOT NULL) OR (custom_name IS NOT NULL) OR (supplier_product_id IS NOT NULL))) |
 | supplements | stack_items | stack_items_cycling_check | CHECK (((cycling IS NULL) OR (((jsonb_typeof(cycling) = 'object'::text) AND (jsonb_typeof((cycling -> 'on_weeks'::text)) = 'number |
 | supplements | stack_items | stack_items_dose_check | CHECK ((dose > (0)::numeric)) |
 | supplements | stack_items | stack_items_dose_unit_check | CHECK ((btrim(dose_unit) <> ''::text)) |
@@ -899,6 +920,9 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | supplements | supplement_warnings | supplement_warnings_status_check | CHECK ((status = ANY (ARRAY['bekannt'::text, 'unbekannt'::text, 'nicht_zutreffend'::text]))) |
 | supplements | supplements | supplements_evidence_grade_check | CHECK (((evidence_grade IS NULL) OR (evidence_grade = ANY (ARRAY['S'::text, 'A'::text, 'B'::text, 'C'::text, 'D'::text, 'E'::text, |
 | supplements | supplements | supplements_slug_check | CHECK ((btrim(slug) <> ''::text)) |
+| supplements | supplier_product_label_statements | supplier_product_label_statements_source_check | CHECK ((btrim(source) <> ''::text)) |
+| supplements | supplier_product_label_statements | supplier_product_label_statements_statement_text_check | CHECK ((length(btrim(statement_text)) >= 1)) |
+| supplements | supplier_product_label_statements | supplier_product_label_statements_statement_type_check | CHECK ((length(btrim(statement_type)) >= 1)) |
 | supplements | supplier_product_nutrient_name_mappings | supplier_product_nutrient_name_mappings_conversion_rule_check | CHECK ((conversion_rule = ANY (ARRAY['mass_or_label'::text, 'vitamin_d_iu_to_ug'::text, 'iu_form_required'::text, 'equivalent_not_ |
 | supplements | supplier_product_nutrient_name_mappings | supplier_product_nutrient_name_mappings_evidence_class_check | CHECK ((evidence_class = ANY (ARRAY['A'::text, 'B'::text, 'C'::text]))) |
 | supplements | supplier_product_nutrient_name_mappings | supplier_product_nutrient_name_mappings_target_column_check | CHECK ((target_column = ANY (ARRAY['enercc'::text, 'prot625'::text, 'fat'::text, 'cho'::text, 'fibt'::text, 'sugar'::text, 'fasat' |
@@ -942,6 +966,7 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | training | muscle_group_level_decisions | muscle_group_level_decisions_reason_check | CHECK ((btrim(reason) <> ''::text)) |
 | training | muscle_group_level_decisions | muscle_group_level_decisions_source_id_check | CHECK ((btrim(source_id) <> ''::text)) |
 | training | muscle_groups | muscle_groups_body_region_check | CHECK (((body_region IS NULL) OR (body_region = ANY (ARRAY['chest'::text, 'back'::text, 'shoulders'::text, 'arms'::text, 'core'::t |
+| training | muscle_groups | muscle_groups_canonical_not_self | CHECK (((canonical_muscle_group_id IS NULL) OR (canonical_muscle_group_id <> id))) |
 | training | muscle_groups | muscle_groups_parent_not_self | CHECK (((parent_id IS NULL) OR (parent_id <> id))) |
 | training | program_assignments | program_assignments_confirmed_ck | CHECK (((status = 'proposed'::text) OR (confirmed_at IS NOT NULL))) |
 | training | program_assignments | program_assignments_ended_ck | CHECK (((status <> 'ended'::text) OR (ended_at IS NOT NULL))) |
@@ -1253,6 +1278,7 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | nutrition | water_logs | water_logs_select | SELECT | (auth.uid() = user_id) |
 | nutrition | water_logs | water_logs_update | UPDATE | (auth.uid() = user_id) |
 | public | allergen_aliases | allergen_aliases_select | SELECT | true |
+| public | allergy_search_terms | allergy_search_terms_select | SELECT | true |
 | public | koerperflaechen | koerperflaechen_select | SELECT | true |
 | public | profiles | profiles_delete | DELETE | (auth.uid() = id) |
 | public | profiles | profiles_insert | INSERT | (auth.uid() = id) |
@@ -1316,10 +1342,19 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | supplements | intake_schedule | intake_schedule_select | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
 | supplements | intake_schedule | intake_schedule_update | UPDATE | (( SELECT auth.uid() AS uid) = user_id) |
 | supplements | lab_effect_enrichment_records | lab_effect_enrichment_records_read | SELECT | true |
+| supplements | meal_plan_product_references | meal_plan_product_references_delete | DELETE | (auth.uid() = user_id) |
+| supplements | meal_plan_product_references | meal_plan_product_references_insert | INSERT | (auth.uid() = user_id) |
+| supplements | meal_plan_product_references | meal_plan_product_references_select | SELECT | (auth.uid() = user_id) |
+| supplements | meal_plan_product_references | meal_plan_product_references_update | UPDATE | (auth.uid() = user_id) |
 | supplements | product_content_candidates | product_content_candidates_select | SELECT | true |
 | supplements | product_contents | product_contents_select | SELECT | true |
+| supplements | product_form_placement_rules | product_form_placement_rules_select | SELECT | true |
 | supplements | product_suppliers | product_suppliers_select | SELECT | true |
 | supplements | pubchem_conflict_records | pubchem_conflict_records_read | SELECT | true |
+| supplements | recipe_product_references | recipe_product_references_delete | DELETE | (auth.uid() = user_id) |
+| supplements | recipe_product_references | recipe_product_references_insert | INSERT | (auth.uid() = user_id) |
+| supplements | recipe_product_references | recipe_product_references_select | SELECT | (auth.uid() = user_id) |
+| supplements | recipe_product_references | recipe_product_references_update | UPDATE | (auth.uid() = user_id) |
 | supplements | rule_catalog | rule_catalog_select | SELECT | true |
 | supplements | stack_curation_candidate_items | stack_curation_candidate_items_select | SELECT | (EXISTS ( SELECT 1    FROM supplements.stack_curation_candidates c   WHERE ((c.id = stack_ |
 | supplements | stack_curation_candidates | stack_curation_candidates_select | SELECT | ((owner_id = ( SELECT auth.uid() AS uid)) OR is_admin()) |
@@ -1384,6 +1419,7 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | supplements | supplement_wada | supplement_wada_select | SELECT | true |
 | supplements | supplement_warnings | supplement_warnings_select | SELECT | true |
 | supplements | supplements | supplements_select | SELECT | is_active |
+| supplements | supplier_product_label_statements | supplier_product_label_statements_select | SELECT | true |
 | supplements | supplier_products | supplier_products_select | SELECT | true |
 | supplements | suppliers | suppliers_select | SELECT | true |
 | supplements | thailand_regulatory_records | thailand_regulatory_records_read | SELECT | true |
