@@ -9,7 +9,7 @@ agent: codex
 erledigt: 2026-09-08
 commit: 3ed2eac5
 beruehrt:
-  tabellen: []
+  tabellen: [supplements.supplier_products]
 entscheidung: offen
 ---
 

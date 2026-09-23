@@ -318,3 +318,199 @@ Aktion.**
         dem Rest. Foto.
     N7  apps/web 1951 oder mehr, apps/coach 65.
 
+## Nacharbeit-Bericht
+
+**Du hattest recht: A1 war nicht erfuellt, und meine Probe konnte
+es nicht merken.**
+
+    N1  Ursache gemessen                     erfuellt
+    N2  der Knopf zeigt "Hinzufügen"         erfuellt
+    N3  eine Probe, die die ANZEIGE prueft   erfuellt
+    N4  th.json begruendet                   erfuellt
+    N5  aufgeklappt: EIN Knopf               erfuellt
+    N6  "Supplement hinzufügen" im Kopf      erfuellt
+    N7  apps/web 1952/1952, coach 65/65      erfuellt
+
+`[cmd]` **`supabase/` unberuehrt.**
+
+### N1 — die Ursache war meine eigene Sabotageprobe
+
+`[cmd]` **Der Fall wurde HALBIERT, nicht geraten:** drei Schluessel
+DESSELBEN Namensraums in DERSELBEN Komponente gerendert.
+
+    tA('speichern')    -> "Speichern"            OK
+    tA('laedt')        -> "Laden..."             OK
+    tA('hinzufuegen')  -> "Allgemein.hinzufuegen" FEHLT
+
+`[read]` **Der Namensraum loeste also auf — nur dieser eine
+Schluessel nicht.** `[cmd]` **Dann im Auslieferungsstrom der Seite
+nachgesehen, welche Schluessel der Server wirklich schickt:**
+
+    "Allgemein": { "speichern", "abbrechen", "entfernen",
+                   "bearbeiten", "hinzufuegenX",  <-- !!
+                   "suchen", "laedt", ... }
+
+`[cmd]` **Und auf der Platte:**
+
+    grep -c hinzufuegenX apps/web/messages/de.json        0
+    grep -l hinzufuegenX apps/web/.next/server/...        1
+      -> _rsc_messages_de_json.js, Zeitstempel 15:43
+
+`[read]` **Die Datei war sauber, das kompilierte Servermodul
+nicht.**
+
+`[cmd]` **Der Schaden stammt aus `_g493-sabotage.mjs`:** dort stand
+ein Fall *,,der deutsche Schluessel faellt weg"*, der
+`"hinzufuegen"` in `"hinzufuegenX"` umbenannte. `[cmd]` **Die
+Probe stellt die Datei danach wieder her — aber Next hatte die
+Sprachdatei laengst in ein Servermodul uebersetzt und haelt es je
+Prozess.**
+
+`[read]` **Ein Schaden an einer Datei, die der Dev-Server
+zwischenspeichert, ueberlebt die Wiederherstellung** — **und sieht
+danach aus wie ein Codefehler.** `[read]` **Genau so habe ich ihn
+Tom gemeldet.**
+
+**Behoben:** `_g493-sabotage.mjs` sabotiert die Sprachdatei nicht
+mehr. `[read]` **Sie belegte ohnehin nur, dass `JSON.parse`
+funktioniert** — die Zusicherung liest die Datei selbst.
+
+`[cmd]` **Das alte Servermodul liegt noch in `.next/server/`.**
+`[read]` **Ich loesche dort nichts** (CLAUDE.md). **Der
+Zwischenstand verschwindet mit dem naechsten Serverstart** —
+danach zeigt auch Toms Schirm das Wort.
+
+### Warum meine A1-Probe das nicht gesehen hat
+
+`[cmd]` **Sie verglich die drei Knopftexte MITEINANDER:**
+
+    Liste       ["Hinzufügen","Hinzufügen","Hinzufügen"]
+    Tafel       "Hinzufügen"
+    Substanzen  ["Hinzufügen","Hinzufügen","Hinzufügen"]
+
+`[read]` **Gleichheit ohne SOLL-Wert kann nicht falsch werden.**
+`[read]` **Haetten alle drei den Schluessel gezeigt, waere die
+Probe ebenso gruen gewesen** — *,,identisch falsch"*, wie Tom es
+genannt hat.
+
+`[cmd]` **Und `tools/i18n-pruefen.mjs` half nicht:** es meldete
+*,,109 Verwendungen, alle vorhanden"*. `[read]` **Es liest die
+DATEIEN, nicht den Schirm** — und genau dazwischen lag der Fehler.
+
+### N3 — die Probe, die rot werden kann
+
+`[cmd]` **`tools/_g493n-anzeige.mjs`:** sie holt den SOLL-Wert aus
+`de.json` und vergleicht ihn mit dem, was der Browser zeigt.
+
+`[cmd]` **`tools/_g493n-sabotage.mjs`: 3 Schaeden plus Kontrolle —
+4/4.**
+
+    ROT    die Liste ruft einen Schluessel, den es nicht gibt
+    ROT    die Substanzen rufen einen, den es nicht gibt
+    ROT    die Liste schreibt das Wort wieder als Literal
+    GRUEN  KONTROLLE
+
+`[cmd]` **Sabotiert wird der AUFRUF, nicht die Sprachdatei** —
+`.tsx` laedt Next bei jeder Aenderung neu, die Sprachdatei nicht.
+`[read]` **Die Lehre aus N1 steht im Kopf der Probe.**
+
+### N2 und N6 — ein Wort, und diesmal richtig geschrieben
+
+`[cmd]` **Gemessen: VIER deutsche Werte, drei davon ohne Umlaut.**
+
+    Allgemein.hinzufuegen              "Hinzufügen"     ok
+    Supplements.supplementHinzufuegen  "Supplement hinzufuegen"
+    Supplements.zumStackHinzufuegen    "Zum Stack hinzufuegen"
+    Nutrition.hinzufuegenZu            "Zu {slot} hinzufuegen"
+
+`[cmd]` **Alle drei berichtigt** — **der SCHLUESSEL bleibt ASCII**
+(er steht so im Code), **der angezeigte WERT bekommt den Umlaut.**
+
+`[cmd]` **Gemessen am Schirm, nach der Aenderung:**
+
+    Liste        "Hinzufügen"
+    Substanzen   "Hinzufügen"
+    Kopf         "Supplement hinzufügen"
+
+### N5 — ein Knopf, nicht zwei
+
+**Tom:** *,,dann erweitert gleich darunter derselbe button? dann
+kann man es gleich weglassen"*
+
+`[cmd]` **Gemessen: die Tafel klappt DIREKT unter ihrer Zeile
+auf**, und die Zeile traegt den Knopf seit G-492/A1.
+
+`[cmd]` **Der Knopf der Tafel ist weg.** `[read]` **Nicht der der
+Zeile** — die Zeile ist der Ort, an dem man die Aktion sucht,
+ohne aufzuklappen.
+
+`[cmd]` **Mitgegangen sind `modalOffen`, `setModalOffen` und der
+`ProduktAktionModal`-Block in der Tafel** — **erreichbar waren sie
+nur ueber diesen Knopf.** `[read]` **Ein Zustand, den nichts mehr
+setzen kann, ist kein Rueckfall, sondern eine Attrappe** (G-163).
+
+`[cmd]` **Das Modal steht weiter — in `tab-produkte.tsx`**, am
+Knopf der Zeile. **Ein Modal, ein Ort.**
+
+`[read]` **Das Prop `aktion` bleibt** — die Substanz-Tafel braucht
+es (A13/A14). **Es wird hier nur nicht belegt.**
+
+### N4 — th.json ist der Sollzustand, kein Loch
+
+`[cmd]` **`docs/ssot/88-i18n.md`, Tom am 2026-08-17:**
+
+> *,,Englisch und Deutsch befuellen wir, Thai sehen wir vor und
+> ziehen wir bei Bedarf nach."*
+
+`[cmd]` **Die Tabelle dort nennt `th.json` = `{}` ausdruecklich
+,,Sollzustand"**, und `tools/i18n-pruefen.mjs` fuehrt nur `de` und
+`en` als Pflicht.
+
+`[cmd]` **Und der Rueckfall greift:** mit `lumeos-sprache=th`
+gemessen — **keine rohen Schluessel, deutscher Text.**
+`[cmd]` **`request.ts` legt die deutschen Nachrichten unter jede
+andere Sprache.**
+
+`[read]` **Also gemeldet, nicht ergaenzt** — 135 Schluessel Thai zu
+erfinden waere eine Entscheidung, die Tom schon getroffen hat.
+
+### Zwei fremde Zusicherungen mussten nachziehen
+
+`[cmd]` **G-492/A12** verlangte den Knopf in BEIDEN Reiterleisten.
+`[read]` **N5 dreht das fuer die Produkt-Tafel um** — die
+Zusicherung gilt jetzt fuer die Substanz-Tafel **und prueft
+zusaetzlich, dass die Produkt-Tafel KEINEN traegt.** `[read]`
+**Sonst kaeme der zweite Knopf still zurueck.**
+
+`[cmd]` **G-493/A1** zaehlte die Tafel mit auf — **sie faellt aus
+der Aufzaehlung**, mit Begruendung im Waechter.
+
+`[cmd]` **Beide Sabotageproben danach erneut gelaufen:**
+**G-492 16/16, G-493 11/11.**
+
+### Ein Waechterfehler, den die Nacharbeit aufgedeckt hat
+
+`[cmd]` **`supplier_product_id: eingabe.supplier_product_id` steht
+DREIMAL in `stack-write.ts`**, seit G-489 zwei Planfunktionen
+dazukamen. `[cmd]` **Die Sabotage am Stack-Insert blieb gruen** —
+**die anderen beiden erfuellten die Zusicherung weiter.**
+
+`[cmd]` **Jetzt prueft sie den INSERT in `stack_items`**, nicht den
+blossen Text.
+
+### Die Fotos
+
+    x-g493n-anzeige.png       N2/N6: "Hinzufügen" in jeder Zeile,
+                              "Supplement hinzufügen" im Kopf
+    x-g493n-n5-ein-knopf.png  N5: Zeile mit Knopf, Tafel darunter
+                              OHNE zweiten
+
+### Neustart noetig?
+
+`[cmd]` **JA — und diesmal ist er die halbe Behebung.**
+
+`[read]` **`apps/web/messages/de.json` ist geaendert** (drei Werte
+mit Umlaut), **und die Sprachdatei wird beim Start in ein
+Servermodul uebersetzt.** `[cmd]` **Ohne Neustart zeigt der Schirm
+weiter den alten Stand — samt des `hinzufuegenX` aus meiner
+Sabotage.**

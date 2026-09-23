@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-21 — 199 Tabellen, 2766 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-23 — 200 Tabellen, 2773 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -112,15 +112,15 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `foods` | 14 | 7140 | 2026-08-05 |
 | `foods_custom` | 46 | 0 | ? |
 | `foods_portions` | 12 | 23402 | ? |
-| `meal_items` | 27 | 9082 | ? |
+| `meal_items` | 27 | 9089 | ? |
 | `meal_plan_days` | 8 | 231 | ? |
-| `meal_plan_entries` | 18 | 756 | ? |
-| `meal_plan_logs` | 14 | 13 | ? |
+| `meal_plan_entries` | 18 | 757 | ? |
+| `meal_plan_logs` | 14 | 14 | ? |
 | `meal_plan_slots` | 7 | 38 | 2026-09-02 |
 | `meal_plan_weeks` | 8 | 33 | ? |
 | `meal_plans` | 21 | 10 | ? |
 | `meal_slots` | 4 | 14 | ? |
-| `meals` | 10 | 2909 | ? |
+| `meals` | 10 | 2910 | ? |
 | `micronutrient_overview_items` | 9 | 8 | ? |
 | `nutrient_aliases` | 7 | 98 | ? |
 | `nutrient_defs` | 20 | 138 | 2026-08-05 |
@@ -155,7 +155,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `scores` | 34 | 370 | ? |
 | `stress_logs` | 12 | 7 | 2026-09-07 |
 
-## supplements — 70 Tabellen, 1009 Spalten
+## supplements — 71 Tabellen, 1016 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -164,10 +164,10 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `entity_pk` | 14 | 0 | ? |
 | `entity_renal_hepatic` | 13 | 0 | ? |
 | `entity_transporters` | 15 | 4617 | ? |
-| `intake_logs` | 22 | 815 | ? |
+| `intake_logs` | 22 | 822 | ? |
 | `intake_schedule` | 18 | 0 | ? |
 | `lab_effect_enrichment_records` | 16 | 47 | ? |
-| `meal_plan_product_references` | 9 | 0 | 2026-09-21 |
+| `meal_plan_product_references` | 9 | 1 | 2026-09-21 |
 | `product_content_candidates` | 12 | 1717835 | 2026-09-09 |
 | `product_contents` | 17 | 3000982 | 2026-09-09 |
 | `product_form_placement_rules` | 6 | 10 | 2026-09-21 |
@@ -178,7 +178,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `stack_curation_candidate_items` | 11 | 2 | ? |
 | `stack_curation_candidates` | 12 | 2 | ? |
 | `stack_curation_decisions` | 6 | 0 | ? |
-| `stack_items` | 17 | 11 | ? |
+| `stack_items` | 18 | 12 | ? |
 | `stack_template_items` | 13 | 6 | ? |
 | `stack_templates` | 17 | 6 | ? |
 | `substance_aliases` | 11 | 1541 | ? |
@@ -219,6 +219,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `supplement_wada` | 22 | 337 | ? |
 | `supplement_warnings` | 14 | 290 | ? |
 | `supplements` | 22 | 617 | ? |
+| `supplier_product_label_statements` | 6 | 1467176 | 2026-09-22 |
 | `supplier_product_nutrient_name_mappings` | 8 | 54 | 2026-09-15 |
 | `supplier_product_vitamin_e_forms` | 8 | 1433 | 2026-09-15 |
 | `supplier_products` | 23 | 214780 | 2026-09-09 |

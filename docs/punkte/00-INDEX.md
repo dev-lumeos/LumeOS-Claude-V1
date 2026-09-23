@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 243 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 519 |
-| **gesamt** | **763** |
+| `todos` | 242 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 520 |
+| **gesamt** | **764** |
 
 ## medical — 49
 
@@ -44,7 +44,7 @@
 | `C-312` | befund | mittel | [Barcode einlesen — was jetzt schon ins Schema gehoert](todos/medical-c-0312-barcode-einlesen-was-jetzt-schon-ins-schema-gehoert.md) | offen | — | — |
 | `C-313` | entscheidung | mittel | [25 Regeln koennen nicht feuern](erledigt/medical-c-0313-25-regeln-koennen-nicht-feuern.md) | erledigt | — | C-332 |
 | `C-314` | entscheidung | mittel | [die drei Wirkstoff-Dubletten zusammenfuehren](todos/medical-c-0314-die-drei-wirkstoff-dubletten-zusammenfuehren.md) | offen | — | — |
-| `C-327` | blocker | hoch | [Die Chelationsregel kennt keine Gruppenmitgliedschaft](erledigt/medical-c-0327-chelation-rule-fehlt-gruppenmitgliedschaft.md) | erledigt | — | C-337 |
+| `C-327` | blocker | hoch | [Die Chelationsregel kennt keine Gruppenmitgliedschaft](erledigt/medical-c-0327-chelation-rule-fehlt-gruppenmitgliedschaft.md) | erledigt | — | C-337, C-533 |
 | `C-328` | blocker | hoch | [`count_risk_flag_gte` zaehlt Schluessel statt Werte](erledigt/medical-c-0328-count-risk-flag-zaehlt-schluessel-statt-werte.md) | erledigt | — | C-331 |
 | `C-331` | messung | hoch | [C-328 live einspielen und den Durchstich wiederholen](erledigt/medical-c-0331-c-328-live-und-durchstich.md) | erledigt | — | G-218 |
 | `C-332` | befund | mittel | [23 Regeln koennen weiterhin nicht feuern](todos/medical-c-0332-23-regeln-koennen-weiterhin-nicht-feuern.md) | offen | — | — |
@@ -443,7 +443,7 @@
 | `G-492` | feature | hoch | [Hinzufuegen ist eine Aktion, keine Detailseite](erledigt/supplements-g-0492-hinzufuegen-als-modal.md) | erledigt | — | G-493 |
 | `G-493` | fehler | hoch | [das Hinzufuegen-Modal nachbessern](laufend_claudecode/supplements-g-0493-hinzufuegen-modal-nachbessern.md) | laeuft (claudecode) | — | — |
 | `G-494` | aufraeumen | mittel | [die Form-Nachlese aus G-492 entfernen](todos/supplements-g-0494-form-nachlese-entfernen.md) | offen | — | — |
-| `G-495` | feature | hoch | [das Etikettenbild beim Oeffnen abrufen](todos/supplements-g-0495-etikettenbild-beim-oeffnen.md) | offen | — | — |
+| `G-495` | feature | hoch | [das Etikettenbild beim Oeffnen abrufen](laufend_claudecode/supplements-g-0495-etikettenbild-beim-oeffnen.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -617,7 +617,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 193
+## quer — 194
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -723,6 +723,7 @@
 | `C-522` | fehler | hoch | [die Allergiesuche kennt nur den Tagnamen](todos/quer-c-0522-allergiesuche-kennt-nur-tagnamen.md) | offen | — | — |
 | `C-523` | befund | hoch | [welche Aliase fehlen noch?](erledigt/quer-c-0523-welche-aliase-fehlen.md) | erledigt | — | C-525 |
 | `C-525` | feature | hoch | [Suchwortschatz für Ausschluss-Tags](erledigt/quer-c-0525-suchwortschatz-ausschluss-tags.md) | erledigt | — | — |
+| `C-533` | befund | hoch | [der Sollstand unterschlaegt service_role-Rechte](erledigt/quer-c-0533-schema-sollstand-substance-group-rechte.md) | erledigt | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

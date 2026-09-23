@@ -3229,7 +3229,7 @@
       "schritt": "327/327a",
       "rls": true,
       "policies": ["SELECT"],
-      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT"]},
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
       "grants_herkunft": "20260829003109_c327_substance_group_membership.sql vergibt Katalog-Leserechte und service_role ALL; 327a_chelation_mineral_membership.sql leitet die acht Zeilen aus der Kimi-Regel ab.",
       "zeilenschutzart": "oeffentlich"
     },
