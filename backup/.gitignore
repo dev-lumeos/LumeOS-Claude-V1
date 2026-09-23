@@ -2,3 +2,14 @@
 # Schema-, Rescue- und Rollen-Dumps bleiben getrackt.
 data/*
 !data/.gitkeep
+
+# Wegwerfgut aus Auftraegen - entsteht bei jeder Messung neu,
+# wurde nie versioniert. Ignorieren nimmt nichts weg.
+# Die Abnahmen zitieren die ZAHLEN, nicht die Dateien.
+x-*
+_g*.mjs
+_c*.mjs
+
+# Taegliche Laeufe und Protokolle - wachsen mit jedem Lauf.
+_taeglich/
+logs/
