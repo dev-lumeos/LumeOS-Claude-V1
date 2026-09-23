@@ -199,13 +199,11 @@ function RoutineEditorModal({ routine, onClose }: { routine: Routine | null; onC
                 <InEntwicklungKnopf titel="Save as template" className="v2-btn">
                   <Icon name="copy" className="v2-ic v2-ic-sm" />Save as template
                 </InEntwicklungKnopf>
-                {/* @abwesend training.routines
-                    G-278: Der Routinen-Knopf begruendet sich damit. Kommt die Tabelle,
-                    faellt `tools/abwesenheit-pruefen.mjs` und nennt
-                    diese Zeile — statt dass der Grund still falsch
-                    wird (A-62). Gemessen 2026-08-30: FEHLT. */}
+                {/* C-536: `training.routines` existiert seit C-461.
+                    Dieser Editor hat noch keinen Schreibweg auf die Tabelle;
+                    deshalb bleibt „Save routine“ bis zu dessen Anbindung deaktiviert. */}
                 <InEntwicklungKnopf titel="Save routine" className="v2-btn v2-btn-primary"
-                                    grund="training.routines gibt es noch nicht.">
+                                    grund="Der Routinen-Speicherweg ist noch nicht angebunden.">
                   <Icon name="check" className="v2-ic v2-ic-sm" />Save routine
                 </InEntwicklungKnopf>
               </>

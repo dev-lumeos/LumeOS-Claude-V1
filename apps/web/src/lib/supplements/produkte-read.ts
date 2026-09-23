@@ -334,76 +334,34 @@ function zeileAus(r: Record<string, unknown>): ProduktZeile | null {
   }
 }
 
-/**
- * Die Darreichungsform zu Suchtreffern nachlesen.
+/*
+ * `formNachlesen` stand hier bis G-494 und ist GELOESCHT, nicht
+ * auskommentiert.
  *
- * ══ G-492: WARUM ES DIESE FUNKTION GIBT ════════════════════════════
+ * ══ SIE WAR EINE KRUECKE MIT ABLAUFDATUM ══════════════════
  *
- * `[cmd]` **Gemessen 2026-09-22:**
+ * `[cmd]` **G-492 hat gemessen, dass `search_supplier_products`
+ * `produktform` NICHT zurueckgab** — elf Spalten, keine davon die
+ * Form. **Die Spalte FORM war in allen acht gemessenen Zeilen
+ * leer**, und die Formregel (C-524) haette jedes Pulver auf
+ * ,,nur Stack" fallen lassen.
  *
- *     SELECT pg_get_function_result(oid) FROM pg_proc
- *      WHERE proname='search_supplier_products';
- *     -> TABLE(id, marke, name_en, portionsgroesse, portionseinheit,
- *              packungsgroesse, packungseinheit, market_status,
- *              gtin, similarity, meidestoff_treffer)
+ * `[cmd]` **C-520 ist seit dem 2026-09-23 live** — selbst gemessen:
  *
- * `[read]` **Elf Spalten, `produktform` ist keine davon** — der
- * Tabellenweg liefert sie (Zeile 475), der Smartweg nicht.
+ *     pg_get_function_result(search_supplier_products)
+ *     -> TABLE(…, gtin text, produktform text, similarity real, …)
  *
- * `[cmd]` **Die Folge im Schirm:** die Spalte FORM war in allen acht
- * gemessenen Zeilen leer. `[read]` **Und fuer G-492 waere sie
- * schlimmer als leer:** die Formregel (C-524) entscheidet, ob der
- * Knopf Stack oder beides anbietet — **ohne Form faellt jedes Pulver
- * auf „nur Stack".**
+ * `[cmd]` **BEIDE Signaturen geben sie zurueck**, auch die alte mit
+ * Vorgabewerten, die dieser Leseweg ruft (vier benannte Argumente).
  *
- * `[cmd]` **Die Nachlese ist billig:** 500 Zeilen in **2,8 ms**
- * (`EXPLAIN ANALYZE`, Index Only Scan ueber den Primaerschluessel).
+ * `[read]` **Damit faellt die Nachlese weg** — sie stand mit genau
+ * diesem Satz im Kopf: *,,Zu entfernen, sobald C-520 `produktform`
+ * zurueckgibt."*
  *
- * `[cmd]` **Aber sie wird GESTUECKELT.** `SUCH_GRENZE` ist 200, und
- * G-64 hat gemessen, dass `.in()` um 200 Ids mit *„URI too long"*
- * kippt — **und die Bibliothek meldet das als LEERE Liste**, nicht
- * als Fehler. `[read]` **Ein stiller Totalverlust waere genau der
- * Fall, den niemand bemerkt.**
- *
- * `[read]` **Faellt die Nachlese aus, bleibt die Zeile ohne Form** —
- * das ist der Zustand von vorher, nicht schlechter. **Sie darf die
- * Suche nicht mitreissen.**
- *
- * `[cmd]` **Zu entfernen, sobald C-520 `produktform` zurueckgibt** —
- * dann traegt `zeileAus` den Wert wieder selbst.
+ * `[read]` **Kein Rueckfall bleibt stehen** (G-163): eine zweite
+ * Quelle fuer dieselbe Spalte laedt dazu ein, die eine zu aendern
+ * und die andere zu vergessen.
  */
-const NACHLESE_STUECK = 150
-
-type SupplementsClient = ReturnType<ReturnType<typeof createSessionClient>['schema']>
-
-async function formNachlesen(
-  c: SupplementsClient, zeilen: ProduktZeile[],
-): Promise<ProduktZeile[]> {
-  // `[read]` **Nur die Zeilen ohne Form** — traegt C-520 sie eines
-  // Tages, laeuft hier nichts mehr.
-  const offen = zeilen.filter(z => z.produktform === null).map(z => z.id)
-  if (offen.length === 0) return zeilen
-  const formen = new Map<string, string>()
-  try {
-    for (let i = 0; i < offen.length; i += NACHLESE_STUECK) {
-      const stueck = offen.slice(i, i + NACHLESE_STUECK)
-      const { data, error } = await c.from('supplier_products')
-        .select('id,produktform').in('id', stueck)
-      if (error) return zeilen
-      for (const r of (data ?? []) as Array<Record<string, unknown>>) {
-        const id = s(r.id); const f = s(r.produktform)
-        if (id && f) formen.set(id, f)
-      }
-    }
-  } catch {
-    // `[read]` **Stumm zurueck mit dem, was da ist** — eine fehlende
-    // Form ist ein Schoenheitsfehler, eine leere Trefferliste nicht.
-    return zeilen
-  }
-  return zeilen.map(z => (z.produktform === null && formen.has(z.id))
-    ? { ...z, produktform: formen.get(z.id) ?? null }
-    : z)
-}
 
 /**
  * Die Produktsuche.
@@ -521,25 +479,10 @@ export async function sucheProdukte(
           ? roh.filter(z => !harteIds.includes(z.id))
           : roh
         return {
-          // ══ G-492: DIE FORM NACHLESEN ═══════════════════════════
-          //
-          // `[cmd]` **Gemessen 2026-09-22:**
-          // `pg_get_function_result('search_supplier_products')`
-          // nennt **elf Spalten und `produktform` ist nicht
-          // darunter** — `zeileAus` liest `r.produktform` und bekommt
-          // jedes Mal `null`. `[cmd]` **Im Schirm war die Spalte
-          // FORM in allen acht gemessenen Zeilen leer.**
-          //
-          // `[read]` **Fuer G-492 ist das keine Schoenheitsfrage:**
-          // der Knopf in der Zeile muss wissen, ob er Stack oder
-          // beides anbietet — **ohne Form faellt jede Zeile auf
-          // „nur Stack", auch ein Pulver.**
-          //
-          // `[cmd]` **Bis C-520 die Spalte zurueckgibt, wird sie
-          // nachgelesen** — hier, nicht im Browser: die Abfrage
-          // laeuft serverseitig, und 500 Zeilen kosten **2,8 ms**
-          // (`EXPLAIN ANALYZE`, Index Only Scan).
-          zeilen: await formNachlesen(c, zeilen),
+          // `[cmd]` **G-494: hier stand `await formNachlesen(c, zeilen)`.**
+          // `[read]` **C-520 gibt `produktform` jetzt selbst zurueck**
+          // — `zeileAus` liest sie direkt aus der Antwort.
+          zeilen,
           gesamt: zeilen.length, weg: 'smart', fehler: null,
           hartEntfernt: roh.length - zeilen.length,
         }

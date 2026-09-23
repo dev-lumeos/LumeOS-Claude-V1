@@ -438,11 +438,51 @@ export function LebenszyklusEcht({ d }: { d: PlanDaten }) {
   const p = d.plan
   if (!p) return null
   const z = zyklusVon(p.lifecycle_type)
+  // ══ G-488: DREI ZAHLEN, KEINE ZWEI PASSTEN ═══════════════════════
+  //
+  // **Tom, 2026-09-08, auf einem Schirm:**
+  //
+  //     Flaeche oben     „Tag 3 von 35"
+  //     Flaeche unten    „Dauer 28 Tage"
+  //     „Laeuft bis"     23.10.  (19.09. + 28 Tage waere der 17.10.)
+  //
+  // `[cmd]` **Gemessen 2026-09-23 am aktiven Plan:**
+  //
+  //     meal_plans.days_count        28
+  //     meal_plan_days, gezaehlt     35   (5 Wochen, 19.09.-23.10.)
+  //     rollover_count                1
+  //
+  // `[read]` **„Tag x von 35" und „Laeuft bis 23.10." stimmen beide**
+  // — sie kommen aus den TAGESZEILEN. `[read]` **Falsch war allein
+  // diese Zeile**, die `days_count` roh anzeigte.
+  //
+  // `[cmd]` **Die Ursache steht in `plan-write.ts`:** ein Rollover
+  // (`ablaufKlaeren`, Weg `neu_starten`) schiebt die Wochen und
+  // zaehlt `rollover_count` hoch — **`days_count` fasst er nicht an.**
+  // `[read]` **Ein Plan, der eine Woche dazubekommt, behaelt also
+  // seine alte Laenge.**
+  //
+  // `[read]` **Die gezaehlten Tage sind die Wahrheit** — dieselbe
+  // Regel wie eine Zeile darueber bei „Days count" (`?? z.tage`) und
+  // bei „Laeuft bis" (aus `plan_date`).
+  //
+  // `[read]` **Und die Abweichung wird GENANNT, nicht geglaettet** —
+  // ein stiller Austausch verbaerge, dass die Spalte veraltet ist.
+  const zaehlung = planZaehlung(d)
+  const weichtAb = p.days_count !== null && p.days_count !== zaehlung.tage
   return (
     <Card title="Lifecycle types" sub={statusText(p.status)}>
       <Row label="Zyklus" value={ZYKLUS_TEXT[z]} />
       {p.start_date && <Row label="Start" value={p.start_date} />}
-      {p.days_count !== null && <Row label="Dauer" value={`${p.days_count} Tage`} />}
+      <Row label="Dauer" value={`${zaehlung.tage} Tage`} />
+      {weichtAb && (
+        <div className="v2-hinweis" style={{ marginTop: 6 }}
+             data-probe="dauer-weicht-ab">
+          Gezählt sind {zaehlung.tage} Tage in {zaehlung.wochen} Wochen.
+          Der Plan ist mit {p.days_count} Tagen angelegt — ein Neustart
+          verschiebt die Wochen, ohne diese Zahl nachzuziehen.
+        </div>
+      )}
       {z === 'rollover' && p.rollover_count !== null && (
         <Row label="Durchläufe" value={String(p.rollover_count)} />
       )}
