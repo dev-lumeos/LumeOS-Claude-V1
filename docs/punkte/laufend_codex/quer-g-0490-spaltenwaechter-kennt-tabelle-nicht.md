@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-460
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - tools/gefallene-spalten-pruefen.mjs
@@ -59,3 +61,28 @@ uebersehen.**
     A3  Gegenprobe: eine echte gefallene Spalte in
         meal_items wird weiter rot. Sabotageprobe.
     A4  G-485 wuerde er fangen -- belegt.
+
+## Zum dritten Mal gemeldet, 2026-09-08
+
+`[cmd]` **Codex in C-536:** *,,pnpm gate ist danach rot wegen
+eines anderen, neu sichtbaren C-519-Nachzugs:
+`produkt-daumen.ts` liest noch die entfernte Spalte
+`meal_items.supplement_product_id`."*
+
+`[cmd]` **Selbst nachgemessen, zum zweiten Mal:
+`produkt-daumen.ts` liest `nutrition.food_preference_items`,
+und DORT steht die Spalte.**
+
+`[read]` **Jeder Agent haelt es fuer einen echten Befund und
+meldet es weiter** ? **das kostet in jedem Bericht Platz und
+einmal fast eine Aenderung am falschen Ort.**
+
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
+

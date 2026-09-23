@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 239 |
-| `laufend_codex` | 1 |
+| `todos` | 238 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 532 |
 | **gesamt** | **773** |
@@ -831,7 +831,7 @@
 | `G-477` | fehler | mittel | [Playwright ist anderthalb Jahre alt](todos/quer-g-0477-playwright-anheben.md) | offen | — | — |
 | `G-479` | fehler | mittel | [zwei Klassen mit 2,88:1 in packages/ui](laufend_claudecode/quer-g-0479-kontraste-in-packages-ui.md) | laeuft (claudecode) | — | — |
 | `G-487` | fehler | hoch | [der Tageswechsler startet nicht auf heute](erledigt/quer-g-0487-tageswechsler-startet-nicht-auf-heute.md) | erledigt | — | — |
-| `G-490` | fehler | mittel | [der Spaltenwaechter kennt die Tabelle nicht](todos/quer-g-0490-spaltenwaechter-kennt-tabelle-nicht.md) | offen | — | — |
+| `G-490` | fehler | mittel | [der Spaltenwaechter kennt die Tabelle nicht](laufend_codex/quer-g-0490-spaltenwaechter-kennt-tabelle-nicht.md) | laeuft (codex) | — | — |
 
 ## buddy — 1
 
