@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 239 |
+| `todos` | 242 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 525 |
-| **gesamt** | **766** |
+| `erledigt` | 526 |
+| **gesamt** | **770** |
 
 ## medical — 49
 
@@ -64,7 +64,9 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 253
+## nutrition — 256
+
+### beauftragbar — 254
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -167,10 +169,11 @@
 | `C-413` | befund | niedrig | [`tom.seed` traegt `days_count 7` bei 21 Tagen](erledigt/nutrition-c-0413-tom-seed-traegt-days-count-7-bei-21-tagen.md) | erledigt | — | — |
 | `C-464` | feature | mittel | [das Ballaststoffziel fehlt](erledigt/nutrition-c-0464-das-ballaststoffziel-fehlt.md) | erledigt | — | G-439 |
 | `C-466` | feature | hoch | [Naehrstoffe aus Supplementen in der Nutrients-Ansicht](erledigt/nutrition-c-0466-naehrstoffe-aus-supplementen.md) | erledigt | — | C-467, G-426 |
-| `C-507` | entscheidung | hoch | [die Suchtiefe nach Erfahrungsgrad](todos/nutrition-c-0507-suchtiefe-nach-erfahrungsgrad.md) | offen | — | — |
+| `C-507` | entscheidung | hoch | [die Suchtiefe nach Erfahrungsgrad](erledigt/nutrition-c-0507-suchtiefe-nach-erfahrungsgrad.md) | erledigt | — | C-534, C-535, E-86, G-497 |
 | `C-521` | fehler | hoch | [die Tagessumme uebersieht die Supplemente](erledigt/nutrition-c-0521-tagessumme-uebersieht-supplemente.md) | erledigt | — | — |
 | `C-524` | feature | hoch | [Planeinträge können Supplemente vorsehen](erledigt/nutrition-c-0524-planeintraege-ohne-supplemente.md) | erledigt | — | G-489 |
 | `C-526` | fehler | hoch | [aktive Meal-Pläne dürfen nicht überlappen](erledigt/nutrition-c-0526-keine-ueberlappungspruefung.md) | erledigt | — | — |
+| `C-534` | befund | hoch | [welche Lebensmittelgruppen gibt es?](todos/nutrition-c-0534-welche-lebensmittelgruppen.md) | offen | — | — |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
 | `G-17` | befund | mittel | [Datum beim Modulwechsel mitgeben](erledigt/nutrition-g-0017-datum-beim-modulwechsel-mitgeben.md) | erledigt | — | G-375 |
@@ -321,6 +324,13 @@
 | `G-488` | fehler | mittel | [drei Zahlen zum Plan, keine zwei passen](laufend_claudecode/nutrition-g-0488-drei-zahlen-zum-plan.md) | laeuft (claudecode) | — | — |
 | `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](erledigt/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
+
+### wartet auf Blocker — 2
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `C-535` | feature | hoch | [parent_id fuer nutrition.foods](todos/nutrition-c-0535-parent-id-fuer-foods.md) | offen | C-534 | — |
+| `G-497` | feature | hoch | [die Suche zeigt Gruppen statt Zeilen](todos/nutrition-g-0497-suche-zeigt-gruppen.md) | offen | C-535 | — |
 
 ## supplements — 120
 
@@ -619,7 +629,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 194
+## quer — 195
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -731,6 +741,7 @@
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
 | `E-83` | entscheidung | hoch | [ein Weg fuer Lebensmittel UND Supplemente](erledigt/quer-e-0083-ein-weg-fuer-beide.md) | erledigt | — | E-84, G-480, G-483, G-484 |
 | `E-84` | entscheidung | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-e-0084-supplement-bleibt-supplement.md) | erledigt | — | C-519 |
+| `E-86` | entscheidung | hoch | [gilt die Suchtiefe modulweit?](todos/quer-e-0086-suchtiefe-modulweit.md) | offen | — | — |
 | `F-01` | befund | mittel | [Schnittstellenvertrag zuerst](todos/quer-f-0001-schnittstellenvertrag-zuerst.md) | offen | — | C-111 |
 | `F-02` | befund | mittel | [Ablageort festlegen](todos/quer-f-0002-ablageort-festlegen.md) | offen | — | C-109, C-110 |
 | `F-03` | befund | mittel | [obsidian-skills einbinden](todos/quer-f-0003-obsidian-skills-einbinden.md) | offen | — | C-112 |

@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: null
 entscheidung: null
+erledigt: 2026-09-08
+commit: aufgeteilt
 beruehrt:
   tabellen: [nutrition.foods]
 zahlen:
@@ -230,4 +232,24 @@ ausgezeichnet werden.**
 
 `[cmd]` **Automatisch geht es vermutlich nicht** ? **miss, ob
 `processing_level` und der Name reichen.**
+
+## AUFGETEILT, 2026-09-08
+
+Tom: *,,507 aufteilen"*
+
+`[cmd]` **Der Waechter hatte recht:** *,,Ein Punkt traegt eine
+Frage. Wer mehrere buendelt, riskiert, dass eine Antwort auf
+alle geschrieben wird ? so geschehen bei G-254."*
+
+    C-534  welche Gruppen gibt es? (Messauftrag)
+    C-535  parent_id fuer nutrition.foods
+    G-497  die Suche zeigt Gruppen statt Zeilen
+    E-86   gilt die Suchtiefe modulweit?
+
+`[read]` **Toms Entscheidung bleibt hier stehen** ? **der
+Parent ist eine ECHTE Zeile, nichts wird weggenommen, der
+Erfahrungsgrad entscheidet nur ueber eingeklappt oder offen.**
+
+`[read]` **Die vier Punkte verweisen als `entscheidung: C-507`
+hierher.**
 
