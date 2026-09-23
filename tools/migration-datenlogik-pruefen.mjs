@@ -72,6 +72,40 @@ const structuralFunctionExceptions = [
     // erzeugt; beim Einspielen schreibt die Migration keine Katalogdaten.
     requiredSql: 'INSERT INTO nutrition.meal_items',
   },
+  {
+    file: '20260918113000_c516_additional_supplier_product_nutrients.sql',
+    functionName: 'nutrition.add_supplement_product_to_meal',
+    command: 'INSERT',
+    // C-516 erweitert ausschliesslich den schon vorhandenen C-513-Snapshot
+    // um vorhandene nutrient_defs. Das INSERT bleibt ein spaeterer
+    // authenticated RPC-Aufruf; die Migration selbst schreibt keine
+    // Katalog- oder Seed-Daten.
+    requiredSql: 'INSERT INTO nutrition.meal_items',
+  },
+  {
+    file: '20260918193000_c519_supplement_intake_references.sql',
+    functionName: 'supplements.record_supplier_product_intake',
+    commands: ['INSERT', 'INSERT'],
+    // C-519 definiert den authenticated-only Einnahmeweg. Beide Inserts
+    // laufen erst auf ausdrueckliche Nutzeraktion; die Mahlzeit enthaelt
+    // danach nur den Log-Verweis, keine Katalogdaten.
+    requiredSql: [
+      'INSERT INTO supplements.intake_logs',
+      'INSERT INTO nutrition.meal_items',
+    ],
+  },
+  {
+    file: '20260918193000_c519_supplement_intake_references.sql',
+    functionName: 'supplements.add_supplier_product_to_recipe',
+    commands: ['INSERT', 'INSERT'],
+    // Auch die Rezeptanlage ist ein spaeterer ownergebundener RPC. Der
+    // Produktverweis liegt in supplements.recipe_product_references; die
+    // Nutrition-Zeile ist nur Positionsanker ohne Produkt-/Naehrwertdaten.
+    requiredSql: [
+      'INSERT INTO nutrition.recipe_ingredients',
+      'INSERT INTO supplements.recipe_product_references',
+    ],
+  },
 ]
 // Im Funktionskoerper zaehlt nur der Anfang einer ausfuehrbaren SQL-Anweisung.
 // `FOR UPDATE` sperrt, schreibt aber nicht; ebenso ist `ON DELETE` Teil einer

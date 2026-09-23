@@ -762,3 +762,29 @@ davon waren verfolgt und wurden mit `git rm --cached` aus dem
 Index genommen** ? **die Historie behaelt sie, der Baum
 nicht.**
 
+## Messwerkzeuge auch
+
+Tom, 2026-09-08:
+
+> ja, mit tools die nie mehr gebraucht werden, dieselbe logik
+
+`[cmd]` **283 Dateien unter `tools/_*`, 234 davon verfolgt.**
+
+`[cmd]` **Gemessen, bevor verschoben: 36 Nennungen in `apps/`
+und `supabase/`, davon 35 in Kommentaren und die letzte
+ebenfalls** ? **niemand fuehrt sie aus.**
+
+### Die Regel
+
+    waehrend des Auftrags   der Agent legt sie an
+    nach der Abnahme        nach F:\My Backups\
+                            lumeos-messwerkzeuge
+
+`[cmd]` **`tools/_*` ist ignoriert.**
+
+`[read]` **Die Abnahmen zitieren die ZAHLEN, nicht die
+Dateien** ? **darum bleibt nichts Nachweisbares zurueck.**
+
+`[cmd]` **2026-09-08 verschoben: 252 Dateien, 208 davon aus
+dem Index.** **29 blieben liegen ? die laufenden Auftraege.**
+

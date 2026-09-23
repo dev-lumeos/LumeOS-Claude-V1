@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 242 |
+| `todos` | 241 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 526 |
 | **gesamt** | **770** |
@@ -486,7 +487,7 @@
 | `C-493` | feature | hoch | [Seed-Sitzungen, die die Karte fuellen](erledigt/training-c-0493-seed-sitzungen-fuer-die-karte.md) | erledigt | — | C-501, G-450, G-451 |
 | `C-528` | befund | hoch | [die Muskelhierarchie ist unsauber](erledigt/training-c-0528-muskelhierarchie-unsauber.md) | erledigt | — | C-530 |
 | `C-530` | feature | hoch | [die Muskelhierarchie bereinigen und vervollstaendigen](erledigt/training-c-0530-muskelhierarchie-bereinigen.md) | erledigt | — | C-531 |
-| `C-531` | fehler | mittel | [Muskel-Aliase sind nicht als Aliase erkennbar](todos/training-c-0531-muskel-aliase-nicht-erkennbar.md) | offen | — | — |
+| `C-531` | fehler | mittel | [Muskel-Aliase sind nicht als Aliase erkennbar](laufend_codex/training-c-0531-muskel-aliase-nicht-erkennbar.md) | laeuft (codex) | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |

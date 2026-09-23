@@ -284,3 +284,10 @@ backup/**/*_before_live.sql
 # Gemeldet von Claude Code in G-253 als "repo-root oddity" - er hatte
 # recht, es gehoerte ignoriert.
 scratchpad/
+
+# Messwerkzeuge aus Auftraegen. Tom, 2026-09-08:
+# "mit tools die nie mehr gebraucht werden dieselbe logik"
+# Entstehen je Auftrag, werden nach der Abnahme nach
+# F:\My Backups\lumeos-messwerkzeuge verschoben.
+# Die Abnahmen zitieren die ZAHLEN, nicht die Dateien.
+tools/_*
