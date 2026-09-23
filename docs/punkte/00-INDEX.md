@@ -5,9 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 241 |
-| `laufend_codex` | 2 |
-| `erledigt` | 530 |
+| `todos` | 239 |
+| `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 532 |
 | **gesamt** | **773** |
 
 ## medical — 49
@@ -66,7 +67,7 @@
 
 ## nutrition — 258
 
-### beauftragbar — 256
+### beauftragbar — 257
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -173,8 +174,9 @@
 | `C-521` | fehler | hoch | [die Tagessumme uebersieht die Supplemente](erledigt/nutrition-c-0521-tagessumme-uebersieht-supplemente.md) | erledigt | — | — |
 | `C-524` | feature | hoch | [Planeinträge können Supplemente vorsehen](erledigt/nutrition-c-0524-planeintraege-ohne-supplemente.md) | erledigt | — | G-489 |
 | `C-526` | fehler | hoch | [aktive Meal-Pläne dürfen nicht überlappen](erledigt/nutrition-c-0526-keine-ueberlappungspruefung.md) | erledigt | — | — |
-| `C-534` | befund | hoch | [welche Lebensmittelgruppen gibt es?](laufend_codex/nutrition-c-0534-welche-lebensmittelgruppen.md) | laeuft (codex) | — | — |
-| `C-537` | fehler | mittel | [days_count zieht beim Rollover mit](todos/nutrition-c-0537-days-count-zieht-mit.md) | offen | — | — |
+| `C-534` | befund | hoch | [welche Lebensmittelgruppen gibt es?](erledigt/nutrition-c-0534-welche-lebensmittelgruppen.md) | erledigt | — | — |
+| `C-535` | feature | hoch | [parent_id fuer nutrition.foods](todos/nutrition-c-0535-parent-id-fuer-foods.md) | offen | — | — |
+| `C-537` | fehler | mittel | [days_count zieht beim Rollover mit](laufend_codex/nutrition-c-0537-days-count-zieht-mit.md) | laeuft (codex) | — | — |
 | `E-87` | entscheidung | mittel | [was bedeutet days_count nach einem Rollover?](erledigt/nutrition-e-0087-days-count-nach-rollover.md) | erledigt | — | C-537 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
@@ -327,11 +329,10 @@
 | `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](erledigt/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | erledigt | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `C-535` | feature | hoch | [parent_id fuer nutrition.foods](todos/nutrition-c-0535-parent-id-fuer-foods.md) | offen | C-534 | — |
 | `G-497` | feature | hoch | [die Suche zeigt Gruppen statt Zeilen](todos/nutrition-g-0497-suche-zeigt-gruppen.md) | offen | C-535 | — |
 
 ## supplements — 120
@@ -489,7 +490,7 @@
 | `C-528` | befund | hoch | [die Muskelhierarchie ist unsauber](erledigt/training-c-0528-muskelhierarchie-unsauber.md) | erledigt | — | C-530 |
 | `C-530` | feature | hoch | [die Muskelhierarchie bereinigen und vervollstaendigen](erledigt/training-c-0530-muskelhierarchie-bereinigen.md) | erledigt | — | C-531 |
 | `C-531` | fehler | mittel | [Muskel-Aliase sind nicht als Aliase erkennbar](erledigt/training-c-0531-muskel-aliase-nicht-erkennbar.md) | erledigt | — | — |
-| `C-536` | fehler | mittel | [drei Abwesenheitsaussagen sind ueberholt](laufend_codex/training-c-0536-abwesenheitsaussagen-ueberholt.md) | laeuft (codex) | — | — |
+| `C-536` | fehler | mittel | [drei Abwesenheitsaussagen sind ueberholt](erledigt/training-c-0536-abwesenheitsaussagen-ueberholt.md) | erledigt | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
@@ -828,7 +829,7 @@
 | `G-474` | fehler | hoch | [der Absturz auf der Anstrichebene](erledigt/quer-g-0474-anstrichebene.md) | erledigt | — | G-476, G-477 |
 | `G-476` | fehler | hoch | [der Produktionsbau nimmt den Dev-Server mit](erledigt/quer-g-0476-dev-server-mitgenommen.md) | erledigt | — | — |
 | `G-477` | fehler | mittel | [Playwright ist anderthalb Jahre alt](todos/quer-g-0477-playwright-anheben.md) | offen | — | — |
-| `G-479` | fehler | mittel | [zwei Klassen mit 2,88:1 in packages/ui](todos/quer-g-0479-kontraste-in-packages-ui.md) | offen | — | — |
+| `G-479` | fehler | mittel | [zwei Klassen mit 2,88:1 in packages/ui](laufend_claudecode/quer-g-0479-kontraste-in-packages-ui.md) | laeuft (claudecode) | — | — |
 | `G-487` | fehler | hoch | [der Tageswechsler startet nicht auf heute](erledigt/quer-g-0487-tageswechsler-startet-nicht-auf-heute.md) | erledigt | — | — |
 | `G-490` | fehler | mittel | [der Spaltenwaechter kennt die Tabelle nicht](todos/quer-g-0490-spaltenwaechter-kennt-tabelle-nicht.md) | offen | — | — |
 

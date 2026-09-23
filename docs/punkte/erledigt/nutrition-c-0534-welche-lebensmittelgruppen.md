@@ -9,6 +9,8 @@ kind_von: C-507
 entscheidung: C-507
 agent: codex
 beauftragt: 2026-09-23
+erledigt: 2026-09-08
+commit: OFFEN
 beruehrt:
   tabellen: [nutrition.foods]
 zahlen:
@@ -135,3 +137,47 @@ Es wurde keine Spalte, keine Gruppe und kein Parent angelegt.
 `nutrition.food_curation_decisions` enthalten beide 0 Zeilen; es gibt
 keine vorhandene Kurationsentscheidung, aus der ein Parent uebernommen
 werden koennte. C-535 bleibt der Bauauftrag fuer die Parent-Beziehung.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Ein Messauftrag.**
+
+> *,,Es gibt keine sichere automatische Parent-Wahl."*
+
+`[cmd]` **Selbst nachgemessen:**
+
+    is_prepared_dish   0 von 7.140 -- trennt nichts
+    category_id        33 von 518 Kategorien belegt
+
+`[cmd]` **Und seine Zahlen:**
+
+    Haehnchenbrust-Kategorie   18 Haehnchen-, 14 Puten-,
+                               3 Entenbrustzeilen
+    BLS-Staemme                2.646 Gruppen,
+                               47 von 100 einheitlich
+    Tagebuchnutzung            46 von 2.646 Gruppen
+
+`[read]` **Punkt B aus meinem Auftrag ist damit beantwortet:
+*,,die, die man isst"* laesst sich NICHT ableiten.**
+
+`[cmd]` **46 von 2.646 Gruppen haben ueberhaupt
+Tagebuchnutzung** ? **zu wenig, um daraus auf den Rest zu
+schliessen.**
+
+### Und ein konkreter Parent
+
+> *,,Der kuratierbare Parent fuer Toms Fall ist V4A6172 ?
+Haehnchen Brust ohne Haut, gegrillt (138 kcal, 28,41 g
+Protein je 100 g)."*
+
+`[read]` **Einer von 2.646** ? **das ist die Groessenordnung
+der Kuration.**
+
+### Und ein Befund, den ich schon kenne
+
+`[cmd]` **Er meldet `produkt-daumen.ts` als C-519-Nachzug** ?
+**das ist G-490: der Waechter vergleicht den Spaltennamen ohne
+die Tabelle. Die Datei liest `food_preference_items`, dort
+steht die Spalte.**
+
+**Abgenommen. Die Kuration entscheidet Tom.**

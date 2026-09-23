@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-478
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - packages/ui/src/shell/app-shell.tsx
@@ -61,3 +63,10 @@ betrifft 57 Dateien."*
 `[read]` **Drei Klassen, ein Befund** ? **er betrifft jedes
 Modul.**
 
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: E-87
 entscheidung: E-87
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -61,3 +63,11 @@ entfernt.**
     A5  ein zweiter Rollover in einer Transaktion:
         days_count waechst mit. Belegt, ROLLBACK.
     A6  Sicherung, Vollkette, ALLE Waechter.
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

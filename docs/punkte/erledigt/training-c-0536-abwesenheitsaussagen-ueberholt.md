@@ -9,6 +9,8 @@ kind_von: G-444
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: OFFEN
 beruehrt:
   dateien:
     - apps/web/src/app/v2/training/modale.tsx
@@ -52,3 +54,29 @@ anschliessend wieder entfernt.
     A3  der Abwesenheitswaechter ist gruen. -- erfuellt.
     A4  Gegenprobe: eine erfundene Abwesenheit wird weiter rot. -- erfuellt.
     A5  App-Kollision gemessen: G-488 beruehrt eine andere Datei. -- erfuellt.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **Abwesenheitswaechter: exit 0, 19 markierte Aussagen
+geprueft, alle gelten noch.**
+
+`[read]` **Der Waechter war seit Tagen rot und blockierte
+`pnpm gate`** ? **jetzt laeuft es darueber hinaus.**
+
+### Nachgefuehrt, nicht geloescht
+
+> *,,Der Routinen-Knopf sagt nun korrekt: Tabelle vorhanden,
+aber sein Schreibweg fehlt."*
+
+`[read]` **Die Aussage war ueberholt, nicht falsch** ? **die
+Tabelle kam, der Weg nicht.**
+
+`[cmd]` **Und eine Sabotage: eine erfundene Abwesenheit zu
+`training.routines` machte den Waechter gezielt rot.**
+
+`[cmd]` **Die Kollision geprueft:** *,,G-488 veraendert
+`nutrition/plans-echt.tsx`, nicht `training/modale.tsx`."*
+
+**Abgenommen.**
