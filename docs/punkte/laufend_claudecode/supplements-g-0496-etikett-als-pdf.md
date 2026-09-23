@@ -101,3 +101,57 @@ _(vom Agenten anzuhaengen)_
 
 _(vom Orchestrator)_
 
+## Der Api-Guide, 2026-09-08
+
+Tom: *,,lies den api guide, vielleicht gibts den label per
+api"*
+
+`[cmd]` **`dsld.od.nih.gov/api-guide` selbst abgerufen** ?
+**die Seite laedt ihren Inhalt erst im Browser, der Abruf gibt
+nur das Geruest.**
+
+`[cmd]` **Ueber die Suche gefunden: ein TypeScript-Client fuer
+die DSLD (`github.com/knorby/nih-dsld-client`) dokumentiert:**
+
+> *`GET /v9/label/{id}` ? the full label model. The response
+also includes a client-derived `thumbnailUrl`
+(`{baseUrl}/s3/pdf/thumbnails/{id}.jpg`) pointing at the
+label's thumbnail JPEG*
+
+`[read]` **Das Muster geht aus der ID, NICHT aus dem blanken
+Dateinamen** ? **darum fielen die sieben Grundadressen aus
+G-495.**
+
+    Bild   api.ods.od.nih.gov/dsld/s3/pdf/thumbnails/<id>.jpg
+    PDF    api.ods.od.nih.gov/dsld/s3/pdf/<id>.pdf
+
+`[cmd]` **Ich darf die zusammengebaute Adresse nicht selbst
+abrufen** ? **PRUEFE sie.**
+
+`[read]` **Ein JPEG waere billiger als ein PDF und braucht
+kein Rendern** ? **wenn es traegt, fallen beide Wege oben
+weg.**
+
+### Und eine Grenze
+
+`[cmd]` **Derselbe Client nennt:** *,,No API key needed for up
+to 1,000 requests/hour per IP."* **Plus getippte Fehler mit
+`Retry-After` bei 429.**
+
+`[read]` **1.000 je Stunde ist viel fuer eine Tafel, wenig fuer
+einen Stapellauf** ? **das spricht fuer Zwischenspeichern,
+sobald mehr als eine Tafel es nutzt.**
+
+`[cmd]` **Die Daten sind gemeinfrei (CC0 1.0), die Quelle wird
+genannt: National Institutes of Health, Office of Dietary
+Supplements.**
+
+### Zusaetzliche Abnahmebedingungen
+
+    A11 traegt s3/pdf/thumbnails/<id>.jpg? An zwanzig
+        Ids gemessen.
+    A12 wenn ja: das Bild wird gezeigt, kein PDF
+        gerendert. Foto.
+    A13 die Grenze 1.000/Stunde im Code vermerkt.
+    A14 die Quelle genannt, wo das Bild steht.
+
