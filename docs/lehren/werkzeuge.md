@@ -788,3 +788,29 @@ Dateien** ? **darum bleibt nichts Nachweisbares zurueck.**
 `[cmd]` **2026-09-08 verschoben: 252 Dateien, 208 davon aus
 dem Index.** **29 blieben liegen ? die laufenden Auftraege.**
 
+### Und ein Fehler dabei, meiner
+
+`[cmd]` **Ich habe nach `tools/_` gesucht und 35 von 36
+Nennungen als Kommentare abgetan** ? **dann 252 Werkzeuge
+verschoben und DREI Waechter gebrochen.**
+
+    not ok  G-474: die Werkzeuge messen NICHT blind
+    not ok  G-474: die Belegkette ist als Werkzeug da
+    not ok  G-476: es GIBT ein startendes Werkzeug
+
+`[read]` **Die Waechter nennen den DATEINAMEN, nicht den
+Pfad** ? **mein Suchmuster hat sie nicht gesehen.**
+
+`[cmd]` **Dieselbe Klasse wie G-460 und G-490: ein Muster,
+das zu eng sucht.**
+
+### Die Ergaenzung zur Regel
+
+    Vor dem Verschieben:
+      git grep -oh "_[gce][0-9a-z-]*\.mjs" -- apps/ supabase/
+                                                tools/
+    Was ein Waechter nennt, BLEIBT -- mit git add -f.
+
+`[cmd]` **33 Werkzeuge sind dadurch weiter verfolgt** ? **sie
+sind Belege, kein Wegwerfgut.**
+
