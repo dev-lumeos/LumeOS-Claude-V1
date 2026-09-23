@@ -2148,3 +2148,23 @@
   border-radius: 10px;
   background: var(--surface);
 }
+
+/* ══ G-496: DAS ETIKETTENBILD ══════════════════════════════════════
+ *
+ * `[cmd]` **Gemessen 2026-09-23: Median 21 KB, zwischen 13 und
+ * 41 KB** — kleine Bilder, die in der Tafel nicht aufgeblasen werden
+ * duerfen. `[read]` **`max-width` statt `width`**: ein 400-px-Scan
+ * auf 900 px gezogen waere unlesbar.
+ *
+ * `[read]` **Heller Grund, auch im Dunkelmodus** — ein gescanntes
+ * Etikett ist weiss, und auf dunklem Grund stuende es wie ein
+ * Aushang im Nichts. */
+.v2-supp-prod-etikett-bild {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  padding: 6px;
+}

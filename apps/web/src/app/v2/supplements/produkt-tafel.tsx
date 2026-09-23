@@ -558,34 +558,90 @@ function EtikettReiter({ dsldId }: { dsldId: number | null }) {
     )
   }
   const seite = `https://dsld.od.nih.gov/label/${dsldId}`
+  const bild = `/api/supplements/etikett?dsld_id=${dsldId}`
+
+  // ══ G-496: DREI ZUSTAENDE, KEIN VIERTER ════════════════
+  //
+  // `[read]` **`laedt` ist nicht dasselbe wie `kein Bild`** — ohne
+  // den Unterschied zeigte die Flaeche waehrend des Abrufs den
+  // Rueckfallsatz und widerriefe ihn eine Sekunde spaeter.
+  const [stand, setStand] = React.useState<'laedt' | 'da' | 'ohne'>('laedt')
+
+  // `[read]` **Beim Wechsel des Produkts zurueck auf `laedt`** —
+  // sonst stuende das Bild des vorigen Produkts, bis das neue kommt.
+  React.useEffect(() => { setStand('laedt') }, [dsldId])
+
   return (
     <section className="v2-supp-prod-abschnitt" data-probe="etikett">
-      {/* ══ DAS RUECKFALLBILD ═══════════════════════════════════════
+      {/* ══ A12: DAS BILD, NICHT DAS PDF ══════════════════
+          `[cmd]` **Gemessen 2026-09-23: 20/20 Ids liefern ein echtes
+          JPEG, Median 21 KB** — gegen 274 KB je PDF. `[read]` **Kein
+          Rendern, kein Betrachter, kein fremdes Paket.**
+
+          `[read]` **`<img>` ueber die EIGENE Route** — die NIH
+          schickt `X-Frame-Options: DENY`, und ein direkter Verweis
+          auf ihre Adresse gaebe unsere Nutzer an sie weiter.
+
+          `[cmd]` **`onError` entscheidet, nicht ein Vorab-Abruf:**
+          der Browser laedt das Bild ohnehin: ein zweiter Abruf, nur
+          um zu fragen, ob es existiert, zaehlte doppelt gegen die
+          1.000 je Stunde. */}
+        {/* ══ KEIN `loading="lazy"`, KEIN `display: none` ═════
+            `[cmd]` **Gemessen 2026-09-23: das Bild wurde NIE
+            abgerufen** — `netz: []`, `complete: false`, und die
+            Flaeche blieb auf *„lädt …"* stehen.
+
+            `[read]` **Ein `loading="lazy"`-Bild, das `display: none`
+            traegt, ist nie im Sichtfeld** — also laedt es nie, also
+            wird es nie sichtbar. **Die Bedingung verhinderte genau
+            das Ereignis, auf das sie wartete.**
+
+            `[cmd]` **Jetzt `visibility` statt `display`**: das Bild
+            belegt seinen Platz und laedt, ist aber unsichtbar, bis
+            `onLoad` kommt. `[read]` **Und ohne `lazy`** — der Reiter
+            wird erst auf Klick gerendert, spaeter geht es nicht. */}
+      <img
+        src={bild}
+        alt={`Etikett des Produkts, DSLD ${dsldId}`}
+        className="v2-supp-prod-etikett-bild"
+        data-probe="etikett-bild"
+        style={{
+          visibility: stand === 'da' ? 'visible' : 'hidden',
+          position: stand === 'da' ? 'static' : 'absolute',
+        }}
+        onLoad={() => setStand('da')}
+        onError={() => setStand('ohne')}
+      />
+
+      {stand === 'laedt' && (
+        <p className="v2-muted v2-supp-prod-satz" data-probe="etikett-laedt">
+          Das Etikett wird geladen …
+        </p>
+      )}
+
+      {/* ══ A5: DAS RUECKFALLFELD ══════════════════════
           **Tom:** *„ein not available bild"*
 
           `[read]` **Ein ruhiges Feld mit einem Satz, KEIN leeres** —
           die Lehre aus den Ghostentries (G-482, G-486): eine leere
-          Flaeche ohne Grund sieht aus wie ein Fehler.
+          Flaeche ohne Grund sieht aus wie ein Fehler. */}
+      {stand === 'ohne' && (
+        <div className="v2-supp-prod-etikett-leer" data-probe="etikett-rueckfall">
+          <Icon name="alert" className="v2-ic" />
+          <p className="v2-muted v2-supp-prod-satz" style={{ margin: 0 }}>
+            Für dieses Produkt liegt kein Etikettenbild vor.
+          </p>
+          <p className="v2-muted" style={{ fontSize: 10.5, margin: 0 }}>
+            Die NIH führt zu dieser Kennung kein Bild — die Etikettseite
+            steht trotzdem offen.
+          </p>
+        </div>
+      )}
 
-          `[cmd]` **Gezeichnet, nicht geladen** — eine Bilddatei fuer
-          einen Satz waere ein zweiter Ort fuer denselben Text. */}
-      <div className="v2-supp-prod-etikett-leer" data-probe="etikett-rueckfall">
-        <Icon name="alert" className="v2-ic" />
-        <p className="v2-muted v2-supp-prod-satz" style={{ margin: 0 }}>
-          Für dieses Produkt liegt kein Etikettenbild vor.
-        </p>
-        {/* `[read]` **Der Grund steht dabei** — nicht nur die
-            Abwesenheit. */}
-        <p className="v2-muted" style={{ fontSize: 10.5, margin: 0 }}>
-          Die NIH-Schnittstelle nennt zwar einen Dateinamen, aber
-          keine Adresse, unter der das Bild abrufbar wäre
-          (gemessen 2026-09-22 · G-495).
-        </p>
-      </div>
-
-      {/* `[read]` **Der Link steht IMMER** (A5) — er ist berechnet,
-          nicht abgerufen. `[cmd]` **`rel="noreferrer"`**: ein fremder
-          Ort braucht unsere Herkunft nicht. */}
+      {/* `[read]` **Der Link steht IMMER** (A7) — er ist berechnet,
+          nicht abgerufen, und faellt in keinem der drei Zustaende aus.
+          `[cmd]` **`rel="noreferrer"`**: ein fremder Ort braucht
+          unsere Herkunft nicht. */}
       <p className="v2-supp-prod-satz" style={{ marginTop: 10 }}>
         <a href={seite} target="_blank" rel="noreferrer noopener"
            data-probe="etikett-link">
@@ -594,6 +650,24 @@ function EtikettReiter({ dsldId }: { dsldId: number | null }) {
         <span className="v2-muted" style={{ fontSize: 10.5, marginLeft: 8 }}>
           dsld.od.nih.gov/label/{dsldId}
         </span>
+      </p>
+
+      {/* ══ A14: DIE QUELLE, WO DAS BILD STEHT ═════════════
+          `[cmd]` **Die Daten sind gemeinfrei (CC0 1.0)** — **die
+          Quelle ist trotzdem zu nennen**, und zwar dort, wo das Bild
+          steht, nicht nur im Quelltext. */}
+      {/* `[cmd]` **`v2-muted`, nicht `v2-dim`** — der G-453-Waechter
+          hat `v2-dim` mit **2,88:1** gemessen, WCAG AA verlangt 4,5.
+          `[read]` **Eine Quellenangabe, die man nicht lesen kann,
+          ist keine.**
+
+          `[read]` **Der Name steht auf EINER Zeile** — umgebrochen
+          traegt das DOM *„Office of Dietary\n Supplements"*, und
+          eine Suche nach dem Namen faende ihn nicht. */}
+      <p className="v2-muted" style={{ fontSize: 10, marginTop: 2 }}
+         data-probe="etikett-quelle">
+        Quelle: National Institutes of Health, Office of Dietary Supplements
+        {' · '}Dietary Supplement Label Database (CC0 1.0)
       </p>
     </section>
   )
