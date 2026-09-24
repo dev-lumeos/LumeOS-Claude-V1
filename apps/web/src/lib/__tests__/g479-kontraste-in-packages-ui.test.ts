@@ -1,4 +1,5 @@
 // G-479 — drei Klassen mit 2,88:1 in `packages/ui`.
+// G-498 — die vierte, `.v2-hinweis`, mit denselben Zahlen.
 //
 // **Zweimal selbst gemeldet und beide Male nicht behoben:**
 //
@@ -18,9 +19,17 @@
 //     v2-eyebrow    2,88:1       2,12:1      9,19 / 7,2
 //     v2-tbl th     2,88:1       2,12:1      9,19 / 7,2
 //
+// `[cmd]` **G-498, 2026-09-24 — dieselbe Zahl, vierte Klasse**
+// (`tools/_g498-kontrast.mjs`, 32 Messungen ueber drei Module):
+//
+//     v2-hinweis    2,88:1       2,12:1      9,19 / 7,2
+//
+// `[read]` **42 Verwendungen, alle in `apps/web/src`, alle
+// Fliesstext** — Fehlermeldungen, Leerhinweise, Erklaersaetze.
+//
 // `[read]` **WCAG AA verlangt 4,5:1 fuer Fliesstext** — und alle
-// drei tragen Text: Beschreibungen, Werte, Abschnittstitel,
-// Spaltenkoepfe.
+// vier tragen Text: Beschreibungen, Werte, Abschnittstitel,
+// Spaltenkoepfe, Hinweissaetze.
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
@@ -95,9 +104,19 @@ const KLASSEN: Array<[string, RegExp]> = [
   ['.v2-eyebrow', /\.v2-eyebrow\s*\{[^}]*color:\s*var\(--([a-z-]+)\)/],
   ['.v2-tbl th', /\.v2-tbl th\s*\{[^}]*color:\s*var\(--([a-z-]+)\)/],
   ['.v2-dim', /\.v2-dim\s*\{\s*color:\s*var\(--([a-z-]+)\)/],
+  // ══ G-498: DIE VIERTE KLASSE ═══════════════════════════════════
+  //
+  // `[cmd]` **Gemessen 2026-09-24 am Schirm: 2,88:1 hell, 2,12:1
+  // dunkel** — dieselben Zahlen wie die drei darueber, gefunden in
+  // G-468 und dort nur OERTLICH ueberschrieben.
+  //
+  // `[read]` **Hier dazugestellt, statt einen zweiten Waechter zu
+  // bauen** — es ist dieselbe Frage an dieselbe Datei, und zwei
+  // Waechter fuer eine Sache laufen irgendwann auseinander.
+  ['.v2-hinweis', /\.v2-hinweis\s*\{[^}]*color:\s*var\(--([a-z-]+)\)/],
 ]
 
-test('G-479/A3+A6: die drei Klassen tragen ein lesbares Token', () => {
+test('G-479/A3+A6 + G-498: jede Klasse traegt ein lesbares Token', () => {
   // `[cmd]` **Die Grundfarben, gemessen:** hell `oklch(1 0 0)`,
   // dunkel `oklch(0.16 0.004 270)`.
   const GRUND = { hell: 1.0, dunkel: 0.16 }
@@ -135,9 +154,14 @@ test('G-479: `--fg-dim` bleibt der Dekoration', () => {
   assert.equal(l.dunkel, 0.42, '`--fg-dim` (dunkel) wurde geaendert.')
 })
 
-test('G-479: keine der drei faellt auf --fg-dim zurueck', () => {
-  // `[read]` **Die eigentliche Rueckfallprobe** — wer eine der drei
+test('G-479 + G-498: keine der Klassen faellt auf --fg-dim zurueck', () => {
+  // `[read]` **Die eigentliche Rueckfallprobe** — wer eine der
   // Regeln auf `--fg-dim` zuruecksetzt, faellt hier auf.
+  //
+  // `[cmd]` **G-498 hat `.v2-hinweis` dazugestellt** — sie kam am
+  // 2026-08-16 herein (`abffc77f`) und wurde dreimal OERTLICH
+  // umgangen (G-453, G-479, G-468), bevor sie jemand anhob.
+  // `[read]` **Ein Waechter ist billiger als die vierte Umgehung.**
   for (const [name, regel] of KLASSEN) {
     assert.notEqual(tokenVon(regel), 'fg-dim',
       `${name} steht wieder auf --fg-dim (2,88:1 hell, 2,12:1 dunkel).`)

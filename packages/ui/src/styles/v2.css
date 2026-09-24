@@ -1644,17 +1644,49 @@ select.v2-feld { cursor: pointer; }
 }
 .v2-empty strong { color: var(--fg); }
 
+/* ══ G-498: `--fg-muted`, NICHT `--fg-dim` ═════════════════════════
+ *
+ * [cmd] Gemessen 2026-09-24 am Schirm: 2,88:1 hell, 2,12:1 dunkel --
+ * dieselben Zahlen wie bei .v2-dim, .v2-eyebrow und .v2-tbl th in
+ * G-479. WCAG AA verlangt 4,5:1.
+ *
+ * ── WARUM DIE KLASSE UND NICHT DAS TOKEN ─────────────────────────
+ *
+ * [read] Die Lehre aus G-479: --fg-dim traegt Dekoration, wo 2,88:1
+ * richtig ist -- Trennzeichen im Brotkrumenpfad, Hintergruende,
+ * Abstandhalter. [cmd] Gemessen: mehr als ein Dutzend Regeln in
+ * dieser Datei lesen das Token. Wer es anhebt, macht Beiwerk laut.
+ *
+ * ── WARUM DIESE KLASSE TEXT IST ──────────────────────────────────
+ *
+ * [cmd] Alle 42 Verwendungen gelesen (apps/web/src, die einzige App,
+ * die sie benutzt): jede traegt einen SATZ -- Fehlermeldungen,
+ * Leerhinweise, Erklaerungen wie „Kein Ziel ableitbar -- dafuer
+ * fehlt das Koerpergewicht im Profil."
+ *
+ * [read] Keine einzige Dekoration darunter. [cmd] Und sieben
+ * Stellen setzten bereits eine eigene Farbe (--neg, --pos, --warn)
+ * -- sie sind der Beweis, dass an der Klasse vorbeigearbeitet wurde.
+ *
+ * [read] Dies ist die dritte Stelle mit derselben Zahl: G-453
+ * (.v2-supp-treffer-rand, .v2-allergie-label), G-479 (drei Klassen),
+ * jetzt hier. */
 .v2-hinweis {
   display: flex;
   gap: 8px;
   align-items: flex-start;
   border-top: 1px solid color-mix(in oklch, var(--border) 60%, transparent);
   padding-top: 10px;
-  color: var(--fg-dim);
+  color: var(--fg-muted);
   font-size: 11px;
   line-height: 1.5;
 }
-.v2-hinweis strong { color: var(--fg-muted); }
+/* [cmd] G-498: `--fg`, nicht `--fg-muted` -- der Rumpf traegt jetzt
+ * selbst `--fg-muted`, und eine Hervorhebung in derselben Farbe wie
+ * ihr Umfeld hebt nichts hervor. [read] Dieselbe Staffelung wie bei
+ * `.v2-empty strong` zwei Regeln weiter oben (Rumpf `--fg-muted`,
+ * Hervorhebung `--fg`) -- gemessen: zehn Verwendungen. */
+.v2-hinweis strong { color: var(--fg); }
 
 .v2-link {
   color: var(--acc);

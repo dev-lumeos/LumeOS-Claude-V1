@@ -160,26 +160,13 @@ export function SuppVorliebenTab({ d }: { d: SuppVorliebenDaten }) {
       {/* `[read]` **Der Satz sagt, WAS wirkt** (A4) — eine Vorliebe,
           die nichts tut, ist eine Attrappe.
 
-          ══ A5: WARUM NICHT `v2-hinweis` ALLEIN ═══════════════════
-          `[cmd]` **Gemessen 2026-09-24: 2,76:1** — WCAG AA verlangt
-          4,5. `[cmd]` **`.v2-hinweis` traegt `--fg-dim`**
-          (`v2.css:1653`), **und das ist eine der 27 Textstellen, die
-          G-479 NICHT angefasst hat** — dort waren nur die drei
-          benannten Klassen im Auftrag.
-
-          `[cmd]` **Eine zweite KLASSE reicht nicht** — gemessen:
-          `.v2-muted` steht in `v2.css:833`, `.v2-hinweis` in `1647`.
-          **Beide sind einfache Klassenwaehler, also gewinnt der
-          SPAETERE** — der Kontrast blieb bei 2,76. `[read]` **Deshalb
-          am Element**, wo nichts mehr dazwischenkommt.
-
-          `[read]` **`--fg-muted` ist die Farbe, die G-479 gemessen
-          hat** (9,19:1 hell, 7,2:1 dunkel). `[cmd]` **Der Rest von
-          `v2-hinweis` bleibt, wie er ist** — ihn global zu aendern
-          waere ein eigener Auftrag, und er steht als Befund im
-          Bericht. */}
+          `[cmd]` **G-498: die oertliche Farbe ist weg** — hier stand
+          `color: 'var(--fg-muted)'`, weil `.v2-hinweis` damals
+          `--fg-dim` trug (2,76:1). `[read]` **Die Klasse traegt die
+          Farbe jetzt selbst**, also waere die Ueberschreibung eine
+          zweite Fassung derselben Entscheidung. */}
       <div className="v2-hinweis" data-probe="vorlieben-wirkung"
-           style={{ marginBottom: 12, color: 'var(--fg-muted)' }}>
+           style={{ marginBottom: 12 }}>
         {wirkungsSatz(stand)}
         {laeuft && <span className="v2-muted"> · speichert …</span>}
       </div>
