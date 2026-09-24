@@ -115,7 +115,7 @@ danach.**
 
 ## C-517 — Backups gehoeren nicht in git
 
-**Modul:** quer · **angelegt:** 2026-09-08 · **Datei:** `todos/quer-c-0517-backups-nicht-in-git.md`
+**Modul:** quer · **angelegt:** 2026-09-08 · **Datei:** `laufend_codex/quer-c-0517-backups-nicht-in-git.md`
 
 ## Toms Vorgabe
 

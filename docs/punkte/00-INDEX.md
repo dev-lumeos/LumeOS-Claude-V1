@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 233 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 549 |
-| **gesamt** | **783** |
+| `todos` | 232 |
+| `laufend_codex` | 1 |
+| `erledigt` | 551 |
+| **gesamt** | **784** |
 
 ## medical — 49
 
@@ -331,9 +331,9 @@
 | `G-497` | feature | hoch | [die Suche zeigt Gruppen statt Zeilen](todos/nutrition-g-0497-suche-zeigt-gruppen.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 123
+## supplements — 124
 
-### beauftragbar — 122
+### beauftragbar — 123
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -409,6 +409,7 @@
 | `C-532` | feature | hoch | [die Label Statements roh importieren](erledigt/supplements-c-0532-label-statements-roh-importieren.md) | erledigt | — | — |
 | `E-85` | entscheidung | hoch | [kein Zwischenspeicher fuer die DSLD-Bilder](erledigt/supplements-e-0085-kein-zwischenspeicher-dsld-bilder.md) | erledigt | — | — |
 | `E-88` | entscheidung | hoch | [die Entwurfsreferenz zeigt PED-Protokolle ohne Gradpruefung](erledigt/supplements-e-0088-entwurfsreferenz-zeigt-ped.md) | erledigt | — | G-499 |
+| `E-89` | entscheidung | hoch | [Wissen ist offen, das Protokoll ist gesperrt](erledigt/supplements-e-0089-wissen-offen-protokoll-gesperrt.md) | erledigt | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](erledigt/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | erledigt | — | A-42, E-88 |
@@ -457,7 +458,7 @@
 | `G-495` | feature | hoch | [das Etikettenbild beim Oeffnen abrufen](erledigt/supplements-g-0495-etikettenbild-beim-oeffnen.md) | erledigt | — | G-496 |
 | `G-496` | feature | hoch | [das Etikett als PDF, Toms Fund](erledigt/supplements-g-0496-etikett-als-pdf.md) | erledigt | — | E-85 |
 | `G-499` | fehler | hoch | [die Entwurfsreferenz hinter die Gradpruefung](erledigt/supplements-g-0499-referenz-hinter-die-gradpruefung.md) | erledigt | — | G-500 |
-| `G-500` | fehler | hoch | [das Injektionsprotokoll ist der sechste Weg](laufend_claudecode/supplements-g-0500-injektionsprotokoll-sechster-weg.md) | laeuft (claudecode) | — | — |
+| `G-500` | fehler | hoch | [das Injektionsprotokoll ist der sechste Weg](erledigt/supplements-g-0500-injektionsprotokoll-sechster-weg.md) | erledigt | — | E-89 |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
@@ -733,7 +734,7 @@
 | `C-503` | feature | hoch | [die Vorschlaege kommen aus den Katalogen](erledigt/quer-c-0503-keine-stoffliste.md) | erledigt | — | C-506, C-522, G-462 |
 | `C-508` | feature | mittel | [eine Zaehlfunktion fuer die Allergietreffer](erledigt/quer-c-0508-zaehlfunktion-allergietreffer.md) | erledigt | — | — |
 | `C-513` | feature | hoch | [ein Supplement in eine Mahlzeit](erledigt/quer-c-0513-supplement-in-mahlzeit.md) | erledigt | — | G-475 |
-| `C-517` | entscheidung | hoch | [Backups gehoeren nicht in git](todos/quer-c-0517-backups-nicht-in-git.md) | offen | — | — |
+| `C-517` | entscheidung | hoch | [Backups gehoeren nicht in git](laufend_codex/quer-c-0517-backups-nicht-in-git.md) | laeuft (codex) | — | — |
 | `C-519` | feature | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-c-0519-supplement-bleibt-supplement.md) | erledigt | — | C-521, G-485 |
 | `C-522` | fehler | hoch | [die Allergiesuche kennt nur den Tagnamen](todos/quer-c-0522-allergiesuche-kennt-nur-tagnamen.md) | offen | — | — |
 | `C-523` | befund | hoch | [welche Aliase fehlen noch?](erledigt/quer-c-0523-welche-aliase-fehlen.md) | erledigt | — | C-525 |

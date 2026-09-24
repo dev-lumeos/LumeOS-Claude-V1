@@ -99,3 +99,4 @@ Punkt belegt.**
 `[read]` **Punkt B ist die Arbeit** ? **ein Bild, auf das eine
 Abnahme zeigt, ist ein Beleg; eines ohne Verweis ist Muell.**
 
+

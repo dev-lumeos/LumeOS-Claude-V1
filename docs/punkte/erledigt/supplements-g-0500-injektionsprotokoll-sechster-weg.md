@@ -9,6 +9,8 @@ kind_von: G-499
 entscheidung: E-88
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: fdba3937
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/injektion-daten.ts
@@ -83,7 +85,65 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Am Messbau nachgemessen.**
+
+    compound:                0 Chunks
+    mg: 150                  0
+    Testosterone Cypionate   0
+    HCG                      0
+    BPC-157                  0
+    500 IU                   0
+    Gluteus                  2   <- Anatomie, bleibt
+
+`[cmd]` **Proben: web 2000, coach 65. Gate 18/18, Waechter
+18/18.**
+
+### Der siebte Weg, und er war nicht messbar
+
+> *,,`Test Cyp - 0.6 ml IM` stand FEST IM JSX, ohne Feld ?
+meine Feldsuche fand es nicht, der SCHIRM schon."*
+
+> *,,Die Lehre aus G-499 gilt in beide Richtungen: nach Feldern
+messen findet, was in DATEN steht, und uebersieht, was jemand
+HINGESCHRIEBEN hat."*
+
+`[read]` **Zwei Messarten, zwei blinde Flecken** ? **er hat
+beide benutzt.**
+
+### Und zwei Treffer, die nicht dazugehoerten
+
+> *,,`restDays` in `/v2/goals` ist ein Kalorienparameter,
+`compound` im Chunk 5541 die Beschriftung des schon gesperrten
+Extended-Reiters."*
+
+`[read]` **Gemessen statt angenommen** ? **zwei Treffer, die
+wie Befunde aussahen.**
+
+### A4: fresh/never ist eine Aussage
+
+`[cmd]` **Ohne Grad: 16 von 16 Stellen *fresh*, *never*, kein
+Wirkstoff** ? **aber Rotationskarte, Nadelempfehlung,
+Ruhefenster und Volumengrenze vollstaendig.**
+
+`[read]` **Der Reiter bleibt brauchbar, wie verlangt** ?
+**wer B12 spritzt, braucht die Rotation genauso.**
+
+### Und ein Waechter, der nicht rot werden konnte
+
+> *,,Ein von der Shell gefressener Backslash machte
+`export\s+const` zu `exports+const` ? die Probe blieb gruen,
+weil sie auf FALSE prueft: ein kaputter Ausdruck trifft nie,
+und *trifft nie* heisst dort *in Ordnung*."*
+
+`[read]` **Dieselbe Familie wie *,,Gleichheit ohne SOLL-Wert"*
+(G-493) und *,,eine Probe, die nur druckt"* (G-426).**
+
+`[cmd]` **Und: nach einer Sabotage-Wiederherstellung war
+`// ==` zu `/ ==` geworden ? die Waechter blieben gruen, `tsc`
+fand es.**
+
+**Abgenommen. Die Auswahlliste als E-89.**
+
 
 
 ## Bericht
