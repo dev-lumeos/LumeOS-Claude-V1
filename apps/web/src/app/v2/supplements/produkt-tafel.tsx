@@ -545,8 +545,31 @@ function WartenderReiter({ welcher }: { welcher: 'hinweise' | 'etikett' }) {
  * 288 ms Median, ohne Ergebnis.
  */
 function EtikettReiter({ dsldId }: { dsldId: number | null }) {
+  // ══ G-496: DREI ZUSTAENDE, KEIN VIERTER ══════════════
+  //
+  // `[read]` **`laedt` ist nicht dasselbe wie `kein Bild`** — ohne
+  // den Unterschied zeigte die Flaeche waehrend des Abrufs den
+  // Rueckfallsatz und widerriefe ihn eine Sekunde spaeter.
+  //
+  // ══ G-479: DIE HAKEN STEHEN VOR JEDEM `return` ═════════
+  //
+  // `[cmd]` **`pnpm lint` hat es gefunden:** *,,React Hook
+  // `React.useState` is called conditionally."* `[cmd]` **Der
+  // fruehe Ausstieg fuer `dsldId === null` stand DAVOR** — und
+  // React verlangt in jedem Anstrich dieselbe Reihenfolge.
+  //
+  // `[read]` **Das war kein Stilfehler:** ein Produkt ohne
+  // `dsld_id` haette die Hakenliste verschoben, und der naechste
+  // Anstrich haette den Zustand eines anderen Bausteins gelesen.
+  const [stand, setStand] = React.useState<'laedt' | 'da' | 'ohne'>('laedt')
+
+  // `[read]` **Beim Wechsel des Produkts zurueck auf `laedt`** —
+  // sonst stuende das Bild des vorigen Produkts, bis das neue kommt.
+  React.useEffect(() => { setStand('laedt') }, [dsldId])
+
   // `[read]` **Ohne `dsld_id` gibt es keine Etikettseite** — das
-  // Produkt stammt dann nicht aus dem DSLD-Import.
+  // Produkt stammt dann nicht aus dem DSLD-Import. `[cmd]` **Der
+  // Ausstieg steht NACH den Haken.**
   if (dsldId === null) {
     return (
       <section className="v2-supp-prod-abschnitt" data-probe="etikett-ohne-id">
@@ -559,17 +582,6 @@ function EtikettReiter({ dsldId }: { dsldId: number | null }) {
   }
   const seite = `https://dsld.od.nih.gov/label/${dsldId}`
   const bild = `/api/supplements/etikett?dsld_id=${dsldId}`
-
-  // ══ G-496: DREI ZUSTAENDE, KEIN VIERTER ════════════════
-  //
-  // `[read]` **`laedt` ist nicht dasselbe wie `kein Bild`** — ohne
-  // den Unterschied zeigte die Flaeche waehrend des Abrufs den
-  // Rueckfallsatz und widerriefe ihn eine Sekunde spaeter.
-  const [stand, setStand] = React.useState<'laedt' | 'da' | 'ohne'>('laedt')
-
-  // `[read]` **Beim Wechsel des Produkts zurueck auf `laedt`** —
-  // sonst stuende das Bild des vorigen Produkts, bis das neue kommt.
-  React.useEffect(() => { setStand('laedt') }, [dsldId])
 
   return (
     <section className="v2-supp-prod-abschnitt" data-probe="etikett">

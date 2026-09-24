@@ -74,12 +74,40 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* Utility */
+/* ══ G-479: 2,88:1 IM HELLEN, 2,12:1 IM DUNKLEN ═══════════════════
+ *
+ * `[cmd]` **Zweimal selbst gemeldet** — G-478 (*„1.565-fach ueber v2
+ * benutzt"*) und G-480 (*„betrifft 57 Dateien"*). `[cmd]` **Jetzt
+ * gezaehlt: 1.905 Stellen** — 1.837 in `apps/web`, 47 in
+ * `apps/coach`, 21 hier.
+ *
+ * `[cmd]` **Gemessen am Schirm, BEIDE Themen** (1x1-Canvas,
+ * `tools/_g479-kontrast.mjs`):
+ *
+ *     hell    2,88:1      dunkel  2,12:1
+ *     WCAG AA verlangt 4,5:1 fuer Fliesstext
+ *
+ * `[read]` **Der Auftrag kannte nur die 2,88** — **im Dunkeln ist es
+ * schlechter.**
+ *
+ * ══ WARUM NICHT `--fg-dim` GEAENDERT WIRD ════════════════════════
+ *
+ * `[cmd]` **Der Wert traegt VIER Dekorationen**, nicht nur Text:
+ * `.v2-dot` (6 px Punkt), der Akzentpunkt der Navigation, eine
+ * 1-px-Trennlinie und ein 7-%-Schraffurverlauf. `[read]` **Dort ist
+ * 2,88:1 richtig** — eine Trennlinie muss keinen Text tragen.
+ *
+ * `[cmd]` **Und `--fg-subtle` reicht nicht:** 4,87:1 hell, aber
+ * **3,98:1 dunkel** — gerechnet, nicht geschaetzt.
+ *
+ * `[cmd]` **`--fg-muted` traegt beide Themen: 9,19:1 und 7,8:1** —
+ * derselbe Wert, den `.v2-muted` schon benutzt. */
 .v2-eyebrow {
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--fg-dim);
+  color: var(--fg-muted);
 }
 .v2-dot {
   width: 6px; height: 6px;
@@ -776,13 +804,16 @@ a { color: inherit; text-decoration: none; }
 
 /* Table */
 .v2-tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+/* `[cmd]` **G-479: Spaltenkoepfe sind Text, den man liest** —
+ * G-480 hat sie mit 2,88:1 gemessen und als Altbefund belegt.
+ * `[read]` **`--fg-muted`, wie `.v2-eyebrow` daneben.** */
 .v2-tbl th {
   text-align: left;
   font-weight: 500;
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--fg-dim);
+  color: var(--fg-muted);
   padding: 8px 8px 8px 0;
   border-bottom: 1px solid var(--border);
 }
@@ -800,7 +831,11 @@ a { color: inherit; text-decoration: none; }
 .v2-spacer { flex: 1; }
 .v2-mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .v2-muted { color: var(--fg-muted); }
-.v2-dim { color: var(--fg-dim); }
+/* `[cmd]` **G-479: `.v2-dim` traegt Fliesstext** — Beschreibungen,
+ * Werte, Erklaersaetze (gemessen an zehn Stellen). `[read]` **Der
+ * NAME bleibt** (1.022 Stellen allein in `apps/web`), **die Farbe
+ * wird lesbar.** */
+.v2-dim { color: var(--fg-muted); }
 .v2-row-gap { display: flex; align-items: center; gap: 8px; }
 .v2-col-gap { display: flex; flex-direction: column; gap: 8px; }
 .v2-center { display: grid; place-items: center; }
