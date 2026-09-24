@@ -17,12 +17,38 @@
 // weglassen waere schlechter, weil die Tab-Leiste dann unvollstaendig
 // aussieht statt unfertig.
 import * as React from 'react'
+import dynamic from 'next/dynamic'
 import { useTranslations } from 'next-intl'
 import { Card, Pill, Icon, Tabs, InEntwicklungKnopf, type TabItem } from '@lumeos/ui'
 
 // G-123: der Tab-Hook aus G-117.
 import { useTabParam } from '../../../lib/tab-url'
-import { STACK, EXTENDED_STACK } from './daten'
+// ══ G-117: KEIN Wert-Import von `EXTENDED_STACK` ═════════════════
+//
+// `[cmd]` **Hier stand `import { STACK, EXTENDED_STACK }`** — und
+// gebraucht wurde davon **eine einzige Zahl**, die Laenge fuer das
+// Zaehlerchen am Reiter (`count:`).
+//
+// `[cmd]` **Gemessen am 2026-09-24:** dieser eine Import zieht die
+// ganze Liste ins Seitenbuendel — fuenf Wirkstoffe mit Namen, Dosis
+// und Anwendungsschema, **auch fuer jemanden ohne Grad.** `[read]`
+// **Das `dynamic` am Reiter allein haette daran nichts geaendert:**
+// es haelt `tab-extended.tsx` heraus, nicht `daten.ts`.
+//
+// `[read]` **Eine Zahl ist kein Grund, eine Stoffliste
+// auszuliefern.** Sie steht deshalb als Konstante hier.
+import { STACK } from './daten'
+
+/**
+ * Wie viele Wirkstoffe der Extended-Entwurf fuehrt — nur fuer das
+ * Zaehlerchen am Reiter.
+ *
+ * `[cmd]` **5**, gemessen am 2026-09-24 gegen `EXTENDED_STACK` in
+ * `daten.ts`. `[read]` **Ein Waechter haelt die Zahl aktuell**
+ * (`g117-extended-buendel.test.ts`) — eine abgeschriebene Zahl ohne
+ * Waechter altert still.
+ */
+const EXTENDED_ANZAHL = 5
 import { SuppCtx, type ModalZustand, type ModalTyp } from './kontext'
 import type { StackDaten, KatalogEintrag } from '../../../lib/supplements/stack-read'
 import type { BilanzZeile } from '../../../lib/supplements/bilanz-lage'
@@ -39,10 +65,61 @@ import {
 // dass der Code nicht im Buendel steht; der Preis war ein Tab, der
 // niemandem mehr etwas zeigt.
 //
-// `[read]` **Das Gate haelt trotzdem:** `SuppExtended` wird nur
-// gerendert, wenn der Grad reicht — der Code liegt im Buendel, die
-// Daten kommen nicht. Als Befund aufgenommen (G-111).
-import { SuppExtended } from './tab-extended'
+// ══ G-117: DER CODE LIEGT NICHT MEHR IM BUENDEL ══════════════════
+//
+// `[cmd]` **Gemessen am 2026-09-24 (Produktionsbau):** die
+// Kennzeichen aus `tab-extended.tsx` (die Nebenwirkungsnotizen und
+// die Knopfbeschriftung des Zyklusplaners) standen in **einem von
+// zehn** JS-Chunks der Seite, `app/v2/supplements/page-*.js`. **Auch
+// fuer jemanden, dessen Grad nicht reicht.**
+//
+// `[read]` **Die Kennzeichen stehen hier BEWUSST nicht woertlich.**
+// `[cmd]` Eine erste Fassung zitierte sie — im Entwicklungsbau
+// werden Kommentare mitgeliefert, und die Probe fand sie in
+// `page.js` und wurde rot. **Der Suchtext eines Waechters gehoert
+// nicht in die Datei, die er bewacht** (dieselbe Falle wie
+// `selbstpruefung-findet-ihre-eigenen-muster`).
+//
+// `[read]` **Was das wiegt:** die Protokolle selbst kommen nicht mit,
+// nur die Attrappenzahlen. **Aber wer den Code liest, erfaehrt, DASS
+// es PED-Protokolle gibt und wie sie aufgebaut sind** — und sobald
+// Extended echte Daten fuehrt, wird aus dem Entwurf ein Leseweg.
+//
+// ── WARUM `ssr: false` DAS FALSCHE WERKZEUG WAR ──────────────────
+//
+// `[cmd]` **Der erste Versuch (2026-08-20) nahm `dynamic({ ssr:
+// false })`.** Das hielt den Chunk heraus **und machte den Reiter
+// leer** — auch den Ladehinweis. Zurueckgenommen, richtig.
+//
+// `[read]` **`dynamic` verschiebt das LADEN, es entscheidet nicht
+// ueber das AUSLIEFERN** — das war die Diagnose. `[read]` **Sie
+// stimmt fuer `ssr: false`, aber die Verschiebung ist genau das, was
+// hier gebraucht wird:** ein eigener Chunk, der erst geholt wird,
+// wenn jemand ihn rendert. **Mit `ssr: true` rendert der Server
+// weiterhin** — der Reiter bleibt am Leben, und wessen Grad nicht
+// reicht, rendert ihn nie und bekommt den Chunk nie.
+//
+// `[read]` **Die Grenze ERSETZT das serverseitige Gate nicht, sie
+// kommt dazu** (A5): `ladeGate()` entscheidet weiterhin ueber die
+// DATEN, `gateOffen` weiterhin ueber das Rendern. Das hier
+// entscheidet nur, was im Buendel liegt.
+const SuppExtended = dynamic(
+  () => import('./tab-extended').then(m => ({ default: m.SuppExtended })),
+  {
+    // `[cmd]` **`ssr: true` ist die Vorgabe und steht hier
+    // ausdruecklich** — ein spaeteres `false` waere der Rueckfall,
+    // den `g117-extended-buendel.test.ts` faengt.
+    ssr: true,
+    // `[read]` **Ein Ladehinweis, kein leeres Feld** — die Lehre aus
+    // G-482/G-486. Beim Serveranstrich erscheint er gar nicht; er
+    // gilt dem Nachladen im Browser.
+    loading: () => (
+      <p className="v2-muted" style={{ fontSize: 12, padding: '24px 0' }}>
+        Extended wird geladen …
+      </p>
+    ),
+  },
+)
 // G-110: das Regelwerk (C-133) und das echte Gate.
 import { InteractionsEchtTab, RegelHinweis } from './tab-interactions-echt'
 import { ExtendedGesperrt } from './extended-gate'
@@ -138,7 +215,7 @@ function tabs(
   return [
     { id: 'today', label: t('tabHeute'), icon: 'check' },
     { id: 'stack', label: t('tabStack'), icon: 'supplements', count: stackAnzahl },
-    { id: 'extended', label: t('tabExtended'), icon: 'medical', count: EXTENDED_STACK.length },
+    { id: 'extended', label: t('tabExtended'), icon: 'medical', count: EXTENDED_ANZAHL },
     // ══ G-452: der Produkte-Reiter, LINKS NEBEN `catalog` ═══════════
     //
     // **Tom, 2026-09-08, mit Tobias:** *„die supplier produkte

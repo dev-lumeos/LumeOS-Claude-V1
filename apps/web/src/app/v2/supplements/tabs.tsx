@@ -19,9 +19,21 @@
 import * as React from 'react'
 import { Card, Pill, Icon, Meter, Ring, Row, LineChart, InEntwicklungKnopf } from '@lumeos/ui'
 
+// ══ G-117: `EXTENDED_STACK`/`EXTENDED_LABS` sind hier raus ═══════
+//
+// `[cmd]` **Beide wurden importiert und NIRGENDS in dieser Datei
+// benutzt** — gemessen am 2026-09-24: je ein Vorkommen, das in der
+// Importzeile selbst. `[read]` **Ein toter Import ist trotzdem ein
+// Wert-Import:** er zieht die Wirkstoffliste des Extended-Entwurfs
+// ins Buendel.
+//
+// `[cmd]` **Und `tabs.tsx` haengt an vier Reitern, die JEDER
+// sieht** (Today, Stack, Database, Cost) — der Umweg lieferte die
+// PED-Stoffliste also auch an jemanden ohne Grad aus. `[read]`
+// **Das `dynamic` am Extended-Reiter fasst diesen Weg nicht an.**
 import {
   STACK, SLOTS, DAY_LETTERS, EVIDENCE_PALETTE, SUPPLEMENT_DB,
-  EXTENDED_STACK, EXTENDED_LABS, type StackItem,
+  type StackItem,
 } from './daten'
 import { ReferenzTrenner } from '../../../components/shell/referenz-trenner'
 import {
