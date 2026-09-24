@@ -734,3 +734,163 @@ alle vier alten Spalten."*
     25 Befunde, genau der Sollstand
     apps/web 1876, apps/coach 65
 
+---
+
+# Sechster Teil - der Stand vor dem Clear
+
+`[cmd]` **2026-09-08. Beide Agenten werden geleert.**
+
+## Wo LumeOS steht
+
+    201 Tabellen, 2.784 Spalten
+    234 Funktionen, 477 Policies
+    776 Punkte: 236 offen, 540 erledigt
+    apps/web 1.982, apps/coach 65
+    pnpm gate GRUEN: 18 von 18
+
+`[read]` **Das Gate war tagelang rot und laeuft seit C-536
+durch.**
+
+## Was in diesem Teil entstand
+
+### Supplemente sind im Essen angekommen
+
+    C-513  Supplemente in Mahlzeiten
+    C-519  Supplements bleiben SSOT, Meal verweist
+    C-521  die Tagessumme zaehlt sie
+    C-524  Planeintraege, mit Formregel in der Datenbank
+    C-529  der Stack kennt sein Produkt
+    G-478  die Kacheln im Diary
+    G-484  Produkt in Stack ODER Mahlzeit
+    G-489  der Ghost zeigt und bestaetigt sie
+    G-492  Hinzufuegen als Modal, eine Subnav fuer beide
+           Tafeln
+
+`[cmd]` **Toms Fruehstueck rechnet: 557,5 kcal, 40,022 g** ?
+**Haferflocken, Blaubeeren, Mandelmus, Whey.**
+
+### Die Suche
+
+    C-495  pg_trgm, 4.907 Marken
+    C-520  produktform in der Rueckgabe, p_formen
+    C-525  23 Suchbegriffe -- "brot" trifft Gluten
+    G-480  eine Suche fuer Lebensmittel UND Supplemente
+    G-481  der Leersatz nennt jeden wirkenden Filter
+
+### Das Etikett
+
+    C-527  die DSLD traegt mehr als wir lasen
+    C-532  1.467.176 Statements, 11 Arten
+    G-495  der Link faellt nie aus
+    G-496  das Bild, 21 KB statt 274
+
+`[cmd]` **Toms Fund:** `api.ods.od.nih.gov/dsld/s3/pdf/<id>.pdf`
+**und das Bild unter** `s3/pdf/thumbnails/<id>.jpg`.
+
+### Die Muskeln
+
+    C-528  die Hierarchie ist unsauber (Messauftrag)
+    C-530  bereinigt, 7 Muskeln ergaenzt, 112 Knoten
+    C-531  Aliase sind als Aliase erkennbar
+
+`[read]` **Der Quadrizeps hatte drei Koepfe, die
+Rotatorenmanschette drei Muskeln** ? **jetzt vier und vier.**
+
+### MealCam
+
+    C-538  der Speicher: Bild, Visionsergebnis,
+           Deklaration
+    C-539  Trigramme verwechseln Pute mit Huhn
+
+## Toms Entscheidungen in diesem Teil
+
+    E-83   ein Weg fuer Lebensmittel UND Supplemente
+    E-84   ein Supplement bleibt ein Supplement
+    E-85   kein Zwischenspeicher fuer die DSLD-Bilder
+    E-86   gilt die Suchtiefe modulweit? OFFEN
+    E-87   days_count zieht mit (vom Orchestrator
+           entschieden)
+
+`[read]` **Und die Formregel, die vieles vereinfacht hat:**
+
+    Meal    Powder, Liquid, Bar, Gummy
+    Stack   Capsule, Tablet, Softgel, Lozenge
+
+## Fehler des Orchestrators, sechster Teil
+
+**18** ? `[cmd]` **G-475 und G-478 ohne Spec und Mockup
+geschrieben** ? **das Mockup hatte die Antwort die ganze Zeit.**
+
+**19** ? `[cmd]` **`backup/` aufgeraeumt ohne `git ls-files`** ?
+**608 Loeschungen.**
+
+**20** ? `[cmd]` **252 Werkzeuge verschoben, drei Waechter
+gebrochen** ? **mein Suchmuster war zu eng.**
+
+**21** ? `[cmd]` **C-536 abgenommen ohne die Proben zu
+laufen** ? **Claude Code hatte es gemeldet, ich hielt es fuer
+fremd.**
+
+**22** ? `[cmd]` **Eine Rangliste vorgeschlagen, die
+Gewohnheit unterstellt** ? **Tom: *,,wer sagt, dass der user
+jeden tag dieselbe art huehnerbrust isst?"***
+
+## Neue Regeln in docs/lehren/
+
+    Eine Sicherung ist nach der Abnahme Geschichte
+    Messwerkzeuge auch -- aber was ein Waechter beim
+      Namen nennt, bleibt verfolgt
+    Ein Werkzeug beendet nur, was es selbst gestartet hat
+    Keine Vermutungen in den Auftrag
+    Eine Beanstandung versandet nie
+
+`[cmd]` **Und aufgeraeumt: Zweige 65 -> 11, unverfolgt
+195 -> 4, 143 Sicherungen und 252 Werkzeuge nach
+`F:\My Backups\`.**
+
+## ZUERST NACH DEM CLEAR
+
+`[read]` **Beide Agenten sind leer. Der erste Auftrag traegt
+den Einstieg.**
+
+### Drei Entscheidungen warten auf Tom
+
+**1** ? **C-539: die Artentrennung.**
+
+`[cmd]` **17 von 20 richtig, 2 falsche Tierart, 1 falsche
+Speise.** **Eine hoehere Schwelle hilft nicht ? bei 0,5 fallen
+6 von 20 ganz heraus.**
+
+`[cmd]` **Codex empfiehlt: eine kuratierte mehrwertige
+Food-Arten-Relation, Art VOR dem Trigramm, bei Unsicherheit
+keine Wahl.**
+
+**2** ? **C-535: der Parent fuer die Textsuche.**
+
+`[cmd]` **C-534 hat gemessen: nicht ableitbar. 46 von 2.646
+Gruppen haben Tagebuchnutzung.**
+
+**3** ? **E-86: gilt die Suchtiefe modulweit?**
+
+### Offene Punkte, sortiert
+
+    G-472  die Portionswahl in der Tafel (pruefen, ob
+           G-492 sie ueberholt hat)
+    G-497  die Suche zeigt Gruppen (braucht C-535)
+    C-517  Backups in git (teilweise erledigt)
+    C-509-Folge: Wirkstoffe weiter kurieren
+
+## Der Zustand, auf den ein neuer Agent trifft
+
+    laufend_codex        leer
+    laufend_claudecode   leer
+    Arbeitsbaum          sauber
+    Dev-Server           3200 und 3220 laufen
+
+`[cmd]` **`backup/schema/*.sql` und `tools/_*` sind
+ignoriert** ? **sie wandern nach der Abnahme nach
+`F:\My Backups\`.**
+
+`[read]` **Was ein Waechter beim Namen nennt, bleibt
+verfolgt** ? **36 Werkzeuge sind deshalb im Baum.**
+
