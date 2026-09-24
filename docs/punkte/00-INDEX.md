@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 232 |
+| `todos` | 231 |
 | `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 551 |
 | **gesamt** | **784** |
 
@@ -493,7 +494,7 @@
 | `C-536` | fehler | mittel | [drei Abwesenheitsaussagen sind ueberholt](erledigt/training-c-0536-abwesenheitsaussagen-ueberholt.md) | erledigt | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
-| `G-25` | befund | mittel | [Training an echte Daten anschliessen](todos/training-g-0025-training-an-echte-daten-anschliessen.md) | offen | — | — |
+| `G-25` | befund | mittel | [Training an echte Daten anschliessen](laufend_claudecode/training-g-0025-training-an-echte-daten-anschliessen.md) | laeuft (claudecode) | — | — |
 | `G-68` | befund | mittel | [`e1RM` deckt 6 von 1.416](todos/training-g-0068-e1rm-deckt-6-von-1-416.md) | offen | — | — |
 | `G-77` | befund | mittel | [Streaks bei 32 Auslassern](todos/training-g-0077-streaks-bei-32-auslassern.md) | offen | — | — |
 | `G-88` | entscheidung | mittel | [Die Sitzungskarte auf `Today`](todos/training-g-0088-die-sitzungskarte-auf-today.md) | offen | — | — |
