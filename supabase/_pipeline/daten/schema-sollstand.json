@@ -604,6 +604,50 @@
       "spalten_herkunft": "[cmd] 2026-08-16 gegen information_schema.columns geprueft. 052_diary_foundation.sql erzeugt die Tagebuchspalten, 058_custom_foods.sql ergaenzt custom_food_id, 058a_meal_item_portions.sql ergaenzt die Portions-Snapshot-Spalten. [cmd] 2026-08-18: 017_datenherkunft.sql ergaenzt measurement_source und source_detail. C-519/E-84 ersetzt den C-513-Produkt-Snapshot durch supplement_intake_log_id: Nutrition haelt nur den Einnahmeverweis."
     },
     {
+      "name": "mealcam_scans",
+      "schritt": "538_mealcam_memory_schema",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "20260924090000_c538_mealcam_memory.sql: private Owner-Operationen; anon und PUBLIC sind explizit widerrufen.",
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": [
+        "id",
+        "user_id",
+        "image_path",
+        "image_sha256",
+        "vision_result",
+        "food_id",
+        "food_name_snapshot",
+        "portion_amount",
+        "portion_unit",
+        "created_at",
+        "updated_at"
+      ],
+      "spalten_herkunft": "C-538: privater Bildpfad und bildbezogener Hash, rohes Visionsergebnis sowie deklarierter BLS-Eintrag mit Portions-Snapshot; keine Auswertung oder Vorschlagsdaten."
+    },
+    {
       "name": "water_logs",
       "schritt": "055",
       "rls": true,
@@ -1187,6 +1231,11 @@
       "schritt": "052"
     },
     {
+      "tabelle": "mealcam_scans",
+      "name": "mealcam_scans_touch_updated_at",
+      "schritt": "538_mealcam_memory_schema"
+    },
+    {
       "tabelle": "meal_items",
       "name": "meal_items_owner_guard_trg",
       "schritt": "052"
@@ -1376,6 +1425,12 @@
       "tabelle": "meal_items",
       "zeigt_auf": "foods",
       "schritt": "052"
+    },
+    {
+      "name": "mealcam_scans_food_id_fkey",
+      "tabelle": "mealcam_scans",
+      "zeigt_auf": "foods",
+      "schritt": "538_mealcam_memory_schema"
     },
     {
       "name": "meal_items_supplement_intake_log_id_fkey",
@@ -1668,6 +1723,10 @@
     }
   ],
   "funktionen": [
+    {
+      "name": "mealcam_scan_declaration_similarity",
+      "schritt": "538_mealcam_memory_schema"
+    },
     {
       "name": "search_fold",
       "schritt": "072"

@@ -2565,6 +2565,17 @@
       "depends_on": [
         "537_materialized_meal_plan_days_count_schema"
       ]
+    },
+    {
+      "id": "538_mealcam_memory_schema",
+      "path": "supabase/migrations/20260924090000_c538_mealcam_memory.sql",
+      "kind": "sql",
+      "creates": "C-538: privater MealCam-Speicher fuer Bild, Roh-Visionsergebnis und erklaerte BLS-Portion ohne Erkennung, Vorschlag oder Lernen.",
+      "depends_on": [
+        "537_backfill_materialized_meal_plan_days_count_daten",
+        "072",
+        "030"
+      ]
     }
   ]
 }
