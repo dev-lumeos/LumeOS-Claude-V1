@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 1264ad04
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/ansicht.tsx
@@ -305,4 +307,54 @@ beruehrt, beides laedt heiss nach.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **Proben: web 1982/1982, coach 65/65.**
+
+`[cmd]` **Die Vorlieben wirken: 121.959 On Market -> 4.050 bei
+zwei gespeicherten Marken.**
+
+### A4 war kein Zeigen, sondern ein Bauen
+
+> *,,Nichts las die C-511-Tabelle, also habe ich die Vorlieben
+in die Produktsuche verdrahtet: 121.959 -> 8.069."*
+
+`[read]` **C-511 war live und wirkungslos** ? **ein Speicher
+ohne Leser, wie `user_display_preferences` vor G-467.**
+
+> *,,`avoided_ingredients` wurde geschrieben, aber nie
+gelesen."*
+
+### Und die zwei Speicher sauber getrennt
+
+> *,,Sitzungsfilter (C-504) und Vorliebe (C-511) als zwei
+Speicher mit ausdruecklichem Vorrang ? ohne diesen Riegel
+haette ein *Zuruecksetzen* die Wirkung der Vorliebe still
+geloescht."*
+
+`[read]` **Genau Codex Unterscheidung aus C-511: der Filter ist
+eine Ansichtssache, die Lieblingsmarke eine Haltung.**
+
+### A3: eine Wahrheit, zwei Flaechen
+
+`[cmd]` **Ein in Supplements angelegtes Allergen erschien in
+Settings** ? **`public.user_allergies` bleibt die Wahrheit
+(E-84).**
+
+### Drei eigene Messfehler, aufgeschrieben
+
+> *,,Eine Probe wartete auf `.first()` ? schon nach dem ersten
+Klick da, also wartete sie nie wieder."*
+
+> *,,Eine Marke im Fuss stand sofort, waehrend die Tafel noch
+*Sucht...* zeigte ? ich habe drei Laeufe lang einen Ladezustand
+als Null gelesen."*
+
+> *,,Vier erfundene Namen, jeder einen Lauf."*
+
+`[read]` **Ein Ladezustand, der wie ein Ergebnis aussieht** ?
+**dieselbe Klasse wie die Null in G-483 und die 438 kcal in
+G-485.**
+
+**Abgenommen.**
+

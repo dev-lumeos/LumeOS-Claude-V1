@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 238 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 536 |
-| **gesamt** | **775** |
+| `erledigt` | 537 |
+| **gesamt** | **776** |
 
 ## medical — 49
 
@@ -451,7 +451,7 @@
 | `G-465` | fehler | hoch | [fuenf Anfragen je Suche](erledigt/supplements-g-0465-fuenf-anfragen-je-suche.md) | erledigt | — | — |
 | `G-466` | fehler | mittel | [amount_qualifier wird nicht gelesen](erledigt/supplements-g-0466-amount-qualifier.md) | erledigt | — | C-512 |
 | `G-467` | fehler | hoch | [die Filter werden nicht gespeichert](erledigt/supplements-g-0467-filter-werden-nicht-gespeichert.md) | erledigt | — | G-469 |
-| `G-468` | feature | hoch | [der Vorlieben-Reiter fuer Supplements](laufend_claudecode/supplements-g-0468-vorlieben-reiter.md) | laeuft (claudecode) | — | — |
+| `G-468` | feature | hoch | [der Vorlieben-Reiter fuer Supplements](erledigt/supplements-g-0468-vorlieben-reiter.md) | erledigt | — | G-498 |
 | `G-472` | feature | mittel | [die Tafel zeigt die Portionswahl nicht](todos/supplements-g-0472-portionswahl-in-der-tafel.md) | offen | — | — |
 | `G-484` | feature | hoch | [keine Aktion im Produkte-Reiter](erledigt/supplements-g-0484-aktion-im-produkte-reiter.md) | erledigt | — | C-529, G-491, G-492 |
 | `G-491` | fehler | hoch | [die Produkttabelle bleibt im Browser leer](erledigt/supplements-g-0491-produkttabelle-bleibt-leer.md) | erledigt | — | — |
@@ -634,7 +634,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 195
+## quer — 196
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -833,6 +833,7 @@
 | `G-479` | fehler | mittel | [zwei Klassen mit 2,88:1 in packages/ui](erledigt/quer-g-0479-kontraste-in-packages-ui.md) | erledigt | — | — |
 | `G-487` | fehler | hoch | [der Tageswechsler startet nicht auf heute](erledigt/quer-g-0487-tageswechsler-startet-nicht-auf-heute.md) | erledigt | — | — |
 | `G-490` | fehler | mittel | [der Spaltenwaechter kennt die Tabelle nicht](erledigt/quer-g-0490-spaltenwaechter-kennt-tabelle-nicht.md) | erledigt | — | — |
+| `G-498` | fehler | mittel | [.v2-hinweis liegt unter 4,5:1](laufend_claudecode/quer-g-0498-hinweis-kontrast.md) | laeuft (claudecode) | — | — |
 
 ## buddy — 1
 
