@@ -97,6 +97,8 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 024 | `02_human_layer/024_suchsynonyme.sql` | `search_synonyms` | 4.877, davon 21 von Hand |
 | C-540 Schema | `migrations/20260924110000_c540_animal_species.sql` | kanonische `animal_species` und mehrwertige `food_animal_species`, beide nur lesbar | RLS, 2 SELECT-Policies |
 | C-540 Daten | `02_human_layer/025a_tierarten_kuration.sql` | sichere Zuordnung aus expliziten Tiernamen; unbenannte Wurst- und Gefluegelprodukte bleiben offen | 1.449 im Katalogbereich, mindestens 53 Mehrfachfoods |
+| C-542 Schema | `migrations/20260924120000_c542_absence_is_not_missing.sql` | benannte, aber mengenlose Produkt-Naehrstoffe bleiben im Intake-Snapshot; nicht genannte bleiben Null | `not_stated` bleibt Luecke |
+| C-542 Daten | `13_supplements/542_backfill_unmeasured_nutrient_codes.sql` | einmaliger, portionsgenauer Nachtrag fuer vorhandene Produkt-Intakes | keine Abwesenheit mehr als Messluecke |
 | 025 | `_ableitung/anzeigenamen-einspielen.ts` | kuratierte `name_display_de`/`name_display_en` aus `daten/anzeigenamen.jsonl` | 7.140 Anzeigenamen, 33 `sicher=false` sichtbar im Lauf |
 | 026 | `_ableitung/anzeigenamen-nebennamen-aliase.ts` | kuratierte `nebennamen` als `food_aliases.source='curated_nebenname'` | 576 Foods mit Nebennamen, 663 kuratierte Namen vor Deduplikation |
 | 027 | `_ableitung/027_lebensmittel-tags.ts` | kuratierte C-44-Tags aus `daten/lebensmittel-tags.jsonl`, `processing_level` nach C-100 und Sortweight-Refresh, ohne die Makro-Tags aus `020` zu löschen | 5.150 Foods, 8.702 Tags; `processing_level`: 927 hochverarbeitet |

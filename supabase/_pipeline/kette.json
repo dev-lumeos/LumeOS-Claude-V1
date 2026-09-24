@@ -2443,6 +2443,24 @@
       ]
     },
     {
+      "id": "c542_absence_is_not_missing_schema",
+      "path": "supabase/migrations/20260924120000_c542_absence_is_not_missing.sql",
+      "kind": "sql",
+      "creates": "C-542: Intake-Snapshots bewahren benannte Etikettenwerte ohne Mengenangabe; nicht genannte Naehrstoffe bleiben Null statt Luecke.",
+      "depends_on": [
+        "521_daily_summary_supplement_snapshots"
+      ]
+    },
+    {
+      "id": "c542_backfill_unmeasured_nutrient_codes",
+      "path": "supabase/_pipeline/13_supplements/542_backfill_unmeasured_nutrient_codes.sql",
+      "kind": "sql",
+      "creates": "C-542: fuellt den fehlenden Snapshot fuer alte Produkt-Einnahmen einmalig aus dem damals gewaehlten Produkt und der Portion.",
+      "depends_on": [
+        "c542_absence_is_not_missing_schema"
+      ]
+    },
+    {
       "id": "525_allergy_search_terms_schema",
       "path": "supabase/migrations/20260921092000_c525_allergy_search_terms.sql",
       "kind": "sql",
