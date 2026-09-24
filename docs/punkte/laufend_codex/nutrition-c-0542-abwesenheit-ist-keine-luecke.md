@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-426
 entscheidung: null
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [nutrition.meal_items]
 zahlen:
@@ -75,3 +77,11 @@ Mengenangabe*, nicht *nicht enthalten*.**
     A5  G-426 zeigt die Obergrenze danach richtig --
         GEMELDET, damit Claude Code nachzieht.
     A6  Sicherung, Vollkette, ALLE Waechter.
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
