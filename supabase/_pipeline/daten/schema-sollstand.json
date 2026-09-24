@@ -1267,6 +1267,16 @@
       "tabelle": "meal_plan_days",
       "name": "meal_plan_days_active_overlap_guard_trg",
       "schritt": "526_one_active_meal_plan_per_day"
+    },
+    {
+      "tabelle": "meal_plans",
+      "name": "meal_plans_rollover_days_count_sync_trg",
+      "schritt": "537_materialized_meal_plan_days_count_schema"
+    },
+    {
+      "tabelle": "meal_plan_days",
+      "name": "meal_plan_days_count_sync_trg",
+      "schritt": "537_materialized_meal_plan_days_count_schema"
     }
   ],
   "_fremdschluessel": "Namentlich, weil beim Ausfall 2026-08-16 meal_items_meal_id_fkey mitverschwand. Ein fehlender Fremdschluessel faellt sonst erst auf, wenn verwaiste Zeilen entstanden sind.",
@@ -1845,6 +1855,22 @@
     {
       "name": "meal_items_inventory_deduct",
       "schritt": "407"
+    },
+    {
+      "name": "meal_plan_materialized_days_count",
+      "schritt": "537_materialized_meal_plan_days_count_schema"
+    },
+    {
+      "name": "sync_meal_plan_materialized_days_count",
+      "schritt": "537_materialized_meal_plan_days_count_schema"
+    },
+    {
+      "name": "meal_plan_days_count_guard",
+      "schritt": "537_materialized_meal_plan_days_count_schema"
+    },
+    {
+      "name": "meal_plan_days_count_sync",
+      "schritt": "537_materialized_meal_plan_days_count_schema"
     }
   ],
   "mindestzeilen": {

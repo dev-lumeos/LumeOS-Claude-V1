@@ -2547,6 +2547,24 @@
         "532_supplier_product_label_statements_schema",
         "485_dsld_import"
       ]
+    },
+    {
+      "id": "537_materialized_meal_plan_days_count_schema",
+      "path": "supabase/migrations/20260923093000_c537_materialized_meal_plan_days_count.sql",
+      "kind": "sql",
+      "creates": "C-537/E-87: days_count eines materialisierten Meal-Plans folgt bei Rollover und Tagesaenderungen immer seiner echten Tageszahl.",
+      "depends_on": [
+        "526_one_active_meal_plan_per_day"
+      ]
+    },
+    {
+      "id": "537_backfill_materialized_meal_plan_days_count_daten",
+      "path": "supabase/_pipeline/05_user_tabellen/537_backfill_materialized_meal_plan_days_count.sql",
+      "kind": "sql",
+      "creates": "C-537: zieht bestehende materialisierte Meal-Plaene idempotent auf ihre tatsaechliche days_count nach.",
+      "depends_on": [
+        "537_materialized_meal_plan_days_count_schema"
+      ]
     }
   ]
 }
