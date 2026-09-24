@@ -151,6 +151,33 @@ const SuppExtendedReferenz = dynamic(
     ),
   },
 )
+// ══ G-500: der Entwurfsstand des Injektionsreiters ══════════════
+//
+// `[cmd]` **Gemessen am 2026-09-08 nach FELDERN** (nicht nach
+// Namen — die Lehre aus G-499): die Wirkstoff-, Mengen-, Weg- und
+// Nadelfelder des Entwurfsprotokolls lagen im Seitenchunk, **fuer
+// jeden Besucher.**
+//
+// `[read]` **Die Feldnamen stehen hier NICHT woertlich** — zum
+// dritten Mal waere die Probe sonst an meinem eigenen Kommentar
+// haengengeblieben. **Die Waechterprobe schneidet Kommentare weg;
+// die Browserprobe kann das im Entwicklungsbau nicht.**
+//
+// `[read]` **Dasselbe Werkzeug wie fuer Reiter und Referenz** —
+// `ssr: true` haelt den Chunk aus dem Buendel und laesst den
+// Serveranstrich stehen.
+const SuppInjectionsEntwurf = dynamic(
+  () => import('./injektion-entwurf')
+    .then(m => ({ default: m.SuppInjectionsEntwurf })),
+  {
+    ssr: true,
+    loading: () => (
+      <p className="v2-muted" style={{ fontSize: 12, padding: '16px 0' }}>
+        Der Entwurfsstand wird geladen …
+      </p>
+    ),
+  },
+)
 // G-110: das Regelwerk (C-133) und das echte Gate.
 import { InteractionsEchtTab, RegelHinweis } from './tab-interactions-echt'
 import { ExtendedGesperrt } from './extended-gate'
@@ -726,7 +753,41 @@ export function SupplementsAnsicht({
               <InjektionsKonfigKarte
                 k={konfig ?? { flaechen: [], vorschlag: null, fehler: null }}
                 substanzen={injizierbare} />
-              <SuppInjections stand={injektionen} stichtag={stichtag} />
+              {/* ══ G-500: die Entwurfsdaten folgen Extendeds Regel ══
+                  **Tom, E-88 (uebertragen):** *„Die Referenz zeigt
+                  Extended-INHALT, also folgt sie Extendeds Regel."*
+
+                  `[cmd]` **Alle 17 `compound`-Eintraege des
+                  Entwurfsprotokolls nennen PED-Stoffe** — mit
+                  Dosis, Weg und Nadelstaerke.
+
+                  `[read]` **Der REITER bleibt fuer jeden** — es
+                  gibt Injektionen ohne PED (B12, Vitamin D).
+                  **Nur seine Attrappendaten gehen hinter die
+                  Pruefung.**
+
+                  `[read]` **Ohne Grad laeuft er mit leerem
+                  Protokoll:** alle 16 Orte `fresh`, Mengen null —
+                  die richtige Aussage fuer jemanden ohne erfasste
+                  Einnahmen. Der Satz darunter sagt, was fehlt. */}
+              {gate?.offen
+                ? <SuppInjectionsEntwurf stand={injektionen} stichtag={stichtag} />
+                : (
+                  <>
+                    <SuppInjections stand={injektionen} stichtag={stichtag} />
+                    <p
+                      data-probe="injektion-ohne-grad"
+                      className="v2-muted"
+                      style={{ fontSize: 11.5, lineHeight: 1.55, margin: '10px 0 0' }}
+                    >
+                      Die Karte zeigt deine eigenen Einstichstellen und
+                      Ruhefenster. <strong>Das Beispielprotokoll des
+                      Entwurfs</strong> — mit Wirkstoffen, Dosierungen
+                      und Nadelstaerken — erscheint erst, wenn dein
+                      Erfahrungsgrad den Extended-Bereich oeffnet.
+                    </p>
+                  </>
+                )}
               <SuppInjectionReferenz />
             </>
           )}

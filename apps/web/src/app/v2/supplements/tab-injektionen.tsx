@@ -34,7 +34,17 @@
 import * as React from 'react'
 import { Card, Pill, Icon } from '@lumeos/ui'
 
-import { INJ_ORTE, INJ_PROTOKOLL, INJ_PLAN, type InjOrt, type Weg } from './injektion-daten'
+// ══ G-500: das Protokoll kommt als PROP, nicht als Import ════════
+//
+// `[cmd]` **`INJ_PROTOKOLL` und `INJ_PLAN` liegen in
+// `injektion-protokoll.ts`** — alle 17 Eintraege nennen PED-Stoffe
+// mit Dosis, Weg und Nadelstaerke (E-88). **Ein statischer Import
+// hier zoege sie fuer jeden Besucher ins Buendel.**
+//
+// `[read]` **Die ORTE bleiben ein Import** — Anatomie ohne
+// Wirkstoff, und der Reiter braucht sie immer.
+import { INJ_ORTE, type InjOrt, type Weg } from './injektion-daten'
+import type { InjEintrag, InjPlan } from './injektion-daten'
 // ══ G-388: dieselbe Figur wie recovery, kein zweiter Umriss ═════
 // ══ G-396: `Koerperkarte`, nicht `InjektionsKarte` ═════════════════
 //
@@ -89,7 +99,7 @@ type Zustand = {
   label: string
   daysAgo: number | null
   site: InjOrt
-  last?: typeof INJ_PROTOKOLL[number]
+  last?: InjEintrag
 }
 
 /**
@@ -99,9 +109,17 @@ type Zustand = {
  * Rest uebrig -> `resting`, genau null oder eins -> `soon`, darunter
  * -> `ready`. Ein nie benutzter Ort ist `fresh`.
  */
-export function ortZustand(id: string): Zustand {
+/**
+ * `[cmd]` **G-500: das Protokoll ist ein PARAMETER geworden.**
+ * `[read]` **Ohne Protokoll ist jeder Ort `fresh`** — das ist die
+ * richtige Aussage fuer jemanden ohne erfasste Einnahmen, kein
+ * Fehler. **Dieselbe Bauform wie `lib/medical/injektion-flaechen.ts`,
+ * der angebundene Weg: dort nimmt `ortZustand` das Protokoll seit
+ * G-388 ebenfalls als Argument.**
+ */
+export function ortZustand(id: string, protokoll: InjEintrag[] = []): Zustand {
   const site = INJ_ORTE.find(s => s.id === id)!
-  const last = INJ_PROTOKOLL.find(l => l.site === id)
+  const last = protokoll.find(l => l.site === id)
   if (!last) return { status: 'fresh', c: 'var(--pos)', label: 'fresh', daysAgo: null, site }
   const rest = site.restDays - last.daysAgo
   if (rest > 1) return { status: 'resting', c: 'var(--neg)', label: `${rest}d rest left`, daysAgo: last.daysAgo, site, last }
@@ -110,9 +128,23 @@ export function ortZustand(id: string): Zustand {
 }
 
 
-export function SuppInjections({ stand = null, stichtag = '1970-01-01' }: {
+export function SuppInjections({
+  stand = null, stichtag = '1970-01-01',
+  entwurfProtokoll = [], entwurfPlan = [],
+}: {
   /** G-388: die Orte aus `medical.injection_sites`. */
   stand?: InjektionsStand | null
+  /**
+   * G-500: das Entwurfsprotokoll — **nur wenn der Grad reicht.**
+   *
+   * `[read]` **Leer ist ein gueltiger Zustand**, kein Fehler: dann
+   * stehen alle Orte auf `fresh` und die Mengenbalken auf null.
+   * `[cmd]` **Die Schale fuellt beides nur bei `gate?.offen`**
+   * (E-88); ohne Grad bleibt der Reiter bedienbar und sagt, was
+   * fehlt.
+   */
+  entwurfProtokoll?: InjEintrag[]
+  entwurfPlan?: InjPlan[]
   /**
    * G-390: der Tag, gegen den gerechnet wird — SERVERSEITIG bestimmt.
    *
@@ -169,11 +201,21 @@ export function SuppInjections({ stand = null, stichtag = '1970-01-01' }: {
   const [tab, setTab] = React.useState('rotation')
 
   const s = INJ_ORTE.find(x => x.id === sel)!
-  const st = ortZustand(sel)
-  const ruhend = INJ_ORTE.filter(x => ortZustand(x.id).status === 'resting').length
-  const bereit = INJ_ORTE.filter(x => ['ready', 'fresh'].includes(ortZustand(x.id).status)).length
+  // ══ G-500: `entwurfProtokoll`, NICHT `protokoll` ══════════════
+  //
+  // `[cmd]` **Zwei Zeilen tiefer steht `const protokoll =
+  // stand?.protokoll ?? []`** — das ECHTE Protokoll aus
+  // `medical.injection_sites` (G-388). `[read]` **Die Entwurfsdaten
+  // tragen deshalb einen eigenen Namen**; ein gleicher haette den
+  // angebundenen Weg ueberdeckt.
+  //
+  // `[read]` Ohne Grad ist der Entwurf leer — dann sind alle Orte
+  // `fresh`.
+  const st = ortZustand(sel, entwurfProtokoll)
+  const ruhend = INJ_ORTE.filter(x => ortZustand(x.id, entwurfProtokoll).status === 'resting').length
+  const bereit = INJ_ORTE.filter(x => ['ready', 'fresh'].includes(ortZustand(x.id, entwurfProtokoll).status)).length
   const ueberlastet = INJ_ORTE
-    .map(x => ({ site: x, count30: INJ_PROTOKOLL.filter(l => l.site === x.id && l.daysAgo <= 30).length }))
+    .map(x => ({ site: x, count30: entwurfProtokoll.filter(l => l.site === x.id && l.daysAgo <= 30).length }))
     .filter(x => x.count30 >= 3)
 
   return (
@@ -226,10 +268,30 @@ export function SuppInjections({ stand = null, stichtag = '1970-01-01' }: {
           </div>
           <div className="v2-dim" style={{ fontSize: 11 }}>≥ 3 uses per site</div>
         </Card>
+        {/* ══ G-500: der Wirkstoff kommt aus dem Entwurfsplan ══════
+            `[cmd]` **Hier stand `Test Cyp · 0.6 ml IM` fest im
+            JSX** — ein Literal in der Auszeichnung, **ohne Feld**.
+            `[read]` **Deshalb hat meine Feldsuche es nicht
+            gefunden:** `compound:` trifft Daten, nicht Markup.
+
+            `[read]` **Die Lehre aus G-499 gilt in beide
+            Richtungen:** nach Feldern zu messen findet, was in
+            Daten steht — **und uebersieht, was jemand direkt
+            hingeschrieben hat.** Der Schirm zeigt beides.
+
+            `[read]` **Jetzt aus `entwurfPlan`** — ohne Grad ist
+            der leer, und die Kachel nennt keinen Stoff. */}
         <Card style={{ padding: 14 }} attrappe={ATTRAPPE}>
           <div className="v2-eyebrow">Next injection</div>
-          <div className="v2-num" style={{ fontSize: 15 }}>Mon 17 Aug</div>
-          <div className="v2-dim" style={{ fontSize: 11 }}>Test Cyp · 0.6 ml IM</div>
+          <div className="v2-num" style={{ fontSize: 15 }}>
+            {entwurfPlan[0] ? `${entwurfPlan[0].day} ${entwurfPlan[0].date.slice(5)}` : '—'}
+          </div>
+          <div className="v2-dim" style={{ fontSize: 11 }}>
+            {entwurfPlan[0]
+              ? `${entwurfPlan[0].compound} · ${entwurfPlan[0].ml} ml `
+                + entwurfPlan[0].route.toUpperCase()
+              : 'kein Plan erfasst'}
+          </div>
         </Card>
       </div>
 
@@ -344,7 +406,7 @@ export function SuppInjections({ stand = null, stichtag = '1970-01-01' }: {
               <div style={{ display: 'flex', gap: 3 }}>
                 {Array.from({ length: 30 }).map((_, i) => {
                   const d = 30 - i
-                  const benutzt = INJ_PROTOKOLL.some(l => l.site === sel && l.daysAgo === d)
+                  const benutzt = entwurfProtokoll.some(l => l.site === sel && l.daysAgo === d)
                   return (
                     <div
                       key={i}
@@ -406,7 +468,7 @@ export function SuppInjections({ stand = null, stichtag = '1970-01-01' }: {
                   </tr>
                 </thead>
                 <tbody>
-                  {INJ_PLAN.map((r, i) => {
+                  {entwurfPlan.map((r, i) => {
                     const ort = INJ_ORTE.find(x => x.id === r.suggested)!
                     const ueberGrenze = r.ml > ort.maxMl
                     return (
@@ -473,7 +535,7 @@ export function SuppInjections({ stand = null, stichtag = '1970-01-01' }: {
             <Card title="Weekly load" sub="volume by site · last 4 weeks" attrappe={ATTRAPPE}>
               {['glute_l', 'glute_r', 'vglute_l', 'vglute_r', 'quad_l', 'abd_l', 'abd_r'].map(id => {
                 const ort = INJ_ORTE.find(x => x.id === id)!
-                const ml = INJ_PROTOKOLL
+                const ml = entwurfProtokoll
                   .filter(l => l.site === id && l.daysAgo <= 28)
                   .reduce((sum, l) => sum + l.ml, 0)
                 // Die Vorlage skaliert den Balken auf 4 ml Wochenlast.
@@ -498,7 +560,7 @@ export function SuppInjections({ stand = null, stichtag = '1970-01-01' }: {
       {tab === 'log' && (
         <Card
           title="Injection log"
-          sub={`${INJ_PROTOKOLL.length} entries · last 14 days`}
+          sub={`${entwurfProtokoll.length} entries · last 14 days`}
           attrappe={ATTRAPPE}
           actions={(
             <button type="button" className="v2-btn v2-btn-sm">
@@ -522,7 +584,7 @@ export function SuppInjections({ stand = null, stichtag = '1970-01-01' }: {
                 </tr>
               </thead>
               <tbody>
-                {INJ_PROTOKOLL.map(l => {
+                {entwurfProtokoll.map(l => {
                   const ort = INJ_ORTE.find(x => x.id === l.site)!
                   return (
                     <tr key={l.id}>

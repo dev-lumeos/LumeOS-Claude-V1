@@ -356,3 +356,105 @@ test('G-499/N4: keine Enhanced-Namen in den Entwurfskacheln', () => {
       + 'jeder Besucher (G-499/N1).')
   }
 })
+
+// ══════════════════════════════════════════════════════════════════
+// G-500/A6 — das Injektionsprotokoll (der sechste Weg)
+// ══════════════════════════════════════════════════════════════════
+//
+// `[cmd]` **Gemessen am 2026-09-08 nach FELDERN, ganzes Manifest:**
+// die Wirkstoff-, Mengen-, Weg- und Nadelfelder des
+// Entwurfsprotokolls lagen im Seitenchunk von `/v2/supplements` —
+// fuer jeden Besucher. **Alle 17 Eintraege nennen PED-Stoffe.**
+//
+// `[read]` **Die ORTE bleiben** (Anatomie, kein Wirkstoff) — es
+// gibt Injektionen ohne PED. **Nur die Attrappendaten gehen hinter
+// die Pruefung** (E-88).
+
+test('G-500: das Protokoll steht nicht mehr in `injektion-daten.ts`', () => {
+  const code = ohneKommentare(lies('injektion-daten.ts'))
+  for (const name of ['INJ_PROTOKOLL', 'INJ_PLAN']) {
+    // `[cmd]` **`\\s`, nicht `\s`** — beim Schreiben dieser Datei
+    // ueber eine Shell-Heredoc wurde der Backslash gefressen, und
+    // `export\s+const` wurde zu `exports+const`. `[read]` **Die
+    // Probe blieb dadurch gruen, weil sie auf `false` prueft** —
+    // ein kaputter Ausdruck trifft nie, und „trifft nie" heisst
+    // hier „ist in Ordnung". **Die gefaehrlichste Bauform.**
+    assert.equal(new RegExp(`export\\s+const\\s+${name}`).test(code), false,
+      `injektion-daten.ts fuehrt wieder ${name} — das Protokoll geht damit `
+      + 'ueber modale.tsx und tab-injektionen.tsx an jeden Besucher (G-500).')
+  }
+  // Die Orte MUESSEN bleiben — sonst ist der Reiter tot.
+  assert.match(code, /export\s+const\s+INJ_ORTE/,
+    'INJ_ORTE fehlt — der Reiter braucht die Einstichstellen (G-500/A4).')
+})
+
+test('G-500: das Protokoll ist erhalten, nicht geloescht', () => {
+  const eigen = ohneKommentare(lies('injektion-protokoll.ts'))
+  for (const name of ['INJ_PROTOKOLL', 'INJ_PLAN']) {
+    assert.match(eigen, new RegExp(`export\\s+const\\s+${name}`),
+      `${name} fehlt in injektion-protokoll.ts.`)
+  }
+  // `[read]` **Im erreichbaren Block zaehlen, nicht in der Datei** —
+  // die Lehre aus G-499, wo eine Sabotage `X = []; const _weg = [...]`
+  // gruen blieb.
+  const von = eigen.indexOf('export const INJ_PROTOKOLL')
+  const gleich = eigen.indexOf('=', von)
+  const auf = eigen.indexOf('[', gleich)
+  let tiefe = 0
+  let bis = -1
+  for (let i = auf; i < eigen.length; i += 1) {
+    if (eigen[i] === '[') tiefe += 1
+    else if (eigen[i] === ']') { tiefe -= 1; if (tiefe === 0) { bis = i; break } }
+  }
+  const wieviele = (eigen.slice(auf, bis).match(/compound:/g) ?? []).length
+  assert.equal(wieviele, 10,
+    `INJ_PROTOKOLL fuehrt ${wieviele} Eintraege, erwartet 10 (gemessen 2026-09-08).`)
+})
+
+test('G-500: nur die Naht liest das Protokoll', () => {
+  // `[read]` **`injektion-entwurf.tsx` ist der einzige Verbraucher** —
+  // und die wird dynamisch geholt. Jeder andere Import zoege das
+  // Protokoll zurueck ins Seitenbuendel.
+  const erlaubt = new Set(['injektion-entwurf.tsx', 'injektion-protokoll.ts'])
+  for (const datei of fs.readdirSync(HIER)) {
+    if (!datei.endsWith('.tsx') && !datei.endsWith('.ts')) continue
+    if (erlaubt.has(datei)) continue
+    const code = ohneKommentare(lies(datei))
+    assert.equal(/from\s*'\.\/injektion-protokoll'/.test(code), false,
+      `${datei} importiert injektion-protokoll.ts — nur die dynamisch `
+      + 'geholte Naht darf das (G-500).')
+  }
+})
+
+test('G-500: die Naht haengt am Gate und kommt ueber `dynamic`', () => {
+  const code = ohneKommentare(lies('ansicht.tsx'))
+  assert.match(code, /dynamic\(\s*\(\)\s*=>\s*import\('\.\/injektion-entwurf'\)/,
+    'Der dynamische Import von injektion-entwurf.tsx fehlt (G-500).')
+
+  const block = dynamikBlock(code, './injektion-entwurf')
+  assert.equal(/ssr\s*:\s*false/.test(block), false,
+    'ssr: false nimmt den Serveranstrich — dieselbe Falle wie G-117.')
+  assert.match(block, /ssr\s*:\s*true/, 'ssr: true muss dastehen (G-500).')
+
+  // `[read]` **Der Buendelschnitt allein genuegt nicht** — ohne
+  // Bedingung laedt der Chunk beim Oeffnen nach.
+  assert.match(code, /gate\?\.offen\s*\r?\n?\s*\?\s*<SuppInjectionsEntwurf/,
+    'Die Gradpruefung vor <SuppInjectionsEntwurf/> fehlt (G-500, E-88).')
+  // Und der Reiter laeuft ohne Grad weiter — mit einer Erklaerung.
+  assert.match(code, /data-probe="injektion-ohne-grad"/,
+    'Der Erklaersatz fuer den Fall ohne Grad fehlt (G-500/A4).')
+})
+
+test('G-500: kein Wirkstoffliteral im Reiter', () => {
+  // `[cmd]` **`Test Cyp · 0.6 ml IM` stand fest im JSX** — ein
+  // Literal OHNE Feld. `[read]` **Die Feldsuche fand es nicht**
+  // (`compound:` trifft Daten, nicht Markup); der Schirm schon.
+  // **Nach Feldern messen findet, was in Daten steht — und
+  // uebersieht, was jemand direkt hingeschrieben hat.**
+  const code = ohneKommentare(lies('tab-injektionen.tsx'))
+  for (const name of ['Test Cyp', 'Testosterone', 'HCG', 'BPC-157']) {
+    assert.equal(code.includes(name), false,
+      `tab-injektionen.tsx nennt "${name}" fest im Quelltext — ein `
+      + 'Literal umgeht die Gradpruefung (G-500).')
+  }
+})

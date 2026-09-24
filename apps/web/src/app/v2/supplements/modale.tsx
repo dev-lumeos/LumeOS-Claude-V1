@@ -18,7 +18,14 @@ import { Pill, Icon, Meter, InEntwicklungKnopf } from '@lumeos/ui'
 
 import { STACK, type StackItem } from './daten'
 // G-45: Orte und Zustandsrechnung des Injections-Tabs.
-import { INJ_ORTE, INJ_PROTOKOLL } from './injektion-daten'
+// `[cmd]` **G-500: `INJ_PROTOKOLL` ist raus** — die Auswahlliste
+// bot die drei PED-Stoffe des Entwurfsprotokolls an. `[read]` **Die
+// ORTE bleiben** (Anatomie, kein Wirkstoff).
+//
+// `[read]` **Die Namen stehen hier NICHT woertlich** — der
+// Entwicklungsbau liefert Kommentare mit, und die Probe faende
+// sonst ihren eigenen Suchtext.
+import { INJ_ORTE } from './injektion-daten'
 import { ortZustand } from './tab-injektionen'
 import { useSupp, type ModalTyp } from './kontext'
 // G-389: der Schreibweg fuer Injektionen.
@@ -983,13 +990,21 @@ function LogInjektionFenster({ onClose, konfig }: {
       <div className="v2-grid v2-g-cols-3" style={{ gap: 10, marginBottom: 12 }}>
         <div>
           <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Compound</div>
-          <select className="v2-feld" aria-label="Compound"
-                  value={substanz} onChange={e => setSubstanz(e.target.value)}>
-            <option value="">Substanz wählen …</option>
-            {INJ_PROTOKOLL.map(l => l.compound)
-              .filter((c, i, a) => a.indexOf(c) === i)
-              .map(c => <option key={c}>{c}</option>)}
-          </select>
+          <input className="v2-feld" aria-label="Compound" type="text"
+                 placeholder="Substanz eintragen …"
+                 value={substanz} onChange={e => setSubstanz(e.target.value)} />
+          {/* ══ G-500: keine Stoffliste aus dem Entwurf ═════
+                `[cmd]` **Hier standen die drei PED-Stoffe des
+                Entwurfsprotokolls** — als fertige Auswahl, fuer
+                jeden Besucher.
+
+                `[read]` **Ein freies Feld statt einer Liste:** die
+                Maske bleibt bedienbar, und wer etwas einträgt,
+                bringt den Namen selbst mit. **Das ist ohnehin
+                naeher am Ziel** — der angebundene Weg liest die
+                Substanzen aus der Datenbank
+                (`medical.injection_sites`, G-388), nicht aus
+                einem Mockup. */}
         </div>
         <div>
           <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Date</div>
