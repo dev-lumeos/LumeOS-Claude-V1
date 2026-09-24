@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: [C-538]
 kind_von: C-538
 entscheidung: null
+erledigt: 2026-09-08
+commit: 1bc924c1
 beruehrt:
   tabellen: [nutrition.foods]
 zahlen:
@@ -160,3 +162,47 @@ Open Food Facts führt kanonische Taxonomie-IDs mit Synonymen für die Suche
 Keine Tabelle, Spalte, Funktion, Migration oder Katalogzeile wurde für
 C-539 angelegt oder geändert. `supabase/` enthält dafür nur den bereits
 live eingespielten C-538-Stand und dessen nachgeschärfte Sicherheitsprobe.
+
+## Abnahme
+
+**2026-09-08, Orchestrator. Ein Messauftrag.**
+
+    17 von 20 richtig
+     2 falsche Tierart auf Rang 1
+     1 ganz andere Speise
+
+### A2 ist beantwortet, und zwar mit Nein
+
+> *,,Hoehere Schwellen beheben keine Reihenfolge: bei 0,5
+verschwinden die Fehler nur, weil 6 von 20 Eingaben KEINEN
+Treffer mehr erhalten."*
+
+`[read]` **Genau meine Vermutung im Auftrag, jetzt belegt** ?
+**eine Schwelle dreht keine Reihenfolge um, sie schneidet nur
+ab.**
+
+### Und die Kategorien taugen auch nicht
+
+`[cmd]` **Die Kategorie *Haehnchenbrust & Filet* enthaelt Huhn,
+Pute und Ente; 53 Foods tragen in der Stichprobe zwei Tierarten,
+eines drei.**
+
+### Seine Empfehlung
+
+> *,,Kuratierte MEHRWERTIGE Food-Arten-Relation mit kanonischen
+Codes und Synonymen; Art VOR dem Trigramm-Ranking einschraenken,
+bei unsicherer Art KEINE automatische Auswahl."*
+
+`[read]` **Mehrwertig, weil ein Gericht zwei Arten tragen
+kann** ? **53 Foods belegen es.**
+
+`[read]` **Und *,,bei unsicherer Art keine automatische
+Auswahl"* ist dieselbe Haltung wie bei Vitamin E (C-500) und
+den Portionen (C-512): lieber eine Luecke als eine geratene
+Zahl.**
+
+`[cmd]` **Quellen: Google Vision (Labels mit Score, ohne
+Katalog-ID), Open Food Facts (kanonische Taxonomie mit
+Synonymen).**
+
+**Abgenommen. Die Kuration entscheidet Tom.**

@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-23 — 200 Tabellen, 2773 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-24 — 201 Tabellen, 2784 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -91,7 +91,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `user_injection_site_selections` | 10 | 0 | 2026-09-09 |
 | `user_medications` | 35 | 5 | ? |
 
-## nutrition — 45 Tabellen, 551 Spalten
+## nutrition — 46 Tabellen, 562 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -120,6 +120,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `meal_plan_weeks` | 8 | 33 | ? |
 | `meal_plans` | 21 | 10 | ? |
 | `meal_slots` | 4 | 14 | ? |
+| `mealcam_scans` | 11 | 0 | 2026-09-24 |
 | `meals` | 10 | 2910 | ? |
 | `micronutrient_overview_items` | 9 | 8 | ? |
 | `nutrient_aliases` | 7 | 98 | ? |
@@ -201,7 +202,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `supplement_organ_risks` | 14 | 1450 | ? |
 | `supplement_pharmacology` | 17 | 577 | ? |
 | `supplement_portions` | 11 | 79 | ? |
-| `supplement_preferences` | 10 | 0 | 2026-09-17 |
+| `supplement_preferences` | 10 | 1 | 2026-09-17 |
 | `supplement_protocol_items` | 15 | 0 | ? |
 | `supplement_protocol_requirements` | 13 | 0 | ? |
 | `supplement_protocol_template_items` | 12 | 9 | 2026-09-09 |

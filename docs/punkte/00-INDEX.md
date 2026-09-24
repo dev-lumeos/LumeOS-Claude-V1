@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 238 |
-| `erledigt` | 538 |
+| `todos` | 237 |
+| `erledigt` | 539 |
 | **gesamt** | **776** |
 
 ## medical — 49
@@ -176,7 +176,7 @@
 | `C-535` | feature | hoch | [parent_id fuer nutrition.foods](todos/nutrition-c-0535-parent-id-fuer-foods.md) | offen | — | — |
 | `C-537` | fehler | mittel | [days_count zieht beim Rollover mit](erledigt/nutrition-c-0537-days-count-zieht-mit.md) | erledigt | — | — |
 | `C-538` | feature | hoch | [das MealCam-Gedaechtnis: Bild, Ergebnis, Deklaration](erledigt/nutrition-c-0538-mealcam-gedaechtnis.md) | erledigt | — | C-539 |
-| `C-539` | befund | hoch | [Trigramme verwechseln Pute mit Huhn](todos/nutrition-c-0539-trigramme-verwechseln-arten.md) | offen | — | — |
+| `C-539` | befund | hoch | [Trigramme verwechseln Pute mit Huhn](erledigt/nutrition-c-0539-trigramme-verwechseln-arten.md) | erledigt | — | — |
 | `E-87` | entscheidung | mittel | [was bedeutet days_count nach einem Rollover?](erledigt/nutrition-e-0087-days-count-nach-rollover.md) | erledigt | — | C-537 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |

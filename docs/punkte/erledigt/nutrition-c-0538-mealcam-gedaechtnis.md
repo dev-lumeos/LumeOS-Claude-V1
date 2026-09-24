@@ -221,4 +221,25 @@ ist der globale Select-Grant zwar vorhanden, die Bucket-RLS zeigt trotzdem
 Storage-Daten. Der C-538-Test prüft nun die wirksame anonyme Sicht statt
 eines globalen Storage-ACLs und ist auf der Kettendatenbank grün.
 
+## Nachtrag: LIVE eingespielt, 2026-09-08
+
+`[cmd]` **`nutrition.mealcam_scans`, selbst gemessen:**
+
+    id, user_id, image_path, image_sha256, vision_result,
+    food_id, food_name_snapshot, portion_amount,
+    portion_unit
+    4 Policies, anon: kein Zugriff
+
+`[cmd]` **Transaktionsprobe: Eigentuemer 1 Scan / 1
+Storage-Objekt, anderer Nutzer 0/0, beide Fremdschreibversuche
+abgewiesen.**
+
+### Und eine Probe geschaerft
+
+> *,,Die Sicherheitsprobe prueft jetzt die EFFEKTIVE anonyme
+Sicht statt nur globaler Storage-ACLs."*
+
+`[read]` **Der globale Storage-Select ist da** ? **aber die
+Bucket-RLS liefert `anon` null MealCam-Objekte. Eine Probe auf
+die ACL allein haette das nicht gezeigt.**
 
