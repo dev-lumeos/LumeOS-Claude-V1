@@ -398,7 +398,10 @@ function GruppenKarte({ g, sicht, treffer, istTag, fenster, offen, knotenOffen, 
               <tr>
                 <th style={{ width: 26 }} aria-label="Klappen" />
                 <th>Naehrstoff</th>
-                <th style={{ width: 110 }}>{istTag ? 'Heute' : 'Schnitt/Tag'}</th>
+                {/* G-426: die Spalte traegt jetzt zwei Zeilen mit
+                    Herkunftswort — 110 px brachen „247,8 g" zwischen
+                    Zahl und Einheit um. */}
+                <th style={{ width: 152 }}>{istTag ? 'Heute' : 'Schnitt/Tag'}</th>
                 <th style={{ width: 100 }}>Erfasst</th>
                 <th style={{ width: 110 }}>Ziel</th>
                 <th style={{ width: 110 }}>Fortschritt</th>
@@ -574,12 +577,60 @@ function Zeilen({ k, tiefe, elternName, sicht, istTag, fenster, knotenOffen, ums
             </span>
           )}
         </td>
+        {/* ══ G-426: die zweite Quelle ═══════════════════════════
+            **Tom, 2026-09-08:** *„uebereinander OHNE summe — die
+            summe haben wir weiter hinten schon in der
+            auflistung."*
+
+                Vitamin D    11,2 ug      Nahrung
+                             25,0 ug      Supplement
+
+            `[read]` **Zwei Zeilen, keine dritte.** Es wird hier
+            nichts addiert — **die Summe steht nicht in dieser
+            Spalte.**
+
+            `[read]` **Und *„wo vorhanden"*:** ohne Praeparat bleibt
+            es bei EINER Zeile, ohne das Wort *Nahrung*. `[cmd]`
+            **Gemessen am 2026-09-24 (dev, 2026-09-22): 12 Codes
+            mit beiden Quellen, 126 nur aus Nahrung** — ein
+            Herkunftswort an allen 138 waere Rauschen.
+
+            `[read]` **Keine Nullzeile:** wo nichts ist, steht
+            nichts (E-72). */}
         <td
           className="v2-num"
           title={istTag || k.summe === null ? undefined
             : `Summe ueber das Fenster: ${zahl(k.summe, k.einheit)}`}
         >
-          {zahl(k.wert, k.einheit)}
+          {k.supplement === null ? zahl(k.wert, k.einheit) : (
+            <span data-probe="quellen-zwei" style={{ display: 'block' }}>
+              {/* `[read]` **Zahl und Einheit duerfen nicht
+                  auseinanderfallen** — ein erster Entwurf brach
+                  „247,8 g" zwischen Zahl und Einheit um, und die
+                  Einheit stand allein in der zweiten Zeile.
+                  `nowrap` haelt sie zusammen. */}
+              <span style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
+                <span style={{ whiteSpace: 'nowrap' }}>{zahl(k.nahrung, k.einheit)}</span>
+                <span className="v2-dim" style={{
+                  fontSize: 9.5, minWidth: 62, textAlign: 'left', whiteSpace: 'nowrap',
+                }}>
+                  Nahrung
+                </span>
+              </span>
+              <span style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
+                <span style={{ whiteSpace: 'nowrap' }}>{zahl(k.supplement, k.einheit)}</span>
+                <span style={{
+                  fontSize: 9.5, minWidth: 62, textAlign: 'left', whiteSpace: 'nowrap',
+                  // `[cmd]` Dieselbe Farbe, die das Mockup dem
+                  // Supplementmodul gibt (Z. 806) und die das
+                  // Dashboard fuehrt — kein neuer Ton.
+                  color: 'var(--acc-suppl)',
+                }}>
+                  Supplement
+                </span>
+              </span>
+            </span>
+          )}
         </td>
         {/* ══ G-341: die Spalte sagt, was sie zaehlt ═══════════════
             **Tom, 2026-09-02:** *„der naechste schwachsinn der mich

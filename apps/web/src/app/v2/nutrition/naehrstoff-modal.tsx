@@ -23,7 +23,9 @@ import * as React from 'react'
 import { Card, Pill, Icon } from '@lumeos/ui'
 
 import type { NaehrstoffKnoten } from '../../../lib/nutrition/naehrstoff-ordnung'
-import type { NaehrstoffDetail, Referenzzeile, TrendPunkt } from '../../../lib/nutrition/naehrstoff-detail-read'
+import type {
+  NaehrstoffDetail, Referenzzeile, TrendPunkt, Herkunft, Obergrenze,
+} from '../../../lib/nutrition/naehrstoff-detail-read'
 import {
   STATUS_TEXT, STATUS_FARBE, zahlMitEinheit as zahl,
 } from '../../../lib/nutrition/naehrstoff-anzeige'
@@ -73,6 +75,174 @@ function referenzWert(r: Referenzzeile): string {
     return `${zahl(r.wertMin, null)}–${zahl(r.wertMax, r.einheit)}`
   }
   return zahl(r.wertMin ?? r.wertMax, r.einheit)
+}
+
+/**
+ * Die Herkunft der Zahl — G-426.
+ *
+ * **Tom, 2026-09-08:** *„und denk an die detailansichten, da muss
+ * natuerlich supplements auch rein."*
+ *
+ * `[read]` **Die Vorlage hat hier eine Attrappe:**
+ * `module-nutrition-nutrients.jsx` Z. 806 zeigt *„Supplement
+ * coverage: …"* aus einer festen Liste (`coverageNote`, acht
+ * Eintraege, der Rest *„Not currently covered"*). `[read]` **Das
+ * ist die Stelle, die C-466 echt macht** — dieselbe Frage,
+ * dieselbe Farbe, nur mit gemessenen Zeilen.
+ *
+ * `[read]` **Gruppiert nach Quelle, nicht flach** — die Frage
+ * lautet *woher*, und drei Arten in einer Liste beantworten sie
+ * nicht.
+ */
+const HERKUNFT_TITEL: Record<Herkunft['art'], string> = {
+  food: 'Aus der Nahrung',
+  meal_supplement: 'Supplement im Essen',
+  supplement: 'Supplement aus dem Stack',
+}
+
+const HERKUNFT_FARBE: Record<Herkunft['art'], string> = {
+  food: 'var(--fg-dim)',
+  meal_supplement: 'var(--acc-suppl)',
+  supplement: 'var(--acc-suppl)',
+}
+
+/**
+ * Der Satz zum Geltungsbereich der Obergrenze — C-344.
+ *
+ * `[read]` **Wenn eine Warnung erscheint, muss dabeistehen, gegen
+ * welche Referenz sie laeuft.** `[cmd]` Bei Magnesium, Niacin und
+ * Folsaeure gilt die Grenze NUR fuer Supplemente — eine Warnung
+ * ohne diesen Satz waere gegen die Tagessumme gelesen worden.
+ */
+const BEREICH_SATZ: Record<string, string> = {
+  supplements_only:
+    'Diese Grenze gilt nur fuer Supplemente — die Menge aus der '
+    + 'Nahrung zaehlt hier nicht mit.',
+  all_recorded_intake_sources:
+    'Diese Grenze gilt fuer die gesamte erfasste Zufuhr — Nahrung '
+    + 'und Supplemente zusammen.',
+  supplements_plus_fortified_foods_unresolved:
+    'Diese Grenze gilt fuer Supplemente und angereicherte '
+    + 'Lebensmittel. Welche Lebensmittel angereichert sind, ist '
+    + 'nicht erfasst — deshalb steht hier keine Zahl.',
+}
+
+/** Warum keine Zahl dasteht. `[read]` Ein benannter Leerhinweis
+ *  statt einer Null — Null saehe aus wie ein Ergebnis (E-72). */
+const STATUS_SATZ: Record<string, string> = {
+  incomplete_supplements:
+    'Nicht alle Einnahmen des Tages tragen Naehrstoffwerte.',
+  incomplete_foods:
+    'Nicht alle Posten des Tages tragen einen Wert fuer diesen Naehrstoff.',
+  unresolved_fortified_food:
+    'Angereicherte Lebensmittel sind nicht als solche erfasst.',
+}
+
+function Herkunftsliste({ zeilen }: { zeilen: Herkunft[] }) {
+  const arten: Herkunft['art'][] = ['food', 'meal_supplement', 'supplement']
+  return (
+    <>
+      {arten.map(art => {
+        const teil = zeilen.filter(z => z.art === art)
+        if (teil.length === 0) return null
+        const summe = teil.reduce((s, z) => s + (z.menge ?? 0), 0)
+        const einheit = teil.find(z => z.einheit !== null)?.einheit ?? null
+        return (
+          <div key={art} data-probe={`herkunft-${art}`} style={{ marginBottom: 10 }}>
+            <div style={{
+              display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4,
+            }}>
+              <span style={{ fontSize: 11.5, fontWeight: 600, color: HERKUNFT_FARBE[art] }}>
+                {HERKUNFT_TITEL[art]}
+              </span>
+              <span className="v2-num v2-dim" style={{ fontSize: 11 }}>
+                {zahl(summe, einheit)} · {teil.length}{' '}
+                {teil.length === 1 ? 'Posten' : 'Posten'}
+              </span>
+            </div>
+            <div className="v2-tbl-wrap">
+              <table className="v2-tbl">
+                <tbody>
+                  {teil.map((z, i) => (
+                    <tr key={`${z.name}-${i}`}>
+                      <td style={{ fontSize: 11.5 }}>
+                        {z.name}
+                        {/* `[read]` **Ein Produktname ist etwas
+                            anderes als eine Substanz** — C-466
+                            liefert beides, und welches es ist,
+                            gehoert dazugesagt. */}
+                        {art !== 'food' && !z.ausProdukt && (
+                          <span className="v2-dim" style={{ fontSize: 9.5, marginLeft: 6 }}>
+                            Substanz
+                          </span>
+                        )}
+                      </td>
+                      <td className="v2-num v2-dim" style={{ width: 110, fontSize: 11 }}>
+                        {z.dosis === null ? '' : `${zahl(z.dosis, null)} ${z.dosisEinheit ?? ''}`}
+                      </td>
+                      <td className="v2-num" style={{ width: 100 }}>
+                        {zahl(z.menge, z.einheit)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )
+      })}
+    </>
+  )
+}
+
+/** Die Obergrenze ueber beide Quellen — die Funktion rechnet, die
+ *  Kachel zeigt. */
+function Grenzkachel({ g }: { g: Obergrenze }) {
+  const warnt = g.darueber === true
+  return (
+    <div
+      data-probe="obergrenze-beide"
+      style={{
+        padding: 10, borderRadius: 5, marginBottom: 14,
+        background: warnt
+          ? 'color-mix(in srgb, var(--neg) 6%, var(--surface))'
+          : 'var(--surface)',
+        border: `1px solid ${warnt
+          ? 'color-mix(in srgb, var(--neg) 30%, var(--border))'
+          : 'var(--border)'}`,
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
+        <span className="v2-eyebrow" style={{ color: warnt ? 'var(--neg)' : undefined }}>
+          Obergrenze · beide Quellen
+        </span>
+        {g.menge !== null && (
+          <span className="v2-num" style={{ fontSize: 13, fontWeight: 500 }}>
+            {zahl(g.menge, g.einheit)}
+            {g.wert !== null && (
+              <span className="v2-dim" style={{ fontWeight: 400 }}>
+                {' '}von {zahl(g.wert, g.einheit)}
+              </span>
+            )}
+            {g.prozent !== null && (
+              <span style={{ marginLeft: 6, color: warnt ? 'var(--neg)' : 'var(--fg-dim)' }}>
+                {/* `[read]` Deutsche Schreibweise wie ueberall
+                    sonst — „67.3 %" stand als einziger Punkt
+                    zwischen lauter Kommazahlen. */}
+                {g.prozent.toLocaleString('de-DE')} %
+              </span>
+            )}
+          </span>
+        )}
+      </div>
+      <div className="v2-muted" style={{ fontSize: 10.5, marginTop: 4, lineHeight: 1.5 }}>
+        {BEREICH_SATZ[g.bereich] ?? g.bereich}
+        {g.menge === null && STATUS_SATZ[g.status] && (
+          <> {STATUS_SATZ[g.status]}</>
+        )}
+      </div>
+    </div>
+  )
 }
 
 export function NaehrstoffModal({ knoten, elternName, datum, fenster, onClose }: {
@@ -246,6 +416,47 @@ export function NaehrstoffModal({ knoten, elternName, datum, fenster, onClose }:
                 </tbody>
               </table>
             </div>
+          )}
+
+          {/* ══ G-426: woraus die Zahl kommt ════════════════════
+              **Tom, 2026-09-08:** *„und denk an die
+              detailansichten, da muss natuerlich supplements auch
+              rein."*
+
+              `[read]` **In der Uebersicht steht eine Zahl — hier
+              steht, WORAUS sie besteht.**
+
+              `[read]` **Der Stichtag, nicht das Fenster:** C-466
+              kennt nur `p_entry_date`. Steht der Tab auf 7/30/90
+              Tagen, sagt der Satz es dazu — eine Tagesliste unter
+              einem Fensterwert waere sonst als dessen Zerlegung
+              gelesen worden. */}
+          {detail && detail.obergrenze !== null && (
+            <Grenzkachel g={detail.obergrenze} />
+          )}
+
+          {detail && detail.herkunft.length > 0 && (
+            <>
+              <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
+                Herkunft am {datum}
+                {fenster !== 1 && (
+                  <span className="v2-dim" style={{
+                    textTransform: 'none', letterSpacing: 0, marginLeft: 6,
+                  }}>
+                    — der Stichtag, nicht das {fenster}-Tage-Fenster
+                  </span>
+                )}
+              </div>
+              <Herkunftsliste zeilen={detail.herkunft} />
+            </>
+          )}
+          {detail && detail.herkunft.length === 0 && (
+            <>
+              <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Herkunft am {datum}</div>
+              <p className="v2-dim" style={{ fontSize: 11.5, marginBottom: 14 }}>
+                An diesem Tag ist fuer diesen Naehrstoff kein Posten erfasst.
+              </p>
+            </>
           )}
 
           {/* Erklaerungen — Information, keine Diagnose. */}

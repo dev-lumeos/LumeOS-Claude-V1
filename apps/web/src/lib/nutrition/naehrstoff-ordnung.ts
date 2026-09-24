@@ -112,6 +112,26 @@ export type NaehrstoffKnoten = {
   /** Der gezeigte Wert: Tag = Summe, Fenster = Schnitt je
    *  protokolliertem Tag. */
   wert: number | null
+  /**
+   * Die beiden Quellen getrennt — G-426.
+   *
+   * **Tom, 2026-09-08:** *„uebereinander OHNE summe — die summe
+   * haben wir weiter hinten schon in der auflistung."*
+   *
+   * `[read]` **`wert` bleibt die eine Zahl**, die Balken, Prozent
+   * und Status treibt. Diese beiden sagen nur, WORAUS sie besteht.
+   *
+   * `[read]` **`supplement` ist `null`, wo kein Praeparat wirkt** —
+   * *„wo vorhanden"*: wer keins nimmt, sieht eine Zeile. **Keine
+   * Nullzeile**, denn Null sieht aus wie ein Ergebnis (E-72).
+   *
+   * `[cmd]` **Die Supplementzahl fasst BEIDE Wege zusammen** —
+   * `meal_supplement` (C-513, im Essen) und `supplement` (der
+   * Stack). **Tom will zwei Zeilen, nicht drei**; die Aufteilung
+   * der Herkunft steht im Detail.
+   */
+  nahrung: number | null
+  supplement: number | null
   /** Die Summe ueber das Fenster (beim Tag gleich `wert`). */
   summe: number | null
   /** Positionen im Fenster, die diesen Naehrstoff betrafen. */
@@ -282,6 +302,80 @@ async function ladeReihen(
   return aus
 }
 
+/**
+ * Die Supplementbilanz im Fenster — G-426.
+ *
+ * `[cmd]` **`supplements.daily_nutrient_summary_long`** (C-466,
+ * seit C-521 ueber `intake_log_nutrient_values`): je Tag und Code
+ * `total_amount`. **Sie traegt beide Wege** — den Stack UND die
+ * Supplemente im Essen (C-513/C-519).
+ *
+ * `[read]` **Eine Sicht, kein Funktionsaufruf** — deshalb laesst
+ * sie sich ueber ein Fenster lesen, waehrend
+ * `nutrient_intake_source_totals_for_day` nur EINEN Tag kennt.
+ * `[cmd]` **Gemessen am 2026-09-24, dev@lumeos.app, 16.–22.09.:**
+ * zwoelf Codes, drei bis vier Tage je Code.
+ *
+ * `[read]` **Die Nahrungsseite wird NICHT zweimal geholt** — sie
+ * steht schon in `nutrient_summary_window`. **Hier kommt nur
+ * dazu, was dort fehlt.**
+ *
+ * `[cmd]` **Seitenweise wie in `ladeReihen`** — PostgREST deckelt
+ * bei 1.000, unabhaengig von `.limit()`.
+ */
+async function ladeSupplemente(
+  client: ReturnType<typeof createSessionClient>,
+  userId: string, stichtag: string, fenster: number,
+): Promise<Map<string, { summe: number; tage: number }>> {
+  const aus = new Map<string, { summe: number; tage: number }>()
+  const db = client.schema('supplements')
+  const von = vonDatum(stichtag, fenster)
+
+  const { count, error: zaehlFehler } = await db
+    .from('daily_nutrient_summary_long')
+    .select('nutrient_code', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .gte('entry_date', von)
+    .lte('entry_date', stichtag)
+  if (zaehlFehler || count === null || count === 0) return aus
+
+  const seiten = Math.min(Math.ceil(count / SEITE), MAX_SEITEN)
+  const teile = await Promise.all(
+    Array.from({ length: seiten }, (_, seite) => db
+      .from('daily_nutrient_summary_long')
+      .select('nutrient_code, entry_date, total_amount')
+      .eq('user_id', userId)
+      .gte('entry_date', von)
+      .lte('entry_date', stichtag)
+      .order('entry_date', { ascending: true })
+      .order('nutrient_code', { ascending: true })
+      .range(seite * SEITE, seite * SEITE + SEITE - 1)))
+
+  // `[read]` **Tage je Code zaehlen, nicht nur summieren** — im
+  // Fenster teilt der Schnitt durch die Tage MIT Wert, genau wie
+  // `avg_per_logged_day` auf der Nahrungsseite.
+  const tage = new Map<string, Set<string>>()
+  for (const { data, error } of teile) {
+    if (error) continue
+    for (const r of (data ?? []) as unknown as Array<Record<string, unknown>>) {
+      const code = text(r.nutrient_code)
+      const betrag = zahl(r.total_amount)
+      const tag = text(r.entry_date)
+      if (!code || betrag === null || !tag) continue
+      const alt = aus.get(code)
+      aus.set(code, { summe: (alt?.summe ?? 0) + betrag, tage: 0 })
+      const menge = tage.get(code) ?? new Set<string>()
+      menge.add(tag)
+      tage.set(code, menge)
+    }
+  }
+  for (const code of Array.from(aus.keys())) {
+    const eintrag = aus.get(code)
+    if (eintrag) aus.set(code, { ...eintrag, tage: tage.get(code)?.size ?? 0 })
+  }
+  return aus
+}
+
 /** Der erste Tag des Fensters — `fenster` Tage inklusive Stichtag. */
 function vonDatum(stichtag: string, fenster: number): string {
   const d = new Date(`${stichtag}T00:00:00Z`)
@@ -377,7 +471,7 @@ export async function ladeOrdnung(
     // hat, und ein leerer Tab waere die falsche Antwort auf einen
     // leeren Tag: die Ordnung existiert auch ohne Werte.
     const [defsR, fensterR, reiheR, refsR, texteR, aliaseR, zieleR,
-      dauerR] = await Promise.allSettled([
+      dauerR, suppR] = await Promise.allSettled([
       db.from('nutrient_defs')
         // G-140: `display_tier` faellt weg — es wurde nur noch in ein
         // Feld geschrieben, das niemand las.
@@ -430,6 +524,10 @@ export async function ladeOrdnung(
       fenster === 1
         ? Promise.resolve([])
         : getFlags(stichtag, fenster).catch(() => null),
+      // G-426: die Supplementseite. `[read]` **Neben den uebrigen,
+      // nicht danach** — ein Zug mehr, keine eigene Wartezeit.
+      ladeSupplemente(client, user.id, stichtag, fenster)
+        .catch(() => new Map<string, { summe: number; tage: number }>()),
     ])
 
     if (defsR.status !== 'fulfilled' || defsR.value.error) {
@@ -519,6 +617,21 @@ export async function ladeOrdnung(
 
     const zielwerte = zieleR.status === 'fulfilled' ? zieleR.value : null
 
+    // ══ G-426: die zweite Quelle ══════════════════════════════════
+    //
+    // `[cmd]` **Gemessen am 2026-09-24, dev@lumeos.app, 2026-09-22:**
+    // `nutrient_summary_window` liefert fuer alle zwoelf Codes mit
+    // Supplement **exakt `food_amount`** — CA 721,86 gegen 721,86,
+    // PROT625 180,99 gegen 180,99.
+    //
+    // `[read]` **Die Tagessumme des Tabs ist die NAHRUNGSSUMME** —
+    // die Supplemente stehen daneben und wurden bisher nicht
+    // gezeigt. **Das ist die Luecke, die G-426 schliesst**, und
+    // gleichzeitig der Grund, warum keine Summe gebildet werden
+    // muss: `wert` ist bereits die eine Quelle, nicht beide.
+    const supplemente = suppR.status === 'fulfilled'
+      ? suppR.value : new Map<string, { summe: number; tage: number }>()
+
     const flach: NaehrstoffKnoten[] = []
     let messbar = 0
     let mitReferenz = 0
@@ -571,6 +684,21 @@ export async function ladeOrdnung(
         suchText: normalisiere(texte.get(code) ?? ''),
         suchAlias: aliase.get(code) ?? [],
         wert,
+        // G-426: die beiden Quellen. `[read]` **Die Nahrungszeile
+        // traegt denselben Wert wie `wert`** — gemessen, nicht
+        // angenommen (siehe oben). **Die Supplementzeile nur, wo
+        // eine Einnahme wirkt**; `null` heisst: keine Zeile.
+        nahrung: wert,
+        supplement: (() => {
+          const s = supplemente.get(code)
+          if (s === undefined || s.tage === 0) return null
+          // `[read]` **Dieselbe Regel wie links daneben:** Tag =
+          // Summe, Fenster = Schnitt je Tag MIT Wert. Ein Praeparat,
+          // das an drei von sieben Tagen genommen wurde, darf nicht
+          // durch sieben geteilt aussehen wie eins, das taeglich
+          // laeuft — die Nahrungsseite teilt ebenso.
+          return fenster === 1 ? s.summe : s.summe / s.tage
+        })(),
         summe: z?.total_value ?? null,
         positionen: z?.item_count ?? 0,
         positionenMitWert: z?.value_count ?? 0,
