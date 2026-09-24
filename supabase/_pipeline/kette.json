@@ -2614,6 +2614,25 @@
         "072",
         "030"
       ]
+    },
+    {
+      "id": "c541_experience_level_backfill",
+      "path": "supabase/_pipeline/09_identitaet/541_experience_level_backfill.sql",
+      "kind": "sql",
+      "creates": "C-541: zieht bestehende Profile ohne Erfahrungsgrad konservativ auf beginner nach, ohne gewaehlte Grade zu veraendern.",
+      "depends_on": [
+        "538_mealcam_memory_schema",
+        "090"
+      ]
+    },
+    {
+      "id": "c541_experience_level_required_schema",
+      "path": "supabase/migrations/20260924160000_c541_experience_level_required.sql",
+      "kind": "sql",
+      "creates": "C-541: experience_level ist ohne Spalten-Default NOT NULL; nur der Auth-Trigger setzt bis zum Onboarding ausdruecklich beginner.",
+      "depends_on": [
+        "c541_experience_level_backfill"
+      ]
     }
   ]
 }
