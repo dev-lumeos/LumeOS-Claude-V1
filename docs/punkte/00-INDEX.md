@@ -6,8 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 237 |
-| `erledigt` | 540 |
-| **gesamt** | **777** |
+| `erledigt` | 541 |
+| **gesamt** | **778** |
 
 ## medical — 49
 
@@ -627,7 +627,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 196
+## quer — 197
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -734,12 +734,13 @@
 | `C-523` | befund | hoch | [welche Aliase fehlen noch?](erledigt/quer-c-0523-welche-aliase-fehlen.md) | erledigt | — | C-525 |
 | `C-525` | feature | hoch | [Suchwortschatz für Ausschluss-Tags](erledigt/quer-c-0525-suchwortschatz-ausschluss-tags.md) | erledigt | — | — |
 | `C-533` | befund | hoch | [der Sollstand unterschlaegt service_role-Rechte](erledigt/quer-c-0533-schema-sollstand-substance-group-rechte.md) | erledigt | — | — |
+| `C-541` | fehler | hoch | [der Erfahrungsgrad darf nicht leer sein](todos/quer-c-0541-erfahrungsgrad-darf-nicht-leer-sein.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
 | `E-83` | entscheidung | hoch | [ein Weg fuer Lebensmittel UND Supplemente](erledigt/quer-e-0083-ein-weg-fuer-beide.md) | erledigt | — | E-84, G-480, G-483, G-484 |
 | `E-84` | entscheidung | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-e-0084-supplement-bleibt-supplement.md) | erledigt | — | C-519 |
-| `E-86` | entscheidung | hoch | [gilt die Suchtiefe modulweit?](todos/quer-e-0086-suchtiefe-modulweit.md) | offen | — | — |
+| `E-86` | entscheidung | hoch | [gilt die Suchtiefe modulweit?](erledigt/quer-e-0086-suchtiefe-modulweit.md) | erledigt | — | C-541 |
 | `F-01` | befund | mittel | [Schnittstellenvertrag zuerst](todos/quer-f-0001-schnittstellenvertrag-zuerst.md) | offen | — | C-111 |
 | `F-02` | befund | mittel | [Ablageort festlegen](todos/quer-f-0002-ablageort-festlegen.md) | offen | — | C-109, C-110 |
 | `F-03` | befund | mittel | [obsidian-skills einbinden](todos/quer-f-0003-obsidian-skills-einbinden.md) | offen | — | C-112 |

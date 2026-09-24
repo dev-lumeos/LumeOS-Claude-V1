@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **21 Punkte tragen `typ: entscheidung`
+`[cmd]` **20 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -197,43 +197,6 @@ Punkt belegt.**
 
 `[read]` **Punkt B ist die Arbeit** ? **ein Bild, auf das eine
 Abnahme zeigt, ist ein Beleg; eines ohne Verweis ist Muell.**
-
-## E-86 — gilt die Suchtiefe modulweit?
-
-**Modul:** quer · **angelegt:** 2026-09-08 · **Datei:** `todos/quer-e-0086-suchtiefe-modulweit.md`
-
-## Die Frage
-
-`[read]` **Steuert der Erfahrungsgrad die Suchtiefe nur in
-Nutrition, oder ueberall?**
-
-## Der Anlass
-
-`[cmd]` **Aus C-507:** *,,Dieselbe Frage stellt sich bei den
-214.780 Supplementprodukten ? ein Anfaenger braucht nicht
-4.907 Marken. Und bei den 1.416 Uebungen."*
-
-`[read]` **Wenn der Erfahrungsgrad die Suchtiefe steuert, ist
-das eine Entscheidung, kein Nutrition-Feature.**
-
-## Was dagegen spricht
-
-`[cmd]` **Supplements hat schon Filter und Lieblingsmarken
-(C-504, C-511)** ? **der Nutzer waehlt selbst, statt dass der
-Grad fuer ihn waehlt.**
-
-`[read]` **Zwei Wege, dieselbe Menge zu verkleinern** ?
-**einer vom Nutzer, einer vom System.**
-
-## Was zu klaeren ist
-
-    A  Supplements: Filter ODER Erfahrungsgrad?
-    B  Training: 1.416 Uebungen -- braucht ein
-       Anfaenger alle?
-    C  wenn beides: was gewinnt, wenn sie sich
-       widersprechen?
-
-`[read]` **Zu entscheiden, nicht zu bauen.**
 
 ---
 
