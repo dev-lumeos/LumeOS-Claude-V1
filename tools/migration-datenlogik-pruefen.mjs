@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const migrationDir = path.resolve('supabase/migrations')
 const baselineTriggerException = {
@@ -106,6 +107,15 @@ const structuralFunctionExceptions = [
       'INSERT INTO supplements.recipe_product_references',
     ],
   },
+  {
+    file: '20260923093000_c537_materialized_meal_plan_days_count.sql',
+    functionName: 'nutrition.sync_meal_plan_materialized_days_count',
+    command: 'UPDATE',
+    // C-537 definiert den Triggerhelfer fuer kuenftige Plantag-Aenderungen.
+    // Er wird beim Einspielen nicht aufgerufen; der einmalige Nachzug steht
+    // getrennt und idempotent in 05_user_tabellen/537_....sql.
+    requiredSql: 'UPDATE nutrition.meal_plans AS plan_row',
+  },
 ]
 // Im Funktionskoerper zaehlt nur der Anfang einer ausfuehrbaren SQL-Anweisung.
 // `FOR UPDATE` sperrt, schreibt aber nicht; ebenso ist `ON DELETE` Teil einer
@@ -189,7 +199,7 @@ function commandsInDollarBlocks(sql, file) {
   return blocks
 }
 
-function findingsInFile(file, sql) {
+export function findingsInFile(file, sql) {
   return [
     ...commandsInStatement(sql),
     ...commandsInDollarBlocks(sql, file),
@@ -238,22 +248,29 @@ function selfTest() {
   console.log('[migration-datenlogik] Selbstprobe erfolgreich; temporaere Migrationen entfernt.')
 }
 
-if (process.argv.includes('--self-test')) {
-  selfTest()
-  process.exit(0)
-}
-
-const findings = findingsInDirectory()
-if (findings.length !== SOLLSTAND) {
-  console.error(`Migrationen duerfen keine neue Datenlogik enthalten (Soll ${SOLLSTAND}, Ist ${findings.length}):`)
-  for (const finding of findings) console.error(`- ${finding}`)
-  if (findings.length > SOLLSTAND) {
-    console.error(`Neue Befunde: ${findings.length - SOLLSTAND}.`)
-  } else {
-    console.error(`Altbestand gesunken: ${SOLLSTAND - findings.length}. Sollstand nachmessen und mit Begruendung nachziehen.`)
+function main() {
+  if (process.argv.includes('--self-test')) {
+    selfTest()
+    return
   }
-  process.exit(1)
+
+  const findings = findingsInDirectory()
+  if (findings.length !== SOLLSTAND) {
+    console.error(`Migrationen duerfen keine neue Datenlogik enthalten (Soll ${SOLLSTAND}, Ist ${findings.length}):`)
+    for (const finding of findings) console.error(`- ${finding}`)
+    if (findings.length > SOLLSTAND) {
+      console.error(`Neue Befunde: ${findings.length - SOLLSTAND}.`)
+    } else {
+      console.error(`Altbestand gesunken: ${SOLLSTAND - findings.length}. Sollstand nachmessen und mit Begruendung nachziehen.`)
+    }
+    process.exitCode = 1
+    return
+  }
+
+  console.log(`Migrationen: ${findings.length} historische Datenoperationen, genau Sollstand ${SOLLSTAND}; keine neue Datenlogik.`)
+  console.log('Benannte Strukturausnahmen: Funktionskoerper schreiben erst bei spaeterem Trigger- oder RPC-Aufruf.')
 }
 
-console.log(`Migrationen: ${findings.length} historische Datenoperationen, genau Sollstand ${SOLLSTAND}; keine neue Datenlogik.`)
-console.log('Benannte Strukturausnahme: 20260805120000_baseline_structure.sql public.handle_new_user().')
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main()
+}

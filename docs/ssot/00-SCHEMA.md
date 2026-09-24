@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-23: 230 Funktionen, 477 Policies, 728 CHECKs, 22 Sichten.**
+`[cmd]` **Stand 2026-09-24: 234 Funktionen, 477 Policies, 728 CHECKs, 22 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -97,9 +97,12 @@ ob man sie rufen kann.**
 | nutrition | meal_items_owner_guard |  | Funktion |
 | nutrition | meal_plan_active_overlap_guard |  | Funktion |
 | nutrition | meal_plan_day_to_diary | p_day_id uuid, p_entry_date date DEFAULT NULL::date | Funktion |
+| nutrition | meal_plan_days_count_guard |  | Funktion |
+| nutrition | meal_plan_days_count_sync |  | Funktion |
 | nutrition | meal_plan_days_owner_guard |  | Funktion |
 | nutrition | meal_plan_entries_owner_guard |  | Funktion |
 | nutrition | meal_plan_logs_owner_guard |  | Funktion |
+| nutrition | meal_plan_materialized_days_count | p_plan_id uuid | Funktion |
 | nutrition | meal_plan_set_next_plan | p_plan_id uuid, p_next_plan_id uuid | Funktion |
 | nutrition | meal_plan_slots_owner_guard |  | Funktion |
 | nutrition | meal_plan_weeks_owner_guard |  | Funktion |
@@ -134,6 +137,7 @@ ob man sie rufen kann.**
 | nutrition | such_alias_treffer | p_groups jsonb | Funktion |
 | nutrition | such_rang_wortgrenze | p_name text, p_groups jsonb | Funktion |
 | nutrition | such_rang_zubereitung | p_bls_code text | Funktion |
+| nutrition | sync_meal_plan_materialized_days_count | p_plan_id uuid | Funktion |
 | nutrition | touch_updated_at |  | Funktion |
 | nutrition | user_inventory_owner_guard |  | Funktion |
 | nutrition | user_inventory_set_state |  | Funktion |
@@ -162,10 +166,10 @@ ob man sie rufen kann.**
 | public | handle_new_user |  | Funktion |
 | public | is_admin |  | Funktion |
 | public | koerperflaechen_touch |  | Funktion |
-| public | levenshtein | text, text | Funktion |
 | public | levenshtein | text, text, integer, integer, integer | Funktion |
-| public | levenshtein_less_equal | text, text, integer | Funktion |
+| public | levenshtein | text, text | Funktion |
 | public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
+| public | levenshtein_less_equal | text, text, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
 | public | set_limit | real | Funktion |
 | public | show_limit |  | Funktion |
@@ -217,8 +221,8 @@ ob man sie rufen kann.**
 | supplements | refresh_stack_item_count |  | Funktion |
 | supplements | rule_assessment | p_user_id uuid DEFAULT auth.uid(), p_entry_date date DEFAULT CURRENT_DATE | Funktion |
 | supplements | rule_operator_supported | p_rule_id text, p_module text, p_field text, p_operator text | Funktion |
-| supplements | search_supplier_products | p_query text, p_market_status text DEFAULT 'On Market'::text, p_marke text DEFAULT NULL::text, p_limit integer DEFAULT 50, p_kategorie text DEFAULT NULL::text, p_form text DEFAULT NULL::text, p_allergien_ausblenden boolean DEFAULT true, p_meidestoffe text[] DEFAULT NULL::text[], p_marken text[] DEFAULT NULL::text[], p_nur_bewertet boolean DEFAULT false | Funktion |
 | supplements | search_supplier_products | p_query text, p_market_status text, p_marke text, p_limit integer, p_kategorie text, p_form text, p_allergien_ausblenden boolean, p_meidestoffe text[], p_marken text[], p_nur_bewertet boolean, p_formen text[] | Funktion |
+| supplements | search_supplier_products | p_query text, p_market_status text DEFAULT 'On Market'::text, p_marke text DEFAULT NULL::text, p_limit integer DEFAULT 50, p_kategorie text DEFAULT NULL::text, p_form text DEFAULT NULL::text, p_allergien_ausblenden boolean DEFAULT true, p_meidestoffe text[] DEFAULT NULL::text[], p_marken text[] DEFAULT NULL::text[], p_nur_bewertet boolean DEFAULT false | Funktion |
 | supplements | set_supplement_cycle_status | p_cycle_id uuid, p_status text, p_note_de text DEFAULT NULL::text | Funktion |
 | supplements | start_supplement_cycle | p_supplement_id uuid, p_source text DEFAULT 'confirmed_by_user'::text, p_suggestion_source text DEFAULT 'user_manual'::text, p_note_de text DEFAULT NULL::text | Funktion |
 | supplements | supplement_brand_options | p_user_id uuid DEFAULT auth.uid(), p_query text DEFAULT NULL::text, p_limit integer DEFAULT 25 | Funktion |

@@ -199,7 +199,7 @@ function RoutineEditorModal({ routine, onClose }: { routine: Routine | null; onC
                 <InEntwicklungKnopf titel="Save as template" className="v2-btn">
                   <Icon name="copy" className="v2-ic v2-ic-sm" />Save as template
                 </InEntwicklungKnopf>
-                {/* C-536: `training.routines` existiert seit C-461.
+                {/* @nachgefuehrt training.routines — C-536: Tabelle existiert seit C-461.
                     Dieser Editor hat noch keinen Schreibweg auf die Tabelle;
                     deshalb bleibt „Save routine“ bis zu dessen Anbindung deaktiviert. */}
                 <InEntwicklungKnopf titel="Save routine" className="v2-btn v2-btn-primary"

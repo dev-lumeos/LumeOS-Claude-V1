@@ -114,3 +114,21 @@ messen.**
     N2  apps/web 1969 von 1969.
     N3  der Abwesenheitswaechter bleibt gruen.
 
+## Nacharbeit abgenommen, 2026-09-08
+
+> *,,Die nachgefuehrte Aussage traegt jetzt
+`@nachgefuehrt training.routines`, nicht faelschlich
+`@abwesend`: Die Tabelle existiert, nur der Schreibweg fehlt."*
+
+`[read]` **Nicht die alte Marke zurueckgesetzt, sondern die
+RICHTIGE gesetzt** ? **`@abwesend` waere wieder falsch
+gewesen.**
+
+`[cmd]` **Selbst gemessen: apps/web 1969 von 1969,
+Abwesenheitswaechter gruen, Spaltenwaechter gruen, Punktelauf
+gruen.**
+
+`[cmd]` **Und das ganze Gate: 18 von 18 Aufgaben.**
+
+`[read]` **Zum ersten Mal seit Tagen laeuft es durch.**
+

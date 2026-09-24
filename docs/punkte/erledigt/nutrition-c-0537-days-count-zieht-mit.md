@@ -91,3 +91,16 @@ Transaktion, danach ROLLBACK.**
 
 **Abgenommen. Einspielen steht aus.**
 
+## Nachtrag: LIVE eingespielt, 2026-09-08
+
+`[cmd]` **Selbst nachgemessen:**
+
+    Aufbau-Wochenplan  days_count 35  Tage 35
+    Nachweiswoche      days_count  7  Tage  7
+    Aufbau-Wochenplan  days_count 21  Tage 21
+
+`[cmd]` **Kein Plan weicht mehr ab.**
+
+`[cmd]` **Transaktionsprobe: 7 -> 14 beim Rollover, ROLLBACK
+stellt 7/7 wieder her.**
+

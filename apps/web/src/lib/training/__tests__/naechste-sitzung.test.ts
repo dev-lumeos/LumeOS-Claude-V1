@@ -147,16 +147,16 @@ test('G-278: die tragenden Gruende sind markiert', () => {
   // `[read]` **Der Mittelweg:** nicht alle 194 Aussagen markieren,
   // sondern die, die eine ANZEIGE begruenden — der Satz, den ein
   // Nutzer liest, wenn ein Knopf nichts tut.
-  const paare: Array<[string, string]> = [
-    ['src/app/v2/medical/modale.tsx', 'medical.biomarker_results'],
-    ['src/app/v2/recovery/modale.tsx', 'recovery.hrv_readings'],
-    ['src/app/v2/recovery/modale.tsx', 'recovery.protocols'],
-    ['src/app/v2/training/modale.tsx', 'training.routines'],
-    ['src/app/v2/training/modale.tsx', 'training.blocks'],
+  const paare: Array<[string, string, string]> = [
+    ['src/app/v2/medical/modale.tsx', 'medical.biomarker_results', '@abwesend medical.biomarker_results'],
+    ['src/app/v2/recovery/modale.tsx', 'recovery.hrv_readings', '@abwesend recovery.hrv_readings'],
+    ['src/app/v2/recovery/modale.tsx', 'recovery.protocols', '@abwesend recovery.protocols'],
+    ['src/app/v2/training/modale.tsx', 'training.routines', '@nachgefuehrt training.routines'],
+    ['src/app/v2/training/modale.tsx', 'training.blocks', '@abwesend training.blocks'],
   ]
-  for (const [datei, ziel] of paare) {
+  for (const [datei, ziel, marke] of paare) {
     const s = lies(datei)
-    assert.ok(s.includes(`@abwesend ${ziel}`),
+    assert.ok(s.includes(marke),
       `${datei}: der Grund fuer ${ziel} traegt keine Marke (G-278).`)
   }
 })
