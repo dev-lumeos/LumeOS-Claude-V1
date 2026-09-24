@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 235 |
+| `todos` | 236 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 541 |
-| **gesamt** | **778** |
+| `erledigt` | 542 |
+| **gesamt** | **779** |
 
 ## medical — 49
 
@@ -65,7 +64,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 261
+## nutrition — 262
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -178,6 +177,7 @@
 | `C-538` | feature | hoch | [das MealCam-Gedaechtnis: Bild, Ergebnis, Deklaration](erledigt/nutrition-c-0538-mealcam-gedaechtnis.md) | erledigt | — | C-539 |
 | `C-539` | befund | hoch | [Trigramme verwechseln Pute mit Huhn](erledigt/nutrition-c-0539-trigramme-verwechseln-arten.md) | erledigt | — | C-540 |
 | `C-540` | feature | hoch | [die Tierarten kurieren](laufend_codex/nutrition-c-0540-tierarten-kurieren.md) | laeuft (codex) | — | — |
+| `C-542` | fehler | hoch | [eine Abwesenheit ist keine Luecke](todos/nutrition-c-0542-abwesenheit-ist-keine-luecke.md) | offen | — | — |
 | `E-87` | entscheidung | mittel | [was bedeutet days_count nach einem Rollover?](erledigt/nutrition-e-0087-days-count-nach-rollover.md) | erledigt | — | C-537 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
@@ -316,7 +316,7 @@
 | `G-417` | feature | hoch | [zwei Spalten und der Score](erledigt/nutrition-g-0417-zwei-spalten-und-der-score.md) | erledigt | — | G-418, G-419 |
 | `G-418` | befund | niedrig | [Seed-Tage liegen in der Zukunft](todos/nutrition-g-0418-seed-tage-in-der-zukunft.md) | offen | — | — |
 | `G-419` | feature | niedrig | [der Insights-Block ist abgenommen](erledigt/nutrition-g-0419-insights-block-abgenommen.md) | erledigt | — | — |
-| `G-426` | feature | hoch | [die Supplementspalte in Nutrients](laufend_claudecode/nutrition-g-0426-die-supplementspalte-in-nutrients.md) | laeuft (claudecode) | — | — |
+| `G-426` | feature | hoch | [die Supplementspalte in Nutrients](erledigt/nutrition-g-0426-die-supplementspalte-in-nutrients.md) | erledigt | — | C-542 |
 | `G-439` | fehler | niedrig | [der Sollstand kennt fiber_g nicht](erledigt/nutrition-g-0439-sollstand-fiber-g.md) | erledigt | — | — |
 | `G-475` | feature | hoch | [Supplemente in die Mahlzeit, in der Oberflaeche](erledigt/nutrition-g-0475-supplement-in-mahlzeit-ui.md) | erledigt | — | C-518, G-478 |
 | `G-478` | feature | hoch | [die Kacheln fuer Supplemente in der Mahlzeit](erledigt/nutrition-g-0478-kacheln-supplement-mahlzeit.md) | erledigt | — | G-479 |
