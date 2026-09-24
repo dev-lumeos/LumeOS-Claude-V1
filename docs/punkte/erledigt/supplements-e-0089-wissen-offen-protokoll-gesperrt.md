@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-500
 entscheidung: null
+erledigt: 2026-09-08
+commit: entschieden
 beruehrt:
   tabellen: [supplements.supplements]
 zahlen:
