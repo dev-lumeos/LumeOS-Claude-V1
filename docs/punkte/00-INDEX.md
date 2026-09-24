@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 233 |
+| `todos` | 234 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 544 |
-| **gesamt** | **779** |
+| `erledigt` | 545 |
+| **gesamt** | **780** |
 
 ## medical — 49
 
@@ -332,9 +331,9 @@
 | `G-497` | feature | hoch | [die Suche zeigt Gruppen statt Zeilen](todos/nutrition-g-0497-suche-zeigt-gruppen.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 120
+## supplements — 121
 
-### beauftragbar — 119
+### beauftragbar — 120
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -409,9 +408,10 @@
 | `C-529` | feature | hoch | [der Stackeintrag kennt sein Produkt nicht](erledigt/supplements-c-0529-stack-kennt-produkt-nicht.md) | erledigt | — | — |
 | `C-532` | feature | hoch | [die Label Statements roh importieren](erledigt/supplements-c-0532-label-statements-roh-importieren.md) | erledigt | — | — |
 | `E-85` | entscheidung | hoch | [kein Zwischenspeicher fuer die DSLD-Bilder](erledigt/supplements-e-0085-kein-zwischenspeicher-dsld-bilder.md) | erledigt | — | — |
+| `E-88` | entscheidung | hoch | [die Entwurfsreferenz zeigt PED-Protokolle ohne Gradpruefung](todos/supplements-e-0088-entwurfsreferenz-zeigt-ped.md) | offen | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
-| `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](laufend_claudecode/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | laeuft (claudecode) | — | A-42 |
+| `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](erledigt/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | erledigt | — | A-42, E-88 |
 | `G-118` | befund | mittel | [Der Extended-Code liegt im Buendel](erledigt/supplements-g-0118-der-extended-code-liegt-im-buendel.md) | erledigt | — | — |
 | `G-150` | entscheidung | mittel | [Die Volltextsuche findet ueber Erklaertexte](todos/supplements-g-0150-die-volltextsuche-findet-ueber-erklaertexte.md) | offen | — | — |
 | `G-162` | befund | mittel | [supplements Compliance und medical Tracking](todos/supplements-g-0162-supplements-compliance-und-medical-tracking.md) | offen | — | — |

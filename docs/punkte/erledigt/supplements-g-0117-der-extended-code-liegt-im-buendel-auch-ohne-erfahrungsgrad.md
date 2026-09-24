@@ -10,6 +10,8 @@ kinder: []
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: a8c6fda9
 beruehrt:
   tabellen: []
   dateien: []
@@ -339,5 +341,71 @@ Browser auf 3200. `[read]` **Austritt 0 = gruen, 1 = rot.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Am Messbau nachgemessen.**
+
+`[cmd]` **`/v2/supplements/page`: 11 Chunks, *,,Active
+protocols"* in EINEM.**
+
+`[cmd]` **Und dieser eine ist die Mockup-Referenz, nicht seine
+Arbeit:**
+
+    ReferenzTrenner        JA
+    Mockup-Marken          6 von 6
+    physician-supervised   JA
+    EXTENDED_STACK         nein
+
+`[read]` **Sein `dynamic` und die zwei toten Importe sind
+draussen** ? **was bleibt, ist die Stelle, die er gemeldet und
+NICHT angefasst hat.**
+
+`[cmd]` **Proben: web 1987/1987, coach 65/65.**
+
+### Messpunkt C beantwortet, und mein Auftrag war schief
+
+> *,,Eine Servergrenze ist NICHT moeglich ?
+`tab-extended.tsx` hat vier `useSupp()`-Stellen und Modale, es
+muss Client bleiben."*
+
+> *,,`dynamic` war die ganze Zeit das richtige Werkzeug, nur
+mit `ssr: true`: das nimmt den Chunk aus dem BUENDEL, ohne den
+Serveranstrich wegzunehmen. `ssr: false` nahm beides ? daher
+der leere Reiter."*
+
+`[read]` **Ich hatte geschrieben, `dynamic` sei das falsche
+Werkzeug** ? **falsch. Falsch war EIN Schalter daran.**
+
+### Drei Wege, nicht einer
+
+> *,,`ansicht.tsx` zog `EXTENDED_STACK` fuer EINE ZAHL (das
+Zaehlerchen), und `tabs.tsx` importierte die Liste, ohne sie je
+zu benutzen ? ein TOTER Import, der ueber vier immer sichtbare
+Reiter ausgeliefert wurde."*
+
+`[read]` **Eine `.length` hat eine PED-Substanzliste ins
+Buendel gezogen.** **Das `dynamic` allein haette zwei Wege
+offen gelassen.**
+
+### C-541 hat eine Antwort bekommen
+
+> *,,Ein NOT NULL aendert am Gate nichts ? `reichtDerGrad`
+faellt bei NULL, leer und unbekannt auf `false`. ABER *nicht
+angegeben* ist ein VORGESEHENER Zustand: der zweite Klick in
+den Settings schreibt `''`, und `z.preprocess(leerZuNull, ...)`
+macht NULL daraus."*
+
+`[read]` **Die Leere ist nicht nur ein Datenfehler** ? **sie
+ist ein Knopf.** **C-541 muss entscheiden, was der
+Ruecknahmeklick kuenftig schreibt.**
+
+### Eigene Fehler
+
+`[cmd]` **Sein Kommentar zitierte die Waechter-Suchtexte
+woertlich ? der Dev-Bau liefert Kommentare mit, die Probe
+wurde rot.**
+
+`[cmd]` **Und: es sind ZWOELF andere Reiter, nicht elf** ?
+**`prefs`, `intel`, `cost` waren geraten.**
+
+**Abgenommen.**
+
 
