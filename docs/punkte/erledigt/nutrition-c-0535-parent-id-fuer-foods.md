@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: [C-534]
 kind_von: C-507
 entscheidung: C-507
+erledigt: 2026-09-08
+commit: zurueckgestellt
 beruehrt:
   tabellen: [nutrition.foods]
 zahlen:
@@ -77,4 +79,28 @@ Zubereitung.**
 
 `[read]` **Also bleibt: kurieren oder gar nicht** ? **und
 C-538 sammelt erst die Lehrdaten, bevor entschieden wird.**
+
+## ZURUECKGESTELLT, 2026-09-08
+
+Tom: *,,C-535 keinen parent, loesen wir spaeter"*
+
+### Warum das traegt
+
+`[cmd]` **51 von 7.140 Lebensmitteln sind je in einer Mahlzeit
+benutzt worden** ? **es gibt keine Datenlage fuer eine
+Vorgabe.**
+
+`[cmd]` **Und MealCam braucht ihn nicht: das BILD sagt die
+Zubereitung (E-84-Nachtrag).**
+
+`[read]` **Der Parent ist eine Frage der Textsuche, und die
+wartet auf die Lehrdaten aus C-538.**
+
+### Was solange gilt
+
+`[read]` **Die Suche zeigt die Gruppe, ohne Vorgabe** ?
+**G-497 bleibt ebenfalls zurueckgestellt, solange kein Parent
+existiert.**
+
+`[cmd]` **C-534 bleibt die Messung dazu: nicht ableitbar.**
 

@@ -6,8 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 237 |
-| `erledigt` | 539 |
-| **gesamt** | **776** |
+| `erledigt` | 540 |
+| **gesamt** | **777** |
 
 ## medical — 49
 
@@ -63,9 +63,7 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 260
-
-### beauftragbar — 259
+## nutrition — 261
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -173,10 +171,11 @@
 | `C-524` | feature | hoch | [Planeinträge können Supplemente vorsehen](erledigt/nutrition-c-0524-planeintraege-ohne-supplemente.md) | erledigt | — | G-489 |
 | `C-526` | fehler | hoch | [aktive Meal-Pläne dürfen nicht überlappen](erledigt/nutrition-c-0526-keine-ueberlappungspruefung.md) | erledigt | — | — |
 | `C-534` | befund | hoch | [welche Lebensmittelgruppen gibt es?](erledigt/nutrition-c-0534-welche-lebensmittelgruppen.md) | erledigt | — | C-538 |
-| `C-535` | feature | hoch | [parent_id fuer nutrition.foods](todos/nutrition-c-0535-parent-id-fuer-foods.md) | offen | — | — |
+| `C-535` | feature | hoch | [parent_id fuer nutrition.foods](erledigt/nutrition-c-0535-parent-id-fuer-foods.md) | erledigt | — | — |
 | `C-537` | fehler | mittel | [days_count zieht beim Rollover mit](erledigt/nutrition-c-0537-days-count-zieht-mit.md) | erledigt | — | — |
 | `C-538` | feature | hoch | [das MealCam-Gedaechtnis: Bild, Ergebnis, Deklaration](erledigt/nutrition-c-0538-mealcam-gedaechtnis.md) | erledigt | — | C-539 |
-| `C-539` | befund | hoch | [Trigramme verwechseln Pute mit Huhn](erledigt/nutrition-c-0539-trigramme-verwechseln-arten.md) | erledigt | — | — |
+| `C-539` | befund | hoch | [Trigramme verwechseln Pute mit Huhn](erledigt/nutrition-c-0539-trigramme-verwechseln-arten.md) | erledigt | — | C-540 |
+| `C-540` | feature | hoch | [die Tierarten kurieren](todos/nutrition-c-0540-tierarten-kurieren.md) | offen | — | — |
 | `E-87` | entscheidung | mittel | [was bedeutet days_count nach einem Rollover?](erledigt/nutrition-e-0087-days-count-nach-rollover.md) | erledigt | — | C-537 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
@@ -327,13 +326,8 @@
 | `G-486` | fehler | hoch | [erfuellte Ghostentries bleiben stehen](erledigt/nutrition-g-0486-erfuellte-ghosts-bleiben.md) | erledigt | — | C-526 |
 | `G-488` | fehler | mittel | [drei Zahlen zum Plan, keine zwei passen](erledigt/nutrition-g-0488-drei-zahlen-zum-plan.md) | erledigt | — | E-87 |
 | `G-489` | feature | hoch | [die Ghost-UI kennt keine Supplemente](erledigt/nutrition-g-0489-ghost-ui-kennt-keine-supplemente.md) | erledigt | — | — |
+| `G-497` | feature | hoch | [die Suche zeigt Gruppen statt Zeilen](todos/nutrition-g-0497-suche-zeigt-gruppen.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
-
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `G-497` | feature | hoch | [die Suche zeigt Gruppen statt Zeilen](todos/nutrition-g-0497-suche-zeigt-gruppen.md) | offen | C-535 | — |
 
 ## supplements — 120
 

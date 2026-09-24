@@ -58,3 +58,11 @@ gewaehlt hat, auch wenn der Kunde `beginner` ist.**
     A4  ohne Erfahrungsgrad: was passiert? Begruendet.
     A5  die bestehende Suche unveraendert bedienbar.
     A6  vier Module unveraendert.
+
+## Wartet auf C-535, 2026-09-08
+
+Tom: *,,keinen parent, loesen wir spaeter"*
+
+`[read]` **Ohne Parent gibt es nichts, was eingeklappt als
+Vorgabe stehen koennte** ? **dieser Punkt ruht mit C-535.**
+
