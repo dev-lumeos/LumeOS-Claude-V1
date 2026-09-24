@@ -5,10 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 234 |
+| `todos` | 233 |
 | `laufend_codex` | 1 |
-| `erledigt` | 545 |
-| **gesamt** | **780** |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 546 |
+| **gesamt** | **781** |
 
 ## medical — 49
 
@@ -331,9 +332,9 @@
 | `G-497` | feature | hoch | [die Suche zeigt Gruppen statt Zeilen](todos/nutrition-g-0497-suche-zeigt-gruppen.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 121
+## supplements — 122
 
-### beauftragbar — 120
+### beauftragbar — 121
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -408,7 +409,7 @@
 | `C-529` | feature | hoch | [der Stackeintrag kennt sein Produkt nicht](erledigt/supplements-c-0529-stack-kennt-produkt-nicht.md) | erledigt | — | — |
 | `C-532` | feature | hoch | [die Label Statements roh importieren](erledigt/supplements-c-0532-label-statements-roh-importieren.md) | erledigt | — | — |
 | `E-85` | entscheidung | hoch | [kein Zwischenspeicher fuer die DSLD-Bilder](erledigt/supplements-e-0085-kein-zwischenspeicher-dsld-bilder.md) | erledigt | — | — |
-| `E-88` | entscheidung | hoch | [die Entwurfsreferenz zeigt PED-Protokolle ohne Gradpruefung](todos/supplements-e-0088-entwurfsreferenz-zeigt-ped.md) | offen | — | — |
+| `E-88` | entscheidung | hoch | [die Entwurfsreferenz zeigt PED-Protokolle ohne Gradpruefung](erledigt/supplements-e-0088-entwurfsreferenz-zeigt-ped.md) | erledigt | — | G-499 |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
 | `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](erledigt/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | erledigt | — | A-42, E-88 |
@@ -456,6 +457,7 @@
 | `G-494` | aufraeumen | mittel | [die Form-Nachlese aus G-492 entfernen](erledigt/supplements-g-0494-form-nachlese-entfernen.md) | erledigt | — | — |
 | `G-495` | feature | hoch | [das Etikettenbild beim Oeffnen abrufen](erledigt/supplements-g-0495-etikettenbild-beim-oeffnen.md) | erledigt | — | G-496 |
 | `G-496` | feature | hoch | [das Etikett als PDF, Toms Fund](erledigt/supplements-g-0496-etikett-als-pdf.md) | erledigt | — | E-85 |
+| `G-499` | fehler | hoch | [die Entwurfsreferenz hinter die Gradpruefung](laufend_claudecode/supplements-g-0499-referenz-hinter-die-gradpruefung.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1

@@ -87,3 +87,34 @@ Onboarding kommt mit ihm.**
     A5  Gegenprobe: ein INSERT ohne Grad faellt.
     A6  die fuenf Leser unveraendert oder benannt.
     A7  Sicherung, Vollkette, ALLE Waechter.
+
+## Entschieden, 2026-09-08, Orchestrator
+
+`[cmd]` **Claude Code hat in G-117 gemessen:**
+
+> *,,*Nicht angegeben* ist ein VORGESEHENER Zustand: der
+zweite Klick in den Settings schreibt `''`, und
+`z.preprocess(leerZuNull, ...)` macht NULL daraus."*
+
+`[read]` **Die Leere ist nicht nur ein Datenfehler** ? **sie
+ist ein KNOPF.**
+
+### Die Entscheidung
+
+`[read]` **Der Ruecknahmeklick verschwindet.**
+
+Tom: *,,dieser zustand kann gar nicht sein"* ? **dann darf
+ihn auch kein Knopf herstellen.**
+
+`[read]` **Der Grad ist AENDERBAR, nicht LOESCHBAR** ? **wie
+ein Geburtsdatum: man korrigiert es, man leert es nicht.**
+
+### Was das fuer den Auftrag heisst
+
+    A8  der zweite Klick leert nicht mehr, er waehlt
+        nur um. GEMELDET an Claude Code, der
+        settings/formular.tsx aendert.
+    A9  die Vorgabe fuer die bestehenden Zeilen folgt
+        aus den Lesern: wer Extended ausblendet,
+        meint beginner.
+

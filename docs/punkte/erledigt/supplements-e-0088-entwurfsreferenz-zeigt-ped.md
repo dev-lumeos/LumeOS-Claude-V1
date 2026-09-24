@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: G-117
 entscheidung: null
+erledigt: 2026-09-08
+commit: entschieden
 beruehrt:
   dateien:
     - apps/web/src/app/v2/supplements/mockup-referenz.tsx
@@ -74,3 +76,38 @@ nicht rein technisch."*
 
 `[read]` **Wer entscheidet, dass der Code nicht zum Browser
 soll, entscheidet auch ueber die Referenz.**
+
+## Entschieden, 2026-09-08, Orchestrator
+
+Tom, zum wiederholten Vorlegen: *,,und was willst du nun von
+mir?"*
+
+`[read]` **Zu Recht** ? **die Entscheidung folgt aus zwei
+Saetzen, die schon stehen.**
+
+### Weg a: die Referenz hinter dieselbe Gradpruefung
+
+`[read]` **Sie zeigt Extended-INHALT, also folgt sie Extendeds
+Regel.**
+
+`[cmd]` **E-68 und E-70 sagen: die Entwurfsreferenz bleibt
+stehen, bis ein Modul fertig ist** ? **sie sagen NICHT, dass
+jeder sie sehen muss.**
+
+`[read]` **Als Massstab taugt sie weiter: wer Extended baut,
+hat den Grad.**
+
+### Warum nicht b oder c
+
+`[read]` **b (nur aus dem Buendel) laedt den Chunk beim
+Oeffnen nach** ? **die Dosis steht dann trotzdem im Browser,
+nur spaeter.**
+
+`[read]` **c laesst G-117 halb** ? **der Code ist drin, nur an
+anderer Stelle.**
+
+`[cmd]` **Und a bringt b mit: hinter dem Gate faellt der Chunk
+fuer alle ohne Grad ohnehin weg.**
+
+### Umsetzung als G-499
+
