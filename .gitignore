@@ -291,3 +291,8 @@ scratchpad/
 # F:\My Backups\lumeos-messwerkzeuge verschoben.
 # Die Abnahmen zitieren die ZAHLEN, nicht die Dateien.
 tools/_*
+
+# Messbauten aus Auftraegen. Der Dev-Server bleibt auf .next,
+# jeder Messbau bekommt sein eigenes Verzeichnis ueber
+# LUMEOS_DIST_DIR und wird nach der Abnahme geloescht.
+apps/*/.next-*
