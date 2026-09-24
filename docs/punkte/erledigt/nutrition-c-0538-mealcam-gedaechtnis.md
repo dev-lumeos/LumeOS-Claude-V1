@@ -198,4 +198,27 @@ enthaelt 18 Haehnchen-, 14 Puten- und 3 Entenbrustzeilen** ?
 
 **Abgenommen. Einspielen steht aus.**
 
+## Nachtrag: LIVE eingespielt, 2026-09-24
+
+`20260924090000_c538_mealcam_memory.sql` wurde nach der vorhandenen
+Sicherung `backup/schema/20260924015431_c43_vor_kettenlauf.sql` bytegenau
+und transaktional auf die laufende Datenbank angewandt.
+
+Die Relation `nutrition.mealcam_scans`, der private Bucket
+`nutrition-mealcam-images`, drei Indizes, der Aktualisierungs-Trigger,
+die Vergleichsfunktion und jeweils vier Eigentümer-Policies für Relation
+und Storage stehen live.
+
+Eine zurückgerollte Live-Probe mit `dev@lumeos.app` schrieb einen Scan und
+ein JPEG-Objekt: Eigentümer `1/1`, anderer authentifizierter Nutzer `0/0`;
+fremde Schreibversuche auf Relation und Objekt wurden beide abgewiesen.
+`anon` hat weder Schema- noch Tabellenzugriff auf `nutrition`; für Storage
+ist der globale Select-Grant zwar vorhanden, die Bucket-RLS zeigt trotzdem
+`0` MealCam-Objekte. Damit kann anon aus diesem Bucket nichts lesen.
+
+`Haehnchenbrust gegrillt` gegen `gegrillte Huehnerbrust` ergibt live
+`0,424242`. Die Probe erzeugte keine bleibenden Nutzer-, Scan- oder
+Storage-Daten. Der C-538-Test prüft nun die wirksame anonyme Sicht statt
+eines globalen Storage-ACLs und ist auf der Kettendatenbank grün.
+
 

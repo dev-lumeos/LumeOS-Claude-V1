@@ -70,3 +70,93 @@ Zuordnung ist Toms Entscheidung.**
     A2  hilft eine Schwelle? Gemessen, nicht vermutet.
     A3  ein Vorschlag, was die Arten trennt.
     A4  KEINE Umsetzung.
+
+## Bericht, 2026-09-24
+
+### A1 - 20 Eingaben gegen den gesamten BLS-Katalog
+
+Je Eingabe wurde der Rang-1-Treffer aus allen 7.140
+`nutrition.foods` nur nach
+`similarity(search_fold(Eingabe), search_fold(name_de))` bestimmt.
+Die erwartete Art kommt aus der menschlichen Eingabe, nicht aus dem
+Treffer.
+
+| Eingabe | Erwartet | Rang 1 | Score | Art richtig? |
+|---|---|---|---:|---|
+| Entenbrust gegrillt | Ente | Ente Brust, mit Haut, gegrillt | 0,5313 | ja |
+| Forelle gegrillt | Forelle | Forelle gegrillt | 1,0000 | ja |
+| Garnelen gekocht | Garnele | Garnele/Granat/Krabbe, gekocht | 0,4667 | ja |
+| gegrillte Haehnchenkeule | Huhn | Haehnchen Brustfilet, gegrillt | 0,4474 | ja |
+| gegrillte Huehnerbrust | Huhn | Pute Brust, ohne Haut, gegrillt | 0,3947 | **nein: Pute** |
+| gegrillte Putenbrust | Pute | Pute Brust, ohne Haut, gegrillt | 0,5000 | ja |
+| gegrillter Entenschenkel | Ente | Ente Schenkel, mit Haut, gegrillt | 0,5000 | ja |
+| gegrilltes Schweinesteak | Schwein | Schwein Kammsteak, gegrillt | 0,5758 | ja |
+| Haehnchenfilet gegrillt | Huhn | Haehnchen Brustfilet, gegrillt | 0,6875 | ja |
+| Haehnchenschnitzel gebraten | Huhn | Haehnchenschenkel/Hähnchenkeule, gebraten im Ofen | 0,5238 | ja |
+| Huhn Brust gegrillt | Huhn | Ente Brust, mit Haut, gegrillt | 0,4848 | **nein: Ente** |
+| Kabeljau geduenstet | Kabeljau | Dorsch/Kabeljau, geduenstet | 0,7407 | ja |
+| Kalbsschnitzel gebraten | Kalb | Kalbsschnitzel mehliert, gebraten | 0,7273 | ja |
+| Lachs gegrillt | Lachs | Lachs gegrillt | 1,0000 | ja |
+| Lammkotelett gegrillt | Lamm | Lamm Kotelett, gegrillt | 0,8000 | ja |
+| Putenkeule gebraten | Pute | Pute Keule, ohne Haut, gebraten ohne Fett (Ofen) | 0,4250 | ja |
+| Rindersteak gegrillt | Rind | Rindersteak gegrillt | 1,0000 | ja |
+| Schweineschnitzel gebraten | Schwein | Schweineschnitzel natur, gebraten | 0,8125 | ja |
+| Seehecht gebraten | Seehecht | Seehecht gebraten ohne Fett (Pfanne) | 0,5294 | ja |
+| Truthahnbrust gegrillt | Pute | Tomate gegrillt | 0,3448 | **nein: andere Speise** |
+
+Von 20 Rang-1-Treffern haben **zwei die falsche Tierart** und einer ist
+eine ganz andere Speise: **17/20** treffen die erwartete Art, **3/20**
+sind nicht der erwartete Katalogtyp.
+
+### A2 - eine höhere Schwelle korrigiert keine Reihenfolge
+
+| Schwelle | Treffer geliefert | ohne Treffer | erwartete Art auf Rang 1 | falsche Tierart auf Rang 1 | andere falsche Speise |
+|---:|---:|---:|---:|---:|---:|
+| 0,3 | 20 | 0 | 17 | 2 | 1 |
+| 0,4 | 18 | 2 | 17 | 1 | 0 |
+| 0,5 | 14 | 6 | 14 | 0 | 0 |
+| 0,6 | 8 | 12 | 8 | 0 | 0 |
+
+Die Schwelle sortiert nicht um. Bei 0,4 bleibt `Huhn Brust gegrillt`
+vor der Ente falsch; bei 0,5 verschwinden Fehler nur, weil sechs von
+zwanzig Eingaben keinen Treffer mehr bekommen. Das ist Unterdrücken,
+nicht Korrigieren.
+
+### A3 - was Arten tatsächlich trennt
+
+`nutrition.foods` hat kein Artenfeld, nur Namen, `category_id`,
+`processing_level` und `is_prepared_dish`. Kategorien sind ungeeignet:
+`Haehnchenbrust & Filet` enthält 35 Einträge aus Huhn, Pute und Ente;
+`Magerer Seefisch` enthält 74 Einträge aus fünf der gemessenen Arten.
+Elf betroffene Kategorien tragen mehr als eine Art.
+
+Ein kontrollierter Stichwortschlüssel würde die zwei Tierverwechslungen
+in dieser Probe verhindern: Eine Begrenzung auf Huhn/Pute/Ente lässt bei
+allen 20 Eingaben die erwartete Art im Kandidatenraum. Er löst nicht die
+ganze Zuordnung: `gegrillte Huehnerbrust` wird danach zu `Huehnerbruehe`
+statt zu Pute. Art ist eine notwendige Nebenbedingung, keine Entscheidung.
+
+Eine einzelne Spalte wäre ebenfalls zu klein: in einem gemessenen
+Zwölf-Arten-Vokabular nennen 53 Foods zwei und ein Food drei Arten, etwa
+`Doener Kebab ... (Kalb/Rind)` oder `Gemuese-Eintopf ... Rind- und
+Schweinefleisch`.
+
+**Empfehlung an Tom, keine Umsetzung:** eine kuratierte, mehrwertige
+Food-Arten-Relation mit kanonischen Codes und Synonymen
+(`Huhn`/`Haehnchen`/`Huehner`, `Pute`/`Truthahn` usw.). Die spätere
+deterministische Bildschicht liefert Arten-Kandidaten mit Konfidenz; erst
+dann begrenzt LumeOS den BLS-Kandidatenraum, nutzt Trigramme nur für
+Schreibweise, Schnitt und Zubereitung und lässt den Nutzer deklarieren.
+Fehlt eine belastbare Art, darf es keine automatische Auswahl geben.
+
+Das entspricht den dokumentierten Bausteinen anderer Katalog- und
+Vision-Systeme: Vision-Labels tragen Beschreibung und Score, aber keine
+BLS-ID ([Google Vision](https://cloud.google.com/vision/docs/labels));
+Open Food Facts führt kanonische Taxonomie-IDs mit Synonymen für die Suche
+([Taxonomie-Dokumentation](https://openfoodfacts.github.io/search-a-licious/users/explain-taxonomies/)).
+
+### A4 - keine Umsetzung
+
+Keine Tabelle, Spalte, Funktion, Migration oder Katalogzeile wurde für
+C-539 angelegt oder geändert. `supabase/` enthält dafür nur den bereits
+live eingespielten C-538-Stand und dessen nachgeschärfte Sicherheitsprobe.

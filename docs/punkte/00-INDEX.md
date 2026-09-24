@@ -6,8 +6,7 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 238 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 537 |
+| `erledigt` | 538 |
 | **gesamt** | **776** |
 
 ## medical — 49
@@ -833,7 +832,7 @@
 | `G-479` | fehler | mittel | [zwei Klassen mit 2,88:1 in packages/ui](erledigt/quer-g-0479-kontraste-in-packages-ui.md) | erledigt | — | — |
 | `G-487` | fehler | hoch | [der Tageswechsler startet nicht auf heute](erledigt/quer-g-0487-tageswechsler-startet-nicht-auf-heute.md) | erledigt | — | — |
 | `G-490` | fehler | mittel | [der Spaltenwaechter kennt die Tabelle nicht](erledigt/quer-g-0490-spaltenwaechter-kennt-tabelle-nicht.md) | erledigt | — | — |
-| `G-498` | fehler | mittel | [.v2-hinweis liegt unter 4,5:1](laufend_claudecode/quer-g-0498-hinweis-kontrast.md) | laeuft (claudecode) | — | — |
+| `G-498` | fehler | mittel | [.v2-hinweis liegt unter 4,5:1](erledigt/quer-g-0498-hinweis-kontrast.md) | erledigt | — | — |
 
 ## buddy — 1
 
