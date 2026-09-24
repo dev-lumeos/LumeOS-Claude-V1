@@ -9,6 +9,8 @@ kind_von: E-87
 entscheidung: E-87
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: a975287a
 beruehrt:
   tabellen: [nutrition.meal_plans]
 zahlen:
@@ -70,4 +72,22 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Gebaut ? NICHT live.**
+
+`[cmd]` **Kein `days_count`-Trigger auf `meal_plan_days`, und
+der Aufbau-Wochenplan traegt weiter 28.**
+
+### Er hat es als TRIGGER gebaut, nicht als Zeile
+
+> *,,`days_count` folgt nun per DB-Trigger den
+materialisierten Tagen; Nachzug liegt getrennt im Datenpfad."*
+
+`[read]` **Ich hatte *,,`ablaufKlaeren` schreibt fort"*
+geschrieben** ? **ein Trigger faengt auch jeden anderen Weg,
+der Tage anlegt.**
+
+`[cmd]` **Belegt: 28 -> 35, zweiter Rollover 35 -> 42 in einer
+Transaktion, danach ROLLBACK.**
+
+**Abgenommen. Einspielen steht aus.**
+

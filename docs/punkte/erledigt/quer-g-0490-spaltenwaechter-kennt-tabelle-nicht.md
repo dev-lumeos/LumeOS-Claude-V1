@@ -9,6 +9,8 @@ kind_von: G-460
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: a975287a
 beruehrt:
   dateien:
     - tools/gefallene-spalten-pruefen.mjs
@@ -84,5 +86,22 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+> *,,Der Spaltenwaechter prueft nun Schema.Tabelle.Spalte."*
+
+`[cmd]` **Selbst gelaufen: exit 0.**
+
+`[cmd]` **Und die Gegenprobe:** *,,eine echte Leseabfrage auf
+`nutrition.meal_items.supplement_serving_size` wird rot und
+haette G-485 gefangen."*
+
+`[read]` **A4 war genau das: der Fall, der Tom das Tagebuch
+gekostet hat.**
+
+`[read]` **Dreimal gemeldet, einmal behoben** ? **und der
+naechste Agent verliert keinen Platz mehr daran.**
+
+**Abgenommen.**
+
 

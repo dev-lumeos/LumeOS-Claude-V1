@@ -80,3 +80,37 @@ Tabelle kam, der Weg nicht.**
 `nutrition/plans-echt.tsx`, nicht `training/modale.tsx`."*
 
 **Abgenommen.**
+
+## ZURUECK - eine Probe faellt, 2026-09-08
+
+`[cmd]` **Selbst gemessen:**
+
+    not ok 1810 - G-278: die tragenden Gruende sind markiert
+      "src/app/v2/training/modale.tsx: der Grund fuer
+       training.routines traegt keine Marke"
+
+`[read]` **Die Aussage wurde nachgefuehrt, aber die MARKE
+fiel weg** ? **G-278 verlangt sie fuer jeden tragenden
+Grund.**
+
+`[cmd]` **apps/web: 1968 von 1969.**
+
+### Und der Fehler ist meiner
+
+`[read]` **Ich habe C-536 abgenommen, ohne die Proben zu
+laufen** ? **nur den Abwesenheitswaechter.**
+
+`[cmd]` **Claude Code hat es in seinem Bericht gemeldet:**
+*,,Der Testfehlschlag (G-278-Marke) gehoert zu Codex
+C-536."*
+
+`[read]` **Und ich habe es als *,,seins"* abgetan, statt zu
+messen.**
+
+## Nacharbeit
+
+    N1  die Marke steht wieder, die Aussage bleibt
+        nachgefuehrt.
+    N2  apps/web 1969 von 1969.
+    N3  der Abwesenheitswaechter bleibt gruen.
+

@@ -6,9 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 238 |
-| `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 532 |
+| `erledigt` | 534 |
 | **gesamt** | **773** |
 
 ## medical — 49
@@ -176,7 +175,7 @@
 | `C-526` | fehler | hoch | [aktive Meal-Pläne dürfen nicht überlappen](erledigt/nutrition-c-0526-keine-ueberlappungspruefung.md) | erledigt | — | — |
 | `C-534` | befund | hoch | [welche Lebensmittelgruppen gibt es?](erledigt/nutrition-c-0534-welche-lebensmittelgruppen.md) | erledigt | — | — |
 | `C-535` | feature | hoch | [parent_id fuer nutrition.foods](todos/nutrition-c-0535-parent-id-fuer-foods.md) | offen | — | — |
-| `C-537` | fehler | mittel | [days_count zieht beim Rollover mit](laufend_codex/nutrition-c-0537-days-count-zieht-mit.md) | laeuft (codex) | — | — |
+| `C-537` | fehler | mittel | [days_count zieht beim Rollover mit](erledigt/nutrition-c-0537-days-count-zieht-mit.md) | erledigt | — | — |
 | `E-87` | entscheidung | mittel | [was bedeutet days_count nach einem Rollover?](erledigt/nutrition-e-0087-days-count-nach-rollover.md) | erledigt | — | C-537 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
@@ -831,7 +830,7 @@
 | `G-477` | fehler | mittel | [Playwright ist anderthalb Jahre alt](todos/quer-g-0477-playwright-anheben.md) | offen | — | — |
 | `G-479` | fehler | mittel | [zwei Klassen mit 2,88:1 in packages/ui](laufend_claudecode/quer-g-0479-kontraste-in-packages-ui.md) | laeuft (claudecode) | — | — |
 | `G-487` | fehler | hoch | [der Tageswechsler startet nicht auf heute](erledigt/quer-g-0487-tageswechsler-startet-nicht-auf-heute.md) | erledigt | — | — |
-| `G-490` | fehler | mittel | [der Spaltenwaechter kennt die Tabelle nicht](laufend_codex/quer-g-0490-spaltenwaechter-kennt-tabelle-nicht.md) | laeuft (codex) | — | — |
+| `G-490` | fehler | mittel | [der Spaltenwaechter kennt die Tabelle nicht](erledigt/quer-g-0490-spaltenwaechter-kennt-tabelle-nicht.md) | erledigt | — | — |
 
 ## buddy — 1
 
