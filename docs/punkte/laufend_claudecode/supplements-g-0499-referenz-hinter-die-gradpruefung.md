@@ -340,3 +340,38 @@ der nie auf Extended klickt.**
 `mode:"enhanced"` im ganzen Manifest, nicht nach vier
 Namen.**
 
+## Toms Klarstellung, 2026-09-08
+
+> preise werden vom user eingepflegt, wenn er es in den stack
+> nimmt. wir verkaufen keine enhanced produkte
+
+`[cmd]` **Selbst nachgemessen ? die echten Preise liegen beim
+Nutzer:**
+
+    supplements.user_inventory.cost_per_unit
+    supplements.user_inventory.total_cost
+    supplements.user_stacks.total_monthly_cost
+    gelesen von tab-inventory-echt.tsx
+
+`[read]` **`cost_per_serving` in `spec-daten.ts` ist eine
+Attrappe, die NIE echt wird** ? **es gibt keinen Katalogpreis,
+weil LumeOS nichts verkauft.**
+
+### Was das fuer die Nacharbeit heisst
+
+`[read]` **Das Argument *,,nur Namen und Preise"* faellt
+doppelt: die Dosis steht drin, UND die Preise gehoeren uns
+nicht.**
+
+`[read]` **Es gibt also nichts an den enhanced-Eintraegen, das
+im Buendel bleiben muesste** ? **kein Name, kein Preis, keine
+Dosis.**
+
+`[cmd]` **Und der Kosten-Reiter hat schon einen echten Weg:
+`tab-inventory-echt.tsx`** ? **`fehlende-kacheln.tsx` ist die
+Entwurfsseite daneben.**
+
+`[read]` **MISS, was die Kostenkachel ohne die
+enhanced-Eintraege zeigt** ? **wenn sie leer wird, ist das ein
+eigener Befund, kein Grund, die Liste zu behalten.**
+
