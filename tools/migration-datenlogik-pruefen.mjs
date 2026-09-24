@@ -117,6 +117,22 @@ const structuralFunctionExceptions = [
     requiredSql: 'UPDATE nutrition.meal_plans AS plan_row',
   },
 ]
+const structuralStatementExceptions = [
+  {
+    file: '20260924090000_c538_mealcam_memory.sql',
+    command: 'INSERT',
+    // C-538 legt genau einen leeren, privaten Storage-Bucket an. Das ist die
+    // Bucketschemadefinition fuer personenbezogene Bilder wie C-463, kein
+    // Produkt-, Katalog- oder Seed-Datensatz. Die Scan-Daten selbst entstehen
+    // ausschliesslich bei einer spaeteren Owner-Aktion.
+    requiredSql: [
+      'INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)',
+      "'nutrition-mealcam-images'",
+      'false,',
+      'ON CONFLICT (id) DO UPDATE SET',
+    ],
+  },
+]
 // Im Funktionskoerper zaehlt nur der Anfang einer ausfuehrbaren SQL-Anweisung.
 // `FOR UPDATE` sperrt, schreibt aber nicht; ebenso ist `ON DELETE` Teil einer
 // Fremdschluesseldefinition. Beide duerfen keinen Befund erzeugen.
@@ -200,8 +216,15 @@ function commandsInDollarBlocks(sql, file) {
 }
 
 export function findingsInFile(file, sql) {
+  const topLevelCommands = commandsInStatement(sql)
+  const structuralStatementException = structuralStatementExceptions.some((exception) =>
+    file === exception.file &&
+    topLevelCommands.length === 1 &&
+    topLevelCommands[0] === exception.command &&
+    exception.requiredSql.every((fragment) => sql.includes(fragment)),
+  )
   return [
-    ...commandsInStatement(sql),
+    ...(structuralStatementException ? [] : topLevelCommands),
     ...commandsInDollarBlocks(sql, file),
   ].map((command) => `${file}: ${command}`)
 }

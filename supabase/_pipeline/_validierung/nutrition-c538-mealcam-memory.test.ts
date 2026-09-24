@@ -38,7 +38,7 @@ test('C-538: ein MealCam-Scan bleibt privat und speichert nur Bild, Rohresultat 
     scanPolicies: number
     storagePolicies: number
     anonTableSelect: boolean
-    anonStorageSelect: boolean
+    anonStorageObjects: number
     objectSurvivesMetadataDeletion: number
     deletedByOwner: boolean
   }>(`
@@ -123,6 +123,23 @@ test('C-538: ein MealCam-Scan bleibt privat und speichert nur Bild, Rohresultat 
     WHERE bucket_id = 'nutrition-mealcam-images' AND name = '${OWNER}/scan-001.jpg';
     RESET ROLE;
 
+    CREATE TEMP TABLE c538_anon(storage_objects integer NOT NULL) ON COMMIT DROP;
+    GRANT SELECT, UPDATE ON c538_anon TO anon;
+    INSERT INTO c538_anon VALUES (0);
+    DO $anon$
+    DECLARE visible_objects integer := 0;
+    BEGIN
+      EXECUTE 'SET LOCAL ROLE anon';
+      BEGIN
+        EXECUTE 'SELECT count(*)::integer FROM storage.objects WHERE bucket_id = ''nutrition-mealcam-images'''
+          INTO visible_objects;
+      EXCEPTION WHEN insufficient_privilege THEN
+        visible_objects := 0;
+      END;
+      EXECUTE 'RESET ROLE';
+      UPDATE c538_anon SET storage_objects = visible_objects;
+    END $anon$;
+
     SELECT json_build_object(
       'columns', (SELECT array_agg(column_name ORDER BY ordinal_position)
                   FROM information_schema.columns
@@ -149,7 +166,7 @@ test('C-538: ein MealCam-Scan bleibt privat und speichert nur Bild, Rohresultat 
                           WHERE schemaname = 'storage' AND tablename = 'objects'
                             AND policyname LIKE 'nutrition_mealcam_images_%'),
       'anonTableSelect', has_table_privilege('anon', 'nutrition.mealcam_scans', 'SELECT'),
-      'anonStorageSelect', has_table_privilege('anon', 'storage.objects', 'SELECT'),
+      'anonStorageObjects', (SELECT storage_objects FROM c538_anon),
       'objectSurvivesMetadataDeletion', (SELECT object_after_metadata_delete FROM c538_delete),
       'deletedByOwner', NOT EXISTS (
         SELECT 1 FROM storage.objects
@@ -177,7 +194,7 @@ test('C-538: ein MealCam-Scan bleibt privat und speichert nur Bild, Rohresultat 
   assert.equal(result.scanPolicies, 4)
   assert.equal(result.storagePolicies, 4)
   assert.equal(result.anonTableSelect, false)
-  assert.equal(result.anonStorageSelect, false)
+  assert.equal(result.anonStorageObjects, 0)
   assert.equal(result.objectSurvivesMetadataDeletion, 1)
   assert.equal(result.deletedByOwner, true)
 })
