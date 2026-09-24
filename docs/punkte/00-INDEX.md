@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 238 |
+| `todos` | 237 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 534 |
+| `erledigt` | 535 |
 | **gesamt** | **773** |
 
 ## medical — 49
@@ -449,7 +449,7 @@
 | `G-465` | fehler | hoch | [fuenf Anfragen je Suche](erledigt/supplements-g-0465-fuenf-anfragen-je-suche.md) | erledigt | — | — |
 | `G-466` | fehler | mittel | [amount_qualifier wird nicht gelesen](erledigt/supplements-g-0466-amount-qualifier.md) | erledigt | — | C-512 |
 | `G-467` | fehler | hoch | [die Filter werden nicht gespeichert](erledigt/supplements-g-0467-filter-werden-nicht-gespeichert.md) | erledigt | — | G-469 |
-| `G-468` | feature | hoch | [der Vorlieben-Reiter fuer Supplements](todos/supplements-g-0468-vorlieben-reiter.md) | offen | — | — |
+| `G-468` | feature | hoch | [der Vorlieben-Reiter fuer Supplements](laufend_claudecode/supplements-g-0468-vorlieben-reiter.md) | laeuft (claudecode) | — | — |
 | `G-472` | feature | mittel | [die Tafel zeigt die Portionswahl nicht](todos/supplements-g-0472-portionswahl-in-der-tafel.md) | offen | — | — |
 | `G-484` | feature | hoch | [keine Aktion im Produkte-Reiter](erledigt/supplements-g-0484-aktion-im-produkte-reiter.md) | erledigt | — | C-529, G-491, G-492 |
 | `G-491` | fehler | hoch | [die Produkttabelle bleibt im Browser leer](erledigt/supplements-g-0491-produkttabelle-bleibt-leer.md) | erledigt | — | — |
@@ -828,7 +828,7 @@
 | `G-474` | fehler | hoch | [der Absturz auf der Anstrichebene](erledigt/quer-g-0474-anstrichebene.md) | erledigt | — | G-476, G-477 |
 | `G-476` | fehler | hoch | [der Produktionsbau nimmt den Dev-Server mit](erledigt/quer-g-0476-dev-server-mitgenommen.md) | erledigt | — | — |
 | `G-477` | fehler | mittel | [Playwright ist anderthalb Jahre alt](todos/quer-g-0477-playwright-anheben.md) | offen | — | — |
-| `G-479` | fehler | mittel | [zwei Klassen mit 2,88:1 in packages/ui](laufend_claudecode/quer-g-0479-kontraste-in-packages-ui.md) | laeuft (claudecode) | — | — |
+| `G-479` | fehler | mittel | [zwei Klassen mit 2,88:1 in packages/ui](erledigt/quer-g-0479-kontraste-in-packages-ui.md) | erledigt | — | — |
 | `G-487` | fehler | hoch | [der Tageswechsler startet nicht auf heute](erledigt/quer-g-0487-tageswechsler-startet-nicht-auf-heute.md) | erledigt | — | — |
 | `G-490` | fehler | mittel | [der Spaltenwaechter kennt die Tabelle nicht](erledigt/quer-g-0490-spaltenwaechter-kennt-tabelle-nicht.md) | erledigt | — | — |
 

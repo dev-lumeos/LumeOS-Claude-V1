@@ -9,6 +9,8 @@ kind_von: G-478
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: b57782f5
 beruehrt:
   dateien:
     - packages/ui/src/shell/app-shell.tsx
@@ -261,4 +263,63 @@ ohne Neustart und zeigt 9,19/7,2.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **`v2.css`: `.v2-dim`, `.v2-eyebrow` und `.v2-tbl th`
+stehen auf `--fg-muted`.**
+
+    hell    2,88:1  ->  9,19:1
+    dunkel  2,12:1  ->  7,20:1
+
+`[cmd]` **Proben: web 1968 von 1969, coach 65/65** ? **der eine
+Fehlschlag ist der G-278-Test aus C-536, nicht seiner.**
+
+### Ein Befund, den der Auftrag nicht hatte
+
+> *,,Im DUNKELMODUS war es 2,12:1, schlechter als die
+gemeldeten 2,88. `--fg-dim` ist 0,420 dunkel gegen 0,680 hell ?
+eine Messung an EINEM Thema sagt nichts ueber das andere."*
+
+`[read]` **Er hat sein eigenes Foto aus G-478 unterboten.**
+
+### Und er hat das Token NICHT angefasst
+
+> *,,`--fg-dim` traegt vier Dekorationen (Punkt, Navakzent,
+1px-Linie, 7%-Schraffur), wo 2,88:1 richtig ist."*
+
+> *,,`--fg-subtle` sah aus wie die naheliegende Mitte und faellt
+dunkel bei 3,98:1 ? gerechnet und gemessen. Nur `--fg-muted`
+besteht beide."*
+
+`[read]` **Drei Zeilen statt eines Tokens** ? **und die Regel
+fuer alle, die nachkommen: die Klasse anheben, nicht das
+Token.**
+
+### A4 mit einer Selbstkorrektur
+
+> *,,Meine erste Vergleichsmessung zeigte 5 Abweichungen ? ich
+habe GEPRUEFT statt sie wegzuerklaeren: zwei identische Laeufe
+geben 0, sie kamen aus dem Zuruecksetzen selbst."*
+
+`[cmd]` **537 Elemente aendern die Farbe, 0 Abweichungen in
+Kacheln, Zeichen und Knoten ueber sechs Module.**
+
+### Und ein eigener Fehler aus G-496
+
+> *,,Die Lint-Stufe fand einen echten Fehler von mir:
+`EtikettReiter` rief Hooks NACH einem fruehen Return ? ein
+Produkt ohne `dsld_id` haette die Hook-Liste verschoben."*
+
+> *,,Ich habe das Gate damals SELEKTIV gelesen statt bis zum
+Ende."*
+
+`[read]` **Derselbe Fehler, den ich bei C-536 gemacht habe** ?
+**einen Teil geprueft und den Rest fuer fremd gehalten.**
+
+### A1 war groesser als gemeldet
+
+`[cmd]` **1.905 Stellen statt 1.565** ? **1.837 in `apps/web`,
+47 in `apps/coach`, 21 in `packages/ui`.**
+
+**Abgenommen.**
+
