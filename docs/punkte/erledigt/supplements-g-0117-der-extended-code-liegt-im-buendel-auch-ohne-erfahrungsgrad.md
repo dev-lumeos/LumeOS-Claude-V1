@@ -13,8 +13,8 @@ beauftragt: 2026-09-08
 erledigt: 2026-09-08
 commit: a8c6fda9
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien:
+    - apps/web/src/app/v2/supplements/tab-extended.tsx
 zahlen: null
 ---
 
