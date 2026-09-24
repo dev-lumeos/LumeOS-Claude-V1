@@ -117,14 +117,27 @@ export function gleich(a: SupplementVorlieben, b: SupplementVorlieben): boolean 
 /**
  * Einen Wert in einer Liste umschalten.
  *
- * `[read]` **Die Reihenfolge bleibt stabil** — neue Werte hinten
- * an. `[cmd]` **Sonst spraenge die Markenliste bei jedem Klick**,
- * und `gleich()` meldete eine Aenderung, wo keine ist.
+ * ══ WARUM SORTIERT ══════════════════════════════════════════════════
+ *
+ * `[cmd]` **Gemessen im Rumpf von `supplement_preferences_write`:**
+ *
+ *     SELECT COALESCE(array_agg(value ORDER BY value), '{}')
+ *
+ * `[read]` **Die Datenbank sortiert** — wer hier hinten anhaengt,
+ * bekommt beim naechsten Lesen eine andere Reihenfolge zurueck,
+ * **und `gleich()` meldete eine Aenderung, wo keine ist.**
+ *
+ * `[read]` **Also dieselbe Ordnung wie dort** — der Stand nach dem
+ * Klick ist der, der zurueckkommt.
  */
 export function umschalten(liste: string[], wert: string): string[] {
-  return liste.includes(wert)
+  const neu = liste.includes(wert)
     ? liste.filter(x => x !== wert)
     : [...liste, wert]
+  // `[cmd]` **`array_agg(value ORDER BY value)`** — Postgres sortiert
+  // Text nach seiner Sortierfolge; `localeCompare` kommt dem am
+  // naechsten, ohne eine eigene Ordnung zu erfinden.
+  return [...neu].sort((a, b) => a.localeCompare(b))
 }
 
 /**

@@ -153,13 +153,50 @@ export async function ladeMeidestoffe(): Promise<string[]> {
       .select('tag_code,catalog_item_code,strength')
       .eq('user_id', user.id)
       .in('strength', ['soft_dislike', 'hard_exclude'])
-    if (error) return []
     const aus: string[] = []
-    for (const r of data ?? []) {
-      const roh = r as unknown as Record<string, unknown>
-      const code = roh.catalog_item_code ?? roh.tag_code
-      if (typeof code === 'string' && code.trim()) aus.push(code.trim())
+    if (!error) {
+      for (const r of data ?? []) {
+        const roh = r as unknown as Record<string, unknown>
+        const code = roh.catalog_item_code ?? roh.tag_code
+        if (typeof code === 'string' && code.trim()) aus.push(code.trim())
+      }
     }
+
+    // ══ G-468: DER ZWEITE ORT — UND WARUM ER DAZUKOMMT ══════════════
+    //
+    // `[cmd]` **Gemessen 2026-09-24:** **die Meidestoffe standen NUR
+    // in `nutrition.food_preference_items`** — der neue
+    // Vorlieben-Reiter schrieb `avoided_ingredients` nach
+    // `supplements.supplement_preferences` (C-511), **und NIEMAND las
+    // das Feld.** `[read]` **Eine Vorliebe, die nichts tut, ist eine
+    // Attrappe** — und schlimmer: sie sieht aus wie eine Zusage.
+    //
+    // ── WARUM DAS KEIN VERSTOSS GEGEN E-84 IST ──────────────────────
+    //
+    // **Tom:** *„solange es an DENSELBEN ORT geschrieben wird."*
+    //
+    // `[read]` **Zwei Speicher waeren zwei Wahrheiten, wenn beide
+    // DASSELBE fuehrten.** `[cmd]` **Sie fuehren es nicht:**
+    //
+    //     nutrition.food_preference_items   Essen, je Stoff eine
+    //                                       Haerte (soft/hard)
+    //     supplements.…_preferences         nur Supplemente, weich
+    //
+    // `[read]` **Also EIN Leseweg ueber BEIDE** — hier, an der einen
+    // Stelle, die markiert. `[cmd]` **Der Reiter bekommt eine
+    // Vereinigung, keine zweite Liste**, und wer kuenftig einen
+    // dritten Ort anbindet, aendert diese Funktion — nicht den Reiter.
+    try {
+      const { ladeVorlieben } = await import('./vorlieben-read')
+      const { stand } = await ladeVorlieben()
+      for (const s of stand.avoided_ingredients) {
+        if (s.trim()) aus.push(s.trim())
+      }
+    } catch {
+      // `[read]` **Die Nahrungsvorlieben allein sind besser als
+      // nichts** — ein Fehler im einen Weg loescht den anderen nicht.
+    }
+
     return Array.from(new Set(aus))
   } catch {
     return []

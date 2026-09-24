@@ -399,19 +399,83 @@ export function SuppProdukte() {
   // weg. **Das ist die Falle bei dieser Bauform.**
   const [geladen, setGeladen] = React.useState(false)
 
+  /** G-468: gesetzt, wenn die VORLIEBEN den Filter gefuellt haben. */
+  const ausVorliebe = React.useRef(false)
+
+
+  // ══ G-468 / A4: DIE VORLIEBEN SETZEN DIE VORGABE ═════════════════
+  //
+  // **Tom:** *„die vorlieben wirken auf die produktsuche."*
+  //
+  // ── ZWEI SPEICHER, ZWEI BEDEUTUNGEN ─────────────────────────────
+  //
+  //     C-504 `user_display_preferences`   was ich JETZT ansehe
+  //     C-511 `supplement_preferences`     was ich ALLGEMEIN will
+  //
+  // `[read]` **Das ist kein Widerspruch zu E-84** — es sind zwei
+  // verschiedene Sachen, nicht zweimal dieselbe. `[cmd]` **Ein
+  // Sitzungsfilter, der den Vorlieben folgte, liesse sich nicht mehr
+  // wegklicken;** **Vorlieben, die dem Filter folgten, waeren keine
+  // Vorlieben.**
+  //
+  // ── DIE RANGFOLGE ───────────────────────────────────────────────
+  //
+  //     1  der gespeicherte Sitzungsfilter   (C-504, wenn VORHANDEN)
+  //     2  die Vorlieben                     (C-511)
+  //     3  die leere Vorgabe
+  //
+  // `[cmd]` **Das Merkmal ist `gespeichert`, nicht `filter`** —
+  // gemessen in `ladeProduktFilter` (`produkt-filter-read.ts:55`):
+  // **ohne Zeile kommt `{ filter: VORGABE, gespeichert: false }`
+  // zurueck, nie `filter: null`.** `[read]` **Eine Pruefung auf
+  // `filter != null` waere IMMER wahr** — die Vorlieben kaemen nie
+  // zum Zug, und A4 waere gebaut und unwirksam. **Genau der Fall,
+  // den ich beim ersten Anlauf geschrieben hatte.**
+  //
+  // `[cmd]` **Gemessen 2026-09-24, VORHER: `426 von 121.959`, keine
+  // Marke aktiv** — die Vorlieben erreichten die Suche nicht.
   React.useEffect(() => {
     void (async () => {
       try {
-        const a = await fetch('/api/supplements/filter')
-        if (a.ok) {
-          const j = await a.json() as { filter?: unknown }
-          const f = ausJson(j.filter)
+        const [aF, aV] = await Promise.all([
+          fetch('/api/supplements/filter'),
+          fetch('/api/supplements/vorlieben'),
+        ])
+
+        const jF = aF.ok
+          ? await aF.json() as { filter?: unknown; gespeichert?: boolean }
+          : { filter: undefined, gespeichert: false }
+
+        if (jF.gespeichert === true) {
+          const f = ausJson(jF.filter)
           setStatus(f.status)
           setKategorie(f.kategorie)
           setForm(f.form)
           setGewaehlteMarken(f.marken)
           setAllergienAn(f.allergienAn)
           setFilterOffen(f.leisteOffen)
+        } else if (aV.ok) {
+          // `[read]` **Kein Filter: die Vorlieben sind die Vorgabe.**
+          const jV = await aV.json() as {
+            preferred_brands?: string[]
+            preferred_forms?: string[]
+            only_on_market?: boolean
+          }
+          // `[read]` **Gesetzt, aber nicht als Filter gespeichert** —
+          // der Speichereffekt ueberspringt genau diesen einen Lauf.
+          if (jV.preferred_brands?.length) {
+            ausVorliebe.current = true
+            setGewaehlteMarken(jV.preferred_brands)
+          }
+          // `[read]` **Der Reiter filtert nach EINER Form** — die
+          // Vorlieben fuehren eine Liste. `[cmd]` **Bei genau einer
+          // ist die Zuordnung eindeutig; bei mehreren waere jede Wahl
+          // eine Erfindung**, also bleibt es dann bei *„alle"*.
+          if (jV.preferred_forms?.length === 1) setForm(jV.preferred_forms[0])
+          // `[cmd]` **`only_on_market: false` heisst ALLE Marktstatus**
+          // — `status = null` ist im Leseweg genau das (`produkte-read`
+          // laesst `status` dann weg).
+          if (jV.only_on_market === false) setStatus(null)
         }
       } catch {
         // `[read]` **Ohne gespeicherten Stand gilt die Vorgabe** —
@@ -431,8 +495,26 @@ export function SuppProdukte() {
   //
   // `[read]` **Entprellt** — wer drei Marken anklickt, soll nicht
   // dreimal schreiben.
+  // ══ G-468: EINE VORLIEBE IST KEINE FILTEREINSTELLUNG ═════════════
+  //
+  // `[cmd]` **Gemessen 2026-09-24:** **die aus den Vorlieben gesetzten
+  // Marken wurden SOFORT als Sitzungsfilter gespeichert** — dieser
+  // Effekt haengt an `gewaehlteMarken` und sieht nicht, WER sie
+  // gesetzt hat.
+  //
+  // `[read]` **Damit waeren die beiden Speicher wieder EINER:** ein
+  // *„Zuruecksetzen"* im Reiter schriebe `marken: []` und loeschte
+  // die Wirkung der Vorlieben — **bis der Nutzer sie in seinen
+  // Vorlieben neu setzt.** `[cmd]` **Genau das ist im Lauf passiert:
+  // nach dem Raeumen war keine Pille mehr aktiv.**
+  //
+  // `[read]` **Also schreibt nur, was der NUTZER hier angefasst hat.**
+  // **Die Vorlieben bleiben die Vorgabe, der Filter bleibt die
+  // Sitzung** — und ein Zuruecksetzen fuehrt zur Vorliebe zurueck,
+  // nicht ins Leere.
   React.useEffect(() => {
     if (!geladen) return
+    if (ausVorliebe.current) { ausVorliebe.current = false; return }
     const stand: ProduktFilter = {
       status, kategorie, form,
       marken: gewaehlteMarken,
@@ -1315,7 +1397,13 @@ export function SuppProdukte() {
               wie viele passen zum Filter, wie gross ist der Katalog.
               **`trefferSatz` beantwortet die ersten beiden in einem
               Satz**, der Katalog steht getrennt daneben. */}
-          <span>{trefferSatz(zeilen.length, gesamt, liste?.gesamtUnscharf)}</span>
+          {/* `[cmd]` **Marke fuer A4** — sie stand hier nicht, und eine
+              Probe musste den Seitentext nach `N von M` durchsuchen.
+              `[read]` **Eine Marke ist billiger als eine Regel ueber
+              Fliesstext.** */}
+          <span data-probe="produkt-treffer">
+            {trefferSatz(zeilen.length, gesamt, liste?.gesamtUnscharf)}
+          </span>
           <span>
             {'Katalog: '}
             {GESAMT_BESTAND.toLocaleString('de-DE')} Produkte

@@ -20,6 +20,14 @@ import {
 } from '../../../lib/supplements/stack-read'
 import type { StackDaten, KatalogEintrag } from '../../../lib/supplements/stack-read'
 import { SupplementsAnsicht } from './ansicht'
+// G-468: die Vorlieben (C-511) und die Allergien (C-498).
+import {
+  ladeVorlieben, type VorliebenDaten,
+} from '../../../lib/supplements/vorlieben-read'
+import { VORGABE } from '../../../lib/supplements/vorlieben-lage'
+import {
+  ladeAllergien, type AllergieStand,
+} from '../../../lib/allergien/allergie-read'
 // G-388: die Injektionsorte liegen in `medical`, nicht in
 // `supplements` — fuenf Tabellen, gemessen in 00-MODULTABELLEN.md.
 import {
@@ -110,7 +118,8 @@ export default async function V2SupplementsPage({
   // meldet **temp read=9457 written=9457** bei 171 ms in der Datenbank
   // — ein Kreuzprodukt. Das ist ein eigener Befund, siehe Bericht.
   const [daten, katalog, regeln, gate, substanzen, stacks, belegteSubstanzen,
-         vorlagen, injektionen, zyklen, konfig, injizierbare]
+         vorlagen, injektionen, zyklen, konfig, injizierbare,
+         vorlieben, allergien]
     = await Promise.all([
       ruhig<StackDaten | null>(getStackDaten, null),
       ruhig<KatalogEintrag[]>(getKatalog, []),
@@ -142,6 +151,21 @@ export default async function V2SupplementsPage({
       // Trigger weist alles andere ab, und eine laengere Liste waere
       // eine Falle.
       ruhig<InjizierbareSubstanz[]>(ladeInjizierbareSubstanzen, []),
+      // ══ G-468: die Vorlieben und die Allergien ═══════════
+      //
+      // `[read]` **In DIESEM `Promise.all`, nicht in einer eigenen
+      // Runde** — der Reiter braucht beides beim ersten Anstrich,
+      // und eine zusaetzliche Rundreise waere die Falle aus G-252.
+      //
+      // `[cmd]` **Die Allergien kommen aus `public.user_allergies`**
+      // (C-498) — **GEZEIGT, nicht kopiert** (E-84). Derselbe
+      // Leseweg, den Settings und nutrition/Preferences benutzen.
+      ruhig<VorliebenDaten>(ladeVorlieben, {
+        stand: VORGABE, marken: [], fehler: null,
+      }),
+      ruhig<AllergieStand>(ladeAllergien, {
+        allergien: [], fehler: null,
+      }),
     ])
 
   // ══ G-275: die Bilanz gilt fuer den ANGESEHENEN Tag ══════════════
@@ -175,6 +199,8 @@ export default async function V2SupplementsPage({
   return (
     <>
     <SupplementsAnsicht
+      vorlieben={vorlieben}
+      allergien={allergien}
       daten={daten} katalog={katalog} heute={stichtag}
       regeln={regeln} gate={gate}
       substanzen={substanzen} stacks={stacks} vorlagen={vorlagen}

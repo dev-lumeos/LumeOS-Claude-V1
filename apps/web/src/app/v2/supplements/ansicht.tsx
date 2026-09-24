@@ -88,6 +88,11 @@ import type {
   SubstanzListenEintrag, EigenerStack, StackVorlage,
 } from '../../../lib/supplements/substanz-read'
 import { SupplementsModale } from './modale'
+// G-468: der Vorlieben-Reiter.
+import { SuppVorliebenTab } from './tab-vorlieben'
+import { VORGABE } from '../../../lib/supplements/vorlieben-lage'
+import type { VorliebenDaten } from '../../../lib/supplements/vorlieben-read'
+import type { AllergieStand } from '../../../lib/allergien/allergie-read'
 
 /**
  * Die elf Tabs der Vorlage (module-supplements.jsx:240-253).
@@ -165,6 +170,19 @@ function tabs(
     // (C-229) — die Zahl ist deren Laenge, nicht die der Vorlage.
     { id: 'catalog', label: t('tabKatalog'), icon: 'search',
       count: substanzAnzahl || undefined },
+    // ══ G-468: DER VORLIEBEN-REITER ══════════════════════════════
+    //
+    // **Tom:** *„jedes modul braucht seine preferences … nutrition
+    // haben wir das schon"*
+    //
+    // `[cmd]` **Gemessen, wo nutrition seinen hat**
+    // (`nutrition/ansicht.tsx:171`): **`prefs`, sechster von zehn —
+    // NACH den Bloetterreitern, VOR den Werkzeugen.**
+    //
+    // `[read]` **Dieselbe Stelle:** hier nach `Katalog`, vor
+    // `Stacks`. `[cmd]` **Der Punkt sagt es auch:** *„der neue steht
+    // bei den Einstellungen, nicht bei den Produkten."*
+    { id: 'prefs', label: t('tabVorlieben'), icon: 'settings' },
     { id: 'stacks', label: t('tabStacks'), icon: 'layers' },
     { id: 'intel', label: t('tabAuswertung'), icon: 'sparkles' },
     { id: 'inventory', label: t('tabBestand'), icon: 'marketplace' },
@@ -188,12 +206,23 @@ export function SupplementsAnsicht({
   daten: datenProp = null, katalog = [], heute: heuteProp = null,
   regeln = null, gate = null, substanzen = [], stacks = [],
   vorlagen = [],
+  // G-468: die Vorlieben und die Allergien.
+  vorlieben = null, allergien = null,
   bilanz = [], belegteSubstanzen = 0, bilanzTag = null,
   injektionen = null,
   zyklen = null,
   konfig = null,
   injizierbare = [],
 }: {
+  /**
+   * G-468: die Vorlieben aus C-511 und die Allergien aus C-498.
+   *
+   * `[read]` **Beide optional** — ein Ladefehler laesst den Reiter
+   * stehen, mit Vorgaben und einem Satz. **Eine leere Flaeche ohne
+   * Grund saehe aus wie ein Fehler** (G-482, G-486).
+   */
+  vorlieben?: VorliebenDaten | null
+  allergien?: AllergieStand | null
   daten?: StackDaten | null
   katalog?: KatalogEintrag[]
   /** G-110: die 64 Regeln des Tages (C-133). */
@@ -554,6 +583,20 @@ export function SupplementsAnsicht({
               eine erfundene Herkunft.** */}
           {tab === 'produkte' && <SuppProdukte />}
           {tab === 'catalog' && <SuppDatabase />}
+          {/* ══ G-468: DER VORLIEBEN-REITER ═══════════════
+              `[read]` **Ohne Referenztrenner und ohne Attrappe** —
+              die Flaeche ist vollstaendig angebunden (C-511), und
+              es gibt keine Mockup-Vorlage dafuer: **Toms Vorgabe
+              vom 2026-09-08, nicht aus einem Entwurf.** */}
+          {tab === 'prefs' && (
+            <SuppVorliebenTab d={{
+              stand: vorlieben?.stand ?? VORGABE,
+              marken: vorlieben?.marken ?? [],
+              fehler: vorlieben?.fehler ?? null,
+              allergien: allergien?.allergien ?? [],
+              allergienFehler: allergien?.fehler ?? null,
+            }} />
+          )}
           {tab === 'stacks' && (
             <>
               <SuppStacks />

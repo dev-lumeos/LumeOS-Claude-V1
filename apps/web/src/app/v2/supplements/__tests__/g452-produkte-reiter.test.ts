@@ -202,12 +202,23 @@ test('A1: der Produkte-Reiter steht LINKS NEBEN catalog', () => {
     `produkte steht auf ${p}, catalog auf ${c} — erwartet: direkt davor.`)
 })
 
-test('A8: die zehn anderen Reiter stehen unveraendert in ihrer Reihenfolge', () => {
+test('A8: die anderen Reiter stehen unveraendert in ihrer Reihenfolge', () => {
   const ids = reiterAusDerLeiste()
   // `[read]` **Die Liste OHNE den neuen muss die alte sein** — so
   // faellt die Probe, wenn der Einbau einen anderen verschoben hat.
+  //
+  // ══ G-468: `prefs` KAM DAZU ═══════════════════════════════════════
+  //
+  // `[cmd]` **Diese Probe ist gefallen, als der Vorlieben-Reiter
+  // eingehaengt wurde** — und das war ihr Zweck. `[read]` **Sie hat
+  // gemeldet, WO er steht:** zwischen `catalog` und `stacks`, also am
+  // Ende der Schauflaechen und vor den Werkzeugen. **Dieselbe Stelle
+  // wie in nutrition** (dort der sechste Reiter).
+  //
+  // `[read]` **Nachgezogen, nicht entschaerft** — die Reihenfolge der
+  // uebrigen elf ist unveraendert, und genau das prueft sie weiter.
   assert.deepEqual(ids.filter(x => x !== 'produkte'), [
-    'today', 'stack', 'extended', 'catalog', 'stacks', 'intel',
+    'today', 'stack', 'extended', 'catalog', 'prefs', 'stacks', 'intel',
     'inventory', 'injection', 'compliance', 'interactions', 'cost',
   ])
 })
