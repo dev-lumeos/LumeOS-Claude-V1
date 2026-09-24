@@ -8,8 +8,8 @@
 | `todos` | 232 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 547 |
-| **gesamt** | **781** |
+| `erledigt` | 548 |
+| **gesamt** | **782** |
 
 ## medical — 49
 
@@ -332,9 +332,9 @@
 | `G-497` | feature | hoch | [die Suche zeigt Gruppen statt Zeilen](todos/nutrition-g-0497-suche-zeigt-gruppen.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 122
+## supplements — 123
 
-### beauftragbar — 121
+### beauftragbar — 122
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -457,7 +457,8 @@
 | `G-494` | aufraeumen | mittel | [die Form-Nachlese aus G-492 entfernen](erledigt/supplements-g-0494-form-nachlese-entfernen.md) | erledigt | — | — |
 | `G-495` | feature | hoch | [das Etikettenbild beim Oeffnen abrufen](erledigt/supplements-g-0495-etikettenbild-beim-oeffnen.md) | erledigt | — | G-496 |
 | `G-496` | feature | hoch | [das Etikett als PDF, Toms Fund](erledigt/supplements-g-0496-etikett-als-pdf.md) | erledigt | — | E-85 |
-| `G-499` | fehler | hoch | [die Entwurfsreferenz hinter die Gradpruefung](laufend_claudecode/supplements-g-0499-referenz-hinter-die-gradpruefung.md) | laeuft (claudecode) | — | — |
+| `G-499` | fehler | hoch | [die Entwurfsreferenz hinter die Gradpruefung](erledigt/supplements-g-0499-referenz-hinter-die-gradpruefung.md) | erledigt | — | G-500 |
+| `G-500` | fehler | hoch | [das Injektionsprotokoll ist der sechste Weg](laufend_claudecode/supplements-g-0500-injektionsprotokoll-sechster-weg.md) | laeuft (claudecode) | — | — |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
 ### wartet auf Blocker — 1
