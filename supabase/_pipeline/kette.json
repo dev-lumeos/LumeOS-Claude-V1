@@ -149,6 +149,26 @@
       ]
     },
     {
+      "id": "c540_schema",
+      "path": "supabase/migrations/20260924110000_c540_animal_species.sql",
+      "kind": "sql",
+      "creates": "C-540: kanonische Tierarten und die mehrwertige, nur lesbare Food-Relation",
+      "depends_on": [
+        "B"
+      ]
+    },
+    {
+      "id": "c540_data",
+      "path": "supabase/_pipeline/02_human_layer/025a_tierarten_kuration.sql",
+      "kind": "sql",
+      "creates": "C-540: sichere Tierarten-Kuration aus expliziten BLS-Namen; unbenannte Produkte bleiben ohne Zuordnung",
+      "depends_on": [
+        "030",
+        "072",
+        "c540_schema"
+      ]
+    },
+    {
       "id": "071",
       "path": "supabase/_pipeline/07_lesefunktionen/071_suchrelevanz.sql",
       "kind": "sql",

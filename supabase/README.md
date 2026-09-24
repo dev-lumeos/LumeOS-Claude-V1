@@ -95,6 +95,8 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 023 | `02_human_layer/023_zubereitung_ableitung.sql` | `preparation_kinds` (11), `food_groups` (19) | 11 / 19 |
 | 023a | `02_human_layer/023a_food_group_category_bridge.sql` | `food_categories.food_group_code` als Bruecke zu `food_groups`; sichere Kategorie-Nachzuege fuer N/X/Y | 7.067 kategorisiert, 73 bewusst leer |
 | 024 | `02_human_layer/024_suchsynonyme.sql` | `search_synonyms` | 4.877, davon 21 von Hand |
+| C-540 Schema | `migrations/20260924110000_c540_animal_species.sql` | kanonische `animal_species` und mehrwertige `food_animal_species`, beide nur lesbar | RLS, 2 SELECT-Policies |
+| C-540 Daten | `02_human_layer/025a_tierarten_kuration.sql` | sichere Zuordnung aus expliziten Tiernamen; unbenannte Wurst- und Gefluegelprodukte bleiben offen | 1.449 im Katalogbereich, mindestens 53 Mehrfachfoods |
 | 025 | `_ableitung/anzeigenamen-einspielen.ts` | kuratierte `name_display_de`/`name_display_en` aus `daten/anzeigenamen.jsonl` | 7.140 Anzeigenamen, 33 `sicher=false` sichtbar im Lauf |
 | 026 | `_ableitung/anzeigenamen-nebennamen-aliase.ts` | kuratierte `nebennamen` als `food_aliases.source='curated_nebenname'` | 576 Foods mit Nebennamen, 663 kuratierte Namen vor Deduplikation |
 | 027 | `_ableitung/027_lebensmittel-tags.ts` | kuratierte C-44-Tags aus `daten/lebensmittel-tags.jsonl`, `processing_level` nach C-100 und Sortweight-Refresh, ohne die Makro-Tags aus `020` zu löschen | 5.150 Foods, 8.702 Tags; `processing_level`: 927 hochverarbeitet |
