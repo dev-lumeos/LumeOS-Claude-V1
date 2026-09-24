@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: E-86
 entscheidung: E-86
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [public.profiles]
 zahlen:
@@ -118,3 +120,10 @@ ein Geburtsdatum: man korrigiert es, man leert es nicht.**
         aus den Lesern: wer Extended ausblendet,
         meint beginner.
 
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
