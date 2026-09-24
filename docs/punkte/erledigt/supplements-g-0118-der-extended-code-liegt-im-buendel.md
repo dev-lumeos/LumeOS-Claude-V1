@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-110
 kinder: []
 entscheidung: null
+erledigt: 2026-09-08
+commit: zusammengelegt
 beruehrt:
   tabellen: []
   dateien: []
@@ -30,3 +32,13 @@ zahlen: null
   **Zu klaeren:** Reicht das Gate, oder soll der Code gar nicht erst zum
   Browser? `[read]` **Es geht um PED-Protokolle** — die Frage ist
   nicht rein technisch.
+
+## Zusammengelegt mit G-117, 2026-09-08
+
+`[read]` **Derselbe Befund aus G-110: einer beschreibt ihn,
+dieser stellt die Frage dazu.**
+
+`[cmd]` **Die Frage ist in G-117 beantwortet und beauftragt:
+eine Servergrenze zusaetzlich zum Gate, gemessen an den
+Chunks.**
+

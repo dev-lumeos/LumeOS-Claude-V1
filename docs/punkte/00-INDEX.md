@@ -5,9 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 236 |
+| `todos` | 234 |
 | `laufend_codex` | 1 |
-| `erledigt` | 542 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 543 |
 | **gesamt** | **779** |
 
 ## medical — 49
@@ -410,8 +411,8 @@
 | `E-85` | entscheidung | hoch | [kein Zwischenspeicher fuer die DSLD-Bilder](erledigt/supplements-e-0085-kein-zwischenspeicher-dsld-bilder.md) | erledigt | — | — |
 | `F-08` | befund | mittel | [Werkstatt-Inventar](todos/supplements-f-0008-werkstatt-inventar.md) | offen | — | — |
 | `G-53` | entscheidung | mittel | [`InjektionsKarte` in `packages/ui` hat keinen Aufrufer](erledigt/supplements-g-0053-injektionskarte-in-packages-ui-hat-keinen-aufrufer.md) | erledigt | — | G-388 |
-| `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](todos/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | offen | — | A-42 |
-| `G-118` | befund | mittel | [Der Extended-Code liegt im Buendel](todos/supplements-g-0118-der-extended-code-liegt-im-buendel.md) | offen | — | — |
+| `G-117` | feature | mittel | [Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad](laufend_claudecode/supplements-g-0117-der-extended-code-liegt-im-buendel-auch-ohne-erfahrungsgrad.md) | laeuft (claudecode) | — | A-42 |
+| `G-118` | befund | mittel | [Der Extended-Code liegt im Buendel](erledigt/supplements-g-0118-der-extended-code-liegt-im-buendel.md) | erledigt | — | — |
 | `G-150` | entscheidung | mittel | [Die Volltextsuche findet ueber Erklaertexte](todos/supplements-g-0150-die-volltextsuche-findet-ueber-erklaertexte.md) | offen | — | — |
 | `G-162` | befund | mittel | [supplements Compliance und medical Tracking](todos/supplements-g-0162-supplements-compliance-und-medical-tracking.md) | offen | — | — |
 | `G-186` | befund | mittel | [Der Katalog zeigt noch nicht alles, was drinsteht](erledigt/supplements-g-0186-der-katalog-zeigt-noch-nicht-alles-was-drinsteht.md) | erledigt | — | G-213, G-214 |
