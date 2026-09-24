@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-24 — 203 Tabellen, 2792 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-24 — 203 Tabellen, 2793 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -158,7 +158,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `scores` | 34 | 370 | ? |
 | `stress_logs` | 12 | 7 | 2026-09-07 |
 
-## supplements — 71 Tabellen, 1016 Spalten
+## supplements — 71 Tabellen, 1017 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -167,7 +167,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `entity_pk` | 14 | 0 | ? |
 | `entity_renal_hepatic` | 13 | 0 | ? |
 | `entity_transporters` | 15 | 4617 | ? |
-| `intake_logs` | 22 | 822 | ? |
+| `intake_logs` | 23 | 822 | ? |
 | `intake_schedule` | 18 | 0 | ? |
 | `lab_effect_enrichment_records` | 16 | 47 | ? |
 | `meal_plan_product_references` | 9 | 1 | 2026-09-21 |

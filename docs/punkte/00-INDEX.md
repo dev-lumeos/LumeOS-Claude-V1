@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 232 |
-| `laufend_codex` | 1 |
+| `todos` | 233 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 548 |
-| **gesamt** | **782** |
+| `erledigt` | 549 |
+| **gesamt** | **783** |
 
 ## medical — 49
 
@@ -633,7 +632,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 197
+## quer — 198
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -740,7 +739,7 @@
 | `C-523` | befund | hoch | [welche Aliase fehlen noch?](erledigt/quer-c-0523-welche-aliase-fehlen.md) | erledigt | — | C-525 |
 | `C-525` | feature | hoch | [Suchwortschatz für Ausschluss-Tags](erledigt/quer-c-0525-suchwortschatz-ausschluss-tags.md) | erledigt | — | — |
 | `C-533` | befund | hoch | [der Sollstand unterschlaegt service_role-Rechte](erledigt/quer-c-0533-schema-sollstand-substance-group-rechte.md) | erledigt | — | — |
-| `C-541` | fehler | hoch | [der Erfahrungsgrad darf nicht leer sein](laufend_codex/quer-c-0541-erfahrungsgrad-darf-nicht-leer-sein.md) | laeuft (codex) | — | — |
+| `C-541` | fehler | hoch | [der Erfahrungsgrad darf nicht leer sein](erledigt/quer-c-0541-erfahrungsgrad-darf-nicht-leer-sein.md) | erledigt | — | G-501 |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
@@ -834,6 +833,7 @@
 | `G-487` | fehler | hoch | [der Tageswechsler startet nicht auf heute](erledigt/quer-g-0487-tageswechsler-startet-nicht-auf-heute.md) | erledigt | — | — |
 | `G-490` | fehler | mittel | [der Spaltenwaechter kennt die Tabelle nicht](erledigt/quer-g-0490-spaltenwaechter-kennt-tabelle-nicht.md) | erledigt | — | — |
 | `G-498` | fehler | mittel | [.v2-hinweis liegt unter 4,5:1](erledigt/quer-g-0498-hinweis-kontrast.md) | erledigt | — | — |
+| `G-501` | fehler | hoch | [der Ruecknahmeklick beim Erfahrungsgrad](todos/quer-g-0501-ruecknahmeklick-erfahrungsgrad.md) | offen | — | — |
 
 ## buddy — 1
 
