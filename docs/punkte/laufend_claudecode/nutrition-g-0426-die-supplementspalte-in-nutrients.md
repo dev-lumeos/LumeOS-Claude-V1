@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-466
 entscheidung: E-35
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/nutrition/naehrstoff-ordnung-tab.tsx
@@ -83,3 +85,46 @@ Supplementbilanz, drei Naehrstoffe (Omega-3, Magnesium,
 Vitamin D).**
 
 `[read]` **Wo nichts ist, steht nichts** ? **keine Nullzeile.**
+
+## Der Leseweg traegt Daten, 2026-09-08
+
+`[cmd]` **Alle drei aus C-466 sind live, selbst gemessen:**
+
+    supplements.daily_nutrient_summary_long          DA
+    nutrition.nutrient_intake_source_totals_for_day  DA
+    nutrition.nutrient_upper_limit_assessment_
+      with_supplements                               DA
+
+`[cmd]` **Und er traegt Daten:**
+
+    PROT625   48,00 g    |  168,00 g
+    ENERCC   240,00 kcal |  910,00 kcal
+    CA       260,00 mg   |  420,00 mg
+
+`[read]` **Das sind Toms eigene Supplemente aus dieser
+Sitzung** ? **das Whey aus dem Fruehstueck, das Rezept, der
+Stack.**
+
+### Was seither dazukam
+
+    C-519  Supplements bleiben SSOT, Meal verweist
+    C-521  die Tagessumme liest Intake-Snapshots
+    C-529  der Stackeintrag kennt sein Produkt
+    G-484  Produkt in Stack oder Mahlzeit
+    G-489  der Ghost bestaetigt sie
+
+`[read]` **Die Zahlen entstehen jetzt an fuenf Stellen** ?
+**und landen alle in derselben Sicht.**
+
+`[cmd]` **`naehrstoff-ordnung-tab.tsx` 27,8 KB,
+`naehrstoff-modal.tsx` 15,5 KB.**
+
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
+
