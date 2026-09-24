@@ -6,9 +6,8 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 233 |
-| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 546 |
+| `erledigt` | 547 |
 | **gesamt** | **781** |
 
 ## medical — 49
@@ -178,7 +177,7 @@
 | `C-538` | feature | hoch | [das MealCam-Gedaechtnis: Bild, Ergebnis, Deklaration](erledigt/nutrition-c-0538-mealcam-gedaechtnis.md) | erledigt | — | C-539 |
 | `C-539` | befund | hoch | [Trigramme verwechseln Pute mit Huhn](erledigt/nutrition-c-0539-trigramme-verwechseln-arten.md) | erledigt | — | C-540 |
 | `C-540` | feature | hoch | [die Tierarten kurieren](erledigt/nutrition-c-0540-tierarten-kurieren.md) | erledigt | — | — |
-| `C-542` | fehler | hoch | [eine Abwesenheit ist keine Luecke](laufend_codex/nutrition-c-0542-abwesenheit-ist-keine-luecke.md) | laeuft (codex) | — | — |
+| `C-542` | fehler | hoch | [eine Abwesenheit ist keine Luecke](erledigt/nutrition-c-0542-abwesenheit-ist-keine-luecke.md) | erledigt | — | — |
 | `E-87` | entscheidung | mittel | [was bedeutet days_count nach einem Rollover?](erledigt/nutrition-e-0087-days-count-nach-rollover.md) | erledigt | — | C-537 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |
