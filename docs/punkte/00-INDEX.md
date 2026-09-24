@@ -6,9 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 237 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 535 |
-| **gesamt** | **773** |
+| **gesamt** | **774** |
 
 ## medical — 49
 
@@ -64,9 +65,9 @@
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
 
-## nutrition — 258
+## nutrition — 259
 
-### beauftragbar — 257
+### beauftragbar — 258
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -173,9 +174,10 @@
 | `C-521` | fehler | hoch | [die Tagessumme uebersieht die Supplemente](erledigt/nutrition-c-0521-tagessumme-uebersieht-supplemente.md) | erledigt | — | — |
 | `C-524` | feature | hoch | [Planeinträge können Supplemente vorsehen](erledigt/nutrition-c-0524-planeintraege-ohne-supplemente.md) | erledigt | — | G-489 |
 | `C-526` | fehler | hoch | [aktive Meal-Pläne dürfen nicht überlappen](erledigt/nutrition-c-0526-keine-ueberlappungspruefung.md) | erledigt | — | — |
-| `C-534` | befund | hoch | [welche Lebensmittelgruppen gibt es?](erledigt/nutrition-c-0534-welche-lebensmittelgruppen.md) | erledigt | — | — |
+| `C-534` | befund | hoch | [welche Lebensmittelgruppen gibt es?](erledigt/nutrition-c-0534-welche-lebensmittelgruppen.md) | erledigt | — | C-538 |
 | `C-535` | feature | hoch | [parent_id fuer nutrition.foods](todos/nutrition-c-0535-parent-id-fuer-foods.md) | offen | — | — |
 | `C-537` | fehler | mittel | [days_count zieht beim Rollover mit](erledigt/nutrition-c-0537-days-count-zieht-mit.md) | erledigt | — | — |
+| `C-538` | feature | hoch | [das MealCam-Gedaechtnis: Bild, Ergebnis, Deklaration](laufend_codex/nutrition-c-0538-mealcam-gedaechtnis.md) | laeuft (codex) | — | — |
 | `E-87` | entscheidung | mittel | [was bedeutet days_count nach einem Rollover?](erledigt/nutrition-e-0087-days-count-nach-rollover.md) | erledigt | — | C-537 |
 | `G-04` | befund | niedrig | [Zwei Zahlen im Entwurf, die nicht stimmen](todos/nutrition-g-0004-zwei-zahlen-im-entwurf-die-nicht-stimmen.md) | offen | — | — |
 | `G-11` | befund | mittel | [Die restlichen Nutrition-Tabs anbinden](erledigt/nutrition-g-0011-die-restlichen-nutrition-tabs-anbinden.md) | erledigt | — | G-254 |

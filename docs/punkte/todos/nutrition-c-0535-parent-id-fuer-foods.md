@@ -59,3 +59,22 @@ zusammengehoeren.**
         unveraendert.
     A4  Gegenprobe: kein Kreis, keine Selbstreferenz.
     A5  Sicherung, Vollkette, ALLE Waechter.
+
+## Eingegrenzt durch Toms MealCam-Entscheidung, 2026-09-08
+
+`[read]` **Ein BILD braucht keinen Parent** ? **es braucht die
+richtige Variante, und die Zubereitung steht im
+Visionsergebnis: gegrillt, paniert, ohne Haut.**
+
+`[cmd]` **`processing_level` traegt acht Werte (raw 3.247,
+cooked 2.346, ...)** ? **ein Abgleich, keine Rangliste.**
+
+`[read]` **Der Parent bleibt eine Frage der TEXTSUCHE** ?
+**wer *,,haehnchenbrust"* tippt, sagt nichts ueber die
+Zubereitung.**
+
+`[cmd]` **Und C-534 hat gemessen: nicht ableitbar.**
+
+`[read]` **Also bleibt: kurieren oder gar nicht** ? **und
+C-538 sammelt erst die Lehrdaten, bevor entschieden wird.**
+
