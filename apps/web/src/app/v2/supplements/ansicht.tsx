@@ -120,6 +120,37 @@ const SuppExtended = dynamic(
     ),
   },
 )
+// ══ G-499: die Entwurfsreferenz folgt derselben Regel ════════════
+//
+// **Tom, E-88:** *„Die Referenz zeigt Extended-INHALT, also folgt
+// sie Extendeds Regel."*
+//
+// `[cmd]` **G-117 hat sie als VIERTEN Weg ins Buendel gemessen:**
+// nachdem die drei anderen zu waren, stand die Unterzeile der
+// Protokollkachel weiter im Seitenmanifest — **aus dieser
+// Referenz**, mit Dosis und Anwendungsschema, fuer jeden.
+//
+// `[read]` **Die Kennzeichen stehen hier NICHT woertlich** — der
+// Entwicklungsbau liefert Kommentare mit, und die Probe faende
+// sonst ihren eigenen Suchtext in `page.js`. **Genau das ist in
+// G-117 passiert und hier ein zweites Mal**, obwohl die Lehre
+// notiert war.
+//
+// `[read]` **Dasselbe Werkzeug wie oben, aus demselben Grund** —
+// `ssr: true` haelt den Chunk aus dem Buendel und laesst den
+// Serveranstrich stehen.
+const SuppExtendedReferenz = dynamic(
+  () => import('./mockup-referenz-extended')
+    .then(m => ({ default: m.SuppExtendedReferenz })),
+  {
+    ssr: true,
+    loading: () => (
+      <p className="v2-muted" style={{ fontSize: 12, padding: '16px 0' }}>
+        Die Entwurfsreferenz wird geladen …
+      </p>
+    ),
+  },
+)
 // G-110: das Regelwerk (C-133) und das echte Gate.
 import { InteractionsEchtTab, RegelHinweis } from './tab-interactions-echt'
 import { ExtendedGesperrt } from './extended-gate'
@@ -130,9 +161,11 @@ import {
   FehlendeKostenKacheln, FehlendeIntelKacheln,
   FehlendeInteraktionsKacheln,
 } from './fehlende-kacheln'
-import {
-  SuppExtendedReferenz, SuppInjectionReferenz,
-} from './mockup-referenz'
+// `[cmd]` G-499: `SuppExtendedReferenz` kommt NICHT mehr von hier —
+// sie liegt in `mockup-referenz-extended.tsx` und wird oben
+// dynamisch geholt. Ein statischer Import hier wuerde sie sofort
+// wieder ins Buendel ziehen.
+import { SuppInjectionReferenz } from './mockup-referenz'
 // G-365: die Mockup-Reiter, die im Code nicht mehr stehen.
 import {
   SuppInteractionsReferenz, SuppStacksReferenz,
@@ -144,6 +177,45 @@ import { SuppProdukte } from './tab-produkte'
 
 /** C-418/3: die Quelle unter der Trennlinie. */
 const QUELLE = 'theme-v1/module-supplements.jsx'
+
+/**
+ * Was an der Stelle der Extended-Referenz steht, wenn der Grad
+ * nicht reicht — G-499.
+ *
+ * `[read]` **Eine Erklaerung, kein leeres Feld** (G-482/G-486).
+ * **Ohne diesen Satz endet der Reiter mitten im Nichts**, und wer
+ * die Trennlinie von anderen Reitern kennt, haelt ihr Fehlen fuer
+ * einen Fehler.
+ *
+ * `[cmd]` **Die Trennlinie bleibt stehen** — G-365 hat gemessen,
+ * was passiert, wenn sie an einer Bedingung haengt: der
+ * Mockup-Reiter steht dann ununterscheidbar da wie eine echte
+ * Ansicht. `[read]` **Hier ist es umgekehrt und genauso wichtig:**
+ * die Linie sagt, dass hier eine Referenz hingehoert — der Satz
+ * darunter, warum sie nicht da ist.
+ *
+ * `[read]` **Kein zweiter Weg heraus:** die Sperrkachel direkt
+ * darunter traegt den Knopf nach `/v2/settings`. Zwei Knoepfe
+ * nebeneinander waeren eine Wiederholung, keine Hilfe.
+ */
+function ReferenzOhneGrad() {
+  return (
+    <>
+      <ReferenzTrenner reiter="Extended" quelle={QUELLE} />
+      <p
+        data-probe="referenz-ohne-grad"
+        className="v2-muted"
+        style={{ fontSize: 11.5, lineHeight: 1.55, margin: '0 0 4px' }}
+      >
+        Die Entwurfsfassung dieses Reiters zeigt dieselben
+        Wirkstoffe, Dosierungen und Anwendungsschemata wie der
+        Reiter darueber. <strong>Sie folgt deshalb derselben
+        Regel</strong> und erscheint erst, wenn dein Erfahrungsgrad
+        den Bereich oeffnet.
+      </p>
+    </>
+  )
+}
 // G-45: der Injections-Tab mit der Rotationskarte.
 import { SuppInjections } from './tab-injektionen'
 // G-388: der Typ des Injektionsstands.
@@ -575,7 +647,29 @@ export function SupplementsAnsicht({
 
                   `[read]` Die Linie beschriftet, was DARUNTER
                   steht — und das steht unbedingt. */}
-              <SuppExtendedReferenz />
+              {/* ══ G-499: die Referenz folgt Extendeds Regel ══════
+                  **Tom, E-88:** *„Die Referenz zeigt
+                  Extended-INHALT, also folgt sie Extendeds
+                  Regel."*
+
+                  `[cmd]` **G-117 hat sie als vierten Weg ins
+                  Buendel gemessen** — dieselben Wirkstoffe mit
+                  Dosis und Schema, fuer jeden.
+
+                  `[read]` **Dieselbe Bedingung wie oben
+                  (`gate?.offen`) und dasselbe `dynamic`** — nicht
+                  nur aus dem Buendel nehmen (Weg b): der Chunk
+                  laedt beim Oeffnen nach, die Dosis stuende dann
+                  trotzdem im Browser.
+
+                  `[read]` **Und ohne Grad steht hier eine
+                  Erklaerung, kein leeres Feld** — die Lehre aus
+                  G-482/G-486. Die Sperrkachel darunter nennt den
+                  Weg heraus; dieser Satz sagt, was FEHLT und
+                  warum. */}
+              {gate?.offen
+                ? <SuppExtendedReferenz />
+                : <ReferenzOhneGrad />}
               <ExtendedGesperrt g={gate ?? { grad: null, offen: false, fehler: null }} />
             </>
           )}

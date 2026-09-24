@@ -24,7 +24,7 @@
 import * as React from 'react'
 import { Card, Pill, Icon, Row, Meter, LineChart, InEntwicklungKnopf } from '@lumeos/ui'
 
-import { EXTENDED_STACK, EXTENDED_LABS } from './daten'
+import { EXTENDED_STACK, EXTENDED_LABS } from './daten-extended'
 import { useSupp } from './kontext'
 
 const ATTRAPPE = 'Aus dem Entwurf uebernommen. Diese Kachel ist noch nicht an die vorhandenen Supplements-Daten angebunden - die Zahlen sind erfunden.'

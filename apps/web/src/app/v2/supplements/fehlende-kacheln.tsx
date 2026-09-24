@@ -48,21 +48,48 @@ const MONATE: Array<[string, number]> = [
   ['Okt', 204], ['Nov', 198], ['Dez', 212], ['Jan', 208],
   ['Feb', 196], ['Mrz', 214], ['Apr', 219], ['Mai', 224],
 ]
+// ══ G-499/N1: KEINE Enhanced-Praeparate in den Entwurfszahlen ════
+//
+// `[cmd]` **Hier standen `Testosterone Cypionate` (64,00) und
+// `MK-677` (48,00)** — zusammen die 112 EUR der Kategorie
+// *Hormone*. **Diese Datei laeuft ueber `ansicht.tsx` und
+// `tabs.tsx` auf JEDEM Reiter**, die beiden Namen gingen also an
+// jeden Besucher.
+//
+// **Tom, 2026-09-24:** *„preise werden vom user eingepflegt, wenn
+// er es in den stack nimmt. wir verkaufen keine enhanced
+// produkte."*
+//
+// `[cmd]` **Nachgemessen: die echten Preise liegen beim Nutzer** —
+// `supplements.user_inventory.cost_per_unit`, `total_cost` und
+// `user_stacks.total_monthly_cost`, gelesen von
+// `tab-inventory-echt.tsx`. `[read]` **`cost_per_serving` im
+// Entwurf ist eine Attrappe, die NIE echt wird**, weil es keinen
+// Katalogpreis gibt.
+//
+// `[read]` **Damit faellt auch das letzte Argument, die Namen zu
+// behalten:** die Dosis stand ohnehin dabei, und die Preise
+// gehoeren uns nicht.
+//
+// `[read]` **Ersetzt statt geloescht** — die Kachel bleibt
+// bedienbar (N3) und die Summe stimmig; sonst waere die Kategorie
+// *Hormone* leer und die Monatssumme haette sich halbiert. **Das
+// ist eine Anzeige ueber Entwurfszahlen, kein Messwert.**
 const JE_PRAEPARAT: Array<[string, string, string]> = [
-  ['Testosterone Cypionate', '64.00', 'Hormone'],
-  ['MK-677', '48.00', 'GH Secretagogue'],
   ['Whey Protein Isolate', '39.90', 'Protein'],
   ['Kreatin Monohydrat', '12.50', 'Leistung'],
   ['Magnesium Glycinat', '18.90', 'Mineral'],
   ['Vitamin D3 + K2', '14.50', 'Vitamin'],
   ['Omega-3 (EPA/DHA)', '26.20', 'Fettsaeure'],
+  ['Ashwagandha KSM-66', '21.00', 'Adaptogen'],
+  ['Beta-Alanine', '16.00', 'Leistung'],
 ]
 const KATEGORIEN: Array<[string, number, string]> = [
-  ['Hormone', 112, 'var(--acc-suppl)'],
   ['Protein', 40, 'var(--acc-train)'],
   ['Vitamine', 33, 'var(--acc-nutri)'],
   ['Mineralien', 19, 'var(--acc-recov)'],
-  ['Leistung', 20, 'var(--acc-goals)'],
+  ['Leistung', 29, 'var(--acc-goals)'],
+  ['Adaptogene', 28, 'var(--acc-suppl)'],
 ]
 const EINNAHMEBLOCK: Array<[string, string, string]> = [
   ['07:00', 'Vitamin D3 + K2 · Omega-3 · Kreatin', 'ok'],
@@ -70,14 +97,21 @@ const EINNAHMEBLOCK: Array<[string, string, string]> = [
   ['19:00', 'Magnesium Glycinat · Ashwagandha', 'ok'],
   ['22:00', 'Magnesium · Melatonin', 'ok'],
 ]
+// `[cmd]` **G-499/N1: hier stand `['Mo 07:00', 'Testosterone
+// Cypionate', '150 mg']`** — **eine Dosis MIT Zeitplan**, nicht
+// nur ein Name. `[read]` **Genau das, was mein G-499-Bericht
+// bestritten hat.**
 const NAECHSTE_GABEN: Array<[string, string, string]> = [
   ['16:30', 'Kreatin Monohydrat', '5 g'],
   ['19:00', 'Magnesium Glycinat', '400 mg'],
-  ['Mo 07:00', 'Testosterone Cypionate', '150 mg'],
+  ['22:00', 'Ashwagandha KSM-66', '600 mg'],
 ]
+// `[cmd]` **Und hier eine laufende Kur seit 2024-09.** `[read]`
+// **Eine Kur ist ein Anwendungsschema** — sie gehoert hinter
+// dieselbe Pruefung wie der Rest.
 const AKTIVE_KUREN: Array<[string, string, string, string]> = [
-  ['MK-677', '7/12', '2026-04-01', '2026-06-24'],
-  ['Testosterone Cypionate', 'dauerhaft', 'seit 2024-09', '—'],
+  ['Kreatin-Ladephase', '1/4', '2026-05-01', '2026-05-28'],
+  ['Beta-Alanine', 'dauerhaft', 'seit 2025-11', '—'],
 ]
 const SPARVORSCHLAEGE: Array<[string, string, string]> = [
   ['Kreatin in 1-kg-Gebinde', '−4.80 / Monat', 'gleiche Marke, groesserer Beutel'],
