@@ -25,7 +25,7 @@ import {
   ladeSitzungen, ladeSitzungsUebungen,
 } from '../../../lib/training/sitzungen-read'
 import {
-  kennzahlen, kraftverlauf, serie, volumenJeMuskel, woche,
+  kennzahlen, kraftverlauf, satzarten, serie, volumenJeMuskel, woche,
 } from '../../../lib/training/auswertung'
 // G-86: die Bereitschaft kommt aus `recovery.scores`, nicht aus Training.
 import { ladeReadiness } from '../../../lib/training/readiness-read'
@@ -112,6 +112,9 @@ export default async function V2TrainingPage({
         kennzahlen: kennzahlen(sitzungen, uebungen, saetze),
         muskelVolumen: volumenJeMuskel(sitzungen, uebungen, muskeln),
         kraft: kraftverlauf(sitzungen, uebungen, saetze),
+        // G-25: die Satzarten -- `workout_sets.set_type` lag seit
+        // C-66 bereit und wurde nie gelesen.
+        satzarten: satzarten(sitzungen, uebungen, saetze),
         serie: serie(sitzungen, stichtag),
         gewicht,
         // G-86: die sieben Tage um den Stichtag, fuer „This week".

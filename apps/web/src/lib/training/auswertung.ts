@@ -294,6 +294,64 @@ export function kennzahlen(
   }
 }
 
+// ── Satzarten (G-25) ─────────────────────────────────────────────
+
+export type SatzartZahl = {
+  /** `working`, `warmup`, `dropset`, `failure` — die vier Werte des
+   *  CHECK auf `training.workout_sets.set_type`. */
+  art: string
+  saetze: number
+  volumen_kg: number
+}
+
+/**
+ * Wie viele Saetze je Art — **nur absolvierte Sitzungen.**
+ *
+ * ══ WARUM DIESE FUNKTION ENTSTEHT ═══════════════════════════════
+ *
+ * `[cmd]` **Die Kachel *„Set types · volume counting"* trug den
+ * Vermerk:** *„eine Satzart je Satz — `training.sets` kennt kein
+ * Feld dafuer."*
+ *
+ * `[cmd]` **Gemessen am 2026-09-08: der Vermerk stimmt in drei
+ * Punkten nicht.** **Erstens** heisst die Tabelle nicht
+ * `training.sets`, sondern `training.workout_sets` — eine Tabelle
+ * `training.sets` gibt es nicht. **Zweitens** hat sie sehr wohl
+ * ein Feld: `set_type`, mit einem CHECK auf genau die vier Arten,
+ * die `SET_TYPES` in `tabs-spec.tsx` auffuehrt. **Drittens** ist
+ * es gefuellt: 372 `working`, 24 `warmup`.
+ *
+ * `[read]` **Ein Vermerk mit falschem Grund ist schlimmer als eine
+ * fehlende Kachel** — er verhindert, dass jemand nachsieht. Genau
+ * das ist hier passiert: das Feld lag seit C-66 bereit.
+ *
+ * `[read]` **Die Kachel zeigt weiter die vier ARTEN aus der Spec**
+ * — welche Art ins Volumen zaehlt, ist eine Festlegung, keine
+ * Messung. **Dazu kommen jetzt die eigenen Zahlen.**
+ */
+export function satzarten(
+  sitzungen: Sitzung[], uebungen: SitzungsUebung[], saetze: Satz[],
+): SatzartZahl[] {
+  const erlaubt = new Set(sitzungen.filter(s => s.absolviert).map(s => s.id))
+  const uebungsIds = new Set(
+    uebungen.filter(u => erlaubt.has(u.workout_session_id)).map(u => u.id))
+
+  const summe = new Map<string, SatzartZahl>()
+  for (const s of saetze) {
+    if (!uebungsIds.has(s.workout_exercise_id)) continue
+    // `[read]` **Ohne Art zaehlt der Satz nicht mit** — eine Null
+    // unter „working" waere eine Aussage, die die Daten nicht
+    // tragen.
+    if (!s.set_type) continue
+    const bisher = summe.get(s.set_type)
+      ?? { art: s.set_type, saetze: 0, volumen_kg: 0 }
+    bisher.saetze += 1
+    bisher.volumen_kg += s.volume_kg ?? 0
+    summe.set(s.set_type, bisher)
+  }
+  return Array.from(summe.values()).sort((a, b) => b.saetze - a.saetze)
+}
+
 // ── Die Woche (G-86) ─────────────────────────────────────────────
 
 export type Wochentag = {

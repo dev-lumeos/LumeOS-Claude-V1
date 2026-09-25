@@ -31,7 +31,7 @@ import * as React from 'react'
 import { Card, Pill, LineChart, Meter, Row, Sparkline } from '@lumeos/ui'
 
 import type {
-  Kennzahlen, Kraftverlauf, MuskelVolumen, Serie, Wochentag,
+  Kennzahlen, Kraftverlauf, MuskelVolumen, SatzartZahl, Serie, Wochentag,
 } from '../../../lib/training/auswertung'
 import { kraftVerhaeltnis } from '../../../lib/training/auswertung'
 import type { Sitzung, SitzungsUebung } from '../../../lib/training/sitzungen-read'
@@ -42,6 +42,8 @@ export type VerlaufDaten = {
   kennzahlen: Kennzahlen
   muskelVolumen: MuskelVolumen[]
   kraft: Kraftverlauf[]
+  /** G-25: Saetze und Volumen je Art (`working`, `warmup`, …). */
+  satzarten: SatzartZahl[]
   serie: Serie
   gewicht: { weight_kg: number; measurement_date: string } | null
   /** G-86: die sieben Tage um den Stichtag, fuer „This week". */

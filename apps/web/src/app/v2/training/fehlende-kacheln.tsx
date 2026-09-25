@@ -32,6 +32,9 @@ import { Card, Pill, Row, Ring, LineChart } from '@lumeos/ui'
 import {
   PROGRESSION_MODELS, DELOAD_TRIGGERS, SET_TYPES,
 } from './tabs-spec'
+// `[cmd]` G-25: nur der TYP — `auswertung.ts` ist serverfrei, aber
+// ein Wert-Import waere hier trotzdem unnoetig (A-30).
+import type { SatzartZahl } from '../../../lib/training/auswertung'
 
 const QUELLE_SPEC = 'theme-v1/module-training-spec.jsx'
 const QUELLE_EXTRA = 'theme-v1/module-training-extras.jsx'
@@ -157,9 +160,20 @@ export function FehlendeHistoryKacheln() {
   )
 }
 
-/** `progress`: die vier Kacheln, die oben fehlen. */
-export function FehlendeProgressKacheln() {
+/**
+ * `progress`: die vier Kacheln, die oben fehlen.
+ *
+ * `[cmd]` **G-25: `satzarten` kommt dazu** — die eigenen Zahlen je
+ * Satzart. `[read]` **Leer heisst: keine Sitzung erfasst** — dann
+ * behaelt die Kachel ihre Marke, denn ohne Zahl waere das Entfernen
+ * eine Attrappe, die aussieht wie ein Wert.
+ */
+export function FehlendeProgressKacheln({ satzarten = [] }: {
+  satzarten?: SatzartZahl[]
+}) {
   const ausgeloest = DELOAD_TRIGGERS.filter(t => t.hit).length
+  const jeArt = new Map(satzarten.map(s => [s.art, s]))
+  const hatZahlen = satzarten.length > 0
   return (
     <>
       <Card title="Progression models" sub="5 models · one per routine · deterministic"
@@ -283,10 +297,32 @@ export function FehlendeProgressKacheln() {
         <Row label="Threshold" value="3 sessions without progression" />
       </Card>
 
+            {/* ══ G-25: der Vermerk war in drei Punkten falsch ════
+          `[cmd]` **Hier stand:** *„eine Satzart je Satz —
+          `training.sets` kennt kein Feld dafuer."*
+
+          `[cmd]` **Gemessen 2026-09-08:** die Tabelle heisst
+          `training.workout_sets` (ein `training.sets` gibt
+          es nicht), sie HAT `set_type`, und der CHECK fuehrt
+          genau die vier Arten, die `SET_TYPES` auflistet.
+          **Gefuellt mit 372 `working` und 24 `warmup`.**
+
+          `[read]` **Ein Vermerk mit falschem Grund
+          verhindert, dass jemand nachsieht** — das Feld lag
+          seit C-66 bereit.
+
+          `[read]` **Die Marke bleibt, solange keine eigene
+          Sitzung erfasst ist** — ohne Zahl waere ihr
+          Entfernen eine Attrappe, die aussieht wie ein
+          Wert. */}
       <Card title="Set types" sub="volume counting"
-            attrappe={marke(QUELLE_SPEC,
-              'eine Satzart je Satz — `training.sets` kennt kein Feld '
-              + 'dafuer')}>
+            attrappe={hatZahlen ? undefined : marke(QUELLE_SPEC,
+              'eine erfasste Sitzung — `workout_sets.set_type` ist '
+              + 'da und wird gelesen, aber dieses Konto hat noch '
+              + 'keine Saetze')}
+            actions={hatZahlen
+              ? <Pill variant="pos">echte Daten</Pill>
+              : undefined}>
         <div style={{ overflowX: 'auto' }}>
           <table className="v2-tbl">
             <thead>
@@ -294,23 +330,52 @@ export function FehlendeProgressKacheln() {
                 <th style={{ width: 120 }}>Art</th>
                 <th>Beschreibung</th>
                 <th style={{ width: 100 }}>Volumen</th>
+                {/* `[read]` Die beiden Spalten NUR mit Zahlen —
+                    leere Spaltenkoepfe versprechen etwas. */}
+                {hatZahlen && <th style={{ width: 80, textAlign: 'right' }}>Saetze</th>}
+                {hatZahlen && <th style={{ width: 90, textAlign: 'right' }}>kg</th>}
               </tr>
             </thead>
             <tbody>
-              {SET_TYPES.map(s => (
-                <tr key={s.id}>
-                  <td className="v2-mono" style={{ fontSize: 11 }}>{s.label}</td>
-                  <td className="v2-muted">{s.desc}</td>
-                  <td>
-                    <Pill variant={s.volume ? 'pos' : undefined}>
-                      {s.volume ? 'counts' : 'excluded'}
-                    </Pill>
-                  </td>
-                </tr>
-              ))}
+              {SET_TYPES.map(s => {
+                const eigen = jeArt.get(s.id)
+                return (
+                  <tr key={s.id}>
+                    <td className="v2-mono" style={{ fontSize: 11 }}>{s.label}</td>
+                    <td className="v2-muted">{s.desc}</td>
+                    <td>
+                      <Pill variant={s.volume ? 'pos' : undefined}>
+                        {s.volume ? 'counts' : 'excluded'}
+                      </Pill>
+                    </td>
+                    {/* `[read]` **Ein Strich, keine Null** — wer
+                        eine Art nie benutzt hat, hat dort keinen
+                        Wert, und Null saehe aus wie ein Ergebnis
+                        (E-72). */}
+                    {hatZahlen && (
+                      <td className="v2-num" style={{ textAlign: 'right' }}>
+                        {eigen ? eigen.saetze : '—'}
+                      </td>
+                    )}
+                    {hatZahlen && (
+                      <td className="v2-num" style={{ textAlign: 'right' }}>
+                        {eigen ? Math.round(eigen.volumen_kg).toLocaleString('de-DE') : '—'}
+                      </td>
+                    )}
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>
+        {hatZahlen && (
+          <p className="v2-muted" style={{ fontSize: 10.5, marginTop: 8, lineHeight: 1.5 }}>
+            Saetze und Volumen aus deinen absolvierten Sitzungen
+            (<span className="v2-mono">training.workout_sets.set_type</span>).
+            Welche Art ins Volumen zaehlt, ist eine Festlegung der
+            Spec — keine Messung.
+          </p>
+        )}
       </Card>
     </>
   )

@@ -280,7 +280,24 @@ test('das Training-Modul kennzeichnet jede Kachel', () => {
     // `[read]` **Dieser Waechter zaehlt Quelltext, nicht Wirkung.**
     // Er ist damit fuer Hilfskomponenten blind — `g365-luecke.mjs`
     // misst am Schirm und faengt, was hier durchfaellt.
-    [path.join(process.cwd(), 'src/app/v2/training/fehlende-kacheln.tsx'), 10],
+    // ══ G-25: eine Marke weniger (10 -> 9) ════════════════════════
+    //
+    // `[cmd]` **„Set types · volume counting" ist angebunden.** Ihr
+    // Vermerk lautete *„eine Satzart je Satz — `training.sets` kennt
+    // kein Feld dafuer"* und war **in drei Punkten falsch**: die
+    // Tabelle heisst `training.workout_sets`, sie HAT `set_type`,
+    // und der CHECK fuehrt genau die vier Arten der Spec.
+    //
+    // `[cmd]` **Gemessen 2026-09-08, `dev@lumeos.app`:** 222
+    // `working` (82.035 kg), 11 `warmup` (5.925 kg).
+    //
+    // `[read]` **Die Marke ist jetzt BEDINGT** (`hatZahlen ?
+    // undefined : marke(…)`) — **auf `coach@lumeos.app` ohne
+    // Saetze steht sie weiter da**, mit berichtigtem Grund. Dieser
+    // Waechter zaehlt Quelltext, also faellt die bedingte Form aus
+    // seiner Zaehlung heraus; **die Wirkung misst
+    // `_g25-marken.mjs` am Schirm.**
+    [path.join(process.cwd(), 'src/app/v2/training/fehlende-kacheln.tsx'), 9],
   ]
   for (const [datei, erwartet] of dateien) {
     const quelle = fs.readFileSync(datei, 'utf8')

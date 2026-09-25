@@ -252,7 +252,7 @@ export function TrainingAnsicht({
       {tab === 'progress' && (
         <>
           {verlauf && <TrainingKraftverlauf d={verlauf} />}
-          <FehlendeProgressKacheln />
+          <FehlendeProgressKacheln satzarten={verlauf?.satzarten ?? []} />
           <ReferenzTrenner reiter="Progression" quelle={QUELLE} />
           <TrainingProgressionView />
         </>
