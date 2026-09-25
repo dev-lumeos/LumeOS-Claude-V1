@@ -814,3 +814,21 @@ das zu eng sucht.**
 `[cmd]` **33 Werkzeuge sind dadurch weiter verfolgt** ? **sie
 sind Belege, kein Wegwerfgut.**
 
+### Und `git reset` nimmt fremde Vorarbeit mit
+
+`[cmd]` **2026-09-08: Codex hatte in C-517 160 Dateien mit
+`git rm --cached` aus dem Index genommen. Mein `git reset` vor
+dem naechsten Commit hat alle 160 zurueckgeholt.**
+
+`[read]` **`git reset` stellt den Index aus HEAD her** ? **es
+unterscheidet nicht, wer ihn veraendert hat.**
+
+### Die Regel
+
+    Vor `git reset`: `git diff --cached --name-status`
+    Wer Entfernungen sieht, die er nicht selbst gemacht
+    hat, committet sie ZUERST.
+
+`[read]` **Das Gegenmittel ist dasselbe wie bei
+`git mv`: den Index lesen, bevor man ihn wegwirft.**
+

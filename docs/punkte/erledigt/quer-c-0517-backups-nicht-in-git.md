@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: null
 agent: codex
 beauftragt: 2026-09-24
+erledigt: 2026-09-08
+commit: 36cc2cb0
 beruehrt:
   dateien:
     - .gitignore
@@ -248,5 +250,65 @@ nicht committed.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **`backup/` verfolgt: 943 Dateien, 172,5 MB** ? **genau
+seine Zahl.**
+
+    backup/        12.503 -> 12.313 Dateien
+                   7.782 -> 5.731 MB
+    git-verfolgt    1.081 -> 943 Dateien
+    verschoben      61 Sicherungen, 151 Werkzeuge
+    aus dem Index   138 + 22
+
+`[cmd]` **Proben: web 2000, coach 65. Punkte-, Encoding- und
+Spaltenwaechter gruen.**
+
+### Und er hat meinen Fehler nicht wiederholt
+
+> *,,Zwei vom Waechter genannte Dateien mit `git add -f`
+gesichert."*
+
+`[cmd]` **Selbst nachgemessen: 36 Werkzeuge werden von
+Waechtern genannt, 35 sind da.**
+
+`[cmd]` **Das eine fehlende ist `_g411-abmelden.mjs`** ? **und
+er hat es gemeldet:** *,,existiert weder im Baum, auf F: noch
+in der Git-Historie."* **Ein Kommentar nennt ein Werkzeug, das
+es nie gab.**
+
+### Die Ignore-Regeln sind schaerfer als meine
+
+> *,,`tools/_[!_]*` ignoriert Messwerkzeuge, aber nicht mehr
+versehentlich `tools/__tests__/`."*
+
+`[cmd]` **Nachgemessen: 2 Dateien unter `tools/__tests__/`
+sind weiter verfolgt.**
+
+`[read]` **Meine Regel `tools/_*` haette sie beim naechsten Mal
+mitgenommen** ? **er hat die Luecke gesehen, bevor sie
+zuschlug.**
+
+### Ein Fehler von mir dabei
+
+`[cmd]` **Mein `git reset` vor dem Committen hat seine 160
+`rm --cached` rueckgaengig gemacht** ? **`git ls-files` zeigte
+wieder 1.081.**
+
+`[read]` **`git reset` stellt den Index aus HEAD her** ? **und
+nimmt dabei alles mit, was ein anderer Agent bereits
+vorbereitet hat.**
+
+`[cmd]` **Behoben mit `git add -A backup/ tools/`** ? **die 160
+Entfernungen stehen jetzt im Commit.**
+
+### Was offen bleibt, und warum es kein C-517 ist
+
+> *,,Der physische Backupbestand betraegt laut Gate weiterhin
+5,41 GiB und wurde seit 22 Tagen nicht inventarisiert. Das ist
+die bestehende C-216/A-70-Aufraeumerinnerung, KEIN
+Git-Tracking-Fehler."*
+
+**Abgenommen.**
+
 

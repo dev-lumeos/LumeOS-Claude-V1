@@ -6,8 +6,7 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 237 |
-| `laufend_codex` | 1 |
-| `erledigt` | 553 |
+| `erledigt` | 554 |
 | **gesamt** | **791** |
 
 ## medical — 49
@@ -741,7 +740,7 @@
 | `C-503` | feature | hoch | [die Vorschlaege kommen aus den Katalogen](erledigt/quer-c-0503-keine-stoffliste.md) | erledigt | — | C-506, C-522, G-462 |
 | `C-508` | feature | mittel | [eine Zaehlfunktion fuer die Allergietreffer](erledigt/quer-c-0508-zaehlfunktion-allergietreffer.md) | erledigt | — | — |
 | `C-513` | feature | hoch | [ein Supplement in eine Mahlzeit](erledigt/quer-c-0513-supplement-in-mahlzeit.md) | erledigt | — | G-475 |
-| `C-517` | entscheidung | hoch | [Backups gehoeren nicht in git](laufend_codex/quer-c-0517-backups-nicht-in-git.md) | laeuft (codex) | — | — |
+| `C-517` | entscheidung | hoch | [Backups gehoeren nicht in git](erledigt/quer-c-0517-backups-nicht-in-git.md) | erledigt | — | — |
 | `C-519` | feature | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-c-0519-supplement-bleibt-supplement.md) | erledigt | — | C-521, G-485 |
 | `C-522` | fehler | hoch | [die Allergiesuche kennt nur den Tagnamen](todos/quer-c-0522-allergiesuche-kennt-nur-tagnamen.md) | offen | — | — |
 | `C-523` | befund | hoch | [welche Aliase fehlen noch?](erledigt/quer-c-0523-welche-aliase-fehlen.md) | erledigt | — | C-525 |
