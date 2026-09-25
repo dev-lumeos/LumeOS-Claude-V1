@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-512
 entscheidung: null
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/lib/supplements/produkt-etikett.ts
@@ -54,3 +56,31 @@ nichts.**
     A4  Gegenprobe: ein Produkt ohne Portionsangabe.
     A5  vier Module unveraendert.
     A6  apps/web 1830 oder mehr, apps/coach 65.
+
+## Ist er durch G-492 ueberholt? 2026-09-08
+
+`[cmd]` **G-492 hat ein Modal mit Portionswahl gebaut:**
+
+    PORTIONSGROESSE  [33 Gram(s) - 130 kcal v]
+    ANZAHL           [2]
+                     ergibt 260 kcal, 48 g Protein
+
+`[read]` **Das ist die Wahl beim HINZUFUEGEN.** **Dieser
+Punkt meint die TAFEL: was steht da, bevor man etwas tut?**
+
+`[cmd]` **MISS das ZUERST** ? **wenn das Modal reicht, ist
+der Punkt erledigt und wird geschlossen, nicht gebaut.**
+
+`[cmd]` **Beleg aus C-512: Mary Ruths Vegan Liquid Iron
+(DSLD 327737) traegt 5/10/15 mL mit 6/12/18 mg Eisen** ?
+**pruefe an genau dem, was die Tafel heute zeigt.**
+
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
+

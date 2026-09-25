@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-541
 entscheidung: C-541
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   dateien:
     - apps/web/src/app/v2/settings/formular.tsx
@@ -67,3 +69,29 @@ bevor du es anfasst.**
         Sabotageprobe.
     A6  vier Module unveraendert.
     A7  apps/web 2000 oder mehr, apps/coach 65.
+
+## Die Stelle, gemessen 2026-09-08
+
+    formular.tsx:64   experience_level: p.experience_level ?? ''
+    formular.tsx:399  onClick={() => setze('ex...')}
+    formular.tsx:353  der Vermerk zur Spalte
+    formular.tsx:411  profiles.experience_level
+
+`[cmd]` **Zeile 64 macht aus NULL einen Leerstring, Zeile 399
+schreibt ihn zurueck.**
+
+`[cmd]` **Und seit C-541 ist die Spalte NOT NULL** ? **die
+Datenbank weist es ab.**
+
+`[read]` **Der Nutzer sieht einen Fehler, wo er einen Knopf
+gedrueckt hat** ? **das ist heute so, nicht irgendwann.**
+
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
+
