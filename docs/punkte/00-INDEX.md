@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 244 |
+| `todos` | 245 |
 | `erledigt` | 554 |
-| **gesamt** | **798** |
+| **gesamt** | **799** |
 
 ## medical — 49
 
@@ -466,9 +466,9 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 47
+## training — 48
 
-### beauftragbar — 46
+### beauftragbar — 47
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -496,6 +496,7 @@
 | `C-545` | befund | hoch | [difficulty ist ein Wert fuer alles](todos/training-c-0545-difficulty-ist-ein-wert-fuer-alles.md) | offen | — | — |
 | `C-546` | feature | mittel | [Sehnen und Nerven je Muskel](todos/training-c-0546-sehnen-und-nerven-je-muskel.md) | offen | — | — |
 | `C-547` | befund | hoch | [6.723 Pauschalen sehen aus wie Messwerte](todos/training-c-0547-pauschalen-sehen-aus-wie-messwerte.md) | offen | — | — |
+| `C-548` | befund | hoch | [fuenf Spalten mit einem Wert fuer 1.416 Uebungen](todos/training-c-0548-fuenf-spalten-ein-wert.md) | offen | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](erledigt/training-g-0025-training-an-echte-daten-anschliessen.md) | erledigt | — | G-502, G-503, G-504, G-505, G-506, G-507, G-508 |

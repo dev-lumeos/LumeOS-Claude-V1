@@ -69,3 +69,17 @@ Zuordnungen, 51 Koerperflaechen mit `x_pct`/`y_pct`.**
     A5  die Grafik ist austauschbar -- keine Kachel
         haengt an ihren Koordinaten. Belegt.
     A6  vier Module unveraendert.
+
+## ZURUECKGESTELLT, 2026-09-08
+
+Tom: *,,der workoutplanner wird eine eigene brainstormsession,
+momentan sind mir die grundlagen wichtiger und die exercises
+sauber aufgesetzt"*
+
+`[read]` **Der Punkt bleibt als Zielbild stehen** ? **gebaut
+wird er nach der eigenen Sitzung.**
+
+`[cmd]` **C-543 (Vererbung) bleibt trotzdem noetig** ? **nicht
+fuer den Planer, sondern weil eine Sackgasse in der Hierarchie
+jedes Modul trifft.**
+
