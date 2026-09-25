@@ -11,8 +11,8 @@ entscheidung: null
 erledigt: 2026-09-08
 commit: ueberholt
 beruehrt:
-  tabellen: []
-  dateien: []
+  dateien:
+    - apps/web/src/app/v2/training/ansicht.tsx
 zahlen: null
 ---
 
