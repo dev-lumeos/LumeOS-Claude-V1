@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: null
 entscheidung: E-90
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [training.exercise_muscles]
 zahlen:
@@ -72,3 +74,11 @@ A = gemessen, C = angenommen.**
     A3  Spanne oder Einzelwert? Empfohlen.
     A4  wer liest den faktor? Gemessen.
     A5  KEINE Umsetzung.
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

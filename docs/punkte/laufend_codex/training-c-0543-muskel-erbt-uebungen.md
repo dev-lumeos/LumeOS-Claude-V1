@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: null
 entscheidung: E-90
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [training.exercise_muscles]
 zahlen:
@@ -71,3 +73,39 @@ sinnvoll ist, und VORLEGEN.**
     A5  Laufzeit gemessen.
     A6  die 6.726 Zuordnungen unveraendert.
     A7  Sicherung, Vollkette, ALLE Waechter.
+
+## Punkt A entschieden, 2026-09-08, Orchestrator
+
+**Der geerbte faktor ist der des Elternteils, unveraendert ?
+aber gekennzeichnet als GEERBT.**
+
+`[read]` **Einen Abschlag zu erfinden (*,,das Kind traegt
+60 %"*) waere genau der Fehler, der in C-547 schon steht: eine
+Zahl, die wie eine Messung aussieht.**
+
+`[cmd]` **`evidence_class` traegt die Unterscheidung bereits:
+A = gemessen, C = angenommen.** **Geerbt braucht eine eigene
+Kennzeichnung, keine eigene Zahl.**
+
+`[read]` **Wer spaeter misst, dass die Kniebeuge den Vastus
+intermedius schwaecher belastet als den lateralis, setzt eine
+ECHTE Zeile ? und die schlaegt die geerbte.**
+
+### Punkt B: beide Richtungen
+
+`[cmd]` **`Legs` mit 0 Uebungen ist genauso falsch wie
+`Vastus Lateralis` mit 0.**
+
+### Und eine Auflage
+
+`[read]` **Die 6.726 Zeilen bleiben unveraendert** ? **die
+Vererbung ist eine SICHT, keine Kopie.** **Sonst hat LumeOS
+zweimal dieselbe Wahrheit.**
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

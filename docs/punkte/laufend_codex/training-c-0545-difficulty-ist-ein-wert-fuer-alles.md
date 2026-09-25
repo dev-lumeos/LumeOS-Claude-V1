@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: null
 entscheidung: E-90
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [training.exercises]
 zahlen:
@@ -74,3 +76,11 @@ oder raten.** **Raten waere dasselbe wie die
     A3  wie viele bleiben unsicher?
     A4  Stufe oder Spanne? Empfohlen, begruendet.
     A5  KEINE Umsetzung.
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 245 |
+| `todos` | 241 |
+| `laufend_codex` | 4 |
 | `erledigt` | 554 |
 | **gesamt** | **799** |
 
@@ -492,11 +493,11 @@
 | `C-530` | feature | hoch | [die Muskelhierarchie bereinigen und vervollstaendigen](erledigt/training-c-0530-muskelhierarchie-bereinigen.md) | erledigt | — | C-531 |
 | `C-531` | fehler | mittel | [Muskel-Aliase sind nicht als Aliase erkennbar](erledigt/training-c-0531-muskel-aliase-nicht-erkennbar.md) | erledigt | — | — |
 | `C-536` | fehler | mittel | [drei Abwesenheitsaussagen sind ueberholt](erledigt/training-c-0536-abwesenheitsaussagen-ueberholt.md) | erledigt | — | — |
-| `C-543` | feature | hoch | [ein Muskel erbt die Uebungen seiner Eltern](todos/training-c-0543-muskel-erbt-uebungen.md) | offen | — | — |
-| `C-545` | befund | hoch | [difficulty ist ein Wert fuer alles](todos/training-c-0545-difficulty-ist-ein-wert-fuer-alles.md) | offen | — | — |
+| `C-543` | feature | hoch | [ein Muskel erbt die Uebungen seiner Eltern](laufend_codex/training-c-0543-muskel-erbt-uebungen.md) | laeuft (codex) | — | — |
+| `C-545` | befund | hoch | [difficulty ist ein Wert fuer alles](laufend_codex/training-c-0545-difficulty-ist-ein-wert-fuer-alles.md) | laeuft (codex) | — | — |
 | `C-546` | feature | mittel | [Sehnen und Nerven je Muskel](todos/training-c-0546-sehnen-und-nerven-je-muskel.md) | offen | — | — |
-| `C-547` | befund | hoch | [6.723 Pauschalen sehen aus wie Messwerte](todos/training-c-0547-pauschalen-sehen-aus-wie-messwerte.md) | offen | — | — |
-| `C-548` | befund | hoch | [fuenf Spalten mit einem Wert fuer 1.416 Uebungen](todos/training-c-0548-fuenf-spalten-ein-wert.md) | offen | — | — |
+| `C-547` | befund | hoch | [6.723 Pauschalen sehen aus wie Messwerte](laufend_codex/training-c-0547-pauschalen-sehen-aus-wie-messwerte.md) | laeuft (codex) | — | — |
+| `C-548` | befund | hoch | [fuenf Spalten mit einem Wert fuer 1.416 Uebungen](laufend_codex/training-c-0548-fuenf-spalten-ein-wert.md) | laeuft (codex) | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](erledigt/training-g-0025-training-an-echte-daten-anschliessen.md) | erledigt | — | G-502, G-503, G-504, G-505, G-506, G-507, G-508 |

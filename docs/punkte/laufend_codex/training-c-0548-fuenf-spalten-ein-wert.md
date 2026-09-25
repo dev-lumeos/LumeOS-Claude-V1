@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: null
 entscheidung: E-90
+agent: codex
+beauftragt: 2026-09-08
 beruehrt:
   tabellen: [training.exercises]
 zahlen:
@@ -93,3 +95,11 @@ Entscheidung, ob sie bleibt.**
     A5  je Spalte eine Empfehlung: setzen, ableiten
         oder streichen.
     A6  KEINE Umsetzung.
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
