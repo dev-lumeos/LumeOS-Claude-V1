@@ -278,6 +278,10 @@ backup/**/*_lumeos_voll.sql
 backup/**/*_voll.sql
 backup/**/*_live_before.sql
 backup/**/*_before_live.sql
+backup/**/*_schema_only.sql
+backup/**/*_vor_*.sql
+backup/**/*_vor-*.sql
+backup/**/*-vor-*.sql
 
 # Arbeitsverzeichnis des Orchestrators (Python-Skripte je Handgriff).
 # Wird nach jedem Commit geleert; nichts darin ist Bestand.
@@ -290,7 +294,8 @@ scratchpad/
 # Entstehen je Auftrag, werden nach der Abnahme nach
 # F:\My Backups\lumeos-messwerkzeuge verschoben.
 # Die Abnahmen zitieren die ZAHLEN, nicht die Dateien.
-tools/_*
+# Nur Ein-Unterstrich-Werkzeuge ignorieren; tools/__tests__ bleibt sichtbar.
+tools/_[!_]*
 
 # Messbauten aus Auftraegen. Der Dev-Server bleibt auf .next,
 # jeder Messbau bekommt sein eigenes Verzeichnis ueber

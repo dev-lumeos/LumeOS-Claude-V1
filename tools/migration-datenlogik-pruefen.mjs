@@ -14,6 +14,15 @@ const baselineTriggerException = {
 const structuralFunctionExceptions = [
   baselineTriggerException,
   {
+    file: '20260924160000_c541_experience_level_required.sql',
+    functionName: 'public.handle_new_user',
+    command: 'INSERT',
+    // C-541 haelt den vorhandenen Auth-Trigger registrierungsfest. Das
+    // INSERT laeuft erst bei einem spaeter neu angelegten Auth-Konto; der
+    // einmalige NULL-Nachzug steht getrennt in der Pipeline.
+    requiredSql: 'INSERT INTO public.profiles',
+  },
+  {
     file: '20260913001900_c489_produktname_name_en.sql',
     functionName: 'supplements.create_supplier_product',
     command: 'INSERT',
@@ -90,6 +99,18 @@ const structuralFunctionExceptions = [
     // C-519 definiert den authenticated-only Einnahmeweg. Beide Inserts
     // laufen erst auf ausdrueckliche Nutzeraktion; die Mahlzeit enthaelt
     // danach nur den Log-Verweis, keine Katalogdaten.
+    requiredSql: [
+      'INSERT INTO supplements.intake_logs',
+      'INSERT INTO nutrition.meal_items',
+    ],
+  },
+  {
+    file: '20260924120000_c542_absence_is_not_missing.sql',
+    functionName: 'supplements.record_supplier_product_intake',
+    commands: ['INSERT', 'INSERT'],
+    // C-542 erweitert den bestehenden C-519-Owner-Schreibweg um den
+    // explizit mengenlosen Etikettwert. Beide Inserts bleiben spätere
+    // Nutzeraktionen; das einmalige Backfill steht getrennt in der Pipeline.
     requiredSql: [
       'INSERT INTO supplements.intake_logs',
       'INSERT INTO nutrition.meal_items',

@@ -10,6 +10,9 @@ data/*
 x-*
 _g*.mjs
 _c*.mjs
+# Aeltere Messwerkzeuge lagen ohne fuehrenden Unterstrich direkt hier.
+g*.mjs
+c*.mjs
 
 # Taegliche Laeufe und Protokolle - wachsen mit jedem Lauf.
 _taeglich/
