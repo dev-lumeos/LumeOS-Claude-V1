@@ -113,75 +113,155 @@ Attrappe, keine Modellanbindung.**
 `[read]` **Die Guardrails gehoeren VOR die Anbindung** ? **nicht
 danach.**
 
-## C-517 — Backups gehoeren nicht in git
+## E-90 — der Koerper als Grundlage aller Module
 
-**Modul:** quer · **angelegt:** 2026-09-08 · **Datei:** `laufend_codex/quer-c-0517-backups-nicht-in-git.md`
+**Modul:** quer · **angelegt:** 2026-09-08 · **Datei:** `todos/quer-e-0090-der-koerper-als-grundlage.md`
 
 ## Toms Vorgabe
 
 Tom, 2026-09-08:
 
-> das soll eigentlich nicht der normale weg sein, denn so
-> waechst ein backupordner ins unendliche. backups haben in git
-> nichts zu suchen
+> bevor wir irgendwas anbinden, will ich die grundlagen fertig
+> haben, sprich die exercises
 
-## Urspruenglich gemessen
+> ich will viel tiefer gehen in den grundlagen der uebungen ?
+> schauen wir es mal global an, unabhaengig von exercises
 
-    backup/           12.475 Dateien, 6.121 MB
-    davon verfolgt       610 lose Dateien
-                         plus 80 Verzeichnisse
+> die tiefe soll die grundlage bieten, dass wir eben alle module
+> damit bedienen koennen. sprich es geht um die grundlagen, dass
+> wir individuell in die tiefe bauen koennen
 
-`[cmd]` **Die groessten waren:**
+## Die Struktur, wie Tom sie beschrieben hat
 
-    data              2.436 MB
-    c262                659 MB
-    _taeglich           621 MB   (untracked)
-    vollsicherung       608 MB
-    kimi-research       496 MB   (10.030 Dateien)
-    schema              410 MB   (teils untracked)
+    Koerper
+      Koerperteil            Beine
+        Muskelparent         Quadriceps
+          Muskelkind         Vastus medialis
+            Sehnenansaetze
+            Injektionspunkte
+            Painpoints
+            Muskelkaterstaerke
+            Nerven, Ausstrahlung, Taubheit
 
-## Der Anlass
+## Was davon heute steht
 
-`[read]` **701 lose Dateien wurden in einen Tagesordner
-verschoben, ohne vorher zu pruefen, welche verfolgt waren; 608
-davon waren verfolgt.**
+`[cmd]` **Gemessen, 2026-09-08:**
 
-`[cmd]` **`git status` meldete 608 Loeschungen, Claude Code
-meldete sie in G-475.**
+    training.muscle_groups              112, 4 Ebenen
+    training.exercise_muscles         6.726
+    training.exercises                1.416
+    recovery.muscle_recovery_profiles   112
+    public.koerperflaechen               51 (33 mit Muskel)
+    medical.injection_sites              16
+    Sehnen, Nerven, Schmerzpunkte         0
 
-`[cmd]` **`git checkout backup/` holte die 608 zurueck, die
-93 unverfolgten kamen aus `F:\My Backups` zurueck: null
-Dateien gingen verloren.**
+`[cmd]` **Und am Muskel haengen SIEBEN Fremdschluessel** ?
+**er IST bereits das Rueckgrat.**
 
-`[read]` **Vor jeder Bewegung in `backup/` muss
-`git ls-files backup/` laufen.**
+## Die tragende Unterscheidung
 
-## Die eigentliche Frage
+`[read]` **Toms Liste mischt zwei Dinge, und die Trennung ist
+die ganze Architektur:**
 
-`[read]` **Warum sind Backups ueberhaupt verfolgt?**
+    FAKT ueber den Koerper      gilt fuer JEDEN Menschen
+      parent/child
+      Ursprung und Ansatz
+      versorgender Nerv
+      Injektionsstelle
+      Ausstrahlungsmuster
+      Regenerationsdauer
 
-`backup/.gitignore` nahm bereits Datenabzuege, taegliche
-Laeufe, Logs und einzelne Sicherungsmuster aus. Die Regeln waren
-aber lueckenhaft und entfernten bereits verfolgte Dateien nicht
-aus dem Index.
+    BEOBACHTUNG ueber EINEN     gilt fuer IHN, heute
+      Muskelkaterstaerke
+      Schmerz
+      Taubheitsgefuehl
+      was er trainiert hat
+      wo er gespritzt hat
 
-## Was zu entscheiden war
+`[read]` **Muskelkaterstaerke ist keine Eigenschaft des Vastus
+medialis. Sie ist `(Nutzer, Muskel, Zeitpunkt) -> Wert`.**
 
-### a - alles in `backup/` ignorieren
+`[cmd]` **`recovery.muscle_recovery_profiles` hat 112 Zeilen ?
+eine je MUSKEL. Das ist richtig gebaut und der Massstab.**
 
-Das ist falsch. Abnahmebelege und Datenquellen liegen historisch
-unter `backup/` und muessen sichtbar bleiben.
+## Der Ort am Koerper ist groesser als der Muskel
 
-### b - nur Nachweise verfolgen, den Rest nicht
+`[read]` **Toms Peptid-Beispiel deckt es auf:**
 
-Das ist fuer den aktuellen Baum richtig. Bilder, kleine
-Messausgaben und reproduzierbare Quellen duerfen verfolgt
-bleiben. Wegwerfwerkzeuge und Datenbanksicherungen nicht.
+    AAS       intramuskulaer  -> die Stelle IST ein Muskel
+    Peptide   subkutan        -> die Stelle ist FETT
 
-### c - Backups ausserhalb des Repos
+    Ort am Koerper
+      ist ein Muskel        Vastus medialis
+      ist ein Fettdepot     Bauch, Oberschenkel aussen
+      ist eine Landmarke    Knochenpunkt
 
-Das ist fuer Sicherungen und abgenommene Messwerkzeuge richtig.
-Ihr Ziel ist `F:\My Backups`.
+`[read]` **Die 18 Koerperflaechen ohne Muskel sind vielleicht
+keine Luecke, sondern genau diese anderen Orte.**
+
+## Was die Struktur oeffnet
+
+`[read]` **Fuenf Module laufen ueber DIESELBE Kette:**
+`Uebung -> Muskel -> Ebene -> Ort am Koerper`
+
+    Planer      Koerper -> Region -> Muskel -> Uebungen
+                braucht: nach unten durchreichen
+    Recovery    "Quadriceps hat Kater, was meiden?"
+                braucht: dieselbe Kette rueckwaerts
+    Injektion   "du spritzt in den Gluteus von gestern"
+                braucht: Stelle -> Ort
+    Medical     "Schmerz am Ansatz" -> welche Sehne
+                braucht: Sehnen je Muskel
+    Coach       "was vernachlaessigt mein Kunde?"
+                braucht: Belastung je Muskel ueber Zeit
+
+## Drei Spalten, die aussehen wie Daten
+
+`[cmd]` **Beim Messen gefunden ? alle drei sind Pauschalen:**
+
+    exercise_muscles.faktor   1.00 / 0.50, 6.723 Zeilen,
+                              EINE Quelle, Klasse C
+                              (3 Zeilen sind echt: Klasse A)
+    exercises.difficulty      intermediate, 1.416 von 1.416
+    foods.is_prepared_dish    false, 7.140 von 7.140 (C-534)
+
+`[read]` **Eine Spalte mit einem Wert fuer alles ist keine
+Einstufung, sondern eine Vorgabe, die nie gesetzt wurde.**
+
+`[read]` **Solange sie steht, sieht LumeOS aus, als wuesste es
+mehr, als es weiss.**
+
+## Die Reihenfolge
+
+    C-543  ein Muskel erbt die Uebungen seiner Eltern
+           -> KEINE Kuration, nur eine Sicht
+           -> der Planer traegt danach sofort
+    C-544  der Ort am Koerper als Begriff
+           -> injection_sites bekommt seinen Ort
+    C-545  difficulty ehrlich machen (Messauftrag)
+    C-546  Sehnen und Nerven je Muskel (FIPAT TA2)
+    C-547  die Prozente je Uebung (Messauftrag)
+    G-509  der Workoutplaner (braucht C-543)
+
+`[read]` **C-543 ist der billigste und beweist am meisten.**
+
+`[read]` **C-545 und C-547 sind MESSAUFTRAEGE, keine
+Bauauftraege** ? **1.416 Uebungen einstufen heisst: eine
+Quelle finden oder raten, und raten waere dasselbe wie die
+Pauschale, nur sichtbarer.**
+
+## Was NICHT zu tun ist
+
+`[cmd]` **Die Zeichnung folgt der Anatomie, nicht umgekehrt** ?
+**Tom ersetzt die Grafik, sie darf das Modell nicht formen.**
+
+`[read]` **Keine Ebene ohne Frage, die sie beantwortet.**
+**Wir haben 121.959 Supplementprodukte und 51 benutzte
+Lebensmittel ? Tiefe ohne Gebrauch ist ein Katalog, den
+niemand liest.**
+
+`[read]` **Und keine Eigenschaft als Spalte am Muskel** ? **je
+Art eine Relation, sonst wird `muscle_groups` zur Halde.**
 
 ---
 

@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 237 |
+| `todos` | 244 |
 | `erledigt` | 554 |
-| **gesamt** | **791** |
+| **gesamt** | **798** |
 
 ## medical — 49
 
@@ -466,7 +466,9 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 42
+## training — 47
+
+### beauftragbar — 46
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -490,6 +492,10 @@
 | `C-530` | feature | hoch | [die Muskelhierarchie bereinigen und vervollstaendigen](erledigt/training-c-0530-muskelhierarchie-bereinigen.md) | erledigt | — | C-531 |
 | `C-531` | fehler | mittel | [Muskel-Aliase sind nicht als Aliase erkennbar](erledigt/training-c-0531-muskel-aliase-nicht-erkennbar.md) | erledigt | — | — |
 | `C-536` | fehler | mittel | [drei Abwesenheitsaussagen sind ueberholt](erledigt/training-c-0536-abwesenheitsaussagen-ueberholt.md) | erledigt | — | — |
+| `C-543` | feature | hoch | [ein Muskel erbt die Uebungen seiner Eltern](todos/training-c-0543-muskel-erbt-uebungen.md) | offen | — | — |
+| `C-545` | befund | hoch | [difficulty ist ein Wert fuer alles](todos/training-c-0545-difficulty-ist-ein-wert-fuer-alles.md) | offen | — | — |
+| `C-546` | feature | mittel | [Sehnen und Nerven je Muskel](todos/training-c-0546-sehnen-und-nerven-je-muskel.md) | offen | — | — |
+| `C-547` | befund | hoch | [6.723 Pauschalen sehen aus wie Messwerte](todos/training-c-0547-pauschalen-sehen-aus-wie-messwerte.md) | offen | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](erledigt/training-g-0025-training-an-echte-daten-anschliessen.md) | erledigt | — | G-502, G-503, G-504, G-505, G-506, G-507, G-508 |
@@ -512,6 +518,12 @@
 | `G-506` | befund | mittel | [das Progressionsmodell hat keine Zuordnung](todos/training-g-0506-progressionsmodell-ohne-zuordnung.md) | offen | — | — |
 | `G-507` | befund | niedrig | [die Kachel ,,Pending actions" zeigt auf ein fremdes Schema](todos/training-g-0507-offene-punkte-liegen-in-coach.md) | offen | — | — |
 | `G-508` | befund | mittel | [die Volumengrenzen haben keine belegte Quelle](todos/training-g-0508-volumengrenzen-ohne-belegte-quelle.md) | offen | — | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-509` | feature | hoch | [der Workoutplaner von aussen nach innen](todos/training-g-0509-workoutplaner-von-aussen-nach-innen.md) | offen | C-543 | — |
 
 ## recovery — 41
 
@@ -639,7 +651,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 198
+## quer — 200
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -747,12 +759,14 @@
 | `C-525` | feature | hoch | [Suchwortschatz für Ausschluss-Tags](erledigt/quer-c-0525-suchwortschatz-ausschluss-tags.md) | erledigt | — | — |
 | `C-533` | befund | hoch | [der Sollstand unterschlaegt service_role-Rechte](erledigt/quer-c-0533-schema-sollstand-substance-group-rechte.md) | erledigt | — | — |
 | `C-541` | fehler | hoch | [der Erfahrungsgrad darf nicht leer sein](erledigt/quer-c-0541-erfahrungsgrad-darf-nicht-leer-sein.md) | erledigt | — | G-501 |
+| `C-544` | feature | hoch | [der Ort am Koerper als Begriff](todos/quer-c-0544-ort-am-koerper.md) | offen | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |
 | `E-83` | entscheidung | hoch | [ein Weg fuer Lebensmittel UND Supplemente](erledigt/quer-e-0083-ein-weg-fuer-beide.md) | erledigt | — | E-84, G-480, G-483, G-484 |
 | `E-84` | entscheidung | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-e-0084-supplement-bleibt-supplement.md) | erledigt | — | C-519 |
 | `E-86` | entscheidung | hoch | [gilt die Suchtiefe modulweit?](erledigt/quer-e-0086-suchtiefe-modulweit.md) | erledigt | — | C-541 |
+| `E-90` | entscheidung | hoch | [der Koerper als Grundlage aller Module](todos/quer-e-0090-der-koerper-als-grundlage.md) | offen | — | — |
 | `F-01` | befund | mittel | [Schnittstellenvertrag zuerst](todos/quer-f-0001-schnittstellenvertrag-zuerst.md) | offen | — | C-111 |
 | `F-02` | befund | mittel | [Ablageort festlegen](todos/quer-f-0002-ablageort-festlegen.md) | offen | — | C-109, C-110 |
 | `F-03` | befund | mittel | [obsidian-skills einbinden](todos/quer-f-0003-obsidian-skills-einbinden.md) | offen | — | C-112 |
