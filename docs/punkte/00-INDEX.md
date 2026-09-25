@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 231 |
+| `todos` | 237 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 551 |
-| **gesamt** | **784** |
+| `erledigt` | 553 |
+| **gesamt** | **791** |
 
 ## medical — 49
 
@@ -468,7 +467,7 @@
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
 
-## training — 35
+## training — 42
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -494,8 +493,8 @@
 | `C-536` | fehler | mittel | [drei Abwesenheitsaussagen sind ueberholt](erledigt/training-c-0536-abwesenheitsaussagen-ueberholt.md) | erledigt | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
-| `G-25` | befund | mittel | [Training an echte Daten anschliessen](laufend_claudecode/training-g-0025-training-an-echte-daten-anschliessen.md) | laeuft (claudecode) | — | — |
-| `G-68` | befund | mittel | [`e1RM` deckt 6 von 1.416](todos/training-g-0068-e1rm-deckt-6-von-1-416.md) | offen | — | — |
+| `G-25` | befund | mittel | [Training an echte Daten anschliessen](erledigt/training-g-0025-training-an-echte-daten-anschliessen.md) | erledigt | — | G-502, G-503, G-504, G-505, G-506, G-507, G-508 |
+| `G-68` | befund | mittel | [`e1RM` deckt 6 von 1.416](erledigt/training-g-0068-e1rm-deckt-6-von-1-416.md) | erledigt | — | — |
 | `G-77` | befund | mittel | [Streaks bei 32 Auslassern](todos/training-g-0077-streaks-bei-32-auslassern.md) | offen | — | — |
 | `G-88` | entscheidung | mittel | [Die Sitzungskarte auf `Today`](todos/training-g-0088-die-sitzungskarte-auf-today.md) | offen | — | — |
 | `G-131` | befund | mittel | [`module-completeness.jsx` ist die Settings-Seite](todos/training-g-0131-module-completeness-jsx-ist-die-settings-seite.md) | offen | — | — |
@@ -507,6 +506,13 @@
 | `G-429` | befund | mittel | [wer rechnet estimated_1rm, und verweigert er?](todos/training-g-0429-einrm-mit-verweigerung.md) | offen | — | — |
 | `G-447` | befund | mittel | [vier gezeichnete Muskeln, die keine Uebung trifft](todos/training-g-0447-vier-muskeln-ohne-jede-zuordnung.md) | offen | — | — |
 | `G-456` | befund | niedrig | [fuenfzehn Sitzungen ohne Saetze](todos/training-g-0456-sitzungen-ohne-saetze.md) | offen | — | — |
+| `G-502` | fehler | mittel | [die e1RM-Kachel rechnet nicht mit der Datenbank](todos/training-g-0502-e1rm-kachel-rechnet-nicht-mit-der-datenbank.md) | offen | — | — |
+| `G-503` | befund | mittel | [der Plan-Reiter steht auf leeren Tabellen](todos/training-g-0503-plan-reiter-ohne-programme.md) | offen | — | — |
+| `G-504` | befund | mittel | [vier Kacheln warten auf dieselbe gemeinsame Sicht](todos/training-g-0504-gemeinsame-sicht-training-goals-recovery.md) | offen | — | — |
+| `G-505` | befund | niedrig | [HR zones und Offline sync haben keine Tabellen](todos/training-g-0505-hr-und-offline-ohne-tabellen.md) | offen | — | — |
+| `G-506` | befund | mittel | [das Progressionsmodell hat keine Zuordnung](todos/training-g-0506-progressionsmodell-ohne-zuordnung.md) | offen | — | — |
+| `G-507` | befund | niedrig | [die Kachel ,,Pending actions" zeigt auf ein fremdes Schema](todos/training-g-0507-offene-punkte-liegen-in-coach.md) | offen | — | — |
+| `G-508` | befund | mittel | [die Volumengrenzen haben keine belegte Quelle](todos/training-g-0508-volumengrenzen-ohne-belegte-quelle.md) | offen | — | — |
 
 ## recovery — 41
 

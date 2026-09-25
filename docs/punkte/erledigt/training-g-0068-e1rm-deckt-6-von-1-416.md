@@ -8,6 +8,8 @@ braucht: []
 kind_von: G-64
 kinder: []
 entscheidung: null
+erledigt: 2026-09-08
+commit: ueberholt
 beruehrt:
   tabellen: []
   dateien: []
@@ -27,3 +29,15 @@ zahlen: null
 
   `[cmd]` **Gehoert zum Sitzungs-Schritt**, nicht zum Katalog — dort
   liegen 9 Sitzungen, 18 Uebungen, 60 Saetze.
+
+## UEBERHOLT, 2026-09-08
+
+`[cmd]` **G-25 hat gemessen: die *,,6 von 1.416"* stammen aus
+G-64 und zaehlten KATALOGEINTRAEGE, nicht Deckung.**
+
+`[cmd]` **Tatsaechlich: 372 von 396 Saetzen (94 %), 23
+Uebungen** ? **und e1RM ist ein Datenbanktrigger,
+`weight/(1.0278-0.0278*reps)`, algebraisch Brzycki.**
+
+`[read]` **Der Punkt behauptet etwas, das nicht stimmt.**
+

@@ -125,13 +125,13 @@ Tom, 2026-09-08:
 > waechst ein backupordner ins unendliche. backups haben in git
 > nichts zu suchen
 
-## Gemessen
+## Urspruenglich gemessen
 
     backup/           12.475 Dateien, 6.121 MB
-    davon verfolgt     610 lose Dateien
-                       plus 80 Verzeichnisse
+    davon verfolgt       610 lose Dateien
+                         plus 80 Verzeichnisse
 
-`[cmd]` **Die groessten:**
+`[cmd]` **Die groessten waren:**
 
     data              2.436 MB
     c262                659 MB
@@ -142,61 +142,46 @@ Tom, 2026-09-08:
 
 ## Der Anlass
 
-`[read]` **Ich habe 701 lose Dateien in einen Tagesordner
-verschoben, ohne zu pruefen, welche verfolgt sind** ? **608
-waren es.**
+`[read]` **701 lose Dateien wurden in einen Tagesordner
+verschoben, ohne vorher zu pruefen, welche verfolgt waren; 608
+davon waren verfolgt.**
 
-`[cmd]` **`git status` meldete 608 Loeschungen, Claude Code hat
-es in G-475 gemeldet.**
+`[cmd]` **`git status` meldete 608 Loeschungen, Claude Code
+meldete sie in G-475.**
 
-`[cmd]` **`git checkout backup/` hat die 608 zurueckgeholt, die
-93 untracken aus `F:\My Backups` kopiert** ? **0 geloescht.**
+`[cmd]` **`git checkout backup/` holte die 608 zurueck, die
+93 unverfolgten kamen aus `F:\My Backups` zurueck: null
+Dateien gingen verloren.**
 
-`[read]` **Was ich haette tun muessen:** `git ls-files backup/`
-**vor dem Verschieben.**
+`[read]` **Vor jeder Bewegung in `backup/` muss
+`git ls-files backup/` laufen.**
 
 ## Die eigentliche Frage
 
 `[read]` **Warum sind Backups ueberhaupt verfolgt?**
 
-`[cmd]` **`backup/.gitignore` existiert** ? **MISS, was es
-ausnimmt und was nicht.**
+`backup/.gitignore` nahm bereits Datenabzuege, taegliche
+Laeufe, Logs und einzelne Sicherungsmuster aus. Die Regeln waren
+aber lueckenhaft und entfernten bereits verfolgte Dateien nicht
+aus dem Index.
 
-`[read]` **Untracked sind heute schon: `_taeglich`, `logs`,
-Teile von `schema`** ? **jemand hat angefangen.**
+## Was zu entscheiden war
 
-## Was zu entscheiden ist
+### a - alles in `backup/` ignorieren
 
-**a** ? **Alles in `backup/` ignorieren.**
+Das ist falsch. Abnahmebelege und Datenquellen liegen historisch
+unter `backup/` und muessen sichtbar bleiben.
 
-`[read]` **Dann sind die Nachweise der Abnahmen nicht mehr im
-Verlauf** ? **die Punktdateien tragen die Zahlen, die Bilder
-waeren weg.**
+### b - nur Nachweise verfolgen, den Rest nicht
 
-**b** ? **Nur die Nachweise verfolgen, den Rest nicht.**
+Das ist fuer den aktuellen Baum richtig. Bilder, kleine
+Messausgaben und reproduzierbare Quellen duerfen verfolgt
+bleiben. Wegwerfwerkzeuge und Datenbanksicherungen nicht.
 
-`[cmd]` **464 `.png` und 129 `.mjs` liegen lose** ? **die
-Bildschirmfotos sind Abnahmebelege, die Messwerkzeuge
-Wegwerfgut.**
+### c - Backups ausserhalb des Repos
 
-**c** ? **Backups ausserhalb des Repos.**
-
-`[cmd]` **`F:\My Backups` existiert schon** ? **dort liegt
-auch `lumeos02092026`.**
-
-`[read]` **Dann braucht `backup/` im Repo nur noch, was ein
-Punkt belegt.**
-
-## Was zu messen ist, vor der Entscheidung
-
-    A  was nimmt backup/.gitignore heute aus?
-    B  welche verfolgten Dateien belegen einen Punkt?
-       (docs/punkte verweist darauf)
-    C  welche sind Wegwerfgut? (x-*.png, _g*.mjs)
-    D  wie gross waere backup/ nach b?
-
-`[read]` **Punkt B ist die Arbeit** ? **ein Bild, auf das eine
-Abnahme zeigt, ist ein Beleg; eines ohne Verweis ist Muell.**
+Das ist fuer Sicherungen und abgenommene Messwerkzeuge richtig.
+Ihr Ziel ist `F:\My Backups`.
 
 ---
 
