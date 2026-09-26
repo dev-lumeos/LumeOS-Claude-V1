@@ -226,8 +226,99 @@ export function ProduktTafel({ satz, meidestoffe = [], aktion }: {
    */
   meidestoffe?: string[]
 }) {
+  // ══ G-472: die Portionswahl ueber der Naehrwertliste ═════════════
+  //
+  // **Tom, 2026-09-26:** *„Eine Portionswahl ueber der Liste, die
+  // Liste zeigt genau diese Portion."*
+  //
+  // `[cmd]` **Der Befund:** bei Mary Ruths (DSLD 327737) standen
+  // *„Calories 10 / 15 / 20 / 10"* als vier unbeschriftete Zeilen —
+  // je eine Portion, ohne zu sagen welche. `[read]` **Vier
+  // widerspruechliche Zahlen ohne Bezug laden zum Fehlschluss ein;
+  // eine Luecke sieht man, einen Fehlschluss nicht.**
+  //
+  // `[read]` **Nicht *Portion je Zeile*:** 138 moegliche Naehrstoffe
+  // mal vier Portionen waeren 552 Zeilen. **Nicht *nur die
+  // Standardportion*:** dann weiss niemand, dass es die anderen
+  // gibt.
+  //
+  // `[cmd]` **Die Portionen stehen in
+  // `product_contents.source_serving_size`** — `null` heisst: gilt
+  // fuer JEDE (so tragen es die Hilfsstoffe).
+  const portionen = React.useMemo(() => {
+    const raus: string[] = []
+    for (const z of satz.inhalt) {
+      const p = z.source_serving_size
+      if (p !== null && !raus.includes(p)) raus.push(p)
+    }
+    // `[read]` **Nach der Menge sortiert, nicht alphabetisch** —
+    // sonst stuende `10 mL` vor `5 mL`. Ohne fuehrende Zahl bleibt
+    // die Fundreihenfolge.
+    return raus.sort((a, b) => {
+      const za = Number.parseFloat(a)
+      const zb = Number.parseFloat(b)
+      if (Number.isNaN(za) || Number.isNaN(zb)) return 0
+      return za - zb
+    })
+  }, [satz.inhalt])
+
+  const [portion, setPortion] = React.useState('')
+  // `[cmd]` **Ueber eine ZEICHENKETTE abhaengig, nicht ueber das
+  // Feld** — `portionen` ist bei jedem Anstrich ein neues Objekt,
+  // und der Effekt liefe endlos. **Dieselbe Falle wie in G-492,
+  // G-455 und G-320.**
+  const portionsSchluessel = portionen.join('|')
+  React.useEffect(() => {
+    // `[read]` **Die erste Portion ist die Vorgabe** — und sie wird
+    // NACHGEZOGEN, wenn die Liste spaeter ankommt. **In G-492 lief
+    // genau hier ein `useState(portionen[0])` gegen eine leere
+    // Liste und blieb `''`.**
+    setPortion(alt => (alt !== '' && portionen.includes(alt))
+      ? alt : (portionen[0] ?? ''))
+  }, [portionsSchluessel])
+
+  // `[read]` **Eine Zeile ohne Portion gilt fuer jede** — sie bleibt
+  // immer stehen. **Gibt es gar keine Portionen, filtert nichts.**
+  const gefiltert = React.useMemo(() => {
+    const roh = (portionen.length < 2 || portion === '')
+      ? satz.inhalt
+      : satz.inhalt.filter(z => z.source_serving_size === null
+        || z.source_serving_size === portion)
+
+    // ══ G-472: dieselbe Zutat zweimal in DERSELBEN Portion ═══════
+    //
+    // `[cmd]` **Gemessen an Mary Ruths:** `5 mL` traegt *Calories
+    // 10*, *Total Carbohydrates 2* und *Iron 6* **je ZWEIMAL** —
+    // verschiedene `id`, verschiedene `reihenfolge`, gleicher Wert.
+    // **Das Etikett fuehrt `5 mL` zweimal auf** (fuer *4-13 years*
+    // und *51+ years*).
+    //
+    // `[read]` **Nach dem Filtern blieben so zwei identische
+    // Zeilen stehen** — genau die Doppelung, die dieser Punkt
+    // beseitigen soll, nur eine Ebene tiefer.
+    //
+    // `[read]` **Zusammengefasst wird nur, was WIRKLICH gleich
+    // ist:** Name, Menge, Einheit und Mischung. **Zwei Zeilen mit
+    // verschiedenen Mengen bleiben zwei** — sonst verschwaende eine
+    // echte Angabe.
+    //
+    // `[read]` **Die Daten bleiben unberuehrt** — das ist eine
+    // Frage an `supabase/` und liegt dort (C-549 misst schon eine
+    // verwandte Zaehlung).
+    const gesehen = new Set<string>()
+    return roh.filter(z => {
+      const schluessel = [
+        z.ingredient_name, z.amount_per_serving, z.unit,
+        z.amount_qualifier, z.blend_id, z.source_serving_size,
+      ].join('\u0001')
+      if (gesehen.has(schluessel)) return false
+      gesehen.add(schluessel)
+      return true
+    })
+  }, [satz.inhalt, portionen.length, portion])
+
   const buendel = React.useMemo(
-    () => etikettBuendel(satz.inhalt), [satz.inhalt])
+    () => etikettBuendel(gefiltert), [gefiltert])
   const { bekannt, gesamt } = React.useMemo(
     () => bekanntZaehlen(satz.inhalt), [satz.inhalt])
 
@@ -333,6 +424,61 @@ export function ProduktTafel({ satz, meidestoffe = [], aktion }: {
       {buendel.length > 0
         ? (
           <>
+            {/* ══ G-472/N1: die Wahl steht UEBER der Liste ═══════
+                `[read]` **Dieselbe Geste wie im G-492-Modal** —
+                `<label>` mit `v2-eyebrow`, darin ein
+                `<select className="v2-feld">`, die Option nennt
+                Groesse und Kaloriensumme.
+
+                `[read]` **Nur bei MEHR als einer Portion** (N4) —
+                bei einer waere die Wahl eine Bedienung ohne
+                Wirkung.
+
+                `[read]` **Die Wahl nennt, wie viele es gibt** —
+                so ist nichts versteckt. */}
+            {portionen.length > 1 && (
+              <label className="v2-supp-prod-portionwahl"
+                     style={{ display: 'flex', alignItems: 'center',
+                              gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
+                <span className="v2-eyebrow">Portionsgröße</span>
+                <select
+                  className="v2-feld"
+                  value={portion}
+                  data-probe="tafel-portion"
+                  aria-label="Portionsgröße"
+                  style={{ maxWidth: 320 }}
+                  onChange={e => setPortion(e.target.value)}
+                >
+                  {portionen.map(p => {
+                    // `[cmd]` Die Kalorien dieser Portion — aus
+                    // derselben Liste, nicht aus einer zweiten
+                    // Quelle.
+                    const kcal = satz.inhalt.find(
+                      z => z.source_serving_size === p
+                        && /^calories$/i.test(z.ingredient_name))
+                    return (
+                      <option key={p} value={p}>
+                        {p}
+                        {kcal?.amount_per_serving != null
+                          ? ` · ${Math.round(kcal.amount_per_serving)} kcal`
+                          : ''}
+                      </option>
+                    )
+                  })}
+                </select>
+                {/* `[cmd]` **`v2-muted`, nicht `v2-dim`** — ein
+                    Waechter hat es gefangen: `v2-dim` misst 2,88:1
+                    und faellt unter WCAG AA (4,5:1), `v2-muted`
+                    misst 9,19:1. `[read]` **Dieser Satz SOLL
+                    gelesen werden** — er sagt, dass es mehr als
+                    eine Portion gibt. */}
+                <span className="v2-muted" style={{ fontSize: 10.5 }}>
+                  {portionen.length} Portionsgrößen auf dem Etikett ·
+                  die Liste zeigt die gewählte
+                </span>
+              </label>
+            )}
+
             <div className="v2-supp-prod-etikettkopf">
               <span className="v2-eyebrow">Etikett · {gesamt} Zeilen</span>
               {/* `[read]` **Zwei Zahlen, keine Quote** (G-452) —

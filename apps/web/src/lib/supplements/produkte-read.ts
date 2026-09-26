@@ -217,6 +217,18 @@ export type InhaltsZeile = {
    */
   blend_id: string | null
   reihenfolge: number | null
+  /**
+   * Die Portion, auf die sich diese Zeile bezieht — G-472.
+   *
+   * `[cmd]` **`product_contents.source_serving_size`.** **`null`
+   * heisst: gilt fuer JEDE Portion** — so tragen es die
+   * Hilfsstoffe (Wasser, Glycerin), die keine Menge haben.
+   *
+   * `[read]` **Ohne dieses Feld standen vier Zeilen *,,Calories"*
+   * untereinander, ohne zu sagen, welche zu welcher Portion
+   * gehoert** — vollstaendig, aber unlesbar.
+   */
+  source_serving_size: string | null
   ist_wirkstoff: boolean
   /**
    * Kennt LumeOS die Zutat?
@@ -695,6 +707,8 @@ function inhaltAus(r: Record<string, unknown>): InhaltsZeile | null {
     amount_qualifier: s(r.amount_qualifier),
     blend_id: s(r.blend_id),
     reihenfolge: n(r.reihenfolge),
+    // G-472: die Portion der Zeile; `null` gilt fuer jede.
+    source_serving_size: s(r.source_serving_size),
     ist_wirkstoff: r.ist_wirkstoff === true,
     // ══ G-464: DIE MARKE HAENGT AN BEIDEM ════════════════════════
     //
@@ -823,8 +837,19 @@ export async function ladeProdukt(id: string): Promise<ProduktSatz | null> {
       c.from('supplier_product_content_catalog')
         .select('product_content_id,ingredient_name,ingredient_category,amount_per_serving,unit,amount_qualifier,ist_wirkstoff,supplement_id,nutrient_code,content_class')
         .eq('product_id', id),
+      // ══ G-472: `source_serving_size` kommt dazu ═══════════════
+      //
+      // `[cmd]` **Gemessen 2026-09-26 an Mary Ruths (DSLD 327737):**
+      // die Zeilen tragen ihre Portion — 3 Zeilen fuer `10 mL`,
+      // 3 fuer `15 mL`, 6 fuer `5 mL` (die Portion steht zweimal
+      // auf dem Etikett), **und 8 Zeilen mit NULL.**
+      //
+      // `[read]` **Die Sicht `supplier_product_content_catalog`
+      // fuehrt die Spalte NICHT** — die Tabelle schon, und diese
+      // Abfrage laeuft ohnehin. **Ein Wort mehr im `select`, keine
+      // Schemaaenderung.**
       c.from('product_contents')
-        .select('id,blend_id,reihenfolge')
+        .select('id,blend_id,reihenfolge,source_serving_size')
         .eq('product_id', id).order('reihenfolge', { ascending: true, nullsFirst: false }),
       c.from('product_suppliers')
         .select('rolle,suppliers(name,land)').eq('product_id', id),

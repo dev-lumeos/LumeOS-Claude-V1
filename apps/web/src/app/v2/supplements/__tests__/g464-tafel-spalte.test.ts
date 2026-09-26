@@ -52,6 +52,9 @@ function z(x: Partial<InhaltsZeile> & { id: string }): InhaltsZeile {
     amount_qualifier: 'not_stated',
     blend_id: null,
     reihenfolge: null,
+    // G-472: `null` heisst „gilt fuer jede Portion" — der Fall,
+    // den die meisten Produkte haben (eine Portionsgroesse).
+    source_serving_size: null,
     ist_wirkstoff: true,
     bekannt: false,
     content_class: null,
