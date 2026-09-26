@@ -894,3 +894,111 @@ ignoriert** ? **sie wandern nach der Abnahme nach
 `[read]` **Was ein Waechter beim Namen nennt, bleibt
 verfolgt** ? **36 Werkzeuge sind deshalb im Baum.**
 
+---
+
+# Siebter Teil - nach dem Clear
+
+`[cmd]` **2026-09-08, spaeter Tag. Beide Agenten waren
+geleert, hier steht, was seither entstand.**
+
+## Der neue Rahmen: E-91
+
+Tom: *,,ein tag komplett erfassbar ? essen, training,
+supplemente, check-in. IN ABHAENGIGKEIT MIT GOALS"*
+
+`[read]` **Goals ist nicht das fuenfte Modul ? es ist das,
+WOFUER die vier anderen erfassen.**
+
+`[read]` **Der Massstab ist nicht mehr *funktioniert die
+Kachel*, sondern: kann Tom einen Tag zu Ende erfassen, ohne
+anzustossen?**
+
+`[cmd]` **Und: einzelne Module duerfen fertig werden und im
+FELD getestet werden ? nicht nur auf `dev@lumeos.app`.**
+
+## Was seit dem Clear entstand
+
+### PED hinter die Gradpruefung
+
+    G-117  der Extended-Code verlaesst das Buendel
+           drei Wege, darunter ein toter Import
+    G-499  die Entwurfsreferenz hinter das Gate
+           ein fuenfter Weg: ein Modul ist unteilbar
+    G-500  das Injektionsprotokoll
+           ein siebter Weg: fest im JSX, ohne Feld
+    E-88   die Referenz folgt Extendeds Regel
+    E-89   Wissen ist offen, das Protokoll ist gesperrt
+
+`[read]` **E-89 ist die Regel, die alles danach traegt:** *ein
+Lexikon warnt, ein Plan empfiehlt.*
+
+`[cmd]` **Der Katalog ist ungesperrt: 617 Substanzen, 596
+Dosierungen, mit WADA- und Rechtsangabe ? Absicht.**
+
+### Die Grundlagen des Koerpers
+
+    E-90   der Koerper als Grundlage
+           Konzept: docs/ssot/40-der-koerper-als-grundlage.md
+    C-540  21 Tierarten, mehrwertig, mit Synonymen
+    C-543  ein Muskel erbt die Uebungen seiner Eltern
+           gebaut, NICHT live
+    C-544  der Ort am Koerper (Muskel, Fettdepot,
+           Landmarke)
+    C-546  Sehnen und Nerven -- HOCH, Voraussetzung
+    C-552  wofuer ist eine Substanz gut?
+
+`[read]` **Die tragende Unterscheidung: FAKT ueber den Koerper
+gilt fuer jeden, BEOBACHTUNG gilt fuer einen Nutzer zu einer
+Zeit.**
+
+### Spalten, die aussehen wie Daten
+
+    exercise_muscles.faktor   1,00/0,50 fuer 6.723
+    exercises.difficulty      intermediate fuer 1.416
+    exercises.tracking_type   weight_reps fuer 1.416
+    supplements.description   Schablone fuer 135 von 617
+    foods.is_prepared_dish    false fuer 7.140
+
+`[cmd]` **Und C-547 hat den Befund umgedreht: Pellands 0,5 ist
+eine RECHENKONVENTION fuer woechentliches Volumen, keine
+gemessene Aktivierung ? eine richtige Zahl an der falschen
+Stelle.**
+
+## Fehler des Orchestrators, siebter Teil
+
+**23** ? `[cmd]` **E-90 als Sammelpunkt angelegt** ? **der
+Waechter hatte recht, das Konzept liegt jetzt in `docs/ssot/`.**
+
+**24** ? `[cmd]` **Dabei die SSOT-Indexzeile vergessen** ?
+**das Gate brach bei Claude Code.**
+
+**25** ? `[cmd]` **`git reset` vor dem Committen hat Codex 160
+`rm --cached` zurueckgeholt** ? **Lehre in
+`docs/lehren/werkzeuge.md`.**
+
+**26** ? `[cmd]` **In G-25 *81 Kacheln* geschrieben** ? **es
+waren 81 TEXTSTELLEN und 63 Kacheln.**
+
+**27** ? `[cmd]` **In G-117 geschrieben, `dynamic` sei das
+falsche Werkzeug** ? **falsch war EIN Schalter daran.**
+
+## Der Zustand
+
+    806 Punkte
+    Gate 18/18, alle Waechter gruen
+    apps/web 2006, apps/coach 65
+    74 Commits ungepusht
+
+    laufend_codex        C-543 einspielen, dann C-544
+    laufend_claudecode   G-510 (Goals-Bestandsaufnahme)
+
+`[cmd]` **`backup/schema/*.sql`, `tools/_*` und
+`apps/*/.next-*` sind ignoriert** ? **nach der Abnahme wandern
+sie nach `F:\My Backups\`.**
+
+`[read]` **Was ein Waechter beim NAMEN nennt, bleibt
+verfolgt** ? **36 Werkzeuge sind deshalb im Baum.**
+
+`[cmd]` **Der Dev-Server gehoert Tom: 3200 und 3220 laufen.
+Reines CSS laedt heiss nach, Bauteile nicht.**
+
