@@ -7,8 +7,9 @@
 |---|---|
 | `todos` | 242 |
 | `laufend_codex` | 1 |
-| `erledigt` | 561 |
-| **gesamt** | **804** |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 562 |
+| **gesamt** | **806** |
 
 ## medical — 49
 
@@ -571,7 +572,7 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 13
+## goals — 14
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -588,6 +589,7 @@
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 | `G-421` | feature | hoch | [die vier fehlenden Reiter in Goals & Body](erledigt/goals-g-0421-die-vier-fehlenden-reiter.md) | erledigt | — | G-422 |
 | `G-422` | befund | mittel | [Schreibwege ohne Aufrufer](todos/goals-g-0422-zwei-schreibwege-ohne-aufrufer.md) | offen | — | — |
+| `G-510` | befund | hoch | [Bestandsaufnahme Goals, gegen alle vier Quellen](laufend_claudecode/goals-g-0510-bestandsaufnahme.md) | laeuft (claudecode) | — | — |
 
 ## coach — 57
 
@@ -651,7 +653,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 200
+## quer — 201
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -767,6 +769,7 @@
 | `E-84` | entscheidung | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-e-0084-supplement-bleibt-supplement.md) | erledigt | — | C-519 |
 | `E-86` | entscheidung | hoch | [gilt die Suchtiefe modulweit?](erledigt/quer-e-0086-suchtiefe-modulweit.md) | erledigt | — | C-541 |
 | `E-90` | entscheidung | hoch | [der Koerper ist die Grundlage, nicht die Uebung](erledigt/quer-e-0090-der-koerper-als-grundlage.md) | erledigt | — | — |
+| `E-91` | entscheidung | hoch | [das Zielbild: ein Tag komplett erfassbar](erledigt/quer-e-0091-ein-tag-komplett-erfassbar.md) | erledigt | — | — |
 | `F-01` | befund | mittel | [Schnittstellenvertrag zuerst](todos/quer-f-0001-schnittstellenvertrag-zuerst.md) | offen | — | C-111 |
 | `F-02` | befund | mittel | [Ablageort festlegen](todos/quer-f-0002-ablageort-festlegen.md) | offen | — | C-109, C-110 |
 | `F-03` | befund | mittel | [obsidian-skills einbinden](todos/quer-f-0003-obsidian-skills-einbinden.md) | offen | — | C-112 |
