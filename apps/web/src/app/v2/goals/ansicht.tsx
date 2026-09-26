@@ -321,7 +321,15 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
             <>
               {echt.umfaenge.length > 0
                 && <PhysiqueEcht saetze={echt.umfaenge} navy={echt.navy} stichtag={echt.stichtag} profil={echt.profil} />}
-              <FehlendePhysiqueKacheln />
+              {/* `[cmd]` **G-512: der FFMI kommt aus derselben Quelle
+                  wie im Composition-Reiter** — `navy.ffmi`, sonst der
+                  Wert der juengsten Messung. Vorher stand 22,4 fest im
+                  JSX, gemessen sind 21,81. */}
+              <FehlendePhysiqueKacheln
+                ffmi={echt.navy?.ffmi
+                  ?? (echt.messungen.length
+                    ? echt.messungen[echt.messungen.length - 1].ffmi ?? null
+                    : null)} />
               <ReferenzTrenner reiter="Physique" quelle={QUELLE} />
               <GoalsPhysiqueView />
             </>

@@ -64,11 +64,14 @@ const MODULGESUNDHEIT: Array<[string, string, number]> = [
   ['Sleep quality avg', '84 / 100', 84],
   ['Recovery avg', '78 / 100', 78],
 ]
-const FFMI_BAENDER: Array<[string, string, boolean]> = [
-  ['18–20', 'Developing', false],
-  ['20–22', 'Natural trained', false],
-  ['22–25', 'Advanced natural', true],
-  ['25+', 'Elite / assisted', false],
+// `[cmd]` **G-512: die dritte Spalte (`aktiv`) ist raus** — sie stand
+// fest auf „22–25" und gehoerte zur erfundenen 22,4. Welches Band gilt,
+// rechnet `imBand()` aus dem echten Wert.
+const FFMI_BAENDER: Array<[string, string]> = [
+  ['18–20', 'Developing'],
+  ['20–22', 'Natural trained'],
+  ['22–25', 'Advanced natural'],
+  ['25+', 'Elite / assisted'],
 ]
 
 /** E-68: Quelle UND Grund. */
@@ -560,26 +563,63 @@ export function FehlendeMessKacheln({ sessions }: { sessions: Fotosession[] }) {
  * FFMI-Kachel fehlt** — der Wert steht im Composition-Reiter, die
  * Einordnungsbaender stehen nirgends.
  */
-export function FehlendePhysiqueKacheln() {
+export function FehlendePhysiqueKacheln({ ffmi }: { ffmi: number | null }) {
+  // `[cmd]` **G-512: hier stand `22.4` fest im JSX** — daneben der Satz
+  // *,,Der WERT ist angebunden"*. `[cmd]` **Gemessen 2026-09-26 auf
+  // `dev@lumeos.app`: `goals.body_composition_navy` gibt 21,81.**
+  //
+  // `[read]` **Die Marke deckte nur die BAENDER** — der Wert stand
+  // ungekennzeichnet daneben und sah aus wie eine Zahl aus der
+  // Datenbank. **22,4 und 21,81 liegen zudem in verschiedenen
+  // Baendern** (die Grenze ist 22), also zeigte die Kachel eine
+  // Einstufung, die der echte Wert nicht traegt.
+  //
+  // `[read]` **Die Baender bleiben Attrappe** (GO-21, keine Quelle im
+  // Repo) — **der Wert ist es nicht mehr.**
+  /** In welches Band der Wert faellt — nur zum Hervorheben. */
+  const imBand = (spanne: string): boolean => {
+    if (ffmi == null) return false
+    const [von, bis] = spanne === '25+'
+      ? [25, Infinity]
+      : spanne.split('–').map(Number)
+    return ffmi >= von && ffmi < bis
+  }
   return (
     <Card title="FFMI" sub="fat-free mass index"
           attrappe={marke(
             'belegte Einordnungsbaender — 18-20 „Developing" bis 25+ '
-            + '„Elite / assisted" haben im Repo keine Quelle (GO-21)')}>
+            + '„Elite / assisted" haben im Repo keine Quelle (GO-21). '
+            + 'Der WERT ist seit G-512 echt.')}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}>
         <div style={{ textAlign: 'center', flexShrink: 0 }}>
-          <div className="v2-num" style={{ fontSize: 26, fontWeight: 600 }}>22.4</div>
+          <div className="v2-num" style={{ fontSize: 26, fontWeight: 600 }}>
+            {ffmi != null ? ffmi.toFixed(2) : '—'}
+          </div>
           <div className="v2-dim" style={{ fontSize: 10 }}>ffmi</div>
         </div>
         <div style={{ flex: 1 }}>
-          <Pill variant="acc">advanced</Pill>
-          <div className="v2-dim v2-mono" style={{ fontSize: 10, marginTop: 6 }}>
-            height-adjusted
-          </div>
+          {/* `[read]` **Keine Einstufung ohne Wert** — eine Pille
+              „advanced" ueber einem Strich waere eine Behauptung. */}
+          {ffmi == null
+            ? (
+              <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.5 }}>
+                Kein FFMI — <code>body_composition_navy</code> braucht
+                Groesse, Gewicht und die Umfangsmasse.
+              </div>
+            )
+            : (
+              <div className="v2-dim v2-mono" style={{ fontSize: 10 }}>
+                height-adjusted · aus body_composition_navy
+              </div>
+            )}
         </div>
       </div>
       <div className="v2-col-gap" style={{ gap: 3 }}>
-        {FFMI_BAENDER.map(([spanne, label, aktiv]) => (
+        {FFMI_BAENDER.map(([spanne, label]) => {
+          // `[read]` **Das Band folgt dem echten Wert** — vorher stand
+          // das Häkchen fest auf „22–25", passend zur erfundenen 22,4.
+          const aktiv = imBand(spanne)
+          return (
           <div key={spanne} style={{
             display: 'flex', alignItems: 'center', gap: 8,
             padding: '6px 10px', borderRadius: 5, fontSize: 11.5,
@@ -596,12 +636,14 @@ export function FehlendePhysiqueKacheln() {
             <span style={{ flex: 1 }}>{label}</span>
             {aktiv && <Pill variant="acc" style={{ fontSize: 9 }}>du</Pill>}
           </div>
-        ))}
+          )
+        })}
       </div>
       <div className="v2-divider" />
       <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.5 }}>
-        Der WERT ist angebunden — er steht im Composition-Reiter aus
-        `body_composition_navy`. Die Stufen sind es nicht.
+        Der WERT kommt aus <span className="v2-mono">body_composition_navy</span>,
+        derselben Quelle wie im Composition-Reiter. Die Stufen sind
+        weiterhin Entwurf.
       </div>
     </Card>
   )
