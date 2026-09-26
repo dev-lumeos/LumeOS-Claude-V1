@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-90
 agent: codex
 beauftragt: 2026-09-26
+erledigt: 2026-09-08
+commit: b51b080e
 beruehrt:
   tabellen: [medical.injection_sites]
 zahlen:
@@ -244,4 +246,37 @@ dort sichtbaren Aenderungen stammen aus fremder Arbeit.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Gebaut ? NICHT live.**
+
+`[cmd]` **Keine `koerperort`-Tabelle in der laufenden
+Datenbank.**
+
+    8 kanonische Koerperorte
+      5 Muskelregionen, 3 Fettdepots
+    7 mehrwertige Muskelrelationen
+    alle 16 Injektionsstellen zugeordnet
+    koerperort_id nach dem Seed NOT NULL
+
+### Der Bauentscheid, der Toms Beispiel traegt
+
+> *,,Fettdepots koennen TECHNISCH keine Muskelrelation
+tragen."*
+
+`[read]` **Nicht *sollten nicht*, sondern *koennen nicht*** ?
+**die Regel steht in der Datenbank, nicht in einem Kommentar.**
+
+`[cmd]` **Damit traegt Toms Peptid-Beispiel: eine subkutane
+Stelle IST Fett, und die Datenbank laesst nichts anderes zu.**
+
+### Und die bestehenden Felder
+
+`[cmd]` **Kontrollhash identisch, Fachfelder unveraendert.**
+
+`[read]` **Er hat den Beweis mitgeliefert, dass nichts
+danebenging** ? **statt es zu behaupten.**
+
+`[cmd]` **Sicherung wiederhergestellt und geprueft, Vollkette
+276 Schritte, Test 6/6, Gate gruen.**
+
+**Abgenommen. Einspielen steht aus.**
+

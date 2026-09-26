@@ -227,3 +227,16 @@ nicht gemessen, genau wie entschieden.**
 
 **Abgenommen. Einspielen steht aus.**
 
+## Nachtrag: LIVE eingespielt, 2026-09-08
+
+`[cmd]` **Selbst nachgemessen:**
+
+    Grundzuordnungen   6.726  (unveraendert)
+    effektive Paare   23.402
+    Vastus Lateralis     356  (vorher 0)
+    Legs                 613  (vorher 0)
+    Dubletten              0
+
+`[read]` **Die Sackgasse ist weg, und die Grundzuordnungen
+sind unangetastet** ? **eine Sicht, keine Kopie.**
+

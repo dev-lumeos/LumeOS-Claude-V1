@@ -832,3 +832,25 @@ unterscheidet nicht, wer ihn veraendert hat.**
 `[read]` **Das Gegenmittel ist dasselbe wie bei
 `git mv`: den Index lesen, bevor man ihn wegwirft.**
 
+### Ein pauschales `git add docs/` nimmt fremde Berichte mit
+
+Codex, 2026-09-08:
+
+> *,,Waehrend der parallelen Arbeit hat allerdings ein FREMDER
+Commit den Punktbericht und Index mit aufgenommen."*
+
+`[cmd]` **Das war ich: `git add -A docs/` nach jeder Abnahme.**
+
+`[read]` **Harmlos, solange nur Berichte betroffen sind** ?
+**aber der Agent sieht seinen Text im Commit eines anderen und
+weiss nicht, ob er noch der Autor ist.**
+
+### Die Regel
+
+    Vor `git add -A docs/`: `git status --porcelain docs/`
+    Was ein anderer Agent geschrieben hat, kommt in SEINEN
+    Commit -- oder in einen eigenen mit seinem Namen.
+
+`[read]` **Dieselbe Familie wie `git reset` (siehe oben): der
+Index gehoert nicht dem, der zuletzt tippt.**
+
