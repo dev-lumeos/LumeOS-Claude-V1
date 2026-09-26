@@ -393,10 +393,40 @@ export function ProfilFormular({
                       // sind der Grund, warum es hier auffiel und dort
                       // nie.
                       data-on={gewaehlt ? 'true' : undefined}
+                      // `[read]` **KEIN `aria-disabled`** — der
+                      // gewaehlte Knopf bleibt bedienbar, sein Klick
+                      // tut nur nichts. `[cmd]` Mit `aria-disabled`
+                      // hielt Playwright ihn fuer nicht anklickbar,
+                      // und ein Screenreader haette ihn als
+                      // abgeschaltet gemeldet — obwohl er die
+                      // AKTUELLE Wahl ist. `aria-pressed` sagt
+                      // bereits, dass er gedrueckt ist.
                       aria-pressed={gewaehlt}
-                      // Ein zweiter Klick nimmt die Angabe zurueck —
-                      // „nicht angegeben" ist ein gueltiger Zustand.
-                      onClick={() => setze('experience_level', gewaehlt ? '' : stufe)}
+                      // ══ G-501: der Klick waehlt UM, er leert nicht ══
+                      //
+                      // `[cmd]` **Hier stand
+                      // `setze('experience_level', gewaehlt ? '' : stufe)`**
+                      // mit dem Vermerk *„Ein zweiter Klick nimmt die
+                      // Angabe zurueck — nicht angegeben ist ein
+                      // gueltiger Zustand."*
+                      //
+                      // `[cmd]` **Seit C-541 ist er es nicht mehr:**
+                      // `public.profiles.experience_level` ist NOT
+                      // NULL. **Gemessen am 2026-09-25:** der zweite
+                      // Klick leerte die Auswahl, und `Speichern`
+                      // antwortete mit
+                      // **HTTP 500 · `WRITE_FAILED`** —
+                      // *„null value in column … violates not-null
+                      // constraint"*. `[read]` **Der Nutzer sah einen
+                      // Fehler, wo er einen Knopf gedrueckt hat.**
+                      //
+                      // **Tom (C-541):** *„dieser zustand kann gar
+                      // nicht sein."*
+                      //
+                      // `[read]` **Der Grad ist AENDERBAR, nicht
+                      // LOESCHBAR** — wie ein Geburtsdatum: man
+                      // korrigiert es, man leert es nicht.
+                      onClick={() => { if (!gewaehlt) setze('experience_level', stufe) }}
                     >
                       <span className="v2-wahl-punkt" />
                       <span style={{ flex: 1, minWidth: 0 }}>

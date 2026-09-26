@@ -55,11 +55,18 @@ export const ACTIVITY_LEVEL_INFO: Record<ActivityLevel, {
  * Stufen: *„starten wir mal damit, ist ja jederzeit ausbaubar."*
  *
  * `[cmd]` **SEIT C-140 GIBT ES DIE SPALTE** —
- * `public.profiles.experience_level`, `text`, nullable, ohne Default,
- * mit CHECK auf genau diese vier Werte. **G-110 hat sie angeschlossen.**
+ * `public.profiles.experience_level`, `text`, mit CHECK auf genau
+ * diese vier Werte. **G-110 hat sie angeschlossen.**
  *
- * `[cmd]` **Sie steht auf allen 7 Profilen auf NULL** (gemessen
- * 2026-08-20): angelegt, aber nie gesetzt.
+ * `[cmd]` **SEIT C-541 IST SIE NOT NULL** — und `handle_new_user`
+ * setzt beim Anlegen `'beginner'`. `[cmd]` **Gemessen 2026-09-25:
+ * 0 Profile ohne Grad** (5 `beginner`, 2 `pro`).
+ *
+ * `[read]` **Hier stand bis dahin *„nullable, ohne Default"* und
+ * *„steht auf allen 7 Profilen auf NULL"* (2026-08-20)** — beides
+ * war richtig und ist es nicht mehr. **Ein Dateikopf altert mit dem
+ * Schema**, und wer ihn glaubt, baut gegen einen Stand von vor
+ * einem Monat.
  *
  * `activity_level` ist etwas anderes — es beschreibt, **wieviel**
  * jemand sich bewegt (und traegt einen TDEE-Faktor), nicht **wie
@@ -156,8 +163,28 @@ export const profileWriteSchema = z.object({
   ),
 
   activity_level: z.preprocess(leerZuNull, z.enum(ACTIVITY_LEVELS).nullable()),
+  // ══ G-501: KEIN `leerZuNull`, KEIN `.nullable()` ═════════════════
+  //
   // G-110: Selbstauskunft, seit C-140 speicherbar.
-  experience_level: z.preprocess(leerZuNull, z.enum(EXPERIENCE_LEVELS).nullable()),
+  //
+  // `[cmd]` **Seit C-541 ist `public.profiles.experience_level` NOT
+  // NULL.** `[cmd]` **Gemessen am 2026-09-25:** mit `leerZuNull`
+  // machte der Schreibweg aus dem Leerstring des Formulars ein NULL,
+  // und `PUT /api/profile` antwortete **HTTP 500 ·
+  // `WRITE_FAILED`** — *„null value in column
+  // \"experience_level\" … violates not-null constraint"*.
+  //
+  // `[read]` **Die Grenze gehoert hierher, nicht nur ins Formular.**
+  // Das Formular entscheidet, was ein Klick tut; DIESE Zeile
+  // entscheidet, was ueberhaupt gespeichert werden kann. **Wer den
+  // Schreibweg direkt ruft, kommt am Knopf vorbei.**
+  //
+  // `[read]` **`leerZuNull` bleibt fuer die uebrigen sechs Felder**
+  // — `birth_date`, `biological_sex`, `height_cm`,
+  // `body_weight_kg`, `activity_level`, `nutrition_goal` sind
+  // **nullable in der Datenbank** (gemessen), und *,,nicht
+  // angegeben"* ist dort ein gueltiger Zustand.
+  experience_level: z.enum(EXPERIENCE_LEVELS),
   nutrition_goal: z.preprocess(leerZuNull, z.enum(NUTRITION_GOALS).nullable()),
 
   // Zeitraeume, keine Eigenschaften. `[cmd]` So sind sie angelegt:
