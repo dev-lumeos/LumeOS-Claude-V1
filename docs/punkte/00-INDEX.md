@@ -7,8 +7,7 @@
 |---|---|
 | `todos` | 242 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 560 |
+| `erledigt` | 561 |
 | **gesamt** | **804** |
 
 ## medical — 49
@@ -452,7 +451,7 @@
 | `G-466` | fehler | mittel | [amount_qualifier wird nicht gelesen](erledigt/supplements-g-0466-amount-qualifier.md) | erledigt | — | C-512 |
 | `G-467` | fehler | hoch | [die Filter werden nicht gespeichert](erledigt/supplements-g-0467-filter-werden-nicht-gespeichert.md) | erledigt | — | G-469 |
 | `G-468` | feature | hoch | [der Vorlieben-Reiter fuer Supplements](erledigt/supplements-g-0468-vorlieben-reiter.md) | erledigt | — | G-498 |
-| `G-472` | feature | mittel | [die Tafel zeigt die Portionswahl nicht](laufend_claudecode/supplements-g-0472-portionswahl-in-der-tafel.md) | laeuft (claudecode) | — | — |
+| `G-472` | feature | mittel | [die Tafel zeigt die Portionswahl nicht](erledigt/supplements-g-0472-portionswahl-in-der-tafel.md) | erledigt | — | — |
 | `G-484` | feature | hoch | [keine Aktion im Produkte-Reiter](erledigt/supplements-g-0484-aktion-im-produkte-reiter.md) | erledigt | — | C-529, G-491, G-492 |
 | `G-491` | fehler | hoch | [die Produkttabelle bleibt im Browser leer](erledigt/supplements-g-0491-produkttabelle-bleibt-leer.md) | erledigt | — | — |
 | `G-492` | feature | hoch | [Hinzufuegen ist eine Aktion, keine Detailseite](erledigt/supplements-g-0492-hinzufuegen-als-modal.md) | erledigt | — | G-493 |

@@ -295,3 +295,4 @@ Gate-Prüfungen geworden.**
 Diese Dateien werden bei jeder Sitzung aktualisiert, in der sich etwas ändert.
 Wer eine Aussage ändert, ändert auch ihren Marker und das Datum im Kopf der Datei.
 Eine SSOT ohne Datum ist wertlos.
+| `40-der-koerper-als-grundlage.md` | **E-90 (Orchestrator), 2026-09-08:** Der Muskel ist das Rueckgrat; FAKT ueber den Koerper gegen BEOBACHTUNG ueber einen Nutzer. Fuenf Module, eine Kette. Fragen darunter: C-543 bis C-548, G-509 |

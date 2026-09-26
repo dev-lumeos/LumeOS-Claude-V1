@@ -9,6 +9,8 @@ kind_von: C-512
 entscheidung: null
 agent: claudecode
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 9ec68b84
 beruehrt:
   dateien:
     - apps/web/src/lib/supplements/produkt-etikett.ts
@@ -82,7 +84,61 @@ _(vom Agenten anzuhaengen)_
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Nachgemessen.**
+
+`[cmd]` **Proben: web 2006, coach 65.**
+
+    5 mL    1 Calories-Zeile   10 kcal,  6 mg Eisen
+    10 mL   1                  15,      12
+    15 mL   1                  20,      18
+
+`[read]` **Vorher vier unbeschriftete Zeilen, jetzt eine.**
+
+### Die Quelle war schon da
+
+> *,,`product_contents.source_serving_size` traegt die Portion
+je Zeile. Die SICHT fuehrt die Spalte nicht, die TABELLE schon ?
+und die zweite Abfrage lief ohnehin. Ein Wort mehr im `select`,
+kein Schemaeingriff."*
+
+`[read]` **Der billigste Weg war der richtige** ? **und er hat
+ihn gesucht, statt eine Spalte zu bestellen.**
+
+### Ein Befund beim Bauen, ehrlich abgegrenzt
+
+> *,,5 mL trug Calories 10, Carbs 2 und Iron 6 ZWEIMAL ?
+verschiedene id, gleicher Wert, weil das Etikett 5 mL fuer zwei
+ALTERSGRUPPEN fuehrt."*
+
+`[cmd]` **In der Anzeige zusammengefasst, nur wo wirklich alles
+gleich ist. Die Daten nicht angefasst** ? **das gehoert zu
+C-549.**
+
+### Drei Probenfehler, und einer ist neu
+
+> *,,Ein NUL-Byte in den Quelltext geschrieben ? `file` meldete
+`data`, der Dev-Server lieferte nichts mehr aus."*
+
+`[read]` **Und die Probe meldete das als *Produkt
+unerreichbar*, nicht als kaputte Datei** ? **ein Schreibfehler,
+der wie ein Befund aussieht.**
+
+### Und ein Waechter hat ihn gefangen
+
+> *,,Mein Hinweissatz stand in `v2-dim` (2,88:1) ? obwohl der
+Dateikopf genau das verbietet."*
+
+`[cmd]` **Auf `v2-muted` geaendert (9,19:1)** ? **G-479 und
+G-498 wirken.**
+
+### Der Gate-Bruch war meiner
+
+`[cmd]` **`docs/ssot/40-der-koerper-als-grundlage.md` fehlte in
+`00-INDEX.md`** ? **ich habe das Konzept verschoben und die
+Indexzeile vergessen. Nachgetragen.**
+
+**Abgenommen.**
+
 
 
 ## Bericht
@@ -255,3 +311,140 @@ nichts versteckt.**
     N5  dieselbe Geste wie im G-492-Modal. Belegt.
     N6  apps/web 2006 oder mehr, apps/coach 65.
 
+
+## Bericht zur Nacharbeit
+
+**Claude Code, 2026-09-26.** `[cmd]` **15 Proben gruen,
+Austritt 0** ? `node tools/_g472-portionswahl.mjs`.
+
+### Woher die Portion kommt
+
+`[cmd]` **`product_contents.source_serving_size`** ? **die
+Zeile traegt ihre Portion selbst.** **Gemessen an Mary Ruths:**
+
+    10 mL     3 Zeilen
+    15 mL     3
+     5 mL     6      <- die Portion steht ZWEIMAL
+    NULL      8      <- Hilfsstoffe, gelten fuer jede
+
+`[read]` **Kein Schemaeingriff noetig** ? die Sicht
+`supplier_product_content_catalog` fuehrt die Spalte nicht, die
+TABELLE schon, **und die zweite Abfrage lief ohnehin.** **Ein
+Wort mehr im `select`.**
+
+`[read]` **`null` heisst: gilt fuer JEDE Portion** ? so tragen
+es Wasser und Glycerin. **Sie bleiben in jeder Auswahl
+stehen.**
+
+### N1 - die Wahl steht ueber der Liste
+
+    PORTIONSGRÖSSE  [5 mL · 10 kcal v]
+                    3 Portionsgrößen auf dem Etikett ·
+                    die Liste zeigt die gewählte
+
+`[read]` **Der Satz daneben nennt die Zahl** ? **so ist nichts
+versteckt**, auch wenn nur eine Portion zu sehen ist.
+
+**Bild:** `tools/_g472-n1-wahl.png`
+
+### N2/N3 - eine Portion, und die Werte stimmen
+
+`[cmd]` **Je Portion umgeschaltet, gegen `psql` geprueft:**
+
+    Portion   Calories-Zeilen   kcal      Eisen
+     5 mL           1           10 = 10   6 = 6
+    10 mL           1           15 = 15  12 = 12
+    15 mL           1           20 = 20  18 = 18
+
+`[read]` **Vorher standen dort vier Calories-Zeilen** ?
+**jetzt eine.** `[read]` **Der SOLL-Wert kommt aus der
+Datenbank, nicht aus dem Auftragstext** ? sonst koennte die
+Probe nicht rot werden.
+
+**Bild:** `tools/_g472-n2-eine-portion.png`
+
+### N4 - eine Portion, keine Wahl
+
+`[cmd]` **`OptiFlex +`** (ueber `psql` gesucht: genau eine
+`source_serving_size`): **die Wahl erscheint nicht.**
+
+`[read]` **Eine Bedienung ohne Wirkung waere schlimmer als
+keine.**
+
+**Bild:** `tools/_g472-n4-eine-portion.png`
+
+### N5 - dieselbe Geste wie im Modal, belegt
+
+`[cmd]` **Sechs Merkmale, beide Stellen verglichen:**
+
+    <label>-Rahmen          Modal JA   Tafel JA
+    v2-eyebrow „Portionsgröße"    JA         JA
+    <select className="v2-feld"   JA         JA
+    aria-label                    JA         JA
+    data-probe                    JA         JA
+    Option nennt die kcal         JA         JA
+
+### N6
+
+`[cmd]` **`apps/web` 2.006, `apps/coach` 65, lint/typecheck/
+build gruen.**
+
+`[cmd]` **Das Gate bricht davor ab** ?
+`[nummern] ssot-ohne-index: docs/ssot/40-der-koerper-als-
+grundlage.md steht nicht in 00-INDEX.md`. **Committet in
+`d235106e` (C-544/C-546), nicht aus dieser Arbeit.**
+
+### Ein Befund beim Bauen: dieselbe Zeile zweimal
+
+`[cmd]` **`5 mL` trug *Calories 10*, *Total Carbohydrates 2*
+und *Iron 6* je ZWEIMAL** ? verschiedene `id`, verschiedene
+`reihenfolge`, **gleicher Wert.**
+
+`[cmd]` **Der Grund steht im Etikett:** es fuehrt `5 mL`
+zweimal auf ? fuer *4-13 years* und fuer *51+ years*.
+
+`[read]` **Nach dem Filtern blieben zwei identische Zeilen
+stehen** ? **genau die Doppelung, die dieser Punkt beseitigen
+soll, nur eine Ebene tiefer.** **In der Anzeige
+zusammengefasst**, und zwar nur, was WIRKLICH gleich ist
+(Name, Menge, Einheit, Mischung, Portion).
+
+`[read]` **Die Daten bleiben unberuehrt** ? das ist eine Frage
+an `supabase/`, und dort laeuft mit C-549 schon eine verwandte
+Zaehlung.
+
+### Drei Fehler in meiner eigenen Probe
+
+`[cmd]` **1 ? zu frueh gezaehlt.** Die Probe suchte die Wahl,
+bevor die Tafel sie gerendert hatte: **0 gemeldet, waehrend
+der Filter nachweislich wirkte.** `[read]` **Erst warten, dann
+zaehlen.**
+
+`[cmd]` **2 ? nach einer Codeaenderung zu kurz gewartet.** Der
+Entwicklungsserver uebersetzt die Route neu (3-10 s); die
+Probe meldete *,,das Produkt ist nicht erreichbar"*, obwohl
+die Seite Sekunden spaeter 200 Zeilen zeigte. **Dieselbe
+Klasse wie bei `hrzones` in G-25.**
+
+`[cmd]` **3 ? ein NUL-Byte in die Datei geschrieben.** Mein
+Trennzeichen `'\0'` landete als echtes Byte im Quelltext;
+`file` meldete `data` statt `JavaScript source`, und der
+Entwicklungsserver lieferte die Seite nicht mehr aus.
+**Ersetzt durch `'\u0001'`.**
+
+### Und ein Waechter hat mich gefangen
+
+`[cmd]` **`A3: die Tafel benutzt kein `v2-dim` fuer Text, der
+gelesen werden soll`** ? mein Hinweissatz stand in `v2-dim`
+(**2,88:1**, WCAG AA verlangt 4,5:1). `[read]` **Der
+Dateikopf sagt es sogar ausdruecklich**, und ich habe es
+trotzdem getan. **Auf `v2-muted` (9,19:1) geaendert.**
+
+### Neustart
+
+`[read]` **Nicht noetig** ? nur `apps/web/src`.
+
+### Werkzeug
+
+    tools/_g472-portionswahl.mjs   N1-N4, 15 Proben,
+                                   SOLL aus psql, Austritt 0/1
