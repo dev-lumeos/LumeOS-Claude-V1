@@ -9,6 +9,8 @@ braucht: []
 kind_von: G-510
 entscheidung: E-91
 
+agent: claudecode
+beauftragt: 2026-09-08
 beruehrt:
   tabellen:
     - goals.goal_phases
@@ -112,3 +114,33 @@ Varianten, Parameter, Dauer, Guards, Exit-Bedingungen.
 
 `[read]` **Nicht erfinden** — die Vorlage steht da (E-83s Lehre aus
 G-475/G-478).
+
+## Der Zusammenhang, 2026-09-08
+
+`[cmd]` **G-511 ist entschieden: die PHASE entscheidet ueber
+die Kalorien, `profiles.nutrition_goal` wird abgeleitet.**
+
+`[read]` **Damit wird dieser Punkt dringend** ? **wenn die
+Phase die Kalorien steuert und niemand eine Phase setzen
+kann, steuert nichts.**
+
+`[cmd]` **Die Umsetzung von G-511 liegt bei Codex
+(`berechne_zielwerte` ist eine Datenbankfunktion)** ? **die
+Oberflaeche dazu ist dieser Punkt.**
+
+### Und Toms Zielbild (E-91)
+
+> ein tag komplett erfassbar ? essen, training, supplemente,
+> check-in. IN ABHAENGIGKEIT MIT GOALS
+
+`[read]` **Die Abhaengigkeit laeuft ueber die Phase.**
+
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_
+

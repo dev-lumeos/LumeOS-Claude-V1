@@ -10,7 +10,7 @@ entscheidung: E-90
 agent: codex
 beauftragt: 2026-09-26
 beruehrt:
-  tabellen: [public.koerperorte, public.koerperort_muskeln, medical.injection_sites]
+  tabellen: [medical.injection_sites]
 zahlen:
   gemessen: 2026-09-26
   koerperorte: 8
