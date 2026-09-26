@@ -201,3 +201,57 @@ Stunde Arbeit** ? die Daten liegen vollstaendig vor.
 ### Werkzeug
 
     tools/_g472-tafel.mjs   Tafel und Modal, je Foto
+
+## UMGESCHRIEBEN und entschieden, 2026-09-08
+
+### Sein Befund
+
+> *,,Die Tafel ZEIGT die Portionen ? *5 mL [1 tsp, 4-13
+years], 10 mL, 15 mL* ? in Liste und Detail, bevor man etwas
+tut. Der Befund ist ueberholt."*
+
+> *,,Aber darunter steht ein SCHAERFERER: die Naehrwertliste
+zeigt *Calories 10 / 15 / 20 / 10* als VIER unbeschriftete
+Zeilen, je eine pro Portion. Gegen die Datenbank geprueft
+stimmen sie exakt."*
+
+> *,,Vier widerspruechliche Zahlen ohne Bezug laden zum
+FEHLSCHLUSS ein ? das ist schlimmer als die urspruengliche
+Luecke."*
+
+`[read]` **Er hat recht: eine Luecke sieht man, einen
+Fehlschluss nicht.**
+
+### Die Entscheidung: eine Wahl ueber der Liste
+
+`[read]` **Der Nutzer waehlt die Portion, die Liste zeigt
+GENAU DIESE.**
+
+**Warum nicht *Portion je Zeile*:** `[read]` **die Liste hat
+138 moegliche Naehrstoffe ? mal vier Portionen sind das 552
+Zeilen fuer ein Praeparat.**
+
+**Warum nicht *nur die Standardportion*:** `[read]` **dann
+verschwinden drei von vier, und der Nutzer weiss nicht, dass es
+sie gibt.**
+
+`[cmd]` **Und es passt zu G-492: das Modal waehlt bereits eine
+Portion, bevor es rechnet.** **Dieselbe Geste an beiden
+Stellen.**
+
+`[read]` **Die Wahl nennt, wie viele es gibt** ? **so ist
+nichts versteckt.**
+
+## Neue Abnahmebedingungen
+
+    N1  eine Portionswahl ueber der Naehrwertliste.
+        Foto.
+    N2  die Liste zeigt GENAU eine Portion, keine
+        vier Zeilen. Foto mit Mary Ruths (DSLD 327737).
+    N3  gegen die Datenbank belegt: 5 mL -> 10 kcal /
+        6 mg, 10 mL -> 15 / 12, 15 mL -> 20 / 18.
+    N4  ein Produkt mit EINER Portion zeigt keine Wahl.
+        Foto.
+    N5  dieselbe Geste wie im G-492-Modal. Belegt.
+    N6  apps/web 2006 oder mehr, apps/coach 65.
+

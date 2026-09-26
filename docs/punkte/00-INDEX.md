@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 238 |
+| `todos` | 239 |
 | `laufend_codex` | 4 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 556 |
-| **gesamt** | **799** |
+| **gesamt** | **800** |
 
 ## medical — 49
 
@@ -332,9 +332,9 @@
 | `G-497` | feature | hoch | [die Suche zeigt Gruppen statt Zeilen](todos/nutrition-g-0497-suche-zeigt-gruppen.md) | offen | — | — |
 | `GO-23` | befund | mittel | [Unter 50 % Deckung wird gedimmt](todos/nutrition-go-0023-unter-50-deckung-wird-gedimmt.md) | offen | — | — |
 
-## supplements — 124
+## supplements — 125
 
-### beauftragbar — 123
+### beauftragbar — 124
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -399,7 +399,7 @@
 | `C-509` | befund | hoch | [der Substanzkatalog ist zu klein](erledigt/supplements-c-0509-substanzkatalog-zu-klein.md) | erledigt | — | C-514, C-515 |
 | `C-510` | fehler | hoch | [das Mapping ist buchstabengenau](erledigt/supplements-c-0510-mapping-buchstabengenau.md) | erledigt | — | C-516 |
 | `C-511` | feature | hoch | [Supplement-Vorlieben, mit Lieblingsmarken](erledigt/supplements-c-0511-lieblingsmarken.md) | erledigt | — | — |
-| `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](erledigt/supplements-c-0512-naehrwerte-werden-summiert.md) | erledigt | — | C-513, G-472 |
+| `C-512` | fehler | hoch | [die Naehrwerte werden summiert statt getrennt](erledigt/supplements-c-0512-naehrwerte-werden-summiert.md) | erledigt | — | C-513, C-549, G-472 |
 | `C-514` | fehler | hoch | [vier Stoffe stehen im Katalog und sind offen](erledigt/supplements-c-0514-vier-stoffe-offen.md) | erledigt | — | — |
 | `C-515` | feature | hoch | [die Wirkstoffe kuratieren](erledigt/supplements-c-0515-wirkstoffe-kuratieren.md) | erledigt | — | — |
 | `C-516` | fehler | hoch | [Naehrwerte ohne Mapping](erledigt/supplements-c-0516-naehrwerte-ohne-zielspalte.md) | erledigt | — | — |
@@ -408,6 +408,7 @@
 | `C-527` | messauftrag | hoch | [die DSLD-Quelle trägt mehr als wir lesen](erledigt/supplements-c-0527-dsld-quelle-traegt-mehr.md) | erledigt | — | C-532, G-495 |
 | `C-529` | feature | hoch | [der Stackeintrag kennt sein Produkt nicht](erledigt/supplements-c-0529-stack-kennt-produkt-nicht.md) | erledigt | — | — |
 | `C-532` | feature | hoch | [die Label Statements roh importieren](erledigt/supplements-c-0532-label-statements-roh-importieren.md) | erledigt | — | — |
+| `C-549` | befund | mittel | [3.273 gegen 2.760 Produkte mit mehreren Portionen](todos/supplements-c-0549-3273-gegen-2760.md) | offen | — | — |
 | `E-85` | entscheidung | hoch | [kein Zwischenspeicher fuer die DSLD-Bilder](erledigt/supplements-e-0085-kein-zwischenspeicher-dsld-bilder.md) | erledigt | — | — |
 | `E-88` | entscheidung | hoch | [die Entwurfsreferenz zeigt PED-Protokolle ohne Gradpruefung](erledigt/supplements-e-0088-entwurfsreferenz-zeigt-ped.md) | erledigt | — | G-499 |
 | `E-89` | entscheidung | hoch | [Wissen ist offen, das Protokoll ist gesperrt](erledigt/supplements-e-0089-wissen-offen-protokoll-gesperrt.md) | erledigt | — | — |
