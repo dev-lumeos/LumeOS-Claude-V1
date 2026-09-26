@@ -84,3 +84,120 @@ _(vom Agenten anzuhaengen)_
 
 _(vom Orchestrator)_
 
+
+## Bericht
+
+**Claude Code, 2026-09-25.** `[read]` **Der Auftrag sagte: erst
+messen, ob er noch gilt.** **Er gilt nicht mehr so ? aber er
+ist auch nicht einfach erledigt.**
+
+### Der Befund von damals ist ueberholt
+
+`[cmd]` **Der Punkt sagt:** *,,Die Tafel liest keine davon."*
+
+`[cmd]` **Gemessen am 2026-09-25, Mary Ruths Vegan Liquid Iron
+Berry (DSLD 327737), `test-user@lumeos.local`:**
+
+    Liste, Spalte PORTION
+      5 mL [1 tsp, 4-13 years], 10 mL [2 tsp, 14-18 years],
+      15 mL [1 Tbsp, 19-50 years], 5 mL [1 tsp, 51+ years]
+
+    Detailtafel, Kachel PORTION
+      derselbe Text
+
+`[read]` **Die Tafel liest sie also** ? **und zwar bevor man
+etwas tut**, genau wie der Punkt es verlangt.
+
+### Und das Modal daneben
+
+`[cmd]` **G-492s Wahl beim Hinzufuegen steht ebenfalls** ?
+`produkt-aktion.tsx` liest `portionen` aus
+`supplier_product_nutrient_serving_options`.
+
+`[read]` **Damit ist die urspruengliche Frage beantwortet:**
+**die Portionen sind an BEIDEN Stellen sichtbar.**
+
+### ABER: ein neuer, genauerer Befund
+
+`[cmd]` **In der Detailtafel, unter NAEHRWERTE:**
+
+    Calories   10 Calorie(s)
+    Calories   15 Calorie(s)
+    Calories   20 Calorie(s)
+    Calories   10 Calorie(s)
+
+    Total Carbohydrates   2 Gram(s)
+    Total Carbohydrates   3 Gram(s)
+
+`[cmd]` **Gemessen gegen die Datenbank ? die Zahlen stimmen
+exakt:**
+
+    5 mL    10 kcal   2 g   6 mg Eisen
+    10 mL   15 kcal   3 g  12 mg
+    15 mL   20 kcal   5 g  18 mg
+
+`[read]` **Es ist JE PORTION eine Zeile ? und keine sagt,
+welche.** `[read]` **Vier Zeilen *,,Calories"* untereinander
+lesen sich wie ein Fehler in den Daten**, und sie sind das
+Gegenteil: sie sind vollstaendig, nur unbeschriftet.
+
+`[read]` **Das ist schlimmer als die urspruengliche Luecke.**
+Eine fehlende Angabe sieht man; **vier widerspruechliche
+Zahlen ohne Bezug laden zum Fehlschluss ein.**
+
+### Was ich NICHT getan habe
+
+`[read]` **Nicht gebaut** ? **welche Form die Loesung hat, ist
+eine Entscheidung:**
+
+    a  je Naehrwertzeile die Portion dahinter
+       („10 Calorie(s) · 5 mL")
+    b  eine Portionswahl ueber der Liste, die Werte
+       folgen ihr (wie im Modal)
+    c  nur die Standardportion zeigen, die uebrigen
+       hinter einem Aufklapper
+
+`[read]` **b waere das, was der Punkt urspruenglich wollte** ?
+**a ist die kleinste Aenderung und macht die Zahlen sofort
+lesbar.**
+
+### Zwei Zahlen, die abweichen
+
+`[cmd]` **C-512 nennt 3.273 Produkte mit mehreren
+Portionsgroessen.** `[cmd]` **Ich messe 2.760** ?
+`supplier_product_nutrient_serving_options`, gruppiert nach
+`product_id` mit `count(*) > 1`.
+
+`[read]` **Die Differenz ist nicht erklaert** ? moeglich ist,
+dass C-512 die Portionsangabe im Text zaehlt und ich die
+hinterlegten Werte. **Gemeldet, nicht geraten.**
+
+### Ein Messfehler, der wie ein Befund aussah
+
+`[cmd]` **Auf `dev@lumeos.app` fand ich das Produkt NICHT** ?
+null Treffer bei jedem Suchbegriff. `[read]` **Ich war nahe
+daran, die Produktsuche als kaputt zu melden.**
+
+`[cmd]` **Der Grund: das Konto hat eine Markenvorliebe**
+(`preferred_brands: ON Optimum Nutrition …`), **und das Produkt
+ist von *,,Mary Ruth's"*.** `[read]` **Der Treffer fehlte
+nicht, er war gefiltert** ? und das ist richtiges Verhalten.
+
+`[cmd]` **Dazu ein zweiter:** mein erster Locator traf die
+GLOBALE Navigationssuche (*,,Search or jump to…"*) statt der
+Produktsuche (`aria-label="Produkt suchen"`). **Drei Textfelder
+auf einer Seite ? der Platzhalter ist kein Anker.**
+
+### Empfehlung
+
+`[read]` **Den Punkt NICHT schliessen, sondern umschreiben:**
+der Titel *,,die Tafel zeigt die Portionswahl nicht"* stimmt
+nicht mehr. **Die offene Frage lautet jetzt:** *welcher Portion
+gehoert eine Naehrwertzeile?*
+
+`[read]` **Wenn Tom a, b oder c waehlt, ist es eine halbe
+Stunde Arbeit** ? die Daten liegen vollstaendig vor.
+
+### Werkzeug
+
+    tools/_g472-tafel.mjs   Tafel und Modal, je Foto

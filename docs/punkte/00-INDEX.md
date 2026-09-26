@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 239 |
+| `todos` | 238 |
 | `laufend_codex` | 4 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 554 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 556 |
 | **gesamt** | **799** |
 
 ## medical — 49
@@ -769,7 +769,7 @@
 | `E-83` | entscheidung | hoch | [ein Weg fuer Lebensmittel UND Supplemente](erledigt/quer-e-0083-ein-weg-fuer-beide.md) | erledigt | — | E-84, G-480, G-483, G-484 |
 | `E-84` | entscheidung | hoch | [ein Supplement bleibt ein Supplement](erledigt/quer-e-0084-supplement-bleibt-supplement.md) | erledigt | — | C-519 |
 | `E-86` | entscheidung | hoch | [gilt die Suchtiefe modulweit?](erledigt/quer-e-0086-suchtiefe-modulweit.md) | erledigt | — | C-541 |
-| `E-90` | entscheidung | hoch | [der Koerper als Grundlage aller Module](todos/quer-e-0090-der-koerper-als-grundlage.md) | offen | — | — |
+| `E-90` | entscheidung | hoch | [der Koerper ist die Grundlage, nicht die Uebung](erledigt/quer-e-0090-der-koerper-als-grundlage.md) | erledigt | — | — |
 | `F-01` | befund | mittel | [Schnittstellenvertrag zuerst](todos/quer-f-0001-schnittstellenvertrag-zuerst.md) | offen | — | C-111 |
 | `F-02` | befund | mittel | [Ablageort festlegen](todos/quer-f-0002-ablageort-festlegen.md) | offen | — | C-109, C-110 |
 | `F-03` | befund | mittel | [obsidian-skills einbinden](todos/quer-f-0003-obsidian-skills-einbinden.md) | offen | — | C-112 |
@@ -857,7 +857,7 @@
 | `G-487` | fehler | hoch | [der Tageswechsler startet nicht auf heute](erledigt/quer-g-0487-tageswechsler-startet-nicht-auf-heute.md) | erledigt | — | — |
 | `G-490` | fehler | mittel | [der Spaltenwaechter kennt die Tabelle nicht](erledigt/quer-g-0490-spaltenwaechter-kennt-tabelle-nicht.md) | erledigt | — | — |
 | `G-498` | fehler | mittel | [.v2-hinweis liegt unter 4,5:1](erledigt/quer-g-0498-hinweis-kontrast.md) | erledigt | — | — |
-| `G-501` | fehler | hoch | [der Ruecknahmeklick beim Erfahrungsgrad](laufend_claudecode/quer-g-0501-ruecknahmeklick-erfahrungsgrad.md) | laeuft (claudecode) | — | — |
+| `G-501` | fehler | hoch | [der Ruecknahmeklick beim Erfahrungsgrad](erledigt/quer-g-0501-ruecknahmeklick-erfahrungsgrad.md) | erledigt | — | — |
 
 ## buddy — 1
 

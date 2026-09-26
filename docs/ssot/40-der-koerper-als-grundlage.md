@@ -1,17 +1,11 @@
----
-nr: E-90
-typ: entscheidung
-modul: quer
-schwere: hoch
-angelegt: 2026-09-08
-braucht: []
-kind_von: null
-entscheidung: null
-beruehrt:
-  tabellen: [training.muscle_groups]
-zahlen:
-  gemessen: 2026-09-08
----
+# Der Koerper als Grundlage aller Module
+
+**Konzept, 2026-09-08.** Entscheidung: E-90.
+
+`[read]` **Dieses Dokument traegt das Konzept.** **Die
+einzelnen Fragen sind eigene Punkte: C-543 bis C-548 und
+G-509.**
+
 
 # E-90 - der Koerper als Grundlage aller Module
 

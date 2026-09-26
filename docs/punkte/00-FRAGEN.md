@@ -263,6 +263,31 @@ niemand liest.**
 `[read]` **Und keine Eigenschaft als Spalte am Muskel** ? **je
 Art eine Relation, sonst wird `muscle_groups` zur Halde.**
 
+## Toms Eingrenzung, 2026-09-08
+
+> der workoutplanner wird eine eigene brainstormsession,
+> momentan sind mir die grundlagen wichtiger und die exercises
+> sauber aufgesetzt
+
+`[cmd]` **G-509 ist zurueckgestellt.**
+
+`[cmd]` **Und beim Messen der Uebungen kam C-548 dazu: FUENF
+Spalten mit einem Wert fuer 1.416 Zeilen** ? `exercise_type`,
+`tracking_type`, `difficulty`, `sort_weight`, `source`.
+
+`[read]` **Der Widerspruch: 128 Uebungen sind Dehnung, Yoga
+oder Ausdauer, tragen aber `strength` und `weight_reps`.**
+
+### Die Reihenfolge, eingegrenzt
+
+    C-543  Vererbung in der Hierarchie
+    C-544  der Ort am Koerper
+    C-548  die fuenf Spalten (Messauftrag)
+    C-545  difficulty (Messauftrag)
+    C-547  die Prozente (Messauftrag)
+    C-546  Sehnen und Nerven
+    G-509  der Planer -- nach der eigenen Sitzung
+
 ---
 
 # Mittel
