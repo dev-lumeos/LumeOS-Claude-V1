@@ -1326,6 +1326,12 @@
       "tabelle": "meal_plan_days",
       "name": "meal_plan_days_count_sync_trg",
       "schritt": "537_materialized_meal_plan_days_count_schema"
+    },
+    {
+      "schema": "public",
+      "tabelle": "koerperorte",
+      "name": "koerperorte_touch_updated_at",
+      "schritt": "544_koerperorte_schema"
     }
   ],
   "_fremdschluessel": "Namentlich, weil beim Ausfall 2026-08-16 meal_items_meal_id_fkey mitverschwand. Ein fehlender Fremdschluessel faellt sonst erst auf, wenn verwaiste Zeilen entstanden sind.",
@@ -1720,6 +1726,27 @@
       "tabelle": "relationships",
       "zeigt_auf": "auth.users",
       "schritt": "155"
+    },
+    {
+      "schema": "public",
+      "name": "koerperort_muskeln_ort_fk",
+      "tabelle": "koerperort_muskeln",
+      "zeigt_auf": "public.koerperorte",
+      "schritt": "544_koerperorte_schema"
+    },
+    {
+      "schema": "public",
+      "name": "koerperort_muskeln_muscle_group_id_fkey",
+      "tabelle": "koerperort_muskeln",
+      "zeigt_auf": "training.muscle_groups",
+      "schritt": "544_koerperorte_schema"
+    },
+    {
+      "schema": "medical",
+      "name": "injection_sites_koerperort_fk",
+      "tabelle": "injection_sites",
+      "zeigt_auf": "public.koerperorte",
+      "schritt": "544_koerperorte_schema"
     }
   ],
   "funktionen": [
@@ -2022,7 +2049,10 @@
     "wissen.vision_contract_records": 15,
     "wissen.travel_medication_records": 27,
     "wissen.buddy_knowledge_records": 2861,
-    "wissen.community_records": 1033
+    "wissen.community_records": 1033,
+    "public.koerperorte": 8,
+    "public.koerperort_muskeln": 7,
+    "medical.injection_sites": 16
   },
   "mindestzeilen_belege": {
     "_kommentar": "Herkunft je Untergrenze. Gerundete Werte sind absichtlich als gerundet markiert; sie sind Warnschwellen, keine exakten Sollwerte.",
@@ -2103,7 +2133,10 @@
     "wissen.vision_contract_records": "C-273: Kimi-Wissen in Schema wissen, Quelle docs/kimi_research/supplement_performance_database/data",
     "wissen.travel_medication_records": "C-273: Kimi-Wissen in Schema wissen, Quelle docs/kimi_research/supplement_performance_database/data",
     "wissen.buddy_knowledge_records": "C-273: Kimi-Wissen in Schema wissen, Quelle docs/kimi_research/supplement_performance_database/data",
-    "wissen.community_records": "C-273: Kimi-Wissen in Schema wissen, Quelle docs/kimi_research/supplement_performance_database/data"
+    "wissen.community_records": "C-273: Kimi-Wissen in Schema wissen, Quelle docs/kimi_research/supplement_performance_database/data",
+    "public.koerperorte": "[cmd] C-544: exakt acht Zielorte kuratieren die 16 Injektionsstellen als fuenf Muskelregionen und drei Fettdepots.",
+    "public.koerperort_muskeln": "[read] C-544: sieben kanonische Relationen, weil dorsogluteal und ventrogluteal jeweils zwei Muskeln umfassen.",
+    "medical.injection_sites": "[cmd] C-455/C-544: der bestehende 16er-Katalog bleibt vollstaendig und jede Zeile erhaelt genau einen Koerperort."
   },
   "datenqualitaet": {
     "_kommentar": "Schutz gegen den C-38-Ausfall: Die Zeilenzahl allein reicht nicht. 698.092 konnte als falscher Sollwert gruen werden; Codezahl und Quellenzahl haetten den Verlust gemeldet.",
@@ -5429,9 +5462,10 @@
         "landmark_note",
         "difficulty",
         "is_active",
-        "body_area_code"
+        "body_area_code",
+        "koerperort_id"
       ],
-      "spalten_herkunft": "C-455/E-79: Planner-Konfiguration und Flaechenzuordnung des 16er-Fachkatalogs. rest_days ist nicht E-57s absichtlich leere minimum_rest_days.",
+      "spalten_herkunft": "C-455/E-79: Planner-Konfiguration und Flaechenzuordnung des 16er-Fachkatalogs. C-544 ergaenzt den verpflichtenden, grafikneutralen Koerperort. rest_days ist nicht E-57s absichtlich leere minimum_rest_days.",
       "rls": true,
       "policies": [
         "SELECT"
@@ -6000,6 +6034,46 @@
       "grants_herkunft": "20260911180000_c471_koerperflaechen_struktur.sql: REVOKE ALL fuer PUBLIC, anon und authenticated; danach authenticated SELECT und service_role ALL.",
       "zeilenschutzart": "oeffentlich"
     },
+    {
+      "schema": "public",
+      "name": "koerperorte",
+      "schritt": "544_koerperorte_schema",
+      "spalten": [
+        "id",
+        "code",
+        "name_de",
+        "name_en",
+        "name_th",
+        "art",
+        "beschreibung",
+        "quelle_url",
+        "created_at",
+        "updated_at"
+      ],
+      "spalten_herkunft": "C-544: grafikneutraler, belegter Koerperort als Muskel, Fettdepot oder Landmarke.",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-544: PUBLIC/anon/authenticated/service_role zuerst vollstaendig entzogen; danach authenticated SELECT und service_role ALL.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "public",
+      "name": "koerperort_muskeln",
+      "schritt": "544_koerperorte_schema",
+      "spalten": [
+        "koerperort_id",
+        "koerperort_art",
+        "muscle_group_id",
+        "created_at"
+      ],
+      "spalten_herkunft": "C-544: mehrwertige Zuordnung ausschliesslich von Muskelorten zu kanonischen training.muscle_groups.",
+      "rls": true,
+      "policies": ["SELECT"],
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
+      "grants_herkunft": "C-544: PUBLIC/anon/authenticated/service_role zuerst vollstaendig entzogen; danach authenticated SELECT und service_role ALL.",
+      "zeilenschutzart": "oeffentlich"
+    },
     {"schema":"public","name":"user_allergies","schritt":"498_global_allergies","rls":true,"policies":["SELECT","INSERT","UPDATE","DELETE"],"grants":{"authenticated":["SELECT","INSERT","UPDATE","DELETE"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-498: REVOKE PUBLIC/anon; Nutzer-DML, Coach-Lesen nur ueber eigene allergy_permissions.","zeilenschutzart":"eigene_zeilen_oder_explizit_freigegebener_coach"},
     {"schema":"public","name":"allergen_aliases","schritt":"498_global_allergies","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-498: kuratierter Alias-Katalog, authenticated SELECT, keine anon-Rechte.","zeilenschutzart":"oeffentlich"},
     {"schema":"public","name":"allergy_search_terms","schritt":"525_allergy_search_terms_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-525: getrennter kuratierter Suchwortschatz, authenticated SELECT, keine anon-Rechte.","zeilenschutzart":"oeffentlich"},
@@ -6387,6 +6461,11 @@
       "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]},
       "grants_herkunft": "C-419: aktive Werbeplatzpreise lesbar.",
       "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "public",
+      "name": "koerperorte_touch",
+      "schritt": "544_koerperorte_schema"
     }
   ],
   "fremde_sichten": [

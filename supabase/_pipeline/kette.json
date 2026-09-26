@@ -2643,6 +2643,35 @@
       "depends_on": [
         "c541_experience_level_backfill"
       ]
+    },
+    {
+      "id": "544_koerperorte_schema",
+      "path": "supabase/migrations/20260926003956_c544_koerperorte.sql",
+      "kind": "sql",
+      "creates": "C-544: grafikneutraler Koerperort-Katalog fuer Muskel, Fettdepot und Landmarke, mehrwertige Muskelrelation und nullable Injektionsstellen-FK.",
+      "depends_on": [
+        "455_injection_planner_schema",
+        "531_muscle_alias_read_model"
+      ]
+    },
+    {
+      "id": "544_koerperorte_daten",
+      "path": "supabase/_pipeline/00_querschnitt/544_koerperorte.sql",
+      "kind": "sql",
+      "creates": "C-544: acht belegte Koerperorte, sieben kanonische Muskelrelationen und die Zuordnung aller 16 bestehenden Injektionsstellen.",
+      "depends_on": [
+        "544_koerperorte_schema",
+        "455_injection_planner_catalog_seed"
+      ]
+    },
+    {
+      "id": "544_injection_site_location_required_schema",
+      "path": "supabase/migrations/20260926004445_c544_injection_site_location_required.sql",
+      "kind": "sql",
+      "creates": "C-544: nach dem kuratierten Seed ist der Koerperort jeder Injektionsstelle verpflichtend.",
+      "depends_on": [
+        "544_koerperorte_daten"
+      ]
     }
   ]
 }
