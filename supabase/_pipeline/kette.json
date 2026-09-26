@@ -2538,6 +2538,16 @@
       ]
     },
     {
+      "id": "543_muscle_exercise_inheritance",
+      "path": "supabase/migrations/20260925100000_c543_muscle_exercise_inheritance.sql",
+      "kind": "sql",
+      "creates": "C-543: aliasbereinigte Uebungssicht mit unveraenderter, gekennzeichneter Vererbung nach unten und Sammlung nach oben; direkte Zuordnungen haben Vorrang.",
+      "depends_on": [
+        "531_muscle_alias_read_model",
+        "490_exercise_muscle_factors_daten"
+      ]
+    },
+    {
       "id": "529_stack_item_product_reference_schema",
       "path": "supabase/migrations/20260922065000_c529_stack_item_product_reference.sql",
       "kind": "sql",
