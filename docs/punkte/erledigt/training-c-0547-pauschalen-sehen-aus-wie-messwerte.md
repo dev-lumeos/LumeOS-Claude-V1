@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-90
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 89ad933a
 beruehrt:
   tabellen: [training.exercise_muscles]
 zahlen:
@@ -180,4 +182,35 @@ nicht committed.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Ein Messauftrag.**
+
+> *,,NUR EINE Uebung besitzt konkrete EMG-Faktoren."*
+
+### Und der Fund, der alles dreht
+
+> *,,Pellands 0,5 ist eine RECHENKONVENTION fuer indirekte
+Saetze im WOECHENTLICHEN VOLUMEN, keine gemessene
+Muskelaktivierung je Uebung."*
+
+`[read]` **Die 6.723 Zeilen sind also nicht einmal falsch
+geraten** ? **sie sind eine RICHTIGE Zahl an der falschen
+Stelle.**
+
+`[cmd]` **Er hat die Quelle GELESEN, wie in Punkt B verlangt
+? und damit den Befund vom Kopf auf die Fuesse gestellt.**
+
+### Seine Empfehlung ? angenommen
+
+> *,,Rollenregel und gemessenen Uebung/Muskel-Faktor fachlich
+TRENNEN."*
+
+    Rollenregel     primary 1,0 / secondary 0,5
+                    -> Volumenrechnung, Pelland, gilt immer
+    Messfaktor      je Uebung und Muskel, aus EMG
+                    -> heute: eine Uebung
+
+`[read]` **Dann sagt die Datenbank die Wahrheit: wir kennen die
+Volumenregel, und wir kennen die Aktivierung fast nie.**
+
+**Abgenommen. Die Trennung als C-551.**
+

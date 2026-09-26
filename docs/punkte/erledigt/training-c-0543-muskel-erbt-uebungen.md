@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-90
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 89ad933a
 beruehrt:
   tabellen: [training.exercise_muscles]
 zahlen:
@@ -205,4 +207,23 @@ angefasst.**
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Gebaut ? NICHT live.**
+
+`[cmd]` **`training.muscle_exercises_effective` gibt es in der
+laufenden Datenbank nicht.**
+
+`[cmd]` **6.726 Grundzuordnungen unveraendert ? selbst
+geprueft. Die Auflage ist eingehalten: eine SICHT, keine
+Kopie.**
+
+    Vastus Lateralis   0 -> 356
+    Legs               0 -> 613
+    23.402 eindeutige Paare, keine Dubletten
+    Aliase zaehlen nicht doppelt
+    Legs: 18,7 ms
+
+`[read]` **Und die Herkunft ist gekennzeichnet** ? **geerbt ist
+nicht gemessen, genau wie entschieden.**
+
+**Abgenommen. Einspielen steht aus.**
+

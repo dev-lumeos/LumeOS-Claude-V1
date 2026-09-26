@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-90
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 89ad933a
 beruehrt:
   tabellen: [training.exercises]
 zahlen:
@@ -202,4 +204,40 @@ Dev-Server wurde nicht beruehrt und es wurde nicht committed.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Ein Messauftrag.**
+
+> *,,Die vorhandenen Daten erlauben KEINE sichere vierstufige
+Einstufung. Ohne Bedeutungsentscheidung bleiben 1.416 Uebungen
+offen."*
+
+`[read]` **Genau die Falle aus dem Auftrag ? und er ist nicht
+hineingelaufen.**
+
+### Seine Empfehlung ? angenommen
+
+> *,,`minimum_experience_level` als UNTERE SCHWELLE mit den
+vier Profilstufen."*
+
+`[read]` **Eine Schwelle sagt *,,ab hier"*, eine Note sagt
+*,,so schwer ist es"*** ? **die Schwelle ist ehrlicher, weil
+sie nur eine Grenze behauptet.**
+
+`[cmd]` **Und sie passt zu `experience_level` beim Nutzer
+(C-541, vier Stufen, NOT NULL).**
+
+### Und der wichtigste Satz seines Berichts
+
+> *,,Die zugrunde gelegte Forschung trennt TECHNISCHE
+Schwierigkeit ausdruecklich von LAST und PERSOENLICHER
+Situation."*
+
+`[read]` **Eine Kniebeuge mit 40 kg und eine mit 200 kg sind
+dieselbe Uebung** ? **die Schwelle meint die TECHNIK.**
+
+### Was offen bleibt
+
+`[cmd]` **Die Kuration der 1.416** ? **eine Schwelle je Uebung
+braucht weiter eine Quelle. Als C-550.**
+
+**Abgenommen.**
+

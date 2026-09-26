@@ -9,6 +9,8 @@ kind_von: null
 entscheidung: E-90
 agent: codex
 beauftragt: 2026-09-08
+erledigt: 2026-09-08
+commit: 89ad933a
 beruehrt:
   tabellen: [training.exercises]
 zahlen:
@@ -242,4 +244,34 @@ Dev-Server wurde nicht beruehrt und es wurde nicht committed.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+**2026-09-08, Orchestrator. Ein Messauftrag.**
+
+    exercise_type    1.316 sicher, 100 widerspruechlich
+    tracking_type      905 ableitbar, 511 Bodyweight
+                       muessen kuriert werden
+    source           fuer alle 1.416 belegt
+    sort_weight      fuer keine fachlich ableitbar
+
+`[read]` **Die 100 Widersprueche sind der Fund** ? **nicht die
+1.316, die gehen.**
+
+> *,,Die 396 bestehenden Saetze duerfen nicht anhand eines
+NACHTRAEGLICH GEAENDERTEN Katalogwertes umgedeutet werden."*
+
+`[read]` **Ein erfasster Satz gehoert dem Nutzer** ? **der
+Katalog darf ihn nicht ruecklings neu deuten.**
+
+### sort_weight ? entschieden
+
+`[read]` **Eine Spalte, fuer die es KEINE fachliche Ableitung
+gibt, ist keine Eigenschaft der Uebung.**
+
+`[cmd]` **Sie bleibt, aber als das, was sie ist: eine
+HANDGESETZTE Reihenfolge, heute ungesetzt.**
+
+`[read]` **Die Sortierung laeuft bis dahin ueber Name und
+Treffergenauigkeit** ? **und der Vermerk an der Spalte sagt
+das.**
+
+**Abgenommen.**
+
