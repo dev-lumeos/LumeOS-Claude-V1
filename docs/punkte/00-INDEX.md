@@ -494,7 +494,7 @@
 | `C-536` | fehler | mittel | [drei Abwesenheitsaussagen sind ueberholt](erledigt/training-c-0536-abwesenheitsaussagen-ueberholt.md) | erledigt | — | — |
 | `C-543` | feature | hoch | [ein Muskel erbt die Uebungen seiner Eltern](erledigt/training-c-0543-muskel-erbt-uebungen.md) | erledigt | — | — |
 | `C-545` | befund | hoch | [difficulty ist ein Wert fuer alles](erledigt/training-c-0545-difficulty-ist-ein-wert-fuer-alles.md) | erledigt | — | C-550 |
-| `C-546` | feature | mittel | [Sehnen und Nerven je Muskel](todos/training-c-0546-sehnen-und-nerven-je-muskel.md) | offen | — | — |
+| `C-546` | feature | hoch | [Sehnen und Nerven je Muskel](todos/training-c-0546-sehnen-und-nerven-je-muskel.md) | offen | — | — |
 | `C-547` | befund | hoch | [6.723 Pauschalen sehen aus wie Messwerte](erledigt/training-c-0547-pauschalen-sehen-aus-wie-messwerte.md) | erledigt | — | C-551 |
 | `C-548` | befund | hoch | [fuenf Spalten mit einem Wert fuer 1.416 Uebungen](erledigt/training-c-0548-fuenf-spalten-ein-wert.md) | erledigt | — | — |
 | `C-550` | feature | mittel | [minimum_experience_level statt difficulty](todos/training-c-0550-minimum-experience-level.md) | offen | — | — |

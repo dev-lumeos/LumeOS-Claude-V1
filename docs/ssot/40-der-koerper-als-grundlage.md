@@ -180,3 +180,25 @@ oder Ausdauer, tragen aber `strength` und `weight_reps`.**
     C-546  Sehnen und Nerven
     G-509  der Planer -- nach der eigenen Sitzung
 
+## Nachtrag: der Painpoint wird ein Ziel
+
+Tom, 2026-09-08:
+
+> an painpoints koennen allfaellige injektionspunkte unter die
+> haut fuer peptide sein, zb bpc 157/tb500
+
+`[read]` **Damit ist ein Painpoint nicht nur eine Beobachtung**
+? **er kann ein ZIEL werden.**
+
+    Beobachtung   "das Knie tut weh"
+    Ort           Ansatz der Patellasehne
+    Ziel          subkutane Gabe an genau dieser Stelle
+
+`[read]` **Die Kette laeuft also in beide Richtungen: vom
+Koerper zur Beobachtung UND von der Beobachtung zurueck an den
+Koerper.**
+
+`[cmd]` **Und sie braucht eine feinere Aufloesung als den
+Muskel** ? **C-546 (Sehnen und Nerven) ist deshalb
+Voraussetzung, nicht Beiwerk.**
+

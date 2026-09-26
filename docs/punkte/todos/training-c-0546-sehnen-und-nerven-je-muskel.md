@@ -2,7 +2,7 @@
 nr: C-546
 typ: feature
 modul: training
-schwere: mittel
+schwere: hoch
 angelegt: 2026-09-08
 braucht: []
 kind_von: null
@@ -80,3 +80,24 @@ nicht.**
     A5  Gegenprobe: ein Muskel ohne Beleg traegt NICHTS,
         keinen Platzhalter.
     A6  Sicherung, Vollkette, ALLE Waechter.
+
+## Toms Hinweis macht diesen Punkt zur Voraussetzung
+
+Tom, 2026-09-08:
+
+> an painpoints koennen allfaellige injektionspunkte unter die
+> haut fuer peptide sein, sprich als beispiel bpc 157/tb500
+
+`[read]` **Ein Schmerz sitzt am SEHNENANSATZ, im MUSKELBAUCH
+oder am NERV** ? **wer eine lokale Gabe setzen will, muss
+wissen, WORAN es liegt.**
+
+`[cmd]` **`recovery.checkins.pain_areas` traegt heute 370
+Zeilen ? unverknuepft.**
+
+`[read]` **Ohne Sehnen und Nerven bleibt *Knie tut weh* eine
+Koordinate auf einem Bild.**
+
+`[cmd]` **Das hebt die Dringlichkeit: von *mittel* auf
+*hoch*.**
+
