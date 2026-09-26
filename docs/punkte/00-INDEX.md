@@ -5,11 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 242 |
+| `todos` | 248 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 562 |
-| **gesamt** | **806** |
+| `erledigt` | 563 |
+| **gesamt** | **812** |
 
 ## medical — 49
 
@@ -572,7 +571,9 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 14
+## goals — 20
+
+### beauftragbar — 19
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -589,7 +590,18 @@
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 | `G-421` | feature | hoch | [die vier fehlenden Reiter in Goals & Body](erledigt/goals-g-0421-die-vier-fehlenden-reiter.md) | erledigt | — | G-422 |
 | `G-422` | befund | mittel | [Schreibwege ohne Aufrufer](todos/goals-g-0422-zwei-schreibwege-ohne-aufrufer.md) | offen | — | — |
-| `G-510` | befund | hoch | [Bestandsaufnahme Goals, gegen alle vier Quellen](laufend_claudecode/goals-g-0510-bestandsaufnahme.md) | laeuft (claudecode) | — | — |
+| `G-510` | befund | hoch | [Bestandsaufnahme Goals, gegen alle vier Quellen](erledigt/goals-g-0510-bestandsaufnahme.md) | erledigt | — | G-511, G-512, G-513, G-514, G-515, G-516 |
+| `G-511` | befund | hoch | [die Phase entscheidet nicht ueber die Kalorien](todos/goals-G-0511-phase-entscheidet-nicht-ueber-kalorien.md) | offen | — | — |
+| `G-512` | befund | hoch | [die FFMI-Kachel zeigte eine erfundene Zahl als echte](todos/goals-G-0512-ffmi-zeigte-eine-erfundene-zahl.md) | offen | — | — |
+| `G-513` | befund | hoch | [die Phase laesst sich nirgends setzen](todos/goals-G-0513-keine-oberflaeche-setzt-eine-phase.md) | offen | — | — |
+| `G-514` | befund | mittel | [die Modulverrechnung, der Zweck des Moduls, fehlt ganz](todos/goals-G-0514-die-modulverrechnung-fehlt-ganz.md) | offen | — | — |
+| `G-515` | befund | mittel | [die drei Goals-Mockups widersprechen sich achtmal in Zahlen](todos/goals-G-0515-die-drei-mockups-widersprechen-sich.md) | offen | — | — |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-516` | befund | mittel | [das Vorgaengerrepo traegt die Phasenzahlen, die uns fehlen](todos/goals-G-0516-das-vorgaengerrepo-hat-die-phasenzahlen.md) | offen | G-511 | — |
 
 ## coach — 57
 
