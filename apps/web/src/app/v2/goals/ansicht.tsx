@@ -66,6 +66,8 @@ import {
   FehlendeMessKacheln, FehlendePhysiqueKacheln,
 } from './fehlende-kacheln'
 import { GoalsPhysiqueView, GoalsPosesView } from './tab-physique'
+// G-513: Phase beginnen, beenden, Vorschlag beantworten.
+import { PhaseBeginnen, PhaseBeenden, PhaseVorschlag } from './phase-setzen'
 
 /** C-418/3: die Quelle unter der Trennlinie. */
 const QUELLE = 'theme-v1/module-goals-pro.jsx'
@@ -169,6 +171,14 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
     juengsteMessung: echt.messungen.length ? echt.messungen[echt.messungen.length - 1] : null,
     stichtag: echt.stichtag,
   }
+
+  // `[cmd]` **G-513: laufend heisst `actual_end_date == null`.**
+  // `phase_am` gibt auch eine beendete Phase zurueck, solange sie am
+  // Stichtag noch galt — `PhaseEcht` zeigt sie deshalb mit der Pille
+  // „abgeschlossen" (`phase-echt.tsx:119`). **Beenden und Vorschlag
+  // gelten aber nur fuer eine, die wirklich laeuft.**
+  const laufendePhase = echt.phase && !echt.phase.actual_end_date
+    ? echt.phase : null
 
   const kontext = React.useMemo(() => ({
     open: (m: ModalZustand) => setModal(m),
@@ -291,6 +301,37 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
             <>
               {echt.phase
                 && <PhaseEcht phase={echt.phase} stichtag={echt.stichtag} />}
+              {/* ══ G-513: der Knopf, der gefehlt hat ══════════════
+                  `[cmd]` **Fuenf Funktionen in der Datenbank, null
+                  Aufrufer** — `goal_phase_start`, `goal_phase_end`,
+                  `phase_transition_recommendation`,
+                  `phase_transition_respond`, `phase_am`.
+
+                  `[cmd]` **`phase_am` liefert auch eine BEENDETE
+                  Phase**, wenn sie am Stichtag noch galt
+                  (`111_…sql:198`). `[read]` **Laufend heisst
+                  `actual_end_date == null`** — wer nur auf
+                  `echt.phase` prueft, sperrt den Start hinter einer
+                  Phase, die laengst vorbei ist. */}
+              <PhaseBeginnen stichtag={echt.stichtag} aktiv={laufendePhase} />
+              {laufendePhase && (
+                <>
+                  <PhaseBeenden phase={laufendePhase} stichtag={echt.stichtag} />
+                  {/* `[cmd]` **Der Vorschlag kommt aus der SPALTE,
+                      nicht aus dem Funktionsaufruf.**
+                      `phase_transition_recommendation` macht ein
+                      `UPDATE` (`422_…sql:50`) — **eine Leseseite darf
+                      nicht schreiben.** `[read]` **Die Funktion
+                      hinterlegt ihr Ergebnis in `recommended_next`
+                      und `transition_reason`; genau die zeigt die
+                      Kachel.** */}
+                  <PhaseVorschlag phase={laufendePhase}
+                                  vorschlag={{
+                                    recommended_next: laufendePhase.recommended_next,
+                                    transition_reason: laufendePhase.transition_reason,
+                                  }} />
+                </>
+              )}
               {/* `[cmd]` G-365: die sechs Mockup-Kacheln, die oben
                   fehlen — OBERHALB der Linie, weil sie zum Soll des
                   Reiters gehoeren. Tom, 2026-09-07: „oben wird alles
