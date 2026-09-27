@@ -7,8 +7,9 @@
 |---|---|
 | `todos` | 246 |
 | `laufend_codex` | 1 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 565 |
-| **gesamt** | **812** |
+| **gesamt** | **813** |
 
 ## medical — 49
 
@@ -665,7 +666,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 201
+## quer — 202
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -870,6 +871,7 @@
 | `G-490` | fehler | mittel | [der Spaltenwaechter kennt die Tabelle nicht](erledigt/quer-g-0490-spaltenwaechter-kennt-tabelle-nicht.md) | erledigt | — | — |
 | `G-498` | fehler | mittel | [.v2-hinweis liegt unter 4,5:1](erledigt/quer-g-0498-hinweis-kontrast.md) | erledigt | — | — |
 | `G-501` | fehler | hoch | [der Ruecknahmeklick beim Erfahrungsgrad](erledigt/quer-g-0501-ruecknahmeklick-erfahrungsgrad.md) | erledigt | — | — |
+| `G-517` | fehler | mittel | [die Probe meldet die Zeitueberschreitung, nicht die Ursache](laufend_claudecode/quer-g-0517-probe-meldet-die-ursache-nicht.md) | laeuft (claudecode) | — | — |
 
 ## buddy — 1
 
