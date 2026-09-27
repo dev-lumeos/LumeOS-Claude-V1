@@ -7,6 +7,8 @@ angelegt: 2026-09-08
 braucht: []
 kind_von: C-547
 entscheidung: C-547
+agent: codex
+beauftragt: 2026-09-27
 beruehrt:
   tabellen: [training.exercise_muscles]
 zahlen:
@@ -62,3 +64,11 @@ Einzige, was wirklich gemessen ist.**
     A5  Gegenprobe: eine Volumenrechnung gibt dasselbe
         Ergebnis wie vorher.
     A6  Sicherung, Vollkette, ALLE Waechter.
+
+## Bericht
+
+_(vom Agenten anzuhaengen)_
+
+## Abnahme
+
+_(vom Orchestrator)_

@@ -16,6 +16,19 @@ function one<T>(sql: string): T {
   return JSON.parse(payload) as T
 }
 
+function failure(sql: string): string {
+  try {
+    execFileSync('docker', [
+      'exec', container, 'psql', '-X', '-q', '-v', 'ON_ERROR_STOP=1', '-U', 'postgres', '-d', db,
+      '-c', sql,
+    ], { encoding: 'utf8', stdio: 'pipe' })
+  } catch (error) {
+    const failed = error as { stdout?: string; stderr?: string }
+    return `${failed.stdout ?? ''}\n${failed.stderr ?? ''}`
+  }
+  throw new Error('SQL sollte scheitern, war aber erfolgreich.')
+}
+
 test('C-544: ein Koerperort ist ein eigener Begriff mit mehrwertiger Muskelrelation', () => {
   const result = one<{
     locationsTable: boolean
@@ -276,4 +289,21 @@ test('C-544: authenticated kann beide Katalogtabellen wirklich lesen', () => {
   `)
 
   assert.deepEqual(result, { locations: 8, muscleLinks: 7 })
+})
+
+test('C-544: ein Fettdepot kann technisch keine Muskelrelation bekommen', () => {
+  const message = failure(`
+    BEGIN;
+    INSERT INTO public.koerperort_muskeln (koerperort_id, muscle_group_id)
+    SELECT ort.id, muscle.id
+    FROM public.koerperorte AS ort
+    CROSS JOIN training.muscle_groups AS muscle
+    WHERE ort.art = 'fettdepot'
+      AND muscle.canonical_muscle_group_id IS NULL
+    ORDER BY ort.code, muscle.name
+    LIMIT 1;
+    ROLLBACK;
+  `)
+
+  assert.match(message, /koerperort_muskeln_ort_fk/)
 })

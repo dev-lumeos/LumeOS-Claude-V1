@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 246 |
-| `laufend_codex` | 1 |
+| `todos` | 244 |
+| `laufend_codex` | 3 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 565 |
 | **gesamt** | **813** |
@@ -497,11 +497,11 @@
 | `C-536` | fehler | mittel | [drei Abwesenheitsaussagen sind ueberholt](erledigt/training-c-0536-abwesenheitsaussagen-ueberholt.md) | erledigt | — | — |
 | `C-543` | feature | hoch | [ein Muskel erbt die Uebungen seiner Eltern](erledigt/training-c-0543-muskel-erbt-uebungen.md) | erledigt | — | — |
 | `C-545` | befund | hoch | [difficulty ist ein Wert fuer alles](erledigt/training-c-0545-difficulty-ist-ein-wert-fuer-alles.md) | erledigt | — | C-550 |
-| `C-546` | feature | hoch | [Sehnen und Nerven je Muskel](todos/training-c-0546-sehnen-und-nerven-je-muskel.md) | offen | — | — |
+| `C-546` | feature | hoch | [Sehnen und Nerven je Muskel](laufend_codex/training-c-0546-sehnen-und-nerven-je-muskel.md) | laeuft (codex) | — | — |
 | `C-547` | befund | hoch | [6.723 Pauschalen sehen aus wie Messwerte](erledigt/training-c-0547-pauschalen-sehen-aus-wie-messwerte.md) | erledigt | — | C-551 |
 | `C-548` | befund | hoch | [fuenf Spalten mit einem Wert fuer 1.416 Uebungen](erledigt/training-c-0548-fuenf-spalten-ein-wert.md) | erledigt | — | — |
 | `C-550` | feature | mittel | [minimum_experience_level statt difficulty](todos/training-c-0550-minimum-experience-level.md) | offen | — | — |
-| `C-551` | feature | hoch | [Rollenregel und Messfaktor trennen](todos/training-c-0551-rollenregel-und-messfaktor-trennen.md) | offen | — | — |
+| `C-551` | feature | hoch | [Rollenregel und Messfaktor trennen](laufend_codex/training-c-0551-rollenregel-und-messfaktor-trennen.md) | laeuft (codex) | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](erledigt/training-g-0025-training-an-echte-daten-anschliessen.md) | erledigt | — | G-502, G-503, G-504, G-505, G-506, G-507, G-508 |

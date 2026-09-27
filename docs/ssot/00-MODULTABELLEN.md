@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-26 — 203 Tabellen, 2793 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-27 — 203 Tabellen, 2794 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -55,7 +55,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `progress_photos` | 13 | 0 | 2026-09-09 |
 | `user_goals` | 23 | 11 | ? |
 
-## medical — 31 Tabellen, 538 Spalten
+## medical — 31 Tabellen, 539 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
@@ -70,7 +70,7 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `injection_needle_recommendations` | 12 | 8 | 2026-09-02 |
 | `injection_site_conditions` | 10 | 0 | 2026-09-02 |
 | `injection_site_overrides` | 9 | 0 | 2026-09-09 |
-| `injection_sites` | 21 | 16 | 2026-09-02 |
+| `injection_sites` | 22 | 16 | 2026-09-02 |
 | `injection_tissue_condition_guidance` | 6 | 1 | 2026-09-02 |
 | `lab_marker_catalog` | 13 | 66 | ? |
 | `lab_reports` | 18 | 13 | ? |

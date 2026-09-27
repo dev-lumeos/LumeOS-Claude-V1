@@ -280,3 +280,8 @@ danebenging** ? **statt es zu behaupten.**
 
 **Abgenommen. Einspielen steht aus.**
 
+## Nachtrag: LIVE eingespielt, 2026-09-27
+
+`[cmd]` **`public.koerperorte` und `public.koerperort_muskeln`
+stehen, selbst nachgemessen.**
+
