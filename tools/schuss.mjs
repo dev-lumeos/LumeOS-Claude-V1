@@ -92,6 +92,102 @@ const seite = await kontext.newPage()
 const fehler = []
 seite.on('console', m => { if (m.type() === 'error') fehler.push(m.text()) })
 
+// ── G-517 (2026-09-27): die Probe meldet die URSACHE ─────────────
+//
+// `[cmd]` **Anlass:** Tom meldete *,,ich hab ueberall 404"*.
+// **`schuss.mjs` sagte dazu nur:**
+//
+//     page.waitForURL: Timeout 60000ms exceeded.
+//
+// `[read]` **Das sagt, dass etwas nicht geschah — nicht, warum.**
+//
+// `[cmd]` **Die Ursache war:** das HTML kam, **kein JavaScript
+// lud** — vier 404er auf `/_next/static/…`. Der Anmeldeknopf tat
+// nichts, weil kein Code hinter ihm war.
+//
+// `[cmd]` **Es hat zwei Laeufe gekostet (G-510, G-513) und eine
+// falsche Faehrte** (der alte Chromium aus G-474 wurde
+// verdaechtigt).
+//
+// `[read]` **Das Werkzeug ZAEHLTE die Konsolenfehler die ganze
+// Zeit** — es meldete sie nur nicht, wenn es vorher abbrach. **Der
+// `try`-Block hatte ein `finally`, aber kein `catch`.**
+
+/** Fehlgeschlagene Anfragen: 404 & Co., ueber den ganzen Lauf. */
+const kaputt = []
+seite.on('response', a => {
+  if (a.status() >= 400) kaputt.push({ status: a.status(), url: a.url() })
+})
+// `[read]` **Eine Anfrage, die gar nicht ankommt, hat keine
+// Antwort** — sie taucht nur hier auf.
+seite.on('requestfailed', a => {
+  kaputt.push({ status: 'fehlgeschlagen', url: a.url(),
+    grund: a.failure()?.errorText ?? '' })
+})
+
+/** Nur der Pfad — der Ursprung ist bei jeder Zeile derselbe. */
+const kurz = u => String(u).replace(BASIS, '').replace('http://localhost:3200', '')
+
+/**
+ * Der Sonderfall mit bekannter Ursache und bekannter Behebung.
+ *
+ * `[cmd]` **Kein JavaScript geladen** heisst: das Dokument kam
+ * (Status 200), aber die Buendel unter `/_next/static/` fehlen.
+ * `[read]` **Dann steht die Seite da und tut nichts** — kein
+ * Knopf wirkt, und jede Route sieht aus, als fehle sie.
+ *
+ * `[cmd]` **Ursache:** der laufende `next dev` fordert neu
+ * uebersetzte Dateien an, die sein `.next` nicht hat (am Marker
+ * `?v=<zahl>` erkennbar).
+ */
+function keinJsGeladen() {
+  return kaputt.filter(k => /\/_next\/static\/.*\.(js|css)/.test(k.url))
+}
+
+// `[cmd]` **A5: die Gegenprobe braucht einen echten 404.** `[read]`
+// **Den Server dafuer zu beschaedigen kommt nicht in Frage** — er
+// gehoert Tom und andere arbeiten daran. **Stattdessen blockt der
+// Browser die Buendel, genau wie ein kaputtes `.next` es tut.**
+//
+// `[read]` **Nur ueber eine Umgebungsvariable, nie ueber einen
+// Schalter** — ein Schalter im Hilfetext lockt dazu, ihn im Ernst
+// zu benutzen.
+if (process.env.LUMEOS_SABOTAGE_404 === '1') {
+  await seite.route('**/_next/static/**/*.js', r => r.fulfill({
+    status: 404, body: 'G-517 Gegenprobe',
+  }))
+}
+
+/** Was im Bericht steht, wenn es schiefging. */
+function befund() {
+  const js = keinJsGeladen()
+  const b = {
+    konsolenfehler: fehler.length,
+    // `[read]` **Nur die erste Zeile je Meldung.** Ein React-Fehler
+    // schleppt dreissig `at …`-Zeilen mit; im Abbruchbericht
+    // verdecken sie genau das, wofuer er da ist. **Der volle Text
+    // steht im normalen Lauf weiterhin unter `fehler`.**
+    fehler: fehler.slice(0, 5).map(f => String(f).split('\n')[0].slice(0, 200)),
+    fehlgeschlagene_anfragen: kaputt.length,
+    // `[read]` **Die ersten zehn reichen** — bei kaputtem Buendel
+    // sind es immer dieselben vier bis sechs.
+    kaputt: kaputt.slice(0, 10).map(k => ({ ...k, url: kurz(k.url) })),
+  }
+  if (js.length) {
+    b.diagnose = 'KEIN JAVASCRIPT GELADEN'
+    b.bedeutung =
+      'Das HTML kam, die Buendel unter /_next/static/ fehlen. Die Seite '
+      + 'steht da und tut nichts — kein Knopf wirkt, und jede Route sieht '
+      + 'aus, als fehle sie. Das ist KEIN Fehler der Anwendung.'
+    b.behebung =
+      'Beide `next dev` beenden und neu starten. `.next` NICHT loeschen '
+      + '(Projektregel). Der laufende Prozess fordert uebersetzte Dateien '
+      + 'an, die sein .next nicht hat.'
+    b.betroffen = js.slice(0, 6).map(k => `${k.status}  ${kurz(k.url)}`)
+  }
+  return b
+}
+
 // A-45: Anfragen sammeln — aber nur waehrend eines Laufs. `sammler`
 // zeigt auf die Liste des laufenden Durchgangs oder ist `null`; die
 // Anmeldung faellt damit heraus.
@@ -240,6 +336,44 @@ try {
     ...(selektoren.length ? { zaehler } : {}),
     ...(klicks.length || tippen.length ? { treffer } : {}),
   }, null, 2))
+} catch (e) {
+  // ── G-517: hier stand NICHTS ──────────────────────────────────
+  //
+  // `[read]` **Der Block hatte ein `finally`, aber kein `catch`** —
+  // **die Ausnahme verliess das Werkzeug mit Playwrights blosser
+  // Meldung, waehrend `fehler[]` und die 404er gefuellt danebenlagen.**
+  //
+  // `[read]` **Gemeldet wird auf `stderr` und als JSON** — die
+  // Meldung darf nicht in `stdout` landen, sonst zerbricht sie jeden
+  // Aufrufer, der die Ausgabe als JSON liest.
+  const b = befund()
+  console.error('\n══ SCHUSS FEHLGESCHLAGEN ══════════════════════════')
+  console.error(String(e?.message ?? e).split('\n')[0])
+  if (b.diagnose) {
+    console.error(`\n${b.diagnose}`)
+    console.error(b.bedeutung)
+    console.error(`\nBetroffen:\n  ${b.betroffen.join('\n  ')}`)
+    console.error(`\nBEHEBUNG: ${b.behebung}`)
+  } else if (b.fehlgeschlagene_anfragen) {
+    console.error(`\n${b.fehlgeschlagene_anfragen} fehlgeschlagene Anfrage(n):`)
+    for (const k of b.kaputt) console.error(`  ${k.status}  ${k.url}`)
+  }
+  if (b.konsolenfehler) {
+    console.error(`\n${b.konsolenfehler} Konsolenfehler, die ersten:`)
+    for (const f of b.fehler) console.error(`  ${String(f).split('\n')[0].slice(0, 160)}`)
+  }
+  if (!b.fehlgeschlagene_anfragen && !b.konsolenfehler) {
+    console.error('\nKeine 404er, keine Konsolenfehler — die Ursache liegt '
+      + 'woanders (Selektor? Zeitpunkt? Anmeldung?).')
+  }
+  console.error('═══════════════════════════════════════════════════\n')
+
+  console.log(JSON.stringify({
+    ok: false, pfad, ziel,
+    abbruch: String(e?.message ?? e).split('\n')[0],
+    ...b,
+  }, null, 2))
+  process.exitCode = 1
 } finally {
   await browser.close()
 }
