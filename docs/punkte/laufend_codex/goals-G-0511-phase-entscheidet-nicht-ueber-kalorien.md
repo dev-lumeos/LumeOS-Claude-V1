@@ -9,6 +9,8 @@ braucht: []
 kind_von: G-510
 entscheidung: E-91
 
+agent: codex
+beauftragt: 2026-09-27
 beruehrt:
   tabellen:
     - goals.goal_phases
@@ -194,4 +196,83 @@ AKTIVER Plan ist SSOT, nicht eine Vorliebe im Profil.**
         Kalorienziel folgt. Belegt.
     N6  die 17 Leser von nutrition_targets
         unveraendert.
+
+## N3 entschieden, 2026-09-27, Orchestrator
+
+### Seine Messung
+
+    Profile                                   7
+    aktive Phasen                             3
+    ohne aktive Phase                         4
+      davon noch nie eine Phase               4
+      davon mit gueltiger Zielzeile           2
+    historische Phasenluecken                 0
+    Zielzeilen insgesamt                      5
+
+### Und der zweischichtige Fall
+
+> *,,`berechne_zielwerte` rechnet ohne Phase weiterhin aus
+`profiles.nutrition_goal`. Bei einem phasenlosen Profil
+entstehen so aktuell 3.090,3 kcal."*
+
+> *,,`zielwerte_am` nimmt STETS die juengste Zielzeile. Ob am
+Stichtag eine Phase existiert, prueft die Funktion nicht."*
+
+`[read]` **Nur die Berechnung umzustellen genuegt also nicht ?
+zwei phasenlose Profile saehen weiter alte Zielwerte.**
+
+## Die Entscheidung
+
+**1** ? **Seine Empfehlung wird uebernommen.**
+
+> *,,Ohne aktive Phase KEIN errechnetes Kalorienziel, sondern
+ein ausdrueckliches Hindernis `keine_aktive_phase`. Kein
+Rueckfall auf `nutrition_goal` und kein stillschweigendes
+Maintenance/TDEE-Ziel."*
+
+`[read]` **Dieselbe Haltung wie C-500 (Vitamin E), C-512 (die
+Portionen) und C-542 (die Abwesenheit): lieber eine Luecke, die
+auffaellt, als eine Zahl, die stimmt, weil sie geraten wurde.**
+
+`[cmd]` **Und sein Beleg ist stark: Spec und Mockup leiten die
+Kalorien aus Phasenparametern ab, der Vorgaenger setzt eine
+Phase VORAUS, und der einzige gegenteilige Text
+(*,,ohne Phase bleibt die Rate neutral"*) wird vom heutigen
+Code selbst nicht erfuellt ? er wendet +10 % an.**
+
+**2** ? **Eine Zielzeile gehoert ihrer Phase und endet mit ihr.**
+
+`[read]` **Das ist die Antwort auf seine zweite Frage. Eine
+Zielzeile ohne Phase ist dasselbe wie eine Zahl ohne Quelle.**
+
+`[cmd]` **`zielwerte_am` darf keine Zeile liefern, deren Phase
+am Stichtag nicht laeuft** ? **sonst bleibt die Umstellung
+wirkungslos, wie er gemessen hat.**
+
+`[read]` **Und das deckt auch den Fall, den er nicht genannt
+hat: eine Phase endet, eine neue beginnt spaeter ? dazwischen
+gilt keine alte Zahl weiter.**
+
+**3** ? **Verpflichtend nach dem Onboarding: JA, aber das baut
+dieser Punkt nicht.**
+
+`[cmd]` **Das Nutzer-Onboarding fehlt ganz (steht in
+`docs/todo`, C-541 hat es beruehrt).** **Wenn es kommt, setzt
+es die erste Phase ? wie es den Erfahrungsgrad setzt.**
+
+`[read]` **Bis dahin ist `keine_aktive_phase` der ehrliche
+Zustand, und die Oberflaeche aus G-513 fuehrt aus ihm heraus.**
+
+## Ergaenzte Abnahmebedingungen
+
+    N7  zielwerte_am liefert keine Zeile, deren Phase
+        am Stichtag nicht laeuft. Gegenprobe mit einer
+        beendeten Phase.
+    N8  keine_aktive_phase ist ein ausdrueckliches
+        Hindernis, kein NULL und keine 0.
+    N9  die beiden phasenlosen Profile mit gueltiger
+        Zielzeile: was passiert mit ihnen? GEMELDET,
+        nicht stillschweigend geloescht.
+    N10 die 17 Leser: welche brechen bei einem
+        Hindernis? GEMELDET an Claude Code.
 

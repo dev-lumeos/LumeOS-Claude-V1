@@ -5,7 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 247 |
+| `todos` | 246 |
+| `laufend_codex` | 1 |
 | `erledigt` | 565 |
 | **gesamt** | **812** |
 
@@ -590,7 +591,7 @@
 | `G-421` | feature | hoch | [die vier fehlenden Reiter in Goals & Body](erledigt/goals-g-0421-die-vier-fehlenden-reiter.md) | erledigt | — | G-422 |
 | `G-422` | befund | mittel | [Schreibwege ohne Aufrufer](todos/goals-g-0422-zwei-schreibwege-ohne-aufrufer.md) | offen | — | — |
 | `G-510` | befund | hoch | [Bestandsaufnahme Goals, gegen alle vier Quellen](erledigt/goals-g-0510-bestandsaufnahme.md) | erledigt | — | G-511, G-512, G-513, G-514, G-515, G-516 |
-| `G-511` | befund | hoch | [die Phase entscheidet nicht ueber die Kalorien](todos/goals-G-0511-phase-entscheidet-nicht-ueber-kalorien.md) | offen | — | — |
+| `G-511` | befund | hoch | [die Phase entscheidet nicht ueber die Kalorien](laufend_codex/goals-G-0511-phase-entscheidet-nicht-ueber-kalorien.md) | laeuft (codex) | — | — |
 | `G-512` | befund | hoch | [die FFMI-Kachel zeigte eine erfundene Zahl als echte](todos/goals-G-0512-ffmi-zeigte-eine-erfundene-zahl.md) | offen | — | — |
 | `G-513` | befund | hoch | [die Phase laesst sich nirgends setzen](erledigt/goals-g-0513-keine-oberflaeche-setzt-eine-phase.md) | erledigt | — | — |
 | `G-514` | befund | mittel | [die Modulverrechnung, der Zweck des Moduls, fehlt ganz](todos/goals-G-0514-die-modulverrechnung-fehlt-ganz.md) | offen | — | — |
