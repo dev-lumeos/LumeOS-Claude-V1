@@ -6,6 +6,10 @@
 // sonst raeumt der Build `.next/types/**` ab, waehrend tsc daraus liest.
 const distDir = process.env.LUMEOS_DIST_DIR || '.next'
 
+// G-518: die Trennung durchsetzen, nicht nur anbieten. Begruendung
+// und Messung in tools/dist-dir-sperre.js.
+require('../../tools/dist-dir-sperre').pruefeDistDir('admin')
+
 const nextConfig = {
   distDir,
   // Lint laeuft einmal explizit im Root-Gate, nicht erneut pro Build.

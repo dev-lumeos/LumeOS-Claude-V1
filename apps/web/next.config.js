@@ -22,6 +22,10 @@
 // Laeufen gruen bei laufendem Dev-Server. Beide Teile gehoeren zusammen.
 const distDir = process.env.LUMEOS_DIST_DIR || '.next'
 
+// G-518: die Trennung durchsetzen, nicht nur anbieten. Begruendung
+// und Messung in tools/dist-dir-sperre.js.
+require('../../tools/dist-dir-sperre').pruefeDistDir('web')
+
 const nextConfig = {
   distDir,
   // G-473: Quellkarten NUR auf Anforderung.
