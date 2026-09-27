@@ -6,8 +6,7 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 247 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 564 |
+| `erledigt` | 565 |
 | **gesamt** | **812** |
 
 ## medical — 49
@@ -593,7 +592,7 @@
 | `G-510` | befund | hoch | [Bestandsaufnahme Goals, gegen alle vier Quellen](erledigt/goals-g-0510-bestandsaufnahme.md) | erledigt | — | G-511, G-512, G-513, G-514, G-515, G-516 |
 | `G-511` | befund | hoch | [die Phase entscheidet nicht ueber die Kalorien](todos/goals-G-0511-phase-entscheidet-nicht-ueber-kalorien.md) | offen | — | — |
 | `G-512` | befund | hoch | [die FFMI-Kachel zeigte eine erfundene Zahl als echte](todos/goals-G-0512-ffmi-zeigte-eine-erfundene-zahl.md) | offen | — | — |
-| `G-513` | befund | hoch | [die Phase laesst sich nirgends setzen](laufend_claudecode/goals-G-0513-keine-oberflaeche-setzt-eine-phase.md) | laeuft (claudecode) | — | — |
+| `G-513` | befund | hoch | [die Phase laesst sich nirgends setzen](erledigt/goals-g-0513-keine-oberflaeche-setzt-eine-phase.md) | erledigt | — | — |
 | `G-514` | befund | mittel | [die Modulverrechnung, der Zweck des Moduls, fehlt ganz](todos/goals-G-0514-die-modulverrechnung-fehlt-ganz.md) | offen | — | — |
 | `G-515` | befund | mittel | [die drei Goals-Mockups widersprechen sich achtmal in Zahlen](todos/goals-G-0515-die-drei-mockups-widersprechen-sich.md) | offen | — | — |
 
