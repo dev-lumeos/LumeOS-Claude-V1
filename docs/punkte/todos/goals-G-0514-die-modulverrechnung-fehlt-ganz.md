@@ -120,3 +120,35 @@ Module** und gehoert zu Codex, nicht in `apps/`.
 `[read]` **Dieser Punkt stellt nur fest, dass sechs Kacheln auf
 EINE fehlende Tabelle warten** — und dass das nirgends an einer
 Stelle stand.
+
+## Nachtrag 2026-09-28 — aus G-524 zusammengefuehrt
+
+`[cmd]` **G-524 (27.09.) hat dieselbe Messung noch einmal gemacht**
+und ist eine Dublette dieses Punktes. Drei Zeilen daraus sind neu
+und stehen deshalb hier:
+
+**1. Zwei Teile von `tdee_settings` haben KEINEN Ersatz.**
+`[cmd]` `macro_cycling` und `cycling_config` haben null Treffer im
+ganzen Repo. **Das ist der Kern von RECOMP** —
+`PHASE_MODELS.md` gibt Trainingstag `TDEE+200` und Ruhetag
+`TDEE-300`. Ohne diesen Block hat RECOMP keinen Ort, an dem die
+zwei Werte stehen koennten. Die Zielwerte selbst sind ersetzt
+(`goals.nutrition_targets` plus `goals.adaptive_tdee`).
+
+**2. Der Gueltigkeitszeitraum wird NICHT zur Flagge zurueckgebaut.**
+`[cmd]` `DATABASE.md` Abschnitt 2 schreibt `is_active BOOLEAN` und
+`UNIQUE (user_id) WHERE (is_active = true)` in die
+Tabellendefinition. **Das ist kein gueltiges PostgreSQL** — eine
+teilweise Eindeutigkeit geht nur als Index. Live steht sie als
+`uq_goal_phases_one_open` auf `(user_id) WHERE actual_end_date IS
+NULL`, und `goal_phases` hat `gueltig_ab`/`actual_end_date` statt
+einer Flagge. **Damit ist die Phasenhistorie befragbar.** Wer die
+Spec woertlich einspielt, baut das zurueck.
+
+**3. `DATABASE.md` ist eine Beschreibung, kein Skript.** Abschnitt 9
+schreibt `UUID FK -> goals.user_goals` als Prosa in einen
+SQL-Block.
+
+`[read]` **Die TDEE-Reihe ist aus diesem Punkt herausgeloest** und
+geht als eigener Auftrag raus: sie blockiert G-523 und damit G-529.
+`tdee_settings` waere nur ein Zustand — gebraucht wird eine Reihe.

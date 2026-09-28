@@ -4,13 +4,12 @@ typ: befund
 modul: goals
 schwere: hoch
 angelegt: 2026-09-26
-
 braucht: []
 kind_von: G-510
 entscheidung: E-91
-
 agent: codex
 beauftragt: 2026-09-27
+status: gesperrt_bis_entscheidung
 beruehrt:
   tabellen:
     - goals.goal_phases
@@ -18,261 +17,232 @@ beruehrt:
     - public.profiles
   dateien:
     - supabase/_pipeline/11_goals/110_goals_zielwerte.sql
-    - apps/web/src/lib/nutrition/setup-karten.ts
-
+    - supabase/_pipeline/11_goals/111_goals_ziele_phasen.sql
+    - apps/web/src/lib/profile/zielwerte-read.ts
+    - apps/web/src/lib/profile/zielwerte-write.ts
 zahlen:
-  gemessen: 2026-09-26
-  phasen_live: 5
+  gemessen: 2026-09-27
   zielzeilen_live: 5
-  funktionen_die_phase_und_kcal_nennen: 0
-  konten_mit_widerspruch: 1
+  phasen_live: 5
+  aktive_phasen_live: 3
+  profile_ohne_aktive_phase: 4
+  phasenlose_profile_mit_zielzeile: 2
+  varianten_ungeprueft_live: 5
 ---
 
 # G-511 - die Phase entscheidet nicht ueber die Kalorien
 
-## Der Befund
-
-`[read]` **Toms Rahmen E-91 verlangt den Tag *,,in Abhaengigkeit mit
-Goals"*.** `[cmd]` **Gemessen am 2026-09-26: die Phase und das
-Kalorienziel sind zwei getrennte Systeme, die sich nicht beruehren.**
-
-`[cmd]` **`goals.berechne_zielwerte(UUID, DATE)` nimmt die Phase
-nicht entgegen** — `110_goals_zielwerte.sql:225`. **Der Zuschlag
-kommt aus `profiles.nutrition_goal`**, `:290-300`:
-
-    lose_weight     -0,20
-    maintain         0,00
-    gain_muscle     +0,10
-    recomposition    0,00
-    performance     +0,10
-
-`[cmd]` **Das Wort *phase* kommt im ganzen Funktionsrumpf
-(`:225-365`) nicht vor.**
-
-## Die Gegenprobe in der Datenbank
-
-`[cmd]` **Keine einzige Funktion in `goals` oder `nutrition` nennt
-`phase_type` UND (`kcal` ODER `nutrition_goal`):**
-
-    select n.nspname||'.'||p.proname
-    from pg_proc p join pg_namespace n on n.oid=p.pronamespace
-    where n.nspname in ('goals','nutrition','public')
-      and p.prosrc ilike '%phase_type%'
-      and (p.prosrc ilike '%kcal%' or p.prosrc ilike '%nutrition_goal%');
-
-    -> 0 Zeilen
-
-`[cmd]` **Drei Funktionen nennen `phase_type` ueberhaupt** —
-`goals.phase_am`, `goals.goal_phase_start`,
-`goals.phase_transition_recommendation`. **Keine davon rechnet
-Kalorien.**
-
-## Der Widerspruch steht live in den Daten
-
-`[cmd]` **Gemessen 2026-09-26, Profil gegen Phase gegen Zielzeile:**
-
-    Konto   Profil        aktive Phase   Zielzeile     kcal
-    ...101  gain_muscle   lean_bulk      gain_muscle   2500,0
-    ...102  performance   maintenance    performance   2200,0   <-
-    ...103  lose_weight   (keine)        lose_weight   1800,0
-    d15f…   gain_muscle   lean_bulk      gain_muscle   2500,0
-    61e9…   gain_muscle   (keine)        gain_muscle   2977,8
-
-`[read]` **Konto `...102` sagt an einer Stelle *halten* und an der
-anderen *+10 %*.** `[cmd]` **Die Phase `maintenance` ist aktiv
-(`actual_end_date IS NULL`), die Rechnung gibt `performance` und
-schlaegt 10 % auf.**
-
-`[cmd]` **Die Phasenzeile sagt es selbst:**
-
-    variant     performance_placeholder
-    parameters  {"note": "Phase unabhaengig vom konkreten Ziel",
-                 "source": "GO-07 testdata"}
-
-## Die Zahl liegt schon da und wird nicht gelesen
-
-`[cmd]` **`goal_phases.parameters` traegt bei beiden `lean_bulk`-
-Zeilen:**
-
-    {"source": "GO-07 testdata", "calorie_surplus_kcal": 250}
-
-`[cmd]` **250 liegt genau im Bereich, den das Vorgaengerrepo
-vorschreibt** (`referenz/lumeos-2026/research/goals/data/
-goal-phase-models.md:55`: `calorieSurplus 200…400`).
-
-`[cmd]` **Gelesen wird der Wert nur zum ANZEIGEN** —
-`phase-echt.tsx:209` stellt `parameters` als Textzeilen dar.
-`[read]` **In die Rechnung geht er nicht ein.**
-
-## Was die Spec dazu sagt
-
-`[cmd]` **`docs/specs/Goals/DATABASE.md:221` nennt eine Spalte
-`phase_calorie_modifier NUMERIC(5,2)` — *,,Deficit/Surplus
-kcal/Tag"*.** `[cmd]` **Der Bezeichner kommt im ganzen Repo null Mal
-vor.**
-
-`[cmd]` **`PHASE_MODELS.md` nennt je Phase den Zuschlag**
-(`:28` FAT_LOSS −400…−600, `:57` LEAN_BULK +200…+400,
-`:77` MAINTENANCE „TDEE ± 100", `:149-151` RECOMP
-Trainingstag +200 / Ruhetag −300).
-
-`[read]` **Was in keiner der zehn Specdateien steht: WIE aus dem
-Bereich eine Zahl wird.** `[cmd]` **`SCORING.md` hat keine Formel
-`kcal = TDEE + phase_modifier`** — die Phase erscheint dort nur in
-`calcWeeklyAdjustment` als NACHtraegliche Korrektur (`:205-232`).
-
-## Warum das zaehlt
-
-`[cmd]` **`lib/nutrition/setup-karten.ts:96` bietet eine Karte an:**
-*,,Die Phase bestimmt das Tempo — Aufbau, Diaet oder Halten. Ohne sie
-bleibt die Rate neutral."*
-
-`[read]` **Das ist eine Zusage, die der Code nicht einloest.** Wer
-der Karte folgt und eine Phase waehlt, aendert an seinen Kalorien
-nichts.
-
-`[read]` **Und es ist genau die Abhaengigkeit, die E-91 nennt:** ein
-Tag ist erst dann *,,in Abhaengigkeit mit Goals"* erfasst, wenn die
-Phase die Zielwerte bewegt.
-
-## Nicht entschieden
-
-`[read]` **Welches der beiden Felder gewinnt, ist Toms
-Entscheidung** — `profiles.nutrition_goal` (5 Werte, multiplikativ)
-oder `goal_phases.phase_type` (9 Werte, additiv in kcal).
-
-`[read]` **Sie sind nicht ineinander ueberfuehrbar:** `lean_bulk`
-und `performance` sind beide *+10 %*, aber `mini_cut`,
-`reverse_diet`, `contest_prep` und `peak_week` haben im Profilfeld
-gar keine Entsprechung.
-
-## ENTSCHIEDEN, 2026-09-08, Orchestrator
-
-**Die PHASE entscheidet ueber die Kalorien.
-`profiles.nutrition_goal` wird abgeleitet, nicht gelesen.**
-
-### Warum, gemessen
-
-    goal_phases.phase_type   NEUN Werte
-      fat_loss, lean_bulk, maintenance, recomp,
-      contest_prep, reverse_diet, expert_bb_annual,
-      mini_cut, peak_week
-
-    profiles.nutrition_goal  VIER Werte
-      gain_muscle 3 | (leer) 2 | lose_weight 1 |
-      performance 1
-
-`[cmd]` **`contest_prep`, `peak_week`, `mini_cut` und
-`reverse_diet` haben KEIN Gegenstueck** ? **eine Umrechnung
-ist also gar nicht moeglich.**
-
-### Und der Unterschied ist nicht nur die Zahl
-
-`[read]` **`nutrition_goal` sagt *ich will Muskeln
-aufbauen* ? eine HALTUNG.**
-
-`[read]` **`phase_type` sagt *ich bin in Woche 3 einer Peak
-Week* ? ein ZUSTAND mit Anfang und Ende.**
-
-`[cmd]` **Und `parameters` traegt bereits
-`calorie_surplus_kcal: 250`** ? **die Zahl ist schon da, sie
-wird nur nicht gerechnet.**
-
-`[cmd]` **Dasselbe Muster wie bei den Plaenen (C-526): ein
-AKTIVER Plan ist SSOT, nicht eine Vorliebe im Profil.**
-
-### Was das fuer den Auftrag heisst
-
-    N1  berechne_zielwerte nimmt die aktive Phase.
-    N2  parameters.calorie_surplus_kcal wird
-        GERECHNET, nicht nur angezeigt.
-    N3  ohne aktive Phase: was gilt? Der Profilwert
-        als Rueckfall -- oder eine Erklaerung?
-        GEMESSEN und vorgelegt.
-    N4  die Phasenzeile "Phase unabhaengig vom
-        konkreten Ziel" faellt weg -- sie stimmt
-        dann nicht mehr.
-    N5  Gegenprobe: dasselbe Konto, Phase gewechselt,
-        Kalorienziel folgt. Belegt.
-    N6  die 17 Leser von nutrition_targets
-        unveraendert.
-
-## N3 entschieden, 2026-09-27, Orchestrator
-
-### Seine Messung
-
-    Profile                                   7
-    aktive Phasen                             3
-    ohne aktive Phase                         4
-      davon noch nie eine Phase               4
-      davon mit gueltiger Zielzeile           2
-    historische Phasenluecken                 0
-    Zielzeilen insgesamt                      5
-
-### Und der zweischichtige Fall
-
-> *,,`berechne_zielwerte` rechnet ohne Phase weiterhin aus
-`profiles.nutrition_goal`. Bei einem phasenlosen Profil
-entstehen so aktuell 3.090,3 kcal."*
-
-> *,,`zielwerte_am` nimmt STETS die juengste Zielzeile. Ob am
-Stichtag eine Phase existiert, prueft die Funktion nicht."*
-
-`[read]` **Nur die Berechnung umzustellen genuegt also nicht ?
-zwei phasenlose Profile saehen weiter alte Zielwerte.**
-
-## Die Entscheidung
-
-**1** ? **Seine Empfehlung wird uebernommen.**
-
-> *,,Ohne aktive Phase KEIN errechnetes Kalorienziel, sondern
-ein ausdrueckliches Hindernis `keine_aktive_phase`. Kein
-Rueckfall auf `nutrition_goal` und kein stillschweigendes
-Maintenance/TDEE-Ziel."*
-
-`[read]` **Dieselbe Haltung wie C-500 (Vitamin E), C-512 (die
-Portionen) und C-542 (die Abwesenheit): lieber eine Luecke, die
-auffaellt, als eine Zahl, die stimmt, weil sie geraten wurde.**
-
-`[cmd]` **Und sein Beleg ist stark: Spec und Mockup leiten die
-Kalorien aus Phasenparametern ab, der Vorgaenger setzt eine
-Phase VORAUS, und der einzige gegenteilige Text
-(*,,ohne Phase bleibt die Rate neutral"*) wird vom heutigen
-Code selbst nicht erfuellt ? er wendet +10 % an.**
-
-**2** ? **Eine Zielzeile gehoert ihrer Phase und endet mit ihr.**
-
-`[read]` **Das ist die Antwort auf seine zweite Frage. Eine
-Zielzeile ohne Phase ist dasselbe wie eine Zahl ohne Quelle.**
-
-`[cmd]` **`zielwerte_am` darf keine Zeile liefern, deren Phase
-am Stichtag nicht laeuft** ? **sonst bleibt die Umstellung
-wirkungslos, wie er gemessen hat.**
-
-`[read]` **Und das deckt auch den Fall, den er nicht genannt
-hat: eine Phase endet, eine neue beginnt spaeter ? dazwischen
-gilt keine alte Zahl weiter.**
-
-**3** ? **Verpflichtend nach dem Onboarding: JA, aber das baut
-dieser Punkt nicht.**
-
-`[cmd]` **Das Nutzer-Onboarding fehlt ganz (steht in
-`docs/todo`, C-541 hat es beruehrt).** **Wenn es kommt, setzt
-es die erste Phase ? wie es den Erfahrungsgrad setzt.**
-
-`[read]` **Bis dahin ist `keine_aktive_phase` der ehrliche
-Zustand, und die Oberflaeche aus G-513 fuehrt aus ihm heraus.**
-
-## Ergaenzte Abnahmebedingungen
-
-    N7  zielwerte_am liefert keine Zeile, deren Phase
-        am Stichtag nicht laeuft. Gegenprobe mit einer
-        beendeten Phase.
-    N8  keine_aktive_phase ist ein ausdrueckliches
-        Hindernis, kein NULL und keine 0.
-    N9  die beiden phasenlosen Profile mit gueltiger
-        Zielzeile: was passiert mit ihnen? GEMELDET,
-        nicht stillschweigend geloescht.
-    N10 die 17 Leser: welche brechen bei einem
-        Hindernis? GEMELDET an Claude Code.
-
+## Sperre
+
+**G-511 ist nicht einspielbar.** Die erste Fassung band Zielzeilen richtig
+an eine Phase, las aber die tragende Phasenspec nicht vollstaendig. Sie
+haette eine Phase technisch erzwungen, obwohl `fat_loss` kein Ziel liefert,
+`maintenance` ungefragt die Mitte einer Spanne nimmt und der lebende
+Schreibweg die neuen Hindernisse verschluckt.
+
+Kein G-511-SQL wurde live eingespielt. Migration und Datennachzug bleiben
+gesperrt, bis N12 bis N15 entschieden beziehungsweise nachgezogen sind.
+
+## Bestehende Entscheidung
+
+- Die aktive Phase ist die Quelle von Kalorien und Makros.
+- `profiles.nutrition_goal` ist eine Haltung, kein zeitlicher Plan.
+- Ohne aktive Phase gilt `keine_aktive_phase`, kein Rueckfall.
+- Eine Zielzeile gehoert ihrer Phase und endet mit ihr.
+- Historische Zielzeilen werden keiner Phase geraten zugeordnet.
+
+## Vier Quellen
+
+**Code:** Der CHECK in `111_goals_ziele_phasen.sql` erlaubt neun
+`phase_type`-Werte. `variant` ist nullable und ungeprueft. Der lokale
+G-511-Entwurf rechnet nur `maintenance` und `lean_bulk`; Protein ist
+pauschal Gewicht mal 2, Fett pauschal 25 Prozent.
+
+**Daten:** Live stehen fuenf Phasenzeilen: zweimal `maintenance/baseline`,
+einmal `maintenance/performance_placeholder` und zweimal
+`lean_bulk/moderate`. Alle fuenf Varianten passieren ohne CHECK. Die zwei
+Lean-Bulk-Zeilen tragen noch `calorie_surplus_kcal`.
+
+**Spec und Mockup:** `docs/specs/Goals/PHASE_MODELS.md` wurde vollstaendig
+gelesen. Es beschreibt sieben Phasenbloecke, Varianten nur fuer
+`fat_loss`, phasenabhaengige Proteinspannen sowie Zeitregeln fuer
+`reverse_diet` und `contest_prep`. Die drei Goals-Mockups zeigen dieselben
+Spannen, Unterphasen und die Woche innerhalb der Phase. Der Editor zeigt
+konkrete persoenliche Overrides; eine Spanne ist nicht automatisch eine
+Zahl.
+
+**Vorgaengerrepo:** `research/goals/data/goal-phase-models.md` traegt
+dieselben Spannen und Unterphasen. Die spaetere API reduzierte sie auf
+Pauschalprozente. Das belegt den frueheren Bruch, nicht neue Defaults.
+
+## N11 - sieben Specbloecke, neun DB-Werte
+
+| DB-Wert | Parametersatz der Spec |
+|---|---|
+| `fat_loss` | eigener Block, `moderate` und `aggressive` |
+| `lean_bulk` | eigener Block |
+| `maintenance` | eigener Block |
+| `recomp` | eigener Block |
+| `contest_prep` | eigener Block mit zeitlichen Unterphasen |
+| `reverse_diet` | eigener Block |
+| `expert_bb_annual` | eigener Block, delegiert im Jahresplan |
+| `mini_cut` | **kein Parametersatz**; nur Uebergangsziel/Knoten `(opt.)` |
+| `peak_week` | kein eigener Phasenblock, aber Parametersatz in `contest_prep` |
+
+**DB nach Spec:** `mini_cut` hat keinen Specblock. `peak_week` ist zwar
+beschrieben, aber nur als Contest-Prep-Unterphase; daraus folgt keine
+autonome Kalorienregel fuer den gleichnamigen DB-Wert.
+
+**Spec-Zustandsmaschine nach DB:** `ONBOARDING` ist Anfangszustand der
+Zustandsmaschine, fehlt aber im CHECK. `NEW PHASE` ist eine Auswahlaktion,
+kein Phasentyp. `SHOW` steht nur in `PEAK_WEEK+SHOW` des Jahresplans.
+
+Die Differenz ist real: sieben nummerierte Modelle, zwei weitere DB-Werte
+und ein nicht persistierter Anfangszustand sind verschiedene Mengen.
+
+## N12 - `variant` ist Fachlogik
+
+Nur `fat_loss` hat in der aktuellen Spec benannte Varianten:
+
+    moderate    -400 bis -600 kcal, Protein 1,8 bis 2,4 g/kg
+    aggressive  -750 bis -1000 kcal, Protein 2,3 bis 3,1 g/kg
+
+`contest_prep.early/mid/late/peak_week` sind Zeitabschnitte,
+Trainingstag/Ruhetag bei `recomp` ist ein Tageszustand und die Monate des
+Jahresplans sind keine Varianten.
+
+Vorgeschlagener CHECK, nicht gebaut:
+
+```sql
+CHECK (
+  (phase_type = 'fat_loss' AND variant IN ('moderate', 'aggressive'))
+  OR (phase_type <> 'fat_loss' AND variant IS NULL)
+)
+```
+
+Dazu gehoeren kein globaler Default und eine Auswahlliste statt Freitext.
+Alle fuenf Live-Zeilen verletzten den CHECK. Ihre Varianten sind fuer ihre
+Phase nicht durch die Spec definiert; eine Normalisierung auf `NULL`
+braucht Toms Zusage.
+
+## N13 - eine Spanne ist keine Rechenzahl
+
+Der Entwurf waehlt bei `maintenance` still die Mitte von `TDEE +/- 100`,
+naemlich TDEE. Das ist ebenso unbeschlossen wie 200, 300 oder 400 kcal bei
+Lean Bulk. Auch Fat Loss liefert nur Spannen. Bei den negativen Defiziten
+sind `min` und `max` numerisch sogar vertauscht; sie sind als zwei
+Intervallenden zu validieren.
+
+**Frage an Tom:** Untergrenze, Obergrenze, Mitte oder Nutzerwahl innerhalb
+der Spanne?
+
+**Empfehlung:** Nutzer beziehungsweise Coach waehlt beim Phasenstart einen
+exakten, validierten Wert innerhalb der Spec-Spanne. Der skalare Wert wird
+im Phasenprotokoll gespeichert. Ohne Wahl gilt `phasenparameter_fehlt`,
+nicht ein automatischer Mittelpunkt. Die Spec bleibt die erlaubte
+Bandbreite, das Protokoll traegt die geltende Zahl.
+
+## N14 - Zeit und phasenabhaengige Makros
+
+`berechne_zielwerte` braucht mehr als `phase_type`:
+
+1. **Reverse Diet:** Zielwert am Phasenstart, exakt gewaehlter
+   `weekly_calorie_increase`, vollendete Woche aus `gueltig_ab` und ein
+   festes Endziel/TDEE-Snapshot. Sonst ist `+50..150 pro Woche` nicht
+   ausrechenbar; ein beweglicher TDEE darf Historie nicht umschreiben.
+2. **Contest Prep:** verpflichtendes Buehnen-/Enddatum. Daraus folgt
+   `weeks_out` und damit `early`, `mid`, `late` oder `peak_week`; die
+   Grenztage muessen eindeutig sein. Zudem muss `peak_week` entweder
+   Unterphase oder eigener `phase_type` sein, nicht beides.
+3. **Recomp:** benoetigt den Tageszustand Training/Ruhe, sonst sind
+   `TDEE +200` und `TDEE -300` nicht auswaehlbar.
+4. **Expert BB Annual:** orchestriert andere Phasen und hat selbst keinen
+   Kalorienparametersatz.
+5. **Mini Cut:** bleibt ohne Specblock unrechenbar.
+
+Auch die Makros des Entwurfs brechen die Spec:
+
+    gebaut                         Spec
+    Protein immer 2,0 g/kg         1,4-2,0 maintenance
+                                   1,6-2,2 lean_bulk
+                                   1,8-2,4 fat_loss moderate
+                                   2,3-3,1 aggressive/contest
+                                   2,0-2,4 recomp
+    Fett immer 25 %                nur lean_bulk nennt 25-35 %;
+                                   fat_loss mindestens 0,5 g/kg
+
+Empfehlung: Die Phase speichert den exakt gewaehlten Kaloriendelta- und
+`protein_g_per_kg`-Wert sowie ihre belegte Fettregel. Protein folgt dem
+Phasenfaktor, Fett nur einer belegten Regel, Kohlenhydrate sind danach der
+Rest. Reverse Diet haelt Protein und erhoeht primaer Kohlenhydrate. Wo eine
+Regel fehlt, wird die Luecke gemeldet statt 2,0/25 Prozent fortgeschrieben.
+
+## N15 - der lebende Schreibweg
+
+Gemessen auf einer Wegwerf-Datenbank mit dem lokalen Entwurf:
+
+| Fall | DB-Funktion | App-Schreiber |
+|---|---|---|
+| keine aktive Phase | `kcal = NULL`, `keine_aktive_phase` | HTTP 400 `INVALID_INPUT`: „Die Formel lieferte keine Zielkalorien.“ |
+| `fat_loss/moderate`, `calorie_deficit = -500` | `kcal = NULL`, `phasenparameter_fehlt` | dieselbe generische HTTP-400-Meldung |
+| direkter Insert mit kcal ohne Phase | SQLSTATE 23514, „keine aktive Phase“ | nicht der normale Ablauf dieses Schreibers |
+
+Ursache: `zielwerte-read.ts` kennt nur die alten Hindernisse und wandelt
+beide neuen Werte in `null` um. `zielwerte-write.ts` sieht nur
+`kcal === null`, wirft vor dem Upsert den generischen Fehler und erreicht
+den Trigger nicht. Ein erreichter DB-Fehler wuerde als `WRITE_FAILED` zu
+HTTP 500.
+
+**An Claude Code gemeldet:** Der Schreiber ist das groessere Risiko als
+die fuenf bisherigen Leser. Typunion, Meldungen und Schreibverhalten fuer
+beide Hindernisse muessen vor Einspielung nachgezogen werden. `apps/` blieb
+unveraendert.
+
+## Namensentscheidung
+
+Kanonisch sind `calorie_surplus` und `calorie_deficit`:
+
+- PHASE_MODELS und API verwenden diese snake_case-Namen.
+- `zielphasen-parameter.json` verwendet sie bereits.
+- Das Altrepo bestaetigt die Semantik als camelCase.
+- `_kcal` nur an einem Gegenstueck waere inkonsistent; Einheit und
+  Zeitbasis gehoeren in den Parametervertrag.
+
+Seed, G-511-Test und Funktionsentwurf lesen jetzt nur
+`calorie_surplus`. Der neue idempotente Pipeline-Datenschritt benennt
+bestehende `calorie_surplus_kcal`-Werte atomar um, entfernt den alten Namen
+und bricht bei widerspruechlichen Doppelwerten ab. Belegt: `1 alt / 0 neu`
+wurde `0 alt / 1 neu`, Wert 250 blieb 250; die Widerspruchsprobe brach ab
+und liess beide Rohwerte unangetastet. Live bleiben die zwei alten Zeilen
+unveraendert, weil G-511 nicht eingespielt wurde.
+
+## N1 bis N10 und offene Freigaben
+
+N1 sowie N3 bis N9 sind im Entwurf strukturell angelegt. N2 und N5 bleiben
+offen, bis Parameterwahl und Zeitdimension entschieden sind. N10 ist um
+den Schreibweg erweitert.
+
+Vor einer Einspielung:
+
+1. Tom entscheidet N13.
+2. Tom bestaetigt N12 und die Normalisierung der fuenf Varianten.
+3. Die sechs nicht trivial rechenbaren Phasenzustaende erhalten komplette
+   Vertraege oder ausdrueckliche Hindernisse.
+4. Claude Code zieht Leser und Schreiber nach.
+5. Danach werden Migration, 17 Leser, Vollkette und Gegenproben neu
+   abgenommen.
+
+## Sicherung und Nachweis
+
+Sicherung vor dem Erstentwurf:
+`backup/schema/20260927103356_g511_vor_bau.dump`, 473.965.860 Byte,
+SHA-256
+`C0C950A3E23941B85CBDF3E2D198D735FA6ED98B26E558D4CA32F50543F93AE8`.
+
+Die fruehere Vollkette und vier Tests waren nur fuer den unvollstaendigen
+Vertrag gruen. Nach der Namenskorrektur sind die vier fokussierten Tests
+erneut gruen; das ist keine Freigabe fuer N11 bis N15.
+
+## Abnahme
+
+_(gesperrt; nicht einspielen)_

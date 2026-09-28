@@ -360,11 +360,60 @@ Zusicherung gefangen:**
     „Phase gewechselt."      -> 13 Falschaussage       ROT
     alles zurueckgebaut      -> 16 von 16              GRUEN
 
-### Was NICHT belegt ist
+### Der Schirmnachweis — NACHGEHOLT 2026-09-27
 
-`[read]` **Der Schirmnachweis fehlt weiterhin** — **3200 und 3220
-antworteten auch heute nicht** (`ERR_CONNECTION_REFUSED`, zweimal
-geprueft). `[read]` **Ich habe den Server nicht gestartet.**
+`[cmd]` **Drei Bilder, `/v2/goals?tab=phase`, 1440 px:**
+
+    backup/x-g513-phase.png      dev@lumeos.app (Phase laeuft)
+    backup/x-g513-leer.png       test-user (keine Phase)
+    backup/x-g513-vorschau.png   test-user, nach dem Klick
+
+**1 — Die Kacheln stehen da** (`dev@lumeos.app`):
+
+    [data-phasenwahl]            9    alle neun Arten
+    [data-phase-beenden-oeffnen] 1
+    sichtbar  Phase beginnen 2 · Phase beenden 1 ·
+              Wechselvorschlag 1
+    konsolenfehler 1   (die data-mode-Warnung, nicht meine)
+
+**2 — Ohne laufende Phase faellt das Beenden weg**
+(`test-user@lumeos.local`, 0 Phasen):
+
+    [data-phasenwahl]            9
+    [data-phase-beenden-oeffnen] 0    <- richtig weg
+    sichtbar  Phase beginnen 1
+
+`[read]` **Die Kachel erscheint nur, wenn es etwas zu beenden
+gibt** — die Ableitung `actual_end_date == null` wirkt am Schirm.
+
+**3 — Der Klick oeffnet die Vorschau** (`fat_loss`):
+
+    [data-phasenfeld]  3    Start, geplantes Ende, Variante
+    [data-phase-start] 1
+    sichtbar  „wird begonnen" 1
+
+`[read]` **Die Geste der Vorlage ist am Bild belegt:** Kachel ->
+Vorschau darunter -> Knopf. **Kein Modal.**
+
+### Und ein Beleg, den ich nicht gesucht habe
+
+`[cmd]` **Der erste Klickversuch lief auf `dev@lumeos.app` und
+SCHEITERTE:**
+
+    <div class="v2-card"> intercepts pointer events
+    retrying click action, attempt #32
+
+`[cmd]` **Nachgemessen mit `elementFromPoint`:** das Raster traegt
+`pointer-events: none` und `opacity: 0.5`.
+
+`[read]` **Das ist kein Fehler — das ist die Sperre aus dem
+Funktionsrumpf, am Schirm wirksam.** `[cmd]` **`dev@lumeos.app`
+hat eine laufende `lean_bulk`-Phase, also ist der Start
+gesperrt** — **genau wie `goal_phase_start` es mit `23505`
+erzwingen wuerde.**
+
+`[read]` **Die Oberflaeche weist ab, BEVOR die Datenbank es tun
+muss.**
 
 `[cmd]` **Offen sind damit ZWEI Bilder:** das Foto der
 Phasenkachel (dieser Punkt) **und das der FFMI-Kachel aus

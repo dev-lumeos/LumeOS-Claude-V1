@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 244 |
-| `laufend_codex` | 3 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 565 |
-| **gesamt** | **813** |
+| `todos` | 254 |
+| `laufend_codex` | 6 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 568 |
+| **gesamt** | **830** |
 
 ## medical — 49
 
@@ -572,9 +572,9 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 20
+## goals — 32
 
-### beauftragbar — 19
+### beauftragbar — 23
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -592,17 +592,29 @@
 | `G-421` | feature | hoch | [die vier fehlenden Reiter in Goals & Body](erledigt/goals-g-0421-die-vier-fehlenden-reiter.md) | erledigt | — | G-422 |
 | `G-422` | befund | mittel | [Schreibwege ohne Aufrufer](todos/goals-g-0422-zwei-schreibwege-ohne-aufrufer.md) | offen | — | — |
 | `G-510` | befund | hoch | [Bestandsaufnahme Goals, gegen alle vier Quellen](erledigt/goals-g-0510-bestandsaufnahme.md) | erledigt | — | G-511, G-512, G-513, G-514, G-515, G-516 |
-| `G-511` | befund | hoch | [die Phase entscheidet nicht ueber die Kalorien](laufend_codex/goals-G-0511-phase-entscheidet-nicht-ueber-kalorien.md) | laeuft (codex) | — | — |
-| `G-512` | befund | hoch | [die FFMI-Kachel zeigte eine erfundene Zahl als echte](todos/goals-G-0512-ffmi-zeigte-eine-erfundene-zahl.md) | offen | — | — |
-| `G-513` | befund | hoch | [die Phase laesst sich nirgends setzen](erledigt/goals-g-0513-keine-oberflaeche-setzt-eine-phase.md) | erledigt | — | — |
-| `G-514` | befund | mittel | [die Modulverrechnung, der Zweck des Moduls, fehlt ganz](todos/goals-G-0514-die-modulverrechnung-fehlt-ganz.md) | offen | — | — |
+| `G-511` | befund | hoch | [die Phase entscheidet nicht ueber die Kalorien](laufend_codex/goals-G-0511-phase-entscheidet-nicht-ueber-kalorien.md) | laeuft (codex) | — | G-526, G-527 |
+| `G-512` | befund | hoch | [die FFMI-Kachel zeigte eine erfundene Zahl als echte](erledigt/goals-G-0512-ffmi-zeigte-eine-erfundene-zahl.md) | erledigt | — | — |
+| `G-513` | befund | hoch | [die Phase laesst sich nirgends setzen](erledigt/goals-g-0513-keine-oberflaeche-setzt-eine-phase.md) | erledigt | — | G-519 |
+| `G-514` | befund | mittel | [die Modulverrechnung, der Zweck des Moduls, fehlt ganz](todos/goals-G-0514-die-modulverrechnung-fehlt-ganz.md) | offen | — | G-522, G-524 |
 | `G-515` | befund | mittel | [die drei Goals-Mockups widersprechen sich achtmal in Zahlen](todos/goals-G-0515-die-drei-mockups-widersprechen-sich.md) | offen | — | — |
+| `G-521` | feature | mittel | [wie modelliert man Ernaehrungsphasen, ihre Varianten und Parameter](todos/goals-g-0521-phasenmodellierung-tiefenrecherche.md) | offen | — | G-529, G-530 |
+| `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](todos/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | offen | — | — |
+| `G-523` | fehler | hoch | [der adaptive TDEE glaettet nicht, er springt](laufend_codex/goals-g-0523-adaptive-tdee-glaettet-nicht.md) | laeuft (codex) | — | — |
+| `G-525` | befund | mittel | [Meilensteine gibt es nur als Seed](todos/goals-g-0525-meilensteine-entstehen-nicht.md) | offen | — | — |
 
-### wartet auf Blocker — 1
+### wartet auf Blocker — 9
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `G-516` | befund | mittel | [das Vorgaengerrepo traegt die Phasenzahlen, die uns fehlen](todos/goals-G-0516-das-vorgaengerrepo-hat-die-phasenzahlen.md) | offen | G-511 | — |
+| `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](laufend_claudecode/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | laeuft (claudecode) | G-511 | G-520, G-521 |
+| `G-520` | feature | hoch | [der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen](todos/goals-g-0520-anpassungsalgorithmus-und-uebergangswaechter.md) | offen | G-519 | — |
+| `G-524` | befund | mittel | [vier der zehn Spec-Tabellen und beide Ansichten fehlen](todos/goals-g-0524-vier-tabellen-und-beide-ansichten-fehlen.md) | offen | G-514 | — |
+| `G-526` | fehler | hoch | [Protein, Fett und Faser kennen die Phase nicht](laufend_codex/goals-g-0526-protein-und-fett-kennen-die-phase-nicht.md) | laeuft (codex) | G-511 | — |
+| `G-527` | fehler | mittel | [der Schreibweg kennt die neuen Hindernisse nicht](laufend_claudecode/goals-g-0527-der-schreibweg-kennt-die-neuen-hindernisse-nicht.md) | laeuft (claudecode) | G-511 | — |
+| `G-528` | befund | mittel | [die Variantenachse und mini_cut sind nicht definiert](todos/goals-g-0528-varianten-und-mini-cut-sind-nicht-definiert.md) | offen | G-521 | — |
+| `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](laufend_codex/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | laeuft (codex) | G-521 | — |
+| `G-530` | feature | hoch | [contest_prep und expert_bb_annual brauchen eine eigene Struktur](todos/goals-g-0530-wettkampfvorbereitung-braucht-eine-eigene-struktur.md) | offen | G-529 | — |
 
 ## coach — 57
 
@@ -666,7 +678,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 202
+## quer — 207
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -707,7 +719,11 @@
 | `A-71` | befund | hoch | [der Leseweg liegt daneben](erledigt/quer-a-0071-der-leseweg-liegt-daneben.md) | erledigt | — | C-424, G-368, G-371 |
 | `A-72` | entscheidung | mittel | [eine Leser-Deklaration im Code](todos/quer-a-0072-eine-leser-deklaration-im-code.md) | offen | — | — |
 | `A-73` | befund | mittel | [der Webpack-Cache kann den Server toeten](todos/quer-a-0073-der-webpack-cache-kann-den-server-toeten.md) | offen | — | — |
-| `A-74` | befund | hoch | [die SSOT ist zwoelf Tage alt](todos/quer-a-0074-die-ssot-ist-zwoelf-tage-alt.md) | offen | — | — |
+| `A-74` | befund | hoch | [die SSOT ist zwoelf Tage alt](todos/quer-a-0074-die-ssot-ist-zwoelf-tage-alt.md) | offen | — | A-75 |
+| `A-75` | befund | hoch | [Auftraege werden nicht gegen die Quellen geprueft, und nichts wird rot](todos/quer-a-0075-auftraege-werden-nicht-gegen-die-quellen-geprueft.md) | offen | — | A-78 |
+| `A-76` | befund | hoch | [die Specs beschreiben ein Repo, das es hier nicht gibt](todos/quer-a-0076-die-specs-beschreiben-das-vorgaengerrepo-als-fertig.md) | offen | — | — |
+| `A-77` | fehler | mittel | [vier Werkzeugtests liefen nirgends](todos/quer-a-0077-werkzeugtests-liefen-nirgends.md) | offen | — | — |
+| `A-78` | befund | mittel | [ein neuer Punkt wird nicht gegen den Bestand geprueft](todos/quer-a-0078-punkte-werden-nicht-gegen-den-bestand-geprueft.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
@@ -871,7 +887,8 @@
 | `G-490` | fehler | mittel | [der Spaltenwaechter kennt die Tabelle nicht](erledigt/quer-g-0490-spaltenwaechter-kennt-tabelle-nicht.md) | erledigt | — | — |
 | `G-498` | fehler | mittel | [.v2-hinweis liegt unter 4,5:1](erledigt/quer-g-0498-hinweis-kontrast.md) | erledigt | — | — |
 | `G-501` | fehler | hoch | [der Ruecknahmeklick beim Erfahrungsgrad](erledigt/quer-g-0501-ruecknahmeklick-erfahrungsgrad.md) | erledigt | — | — |
-| `G-517` | fehler | mittel | [die Probe meldet die Zeitueberschreitung, nicht die Ursache](laufend_claudecode/quer-g-0517-probe-meldet-die-ursache-nicht.md) | laeuft (claudecode) | — | — |
+| `G-517` | fehler | mittel | [die Probe meldet die Zeitueberschreitung, nicht die Ursache](erledigt/quer-g-0517-probe-meldet-die-ursache-nicht.md) | erledigt | — | — |
+| `G-518` | fehler | hoch | [der Dev-Server liefert HTML ohne JavaScript](erledigt/quer-g-0518-dev-server-liefert-html-ohne-javascript.md) | erledigt | — | — |
 
 ## buddy — 1
 
