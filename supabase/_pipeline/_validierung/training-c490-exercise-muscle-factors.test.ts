@@ -14,12 +14,13 @@ function one<T>(sql: string): T {
   return JSON.parse(output.split(/\r?\n/).at(-1) ?? '') as T
 }
 
-test('C-490: jede Uebung-Muskel-Zuordnung hat belegten Faktor und Herkunft', () => {
+test('C-490/C-551: konkrete Aktivierung ist optional und belegt', () => {
   const result = one<{
     fields: string[]
-    missing: number
+    measured: number
+    unmeasured: number
     invalid: number
-    fallback: number
+    conventionMixedIn: number
     bench: Array<{ muscle: string; factor: number; evidence_class: string; source_id: string }>
   }>(`
     SELECT json_build_object(
@@ -27,40 +28,58 @@ test('C-490: jede Uebung-Muskel-Zuordnung hat belegten Faktor und Herkunft', () 
         SELECT coalesce(json_agg(column_name ORDER BY column_name), '[]'::json)
         FROM information_schema.columns
         WHERE table_schema = 'training' AND table_name = 'exercise_muscles'
-          AND column_name = ANY (ARRAY['faktor', 'source_id', 'evidence_class'])
+          AND column_name = ANY (ARRAY[
+            'activation_factor',
+            'activation_source_id',
+            'activation_evidence_class'
+          ])
       ),
-      'missing', (
+      'measured', (
         SELECT count(*) FROM training.exercise_muscles
-        WHERE faktor IS NULL OR source_id IS NULL OR evidence_class IS NULL
+        WHERE activation_factor IS NOT NULL
+      ),
+      'unmeasured', (
+        SELECT count(*) FROM training.exercise_muscles
+        WHERE activation_factor IS NULL
       ),
       'invalid', (
         SELECT count(*) FROM training.exercise_muscles
-        WHERE faktor <= 0 OR evidence_class NOT IN ('A', 'C')
-           OR (faktor NOT IN (1.0, 0.5) AND source_id IS NULL)
+        WHERE num_nonnulls(
+          activation_factor,
+          activation_source_id,
+          activation_evidence_class
+        ) NOT IN (0, 3)
+           OR activation_factor <= 0
+           OR activation_evidence_class NOT IN ('A', 'B')
       ),
-      'fallback', (
+      'conventionMixedIn', (
         SELECT count(*) FROM training.exercise_muscles
-        WHERE evidence_class = 'C'
-          AND source_id = 'pelland_2026_fractional_sets'
-          AND faktor = CASE role WHEN 'primary' THEN 1.0 WHEN 'secondary' THEN 0.5 END
+        WHERE activation_source_id = 'pelland_2026_fractional_sets'
       ),
       'bench', (
         SELECT coalesce(json_agg(json_build_object(
-          'muscle', mg.name, 'factor', em.faktor,
-          'evidence_class', em.evidence_class, 'source_id', em.source_id
+          'muscle', mg.name, 'factor', em.activation_factor,
+          'evidence_class', em.activation_evidence_class,
+          'source_id', em.activation_source_id
         ) ORDER BY mg.name), '[]'::json)
         FROM training.exercise_muscles em
         JOIN training.exercises e ON e.id = em.exercise_id
         JOIN training.muscle_groups mg ON mg.id = em.muscle_group_id
         WHERE e.name = 'Barbell Bench Press'
+          AND em.activation_factor IS NOT NULL
       )
     );
   `)
 
-  assert.deepEqual(result.fields, ['evidence_class', 'faktor', 'source_id'])
-  assert.equal(result.missing, 0)
+  assert.deepEqual(result.fields, [
+    'activation_evidence_class',
+    'activation_factor',
+    'activation_source_id',
+  ])
+  assert.equal(result.measured, 3)
+  assert.equal(result.unmeasured, 6723)
   assert.equal(result.invalid, 0)
-  assert.ok(result.fallback > 0)
+  assert.equal(result.conventionMixedIn, 0)
   assert.deepEqual(result.bench, [
     { muscle: 'Anterior Deltoid', factor: 0.79, evidence_class: 'A', source_id: 'pmc4327372_bench_press_emg' },
     { muscle: 'Pectoralis Major', factor: 0.95, evidence_class: 'A', source_id: 'pmc4327372_bench_press_emg' },

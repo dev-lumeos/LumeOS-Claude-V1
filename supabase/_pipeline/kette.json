@@ -2672,6 +2672,109 @@
       "depends_on": [
         "544_koerperorte_daten"
       ]
+    },
+    {
+      "id": "511_goals_phase_parameter_name",
+      "path": "supabase/_pipeline/11_goals/511_goals_phase_parameter_name.sql",
+      "kind": "sql",
+      "creates": "G-511: der einzelne alte calorie_surplus_kcal-Parameter wird atomar auf calorie_surplus normalisiert.",
+      "depends_on": [
+        "111"
+      ]
+    },
+    {
+      "id": "511_goals_phase_calories_schema",
+      "path": "supabase/migrations/20260927034024_g511_phase_calories.sql",
+      "kind": "sql",
+      "creates": "G-511: Zielkalorien folgen ausschliesslich der aktiven Phase; Zielzeilen gehoeren ihrer Phase und enden mit ihr.",
+      "depends_on": [
+        "464_nutrition_fiber_target",
+        "511_goals_phase_parameter_name"
+      ]
+    },
+    {
+      "id": "526_goals_macro_rule_structure",
+      "path": "supabase/migrations/20260928095000_g526_macro_rule_structure.sql",
+      "kind": "sql",
+      "creates": "G-526: leere, quellpflichtige Struktur fuer Makrobaender, harte Untergrenzen und Festwerte; keine unbelegten Proteinbaender.",
+      "depends_on": [
+        "110",
+        "111"
+      ]
+    },
+    {
+      "id": "524_tdee_history_schema",
+      "path": "supabase/migrations/20260928150000_g524_tdee_history_ewma.sql",
+      "kind": "sql",
+      "creates": "G-524/G-523: datierte TDEE-Reihe und EWMA mit alpha 0,3 gegen den letzten verlaesslichen Vorgaengerwert.",
+      "depends_on": [
+        "113"
+      ]
+    },
+    {
+      "id": "524_tdee_history_writer",
+      "path": "supabase/_pipeline/11_goals/524_tdee_history_writer.sql",
+      "kind": "sql",
+      "creates": "G-524: service_role-Schreibweg fuer einen berechneten datierten TDEE-Reihenwert.",
+      "depends_on": [
+        "524_tdee_history_schema"
+      ]
+    },
+    {
+      "id": "524_tdee_history_backfill",
+      "path": "supabase/_pipeline/11_goals/524_tdee_history_backfill.sql",
+      "kind": "sql",
+      "creates": "G-524: rueckwirkende Reihenwerte nur fuer vollstaendig berechenbare 14-Tage-Fenster.",
+      "depends_on": [
+        "524_tdee_history_writer"
+      ]
+    },
+    {
+      "id": "529_phase_rate_storage_schema",
+      "path": "supabase/migrations/20260928153000_g529_phase_rate_storage.sql",
+      "kind": "sql",
+      "creates": "G-529: typisierte Zielrate an goal_phases, leerer quellpflichtiger Spannen-Katalog und beidseitiger Bereichswaechter.",
+      "depends_on": [
+        "111",
+        "526_goals_macro_rule_structure"
+      ]
+    },
+    {
+      "id": "551_role_measurement_separation_schema",
+      "path": "supabase/migrations/20260927040500_c551_role_measurement_separation.sql",
+      "kind": "sql",
+      "creates": "C-551: trennt die Pelland-Rollenregel fuer Wochenvolumen von optionalen konkreten Aktivierungsmessungen je Uebung und Muskel.",
+      "depends_on": [
+        "543_muscle_exercise_inheritance"
+      ]
+    },
+    {
+      "id": "551_role_measurement_separation_data",
+      "path": "supabase/_pipeline/10_training/551_role_measurement_separation.sql",
+      "kind": "sql",
+      "creates": "C-551: kuratiert primary 1.0 und secondary 0.5 als Rollenregel, behaelt drei EMG-Messungen und markiert 6.723 Zuordnungen ehrlich als nicht gemessen.",
+      "depends_on": [
+        "551_role_measurement_separation_schema"
+      ]
+    },
+    {
+      "id": "546_muscle_anatomy_schema",
+      "path": "supabase/migrations/20260927043000_c546_muscle_anatomy.sql",
+      "kind": "sql",
+      "creates": "C-546: getrennte globale Relationen fuer Ursprung, Ansatz, Innervation und belegte Schmerzausstrahlung sowie eine private zeitbezogene Nutzerbeobachtung.",
+      "depends_on": [
+        "531_muscle_alias_read_model",
+        "120"
+      ]
+    },
+    {
+      "id": "546_muscle_anatomy_data",
+      "path": "supabase/_pipeline/10_training/546_muscle_anatomy.sql",
+      "kind": "sql",
+      "creates": "C-546: FIPAT-Terminologiequelle und 64 einzeln belegte Ursprungs-, Ansatz- und Nervenfakten fuer 23 Katalogmuskeln; unbelegte Beziehungen bleiben leer.",
+      "depends_on": [
+        "546_muscle_anatomy_schema"
+      ]
     }
   ]
 }

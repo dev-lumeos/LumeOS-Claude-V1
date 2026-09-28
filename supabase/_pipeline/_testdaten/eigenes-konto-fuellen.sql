@@ -121,9 +121,9 @@ DELETE FROM recovery.checkins WHERE user_id = :'ziel'::uuid;
 DELETE FROM goals.body_circumferences WHERE user_id = :'ziel'::uuid;
 DELETE FROM goals.body_measurements WHERE user_id = :'ziel'::uuid;
 DELETE FROM goals.goal_milestones WHERE user_id = :'ziel'::uuid;
+DELETE FROM goals.nutrition_targets WHERE user_id = :'ziel'::uuid;
 DELETE FROM goals.goal_phases WHERE user_id = :'ziel'::uuid;
 DELETE FROM goals.user_goals WHERE user_id = :'ziel'::uuid;
-DELETE FROM goals.nutrition_targets WHERE user_id = :'ziel'::uuid;
 
 DELETE FROM nutrition.food_preference_items WHERE user_id = :'ziel'::uuid;
 DELETE FROM nutrition.food_preferences WHERE user_id = :'ziel'::uuid;
@@ -245,20 +245,7 @@ SET birth_date             = q.birth_date,
 FROM public.profiles q
 WHERE p.id = :'ziel'::uuid AND q.id = :'quelle'::uuid;
 
--- 2. Zielwerte. gueltig_ab bleibt wie in der Vorlage -- ein Ziel wirkt
--- vorwaerts, ein frueheres Datum wuerde die aelteren Tage falsch bewerten.
-INSERT INTO goals.nutrition_targets (
-  user_id, gueltig_ab, kcal, protein_g, carbs_g, fat_g, herkunft, tdee,
-  nutrition_goal, notiz, fiber_g, linoleic_acid_g, alpha_linolenic_acid_g
-)
-SELECT
-  :'ziel'::uuid, gueltig_ab, kcal, protein_g, carbs_g, fat_g, herkunft, tdee,
-  nutrition_goal, 'Kopie aus Seed-Konto fuer dev@lumeos.app',
-  fiber_g, linoleic_acid_g, alpha_linolenic_acid_g
-FROM goals.nutrition_targets
-WHERE user_id = :'quelle'::uuid;
-
--- 3. Mahlzeiten mit neuer id, aber gemerkter Herkunft fuer die Positionen.
+-- 2. Mahlzeiten mit neuer id, aber gemerkter Herkunft fuer die Positionen.
 -- Die Abbildung laeuft explizit ueber IDs, nicht ueber
 -- (entry_date, meal_type): seit C-59 darf derselbe Typ mehrfach am Tag
 -- vorkommen.
@@ -451,18 +438,43 @@ SELECT
 FROM goals.user_goals g
 JOIN goal_map gm ON gm.alt = g.id;
 
+CREATE TEMP TABLE phase_map (neu uuid, alt uuid PRIMARY KEY) ON COMMIT DROP;
+
+INSERT INTO phase_map (neu, alt)
+SELECT gen_random_uuid(), id
+FROM goals.goal_phases
+WHERE user_id = :'quelle'::uuid;
+
 INSERT INTO goals.goal_phases (
   id, user_id, goal_id, phase_type, variant, parameters, gueltig_ab,
   projected_end_date, actual_end_date, transitioned_from, recommended_next,
   transition_reason
 )
 SELECT
-  gen_random_uuid(), :'ziel'::uuid, gm.neu, phase_type, variant, parameters,
+  pm.neu, :'ziel'::uuid, gm.neu, phase_type, variant, parameters,
   gueltig_ab, projected_end_date, actual_end_date, transitioned_from,
   recommended_next, transition_reason
 FROM goals.goal_phases gp
+JOIN phase_map pm ON pm.alt = gp.id
 LEFT JOIN goal_map gm ON gm.alt = gp.goal_id
 WHERE gp.user_id = :'quelle'::uuid;
+
+-- G-511: Zielwerte werden erst nach ihren Phasen kopiert. phase_id wird
+-- dabei auf die neue Phase abgebildet; ungeklaerter Altbestand ohne Phase
+-- wird nicht als scheinbar gueltiges Ziel auf das Dev-Konto uebertragen.
+INSERT INTO goals.nutrition_targets (
+  user_id, gueltig_ab, kcal, protein_g, carbs_g, fat_g, herkunft, tdee,
+  nutrition_goal, notiz, fiber_g, linoleic_acid_g, alpha_linolenic_acid_g,
+  phase_id
+)
+SELECT
+  :'ziel'::uuid, nt.gueltig_ab, nt.kcal, nt.protein_g, nt.carbs_g, nt.fat_g,
+  nt.herkunft, nt.tdee, nt.nutrition_goal,
+  'Kopie aus Seed-Konto fuer dev@lumeos.app', nt.fiber_g,
+  nt.linoleic_acid_g, nt.alpha_linolenic_acid_g, pm.neu
+FROM goals.nutrition_targets AS nt
+JOIN phase_map AS pm ON pm.alt = nt.phase_id
+WHERE nt.user_id = :'quelle'::uuid;
 
 INSERT INTO goals.goal_milestones (
   id, goal_id, user_id, milestone_type, title, description, target_value,

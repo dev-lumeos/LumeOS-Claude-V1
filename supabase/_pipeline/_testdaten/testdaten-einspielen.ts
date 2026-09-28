@@ -51,7 +51,6 @@ const WINDOWS = [
   { start: START_DATE, end: addIsoDays(START_DATE, WINDOW_DAYS) },
   { start: NEXT_START_DATE, end: addIsoDays(NEXT_START_DATE, WINDOW_DAYS - 1) },
 ]
-const TARGET_START_DATE = addIsoDays(START_DATE, 1)
 const ALL_DATES = WINDOWS.flatMap(window => daysBetween(window.start, window.end))
 const END_DATE = WINDOWS[WINDOWS.length - 1]!.end
 // C-412/C-413: Einnahmeprotokolle muessen bis zum Lauftag reichen.
@@ -1158,7 +1157,7 @@ const goalPhaseRows: GoalPhaseRow[] = [
     goalId: '30000000-0000-0000-0000-000000000101',
     phaseType: 'lean_bulk',
     variant: 'moderate',
-    parameters: '{"source":"GO-07 testdata","calorie_surplus_kcal":250}',
+    parameters: '{"source":"GO-07 testdata","calorie_surplus":250}',
     gueltigAb: relDate('2026-08-17'),
     projectedEndDate: relDate('2026-09-30'),
     actualEndDate: null,
@@ -3505,13 +3504,15 @@ VALUES
 INSERT INTO goals.nutrition_targets (
   user_id, gueltig_ab, kcal, protein_g, carbs_g, fat_g,
   fiber_g, linoleic_acid_g, alpha_linolenic_acid_g,
-  herkunft, tdee, nutrition_goal, notiz
+  herkunft, tdee, nutrition_goal, notiz, phase_id
 )
-SELECT id, DATE '${TARGET_START_DATE}', kcal, protein_g, carbs_g, fat_g,
-       30.0, ROUND(kcal * 0.04 / 9, 1), ROUND(kcal * 0.005 / 9, 1),
-       'formel', tdee, nutrition_goal,
-       'C-82 Testdaten aus Vorgängerrepo-Zuschnitt'
-FROM test_users
+SELECT gp.user_id, gp.gueltig_ab, bz.kcal, bz.protein_g, bz.carbs_g, bz.fat_g,
+       bz.fiber_g, bz.linoleic_acid_g, bz.alpha_linolenic_acid_g,
+       'formel', bz.tdee, bz.nutrition_goal,
+       'G-511 Testdaten aus der am Stichtag laufenden Phase', gp.id
+FROM goals.goal_phases AS gp
+CROSS JOIN LATERAL goals.berechne_zielwerte(gp.user_id, gp.gueltig_ab) AS bz
+WHERE bz.hindernis IS NULL
 ON CONFLICT (user_id, gueltig_ab) DO UPDATE SET
   kcal = EXCLUDED.kcal,
   protein_g = EXCLUDED.protein_g,
@@ -3523,6 +3524,7 @@ ON CONFLICT (user_id, gueltig_ab) DO UPDATE SET
   tdee = EXCLUDED.tdee,
   nutrition_goal = EXCLUDED.nutrition_goal,
   notiz = EXCLUDED.notiz,
+  phase_id = EXCLUDED.phase_id,
   updated_at = now();
 
 CREATE TEMP TABLE test_goals (

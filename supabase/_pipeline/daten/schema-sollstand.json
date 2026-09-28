@@ -1332,6 +1332,78 @@
       "tabelle": "koerperorte",
       "name": "koerperorte_touch_updated_at",
       "schritt": "544_koerperorte_schema"
+    },
+    {
+      "schema": "goals",
+      "tabelle": "nutrition_targets",
+      "name": "nutrition_targets_assign_phase",
+      "schritt": "511_goals_phase_calories_schema"
+    },
+    {
+      "schema": "goals",
+      "tabelle": "nutrition_macro_rules",
+      "name": "nutrition_macro_rules_touch_updated_at",
+      "schritt": "526_goals_macro_rule_structure"
+    },
+    {
+      "schema": "goals",
+      "tabelle": "tdee_history",
+      "name": "tdee_history_touch_updated_at",
+      "schritt": "524_tdee_history_schema"
+    },
+    {
+      "schema": "goals",
+      "tabelle": "goal_phases",
+      "name": "goal_phases_validate_rate",
+      "schritt": "529_phase_rate_storage_schema"
+    },
+    {
+      "schema": "goals",
+      "tabelle": "phase_rate_rules",
+      "name": "phase_rate_rules_validate",
+      "schritt": "529_phase_rate_storage_schema"
+    },
+    {
+      "schema": "goals",
+      "tabelle": "phase_rate_rules",
+      "name": "phase_rate_rules_touch_updated_at",
+      "schritt": "529_phase_rate_storage_schema"
+    },
+    {
+      "schema": "training",
+      "tabelle": "muscle_origins",
+      "name": "muscle_origins_canonical",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "training",
+      "tabelle": "muscle_insertions",
+      "name": "muscle_insertions_canonical",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "training",
+      "tabelle": "muscle_innervations",
+      "name": "muscle_innervations_canonical",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "training",
+      "tabelle": "muscle_pain_referrals",
+      "name": "muscle_pain_referrals_canonical",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "recovery",
+      "tabelle": "muscle_symptom_observations",
+      "name": "muscle_symptom_observations_canonical",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "recovery",
+      "tabelle": "muscle_symptom_observations",
+      "name": "muscle_symptom_observations_touch_updated_at",
+      "schritt": "546_muscle_anatomy_schema"
     }
   ],
   "_fremdschluessel": "Namentlich, weil beim Ausfall 2026-08-16 meal_items_meal_id_fkey mitverschwand. Ein fehlender Fremdschluessel faellt sonst erst auf, wenn verwaiste Zeilen entstanden sind.",
@@ -1747,6 +1819,111 @@
       "tabelle": "injection_sites",
       "zeigt_auf": "public.koerperorte",
       "schritt": "544_koerperorte_schema"
+    },
+    {
+      "schema": "goals",
+      "name": "nutrition_targets_phase_user_fk",
+      "tabelle": "nutrition_targets",
+      "zeigt_auf": "goals.goal_phases",
+      "schritt": "511_goals_phase_calories_schema"
+    },
+    {
+      "schema": "goals",
+      "name": "tdee_history_user_id_fkey",
+      "tabelle": "tdee_history",
+      "zeigt_auf": "auth.users",
+      "schritt": "524_tdee_history_schema"
+    },
+    {
+      "schema": "training",
+      "name": "muscle_origins_muscle_group_id_fkey",
+      "tabelle": "muscle_origins",
+      "zeigt_auf": "training.muscle_groups",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "training",
+      "name": "muscle_origins_source_id_fkey",
+      "tabelle": "muscle_origins",
+      "zeigt_auf": "training.anatomy_sources",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "training",
+      "name": "muscle_insertions_muscle_group_id_fkey",
+      "tabelle": "muscle_insertions",
+      "zeigt_auf": "training.muscle_groups",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "training",
+      "name": "muscle_insertions_source_id_fkey",
+      "tabelle": "muscle_insertions",
+      "zeigt_auf": "training.anatomy_sources",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "training",
+      "name": "muscle_innervations_muscle_group_id_fkey",
+      "tabelle": "muscle_innervations",
+      "zeigt_auf": "training.muscle_groups",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "training",
+      "name": "muscle_innervations_source_id_fkey",
+      "tabelle": "muscle_innervations",
+      "zeigt_auf": "training.anatomy_sources",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "training",
+      "name": "muscle_pain_referrals_muscle_group_id_fkey",
+      "tabelle": "muscle_pain_referrals",
+      "zeigt_auf": "training.muscle_groups",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "training",
+      "name": "muscle_pain_referrals_source_id_fkey",
+      "tabelle": "muscle_pain_referrals",
+      "zeigt_auf": "training.anatomy_sources",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "recovery",
+      "name": "muscle_symptom_observations_user_id_fkey",
+      "tabelle": "muscle_symptom_observations",
+      "zeigt_auf": "public.profiles",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "recovery",
+      "name": "muscle_symptom_observations_muscle_group_id_fkey",
+      "tabelle": "muscle_symptom_observations",
+      "zeigt_auf": "training.muscle_groups",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "recovery",
+      "name": "muscle_symptom_observations_origin_fkey",
+      "tabelle": "muscle_symptom_observations",
+      "zeigt_auf": "training.muscle_origins",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "recovery",
+      "name": "muscle_symptom_observations_insertion_fkey",
+      "tabelle": "muscle_symptom_observations",
+      "zeigt_auf": "training.muscle_insertions",
+      "schritt": "546_muscle_anatomy_schema"
+    },
+    {
+      "schema": "recovery",
+      "name": "muscle_symptom_observations_innervation_fkey",
+      "tabelle": "muscle_symptom_observations",
+      "zeigt_auf": "training.muscle_innervations",
+      "schritt": "546_muscle_anatomy_schema"
     }
   ],
   "funktionen": [
@@ -1984,6 +2161,11 @@
     "training.equipment": 58,
     "training.exercise_muscles": 6588,
     "training.exercise_catalog_enrichment": 1407,
+    "training.muscle_role_volume_rules": 2,
+    "training.anatomy_sources": 5,
+    "training.muscle_origins": 20,
+    "training.muscle_insertions": 21,
+    "training.muscle_innervations": 23,
     "supplements.substance_aliases": 1132,
     "supplements.rule_catalog": 64,
     "medical.biomarker_catalog": 11676,
@@ -2275,7 +2457,24 @@
         ]
       },
       "grants_herkunft": "111_goals_ziele_phasen.sql vergibt authenticated DML und service_role ALL explizit.",
-      "zeilenschutzart": "eigene_zeilen"
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": [
+        "id",
+        "user_id",
+        "goal_id",
+        "phase_type",
+        "variant",
+        "parameters",
+        "gueltig_ab",
+        "projected_end_date",
+        "actual_end_date",
+        "transitioned_from",
+        "recommended_next",
+        "transition_reason",
+        "created_at",
+        "updated_at",
+        "zielrate_pct_kg_woche"
+      ]
     },
     {
       "schema": "goals",
@@ -6084,6 +6283,16 @@
     {"schema":"supplements","name":"recipe_product_references","schritt":"519_supplement_intake_references_schema","rls":true,"policies":["SELECT","INSERT","UPDATE","DELETE"],"grants":{"authenticated":["SELECT","INSERT","UPDATE","DELETE"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-519/E-84: Produktverweis eines Rezeptes liegt im Supplements-Schema; owner-guard und RLS begrenzen ihn auf eigene Rezeptpositionen.","zeilenschutzart":"eigene_zeilen"},
     {"schema":"supplements","name":"product_form_placement_rules","schritt":"524_meal_plan_supplements_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-524/E-83: eine lesbare, kuratierte Produktformregel; authenticated liest, anon hat keine Rechte.","zeilenschutzart":"oeffentlich"},
     {"schema":"supplements","name":"meal_plan_product_references","schritt":"524_meal_plan_supplements_schema","rls":true,"policies":["SELECT","INSERT","UPDATE","DELETE"],"grants":{"authenticated":["SELECT","INSERT","UPDATE","DELETE"],"service_role":["SELECT","INSERT","UPDATE","DELETE","REFERENCES","TRIGGER","TRUNCATE"]},"grants_herkunft":"C-524/E-84: Produktabsicht eines supplement-Planeintrags; owner-guard und RLS beschränken auf eigene Planeinträge.","zeilenschutzart":"eigene_zeilen"}
+    ,{"schema":"goals","name":"nutrition_macro_rules","schritt":"526_goals_macro_rule_structure","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE"]},"grants_herkunft":"G-526: globale Regelstruktur ist fuer authenticated lesbar und ausschliesslich durch service_role pflegbar; Werte brauchen Beleg oder sichtbare Annahme.","zeilenschutzart":"oeffentlich","spalten":["code","nutrient","rule_kind","basis","unit","phase_type","experience_level","lower_value","upper_value","evidence_status","source_id","source_locator","notes","created_at","updated_at"]},
+    {"schema":"goals","name":"tdee_history","schritt":"524_tdee_history_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE"]},"grants_herkunft":"G-524: eigene Reihenwerte sind fuer authenticated lesbar; nur service_role schreibt berechnete Historie. PUBLIC und anon sind explizit entzogen.","zeilenschutzart":"eigene_zeilen","spalten":["id","user_id","stichtag","window_days","period_start","complete_intake_days","weight_measurement_count","weight_start_kg","weight_end_kg","weight_delta_kg","measurement_span_days","avg_intake_kcal","formula_tdee_kcal","raw_tdee_kcal","previous_tdee_kcal","previous_source","adaptive_tdee_kcal","delta_to_formula_kcal","alpha","confidence","reliable","status","method","created_at","updated_at"]},
+    {"schema":"goals","name":"phase_rate_rules","schritt":"529_phase_rate_storage_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE"]},"grants_herkunft":"G-529: globale belegte Zielraten-Spannen sind fuer authenticated lesbar und ausschliesslich durch service_role pflegbar; der Katalog startet leer.","zeilenschutzart":"oeffentlich","spalten":["code","phase_type","experience_level","lower_value","upper_value","evidence_status","source_id","source_locator","notes","created_at","updated_at"]},
+    {"schema":"training","name":"muscle_role_volume_rules","schritt":"551_role_measurement_separation_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE"]},"grants_herkunft":"C-551: Rollenregeln sind fuer authenticated lesbar und ausschliesslich durch service_role pflegbar.","zeilenschutzart":"oeffentlich","spalten":["role","weekly_volume_factor","source_id","source_locator","updated_at"]},
+    {"schema":"training","name":"anatomy_sources","schritt":"546_muscle_anatomy_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE"]},"grants_herkunft":"C-546: Anatomiequellen sind global lesbar und nur durch service_role pflegbar.","zeilenschutzart":"oeffentlich","spalten":["id","name","url","source_kind","citation","published_year"]},
+    {"schema":"training","name":"muscle_origins","schritt":"546_muscle_anatomy_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE"]},"grants_herkunft":"C-546: belegte Koerperfakten sind global lesbar und nur durch service_role pflegbar.","zeilenschutzart":"oeffentlich","spalten":["id","muscle_group_id","attachment_site","source_id","note","created_at"]},
+    {"schema":"training","name":"muscle_insertions","schritt":"546_muscle_anatomy_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE"]},"grants_herkunft":"C-546: belegte Koerperfakten sind global lesbar und nur durch service_role pflegbar.","zeilenschutzart":"oeffentlich","spalten":["id","muscle_group_id","attachment_site","source_id","note","created_at"]},
+    {"schema":"training","name":"muscle_innervations","schritt":"546_muscle_anatomy_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE"]},"grants_herkunft":"C-546: belegte Koerperfakten sind global lesbar und nur durch service_role pflegbar.","zeilenschutzart":"oeffentlich","spalten":["id","muscle_group_id","nerve_name","nerve_roots","source_id","note","created_at"]},
+    {"schema":"training","name":"muscle_pain_referrals","schritt":"546_muscle_anatomy_schema","rls":true,"policies":["SELECT"],"grants":{"authenticated":["SELECT"],"service_role":["SELECT","INSERT","UPDATE","DELETE"]},"grants_herkunft":"C-546: nur belegte Ausstrahlungsmuster sind global lesbar und nur durch service_role pflegbar.","zeilenschutzart":"oeffentlich","spalten":["id","muscle_group_id","trigger_site","referred_area","source_id","note","created_at"]},
+    {"schema":"recovery","name":"muscle_symptom_observations","schritt":"546_muscle_anatomy_schema","rls":true,"policies":["SELECT","INSERT","UPDATE","DELETE"],"grants":{"authenticated":["SELECT","INSERT","UPDATE","DELETE"],"service_role":["SELECT","INSERT","UPDATE","DELETE"]},"grants_herkunft":"C-546: Nutzer verwalten nur eigene zeitbezogene Symptome; service_role darf sie fuer Backend-Wege verwalten.","zeilenschutzart":"eigene_zeilen","spalten":["id","user_id","muscle_group_id","observed_at","symptom_type","severity","anatomical_focus","origin_id","insertion_id","innervation_id","note","created_at","updated_at"]}
   ],
   "_fremde_funktionen": "GO-04: Funktionen ausserhalb nutrition. Dieselbe Luecke wie oben.",
   "fremde_funktionen": [
@@ -6130,7 +6339,32 @@
     {
       "schema": "goals",
       "name": "adaptive_tdee",
-      "schritt": "113"
+      "schritt": "524_tdee_history_schema"
+    },
+    {
+      "schema": "goals",
+      "name": "tdee_ema",
+      "schritt": "524_tdee_history_schema"
+    },
+    {
+      "schema": "goals",
+      "name": "tdee_previous_value",
+      "schritt": "524_tdee_history_schema"
+    },
+    {
+      "schema": "goals",
+      "name": "record_adaptive_tdee",
+      "schritt": "524_tdee_history_writer"
+    },
+    {
+      "schema": "goals",
+      "name": "validate_goal_phase_rate",
+      "schritt": "529_phase_rate_storage_schema"
+    },
+    {
+      "schema": "goals",
+      "name": "validate_phase_rate_rule",
+      "schritt": "529_phase_rate_storage_schema"
     },
     {
       "schema": "goals",
@@ -6488,6 +6722,16 @@
       "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT"]},
       "grants_herkunft": "C-531: security-invoker-Leseweg auf die kanonischen Muskelgruppen; PUBLIC und anon haben keinen Zugriff.",
       "spalten": ["id", "name", "name_display_en", "parent_id", "body_region", "display_order", "created_at"]
+    },
+    {
+      "schema": "training",
+      "name": "muscle_exercises_effective",
+      "schritt": "551_role_measurement_separation_schema",
+      "security_invoker": true,
+      "security_barrier": false,
+      "grants": {"authenticated": ["SELECT"], "service_role": ["SELECT"]},
+      "grants_herkunft": "C-543/C-551: security-invoker-Sicht mit getrennter Rollenregel und optionaler Aktivierungsmessung.",
+      "spalten": ["muscle_group_id", "exercise_id", "is_direct", "is_inherited", "is_collected", "nearest_distance", "contribution_count", "contributions"]
     },
     {
       "schema": "public",

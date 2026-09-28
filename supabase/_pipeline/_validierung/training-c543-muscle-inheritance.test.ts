@@ -128,10 +128,11 @@ test('C-543: Kinder erben, Eltern sammeln und direkte Fakten schlagen indirekte'
   })
 })
 
-test('C-543: jeder geerbte Faktor entspricht unveraendert seiner Grundzuordnung', () => {
+test('C-543/C-551: geerbte Rollenregel und Messung entsprechen ihrer Grundzuordnung', () => {
   const result = one<{
     inheritedContributions: number
-    changedFactors: number
+    changedRoleFactors: number
+    changedMeasurements: number
     unmarkedIndirect: number
   }>(`
     WITH expanded AS (
@@ -146,8 +147,13 @@ test('C-543: jeder geerbte Faktor entspricht unveraendert seiner Grundzuordnung'
       'inheritedContributions', count(*) FILTER (
         WHERE contribution->>'relation_kind' = 'inherited_ancestor'
       ),
-      'changedFactors', count(*) FILTER (
-        WHERE (contribution->>'faktor')::numeric IS DISTINCT FROM source.faktor
+      'changedRoleFactors', count(*) FILTER (
+        WHERE (contribution->>'weekly_volume_factor')::numeric
+          IS DISTINCT FROM rule.weekly_volume_factor
+      ),
+      'changedMeasurements', count(*) FILTER (
+        WHERE (contribution->>'activation_factor')::numeric
+          IS DISTINCT FROM source.activation_factor
       ),
       'unmarkedIndirect', count(*) FILTER (
         WHERE contribution->>'relation_kind' <> 'direct'
@@ -158,11 +164,13 @@ test('C-543: jeder geerbte Faktor entspricht unveraendert seiner Grundzuordnung'
     JOIN training.exercise_muscles source
       ON source.exercise_id = expanded.exercise_id
      AND source.muscle_group_id = (expanded.contribution->>'source_muscle_group_id')::uuid
-     AND source.role = expanded.contribution->>'role';
+     AND source.role = expanded.contribution->>'role'
+    JOIN training.muscle_role_volume_rules rule ON rule.role = source.role;
   `)
 
   assert.ok(result.inheritedContributions > 0)
-  assert.equal(result.changedFactors, 0)
+  assert.equal(result.changedRoleFactors, 0)
+  assert.equal(result.changedMeasurements, 0)
   assert.equal(result.unmarkedIndirect, 0)
 })
 

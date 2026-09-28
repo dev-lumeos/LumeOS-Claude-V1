@@ -35,6 +35,12 @@ test('C-464: Formel, Zielwert-Leser und Fortschreibung tragen Fiber', () => {
     SET birth_date = DATE '1990-01-01', biological_sex = 'male', height_cm = 180,
         body_weight_kg = 80, activity_level = 'moderate', nutrition_goal = 'maintain'
     WHERE id = '${USER}'::uuid;
+    INSERT INTO goals.goal_phases (
+      id, user_id, phase_type, parameters, gueltig_ab
+    ) VALUES (
+      'c464f100-0000-0000-0000-000000000001', '${USER}'::uuid,
+      'maintenance', '{}'::jsonb, DATE '2030-01-01'
+    );
 
     INSERT INTO goals.nutrition_targets (
       user_id, gueltig_ab, kcal, protein_g, carbs_g, fat_g, fiber_g,
