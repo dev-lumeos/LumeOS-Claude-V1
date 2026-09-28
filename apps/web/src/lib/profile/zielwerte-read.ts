@@ -50,8 +50,105 @@ export type Zielvorschlag = {
   nutrition_goal: string | null
   kalorienfaktor: number | null
   /** `null` heisst: es ging. Sonst der Grund. */
-  hindernis: 'profil_unvollstaendig' | 'zielrichtung_ohne_faktor' | null
+  hindernis: Hindernis | null
   fehlende_felder: string[]
+}
+
+// ── G-527: vier Hindernisse, vier Texte ──────────────────────────
+//
+// `[cmd]` **Hier standen zwei** — `profil_unvollstaendig` und
+// `zielrichtung_ohne_faktor`. `[cmd]` **G-511 bringt zwei weitere:**
+// `keine_aktive_phase` und `phasenparameter_fehlt`.
+//
+// `[read]` **Ohne sie wird jede Ursache, die nicht die erste ist, zu
+// einem Satz:** *,,Die Formel lieferte keine Zielkalorien"*
+// (`zielwerte-write.ts:54`). **Vier Ursachen, eine Meldung** — und
+// die eine sagt nicht, was zu tun ist.
+
+/**
+ * Was `berechne_zielwerte` als `hindernis` zurueckgeben kann.
+ *
+ * `[read]` **Die Namen kommen aus der Datenbank, nicht von hier** —
+ * sie muessen zeichengleich zu dem sein, was die Funktion schreibt.
+ */
+export type Hindernis =
+  | 'profil_unvollstaendig'
+  | 'zielrichtung_ohne_faktor'
+  | 'keine_aktive_phase'
+  | 'phasenparameter_fehlt'
+
+/**
+ * Der Satz zum Hindernis — **was zu tun ist, nicht was schiefging.**
+ *
+ * `[read]` **Kein Fehlertext.** Drei der vier Faelle kann der Nutzer
+ * selbst aufloesen; der Satz sagt ihm wie. **Der vierte
+ * (`zielrichtung_ohne_faktor`) ist eine Luecke im Katalog** — dort
+ * ist ehrlich, dass er nichts tun kann.
+ *
+ * `[read]` **Grenze zu E-74 geprueft (G-527/A4):** E-74 verbietet,
+ * **aus Daten eine Diagnose abzuleiten oder einen Wert als krankhaft
+ * zu bewerten.** *,,Fuer diese Phase fehlt der Kalorienwert"* ist
+ * eine Aussage ueber den eigenen Datenbestand und eine Aufforderung
+ * zum Ergaenzen — **keine Bewertung und keine Empfehlung.** Sie
+ * faellt nicht unter E-74.
+ *
+ * @param fehlende Nur fuer `profil_unvollstaendig` — die Feldnamen.
+ */
+export function hindernisSatz(h: Hindernis, fehlende: string[] = []): string {
+  switch (h) {
+    case 'profil_unvollstaendig':
+      return fehlende.length
+        ? `Ergaenze dein Profil: ${fehlende.join(', ')} fehlt noch.`
+        : 'Ergaenze dein Profil — es fehlen noch Angaben.'
+    case 'keine_aktive_phase':
+      return 'Waehle eine Phase. Ohne sie gibt es kein Kalorienziel, '
+        + 'weil die Phase das Tempo bestimmt.'
+    case 'phasenparameter_fehlt':
+      return 'Fuer diese Phase fehlt der Kalorienwert. Trag ihn an der '
+        + 'Phase nach, dann rechnet das Ziel.'
+    case 'zielrichtung_ohne_faktor':
+      // `[read]` **Der einzige Fall, den der Nutzer NICHT aufloesen
+      // kann** — der Katalog kennt die Zielrichtung nicht. **Das
+      // sagt der Satz, statt eine Handlung vorzutaeuschen.**
+      return 'Fuer diese Zielrichtung ist noch kein Kalorienzuschlag '
+        + 'hinterlegt. Das liegt nicht an deinen Angaben.'
+  }
+}
+
+/**
+ * Phasen OHNE Tagesziel — sie sind kein Hindernis, sondern ein
+ * eigener Zustand.
+ *
+ * `[cmd]` **G-527/A6 und A7, belegt in G-521/F6:** die Peak Week ist
+ * **protokollgetrieben** (Entladen, Laden, Natrium — `PHASE_MODELS.md:127-131`),
+ * **ein Kalorienziel verliert dort seinen Wert.**
+ *
+ * `[cmd]` **`expert_bb_annual` ist eine VORLAGE, die Phasen erzeugt**
+ * (`PHASE_MODELS.md:167-173`: zwoelf Monate, je ein Phasenname) —
+ * **sie hat selbst keines.**
+ *
+ * `[read]` **Der Unterschied zu einem Hindernis ist der Ton:** ein
+ * Hindernis fordert zum Handeln auf. **Hier gibt es nichts zu tun,
+ * und das ist richtig so** — sonst sieht der Nutzer in der
+ * wichtigsten Woche seines Jahres eine Fehlermeldung.
+ */
+export const PHASEN_OHNE_TAGESZIEL: ReadonlySet<string> = new Set([
+  'peak_week',
+  'expert_bb_annual',
+])
+
+/** Warum diese Phase kein Tagesziel hat — je Phase ein eigener Satz. */
+export function ohneTageszielSatz(phaseType: string): string | null {
+  switch (phaseType) {
+    case 'peak_week':
+      return 'Die Peak Week laeuft nach Protokoll, nicht nach '
+        + 'Tagesziel — Entladen, Laden, Natrium.'
+    case 'expert_bb_annual':
+      return 'Der Jahreszyklus ist eine Vorlage: er erzeugt Phasen, '
+        + 'und die tragen das Ziel.'
+    default:
+      return null
+  }
 }
 
 function zahl(v: unknown): number | null {

@@ -10,7 +10,35 @@
 import { createSessionClient } from '@lumeos/shared/session'
 
 import { ProfileWriteError } from './profile-model'
-import { getZielwertVorschlag, type Zielwerte } from './zielwerte-read'
+import {
+  getZielwertVorschlag, hindernisSatz,
+  type Hindernis, type Zielwerte,
+} from './zielwerte-read'
+
+/**
+ * Macht aus einem Datenbankfehler dasselbe Hindernis, das die
+ * Leseseite kennt — oder `null`, wenn es keines ist.
+ *
+ * `[cmd]` **G-527: Treffer auf `23514` in `apps/web/src` waren
+ * null.** `[read]` **`23514` ist `check_violation`** — der Code,
+ * mit dem der G-511-Trigger abweist.
+ *
+ * `[read]` **Der Name wird aus der Meldung gelesen, nicht geraten:**
+ * die Funktion nennt ihn (`keine_aktive_phase`,
+ * `phasenparameter_fehlt`). **Findet sich keiner, ist es ein
+ * fremder CHECK** — dann bleibt es ein Schreibfehler.
+ */
+function hindernisAusFehler(
+  error: { code?: string; message?: string },
+): Hindernis | null {
+  if (error.code !== '23514') return null
+  const text = error.message ?? ''
+  const bekannt: Hindernis[] = [
+    'keine_aktive_phase', 'phasenparameter_fehlt',
+    'profil_unvollstaendig', 'zielrichtung_ohne_faktor',
+  ]
+  return bekannt.find(h => text.includes(h)) ?? null
+}
 
 /** Heute in lokaler Zeit als YYYY-MM-DD. */
 function heute(): string {
@@ -38,19 +66,25 @@ export async function setzeZielwerteAusFormel(): Promise<Zielwerte> {
   const stichtag = heute()
   const vorschlag = await getZielwertVorschlag(stichtag)
 
-  if (vorschlag.hindernis === 'profil_unvollstaendig') {
+  // ── G-527/A1: je Hindernis der eigene Satz ─────────────────────
+  //
+  // `[cmd]` **Hier standen zwei Faelle und ein Auffangsatz:** *,,Die
+  // Formel lieferte keine Zielkalorien."* `[read]` **Damit wurden
+  // vier Ursachen zu einer Meldung** — und die eine sagte nicht, was
+  // zu tun ist.
+  //
+  // `[read]` **Der Text kommt aus `hindernisSatz()`**, damit Lese-
+  // und Schreibweg denselben Wortlaut fuehren. **Zwei Kopien
+  // driften.**
+  if (vorschlag.hindernis) {
     throw new ProfileWriteError(
       'INVALID_INPUT',
-      `Profil unvollstaendig: ${vorschlag.fehlende_felder.join(', ')} fehlt.`,
-    )
-  }
-  if (vorschlag.hindernis === 'zielrichtung_ohne_faktor') {
-    throw new ProfileWriteError(
-      'INVALID_INPUT',
-      'Fuer diese Zielrichtung gibt es noch keinen Kalorienzuschlag.',
+      hindernisSatz(vorschlag.hindernis, vorschlag.fehlende_felder),
     )
   }
   if (vorschlag.kcal === null) {
+    // `[read]` **Kein Hindernis, aber auch keine Zahl** — das ist
+    // ein echter Fehler der Rechnung und bleibt es.
     throw new ProfileWriteError('INVALID_INPUT', 'Die Formel lieferte keine Zielkalorien.')
   }
 
@@ -76,7 +110,25 @@ export async function setzeZielwerteAusFormel(): Promise<Zielwerte> {
     .select('gueltig_ab, kcal, protein_g, carbs_g, fat_g, fiber_g, linoleic_acid_g, alpha_linolenic_acid_g, herkunft, tdee, nutrition_goal')
     .maybeSingle()
 
-  if (error) throw new ProfileWriteError('WRITE_FAILED', error.message)
+  // ── G-527/A2: 23514 ist eine Auskunft, kein Serverfehler ───────
+  //
+  // `[cmd]` **Hier stand `error.message` unveraendert.** `[read]`
+  // **Ein CHECK-Verstoss aus dem G-511-Trigger kam damit als
+  // Datenbanktext beim Nutzer an — oder als HTTP 500**, fuer eine
+  // Situation, die er selbst aufloesen kann.
+  //
+  // `[read]` **Ein Zustand, zwei Wege, eine Meldung:** derselbe
+  // Satz wie auf der Leseseite, aus derselben Funktion.
+  //
+  // `[cmd]` **Der Weg hierher ist echt:** die Rechnung lief oben
+  // durch (kein `hindernis`, eine Zahl), und erst der Trigger beim
+  // Schreiben weist ab — **etwa weil die Phase zwischen Lesen und
+  // Schreiben beendet wurde.**
+  if (error) {
+    const h = hindernisAusFehler(error)
+    if (h) throw new ProfileWriteError('INVALID_INPUT', hindernisSatz(h))
+    throw new ProfileWriteError('WRITE_FAILED', error.message)
+  }
   if (!data) throw new ProfileWriteError('WRITE_FAILED', 'Upsert lieferte keine Zeile zurueck.')
 
   const r = data as Record<string, unknown>

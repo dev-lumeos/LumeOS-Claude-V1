@@ -28,6 +28,15 @@ import { Card, Pill, Icon, LineChart, InEntwicklungKnopf } from '@lumeos/ui'
 // Wert-Import aus `lib/goals/fotosession-write` zoege den Server-Baum
 // ueber die `'use client'`-Grenze (die Lehre aus G-412).
 import { fotosessionAnlegenAktion } from './fotosession-aktionen'
+// G-422: der Schreibweg fuer Koerpermessungen gibt es seit G-122 —
+// nur der Aufrufer fehlte.
+import { messungAnlegenAktion } from './koerpermass-aktionen'
+// `[read]` **Nur Typ und Konstanten** — `koerpermass-rechnung.ts`
+// hat kein Server-I/O, aber die Regel bleibt: kein Wert-Import aus
+// einem `*-write`-Modul.
+import {
+  BF_METHODEN, LEERE_MESSUNG, type KoerpermassEingabe,
+} from '../../../lib/goals/koerpermass-rechnung'
 
 import {
   zielArtAuswahl, AKTIVE_PLAETZE, type ZielArt,
@@ -35,6 +44,13 @@ import {
 
 import { MEASUREMENTS, daysToDeadline, type Ziel } from './daten'
 import type { ModalZustand } from './kontext'
+
+/** Heute als `YYYY-MM-DD`, in Ortszeit. */
+function heuteISO(): string {
+  const d = new Date()
+  const z = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}`
+}
 
 // ── Der Rahmen ──────────────────────────────────────────────────
 // [cmd] module-goals.jsx:659-681.
@@ -363,37 +379,144 @@ function GoalProgressChart({ g }: { g: Ziel }) {
 
 // ── LOG WEIGHT ──────────────────────────────────────────────────
 // [cmd] module-goals.jsx:827-847.
+//
+// ══ G-422: gebaut und nicht verdrahtet ═══════════════════════════
+//
+// `[cmd]` **Hier stand ein `InEntwicklungKnopf` mit diesem Grund:**
+// *,,`goals.body_measurements` gibt es … Was fehlt, ist der
+// Schreibweg — eine eigene Messung eintragen kann die Oberflaeche
+// noch nicht."*
+//
+// `[cmd]` **Der Grund war FALSCH.** `messungAnlegenAktion` gibt es
+// seit G-122 (`koerpermass-aktionen.ts:31`), samt Pruefung
+// (`koerpermass-rechnung.ts`) und Schreibweg
+// (`koerpermass-write.ts`). `[cmd]` **Gemessen 2026-09-28: null
+// Aufrufer im ganzen `apps/web/src`** — die Funktion war fertig und
+// niemand rief sie.
+//
+// `[read]` **Ein Vermerk mit falschem Grund ist schlimmer als eine
+// fehlende Kachel** — er verhindert, dass jemand nachsieht. **Hier
+// hat er genau das getan: das Fehlende lag daneben.**
+//
+// `[cmd]` **Die Quellenliste kommt aus `BF_METHODEN`**, also aus
+// `body_measurements_method_ck` — **vorher standen dort
+// `Manual / Smart scale / DXA`, und zwei davon kennt der CHECK
+// nicht.**
 function LogWeightModal({ onClose }: { onClose: () => void }) {
+  const [eingabe, setEingabe] = React.useState<KoerpermassEingabe>({
+    ...LEERE_MESSUNG,
+    measurement_date: heuteISO(),
+    bf_method: 'manual',
+  })
+  const [laeuft, setLaeuft] = React.useState(false)
+  const [fehler, setFehler] = React.useState<string | null>(null)
+  const [felder, setFelder] = React.useState<Array<{ feld: string; text: string }>>([])
+  const [fertig, setFertig] = React.useState(false)
+
+  const setz = (k: keyof KoerpermassEingabe, v: string) =>
+    setEingabe(e => ({ ...e, [k]: v }))
+  const feldFehler = (f: string) => felder.find(x => x.feld === f)?.text
+
+  async function speichern() {
+    setLaeuft(true)
+    setFehler(null)
+    setFelder([])
+    const r = await messungAnlegenAktion(eingabe)
+    setLaeuft(false)
+    if (r.ok) {
+      setFertig(true)
+      // `[read]` **Erst schliessen, wenn die Zeile da ist** — sonst
+      // sieht ein Fehlschlag aus wie Erfolg (dasselbe wie im
+      // Fotomodal).
+      setTimeout(onClose, 900)
+    } else {
+      setFelder(r.felder)
+      if (r.felder.length === 0) setFehler(r.text)
+    }
+  }
+
   return (
     <GModal title="Log weight" subtitle="Daily — morning fasted preferred"
             eyebrow="plus" onClose={onClose} width={520}
             footer={
               <>
                 <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
-                <InEntwicklungKnopf titel="Log" className="v2-btn v2-btn-primary"
-                                    grund="`goals.body_measurements` gibt es (17 Spalten, 362 Zeilen live) und wird gelesen. Was fehlt, ist der Schreibweg — eine eigene Messung eintragen kann die Oberflaeche noch nicht.">
-                  <Icon name="check" className="v2-ic v2-ic-sm" />Log
-                </InEntwicklungKnopf>
+                <button type="button" className="v2-btn v2-btn-primary"
+                        data-messung-speichern
+                        disabled={laeuft || !eingabe.weight_kg.trim()}
+                        onClick={() => { void speichern() }}>
+                  <Icon name="check" className="v2-ic v2-ic-sm" />
+                  {laeuft ? 'Speichert …' : 'Log'}
+                </button>
               </>
             }>
       <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
-        <GField label="Date"><GInput type="date" aria-label="Date" defaultValue="2026-05-16" /></GField>
-        <GField label="Time"><GInput type="time" aria-label="Time" defaultValue="07:15" /></GField>
+        <GField label="Date">
+          <GInput type="date" aria-label="Date" data-messfeld="datum"
+                  value={eingabe.measurement_date}
+                  onChange={e => setz('measurement_date', e.target.value)} />
+        </GField>
+        <GField label="Time">
+          <GInput type="time" aria-label="Time" data-messfeld="zeit"
+                  value={eingabe.measurement_time}
+                  onChange={e => setz('measurement_time', e.target.value)} />
+        </GField>
       </div>
       <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
-        <GField label="Weight"><GInput type="number" aria-label="Weight" defaultValue="79.4" /></GField>
-        <GField label="Body fat (optional)"><GInput type="number" aria-label="Body fat" defaultValue="13.8" /></GField>
+        <GField label="Weight" sub="kg">
+          <GInput type="number" aria-label="Weight" data-messfeld="gewicht"
+                  value={eingabe.weight_kg}
+                  onChange={e => setz('weight_kg', e.target.value)} />
+        </GField>
+        <GField label="Body fat (optional)" sub="%">
+          <GInput type="number" aria-label="Body fat" data-messfeld="koerperfett"
+                  value={eingabe.body_fat_pct}
+                  onChange={e => setz('body_fat_pct', e.target.value)} />
+        </GField>
       </div>
-      <GField label="Source">
+      {/* `[cmd]` **Die zehn Werte aus dem CHECK**, nicht drei
+          erfundene. */}
+      <GField label="Source" sub="aus body_measurements_method_ck">
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-          {['Manual', 'Smart scale', 'DXA'].map(s => (
-            <InEntwicklungKnopf key={s} titel={`Quelle ${s}`} className="v2-btn">{s}</InEntwicklungKnopf>
+          {BF_METHODEN.map(s => (
+            <button key={s} type="button" data-messfeld-quelle={s}
+                    className={`v2-btn${eingabe.bf_method === s ? ' v2-btn-primary' : ''}`}
+                    onClick={() => setz('bf_method', s)}>
+              {s.replace(/_/g, ' ')}
+            </button>
           ))}
         </div>
       </GField>
       <GField label="Note (optional)">
-        <GInput aria-label="Note" placeholder="Hydration, cycle phase, salt the night before…" />
+        <GInput aria-label="Note" data-messfeld="notiz" value={eingabe.notes}
+                placeholder="Hydration, cycle phase, salt the night before…"
+                onChange={e => setz('notes', e.target.value)} />
       </GField>
+
+      {/* `[read]` **Feldfehler am Feld, nicht als Sammelsatz** — die
+          Pruefung liefert sie einzeln. */}
+      {felder.length > 0 && (
+        <div style={{
+          marginTop: 10, padding: '8px 10px', borderRadius: 5, fontSize: 11.5,
+          lineHeight: 1.5,
+          background: 'color-mix(in oklch, var(--neg) 8%, var(--surface))',
+          border: '1px solid color-mix(in oklch, var(--neg) 30%, var(--border))',
+        }}>
+          {felder.map(f => <div key={f.feld}>{f.feld}: {f.text}</div>)}
+        </div>
+      )}
+      {fehler && (
+        <div className="v2-muted" style={{ marginTop: 10, fontSize: 11.5 }}>{fehler}</div>
+      )}
+      {fertig && (
+        <div style={{
+          marginTop: 10, padding: '8px 10px', borderRadius: 5, fontSize: 11.5,
+          background: 'color-mix(in oklch, var(--pos) 8%, var(--surface))',
+          border: '1px solid color-mix(in oklch, var(--pos) 30%, var(--border))',
+        }}>
+          Messung gespeichert.
+        </div>
+      )}
     </GModal>
   )
 }
