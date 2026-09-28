@@ -70,6 +70,7 @@ type TestUser = {
   heightCm: number
   bodyWeightKg: number | null
   activityLevel: 'light' | 'moderate' | 'active' | 'very_active'
+  experienceLevel: 'beginner' | 'advanced' | 'pro' | 'elite'
   nutritionGoal: 'lose_weight' | 'gain_muscle' | 'performance'
   kcal: number
   proteinG: number
@@ -207,6 +208,7 @@ type GoalPhaseRow = {
   goalId: string | null
   phaseType: 'fat_loss' | 'lean_bulk' | 'maintenance' | 'recomp' | 'contest_prep' | 'reverse_diet' | 'expert_bb_annual' | 'mini_cut' | 'peak_week'
   variant: string | null
+  zielRatePctKgWoche: number | null
   parameters: string
   gueltigAb: string
   projectedEndDate: string | null
@@ -453,6 +455,7 @@ const USERS: TestUser[] = [
     heightCm: 185,
     bodyWeightKg: 85,
     activityLevel: 'light',
+    experienceLevel: 'beginner',
     nutritionGoal: 'gain_muscle',
     kcal: 2500,
     proteinG: 170,
@@ -469,6 +472,7 @@ const USERS: TestUser[] = [
     heightCm: 178,
     bodyWeightKg: 78,
     activityLevel: 'light',
+    experienceLevel: 'beginner',
     nutritionGoal: 'performance',
     kcal: 2200,
     proteinG: 156,
@@ -485,6 +489,7 @@ const USERS: TestUser[] = [
     heightCm: 165,
     bodyWeightKg: null,
     activityLevel: 'active',
+    experienceLevel: 'beginner',
     nutritionGoal: 'lose_weight',
     kcal: 1800,
     proteinG: 150,
@@ -1142,7 +1147,8 @@ const goalPhaseRows: GoalPhaseRow[] = [
     userId: '10000000-0000-0000-0000-000000000101',
     goalId: '30000000-0000-0000-0000-000000000101',
     phaseType: 'maintenance',
-    variant: 'baseline',
+    variant: null,
+    zielRatePctKgWoche: null,
     parameters: '{"source":"GO-07 testdata","reason":"Startphase vor Lean Bulk"}',
     gueltigAb: relDate('2026-08-03'),
     projectedEndDate: relDate('2026-08-16'),
@@ -1156,8 +1162,9 @@ const goalPhaseRows: GoalPhaseRow[] = [
     userId: '10000000-0000-0000-0000-000000000101',
     goalId: '30000000-0000-0000-0000-000000000101',
     phaseType: 'lean_bulk',
-    variant: 'moderate',
-    parameters: '{"source":"GO-07 testdata","calorie_surplus":250}',
+    variant: null,
+    zielRatePctKgWoche: 0.267,
+    parameters: '{"source":"GO-07 testdata"}',
     gueltigAb: relDate('2026-08-17'),
     projectedEndDate: relDate('2026-09-30'),
     actualEndDate: null,
@@ -1170,7 +1177,8 @@ const goalPhaseRows: GoalPhaseRow[] = [
     userId: '10000000-0000-0000-0000-000000000102',
     goalId: null,
     phaseType: 'maintenance',
-    variant: 'performance_placeholder',
+    variant: null,
+    zielRatePctKgWoche: null,
     parameters: '{"source":"GO-07 testdata","note":"Phase unabhaengig vom konkreten Ziel"}',
     gueltigAb: relDate('2026-08-05'),
     projectedEndDate: null,
@@ -2441,6 +2449,7 @@ const userValues = USERS.map(user => tuple([
   user.heightCm,
   user.bodyWeightKg,
   user.activityLevel,
+  user.experienceLevel,
   user.nutritionGoal,
   user.kcal,
   user.proteinG,
@@ -2556,6 +2565,7 @@ const goalPhaseValues = goalPhaseRows.map(phase => tuple([
   phase.goalId,
   phase.phaseType,
   phase.variant,
+  phase.zielRatePctKgWoche,
   phase.parameters,
   phase.gueltigAb,
   phase.projectedEndDate,
@@ -2911,6 +2921,7 @@ CREATE TEMP TABLE test_users (
   height_cm numeric NOT NULL,
   body_weight_kg numeric,
   activity_level text NOT NULL,
+  experience_level text NOT NULL,
   nutrition_goal text NOT NULL,
   kcal numeric NOT NULL,
   protein_g numeric NOT NULL,
@@ -3164,9 +3175,11 @@ SELECT 'c4230000-0000-0000-0000-000000000031'::uuid, s.id, 200, 'mg', 'morning',
 FROM supplements.supplements s WHERE s.is_active ORDER BY s.id LIMIT 1;
 
 INSERT INTO public.profiles (
-  id, birth_date, biological_sex, height_cm, body_weight_kg, activity_level, nutrition_goal
+  id, birth_date, biological_sex, height_cm, body_weight_kg, activity_level,
+  experience_level, nutrition_goal
 )
-SELECT id, birth_date, biological_sex, height_cm, body_weight_kg, activity_level, nutrition_goal
+SELECT id, birth_date, biological_sex, height_cm, body_weight_kg, activity_level,
+       experience_level, nutrition_goal
 FROM test_users
 ON CONFLICT (id) DO UPDATE SET
   birth_date = EXCLUDED.birth_date,
@@ -3174,11 +3187,12 @@ ON CONFLICT (id) DO UPDATE SET
   height_cm = EXCLUDED.height_cm,
   body_weight_kg = EXCLUDED.body_weight_kg,
   activity_level = EXCLUDED.activity_level,
+  experience_level = EXCLUDED.experience_level,
   nutrition_goal = EXCLUDED.nutrition_goal,
   updated_at = now();
 
-INSERT INTO public.profiles (id)
-VALUES (${lit(COACH_USER.id)}::uuid)
+INSERT INTO public.profiles (id, experience_level)
+VALUES (${lit(COACH_USER.id)}::uuid, 'beginner')
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO coach.coach_profiles (user_id, display_name, email)
@@ -3571,6 +3585,7 @@ CREATE TEMP TABLE test_goal_phases (
   goal_id uuid,
   phase_type text NOT NULL,
   variant text,
+  zielrate_pct_kg_woche numeric(5,3),
   parameters jsonb NOT NULL,
   gueltig_ab date NOT NULL,
   projected_end_date date,
@@ -3584,12 +3599,12 @@ INSERT INTO test_goal_phases VALUES
 ${goalPhaseValues};
 
 INSERT INTO goals.goal_phases (
-  id, user_id, goal_id, phase_type, variant, parameters,
+  id, user_id, goal_id, phase_type, variant, zielrate_pct_kg_woche, parameters,
   gueltig_ab, projected_end_date, actual_end_date,
   transitioned_from, recommended_next, transition_reason
 )
 SELECT
-  id, user_id, goal_id, phase_type, variant, parameters,
+  id, user_id, goal_id, phase_type, variant, zielrate_pct_kg_woche, parameters,
   gueltig_ab, projected_end_date, actual_end_date,
   transitioned_from, recommended_next, transition_reason
 FROM test_goal_phases;

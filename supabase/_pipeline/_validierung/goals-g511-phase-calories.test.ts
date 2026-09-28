@@ -54,24 +54,57 @@ test('G-511: ohne aktive Phase gibt es keine Zielkalorien und ein ausdrueckliche
   assert.deepEqual(result, { kcal: null, hindernis: 'keine_aktive_phase' })
 })
 
-test('G-511: lean_bulk rechnet den exakten Phasenparameter statt des Profilziels', () => {
+test('G-511 A1: 11 x Rate x Gewicht gilt an den Gewichtsraendern in beide Richtungen', () => {
+  const result = one<{
+    loss45: number
+    loss45Back: number
+    gain120: number
+    gain120Back: number
+  }>(`
+    WITH values_at_edges AS (
+      SELECT
+        goals.kcal_delta_aus_zielrate(-1.5, 45) AS loss45,
+        goals.kcal_delta_aus_zielrate(1.5, 120) AS gain120
+    )
+    SELECT json_build_object(
+      'loss45', loss45,
+      'loss45Back', round(loss45 / (11 * 45), 3),
+      'gain120', gain120,
+      'gain120Back', round(gain120 / (11 * 120), 3)
+    )
+    FROM values_at_edges;
+  `)
+
+  assert.deepEqual(result, {
+    loss45: -742.5,
+    loss45Back: -1.5,
+    gain120: 1980,
+    gain120Back: 1.5,
+  })
+})
+
+test('G-511 A1/A4: lean_bulk rechnet die Rate statt eines gespeicherten Kaloriendeltas', () => {
   const result = one<{
     tdee: number
     kcal: number
+    rate: number
+    weight: number
     nutritionGoal: string | null
     hindernis: string | null
   }>(`
     BEGIN;
     ${profile(BULK_USER, 'g511-bulk@example.test', 'lose_weight')}
     INSERT INTO goals.goal_phases (
-      id, user_id, phase_type, parameters, gueltig_ab
+      id, user_id, phase_type, zielrate_pct_kg_woche, parameters, gueltig_ab
     ) VALUES (
       '51110000-0000-0000-0000-000000000002', '${BULK_USER}', 'lean_bulk',
-      '{"calorie_surplus":250}'::jsonb, DATE '2030-01-01'
+      0.5, '{"source":"G-511 test"}'::jsonb, DATE '2030-01-01'
     );
     SELECT json_build_object(
       'tdee', tdee,
       'kcal', kcal,
+      'rate', zielrate_pct_kg_woche,
+      'weight', body_weight_kg,
       'nutritionGoal', nutrition_goal,
       'hindernis', hindernis
     )
@@ -79,9 +112,139 @@ test('G-511: lean_bulk rechnet den exakten Phasenparameter statt des Profilziels
     ROLLBACK;
   `)
 
-  assert.equal(result.kcal, result.tdee + 250)
+  assert.equal(result.kcal, result.tdee + 440)
+  assert.equal(result.rate, 0.5)
+  assert.equal(result.weight, 80)
   assert.equal(result.nutritionGoal, 'gain_muscle')
   assert.equal(result.hindernis, null)
+})
+
+test('G-511 A2: verlaessliche Reihe gewinnt, test-user faellt auf Formel-TDEE zurueck', () => {
+  const result = one<{
+    devSource: string
+    devHistoryId: string
+    devTdee: number
+    devHistoryTdee: number
+    testSource: string
+    testHistoryId: string | null
+  }>(`
+    BEGIN;
+    UPDATE goals.goal_phases
+    SET zielrate_pct_kg_woche = 0.267
+    WHERE user_id = (SELECT id FROM auth.users WHERE email = 'dev@lumeos.app')
+      AND phase_type = 'lean_bulk'
+      AND actual_end_date IS NULL;
+
+    INSERT INTO goals.goal_phases (
+      user_id, phase_type, zielrate_pct_kg_woche, parameters, gueltig_ab
+    ) VALUES (
+      (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'),
+      'lean_bulk', 0.267, '{"source":"G-511 test"}'::jsonb, CURRENT_DATE
+    );
+
+    WITH dev AS (
+      SELECT *
+      FROM goals.berechne_zielwerte(
+        (SELECT id FROM auth.users WHERE email = 'dev@lumeos.app'),
+        CURRENT_DATE
+      )
+    ), test_user AS (
+      SELECT *
+      FROM goals.berechne_zielwerte(
+        (SELECT id FROM auth.users WHERE email = 'test-user@lumeos.local'),
+        CURRENT_DATE
+      )
+    )
+    SELECT json_build_object(
+      'devSource', dev.tdee_herkunft,
+      'devHistoryId', dev.tdee_history_id,
+      'devTdee', dev.tdee,
+      'devHistoryTdee', h.adaptive_tdee_kcal,
+      'testSource', test_user.tdee_herkunft,
+      'testHistoryId', test_user.tdee_history_id
+    )
+    FROM dev
+    JOIN goals.tdee_history h ON h.id = dev.tdee_history_id
+    CROSS JOIN test_user;
+    ROLLBACK;
+  `)
+
+  assert.equal(result.devSource, 'adaptive')
+  assert.equal(result.devTdee, result.devHistoryTdee)
+  assert.ok(result.devHistoryId)
+  assert.equal(result.testSource, 'formula')
+  assert.equal(result.testHistoryId, null)
+})
+
+test('G-511 A3: eine Formel-Zielzeile friert Rate, Gewicht und TDEE-Herkunft ein', () => {
+  const result = one<{
+    source: string
+    historyId: string | null
+    rateBefore: number
+    rateAfter: number
+    weight: number
+  }>(`
+    BEGIN;
+    ${profile(BULK_USER, 'g511-snapshot@example.test', 'lose_weight')}
+    INSERT INTO goals.goal_phases (
+      id, user_id, phase_type, zielrate_pct_kg_woche, parameters, gueltig_ab
+    ) VALUES (
+      '51110000-0000-0000-0000-000000000012', '${BULK_USER}', 'lean_bulk',
+      0.5, '{"source":"G-511 test"}'::jsonb, DATE '2031-01-01'
+    );
+
+    INSERT INTO goals.nutrition_targets (
+      user_id, gueltig_ab, kcal, protein_g, carbs_g, fat_g, fiber_g,
+      linoleic_acid_g, alpha_linolenic_acid_g, herkunft, tdee, nutrition_goal
+    )
+    SELECT
+      '${BULK_USER}', DATE '2031-01-01', kcal, protein_g, carbs_g, fat_g, fiber_g,
+      linoleic_acid_g, alpha_linolenic_acid_g, 'formel', tdee, nutrition_goal
+    FROM goals.berechne_zielwerte('${BULK_USER}'::uuid, DATE '2031-01-01');
+
+    UPDATE goals.goal_phases
+    SET zielrate_pct_kg_woche = 0.8
+    WHERE id = '51110000-0000-0000-0000-000000000012';
+
+    SELECT json_build_object(
+      'source', nt.tdee_herkunft,
+      'historyId', nt.tdee_history_id,
+      'rateBefore', nt.zielrate_pct_kg_woche,
+      'rateAfter', gp.zielrate_pct_kg_woche,
+      'weight', nt.body_weight_kg
+    )
+    FROM goals.nutrition_targets nt
+    JOIN goals.goal_phases gp ON gp.id = nt.phase_id
+    WHERE nt.user_id = '${BULK_USER}'::uuid
+      AND nt.gueltig_ab = DATE '2031-01-01';
+    ROLLBACK;
+  `)
+
+  assert.deepEqual(result, {
+    source: 'formula',
+    historyId: null,
+    rateBefore: 0.5,
+    rateAfter: 0.8,
+    weight: 80,
+  })
+})
+
+test('G-511 A4: fehlende Rate behaelt den Hindernisnamen phasenparameter_fehlt', () => {
+  const result = one<{ kcal: number | null; hindernis: string }>(`
+    BEGIN;
+    ${profile(BULK_USER, 'g511-no-rate@example.test', 'gain_muscle')}
+    INSERT INTO goals.goal_phases (
+      id, user_id, phase_type, zielrate_pct_kg_woche, parameters, gueltig_ab
+    ) VALUES (
+      '51110000-0000-0000-0000-000000000022', '${BULK_USER}', 'maintenance',
+      NULL, '{}'::jsonb, DATE '2032-01-01'
+    );
+    SELECT json_build_object('kcal', kcal, 'hindernis', hindernis)
+    FROM goals.berechne_zielwerte('${BULK_USER}'::uuid, DATE '2032-01-01');
+    ROLLBACK;
+  `)
+
+  assert.deepEqual(result, { kcal: null, hindernis: 'phasenparameter_fehlt' })
 })
 
 test('G-511: eine Zielzeile gilt nur waehrend ihrer zugeordneten Phase', () => {
@@ -89,10 +252,10 @@ test('G-511: eine Zielzeile gilt nur waehrend ihrer zugeordneten Phase', () => {
     BEGIN;
     ${profile(ENDED_USER, 'g511-ended@example.test', 'gain_muscle')}
     INSERT INTO goals.goal_phases (
-      id, user_id, phase_type, parameters, gueltig_ab, actual_end_date
+      id, user_id, phase_type, zielrate_pct_kg_woche, parameters, gueltig_ab, actual_end_date
     ) VALUES (
       '51110000-0000-0000-0000-000000000003', '${ENDED_USER}', 'maintenance',
-      '{}'::jsonb, DATE '2030-01-01', DATE '2030-01-10'
+      0, '{}'::jsonb, DATE '2030-01-01', DATE '2030-01-10'
     );
     INSERT INTO goals.nutrition_targets (
       user_id, gueltig_ab, kcal, protein_g, carbs_g, fat_g, herkunft, tdee

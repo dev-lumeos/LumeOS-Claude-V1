@@ -2674,22 +2674,13 @@
       ]
     },
     {
-      "id": "511_goals_phase_parameter_name",
-      "path": "supabase/_pipeline/11_goals/511_goals_phase_parameter_name.sql",
-      "kind": "sql",
-      "creates": "G-511: der einzelne alte calorie_surplus_kcal-Parameter wird atomar auf calorie_surplus normalisiert.",
-      "depends_on": [
-        "111"
-      ]
-    },
-    {
       "id": "511_goals_phase_calories_schema",
       "path": "supabase/migrations/20260927034024_g511_phase_calories.sql",
       "kind": "sql",
-      "creates": "G-511: Zielkalorien folgen ausschliesslich der aktiven Phase; Zielzeilen gehoeren ihrer Phase und enden mit ihr.",
+      "creates": "G-511/E1: phasenfeste Zielzeilen mit erklaerbaren Rate-, Gewicht- und TDEE-Snapshots; kcal bleiben Ableitung.",
       "depends_on": [
         "464_nutrition_fiber_target",
-        "511_goals_phase_parameter_name"
+        "111"
       ]
     },
     {
@@ -2708,7 +2699,8 @@
       "kind": "sql",
       "creates": "G-524/G-523: datierte TDEE-Reihe und EWMA mit alpha 0,3 gegen den letzten verlaesslichen Vorgaengerwert.",
       "depends_on": [
-        "113"
+        "113",
+        "511_goals_phase_calories_schema"
       ]
     },
     {
@@ -2735,8 +2727,17 @@
       "kind": "sql",
       "creates": "G-529: typisierte Zielrate an goal_phases, leerer quellpflichtiger Spannen-Katalog und beidseitiger Bereichswaechter.",
       "depends_on": [
-        "111",
+        "524_tdee_history_backfill",
         "526_goals_macro_rule_structure"
+      ]
+    },
+    {
+      "id": "529_phase_rate_testdata_cleanup",
+      "path": "supabase/_pipeline/11_goals/529_phase_rate_testdata_cleanup.sql",
+      "kind": "sql",
+      "creates": "G-528/G-529: alte GO-07-Testvarianten und Kaloriendeltas entfernt, zwei Lean-Bulk-Raten nachgezogen und Phasenart-CHECK validiert.",
+      "depends_on": [
+        "529_phase_rate_storage_schema"
       ]
     },
     {

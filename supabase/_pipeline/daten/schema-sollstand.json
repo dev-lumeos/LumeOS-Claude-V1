@@ -1835,6 +1835,13 @@
       "schritt": "524_tdee_history_schema"
     },
     {
+      "schema": "goals",
+      "name": "nutrition_targets_tdee_history_user_fk",
+      "tabelle": "nutrition_targets",
+      "zeigt_auf": "goals.tdee_history",
+      "schritt": "524_tdee_history_schema"
+    },
+    {
       "schema": "training",
       "name": "muscle_origins_muscle_group_id_fkey",
       "tabelle": "muscle_origins",
@@ -6299,7 +6306,7 @@
     {
       "schema": "goals",
       "name": "berechne_zielwerte",
-      "schritt": "110"
+      "schritt": "529_phase_rate_storage_schema"
     },
     {
       "schema": "goals",
@@ -6335,6 +6342,21 @@
       "schema": "goals",
       "name": "body_composition_navy",
       "schritt": "112"
+    },
+    {
+      "schema": "goals",
+      "name": "kcal_delta_aus_zielrate",
+      "schritt": "511_goals_phase_calories_schema"
+    },
+    {
+      "schema": "goals",
+      "name": "formula_tdee",
+      "schritt": "511_goals_phase_calories_schema"
+    },
+    {
+      "schema": "goals",
+      "name": "tdee_basis_am",
+      "schritt": "524_tdee_history_schema"
     },
     {
       "schema": "goals",

@@ -27,15 +27,15 @@ ALTER TABLE goals.goal_phases
       AND zielrate_pct_kg_woche > 0)
     OR (phase_type = 'maintenance'
       AND (zielrate_pct_kg_woche IS NULL OR abs(zielrate_pct_kg_woche) <= 0.1))
-    OR (phase_type IN ('peak_week', 'expert_bb_annual')
+    OR (phase_type IN (
+        'peak_week', 'expert_bb_annual',
+        'contest_prep', 'reverse_diet', 'recomp'
+      )
       AND zielrate_pct_kg_woche IS NULL)
-    -- A6 bleibt eine Messfrage: diese drei Protokolle duerfen leer bleiben;
-    -- eine spaetere Entscheidung kann ihre zulaessige Form verschaerfen.
-    OR phase_type IN ('contest_prep', 'reverse_diet', 'recomp')
   ) NOT VALID;
 
 COMMENT ON COLUMN goals.goal_phases.zielrate_pct_kg_woche IS
-  'Gewaehlt: prozentuale Koerpergewichtsaenderung je Woche. NULL fuer Protokolle ohne eigene Rate oder noch nicht kuratierte Altzeilen; Ziel-kcal werden daraus abgeleitet.';
+  'Gewaehlt: prozentuale Koerpergewichtsaenderung je Woche. contest_prep, reverse_diet und recomp erzwingen NULL; G-530 kann contest_prep spaeter je Unterphase anders modellieren. Ziel-kcal werden aus der Rate abgeleitet.';
 
 CREATE TABLE goals.phase_rate_rules (
   code text PRIMARY KEY,
@@ -209,5 +209,148 @@ REVOKE ALL ON FUNCTION goals.validate_phase_rate_rule()
 
 -- Triggerfunktionen brauchen keinen direkten API-Aufruf; Ausfuehrung erfolgt
 -- ausschliesslich ueber Tabellenoperationen.
+
+-- E1 dreht G-511 hier auf die nun vorhandene, typisierte Rate um. Der TDEE
+-- kommt aus G-524: letzte verlaessliche adaptive Reihenzeile, sonst Formel.
+-- Die vier Hindernisnamen bleiben der in apps/ verdrahtete Vertrag.
+DROP FUNCTION goals.berechne_zielwerte(uuid, date);
+CREATE FUNCTION goals.berechne_zielwerte(
+  p_user_id uuid,
+  p_stichtag date DEFAULT CURRENT_DATE
+)
+RETURNS TABLE (
+  bmr numeric,
+  tdee numeric,
+  kcal numeric,
+  protein_g numeric,
+  carbs_g numeric,
+  fat_g numeric,
+  fiber_g numeric,
+  linoleic_acid_g numeric,
+  alpha_linolenic_acid_g numeric,
+  nutrition_goal text,
+  kalorienfaktor numeric,
+  hindernis text,
+  fehlende_felder text[],
+  tdee_herkunft text,
+  tdee_history_id uuid,
+  zielrate_pct_kg_woche numeric,
+  body_weight_kg numeric
+)
+LANGUAGE sql
+STABLE
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+WITH formel AS (
+  SELECT * FROM goals.formula_tdee(p_user_id, p_stichtag)
+),
+basis AS (
+  SELECT * FROM goals.tdee_basis_am(p_user_id, p_stichtag)
+),
+phase AS (
+  SELECT
+    gp.id AS phase_id,
+    gp.phase_type,
+    gp.zielrate_pct_kg_woche
+  FROM (SELECT 1) singleton
+  LEFT JOIN LATERAL (
+    SELECT p.id, p.phase_type, p.zielrate_pct_kg_woche
+    FROM goals.goal_phases p
+    WHERE p.user_id = p_user_id
+      AND p.gueltig_ab <= p_stichtag
+      AND (p.actual_end_date IS NULL OR p.actual_end_date >= p_stichtag)
+    ORDER BY p.gueltig_ab DESC, p.created_at DESC, p.id DESC
+    LIMIT 1
+  ) gp ON true
+),
+gerechnet AS (
+  SELECT
+    f.bmr,
+    f.body_weight_kg,
+    f.fehlende_felder,
+    b.tdee,
+    b.tdee_herkunft,
+    b.tdee_history_id,
+    ph.phase_id,
+    ph.phase_type,
+    ph.zielrate_pct_kg_woche,
+    CASE
+      WHEN ph.phase_id IS NULL
+        OR cardinality(f.fehlende_felder) > 0
+        OR ph.zielrate_pct_kg_woche IS NULL
+        OR b.tdee IS NULL
+      THEN NULL
+      ELSE round((
+        b.tdee
+        + goals.kcal_delta_aus_zielrate(
+            ph.zielrate_pct_kg_woche,
+            f.body_weight_kg
+          )
+      )::numeric, 1)
+    END AS kcal_wert
+  FROM formel f
+  CROSS JOIN basis b
+  CROSS JOIN phase ph
+),
+makros AS (
+  SELECT
+    g.*,
+    CASE WHEN g.kcal_wert IS NULL THEN NULL
+         ELSE round((g.body_weight_kg * 2)::numeric, 1) END AS protein_wert,
+    CASE WHEN g.kcal_wert IS NULL THEN NULL
+         ELSE round((g.kcal_wert * 0.25 / 9)::numeric, 1) END AS fett_wert,
+    CASE WHEN g.kcal_wert IS NULL THEN NULL ELSE 30.0::numeric END AS fiber_wert,
+    CASE WHEN g.kcal_wert IS NULL THEN NULL
+         ELSE round((g.kcal_wert * 0.04 / 9)::numeric, 1) END AS linolsaeure_wert,
+    CASE WHEN g.kcal_wert IS NULL THEN NULL
+         ELSE round((g.kcal_wert * 0.005 / 9)::numeric, 1) END AS alpha_linolensaeure_wert
+  FROM gerechnet g
+)
+SELECT
+  m.bmr,
+  m.tdee,
+  m.kcal_wert,
+  m.protein_wert,
+  CASE WHEN m.kcal_wert IS NULL THEN NULL
+       ELSE round(greatest(
+         m.kcal_wert - (m.protein_wert * 4 + m.fett_wert * 9),
+         0
+       ) / 4, 1)
+  END,
+  m.fett_wert,
+  m.fiber_wert,
+  m.linolsaeure_wert,
+  m.alpha_linolensaeure_wert,
+  CASE m.phase_type
+    WHEN 'fat_loss' THEN 'lose_weight'
+    WHEN 'mini_cut' THEN 'lose_weight'
+    WHEN 'lean_bulk' THEN 'gain_muscle'
+    WHEN 'maintenance' THEN 'maintain'
+    WHEN 'recomp' THEN 'recomposition'
+    ELSE NULL
+  END,
+  NULL::numeric,
+  CASE
+    WHEN m.phase_id IS NULL THEN 'keine_aktive_phase'
+    WHEN cardinality(m.fehlende_felder) > 0 THEN 'profil_unvollstaendig'
+    WHEN m.zielrate_pct_kg_woche IS NULL THEN 'phasenparameter_fehlt'
+    ELSE NULL
+  END,
+  m.fehlende_felder,
+  m.tdee_herkunft,
+  m.tdee_history_id,
+  m.zielrate_pct_kg_woche,
+  m.body_weight_kg
+FROM makros m;
+$$;
+
+REVOKE ALL ON FUNCTION goals.berechne_zielwerte(uuid, date)
+  FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION goals.berechne_zielwerte(uuid, date)
+  TO authenticated, service_role;
+
+COMMENT ON FUNCTION goals.berechne_zielwerte(uuid, date) IS
+  'G-511/E1: Ziel-kcal = verlaesslicher adaptiver TDEE (sonst Formel) + 11 x Zielrate in Prozent KG/Woche x Profilgewicht. Fehlende Rate bleibt phasenparameter_fehlt. G-526 bleibt unveraendert: Faser 30 g/Tag ist [annahme]; Protein und Fett warten auf G-521 A1.';
 
 COMMIT;

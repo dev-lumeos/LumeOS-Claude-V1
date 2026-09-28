@@ -36,6 +36,8 @@ CREATE TABLE goals.tdee_history (
 
   CONSTRAINT tdee_history_user_day_window_uq
     UNIQUE (user_id, stichtag, window_days),
+  CONSTRAINT tdee_history_id_user_uq
+    UNIQUE (id, user_id),
   CONSTRAINT tdee_history_window_ck CHECK (window_days > 0),
   CONSTRAINT tdee_history_counts_ck CHECK (
     complete_intake_days >= 0
@@ -93,6 +95,12 @@ REVOKE ALL ON TABLE goals.tdee_history
 GRANT SELECT ON TABLE goals.tdee_history TO authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE goals.tdee_history TO service_role;
 
+ALTER TABLE goals.nutrition_targets
+  ADD CONSTRAINT nutrition_targets_tdee_history_user_fk
+  FOREIGN KEY (tdee_history_id, user_id)
+  REFERENCES goals.tdee_history (id, user_id)
+  ON DELETE RESTRICT;
+
 CREATE FUNCTION goals.tdee_ema(
   p_raw_tdee_kcal numeric,
   p_previous_tdee_kcal numeric,
@@ -142,6 +150,42 @@ LEFT JOIN LATERAL (
   WHERE th.user_id = p_user_id
     AND th.window_days = GREATEST(p_window_days, 1)
     AND th.stichtag < p_stichtag
+    AND th.reliable
+    AND th.adaptive_tdee_kcal IS NOT NULL
+  ORDER BY th.stichtag DESC, th.updated_at DESC, th.id DESC
+  LIMIT 1
+) h ON true;
+$$;
+
+-- SCORING.md und das Goals-Mockup trennen Formel-Baseline und adaptiven
+-- Istwert. Sobald eine verlaessliche Reihenzeile existiert, ist sie die
+-- aktive Basis; ohne eine solche Zeile bleibt die Formel der ehrliche
+-- Rueckfall. Die konkrete Reihen-ID wandert als Snapshot ins Ziel.
+CREATE OR REPLACE FUNCTION goals.tdee_basis_am(
+  p_user_id uuid,
+  p_stichtag date DEFAULT CURRENT_DATE
+)
+RETURNS TABLE (
+  tdee numeric,
+  tdee_herkunft text,
+  tdee_history_id uuid
+)
+LANGUAGE sql
+STABLE
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+SELECT
+  COALESCE(h.adaptive_tdee_kcal, f.tdee) AS tdee,
+  CASE WHEN h.id IS NULL THEN 'formula' ELSE 'adaptive' END AS tdee_herkunft,
+  h.id AS tdee_history_id
+FROM goals.formula_tdee(p_user_id, p_stichtag) f
+LEFT JOIN LATERAL (
+  SELECT th.id, th.adaptive_tdee_kcal
+  FROM goals.tdee_history th
+  WHERE th.user_id = p_user_id
+    AND th.window_days = 14
+    AND th.stichtag <= p_stichtag
     AND th.reliable
     AND th.adaptive_tdee_kcal IS NOT NULL
   ORDER BY th.stichtag DESC, th.updated_at DESC, th.id DESC
@@ -216,9 +260,9 @@ weights AS (
    AND bm.weight_kg IS NOT NULL
 ),
 formula AS (
-  SELECT bz.tdee AS formula_tdee_kcal
+  SELECT ft.tdee AS formula_tdee_kcal
   FROM params p
-  LEFT JOIN LATERAL goals.berechne_zielwerte(p.user_id, p.period_end) bz ON true
+  LEFT JOIN LATERAL goals.formula_tdee(p.user_id, p.period_end) ft ON true
 ),
 base AS (
   SELECT
@@ -328,12 +372,16 @@ REVOKE ALL ON FUNCTION goals.tdee_ema(numeric, numeric, numeric)
   FROM PUBLIC, anon, authenticated, service_role;
 REVOKE ALL ON FUNCTION goals.tdee_previous_value(uuid, date, integer, numeric)
   FROM PUBLIC, anon, authenticated, service_role;
+REVOKE ALL ON FUNCTION goals.tdee_basis_am(uuid, date)
+  FROM PUBLIC, anon, authenticated, service_role;
 REVOKE ALL ON FUNCTION goals.adaptive_tdee(uuid, date, integer)
   FROM PUBLIC, anon, authenticated, service_role;
 
 GRANT EXECUTE ON FUNCTION goals.tdee_ema(numeric, numeric, numeric)
   TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION goals.tdee_previous_value(uuid, date, integer, numeric)
+  TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION goals.tdee_basis_am(uuid, date)
   TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION goals.adaptive_tdee(uuid, date, integer)
   TO authenticated, service_role;
@@ -346,6 +394,8 @@ COMMENT ON COLUMN goals.tdee_history.previous_source IS
   'formula_seed nur fuer den Start der Reihe, danach history.';
 COMMENT ON FUNCTION goals.tdee_ema(numeric, numeric, numeric) IS
   'EWMA-Schritt alpha * Rohwert + (1-alpha) * geglaetteter Vorgaengerwert.';
+COMMENT ON FUNCTION goals.tdee_basis_am(uuid, date) IS
+  'G-511 A2: letzte verlaessliche adaptive G-524-Reihenzeile bis zum Stichtag; ohne sie Formel-TDEE.';
 COMMENT ON FUNCTION goals.adaptive_tdee(uuid, date, integer) IS
   'Adaptiver TDEE mit alpha 0,3 gegen den letzten verlaesslichen Reihenwert; der Formel-TDEE ist nur der Startwert.';
 

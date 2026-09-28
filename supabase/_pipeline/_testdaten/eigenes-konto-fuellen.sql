@@ -446,12 +446,14 @@ FROM goals.goal_phases
 WHERE user_id = :'quelle'::uuid;
 
 INSERT INTO goals.goal_phases (
-  id, user_id, goal_id, phase_type, variant, parameters, gueltig_ab,
+  id, user_id, goal_id, phase_type, variant, zielrate_pct_kg_woche,
+  parameters, gueltig_ab,
   projected_end_date, actual_end_date, transitioned_from, recommended_next,
   transition_reason
 )
 SELECT
-  pm.neu, :'ziel'::uuid, gm.neu, phase_type, variant, parameters,
+  pm.neu, :'ziel'::uuid, gm.neu, phase_type, variant,
+  zielrate_pct_kg_woche, parameters,
   gueltig_ab, projected_end_date, actual_end_date, transitioned_from,
   recommended_next, transition_reason
 FROM goals.goal_phases gp

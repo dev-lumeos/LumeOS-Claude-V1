@@ -88,22 +88,98 @@ test('G-529 A5: Zielrate ist nullable numeric(5,3) mit Aussen- und Artgrenze', (
   assert.match(failure(phaseInsert('lean_bulk', '1.501')), /goal_phases_zielrate_aussengrenze/)
 })
 
-test('G-529 A6: drei anders parametrisierte Phasen koennen die Rate ehrlich leer lassen', () => {
+test('G-528 A1 / G-529 B2-B3: Testphasen sind bereinigt, zwei Bulks tragen Rate und der CHECK ist VALID', () => {
+  const result = one<{
+    rows: number
+    variants: number
+    bulkRows: number
+    bulkWithRate: number
+    oldDeltaKeys: number
+    validated: boolean
+  }>(`
+    SELECT json_build_object(
+      'rows', count(*),
+      'variants', count(*) FILTER (WHERE variant IS NOT NULL),
+      'bulkRows', count(*) FILTER (WHERE phase_type = 'lean_bulk'),
+      'bulkWithRate', count(*) FILTER (
+        WHERE phase_type = 'lean_bulk' AND zielrate_pct_kg_woche IS NOT NULL
+      ),
+      'oldDeltaKeys', count(*) FILTER (
+        WHERE parameters ?| ARRAY['calorie_surplus', 'calorie_surplus_kcal', 'calorie_deficit']
+      ),
+      'validated', (
+        SELECT convalidated
+        FROM pg_constraint
+        WHERE conrelid = 'goals.goal_phases'::regclass
+          AND conname = 'goal_phases_zielrate_passt_zur_art'
+      )
+    )
+    FROM goals.goal_phases
+    WHERE parameters ->> 'source' = 'GO-07 testdata';
+  `)
+
+  assert.deepEqual(result, {
+    rows: 5,
+    variants: 0,
+    bulkRows: 2,
+    bulkWithRate: 2,
+    oldDeltaKeys: 0,
+    validated: true,
+  })
+})
+
+test('G-529 A9: contest_prep akzeptiert NULL und weist beide Vorzeichen ab', () => {
   const result = one<{ accepted: number }>(`
     BEGIN;
     ${phaseInsert('contest_prep', 'NULL')}
+    SELECT json_build_object('accepted', count(*))
+    FROM goals.goal_phases
+    WHERE user_id = ${userId}
+      AND gueltig_ab = DATE '2099-01-01'
+      AND phase_type = 'contest_prep'
+      AND zielrate_pct_kg_woche IS NULL;
+    ROLLBACK;
+  `)
+
+  assert.deepEqual(result, { accepted: 1 })
+  assert.match(failure(phaseInsert('contest_prep', '-0.5')), /goal_phases_zielrate_passt_zur_art/)
+  assert.match(failure(phaseInsert('contest_prep', '0.5')), /goal_phases_zielrate_passt_zur_art/)
+})
+
+test('G-529 A9: reverse_diet akzeptiert NULL und weist beide Vorzeichen ab', () => {
+  const result = one<{ accepted: number }>(`
+    BEGIN;
     ${phaseInsert('reverse_diet', 'NULL')}
+    SELECT json_build_object('accepted', count(*))
+    FROM goals.goal_phases
+    WHERE user_id = ${userId}
+      AND gueltig_ab = DATE '2099-01-01'
+      AND phase_type = 'reverse_diet'
+      AND zielrate_pct_kg_woche IS NULL;
+    ROLLBACK;
+  `)
+
+  assert.deepEqual(result, { accepted: 1 })
+  assert.match(failure(phaseInsert('reverse_diet', '-0.5')), /goal_phases_zielrate_passt_zur_art/)
+  assert.match(failure(phaseInsert('reverse_diet', '0.5')), /goal_phases_zielrate_passt_zur_art/)
+})
+
+test('G-529 A9: recomp akzeptiert NULL und weist beide Vorzeichen ab', () => {
+  const result = one<{ accepted: number }>(`
+    BEGIN;
     ${phaseInsert('recomp', 'NULL')}
     SELECT json_build_object('accepted', count(*))
     FROM goals.goal_phases
     WHERE user_id = ${userId}
       AND gueltig_ab = DATE '2099-01-01'
-      AND phase_type IN ('contest_prep', 'reverse_diet', 'recomp')
+      AND phase_type = 'recomp'
       AND zielrate_pct_kg_woche IS NULL;
     ROLLBACK;
   `)
 
-  assert.deepEqual(result, { accepted: 3 })
+  assert.deepEqual(result, { accepted: 1 })
+  assert.match(failure(phaseInsert('recomp', '-0.5')), /goal_phases_zielrate_passt_zur_art/)
+  assert.match(failure(phaseInsert('recomp', '0.5')), /goal_phases_zielrate_passt_zur_art/)
 })
 
 test('G-529 A7: offene Ratenregeln tragen keine Zahl, belegte brauchen Quelle und Fundstelle', () => {
