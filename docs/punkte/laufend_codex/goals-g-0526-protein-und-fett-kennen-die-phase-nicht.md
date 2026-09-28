@@ -10,7 +10,7 @@ beauftragt: 2026-09-28
 quellen:
   - docs/specs/Goals/PHASE_MODELS.md
   - docs/specs/Goals/CONSOLIDATED_KNOWLEDGE.md
-  - docs/punkte/laufend_codex/goals-G-0511-phase-entscheidet-nicht-ueber-kalorien.md
+  - docs/punkte/00-INDEX.md  # G-511 ueber den Index, A-75 A6
 
 braucht: [G-511]
 kind_von: G-511

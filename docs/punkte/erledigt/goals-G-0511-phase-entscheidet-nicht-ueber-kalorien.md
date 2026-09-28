@@ -4,6 +4,8 @@ typ: befund
 modul: goals
 schwere: hoch
 angelegt: 2026-09-26
+erledigt: 2026-09-28
+commit: c572fbab
 braucht: []
 kind_von: G-510
 entscheidung: E-91

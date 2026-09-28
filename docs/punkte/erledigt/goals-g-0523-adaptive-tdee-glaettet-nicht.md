@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-09-27
+erledigt: 2026-09-28
+commit: c572fbab
 agent: codex
 beauftragt: 2026-09-28
 quellen:

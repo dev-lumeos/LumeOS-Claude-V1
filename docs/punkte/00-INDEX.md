@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 250 |
-| `laufend_codex` | 7 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 571 |
+| `todos` | 251 |
+| `laufend_codex` | 3 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 576 |
 | **gesamt** | **831** |
 
 ## medical — 49
@@ -574,7 +574,7 @@
 
 ## goals — 32
 
-### beauftragbar — 23
+### beauftragbar — 27
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -592,28 +592,28 @@
 | `G-421` | feature | hoch | [die vier fehlenden Reiter in Goals & Body](erledigt/goals-g-0421-die-vier-fehlenden-reiter.md) | erledigt | — | G-422 |
 | `G-422` | befund | mittel | [Schreibwege ohne Aufrufer](erledigt/goals-g-0422-zwei-schreibwege-ohne-aufrufer.md) | erledigt | — | — |
 | `G-510` | befund | hoch | [Bestandsaufnahme Goals, gegen alle vier Quellen](erledigt/goals-g-0510-bestandsaufnahme.md) | erledigt | — | G-511, G-512, G-513, G-514, G-515, G-516 |
-| `G-511` | befund | hoch | [die Phase entscheidet nicht ueber die Kalorien](laufend_codex/goals-G-0511-phase-entscheidet-nicht-ueber-kalorien.md) | laeuft (codex) | — | G-526, G-527 |
+| `G-511` | befund | hoch | [die Phase entscheidet nicht ueber die Kalorien](erledigt/goals-G-0511-phase-entscheidet-nicht-ueber-kalorien.md) | erledigt | — | G-526, G-527 |
 | `G-512` | befund | hoch | [die FFMI-Kachel zeigte eine erfundene Zahl als echte](erledigt/goals-G-0512-ffmi-zeigte-eine-erfundene-zahl.md) | erledigt | — | — |
 | `G-513` | befund | hoch | [die Phase laesst sich nirgends setzen](erledigt/goals-g-0513-keine-oberflaeche-setzt-eine-phase.md) | erledigt | — | G-519 |
 | `G-514` | befund | mittel | [die Modulverrechnung, der Zweck des Moduls, fehlt ganz](todos/goals-G-0514-die-modulverrechnung-fehlt-ganz.md) | offen | — | G-522, G-524 |
 | `G-515` | befund | mittel | [die drei Goals-Mockups widersprechen sich achtmal in Zahlen](todos/goals-G-0515-die-drei-mockups-widersprechen-sich.md) | offen | — | — |
+| `G-516` | befund | mittel | [das Vorgaengerrepo traegt die Phasenzahlen, die uns fehlen](todos/goals-G-0516-das-vorgaengerrepo-hat-die-phasenzahlen.md) | offen | — | — |
+| `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](laufend_claudecode/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | laeuft (claudecode) | — | G-520, G-521 |
 | `G-521` | feature | mittel | [wie modelliert man Ernaehrungsphasen, ihre Varianten und Parameter](todos/goals-g-0521-phasenmodellierung-tiefenrecherche.md) | offen | — | G-529, G-530 |
 | `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](todos/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | offen | — | — |
-| `G-523` | fehler | hoch | [der adaptive TDEE glaettet nicht, er springt](laufend_codex/goals-g-0523-adaptive-tdee-glaettet-nicht.md) | laeuft (codex) | — | — |
+| `G-523` | fehler | hoch | [der adaptive TDEE glaettet nicht, er springt](erledigt/goals-g-0523-adaptive-tdee-glaettet-nicht.md) | erledigt | — | — |
 | `G-525` | befund | mittel | [Meilensteine gibt es nur als Seed](todos/goals-g-0525-meilensteine-entstehen-nicht.md) | offen | — | — |
+| `G-526` | fehler | hoch | [Protein, Fett und Faser kennen die Phase nicht](laufend_codex/goals-g-0526-protein-und-fett-kennen-die-phase-nicht.md) | laeuft (codex) | — | — |
+| `G-527` | fehler | mittel | [der Schreibweg kennt die neuen Hindernisse nicht](erledigt/goals-g-0527-der-schreibweg-kennt-die-neuen-hindernisse-nicht.md) | erledigt | — | — |
 
-### wartet auf Blocker — 9
+### wartet auf Blocker — 5
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-516` | befund | mittel | [das Vorgaengerrepo traegt die Phasenzahlen, die uns fehlen](todos/goals-G-0516-das-vorgaengerrepo-hat-die-phasenzahlen.md) | offen | G-511 | — |
-| `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](laufend_claudecode/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | laeuft (claudecode) | G-511 | G-520, G-521 |
 | `G-520` | feature | hoch | [der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen](todos/goals-g-0520-anpassungsalgorithmus-und-uebergangswaechter.md) | offen | G-519 | — |
 | `G-524` | befund | mittel | [vier der zehn Spec-Tabellen und beide Ansichten fehlen](erledigt/goals-g-0524-vier-tabellen-und-beide-ansichten-fehlen.md) | erledigt | G-514 | — |
-| `G-526` | fehler | hoch | [Protein, Fett und Faser kennen die Phase nicht](laufend_codex/goals-g-0526-protein-und-fett-kennen-die-phase-nicht.md) | laeuft (codex) | G-511 | — |
-| `G-527` | fehler | mittel | [der Schreibweg kennt die neuen Hindernisse nicht](erledigt/goals-g-0527-der-schreibweg-kennt-die-neuen-hindernisse-nicht.md) | erledigt | G-511 | — |
-| `G-528` | befund | mittel | [die Variantenachse und mini_cut sind nicht definiert](laufend_codex/goals-g-0528-varianten-und-mini-cut-sind-nicht-definiert.md) | laeuft (codex) | G-521 | — |
-| `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](laufend_codex/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | laeuft (codex) | G-521 | — |
+| `G-528` | befund | mittel | [die Variantenachse und mini_cut sind nicht definiert](erledigt/goals-g-0528-varianten-und-mini-cut-sind-nicht-definiert.md) | erledigt | G-521 | — |
+| `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](todos/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | offen | G-521 | — |
 | `G-530` | feature | hoch | [contest_prep und expert_bb_annual brauchen eine eigene Struktur](todos/goals-g-0530-wettkampfvorbereitung-braucht-eine-eigene-struktur.md) | offen | G-529 | — |
 
 ## coach — 57
@@ -838,7 +838,7 @@
 | `G-360` | feature | hoch | [coach, market und admin als eigene Apps](todos/quer-g-0360-coach-market-admin-als-eigene-apps.md) | offen | — | G-361, G-362 |
 | `G-363` | entscheidung | mittel | [wer schlaegt die naechste Phase vor?](erledigt/quer-g-0363-wer-schlaegt-die-naechste-phase-vor.md) | erledigt | — | — |
 | `G-365` | feature | hoch | [vier Schritte je Kachel](erledigt/quer-g-0365-vier-schritte-je-kachel.md) | erledigt | — | C-421, C-423, G-366, G-369, G-370 |
-| `G-368` | befund | mittel | [Attrappen-Vermerke mit falschem Grund](laufend_claudecode/quer-g-0368-attrappen-vermerke-mit-falschem-grund.md) | laeuft (claudecode) | — | — |
+| `G-368` | befund | mittel | [Attrappen-Vermerke mit falschem Grund](erledigt/quer-g-0368-attrappen-vermerke-mit-falschem-grund.md) | erledigt | — | — |
 | `G-370` | befund | mittel | [Unternavigationen vollstaendig pruefen](erledigt/quer-g-0370-unternavigationen-vollstaendig-pruefen.md) | erledigt | — | — |
 | `G-375` | feature | hoch | [der Tageswechsler gehoert in die Schale](erledigt/quer-g-0375-der-tageswechsler-gehoert-in-die-schale.md) | erledigt | — | G-377 |
 | `G-377` | entscheidung | mittel | [ein gemeinsames Bauteil fuer den Modulkopf](todos/quer-g-0377-ein-gemeinsames-bauteil-fuer-den-modulkopf.md) | offen | — | — |
@@ -850,7 +850,7 @@
 | `G-385` | feature | hoch | [`@abwesend`-Marken in die SSOT](erledigt/quer-g-0385-abwesend-marken-in-die-ssot.md) | erledigt | — | G-386 |
 | `G-386` | feature | hoch | [die SSOT in den Abwesenheitswaechter](erledigt/quer-g-0386-die-ssot-in-den-abwesenheitswaechter.md) | erledigt | — | G-387 |
 | `G-387` | feature | hoch | [die neun Marken in die SSOT](erledigt/quer-g-0387-die-neun-marken-in-die-ssot.md) | erledigt | — | C-437 |
-| `G-394` | feature | mittel | [sechs Module ohne Ladezustand](laufend_claudecode/quer-g-0394-sechs-module-ohne-ladezustand.md) | laeuft (claudecode) | — | — |
+| `G-394` | feature | mittel | [sechs Module ohne Ladezustand](erledigt/quer-g-0394-sechs-module-ohne-ladezustand.md) | erledigt | — | — |
 | `G-395` | entscheidung | mittel | [sechs Injektionsorte ohne Punkt auf der Figur](erledigt/quer-g-0395-sechs-injektionsorte-ohne-punkt.md) | erledigt | — | — |
 | `G-396` | feature | hoch | [die Beschriftung der Koerperkarte](erledigt/quer-g-0396-die-beschriftung-der-koerperkarte.md) | erledigt | — | — |
 | `G-397` | befund | mittel | [zwei Vorlagen kennt die Zaehlung nicht](erledigt/quer-g-0397-zwei-vorlagen-kennt-die-zaehlung-nicht.md) | erledigt | — | — |

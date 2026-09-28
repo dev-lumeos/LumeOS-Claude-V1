@@ -4,6 +4,8 @@ typ: feature
 modul: quer
 schwere: mittel
 angelegt: 2026-09-08
+erledigt: 2026-09-28
+commit: 7399aca3
 agent: claudecode
 beauftragt: 2026-09-28
 braucht: []

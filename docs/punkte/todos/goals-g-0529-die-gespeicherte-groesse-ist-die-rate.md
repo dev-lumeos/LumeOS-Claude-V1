@@ -365,3 +365,16 @@ sich nicht zurueckrechnen.
 **A9 (neu)** — die drei Arten tragen `zielrate_pct_kg_woche IS
 NULL` im Phasenart-CHECK, mit einem Kommentar, der auf G-530
 verweist. **Ein Test je Art, von beiden Seiten.**
+
+## Was noch offen ist — Stand 2026-09-28
+
+[cmd] **A1, A2, A5 bis A9 sind gebaut und in c572fbab** — die
+Spalte, die Regeltabelle, die beidseitigen Trigger, die drei Arten mit
+erzwungenem NULL, und die Rechnung in G-511.
+
+[read] **Offen ist allein A3:** Maximaldauer und Pausentakt als
+Funktionen der Rate. Das ist der Teil, der die Variantenachse
+endgueltig ersetzt — solange er fehlt, traegt kein Feld die Dauer.
+
+**Deshalb liegt der Punkt wieder in 	odos/**: es arbeitet niemand
+daran.

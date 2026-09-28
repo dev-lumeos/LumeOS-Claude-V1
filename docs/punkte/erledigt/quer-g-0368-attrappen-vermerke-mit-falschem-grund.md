@@ -4,6 +4,8 @@ typ: befund
 modul: quer
 schwere: mittel
 angelegt: 2026-09-07
+erledigt: 2026-09-28
+commit: 7399aca3
 agent: claudecode
 beauftragt: 2026-09-28
 braucht: []
@@ -170,3 +172,37 @@ Sollstand fuer den, der ihn spaeter baut.
 etwas, nur die Beschreibung war ueberholt.
 
 `[cmd]` **Nichts in `supabase/`. Nicht committet.**
+
+## Abnahme
+
+`[cmd]` **Committet in `7399aca3`, voller Gate-Lauf gruen.**
+
+`[read]` **Der Punkt nannte acht falsche Marken, nicht welche.** Der
+Agent hat gesucht statt gezaehlt: **fuenf waren noch falsch, drei
+laengst zu.** Haette er die Acht uebernommen, haette er drei erfunden.
+
+`[cmd]` **Drei Marken trugen ueberholte Zahlen** — der Grund stimmte
+jeweils, die Zahl daneben nicht. Selbst gegen die Datenbank geprueft:
+
+    :177  resting_hr        behauptet  43   gemessen  94
+    :240  sleep_hours       behauptet 170   gemessen 370
+    :307  sleep_start/_end  behauptet 170   gemessen 370
+
+`[cmd]` **Eine mit wanderndem Fenster** (`:138`): 38 behauptet, 32
+gemessen — die Zahl sinkt ohne neue Messungen, weil das
+90-Tage-Fenster mitwandert. **Jetzt tragen alle vier ihren Stichtag.**
+
+`[read]` **Die fuenfte war die interessanteste** (`training:428`): sie
+sagte, es fehle ,,nichts". Formal richtig, die Serie ist angebunden —
+**aber die Kachel zeigt 12, 18 weeks und 92 %, und keine dieser
+Zahlen ist gerechnet.** Die Marke hat sie gedeckt.
+
+### Die Inventur (A4)
+
+    495   Marken gesamt
+    256   mit eigenem Grund
+    115   mit pruefbarem Grund (Nummer, Tabelle/Spalte oder Datei)
+    239   nur die Konstante, ohne jeden Grund
+
+**Kein Waechter gebaut.** Die 115 sind der Sollstand fuer den, der ihn
+spaeter baut.

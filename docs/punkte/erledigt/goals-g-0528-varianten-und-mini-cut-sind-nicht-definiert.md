@@ -4,6 +4,8 @@ typ: befund
 modul: goals
 schwere: mittel
 angelegt: 2026-09-28
+erledigt: 2026-09-28
+commit: c572fbab
 agent: codex
 beauftragt: 2026-09-28
 
@@ -333,3 +335,19 @@ getroffen ist, verfaelscht die Liste der offenen Entscheidungen.
 Auflistung aller Parameter je Phase, an einer Stelle, damit die
 Ableitung nicht jedes Mal neu entsteht. Genau das, wofuer Tom ihn
 angelegt hat.
+
+## Abschluss
+
+`[cmd]` **A1 erledigt, committet in `c572fbab`:** ungueltige
+Varianten 3 -> 0, gespeicherte Kaloriendelta-Schluessel 2 -> 0.
+
+`[cmd]` **Die zwei lean_bulk-Zeilen tragen 0,267 %** — bestandserhaltend
+aus 250 / (11 x 85) gerechnet, nicht als fachliches Band erfunden.
+Selbst nachgerechnet: 250 / 935 = 0,2674.
+
+`[cmd]` **Danach ist der Phasenart-CHECK VALID** — der Grund fuer
+`NOT VALID` war genau dieser Altbestand.
+
+`[read]` **Die Auflistung bleibt der Zweck dieses Punktes** und steht
+weiter oben. **Was offen bleibt, gehoert nicht hierher:** die
+Fundstellen fuer die Baender sind G-521 A1.
