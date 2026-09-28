@@ -136,9 +136,13 @@ export function FehlendeHrvKacheln() {
 
       <Card title="HRV · 90 days" sub="drei Monate statt einem"
             attrappe={attrappeAus(V2,
-              'genug Messungen — `recovery.checkins` traegt 38 '
+              // G-368: 38 am 2026-09-07, heute 32 — das Fenster
+              // wandert mit, die Zahl sinkt ohne neue Messungen.
+              // `[read]` **Deshalb traegt dieser Vermerk seinen
+              // Stichtag: ohne ihn liest man eine Zahl als Zustand.**
+              'genug Messungen — `recovery.checkins` traegt 32 '
               + 'hrv_rmssd-Werte in den letzten 90 Tagen, gemessen '
-              + '2026-09-07 auf dev@lumeos.app')}>
+              + '2026-09-28 auf dev@lumeos.app (43 insgesamt)')}>
         <div className="v2-col-gap" style={{ gap: 4 }}>
           <div style={{
             display: 'grid', gridTemplateColumns: '120px 1fr 54px',
@@ -175,9 +179,11 @@ export function FehlendeHrvKacheln() {
 
       <Card title="Resting HR · 90 days"
             attrappe={attrappeAus(V2,
+              // G-368: die Zahl war ueberholt — 43 gemessen am
+              // 2026-09-07, heute 94. Der GRUND stimmte.
               'nichts an der Datenbank — `recovery.checkins.resting_hr` '
-              + 'existiert und traegt 43 Werte; die Kachel ist nur '
-              + 'nicht gebaut')}>
+              + 'existiert und traegt 94 Werte (2026-09-28); die Kachel '
+              + 'ist nur nicht gebaut')}>
         <div className="v2-col-gap" style={{ gap: 5 }}>
           {RHR_ZEILEN.map(([l, v]) => (
             <div key={l} style={{
@@ -238,8 +244,10 @@ export function FehlendeSchlafKacheln() {
     <div className="v2-col-gap" style={{ gap: 14, marginTop: 14 }}>
       <Card title="Sleep · last 14 nights" sub="Dauer je Nacht"
             attrappe={attrappeAus(V2,
+              // G-368: 170 gemessen am 2026-09-07, heute 370.
               'nichts an der Datenbank — `recovery.checkins.sleep_hours` '
-              + 'traegt 170 Werte; die Kachel ist nur nicht gebaut')}>
+              + 'traegt 370 Werte (2026-09-28); die Kachel ist nur '
+              + 'nicht gebaut')}>
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 68 }}>
           {naechte.map((n, i) => (
             <div key={i} style={{ flex: 1, textAlign: 'center' }}>
@@ -305,9 +313,10 @@ export function FehlendeSchlafKacheln() {
 
       <Card title="Bedtime &amp; wake · 30 days"
             attrappe={attrappeAus(V2,
+              // G-368: 170 gemessen am 2026-09-07, heute 370.
               'nichts an der Datenbank — `sleep_start_time` und '
-              + '`sleep_end_time` tragen je 170 Werte; die Kachel ist '
-              + 'nur nicht gebaut')}>
+              + '`sleep_end_time` tragen je 370 Werte (2026-09-28); die '
+              + 'Kachel ist nur nicht gebaut')}>
         <div className="v2-col-gap" style={{ gap: 6 }}>
           {BETTZEITEN.map(([l, mitte, von, bis]) => (
             <div key={l}>

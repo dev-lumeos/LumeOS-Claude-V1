@@ -424,9 +424,23 @@ export function FehlendeCalendarKacheln() {
   return (
     <>
       <Card title="Streak" sub="Wochen in Folge"
+            // ── G-368: der Grund sagte „nichts" ──────────────────
+            //
+            // `[cmd]` **Hier stand:** *,,nichts — die Serie ist
+            // gebaut und steht auf `today`; auf diesem Reiter fehlt
+            // sie nur"*. `[cmd]` **Der erste Teil stimmt:**
+            // `TrainingSerie` ist angebunden (`ansicht.tsx:615`).
+            //
+            // `[read]` **Aber „nichts fehlt" ist die falsche
+            // Auskunft fuer DIESE Kachel** — sie zeigt 12, 18 und
+            // 92 %, und keine dieser drei Zahlen ist gerechnet.
+            // **Wer den Vermerk liest, haelt die Kachel fuer
+            // uebertragbar und uebersieht die erfundenen Werte.**
             attrappe={marke(QUELLE_SPEC,
-              'nichts — die Serie ist gebaut und steht auf `today`; '
-              + 'auf diesem Reiter fehlt sie nur')}>
+              'den Leseweg AUF DIESEM REITER — die Serie ist gebaut '
+              + 'und steht auf `today` (`TrainingSerie`, '
+              + 'ansicht.tsx:615). Die Zahlen hier (12 Wochen, 18 '
+              + 'laengste, 92 %) sind Entwurfswerte, nicht gerechnet')}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 10 }}>
           <span className="v2-num" style={{ fontSize: 32, fontWeight: 600 }}>12</span>
           <span className="v2-dim" style={{ fontSize: 12 }}>
