@@ -176,3 +176,31 @@ zwei exakten Ankern, CRLF erhalten, keine gemischten Zeilenenden.
 vier Wochen zaehlen, wieviele neue Punkte einen Block tragen und
 wieviele davon auf eine Datei zeigen, die auch im Bericht vorkommt.
 Ein Waechter, der nur Felder fuellt, ist keine Verbesserung.
+
+## Ein Konstruktionsfehler, vom Waechter selbst gefunden
+
+`[cmd]` **2026-09-28, vier Stunden nach dem Bau:** A-78 trug
+`quellen: docs/punkte/todos/goals-g-0524-...md`. Als G-524 nach
+`erledigt/` wanderte, meldete der Waechter *,,gibt es nicht"* — und
+er hatte recht.
+
+`[read]` **Ein `quellen:`-Eintrag auf eine PUNKTDATEI ist
+zerbrechlich, weil der Ordner der Zustand ist.** Jeder Punkt wandert
+irgendwann von `todos/` nach `laufend_*/` nach `erledigt/`, und jeder
+Verweis auf seinen Pfad wird dabei falsch. **Das ist keine
+Nachlaessigkeit, das ist die Bauform.**
+
+**A6 (neu)** — Punktverweise in `quellen:` gehen ueber
+`docs/punkte/00-INDEX.md`, nicht ueber einen Ordnerpfad. Die Nummer
+steht im Fliesstext, wo sie nicht bricht.
+
+**A7 (neu)** — besser noch: der Waechter loest eine NUMMER in
+`quellen:` auf, so wie er es bei `braucht:` und `kind_von:` schon
+tut. Dann ist `quellen: [G-514]` ein gueltiger Eintrag und wandert
+mit. **Nicht gebaut** — erst messen, wieviele bestehende Eintraege
+ueberhaupt auf Punktdateien zeigen.
+
+`[read]` **Der Vorfall ist der Beleg fuer den ganzen Punkt.** Eine
+Regel haette gesagt ,,nenne stabile Pfade" und waere ignoriert
+worden. Der Waechter hat den falschen Pfad innerhalb eines
+Arbeitstages rot gemeldet — beim Autor der Regel selbst.

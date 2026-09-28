@@ -4,6 +4,8 @@ typ: befund
 modul: goals
 schwere: mittel
 angelegt: 2026-09-27
+erledigt: 2026-09-28
+commit: e22a7c03
 quellen:
   - docs/specs/Goals/DATABASE.md
   - docs/specs/Goals/CONSOLIDATED_KNOWLEDGE.md
@@ -140,3 +142,20 @@ fehlt.**
 belegt und die Spur lesbar — `erledigt:` und `commit:` tragen den
 Commit, der diese Zusammenfuehrung macht. **Bis dahin liegt er hier
 mit diesem Vermerk oben.**
+
+## Abnahme
+
+`[cmd]` **Geschlossen als Dublette von G-514, nicht als erledigte
+Arbeit.** Der Commit `e22a7c03` traegt die Zusammenfuehrung: die
+drei einzigartigen Zeilen stehen seither in G-514, nichts ist
+verloren.
+
+`[read]` **Die Nummer bleibt belegt.** Wer spaeter auf G-524 stoesst,
+findet diesen Vermerk und den Weg nach G-514 — eine geloeschte Datei
+haette eine Luecke gelassen, die niemand erklaeren kann.
+
+`[read]` **Was daraus gelernt wurde, steht in A-78:** ein neuer Punkt
+wird nicht gegen den Bestand geprueft, und `nummern-pruefen` faengt
+doppelte Nummern, nicht doppelte Inhalte. Der Kennungsabgleich
+haette es gefangen — vier gemeinsame Datenbankobjekte in zwei
+Punkten desselben Moduls sind kein Zufall.

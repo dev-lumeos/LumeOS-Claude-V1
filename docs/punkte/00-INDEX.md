@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 254 |
+| `todos` | 253 |
 | `laufend_codex` | 6 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 568 |
+| `erledigt` | 569 |
 | **gesamt** | **830** |
 
 ## medical — 49
@@ -609,7 +609,7 @@
 | `G-516` | befund | mittel | [das Vorgaengerrepo traegt die Phasenzahlen, die uns fehlen](todos/goals-G-0516-das-vorgaengerrepo-hat-die-phasenzahlen.md) | offen | G-511 | — |
 | `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](laufend_claudecode/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | laeuft (claudecode) | G-511 | G-520, G-521 |
 | `G-520` | feature | hoch | [der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen](todos/goals-g-0520-anpassungsalgorithmus-und-uebergangswaechter.md) | offen | G-519 | — |
-| `G-524` | befund | mittel | [vier der zehn Spec-Tabellen und beide Ansichten fehlen](todos/goals-g-0524-vier-tabellen-und-beide-ansichten-fehlen.md) | offen | G-514 | — |
+| `G-524` | befund | mittel | [vier der zehn Spec-Tabellen und beide Ansichten fehlen](erledigt/goals-g-0524-vier-tabellen-und-beide-ansichten-fehlen.md) | erledigt | G-514 | — |
 | `G-526` | fehler | hoch | [Protein, Fett und Faser kennen die Phase nicht](laufend_codex/goals-g-0526-protein-und-fett-kennen-die-phase-nicht.md) | laeuft (codex) | G-511 | — |
 | `G-527` | fehler | mittel | [der Schreibweg kennt die neuen Hindernisse nicht](laufend_claudecode/goals-g-0527-der-schreibweg-kennt-die-neuen-hindernisse-nicht.md) | laeuft (claudecode) | G-511 | — |
 | `G-528` | befund | mittel | [die Variantenachse und mini_cut sind nicht definiert](todos/goals-g-0528-varianten-und-mini-cut-sind-nicht-definiert.md) | offen | G-521 | — |

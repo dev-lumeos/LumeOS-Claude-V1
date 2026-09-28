@@ -6,8 +6,9 @@ schwere: mittel
 angelegt: 2026-09-28
 
 quellen:
-  - docs/punkte/todos/goals-G-0514-die-modulverrechnung-fehlt-ganz.md
-  - docs/punkte/todos/goals-g-0524-vier-tabellen-und-beide-ansichten-fehlen.md
+  # G-514 und G-524 ueber den Index, nicht ueber ihren Ordner -
+  # der Ordner ist der Zustand und wandert. Siehe A-75.
+  - docs/punkte/00-INDEX.md
   - tools/nummern-pruefen.mjs
   - CLAUDE.md:391
 
