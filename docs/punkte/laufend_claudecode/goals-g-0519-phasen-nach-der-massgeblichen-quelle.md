@@ -458,3 +458,22 @@ eine Rechnung, die sich danach noch einmal aendert.
 
 `[cmd]` **Der Bildnachweis setzt G-518 voraus** — erledigt, der
 Dev-Server liefert wieder aus.
+
+## Stand 2026-09-28
+
+`[cmd]` **A1 bis A4 gemessen und abgenommen. A3 zur Haelfte gebaut**
+und in `0483f080` committet: `transitions_to` liegt als REGEL in
+`apps/web/src/lib/goals/phase-regeln.ts`, mit einer reinen Funktion
+und einem Test, der die Grenze von beiden Seiten trifft.
+`mini_cut` traegt `[annahme]`, `peak_week` und `expert_bb_annual`
+stehen in `UEBERGANG_UNBEKANNT` — damit ist ,,leer weil
+unentschieden" von ,,leer weil Ende" unterscheidbar.
+
+`[cmd]` **Die ANSICHT ist unberuehrt** (`git diff` auf
+`v2/goals/` leer), am Schirm weiterhin neun Arten.
+
+`[read]` **A5 bis A8 haengen an G-529 A5** — nicht mehr an N13, das
+ist entschieden. Das Eingabefeld fuehrt die RATE, die kcal laufen
+daneben mit. Sobald die Spalte
+`goals.goal_phases.zielrate_pct_kg_woche` steht, ist der Rest in
+einem Zug baubar.

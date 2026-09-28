@@ -4,6 +4,8 @@ typ: befund
 modul: goals
 schwere: mittel
 angelegt: 2026-09-08
+erledigt: 2026-09-28
+commit: 0483f080
 braucht: []
 kind_von: G-421
 entscheidung: null
@@ -215,3 +217,59 @@ erneut geprueft: faengt weiterhin.**
 kein Eingabefeld fuer Phasen, kein Waechter fuer B2.**
 
 `[cmd]` **Nicht committet.**
+
+## Abnahme
+
+`[cmd]` **Committet am 2026-09-28 in `0483f080`.**
+
+### Zwei von drei waren schon zu
+
+`[cmd]` `logPhoto` (`fehlende-kacheln.tsx:491`, G-421) und
+`preferences_hidden` (`tab-foods.tsx:1066`, G-413) waren laengst
+verdrahtet. **Der Punkt war insoweit ueberholt und lag trotzdem in
+`todos/`.**
+
+`[read]` **Zusammen mit G-512 heisst das: zwei von zwei Punkten eines
+Auftrags waren ganz oder teils erledigt.** Daraus wurde die Messung,
+die jetzt in A-78 steht: von 263 offenen Punkten hatten 11 einen Test
+auf ihre Nummer, in `todos/` genau drei — und zwei davon waren fertig.
+
+### Was offen war
+
+`[cmd]` **`messungAnlegenAktion`: null Aufrufer**, und das Modal trug
+einen `InEntwicklung`-Knopf mit dem Grund *,,Was fehlt, ist der
+Schreibweg."* **Der Schreibweg fehlte nicht; er stand seit G-122.**
+Jetzt verdrahtet.
+
+`[read]` **Eine Attrappenmarke mit falschem Grund ist schlimmer als
+keine** — sie schickt die Suche in die falsche Richtung. Dasselbe
+Muster wie die Statusbehauptungen in A-76, eine Ebene tiefer.
+
+### Ein zweiter Befund, der dabei anfiel
+
+`[cmd]` **Die Quellenliste bot `Manual / Smart scale / DXA` — zwei
+davon kennt `body_measurements_method_ck` nicht.** Ein Schreibversuch
+waere am CHECK gescheitert. Jetzt kommt sie aus `BF_METHODEN`, also
+aus dem CHECK selbst, zehn Werte.
+
+### Der Nachweis lief ueber die Oberflaeche
+
+`[cmd]` Auf `test-user@lumeos.local`: erst *,,measurement_time: Um
+welche Uhrzeit?"* — die Pruefung greift —, dann die Zeile
+`81.40 kg / 14.20 % / bia` in `goals.body_measurements`, danach
+geloescht. **Die Datenbank hat `ffmi 20.96` selbst erzeugt** und damit
+G-512s Hoehenkorrektur von der anderen Seite belegt.
+
+### B2: neun ohne Aufrufer, und die Zahl war zuerst falsch
+
+`[cmd]` **Neun ueber 204 Dateien.** Zuerst waren es 21: der Zaehler
+hielt jedes `typ: 'x'` fuer einen Ausloeser und meldete `logWeight`,
+`logPhoto` und `logMeasure` faelschlich als tot. Der Ausloeser ist
+ein `open({ typ: 'x' })`.
+
+`[read]` **Die Selbstkorrektur ist die wertvollste Zeile des
+Berichts** — dieselbe Fehlerklasse, die der Orchestrator am selben
+Tag dreimal hatte: eine Messung, die wie ein Ergebnis aussieht.
+
+**Kein Waechter gebaut.** Die neun sind der Sollstand fuer den, der
+ihn spaeter baut.

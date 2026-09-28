@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: mittel
 angelegt: 2026-09-28
+erledigt: 2026-09-28
+commit: 0483f080
 agent: claudecode
 beauftragt: 2026-09-28
 
@@ -254,3 +256,70 @@ Fehlermeldung.
 **A7 (neu)** — dasselbe gilt fuer `expert_bb_annual`: eine
 Vorlage, die Phasen erzeugt, hat selbst kein Kalorienziel
 (G-530).
+
+## Abnahme
+
+`[cmd]` **Gebaut und committet am 2026-09-28 in `0483f080`.**
+Der volle `pnpm gate` lief dabei gruen, 30 Schritte.
+
+### Was steht
+
+`[cmd]` **Vier Hindernisse, vier Texte, aus EINER Funktion.**
+`hindernisSatz()` (`zielwerte-read.ts:97`) bedient Lese- und
+Schreibweg, damit sie nicht auseinanderlaufen.
+
+`[read]` **Drei Texte nennen eine Handlung, der vierte bewusst
+nicht:** bei `zielrichtung_ohne_faktor` kann der Nutzer nichts tun,
+und eine erfundene Handlung waere dort eine Luege. **Das ist die
+richtige Entscheidung** — ein Text, der zum Handeln auffordert, wo
+nichts zu tun ist, schickt die Suche in die Irre (dieselbe Krankheit
+wie der falsche Attrappengrund in G-422).
+
+`[cmd]` **`23514` wird gefangen** (`zielwerte-write.ts:34`) und ueber
+`hindernisAusFehler()` demselben Hindernis zugeordnet, das die
+Leseseite kennt. Vorher: null Treffer auf `23514` in
+`apps/web/src`, und ein ungefangener Datenbankfehler haette HTTP 500
+ergeben — fuer eine Situation, die der Nutzer selbst aufloesen kann.
+
+`[cmd]` **Die Hindernispruefung steht VOR dem Auffangsatz**, sonst
+faengt der sie wieder alle ab. Ein Waechter prueft die Reihenfolge.
+
+`[cmd]` **`peak_week` und `expert_bb_annual` sind kein Hindernis,
+sondern ein Zustand** (`zielwerte-read.ts:136-146`), je mit eigenem
+Satz. Ein Waechter prueft den TON: diese zwei Saetze duerfen weder
+*fehlt* noch *Fehler* noch eine Handlung enthalten.
+
+### Der Stellvertreterbeweis
+
+`[read]` **A3 war nicht erfuellbar, und der Ersatz traegt mehr.** Der
+verlangte Zustand — ein Nutzer ohne aktive Phase — existiert nicht,
+solange G-511 gesperrt ist; die zwei neuen Hindernisse gibt es in
+`pg_proc` null Mal.
+
+`[cmd]` **Statt die Zeile offen zu lassen, wurde ein ECHTER `23514`
+ausgeloest** — `goals.nutrition_targets` hat acht CHECKs, die schon
+heute einen werfen (`kcal = 100`). Die echte Datenbankmeldung ging
+durch die Zuordnung und kam korrekt als `null` zurueck, blieb also
+ein Schreibfehler. **Beide Zweige belegt, einer an einer Meldung aus
+der laufenden Datenbank.**
+
+`[cmd]` **Die acht CHECKs habe ich unabhaengig gemessen** — sie
+existieren.
+
+### Meine eigene Gegenprobe
+
+`[cmd]` Nicht die gemeldete geglaubt, sondern gefahren:
+
+    unveraendert                    GRUEN  pass=26 fail=0
+    sabotiert zielwerte-write.ts    ROT    pass=25 fail=1
+    sabotiert phase-regeln.ts       ROT    pass=24 fail=2
+    nach Wiederherstellung          GRUEN  pass=26 fail=0
+
+Beide Dateien byteidentisch wiederhergestellt, sha256 belegt.
+
+### Was offen bleibt
+
+`[read]` **A3 vollstaendig erst am Tag, an dem G-511 live geht.**
+Dann muss ein Nutzer ohne aktive Phase den Satz sehen und keinen
+500er. **Diese Zeile gehoert in den Auftrag, der G-511 einspielt** —
+nicht hierher zurueck.

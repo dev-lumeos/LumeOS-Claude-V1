@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 253 |
+| `todos` | 252 |
 | `laufend_codex` | 6 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 569 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 571 |
 | **gesamt** | **830** |
 
 ## medical — 49
@@ -590,7 +590,7 @@
 | `G-159` | befund | mittel | [training Today zeigt nicht, was History liest](todos/goals-g-0159-training-today-zeigt-nicht-was-history-liest.md) | offen | — | — |
 | `G-242` | befund | mittel | [die Goals-Rechenwerke liegen in der Pro-Datei](todos/goals-g-0242-die-goals-rechenwerke-liegen-in-der-pro-datei.md) | offen | — | — |
 | `G-421` | feature | hoch | [die vier fehlenden Reiter in Goals & Body](erledigt/goals-g-0421-die-vier-fehlenden-reiter.md) | erledigt | — | G-422 |
-| `G-422` | befund | mittel | [Schreibwege ohne Aufrufer](todos/goals-g-0422-zwei-schreibwege-ohne-aufrufer.md) | offen | — | — |
+| `G-422` | befund | mittel | [Schreibwege ohne Aufrufer](erledigt/goals-g-0422-zwei-schreibwege-ohne-aufrufer.md) | erledigt | — | — |
 | `G-510` | befund | hoch | [Bestandsaufnahme Goals, gegen alle vier Quellen](erledigt/goals-g-0510-bestandsaufnahme.md) | erledigt | — | G-511, G-512, G-513, G-514, G-515, G-516 |
 | `G-511` | befund | hoch | [die Phase entscheidet nicht ueber die Kalorien](laufend_codex/goals-G-0511-phase-entscheidet-nicht-ueber-kalorien.md) | laeuft (codex) | — | G-526, G-527 |
 | `G-512` | befund | hoch | [die FFMI-Kachel zeigte eine erfundene Zahl als echte](erledigt/goals-G-0512-ffmi-zeigte-eine-erfundene-zahl.md) | erledigt | — | — |
@@ -611,7 +611,7 @@
 | `G-520` | feature | hoch | [der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen](todos/goals-g-0520-anpassungsalgorithmus-und-uebergangswaechter.md) | offen | G-519 | — |
 | `G-524` | befund | mittel | [vier der zehn Spec-Tabellen und beide Ansichten fehlen](erledigt/goals-g-0524-vier-tabellen-und-beide-ansichten-fehlen.md) | erledigt | G-514 | — |
 | `G-526` | fehler | hoch | [Protein, Fett und Faser kennen die Phase nicht](laufend_codex/goals-g-0526-protein-und-fett-kennen-die-phase-nicht.md) | laeuft (codex) | G-511 | — |
-| `G-527` | fehler | mittel | [der Schreibweg kennt die neuen Hindernisse nicht](laufend_claudecode/goals-g-0527-der-schreibweg-kennt-die-neuen-hindernisse-nicht.md) | laeuft (claudecode) | G-511 | — |
+| `G-527` | fehler | mittel | [der Schreibweg kennt die neuen Hindernisse nicht](erledigt/goals-g-0527-der-schreibweg-kennt-die-neuen-hindernisse-nicht.md) | erledigt | G-511 | — |
 | `G-528` | befund | mittel | [die Variantenachse und mini_cut sind nicht definiert](todos/goals-g-0528-varianten-und-mini-cut-sind-nicht-definiert.md) | offen | G-521 | — |
 | `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](laufend_codex/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | laeuft (codex) | G-521 | — |
 | `G-530` | feature | hoch | [contest_prep und expert_bb_annual brauchen eine eigene Struktur](todos/goals-g-0530-wettkampfvorbereitung-braucht-eine-eigene-struktur.md) | offen | G-529 | — |

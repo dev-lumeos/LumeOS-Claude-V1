@@ -1,6 +1,6 @@
 # Laufende Auftraege
 
-**Stand: 2026-09-28, 21:30**
+**Stand: 2026-09-28, 22:40**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
@@ -10,8 +10,8 @@
 | Codex | G-511 | die Phase entscheidet ueber die Kalorien | gesperrt, wartet auf G-529 A1 |
 | Codex | C-546 | Sehnen und Nerven je Muskel | geliefert, Abnahme offen |
 | Codex | C-551 | Rollenregel und Messfaktor trennen | geliefert, Abnahme offen |
-| Claude Code | G-519 | Phasen nach der massgeblichen Quelle | A1-A4 und A3-Regelhaelfte fertig; A5-A8 wartet auf G-529 A1 |
-| Claude Code | G-527 | der Schreibweg, plus G-519 A3 als Regel | **geliefert 28.09.**, geprueft, wartet auf Commit |
+| Claude Code | G-519 | Phasen nach der massgeblichen Quelle | A1-A4 ab, A3-Regel in `0483f080`; A5-A8 wartet auf G-529 A5 |
+| Claude Code | — | frei | G-527 und G-422 geschlossen in `0483f080` |
 
 `[cmd]` **Nichts davon ist live eingespielt.** Codex haelt die drei
 Migrationen zurueck.
@@ -95,6 +95,22 @@ es als eigene Phasenart: `PHASE_MODELS.md:13` (Diagramm),
 `PHASE_MODELS.md:139` (eigener Parameterblock mit drei Werten),
 `PHASE_MODELS.md:167` (Monat 11), dazu `DATABASE.md` und `SCORING.md`.
 Nur eine Kalorienvorgabe fehlt.
+
+---
+
+## Der volle Gate-Lauf ist gruen
+
+`[cmd]` **28.09., 15:29: `[gate] gruen`, 30 Schritte** — mit den drei
+neuen Waechtern darin und mit Codex' ungetrackten Dateien im Baum.
+`turbo` 18/18 (voll gecacht), `serverimport` 55 Client-Chunks, 0
+Treffer.
+
+`[read]` **Der erste volle gruene Lauf mit A-75, A-76 und A-77 im
+Gate.** Ab jetzt ist ein roter Schritt ein Befund und keine
+Baustelle.
+
+`[cmd]` **Draussen:** `3c3c4da9` (Waechter), `e22a7c03` (Punkte),
+`8fc65ed7` (Serena), `0483f080` (G-527/G-422).
 
 ---
 
