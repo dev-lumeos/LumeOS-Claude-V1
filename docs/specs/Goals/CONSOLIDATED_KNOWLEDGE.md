@@ -1,4 +1,10 @@
 # Goals Module — Konsolidiertes Wissen
+
+> GELTUNG: Die Entscheidungen in dieser Datei gelten. Pfade,
+> Ports, Dateinamen und Angaben darueber, was schon gebaut ist,
+> beschreiben das Vorgaengerrepo lumeos-2026 und gelten NICHT.
+> Wo etwas liegt, sagt der Code; was offen ist, sagt
+> docs/punkte/00-INDEX.md. (A-76)
 > Konsolidiert aus 14 Alt-Dokumenten | 2026-04-17
 > Quellen: 07_MODULE_GOALS.md, lumeos-goals-strategy.md, goal-phase-models.md,
 > goals_DATABASE.md, goals_FEATURES.md, goals_API.md, goals_COMPONENTS.md,
@@ -12,8 +18,6 @@
 **Port 5900. Zentraler Aggregation Point von LumeOS.**
 
 Goals ist KEIN weiteres Feature-Modul — es ist der Betriebssystem-Kern um den alle anderen Module rotieren. Alle Scores sind relativ zum Ziel, nicht absolut. Jeder Alert und jede Empfehlung beantwortet: "Bringt dich das näher an dein Ziel?"
-
-**Status:** ✅ Vollständig implementiert (2026-04-14)
 
 ---
 

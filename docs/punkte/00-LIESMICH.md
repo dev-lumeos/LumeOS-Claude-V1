@@ -90,6 +90,10 @@ Entwurf, bewusst und hier begruendet.**
     schwere: hoch        # hoch | mittel | niedrig
     angelegt: 2026-08-27
 
+    quellen:              # Pflicht ab 2026-09-28 (A-75)
+      - docs/specs/Supplements/SPEC_01_MODULE_CONTRACT.md:44
+      - apps/web/src/lib/supplements/substanz-read.ts
+
     braucht: []          # blockiert von diesen Nummern
     kind_von: null       # aus welchem Punkt ist dieser entstanden
     entscheidung: E-01   # welche Entscheidung haengt dran
@@ -136,6 +140,42 @@ Dateisystem, jede Zahl mit ihrem Stichtag.
 `[read]` **Sonst prueft der Waechter die Buchhaltung gegen sich
 selbst** — genau wie der Regelkatalog 64 Regeln meldet, von denen 25
 nicht feuern.
+
+### Warum `quellen:` Pflicht ist
+
+Tom, 2026-09-27: *,,ich habe schon tausendmal gesagt es gibt keinen
+auftrag der nicht gegen die quellen gecheckt ist, egal was wir fuer
+workflows einbauen das klappt einfach nicht."*
+
+`[read]` **Jede bisherige Korrektur war eine Regel.** Ein Agent liest
+den Satz und macht danach, was er ohnehin vorhatte. Was in diesem
+Repo haelt, sind die Sachen, die rot werden.
+
+`[cmd]` **Der Waechter faellt bei vier Faellen:**
+
+1. der Block fehlt an einem Punkt mit `angelegt: 2026-09-28` oder
+   spaeter,
+2. der Block ist leer,
+3. eine genannte Datei gibt es nicht,
+4. ein genannter Pfad steht auf der Liste in `CLAUDE.md:391`
+   (`docs/_archive/`, `_archive/`, `AGENTS.md`, `.codex/`,
+   `.agents/`, `infra/`).
+
+`[read]` **Ein Stichtag, kein Sollstand.** Die 823 Punkte von vorher
+sind frei — sonst waere der Waechter ab Tag eins rot und wuerde
+umgangen. **Ein vorhandener Block wird immer geprueft**, auch an
+einem alten Punkt.
+
+`[read]` **Die Zeilenangabe ist erlaubt und erwuenscht**
+(`PHASE_MODELS.md:28`), aber nicht verlangt. Ein Glob wird
+uebersprungen, wie bei `beruehrt.dateien` — eine Menge ist keine
+Behauptung ueber eine Datei.
+
+`[read]` **Die ehrliche Grenze:** der Waechter faengt keinen
+Agenten, der eine Datei NENNT, ohne sie gelesen zu haben. Das kann
+nichts faengen. Er macht aus ,,still uebersprungen" ein ,,muss etwas
+nennen" — und eine falsche Angabe faellt bei der Abnahme auf, wo
+eine fehlende unsichtbar war.
 
 ### Es gibt kein Feld `kinder`
 
@@ -233,6 +273,27 @@ Grenze war entfernt und ein Test hielt sie draussen).
 die Tabelle?"* geht. *,,Wie viele Zeilen hat sie unter welcher
 Bedingung?"* nicht.
 
+### Der Kopf eines Auftrags
+
+`[cmd]` **Tom, 2026-09-28:** *,,in den header eines auftrages
+gehoert fuer wen er ist."* Am selben Tag gingen zwei Auftraege
+nebeneinander raus, keiner nannte seinen Agenten — der Leser musste
+aus dem Inhalt schliessen, wem welcher gehoert.
+
+**Der Kopf traegt vier Angaben, in dieser Reihenfolge:**
+
+    AUFTRAG FUER <agent> - <Nummern>: <Sache in einem Halbsatz>
+    Bereich: <Pfade, die er anfasst>
+    Fremd:   <Pfade, die ihm NICHT gehoeren, und wer dort arbeitet>
+    Stand:   <Datum>
+
+`[read]` **Die dritte Zeile ist die, die Kollisionen verhindert.**
+Ein Agent, der weiss, wo er nicht hingehoert, fragt nicht nach und
+faesst auch nichts an. Zwei Agenten in `apps/web` teilen sich die
+Browsersitzung — das gehoert in dieselbe Zeile.
+
+`[read]` **Der Kopf steht im Auftrag, nicht in der Begleitnachricht.**
+Der Auftrag wird kopiert; was danebensteht, geht verloren.
 ### Wie ein Auftrag stattdessen formuliert wird
 
     frueher   ,,Es sind 31 Regeln, pruef das."

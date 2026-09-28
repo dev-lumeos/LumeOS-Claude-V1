@@ -1,6 +1,10 @@
 # Goals Module — Offene Punkte, Bugs & Geplante Features
 
-## Status: Vollständig implementiert (2026-04-14)
+> GELTUNG: Die Entscheidungen in dieser Datei gelten. Pfade,
+> Ports, Dateinamen und Angaben darueber, was schon gebaut ist,
+> beschreiben das Vorgaengerrepo lumeos-2026 und gelten NICHT.
+> Wo etwas liegt, sagt der Code; was offen ist, sagt
+> docs/punkte/00-INDEX.md. (A-76)
 
 ---
 

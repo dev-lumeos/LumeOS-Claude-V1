@@ -1,5 +1,11 @@
 # Goals Module — Übersicht
 
+> GELTUNG: Die Entscheidungen in dieser Datei gelten. Pfade,
+> Ports, Dateinamen und Angaben darueber, was schon gebaut ist,
+> beschreiben das Vorgaengerrepo lumeos-2026 und gelten NICHT.
+> Wo etwas liegt, sagt der Code; was offen ist, sagt
+> docs/punkte/00-INDEX.md. (A-76)
+
 Das Goals-Modul ist der **zentrale Aggregation Point** von LumeOS. Es ist kein weiteres Feature-Modul — es ist der Betriebssystem-Kern um den alle anderen Module rotieren.
 
 ---

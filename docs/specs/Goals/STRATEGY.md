@@ -1,5 +1,11 @@
 # Goals Module — Strategie & Markt
 
+> GELTUNG: Die Entscheidungen in dieser Datei gelten. Pfade,
+> Ports, Dateinamen und Angaben darueber, was schon gebaut ist,
+> beschreiben das Vorgaengerrepo lumeos-2026 und gelten NICHT.
+> Wo etwas liegt, sagt der Code; was offen ist, sagt
+> docs/punkte/00-INDEX.md. (A-76)
+
 ## Markt-Landscape
 
 **10 Apps analysiert** — 3 Tiers: Dumb Goals (MFP, YAZIO), Adaptive Goals (MacroFactor, Carbon, RP Strength), Psychology-First (Noom $400M+ Revenue)

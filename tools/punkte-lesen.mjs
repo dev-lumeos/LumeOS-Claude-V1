@@ -119,7 +119,25 @@ export function frontmatter(text) {
         continue
       }
       const ziel = listeIn ? (daten[listeIn] ??= {}) : daten
-      ;(ziel[liste] ??= []).push(String(wert(punkt[2]) ?? '').trim())
+      // `[cmd]` **Ein Schluessel ohne Wert auf oberster Ebene wird
+      // weiter unten als BLOCK angelegt (`{}`), nicht als Liste** —
+      // welches von beidem gemeint war, sagt erst die naechste Zeile.
+      // Kommt ein `- `, ist es eine Liste. Vorher fiel hier
+      // `ziel[liste].push is not a function`, weil `??=` ein leeres
+      // Objekt nicht ersetzt. Gefunden von der A-75-Gegenprobe mit
+      // einem `quellen:`-Block, 2026-09-28.
+      if (!Array.isArray(ziel[liste])) {
+        const vorher = ziel[liste]
+        const warLeer = vorher == null
+          || (typeof vorher === 'object' && Object.keys(vorher).length === 0)
+        if (!warLeer) {
+          fehler.push(`Zeile ${i + 1}: ${liste} hat schon einen Wert — `
+            + 'ein Listeneintrag passt nicht dazu')
+          continue
+        }
+        ziel[liste] = []
+      }
+      ziel[liste].push(String(wert(punkt[2]) ?? '').trim())
       continue
     }
 

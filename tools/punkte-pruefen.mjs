@@ -134,6 +134,33 @@ const OHNE_DB = process.argv.includes('--ohne-db')
 // **HIER nachziehen, nirgends sonst — mit Datum und Anlass.**
 const SOLLSTAND = 25
 
+// ── A-75 · ab wann `quellen:` Pflicht ist ───────────────────────────
+//
+// `[read]` **Ein Stichtag, kein Sollstand.** A-75 A2 schlug einen
+// Sollstand vor, wie bei `kind_von`. Das traegt hier nicht: dieser
+// Waechter faellt in BEIDE Richtungen (siehe Ende der Datei). Ein
+// Sollstand von 823 waere rot, sobald der erste alte Punkt einen
+// Block bekommt — und jeder geschlossene Punkt verschiebt ihn.
+//
+// `[read]` **Der Stichtag ist unbestechlich und braucht keine
+// Pflege.** Punkte ab diesem `angelegt:` brauchen den Block; aeltere
+// sind frei. **Ein vorhandener Block wird IMMER geprueft**, auch an
+// einem alten Punkt — wer nachtraegt, wird nicht bestraft, aber auch
+// nicht geglaubt.
+const QUELLEN_AB = '2026-09-28'
+
+// `[cmd]` **Die Liste steht in CLAUDE.md:391 bis 394** und nur dort.
+// Wer sie aendert, aendert sie da — und hier nach. Ein Pfad von
+// dieser Liste ist keine Quelle, auch wenn die Datei existiert.
+const VERBOTEN = [
+  'docs/_archive/',
+  '_archive/',
+  'AGENTS.md',
+  '.codex/',
+  '.agents/',
+  'infra/',
+]
+
 const meldungen = []
 function rot(pfad, text) { meldungen.push({ pfad, text }) }
 
@@ -293,6 +320,68 @@ for (const p of gueltig) {
     if (/[*?]/.test(d)) continue
     if (!fs.existsSync(path.join(WURZEL, d))) {
       rot(p.relativ, `beruehrt.dateien: ${d} — gibt es nicht`)
+    }
+  }
+}
+
+// ── 5b · quellen gegen Dateisystem und Verbotsliste (A-75) ──────────
+//
+// `[read]` **Der Waechter faengt keinen, der eine Datei NENNT, ohne
+// sie gelesen zu haben.** Das kann nichts faengen. Er macht aus
+// ,,still uebersprungen" ein ,,muss etwas nennen" — und eine falsche
+// Angabe faellt bei der Abnahme auf, wo eine fehlende unsichtbar war.
+for (const p of gueltig) {
+  const q = p.daten.quellen
+  const angelegt = String(p.daten.angelegt ?? '').slice(0, 10)
+
+  // `[read]` **Nur der Stichtag entscheidet, nicht der Ordner.** Ein
+  // Punkt wandert von `todos/` nach `erledigt/`; sein `angelegt:`
+  // nicht.
+  if (q === undefined || q === null) {
+    if (angelegt >= QUELLEN_AB) {
+      rot(p.relativ, `quellen: fehlt — Pflicht ab ${QUELLEN_AB}`)
+    }
+    continue
+  }
+
+  // `quellen:` ohne Eintraege kommt als leeres Objekt zurueck, nicht
+  // als leere Liste — der Leser kann erst an der naechsten Zeile
+  // unterscheiden, ob ein Block oder eine Liste gemeint war.
+  const liste = Array.isArray(q)
+    ? q
+    : (typeof q === 'object' ? [] : [q])
+  if (liste.length === 0) {
+    rot(p.relativ, 'quellen: leer — ein leerer Block ist keine Quelle')
+    continue
+  }
+
+  for (const eintrag of liste) {
+    const roh = String(eintrag).trim()
+    if (roh === '') {
+      rot(p.relativ, 'quellen: leerer Eintrag')
+      continue
+    }
+    // `[read]` **Zeilenangabe abtrennen, nicht verlangen.**
+    // `PHASE_MODELS.md:28` ist die nuetzlichere Angabe, aber eine
+    // Datei ohne Zeile bleibt eine Quelle.
+    const pfad = roh.replace(/:\d+(-\d+)?$/, '')
+    const norm = pfad.replace(/\\/g, '/').replace(/^\.\//, '')
+
+    const treffer = VERBOTEN.find(v => norm === v
+      || norm.startsWith(v)
+      || norm.includes('/' + v))
+    if (treffer) {
+      rot(p.relativ, `quellen: ${roh} — steht auf der Verbotsliste `
+        + `(${treffer}), gilt nicht als Quelle`)
+      continue
+    }
+
+    // Ein Glob ist eine Menge, keine Behauptung ueber eine Datei —
+    // dieselbe Regel wie bei `beruehrt.dateien`.
+    if (/[*?]/.test(norm)) continue
+
+    if (!fs.existsSync(path.join(WURZEL, norm))) {
+      rot(p.relativ, `quellen: ${roh} — gibt es nicht`)
     }
   }
 }
