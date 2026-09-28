@@ -4,6 +4,8 @@ typ: feature
 modul: quer
 schwere: mittel
 angelegt: 2026-09-08
+agent: claudecode
+beauftragt: 2026-09-28
 braucht: []
 kind_von: G-392
 entscheidung: null
@@ -433,3 +435,91 @@ er wurde mit einem anderen Punkt miterledigt.**
 
 `[read]` **Vor dem naechsten Auftrag messen, was davon noch
 offen ist.**
+
+## Bericht
+
+**Claude Code, 2026-09-28.**
+
+### B1 — die Messung vom 25.08. nachgeprueft
+
+`[cmd]` **Die Modulzahl stimmt weiterhin:** von neun Modulen hatte
+**nur `supplements`** eine `loading.tsx`.
+
+`[cmd]` **Die ZEIT nicht mehr.** Gemessen 2026-09-28 auf
+`test-user@lumeos.local`, bis `networkidle`:
+
+    goals        1.518 ms      medical      1.343 ms
+    training     1.402 ms      nutrition    1.606 ms
+    recovery     1.379 ms      supplements  1.329 ms
+    coach        1.756 ms      dashboard    1.235 ms
+    settings     1.295 ms
+
+`[read]` **1,2 bis 1,8 s statt der gemessenen 1,9 bis 2,9 s** —
+schneller, aber **immer noch ueber einer Sekunde ohne jede
+Rueckmeldung.** `[read]` **Der Befund traegt: in dieser Zeit sieht
+der Nutzer die alte Seite.**
+
+### B2 — acht Ladezustaende gebaut
+
+    goals        10 Reiter    medical       6 Reiter
+    training     10 Reiter    nutrition     9 Reiter
+    recovery      9 Reiter    coach         9 Reiter
+    dashboard    OHNE Reiter  settings     OHNE Reiter
+
+`[cmd]` **Neun von neun Modulen haben jetzt eine `loading.tsx`.**
+
+`[read]` **Die Reiterzahl je Modul ist gemessen, nicht geschaetzt**
+— `goals` zehn (`ansicht.tsx:113-125`), `nutrition` neun
+(`:164-186`), `medical` sechs.
+
+`[cmd]` **Zwei Module bekommen KEINE Reiterreihe:** `dashboard`
+und `settings` haben keine `Tabs`. `[read]` **Ein Platzhalter, der
+eine Reiterzeile zeigt, die danach verschwindet, laesst den Inhalt
+springen** — **das waere schlimmer als gar keiner.**
+
+`[cmd]` **Kein CSS geaendert:** die Klassen `v2-skel*` stehen seit
+dem 25.08. in `packages/ui/src/styles/v2.css:2287-2308`. `[read]`
+**`packages/` gehoert allen Apps** — dort war nichts noetig.
+
+### B3 — am Schirm belegt
+
+`[cmd]` **Ueber die CLIENT-Navigation gemessen**, nicht ueber
+`goto`:
+
+    goals      Skelett gesehen    medical     gesehen
+    training   gesehen            nutrition   gesehen
+    recovery   gesehen (3 von 3)  coach       gesehen
+    dashboard  gesehen            settings    gesehen
+
+**8 von 8.**
+
+`[cmd]` **Bild:** `backup/x-g394-training-laedt.png` — Kopf, zehn
+Reiterplatzhalter, zwei Kachelbloecke, **die Schale steht schon.**
+
+`[read]` **Ein erster Anlauf mass falsch und meldete 0 von 4.**
+`[cmd]` **Die Ursache: ich habe mit `page.goto()` gemessen** — das
+laedt das Dokument neu, und dabei ist `loading.tsx` nicht zwingend
+zu sehen. `[read]` **`loading.tsx` wirkt bei der Navigation
+INNERHALB der Anwendung**, also beim Klick. **Mit einem
+Anker-Klick gemessen: acht von acht.**
+
+`[cmd]` **Und `recovery` meldete beim ersten Durchgang `false`** —
+**dreimal wiederholt: dreimal `true`.** `[read]` **Ein einzelner
+Fehlschlag war das erste Uebersetzen der Route, kein Mangel.**
+
+`[cmd]` **Attrappen und Konsolenfehler je Modul gezaehlt:**
+
+    goals 13 · training 12 · recovery 17 · medical 15
+    nutrition 1 · supplements 14 · coach 19 · dashboard 10
+    settings 1
+    Konsolenfehler: je 1 (die bekannte data-mode-Warnung),
+    coach 2
+
+### Abgrenzung
+
+`[cmd]` **Acht neue Dateien, je 20 bis 38 Zeilen.** `[cmd]`
+**Keine bestehende Datei geaendert** — die Ladezustaende haengen
+sich an Next.js, nicht an den Modulcode.
+
+`[cmd]` **Nichts in `supabase/`, kein CSS, kein Waechter.**
+**Nicht committet.**

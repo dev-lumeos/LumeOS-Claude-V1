@@ -152,3 +152,51 @@ SQL-Block.
 `[read]` **Die TDEE-Reihe ist aus diesem Punkt herausgeloest** und
 geht als eigener Auftrag raus: sie blockiert G-523 und damit G-529.
 `tdee_settings` waere nur ein Zustand — gebraucht wird eine Reihe.
+
+## Die TDEE-Reihe ist gebaut — 2026-09-28
+
+`[read]` **Ein Buchhaltungsfehler des Orchestrators gehoert hier
+zuerst hin:** der Auftrag an Codex hiess ,,G-524, nur die
+TDEE-Reihe" — und G-524 wurde am selben Nachmittag als Dublette
+dieses Punktes geschlossen, **waehrend der Auftrag lief.** Die
+Reihe hatte danach keinen offenen Punkt mehr. Sie wird deshalb hier
+gefuehrt, wo die Tabellenmenge steht, aus der sie stammt.
+
+**Die Lehre:** eine Nummer, die in einem laufenden Auftrag steht,
+wird nicht geschlossen, solange der Auftrag laeuft. Der
+Punkteordner ist der Zustand — auch fuer die Agenten.
+
+### Was gebaut ist
+
+`[cmd]` **Eine datierte Reihe**
+(`supabase/migrations/20260928150000_g524_tdee_history_ewma.sql`)
+mit Rohwert, Vorgaengerwert, geglaettetem Wert, alpha, Methode,
+`confidence` und `reliable`.
+
+`[cmd]` **Struktur, Schreibweg und Rueckfuellung sind getrennt** —
+`524_tdee_history_writer.sql` und `524_tdee_history_backfill.sql`
+liegen in der Kette, nicht in der Migration. **Das war mein
+Auftragsfehler:** A4 verlangte ein Rueckfuellen, ohne den Ort zu
+nennen, und der Datenlogik-Waechter fiel zu Recht. Codex hat es
+selbst getrennt, bevor die Korrektur ihn erreichte.
+
+`[cmd]` **Die Rueckfuellung rechnet, sie uebernimmt nicht.** Aus 362
+Koerpermessungen und 730 Tageszusammenfassungen entstanden 218
+Werte (109 je Nutzer mit Messungen). Der erste dev-Wert: Rohwert
+2129,4 gegen Formelstart 3202,1 ergibt geglaettet **2880,3** —
+nachgerechnet: 0,3 * 2129,4 + 0,7 * 3202,1 = 2880,29.
+
+`[cmd]` **`test-user@lumeos.local` hat 0 Koerpermessungen und 7
+Tageszeilen** (selbst gemessen) — also keine rueckwirkend geratene
+Reihe, und der Schreibweg meldet `insufficient_intake_days`.
+**Eine fehlende Reihe ist kein Nullwert.**
+
+### Ein Befund aus dem Vorgaengerrepo
+
+`[cmd]` **`tdee_history` gab es dort, und es war tot:** hoechstens
+taeglich eindeutig (nicht woechentlich), weder Leser noch Schreiber,
+null Datenzeilen. Eine dokumentierte Abloesung ist nicht auffindbar.
+
+`[read]` **Das aendert die Lesart der Struktur:** sie ist ein
+Entwurf, der nie lief, keine erprobte Loesung. Uebernommen wurde
+die Idee der Reihe, nicht ihre Ausfuehrung.

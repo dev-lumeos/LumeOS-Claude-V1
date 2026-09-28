@@ -319,3 +319,49 @@ Spalten deutsch (`gueltig_ab`), und die Schwestertabelle von
 `nutrition_macro_rules` traegt dessen Sprache. Jedes Objekt folgt
 seiner Nachbarschaft. Die gemischte Benennung im Repo ist eine
 aeltere Sache und wird hier nicht mitentschieden.
+
+## Abnahme A5 bis A8 — 2026-09-28
+
+`[cmd]` **Gebaut, 7/7 gruen, nichts live** — die Spalte, die
+Regeltabelle und die Spalte selbst haben im laufenden Schema null
+Treffer (selbst gemessen).
+
+`[cmd]` **Die Spalte steht wie festgelegt:**
+`zielrate_pct_kg_woche numeric(5,3)`, Aussengrenze `-2.5 bis 1.5`,
+dazu die Phasenartgrenze mit Vorzeichen je Art.
+
+`[cmd]` **`goals.phase_rate_rules` ist leer und quellpflichtig** —
+offene Regeln duerfen keine Zahl tragen, belegte brauchen Quelle und
+Fundstelle. **Beidseitige Trigger** verhindern, dass eine Phase oder
+eine nachtraeglich eingefuegte Regel der anderen widerspricht.
+**Ohne belegte Regel gilt nur die Aussengrenze** — genau die
+Unterscheidung aus A8 zwischen ,,keine Regel" und ,,Regel erlaubt
+alles".
+
+`[cmd]` **Der Phasenart-CHECK ist `NOT VALID`**, weil zwei
+bestehende `lean_bulk`-Zeilen noch keine Rate haben. **Neue und
+geaenderte Zeilen werden geprueft, der Altbestand wird nicht
+geraten.** Dieselbe Bauform wie in G-511 — und die zwei Zeilen sind
+Testdaten aus `GO-07`, also mit G-528 A1 aufzuraeumen. **Danach kann
+der CHECK validiert werden.**
+
+### A6 entschieden — 2026-09-28, Orchestrator
+
+Codex hat A6 offen vorgelegt und empfohlen, die Spalte bei
+`reverse_diet`, `recomp` und `contest_prep` NULL zu lassen und eine
+errechnete Momentanrate nur abzuleiten, nicht zu speichern.
+**Die Empfehlung ist richtig und wird erzwungen, nicht nur notiert.**
+
+`[read]` **Der Grund:** eine nullable Spalte, die bei drei
+Phasenarten ,,nicht gefuellt werden sollte", wird gefuellt. Eine
+weiche Regel ohne CHECK ist genau das, was A-75 und A-76 zu diesem
+Repo sagen.
+
+`[read]` **Der Preis ist klein und umkehrbar:** ein CHECK, der NULL
+erzwingt, laesst sich lockern, wenn G-530 fuer `contest_prep` je
+Unterphase doch eine Rate braucht. Garbage in einer Spalte laesst
+sich nicht zurueckrechnen.
+
+**A9 (neu)** — die drei Arten tragen `zielrate_pct_kg_woche IS
+NULL` im Phasenart-CHECK, mit einem Kommentar, der auf G-530
+verweist. **Ein Test je Art, von beiden Seiten.**

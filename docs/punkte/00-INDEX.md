@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 252 |
-| `laufend_codex` | 6 |
-| `laufend_claudecode` | 1 |
+| `todos` | 250 |
+| `laufend_codex` | 7 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 571 |
-| **gesamt** | **830** |
+| **gesamt** | **831** |
 
 ## medical — 49
 
@@ -612,7 +612,7 @@
 | `G-524` | befund | mittel | [vier der zehn Spec-Tabellen und beide Ansichten fehlen](erledigt/goals-g-0524-vier-tabellen-und-beide-ansichten-fehlen.md) | erledigt | G-514 | — |
 | `G-526` | fehler | hoch | [Protein, Fett und Faser kennen die Phase nicht](laufend_codex/goals-g-0526-protein-und-fett-kennen-die-phase-nicht.md) | laeuft (codex) | G-511 | — |
 | `G-527` | fehler | mittel | [der Schreibweg kennt die neuen Hindernisse nicht](erledigt/goals-g-0527-der-schreibweg-kennt-die-neuen-hindernisse-nicht.md) | erledigt | G-511 | — |
-| `G-528` | befund | mittel | [die Variantenachse und mini_cut sind nicht definiert](todos/goals-g-0528-varianten-und-mini-cut-sind-nicht-definiert.md) | offen | G-521 | — |
+| `G-528` | befund | mittel | [die Variantenachse und mini_cut sind nicht definiert](laufend_codex/goals-g-0528-varianten-und-mini-cut-sind-nicht-definiert.md) | laeuft (codex) | G-521 | — |
 | `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](laufend_codex/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | laeuft (codex) | G-521 | — |
 | `G-530` | feature | hoch | [contest_prep und expert_bb_annual brauchen eine eigene Struktur](todos/goals-g-0530-wettkampfvorbereitung-braucht-eine-eigene-struktur.md) | offen | G-529 | — |
 
@@ -678,7 +678,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 207
+## quer — 208
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -715,7 +715,7 @@
 | `A-64` | entscheidung | niedrig | [der Schirmlauf ausserhalb des Gates](todos/quer-a-0064-der-schirmlauf-ausserhalb-des-gates.md) | offen | — | — |
 | `A-68` | befund | niedrig | [der Waechter fuer leerlaufende Agenten](erledigt/quer-a-0068-der-waechter-fuer-leerlaufende-agenten.md) | erledigt | — | — |
 | `A-69` | befund | mittel | [26 Abhaengigkeiten mit High Severity](todos/quer-a-0069-26-abhaengigkeiten-mit-high-severity.md) | offen | — | — |
-| `A-70` | feature | hoch | [ein Backupsystem statt eines wachsenden Ordners](erledigt/quer-a-0070-ein-backupsystem-statt-eines-wachsenden-ordners.md) | erledigt | — | — |
+| `A-70` | feature | hoch | [ein Backupsystem statt eines wachsenden Ordners](erledigt/quer-a-0070-ein-backupsystem-statt-eines-wachsenden-ordners.md) | erledigt | — | A-79 |
 | `A-71` | befund | hoch | [der Leseweg liegt daneben](erledigt/quer-a-0071-der-leseweg-liegt-daneben.md) | erledigt | — | C-424, G-368, G-371 |
 | `A-72` | entscheidung | mittel | [eine Leser-Deklaration im Code](todos/quer-a-0072-eine-leser-deklaration-im-code.md) | offen | — | — |
 | `A-73` | befund | mittel | [der Webpack-Cache kann den Server toeten](todos/quer-a-0073-der-webpack-cache-kann-den-server-toeten.md) | offen | — | — |
@@ -724,6 +724,7 @@
 | `A-76` | befund | hoch | [die Specs beschreiben ein Repo, das es hier nicht gibt](todos/quer-a-0076-die-specs-beschreiben-das-vorgaengerrepo-als-fertig.md) | offen | — | — |
 | `A-77` | fehler | mittel | [vier Werkzeugtests liefen nirgends](todos/quer-a-0077-werkzeugtests-liefen-nirgends.md) | offen | — | — |
 | `A-78` | befund | mittel | [ein neuer Punkt wird nicht gegen den Bestand geprueft](todos/quer-a-0078-punkte-werden-nicht-gegen-den-bestand-geprueft.md) | offen | — | — |
+| `A-79` | befund | mittel | [jeder Auftrag legt 452 MiB ab, auch wenn nichts eingespielt wird](todos/quer-a-0079-jeder-auftrag-legt-452-mib-ab.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
@@ -837,7 +838,7 @@
 | `G-360` | feature | hoch | [coach, market und admin als eigene Apps](todos/quer-g-0360-coach-market-admin-als-eigene-apps.md) | offen | — | G-361, G-362 |
 | `G-363` | entscheidung | mittel | [wer schlaegt die naechste Phase vor?](erledigt/quer-g-0363-wer-schlaegt-die-naechste-phase-vor.md) | erledigt | — | — |
 | `G-365` | feature | hoch | [vier Schritte je Kachel](erledigt/quer-g-0365-vier-schritte-je-kachel.md) | erledigt | — | C-421, C-423, G-366, G-369, G-370 |
-| `G-368` | befund | mittel | [Attrappen-Vermerke mit falschem Grund](todos/quer-g-0368-attrappen-vermerke-mit-falschem-grund.md) | offen | — | — |
+| `G-368` | befund | mittel | [Attrappen-Vermerke mit falschem Grund](laufend_claudecode/quer-g-0368-attrappen-vermerke-mit-falschem-grund.md) | laeuft (claudecode) | — | — |
 | `G-370` | befund | mittel | [Unternavigationen vollstaendig pruefen](erledigt/quer-g-0370-unternavigationen-vollstaendig-pruefen.md) | erledigt | — | — |
 | `G-375` | feature | hoch | [der Tageswechsler gehoert in die Schale](erledigt/quer-g-0375-der-tageswechsler-gehoert-in-die-schale.md) | erledigt | — | G-377 |
 | `G-377` | entscheidung | mittel | [ein gemeinsames Bauteil fuer den Modulkopf](todos/quer-g-0377-ein-gemeinsames-bauteil-fuer-den-modulkopf.md) | offen | — | — |
@@ -849,7 +850,7 @@
 | `G-385` | feature | hoch | [`@abwesend`-Marken in die SSOT](erledigt/quer-g-0385-abwesend-marken-in-die-ssot.md) | erledigt | — | G-386 |
 | `G-386` | feature | hoch | [die SSOT in den Abwesenheitswaechter](erledigt/quer-g-0386-die-ssot-in-den-abwesenheitswaechter.md) | erledigt | — | G-387 |
 | `G-387` | feature | hoch | [die neun Marken in die SSOT](erledigt/quer-g-0387-die-neun-marken-in-die-ssot.md) | erledigt | — | C-437 |
-| `G-394` | feature | mittel | [sechs Module ohne Ladezustand](todos/quer-g-0394-sechs-module-ohne-ladezustand.md) | offen | — | — |
+| `G-394` | feature | mittel | [sechs Module ohne Ladezustand](laufend_claudecode/quer-g-0394-sechs-module-ohne-ladezustand.md) | laeuft (claudecode) | — | — |
 | `G-395` | entscheidung | mittel | [sechs Injektionsorte ohne Punkt auf der Figur](erledigt/quer-g-0395-sechs-injektionsorte-ohne-punkt.md) | erledigt | — | — |
 | `G-396` | feature | hoch | [die Beschriftung der Koerperkarte](erledigt/quer-g-0396-die-beschriftung-der-koerperkarte.md) | erledigt | — | — |
 | `G-397` | befund | mittel | [zwei Vorlagen kennt die Zaehlung nicht](erledigt/quer-g-0397-zwei-vorlagen-kennt-die-zaehlung-nicht.md) | erledigt | — | — |

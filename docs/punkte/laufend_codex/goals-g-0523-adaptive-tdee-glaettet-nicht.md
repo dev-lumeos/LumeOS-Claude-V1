@@ -129,3 +129,31 @@ alpha = 0.3 genau 2800 und 2710.
 ergaebe 3500 und 2500, eine feste Mischung gegen den Formelwert
 etwas Drittes. **Der Test misst die Glaettung, nicht ihre
 Anwesenheit.**
+
+## Abnahme — 2026-09-28
+
+`[cmd]` **B2 bis B5 gebaut, 7/7 Tests gruen, Kettenlauf gruen in
+1330,6 Sekunden mit SCHEMA VOLLSTAENDIG.** Nichts live, nichts
+committet.
+
+`[cmd]` **alpha = 0,3 gegen den letzten ZUVERLAESSIGEN Reihenwert**,
+der Formel-TDEE ist nur der Startwert. Das ist genau die
+Unterscheidung, an der die alte Fassung scheiterte: dort stand der
+Formelwert im zweiten Term, und mit alpha = 1 wurde er mit Null
+multipliziert.
+
+`[cmd]` **Die Gegenprobe traegt in beide Richtungen:** 2500, dann
+Rohwert 3500 ergibt 2800, dann Rohwert 2500 ergibt 2710. **Mit
+alpha = 1 entstuenden 3500 und 2500** — der Test wird damit rot.
+Selbst nachgerechnet.
+
+`[read]` **,,letzter zuverlaessiger Wert" statt ,,letzter Wert" ist
+eine Zutat, die der Auftrag nicht verlangt hat und die richtig ist.**
+Eine Reihe mit `reliable = false` an einer Stelle wuerde sonst ihren
+eigenen Ausrutscher fortschreiben.
+
+`[cmd]` **`confidence` und `reliable` sind erhalten**, und der
+Methodenname nennt jetzt EWMA und den Vorgaengerwert — der alte
+hiess `alpha_1_formula_baseline` und war damit ehrlich, aber falsch.
+
+**Offen:** die Einspielung. Der Punkt schliesst mit dem Commit.

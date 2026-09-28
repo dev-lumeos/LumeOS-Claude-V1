@@ -1,17 +1,19 @@
 # Laufende Auftraege
 
-**Stand: 2026-09-28, 22:40**
+**Stand: 2026-09-28, 22:55**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Codex | G-529 | die gespeicherte Groesse ist die Rate | **raus 28.09.** — A1 messen, nicht umbauen |
-| Codex | G-523 | der adaptive TDEE glaettet nicht | **raus 28.09.** — jetzt Voraussetzung |
-| Codex | G-526 | Protein und Fett kennen die Phase nicht | **raus 28.09.** — nur die Struktur |
-| Codex | G-511 | die Phase entscheidet ueber die Kalorien | gesperrt, wartet auf G-529 A1 |
+| Codex | G-511 | die Rechnung dreht sich: Rate statt Delta | **raus 28.09., 15:48** |
+| Codex | G-528 | A1 — die drei variant-Testwerte aufraeumen | **raus 28.09., 15:48** |
+| Codex | G-529 | A9 — drei Arten erzwingen NULL | **raus 28.09., 15:48** |
+| Codex | G-523 | der adaptive TDEE glaettet nicht | gebaut, gruen, wartet auf Einspielung |
+| Codex | G-526 | Protein und Fett kennen die Phase nicht | Struktur ab (A11/A12); Baender warten auf G-521 A1 |
 | Codex | C-546 | Sehnen und Nerven je Muskel | geliefert, Abnahme offen |
 | Codex | C-551 | Rollenregel und Messfaktor trennen | geliefert, Abnahme offen |
-| Claude Code | G-519 | Phasen nach der massgeblichen Quelle | A1-A4 ab, A3-Regel in `0483f080`; A5-A8 wartet auf G-529 A5 |
-| Claude Code | — | frei | G-527 und G-422 geschlossen in `0483f080` |
+| Claude Code | G-368 | Attrappenvermerke mit falschem Grund | **raus 28.09., 15:48** — acht falsche Marken |
+| Claude Code | G-394 | sechs Module ohne Ladezustand | **raus 28.09., 15:48** |
+| Claude Code | G-519 | Phasen nach der massgeblichen Quelle | A1-A4 ab, A3-Regel in `0483f080`; A5-A8 blockiert |
 
 `[cmd]` **Nichts davon ist live eingespielt.** Codex haelt die drei
 Migrationen zurueck.
@@ -25,6 +27,25 @@ Migrationen zurueck.
     apps/coach/src/              Claude Code
     packages/ui, packages/scoring  Claude Code (mit Gegenprobe)
     docs/, tools/                Orchestrator
+
+---
+
+## Warum G-519 A5 bis A8 NICHT laeuft
+
+`[cmd]` **Die Ratenspalte ist gebaut und NICHT eingespielt.** Der
+Dev-Server liest die laufende Datenbank; dort gibt es
+`goals.goal_phases.zielrate_pct_kg_woche` nicht — null Treffer,
+selbst gemessen. **Ein Eingabefeld dagegen ist nicht baubar.**
+
+`[cmd]` **Und G-511 speichert weiter das Delta:** Zeile 148 liest
+`parameters -> 'calorie_surplus'`, Zeile 195 rechnet
+`bmr_wert * akt_faktor + kalorien_delta`. Nach E1 ist das die
+verworfene Groesse. **Die Reihenfolge: G-511 neu, dann einspielen,
+dann G-519 A5-A8.**
+
+`[read]` **Der Orchestrator hat am 28.09. behauptet, A5-A8 sei
+freigeschaltet.** Das war falsch — eine Spalte in einer Migration
+ist keine Spalte in der Datenbank.
 
 ---
 
