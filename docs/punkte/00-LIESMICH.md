@@ -247,6 +247,26 @@ beim Abgrenzen einer Kategorie:**
     105 kaputte Dateien        113 waren Namen ohne Pfad
     6.600 statt 6.084 Zeilen   Zahl aus einer aelteren Messung
 
+`[cmd]` **Und am 2026-09-29 sechs weitere, alle beim Nachpruefen eines
+Agentenberichts:**
+
+    vier Fehlmessungen         PowerShell-Quoting zerlegte das Muster
+    fuenf fehlende Objekte     das Muster fing alias.spalte (bm.user_id)
+    "faellt nicht am CHECK"    der Aufruf brach vorher mit
+                               "Anmeldung erforderlich" ab - als postgres
+                               ist auth.uid() NULL
+    "Testdatei laeuft nicht"   gesucht wurde nach "g519" in deutschen
+                               Testnamen
+    tdee_smoothed              eine geratene Spalte; sie heisst
+                               adaptive_tdee_kcal
+    zehn neue Befunde          sechs gebaute, aber nicht eingespielte
+                               Tabellen in beruehrt.tabellen eingetragen
+
+`[read]` **Jedes Mal war die Messung des Agenten richtig und meine
+kaputt.** `[read]` **Und jedes Mal war die Frage schon beantwortet** —
+ich habe seine Messung nachgebaut, in seiner Domaene, mit Werkzeug, das
+ich schlechter beherrsche.
+
 `[cmd]` **Und derselbe Fehler auf 25 Punkte gleichzeitig angewandt:**
 eine Textheuristik ueber Berichte statt einer Messung je Punkt.
 **Mindestens einer davon war falsch** (C-274), gefunden von Codex,
@@ -272,6 +292,41 @@ Grenze war entfernt und ein Test hielt sie draussen).
 `[read]` **Das ist eine Ja/Nein-Frage, keine Zaehlung.** *,,Gibt es
 die Tabelle?"* geht. *,,Wie viele Zeilen hat sie unter welcher
 Bedingung?"* nicht.
+
+### Und dasselbe gilt fuer die Abnahme
+
+`[cmd]` **Ergaenzt am 2026-09-29, nach Toms Hinweis:** *,,du bist
+orchestrator und nicht coder ... der agent weiss schon wie man sauber
+messen muss im gegensatz zu dir"*.
+
+`[read]` **Die Regel oben galt bisher nur fuer den Auftrag.** Sie gilt
+genauso fuer die Pruefung des Berichts — **es ist derselbe Fehler an
+einem anderen Ende.**
+
+`[read]` **Die Abnahme zaehlt MERKMALE des Ergebnisses, sie baut keine
+Messung nach:**
+
+    geht      existiert das Objekt? steht die Spalte? ist der
+              Waechter gruen? stimmt die Testzahl? wurde nur der
+              eigene Bereich angefasst? ist aufgeraeumt?
+    geht      eine reine Funktion gegen die eigene Rechnung halten
+              (goals.kcal_delta_aus_zielrate: vier von vier)
+    geht      eine Ableitung aus zwei gemessenen Tatsachen, als
+              solche gekennzeichnet
+    nicht     den Aufruf des Agenten wiederholen
+    nicht     seine Ausgabe nach Stichwoertern durchsuchen
+    nicht     eine Zahl nachrechnen, die eine Sitzung oder einen
+              Schreibvorgang braucht
+
+`[read]` **Was sich nur mit angemeldeter Sitzung oder durch Schreiben in
+die Datenbank nachmessen liesse, bleibt SEIN `[cmd]`** — im Bericht
+zitiert, als seines gekennzeichnet, nicht als meines. **Eine
+unbestaetigte Zahl wird benannt, nicht mit einer schlechten Probe
+uebermalt.**
+
+`[read]` **Der Grund ist nicht Bescheidenheit, sondern Messbarkeit:**
+eine Probe, die am falschen Ort abbricht, sieht aus wie ein Ergebnis.
+**Elf Fehlzaehlungen am 27.08. und sechs am 29.09. haben denselben Bau.**
 
 ### Der Kopf eines Auftrags
 
@@ -451,10 +506,21 @@ next drin sind"*.
     1  Bericht ueberfliegen - ist der vorbereitete Auftrag betroffen?
     2  falls ja: anpassen
     3  next/ eine Ebene hoeher - der Auftrag geht raus
-    4  Bericht nachmessen, Abnahme schreiben, nach erledigt/
+    4  Bericht pruefen, Abnahme in DIESELBE Datei schreiben
     5  neue Befunde als Punkte
-    6  committen, Commit-Hash nachtragen
+    6  committen, Commit-Hash nachtragen, DANN nach erledigt/
     7  next/ wieder fuellen
+
+`[cmd]` **Berichtigt am 2026-09-29, gemessen.** Frueher stand ,,nach
+`erledigt/`" in Schritt 4 und der Commit-Hash in Schritt 6. **In dieser
+Reihenfolge geht es nicht:** ein Punkt in `erledigt/` ohne `commit:` macht
+`punkte-pruefen.mjs` rot (26 statt 25, selbst gemessen an G-519) — und
+weil der Waechter im Gate steht, blockiert das rote Gate genau den
+Commit, der den Hash liefern soll. **Ein Zirkel.**
+
+`[read]` **Der Waechter hat recht:** `erledigt/` behauptet belegt UND
+gelandet. Ein Punkt dort ohne Hash behauptet mehr, als er hat. **Die
+Abnahme entsteht in Schritt 4, der Umzug gehoert hinter den Commit.**
 
 **Fertig ist, wenn Schritt 7 steht.**
 

@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 252 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 579 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 580 |
 | **gesamt** | **836** |
 
 ## medical — 49
@@ -575,7 +575,7 @@
 
 ## goals — 33
 
-### beauftragbar — 28
+### beauftragbar — 29
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -599,7 +599,8 @@
 | `G-514` | befund | mittel | [die Modulverrechnung, der Zweck des Moduls, fehlt ganz](laufend_codex/goals-G-0514-die-modulverrechnung-fehlt-ganz.md) | laeuft (codex) | — | G-522, G-524 |
 | `G-515` | befund | mittel | [die drei Goals-Mockups widersprechen sich achtmal in Zahlen](todos/goals-G-0515-die-drei-mockups-widersprechen-sich.md) | offen | — | — |
 | `G-516` | befund | mittel | [das Vorgaengerrepo traegt die Phasenzahlen, die uns fehlen](todos/goals-G-0516-das-vorgaengerrepo-hat-die-phasenzahlen.md) | offen | — | — |
-| `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](laufend_claudecode/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | laeuft (claudecode) | — | G-520, G-521 |
+| `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](erledigt/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | erledigt | — | G-520, G-521 |
+| `G-520` | feature | hoch | [der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen](laufend_claudecode/goals-g-0520-anpassungsalgorithmus-und-uebergangswaechter.md) | laeuft (claudecode) | — | — |
 | `G-521` | feature | mittel | [wie modelliert man Ernaehrungsphasen, ihre Varianten und Parameter](todos/goals-g-0521-phasenmodellierung-tiefenrecherche.md) | offen | — | G-529, G-530 |
 | `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](todos/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | offen | — | — |
 | `G-523` | fehler | hoch | [der adaptive TDEE glaettet nicht, er springt](erledigt/goals-g-0523-adaptive-tdee-glaettet-nicht.md) | erledigt | — | — |
@@ -608,11 +609,10 @@
 | `G-527` | fehler | mittel | [der Schreibweg kennt die neuen Hindernisse nicht](erledigt/goals-g-0527-der-schreibweg-kennt-die-neuen-hindernisse-nicht.md) | erledigt | — | — |
 | `G-531` | fehler | hoch | [`goal_phase_start` kann drei der neun Phasenarten nicht anlegen](laufend_codex/goals-g-0531-goal-phase-start-kennt-die-rate-nicht.md) | vorbereitet (codex) | — | — |
 
-### wartet auf Blocker — 5
+### wartet auf Blocker — 4
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-520` | feature | hoch | [der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen](laufend_claudecode/goals-g-0520-anpassungsalgorithmus-und-uebergangswaechter.md) | laeuft (claudecode) | G-519 | — |
 | `G-524` | befund | mittel | [vier der zehn Spec-Tabellen und beide Ansichten fehlen](erledigt/goals-g-0524-vier-tabellen-und-beide-ansichten-fehlen.md) | erledigt | G-514 | — |
 | `G-528` | befund | mittel | [die Variantenachse und mini_cut sind nicht definiert](erledigt/goals-g-0528-varianten-und-mini-cut-sind-nicht-definiert.md) | erledigt | G-521 | — |
 | `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](todos/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | offen | G-521 | G-531 |

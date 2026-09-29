@@ -4,6 +4,8 @@ typ: befund
 modul: goals
 schwere: hoch
 angelegt: 2026-09-27
+erledigt: 2026-09-29
+commit: 8312c1d6
 agent: claudecode
 beauftragt: 2026-09-29
 
@@ -807,10 +809,10 @@ Zeit vor E1, als das Kaloriendelta die gespeicherte Groesse war.
 **Fuenf ist die gemessene Zahl, sieben war die abgeleitete** — und
 G-520s Waechterzaehlung ist entsprechend nachgezogen.
 
-### Wartet auf den Commit-Hash
+### Abgelegt mit dem Hash
 
-`[cmd]` **Die Abnahme ist geschrieben, der Punkt ist durch.** Er liegt
-noch in `laufend_claudecode/`, weil `punkte-pruefen.mjs` einen Punkt in
+`[cmd]` **Der Code liegt in `8312c1d6`, die Doku in `8f10df6e`.**
+Der Punkt lag bis dahin in `laufend_claudecode/`, weil `punkte-pruefen.mjs` einen Punkt in
 `erledigt/` ohne `commit:` als Befund zaehlt — selbst gemessen am
 2026-09-29: der Umzug ohne Hash machte den Waechter rot (26 statt 25).
 

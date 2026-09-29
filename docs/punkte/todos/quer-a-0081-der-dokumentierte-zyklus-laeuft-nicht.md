@@ -168,3 +168,47 @@ gefahren, der bei jedem Auftrag dieselbe Kollision erzeugt.**
 Auftrag vier Quellen zu pruefen ist Regel — `00-LIESMICH.md` ist eine
 davon und wurde uebersprungen, waehrend derselbe Orchestrator Waechter
 baute, die genau solche Auslassungen finden sollen.
+
+## Umgesetzt am 2026-09-29
+
+`[cmd]` **A1 und A2 laufen:** die zwei laufenden Punkte tragen ihren
+Auftragsteil, und die Reihenfolge ist jetzt Auftragsteil → verschieben →
+Anweisung mit Pfad.
+
+`[cmd]` **A3 steht:** beide `next/` gefuellt (G-531 fuer Codex, G-441
+fuer Claude Code), der Waechter meldet *,,2 vorbereitet, noch nicht
+raus"*.
+
+`[cmd]` **A4 berichtigt:** der Waechter zaehlt sie, der Verdacht war
+falsch.
+
+`[cmd]` **A6 ist in `00-LIESMICH.md` eingetragen:** Schritt 4 heisst
+jetzt ,,Abnahme in DIESELBE Datei schreiben", Schritt 6 ,,committen,
+Commit-Hash nachtragen, DANN nach erledigt/". Mit der gemessenen
+Begruendung.
+
+`[read]` **Offen bleibt A5:** Kopf, Weg und Zyklus stehen in
+`00-LIESMICH.md` an drei Stellen (22, 276, 444). Wer bei 276 anfaengt,
+liest die Reihenfolge nicht. **Das ist genau der Weg, auf dem ich sie
+dreissig Tage nicht gelesen habe.**
+
+## Ein zweiter Fall derselben Art, am selben Tag
+
+`[cmd]` **`00-LIESMICH.md:228` ,,Der Orchestrator zaehlt nicht" steht
+seit dem 2026-08-27, auf Toms Anweisung, mit ELF Fehlzaehlungen von mir
+aufgelistet** — und mit der Regel, die genau das abdeckt, was ich am
+29.09. sechsmal falsch gemacht habe: *,,Das ist eine Ja/Nein-Frage,
+keine Zaehlung."*
+
+`[read]` **Zwei Regeln an einem Tag, die existierten und nicht befolgt
+wurden.** `[read]` **Das ist kein Zufall und keine Vergesslichkeit,
+sondern die Folge davon, dass `00-LIESMICH.md` nur gelesen wird, wenn
+jemand darauf zeigt.** Deshalb ist A5 nicht Kosmetik.
+
+`[cmd]` **Die Luecke, die wirklich neu war, ist geschlossen:** die
+Zaehlregel galt bisher nur fuer den Auftrag, nicht fuer die Abnahme.
+Jetzt steht dort, was die Abnahme darf (Merkmale zaehlen, reine
+Funktionen gegen die eigene Rechnung halten, Ableitungen kennzeichnen)
+und was nicht (den Aufruf des Agenten wiederholen, seine Ausgabe nach
+Stichwoertern durchsuchen, eine Zahl nachrechnen, die eine Sitzung
+braucht).

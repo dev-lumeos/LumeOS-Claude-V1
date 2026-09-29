@@ -1,19 +1,21 @@
 # Laufende Auftraege
 
-**Stand: 2026-09-29, 08:25**
+**Stand: 2026-09-29, 08:35**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-519 | A5-A8 — das Eingabefeld fuer die Zielrate, kcal daneben | **laeuft**, raus 29.09., 08:00 |
+| Claude Code | G-520 | Anpassungsalgorithmus und sieben Uebergangswaechter | **laeuft**, raus 29.09., 08:30 |
 | Codex | G-514 | die Beitragstabelle plus recovery und supplements | **laeuft**, raus 29.09., 08:00 |
-| Claude Code | G-520 | Anpassungsalgorithmus und sieben Uebergangswaechter | **vorbereitet** in `next/` |
-| Codex | G-529 | A3 — Maximaldauer und Pausentakt als Funktionen der Rate | **vorbereitet** in `next/` |
+| Claude Code | G-441 | die Recovery-Today-Kachel rechnet aus der Attrappe | **vorbereitet** in `next/` |
+| Codex | G-531 | `goal_phase_start` kennt die Rate nicht | **vorbereitet** in `next/` |
 
-`[cmd]` **Der Vierstufen-Zyklus laeuft zum ersten Mal.**
-`docs/punkte/00-INDEX.md` fuehrt 835 Punkte (todos 252 · laufend_codex 1
-+ 1 vorbereitet · laufend_claudecode 1 + 1 vorbereitet · erledigt 579),
-und der Waechter meldet *,,2 vorbereitet, noch nicht raus: codex 1 |
-claudecode 1"*.
+`[cmd]` **G-519 A5-A8 ist abgenommen und abgelegt** — Code in
+`8312c1d6`, Doku in `8f10df6e`. **Das Eingabefeld fuer die Zielrate
+steht.**
+
+`[cmd]` **Der Waechter meldet *,,2 vorbereitet, noch nicht raus: codex 1
+| claudecode 1"*.** Der Vierstufen-Zyklus ist einmal vollstaendig
+gelaufen.
 
 `[read]` **Der Auftragstext steht jetzt IN der Punktdatei**, nicht im
 Gespraech — so wie `00-LIESMICH.md:22-41` es seit langem verlangt und
@@ -118,9 +120,9 @@ rechnet genauso, **sagt es aber** (`ohne_wert`).
 
 **Nach G-519 A5-A8:** G-520. Danach die Baender, sobald G-521 A1 liegt.
 
-**Nach G-514:** nutrition in eine Zeile je Tag (der Score existiert als
-Funktion, aber nur im Browser). Dann G-529 A3 — Maximaldauer und
-Diaetpausen-Takt als Funktion der Rate.
+**Nach G-514:** G-531 (`goal_phase_start` braucht den
+Rate-Parameter — drei von neun Phasenarten sind ueber die Funktion nicht
+anlegbar). Danach G-529 A3, dann nutrition in eine Zeile je Tag.
 
 **Orchestrator:** C-555 A1/A2 nachrechnen (die Zahlen von C-546 und
 C-551), Verwerfliste fuer A-80 vorlegen, G-530 und G-526 A1-A9
