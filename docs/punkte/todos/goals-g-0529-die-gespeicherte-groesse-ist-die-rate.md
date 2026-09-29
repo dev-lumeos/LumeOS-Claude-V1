@@ -4,8 +4,6 @@ typ: feature
 modul: goals
 schwere: hoch
 angelegt: 2026-09-28
-agent: codex
-beauftragt: 2026-09-28
 
 quellen:
   - docs/punkte/todos/goals-g-0521-phasenmodellierung-tiefenrecherche.md

@@ -1,5 +1,24 @@
 # Punkte — wie sie gefuehrt werden
 
+> **Wenn du nur eine Sache hier liest, lies diese drei Abschnitte:**
+>
+> | | |
+> |---|---|
+> | **Der Weg eines Punktes** | wie ein Auftrag rausgeht: Auftragsteil in DIESELBE Datei, verschieben BEIM Beauftragen, die Anweisung traegt den PFAD |
+> | **Der Orchestrator zaehlt nicht** | keine Zahlen vom Orchestrator — im Auftrag NICHT und in der Abnahme NICHT |
+> | **Der Zyklus laeuft ohne Aufforderung** | sieben Schritte, vier Stufen, `next/` — fertig ist, wenn Schritt 7 steht |
+>
+> `[cmd]` **Alle drei standen vollstaendig hier, als sie am 2026-09-29
+> gebrochen wurden** — zwei davon seit Ende August. **Der Grund war nicht
+> Unkenntnis, sondern dass diese Datei nur gelesen wird, wenn jemand
+> darauf zeigt** (A-81).
+>
+> `[cmd]` **Deshalb haengt der Zyklus jetzt nicht mehr an Aufmerksamkeit:**
+> `tools/zyklus-pruefen.mjs` erzwingt ihn im Gate, Sollstand 0. Er prueft,
+> dass ein laufender Punkt seinen Auftragsteil und seinen Agenten traegt,
+> dass ein vorbereiteter den Auftrag hat und den Agenten noch NICHT, und
+> dass ein zurueckgelegter Punkt keine Zuteilung mehr behauptet.
+
 **Seit 2026-08-27.** Loest `docs/todo/TODO.md` und
 `docs/todo/ERLEDIGT.md` ab.
 

@@ -212,3 +212,34 @@ Funktionen gegen die eigene Rechnung halten, Ableitungen kennzeichnen)
 und was nicht (den Aufruf des Agenten wiederholen, seine Ausgabe nach
 Stichwoertern durchsuchen, eine Zahl nachrechnen, die eine Sitzung
 braucht).
+
+## A5 geloest - der Zyklus haengt nicht mehr an Aufmerksamkeit
+
+`[cmd]` **`tools/zyklus-pruefen.mjs`, neu, im Gate (31 Schritte),
+Sollstand 0.** Er prueft je Ordner:
+
+    todos/                  KEIN agent:, KEIN beauftragt:
+    laufend_<agent>/        agent: passt zum Ordner, beauftragt: da,
+                            UND ein Auftragsteil in derselben Datei
+    laufend_<agent>/next/   Auftragsteil da, agent: noch NICHT
+
+`[cmd]` **In beide Richtungen belegt, drei Sabotagen, je von ihrer
+eigenen Zeile gefangen:**
+
+    agent: in einen todos-Punkt geschrieben     ROT, Datei benannt
+    Auftragsteil aus einem laufenden genommen   ROT, "kein Auftragsteil"
+    agent: claudecode in laufend_codex/         ROT, "Ordner gegen Feld"
+    alle drei zurueckgestellt                   byteidentisch, GRUEN
+
+`[cmd]` **Vier Punkte in `todos/` bereinigt**, die von einem Agenten
+zurueckkamen und ihr `agent:` behielten: G-522, G-526, G-529, G-224.
+`[read]` **Der Auftragstext bleibt in der Datei** — er ist Teil der
+Geschichte des Punktes. **Nur `agent:` und `beauftragt:` behaupten eine
+Zuteilung, die nicht mehr gilt.**
+
+`[cmd]` **Und `00-LIESMICH.md` traegt oben einen Einstieg**, der die drei
+tragenden Abschnitte nennt — Weg, Zaehlregel, Zyklus. `[read]` **Das
+allein haette nichts geloest**; es hilft nur dem, der die Datei schon
+oeffnet. **Der Waechter ist die Loesung, der Einstieg die Bequemlichkeit.**
+
+`[read]` **Damit ist A-81 durch.** A1 bis A6 stehen, A5 mechanisch.

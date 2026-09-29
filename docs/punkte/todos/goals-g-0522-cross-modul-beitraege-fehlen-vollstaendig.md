@@ -4,8 +4,6 @@ typ: befund
 modul: goals
 schwere: hoch
 angelegt: 2026-09-27
-agent: claudecode
-beauftragt: 2026-09-28
 kind_von: G-514
 quellen:
   - docs/specs/Goals/STRATEGY.md

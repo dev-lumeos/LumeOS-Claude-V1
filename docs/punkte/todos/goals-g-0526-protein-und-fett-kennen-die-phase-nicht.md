@@ -4,8 +4,6 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-09-28
-agent: codex
-beauftragt: 2026-09-28
 
 quellen:
   - docs/specs/Goals/PHASE_MODELS.md
