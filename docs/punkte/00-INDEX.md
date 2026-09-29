@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 254 |
-| `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
-| `erledigt` | 578 |
-| **gesamt** | **834** |
+| `todos` | 252 |
+| `laufend_codex` | 2 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 579 |
+| **gesamt** | **835** |
 
 ## medical — 49
 
@@ -596,12 +596,12 @@
 | `G-511` | befund | hoch | [die Phase entscheidet nicht ueber die Kalorien](erledigt/goals-G-0511-phase-entscheidet-nicht-ueber-kalorien.md) | erledigt | — | G-526, G-527 |
 | `G-512` | befund | hoch | [die FFMI-Kachel zeigte eine erfundene Zahl als echte](erledigt/goals-G-0512-ffmi-zeigte-eine-erfundene-zahl.md) | erledigt | — | — |
 | `G-513` | befund | hoch | [die Phase laesst sich nirgends setzen](erledigt/goals-g-0513-keine-oberflaeche-setzt-eine-phase.md) | erledigt | — | G-519 |
-| `G-514` | befund | mittel | [die Modulverrechnung, der Zweck des Moduls, fehlt ganz](todos/goals-G-0514-die-modulverrechnung-fehlt-ganz.md) | offen | — | G-522, G-524 |
+| `G-514` | befund | mittel | [die Modulverrechnung, der Zweck des Moduls, fehlt ganz](laufend_codex/goals-G-0514-die-modulverrechnung-fehlt-ganz.md) | laeuft (codex) | — | G-522, G-524 |
 | `G-515` | befund | mittel | [die drei Goals-Mockups widersprechen sich achtmal in Zahlen](todos/goals-G-0515-die-drei-mockups-widersprechen-sich.md) | offen | — | — |
 | `G-516` | befund | mittel | [das Vorgaengerrepo traegt die Phasenzahlen, die uns fehlen](todos/goals-G-0516-das-vorgaengerrepo-hat-die-phasenzahlen.md) | offen | — | — |
-| `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](todos/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | offen | — | G-520, G-521 |
+| `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](laufend_claudecode/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | laeuft (claudecode) | — | G-520, G-521 |
 | `G-521` | feature | mittel | [wie modelliert man Ernaehrungsphasen, ihre Varianten und Parameter](todos/goals-g-0521-phasenmodellierung-tiefenrecherche.md) | offen | — | G-529, G-530 |
-| `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](laufend_claudecode/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | laeuft (claudecode) | — | — |
+| `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](todos/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | offen | — | — |
 | `G-523` | fehler | hoch | [der adaptive TDEE glaettet nicht, er springt](erledigt/goals-g-0523-adaptive-tdee-glaettet-nicht.md) | erledigt | — | — |
 | `G-525` | befund | mittel | [Meilensteine gibt es nur als Seed](todos/goals-g-0525-meilensteine-entstehen-nicht.md) | offen | — | — |
 | `G-526` | fehler | hoch | [Protein, Fett und Faser kennen die Phase nicht](todos/goals-g-0526-protein-und-fett-kennen-die-phase-nicht.md) | offen | — | — |
@@ -611,10 +611,10 @@
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-520` | feature | hoch | [der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen](todos/goals-g-0520-anpassungsalgorithmus-und-uebergangswaechter.md) | offen | G-519 | — |
+| `G-520` | feature | hoch | [der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen](laufend_claudecode/goals-g-0520-anpassungsalgorithmus-und-uebergangswaechter.md) | vorbereitet (claudecode) | G-519 | — |
 | `G-524` | befund | mittel | [vier der zehn Spec-Tabellen und beide Ansichten fehlen](erledigt/goals-g-0524-vier-tabellen-und-beide-ansichten-fehlen.md) | erledigt | G-514 | — |
 | `G-528` | befund | mittel | [die Variantenachse und mini_cut sind nicht definiert](erledigt/goals-g-0528-varianten-und-mini-cut-sind-nicht-definiert.md) | erledigt | G-521 | — |
-| `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](todos/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | offen | G-521 | — |
+| `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](laufend_codex/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | vorbereitet (codex) | G-521 | — |
 | `G-530` | feature | hoch | [contest_prep und expert_bb_annual brauchen eine eigene Struktur](todos/goals-g-0530-wettkampfvorbereitung-braucht-eine-eigene-struktur.md) | offen | G-529 | — |
 
 ## coach — 57
@@ -679,7 +679,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 210
+## quer — 211
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -727,6 +727,7 @@
 | `A-78` | befund | mittel | [ein neuer Punkt wird nicht gegen den Bestand geprueft](todos/quer-a-0078-punkte-werden-nicht-gegen-den-bestand-geprueft.md) | offen | — | — |
 | `A-79` | befund | mittel | [jeder Auftrag legt 452 MiB ab, auch wenn nichts eingespielt wird](todos/quer-a-0079-jeder-auftrag-legt-452-mib-ab.md) | offen | — | — |
 | `A-80` | befund | mittel | [150 Wegwerf-Datenbanken, und 49 davon heissen "final"](todos/quer-a-0080-hundertfuenfzig-wegwerf-datenbanken.md) | offen | — | — |
+| `A-81` | befund | hoch | [der Zyklus steht seit dem 30.08. geschrieben und laeuft nicht](todos/quer-a-0081-der-dokumentierte-zyklus-laeuft-nicht.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
@@ -794,7 +795,7 @@
 | `C-533` | befund | hoch | [der Sollstand unterschlaegt service_role-Rechte](erledigt/quer-c-0533-schema-sollstand-substance-group-rechte.md) | erledigt | — | — |
 | `C-541` | fehler | hoch | [der Erfahrungsgrad darf nicht leer sein](erledigt/quer-c-0541-erfahrungsgrad-darf-nicht-leer-sein.md) | erledigt | — | G-501 |
 | `C-544` | feature | hoch | [der Ort am Koerper als Begriff](erledigt/quer-c-0544-ort-am-koerper.md) | erledigt | — | — |
-| `C-554` | blocker | hoch | [das Migrationsregister sagt nicht, was in der Datenbank steht](laufend_codex/quer-c-0554-das-migrationsregister-ist-unbrauchbar.md) | laeuft (codex) | — | — |
+| `C-554` | blocker | hoch | [das Migrationsregister sagt nicht, was in der Datenbank steht](erledigt/quer-c-0554-das-migrationsregister-ist-unbrauchbar.md) | erledigt | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

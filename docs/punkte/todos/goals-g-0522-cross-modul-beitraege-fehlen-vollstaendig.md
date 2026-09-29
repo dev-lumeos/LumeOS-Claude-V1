@@ -323,3 +323,53 @@ Waechter sind gruen.**
 
 `[cmd]` **Mein Fussabdruck: drei Dateien in `packages/scoring/`.**
 **Nichts committet.**
+
+## Abnahme A3 — Orchestrator, 2026-09-29
+
+`[cmd]` **Selbst nachgezaehlt, nicht aus dem Bericht uebernommen:**
+
+    packages/scoring, eigener Lauf        36 von 36 gruen
+    beitrag.ts                            9.316 Byte
+    __tests__/beitrag.test.ts             8.305 Byte
+    nutrition.ts / nutrition.test.ts      unveraendert
+
+`[cmd]` **Die vier Gewichtungsreihen summieren exakt auf 1,00** —
+selbst addiert aus `beitrag.ts`, nicht aus `CONTRIBUTION_WEIGHTS`
+abgeleitet: `body_composition_loss`, `body_composition_gain`,
+`performance_strength`, `health`, je fuenf Werte.
+
+`[cmd]` **Sabotage selbst wiederholt:** `nutrition: 0.40` auf `0.45`
+verstellt → **2 Zusicherungen rot**. Zurueckgestellt → sha256
+byteidentisch (`9b25cc901266ee5e`), danach wieder 36 gruen. **Der Test
+misst etwas, in beide Richtungen.**
+
+`[cmd]` **Die Spec-Stellen stehen im Vertrag:** `DATABASE.md` 6x,
+`SCORING.md` 5x, dazu `ohne_wert`, `0..100` und `stichtag`.
+
+`[read]` **Die Festlegung `tag <= stichtag` traegt.** Sie steht nicht in
+der Spec, ist als eigene Festlegung gekennzeichnet und begruendet: ein
+Beitrag ist eine Aussage ueber einen VERGANGENEN Tag. `recovery.scores`
+reicht bis 2026-11-06, 78 von 370 Zeilen liegen in der Zukunft — ein
+Wert fuer morgen kann nicht erfasst worden sein.
+
+`[read]` **Die vierte Spec-Abweichung ist neu und gehoert festgehalten:**
+`SCORING.md:66` rechnet ein fehlendes Modul still als 0
+(`contributions[module] ?? 0`). Der Vertrag rechnet genauso, **sagt es
+aber** (`ohne_wert`), statt ein fehlendes Modul wie ein schlechtes
+aussehen zu lassen.
+
+### Was an diesem Punkt OFFEN bleibt
+
+`[read]` **A2, A4 und A5 haengen alle an
+`goals.goal_contributions`** — die Tabelle gehoert G-514 und Codex.
+
+    A2  die Tabelle in die Kette              -> G-514
+    A4  findBottleneck gegen echte Werte      wartet auf A2
+    A5  Grenze zu C-108/F-02 pruefen          eigene Frage, unabhaengig
+
+`[read]` **Claude Code hat `findBottleneck` bewusst NICHT uebernommen**,
+obwohl `SCORING.md:88-118` es vollstaendig vorgibt: ohne echte Beitraege
+liesse es sich nur gegen erfundene Zahlen pruefen. **Das ist die richtige
+Entscheidung** — es gehoert in denselben Zug wie die Tabelle.
+
+`[cmd]` **Gebaut in `dc55728a`.**

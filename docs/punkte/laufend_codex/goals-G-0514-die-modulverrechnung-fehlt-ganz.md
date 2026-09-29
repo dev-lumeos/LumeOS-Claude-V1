@@ -4,6 +4,8 @@ typ: befund
 modul: goals
 schwere: mittel
 angelegt: 2026-09-26
+agent: codex
+beauftragt: 2026-09-29
 
 braucht: []
 kind_von: G-510
@@ -200,3 +202,83 @@ null Datenzeilen. Eine dokumentierte Abloesung ist nicht auffindbar.
 `[read]` **Das aendert die Lesart der Struktur:** sie ist ein
 Entwurf, der nie lief, keine erprobte Loesung. Uebernommen wurde
 die Idee der Reihe, nicht ihre Ausfuehrung.
+
+## Auftrag - Codex, raus 2026-09-29, 08:00
+
+**Nachgetragen 08:15.** Dieser Auftrag ging als Text im Gespraech raus,
+nicht in dieser Datei — gegen `00-LIESMICH.md:22-41`. Er steht hier
+nach (A-81 A2).
+
+    Bereich: supabase/_pipeline/, supabase/migrations/
+    Fremd:   apps/ (Claude Code baut dort G-519 A5-A8) ·
+             packages/scoring/ (fertig) · docs/ (Orchestrator)
+
+### Der Vertrag ist gebaut - lies ihn, erfinde ihn nicht
+
+`[cmd]` **`packages/scoring/src/beitrag.ts`, `dc55728a`, abgenommen:**
+36 von 36 gruen, die vier Gewichtungsreihen summieren exakt auf 1,00
+(selbst nachgerechnet), Sabotage in beide Richtungen belegt.
+
+Er beantwortet drei Fragen, und die Tabelle muss zu ihnen passen:
+
+    WAS        score 0..100 plus ein details-Objekt je Modul
+               (DATABASE.md:149-160)
+    WANN       tag <= stichtag. Eine FESTLEGUNG des Vertrags, kein
+               Spec-Zitat - die Spec sagt dazu nichts.
+    KEIN WERT  score: number | null PLUS ein Grund. Eine 0 ist ein
+               Ergebnis, ein null ist keins.
+
+### A1 - die Tabelle
+
+`goals.goal_contributions` nach `DATABASE.md` Abschnitt 3, mit
+`UNIQUE (goal_id, module, contribution_date)` und dem Modul-CHECK ueber
+die fuenf Module. **Struktur in `migrations/`, Daten und Ableitungen in
+`_pipeline/`** — die Grenze prueft `migration-datenlogik-pruefen.mjs`,
+und sie ist bei G-524 zu Recht gefallen.
+
+### A2 - recovery und supplements daran haengen
+
+`[cmd]` **Gemessen (G-522 A1), je Modul gefragt, ob es ueberhaupt einen
+Tagesscore liefern KANN:**
+
+    recovery      recovery.scores.score               liegt vor
+                  370 Zeilen, 3 Nutzer, alle gefuellt
+    supplements   daily_intake_summary.compliance_pct rechenbar
+                  Ansicht, 274 Zeilen, 3 Nutzer
+    nutrition     kein gespeicherter Score - nur im Browser gerechnet
+    training      nichts
+    medical       nichts
+
+**Nur die ersten zwei in diesem Auftrag.**
+
+### Die Falle
+
+`[cmd]` **`recovery.scores` reicht bis 2026-11-06 — 78 von 370 Zeilen
+liegen in der ZUKUNFT.** Testdaten. Der Vertrag hat entschieden:
+`tag <= stichtag`. Die Schreibseite haelt sich daran, und du belegst es
+mit einer Zeile, die zeigt, dass ein Zukunftswert NICHT eingeht.
+
+### A3 - ein fehlendes Modul ist kein schlechtes
+
+`[cmd]` **`SCORING.md:66` rechnet ein fehlendes Modul still als 0**
+(`contributions[module] ?? 0`). Der Vertrag rechnet genauso, **sagt es
+aber**. Die Tabelle muss den Unterschied tragen: **kein Eintrag ist
+nicht dasselbe wie ein Eintrag mit 0.** G-524 belegt, warum das zaehlt.
+
+### Zu belegen
+
+die Tabelle mit ihren Regeln, Vorher-Nachher objektweise · Zeilenzahlen
+je Modul mit Stichtag · der Zukunftsbeleg · kein Eintrag gegen
+Eintrag-mit-0 unterscheidbar · Nachweise auf `test-user@lumeos.local` ·
+`pnpm gate` gruen · **die Wegwerf-Datenbank VERWORFEN und die Zahl
+genannt** (A-80: 150 Datenbanken mit 207 GB stehen herum, 49 heissen
+`_final`) · **kein `supabase db push`** (C-554).
+
+### Nicht in diesem Auftrag
+
+`phase_rate_rules` fuellen (haengt an G-521 A1) · den CHECK
+`goal_phases_zielrate_passt_zur_art` auf `VALID` setzen ·
+`findBottleneck` (gehoert nach `apps/`, und erst wenn Beitraege stehen)
+· nutrition in eine Zeile je Tag schreiben (naechster Auftrag).
+
+Nichts committen, nichts pushen.

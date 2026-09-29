@@ -4,6 +4,8 @@ typ: blocker
 modul: quer
 schwere: hoch
 angelegt: 2026-09-28
+erledigt: 2026-09-29
+commit: 71dfc23d
 agent: codex
 beauftragt: 2026-09-28
 
@@ -258,3 +260,15 @@ im Namen.** Die laufende belegt 4.816 MB. **Das ist A-80.**
 
 `[read]` **Nicht Codex' Sache** — die aeltesten stammen aus dem
 C-490er-Bereich und von mehreren Agenten. Seine war weg.
+
+### Abgeschlossen
+
+`[cmd]` **A1 und A2 sind durch, A3 ist Toms Entscheidung und bleibt als
+eigener Punkt sichtbar** — siehe die Zeile in `docs/todo/LAUFEND.md`
+unter ,,Was auf Tom wartet". Das Werkzeug liegt in `71dfc23d`, der
+Waechter-Nachzug in `3bb50648`.
+
+`[cmd]` **Die 70 unregistrierten Dateien bleiben gemessen und benannt:**
+318 Objekte vorhanden, 19 fehlend, abfragbar mit
+`node tools/migrations-objekte-pruefen.mjs`. **Kein Ratespiel mehr, aber
+auch keine erledigte Sache.**

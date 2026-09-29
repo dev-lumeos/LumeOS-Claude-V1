@@ -378,3 +378,84 @@ endgueltig ersetzt — solange er fehlt, traegt kein Feld die Dauer.
 
 **Deshalb liegt der Punkt wieder in 	odos/**: es arbeitet niemand
 daran.
+
+## Vorbereiteter Auftrag A3 - Codex, geschrieben 2026-09-29, 08:20
+
+**Noch nicht raus.** Geht raus, wenn G-514 zurueck ist.
+
+    Bereich: supabase/_pipeline/, supabase/migrations/
+    Fremd:   apps/ (Claude Code) · docs/ (Orchestrator)
+
+### A3 HAT HEUTE KEINEN ORT - DAS IST DER ERSTE TEIL DES AUFTRAGS
+
+`[cmd]` **Gemessen 2026-09-29, `goals.phase_rate_rules`:**
+
+    code · phase_type · experience_level · lower_value · upper_value
+    evidence_status · source_id · source_locator · notes
+    created_at · updated_at
+
+`[cmd]` **Und ihr CHECK `phase_rate_rules_value_shape` erzwingt
+`lower_value >= -2.5 AND upper_value <= 1.5`** — das sind Raten in
+% KG/Woche. **Fuer eine Maximaldauer in Wochen oder einen Pausentakt
+gibt es dort keinen Platz**, und ein Wert von 12 (Wochen) waere durch
+denselben CHECK verboten.
+
+`[read]` **A3 braucht deshalb eine eigene Struktur, keine Zeile in
+`phase_rate_rules`.** Wie sie aussieht, entscheidest du und begruendest
+es — aber die Trennung Rate gegen Dauer bleibt sichtbar, weil beides
+verschiedene Einheiten sind und verschiedene Belege hat.
+
+### A3.1 - die neun open-Zeilen, und warum sie zuerst kommen
+
+`[cmd]` **`phase_rate_rules` hat 0 Zeilen.** `[read]` **Eine leere
+Tabelle ist nicht unterscheidbar von einer, die niemand gebaut hat** —
+dieselbe Klasse wie das Migrationsregister (C-554) und die 49
+Datenbanken mit `_final` im Namen (A-80).
+
+`[cmd]` **Und die Tabelle kann es besser:**
+`phase_rate_rules_open_has_no_values` erzwingt, dass
+`evidence_status = 'open'` KEINE Werte tragen darf, und
+`phase_rate_rules_source_complete` erzwingt bei `sourced` einen
+`source_id` UND einen `source_locator`.
+
+`[read]` **Neun `open`-Zeilen, je Phasenart eine, brauchen also keinen
+einzigen Seitenbeleg** — sie sagen aus: die Art ist bekannt, das Band
+ist offen, die Quelle fehlt. **Damit wird aus ,,Tabelle leer" ein
+dokumentiertes ,,Band offen"**, und das Eingabefeld aus G-519 A5 liest
+einen Grund statt ein Nichts.
+
+`[read]` **Die Baender selbst bleiben offen** — sie haengen an G-521 A1,
+weil vier tragende Zahlen keinen Seitenbeleg haben (Ratendeckel 1,25,
+Fettboden 0,5, Proteinband nach Trainingsstatus, 8-12 Wochen
+Diaetpause). **Trage keine Werte ein, auch keine aus der Spec
+abgetippten.**
+
+### A3.2 - Maximaldauer und Pausentakt
+
+Die Werte stehen in G-528 (`erledigt/`, Toms freigegebener
+Parametersatz). **Ein Test je Grenze, von beiden Seiten.**
+
+`[read]` **Sie sind Toms Festlegung, nicht Literatur** — also
+`evidence_status = 'assumption'` mit einem `notes`-Satz, der sagt woher,
+und NICHT `sourced`. Der CHECK laesst `sourced` ohne Beleg gar nicht zu,
+und das ist richtig so.
+
+`[cmd]` **Der Zusammenhang, der A3 ueberhaupt begruendet:** die Dauer
+ist eine Funktion der RATE, nicht der Phasenart. Eine aggressive Rate
+haelt kuerzer als eine konservative. **Das ist der Teil, der die
+Variantenachse endgueltig ersetzt** — solange er fehlt, traegt kein Feld
+die Dauer, und G-520s Waechter `max_duration_weeks` ist nicht rechenbar.
+
+### Zu belegen
+
+  - die neue Struktur mit Vorher-Nachher objektweise
+  - die neun `open`-Zeilen, und dass ein Wert darin abgewiesen wird
+    (Gegenprobe gegen `open_has_no_values`)
+  - ein Versuch mit `sourced` ohne `source_locator` muss fallen
+  - je Grenze ein Test von beiden Seiten
+  - Nachweise auf `test-user@lumeos.local`
+  - `pnpm gate` gruen
+  - **die Wegwerf-Datenbank verworfen, mit genannter Zahl** (A-80)
+  - **kein `supabase db push`** (C-554)
+
+Nichts committen, nichts pushen.

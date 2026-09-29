@@ -4,6 +4,8 @@ typ: befund
 modul: goals
 schwere: hoch
 angelegt: 2026-09-27
+agent: claudecode
+beauftragt: 2026-09-29
 
 braucht: [G-511]
 kind_von: G-513
@@ -477,3 +479,226 @@ ist entschieden. Das Eingabefeld fuehrt die RATE, die kcal laufen
 daneben mit. Sobald die Spalte
 `goals.goal_phases.zielrate_pct_kg_woche` steht, ist der Rest in
 einem Zug baubar.
+
+## Auftrag A5 bis A8 - Claude Code, raus 2026-09-29, 08:00
+
+**Nachgetragen 08:15.** Dieser Auftrag ging als Text im Gespraech raus,
+nicht in dieser Datei — gegen `00-LIESMICH.md:22-41`. Er steht hier
+nach, damit Auftrag, Bericht und Befund in EINER Datei liegen (A-81 A2).
+
+    Bereich: apps/web/src/app/v2/goals/, apps/web/src/lib/goals/,
+             apps/web/src/lib/profile/
+    Fremd:   supabase/ (Codex baut dort G-514) ·
+             packages/scoring/ (der Vertrag ist fertig) ·
+             docs/ (Orchestrator)
+
+### Die Sperre ist weg - gemessen
+
+`[cmd]` **Gegen die laufende Datenbank, 2026-09-29:**
+
+    goal_phases.zielrate_pct_kg_woche          da
+    nutrition_targets.tdee_herkunft            da
+    nutrition_targets.tdee_history_id          da
+    goals.phase_rate_rules                     da, aber LEER
+    goals.tdee_history                         da
+    Kalorienspalten auf goal_phases             0   (richtig, E1)
+
+`[cmd]` **Codex hat die vier Migrationen einzeln eingespielt und
+registriert** (C-554, `71dfc23d`). Register jetzt 21 Eintraege.
+
+### Welche Regeln vorliegen - und welche nicht
+
+`[cmd]` **Die Aussengrenze als CHECK
+`goal_phases_zielrate_aussengrenze`:** `NULL` oder `>= -2.5 AND <= 1.5`.
+
+`[cmd]` **Die Vorzeichenregel als CHECK
+`goal_phases_zielrate_passt_zur_art`:**
+
+    fat_loss, mini_cut                        NOT NULL und < 0
+    lean_bulk                                 NOT NULL und > 0
+    maintenance                               NULL oder |x| <= 0.1
+    peak_week, expert_bb_annual,
+    contest_prep, reverse_diet, recomp        NULL
+
+`[cmd]` **Dieser CHECK ist `NOT VALID`** — Bestandszeilen sind nicht
+geprueft, neue und geaenderte schon.
+
+`[cmd]` **Und `goals.phase_rate_rules` ist LEER, null Zeilen.** Die
+Baender je Variante existieren nicht als Daten; sie warten auf G-521 A1,
+weil vier tragende Zahlen keinen Seitenbeleg haben. **Das Feld liest die
+Tabelle, und wo sie leer ist, sagt es das — ein Strich mit Grund, keine
+erfundene Spanne und keine aus der Spec abgetippte Zahl.**
+
+### A5 - das Feld
+
+Die Eingabe ist die Rate in % Koerpergewicht pro Woche; sie ist die
+gespeicherte Groesse (E1). Daneben steht kcal/Tag, immer beide (N13):
+
+    kcal/Tag = 11 x Rate(% KG/Woche) x Gewicht(kg)
+
+`[cmd]` **Aus 7700 kcal je kg, nachgerechnet:** 45 kg bei -1,0 %/Woche
+gibt -495, 120 kg gibt -1320, 80 kg bei +0,25 % gibt +220.
+
+Das Gewicht kommt aus `nutrition_targets.body_weight_kg` beziehungsweise
+`public.profiles` — nicht geraten. Fehlt es, fehlt die kcal-Anzeige, mit
+Grund.
+
+### A6 - die sieben Arten sagen es selbst
+
+`[cmd]` **`goals.berechne_zielwerte(p_user_id uuid, p_stichtag date)`
+nimmt KEINE Phase als Argument — sie liest sie selbst. Und ihr
+Quelltext enthaelt `phasenparameter_fehlt`** (gemessen ueber
+`pg_proc.prosrc`). Miss, welche Arten diesen Wert liefern, und schreib
+es auf den Schirm.
+
+### A7 - Bilder je Zustand
+
+keine Phase / Phase laeuft / Vorschlag offen. Auf
+`test-user@lumeos.local`, NICHT auf `dev`. Mit `tools/schuss.mjs`.
+Nie `.next` loeschen, nie `next build` direkt.
+
+### A8 - die Grenze
+
+Vier andere Module zeichengleich vorher/nachher, Testlaeufe gruen,
+Sabotageprobe je Waechter in beide Richtungen belegt.
+
+### Nicht anfassen
+
+`phase_rate_rules` fuellen (Codex, haengt an G-521 A1) · den CHECK auf
+`VALID` setzen (Codex) · `packages/scoring/src/beitrag.ts` (fertig,
+36/36) · die Attrappen im `cross`-Reiter (warten auf G-514; die Marken
+in `tab-phase.tsx:585-703` nennen Quelle und Grund und bleiben).
+
+Nichts committen, nichts pushen.
+
+## A5 bis A8 — gebaut, 2026-09-29
+
+### Die Sperre ist weg — selbst nachgemessen
+
+    goal_phases.zielrate_pct_kg_woche   numeric        da
+    goals.phase_rate_rules              0 Zeilen       LEER
+    zielrate_aussengrenze               validated: t   >= -2.5, <= 1.5
+    zielrate_passt_zur_art              validated: f   NOT VALID
+
+### DER BEFUND, DER DEN BAU GEFORMT HAT
+
+`[cmd]` **`goal_phase_start` hat SECHS Parameter und KEINEN fuer
+die Rate:**
+
+    p_phase_type, p_gueltig_ab, p_goal_id,
+    p_projected_end_date, p_variant, p_parameters
+
+`[cmd]` **Der CHECK verlangt sie fuer `fat_loss`, `lean_bulk` und
+`mini_cut` aber NOT NULL.** `[cmd]` **Folge, dreimal gemessen:**
+
+    goal_phase_start('fat_loss','2026-09-29')
+      -> ERROR: new row for relation "goal_phases" violates check
+         constraint "goal_phases_zielrate_passt_zur_art"
+
+`[read]` **Diese drei Arten sind ueber die Funktion NICHT
+anlegbar.** `[cmd]` **Per INSERT mit Rate geht es** (`INSERT 0 1`),
+und `goal_phases_insert` erlaubt es dem Eigentuemer.
+
+`[cmd]` **Deshalb ein zweigeteilter Schreibweg:** ohne Rate die
+Funktion (sie traegt die 23505-Sperre), mit Rate ein INSERT mit
+vorheriger Sperrpruefung. `[read]` **Kein gleichwertiger Ersatz** —
+zwischen Frage und Schreiben liegt ein Augenblick. **Bei einer
+Formulareingabe hinnehmbar, im Quelltext begruendet.**
+
+`[read]` **Ein Rate-Parameter an `goal_phase_start` ist der saubere
+Weg — Befund fuer Codex, nichts, was die Oberflaeche in
+`supabase/` behebt.**
+
+### A5 — das Feld
+
+`[cmd]` **Die Rate ist die gespeicherte Groesse** (E1), das
+Kaloriendelta die Ableitung. **Beide stehen da** (N13).
+
+`[cmd]` **Die Formel gegen `goals.kcal_delta_aus_zielrate`
+nachgerechnet — VIER von vier gleich:**
+
+    -1,0 % / 45 kg     -> -495,0
+    -1,0 % / 120 kg    -> -1320,0
+    +0,25 % / 80 kg    -> +220,0
+    -0,5 % / 81,4 kg   -> -447,7
+
+`[read]` **Die Datenbank hat die Formel schon** — die Anzeige
+rechnet sie mit, damit der Nutzer beim Tippen sieht, was es
+bedeutet. **Wer sie BELEGEN will, nimmt die Datenbankfunktion.**
+
+`[cmd]` **Das Gewicht kommt aus `public.profiles.body_weight_kg`,
+durchgereicht ueber `echt.profil`** — nicht geraten. `[cmd]`
+**Fehlt es, faellt die kcal-Anzeige weg, mit Grund.**
+
+**DAS BAND: es gibt KEINS, und das Feld sagt das.**
+
+`[cmd]` **`goals.phase_rate_rules` hat 0 Zeilen.** `[cmd]` **Das
+Feld zeigt:**
+
+    Ein empfohlenes Band je Variante gibt es noch nicht —
+    goals.phase_rate_rules ist leer. Es haengt an G-521. Bis dahin
+    begrenzen nur die Aussengrenze (-2.5 bis 1.5) und das
+    Vorzeichen.
+
+`[read]` **Keine erfundene Spanne, keine aus der Spec abgetippte
+Zahl.**
+
+### A6 — die Arten sagen es selbst
+
+`[cmd]` **Der Rumpf von `berechne_zielwerte`, gelesen:**
+
+    WHEN m.phase_id IS NULL THEN 'keine_aktive_phase'
+    WHEN cardinality(m.fehlende_felder) > 0 THEN 'profil_unvollstaendig'
+    WHEN m.zielrate_pct_kg_woche IS NULL THEN 'phasenparameter_fehlt'
+
+`[cmd]` **Je Art gemessen, auf `test-user`:**
+
+    maintenance        rate 0,0    -> (kein Hindernis) kcal 2753,6
+    recomp             NULL        -> phasenparameter_fehlt
+    contest_prep       NULL        -> phasenparameter_fehlt
+    reverse_diet       NULL        -> phasenparameter_fehlt
+    expert_bb_annual   NULL        -> phasenparameter_fehlt
+    peak_week          NULL        -> phasenparameter_fehlt
+    fat_loss/lean_bulk/mini_cut    -> ueber die Funktion NICHT
+                                      anlegbar (siehe oben)
+
+`[read]` **FUENF Arten fuehren ins Leere, nicht sieben** — die
+anderen vier tragen eine Rate und liefern ein Ziel. `[cmd]` **Das
+Feld sagt es je Art**, statt neun anzubieten und zu schweigen.
+
+### A7 — drei Bilder, auf test-user
+
+    x-g519-1-keine-phase.png    Rate -0,5 eingetippt
+                                Anzeige: „Das sind -447.7 kcal/Tag
+                                bei 81.4 kg."
+    x-g519-2-ohne-rate.png      peak_week: „traegt keine Zielrate —
+                                der CHECK verlangt hier NULL"
+    x-g519-3-phase-laeuft.png   Beenden-Kachel und Wechselvorschlag
+                                da, Raster gesperrt
+
+`[cmd]` **Die Phase wurde ueber die OBERFLAECHE geschrieben:**
+
+    fat_loss | 2026-09-29 | -0.500 | (laeuft)
+    berechne_zielwerte -> (kein Hindernis), kcal 2305,9
+
+`[read]` **Genau die Art, die vor diesem Auftrag nicht anlegbar
+war.** `[cmd]` **Danach geloescht, `test-user` hat wieder 0
+Phasen.**
+
+`[cmd]` **1 Konsolenfehler** — die bekannte `data-mode`-Warnung.
+
+### A8 — die Grenze
+
+`[cmd]` **`git status` in `apps/web/src/app/v2/`: nur `goals`.**
+`[cmd]` **21 Zusicherungen gruen.**
+
+**Sabotageprobe, vier Eingriffe, je von ihrer eigenen gefangen:**
+
+    Aussengrenze -2.5 -> -3.0      Zusicherung 1 und 16   ROT
+    kcal-Formel 11 -> 10           17 bis 20              ROT
+    mini_cut 'negativ' -> 'keine'  3                      ROT
+    Vorzeichenpruefung weg         12                     ROT
+    zurueckgestellt                21 von 21   byteidentisch GRUEN
+
+`[cmd]` **`pnpm gate` 18 von 18 GRUEN.** `[cmd]` **Nichts in
+`supabase/`, nichts committet.**
