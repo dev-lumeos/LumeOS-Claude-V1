@@ -80,3 +80,55 @@ klaeren** — die bleibt bei Tom.
 traegt eine Dosierung, und die Lektuere wird fuer Ernaehrung, Training,
 Cardio und Peak-Week-Wassermanagement genutzt — alles, was Abschnitt 2
 nicht betrifft.
+
+---
+
+## Nachtrag, 2026-09-29 17:00 — die Neufassung baut die Empfehlung aus
+
+`[cmd]` **Die v2.0 vom 16:45 ist in diesem Punkt deutlicher als die erste
+Fassung.** Sie traegt elf Peptide mit vollstaendigem Protokoll — Dosierung,
+Timing, Dauer, Stapelung, Injektionsort, **Nadelstaerke und Rekonstitution**
+(Abschnitte 6.3 bis 6.5):
+
+    BPC-157 · TB-500 · CJC-1295 DAC · CJC-1295 no DAC · Ipamorelin
+    GHRP-6 · GHRP-2 · HGH-Fragment 176-191 · AOD9604 · IGF-1 LR3
+    MGF · Melanotan 2 · PT-141
+
+**Und Abschnitt 9.1 ordnet sie den Phasen zu**, als Zeile in derselben
+Tabelle wie Kalorien und Makros:
+
+    Off-Season      CJC+IPA+IGF
+    Lean Bulk       CJC+GHRP6
+    Cut             CJC+IPA+Frag
+    Contest Prep    CJC+IPA+Frag+MT2
+    Peak Week       Stop
+    Reverse Diet    Optional
+
+`[read]` **Damit ist die Frage dieses Punktes nicht mehr abstrakt.** Die
+Quelle behandelt Peptide als Phasenparameter — gleichrangig mit dem
+Proteinfaktor. Wer die Tabelle uebernimmt, uebernimmt die Empfehlung mit.
+
+### Was das an der Entscheidung aendert: nichts, aber sie wird dringender
+
+`[read]` **Tom, 16:39:** *„es folgt nochmal eine komplette wikipedia wo alle
+aenderungen plus ergaenzend pepdtides auch noch drinnen haben werden."* Das
+ist eine Ansage zur Quelle, **keine Entscheidung zum Produkt** — und der
+Orchestrator behandelt sie nicht als eine.
+
+**Was zusaetzlich zu entscheiden ist, wenn die Antwort „abbilden" lautet:**
+
+    1  Nur erfassen, oder auch vorschlagen?
+    2  Falls vorschlagen: an eine Coach-Freigabe gebunden, an eine
+       Abostufe, oder an eine Selbstauskunft zur Erfahrung?
+    3  Wer traegt die fachliche Verantwortung fuer den ausgelieferten
+       Wert - LumeOS, der Coach, oder niemand?
+    4  Gilt es in jedem Land gleich, oder haengt die Sichtbarkeit am
+       Standort des Nutzers?
+
+`[read]` **Frage 3 ist die, die kein Dokument beantwortet.** Ein
+Katalogeintrag mit `250-500 mcg 2-3×/Tag` ist eine Aussage von LumeOS, auch
+wenn die Zahl aus einer Quelle kommt.
+
+**Unveraendert gilt:** bis zur Entscheidung erscheint in Goals keine
+Substanz, kein Katalogeintrag traegt eine Dosierung, und `docs/ssot/131`
+Abschnitt 6 haelt fest, dass die Protokolle bewusst draussen sind.

@@ -1,7 +1,9 @@
 # 131 · Fachwissen — Phasen, Rechenwege, Grenzwerte
 
-`[cmd]` Erstellt 2026-09-29 aus vier Dokumenten, die Tom am selben Tag
-beigebracht hat.
+`[cmd]` Stand 2026-09-29, 17:00. **Maßgeblich ist
+*Professional Bodybuilding Encyclopedia v2.0*** — sie ist eine
+vollständige Neufassung und löst die vier Vorfassungen desselben Tages ab.
+Wo diese Datei früher Bänder nannte, stehen jetzt die Einzelwerte aus v2.0.
 
 ---
 
@@ -10,406 +12,322 @@ beigebracht hat.
 **Tom, 2026-09-29, 16:15:** *„das sind keine ssot daten, die quelle kennt
 lumeos nicht und sagt nur wie es das bauen wuerde."*
 
-`[read]` **Diese Datei ist Fachwissen, keine Festlegung.** Sie sammelt, was
-aus den vier Dokumenten verwertbar ist, und nennt je Aussage die Herkunft.
-**Nichts hier gilt, weil es hier steht.** Was gilt, entscheidet ein Punkt
-mit Abnahme oder eine Entscheidung Toms.
+`[read]` **Diese Datei ist Fachwissen, keine Festlegung.** Nichts hier gilt,
+weil es hier steht. Was gilt, entscheidet ein Punkt mit Abnahme oder Tom.
 
 Die Rangfolge aus `docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md`
-bleibt unberuehrt: **Vorgaengerrepo (Rechenwege) → Designvorlage (Umfang) →
-Spec (Absicht).** Diese Dokumente stehen **unter** allen drei — sie sind
-Sekundaerliteratur, die Primaerquellen zitiert.
+bleibt: **Vorgängerrepo (Rechenwege) → Designvorlage (Umfang) → Spec
+(Absicht).** Diese Quelle steht **unter** allen drei.
 
-### Die vier Quellen
+**Die Grundentscheidung von v2.0, und sie deckt sich mit Toms Einwand:**
 
-    A  Professional Bodybuilding Encyclopedia - Contest Prep Protocol
-    B  Formelsammlung BMR/TDEE/Phasen
-    C  Contest Prep - das wissenschaftliche Framework
-    D  Goal System Architecture (Ansatzdokument) + Protein-Nachtrag
+> *Basis: Gesamtkörpergewicht. Kein LBM nötig. KFA optional für Feintuning
+> (5 Kategorien).*
 
-**Alle vier liegen als Anhang am Gespraech vom 2026-09-29**, nicht im Repo.
-Wer eine Zahl braucht, holt sie dort. `[read]` **Eine Zahl ohne Fundstelle
-in dieser Datei ist ein Fehler dieser Datei.**
+**Tom, 16:19:** *„niemand kennt seine magermasse."* `[cmd]` v2.0 nennt LBM
+im Glossar ausdrücklich `not used in calculations`.
 
-### Zitierte Primaerquellen
+### Fundstellen
 
-    Helms et al. 2014, JISSN 11:20    natural contest prep
-    Helms et al. 2015                  Fortsetzung
-    Iraki et al. 2019, Sports 7(7)     off-season
-    Garthe et al. 2011, IJSNEM 21(2)   Rate und Magermasse
-    Pasiakos et al. 2013               Proteolyse bei niedrigem KFA
-    Trexler et al. 2014, JISSN 11:7    metabolische Adaption
-    Byrne et al. 2018, Int J Obes 42   MATADOR, intermittierende Diaet
-    Roberts et al. 2020 · Chappell et al. 2018
+Die Quelle liegt als Anhang am Gespräch vom 2026-09-29, nicht im Repo.
+Abschnittsnummern in dieser Datei verweisen auf v2.0. `[read]` **Eine Zahl
+ohne Abschnittsnummer ist ein Fehler dieser Datei.**
+
+Zitierte Primärquellen: Helms et al. 2014 (JISSN 11:20) · Iraki et al. 2019
+(Sports 7(7)) · Garthe et al. 2011 (IJSNEM 21(2)) · Pasiakos et al. 2013 ·
+Trexler et al. 2014 · Byrne et al. 2018 (MATADOR) · Roberts et al. 2020 ·
+Chappell et al. 2018.
 
 ---
 
-## 1. Was LumeOS davon schon hat
+## 1. Die acht Phasen von v2.0 gegen unsere 17 Strategien
 
-`[cmd]` Bevor etwas uebernommen wird — der Stand am 2026-09-29:
+`[cmd]` **v2.0 kennt acht Phasen** (Abschnitt 9.1), `goals.goal_strategies`
+trägt **17 Strategien**. Das ist kein Widerspruch, sondern eine andere
+Schnittweite — aber die Zuordnung ist nötig, bevor ein Wert übernommen wird:
 
-| Gegenstand | Wo | Stand |
-|---|---|---|
-| Rate↔kcal-Identitaet | E-1, `11 × Rate × Gewicht` | gilt, gemessen |
-| Mifflin-St Jeor mit Aktivitaetsfaktor | Vorgaengerrepo, G-510 | gemessen |
-| Kohlenhydrate als Restgroesse | `berechne_zielwerte` | live |
-| Anpassungsregeln und Uebergangswaechter | G-520 | gebaut, Vorschlagsfunktionen |
-| 17 Strategien mit Faktor, Rate, Makros | `goals.goal_strategies` | live, Werte duenn (G-545) |
-| Koerpermasse, Magermasse, KFA, FFMI | `goals.body_measurements` | 362 Zeilen |
-| Biomarker mit Referenzbereichen | Medical, C-183/C-204 | eigener Katalog |
-| Adaptiver TDEE | `goals.tdee_history`, G-523 | live |
-
----
-
-## 2. Rechenwege
-
-### 2.1 Grundumsatz — Mifflin-St Jeor bleibt
-
-`[read]` Die Quellen nennen Katch-McArdle als Bodybuilder-Vorzug
-(`370 + 21,6 × Magermasse`, A 1.2, B). **Fuer LumeOS nicht verwendbar:**
-er braucht die Magermasse, und die braucht den Koerperfettanteil.
-
-**Tom, 2026-09-29:** *„niemand kennt seine magermasse."*
-
-    Mifflin-St Jeor, Maenner:  10×kg + 6,25×cm − 5×Alter + 5
-    Mifflin-St Jeor, Frauen:   10×kg + 6,25×cm − 5×Alter − 161
-
-`[cmd]` Das ist der Weg, den auch das Vorgaengerrepo nimmt
-(`calculateTDEE.ts`, gemessen in G-510) — **inklusive des
-Aktivitaetsmultiplikators**, der in der Spec fehlte und dort um Faktor 1,2
-bis 1,9 zu niedrig lag.
-
-### 2.2 Aktivitaetsmultiplikatoren (A 1.3, B)
-
-    sedentaer  (kein Sport)        1,20
-    leicht     (1-3×/Woche)        1,375
-    maessig    (3-5×/Woche)        1,55
-    sehr aktiv (6-7×/Woche)        1,725
-    extrem     (2×/Tag)            1,90
-
-`[read]` **Und eine Sonderregel fuer Wettkampfvorbereitung** (A 1.3):
-`Contest Prep TDEE = BMR × 1,4–1,5` bei 5–6 Einheiten plus Cardio. Das ist
-**niedriger** als der Tabellenwert fuer „sehr aktiv" — weil in der Diaet
-die Alltagsaktivitaet sinkt. Nicht uebernommen, aber ein Kandidat.
-
-### 2.3 Gewichtsaenderung — deckt sich mit E-1
-
-    Δkg/Woche = (kcal-Differenz × 7) / 7700        (A 1.4, B)
-
-`[cmd]` Identisch zu unserer Form `kcal/Tag = 11 × Rate(%/Woche) ×
-Gewicht(kg)`, nur nach der anderen Groesse aufgeloest. **Vier Quellen,
-dieselbe Konstante 7700 kcal/kg.**
-
-### 2.4 Makros
-
-    Protein   Gewicht × Faktor je Phase        (Abschnitt 3.1)
-    Fett      Prozentsatz der Kalorien / 9     ODER g/kg — offen, 3.2
-    Carbs     (kcal − Protein×4 − Fett×9) / 4  Restgroesse
-
-`[cmd]` Die Restgroessenregel steht in keiner Goals-Spec, aber als Code im
-Vorgaengerrepo und in allen vier Dokumenten. **Sie ist live.**
-
-### 2.5 Cardio-Bedarf aus dem Restdefizit (D 5.1)
-
-    Restdefizit = Zieldefizit − Defizit aus der Ernaehrung
-    1 % Defizit ≈ 200-300 kcal ≈ 30-45 min LISS
-    Minuten = Restdefizit × 35
-
-`[read]` **Das ist der Rechenweg, der Ernaehrung und Cardio verbindet** —
-und LumeOS hat ihn nicht. Heute entscheidet die Strategie das Defizit, und
-niemand rechnet, wieviel davon aus Bewegung kommen soll. **Ein Kandidat
-fuer das Cardio-Modul, kein Goals-Thema.**
-
-### 2.6 Kalorien je Cardio-Einheit (A 5.4)
-
-    LISS  30 min   150-250 kcal    (gewichtsabhaengig)
-    MISS  30 min   250-350 kcal
-    HIIT  20 min   250-400 kcal    inkl. Nachbrennen
-    1 h LISS ≈ 300-500 kcal ≈ dieselbe Menge weniger essen
-
----
-
-## 3. Baender je Phase
-
-### 3.1 Protein, pro kg **Koerpergewicht** (D, korrigierte Fassung)
-
-| Phase | g/kg Koerpergewicht |
+| v2.0-Phase | unsere Strategie(n) |
 |---|---|
-| Off-Season / Bulk | 1,8 – 2,2 |
-| Lean Bulk | 2,0 – 2,4 |
-| Recomp / Maintenance | 2,0 – 2,4 |
-| Cut (standard) | 2,2 – 2,6 |
-| Contest Prep | 2,4 – 3,0 |
-| Peak Week | 2,0 – 2,4 |
+| Off-Season | `gain`, `clean_bulk`, `aggressive_bulk` |
+| Lean Bulk | `lean_bulk` |
+| Recomp | `body_recomp`, `maintain`, `maintenance_diet_break` |
+| Cut | `lose`, `conservative_cut`, `moderate_cut`, `aggressive_cut`, `mini_cut` |
+| Contest Prep Early/Mid/Late | `contest_prep` — **eine Zeile für drei Stufen** |
+| Peak Week | `peak_week` |
+| Reverse Diet | `reverse_diet` |
 
-`[read]` **Warum Koerpergewicht und nicht Magermasse:** die Literatur
-rechnet in g/kg Magermasse (Helms 2014: 2,3–3,1), aber das setzt einen
-bekannten Koerperfettanteil voraus. Dokument D rechnet die Baender um und
-begruendet es: bei hoeherem Koerperfett gibt die Gewichtsmethode **mehr**
-Protein (bei 25 % KFA +52 g), bei niedrigem sind beide fast gleich (+5 g
-bei 6 %). **Die Abweichung zeigt in die sichere Richtung** — zu viel
-Protein kostet Kohlenhydrate, zu wenig kostet Muskelmasse.
+`[read]` **Zwei Stellen passen nicht:**
 
-`[cmd]` **Drei Live-Werte liegen ausserhalb** (G-545 A7): `peak_week` 2,50,
-`conservative_cut` 2,00, `aggressive_bulk` 1,60.
+**Fünf Cut-Varianten, ein v2.0-Wert.** v2.0 nennt für Cut pauschal −20 %
+und 2,2 g/kg Protein. Unsere fünf unterscheiden sich in der Rate
+(`aggressive_cut` −1,0 %/Woche gegen `conservative_cut`). **Der v2.0-Wert
+ist der Mittelwert, nicht die Spanne** — er ersetzt unsere Differenzierung
+nicht, er prüft sie.
 
-### 3.2 Fett — zwei Wege, und wir nehmen den einen
+**Wettkampfvorbereitung ist drei Phasen.** Das ist der Kern:
 
-    Weg 1   Prozentsatz der Kalorien   20-30 %        (A 1.5)
-    Weg 2   Gramm pro kg Koerpergewicht 0,5-1,0       (D)
-
-`[cmd]` **`goals.goal_strategies.fat_percent` nimmt Weg 1.** Dokument D
-gibt Weg 2 je Phase: Bulk 1,0 · Lean Bulk 0,9 · Cut 0,8 · Contest Prep 0,7
-· Peak Week 0,5 · Maintenance 0,9.
-
-`[read]` **Die beiden Wege sind nicht dasselbe**, und der Unterschied
-waechst mit dem Defizit: 25 % von 2.000 kcal sind 55 g, das sind bei 84 kg
-0,66 g/kg. 25 % von 3.000 kcal sind 83 g, also 0,99 g/kg. **Derselbe
-Prozentsatz ergibt in der Diaet weniger Fett pro Kilogramm** — genau dort,
-wo die Hormongrenze wichtig wird.
-
-**Die Untergrenze, die beide Wege nennen:** nie unter 0,5 g/kg
-Koerpergewicht fuer mehr als etwa eine Woche (A 1.5, C Phase 3). `[cmd]`
-Als CHECK haben wir das nicht.
-
-### 3.3 Kohlenhydrate (A 3.2)
-
-    Trainingstage   3-4 g/kg        bei >5 h Cardio/Woche: 4-5
-    Ruhetage        2-3 g/kg        bei <3 h Cardio/Woche: 1,5-2,5
-    Ladephase       6-8 g/kg        Peak Week
-
-`[read]` Kohlenhydrate sind bei uns die Restgroesse und werden nicht
-vorgegeben. **Diese Baender sind damit eine Pruefgroesse, kein Zielwert** —
-wenn die Restrechnung unter 1,5 g/kg fuehrt, ist entweder das Defizit zu
-gross oder Protein und Fett zu hoch.
-
-### 3.4 Wettkampfvorbereitung, vier Unterphasen (C)
-
-| Stage | Wochen | Defizit | Zielrate | Cardio |
+| Stufe | Kalorien | Protein | Fett | Cardio |
 |---|---|---|---|---|
-| Initiation | 0–4 | −15…20 % | 0,5–0,8 %/Woche | 2× 30 min LISS |
-| Progression | 4–12 | −20…25 % | 0,5–1,0 %/Woche | 3–5× 30–40 min |
-| Intensification | 12–18 | −25…35 % | 0,3–0,6 %/Woche | 5–6× + HIIT |
-| Peak Week | letzte 7–10 Tage | variabel | — | minimal |
+| Early | × 0,85 (−15 %) | 2,2 g/kg | 0,8 g/kg | 3–4× 30–40 min LISS |
+| Mid | × 0,78 (−22 %) | 2,4 g/kg | 0,7 g/kg | 4–6× 40 min |
+| Late | × 0,70 (−30 %) | 2,6 g/kg | 0,6 g/kg | 5–7× 40–45 min + HIIT |
 
-`[read]` **Die Rate sinkt, waehrend das Defizit steigt.** Kein Widerspruch:
-bei niedrigem Koerperfett ist Muskelverlust das Risiko, nicht die
-Geschwindigkeit (Pasiakos et al. 2013 zur erhoehten Proteolyse). **Das ist
-der Grund, warum ein pauschaler `tdee_modifier` je Strategie
-Wettkampfvorbereitung nicht darstellen kann** (G-543, G-545 A1).
-
-### 3.5 Dauer aus dem Koerperfettanteil (C 1)
-
-    Prep-Wochen = (Start-KFA % − Ziel-KFA %) × 1,5 bis 2,0
-                  + 2-4 Wochen Puffer
-
-    Mindestvoraussetzung  Maenner ≤ 15 % (besser 12-13 %)
-                          Frauen  ≤ 22 % (besser 18-20 %)
-
-`[cmd]` **`max_duration_weeks` steht bei uns als feste Zahl** (contest_prep
-16). Fuer 10 % KFA zu lang, fuer 18 % zu kurz — und dann greift
-`force_transition` am falschen Tag. Gemeldet in G-545 A5, nicht geloest.
+`[cmd]` **Live steht eine Zeile mit `tdee_modifier −0,25` und
+`protein_per_kg 2,50`.** Drei Stufen lassen sich damit nicht abbilden — das
+ist der Befund hinter **G-530** und der Grund, warum `sub_phases` mehr als
+eine Textliste sein muss.
 
 ---
 
-## 4. Anpassung und Waechter
+## 2. Rechenwege (v2.0, Abschnitte 1.3, 3.1, 13.1)
 
-### 4.1 Der symmetrische Algorithmus (C 2)
+### 2.1 Grundumsatz und Gesamtumsatz
 
-    Verlust < 0,5 %/Woche ueber 2 Wochen  ->  −100…200 kcal ODER +1 Cardio
-    Verlust > 1,2 %/Woche ueber 2 Wochen  ->  +100…150 kcal
+    Mifflin-St Jeor, Männer:  10×kg + 6,25×cm − 5×Alter + 5
+    Mifflin-St Jeor, Frauen:  10×kg + 6,25×cm − 5×Alter − 161
 
-`[cmd]` **Der zweite Zweig fehlt uns.** G-520 baute
-`weekly_loss > 1.0kg → increase_calories (+150)` — **eine absolute Zahl.**
-0,7 kg sind bei 60 kg dasselbe Problem wie 1,2 kg bei 100 kg. `[read]` Die
-Regel gehoert relativ. Gemeldet in G-545 A2.
+    TDEE = BMR × Aktivitätsmultiplikator
+      sedentär 1,2 · leicht 1,375 · mäßig 1,55
+      sehr aktiv 1,725 · extrem 1,9
+      Bodybuilder-Anpassung: +0,05 bis +0,15 je nach Cardio und Beruf
 
-### 4.2 Wann eine Diaetpause (A 8.1, C 3)
+`[cmd]` Derselbe Weg wie im Vorgängerrepo (`calculateTDEE.ts`, gemessen in
+G-510), inklusive Aktivitätsmultiplikator.
 
-    Gewicht stagniert 3+ Wochen trotz Anpassung
-    Kaelteempfindlichkeit, Libido sinkt, Schlafqualitaet faellt
-    Trainingsleistung −20…30 %
-    Thyroid unterdrueckt (TSH erhoeht, T3 niedrig)
+### 2.2 Makros
 
-    Dauer      1-2 Wochen auf TDEE, nicht laenger
-    Protein    2,0-2,2 g/kg, bleibt hoch
-    Fett       1,0 g/kg
+    Protein  Gewicht × Phasenfaktor × KFA-Faktor
+    Fett     Gewicht × Phasenfaktor, mindestens Gewicht × Phasenminimum
+    Carbs    (kcal − Protein×4 − Fett×9) / 4        Restgröße
 
-`[read]` **MATADOR (Byrne et al. 2018) ist das Argument dafuer:**
-intermittierende Diaet ergab mehr Fettverlust und geringere Adaption als
-durchgehende. **Das ist die Begruendung, mit der `moderate_cut` auf 20
-Wochen gesetzt wurde** (G-542) — die Sicherheit kommt von der Pause, nicht
-vom kurzen Deckel.
+### 2.3 Kalorien je Cardiominute — aus dem Gewicht (5.1)
 
-### 4.3 Refeed (A 3.3, C 3)
+    LISS   0,10 × kg pro Minute       90 kg: 9,0 kcal/min
+    MISS   0,12 × kg pro Minute       90 kg: 10,8 kcal/min
+    HIIT   0,15 × kg pro Minute       90 kg: 13,5 kcal/min + Nachbrennen
 
-    Frequenz    1-2×/Woche, an einem schweren Trainingstag
-    Dauer       1 Tag, nicht 24h+
-    Kalorien    TDEE oder +10-20 %
-    Carbs       +100-150 g   Protein konstant   Fett −30-50 %
-
-`[read]` **Kein Cheat Day.** Beide Dokumente betonen es: der Refeed ist
-geplant, kohlenhydratbetont und einen Tag lang.
-
-### 4.4 Erholung, mit Schwellen (A 7.2)
-
-    HRV 10 % unter Baseline    Intensitaet senken oder Ruhetag
-    HRV 20 % unter Baseline    Ruhetag zwingend
-    Schlaf                     7-9 h, Raum 18-19 °C
-
-`[cmd]` LumeOS hat HRV in Recovery und `hrv7d < baseline × 0.85` in G-520 —
-**das ist 15 %, zwischen den beiden Schwellen.** Kein Fehler, aber eine
-Zahl ohne Beleg dort, wo zwei belegte existieren.
-
-### 4.5 Abbruchkriterien (C 3)
-
-    Libido komplett weg  > 2 Wochen
-    Schlaf < 5 h trotz Muedigkeit
-    Trainingsleistung −40 % und mehr
-    Depression, Anhedonie
-    Herzrhythmusstoerungen
-    Maenner: Testosteron < 200 ng/dL
-
-`[read]` **Die ersten drei sind Steuergroessen, die letzten drei sind
-medizinisch.** Trainingsleistung und Schlafdauer duerfen in `guards` einer
-Strategie; Blutwerte und Herzrhythmus gehoeren ins Medical-Modul mit dessen
-Belegpflicht — **nicht als Textzeile an eine Ernaehrungsstrategie**
-(G-545 A6).
+`[read]` **Das ist die Formel, die eine Pauschaltabelle ersetzt** — ein
+70-kg- und ein 110-kg-Nutzer verbrennen in derselben Stunde nicht dasselbe.
 
 ---
 
-## 5. Peak Week — ohne Pharmakologie
+## 3. Die Werte je Phase (v2.0, Abschnitte 1.4, 3.1, 4.1, 4.2, 5.2)
 
-### 5.1 Wasser und Natrium (A 6.2, C 4)
+### 3.1 Kalorien, Protein, Fett
 
-| Tag | Wasser | Natrium |
+| Phase | Kalorien | Protein g/kg | Fett g/kg | Fett-Minimum |
+|---|---|---|---|---|
+| Off-Season | × 1,15 | 1,8 | 1,0 | 0,6 |
+| Lean Bulk | × 1,10 | 2,0 | 0,9 | 0,6 |
+| Recomp | × 1,00 | 2,0 | 0,9 | 0,6 |
+| Cut | × 0,80 | 2,2 | 0,8 | 0,6 |
+| Contest Prep Early | × 0,85 | 2,2 | 0,8 | 0,6 |
+| Contest Prep Mid | × 0,78 | 2,4 | 0,7 | 0,5 |
+| Contest Prep Late | × 0,70 | 2,6 | 0,6 | 0,5 |
+| Peak Week | variabel | 2,0 | 0,4 | 0,4 |
+| Reverse Diet | × 0,90 → 1,0 | 1,8 | 1,0 | 0,6 |
+
+### 3.2 Die KFA-Kategorie als Feinjustierung (1.2, 1.4, 3.1)
+
+    Männer   very_low <10 % · low 10-15 % · moderate 15-20 %
+             high 20-25 % · very_high >25 %
+    Frauen   very_low <18 % · low 18-22 % · moderate 22-27 %
+             high 27-32 % · very_high >32 %
+
+    auf das Protein     very_low ×1,15 · low ×1,05 · moderate ×1,00
+                        high ×0,95 · very_high ×0,90
+    auf die Kalorien    very_low −5 % · low 0 · moderate 0
+                        high −3 % · very_high −5 %
+
+`[read]` **Die Proteinreihe ist begründet** (Muskelschutz bei wenig
+Reserve). `[annahme]` **Die Kalorienreihe ist es nicht:** −3 und −5 % bei
+*hohem* Körperfett steht als *„konservativer"* ohne Begründung und
+widerspricht Helms — wer mehr Reserve hat, kann schneller abnehmen. **Nicht
+übernehmen, ohne dass Tobias es bestätigt** (G-552).
+
+### 3.3 Schätzung ohne Messung — US Navy (1.2)
+
+    Männer  KFA% = 86,010 × log10(Taille − Hals)
+                 − 70,041 × log10(Größe) + 36,76
+    Frauen  KFA% = 163,205 × log10(Taille + Hüfte − Hals)
+                 − 97,684 × log10(Größe) − 78,387
+
+`[cmd]` Taille, Hals und Hüfte erfasst LumeOS bereits. **Damit braucht die
+Feinjustierung keine neue Eingabe** — nur zwei vorhandene Maße.
+
+### 3.4 Trainingsvolumen, Sätze je Muskelgruppe und Woche (4.1)
+
+| Erfahrung | Off-Season | Lean Bulk | Cut | Contest Prep | Peak Week |
+|---|---|---|---|---|---|
+| beginner | 10 | 11 | 8 | 7 | 3 |
+| intermediate | 14 | 15 | 12 | 10 | 4 |
+| advanced | 18 | 20 | 15 | 13 | 5 |
+| elite | 22 | 24 | 18 | 15 | 6 |
+
+    Recovery-Anpassung  <50 ×0,70 · 50-65 ×0,85 · 65-85 ×1,00 · >85 ×1,05
+    Intensität % 1RM    Off-Season 70-85 · Lean Bulk 75-90 · Cut 75-90
+                        Prep Early 75-88 · Mid 78-92 · Late 80-95
+                        Peak Week 50-65
+    Split               3 Tage Ganzkörper · 4 Upper/Lower
+                        5 PPL+UL · 6 PPL · 7 PPL+Schwachstellen
+
+### 3.5 Cardio je Phase (5.2)
+
+| Phase | Einheiten/Woche | Minuten | Typ |
+|---|---|---|---|
+| Off-Season | 0–2 | 20–30 | LISS |
+| Lean Bulk | 2–3 | 30 | LISS |
+| Cut | 3–5 | 30–40 | LISS/MISS |
+| Contest Prep Early | 3–4 | 30–40 | LISS |
+| Contest Prep Mid | 4–6 | 40 | LISS/MISS |
+| Contest Prep Late | 5–7 | 40–45 | LISS + HIIT |
+| Peak Week | 2–3 | 20 | LISS |
+
+    Kohlenhydratausgleich  +2 g Carbs je 10 min Cardio (nur bei
+                           Präferenz "high") — 300 min/Woche = +60 g/Tag
+
+---
+
+## 4. Erholung, Übergänge, Alarme
+
+### 4.1 Erholungsbewertung, 0 bis 100 (7.1)
+
+    Schlaf     30  7-9 h gut 30 · 6-7 h oder mittel 22
+                   5-6 h oder schlecht 15 · <5 h 5
+    HRV        30  >100 % Baseline 30 · 90-100 % 25 · 80-90 % 20
+                   70-80 % 10 · <70 % 5
+    Stress     20  1-3 → 20 · 4-6 → 15 · 7-8 → 10 · 9-10 → 5
+    Muskelkater 20 1-2 → 20 · 3-4 → 15 · 5-6 → 10 · 7+ → 5
+
+`[cmd]` **LumeOS hat `recovery.scores` und `recovery.score_contributions`
+live.** Ob die Gewichtung dieselbe ist, ist nicht geprüft — **G-552**.
+
+### 4.2 Anpassung nach Erholungswert (7.2)
+
+| Wert | Training | Cardio | Ernährung | Ergänzung |
+|---|---|---|---|---|
+| <50 | Volumen −30 % | −50 % | Refeed einlegen | Ashwagandha, Melatonin |
+| 50–65 | Volumen −15 % | halten | halten | Magnesium |
+| 65–85 | halten | halten | halten | halten |
+| >85 | +10 % Volumen | mehr möglich | halten | halten |
+
+### 4.3 Phasenübergänge mit Auslöser (9.2)
+
+    Off-Season  -> Lean Bulk    KFA >15 % (M) / >22 % (F)
+    Lean Bulk   -> Cut          Zielgewicht ODER KFA >18 % / >25 %
+    Cut         -> Contest Prep Wettkampfdatum steht, 16-20 Wochen vorher
+    Prep        -> Peak Week    7-10 Tage vor der Show
+    Peak Week   -> Reverse Diet Show beendet
+
+`[read]` **Die ersten beiden Auslöser brauchen den Körperfettanteil**, und
+damit die Kategorie oder die Navy-Schätzung aus 3.3. Ohne sie kann der
+Übergang nicht vorgeschlagen werden — er wäre eine reine Datumsfrage.
+
+### 4.4 Alarmschwellen (11.3) und medizinische Grenzen (8.1)
+
+    Gewichtsverlust >2 %/Woche      warning
+    Kraftverlust >15 %              critical
+    Schlaf <5 h an 3+ Tagen         warning
+    HRV <70 % an 5+ Tagen           critical
+
+    Blutdruck systolisch >160 · diastolisch >100   critical
+    Ruhepuls >100                                   warning
+    ALT/AST >100 U/L                                critical
+    Kreatinin >1,5 mg/dL · eGFR <60                 warning
+    Hämatokrit >55 % · Hämoglobin >18 g/dL          critical
+    Brustschmerz · starke Kopfschmerzen ·
+    Sehstörungen · Kurzatmigkeit                    emergency
+
+`[read]` **Die obere Gruppe sind Steuergrößen**, die untere sind
+**medizinische Aussagen** — sie gehören ins Medical-Modul mit dessen
+Belegpflicht (C-183, C-204), nicht als Textzeile an eine Strategie. Medical
+hat einen eigenen Biomarker-Katalog mit Evidenzeinstufung; Werte aus einer
+Sekundärquelle nachzutragen würde ihn verwässern.
+
+### 4.5 Fehlersuche (12.1)
+
+    Gewicht stagniert      metabolische Adaption  -> Diätpause 1-2 Wochen
+    zu schneller Verlust   Defizit zu groß        -> +200-300 kcal
+    Kraftverlust           Muskelverlust, CNS     -> Refeed, Deload
+    Schlaf schlecht        Cortisol, Hunger       -> Carbs abends
+    Wasserretention        Cortisol, Natrium      -> Konsistenz
+    Libido weg             Hormonabfall           -> Fett erhöhen, Pause
+    Plateau                Adaption               -> Refeed, Cardiowechsel
+
+---
+
+## 5. Peak Week (v2.0, Abschnitt 10)
+
+    Tag -10 bis -7   Wasser 8-10 L   Natrium 5-8 g
+    Tag  -6 bis -4   Wasser 6-8 L    Natrium 4-6 g
+    Tag  -3 bis -2   Wasser 4-5 L    Natrium 2-3 g
+    Tag  -1          Wasser 2-3 L    Natrium 1-2 g
+    Showtag          nach Durst      normal
+
+    Front-Load   -5: 2 g/kg · -4: 3 · -3: 4 · -2: 5-6 · -1: 3-4 · Show 1-2
+    Back-Load    Entleerung 0,5-1 g/kg bis -4, dann 5 · 7-8 · 4-5 · 2-3
+
+    Training     -7 hoch (20+ Sätze) bis -1 Ruhe, Intensität fallend
+    Nie          neues Essen · viel Wasser auf einmal · NSAIDs
+
+`[cmd]` **Peak Week rechnet in der anderen Richtung:** Kohlenhydrate pro
+Kilogramm sind die **Vorgabe**, die Kalorien das **Ergebnis**. Bei uns sind
+Kohlenhydrate die Restgröße — **das ist G-549**.
+
+---
+
+## 6. Was ausdrücklich nicht übernommen wird
+
+`[cmd]` **v2.0 Abschnitt 6.3 bis 6.5 — Peptidprotokolle.** Elf Wirkstoffe
+mit Dosierung, Timing, Dauer, Stapelung, Injektionsort, Nadelstärke und
+Rekonstitution: BPC-157, TB-500, CJC-1295 (DAC und no-DAC), Ipamorelin,
+GHRP-6, GHRP-2, HGH-Fragment 176-191, AOD9604, IGF-1 LR3, MGF, Melanotan 2,
+PT-141.
+
+**Und Abschnitt 9.1 empfiehlt sie je Phase** — CJC+IPA+IGF im Off-Season,
+CJC+IPA+Fragment im Cut, dazu MT2 in der Wettkampfvorbereitung, `Stop` in
+der Peak Week.
+
+`[read]` **Das ist die „ausliefern"-Richtung, und sie ist nicht
+entschieden.** LumeOS **erfasst** heute Medikamente verschlüsselt (C-285),
+hat einen Medikamentenkatalog (C-506) und ein Datenmodell für
+Injektionsstellen (C-385). Eine Dosierung **auszuliefern, weil eine Phase
+sie vorsieht**, ist eine andere Kategorie mit rechtlicher Seite. **Das ist
+G-546 und liegt bei Tom.**
+
+**Solange G-546 offen ist:** kein Katalogeintrag trägt eine Substanz, und
+in Goals erscheint keine.
+
+`[cmd]` **Nicht übernommen, weil Medical es besser hat:** die
+Blutwert-Referenzbereiche und der Bluttest-Zeitplan (8.2). Der
+Biomarker-Katalog trägt Evidenzeinstufungen (C-180, C-183, C-204).
+
+`[cmd]` **Nicht übernommen, weil ohne Begründung:** die Kalorien-Senkung bei
+*hohem* Körperfett (3.2).
+
+`[cmd]` **Nicht übernommen, weil wir eine bessere Quelle haben:** die
+Lebensmitteltabelle (13.2). Der BLS-Katalog hat 300+ Nährstoffe je Eintrag.
+
+---
+
+## 7. Wohin das gegangen ist
+
+| Befund | Punkt | Stand |
 |---|---|---|
-| −10 bis −7 | 8–10 L | 5–8 g |
-| −6 bis −4 | 6–8 L | 4–6 g |
-| −3 bis −2 | 4–5 L | 2–3 g |
-| −1 | 2–3 L | 1–2 g |
-| Showtag | nach Durst | normal |
+| Zielrate in Prozent pro Woche | G-542 | entschieden |
+| Wettkampfvorbereitung als drei Stufen | G-530, G-545 A1 | offen |
+| drei Proteinfaktoren außerhalb | G-545 A7 | vorbereitet |
+| Fett als g/kg mit Minimum statt Prozentsatz | **G-550** | neu |
+| Höchstdauer `moderate_cut` | G-548 | bei Tobias |
+| Protein und Fett in der Ladewoche | G-549 | bei Tobias |
+| Peptide — erfassen oder empfehlen | G-546 | bei Tom |
+| Cardio fehlt als Modul ganz | **G-551** | neu |
+| Trainingsvolumen und Erholung je Phase | **G-552** | neu |
+| persönliche Untergrenze am Ziel | G-547 | offen |
+| Rate statt Faktor in der Rechnung | G-543 | vorbereitet |
 
-`[read]` **Der Mechanismus, den beide nennen:** hohe Zufuhr senkt Aldosteron
-und erhoeht die Ausscheidung; die ploetzliche Reduktion laeuft dann ueber
-das Ziel hinaus. **Und beide nennen die Alternative:** manche verzichten
-ganz darauf und arbeiten nur mit Kohlenhydraten und gleichmaessigem
-Natrium — sicherer, aber weniger „trocken".
-
-### 5.2 Kohlenhydratladung, zwei Wege (A 6.3, C 4)
-
-    Front-Load   Tag −5: 2 g/kg, dann 3, 4, 5-6, Tag −1: 3-4
-    Back-Load    Entleerung 0,5-1 g/kg bis −4, dann 5, 7-8, −1: 4-5
-
-    Beurteilung  flach     -> mehr Carbs
-                 weich     -> weniger Carbs, Natrium pruefen
-                 voll und definiert -> halten
-
-### 5.3 Training in der Peak Week (A 6.4)
-
-Volumen faellt von hoch (Tag −7) auf nichts (Tag −1), Intensitaet von
-moderat auf sehr leicht. Letzte Einheit: Pumparbeit, 15–25 Wiederholungen.
-
-`[cmd]` **Nicht uebernommen:** Diuretika-Tabelle (A 2.6) und alles aus
-A Abschnitt 2. Das ist **G-546**, Toms Entscheidung.
-
----
-
-## 6. Ansaetze, die LumeOS heute nicht hat
-
-`[read]` Aus Dokument D, dem Architekturentwurf. **Er kennt LumeOS nicht** —
-was hier steht, ist der Gedanke, nicht die Vorgabe.
-
-### 6.1 Die persoenliche Untergrenze am Ziel
-
-    constraints: min_calories, max_cardio_hours_per_week,
-                 min_protein_g_per_kg, max_deficit_percent,
-                 min_bf_percent
-
-`[cmd]` **Unsere drei Ebenen haben dafuer keine Spalte.** Eine Grenze gilt
-fuer den Nutzer und begrenzt jede Strategie; ein Override gilt fuer eine
-Phase. Das ist **G-547**.
-
-### 6.2 Koerperfett als Kategorie statt als Zahl
-
-    <10 %  10-15 %  15-20 %  20-25 %  >25 %
-    Faktor 1,15 · 1,05 · 1,00 · 0,95 · 0,90 auf das Protein
-
-`[read]` **Das ist die Bruecke, die Toms Einwand aufloest:** niemand kennt
-seine Magermasse, aber „eher schlank oder eher fett" kann jeder
-einschaetzen — und als Fuenferstufe ist der Fehler eingebaut statt
-versteckt. Dazu die Navy-Formel als Rueckfall:
-
-    Maenner: 86,010 × log10(Taille − Hals) − 70,041 × log10(Groesse) + 36,76
-    Frauen:  163,205 × log10(Taille + Huefte − Hals)
-             − 97,684 × log10(Groesse) − 78,387
-
-`[cmd]` **Taille, Hals und Huefte erfassen wir schon.** Der Weg braucht
-keine neue Eingabe. Gemeldet in G-545, nicht beauftragt.
-
-### 6.3 Module beschraenken sich gegenseitig
-
-`[read]` Der Abhaengigkeitsgraph in D ist **bidirektional**, nicht nur
-„Module liefern Beitraege an Goals" (das ist G-514):
-
-    min_carbs_for_hiit           wenig Carbs -> kein HIIT
-    cardio_interference_window   Stunden Abstand zum Training
-    max_total_training_hours     Training plus Cardio zusammen
-    leg_day_cardio_restriction   kein Cardio nach Beintag
-    liver_enzymes_elevated       keine oralen Substanzen
-    thyroid_suppressed           kein weiteres Defizit
-
-**Das ist eine Schicht zwischen den Modulen, nicht in Goals.** Notiert in
-G-547, ohne Nummer und ohne Auftrag.
-
-### 6.4 Alarmstufen und Anpassungsablauf
-
-    info · warning · critical · emergency
-
-Und der Ablauf: Daten sammeln → Trends → Abweichung → Anpassung erzeugen →
-priorisieren → **Nutzer bestaetigt** → umsetzen → nach 1–2 Wochen messen,
-ob es gewirkt hat.
-
-`[cmd]` **Schritt 6 haben wir** (G-520 baut Vorschlagsfunktionen, der Nutzer
-antwortet ueber `phase_transition_respond`). **Schritt 8 fehlt:** niemand
-prueft, ob eine angenommene Anpassung gewirkt hat.
-
----
-
-## 7. Was ausdruecklich nicht uebernommen wird
-
-`[cmd]` **Dokument A, Abschnitt 2 — Pharmakologie.** Dosierungen fuer
-anabole Steroide, Wachstumshormon, Thyroidhormone, Insulin, Diuretika, DNP,
-mit Zyklusplaenen und Nebenwirkungsmanagement. **Steht in keinem
-Katalogeintrag und in keinem Auftrag.** Die Entscheidung liegt bei Tom und
-ist als **G-546** vorgelegt: erfassen, was ein Nutzer nimmt, oder eine
-Dosierung ausliefern.
-
-`[cmd]` **Dokument A, Abschnitt 7.3 — Blutwert-Referenzbereiche.** Medical
-hat einen eigenen Biomarker-Katalog mit Evidenzeinstufung (C-183, C-204,
-C-180). **Referenzbereiche aus einer Sekundaerquelle nachzutragen wuerde
-ihn verwaessern**, nicht ergaenzen.
-
-`[cmd]` **Katch-McArdle als Grundumsatz.** Braucht die Magermasse.
-
----
-
-## 8. Wohin das gegangen ist
-
-| Befund | Punkt |
-|---|---|
-| Zielrate in Prozent pro Woche — vier Fundstellen | G-542, entschieden |
-| Unterphasen der Wettkampfvorbereitung | G-545 A1 |
-| symmetrischer Anpassungsalgorithmus, relativ statt absolut | G-545 A2 |
-| Mindest-Koerperfett als `requirements` | G-545 A3 |
-| Ausstiegs- und Erfolgskriterien | G-545 A4 |
-| Dauer als Rechnung statt Konstante | G-545 A5, gemeldet |
-| drei Proteinfaktoren ausserhalb der Baender | G-545 A7 |
-| Pharmakologie — erfassen oder empfehlen | G-546, bei Tom |
-| persoenliche Untergrenze am Ziel | G-547 |
-| Rate statt Faktor in der Rechnung | G-543 |
-
-`[read]` **Nicht in einem Punkt, weil noch zu weit weg:** Cardio-Bedarf aus
-dem Restdefizit (2.5), Fettuntergrenze 0,5 g/kg als CHECK (3.2),
-Kohlenhydratbaender als Pruefgroesse (3.3), HRV-Schwellen 10/20 % statt 15 %
-(4.4), Wirkungskontrolle nach einer Anpassung (6.4).
+`[read]` **Nicht in einem Punkt, weil es einen anderen Modulstand braucht:**
+Mahlzeitenverteilung (3.2), Nährstofftiming (3.3), die
+Trainingstechniken (4.4 — Myo-Reps, Rest-Pause, Cluster), der
+Schlafoptimierungs-Ablauf (7.3). Alles vier ist beschrieben und keines
+blockiert die Goals-Grundlagen.

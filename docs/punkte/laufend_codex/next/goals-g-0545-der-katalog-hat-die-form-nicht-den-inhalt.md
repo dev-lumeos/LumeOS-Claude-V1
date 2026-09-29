@@ -239,3 +239,57 @@ Die Fettfaktoren aus demselben Dokument (0,5 bis 1,0 g/kg je Phase) sind
 im Katalog als `fat_percent` abgebildet — **ein Prozentsatz der Kalorien,
 keine Groesse pro Kilogramm.** Das sind zwei verschiedene Wege zum selben
 Wert. Melden, welcher gilt; nicht umstellen.
+
+---
+
+## Nachtrag, 2026-09-29 17:00 — v2.0 ersetzt die Baender durch Einzelwerte
+
+**Tom hat um 16:45 die vollstaendige Neufassung nachgereicht.** Sie loest die
+vier Vorfassungen ab. **Maßgeblich ist ab jetzt
+`docs/ssot/131-fachwissen-phasen-und-rechenwege.md`** — dort stehen alle
+Werte mit Abschnittsnummer, und diese Datei nennt keine Zahl mehr selbst.
+
+### Was sich gegenueber dem Nachtrag von 16:30 aendert
+
+`[cmd]` **Statt Baender nennt v2.0 Einzelwerte**, und sie liegen am unteren
+Rand der vorherigen Baender. A7 bleibt richtig, wird aber praeziser:
+
+    peak_week          live 2,50   v2.0 2,0    zu hoch
+    conservative_cut   live 2,00   v2.0 2,2    zu niedrig (Cut-Wert)
+    aggressive_bulk    live 1,60   v2.0 1,8    zu niedrig (Off-Season)
+
+`[read]` **Und die Zuordnung ist nicht eins zu eins** — v2.0 kennt acht
+Phasen, wir 17 Strategien. Die Tabelle dafuer steht in `docs/ssot/131`
+Abschnitt 1. **Zwei Stellen, wo sie nicht aufgeht, gehoeren in den Bericht:**
+
+**Fuenf Cut-Varianten, ein v2.0-Wert.** v2.0 nennt fuer Cut pauschal 2,2 g/kg.
+Unsere fuenf unterscheiden sich in der Rate. **Der v2.0-Wert prueft unsere
+Differenzierung, er ersetzt sie nicht** — `aggressive_cut` mit 2,50 darf
+hoeher liegen, weil das Defizit groesser ist.
+
+**`contest_prep` ist bei v2.0 drei Phasen** mit 2,2 / 2,4 / 2,6 g/kg, drei
+Fettwerten und drei Kalorienfaktoren. **Ein Katalogeintrag kann das nicht** —
+melden, nicht loesen, das ist G-530.
+
+### A8 neu — die KFA-Kategorie als Feinjustierung vorbereiten
+
+`[read]` v2.0 multipliziert das Protein mit einem Faktor je
+Koerperfettkategorie (`very_low` ×1,15 bis `very_high` ×0,90), und die
+Kategorie ist eine **Fuenferstufe**, keine Zahl. `docs/ssot/131` Abschnitt 3.2.
+
+**Das ist der Weg, der Toms Einwand aufloest** — niemand kennt seine
+Magermasse, aber die Stufe schaetzt jeder, und die Navy-Formel aus Taille und
+Hals liefert sie aus Maßen, die LumeOS schon erfasst.
+
+**In diesem Auftrag nur die Tabelle anlegen**, nicht anwenden:
+`goals.bodyfat_faktoren` mit Stufe, Geschlechtsgrenzen und den zwei Faktoren
+(Protein, Kalorien). **Die Kalorienspalte bleibt leer** — ihre Werte
+widersprechen Helms und liegen bei Tobias (G-552).
+
+### Zu belegen, zusaetzlich
+
+- je geaendertem Wert die Abschnittsnummer aus `docs/ssot/131` als Kommentar
+- die Zuordnungstabelle im Bericht: welche Strategie welcher v2.0-Phase, und
+  wo sie nicht aufgeht
+- `bodyfat_faktoren`: fuenf Zeilen, Protein gefuellt, Kalorien NULL, und ein
+  CHECK, dass die Stufen sich nicht ueberlappen
