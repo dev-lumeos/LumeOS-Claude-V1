@@ -211,3 +211,263 @@ mehr, A3 (vorschlagen oder handeln?) vor A2 zu klaeren.
 Der Waechter dazu ist nicht rechenbar und wird als solcher gemeldet,
 nicht mit einer geratenen Dauer gebaut. Das ist G-529 A3, und es liegt
 hinter G-531.
+
+## Bericht
+
+**Claude Code, 2026-09-29.**
+
+### A1 — die vier Eingangsgroessen, gemessen
+
+`[cmd]` **Gegen die laufende Datenbank, 2026-09-29. Alle vier
+tragen — eine fuenfte fehlt.**
+
+    weightTrend        goals.body_measurements
+                       181 Zeilen (dev/tom), 62 in 14 Tagen
+                       TRAEGT
+    calorieAdherence   nutrition.daily_summary.enercc
+                       gegen goals.nutrition_targets.kcal
+                       181 Zeilen (dev), 7 (test-user)   TRAEGT
+    strengthTrend      training.workout_sets.estimated_1rm
+                       222 von 233 Saetzen, 23 Uebungen  TRAEGT
+    hrv7d              recovery.checkins.hrv_rmssd
+                       43 Werte (dev), 8 (test-user)     TRAEGT
+    ----------------------------------------------------------
+    hrv_baseline       GIBT ES NICHT
+
+`[cmd]` **Keine `%baseline%`-Spalte im ganzen Schema** — nur
+`hrv_rmssd`, `hrv_score`, `hrv_source`, `hrv_impact_points`.
+`[read]` **Sie liesse sich aus derselben Reihe ABLEITEN, aber das
+ist eine Festlegung, keine gespeicherte Groesse.** **Die Funktion
+nimmt sie deshalb als Argument und sagt, wenn sie fehlt.**
+
+`[read]` **Eine Berichtigung zu meinem ersten Blick:** ich habe
+nach `%e1rm%` gesucht und nichts gefunden — **die Spalte heisst
+`estimated_1rm`.** `[read]` **Die Praemisse des Punktes stimmt;
+mein Suchmuster war zu eng.**
+
+`[cmd]` **Und eine Auffaelligkeit:** beide Reihen laufen bis
+**2026-11-16**, also in die Zukunft. `[read]` **Ein Trend muss das
+Fenster beidseitig begrenzen** — sonst mittelt er Seed ein.
+
+`[read]` **Damit ist A2 EIN Auftrag, nicht vier** — anders als bei
+G-522/A1, wo drei von fuenf Modulen ausfielen.
+
+### A3 — vorschlagen, nicht handeln. VOR A2 geklaert
+
+`[cmd]` **C-108 und F-02, zitiert in `E-56:51` und `E-57:224`:**
+*,,nennen ja, bewerten nein"*.
+
+`[cmd]` **Keine Funktion in `anpassung.ts` oder
+`uebergangswaechter.ts` schreibt** — ein eigener Test prueft es
+(kein `createSessionClient`, kein `.rpc(`, kein `.insert(`,
+`.update(`, `.upsert(`, `fetch(`).
+
+`[read]` **Der zweite Grund ist technisch:** seit G-519 hat
+`phase-write.ts` einen zweigeteilten Weg, und die Sperrpruefung
+darin **ist kein gleichwertiger Ersatz fuer die `23505`-Sperre**.
+**Ein Waechter, der selbsttaetig schreibt, macht aus einem
+hinnehmbaren Augenblick einen Dauerzustand.**
+
+### Der Widerspruch, umgerechnet
+
+`[cmd]` **Die Spec gibt alles in Kalorien, E1 speichert die Rate.**
+`[cmd]` **`rateAusKcal(kcal, gewicht)` = `kcal / (11 x gewicht)`.**
+
+**An BEIDEN Raendern belegt:**
+
+    -100 kcal bei  45 kg  ->  -0,202 %/Woche
+    -100 kcal bei  80 kg  ->  -0,114 %/Woche
+    -100 kcal bei 120 kg  ->  -0,076 %/Woche
+    +150 kcal bei  80 kg  ->  +0,170 %/Woche
+
+`[read]` **Der leichte Rand ergibt die 2,7-fache Rate des
+schweren** — **genau der Befund, der zu E1 gefuehrt hat.** **Ohne
+Gewicht: `null`, keine erfundene Rate.**
+
+`[cmd]` **`haltInGrenzen()` haelt beide CHECKs:** die Aussengrenze
+kappt (`-2,5 … 1,5`), **ein Vorzeichenwechsel wird ABGEWIESEN, nicht
+gekappt** — sonst liefe der Vorschlag gegen
+`goal_phases_zielrate_passt_zur_art`.
+
+### A2 — sechs Regeln, sieben Waechter
+
+`[cmd]` **Alle gebaut, je mit Test an BEIDEN Seiten der Grenze:**
+
+    Regel                     greift bei      greift nicht bei
+    ------------------------------------------------------------
+    fat_loss Plateau          -0,05 / 90 %    -0,10 / 90 %  und
+                                              -0,05 / 85 %
+    fat_loss zu schnell       -1,1            -1,0
+    fat_loss Kraftverlust     -11             -10
+    lean_bulk zu schnell      +0,8            +0,75
+    lean_bulk Stillstand      +0,05 / 90 %    +0,10 / 90 %
+    HRV                       50 von 60       51 von 60
+
+`[read]` **Die Spec verlangt echte Ungleichheit** (`> -0.1`,
+`< -1.0`) — **der Grenzwert selbst loest NICHT aus.** Das prueft je
+Regel ein eigener Fall.
+
+**Zwei Regeln koennen nicht wirken, und sie sagen es:**
+
+`[cmd]` **`+20 g Protein`** — `goal_phases` hat keine Proteinspalte,
+und `nutrition_targets.protein_g` rechnet `berechne_zielwerte` aus
+dem Gewicht. **Der Vorschlag steht, der Schreibweg fehlt.**
+
+`[cmd]` **Die HRV-Regel ohne Vergleichsgroesse** — sie meldet
+*,,liesse sich nicht pruefen"*, statt still zu schweigen.
+
+**Die sieben Waechter, je ein Befund — auch die nicht
+greifenden:**
+
+`[read]` **Sonst liesse sich *geprueft und in Ordnung* nicht von
+*gar nicht geprueft* unterscheiden.** `[cmd]` **Deshalb tragen sie
+`greift` UND `hindernis` getrennt.**
+
+`[cmd]` **`max_duration_weeks` ist NICHT rechenbar und wird als
+solches gemeldet** — nicht mit einer geratenen Dauer gebaut
+(G-529/A3). `[cmd]` **Der Test prueft beides:** ohne Hoechstdauer
+kommt das Hindernis, mit Hoechstdauer greift er von beiden Seiten
+(19 von 20 nicht, 20 von 20 schon).
+
+`[cmd]` **Uebertraining verlangt FUENF Tage**, nicht einen — die
+Spec sagt *,,5+ Tage"*, und ein eigener Fall haelt es fest.
+
+### A4 — die Gesundheitswarnung unter E-74
+
+`[cmd]` **E-74:54-56 verbietet dreierlei:** eine Diagnose ableiten,
+eine Therapie empfehlen, einen Wert als krankhaft bewerten.
+
+`[cmd]` **Der gebaute Satz:**
+
+    Gemessen 4.2 % Koerperfett. Die Phasenspec setzt fuer maennlich
+    eine Aufmerksamkeitsgrenze bei 5 % (PHASE_MODELS.md:133). Was
+    das fuer dich bedeutet, gehoert in aerztliche Haende — LumeOS
+    bewertet es nicht.
+
+`[read]` **Er nennt den Wert, ZITIERT die Quelle und gibt die
+Einordnung ab** — E-74: *,,damit ist die Wiedergabe ein Zitat,
+keine Aussage"*.
+
+`[cmd]` **Ein Test prueft sieben verbotene Wendungen** —
+`gefaehrlich`, `ungesund`, `krankhaft`, `zu niedrig`, `du
+solltest`, `nimm `, `behandl`. **Und dass der Verweis auf
+aerztliche Haende dasteht.**
+
+`[cmd]` **Die Schwelle je Geschlecht aus der Spec: 5 % (M), 10 %
+(W).** `[cmd]` **Ohne Geschlecht im Profil wird NICHT geraten** —
+der Waechter meldet das Hindernis.
+
+### A5 — die Grenze
+
+`[cmd]` **`git status`: drei neue Dateien in
+`apps/web/src/lib/goals/`, sonst nichts.** `[cmd]` **28
+Zusicherungen gruen.**
+
+**Sabotageprobe, sechs Eingriffe, je von ihren eigenen
+Zusicherungen gefangen:**
+
+    Umrechnung 11 -> 10           2, 3, 4    ROT
+    Plateau-Grenze auf >=         1          ROT
+    Vorzeichenschutz weg          3          ROT
+    Uebertraining ab 1 Tag        5          ROT
+    Phasendauer ohne Hindernis    1, 3       ROT
+    Warnung bewertet              2, 3       ROT
+    alles zurueck                 28 von 28  GRUEN, byteidentisch
+
+`[read]` **Und eine eigene Falle, in die ich fast gelaufen
+waere:** nach der ersten Sabotage habe ich `git checkout`
+gerufen — **die Datei ist neu und ungetrackt, der Befehl tat
+nichts.** `[cmd]` **Gemerkt am `grep`, behoben per `cp`.**
+
+`[cmd]` **`turbo run typecheck test build`: 18 von 18.**
+
+`[cmd]` **`pnpm gate` ist rot an EINER Stelle: `sammelfragen`,
+wegen `G-532` und `G-377`** — beide in `docs/`, `G-532` heute
+angelegt und ungetrackt. `[read]` **Nicht meine.** **Die drei
+anderen Waechter sind gruen.**
+
+### Was NICHT gebaut wurde
+
+`[read]` **Keine Oberflaeche.** Der Auftrag nennt sie nicht, und
+ohne `goal_contributions` (G-514) gaebe es keinen Ort, an dem ein
+Vorschlag stuende. **Die Bauteile sind rein und bereit.**
+
+`[cmd]` **Nichts in `supabase/`, nichts committet.**
+
+## Abnahme A1 bis A5 - Orchestrator, 2026-09-29
+
+_(Nach der am selben Tag geschaerften Regel: gezaehlt werden MERKMALE des
+Ergebnisses, die Messung des Agenten wird nicht nachgebaut.
+`00-LIESMICH.md`, ,,Und dasselbe gilt fuer die Abnahme".)_
+
+### Merkmale, die ich gezaehlt habe
+
+`[cmd]` **Die drei Dateien liegen:**
+
+    lib/goals/anpassung.ts                    277 Zeilen, 10.527 Byte
+    lib/goals/uebergangswaechter.ts           267 Zeilen, 10.986 Byte
+    lib/goals/__tests__/g520-anpassung.test.ts
+
+`[cmd]` **A3 ist strukturell belegt: KEINE der beiden Dateien schreibt.**
+Null Treffer auf `.rpc(`, `.insert(`, `.update(`, `.upsert(`, `.delete(`.
+`[read]` **Damit ist ,,nennen ja, bewerten nein" nicht nur behauptet,
+sondern am Code ablesbar** — ein Waechter, der nicht schreiben KANN, kann
+auch nicht selbsttaetig handeln.
+
+`[cmd]` **Die Testzahl stimmt: 2084 vor dem Auftrag, 2112 danach.**
+Differenz 28, genau seine Zusicherungen. 2112 von 2112 gruen.
+
+`[cmd]` **`hrv_baseline` existiert nirgends** — eine Ja/Nein-Frage, selbst
+gestellt. Was das Schema zu HRV fuehrt: `recovery.checkins.hrv_rmssd`,
+`recovery.scores.hrv_score`, `recovery.scores.hrv_source`,
+`recovery.stress_logs.hrv_impact_points`. **Kein Vergleichswert.** Die
+Regel meldet sich zu Recht als nicht pruefbar.
+
+`[cmd]` **`estimated_1rm` liegt auf `training.workout_sets`** — sein
+erster Griff suchte `%e1rm%` und fand nichts, er hat es selbst
+berichtigt. Daneben `training.workout_exercises.best_estimated_1rm` und
+`training.routine_exercises.target_percent_1rm`.
+
+`[cmd]` **Die Umrechnung selbst nachgerechnet, an beiden Raendern:**
+-100 kcal ergeben -0,202 %/Woche bei 45 kg und -0,076 bei 120 kg,
+Verhaeltnis **2,67-fach**. `[read]` **Das ist der Befund hinter E1 in
+einer Zahl:** derselbe Kalorienbetrag ist am leichten Rand fast die
+dreifache Rate. **Ein Vorschlag, der Kalorien verstellt, verstellt bei
+zwei Nutzern zwei verschiedene Dinge.**
+
+### Was ich NICHT nachgemessen habe
+
+`[read]` **Die sechs Regeln und sieben Waechter einzeln gegen ihre
+Grenzen** — das sind seine 28 Zusicherungen, und sie laufen im Gate.
+Sein `[cmd]`, nicht meins.
+
+### Ein Fehlalarm von mir, und was daraus folgt
+
+`[cmd]` **Mein erster Testlauf meldete `# fail 1`.** `[cmd]` **Der zweite,
+zwoelf Minuten spaeter: 2112 von 2112 gruen.**
+
+`[read]` **Ursache: ich lief gegen einen halbfertigen Baum** — Claude Code
+schrieb zu diesem Zeitpunkt schon an G-534 in denselben Dateien
+(`phase-setzen.tsx` 09:55, `phase-echt.tsx` 09:56).
+
+`[read]` **Regel daraus: waehrend ein Agent in einem Bereich schreibt,
+misst dort niemand.** Ein Testlauf gegen mitten im Schreiben ist keine
+Messung, sondern ein Zufall — und er haette als achte Fehlmessung des
+Tages gezaehlt.
+
+### Was offen bleibt, und wo es liegt
+
+`[cmd]` **Drei Luecken, alle gemeldet statt geraten:**
+
+    hrv_baseline           keine Spalte - die HRV-Regel meldet sich
+                           selbst als nicht pruefbar
+    +20 g Protein          goal_phases hat keine Proteinspalte
+    max_duration_weeks     existiert nicht - G-529 A3, hinter G-531
+
+`[read]` **Alle drei sind Meldungen, keine Platzhalter.** Das ist die
+richtige Form: ein Waechter, der eine geratene Dauer prueft, prueft
+nichts.
+
+`[cmd]` **Und die Oberflaeche dazu ist G-534**, seit 09:52 bei Claude
+Code. **Bis dahin ist von diesem Auftrag nichts zu sehen** — das ist
+gewollt, aber es ist der Grund, warum G-534 nicht warten durfte.
