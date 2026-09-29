@@ -4,10 +4,19 @@
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-520 | Anpassungsalgorithmus und sieben Uebergangswaechter | **laeuft**, raus 29.09., 08:30 |
+| Claude Code | G-520 | Anpassungsalgorithmus und sieben Uebergangswaechter | **uebergeben 29.09., 09:06** |
 | Codex | G-514 | die Beitragstabelle plus recovery und supplements | **laeuft**, raus 29.09., 08:00 |
 | Claude Code | G-441 | die Recovery-Today-Kachel rechnet aus der Attrappe | **vorbereitet** in `next/` |
 | Codex | G-531 | `goal_phase_start` kennt die Rate nicht | **vorbereitet** in `next/` |
+
+`[cmd]` **Berichtigt 09:06:** die Zeile zu G-520 sagte ,,raus 08:30".
+Das war falsch — der Orchestrator hat die Datei verschoben und den
+Auftragsteil geschrieben, aber Tom nie die Anweisung gegeben. Claude Code
+war eine halbe Stunde frei, ohne dass es jemand sah. **Dritter Verstoss
+gegen `00-LIESMICH.md:22-41` am selben Tag**, und `zyklus-pruefen.mjs`
+kann ihn nicht fangen: er prueft, dass ein Auftrag dasteht, nicht dass er
+uebergeben wurde. **Der Umzug und die Uebergabe sind EINE Handlung** —
+wer verschiebt und nicht uebergibt, hat nichts beauftragt.
 
 `[cmd]` **G-519 A5-A8 ist abgenommen und abgelegt** — Code in
 `8312c1d6`, Doku in `8f10df6e`. **Das Eingabefeld fuer die Zielrate

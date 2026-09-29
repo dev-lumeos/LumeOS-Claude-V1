@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 252 |
+| `todos` | 253 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 580 |
-| **gesamt** | **836** |
+| **gesamt** | **837** |
 
 ## medical — 49
 
@@ -573,9 +573,9 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 33
+## goals — 34
 
-### beauftragbar — 29
+### beauftragbar — 30
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -608,6 +608,7 @@
 | `G-526` | fehler | hoch | [Protein, Fett und Faser kennen die Phase nicht](todos/goals-g-0526-protein-und-fett-kennen-die-phase-nicht.md) | offen | — | — |
 | `G-527` | fehler | mittel | [der Schreibweg kennt die neuen Hindernisse nicht](erledigt/goals-g-0527-der-schreibweg-kennt-die-neuen-hindernisse-nicht.md) | erledigt | — | — |
 | `G-531` | fehler | hoch | [`goal_phase_start` kann drei der neun Phasenarten nicht anlegen](laufend_codex/goals-g-0531-goal-phase-start-kennt-die-rate-nicht.md) | vorbereitet (codex) | — | — |
+| `G-532` | befund | hoch | [zehn Unternavigationen, eine Datei mit echter Quelle](todos/goals-g-0532-zehn-reiter-eine-echte-quelle.md) | offen | — | — |
 
 ### wartet auf Blocker — 4
 
