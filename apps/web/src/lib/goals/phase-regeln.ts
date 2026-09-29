@@ -137,6 +137,134 @@ export type Phasenstart = {
   goal_id?: string | null
   projected_end_date?: string | null
   variant?: string | null
+  /**
+   * `[cmd]` **G-519/E1: die Rate ist die GESPEICHERTE Groesse**,
+   * nicht das Kaloriendelta. In % Koerpergewicht je Woche.
+   *
+   * `[read]` **`null` heisst *diese Art traegt keine Rate*** — der
+   * CHECK verlangt es fuer fuenf der neun Arten.
+   */
+  zielrate_pct_kg_woche?: number | null
+}
+
+// ── G-519/A5: was der CHECK je Art verlangt ──────────────────────
+//
+// `[cmd]` **Gelesen aus `goal_phases_zielrate_passt_zur_art`,
+// 2026-09-29** — nicht aus der Spec abgetippt:
+//
+//     fat_loss, mini_cut   NOT NULL und < 0
+//     lean_bulk            NOT NULL und > 0
+//     maintenance          NULL oder |x| <= 0.1
+//     die uebrigen fuenf   NULL
+//
+// `[cmd]` **Der CHECK ist NOT VALID** — Bestandszeilen sind
+// ungeprueft, **neue und geaenderte nicht.** Das Feld laeuft
+// dagegen.
+
+/** Was die Rate fuer eine Art sein muss. */
+export type Ratenpflicht =
+  /** NOT NULL, Vorzeichen negativ. */
+  | 'negativ'
+  /** NOT NULL, Vorzeichen positiv. */
+  | 'positiv'
+  /** NULL oder nahe null (|x| <= 0.1). */
+  | 'nahe_null'
+  /** Muss NULL bleiben. */
+  | 'keine'
+
+export const RATENPFLICHT: Readonly<Record<Phasenart, Ratenpflicht>> = {
+  fat_loss: 'negativ',
+  mini_cut: 'negativ',
+  lean_bulk: 'positiv',
+  maintenance: 'nahe_null',
+  recomp: 'keine',
+  contest_prep: 'keine',
+  reverse_diet: 'keine',
+  peak_week: 'keine',
+  expert_bb_annual: 'keine',
+} as const
+
+/**
+ * Die Aussengrenze, aus `goal_phases_zielrate_aussengrenze`.
+ *
+ * `[cmd]` **Gelesen, nicht gesetzt:** `>= -2.5 AND <= 1.5`.
+ */
+export const RATE_MIN = -2.5
+export const RATE_MAX = 1.5
+
+/**
+ * Das Kaloriendelta je Tag aus der Rate.
+ *
+ * `[cmd]` **Dieselbe Formel wie `goals.kcal_delta_aus_zielrate`**
+ * (`11 * rate * gewicht`, auf eine Stelle gerundet) — **hergeleitet
+ * aus 7700 kcal je kg.**
+ *
+ * `[cmd]` **Gegen die Datenbank nachgerechnet, 2026-09-29:**
+ * `-1,0 % / 45 kg -> -495,0` · `-1,0 % / 120 kg -> -1320,0` ·
+ * `+0,25 % / 80 kg -> +220,0`. **Drei von drei gleich.**
+ *
+ * `[read]` **Die Anzeige rechnet sie mit, damit der Nutzer beim
+ * Schieben sofort sieht, was es bedeutet** — **gespeichert wird
+ * weiterhin nur die Rate** (E1). **Wer den Wert BELEGEN will,
+ * nimmt die Datenbankfunktion.**
+ *
+ * @returns `null`, wenn Rate oder Gewicht fehlt.
+ */
+export function kcalDeltaAusRate(
+  rate: number | null | undefined,
+  gewichtKg: number | null | undefined,
+): number | null {
+  if (rate === null || rate === undefined) return null
+  if (gewichtKg === null || gewichtKg === undefined) return null
+  return Math.round(11 * rate * gewichtKg * 10) / 10
+}
+
+/** Prueft eine Rate gegen beide CHECKs. Leer heisst: in Ordnung. */
+export function pruefeRate(
+  art: Phasenart, rate: number | null | undefined,
+): Feldfehler[] {
+  const f: Feldfehler[] = []
+  const pflicht = RATENPFLICHT[art]
+
+  if (rate === null || rate === undefined) {
+    if (pflicht === 'negativ' || pflicht === 'positiv') {
+      f.push({
+        feld: 'zielrate_pct_kg_woche',
+        text: 'Diese Phasenart braucht eine Rate.',
+      })
+    }
+    return f
+  }
+
+  // [cmd] goal_phases_zielrate_aussengrenze
+  if (rate < RATE_MIN || rate > RATE_MAX) {
+    f.push({
+      feld: 'zielrate_pct_kg_woche',
+      text: `Die Rate liegt ausserhalb von ${RATE_MIN} bis ${RATE_MAX} % KG/Woche.`,
+    })
+    return f
+  }
+
+  // [cmd] goal_phases_zielrate_passt_zur_art
+  if (pflicht === 'negativ' && rate >= 0) {
+    f.push({ feld: 'zielrate_pct_kg_woche', text: 'Hier muss die Rate negativ sein.' })
+  }
+  if (pflicht === 'positiv' && rate <= 0) {
+    f.push({ feld: 'zielrate_pct_kg_woche', text: 'Hier muss die Rate positiv sein.' })
+  }
+  if (pflicht === 'nahe_null' && Math.abs(rate) > 0.1) {
+    f.push({
+      feld: 'zielrate_pct_kg_woche',
+      text: 'Beim Halten liegt die Rate zwischen -0,1 und +0,1.',
+    })
+  }
+  if (pflicht === 'keine') {
+    f.push({
+      feld: 'zielrate_pct_kg_woche',
+      text: 'Diese Phasenart traegt keine Rate.',
+    })
+  }
+  return f
 }
 
 export type Feldfehler = { feld: string; text: string }

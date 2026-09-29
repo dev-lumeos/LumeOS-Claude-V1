@@ -313,7 +313,10 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                   `actual_end_date == null`** — wer nur auf
                   `echt.phase` prueft, sperrt den Start hinter einer
                   Phase, die laengst vorbei ist. */}
-              <PhaseBeginnen stichtag={echt.stichtag} aktiv={laufendePhase} />
+              {/* `[cmd]` **G-519/A5: das Gewicht aus dem Profil** —
+                  es traegt die kcal-Anzeige neben der Rate. */}
+              <PhaseBeginnen stichtag={echt.stichtag} aktiv={laufendePhase}
+                             gewichtKg={echt.profil?.body_weight_kg ?? null} />
               {laufendePhase && (
                 <>
                   <PhaseBeenden phase={laufendePhase} stichtag={echt.stichtag} />

@@ -37,8 +37,29 @@ import {
   type PhaseErgebnis,
 } from './phase-aktionen'
 import {
-  PHASENARTEN, phasenName, type Phasenart,
+  PHASENARTEN, phasenName, kcalDeltaAusRate,
+  RATENPFLICHT, RATE_MIN, RATE_MAX,
+  type Phasenart, type Ratenpflicht,
 } from '../../../lib/goals/phase-regeln'
+
+/**
+ * Was die Rate fuer diese Art sein muss — als Satz.
+ *
+ * `[cmd]` **Aus `goal_phases_zielrate_passt_zur_art` gelesen**,
+ * nicht aus der Spec.
+ */
+function ratenSatz(p: Ratenpflicht | null): string {
+  switch (p) {
+    case 'negativ':
+      return `% Koerpergewicht je Woche — hier negativ, ${RATE_MIN} bis unter 0.`
+    case 'positiv':
+      return `% Koerpergewicht je Woche — hier positiv, ueber 0 bis ${RATE_MAX}.`
+    case 'nahe_null':
+      return '% Koerpergewicht je Woche — beim Halten zwischen -0,1 und +0,1.'
+    default:
+      return '% Koerpergewicht je Woche.'
+  }
+}
 import type { Phase } from '../../../lib/goals/lesen'
 
 /** Ein Feld mit Beschriftung, wie in `modale.tsx:92`. */
@@ -95,10 +116,16 @@ function heute(stichtag: string): string {
  * gewinnt:** wer `mini_cut` nicht anbietet, verbietet einen Zustand,
  * den die Datenbank erlaubt (G-515, W2).
  */
-export function PhaseBeginnen({ stichtag, aktiv }: {
+export function PhaseBeginnen({ stichtag, aktiv, gewichtKg }: {
   stichtag: string
   /** Die laufende Phase — solange eine da ist, sperrt die Datenbank. */
   aktiv: Phase | null
+  /**
+   * `[cmd]` **G-519/A5: aus `public.profiles.body_weight_kg`** —
+   * NICHT geraten. `[read]` **Fehlt es, faellt die kcal-Anzeige
+   * weg, mit Grund.**
+   */
+  gewichtKg: number | null
 }) {
   const [wahl, setWahl] = React.useState<Phasenart | null>(null)
   const [start, setStart] = React.useState(heute(stichtag))
@@ -106,8 +133,15 @@ export function PhaseBeginnen({ stichtag, aktiv }: {
   const [variante, setVariante] = React.useState('')
   const [laeuft, setLaeuft] = React.useState(false)
   const [erg, setErg] = React.useState<PhaseErgebnis | null>(null)
+  // G-519/A5: die Rate in % Koerpergewicht je Woche — die
+  // gespeicherte Groesse (E1).
+  const [rate, setRate] = React.useState('')
 
   const gewaehlt = PHASENARTEN.find(p => p.id === wahl) ?? null
+  const pflicht = wahl ? RATENPFLICHT[wahl] : null
+  const rateZahl = rate.trim() === '' ? null : Number(rate)
+  const rateGueltig = rateZahl !== null && Number.isFinite(rateZahl)
+  const kcalDelta = kcalDeltaAusRate(rateGueltig ? rateZahl : null, gewichtKg)
 
   async function beginnen() {
     if (!wahl) return
@@ -118,6 +152,10 @@ export function PhaseBeginnen({ stichtag, aktiv }: {
       gueltig_ab: start,
       projected_end_date: ende || null,
       variant: variante.trim() || null,
+      // `[read]` **Nur mitschicken, wo die Art eine traegt** — die
+      // uebrigen fuenf muessen `null` bleiben (CHECK).
+      zielrate_pct_kg_woche: pflicht === 'keine' || !rateGueltig
+        ? null : rateZahl,
     })
     setErg(r)
     setLaeuft(false)
@@ -213,6 +251,77 @@ export function PhaseBeginnen({ stichtag, aktiv }: {
               `performance_placeholder`. `[read]` **Keine Auswahlliste
               erfinden:** eine Liste waere eine Zusage, die das Schema
               nicht deckt. */}
+          {/* ══ G-519/A5: die Zielrate ═══════════════════════════════
+              `[cmd]` **Die Rate ist die GESPEICHERTE Groesse** (E1),
+              das Kaloriendelta ist eine Ableitung.
+              `[cmd]` **Beide stehen da** (N13). */}
+          {pflicht !== 'keine' ? (
+            <>
+              <Feld label="Zielrate"
+                    sub={ratenSatz(pflicht)}>
+                <input type="number" step="0.05" style={FELD} value={rate}
+                       min={RATE_MIN} max={RATE_MAX}
+                       data-phasenfeld="zielrate"
+                       placeholder={pflicht === 'nahe_null' ? '0' : ''}
+                       onChange={e => setRate(e.target.value)} />
+              </Feld>
+              {feldFehler('zielrate_pct_kg_woche')
+                && <Meldung art="fehler" text={feldFehler('zielrate_pct_kg_woche')!} />}
+
+              {/* `[read]` **Die zweite Zahl, immer daneben** — wer
+                  eine Rate waehlt, sieht sofort, was sie am Tag
+                  bedeutet. */}
+              <div className="v2-dim" style={{
+                fontSize: 11, lineHeight: 1.5, marginTop: -4, marginBottom: 10,
+              }} data-kcal-delta>
+                {kcalDelta !== null
+                  ? <>
+                      Das sind <strong>{kcalDelta > 0 ? '+' : ''}{kcalDelta} kcal/Tag</strong>
+                      {' '}bei {gewichtKg} kg.
+                    </>
+                  // `[read]` **Kein Gewicht, keine kcal-Anzeige** —
+                  // und der Grund steht dabei (E-72).
+                  : gewichtKg === null
+                    ? <>Ohne Koerpergewicht im Profil laesst sich das
+                        Kaloriendelta nicht ausrechnen.</>
+                    : <>Trag eine Rate ein, dann steht hier das
+                        Kaloriendelta je Tag.</>}
+              </div>
+
+              {/* ── Das Band je Variante: es gibt KEINS ──────────
+                  `[cmd]` **`goals.phase_rate_rules` hat 0 Zeilen**,
+                  gemessen 2026-09-29. `[read]` **Die Baender je
+                  Variante existieren nicht als Daten** — sie warten
+                  auf G-521 A1, weil vier tragende Zahlen keinen
+                  Seitenbeleg haben.
+                  `[read]` **Also ein Strich mit Grund, keine
+                  erfundene Spanne und keine aus der Spec
+                  abgetippte Zahl.** */}
+              <div className="v2-dim" style={{
+                fontSize: 10.5, lineHeight: 1.5, marginBottom: 10,
+              }} data-bandhinweis>
+                Ein empfohlenes Band je Variante gibt es noch nicht —{' '}
+                <span className="v2-mono">goals.phase_rate_rules</span> ist
+                leer. Es haengt an G-521. Bis dahin begrenzen nur die
+                Aussengrenze ({RATE_MIN} bis {RATE_MAX}) und das Vorzeichen.
+              </div>
+            </>
+          ) : (
+            // `[read]` **Fuenf Arten tragen KEINE Rate** — der CHECK
+            // verlangt `NULL`. **Das Feld wegzulassen ist richtig,
+            // aber es muss gesagt werden.**
+            <div className="v2-muted" style={{
+              fontSize: 11.5, lineHeight: 1.55, marginBottom: 10,
+            }} data-ohne-rate>
+              <strong>{gewaehlt.name}</strong> traegt keine Zielrate — der
+              CHECK <span className="v2-mono">goal_phases_zielrate_passt_zur_art</span>{' '}
+              verlangt hier <span className="v2-mono">NULL</span>.{' '}
+              Damit liefert <span className="v2-mono">berechne_zielwerte</span>{' '}
+              fuer diese Phase <span className="v2-mono">phasenparameter_fehlt</span>{' '}
+              und kein Kalorienziel.
+            </div>
+          )}
+
           <Feld label="Variante"
                 sub={'Freier Text, z. B. „moderate“. Die Tabelle schreibt nichts vor.'}>
             <input type="text" style={FELD} value={variante}
