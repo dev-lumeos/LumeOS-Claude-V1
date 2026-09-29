@@ -167,3 +167,52 @@ kein Nachweis zeigt, dass die Spalte wirkt, ist sie Dekoration.
 
 **Welche Bezugsgroesse gilt, entscheidet Tobias** — G-542 Frage 4. Die
 Umstellung ist dann eine Zeile im Kettenschritt, kein Umbau.
+
+---
+
+## Ruecknahme, 2026-09-29 16:30 — A6 und A7 entfallen
+
+**Tom, 16:19:** *„nein das ist nicht noetig, denn niemand kennt seine
+magermasse."*
+
+**Er hat recht, und der Nachtrag von 16:25 war falsch begruendet.**
+`protein_bezug` wird **nicht** gebaut. Die Rechnung bleibt bei
+`body_weight_kg`.
+
+### Warum die Bezugsgroesse keine Frage ist
+
+`[read]` **Magermasse ist keine Messung, sondern eine Ableitung aus einer
+Schaetzung.** Sie braucht den Koerperfettanteil, und der kommt aus
+Caliper, Bioimpedanz oder Waage — mit einem Fehler von mehreren
+Prozentpunkten. Ein Proteinwert auf dieser Grundlage ist nicht genauer als
+einer auf dem Koerpergewicht, er sieht nur genauer aus.
+
+`[read]` **Und die Richtung der Abweichung macht sie harmlos**, was der
+Nachtrag von 16:25 nicht gefragt hat:
+
+| Szenario | KFA | nach LBM (2,5) | nach Gewicht (2,4) | Differenz |
+|---|---|---|---|---|
+| Anfaenger, hoeherer KFA | 25 % | 188 g | 240 g | +52 g |
+| Fortgeschritten | 15 % | 213 g | 240 g | +27 g |
+| Lean | 10 % | 225 g | 240 g | +15 g |
+| Wettkampf | 6 % | 235 g | 240 g | +5 g |
+
+**Die Gewichtsmethode gibt bei hoeherem Koerperfett MEHR Protein, nicht
+weniger.** In einer Diaet ist zu viel Protein harmlos — es kostet
+Kohlenhydrate, weil sie die Restgroesse sind — und zu wenig kostet
+Muskelmasse. Die Abweichung zeigt in die sichere Richtung.
+
+`[read]` **Der Fehler des Orchestrators war nicht die Rechnung, sondern
+die Bewertung:** eine Abweichung von der Literatur gemessen und fuer einen
+Defekt erklaert, ohne zu fragen, wohin sie wirkt. Und bei niedrigem
+Koerperfett — also genau dort, wo Protein wirklich knapp wird — sind beide
+Methoden fast gleich.
+
+### Was bleibt und wo es hingehoert
+
+**Die Faktoren, nicht die Bezugsgroesse.** Drei Live-Werte liegen ausserhalb
+der Baender fuer Koerpergewicht — das gehoert in **G-545**, wo die
+Katalogwerte ohnehin angefasst werden, und nicht in diesen Auftrag.
+
+**Dieser Auftrag bleibt bei A1 bis A4: die Rate statt des Faktors.**
+Nichts weiter.

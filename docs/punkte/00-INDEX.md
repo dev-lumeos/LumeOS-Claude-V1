@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 260 |
+| `todos` | 262 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 588 |
-| **gesamt** | **853** |
+| **gesamt** | **855** |
 
 ## medical — 49
 
@@ -573,9 +573,9 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 47
+## goals — 49
 
-### beauftragbar — 40
+### beauftragbar — 42
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -616,9 +616,11 @@
 | `G-538` | fehler | hoch | [Die Phasen haengen an keinem Ziel — die Wurzel](erledigt/goals-g-0538-phasen-haengen-an-keinem-ziel.md) | erledigt | — | G-544 |
 | `G-539` | fehler | mittel | [Der Phasen-Editor fehlt — „editieren" aus Toms Satz](laufend_claudecode/goals-g-0539-der-phasen-editor-fehlt.md) | vorbereitet (claudecode) | — | — |
 | `G-541` | fehler | hoch | [Das Vorschaupanel liest den Strategiekatalog](erledigt/goals-g-0541-das-vorschaupanel-liest-den-katalog.md) | erledigt | — | G-545 |
-| `G-542` | entscheidung | hoch | [Die Einheit der Zielrate und die Hoechstdauer — vorlaeufig gesetzt](todos/goals-g-0542-die-einheit-der-zielrate-und-die-hoechstdauer.md) | offen | — | — |
+| `G-542` | entscheidung | hoch | [Die Zielrate — Einheit geklaert, eine Frage bleibt](todos/goals-g-0542-die-einheit-der-zielrate.md) | offen | — | G-548, G-549 |
 | `G-544` | fehler | hoch | [Der Phase-Reiter zeigt Phasentypen statt einer Zeitachse](laufend_claudecode/goals-g-0544-der-phase-reiter-zeigt-keine-zeitachse.md) | laeuft (claudecode) | — | — |
 | `G-545` | fehler | hoch | [Der Katalog hat die Form, nicht den Inhalt](laufend_codex/goals-g-0545-der-katalog-hat-die-form-nicht-den-inhalt.md) | vorbereitet (codex) | — | — |
+| `G-548` | entscheidung | mittel | [Wie lange darf eine moderate Diaet laufen?](todos/goals-g-0548-hoechstdauer-moderate-cut.md) | offen | — | — |
+| `G-549` | entscheidung | mittel | [Wieviel Protein weicht in der Ladewoche?](todos/goals-g-0549-protein-in-der-ladewoche.md) | offen | — | — |
 
 ### wartet auf Blocker — 7
 

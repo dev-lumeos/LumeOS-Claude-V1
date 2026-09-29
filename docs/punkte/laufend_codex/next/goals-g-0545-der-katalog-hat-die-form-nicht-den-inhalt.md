@@ -184,3 +184,58 @@ Abbruchkriterien (Trainingsleistung, Schlafdauer) duerfen in `guards`.
 
 **Reihenfolge:** nach G-543. Der Katalog bekommt hier Werte, die die
 Rechnung erst nutzen kann, wenn sie die Rate liest statt den Faktor.
+
+---
+
+## Nachtrag, 2026-09-29 16:30 — A7: drei Proteinfaktoren liegen ausserhalb
+
+**Tom, 16:19, zur Bezugsgroesse:** *„niemand kennt seine magermasse."* Die
+Rechnung bleibt bei Koerpergewicht (G-543, Ruecknahme). **Damit ist die
+Frage nicht die Bezugsgroesse, sondern ob die Faktoren zu ihr passen.**
+
+`[read]` Das vierte Dokument vom 2026-09-29 liefert Baender **fuer
+Koerpergewicht** — nicht fuer Magermasse, also direkt vergleichbar mit dem,
+was live steht:
+
+| Phase | Band g/kg Koerpergewicht |
+|---|---|
+| Off-Season / Bulk | 1,8 – 2,2 |
+| Lean Bulk | 2,0 – 2,4 |
+| Recomp / Maintenance | 2,0 – 2,4 |
+| Cut (standard) | 2,2 – 2,6 |
+| Contest Prep | 2,4 – 3,0 |
+| Peak Week | 2,0 – 2,4 |
+
+`[cmd]` **Gegen die 17 Live-Werte gehalten — drei liegen ausserhalb:**
+
+    peak_week          2,50   Band 2,0-2,4   ZU HOCH
+    conservative_cut   2,00   Band 2,2-2,6   ZU NIEDRIG
+    aggressive_bulk    1,60   Band 1,8-2,2   ZU NIEDRIG
+
+Die anderen vierzehn liegen drin, die meisten am unteren Rand.
+
+`[read]` **`peak_week` ist der interessanteste Fall**, weil er eine
+Begruendung hat: das Dokument senkt dort Protein auf 2,0–2,4 und Fett auf
+0,5 g/kg, **um Platz fuer Kohlenhydrate zu machen** — in der Ladephase
+sind 6–8 g/kg Kohlenhydrate das Ziel, und die muessen irgendwo herkommen.
+Unsere 2,50 stehen dem im Weg. **Das ist kein Tippfehler, sondern eine
+fehlende Fachregel.**
+
+### Was zu tun ist
+
+Die drei Werte auf das Band bringen, **je Wert mit der Fundstelle als
+Kommentar**. Und im Bericht: welche der vierzehn anderen am Rand liegen,
+damit Tom sieht, wo der Katalog konservativ ist.
+
+`[read]` **Nicht mitbauen, nur melden:** dasselbe Dokument schlaegt eine
+**KFA-Kategorie in fuenf Stufen** als Feinjustierung vor (Faktor 0,90 bis
+1,15) und die Navy-Formel aus Taille und Hals als Schaetzung, wenn der
+Nutzer keinen KFA kennt. Das braucht keine Magermasse und keine genaue
+Messung — nur eine Selbsteinschaetzung oder zwei Umfaenge, **die wir schon
+erfassen.** Ob das kommt, ist eine eigene Entscheidung; hier gehoert es
+nur in den Bericht, damit der Gedanke nicht verloren geht.
+
+Die Fettfaktoren aus demselben Dokument (0,5 bis 1,0 g/kg je Phase) sind
+im Katalog als `fat_percent` abgebildet — **ein Prozentsatz der Kalorien,
+keine Groesse pro Kilogramm.** Das sind zwei verschiedene Wege zum selben
+Wert. Melden, welcher gilt; nicht umstellen.
