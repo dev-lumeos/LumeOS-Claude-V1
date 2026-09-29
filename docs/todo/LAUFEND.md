@@ -1,64 +1,69 @@
 # Laufende Auftraege
 
-**Stand: 2026-09-29, 08:35**
+**Stand: 2026-09-29, 12:05**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-520 | Anpassungsalgorithmus und sieben Uebergangswaechter | **uebergeben 29.09., 09:06** |
-| Codex | G-514 | die Beitragstabelle plus recovery und supplements | **laeuft**, raus 29.09., 08:00 |
-| Claude Code | G-441 | die Recovery-Today-Kachel rechnet aus der Attrappe | **vorbereitet** in `next/` |
-| Codex | G-531 | `goal_phase_start` kennt die Rate nicht | **vorbereitet** in `next/` |
+| Codex | G-536 | der Strategiekatalog fehlt ganz — Schicht 2 | **laeuft**, raus 29.09., 11:50 |
+| Claude Code | G-537 | Ziele sind nicht anlegbar | **laeuft**, raus 29.09., 11:50 |
+| Codex | G-538 | Phasen haengen an keinem Ziel | **vorbereitet** in `next/` |
+| Claude Code | — | — | `next/` leer, mit Grund: der naechste Schritt (G-538 Teil 2) wartet auf Codex |
 
-`[cmd]` **Berichtigt 09:06:** die Zeile zu G-520 sagte ,,raus 08:30".
-Das war falsch — der Orchestrator hat die Datei verschoben und den
-Auftragsteil geschrieben, aber Tom nie die Anweisung gegeben. Claude Code
-war eine halbe Stunde frei, ohne dass es jemand sah. **Dritter Verstoss
-gegen `00-LIESMICH.md:22-41` am selben Tag**, und `zyklus-pruefen.mjs`
-kann ihn nicht fangen: er prueft, dass ein Auftrag dasteht, nicht dass er
-uebergeben wurde. **Der Umzug und die Uebergabe sind EINE Handlung** —
-wer verschiebt und nicht uebergibt, hat nichts beauftragt.
+`[cmd]` **Zwei Nachtraege sind um 12:00 an die laufenden Auftraege
+gegangen**, weil `module-goals-editor.jsx` beim Quellendurchgang eine
+Praemisse umgeworfen hat:
 
-`[cmd]` **G-519 A5-A8 ist abgenommen und abgelegt** — Code in
-`8312c1d6`, Doku in `8f10df6e`. **Das Eingabefeld fuer die Zielrate
-steht.**
+- **G-536:** `goal_phases.parameters` ist **nicht** ueberfluessig. Der
+  Editor sagt *„Personal override — the shipped defaults stay intact"* —
+  Katalog und Override sind zwei Ebenen. Nur `variant` faellt.
+- **G-537:** `linked_modules` ist die **Datenquelle** fuer den Ist-Wert,
+  nicht Zierde. Das Feld wird auswaehlbar gebaut, auch ohne Spalte.
 
-`[cmd]` **Der Waechter meldet *,,2 vorbereitet, noch nicht raus: codex 1
-| claudecode 1"*.** Der Vierstufen-Zyklus ist einmal vollstaendig
-gelaufen.
-
-`[read]` **Der Auftragstext steht jetzt IN der Punktdatei**, nicht im
-Gespraech — so wie `00-LIESMICH.md:22-41` es seit langem verlangt und
-ich es dreissig Tage nicht getan habe (A-81).
+`[read]` **Das ist der Zweck von `next/`, an einem echten Fall:** waehrend
+die Agenten arbeiteten, hat der Durchgang durch die Quellen die Praemisse
+geaendert — und der Auftrag liess sich noch korrigieren, bevor in die
+falsche Richtung fertig gebaut wurde.
 
 ---
 
-## Die Kette ist eingespielt — der Stand der laufenden Datenbank
+## Die Bauordnung steht — `docs/ssot/130-goals-bauordnung.md`
 
-`[cmd]` **Selbst gemessen, 2026-09-29:**
+**Tom, 2026-09-29, 11:56, die kuerzeste Fassung:**
 
-    goal_phases.zielrate_pct_kg_woche     da
-    nutrition_targets.tdee_herkunft       da
-    nutrition_targets.tdee_history_id     da
-    goals.phase_rate_rules                da, aber LEER
-    goals.nutrition_macro_rules           da
-    goals.tdee_history                    da
-    Kalorienspalten auf goal_phases        0   (richtig, E1)
-    Registereintraege                     21
-    unregistrierte Dateien                70  (318 Objekte da, 19 fehlend)
+> subnav goals: user kann einzelne oder mehrere ziele setzen
+> subnav phase engine: user kann seine goals planen, terminieren,
+> editieren
 
-`[cmd]` **Vier Einzelanwendungen mit Vorher-Nachher je Datei, bytegenau
-ueber `tools/lauf.py psql_datei` mit `ON_ERROR_STOP=1`. Kein
-`supabase db push`** — das Register ist unbrauchbar (C-554).
+`[read]` **Planen, terminieren, editieren sind Operationen auf Zielen**,
+nicht auf einem eigenen Objekt. Sechs Ebenen folgen daraus:
 
-`[cmd]` **Zwei Regeln stehen als CHECK, die Baender nicht:**
-`goal_phases_zielrate_aussengrenze` (NULL oder -2,5 bis 1,5) und
-`goal_phases_zielrate_passt_zur_art` (Vorzeichen je Art, **NOT VALID** —
-Bestandszeilen ungeprueft, neue geprueft).
+    1  Ziele                mehrere, messbar, verknuepfte Module   G-537
+    2  Strategiekatalog     17 ausgelieferte Definitionen          G-536
+    3  Terminierung         Ziel + Strategie + Zeitfenster         G-538
+    4  Editor               persoenlicher Override, 12 Reiter      G-539
+    5  Vorlagen             eigene und geteilte                    G-540
+    6  Automatik            Waechter, Wochenanpassung              G-520, gebaut
 
-`[read]` **`phase_rate_rules` ist leer, und das ist der Engpass hinter
-dem Eingabefeld.** Die Baender je Variante existieren nicht als Daten;
-sie warten auf G-521 A1, weil vier tragende Zahlen keinen Seitenbeleg
-haben. **Das Feld darf sich keine Spanne erfinden.**
+`[cmd]` **Es sind drei Goals-Mockups, nicht eines.**
+`module-goals-editor.jsx` (569 Zeilen) war bis heute ungelesen und traegt
+den `anchor`-Reiter: Showdatum setzen, und Prep start, Mid, Late,
+Refeeds, Peak week, Show day rechnen rueckwaerts. **Das ist, was Tom mit
+„terminieren" meint.**
+
+### Die Wurzel, die der Durchgang gefunden hat
+
+`[read]` `supabase/_pipeline/11_goals/111_goals_ziele_phasen.sql:88`:
+
+```
+-- 2. Phasen, unabhaengig vom konkreten Ziel waehlbar.
+goal_id  UUID REFERENCES goals.user_goals(id) ON DELETE SET NULL,
+```
+
+**Die Tabelle wurde mit dem Gegenteil von Toms Satz gebaut.** Daraus
+folgt, was auf dem Bildschirm steht: der Reiter bietet Phasentypen an,
+weil er keine Ziele kennt. Dazu erlaubt `uq_goal_phases_one_open` eine
+offene Phase je **Nutzer** statt je **Ziel** — zwei Ziele parallel sind
+damit verboten. Beides ist G-538.
 
 ---
 
@@ -80,11 +85,29 @@ haben. **Das Feld darf sich keine Spanne erfinden.**
     A-80       150 Wegwerf-Datenbanken, 207 GB. Platte ist NICHT das
                Problem (6.726 GB frei) — die 49 mit "_final" im Namen
                sind es. Orchestrator legt die Verwerfliste vor.
-    G-521 A1   vier tragende Zahlen ohne Seitenbeleg: Ratendeckel 1,25,
-               Fettboden 0,5, Proteinband nach Trainingsstatus, die
-               8-12 Wochen fuer eine Diaetpause. Blockiert die Baender.
     A-79       backup/-Aufbewahrung, 3.958 MiB gegen ein Limit von 2.5 GiB
     A-78       Waechter auf Bezeichner-Ueberschneidung (Dubletten)
+    G-540      drei Entscheidungen zu Vorlagen: gehoeren geteilte
+               Vorlagen mit Bewertung zu Goals oder zum Marketplace,
+               nimmt "Share with coach" den Weg der Freigabeschicht,
+               und wer pflegt die LumeOS-Vorlagen
+
+`[cmd]` **G-521 A1 ist erledigt, ohne Auftrag.** Die vier tragenden
+Zahlen ohne Seitenbeleg stehen in drei Quellen: `definitions.ts`,
+`GOAL_PHASES` in `module-goals-pro.jsx:5-69` und
+`docs/specs/Goals/PHASE_MODELS.md`. Sie gehoeren an den Katalogeintrag
+(G-536), nicht in `phase_rate_rules` — die bleibt leer und wird zum
+Fallen vorgelegt.
+
+---
+
+## Was ausdruecklich wartet
+
+**Tom, 2026-09-29:** *„physique oder pose interessiert mich noch nicht,
+wenn wir nicht mal in der lage sind grundlagen in der ui darzustellen."*
+
+Damit warten: Physique-Verhaeltnisse, Pose-Sessions, C-494 (IFBB-Klassen
+und Pflichtposen), G-139 (Fortschrittsfotos).
 
 ---
 
@@ -102,44 +125,14 @@ kcal je kg. Gegen die eingespielte Struktur nachgerechnet: 45 kg bei
 -1,0 %/Woche gibt -495, 120 kg gibt -1320, 80 kg bei +0,25 % gibt +220.
 Beide Groessen werden angezeigt, gespeichert wird die Rate.
 
----
-
-## Der Vertrag fuer einen Modulbeitrag liegt
-
-`[cmd]` **`packages/scoring/src/beitrag.ts`, Commit `dc55728a`,
-abgenommen:** 36 von 36 gruen, die vier Gewichtungsreihen summieren
-exakt auf 1,00 (selbst addiert, nicht aus `CONTRIBUTION_WEIGHTS`
-abgeleitet), Sabotage in beide Richtungen belegt — `nutrition: 0.40` auf
-`0.45` verstellt gibt 2 rote Zusicherungen, Rueckstellung byteidentisch
-(`sha 9b25cc901266ee5e`), danach wieder 36 gruen.
-
-`[read]` **Er traegt drei Festlegungen, und `tag <= stichtag` ist die
-einzige, die die Spec nicht hergibt** — als eigene Festlegung
-gekennzeichnet, begruendet damit, dass ein Beitrag eine Aussage ueber
-einen VERGANGENEN Tag ist. `recovery.scores` reicht bis 2026-11-06, 78
-von 370 Zeilen liegen in der Zukunft.
-
-`[read]` **Und eine vierte Spec-Abweichung ist dabei aufgefallen:**
-`SCORING.md:66` rechnet ein fehlendes Modul still als 0. Der Vertrag
-rechnet genauso, **sagt es aber** (`ohne_wert`).
+`[read]` **E1 loest sich mit G-536 auf.** Das Altrepo speichert beides —
+den Faktor und die Rate — aber an der **Definition**, nicht am
+Nutzerdatensatz. Wir haben die Rate an die Instanz gehaengt und dann
+gefragt, woher die Baender kommen. Sie kommen vom Katalogeintrag.
 
 ---
 
-## Was als naechstes ansteht
-
-**Nach G-519 A5-A8:** G-520. Danach die Baender, sobald G-521 A1 liegt.
-
-**Nach G-514:** G-531 (`goal_phase_start` braucht den
-Rate-Parameter — drei von neun Phasenarten sind ueber die Funktion nicht
-anlegbar). Danach G-529 A3, dann nutrition in eine Zeile je Tag.
-
-**Orchestrator:** C-555 A1/A2 nachrechnen (die Zahlen von C-546 und
-C-551), Verwerfliste fuer A-80 vorlegen, G-530 und G-526 A1-A9
-vorbereiten.
-
----
-
-## Der Zyklus, wie er ab jetzt laeuft
+## Der Zyklus, wie er laeuft
 
 `[cmd]` **`00-LIESMICH.md:444-463`, Toms Wortlaut vom 30.08.:**
 *,,du spielst nun jedesmal den vollen cycle durch ohne mein befehl"*.
@@ -147,20 +140,13 @@ vorbereiten.
     1  Bericht ueberfliegen - ist der vorbereitete Auftrag betroffen?
     2  falls ja: anpassen
     3  next/ eine Ebene hoeher - der Auftrag geht raus
-    4  Bericht nachmessen, Abnahme schreiben, nach erledigt/
+    4  Bericht nachmessen, Abnahme schreiben
     5  neue Befunde als Punkte
-    6  committen, Commit-Hash nachtragen
+    6  committen, Commit-Hash nachtragen, DANN nach erledigt/
     7  next/ wieder fuellen
 
 **Fertig ist, wenn Schritt 7 steht.** Kein Schritt braucht eine
 Aufforderung.
-
-`[read]` **Und Tom hat den Ablauf am 29.09. noch einmal ausdruecklich
-erklaert:** die Agenten schreiben ihren ausfuehrlichen Bericht in die
-Punktdatei und geben Tom ein kurzes Summary; Tom schickt das Summary an
-den Orchestrator; der liest den Bericht IN der Punktdatei, prueft das
-Ergebnis, schreibt seine Abnahme in dieselbe Datei und legt den Punkt
-ab. **Damit ist A-81 A4 entschieden: der Agent schreibt hinein.**
 
 `[read]` **Die vier Stufen:**
 
@@ -171,15 +157,12 @@ ab. **Damit ist A-81 A4 entschieden: der Agent schreibt hinein.**
 
 `[cmd]` **Ein vorbereiteter Auftrag traegt `agent:` und `beauftragt:`
 noch nicht** — er bekommt sie beim Verschieben eine Ebene hoeher
-(`00-LIESMICH.md:430`).
+(`00-LIESMICH.md:430`). `tools/zyklus-pruefen.mjs` zaehlt das, Soll 0.
 
-`[read]` **Der Sinn, in Toms Worten:** waehrend ein Agent arbeitet, hat
-der Orchestrator Zeit, und die gehoert in den naechsten Auftrag — und
-wenn der Bericht kommt, laesst sich der vorbereitete Auftrag noch
-anpassen, denn **oft aendert ein Bericht die Praemisse des naechsten.**
-`[cmd]` **Genau das ist heute eingetreten:** Codex' C-554-Bericht hat
-die Praemisse von G-519 A5-A8 geaendert (Ratenspalte live,
-`phase_rate_rules` leer).
+`[read]` **Der Umzug und die Uebergabe sind EINE Handlung** — wer
+verschiebt und nicht uebergibt, hat nichts beauftragt. Das ist am 29.09.
+einmal passiert: G-520 stand eine halbe Stunde als ,,raus", und Claude
+Code war frei, ohne dass es jemand sah.
 
 ---
 
@@ -195,43 +178,45 @@ melden EINMAL am Ende — kein Zwischenstand.
 
 ## Lehren
 
+`[cmd]` **Der Orchestrator plante Speicherorte statt Artefakte.** E-1,
+G-511, G-529, G-531, G-533 und G-520 haben alle geregelt, **wo eine Zahl
+liegt**. Keiner hat geregelt, **was Tom sieht und tut**. Tom:
+*„du verzettelst dich immer wieder in irgendwas anstatt dich an das
+grosse ganze zu halten."* Die Bauordnung ist entlang der vier Verben
+geschnitten, nicht entlang der Tabellen.
+
+`[cmd]` **Drei Quellen waren da und wurden nicht gelesen.**
+`module-goals-editor.jsx` (569 Zeilen, der ganze Editor),
+`docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md` (nennt die
+Rangfolge der Quellen seit dem 16.08.) und `docs/specs/Goals/PHASE_MODELS.md`
+(alle Baender als JSON). Vier Auftraege wurden auf Annahmen gestellt, die
+in diesen Dateien beantwortet standen. **Ein `rg` kostet Sekunden.**
+
 `[cmd]` **Ein Agent, der einem falschen Auftrag widerspricht, hat recht
 behandelt zu werden.** Der Auftrag verlangte
 `goal_phases.tdee_herkunft`; Codex baute
 `nutrition_targets.tdee_herkunft` und meldete die Abweichung. Eine
 Phase laeuft Wochen, der adaptive TDEE aendert sich darin taeglich —
-eine Spalte an der Phase koennte nur EINEN Wert halten. Und
-`tdee_history_id` verweist auf genau eine Zeile der Reihe; so ein
-Verweis kann nicht an der Phase haengen, die viele davon ueberspannt.
-**Der Fehler war der Auftrag.**
+eine Spalte an der Phase koennte nur EINEN Wert halten. **Der Fehler war
+der Auftrag.**
 
 `[cmd]` **Ein Waechter, der nur eine Zahl meldet, zwingt zum Raten.**
 Der Zwei-Wahrheiten-Waechter sagte ,,12 statt 7" und riet ,,danach SOLL
 anheben" — die falsche Antwort in beiden moeglichen Faellen. Jetzt
-nennt er die Posten und stellt die Frage: Naehrstoffziel (G-261
-pruefen, DANACH anheben) oder Rechenprotokoll (in die Ausschlussliste,
-Soll bleibt). **Wer eine Zahl meldet, nennt die Posten.**
+nennt er die Posten und stellt die Frage. **Wer eine Zahl meldet, nennt
+die Posten.**
 
 `[cmd]` **Die Regel war da, und der Orchestrator hat sie nicht
 gelesen.** `00-LIESMICH.md:22-41` schreibt seit langem: Auftragsteil in
 DIESELBE Datei, verschieben BEIM Beauftragen, Tom bekommt den PFAD.
-**Alle drei verletzt** — Auftrag als Gespraechstext, verschoben nachdem
-er raus war, Tom bekam die Nummer. Und `:405-463` beschreibt seit dem
-30.08. den Vierstufen-Zyklus mit `next/`; **beide Ordner waren dreissig
-Tage leer.**
+**Alle drei verletzt.** Und `:405-463` beschreibt seit dem 30.08. den
+Vierstufen-Zyklus mit `next/`; **beide Ordner waren dreissig Tage leer.**
+Das ist A-81.
 
-`[read]` **Deshalb musste Tom mehrfach ,,beide agenten sind frei gib mir
-die naechsten auftraege" schreiben** — das ist die Aufforderung, die es
-laut Regel nicht braucht. **Die erste Fassung von A-81 nannte als
-Ursache, dass Agenten Punkte ueber den Pfad finden, und schlug ein
-Werkzeug vor. Das war die teure Antwort auf das falsche Problem.**
-
-`[cmd]` **Und aus dem Schweigen eines Waechters folgt keine
-Abwesenheit.** A-81 A4 hielt fuer moeglich, dass die Zaehlung
-vorbereiteter Auftraege nie gebaut wurde — sie meldet sich nur bei 0
-nicht. Mit zwei vorbereiteten Auftraegen steht die Zeile da. **Die
-Gegenprobe war, den Zustand herzustellen, den der Waechter melden
-soll.**
+`[cmd]` **Aus dem Schweigen eines Waechters folgt keine Abwesenheit.**
+A-81 A4 hielt fuer moeglich, dass die Zaehlung vorbereiteter Auftraege
+nie gebaut wurde — sie meldet sich nur bei 0 nicht. **Die Gegenprobe
+war, den Zustand herzustellen, den der Waechter melden soll.**
 
 `[cmd]` **`beruehrt.tabellen` ist eine Behauptung ueber die laufende
 Datenbank, keine Inhaltsangabe.** Sechs gebaute, aber nicht
@@ -239,30 +224,35 @@ eingespielte Tabellen dort eingetragen ergab zehn neue Befunde. Neue
 Tabellen gehoeren in den Fliesstext, bis sie live sind.
 
 `[cmd]` **Sechs Waechter, nicht vier** — `punkte`, `sammelfragen`,
-`nummern`, `specs`, `zwei-wahrheiten`, `encoding`, dazu `kettenlauf`
-und `fragen` im Gate. Drei von vier war schon kein Lauf.
+`nummern`, `specs`, `zwei-wahrheiten`, `encoding`, dazu `kettenlauf`,
+`fragen` und `zyklus` im Gate. Drei von vier war schon kein Lauf.
 
 `[cmd]` **Muster gehoeren in Dateien, nicht durch die Shell.** Vier
 Fehlmessungen aus PowerShell-Quoting, dazu ein Muster, das
 `alias.spalte` (`bm.user_id`, `gp.id`) fuer fehlende Objekte hielt —
-es fehlte die Gegenprobe. Codex' Werkzeug macht es richtig:
-clause-basierte Extraktion, und seine TDD-Kalibrierung deckte dabei
-zwei echte Messfehler auf.
+es fehlte die Gegenprobe.
 
 `[cmd]` **Der Commit-Betreff ist kein Signal dafuer, was erledigt
 wurde.** C-546 und C-551 kamen unter `4972b27e` herein, Betreff
-`goals(G-523, G-529, G-526)`. Dasselbe bei G-512 unter `goals(G-510)`.
+`goals(G-523, G-529, G-526)`.
 
 `[cmd]` **Eine Regel, die nirgends nachgezaehlt wird, wird zur
 Empfehlung.** ,,Wegwerf-Datenbank, danach verwerfen" steht in den
 Projektregeln; 150 Datenbanken mit 207 GB stehen in `pg_database`.
-Der erste Halbsatz wird befolgt, der zweite seit vierzig Auftraegen
-nicht. **Das ist A-80.**
+**Das ist A-80.**
 
 `[cmd]` **Eine leere Abnahme ist kein Zustand, sondern ein
 Versaeumnis.** C-546 und C-551 standen einen Tag mit vollem Bericht und
 leerer Abnahme in `laufend_codex`, und niemand hat es gemerkt, bis ein
 Agent das rote Gate meldete.
+
+`[cmd]` **Waehrend ein Agent in einem Bereich schreibt, misst dort
+niemand.** Ein Testlauf mitten in Claude Codes Schreibvorgang ergab ein
+Phantom-`# fail 1`; zwoelf Minuten spaeter waren 2.112 von 2.112 gruen.
+
+`[read]` **Zwei Fehler fand Claude Code am Bild, nicht am Test** — zwei
+Raster uebereinander und eine Kachel mit drei Strichen. Die Zaehlproben
+hatten sie nicht. **Bei Oberflaeche ist das Bild der Nachweis.**
 
 ---
 
@@ -272,5 +262,5 @@ Agent das rote Gate meldete.
 kennt aus dem Frontmatter, welche Punkte in `laufend_codex/` und
 `laufend_claudecode/` liegen. Von Hand gepflegt wird sie genau so alt
 wie beim letzten Mal. **Was NICHT ableitbar ist, sind die Abschnitte
-darunter** — was auf Tom wartet, was als naechstes ansteht, die Regeln
+darunter** — was auf Tom wartet, was ausdruecklich wartet, die Regeln
 und die Lehren.
