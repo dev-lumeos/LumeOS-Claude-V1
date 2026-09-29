@@ -89,3 +89,81 @@ Punkte 1 bis 4. Zusaetzlich zu belegen:
 **Reihenfolge:** nach G-538. Dieser Punkt fasst `berechne_zielwerte` an,
 G-538 fasst die Struktur an — zwei Eingriffe in eine Funktion gleichzeitig
 sind ein Nachweis, der nichts trennt.
+
+---
+
+## Nachtrag, 2026-09-29 16:25 — die Bezugsgroesse von `protein_per_kg`
+
+`[cmd]` **Gemessen an der live eingespielten Funktion:**
+
+```sql
+round((g.body_weight_kg * g.protein_per_kg)::numeric, 1) AS protein_wert
+```
+
+**Protein rechnet gegen Koerpergewicht.** Und der Katalogwert traegt keine
+Bezugsgroesse — `protein_per_kg` sagt nicht, pro kg *wovon*.
+
+### Was die drei Quellen sagen, und sie sagen Verschiedenes
+
+`[cmd]` **Der Vorgaenger, `calculateTDEE.ts:88`:**
+
+```js
+// Protein: 2g per kg bodyweight
+const proteinG = Math.round(weightKg * 2);
+```
+
+**Koerpergewicht — aber mit einem festen Wert 2, und `protein_per_kg` aus
+`definitions.ts` wird dort gar nicht benutzt.** Der Vorgaenger hatte zwei
+Rechenwege, die sich widersprachen: das Onboarding rechnete pauschal, der
+Katalog trug Werte von 1,6 bis 2,5, die niemand las.
+
+`[read]` **Die Literatur meint Magermasse.** Helms et al. 2014:
+*„2.3–3.1 g/kg LBM"*. Die Encyclopedia (1.5) und die Formelsammlung
+ebenso — und die Encyclopedia gibt sogar die Bruecke:
+
+    Standard:  2,3-3,1 g/kg LBM
+    Umgerechnet auf Gesamtgewicht:
+      100 kg @ 10 % KFA  ->  2,5-2,8 g/kg Gesamtgewicht
+       90 kg @  8 % KFA  ->  2,7-3,0 g/kg Gesamtgewicht
+
+`[cmd]` **Und die Magermasse ist vollstaendig verfuegbar:**
+`goals.body_measurements` hat 362 Zeilen, **alle 362 mit `lean_mass_kg`
+und `body_fat_pct`**, dazu `fat_mass_kg` und `ffmi`. Mittlerer
+Koerperfettanteil 15,5 %.
+
+### Warum das kein grober Fehler ist, aber systematisch schief
+
+`[read]` **Bei Schlanken stimmt es fast, bei Fetteren nicht mehr** — und
+das trifft genau die Nutzer, die abnehmen wollen:
+
+| KFA | 2,5 g/kg Gesamtgewicht entspricht | Literaturband |
+|---|---|---|
+| 10 % | 2,78 g/kg LBM | 2,3–3,1 · **drin** |
+| 15,5 % | 2,96 g/kg LBM | 2,3–3,1 · **oberer Rand** |
+| 25 % | 3,33 g/kg LBM | 2,3–3,1 · **darueber** |
+
+Bei Tom (83,74 kg, 15,5 % KFA) sind es 209 g gegen 177 g — **32 Gramm und
+126 kcal am Tag.** Das verschiebt auch die Kohlenhydrate, weil sie die
+Restgroesse sind.
+
+### Was in DIESEN Auftrag gehoert
+
+**Nur eines: die Bezugsgroesse sichtbar machen.** Nicht umstellen.
+
+    A6  goal_strategies bekommt protein_bezug
+        CHECK (protein_bezug IN ('koerpergewicht','magermasse'))
+        NOT NULL, alle 17 Zeilen auf 'koerpergewicht' -
+        das ist der heutige Zustand, nicht die richtige Antwort.
+
+    A7  berechne_zielwerte liest die Spalte statt sie anzunehmen.
+        Bei 'magermasse': lean_mass_kg aus derselben Zeile von
+        body_measurements, aus der schon body_weight_kg kommt.
+        Fehlt sie, bricht der Schritt ab - er raet nicht.
+
+`[read]` **Der Nachweis ist die Gegenprobe, die es heute nicht gibt:**
+eine Strategie auf `magermasse` gestellt muss eine **andere** Zahl
+liefern, und zwar `2,5 × lean_mass_kg`. Danach zuruecksetzen. Solange
+kein Nachweis zeigt, dass die Spalte wirkt, ist sie Dekoration.
+
+**Welche Bezugsgroesse gilt, entscheidet Tobias** — G-542 Frage 4. Die
+Umstellung ist dann eine Zeile im Kettenschritt, kein Umbau.

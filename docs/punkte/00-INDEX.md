@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 259 |
+| `todos` | 260 |
 | `laufend_codex` | 3 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 588 |
-| **gesamt** | **852** |
+| **gesamt** | **853** |
 
 ## medical — 49
 
@@ -573,7 +573,7 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 46
+## goals — 47
 
 ### beauftragbar — 40
 
@@ -620,7 +620,7 @@
 | `G-544` | fehler | hoch | [Der Phase-Reiter zeigt Phasentypen statt einer Zeitachse](laufend_claudecode/goals-g-0544-der-phase-reiter-zeigt-keine-zeitachse.md) | laeuft (claudecode) | — | — |
 | `G-545` | fehler | hoch | [Der Katalog hat die Form, nicht den Inhalt](laufend_codex/goals-g-0545-der-katalog-hat-die-form-nicht-den-inhalt.md) | vorbereitet (codex) | — | — |
 
-### wartet auf Blocker — 6
+### wartet auf Blocker — 7
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -630,6 +630,7 @@
 | `G-530` | feature | hoch | [contest_prep und expert_bb_annual brauchen eine eigene Struktur](todos/goals-g-0530-wettkampfvorbereitung-braucht-eine-eigene-struktur.md) | offen | G-529 | — |
 | `G-540` | befund | niedrig | [Vorlagen fuer Phasenplaene — die fuenfte Ebene](todos/goals-g-0540-vorlagen-fuer-phasenplaene.md) | offen | G-539 | — |
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](laufend_codex/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | laeuft (codex) | G-542 | — |
+| `G-547` | befund | mittel | [Die persoenliche Untergrenze hat keinen Ort](todos/goals-g-0547-die-persoenliche-untergrenze-hat-keinen-ort.md) | offen | G-545 | — |
 
 ## coach — 57
 

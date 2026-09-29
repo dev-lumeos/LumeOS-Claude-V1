@@ -164,3 +164,59 @@ al. 2014). Vier Quellen, eine Einheit.
 **Fuer Tobias bleiben Frage 2 und 3** — die Hoechstdauer von
 `moderate_cut` und ob ein fortgeschrittener Natural in Prozent oder in
 Kilokalorien denkt. Beide sind Erfahrungsfragen, keine Literaturfragen.
+
+---
+
+## Frage 4, neu am 2026-09-29 16:25 — Protein pro kg wovon?
+
+`[cmd]` **Dieselbe Fehlerart wie Frage 1, an einer anderen Zahl.**
+`goal_strategies.protein_per_kg` traegt keine Bezugsgroesse, und
+`berechne_zielwerte` hat sich fuer Koerpergewicht entschieden:
+
+```sql
+round((g.body_weight_kg * g.protein_per_kg)::numeric, 1)
+```
+
+**Die drei Quellen sagen Verschiedenes:**
+
+| Quelle | Aussage |
+|---|---|
+| Vorgaenger `calculateTDEE.ts:88` | `// Protein: 2g per kg bodyweight` — Koerpergewicht, aber fester Wert 2; `protein_per_kg` wird dort **nicht benutzt** |
+| Helms et al. 2014 | 2,3–3,1 g/kg **LBM** |
+| Encyclopedia 1.5, Formelsammlung | g/kg **LBM**, mit Umrechnungstabelle auf Gesamtgewicht |
+
+`[cmd]` **Die Magermasse ist verfuegbar:** 362 von 362 Zeilen in
+`goals.body_measurements` tragen `lean_mass_kg` und `body_fat_pct`.
+
+### Die Folge, gerechnet
+
+Bei 83,74 kg und 15,5 % KFA (der gemessene Mittelwert), `protein_per_kg`
+2,5:
+
+    gegen Koerpergewicht   209,4 g   838 kcal
+    gegen Magermasse       176,9 g   708 kcal
+    Differenz               32,5 g   130 kcal/Tag
+
+`[read]` **Und der Fehler waechst mit dem Koerperfettanteil**: 2,5 g/kg
+Gesamtgewicht sind bei 10 % KFA noch 2,78 g/kg LBM (im Band), bei 25 % KFA
+schon 3,33 g/kg LBM (darueber). **Es trifft am staerksten die Nutzer, die
+abnehmen wollen** — und die Kohlenhydrate verschieben sich mit, weil sie
+die Restgroesse sind.
+
+### Was Tobias entscheidet
+
+    4a  Protein pro kg Koerpergewicht oder pro kg Magermasse?
+    4b  Falls Magermasse: sind die Katalogwerte (1,6 bis 2,5) dann noch
+        richtig, oder gehoeren sie auf 2,3-3,1 angehoben?
+    4c  Wie rechnet er selbst - und wie rechnet er fuer einen Klienten
+        mit 25 % Koerperfett?
+
+`[annahme]` **Erwartung: Magermasse**, weil jede Empfehlungsliteratur so
+rechnet und weil es der Grund ist, warum LBM ueberhaupt erfasst wird. Aber
+4b ist die eigentliche Falle: die Bezugsgroesse zu wechseln, ohne die
+Werte zu pruefen, senkt das Protein bei allen um rund 15 % — das ist
+schlechter als der heutige Zustand.
+
+**Bis dahin:** G-543 A6/A7 machen die Bezugsgroesse zu einer Spalte mit
+CHECK, gesetzt auf `koerpergewicht` — den heutigen Zustand, sichtbar statt
+angenommen. Der Wechsel ist danach eine Zeile.
