@@ -5,10 +5,10 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 260 |
-| `laufend_codex` | 4 |
-| `laufend_claudecode` | 4 |
-| `erledigt` | 584 |
+| `todos` | 259 |
+| `laufend_codex` | 3 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 588 |
 | **gesamt** | **852** |
 
 ## medical — 49
@@ -575,7 +575,7 @@
 
 ## goals — 46
 
-### beauftragbar — 37
+### beauftragbar — 40
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -610,14 +610,17 @@
 | `G-531` | fehler | hoch | [`goal_phase_start` kann drei der neun Phasenarten nicht anlegen](erledigt/goals-g-0531-goal-phase-start-kennt-die-rate-nicht.md) | erledigt | — | G-535 |
 | `G-532` | befund | hoch | [der Bauplan fuer die letzten drei Goals-Reiter](todos/goals-g-0532-der-bauplan-fuer-die-letzten-drei-reiter.md) | offen | — | — |
 | `G-533` | fehler | hoch | [die laufenden Phasen sind vor E1, und drei Funktionen sind aus der Oberflaeche nicht erreichbar](erledigt/goals-g-0533-die-laufenden-phasen-sind-vor-e1.md) | erledigt | — | — |
-| `G-534` | fehler | hoch | [der Phase-Reiter zeigt Daten und plant nichts](laufend_claudecode/goals-g-0534-der-phase-reiter-ist-kein-planungswerkzeug.md) | laeuft (claudecode) | — | G-538, G-539, G-540, G-541 |
+| `G-534` | fehler | hoch | [der Phase-Reiter zeigt Daten und plant nichts](erledigt/goals-g-0534-der-phase-reiter-ist-kein-planungswerkzeug.md) | erledigt | — | G-538, G-539, G-540, G-541 |
 | `G-536` | fehler | hoch | [Der Strategiekatalog fehlt ganz — Schicht 2](erledigt/goals-g-0536-der-strategiekatalog-fehlt-ganz.md) | erledigt | — | G-542, G-543 |
-| `G-537` | fehler | hoch | [In LumeOS kann man kein Ziel anlegen](laufend_claudecode/goals-g-0537-ziele-sind-nicht-anlegbar.md) | laeuft (claudecode) | — | — |
-| `G-541` | fehler | hoch | [Das Vorschaupanel liest den Strategiekatalog](laufend_claudecode/goals-g-0541-das-vorschaupanel-liest-den-katalog.md) | laeuft (claudecode) | — | G-545 |
+| `G-537` | fehler | hoch | [In LumeOS kann man kein Ziel anlegen](erledigt/goals-g-0537-ziele-sind-nicht-anlegbar.md) | erledigt | — | — |
+| `G-538` | fehler | hoch | [Die Phasen haengen an keinem Ziel — die Wurzel](erledigt/goals-g-0538-phasen-haengen-an-keinem-ziel.md) | erledigt | — | G-544 |
+| `G-539` | fehler | mittel | [Der Phasen-Editor fehlt — „editieren" aus Toms Satz](laufend_claudecode/goals-g-0539-der-phasen-editor-fehlt.md) | vorbereitet (claudecode) | — | — |
+| `G-541` | fehler | hoch | [Das Vorschaupanel liest den Strategiekatalog](erledigt/goals-g-0541-das-vorschaupanel-liest-den-katalog.md) | erledigt | — | G-545 |
 | `G-542` | entscheidung | hoch | [Die Einheit der Zielrate und die Hoechstdauer — vorlaeufig gesetzt](todos/goals-g-0542-die-einheit-der-zielrate-und-die-hoechstdauer.md) | offen | — | — |
+| `G-544` | fehler | hoch | [Der Phase-Reiter zeigt Phasentypen statt einer Zeitachse](laufend_claudecode/goals-g-0544-der-phase-reiter-zeigt-keine-zeitachse.md) | laeuft (claudecode) | — | — |
 | `G-545` | fehler | hoch | [Der Katalog hat die Form, nicht den Inhalt](laufend_codex/goals-g-0545-der-katalog-hat-die-form-nicht-den-inhalt.md) | vorbereitet (codex) | — | — |
 
-### wartet auf Blocker — 9
+### wartet auf Blocker — 6
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -625,11 +628,8 @@
 | `G-528` | befund | mittel | [die Variantenachse und mini_cut sind nicht definiert](erledigt/goals-g-0528-varianten-und-mini-cut-sind-nicht-definiert.md) | erledigt | G-521 | — |
 | `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](todos/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | offen | G-521 | G-531, G-533 |
 | `G-530` | feature | hoch | [contest_prep und expert_bb_annual brauchen eine eigene Struktur](todos/goals-g-0530-wettkampfvorbereitung-braucht-eine-eigene-struktur.md) | offen | G-529 | — |
-| `G-538` | fehler | hoch | [Die Phasen haengen an keinem Ziel — die Wurzel](laufend_codex/goals-g-0538-phasen-haengen-an-keinem-ziel.md) | laeuft (codex) | G-537 | G-544 |
-| `G-539` | fehler | mittel | [Der Phasen-Editor fehlt — „editieren" aus Toms Satz](todos/goals-g-0539-der-phasen-editor-fehlt.md) | offen | G-538 | — |
 | `G-540` | befund | niedrig | [Vorlagen fuer Phasenplaene — die fuenfte Ebene](todos/goals-g-0540-vorlagen-fuer-phasenplaene.md) | offen | G-539 | — |
-| `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](laufend_codex/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | vorbereitet (codex) | G-538, G-542 | — |
-| `G-544` | fehler | hoch | [Der Phase-Reiter zeigt Phasentypen statt einer Zeitachse](laufend_claudecode/goals-g-0544-der-phase-reiter-zeigt-keine-zeitachse.md) | vorbereitet (claudecode) | G-538, G-541 | — |
+| `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](laufend_codex/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | laeuft (codex) | G-542 | — |
 
 ## coach — 57
 

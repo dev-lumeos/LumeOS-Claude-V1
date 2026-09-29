@@ -109,3 +109,44 @@ Die gehoeren server-frei in `lib/goals/`, nicht in die Komponente — wie
 
 Nach G-538. Der Editor verschiebt Zeitfenster; solange eine Phase an
 keinem Ziel haengt, verschiebt er nichts Bestimmtes.
+
+---
+
+## Auftrag, vorbereitet 2026-09-29 16:20
+
+Die fuenf Punkte oben. Dazu, was sich seit dem Anlegen geklaert hat:
+
+**`PE_MODES` steht als Spalte im Katalog.** `[cmd]` `editor_modes` ist die
+einzige der zehn Spalten, die in **allen 17** Zeilen gefuellt ist. Welche
+Reiter erscheinen, kommt aus der Tabelle — keine Fallunterscheidung im
+Browser, kein `switch` ueber Strategiecodes.
+
+**Die Ausgangswerte sind duenn, und das entscheidet den Bau.** `[cmd]` Von
+zehn Spalten sind sechs in genau einer der 17 Zeilen gefuellt (G-545 holt
+das nach). Ein Editor, der ein leeres Feld als `0` anzeigt, schreibt beim
+Speichern eine erfundene Null in den Override. **Leer muss leer bleiben,
+bis der Nutzer etwas eintraegt** — und ein Feld ohne Katalogwert sagt, dass
+es keinen gibt, statt einen zu behaupten.
+
+**Der Override ist eine Differenz, kein Abzug.** `goal_phases.parameters`
+traegt **nur die geaenderten** Werte. Wer den ganzen Satz hineinschreibt,
+friert den Katalogstand von heute bei jedem Nutzer ein — und eine spaetere
+Korrektur am Katalog erreicht keinen mehr.
+
+**Die drei Rechnungen server-frei nach `lib/goals/`:**
+
+    cycling   (5 × 200 + 2 × -300) / 7  ->  Wochenmittel, dann TDEE + Mittel
+    anchor    Showdatum minus Wochen    ->  sechs Datumsangaben
+    annual    Monatssumme muss 12 sein  ->  sonst ist der Plan kaputt
+
+`[read]` **`anchor` wird von G-544 auch gebraucht** — dieselbe Rechnung,
+zwei Aufrufer. Wenn G-544 sie gebaut hat, wird sie hier **benutzt**, nicht
+nachgebaut. Zwei Rechnungen fuer dasselbe gehen auseinander.
+
+**Reihenfolge:** nach G-544 (die Zeitachse, in Arbeit) und G-545 (die
+Katalogwerte, bei Codex vorbereitet). Vorher editiert der Editor leere
+Felder an einer Phase ohne Zeitfenster.
+
+`[read]` **„Save as my template" bleibt aus** — G-540 ist nicht
+entschieden, und drei Fragen liegen bei Tom. **Kein Knopf, der nichts
+tut**; „Apply to my plan" reicht.

@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-09-29
 agent: claudecode
 beauftragt: 2026-09-29
+erledigt: 2026-09-29
+commit: 6dd3932b
 
 braucht: [G-520, G-533]
 kind_von: G-519
