@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-09-29
 agent: codex
 beauftragt: 2026-09-29
+erledigt: 2026-09-29
+commit: 46b73f6f
 
 braucht: [G-533]
 kind_von: null

@@ -333,3 +333,28 @@ bleibt der Cross-module-Reiter Attrappe** — und er ist laut
 nutrition rechnet im Browser, die anderen zwei haben keinen Tagesscore.
 **Das sind drei weitere Auftraege, und zwei davon gehoeren nicht zu
 Goals.**
+
+---
+
+## Warum dieser Punkt offen bleibt, Orchestrator 2026-09-29 15:15
+
+`[cmd]` **Der Bau ist abgenommen (Abnahme oben, Code in `309db7e1`) — aber
+die Tabelle ist nicht live:**
+
+    SELECT count(*) FROM goals.goal_contributions
+    ERROR: relation "goals.goal_contributions" does not exist
+
+`[read]` **Damit ist es ein fertiges Bauteil ohne Aufrufer** — dieselbe
+Art Befund, die heute dreimal gefunden wurde, nur eine Ebene tiefer: die
+Migration existiert, die Datenbank kennt sie nicht. Und solange das so
+ist, bleibt der Cross-module-Reiter Attrappe, obwohl sein Blocker
+gebaut daliegt.
+
+**Der offene Teil ist eine Einspielung, kein Bau.** Er gehoert in Codex'
+naechste Runde nach G-538 und G-543 — beide fassen dieselbe Kette an, und
+drei Einspielungen gleichzeitig trennen keinen Nachweis mehr.
+
+`[read]` **Nicht vergessen dabei:** nutrition, training und medical
+liefern weiterhin nichts. nutrition rechnet im Browser, die anderen zwei
+haben keinen Tagesscore. Das sind drei eigene Auftraege, und zwei davon
+gehoeren nicht zu Goals.

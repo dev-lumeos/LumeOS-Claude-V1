@@ -6,7 +6,7 @@ Hand aendern.**
 `[read]` **Es ersetzt das Lesen nicht** ? **es sagt, WO gelesen
 werden muss.**
 
-`[cmd]` **Stand 2026-09-11: 189 Tabellen, 103 in Specs genannt, 54 ohne Entsprechung, 139 ohne Erwaehnung.**
+`[cmd]` **Stand 2026-09-29: 215 Tabellen, 103 in Specs genannt, 53 ohne Entsprechung, 164 ohne Erwaehnung.**
 
 ## Die Spec nennt, das Schema hat nicht
 
@@ -25,29 +25,28 @@ ist der gefaehrliche, weil der Name plausibel bleibt.**
 | `coach.coach_messages` | ungebaut | docs\specs\HumanCoach\SPEC_06_DATABASE_SCHEMA.md:330 |
 | `coach.coach_rule_templates` | ungebaut | docs\specs\HumanCoach\SPEC_06_DATABASE_SCHEMA.md:228 (+4) |
 | `coach.coach_rules` | ungebaut | docs\specs\HumanCoach\SPEC_06_DATABASE_SCHEMA.md:165 (+1) |
-| `goals.goal_adjustments` | ungebaut | docs\specs\Goals\CONSOLIDATED_KNOWLEDGE.md:159 (+2) |
-| `goals.goal_contributions` | ungebaut | docs\specs\Goals\CONSOLIDATED_KNOWLEDGE.md:157 (+5) |
-| `goals.tdee_settings` | ungebaut | docs\specs\Goals\CONSOLIDATED_KNOWLEDGE.md:158 (+5) |
-| `goals.user_goal_dashboard` | ungebaut | docs\specs\Goals\DATABASE.md:25 |
-| `goals.weekly_contributions_summary` | ungebaut | docs\specs\Goals\DATABASE.md:26 |
-| `goals.weekly_reports` | ungebaut | docs\specs\Goals\DATABASE.md:22 (+1) |
+| `goals.goal_adjustments` | ungebaut | docs\specs\Goals\CONSOLIDATED_KNOWLEDGE.md:163 (+2) |
+| `goals.goal_contributions` | ungebaut | docs\specs\Goals\CONSOLIDATED_KNOWLEDGE.md:161 (+5) |
+| `goals.tdee_settings` | ungebaut | docs\specs\Goals\CONSOLIDATED_KNOWLEDGE.md:162 (+5) |
+| `goals.user_goal_dashboard` | ungebaut | docs\specs\Goals\DATABASE.md:31 |
+| `goals.weekly_contributions_summary` | ungebaut | docs\specs\Goals\DATABASE.md:32 |
+| `goals.weekly_reports` | ungebaut | docs\specs\Goals\DATABASE.md:28 (+1) |
 | `medical.biomarker_population_statistics` | ungebaut | docs\specs\Medical\SPEC_08_IMPORT_PIPELINE.md:102 (+2) |
 | `medical.medical_alerts` | ungebaut | docs\specs\Medical\SPEC_06_DATABASE_SCHEMA.md:342 (+1) |
 | `medical.user_biomarker_results` | ungebaut | docs\specs\Medical\SPEC_06_DATABASE_SCHEMA.md:145 (+4) |
 | `medical.user_health_metrics` | ungebaut | docs\specs\Medical\SPEC_06_DATABASE_SCHEMA.md:234 (+1) |
 | `medical.user_symptoms` | ungebaut | docs\specs\Medical\SPEC_06_DATABASE_SCHEMA.md:266 (+1) |
 | `nutrition.coach_nutrition_suggestions` | ungebaut | docs\specs\Nutrition\05_reviews\OPUS_REVIEW_NUTRITION_02_DATA_API.md:58 (+2) |
-| `nutrition.daily_nutrition_summary` | ungebaut | docs\specs\Goals\OPEN_ITEMS.md:11 (+1) |
+| `nutrition.daily_nutrition_summary` | ungebaut | docs\specs\Goals\OPEN_ITEMS.md:15 (+1) |
 | `nutrition.daily_summary` | ungebaut | docs\specs\Nutrition\04_adrs\ADR_SUPPLEMENTS_API_BOUNDARY.md:8 |
 | `nutrition.food_portions` | ungebaut | docs\specs\Nutrition\01_current_specs\SPEC_06_DATABASE_SCHEMA.md:1310 (+1) |
 | `nutrition.meal_item_snapshot_history` | ungebaut | docs\specs\Nutrition\05_reviews\OPUS_REVIEW_NUTRITION_02_DATA_API.md:528 (+1) |
 | `nutrition.meal_plan_items` | ungebaut | docs\specs\Nutrition\01_current_specs\SPEC_06_DATABASE_SCHEMA.md:34 (+3) |
-| `nutrition.mealcam_scans` | ungebaut | docs\specs\Nutrition\01_current_specs\SPEC_06_DATABASE_SCHEMA.md:1312 (+3) |
 | `nutrition.micro_flags` | ungebaut | docs\specs\Nutrition\01_current_specs\SPEC_06_DATABASE_SCHEMA.md:38 (+2) |
 | `nutrition.nutrition_targets` | anderes Schema: goals | docs\specs\Nutrition\01_current_specs\SPEC_06_DATABASE_SCHEMA.md:37 (+2) |
 | `nutrition.recipe_items` | ungebaut | docs\specs\Nutrition\01_current_specs\SPEC_06_DATABASE_SCHEMA.md:31 (+9) |
 | `nutrition.user_recent_portions` | ungebaut | docs\specs\Nutrition\01_current_specs\SPEC_06_DATABASE_SCHEMA.md:1311 (+1) |
-| `nutrition.weight_logs` | ungebaut | docs\specs\Goals\OPEN_ITEMS.md:11 |
+| `nutrition.weight_logs` | ungebaut | docs\specs\Goals\OPEN_ITEMS.md:15 |
 | `recovery.hrv_baselines` | ungebaut | docs\specs\Recovery\SPEC_06_DATABASE_SCHEMA.md:226 (+1) |
 | `recovery.hrv_measurements` | ungebaut | docs\specs\Recovery\SPEC_06_DATABASE_SCHEMA.md:194 (+2) |
 | `recovery.muscle_recovery_params` | ungebaut | docs\specs\Recovery\SPEC_08_IMPORT_PIPELINE.md:86 (+1) |
@@ -78,6 +77,8 @@ beschrieben.**
 - `coach.action_log`
 - `coach.alert_settings`
 - `coach.alerts`
+- `coach.allergy_permission_change_log`
+- `coach.allergy_permissions`
 - `coach.autonomy_change_log`
 - `coach.checkin_templates`
 - `coach.client_autonomy`
@@ -88,8 +89,13 @@ beschrieben.**
 - `coach.pending_invites`
 - `coach.permission_change_log`
 - `coach.relationship_change_log`
+- `coach.relationship_specialties`
 - `coach.relationships`
+- `goals.goal_strategies`
+- `goals.nutrition_macro_rules`
+- `goals.phase_rate_rules`
 - `goals.phase_transition_responses`
+- `goals.tdee_history`
 - `medical.appointments`
 - `medical.biomarker_aliases`
 - `medical.biomarker_catalog`
@@ -118,8 +124,10 @@ beschrieben.**
 - `medical.user_conditions`
 - `medical.user_injection_site_selections`
 - `nutrition._sortweight_neu`
+- `nutrition.animal_species`
 - `nutrition.exclusion_preset_rules`
 - `nutrition.exclusion_presets`
+- `nutrition.food_animal_species`
 - `nutrition.food_curation_decisions`
 - `nutrition.food_preference_search_targets`
 - `nutrition.food_tags_kuriert`
@@ -143,6 +151,8 @@ beschrieben.**
 - `nutrition.shopping_list_items`
 - `recovery.checkins`
 - `recovery.modality_log`
+- `recovery.muscle_recovery_profiles`
+- `recovery.recovery_effort_factors`
 - `recovery.score_contributions`
 - `recovery.scores`
 - `recovery.stress_logs`
@@ -153,7 +163,13 @@ beschrieben.**
 - `supplements.entity_transporters`
 - `supplements.intake_schedule`
 - `supplements.lab_effect_enrichment_records`
+- `supplements.meal_plan_product_references`
+- `supplements.product_content_candidates`
+- `supplements.product_contents`
+- `supplements.product_form_placement_rules`
+- `supplements.product_suppliers`
 - `supplements.pubchem_conflict_records`
+- `supplements.recipe_product_references`
 - `supplements.rule_catalog`
 - `supplements.stack_curation_candidate_items`
 - `supplements.stack_curation_candidates`
@@ -177,6 +193,7 @@ beschrieben.**
 - `supplements.supplement_organ_risks`
 - `supplements.supplement_pharmacology`
 - `supplements.supplement_portions`
+- `supplements.supplement_preferences`
 - `supplements.supplement_protocol_items`
 - `supplements.supplement_protocol_requirements`
 - `supplements.supplement_protocol_template_items`
@@ -194,12 +211,19 @@ beschrieben.**
 - `supplements.supplement_wada`
 - `supplements.supplement_warnings`
 - `supplements.supplements`
+- `supplements.supplier_product_label_statements`
+- `supplements.supplier_product_nutrient_name_mappings`
+- `supplements.supplier_product_vitamin_e_forms`
+- `supplements.supplier_products`
+- `supplements.suppliers`
 - `supplements.thailand_regulatory_records`
 - `supplements.user_supplement_cycles`
 - `supplements.wada_conflict_records`
 - `training.equipment`
 - `training.exercise_catalog_enrichment`
+- `training.exercise_muscle_resolution_notes`
 - `training.exercises`
+- `training.muscle_group_level_decisions`
 - `training.program_assignments`
 - `training.program_blocks`
 - `training.program_days`

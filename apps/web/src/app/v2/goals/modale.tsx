@@ -31,6 +31,8 @@ import { fotosessionAnlegenAktion } from './fotosession-aktionen'
 // G-422: der Schreibweg fuer Koerpermessungen gibt es seit G-122 —
 // nur der Aufrufer fehlte.
 import { messungAnlegenAktion } from './koerpermass-aktionen'
+// G-537: der Anlegeweg fuer Ziele.
+import { zielAnlegenAktion } from './ziel-aktionen'
 // `[read]` **Nur Typ und Konstanten** — `koerpermass-rechnung.ts`
 // hat kein Server-I/O, aber die Regel bleibt: kein Wert-Import aus
 // einem `*-write`-Modul.
@@ -41,6 +43,10 @@ import {
 import {
   zielArtAuswahl, AKTIVE_PLAETZE, type ZielArt,
 } from '../../../lib/goals/ziel-arten'
+// G-537: die Pruefung, die auch der Schreibweg nutzt.
+import { pruefeNeuesZiel } from '../../../lib/goals/ziel-regeln'
+// G-537/A3: die Marke fuer „Linked modules" — E-68, eine Zeile.
+import { attrappeAus } from './ansicht'
 
 import { MEASUREMENTS, daysToDeadline, type Ziel } from './daten'
 import type { ModalZustand } from './kontext'
@@ -154,6 +160,15 @@ export function GoalsModale({ modal, onClose }: {
  * und werden nie gespeichert. **Sie zeigen die Form einer Eingabe,
  * nicht eine gemessene Zahl.**
  */
+/**
+ * Die fuenf Module, die Daten zu einem Ziel beitragen.
+ *
+ * `[cmd]` **Aus dem Entwurf** (`module-goals.jsx:734-738`) — **und
+ * dieselben fuenf, die `goal_contributions.module` im CHECK
+ * nennt** (`DATABASE.md:149`).
+ */
+const MODULE = ['nutrition', 'training', 'recovery', 'supplements', 'medical'] as const
+
 const BEISPIEL: Record<ZielArt, { titel: string; ist: string; ziel: string }> = {
   body_composition: { titel: 'z. B. auf 12 % Körperfett', ist: '79.4', ziel: '78' },
   performance: { titel: 'z. B. Bankdrücken 1RM · 130 kg', ist: '122.5', ziel: '130' },
@@ -188,16 +203,84 @@ function NewGoalModal({ onClose }: { onClose: () => void }) {
   const types = zielArtAuswahl().map(a => ({
     id: a.code, label: a.label, icon: SINNBILD[a.code],
   }))
+
+  // ══ G-537: der Dialog legt jetzt wirklich an ═══════════════════
+  //
+  // `[cmd]` **Hier stand ein `InEntwicklungKnopf` mit dem Grund**
+  // *,,Was fehlt, ist nur das ANLEGEN: `schreiben.ts` kennt genau
+  // eine Operation, `.update()`"*. `[cmd]` **`zielAnlegen()` gibt es
+  // seit G-537** — der Grund ist eingeloest.
+  const [titel, setTitel] = React.useState('')
+  const [ist, setIst] = React.useState('')
+  const [ziel, setZiel] = React.useState('')
+  const [einheit, setEinheit] = React.useState('')
+  const [start, setStart] = React.useState(heuteISO())
+  const [deadline, setDeadline] = React.useState('')
+  const [prio, setPrio] = React.useState(1)
+  const [notiz, setNotiz] = React.useState('')
+  // `[cmd]` **G-537/A3: die Wahl wird GEHALTEN**, auch wenn sie
+  // noch nirgends ankommt — `user_goals` hat keine Spalte dafuer
+  // (G-536). `[read]` **Gehalten heisst: sie ist pruefbar.**
+  const [module, setModule] = React.useState<string[]>([])
+  const [laeuft, setLaeuft] = React.useState(false)
+  const [fehler, setFehler] = React.useState<string | null>(null)
+  const [fertig, setFertig] = React.useState(false)
+
+  const zahl = (s: string): number | null => {
+    const t = s.trim()
+    if (t === '') return null
+    const n = Number(t)
+    return Number.isFinite(n) ? n : null
+  }
+
+  // `[read]` **Die Pruefung liegt in `ziel-regeln.ts`** — dieselbe,
+  // die der Schreibweg nutzt. **Zwei Kopien driften.**
+  const felder = pruefeNeuesZiel({
+    goal_type: type, title: titel, gueltig_ab: start, priority: prio,
+    target_value: zahl(ziel), current_value: zahl(ist),
+    target_date: deadline || null,
+  })
+  const feldFehler = (f: string) => felder.find(x => x.feld === f)?.text
+
+  async function anlegen() {
+    setLaeuft(true)
+    setFehler(null)
+    const r = await zielAnlegenAktion({
+      goal_type: type,
+      title: titel,
+      gueltig_ab: start,
+      priority: prio,
+      target_value: zahl(ziel),
+      current_value: zahl(ist),
+      start_value: zahl(ist),
+      target_unit: einheit || null,
+      target_date: deadline || null,
+      description: notiz || null,
+    })
+    setLaeuft(false)
+    if (r.ok) {
+      setFertig(true)
+      // `[read]` **Erst schliessen, wenn die Zeile da ist** — sonst
+      // sieht ein Fehlschlag aus wie Erfolg.
+      setTimeout(onClose, 900)
+    } else {
+      setFehler(r.fehler)
+    }
+  }
+
   return (
     <GModal title="New goal" subtitle="Choose type · set target · link modules"
             eyebrow="plus" onClose={onClose}
             footer={
               <>
                 <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
-                <InEntwicklungKnopf titel="Create goal" className="v2-btn v2-btn-primary"
-                                    grund={`\`goals.user_goals\` gibt es (23 Spalten, 11 Zeilen live), und geschrieben wird sie bereits — \`lib/goals/schreiben.ts\` setzt Prioritaet und Status. Was fehlt, ist nur das ANLEGEN: \`schreiben.ts\` kennt genau eine Operation, \`.update()\`, und \`ZielAenderung\` fuehrt weder \`goal_type\` noch \`subtype\` (G-352). Die ${AKTIVE_PLAETZE} aktiven Plaetze sind dabei KEINE offene Frage — sie stehen im CHECK \`user_goals_check1\` und im Index \`uq_user_goals_active_slot\` (G-354). Offen ist nur, welchen freien Platz die Oberflaeche waehlt.`}>
-                  <Icon name="check" className="v2-ic v2-ic-sm" />Create goal
-                </InEntwicklungKnopf>
+                <button type="button" className="v2-btn v2-btn-primary"
+                        data-ziel-anlegen
+                        disabled={laeuft || felder.length > 0}
+                        onClick={() => { void anlegen() }}>
+                  <Icon name="check" className="v2-ic v2-ic-sm" />
+                  {laeuft ? 'Legt an …' : 'Create goal'}
+                </button>
               </>
             }>
       <GField label="Goal type">
@@ -227,33 +310,129 @@ function NewGoalModal({ onClose }: { onClose: () => void }) {
           drei Vergleiche hatten nach dem Anschluss keine
           Ueberschneidung mehr. */}
       <GField label="Title">
-        <GInput aria-label="Title" placeholder={BEISPIEL[type].titel} />
+        <GInput aria-label="Title" data-zielfeld="titel" value={titel}
+                placeholder={BEISPIEL[type].titel}
+                onChange={e => setTitel(e.target.value)} />
       </GField>
       <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
         <GField label="Current value">
-          <GInput aria-label="Current value" placeholder={BEISPIEL[type].ist} />
+          <GInput aria-label="Current value" data-zielfeld="ist" value={ist}
+                  placeholder={BEISPIEL[type].ist}
+                  onChange={e => setIst(e.target.value)} />
         </GField>
         <GField label="Target value">
-          <GInput aria-label="Target value" placeholder={BEISPIEL[type].ziel} />
+          <GInput aria-label="Target value" data-zielfeld="ziel" value={ziel}
+                  placeholder={BEISPIEL[type].ziel}
+                  onChange={e => setZiel(e.target.value)} />
         </GField>
       </div>
       <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
-        <GField label="Start date"><GInput type="date" aria-label="Start date" defaultValue="2026-05-16" /></GField>
-        <GField label="Deadline"><GInput type="date" aria-label="Deadline" defaultValue="2026-08-01" /></GField>
+        <GField label="Unit">
+          <GInput aria-label="Unit" data-zielfeld="einheit" value={einheit}
+                  placeholder="kg · %  · min" onChange={e => setEinheit(e.target.value)} />
+        </GField>
+        {/* `[read]` **Die Prioritaet gehoert ins Anlegen** — sie
+            entscheidet, welchen der drei aktiven Plaetze das Ziel
+            belegt, und ist danach nur noch umzusortieren. */}
+        <GField label="Priority" sub={`${AKTIVE_PLAETZE} aktive Plätze, jeder einmal`}>
+          <select aria-label="Priority" data-zielfeld="prio" value={prio}
+                  onChange={e => setPrio(Number(e.target.value))}
+                  style={{
+                    width: '100%', padding: '7px 9px', fontSize: 12,
+                    background: 'var(--surface)', color: 'var(--fg)',
+                    border: '1px solid var(--border)', borderRadius: 5,
+                  }}>
+            {[1, 2, 3].map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
+        </GField>
       </div>
-      <GField label="Linked modules · auto-pull data">
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-          {['nutrition', 'training', 'recovery', 'supplements', 'medical'].map(m => (
-            <InEntwicklungKnopf key={m} titel={`Modul ${m} verknuepfen`} className="v2-pill"
-                                style={{ cursor: 'pointer', padding: '4px 10px', fontSize: 11 }}>
-              {m}
-            </InEntwicklungKnopf>
-          ))}
+      <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
+        <GField label="Start date">
+          <GInput type="date" aria-label="Start date" data-zielfeld="start"
+                  value={start} onChange={e => setStart(e.target.value)} />
+        </GField>
+        <GField label="Deadline">
+          <GInput type="date" aria-label="Deadline" data-zielfeld="deadline"
+                  value={deadline} min={start}
+                  onChange={e => setDeadline(e.target.value)} />
+        </GField>
+      </div>
+      {feldFehler('target_date') && (
+        <div data-zielfehler="target_date" style={{
+          marginTop: -4, marginBottom: 10, fontSize: 11.5,
+          color: 'var(--neg)',
+        }}>{feldFehler('target_date')}</div>
+      )}
+      {/* ══ G-537/A3: „Linked modules" bekommt einen Platz mit
+          MARKE ══════════════════════════════════════════════════
+          `[cmd]` **`goals.user_goals` hat keine Spalte dafuer** —
+          sie kommt mit G-536 von Codex.
+
+          `[read]` **Eine Zeile, Quelle und Grund** — kein Absatz
+          ueber die fehlende Spalte (das war G-534/A1). */}
+      {/* `[read]` **Die verknuepften Module sind die DATENQUELLE,
+          nicht Schmuck.** `[cmd]` **Der Entwurf gibt jedem Ziel
+          `history[]` und `pace`** (`module-goals.jsx:746-779`),
+          **und `user_goals` traegt `auto_update`** — **der
+          Ist-Wert kommt aus den Modulen, er wird nicht getippt.**
+
+          `[read]` **Deshalb ist die Auswahl BEDIENBAR, obwohl die
+          Spalte fehlt** — ein Feld, das man nicht anklicken kann,
+          prueft niemand. **Die Marke sagt, dass die Wahl noch
+          nirgends ankommt.** */}
+      <Card className="v2-card-tight" style={{ padding: 10, marginBottom: 10 }}
+            attrappe={attrappeAus('theme-v1/module-goals.jsx',
+              'eine Spalte fuer verknuepfte Module — wartet auf: G-536')}>
+        <div className="v2-eyebrow">Linked modules · auto-pull data</div>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 6 }}>
+          {MODULE.map(m => {
+            const an = module.includes(m)
+            return (
+              <button key={m} type="button" className="v2-pill"
+                      data-zielmodul={m} aria-pressed={an}
+                      onClick={() => setModule(v => an
+                        ? v.filter(x => x !== m) : [...v, m])}
+                      style={{
+                        cursor: 'pointer', padding: '4px 10px', fontSize: 11,
+                        background: an
+                          ? 'color-mix(in oklch, var(--acc-goals) 14%, var(--surface))'
+                          : 'var(--surface)',
+                        borderColor: an
+                          ? 'color-mix(in oklch, var(--acc-goals) 40%, var(--border))'
+                          : 'var(--border)',
+                        color: an ? 'var(--acc-goals)' : 'var(--fg-muted)',
+                      }}>
+                {m}
+              </button>
+            )
+          })}
         </div>
-      </GField>
+      </Card>
+
       <GField label="Notes (optional)">
-        <GInput aria-label="Notes" placeholder="Context, sub-goals, reminders…" />
+        <GInput aria-label="Notes" data-zielfeld="notiz" value={notiz}
+                placeholder="Context, sub-goals, reminders…"
+                onChange={e => setNotiz(e.target.value)} />
       </GField>
+
+      {/* `[read]` **Der Satz zum belegten Platz kommt aus dem
+          Schreibweg** — dieselbe Meldung wie bei `zielAendern`,
+          damit der Nutzer eine kennt und nicht zwei. */}
+      {fehler && (
+        <div data-ziel-fehler style={{
+          marginTop: 10, padding: '8px 10px', borderRadius: 5, fontSize: 11.5,
+          lineHeight: 1.5,
+          background: 'color-mix(in oklch, var(--neg) 8%, var(--surface))',
+          border: '1px solid color-mix(in oklch, var(--neg) 30%, var(--border))',
+        }}>{fehler}</div>
+      )}
+      {fertig && (
+        <div data-ziel-fertig style={{
+          marginTop: 10, padding: '8px 10px', borderRadius: 5, fontSize: 11.5,
+          background: 'color-mix(in oklch, var(--pos) 8%, var(--surface))',
+          border: '1px solid color-mix(in oklch, var(--pos) 30%, var(--border))',
+        }}>Ziel angelegt.</div>
+      )}
     </GModal>
   )
 }

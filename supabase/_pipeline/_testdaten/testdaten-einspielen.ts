@@ -1179,7 +1179,7 @@ const goalPhaseRows: GoalPhaseRow[] = [
     phaseType: 'maintenance',
     variant: null,
     zielRatePctKgWoche: null,
-    parameters: '{"source":"GO-07 testdata","note":"Phase unabhaengig vom konkreten Ziel"}',
+    parameters: '{"source":"GO-07 testdata","note":"Ungebundene Seedphase; wird in G-538 als Historie beendet"}',
     gueltigAb: relDate('2026-08-05'),
     projectedEndDate: null,
     actualEndDate: null,

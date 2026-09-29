@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 257 |
-| `laufend_codex` | 5 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 581 |
-| **gesamt** | **845** |
+| `todos` | 260 |
+| `laufend_codex` | 4 |
+| `laufend_claudecode` | 4 |
+| `erledigt` | 584 |
+| **gesamt** | **852** |
 
 ## medical — 49
 
@@ -573,9 +573,9 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 42
+## goals — 46
 
-### beauftragbar — 32
+### beauftragbar — 37
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -607,12 +607,17 @@
 | `G-525` | befund | mittel | [Meilensteine gibt es nur als Seed](todos/goals-g-0525-meilensteine-entstehen-nicht.md) | offen | — | — |
 | `G-526` | fehler | hoch | [Protein, Fett und Faser kennen die Phase nicht](todos/goals-g-0526-protein-und-fett-kennen-die-phase-nicht.md) | offen | — | — |
 | `G-527` | fehler | mittel | [der Schreibweg kennt die neuen Hindernisse nicht](erledigt/goals-g-0527-der-schreibweg-kennt-die-neuen-hindernisse-nicht.md) | erledigt | — | — |
-| `G-531` | fehler | hoch | [`goal_phase_start` kann drei der neun Phasenarten nicht anlegen](laufend_codex/goals-g-0531-goal-phase-start-kennt-die-rate-nicht.md) | laeuft (codex) | — | — |
+| `G-531` | fehler | hoch | [`goal_phase_start` kann drei der neun Phasenarten nicht anlegen](erledigt/goals-g-0531-goal-phase-start-kennt-die-rate-nicht.md) | erledigt | — | G-535 |
 | `G-532` | befund | hoch | [der Bauplan fuer die letzten drei Goals-Reiter](todos/goals-g-0532-der-bauplan-fuer-die-letzten-drei-reiter.md) | offen | — | — |
+| `G-533` | fehler | hoch | [die laufenden Phasen sind vor E1, und drei Funktionen sind aus der Oberflaeche nicht erreichbar](erledigt/goals-g-0533-die-laufenden-phasen-sind-vor-e1.md) | erledigt | — | — |
+| `G-534` | fehler | hoch | [der Phase-Reiter zeigt Daten und plant nichts](laufend_claudecode/goals-g-0534-der-phase-reiter-ist-kein-planungswerkzeug.md) | laeuft (claudecode) | — | G-538, G-539, G-540, G-541 |
+| `G-536` | fehler | hoch | [Der Strategiekatalog fehlt ganz — Schicht 2](erledigt/goals-g-0536-der-strategiekatalog-fehlt-ganz.md) | erledigt | — | G-542, G-543 |
 | `G-537` | fehler | hoch | [In LumeOS kann man kein Ziel anlegen](laufend_claudecode/goals-g-0537-ziele-sind-nicht-anlegbar.md) | laeuft (claudecode) | — | — |
+| `G-541` | fehler | hoch | [Das Vorschaupanel liest den Strategiekatalog](laufend_claudecode/goals-g-0541-das-vorschaupanel-liest-den-katalog.md) | laeuft (claudecode) | — | G-545 |
 | `G-542` | entscheidung | hoch | [Die Einheit der Zielrate und die Hoechstdauer — vorlaeufig gesetzt](todos/goals-g-0542-die-einheit-der-zielrate-und-die-hoechstdauer.md) | offen | — | — |
+| `G-545` | fehler | hoch | [Der Katalog hat die Form, nicht den Inhalt](laufend_codex/goals-g-0545-der-katalog-hat-die-form-nicht-den-inhalt.md) | vorbereitet (codex) | — | — |
 
-### wartet auf Blocker — 10
+### wartet auf Blocker — 9
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -620,12 +625,11 @@
 | `G-528` | befund | mittel | [die Variantenachse und mini_cut sind nicht definiert](erledigt/goals-g-0528-varianten-und-mini-cut-sind-nicht-definiert.md) | erledigt | G-521 | — |
 | `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](todos/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | offen | G-521 | G-531, G-533 |
 | `G-530` | feature | hoch | [contest_prep und expert_bb_annual brauchen eine eigene Struktur](todos/goals-g-0530-wettkampfvorbereitung-braucht-eine-eigene-struktur.md) | offen | G-529 | — |
-| `G-533` | fehler | hoch | [die laufenden Phasen sind vor E1, und drei Funktionen sind aus der Oberflaeche nicht erreichbar](laufend_codex/goals-g-0533-die-laufenden-phasen-sind-vor-e1.md) | laeuft (codex) | G-531 | — |
-| `G-534` | fehler | hoch | [der Phase-Reiter zeigt Daten und plant nichts](laufend_claudecode/goals-g-0534-der-phase-reiter-ist-kein-planungswerkzeug.md) | laeuft (claudecode) | G-533 | G-538, G-539, G-540 |
-| `G-536` | fehler | hoch | [Der Strategiekatalog fehlt ganz — Schicht 2](laufend_codex/goals-g-0536-der-strategiekatalog-fehlt-ganz.md) | laeuft (codex) | G-533 | G-542 |
-| `G-538` | fehler | hoch | [Die Phasen haengen an keinem Ziel — die Wurzel](laufend_codex/goals-g-0538-phasen-haengen-an-keinem-ziel.md) | vorbereitet (codex) | G-536, G-537 | — |
-| `G-539` | fehler | mittel | [Der Phasen-Editor fehlt — „editieren" aus Toms Satz](todos/goals-g-0539-der-phasen-editor-fehlt.md) | offen | G-536, G-538 | — |
+| `G-538` | fehler | hoch | [Die Phasen haengen an keinem Ziel — die Wurzel](laufend_codex/goals-g-0538-phasen-haengen-an-keinem-ziel.md) | laeuft (codex) | G-537 | G-544 |
+| `G-539` | fehler | mittel | [Der Phasen-Editor fehlt — „editieren" aus Toms Satz](todos/goals-g-0539-der-phasen-editor-fehlt.md) | offen | G-538 | — |
 | `G-540` | befund | niedrig | [Vorlagen fuer Phasenplaene — die fuenfte Ebene](todos/goals-g-0540-vorlagen-fuer-phasenplaene.md) | offen | G-539 | — |
+| `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](laufend_codex/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | vorbereitet (codex) | G-538, G-542 | — |
+| `G-544` | fehler | hoch | [Der Phase-Reiter zeigt Phasentypen statt einer Zeitachse](laufend_claudecode/goals-g-0544-der-phase-reiter-zeigt-keine-zeitachse.md) | vorbereitet (claudecode) | G-538, G-541 | — |
 
 ## coach — 57
 
@@ -689,7 +693,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 211
+## quer — 214
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -738,6 +742,7 @@
 | `A-79` | befund | mittel | [jeder Auftrag legt 452 MiB ab, auch wenn nichts eingespielt wird](todos/quer-a-0079-jeder-auftrag-legt-452-mib-ab.md) | offen | — | — |
 | `A-80` | befund | mittel | [150 Wegwerf-Datenbanken, und 49 davon heissen "final"](todos/quer-a-0080-hundertfuenfzig-wegwerf-datenbanken.md) | offen | — | — |
 | `A-81` | befund | hoch | [der Zyklus steht seit dem 30.08. geschrieben und laeuft nicht](todos/quer-a-0081-der-dokumentierte-zyklus-laeuft-nicht.md) | offen | — | — |
+| `A-82` | befund | mittel | [Die Migrationskette prueft den Arbeitsbaum, nicht das Staging](todos/quer-a-0082-die-migrationskette-prueft-den-arbeitsbaum.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
@@ -904,6 +909,8 @@
 | `G-501` | fehler | hoch | [der Ruecknahmeklick beim Erfahrungsgrad](erledigt/quer-g-0501-ruecknahmeklick-erfahrungsgrad.md) | erledigt | — | — |
 | `G-517` | fehler | mittel | [die Probe meldet die Zeitueberschreitung, nicht die Ursache](erledigt/quer-g-0517-probe-meldet-die-ursache-nicht.md) | erledigt | — | — |
 | `G-518` | fehler | hoch | [der Dev-Server liefert HTML ohne JavaScript](erledigt/quer-g-0518-dev-server-liefert-html-ohne-javascript.md) | erledigt | — | — |
+| `G-535` | fehler | hoch | [Sechs Funktionen lesen den alten Sitzungsnamen](todos/quer-g-0535-sechs-funktionen-lesen-den-alten-sitzungsnamen.md) | offen | — | — |
+| `G-546` | entscheidung | hoch | [Erfassen oder empfehlen — die Grenze bei Substanzprotokollen](todos/quer-g-0546-erfassen-oder-empfehlen.md) | offen | — | — |
 
 ## buddy — 1
 

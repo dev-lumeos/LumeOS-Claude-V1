@@ -13,7 +13,7 @@ steht in den Modul-Dateien** — das bleibt Handarbeit.
 steht in G-382:** ein Erzeuger, der nach Dateinamen zaehlt, meldete
 fuer `goals` null Lesewege, weil `goals` seine Dateien anders nennt.
 
-`[cmd]` **Stand: 2026-09-27 — 203 Tabellen, 2794 Spalten in 7 Modulen.**
+`[cmd]` **Stand: 2026-09-29 — 207 Tabellen, 2884 Spalten in 7 Modulen.**
 
 `[read]` **Die Zeilenzahlen sind der Bestand der Entwicklungs-
 datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
@@ -42,18 +42,22 @@ datenbank an diesem Tag, ueber alle Konten** — kein Nutzerstand.
 | `relationship_specialties` | 4 | 0 | 2026-09-09 |
 | `relationships` | 17 | 6 | ? |
 
-## goals — 8 Tabellen, 130 Spalten
+## goals — 12 Tabellen, 220 Spalten
 
 | Tabelle | Spalten | Zeilen | seit |
 |---|---|---|---|
 | `body_circumferences` | 22 | 54 | ? |
 | `body_measurements` | 17 | 362 | ? |
 | `goal_milestones` | 20 | 13 | ? |
-| `goal_phases` | 14 | 5 | ? |
-| `nutrition_targets` | 15 | 5 | ? |
+| `goal_phases` | 16 | 5 | ? |
+| `goal_strategies` | 31 | 17 | 2026-09-29 |
+| `nutrition_macro_rules` | 15 | 0 | 2026-09-28 |
+| `nutrition_targets` | 20 | 5 | ? |
+| `phase_rate_rules` | 11 | 0 | 2026-09-28 |
 | `phase_transition_responses` | 6 | 0 | ? |
 | `progress_photos` | 13 | 0 | 2026-09-09 |
-| `user_goals` | 23 | 11 | ? |
+| `tdee_history` | 25 | 0 | 2026-09-28 |
+| `user_goals` | 24 | 11 | ? |
 
 ## medical — 31 Tabellen, 539 Spalten
 

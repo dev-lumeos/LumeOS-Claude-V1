@@ -67,7 +67,9 @@ import {
 } from './fehlende-kacheln'
 import { GoalsPhysiqueView, GoalsPosesView } from './tab-physique'
 // G-513: Phase beginnen, beenden, Vorschlag beantworten.
-import { PhaseBeginnen, PhaseBeenden, PhaseVorschlag } from './phase-setzen'
+import { PhaseBeginnen, PhaseBeenden, PhaseVorschlag, PhaseWechseln } from './phase-setzen'
+// G-534/A7: die Phasenart fuer das Wechselraster.
+import type { Phasenart } from '../../../lib/goals/phase-regeln'
 
 /** C-418/3: die Quelle unter der Trennlinie. */
 const QUELLE = 'theme-v1/module-goals-pro.jsx'
@@ -81,6 +83,11 @@ import type {
   Meilenstein, Phase, ProfilEingaben, Umfangssatz, ZielFortschritt,
 } from '../../../lib/goals/lesen'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
+// `[read]` **Nur der TYP** — `strategie-read.ts` zieht
+// `createSessionClient` und damit `next/headers`; ein Wert-Import
+// von hier aus beantwortete die Seite mit HTTP 500 (A-30, G-412).
+import type { Strategie } from '../../../lib/goals/strategie-read'
+import { StrategieWahl } from './strategie-wahl'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
@@ -153,6 +160,13 @@ export type EchteDaten = {
   umfaenge: Umfangssatz[]
   /** `[cmd]` **G-421: `goals.progress_photos`, seit C-463.** */
   fotosessions: Fotosession[]
+  /** `[cmd]` **G-541: `goals.goal_strategies`, 17 Zeilen, seit G-538.** */
+  strategien: Strategie[]
+  /**
+   * `[cmd]` **G-541/A4:** Erfahrung aus `profiles.experience_level`,
+   * Coach aus `coach.relationships` — beide gemessen, keine Attrappe.
+   */
+  strategieProfil: { experience: string | null; hasCoach: boolean }
   ladefehler: string | null
 }
 
@@ -315,10 +329,29 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                   Phase, die laengst vorbei ist. */}
               {/* `[cmd]` **G-519/A5: das Gewicht aus dem Profil** —
                   es traegt die kcal-Anzeige neben der Rate. */}
-              <PhaseBeginnen stichtag={echt.stichtag} aktiv={laufendePhase}
-                             gewichtKg={echt.profil?.body_weight_kg ?? null} />
+              {/* `[cmd]` **G-534/A7: nur, wenn KEINE Phase laeuft.**
+                  `[read]` **Vorher standen zwei Raster
+                  uebereinander** — ein ausgegrautes ,,Phase
+                  beginnen" und darunter ,,Phase wechseln" mit
+                  derselben Auswahl. **Der Entwurf hat EINES.** */}
+              {!laufendePhase && (
+                <PhaseBeginnen stichtag={echt.stichtag} aktiv={null}
+                               gewichtKg={echt.profil?.body_weight_kg ?? null} />
+              )}
               {laufendePhase && (
                 <>
+                  {/* `[cmd]` **G-534/A7: das Raster mit Vorschau** —
+                      die Geste des Entwurfs
+                      (`module-goals-pro.jsx:262-429`). `[read]` **Der
+                      Wechsel fuehrt zum Beenden**, weil
+                      `goal_phase_start` abweist, solange eine Phase
+                      laeuft. */}
+                  <PhaseWechseln
+                    laufend={laufendePhase.phase_type as Phasenart | null}
+                    onBeenden={() => {
+                      document.querySelector<HTMLButtonElement>(
+                        '[data-phase-beenden-oeffnen]')?.click()
+                    }} />
                   <PhaseBeenden phase={laufendePhase} stichtag={echt.stichtag} />
                   {/* `[cmd]` **Der Vorschlag kommt aus der SPALTE,
                       nicht aus dem Funktionsaufruf.**
@@ -340,6 +373,18 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                   Reiters gehoeren. Tom, 2026-09-07: „oben wird alles
                   angezeigt das angebunden ist plus attrappen aus dem
                   mockup welche oben noch fehlen". */}
+              {/* ══ G-541: der Strategiekatalog ═══════════════════
+                  `[cmd]` **`goals.goal_strategies`, 17 Zeilen, seit
+                  G-538** — und damit OBERHALB der Linie: die Karten
+                  lesen eine Tabelle, nicht den Entwurf.
+
+                  `[cmd]` **In G-534 meldete ich zehn Elemente des
+                  Vorschaupanels ohne Quelle.** `[read]` **Alle zehn
+                  haben jetzt eine Spalte** — was die einzelne ZEILE
+                  nicht fuehrt, ist ein Strich mit Grund (A2), keine
+                  Attrappe: die Quelle steht, der Wert fehlt. */}
+              <StrategieWahl strategien={echt.strategien}
+                             profil={echt.strategieProfil} />
               <FehlendePhaseKacheln />
               {/* `[cmd]` G-365: die Linie stand unter `echt.phase &&`.
                   Sabotageprobe 2026-09-07 — `phase` auf `null`: die

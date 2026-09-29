@@ -125,8 +125,8 @@ export function GoalsPhaseView() {
         {/* Kachel 3: der Zustandsautomat */}
         <Card title="Phase state machine" sub="9 Phasenarten · aus dem CHECK"
               attrappe={attrappeAus('theme-v1/module-goals-pro.jsx',
-                'goal_phases-Schreibweg (G-357) — die neun Arten stehen im CHECK, '
-                + 'gelesen wird ueber goals.phase_am, geschrieben nirgends')}>
+                'einen Wechsel in einem Zug — heute wird beendet und '
+                + 'neu begonnen (G-534)')}>
           <div className="v2-goals-phasen">
             {Object.values(GOAL_PHASES).map(ph => {
               const active = ph.id === PHASE_STATE.current
@@ -205,8 +205,8 @@ export function GoalsPhaseView() {
         <Card
           title="Phase parameters" sub={p.name}
           attrappe={attrappeAus('theme-v1/module-goals-pro.jsx',
-            'goal_phases.parameters ist ein jsonb und wird gelesen — '
-            + 'es fehlt der Schreibweg (G-357)')}
+            'feste Felder je Phasenart statt freier Werte — '
+            + 'Rate, Hoechstdauer, Protein (G-534)')}
           actions={
             <>
               <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm" onClick={() => setLibrary(true)}>

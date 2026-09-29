@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-09-29
+agent: codex
+beauftragt: 2026-09-29
 
 braucht: [G-536, G-537]
 kind_von: G-534
@@ -146,3 +148,130 @@ Punkte 1 bis 4 oben. Dazu die Nachweise:
 
 Punkte 5 bis 7 oben. Wird geschrieben, wenn Teil 1 abgenommen ist — die
 Zeitachse braucht die Spalten, die Teil 1 setzt.
+
+---
+
+## Nachtrag, Orchestrator, 2026-09-29 14:55 — A1 korrigiert, A6 und A7 neu
+
+Codex hat A1 gemeldet statt still zuzuordnen, und das war richtig:
+**1 von 5 Phasen traegt `goal_id IS NULL`** —
+`31000000-0000-0000-0000-000000000201`, `maintenance/maintain`, seit
+2026-05-23 offen, `max.seed@example.com`. Max besitzt genau ein Ziel:
+`performance`, „Mehr Trainingsleistung", ohne Zieldatum.
+
+### A1 korrigiert — `goal_id` wird nicht pauschal NOT NULL
+
+```sql
+CHECK (actual_end_date IS NOT NULL OR goal_id IS NOT NULL)
+```
+
+Eine **laufende** Phase braucht ein Ziel. Eine abgeschlossene darf ohne
+auskommen — sie ist Historie.
+
+`[read]` **Der Grund ist `ON DELETE SET NULL`.** Damit bleibt es
+sinnvoll: wer sein Ziel loescht, verliert nicht die Phasenhistorie. Mit
+pauschalem NOT NULL muesste es CASCADE werden, und dann nimmt jedes
+geloeschte Ziel seine Historie mit.
+
+**Max' Phase wird beendet**, nicht geloescht und nicht zugeordnet:
+
+    actual_end_date    2026-09-29
+    transition_reason  Seed ohne Zielbindung, beendet bei der
+                       Strukturumstellung G-538
+
+`[annahme]` Eine Maintenance-Phase an „Mehr Trainingsleistung" zu haengen
+waere erfundene Fachlichkeit — ein Performance-Ziel ist kein
+Koerperzusammensetzungs-Ziel, und Max hat kein anderes. **Tom hat diese
+Entscheidung ausdruecklich uebertragen:** *„ich hab diesen seed nicht
+erstellt, dann loese das."* Loeschen faellt weg, Beenden reicht — die
+Regel „der Orchestrator legt vor, Tom entsorgt" bleibt unberuehrt.
+
+**A2 wird dadurch praeziser:** `uq_goal_phases_one_open` auf `(goal_id)`
+greift nur fuer offene Phasen, und die tragen durch den CHECK garantiert
+ein Ziel.
+
+### A6 neu — `user_goals.linked_modules`
+
+Aus der Abnahme von G-537. Claude Code hat die Modulwahl bedienbar
+gebaut, aber **es gibt keine Spalte** — die Wahl wird gehalten und
+verworfen.
+
+    linked_modules  text[] NOT NULL DEFAULT '{}'
+    CHECK           jeder Eintrag aus nutrition, training, recovery,
+                    supplements, medical
+
+`[read]` **Warum in diese Migration:** beide Spalten binden ein Ziel an
+etwas — `goal_id` an seine Phase, `linked_modules` an seine
+Datenquellen. Und `module-goals.jsx` sagt, warum es keine Zierde ist:
+das Ziel traegt `history[]` und `pace`, `user_goals` traegt
+`auto_update`. **Der Ist-Wert wird gezogen, nicht getippt.**
+
+Kein Fuellen der Bestandszeilen. Default leer — wer die fuenf Seed-Ziele
+fuellt, erfindet Verknuepfungen.
+
+### A7 neu — `moderate_cut` auf 20 Wochen
+
+Eine Zeile im Kettenschritt: `max_duration_weeks` von 12 auf 20.
+
+Begruendung in **G-542**: Helms et al. 2014 nennt 12 bis 24 Wochen;
+`max_duration_weeks` ist ein harter Deckel mit `force_transition`, und 12
+bricht eine normale Diaet mitten im Verlauf ab. Die Sicherheit kommt von
+der Diaetpause alle 8 Wochen und den Waechtern, nicht vom kurzen Deckel.
+
+`[read]` **Das weicht bewusst von „der Vorgaenger gewinnt" ab**, weil
+`max_duration_weeks` dort luekenhaft ist — von 17 Strategien tragen nur 8
+einen Wert. Eine loeckrige Quelle traegt keine Entscheidung allein.
+Vorlaeufig bis 2026-09-30, dann klaert Tobias es.
+
+### Was nicht in diesen Auftrag gehoert
+
+Die Umstellung von `berechne_zielwerte` auf die **Rate** statt
+`tdee_modifier`. Codex' Zusatzbefund stimmt — E1 ist damit nicht
+umgesetzt. Das wird **G-543** und kommt danach, weil es einen eigenen
+Nachweis braucht: dieselbe Zahl, wo Faktor und Rate uebereinstimmen, und
+eine andere, wo sie auseinandergehen.
+
+Die Einheit ist dafuer gesetzt: **Prozent pro Woche** (G-542).
+
+---
+
+## Abnahme, Orchestrator, 2026-09-29 16:10
+
+**Angenommen.** Selbst gemessen:
+
+    phasen               5
+    davon mit goal_id    4
+    davon offen          1
+
+`[read]` **Die 4 von 5 sind der Beleg, dass der CHECK richtig gebaut
+ist**, nicht dass etwas fehlt: Max' beendete Phase traegt weiterhin kein
+`goal_id` und darf das — `CHECK (actual_end_date IS NOT NULL OR goal_id
+IS NOT NULL)`. Die eine offene Phase traegt eines, sonst haette der CHECK
+gegriffen. **Historie ohne Ziel bleibt erlaubt, Laufendes nicht.**
+
+    moderate_cut.max_duration_weeks   20   (war 12)
+    contest_prep.max_duration_weeks   16   unveraendert, richtig
+    user_goals                        11 Ziele, 11 mit leerem Array
+
+`[cmd]` **`linked_modules` ist live und alle Bestandszeilen sind leer** —
+wie beauftragt. Wer die fuenf Seed-Ziele gefuellt haette, haette
+Verknuepfungen erfunden.
+
+`[read]` **Max' Phase wurde beendet, nicht geloescht und nicht erfunden
+zugeordnet.** Das war die Entscheidung des Orchestrators auf Toms
+Uebertragung (*„ich hab diesen seed nicht erstellt, dann loese das"*), und
+Codex hat sie ausgefuehrt, ohne eine Fachlichkeit zu erfinden.
+
+### Der Zahlenbefund A5 ist vollstaendig geliefert
+
+`[read]` Drei Konflikte, je mit der Folge in Kilokalorien bei 83,74 kg —
+und einer davon ist keiner:
+
+- **`moderate_cut`**: 20 Wochen. Die Dauer aendert das Tagesziel nicht;
+  die Rate −0,75 %/Woche bleibt −690,86 kcal/Tag.
+- **`lean_bulk`**: +0,25 %/Woche → +230,29 kcal/Tag. Durch G-542 geklaert.
+- **`contest_prep`**: **kein Konflikt, sondern eine falsche Form.** Die
+  Kalorien haengen an den Unterphasen (−300/−600/−750), nicht an einer
+  durchgehenden Rate. Codex hat es richtig unangetastet gelassen.
+
+Der letzte Punkt ist jetzt belegbar geworden — siehe **G-545**.

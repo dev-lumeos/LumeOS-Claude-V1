@@ -59,60 +59,24 @@ function db() {
   return createSessionClient().schema('goals')
 }
 
-/**
- * Legt eine Phase MIT Rate an — der Weg, den `goal_phase_start`
- * nicht kann.
- *
- * `[read]` **Die Funktion traegt eine Sperre, die hier fehlen
- * wuerde:** *,,zuerst die laufende Phase beenden"* (`23505`).
- * `[cmd]` **Deshalb wird sie hier NACHGEBILDET** — erst fragen, ob
- * eine laeuft, dann schreiben.
- *
- * `[read]` **Das ist kein gleichwertiger Ersatz:** zwischen Frage
- * und Schreiben liegt ein Augenblick. `[read]` **Ein zweiter
- * Anlauf im selben Moment kaeme durch** — bei einer Eingabe, die
- * ein Mensch in einem Formular macht, ist das hinnehmbar, und die
- * Datenbank haelt die uebrigen Regeln weiterhin.
- *
- * `[cmd]` **Der saubere Weg ist ein Rate-Parameter an
- * `goal_phase_start`** — Befund fuer Codex.
- */
-async function startMitRate(e: Phasenstart) {
-  const userId = await sitzung()
-
-  const { data: laufend, error: leseFehler } = await db()
-    .from('goal_phases')
-    .select('id')
-    .eq('user_id', userId)
-    .is('actual_end_date', null)
-    .limit(1)
-
-  if (leseFehler) return { data: null, error: leseFehler }
-  if (laufend && laufend.length > 0) {
-    // Dieselbe Meldung wie die Funktion, damit der Aufrufer nur
-    // einen Fall kennt.
-    return {
-      data: null,
-      error: { code: '23505', message: 'goal_phase_start: zuerst die laufende Phase beenden' },
-    }
-  }
-
-  const { data, error } = await db()
-    .from('goal_phases')
-    .insert({
-      user_id: userId,
-      phase_type: e.phase_type,
-      gueltig_ab: e.gueltig_ab,
-      goal_id: e.goal_id ?? null,
-      projected_end_date: e.projected_end_date ?? null,
-      variant: e.variant ?? null,
-      zielrate_pct_kg_woche: e.zielrate_pct_kg_woche,
-    })
-    .select('id')
-    .maybeSingle()
-
-  return { data: data?.id ?? null, error }
-}
+// ══ G-534/A4: DER UMWEG IST WEG ═══════════════════════════════════
+//
+// `[cmd]` **Hier stand `startMitRate()`** — ein `INSERT` mit
+// vorheriger Sperrpruefung, weil `goal_phase_start` keinen
+// Rate-Parameter hatte (G-531).
+//
+// `[read]` **Die Pruefung war KEIN gleichwertiger Ersatz fuer die
+// `23505`-Sperre der Funktion:** zwischen Frage und Schreiben lag
+// ein Augenblick.
+//
+// `[cmd]` **Gemessen 2026-09-29: G-531 ist live.**
+// `goal_phase_start` hat sieben Parameter, der letzte ist
+// `p_zielrate_pct_kg_woche numeric`, **und es gibt GENAU EINE
+// Signatur** — die alte sechsparametrige ist entfernt.
+//
+// `[read]` **Damit ist der Umweg unnoetig.** **Ein Umweg im
+// Anwendungscode war einmal vertretbar; zweimal waere es eine
+// Architektur.**
 
 async function sitzung(): Promise<string> {
   const supabase = createSessionClient()
@@ -143,52 +107,23 @@ export async function phaseStarten(e: Phasenstart): Promise<string> {
       'Die Eingabe ist unvollstaendig.', felder)
   }
 
-  // `[read]` **`p_parameters` bleibt leer, solange die Schluessel
-  // nicht entschieden sind.** `[cmd]` **G-511 macht
-  // `calorie_surplus_kcal` tragend** — welcher Name gilt und woher
-  // die Zahl kommt, entscheidet der Punkt bei Codex. **Ein hier
-  // erfundener Schluessel waere eine Zahl, die niemand liest.**
-  // ── G-519/A5: die Rate MUSS beim Anlegen mit ───────────────────
+  // ── G-534/A4: EIN Aufruf, atomar ───────────────────────────────
   //
-  // `[cmd]` **Gemessen 2026-09-29:** `goal_phase_start` hat sechs
-  // Parameter und KEINEN fuer die Rate:
+  // `[cmd]` **Seit G-531 nimmt `goal_phase_start` die Rate
+  // entgegen** — siebter Parameter, eine einzige Signatur.
+  // `[read]` **Damit traegt die Datenbank wieder beides:** die
+  // Sperre gegen eine zweite laufende Phase (`23505`) UND die Rate.
   //
-  //     p_phase_type, p_gueltig_ab, p_goal_id,
-  //     p_projected_end_date, p_variant, p_parameters
-  //
-  // `[cmd]` **Der CHECK `goal_phases_zielrate_passt_zur_art`
-  // verlangt sie aber fuer `fat_loss`, `lean_bulk` und `mini_cut`
-  // NOT NULL.** `[cmd]` **Folge, dreimal belegt:** ein Aufruf von
-  // `goal_phase_start('fat_loss', …)` **scheitert am CHECK** —
-  // *,,new row … violates check constraint
-  // goal_phases_zielrate_passt_zur_art"*.
-  //
-  // `[read]` **Diese drei Arten sind ueber die Funktion nicht
-  // anlegbar.** `[cmd]` **Gemessen geht es per INSERT mit Rate**
-  // (`INSERT 0 1`), und die Zeilenschutzregel `goal_phases_insert`
-  // erlaubt es dem Eigentuemer.
-  //
-  // `[read]` **Deshalb der zweigeteilte Weg:** wo die Funktion
-  // reicht, wird sie gerufen — sie traegt die Sperre gegen eine
-  // zweite laufende Phase. **Wo sie den CHECK nicht erfuellen
-  // kann, legt der Schreibweg die Zeile selbst an und prueft die
-  // Sperre vorher.**
-  //
-  // `[cmd]` **Die fehlende Parameterliste ist ein Befund fuer
-  // Codex** (G-519/A5) — **nicht etwas, das die Oberflaeche in
-  // `supabase/` behebt.**
-  const brauchtRate = e.zielrate_pct_kg_woche !== null
-    && e.zielrate_pct_kg_woche !== undefined
-
-  const { data, error } = brauchtRate
-    ? await startMitRate(e)
-    : await db().rpc('goal_phase_start', {
-      p_phase_type: e.phase_type,
-      p_gueltig_ab: e.gueltig_ab,
-      p_goal_id: e.goal_id ?? null,
-      p_projected_end_date: e.projected_end_date ?? null,
-      p_variant: e.variant ?? null,
-    })
+  // `[read]` **`p_parameters` bleibt leer** — die Rate hat seit E1
+  // ihre eigene Spalte, das freie JSON-Feld ist nicht mehr der Ort.
+  const { data, error } = await db().rpc('goal_phase_start', {
+    p_phase_type: e.phase_type,
+    p_gueltig_ab: e.gueltig_ab,
+    p_goal_id: e.goal_id ?? null,
+    p_projected_end_date: e.projected_end_date ?? null,
+    p_variant: e.variant ?? null,
+    p_zielrate_pct_kg_woche: e.zielrate_pct_kg_woche ?? null,
+  })
 
   if (error) {
     // `[cmd]` **23505 ist hier KEIN doppelter Schluessel**, sondern

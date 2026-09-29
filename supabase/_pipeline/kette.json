@@ -2786,6 +2786,33 @@
       ]
     },
     {
+      "id": "538_goal_phase_targeting_schema",
+      "path": "supabase/migrations/20260929150315_g538_goal_phase_targeting.sql",
+      "kind": "sql",
+      "creates": "G-538: offene Phasen brauchen ein Ziel, die Offen-Eindeutigkeit gilt je Ziel und user_goals traegt seine Modulquellen.",
+      "depends_on": [
+        "536_goal_strategies_runtime"
+      ]
+    },
+    {
+      "id": "538_goal_phase_targeting_data",
+      "path": "supabase/_pipeline/11_goals/538_goal_phase_targeting_data.sql",
+      "kind": "sql",
+      "creates": "G-538: ungebundene Max-Seedphase beendet, Zielbindungs-CHECK validiert und moderate_cut auf den belegten 20-Wochen-Deckel gesetzt.",
+      "depends_on": [
+        "538_goal_phase_targeting_schema"
+      ]
+    },
+    {
+      "id": "538_goal_phase_start",
+      "path": "supabase/_pipeline/11_goals/538_goal_phase_start.sql",
+      "kind": "sql",
+      "creates": "G-538: goal_phase_start verlangt das Nutzerziel und erlaubt parallele offene Phasen an verschiedenen Zielen.",
+      "depends_on": [
+        "538_goal_phase_targeting_data"
+      ]
+    },
+    {
       "id": "514_goal_contributions_schema",
       "path": "supabase/migrations/20260929081000_g514_goal_contributions.sql",
       "kind": "sql",

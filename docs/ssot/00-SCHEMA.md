@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-24: 234 Funktionen, 477 Policies, 728 CHECKs, 22 Sichten.**
+`[cmd]` **Stand 2026-09-29: 245 Funktionen, 489 Policies, 799 CHECKs, 23 Sichten.**
 
 ## Funktionen und Prozeduren
 
@@ -48,10 +48,13 @@ ob man sie rufen kann.**
 | goals | body_circumference_write | p_measurement_date date, p_measurement_time time without time zone, p_measurement_source text DEFAULT 'manual'::text, p_source_detail text DEFAULT NULL::text, p_notes text DEFAULT NULL::text, p_neck_cm numeric DEFAULT NULL::numeric, p_shoulders_cm numeric DEFAULT NULL::numeric, p_chest_cm numeric DEFAULT NULL::numeric, p_upper_arm_left_cm numeric DEFAULT NULL::numeric, p_upper_arm_right_cm numeric DEFAULT NULL::numeric, p_forearm_left_cm numeric DEFAULT NULL::numeric, p_forearm_right_cm numeric DEFAULT NULL::numeric, p_waist_cm numeric DEFAULT NULL::numeric, p_hip_cm numeric DEFAULT NULL::numeric, p_thigh_left_cm numeric DEFAULT NULL::numeric, p_thigh_right_cm numeric DEFAULT NULL::numeric, p_calf_left_cm numeric DEFAULT NULL::numeric, p_calf_right_cm numeric DEFAULT NULL::numeric | Funktion |
 | goals | body_composition_navy | p_user_id uuid, p_date date DEFAULT CURRENT_DATE | Funktion |
 | goals | fill_body_measurement_snapshot |  | Funktion |
+| goals | formula_tdee | p_user_id uuid, p_stichtag date DEFAULT CURRENT_DATE | Funktion |
 | goals | goal_milestone_status | p_milestone_id uuid, p_stichtag date DEFAULT CURRENT_DATE | Funktion |
 | goals | goal_phase_end | p_phase_id uuid, p_transition_reason text, p_actual_end_date date DEFAULT CURRENT_DATE | Funktion |
-| goals | goal_phase_start | p_phase_type text, p_gueltig_ab date DEFAULT CURRENT_DATE, p_goal_id uuid DEFAULT NULL::uuid, p_projected_end_date date DEFAULT NULL::date, p_variant text DEFAULT NULL::text, p_parameters jsonb DEFAULT '{}'::jsonb | Funktion |
+| goals | goal_phase_start | p_phase_type text, p_goal_id uuid, p_gueltig_ab date DEFAULT CURRENT_DATE, p_projected_end_date date DEFAULT NULL::date, p_variant text DEFAULT NULL::text, p_parameters jsonb DEFAULT '{}'::jsonb, p_zielrate_pct_kg_woche numeric DEFAULT NULL::numeric | Funktion |
 | goals | goal_progress_at | p_goal_id uuid, p_stichtag date DEFAULT CURRENT_DATE | Funktion |
+| goals | kcal_delta_aus_zielrate | p_zielrate_pct_kg_woche numeric, p_body_weight_kg numeric | Funktion |
+| goals | nutrition_target_assign_phase |  | Funktion |
 | goals | phase_am | p_user_id uuid, p_stichtag date DEFAULT CURRENT_DATE | Funktion |
 | goals | phase_transition_recommendation | p_user_id uuid, p_as_of date DEFAULT CURRENT_DATE | Funktion |
 | goals | phase_transition_respond | p_phase_id uuid, p_response text, p_reason text DEFAULT NULL::text | Funktion |
@@ -61,7 +64,12 @@ ob man sie rufen kann.**
 | goals | refresh_user_goal_progress | p_goal_id uuid, p_stichtag date DEFAULT CURRENT_DATE | Funktion |
 | goals | refresh_user_goals_progress_for_user | p_user_id uuid, p_stichtag date DEFAULT CURRENT_DATE | Funktion |
 | goals | sync_profile_weight_from_measurement |  | Funktion |
+| goals | tdee_basis_am | p_user_id uuid, p_stichtag date DEFAULT CURRENT_DATE | Funktion |
+| goals | tdee_ema | p_raw_tdee_kcal numeric, p_previous_tdee_kcal numeric, p_alpha numeric DEFAULT 0.3 | Funktion |
+| goals | tdee_previous_value | p_user_id uuid, p_stichtag date, p_window_days integer, p_formula_tdee_kcal numeric | Funktion |
 | goals | touch_updated_at |  | Funktion |
+| goals | validate_goal_phase_rate |  | Funktion |
+| goals | validate_phase_rate_rule |  | Funktion |
 | goals | zielwerte_am | p_user_id uuid, p_stichtag date DEFAULT CURRENT_DATE | Funktion |
 | medical | appointments_validate_owner_links |  | Funktion |
 | medical | attach_lab_report_original | p_report_id uuid, p_object_name text | Funktion |
@@ -107,6 +115,7 @@ ob man sie rufen kann.**
 | nutrition | meal_plan_slots_owner_guard |  | Funktion |
 | nutrition | meal_plan_weeks_owner_guard |  | Funktion |
 | nutrition | meal_plans_status_compatibility |  | Funktion |
+| nutrition | mealcam_scan_declaration_similarity | p_scan_id uuid, p_declaration_text text | Funktion |
 | nutrition | micronutrient_below_threshold | p_user_id uuid, p_entry_date date, p_threshold_pct numeric DEFAULT 75 | Funktion |
 | nutrition | micronutrient_snapshot | p_user_id uuid, p_entry_date date | Funktion |
 | nutrition | micronutrient_snapshot_with_supplements | p_user_id uuid, p_entry_date date | Funktion |
@@ -166,10 +175,11 @@ ob man sie rufen kann.**
 | public | handle_new_user |  | Funktion |
 | public | is_admin |  | Funktion |
 | public | koerperflaechen_touch |  | Funktion |
+| public | koerperorte_touch |  | Funktion |
 | public | levenshtein | text, text, integer, integer, integer | Funktion |
 | public | levenshtein | text, text | Funktion |
-| public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
 | public | levenshtein_less_equal | text, text, integer | Funktion |
+| public | levenshtein_less_equal | text, text, integer, integer, integer, integer | Funktion |
 | public | metaphone | text, integer | Funktion |
 | public | set_limit | real | Funktion |
 | public | show_limit |  | Funktion |
@@ -236,6 +246,7 @@ ob man sie rufen kann.**
 | supplements | supplier_product_nutrient_snapshot | p_supplier_product_id uuid, p_serving_quantity numeric DEFAULT 1, p_serving_size text DEFAULT NULL::text | Funktion |
 | supplements | supplier_product_preference_write | p_product_id uuid, p_preference text | Funktion |
 | supplements | supplier_product_search_meta | p_query text, p_market_status text DEFAULT 'On Market'::text, p_marke text DEFAULT NULL::text, p_kategorie text DEFAULT NULL::text, p_form text DEFAULT NULL::text, p_allergien_ausblenden boolean DEFAULT true, p_meidestoffe text[] DEFAULT NULL::text[], p_marken text[] DEFAULT NULL::text[], p_nur_bewertet boolean DEFAULT false | Funktion |
+| supplements | supplier_product_unmeasured_nutrient_codes | p_supplier_product_id uuid, p_serving_size text | Funktion |
 | supplements | touch_updated_at |  | Funktion |
 | supplements | validate_meal_plan_product_reference |  | Funktion |
 | supplements | withdraw_stack_template | p_stack_id uuid | Funktion |
@@ -277,6 +288,7 @@ Rechten des Lesers, nicht des Erzeugers.**
 | supplements | supplier_product_content_catalog | security_invoker |
 | supplements | supplier_product_nutrient_serving_options | security_invoker |
 | supplements | supplier_product_nutrients | security_invoker |
+| training | muscle_exercises_effective | security_invoker |
 | training | muscle_group_tree | security_invoker |
 
 ## CHECK-Bedingungen
@@ -355,25 +367,78 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | goals | goal_milestones | goal_milestones_type_ck | CHECK ((milestone_type = ANY (ARRAY['absolute_value'::text, 'percentage'::text, 'date'::text, 'behavioral'::text]))) |
 | goals | goal_phases | goal_phases_check | CHECK (((projected_end_date IS NULL) OR (projected_end_date >= gueltig_ab))) |
 | goals | goal_phases | goal_phases_check1 | CHECK (((actual_end_date IS NULL) OR (actual_end_date >= gueltig_ab))) |
+| goals | goal_phases | goal_phases_open_requires_goal | CHECK (((actual_end_date IS NOT NULL) OR (goal_id IS NOT NULL))) |
 | goals | goal_phases | goal_phases_parameters_check | CHECK ((jsonb_typeof(parameters) = 'object'::text)) |
 | goals | goal_phases | goal_phases_phase_type_check | CHECK ((phase_type = ANY (ARRAY['fat_loss'::text, 'lean_bulk'::text, 'maintenance'::text, 'recomp'::text, 'contest_prep'::text, 'r |
+| goals | goal_phases | goal_phases_zielrate_aussengrenze | CHECK (((zielrate_pct_kg_woche IS NULL) OR ((zielrate_pct_kg_woche >= '-2.5'::numeric) AND (zielrate_pct_kg_woche <= 1.5)))) |
+| goals | goal_phases | goal_phases_zielrate_passt_zur_art | CHECK ((((phase_type = ANY (ARRAY['fat_loss'::text, 'mini_cut'::text])) AND ((zielrate_pct_kg_woche IS NULL) OR (zielrate_pct_kg_w |
+| goals | goal_strategies | goal_strategies_annual_array | CHECK ((jsonb_typeof(annual) = 'array'::text)) |
+| goals | goal_strategies | goal_strategies_category_check | CHECK ((category = ANY (ARRAY['fat_loss'::text, 'muscle_gain'::text, 'hybrid'::text, 'contest_prep'::text, 'recovery'::text, 'expe |
+| goals | goal_strategies | goal_strategies_code_format | CHECK ((code ~ '^[a-z][a-z0-9_]*$'::text)) |
+| goals | goal_strategies | goal_strategies_duration_check | CHECK (((max_duration_weeks IS NULL) OR (max_duration_weeks >= 1))) |
+| goals | goal_strategies | goal_strategies_editor_modes_check | CHECK ((editor_modes <@ ARRAY['variants'::text, 'params'::text, 'guards'::text, 'duration'::text, 'subphases'::text, 'refeeds'::te |
+| goals | goal_strategies | goal_strategies_fat_check | CHECK (((fat_percent IS NULL) OR ((fat_percent >= 0.15) AND (fat_percent <= 0.40)))) |
+| goals | goal_strategies | goal_strategies_peak_week_details_object | CHECK (((peak_week_details IS NULL) OR (jsonb_typeof(peak_week_details) = 'object'::text))) |
+| goals | goal_strategies | goal_strategies_protein_check | CHECK (((protein_per_kg IS NULL) OR ((protein_per_kg >= 1.2) AND (protein_per_kg <= 3.5)))) |
+| goals | goal_strategies | goal_strategies_refeeds_object | CHECK (((refeeds IS NULL) OR (jsonb_typeof(refeeds) = 'object'::text))) |
+| goals | goal_strategies | goal_strategies_requirements_object | CHECK ((jsonb_typeof(requirements) = 'object'::text)) |
+| goals | goal_strategies | goal_strategies_sub_phases_array | CHECK ((jsonb_typeof(sub_phases) = 'array'::text)) |
+| goals | goal_strategies | goal_strategies_tdee_modifier_check | CHECK (((tdee_modifier IS NULL) OR ((tdee_modifier >= '-0.40'::numeric) AND (tdee_modifier <= 0.25)))) |
+| goals | goal_strategies | goal_strategies_tier_check | CHECK ((tier = ANY (ARRAY['simple'::text, 'advanced'::text]))) |
+| goals | goal_strategies | goal_strategies_weight_change_check | CHECK (((weight_change_target_percent IS NULL) OR ((weight_change_target_percent >= '-2.5'::numeric) AND (weight_change_target_per |
+| goals | nutrition_macro_rules | nutrition_macro_rules_basis | CHECK ((basis = ANY (ARRAY['lean_mass_kg'::text, 'body_weight_kg'::text, 'kcal'::text, 'per_day'::text]))) |
+| goals | nutrition_macro_rules | nutrition_macro_rules_basis_unit | CHECK ((((basis = ANY (ARRAY['lean_mass_kg'::text, 'body_weight_kg'::text])) AND (unit = 'g_per_kg'::text)) OR ((basis = 'kcal'::t |
+| goals | nutrition_macro_rules | nutrition_macro_rules_code_format | CHECK (((code = lower(code)) AND (code ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'::text))) |
+| goals | nutrition_macro_rules | nutrition_macro_rules_evidence_status | CHECK ((evidence_status = ANY (ARRAY['open'::text, 'assumption'::text, 'sourced'::text]))) |
+| goals | nutrition_macro_rules | nutrition_macro_rules_experience_level | CHECK (((experience_level IS NULL) OR (experience_level = ANY (ARRAY['beginner'::text, 'advanced'::text, 'pro'::text, 'elite'::tex |
+| goals | nutrition_macro_rules | nutrition_macro_rules_kind | CHECK ((rule_kind = ANY (ARRAY['target_range'::text, 'hard_minimum'::text, 'fixed_target'::text]))) |
+| goals | nutrition_macro_rules | nutrition_macro_rules_nonnegative | CHECK ((((lower_value IS NULL) OR (lower_value >= (0)::numeric)) AND ((upper_value IS NULL) OR (upper_value >= (0)::numeric)))) |
+| goals | nutrition_macro_rules | nutrition_macro_rules_nutrient | CHECK ((nutrient = ANY (ARRAY['protein'::text, 'fat'::text, 'carbohydrate'::text, 'fiber'::text]))) |
+| goals | nutrition_macro_rules | nutrition_macro_rules_open_has_no_values | CHECK (((evidence_status <> 'open'::text) OR ((lower_value IS NULL) AND (upper_value IS NULL)))) |
+| goals | nutrition_macro_rules | nutrition_macro_rules_phase_type | CHECK (((phase_type IS NULL) OR (phase_type = ANY (ARRAY['fat_loss'::text, 'lean_bulk'::text, 'maintenance'::text, 'recomp'::text, |
+| goals | nutrition_macro_rules | nutrition_macro_rules_source_complete | CHECK (((evidence_status <> 'sourced'::text) OR ((NULLIF(btrim(source_id), ''::text) IS NOT NULL) AND (NULLIF(btrim(source_locator |
+| goals | nutrition_macro_rules | nutrition_macro_rules_source_pair | CHECK ((num_nonnulls(source_id, source_locator) = ANY (ARRAY[0, 2]))) |
+| goals | nutrition_macro_rules | nutrition_macro_rules_unit | CHECK ((unit = ANY (ARRAY['g_per_kg'::text, 'percent_kcal'::text, 'g_per_day'::text]))) |
+| goals | nutrition_macro_rules | nutrition_macro_rules_value_shape | CHECK (((evidence_status = 'open'::text) OR ((rule_kind = 'target_range'::text) AND (lower_value IS NOT NULL) AND (upper_value IS  |
 | goals | nutrition_targets | nutrition_targets_alpha_linolenic_acid_check | CHECK (((alpha_linolenic_acid_g IS NULL) OR ((alpha_linolenic_acid_g >= (0)::numeric) AND (alpha_linolenic_acid_g <= (50)::numeric |
 | goals | nutrition_targets | nutrition_targets_carbs_check | CHECK (((carbs_g IS NULL) OR ((carbs_g >= (0)::numeric) AND (carbs_g <= (1500)::numeric)))) |
 | goals | nutrition_targets | nutrition_targets_fat_check | CHECK (((fat_g IS NULL) OR ((fat_g >= (0)::numeric) AND (fat_g <= (500)::numeric)))) |
 | goals | nutrition_targets | nutrition_targets_fiber_check | CHECK (((fiber_g IS NULL) OR ((fiber_g >= (0)::numeric) AND (fiber_g <= (100)::numeric)))) |
+| goals | nutrition_targets | nutrition_targets_formula_inputs_required | CHECK (((herkunft <> 'formel'::text) OR ((body_weight_kg IS NOT NULL) AND (tdee_herkunft IS NOT NULL) AND (((tdee_herkunft = 'form |
 | goals | nutrition_targets | nutrition_targets_herkunft_check | CHECK ((herkunft = ANY (ARRAY['formel'::text, 'manuell'::text]))) |
 | goals | nutrition_targets | nutrition_targets_kcal_check | CHECK (((kcal IS NULL) OR ((kcal >= (500)::numeric) AND (kcal <= (10000)::numeric)))) |
 | goals | nutrition_targets | nutrition_targets_linoleic_acid_check | CHECK (((linoleic_acid_g IS NULL) OR ((linoleic_acid_g >= (0)::numeric) AND (linoleic_acid_g <= (200)::numeric)))) |
+| goals | nutrition_targets | nutrition_targets_phase_required | CHECK ((phase_id IS NOT NULL)) NOT VALID |
 | goals | nutrition_targets | nutrition_targets_protein_check | CHECK (((protein_g IS NULL) OR ((protein_g >= (0)::numeric) AND (protein_g <= (500)::numeric)))) |
+| goals | nutrition_targets | nutrition_targets_rate_snapshot_check | CHECK (((zielrate_pct_kg_woche IS NULL) OR ((zielrate_pct_kg_woche >= '-2.5'::numeric) AND (zielrate_pct_kg_woche <= 1.5)))) |
+| goals | nutrition_targets | nutrition_targets_tdee_herkunft_check | CHECK (((tdee_herkunft IS NULL) OR (tdee_herkunft = ANY (ARRAY['formula'::text, 'adaptive'::text])))) |
+| goals | nutrition_targets | nutrition_targets_weight_snapshot_check | CHECK (((body_weight_kg IS NULL) OR (body_weight_kg > (0)::numeric))) |
+| goals | phase_rate_rules | phase_rate_rules_code_format | CHECK (((code = lower(code)) AND (code ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'::text))) |
+| goals | phase_rate_rules | phase_rate_rules_evidence_status | CHECK ((evidence_status = ANY (ARRAY['open'::text, 'assumption'::text, 'sourced'::text]))) |
+| goals | phase_rate_rules | phase_rate_rules_experience_level | CHECK (((experience_level IS NULL) OR (experience_level = ANY (ARRAY['beginner'::text, 'advanced'::text, 'pro'::text, 'elite'::tex |
+| goals | phase_rate_rules | phase_rate_rules_open_has_no_values | CHECK (((evidence_status <> 'open'::text) OR ((lower_value IS NULL) AND (upper_value IS NULL)))) |
+| goals | phase_rate_rules | phase_rate_rules_phase_type | CHECK ((phase_type = ANY (ARRAY['fat_loss'::text, 'lean_bulk'::text, 'maintenance'::text, 'recomp'::text, 'contest_prep'::text, 'r |
+| goals | phase_rate_rules | phase_rate_rules_source_complete | CHECK (((evidence_status <> 'sourced'::text) OR ((NULLIF(btrim(source_id), ''::text) IS NOT NULL) AND (NULLIF(btrim(source_locator |
+| goals | phase_rate_rules | phase_rate_rules_source_pair | CHECK ((num_nonnulls(source_id, source_locator) = ANY (ARRAY[0, 2]))) |
+| goals | phase_rate_rules | phase_rate_rules_value_shape | CHECK (((evidence_status = 'open'::text) OR ((lower_value IS NOT NULL) AND (upper_value IS NOT NULL) AND (lower_value <= upper_val |
 | goals | phase_transition_responses | phase_transition_responses_response_check | CHECK ((response = ANY (ARRAY['accepted'::text, 'rejected'::text]))) |
 | goals | progress_photos | progress_photos_ai_analysis_check | CHECK ((jsonb_typeof(ai_analysis) = 'object'::text)) |
 | goals | progress_photos | progress_photos_photo_url_check | CHECK ((btrim(photo_url) <> ''::text)) |
 | goals | progress_photos | progress_photos_pose_name_check | CHECK ((btrim(pose_name) <> ''::text)) |
 | goals | progress_photos | progress_photos_pose_type_check | CHECK ((pose_type = ANY (ARRAY['mandatory_8'::text, 'quarter_turns'::text, 'detail'::text, 'custom'::text]))) |
+| goals | tdee_history | tdee_history_alpha_ck | CHECK (((alpha > (0)::numeric) AND (alpha <= (1)::numeric))) |
+| goals | tdee_history | tdee_history_confidence_ck | CHECK ((confidence = ANY (ARRAY['low'::text, 'medium'::text, 'high'::text]))) |
+| goals | tdee_history | tdee_history_counts_ck | CHECK (((complete_intake_days >= 0) AND (weight_measurement_count >= 0) AND ((measurement_span_days IS NULL) OR (measurement_span_ |
+| goals | tdee_history | tdee_history_method_ck | CHECK ((NULLIF(btrim(method), ''::text) IS NOT NULL)) |
+| goals | tdee_history | tdee_history_previous_source_ck | CHECK (((previous_source IS NULL) OR (previous_source = ANY (ARRAY['formula_seed'::text, 'history'::text])))) |
+| goals | tdee_history | tdee_history_reliable_ck | CHECK (((NOT reliable) OR ((status = 'complete'::text) AND (raw_tdee_kcal IS NOT NULL) AND (previous_tdee_kcal IS NOT NULL) AND (p |
+| goals | tdee_history | tdee_history_status_ck | CHECK ((status = ANY (ARRAY['missing_profile'::text, 'insufficient_intake_days'::text, 'insufficient_weight_measurements'::text, ' |
+| goals | tdee_history | tdee_history_window_ck | CHECK ((window_days > 0)) |
 | goals | user_goals | user_goals_check | CHECK (((target_date IS NULL) OR (target_date >= gueltig_ab))) |
 | goals | user_goals | user_goals_check1 | CHECK (((status <> 'active'::text) OR ((priority >= 1) AND (priority <= 3)))) |
 | goals | user_goals | user_goals_difficulty_level_check | CHECK (((difficulty_level IS NULL) OR (difficulty_level = ANY (ARRAY['easy'::text, 'moderate'::text, 'challenging'::text, 'aggress |
 | goals | user_goals | user_goals_goal_type_check | CHECK ((goal_type = ANY (ARRAY['body_composition'::text, 'performance'::text, 'health'::text, 'lifestyle'::text]))) |
+| goals | user_goals | user_goals_linked_modules_check | CHECK (((linked_modules <@ ARRAY['nutrition'::text, 'training'::text, 'recovery'::text, 'supplements'::text, 'medical'::text]) AND |
 | goals | user_goals | user_goals_priority_check | CHECK (((priority >= 1) AND (priority <= 10))) |
 | goals | user_goals | user_goals_progress_pct_check | CHECK (((progress_pct >= (0)::numeric) AND (progress_pct <= (100)::numeric))) |
 | goals | user_goals | user_goals_status_check | CHECK ((status = ANY (ARRAY['active'::text, 'paused'::text, 'achieved'::text, 'missed'::text, 'abandoned'::text, 'on_hold'::text]) |
@@ -531,10 +596,16 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | medical | user_medications | user_medications_measurement_source_check | CHECK ((measurement_source = ANY (ARRAY['manual'::text, 'device'::text, 'import'::text, 'admin'::text, 'seed'::text]))) |
 | medical | user_medications | user_medications_monitoring_frequency_check | CHECK (((monitoring_frequency IS NULL) OR (monitoring_frequency = ANY (ARRAY['weekly'::text, 'monthly'::text, 'quarterly'::text, ' |
 | medical | user_medications | user_medications_name_check | CHECK ((btrim(name) <> ''::text)) |
+| nutrition | animal_species | animal_species_code_check | CHECK ((code ~ '^[a-z][a-z0-9_]*$'::text)) |
+| nutrition | animal_species | animal_species_name_de_check | CHECK ((btrim(name_de) <> ''::text)) |
+| nutrition | animal_species | animal_species_name_en_check | CHECK ((btrim(name_en) <> ''::text)) |
+| nutrition | animal_species | animal_species_name_th_check | CHECK ((btrim(name_th) <> ''::text)) |
+| nutrition | animal_species | animal_species_synonyms_check | CHECK ((cardinality(synonyms) > 0)) |
 | nutrition | exclusion_preset_rules | exclusion_preset_rules_rule_kind_check | CHECK ((rule_kind = ANY (ARRAY['category'::text, 'bls_prefix'::text, 'name'::text, 'name_not'::text, 'raw_animal'::text]))) |
 | nutrition | exclusion_preset_rules | exclusion_preset_rules_rule_value_check | CHECK ((btrim(rule_value) <> ''::text)) |
 | nutrition | exclusion_presets | exclusion_presets_kind_check | CHECK ((kind = ANY (ARRAY['religious'::text, 'personal'::text]))) |
 | nutrition | food_aliases | food_aliases_source_check | CHECK ((source = ANY (ARRAY['editorial'::text, 'ai_generated'::text, 'user'::text, 'derived'::text, 'curated_nebenname'::text, 'cu |
+| nutrition | food_animal_species | food_animal_species_source_check | CHECK ((source = 'name_explicit_c540'::text)) |
 | nutrition | food_categories | food_categories_level_check | CHECK ((level = ANY (ARRAY[1, 2, 3, 4]))) |
 | nutrition | food_curation_candidates | food_curation_candidates_status_check | CHECK ((status = ANY (ARRAY['pending'::text, 'accepted'::text, 'rejected'::text, 'superseded'::text]))) |
 | nutrition | food_curation_candidates | food_curation_candidates_target_type_check | CHECK ((target_type = ANY (ARRAY['category_assignment'::text, 'display_name'::text, 'alias'::text, 'preference_item_mapping'::text |
@@ -622,6 +693,12 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | nutrition | meal_plans | meal_plans_target_fat_g_check | CHECK (((target_fat_g IS NULL) OR (target_fat_g >= (0)::numeric))) |
 | nutrition | meal_plans | meal_plans_target_kcal_check | CHECK (((target_kcal IS NULL) OR (target_kcal >= (0)::numeric))) |
 | nutrition | meal_plans | meal_plans_target_protein_g_check | CHECK (((target_protein_g IS NULL) OR (target_protein_g >= (0)::numeric))) |
+| nutrition | mealcam_scans | mealcam_scans_food_name_snapshot_check | CHECK ((btrim(food_name_snapshot) <> ''::text)) |
+| nutrition | mealcam_scans | mealcam_scans_image_path_check | CHECK ((btrim(image_path) <> ''::text)) |
+| nutrition | mealcam_scans | mealcam_scans_image_sha256_check | CHECK ((image_sha256 ~ '^[0-9a-f]{64}$'::text)) |
+| nutrition | mealcam_scans | mealcam_scans_portion_amount_check | CHECK ((portion_amount > (0)::numeric)) |
+| nutrition | mealcam_scans | mealcam_scans_portion_unit_check | CHECK ((btrim(portion_unit) <> ''::text)) |
+| nutrition | mealcam_scans | mealcam_scans_vision_result_check | CHECK ((jsonb_typeof(vision_result) = 'object'::text)) |
 | nutrition | meals | meals_entry_source_ck | CHECK ((entry_source = ANY (ARRAY['manual'::text, 'device'::text, 'import'::text, 'admin'::text, 'seed'::text]))) |
 | nutrition | meals | meals_meal_time_minute_check | CHECK (((meal_time IS NULL) OR (EXTRACT(second FROM meal_time) = (0)::numeric))) |
 | nutrition | meals | meals_meal_type_check | CHECK ((meal_type = ANY (ARRAY['breakfast'::text, 'lunch'::text, 'dinner'::text, 'snack'::text, 'pre_workout'::text, 'post_workout |
@@ -702,6 +779,12 @@ Gedaechtnis falsch abgeschrieben wird** (G-373).
 | public | allergy_search_terms | allergy_search_terms_source_id_check | CHECK ((btrim(source_id) <> ''::text)) |
 | public | koerperflaechen | koerperflaechen_art_ck | CHECK ((art = ANY (ARRAY['wurzel'::text, 'gruppe'::text, 'muskel'::text, 'umriss'::text, 'kopf'::text]))) |
 | public | koerperflaechen | koerperflaechen_umriss_ck | CHECK (((art <> ALL (ARRAY['umriss'::text, 'kopf'::text])) OR (muscle_group_id IS NULL))) |
+| public | koerperort_muskeln | koerperort_muskeln_art_ck | CHECK ((koerperort_art = 'muskel'::text)) |
+| public | koerperorte | koerperorte_art_ck | CHECK ((art = ANY (ARRAY['muskel'::text, 'fettdepot'::text, 'landmarke'::text]))) |
+| public | koerperorte | koerperorte_code_ck | CHECK (((code = lower(code)) AND (code ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'::text))) |
+| public | koerperorte | koerperorte_name_de_ck | CHECK ((btrim(name_de) <> ''::text)) |
+| public | koerperorte | koerperorte_name_en_ck | CHECK ((btrim(name_en) <> ''::text)) |
+| public | koerperorte | koerperorte_quelle_ck | CHECK ((quelle_url ~ '^https://'::text)) |
 | public | profiles | profiles_activity_level_check | CHECK (((activity_level IS NULL) OR (activity_level = ANY (ARRAY['sedentary'::text, 'light'::text, 'moderate'::text, 'active'::tex |
 | public | profiles | profiles_biological_sex_check | CHECK (((biological_sex IS NULL) OR (biological_sex = ANY (ARRAY['male'::text, 'female'::text])))) |
 | public | profiles | profiles_birth_date_check | CHECK (((birth_date IS NULL) OR ((birth_date >= '1900-01-01'::date) AND (birth_date <= CURRENT_DATE)))) |
@@ -1093,11 +1176,14 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | goals | goal_phases | goal_phases_insert | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
 | goals | goal_phases | goal_phases_select | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
 | goals | goal_phases | goal_phases_update | UPDATE | (( SELECT auth.uid() AS uid) = user_id) |
+| goals | goal_strategies | goal_strategies_select | SELECT | true |
+| goals | nutrition_macro_rules | nutrition_macro_rules_select | SELECT | true |
 | goals | nutrition_targets | nutrition_targets_coach_read | SELECT | (user_id IN ( SELECT p.client_id    FROM coach.client_permissions p   WHERE ((p.coach_id = |
 | goals | nutrition_targets | nutrition_targets_delete | DELETE | (auth.uid() = user_id) |
 | goals | nutrition_targets | nutrition_targets_insert | INSERT | (auth.uid() = user_id) |
 | goals | nutrition_targets | nutrition_targets_select | SELECT | (auth.uid() = user_id) |
 | goals | nutrition_targets | nutrition_targets_update | UPDATE | (auth.uid() = user_id) |
+| goals | phase_rate_rules | phase_rate_rules_select | SELECT | true |
 | goals | phase_transition_responses | phase_transition_responses_delete_own | DELETE | (( SELECT auth.uid() AS uid) = user_id) |
 | goals | phase_transition_responses | phase_transition_responses_insert_own | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
 | goals | phase_transition_responses | phase_transition_responses_select_own | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
@@ -1106,6 +1192,7 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | goals | progress_photos | progress_photos_insert_own | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
 | goals | progress_photos | progress_photos_select_own | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
 | goals | progress_photos | progress_photos_update_own | UPDATE | (( SELECT auth.uid() AS uid) = user_id) |
+| goals | tdee_history | tdee_history_select | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
 | goals | user_goals | user_goals_coach_read | SELECT | (user_id IN ( SELECT p.client_id    FROM coach.client_permissions p   WHERE ((p.coach_id = |
 | goals | user_goals | user_goals_delete | DELETE | (( SELECT auth.uid() AS uid) = user_id) |
 | goals | user_goals | user_goals_insert | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
@@ -1177,9 +1264,11 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | medical | user_medications | user_medications_insert | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
 | medical | user_medications | user_medications_select | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
 | medical | user_medications | user_medications_update | UPDATE | (( SELECT auth.uid() AS uid) = user_id) |
+| nutrition | animal_species | animal_species_select | SELECT | true |
 | nutrition | exclusion_preset_rules | exclusion_preset_rules_select | SELECT | true |
 | nutrition | exclusion_presets | exclusion_presets_select | SELECT | is_active |
 | nutrition | food_aliases | food_aliases_select | SELECT | true |
+| nutrition | food_animal_species | food_animal_species_select | SELECT | true |
 | nutrition | food_categories | food_categories_select | SELECT | true |
 | nutrition | food_curation_candidates | food_curation_candidates_select_admin | SELECT | is_admin() |
 | nutrition | food_curation_decisions | food_curation_decisions_select_admin | SELECT | is_admin() |
@@ -1238,6 +1327,10 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | nutrition | meal_slots | meal_slots_insert | INSERT | (auth.uid() = user_id) |
 | nutrition | meal_slots | meal_slots_select | SELECT | (auth.uid() = user_id) |
 | nutrition | meal_slots | meal_slots_update | UPDATE | (auth.uid() = user_id) |
+| nutrition | mealcam_scans | mealcam_scans_delete_own | DELETE | (( SELECT auth.uid() AS uid) = user_id) |
+| nutrition | mealcam_scans | mealcam_scans_insert_own | INSERT | (( SELECT auth.uid() AS uid) = user_id) |
+| nutrition | mealcam_scans | mealcam_scans_select_own | SELECT | (( SELECT auth.uid() AS uid) = user_id) |
+| nutrition | mealcam_scans | mealcam_scans_update_own | UPDATE | (( SELECT auth.uid() AS uid) = user_id) |
 | nutrition | meals | meals_coach_read | SELECT | (user_id IN ( SELECT p.client_id    FROM coach.client_permissions p   WHERE ((p.coach_id = |
 | nutrition | meals | meals_delete | DELETE | (auth.uid() = user_id) |
 | nutrition | meals | meals_insert | INSERT | (auth.uid() = user_id) |
@@ -1284,6 +1377,8 @@ gekuerzt** ? **wer mehr braucht, fragt `pg_policy`.**
 | public | allergen_aliases | allergen_aliases_select | SELECT | true |
 | public | allergy_search_terms | allergy_search_terms_select | SELECT | true |
 | public | koerperflaechen | koerperflaechen_select | SELECT | true |
+| public | koerperort_muskeln | koerperort_muskeln_select | SELECT | true |
+| public | koerperorte | koerperorte_select | SELECT | true |
 | public | profiles | profiles_delete | DELETE | (auth.uid() = id) |
 | public | profiles | profiles_insert | INSERT | (auth.uid() = id) |
 | public | profiles | profiles_select | SELECT | (auth.uid() = id) |

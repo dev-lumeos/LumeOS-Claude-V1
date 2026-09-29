@@ -19,7 +19,10 @@
 // Laeuft ausschliesslich serverseitig.
 import { createSessionClient } from '@lumeos/shared/session'
 
-import { pruefeAenderung, type ZielAenderung } from './ziel-regeln'
+import {
+  pruefeAenderung, pruefeNeuesZiel,
+  type ZielAenderung, type ZielNeu,
+} from './ziel-regeln'
 
 export type SchreibErgebnis =
   | { ok: true }
@@ -77,6 +80,73 @@ export async function zielAendern(
   }
   if (!data || data.length === 0) {
     return { ok: false, fehler: 'Kein Ziel geändert — gehört es dieser Sitzung?' }
+  }
+  return { ok: true }
+}
+
+/**
+ * Ein neues Ziel anlegen — G-537.
+ *
+ * `[cmd]` **Diesen Weg gab es nicht.** `[read]` **Man konnte in
+ * LumeOS kein Ziel erstellen** — die Zeilen in der Datenbank sind
+ * Seed.
+ *
+ * `[read]` **`.select('id')` wie bei `zielAendern`** — ohne sie
+ * meldet PostgREST auch dann Erfolg, wenn der Zeilenschutz alles
+ * weggefiltert hat. **Der Fehler aus G-79 wiederholt sich sonst am
+ * Anlegeweg.**
+ *
+ * `[read]` **Ein neues Ziel ist immer `active`** — deshalb greift
+ * `user_goals_check1` (Prioritaet 1 bis 3) und
+ * `uq_user_goals_active_slot` (jeder Platz einmal).
+ */
+export async function zielAnlegen(z: ZielNeu): Promise<SchreibErgebnis> {
+  const supabase = createSessionClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { ok: false, fehler: 'Keine angemeldete Sitzung.' }
+
+  const felder = pruefeNeuesZiel(z)
+  if (felder.length) {
+    // `[read]` **Der erste Feldfehler als Satz** — der Dialog zeigt
+    // sie einzeln, dieser Weg gibt einen zurueck.
+    return { ok: false, fehler: `${felder[0].feld}: ${felder[0].text}` }
+  }
+
+  const { data, error } = await supabase
+    .schema('goals')
+    .from('user_goals')
+    .insert({
+      user_id: user.id,
+      goal_type: z.goal_type,
+      title: z.title.trim(),
+      gueltig_ab: z.gueltig_ab,
+      priority: z.priority,
+      status: 'active',
+      description: z.description?.trim() || null,
+      target_value: z.target_value ?? null,
+      target_unit: z.target_unit?.trim() || null,
+      start_value: z.start_value ?? null,
+      current_value: z.current_value ?? null,
+      target_date: z.target_date || null,
+      motivation_reason: z.motivation_reason?.trim() || null,
+    })
+    .select('id')
+
+  if (error) {
+    // `[cmd]` **`uq_user_goals_active_slot`** — derselbe Satz wie in
+    // `zielAendern`, damit der Nutzer eine Meldung kennt und nicht
+    // zwei.
+    if (error.code === '23505' && error.message.includes('active_slot')) {
+      return {
+        ok: false,
+        fehler: `Priorität ${z.priority} ist schon vergeben. `
+          + 'Aktive Ziele belegen die Plätze 1 bis 3, jeden nur einmal.',
+      }
+    }
+    return { ok: false, fehler: error.message }
+  }
+  if (!data || data.length === 0) {
+    return { ok: false, fehler: 'Kein Ziel angelegt — gehört es dieser Sitzung?' }
   }
   return { ok: true }
 }

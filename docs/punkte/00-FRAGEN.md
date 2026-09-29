@@ -2,7 +2,7 @@
 
 **Erzeugt von `tools/fragen-index.mjs`. Nicht von Hand aendern.**
 
-`[cmd]` **20 Punkte tragen `typ: entscheidung`
+`[cmd]` **21 Punkte tragen `typ: entscheidung`
 und sind keiner Entscheidung zugeordnet.**
 
 `[read]` **Jeder Satz unten steht woertlich in der genannten
@@ -226,6 +226,92 @@ Zeile im Kettenschritt und kein Umbau — genau dafuer steht der Katalog
 rechnet pauschal −25 % TDEE und ignoriert die Unterphasen
 (−300/−600/−750 kcal). Das ist ein Fehler, keine Entscheidung — er
 gehoert zu G-530.
+
+---
+
+## Nachtrag, 2026-09-29 16:10 — Frage 1 ist geklaert, bevor Tobias da war
+
+`[cmd]` **Tom hat um 16:02 drei Dokumente beigebracht. Alle drei rechnen
+in Prozent pro Woche, an vier unabhaengigen Stellen:**
+
+    Encyclopedia 1.4   "Lean Bulk: Target gain: 0.25-0.5% bodyweight/week"
+    Encyclopedia 3.1   "Phase 1: Rate of loss: 0.5-0.8% bodyweight/week"
+    Formelsammlung     "Lean Bulk: Ziel +0.25-0.5% Koerpergewicht/Woche"
+    Contest-Framework  "Phase 1: 0.5-0.8% Koerpergewicht/Woche"
+
+`[read]` **Keines der drei nennt irgendwo Prozent pro Monat.** Damit ist
+`PHASE_MODELS.md:68` (*„rate_of_gain: 0.25–0.5% BW/month"*) der Einzelfall
+und der Fehler — dieselbe Zahl, falsche Einheit.
+
+**Frage 1 gilt als entschieden: Prozent pro Woche.** Die Dokumente sind
+Sekundaerliteratur, aber sie konvergieren untereinander, mit
+`definitions.ts` und mit den Primaerquellen (Iraki et al. 2019, Helms et
+al. 2014). Vier Quellen, eine Einheit.
+
+**Fuer Tobias bleiben Frage 2 und 3** — die Hoechstdauer von
+`moderate_cut` und ob ein fortgeschrittener Natural in Prozent oder in
+Kilokalorien denkt. Beide sind Erfahrungsfragen, keine Literaturfragen.
+
+## G-546 — quer-g-0546-erfassen-oder-empfehlen.md
+
+**Modul:** quer · **angelegt:** 2026-09-29 · **Datei:** `todos/quer-g-0546-erfassen-oder-empfehlen.md`
+
+`[cmd]` **Die Lektuere vom 2026-09-29 (Dokument A, Abschnitt 2) enthaelt
+Dosierungsprotokolle fuer sechs Substanzklassen:** anabole Steroide,
+Wachstumshormon und Peptide, Thyroidhormone, Fettabbaumittel
+einschliesslich DNP, Insulin und Diuretika. Mit Wochendosierungen,
+Halbwertszeiten, Zyklusplaenen und Nebenwirkungsmanagement.
+
+**Das ist nicht in einen Katalogeintrag eingebaut worden** (G-545 A6), und
+zwar nicht, weil es fachlich falsch waere, sondern weil die Entscheidung
+Tom gehoert.
+
+## Die Frage ist nicht, ob LumeOS Substanzen kennt
+
+`[cmd]` **Es tut es schon:** `medical.user_medications` speichert
+Medikamente verschluesselt (C-285), der Medikamentenkatalog steht (C-506),
+und der Injektionsplaner hat ein Datenmodell fuer Injektionsstellen
+(C-385). Ein Nutzer kann heute erfassen, was er nimmt.
+
+**Die Frage ist die Richtung:**
+
+| | |
+|---|---|
+| **Erfassen** | Der Nutzer traegt ein, was er nimmt. LumeOS rechnet damit — Wechselwirkungen, Laborwerte, Injektionsstellen. **Gebaut, unstrittig.** |
+| **Empfehlen** | LumeOS liefert eine Dosierung aus, weil eine Strategie sie vorsieht. Der Katalog wuerde sagen: *„contest_prep, Woche 9–16: Trenbolon 400 mg/Woche."* **Nicht gebaut, und eine andere Kategorie.** |
+
+`[read]` **Der Unterschied ist nicht graduell.** Im ersten Fall ist LumeOS
+ein Tagebuch mit Rechenwerk. Im zweiten gibt es eine Anweisung zu
+Substanzen, die in den meisten Laendern verschreibungspflichtig oder
+verboten sind — an einen Nutzer, dessen Erfahrung und Gesundheitszustand
+es nur als Selbstauskunft kennt.
+
+## Was zu entscheiden ist
+
+1. **Bleibt es beim Erfassen?** Dann ist dieser Punkt geschlossen, und
+   Substanzen erscheinen in Goals nirgends.
+2. **Oder werden Protokolle abgebildet** — dann: fuer wen sichtbar
+   (Coach-Freigabe? Tier?), mit welchem Hinweis, und wer traegt die
+   fachliche Verantwortung fuer den ausgelieferten Wert.
+3. **Ein Mittelweg, der ohne Empfehlung auskommt:** der Nutzer erfasst
+   sein eigenes Protokoll, und LumeOS **rechnet damit** statt es
+   vorzugeben — Zeitachse, Laborwert-Kopplung, Warnung bei Konflikt. Das
+   nutzt dieselben Daten, ohne eine Dosierung auszuliefern.
+
+`[annahme]` **Weg 3 traegt den Nutzen ohne die Anweisung** und passt zu
+dem, was schon gebaut ist (Medical, Injektionsplaner). Das ist eine
+Einschaetzung, keine Messung — Tom entscheidet.
+
+## Wer das beantworten kann
+
+`[read]` Tobias ist IFBB-Profi und am 2026-09-30 da. Er kann die fachliche
+Seite klaeren. **Die produkt- und haftungsseitige Frage kann er nicht
+klaeren** — die bleibt bei Tom.
+
+**Bis dahin:** in Goals erscheint keine Substanz, kein Katalogeintrag
+traegt eine Dosierung, und die Lektuere wird fuer Ernaehrung, Training,
+Cardio und Peak-Week-Wassermanagement genutzt — alles, was Abschnitt 2
+nicht betrifft.
 
 ---
 

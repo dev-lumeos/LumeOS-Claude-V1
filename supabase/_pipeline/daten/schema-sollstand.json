@@ -2433,7 +2433,33 @@
         ]
       },
       "grants_herkunft": "111_goals_ziele_phasen.sql vergibt authenticated DML und service_role ALL explizit.",
-      "zeilenschutzart": "eigene_zeilen"
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": [
+        "id",
+        "user_id",
+        "goal_type",
+        "subtype",
+        "title",
+        "description",
+        "target_value",
+        "target_unit",
+        "start_value",
+        "current_value",
+        "gueltig_ab",
+        "target_date",
+        "status",
+        "priority",
+        "is_primary",
+        "progress_pct",
+        "motivation_reason",
+        "difficulty_level",
+        "auto_update",
+        "celebration_enabled",
+        "achievement_date",
+        "created_at",
+        "updated_at",
+        "linked_modules"
+      ]
     },
     {
       "schema": "goals",
@@ -6345,7 +6371,7 @@
     {
       "schema": "goals",
       "name": "goal_phase_start",
-      "schritt": "531_goal_phase_start_rate"
+      "schritt": "538_goal_phase_start"
     },
     {
       "schema": "goals",

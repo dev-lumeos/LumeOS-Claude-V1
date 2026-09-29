@@ -601,3 +601,61 @@ weiter unter der Linie.
 `[cmd]` **Und der Editor** (elf Reiter, ueber sechzig
 Bedienelemente) **bleibt vollstaendig unter der Linie.** `[read]`
 **Nichts davon hat heute eine Quelle.**
+
+---
+
+## Warum die Abnahme wartet, Orchestrator 2026-09-29 15:15
+
+`[read]` **Der zweite Teil ist gemeldet und vollstaendig** — A4
+(`startMitRate` entfernt, die Sperre liegt wieder in der Datenbank), A2
+(Zielrate aus der eigenen Spalte, Hoechstdauer und Protein als Strich mit
+gemessenem Grund) und A7 (je Element die Quellenfrage gestellt, drei
+gebunden, drei nicht).
+
+**Die Abnahme wird zusammen mit G-541 geschrieben, aus einem Grund:**
+Claude Code arbeitet seit 14:42 in genau den Dateien, deren Merkmale hier
+zu zaehlen waeren — `phase-echt.tsx`, `ansicht.tsx`, `page.tsx`. Eine
+Messung mitten in einem Schreibvorgang hat heute schon ein
+Phantom-`# fail 1` erzeugt.
+
+`[read]` **Und inhaltlich gehoeren sie zusammen:** die sieben Elemente,
+die G-534 A7 als „ohne Quelle" gemeldet hat, bekommen ihre Quelle in
+G-541. Zwei Abnahmen ueber dieselben Kacheln, eine Stunde auseinander,
+wuerden sich widersprechen — die erste sagt „kein Beleg", die zweite
+„Katalogspalte".
+
+**Der Commit-Hash fehlt ebenfalls:** der Code liegt uncommittet in
+`apps/`, weil dort G-541 gebaut wird. Code und Abnahme gehen in einen
+Commit, wenn Claude Code meldet.
+
+---
+
+## Abnahme, Orchestrator, 2026-09-29 16:10
+
+**Angenommen, beide Teile.** Die tragende Pruefung steht in der Abnahme zu
+**G-541**, weil dieselben Dateien betroffen sind und G-541 die Frage
+beantwortet, die dieser Punkt offen gelassen hat.
+
+`[read]` **Was dieser Punkt geleistet hat, und es war nicht das Gebaute:**
+er hat je Element die **Quellenfrage** gestellt und die Antwort
+ausgehalten. Sieben Elemente hatten keine Quelle, und sie haben einen
+Strich mit Grund bekommen statt einer plausiblen Zahl. Drei Monate lang
+hat niemand gefragt, woher die Werte im Vorschaupanel kommen sollen — die
+Frage war der Fortschritt, nicht die Kachel.
+
+`[cmd]` **A4 hat die Sperre aus dem Anwendungscode entfernt**
+(`startMitRate` geloescht), und ein Waechter zaehlt, dass
+`goal_phase_start` genau einmal vorkommt. **Die Datenbank traegt die Regel
+wieder allein** — das war die Lehre aus der Ueberladung in G-531.
+
+`[cmd]` **A2 nennt den Grund fuer jeden Strich mit einer Zahl:**
+`phase_rate_rules` hat 0 Zeilen. Nicht *„Daten fehlen"*, sondern *„diese
+Tabelle ist leer"*. Nachpruefbar in einer Abfrage.
+
+`[read]` **Und die zwei Befunde am eigenen Bau kamen vom Bild, nicht vom
+Test:** zwei Raster uebereinander mit derselben Auswahl, und eine Kachel
+mit drei Strichen. *„Eine Kachel, die dreimal nichts sagt, ist kein
+Posten"* — der Satz steht jetzt in den Lehren.
+
+**Offen geblieben und weitergetragen:** die sieben Vorschaupanel-Elemente
+→ G-541 (gebaut), der Editor → G-539, die Zeitachse → G-544.

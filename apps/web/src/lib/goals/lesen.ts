@@ -346,6 +346,14 @@ export type Phase = {
   transitioned_from: string | null
   recommended_next: string | null
   transition_reason: string | null
+  /**
+   * `[cmd]` **G-534/A2: die Zielrate, in % Koerpergewicht je
+   * Woche.** Seit E1 die gespeicherte Groesse.
+   *
+   * `[cmd]` **Ebenfalls nicht in `phase_am()`** — sie wird mit den
+   * drei Uebergangsspalten zusammen nachgelesen.
+   */
+  zielrate_pct_kg_woche: number | null
 }
 
 export async function ladePhase(userId: string, stichtag: string): Promise<Phase | null> {
@@ -363,7 +371,9 @@ export async function ladePhase(userId: string, stichtag: string): Promise<Phase
   if (phaseId) {
     const { data: z, error: zFehler } = await goalsDb()
       .from('goal_phases')
-      .select('transitioned_from, recommended_next, transition_reason')
+      // G-534/A2: die Zielrate kommt hier mit — `phase_am()` fuehrt
+      // sie nicht.
+      .select('transitioned_from, recommended_next, transition_reason, zielrate_pct_kg_woche')
       .eq('id', phaseId)
       .maybeSingle()
     // `[read]` Werfen, nicht schlucken — eine der zwei Fallen aus G-64:
@@ -382,6 +392,7 @@ export async function ladePhase(userId: string, stichtag: string): Promise<Phase
     gueltig_ab: text(r.gueltig_ab),
     projected_end_date: text(r.projected_end_date),
     actual_end_date: text(r.actual_end_date),
+    zielrate_pct_kg_woche: zahl(uebergang.zielrate_pct_kg_woche),
     transitioned_from: text(uebergang.transitioned_from),
     recommended_next: text(uebergang.recommended_next),
     transition_reason: text(uebergang.transition_reason),

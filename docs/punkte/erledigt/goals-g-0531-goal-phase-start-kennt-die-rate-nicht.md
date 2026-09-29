@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-09-29
 beauftragt: 2026-09-29
 agent: codex
+erledigt: 2026-09-29
+commit: 309db7e1
 
 braucht: []
 kind_von: G-529

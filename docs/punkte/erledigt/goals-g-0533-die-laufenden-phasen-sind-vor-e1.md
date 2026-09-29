@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-09-29
 beauftragt: 2026-09-29
 agent: codex
+erledigt: 2026-09-29
+commit: 46b73f6f
 
 braucht: [G-531]
 kind_von: G-529
@@ -216,3 +218,45 @@ goal_phases_zielrate_passt_zur_art;` **Faellt eine Zeile, BLEIBT er
 `dev@lumeos.app` durch (in einer Transaktion mit ROLLBACK, wie bei
 G-531), `convalidated` von `f` auf `t`, und
 `parameters.calorie_surplus_kcal` kommt nirgends mehr vor.
+
+---
+
+## Abnahme, Orchestrator, 2026-09-29 15:15
+
+**Angenommen.** Selbst gemessen gegen die laufende Datenbank:
+
+    goal_phases_zielrate_passt_zur_art   convalidated = t
+    goal_phases_zielrate_aussengrenze    convalidated = t
+
+    dev@lumeos.app        lean_bulk     0.271   kein calorie_surplus_kcal
+    tom.seed@example.com  lean_bulk     0.271   kein calorie_surplus_kcal
+    max.seed@example.com  maintenance   NULL    kein calorie_surplus_kcal
+
+`[cmd]` **Alle drei Aussagen des Berichts halten:** der CHECK ist von
+`convalidated = f` auf `t` gegangen, beide `lean_bulk`-Zeilen tragen
+0,271 %/Woche, und `calorie_surplus_kcal` steht in **keiner** Zeile mehr
+(vorher zwei). `maintenance` bleibt ohne Rate, wie es sein soll.
+
+`[read]` **Die Rate ist abgeleitet, nicht gesetzt:** `250 / (11 × 83,74)
+= 0,271`, mit dem Gewicht aus
+`goals.body_measurements.measurement_date <= gueltig_ab`. Der Schritt
+bricht ab, wenn das Gewicht fehlt oder mehrfach da ist — **er raet
+nicht**, und das war die Bedingung.
+
+### Was dieser Punkt praktisch geloest hat
+
+`[read]` **Tom konnte die Phase vorher nicht beenden.** `NOT VALID`
+ueberspringt die Pruefung der Bestandszeilen, **erzwingt sie aber bei
+jedem UPDATE** — und `goal_phase_end` auf einer `lean_bulk`-Zeile ohne
+Rate fiel genau daran. Die Zeile war unberuehrbar.
+
+`[cmd]` **Und er hat sie inzwischen beendet:** `dev@lumeos.app`,
+`lean_bulk`, `actual_end_date = 2026-09-29`. Der Weg funktioniert nicht
+nur im Nachweis, sondern im Gebrauch.
+
+### Ein Nebenbefund, der zu G-538 gehoert
+
+`[cmd]` **`max.seed@example.com` ist die einzige offene Phase ohne
+`actual_end_date` — und ohne `goal_id`.** Das ist genau die Zeile, an der
+G-538 A1 haengt, und der Grund, warum `goal_id NOT NULL` dort auf einen
+CHECK fuer laufende Phasen geaendert wurde.

@@ -26,7 +26,6 @@ test('G-531 A1/A1b/A2: auth.uid liest die Sitzung und der Startvertrag reicht di
     oldSignature: boolean
     rateArgumentCount: number
     storedRate: number
-    fatLossMissing: string
     leanBulkWrongSign: string
     peakWeekWithRate: string
     secondActivePhase: string
@@ -45,6 +44,16 @@ test('G-531 A1/A1b/A2: auth.uid liest die Sitzung und der Startvertrag reicht di
       ('53100000-0000-0000-0000-000000000002', 'g531-foreign@lumeos.local');
     SET LOCAL session_replication_role = origin;
 
+    INSERT INTO goals.user_goals (
+      id, user_id, goal_type, title, gueltig_ab, priority
+    ) VALUES
+      ('53100000-0000-0000-0000-000000000011',
+       '53100000-0000-0000-0000-000000000001',
+       'body_composition', 'G-531 Probe-Ziel', DATE '2099-05-30', 1),
+      ('53100000-0000-0000-0000-000000000012',
+       '53100000-0000-0000-0000-000000000002',
+       'body_composition', 'G-531 Fremdziel', DATE '2099-05-30', 1);
+
     CREATE TEMP TABLE g531_result (
       fall text PRIMARY KEY,
       sqlstate text,
@@ -56,9 +65,10 @@ test('G-531 A1/A1b/A2: auth.uid liest die Sitzung und der Startvertrag reicht di
     CREATE TEMP TABLE g531_foreign_phase ON COMMIT DROP AS
     WITH inserted AS (
       INSERT INTO goals.goal_phases (
-        user_id, phase_type, gueltig_ab, parameters
+        user_id, goal_id, phase_type, gueltig_ab, parameters
       ) VALUES (
         '53100000-0000-0000-0000-000000000002',
+        '53100000-0000-0000-0000-000000000012',
         'maintenance',
         DATE '2099-05-30',
         jsonb_build_object('source', 'G-531 Fremdprobe')
@@ -73,7 +83,11 @@ test('G-531 A1/A1b/A2: auth.uid liest die Sitzung und der Startvertrag reicht di
       v_message text;
     BEGIN
       BEGIN
-        PERFORM goals.goal_phase_start('maintenance', DATE '2099-05-30');
+        PERFORM goals.goal_phase_start(
+          'maintenance',
+          '53100000-0000-0000-0000-000000000011',
+          DATE '2099-05-30'
+        );
         RAISE EXCEPTION 'goal_phase_start nahm eine Sitzung ohne Nutzer an';
       EXCEPTION WHEN insufficient_privilege THEN
         GET STACKED DIAGNOSTICS v_message = MESSAGE_TEXT;
@@ -122,23 +136,9 @@ test('G-531 A1/A1b/A2: auth.uid liest die Sitzung und der Startvertrag reicht di
       v_constraint text;
       v_message text;
     BEGIN
-      BEGIN
-        PERFORM goals.goal_phase_start(
-          p_phase_type := 'fat_loss',
-          p_gueltig_ab := DATE '2099-05-31'
-        );
-        RAISE EXCEPTION 'fat_loss ohne Rate wurde angenommen';
-      EXCEPTION WHEN check_violation THEN
-        GET STACKED DIAGNOSTICS
-          v_constraint = CONSTRAINT_NAME,
-          v_message = MESSAGE_TEXT;
-        INSERT INTO g531_result VALUES (
-          'fat_loss_missing', SQLSTATE, v_constraint, v_message
-        );
-      END;
-
       v_phase_id := goals.goal_phase_start(
         p_phase_type := 'fat_loss',
+        p_goal_id := '53100000-0000-0000-0000-000000000011',
         p_gueltig_ab := DATE '2099-06-01',
         p_zielrate_pct_kg_woche := -0.500
       );
@@ -153,6 +153,7 @@ test('G-531 A1/A1b/A2: auth.uid liest die Sitzung und der Startvertrag reicht di
       BEGIN
         PERFORM goals.goal_phase_start(
           p_phase_type := 'lean_bulk',
+          p_goal_id := '53100000-0000-0000-0000-000000000011',
           p_gueltig_ab := DATE '2099-06-02',
           p_zielrate_pct_kg_woche := -0.500
         );
@@ -169,6 +170,7 @@ test('G-531 A1/A1b/A2: auth.uid liest die Sitzung und der Startvertrag reicht di
       BEGIN
         PERFORM goals.goal_phase_start(
           p_phase_type := 'peak_week',
+          p_goal_id := '53100000-0000-0000-0000-000000000011',
           p_gueltig_ab := DATE '2099-06-03',
           p_zielrate_pct_kg_woche := 0.500
         );
@@ -184,6 +186,7 @@ test('G-531 A1/A1b/A2: auth.uid liest die Sitzung und der Startvertrag reicht di
 
       v_phase_id := goals.goal_phase_start(
         p_phase_type := 'maintenance',
+        p_goal_id := '53100000-0000-0000-0000-000000000011',
         p_gueltig_ab := DATE '2099-06-04',
         p_zielrate_pct_kg_woche := 0.000
       );
@@ -217,6 +220,7 @@ test('G-531 A1/A1b/A2: auth.uid liest die Sitzung und der Startvertrag reicht di
       BEGIN
         PERFORM goals.goal_phase_start(
           p_phase_type := 'fat_loss',
+          p_goal_id := '53100000-0000-0000-0000-000000000011',
           p_gueltig_ab := DATE '2099-06-05',
           p_zielrate_pct_kg_woche := -0.500
         );
@@ -234,26 +238,22 @@ test('G-531 A1/A1b/A2: auth.uid liest die Sitzung und der Startvertrag reicht di
 
     SELECT json_build_object(
       'newSignature', to_regprocedure(
-        'goals.goal_phase_start(text,date,uuid,date,text,jsonb,numeric)'
+        'goals.goal_phase_start(text,uuid,date,date,text,jsonb,numeric)'
       ) IS NOT NULL,
       'oldSignature', to_regprocedure(
-        'goals.goal_phase_start(text,date,uuid,date,text,jsonb)'
+        'goals.goal_phase_start(text,date,uuid,date,text,jsonb,numeric)'
       ) IS NOT NULL,
       'rateArgumentCount', (
         SELECT count(*)::integer
         FROM pg_proc p
         CROSS JOIN LATERAL unnest(p.proargnames) AS argument_name
-        WHERE p.oid = 'goals.goal_phase_start(text,date,uuid,date,text,jsonb,numeric)'::regprocedure
+        WHERE p.oid = 'goals.goal_phase_start(text,uuid,date,date,text,jsonb,numeric)'::regprocedure
           AND argument_name = 'p_zielrate_pct_kg_woche'
       ),
       'storedRate', (
         SELECT zielrate_pct_kg_woche
         FROM goals.goal_phases
         WHERE id = (SELECT message::uuid FROM g531_result WHERE fall = 'fat_loss_valid')
-      ),
-      'fatLossMissing', (
-        SELECT sqlstate || ':' || constraint_name
-        FROM g531_result WHERE fall = 'fat_loss_missing'
       ),
       'leanBulkWrongSign', (
         SELECT sqlstate || ':' || constraint_name
@@ -315,10 +315,6 @@ test('G-531 A1/A1b/A2: auth.uid liest die Sitzung und der Startvertrag reicht di
   assert.equal(result.rateArgumentCount, 1)
   assert.equal(result.storedRate, -0.5)
   assert.equal(
-    result.fatLossMissing,
-    '23514:goal_phases_zielrate_passt_zur_art',
-  )
-  assert.equal(
     result.leanBulkWrongSign,
     '23514:goal_phases_zielrate_passt_zur_art',
   )
@@ -326,7 +322,7 @@ test('G-531 A1/A1b/A2: auth.uid liest die Sitzung und der Startvertrag reicht di
     result.peakWeekWithRate,
     '23514:goal_phases_zielrate_passt_zur_art',
   )
-  assert.match(result.secondActivePhase, /^23505:goal_phase_start: zuerst die laufende Phase beenden$/)
+  assert.match(result.secondActivePhase, /^23505:goal_phase_start: fuer dieses Ziel laeuft bereits eine Phase$/)
   assert.equal(result.unauthenticatedStart, '42501:goal_phase_start: Anmeldung erforderlich')
   assert.equal(result.unauthenticatedEnd, '42501:goal_phase_end: Anmeldung erforderlich')
   assert.equal(

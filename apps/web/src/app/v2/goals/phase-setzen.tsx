@@ -38,9 +38,11 @@ import {
 } from './phase-aktionen'
 import {
   PHASENARTEN, phasenName, kcalDeltaAusRate,
-  RATENPFLICHT, RATE_MIN, RATE_MAX,
+  RATENPFLICHT, RATE_MIN, RATE_MAX, uebergangErlaubt,
   type Phasenart, type Ratenpflicht,
 } from '../../../lib/goals/phase-regeln'
+// G-534/A7: das Vorschaupanel des Entwurfs.
+import { PhaseVorschau } from './phase-vorschau'
 
 /**
  * Was die Rate fuer diese Art sein muss — als Satz.
@@ -169,7 +171,9 @@ export function PhaseBeginnen({ stichtag, aktiv, gewichtKg }: {
 
   return (
     <Card title="Phase beginnen"
-          sub={`${PHASENARTEN.length} Arten · aus dem CHECK von goal_phases`}>
+          // G-534/A1: hier stand „aus dem CHECK von goal_phases" —
+          // der Nutzer braucht die Zahl, nicht ihre Herkunft.
+          sub={`${PHASENARTEN.length} Arten`}>
       {/* `[read]` **Laeuft eine Phase, sperrt die Datenbank den
           Start** — das gehoert VOR das Raster, nicht als Fehler
           hinterher. */}
@@ -297,28 +301,29 @@ export function PhaseBeginnen({ stichtag, aktiv, gewichtKg }: {
                   `[read]` **Also ein Strich mit Grund, keine
                   erfundene Spanne und keine aus der Spec
                   abgetippte Zahl.** */}
+              {/* `[cmd]` **G-534/A1: hier standen Tabellenname und
+                  Punktnummer.** `[read]` **Der Nutzer braucht die
+                  Grenze, nicht unsere Ablage.** */}
               <div className="v2-dim" style={{
                 fontSize: 10.5, lineHeight: 1.5, marginBottom: 10,
               }} data-bandhinweis>
-                Ein empfohlenes Band je Variante gibt es noch nicht —{' '}
-                <span className="v2-mono">goals.phase_rate_rules</span> ist
-                leer. Es haengt an G-521. Bis dahin begrenzen nur die
-                Aussengrenze ({RATE_MIN} bis {RATE_MAX}) und das Vorzeichen.
+                Empfohlene Werte je Variante gibt es noch nicht. Erlaubt
+                ist {RATE_MIN} bis {RATE_MAX} % pro Woche.
               </div>
             </>
           ) : (
             // `[read]` **Fuenf Arten tragen KEINE Rate** — der CHECK
             // verlangt `NULL`. **Das Feld wegzulassen ist richtig,
             // aber es muss gesagt werden.**
+            //
+            // `[cmd]` **G-534/A1: hier standen CHECK-Name,
+            // Funktionsname und Hinderniswert.** `[read]` **Die
+            // WIRKUNG bleibt, die Herkunft geht.**
             <div className="v2-muted" style={{
               fontSize: 11.5, lineHeight: 1.55, marginBottom: 10,
             }} data-ohne-rate>
-              <strong>{gewaehlt.name}</strong> traegt keine Zielrate — der
-              CHECK <span className="v2-mono">goal_phases_zielrate_passt_zur_art</span>{' '}
-              verlangt hier <span className="v2-mono">NULL</span>.{' '}
-              Damit liefert <span className="v2-mono">berechne_zielwerte</span>{' '}
-              fuer diese Phase <span className="v2-mono">phasenparameter_fehlt</span>{' '}
-              und kein Kalorienziel.
+              <strong>{gewaehlt.name}</strong> laeuft ohne Zielrate — und
+              damit ohne eigenes Kalorienziel.
             </div>
           )}
 
@@ -349,13 +354,10 @@ export function PhaseBeginnen({ stichtag, aktiv, gewichtKg }: {
       {/* `[read]` **Was `parameters` angeht, ist die Kachel ehrlich:**
           sie schreibt nichts hinein, weil nicht entschieden ist, wie
           der Schluessel heisst. */}
-      <div className="v2-divider" />
-      <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.55 }}>
-        <span className="v2-mono">parameters</span> bleibt leer. Der
-        Kalorienzuschlag je Phase gehört hinein (G-511), aber welcher
-        Schlüssel gilt, entscheidet der Punkt, der die Rechnung baut —
-        eine hier erfundene Zahl läse niemand.
-      </div>
+      {/* `[cmd]` **G-534/A1: hier stand ein Absatz ueber
+          `parameters` und den offenen Schluesselnamen.** `[read]`
+          **Richtig, aber eine Entwicklernotiz** — sie steht jetzt im
+          Punkt. */}
     </Card>
   )
 }
@@ -369,6 +371,78 @@ export function PhaseBeginnen({ stichtag, aktiv, gewichtKg }: {
  * leeren mit `22023` ab. `[read]` **Das Feld sagt das vorher**,
  * statt den Nutzer in die Datenbankmeldung laufen zu lassen.
  */
+/**
+ * Das Raster mit Vorschau — die Geste des Entwurfs, bei laufender
+ * Phase.
+ *
+ * `[cmd]` **`module-goals-pro.jsx:262-292`:** ein Raster, der Klick
+ * setzt `preview`; **`:295-429`** klappt die Vorschau darunter auf;
+ * **`:421`** traegt `Switch to {name}`.
+ *
+ * `[read]` **Der Direktwechsel ist bei uns ZWEI Handgriffe** —
+ * `goal_phase_start` weist ab, solange eine Phase laeuft (`23505`).
+ * `[read]` **Die Vorschau fuehrt deshalb zum Beenden**, statt einen
+ * Wechsel vorzutaeuschen, den die Datenbank nicht kennt.
+ */
+export function PhaseWechseln({ laufend, onBeenden }: {
+  laufend: Phasenart | null
+  /** Ruft den Beenden-Weg auf — der erste der zwei Handgriffe. */
+  onBeenden: () => void
+}) {
+  const [wahl, setWahl] = React.useState<Phasenart | null>(null)
+
+  return (
+    <Card title="Phase wechseln"
+          sub="waehle eine Art, um sie zu vergleichen">
+      <div className="v2-grid" style={{
+        gap: 8, gridTemplateColumns: 'repeat(auto-fit, minmax(128px, 1fr))',
+      }}>
+        {PHASENARTEN.map(ph => {
+          const an = ph.id === wahl
+          const laeuftGerade = ph.id === laufend
+          return (
+            <button key={ph.id} type="button"
+                    data-wechselwahl={ph.id}
+                    disabled={laeuftGerade}
+                    onClick={() => setWahl(an ? null : ph.id)}
+                    style={{
+                      textAlign: 'left', padding: 10, borderRadius: 7,
+                      cursor: laeuftGerade ? 'default' : 'pointer',
+                      opacity: laeuftGerade ? 0.55 : 1,
+                      background: an
+                        ? 'color-mix(in oklch, var(--acc-goals) 12%, var(--surface))'
+                        : 'var(--surface)',
+                      border: `1px solid ${an
+                        ? 'color-mix(in oklch, var(--acc-goals) 40%, var(--border))'
+                        : 'var(--border)'}`,
+                      color: 'var(--fg)',
+                    }}>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3,
+              }}>
+                <span style={{ fontSize: 11.5, fontWeight: 600 }}>{ph.name}</span>
+                {laeuftGerade && <Pill variant="acc" style={{ fontSize: 9 }}>laeuft</Pill>}
+              </div>
+              {/* [cmd] module-goals-pro.jsx:286-287 — die zwei Marken */}
+              {!laeuftGerade && (
+                <span className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>
+                  {uebergangErlaubt(laufend, ph.id) ? '→ empfohlen' : 'waehlbar'}
+                </span>
+              )}
+            </button>
+          )
+        })}
+      </div>
+
+      {wahl && (
+        <PhaseVorschau art={wahl} laufend={laufend}
+                       onSchliessen={() => setWahl(null)}
+                       onWechseln={onBeenden} />
+      )}
+    </Card>
+  )
+}
+
 export function PhaseBeenden({ phase, stichtag }: {
   phase: Phase; stichtag: string
 }) {

@@ -139,3 +139,28 @@ Zeile im Kettenschritt und kein Umbau — genau dafuer steht der Katalog
 rechnet pauschal −25 % TDEE und ignoriert die Unterphasen
 (−300/−600/−750 kcal). Das ist ein Fehler, keine Entscheidung — er
 gehoert zu G-530.
+
+---
+
+## Nachtrag, 2026-09-29 16:10 — Frage 1 ist geklaert, bevor Tobias da war
+
+`[cmd]` **Tom hat um 16:02 drei Dokumente beigebracht. Alle drei rechnen
+in Prozent pro Woche, an vier unabhaengigen Stellen:**
+
+    Encyclopedia 1.4   "Lean Bulk: Target gain: 0.25-0.5% bodyweight/week"
+    Encyclopedia 3.1   "Phase 1: Rate of loss: 0.5-0.8% bodyweight/week"
+    Formelsammlung     "Lean Bulk: Ziel +0.25-0.5% Koerpergewicht/Woche"
+    Contest-Framework  "Phase 1: 0.5-0.8% Koerpergewicht/Woche"
+
+`[read]` **Keines der drei nennt irgendwo Prozent pro Monat.** Damit ist
+`PHASE_MODELS.md:68` (*„rate_of_gain: 0.25–0.5% BW/month"*) der Einzelfall
+und der Fehler — dieselbe Zahl, falsche Einheit.
+
+**Frage 1 gilt als entschieden: Prozent pro Woche.** Die Dokumente sind
+Sekundaerliteratur, aber sie konvergieren untereinander, mit
+`definitions.ts` und mit den Primaerquellen (Iraki et al. 2019, Helms et
+al. 2014). Vier Quellen, eine Einheit.
+
+**Fuer Tobias bleiben Frage 2 und 3** — die Hoechstdauer von
+`moderate_cut` und ob ein fortgeschrittener Natural in Prozent oder in
+Kilokalorien denkt. Beide sind Erfahrungsfragen, keine Literaturfragen.

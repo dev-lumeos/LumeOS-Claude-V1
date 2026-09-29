@@ -22,6 +22,8 @@ function phase(teil: Partial<Phase>): Phase {
     variant: 'moderate', parameters: {},
     gueltig_ab: null, projected_end_date: null, actual_end_date: null,
     transitioned_from: null, recommended_next: null, transition_reason: null,
+    // G-534/A2: die Zielrate gehoert seit E1 zum Typ.
+    zielrate_pct_kg_woche: null,
     ...teil,
   }
 }

@@ -172,18 +172,52 @@ export function PhaseEcht({ phase, stichtag }: { phase: Phase; stichtag: string 
               gespeichert nebeneinanderstanden, ohne dass klar war,
               welcher gilt. Hier ist nur eines von beidem da — und die
               Zeile sagt, welches. */}
-          <div className="v2-divider" />
-          <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.55 }}>
-            Woche und Tage sind aus Start und geplantem Ende gegen den
-            Stichtag {stichtag} <strong>gerechnet</strong>, nicht
-            gespeichert — <span className="v2-mono">goal_phases</span> führt
-            weder Woche noch Fortschritt.
-          </div>
+          {/* ══ G-534/A3: die ueberzogene Phase ist ein POSTEN ══
+              `[cmd]` **Gemessen 2026-09-29: zwei von drei laufenden
+              Phasen sind ueber `projected_end_date`, die aelteste um
+              73 Tage.**
+
+              `[read]` **Der Reiter nannte das als Tatsache in der
+              Kennzahlenreihe** (,,Tage ueberzogen 73"). **Ein
+              Planungswerkzeug macht daraus einen offenen Posten mit
+              dem Weg daneben.**
+
+              `[read]` **Keine Bewertung des Nutzers** — C-108/F-02
+              und E-74. **Es ist eine Aussage ueber die PHASE.** */}
+          {lauf.tageRest != null && lauf.tageRest < 0 && !lauf.beendet && (
+            <div data-phase-ueberzogen style={{
+              marginTop: 12, padding: '10px 12px', borderRadius: 7,
+              background: 'color-mix(in oklch, var(--warn) 8%, var(--surface))',
+              border: '1px solid color-mix(in oklch, var(--warn) 30%, var(--border))',
+            }}>
+              <div style={{ fontSize: 12.5, fontWeight: 600, marginBottom: 3 }}>
+                Diese Phase laeuft {Math.abs(lauf.tageRest)} Tage laenger als geplant.
+              </div>
+              <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.5 }}>
+                Geplantes Ende war {phase.projected_end_date}. Beende sie
+                oder verschieb das geplante Ende.
+              </div>
+            </div>
+          )}
         </Card>
 
-        <Card title="Phasenwechsel" sub="was die Tabelle über Herkunft und Weg sagt">
-          <Row label="Kam aus" value={lesbar(phase.transitioned_from)} />
-          <Row label="Empfohlen als Nächstes" value={lesbar(phase.recommended_next)} />
+        {/* ══ G-534/A1+A7: die Kachel zeigt sich nur, wenn sie etwas
+            zu sagen hat ══════════════════════════════════════════
+            `[cmd]` **Sie stand mit zwei Strichen da** — ,,Kam aus —"
+            und ,,Empfohlen als Naechstes —". `[read]` **Eine
+            Kachel, die dreimal nichts sagt, ist kein Posten.**
+
+            `[cmd]` **Und der Untertitel nannte die Tabelle**
+            (,,was die Tabelle ueber Herkunft und Weg sagt"). */}
+        {(phase.transitioned_from || phase.recommended_next
+          || phase.transition_reason) && (
+        <Card title="Phasenwechsel" sub="woher diese Phase kommt">
+          {phase.transitioned_from && (
+            <Row label="Kam aus" value={lesbar(phase.transitioned_from)} />
+          )}
+          {phase.recommended_next && (
+            <Row label="Empfohlen als Nächstes" value={lesbar(phase.recommended_next)} />
+          )}
           {/* `transition_reason` ist Freitext aus der Zeile — er wird
               gezeigt, nicht ausgewertet. */}
           {phase.transition_reason && (
@@ -195,47 +229,60 @@ export function PhaseEcht({ phase, stichtag }: { phase: Phase; stichtag: string 
               </div>
             </>
           )}
-          <div className="v2-divider" />
-          <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.55 }}>
-            <span className="v2-mono">recommended_next</span> ist ein
-            gespeicherter Text, keine Ableitung aus dem Verlauf. Der
-            Entwurf zeigt daneben einen Zeitpunkt („in 4 Wochen&quot;) und
-            eine Konfidenz — beides hat keine Spalte.
-          </div>
         </Card>
+        )}
       </div>
 
       <div className="v2-col-gap" style={{ gap: 14 }}>
+        {/* ══ G-534/A2: feste Felder statt JSON-Inhalt ════════════
+            `[cmd]` **Hier standen die Schluessel aus `parameters`,
+            wie sie drinstanden** — *,,Source GO-07 testdata ·
+            Calorie surplus kcal 250"*.
+
+            `[cmd]` **`calorie_surplus_kcal` ist die von E1
+            verworfene Groesse**, und der Nutzer las einen
+            Datenbankschluessel.
+
+            `[read]` **`PHASE_MODELS.md` fuehrt je Phasenart DREI
+            feste Felder:** Rate, Hoechstdauer, Protein. **Die
+            Kachel zeigt diese drei** — und wo ein Wert fehlt, einen
+            Strich MIT GRUND. */}
         <Card title="Phase parameters" sub={lesbar(phase.phase_type)}>
-          {params.length > 0
-            ? params.map(([k, v]) => <Row key={k} label={k} value={v} />)
-            : (
-              <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
-                Für diese Phase ist kein Parameter hinterlegt.
-              </div>
-            )}
-          <div className="v2-divider" />
-          <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.55 }}>
-            Aus <span className="v2-mono">parameters</span>, einem freien
-            JSON-Feld — gezeigt wird, was drinsteht. Der Entwurf führt
-            hier feste Felder je Phasenart (Defizit, Rate, Protein,
-            Höchstdauer); die Tabelle kennt sie nicht.
+          <Row label="Zielrate"
+               value={phase.zielrate_pct_kg_woche != null
+                 ? `${phase.zielrate_pct_kg_woche} % KG/Woche`
+                 : '—'} />
+          {phase.zielrate_pct_kg_woche == null && (
+            <div className="v2-dim" data-grund="rate"
+                 style={{ fontSize: 10.5, lineHeight: 1.5, marginTop: -4, marginBottom: 6 }}>
+              Diese Phasenart laeuft ohne Zielrate.
+            </div>
+          )}
+
+          {/* `[cmd]` **Hoechstdauer und Protein haben KEINE
+              Quelle** — gemessen 2026-09-29: `phase_rate_rules` hat
+              0 Zeilen. `[read]` **Also ein Strich mit genau diesem
+              Grund, keine aus der Spec abgetippte Zahl.** */}
+          <Row label="Hoechstdauer" value="—" />
+          <Row label="Protein" value="—" />
+          <div className="v2-dim" data-grund="baender"
+               style={{ fontSize: 10.5, lineHeight: 1.5, marginTop: -4 }}>
+            Empfohlene Werte je Variante sind noch nicht hinterlegt.
           </div>
         </Card>
 
-        <Card title="Zeile" sub="woher diese Phase kommt">
-          <Row label="Phase-ID" value={phase.phase_id.slice(0, 8)} />
-          <Row label="Ziel verknüpft" value={phase.goal_id ? 'ja' : 'nein'} />
-          <Row label="Gültig ab" value={phase.gueltig_ab ?? '—'} />
-          <Row label="Geplantes Ende" value={phase.projected_end_date ?? '—'} />
-          <Row label="Tatsächliches Ende" value={phase.actual_end_date ?? '—'} />
-          <div className="v2-divider" />
-          <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.55 }}>
-            <span className="v2-mono">phase_am()</span> wählt die Zeile,
-            deren <span className="v2-mono">gueltig_ab</span> am Stichtag
-            erreicht und deren Ende noch nicht überschritten ist.
-          </div>
-        </Card>
+        {/* ══ G-534/A1: die Kachel „Zeile" ist RAUS ═══════════════
+            `[cmd]` **Sie zeigte `Phase-ID` (die ersten acht Zeichen
+            der Datenbankkennung), `Ziel verknuepft ja/nein` und
+            drei Daten.**
+
+            `[cmd]` **Start und geplantes Ende stehen schon im Kopf**
+            (`:153-154`) — **die Kachel war eine Dublette plus eine
+            Kennung, die niemanden ausser uns angeht.**
+
+            `[read]` **Das ist keine Attrappe** (sie las echte
+            Daten), **also faellt sie nicht unter E-68.** **Sie war
+            eine Entwicklersicht auf dem Nutzerschirm.** */}
       </div>
     </div>
   )

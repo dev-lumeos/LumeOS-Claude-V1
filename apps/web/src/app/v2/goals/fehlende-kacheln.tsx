@@ -17,9 +17,14 @@
 //
 // ## Abgrenzung
 //
-// `[cmd]` **`GoalsPhaseView` (module-goals-pro.jsx:198-490) hat zehn
-// Kacheln.** `[cmd]` **`PhaseEcht` baut vier davon:** den Phasenkopf,
-// `Phase parameters`, `Phasenwechsel`, `Zeile`.
+// `[cmd]` **G-534/A5, neu gezaehlt 2026-09-29:** `GoalsPhaseView`
+// (`module-goals-pro.jsx:198-489`) traegt **fuenf Karten und zwei
+// Modale** — nicht zehn Kacheln, wie hier stand.
+//
+// `[cmd]` **`PhaseEcht` baut davon zwei:** den Phasenkopf und
+// `Phase parameters`. `[cmd]` **,,Phasenwechsel" hat im Entwurf
+// KEINE Entsprechung**, und die Kachel ,,Zeile" ist mit G-534/A1
+// entfernt (sie zeigte eine Datenbankkennung).
 //
 // `[cmd]` **Dieselbe Luecke in zwei weiteren Reitern, gemessen am
 // Schirm mit Titelvergleich:**
@@ -94,7 +99,9 @@ export function FehlendePhaseKacheln() {
       <div className="v2-grid v2-g-cols-4" style={{ gap: 8 }}>
         {([
           ['Weight trend', `${PHASE_STATE.weightTrend} kg/wk`,
-            'goal_phases fuehrt keinen Gewichtstrend — die Spalte fehlt (G-357)'],
+            // G-534/A1: hier stand der Spaltenname. Die Marke nennt,
+            // WAS fehlt — nicht, wo es fehlt.
+            'einen gespeicherten Gewichtstrend je Phase'],
           ['Strength', `+${PHASE_STATE.strengthTrend}%`,
             'Kraftzuwachs je Phase braucht training.sets ueber den Phasenzeitraum'],
           ['Body fat', `${PHASE_STATE.bfTrend} %/wk`,
@@ -174,10 +181,22 @@ export function FehlendePhaseKacheln() {
           `apps/web`-Pfad ruft eine der drei. */}
       <Card title="Phase state machine"
             sub="7 phases · click any phase to preview or switch"
+            // ══ G-534/A1: der Grund war UEBERHOLT ═══════════════
+            //
+            // `[cmd]` **Hier stand:** *,,die Oberflaeche ruft sie
+            // nur noch nicht"*. `[cmd]` **G-513 hat genau diesen
+            // Aufrufer gebaut** — `PhaseBeginnen` und
+            // `PhaseBeenden` rufen `goal_phase_start`/`_end`
+            // (`phase-setzen.tsx`).
+            //
+            // `[read]` **Was HIER fehlt, ist etwas anderes:** der
+            // Direktwechsel aus dem Raster heraus, den der Entwurf
+            // zeigt (`module-goals-pro.jsx:421`, „Switch to X").
+            // **Bei uns sind es zwei Handgriffe: beenden, dann
+            // beginnen.**
             attrappe={marke(
-              'einen Aufrufer fuer den Phasenwechsel — die Funktionen '
-              + '`goals.goal_phase_start/_end` gibt es seit G-357, die '
-              + 'Oberflaeche ruft sie nur noch nicht')}>
+              'einen Wechsel in einem Zug — heute wird die Phase '
+              + 'beendet und die naechste begonnen')}>
         <div style={{
           display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8,
         }}>
@@ -218,8 +237,10 @@ export function FehlendePhaseKacheln() {
       {/* [cmd] module-goals-pro.jsx:470-489 */}
       <Card title="Expert BB annual" sub="12-month cycle · advanced only"
             attrappe={marke(
-              'einen Jahresplan je Nutzer — `goal_phases` traegt eine '
-              + 'Phase, keine Zwoelfmonatsfolge')}>
+              // G-534/A1: der Tabellenname ist raus. Was fehlt, ist
+              // der Jahresplan — nicht eine Spalte.
+              'einen Jahresplan je Nutzer — gespeichert wird immer '
+              + 'nur die laufende Phase')}>
         <div className="v2-col-gap" style={{ gap: 4 }}>
           {(GOAL_PHASES.expert_bb_annual?.annual ?? []).map(a => (
             <div key={a.months} style={{

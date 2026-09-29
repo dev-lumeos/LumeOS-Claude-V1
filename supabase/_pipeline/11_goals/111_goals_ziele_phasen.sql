@@ -85,7 +85,7 @@ ALTER TABLE goals.user_goals
   CHECK (status IN ('active','paused','achieved','missed','abandoned','on_hold'));
 
 -- -------------------------------------------------------------
--- 2. Phasen, unabhaengig vom konkreten Ziel waehlbar.
+-- 2. Phasen als Terminierungen konkreter Ziele.
 -- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS goals.goal_phases (
   id                 UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -129,7 +129,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS uq_goal_phases_one_open
   WHERE actual_end_date IS NULL;
 
 COMMENT ON TABLE goals.goal_phases IS
-  'Phasenhistorie je Nutzer. Die Phase ist optional an ein Ziel gebunden, aber fachlich unabhaengig waehlbar.';
+  'Terminiert Strategien fuer konkrete Nutzerziele. Offene Phasen brauchen ein Ziel; abgeschlossene Phasen bleiben als Historie erhalten.';
+COMMENT ON COLUMN goals.goal_phases.goal_id IS
+  'Das terminierte Nutzerziel. Bei abgeschlossenen Phasen darf die Bindung durch Ziel-Loeschung entfallen.';
 COMMENT ON COLUMN goals.goal_phases.gueltig_ab IS
   'Lokales Datum, ab dem diese Phase gilt. Vor der ersten Phase liefert goals.phase_am keine Zeile.';
 

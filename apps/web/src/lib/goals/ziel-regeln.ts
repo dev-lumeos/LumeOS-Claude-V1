@@ -110,3 +110,119 @@ export function pruefeAenderung(a: ZielAenderung): string | null {
   }
   return null
 }
+
+// ── G-537: ein Ziel ANLEGEN ──────────────────────────────────────
+//
+// `[cmd]` **`lib/goals/schreiben.ts` kannte bis heute nur
+// `zielAendern` und `reihenfolgeSetzen`** — **kein `zielAnlegen`.**
+// `[read]` **Man konnte in LumeOS kein Ziel erstellen;** die Zeilen
+// in der Datenbank sind Seed.
+
+/**
+ * Die vier Zielarten.
+ *
+ * `[cmd]` **Aus `user_goals_goal_type_check` gelesen**, gemessen
+ * 2026-09-29 — nicht aus dem Mockup abgetippt.
+ *
+ * `[read]` **Der Entwurf zeigt SECHS** (`module-goals.jsx:696-703`:
+ * body_comp, weight, strength, performance, habit, custom) — **die
+ * Datenbank erlaubt vier.** **Der CHECK gewinnt.**
+ *
+ * `[read]` **Die Namen sind Anzeigetexte** — der CHECK kennt nur
+ * die Schluessel.
+ */
+export const ZIELARTEN = [
+  { id: 'body_composition', name: 'Koerperzusammensetzung',
+    zweck: 'Gewicht, Koerperfett, Muskelmasse' },
+  { id: 'performance', name: 'Leistung',
+    zweck: 'Kraft, Ausdauer, ein Wettkampf' },
+  { id: 'health', name: 'Gesundheit',
+    zweck: 'Blutwerte, Blutdruck, Schlaf' },
+  { id: 'lifestyle', name: 'Lebensstil',
+    zweck: 'Gewohnheiten, Regelmaessigkeit' },
+] as const
+
+export type Zielart = typeof ZIELARTEN[number]['id']
+
+/** Was ein neues Ziel braucht. Nur `NOT NULL` ist Pflicht. */
+export type ZielNeu = {
+  goal_type: Zielart
+  title: string
+  /** ISO-Tag. `gueltig_ab` ist `NOT NULL`. */
+  gueltig_ab: string
+  priority: number
+  description?: string | null
+  target_value?: number | null
+  target_unit?: string | null
+  start_value?: number | null
+  current_value?: number | null
+  target_date?: string | null
+  motivation_reason?: string | null
+}
+
+export type ZielFeldfehler = { feld: string; text: string }
+
+const ISO_TAG = /^\d{4}-\d{2}-\d{2}$/
+
+/**
+ * Prueft ein neues Ziel gegen die CHECKs der Tabelle.
+ *
+ * `[read]` **Je Regel ein Feldfehler, nicht ein Sammelsatz** —
+ * damit die Meldung am Feld stehen kann.
+ *
+ * `[read]` **Die Regeln stehen schon in der Datenbank** — hier
+ * stehen sie nur frueher, damit die Nutzerin einen Satz sieht und
+ * keine Postgres-Meldung.
+ */
+export function pruefeNeuesZiel(z: ZielNeu): ZielFeldfehler[] {
+  const f: ZielFeldfehler[] = []
+
+  // [cmd] user_goals_goal_type_check
+  if (!ZIELARTEN.some(a => a.id === z.goal_type)) {
+    f.push({ feld: 'goal_type', text: 'Diese Zielart gibt es nicht.' })
+  }
+
+  // [cmd] user_goals_title_check: btrim(title) <> ''
+  if (!z.title || z.title.trim() === '') {
+    f.push({ feld: 'title', text: 'Gib dem Ziel einen Titel.' })
+  }
+
+  // [cmd] gueltig_ab NOT NULL
+  if (!ISO_TAG.test(z.gueltig_ab ?? '')) {
+    f.push({ feld: 'gueltig_ab', text: 'Ein Startdatum ist erforderlich.' })
+  }
+
+  // [cmd] user_goals_check: target_date IS NULL OR >= gueltig_ab
+  if (z.target_date) {
+    if (!ISO_TAG.test(z.target_date)) {
+      f.push({ feld: 'target_date', text: 'Kein gueltiges Datum.' })
+    } else if (ISO_TAG.test(z.gueltig_ab ?? '')
+      && z.target_date < z.gueltig_ab) {
+      f.push({
+        feld: 'target_date',
+        text: 'Die Deadline liegt vor dem Start.',
+      })
+    }
+  }
+
+  // [cmd] user_goals_check1 — ein neues Ziel ist immer `active`.
+  if (!Number.isInteger(z.priority)) {
+    f.push({ feld: 'priority', text: 'Die Prioritaet muss eine ganze Zahl sein.' })
+  } else if (z.priority < PRIO_MIN_AKTIV || z.priority > PRIO_MAX_AKTIV) {
+    f.push({
+      feld: 'priority',
+      text: `Ein aktives Ziel traegt Prioritaet ${PRIO_MIN_AKTIV} bis ${PRIO_MAX_AKTIV}.`,
+    })
+  }
+
+  for (const [feld, wert] of [
+    ['target_value', z.target_value], ['start_value', z.start_value],
+    ['current_value', z.current_value],
+  ] as Array<[string, number | null | undefined]>) {
+    if (wert !== undefined && wert !== null && !Number.isFinite(wert)) {
+      f.push({ feld, text: 'Das muss eine Zahl sein.' })
+    }
+  }
+
+  return f
+}

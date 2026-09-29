@@ -41,6 +41,11 @@ import {
   getZielwerteAm, getZielwertVorschlag,
   type Zielvorschlag, type Zielwerte,
 } from '../../../lib/profile/zielwerte-read'
+// `[cmd]` **G-541: der Strategiekatalog.** Serverseitig geladen wie
+// alles andere — die Ansicht bekommt Daten, keinen Klienten.
+import {
+  ladeStrategien, ladeStrategieProfil, type Strategie,
+} from '../../../lib/goals/strategie-read'
 import { GoalsAnsicht } from './ansicht'
 import './goals.css'
 
@@ -82,12 +87,17 @@ export default async function V2GoalsPage({
   let umfaenge: Umfangssatz[] = []
   // `[cmd]` **G-421: `goals.progress_photos` gibt es seit C-463.**
   let fotosessions: Fotosession[] = []
+  // `[cmd]` **G-541: 17 Zeilen, fuer alle gleich** — der Katalog
+  // traegt kein `user_id`, die RLS-Regel erlaubt `authenticated`
+  // genau SELECT.
+  let strategien: Strategie[] = []
+  let strategieProfil = { experience: null as string | null, hasCoach: false }
   let ladefehler: string | null = null
 
   try {
     const userId = await angemeldeteNutzerin()
     ;[ziele, meilensteine, phase, navy, tdee, messungen, zukunftsmessungen, umfaenge,
-      profil, fotosessions]
+      profil, fotosessions, strategien, strategieProfil]
       = await Promise.all([
         ladeZiele(userId, stichtag),
         ladeMeilensteine(userId, stichtag),
@@ -99,6 +109,8 @@ export default async function V2GoalsPage({
         ladeUmfaenge(userId, stichtag),
         ladeProfil(userId),
         ladeFotosessions(userId, stichtag),
+        ladeStrategien(),
+        ladeStrategieProfil(userId),
       ])
 
     // Die zwei Zielwert-Funktionen kommen aus dem bestehenden Lesepfad
@@ -129,6 +141,8 @@ export default async function V2GoalsPage({
         zukunftsmessungen,
         umfaenge,
         fotosessions,
+        strategien,
+        strategieProfil,
         ladefehler,
       }}
     />
