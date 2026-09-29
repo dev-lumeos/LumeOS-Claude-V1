@@ -2741,6 +2741,44 @@
       ]
     },
     {
+      "id": "531_goal_phase_start_rate",
+      "path": "supabase/_pipeline/11_goals/531_goal_phase_start_rate.sql",
+      "kind": "sql",
+      "creates": "G-531: goal_phase_start schreibt Phase und optionale Zielrate atomar; die fachliche Pruefung bleibt im Tabellen-CHECK.",
+      "depends_on": [
+        "529_phase_rate_testdata_cleanup"
+      ]
+    },
+    {
+      "id": "514_goal_contributions_schema",
+      "path": "supabase/migrations/20260929081000_g514_goal_contributions.sql",
+      "kind": "sql",
+      "creates": "G-514: taegliche Modulbeitraege je Ziel mit getrennten Zustaenden fuer keine Zeile, Score 0 und NULL plus Grund.",
+      "depends_on": [
+        "113"
+      ]
+    },
+    {
+      "id": "514_goal_contribution_writers",
+      "path": "supabase/_pipeline/11_goals/514_goal_contribution_writers.sql",
+      "kind": "sql",
+      "creates": "G-514: service-role-Schreibwege fuer vorhandene Recovery- und Supplements-Tagesscores bis zum ausdruecklichen Stichtag.",
+      "depends_on": [
+        "514_goal_contributions_schema",
+        "121",
+        "130"
+      ]
+    },
+    {
+      "id": "514_goal_contribution_backfill",
+      "path": "supabase/_pipeline/11_goals/514_goal_contribution_backfill.sql",
+      "kind": "sql",
+      "creates": "G-514: einmaliger Nachzug vorhandener Recovery- und Supplements-Beitraege fuer aktive Ziele, ohne Zukunftswerte.",
+      "depends_on": [
+        "514_goal_contribution_writers"
+      ]
+    },
+    {
       "id": "551_role_measurement_separation_schema",
       "path": "supabase/migrations/20260927040500_c551_role_measurement_separation.sql",
       "kind": "sql",

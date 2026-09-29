@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 254 |
 | `laufend_codex` | 3 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 580 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 581 |
 | **gesamt** | **839** |
 
 ## medical — 49
@@ -600,7 +600,7 @@
 | `G-515` | befund | mittel | [die drei Goals-Mockups widersprechen sich achtmal in Zahlen](todos/goals-G-0515-die-drei-mockups-widersprechen-sich.md) | offen | — | — |
 | `G-516` | befund | mittel | [das Vorgaengerrepo traegt die Phasenzahlen, die uns fehlen](todos/goals-G-0516-das-vorgaengerrepo-hat-die-phasenzahlen.md) | offen | — | — |
 | `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](erledigt/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | erledigt | — | G-520, G-521, G-534 |
-| `G-520` | feature | hoch | [der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen](laufend_claudecode/goals-g-0520-anpassungsalgorithmus-und-uebergangswaechter.md) | laeuft (claudecode) | — | — |
+| `G-520` | feature | hoch | [der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen](erledigt/goals-g-0520-anpassungsalgorithmus-und-uebergangswaechter.md) | erledigt | — | — |
 | `G-521` | feature | mittel | [wie modelliert man Ernaehrungsphasen, ihre Varianten und Parameter](todos/goals-g-0521-phasenmodellierung-tiefenrecherche.md) | offen | — | G-529, G-530 |
 | `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](todos/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | offen | — | — |
 | `G-523` | fehler | hoch | [der adaptive TDEE glaettet nicht, er springt](erledigt/goals-g-0523-adaptive-tdee-glaettet-nicht.md) | erledigt | — | — |
@@ -619,7 +619,7 @@
 | `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](todos/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | offen | G-521 | G-531, G-533 |
 | `G-530` | feature | hoch | [contest_prep und expert_bb_annual brauchen eine eigene Struktur](todos/goals-g-0530-wettkampfvorbereitung-braucht-eine-eigene-struktur.md) | offen | G-529 | — |
 | `G-533` | fehler | hoch | [die laufenden Phasen sind vor E1, und drei Funktionen sind aus der Oberflaeche nicht erreichbar](laufend_codex/goals-g-0533-die-laufenden-phasen-sind-vor-e1.md) | vorbereitet (codex) | G-531 | — |
-| `G-534` | fehler | hoch | [der Phase-Reiter zeigt Daten und plant nichts](laufend_claudecode/goals-g-0534-der-phase-reiter-ist-kein-planungswerkzeug.md) | laeuft (claudecode) | G-520, G-533 | — |
+| `G-534` | fehler | hoch | [der Phase-Reiter zeigt Daten und plant nichts](laufend_claudecode/goals-g-0534-der-phase-reiter-ist-kein-planungswerkzeug.md) | laeuft (claudecode) | G-533 | — |
 
 ## coach — 57
 

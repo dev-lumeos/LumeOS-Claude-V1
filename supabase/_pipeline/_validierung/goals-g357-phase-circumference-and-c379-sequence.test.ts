@@ -102,7 +102,8 @@ test('G-357/G-356/C-379: eigene Phasen, Umfaenge und Planfolgen sind schreibbar;
       p_gueltig_ab := DATE '2099-01-15',
       p_projected_end_date := DATE '2099-02-15',
       p_variant := 'moderate',
-      p_parameters := jsonb_build_object('source', 'G-357 test')
+      p_parameters := jsonb_build_object('source', 'G-357 test'),
+      p_zielrate_pct_kg_woche := 0.250
     );
     CREATE TEMP TABLE c357_ended ON COMMIT DROP AS
       SELECT goals.goal_phase_end(

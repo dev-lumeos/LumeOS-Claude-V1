@@ -4,6 +4,8 @@ typ: feature
 modul: goals
 schwere: hoch
 angelegt: 2026-09-27
+erledigt: 2026-09-29
+commit: cde1aa2e
 beauftragt: 2026-09-29
 agent: claudecode
 quellen:
