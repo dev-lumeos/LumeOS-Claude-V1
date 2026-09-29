@@ -200,3 +200,257 @@ sind geparkt** (G-532).
 Quelle", sondern: kann Tom damit eine Phase planen, laufen lassen,
 wechseln und beenden, ohne dass ein Satz ueber unser Schema dabei
 steht.**
+
+## Bericht
+
+**Claude Code, 2026-09-29.**
+
+### Was gebaut ist, was blockiert bleibt
+
+    A1  Fussnoten runter              GEBAUT
+    A3  ueberzogene Phase als Posten  GEBAUT
+    A5  gegen das Mockup halten       GEMESSEN, Liste unten
+    A2  feste Felder je Phasenart     BLOCKIERT (G-533)
+    A4  Wechselvorschlag annehmbar    BLOCKIERT (G-533 A1)
+
+`[cmd]` **Beide Sperren selbst nachgemessen, 2026-09-29:** alle drei
+laufenden Phasen tragen `zielrate_pct_kg_woche = NULL`, und
+`goal_phase_start`, `goal_phase_end`, `phase_transition_respond` sind
+weiterhin `SECURITY INVOKER` (`prosecdef = f`).
+
+### A1 - die Fussnoten sind runter
+
+`[cmd]` **Fuenf Erklaerabsaetze entfernt. Was darin stand und stimmt,
+steht jetzt hier:**
+
+**1** - *,,Woche und Tage sind gerechnet, nicht gespeichert -
+`goal_phases` fuehrt weder Woche noch Fortschritt."* `[read]`
+**Richtig.** Beide Zahlen kommen aus `gueltig_ab` und
+`projected_end_date` gegen den Stichtag.
+
+**2** - *,,`recommended_next` ist ein gespeicherter Text, keine
+Ableitung aus dem Verlauf. Der Entwurf zeigt daneben einen Zeitpunkt
+und eine Konfidenz - beides hat keine Spalte."* `[read]` **Richtig,
+und es bleibt der Stand** (siehe A5).
+
+**3** - *,,Aus `parameters`, einem freien JSON-Feld - gezeigt wird,
+was drinsteht. Der Entwurf fuehrt hier feste Felder je Phasenart."*
+`[read]` **Richtig - das ist A2 und haengt an G-533.**
+
+**4** - *,,`phase_am()` waehlt die Zeile, deren `gueltig_ab` am
+Stichtag erreicht und deren Ende noch nicht ueberschritten ist."*
+`[read]` **Richtig, aber reine Innensicht.**
+
+**5** - *,,`parameters` bleibt leer. Der Kalorienzuschlag je Phase
+gehoert hinein (G-511)."* `[read]` **Ueberholt seit G-519:** die Rate
+wird geschrieben, `parameters` ist nicht mehr der Ort.
+
+`[cmd]` **Dazu vier weitere Stellen, die unser Schema nannten:**
+
+    der Reitertitel     "aus dem CHECK von goal_phases"   -> "9 Arten"
+    der Bandhinweis     nannte Tabelle und Punktnummer    -> nur die Grenze
+    der Ohne-Rate-Satz  nannte CHECK, Funktion, Hindernis -> nur die Wirkung
+    zwei Marken unten   nannten Tabelle/Spalte/Typ        -> was fehlt
+
+`[cmd]` **Und eine Kachel ganz entfernt: ,,Zeile".** `[read]` **Sie
+zeigte die ersten acht Zeichen der Datenbankkennung, ein
+,,Ziel verknuepft ja/nein" und drei Daten** - **Start und geplantes
+Ende stehen schon im Kopf.** `[read]` **Keine Attrappe, also faellt
+sie nicht unter E-68: sie war eine Entwicklersicht auf dem
+Nutzerschirm.**
+
+**AM SCHIRM BELEGT** (`test-user`, `/v2/goals?tab=phase`):
+
+    vorher    goal_phases 4x · phase_am 1x
+    nachher   0 ueber der Linie
+              was bleibt: "Phase parameters" (Kacheltitel des
+              Entwurfs) und zwei Marken UNTER der Linie
+
+`[cmd]` **Gemessen mit einem Baumlauf ueber alle Textknoten**, je
+Treffer mit der Lage zur Trennlinie - nicht mit einer blossen
+Wortzaehlung.
+
+`[cmd]` **Was blieb, weil E-68 es verlangt:** alle Attrappenmarken,
+der `ReferenzTrenner`, `GoalsPhaseView` darunter. **Ein Waechter
+haelt das fest.**
+
+### A3 - die ueberzogene Phase ist ein Posten
+
+`[cmd]` **Gemessen: zwei von drei laufenden Phasen sind ueber ihr
+geplantes Ende, die aelteste um 73 Tage.**
+
+`[cmd]` **Gebaut als eigener Kasten, nicht als Kennzahl:**
+
+    Diese Phase laeuft 73 Tage laenger als geplant.
+    Geplantes Ende war 2026-07-18. Beende sie oder verschieb das
+    geplante Ende.
+
+`[read]` **Eine Aussage ueber die PHASE, nicht ueber den Nutzer**
+(C-108/F-02, E-74). `[cmd]` **Ein Test prueft, dass der Kasten keine
+Wendung wie ,,zu lange", ,,versaeumt" oder ,,du solltest"
+enthaelt.**
+
+`[cmd]` **Er erscheint NUR bei einer laufenden, ueberzogenen Phase** -
+ein eigener Testfall.
+
+`[cmd]` **Am Schirm belegt** auf `test-user` mit einer eigens
+angelegten 73-Tage-Phase: `[data-phase-ueberzogen]` = 1. **Danach
+geloescht.**
+
+### A5 - der Entwurf gegen das Gebaute, Kachel fuer Kachel
+
+`[cmd]` **`GoalsPhaseView` (`module-goals-pro.jsx:198-489`) traegt
+FUENF Karten und ZWEI Modale** - nicht zehn Kacheln, wie ein
+Kommentar in `fehlende-kacheln.tsx:20` behauptete. **Der Kommentar ist
+berichtigt.**
+
+| Kachel | Entwurf | bei uns |
+|---|---|---|
+| Phasenkopf | :208-225 | oben-echt, unvollstaendig |
+| Kennzahlenreihe (4) | :226-231 | oben-attrappe |
+| Weekly auto-adjustment | :235-258 | oben-attrappe |
+| Phase state machine | :261-447 | oben-attrappe (Raster), Vorschau nur-unten |
+| Phase parameters | :451-469 | oben-echt, ohne Actions/Success metrics |
+| Expert BB annual | :470-482 | oben-attrappe |
+| PhaseEditorModal | :485 | nur-unten |
+| PhaseTemplateLibrary | :486 | nur-unten |
+
+**DIE FELDER, DIE OBEN FEHLEN - die Liste fuer die naechsten
+Auftraege:**
+
+**Phasenkopf** (`:210-223`): Phasen-Icon in Phasenfarbe, Pille
+`week 9 of 20`, Pille `on track`, `adherence 94%`,
+Fortschrittsbalken (`Meter value=week max=maxWeeks`).
+
+**Kennzahlenreihe** (`:227-230`): Weight trend, Strength, Body fat,
+Adherence - vier Felder.
+
+**Weekly auto-adjustment** (`:243-256`): Statuszeile,
+`confidence 88%`, Begruendungstext, `Active guards` mit
+Guard-Zeilen. `[read]` **Die Regeln dahinter sind G-520, fertig
+gebaut** - es fehlt die Anzeige.
+
+**Phasenraster** (`:266-288`): Klick setzt `preview`, Pille
+`current`, Marke `recommended next`, Marke `switchable`, Marke
+`needs advanced` samt Ausgrauen. `[cmd]` **Der gated-Zweig fehlt in
+`fehlende-kacheln.tsx` ganz.**
+
+**Vorschaupanel** (`:295-429`) - **kein einziges Feld oben:** Kopf mit
+Pille `recommended transition` / `manual switch`, Variantenkarten mit
+je fuenf Zeilen (Deficit, Rate, Protein, Max duration, Diet break),
+`Parameters`, `Sub-phases`-Tabelle (Stage/Weeks out/Deficit/Cardio),
+`Refeeds`, `Peak week`, `12-month cycle` mit Auto-transitions und
+Coach override, `Exit conditions`, `Success metrics`, `Best for`,
+`Purpose`, `Guards that would apply`.
+
+**Suggested transition** (`:439-444`): die Zahl `inWeeks`
+(,,in 4 Wochen"), die modellierte Begruendung, `Accept and schedule`
+statt blossem Annehmen.
+
+**Phase parameters** (`:452-468`): Knopf `Templates`, Knopf `Edit`,
+Block `Success metrics`.
+
+**Expert BB annual** (`:470-481`): Knopf `Customize`, Knopf
+`Open annual cycle editor`.
+
+**ZWOELF BEDIENELEMENTE, die oben gar nicht vorkommen**
+(`:269, 311, 421, 422, 423, 424, 443, 444, 452, 453, 470, 481`) -
+darunter `Switch to {name}` (der Direktwechsel) und
+`Schedule for later`.
+
+**DER EDITOR** (`module-goals-editor.jsx`) liegt bei uns **nur unter
+der Linie.** Er traegt elf Reiter mit zusammen ueber sechzig
+Bedienelementen - Varianten, Parameter, Kalorienzyklus, Dauer mit
+Dreiwegschalter, Unterphasen-Tabelle, Refeeds mit Wochentagsleiste,
+Peak week mit fuenf Kippschaltern (darunter *,,Diuretics · requires
+medical sign-off"*), Datumsanker mit Rueckwaertsplan, Jahreszyklus mit
+Monatsbalken, Per-phase overrides (zehn Felder), Guards als
+Schieberegler, Exit conditions. **Dazu die Vorlagenbibliothek.**
+
+`[read]` **Das ist die Liste, aus der die naechsten Auftraege
+kommen.**
+
+**ZWEI SACHEN, DIE DER ENTWURF ZEIGT UND DIE KEINE SPALTE HABEN** -
+gemeldet, nicht gebaut:
+
+`[cmd]` **Der Zeitpunkt beim Wechselvorschlag** (,,in 4 Wochen",
+`:439`). `[read]` **Rechenbar, sobald die Hoechstdauer als Funktion
+der Rate existiert** (G-529 A3).
+
+`[cmd]` **Die Konfidenz** (`0.88`, `:85`). `[read]` **Eine
+Entscheidung, keine Rechnung.**
+
+**UND ZWEI, DIE WIR HABEN UND DER ENTWURF NICHT:** `PhaseBeginnen` und
+`PhaseBeenden` mit Pflichtgrund - **beide aus G-513, beide ohne
+Vorbild in der Vorlage.**
+
+### Ein ueberholter Grund, nebenbei gefunden
+
+`[cmd]` **Die Marke an ,,Phase state machine" sagte:** *,,die
+Oberflaeche ruft sie nur noch nicht"*. `[cmd]` **G-513 hat genau
+diesen Aufrufer gebaut.** `[read]` **Berichtigt: was dort fehlt, ist
+der Wechsel in EINEM Zug** - bei uns sind es zwei Handgriffe.
+
+### A6 - die Grenze
+
+`[cmd]` **`git status` in `apps/web/src/app/v2/`: nur `goals`.**
+`[cmd]` **14 Zusicherungen gruen.**
+
+**Sabotageprobe, drei Eingriffe, je von ihrer eigenen gefangen:**
+
+    eine Fussnote kehrt zurueck   -> 2 und 4   ROT
+    der Posten faellt weg         -> 1         ROT
+    Posten auch bei beendeter     -> 3         ROT
+    alles zurueck                 -> 14/14     GRUEN, byteidentisch
+
+`[cmd]` **Ein vierter Versuch kam nicht an** - der Suchtext traf
+nicht. `[read]` **Die `assert`-Zeile hat die Nulloperation
+abgewiesen, statt sie als gruen zu verbuchen.**
+
+`[cmd]` **Ein bestehender Waechter fiel dabei:**
+`entwurf-wird-nicht-verdraengt.test.ts` zaehlt Marken ueber ein
+Muster, das meine Kommentarzeile zwischen `attrappeAus(` und dem Grund
+zerschnitt. `[read]` **Nicht die Zahl der Gruende war falsch, sondern
+meine Formatierung** - Kommentar raus, Punktnummer in den Grund,
+**15 von 15 wieder gruen.**
+
+`[cmd]` **`pnpm gate` 18 von 18 GRUEN.** `[cmd]` **Nichts in
+`supabase/`, nichts committet.**
+
+## Der Auftrag geht weiter - raus 2026-09-29, 11:10
+
+`[cmd]` **A2 und A4 sind frei: G-531 ist live**, selbst geprueft — alle
+drei Funktionen auf `auth.uid()`, `goal_phase_start` mit
+`p_zielrate_pct_kg_woche`, genau eine Signatur.
+
+**A4** — der Wechselvorschlag ist annehmbar. Und `phase-write.ts` fuehrt
+seinen zweigeteilten Schreibweg auf den atomaren RPC zurueck; Codex hat
+es selbst gemeldet. `[read]` **Ein Umweg im Anwendungscode war einmal
+vertretbar, jetzt ist er unnoetig** — und zwei Orte fuer die
+,,eine laufende Phase"-Regel sind die Ursache von Drift.
+
+**A2** — feste Felder je Phasenart statt des JSON-Inhalts: Rate,
+Hoechstdauer, Protein. Wo ein Wert fehlt, Strich MIT GRUND;
+`goals.phase_rate_rules` hat 0 Zeilen, das ist der Grund.
+
+### A7 (neu) - das Vorschaupanel, und es ist der Kern
+
+`[read]` **Toms Urteil nach A1 (11:07):** *,,sieht immer noch scheisse
+aus und in keinster art und weise was die vorgabe ist."* `[read]` **Er
+hat recht: A1 hat Fussnoten entfernt und nichts gebaut.**
+
+`[cmd]` **Deine eigene A5-Liste ist jetzt die Vorgabe:**
+
+    das Vorschaupanel (module-goals-pro.jsx:295-429)
+      -> heute fehlt JEDES Feld davon
+    zwoelf Bedienelemente, darunter Switch to X als Direktwechsel
+    der Editor: elf Reiter, ueber sechzig Bedienelemente
+      -> liegt nur unter der Linie
+    oben stehen heute: fuenf Karten und zwei Modale
+
+`[read]` **Reihenfolge: was eine echte Quelle HAT, wird angebunden.** Was
+keine hat, bleibt Attrappe mit einer Marke nach `attrappeAus()` — eine
+Zeile, Quelle und Grund. **Keine Fussnoten, das war A1.**
+
+`[read]` **Der Massstab:** fertig ist, wenn der Reiter neben dem Entwurf
+steht und man den Unterschied benennen muss, statt ihn zu sehen.

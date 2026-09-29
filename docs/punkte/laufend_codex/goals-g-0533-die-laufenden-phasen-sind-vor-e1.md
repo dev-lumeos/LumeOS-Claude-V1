@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-09-29
+beauftragt: 2026-09-29
+agent: codex
 
 braucht: [G-531]
 kind_von: G-529
@@ -155,3 +157,62 @@ direkt daran.
 
 **Der Auftrag sind A1 bis A5 oben, in dieser Reihenfolge.** A1 zuerst,
 weil sein Ergebnis entscheidet, ob A2 eine Aenderung ist oder drei.
+
+## Der Auftrag, raus 2026-09-29, 11:10 - A2 ist DRINGEND
+
+`[cmd]` **Der Grund, warum A2 nicht entfallen kann** — der Orchestrator
+hatte es am Morgen gestrichen, weil Tom sagte, er fange bei null an.
+**Das war falsch, und der Beweis liegt vor:**
+
+    begin;
+      update goals.goal_phases set actual_end_date = current_date
+       where actual_end_date is null and phase_type='lean_bulk'
+         and zielrate_pct_kg_woche is null;
+    rollback;
+    -> ERROR: violates check constraint
+       "goal_phases_zielrate_passt_zur_art"
+       Failing row: 31000000-0000-0000-0000-000000000102
+
+    dasselbe UPDATE mit zielrate_pct_kg_woche = 0.271  ->  UPDATE 2
+
+`[read]` **`NOT VALID` schuetzt nur vor der Pruefung BESTEHENDER Zeilen
+beim Validieren — nicht vor der Pruefung bei jeder Aenderung.** Also
+faellt jedes UPDATE auf eine `lean_bulk`-Zeile ohne Rate. **Die zwei
+Altzeilen sind nicht veraltet, sie sind unbeweglich:** nicht beendbar,
+nicht verschiebbar, nicht anfassbar.
+
+`[cmd]` **Tom hat es am Schirm getroffen (11:07):** ,,Phase beenden" gab
+`new row for relation "goal_phases" violates check constraint
+"goal_phases_zielrate_passt_zur_art"`.
+
+### Die Rate ist ableitbar, nicht zu raten
+
+`[cmd]` **Gemessen:** beide Zeilen `lean_bulk`, `gueltig_ab 2026-06-04`,
+`parameters.calorie_surplus_kcal = 250`. Gewicht am `gueltig_ab` aus
+`goals.body_measurements` (Spalte `measurement_date`): **83,74 kg** fuer
+`dev@lumeos.app` und `tom.seed@example.com`.
+
+    Rate = kcal / (11 x kg) = 250 / (11 x 83,74) = +0,271 %/Woche
+
+`[read]` **Der Kettenschritt rechnet das SELBST aus den vorhandenen
+Werten** — `0.271` wird nicht hineingeschrieben. **Fehlt das Gewicht,
+faellt der Schritt mit Meldung, nicht mit einem Vorgabewert.**
+
+`[cmd]` **Und `calorie_surplus_kcal` verlaesst `parameters` im selben
+Schritt.** Zwei Wahrheiten nebeneinander sind die Ursache, nicht das
+Symptom.
+
+`[cmd]` **Die `maintenance`-Zeile von `max.seed@example.com` bleibt
+NULL** — der CHECK erlaubt bei `maintenance` NULL oder `|x| <= 0,1`. Sie
+ist nicht blockiert.
+
+### A3 danach
+
+`ALTER TABLE goals.goal_phases VALIDATE CONSTRAINT
+goal_phases_zielrate_passt_zur_art;` **Faellt eine Zeile, BLEIBT er
+`NOT VALID` und die Zeile wird gemeldet.**
+
+**Nachweis:** vorher faellt das UPDATE, nachher geht `goal_phase_end` auf
+`dev@lumeos.app` durch (in einer Transaktion mit ROLLBACK, wie bei
+G-531), `convalidated` von `f` auf `t`, und
+`parameters.calorie_surplus_kcal` kommt nirgends mehr vor.

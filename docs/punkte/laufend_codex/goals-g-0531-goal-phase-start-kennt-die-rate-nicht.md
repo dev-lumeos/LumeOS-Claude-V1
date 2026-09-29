@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-09-29
+beauftragt: 2026-09-29
+agent: codex
 
 braucht: []
 kind_von: G-529
@@ -147,3 +149,39 @@ Regel aus dem Anwendungscode zurueck in die Datenbank.
 **Der Auftrag sind A1 bis A6 oben, in dieser Reihenfolge.** A4 ist
 ausdruecklich NICHT deiner; A5 ist eine Messung, deren Ergebnis eine
 Entscheidung sein kann.
+
+## Abnahme - Orchestrator, 2026-09-29, an der laufenden Datenbank
+
+`[cmd]` **Nach dem Einspielen selbst gemessen:**
+
+    Funktion                    auth.uid()   request.jwt.claim.sub
+    goal_phase_start                 t                 f
+    goal_phase_end                   t                 f
+    phase_transition_respond         t                 f
+
+`[cmd]` **Die Signatur traegt den Parameter**, und es gibt **GENAU EINE**
+— die alte sechsparametrige ist entfernt. `[read]` **Das ist der
+wichtigere Teil:** blieben beide stehen, wuerde ein Aufruf ohne Rate
+stillschweigend die alte Fassung treffen und wieder am CHECK fallen.
+**Eine Ueberladung waere der naechste Geist gewesen.**
+
+`[cmd]` **`backup/` bytegenau unveraendert:** 65 Dumps, 11.499 Dateien,
+4.159.172.208 Byte. **Kein neuer Dump, und die Begruendung traegt** — es
+wurden reproduzierbare Funktionsdefinitionen ersetzt.
+
+`[cmd]` **Der CHECK bleibt `convalidated = f`**, wie verlangt.
+
+`[cmd]` **Die Livesuche findet nur noch `auth.uid` selbst plus sechs
+Anwendungsleser** — das ist G-535.
+
+### Was dieser Punkt wirklich geloest hat
+
+`[read]` **Die Phase engine war nicht halb fertig, sie war unbedienbar**
+— fuer jeden Nutzer, immer, seit `request.jwt.claim.sub` mit PostgREST 9
+verschwand. **Anlegen, Beenden und Wechseln haben nie funktioniert.**
+
+`[read]` **Die Lehre:** ein Fehler, der ,,Anmeldung erforderlich" sagt,
+wurde als Sitzungsproblem gelesen. **Er war ein Namensproblem.** Die
+Frage, die ihn aufdeckte, war nicht ,,warum schlaegt der Aufruf fehl",
+sondern ,,WIE prueft die Funktion die Sitzung" — eine Frage an den
+Quelltext, nicht an das Verhalten.

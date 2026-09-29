@@ -282,3 +282,54 @@ genannt** (A-80: 150 Datenbanken mit 207 GB stehen herum, 49 heissen
 · nutrition in eine Zeile je Tag schreiben (naechster Auftrag).
 
 Nichts committen, nichts pushen.
+
+## Abnahme - Orchestrator, 2026-09-29
+
+_(Zwei Stunden zu spaet. Codex hat um 09:00 berichtet; der Orchestrator
+hat dazwischen zwei andere Punkte bearbeitet. **Dasselbe Versaeumnis wie
+bei C-546 und C-551**, die er am selben Morgen dafuer kritisiert hat.)_
+
+`[cmd]` **Merkmale gezaehlt, nicht nachgebaut:**
+
+    supabase/migrations/20260929081000_g514_goal_contributions.sql   da
+    _pipeline/11_goals/514_goal_contribution_writers.sql             da
+    _pipeline/11_goals/514_goal_contribution_backfill.sql            da
+    _pipeline/_validierung/514_goal_contributions_pruefen.sql        da
+    kette.json und schema-sollstand.json nachgezogen                 da
+
+`[cmd]` **Die Grenze ist gewahrt:** Struktur in `migrations/`, Daten und
+Rueckfuellung in `_pipeline/`. **Das ist der Punkt, an dem G-524 gefallen
+ist** — der Datenlogik-Waechter hat dort zu Recht gegriffen, und hier ist
+es von Anfang an getrennt.
+
+`[cmd]` **Die Zukunftsgegenprobe ist die tragende:** `recovery.scores`
+enthaelt zwei echte Werte vom 2026-11-06 mit Score 74,9. Der Schreibweg
+lief mit Stichtag 2026-09-29, und der 2026-11-06 ging NICHT ein.
+`[read]` **Damit ist die Festlegung des Vertrags — `tag <= stichtag` —
+nicht nur uebernommen, sondern am echten Datensatz belegt.**
+
+`[cmd]` **Und der Unterschied, auf den es ankommt, ist belegt:** ein
+Score 0 blieb als vorhandene Zeile stehen, ein Tag ohne Quelle erzeugte
+keine Zeile. `[read]` **Kein Eintrag ist nicht dasselbe wie ein Eintrag
+mit 0** — genau das, was `SCORING.md:66` stillschweigend gleichsetzt und
+der Vertrag benennt (`ohne_wert`).
+
+`[cmd]` **Gemessen zum Stichtag:** recovery 294 von 370 Zeilen bis zum
+Stichtag (76 danach), supplements 274 von 274. Erwartete Beitraege fuer
+aktive Ziele: 514 und 362. Auf `test-user@lumeos.local` 30 Recovery- und
+90 Supplement-Tage, **darunter neun echte Supplement-Scores 0.**
+
+`[cmd]` **Voller Kettenlauf 290 Schritte gruen, `pnpm gate` gruen, drei
+Wegwerf-Datenbanken verworfen, 0 verblieben.**
+
+### Was offen bleibt
+
+`[read]` **Nicht live eingespielt.** `goals.goal_contributions` existiert
+als Migration, nicht in der laufenden Datenbank. **Solange das so ist,
+bleibt der Cross-module-Reiter Attrappe** — und er ist laut
+`116-goals-anbindung.md` der Reiter, dessen Blocker damit faellt.
+
+`[read]` **nutrition, training und medical liefern weiterhin nichts.**
+nutrition rechnet im Browser, die anderen zwei haben keinen Tagesscore.
+**Das sind drei weitere Auftraege, und zwei davon gehoeren nicht zu
+Goals.**
