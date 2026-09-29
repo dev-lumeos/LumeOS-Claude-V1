@@ -147,3 +147,114 @@ Gegenprobe.** Ein Muster ohne eingebauten Fehler misst nichts —
 dieselbe Klasse wie die vier Fehlmessungen aus PowerShell-Quoting
 vom selben Tag. Die berichtigte Messung: alle echten
 Voraussetzungen der vier Dateien stehen in der laufenden DB.
+
+## Abnahme
+
+_(Orchestrator, 2026-09-29. Jede Zahl unten selbst gemessen, nicht aus
+dem Bericht uebernommen.)_
+
+### A1 und A2 stimmen bis auf die Byte-Zahl
+
+`[cmd]` **Nachgezaehlt gegen die laufende Datenbank:**
+
+    Registereintraege                        21   (Bericht: 21)
+    davon die vier neuen                   4/4   20260927034024, 20260928095000,
+                                                 20260928150000, 20260928153000
+    unregistrierte Dateien                   70   (Bericht: 70)
+    Dumps in backup/                         65   (Bericht: 65)
+    neuester Dump         20260928155121_g511_e1_vor_struktur.dump
+    dessen Groesse                  473.970.119 Byte   (Bericht: bytegenau gleich)
+    kein neuer Dump                          ja
+
+`[cmd]` **Die fuenf Objekte stehen:**
+`goal_phases.zielrate_pct_kg_woche`,
+`nutrition_targets.tdee_herkunft`, `goals.phase_rate_rules`,
+`goals.nutrition_macro_rules`, `goals.tdee_history`.
+
+`[cmd]` **E1 ist gewahrt:** null Spalten auf `goals.goal_phases`, deren
+Name `kcal` oder `kalorien` enthaelt.
+
+`[cmd]` **Die Rate-Identitaet nachgerechnet:** 45 kg bei -1,0 %/Woche
+gibt -495 kcal/Tag, 120 kg gibt -1320, 80 kg bei +0,25 % gibt +220.
+**11 x Rate x Gewicht, bestaetigt.**
+
+`[cmd]` **Sein Werkzeug liegt und ist getestet:**
+`tools/migrations-objekte-pruefen.mjs` (12.878 Byte),
+`tools/__tests__/migrations-objekte-pruefen.test.mjs` (2.578 Byte),
+`tools/__tests__/fixtures/c554-gegenprobe.sql` (197 Byte).
+
+`[cmd]` **Seine Wegwerf-Datenbank ist verworfen** — keine Datenbank mit
+`c554` im Namen.
+
+### Codex hatte recht, und der Auftrag hatte unrecht
+
+`[cmd]` **Der Auftrag verlangte `goal_phases.tdee_herkunft`. Gebaut ist
+`nutrition_targets.tdee_herkunft`.** Codex hat die Abweichung gemeldet
+statt sie stillschweigend zu bauen, und seine Begruendung traegt:
+
+`[read]` **Die TDEE-Herkunft erklaert eine gespeicherte Zielzeile,
+nicht die Phase.** Eine Phase laeuft Wochen; der adaptive TDEE
+aendert sich darin taeglich. Eine Spalte an der Phase koennte nur
+EINEN Wert halten und waere ab dem zweiten Tag falsch.
+
+`[cmd]` **Und es gibt einen zwingenden Beleg dafuer:**
+`nutrition_targets` traegt jetzt auch `tdee_history_id` — einen Verweis
+auf genau den Reihenwert, mit dem gerechnet wurde. **Ein Verweis auf
+eine Zeile der TDEE-Reihe kann nicht an der Phase haengen**, weil die
+Phase viele solche Zeilen ueberspannt. Die Spalte gehoert dorthin, wo
+Codex sie gebaut hat.
+
+`[read]` **Der Fehler war mein Auftrag, nicht seine Ausfuehrung.** Und
+er hat richtig gehandelt, indem er keine fuenfte, unbeauftragte
+Strukturaenderung erfunden hat.
+
+### Den Zwei-Wahrheiten-Waechter habe ich behoben
+
+`[cmd]` **Ursache, gemessen:** `zwei-wahrheiten-pruefen.mjs` arbeitet
+mit einer Ausschlussliste. G-511 hat fuenf Metadatenfelder auf
+`nutrition_targets` eingespielt — `phase_id`,
+`zielrate_pct_kg_woche`, `body_weight_kg`, `tdee_herkunft`,
+`tdee_history_id` — die dort nicht standen und deshalb als
+Naehrstoffspalten gezaehlt wurden. **12 statt 7.**
+
+`[read]` **Die Ausschlussliste ist die richtige Richtung und bleibt.**
+Eine Einschlussliste waere bequemer und wuerde einen achten Naehrstoff
+stillschweigend durchlassen — genau das, was der Waechter verhindert.
+**`body_weight_kg` endet auf eine Einheit und ist trotzdem kein
+Naehrstoff**: deshalb entscheidet eine benannte Liste und keine
+Namensregel.
+
+`[cmd]` **Ein zweiter Mangel war die Ursache dafuer, dass Codex raten
+musste:** der Waechter meldete nur eine Zahl, nicht welche Spalten er
+zaehlt. **Jetzt nennt er sie** und stellt die Frage, die vorher
+fehlte: traegt die neue Spalte ein Naehrstoffziel (dann G-261 pruefen,
+DANACH das Soll anheben) oder ist sie Rechenprotokoll (dann in die
+Liste, Soll bleibt)? **,,Soll anheben, weil die Zahl gestiegen ist" ist
+in beiden Faellen falsch** — und stand vorher als einziger Rat da.
+
+`[cmd]` **In beide Richtungen belegt, gegen eine Wegwerf-Datenbank,
+ohne die laufende anzufassen:**
+
+    laufende DB                          7 von 7    gruen
+    Nachbau in der Wegwerf-DB            7 von 7    gruen
+    + vitamin_d_ug (achter Naehrstoff)   8 von 7    ROT, benannt
+    + tdee_herkunft_notiz (Metadatum)    8 von 7    ROT, benannt
+    Wegwerf-DB verworfen                 0 Reste
+    laufende DB danach                   20 Spalten, unveraendert
+
+`[read]` **Auch der zweite Sabotagefall faellt rot auf, und das ist
+Absicht** — ein neues Feld, das niemand eingeordnet hat, soll eine
+Einordnung erzwingen.
+
+`[cmd]` **`pnpm gate`: Exitcode 0.** 2063 Tests, 18 Turbo-Tasks,
+`serverimport` 63 Client-Chunks / 0 Treffer.
+
+### Ein Befund, der bei dieser Abnahme abgefallen ist
+
+`[cmd]` **Die Frage ,,hat Codex seine Wegwerf-DB verworfen?" gab 27
+Namen zurueck, von denen keiner zu C-554 gehoerte.** Weiter gemessen:
+**150 Datenbanken ausser der laufenden, 207 GB, davon 49 mit `_final`
+im Namen.** Die laufende belegt 4.816 MB. **Das ist A-80.**
+
+`[read]` **Nicht Codex' Sache** — die aeltesten stammen aus dem
+C-490er-Bereich und von mehreren Agenten. Seine war weg.

@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 253 |
+| `todos` | 254 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 578 |
-| **gesamt** | **833** |
+| **gesamt** | **834** |
 
 ## medical — 49
 
@@ -679,7 +679,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 209
+## quer — 210
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -726,6 +726,7 @@
 | `A-77` | fehler | mittel | [vier Werkzeugtests liefen nirgends](todos/quer-a-0077-werkzeugtests-liefen-nirgends.md) | offen | — | — |
 | `A-78` | befund | mittel | [ein neuer Punkt wird nicht gegen den Bestand geprueft](todos/quer-a-0078-punkte-werden-nicht-gegen-den-bestand-geprueft.md) | offen | — | — |
 | `A-79` | befund | mittel | [jeder Auftrag legt 452 MiB ab, auch wenn nichts eingespielt wird](todos/quer-a-0079-jeder-auftrag-legt-452-mib-ab.md) | offen | — | — |
+| `A-80` | befund | mittel | [150 Wegwerf-Datenbanken, und 49 davon heissen "final"](todos/quer-a-0080-hundertfuenfzig-wegwerf-datenbanken.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

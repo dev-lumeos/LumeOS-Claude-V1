@@ -1,40 +1,42 @@
 # Laufende Auftraege
 
-**Stand: 2026-09-28, 18:30**
+**Stand: 2026-09-29, 08:30**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Codex | C-554 | das Migrationsregister ist unbrauchbar — A1 messen, dann vier Goals-Dateien einspielen | **raus 28.09., 18:03** |
-| Claude Code | G-522 | A3 — der Vertrag fuer einen Modulbeitrag | **raus 28.09., 18:03** — Bericht liegt |
+| Codex | C-554 | Register gemessen, vier Goals-Migrationen einzeln live | **abgenommen 29.09.** — wartet auf Commit |
+| Claude Code | G-522 | A3 — der Vertrag fuer einen Modulbeitrag | **abgenommen 28.09.** — wartet auf Commit |
 
-`[cmd]` **Alles andere liegt in `todos/` oder `erledigt/`.** Der
-Ordner ist der Zustand; `docs/punkte/00-INDEX.md` fuehrt 833 Punkte
-(todos 253 · laufend_codex 1 · laufend_claudecode 1 · erledigt 578).
+`[cmd]` **Beide Agenten sind frei.** `docs/punkte/00-INDEX.md` fuehrt
+834 Punkte.
 
 ---
 
-## Der Befund des Tages: niemand kann sagen, was live ist
+## Die Kette IST eingespielt — was sich damit geaendert hat
 
-`[cmd]` **Gemessen 2026-09-28 gegen die laufende Datenbank:**
+`[cmd]` **Selbst gemessen, 2026-09-29, gegen die laufende Datenbank:**
 
-    Registereintraege in supabase_migrations.schema_migrations   17
-    Dateien in supabase/migrations/                              91
-    nicht registriert                                            74
-    neuester Registereintrag                        20260915142200
-    Registereintraege ohne Datei (Geister)                        0
+    goal_phases.zielrate_pct_kg_woche     da
+    nutrition_targets.tdee_herkunft       da
+    goals.phase_rate_rules                da
+    goals.nutrition_macro_rules           da
+    goals.tdee_history                    da
+    Kalorienspalten auf goal_phases        0   (richtig, E1)
+    Registereintraege                     21
+    unregistrierte Dateien                70
+    neuer Dump in backup/                 keiner
 
-`[cmd]` **Und die 74 sind keine Arbeitsliste.** Stichprobe von 12,
-objektweise gegen `information_schema`: **3 sind strukturell DA,
-obwohl nicht registriert** (`marketplace.wallets`,
-`nutrition.animal_species`, `public.profiles.experience_level`).
+`[cmd]` **`supabase db push` wurde nicht verwendet.** Vier
+Einzelanwendungen mit Vorher-Nachher je Datei, bytegenau ueber
+`tools/lauf.py psql_datei` mit `ON_ERROR_STOP=1`.
 
-`[read]` **Damit ist das Register in beide Richtungen unbrauchbar.**
-`supabase db push` ist verboten. **Der Zustand wird objektweise
-gemessen, nie aus dem Register gelesen.** Das ist C-554.
+`[read]` **Damit ist G-519 A5-A8 zum ersten Mal wirklich baubar.** Die
+Spalte steht in der Datenbank, die der Dev-Server liest — nicht nur in
+einer Datei.
 
-`[cmd]` **Der Grund steht in `supabase/README.md` selbst:** die
-laufende DB entstand aus einzeln ausgefuehrten Kettenskripten, und
-der Registerumtrag ist dort seit 2026-08-05 offener Punkt 1.
+`[cmd]` **Der Rest von C-554 bleibt offen:** 70 unregistrierte Dateien
+mit 318 vorhandenen und 19 fehlenden Objekten. Das ist A3 und Toms
+Entscheidung.
 
 ---
 
@@ -48,79 +50,43 @@ der Registerumtrag ist dort seit 2026-08-05 offener Punkt 1.
 
 ---
 
-## Warum G-519 A5 bis A8 immer noch nicht laeuft
-
-`[cmd]` **Die Ratenspalte ist gebaut und NICHT eingespielt.** Selbst
-gemessen, 2026-09-28, gegen die laufende Datenbank:
-
-    goal_phases.zielrate_pct_kg_woche   fehlt
-    goal_phases.tdee_herkunft           fehlt
-    goals.phase_rate_rules              fehlt
-    goals.nutrition_macro_rules         fehlt
-    goals.tdee_history                  fehlt
-    goal_phases.*kalorien*              fehlt  (richtig so, E1)
-
-`[cmd]` **Die echten Voraussetzungen der vier Goals-Migrationen
-stehen alle in der laufenden DB** — `auth.uid`, `auth.users`,
-`goals.goal_phases`, `goals.nutrition_targets`, `goals.phase_am`,
-`goals.touch_updated_at`, `goals.body_measurements`,
-`nutrition.daily_summary`, `public.profiles`. **Der schmale Weg ist
-frei.** Er laeuft als C-554 A2 bei Codex.
-
-`[read]` **Reihenfolge:** C-554 A1 messen → die vier einspielen →
-dann G-519 A5-A8.
-
----
-
 ## Was auf Tom wartet
 
-    C-554 A3   der Registerumtrag fuer die uebrigen 70 — welche
-               nachgetragen, welche eingespielt, welche bewusst
-               nicht. Grundlage liefert Codex mit A1.
-    A-79       backup/-Aufbewahrung. Der Ordner steht bei 3.958 MiB
-               gegen ein Limit von 2.5 GiB, nach Toms Leerung von
-               8,96 GiB. Der Ausloeser haengt am Auftrag, nicht an
-               der Aenderung.
-    A-78       Waechter auf Bezeichner-Ueberschneidung (Dubletten
-               wie G-524 gegen G-514). Bauen oder nicht.
-
-`[cmd]` **Keine neue Sicherung noetig fuer C-554 A2.**
-`backup/20260928155121_g511_e1_vor_struktur.dump` von 15:51 ist als
-struktureller Vorher-Stand gueltig — seit dann wurde nichts
-eingespielt, objektweise belegt.
+    C-554 A3   der Registerumtrag fuer die 70 — welche nachgetragen,
+               welche eingespielt, welche bewusst nicht. Codex' Werkzeug
+               liefert die Objektmatrix: node tools/migrations-objekte-pruefen.mjs
+    A-80       150 Wegwerf-Datenbanken, 207 GB. Die Liste zum Verwerfen
+               legt der Orchestrator vor; Tom entsorgt. Platte ist NICHT
+               das Problem (6.726 GB frei) — die 49 Datenbanken mit
+               "_final" im Namen sind es.
+    A-79       backup/-Aufbewahrung, 3.958 MiB gegen ein Limit von 2.5 GiB
+    A-78       Waechter auf Bezeichner-Ueberschneidung (Dubletten)
 
 ---
 
-## Erledigt am 2026-09-28
+## Der Zwei-Wahrheiten-Waechter ist behoben
 
-`[cmd]` **Fuenf Punkte geschlossen und gepusht** (`6692face`):
-G-368, G-394, G-511, G-523, G-528. G-529 auf A3 verengt.
+`[cmd]` **Er zaehlte 12 statt 7, weil G-511 fuenf Metadatenfelder auf
+`nutrition_targets` eingespielt hat**, die nicht in seiner
+Ausschlussliste standen: `phase_id`, `zielrate_pct_kg_woche`,
+`body_weight_kg`, `tdee_herkunft`, `tdee_history_id`.
 
-`[cmd]` **C-546 und C-551 abgenommen** — sie standen seit dem 27.09.
-mit vollem Bericht und LEERER Abnahme in `laufend_codex`. Das war
-ein Versaeumnis des Orchestrators, kein Zustand der Punkte.
-Strukturell nachgezaehlt: 16 Bezeichner, vier Trigger, die
-Alias-Sperre als Funktion gelesen, die zusammengesetzten
-Fremdschluessel. Gegenprobe eingebaut, erfundene Namen werden nicht
-gefunden.
+`[read]` **Die Ausschlussliste bleibt, ihre Richtung ist Absicht** —
+eine Einschlussliste liesse einen achten Naehrstoff stillschweigend
+durch. `body_weight_kg` endet auf eine Einheit und ist trotzdem kein
+Naehrstoff; deshalb entscheidet eine benannte Liste, keine Namensregel.
 
-`[cmd]` **Die ZAHLEN der beiden sind NICHT nachgerechnet** — sie
-brauchen einen Kettenlauf gegen eine Wegwerf-Datenbank, und der
-wurde nicht gestartet, waehrend Codex gegen denselben Server
-arbeitet. **Festgehalten als C-555, nicht stillgelegt.**
+`[cmd]` **Zweiter Mangel, der Codex zum Raten zwang:** der Waechter
+meldete nur eine Zahl, nicht welche Spalten. Jetzt nennt er sie und
+stellt die Frage — Naehrstoffziel (G-261 pruefen, DANACH Soll anheben)
+oder Rechenprotokoll (in die Liste, Soll bleibt). **,,Soll anheben, weil
+die Zahl gestiegen ist" ist in beiden Faellen falsch** und war vorher
+der einzige Rat.
 
-`[cmd]` **Drei Waechter gebaut und in beide Richtungen belegt:**
-A-75 (Quellen, 8-fache Gegenprobe, fand einen echten Lesefehler in
-`punkte-lesen.mjs`), A-76 (Geltung, Sollstand 149), A-77
-(Werkzeugtests, 33 Pruefungen als erster Gate-Schritt, Sabotage an
-echtem Code: 7 von 33 rot, byteidentisch wiederhergestellt).
-
-`[cmd]` **Gate: 30 Schritte, gruen.** Fuenf Waechter einzeln gruen:
-punkte 25/25, sammelfragen 1/1, nummern ohne Dublette, specs
-149/149, encoding 21.585 Dateien sauber.
-
-`[cmd]` **Draussen:** `3c3c4da9` · `e22a7c03` · `8fc65ed7` ·
-`0483f080` · `7399aca3` · `c572fbab` · `6692face`.
+`[cmd]` **In beide Richtungen belegt gegen eine Wegwerf-Datenbank:**
+laufend 7/7 gruen, Nachbau 7/7 gruen, mit `vitamin_d_ug` 8/7 ROT und
+benannt, mit `tdee_herkunft_notiz` ebenso ROT, Wegwerf-DB verworfen (0
+Reste), laufende danach unveraendert bei 20 Spalten.
 
 ---
 
@@ -133,32 +99,32 @@ punkte 25/25, sammelfragen 1/1, nummern ohne Dublette, specs
     E4  contest_prep und expert_bb_annual bekommen eine
         eigene Struktur                                 -> G-530
 
-`[cmd]` **kcal/Tag = 11 x Rate(% KG/Woche) x Gewicht(kg)**, aus
-7700 kcal je kg. Beide Groessen werden angezeigt, gespeichert wird
-die Rate.
+`[cmd]` **kcal/Tag = 11 x Rate(% KG/Woche) x Gewicht(kg)**, aus 7700
+kcal je kg. Nachgerechnet gegen die eingespielte Struktur: 45 kg bei
+-1,0 %/Woche gibt -495, 120 kg gibt -1320, 80 kg bei +0,25 % gibt +220.
+Beide Groessen werden angezeigt, gespeichert wird die Rate.
 
-`[read]` **Der Recherchebericht erfuellt seine Beweisanforderung
-nicht:** keine Fundstelle nennt Seite oder Abschnitt, und von drei
-verlangten Quellenarten fehlt die dritte ganz. **Nichts daraus ist
-`[cmd]`.** G-521 A1 bleibt offen — vier tragende Zahlen ohne
+`[read]` **G-521 A1 bleibt offen** — vier tragende Zahlen ohne
 Seitenbeleg: Ratendeckel 1,25, Fettboden 0,5, Proteinband nach
-Trainingsstatus, die 8-12 Wochen fuer eine Diaetpause.
+Trainingsstatus, die 8-12 Wochen fuer eine Diaetpause. Der
+Recherchebericht nennt keine Fundstelle mit Seite oder Abschnitt;
+nichts daraus ist `[cmd]`.
 
 ---
 
 ## Was als naechstes ansteht
 
-**Codex, nach C-554:** G-529 A3 (Maximaldauer und Diaetpausen-Takt
-als Funktion der Rate). Dann G-514 — die Beitragstabelle plus
-recovery und supplements, der Auftrag, der den ersten USP echt
-macht.
+**Claude Code:** G-519 A5-A8 — das Eingabefeld fuer die Zielrate, kcal
+daneben angezeigt (N13). Jetzt baubar, die Spalte steht live.
 
-**Claude Code, nach G-522 A3:** G-519 A5-A8, sobald C-554 A2 durch
-ist. Danach G-520.
+**Codex:** G-514 — `goals.goal_contributions` plus recovery und
+supplements daran. Der Vertrag dafuer liegt gebaut und getestet in
+`packages/scoring/src/beitrag.ts` (G-522 A3, 26 Zusicherungen,
+Sabotage in beide Richtungen). Danach G-529 A3.
 
-**Orchestrator:** C-555 A1/A2 nachrechnen, wenn der Server frei ist.
-G-530 und G-526 A1-A9 vorbereiten. Geltungszeile je Modul nachziehen,
-wenn dort gearbeitet wird.
+**Orchestrator:** C-555 A1/A2 nachrechnen (die Zahlen von C-546 und
+C-551), Verwerfliste fuer A-80 vorlegen, G-530 und G-526 A1-A9
+vorbereiten.
 
 ---
 
@@ -172,47 +138,56 @@ melden EINMAL am Ende — kein Zwischenstand.
 
 ---
 
-## Lehren vom 28.09.
+## Lehren
+
+`[cmd]` **Ein Agent, der einem falschen Auftrag widerspricht, hat
+recht behandelt zu werden.** Der Auftrag verlangte
+`goal_phases.tdee_herkunft`; Codex baute
+`nutrition_targets.tdee_herkunft` und meldete die Abweichung. **Seine
+Begruendung traegt:** eine Phase laeuft Wochen, der adaptive TDEE
+aendert sich darin taeglich — eine Spalte an der Phase koennte nur
+EINEN Wert halten. Und `nutrition_targets.tdee_history_id` verweist auf
+genau eine Zeile der TDEE-Reihe; ein solcher Verweis kann nicht an der
+Phase haengen, die viele davon ueberspannt. **Der Fehler war der
+Auftrag.**
+
+`[cmd]` **Ein Waechter, der nur eine Zahl meldet, zwingt zum Raten.**
+Der Zwei-Wahrheiten-Waechter sagte ,,12 statt 7" und als einzigen Rat
+,,danach SOLL anheben" — die falsche Antwort in beiden moeglichen
+Faellen. Wer eine Zahl meldet, nennt die Posten.
 
 `[cmd]` **Eine Punktdatei wird nicht verschoben, waehrend ein Agent
-hineinschreibt.** Um 18:03 ging G-522 an Claude Code; kurz darauf
-verschob der Orchestrator die Datei von `todos/` nach
-`laufend_claudecode/`. Der Agent schrieb seinen Bericht in den Pfad,
-den er kannte — und weil dort nichts mehr lag, entstand eine zweite
-Datei mit nur seinem Abschnitt, ohne Frontmatter. Der Waechter fand
-sie. **Nichts ging verloren, aber der Punkt lag in zwei Stuecken.**
-Zusammengefuehrt, das Stueck entfernt.
+hineinschreibt.** G-522 ging um 18:03 raus; der Orchestrator verschob
+die Datei kurz darauf. Der Agent schrieb in den Pfad, den er kannte —
+es entstand eine zweite Datei mit nur seinem Abschnitt, ohne
+Frontmatter. Zusammengefuehrt, nichts verloren.
 
 `[cmd]` **`beruehrt.tabellen` ist eine Behauptung ueber die laufende
-Datenbank, keine Inhaltsangabe.** Der Orchestrator hat in C-546 sechs
-gebaute, aber nicht eingespielte Tabellen eingetragen und damit zehn
-neue Befunde erzeugt. Das Original nannte nur `training.muscle_groups`
-— und das war richtig. **Neue Tabellen gehoeren in den Fliesstext,
-bis sie live sind.**
+Datenbank, keine Inhaltsangabe.** Sechs gebaute, aber nicht
+eingespielte Tabellen dort eingetragen ergab zehn neue Befunde. Neue
+Tabellen gehoeren in den Fliesstext, bis sie live sind.
 
-`[cmd]` **Drei von vier Waechtern ist kein Lauf.** Nach G-529 und
-G-530 liefen `punkte`, `nummern`, `specs` und der Index —
-`sammelfragen` nicht. Der Agent fand das rote Gate, nicht der
-Orchestrator.
+`[cmd]` **Drei von vier Waechtern ist kein Lauf.** Und die Zahl ist
+gewachsen: es sind sechs — `punkte`, `sammelfragen`, `nummern`,
+`specs`, `zwei-wahrheiten`, `encoding`, dazu `kettenlauf` und
+`fragen` im Gate.
 
 `[cmd]` **Muster gehoeren in Dateien, nicht durch die Shell.** Vier
-Fehlmessungen aus PowerShell-Quoting, und danach noch eine: ein
-Muster, das `alias.spalte` (`bm.user_id`, `gp.id`) fuer fehlende
-Objekte hielt. **Es fehlte die Gegenprobe.** Ein Muster ohne
-eingebauten Fehler misst nichts.
+Fehlmessungen aus PowerShell-Quoting, dazu ein Muster, das
+`alias.spalte` (`bm.user_id`, `gp.id`) fuer fehlende Objekte hielt.
+**Es fehlte die Gegenprobe.** Codex' Werkzeug macht es richtig:
+clause-basierte Extraktion, und seine TDD-Kalibrierung deckte dabei
+zwei echte Messfehler auf.
 
 `[cmd]` **Der Commit-Betreff ist kein Signal dafuer, was erledigt
 wurde.** C-546 und C-551 kamen unter `4972b27e` herein, Betreff
-`goals(G-523, G-529, G-526)` — zwei Training-Punkte ungenannt
-mitgefahren. Dasselbe bei G-512 unter `goals(G-510)`. **Die Nummer
-steht im Punkt, nicht nur im Commit.**
+`goals(G-523, G-529, G-526)`. Dasselbe bei G-512 unter `goals(G-510)`.
 
-`[cmd]` **Ein Stellvertreterbeweis ist besser als kein Beweis.**
-G-527 A3 verlangte einen Nutzer ohne aktive Phase — den Zustand gibt
-es nicht, solange G-511 gesperrt ist. Statt die Zeile offen zu
-lassen, hat der Agent einen ECHTEN `23514` aus den acht CHECKs von
-`nutrition_targets` ausgeloest und die echte Datenbankmeldung durch
-die Zuordnung geschickt.
+`[cmd]` **Eine Regel, die nirgends nachgezaehlt wird, wird zur
+Empfehlung.** ,,Wegwerf-Datenbank, danach verwerfen" steht in den
+Projektregeln; 150 Datenbanken mit 207 GB stehen in `pg_database`.
+Der erste Halbsatz wird befolgt, der zweite seit vierzig Auftraegen
+nicht. **Das ist A-80.**
 
 ---
 
@@ -220,7 +195,7 @@ die Zuordnung geschickt.
 
 `[read]` **Die Tabelle oben ist ableitbar.** `docs/punkte/00-INDEX.md`
 kennt aus dem Frontmatter, welche Punkte in `laufend_codex/` und
-`laufend_claudecode/` liegen. Von Hand gepflegt wird sie genau so
-alt wie beim letzten Mal. **Was NICHT ableitbar ist, sind die
-Abschnitte darunter** — was auf Tom wartet, was als naechstes
-ansteht, die Regeln und die Lehren.
+`laufend_claudecode/` liegen. Von Hand gepflegt wird sie genau so alt
+wie beim letzten Mal. **Was NICHT ableitbar ist, sind die Abschnitte
+darunter** — was auf Tom wartet, was als naechstes ansteht, die Regeln
+und die Lehren.
