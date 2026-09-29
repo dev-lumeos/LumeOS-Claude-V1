@@ -459,3 +459,12 @@ die Dauer, und G-520s Waechter `max_duration_weeks` ist nicht rechenbar.
   - **kein `supabase db push`** (C-554)
 
 Nichts committen, nichts pushen.
+
+### Zurueckgestellt hinter G-531, 2026-09-29
+
+`[read]` **Der vorbereitete Auftrag oben bleibt gueltig, geht aber
+spaeter raus.** G-531 hat Vorrang: `goals.goal_phase_start` kann drei
+der neun Phasenarten nicht anlegen, weil ihr der Rate-Parameter fehlt.
+**Solange das so ist, traegt der Anwendungscode eine Regel, die in die
+Datenbank gehoert** — und eine Dauer an eine Rate zu haengen, die man
+nicht anlegen kann, hilft niemandem.

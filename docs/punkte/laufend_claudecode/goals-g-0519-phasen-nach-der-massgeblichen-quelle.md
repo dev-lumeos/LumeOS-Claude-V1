@@ -702,3 +702,124 @@ Phasen.**
 
 `[cmd]` **`pnpm gate` 18 von 18 GRUEN.** `[cmd]` **Nichts in
 `supabase/`, nichts committet.**
+
+## Abnahme A5 bis A8 - Orchestrator, 2026-09-29
+
+_(Jede Zahl unten selbst gemessen. Zwei meiner eigenen Messungen waren
+falsch und stehen deshalb mit dabei.)_
+
+### Was ich bestaetigen kann
+
+`[cmd]` **Die kcal-Identitaet, vier von vier, dreifach gehalten** —
+Datenbankfunktion, meine eigene Rechnung, sein Bericht:
+
+    Rate      Gewicht    goals.kcal_delta_aus_zielrate    11 x Rate x kg
+    -1,00 %     45 kg              -495,0                     -495,0
+    -1,00 %    120 kg             -1320,0                    -1320,0
+    +0,25 %     80 kg              +220,0                     +220,0
+    -0,50 %   81,4 kg              -447,7                     -447,7
+
+`[cmd]` **`goal_phase_start` hat sechs Parameter und keinen fuer die
+Rate** — `p_phase_type, p_gueltig_ab, p_goal_id,
+p_projected_end_date, p_variant, p_parameters`.
+
+`[cmd]` **Und ihr Rumpf erwaehnt `zielrate` NULL Mal**, fuegt aber in
+`goals.goal_phases` ein (je selbst gemessen ueber `pg_proc.prosrc`).
+
+`[read]` **Damit folgt sein Befund zwingend:** eine Funktion, die die
+Rate nie setzt, kann keine Zeile anlegen, deren CHECK sie fuer
+`fat_loss`, `lean_bulk` und `mini_cut` `NOT NULL` verlangt. **Das ist
+eine Ableitung aus zwei gemessenen Tatsachen, kein eigener Messwert** —
+siehe unten, warum ich es nicht direkt messen konnte.
+
+`[cmd]` **Die drei Hinderniszweige stehen im Rumpf von
+`berechne_zielwerte`:** `keine_aktive_phase`, `profil_unvollstaendig`,
+`phasenparameter_fehlt` bei `zielrate_pct_kg_woche IS NULL`.
+
+`[cmd]` **`goals.phase_rate_rules` hat 0 Zeilen** — der Hinweis im Feld
+ist gedeckt.
+
+`[cmd]` **`test-user@lumeos.local` hat 0 Phasen** — das Aufraeumen nach
+A7 ist belegt, nicht behauptet.
+
+`[cmd]` **Seine 21 Zusicherungen laufen im Gate**, und die Arithmetik
+belegt es: `apps/web` fuehrt `tsx --test "src/**/__tests__/*.test.ts"`,
+seine Datei liegt unter `src/lib/goals/__tests__/` und passt darauf.
+**Gestern 2063 Tests, heute 2084 — Differenz genau 21.**
+
+`[cmd]` **Nur `goals` angefasst:** `ansicht.tsx`, `phase-setzen.tsx`,
+`phase-regeln.ts`, `phase-write.ts` und die neue Testdatei. Nichts in
+`supabase/`, nichts committet.
+
+### Zwei Messungen von mir, die nichts gemessen haben
+
+`[cmd]` **Ich rief `goals.goal_phase_start('fat_loss','2026-09-29')`
+als `postgres` und bekam `Anmeldung erforderlich`** — die Funktion
+bricht bei `auth.uid() IS NULL` ab, lange vor dem CHECK. **Meine Probe
+hat den CHECK nie erreicht und seinen Befund weder bestaetigt noch
+widerlegt.** Deshalb die Ableitung oben.
+
+`[cmd]` **Und ich suchte in der Testausgabe nach ,,g519" und
+,,zielrate" und fand null Treffer** — die Testnamen sind deutsch. **Der
+Verdacht, seine Datei laufe nicht im Gate, war mein Griff, nicht sein
+Fehler.** Die Zaehldifferenz war die richtige Frage.
+
+`[read]` **Zwei Mal derselbe Fehler wie schon dreimal heute:** ein
+Muster ohne Gegenprobe. **Eine Probe, die am falschen Ort abbricht,
+sieht aus wie ein Ergebnis.**
+
+### Eine Zahl bleibt unbestaetigt
+
+`[cmd]` **Er berichtet fuer `maintenance` bei Rate 0,0 ein Ziel von
+2753,6 kcal.** `[cmd]` **`goals.tdee_history` hat fuer `test-user`
+KEINE Zeile** (passt zu G-524: 0 Koerpermessungen, der Schreibweg
+meldet `insufficient_intake_days`), und die neueste gespeicherte
+Zielzeile traegt `tdee = 2707,1`.
+
+`[read]` **Die 2753,6 stammt also aus dem Formel-TDEE, die 2707,1 aus
+einer aelteren Zeile** — 46,5 kcal Unterschied, plausibel bei anderem
+Gewicht oder Datum. **Ich habe es nicht nachgerechnet, weil das eine
+Phase in die laufende Datenbank schreiben wuerde.** Kein Fund gegen
+ihn, aber auch keine Bestaetigung.
+
+### Der zweigeteilte Schreibweg ist die richtige Entscheidung
+
+`[read]` **Er haette drei Wege gehabt:** die Funktion in `supabase/`
+reparieren (fremder Bereich), die drei Arten in der Oberflaeche
+sperren (haette den Auftrag nicht erfuellt), oder den Weg teilen und
+den Bruch benennen. **Er hat geteilt und im Quelltext begruendet.**
+
+`[cmd]` **Und er hat den Preis selbst genannt:** die Sperrpruefung vor
+dem INSERT ist kein gleichwertiger Ersatz fuer die `23505`-Sperre der
+Funktion — zwischen Frage und Schreiben liegt ein Augenblick.
+`[read]` **Bei einer Formulareingabe hinnehmbar; als Dauerzustand
+nicht.** Deshalb geht der Befund als **G-531** an Codex.
+
+### A6 sind fuenf, nicht sieben - und das korrigiert den Punkt
+
+`[cmd]` **`maintenance` liefert mit Rate 0,0 ein Ziel** (der CHECK
+erlaubt `|x| <= 0,1`), und die drei mit Pflichtrate liefern ebenfalls,
+sobald sie anlegbar sind. **Ins Leere fuehren fuenf:** `recomp`,
+`contest_prep`, `reverse_diet`, `expert_bb_annual`, `peak_week`.
+
+`[read]` **Die Nachweiszeile A6 sprach von sieben.** Sie stammt aus der
+Zeit vor E1, als das Kaloriendelta die gespeicherte Groesse war.
+**Fuenf ist die gemessene Zahl, sieben war die abgeleitete** — und
+G-520s Waechterzaehlung ist entsprechend nachgezogen.
+
+### Wartet auf den Commit-Hash
+
+`[cmd]` **Die Abnahme ist geschrieben, der Punkt ist durch.** Er liegt
+noch in `laufend_claudecode/`, weil `punkte-pruefen.mjs` einen Punkt in
+`erledigt/` ohne `commit:` als Befund zaehlt — selbst gemessen am
+2026-09-29: der Umzug ohne Hash machte den Waechter rot (26 statt 25).
+
+`[read]` **Das berichtigt den dokumentierten Zyklus** (`00-LIESMICH.md:444`):
+dort steht Schritt 4 *,,Abnahme schreiben, nach erledigt/"* vor Schritt 6
+*,,committen, Commit-Hash nachtragen"*. **In dieser Reihenfolge ist er
+nicht ausfuehrbar** — und weil `punkte-pruefen` im Gate steht, wuerde
+das rote Gate genau den Commit blockieren, der es heilen soll.
+
+`[read]` **Der Waechter hat recht, nicht der Zyklus:** `erledigt/` heisst
+belegt UND gelandet. **Die Abnahme entsteht in Schritt 4, der Umzug
+gehoert in Schritt 6.** Festgehalten als A-81 A6.

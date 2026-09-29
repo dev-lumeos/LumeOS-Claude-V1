@@ -4,6 +4,8 @@ typ: feature
 modul: goals
 schwere: hoch
 angelegt: 2026-09-27
+beauftragt: 2026-09-29
+agent: claudecode
 quellen:
   - docs/specs/Goals/PHASE_MODELS.md:175
 
@@ -183,3 +185,29 @@ erfinden.
 Vier andere Module zeichengleich vorher/nachher, Testlaeufe gruen,
 Sabotageprobe je Waechter in beide Richtungen. Nachweise auf
 `test-user@lumeos.local`. Nichts committen, nichts pushen.
+
+### Nachzug aus G-519, 2026-09-29 - VOR dem Bauen lesen
+
+`[cmd]` **A6 von G-519 hat FUENF Arten gemessen, die ins Leere fuehren,
+nicht sieben:** `recomp`, `contest_prep`, `reverse_diet`,
+`expert_bb_annual`, `peak_week`. **`maintenance` liefert mit Rate 0,0 ein
+Ziel** (der CHECK erlaubt `|x| <= 0,1`), und `fat_loss`, `lean_bulk`,
+`mini_cut` liefern ebenfalls, sobald sie anlegbar sind.
+
+`[cmd]` **Und drei davon sind ueber `goals.goal_phase_start` heute NICHT
+anlegbar** — die Funktion hat keinen Rate-Parameter, der CHECK verlangt
+die Rate aber `NOT NULL`. **Das ist G-531 und liegt bei Codex.**
+
+`[cmd]` **Bis G-531 steht, hat `apps/web/src/lib/goals/phase-write.ts`
+einen zweigeteilten Schreibweg:** ohne Rate die Funktion, mit Rate ein
+`INSERT` mit vorheriger Sperrpruefung. `[read]` **Wenn dein
+Anpassungsalgorithmus eine Rate schreibt, laeuft er ueber denselben
+zweiten Weg** — und die Sperrpruefung ist kein gleichwertiger Ersatz fuer
+die `23505`-Sperre. **Ein Waechter, der selbsttaetig schreibt, macht aus
+einem hinnehmbaren Augenblick einen Dauerzustand.** Das ist ein Grund
+mehr, A3 (vorschlagen oder handeln?) vor A2 zu klaeren.
+
+`[cmd]` **`max_duration_weeks` existiert weiterhin nirgends als Daten.**
+Der Waechter dazu ist nicht rechenbar und wird als solcher gemeldet,
+nicht mit einer geratenen Dauer gebaut. Das ist G-529 A3, und es liegt
+hinter G-531.

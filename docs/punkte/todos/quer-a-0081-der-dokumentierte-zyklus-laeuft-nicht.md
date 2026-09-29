@@ -137,6 +137,26 @@ Reihenfolge an EINER Stelle.** Heute steht der Kopf bei Zeile 276, der
 Weg bei Zeile 22 und der Zyklus bei Zeile 444. **Wer bei 276 anfaengt,
 liest die Reihenfolge nicht.**
 
+
+**A6** — **Die Schrittfolge des Zyklus ist selbst falsch, gemessen am
+2026-09-29.** `00-LIESMICH.md:444` nennt Schritt 4 *,,Abnahme schreiben,
+nach `erledigt/`"* und erst Schritt 6 *,,committen, Commit-Hash
+nachtragen"*.
+
+`[cmd]` **In dieser Reihenfolge geht es nicht:** G-519 nach `erledigt/`
+verschoben, ohne `commit:`, machte `punkte-pruefen.mjs` rot — 26
+Befunde, Soll 25. **Und weil der Waechter im Gate steht, blockiert das
+rote Gate genau den Commit, der den Hash liefern soll.** Ein Zirkel.
+
+`[read]` **Der Waechter hat recht:** `erledigt/` behauptet belegt UND
+gelandet; ein Punkt dort ohne Hash behauptet mehr, als er hat.
+**Also: Abnahme in Schritt 4, Umzug nach `erledigt/` in Schritt 6,
+zusammen mit dem Hash.** `00-LIESMICH.md:444-463` ist entsprechend
+nachzuziehen.
+
+`[read]` **Und es ist kein Zufall, dass das erst heute auffiel:** der
+Zyklus ist heute zum ersten Mal gefahren worden.
+
 ## Was dieser Punkt nicht ist
 
 `[read]` **Keine Werkzeuglücke und kein Agentenfehler.** Die Regel war
