@@ -4,6 +4,8 @@ typ: feature
 modul: training
 schwere: hoch
 angelegt: 2026-09-08
+erledigt: 2026-09-28
+commit: 4972b27e
 braucht: []
 kind_von: C-547
 entscheidung: C-547
@@ -11,8 +13,15 @@ agent: codex
 beauftragt: 2026-09-27
 beruehrt:
   tabellen: [training.exercise_muscles]
+  dateien:
+    - supabase/migrations/20260927040500_c551_role_measurement_separation.sql
+    - supabase/_pipeline/10_training/490_exercise_muscle_factors.sql
 zahlen:
   gemessen: 2026-09-27
+  volumenregeln: 2
+  pelland_zeilen_null: 6723
+  emg_zeilen: 3
+  gewichtete_saetze_vorher_nachher: 4941.0
 ---
 
 # C-551 - Rollenregel und Messfaktor trennen
@@ -105,4 +114,68 @@ Datenlogik- und Encoding-Waechter sind gruen.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+_(Orchestrator, 2026-09-28 — einen Tag zu spaet. Der Punkt stand seit
+dem 27.09. mit vollem Bericht und leerer Abnahme in `laufend_codex`.
+Das ist mein Versaeumnis, nicht ein Zustand des Punktes.)_
+
+### Was ich nachgezaehlt habe
+
+`[cmd]` **Alle fuenf behaupteten Bezeichner stehen in der Kette**
+(gemessen ueber 265 SQL-Dateien aus `migrations/` und `_pipeline/`):
+
+    training.muscle_role_volume_rules      12 Vorkommen
+    activation_factor                      14
+    activation_evidence_class              14
+    weekly_volume_factor                   13
+    activation_source_id                   12
+    weekly_volume_source_id                 4
+
+`[cmd]` **Gegenprobe eingebaut:** die erfundenen Namen
+`activation_phantom_factor` und `training.muscle_nonsense_xyz`
+werden nicht gefunden. Die Messung kann also beides.
+
+`[cmd]` **Die Umbenennung steht als drei `RENAME COLUMN`**
+(`20260927040500_c551_role_measurement_separation.sql:33-38`):
+`faktor` → `activation_factor`, `source_id` → `activation_source_id`,
+`evidence_class` → `activation_evidence_class`.
+
+`[cmd]` **Die drei EMG-Werte sind belegt**
+(`_pipeline/10_training/490_exercise_muscle_factors.sql:15-27`):
+Chest 0,95, Shoulders 0,79, Triceps 0,67, `evidence_class = 'A'`,
+nur fuer `Barbell Bench Press`. Die 6.723 Rollenzeilen davor tragen
+`source_id = 'pelland_2026_fractional_sets'` und Klasse C.
+
+`[cmd]` **Die Reihenfolge traegt:** `490_exercise_muscle_factors_daten`
+steht in `kette.json` (Zeile 2064) **vor** der C-551-Migration
+(Zeile 2745). Der Kettenschritt schreibt also noch `faktor`, und die
+Migration benennt danach um. Das ist kein Fehler, aber es ist eine
+Reihenfolgeabhaengigkeit: wer `490` nach `c551` laufen laesst, bricht.
+
+### Eine Ungenauigkeit im Bericht
+
+`[cmd]` **Der Bericht nennt die EMG-Quelle `pmc4327372_emg`. Im Code
+steht `pmc4327372_bench_press_emg`.** Der Bericht hat den Bezeichner
+verkuerzt. Sachlich dasselbe, aber eine Suche nach der Berichtszeile
+findet nichts — und genau dafuer gibt es die Abnahme.
+
+### Was ich NICHT nachgerechnet habe
+
+`[read]` **Die Zahlen 4.941,0 gewichtete Saetze, 6.723 NULL-Zeilen
+und 10/10 Fachtests sind nicht von mir gemessen.** Sie brauchen einen
+Kettenlauf gegen eine Wegwerf-Datenbank, und den starte ich nicht,
+waehrend Codex gegen denselben Server arbeitet. **Das ist in C-555
+als offener Nachweis festgehalten, nicht stillgelegt.**
+
+`[cmd]` **Die behauptete Sicherung
+`backup/schema/20260927105121_c551_vor_bau.dump` ist nicht mehr da.**
+Erwartbar: Tom hat `backup/` von 8,96 GiB auf 3.958 MiB geleert. Kein
+Fund gegen Codex.
+
+### Nebenbefund zum Commit
+
+`[cmd]` **Dieser Punkt kam unter `4972b27e` herein, dessen Betreff
+`goals(G-523, G-529, G-526)` lautet** — zwei Training-Punkte sind in
+einem Goals-Commit mitgefahren, ohne genannt zu werden. Dasselbe
+Muster wie bei G-512 unter `goals(G-510)`. **Der Commit-Betreff ist
+kein Signal dafuer, was erledigt wurde.** Deshalb steht die Nummer
+hier im Punkt und nicht nur dort.

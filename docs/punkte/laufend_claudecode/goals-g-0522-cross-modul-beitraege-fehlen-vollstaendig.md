@@ -4,6 +4,8 @@ typ: befund
 modul: goals
 schwere: hoch
 angelegt: 2026-09-27
+agent: claudecode
+beauftragt: 2026-09-28
 kind_von: G-514
 quellen:
   - docs/specs/Goals/STRATEGY.md
@@ -181,3 +183,143 @@ sein muessen.**
 
 `[read]` **Die Tabelle selbst gehoert G-514.** Wer sie baut,
 schliesst dort ab, nicht hier.
+## A3 — der Vertrag, 2026-09-28 (Claude Code)
+
+### A3.1 — die Form, pruefend gelesen
+
+`[cmd]` **Gebaut: `packages/scoring/src/beitrag.ts`.** Jede
+Festlegung traegt ihre Spec-Stelle.
+
+**WAS ein Modul liefert:**
+
+    BEITRAGSMODULE      DATABASE.md:149-150 (der CHECK, fuenf)
+    score 0..100        DATABASE.md:152 (NUMERIC(5,2), „0–100")
+    details je Modul    DATABASE.md:155-160
+
+**WANN er gilt — hier musste ich ENTSCHEIDEN, die Spec sagt
+nichts:**
+
+`[cmd]` **Gemessen: `recovery.scores` reicht bis 2026-11-06 —
+78 von 370 Zeilen liegen in der Zukunft.**
+
+`[cmd]` **Auf `test-user@lumeos.local`: 30 Zeilen, davon 0 in der
+Zukunft.** **Auf `dev@lumeos.app` schon.**
+
+`[cmd]` **Der Vertrag waehlt: `tag <= stichtag`.** `[read]`
+**Begruendung: ein Beitrag ist eine Aussage ueber einen
+VERGANGENEN Tag.** Ein Wert fuer morgen kann nicht erfasst worden
+sein — er ist Seed oder Vorhersage, und beides gehoert nicht in
+eine Bilanz.
+
+`[read]` **`DATABASE.md` kennt nur `contribution_date DATE NOT
+NULL`** — **die Wahl ist als Festlegung dieses Vertrags
+gekennzeichnet, nicht als Spec-Zitat.**
+
+**WAS „kein Wert" heisst:**
+
+`[cmd]` **`score: number | null` plus `grund`.** `[read]` **Eine 0
+ist ein Ergebnis, ein `null` ist keins** — G-524 belegt es:
+`test-user` hat KEINE TDEE-Reihe, nicht eine mit Nullen.
+
+`[cmd]` **`nutrition.ts:129` fuehrt es seit jeher so** — der
+Vertrag schreibt es nur fest.
+
+### Die Abweichungen Spec gegen gebauten Zustand
+
+`[cmd]` **Gegen die laufende Datenbank gemessen, 2026-09-28:**
+
+    goals.goal_contributions   Spec DATABASE.md:144   GIBT ES NICHT
+    goals.tdee_settings        Spec DATABASE.md:204   GIBT ES NICHT
+                               gebaut: goals.nutrition_targets
+
+`[read]` **Die zweite ist die, die G-522 Absatz drei schon
+nennt** — bestaetigt, nicht still angepasst.
+
+`[cmd]` **Und eine dritte, die noch nicht im Punkt stand:** die
+Spec rechnet ein fehlendes Modul still als 0
+(`SCORING.md:66`, `contributions[module] ?? 0`). `[read]` **Der
+Vertrag rechnet genauso — aber er SAGT es** (`ohne_wert`), **statt
+ein fehlendes Modul wie ein schlechtes aussehen zu lassen.**
+
+`[cmd]` **Eine vierte, gemessen:** `recovery.scores.score` liegt
+zwischen 35,3 und 78,7 — **im selben Bereich 0..100 wie
+nutrition.** `[read]` **Der Vertrag passt damit auf BEIDE
+gebauten Bauarten**, ohne dass eine sich aendern muss.
+
+### A3.2 — CONTRIBUTION_WEIGHTS und der Fortschritt
+
+`[cmd]` **Nach `packages/scoring/`, nicht als Kopie in
+`daten.ts`.** `[cmd]` **Vier Reihen aus `SCORING.md:51-56`,
+unveraendert.** `[cmd]` **Rechenweg und Schwellen aus `:58-81`.**
+
+`[cmd]` **`__tests__/beitrag.test.ts`, 26 Zusicherungen, gruen.**
+
+`[read]` **Die Erwartung steht im Test AUSGESCHRIEBEN**, nicht aus
+`CONTRIBUTION_WEIGHTS` abgeleitet — **sonst prueft sich die
+Tabelle gegen sich selbst.**
+
+`[cmd]` **Zusaetzlich nachgerechnet: jede Reihe summiert auf
+1,00.** `[read]` **Die Spec sagt es nicht, aber sie rechnet damit**
+(`calcGoalProgress` teilt durch `totalWeight`).
+
+`[cmd]` **Die Schwellen von BEIDEN Seiten geprueft** — 80/79,
+65/64, 50/49.
+
+**SABOTAGEPROBE, beide Richtungen:**
+
+    nutrition 0.40 -> 0.45      Zusicherung 2 und 3   ROT
+    zurueckgestellt             26 von 26             GRUEN
+                                byteidentisch (cmp)
+
+`[cmd]` **Drei weitere Eingriffe, je von ihrer eigenen Zusicherung
+gefangen:**
+
+    Zukunftsfilter entfernt     -> „Zukunft zaehlt nicht"   ROT
+    ohne_wert entfernt          -> 9 und 10                 ROT
+    Schwelle 80 -> 81           -> „Score 80 excellent"     ROT
+
+### A3.3 — nutrition hinter den Vertrag
+
+`[cmd]` **`nutritionScore()` UNVERAENDERT.** `[cmd]`
+**`alsModulbeitrag()` uebersetzt nur** — die Zahl wird
+durchgereicht, nicht neu gebildet.
+
+`[cmd]` **Der bestehende Test: 10 von 10 gruen, unveraendert.**
+`[read]` **Das ist der Beleg, dass sich seine Zahlen nicht
+geaendert haben.**
+
+`[cmd]` **Drei neue Zusicherungen pruefen die Vertragstreue:** der
+Score wird durchgereicht, der Bereich ist 0..100, und „kein Wert"
+ergibt `null` MIT Grund statt 0.
+
+### Was ich NICHT angefasst habe
+
+`[cmd]` **Kein `goals.goal_contributions`** (gehoert G-514 und
+Codex). `[cmd]` **Kein Schreiben je Tag** (braucht die Tabelle).
+`[cmd]` **Kein `findBottleneck` gegen echte Werte** (braucht die
+Tabelle). `[cmd]` **Keine Attrappe in `daten.ts` entfernt** — die
+Marken in `tab-phase.tsx:585-703` nennen Quelle und Grund und
+bleiben.
+
+`[read]` **`findBottleneck` habe ich bewusst NICHT uebernommen** —
+die Spec gibt es vollstaendig vor (`SCORING.md:88-118`), aber ohne
+echte Beitraege liesse es sich nur gegen erfundene Zahlen pruefen.
+**Es gehoert in denselben Zug wie die Tabelle.**
+
+### Belege
+
+    packages/scoring, eigener Lauf   36 von 36 gruen
+    nutrition-Test unveraendert      10 von 10
+    beitrag-Test                     26 von 26
+    tsc --noEmit im Paket            gruen
+    turbo typecheck/test/build       18 von 18
+
+`[cmd]` **`pnpm gate` ist rot an EINER Stelle: `punkte-pruefen`,
+wegen `C-551`** — der Punkt liegt doppelt (`laufend_codex` UND
+`erledigt`) und nennt `training.muscle_role_volume_rules`, die es
+nicht gibt. `[read]` **Codex' Stand von heute, in `docs/` und
+`supabase/`** — beides nicht mein Bereich. **Die drei anderen
+Waechter sind gruen.**
+
+`[cmd]` **Mein Fussabdruck: drei Dateien in `packages/scoring/`.**
+**Nichts committet.**

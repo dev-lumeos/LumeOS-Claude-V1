@@ -4,15 +4,28 @@ typ: feature
 modul: training
 schwere: hoch
 angelegt: 2026-09-08
+erledigt: 2026-09-28
+commit: 4972b27e
 braucht: []
 kind_von: null
 entscheidung: E-90
 agent: codex
 beauftragt: 2026-09-27
 beruehrt:
-  tabellen: [training.muscle_groups]
+  tabellen:
+    - training.muscle_groups
+  dateien:
+    - supabase/migrations/20260927043000_c546_muscle_anatomy.sql
 zahlen:
   gemessen: 2026-09-27
+  katalogknoten: 112
+  davon_kanonisch: 108
+  mit_anatomiefakt: 23
+  ohne: 89
+  urspruenge: 20
+  ansaetze: 21
+  nerven: 23
+  ausstrahlungsmuster: 0
 ---
 
 # C-546 - Sehnen und Nerven je Muskel
@@ -159,4 +172,81 @@ gruen.
 
 ## Abnahme
 
-_(vom Orchestrator)_
+_(Orchestrator, 2026-09-28 — einen Tag zu spaet. Der Punkt stand seit
+dem 27.09. mit vollem Bericht und leerer Abnahme in `laufend_codex`.
+Mein Versaeumnis.)_
+
+### A1 und A2 sind strukturell belegt
+
+`[cmd]` **Fuenf eigene Relationen, keine Spalten am Muskel**
+(`20260927043000_c546_muscle_anatomy.sql`):
+
+    training.anatomy_sources                 Zeile   3
+    training.muscle_origins                  Zeile  21
+    training.muscle_insertions               Zeile  32
+    training.muscle_innervations             Zeile  43
+    training.muscle_pain_referrals           Zeile  55
+    recovery.muscle_symptom_observations     Zeile 102
+
+`[cmd]` **Fakt und Beobachtung liegen in verschiedenen Schemas** —
+Anatomie in `training`, Beobachtung in `recovery`. Die Beobachtung
+traegt `user_id → public.profiles(id) ON DELETE CASCADE`, die
+Faktentabellen tragen keinen Nutzerbezug. **Die Trennung ist nicht
+nur benannt, sie ist erzwungen.**
+
+`[cmd]` **Jeder Fakt braucht eine Quelle:** vier mal
+`source_id text NOT NULL REFERENCES training.anatomy_sources(id)
+ON DELETE RESTRICT`. Eine Zeile ohne Quelle ist nicht speicherbar.
+
+### A5 — die Alias-Sperre ist echt, und ich habe sie nachgelesen
+
+`[cmd]` **`training.require_canonical_muscle_reference()`
+(Zeile 67-86) wirft `ERRCODE 23514`, wenn der referenzierte Muskel
+NICHT selbst kanonisch ist** — die Bedingung ist
+`NOT EXISTS (… AND muscle.canonical_muscle_group_id IS NULL)`, und
+ein Alias-Knoten traegt dort seinen kanonischen Verweis, ist also
+nicht NULL. **Vier Trigger haengen daran** (Zeile 89-100), einer je
+Faktrelation.
+
+`[cmd]` **Und die ,,gleicher Muskel"-Erzwingung ist ein
+zusammengesetzter Fremdschluessel, keine Prosa** (Zeile 127-131):
+`FOREIGN KEY (origin_id, muscle_group_id) REFERENCES
+training.muscle_origins(id, muscle_group_id)`, ebenso fuer
+`insertion_id`. Eine Beobachtung kann nicht auf den Ansatz eines
+anderen Muskels zeigen.
+
+### Was ich NICHT nachgerechnet habe
+
+`[read]` **Die Zahlen 23 von 112, 20/21/23, 0 Ausstrahlungsmuster,
+108 kanonische Knoten und 6/6 gruen sind nicht von mir gemessen.**
+Sie brauchen einen Kettenlauf gegen eine Wegwerf-Datenbank; den
+starte ich nicht, waehrend Codex gegen denselben Server arbeitet.
+**Festgehalten als offener Nachweis in C-555.**
+
+`[read]` **Die 0 Ausstrahlungsmuster sind die ehrlichste Zahl im
+Bericht.** Tom hat Ausstrahlung ausdruecklich verlangt, die Tabelle
+steht leer da, und der Bericht sagt warum: die gewaehlten Quellen
+belegen sie nicht systematisch. **Eine leere Tabelle mit Begruendung
+ist richtig; geratene Muster waeren der Fehler gewesen.** Was fehlt,
+ist der Punkt, der die Quelle dafuer sucht — siehe C-555 A3.
+
+`[cmd]` **Die behauptete Sicherung ist nicht mehr da** (Tom hat
+`backup/` geleert). Kein Fund gegen Codex.
+
+### Ein Nebenbefund, der zwei Module beruehrt
+
+`[cmd]` **Diese Trigger werfen `ERRCODE 23514`.** `[cmd]` Und
+`apps/web/src/lib/profile/zielwerte-write.ts:31` filtert in
+`hindernisAusFehler()` genau darauf: `if (error.code !== '23514')
+return null`. **Heute kollidiert das nicht** — die Anatomietabellen
+sind nur fuer `service_role` schreibbar, `apps/` schreibt sie nicht.
+`[read]` **Aber ein Fehlercode ist kein Fehlergrund.** Wer die
+Hindernissatz-Zuordnung je verallgemeinert, bekommt fuer eine
+Anatomieverletzung einen Satz ueber Phasen. **In C-555 A4 vermerkt.**
+
+### Nebenbefund zum Commit
+
+`[cmd]` **Dieser Punkt kam unter `4972b27e` herein, Betreff
+`goals(G-523, G-529, G-526)`** — der Betreff nennt ihn nicht.
+Dasselbe bei C-551. **Der Commit-Betreff ist kein Signal dafuer, was
+erledigt wurde.**

@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 251 |
-| `laufend_codex` | 3 |
+| `todos` | 253 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 576 |
-| **gesamt** | **831** |
+| `erledigt` | 578 |
+| **gesamt** | **833** |
 
 ## medical — 49
 
@@ -334,7 +334,7 @@
 
 ## supplements — 127
 
-### beauftragbar — 125
+### beauftragbar — 126
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -409,6 +409,7 @@
 | `C-529` | feature | hoch | [der Stackeintrag kennt sein Produkt nicht](erledigt/supplements-c-0529-stack-kennt-produkt-nicht.md) | erledigt | — | — |
 | `C-532` | feature | hoch | [die Label Statements roh importieren](erledigt/supplements-c-0532-label-statements-roh-importieren.md) | erledigt | — | — |
 | `C-549` | befund | mittel | [3.273 gegen 2.760 Produkte mit mehreren Portionen](todos/supplements-c-0549-3273-gegen-2760.md) | offen | — | — |
+| `C-552` | feature | hoch | [wofuer ist eine Substanz gut?](todos/supplements-c-0552-wofuer-ist-eine-substanz-gut.md) | offen | — | — |
 | `C-553` | befund | mittel | [135 von 617 Beschreibungen sind Schablonen](todos/supplements-c-0553-schablonen-statt-beschreibungen.md) | offen | — | — |
 | `E-85` | entscheidung | hoch | [kein Zwischenspeicher fuer die DSLD-Bilder](erledigt/supplements-e-0085-kein-zwischenspeicher-dsld-bilder.md) | erledigt | — | — |
 | `E-88` | entscheidung | hoch | [die Entwurfsreferenz zeigt PED-Protokolle ohne Gradpruefung](erledigt/supplements-e-0088-entwurfsreferenz-zeigt-ped.md) | erledigt | — | G-499 |
@@ -464,14 +465,13 @@
 | `G-500` | fehler | hoch | [das Injektionsprotokoll ist der sechste Weg](erledigt/supplements-g-0500-injektionsprotokoll-sechster-weg.md) | erledigt | — | E-89 |
 | `GO-24` | entscheidung | mittel | [*„Mineralstoffe"* als Gruppenbegriff?](todos/supplements-go-0024-mineralstoffe-als-gruppenbegriff.md) | offen | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `C-317` | befund | mittel | [35 Substanzen mit Text, aber unsichtbar](todos/supplements-c-0317-35-substanzen-mit-text-aber-unsichtbar.md) | offen | C-274 | — |
-| `C-552` | feature | hoch | [wofuer ist eine Substanz gut?](todos/supplements-c-0552-wofuer-ist-eine-substanz-gut.md) | offen | C-546 | — |
 
-## training — 50
+## training — 51
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -497,11 +497,12 @@
 | `C-536` | fehler | mittel | [drei Abwesenheitsaussagen sind ueberholt](erledigt/training-c-0536-abwesenheitsaussagen-ueberholt.md) | erledigt | — | — |
 | `C-543` | feature | hoch | [ein Muskel erbt die Uebungen seiner Eltern](erledigt/training-c-0543-muskel-erbt-uebungen.md) | erledigt | — | — |
 | `C-545` | befund | hoch | [difficulty ist ein Wert fuer alles](erledigt/training-c-0545-difficulty-ist-ein-wert-fuer-alles.md) | erledigt | — | C-550 |
-| `C-546` | feature | hoch | [Sehnen und Nerven je Muskel](laufend_codex/training-c-0546-sehnen-und-nerven-je-muskel.md) | laeuft (codex) | — | — |
+| `C-546` | feature | hoch | [Sehnen und Nerven je Muskel](erledigt/training-c-0546-sehnen-und-nerven-je-muskel.md) | erledigt | — | — |
 | `C-547` | befund | hoch | [6.723 Pauschalen sehen aus wie Messwerte](erledigt/training-c-0547-pauschalen-sehen-aus-wie-messwerte.md) | erledigt | — | C-551 |
 | `C-548` | befund | hoch | [fuenf Spalten mit einem Wert fuer 1.416 Uebungen](erledigt/training-c-0548-fuenf-spalten-ein-wert.md) | erledigt | — | — |
 | `C-550` | feature | mittel | [minimum_experience_level statt difficulty](todos/training-c-0550-minimum-experience-level.md) | offen | — | — |
-| `C-551` | feature | hoch | [Rollenregel und Messfaktor trennen](laufend_codex/training-c-0551-rollenregel-und-messfaktor-trennen.md) | laeuft (codex) | — | — |
+| `C-551` | feature | hoch | [Rollenregel und Messfaktor trennen](erledigt/training-c-0551-rollenregel-und-messfaktor-trennen.md) | erledigt | — | — |
+| `C-555` | messung | mittel | [die Zahlen von C-546 und C-551 sind berichtet, nicht nachgerechnet](todos/training-c-0555-die-zahlen-von-c546-und-c551-sind-nicht-nachgerechnet.md) | offen | — | — |
 | `E-07` | entscheidung | mittel | [Lücke weibliche Darstellungen entscheiden](todos/training-e-0007-lucke-weibliche-darstellungen-entscheiden.md) | offen | — | — |
 | `E-14` | befund | mittel | [26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien](todos/training-e-0014-26-image-male-start-pfade-zeigen-auf-female-dateien.md) | offen | — | — |
 | `G-25` | befund | mittel | [Training an echte Daten anschliessen](erledigt/training-g-0025-training-an-echte-daten-anschliessen.md) | erledigt | — | G-502, G-503, G-504, G-505, G-506, G-507, G-508 |
@@ -598,12 +599,12 @@
 | `G-514` | befund | mittel | [die Modulverrechnung, der Zweck des Moduls, fehlt ganz](todos/goals-G-0514-die-modulverrechnung-fehlt-ganz.md) | offen | — | G-522, G-524 |
 | `G-515` | befund | mittel | [die drei Goals-Mockups widersprechen sich achtmal in Zahlen](todos/goals-G-0515-die-drei-mockups-widersprechen-sich.md) | offen | — | — |
 | `G-516` | befund | mittel | [das Vorgaengerrepo traegt die Phasenzahlen, die uns fehlen](todos/goals-G-0516-das-vorgaengerrepo-hat-die-phasenzahlen.md) | offen | — | — |
-| `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](laufend_claudecode/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | laeuft (claudecode) | — | G-520, G-521 |
+| `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](todos/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | offen | — | G-520, G-521 |
 | `G-521` | feature | mittel | [wie modelliert man Ernaehrungsphasen, ihre Varianten und Parameter](todos/goals-g-0521-phasenmodellierung-tiefenrecherche.md) | offen | — | G-529, G-530 |
-| `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](todos/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | offen | — | — |
+| `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](laufend_claudecode/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | laeuft (claudecode) | — | — |
 | `G-523` | fehler | hoch | [der adaptive TDEE glaettet nicht, er springt](erledigt/goals-g-0523-adaptive-tdee-glaettet-nicht.md) | erledigt | — | — |
 | `G-525` | befund | mittel | [Meilensteine gibt es nur als Seed](todos/goals-g-0525-meilensteine-entstehen-nicht.md) | offen | — | — |
-| `G-526` | fehler | hoch | [Protein, Fett und Faser kennen die Phase nicht](laufend_codex/goals-g-0526-protein-und-fett-kennen-die-phase-nicht.md) | laeuft (codex) | — | — |
+| `G-526` | fehler | hoch | [Protein, Fett und Faser kennen die Phase nicht](todos/goals-g-0526-protein-und-fett-kennen-die-phase-nicht.md) | offen | — | — |
 | `G-527` | fehler | mittel | [der Schreibweg kennt die neuen Hindernisse nicht](erledigt/goals-g-0527-der-schreibweg-kennt-die-neuen-hindernisse-nicht.md) | erledigt | — | — |
 
 ### wartet auf Blocker — 5
@@ -678,7 +679,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 208
+## quer — 209
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -792,6 +793,7 @@
 | `C-533` | befund | hoch | [der Sollstand unterschlaegt service_role-Rechte](erledigt/quer-c-0533-schema-sollstand-substance-group-rechte.md) | erledigt | — | — |
 | `C-541` | fehler | hoch | [der Erfahrungsgrad darf nicht leer sein](erledigt/quer-c-0541-erfahrungsgrad-darf-nicht-leer-sein.md) | erledigt | — | G-501 |
 | `C-544` | feature | hoch | [der Ort am Koerper als Begriff](erledigt/quer-c-0544-ort-am-koerper.md) | erledigt | — | — |
+| `C-554` | blocker | hoch | [das Migrationsregister sagt nicht, was in der Datenbank steht](laufend_codex/quer-c-0554-das-migrationsregister-ist-unbrauchbar.md) | laeuft (codex) | — | — |
 | `E-08` | blocker | mittel | [Deployment nach `main`](todos/quer-e-0008-deployment-nach-main.md) | offen | — | — |
 | `E-09` | befund | mittel | [Preview-Branches erst danach](todos/quer-e-0009-preview-branches-erst-danach.md) | offen | — | — |
 | `E-10` | entscheidung | mittel | [RLS neu bewerten, sobald `main` produktiv wird](todos/quer-e-0010-rls-neu-bewerten-sobald-main-produktiv-wird.md) | offen | — | — |

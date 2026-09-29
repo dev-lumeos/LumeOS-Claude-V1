@@ -37,29 +37,70 @@ import { execFileSync } from 'node:child_process';
 // die Zunahme bekannt ist.**
 const SOLL_NAEHRSTOFFSPALTEN = 7;
 
+// Die Ausschlussliste, und warum sie eine Ausschlussliste ist:
+//
+// `[read]` **Die Richtung ist Absicht.** Wer eine Spalte hinzufuegt und
+// sie nirgends einordnet, faellt hier ROT auf. Eine Einschlussliste
+// waere bequemer und wuerde einen achten Naehrstoff stillschweigend
+// durchlassen — genau das, was dieser Waechter verhindern soll.
+//
+// `[cmd]` **2026-09-29, C-554 A2:** G-511 hat fuenf Metadatenfelder
+// eingespielt, die keine Naehrstoffziele sind. Sie standen nicht in
+// dieser Liste und wurden als Naehrstoffe gezaehlt — 12 statt 7, das
+// Gate war rot. Selbst gemessen gegen die laufende Datenbank:
+//
+//     phase_id               uuid      welche Phase die Zeile erklaert
+//     zielrate_pct_kg_woche  numeric   die gespeicherte Groesse nach E1
+//     body_weight_kg         numeric   das Gewicht, mit dem gerechnet wurde
+//     tdee_herkunft          text      formula oder adaptive
+//     tdee_history_id        uuid      welcher Reihenwert benutzt wurde
+//
+// `[read]` **Keines davon traegt ein persoenliches Naehrstoffziel**, und
+// keines kann gegen eine wissenschaftliche Referenz gehalten werden.
+// Es sind Angaben DARUEBER, wie die Zielzeile entstand — ein
+// Rechenprotokoll, keine Zielmenge. **`body_weight_kg` endet auf eine
+// Einheit und ist trotzdem kein Naehrstoff**: deshalb entscheidet hier
+// eine benannte Liste und keine Namensregel.
+const KEINE_NAEHRSTOFFSPALTEN = [
+  // Schluessel und Zeitachse
+  'user_id', 'gueltig_ab', 'created_at', 'updated_at',
+  // Herkunft und Notiz der Zielzeile
+  'herkunft', 'tdee', 'nutrition_goal', 'notiz',
+  // G-511, eingespielt 2026-09-29: das Rechenprotokoll der Zielzeile
+  'phase_id', 'zielrate_pct_kg_woche', 'body_weight_kg',
+  'tdee_herkunft', 'tdee_history_id',
+];
+
 const SQL = `
-select count(*)
+select column_name
 from information_schema.columns
 where table_schema = 'goals'
   and table_name = 'nutrition_targets'
-  and column_name not in ('user_id','gueltig_ab','herkunft','tdee',
-                          'nutrition_goal','notiz','created_at','updated_at');
+  and column_name not in (${KEINE_NAEHRSTOFFSPALTEN.map((s) => `'${s}'`).join(',')})
+order by column_name;
 `;
+
+// Erlaubt eine Gegenprobe gegen eine WEGWERF-Datenbank, ohne die
+// laufende anzufassen: node zwei-wahrheiten-pruefen.mjs --db <name>
+const dbIndex = process.argv.indexOf('--db');
+const DATENBANK = dbIndex !== -1 ? process.argv[dbIndex + 1] : 'postgres';
 
 let ausgabe;
 try {
   ausgabe = execFileSync('docker', [
     'exec', 'supabase_db_LumeOS-Claude-V1',
-    'psql', '-U', 'postgres', '-d', 'postgres', '-t', '-A', '-c', SQL,
+    'psql', '-U', 'postgres', '-d', DATENBANK, '-t', '-A', '-c', SQL,
   ], { encoding: 'utf8', windowsHide: true });
 } catch (e) {
   console.log('[zwei-wahrheiten] uebersprungen: Datenbank nicht erreichbar.');
   process.exit(0);
 }
 
-const zahl = Number.parseInt(ausgabe.trim(), 10);
-if (!Number.isFinite(zahl)) {
-  console.log('[zwei-wahrheiten] uebersprungen: keine Zahl aus der Abfrage.');
+const spalten = ausgabe.split('\n').map((z) => z.trim()).filter(Boolean);
+const zahl = spalten.length;
+
+if (zahl === 0) {
+  console.log('[zwei-wahrheiten] uebersprungen: keine Spalten gefunden.');
   process.exit(0);
 }
 
@@ -67,16 +108,26 @@ if (zahl > SOLL_NAEHRSTOFFSPALTEN) {
   console.error(`[zwei-wahrheiten] ROT: ${zahl} Naehrstoffspalten in ` +
                 `goals.nutrition_targets, Soll ${SOLL_NAEHRSTOFFSPALTEN}.`);
   console.error('');
-  console.error('  Mehr persoenliche Ziele heisst mehr Naehrstoffe, die');
-  console.error('  gleichzeitig ein Goal und eine wissenschaftliche Referenz');
-  console.error('  tragen - und damit mehr Faelle, in denen beide Achsen');
-  console.error('  auseinandergehen koennen.');
+  console.error('  Gezaehlt werden diese Spalten:');
+  for (const s of spalten) console.error(`      ${s}`);
   console.error('');
-  console.error('  G-261 pruefen: die Vergleichsfunktionen sind gebaut und');
-  console.error('  an nichts gehaengt. Wenn die Abweichungen zunehmen, ist');
-  console.error('  eine Achse mit Vermerk nicht mehr genug (Massstab G-218).');
+  console.error('  ERST PRUEFEN, WELCHER FALL VORLIEGT:');
   console.error('');
-  console.error('  Danach SOLL hier anheben.');
+  console.error('  (a) Eine neue Spalte traegt ein persoenliches');
+  console.error('      Naehrstoffziel. Dann ist es der Fall, fuer den');
+  console.error('      dieser Waechter da ist: G-261 pruefen, denn die');
+  console.error('      Vergleichsfunktionen sind gebaut und an nichts');
+  console.error('      gehaengt. Wenn die Abweichungen zunehmen, ist eine');
+  console.error('      Achse mit Vermerk nicht mehr genug (Massstab');
+  console.error('      G-218). DANACH das SOLL hier anheben.');
+  console.error('');
+  console.error('  (b) Eine neue Spalte ist KEIN Naehrstoffziel, sondern');
+  console.error('      Herkunft, Schluessel oder Rechenprotokoll. Dann');
+  console.error('      gehoert sie in KEINE_NAEHRSTOFFSPALTEN, mit einem');
+  console.error('      Satz dazu, warum. Das SOLL bleibt.');
+  console.error('');
+  console.error('  Das SOLL anzuheben, weil die Zahl gestiegen ist, ist');
+  console.error('  in beiden Faellen falsch.');
   process.exit(1);
 }
 
