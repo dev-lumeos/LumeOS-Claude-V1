@@ -9,3 +9,16 @@ export {
 export type {
   Stufe, Makro, Tageswerte, Ziele, Anteil, ScoreErgebnis,
 } from './nutrition'
+
+// ── G-522/A3: die Form eines Modulbeitrags ───────────────────────
+//
+// `[cmd]` **G-522 hat zwei Bauarten ohne Vertrag gemessen** —
+// nutrition in TypeScript, recovery in SQL. `[read]` **Der Vertrag
+// liegt hier, damit der dritte Beitrag keine dritte Bauart wird.**
+export {
+  BEITRAGSMODULE, CONTRIBUTION_WEIGHTS, ZIELTYP_RUECKFALL,
+  berechneZielfortschritt, giltFuerBilanz, alsModulbeitrag,
+} from './beitrag'
+export type {
+  Beitragsmodul, Modulbeitrag, Zielfortschritt, Fortschrittsstatus,
+} from './beitrag'
