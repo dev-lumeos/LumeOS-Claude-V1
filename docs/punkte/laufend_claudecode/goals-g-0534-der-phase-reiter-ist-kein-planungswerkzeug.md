@@ -454,3 +454,150 @@ Zeile, Quelle und Grund. **Keine Fussnoten, das war A1.**
 
 `[read]` **Der Massstab:** fertig ist, wenn der Reiter neben dem Entwurf
 steht und man den Unterschied benennen muss, statt ihn zu sehen.
+
+## Bericht, zweiter Teil - A2, A4, A7
+
+**Claude Code, 2026-09-29.**
+
+### G-531 selbst nachgemessen
+
+`[cmd]` **Gegen die laufende Datenbank, 2026-09-29:**
+
+    goal_phase_start   7 Parameter, letzter
+                       p_zielrate_pct_kg_woche numeric
+                       GENAU EINE Signatur
+    alle drei          v_user_id uuid := auth.uid()
+
+`[cmd]` **Und durchgespielt, je Art:** `fat_loss` (-0,5),
+`lean_bulk` (+0,25), `peak_week` (ohne Rate) legen **alle drei ueber
+die Funktion** an. `[cmd]` **Der Doppelstart wirft weiterhin**
+*,,zuerst die laufende Phase beenden"*.
+
+### A4 - der Umweg ist weg
+
+`[cmd]` **`startMitRate()` geloescht** — der `INSERT` mit
+vorheriger Sperrpruefung aus G-519.
+
+`[read]` **Die Pruefung war kein gleichwertiger Ersatz fuer die
+`23505`-Sperre:** zwischen Frage und Schreiben lag ein Augenblick.
+**Jetzt traegt die Datenbank wieder beides.**
+
+`[cmd]` **Ein Aufruf, kein Ternaer** — ein Waechter zaehlt, dass
+`goal_phase_start` genau einmal vorkommt.
+
+### A2 - feste Felder statt JSON-Inhalt
+
+`[cmd]` **Die Kachel zeigte den Rohinhalt:** *,,Source GO-07
+testdata · Calorie surplus kcal 250"* — **und
+`calorie_surplus_kcal` ist die von E1 verworfene Groesse.**
+
+`[cmd]` **Jetzt die drei Felder aus `PHASE_MODELS.md`:**
+
+    Zielrate        -0.5 % KG/Woche     aus der eigenen Spalte
+    Hoechstdauer    —                   Grund darunter
+    Protein         —                   Grund darunter
+
+`[cmd]` **Der Grund am Strich:** *,,Empfohlene Werte je Variante
+sind noch nicht hinterlegt."* `[read]` **`goals.phase_rate_rules`
+hat 0 Zeilen** — gemessen, nicht vermutet.
+
+`[cmd]` **Der Leseweg nachgezogen:** `phase_am()` fuehrt die Rate
+nicht, sie wird mit den drei Uebergangsspalten zusammen
+nachgelesen — **dasselbe Muster, das dort schon stand.**
+
+### A7 - das Vorschaupanel
+
+`[cmd]` **Je Element die Quellenfrage gestellt, 2026-09-29:**
+
+    Uebergaenge          UEBERGAENGE (Spec, G-519)      QUELLE JA
+    Aussengrenze         CHECK zielrate_aussengrenze    QUELLE JA
+    Vorzeichen je Art    CHECK zielrate_passt_zur_art   QUELLE JA
+    Baender je Variante  phase_rate_rules: 0 Zeilen     QUELLE NEIN
+    Sub-phases           keine Tabelle                  QUELLE NEIN
+    Guards               keine Tabelle                  QUELLE NEIN
+
+`[read]` **Was eine Quelle hat, ist angebunden. Was keine hat,
+traegt eine Marke nach `attrappeAus()` — eine Zeile.** **Ein
+Waechter prueft, dass keine Marke laenger als 120 Zeichen ist.**
+
+**GEBAUT, mit echter Quelle:**
+
+    das Raster mit neun Arten, je Kachel „empfohlen" oder
+      „waehlbar" — GERECHNET aus UEBERGAENGE, nicht abgetippt
+    die laufende Art ist ausgegraut und nicht waehlbar
+    die Vorschau klappt DARUNTER auf (nicht als Modal)
+    Pille „empfohlener Uebergang" / „kein empfohlener Uebergang"
+    Zielrate-Regel je Art aus den zwei CHECKs
+    „Danach moeglich" aus der Spec-Zustandsmaschine
+    Schliessen- und Wechselknopf
+
+**ATTRAPPE, mit einer Zeile Marke:** die Variantenkachel
+(conservative/moderate/aggressive) — **ohne jede Zahl**, weil
+`phase_rate_rules` leer ist. `[cmd]` **Ein Waechter prueft, dass
+keine Spanne aus der Spec im Panel steht.**
+
+`[read]` **Der Wechsel fuehrt zum BEENDEN**, nicht zu einem
+erfundenen Direktwechsel — `goal_phase_start` weist ab, solange
+eine Phase laeuft. **Der Entwurf zeigt `Switch to X`; bei uns sind
+es zwei Handgriffe, und die Oberflaeche sagt das nicht, sie TUT
+es.**
+
+### Zwei Befunde am eigenen Bau, am Bild gefunden
+
+`[cmd]` **1 - zwei Raster uebereinander.** Bei laufender Phase
+stand ein ausgegrautes ,,Phase beginnen" UND darunter ,,Phase
+wechseln" mit derselben Auswahl. `[read]` **Der Entwurf hat
+EINES.** `[cmd]` **Behoben: ,,Phase beginnen" erscheint nur ohne
+laufende Phase.** **Belegt: Zustand 1 zeigt 9/0, Zustand 2 zeigt
+0/9.**
+
+`[cmd]` **2 - die Kachel ,,Phasenwechsel" stand mit zwei Strichen
+da** (,,Kam aus —", ,,Empfohlen als Naechstes —"). `[read]` **Eine
+Kachel, die dreimal nichts sagt, ist kein Posten.** `[cmd]`
+**Behoben: sie erscheint nur mit Inhalt.** **Am Bild: ,,Kam aus"
+kommt 0x vor.**
+
+### Die Bilder
+
+    x-g534b-1-keine.png       keine Phase
+                              [data-phasenwahl] 9, [data-wechselwahl] 0
+    x-g534b-2-laeuft.png      Phase laeuft
+                              [data-wechselwahl] 9, Zielrate sichtbar
+    x-g534-a7-vorschau.png    Vorschau offen
+                              Pille, Ratenregel, „Danach moeglich",
+                              Variantenkachel mit Marke, zwei Knoepfe
+
+`[cmd]` **Alle auf `test-user@lumeos.local`, 1 Konsolenfehler** (die
+bekannte `data-mode`-Warnung). **Testdaten danach geloescht.**
+
+### Die Grenze
+
+`[cmd]` **18 Zusicherungen gruen** (dazu die 14 aus dem ersten
+Teil).
+
+**Sabotageprobe, fuenf Eingriffe, je von ihrer eigenen gefangen:**
+
+    der Umweg kehrt zurueck        -> 2   ROT
+    Rate nicht mehr mitgeschickt   -> 3   ROT
+    Spec-Spanne im Panel           -> 4   ROT
+    Uebergaenge abgetippt          -> 2   ROT
+    JSON-Rohform zurueck           -> 2   ROT
+    alles zurueck                  -> 18/18 GRUEN, byteidentisch
+
+`[cmd]` **`pnpm gate` 18 von 18 GRUEN.**
+
+`[read]` **Ein Gatelauf fiel zwischendurch am Bau** — der
+Dev-Server uebersetzte gerade meine Aenderungen. `[cmd]` **Der
+Bau allein lief durch, der naechste Gatelauf ebenfalls.**
+
+### Was WEITERHIN offen ist
+
+`[read]` **Das Vorschaupanel des Entwurfs traegt mehr, als eine
+Quelle hat:** Sub-phases-Tabelle, Guards, Exit conditions, Success
+metrics, `12-month cycle`, `Best for`, `Purpose`. `[read]` **Alle
+sieben brauchen eine Tabelle, die es nicht gibt** — sie stehen
+weiter unter der Linie.
+
+`[cmd]` **Und der Editor** (elf Reiter, ueber sechzig
+Bedienelemente) **bleibt vollstaendig unter der Linie.** `[read]`
+**Nichts davon hat heute eine Quelle.**

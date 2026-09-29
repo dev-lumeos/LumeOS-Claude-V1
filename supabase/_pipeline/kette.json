@@ -2750,6 +2750,42 @@
       ]
     },
     {
+      "id": "533_phase_rate_backfill",
+      "path": "supabase/_pipeline/11_goals/533_phase_rate_backfill.sql",
+      "kind": "sql",
+      "creates": "G-533: zwei alte Lean-Bulk-Phasen aus Kaloriendelta und Starttagsgewicht in Zielraten ueberfuehrt, alten Parameter entfernt und Phasenart-CHECK validiert.",
+      "depends_on": [
+        "531_goal_phase_start_rate"
+      ]
+    },
+    {
+      "id": "536_goal_strategies_schema",
+      "path": "supabase/migrations/20260929115000_g536_goal_strategies.sql",
+      "kind": "sql",
+      "creates": "G-536: read-only Strategiekatalog und Referenz der Nutzerphase auf ihren ausgelieferten Default.",
+      "depends_on": [
+        "533_phase_rate_backfill"
+      ]
+    },
+    {
+      "id": "536_goal_strategies_seed",
+      "path": "supabase/_pipeline/11_goals/536_goal_strategies_seed.sql",
+      "kind": "sql",
+      "creates": "G-536: 16 laufende Definitionen plus Expert-BB-Jahresprotokoll, Vorschauquellen und Editor-Modi; bestehende Phasen werden eindeutig verknuepft.",
+      "depends_on": [
+        "536_goal_strategies_schema"
+      ]
+    },
+    {
+      "id": "536_goal_strategies_runtime",
+      "path": "supabase/_pipeline/11_goals/536_goal_strategies_runtime.sql",
+      "kind": "sql",
+      "creates": "G-536: berechne_zielwerte liest Katalogdefaults und persoenliche parameters-Overrides; die Instanzrate ueberschreibt die Katalograte.",
+      "depends_on": [
+        "536_goal_strategies_seed"
+      ]
+    },
+    {
       "id": "514_goal_contributions_schema",
       "path": "supabase/migrations/20260929081000_g514_goal_contributions.sql",
       "kind": "sql",

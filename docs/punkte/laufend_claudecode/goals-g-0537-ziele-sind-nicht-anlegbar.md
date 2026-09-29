@@ -296,3 +296,68 @@ ungetrackt, in `supabase/`** - **nicht meine.**
 gespeichert** - die Spalte kommt mit G-536. `[cmd]` **Die Marke
 sagt das, und die Wahl ist bedienbar, damit sie am Tag der
 Einspielung nur noch durchgereicht werden muss.**
+
+---
+
+## Abnahme, Orchestrator, 2026-09-29 14:40
+
+**Angenommen, mit einem Rest, der bei Codex liegt.** Selbst gemessen,
+nicht aus dem Bericht uebernommen.
+
+### Die Kette ist vollstaendig — kein Bauteil ohne Aufrufer
+
+`[cmd]` Der Fehler aus G-422 (*„zwei Schreibwege ohne Aufrufer"*)
+wiederholt sich nicht:
+
+    ziel-regeln.ts:177   pruefeNeuesZiel
+    schreiben.ts:103     zielAnlegen
+    ziel-aktionen.ts:19  zielAnlegenAktion, mit revalidatePath('/v2/goals')
+
+`[read]` Die Serveraktion traegt dieselbe Form wie `zielSpeichern`:
+**Fehler als Wert, nicht als Ausnahme.** Und `revalidatePath` nach dem
+Erfolg, weil die Uebersicht serverseitig liest — ohne das stuende das
+neue Ziel bis zum naechsten Laden nicht da.
+
+### Aufgeraeumt, und das ist gezaehlt
+
+`[cmd]` Ziele je Nutzer, mit der Frage, ob die Probe Reste gelassen hat:
+
+    dev@lumeos.app          5 Ziele   0 heute erzeugt
+    tom.seed@example.com    5 Ziele   0 heute erzeugt
+    max.seed@example.com    1 Ziel    0 heute erzeugt
+
+**Kein einziges heute erzeugtes Ziel steht in der Datenbank.** Claude
+Codes Probe hat ihr Ziel angelegt und wieder entfernt, wie gemeldet.
+
+`[read]` **Und eine Praezisierung zur Befundzeile dieses Punktes:** „fuenf
+Ziele sind Seed" war die Zahl fuer `dev@lumeos.app`. Ueber alle Nutzer
+sind es elf. Die Aussage stimmte, sie war nur zu eng formuliert.
+
+### Der Messfehler im Bericht ist der richtige Umgang damit
+
+`[read]` Claude Code meldet: der erste Lauf sagte `gespeichert: false`,
+obwohl die Zeile da war — das Modal schliesst nach 900 ms, der Blick kam
+bei 2500. **Er hat die Datenbank geprueft, bevor er etwas gemeldet hat,
+und den Befund der Probe zugeschrieben, nicht dem Bau.**
+
+Das ist genau die Trennung, die heute mehrfach gefehlt hat: **eine Probe,
+die nichts findet, hat nicht bewiesen, dass nichts da ist.**
+
+### Der Rest
+
+`[cmd]` **`linked_modules` ist waehlbar, aber es gibt keine Spalte.** Die
+Wahl wird im Formularzustand gehalten, `aria-pressed` sagt den Zustand,
+die Marke nennt den Grund. Das war die Schaerfung aus dem Nachtrag und
+ist so richtig — **ein Feld, das man nicht anklicken kann, prueft
+niemand.**
+
+Die Spalte gehoert in dieselbe Migration wie `goal_id` (G-538, Codex):
+beide binden ein Ziel an seine Datenquellen. Bis dahin steht die Wahl da
+und wird verworfen.
+
+### Was nicht passiert ist, und das war gefordert
+
+`[cmd]` Eine Zusicherung prueft fuenf Woerter im Dialogrumpf —
+`nutrition_targets`, `Kalorienziel`, `Tageswert`, `Strategie`, `kcal` —
+**keines kommt vor.** Der Dialog legt ein Ziel an, kein Ernaehrungsziel.
+Schicht 1 und Schicht 2 bleiben getrennt, auch sprachlich.

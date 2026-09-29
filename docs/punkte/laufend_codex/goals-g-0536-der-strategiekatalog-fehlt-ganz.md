@@ -199,3 +199,62 @@ nicht sieben `if` braucht.
 - **live einspielen** — ohne das liest die Oberflaeche nichts
 
 Nichts committen.
+
+---
+
+## Abnahme, Orchestrator, 2026-09-29 14:40
+
+**Angenommen, mit einem benannten Rest.** Selbst gemessen gegen die
+laufende Datenbank, nicht aus dem Bericht uebernommen:
+
+    strategien                        17
+    phasen mit strategie_code       5 / 5
+    zeilen mit editor_modes        17 / 17
+    tier (DISTINCT)                    2
+    category (DISTINCT)                6
+    phase_rate_rules                   0
+    expert_bb_annual.protein_per_kg  NULL
+
+`[cmd]` **Die Aufteilung stimmt mit der Quelle:** 3 simple, 14 advanced.
+Und `expert_bb_annual` traegt keinen Proteinwert, weil es aus Spec und
+Mockup kommt, wo keiner steht. **Eine NULL mit Grund ist besser als eine
+uebernommene Zahl** — das ist konsequent und war nicht beauftragt.
+
+### Codex hat einem falschen Auftrag widersprochen, und er hatte recht
+
+`[cmd]` **Der Auftrag nannte 17 Definitionen im Vorgaenger, darunter
+`profile`. Es sind 16, und `profile` ist keine Strategie.**
+`GOAL_DEFINITIONS` endet in `definitions.ts:263` mit `custom`; das
+`profile:` in Zeile 287 ist der **Parameter** von `isGoalAvailable`:
+
+```ts
+profile: { experience?: string; bodyFat?: number; hasCoach?: boolean }
+```
+
+Eine TypeScript-Signatur, kein Katalogeintrag. Der Orchestrator hat ein
+Muster auf Einrueckungsebene 2 laufen lassen und den Funktionsparameter
+mitgezaehlt — **dieselbe Fehlerart wie `alias.spalte` heute Morgen, und
+wieder ohne Gegenprobe.** Codex hat nicht abgeschrieben, sondern
+nachgezaehlt und gemeldet.
+
+### Der Rest, und er ist benannt
+
+`[cmd]` **A3 ist zur Haelfte umgesetzt.** `tdee_modifier`,
+`protein_per_kg` und `fat_percent` kommen aus dem Katalog — belegt durch
+Codex' Gegenprobe (persoenlicher Faktor 0,20 gibt 2625,4 kcal gegen 2187,8
+aus dem Katalog, und der Katalogwert bleibt unveraendert).
+
+**Aber die Rechnung nimmt weiterhin den Faktor, nicht die Rate.** Damit
+ist E1 (*„die Parameter haengen an der Rate, nicht an der Art"*) noch
+nicht umgesetzt. Die Umstellung braucht die Einheit von
+`weight_change_target_percent`, und die legt der Vorgaenger nirgends fest
+— **das ist G-542**, vorlaeufig auf %/Woche gesetzt, Tobias klaert es am
+30.09.
+
+**A5 erledigt:** `phase_rate_rules` bleibt bei 0, weder gefuellt noch
+geloescht, wie beauftragt. Sie ist nach A3 redundant und liegt Tom vor.
+
+### Was damit eine Quelle hat
+
+Die zehn Elemente aus G-534 („keine Quelle", „ohne jede Zahl", „Strich
+mit Grund") tragen jetzt eine Spalte. Der Bau der Anzeige ist **G-541**.

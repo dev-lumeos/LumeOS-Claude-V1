@@ -2480,8 +2480,31 @@
         "transition_reason",
         "created_at",
         "updated_at",
-        "zielrate_pct_kg_woche"
+        "zielrate_pct_kg_woche",
+        "strategie_code"
       ]
+    },
+    {
+      "schema": "goals",
+      "name": "goal_strategies",
+      "schritt": "536_goal_strategies_schema",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ]
+      },
+      "grants_herkunft": "G-536 entzieht zuerst alle Rechte und gibt authenticated nur SELECT, service_role gezielt DML.",
+      "zeilenschutzart": "oeffentlich"
     },
     {
       "schema": "goals",
