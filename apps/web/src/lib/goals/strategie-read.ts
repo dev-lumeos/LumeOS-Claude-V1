@@ -49,14 +49,43 @@
 
 import { createSessionClient } from '@lumeos/shared/session'
 
-/** Ein Abschnitt aus `sub_phases`. Die Form kommt aus den Daten. */
+/**
+ * Ein Abschnitt aus `sub_phases`. **Die Form kommt aus den Daten.**
+ *
+ * ══ DIE FORM HAT SICH GEAENDERT ════════════════════════════════════
+ *
+ * `[cmd]` **Bis G-545 (2026-09-30) trug jede Teilphase `weeks`,
+ * `deficit` und `cardio` als Text:**
+ *
+ *     { name: "early", weeks: "24–16", deficit: -300, cardio: "low" }
+ *
+ * `[cmd]` **Seit G-545 nicht mehr** — gemessen an
+ * `jsonb_object_keys`, alle drei Teilphasen von `contest_prep`:
+ *
+ *     name · cardio · fat_g_per_kg · tdee_multiplier
+ *          · protein_g_per_kg · fat_minimum_g_per_kg
+ *
+ * `[cmd]` **`weeks` und `deficit` gibt es in KEINER Zeile mehr**,
+ * und `cardio` ist ein Objekt (`{type, minutes, sessions_per_week}`)
+ * statt eines Wortes.
+ *
+ * `[read]` **Deshalb traegt die Teilphase jetzt ihre ganze Zeile
+ * mit** (`roh`) — ein festes Feld je Schluessel liesse die neuen
+ * still fallen, und genau das ist beim Ankerplan passiert.
+ */
 export type Teilphase = {
   name: string
-  /** `"24→16"` oder eine Wochenzahl — die Spalte fuehrt beides. */
+  /**
+   * `[cmd]` **Seit G-545 in keiner Zeile mehr gefuellt.** `[read]`
+   * **Das Feld bleibt**, weil der Ankerplan es liest — **und `null`
+   * heisst dort: keine Rechnung, kein erfundenes Datum.**
+   */
   weeks: string | null
   deficit: number | null
   cardio: string | null
   special: boolean
+  /** Die Zeile, wie sie dasteht — samt der Schluessel von G-545. */
+  roh: Record<string, unknown>
 }
 
 /** Ein Monatsblock aus `annual`. */
@@ -99,6 +128,17 @@ export type Strategie = {
   best_for: string[]
   purpose: string[]
   editor_modes: string[]
+  /**
+   * `[cmd]` **G-539: die Refeed-Angaben, 3 von 17 Zeilen** — gemessen
+   * 2026-09-30. `[read]` **Zwei verschiedene Formen:**
+   * `{every_weeks, duration_weeks}` bei den Cuts,
+   * `{type, frequency, start_after_week}` bei `contest_prep`.
+   * **Deshalb ein freies Feld** — ein festes Formular liesse die
+   * jeweils anderen Schluessel still fallen.
+   */
+  refeeds: Record<string, unknown> | null
+  /** `[cmd]` **1 von 17** — `contest_prep`. */
+  peak_week_details: Record<string, unknown> | null
   sub_phases: Teilphase[]
   annual: Jahresblock[]
 }
@@ -122,6 +162,12 @@ const zahl = (v: unknown): number | null => {
   return typeof n === 'number' && Number.isFinite(n) ? n : null
 }
 
+/** Ein freies jsonb-Objekt, oder `null`. */
+const objekt = (v: unknown): Record<string, unknown> | null =>
+  typeof v === 'object' && v !== null && !Array.isArray(v)
+    ? v as Record<string, unknown>
+    : null
+
 const liste = (v: unknown): string[] =>
   Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : []
 
@@ -138,8 +184,12 @@ function teilphasen(v: unknown): Teilphase[] {
       name: o.name,
       weeks: typeof w === 'string' ? w : typeof w === 'number' ? String(w) : null,
       deficit: zahl(o.deficit),
+      // `[cmd]` **`cardio` ist seit G-545 ein OBJEKT** — als Text
+      // gelesen gaebe es `[object Object]`. `[read]` **Lieber
+      // `null` und die Rohform daneben.**
       cardio: typeof o.cardio === 'string' ? o.cardio : null,
       special: o.special === true,
+      roh: o,
     }]
   })
 }
@@ -196,6 +246,8 @@ function zeile(r: Record<string, unknown>): Strategie {
     best_for: liste(r.best_for),
     purpose: liste(r.purpose),
     editor_modes: liste(r.editor_modes),
+    refeeds: objekt(r.refeeds),
+    peak_week_details: objekt(r.peak_week_details),
     sub_phases: teilphasen(r.sub_phases),
     annual: jahresbloecke(r.annual),
   }

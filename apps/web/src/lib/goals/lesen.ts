@@ -697,6 +697,12 @@ export type Zielphase = {
   projected_end_date: string | null
   actual_end_date: string | null
   zielrate_pct_kg_woche: number | null
+  /**
+   * `[cmd]` **G-539: der persoenliche Override**, `jsonb NOT NULL
+   * DEFAULT '{}'`. `[read]` **Nur die ABWEICHUNG vom Katalog** — was
+   * hier nicht steht, kommt aus `goal_strategies`.
+   */
+  parameters: Record<string, unknown>
 }
 
 /**
@@ -712,7 +718,8 @@ export async function ladeOffenePhasen(
   const { data, error } = await goalsDb()
     .from('goal_phases')
     .select('id, goal_id, phase_type, strategie_code, gueltig_ab, '
-      + 'projected_end_date, actual_end_date, zielrate_pct_kg_woche')
+      + 'projected_end_date, actual_end_date, zielrate_pct_kg_woche, '
+      + 'parameters')
     .eq('user_id', userId)
     .is('actual_end_date', null)
     .lte('gueltig_ab', stichtag)
@@ -732,6 +739,10 @@ export async function ladeOffenePhasen(
       projected_end_date: text(z.projected_end_date),
       actual_end_date: text(z.actual_end_date),
       zielrate_pct_kg_woche: zahl(z.zielrate_pct_kg_woche),
+      parameters: typeof z.parameters === 'object' && z.parameters !== null
+        && !Array.isArray(z.parameters)
+        ? z.parameters as Record<string, unknown>
+        : {},
     }
   })
 }

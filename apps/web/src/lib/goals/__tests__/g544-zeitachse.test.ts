@@ -296,29 +296,59 @@ describe('G-544/A3 — planen heisst Reihenfolge', () => {
   })
 })
 
-describe('G-544/A4 — der Editor wird nicht versprochen', () => {
+describe('G-544/A4 — was die Achse nicht kann, steht da', () => {
   const Z = () => lies(join(GOALS, 'phasen-zeitachse.tsx'))
 
-  it('kein Knopf in den Editor', () => {
-    // `[read]` **A4: „Kein Knopf, der dorthin zeigt, solange er
-    // nicht existiert."**
+  // ══ G-539 hat die Voraussetzung eingeloest ═════════════
+  //
+  // `[cmd]` Diese Pruefungen verboten einen Knopf in den Editor und
+  // jeden Schreibweg. **Ihre Begruendung war: „den gibt es erst mit
+  // G-539."**
+  //
+  // `[cmd]` **G-539 ist gebaut** (`phasen-editor-echt.tsx`).
+  // `[read]` **Die Begruendung ist damit hinfaellig, die REGEL
+  // nicht:** was es nicht gibt, wird nicht versprochen. **Gemessen
+  // wird jetzt, was WEITERHIN fehlt** — eigene Vorlagen (G-540).
+
+  it('der Editorknopf zeigt auf den Editor, den es gibt', () => {
     const q = Z()
-    assert.ok(!/PhaseEditorModal|editorOeffnen|Editor oeffnen/.test(q),
-      'ein Knopf zeigt auf den Editor — den gibt es erst mit G-539')
+    assert.match(q, /data-editor-auf=\{g\.goal_id\}/,
+      'es gibt keinen Weg in den Editor — G-539 ist gebaut, also '
+      + 'gehoert der Knopf an die Zielzeile')
+    assert.match(q, /import \{ PhasenEditor \}/,
+      'der Knopf zeigt auf nichts — der Editor wird nicht eingebunden')
   })
 
-  it('die Grenze steht als Satz da', () => {
-    assert.match(Z(), /data-zeitachse-grenze/,
-      'es steht nicht da, was die Achse NICHT kann — dann sieht sie '
-      + 'aus wie ein fertiger Editor')
-    assert.match(Z(), /G-539/,
-      'der Satz nennt den Punkt nicht, auf den er wartet')
+  it('der Knopf erscheint nur mit Strategie UND Phase', () => {
+    // `[read]` **Ohne Strategie kennt der Editor keine
+    // Auslieferungswerte und keine Reiter; ohne Phase gibt es keine
+    // Zeile, in die der Override geschrieben wuerde.**
+    assert.match(Z(), /\{z\.strategie && z\.phase && \(/,
+      'der Knopf erscheint auch ohne Strategie oder Phase — dann '
+      + 'oeffnet er einen Editor ohne Werte')
   })
 
-  it('die Achse schreibt nicht', () => {
+  it('eigene Vorlagen werden NICHT versprochen', () => {
+    // `[cmd]` **Der Entwurf hat zwei Fussknoepfe**
+    // (`module-goals-editor.jsx:497-498`). `[read]` **„Save as my
+    // template" braucht G-540 und bleibt aus** — kein Knopf, der
+    // nichts tut.
+    const e = lies(join(GOALS, 'phasen-editor-echt.tsx'))
+    assert.ok(!/Save as my template|Als Vorlage|vorlageSpeichern/.test(e),
+      'der Editor verspricht eigene Vorlagen — die gibt es erst '
+      + 'mit G-540')
+    assert.match(Z(), /G-540/,
+      'die Achse sagt nicht mehr, was noch fehlt')
+  })
+
+  it('die Achse selbst schreibt keine Phase', () => {
+    // `[read]` **Die Achse zeigt und plant.** **Der Override geht
+    // ueber die Serveraktion**, nicht ueber einen eigenen Weg.
     const q = Z()
-    assert.ok(!/goal_phase_start|phaseStarten|Aktion\(/.test(q),
-      'die Achse schreibt — sie zeigt und plant, mehr nicht')
+    assert.ok(!/goal_phase_start|phaseStarten\(/.test(q),
+      'die Achse startet Phasen — das ist das Anlegen (G-554)')
+    assert.match(q, /phasenOverrideAktion\(/,
+      'der Override laeuft nicht ueber die Serveraktion')
   })
 })
 

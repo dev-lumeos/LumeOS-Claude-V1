@@ -500,10 +500,16 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                   `uq_goal_phases_one_open` eine offene Phase JE
                   ZIEL** — deshalb `ladeOffenePhasen` und nicht
                   `phase_am()`, deren Rumpf auf `LIMIT 1` endet. */}
+              {/* `[read]` **Der angepasste TDEE, sonst der
+                  gerechnete** — `adaptive_tdee_kcal` ist null,
+                  solange zu wenige Zufuhrtage vorliegen (G-539,
+                  `cycling`-Reiter). */}
               {!echtAus && (
                 <PhasenZeitachse
                   ziele={echt.ziele} phasen={echt.offenePhasen}
                   strategien={echt.strategien} heute={echt.stichtag}
+                  tdee={echt.tdee?.adaptive_tdee_kcal
+                    ?? echt.tdee?.formula_tdee_kcal ?? null}
                   onNeuesZiel={() => kontext.open({ typ: 'newGoal' })} />
               )}
               {!echtAus && (

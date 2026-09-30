@@ -51,6 +51,7 @@ function strat(p: Partial<Strategie> = {}): Strategie {
     peak_week: false, badge: null, warnings: [], requirements: {},
     guards: [], next_codes: [], exits: [], success: [], best_for: [],
     purpose: [], editor_modes: [], sub_phases: [], annual: [],
+    refeeds: null, peak_week_details: null,
     ...p,
   }
 }

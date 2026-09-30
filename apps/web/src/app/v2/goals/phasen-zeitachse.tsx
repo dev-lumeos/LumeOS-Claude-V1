@@ -31,6 +31,9 @@ import { ankerplan, gesamtWochen, type Ankerzeile } from '../../../lib/goals/ank
 import { phasenName } from '../../../lib/goals/phase-regeln'
 import type { ZielFortschritt, Zielphase } from '../../../lib/goals/lesen'
 import type { Strategie } from '../../../lib/goals/strategie-read'
+// G-539: der Phasen-Editor.
+import { PhasenEditor } from './phasen-editor-echt'
+import { phasenOverrideAktion } from './phase-aktionen'
 
 /** Ein Ziel mit dem, was daran haengt. */
 type Zeile = {
@@ -119,7 +122,9 @@ function Ankertafel({ zeilen, anker }: {
  *
  * `[read]` **Titel, Fenster, laufende Strategie** — was A1 verlangt.
  */
-function Zielzeile({ z, heute }: { z: Zeile; heute: string }) {
+function Zielzeile({ z, heute, onBearbeiten }: {
+  z: Zeile; heute: string; onBearbeiten: (z: Zeile) => void
+}) {
   const [offen, setOffen] = React.useState(false)
   const g = z.ziel
   const rest = restTage(g.target_date, heute)
@@ -197,6 +202,20 @@ function Zielzeile({ z, heute }: { z: Zeile; heute: string }) {
         </>
       )}
 
+      {/* ══ G-539: anpassen ═══════════════════════════════════════
+          `[read]` **Nur wo es etwas anzupassen gibt** — ohne
+          Strategie kennt der Editor keine Auslieferungswerte und
+          keine Reiter. */}
+      {z.strategie && z.phase && (
+        <button type="button" data-editor-auf={g.goal_id}
+                className="v2-btn v2-btn-ghost v2-btn-sm"
+                style={{ marginTop: 8, fontSize: 10.5 }}
+                onClick={() => onBearbeiten(z)}>
+          <Icon name="edit" className="v2-ic v2-ic-sm" />
+          Anpassen
+        </button>
+      )}
+
       {/* ── A3: was danach moeglich ist ───────────────────────────
           `[cmd]` **`goal_strategies.next_codes`** — gemessen: 8 von
           17 Zeilen fuehren sie. `[read]` **Genannt, nicht verlinkt**
@@ -220,13 +239,21 @@ function Zielzeile({ z, heute }: { z: Zeile; heute: string }) {
  * @param strategien  Der Katalog, zum Aufloesen von `strategie_code`.
  * @param heute       Der Stichtag. **Kein `Date.now()`.**
  */
-export function PhasenZeitachse({ ziele, phasen, strategien, heute, onNeuesZiel }: {
+export function PhasenZeitachse({
+  ziele, phasen, strategien, heute, tdee, onNeuesZiel,
+}: {
   ziele: ZielFortschritt[]
   phasen: Zielphase[]
   strategien: Strategie[]
   heute: string
+  /** `[cmd]` **G-539: fuer den `cycling`-Reiter** — `TDEE + Mittel`. */
+  tdee: number | null
   onNeuesZiel: () => void
 }) {
+  // ══ G-539: der Editor ══════════════════════════════════════════
+  const [bearbeitet, setBearbeitet] = React.useState<Zeile | null>(null)
+  const [meldung, setMeldung] = React.useState<string | null>(null)
+
   const zeilen: Zeile[] = ziele.map(z => {
     const p = phasen.find(x => x.goal_id === z.goal_id) ?? null
     // `[read]` **Der Code, wenn er da ist** — bis G-558 traegt ihn
@@ -263,21 +290,64 @@ export function PhasenZeitachse({ ziele, phasen, strategien, heute, onNeuesZiel 
       ) : (
         <div className="v2-col-gap" data-zeitachse style={{ gap: 8 }}>
           {zeilen.map(z => (
-            <Zielzeile key={z.ziel.goal_id} z={z} heute={heute} />
+            <Zielzeile key={z.ziel.goal_id} z={z} heute={heute}
+                       onBearbeiten={setBearbeitet} />
           ))}
         </div>
       )}
 
-      {/* `[cmd]` **A4: kein Knopf in den Editor** — den gibt es erst
-          mit G-539. `[read]` **Ein Knopf ohne Ziel ist eine
-          Zusage.** */}
+      {/* ══ G-539: der Editor GIBT es jetzt ═══════════════════════
+          `[cmd]` **In G-544/A4 stand hier ein Satz statt eines
+          Knopfes** — *„braucht den Editor aus G-539"*. **Der ist
+          gebaut**, also steht der Knopf an der Zielzeile.
+
+          `[read]` **Was weiterhin fehlt, steht weiterhin da:**
+          eigene Vorlagen sind G-540. */}
       <div className="v2-dim" data-zeitachse-grenze style={{
         fontSize: 10.5, lineHeight: 1.5, marginTop: 10, paddingTop: 8,
         borderTop: '1px solid var(--border)',
       }}>
-        Einzelne Phasen bearbeiten — Teilphasen, Refeeds, Protokolle —
-        braucht den Editor aus G-539.
+        Eine Anpassung gilt fuer deine Phase, nicht fuer den Katalog.
+        Sie als eigene Vorlage zu sichern, braucht G-540.
       </div>
+      {/* `[read]` **Was der Schreibweg gemeldet hat** — Erfolg wie
+          Fehler, beides sichtbar. */}
+      {meldung && (
+        <div className="v2-dim" data-editor-meldung style={{
+          fontSize: 10.5, marginTop: 8, lineHeight: 1.5,
+        }}>{meldung}</div>
+      )}
+
+      {/* ══ G-539: der Editor ══════════════════════════════════════
+          `[read]` **Nur mit Strategie und Phase** — ohne beides gibt
+          es weder Auslieferungswerte noch eine Zeile zum Schreiben. */}
+      {bearbeitet?.strategie && bearbeitet.phase && (
+        <PhasenEditor
+          strategie={bearbeitet.strategie}
+          override={alsOverride(bearbeitet.phase.parameters)}
+          zieldatum={bearbeitet.ziel.target_date}
+          tdee={tdee}
+          onClose={() => setBearbeitet(null)}
+          onAnwenden={async (abweichung) => {
+            const phaseId = bearbeitet.phase?.phase_id
+            if (!phaseId) return
+            const r = await phasenOverrideAktion(phaseId, abweichung)
+            setBearbeitet(null)
+            setMeldung(r.ok
+              ? `Uebernommen — ${Object.keys(abweichung).length} Abweichung(en) gespeichert.`
+              : r.text)
+          }} />
+      )}
     </Card>
   )
+}
+
+/** `parameters` ist `jsonb` — flach gelesen, ohne zu raten. */
+function alsOverride(p: Record<string, unknown> | null | undefined) {
+  const raus: Record<string, string | number | boolean | null> = {}
+  for (const [k, v] of Object.entries(p ?? {})) {
+    if (typeof v === 'string' || typeof v === 'number'
+        || typeof v === 'boolean' || v === null) raus[k] = v
+  }
+  return raus
 }

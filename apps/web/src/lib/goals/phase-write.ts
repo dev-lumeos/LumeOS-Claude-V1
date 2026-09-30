@@ -233,3 +233,51 @@ export async function vorschlagBeantworten(
 
 export { PHASENARTEN }
 export type { Phasenstart }
+
+// ── Der persoenliche Override — G-539 ───────────────────────────
+//
+// `[cmd]` **`module-goals-editor.jsx:56`:** *„Personal override —
+// the shipped defaults stay intact."*
+//
+// `[read]` **Der Editor aendert den Katalog NICHT.** `[cmd]` **Die
+// Abweichung traegt `goal_phases.parameters`** — `jsonb NOT NULL
+// DEFAULT '{}'`, und `goal_phases_update` erlaubt dem Nutzer den
+// Schreibzugriff auf seine eigenen Zeilen (`auth.uid() = user_id`,
+// in `qual` UND `with_check`).
+//
+// `[read]` **Geschrieben wird NUR die Differenz.** Wer den ganzen
+// Satz hineinschreibt, friert den Katalogstand von heute bei jedem
+// Nutzer ein — **und das ist keine Sorge auf Vorrat:** G-545 hat den
+// Katalog am 2026-09-30 nachgefuellt (`guards` von 7 auf 17 Zeilen).
+// **Wer vorher kopiert haette, saehe diese Korrektur nie.**
+
+/**
+ * Die Abweichung an eine Phase schreiben.
+ *
+ * `[read]` **Der ganze Satz wird ERSETZT, nicht gemischt** — wer ein
+ * Feld im Editor leert, will es los sein. **Das Mischen passiert im
+ * Editor** (`nurAbweichung`), nicht hier.
+ *
+ * @returns Die Zahl der geschriebenen Zeilen — **0 heisst: nichts
+ *   getroffen**, und das ist ein Fehler, kein Erfolg (G-79).
+ */
+export async function phasenOverrideSetzen(
+  phaseId: string, abweichung: Record<string, unknown>,
+): Promise<number> {
+  await sitzung()
+
+  const { data, error } = await db()
+    .from('goal_phases')
+    .update({ parameters: abweichung })
+    .eq('id', phaseId)
+    // `[read]` **G-79: zaehlen, nicht auf das Ausbleiben eines
+    // Fehlers vertrauen** — ein vom Zeilenschutz gefiltertes UPDATE
+    // kaeme sonst als Erfolg zurueck.
+    .select('id')
+
+  if (error) {
+    if (error.code === '42501') throw new PhaseFehler('NO_SESSION', error.message)
+    throw new PhaseFehler('WRITE_FAILED', error.message)
+  }
+  return data?.length ?? 0
+}

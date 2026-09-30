@@ -14,7 +14,7 @@
 import { revalidatePath } from 'next/cache'
 
 import {
-  phaseStarten, phaseBeenden, vorschlagBeantworten,
+  phaseStarten, phaseBeenden, vorschlagBeantworten, phasenOverrideSetzen,
   PhaseFehler, type PhaseFehlerCode,
 } from '../../../lib/goals/phase-write'
 import type { Phasenstart } from '../../../lib/goals/phase-regeln'
@@ -67,6 +67,33 @@ export async function vorschlagBeantwortenAktion(
 ): Promise<PhaseErgebnis> {
   try {
     await vorschlagBeantworten(phaseId, antwort, grund)
+    revalidatePath('/v2/goals')
+    return { ok: true, phaseId }
+  } catch (f) {
+    return alsFehler(f)
+  }
+}
+
+/**
+ * Den persoenlichen Override an eine Phase schreiben — G-539.
+ *
+ * `[read]` **Nur die Abweichung** — was hier nicht steht, kommt aus
+ * dem Katalog und aendert sich mit ihm.
+ */
+export async function phasenOverrideAktion(
+  phaseId: string, abweichung: Record<string, unknown>,
+): Promise<PhaseErgebnis> {
+  try {
+    const zeilen = await phasenOverrideSetzen(phaseId, abweichung)
+    // `[read]` **G-79: null Zeilen ist ein Fehler, kein Erfolg.**
+    if (zeilen === 0) {
+      return {
+        ok: false,
+        code: 'WRITE_FAILED',
+        text: 'Die Phase wurde nicht geaendert — gehoert sie dieser Sitzung?',
+        felder: [],
+      }
+    }
     revalidatePath('/v2/goals')
     return { ok: true, phaseId }
   } catch (f) {
