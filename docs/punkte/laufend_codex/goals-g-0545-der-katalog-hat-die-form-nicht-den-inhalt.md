@@ -58,9 +58,13 @@ steht, wird sie als solche gekennzeichnet.
     B  Formelsammlung BMR/TDEE/Phasen
     C  Contest Prep - das wissenschaftliche Framework
 
-**Alle drei liegen als Anhang am Gespraech vom 2026-09-29, 16:02.** Sie
-sind nicht im Repo — wer sie braucht, bekommt sie von Tom. Kein Wert
-aus dem Gedaechtnis.
+**UEBERHOLT, siehe Nachtrag 2026-09-30 am Ende dieser Datei.** Die drei
+sind Vorfassungen desselben Tages; *Encyclopedia v2.0* loest sie ab, und
+daraus ist `docs/ssot/131-fachwissen-phasen-und-rechenwege.md`
+geschrieben. **Alle Werte stehen dort mit Abschnittsnummern, im Repo.**
+Kein Anhang von Tom noetig. **Wer aus A oder C fuellt, fuellt aus der
+ueberholten Quelle** — die Baender unten in A1 sind nur noch
+Plausibilitaetsprobe, die geltenden Einzelwerte stehen im Nachtrag.
 
 ## Was die Einheitenfrage betrifft: G-542 Frage 1 ist geklaert
 

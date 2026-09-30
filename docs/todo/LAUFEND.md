@@ -145,6 +145,29 @@ Datei, nicht das Original. **Wenn ein Auftrag rausgeht, existiert er.**
 `[read]` **Der Umzug und die Uebergabe sind EINE Handlung.** Wer
 verschiebt und nicht uebergibt, hat nichts beauftragt.
 
+### Was Tom kopiert, ist ein ZEIGER — keine Zusammenfassung
+
+**Tom, 2026-09-30, 12:59:** *„in dem was ich kopiere sind die facts nicht
+drin was er lesen soll."*
+
+`[cmd]` **Der Orchestrator hat die Auftragstexte als gekuerzte Fassung in
+die Antwort geschrieben.** Tom kopiert diesen Block in den Agenten — und
+damit bekommt der Agent die Kurzfassung, nicht die Zahlen, nicht die
+Tabellen, nicht die Nachweispflichten. **Der Agent sieht nur, was Tom
+einfuegt.**
+
+`[read]` **Ab jetzt ist der Block in der Antwort kurz und schickt in die
+Datei:** Pfad, die Anweisung sie VOLLSTAENDIG zu lesen, und nur die zwei
+oder drei Saetze, die ohne Lesen falsch verstanden wuerden. **Alles
+andere gehoert in die Datei, nicht in die Antwort.** Eine Auftragskopie,
+die die Datei ersetzt, ersetzt sie schlecht.
+
+`[read]` **Und die Datei muss von oben nach unten stimmen.** G-545 sagte
+auf Zeile 60, die Quellen kaemen von Tom, und korrigierte das erst 200
+Zeilen spaeter im Nachtrag. **Wer oben liest, hoert dort auf.** Ein
+Nachtrag, der eine Aussage aufhebt, wird an der Aussage vermerkt.
+
+
 ## Zwei Regeln
 
 `[cmd]` **Ein Auftrag, ein Bericht.** Ketten sind erlaubt, aber sie
