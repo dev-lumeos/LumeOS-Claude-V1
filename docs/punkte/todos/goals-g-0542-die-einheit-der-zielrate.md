@@ -7,6 +7,7 @@ angelegt: 2026-09-29
 
 braucht: []
 kind_von: G-536
+entscheidung: E-83
 
 quellen:
   - referenz/lumeos-2026/src/modules/goals/lib/definitions.ts
@@ -100,3 +101,34 @@ einen Fortgeschrittenen zu hoch?**
 G-543 wie geschrieben. Rechnet er in Kilokalorien, braucht der Katalog eine
 zweite Angabe je Erfahrungsstufe — und `requirements.min_experience` waere
 dann nicht nur eine Sperre, sondern ein Rechenparameter.
+
+---
+
+## Entschieden 2026-09-30 — E-83
+
+**Tom, 17:43:** *„gerechnet wird immer in kcal, das kann man als mensch
+zaehlen, prozente sind nur als grafik besser lesbar und in formel
+einfacher rechenbar."*
+
+**Und 17:45, auf den Einwand, kcal sei damit die Anzeigegroesse:** *„das
+soll doch ein user entscheiden, manchmal ist es klarer mit prozenten zu
+arbeiten und manchmal easier mit direkt kcal. fuer uns doch egal solange
+wir wissen wie rechnen."*
+
+`[read]` **Damit ist die Frage dieses Punktes beantwortet, aber anders
+gestellt als sie hier stand.** Sie lautete: *welche Einheit fuehrt die
+Zielrate?* **Die Antwort: beide, und der Nutzer waehlt.** Gespeichert wird
+die Rate, weil eine Kilokalorienzahl am Gewicht haengt und beim naechsten
+Wiegen falsch waere, ohne dass sich die Absicht geaendert hat.
+
+`[cmd]` **Der Orchestrator hat dabei einmal zu weit geschlossen:** aus
+,,gerechnet wird in kcal" wurde ,,kcal ist die Anzeigegroesse". **Tom hat
+es zurueckgeholt** — es ist eine Nutzerwahl, keine Festlegung. Die
+Vollstaendigkeit steht in `docs/entscheidungen/E-83-der-nutzer-waehlt-die-einheit.md`.
+
+**Was hier herausfaellt und eigene Punkte bekommt:**
+
+    G-565   der Umschalter in der Oberflaeche, vorbereitet in next/
+    G-566   ob 0,25 %/Woche fuer Fortgeschrittene zu hoch ist -
+            die Formelsammlung nennt +200 kcal, wir liegen bei +230
+            fuer Tobias, und es betrifft den WERT, nicht die Einheit

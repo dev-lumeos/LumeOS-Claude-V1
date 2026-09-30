@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 269 |
+| `todos` | 270 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 1 |
+| `laufend_claudecode` | 2 |
 | `erledigt` | 598 |
-| **gesamt** | **870** |
+| **gesamt** | **872** |
 
 ## medical — 49
 
@@ -573,9 +573,9 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 61
+## goals — 63
 
-### beauftragbar — 55
+### beauftragbar — 56
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -617,7 +617,7 @@
 | `G-539` | fehler | mittel | [Der Phasen-Editor fehlt — „editieren" aus Toms Satz](erledigt/goals-g-0539-der-phasen-editor-fehlt.md) | erledigt | — | — |
 | `G-540` | befund | niedrig | [Vorlagen fuer Phasenplaene — die fuenfte Ebene](todos/goals-g-0540-vorlagen-fuer-phasenplaene.md) | offen | — | — |
 | `G-541` | fehler | hoch | [Das Vorschaupanel liest den Strategiekatalog](erledigt/goals-g-0541-das-vorschaupanel-liest-den-katalog.md) | erledigt | — | G-545 |
-| `G-542` | entscheidung | hoch | [Die Zielrate — Einheit geklaert, eine Frage bleibt](todos/goals-g-0542-die-einheit-der-zielrate.md) | offen | — | G-548, G-549 |
+| `G-542` | entscheidung | hoch | [Die Zielrate — Einheit geklaert, eine Frage bleibt](todos/goals-g-0542-die-einheit-der-zielrate.md) | offen | — | G-548, G-549, G-566 |
 | `G-544` | fehler | hoch | [Der Phase-Reiter zeigt Phasentypen statt einer Zeitachse](erledigt/goals-g-0544-der-phase-reiter-zeigt-keine-zeitachse.md) | erledigt | — | G-559, G-560 |
 | `G-545` | fehler | hoch | [Der Katalog hat die Form, nicht den Inhalt](erledigt/goals-g-0545-der-katalog-hat-die-form-nicht-den-inhalt.md) | erledigt | — | G-550, G-561, G-562 |
 | `G-547` | befund | mittel | [Die persoenliche Untergrenze hat keinen Ort](todos/goals-g-0547-die-persoenliche-untergrenze-hat-keinen-ort.md) | offen | — | — |
@@ -634,8 +634,9 @@
 | `G-562` | entscheidung | hoch | [Die Teilphasen haben keine Zeitachse mehr](todos/goals-g-0562-die-teilphasen-haben-keine-zeitachse-mehr.md) | offen | — | — |
 | `G-563` | fehler | hoch | [`berechne_zielwerte` wählt selbst eine Phase aus](laufend_codex/goals-g-0563-berechne-zielwerte-waehlt-selbst-eine-phase.md) | laeuft (codex) | — | — |
 | `G-564` | fehler | hoch | [`ladePhase` nimmt die erste fuer die einzige](laufend_claudecode/goals-g-0564-ladephase-nimmt-die-erste-fuer-die-einzige.md) | laeuft (claudecode) | — | — |
+| `G-565` | fehler | hoch | [Die Einheit ist eine Nutzerwahl, heute gibt es nur Prozent](laufend_claudecode/goals-g-0565-die-einheit-ist-eine-nutzerwahl.md) | vorbereitet (claudecode) | — | — |
 
-### wartet auf Blocker — 6
+### wartet auf Blocker — 7
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -643,8 +644,9 @@
 | `G-528` | befund | mittel | [die Variantenachse und mini_cut sind nicht definiert](erledigt/goals-g-0528-varianten-und-mini-cut-sind-nicht-definiert.md) | erledigt | G-521 | — |
 | `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](todos/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | offen | G-521 | G-531, G-533 |
 | `G-530` | feature | hoch | [contest_prep und expert_bb_annual brauchen eine eigene Struktur](todos/goals-g-0530-wettkampfvorbereitung-braucht-eine-eigene-struktur.md) | offen | G-529 | — |
-| `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558 |
+| `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](todos/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | offen | G-542 | — |
+| `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
 
 ## coach — 57
 

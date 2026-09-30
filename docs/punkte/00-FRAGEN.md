@@ -113,81 +113,6 @@ Attrappe, keine Modellanbindung.**
 `[read]` **Die Guardrails gehoeren VOR die Anbindung** ? **nicht
 danach.**
 
-## G-542 — goals-g-0542-die-einheit-der-zielrate.md
-
-**Modul:** goals · **angelegt:** 2026-09-29 · **Datei:** `todos/goals-g-0542-die-einheit-der-zielrate.md`
-
-**Tom, 2026-09-29, 14:47:** *„nimm was wissenschaftlich bewiesenes und
-brauchbares als loesung, dass wir weiterarbeiten koennen."*
-
-`[read]` **Dieser Punkt war bis 16:30 gebuendelt.** Der
-Sammelfragen-Waechter hat es gefunden und auf G-254 verwiesen, wo am
-2026-08-29 eine Antwort auf mehreres geschrieben wurde. **Aufgeteilt:**
-Hoechstdauer → **G-548**, Protein in der Ladewoche → **G-549**, die
-Bezugsgroesse von `protein_per_kg` → zurueckgezogen, weil niemand seine
-Magermasse kennt (G-543, Ruecknahme).
-
-**Hier bleibt allein die Zielrate.**
-
----
-
-## Geklaert: die Zielrate ist Prozent pro Woche
-
-`[cmd]` **Der Vorgaengercode legt die Einheit nirgends fest.** Das Interface
-sagt `weight_change_target_percent?: number` — ohne Kommentar, ohne Suffix.
-
-`[cmd]` **Die Spec verwendet zwei Einheiten fuer dasselbe Feld:**
-`PHASE_MODELS.md` schreibt bei `fat_loss` *„0.5–0.75% BW/week"*, bei
-`lean_bulk` *„0.25–0.5% BW/month"*.
-
-`[cmd]` **Vier Fundstellen gegen eine:**
-
-    Encyclopedia 1.4    "Lean Bulk: Target gain 0.25-0.5% bodyweight/week"
-    Encyclopedia 3.1    "Phase 1: Rate of loss 0.5-0.8% bodyweight/week"
-    Formelsammlung      "Lean Bulk: +0.25-0.5% Koerpergewicht/Woche"
-    Contest-Framework   "Phase 1: 0.5-0.8% Koerpergewicht/Woche"
-
-Dazu die Primaerquellen: **Iraki et al. 2019** (0,25–0,5 %/Woche Aufbau),
-**Helms et al. 2014** (0,5–1,0 %/Woche Abbau), **Garthe et al. 2011**
-(0,7 gegen 1,4 %/Woche).
-
-`[read]` **Die Zahlen im Vorgaenger sind die Randwerte dieser Literatur:**
-`lean_bulk` traegt genau 0,25, `moderate_cut` genau 0,75. **Als Wochenwerte.**
-Keine Empfehlungsliteratur rechnet in Prozent pro Monat — `PHASE_MODELS.md:68`
-ist der Einzelfall und damit der Fehler.
-
-**Folge in Kilokalorien** bei 83,74 kg, nach `kcal/Tag = 11 × Rate × Gewicht`:
-
-    %/Woche   +230 kcal/Tag   0,21 kg/Woche   0,9 kg/Monat
-    %/Monat    +53 kcal/Tag   0,05 kg/Woche   0,21 kg/Monat
-
-`[read]` **Als Monatswert waere die Groesse unbrauchbar:** 2,5 kg Zunahme im
-Jahr fuer eine Strategie mit Makrozyklen und automatischer Anpassung.
-
-**Gilt damit als entschieden.** G-543 stellt `berechne_zielwerte` darauf um.
-
----
-
-## Was Tobias noch klaeren soll
-
-**Rechnet ein fortgeschrittener Natural in Prozent pro Woche — oder in
-Kilokalorien?**
-
-`[read]` Die Frage steht hier, weil sie die Antwort oben **pruefbar** macht.
-Wer in +200 bis +400 kcal denkt statt in Prozent, hat eine andere
-Vorstellung vom Aufbau — und dann ist die Rate die falsche **Leitgroesse**,
-nicht nur ihre Einheit.
-
-Konkret: `lean_bulk` steht auf +0,25 %/Woche, das sind bei 83,74 kg
-**+230 kcal/Tag**. Die Formelsammlung nennt fuer Fortgeschrittene +200,
-fuer Profis +150 kcal. **Passt das zusammen, oder liegt unser Wert fuer
-einen Fortgeschrittenen zu hoch?**
-
-`[read]` **Die Folge fuer den Bau:** bleibt die Rate die Leitgroesse, gilt
-G-543 wie geschrieben. Rechnet er in Kilokalorien, braucht der Katalog eine
-zweite Angabe je Erfahrungsstufe — und `requirements.min_experience` waere
-dann nicht nur eine Sperre, sondern ein Rechenparameter.
-
 ## G-562 — goals-g-0562-die-teilphasen-haben-keine-zeitachse-mehr.md
 
 **Modul:** goals · **angelegt:** 2026-09-30 · **Datei:** `todos/goals-g-0562-die-teilphasen-haben-keine-zeitachse-mehr.md`
@@ -540,6 +465,55 @@ eine Zeile im Katalog. Rechnet Peak Week dagegen mit Kohlenhydraten als
 Vorgabe und den Kalorien als Ergebnis, ist es ein eigener Rechenweg neben
 `berechne_zielwerte` — und dann gehoert er zu G-530
 (Wettkampfvorbereitung braucht eine eigene Struktur).
+
+## G-566 — goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md
+
+**Modul:** goals · **angelegt:** 2026-09-30 · **Datei:** `todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md`
+
+`[read]` **Abgespalten von G-542**, weil dort die EINHEIT gefragt war und
+sie mit E-83 entschieden ist. **Hier bleibt der WERT.**
+
+## Die Frage
+
+`[cmd]` **`goal_strategies.lean_bulk.weight_change_target_percent` steht
+auf 0,25 %/Woche.** Bei 83,74 kg sind das nach E-1 **+230 kcal/Tag**.
+
+`[cmd]` **Die Formelsammlung (Dokument B, 2026-09-29) nennt
+erfahrungsabhaengige Zuschlaege:**
+
+    Fortgeschrittene   +200 kcal/Tag
+    Profis             +150 kcal/Tag
+
+`[read]` **Unser Wert liegt darueber** — und zwar nicht, weil er falsch
+gesetzt waere, sondern weil er als Rate gesetzt ist: **derselbe Prozentwert
+ergibt bei einem schwereren Nutzer mehr Kilokalorien.** Bei 72 kg waeren es
+198 kcal und damit genau der Buchwert.
+
+## Was zu entscheiden ist
+
+**Ist +0,25 %/Woche fuer einen fortgeschrittenen Natural richtig, oder
+gehoert die Rate nach Erfahrungsstufe abgestuft?**
+
+`[read]` **Fuer Tobias.** Es ist eine Erfahrungsfrage: die Literatur nennt
+0,25–0,5 %/Woche (Iraki 2019) als Spanne fuer alle, die Formelsammlung
+nennt Kilokalorien je Stufe. **Beide koennen nicht gleichzeitig gelten,
+solange die Rate nicht nach Stufe differenziert.**
+
+## Die Folge fuer den Bau
+
+`[read]` **Bleibt 0,25 fuer alle:** dieser Punkt wird geschlossen, nichts
+zu tun.
+
+`[read]` **Wird abgestuft:** der Katalog braucht die Rate je
+Erfahrungsstufe, und `requirements.min_experience` ist dann nicht mehr nur
+eine Sperre, sondern ein **Rechenparameter**. `[cmd]` Die vier Stufen
+stehen in E-80 (`beginner 0,75 · advanced 0,90 · pro 1,00 · elite 1,10`) —
+**aber das sind Score-Faktoren, keine Ratenfaktoren.** Sie hier zu
+verwenden waere eine Annahme, keine Ableitung.
+
+`[read]` **Und es beruehrt G-561:** wenn die Rate nach Stufe variiert,
+variieren die Waechterschwellen mit — ein relativer Waechter haelt das
+aus, ein absoluter in Kilogramm nicht.
 
 ## A-72 — eine Leser-Deklaration im Code
 
