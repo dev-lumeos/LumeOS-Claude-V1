@@ -1,11 +1,11 @@
 # Laufende Auftraege
 
-**Stand: 2026-09-30, 13:05**
+**Stand: 2026-09-30, 13:15**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Codex | G-545 | der Katalog hat die Form, nicht den Inhalt | **bereit** in `next/`, Vorbedingung G-558 erfuellt |
-| Claude Code | G-544 | der Phase-Reiter zeigt keine Zeitachse | **bereit** in `next/` |
+| Codex | G-545 | der Katalog hat die Form, nicht den Inhalt | **laeuft**, raus 30.09. |
+| Claude Code | G-544 | der Phase-Reiter zeigt keine Zeitachse | **laeuft**, raus 30.09. |
 | Claude Code | G-539 | der Phasen-Editor fehlt | **vorbereitet** in `next/` |
 | Codex | G-514 | die Modulverrechnung — Bau abgenommen | **offen**: nicht live eingespielt |
 

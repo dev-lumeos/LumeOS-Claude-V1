@@ -617,8 +617,8 @@
 | `G-539` | fehler | mittel | [Der Phasen-Editor fehlt — „editieren" aus Toms Satz](laufend_claudecode/goals-g-0539-der-phasen-editor-fehlt.md) | vorbereitet (claudecode) | — | — |
 | `G-541` | fehler | hoch | [Das Vorschaupanel liest den Strategiekatalog](erledigt/goals-g-0541-das-vorschaupanel-liest-den-katalog.md) | erledigt | — | G-545 |
 | `G-542` | entscheidung | hoch | [Die Zielrate — Einheit geklaert, eine Frage bleibt](todos/goals-g-0542-die-einheit-der-zielrate.md) | offen | — | G-548, G-549 |
-| `G-544` | fehler | hoch | [Der Phase-Reiter zeigt Phasentypen statt einer Zeitachse](laufend_claudecode/goals-g-0544-der-phase-reiter-zeigt-keine-zeitachse.md) | vorbereitet (claudecode) | — | — |
-| `G-545` | fehler | hoch | [Der Katalog hat die Form, nicht den Inhalt](laufend_codex/goals-g-0545-der-katalog-hat-die-form-nicht-den-inhalt.md) | vorbereitet (codex) | — | G-550 |
+| `G-544` | fehler | hoch | [Der Phase-Reiter zeigt Phasentypen statt einer Zeitachse](laufend_claudecode/goals-g-0544-der-phase-reiter-zeigt-keine-zeitachse.md) | laeuft (claudecode) | — | — |
+| `G-545` | fehler | hoch | [Der Katalog hat die Form, nicht den Inhalt](laufend_codex/goals-g-0545-der-katalog-hat-die-form-nicht-den-inhalt.md) | laeuft (codex) | — | G-550 |
 | `G-548` | entscheidung | mittel | [Wie lange darf eine moderate Diaet laufen?](todos/goals-g-0548-hoechstdauer-moderate-cut.md) | offen | — | — |
 | `G-549` | entscheidung | mittel | [Wieviel Protein weicht in der Ladewoche?](todos/goals-g-0549-protein-in-der-ladewoche.md) | offen | — | — |
 | `G-550` | fehler | hoch | [Fett steht als Prozentsatz, gebraucht wird eine Menge](todos/goals-g-0550-fett-als-prozentsatz-statt-als-menge.md) | offen | — | — |
