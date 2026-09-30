@@ -14,6 +14,8 @@ quellen:
   - docs/punkte/erledigt/goals-g-0544-der-phase-reiter-zeigt-keine-zeitachse.md
   - docs/punkte/00-INDEX.md
 
+erledigt: 2026-09-30
+commit: f03dfbe8
 beruehrt:
   tabellen:
     - goals.goal_phases
@@ -116,3 +118,53 @@ Claude Code darauf aufsetzen kann.
 Kettenlauf gruen mit Schrittzahl · rote Gegenprobe zuerst · Wegwerf-DB
 verworfen mit Zaehler · kein `db push` · nichts committen · welcher Lauf
 die neue Probe aufruft.
+
+## Abnahme 2026-09-30 — `f03dfbe8`
+
+`[cmd]` **Selbst nachgezaehlt in `559_phase_at_scope.sql`** (5.579 Bytes):
+`phase_eines_ziels_am` fuenfmal, **zwei `ORDER BY`, eine `LIMIT 1`** — die
+Mengenfunktion traegt keine. `kette.json` fuehrt **305** Schritte statt
+303. **Live unveraendert:** `phase_am` traegt dort weiter `LIMIT 1` an
+Position 933, wie gemeldet.
+
+## Was diese Abnahme mitnimmt
+
+`[read]` **A1 hat die Bedeutung entschieden, nicht ich.** Genau so war
+der Auftrag gebaut: erst messen, WER ruft und was der Aufrufer erwartet,
+dann festlegen. Das Ergebnis — **zwei Funktionen mit verschiedenen Namen,
+kein Schalter** — folgt aus der Messung, weil beide Bedeutungen wirklich
+gebraucht werden.
+
+`[cmd]` **A3 hat einen Fehler gefunden, den niemand gesucht hat:** vorher
+war nur nach `gueltig_ab DESC` sortiert. **Bei Gleichstand war das
+Ergebnis beliebig** — und niemand haette es gemerkt, weil es heute
+zufaellig passt. Jetzt `gueltig_ab, created_at, id`, alle DESC.
+
+`[read]` **`nutrition_target_assign_phase` bekommt ein ausdrueckliches
+Hindernis statt einer stillen Auswahl.** Das ist die richtige Richtung:
+ein geworfener Fehler ist sichtbar, eine stille Auswahl nicht.
+
+`[cmd]` **A4 gegen den Seed, nicht den Bestand** — `test-user` traegt
+jetzt zwei offene Phasen an zwei Zielen, und die rote Gegenprobe kam
+zuerst (*Expected 2, actual 1*). **Die Probe haengt als Kettenschritt**,
+nicht als Datei in `_validierung/`, die niemand aufruft. Zweites Mal nach
+G-558, dass der Weg aus A-77 einfach benutzt wird.
+
+## Zwei Befunde daraus
+
+`[cmd]` **`berechne_zielwerte` ruft `phase_am` nicht auf, wiederholt aber
+die nutzerweite Auswahl mit `LIMIT 1` im eigenen Rumpf.** Gemeldet statt
+mitgenommen — **das ist G-563**, und es ist die gefaehrlichere Haelfte:
+der Schreibweg wirft bei Mehrdeutigkeit, die direkte Vorschau waehlt
+weiter still.
+
+`[cmd]` **`ladePhase()` in `apps/web` behandelt `data[0]` als die
+Nutzerphase.** `apps/` wurde nicht angefasst, die Meldung kam woertlich
+mit — **das ist G-564 und geht an Claude Code.**
+
+## Was offen bleibt
+
+`[cmd]` **Nicht live.** Solange `phase_am` in der laufenden Datenbank die
+alte Begrenzung traegt, bleibt `ladePhase` dort zufaellig richtig — und
+wird mit dem Einspielen falsch. **Reihenfolge: erst G-564, dann
+einspielen.** Sonst zeigt der Reiter eine Phase, wo zwei gelten.

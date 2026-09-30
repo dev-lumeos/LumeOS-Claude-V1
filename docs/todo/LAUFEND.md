@@ -1,10 +1,11 @@
 # Laufende Auftraege
 
-**Stand: 2026-09-30, 14:45**
+**Stand: 2026-09-30, 17:45**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-539 | der Phasen-Editor fehlt | **bereit** in `next/` |
+| Claude Code | G-564 | ladePhase nimmt die erste fuer die einzige | **laeuft**, raus 30.09. |
+| Codex | G-563 | berechne_zielwerte waehlt still eine Phase | **laeuft**, raus 30.09. |
 | Claude Code | G-539 | der Phasen-Editor fehlt | **vorbereitet** in `next/` |
 | Codex | G-514 | die Modulverrechnung — Bau abgenommen | **offen**: nicht live eingespielt |
 
@@ -18,6 +19,8 @@
     G-558  a0be641d   goal_phase_start nimmt den Strategiecode (Kette)
     G-544  82b3973b   Zeitachse und Ankerdatum, phase_am umgangen
     G-545  56cbc87f   Katalog: guards 17/17, exits 7, drei Prep-Stufen
+    G-539  9ed19b12   Phasen-Editor als Override, Reiter aus dem Katalog
+    G-559  f03dfbe8   phase_am liefert alle, phase_eines_ziels_am eine
 
 `[cmd]` **Die Kette ist wieder gruen** — `kettenlauf-status.json`:
 `passed`, Exit 0, 1401 s, 299 Schritte. Damit war das Repo nach zwei
@@ -180,6 +183,32 @@ melden EINMAL am Ende.
 ---
 
 ## Lehren
+
+`[cmd]` **Wer einen Wert ERSETZEN laesst, verlangt den
+Schluesselvergleich, nicht die Anzahl.** Mein Auftrag G-545 verlangte
+,,vorher/nachher je Spalte: wie viele der 17 Zeilen tragen einen Wert".
+G-545 hat `sub_phases` umgeschrieben und dabei `weeks` und `deficit`
+entfernt — **vorher 1, nachher 1, anderer Inhalt.** Die Zaehlung war
+gruen, der Ankerplan aus G-544 hat seither keine Quelle. **Claude Code
+fand es am Bild, vier Gedankenstriche je Stufe.** Das ist G-562.
+
+`[cmd]` **Der Vorcommit-Haken laeuft laenger als die Bruecke wartet.**
+Ein `git commit` ueber `lauf()` bricht nach 60 s mit ,,did not respond",
+waehrend der Commit weiterlaeuft — **die Fehlermeldung sieht aus wie ein
+gescheiterter Commit.** Richtig: `subprocess.Popen` mit
+`DETACHED_PROCESS|CREATE_NO_WINDOW`, Ausgabe in `.git/ORCH_COMMIT.log`,
+danach `git log` und das Logende lesen.
+
+`[cmd]` **Die Waechter arbeiten die Liste einzeln ab.** Drei Anlaeufe fuer
+einen Commit: `quellen` (ein Verweis auf eine Datei, die noch in
+`laufend_` liegt), dann `fragen` (ein neuer `typ: entscheidung` gehoert in
+00-FRAGEN.md), dann `index`. **Vor dem Commit selbst durchlaufen:**
+`punkte-index --schreiben`, `fragen-index --schreiben`,
+`zyklus-pruefen`, `punkte-pruefen`.
+
+`[cmd]` **`git mv` scheitert an untracked Dateien.** Ein frisch
+geschriebener Punkt ist nicht im Index; `os.rename` verschiebt ihn, git
+sieht ihn am neuen Ort.
 
 `[cmd]` **`git grep` sieht keine untracked Dateien.** Die Suche nach dem
 Waechter zu G-544 fand nichts, weil `g544-zeitachse.test.ts` noch nicht
