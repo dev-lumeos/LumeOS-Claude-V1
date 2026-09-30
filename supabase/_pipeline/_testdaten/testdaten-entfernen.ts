@@ -14,6 +14,17 @@ const ids = IDS.map(id => `'${id}'`).join(', ')
 const sql = `
 BEGIN;
 
+DELETE FROM goals.goal_phases
+WHERE id IN (
+  '31000000-0000-0000-0000-000000000901'::uuid,
+  '31000000-0000-0000-0000-000000000902'::uuid
+);
+DELETE FROM goals.user_goals
+WHERE id IN (
+  '30000000-0000-0000-0000-000000000901'::uuid,
+  '30000000-0000-0000-0000-000000000902'::uuid
+);
+
 WITH deleted_items AS (
   DELETE FROM nutrition.meal_items
   WHERE user_id IN (${ids})

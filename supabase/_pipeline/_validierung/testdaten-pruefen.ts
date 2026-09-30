@@ -513,19 +513,19 @@ if (MODE === 'clean') {
   if (numberScalar(`SELECT count(*) FROM goals.zielwerte_am('${tom}'::uuid, DATE '${relDate('2026-08-02')}');`) !== 0) {
     errors.push('Fall Tag ohne Ziel: goals.zielwerte_am liefert vor gueltig_ab trotzdem eine Zeile')
   }
-  if (numberScalar(`SELECT count(*) FROM goals.phase_am('${tom}'::uuid, DATE '${relDate('2026-08-02')}');`) !== 0) {
-    errors.push('Fall Tag ohne Phase: goals.phase_am liefert vor erster gueltig_ab trotzdem eine Zeile')
+  if (numberScalar(`SELECT count(*) FROM goals.phase_eines_ziels_am('30000000-0000-0000-0000-000000000101'::uuid, DATE '${relDate('2026-08-02')}');`) !== 0) {
+    errors.push('Fall Tag ohne Phase: phase_eines_ziels_am liefert vor erster gueltig_ab trotzdem eine Zeile')
   }
   if (!hasRows(`
     SELECT 1
-    FROM goals.phase_am('${tom}'::uuid, DATE '${relDate('2026-08-10')}')
+    FROM goals.phase_eines_ziels_am('30000000-0000-0000-0000-000000000101'::uuid, DATE '${relDate('2026-08-10')}')
     WHERE phase_type = 'maintenance'
       AND gueltig_ab = DATE '${relDate('2026-08-03')}';`)) {
     errors.push('Fall Goals Phase vor Wechsel: maintenance am 2026-08-10 fehlt')
   }
   if (!hasRows(`
     SELECT 1
-    FROM goals.phase_am('${tom}'::uuid, DATE '${relDate('2026-08-18')}')
+    FROM goals.phase_eines_ziels_am('30000000-0000-0000-0000-000000000101'::uuid, DATE '${relDate('2026-08-18')}')
     WHERE phase_type = 'lean_bulk'
       AND gueltig_ab = DATE '${relDate('2026-08-17')}';`)) {
     errors.push('Fall Goals Phasenwechsel: lean_bulk am 2026-08-18 fehlt')
@@ -540,6 +540,18 @@ if (MODE === 'clean') {
        AND count(*) FILTER (WHERE is_primary) = 1
        AND max(priority) <= 3;`)) {
     errors.push('Fall Goals aktiv: Toms zwei aktive Ziele mit genau einem Primary fehlen')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.goal_phases gp
+    JOIN auth.users u ON u.id = gp.user_id
+    WHERE u.email = 'test-user@lumeos.local'
+      AND gp.actual_end_date IS NULL
+      AND gp.goal_id IS NOT NULL
+    GROUP BY gp.user_id
+    HAVING count(*) = 2
+       AND count(DISTINCT gp.goal_id) = 2;`)) {
+    errors.push('G-559: test-user traegt nicht zwei offene Phasen an zwei Zielen')
   }
   if (!hasRows(`
     SELECT 1

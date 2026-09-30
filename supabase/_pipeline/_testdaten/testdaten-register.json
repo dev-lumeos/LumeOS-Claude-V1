@@ -133,7 +133,7 @@
     "user_id": "10000000-0000-0000-0000-000000000101",
     "date": "2026-08-02, 2026-08-10, 2026-08-18",
     "case": "Goals und Phasen mit gueltig_ab und Phasenwechsel",
-    "expected": "goals.phase_am liefert am 2026-08-02 keine Zeile, am 2026-08-10 maintenance und am 2026-08-18 lean_bulk. Tom hat zwei aktive Ziele, genau eines davon primary."
+    "expected": "goals.phase_eines_ziels_am liefert fuer Toms Lean-Bulk-Ziel am 2026-08-02 keine Zeile, am 2026-08-10 maintenance und am 2026-08-18 lean_bulk. Tom hat zwei aktive Ziele, genau eines davon primary."
   },
   {
     "user": "Tom Miller",

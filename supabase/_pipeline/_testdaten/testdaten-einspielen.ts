@@ -1141,6 +1141,48 @@ const goalRows: GoalRow[] = [
     difficultyLevel: null,
     achievementDate: null,
   },
+  {
+    id: '30000000-0000-0000-0000-000000000901',
+    userId: '20000000-0000-0000-0000-000000000901',
+    goalType: 'body_composition',
+    subtype: 'maintenance',
+    title: 'G-559 Koerperziel',
+    description: 'Gegenprobe fuer zwei gleichzeitig laufende Zielphasen',
+    targetValue: null,
+    targetUnit: null,
+    startValue: null,
+    currentValue: null,
+    gueltigAb: relDate('2026-08-01'),
+    targetDate: null,
+    status: 'active',
+    priority: 1,
+    isPrimary: true,
+    progressPct: 0,
+    motivationReason: 'G-559 Seed: erste von zwei parallelen Zielphasen',
+    difficultyLevel: null,
+    achievementDate: null,
+  },
+  {
+    id: '30000000-0000-0000-0000-000000000902',
+    userId: '20000000-0000-0000-0000-000000000901',
+    goalType: 'body_composition',
+    subtype: 'gain_muscle',
+    title: 'G-559 Aufbauziel',
+    description: 'Zweites Ziel fuer die Mehrphasen-Gegenprobe',
+    targetValue: null,
+    targetUnit: null,
+    startValue: null,
+    currentValue: null,
+    gueltigAb: relDate('2026-08-02'),
+    targetDate: null,
+    status: 'active',
+    priority: 2,
+    isPrimary: false,
+    progressPct: 0,
+    motivationReason: 'G-559 Seed: zweite von zwei parallelen Zielphasen',
+    difficultyLevel: null,
+    achievementDate: null,
+  },
 ]
 const goalPhaseRows: GoalPhaseRow[] = [
   {
@@ -1190,6 +1232,38 @@ const goalPhaseRows: GoalPhaseRow[] = [
     recommendedNext: null,
     transitionReason: 'Seed ohne Zielbindung, beendet bei der Strukturumstellung G-538',
     strategyCode: 'maintain',
+  },
+  {
+    id: '31000000-0000-0000-0000-000000000901',
+    userId: '20000000-0000-0000-0000-000000000901',
+    goalId: '30000000-0000-0000-0000-000000000901',
+    phaseType: 'maintenance',
+    variant: null,
+    zielRatePctKgWoche: null,
+    parameters: '{"source":"G-559 Mehrphasen-Gegenprobe"}',
+    gueltigAb: relDate('2026-08-01'),
+    projectedEndDate: null,
+    actualEndDate: null,
+    transitionedFrom: null,
+    recommendedNext: null,
+    transitionReason: 'G-559: offene Phase des Koerperziels',
+    strategyCode: 'maintain',
+  },
+  {
+    id: '31000000-0000-0000-0000-000000000902',
+    userId: '20000000-0000-0000-0000-000000000901',
+    goalId: '30000000-0000-0000-0000-000000000902',
+    phaseType: 'lean_bulk',
+    variant: null,
+    zielRatePctKgWoche: 0.250,
+    parameters: '{"source":"G-559 Mehrphasen-Gegenprobe"}',
+    gueltigAb: relDate('2026-08-02'),
+    projectedEndDate: null,
+    actualEndDate: null,
+    transitionedFrom: null,
+    recommendedNext: null,
+    transitionReason: 'G-559: offene Phase des Leistungsziels',
+    strategyCode: 'lean_bulk',
   },
 ]
 
@@ -2912,6 +2986,16 @@ DELETE FROM nutrition.food_preferences WHERE user_id IN (${userIds});
 DELETE FROM goals.body_circumferences WHERE user_id IN (${userIds});
 DELETE FROM goals.body_measurements WHERE user_id IN (${userIds});
 DELETE FROM goals.goal_milestones WHERE user_id IN (${userIds});
+DELETE FROM goals.goal_phases
+WHERE id IN (
+  '31000000-0000-0000-0000-000000000901'::uuid,
+  '31000000-0000-0000-0000-000000000902'::uuid
+);
+DELETE FROM goals.user_goals
+WHERE id IN (
+  '30000000-0000-0000-0000-000000000901'::uuid,
+  '30000000-0000-0000-0000-000000000902'::uuid
+);
 DELETE FROM goals.goal_phases WHERE user_id IN (${userIds});
 DELETE FROM goals.user_goals WHERE user_id IN (${userIds});
 DELETE FROM goals.nutrition_targets WHERE user_id IN (${userIds});
