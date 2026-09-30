@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 269 |
-| `laufend_codex` | 1 |
+| `todos` | 268 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
 | `erledigt` | 596 |
 | **gesamt** | **867** |
@@ -614,7 +614,7 @@
 | `G-536` | fehler | hoch | [Der Strategiekatalog fehlt ganz — Schicht 2](erledigt/goals-g-0536-der-strategiekatalog-fehlt-ganz.md) | erledigt | — | G-542, G-543 |
 | `G-537` | fehler | hoch | [In LumeOS kann man kein Ziel anlegen](erledigt/goals-g-0537-ziele-sind-nicht-anlegbar.md) | erledigt | — | G-554 |
 | `G-538` | fehler | hoch | [Die Phasen haengen an keinem Ziel — die Wurzel](erledigt/goals-g-0538-phasen-haengen-an-keinem-ziel.md) | erledigt | — | G-544, G-556 |
-| `G-539` | fehler | mittel | [Der Phasen-Editor fehlt — „editieren" aus Toms Satz](laufend_claudecode/goals-g-0539-der-phasen-editor-fehlt.md) | vorbereitet (claudecode) | — | — |
+| `G-539` | fehler | mittel | [Der Phasen-Editor fehlt — „editieren" aus Toms Satz](laufend_claudecode/goals-g-0539-der-phasen-editor-fehlt.md) | laeuft (claudecode) | — | — |
 | `G-541` | fehler | hoch | [Das Vorschaupanel liest den Strategiekatalog](erledigt/goals-g-0541-das-vorschaupanel-liest-den-katalog.md) | erledigt | — | G-545 |
 | `G-542` | entscheidung | hoch | [Die Zielrate — Einheit geklaert, eine Frage bleibt](todos/goals-g-0542-die-einheit-der-zielrate.md) | offen | — | G-548, G-549 |
 | `G-544` | fehler | hoch | [Der Phase-Reiter zeigt Phasentypen statt einer Zeitachse](erledigt/goals-g-0544-der-phase-reiter-zeigt-keine-zeitachse.md) | erledigt | — | G-559, G-560 |
@@ -628,7 +628,7 @@
 | `G-556` | fehler | hoch | [Der Kettenlauf faellt, und er blockiert jeden Commit im Repo](erledigt/goals-g-0556-der-kettenlauf-faellt-am-eigenen-check.md) | erledigt | — | — |
 | `G-557` | fehler | hoch | [Die Zuordnung der sechs Arten erreicht die Datenbank nicht](erledigt/goals-g-0557-die-zuordnung-erreicht-die-datenbank-nicht.md) | erledigt | — | — |
 | `G-558` | fehler | hoch | [`goal_phase_start` nimmt den Strategiecode nicht entgegen](erledigt/goals-g-0558-goal-phase-start-nimmt-den-strategiecode-nicht.md) | erledigt | — | — |
-| `G-559` | fehler | hoch | [`phase_am` deckelt auf eine Phase, und der Phasenkopf haengt daran](todos/goals-g-0559-phase-am-deckelt-auf-eine-phase.md) | offen | — | — |
+| `G-559` | fehler | hoch | [`phase_am` deckelt auf eine Phase, und der Phasenkopf haengt daran](laufend_codex/goals-g-0559-phase-am-deckelt-auf-eine-phase.md) | laeuft (codex) | — | — |
 | `G-560` | fehler | hoch | [Die Reihenfolge eines Programms ist nirgends speicherbar](todos/goals-g-0560-die-reihenfolge-eines-programms-ist-nirgends-speicherbar.md) | offen | — | — |
 
 ### wartet auf Blocker — 7

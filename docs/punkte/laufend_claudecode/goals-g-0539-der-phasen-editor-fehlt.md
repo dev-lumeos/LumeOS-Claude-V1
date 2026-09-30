@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: mittel
 angelegt: 2026-09-29
+beauftragt: 2026-09-30
+agent: claudecode
 
 braucht: [G-536, G-538]
 kind_von: G-534
@@ -27,6 +29,36 @@ zahlen:
 ---
 
 # Der Phasen-Editor fehlt — „editieren" aus Toms Satz
+
+    AUFTRAG FUER Claude Code - G-539: der Phasen-Editor, persoenlicher
+                                     Override ohne die Vorgaben zu
+                                     zerstoeren
+    Bereich: apps/web/src/app/v2/goals/
+             apps/web/src/lib/goals/
+             apps/web/src/lib/goals/__tests__/
+    Fremd:   supabase/ gehoert Codex, der gerade an G-559 baut
+             (phase_am gibt eine Phase zurueck, wo mehrere gelten).
+             Kein SQL, kein Kettenschritt. goal_strategies wird
+             GELESEN - der Katalog hat seit G-545 Werte: 17 von 17
+             guards, 7 exits, drei Prep-Stufen in sub_phases.
+             docs/ gehoert dem Orchestrator, auch diese Punktdatei:
+             der Bericht kommt als Antwort, nicht als Anhang hier.
+    Stand:   2026-09-30
+
+**Zuerst lesen, vollstaendig:** diese Datei, dann
+`docs/spezifikation/10-plattform/design-system/theme-v1/module-goals-editor.jsx`
+(569 Zeilen, der ganze Editor mit `PE_MODES` und dem `anchor`-Reiter)
+und `docs/sessions/2026-09-30-uebergabe.md`.
+
+**Zwei Dinge, die ohne Lesen falsch verstanden werden:**
+
+- **Die Ankerrechnung ist schon da.** `lib/goals/anker.ts` aus G-544 ist
+  server-frei und geprueft — **wiederverwenden, nicht neu rechnen.** Zwei
+  Rechnungen fuer dasselbe gehen auseinander.
+- **Der Editor ueberschreibt die Auslieferung nicht.** Der Entwurf sagt
+  es auf Zeile 56: *„Personal override — the shipped defaults stay
+  intact."* Ein Override liegt an der Phase des Nutzers, nie am Katalog.
+
 
 **Tom, 2026-09-29, 11:56:** *„subnav phase engine: user kann seine goals
 planen, terminieren, **editieren**."*
