@@ -1089,13 +1089,36 @@ test('Goals bewertet nicht, es zeigt', () => {
     }
   }
 
-  // `[cmd]` **Der Pace muss GERECHNET sein, nicht behauptet** —
-  // sonst waere er wieder die Attrappe von frueher.
+  // ══ G-557/A4: UNBEDINGT, nicht unter einem `if` ══════════
+  //
+  // `[cmd]` **Hier stand die Forderung unter
+  // `if (/PACE_TEXT|data-ziel-pace/.test(karten))`.** `[read]`
+  // **Ein Waechter, dessen Bedingung aus derselben Datei kommt, die
+  // er prueft, schaltet sich selbst ab:** wer den Pace entfernt,
+  // erfuellt ihn — **dieselbe Blindheit wie bei den zwei
+  // Waechtern aus G-554**, die die WOERTER statt der Wirkung suchten.
+  //
+  // `[read]` **Die Karte ZEIGT einen Pace** (A4 aus G-554). **Also
+  // wird unbedingt gefordert, dass sie ihn rechnet.**
   const karten = ohneKommentar(fs.readFileSync(GOALS_KARTEN, 'utf8'))
-  if (/PACE_TEXT|data-ziel-pace/.test(karten)) {
-    assert.ok(/berechnePace\(/.test(karten),
-      'ziel-karten.tsx zeigt einen Pace, ohne ihn zu rechnen — '
-      + 'das waere wieder das Urteil aus der Attrappe.')
+  assert.ok(/berechnePace\(/.test(karten),
+    'ziel-karten.tsx rechnet den Pace nicht — entweder er fehlt '
+    + 'ganz, oder er ist wieder das Urteil aus der Attrappe.')
+  assert.ok(/data-ziel-pace/.test(karten),
+    'die Karte zeigt keinen Pace mehr — G-554/A4 verlangt ihn, und '
+    + 'ein Waechter, der bei Abwesenheit schweigt, misst nichts.')
+
+  // `[cmd]` **Und die Zahl bleibt eine Zahl:** kein Satz, der aus ihr
+  // ein Urteil ueber die Person macht. `[read]` **Die Wendungen
+  // stehen oben je Datei** — hier die, die nur beim Pace
+  // aufkaemen.
+  for (const wendung of [
+    /nicht im plan/i, /haeng(st|t) (du )?hinterher/i, /schaffst du nicht/i,
+    /unrealistisch/i, /gib (dir|mehr)/i,
+  ]) {
+    assert.ok(!wendung.test(karten),
+      `ziel-karten.tsx: ${wendung.source} bewertet statt zu nennen `
+      + '(C-108/F-02).')
   }
 })
 

@@ -108,14 +108,37 @@ export const PRIORITAET_MAX = 10
 //
 // ── Die Zuordnung, und wo sie unsicher ist ────────────────────────
 //
+// ── Der Bestand, nachzaehlbar ─────────────────────────────────────
+//
+// `[cmd]` **Gemessen 2026-09-30, 11 Zeilen in `goals.user_goals`:**
+//
+//     select goal_type, subtype, count(*)
+//       from goals.user_goals group by 1,2 order by 1,2;
+//
+//     body_composition  cut                 2
+//     body_composition  gain_muscle         2
+//     lifestyle         cardio_frequency    2
+//     performance       strength            4
+//     performance       training_capacity   1
+//
+// `[cmd]` **KEINE Zeile fuehrt `subtype = NULL`:**
+//
+//     select count(*) filter (where subtype is null), count(*)
+//       from goals.user_goals;          -- 0 von 11
+//
+// `[read]` **Hier stand „`strength` 2 Zeilen" — gemessen sind es 4**
+// (G-557/A3). **Eine Zahl im Kommentar altert, wenn der Befehl
+// danebenfehlt, mit dem sie nachzuzaehlen waere.**
+//
 // `[cmd]` **Vier Knoepfe sind eindeutig**, weil der Seed den
 // Untertyp schon so fuehrt:
 //
-//     body_comp    -> body_composition            (kein subtype:
-//                                                  die Art SELBST)
-//     strength     -> performance / strength      2 Zeilen im Seed
-//     performance  -> performance / training_capacity  1 Zeile
-//     habit        -> lifestyle / cardio_frequency     2 Zeilen
+//     body_comp    -> body_composition / cut | gain_muscle
+//                                              (aus der Strategie,
+//                                               siehe unten)
+//     strength     -> performance / strength            4 Zeilen
+//     performance  -> performance / training_capacity   1 Zeile
+//     habit        -> lifestyle / cardio_frequency      2 Zeilen
 //
 // `[cmd]` **Zwei sind es NICHT** — und der Auftrag verlangt, sie zu
 // melden statt still zu waehlen:
@@ -179,6 +202,76 @@ export const ZIELKNOEPFE: readonly Zielknopf[] = [
 /** Der Knopf zu einer Kennung. */
 export function zielknopf(id: string): Zielknopf | null {
   return ZIELKNOEPFE.find(k => k.id === id) ?? null
+}
+
+// ══ G-557/A2: `body_comp` traegt kein NULL ═════════════════════════
+//
+// `[cmd]` **Gemessen 2026-09-30: alle vier `body_composition`-Zeilen
+// fuehren `cut` oder `gain_muscle`** — und **keine der 11 Zeilen der
+// Tabelle hat `subtype = NULL`:**
+//
+//     select count(*) filter (where subtype is null), count(*)
+//       from goals.user_goals;                        -- 0 von 11
+//
+// `[read]` **Ein `body_comp`-Ziel ohne Unterart waere das erste
+// seiner Art** — und die beiden Werte stehen seit G-352 in
+// `ZIEL_UNTERARTEN.body_composition`.
+//
+// ── Die Richtung wird ABGELEITET, nicht erfunden ──────────────────
+//
+// `[cmd]` **Die gewaehlte Strategie sagt sie**, ueber ihre
+// `category` — gemessen an `goals.goal_strategies`:
+//
+//     select code, category, tdee_modifier
+//       from goals.goal_strategies order by category, code;
+//
+//     fat_loss      5 Zeilen, tdee_modifier -0,10 bis -0,25   -> cut
+//     muscle_gain   4 Zeilen, tdee_modifier +0,10 bis +0,20   -> gain_muscle
+//     hybrid        2 Zeilen, tdee_modifier 0,000             -> keine Richtung
+//     contest_prep  2 · recovery 1 · expert 3                 -> keine Richtung
+//
+// `[read]` **Nur zwei der sechs Kategorien sagen eine Richtung.**
+// **Die uebrigen halten das Gewicht oder verfolgen etwas anderes** —
+// dort bleibt die Unterart leer, **und die Karte sagt das**, statt
+// eine der zwei zu raten.
+//
+// `[read]` **Ohne Strategie bleibt `subtype` leer.** Ein Ziel *„auf
+// 12 % Koerperfett"* ohne gewaehlte Strategie sagt WOHIN, nicht WIE
+// — **und `cut` waere schon eine Annahme ueber das Wie.**
+
+/**
+ * Welche Unterart gehoert zu dieser Strategiekategorie?
+ *
+ * `[read]` **Eine Tabelle, kein Vergleich im Fluss** — sonst laesst
+ * sich die Ableitung nicht nachlesen und nicht pruefen.
+ */
+const KATEGORIE_ZU_UNTERART: Record<string, string> = {
+  fat_loss: 'cut',
+  muscle_gain: 'gain_muscle',
+}
+
+/**
+ * Die Unterart eines neuen Ziels — G-557/A2.
+ *
+ * `[read]` **Drei Faelle, in dieser Reihenfolge:**
+ *
+ *   1  Der Knopf bringt eine feste Unterart mit (`strength`,
+ *      `performance`, `habit`) — sie gewinnt.
+ *   2  `body_composition` mit Strategie: die Kategorie sagt die
+ *      Richtung.
+ *   3  Sonst `null` — **nicht geraten.**
+ *
+ * @param knopfId    Die Kennung des Entwurfsknopfes.
+ * @param kategorie  `category` der gewaehlten Strategie, oder `null`.
+ */
+export function unterartFuer(
+  knopfId: string, kategorie: string | null,
+): string | null {
+  const k = zielknopf(knopfId)
+  if (!k) return null
+  if (k.unterart !== null) return k.unterart
+  if (k.art !== 'body_composition' || kategorie === null) return null
+  return KATEGORIE_ZU_UNTERART[kategorie] ?? null
 }
 
 /**

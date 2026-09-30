@@ -147,6 +147,16 @@ export type Zielart = typeof ZIELARTEN[number]['id']
 /** Was ein neues Ziel braucht. Nur `NOT NULL` ist Pflicht. */
 export type ZielNeu = {
   goal_type: Zielart
+  /**
+   * `[cmd]` **G-557/A1: die zweite Ebene.** `user_goals.subtype` hat
+   * keinen CHECK, aber **keine der 11 Zeilen fuehrt `NULL`**
+   * (gemessen 2026-09-30).
+   *
+   * `[read]` **Er kommt aus `unterartFuer()`**, nicht aus einer
+   * Eingabe — der Knopf bringt ihn mit, oder die Strategie sagt die
+   * Richtung.
+   */
+  subtype?: string | null
   title: string
   /** ISO-Tag. `gueltig_ab` ist `NOT NULL`. */
   gueltig_ab: string

@@ -138,6 +138,23 @@ function ZielKarte({ g, stichtag, onBearbeiten }: {
             }}>
               {(g.goal_type ?? '').replace(/_/g, ' ')}
             </span>
+            {/* ══ G-557/A2: die Unterart, oder ihr Fehlen ═════════
+                `[cmd]` **Keine der 11 Bestandszeilen fuehrt
+                `subtype = NULL`** (gemessen 2026-09-30). `[read]`
+                **Fehlt sie, wird das gesagt** — sie kommt bei
+                `body_composition` aus der Strategie, und ohne
+                Strategie gibt es keine Richtung. **Nicht geraten.** */}
+            {g.subtype
+              ? <Pill data-ziel-unterart={g.subtype}>
+                  {g.subtype.replace(/_/g, ' ')}
+                </Pill>
+              : (
+                <span className="v2-dim" data-ziel-unterart=""
+                      style={{ fontSize: 10, fontStyle: 'italic' }}
+                      title="Die Unterart kommt aus der gewaehlten Strategie.">
+                  ohne Unterart
+                </span>
+              )}
             {g.is_primary && <Pill variant="acc">primaer</Pill>}
             {/* G-79: die Rangzahl steht sichtbar — sie bestimmt die
                 Reihenfolge dieser Liste. Bis heute stand nur die

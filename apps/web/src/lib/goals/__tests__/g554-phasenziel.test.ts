@@ -14,6 +14,7 @@ import { dirname, join } from 'node:path'
 
 import {
   ZIELKNOEPFE, zielknopf, traegtStrategie, ZIEL_ARTEN,
+  unterartFuer, ZIEL_UNTERARTEN,
 } from '../ziel-arten'
 import {
   berechnePace, restTage, tageZwischen, PACE_TOLERANZ,
@@ -425,5 +426,107 @@ describe('G-554/A1 — die Strategie im Anlegen-Dialog', () => {
       'im Ergebnis steht nicht, dass der Code nicht gespeichert wurde')
     assert.match(q, /G-543/,
       'die Marke nennt den Punkt nicht, auf den sie wartet')
+  })
+})
+
+// ════════════════════════════════════════════════════════════════
+// G-557 — die Zuordnung kommt in der Datenbank an
+// ════════════════════════════════════════════════════════════════
+
+describe('G-557/A1 — subtype wird durchgereicht', () => {
+  it('ZielNeu kennt das Feld', () => {
+    const q = lies(join(HIER, '..', 'ziel-regeln.ts'))
+    assert.match(q, /subtype\?: string \| null/,
+      'ZielNeu traegt keinen subtype — dann kann ihn niemand setzen')
+  })
+
+  it('der Schreibweg setzt die Spalte', () => {
+    const q = lies(join(HIER, '..', 'schreiben.ts'))
+    const i = q.indexOf('export async function zielAnlegen')
+    const rumpf = q.slice(i, i + 1800)
+    assert.match(rumpf, /subtype: z\.subtype/,
+      'die Spalte wird nicht geschrieben — die Zuordnung endet im '
+      + 'Dialog und kommt nie an')
+    // `[read]` **Leerer Text wird `null`** — `''` fuehrt keine der
+    // 11 Bestandszeilen.
+    assert.match(rumpf, /subtype: z\.subtype\?\.trim\(\) \|\| null/,
+      'ein leerer Text kaeme als „" in die Spalte')
+  })
+
+  it('der Dialog leitet ihn aus der Zuordnung ab', () => {
+    const q = lies(join(GOALS, 'modale.tsx'))
+    assert.match(q, /subtype: unterartFuer\(/,
+      'der Dialog setzt den subtype nicht — oder er tippt ihn, '
+      + 'statt ihn abzuleiten')
+    // `[read]` **Die Kategorie der Strategie, nicht der Code** —
+    // sonst muesste die Tabelle 17 Zeilen kennen statt sechs.
+    assert.match(q, /\?\.category \?\? null/,
+      'die Richtung kommt nicht aus der Kategorie')
+  })
+
+  it('jeder Knopf mit fester Unterart reicht sie durch', () => {
+    // `[cmd]` **Die drei, die der Seed belegt.**
+    assert.equal(unterartFuer('strength', null), 'strength')
+    assert.equal(unterartFuer('performance', null), 'training_capacity')
+    assert.equal(unterartFuer('habit', null), 'cardio_frequency')
+    // `[read]` **Die feste Unterart gewinnt** — eine Strategie
+    // aendert bei einem Kraftziel nichts.
+    assert.equal(unterartFuer('strength', 'fat_loss'), 'strength',
+      'eine Strategie ueberschreibt die feste Unterart')
+  })
+})
+
+describe('G-557/A2 — body_comp traegt kein null', () => {
+  it('die Richtung kommt aus der Kategorie', () => {
+    // `[cmd]` **Gemessen: `fat_loss` senkt den TDEE (-0,10 bis
+    // -0,25), `muscle_gain` hebt ihn (+0,10 bis +0,20).**
+    assert.equal(unterartFuer('body_comp', 'fat_loss'), 'cut')
+    assert.equal(unterartFuer('body_comp', 'muscle_gain'), 'gain_muscle')
+    assert.equal(unterartFuer('weight', 'fat_loss'), 'cut',
+      '„weight" ist body_composition und folgt derselben Ableitung')
+  })
+
+  it('es sind genau die zwei Werte des Bestands', () => {
+    // `[cmd]` **`ZIEL_UNTERARTEN.body_composition`, seit G-352
+    // gemessen.** `[read]` **Die Ableitung darf keinen dritten Wert
+    // erfinden.**
+    for (const kat of ['fat_loss', 'muscle_gain']) {
+      const u = unterartFuer('body_comp', kat)
+      assert.ok(u !== null && ZIEL_UNTERARTEN.body_composition.includes(u),
+        `„${kat}" ergibt „${u}" — das steht nicht im Bestand`)
+    }
+  })
+
+  it('ohne Richtung wird nicht geraten', () => {
+    // `[read]` **Vier der sechs Kategorien sagen keine Richtung** —
+    // sie halten das Gewicht oder verfolgen etwas anderes.
+    for (const kat of ['hybrid', 'contest_prep', 'recovery', 'expert']) {
+      assert.equal(unterartFuer('body_comp', kat), null,
+        `„${kat}" ergibt eine Richtung — sie hat keine`)
+    }
+  })
+
+  it('ohne Strategie bleibt die Unterart leer', () => {
+    // `[read]` **Ein Ziel „auf 12 % Koerperfett" ohne Strategie sagt
+    // WOHIN, nicht WIE** — `cut` waere schon eine Annahme.
+    assert.equal(unterartFuer('body_comp', null), null,
+      'ohne Strategie wird eine Richtung behauptet')
+    assert.equal(unterartFuer('custom', null), null)
+  })
+
+  it('die Karte sagt, wenn die Unterart fehlt', () => {
+    const q = lies(join(GOALS, 'ziel-karten.tsx'))
+    assert.match(q, /data-ziel-unterart/,
+      'die Karte zeigt die Unterart nicht')
+    assert.match(q, /ohne Unterart/,
+      'eine fehlende Unterart bleibt unsichtbar — dann sieht das '
+      + 'Ziel vollstaendig aus, ist es aber nicht')
+  })
+
+  it('weight und custom bleiben Vorschlag', () => {
+    // `[read]` **Toms Entscheidung, nicht meine** — die Ableitung
+    // aendert daran nichts.
+    const unsicher = ZIELKNOEPFE.filter(k => k.unsicher).map(k => k.id)
+    assert.deepEqual(unsicher.sort(), ['custom', 'weight'])
   })
 })

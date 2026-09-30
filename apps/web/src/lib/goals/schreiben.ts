@@ -118,6 +118,10 @@ export async function zielAnlegen(z: ZielNeu): Promise<SchreibErgebnis> {
     .insert({
       user_id: user.id,
       goal_type: z.goal_type,
+      // `[cmd]` **G-557/A1: die Unterart wird durchgereicht.**
+      // `[read]` **Leerer Text wird `null`** — `''` waere ein Wert,
+      // den keine der 11 Bestandszeilen fuehrt.
+      subtype: z.subtype?.trim() || null,
       title: z.title.trim(),
       gueltig_ab: z.gueltig_ab,
       priority: z.priority,

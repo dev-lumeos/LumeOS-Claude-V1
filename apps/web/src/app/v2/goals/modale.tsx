@@ -40,7 +40,7 @@ import {
 
 import {
   zielArtAuswahl, AKTIVE_PLAETZE, type ZielArt,
-  ZIELKNOEPFE, zielknopf, traegtStrategie,
+  ZIELKNOEPFE, zielknopf, traegtStrategie, unterartFuer,
 } from '../../../lib/goals/ziel-arten'
 // G-554/A2: Ziel und Phase in einem Schritt.
 import { phasenzielAnlegenAktion } from './ziel-aktionen'
@@ -338,6 +338,16 @@ function NewGoalModal({ onClose, strategien }: {
     const r = await phasenzielAnlegenAktion({
       ziel: {
         goal_type: type,
+        // `[cmd]` **G-557/A1/A2: die Unterart kommt aus der
+        // Zuordnung.** `[read]` **Der Knopf bringt sie mit, oder die
+        // Kategorie der Strategie sagt die Richtung** — bei
+        // `body_comp` ohne Strategie bleibt sie leer, statt `cut`
+        // zu raten.
+        subtype: unterartFuer(
+          knopf,
+          gewaehlteStrategie
+            ? strategien.find(x => x.code === gewaehlteStrategie)?.category ?? null
+            : null),
         title: titel,
         gueltig_ab: start,
         priority: prio,
