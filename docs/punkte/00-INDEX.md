@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 266 |
-| `laufend_codex` | 3 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 592 |
+| `laufend_codex` | 2 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 594 |
 | **gesamt** | **864** |
 
 ## medical — 49
@@ -625,8 +625,8 @@
 | `G-553` | fehler | hoch | [Ein Tokenfehler sieht aus wie ein Datenfehler — und das Mockup fehlt](erledigt/goals-g-0553-ein-tokenfehler-sieht-aus-wie-ein-datenfehler.md) | erledigt | — | G-555 |
 | `G-554` | fehler | hoch | [Phasenziele sind nicht anlegbar, und der Reiter ist nicht nach Vorgabe](erledigt/goals-g-0554-phasenziele-sind-nicht-anlegbar.md) | erledigt | — | G-557 |
 | `G-556` | fehler | hoch | [Der Kettenlauf faellt, und er blockiert jeden Commit im Repo](erledigt/goals-g-0556-der-kettenlauf-faellt-am-eigenen-check.md) | erledigt | — | — |
-| `G-557` | fehler | hoch | [Die Zuordnung der sechs Arten erreicht die Datenbank nicht](laufend_claudecode/goals-g-0557-die-zuordnung-erreicht-die-datenbank-nicht.md) | laeuft (claudecode) | — | — |
-| `G-558` | fehler | hoch | [`goal_phase_start` nimmt den Strategiecode nicht entgegen](laufend_codex/goals-g-0558-goal-phase-start-nimmt-den-strategiecode-nicht.md) | laeuft (codex) | — | — |
+| `G-557` | fehler | hoch | [Die Zuordnung der sechs Arten erreicht die Datenbank nicht](erledigt/goals-g-0557-die-zuordnung-erreicht-die-datenbank-nicht.md) | erledigt | — | — |
+| `G-558` | fehler | hoch | [`goal_phase_start` nimmt den Strategiecode nicht entgegen](erledigt/goals-g-0558-goal-phase-start-nimmt-den-strategiecode-nicht.md) | erledigt | — | — |
 
 ### wartet auf Blocker — 7
 

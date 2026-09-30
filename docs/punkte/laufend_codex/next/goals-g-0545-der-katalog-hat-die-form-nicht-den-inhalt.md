@@ -293,3 +293,93 @@ widersprechen Helms und liegen bei Tobias (G-552).
   wo sie nicht aufgeht
 - `bodyfat_faktoren`: fuenf Zeilen, Protein gefuellt, Kalorien NULL, und ein
   CHECK, dass die Stufen sich nicht ueberlappen
+
+---
+
+## Nachtrag 2026-09-30 — die Quellen liegen jetzt im Repo
+
+`[cmd]` **Dieser Auftrag verwies auf drei Anhaenge am Gespraech vom
+2026-09-29 und sagte, wer sie braucht, bekommt sie von Tom. Das ist
+ueberholt.** Seit `d509072d` und `0589da46` liegt
+`docs/ssot/131-fachwissen-phasen-und-rechenwege.md` im Repo, und die
+Werte stehen dort mit Abschnittsnummern. **Kein Anhang wird gebraucht.**
+
+`[read]` **Wichtiger als die Bequemlichkeit: 131 fuehrt eine ANDERE
+Fassung.** Die drei Dokumente A, B und C sind Vorfassungen desselben
+Tages; *Professional Bodybuilding Encyclopedia v2.0* loest sie ab, und
+131 ist daraus geschrieben. **Wer aus A oder C fuellt, fuellt aus der
+ueberholten Quelle.**
+
+`[read]` **Die GELTUNG aus 131 bleibt in Kraft:** die Datei ist
+Fachwissen, keine Festlegung. Sie steht unter Vorgaengerrepo,
+Designvorlage und Spec. Jeder Wert braucht weiter seine Fundstelle im
+Kettenschritt, und Widersprueche werden gemeldet, nicht gewaehlt.
+
+### A1 neu — die drei Stufen kommen aus 131, Abschnitt 1 und 3.1
+
+`[cmd]` **v2.0 nennt Einzelwerte, wo A und C Baender nennen — und
+ausserdem Protein und Fett je Stufe**, was die alte Tabelle nicht hatte:
+
+| Stufe | Kalorien | Protein g/kg | Fett g/kg | Fett-Minimum | Cardio |
+|---|---|---|---|---|---|
+| Early | × 0,85 (−15 %) | 2,2 | 0,8 | 0,6 | 3–4× 30–40 min LISS |
+| Mid | × 0,78 (−22 %) | 2,4 | 0,7 | 0,5 | 4–6× 40 min |
+| Late | × 0,70 (−30 %) | 2,6 | 0,6 | 0,5 | 5–7× 40–45 min + HIIT |
+
+`[read]` **Die Baender aus A 3.1 und C bleiben als Plausibilitaetsprobe
+brauchbar** — −15…20 / −20…25 / −25…35 umschliessen −15 / −22 / −30. **Wo
+sie es nicht taeten, ist das ein Befund fuer den Bericht.** Die
+Stufennamen des Katalogs entscheidet der Bau; 131 sagt Early/Mid/Late.
+
+### A3 neu — die Geschlechtsabhaengigkeit ist beantwortet
+
+`[cmd]` **131, Abschnitt 3.2 fuehrt beide Reihen**, nicht nur die der
+Maenner:
+
+    Maenner  very_low <10 % · low 10-15 % · moderate 15-20 %
+             high 20-25 % · very_high >25 %
+    Frauen   very_low <18 % · low 18-22 % · moderate 22-27 %
+             high 27-32 % · very_high >32 %
+
+**Damit entfaellt die Frage, welchen der zwei Werte man nimmt** — beide
+gehoeren hin. Wie der Katalog zwei Reihen traegt, ist zu melden, nicht
+zu waehlen: eine Spalte je Geschlecht, oder eine Zeile je Geschlecht,
+oder die Kategorie am Nutzer statt am Katalog.
+
+`[cmd]` **Und die Kategorie braucht keine neue Eingabe** — 131,
+Abschnitt 3.3: die Navy-Schaetzung nimmt Taille, Hals und Huefte, alle
+drei erfasst LumeOS schon.
+
+### A5 bleibt offen — und der Widerspruch ist jetzt benannt
+
+`[cmd]` **Zwei Quellen, zwei Antworten auf dieselbe Frage:**
+
+    Dokument C   Prep-Wochen = (Start-KFA − Ziel-KFA) × 1,5 bis 2,0
+                 + 2-4 Wochen Puffer          -> eine RECHNUNG
+    v2.0 (9.2)   "Wettkampfdatum steht, 16-20 Wochen vorher"
+                 (131, Abschnitt 4.3)          -> ein FENSTER
+
+`[read]` **Live steht 16 als feste Zahl.** Beide Quellen sagen, dass das
+zu starr ist, aber sie sagen es verschieden. **Weiter nicht loesen** —
+melden, welche Strategien eine Dauer aus einer Rechnung brauchen, und
+dass hier zwei Quellen auseinanderlaufen.
+
+### A7 — die Bezugsgroesse steht, die Faktoren kommen aus 131
+
+`[cmd]` **131, Abschnitt 3.1 fuehrt Protein je Phase** (1,8 bis 2,6 g/kg)
+**und 3.2 den KFA-Faktor darauf** (×1,15 bis ×0,90). Das ist die
+Grundlage fuer den Abgleich der drei Ausreisser — Koerpergewicht als
+Bezug, wie Tom es am 2026-09-29 festgelegt hat.
+
+`[cmd]` **Nicht uebernehmen:** die Kalorien-Senkung bei *hohem*
+Koerperfett (131, 3.2, dort als `[annahme]` markiert — ohne Begruendung
+und gegen Helms). Die wartet auf Tobias.
+
+### Reihenfolge
+
+`[cmd]` **Die Bedingung „nach G-543" ist erfuellt** — G-543 ist seit
+`20992639` abgelegt, die Rechnung liest die Rate. **Offen bleibt
+G-558:** solange `goal_phase_start` den Strategiecode nicht nimmt, kommt
+ein neuer Katalogwert nicht an einer neu angelegten Phase an. **Dieser
+Auftrag geht nach G-558 raus, nicht daneben** — sonst wird er gegen eine
+Funktion belegt, die den Weg noch nicht hat.

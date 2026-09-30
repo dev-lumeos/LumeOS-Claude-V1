@@ -134,3 +134,29 @@ Datenbankproben ins Gate koennen (sie brauchen eine Wegwerf-Datenbank,
 das Gate hat keine) oder ob sie in den Kettenlauf gehoeren, der eine
 hat. Die zweite Antwort ist die wahrscheinlichere — der Kettenlauf baut
 die Datenbank ohnehin und laeuft naechtlich.
+
+## Der Loesungsweg ist vorgemacht — 2026-09-30, G-558
+
+`[cmd]` **Codex hat die Frage aus dem Nachtrag beantwortet, ohne dass sie
+beauftragt war:** die Gegenprobe zu G-558 liegt nicht als Datei in
+`_validierung/`, die niemand aufruft, sondern als **eigener
+Kettenschritt**. `kette.json` fuehrt seither **301** Schritte statt 299,
+darunter `558_goal_phase_start_strategy_probe`.
+
+`[read]` **Damit ist die offene Entscheidung entschieden, und zwar zur
+zweiten Antwort:** die Datenbankproben gehoeren in den Kettenlauf, nicht
+ins Gate. Das Gate hat keine Wegwerf-Datenbank, der Kettenlauf baut eine
+ohnehin und laeuft naechtlich; `punkte-pruefen` liest dessen Status und
+wird rot, wenn er faellt. **Die Kette ist der Lauf, der eine
+Datenbankprobe tragen kann.**
+
+`[read]` **Was dieser Punkt jetzt noch ist:** die bestehenden Proben
+nachziehen. `tools/__tests__/` (4 Dateien, 33 Pruefungen) gehoert ins
+Gate — es braucht keine Datenbank, nur einen Aufruf in `package.json`.
+Die Dateien in `supabase/_pipeline/_validierung/` gehoeren einzeln
+geprueft: wer eine Datenbank braucht, wird Kettenschritt wie bei G-558;
+wer keine braucht, kann ins Gate.
+
+`[cmd]` **Und der belegte Schaden bleibt der Grund:** zwei
+G-536-Rechnungstests erwarten seit G-543 die alte Semantik, und nichts
+wurde rot.

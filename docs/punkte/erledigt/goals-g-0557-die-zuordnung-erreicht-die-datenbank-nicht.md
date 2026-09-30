@@ -14,6 +14,8 @@ quellen:
   - apps/web/src/lib/goals/ziel-arten.ts
   - docs/spezifikation/10-plattform/design-system/theme-v1/module-goals.jsx
 
+erledigt: 2026-09-30
+commit: db2a7a21
 beruehrt:
   tabellen:
     - goals.user_goals
@@ -110,3 +112,47 @@ messen, und in beide Richtungen belegen: mit entferntem
 
 `strategie_code` in die Phase zu schreiben — das ist G-558 bei Codex.
 Bis die Funktion den Parameter nimmt, bleibt `strategieOffen` sichtbar.
+
+## Abnahme 2026-09-30 — `db2a7a21`
+
+`[cmd]` **Die Umkehrung meiner eigenen Messung ist der Nachweis.** Beim
+Anlegen des Punkts fand `git grep -cE "subtype|unterart"` im Schreibweg
+**null** Treffer. Jetzt:
+
+    apps/web/src/app/v2/goals/modale.tsx        4
+    apps/web/src/lib/goals/schreiben.ts         1
+    apps/web/src/lib/goals/ziel-regeln.ts       3
+
+`[cmd]` **Live 11 Ziele** — die sechs Testzeilen sind wieder weg.
+`ziel-arten.ts:139` sagt **4 Zeilen**, mit dem Zaehlbefehl daneben.
+Zeile 1107 in `v2-attrappen.test.ts` misst `data-ziel-pace`
+**unbedingt**; der `if`, dessen Bedingung aus der geprueften Datei kam,
+ist weg.
+
+## Was diese Abnahme mitnimmt
+
+`[read]` **Der Agent hat die richtige Stelle geruegt.** Zwei seiner
+Sabotagen bissen zuerst nicht, und er hat den Befund den **Proben**
+zugeschrieben, nicht dem Bau: eine Ersetzung, die `TABELLE[null] ?? null`
+nicht veraenderte, und eine, die von zwei Vorkommen nur das erste traf.
+**Dieselbe Blindheit, die A4 an seinem Waechter ruegte, lag in seinen
+Proben** — und er hat sie gemeldet statt sie stehen zu lassen.
+
+`[cmd]` **A3 hat der Agent gegen sich selbst entschieden.** Sein
+G-554-Bericht nannte 4, sein Kommentar 2 — und die Ursache benannt: es
+stand kein Zaehlbefehl daneben. **Eine `[cmd]`-Zahl ohne ihren Befehl
+ist eine Behauptung.**
+
+`[cmd]` **Elf Stellen trugen die falsche Punktnummer** (G-558 statt
+G-557) und wurden berichtigt. G-558 ist Codex' Punkt.
+
+`[annahme]` **Eine Grenze wurde ueberschritten:** die Punktdatei in
+`docs/punkte/` ist im Bereich des Orchestrators. Ohne Schaden, aber
+`docs/` bleibt beim Orchestrator — sonst laufen zwei Schreiber auf eine
+Datei.
+
+## Was offen bleibt
+
+`weight` und `custom` tragen weiter `unsicher: true` und warten auf Tom.
+`strategie_code` ist mit G-558 in der Kette gebaut, aber **nicht live** —
+bis zur Einspielung bleibt `strategieOffen` sichtbar, und das ist richtig.

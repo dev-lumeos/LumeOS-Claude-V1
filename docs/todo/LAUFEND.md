@@ -1,13 +1,11 @@
 # Laufende Auftraege
 
-**Stand: 2026-09-30, 11:40**
+**Stand: 2026-09-30, 13:05**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-557 | die Zuordnung der sechs Arten erreicht die Datenbank nicht | **laeuft**, raus 30.09. |
-| Codex | G-558 | `goal_phase_start` nimmt den Strategiecode nicht entgegen | **laeuft**, raus 30.09. |
-| Codex | G-545 | der Katalog hat die Form, nicht den Inhalt | **vorbereitet** in `next/` |
-| Claude Code | G-544 | der Phase-Reiter zeigt keine Zeitachse | **vorbereitet** in `next/` |
+| Codex | G-545 | der Katalog hat die Form, nicht den Inhalt | **bereit** in `next/`, Vorbedingung G-558 erfuellt |
+| Claude Code | G-544 | der Phase-Reiter zeigt keine Zeitachse | **bereit** in `next/` |
 | Claude Code | G-539 | der Phasen-Editor fehlt | **vorbereitet** in `next/` |
 | Codex | G-514 | die Modulverrechnung — Bau abgenommen | **offen**: nicht live eingespielt |
 
@@ -17,6 +15,8 @@
     G-553  20992639   Ladefehler als eigener Zustand, Mockup sichtbar
     G-554  8553e5b2   Phasenziele anlegbar, sechs Arten ueber subtype
     G-556  89e71386   der Kettenlauf faellt nicht mehr am eigenen Check
+    G-557  db2a7a21   subtype kommt an, sechs Arten unterscheidbar
+    G-558  a0be641d   goal_phase_start nimmt den Strategiecode (Kette)
 
 `[cmd]` **Die Kette ist wieder gruen** — `kettenlauf-status.json`:
 `passed`, Exit 0, 1401 s, 299 Schritte. Damit war das Repo nach zwei
@@ -278,6 +278,27 @@ bewiesen, dass nichts da ist.**
 `[cmd]` **Eine Regel, die nirgends nachgezaehlt wird, wird zur
 Empfehlung.** „Wegwerf-Datenbank, danach verwerfen" steht in den
 Projektregeln; 116 Datenbanken stehen in `pg_database`. Das ist A-80.
+
+`[cmd]` **Eine `[cmd]`-Zahl ohne ihren Befehl ist eine Behauptung.**
+Claude Code hat es selbst gefunden: sein Bericht nannte 4 Zeilen, sein
+Kommentar 2 — dieselbe Datei, dieselbe Stunde. Der Befehl steht jetzt
+jeweils daneben. **Wer eine Zahl mit `[cmd]` markiert, schreibt den Aufruf
+dazu, mit dem sie nachzaehlbar ist.**
+
+`[cmd]` **Der Weg aus A-77 ist die Kette, nicht das Gate.** Eine
+Datenbankprobe braucht eine Wegwerf-Datenbank; das Gate hat keine, der
+Kettenlauf baut eine. Codex hat die G-558-Gegenprobe als Kettenschritt
+eingetragen (301 statt 299 Schritte) — sie laeuft naechtlich, und
+`pnpm gate` prueft den Status dieses Laufs. **An einem Beispiel
+vorgemacht, statt sie „dauerhaft" zu nennen.**
+
+`[cmd]` **`io.open(pfad, "w")` leert die Datei, bevor das Argument
+gerechnet wird.** In `io.open(p,"w").write(re.sub(..., io.open(p).read()))`
+wird zuerst der Schreibgriff erzeugt — die Datei ist dann leer, und der
+Lesezugriff liefert nichts. Zwei Punktdateien standen auf 0 Bytes und
+kamen nur ueber `git checkout` zurueck; die uncommittete Abnahme war weg.
+**Lesen, Ergebnis in eine Variable, DANN schreiben — nie in einem
+Ausdruck.**
 
 ---
 

@@ -14,6 +14,8 @@ quellen:
   - supabase/_pipeline/11_goals/111_goals_ziele_phasen.sql
   - apps/web/src/lib/goals/phasenziel-write.ts
 
+erledigt: 2026-09-30
+commit: a0be641d
 beruehrt:
   tabellen:
     - goals.goal_phases
@@ -96,3 +98,41 @@ sie auf, ist das zu melden statt sie ,,dauerhaft" zu nennen.
 Die zwei G-536-Rechnungstests, die noch die Semantik vor G-543
 erwarten. Die sind ein Befund von A-77 und kein Teil dieses Auftrags —
 aber wer sie anfasst, schreibt in den Bericht, welcher Lauf sie prueft.
+
+## Abnahme 2026-09-30 — `a0be641d`
+
+`[cmd]` **Selbst nachgezaehlt:** `kette.json` fuehrt **301** Schritte
+statt 299, darunter `558_goal_phase_start_strategy` und
+`558_goal_phase_start_strategy_probe`. Die Datei traegt
+`p_strategie_code` an vier Stellen. **Live unveraendert bei sieben
+Parametern** — aus `pg_proc` gezaehlt, wie angegeben.
+
+`[cmd]` **Die 77,9 kcal decken sich mit G-543.** Dort war der
+Unterschied zwischen Rate 0,40 und Faktor 0,20 mit 78 kcal vorgelegt.
+Zwei getrennte Messungen, dieselbe Groesse.
+
+## Was diese Abnahme mitnimmt
+
+`[cmd]` **A4 ist besser beantwortet als verlangt.** Der Auftrag sagte:
+melden, welcher Lauf die Probe aufruft, und sie nicht „dauerhaft"
+nennen, wenn keiner sie aufruft. **Der Agent hat sie stattdessen zu
+einem Kettenschritt gemacht** — damit laeuft sie naechtlich, und
+`pnpm gate` prueft den Status dieses Laufs. Das ist der Weg aus A-77, an
+einem Beispiel vorgemacht: **nicht ins Gate, das keine
+Wegwerf-Datenbank hat, sondern in die Kette, die eine baut.** Gehoert
+als Loesungsweg in A-77.
+
+`[read]` **Die Reihenfolge war richtig gewaehlt:** zuerst rot gegen die
+alte Funktion mit sieben Parametern, dann Gegenprobe, dann der
+vollstaendige Neuaufbau. Nicht umgekehrt.
+
+## Was offen bleibt
+
+`[cmd]` **Nicht live.** Die Funktion nimmt den Code in der Kette; die
+laufende Datenbank hat weiter sieben Parameter. **Das ist kein Mangel
+dieses Punkts** — Einspielen ist eine eigene Handlung und liegt bei Tom.
+Solange es nicht geschehen ist, bleibt `strategieOffen` sichtbar (G-557).
+
+`[cmd]` **Der Kettenlaeufer hat
+`backup/schema/20260930050446_c43_vor_kettenlauf.sql` angelegt** —
+ignoriert, gehoert zu A-79 (Aufbewahrung), kein neuer Befund.
