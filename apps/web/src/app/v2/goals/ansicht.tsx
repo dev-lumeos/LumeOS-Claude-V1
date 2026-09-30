@@ -81,6 +81,7 @@ import { ZielKarten } from './ziel-karten'
 import type {
   AdaptiverTdee, Fotosession, Koerpermessung, Koerperzusammensetzung,
   Meilenstein, Phase, ProfilEingaben, Umfangssatz, ZielFortschritt,
+  Zielphase,
 } from '../../../lib/goals/lesen'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 // `[read]` **Nur der TYP** — `strategie-read.ts` zieht
@@ -88,6 +89,8 @@ import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-re
 // von hier aus beantwortete die Seite mit HTTP 500 (A-30, G-412).
 import type { Strategie } from '../../../lib/goals/strategie-read'
 import { StrategieWahl } from './strategie-wahl'
+// G-544: die Zeitachse des Phase-Reiters.
+import { PhasenZeitachse } from './phasen-zeitachse'
 // `[cmd]` **G-553/A1: reine Funktionen, kein I/O** — sie duerfen aus
 // einer `'use client'`-Datei kommen (A-30).
 import { fehlerart, fehlertexte } from '../../../lib/goals/ladefehler'
@@ -170,6 +173,12 @@ export type EchteDaten = {
    * Coach aus `coach.relationships` — beide gemessen, keine Attrappe.
    */
   strategieProfil: { experience: string | null; hasCoach: boolean }
+  /**
+   * `[cmd]` **G-544/A1: eine offene Phase JE ZIEL** — seit G-538
+   * erlaubt `uq_goal_phases_one_open` mehrere. **`phase_am()`
+   * kann sie nicht liefern** (`LIMIT 1` im Rumpf).
+   */
+  offenePhasen: Zielphase[]
   ladefehler: string | null
 }
 
@@ -256,11 +265,26 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
             <Pill variant="acc">
               {`${echt.ziele.filter(g => g.status === 'active').length} active goals`}
             </Pill>
-            {echt.phase?.phase_type && (
-              <Pill>
-                <span className="v2-dot" style={{ background: 'var(--pos)' }} />
-                {`Phase ${echt.phase.phase_type.replace(/_/g, ' ')}`}
-              </Pill>
+            {/* ══ G-544: die Kopfmarke zaehlt, statt EINE zu nennen ══
+                `[cmd]` **Am Bild gefunden** (2026-09-30): bei zwei
+                offenen Phasen stand hier *„Phase lean bulk"* — die
+                Marke las `echt.phase` aus `phase_am()`, und deren
+                Rumpf endet auf `LIMIT 1`.
+
+                `[read]` **Eine von zwei zu nennen heisst, die andere
+                zu verschweigen.** `[cmd]` **Seit G-538 ist eine
+                offene Phase JE ZIEL erlaubt** — die Marke sagt jetzt,
+                wie viele laufen, und nennt die Art nur, wenn es
+                genau eine ist. */}
+            {echt.offenePhasen.length > 0 && (
+              <span data-kopf-phasen={echt.offenePhasen.length}>
+                <Pill>
+                  <span className="v2-dot" style={{ background: 'var(--pos)' }} />
+                  {echt.offenePhasen.length === 1
+                    ? `Phase ${(echt.offenePhasen[0].phase_type ?? '').replace(/_/g, ' ')}`
+                    : `${echt.offenePhasen.length} Phasen laufen`}
+                </Pill>
+              </span>
             )}
           </div>
           <div className="v2-module-sub">
@@ -467,6 +491,21 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                   haben jetzt eine Spalte** — was die einzelne ZEILE
                   nicht fuehrt, ist ein Strich mit Grund (A2), keine
                   Attrappe: die Quelle steht, der Wert fehlt. */}
+              {/* ══ G-544/A1: der Reiter zeigt ZIELE ═══════════════
+                  `[cmd]` **Er zeigte neun Phasentypen und null
+                  Ziele** — er konnte nicht terminieren, weil er
+                  nicht wusste, WAS.
+
+                  `[cmd]` **Seit G-538 erlaubt
+                  `uq_goal_phases_one_open` eine offene Phase JE
+                  ZIEL** — deshalb `ladeOffenePhasen` und nicht
+                  `phase_am()`, deren Rumpf auf `LIMIT 1` endet. */}
+              {!echtAus && (
+                <PhasenZeitachse
+                  ziele={echt.ziele} phasen={echt.offenePhasen}
+                  strategien={echt.strategien} heute={echt.stichtag}
+                  onNeuesZiel={() => kontext.open({ typ: 'newGoal' })} />
+              )}
               {!echtAus && (
                 <StrategieWahl strategien={echt.strategien}
                                profil={echt.strategieProfil} />

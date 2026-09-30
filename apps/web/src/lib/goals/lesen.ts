@@ -667,3 +667,71 @@ export async function ladeFotosessions(
   nachDatum.forEach(s => { sessions.push(s) })
   return sessions.slice(0, limit)
 }
+
+// ── Alle offenen Phasen — G-544/A1 ──────────────────────────────
+//
+// `[cmd]` **`phase_am()` kann das nicht:** ihr Rumpf endet auf
+// `LIMIT 1` (gemessen an `prosrc`, 2026-09-30). **Sie liefert genau
+// eine Phase, und `ladePhase` nimmt `data[0]`.**
+//
+// `[cmd]` **Seit G-538 erlaubt `uq_goal_phases_one_open` eine offene
+// Phase JE ZIEL**, nicht mehr eine je Nutzer:
+//
+//     CREATE UNIQUE INDEX uq_goal_phases_one_open
+//       ON goals.goal_phases (goal_id) WHERE actual_end_date IS NULL
+//
+// `[read]` **Zwei Ziele mit je einer offenen Phase sind damit
+// erlaubt** — und der Reiter muss beide zeigen. **Deshalb liest
+// diese Funktion die Tabelle, nicht die Funktion.**
+//
+// `[cmd]` **Der Zeilenschutz greift auch hier:** `goal_phases_select`
+// prueft `auth.uid() = user_id`.
+
+/** Eine Phase, wie der Reiter sie je Ziel braucht. */
+export type Zielphase = {
+  phase_id: string
+  goal_id: string | null
+  phase_type: string | null
+  strategie_code: string | null
+  gueltig_ab: string | null
+  projected_end_date: string | null
+  actual_end_date: string | null
+  zielrate_pct_kg_woche: number | null
+}
+
+/**
+ * Alle Phasen, die am Stichtag laufen — eine je Ziel.
+ *
+ * `[read]` **Offen heisst `actual_end_date IS NULL`** (so definiert
+ * es der Index). **Eine Phase mit gesetztem Ende ist Verlauf, nicht
+ * Gegenwart** — sie gehoert in die Historie, nicht auf die Achse.
+ */
+export async function ladeOffenePhasen(
+  userId: string, stichtag: string,
+): Promise<Zielphase[]> {
+  const { data, error } = await goalsDb()
+    .from('goal_phases')
+    .select('id, goal_id, phase_type, strategie_code, gueltig_ab, '
+      + 'projected_end_date, actual_end_date, zielrate_pct_kg_woche')
+    .eq('user_id', userId)
+    .is('actual_end_date', null)
+    .lte('gueltig_ab', stichtag)
+    .order('gueltig_ab', { ascending: false })
+  if (error) throw new GoalsLeseFehler('READ_FAILED', `goal_phases: ${error.message}`)
+
+  return (data ?? []).map(r => {
+    // `[read]` **Ueber `unknown`** — dieselbe Form wie in Zeile 555:
+    // die erzeugten Typen kennen die neuen Spalten noch nicht.
+    const z = r as unknown as Record<string, unknown>
+    return {
+      phase_id: text(z.id) ?? '',
+      goal_id: text(z.goal_id),
+      phase_type: text(z.phase_type),
+      strategie_code: text(z.strategie_code),
+      gueltig_ab: text(z.gueltig_ab),
+      projected_end_date: text(z.projected_end_date),
+      actual_end_date: text(z.actual_end_date),
+      zielrate_pct_kg_woche: zahl(z.zielrate_pct_kg_woche),
+    }
+  })
+}
