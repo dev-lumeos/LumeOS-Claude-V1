@@ -141,6 +141,64 @@ export function merkmale(s: Strategie): string[] {
  * ohne `protein_per_kg`), und `0 %` waere dort eine Aussage, die
  * niemand getroffen hat (A2).
  */
+// ══ G-554/A2: von der Strategie zur Phasenart ══════════════════════
+//
+// `[cmd]` **`goal_phases.phase_type` hat einen CHECK mit neun
+// Werten** (gemessen 2026-09-30): `fat_loss`, `lean_bulk`,
+// `maintenance`, `recomp`, `contest_prep`, `reverse_diet`,
+// `expert_bb_annual`, `mini_cut`, `peak_week`.
+//
+// `[cmd]` **Der Strategiecode ist NICHT derselbe Schluessel** — von
+// 17 Codes sind nur sechs zugleich Phasenarten. **Die Bruecke ist
+// `category`**, und die Zuordnung ist gemessen, nicht geraten:
+//
+//     fat_loss     -> fat_loss       5 Zeilen
+//     muscle_gain  -> lean_bulk      4
+//     hybrid       -> maintenance    2  (maintain, body_recomp)
+//     contest_prep -> contest_prep   2
+//     recovery     -> reverse_diet   1
+//     expert       -> expert_bb_annual 3
+//
+// `[read]` **Zwei Codes sind die Ausnahme:** `mini_cut` und
+// `peak_week` liegen unter `fat_loss` bzw. `contest_prep`, **sind
+// aber selbst eigene Phasenarten** — fuer sie gewinnt der Code.
+//
+// `[read]` **`body_recomp` faellt auf `maintenance`, nicht auf
+// `recomp`** — die Kategorie sagt `hybrid`, und `recomp` verlangt
+// laut CHECK eine NULL-Rate wie `maintenance`. **Waere `recomp`
+// gemeint, muesste die Katalogzeile es sagen.**
+
+const KATEGORIE_ZU_PHASE: Record<string, string> = {
+  fat_loss: 'fat_loss',
+  muscle_gain: 'lean_bulk',
+  hybrid: 'maintenance',
+  contest_prep: 'contest_prep',
+  recovery: 'reverse_diet',
+  expert: 'expert_bb_annual',
+}
+
+/** Die neun Werte des CHECK `goal_phases.phase_type`. */
+export const PHASENARTEN_CHECK = [
+  'fat_loss', 'lean_bulk', 'maintenance', 'recomp', 'contest_prep',
+  'reverse_diet', 'expert_bb_annual', 'mini_cut', 'peak_week',
+] as const
+
+/**
+ * Welche Phasenart gehoert zu diesem Strategiecode?
+ *
+ * `[read]` **Erst der Code selbst** — ist er eine Phasenart, gewinnt
+ * er (`mini_cut`, `peak_week`). **Sonst die Kategorie.**
+ *
+ * @param code       Der Strategiecode.
+ * @param kategorie  Die Kategorie derselben Zeile.
+ */
+export function phasenartFuerStrategie(
+  code: string, kategorie: string,
+): string | null {
+  if ((PHASENARTEN_CHECK as readonly string[]).includes(code)) return code
+  return KATEGORIE_ZU_PHASE[kategorie] ?? null
+}
+
 export function tdeeProzent(s: Strategie): string | null {
   if (s.tdee_modifier === null) return null
   const p = Math.round(s.tdee_modifier * 100)

@@ -25,7 +25,7 @@ import {
 } from './ziel-regeln'
 
 export type SchreibErgebnis =
-  | { ok: true }
+  | { ok: true; id?: string | null }
   | { ok: false; fehler: string }
 
 /**
@@ -148,7 +148,10 @@ export async function zielAnlegen(z: ZielNeu): Promise<SchreibErgebnis> {
   if (!data || data.length === 0) {
     return { ok: false, fehler: 'Kein Ziel angelegt — gehört es dieser Sitzung?' }
   }
-  return { ok: true }
+  // `[cmd]` **G-554/A2: die Kennung wird zurueckgegeben** — die
+  // Phase braucht sie (`goal_phase_start(p_goal_id …)`), und ohne
+  // sie muesste der Aufrufer die eben geschriebene Zeile suchen.
+  return { ok: true, id: (data[0] as { id?: string }).id ?? null }
 }
 
 /**

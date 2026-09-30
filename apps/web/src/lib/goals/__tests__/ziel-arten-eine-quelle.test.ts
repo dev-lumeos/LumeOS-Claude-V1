@@ -107,17 +107,34 @@ describe('G-354 — eine Quelle fuer die Zielarten', () => {
   })
 
   // ── 4 · Kein Fenster fuehrt eine eigene Liste ────────────────────
-  it('keine v2-Datei nennt `body_comp`', () => {
-    const schuldig: string[] = []
-    for (const d of tsxDateien(V2)) {
-      // `[read]` **Mit Wortgrenze** — `body_composition` enthaelt
-      // `body_comp` als Teilkette und waere sonst ein Falschtreffer.
-      if (/(?<![a-z0-9_])body_comp(?![a-z0-9_])/.test(lies(d))) {
-        schuldig.push(d.replace(/\\/g, '/').split('/v2/')[1])
-      }
+  it('`body_comp` steht nie da, wo ein goal_type hingehoert', () => {
+    // ══ G-554/A3: die Bedeutung hat sich geaendert ═════════
+    //
+    // `[cmd]` Diese Pruefung verbot das Wort in allen v2-Dateien.
+    // Ihr Grund: `body_comp` war ein ungueltiger `goal_type`, den
+    // der CHECK abgewiesen haette.
+    //
+    // `[cmd]` **Seit G-554 ist es eine KNOPFKENNUNG des Entwurfs**
+    // (`module-goals.jsx:697`) — einer von sechs Knoepfen, die
+    // `ZIELKNOEPFE` auf vier `goal_type`-Werte abbildet. **Es
+    // erreicht die Datenbank nie.**
+    //
+    // `[read]` **Verboten bleibt das Gefaehrliche:** dass die
+    // Kennung als `goal_type` geschrieben wird.
+    const t = lies(join(V2, 'goals', 'modale.tsx'))
+    for (const gefaehrlich of [
+      /goal_type:\s*'body_comp'/,
+      /goal_type:\s*"body_comp"/,
+      /goal_type:\s*knopf\b/,
+    ]) {
+      assert.ok(!gefaehrlich.test(t),
+        `modale.tsx schreibt eine Knopfkennung als goal_type `
+        + `(${gefaehrlich.source}) — der CHECK wiese sie ab`)
     }
-    assert.deepEqual(schuldig, [],
-      `\`body_comp\` steht noch in: ${schuldig.join(', ')}`)
+    // `[cmd]` **Der Typ kommt aus der Zuordnung, nicht aus dem Knopf.**
+    assert.match(t, /zielknopf\(/,
+      'modale.tsx bildet die Knopfkennung nicht mehr auf eine '
+      + 'Zielart ab — dann stuende die Kennung im goal_type')
   })
 
   it('das New-goal-Modal holt die Arten aus ziel-arten', () => {

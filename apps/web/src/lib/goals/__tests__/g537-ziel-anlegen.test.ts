@@ -185,8 +185,18 @@ describe('G-537/A4 — der Dialog vermischt nichts', () => {
     // Strategie sagt WIE** — und nur die zweite aendert die
     // Tageswerte. **Der Dialog darf das nicht vermischen, auch
     // nicht durch einen Hinweis.**
+    // ══ G-554/A1: „Strategie" ist hier nicht mehr verboten ════
+    //
+    // `[cmd]` G-537 schloss sie aus: **der Katalog war nicht live.**
+    // `[cmd]` **`goal_strategies` hat seit G-536 siebzehn Zeilen**,
+    // und G-554 bringt die Wahl in den Dialog — **aber nur bei
+    // `body_composition` und freiwillig.**
+    //
+    // `[read]` **Was verboten BLEIBT, ist Schicht 2:** konkrete
+    // Tageswerte. Ein Ziel sagt wohin, eine Strategie wie —
+    // **Kalorien und Makros rechnet weiterhin niemand hier.**
     for (const wort of ['nutrition_targets', 'Kalorienziel', 'Tageswert',
-      'Strategie', 'kcal']) {
+      'kcal']) {
       assert.ok(!rumpf.includes(wort),
         `der Dialog nennt „${wort}" — das ist Schicht 2 (G-536)`)
     }

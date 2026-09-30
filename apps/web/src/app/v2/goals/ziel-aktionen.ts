@@ -7,6 +7,9 @@ import {
   zielAendern, reihenfolgeSetzen, zielAnlegen,
 } from '../../../lib/goals/schreiben'
 import type { ZielAenderung, ZielNeu } from '../../../lib/goals/ziel-regeln'
+import {
+  phasenzielAnlegen, type PhasenzielNeu, type PhasenzielErgebnis,
+} from '../../../lib/goals/phasenziel-write'
 
 /**
  * Ein neues Ziel anlegen — G-537.
@@ -22,6 +25,23 @@ export async function zielAnlegenAktion(z: ZielNeu): Promise<{
   const e = await zielAnlegen(z)
   if (e.ok) revalidatePath('/v2/goals')
   return e.ok ? { ok: true, fehler: null } : { ok: false, fehler: e.fehler }
+}
+
+/**
+ * Ein Phasenziel anlegen — G-554/A2. **Ziel und Phase in einem
+ * Schritt, beides oder keines.**
+ *
+ * `[read]` **Ein Aufruf, serverseitig gekoppelt** — so hat es auch
+ * der Vorgaenger gemacht (`GoalSetupDialog` -> ein `POST`). **Zwei
+ * Aufrufe aus dem Browser koennten zwischen den Schritten
+ * abbrechen.**
+ */
+export async function phasenzielAnlegenAktion(
+  n: PhasenzielNeu,
+): Promise<PhasenzielErgebnis> {
+  const e = await phasenzielAnlegen(n)
+  if (e.ok) revalidatePath('/v2/goals')
+  return e
 }
 
 export async function zielSpeichern(zielId: string, aenderung: ZielAenderung): Promise<{

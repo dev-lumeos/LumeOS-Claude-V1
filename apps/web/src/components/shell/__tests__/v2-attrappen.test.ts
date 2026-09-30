@@ -1052,9 +1052,22 @@ test('Goals bewertet nicht, es zeigt', () => {
   // `[read]` Der Auftrag: „Keine Bewertung. Ob jemand sein Ziel gut
   // verfolgt, ist eine Aussage ueber einen Menschen."
   //
-  // `[cmd]` Die Attrappe fuehrt `pace: 'ahead' | 'on-track' | 'behind'`
-  // (daten.ts) — drei Urteile ueber die Person. Die Datenbank fuehrt so
-  // etwas nicht, und in den angebundenen Dateien kommt es nicht vor.
+  // ══ G-554/A4: WAS DIESE PRUEFUNG SEIT HEUTE MISST ═══════
+  //
+  // `[cmd]` Sie verbot die WOERTER `'ahead'`, `'on-track'` und
+  // `'behind'` in vier Dateien. `[cmd]` Ihre Begruendung war: „die
+  // Datenbank fuehrt so etwas nicht" — die Attrappe lieferte das
+  // Wort ohne Rechnung dahinter (`daten.ts`).
+  //
+  // `[cmd]` **Die Begruendung ist mit G-554 hinfaellig:**
+  // `berechnePace` leitet den Wert aus fuenf gemessenen Spalten ab
+  // (`start_value`, `current_value`, `target_value`, `gueltig_ab`,
+  // `target_date`). **Das ist eine Aussage ueber den PLAN** — „die
+  // Haelfte der Zeit ist um, ein Viertel der Strecke ist geschafft".
+  //
+  // `[read]` **Verboten bleibt das BEWERTEN, nicht das Nennen**
+  // (C-108/F-02). **Gemessen wird deshalb der Kommentar zur Zahl —
+  // und dass die Zahl gerechnet ist.**
   const ohneKommentar = (s: string) => s
     .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
     .replace(/\/\*[\s\S]*?\*\//g, '')
@@ -1062,10 +1075,27 @@ test('Goals bewertet nicht, es zeigt', () => {
 
   for (const datei of [GOALS_COMP, GOALS_KARTEN, GOALS_TDEE, GOALS_KOERPER]) {
     const q = ohneKommentar(fs.readFileSync(datei, 'utf8'))
-    for (const urteil of [/'ahead'/, /'on-track'/, /'behind'/, /deltaVariant/]) {
+    // `[read]` **`deltaVariant` bleibt verboten** — es faerbte eine
+    // Abweichung nach gut und schlecht, ohne Rechnung dahinter.
+    assert.ok(!/deltaVariant/.test(q),
+      `${path.basename(datei)}: deltaVariant faerbt ohne Rechnung.`)
+    // `[cmd]` **Die Saetze, die aus einer Zahl ein Urteil machen.**
+    for (const urteil of [
+      /zu langsam/i, /zu schnell/i, /nicht gut genug/i, /schlecht/i,
+      /du solltest/i, /streng dich/i, /enttaeusch/i, /faul/i,
+    ]) {
       assert.ok(!urteil.test(q),
-        `${path.basename(datei)}: ${urteil.source} ist ein Urteil ueber einen Menschen.`)
+        `${path.basename(datei)}: ${urteil.source} bewertet den Menschen.`)
     }
+  }
+
+  // `[cmd]` **Der Pace muss GERECHNET sein, nicht behauptet** —
+  // sonst waere er wieder die Attrappe von frueher.
+  const karten = ohneKommentar(fs.readFileSync(GOALS_KARTEN, 'utf8'))
+  if (/PACE_TEXT|data-ziel-pace/.test(karten)) {
+    assert.ok(/berechnePace\(/.test(karten),
+      'ziel-karten.tsx zeigt einen Pace, ohne ihn zu rechnen — '
+      + 'das waere wieder das Urteil aus der Attrappe.')
   }
 })
 

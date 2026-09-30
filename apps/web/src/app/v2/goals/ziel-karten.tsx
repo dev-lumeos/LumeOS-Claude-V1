@@ -12,13 +12,33 @@
 // eigenständige Dateneingabe."* Diese Datei hat deshalb keinen
 // Schreibpfad und kein Eingabefeld.
 //
-// **KEINE BEWERTUNG.** `[read]` *„Ob jemand sein Ziel ‚gut' verfolgt,
-// ist eine Aussage über einen Menschen."* Die Attrappe führt dafür
-// `pace: 'ahead' | 'on-track' | 'behind'` — drei Urteile über die
-// Person. `[cmd]` **Die Datenbank führt so etwas nicht**, und hier wird
-// es nicht erfunden: gezeigt werden Fortschritt in Prozent (gerechnet),
-// die Frist (ein Datum) und `progress_status` (die Auskunft der
-// Funktion darüber, ob sie rechnen konnte).
+// **KEINE BEWERTUNG DER PERSON.** `[read]` *„Ob jemand sein Ziel
+// ‚gut' verfolgt, ist eine Aussage über einen Menschen."*
+//
+// ══ G-554/A4: WARUM `pace` JETZT TROTZDEM DASTEHT ══════════════════
+//
+// `[cmd]` **Hier stand, `pace` sei ein Urteil über die Person und
+// werde deshalb nicht gezeigt.** `[read]` **Das war richtig, solange
+// es eine erfundene Marke aus der Attrappe war** — die Vorlage
+// lieferte das Wort ohne Rechnung dahinter.
+//
+// `[read]` **Es ist etwas anderes, wenn es eine ABLEITUNG ist:**
+// `berechnePace` vergleicht den Ist-Wert mit dem, was bei
+// gleichmäßigem Verlauf bis heute erreicht wäre — aus Startwert,
+// Zielwert, Startdatum und Deadline. **Das ist eine Aussage über den
+// PLAN, nicht über den Menschen:** *„die Hälfte der Zeit ist um, ein
+// Viertel der Strecke ist geschafft."*
+//
+// `[read]` **Der Unterschied steht in C-108/F-02:** *nennen ja,
+// bewerten nein*. **Die Zahl wird genannt, nicht kommentiert** — es
+// steht kein „zu langsam" daneben und kein Rat.
+//
+// `[cmd]` **Und wo die Grundlage fehlt, steht ein Grund statt eines
+// Urteils** (E-72) — kein „on-track" mangels Daten.
+//
+// `[read]` Sonst gilt unverändert: gezeigt werden Fortschritt in
+// Prozent (gerechnet), die Frist (ein Datum) und `progress_status`
+// (die Auskunft der Funktion darüber, ob sie rechnen konnte).
 import * as React from 'react'
 import { Card, Icon, Pill, Row } from '@lumeos/ui'
 
@@ -28,6 +48,8 @@ import { ZielEditor } from './ziel-editor'
 import {
   ABGESCHLOSSEN, STATUS_LABEL, type ZielStatus,
 } from '../../../lib/goals/ziel-regeln'
+// G-554/A4: der Pace — eine Rechnung, kein Urteil über die Person.
+import { berechnePace, PACE_TEXT } from '../../../lib/goals/pace'
 
 /**
  * Was `progress_status` sagt — die Funktion über sich selbst, nicht
@@ -83,6 +105,16 @@ function ZielKarte({ g, stichtag, onBearbeiten }: {
   const farbe = 'var(--acc-goals)'
   const pct = g.progress_pct
   const gerechnet = g.progress_status === 'measured'
+  // `[cmd]` **G-554/A4: der Pace, aus fuenf vorhandenen Werten.**
+  // `[read]` **Der Stichtag kommt von aussen** — kein `Date.now()`.
+  const p = berechnePace({
+    start_value: g.start_value,
+    current_value: g.current_value,
+    target_value: g.target_value,
+    start: g.gueltig_ab,
+    deadline: g.target_date,
+    heute: stichtag,
+  })
 
   return (
     <Card>
@@ -114,6 +146,25 @@ function ZielKarte({ g, stichtag, onBearbeiten }: {
             {g.status && g.status !== 'active' && (
               <Pill>{STATUS_LABEL[g.status as ZielStatus] ?? g.status}</Pill>
             )}
+            {/* ══ G-554/A4: der Pace ══════════════════════════
+                `[read]` **Genannt, nicht bewertet** (C-108/F-02):
+                die Farbe folgt dem Entwurf, es steht kein Rat
+                daneben. `[read]` **Ohne Grundlage ein Grund, kein
+                Urteil** (E-72). */}
+            {p.grund === null ? (
+              <span data-ziel-pace={p.pace}
+                    title={`Soll heute ${p.sollwert?.toFixed(1)} `
+                      + `${g.target_unit ?? ''} · Ist ${g.current_value ?? '—'}`}>
+                <Pill variant={p.pace === 'behind' ? 'warn' : undefined}>
+                  {PACE_TEXT[p.pace]}
+                </Pill>
+              </span>
+            ) : (
+              <span className="v2-dim" data-ziel-pace="unbekannt"
+                    style={{ fontSize: 10, fontStyle: 'italic' }}>
+                kein Verlauf — {p.grund}
+              </span>
+            )}
             <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 10 }}>
               {`Frist ${g.target_date ?? '—'} · ${bisFrist(g.target_date, stichtag)}`}
             </span>
@@ -129,6 +180,18 @@ function ZielKarte({ g, stichtag, onBearbeiten }: {
           <div style={{
             fontSize: 15, fontWeight: 600, letterSpacing: '-0.01em', marginBottom: 8,
           }}>{g.title}</div>
+
+          {/* ══ G-554/A4: die verknuepften Module ════════════════
+              `[cmd]` **Spalte da seit G-538, alle Zeilen leer**
+              (gemessen 2026-09-30). `[read]` **Eine leere Liste
+              zeigt keine Pille** — das ist der richtige Zustand,
+              kein Platzhalter. */}
+          {g.linked_modules.length > 0 && (
+            <div data-ziel-module
+                 style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 8 }}>
+              {g.linked_modules.map(m => <Pill key={m}>{m}</Pill>)}
+            </div>
+          )}
 
           <div style={{
             display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 8,

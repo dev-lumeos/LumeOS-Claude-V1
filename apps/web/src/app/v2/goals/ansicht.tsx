@@ -542,7 +542,11 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
           `mandatory`, egal was oben gewaehlt ist. */}
       {tab === 'poses' && <GoalsPosesView />}
 
-      <GoalsModale modal={modal} onClose={kontext.close} />
+      {/* `[cmd]` **G-554/A1: der Katalog geht ins Anlegen-Modal** —
+          dort erscheint die Strategiewahl, aber nur bei
+          `body_composition`. */}
+      <GoalsModale modal={modal} onClose={kontext.close}
+                   strategien={echt.strategien} />
     </GoalsKontext.Provider>
   )
 }

@@ -197,6 +197,14 @@ export type ZielFortschritt = {
   progress_status: string | null
   measured_at: string | null
   target_date: string | null
+  /** `[cmd]` **G-554/A4: das Startdatum** — der Pace braucht es. */
+  gueltig_ab: string | null
+  /**
+   * `[cmd]` **Spalte da seit G-538, alle Zeilen leer** (gemessen).
+   * `[read]` **Der Entwurf zeigt sie als Pillen** — eine leere Liste
+   * zeigt keine, und das ist richtig, nicht kaputt.
+   */
+  linked_modules: string[]
   status: string | null
   is_primary: boolean
   priority: number | null
@@ -217,8 +225,13 @@ export async function ladeZiele(userId: string, stichtag: string): Promise<ZielF
   const db = goalsDb()
   const { data: ziele, error } = await db
     .from('user_goals')
+    // `[cmd]` **G-554/A4: `gueltig_ab` und `linked_modules` dazu.**
+    // `[read]` **Der Pace braucht das Startdatum** — ohne es laesst
+    // sich der Zeitanteil nicht rechnen, und der Entwurf zeigt die
+    // Module als Pillen.
     .select('id, goal_type, subtype, title, target_value, target_unit, start_value, '
-      + 'current_value, target_date, status, is_primary, priority, progress_pct')
+      + 'current_value, target_date, gueltig_ab, linked_modules, status, '
+      + 'is_primary, priority, progress_pct')
     .eq('user_id', userId)
     .order('priority', { ascending: true })
   if (error) throw new GoalsLeseFehler('READ_FAILED', `user_goals: ${error.message}`)
@@ -250,6 +263,10 @@ export async function ladeZiele(userId: string, stichtag: string): Promise<ZielF
       progress_status: text(f.progress_status),
       measured_at: text(f.measured_at),
       target_date: text(z.target_date),
+      gueltig_ab: text(z.gueltig_ab),
+      linked_modules: Array.isArray(z.linked_modules)
+        ? (z.linked_modules as unknown[]).filter((m): m is string => typeof m === 'string')
+        : [],
       status: text(z.status),
       is_primary: z.is_primary === true,
       priority: zahl(z.priority),
