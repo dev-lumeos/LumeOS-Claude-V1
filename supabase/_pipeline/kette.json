@@ -2840,6 +2840,24 @@
       ]
     },
     {
+      "id": "545_goal_strategy_content",
+      "path": "supabase/_pipeline/11_goals/545_goal_strategy_content.sql",
+      "kind": "sql",
+      "creates": "G-545: belegte Contest-Prep-Stufen, relative Steuerwaechter und direkt belegte Phasenausgaenge aus SSOT 131.",
+      "depends_on": [
+        "558_goal_phase_start_strategy_probe"
+      ]
+    },
+    {
+      "id": "545_goal_strategy_content_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g545-strategy-content.test.ts",
+      "kind": "tsx",
+      "creates": "G-545 Gegenprobe: Quelleninhalt, test-user-Lesepfad, ausgeschlossene Inhalte und G-536-Grenzen auf dem Neubau.",
+      "depends_on": [
+        "545_goal_strategy_content"
+      ]
+    },
+    {
       "id": "514_goal_contributions_schema",
       "path": "supabase/migrations/20260929081000_g514_goal_contributions.sql",
       "kind": "sql",
