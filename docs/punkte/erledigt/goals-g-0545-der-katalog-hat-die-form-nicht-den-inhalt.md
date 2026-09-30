@@ -14,6 +14,8 @@ quellen:
   - docs/specs/Goals/PHASE_MODELS.md
   - docs/punkte/00-INDEX.md
 
+erledigt: 2026-09-30
+commit: 56cbc87f
 beruehrt:
   tabellen:
     - goals.goal_strategies
@@ -28,6 +30,23 @@ zahlen:
 ---
 
 # Der Katalog hat die Form, nicht den Inhalt
+
+    AUFTRAG FUER Codex - G-545: der Strategiekatalog bekommt Werte,
+                                nicht nur Spalten
+    Bereich: supabase/_pipeline/11_goals/
+             supabase/_pipeline/_validierung/
+             supabase/_pipeline/kette.json
+    Fremd:   apps/ gehoert Claude Code, der gerade an G-544 baut
+             (Phase-Reiter, Zeitachse) - nichts dort anfassen.
+             docs/ gehoert dem Orchestrator, auch diese Punktdatei:
+             der Bericht kommt als Antwort, nicht als Anhang hier.
+    Stand:   2026-09-30
+
+**Zuerst lesen, vollstaendig:** diese Datei bis zum Ende — der
+**Nachtrag 2026-09-30** hebt Aussagen im oberen Teil auf. Dann
+`docs/ssot/131-fachwissen-phasen-und-rechenwege.md` samt ihrem
+Abschnitt GELTUNG.
+
 
 `[cmd]` **Claude Code hat in G-541 gezaehlt, wie viele der 17 Zeilen einen
 Wert tragen — nicht, ob die Spalte existiert:**
@@ -389,3 +408,55 @@ G-558:** solange `goal_phase_start` den Strategiecode nicht nimmt, kommt
 ein neuer Katalogwert nicht an einer neu angelegten Phase an. **Dieser
 Auftrag geht nach G-558 raus, nicht daneben** — sonst wird er gegen eine
 Funktion belegt, die den Weg noch nicht hat.
+
+## Abnahme 2026-09-30 — `56cbc87f`
+
+`[cmd]` **Am Bestand nachgezaehlt, und zwar richtig gezaehlt:**
+
+    guards        17 von 17 nicht leer
+    exits          7 von 17
+    sub_phases     1 von 17   (contest_prep, jetzt mit drei Stufen)
+    success        1 von 17
+
+`[cmd]` **Mein erster Zaehlversuch sagte 17/17/17** — `count(spalte)`
+zaehlt nicht-NULL, und ein leeres JSON ist nicht NULL. **Das ist genau
+der Fehler, um den es in diesem Punkt geht** (,,eine Spalte ist kein
+Wert"), und er hat mich beim Nachzaehlen desselben Punkts erwischt.
+Richtig gezaehlt wird mit `FILTER (WHERE ... NOT IN ('[]','{}'))`.
+
+`[cmd]` **Die Kette traegt 303 Schritte** — selbst aus `kette.json`
+gezaehlt, 301 vor diesem Punkt.
+
+## Was diese Abnahme mitnimmt
+
+`[read]` **Dreimal gemeldet statt gewaehlt, und jedes Mal war es die
+richtige Entscheidung:**
+
+    A3   requirements unveraendert - drei Formen fuer zwei
+         Geschlechtsreihen, keine entschieden. Ein Frauen-Schwellwert
+         als Maenner-Schwellwert waere schlimmer als keiner.
+    A4   success bleibt bei 1 - SSOT 131 definiert keine
+         Erfolgsmetriken, und aus Alarmgrenzen wurde kein Erfolg
+         erfunden.
+    A5   max_duration bleibt 16, der Widerspruch Rechnung gegen
+         Fenster steht im Bericht.
+
+`[read]` **Und der gemeldete Konflikt ist der Befund, den A2 vorhergesagt
+hat:** sechs aeltere Zeilen und G-520 pruefen in Kilogramm statt in
+Prozent. **Er hat gefuellte Werte nicht ueberschrieben, um eine Luecke zu
+fuellen** — das ist G-561.
+
+`[cmd]` **Die rote Gegenprobe kam zuerst:** 4 von 5 Paketen fielen am
+alten Katalogzustand, danach 5 von 5 gruen. **Eine Probe, die nie rot
+war, misst nichts.**
+
+## Was offen bleibt
+
+`[cmd]` **`sub_phases` traegt weiter nur EINE Zeile.** Das ist richtig —
+nur `contest_prep` hat belegte Unterphasen. `[read]` **Aber die Rechnung
+kennt die Stufen noch nicht:** `tdee_modifier` ist ein Wert je Strategie,
+und Early/Mid/Late brauchen drei. **Das war schon der Befund in G-530 und
+ist mit diesem Punkt nicht behoben, nur belegt.**
+
+`[cmd]` **Live eingespielt**, wie der Auftrag es verlangte. `exits` bei
+7 von 17 ist kein Mangel: nur diese sieben sind belegt.

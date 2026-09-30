@@ -1,11 +1,10 @@
 # Laufende Auftraege
 
-**Stand: 2026-09-30, 13:15**
+**Stand: 2026-09-30, 14:45**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Codex | G-545 | der Katalog hat die Form, nicht den Inhalt | **laeuft**, raus 30.09. |
-| Claude Code | G-544 | der Phase-Reiter zeigt keine Zeitachse | **laeuft**, raus 30.09. |
+| Claude Code | G-539 | der Phasen-Editor fehlt | **bereit** in `next/` |
 | Claude Code | G-539 | der Phasen-Editor fehlt | **vorbereitet** in `next/` |
 | Codex | G-514 | die Modulverrechnung — Bau abgenommen | **offen**: nicht live eingespielt |
 
@@ -17,6 +16,8 @@
     G-556  89e71386   der Kettenlauf faellt nicht mehr am eigenen Check
     G-557  db2a7a21   subtype kommt an, sechs Arten unterscheidbar
     G-558  a0be641d   goal_phase_start nimmt den Strategiecode (Kette)
+    G-544  82b3973b   Zeitachse und Ankerdatum, phase_am umgangen
+    G-545  56cbc87f   Katalog: guards 17/17, exits 7, drei Prep-Stufen
 
 `[cmd]` **Die Kette ist wieder gruen** — `kettenlauf-status.json`:
 `passed`, Exit 0, 1401 s, 299 Schritte. Damit war das Repo nach zwei
@@ -179,6 +180,27 @@ melden EINMAL am Ende.
 ---
 
 ## Lehren
+
+`[cmd]` **`git grep` sieht keine untracked Dateien.** Die Suche nach dem
+Waechter zu G-544 fand nichts, weil `g544-zeitachse.test.ts` noch nicht
+im Index lag. **Die Arbeit eines Agenten ist untracked, bis der
+Orchestrator sie stagt** — eine Suche mit `git grep` misst dort
+systematisch null, und das sieht aus wie ein fehlender Waechter.
+Fuer frische Arbeit `start_search` oder `os.path.getsize` nehmen.
+
+`[cmd]` **Ein gefilterter Status ist kein Status.**
+`git diff --cached --name-status -- apps/` filtert genau das weg, was
+die Regel sehen will: drei docs-Dateien lagen aus einem frueheren
+Versuch im Index und gingen in den G-544-Commit mit. Getrennt per
+`reset --soft`. **Die Regel sagt ,,den vollstaendigen `git status`
+lesen", und ein Pfadfilter hebt sie auf.**
+
+`[cmd]` **`count(spalte)` zaehlt nicht-NULL, nicht Inhalt.** Beim
+Nachzaehlen von G-545 ergab `count(guards), count(exits)` 17/17/17 —
+ein leeres JSON ist nicht NULL. Richtig:
+`count(*) FILTER (WHERE x IS NOT NULL AND x::text NOT IN ('[]','{}'))`.
+**Das ist genau der Fehler, um den G-545 geht — er hat mich beim
+Nachzaehlen desselben Punkts erwischt.**
 
 `[cmd]` **Live repariert, Quelle nicht.** G-538/A1 verlangte den Nachzug
 des Bestands — der Schritt, der Max' Phase *erzeugt*, stand nicht im
