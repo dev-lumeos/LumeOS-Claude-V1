@@ -2822,6 +2822,24 @@
       ]
     },
     {
+      "id": "558_goal_phase_start_strategy",
+      "path": "supabase/_pipeline/11_goals/558_goal_phase_start_strategy.sql",
+      "kind": "sql",
+      "creates": "G-558: goal_phase_start schreibt den Strategiecode atomar und uebernimmt ohne persoenlichen Override die Katalograte.",
+      "depends_on": [
+        "543_rate_drives_targets"
+      ]
+    },
+    {
+      "id": "558_goal_phase_start_strategy_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g558-phase-start-strategy.test.ts",
+      "kind": "tsx",
+      "creates": "G-558 Gegenprobe: bekannter und unbekannter Strategiecode sowie Katalograte und persoenlicher Override auf der frisch gebauten Datenbank.",
+      "depends_on": [
+        "558_goal_phase_start_strategy"
+      ]
+    },
+    {
       "id": "514_goal_contributions_schema",
       "path": "supabase/migrations/20260929081000_g514_goal_contributions.sql",
       "kind": "sql",
