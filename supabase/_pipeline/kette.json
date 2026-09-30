@@ -2813,6 +2813,15 @@
       ]
     },
     {
+      "id": "543_rate_drives_targets",
+      "path": "supabase/_pipeline/11_goals/543_rate_drives_targets.sql",
+      "kind": "sql",
+      "creates": "G-543/E-1: Zielkalorien folgen der Instanz- oder Katalograte und dem eindeutigen Gewicht am Phasenbeginn; tdee_modifier steuert nicht mehr.",
+      "depends_on": [
+        "538_goal_phase_start"
+      ]
+    },
+    {
       "id": "514_goal_contributions_schema",
       "path": "supabase/migrations/20260929081000_g514_goal_contributions.sql",
       "kind": "sql",

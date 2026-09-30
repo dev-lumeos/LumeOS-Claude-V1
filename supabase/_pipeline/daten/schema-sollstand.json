@@ -6356,7 +6356,7 @@
     {
       "schema": "goals",
       "name": "berechne_zielwerte",
-      "schritt": "529_phase_rate_storage_schema"
+      "schritt": "543_rate_drives_targets"
     },
     {
       "schema": "goals",

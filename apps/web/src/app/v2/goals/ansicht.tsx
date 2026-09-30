@@ -88,6 +88,9 @@ import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-re
 // von hier aus beantwortete die Seite mit HTTP 500 (A-30, G-412).
 import type { Strategie } from '../../../lib/goals/strategie-read'
 import { StrategieWahl } from './strategie-wahl'
+// `[cmd]` **G-553/A1: reine Funktionen, kein I/O** — sie duerfen aus
+// einer `'use client'`-Datei kommen (A-30).
+import { fehlerart, fehlertexte } from '../../../lib/goals/ladefehler'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
@@ -170,6 +173,49 @@ export type EchteDaten = {
   ladefehler: string | null
 }
 
+/**
+ * Die Fehlerkachel — G-553/A1.
+ *
+ * `[cmd]` **Hier stand eine Kachel fuer beide Faelle:** *„Goals ·
+ * konnten nicht geladen werden"*, darunter der technische Text.
+ * `[read]` **Bei `JWT issued at future` schickt das auf die falsche
+ * Suche** — der Nutzer prueft seine Ziele, und das Problem ist die
+ * Anmeldung.
+ *
+ * `[read]` **Der technische Text BLEIBT** — er hat diesen Befund
+ * moeglich gemacht.
+ */
+function LadefehlerKachel({ text }: { text: string }) {
+  const art = fehlerart(text)
+  const t = fehlertexte(art)
+  return (
+    <Card title={t.titel} sub={art === 'sitzung' ? undefined : t.satz}>
+      {/* `[cmd]` **Die Marke steht am `span`, nicht an der `Card`** —
+          `Card` nimmt nur benannte Requisiten und liesse `data-…`
+          fallen (gemessen in `primitives.tsx:61-63`). */}
+      <span data-ladefehler={art} hidden />
+      {art === 'sitzung' && (
+        <div style={{ fontSize: 12, lineHeight: 1.55, marginBottom: 10 }}>
+          {t.satz}
+        </div>
+      )}
+      {/* `[read]` **Der Weg, nicht nur der Satz.** Ein Hinweis
+          „melde dich neu an" ohne Knopf laesst den Nutzer suchen. */}
+      {art === 'sitzung' && (
+        <a className="v2-btn v2-btn-primary v2-btn-sm" href="/login"
+           data-ladefehler-anmelden
+           style={{ display: 'inline-flex', marginBottom: 10 }}>
+          Zur Anmeldung
+        </a>
+      )}
+      <div className="v2-muted" data-ladefehler-text
+           style={{ fontSize: 12, lineHeight: 1.55 }}>
+        {text}
+      </div>
+    </Card>
+  )
+}
+
 export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
   // G-117: Tab in der Adresse — Drop-in aus lib/tab-url.
   const [tab, setTab] = useTabParam('goals')
@@ -249,48 +295,86 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
       {/* G-87: `phase` und `physique` stehen jetzt mit in der Liste —
           sonst sähe eine fehlende Phase nach „keine Phase" aus und
           wäre doch nur ein fehlendes Cookie. */}
+      {/* ══ G-553/A2: der Mockup-Teil haengt nicht am Ladefehler ═══
+          **Tom, 2026-09-29:** *„lass da zumindest das mockup wieder
+          einblenden, wir haben keine seite ohne mockup."*
+
+          `[cmd]` **Hier stand ein Entweder-oder ueber SIEBEN
+          Reitern:** lag ein Ladefehler vor, ersetzte die
+          Fehlerkachel den ganzen Reiter — **und mit ihm den
+          Trennstrich und die Mockup-Referenz.**
+
+          `[cmd]` **`cross`, `timeline` und `poses` standen schon
+          ausserhalb** und haben ihren Entwurf behalten. **Die
+          anderen sieben nicht** — das ist der Befund, den Tom
+          gesehen hat.
+
+          `[read]` **Der Entwurf braucht keine Daten.** Alle sechs
+          `…Referenz`-Bauteile sind parameterlos (gemessen: nur
+          `GoalsPosesReferenz` nimmt einen Wert, und der hat eine
+          Vorgabe). **Sie an einen Ladefehler zu haengen, war eine
+          Kopplung ohne Grund.**
+
+          `[read]` **Dieselbe Klasse wie G-359/G-365:** dort
+          verdraengte der ECHTE Teil den Entwurf, hier verdraengt ihn
+          der FEHLER. **Beide Male war der Quelltext da und nicht
+          erreichbar.** */}
       {echt.ladefehler
-        && ['goals', 'metrics', 'measure', 'comp', 'tdee', 'phase', 'physique'].includes(tab) ? (
-        <Card title="Goals" sub="konnten nicht geladen werden">
-          <div className="v2-muted" style={{ fontSize: 12, lineHeight: 1.55 }}>
-            {echt.ladefehler}
-          </div>
-        </Card>
-      ) : (
+        && ['goals', 'metrics', 'measure', 'comp', 'tdee', 'phase', 'physique'].includes(tab) && (
+        <LadefehlerKachel text={echt.ladefehler} />
+      )}
+      {(() => {
+        // `[read]` **Nur der ECHTE Teil faellt aus, nicht der
+        // Reiter.** Ein Ladefehler heisst: die Daten fehlen — nicht,
+        // dass es die Seite nicht gibt.
+        const echtAus = echt.ladefehler !== null
+        return (
         <>
           {tab === 'goals' && (
             <>
-              <ZielKarten
-                ziele={echt.ziele} meilensteine={echt.meilensteine} stichtag={echt.stichtag} />
-              <FehlendeZielKacheln />
+              {!echtAus && (
+                <>
+                  <ZielKarten
+                    ziele={echt.ziele} meilensteine={echt.meilensteine} stichtag={echt.stichtag} />
+                  <FehlendeZielKacheln />
+                </>
+              )}
               <GoalsGoalsReferenz />
             </>
           )}
           {tab === 'tdee' && (
             <>
-              <GoalsTDEEView tdee={echt.tdee} />
+              {!echtAus && <GoalsTDEEView tdee={echt.tdee} />}
               <GoalsTdeeReferenz />
             </>
           )}
           {tab === 'metrics' && (
             <>
-              <KoerperMetriken
-                messungen={echt.messungen} zukunft={echt.zukunftsmessungen}
-                stichtag={echt.stichtag} />
-              <FehlendeMetrikKacheln messungen={echt.messungen} />
+              {!echtAus && (
+                <>
+                  <KoerperMetriken
+                    messungen={echt.messungen} zukunft={echt.zukunftsmessungen}
+                    stichtag={echt.stichtag} />
+                  <FehlendeMetrikKacheln messungen={echt.messungen} />
+                </>
+              )}
               <GoalsMetricsReferenz />
             </>
           )}
           {tab === 'measure' && (
             <>
-              <KoerperUmfaenge saetze={echt.umfaenge} stichtag={echt.stichtag} />
-              <FehlendeMessKacheln sessions={echt.fotosessions} />
+              {!echtAus && (
+                <>
+                  <KoerperUmfaenge saetze={echt.umfaenge} stichtag={echt.stichtag} />
+                  <FehlendeMessKacheln sessions={echt.fotosessions} />
+                </>
+              )}
               <GoalsMeasureReferenz />
             </>
           )}
           {tab === 'comp' && (
             <>
-              <CompositionTab d={comp} />
+              {!echtAus && <CompositionTab d={comp} />}
               <GoalsCompReferenz />
             </>
           )}
@@ -313,7 +397,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
               gilt; darunter, was geplant ist, mit Marke. */}
           {tab === 'phase' && (
             <>
-              {echt.phase
+              {!echtAus && echt.phase
                 && <PhaseEcht phase={echt.phase} stichtag={echt.stichtag} />}
               {/* ══ G-513: der Knopf, der gefehlt hat ══════════════
                   `[cmd]` **Fuenf Funktionen in der Datenbank, null
@@ -334,11 +418,11 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                   uebereinander** — ein ausgegrautes ,,Phase
                   beginnen" und darunter ,,Phase wechseln" mit
                   derselben Auswahl. **Der Entwurf hat EINES.** */}
-              {!laufendePhase && (
+              {!echtAus && !laufendePhase && (
                 <PhaseBeginnen stichtag={echt.stichtag} aktiv={null}
                                gewichtKg={echt.profil?.body_weight_kg ?? null} />
               )}
-              {laufendePhase && (
+              {!echtAus && laufendePhase && (
                 <>
                   {/* `[cmd]` **G-534/A7: das Raster mit Vorschau** —
                       die Geste des Entwurfs
@@ -383,8 +467,10 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                   haben jetzt eine Spalte** — was die einzelne ZEILE
                   nicht fuehrt, ist ein Strich mit Grund (A2), keine
                   Attrappe: die Quelle steht, der Wert fehlt. */}
-              <StrategieWahl strategien={echt.strategien}
-                             profil={echt.strategieProfil} />
+              {!echtAus && (
+                <StrategieWahl strategien={echt.strategien}
+                               profil={echt.strategieProfil} />
+              )}
               <FehlendePhaseKacheln />
               {/* `[cmd]` G-365: die Linie stand unter `echt.phase &&`.
                   Sabotageprobe 2026-09-07 — `phase` auf `null`: die
@@ -408,7 +494,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
               nie zu sehen.** */}
           {tab === 'physique' && (
             <>
-              {echt.umfaenge.length > 0
+              {!echtAus && echt.umfaenge.length > 0
                 && <PhysiqueEcht saetze={echt.umfaenge} navy={echt.navy} stichtag={echt.stichtag} profil={echt.profil} />}
               {/* `[cmd]` **G-512: der FFMI kommt aus derselben Quelle
                   wie im Composition-Reiter** — `navy.ffmi`, sonst der
@@ -424,7 +510,8 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
             </>
           )}
         </>
-      )}
+        )
+      })()}
 
       {tab === 'cross' && (
         <>

@@ -216,3 +216,116 @@ Katalogwerte ohnehin angefasst werden, und nicht in diesen Auftrag.
 
 **Dieser Auftrag bleibt bei A1 bis A4: die Rate statt des Faktors.**
 Nichts weiter.
+
+---
+
+## A5 neu, 2026-09-29 17:15 — `goal_phase_start` nimmt den Strategiecode nicht
+
+`[cmd]` **Claude Code hat es in G-541 A5 gemeldet:**
+`goals.goal_phases.strategie_code` existiert als Fremdschluessel, **aber
+`goal_phase_start` hat keinen Parameter dafuer.** Eine gewaehlte Strategie
+laesst sich nicht speichern.
+
+`[read]` **Das blockiert G-554** — dort legt der Nutzer ein Phasenziel an:
+ein Ziel plus die Phase mit ihrer Strategie, in einem Zug. Ohne den Parameter
+bleibt die Wahl in der Oberflaeche haengen.
+
+    p_strategie_code text   -> goal_phases.strategie_code
+                              NULL erlaubt (eine Phase ohne Strategie
+                              bleibt moeglich, wie heute)
+                              FK greift, ein erfundener Code faellt
+
+**Genau eine Signatur.** Die Lehre aus G-531 gilt: bliebe die alte daneben
+stehen, trifft ein Aufruf ohne Strategiecode stillschweigend die alte
+Fassung — *„eine Ueberladung waere der naechste Geist gewesen."*
+
+### Zu belegen
+
+- Aufruf **mit** gueltigem Code: Zeile traegt ihn
+- Aufruf **mit** erfundenem Code: faellt am Fremdschluessel
+- Aufruf **ohne** Code: geht durch, `strategie_code` bleibt NULL
+- `SELECT count(*) FROM pg_proc` fuer `goal_phase_start`: **genau 1**
+- der CHECK aus G-538 haelt weiter: ohne `goal_id` faellt der Aufruf
+
+`[read]` **Warum das hier steht und nicht in einem eigenen Punkt:** es ist
+dieselbe Funktionsfamilie, die dieser Auftrag ohnehin anfasst, und ein
+eigener Auftrag fuer einen Parameter waere ein Auftrag fuer eine Zeile. Der
+Nachweis bleibt getrennt — A5 hat seine eigenen fuenf Proben.
+
+---
+
+## Abnahme, Orchestrator, 2026-09-30 09:05
+
+**Angenommen. E-1 ist damit umgesetzt** — die Rate steuert, der Faktor nicht
+mehr.
+
+    Ziel-kcal = TDEE + 11 × Rate(% KG/Woche) × Gewicht am Phasenbeginn
+
+    1. goal_phases.zielrate_pct_kg_woche          persoenlich
+    2. goal_strategies.weight_change_target_percent  Katalog
+    3. fehlt beides -> phasenparameter_fehlt
+
+`[read]` **Die Rangfolge ist richtig herum:** die persoenliche Rate schlaegt
+den Katalog, und wo beides fehlt, entstehen keine Zielwerte statt geratener.
+`tdee_modifier` bleibt als Herkunftswert — **nicht geloescht**, wie verlangt,
+denn er ist die Gegenprobe.
+
+### Die tragende Zahl selbst nachgerechnet
+
+`[cmd]` **Tom, live:**
+
+    11 × 0,271 × 83,74 = 249,63
+    2.552,4 + 249,63    = 2.802,0      Bericht: 2.802,0
+
+**Stimmt auf die Stelle.** Die Formel ist die, die E-1 festlegt, und sie
+rechnet mit dem Gewicht der jüngsten Messung bis `gueltig_ab` — bei keiner
+oder mehreren an diesem Tag entstehen keine Zielwerte, sondern
+`profil_unvollstaendig`. **Der Schritt raet nicht.**
+
+### Eine Beschriftung im Bericht ist irreführend
+
+`[cmd]` Der Bericht nennt beim Auseinanderlauf:
+
+    alter Faktorweg   2.455,0 kcal
+    neuer Ratenweg    2.462,1 kcal
+    "Delta von Hand"  11 × 0,25 × 83,74 = 230,3 kcal/Tag
+
+`[cmd]` **Die tatsaechliche Differenz ist 7,1 kcal**, nicht 230,3. Die 230,3
+sind der **Zuschlag der Rate auf den TDEE**, nicht der Unterschied zwischen
+den beiden Wegen.
+
+`[read]` **Die Probe selbst ist gueltig** — der Auftrag verlangte einen Fall,
+wo beide Wege dieselbe Zahl geben (2.462,1 = 2.462,1) und einen, wo sie
+auseinandergehen (2.455,0 gegen 2.462,1). Beides liegt vor. **Nur die Zeile
+„Delta von Hand" erklaert nicht, was sie zu erklaeren scheint.**
+
+### Und das ist der eigentliche Befund
+
+`[cmd]` **Faktor und Rate liegen bei den heutigen Katalogwerten 5 bis 7 kcal
+auseinander** — 7,1 im Testfall, 5,6 bei Tom (2.807,6 gegen 2.802,0).
+
+`[read]` **Das ist eine gute Nachricht, und sie gehoert festgehalten:** die
+Umstellung aendert fuer keinen bestehenden Nutzer die Tageswerte nennenswert.
+Sie war strukturell noetig (E-1: die Rate ist die Leitgroesse, nicht die Art),
+aber **die Katalogwerte waren konsistent gewaehlt** — `tdee_modifier` und
+`weight_change_target_percent` beschrieben dieselbe Absicht.
+
+**Wo es wirklich auseinandergeht, ist der persoenliche Override:** Rate 0,40
+gegen JSON-Faktor 0,20 ergibt 2.600,3 statt 2.678,2 — **78 kcal.** Dort
+wirkt die Umstellung, und dort war der alte Weg falsch.
+
+### Was zu „pnpm gate gruen" zu sagen ist
+
+`[cmd]` **Der Bericht meldet `pnpm gate: gruen, 18/18 Tasks`. Das Gate ist
+trotzdem rot.** `backup/_manifests/kettenlauf-status.json` steht unveraendert
+auf `failed`, und `punkte-pruefen` wird davon rot — **gemessen um 09:05, nach
+der Einspielung.**
+
+`[read]` **Kein Widerspruch im Bericht, sondern zwei verschiedene
+Pruefungen:** `pnpm gate` sind die 18 Turborepo-Aufgaben (Build, Test,
+Typecheck), die Waechter laufen im Vorcommit-Haken. **Wer „Gate gruen"
+schreibt, meint das eine und ein anderer liest das andere.** Fuer kuenftige
+Berichte: die Turbo-Zahl und der Waechterstand sind zwei Angaben.
+
+**Der Punkt bleibt in `laufend_codex/`**, bis ein Commit moeglich ist — und
+das ist er erst nach **G-556**.

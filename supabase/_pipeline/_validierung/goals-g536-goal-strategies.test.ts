@@ -226,11 +226,16 @@ test('G-536 A3: Katalogwerte sind Defaults; persoenliche JSON-Overrides gewinnen
     fat: number
     factor: number
     rate: number
-    jsonKcal: number
+    rateKcal: number
+    jsonFactorKcal: number
     catalogFactor: number
     hindernis: string | null
   }>(`
     BEGIN;
+    INSERT INTO goals.body_measurements (
+      user_id, measurement_date, measurement_time, weight_kg
+    ) VALUES (${testUser}, DATE '2099-07-01', TIME '08:00', 81.4);
+
     INSERT INTO goals.goal_phases (
       user_id, phase_type, gueltig_ab, actual_end_date, strategie_code,
       zielrate_pct_kg_woche, parameters
@@ -245,7 +250,10 @@ test('G-536 A3: Katalogwerte sind Defaults; persoenliche JSON-Overrides gewinnen
       'fat', fat_g,
       'factor', kalorienfaktor,
       'rate', zielrate_pct_kg_woche,
-      'jsonKcal', round(tdee * 1.20, 1),
+      'rateKcal', round(tdee + goals.kcal_delta_aus_zielrate(
+        zielrate_pct_kg_woche, body_weight_kg
+      ), 1),
+      'jsonFactorKcal', round(tdee * 1.20, 1),
       'catalogFactor', (SELECT tdee_modifier FROM goals.goal_strategies WHERE code = 'gain'),
       'hindernis', hindernis
     )
@@ -253,7 +261,8 @@ test('G-536 A3: Katalogwerte sind Defaults; persoenliche JSON-Overrides gewinnen
     ROLLBACK;
   `)
 
-  assert.equal(result.kcal, result.jsonKcal)
+  assert.equal(result.kcal, result.rateKcal)
+  assert.notEqual(result.kcal, result.jsonFactorKcal)
   assert.equal(result.protein, 244.2)
   assert.equal(result.fat, Math.round((result.kcal * 0.40 / 9) * 10) / 10)
   assert.equal(result.factor, 0.2)
@@ -269,6 +278,12 @@ test('G-536 A3: Instanzrate ueberschreibt die Katalograte, fehlende Strategie bl
     missingObstacle: string
   }>(`
     BEGIN;
+    INSERT INTO goals.body_measurements (
+      user_id, measurement_date, measurement_time, weight_kg
+    ) VALUES
+      (${testUser}, DATE '2099-08-01', TIME '08:00', 81.4),
+      (${testUser}, DATE '2099-08-16', TIME '08:00', 81.4);
+
     INSERT INTO goals.goal_phases (
       user_id, phase_type, gueltig_ab, actual_end_date, strategie_code,
       zielrate_pct_kg_woche

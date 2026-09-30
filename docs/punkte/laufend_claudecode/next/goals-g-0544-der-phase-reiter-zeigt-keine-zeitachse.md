@@ -5,7 +5,7 @@ modul: goals
 schwere: hoch
 angelegt: 2026-09-29
 
-braucht: [G-538, G-541, G-553]
+braucht: [G-538, G-541, G-553, G-554]
 kind_von: G-538
 
 quellen:
