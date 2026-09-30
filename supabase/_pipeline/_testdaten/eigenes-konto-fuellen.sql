@@ -449,13 +449,13 @@ INSERT INTO goals.goal_phases (
   id, user_id, goal_id, phase_type, variant, zielrate_pct_kg_woche,
   parameters, gueltig_ab,
   projected_end_date, actual_end_date, transitioned_from, recommended_next,
-  transition_reason
+  transition_reason, strategie_code
 )
 SELECT
   pm.neu, :'ziel'::uuid, gm.neu, phase_type, variant,
   zielrate_pct_kg_woche, parameters,
   gueltig_ab, projected_end_date, actual_end_date, transitioned_from,
-  recommended_next, transition_reason
+  recommended_next, transition_reason, strategie_code
 FROM goals.goal_phases gp
 JOIN phase_map pm ON pm.alt = gp.id
 LEFT JOIN goal_map gm ON gm.alt = gp.goal_id

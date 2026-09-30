@@ -13,7 +13,14 @@ BEGIN
     AND goal_id IS NULL
     AND actual_end_date IS NULL;
 
-  IF NOT EXISTS (
+  -- Im Neuaufbau sind die expliziten Testdaten noch nicht eingespielt.
+  -- Nur eine vorhandene Bestandszeile muss deshalb den nachgezogenen Zustand
+  -- tragen; ihre Abwesenheit ist der korrekte leere Sollzustand der Kette.
+  IF EXISTS (
+    SELECT 1
+    FROM goals.goal_phases
+    WHERE id = '31000000-0000-0000-0000-000000000201'
+  ) AND NOT EXISTS (
     SELECT 1
     FROM goals.goal_phases
     WHERE id = '31000000-0000-0000-0000-000000000201'

@@ -192,7 +192,10 @@ function installAuthStub(db: string): void {
     LANGUAGE sql
     STABLE
     AS $$
-      SELECT nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
+      SELECT coalesce(
+        nullif(current_setting('request.jwt.claim.sub', true), ''),
+        nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'sub'
+      )::uuid
     $$;
     GRANT USAGE ON SCHEMA auth TO authenticated, service_role;
     GRANT EXECUTE ON FUNCTION auth.uid() TO authenticated, service_role;

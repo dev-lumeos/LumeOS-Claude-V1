@@ -216,6 +216,7 @@ type GoalPhaseRow = {
   transitionedFrom: string | null
   recommendedNext: string | null
   transitionReason: string | null
+  strategyCode: string
 }
 
 type GoalMilestoneRow = {
@@ -1156,6 +1157,7 @@ const goalPhaseRows: GoalPhaseRow[] = [
     transitionedFrom: null,
     recommendedNext: 'lean_bulk',
     transitionReason: 'Ausgangswoche stabilisieren',
+    strategyCode: 'maintain',
   },
   {
     id: '31000000-0000-0000-0000-000000000102',
@@ -1171,6 +1173,7 @@ const goalPhaseRows: GoalPhaseRow[] = [
     transitionedFrom: 'maintenance',
     recommendedNext: 'mini_cut',
     transitionReason: 'Phasenwechsel im Testzeitraum',
+    strategyCode: 'lean_bulk',
   },
   {
     id: '31000000-0000-0000-0000-000000000201',
@@ -1182,10 +1185,11 @@ const goalPhaseRows: GoalPhaseRow[] = [
     parameters: '{"source":"GO-07 testdata","note":"Ungebundene Seedphase; wird in G-538 als Historie beendet"}',
     gueltigAb: relDate('2026-08-05'),
     projectedEndDate: null,
-    actualEndDate: null,
+    actualEndDate: '2026-09-29',
     transitionedFrom: null,
     recommendedNext: null,
-    transitionReason: 'Performance hat kein eigenes Phasenmapping',
+    transitionReason: 'Seed ohne Zielbindung, beendet bei der Strukturumstellung G-538',
+    strategyCode: 'maintain',
   },
 ]
 
@@ -2573,6 +2577,7 @@ const goalPhaseValues = goalPhaseRows.map(phase => tuple([
   phase.transitionedFrom,
   phase.recommendedNext,
   phase.transitionReason,
+  phase.strategyCode,
 ])).join(',\n')
 const goalMilestoneValues = goalMilestoneRows.map(milestone => tuple([
   milestone.id,
@@ -3592,7 +3597,8 @@ CREATE TEMP TABLE test_goal_phases (
   actual_end_date date,
   transitioned_from text,
   recommended_next text,
-  transition_reason text
+  transition_reason text,
+  strategie_code text
 ) ON COMMIT DROP;
 
 INSERT INTO test_goal_phases VALUES
@@ -3601,12 +3607,12 @@ ${goalPhaseValues};
 INSERT INTO goals.goal_phases (
   id, user_id, goal_id, phase_type, variant, zielrate_pct_kg_woche, parameters,
   gueltig_ab, projected_end_date, actual_end_date,
-  transitioned_from, recommended_next, transition_reason
+  transitioned_from, recommended_next, transition_reason, strategie_code
 )
 SELECT
   id, user_id, goal_id, phase_type, variant, zielrate_pct_kg_woche, parameters,
   gueltig_ab, projected_end_date, actual_end_date,
-  transitioned_from, recommended_next, transition_reason
+  transitioned_from, recommended_next, transition_reason, strategie_code
 FROM test_goal_phases;
 
 CREATE TEMP TABLE test_goal_milestones (
@@ -4078,7 +4084,7 @@ SELECT nutrition.food_preferences_write(
   '10000000-0000-0000-0000-000000000101'::uuid,
   jsonb_build_object(
     'diet_type', 'omnivore',
-    'allergies', jsonb_build_array('tree_nuts'),
+    'allergies', jsonb_build_array('nutrition:contains_nuts'),
     'intolerances', jsonb_build_array('lactose'),
     'general_exclusions', jsonb_build_array('ultra_processed'),
     'preferred_cuisines', jsonb_build_array('mediterranean'),
