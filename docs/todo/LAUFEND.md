@@ -1,22 +1,26 @@
 # Laufende Auftraege
 
-**Stand: 2026-09-29, 15:20**
+**Stand: 2026-09-30, 11:40**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Codex | G-538 | Phasen haengen an keinem Ziel — die Terminierung | **laeuft**, raus 29.09., 14:55 |
-| Claude Code | G-541 | das Vorschaupanel liest den Katalog | **laeuft**, raus 29.09., 14:35 |
-| Codex | G-543 | die Rechnung nimmt den Faktor statt der Rate | **vorbereitet** in `next/` |
+| Claude Code | G-557 | die Zuordnung der sechs Arten erreicht die Datenbank nicht | **laeuft**, raus 30.09. |
+| Codex | G-558 | `goal_phase_start` nimmt den Strategiecode nicht entgegen | **laeuft**, raus 30.09. |
+| Codex | G-545 | der Katalog hat die Form, nicht den Inhalt | **vorbereitet** in `next/` |
 | Claude Code | G-544 | der Phase-Reiter zeigt keine Zeitachse | **vorbereitet** in `next/` |
+| Claude Code | G-539 | der Phasen-Editor fehlt | **vorbereitet** in `next/` |
 | Codex | G-514 | die Modulverrechnung — Bau abgenommen | **offen**: nicht live eingespielt |
-| Claude Code | G-534 | der Phase-Reiter ist kein Planungswerkzeug | **offen**: Abnahme mit G-541 |
 
-## Was heute abgelegt wurde
+## Was am 30.09. abgelegt wurde
 
-    G-531  309db7e1   die Phase engine war unbedienbar
-    G-533  46b73f6f   Zielrate der Bestandsphasen, CHECK convalidated
-    G-536  46b73f6f   der Strategiekatalog, 17 Strategien live
-    G-537  offen      abgenommen, Code liegt uncommittet in apps/
+    G-543  20992639   kcal/Tag = 11 x Rate x Gewicht, A5 -> G-558
+    G-553  20992639   Ladefehler als eigener Zustand, Mockup sichtbar
+    G-554  8553e5b2   Phasenziele anlegbar, sechs Arten ueber subtype
+    G-556  89e71386   der Kettenlauf faellt nicht mehr am eigenen Check
+
+`[cmd]` **Die Kette ist wieder gruen** — `kettenlauf-status.json`:
+`passed`, Exit 0, 1401 s, 299 Schritte. Damit war das Repo nach zwei
+Tagen wieder committierbar; drei Commits sind seither durch.
 
 ## Die Bauordnung — `docs/ssot/130-goals-bauordnung.md`
 
@@ -31,10 +35,14 @@ nicht auf einem eigenen Objekt. Sechs Ebenen:
 
     1  Ziele                mehrere, messbar, verknuepfte Module   G-537 ✓
     2  Strategiekatalog     17 ausgelieferte Definitionen          G-536 ✓
-    3  Terminierung         Ziel + Strategie + Zeitfenster    G-538, G-544
+    3  Terminierung         Ziel + Strategie + Zeitfenster  G-538 ✓, G-544
     4  Editor               persoenlicher Override, 12 Reiter      G-539
     5  Vorlagen             eigene und geteilte                    G-540
-    6  Automatik            Waechter, Wochenanpassung        G-520 ✓, G-543
+    6  Automatik            Waechter, Wochenanpassung        G-520 ✓, G-543 ✓
+
+`[cmd]` **Anlegen steht seit G-554**, aber die sechs Arten fallen beim
+Speichern noch auf vier zusammen — G-557. **Die Strategie kommt in der
+Phase noch nicht an** — G-558. Erst dann ist Ebene 3 eingeloest.
 
 ---
 
@@ -48,26 +56,41 @@ nicht auf einem eigenen Objekt. Sechs Ebenen:
 
 ## Was auf Tom wartet
 
-    G-542      zwei Zahlen vorlaeufig gesetzt, Tobias klaert am 30.09.:
-               ist weight_change_target_percent pro Woche oder pro Monat,
-               und moderate_cut 12 oder 20 Wochen. Steht in 00-FRAGEN.md.
-    A-82       der Kettenwaechter prueft den Arbeitsbaum statt des
-               Staging - waehrend ein Agent in supabase/ baut, kann
-               niemand committen. Eine Zeile: git diff --cached.
-    C-554 A3   der Registerumtrag fuer die 70 unregistrierten Dateien
-    A-80       150 Wegwerf-Datenbanken, 207 GB. Die 49 mit "_final" sind
-               das Problem, nicht die Platte (6.726 GB frei).
-    A-79       backup/-Aufbewahrung, 3.958 MiB gegen ein Limit von 2.5 GiB
-    A-78       Waechter auf Bezeichner-Ueberschneidung
+    Tobias     G-542  ist die Rate pro Woche oder pro Monat
+               G-548  moderate_cut 12 oder 20 Wochen (vorlaeufig 20)
+               G-549  Protein und Fett in der Ladewoche
+               Alle drei stehen in 00-FRAGEN.md.
+    G-546      erfassen oder empfehlen: v2.0 fuehrt Peptide als
+               Phasenparameter. Das ist eine Entscheidung ueber das
+               Produkt, nicht ueber eine Tabelle.
     G-540      drei Entscheidungen zu Vorlagen: gehoeren geteilte
                Vorlagen mit Bewertung zu Goals oder zum Marketplace,
                nimmt "Share with coach" den Weg der Freigabeschicht,
                und wer pflegt die LumeOS-Vorlagen
+    G-557 A2   `weight` und `custom` bleiben Vorschlag (`unsicher: true`)
+               bis Tom entscheidet, ob sie eigene CHECK-Werte brauchen
+    A-77       zwei Verzeichnisse mit Proben laufen in keinem Lauf —
+               `tools/__tests__/` und `supabase/_pipeline/_validierung/`.
+               Schwere heute auf hoch: der Schaden ist belegt.
+    A-82       der Kettenwaechter prueft den Arbeitsbaum statt des
+               Staging - waehrend ein Agent in supabase/ baut, kann
+               niemand committen. Eine Zeile: git diff --cached.
+    C-554 A3   der Registerumtrag fuer die 70 unregistrierten Dateien
+    A-80       116 Wegwerf-Datenbanken. Die mit "_final" sind das
+               Problem, nicht die Platte.
+    A-79       backup/-Aufbewahrung, 3.958 MiB gegen ein Limit von 2.5 GiB
+    A-78       Waechter auf Bezeichner-Ueberschneidung
 
-`[cmd]` **G-521 A1 ist ohne Auftrag gefallen.** Die vier tragenden Zahlen
-ohne Seitenbeleg stehen in drei Quellen: `definitions.ts`, `GOAL_PHASES`
-und `PHASE_MODELS.md`. Sie gehoeren an den Katalogeintrag (G-536), nicht
-in `phase_rate_rules` — die bleibt leer und wird zum Fallen vorgelegt.
+## Neu angelegt, noch ohne Reihenfolge
+
+    G-547   der persoenliche Boden unter der Katalograte
+    G-550   Fett als g/kg Koerpergewicht statt als Prozentsatz
+    G-551   das Cardio-Modul — Tom hat entschieden, dass es kommt,
+            der Zeitpunkt ist offen
+    G-552   Trainings- und Erholungsphase
+    G-555   derselbe Ladefehler in medical und nutrition (Kind von G-553)
+    G-535   sechs Funktionen lesen den alten Sitzungsnamen
+            request.jwt.claim.sub (Singular) - coach, medical, nutrition
 
 ## Was ausdruecklich wartet
 
@@ -75,13 +98,6 @@ in `phase_rate_rules` — die bleibt leer und wird zum Fallen vorgelegt.
 wenn wir nicht mal in der lage sind grundlagen in der ui darzustellen."*
 
 Damit warten: Physique-Verhaeltnisse, Pose-Sessions, C-494, G-139.
-
-## Neu angelegt, noch ohne Reihenfolge
-
-    G-535   sechs Funktionen lesen den alten Sitzungsnamen
-            request.jwt.claim.sub (Singular) - coach, medical, nutrition.
-            Dieselbe Ursache, die die Phase engine unbedienbar machte.
-    A-82    siehe oben
 
 ---
 
@@ -141,6 +157,51 @@ melden EINMAL am Ende.
 
 ## Lehren
 
+`[cmd]` **Live repariert, Quelle nicht.** G-538/A1 verlangte den Nachzug
+des Bestands — der Schritt, der Max' Phase *erzeugt*, stand nicht im
+Auftrag. Der naechtliche Kettenlauf fiel zwei Tage lang am eigenen CHECK
+und blockierte jeden Commit im Repo. **Wer eine Regel einfuehrt, prueft
+sie gegen den SEED, nicht nur gegen den Bestand** — die Kette baut neu,
+sie repariert nicht.
+
+`[cmd]` **Eine Tabelle, die niemand schreibt, ist keine Zuordnung.**
+G-554 hat die sechs Arten richtig auf `goal_type` und `subtype`
+abgebildet; `git grep -cE "subtype|unterart"` findet 13 Treffer in
+`ziel-arten.ts` und **null** im Schreibweg. Beim Speichern fallen die
+sechs Knoepfe wieder auf vier zusammen. **Aus der Existenz einer Sache
+folgt nicht ihre Funktion** — das steht so in den Projektregeln und gilt
+auch fuer eine richtig gebaute Tabelle.
+
+`[cmd]` **Eine Probe, die nur von Hand laeuft, ist keine Gegenprobe.**
+`supabase/_pipeline/_validierung/` liegt in keinem Gate: keine
+`package.json` nennt es, die Kette ruft genau ein Skript daraus auf, und
+die G-536-Probe wirft ohne Umgebungsvariable. Der Schaden ist belegt —
+zwei Rechnungstests erwarten seit G-543 die alte Semantik, und **nichts
+wurde rot.** Im Bericht hiessen sie „dauerhaft". Das ist A-77, zweiter
+Ort, Schwere hoch.
+
+`[cmd]` **Ein `[cmd]` mit falscher Zahl ist schlimmer als ein
+`[annahme]`.** `ziel-arten.ts:116` sagt `2 Zeilen im Seed`, gemessen sind
+**4** — und der Bericht an Tom sagte 4. Nur `[cmd]` darf zur Regel
+werden; eine falsche Zahl unter dieser Marke wird geglaubt.
+
+`[cmd]` **Ein Waechter mit `if` davor ist abschaltbar.** Die Forderung
+nach `berechnePace(` haengt an
+`if (/PACE_TEXT|data-ziel-pace/.test(karten))`: wer die Markierung
+umbenennt, schaltet die Pruefung stumm. Derselbe Agent hat genau diese
+Blindheit an seinen eigenen zwei Waechtern gefunden und dort behoben.
+
+`[cmd]` **`git status --short` lesen, nicht `--name-only`.** Der Index
+trug G-554 noch in `next/`, der Arbeitsbaum in `laufend_` — `AD` im
+vollen Status, unsichtbar in der Dateiliste. Ein Commit haette den
+Auftrag an beiden Orten verewigt. **Dafuer steht die Regel da.**
+
+`[cmd]` **Pythons Standardausgabe ist unter Windows cp1252.** Ein
+Commit-Aufruf lief durch, und erst das `print` des Haken-Zeichens warf
+`UnicodeEncodeError` — die Fehlermeldung sah aus wie ein
+fehlgeschlagener Commit. **`set PYTHONIOENCODING=utf-8` vor jedem Aufruf,
+der Werkzeugausgabe weitergibt.**
+
 `[cmd]` **Der Orchestrator plante Speicherorte statt Artefakte.** E-1,
 G-511, G-529, G-531, G-533 und G-520 haben alle geregelt, **wo eine Zahl
 liegt**. Keiner hat geregelt, **was Tom sieht und tut**. Die Bauordnung
@@ -174,7 +235,6 @@ interpoliert in doppelten Anfuehrungszeichen.** Ein Commit mit sechs `-m`
 wurde zu sechs Pfadangaben (`error: pathspec 'Claude' did not match`),
 und `$$goals$$` wurde zu `goals`. **Commit-Nachrichten gehen als
 BOM-freie Datei ueber `-F`, SQL-Literale ueber `chr(39)` aus Python.**
-Das ist die sechste und siebte Fehlmessung derselben Art heute.
 
 `[cmd]` **Ein Waechter, der nur eine Zahl meldet, zwingt zum Raten.**
 Der Zwei-Wahrheiten-Waechter nennt jetzt die Posten und stellt die Frage.
@@ -186,6 +246,10 @@ Tabellen dort eingetragen ergab zehn neue Befunde.
 `[cmd]` **Neun Waechter, nicht vier** — `punkte`, `zyklus`,
 `sammelfragen`, `nummern`, `specs`, `quellen`, `encoding`, `fragen`,
 `kettenlauf`. Drei von vier war schon kein Lauf.
+
+`[cmd]` **`pnpm gate` gruen heisst nicht, dass das Gate gruen ist.** Die
+18 Turborepo-Aufgaben und die neun Waechter im Vorcommit-Haken sind zwei
+verschiedene Pruefungen. Ein Bericht nennt beide Zahlen.
 
 `[cmd]` **Der Commit-Betreff ist kein Signal dafuer, was erledigt
 wurde.** G-514s Code kam unter `goals(G-531)` herein, C-546 und C-551
@@ -213,7 +277,7 @@ bewiesen, dass nichts da ist.**
 
 `[cmd]` **Eine Regel, die nirgends nachgezaehlt wird, wird zur
 Empfehlung.** „Wegwerf-Datenbank, danach verwerfen" steht in den
-Projektregeln; 150 Datenbanken stehen in `pg_database`. Das ist A-80.
+Projektregeln; 116 Datenbanken stehen in `pg_database`. Das ist A-80.
 
 ---
 

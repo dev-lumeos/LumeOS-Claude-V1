@@ -6,7 +6,7 @@ Hand aendern.**
 `[read]` **Es ersetzt das Lesen nicht** ? **es sagt, WO gelesen
 werden muss.**
 
-`[cmd]` **Stand 2026-09-29: 215 Tabellen, 103 in Specs genannt, 53 ohne Entsprechung, 164 ohne Erwaehnung.**
+`[cmd]` **Stand 2026-09-30: 215 Tabellen, 103 in Specs genannt, 53 ohne Entsprechung, 164 ohne Erwaehnung.**
 
 ## Die Spec nennt, das Schema hat nicht
 

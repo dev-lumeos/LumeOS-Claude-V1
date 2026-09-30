@@ -15,6 +15,8 @@ quellen:
   - docs/ssot/130-goals-bauordnung.md
   - docs/punkte/00-INDEX.md
 
+erledigt: 2026-09-30
+commit: 8553e5b2
 beruehrt:
   tabellen:
     - goals.user_goals
@@ -444,3 +446,59 @@ Karte zeigt die Pillen, sobald etwas drinsteht. **Kein Platzhalter.**
 `[read]` **Die zwei Zuordnungen `weight` und `custom` warten auf eine
 Entscheidung** — sie stehen als Vorschlag im Code und sind als solcher
 gekennzeichnet.
+
+## Abnahme 2026-09-30 — `8553e5b2`
+
+`[cmd]` **Das Anlegen steht.** Gate gruen, 2.243 Pruefungen, 18 von 18
+Aufgaben. Die Waechter liegen unter `apps/web/src/**/__tests__/` und
+laufen damit wirklich im Gate — anders als die Datenbankproben in
+`_validierung/` (A-77).
+
+`[cmd]` **`ziel-arten.ts` ist die einzige Quelle der Zuordnung**, und
+die zwei offenen Faelle sind im Code als Vorschlag gekennzeichnet
+(`unsicher: true` bei `weight` und `custom`). Der Auftrag lautete
+melden statt still waehlen — das ist eingehalten.
+
+`[cmd]` **Der fremde Waechter ist nicht entschaerft, aber schmaler
+geworden.** Er verbot bisher drei Woerter in vier Dateien; jetzt
+verbietet er `deltaVariant` und acht Urteilswendungen und verlangt
+`berechnePace(`. Das Verbot des Bewertens bleibt, die Pruefung der
+Wortliste ist aber eine offene Aufzaehlung statt einer geschlossenen
+Regel. **Und die Forderung nach der Rechnung haengt an einer
+Bedingung** (`if (/PACE_TEXT|data-ziel-pace/.test(karten))`) — wer die
+Markierung umbenennt, schaltet sie stumm ab. Das ist dieselbe Blindheit,
+die er an seinen eigenen zwei Waechtern selbst gefunden und dort behoben
+hat. Geht nach G-557/A3.
+
+## Zwei Befunde der Abnahme
+
+`[cmd]` **Die gemeldete Zahl stimmt, der Kommentar im Code nicht.**
+Selbst gezaehlt in `goals.user_goals` am 2026-09-30:
+
+    body_composition | cut               | 2
+    body_composition | gain_muscle       | 2
+    lifestyle        | cardio_frequency  | 2
+    performance      | strength          | 4
+    performance      | training_capacity | 1
+
+`performance/strength` traegt **4** Zeilen. Der Bericht sagt 4, aber
+`ziel-arten.ts:116` sagt **2** — und traegt die Marke `[cmd]`. Eine
+falsche `[cmd]`-Zahl ist der schwerere Fall, weil nur `[cmd]` zur Regel
+werden darf.
+
+`[cmd]` **Die Zuordnung erreicht die Datenbank nicht.** Das ist der
+schwerere Befund und der Grund fuer G-557:
+
+    git grep -cE "subtype|unterart" -- .../ziel-arten.ts        13
+    git grep -cE "subtype|unterart" -- schreiben.ts ziel-regeln.ts   0
+
+Beide Richtungen belegt: derselbe Aufruf findet 13 Treffer in der
+Zuordnungsdatei und **null** im Schreibweg. `ZielNeu` fuehrt kein
+`subtype`, `schreiben.ts` schreibt keines, `phasenziel-write.ts` und
+`ziel-aktionen.ts` reichen keines durch. **Die sechs Knoepfe fallen beim
+Speichern wieder auf vier `goal_type`-Werte zusammen** — `strength` und
+`performance` werden ununterscheidbar, `habit` und `custom` ebenso. Die
+Tabelle ist gebaut und richtig, sie wird nur nicht benutzt.
+
+`[read]` **Der Auftrag ist damit erfuellt und doch nicht eingeloest:**
+anlegen kann Tom jetzt, aber nicht sechs Arten — das ist G-557.

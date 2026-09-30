@@ -13,6 +13,8 @@ kind_von: G-538
 quellen:
   - docs/punkte/00-INDEX.md
 
+erledigt: 2026-09-30
+commit: 89e71386
 beruehrt:
   tabellen:
     - goals.goal_phases
@@ -126,3 +128,50 @@ Log gelesen ist. `[cmd]` 116 Wegwerf-Datenbanken stehen noch (A-80).
 
 `[read]` **Reihenfolge: VOR G-543.** Dieser Punkt blockiert jeden Commit im
 ganzen Repo — auch die Abnahmen, die auf ihn warten.
+
+## Abnahme 2026-09-30 — `89e71386`
+
+`[cmd]` **Der Kettenlauf ist gruen.** `backup/_manifests/kettenlauf-status.json`
+selbst gelesen: `"status": "passed"`, `"exit_code": 0`, 1401 s,
+Datenbank `lumeos_tageskette_20260930_g556`. Damit ist `punkte-pruefen`
+wieder gruen und das Repo committierbar — drei Commits sind seither
+durchgelaufen.
+
+`[cmd]` **Die Regel wurde nicht geschwaecht, um gruen zu werden.** Das
+war die Frage, mit der ich die Datei gelesen habe. `538_goal_phase_targeting_data.sql`
+macht nur die Bestandspruefung bedingt (`IF EXISTS ... AND NOT EXISTS`),
+waehrend die zweite Pruefung — *keine offene Phase ohne Ziel* —
+unbedingt bleibt und im leeren Neuaufbau genauso greift. Die
+Invariante ist ungebrochen; nur die Erwartung an eine einzelne
+Bestandszeile ist an den Neuaufbau angepasst.
+
+`[cmd]` **Live nachgezaehlt**, nicht dem Bericht abgelesen:
+5 Phasen, 4 davon mit `goal_id`, genau **eine** offene, alle **5** mit
+`strategie_code`. Die eine ohne Ziel ist Max' beendete Seedphase — vom
+CHECK erlaubt, weil beendet. Ziele je Konto: dev 5, tom.seed 5,
+max.seed 1 = 11.
+
+## Was diese Abnahme mitnimmt
+
+`[cmd]` **Die Ursache lag bei mir**, nicht bei Codex: mein Auftrag
+G-538/A1 verlangte den Nachzug des Bestands und nicht den Schritt, der
+die Zeile *erzeugt*. Fehlerklasse **,,live repariert, Quelle nicht"** —
+sie ist in `docs/ssot/00-LEHREN.md` einzutragen, falls sie dort noch
+fehlt.
+
+`[cmd]` **A3 ist beantwortet, aber die Antwort taugt weniger als sie
+klingt:** die genannten Gegenproben liegen in
+`supabase/_pipeline/_validierung/` — und **dieses Verzeichnis laeuft in
+keinem Gate.** Gemessen: keine `package.json` im Repo nennt
+`_validierung` oder `LUMEOS_G536_DATABASE`; die Kette ruft genau ein
+Skript daraus auf (`kette-ausfuehren.ts:30`,
+`schema-vollstaendigkeit-pruefen.ts`). `goals-g536-goal-strategies.test.ts:7`
+wirft ohne Umgebungsvariable, kann also gar nicht im Gate liegen.
+**Das ist die Ursache dafuer, dass zwei G-536-Rechnungstests die
+Semantik vor G-543 erwarten und trotzdem nichts rot wurde.** Derselbe
+Befund wie A-77, nur am zweiten Ort — dort nachgetragen, kein neuer
+Punkt.
+
+`[offen]` Der veraltete kontenuebergreifende Kopierlauf
+(`eigenes-konto-fuellen.sql`, Medical/Nutrition) bleibt als Befund
+stehen und wird ein eigener Punkt, sobald jemand ihn braucht.

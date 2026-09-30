@@ -2,7 +2,7 @@
 nr: A-77
 typ: fehler
 modul: quer
-schwere: mittel
+schwere: hoch
 angelegt: 2026-09-28
 
 quellen:
@@ -100,3 +100,37 @@ laufen im Gate, vier haben einen Test. **Das ist kein Befund fuer
 diesen Punkt** — ein Test je Waechter waere eine eigene Aufgabe und
 vermutlich nicht ueberall sinnvoll. Festgehalten ist nur, dass die
 Zahl 4 von 25 ist und niemand sie fuer vollstaendig halten soll.
+
+## Nachtrag 2026-09-30 — derselbe Befund am zweiten Ort
+
+`[cmd]` **`supabase/_pipeline/_validierung/` laeuft in keinem Gate.**
+Dieselbe Ursache wie oben: `turbo run test` greift nur in die
+Arbeitsbereiche unter `apps/` und `packages/`, und `supabase/` ist
+keiner. Gemessen am 2026-09-30:
+
+- Keine `package.json` im Repo nennt `_validierung` oder
+  `LUMEOS_G536_DATABASE`. Die einzigen zwei Treffer liegen in einem
+  alten Backup-Manifest.
+- Die Kette ruft genau **ein** Skript daraus auf:
+  `kette-ausfuehren.ts:30` -> `schema-vollstaendigkeit-pruefen.ts`.
+- `goals-g536-goal-strategies.test.ts:7` wirft ohne
+  `LUMEOS_G536_DATABASE` eine Ausnahme. Eine Datei, die ohne
+  Umgebungsvariable scheitert, **kann** nicht im Gate liegen.
+
+`[cmd]` **Der Beleg, dass das schon geschadet hat:** Codex hat am
+2026-09-30 zu G-556 gemeldet, dass zwei G-536-Rechnungstests noch die
+Semantik vor G-543 erwarten — **und dass das Gate trotzdem gruen ist.**
+Genau das ist der Schaden: eine Semantikaenderung hat zwei Proben
+ungueltig gemacht, und nichts wurde rot. Im selben Bericht heissen die
+dortigen Gegenproben ,,dauerhaft". Sie sind es nicht.
+
+`[read]` **Damit ist A-77 nicht mehr ,,mittel".** Es geht nicht um vier
+Werkzeugtests, sondern um zwei Verzeichnisse mit Proben, auf die sich
+Berichte berufen, waehrend sie nur laufen, wenn jemand sie von Hand
+aufruft. **Schwere auf hoch.**
+
+`[offen]` Wer diesen Punkt uebernimmt, entscheidet dabei auch, ob die
+Datenbankproben ins Gate koennen (sie brauchen eine Wegwerf-Datenbank,
+das Gate hat keine) oder ob sie in den Kettenlauf gehoeren, der eine
+hat. Die zweite Antwort ist die wahrscheinlichere — der Kettenlauf baut
+die Datenbank ohnehin und laeuft naechtlich.

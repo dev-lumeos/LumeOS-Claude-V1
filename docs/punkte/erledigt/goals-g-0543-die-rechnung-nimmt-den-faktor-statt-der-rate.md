@@ -15,6 +15,8 @@ quellen:
   - docs/specs/Goals/PHASE_MODELS.md
   - docs/punkte/00-INDEX.md
 
+erledigt: 2026-09-30
+commit: 20992639
 beruehrt:
   tabellen:
     - goals.goal_strategies
@@ -329,3 +331,19 @@ Berichte: die Turbo-Zahl und der Waechterstand sind zwei Angaben.
 
 **Der Punkt bleibt in `laufend_codex/`**, bis ein Commit moeglich ist — und
 das ist er erst nach **G-556**.
+
+## Hash 2026-09-30 — `20992639`
+
+`[cmd]` Der Commit lag bis heute an G-556 fest: `punkte-pruefen` war rot,
+weil der naechtliche Kettenlauf gescheitert war. Seit `89e71386` ist die
+Kette gruen, der Commit ist durch.
+
+`[cmd]` **A5 bleibt offen und wandert in einen eigenen Punkt:** G-558 —
+`goal_phase_start` nimmt den Strategiecode nicht entgegen
+(7 Parameter, selbst gelesen aus `pg_get_function_arguments`). Ein
+offener Unterpunkt in einem abgeschlossenen Punkt ist keine Ablage.
+
+`[cmd]` **Zur Beschriftung im Bericht:** ,,Delta von Hand: 230,3" ist
+der Zuschlag der Rate auf den TDEE, nicht der Unterschied der beiden
+Wege. Der Unterschied ist **7,1 kcal** (2.462,1 gegen 2.455,0). Die
+Probe selbst ist gueltig, Gleich- und Auseinanderlauf liegen beide vor.

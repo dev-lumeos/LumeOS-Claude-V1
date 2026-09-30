@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 266 |
-| `laufend_codex` | 4 |
-| `laufend_claudecode` | 4 |
-| `erledigt` | 588 |
-| **gesamt** | **862** |
+| `laufend_codex` | 3 |
+| `laufend_claudecode` | 3 |
+| `erledigt` | 592 |
+| **gesamt** | **864** |
 
 ## medical — 49
 
@@ -573,9 +573,9 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 53
+## goals — 55
 
-### beauftragbar — 43
+### beauftragbar — 48
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -617,13 +617,18 @@
 | `G-539` | fehler | mittel | [Der Phasen-Editor fehlt — „editieren" aus Toms Satz](laufend_claudecode/goals-g-0539-der-phasen-editor-fehlt.md) | vorbereitet (claudecode) | — | — |
 | `G-541` | fehler | hoch | [Das Vorschaupanel liest den Strategiekatalog](erledigt/goals-g-0541-das-vorschaupanel-liest-den-katalog.md) | erledigt | — | G-545 |
 | `G-542` | entscheidung | hoch | [Die Zielrate — Einheit geklaert, eine Frage bleibt](todos/goals-g-0542-die-einheit-der-zielrate.md) | offen | — | G-548, G-549 |
+| `G-544` | fehler | hoch | [Der Phase-Reiter zeigt Phasentypen statt einer Zeitachse](laufend_claudecode/goals-g-0544-der-phase-reiter-zeigt-keine-zeitachse.md) | vorbereitet (claudecode) | — | — |
 | `G-545` | fehler | hoch | [Der Katalog hat die Form, nicht den Inhalt](laufend_codex/goals-g-0545-der-katalog-hat-die-form-nicht-den-inhalt.md) | vorbereitet (codex) | — | G-550 |
 | `G-548` | entscheidung | mittel | [Wie lange darf eine moderate Diaet laufen?](todos/goals-g-0548-hoechstdauer-moderate-cut.md) | offen | — | — |
 | `G-549` | entscheidung | mittel | [Wieviel Protein weicht in der Ladewoche?](todos/goals-g-0549-protein-in-der-ladewoche.md) | offen | — | — |
-| `G-553` | fehler | hoch | [Ein Tokenfehler sieht aus wie ein Datenfehler — und das Mockup fehlt](laufend_claudecode/goals-g-0553-ein-tokenfehler-sieht-aus-wie-ein-datenfehler.md) | laeuft (claudecode) | — | G-555 |
-| `G-556` | fehler | hoch | [Der Kettenlauf faellt, und er blockiert jeden Commit im Repo](laufend_codex/goals-g-0556-der-kettenlauf-faellt-am-eigenen-check.md) | laeuft (codex) | — | — |
+| `G-550` | fehler | hoch | [Fett steht als Prozentsatz, gebraucht wird eine Menge](todos/goals-g-0550-fett-als-prozentsatz-statt-als-menge.md) | offen | — | — |
+| `G-553` | fehler | hoch | [Ein Tokenfehler sieht aus wie ein Datenfehler — und das Mockup fehlt](erledigt/goals-g-0553-ein-tokenfehler-sieht-aus-wie-ein-datenfehler.md) | erledigt | — | G-555 |
+| `G-554` | fehler | hoch | [Phasenziele sind nicht anlegbar, und der Reiter ist nicht nach Vorgabe](erledigt/goals-g-0554-phasenziele-sind-nicht-anlegbar.md) | erledigt | — | G-557 |
+| `G-556` | fehler | hoch | [Der Kettenlauf faellt, und er blockiert jeden Commit im Repo](erledigt/goals-g-0556-der-kettenlauf-faellt-am-eigenen-check.md) | erledigt | — | — |
+| `G-557` | fehler | hoch | [Die Zuordnung der sechs Arten erreicht die Datenbank nicht](laufend_claudecode/goals-g-0557-die-zuordnung-erreicht-die-datenbank-nicht.md) | laeuft (claudecode) | — | — |
+| `G-558` | fehler | hoch | [`goal_phase_start` nimmt den Strategiecode nicht entgegen](laufend_codex/goals-g-0558-goal-phase-start-nimmt-den-strategiecode-nicht.md) | laeuft (codex) | — | — |
 
-### wartet auf Blocker — 10
+### wartet auf Blocker — 7
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -632,11 +637,8 @@
 | `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](todos/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | offen | G-521 | G-531, G-533 |
 | `G-530` | feature | hoch | [contest_prep und expert_bb_annual brauchen eine eigene Struktur](todos/goals-g-0530-wettkampfvorbereitung-braucht-eine-eigene-struktur.md) | offen | G-529 | — |
 | `G-540` | befund | niedrig | [Vorlagen fuer Phasenplaene — die fuenfte Ebene](todos/goals-g-0540-vorlagen-fuer-phasenplaene.md) | offen | G-539 | — |
-| `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](laufend_codex/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | laeuft (codex) | G-542 | — |
-| `G-544` | fehler | hoch | [Der Phase-Reiter zeigt Phasentypen statt einer Zeitachse](laufend_claudecode/goals-g-0544-der-phase-reiter-zeigt-keine-zeitachse.md) | vorbereitet (claudecode) | G-553, G-554 | — |
+| `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558 |
 | `G-547` | befund | mittel | [Die persoenliche Untergrenze hat keinen Ort](todos/goals-g-0547-die-persoenliche-untergrenze-hat-keinen-ort.md) | offen | G-545 | — |
-| `G-550` | fehler | hoch | [Fett steht als Prozentsatz, gebraucht wird eine Menge](todos/goals-g-0550-fett-als-prozentsatz-statt-als-menge.md) | offen | G-543 | — |
-| `G-554` | fehler | hoch | [Phasenziele sind nicht anlegbar, und der Reiter ist nicht nach Vorgabe](laufend_claudecode/goals-g-0554-phasenziele-sind-nicht-anlegbar.md) | laeuft (claudecode) | G-553 | — |
 
 ## coach — 57
 
@@ -702,7 +704,7 @@
 
 ## quer — 217
 
-### beauftragbar — 215
+### beauftragbar — 216
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -746,7 +748,7 @@
 | `A-74` | befund | hoch | [die SSOT ist zwoelf Tage alt](todos/quer-a-0074-die-ssot-ist-zwoelf-tage-alt.md) | offen | — | A-75 |
 | `A-75` | befund | hoch | [Auftraege werden nicht gegen die Quellen geprueft, und nichts wird rot](todos/quer-a-0075-auftraege-werden-nicht-gegen-die-quellen-geprueft.md) | offen | — | A-78 |
 | `A-76` | befund | hoch | [die Specs beschreiben ein Repo, das es hier nicht gibt](todos/quer-a-0076-die-specs-beschreiben-das-vorgaengerrepo-als-fertig.md) | offen | — | — |
-| `A-77` | fehler | mittel | [vier Werkzeugtests liefen nirgends](todos/quer-a-0077-werkzeugtests-liefen-nirgends.md) | offen | — | — |
+| `A-77` | fehler | hoch | [vier Werkzeugtests liefen nirgends](todos/quer-a-0077-werkzeugtests-liefen-nirgends.md) | offen | — | — |
 | `A-78` | befund | mittel | [ein neuer Punkt wird nicht gegen den Bestand geprueft](todos/quer-a-0078-punkte-werden-nicht-gegen-den-bestand-geprueft.md) | offen | — | — |
 | `A-79` | befund | mittel | [jeder Auftrag legt 452 MiB ab, auch wenn nichts eingespielt wird](todos/quer-a-0079-jeder-auftrag-legt-452-mib-ab.md) | offen | — | — |
 | `A-80` | befund | mittel | [150 Wegwerf-Datenbanken, und 49 davon heissen "final"](todos/quer-a-0080-hundertfuenfzig-wegwerf-datenbanken.md) | offen | — | — |
@@ -921,13 +923,13 @@
 | `G-535` | fehler | hoch | [Sechs Funktionen lesen den alten Sitzungsnamen](todos/quer-g-0535-sechs-funktionen-lesen-den-alten-sitzungsnamen.md) | offen | — | — |
 | `G-546` | entscheidung | hoch | [Erfassen oder empfehlen — die Grenze bei Substanzprotokollen](todos/quer-g-0546-erfassen-oder-empfehlen.md) | offen | — | — |
 | `G-551` | befund | hoch | [Cardio fehlt als Modul ganz — und damit die Hälfte der Steuerung](todos/quer-g-0551-cardio-fehlt-als-modul-ganz.md) | offen | — | — |
+| `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](todos/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | offen | — | — |
 
-### wartet auf Blocker — 2
+### wartet auf Blocker — 1
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
 | `G-552` | befund | mittel | [Training und Erholung kennen die Phase nicht](todos/quer-g-0552-phasenparameter-fuer-training-und-erholung.md) | offen | G-545 | — |
-| `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](todos/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | offen | G-553 | — |
 
 ## buddy — 1
 

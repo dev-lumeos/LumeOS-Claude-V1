@@ -14,6 +14,8 @@ entscheidung: E-68
 quellen:
   - docs/punkte/00-INDEX.md
 
+erledigt: 2026-09-30
+commit: 20992639
 beruehrt:
   tabellen:
     - goals.body_measurements
@@ -344,3 +346,15 @@ an einem `# fail 1` — **und dieser Fehlschlag war Claude Codes Zwischenstand,
 weil ich mitten in seine Arbeit gemessen habe.** Die Lehre stand schon in
 `LAUFEND.md`: waehrend ein Agent in einem Bereich schreibt, misst dort
 niemand. **Mein Commit-Hook misst dort.**
+
+## Hash 2026-09-30 — `20992639`
+
+`[cmd]` Der Commit lag an G-556 fest (`punkte-pruefen` rot, weil der
+naechtliche Kettenlauf gescheitert war). Seit `89e71386` ist die Kette
+gruen. `ladefehler.ts` und das wieder sichtbare Mockup sind drin.
+
+`[cmd]` **Der Folgebefund G-555 bleibt offen** — derselbe verschluckte
+Ladefehler in `medical/tab-biomarker.tsx` und
+`nutrition/tab-vorlieben.tsx`. Bei Medical ist es ein `early return`,
+also strenger als ein Ternaer: `MedImportReferenz` auf Zeile 399 wird
+nie erreicht.
