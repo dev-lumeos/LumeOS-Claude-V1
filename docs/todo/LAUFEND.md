@@ -1,16 +1,15 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-01, 09:35**
+**Stand: 2026-10-01, 10:15**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-565 | die Einheit ist eine Nutzerwahl | **laeuft**, raus 01.10. |
+| Claude Code | G-569 | G-520 prueft Kilogramm in der Anwendung | **laeuft**, raus 01.10. |
 | Codex | G-535 | sechs Funktionen lesen den alten Sitzungsnamen | **laeuft**, raus 01.10. |
-| Claude Code | G-565 | die Einheit ist eine Nutzerwahl | **bereit** in `next/` |
-| Claude Code | G-539 | der Phasen-Editor fehlt | **vorbereitet** in `next/` |
 | Codex | G-514 | die Modulverrechnung — Bau abgenommen | **offen**: nicht live eingespielt |
+| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 
-## Was am 30.09. abgelegt wurde
+## Was am 30.09. und 01.10. abgelegt wurde
 
     G-543  20992639   kcal/Tag = 11 x Rate x Gewicht, A5 -> G-558
     G-553  20992639   Ladefehler als eigener Zustand, Mockup sichtbar
@@ -28,10 +27,12 @@
     A-82   724cfd29   der Kettenwaechter liest das Staging
     A-84   724cfd29   der Pruefumfang haengt am Staging
     G-561  605a27d8   die Katalogwaechter pruefen Prozent, 6 Zeilen
+    G-568  f3088a98   Rueckfall auf die Zweiparameter-Fassung (Bruecke)
+    G-565  bdaea479   der Nutzer waehlt die Einheit, gespeichert die Rate
 
 `[cmd]` **Die Kette ist wieder gruen** — `kettenlauf-status.json`:
 `passed`, Exit 0, 1401 s, 299 Schritte. Damit war das Repo nach zwei
-Tagen wieder committierbar; drei Commits sind seither durch.
+Tagen wieder committierbar; fuenf Commits sind seither durch.
 
 ## Der Commit-Takt — gemessen 2026-10-01
 
@@ -47,10 +48,15 @@ auf:** schreiben, committen, Logende lesen. Wird er rot, korrigieren.
 Derselbe Aufwand, ohne den Vorlauf.
 
 `[cmd]` **Ein Commit laeuft abgesetzt**, weil der Haken laenger braucht
-als die Bruecke wartet: `subprocess.Popen` mit
-`DETACHED_PROCESS|CREATE_NO_WINDOW`, Ausgabe nach `.git/ORCH_COMMIT.log`,
+als die Bruecke wartet: Ausgabe nach `.git/ORCH_COMMIT.log` umleiten,
 danach `git log` und das Logende lesen. **Ein Zeitablauf der Bruecke ist
 kein gescheiterter Commit.**
+
+`[cmd]` **Und die Ausgabe gehoert in eine Datei, nicht in die Antwort.**
+Ein `git commit` ohne Umleitung lieferte am 01.10. 763.601 Zeichen in
+16.306 Zeilen — der vollstaendige Gate-Lauf — und sprengte die Grenze der
+Bruecke. **Der Commit war durch; nur das Ergebnis war nicht lesbar.**
+`> .git\ORCH_COMMIT.log 2>&1`, dann `git log --oneline -1`.
 
 `[cmd]` **Die drei Waechter, die am Dokument-Commit nicht haengen**, und
 was sie kosten: `encoding-pruefen` 15,6 s ueber 21.692 Dateien,
@@ -59,18 +65,25 @@ was sie kosten: `encoding-pruefen` 15,6 s ueber 21.692 Dateien,
 
 ---
 
-## Die Einspielreihenfolge — frei seit 2026-10-01, 09:10
+## Die Einspielreihenfolge — und sie ist seit heute dringend
 
 `[cmd]` **Zwei Datenbankaenderungen sind gebaut und NICHT live. Ihre
-Anwendungsseite steht jetzt fuer beide:**
+Anwendungsseite steht fuer beide:**
 
     G-559   phase_am liefert alle Phasen, phase_eines_ziels_am eine
             Anwendung: G-564  (6ae14c93)   FERTIG
     G-563   berechne_zielwerte(p_user_id, p_goal_id, p_stichtag)
             Anwendung: G-568  (57b88381)   FERTIG
 
-`[read]` **Damit koennen beide zusammen eingespielt werden.** Die
-Reihenfolge Anwendung-zuerst ist eingehalten.
+`[cmd]` **Am 01.10. ist die Goals-Seite daran ausgefallen.** G-568 reicht
+bei genau einer offenen Phase ein `p_goal_id` durch; live steht nur die
+Zweiparameter-Fassung. Am Schirm stand *„Could not find the function
+goals.berechne_zielwerte(p_goal_id, p_stichtag, p_user_id)"*. **Claude
+Code hat es beim Bildnachweis zu G-565 gefunden und ueberbrueckt**
+(`f3088a98`): ein Rueckfall, der ausschliesslich bei `PGRST202` greift.
+
+`[read]` **Die Bruecke ist G-570 und gehoert nach dem Einspielen weg** —
+sonst verdeckt sie genau den Fehler, den sie heute ueberbrueckt.
 
 `[cmd]` **Was bis dahin falsch ist, und zwar leise:**
 
@@ -103,14 +116,18 @@ nicht auf einem eigenen Objekt. Sechs Ebenen:
 
     1  Ziele                mehrere, messbar, verknuepfte Module   G-537 ✓
     2  Strategiekatalog     17 ausgelieferte Definitionen          G-536 ✓
-    3  Terminierung         Ziel + Strategie + Zeitfenster  G-538 ✓, G-544
-    4  Editor               persoenlicher Override, 12 Reiter      G-539
+    3  Terminierung         Ziel + Strategie + Zeitfenster  G-538 ✓, G-544 ✓
+    4  Editor               persoenlicher Override, 12 Reiter      G-539 ✓
     5  Vorlagen             eigene und geteilte                    G-540
-    6  Automatik            Waechter, Wochenanpassung        G-520 ✓, G-543 ✓
+    6  Automatik            Waechter, Wochenanpassung  G-520 ✓, G-543 ✓, G-569
 
-`[cmd]` **Anlegen steht seit G-554**, aber die sechs Arten fallen beim
-Speichern noch auf vier zusammen — G-557. **Die Strategie kommt in der
-Phase noch nicht an** — G-558. Erst dann ist Ebene 3 eingeloest.
+`[cmd]` **Ebene 3 ist eingeloest** — Anlegen seit G-554, die sechs Arten
+kommen seit G-557 an, die Strategie seit G-558. **Ebene 6 ist halb:** die
+Wochenanpassung rechnet, prueft aber absolut in Kilogramm (G-569).
+
+`[cmd]` **Und die Einheit ist seit G-565 eine Wahl des Nutzers** — ein
+Knopfpaar an den drei Stellen mit Gewicht, der Katalog bleibt in Prozent,
+gespeichert wird die Rate (E-83).
 
 ---
 
@@ -124,27 +141,38 @@ Phase noch nicht an** — G-558. Erst dann ist Ebene 3 eingeloest.
 
 ## Was auf Tom wartet
 
-    Tobias     G-542  ist die Rate pro Woche oder pro Monat
-               G-548  moderate_cut 12 oder 20 Wochen (vorlaeufig 20)
-               G-549  Protein und Fett in der Ladewoche
-               Alle drei stehen in 00-FRAGEN.md.
-    G-546      erfassen oder empfehlen: v2.0 fuehrt Peptide als
-               Phasenparameter. Das ist eine Entscheidung ueber das
-               Produkt, nicht ueber eine Tabelle.
-    G-540      drei Entscheidungen zu Vorlagen: gehoeren geteilte
-               Vorlagen mit Bewertung zu Goals oder zum Marketplace,
-               nimmt "Share with coach" den Weg der Freigabeschicht,
-               und wer pflegt die LumeOS-Vorlagen
-    G-557 A2   `weight` und `custom` bleiben Vorschlag (`unsicher: true`)
-               bis Tom entscheidet, ob sie eigene CHECK-Werte brauchen
-    A-77       zwei Verzeichnisse mit Proben laufen in keinem Lauf —
-               `tools/__tests__/` und `supabase/_pipeline/_validierung/`.
-               Schwere heute auf hoch: der Schaden ist belegt.
-    C-554 A3   der Registerumtrag fuer die 70 unregistrierten Dateien
-    A-80       116 Wegwerf-Datenbanken. Die mit "_final" sind das
-               Problem, nicht die Platte.
-    A-79       backup/-Aufbewahrung, 3.958 MiB gegen ein Limit von 2.5 GiB
-    A-78       Waechter auf Bezeichner-Ueberschneidung
+    EINSPIELEN  G-559 und G-563 zusammen, mit dem Seed. Seit heute nicht
+                mehr nur stillschweigend falsch, sondern einmal sichtbar
+                ausgefallen. Danach G-570: die Bruecke wieder weg.
+    Tobias      G-542  ist die Rate pro Woche oder pro Monat
+                G-548  moderate_cut 12 oder 20 Wochen (vorlaeufig 20)
+                G-549  Protein und Fett in der Ladewoche
+                G-566  ist 0,25 %/Woche fuer einen fortgeschrittenen
+                       Natural zu hoch - und die Waechtergrenzen
+                       bewegen sich bei abgestuften Raten NICHT mit
+                Alle stehen in 00-FRAGEN.md.
+    G-546       erfassen oder empfehlen: v2.0 fuehrt Peptide als
+                Phasenparameter. Das ist eine Entscheidung ueber das
+                Produkt, nicht ueber eine Tabelle.
+    G-540       drei Entscheidungen zu Vorlagen: gehoeren geteilte
+                Vorlagen mit Bewertung zu Goals oder zum Marketplace,
+                nimmt "Share with coach" den Weg der Freigabeschicht,
+                und wer pflegt die LumeOS-Vorlagen
+    G-560       ist eine geplante Phase ein Satz oder eine Rechnung
+    G-562       die Teilphasen haben keine Wochen mehr - G-545 hat
+                `weeks` und `deficit` entfernt, der Ankerplan aus G-544
+                hat seither keine Quelle
+    G-567       die Tagesreferenz der Mikronaehrstoffe kennt kein Ziel
+    G-557 A2    `weight` und `custom` bleiben Vorschlag (`unsicher: true`)
+                bis Tom entscheidet, ob sie eigene CHECK-Werte brauchen
+    A-77        zwei Verzeichnisse mit Proben laufen in keinem Lauf —
+                `tools/__tests__/` und `supabase/_pipeline/_validierung/`.
+                Schwere heute auf hoch: der Schaden ist belegt.
+    C-554 A3    der Registerumtrag fuer die 70 unregistrierten Dateien
+    A-80        116 Wegwerf-Datenbanken. Die mit "_final" sind das
+                Problem, nicht die Platte.
+    A-79        backup/-Aufbewahrung, 3.958 MiB gegen ein Limit von 2.5 GiB
+    A-78        Waechter auf Bezeichner-Ueberschneidung
 
 ## Neu angelegt, noch ohne Reihenfolge
 
@@ -154,6 +182,8 @@ Phase noch nicht an** — G-558. Erst dann ist Ebene 3 eingeloest.
             der Zeitpunkt ist offen
     G-552   Trainings- und Erholungsphase
     G-555   derselbe Ladefehler in medical und nutrition (Kind von G-553)
+    G-570   die Bruecke in zielwerte-read.ts gehoert nach dem
+            Einspielen weg
 
 ## Was ausdruecklich wartet
 
@@ -188,6 +218,15 @@ Aufforderung.
 `[cmd]` **Ein vorbereiteter Auftrag traegt `agent:` und `beauftragt:`
 noch nicht** — er bekommt sie beim Verschieben eine Ebene hoeher.
 `tools/zyklus-pruefen.mjs` zaehlt das, Soll 0.
+
+`[cmd]` **Ein vorbereiteter Auftrag veraltet, waehrend er in `next/`
+liegt.** G-569 lag dort, solange G-565 lief, und sagte an zwei Stellen
+Falsches, als er rausging: kein Auftragskopf (die Regel kam erst am
+01.10.), „supabase/ gehoert Codex, der gerade an G-561 baut" — Codex war
+schon bei G-535 — und „die Umrechnung liegt server-frei (G-565 baut sie
+gerade)" statt der fertigen Datei mit ihren vier Namen. **Schritt 1 und 2
+des Zyklus sind nicht Hoeflichkeit: der vorbereitete Auftrag wird beim
+Rausgehen gegen den Stand gelesen, nicht nur verschoben.**
 
 ### Die Reihenfolge innerhalb von Schritt 3 — und sie war falsch
 
@@ -225,6 +264,15 @@ oder drei Saetze, die ohne Lesen falsch verstanden wuerden. **Alles
 andere gehoert in die Datei, nicht in die Antwort.** Eine Auftragskopie,
 die die Datei ersetzt, ersetzt sie schlecht.
 
+**Tom, 2026-10-01, 09:40:** *„mach den auftrag laut vorlage, der agent
+muss wissen dass es fuer ihn ist."*
+
+`[cmd]` **Der Auftragskopf steht IM Auftrag**, vier Zeilen, `AUFTRAG FUER
+<agent> - <Nummern>` / `Bereich:` / `Fremd:` / `Stand:`
+(`00-LIESMICH.md:355`). **Der Block, den Tom kopiert, beginnt mit diesem
+Kopf** — woertlich aus der Datei, nicht nachgetippt. Was danebensteht,
+geht verloren.
+
 `[read]` **Und die Datei muss von oben nach unten stimmen.** G-545 sagte
 auf Zeile 60, die Quellen kaemen von Tom, und korrigierte das erst 200
 Zeilen spaeter im Nachtrag. **Wer oben liest, hoert dort auf.** Ein
@@ -242,6 +290,33 @@ melden EINMAL am Ende.
 ---
 
 ## Lehren
+
+`[cmd]` **Eine Anwendung, die eine neue Signatur ruft, muss VOR dem
+Einspielen laufen und danach.** G-568 war abgenommen, `pnpm gate` gruen,
+2.386 Tests — und die Goals-Seite fiel am naechsten Tag mit `PGRST202`
+aus. **Das Gate konnte es nicht sehen: es laeuft gegen keine
+Datenbank** (A-77). Keine Abnahmefrage, eine Reihenfolgefrage. **Wer
+einen Aufruf aendert, nennt im Bericht, was die Seite tut, solange die
+Gegenseite nicht eingespielt ist.**
+
+`[cmd]` **Eine reine Funktion kann der Orchestrator abnehmen, ohne den
+Bau nachzubauen.** G-565: `kcalAusRate` und `rateAusKcal` direkt
+aufgerufen, 16 Sollwerte von Hand gerechnet, 0 Abweichungen — **und mit
+`-1526,2` als Soll wird dieselbe Pruefung rot.** Das ist die Grenze: eine
+reine Funktion gegen eigene Arithmetik ja, eine Zahl, die eine Sitzung
+oder einen Schreibvorgang braucht, nein. `[cmd]` **Mechanik:** `tsx` ueber
+eine `.mts` im Repo-Wurzelverzeichnis, **mit `await import(...)`** — ein
+statischer `import { … } from './…ts'` meldet „does not provide an export
+named", und ein absoluter Pfad `D:/…` meldet
+`ERR_UNSUPPORTED_ESM_URL_SCHEME`. Danach die Datei wieder entfernen.
+
+`[cmd]` **`Math.round` ist nicht Postgres `round`.** Postgres rundet die
+Haelfte von der Null WEG, JavaScript nach oben: bei −2,5 % und 55,5 kg
+−1526,3 gegen −1526,2. **Also nur beim Abnehmen, und nur auf der halben
+Stelle** — ein Fehler, der in 7 von 8 Faellen unsichtbar ist. Er stand
+seit G-543 in `kcalDeltaAusRate`. **Wer eine Datenbankrechnung in der
+Anwendung wiederholt, rundet wie die Datenbank oder rechnet nicht
+selbst.**
 
 `[cmd]` **Ein Muster ohne Gegenprobe zaehlt das Falsche, und das Muster
 kann auch die FORM verfehlen.** Mein `git grep` suchte `1.0 kg` als Text
@@ -281,7 +356,10 @@ Python-Einzeiler mit `Phase[] | null` im Text brach mit „Das System kann
 die angegebene Datei nicht finden" ab — die Shell las das Zeichen als
 Umleitung. **Text mit Sonderzeichen geht ueber eine Datei, nicht ueber
 die Kommandozeile.** Dieselbe Klasse wie das PowerShell-Quoting vom
-29.09.
+29.09. — und am 01.10. erneut: ein `rg`-Muster mit `|` und `^…\(` in
+einem `cmd /c "…"` aus PowerShell heraus brach zweimal am Quoting.
+**Die Shell ausdruecklich auf `cmd` stellen und Alternativen als `-e`
+schreiben, nicht als `|`.**
 
 `[cmd]` **Wer einen Wert ERSETZEN laesst, verlangt den
 Schluesselvergleich, nicht die Anzahl.** Mein Auftrag G-545 verlangte
@@ -294,9 +372,8 @@ fand es am Bild, vier Gedankenstriche je Stufe.** Das ist G-562.
 `[cmd]` **Der Vorcommit-Haken laeuft laenger als die Bruecke wartet.**
 Ein `git commit` ueber `lauf()` bricht nach 60 s mit ,,did not respond",
 waehrend der Commit weiterlaeuft — **die Fehlermeldung sieht aus wie ein
-gescheiterter Commit.** Richtig: `subprocess.Popen` mit
-`DETACHED_PROCESS|CREATE_NO_WINDOW`, Ausgabe in `.git/ORCH_COMMIT.log`,
-danach `git log` und das Logende lesen.
+gescheiterter Commit.** Richtig: Ausgabe in `.git/ORCH_COMMIT.log`
+umleiten, danach `git log` und das Logende lesen.
 
 `[cmd]` **Die Waechter arbeiten die Liste einzeln ab.** Drei Anlaeufe fuer
 einen Commit: `quellen` (ein Verweis auf eine Datei, die noch in
@@ -314,7 +391,7 @@ Waechter zu G-544 fand nichts, weil `g544-zeitachse.test.ts` noch nicht
 im Index lag. **Die Arbeit eines Agenten ist untracked, bis der
 Orchestrator sie stagt** — eine Suche mit `git grep` misst dort
 systematisch null, und das sieht aus wie ein fehlender Waechter.
-Fuer frische Arbeit `start_search` oder `os.path.getsize` nehmen.
+Fuer frische Arbeit `rg`, `start_search` oder `os.path.getsize` nehmen.
 
 `[cmd]` **Ein gefilterter Status ist kein Status.**
 `git diff --cached --name-status -- apps/` filtert genau das weg, was
@@ -393,10 +470,13 @@ Katalogeintrag, obwohl es der **Parameter von `isGoalAvailable`** ist:
 `GOAL_DEFINITIONS` endet auf Zeile 263. Der Auftrag G-536 nannte darum 17
 Definitionen; es sind 16.
 
-`[cmd]` **Codex hat dem widersprochen und hatte recht.** Zum zweiten Mal:
-vorher bei `goal_phases.tdee_herkunft`, wo der Auftrag die Spalte an die
-falsche Tabelle haengte. **Ein Agent, der einem falschen Auftrag
-widerspricht, hat recht behandelt zu werden.**
+`[cmd]` **Codex hat dem widersprochen und hatte recht.** Dreimal:
+`goal_phases.tdee_herkunft` (die Spalte hing im Auftrag an der falschen
+Tabelle), die Katalogdefinitionen, und G-561/A2 — der Waechter nimmt das
+Gewicht **am Pruefstichtag**, nicht am Phasenbeginn, weil die Rate die
+Absicht der Phase ist und der Waechter einen gegenwaertigen Vorgang
+bewertet. **Ein Agent, der einem falschen Auftrag widerspricht, hat recht
+behandelt zu werden.**
 
 `[cmd]` **Ein laufender Suchlauf ist kein Ergebnis.** „Status: RUNNING,
 Total results: 5" wurde als vollstaendig gelesen; der Aufrufer
@@ -439,7 +519,9 @@ Phantom-`# fail 1`; zwoelf Minuten spaeter 2.112 von 2.112 gruen.
 
 `[read]` **Zwei Fehler fand Claude Code am Bild, nicht am Test** — zwei
 Raster uebereinander, eine Kachel mit drei Strichen. **Bei Oberflaeche
-ist das Bild der Nachweis.**
+ist das Bild der Nachweis.** Am 01.10. derselbe Weg mit dem groessten
+Fund des Tages: der `PGRST202`-Ausfall stand nicht in 2.386 Tests, er
+stand am Schirm.
 
 `[read]` **Und derselbe Agent hat einen eigenen Messfehler richtig
 behandelt:** sein erster Lauf meldete `gespeichert: false`, weil das
@@ -456,7 +538,10 @@ Projektregeln; 116 Datenbanken stehen in `pg_database`. Das ist A-80.
 Claude Code hat es selbst gefunden: sein Bericht nannte 4 Zeilen, sein
 Kommentar 2 — dieselbe Datei, dieselbe Stunde. Der Befehl steht jetzt
 jeweils daneben. **Wer eine Zahl mit `[cmd]` markiert, schreibt den Aufruf
-dazu, mit dem sie nachzaehlbar ist.**
+dazu, mit dem sie nachzaehlbar ist.** `[read]` **Und eine Zahl im
+Bericht, die niemand nachrechnet, bleibt stehen:** G-565 nannte
+`230 / (11 × 83,74) = 0,24973`, gerechnet sind 0,24969. Am Ergebnis
+(0,250) aendert es nichts — an der Marke `[cmd]` schon.
 
 `[cmd]` **Der Weg aus A-77 ist die Kette, nicht das Gate.** Eine
 Datenbankprobe braucht eine Wegwerf-Datenbank; das Gate hat keine, der

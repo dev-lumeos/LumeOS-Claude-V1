@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-10-01
+beauftragt: 2026-10-01
+agent: claudecode
 
 braucht: [G-561, G-565]
 kind_von: G-561
@@ -11,15 +13,35 @@ entscheidung: E-83
 
 quellen:
   - docs/punkte/erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md
+  - docs/punkte/erledigt/goals-g-0565-die-einheit-ist-eine-nutzerwahl.md
   - docs/entscheidungen/E-83-der-nutzer-waehlt-die-einheit.md
 
 beruehrt:
   dateien:
     - apps/web/src/lib/goals/anpassung.ts
     - apps/web/src/lib/goals/uebergangswaechter.ts
+    - apps/web/src/lib/goals/zielrate-einheit.ts
 ---
 
 # G-520 prueft Kilogramm in der Anwendung
+
+    AUFTRAG FUER Claude Code - G-569: G-520 prueft Kilogramm in der
+                                     Anwendung, der Katalog Prozent
+    Bereich: apps/web/src/lib/goals/anpassung.ts
+             apps/web/src/lib/goals/uebergangswaechter.ts
+             und was A1 dazu findet, innerhalb apps/
+    Fremd:   supabase/ gehoert Codex, der gerade an G-535 baut (sechs
+             Funktionen lesen den alten Sitzungsnamen). Die drei
+             Waechtertexte von G-561 liegen hier woertlich bei - sie
+             kommen nicht noch einmal von ihm.
+             docs/ gehoert dem Orchestrator, auch diese Punktdatei:
+             der Bericht kommt als Antwort, nicht als Anhang hier.
+    Stand:   2026-10-01
+
+**Zuerst lesen, vollstaendig:** diese Datei,
+`docs/punkte/erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md`
+und `docs/entscheidungen/E-83-der-nutzer-waehlt-die-einheit.md`.
+
 
 ## Der Befund
 
@@ -58,16 +80,37 @@ Rueckfall auf Profil- oder Startgewicht.
 und in Kilogramm. Sie stehen im Bericht zu G-561 und sind zu uebernehmen,
 nicht neu zu formulieren.
 
+## Was G-565 seit heute bereitstellt
+
+`[cmd]` **Die Umrechnung ist gebaut und abgenommen** (`bdaea479`), in
+`apps/web/src/lib/goals/zielrate-einheit.ts`:
+
+    kcalAusRate(rate, gewichtKg)     rateAusKcal(kcal, gewichtKg)
+    rundeWieDb(wert, stellen)        inEinheit / ausEinheit
+
+**Benutzen, nicht neu schreiben.** `[cmd]` **Und `Math.round` ist dort
+eine Falle, nicht nur Geschmack:** Postgres rundet die Haelfte von der
+Null WEG, JavaScript nach oben — bei −2,5 % und 55,5 kg sind das
+−1526,3 gegen −1526,2. Genau dieser Fehler stand bis heute in
+`kcalDeltaAusRate`. **Wer in diesem Auftrag rundet, rundet durch
+`rundeWieDb`.**
+
+`[cmd]` **Die gewaehlte Einheit kommt aus
+`public.user_display_preferences`** unter `goals.zielrate_einheit`,
+geladen mit `ladeEinheit()` aus `lib/goals/einheit-speichern.ts` —
+nicht aus der Phase (E-83).
+
 ## Auftrag
 
 **A1 — zaehlen, wo absolut geprueft wird.** `anpassung.ts` und
 `uebergangswaechter.ts` sind belegt; **miss, ob es weitere gibt**, und sag,
 wie du abgegrenzt hast. Eine Schwelle kann als Zahl, als Konstante oder in
-einem Text stehen.
+einem Text stehen. `[read]` **Ein Muster kann auch die FORM verfehlen:**
+„1.0 kg" als Text findet die Schwelle nicht, sie steht als Zahl.
 
 **A2 — relativ rechnen, mit dem Gewicht am Stichtag.** Die Umrechnung
-liegt server-frei neben E-1 (G-565 baut sie gerade) — **benutzen, nicht
-neu schreiben.** Fehlt das Gewicht, ist es ein Hindernis ueber
+liegt in `zielrate-einheit.ts` (siehe oben) — **benutzen, nicht neu
+schreiben.** Fehlt das Gewicht, ist es ein Hindernis ueber
 `hindernisSatz` (G-568), keine stille Null.
 
 **A3 — die Strenge darf sich nicht verschieben.** Randprobe wie bei

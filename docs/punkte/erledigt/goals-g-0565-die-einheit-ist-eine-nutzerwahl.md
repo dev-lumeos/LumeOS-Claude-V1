@@ -5,7 +5,9 @@ modul: goals
 schwere: hoch
 angelegt: 2026-09-30
 beauftragt: 2026-10-01
+erledigt: 2026-10-01
 agent: claudecode
+commit: bdaea479
 
 braucht: [G-539, G-543]
 kind_von: G-543
@@ -18,10 +20,13 @@ quellen:
 beruehrt:
   tabellen:
     - goals.goal_phases
+    - public.user_display_preferences
   dateien:
     - apps/web/src/app/v2/goals/phasen-editor-echt.tsx
-    - apps/web/src/app/v2/goals/modale.tsx
-    - apps/web/src/lib/goals/
+    - apps/web/src/app/v2/goals/einheiten-schalter.tsx
+    - apps/web/src/lib/goals/zielrate-einheit.ts
+    - apps/web/src/lib/goals/einheit-speichern.ts
+    - apps/web/src/lib/goals/phase-regeln.ts
 ---
 
 # Die Einheit ist eine Nutzerwahl, heute gibt es nur Prozent
@@ -104,3 +109,51 @@ Einheit · die Umrechnung in beide Richtungen mit einer von Hand
 nachrechenbaren Zahl · Sabotage je Waechter in beide Richtungen ·
 `pnpm gate` gruen mit Testzahl UND der Aussage zu den neun Waechtern im
 Vorcommit-Haken · nichts committen.
+
+## Abnahme — 2026-10-01, Commit `bdaea479`
+
+**Gemessene Merkmale, keine nachgerechneten Agentenzahlen.**
+
+`[cmd]` **Die Umrechnung gegen meine eigene Handrechnung**, 16 Faelle,
+0 Abweichungen — `kcalAusRate` und `rateAusKcal` aus
+`zielrate-einheit.ts` direkt aufgerufen, die Sollwerte von mir
+gerechnet (11 × Rate × kg, Haelfte von der Null weg, 1 Stelle):
+
+    -2,5 % bei 55,5 kg -> -1526,3      (Math.round gaebe -1526,2)
+    -0,5 % bei 81,4 kg ->  -447,7
+    +0,5 % bei 50,5 kg ->  +277,8      (Haelfte, nach aussen)
+    -0,5 % bei 50,5 kg ->  -277,8
+    0,271 % bei 83,74 kg -> 249,6
+    230 kcal bei 83,74 kg -> 0,250     (Rueckweg, numeric(5,3))
+    -447,7 kcal bei 81,4 kg -> -0,500
+
+`[cmd]` **Gegenprobe:** mit `-1526,2` als Soll wird die Pruefung rot,
+zwei Zeilen (`kcalAusRate` und `rundeWieDb`). **Sie misst also genau
+den behobenen Fehler**, nicht nur irgendeine Zahl.
+
+`[cmd]` **Null Treffer** auf `einheiten-schalter` oder
+`zielrate-einheit` in `strategie-vorschau.tsx` und
+`strategie-wahl.tsx` — der Katalog bleibt in Prozent, wie E-83 es
+verlangt.
+
+`[cmd]` **`Math.round` steht in `phase-regeln.ts` nur noch im
+Kommentar** (Zeilen 222, 228, 231), der den Fehler erklaert. Die
+Rechnung laeuft durch `kcalAusRate`.
+
+`[cmd]` **31 Zusicherungen in fuenf Abschnitten** in
+`g565-einheit.test.ts` — darunter „der Katalog bleibt in Prozent",
+„sie steht NICHT an der Phase" und „keine Stelle rechnet selbst mit
+11".
+
+`[cmd]` **Die Einstellung liegt in `public.user_display_preferences`**
+unter dem Schluessel `goals.zielrate_einheit`
+(`einheit-speichern.ts:28`) — kein Schemawechsel, kein Befund fuer
+Codex.
+
+**Eine Zahl im Bericht stimmt nicht, am Ergebnis aendert sie nichts:**
+230 / (11 × 83,74) ist 0,24969, nicht 0,24973. Gerundet beides 0,250.
+
+**Mitgeliefert und getrennt abgelegt (`f3088a98`):** der Rueckfall in
+`zielwerte-read.ts`, der die Goals-Seite heute wieder lauffaehig macht,
+solange G-563 nicht eingespielt ist. **Er ist kein Zustand, sondern
+G-570** — nach dem Einspielen gehoert er weg.
