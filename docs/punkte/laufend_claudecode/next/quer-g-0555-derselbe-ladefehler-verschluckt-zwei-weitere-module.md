@@ -26,6 +26,22 @@ zahlen:
 
 # Derselbe Ladefehler verschluckt zwei weitere Module
 
+## Auftrag — Kopf
+
+    AUFTRAG FUER Claude Code - G-555: derselbe Ladefehler verschluckt
+                                     medical und nutrition
+    Bereich: apps/web/src/app/v2/medical/
+             apps/web/src/app/v2/nutrition/
+             apps/web/src/lib/ (der neue Ort fuer ladefehler.ts)
+    Fremd:   supabase/ gehoert Codex (A-90, der Grunddaten-Dump).
+             docs/ gehoert dem Orchestrator, auch diese Punktdatei:
+             der Bericht kommt als Antwort, nicht als Anhang hier.
+    Stand:   2026-10-01
+
+**Zuerst lesen, vollstaendig:** diese Datei und
+`docs/punkte/erledigt/goals-g-0553-der-ladefehler-ist-ein-eigener-zustand.md`
+— dort steht die Bauart, die hier zu uebertragen ist.
+
 `[cmd]` **Claude Code hat es ausserhalb seines Auftrags gefunden und
 gemeldet, statt es mitzunehmen:**
 
@@ -95,3 +111,34 @@ der Tokenfehler von gestern trifft jede Seite, nicht nur Goals.
 
 **Reihenfolge:** nach G-554. Die Goals-Grundlagen gehen vor, und dieser Punkt
 betrifft zwei Module, die Tom heute nicht bearbeitet.
+
+---
+
+## Nachtrag 2026-10-01 — zwei Dinge sind seit dem 30.09. dazugekommen
+
+`[cmd]` **Der Ort fuer `ladefehler.ts` ist jetzt dringlicher als am
+30.09.** G-535 hat eine neue Fachmeldung erzeugt:
+`medical import: user mismatch` mit `P0001`. Gezaehlt in
+`apps/web/src/lib`: **null Treffer auf `P0001`, null auf
+`user mismatch`.** Die Meldung hat heute keinen Ort, an dem sie zu einem
+Text wird.
+
+`[cmd]` **Und die Datei ist noch enger gebunden, als der Punkt sagt:**
+`apps/web/src/lib/goals/ladefehler.ts` fuehrt
+`Fehlerart = 'sitzung' | 'daten'` und nennt im Kommentar
+PostgREST-Codes. **Ein medical-Fehler hat dort keinen Platz, solange die
+Datei unter `goals/` liegt.**
+
+`[read]` **Damit haengt G-571 an diesem Punkt.** Dort ist entschieden,
+dass der Laborimport eine Oberflaeche bekommt — und der braucht einen Ort
+fuer seine Meldung. **Die Reihenfolge ist: dieser Punkt, dann der
+Aufrufer.**
+
+`[read]` **Was sich NICHT geaendert hat:** die Bauart in `medical` ist ein
+frueher `return` (Zeile 55), kein Ternaer. Wer nach einem Ternaer sucht,
+findet dort nichts — das steht oben und gilt weiter.
+
+**Zu belegen, berichtigt:** wie oben, **aber kein voller Kettenlauf** —
+dieser Punkt beruehrt die Datenbank nicht. `pnpm gate` gruen mit
+Testzahl, Bild je Modul, Attrappenzahl je Reiter vorher und nachher,
+Sabotage je Waechter in beide Richtungen.

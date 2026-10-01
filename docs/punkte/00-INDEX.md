@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 274 |
-| `laufend_codex` | 2 |
-| `laufend_claudecode` | 1 |
+| `todos` | 272 |
+| `laufend_codex` | 3 |
+| `laufend_claudecode` | 2 |
 | `erledigt` | 612 |
 | **gesamt** | **889** |
 
@@ -631,7 +631,7 @@
 | `G-557` | fehler | hoch | [Die Zuordnung der sechs Arten erreicht die Datenbank nicht](erledigt/goals-g-0557-die-zuordnung-erreicht-die-datenbank-nicht.md) | erledigt | — | G-576 |
 | `G-558` | fehler | hoch | [`goal_phase_start` nimmt den Strategiecode nicht entgegen](erledigt/goals-g-0558-goal-phase-start-nimmt-den-strategiecode-nicht.md) | erledigt | — | — |
 | `G-559` | fehler | hoch | [`phase_am` deckelt auf eine Phase, und der Phasenkopf haengt daran](erledigt/goals-g-0559-phase-am-deckelt-auf-eine-phase.md) | erledigt | — | G-563, G-564 |
-| `G-560` | fehler | hoch | [Die Reihenfolge eines Programms ist nirgends speicherbar](todos/goals-g-0560-die-reihenfolge-eines-programms-ist-nirgends-speicherbar.md) | offen | — | — |
+| `G-560` | fehler | hoch | [Die Reihenfolge eines Programms ist nirgends speicherbar](laufend_codex/goals-g-0560-die-reihenfolge-eines-programms-ist-nirgends-speicherbar.md) | vorbereitet (codex) | — | — |
 | `G-562` | entscheidung | hoch | [Die Teilphasen haben keine Zeitachse mehr](todos/goals-g-0562-die-teilphasen-haben-keine-zeitachse-mehr.md) | offen | — | — |
 | `G-563` | fehler | hoch | [`berechne_zielwerte` wählt selbst eine Phase aus](erledigt/goals-g-0563-berechne-zielwerte-waehlt-selbst-eine-phase.md) | erledigt | — | G-567, G-568 |
 | `G-564` | fehler | hoch | [`ladePhase` nimmt die erste fuer die einzige](erledigt/goals-g-0564-ladephase-nimmt-die-erste-fuer-die-einzige.md) | erledigt | — | — |
@@ -945,7 +945,7 @@
 | `G-546` | entscheidung | hoch | [Erfassen oder empfehlen — die Grenze bei Substanzprotokollen](todos/quer-g-0546-erfassen-oder-empfehlen.md) | offen | — | — |
 | `G-551` | befund | hoch | [Cardio fehlt als Modul ganz — und damit die Hälfte der Steuerung](todos/quer-g-0551-cardio-fehlt-als-modul-ganz.md) | offen | — | — |
 | `G-552` | befund | mittel | [Training und Erholung kennen die Phase nicht](todos/quer-g-0552-phasenparameter-fuer-training-und-erholung.md) | offen | — | — |
-| `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](todos/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | offen | — | — |
+| `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](laufend_claudecode/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | vorbereitet (claudecode) | — | — |
 | `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](todos/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | offen | — | — |
 | `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | — |
 
