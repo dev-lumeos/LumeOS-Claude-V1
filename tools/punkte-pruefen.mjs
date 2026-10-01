@@ -544,6 +544,19 @@ if (meldungen.length > 0 && AUSFUEHRLICH) {
 }
 
 // ── Der Sollstand entscheidet ───────────────────────────────────────
+//
+// `[cmd]` **Der Kettenstatus ist Information, kein Tor — seit
+// 2026-10-01.** Vorher machte ein ueberfaelliger Kettenlauf (36 h)
+// jeden Commit rot, auch einen an einer Markdown-Datei: vom 28. bis
+// 30.09. war damit zwei Tage lang jeder Commit im Repo blockiert.
+//
+// **Tom, 2026-10-01:** *,,ich warte mich hier dumm und daemlich dass
+// ich arbeiten kann."*
+//
+// `[read]` **Ein Nachweis, der 24 Minuten braucht, entscheidet nicht
+// ueber einen Tippfehler.** Der Status wird weiter gemeldet und faellt
+// auf — er haelt nur nichts mehr an. Wer ihn als Tor braucht, ruft
+// `pnpm kette:status`; der bricht weiter ab.
 const kettenlauf = spawnSync(process.execPath, ['tools/kettenlauf-status-pruefen.mjs'], {
   cwd: WURZEL,
   encoding: 'utf8',
@@ -553,7 +566,14 @@ if (kettenlauf.stdout) process.stdout.write(kettenlauf.stdout)
 if (kettenlauf.stderr) process.stderr.write(kettenlauf.stderr)
 const kettenlaufGruen = kettenlauf.status === 0
 
-if (meldungen.length === SOLLSTAND && kettenlaufGruen) {
+if (!kettenlaufGruen) {
+  console.error('')
+  console.error('[punkte] HINWEIS: der taegliche Kettenlauf ist fehlgeschlagen')
+  console.error('         oder ueberfaellig. Das haelt diesen Lauf NICHT an')
+  console.error('         (seit 2026-10-01). Mit Abbruch: pnpm kette:status')
+}
+
+if (meldungen.length === SOLLSTAND) {
   console.log('')
   console.log(`[punkte] gruen: ${meldungen.length} Befunde, genau der `
     + 'Sollstand. Kein neuer Schaden.')
@@ -561,10 +581,6 @@ if (meldungen.length === SOLLSTAND && kettenlaufGruen) {
 }
 
 console.error('')
-if (!kettenlaufGruen) {
-  console.error('[punkte] ROT: der taegliche Kettenlauf ist fehlgeschlagen oder ueberfaellig.')
-  process.exit(1)
-}
 if (meldungen.length > SOLLSTAND) {
   console.error(`[punkte] ROT: ${meldungen.length} Befunde, Soll `
     + `${SOLLSTAND} — ${meldungen.length - SOLLSTAND} neu hinzugekommen.`)
