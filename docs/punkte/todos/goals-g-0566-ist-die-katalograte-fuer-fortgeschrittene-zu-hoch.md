@@ -63,3 +63,18 @@ verwenden waere eine Annahme, keine Ableitung.
 `[read]` **Und es beruehrt G-561:** wenn die Rate nach Stufe variiert,
 variieren die Waechterschwellen mit — ein relativer Waechter haelt das
 aus, ein absoluter in Kilogramm nicht.
+
+## Nachtrag 2026-10-01 — die Waechtergrenzen bewegen sich nicht mit
+
+`[cmd]` **Codex hat es beim Abschluss von G-561 gemeldet:** die
+Waechtergrenzen sind **Text im Katalog und Konstanten in G-520**. **Bloss
+neue Zielraten je Erfahrungsstufe wuerden die Schwellen nicht
+mitbewegen.**
+
+`[read]` **Damit ist diese Entscheidung teurer als sie aussieht.** Wird
+abgestuft, muss die Grenze **aus der Rate abgeleitet** oder je Stufe
+gefuehrt werden — sonst prueft ein Anfaenger mit 0,25 %/Woche gegen
+dieselbe Obergrenze wie ein Elite-Athlet mit 0,5.
+
+`[read]` **Bleibt es bei einer Rate fuer alle, entfaellt das** — und das
+ist ein Argument fuer die einfache Antwort, kein Grund, sie zu waehlen.

@@ -1,11 +1,10 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-01, 09:10**
+**Stand: 2026-10-01, 09:25**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
 | Claude Code | G-565 | die Einheit ist eine Nutzerwahl | **laeuft**, raus 01.10. |
-| Codex | G-561 | die Waechter pruefen Kilogramm statt Prozent | **laeuft**, raus 01.10. |
 | Claude Code | G-565 | die Einheit ist eine Nutzerwahl | **bereit** in `next/` |
 | Claude Code | G-539 | der Phasen-Editor fehlt | **vorbereitet** in `next/` |
 | Codex | G-514 | die Modulverrechnung — Bau abgenommen | **offen**: nicht live eingespielt |
@@ -27,6 +26,7 @@
     G-568  57b88381   die Zielwerte reichen ihr Ziel durch
     A-82   724cfd29   der Kettenwaechter liest das Staging
     A-84   724cfd29   der Pruefumfang haengt am Staging
+    G-561  605a27d8   die Katalogwaechter pruefen Prozent, 6 Zeilen
 
 `[cmd]` **Die Kette ist wieder gruen** — `kettenlauf-status.json`:
 `passed`, Exit 0, 1401 s, 299 Schritte. Damit war das Repo nach zwei
@@ -243,6 +243,12 @@ melden EINMAL am Ende.
 ---
 
 ## Lehren
+
+`[cmd]` **Ein Muster ohne Gegenprobe zaehlt das Falsche, und das Muster
+kann auch die FORM verfehlen.** Mein `git grep` suchte `1.0 kg` als Text
+und fand nichts; die Schwellen stehen als Zahlen im Code
+(`d.weightTrend < -1.0`). **Codex Angabe war exakt, mein Suchmuster
+nicht.** Vorher dasselbe mit dem Vokabular des falschen Dokuments.
 
 `[cmd]` **Ein Verweis auf einen Punkt, der im selben Zug geschlossen
 wird, zeigt auf den alten Pfad.** Dreimal am 30.09. und 01.10.: der neue
