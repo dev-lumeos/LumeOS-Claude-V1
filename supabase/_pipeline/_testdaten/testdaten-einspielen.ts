@@ -3614,7 +3614,9 @@ SELECT gp.user_id, gp.gueltig_ab, bz.kcal, bz.protein_g, bz.carbs_g, bz.fat_g,
        'formel', bz.tdee, bz.nutrition_goal,
        'G-511 Testdaten aus der am Stichtag laufenden Phase', gp.id
 FROM goals.goal_phases AS gp
-CROSS JOIN LATERAL goals.berechne_zielwerte(gp.user_id, gp.gueltig_ab) AS bz
+CROSS JOIN LATERAL goals.berechne_zielwerte(
+  gp.user_id, gp.goal_id, gp.gueltig_ab
+) AS bz
 WHERE bz.hindernis IS NULL
 ON CONFLICT (user_id, gueltig_ab) DO UPDATE SET
   kcal = EXCLUDED.kcal,

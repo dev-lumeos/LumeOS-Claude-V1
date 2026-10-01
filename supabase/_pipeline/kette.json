@@ -2876,6 +2876,24 @@
       ]
     },
     {
+      "id": "563_target_scoped_calculation",
+      "path": "supabase/_pipeline/11_goals/563_target_scoped_calculation.sql",
+      "kind": "sql",
+      "creates": "G-563: berechne_zielwerte rechnet zielbezogen; der nutzerweite Altvertrag wirft bei mehreren Zielphasen statt still eine zu waehlen.",
+      "depends_on": [
+        "559_phase_at_scope_probe"
+      ]
+    },
+    {
+      "id": "563_target_scoped_calculation_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g563-target-calculation.test.ts",
+      "kind": "tsx",
+      "creates": "G-563 Gegenprobe: test-user mit zwei Zielphasen erhaelt je Ziel andere Werte; die nutzerweite Vorschau wirft denselben Mehrdeutigkeitsfehler wie der Schreibweg.",
+      "depends_on": [
+        "563_target_scoped_calculation"
+      ]
+    },
+    {
       "id": "514_goal_contributions_schema",
       "path": "supabase/migrations/20260929081000_g514_goal_contributions.sql",
       "kind": "sql",
