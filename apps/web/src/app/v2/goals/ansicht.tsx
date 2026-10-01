@@ -94,7 +94,9 @@ import { StrategieWahl } from './strategie-wahl'
 import { PhasenZeitachse } from './phasen-zeitachse'
 // `[cmd]` **G-553/A1: reine Funktionen, kein I/O** — sie duerfen aus
 // einer `'use client'`-Datei kommen (A-30).
-import { fehlerart, fehlertexte } from '../../../lib/goals/ladefehler'
+// `[cmd]` **G-555: die Kachel ist geteilt**, der Pfad liegt nicht
+// mehr unter `goals/`.
+import { LadefehlerKachel } from '../../../components/shell/ladefehler-kachel'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
@@ -197,48 +199,10 @@ export type EchteDaten = {
   ladefehler: string | null
 }
 
-/**
- * Die Fehlerkachel — G-553/A1.
- *
- * `[cmd]` **Hier stand eine Kachel fuer beide Faelle:** *„Goals ·
- * konnten nicht geladen werden"*, darunter der technische Text.
- * `[read]` **Bei `JWT issued at future` schickt das auf die falsche
- * Suche** — der Nutzer prueft seine Ziele, und das Problem ist die
- * Anmeldung.
- *
- * `[read]` **Der technische Text BLEIBT** — er hat diesen Befund
- * moeglich gemacht.
- */
-function LadefehlerKachel({ text }: { text: string }) {
-  const art = fehlerart(text)
-  const t = fehlertexte(art)
-  return (
-    <Card title={t.titel} sub={art === 'sitzung' ? undefined : t.satz}>
-      {/* `[cmd]` **Die Marke steht am `span`, nicht an der `Card`** —
-          `Card` nimmt nur benannte Requisiten und liesse `data-…`
-          fallen (gemessen in `primitives.tsx:61-63`). */}
-      <span data-ladefehler={art} hidden />
-      {art === 'sitzung' && (
-        <div style={{ fontSize: 12, lineHeight: 1.55, marginBottom: 10 }}>
-          {t.satz}
-        </div>
-      )}
-      {/* `[read]` **Der Weg, nicht nur der Satz.** Ein Hinweis
-          „melde dich neu an" ohne Knopf laesst den Nutzer suchen. */}
-      {art === 'sitzung' && (
-        <a className="v2-btn v2-btn-primary v2-btn-sm" href="/login"
-           data-ladefehler-anmelden
-           style={{ display: 'inline-flex', marginBottom: 10 }}>
-          Zur Anmeldung
-        </a>
-      )}
-      <div className="v2-muted" data-ladefehler-text
-           style={{ fontSize: 12, lineHeight: 1.55 }}>
-        {text}
-      </div>
-    </Card>
-  )
-}
+// `[cmd]` **G-555: die Kachel stand hier und steht jetzt in
+// `components/shell/ladefehler-kachel.tsx`** — Medical und Nutrition
+// brauchen dieselbe. **Drei Abschriften waeren drei Orte, die
+// driften.**
 
 export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
   // G-117: Tab in der Adresse — Drop-in aus lib/tab-url.
@@ -401,7 +365,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
           erreichbar.** */}
       {echt.ladefehler
         && ['goals', 'metrics', 'measure', 'comp', 'tdee', 'phase', 'physique'].includes(tab) && (
-        <LadefehlerKachel text={echt.ladefehler} />
+        <LadefehlerKachel text={echt.ladefehler} modul="Goals" />
       )}
       {(() => {
         // `[read]` **Nur der ECHTE Teil faellt aus, nicht der

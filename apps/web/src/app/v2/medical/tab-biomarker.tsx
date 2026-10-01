@@ -16,6 +16,9 @@ import { Card, Pill, Icon, Sparkline, InEntwicklungKnopf, UnterTabs } from '@lum
 import {
   OCR_EXTRACTED, LAB_REPORTS, UNIT_CONVERSIONS,
 } from './daten'
+// `[cmd]` **G-555: dieselbe Kachel wie in Goals** — mit der
+// Unterscheidung Sitzung/Daten und dem Weg zur Anmeldung.
+import { LadefehlerKachel } from '../../../components/shell/ladefehler-kachel'
 import { useMedical } from './kontext'
 import { ATTRAPPE } from './ansicht'
 import { MedImportReferenz, FehlendeImportKacheln } from './mockup-referenz'
@@ -53,20 +56,47 @@ const FELD_MONO: React.CSSProperties = { ...FELD, fontFamily: 'var(--font-mono)'
 export function MedBiomarkers({ echt }: { echt: EchteDaten }) {
   const [katalogOffen, setKatalogOffen] = React.useState(false)
 
-  if (echt.ladefehler) {
-    return (
-      <Card title="Biomarkers" sub="konnten nicht geladen werden">
-        <div className="v2-muted" style={{ fontSize: 12, lineHeight: 1.55 }}>
-          {echt.ladefehler}
-        </div>
-      </Card>
-    )
-  }
+  // ══ G-555: der Fehler steht NEBEN dem Reiter, nicht statt seiner ══
+  //
+  // `[cmd]` **Hier stand ein frueher `return`** mit einer eigenen
+  // Kachel: *„Biomarkers · konnten nicht geladen werden"*, darunter
+  // der rohe Fehlertext. `[read]` **Zwei Maengel in einer Zeile:**
+  //
+  //   1  **Keine Unterscheidung Sitzung/Daten.** Toms Fall
+  //      (`JWT issued at future`) stand als Datenfehler da und
+  //      schickte auf die falsche Suche — **der Befund aus G-553,
+  //      hier nie nachgezogen.** Es gab auch keinen Weg zur
+  //      Anmeldung.
+  //   2  **Ein frueher `return` sperrt den GANZEN Reiter.** Heute
+  //      traegt `MedBiomarkers` nur Datenteile, **aber der naechste
+  //      parameterlose Teil haengt still mit dran** — dieselbe
+  //      Kopplung, die G-553 in Goals geloest hat.
+  //
+  // `[cmd]` **Was NICHT der Fall war:** die Mockup-Referenz steht
+  // als Geschwister in `ansicht.tsx:258` (`MedBiomarkersReferenz`)
+  // und hat den fruehen `return` ueberlebt. **Am Schirm gemessen,
+  // 2026-10-01: Attrappen 1, Trenner 1 — mit und ohne Ladefehler
+  // gleich.** `[read]` **Der Punkt vermutete, sie werde
+  // verschluckt; sie wurde es nicht.**
+  const echtAus = echt.ladefehler !== null
 
   return (
     <div>
+      {echt.ladefehler && (
+        <LadefehlerKachel text={echt.ladefehler} modul="Biomarkers" />
+      )}
+      {/* `[read]` **Nur der ECHTE Teil faellt aus, nicht der
+          Reiter.** `MarkerListe` und die Katalogsuche tragen
+          Daten — alles andere bleibt. */}
+      {!echtAus && (
       <MarkerListe reihen={echt.reihen} befunde={echt.befunde} labEffekte={echt.labEffekte} />
+      )}
 
+      {/* `[cmd]` **Die Katalogsuche traegt ebenfalls Daten** —
+          `katalogGesamt` kommt aus derselben Abfrage, und ein
+          Knopf, der „0 Marker" sagt, waere eine Falschaussage
+          (E-72). */}
+      {!echtAus && (
       <div style={{ marginTop: 14 }}>
         <button
           type="button"
@@ -80,8 +110,9 @@ export function MedBiomarkers({ echt }: { echt: EchteDaten }) {
             : `Im Katalog suchen · ${echt.katalogGesamt.toLocaleString('de-DE')} Marker`}
         </button>
       </div>
+      )}
 
-      {katalogOffen && (
+      {!echtAus && katalogOffen && (
         <div style={{ marginTop: 12 }}>
           <KatalogSuche
             start={echt.katalogStart}

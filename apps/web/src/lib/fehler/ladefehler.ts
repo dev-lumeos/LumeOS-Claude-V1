@@ -1,4 +1,24 @@
-// Sitzungsfehler von Datenfehler trennen — G-553/A1.
+// Sitzungsfehler von Datenfehler trennen — G-553/A1, G-555.
+//
+// ══ G-555: WARUM DIE DATEI HIER LIEGT UND NICHT UNTER goals/ ══════
+//
+// `[cmd]` **Sie lag in `lib/goals/`, wird aber von drei Modulen
+// gebraucht** — Goals, Medical, Nutrition. `[read]` **Ein
+// medical-Fehler hatte dort keinen Platz:** `fehlertexte` gab den
+// Titel `'Goals'` zurueck, fest verdrahtet.
+//
+// `[cmd]` **Und es wird mehr:** G-535 hat die Fachmeldung
+// `medical import: user mismatch` (`P0001`) erzeugt
+// (`535_auth_uid_legacy_readers.sql:175`,
+// `142_laborimport_matching.sql:231`). `[cmd]` **Gezaehlt in
+// `apps/web/src/lib` am 2026-10-01: null Treffer auf `P0001`, null
+// auf `user mismatch`** — die Meldung hat heute keinen Ort, an dem
+// sie zu einem Text wird. **G-571 baut den Aufrufer.**
+//
+// `[read]` **`lib/fehler/` statt `packages/ui`:** das hier ist
+// Fachlogik ueber Fehlertexte, keine Darstellung. **`packages/ui`
+// gehoert allen Apps** — eine Supabase-Fehlerkunde gehoert nicht
+// hinein (A-30-Nachbarschaft: was dort liegt, zieht jede App mit).
 //
 // ══ DER BEFUND ═════════════════════════════════════════════════════
 //
@@ -87,8 +107,24 @@ export type Fehlertexte = { titel: string; satz: string }
  * technische Text steht darunter und bleibt sichtbar: **er hat diesen
  * Befund moeglich gemacht.** `[read]` **Ein Fehler ohne Text waere
  * schlechter als der falsche.**
+ *
+ * `[cmd]` **G-555: der Titel ist ein Parameter.** Hier stand
+ * `titel: 'Goals'` fest — **damit war die Datei an ein Modul
+ * gebunden**, obwohl drei sie brauchen.
+ *
+ * `[read]` **Der Sitzungsfall nennt KEIN Modul**, und das ist
+ * Absicht: eine abgelaufene Sitzung betrifft die Anmeldung, nicht
+ * die Biomarker. **Das Modul zu nennen schickte wieder auf die
+ * falsche Suche** — genau der Befund aus G-553.
+ *
+ * @param art    Was `fehlerart()` ergeben hat.
+ * @param modul  Der Reitername fuer den Datenfall (`Goals`,
+ *               `Biomarkers`, `Preferences`). **Fehlt er, steht der
+ *               Satz ohne Modul** — ehrlicher als ein geratenes.
  */
-export function fehlertexte(art: Fehlerart): Fehlertexte {
+export function fehlertexte(
+  art: Fehlerart, modul?: string,
+): Fehlertexte {
   if (art === 'sitzung') {
     return {
       titel: 'Sitzung abgelaufen',
@@ -97,7 +133,7 @@ export function fehlertexte(art: Fehlerart): Fehlertexte {
     }
   }
   return {
-    titel: 'Goals',
+    titel: modul ?? 'Daten',
     satz: 'Die Daten konnten nicht geladen werden.',
   }
 }

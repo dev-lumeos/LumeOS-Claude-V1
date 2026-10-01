@@ -52,6 +52,9 @@
 // zweite Klick den Stand VOR dem ersten und loeschte ihn wieder.
 import * as React from 'react'
 
+// `[cmd]` **G-555: dieselbe Kachel wie in Goals und Medical.**
+import { LadefehlerKachel } from '../../../components/shell/ladefehler-kachel'
+
 // G-335: `rasterZeilen` wird hier nicht mehr gebraucht — die
 // Slotliste hat die Mahlzeitenzahl ersetzt (verschmolzen). Der
 // Rueckfall fuer Nutzer OHNE Slots steht in `page.tsx`.
@@ -444,11 +447,24 @@ export function VorliebenTab({ d }: { d: VorliebenDaten }) {
     aus: stand.items.filter(i => i.preference === 'hard_exclude').length,
   }
 
+  // ══ G-555: der Fehler steht NEBEN dem Reiter, nicht statt seiner ══
+  //
+  // `[cmd]` **Hier stand ein frueher `return`** mit einer eigenen
+  // Kachel und dem rohen Fehlertext — **ohne die Unterscheidung
+  // Sitzung/Daten und ohne Weg zur Anmeldung** (G-553/A1, hier nie
+  // nachgezogen).
+  //
+  // `[cmd]` **Am Schirm gemessen, 2026-10-01, mit Ladefehler:** die
+  // Karten fielen von 17 auf 8, **die Attrappen blieben bei 6** —
+  // `NutritionPrefsReferenz` steht als Geschwister in
+  // `ansicht.tsx:1031` und ueberlebte den `return`. `[read]` **Der
+  // Punkt vermutete ein verschlucktes Mockup; verschluckt wurden
+  // die neun Datenkarten.**
   if (d.ladefehler) {
     return (
-      <Card title="Preferences" sub="konnten nicht geladen werden">
-        <div className="v2-muted" style={{ fontSize: 12, lineHeight: 1.55 }}>{d.ladefehler}</div>
-      </Card>
+      <div>
+        <LadefehlerKachel text={d.ladefehler} modul="Preferences" />
+      </div>
     )
   }
 

@@ -68,6 +68,9 @@
 // Aufgabe. `Copy week` kopiert deshalb eine vorhandene Woche
 // (`copy_meal_plan_week`), es erfindet keine.
 import * as React from 'react'
+
+// `[cmd]` **G-555: dieselbe Kachel wie in Goals und Medical.**
+import { LadefehlerKachel } from '../../../components/shell/ladefehler-kachel'
 // G-319: der Planeditor.
 import { PlanModal } from './plan-modal'
 
@@ -390,16 +393,20 @@ export function PlannerEchtTab({ d }: { d: PlanDaten }) {
     [d.rezepte],
   )
 
+  // ══ G-555: die dritte Stelle, vom Punkt nicht genannt ════════════
+  //
+  // `[cmd]` **Der Auftrag nennt `tab-biomarker.tsx` und
+  // `tab-vorlieben.tsx`.** `[cmd]` **Gemessen in `app/v2/`,
+  // 2026-10-01: DREI frueher `return` auf `ladefehler`** — dieser
+  // hier war der dritte. `[read]` **Dieselbe Luecke:** der rohe Text
+  // ohne Unterscheidung Sitzung/Daten und ohne Weg zur Anmeldung.
+  //
+  // `[read]` **Mitgenommen, weil er im Bereich liegt und dieselbe
+  // Sache ist** — eine Zeile stehenzulassen, die den Nutzer bei
+  // einem Tokenfehler auf den Plan schauen laesst, waere der Fehler
+  // aus G-553 zum dritten Mal.
   if (d.ladefehler) {
-    return (
-      <div className="v2-insight v2-neg">
-        <div className="v2-insight-mark" />
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="v2-insight-title">Plan nicht gelesen</div>
-          <div className="v2-insight-body">{d.ladefehler}</div>
-        </div>
-      </div>
-    )
+    return <LadefehlerKachel text={d.ladefehler} modul="Planner" />
   }
 
   // `[read]` KEIN PLAN IST KEIN FEHLER. Wer noch keinen angelegt hat,

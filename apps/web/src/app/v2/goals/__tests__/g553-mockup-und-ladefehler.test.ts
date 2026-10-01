@@ -15,7 +15,7 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
-import { fehlerart, fehlertexte } from '../../../../lib/goals/ladefehler'
+import { fehlerart, fehlertexte } from '../../../../lib/fehler/ladefehler'
 
 const HIER = dirname(fileURLToPath(import.meta.url))
 const GOALS = join(HIER, '..')
@@ -26,6 +26,17 @@ const ohneKommentare = (q: string) => q
 
 const lies = (p: string) => ohneKommentare(readFileSync(p, 'utf8'))
 const A = () => lies(join(GOALS, 'ansicht.tsx'))
+
+// ══ G-555: die Kachel steht nicht mehr in ansicht.tsx ═════════════
+//
+// `[cmd]` **Medical und Nutrition brauchen dieselbe** — sie liegt
+// seit G-555 in `components/shell/ladefehler-kachel.tsx`.
+// `[read]` **Die Fragen dieser Zusicherungen bleiben gueltig**,
+// nur die Datei wechselt: traegt der technische Text eine Marke,
+// gibt es den Weg zur Anmeldung, haengt die Marke am `span` statt
+// an der `Card`.
+const KACHEL = () => lies(join(GOALS, '..', '..', '..',
+  'components', 'shell', 'ladefehler-kachel.tsx'))
 
 // ════════════════════════════════════════════════════════════════
 // A2 — der Mockup-Teil haengt nicht am Ladefehler
@@ -214,9 +225,7 @@ describe('G-553/A1 — der Tokenfehler wird als solcher benannt', () => {
   it('der technische Text bleibt sichtbar', () => {
     // `[cmd]` **Auftrag A1:** *„Der technische Text bleibt sichtbar,
     // er hat den Befund moeglich gemacht."*
-    const q = A()
-    const i = q.indexOf('function LadefehlerKachel')
-    const rumpf = q.slice(i, q.indexOf('export function GoalsAnsicht'))
+    const rumpf = KACHEL()
     assert.match(rumpf, /data-ladefehler-text/,
       'der technische Text traegt keine Marke')
     assert.match(rumpf, /\{text\}/,
@@ -225,9 +234,7 @@ describe('G-553/A1 — der Tokenfehler wird als solcher benannt', () => {
   })
 
   it('der Sitzungsfall traegt den WEG zur Anmeldung', () => {
-    const q = A()
-    const i = q.indexOf('function LadefehlerKachel')
-    const rumpf = q.slice(i, q.indexOf('export function GoalsAnsicht'))
+    const rumpf = KACHEL()
     assert.match(rumpf, /data-ladefehler-anmelden/,
       'es gibt keinen Knopf zur Anmeldung')
     assert.match(rumpf, /href="\/login"/,
@@ -250,7 +257,7 @@ describe('G-553/A1 — der Tokenfehler wird als solcher benannt', () => {
     // `[read]` **`Card` nimmt nur benannte Requisiten** und liesse
     // `data-…` fallen (`primitives.tsx:61-63`) — die Marke waere im
     // DOM nicht zu finden.
-    const q = A()
+    const q = KACHEL()
     assert.ok(!/<Card[^>]*data-ladefehler/.test(q),
       'die Marke haengt an der Card — sie kommt nicht im DOM an')
     assert.match(q, /<span data-ladefehler=\{art\}/,

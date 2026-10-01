@@ -34,7 +34,7 @@ import { createSessionClient } from '@lumeos/shared/session'
 
 import { zielAnlegen } from './schreiben'
 import { phaseStarten, PhaseFehler } from './phase-write'
-import { fehlerart } from './ladefehler'
+import { fehlerart } from '../fehler/ladefehler'
 import type { ZielNeu } from './ziel-regeln'
 import type { Phasenart } from './phase-regeln'
 
