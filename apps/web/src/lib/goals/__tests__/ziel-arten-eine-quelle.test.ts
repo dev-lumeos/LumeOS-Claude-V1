@@ -85,13 +85,37 @@ describe('G-354 — eine Quelle fuer die Zielarten', () => {
     }
   })
 
+  // ══ G-576: fuenf gemessene + eine entschiedene ════════════════
+  //
+  // `[cmd]` **G-352 hat fuenf Werte gezaehlt.** `[cmd]` **E-89
+  // (2026-10-01) hat `weight` dazu ENTSCHIEDEN** — er kommt im
+  // Bestand in null Zeilen vor, weil es den Knopf bis dahin nicht
+  // gab.
+  //
+  // `[read]` **Der Unterschied gehoert in den Waechter:** gemessen
+  // und entschieden sind zwei Herkuenfte, und wer sie zusammenwirft,
+  // kann spaeter nicht mehr sagen, welcher Wert einen Beleg hat.
   it('die fuenf gemessenen Unterarten stehen drin, ohne Dublette', () => {
+    const GEMESSEN = ['cardio_frequency', 'cut', 'gain_muscle', 'strength',
+      'training_capacity']
     const alle = Object.values(ZIEL_UNTERARTEN).flat()
-    assert.equal(alle.length, 5, 'G-352 hat fuenf gezaehlt')
-    assert.equal(new Set(alle).size, 5, 'eine Unterart steht doppelt')
+    for (const u of GEMESSEN) {
+      assert.ok(alle.includes(u), `„${u}" ist aus dem Bestand gefallen`)
+    }
+    assert.equal(new Set(alle).size, alle.length, 'eine Unterart steht doppelt')
+  })
+
+  it('genau eine Unterart ist entschieden statt gemessen', () => {
+    // `[read]` **Eine Untergrenze erlaubt Verlust** — deshalb die
+    // genaue Liste, nicht `>= 6`.
+    const alle = Object.values(ZIEL_UNTERARTEN).flat()
     assert.deepEqual([...alle].sort(),
       ['cardio_frequency', 'cut', 'gain_muscle', 'strength',
-        'training_capacity'])
+        'training_capacity', 'weight'],
+      'die Liste weicht von fuenf gemessenen + E-89 ab')
+    assert.ok(ZIEL_UNTERARTEN.body_composition.includes('weight'),
+      '„weight" steht nicht unter body_composition — dort gehoert es '
+      + 'hin, solange der CHECK nichts Passenderes kennt (E-89)')
   })
 
   it('`health` bleibt leer — null Zeilen, kein erfundener Wert', () => {

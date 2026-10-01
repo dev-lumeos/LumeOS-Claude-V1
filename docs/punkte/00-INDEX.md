@@ -6,10 +6,10 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 272 |
-| `laufend_codex` | 3 |
-| `laufend_claudecode` | 2 |
+| `laufend_codex` | 4 |
+| `laufend_claudecode` | 3 |
 | `erledigt` | 612 |
-| **gesamt** | **889** |
+| **gesamt** | **891** |
 
 ## medical — 49
 
@@ -573,7 +573,7 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 71
+## goals — 72
 
 ### beauftragbar — 65
 
@@ -645,7 +645,7 @@
 | `G-575` | fehler | hoch | [Ein Ziel traegt genau eine Messgroesse](todos/goals-g-0575-ein-ziel-traegt-genau-eine-messgroesse.md) | offen | — | — |
 | `G-576` | fehler | niedrig | [weight wird ein Untertyp, Eigenes bleibt ohne](laufend_claudecode/goals-g-0576-weight-als-untertyp-eigenes-ohne.md) | laeuft (claudecode) | — | — |
 
-### wartet auf Blocker — 6
+### wartet auf Blocker — 7
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -655,6 +655,7 @@
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
 | `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](erledigt/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | erledigt | G-542 | G-569 |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
+| `G-577` | fehler | hoch | [Die Umfangserfassung hat keinen Schreibweg](laufend_claudecode/goals-g-0577-die-umfangserfassung-hat-keinen-schreibweg.md) | laeuft (claudecode) | G-571 | — |
 
 ## coach — 57
 
@@ -718,7 +719,9 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 226
+## quer — 227
+
+### beauftragbar — 226
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -774,7 +777,7 @@
 | `A-87` | fehler | hoch | [46 Zeugen, nach Ursache gestaffelt verdrahten](todos/quer-a-0087-46-zeugen-nach-ursache-gestaffelt.md) | offen | — | — |
 | `A-88` | fehler | hoch | [31 Proben fallen still auf postgres zurueck](todos/quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md) | offen | — | — |
 | `A-89` | fehler | mittel | [zyklus-fahren scheitert an EPERM, wenn ein Agent die Datei offen hat](todos/quer-a-0089-zyklus-fahren-scheitert-an-eperm.md) | offen | — | — |
-| `A-90` | fehler | hoch | [Grunddaten als Dump, nicht als Import bei jedem Lauf](laufend_codex/quer-a-0090-grunddaten-als-dump-statt-als-import.md) | laeuft (codex) | — | — |
+| `A-90` | fehler | hoch | [Grunddaten als Dump, nicht als Import bei jedem Lauf](laufend_codex/quer-a-0090-grunddaten-als-dump-statt-als-import.md) | laeuft (codex) | — | A-91 |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
@@ -947,7 +950,13 @@
 | `G-552` | befund | mittel | [Training und Erholung kennen die Phase nicht](todos/quer-g-0552-phasenparameter-fuer-training-und-erholung.md) | offen | — | — |
 | `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](laufend_claudecode/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | vorbereitet (claudecode) | — | — |
 | `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](todos/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | offen | — | — |
-| `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | — |
+| `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | G-577 |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `A-91` | fehler | hoch | [Der taegliche Lauf erzeugt bei gruen einen neuen Dump](laufend_codex/quer-a-0091-der-taegliche-lauf-erzeugt-bei-gruen-einen-neuen-dump.md) | laeuft (codex) | A-90 | — |
 
 ## buddy — 1
 

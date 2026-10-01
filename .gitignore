@@ -301,3 +301,12 @@ tools/_[!_]*
 # jeder Messbau bekommt sein eigenes Verzeichnis ueber
 # LUMEOS_DIST_DIR und wird nach der Abnahme geloescht.
 apps/*/.next-*
+
+# A-90: der Grunddaten-Dump ist ein ZWISCHENSTAND, kein Quellcode.
+# Tom, 2026-10-01: "der Dump ist ein Zwischenstand, kein Quellcode" -
+# und die taegliche Kettenpruefung erzeugt bei gruen einen neuen.
+# Das Manifest gehoert dazu: es beschreibt GENAU den Dump, der daneben
+# liegt (19 Quellpruefsummen), und waere versioniert eine Behauptung
+# ueber eine Datei, die es auf dieser Maschine nicht gibt.
+supabase/_pipeline/daten/grunddaten-*.dump
+supabase/_pipeline/daten/grunddaten-dump.manifest.json

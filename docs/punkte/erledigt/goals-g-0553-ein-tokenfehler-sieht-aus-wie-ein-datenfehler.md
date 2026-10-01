@@ -137,7 +137,7 @@ das geht zuerst.
 
 ### Was gebaut wurde
 
-    apps/web/src/lib/goals/ladefehler.ts            fehlerart · fehlertexte
+    apps/web/src/lib/fehler/ladefehler.ts            fehlerart · fehlertexte
     apps/web/src/app/v2/goals/ansicht.tsx           Umbau + LadefehlerKachel
     apps/web/src/app/v2/goals/__tests__/g553-mockup-und-ladefehler.test.ts
 

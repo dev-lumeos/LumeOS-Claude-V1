@@ -196,7 +196,7 @@ planen.**
 **G-553 ist fertig** (2.208 Tests, Gate gruen). Zwei Sachen daraus aendern
 diesen Auftrag.
 
-### `apps/web/src/lib/goals/ladefehler.ts` benutzen, nicht neu bauen
+### `apps/web/src/lib/fehler/ladefehler.ts` benutzen, nicht neu bauen
 
 `[cmd]` G-553 hat die Unterscheidung Sitzungsfehler / Datenfehler gebaut, und
 **sie liest den Text, nicht den Code** — Toms Fehler kam als `READ_FAILED`,

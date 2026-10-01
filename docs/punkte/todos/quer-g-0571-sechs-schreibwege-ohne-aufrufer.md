@@ -14,7 +14,7 @@ quellen:
 beruehrt:
   dateien:
     - apps/web/src/app/v2/medical/katalog-suche.tsx
-    - apps/web/src/lib/goals/ladefehler.ts
+    - apps/web/src/lib/fehler/ladefehler.ts
 ---
 
 # Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt
@@ -72,7 +72,7 @@ kennt:** `medical import: user mismatch` mit `P0001`. Gezaehlt in
 `user mismatch`.**
 
 `[cmd]` **Und die Zuordnung von Fehlercodes zu Texten liegt unter
-`goals/`**, nicht querliegend: `apps/web/src/lib/goals/ladefehler.ts`
+`goals/`**, nicht querliegend: `apps/web/src/lib/fehler/ladefehler.ts`
 kennt `Fehlerart = 'sitzung' | 'daten'` und nennt im Kommentar
 PostgREST-Codes. **Ein medical-Fehler hat dort keinen Platz, ohne dass
 die Datei aus `goals/` heraus wandert** — dasselbe, was G-555 fuer
@@ -117,5 +117,5 @@ wird.
 
 `[read]` **Und die Reihenfolge ist nicht beliebig:** die Zuordnung von
 Fehlercodes zu Texten liegt unter `goals/`
-(`apps/web/src/lib/goals/ladefehler.ts`), nicht querliegend. **G-555
+(`apps/web/src/lib/fehler/ladefehler.ts`), nicht querliegend. **G-555
 raeumt das**, und der medical-Weg braucht es. Die anderen drei nicht.

@@ -117,8 +117,17 @@ des Nutzers liegen als Positionen im Programm.
 Sitzungsnamens (G-535). **Nicht den `coalesce` kopieren.**
 
 **A5 — die Probe als Kettenschritt**, nach dem Muster aus G-535 und
-G-558: Schritt plus `dependsOn`. `[cmd]` **Die Kette steht bei 315
-Schritten**, Testdaten an Position 305, Proben 306 bis 315.
+G-558: Schritt plus `dependsOn`. `[cmd]` **Seit A-90 (2026-10-01) ist die
+Standardkette anders gebaut:** `kette.json` fuehrt 318 Eintraege, davon
+kommen 263 historische Schritte aus dem C-537-Snapshot und 55 laufen
+wirklich - Dumppruefung, Restore, sieben Ableitungen, Aenderungen NACH
+C-537, Testdaten, Proben. **Dein Schritt ist eine Aenderung nach C-537
+und laeuft im Standardlauf mit.** `kette-voll.json` expandiert auf alle
+urspruenglichen Schritte und laeuft naechtlich.
+
+`[cmd]` **Und der Restore kostet 78,0 s statt 1.300,7 s** - deine Probe
+laeuft also gegen eine Wegwerf-Datenbank, die in gut einer Minute
+steht.
 
 **Nicht Teil:** die Oberflaeche (Claude Code), die Vorlagen (G-540,
 E-88, zuletzt) und die Gesamtdauer-Frage aus G-545/A5 — die bleibt

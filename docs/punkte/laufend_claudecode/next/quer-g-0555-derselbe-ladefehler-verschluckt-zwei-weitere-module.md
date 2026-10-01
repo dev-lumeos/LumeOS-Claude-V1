@@ -16,7 +16,7 @@ beruehrt:
   dateien:
     - apps/web/src/app/v2/medical/tab-biomarker.tsx
     - apps/web/src/app/v2/nutrition/tab-vorlieben.tsx
-    - apps/web/src/lib/goals/ladefehler.ts
+    - apps/web/src/lib/fehler/ladefehler.ts
 
 zahlen:
   gemessen: 2026-09-30
@@ -124,7 +124,7 @@ betrifft zwei Module, die Tom heute nicht bearbeitet.
 Text wird.
 
 `[cmd]` **Und die Datei ist noch enger gebunden, als der Punkt sagt:**
-`apps/web/src/lib/goals/ladefehler.ts` fuehrt
+`apps/web/src/lib/fehler/ladefehler.ts` fuehrt
 `Fehlerart = 'sitzung' | 'daten'` und nennt im Kommentar
 PostgREST-Codes. **Ein medical-Fehler hat dort keinen Platz, solange die
 Datei unter `goals/` liegt.**

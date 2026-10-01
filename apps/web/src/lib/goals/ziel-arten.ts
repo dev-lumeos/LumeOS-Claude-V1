@@ -31,6 +31,13 @@
  * `[read]` **Sie stehen hier als gemessener Bestand, nicht als
  * Vorschrift** — ob `subtype` einen CHECK bekommt, ist offen
  * (G-352). **Bis dahin ist diese Zuordnung eine Anzeigehilfe.**
+ *
+ * `[cmd]` **Seit E-89 (2026-10-01) kommt `weight` dazu** — der
+ * einzige Wert, der entschieden und nicht gezaehlt ist. `[cmd]`
+ * **Nochmal gemessen 2026-10-01, ueber die ganze Pipeline: null
+ * Treffer auf einen CHECK fuer `subtype`** (`111_goals_ziele_
+ * phasen.sql:26` fuehrt `subtype TEXT`, ohne Einschraenkung) —
+ * **der Wert wird hier gesetzt, nicht in der Datenbank.**
  */
 
 /**
@@ -61,7 +68,17 @@ export const ZIEL_ART_TEXT: Record<ZielArt, string> = {
  * und nicht aus einer Spec uebernommen.
  */
 export const ZIEL_UNTERARTEN: Record<ZielArt, readonly string[]> = {
-  body_composition: ['cut', 'gain_muscle'],
+  // `[cmd]` **`weight` seit E-89 (2026-10-01)** — als einziger Wert
+  // hier NICHT aus dem Bestand gezaehlt, sondern entschieden.
+  // `[read]` **Der Untertyp benennt die MESSGROESSE:** die Waage ist
+  // eine andere Groesse als KFA und Umfaenge, auch wenn die Absicht
+  // dieselbe ist. **Deshalb ein eigener Wert und kein `cut`.**
+  //
+  // `[cmd]` **Nachzuzaehlen, wann er im Bestand ankommt:**
+  //
+  //     select subtype, count(*) from goals.user_goals
+  //       where goal_type = 'body_composition' group by 1;
+  body_composition: ['cut', 'gain_muscle', 'weight'],
   performance: ['strength', 'training_capacity'],
   lifestyle: ['cardio_frequency'],
   // `[cmd]` **`health` traegt heute keine Unterart** — null Zeilen.
@@ -140,27 +157,39 @@ export const PRIORITAET_MAX = 10
 //     performance  -> performance / training_capacity   1 Zeile
 //     habit        -> lifestyle / cardio_frequency      2 Zeilen
 //
-// `[cmd]` **Zwei sind es NICHT** — und der Auftrag verlangt, sie zu
-// melden statt still zu waehlen:
+// `[cmd]` **Zwei waren es NICHT** — `weight` und `custom` trugen
+// `unsicher: true` und warteten auf Tom.
 //
-//     weight   Gewicht ist eine MESSGROESSE, keine Absicht. Sowohl
-//              `cut` als auch `gain_muscle` sind Gewichtsziele, und
-//              beide liegen unter `body_composition`. **Hier
-//              vorgeschlagen als `body_composition` ohne
-//              vorbelegten Untertyp** — die Richtung ergibt sich
-//              erst aus Ist- und Zielwert.
-//              **Offen: soll `weight` ein eigener `subtype` sein?**
+// ── E-89, 2026-10-01: beide entschieden ───────────────────────────
 //
-//     custom   ,,Custom" ist die Abwesenheit einer Einordnung. Der
-//              CHECK erlaubt keinen freien `goal_type`.
-//              **Hier vorgeschlagen als `lifestyle` ohne Untertyp**,
-//              weil das die weiteste der vier Arten ist.
-//              **Offen: ist das die richtige Art, oder braucht
-//              `custom` einen eigenen CHECK-Wert?**
+// **Tom, 13:26:** *,,das kann nicht nur gewichtsabhaengig sein.
+// gewicht ist eine variable aber dazu kommen noch die
+// bodymeasurements, die deklarieren wo das gewicht weg oder
+// hinzugekommen ist."*
 //
-// `[read]` **Beide Vorschlaege sind als solche gekennzeichnet**
-// (`unsicher: true`) — **eine Anzeige, die eine offene Frage als
-// entschieden darstellt, ist eine Falschaussage.**
+// `[read]` **Daraus folgt der Grundsatz: der Untertyp benennt die
+// MESSGROESSE, nicht die Absicht.**
+//
+//     weight   die Waage ist die Messgroesse -> subtype `weight`,
+//              ein EIGENER Wert und kein `cut`. Ein Gewichtsziel
+//              wird an der Waage gemessen, ein
+//              Koerperzusammensetzungsziel an KFA und Umfaengen —
+//              **verschiedene Groessen, auch wenn die Absicht
+//              dieselbe ist.**
+//
+//     custom   ,,Eigenes": der Nutzer benennt die Groesse selbst,
+//              **also steht kein Untertyp dafuer** -> `null`.
+//              `[read]` **Die Art bleibt `lifestyle`** — ein
+//              Behelf, weil der CHECK keinen freien `goal_type`
+//              erlaubt. **E-89 entscheidet den Untertyp, nicht die
+//              Art**; ob `custom` einen eigenen `goal_type`-Wert
+//              braucht, ist weiter offen.
+//
+// `[cmd]` **`weight` ist damit der einzige Wert in
+// `ZIEL_UNTERARTEN`, der nicht aus dem Bestand gezaehlt ist** — er
+// kommt noch in null Zeilen vor, weil es den Knopf bis heute nicht
+// gab. `[read]` **Entschieden ist nicht erfunden**, aber es ist auch
+// nicht gemessen, und der Unterschied gehoert hierher.
 
 /** Ein Knopf des Entwurfs, uebersetzt in die Datenbank. */
 export type Zielknopf = {
@@ -169,14 +198,33 @@ export type Zielknopf = {
   label: string
   /** Was in `goal_type` landet. */
   art: ZielArt
-  /** Was in `subtype` landet, oder `null`. */
-  unterart: string | null
   /**
-   * `true`, wenn die Zuordnung ein Vorschlag ist und keine
-   * gemessene Entsprechung hat.
+   * Was in `subtype` landet, oder `null`.
+   *
+   * `[read]` **`null` heisst bei `custom`: der Nutzer benennt die
+   * Messgroesse selbst** (E-89). **Bei `body_comp` heisst es: die
+   * Richtung kommt erst aus der Strategie** — siehe
+   * `unterartFuer()`. `[read]` **Zwei verschiedene Gruende fuer
+   * dieselbe Abwesenheit**, deshalb steht der Grund je Knopf.
    */
-  unsicher: boolean
+  unterart: string | null
 }
+
+// ══ G-576: `unsicher` ist weg ═════════════════════════════════════
+//
+// `[cmd]` **Das Feld trug `true` bei genau zwei Knoepfen** —
+// `weight` und `custom`, die seit G-554 auf Toms Entscheidung
+// warteten. **E-89 hat beide entschieden (2026-10-01)**, damit stand
+// ueberall `false`.
+//
+// `[read]` **Ein Feld mit einem einzigen Wert sagt nichts** — und
+// ein `unsicher: false` an jedem Knopf liest sich wie eine geprüfte
+// Zusicherung, wo nur die Frage weggefallen ist.
+//
+// `[cmd]` **Gemessen vor dem Entfernen: `modale.tsx:261` reichte es
+// in `types` durch, keine Zeile las `t.unsicher`** — es erreichte
+// den Schirm nie. **Die Kennzeichnung, die G-554 versprochen hatte,
+// war nie gebaut.**
 
 /**
  * Die sechs Knoepfe, in der Reihenfolge des Entwurfs.
@@ -186,17 +234,33 @@ export type Zielknopf = {
  */
 export const ZIELKNOEPFE: readonly Zielknopf[] = [
   { id: 'body_comp', label: 'Body composition',
-    art: 'body_composition', unterart: null, unsicher: false },
+    art: 'body_composition', unterart: null },
+  // `[cmd]` **E-89, 2026-10-01: `weight` traegt die Waage.** Ein
+  // Gewichtsziel wird an der Waage gemessen, ein
+  // Koerperzusammensetzungsziel an KFA und Umfaengen — **zwei
+  // Messgroessen, dieselbe Absicht.** `[read]` **Deshalb ein FESTER
+  // Untertyp:** er darf nicht aus der Strategie abgeleitet werden,
+  // sonst wuerde aus einem Waageziel ein `cut`.
   { id: 'weight', label: 'Weight',
-    art: 'body_composition', unterart: null, unsicher: true },
+    art: 'body_composition', unterart: 'weight' },
   { id: 'strength', label: 'Strength PR',
-    art: 'performance', unterart: 'strength', unsicher: false },
+    art: 'performance', unterart: 'strength' },
   { id: 'performance', label: 'Performance',
-    art: 'performance', unterart: 'training_capacity', unsicher: false },
+    art: 'performance', unterart: 'training_capacity' },
   { id: 'habit', label: 'Habit',
-    art: 'lifestyle', unterart: 'cardio_frequency', unsicher: false },
+    art: 'lifestyle', unterart: 'cardio_frequency' },
+  // `[cmd]` **E-89, 2026-10-01: ,,Eigenes" traegt KEINEN Untertyp.**
+  // `[read]` **Der Nutzer benennt die Messgroesse selbst** — ein
+  // vorbelegter Untertyp waere eine Einordnung, die er nicht
+  // vorgenommen hat. **`null` ist hier die Aussage, nicht die
+  // Luecke.**
+  //
+  // `[read]` **`lifestyle` als Art bleibt**, weil der CHECK keinen
+  // freien `goal_type` erlaubt und `lifestyle` die weiteste der vier
+  // Arten ist. **Das war und bleibt ein Behelf** — E-89 entscheidet
+  // den Untertyp, nicht die Art.
   { id: 'custom', label: 'Custom',
-    art: 'lifestyle', unterart: null, unsicher: true },
+    art: 'lifestyle', unterart: null },
 ] as const
 
 /** Der Knopf zu einer Kennung. */
@@ -256,10 +320,28 @@ const KATEGORIE_ZU_UNTERART: Record<string, string> = {
  * `[read]` **Drei Faelle, in dieser Reihenfolge:**
  *
  *   1  Der Knopf bringt eine feste Unterart mit (`strength`,
- *      `performance`, `habit`) — sie gewinnt.
+ *      `performance`, `habit`, **seit E-89 auch `weight`**) — sie
+ *      gewinnt.
  *   2  `body_composition` mit Strategie: die Kategorie sagt die
  *      Richtung.
  *   3  Sonst `null` — **nicht geraten.**
+ *
+ * ══ G-576/A3: `weight` darf die Ableitung NICHT mitnehmen ════════
+ *
+ * `[cmd]` **Bis E-89 ergab `unterartFuer('weight', 'fat_loss')` den
+ * Wert `cut`** — `weight` war `body_composition` ohne feste
+ * Unterart und fiel damit in Fall 2. **Eine Zusicherung behauptete
+ * das sogar ausdruecklich** (`g554-phasenziel.test.ts:485`).
+ *
+ * `[read]` **Nach E-89 ist das falsch:** wer ,,Weight" drueckt,
+ * waehlt die Waage als Messgroesse. **Eine Abnehmstrategie aendert
+ * die Absicht, nicht die Groesse** — aus einem Waageziel wird kein
+ * Koerperzusammensetzungsziel.
+ *
+ * `[cmd]` **Fall 1 faengt es ab**, weil `weight` jetzt eine feste
+ * Unterart traegt. **Das ist keine Sonderbehandlung**, sondern
+ * dieselbe Regel wie bei `strength`: eine gewaehlte Messgroesse
+ * ueberschreibt die abgeleitete.
  *
  * @param knopfId    Die Kennung des Entwurfsknopfes.
  * @param kategorie  `category` der gewaehlten Strategie, oder `null`.

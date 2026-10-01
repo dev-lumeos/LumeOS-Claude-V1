@@ -258,7 +258,7 @@ function NewGoalModal({ onClose, strategien }: {
     custom: 'edit',
   }
   const types = ZIELKNOEPFE.map(k => ({
-    id: k.id, label: k.label, icon: SINNBILD[k.id], unsicher: k.unsicher,
+    id: k.id, label: k.label, icon: SINNBILD[k.id],
   }))
 
   // ══ G-537: der Dialog legt jetzt wirklich an ═══════════════════

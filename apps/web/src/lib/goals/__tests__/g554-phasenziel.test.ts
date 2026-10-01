@@ -52,14 +52,42 @@ describe('G-554/A3 — die sechs Typen des Entwurfs', () => {
     }
   })
 
-  it('die unsicheren Zuordnungen sind als solche gekennzeichnet', () => {
-    // `[read]` **Der Auftrag: melden, nicht still waehlen.**
-    // `[cmd]` **`weight` und `custom` sind die zwei** — bei den
-    // anderen vier fuehrt der Seed den Untertyp schon.
-    const unsicher = ZIELKNOEPFE.filter(k => k.unsicher).map(k => k.id)
-    assert.deepEqual(unsicher.sort(), ['custom', 'weight'],
-      'die offenen Faelle sind nicht die gemeldeten — eine Zuordnung, '
-      + 'die als entschieden dasteht, ist eine Falschaussage')
+  // ══ G-576: aus zwei offenen Faellen wurden zwei entschiedene ═══
+  //
+  // `[cmd]` **Hier stand: `weight` und `custom` tragen
+  // `unsicher: true`.** `[cmd]` **E-89 (2026-10-01) hat beide
+  // entschieden**, damit stand das Feld ueberall auf `false` — **ein
+  // Feld mit einem Wert sagt nichts** und ist entfallen.
+  //
+  // `[read]` **Die Frage, die der Waechter stellte, bleibt gueltig:**
+  // steht eine Zuordnung da, die niemand entschieden hat? **Sie wird
+  // jetzt ueber den Untertyp gestellt, nicht ueber ein Merkfeld.**
+  it('jeder Knopf traegt eine entschiedene Zuordnung', () => {
+    // `[cmd]` **E-89 nennt die Paare. Keine Abweichung, kein
+    // zusaetzlicher Knopf.**
+    const nachE89: Record<string, string | null> = {
+      body_comp: null,          // Richtung erst aus der Strategie
+      weight: 'weight',         // die Waage ist die Messgroesse
+      strength: 'strength',
+      performance: 'training_capacity',
+      habit: 'cardio_frequency',
+      custom: null,             // der Nutzer benennt die Groesse
+    }
+    assert.deepEqual(
+      Object.fromEntries(ZIELKNOEPFE.map(k => [k.id, k.unterart])),
+      nachE89,
+      'ein Knopf traegt eine andere Unterart als E-89 entschieden hat')
+  })
+
+  it('kein Knopf traegt noch ein Unsicher-Merkmal', () => {
+    // `[read]` **Die Gegenprobe zum Entfernen** — ein wieder
+    // eingefuehrtes `unsicher` waere ein zweiter Ort fuer dieselbe
+    // Aussage, und zwei Orte driften.
+    for (const k of ZIELKNOEPFE) {
+      assert.ok(!('unsicher' in k),
+        `„${k.id}" traegt wieder ein Unsicher-Merkmal — die Zuordnung `
+        + 'steht seit E-89 in der Unterart, nicht in einem Flag')
+    }
   })
 
   it('die sicheren Zuordnungen decken sich mit dem Seed', () => {
@@ -71,12 +99,40 @@ describe('G-554/A3 — die sechs Typen des Entwurfs', () => {
       strength: ['performance', 'strength'],
       performance: ['performance', 'training_capacity'],
       habit: ['lifestyle', 'cardio_frequency'],
+      // `[cmd]` **`weight` steht hier NICHT** — er ist der einzige
+      // Knopf, dessen Untertyp entschieden und nicht gezaehlt ist
+      // (E-89). **Er wird eine Zeile tiefer eigens geprueft**, damit
+      // der Unterschied zwischen gemessen und entschieden nicht
+      // verschwindet.
     }
     for (const [id, [art, unterart]] of Object.entries(erwartet)) {
       const k = zielknopf(id)
       assert.equal(k?.art, art, `„${id}" zeigt auf die falsche Art`)
       assert.equal(k?.unterart, unterart, `„${id}" hat die falsche Unterart`)
     }
+  })
+
+  it('weight traegt die Waage — entschieden, nicht gezaehlt', () => {
+    // `[cmd]` **E-89, 2026-10-01.** `[read]` **Die Waage ist eine
+    // andere Messgroesse als KFA und Umfaenge**, auch wenn die
+    // Absicht dieselbe ist — deshalb ein eigener Wert und kein `cut`.
+    const k = zielknopf('weight')
+    assert.equal(k?.art, 'body_composition',
+      '„weight" bleibt body_composition — der CHECK kennt nichts '
+      + 'Passenderes')
+    assert.equal(k?.unterart, 'weight',
+      '„weight" traegt die Waage als Untertyp (E-89)')
+    assert.notEqual(k?.unterart, 'cut',
+      '„weight" ist kein cut — das waere die Absicht statt der '
+      + 'Messgroesse')
+  })
+
+  it('custom bleibt ohne Untertyp — der Nutzer benennt die Groesse', () => {
+    // `[read]` **`null` ist hier die Aussage, nicht die Luecke**
+    // (E-89).
+    assert.equal(zielknopf('custom')?.unterart, null,
+      '„Eigenes" traegt einen Untertyp — damit waere die Groesse '
+      + 'eingeordnet, die der Nutzer selbst benennen soll')
   })
 
   // ── A1 haengt daran: wann erscheint die Strategie? ──────────────
@@ -482,8 +538,34 @@ describe('G-557/A2 — body_comp traegt kein null', () => {
     // -0,25), `muscle_gain` hebt ihn (+0,10 bis +0,20).**
     assert.equal(unterartFuer('body_comp', 'fat_loss'), 'cut')
     assert.equal(unterartFuer('body_comp', 'muscle_gain'), 'gain_muscle')
-    assert.equal(unterartFuer('weight', 'fat_loss'), 'cut',
-      '„weight" ist body_composition und folgt derselben Ableitung')
+  })
+
+  // ══ G-576/A3: und sie nimmt `weight` NICHT mit ════════════════
+  //
+  // `[cmd]` **Hier stand die Gegenbehauptung:**
+  // `assert.equal(unterartFuer('weight', 'fat_loss'), 'cut')` mit
+  // der Begruendung *„weight ist body_composition und folgt
+  // derselben Ableitung"*. **E-89 hat das umgedreht.**
+  //
+  // `[read]` **Eine Abnehmstrategie aendert die Absicht, nicht die
+  // Messgroesse** — wer die Waage gewaehlt hat, misst weiter an der
+  // Waage.
+  it('die Ableitung nimmt weight nicht mit', () => {
+    for (const kat of ['fat_loss', 'muscle_gain', 'hybrid', null]) {
+      assert.equal(unterartFuer('weight', kat), 'weight',
+        `„weight" wird unter „${kat}" zu etwas anderem — die `
+        + 'Strategie ueberschreibt die gewaehlte Messgroesse')
+    }
+  })
+
+  it('custom bleibt auch mit Strategie ohne Untertyp', () => {
+    // `[read]` **Die zweite Haelfte von E-89**, und sie kann nicht
+    // ueber Fall 1 laufen: `custom` ist `lifestyle`, nicht
+    // `body_composition` — **Fall 2 greift gar nicht erst.**
+    for (const kat of ['fat_loss', 'muscle_gain', null]) {
+      assert.equal(unterartFuer('custom', kat), null,
+        `„custom" bekommt unter „${kat}" einen Untertyp`)
+    }
   })
 
   it('es sind genau die zwei Werte des Bestands', () => {
@@ -523,10 +605,12 @@ describe('G-557/A2 — body_comp traegt kein null', () => {
       + 'Ziel vollstaendig aus, ist es aber nicht')
   })
 
-  it('weight und custom bleiben Vorschlag', () => {
-    // `[read]` **Toms Entscheidung, nicht meine** — die Ableitung
-    // aendert daran nichts.
-    const unsicher = ZIELKNOEPFE.filter(k => k.unsicher).map(k => k.id)
-    assert.deepEqual(unsicher.sort(), ['custom', 'weight'])
+  it('weight und custom sind entschieden — E-89', () => {
+    // `[cmd]` **Hier stand: ,,bleiben Vorschlag"**, mit der
+    // Begruendung *„Toms Entscheidung, nicht meine"*. `[cmd]` **Tom
+    // hat sie am 2026-10-01 getroffen** (E-89) — **der Grund des
+    // Waechters ist eingeloest, nicht umgangen.**
+    assert.equal(zielknopf('weight')?.unterart, 'weight')
+    assert.equal(zielknopf('custom')?.unterart, null)
   })
 })
