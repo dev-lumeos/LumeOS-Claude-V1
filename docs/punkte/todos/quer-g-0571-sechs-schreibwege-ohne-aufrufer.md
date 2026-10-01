@@ -1,0 +1,91 @@
+---
+nr: G-571
+typ: fehler
+modul: quer
+schwere: mittel
+angelegt: 2026-10-01
+
+braucht: [G-535]
+kind_von: G-535
+
+quellen:
+  - docs/punkte/erledigt/quer-g-0535-sechs-funktionen-lesen-den-alten-sitzungsnamen.md
+
+beruehrt:
+  dateien:
+    - apps/web/src/app/v2/medical/katalog-suche.tsx
+    - apps/web/src/lib/goals/ladefehler.ts
+---
+
+# Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt
+
+## Der Befund
+
+`[cmd]` **Bei der Abnahme von G-535 selbst gezaehlt**, ueber `apps/` und
+`packages/`, ohne Testdateien:
+
+    coach.raise_alert                     0 Aufrufer
+    goals.body_circumference_write        0 Aufrufer
+    medical.import_lab_report_rows        0 Aufrufer
+    medical.start_lab_report_ocr          0 Aufrufer
+    medical.store_lab_report_ocr_result   0 Aufrufer
+    nutrition.meal_plan_set_next_plan     0 Aufrufer
+
+`[cmd]` **Ein einziger Treffer im ganzen Produkt, und das ist ein
+Kommentar:** `apps/web/src/app/v2/medical/katalog-suche.tsx:20`. `[cmd]`
+**Codex hat zusaetzlich Spec, Mockup und Vorgaengerrepo abgesucht** —
+auch dort kein lebender Aufrufer.
+
+`[read]` **Das sind keine Hilfsfunktionen, das sind Funktionen fuer
+Dinge, die ein Nutzer tun soll:** einen Koerperumfang eintragen, einen
+Laborbericht einlesen, die Auswertung speichern, den naechsten
+Ernaehrungsplan setzen, einen Coach-Hinweis ausloesen. **Jede ist
+gebaut, geprueft und unerreichbar** — und keine der bisherigen Messungen
+hat das gemeldet, weil jede nur gefragt hat, ob die Funktion richtig ist.
+
+`[read]` **Aus der Existenz einer Sache folgt nicht ihre Funktion** — das
+steht so in den Projektregeln, und hier trifft es sechs Funktionen auf
+einmal.
+
+## Was daran entschieden werden muss
+
+`[read]` **Die Frage ist nicht, wer die Aufrufe schreibt, sondern ob sie
+gewollt sind.** Zwei Moeglichkeiten, und sie fuehren zu verschiedener
+Arbeit:
+
+1. **Der Weg ist geplant und fehlt nur** — dann gehoert je Funktion ein
+   Punkt mit der Oberflaeche, an der er haengt (Umfangserfassung,
+   Laborimport, Mahlzeitenplan, Coach-Hinweise).
+2. **Der Weg ist aufgegeben** — dann ist die Funktion toter Bestand und
+   gehoert benannt, nicht gepflegt. Sie steht sonst in jedem kuenftigen
+   Waechterlauf mit und kostet bei jeder Aenderung Aufmerksamkeit.
+
+`[annahme]` **Die erste Moeglichkeit ist wahrscheinlicher** — alle fuenf
+Fachbereiche stehen in der Spec. Aber das ist eine Vermutung, und eine
+Zuordnung je Funktion steht nirgends.
+
+## Die neue Meldung hat keinen Ort
+
+`[cmd]` **G-535 hat eine Meldung hinzugefuegt, die die Oberflaeche nicht
+kennt:** `medical import: user mismatch` mit `P0001`. Gezaehlt in
+`apps/web/src/lib`: **null Treffer auf `P0001` und null auf
+`user mismatch`.**
+
+`[cmd]` **Und die Zuordnung von Fehlercodes zu Texten liegt unter
+`goals/`**, nicht querliegend: `apps/web/src/lib/goals/ladefehler.ts`
+kennt `Fehlerart = 'sitzung' | 'daten'` und nennt im Kommentar
+PostgREST-Codes. **Ein medical-Fehler hat dort keinen Platz, ohne dass
+die Datei aus `goals/` heraus wandert** — dasselbe, was G-555 fuer
+medical und nutrition schon festhaelt.
+
+`[read]` **Wer den Aufrufer fuer `import_lab_report_rows` baut, braucht
+also zuerst einen Ort fuer die Meldung** — sonst zeigt die Oberflaeche
+einen rohen Postgres-Fehler. **Die Reihenfolge ist G-555, dann der
+Aufrufer.**
+
+**Nicht Teil:** die sechs Funktionen selbst (G-535, erledigt und
+geprueft).
+
+**Zu belegen:** je Funktion die Oberflaeche, an der sie haengt, oder die
+Aussage, dass sie aufgegeben ist · die Zaehlung der Aufrufer vorher und
+nachher · der Ort fuer die neue Meldung, wenn der medical-Weg dabei ist.

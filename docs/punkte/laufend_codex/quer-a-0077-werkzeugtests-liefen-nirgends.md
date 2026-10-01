@@ -4,29 +4,53 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-09-28
+beauftragt: 2026-10-01
+agent: codex
 
 quellen:
   - tools/__tests__/g518-dist-dir-sperre.test.mjs
   - tools/__tests__/kettenlauf-status-pruefen.test.mjs
   - package.json:10
+  - docs/punkte/erledigt/quer-g-0535-sechs-funktionen-lesen-den-alten-sitzungsnamen.md
 
 beruehrt:
   dateien:
     - package.json
+    - supabase/_pipeline/kette.json
     - tools/__tests__/backup-manifest.test.mjs
     - tools/__tests__/g517-schuss-meldet-die-ursache.test.mjs
     - tools/__tests__/g518-dist-dir-sperre.test.mjs
     - tools/__tests__/kettenlauf-status-pruefen.test.mjs
 
 zahlen:
-  gemessen: 2026-09-28
-  testdateien: 4
-  pruefungen: 33
-  dauer_sekunden: 2.7
-  berichte_mit_dem_hinweis: 5
+  gemessen: 2026-10-01
+  werkzeugtests_dateien: 5
+  werkzeugtests_pruefungen: 37
+  werkzeugtests_dauer_sekunden: 12.9
+  validierung_dateien: 164
+  validierung_testdateien: 120
+  validierung_in_der_kette: 6
+  validierung_in_keinem_lauf: 114
 ---
 
 # A-77 - vier Werkzeugtests liefen nirgends
+
+    AUFTRAG FUER Codex - A-77: 114 von 120 Proben in _validierung/
+                              laufen in keinem Lauf
+    Bereich: supabase/_pipeline/kette.json
+             supabase/_pipeline/_validierung/
+             package.json (nur der Testaufruf, nichts darunter)
+    Fremd:   apps/ gehoert Claude Code, der gerade an G-569 baut (die
+             Waechter pruefen Kilogramm statt Prozent). Wird eine Probe
+             rot, die eine Oberflaeche betrifft, MELDE sie - raeume sie
+             nicht weg.
+             docs/ gehoert dem Orchestrator, auch diese Punktdatei:
+             der Bericht kommt als Antwort, nicht als Anhang hier.
+    Stand:   2026-10-01
+
+**Zuerst lesen, vollstaendig:** diese Datei. Der untere Teil
+(„Der Loesungsweg ist vorgemacht") entscheidet die Richtung, der
+Abschnitt „Was heute gemessen ist" nennt die Zahlen.
 
 ## Der Befund
 
@@ -129,19 +153,13 @@ Werkzeugtests, sondern um zwei Verzeichnisse mit Proben, auf die sich
 Berichte berufen, waehrend sie nur laufen, wenn jemand sie von Hand
 aufruft. **Schwere auf hoch.**
 
-`[offen]` Wer diesen Punkt uebernimmt, entscheidet dabei auch, ob die
-Datenbankproben ins Gate koennen (sie brauchen eine Wegwerf-Datenbank,
-das Gate hat keine) oder ob sie in den Kettenlauf gehoeren, der eine
-hat. Die zweite Antwort ist die wahrscheinlichere — der Kettenlauf baut
-die Datenbank ohnehin und laeuft naechtlich.
-
 ## Der Loesungsweg ist vorgemacht — 2026-09-30, G-558
 
 `[cmd]` **Codex hat die Frage aus dem Nachtrag beantwortet, ohne dass sie
 beauftragt war:** die Gegenprobe zu G-558 liegt nicht als Datei in
 `_validierung/`, die niemand aufruft, sondern als **eigener
-Kettenschritt**. `kette.json` fuehrt seither **301** Schritte statt 299,
-darunter `558_goal_phase_start_strategy_probe`.
+Kettenschritt**. `kette.json` fuehrt seither mehr Schritte, darunter
+`558_goal_phase_start_strategy_probe`.
 
 `[read]` **Damit ist die offene Entscheidung entschieden, und zwar zur
 zweiten Antwort:** die Datenbankproben gehoeren in den Kettenlauf, nicht
@@ -150,13 +168,80 @@ ohnehin und laeuft naechtlich; `punkte-pruefen` liest dessen Status und
 wird rot, wenn er faellt. **Die Kette ist der Lauf, der eine
 Datenbankprobe tragen kann.**
 
-`[read]` **Was dieser Punkt jetzt noch ist:** die bestehenden Proben
-nachziehen. `tools/__tests__/` (4 Dateien, 33 Pruefungen) gehoert ins
-Gate — es braucht keine Datenbank, nur einen Aufruf in `package.json`.
-Die Dateien in `supabase/_pipeline/_validierung/` gehoeren einzeln
-geprueft: wer eine Datenbank braucht, wird Kettenschritt wie bei G-558;
-wer keine braucht, kann ins Gate.
+`[cmd]` **Und seit G-535 ist das Muster vollstaendig vorgemacht:** der
+SQL-Schritt und die Probe stehen beide in `kette.json`, die Probe mit
+`dependsOn` auf den SQL-Schritt. **Das ist die Form, die hier 114 Mal
+zu pruefen ist.**
 
-`[cmd]` **Und der belegte Schaden bleibt der Grund:** zwei
-G-536-Rechnungstests erwarten seit G-543 die alte Semantik, und nichts
-wurde rot.
+---
+
+## Was heute gemessen ist — 2026-10-01, Orchestrator
+
+`[cmd]` **Die erste Haelfte dieses Punkts ist erledigt und darf nicht
+noch einmal gebaut werden:**
+
+    node --test "tools/__tests__/*.test.mjs"
+    # tests 37   # pass 37   # fail 0   12,9 s
+
+Der Aufruf steht als **erster** Schritt in `package.json:10` (`gate`)
+und einzeln als `test:werkzeuge`. **5 Dateien, 37 Pruefungen, gruen.**
+
+`[cmd]` **Die zweite Haelfte ist der Auftrag, und sie ist groesser als
+der Nachtrag vom 30.09. vermutet:**
+
+    Dateien in _validierung/            164
+    davon *.test.ts                     120
+    davon in kette.json                   6
+    in KEINEM Lauf                      114
+
+`[cmd]` **Die sechs, die laufen, sind alle aus den letzten vier
+Tagen:** `goals-g545-strategy-content`, `goals-g558-phase-start-strategy`,
+`goals-g559-phase-at`, `goals-g561-relative-weight-guards`,
+`goals-g563-target-calculation`, `quer-g535-auth-uid-readers`.
+**Alles, was aelter ist als der 27.09., laeuft nicht.**
+
+`[read]` **Das aendert die Erwartung an diesen Auftrag.** 114 Proben
+beschreiben einen Bestand aus Monaten, in denen sich die Semantik
+mehrfach geaendert hat. **Es ist wahrscheinlich, dass ein erheblicher
+Teil rot wird — und das ist das Ergebnis, nicht der Fehlschlag.**
+
+## Auftrag
+
+**A1 — alle 120 einordnen, nicht nur zaehlen.** Je Datei drei Angaben:
+braucht sie eine Datenbank, laeuft sie ohne Umgebungsvariable, und
+beschreibt sie noch den heutigen Zustand? `[read]` **Eine Datei, die
+eine Semantik von vor G-543 prueft, ist kein Waechter, sondern ein
+Zeuge** — melde sie als solche.
+
+**A2 — einen ERSTEN Stapel verdrahten, nicht alle 114.** Nimm die, die
+keine Umgebungsvariable brauchen und zu einem bestehenden
+Kettenabschnitt gehoeren, nach dem Muster aus G-535: Schritt plus
+`dependsOn`. **Sag, wie du den Stapel abgegrenzt hast**, und melde die
+Schrittzahl vorher und nachher.
+
+**A3 — was rot wird, wird gemeldet, nicht angepasst.** `[read]` **Eine
+Probe, die unerwartet rot wird, ist eine Messung** — sie sagt, dass eine
+Aussage ueber das Produkt nicht mehr stimmt. **Nicht die Probe aendern,
+bis sie schweigt.** Je roter Probe: welche Aussage faellt, und seit
+welcher Aenderung. Daraus werden Punkte, einer je Aussage.
+
+**A4 — die Laufzeit ist ein Ergebnis.** Der letzte volle Lauf stand bei
+1.459,7 s. **Miss, was dein Stapel kostet**, und sag, ob 114 Proben in
+diesem Lauf tragbar sind oder ob der Lauf dafuer geteilt werden muss.
+`[read]` Ein naechtlicher Lauf, der nicht mehr durchkommt, ist dasselbe
+Problem eine Stufe spaeter.
+
+**A5 — die Umgebungsvariablen benennen.** `goals-g536-goal-strategies`
+wirft ohne `LUMEOS_G536_DATABASE`. **Zaehle, wie viele Dateien so
+gebaut sind**, und sag, ob die Kette die Variable setzen kann oder ob
+die Datei sie nicht brauchen sollte.
+
+**Nicht Teil:** `tools/__tests__/` (laeuft, siehe oben), ein Test je
+Waechter (eigene Aufgabe, hier nur festgehalten), und die Frage, ob eine
+rote Probe recht hat — das entscheidet der Punkt, der aus ihr entsteht.
+
+**Zu belegen:** die Einordnung aller 120 als Tabelle · Schrittzahl der
+Kette vorher und nachher · voller Kettenlauf gruen ODER die rote Liste
+mit je einer Zeile Begruendung · Laufzeit vorher und nachher ·
+Wegwerf-Datenbank verworfen mit Zaehler · kein `db push` · nichts
+committen.

@@ -1,13 +1,14 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-01, 10:15**
+**Stand: 2026-10-01, 11:45**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
 | Claude Code | G-569 | G-520 prueft Kilogramm in der Anwendung | **laeuft**, raus 01.10. |
-| Codex | G-535 | sechs Funktionen lesen den alten Sitzungsnamen | **laeuft**, raus 01.10. |
+| Codex | A-77 | 114 von 120 Proben laufen in keinem Lauf | **laeuft**, raus 01.10. |
 | Codex | G-514 | die Modulverrechnung — Bau abgenommen | **offen**: nicht live eingespielt |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
+| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 
 ## Was am 30.09. und 01.10. abgelegt wurde
 
@@ -29,10 +30,11 @@
     G-561  605a27d8   die Katalogwaechter pruefen Prozent, 6 Zeilen
     G-568  f3088a98   Rueckfall auf die Zweiparameter-Fassung (Bruecke)
     G-565  bdaea479   der Nutzer waehlt die Einheit, gespeichert die Rate
+    G-535  79d50c60   sechs Funktionen lesen die Sitzung ueber auth.uid()
 
-`[cmd]` **Die Kette ist wieder gruen** — `kettenlauf-status.json`:
-`passed`, Exit 0, 1401 s, 299 Schritte. Damit war das Repo nach zwei
-Tagen wieder committierbar; fuenf Commits sind seither durch.
+`[cmd]` **Die Kette ist wieder gruen** — der letzte volle Lauf: 310
+Schritte, Exit 0, 1.459,7 s. Damit war das Repo nach zwei Tagen wieder
+committierbar; sieben Commits sind seither durch.
 
 ## Der Commit-Takt — gemessen 2026-10-01
 
@@ -65,15 +67,16 @@ was sie kosten: `encoding-pruefen` 15,6 s ueber 21.692 Dateien,
 
 ---
 
-## Die Einspielreihenfolge — und sie ist seit heute dringend
+## Die Einspielreihenfolge — drei Aenderungen, und eine ist heute ausgefallen
 
-`[cmd]` **Zwei Datenbankaenderungen sind gebaut und NICHT live. Ihre
-Anwendungsseite steht fuer beide:**
+`[cmd]` **Drei Datenbankaenderungen sind gebaut und NICHT live:**
 
     G-559   phase_am liefert alle Phasen, phase_eines_ziels_am eine
             Anwendung: G-564  (6ae14c93)   FERTIG
     G-563   berechne_zielwerte(p_user_id, p_goal_id, p_stichtag)
             Anwendung: G-568  (57b88381)   FERTIG
+    G-535   sechs Funktionen lesen auth.uid() statt des Singulars
+            Anwendung: keine noetig - es gibt keinen Aufrufer (G-571)
 
 `[cmd]` **Am 01.10. ist die Goals-Seite daran ausgefallen.** G-568 reicht
 bei genau einer offenen Phase ein `p_goal_id` durch; live steht nur die
@@ -91,6 +94,8 @@ sonst verdeckt sie genau den Fehler, den sie heute ueberbrueckt.
     die Zielwerte nehmen still eine von zwei Raten - gemessen -0,500,
     bei einem Nutzer, der auch ein Aufbauziel fuehrt. Der Unterschied
     betraegt 716 kcal/Tag (2306 gegen 3023 bei 81,4 kg).
+    die sechs Funktionen aus G-535 lesen weiter NULL als Sitzung -
+    folgenlos nur deshalb, weil nichts sie aufruft
 
 `[read]` **Beides faellt niemandem auf**, weil keine Fehlermeldung
 entsteht. **Nach dem Einspielen ist es sichtbar richtig** — die Achse
@@ -101,8 +106,11 @@ Ziel seine Zahl statt einer beliebigen.
 `testdaten-einspielen.ts:1149` gibt `test-user` zwei offene Phasen an
 zwei Zielen — der Fall, der die ganze Kette beweist.
 
----
+`[cmd]` **Und der Zaehler aus A-80 ist gewachsen:** 151 Datenbanken in
+`pg_database`, gemessen am 01.10. nach dem Verwerfen von drei
+Wegwerf-Datenbanken. Am 29.09. waren es 116.
 
+---
 ## Die Bauordnung — `docs/ssot/130-goals-bauordnung.md`
 
 **Tom, 2026-09-29, 11:56:**
@@ -290,6 +298,32 @@ melden EINMAL am Ende.
 ---
 
 ## Lehren
+
+`[cmd]` **Ein Punkt kann zur Haelfte erledigt sein, ohne dass es
+jemand merkt.** A-77 sagte „`tools/__tests__/` laeuft nirgends" — der
+Aufruf steht seit dem 28.09. als erster Schritt im Gate, 5 Dateien, 37
+Pruefungen, 12,9 s, selbst nachgelaufen. **Was offen war, ist der
+zweite Ort und zwanzigmal groesser:** 120 Proben in
+`_validierung/`, **6 in der Kette, 114 in keinem Lauf** — und die sechs
+sind alle aus den letzten vier Tagen. **Wer einen alten Punkt
+beauftragt, misst ihn zuerst nach.** Sonst baut der Agent, was schon
+steht, und uebersieht, was gewachsen ist.
+
+`[cmd]` **Eine Funktion kann richtig sein und trotzdem unerreichbar.**
+Die sechs Funktionen aus G-535 sind gemessen, korrigiert und bewacht —
+und **keine hat einen Aufrufer in `apps/` oder `packages/`**, gezaehlt
+beim Abnehmen. Der einzige Treffer im ganzen Produkt ist ein Kommentar.
+**Jede Messung hatte gefragt, ob die Funktion richtig ist, keine, ob
+sie erreicht wird.** Das ist G-571. **Zur Abnahme gehoert die Frage,
+wer das Gebaute benutzt.**
+
+`[cmd]` **Eine Quelle kann zwei Fassungen tragen, die Datenbank nur
+eine.** Nach G-535 steht `request.jwt.claim.sub` weiter in fuenf
+urspruenglichen Pipelinedateien; richtig ist der Endzustand, weil
+Schritt 535 spaeter laeuft und ersetzt. **Wer eine dieser Dateien
+kuenftig anfasst, wird vom Waechter rot** — das ist der Grund, dass der
+Waechter in der Kette steht und nicht eine Einmalprobe war. **Ein
+`rg` ueber die Quelle misst hier nicht den Zustand.**
 
 `[cmd]` **Eine Anwendung, die eine neue Signatur ruft, muss VOR dem
 Einspielen laufen und danach.** G-568 war abgenommen, `pnpm gate` gruen,

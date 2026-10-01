@@ -8,8 +8,8 @@
 | `todos` | 269 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 1 |
-| `erledigt` | 605 |
-| **gesamt** | **877** |
+| `erledigt` | 606 |
+| **gesamt** | **878** |
 
 ## medical — 49
 
@@ -713,7 +713,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 219
+## quer — 220
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -757,7 +757,7 @@
 | `A-74` | befund | hoch | [die SSOT ist zwoelf Tage alt](todos/quer-a-0074-die-ssot-ist-zwoelf-tage-alt.md) | offen | — | A-75 |
 | `A-75` | befund | hoch | [Auftraege werden nicht gegen die Quellen geprueft, und nichts wird rot](todos/quer-a-0075-auftraege-werden-nicht-gegen-die-quellen-geprueft.md) | offen | — | A-78 |
 | `A-76` | befund | hoch | [die Specs beschreiben ein Repo, das es hier nicht gibt](todos/quer-a-0076-die-specs-beschreiben-das-vorgaengerrepo-als-fertig.md) | offen | — | — |
-| `A-77` | fehler | hoch | [vier Werkzeugtests liefen nirgends](todos/quer-a-0077-werkzeugtests-liefen-nirgends.md) | offen | — | — |
+| `A-77` | fehler | hoch | [vier Werkzeugtests liefen nirgends](laufend_codex/quer-a-0077-werkzeugtests-liefen-nirgends.md) | laeuft (codex) | — | — |
 | `A-78` | befund | mittel | [ein neuer Punkt wird nicht gegen den Bestand geprueft](todos/quer-a-0078-punkte-werden-nicht-gegen-den-bestand-geprueft.md) | offen | — | — |
 | `A-79` | befund | mittel | [jeder Auftrag legt 452 MiB ab, auch wenn nichts eingespielt wird](todos/quer-a-0079-jeder-auftrag-legt-452-mib-ab.md) | offen | — | — |
 | `A-80` | befund | mittel | [150 Wegwerf-Datenbanken, und 49 davon heissen "final"](todos/quer-a-0080-hundertfuenfzig-wegwerf-datenbanken.md) | offen | — | — |
@@ -930,12 +930,13 @@
 | `G-501` | fehler | hoch | [der Ruecknahmeklick beim Erfahrungsgrad](erledigt/quer-g-0501-ruecknahmeklick-erfahrungsgrad.md) | erledigt | — | — |
 | `G-517` | fehler | mittel | [die Probe meldet die Zeitueberschreitung, nicht die Ursache](erledigt/quer-g-0517-probe-meldet-die-ursache-nicht.md) | erledigt | — | — |
 | `G-518` | fehler | hoch | [der Dev-Server liefert HTML ohne JavaScript](erledigt/quer-g-0518-dev-server-liefert-html-ohne-javascript.md) | erledigt | — | — |
-| `G-535` | fehler | hoch | [Sechs Funktionen lesen den alten Sitzungsnamen](laufend_codex/quer-g-0535-sechs-funktionen-lesen-den-alten-sitzungsnamen.md) | laeuft (codex) | — | — |
+| `G-535` | fehler | hoch | [Sechs Funktionen lesen den alten Sitzungsnamen](erledigt/quer-g-0535-sechs-funktionen-lesen-den-alten-sitzungsnamen.md) | erledigt | — | G-571 |
 | `G-546` | entscheidung | hoch | [Erfassen oder empfehlen — die Grenze bei Substanzprotokollen](todos/quer-g-0546-erfassen-oder-empfehlen.md) | offen | — | — |
 | `G-551` | befund | hoch | [Cardio fehlt als Modul ganz — und damit die Hälfte der Steuerung](todos/quer-g-0551-cardio-fehlt-als-modul-ganz.md) | offen | — | — |
 | `G-552` | befund | mittel | [Training und Erholung kennen die Phase nicht](todos/quer-g-0552-phasenparameter-fuer-training-und-erholung.md) | offen | — | — |
 | `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](todos/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | offen | — | — |
 | `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](todos/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | offen | — | — |
+| `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | — |
 
 ## buddy — 1
 
