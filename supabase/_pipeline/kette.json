@@ -2876,12 +2876,21 @@
       ]
     },
     {
+      "id": "561_relative_weight_guards_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g561-relative-weight-guards.test.ts",
+      "kind": "tsx",
+      "creates": "G-561 Gegenprobe: sechs Katalogwaechter messen relativ; die umgerechnete Strenge skaliert an zwei Gewichten und gilt fuer zwei Zielphasen des test-user.",
+      "depends_on": [
+        "559_phase_at_scope_probe"
+      ]
+    },
+    {
       "id": "563_target_scoped_calculation",
       "path": "supabase/_pipeline/11_goals/563_target_scoped_calculation.sql",
       "kind": "sql",
       "creates": "G-563: berechne_zielwerte rechnet zielbezogen; der nutzerweite Altvertrag wirft bei mehreren Zielphasen statt still eine zu waehlen.",
       "depends_on": [
-        "559_phase_at_scope_probe"
+        "561_relative_weight_guards_probe"
       ]
     },
     {

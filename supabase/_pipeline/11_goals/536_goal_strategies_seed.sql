@@ -1,6 +1,9 @@
 -- G-536: 16 lauffaehige Definitionen aus dem Vorgaenger plus das nur im
 -- Phasenmodell/Mockup vorhandene expert_bb_annual. Fehlende Rechenwerte des
 -- Jahresprotokolls bleiben NULL; keine Zahl wird aus einem UI-Beispiel geraten.
+-- G-561/E-83: Die sechs geerbten Gewichtswaechter fuehren ihre bisherige
+-- Strenge relativ weiter. Bezug ist 83,74 kg: 1,0 kg = 1,194 % und
+-- 0,5 kg = 0,597 % Koerpergewicht pro Woche.
 
 BEGIN;
 
@@ -11,7 +14,7 @@ WITH source_rows AS (
     {
       "code":"lose","label":"Abnehmen","description":"Moderates Kaloriendefizit für nachhaltigen Fettabbau","icon":"TrendingDown","category":"fat_loss","tier":"simple",
       "tdee_modifier":-0.15,"weight_change_target_percent":-0.5,"protein_per_kg":2.2,"fat_percent":0.25,
-      "guards":["strength_loss > 10% → reduce deficit","weekly_loss > 1.0kg → +150 kcal","duration > max → force transition"],
+      "guards":["strength_loss > 10% → reduce deficit","weekly_loss > 1.194% BW/week → +150 kcal","duration > max → force transition"],
       "next_codes":["reverse_diet","maintenance","lean_bulk"],"editor_modes":["variants","guards","duration"]
     },
     {
@@ -29,21 +32,21 @@ WITH source_rows AS (
       "code":"aggressive_cut","label":"Aggressive Cut","description":"Schneller Fettabbau mit hohem Proteinanteil. Für erfahrene Athleten.","icon":"TrendingDown","category":"fat_loss","tier":"advanced",
       "tdee_modifier":-0.25,"weight_change_target_percent":-1.0,"max_duration_weeks":8,"macro_cycling":true,"refeed_schedule":true,"auto_adjust":true,"badge":"Intensiv",
       "warnings":["Nur für erfahrene Athleten","Max 8 Wochen empfohlen","Leistungseinbußen möglich"],"requirements":{"min_experience":"advanced"},"protein_per_kg":2.5,"fat_percent":0.20,
-      "guards":["strength_loss > 10% → reduce deficit","weekly_loss > 1.0kg → +150 kcal","duration > max → force transition"],
+      "guards":["strength_loss > 10% → reduce deficit","weekly_loss > 1.194% BW/week → +150 kcal","duration > max → force transition"],
       "next_codes":["reverse_diet","maintenance","lean_bulk"],"editor_modes":["variants","guards","duration"],
       "refeeds":{"every_weeks":4,"duration_weeks":1}
     },
     {
       "code":"moderate_cut","label":"Moderate Cut","description":"Bewährtes Defizit mit guter Balance zwischen Fettabbau und Leistung.","icon":"TrendingDown","category":"fat_loss","tier":"advanced",
       "tdee_modifier":-0.20,"weight_change_target_percent":-0.75,"max_duration_weeks":12,"macro_cycling":true,"refeed_schedule":true,"auto_adjust":true,"protein_per_kg":2.2,"fat_percent":0.25,
-      "guards":["strength_loss > 10% → reduce deficit","weekly_loss > 1.0kg → +150 kcal","duration > max → force transition"],
+      "guards":["strength_loss > 10% → reduce deficit","weekly_loss > 1.194% BW/week → +150 kcal","duration > max → force transition"],
       "next_codes":["reverse_diet","maintenance","lean_bulk"],"editor_modes":["variants","guards","duration"],
       "refeeds":{"every_weeks":8,"duration_weeks":1}
     },
     {
       "code":"conservative_cut","label":"Conservative Cut","description":"Sanftes Defizit. Ideal um Muskelmasse zu erhalten.","icon":"TrendingDown","category":"fat_loss","tier":"advanced",
       "tdee_modifier":-0.10,"weight_change_target_percent":-0.4,"refeed_schedule":true,"protein_per_kg":2.0,"fat_percent":0.28,
-      "guards":["strength_loss > 10% → reduce deficit","weekly_loss > 1.0kg → +150 kcal","duration > max → force transition"],
+      "guards":["strength_loss > 10% → reduce deficit","weekly_loss > 1.194% BW/week → +150 kcal","duration > max → force transition"],
       "next_codes":["reverse_diet","maintenance","lean_bulk"],"editor_modes":["variants","guards","duration"]
     },
     {
@@ -54,7 +57,7 @@ WITH source_rows AS (
     {
       "code":"lean_bulk","label":"Lean Bulk","description":"Kontrollierter Überschuss mit minimaler Fettzunahme.","icon":"TrendingUp","category":"muscle_gain","tier":"advanced",
       "tdee_modifier":0.10,"weight_change_target_percent":0.25,"max_duration_weeks":52,"macro_cycling":true,"auto_adjust":true,"protein_per_kg":2.0,"fat_percent":0.25,
-      "guards":["bf_increase > 2% in 4 wk → −100 kcal","gain > 1kg/wk → surplus too high","no strength 3+ wk → check training"],
+      "guards":["bf_increase > 2% in 4 wk → −100 kcal","gain > 1.194% BW/week → surplus too high","no strength 3+ wk → check training"],
       "next_codes":["mini_cut","maintenance","contest_prep"],"editor_modes":["params","guards","duration"]
     },
     {
@@ -75,7 +78,7 @@ WITH source_rows AS (
     {
       "code":"reverse_diet","label":"Reverse Diet","description":"Schrittweise Kalorien erhöhen nach einer Diätphase.","icon":"RotateCcw","category":"recovery","tier":"advanced",
       "tdee_modifier":0.05,"max_duration_weeks":16,"auto_adjust":true,"protein_per_kg":2.0,"fat_percent":0.28,
-      "guards":["weekly gain > 0.5kg → slow increase","hunger normalized → close to TDEE"],
+      "guards":["weekly gain > 0.597% BW/week → slow increase","hunger normalized → close to TDEE"],
       "next_codes":["maintenance","lean_bulk","fat_loss"],"exits":["reached estimated TDEE","gain > 0.5kg/wk","user satisfied"],
       "editor_modes":["params","exits","guards"]
     },
