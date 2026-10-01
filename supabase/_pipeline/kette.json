@@ -2989,6 +2989,44 @@
       "depends_on": [
         "535_auth_uid_legacy_readers"
       ]
+    },
+    {
+      "id": "a77_c236_counter_series_probe",
+      "path": "supabase/_pipeline/_validierung/quer-c236-zaehlreihen-gate.test.ts",
+      "kind": "tsx",
+      "creates": "A-77 erster Stapel: C-236 prueft Zaehlreihen gegen longitudinale Recovery-Werte statt gegen Wiederholungen eines Satzes.",
+      "depends_on": [
+        "106",
+        "120"
+      ]
+    },
+    {
+      "id": "a77_c395_seed_migration_boundary_probe",
+      "path": "supabase/_pipeline/_validierung/quer-c395-seed-gegen-migrations.test.ts",
+      "kind": "tsx",
+      "creates": "A-77 erster Stapel: C-395 bewacht die Grenze zwischen Strukturmigration und registrierter Katalog- oder Ableitungslogik.",
+      "depends_on": [
+        "327a",
+        "385"
+      ]
+    },
+    {
+      "id": "a77_c415_chain_order_probe",
+      "path": "supabase/_pipeline/_validierung/quer-c415-chain-order.test.ts",
+      "kind": "tsx",
+      "creates": "A-77 erster Stapel: C-415 bewacht die Reihenfolge von kuratierten effektiven Tags und ihrem Suchleser.",
+      "depends_on": [
+        "075"
+      ]
+    },
+    {
+      "id": "a77_g451_testdata_runner_probe",
+      "path": "supabase/_pipeline/_validierung/quer-g451-testdatenlauf.test.ts",
+      "kind": "tsx",
+      "creates": "A-77 erster Stapel: G-451/G-556 pruefen Testdatenerzeuger, Kontokopie und Auth-Stub gegen die heutige Kette.",
+      "depends_on": [
+        "563_target_scoped_calculation_probe"
+      ]
     }
   ]
 }
