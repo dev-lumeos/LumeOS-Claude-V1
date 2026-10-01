@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-01
 beauftragt: 2026-10-01
 agent: claudecode
+erledigt: 2026-10-01
+commit: 8b9f82f0
 
 braucht: []
 kind_von: G-565
@@ -96,3 +98,54 @@ Einheitenwahl (G-565, erledigt).
 
 **Zu belegen:** die Zahl aus A1 · Sabotage je Zusicherung in beide
 Richtungen · `pnpm gate` gruen mit Testzahl · nichts committen.
+
+---
+
+## Abnahme — 2026-10-01, Commit `8b9f82f0`
+
+`[cmd]` **Genau ein Export von `rateAusKcal` im ganzen `apps/web`**
+(`zielrate-einheit.ts:120`). `anpassung.ts` importiert sie (Zeile 54);
+`Math.round` steht dort nur noch im Kommentar, der den Fehler erklaert.
+`rate_delta` laeuft ueber `rundeWieDb(…, RATE_STELLEN)` (Zeile 241).
+
+`[cmd]` **Die vier Datenbankbeispiele selbst nachgerechnet, alle vier
+treffen:**
+
+    220 / (11 x 64)    = 0,3125  -> 0,313   (Math.round(-312,5) = -312)
+    110 / (11 x 160)   = 0,0625  -> 0,063
+    528 / (11 x 51,2)  = 0,9375  -> 0,938
+    242 / (11 x 70,4)  = 0,3125  -> 0,313
+
+`[cmd]` **Und seine Regel haelt an allen vier:** 220, 110, 528 und 242
+sind durch 11 teilbar, die vier Spec-Betraege (−100, +150, −100, +100)
+nicht. **Deshalb keine Abweichung an den echten Aufrufstellen** — und die
+Dublette war trotzdem eine. 20 Zusicherungen in der neuen Probe,
+2.430 Tests im Gate (vorher 2.410).
+
+### Drei Funde, die nicht im Auftrag standen
+
+`[cmd]` **Der Formwaechter traf eine ZWEITE Stelle:**
+`anpassung.ts:235`, `rate_delta` mit `Math.round`, 90 Zeilen unter der
+genannten. A3 verlangte die FORM, und genau deshalb fand er sie.
+
+`[cmd]` **Die alte Fassung prueste `gewichtKg <= 0`, die kanonische nur
+`=== 0`:** bei −80 kg kam +0,114 heraus. **Die schaerfere Pruefung ist
+mitgewandert** — sonst waere beim Umbau still eine Zusicherung verloren
+gegangen.
+
+`[read]` **Und zwei Korrekturen am Waechter selbst, beide gemeldet statt
+verschwiegen:** ein pauschales `Math.round`-Verbot traf fuenf fremde
+Dateien (Tage, BMI, Zentimeter, TDEE-Prozent) — der Waechter, der die
+falsche Sache misst. Und **eine Sabotage kam gruen durch**, weil das
+Ausrufezeichen in `gewichtKg!` nicht in der Zeichenklasse stand: die
+naheliegendste TypeScript-Schreibweise genau der Rechnung, die er
+verbietet. Beide behoben, die Schreibweise steht in der Eichung.
+
+### Offen geblieben
+
+`[read]` **`verhaeltnisse.ts:73` traegt dieselbe Rundungsform fuer einen
+Umfangsquotienten** — kein Ratenwert, deshalb bewusst ausserhalb des
+Waechters gelassen statt per Ausnahmeliste entschaerft. **Richtig
+entschieden:** eine Ausnahmeliste haette den Waechter aufgeweicht. Ob der
+Quotient trotzdem wie die Datenbank runden soll, ist eine eigene Frage
+und kein Befund dieses Punktes.

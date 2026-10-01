@@ -230,6 +230,15 @@ sagt, aus welcher Quelle `current_value` kommt.
             im Punkt), keine Bauentscheidung
     G-572   der Dateikopf von ansicht.tsx nennt Phase engine als Attrappe
     G-575   ein Ziel traegt genau EINE Messgroesse - wartet auf Tom
+    A-86    die Kette spielt die Testdaten NICHT ein - goal_phases 0,
+            meals 0, workout_sessions 0 nach dem Lauf. Geht allen
+            weiteren A-77-Stapeln voraus
+    A-87    46 Zeugen, nach Ursache gestaffelt verdrahten (die Gruppen
+            stehen im Punkt)
+    A-88    31 Proben fallen still auf postgres zurueck, 70 eigene
+            Variablennamen - fail-closed und ein Vertrag
+    A-89    zyklus-fahren scheitert an EPERM, wenn ein Agent die Datei
+            offen haelt - dreimal gemessen, einmal im Werkzeug selbst
     G-576   weight wird ein Untertyp, "Eigenes" bleibt ohne (E-89,
             entschieden, klein und beauftragbar)
     G-550   Fett als g/kg Koerpergewicht statt als Prozentsatz

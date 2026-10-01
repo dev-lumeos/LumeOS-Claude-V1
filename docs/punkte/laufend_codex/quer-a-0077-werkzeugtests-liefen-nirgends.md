@@ -245,3 +245,62 @@ Kette vorher und nachher · voller Kettenlauf gruen ODER die rote Liste
 mit je einer Zeile Begruendung · Laufzeit vorher und nachher ·
 Wegwerf-Datenbank verworfen mit Zaehler · kein `db push` · nichts
 committen.
+
+---
+
+## Abnahme — 2026-10-01, Commit `1222ff7c`
+
+`[cmd]` **`kette.json` traegt 314 Schritte** (vorher 310), selbst
+gezaehlt. **Im Staging lag nur `kette.json`** — `package.json`,
+Testdateien, `apps/` und `docs/` unberuehrt, wie der Auftrag verlangte.
+**`pnpm gate` gruen**, einschliesslich der 54 Werkzeugtests aus A-85.
+
+`[cmd]` **Drei der vier neuen Schritte gruen** (C-236, C-395, C-415),
+**einer rot — und der rote ist das Ergebnis.** G-451/G-556 erwartet drei
+Basisphasen, es sind fuenf; Ursache gemessen: **G-559, Commit `f03dfbe8`
+vom 30.09.** `[read]` **Die Probe war zwei Tage lang ein Zeuge der alten
+Seedform, und niemand hat es gemerkt, weil sie in keinem Lauf lag.**
+Genau der Schaden, um den dieser Punkt geht — am ersten Tag, an dem
+gemessen wurde.
+
+`[cmd]` **Die Inventur aller 120:**
+
+    116 Datenbankproben, 4 reine Quelltextproben
+     71 aktuell und gruen
+     46 Zeugen beziehungsweise rot
+      3 nicht sicher messbar (-d postgres steht fest im Test)
+     35 laufen formal ohne Variable - 31 davon nur durch einen stillen
+        Rueckfall auf postgres
+
+`[cmd]` **Laufzeit, A4 beantwortet:** der erste Stapel kostet 5,445 s,
+**+0,37 %** gegenueber 1.459,7 s. Die Serieninventur aller 117
+umleitbaren Dateien brauchte **819,7 s** — also rund 13,5 Minuten, wenn
+alles pauschal angehaengt wird. **Nicht tragbar**, und damit ist A2s
+„erster Stapel" als Form bestaetigt, nicht als Zwischenschritt.
+
+`[cmd]` **A5 gegen die Frage beantwortet:** 70 Dateien tragen **70
+verschiedene** Variablennamen. Die Kette koennte sie alle setzen und
+sollte es nicht — `PGDATABASE` reicht. **Und die 31 stillen Rueckfaelle
+gehoeren fail-closed:** ein fehlender Wegwerf-Name darf nicht unbemerkt
+die Basisdatenbank waehlen. **Das ist A-88.**
+
+`[cmd]` **Aufraeumen belegt und offen gelegt:** `lumeos_a77_first_batch`
+verworfen, Zaehler 153 auf 152, Zielbestand 0. **Er nennt, dass der
+Anfangsbestand 151 war und eine fremde Datenbank parallel entstand**,
+statt die Differenz zu verschweigen.
+
+### Der groesste Fund, und er geht allen weiteren Stapeln voraus
+
+`[cmd]` **`kette.json` spielt `_testdaten/testdaten-einspielen.ts`
+NICHT ein.** Nach dem Kettenlauf stehen `goal_phases` 0,
+`nutrition.meals` 0, `training.workout_sessions` 0, `user_goals` 5.
+**Viele Proben sind im Kettenkontext deshalb gar nicht ausfuehrbar** —
+keine Regression, eine fehlende Schicht im Lauf. **Das ist A-86.**
+
+### Was nicht uebertragen wurde
+
+`[read]` **Die Tabelle je Datei (120 Zeilen) ist nicht in diese Datei
+uebernommen**, sondern nach Ursache gruppiert in **A-87** — dort wird sie
+gebraucht. Eine von Hand abgeschriebene 120-Zeilen-Tabelle waere eine
+zweite Wahrheit mit Tippfehlern. **Die Gruppen sind das Handlungsbare,
+die Zeilen sind der Nachweis.**

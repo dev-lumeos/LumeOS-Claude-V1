@@ -6,6 +6,8 @@ schwere: mittel
 angelegt: 2026-10-01
 beauftragt: 2026-10-01
 agent: claudecode
+erledigt: 2026-10-01
+commit: c62bd149
 
 braucht: [A-81]
 kind_von: A-81
@@ -346,3 +348,55 @@ gehoert in den Abschnitt *Die Einspielreihenfolge*, der von Hand bleibt
 und Beurteilung samt gemessener Zahlen traegt. **Braucht es spaeter
 doch eines, dann mit geschlossener Werteliste** — Freitext im
 Frontmatter ist eine zweite Wahrheit, die unbemerkt veraltet (G-572).
+
+---
+
+## Abnahme — 2026-10-01, Commit `c62bd149`
+
+**Der Nachweis, der zaehlt, ist der Gebrauch.** Ich habe das Werkzeug bei
+dieser Abnahme selbst benutzt.
+
+`[cmd]` **`zyklus-fahren tabelle --schreiben`: fuenf Zeilen erzeugt,
+Meldung „ausserhalb der Markierungen unveraendert".** Und die erzeugte
+Tabelle hat sofort **zwei Abweichungen meiner Handpflege** aufgedeckt:
+A-77 und A-85 standen dort mit meinen Umschreibungen statt mit ihrer H1.
+`[read]` **Eine erzeugte Tabelle kann nicht von der Datei abweichen, die
+handgefuehrte konnte es** — das ist der ganze Zweck.
+
+`[cmd]` **12 Funktionen in 535 Zeilen, 20 Zusicherungen** in
+`tools/__tests__/a85-zyklus-fahren.test.mjs`. **Der Test laeuft im Glob
+mit, `package.json` unberuehrt:** vorher 5 Dateien / 37 Pruefungen,
+nachher 6 / 54.
+
+`[cmd]` **Die harte Grenze ist gebaut:** `abnehmen` ohne `--commit`
+bricht ab, `--commit TODO` bricht ab, ein Feld das schon dasteht bricht
+ab statt zu ueberschreiben, ein Stufensprung bricht ab, und nach jedem
+schreibenden Schritt ruft es `zyklus-pruefen` und bricht ab, wenn der
+rot ist.
+
+`[read]` **Und der Agent hat eine eigene falsche Sabotage als solche
+gemeldet statt sie gruen zu lassen:** `writeFileSync('')` plus
+`appendFileSync` hat denselben Endzustand, misst also nichts. Die
+Sabotage, die den Fehler vom 01.10. nachbaut — leeren, dann lesen —
+macht vier Pruefungen rot. Steht als Kommentar am Test. **Das ist der
+Unterschied zwischen einer Probe und einer Behauptung ueber eine Probe.**
+
+### Ein Befund aus dem Gebrauch
+
+`[cmd]` **Derselbe Schreibweg ist mir zweimal mit `EPERM` gescheitert**,
+weil ein Agent dieselbe Datei offen hatte — einmal an A-77s Punktdatei,
+einmal an `LAUFEND.md`. **Das Werkzeug benutzt dasselbe Muster** und
+wuerde dabei eine `.neu`-Datei liegen lassen, die kein Waechter kennt.
+**Das ist A-89.**
+
+### Offen
+
+`[read]` **`gate:docs` fuehrt den Werkzeugtest nicht**, obwohl dieses
+Werkzeug auf `docs/` arbeitet. Der Agent hat die Zeile vorgeschlagen und
+`package.json` nicht angefasst — **richtig, die Datei lag bei Codex
+(A-77).** A-77 ist jetzt abgenommen, die Zeile ist frei und gehoert in
+den naechsten Werkzeug-Auftrag.
+
+`[read]` **`pnpm gate` lief bei ihm nicht**, nur die Waechter einzeln.
+**Beim Commit ist er gelaufen und war gruen** — damit ist die Luecke
+geschlossen, aber die Aussage im Bericht war korrekt eingeschraenkt.
