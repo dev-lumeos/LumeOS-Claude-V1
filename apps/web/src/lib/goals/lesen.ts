@@ -373,28 +373,118 @@ export type Phase = {
   zielrate_pct_kg_woche: number | null
 }
 
-export async function ladePhase(userId: string, stichtag: string): Promise<Phase | null> {
+// ══ G-564: `phase_am` liefert eine MENGE ═════════════════
+//
+// `[cmd]` **Codex hat es bei der Abgrenzung von G-559 gemeldet:**
+// `phase_am(user, stichtag)` liefert kuenftig **alle** am Tag
+// gueltigen Zielphasen, sortiert `gueltig_ab DESC, created_at DESC,
+// id DESC`. **`data[0]` ist dann nicht mehr die Nutzerphase, sondern
+// die zuletzt begonnene.**
+//
+// `[cmd]` **Gemessen 2026-09-30:** live traegt `phase_am` noch
+// `LIMIT 1` (Position 463 in `prosrc`), `phase_eines_ziels_am` gibt
+// es dort noch nicht. **Der Umbau steht in
+// `supabase/_pipeline/11_goals/559_phase_at_scope.sql`:** die
+// Mengenfunktion ohne `LIMIT`, die Zielfunktion mit.
+//
+// `[read]` **Heute ist `data[0]` zufaellig richtig, mit dem
+// Einspielen wird es falsch** — ohne Fehlermeldung und ohne rote
+// Probe. **Deshalb steht hier die Mehrzahl, bevor eingespielt
+// wird.**
+//
+// ── Wo `data[0]` sonst noch steht, und warum es dort bleibt ─────
+//
+// `[cmd]` **Fuenf Stellen in dieser Datei lesen `data[0]`**, gezaehlt
+// 2026-09-30 — **nur diese eine ist betroffen:**
+//
+//     body_composition_navy   LIMIT im Rumpf        eine Zeile
+//     adaptive_tdee           je Nutzer eine Zeile  gemessen: 1
+//     goal_progress_at        LIMIT im Rumpf        eine Zeile
+//     goal_milestone_status   nimmt EINE Kennung    eine Zeile
+//     phase_am                ohne LIMIT (G-559)    MENGE   <- hier
+
+/**
+ * Alle am Stichtag geltenden Phasen des Nutzers — G-564.
+ *
+ * ── Warum es `ladeOffenePhasen` DANEBEN gibt ──────────────────────
+ *
+ * `[cmd]` **Zwei Lesewege, zwei Fragen** — gemessen an den
+ * Bedingungen, nicht vermutet:
+ *
+ *     ladePhasen         actual_end_date IS NULL ODER >= Stichtag
+ *                        -> was am Tag GALT, auch wenn es endete
+ *     ladeOffenePhasen   actual_end_date IS NULL
+ *                        -> was heute noch LAEUFT
+ *
+ * `[read]` **Die Zeitachse (G-544) will die laufenden**, der
+ * Phasenkopf will die geltenden — **eine beendete Phase gehoert in
+ * den Verlauf, nicht auf die Achse.**
+ *
+ * `[read]` **Die Mehrzahl ist die Wahrheit**, seit
+ * `uq_goal_phases_one_open` auf `goal_id` steht: eine offene Phase JE
+ * ZIEL. **Wer eine einzelne braucht, nimmt `ladeZielphase`.**
+ */
+export async function ladePhasen(
+  userId: string, stichtag: string,
+): Promise<Phase[]> {
   const { data, error } = await goalsDb()
     .rpc('phase_am', { p_user_id: userId, p_stichtag: stichtag })
   if (error) throw new GoalsLeseFehler('READ_FAILED', `phase_am: ${error.message}`)
 
-  const r = (Array.isArray(data) ? data[0] : null) as Record<string, unknown> | null
-  if (!r) return null
+  const zeilen = (Array.isArray(data) ? data : []) as Record<string, unknown>[]
+  // `[read]` **Nacheinander, nicht parallel** — die Liste ist kurz
+  // (eine Phase je Ziel), und `Promise.all` machte aus einem Fehler
+  // ein Rennen.
+  const raus: Phase[] = []
+  for (const r of zeilen) {
+    const p = await phaseAusZeile(r)
+    if (p) raus.push(p)
+  }
+  return raus
+}
 
+/**
+ * Die Phase EINES Ziels — G-564/A2, der zweite Fall.
+ *
+ * `[cmd]` **`goals.phase_eines_ziels_am(goal, stichtag)`** aus G-559
+ * — **sie traegt das `LIMIT 1` mit Absicht**, und der Kommentar der
+ * Funktion sagt warum: *,,loest nur ueberlappende Historie auf"*.
+ *
+ * `[read]` **Hier ist `data[0]` richtig**, weil die Funktion je Ziel
+ * genau eine Zeile liefert — und das steht in ihrem Namen.
+ */
+export async function ladeZielphase(
+  goalId: string, stichtag: string,
+): Promise<Phase | null> {
+  const { data, error } = await goalsDb()
+    .rpc('phase_eines_ziels_am', { p_goal_id: goalId, p_stichtag: stichtag })
+  if (error) {
+    throw new GoalsLeseFehler('READ_FAILED', `phase_eines_ziels_am: ${error.message}`)
+  }
+  const r = (Array.isArray(data) ? data[0] : null) as Record<string, unknown> | null
+  return r ? phaseAusZeile(r) : null
+}
+
+/**
+ * Eine Zeile aus `phase_am` zu einer `Phase`.
+ *
+ * `[read]` **Die drei Uebergangsspalten und die Zielrate kommen
+ * nach** — beide Funktionen fuehren sie nicht (siehe `Phase`).
+ */
+async function phaseAusZeile(
+  r: Record<string, unknown>,
+): Promise<Phase | null> {
   const phaseId = text(r.phase_id) ?? ''
-  // Die drei Spalten je Zeile nachlesen. Der Zeilenschutz greift auch
-  // hier — die Abfrage läuft mit derselben Identität wie die Funktion.
   let uebergang: Record<string, unknown> = {}
   if (phaseId) {
     const { data: z, error: zFehler } = await goalsDb()
       .from('goal_phases')
-      // G-534/A2: die Zielrate kommt hier mit — `phase_am()` fuehrt
-      // sie nicht.
       .select('transitioned_from, recommended_next, transition_reason, zielrate_pct_kg_woche')
       .eq('id', phaseId)
       .maybeSingle()
-    // `[read]` Werfen, nicht schlucken — eine der zwei Fallen aus G-64:
-    // ein stiller Fehler sähe aus wie „kein Übergang hinterlegt".
+    // `[read]` Werfen, nicht schlucken — eine der zwei Fallen aus
+    // G-64: ein stiller Fehler saehe aus wie ,,kein Uebergang
+    // hinterlegt".
     if (zFehler) throw new GoalsLeseFehler('READ_FAILED', `goal_phases: ${zFehler.message}`)
     uebergang = (z ?? {}) as Record<string, unknown>
   }

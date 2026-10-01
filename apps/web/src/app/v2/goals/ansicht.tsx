@@ -153,7 +153,15 @@ export type EchteDaten = {
   stichtag: string
   ziele: ZielFortschritt[]
   meilensteine: Meilenstein[]
-  phase: Phase | null
+  /**
+   * `[cmd]` **G-564: alle am Stichtag geltenden Phasen**, nicht eine.
+   *
+   * `[cmd]` **`phase_am` verliert mit G-559 sein `LIMIT 1`** —
+   * `data[0]` waere dann die zuletzt begonnene, nicht ,,die Phase".
+   * `[read]` **Und seit G-538 gilt eine offene Phase JE ZIEL**, also
+   * gibt es den Fall wirklich.
+   */
+  phasen: Phase[]
   navy: Koerperzusammensetzung | null
   tdee: AdaptiverTdee | null
   vorschlag: Zielvorschlag | null
@@ -246,8 +254,39 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
   // Stichtag noch galt — `PhaseEcht` zeigt sie deshalb mit der Pille
   // „abgeschlossen" (`phase-echt.tsx:119`). **Beenden und Vorschlag
   // gelten aber nur fuer eine, die wirklich laeuft.**
-  const laufendePhase = echt.phase && !echt.phase.actual_end_date
-    ? echt.phase : null
+  // ══ G-564/A2: die Menge, und was sie fuer die Bedienung heisst ══
+  //
+  // `[cmd]` **`phase_am` liefert seit G-559 alle Zielphasen.**
+  // `[read]` **Laufend heisst weiterhin `actual_end_date === null`**
+  // — `phase_am` gibt auch eine beendete zurueck, solange sie am
+  // Stichtag noch galt.
+  // ══ G-564: die Zahl kommt aus der ungedeckelten Quelle ══════
+  //
+  // `[cmd]` **Am Bild gefunden, 2026-09-30:** der Kopf sagte
+  // ,,2 Phasen laufen", und darunter standen ,,Phase beenden" und
+  // ,,Phase wechseln" fuer EINE — **zwei Quellen, zwei Zahlen auf
+  // demselben Schirm.**
+  //
+  // `[cmd]` **Der Grund:** `echt.phasen` kommt aus `phase_am`, das
+  // live noch `LIMIT 1` traegt; `echt.offenePhasen` liest die Tabelle
+  // direkt (G-544) und sieht beide.
+  //
+  // `[read]` **Also entscheidet die Tabelle, wie viele laufen** — sie
+  // ist heute UND nach dem Einspielen richtig. **`echt.phasen` traegt
+  // weiterhin die Anzeige je Phase**, und sobald `phase_am` beide
+  // liefert, stimmen beide Wege ueberein.
+  const laufendePhasen = echt.offenePhasen
+  // `[read]` **Beenden und Vorschlag brauchen EINE bestimmte Phase.**
+  // **Bei mehreren waere jede Wahl eine stille Entscheidung** —
+  // deshalb nur, wenn es genau eine gibt; sonst sagt die Ansicht, dass
+  // die Wahl fehlt.
+  // `[read]` **Die Bedienkacheln brauchen die volle `Phase`** (mit
+  // Uebergangsspalten und Zielrate) — die traegt `echt.phasen`.
+  // **Nur wenn BEIDE Wege genau eine sehen**, ist die Wahl
+  // eindeutig.
+  const laufendePhase = laufendePhasen.length === 1
+    ? echt.phasen.find(p => !p.actual_end_date) ?? null
+    : null
 
   const kontext = React.useMemo(() => ({
     open: (m: ModalZustand) => setModal(m),
@@ -421,8 +460,14 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
               gilt; darunter, was geplant ist, mit Marke. */}
           {tab === 'phase' && (
             <>
-              {!echtAus && echt.phase
-                && <PhaseEcht phase={echt.phase} stichtag={echt.stichtag} />}
+              {/* ══ G-564/A2: JE PHASE eine Kachel ═════════════
+                  `[cmd]` **Hier stand `echt.phase`** — die erste aus
+                  `phase_am`. `[read]` **Bei zwei offenen Phasen
+                  zeigte das eine und verschwieg die andere**, und
+                  welche, entschied die Sortierung. */}
+              {!echtAus && echt.phasen.map(p => (
+                <PhaseEcht key={p.phase_id} phase={p} stichtag={echt.stichtag} />
+              ))}
               {/* ══ G-513: der Knopf, der gefehlt hat ══════════════
                   `[cmd]` **Fuenf Funktionen in der Datenbank, null
                   Aufrufer** — `goal_phase_start`, `goal_phase_end`,
@@ -442,9 +487,31 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                   uebereinander** — ein ausgegrautes ,,Phase
                   beginnen" und darunter ,,Phase wechseln" mit
                   derselben Auswahl. **Der Entwurf hat EINES.** */}
-              {!echtAus && !laufendePhase && (
+              {/* `[cmd]` **G-564: `laufendePhasen.length`, nicht
+                  `!laufendePhase`.** `[read]` **Bei ZWEI laufenden
+                  Phasen ist `laufendePhase` null** (die Wahl waere
+                  willkuerlich) — und dann haette hier ,,Phase
+                  beginnen" gestanden, obwohl zwei laufen. */}
+              {!echtAus && laufendePhasen.length === 0 && (
                 <PhaseBeginnen stichtag={echt.stichtag} aktiv={null}
                                gewichtKg={echt.profil?.body_weight_kg ?? null} />
+              )}
+              {/* ══ G-564/A2: bei mehreren sagt die Ansicht das ════
+                  `[read]` **Beenden und Wechseln gelten je EINER
+                  Phase.** **Welche, kann die Ansicht nicht raten** —
+                  also nennt sie die Zahl und verweist auf die
+                  Zeitachse, wo jede Phase an ihrem Ziel steht. */}
+              {!echtAus && laufendePhasen.length > 1 && (
+                <Card title="Mehrere Phasen laufen"
+                      sub={`${laufendePhasen.length} offene Phasen an `
+                        + `${laufendePhasen.length} Zielen`}>
+                  <div className="v2-dim" data-mehrere-phasen={laufendePhasen.length}
+                       style={{ fontSize: 11.5, lineHeight: 1.55 }}>
+                    Beenden und Wechseln gelten je einer Phase. Welche
+                    gemeint ist, steht an ihrem Ziel — in der Zeitachse
+                    unten.
+                  </div>
+                </Card>
               )}
               {!echtAus && laufendePhase && (
                 <>
@@ -574,7 +641,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
         <>
           {(echt.ziele.length + echt.meilensteine.length) > 0
             && (
-              <ZeitachseTab ziele={echt.ziele} phase={echt.phase}
+              <ZeitachseTab ziele={echt.ziele} phasen={echt.phasen}
                             meilensteine={echt.meilensteine} stichtag={echt.stichtag} />
             )}
           <ReferenzTrenner reiter="Timeline" quelle={QUELLE} />

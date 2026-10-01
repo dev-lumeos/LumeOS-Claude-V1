@@ -49,15 +49,24 @@ type Zeile = {
 }
 
 export function TimelineTab({
-  ziele, phase, meilensteine, stichtag,
+  ziele, phasen, meilensteine, stichtag,
 }: {
   ziele: ZielFortschritt[]
-  /** `[cmd]` `ladePhase` liefert die EINE Phase am Stichtag, keine Liste. */
-  phase: Phase | null
+  /**
+   * `[cmd]` **G-564: alle am Stichtag geltenden Phasen.**
+   *
+   * `[cmd]` **Hier stand `phase: Phase | null` mit dem Vermerk
+   * ,,liefert die EINE Phase am Stichtag, keine Liste".** `[cmd]`
+   * **Das stimmt seit G-559 nicht mehr** — `phase_am` gibt alle
+   * Zielphasen zurueck, und die Zeile unten ZAEHLT sie.
+   */
+  phasen: Phase[]
   meilensteine: Meilenstein[]
   stichtag: string
 }) {
-  const phasen = phase ? [phase] : []
+  // `[read]` **Kein `[phase]` mehr** — die Menge kommt herein, und
+  // der Untertitel zaehlt sie. **Vorher stand dort immer ,,1
+  // Phasen", auch wenn zwei galten.**
   const [gewaehlt, setGewaehlt] = React.useState<string | null>(null)
 
   const jahr = Number(stichtag.slice(0, 4))

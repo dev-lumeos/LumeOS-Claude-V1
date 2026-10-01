@@ -30,7 +30,7 @@ import { heute } from '../../../lib/datum'
 import {
   alterAm, angemeldeteNutzerin, ladeAdaptivenTdee, ladeKoerperzusammensetzung,
   ladeFotosessions, ladeMeilensteine, ladeMessungen, ladeOffenePhasen,
-  ladePhase, ladeProfil,
+  ladePhasen, ladeProfil,
   ladeUmfaenge, ladeZiele,
   zaehleZukunftsmessungen,
   type AdaptiverTdee, type Koerpermessung, type Koerperzusammensetzung,
@@ -77,7 +77,9 @@ export default async function V2GoalsPage({
 
   let ziele: ZielFortschritt[] = []
   let meilensteine: Meilenstein[] = []
-  let phase: Phase | null = null
+  // `[cmd]` **G-564: eine MENGE, keine einzelne Phase** — seit
+  // G-559 liefert `phase_am` alle am Tag gueltigen Zielphasen.
+  let phasen: Phase[] = []
   let navy: Koerperzusammensetzung | null = null
   let tdee: AdaptiverTdee | null = null
   let vorschlag: Zielvorschlag | null = null
@@ -101,12 +103,12 @@ export default async function V2GoalsPage({
 
   try {
     const userId = await angemeldeteNutzerin()
-    ;[ziele, meilensteine, phase, navy, tdee, messungen, zukunftsmessungen, umfaenge,
+    ;[ziele, meilensteine, phasen, navy, tdee, messungen, zukunftsmessungen, umfaenge,
       profil, fotosessions, strategien, strategieProfil, offenePhasen]
       = await Promise.all([
         ladeZiele(userId, stichtag),
         ladeMeilensteine(userId, stichtag),
-        ladePhase(userId, stichtag),
+        ladePhasen(userId, stichtag),
         ladeKoerperzusammensetzung(userId, stichtag),
         ladeAdaptivenTdee(userId, stichtag),
         ladeMessungen(userId, stichtag),
@@ -136,7 +138,7 @@ export default async function V2GoalsPage({
         stichtag,
         ziele,
         meilensteine,
-        phase,
+        phasen,
         navy,
         tdee,
         vorschlag,
