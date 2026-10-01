@@ -189,6 +189,9 @@ export const RATENPFLICHT: Readonly<Record<Phasenart, Ratenpflicht>> = {
  *
  * `[cmd]` **Gelesen, nicht gesetzt:** `>= -2.5 AND <= 1.5`.
  */
+// G-565: die Umrechnung steht in `zielrate-einheit.ts`.
+import { kcalAusRate } from './zielrate-einheit'
+
 export const RATE_MIN = -2.5
 export const RATE_MAX = 1.5
 
@@ -214,9 +217,23 @@ export function kcalDeltaAusRate(
   rate: number | null | undefined,
   gewichtKg: number | null | undefined,
 ): number | null {
-  if (rate === null || rate === undefined) return null
-  if (gewichtKg === null || gewichtKg === undefined) return null
-  return Math.round(11 * rate * gewichtKg * 10) / 10
+  // ══ G-565: eine Rechnung, nicht zwei ═══════════════════════════
+  //
+  // `[cmd]` **Hier stand `Math.round(11 * rate * kg * 10) / 10`.**
+  // `[cmd]` **Das weicht von der Datenbank ab**, wo die Haelfte von
+  // der Null WEG gerundet wird:
+  //
+  //     Rate -2,5 bei 55,5 kg  ->  roh -1526,25
+  //       goals.kcal_delta_aus_zielrate = -1526,3
+  //       Math.round(-15262,5)/10       = -1526,2
+  //
+  // `[read]` **Gemessen an 126 Paaren gegen die laufende Datenbank:**
+  // mit `kcalAusRate` null Abweichungen, mit `Math.round` eine.
+  //
+  // `[read]` **Die Funktion bleibt als Name bestehen** — sie hat
+  // Aufrufer, und ein zweiter Name fuer dieselbe Sache waere
+  // G-529.
+  return kcalAusRate(rate, gewichtKg)
 }
 
 /** Prueft eine Rate gegen beide CHECKs. Leer heisst: in Ordnung. */

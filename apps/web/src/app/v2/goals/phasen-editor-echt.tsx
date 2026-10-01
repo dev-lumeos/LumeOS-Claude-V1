@@ -46,6 +46,12 @@ import {
 // nicht nachgebaut. Zwei Rechnungen fuer dasselbe gehen auseinander.
 import { ankerplan, gesamtWochen } from '../../../lib/goals/anker'
 import type { Strategie } from '../../../lib/goals/strategie-read'
+// ══ G-565/E-83: dieselbe Rate, zwei Einheiten ══════════════
+import {
+  inEinheit, ausEinheit, EINHEIT_ZEICHEN, type Rateneinheit,
+} from '../../../lib/goals/zielrate-einheit'
+import { EinheitenSchalter } from './einheiten-schalter'
+import { einheitSetzenAktion } from './phase-aktionen'
 
 /** Die Beschriftungen des Entwurfs, `module-goals-editor.jsx:63-67`. */
 const REITERTEXT: Record<string, string> = {
@@ -129,12 +135,20 @@ type Entwurf = Record<string, Overridewert>
  * @param tdee       Fuer `cycling`, oder `null`.
  */
 export function PhasenEditor({
-  strategie, override, zieldatum, tdee, onClose, onAnwenden,
+  strategie, override, zieldatum, tdee, gewichtKg, einheit,
+  onClose, onAnwenden,
 }: {
   strategie: Strategie
   override: Record<string, Overridewert>
   zieldatum: string | null
   tdee: number | null
+  /**
+   * `[cmd]` **G-565: ohne Gewicht keine Kilokalorien** (E-83) — das
+   * Gewicht am Phasenbeginn, nicht das heutige (G-543).
+   */
+  gewichtKg: number | null
+  /** Die gewaehlte Einheit des Nutzers, aus den Einstellungen. */
+  einheit: Rateneinheit
   onClose: () => void
   onAnwenden: (abweichung: Record<string, Overridewert>) => void
 }) {
@@ -144,6 +158,12 @@ export function PhasenEditor({
     ? strategie.editor_modes
     : ['params']
   const [tab, setTab] = React.useState(reiter[0])
+  // ══ G-565/A1: die Einheit, lokal umschaltbar ═════════════
+  //
+  // `[read]` **Gespeichert bleibt die RATE** — der Schalter aendert
+  // nur, worin sie dasteht. **Zwei Felder waeren zwei Wahrheiten
+  // (G-529).**
+  const [einheitWahl, setEinheitWahl] = React.useState(einheit)
   const [entwurf, setEntwurf] = React.useState<Entwurf>(() => ({ ...override }))
 
   // `[read]` **Die Auslieferungswerte als flache Abbildung** — nur
@@ -161,6 +181,15 @@ export function PhasenEditor({
 
   const setzen = (feld: string, v: Overridewert) =>
     setEntwurf(d => ({ ...d, [feld]: v }))
+
+  // `[read]` **Der Entwurfswert in der gewaehlten Einheit** — der
+  // Zustand bleibt die Rate.
+  const ratenFeldwert = (() => {
+    const v = entwurf.weight_change_target_percent
+    if (v === null || v === undefined || typeof v !== 'number') return ''
+    const w = inEinheit(v, gewichtKg, einheitWahl)
+    return w === null ? '' : String(w)
+  })()
 
   const zahl = (feld: string): string => {
     const v = entwurf[feld]
@@ -254,12 +283,35 @@ export function PhasenEditor({
                           katalog={strategie.tdee_modifier}
                           onChange={v => setzen('tdee_modifier', v === '' ? null : Number(v))} />
               </Feld>
-              <Feld label="Zielrate" sub="% Koerpergewicht je Woche">
-                <Zahlfeld marke="weight_change_target_percent"
-                          wert={zahl('weight_change_target_percent')}
-                          katalog={strategie.weight_change_target_percent}
-                          einheit="%/Wo"
-                          onChange={v => setzen('weight_change_target_percent', v === '' ? null : Number(v))} />
+              {/* ══ G-565/A1: EIN Feld, zwei Einheiten ══════════
+                  `[cmd]` **Hier stand nur Prozent** — `%/Wo` als
+                  festes Suffix. `[read]` **Im selben Editor rechnet
+                  das Kalorienradeln schon in kcal** (+200 / −300),
+                  ohne dass eine Stelle umrechnete (E-83). */}
+              <Feld label="Zielrate"
+                    sub={EINHEIT_ZEICHEN[einheitWahl]}>
+                <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                  <div style={{ flex: 1 }}>
+                    <Zahlfeld marke="weight_change_target_percent"
+                              wert={ratenFeldwert}
+                              katalog={inEinheit(
+                                strategie.weight_change_target_percent,
+                                gewichtKg, einheitWahl)}
+                              einheit={einheitWahl === 'prozent' ? '%/Wo' : 'kcal'}
+                              onChange={v => setzen('weight_change_target_percent',
+                                v === ''
+                                  ? null
+                                  // `[read]` **Immer zurueck auf die
+                                  // Rate** — der Entwurf kennt nur
+                                  // eine Groesse.
+                                  : ausEinheit(Number(v), gewichtKg, einheitWahl))} />
+                  </div>
+                  <EinheitenSchalter einheit={einheitWahl} gewichtKg={gewichtKg}
+                                     onWechsel={e => {
+                                       setEinheitWahl(e)
+                                       void einheitSetzenAktion(e)
+                                     }} />
+                </div>
               </Feld>
               <Feld label="Protein" sub="je kg Koerpergewicht">
                 <Zahlfeld marke="protein_per_kg" wert={zahl('protein_per_kg')}

@@ -31,6 +31,7 @@ import { ankerplan, gesamtWochen, type Ankerzeile } from '../../../lib/goals/ank
 import { phasenName } from '../../../lib/goals/phase-regeln'
 import type { ZielFortschritt, Zielphase } from '../../../lib/goals/lesen'
 import type { Strategie } from '../../../lib/goals/strategie-read'
+import type { Rateneinheit } from '../../../lib/goals/zielrate-einheit'
 // G-539: der Phasen-Editor.
 import { PhasenEditor } from './phasen-editor-echt'
 import { phasenOverrideAktion } from './phase-aktionen'
@@ -240,7 +241,7 @@ function Zielzeile({ z, heute, onBearbeiten }: {
  * @param heute       Der Stichtag. **Kein `Date.now()`.**
  */
 export function PhasenZeitachse({
-  ziele, phasen, strategien, heute, tdee, onNeuesZiel,
+  ziele, phasen, strategien, heute, tdee, gewichtKg, einheit, onNeuesZiel,
 }: {
   ziele: ZielFortschritt[]
   phasen: Zielphase[]
@@ -248,6 +249,10 @@ export function PhasenZeitachse({
   heute: string
   /** `[cmd]` **G-539: fuer den `cycling`-Reiter** — `TDEE + Mittel`. */
   tdee: number | null
+  /** `[cmd]` **G-565: ohne Gewicht keine Kilokalorien** (E-83). */
+  gewichtKg: number | null
+  /** Die gewaehlte Einheit des Nutzers. */
+  einheit: Rateneinheit
   onNeuesZiel: () => void
 }) {
   // ══ G-539: der Editor ══════════════════════════════════════════
@@ -327,6 +332,8 @@ export function PhasenZeitachse({
           override={alsOverride(bearbeitet.phase.parameters)}
           zieldatum={bearbeitet.ziel.target_date}
           tdee={tdee}
+          gewichtKg={gewichtKg}
+          einheit={einheit}
           onClose={() => setBearbeitet(null)}
           onAnwenden={async (abweichung) => {
             const phaseId = bearbeitet.phase?.phase_id

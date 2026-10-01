@@ -88,6 +88,7 @@ import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-re
 // `createSessionClient` und damit `next/headers`; ein Wert-Import
 // von hier aus beantwortete die Seite mit HTTP 500 (A-30, G-412).
 import type { Strategie } from '../../../lib/goals/strategie-read'
+import type { Rateneinheit } from '../../../lib/goals/zielrate-einheit'
 import { StrategieWahl } from './strategie-wahl'
 // G-544: die Zeitachse des Phase-Reiters.
 import { PhasenZeitachse } from './phasen-zeitachse'
@@ -187,6 +188,12 @@ export type EchteDaten = {
    * kann sie nicht liefern** (`LIMIT 1` im Rumpf).
    */
   offenePhasen: Zielphase[]
+  /**
+   * `[cmd]` **G-565/A4: die gewaehlte Einheit** — aus
+   * `user_display_preferences`, eine Einstellung des NUTZERS
+   * und keine Spalte in `goal_phases` (E-83).
+   */
+  einheit: Rateneinheit
   ladefehler: string | null
 }
 
@@ -476,7 +483,9 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                   zeigte das eine und verschwieg die andere**, und
                   welche, entschied die Sortierung. */}
               {!echtAus && echt.phasen.map(p => (
-                <PhaseEcht key={p.phase_id} phase={p} stichtag={echt.stichtag} />
+                <PhaseEcht key={p.phase_id} phase={p} stichtag={echt.stichtag}
+                           gewichtKg={echt.profil?.body_weight_kg ?? null}
+                           einheit={echt.einheit} />
               ))}
               {/* ══ G-513: der Knopf, der gefehlt hat ══════════════
                   `[cmd]` **Fuenf Funktionen in der Datenbank, null
@@ -504,7 +513,8 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                   beginnen" gestanden, obwohl zwei laufen. */}
               {!echtAus && laufendePhasen.length === 0 && (
                 <PhaseBeginnen stichtag={echt.stichtag} aktiv={null}
-                               gewichtKg={echt.profil?.body_weight_kg ?? null} />
+                               gewichtKg={echt.profil?.body_weight_kg ?? null}
+                               einheitVorgabe={echt.einheit} />
               )}
               {/* ══ G-564/A2: bei mehreren sagt die Ansicht das ════
                   `[read]` **Beenden und Wechseln gelten je EINER
@@ -587,6 +597,8 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
                   strategien={echt.strategien} heute={echt.stichtag}
                   tdee={echt.tdee?.adaptive_tdee_kcal
                     ?? echt.tdee?.formula_tdee_kcal ?? null}
+                  gewichtKg={echt.profil?.body_weight_kg ?? null}
+                  einheit={echt.einheit}
                   onNeuesZiel={() => kontext.open({ typ: 'newGoal' })} />
               )}
               {!echtAus && (

@@ -47,6 +47,10 @@ import {
 import {
   ladeStrategien, ladeStrategieProfil, type Strategie,
 } from '../../../lib/goals/strategie-read'
+// G-565/A4: die zuletzt gewaehlte Einheit, aus
+// `user_display_preferences` — nicht aus der Phase (E-83).
+import { ladeEinheit } from '../../../lib/goals/einheit-speichern'
+import type { Rateneinheit } from '../../../lib/goals/zielrate-einheit'
 import { GoalsAnsicht } from './ansicht'
 import './goals.css'
 
@@ -99,12 +103,16 @@ export default async function V2GoalsPage({
   // G-538 erlaubt `uq_goal_phases_one_open` mehrere.
   // `phase_am()` kann sie nicht liefern (`LIMIT 1`).
   let offenePhasen: Zielphase[] = []
+  // `[read]` **Eine Darstellung, kein Datum** — faellt sie aus,
+  // gilt die Vorgabe, nicht ein Fehler.
+  let einheit: Rateneinheit = 'prozent'
   let ladefehler: string | null = null
 
   try {
     const userId = await angemeldeteNutzerin()
     ;[ziele, meilensteine, phasen, navy, tdee, messungen, zukunftsmessungen, umfaenge,
-      profil, fotosessions, strategien, strategieProfil, offenePhasen]
+      profil, fotosessions, strategien, strategieProfil, offenePhasen,
+      einheit]
       = await Promise.all([
         ladeZiele(userId, stichtag),
         ladeMeilensteine(userId, stichtag),
@@ -119,6 +127,7 @@ export default async function V2GoalsPage({
         ladeStrategien(),
         ladeStrategieProfil(userId),
         ladeOffenePhasen(userId, stichtag),
+        ladeEinheit(),
       ])
 
     // Die zwei Zielwert-Funktionen kommen aus dem bestehenden Lesepfad
@@ -167,6 +176,7 @@ export default async function V2GoalsPage({
         strategien,
         strategieProfil,
         offenePhasen,
+        einheit,
         ladefehler,
       }}
     />

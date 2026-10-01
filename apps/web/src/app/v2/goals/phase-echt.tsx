@@ -31,6 +31,13 @@
 // ist keine von beiden. Das steht an der Kachel, damit niemand die
 // gerechnete Woche fuer eine gespeicherte haelt.
 import * as React from 'react'
+
+// ══ G-565/E-83: dieselbe Rate, zwei Einheiten ══════════════
+import {
+  inEinheit, EINHEIT_ZEICHEN, type Rateneinheit,
+} from '../../../lib/goals/zielrate-einheit'
+import { EinheitenSchalter } from './einheiten-schalter'
+import { einheitSetzenAktion } from './phase-aktionen'
 import { Card, Pill, Row } from '@lumeos/ui'
 
 import type { Phase } from '../../../lib/goals/lesen'
@@ -92,7 +99,23 @@ function parameterZeilen(parameters: Record<string, unknown>): Array<[string, st
     ])
 }
 
-export function PhaseEcht({ phase, stichtag }: { phase: Phase; stichtag: string }) {
+export function PhaseEcht({ phase, stichtag, gewichtKg, einheit }: { phase: Phase; stichtag: string   /**
+   * `[cmd]` **G-565: fuer die Einheitenwahl** — ohne Gewicht keine
+   * Kilokalorien (E-83). `[read]` **Das Gewicht am Phasenbeginn**,
+   * nicht das heutige (G-543).
+   */
+  gewichtKg: number | null
+  /** Die gewaehlte Einheit des Nutzers, aus den Einstellungen. */
+  einheit: Rateneinheit
+}) {
+  // ══ G-565/A1: die gewaehlte Einheit, lokal umschaltbar ══════
+  //
+  // `[read]` **Die Vorgabe kommt vom Nutzer** (Einstellung), der
+  // Wechsel wirkt sofort und wird nebenher festgehalten.
+  const [gewaehlt, setGewaehlt] = React.useState(einheit)
+  // `[read]` **Eine Groesse, zwei Darstellungen** — gespeichert
+  // bleibt die Rate (E-83).
+  const anzeige = inEinheit(phase.zielrate_pct_kg_woche, gewichtKg, gewaehlt)
   const lauf = React.useMemo(() => phasenLauf(phase, stichtag), [phase, stichtag])
   const params = React.useMemo(
     () => parameterZeilen(phase.parameters), [phase.parameters])
@@ -248,10 +271,26 @@ export function PhaseEcht({ phase, stichtag }: { phase: Phase; stichtag: string 
             Kachel zeigt diese drei** — und wo ein Wert fehlt, einen
             Strich MIT GRUND. */}
         <Card title="Phase parameters" sub={lesbar(phase.phase_type)}>
-          <Row label="Zielrate"
-               value={phase.zielrate_pct_kg_woche != null
-                 ? `${phase.zielrate_pct_kg_woche} % KG/Woche`
-                 : '—'} />
+          {/* ══ G-565/A1: die Rate in der gewaehlten Einheit ═════
+              `[read]` **Ein Umschalter, kein zweites Feld** —
+              gespeichert bleibt die Rate (E-83). */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+          }}>
+            <div style={{ flex: 1 }}>
+              <Row label="Zielrate"
+                   value={anzeige !== null
+                     ? `${anzeige > 0 ? '+' : ''}${anzeige} ${EINHEIT_ZEICHEN[gewaehlt]}`
+                     : '—'} />
+            </div>
+            {phase.zielrate_pct_kg_woche != null && (
+              <EinheitenSchalter einheit={gewaehlt} gewichtKg={gewichtKg}
+                                 onWechsel={e => {
+                                   setGewaehlt(e)
+                                   void einheitSetzenAktion(e)
+                                 }} />
+            )}
+          </div>
           {phase.zielrate_pct_kg_woche == null && (
             <div className="v2-dim" data-grund="rate"
                  style={{ fontSize: 10.5, lineHeight: 1.5, marginTop: -4, marginBottom: 6 }}>

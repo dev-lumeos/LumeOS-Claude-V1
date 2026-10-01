@@ -18,6 +18,8 @@ import {
   PhaseFehler, type PhaseFehlerCode,
 } from '../../../lib/goals/phase-write'
 import type { Phasenstart } from '../../../lib/goals/phase-regeln'
+// G-565/A4: die Einheit gehoert dem Nutzer.
+import { speichereEinheit } from '../../../lib/goals/einheit-speichern'
 
 export type PhaseErgebnis =
   | { ok: true; phaseId: string }
@@ -98,5 +100,26 @@ export async function phasenOverrideAktion(
     return { ok: true, phaseId }
   } catch (f) {
     return alsFehler(f)
+  }
+}
+
+/**
+ * Die gewaehlte Einheit festhalten — G-565/A4.
+ *
+ * `[read]` **Eine Darstellung, kein Datum** — sie liegt in
+ * `user_display_preferences`, nicht an der Phase.
+ */
+export async function einheitSetzenAktion(
+  einheit: 'prozent' | 'kcal',
+): Promise<{ ok: boolean; fehler: string | null }> {
+  try {
+    await speichereEinheit(einheit)
+    revalidatePath('/v2/goals')
+    return { ok: true, fehler: null }
+  } catch (f) {
+    return {
+      ok: false,
+      fehler: f instanceof Error ? f.message : String(f),
+    }
   }
 }

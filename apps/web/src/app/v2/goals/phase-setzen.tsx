@@ -37,12 +37,23 @@ import {
   type PhaseErgebnis,
 } from './phase-aktionen'
 import {
-  PHASENARTEN, phasenName, kcalDeltaAusRate,
+  PHASENARTEN, phasenName,
   RATENPFLICHT, RATE_MIN, RATE_MAX, uebergangErlaubt,
   type Phasenart, type Ratenpflicht,
 } from '../../../lib/goals/phase-regeln'
 // G-534/A7: das Vorschaupanel des Entwurfs.
 import { PhaseVorschau } from './phase-vorschau'
+// ══ G-565/E-83: der Nutzer waehlt die Einheit ══════════════
+//
+// `[cmd]` **`kcalDeltaAusRate` aus `phase-regeln.ts` rundete mit
+// `Math.round`** — das weicht bei negativen Haelfte-Faellen von
+// Postgres ab (gemessen: -2,5 bei 55,5 kg gibt -1526,2 statt
+// -1526,3). **`kcalAusRate` rundet wie die Datenbank.**
+import {
+  kcalAusRate, ausEinheit, inEinheit, type Rateneinheit,
+} from '../../../lib/goals/zielrate-einheit'
+import { EinheitenSchalter } from './einheiten-schalter'
+import { einheitSetzenAktion } from './phase-aktionen'
 
 /**
  * Was die Rate fuer diese Art sein muss — als Satz.
@@ -118,7 +129,7 @@ function heute(stichtag: string): string {
  * gewinnt:** wer `mini_cut` nicht anbietet, verbietet einen Zustand,
  * den die Datenbank erlaubt (G-515, W2).
  */
-export function PhaseBeginnen({ stichtag, aktiv, gewichtKg }: {
+export function PhaseBeginnen({ stichtag, aktiv, gewichtKg, einheitVorgabe }: {
   stichtag: string
   /** Die laufende Phase — solange eine da ist, sperrt die Datenbank. */
   aktiv: Phase | null
@@ -128,6 +139,11 @@ export function PhaseBeginnen({ stichtag, aktiv, gewichtKg }: {
    * weg, mit Grund.**
    */
   gewichtKg: number | null
+  /**
+   * `[cmd]` **G-565/A4: die zuletzt gewaehlte Einheit des Nutzers**
+   * — aus `user_display_preferences`, nicht aus der Phase (E-83).
+   */
+  einheitVorgabe: Rateneinheit
 }) {
   const [wahl, setWahl] = React.useState<Phasenart | null>(null)
   const [start, setStart] = React.useState(heute(stichtag))
@@ -143,7 +159,17 @@ export function PhaseBeginnen({ stichtag, aktiv, gewichtKg }: {
   const pflicht = wahl ? RATENPFLICHT[wahl] : null
   const rateZahl = rate.trim() === '' ? null : Number(rate)
   const rateGueltig = rateZahl !== null && Number.isFinite(rateZahl)
-  const kcalDelta = kcalDeltaAusRate(rateGueltig ? rateZahl : null, gewichtKg)
+  // ══ G-565/A1: eine Groesse, zwei Einheiten, EIN Feld ═══════
+  //
+  // `[read]` **Der Zustand bleibt die RATE** — das Feld zeigt sie
+  // nur umgerechnet. **Zwei Zustaende waeren zwei Wahrheiten
+  // (G-529).**
+  const [einheit, setEinheit] = React.useState<Rateneinheit>(einheitVorgabe)
+  const kcalDelta = kcalAusRate(rateGueltig ? rateZahl : null, gewichtKg)
+  // Was im Feld steht: die Rate, in der gewaehlten Einheit.
+  const feldwert = einheit === 'prozent'
+    ? rate
+    : (rateGueltig ? String(kcalAusRate(rateZahl, gewichtKg) ?? '') : rate)
 
   async function beginnen() {
     if (!wahl) return
@@ -261,13 +287,35 @@ export function PhaseBeginnen({ stichtag, aktiv, gewichtKg }: {
               `[cmd]` **Beide stehen da** (N13). */}
           {pflicht !== 'keine' ? (
             <>
+              {/* ══ G-565/A1: EIN Feld, zwei Einheiten ══════════
+                  `[read]` **Gespeichert wird die Rate** — wer kcal
+                  eintraegt, bekommt sie umgerechnet, und zwar mit
+                  derselben Rundung wie die Datenbank. */}
               <Feld label="Zielrate"
                     sub={ratenSatz(pflicht)}>
-                <input type="number" step="0.05" style={FELD} value={rate}
-                       min={RATE_MIN} max={RATE_MAX}
-                       data-phasenfeld="zielrate"
-                       placeholder={pflicht === 'nahe_null' ? '0' : ''}
-                       onChange={e => setRate(e.target.value)} />
+                <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                  <input type="number"
+                         step={einheit === 'prozent' ? '0.05' : '10'}
+                         style={{ ...FELD, flex: 1 }} value={feldwert}
+                         min={einheit === 'prozent' ? RATE_MIN : undefined}
+                         max={einheit === 'prozent' ? RATE_MAX : undefined}
+                         data-phasenfeld="zielrate"
+                         data-feldeinheit={einheit}
+                         placeholder={pflicht === 'nahe_null' ? '0' : ''}
+                         onChange={e => {
+                           const roh = e.target.value
+                           if (roh === '') { setRate(''); return }
+                           // `[read]` **Immer auf die Rate zurueck** —
+                           // der Zustand kennt nur eine Groesse.
+                           const r = ausEinheit(Number(roh), gewichtKg, einheit)
+                           setRate(r === null ? roh : String(r))
+                         }} />
+                  <EinheitenSchalter einheit={einheit} gewichtKg={gewichtKg}
+                                     onWechsel={e => {
+                                       setEinheit(e)
+                                       void einheitSetzenAktion(e)
+                                     }} />
+                </div>
               </Feld>
               {feldFehler('zielrate_pct_kg_woche')
                 && <Meldung art="fehler" text={feldFehler('zielrate_pct_kg_woche')!} />}
@@ -278,7 +326,16 @@ export function PhaseBeginnen({ stichtag, aktiv, gewichtKg }: {
               <div className="v2-dim" style={{
                 fontSize: 11, lineHeight: 1.5, marginTop: -4, marginBottom: 10,
               }} data-kcal-delta>
-                {kcalDelta !== null
+                {/* `[read]` **Immer die ANDERE Einheit** — wer in
+                    Prozent tippt, sieht die Kilokalorien; wer in
+                    Kilokalorien tippt, sieht die Rate. **Beide
+                    stehen da** (N13). */}
+                {einheit === 'kcal' && rateGueltig
+                  ? <>
+                      Das sind <strong>{rateZahl > 0 ? '+' : ''}{rateZahl} % KG/Woche</strong>
+                      {' '}bei {gewichtKg} kg.
+                    </>
+                  : kcalDelta !== null
                   ? <>
                       Das sind <strong>{kcalDelta > 0 ? '+' : ''}{kcalDelta} kcal/Tag</strong>
                       {' '}bei {gewichtKg} kg.
