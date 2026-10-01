@@ -5,8 +5,8 @@
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
 | Claude Code | G-569 | G-520 prueft Kilogramm in der Anwendung | **laeuft**, raus 01.10. |
+| Claude Code | A-85 | der Zyklus wird geprueft, aber nicht ausgefuehrt | **laeuft**, raus 01.10. |
 | Codex | A-77 | 114 von 120 Proben laufen in keinem Lauf | **laeuft**, raus 01.10. |
-| Codex | G-514 | die Modulverrechnung — Bau abgenommen | **offen**: nicht live eingespielt |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 
@@ -67,9 +67,12 @@ was sie kosten: `encoding-pruefen` 15,6 s ueber 21.692 Dateien,
 
 ---
 
-## Die Einspielreihenfolge — drei Aenderungen, und eine ist heute ausgefallen
+## Die Einspielreihenfolge — vier Aenderungen, und eine ist heute ausgefallen
 
-`[cmd]` **Drei Datenbankaenderungen sind gebaut und NICHT live:**
+`[cmd]` **Vier Datenbankaenderungen sind gebaut und NICHT live.** `[read]`
+**Alle vier liegen in `erledigt/` mit Hash** — abgenommen heisst gebaut und
+belegt, nicht eingespielt. **Die Warteschlange steht hier, nicht in der
+Tabelle oben:** ein Punkt, der auf Tom wartet, ist kein laufender Auftrag.
 
     G-559   phase_am liefert alle Phasen, phase_eines_ziels_am eine
             Anwendung: G-564  (6ae14c93)   FERTIG
@@ -77,6 +80,9 @@ was sie kosten: `encoding-pruefen` 15,6 s ueber 21.692 Dateien,
             Anwendung: G-568  (57b88381)   FERTIG
     G-535   sechs Funktionen lesen auth.uid() statt des Singulars
             Anwendung: keine noetig - es gibt keinen Aufrufer (G-571)
+    G-514   goals.goal_contributions, die Modulverrechnung
+            Anwendung: offen - G-532/A2 wartet genau darauf
+            (Code kam unter dem Betreff goals(G-531) herein: 309db7e1)
 
 `[cmd]` **Am 01.10. ist die Goals-Seite daran ausgefallen.** G-568 reicht
 bei genau einer offenen Phase ein `p_goal_id` durch; live steht nur die

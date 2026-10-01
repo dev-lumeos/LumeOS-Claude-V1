@@ -4,6 +4,8 @@ typ: befund
 modul: goals
 schwere: mittel
 angelegt: 2026-09-26
+erledigt: 2026-09-29
+commit: 309db7e1
 agent: codex
 beauftragt: 2026-09-29
 

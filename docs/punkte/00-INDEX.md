@@ -6,9 +6,9 @@
 | Zustand | Punkte |
 |---|---|
 | `todos` | 269 |
-| `laufend_codex` | 2 |
+| `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 607 |
+| `erledigt` | 608 |
 | **gesamt** | **880** |
 
 ## medical — 49
@@ -575,7 +575,7 @@
 
 ## goals — 67
 
-### beauftragbar — 60
+### beauftragbar — 61
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -596,7 +596,7 @@
 | `G-511` | befund | hoch | [die Phase entscheidet nicht ueber die Kalorien](erledigt/goals-G-0511-phase-entscheidet-nicht-ueber-kalorien.md) | erledigt | — | G-526, G-527 |
 | `G-512` | befund | hoch | [die FFMI-Kachel zeigte eine erfundene Zahl als echte](erledigt/goals-G-0512-ffmi-zeigte-eine-erfundene-zahl.md) | erledigt | — | — |
 | `G-513` | befund | hoch | [die Phase laesst sich nirgends setzen](erledigt/goals-g-0513-keine-oberflaeche-setzt-eine-phase.md) | erledigt | — | G-519 |
-| `G-514` | befund | mittel | [die Modulverrechnung, der Zweck des Moduls, fehlt ganz](laufend_codex/goals-G-0514-die-modulverrechnung-fehlt-ganz.md) | laeuft (codex) | — | G-522, G-524 |
+| `G-514` | befund | mittel | [die Modulverrechnung, der Zweck des Moduls, fehlt ganz](erledigt/goals-G-0514-die-modulverrechnung-fehlt-ganz.md) | erledigt | — | G-522, G-524 |
 | `G-515` | befund | mittel | [die drei Goals-Mockups widersprechen sich achtmal in Zahlen](todos/goals-G-0515-die-drei-mockups-widersprechen-sich.md) | offen | — | — |
 | `G-516` | befund | mittel | [das Vorgaengerrepo traegt die Phasenzahlen, die uns fehlen](todos/goals-G-0516-das-vorgaengerrepo-hat-die-phasenzahlen.md) | offen | — | — |
 | `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](erledigt/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | erledigt | — | G-520, G-521, G-534 |
@@ -604,6 +604,7 @@
 | `G-521` | feature | mittel | [wie modelliert man Ernaehrungsphasen, ihre Varianten und Parameter](todos/goals-g-0521-phasenmodellierung-tiefenrecherche.md) | offen | — | G-529, G-530 |
 | `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](todos/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | offen | — | — |
 | `G-523` | fehler | hoch | [der adaptive TDEE glaettet nicht, er springt](erledigt/goals-g-0523-adaptive-tdee-glaettet-nicht.md) | erledigt | — | — |
+| `G-524` | befund | mittel | [vier der zehn Spec-Tabellen und beide Ansichten fehlen](erledigt/goals-g-0524-vier-tabellen-und-beide-ansichten-fehlen.md) | erledigt | — | — |
 | `G-525` | befund | mittel | [Meilensteine gibt es nur als Seed](todos/goals-g-0525-meilensteine-entstehen-nicht.md) | offen | — | — |
 | `G-526` | fehler | hoch | [Protein, Fett und Faser kennen die Phase nicht](todos/goals-g-0526-protein-und-fett-kennen-die-phase-nicht.md) | offen | — | — |
 | `G-527` | fehler | mittel | [der Schreibweg kennt die neuen Hindernisse nicht](erledigt/goals-g-0527-der-schreibweg-kennt-die-neuen-hindernisse-nicht.md) | erledigt | — | — |
@@ -640,11 +641,10 @@
 | `G-570` | fehler | mittel | [Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg](todos/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md) | offen | — | — |
 | `G-572` | fehler | mittel | [Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch](todos/goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md) | offen | — | — |
 
-### wartet auf Blocker — 7
+### wartet auf Blocker — 6
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
-| `G-524` | befund | mittel | [vier der zehn Spec-Tabellen und beide Ansichten fehlen](erledigt/goals-g-0524-vier-tabellen-und-beide-ansichten-fehlen.md) | erledigt | G-514 | — |
 | `G-528` | befund | mittel | [die Variantenachse und mini_cut sind nicht definiert](erledigt/goals-g-0528-varianten-und-mini-cut-sind-nicht-definiert.md) | erledigt | G-521 | — |
 | `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](todos/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | offen | G-521 | G-531, G-533 |
 | `G-530` | feature | hoch | [contest_prep und expert_bb_annual brauchen eine eigene Struktur](todos/goals-g-0530-wettkampfvorbereitung-braucht-eine-eigene-struktur.md) | offen | G-529 | — |
