@@ -89,3 +89,33 @@ geprueft).
 **Zu belegen:** je Funktion die Oberflaeche, an der sie haengt, oder die
 Aussage, dass sie aufgegeben ist · die Zaehlung der Aufrufer vorher und
 nachher · der Ort fuer die neue Meldung, wenn der medical-Weg dabei ist.
+
+---
+
+## Entschieden — 2026-10-01
+
+**Tom:** alle vier Bereiche bekommen eine Oberflaeche. Damit ist Weg 1
+aus dem Abschnitt oben gewaehlt — **die Wege sind geplant, keiner ist
+aufgegeben:**
+
+    goals.body_circumference_write        Umfangserfassung
+    medical.import_lab_report_rows        Laborimport
+    medical.start_lab_report_ocr          (zusammen mit dem Import)
+    medical.store_lab_report_ocr_result   (zusammen mit dem Import)
+    nutrition.meal_plan_set_next_plan     Plansprung
+    coach.raise_alert                     Alarm im Coach-Portal
+
+`[read]` **Damit ist dieser Punkt kein Entscheidungspunkt mehr, sondern
+eine Liste von vier Auftraegen** — je Bereich einer, in verschiedenen
+Modulen. Sie gehoeren nicht in einen Auftrag: `goals`, `medical`,
+`nutrition` und `coach` sind vier Oberflaechen mit vier Lesepfaden.
+
+`[cmd]` **Der Laborimport bringt drei Funktionen mit einem Weg** — Import
+plus zwei OCR-Funktionen. Dort haengt auch die neue Meldung
+`medical import: user mismatch` (`P0001`), die heute nirgends behandelt
+wird.
+
+`[read]` **Und die Reihenfolge ist nicht beliebig:** die Zuordnung von
+Fehlercodes zu Texten liegt unter `goals/`
+(`apps/web/src/lib/goals/ladefehler.ts`), nicht querliegend. **G-555
+raeumt das**, und der medical-Weg braucht es. Die anderen drei nicht.

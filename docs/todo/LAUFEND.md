@@ -5,6 +5,7 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
+| Claude Code | G-573 | rateAusKcal gibt es zweimal, mit verschiedener Rundung | **laeuft**, raus 01.10. |
 | Claude Code | A-85 | Der Zyklus wird geprueft, aber nichts fuehrt ihn aus | **laeuft**, raus 01.10. |
 | Codex | A-77 | vier Werkzeugtests liefen nirgends | **laeuft**, raus 01.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
@@ -163,41 +164,59 @@ gespeichert wird die Rate (E-83).
     packages/ui, packages/scoring              Claude Code (mit Gegenprobe)
     docs/, tools/                              Orchestrator
 
+## Entschieden am 2026-10-01 — acht Fragen im Interview
+
+`[cmd]` **Tom hat in einem Durchgang acht offene Fragen beantwortet.**
+Die Entscheidungen stehen als ADR, die Punkte tragen sie nach:
+
+    E-84   die Automatik passt an, der Hinweis ist passiv, gefragt wird
+           einmal und die Antwort wird gemerkt              (G-574)
+    E-85   ein Programm ist eine eigene Tabelle; die Teilphasen erben
+           ein Verhaeltnis (22/44/33 %), keine Wochen       (G-560, G-562)
+    E-86   gerechnet und vorgeschlagen wird auf ERFASSTEN Daten; die
+           Peptid-Zeile bleibt Referenz, kein Parameter     (G-546)
+    E-87   die Mikronaehrstoff-Tagesreferenz ist zielfrei - belegt mit
+           EFSA (Thiamin pro Energie, Riboflavin absolut)   (G-567)
+    E-88   geteilte Vorlagen gehoeren dem Marketplace, Goals fuehrt
+           nur eigene                                      (G-540)
+    E-89   der Untertyp benennt die MESSGROESSE, nicht die Absicht -
+           weight eigener Wert, "Eigenes" ohne             (G-557/A2)
+
+`[cmd]` **Dazu G-571:** alle vier Bereiche bekommen eine Oberflaeche -
+Umfangserfassung, Laborimport (drei Funktionen), Plansprung,
+Coach-Alarm. **Keiner ist aufgegeben.**
+
+`[read]` **Und eine Frage hat eine groessere aufgedeckt:** Toms Einwand
+zu den Zielarten - *„gewicht ist eine variable aber dazu kommen noch die
+bodymeasurements"* - hat G-575 erzeugt. `[cmd]` **`user_goals` traegt
+genau EINE Messgroesse**, `auto_update` steht auf `true` und nichts
+sagt, aus welcher Quelle `current_value` kommt.
+
 ## Was auf Tom wartet
 
-    EINSPIELEN  G-559 und G-563 zusammen, mit dem Seed. Seit heute nicht
-                mehr nur stillschweigend falsch, sondern einmal sichtbar
-                ausgefallen. Danach G-570: die Bruecke wieder weg.
+    EINSPIELEN  G-559, G-563, G-535 und G-514 - vier gebaute, nicht
+                eingespielte Aenderungen. G-559/G-563 sind die, an denen
+                die Goals-Seite am 01.10. sichtbar ausgefallen ist.
+                Danach G-570: die Bruecke wieder weg.
     Tobias      G-542  ist die Rate pro Woche oder pro Monat
                 G-548  moderate_cut 12 oder 20 Wochen (vorlaeufig 20)
                 G-549  Protein und Fett in der Ladewoche
                 G-566  ist 0,25 %/Woche fuer einen fortgeschrittenen
-                       Natural zu hoch - und die Waechtergrenzen
-                       bewegen sich bei abgestuften Raten NICHT mit
+                       Natural zu hoch - und die Waechtergrenzen bewegen
+                       sich bei abgestuften Raten NICHT mit. Der
+                       Spielraum ist gemessen: aggressive_bulk 0,146 pp,
+                       aggressive_cut 0,194 pp
                 Alle stehen in 00-FRAGEN.md.
-    G-546       erfassen oder empfehlen: v2.0 fuehrt Peptide als
-                Phasenparameter. Das ist eine Entscheidung ueber das
-                Produkt, nicht ueber eine Tabelle.
-    G-540       drei Entscheidungen zu Vorlagen: gehoeren geteilte
-                Vorlagen mit Bewertung zu Goals oder zum Marketplace,
-                nimmt "Share with coach" den Weg der Freigabeschicht,
-                und wer pflegt die LumeOS-Vorlagen
-    G-560       ist eine geplante Phase ein Satz oder eine Rechnung
-    G-562       die Teilphasen haben keine Wochen mehr - G-545 hat
-                `weeks` und `deficit` entfernt, der Ankerplan aus G-544
-                hat seither keine Quelle
-    G-567       die Tagesreferenz der Mikronaehrstoffe kennt kein Ziel
-    G-557 A2    `weight` und `custom` bleiben Vorschlag (`unsicher: true`)
-                bis Tom entscheidet, ob sie eigene CHECK-Werte brauchen
-    A-77        zwei Verzeichnisse mit Proben laufen in keinem Lauf —
-                `tools/__tests__/` und `supabase/_pipeline/_validierung/`.
-                Schwere heute auf hoch: der Schaden ist belegt.
+    G-575       NEU: traegt ein Ziel eine Messgroesse oder mehrere?
+                Drei Formen im Punkt. Mitzuentscheiden: welche Quelle
+                `current_value` nachzieht, und was `progress_pct`
+                bedeutet, wenn ein Ziel mehrere Groessen fuehrt
+    A-77        laeuft bei Codex seit dem 01.10.
     C-554 A3    der Registerumtrag fuer die 70 unregistrierten Dateien
-    A-80        116 Wegwerf-Datenbanken. Die mit "_final" sind das
-                Problem, nicht die Platte.
+    A-80        151 Datenbanken in pg_database (29.09.: 116). Die mit
+                "_final" sind das Problem, nicht die Platte.
     A-79        backup/-Aufbewahrung, 3.958 MiB gegen ein Limit von 2.5 GiB
     A-78        Waechter auf Bezeichner-Ueberschneidung
-
 ## Neu angelegt, noch ohne Reihenfolge
 
     G-547   der persoenliche Boden unter der Katalograte
@@ -210,6 +229,9 @@ gespeichert wird die Rate (E-83).
             Wie sie erscheinen, ist eine Produktentscheidung (drei Formen
             im Punkt), keine Bauentscheidung
     G-572   der Dateikopf von ansicht.tsx nennt Phase engine als Attrappe
+    G-575   ein Ziel traegt genau EINE Messgroesse - wartet auf Tom
+    G-576   weight wird ein Untertyp, "Eigenes" bleibt ohne (E-89,
+            entschieden, klein und beauftragbar)
     G-550   Fett als g/kg Koerpergewicht statt als Prozentsatz
     G-551   das Cardio-Modul — Tom hat entschieden, dass es kommt,
             der Zeitpunkt ist offen

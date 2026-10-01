@@ -174,6 +174,8 @@ Zahl, die selbst nicht steht.
 wörtlich** — Claude Code hat das gebaut, statt „keine Teilphasen" zu
 behaupten. Das ist der richtige Zwischenzustand, kein Mangel.
 
+---
+
 ## G-546 — quer-g-0546-erfassen-oder-empfehlen.md
 
 **Modul:** quer · **angelegt:** 2026-09-29 · **Datei:** `todos/quer-g-0546-erfassen-oder-empfehlen.md`
@@ -287,6 +289,8 @@ wenn die Zahl aus einer Quelle kommt.
 Substanz, kein Katalogeintrag traegt eine Dosierung, und `docs/ssot/131`
 Abschnitt 6 haelt fest, dass die Protokolle bewusst draussen sind.
 
+---
+
 ## G-567 — quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md
 
 **Modul:** quer · **angelegt:** 2026-10-01 · **Datei:** `todos/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md`
@@ -353,6 +357,8 @@ Schwellenpruefung und haengt an dem, was die erste liefert.
 `[read]` **Die Lehre stand schon in LAUFEND:** *„`beruehrt.tabellen` ist
 eine Behauptung ueber die laufende Datenbank, keine Inhaltsangabe."* Ein
 Name aus einem Bericht ist keine Messung.
+
+---
 
 ---
 

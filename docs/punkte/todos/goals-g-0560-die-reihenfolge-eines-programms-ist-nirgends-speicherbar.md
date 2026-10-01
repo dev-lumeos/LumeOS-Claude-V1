@@ -53,3 +53,19 @@ haben, und die naechste entsteht erst, wenn die vorige endet.
 
 `[read]` **Die Wahl entscheidet, ob eine geplante Phase ein Datensatz
 ist oder eine Rechnung.** Das gehoert vor den Auftrag, nicht in ihn.
+
+---
+
+## Entschieden — 2026-10-01, E-85
+
+**Tom:** eigene Tabelle `goal_programs` mit Positionen. **Eine geplante
+Phase ist ein Datensatz, nicht eine Rechnung.**
+
+`[cmd]` **Die Ordnungsspalte fiel aus, weil `uq_goal_phases_one_open`
+je Nutzer genau eine offene Phase zulaesst** — eine geplante, unbegonnene
+Phase haette „offen" zweideutig gemacht.
+
+`[read]` **Beauftragbar fuer Codex.** Die Form der Tabelle ist Bau, nicht
+Entscheidung: Spalten, ob eine Position eine Phase referenziert oder
+beschreibt, und wie ein laufendes Programm sich zur laufenden Phase
+verhaelt.

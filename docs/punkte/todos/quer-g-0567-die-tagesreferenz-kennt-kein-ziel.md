@@ -82,3 +82,21 @@ Schwellenpruefung und haengt an dem, was die erste liefert.
 `[read]` **Die Lehre stand schon in LAUFEND:** *„`beruehrt.tabellen` ist
 eine Behauptung ueber die laufende Datenbank, keine Inhaltsangabe."* Ein
 Name aus einem Bericht ist keine Messung.
+
+---
+
+## Entschieden — 2026-10-01, E-87
+
+**Tom, 13:19:** *„ja das passt"* — zielfrei rechnen.
+
+`[cmd]` **Recherchiert und belegt:** EFSA setzt Thiamin pro Energie
+(PRI 0,1 mg/MJ = 0,4 mg/1000 kcal), Riboflavin absolut (PRI 1,6 mg/Tag).
+**Der energieabhaengige Teil haengt am Energie-BEDARF, nicht am
+Energie-ZIEL** — wer 2300 statt 3000 kcal isst, hat keinen niedrigeren
+Thiaminbedarf.
+
+`[read]` **Der Zielbezug faellt also HERAUS statt hinzuzukommen.**
+Betrifft `micronutrient_snapshot`,
+`micronutrient_snapshot_with_supplements` und die davon abhaengige
+`micronutrient_below_threshold`. Was sich bei Defizit aendert, ist die
+Luecke — und die wird sichtbar statt wegdefiniert.

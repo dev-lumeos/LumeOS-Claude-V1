@@ -132,3 +132,24 @@ wenn die Zahl aus einer Quelle kommt.
 **Unveraendert gilt:** bis zur Entscheidung erscheint in Goals keine
 Substanz, kein Katalogeintrag traegt eine Dosierung, und `docs/ssot/131`
 Abschnitt 6 haelt fest, dass die Protokolle bewusst draussen sind.
+
+---
+
+## Entschieden — 2026-10-01, E-86
+
+**Tom, 13:15:** *„alle daten die vom user erfasst werden duerfen wir auch
+rechnen und vorschlagen. wir haben im katalog referenzwerte aber fuer uns
+zaehlen die werte welche der user eingibt"*.
+
+`[read]` **Die Grenze laeuft an der Herkunft der Zahl, nicht zwischen
+erfassen und empfehlen.** Erfasst der Nutzer sein Protokoll, rechnet
+LumeOS damit und schlaegt vor — Zeit, Reihenfolge, Ort, Konflikt. **Nicht
+zur Hoehe**, und nichts, was er nicht erfasst hat.
+
+`[cmd]` **Abschnitt 9.1 der Quelle wird kein Phasenparameter.** Die
+Peptid-Zeile bleibt Referenzwert im Katalog.
+
+`[read]` **Die vier Folgefragen entfallen** — sie entstanden an der
+ausgelieferten Dosierung. **Offen bleibt eine Nacharbeit:**
+`docs/ssot/131` Abschnitt 6 sagt heute, die Protokolle seien bewusst
+draussen; richtig ist jetzt „Referenz, nicht Vorgabe".

@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 270 |
+| `todos` | 272 |
 | `laufend_codex` | 1 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 609 |
-| **gesamt** | **882** |
+| **gesamt** | **884** |
 
 ## medical — 49
 
@@ -573,9 +573,9 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 69
+## goals — 71
 
-### beauftragbar — 63
+### beauftragbar — 65
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -628,7 +628,7 @@
 | `G-553` | fehler | hoch | [Ein Tokenfehler sieht aus wie ein Datenfehler — und das Mockup fehlt](erledigt/goals-g-0553-ein-tokenfehler-sieht-aus-wie-ein-datenfehler.md) | erledigt | — | G-555 |
 | `G-554` | fehler | hoch | [Phasenziele sind nicht anlegbar, und der Reiter ist nicht nach Vorgabe](erledigt/goals-g-0554-phasenziele-sind-nicht-anlegbar.md) | erledigt | — | G-557 |
 | `G-556` | fehler | hoch | [Der Kettenlauf faellt, und er blockiert jeden Commit im Repo](erledigt/goals-g-0556-der-kettenlauf-faellt-am-eigenen-check.md) | erledigt | — | — |
-| `G-557` | fehler | hoch | [Die Zuordnung der sechs Arten erreicht die Datenbank nicht](erledigt/goals-g-0557-die-zuordnung-erreicht-die-datenbank-nicht.md) | erledigt | — | — |
+| `G-557` | fehler | hoch | [Die Zuordnung der sechs Arten erreicht die Datenbank nicht](erledigt/goals-g-0557-die-zuordnung-erreicht-die-datenbank-nicht.md) | erledigt | — | G-576 |
 | `G-558` | fehler | hoch | [`goal_phase_start` nimmt den Strategiecode nicht entgegen](erledigt/goals-g-0558-goal-phase-start-nimmt-den-strategiecode-nicht.md) | erledigt | — | — |
 | `G-559` | fehler | hoch | [`phase_am` deckelt auf eine Phase, und der Phasenkopf haengt daran](erledigt/goals-g-0559-phase-am-deckelt-auf-eine-phase.md) | erledigt | — | G-563, G-564 |
 | `G-560` | fehler | hoch | [Die Reihenfolge eines Programms ist nirgends speicherbar](todos/goals-g-0560-die-reihenfolge-eines-programms-ist-nirgends-speicherbar.md) | offen | — | — |
@@ -642,6 +642,8 @@
 | `G-572` | fehler | mittel | [Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch](todos/goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md) | offen | — | — |
 | `G-573` | fehler | hoch | [rateAusKcal gibt es zweimal, mit verschiedener Rundung](laufend_claudecode/goals-g-0573-rateauskcal-gibt-es-zweimal-mit-verschiedener-rundung.md) | laeuft (claudecode) | — | — |
 | `G-574` | fehler | hoch | [Die Waechter rechnen, und niemand sieht sie](todos/goals-g-0574-die-waechter-rechnen-und-niemand-sieht-sie.md) | offen | — | — |
+| `G-575` | fehler | hoch | [Ein Ziel traegt genau eine Messgroesse](todos/goals-g-0575-ein-ziel-traegt-genau-eine-messgroesse.md) | offen | — | — |
+| `G-576` | fehler | niedrig | [weight wird ein Untertyp, Eigenes bleibt ohne](todos/goals-g-0576-weight-als-untertyp-eigenes-ohne.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
 

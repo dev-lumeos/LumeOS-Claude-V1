@@ -84,3 +84,21 @@ Zahl, die selbst nicht steht.
 `[read]` **Solange nichts entschieden ist, sagt die Oberfläche es
 wörtlich** — Claude Code hat das gebaut, statt „keine Teilphasen" zu
 behaupten. Das ist der richtige Zwischenzustand, kein Mangel.
+
+---
+
+## Entschieden — 2026-10-01, E-85
+
+**Tom:** *„ein user erwartet einen vorschlag, der soll aber individuell
+von ihm editiert werden koennen"*.
+
+`[cmd]` **Der Vorschlag kommt aus dem Verhaeltnis, nicht aus Wochen:**
+0–4 / 4–12 / 12–18 sind 4, 8 und 6 Wochen, als Anteil 22 % / 44 % / 33 %.
+Auf 16 Wochen 4 / 7 / 5, auf 20 Wochen 4 / 9 / 7. **Damit behauptet
+niemand absolute Wochen**, und der Widerspruch aus G-545/A5 muss nicht
+vorher geloest werden.
+
+`[read]` **`sub_phases` bekommt `weeks` NICHT zurueck.** Was fehlte,
+war nicht die Zahl, sondern die Regel, aus der sie entsteht. Die
+editierten Wochen des Nutzers liegen im Programm (E-85), nicht im
+Katalog.

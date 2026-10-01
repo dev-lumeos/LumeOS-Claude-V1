@@ -59,3 +59,24 @@ Bis das entschieden ist: **kein Knopf im Editor, der hierher zeigt.**
 
 Zuletzt. Weder Ziele (G-537), Katalog (G-536), Terminierung (G-538) noch
 Editor (G-539) brauchen Vorlagen — Vorlagen brauchen alle vier.
+
+---
+
+## Entschieden — 2026-10-01, E-88
+
+**Tom:** Marketplace fuer geteilte Vorlagen, Goals fuehrt nur eigene.
+
+    Goals          "Save as my template", Apply, Edit, Duplicate
+    Marketplace    geteilte Vorlagen mit Bewertung und Nutzungszahl
+
+`[cmd]` **Der Grund ist die Zaehlung:** „4,7 ★ · 310 uses" setzt eine
+modulweite Zaehlung voraus, und zwei Zaehlungen laufen auseinander.
+
+`[read]` **Damit sind auch die zwei Folgefragen beantwortet:** die
+LumeOS-Vorlagen sind geteilte Vorlagen, also Marketplace-Inhalt und dort
+gepflegt. „Share with coach" nimmt die bestehende Freigabeschicht
+(C-381, C-379) — ein zweiter Freigabeweg waere dieselbe
+Zwei-Wahrheiten-Klasse.
+
+`[read]` **Reihenfolge unveraendert:** Vorlagen kommen zuletzt, und die
+geteilte Liste braucht zusaetzlich den Marketplace (G-362).

@@ -75,3 +75,21 @@ passen (G-566, bei Tobias).
 `test-user@lumeos.local` · ein Nutzer, bei dem ein Waechter wirklich
 greift (die Randprobe sagt, welche Werte das sind) · Sabotage je
 Zusicherung in beide Richtungen.
+
+---
+
+## Entschieden — 2026-10-01, E-84
+
+**Tom:** *„mischung aus 2 und 3: automatische anpassung aber passiven
+hinweis dazu"* und *„Einmal fragen, dann merken"*.
+
+Also: die Rate passt sich selbst an, ein passiver Hinweis sagt was und
+warum, und beim ERSTEN Eingriff wird gefragt, ob die Automatik das
+kuenftig selbst tun soll — die Antwort gilt je Nutzer.
+
+`[read]` **Damit ist dieser Punkt beauftragbar, aber nicht allein:**
+E-84 verlangt ein Herkunftsmerkmal an der Rate und einen Verlauf der
+Aenderungen (Datenbank, Codex), bevor die Oberflaeche den Hinweis
+schreiben kann. `[cmd]` **Die Merk-Antwort braucht keinen
+Schemawechsel** — `user_display_preferences`, dasselbe Muster wie
+`goals.zielrate_einheit` aus G-565.
