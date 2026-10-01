@@ -28,8 +28,43 @@ if [ -n "$zu_gross" ]; then
   exit 1
 fi
 
-echo "[gate] pnpm gate (typecheck + test + build) ..."
-pnpm gate
+# --- Der Pruefumfang haengt am Staging (A-84, 2026-10-01) ---
+#
+# ANLASS, gemessen am 2026-10-01: die 27 Waechter brauchen 43 s, davon
+# 15,6 s `encoding-pruefen` ueber 21.692 Dateien und 13 s die drei
+# Pruefungen fuer Supplemente und SVG-Pfade. Ein Commit, der drei
+# Markdown-Dateien traegt, fuhr das vollstaendig mit.
+#
+# Tom, 2026-10-01: "ein simpler commit solange braucht".
+#
+# ENTSCHEIDUNG: Traegt der Commit NUR Dateien unter `docs/`, laeuft
+# `pnpm gate:docs` — die dokumentnahen Waechter plus `encoding-pruefen
+# --staged`. Sobald eine Datei ausserhalb `docs/` dabei ist, laeuft
+# `pnpm gate` unveraendert, mit allem.
+#
+# WARUM DAS TRAEGT: Markdown bricht keinen Typecheck und keinen Build.
+# Was eine Punktdatei kaputt machen kann — ein toter Verweis, eine
+# falsche Nummer, ein Zyklusbruch, eine kaputte Kodierung — pruefen die
+# Waechter in `gate:docs`, und die Gegenprobe dazu ist belegt:
+# eine doppelt kodierte Datei im Staging macht `--staged` rot.
+#
+# WAS ES NICHT TUT: es verzichtet auf keinen Waechter fuer Code. Ein
+# Commit mit einer Zeile in `apps/` oder `supabase/` wird genauso
+# geprueft wie vorher.
+gestaged=$(git diff --cached --name-only)
+ausserhalb_docs=$(printf '%s\n' "$gestaged" | grep -v '^docs/' | grep -v '^[[:space:]]*$')
+
+if [ -z "$gestaged" ]; then
+  echo "[gate] nichts im Staging — voller Lauf."
+  pnpm gate
+elif [ -z "$ausserhalb_docs" ]; then
+  anzahl=$(printf '%s\n' "$gestaged" | grep -c '^docs/')
+  echo "[gate] nur docs/ im Commit ($anzahl Dateien) — pnpm gate:docs ..."
+  pnpm gate:docs
+else
+  echo "[gate] pnpm gate (typecheck + test + build) ..."
+  pnpm gate
+fi
 status=$?
 if [ $status -ne 0 ]; then
   echo "[gate] ROT — Commit abgebrochen (Umgehung: --no-verify)." >&2

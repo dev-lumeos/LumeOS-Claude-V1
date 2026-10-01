@@ -17,13 +17,57 @@
 // "c3 83 c2 bc", was harmlos aussieht. Beide Richtungen taeuschen; die Bytes
 // nicht.
 //
-// AUFRUF: node tools/encoding-pruefen.mjs
+// AUFRUF: node tools/encoding-pruefen.mjs            das ganze Repo
+//         node tools/encoding-pruefen.mjs --staged   nur das Staging
 // Exit 0 = sauber, Exit 1 = Befund.
+//
+// NACHTRAG 2026-10-01 (A-84): `--staged` prueft die Dateien, die der
+// Commit traegt, statt das ganze Repo. ANLASS: der Lauf ueber alle
+// Dateien kostet 15,6 s und war damit 36 Prozent der Pruefzeit JEDES
+// Commits ? auch wenn im Staging drei Markdown-Dateien lagen. Tom,
+// 2026-10-01: ,,ein simpler commit solange braucht".
+//
+// `[read]` **Die Fassung mit `--staged` ist SCHWAECHER, und das ist
+// Absicht:** sie sieht einen Schaden nicht, der schon im Repo liegt.
+// Deshalb faehrt `pnpm gate` weiter den vollen Lauf, und nur
+// `pnpm gate:docs` nimmt `--staged`. **Ein Schaden kann nur ueber einen
+// Commit hereinkommen, und den sieht diese Fassung.**
+//
+// `[read]` **Der Datenbankgegencheck entfaellt mit `--staged`** ? er
+// fragt die laufende Datenbank nach Muskelkartennamen und hat mit den
+// Dateien eines Dokument-Commits nichts zu tun.
 import fs from 'node:fs'
 import path from 'node:path'
 import { execFileSync } from 'node:child_process'
 
 const WURZEL = process.cwd()
+
+/**
+ * `--staged`: nur die Dateien, die der Commit traegt.
+ *
+ * `[read]` Gelesen wird der Zustand NACH dem Commit, also die
+ * hinzugefuegten und geaenderten Pfade aus dem Staging ? nicht der
+ * Arbeitsbaum. Ein Agent, der gerade nebenher schreibt, kann diesen
+ * Commit damit nicht rot machen.
+ */
+const NUR_STAGING = process.argv.includes('--staged')
+
+function stagingDateien() {
+  let aus
+  try {
+    aus = execFileSync('git', [
+      'diff', '--cached', '--name-only', '--diff-filter=ACM',
+    ], { cwd: WURZEL, encoding: 'utf8' })
+  } catch (fehler) {
+    const detail = fehler instanceof Error ? fehler.message : String(fehler)
+    console.error(`[encoding] ROT ? Staging nicht lesbar: ${detail}`)
+    process.exit(1)
+  }
+  return aus.split(/\r?\n/).filter(Boolean)
+    .filter(rel => ENDUNGEN.has(path.extname(rel).toLowerCase()))
+    .map(rel => path.join(WURZEL, rel))
+    .filter(p => fs.existsSync(p))
+}
 
 const ENDUNGEN = new Set([
   '.sql', '.ts', '.tsx', '.mjs', '.js', '.json', '.jsonl',
@@ -165,7 +209,9 @@ function melde(befund, hatMarke) {
   befunde.push(befund)
 }
 
-for (const datei of dateien(WURZEL)) {
+const QUELLE = NUR_STAGING ? stagingDateien() : dateien(WURZEL)
+
+for (const datei of QUELLE) {
   const rel = path.relative(WURZEL, datei).replace(/\\/g, '/')
   let buf
   try {
@@ -271,7 +317,7 @@ const FEHLERARTEN = new Set(['doppelt', 'kein-utf8', 'utf16', 'fffd'])
 
 const fehler = befunde.filter(b => FEHLERARTEN.has(b.art))
 const warnungen = befunde.filter(b => !FEHLERARTEN.has(b.art))
-const dbMuskelBefunde = pruefeMuskelkartenDb()
+const dbMuskelBefunde = NUR_STAGING ? [] : pruefeMuskelkartenDb()
 
 const jeDatei = new Map()
 for (const b of fehler) {
@@ -293,8 +339,11 @@ function warnungenZeigen() {
 }
 
 if (fehler.length === 0 && dbMuskelBefunde.length === 0) {
-  console.log(`[encoding] ${geprueft} Dateien geprueft, sauber.${freiText}`)
-  console.log('[encoding] Datenbank: deutsche Muskelkartennamen ohne Fragezeichen.')
+  const was = NUR_STAGING ? 'Dateien im Staging' : 'Dateien'
+  console.log(`[encoding] ${geprueft} ${was} geprueft, sauber.${freiText}`)
+  if (!NUR_STAGING) {
+    console.log('[encoding] Datenbank: deutsche Muskelkartennamen ohne Fragezeichen.')
+  }
   warnungenZeigen()
   process.exit(0)
 }
