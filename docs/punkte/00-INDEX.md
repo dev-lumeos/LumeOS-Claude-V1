@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 269 |
 | `laufend_codex` | 2 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 602 |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 603 |
 | **gesamt** | **875** |
 
 ## medical — 49
@@ -634,8 +634,8 @@
 | `G-562` | entscheidung | hoch | [Die Teilphasen haben keine Zeitachse mehr](todos/goals-g-0562-die-teilphasen-haben-keine-zeitachse-mehr.md) | offen | — | — |
 | `G-563` | fehler | hoch | [`berechne_zielwerte` wählt selbst eine Phase aus](erledigt/goals-g-0563-berechne-zielwerte-waehlt-selbst-eine-phase.md) | erledigt | — | G-567, G-568 |
 | `G-564` | fehler | hoch | [`ladePhase` nimmt die erste fuer die einzige](erledigt/goals-g-0564-ladephase-nimmt-die-erste-fuer-die-einzige.md) | erledigt | — | — |
-| `G-565` | fehler | hoch | [Die Einheit ist eine Nutzerwahl, heute gibt es nur Prozent](laufend_claudecode/goals-g-0565-die-einheit-ist-eine-nutzerwahl.md) | vorbereitet (claudecode) | — | — |
-| `G-568` | fehler | hoch | [Die Zielwerte brauchen ihr Ziel](laufend_claudecode/goals-g-0568-die-zielwerte-brauchen-ihr-ziel.md) | laeuft (claudecode) | — | — |
+| `G-565` | fehler | hoch | [Die Einheit ist eine Nutzerwahl, heute gibt es nur Prozent](laufend_claudecode/goals-g-0565-die-einheit-ist-eine-nutzerwahl.md) | laeuft (claudecode) | — | — |
+| `G-568` | fehler | hoch | [Die Zielwerte brauchen ihr Ziel](erledigt/goals-g-0568-die-zielwerte-brauchen-ihr-ziel.md) | erledigt | — | — |
 
 ### wartet auf Blocker — 7
 

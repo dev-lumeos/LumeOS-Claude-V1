@@ -5,7 +5,7 @@ aendern** ? **die Quelle ist die Datenbank.**
 
 `[read]` **Tabellen und Spalten stehen in `00-MODULTABELLEN.md`.**
 
-`[cmd]` **Stand 2026-09-30: 245 Funktionen, 489 Policies, 799 CHECKs, 23 Sichten.**
+`[cmd]` **Stand 2026-10-01: 245 Funktionen, 489 Policies, 799 CHECKs, 23 Sichten.**
 
 ## Funktionen und Prozeduren
 

@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-09-30
+beauftragt: 2026-10-01
+agent: claudecode
 
 braucht: [G-539, G-543]
 kind_von: G-543
@@ -23,6 +25,21 @@ beruehrt:
 ---
 
 # Die Einheit ist eine Nutzerwahl, heute gibt es nur Prozent
+
+    AUFTRAG FUER Claude Code - G-565: der Nutzer waehlt die Einheit,
+                                     Prozent oder Kilokalorien
+    Bereich: apps/web/src/app/v2/goals/
+             apps/web/src/lib/goals/
+    Fremd:   supabase/ gehoert Codex, der gerade an G-561 baut (die
+             Waechter pruefen Kilogramm statt Prozent) - seine
+             Waechtertexte kommen dort an, nicht von dir.
+             docs/ gehoert dem Orchestrator, auch diese Punktdatei:
+             der Bericht kommt als Antwort, nicht als Anhang hier.
+    Stand:   2026-10-01
+
+**Zuerst lesen, vollstaendig:** diese Datei und
+`docs/entscheidungen/E-83-der-nutzer-waehlt-die-einheit.md`.
+
 
 ## Der Befund
 

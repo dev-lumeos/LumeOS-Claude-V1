@@ -1,10 +1,10 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-01, 08:55**
+**Stand: 2026-10-01, 09:10**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-568 | die Zielwerte brauchen ihr Ziel | **laeuft**, raus 01.10. |
+| Claude Code | G-565 | die Einheit ist eine Nutzerwahl | **laeuft**, raus 01.10. |
 | Codex | G-561 | die Waechter pruefen Kilogramm statt Prozent | **laeuft**, raus 01.10. |
 | Claude Code | G-565 | die Einheit ist eine Nutzerwahl | **bereit** in `next/` |
 | Claude Code | G-539 | der Phasen-Editor fehlt | **vorbereitet** in `next/` |
@@ -24,6 +24,9 @@
     G-559  f03dfbe8   phase_am liefert alle, phase_eines_ziels_am eine
     G-563  f0af9194   berechne_zielwerte bekommt ihr Ziel (Kette)
     G-564  6ae14c93   ladePhasen gibt eine Menge, ladeZielphase eine
+    G-568  57b88381   die Zielwerte reichen ihr Ziel durch
+    A-82   724cfd29   der Kettenwaechter liest das Staging
+    A-84   724cfd29   der Pruefumfang haengt am Staging
 
 `[cmd]` **Die Kette ist wieder gruen** — `kettenlauf-status.json`:
 `passed`, Exit 0, 1401 s, 299 Schritte. Damit war das Repo nach zwei
@@ -55,32 +58,34 @@ was sie kosten: `encoding-pruefen` 15,6 s ueber 21.692 Dateien,
 
 ---
 
-## Die Einspielreihenfolge — Stand 2026-10-01
+## Die Einspielreihenfolge — frei seit 2026-10-01, 09:10
 
-`[cmd]` **Zwei Datenbankaenderungen sind gebaut und NICHT live:**
+`[cmd]` **Zwei Datenbankaenderungen sind gebaut und NICHT live. Ihre
+Anwendungsseite steht jetzt fuer beide:**
 
     G-559   phase_am liefert alle Phasen, phase_eines_ziels_am eine
-            Anwendungsseite: G-564, FERTIG (6ae14c93)
+            Anwendung: G-564  (6ae14c93)   FERTIG
     G-563   berechne_zielwerte(p_user_id, p_goal_id, p_stichtag)
-            Anwendungsseite: G-568, LAEUFT
+            Anwendung: G-568  (57b88381)   FERTIG
 
-`[read]` **Beide haben eine Anwendungsseite, und beide Male gilt dieselbe
-Reihenfolge: die Anwendung zuerst.** Der Grund ist in beiden Faellen
-derselbe — heute ist der Aufruf **still richtig**, weil die Datenbank
-deckelt, und nach dem Einspielen **sichtbar falsch**.
+`[read]` **Damit koennen beide zusammen eingespielt werden.** Die
+Reihenfolge Anwendung-zuerst ist eingehalten.
 
-    vor dem Einspielen    die Zeitachse zeigt "1 Phasen", wo zwei
-                          gelten. Falsch, aber leise.
-    nach G-568            zielwerte-read reicht das Ziel durch, der
-                          Phasenkopf zaehlt die Tabelle
-    dann einspielen       beide zusammen, G-559 und G-563
+`[cmd]` **Was bis dahin falsch ist, und zwar leise:**
 
-`[read]` **Einzeln einspielen geht auch**, aber G-563 allein wuerde einem
-Nutzer mit zwei offenen Phasen in `zielwerte-read.ts:212` einen Fehler
-zeigen. **Deshalb warten beide auf G-568.**
+    die Zeitachse zeigt "1 Phasen", wo zwei gelten
+    die Zielwerte nehmen still eine von zwei Raten - gemessen -0,500,
+    bei einem Nutzer, der auch ein Aufbauziel fuehrt. Der Unterschied
+    betraegt 716 kcal/Tag (2306 gegen 3023 bei 81,4 kg).
 
-`[cmd]` **Und der Seed wartet mit:** `testdaten-einspielen.ts:1149` gibt
-`test-user` zwei offene Phasen an zwei Zielen. Im Repo, nicht live.
+`[read]` **Beides faellt niemandem auf**, weil keine Fehlermeldung
+entsteht. **Nach dem Einspielen ist es sichtbar richtig** — die Achse
+zaehlt die Tabelle, und ein Nutzer mit zwei offenen Phasen bekommt je
+Ziel seine Zahl statt einer beliebigen.
+
+`[cmd]` **Der Seed gehoert mit eingespielt:**
+`testdaten-einspielen.ts:1149` gibt `test-user` zwei offene Phasen an
+zwei Zielen — der Fall, der die ganze Kette beweist.
 
 ---
 

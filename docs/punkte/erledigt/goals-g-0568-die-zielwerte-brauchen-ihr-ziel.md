@@ -13,6 +13,8 @@ kind_von: G-563
 quellen:
   - docs/punkte/erledigt/goals-g-0563-berechne-zielwerte-waehlt-selbst-eine-phase.md
 
+erledigt: 2026-10-01
+commit: 57b88381
 beruehrt:
   funktionen:
     - goals.berechne_zielwerte
@@ -104,3 +106,55 @@ zwei offenen Phasen · je Ziel die eigene Zahl, von Hand nachrechenbar ·
 Bild mit zwei Zielen · Sabotage je Waechter in beide Richtungen ·
 `pnpm gate` gruen mit Testzahl UND der Aussage zu den neun Waechtern ·
 nichts committen.
+
+## Abnahme 2026-10-01 — `57b88381`
+
+`[cmd]` **Die Handrechnung selbst nachgerechnet, alle vier Zeilen** — eine
+reine Rechnung darf der Orchestrator pruefen:
+
+    BMR    10 x 81,4 + 6,25 x 182 - 5 x 36 + 5  =  1776,5
+    TDEE   x 1,55                                =  2754
+    +0,3   2754 + 11 x 0,3 x 81,4                =  3022,6
+    -0,5   2754 + 11 x (-0,5) x 81,4             =  2306,3
+                                  Unterschied    =   716,3
+
+**716 kcal/Tag ist die Groesse der stillen Entscheidung**, die die alte
+Fassung heute trifft. Gemessen nahm sie −0,500 — also das Defizit, bei
+einem Nutzer, der auch ein Aufbauziel fuehrt.
+
+`[cmd]` **Der A-30-Fall ist richtig geloest, und ich habe daran
+gezweifelt:** `createSessionClient` steht in `zielwerte-hindernis.ts`
+**einmal** — mein erster Blick las das als Import. Nachgesehen: es steht
+im **Kommentar**, der erklaert, warum die Datei existiert. **Die Datei
+traegt keinen einzigen Import.** `serverimport` im Gate bestaetigt 0
+Treffer in 63 Client-Chunks.
+
+## Was diese Abnahme mitnimmt
+
+`[read]` **A1 ist wieder die Form, die traegt:** ein RPC-Aufruf, drei
+Aufrufer, und je Aufrufer die Frage, ob er ein Ziel kennt. **Zwei kennen
+keines, und dort wird keines erfunden** — sie bleiben offen und gehoeren
+zu G-567. Das ist die dritte Meldung hintereinander, in der ein Agent an
+der Stelle stehenbleibt, wo eine Entscheidung fehlt.
+
+`[cmd]` **Und `getZielwerteAm` ruft `zielwerte_am`** — eine andere
+Funktion, die G-563 nicht anfasst. **Nachgemessen, nicht angenommen.**
+Genau die Abgrenzung, an der eine Zaehlung sonst kippt.
+
+`[read]` **Zwei Saetze fuer vier Hindernisse war ein stiller Fehler:**
+alles ausser `profil_unvollstaendig` bekam den Text ueber den
+Kalorienfaktor, auch `keine_aktive_phase`. **Jetzt eine Quelle fuer
+Anzeige und Schreibweg** — dieselbe Lehre wie der Phasenkopf aus G-564:
+zwei Lesewege auf eine Tatsache laufen auseinander.
+
+`[cmd]` **Der exhaustive `switch` hat den fuenften Satz erzwungen.** Ein
+Waechter, der im Compiler sitzt, ist der billigste, den es gibt —
+er kann nicht uebersehen werden und kostet keine Sekunde Laufzeit.
+
+## Damit ist das Einspielen frei
+
+`[cmd]` **Die Anwendungsseite steht fuer beide Datenbankaenderungen:**
+G-564 (`57b88381` war G-568, G-564 lag auf `6ae14c93`) und G-568. **G-559
+und G-563 koennen zusammen eingespielt werden.** Bis dahin zeigt die
+Zeitachse ,,1 Phasen", wo zwei gelten, und die Zielwerte nehmen still
+eine von zwei Raten — beides falsch, beides leise.
