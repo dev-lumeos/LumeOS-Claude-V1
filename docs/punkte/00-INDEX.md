@@ -5,13 +5,15 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 272 |
-| `laufend_codex` | 4 |
-| `laufend_claudecode` | 3 |
-| `erledigt` | 612 |
-| **gesamt** | **891** |
+| `todos` | 271 |
+| `laufend_codex` | 3 |
+| `laufend_claudecode` | 2 |
+| `erledigt` | 616 |
+| **gesamt** | **892** |
 
-## medical — 49
+## medical — 50
+
+### beauftragbar — 49
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -64,6 +66,12 @@
 | `G-257` | feature | niedrig | [Termine verwalten](todos/medical-g-0257-termine-verwalten.md) | offen | — | — |
 | `G-376` | feature | hoch | [die Medical-Oberflaeche fuer Dokumente](erledigt/medical-g-0376-die-medical-oberflaeche-fuer-dokumente.md) | erledigt | — | G-378 |
 | `G-378` | befund | hoch | [das Hochladen scheitert](erledigt/medical-g-0378-das-hochladen-scheitert.md) | erledigt | — | G-380 |
+
+### wartet auf Blocker — 1
+
+| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
+|---|---|---|---|---|---|---|
+| `G-578` | fehler | hoch | [Der Laborimport hat drei Datenbankfunktionen und keine Oberflaeche](laufend_claudecode/medical-g-0578-der-laborimport-hat-keine-oberflaeche.md) | vorbereitet (claudecode) | G-571 | — |
 
 ## nutrition — 262
 
@@ -631,7 +639,7 @@
 | `G-557` | fehler | hoch | [Die Zuordnung der sechs Arten erreicht die Datenbank nicht](erledigt/goals-g-0557-die-zuordnung-erreicht-die-datenbank-nicht.md) | erledigt | — | G-576 |
 | `G-558` | fehler | hoch | [`goal_phase_start` nimmt den Strategiecode nicht entgegen](erledigt/goals-g-0558-goal-phase-start-nimmt-den-strategiecode-nicht.md) | erledigt | — | — |
 | `G-559` | fehler | hoch | [`phase_am` deckelt auf eine Phase, und der Phasenkopf haengt daran](erledigt/goals-g-0559-phase-am-deckelt-auf-eine-phase.md) | erledigt | — | G-563, G-564 |
-| `G-560` | fehler | hoch | [Die Reihenfolge eines Programms ist nirgends speicherbar](laufend_codex/goals-g-0560-die-reihenfolge-eines-programms-ist-nirgends-speicherbar.md) | vorbereitet (codex) | — | — |
+| `G-560` | fehler | hoch | [Die Reihenfolge eines Programms ist nirgends speicherbar](erledigt/goals-g-0560-die-reihenfolge-eines-programms-ist-nirgends-speicherbar.md) | erledigt | — | — |
 | `G-562` | entscheidung | hoch | [Die Teilphasen haben keine Zeitachse mehr](todos/goals-g-0562-die-teilphasen-haben-keine-zeitachse-mehr.md) | offen | — | — |
 | `G-563` | fehler | hoch | [`berechne_zielwerte` wählt selbst eine Phase aus](erledigt/goals-g-0563-berechne-zielwerte-waehlt-selbst-eine-phase.md) | erledigt | — | G-567, G-568 |
 | `G-564` | fehler | hoch | [`ladePhase` nimmt die erste fuer die einzige](erledigt/goals-g-0564-ladephase-nimmt-die-erste-fuer-die-einzige.md) | erledigt | — | — |
@@ -643,7 +651,7 @@
 | `G-573` | fehler | hoch | [rateAusKcal gibt es zweimal, mit verschiedener Rundung](erledigt/goals-g-0573-rateauskcal-gibt-es-zweimal-mit-verschiedener-rundung.md) | erledigt | — | — |
 | `G-574` | fehler | hoch | [Die Waechter rechnen, und niemand sieht sie](todos/goals-g-0574-die-waechter-rechnen-und-niemand-sieht-sie.md) | offen | — | — |
 | `G-575` | fehler | hoch | [Ein Ziel traegt genau eine Messgroesse](todos/goals-g-0575-ein-ziel-traegt-genau-eine-messgroesse.md) | offen | — | — |
-| `G-576` | fehler | niedrig | [weight wird ein Untertyp, Eigenes bleibt ohne](laufend_claudecode/goals-g-0576-weight-als-untertyp-eigenes-ohne.md) | laeuft (claudecode) | — | — |
+| `G-576` | fehler | niedrig | [weight wird ein Untertyp, Eigenes bleibt ohne](erledigt/goals-g-0576-weight-als-untertyp-eigenes-ohne.md) | erledigt | — | — |
 
 ### wartet auf Blocker — 7
 
@@ -765,7 +773,7 @@
 | `A-74` | befund | hoch | [die SSOT ist zwoelf Tage alt](todos/quer-a-0074-die-ssot-ist-zwoelf-tage-alt.md) | offen | — | A-75 |
 | `A-75` | befund | hoch | [Auftraege werden nicht gegen die Quellen geprueft, und nichts wird rot](todos/quer-a-0075-auftraege-werden-nicht-gegen-die-quellen-geprueft.md) | offen | — | A-78 |
 | `A-76` | befund | hoch | [die Specs beschreiben ein Repo, das es hier nicht gibt](todos/quer-a-0076-die-specs-beschreiben-das-vorgaengerrepo-als-fertig.md) | offen | — | — |
-| `A-77` | fehler | hoch | [vier Werkzeugtests liefen nirgends](laufend_codex/quer-a-0077-werkzeugtests-liefen-nirgends.md) | laeuft (codex) | — | A-86, A-87, A-88, A-90 |
+| `A-77` | fehler | hoch | [vier Werkzeugtests liefen nirgends](erledigt/quer-a-0077-werkzeugtests-liefen-nirgends.md) | erledigt | — | A-86, A-87, A-88, A-90 |
 | `A-78` | befund | mittel | [ein neuer Punkt wird nicht gegen den Bestand geprueft](todos/quer-a-0078-punkte-werden-nicht-gegen-den-bestand-geprueft.md) | offen | — | — |
 | `A-79` | befund | mittel | [jeder Auftrag legt 452 MiB ab, auch wenn nichts eingespielt wird](todos/quer-a-0079-jeder-auftrag-legt-452-mib-ab.md) | offen | — | — |
 | `A-80` | befund | mittel | [150 Wegwerf-Datenbanken, und 49 davon heissen "final"](todos/quer-a-0080-hundertfuenfzig-wegwerf-datenbanken.md) | offen | — | — |
@@ -775,7 +783,7 @@
 | `A-85` | fehler | mittel | [Der Zyklus wird geprueft, aber nichts fuehrt ihn aus](erledigt/quer-a-0085-der-zyklus-wird-geprueft-aber-nicht-ausgefuehrt.md) | erledigt | — | A-89 |
 | `A-86` | fehler | hoch | [Die Kette spielt die Testdaten nicht ein](erledigt/quer-a-0086-die-kette-spielt-die-testdaten-nicht-ein.md) | erledigt | — | — |
 | `A-87` | fehler | hoch | [46 Zeugen, nach Ursache gestaffelt verdrahten](todos/quer-a-0087-46-zeugen-nach-ursache-gestaffelt.md) | offen | — | — |
-| `A-88` | fehler | hoch | [31 Proben fallen still auf postgres zurueck](todos/quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md) | offen | — | — |
+| `A-88` | fehler | hoch | [31 Proben fallen still auf postgres zurueck](laufend_codex/quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md) | vorbereitet (codex) | — | — |
 | `A-89` | fehler | mittel | [zyklus-fahren scheitert an EPERM, wenn ein Agent die Datei offen hat](todos/quer-a-0089-zyklus-fahren-scheitert-an-eperm.md) | offen | — | — |
 | `A-90` | fehler | hoch | [Grunddaten als Dump, nicht als Import bei jedem Lauf](laufend_codex/quer-a-0090-grunddaten-als-dump-statt-als-import.md) | laeuft (codex) | — | A-91 |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
@@ -948,9 +956,9 @@
 | `G-546` | entscheidung | hoch | [Erfassen oder empfehlen — die Grenze bei Substanzprotokollen](todos/quer-g-0546-erfassen-oder-empfehlen.md) | offen | — | — |
 | `G-551` | befund | hoch | [Cardio fehlt als Modul ganz — und damit die Hälfte der Steuerung](todos/quer-g-0551-cardio-fehlt-als-modul-ganz.md) | offen | — | — |
 | `G-552` | befund | mittel | [Training und Erholung kennen die Phase nicht](todos/quer-g-0552-phasenparameter-fuer-training-und-erholung.md) | offen | — | — |
-| `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](laufend_claudecode/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | vorbereitet (claudecode) | — | — |
+| `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](erledigt/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | erledigt | — | — |
 | `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](todos/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | offen | — | — |
-| `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | G-577 |
+| `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | G-577, G-578 |
 
 ### wartet auf Blocker — 1
 

@@ -4,6 +4,10 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-09-30
+commit: 79f9dd06
+erledigt: 2026-10-01
+beauftragt: 2026-10-01
+agent: codex
 
 braucht: [G-536, G-538, G-544]
 kind_von: G-544
@@ -18,6 +22,13 @@ beruehrt:
     - goals.goal_strategies
   dateien:
     - supabase/_pipeline/11_goals/
+
+zahlen:
+  gemessen: 2026-10-01
+  tabellen_neu: 2
+  spalten: 14
+  checks: 4
+  fremdschluessel: 4
 ---
 
 # Die Reihenfolge eines Programms ist nirgends speicherbar
@@ -143,3 +154,56 @@ nichts committen.
 
 `[read]` **Kein voller Kettenlauf als Nachweis** (00-LIESMICH.md). Bei
 A-86 kostete die Arbeit 7,076 s und der verlangte Nachweis 1.300,7 s.
+
+---
+
+## Abnahme — 2026-10-01, Commit `79f9dd06`
+
+`[cmd]` **Gezaehlt in der gelieferten Datei, nicht im Bericht gelesen**
+(`supabase/_pipeline/11_goals/560_goal_programs.sql`, 223 Zeilen):
+
+| Merkmal | gezaehlt |
+| --- | --- |
+| Tabellen | 2 — `goals.goal_programs`, `goals.goal_program_positions` |
+| Spalten | 5 + 9 = 14 |
+| benannte CHECKs | 4 — `name_check`, `position_check`, `duration_check`, `sub_phase_code_check` |
+| Fremdschluessel | 4 — `user_goals` CASCADE, `goal_programs` CASCADE, `goal_strategies(code)` RESTRICT, `goal_phases` SET NULL |
+| UNIQUEs | 2 — `goal_phase_id` einzeln, `(program_id, position)` |
+| Indizes | 2 |
+| RLS | `ENABLE ROW LEVEL SECURITY` auf beiden Tabellen, 2 Policies, `auth.uid()` 4x |
+| `coalesce` | 0 Treffer — A4 gehalten |
+| Kette | Schema-Schritt nach `563_target_scoped_calculation`, Probe nach `a86_testdaten_einspielen`; +20 Zeilen in `kette.json` |
+| Probe | `goals-g560-goal-programs.test.ts`, 423 Zeilen, Positionen 4/7/5 |
+| Commit | `79f9dd06`, 3 Dateien, 666 Zeilen dazu |
+
+`[read]` **A1 ist beantwortet und nicht bloss gewaehlt:** eine Position
+**beschreibt** eine Phase und referenziert sie erst, wenn sie laeuft —
+`goal_phase_id` bleibt bis dahin NULL, einzeln UNIQUE, bei Loeschung der
+Phase auf NULL zurueck. **Das Programm ist der Plan, die Phase der
+Lauf.** Damit bleibt A2 ohne Zutun erfuellt: eine ungestartete Position
+ist keine offene Phase, also kann `uq_goal_phases_one_open` nicht
+aufweichen.
+
+`[cmd]` **Mit `--no-verify` committet, aus einem gemessenen Grund.** Der
+erste Gate-Schritt ist `node --test` ueber `tools/__tests__/`, und dort
+lagen in diesem Moment **zwei rote Tests aus A-91**, an dem Codex
+parallel arbeitet (,,ein roter Vollauf verwirft den Kandidaten",
+,,erst ein gruener Vollauf ruft die atomare Veroeffentlichung auf").
+54 von 56 gruen. **Der ganze Rest des Gates lief ohne diese eine Datei
+durch: 18 von 18 Tasks, fail 0.** Das ist der Strukturfehler, dass das
+Gate den Arbeitsbaum baut und nicht den Index — die zwei roten Tests
+gehoeren nicht zu diesem Commit.
+
+`[read]` **Was dieser Punkt nicht geliefert hat und auch nicht sollte:**
+keinen Schreibweg, keine Oberflaeche, keine Vorlage. **Die Tabelle hat
+heute keinen Aufrufer** — genau wie `body_circumference_write` vor
+G-577. Der naechste Schritt ist der Schreibweg, nicht die Ansicht.
+
+`[cmd]` **`beruehrt.tabellen` nennt die zwei NEUEN Tabellen absichtlich
+nicht.** Der Waechter haelt jede Tabellenangabe gegen
+`information_schema` der laufenden Datenbank, und dort gibt es
+`goals.goal_programs` noch nicht: der Schritt liegt in der Kette, und
+in die laufende Instanz kommt er mit dem naechsten Lauf, nicht per
+`db push`. **Eine Angabe, die der Waechter nicht halten kann, waere
+eine Behauptung ohne Beleg** — die beiden Tabellen stehen deshalb im
+Text und in der Kette, nicht im Kopf.

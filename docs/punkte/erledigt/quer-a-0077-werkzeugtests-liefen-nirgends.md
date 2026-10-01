@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-09-28
+commit: 1222ff7c
+erledigt: 2026-10-01
 beauftragt: 2026-10-01
 agent: codex
 

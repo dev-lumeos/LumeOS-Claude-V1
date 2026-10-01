@@ -4,6 +4,10 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-09-30
+commit: bec132b6
+erledigt: 2026-10-01
+beauftragt: 2026-10-01
+agent: claudecode
 
 braucht: [G-553]
 kind_von: G-553
@@ -19,9 +23,10 @@ beruehrt:
     - apps/web/src/lib/fehler/ladefehler.ts
 
 zahlen:
-  gemessen: 2026-09-30
+  gemessen: 2026-10-01
   module_betroffen: 2
-  module_behoben: 1
+  module_behoben: 2
+  ansichten_mit_kachel: 4
 ---
 
 # Derselbe Ladefehler verschluckt zwei weitere Module
@@ -142,3 +147,42 @@ findet dort nichts — das steht oben und gilt weiter.
 dieser Punkt beruehrt die Datenbank nicht. `pnpm gate` gruen mit
 Testzahl, Bild je Modul, Attrappenzahl je Reiter vorher und nachher,
 Sabotage je Waechter in beide Richtungen.
+
+---
+
+## Abnahme — 2026-10-01, Commit `bec132b6`
+
+`[cmd]` **Die Praemisse dieses Punktes war falsch, und der Agent hat es
+gemessen statt es zu uebernehmen.** Der Punkt behauptet, der fruehe
+`return` in `tab-biomarker.tsx` verschlucke das Mockup, namentlich
+`MedImportReferenz` in Zeile 399. Der Agent hat die Attrappenzahl je
+Reiter vorher und nachher gezaehlt: **sie ist in keiner Richtung
+gesunken, 1/6 bleibt 1/6.** Der fruehe `return` stand nicht vor dem
+Mockup, sondern vor einem Zweig, der es nicht trug. **Der Umbau bleibt
+richtig, die Begruendung im Punkt war es nicht** — was hier zaehlt, ist
+die geteilte Kachel, nicht ein verschlucktes Mockup.
+
+`[cmd]` **Gezaehlt am Ergebnis, nicht im Bericht gelesen:**
+
+| Merkmal | gezaehlt |
+| --- | --- |
+| `apps/web/src/lib/fehler/ladefehler.ts` | 140 Zeilen, Git erkennt die Umbenennung aus `lib/goals/` (66 %) |
+| `fehlertexte(art: Fehlerart, modul?: string)` | der Modultitel ist ein Parameter, keine Goals-Konstante mehr |
+| `components/shell/ladefehler-kachel.tsx` | neu, zieht `fehlerart`/`fehlertexte` aus `../../lib/fehler/ladefehler` |
+| Ansichten mit `LadefehlerKachel` | 4 — `goals/ansicht.tsx:99`, `medical/tab-biomarker.tsx:21`, `nutrition/tab-vorlieben.tsx:56`, `nutrition/tab-planner-echt.tsx:73` |
+| Schreibweg am neuen Pfad | `lib/goals/phasenziel-write.ts:37` |
+| verwaister Pfad `lib/goals/ladefehler.ts` | 0 Treffer |
+| Waechter | `apps/web/src/app/v2/__tests__/g555-ladefehler-quer.test.ts`, neu, quer ueber die Module |
+| Bilder | 4 in `docs/bilder/g555/` — je Modul vorher und nachher |
+| Gate beim Commit | 2.471 Tests, 102 Suiten, fail 0; 18 von 18 Tasks |
+| Commit | `bec132b6`, 13 Dateien, 481 Zeilen dazu, 78 weg |
+
+`[cmd]` **Nicht Teil dieses Commits:** `lib/goals/umfang-write.ts` zieht
+`fehlerart` ebenfalls aus dem neuen Pfad, gehoert aber zu G-577 und lag
+beim Commit noch unversioniert daneben. **Der neue Ort hat damit seinen
+zweiten Nutzer, bevor er abgenommen ist** — das ist der Beleg, dass die
+Verschiebung richtig war, und kein Teil dieser Abnahme.
+
+`[read]` **Offen bleibt der Anlass aus dem Nachtrag:** `P0001` und
+`medical import: user mismatch` haben jetzt einen Ort, aber noch keinen
+Text. **Das gehoert zu G-571**, dem Aufrufer.

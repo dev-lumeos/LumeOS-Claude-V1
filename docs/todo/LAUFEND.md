@@ -5,11 +5,11 @@
 <!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-573 | rateAusKcal gibt es zweimal, mit verschiedener Rundung | **laeuft**, raus 01.10. |
-| Claude Code | A-85 | Der Zyklus wird geprueft, aber nichts fuehrt ihn aus | **laeuft**, raus 01.10. |
-| Codex | A-77 | vier Werkzeugtests liefen nirgends | **laeuft**, raus 01.10. |
-| Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
-| Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
+| Claude Code | G-577 | Die Umfangserfassung hat keinen Schreibweg | **laeuft**, raus 01.10. |
+| Codex | A-90 | Grunddaten als Dump, nicht als Import bei jedem Lauf | **laeuft**, raus 01.10. |
+| Codex | A-91 | Der taegliche Lauf erzeugt bei gruen einen neuen Dump | **laeuft**, raus 01.10. |
+| Claude Code | G-578 | Der Laborimport hat drei Datenbankfunktionen und keine Oberflaeche | **bereit in `next/`** |
+| Codex | A-88 | 31 Proben fallen still auf postgres zurueck | **bereit in `next/`** |
 <!-- /ERZEUGT:laufend-tabelle -->
 
 `[read]` **Die Tabelle wird erzeugt, nicht gepflegt** —

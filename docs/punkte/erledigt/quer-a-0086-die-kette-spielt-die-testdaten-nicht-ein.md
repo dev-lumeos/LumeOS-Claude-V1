@@ -13,7 +13,7 @@ braucht: []
 kind_von: A-77
 
 quellen:
-  - docs/punkte/laufend_codex/quer-a-0077-werkzeugtests-liefen-nirgends.md
+  - docs/punkte/erledigt/quer-a-0077-werkzeugtests-liefen-nirgends.md
 
 beruehrt:
   dateien:
@@ -35,7 +35,7 @@ beruehrt:
     Stand:   2026-10-01
 
 **Zuerst lesen, vollstaendig:** diese Datei und die Abnahme in
-`docs/punkte/laufend_codex/quer-a-0077-werkzeugtests-liefen-nirgends.md`
+`docs/punkte/erledigt/quer-a-0077-werkzeugtests-liefen-nirgends.md`
 — dort steht die Inventur, aus der dieser Punkt entstanden ist.
 
 ## Der Befund

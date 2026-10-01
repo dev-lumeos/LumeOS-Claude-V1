@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: niedrig
 angelegt: 2026-10-01
+commit: 45583c3c
+erledigt: 2026-10-01
 agent: claudecode
 beauftragt: 2026-10-01
 
@@ -82,3 +84,42 @@ erledigt).
 und das Paar `(goal_type, subtype)` zurueckgelesen · Gegenprobe mit
 entfernter Zuordnung · die Testzeilen danach entfernt · `pnpm gate`
 gruen mit Testzahl · nichts committen.
+
+---
+
+## Abnahme — 2026-10-01, Commit `45583c3c`
+
+`[cmd]` **In `apps/web/src/lib/goals/ziel-arten.ts` nachgezaehlt, nicht
+im Bericht gelesen:**
+
+| Merkmal | gezaehlt |
+| --- | --- |
+| `ZIEL_UNTERARTEN.body_composition` | `['cut', 'gain_muscle', 'weight']` — der dritte Wert ist neu |
+| `ZIEL_UNTERARTEN.health` | `[]` — leer geblieben, kein erfundener Wert (C-378) |
+| `ZIELKNOEPFE` | 6 Knoepfe; `weight` traegt `unterart: 'weight'` fest, `custom` traegt `unterart: null` |
+| `unsicher: true` | 0 Treffer — bei beiden Knoepfen weg, je mit Begruendung im Kommentar |
+| `unterartFuer` | die feste Unterart gewinnt VOR der Kategorieableitung; `KATEGORIE_ZU_UNTERART` fuehrt nur `fat_loss -> cut` und `muscle_gain -> gain_muscle` |
+| A3-Zusicherung | `g554-phasenziel.test.ts:555` — `unterartFuer('weight', kat)` ist `'weight'`, fuer jede Kategorie |
+| Tests in der Datei | 50 Testaufrufe in `g554-phasenziel.test.ts`, dazu `ziel-arten-eine-quelle.test.ts` (+30 Zeilen) |
+| Commit | `45583c3c`, 13 Dateien, 477 Zeilen dazu, 70 weg |
+
+`[read]` **Der Kern des Punktes war die Ableitung, nicht die Liste.**
+Bis E-89 ergab `unterartFuer('weight', 'fat_loss')` den Wert `cut` —
+aus einem Waageziel wurde ein Diaetziel. **Das ist jetzt durch eine
+Zusicherung gehalten, die in beide Richtungen zaehlt**, und nicht durch
+einen Kommentar.
+
+`[read]` **`custom` bleibt unter der Art `lifestyle`**, und das ist im
+Punkt wie im Code als Behelf benannt: der CHECK auf `goal_type` erlaubt
+keinen freien Wert, `lifestyle` ist die weiteste der vier Arten. **E-89
+entscheidet den Untertyp, nicht die Art** — die Art bleibt offen und
+gehoert zu G-575.
+
+`[cmd]` **Mitgekommen in diesem Commit, weil es dieselbe Minute war:**
+`.gitignore` nimmt den Grunddaten-Dump und sein Manifest auf (Toms
+Entscheidung: der Dump ist ein Zwischenstand, kein Quellcode), die
+Punktdateien zu A-91 und G-578 entstanden mit der Auftragsvergabe, und
+vier Punktdateien haben den auf `lib/fehler/` gewanderten Pfad
+nachgezogen. **Kein fremder Arbeitsstand ist mitgegangen** — das war
+beim ersten Versuch anders und wurde mit `git reset --soft` korrigiert,
+bevor dieser Commit entstand.

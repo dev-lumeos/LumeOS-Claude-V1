@@ -9,7 +9,7 @@ braucht: [A-86]
 kind_von: A-77
 
 quellen:
-  - docs/punkte/laufend_codex/quer-a-0077-werkzeugtests-liefen-nirgends.md
+  - docs/punkte/erledigt/quer-a-0077-werkzeugtests-liefen-nirgends.md
 
 beruehrt:
   dateien:
