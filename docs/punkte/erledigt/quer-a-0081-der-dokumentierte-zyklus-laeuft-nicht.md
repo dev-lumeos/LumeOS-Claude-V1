@@ -4,6 +4,8 @@ typ: befund
 modul: quer
 schwere: hoch
 angelegt: 2026-09-29
+erledigt: 2026-09-29
+commit: 85b62cd3
 
 braucht: []
 quellen:
