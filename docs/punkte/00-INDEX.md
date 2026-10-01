@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 268 |
+| `todos` | 269 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 607 |
-| **gesamt** | **879** |
+| **gesamt** | **880** |
 
 ## medical — 49
 
@@ -573,9 +573,9 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 66
+## goals — 67
 
-### beauftragbar — 59
+### beauftragbar — 60
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -608,7 +608,7 @@
 | `G-526` | fehler | hoch | [Protein, Fett und Faser kennen die Phase nicht](todos/goals-g-0526-protein-und-fett-kennen-die-phase-nicht.md) | offen | — | — |
 | `G-527` | fehler | mittel | [der Schreibweg kennt die neuen Hindernisse nicht](erledigt/goals-g-0527-der-schreibweg-kennt-die-neuen-hindernisse-nicht.md) | erledigt | — | — |
 | `G-531` | fehler | hoch | [`goal_phase_start` kann drei der neun Phasenarten nicht anlegen](erledigt/goals-g-0531-goal-phase-start-kennt-die-rate-nicht.md) | erledigt | — | G-535 |
-| `G-532` | befund | hoch | [der Bauplan fuer die letzten drei Goals-Reiter](todos/goals-g-0532-der-bauplan-fuer-die-letzten-drei-reiter.md) | offen | — | — |
+| `G-532` | befund | hoch | [der Bauplan fuer die letzten drei Goals-Reiter](todos/goals-g-0532-der-bauplan-fuer-die-letzten-drei-reiter.md) | offen | — | G-572 |
 | `G-533` | fehler | hoch | [die laufenden Phasen sind vor E1, und drei Funktionen sind aus der Oberflaeche nicht erreichbar](erledigt/goals-g-0533-die-laufenden-phasen-sind-vor-e1.md) | erledigt | — | — |
 | `G-534` | fehler | hoch | [der Phase-Reiter zeigt Daten und plant nichts](erledigt/goals-g-0534-der-phase-reiter-ist-kein-planungswerkzeug.md) | erledigt | — | G-538, G-539, G-540, G-541 |
 | `G-536` | fehler | hoch | [Der Strategiekatalog fehlt ganz — Schicht 2](erledigt/goals-g-0536-der-strategiekatalog-fehlt-ganz.md) | erledigt | — | G-542, G-543 |
@@ -638,6 +638,7 @@
 | `G-568` | fehler | hoch | [Die Zielwerte brauchen ihr Ziel](erledigt/goals-g-0568-die-zielwerte-brauchen-ihr-ziel.md) | erledigt | — | G-570 |
 | `G-569` | fehler | hoch | [G-520 prueft Kilogramm in der Anwendung](laufend_claudecode/goals-g-0569-g520-prueft-kilogramm-in-der-anwendung.md) | laeuft (claudecode) | — | — |
 | `G-570` | fehler | mittel | [Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg](todos/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md) | offen | — | — |
+| `G-572` | fehler | mittel | [Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch](todos/goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md) | offen | — | — |
 
 ### wartet auf Blocker — 7
 
