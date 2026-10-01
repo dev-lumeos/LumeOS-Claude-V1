@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: niedrig
 angelegt: 2026-10-01
+agent: claudecode
+beauftragt: 2026-10-01
 
 braucht: []
 kind_von: G-557
@@ -21,6 +23,21 @@ beruehrt:
 ---
 
 # weight wird ein Untertyp, Eigenes bleibt ohne
+
+## Auftrag
+
+    AUFTRAG FUER Claude Code - G-576: weight wird ein Untertyp,
+                                     "Eigenes" bleibt ohne
+    Bereich: apps/web/src/lib/goals/ziel-arten.ts
+             apps/web/src/lib/goals/__tests__/
+    Fremd:   supabase/ gehoert Codex, der gerade an A-90 baut (der
+             Grunddaten-Dump). docs/ gehoert dem Orchestrator, auch
+             diese Punktdatei: der Bericht kommt als Antwort, nicht
+             als Anhang hier.
+    Stand:   2026-10-01
+
+**Zuerst lesen, vollstaendig:** diese Datei und
+`docs/entscheidungen/E-89-der-untertyp-benennt-die-messgroesse.md`.
 
 ## Der Befund
 

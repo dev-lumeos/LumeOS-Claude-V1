@@ -5,8 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 275 |
+| `todos` | 274 |
 | `laufend_codex` | 2 |
+| `laufend_claudecode` | 1 |
 | `erledigt` | 612 |
 | **gesamt** | **889** |
 
@@ -642,7 +643,7 @@
 | `G-573` | fehler | hoch | [rateAusKcal gibt es zweimal, mit verschiedener Rundung](erledigt/goals-g-0573-rateauskcal-gibt-es-zweimal-mit-verschiedener-rundung.md) | erledigt | — | — |
 | `G-574` | fehler | hoch | [Die Waechter rechnen, und niemand sieht sie](todos/goals-g-0574-die-waechter-rechnen-und-niemand-sieht-sie.md) | offen | — | — |
 | `G-575` | fehler | hoch | [Ein Ziel traegt genau eine Messgroesse](todos/goals-g-0575-ein-ziel-traegt-genau-eine-messgroesse.md) | offen | — | — |
-| `G-576` | fehler | niedrig | [weight wird ein Untertyp, Eigenes bleibt ohne](todos/goals-g-0576-weight-als-untertyp-eigenes-ohne.md) | offen | — | — |
+| `G-576` | fehler | niedrig | [weight wird ein Untertyp, Eigenes bleibt ohne](laufend_claudecode/goals-g-0576-weight-als-untertyp-eigenes-ohne.md) | laeuft (claudecode) | — | — |
 
 ### wartet auf Blocker — 6
 
