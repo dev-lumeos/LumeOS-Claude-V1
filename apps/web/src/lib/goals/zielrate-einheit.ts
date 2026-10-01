@@ -109,6 +109,13 @@ export function kcalAusRate(
  *
  * `[read]` **Ohne Gewicht keine Rate** — kcal allein sagt nichts
  * ueber die Absicht.
+ *
+ * `[cmd]` **G-573: `<= 0`, nicht `=== 0`.** Die zweite Fassung in
+ * `anpassung.ts` prueft seit G-520 auf `<= 0`; **diese prueft nur auf
+ * `0`, und ein negatives Gewicht dreht das Vorzeichen** — `-100 kcal`
+ * bei `-80 kg` ergab `+0,114`. **Beim Zusammenlegen wandert die
+ * schaerfere Pruefung hierher**, sonst verliert der Umbau still eine
+ * Zusicherung.
  */
 export function rateAusKcal(
   kcal: number | null | undefined,
@@ -116,7 +123,7 @@ export function rateAusKcal(
 ): number | null {
   if (kcal === null || kcal === undefined || !Number.isFinite(kcal)) return null
   if (gewichtKg === null || gewichtKg === undefined
-      || !Number.isFinite(gewichtKg) || gewichtKg === 0) return null
+      || !Number.isFinite(gewichtKg) || gewichtKg <= 0) return null
   return rundeWieDb(kcal / (E1_FAKTOR * gewichtKg), RATE_STELLEN)
 }
 

@@ -47,6 +47,11 @@ import {
   RATE_MIN, RATE_MAX, RATENPFLICHT, kcalDeltaAusRate,
   type Phasenart,
 } from './phase-regeln'
+// `[cmd]` **G-573: EINE Rechnung fuer `kcal -> Rate`.** Diese Datei
+// hatte eine eigene, mit `Math.round` statt `rundeWieDb` — die
+// Fehlerklasse aus G-565 unter demselben Namen. **Der Grund steht
+// unten am `export`.**
+import { rateAusKcal, rundeWieDb, RATE_STELLEN } from './zielrate-einheit'
 
 /** Die vier Eingangsgroessen aus `PHASE_MODELS.md:185`. */
 export type Wochendaten = {
@@ -128,25 +133,30 @@ export type Anpassungsvorschlag = {
   hindernis?: string
 }
 
-/**
- * Rechnet einen Spec-Kalorienbetrag in eine Rate um.
- *
- * `[cmd]` **Umkehrung von `kcal/Tag = 11 x Rate x Gewicht`**, also
- * `Rate = kcal / (11 x Gewicht)`.
- *
- * `[cmd]` **Gegen die Auftragswerte geprueft:** `-100 kcal` bei 80 kg
- * ergibt `-0,114 %/Woche`, `+150 kcal` bei 80 kg ergibt
- * `+0,170 %/Woche`.
- *
- * @returns `null` ohne Gewicht — **eine Rate ohne Gewicht waere
- *   erfunden.**
- */
-export function rateAusKcal(
-  kcal: number, gewichtKg: number | null | undefined,
-): number | null {
-  if (gewichtKg === null || gewichtKg === undefined || gewichtKg <= 0) return null
-  return Math.round((kcal / (11 * gewichtKg)) * 1000) / 1000
-}
+// ══ G-573: DIE RECHNUNG STAND HIER EIN ZWEITES MAL ═══════════════
+//
+// `[cmd]` **Bis 2026-10-01 stand hier ein eigenes `rateAusKcal`** —
+// `Math.round((kcal / (11 * kg)) * 1000) / 1000`, waehrend
+// `zielrate-einheit.ts` seit G-565 `rundeWieDb` benutzt. **Zwei
+// exportierte Funktionen desselben Namens, verschiedene Rundung**,
+// und `wochenAnpassung` rief die falsche.
+//
+// `[cmd]` **Gemessen ueber 40,0-200,0 kg und -1000..+1000 kcal:
+// 3.203.601 Faelle, 184 Abweichungen — alle negativ, alle 0,001.**
+// `[cmd]` **Der erreichbare Fall mit einem echten Spec-Betrag:**
+// `-100 kcal` bei `90,4568 kg` ergab hier `-0,100`, die Datenbank
+// `-0,101`.
+//
+// `[read]` **Postgres rundet die Haelfte von der Null WEG, JavaScript
+// nach oben** — und Abnehmen ist der negative Fall.
+//
+// `[read]` **Die Datei rechnet nicht mehr selbst.** Sie reicht den
+// Namen weiter, damit die Aufrufer nicht zweimal importieren
+// muessen — **es ist dieselbe Funktion, kein zweiter Name** (G-529).
+// **Die `<= 0`-Pruefung dieser Fassung ist mitgewandert**, sie war
+// schaerfer als die kanonische: ein negatives Gewicht drehte dort
+// das Vorzeichen.
+export { rateAusKcal }
 
 /**
  * Haelt eine vorgeschlagene Rate innerhalb beider CHECKs.
@@ -222,7 +232,13 @@ export function wochenAnpassung(
     const { rate, gekappt } = haltInGrenzen(art, rateJetzt + delta)
     return {
       art: artVorschlag,
-      rate_delta: Math.round((rate - rateJetzt) * 1000) / 1000,
+      // `[cmd]` **G-573: war `Math.round(… * 1000) / 1000`.** Der
+      // Waechter aus A3 hat es gefunden — **dieselbe Form wie die
+      // Dublette, dieselbe Groesse (`numeric(5,3)`), und `rate -
+      // rateJetzt` ist beim Senken negativ.** `[read]` **Der Punkt
+      // nannte nur die eine Stelle; die zweite stand 90 Zeilen
+      // weiter unten.**
+      rate_delta: rundeWieDb(rate - rateJetzt, RATE_STELLEN),
       kcal_delta: kcalDeltaAusRate(rate - rateJetzt, gewichtKg),
       regel, grund,
       ...(gekappt ? { hindernis: gekappt } : {}),
