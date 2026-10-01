@@ -13,6 +13,8 @@ kind_von: G-559
 quellen:
   - docs/punkte/erledigt/goals-g-0559-phase-am-deckelt-auf-eine-phase.md
 
+erledigt: 2026-10-01
+commit: 6ae14c93
 beruehrt:
   funktionen:
     - goals.phase_am
@@ -89,3 +91,54 @@ Einspielen von G-559 (bei Tom).
 Zustand · Sabotage je Waechter in beide Richtungen · `pnpm gate` gruen
 mit Testzahl UND der Aussage, ob die neun Waechter im Vorcommit-Haken
 gruen sind · nichts committen.
+
+## Abnahme 2026-10-01 — `6ae14c93`
+
+`[cmd]` **Die wichtigste Zahl zuerst: live ist unberuehrt.** Er hat den
+Zustand ueber den Dialog hergestellt und wieder entfernt, und schreibt
+„user_goals 0, goal_phases 0" — das gilt fuer `test-user`.
+**Selbst nachgezaehlt:** tom.seed 5, dev 5, max.seed 1 = **11 Ziele**,
+**5 Phasen**, eine offen, `test-user` 0. Nichts verloren.
+
+`[cmd]` **`ladePhasen` und `ladeZielphase` haengen in `page.tsx` und
+`lesen.ts`** (2 und 4 Treffer).
+
+## Was diese Abnahme mitnimmt
+
+`[read]` **A1 ist die Antwort, die ich sehen wollte: fuenf Stellen
+gezaehlt, genau eine betroffen** — und die vier anderen mit Grund
+freigesprochen (LIMIT im Rumpf, oder eine Kennung je Zeile).
+**Die Zahl steht als Zusicherung, damit eine sechste auffaellt.** Das ist
+eine Messung, die sich selbst bewacht.
+
+`[read]` **`ladeZielphase` behaelt `data[0]`, und das ist richtig** —
+`phase_eines_ziels_am` traegt ihr `LIMIT 1` mit Absicht. **Nicht jedes
+`data[0]` ist ein Fehler; es ist einer, wenn die Quelle eine Menge
+liefert.** Der Auftrag hatte das offen gelassen, der Bericht hat es
+geschlossen.
+
+`[cmd]` **Zwei Lesewege auf dieselbe Tatsache, zwei Zahlen auf einem
+Schirm:** der Kopf sagte „2 Phasen laufen", darunter standen Beenden und
+Wechseln fuer eine. **Am Bild gefunden, bei gruener Messung** — das ist
+das vierte Mal in zwei Tagen. **Die Lehre gehoert in LAUFEND:** wo zwei
+Lesewege auf eine Tatsache zeigen, widersprechen sie sich irgendwann, und
+kein Test faellt dabei um.
+
+`[read]` **Und eine falsch gewaehlte Kontrollprobe hat etwas Echtes
+gefunden:** `Promise<Phase[] | null>` sollte harmlos sein, ging aber rot —
+zu Recht, denn `null` statt `[]` zwaengt jeden Konsumenten zurueck in die
+Form ,,eine oder keine". **Eine Probe, die unerwartet rot wird, ist eine
+Messung, kein Fehlalarm** — und er hat sie als solche behandelt.
+
+`[cmd]` **Nicht gegen die laufende Instanz geprueft**, mit Verweis auf
+CLAUDE.md:355 und darauf, dass `supabase/` Codex gehoert. **Das ist die
+Regel, und der Stellvertreterbeweis** — zwei Zeilen als Eingabe an der
+Abbildungsstelle plus die gemessene Diskrepanz 1 gegen 2 am Schirm —
+**traegt die Aussage.**
+
+## Was offen bleibt
+
+`[cmd]` **Die Zeitachse zeigt bis zum Einspielen von G-559 „1 Phasen"**,
+weil `phase_am` live noch deckelt. **Das ist kein Mangel dieses Punkts,
+sondern die Reihenfolge:** die Anwendung ist fertig, die Datenbank wartet.
+Der Seed aus `testdaten-einspielen.ts:1149` ist im Repo und nicht live.

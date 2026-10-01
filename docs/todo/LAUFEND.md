@@ -1,11 +1,12 @@
 # Laufende Auftraege
 
-**Stand: 2026-09-30, 17:45**
+**Stand: 2026-10-01, 08:30**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-564 | ladePhase nimmt die erste fuer die einzige | **laeuft**, raus 30.09. |
-| Codex | G-563 | berechne_zielwerte waehlt still eine Phase | **laeuft**, raus 30.09. |
+| Claude Code | G-568 | die Zielwerte brauchen ihr Ziel | **laeuft**, raus 01.10. |
+| Codex | G-561 | die Waechter pruefen Kilogramm statt Prozent | **laeuft**, raus 01.10. |
+| Claude Code | G-565 | die Einheit ist eine Nutzerwahl | **bereit** in `next/` |
 | Claude Code | G-539 | der Phasen-Editor fehlt | **vorbereitet** in `next/` |
 | Codex | G-514 | die Modulverrechnung — Bau abgenommen | **offen**: nicht live eingespielt |
 
@@ -21,10 +22,41 @@
     G-545  56cbc87f   Katalog: guards 17/17, exits 7, drei Prep-Stufen
     G-539  9ed19b12   Phasen-Editor als Override, Reiter aus dem Katalog
     G-559  f03dfbe8   phase_am liefert alle, phase_eines_ziels_am eine
+    G-563  f0af9194   berechne_zielwerte bekommt ihr Ziel (Kette)
+    G-564  6ae14c93   ladePhasen gibt eine Menge, ladeZielphase eine
 
 `[cmd]` **Die Kette ist wieder gruen** — `kettenlauf-status.json`:
 `passed`, Exit 0, 1401 s, 299 Schritte. Damit war das Repo nach zwei
 Tagen wieder committierbar; drei Commits sind seither durch.
+
+## Die Einspielreihenfolge — Stand 2026-10-01
+
+`[cmd]` **Zwei Datenbankaenderungen sind gebaut und NICHT live:**
+
+    G-559   phase_am liefert alle Phasen, phase_eines_ziels_am eine
+            Anwendungsseite: G-564, FERTIG (6ae14c93)
+    G-563   berechne_zielwerte(p_user_id, p_goal_id, p_stichtag)
+            Anwendungsseite: G-568, LAEUFT
+
+`[read]` **Beide haben eine Anwendungsseite, und beide Male gilt dieselbe
+Reihenfolge: die Anwendung zuerst.** Der Grund ist in beiden Faellen
+derselbe — heute ist der Aufruf **still richtig**, weil die Datenbank
+deckelt, und nach dem Einspielen **sichtbar falsch**.
+
+    vor dem Einspielen    die Zeitachse zeigt "1 Phasen", wo zwei
+                          gelten. Falsch, aber leise.
+    nach G-568            zielwerte-read reicht das Ziel durch, der
+                          Phasenkopf zaehlt die Tabelle
+    dann einspielen       beide zusammen, G-559 und G-563
+
+`[read]` **Einzeln einspielen geht auch**, aber G-563 allein wuerde einem
+Nutzer mit zwei offenen Phasen in `zielwerte-read.ts:212` einen Fehler
+zeigen. **Deshalb warten beide auf G-568.**
+
+`[cmd]` **Und der Seed wartet mit:** `testdaten-einspielen.ts:1149` gibt
+`test-user` zwei offene Phasen an zwei Zielen. Im Repo, nicht live.
+
+---
 
 ## Die Bauordnung — `docs/ssot/130-goals-bauordnung.md`
 
@@ -183,6 +215,40 @@ melden EINMAL am Ende.
 ---
 
 ## Lehren
+
+`[cmd]` **Ein Verweis auf einen Punkt, der im selben Zug geschlossen
+wird, zeigt auf den alten Pfad.** Dreimal am 30.09. und 01.10.: der neue
+Punkt nennt `laufend_<agent>/...`, die Abnahme verschiebt die Datei nach
+`erledigt/`, und der Quellenwaechter faellt. **Regel: wer einen Punkt
+abnimmt und im selben Zug darauf verweist, schreibt den
+`erledigt/`-Pfad.** Der Waechter hat es jedes Mal gefangen — und jedes
+Mal einen Commit-Anlauf gekostet.
+
+`[cmd]` **Wo zwei Lesewege auf dieselbe Tatsache zeigen, widersprechen
+sie sich irgendwann — und kein Test faellt dabei um.** Der Phasenkopf las
+die Tabelle, die Bedienkacheln `phase_am` mit seinem LIMIT 1: „2 Phasen
+laufen" und darunter „Beenden" fuer eine, auf einem Schirm. **Vierter
+Fund am Bild bei gruener Messung in zwei Tagen.** Eine Tatsache, ein
+Leseweg.
+
+`[cmd]` **Eine Probe, die unerwartet rot wird, ist eine Messung.**
+`Promise<Phase[] oder null>` sollte eine harmlose Kontrolle sein und ging
+rot — zu Recht, denn `null` statt der leeren Liste zwaengt jeden
+Konsumenten zurueck in die Form „eine oder keine". **Nicht die Probe
+anpassen, bis sie schweigt.**
+
+`[cmd]` **Nicht jedes `data[0]` ist ein Fehler.** Es ist einer, wenn die
+Quelle eine Menge liefert. `ladeZielphase` behaelt es, weil
+`phase_eines_ziels_am` ihr LIMIT 1 mit Absicht traegt — und von fuenf
+gezaehlten Stellen war genau eine betroffen. **Die vier anderen wurden
+mit Grund freigesprochen, nicht uebersehen.**
+
+`[cmd]` **Ein `oder` in einer cmd-Zeile ist ein Rohrzeichen.** Ein
+Python-Einzeiler mit `Phase[] | null` im Text brach mit „Das System kann
+die angegebene Datei nicht finden" ab — die Shell las das Zeichen als
+Umleitung. **Text mit Sonderzeichen geht ueber eine Datei, nicht ueber
+die Kommandozeile.** Dieselbe Klasse wie das PowerShell-Quoting vom
+29.09.
 
 `[cmd]` **Wer einen Wert ERSETZEN laesst, verlangt den
 Schluesselvergleich, nicht die Anzahl.** Mein Auftrag G-545 verlangte

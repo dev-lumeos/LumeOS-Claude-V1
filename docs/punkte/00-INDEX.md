@@ -8,8 +8,8 @@
 | `todos` | 270 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 598 |
-| **gesamt** | **872** |
+| `erledigt` | 600 |
+| **gesamt** | **874** |
 
 ## medical — 49
 
@@ -573,9 +573,9 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 63
+## goals — 64
 
-### beauftragbar — 56
+### beauftragbar — 57
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -632,9 +632,10 @@
 | `G-559` | fehler | hoch | [`phase_am` deckelt auf eine Phase, und der Phasenkopf haengt daran](erledigt/goals-g-0559-phase-am-deckelt-auf-eine-phase.md) | erledigt | — | G-563, G-564 |
 | `G-560` | fehler | hoch | [Die Reihenfolge eines Programms ist nirgends speicherbar](todos/goals-g-0560-die-reihenfolge-eines-programms-ist-nirgends-speicherbar.md) | offen | — | — |
 | `G-562` | entscheidung | hoch | [Die Teilphasen haben keine Zeitachse mehr](todos/goals-g-0562-die-teilphasen-haben-keine-zeitachse-mehr.md) | offen | — | — |
-| `G-563` | fehler | hoch | [`berechne_zielwerte` wählt selbst eine Phase aus](laufend_codex/goals-g-0563-berechne-zielwerte-waehlt-selbst-eine-phase.md) | laeuft (codex) | — | — |
-| `G-564` | fehler | hoch | [`ladePhase` nimmt die erste fuer die einzige](laufend_claudecode/goals-g-0564-ladephase-nimmt-die-erste-fuer-die-einzige.md) | laeuft (claudecode) | — | — |
+| `G-563` | fehler | hoch | [`berechne_zielwerte` wählt selbst eine Phase aus](erledigt/goals-g-0563-berechne-zielwerte-waehlt-selbst-eine-phase.md) | erledigt | — | G-567, G-568 |
+| `G-564` | fehler | hoch | [`ladePhase` nimmt die erste fuer die einzige](erledigt/goals-g-0564-ladephase-nimmt-die-erste-fuer-die-einzige.md) | erledigt | — | — |
 | `G-565` | fehler | hoch | [Die Einheit ist eine Nutzerwahl, heute gibt es nur Prozent](laufend_claudecode/goals-g-0565-die-einheit-ist-eine-nutzerwahl.md) | vorbereitet (claudecode) | — | — |
+| `G-568` | fehler | hoch | [Die Zielwerte brauchen ihr Ziel](laufend_claudecode/goals-g-0568-die-zielwerte-brauchen-ihr-ziel.md) | laeuft (claudecode) | — | — |
 
 ### wartet auf Blocker — 7
 
@@ -645,7 +646,7 @@
 | `G-529` | feature | hoch | [die gespeicherte Groesse ist die Rate, nicht das Kaloriendelta](todos/goals-g-0529-die-gespeicherte-groesse-ist-die-rate.md) | offen | G-521 | G-531, G-533 |
 | `G-530` | feature | hoch | [contest_prep und expert_bb_annual brauchen eine eigene Struktur](todos/goals-g-0530-wettkampfvorbereitung-braucht-eine-eigene-struktur.md) | offen | G-529 | — |
 | `G-543` | fehler | hoch | [Die Rechnung nimmt den Faktor, nicht die Rate — E-1 ist nicht umgesetzt](erledigt/goals-g-0543-die-rechnung-nimmt-den-faktor-statt-der-rate.md) | erledigt | G-542 | G-558, G-565 |
-| `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](todos/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | offen | G-542 | — |
+| `G-561` | fehler | hoch | [Sechs Waechter pruefen Kilogramm statt Prozent](laufend_codex/goals-g-0561-sechs-waechter-pruefen-kilogramm-statt-prozent.md) | laeuft (codex) | G-542 | — |
 | `G-566` | entscheidung | mittel | [Ist die Katalograte fuer Fortgeschrittene zu hoch?](todos/goals-g-0566-ist-die-katalograte-fuer-fortgeschrittene-zu-hoch.md) | offen | G-542 | — |
 
 ## coach — 57
@@ -710,7 +711,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 217
+## quer — 218
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -931,6 +932,7 @@
 | `G-551` | befund | hoch | [Cardio fehlt als Modul ganz — und damit die Hälfte der Steuerung](todos/quer-g-0551-cardio-fehlt-als-modul-ganz.md) | offen | — | — |
 | `G-552` | befund | mittel | [Training und Erholung kennen die Phase nicht](todos/quer-g-0552-phasenparameter-fuer-training-und-erholung.md) | offen | — | — |
 | `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](todos/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | offen | — | — |
+| `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](todos/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | offen | — | — |
 
 ## buddy — 1
 

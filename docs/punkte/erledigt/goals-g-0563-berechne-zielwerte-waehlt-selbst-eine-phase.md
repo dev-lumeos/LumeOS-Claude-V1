@@ -13,6 +13,8 @@ kind_von: G-559
 quellen:
   - docs/punkte/erledigt/goals-g-0559-phase-am-deckelt-auf-eine-phase.md
 
+erledigt: 2026-10-01
+commit: f0af9194
 beruehrt:
   funktionen:
     - goals.berechne_zielwerte
@@ -106,3 +108,50 @@ Kettenlauf gruen mit Schrittzahl · rote Gegenprobe zuerst · welcher Lauf
 die neue Probe aufruft · Wegwerf-DB verworfen mit Zaehler · kein
 `db push` · nichts committen · **wenn die Signatur sich aendert, die
 neue Signatur woertlich im Bericht.**
+
+## Abnahme 2026-10-01 — `f0af9194`
+
+`[cmd]` **Selbst nachgemessen:** `563_target_scoped_calculation.sql` ist
+11.342 Bytes und traegt `p_goal_id` sowie die Mehrdeutigkeitsmeldung je
+zweimal. `kette.json` fuehrt **307** Schritte statt 305. **Live steht die
+alte Signatur** — `p_user_id uuid, p_stichtag date DEFAULT CURRENT_DATE`,
+aus `pg_proc` gelesen.
+
+## Was diese Abnahme mitnimmt
+
+`[read]` **A1 ist der Grund, warum dieser Auftrag so gebaut war: vier
+Aufrufer gemessen, und je Aufrufer die Frage gestellt, ob er ein Ziel
+kennt.** Zwei kennen eines, zwei nicht — **und bei den zwei anderen wurde
+keines geraten.** Das ist der Unterschied zwischen einem Vertrag und einer
+Annahme.
+
+`[cmd]` **Die alte Zweiparameter-Fassung bleibt und wirft.** Das ist die
+richtige Wahl: ein Aufrufer, der kein Ziel kennt, bekommt einen sichtbaren
+Fehler statt einer beliebigen Zahl. **Und sie macht das Einspielen
+moeglich, ohne dass die Anwendung gleichzeitig umgebaut sein muss** — der
+Fehler tritt nur bei mehreren offenen Phasen auf.
+
+`[read]` **`micronutrient_snapshot` ist der interessante Fund, und er war
+nicht beauftragt.** Der Aufrufer meint eine allgemeine Tagesreferenz, kein
+Ziel. **Dafuer ein Ziel zu erfinden waere eine fachliche Aussage** — das
+ist G-567 und liegt bei Tom.
+
+`[cmd]` **Der Orchestrator hat dabei einen eigenen Fehler gemacht:** er
+trug `micronutrient_snapshot` als TABELLE in `beruehrt.tabellen` ein. **Es
+ist eine Funktion** — der Waechter hat es gefangen. Und es sind zwei:
+`micronutrient_snapshot` und `micronutrient_snapshot_with_supplements`.
+**Die Lehre stand schon in LAUFEND; ein Name aus einem Bericht ist keine
+Messung.**
+
+## Was offen bleibt
+
+`[cmd]` **Nicht live.** Und anders als bei G-559 ist die Reihenfolge hier
+zwingend: `zielwerte-read.ts:212` ruft die Zweiparameter-Fassung auf.
+**Nach dem Einspielen bekommt ein Nutzer mit zwei offenen Phasen dort
+einen Fehler** — heute bekommt er eine beliebige Zahl. **Das ist G-568,
+und es geht VOR dem Einspielen.**
+
+`[read]` **Damit stehen zwei Datenbankaenderungen gebaut und nicht
+eingespielt** (G-559 und G-563), und beide haben eine Anwendungsseite:
+G-564 ist fertig, G-568 laeuft. **Eingespielt wird, wenn G-568 durch ist —
+beide zusammen.**
