@@ -2831,30 +2831,12 @@
       ]
     },
     {
-      "id": "558_goal_phase_start_strategy_probe",
-      "path": "supabase/_pipeline/_validierung/goals-g558-phase-start-strategy.test.ts",
-      "kind": "tsx",
-      "creates": "G-558 Gegenprobe: bekannter und unbekannter Strategiecode sowie Katalograte und persoenlicher Override auf der frisch gebauten Datenbank.",
-      "depends_on": [
-        "558_goal_phase_start_strategy"
-      ]
-    },
-    {
       "id": "545_goal_strategy_content",
       "path": "supabase/_pipeline/11_goals/545_goal_strategy_content.sql",
       "kind": "sql",
       "creates": "G-545: belegte Contest-Prep-Stufen, relative Steuerwaechter und direkt belegte Phasenausgaenge aus SSOT 131.",
       "depends_on": [
-        "558_goal_phase_start_strategy_probe"
-      ]
-    },
-    {
-      "id": "545_goal_strategy_content_probe",
-      "path": "supabase/_pipeline/_validierung/goals-g545-strategy-content.test.ts",
-      "kind": "tsx",
-      "creates": "G-545 Gegenprobe: Quelleninhalt, test-user-Lesepfad, ausgeschlossene Inhalte und G-536-Grenzen auf dem Neubau.",
-      "depends_on": [
-        "545_goal_strategy_content"
+        "558_goal_phase_start_strategy"
       ]
     },
     {
@@ -2863,25 +2845,7 @@
       "kind": "sql",
       "creates": "G-559: phase_am liefert alle Nutzerphasen; phase_eines_ziels_am liefert die eine Zielphase und Zielwerte waehlen bei Mehrdeutigkeit nicht still aus.",
       "depends_on": [
-        "545_goal_strategy_content_probe"
-      ]
-    },
-    {
-      "id": "559_phase_at_scope_probe",
-      "path": "supabase/_pipeline/_validierung/goals-g559-phase-at.test.ts",
-      "kind": "tsx",
-      "creates": "G-559 Gegenprobe: zwei offene Phasen fuer test-user, deterministische Reihenfolge, zielbezogene Einzelphase und ausdrueckliches Hindernis im Zielwert-Schreibweg.",
-      "depends_on": [
-        "559_phase_at_scope"
-      ]
-    },
-    {
-      "id": "561_relative_weight_guards_probe",
-      "path": "supabase/_pipeline/_validierung/goals-g561-relative-weight-guards.test.ts",
-      "kind": "tsx",
-      "creates": "G-561 Gegenprobe: sechs Katalogwaechter messen relativ; die umgerechnete Strenge skaliert an zwei Gewichten und gilt fuer zwei Zielphasen des test-user.",
-      "depends_on": [
-        "559_phase_at_scope_probe"
+        "545_goal_strategy_content"
       ]
     },
     {
@@ -2890,16 +2854,7 @@
       "kind": "sql",
       "creates": "G-563: berechne_zielwerte rechnet zielbezogen; der nutzerweite Altvertrag wirft bei mehreren Zielphasen statt still eine zu waehlen.",
       "depends_on": [
-        "561_relative_weight_guards_probe"
-      ]
-    },
-    {
-      "id": "563_target_scoped_calculation_probe",
-      "path": "supabase/_pipeline/_validierung/goals-g563-target-calculation.test.ts",
-      "kind": "tsx",
-      "creates": "G-563 Gegenprobe: test-user mit zwei Zielphasen erhaelt je Ziel andere Werte; die nutzerweite Vorschau wirft denselben Mehrdeutigkeitsfehler wie der Schreibweg.",
-      "depends_on": [
-        "563_target_scoped_calculation"
+        "559_phase_at_scope"
       ]
     },
     {
@@ -2982,12 +2937,76 @@
       ]
     },
     {
+      "id": "a86_testdaten_einspielen",
+      "path": "supabase/_pipeline/_testdaten/testdaten-einspielen.ts",
+      "kind": "tsx",
+      "creates": "A-86: reproduzierbarer Testbestand nach dem vollstaendigen Aufbau und vor jeder Kettenprobe.",
+      "depends_on": [
+        "563_target_scoped_calculation",
+        "514_goal_contribution_backfill",
+        "551_role_measurement_separation_data",
+        "546_muscle_anatomy_data",
+        "535_auth_uid_legacy_readers"
+      ]
+    },
+    {
+      "id": "558_goal_phase_start_strategy_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g558-phase-start-strategy.test.ts",
+      "kind": "tsx",
+      "creates": "G-558 Gegenprobe: bekannter und unbekannter Strategiecode sowie Katalograte und persoenlicher Override auf der frisch gebauten Datenbank.",
+      "depends_on": [
+        "558_goal_phase_start_strategy",
+        "a86_testdaten_einspielen"
+      ]
+    },
+    {
+      "id": "545_goal_strategy_content_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g545-strategy-content.test.ts",
+      "kind": "tsx",
+      "creates": "G-545 Gegenprobe: Quelleninhalt, test-user-Lesepfad, ausgeschlossene Inhalte und G-536-Grenzen auf dem Neubau.",
+      "depends_on": [
+        "545_goal_strategy_content",
+        "a86_testdaten_einspielen"
+      ]
+    },
+    {
+      "id": "559_phase_at_scope_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g559-phase-at.test.ts",
+      "kind": "tsx",
+      "creates": "G-559 Gegenprobe: zwei offene Phasen fuer test-user, deterministische Reihenfolge, zielbezogene Einzelphase und ausdrueckliches Hindernis im Zielwert-Schreibweg.",
+      "depends_on": [
+        "559_phase_at_scope",
+        "a86_testdaten_einspielen"
+      ]
+    },
+    {
+      "id": "561_relative_weight_guards_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g561-relative-weight-guards.test.ts",
+      "kind": "tsx",
+      "creates": "G-561 Gegenprobe: sechs Katalogwaechter messen relativ; die umgerechnete Strenge skaliert an zwei Gewichten und gilt fuer zwei Zielphasen des test-user.",
+      "depends_on": [
+        "559_phase_at_scope",
+        "a86_testdaten_einspielen"
+      ]
+    },
+    {
+      "id": "563_target_scoped_calculation_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g563-target-calculation.test.ts",
+      "kind": "tsx",
+      "creates": "G-563 Gegenprobe: test-user mit zwei Zielphasen erhaelt je Ziel andere Werte; die nutzerweite Vorschau wirft denselben Mehrdeutigkeitsfehler wie der Schreibweg.",
+      "depends_on": [
+        "563_target_scoped_calculation",
+        "a86_testdaten_einspielen"
+      ]
+    },
+    {
       "id": "535_auth_uid_legacy_readers_probe",
       "path": "supabase/_pipeline/_validierung/quer-g535-auth-uid-readers.test.ts",
       "kind": "tsx",
       "creates": "G-535 Gegenprobe: sechs plural-Claim-Pfade, unveraenderte Abmeldung, genau eine Signatur und der namensgenau freigestellte auth.uid-Kompatibilitaetshelper.",
       "depends_on": [
-        "535_auth_uid_legacy_readers"
+        "535_auth_uid_legacy_readers",
+        "a86_testdaten_einspielen"
       ]
     },
     {
@@ -2997,7 +3016,8 @@
       "creates": "A-77 erster Stapel: C-236 prueft Zaehlreihen gegen longitudinale Recovery-Werte statt gegen Wiederholungen eines Satzes.",
       "depends_on": [
         "106",
-        "120"
+        "120",
+        "a86_testdaten_einspielen"
       ]
     },
     {
@@ -3007,7 +3027,8 @@
       "creates": "A-77 erster Stapel: C-395 bewacht die Grenze zwischen Strukturmigration und registrierter Katalog- oder Ableitungslogik.",
       "depends_on": [
         "327a",
-        "385"
+        "385",
+        "a86_testdaten_einspielen"
       ]
     },
     {
@@ -3016,7 +3037,8 @@
       "kind": "tsx",
       "creates": "A-77 erster Stapel: C-415 bewacht die Reihenfolge von kuratierten effektiven Tags und ihrem Suchleser.",
       "depends_on": [
-        "075"
+        "075",
+        "a86_testdaten_einspielen"
       ]
     },
     {
@@ -3025,7 +3047,7 @@
       "kind": "tsx",
       "creates": "A-77 erster Stapel: G-451/G-556 pruefen Testdatenerzeuger, Kontokopie und Auth-Stub gegen die heutige Kette.",
       "depends_on": [
-        "563_target_scoped_calculation_probe"
+        "a86_testdaten_einspielen"
       ]
     }
   ]

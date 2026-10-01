@@ -87,5 +87,11 @@ Meal-Plan-Lifecycle und -Slots, aeltere Goals-Zielwertproben.
 worden.**
 
 **Zu belegen:** je Gruppe die Entscheidung mit einem Satz Begruendung ·
-Kettenschrittzahl und Laufzeit je Stapel · voller Lauf gruen oder die
-rote Liste · kein `db push` · nichts committen.
+**je Stapel nur die verdrahteten Proben**, gegen eine Wegwerf-Datenbank,
+mit ihrer Laufzeit · die Schrittzahl aus `kette.json` gelesen ·
+kein `db push` · nichts committen.
+
+`[read]` **Kein voller Kettenlauf als Nachweis** (00-LIESMICH.md, „Was
+ein Auftrag als Nachweis verlangen darf"). Bei A-86 kostete die Arbeit
+7,076 s und der verlangte Nachweis 1.300,7 s. **Der volle Lauf laeuft
+naechtlich, einmal.**

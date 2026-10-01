@@ -378,6 +378,44 @@ Der Auftrag wird kopiert; was danebensteht, geht verloren.
 `[read]` **Die zweite Form erzeugt dieselbe Zahl ohne den Umweg —
 und verlangt die Abgrenzung mit, die bei mir jedes Mal schiefging.**
 
+### Was ein Auftrag als Nachweis verlangen darf — und was nicht
+
+**Tom, 2026-10-01, 14:26:** *„das war das letztemal wo ich so einen
+scheiss sehe und auf dich oder einen agenten solange warten muss weil du
+nicht faehig bist richtige und logische auftraege zu geben."*
+
+`[cmd]` **Der Orchestrator hat in fuenf Auftraegen „voller Kettenlauf
+gruen" als Nachweis verlangt.** Ein voller Lauf dauert **1.459,7 s** —
+24 Minuten, davon **45 von 315 Schritten reine Importe von Fremddaten**
+(26,8 MB LOINC, DSLD, kimi, BLS), die sich nur aendern, wenn ein Auftrag
+sie aendert.
+
+`[read]` **Damit hat der Orchestrator 24 Minuten Wartezeit fuer die
+Aenderung einer einzigen SQL-Datei verlangt** — und das in jedem
+Datenbankauftrag. **Das ist keine Eigenschaft der Kette, das war eine
+Zeile in der Vorlage.**
+
+**Ab sofort gilt:**
+
+    verlangt    der geaenderte Schritt und seine Probe, gegen eine
+                Wegwerf-Datenbank. Schrittzahl der Kette, aus
+                kette.json gelesen.
+
+    NICHT       "voller Kettenlauf gruen". Der laeuft naechtlich,
+                einmal, und sein Status ist Information - seit
+                2026-10-01 haelt er keinen Commit mehr an.
+
+`[read]` **Was der volle Lauf zusaetzlich beweist**, ist eine Aussage
+ueber das GANZE: dass die 315 Schritte zusammen noch aufbaubar sind.
+**Das ist richtig und wichtig — und es ist keine Aussage ueber die
+Aenderung eines Auftrags.** Es gehoert in die Nacht.
+
+`[cmd]` **Ein Waechter haelt das:** `tools/auftrag-nachweis-pruefen.mjs`
+meldet jeden Auftrag in `laufend_*` oder `*/next/`, der einen vollen
+Kettenlauf verlangt. `[read]` **Eine Regel, die nirgends nachgezaehlt
+wird, wird zur Empfehlung** — das steht in LAUFEND, und es ist hier zum
+dritten Mal eingetreten.
+
 ## Der Waechter arbeitet mit Sollstand je Art
 
 `[cmd]` **Muster wie C-313b:** der Waechter zaehlt Befunde gegen einen

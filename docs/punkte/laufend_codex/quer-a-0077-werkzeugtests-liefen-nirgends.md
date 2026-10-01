@@ -240,11 +240,18 @@ die Datei sie nicht brauchen sollte.
 Waechter (eigene Aufgabe, hier nur festgehalten), und die Frage, ob eine
 rote Probe recht hat — das entscheidet der Punkt, der aus ihr entsteht.
 
-**Zu belegen:** die Einordnung aller 120 als Tabelle · Schrittzahl der
-Kette vorher und nachher · voller Kettenlauf gruen ODER die rote Liste
-mit je einer Zeile Begruendung · Laufzeit vorher und nachher ·
-Wegwerf-Datenbank verworfen mit Zaehler · kein `db push` · nichts
-committen.
+**Zu belegen:** — **der Nachweis wurde am 2026-10-01 berichtigt.**
+
+`[cmd]` **Verlangt war hier „voller Kettenlauf" bzw. „Laufzeit des ganzen Laufs". Das war falsch verlangt, und es ist gemessen, was es
+gekostet hat:** bei A-86 kostete die Arbeit **7,076 s**, der verlangte
+Nachweis **1.300,7 s**. Tom hat 33 Minuten davor gesessen.
+
+**Richtig ist:** der geaenderte Schritt und seine Probe, gegen eine
+Wegwerf-Datenbank, mit ihrer Laufzeit · die Schrittzahl aus
+`kette.json` gelesen · Wegwerf-Datenbank verworfen mit Zaehler ·
+kein `db push` · nichts committen. **Der volle Lauf laeuft naechtlich,
+einmal** (00-LIESMICH.md, „Was ein Auftrag als Nachweis verlangen
+darf").
 
 ---
 
