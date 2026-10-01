@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import test from 'node:test'
@@ -99,4 +99,85 @@ test('C-416: die Bereinigung beendet keine fremden Superuser-Verbindungen', () =
   const source = readFileSync('supabase/_pipeline/kette-ausfuehren.ts', 'utf8')
 
   assert.match(source, /WHERE datname = '\$\{db\.replace[\s\S]+?\}'\s+AND usename = current_user;/)
+})
+
+function writeA91Fakes(dir) {
+  const runner = join(dir, 'runner.mjs')
+  const publisher = join(dir, 'publisher.mjs')
+  writeFileSync(runner, `
+    import { writeFileSync } from 'node:fs'
+    const index = process.argv.indexOf('--checkpoint-dump')
+    if (index >= 0) writeFileSync(process.argv[index + 1], 'candidate')
+    process.exit(Number(process.env.A91_FAKE_RUNNER_EXIT ?? 0))
+  `)
+  writeFileSync(publisher, `
+    import { writeFileSync } from 'node:fs'
+    writeFileSync(process.env.A91_FAKE_PUBLISH_MARKER, 'called')
+  `)
+  return { runner, publisher }
+}
+
+test('A-91: ein roter Vollauf verwirft den Kandidaten und veroeffentlicht keinen Dump', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lumeos-a91-red-'))
+  const status = join(dir, 'status.json')
+  const marker = join(dir, 'published')
+  const { runner, publisher } = writeA91Fakes(dir)
+  try {
+    const result = spawnSync(process.execPath, [DAILY_RUNNER,
+      '--manifest', join(dir, 'voll.json'),
+      '--status', status,
+      '--database', 'lumeos_a91_red',
+      '--dump-dir', dir,
+    ], {
+      cwd: process.cwd(),
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        A91_FAKE_RUNNER_EXIT: '23',
+        A91_FAKE_PUBLISH_MARKER: marker,
+        LUMEOS_KETTEN_RUNNER: runner,
+        LUMEOS_GRUNDDATEN_PUBLISHER: publisher,
+      },
+    })
+
+    assert.notEqual(result.status, 0)
+    assert.equal(existsSync(marker), false)
+    assert.equal(JSON.parse(readFileSync(status, 'utf8')).status, 'failed')
+    assert.equal(
+      readdirSync(dir).some(name => name.endsWith('.tmp')),
+      false,
+    )
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('A-91: erst ein gruener Vollauf ruft die atomare Veroeffentlichung auf', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lumeos-a91-green-'))
+  const status = join(dir, 'status.json')
+  const marker = join(dir, 'published')
+  const { runner, publisher } = writeA91Fakes(dir)
+  try {
+    const result = spawnSync(process.execPath, [DAILY_RUNNER,
+      '--manifest', join(dir, 'voll.json'),
+      '--status', status,
+      '--database', 'lumeos_a91_green',
+      '--dump-dir', dir,
+    ], {
+      cwd: process.cwd(),
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        A91_FAKE_PUBLISH_MARKER: marker,
+        LUMEOS_KETTEN_RUNNER: runner,
+        LUMEOS_GRUNDDATEN_PUBLISHER: publisher,
+      },
+    })
+
+    assert.equal(result.status, 0)
+    assert.equal(readFileSync(marker, 'utf8'), 'called')
+    assert.equal(JSON.parse(readFileSync(status, 'utf8')).status, 'passed')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
 })

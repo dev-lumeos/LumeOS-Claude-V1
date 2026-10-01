@@ -1,0 +1,8 @@
+{
+  "name": "lumeos-lokale-kette-vollimport",
+  "version": 2,
+  "description": "A-90: Naechtlicher Vollimport. Erweitert kette.json, ignoriert den Dump und fuehrt alle eingefrorenen Schritte erneut aus.",
+  "extends": "supabase/_pipeline/kette.json",
+  "mode": "full",
+  "steps": []
+}

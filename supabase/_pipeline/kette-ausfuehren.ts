@@ -12,14 +12,18 @@ import path from 'node:path'
 type PipelineStep = {
   id: string
   path: string
-  kind: 'sql' | 'tsx'
+  kind: 'sql' | 'tsx' | 'dump'
   creates: string
   depends_on: string[]
+  covered_by_dump?: boolean
 }
 
 type PipelineManifest = {
   name: string
   version: number
+  description?: string
+  extends?: string
+  mode?: 'full'
   steps: PipelineStep[]
 }
 
@@ -33,6 +37,8 @@ type Args = {
   manifest: string
   database: string
   keepDatabase: boolean
+  checkpointStep?: string
+  checkpointDump?: string
 }
 
 function fail(message: string): never {
@@ -45,6 +51,8 @@ function parseArgs(): Args {
   let manifest = DEFAULT_MANIFEST
   let database = `lumeos_kette_${new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14)}`
   let keepDatabase = false
+  let checkpointStep: string | undefined
+  let checkpointDump: string | undefined
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i]
@@ -54,6 +62,10 @@ function parseArgs(): Args {
       database = args[++i] ?? fail('--database braucht einen Namen')
     } else if (arg === '--keep-database') {
       keepDatabase = true
+    } else if (arg === '--checkpoint-step') {
+      checkpointStep = args[++i] ?? fail('--checkpoint-step braucht eine Schritt-ID')
+    } else if (arg === '--checkpoint-dump') {
+      checkpointDump = args[++i] ?? fail('--checkpoint-dump braucht einen Pfad')
     } else {
       fail(`Unbekanntes Argument: ${arg}`)
     }
@@ -65,8 +77,11 @@ function parseArgs(): Args {
   if (!/^[a-z][a-z0-9_]*$/i.test(database)) {
     fail(`Ungueltiger Datenbankname: ${database}`)
   }
+  if (Boolean(checkpointStep) !== Boolean(checkpointDump)) {
+    fail('--checkpoint-step und --checkpoint-dump muessen gemeinsam gesetzt werden')
+  }
 
-  return { manifest, database, keepDatabase }
+  return { manifest, database, keepDatabase, checkpointStep, checkpointDump }
 }
 
 function run(command: string, args: string[], options: {
@@ -131,12 +146,26 @@ function quoteIdent(identifier: string): string {
 }
 
 function readManifest(file: string): PipelineManifest {
-  const manifest = JSON.parse(fs.readFileSync(file, 'utf8')) as PipelineManifest
+  const raw = JSON.parse(fs.readFileSync(file, 'utf8')) as PipelineManifest
+  const manifest = raw.extends && raw.mode === 'full'
+    ? (() => {
+        const base = JSON.parse(fs.readFileSync(raw.extends!, 'utf8')) as PipelineManifest
+        return {
+          ...raw,
+          steps: base.steps
+            .filter(step => !step.id.startsWith('a90_'))
+            .map(step => ({ ...step, covered_by_dump: false })),
+        }
+      })()
+    : raw
+  if (!Array.isArray(manifest.steps)) fail(`${file}: steps fehlt`)
   const ids = new Set<string>()
   for (const step of manifest.steps) {
     if (ids.has(step.id)) fail(`${file}: doppelte Schritt-ID ${step.id}`)
     ids.add(step.id)
-    if (step.kind !== 'sql' && step.kind !== 'tsx') fail(`${file}: ${step.id} hat ungueltige Art ${step.kind}`)
+    if (step.kind !== 'sql' && step.kind !== 'tsx' && step.kind !== 'dump') {
+      fail(`${file}: ${step.id} hat ungueltige Art ${step.kind}`)
+    }
     if (!fs.existsSync(step.path)) fail(`${file}: ${step.id} verweist auf fehlenden Pfad ${step.path}`)
   }
   for (const step of manifest.steps) {
@@ -255,10 +284,41 @@ function prepareImportFiles(): void {
   run('docker', ['cp', path.join(fatDir, 'fehlende_fettsaeuren.csv'), `${CONTAINER}:/tmp/bls-fettsaeuren/fehlende_fettsaeuren.csv`])
 }
 
+function restoreDump(db: string, dumpFile: string): void {
+  const containerFile = `/tmp/lumeos-a90-${db}.dump`
+  run('docker', ['cp', path.resolve(dumpFile), `${CONTAINER}:${containerFile}`])
+  try {
+    run('docker', [
+      'exec', CONTAINER,
+      'pg_restore', '-U', 'postgres', '-d', db,
+      '--exit-on-error', '--no-owner',
+      containerFile,
+    ])
+  } finally {
+    run('docker', ['exec', CONTAINER, 'rm', '-f', containerFile])
+  }
+}
+
+function dumpPathFromStep(stepPath: string): string {
+  if (!stepPath.endsWith('.json')) return stepPath
+  const manifest = JSON.parse(fs.readFileSync(stepPath, 'utf8')) as { dump?: { path?: string } }
+  return manifest.dump?.path ?? fail(`${stepPath}: dump.path fehlt`)
+}
+
 function runStep(db: string, step: PipelineStep): void {
   if (step.kind === 'sql') {
     const text = fs.readFileSync(step.path, 'utf8')
     sql(db, text)
+    return
+  }
+
+  if (step.kind === 'dump') {
+    restoreDump(db, dumpPathFromStep(step.path))
+    // Der Snapshot traegt den historischen lokalen auth-Stub. Nach dem
+    // Restore gilt dieselbe aktuelle Supabase-Sitzungslesung wie im
+    // Vollaufbau; insbesondere request.jwt.claims (Plural) darf nicht auf
+    // den Stand vor PostgREST 9 zurueckfallen.
+    installAuthStub(db)
     return
   }
 
@@ -285,6 +345,9 @@ function runFinalCheck(db: string): void {
 const started = Date.now()
 const args = parseArgs()
 const manifest = readManifest(args.manifest)
+if (args.checkpointStep && !manifest.steps.some(step => step.id === args.checkpointStep)) {
+  fail(`Checkpoint-Schritt fehlt in der Kette: ${args.checkpointStep}`)
+}
 let created = false
 let success = false
 
@@ -296,15 +359,31 @@ try {
   console.log(`Schema-Backup: ${backup}`)
   createDatabase(args.database)
   created = true
-  installAuthStub(args.database)
-  installStorageStub(args.database)
-  prepareImportFiles()
+  const hasDump = manifest.steps.some(step => step.kind === 'dump')
+  if (!hasDump) {
+    installAuthStub(args.database)
+    installStorageStub(args.database)
+    prepareImportFiles()
+  }
 
   for (const step of manifest.steps) {
+    if (step.covered_by_dump) {
+      console.log(`AUS DUMP ${step.id}: ${step.path}`)
+      continue
+    }
     const t0 = Date.now()
     console.log(`\n== ${step.id} ${step.path}`)
     runStep(args.database, step)
     console.log(`OK ${step.id}: ${((Date.now() - t0) / 1000).toFixed(1)}s`)
+    if (step.id === args.checkpointStep) {
+      console.log(`\n== A-91 Grunddaten-Kandidat nach ${step.id}`)
+      run('pnpm', [
+        'exec', 'tsx', 'supabase/_pipeline/grunddaten-erneuern.ts',
+        'snapshot',
+        '--database', args.database,
+        '--output', path.resolve(args.checkpointDump!),
+      ], { stdio: 'inherit' })
+    }
   }
 
   console.log('\n== Abschlusspruefung')
