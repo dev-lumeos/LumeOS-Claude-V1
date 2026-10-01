@@ -11,6 +11,8 @@ kind_von: null
 quellen:
   - docs/punkte/00-INDEX.md
 
+erledigt: 2026-10-01
+commit: 724cfd29
 beruehrt:
   tabellen: []
   dateien:
@@ -77,3 +79,24 @@ Gewohnheit wird, kostet die Pruefung.
 Praktisch heisst das: Code und die zugehoerige Doku gehen **in einen
 Commit**, wenn der Agent gemeldet hat. Das ist ohnehin das bessere
 Paket — der Commit traegt dann den Bau und seine Abnahme.
+
+## Abnahme 2026-10-01 — `724cfd29`
+
+`[cmd]` **Mit A-84 behoben.** `migration-kette-pruefen --staging` liest
+den Zustand nach dem Commit: HEAD plus Staging minus die Geloeschten, und
+das Manifest ueber `git show :supabase/_pipeline/kette.json`.
+
+`[cmd]` **Gegenprobe in beide Richtungen:**
+
+    Migration nur im Arbeitsbaum      Baum rot, Staging GRUEN
+    dieselbe im Staging               BEIDE rot
+    aufgeraeumt                       beide gruen
+
+`[read]` **Die zweite Zeile ist die, auf die es ankommt** — die Lockerung
+laesst keine Migration ohne Kettenschritt durch. **Nur die Datei eines
+anderen blockiert den eigenen Commit nicht mehr.**
+
+`[cmd]` **Es war nicht nur die Dateiliste, sondern auch das Manifest.**
+`kette.json` kam ebenfalls aus dem Arbeitsbaum — ein Agent, der einen
+Kettenschritt eintraegt und noch nicht stagt, haette den Befund
+andersherum verdeckt. Beide Seiten lesen jetzt dieselbe Quelle.

@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 270 |
+| `todos` | 269 |
 | `laufend_codex` | 2 |
 | `laufend_claudecode` | 2 |
-| `erledigt` | 600 |
-| **gesamt** | **874** |
+| `erledigt` | 602 |
+| **gesamt** | **875** |
 
 ## medical — 49
 
@@ -711,7 +711,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 218
+## quer — 219
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -760,7 +760,8 @@
 | `A-79` | befund | mittel | [jeder Auftrag legt 452 MiB ab, auch wenn nichts eingespielt wird](todos/quer-a-0079-jeder-auftrag-legt-452-mib-ab.md) | offen | — | — |
 | `A-80` | befund | mittel | [150 Wegwerf-Datenbanken, und 49 davon heissen "final"](todos/quer-a-0080-hundertfuenfzig-wegwerf-datenbanken.md) | offen | — | — |
 | `A-81` | befund | hoch | [der Zyklus steht seit dem 30.08. geschrieben und laeuft nicht](todos/quer-a-0081-der-dokumentierte-zyklus-laeuft-nicht.md) | offen | — | — |
-| `A-82` | befund | mittel | [Die Migrationskette prueft den Arbeitsbaum, nicht das Staging](todos/quer-a-0082-die-migrationskette-prueft-den-arbeitsbaum.md) | offen | — | — |
+| `A-82` | befund | mittel | [Die Migrationskette prueft den Arbeitsbaum, nicht das Staging](erledigt/quer-a-0082-die-migrationskette-prueft-den-arbeitsbaum.md) | erledigt | — | A-84 |
+| `A-84` | fehler | hoch | [Der Pruefumfang haengt am Staging, nicht am Repo](erledigt/quer-a-0084-der-pruefumfang-haengt-am-staging.md) | erledigt | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |

@@ -1,6 +1,6 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-01, 08:30**
+**Stand: 2026-10-01, 08:55**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
@@ -28,6 +28,32 @@
 `[cmd]` **Die Kette ist wieder gruen** — `kettenlauf-status.json`:
 `passed`, Exit 0, 1401 s, 299 Schritte. Damit war das Repo nach zwei
 Tagen wieder committierbar; drei Commits sind seither durch.
+
+## Der Commit-Takt — gemessen 2026-10-01
+
+`[cmd]` **Der Haken waehlt den Umfang am Staging** (A-84):
+
+    nur docs/ im Commit     pnpm gate:docs     ~16 s
+    eine Datei darueber     pnpm gate          ~60 s gecacht,
+                                               184 s wenn Turbo neu baut
+
+`[read]` **Der Orchestrator fuhr die Waechter doppelt** — vier- bis
+fuenfmal einzeln vor dem Commit, dann noch einmal im Haken. **Das hoert
+auf:** schreiben, committen, Logende lesen. Wird er rot, korrigieren.
+Derselbe Aufwand, ohne den Vorlauf.
+
+`[cmd]` **Ein Commit laeuft abgesetzt**, weil der Haken laenger braucht
+als die Bruecke wartet: `subprocess.Popen` mit
+`DETACHED_PROCESS|CREATE_NO_WINDOW`, Ausgabe nach `.git/ORCH_COMMIT.log`,
+danach `git log` und das Logende lesen. **Ein Zeitablauf der Bruecke ist
+kein gescheiterter Commit.**
+
+`[cmd]` **Die drei Waechter, die am Dokument-Commit nicht haengen**, und
+was sie kosten: `encoding-pruefen` 15,6 s ueber 21.692 Dateien,
+`supplement-kennungen` 5,0 s, `supplement-kern-dubletten` 4,5 s,
+`svgpfade` 3,7 s. **Vier Skripte, 29 von 43 Sekunden.**
+
+---
 
 ## Die Einspielreihenfolge — Stand 2026-10-01
 
@@ -108,9 +134,6 @@ Phase noch nicht an** — G-558. Erst dann ist Ebene 3 eingeloest.
     A-77       zwei Verzeichnisse mit Proben laufen in keinem Lauf —
                `tools/__tests__/` und `supabase/_pipeline/_validierung/`.
                Schwere heute auf hoch: der Schaden ist belegt.
-    A-82       der Kettenwaechter prueft den Arbeitsbaum statt des
-               Staging - waehrend ein Agent in supabase/ baut, kann
-               niemand committen. Eine Zeile: git diff --cached.
     C-554 A3   der Registerumtrag fuer die 70 unregistrierten Dateien
     A-80       116 Wegwerf-Datenbanken. Die mit "_final" sind das
                Problem, nicht die Platte.
