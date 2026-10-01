@@ -148,3 +148,201 @@ Pruefsumme · `zyklus-pruefen` gruen danach ·
 `node --test "tools/__tests__/*.test.mjs"` mit Testzahl · **`pnpm gate`
 nur abgesprochen**, die andere Sitzung laeuft an G-569 · nichts
 committen.
+
+---
+
+# Bericht — Claude Code, 2026-10-01
+
+**Gebaut:** `tools/zyklus-fahren.mjs` (neu, 530 Zeilen) ·
+`tools/__tests__/a85-zyklus-fahren.test.mjs` (neu, 17 Pruefungen) ·
+`docs/todo/LAUFEND.md` (zwei Markierungen plus ein Hinweisabsatz).
+**Nicht angefasst:** `apps/`, `packages/`, `package.json`,
+`tools/zyklus-pruefen.mjs`, `tools/punkte-index.mjs`. **Nichts
+committet.**
+
+    node tools/zyklus-fahren.mjs tabelle [--schreiben]
+    node tools/zyklus-fahren.mjs vorbereiten <pfad> --agent <name>
+    node tools/zyklus-fahren.mjs rausgeben   <pfad> [--agent <name>]
+    node tools/zyklus-fahren.mjs abnehmen    <pfad> --commit <hash>
+
+## A1 — die Tabelle, und nur die Tabelle
+
+`[cmd]` **`LAUFEND.md` hat 628 Zeilen, erzeugt sind 6** — Kopf,
+Trennzeile und vier Datenzeilen. Der Abschnitt steht zwischen
+`<!-- ERZEUGT:laufend-tabelle -->` und `<!-- /ERZEUGT:laufend-tabelle -->`.
+
+`[cmd]` **Byteidentisch ausserhalb der Markierungen, in drei Zustaenden
+gemessen** — A vor dem Lauf, B mit absichtlich verstellter Tabelle, C
+nach dem Generator:
+
+    Zustand                 gesamt            ausserhalb der Marken
+    A  vor dem Lauf         1ca9c98a4669a278  3c2246133b2b6709
+    B  Tabelle verstellt    2c5a127da6e9f556  3c2246133b2b6709
+    C  Generator gelaufen   1ca9c98a4669a278  3c2246133b2b6709
+
+`[read]` **A == C vollstaendig, `diff` leer.** `[read]` **Die
+Pruefsumme ausserhalb bleibt durch B hindurch dieselbe** — der
+Generator hat den Abschnitt ersetzt und sonst nichts. Ein zweiter Lauf
+meldet *„die Tabelle ist schon aktuell, nichts geschrieben"*.
+
+`[cmd]` **Fehlt eine Markierung, bricht er ab statt zu raten** —
+eine geratene Grenze loescht Prosa.
+
+### Zwei Befunde beim ersten Lauf, beide berichtigt
+
+`[cmd]` **`laufend_fable/` und `laufend_kimi/` existieren und tragen nur
+`.gitkeep`.** Die erste Fassung schrieb fuer beide *„`next/` ist leer,
+Schritt 7 des Zyklus offen"*. `[read]` **Das ist eine Falschaussage** —
+niemand wartet dort auf einen vorbereiteten Auftrag. **Ein Agent kommt
+in die Tabelle, wenn er etwas hat;** eigener Test, von Sabotage S5
+gefangen.
+
+`[cmd]` **Zwei Titel in der handgefuehrten Tabelle waren Umschreibungen,
+nicht die H1:** A-77 stand als *„114 von 120 Proben laufen in keinem
+Lauf"*, die H1 sagt *„vier Werkzeugtests liefen nirgends"*; A-85 stand
+als *„der Zyklus wird geprueft, aber nicht ausgefuehrt"*, die H1 sagt
+*„Der Zyklus wird geprueft, aber nichts fuehrt ihn aus"*. `[read]`
+**A1 nennt die H1 als Quelle, also gewinnt sie** — und das ist der
+Punkt an einer erzeugten Tabelle: sie kann nicht von der Datei
+abweichen.
+
+## A2 — der Setzer schreibt nie auf die Zieldatei
+
+`[cmd]` **Lesen, Variable, Temporaerdatei, umbenennen.** Die vier
+Felder landen vor der ersten Leerzeile des Frontmatters — dort, wo
+`agent:` und `beauftragt:` in allen Punktdateien stehen, die sie
+tragen. Belegt am Attrappenlauf: 196 Bytes vorher, 270 nachher, keine
+`.tmp`-Reste, keine Datei mit 0 Bytes.
+
+`[cmd]` **Ein Feld, das schon dasteht, ist ein Abbruch:**
+*„beauftragt: steht schon da (2026-09-29) — das Werkzeug ueberschreibt
+nicht, es bricht ab"*. `[read]` **Nur `null` darf ersetzt werden** —
+ein leeres Feld ist keine Aussage.
+
+`[read]` **Der Test misst die Reihenfolge, nicht die Atomizitaet**, und
+das steht als Kommentar an ihm. Eine erste Sabotage (`writeFileSync('')`
+plus `appendFileSync`) blieb gruen, weil der Endzustand derselbe ist;
+`sicherSchreiben` ist am Ergebnis nicht sichtbar. **Die Sabotage, die
+den echten Fehler vom 01.10. nachbaut — leeren, dann lesen — macht vier
+Pruefungen rot.**
+
+## A3 — der Umzug, mit geprueftem Weg
+
+`[cmd]` **Umbenannt auf Dateisystemebene**, nicht `git mv`: ein frisch
+geschriebener Punkt ist nicht im Index.
+
+    todos/ -> next/ -> laufend/ -> erledigt/   je eine Stufe, erlaubt
+    nach todos/                                aus jeder Stufe, erlaubt
+    todos/ -> laufend/                         "springt ueber eine Stufe"
+    next/ -> erledigt/                         "springt ueber eine Stufe"
+    erledigt/ -> laufend/                      "geht rueckwaerts"
+
+`[cmd]` **Liegt am Ziel schon eine Datei, ist das ein Abbruch** — kein
+Ueberschreiben.
+
+## A4 — der Test laeuft im Glob mit, `package.json` unberuehrt
+
+`[cmd]` **Vorher 5 Dateien, 37 Pruefungen. Nachher 6 Dateien, 54
+Pruefungen, 3,8 s.** Gemessen beides am selben Stand, einmal mit und
+einmal ohne die neue Datei — **+17, genau die neuen.**
+
+`[read]` **Die Nachweise laufen auf Attrappen.** Jeder Test baut sich
+seine eigene Punktewurzel in `mkdtempSync` und raeumt sie in `finally`
+weg. **Keine echte Punktdatei wurde verschoben** — `git status` zeigt
+unter `docs/punkte/` keine Aenderung.
+
+`[read]` **Vorschlag fuer A-77, nicht von mir geaendert:** `gate:docs`
+fuehrt den Werkzeugtest nicht, obwohl dieses Werkzeug auf `docs/`
+arbeitet. Eine Zeile `node --test "tools/__tests__/*.test.mjs"` am
+Anfang von `gate:docs` wuerde ihn mitnehmen — **die Datei liegt bei
+Codex.**
+
+## A5 — `zyklus-pruefen` bleibt die Wahrheit
+
+`[cmd]` **Nach jedem schreibenden Schritt ruft das Werkzeug ihn auf und
+bricht ab, wenn er rot ist.** Es prueft nicht selbst, was der Waechter
+prueft.
+
+`[read]` **Auf einer Attrappenwurzel laeuft er nicht** — er liest
+`docs/punkte/` und wuerde ueber den echten Bestand urteilen, nicht ueber
+die Probe. **Deshalb `--waechter <pfad>` fuer die Probe:** ein
+untergeschobener roter macht den Lauf rot (*„zyklus-pruefen ist ROT nach
+diesem Schritt … 3 Verstoesse"*), ein gruener laesst ihn durch.
+Sabotage S7 belegt, dass das Urteil durchschlaegt.
+
+`[cmd]` **Nach allen Laeufen gruen:** *„271 offen · 0+0 vorbereitet ·
+1+1 laufend"*. Ebenso `punkte-pruefen` (25, genau der Sollstand) und
+`punkte-index --pruefen` (882 Punkte).
+
+## Die harte Grenze: kein Platzhalter
+
+`[cmd]` **`abnehmen` ohne `--commit` bricht ab**, mit dem Grund:
+*„Der Hash wird nicht erfunden und nicht als Platzhalter gesetzt: erst
+committen, dann abnehmen."* Die Datei bleibt liegen, und sie traegt
+danach kein `commit:`.
+
+`[cmd]` **`--commit TODO` bricht ab:** *„sieht nicht wie ein Git-Hash
+aus (7 bis 40 Hexzeichen)"*. `[read]` **Ein Platzhalter erzeugte genau
+die Fehlerklasse, die `punkte-pruefen` sucht** — ein Punkt in
+`erledigt/` ohne Hash behauptet mehr, als er hat (A-81/A6).
+
+`[read]` **Und `vorbereiten` setzt NICHTS** — ein vorbereiteter Auftrag
+traegt den Auftragsteil, aber noch kein `agent:` (`00-LIESMICH.md:430`).
+Eigener Test.
+
+## Sabotage: neun Stellen, je von ihrer eigenen Zeile gefangen
+
+    S1  if (!opt.commit) ausgeschaltet        rot: Platzhalter-Test
+    S2  Ueberschreibschutz ausgeschaltet      rot: Feld-steht-schon-da
+    S3  Stufensprung erlaubt                  rot: 2 Wegpruefungen
+    S4  Markierungspruefung ausgeschaltet     rot: Marken-fehlen
+    S5  leere Agenten in die Tabelle          rot: 2 Tabellentests
+    S6  leeren, dann lesen (der 01.10.-Fehler) rot: 5 Pruefungen
+    S7  Waechterurteil verworfen (return)     rot: A5-Test
+    S8  Hashform nicht geprueft               rot: Platzhalter-Test
+    S9  Prosa hinter der Endmarke geloescht   rot: 2 Byteidentitaeten
+    alle neun zurueckgestellt                 GRUEN 17/17, byteidentisch
+
+`[cmd]` **Kontrollprobe: Pruefsumme der Datei vor der ersten und nach
+der letzten Sabotage identisch** (`bfda53ffa8d16862`). `[read]` **Keine
+Sabotage blieb gruen** — die eine, die es tat, war eine falsche
+Sabotage und ist oben unter A2 erklaert.
+
+## Ein Lauf durch alle vier Stufen, auf einer Attrappe
+
+    0  todos/              196 Bytes
+    1  vorbereiten         -> laufend_codex/next/   (keine Felder gesetzt)
+    2  rausgeben           -> laufend_codex/        agent:, beauftragt:
+    3  abnehmen            -> erledigt/             erledigt:, commit:
+       Ergebnis            270 Bytes, "## Auftrag" noch da,
+                           0 Temporaerreste, 0 leere Dateien
+
+## Was das Werkzeug nicht tut
+
+`[read]` **Es entscheidet nichts.** Kein Abnahmetext, kein
+Auftragstext, keine Messung, keine Reihenfolge, kein Commit. **Es macht
+aus keiner Nummer einen Pfad** — A-81 hat das verworfen, und die
+Begruendung gilt weiter: erst verschieben, dann beauftragen, die
+Anweisung traegt den Pfad. **Es aendert die Generatoren nicht.**
+
+## Offen
+
+`[read]` **`pnpm gate` ist nicht gelaufen** — nur abgesprochen, und die
+andere Sitzung baute an G-569. **Einzeln gelaufen und gruen:**
+`node --test "tools/__tests__/*.test.mjs"` (54), `zyklus-pruefen`,
+`punkte-pruefen`, `punkte-index --pruefen`. `[read]` **Ein Einzellauf
+ersetzt den Gatelauf nicht.**
+
+`[read]` **Nichts committet.** Offen im Baum: `tools/zyklus-fahren.mjs`
+und `tools/__tests__/a85-zyklus-fahren.test.mjs` (beide neu).
+`[cmd]` **Die zwei Markierungen in `LAUFEND.md` sind mit `90918f2e`
+hereingekommen** — der Orchestrator hat sie in seinem eigenen
+`punkte(G-569)`-Commit mitgenommen, nicht ich. `supabase/_pipeline/kette.json`
+ist aus einer anderen Sitzung.
+
+`[read]` **Ein Zustandsfeld im Frontmatter wurde erwogen und
+verworfen** (Entscheidung Tom, 01.10.): „gebaut, nicht eingespielt"
+gehoert in den Abschnitt *Die Einspielreihenfolge*, der von Hand bleibt
+und Beurteilung samt gemessener Zahlen traegt. **Braucht es spaeter
+doch eines, dann mit geschlossener Werteliste** — Freitext im
+Frontmatter ist eine zweite Wahrheit, die unbemerkt veraltet (G-572).

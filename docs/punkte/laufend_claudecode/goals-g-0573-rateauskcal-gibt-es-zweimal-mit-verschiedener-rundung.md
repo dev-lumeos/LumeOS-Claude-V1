@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-10-01
+beauftragt: 2026-10-01
+agent: claudecode
 
 braucht: []
 kind_von: G-565
@@ -21,6 +23,23 @@ beruehrt:
 ---
 
 # rateAusKcal gibt es zweimal, mit verschiedener Rundung
+
+## Auftrag
+
+    AUFTRAG FUER Claude Code - G-573: rateAusKcal gibt es zweimal, mit
+                                     verschiedener Rundung
+    Bereich: apps/web/src/lib/goals/anpassung.ts
+             apps/web/src/lib/goals/zielrate-einheit.ts
+             apps/web/src/lib/goals/__tests__/
+    Fremd:   tools/ baut die ANDERE Claude-Code-Sitzung gerade (A-85),
+             supabase/ gehoert Codex (A-77). Beides bleibt unangetastet.
+             docs/ gehoert dem Orchestrator, auch diese Punktdatei:
+             der Bericht kommt als Antwort, nicht als Anhang hier.
+    Stand:   2026-10-01
+
+**Zuerst lesen, vollstaendig:** diese Datei und
+`docs/punkte/erledigt/goals-g-0565-die-einheit-ist-eine-nutzerwahl.md`
+(dort stehen die 126 gemessenen Faelle, die A4 als Vorlage nimmt).
 
 ## Der Befund
 

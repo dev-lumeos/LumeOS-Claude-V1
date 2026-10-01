@@ -5,9 +5,9 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 271 |
+| `todos` | 270 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 1 |
+| `laufend_claudecode` | 2 |
 | `erledigt` | 609 |
 | **gesamt** | **882** |
 
@@ -640,7 +640,7 @@
 | `G-569` | fehler | hoch | [G-520 prueft Kilogramm in der Anwendung](erledigt/goals-g-0569-g520-prueft-kilogramm-in-der-anwendung.md) | erledigt | — | — |
 | `G-570` | fehler | mittel | [Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg](todos/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md) | offen | — | — |
 | `G-572` | fehler | mittel | [Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch](todos/goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md) | offen | — | — |
-| `G-573` | fehler | hoch | [rateAusKcal gibt es zweimal, mit verschiedener Rundung](todos/goals-g-0573-rateauskcal-gibt-es-zweimal-mit-verschiedener-rundung.md) | offen | — | — |
+| `G-573` | fehler | hoch | [rateAusKcal gibt es zweimal, mit verschiedener Rundung](laufend_claudecode/goals-g-0573-rateauskcal-gibt-es-zweimal-mit-verschiedener-rundung.md) | laeuft (claudecode) | — | — |
 | `G-574` | fehler | hoch | [Die Waechter rechnen, und niemand sieht sie](todos/goals-g-0574-die-waechter-rechnen-und-niemand-sieht-sie.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
