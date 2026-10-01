@@ -2967,6 +2967,28 @@
       "depends_on": [
         "546_muscle_anatomy_schema"
       ]
+    },
+    {
+      "id": "535_auth_uid_legacy_readers",
+      "path": "supabase/_pipeline/00_querschnitt/535_auth_uid_legacy_readers.sql",
+      "kind": "sql",
+      "creates": "G-535: sechs Fachfunktionen lesen die PostgREST-Sitzung ueber Supabases auth.uid statt ueber den alten Singular-GUC.",
+      "depends_on": [
+        "058b",
+        "112",
+        "142_medical",
+        "457_lab_report_ocr",
+        "459_coach_alert_producer"
+      ]
+    },
+    {
+      "id": "535_auth_uid_legacy_readers_probe",
+      "path": "supabase/_pipeline/_validierung/quer-g535-auth-uid-readers.test.ts",
+      "kind": "tsx",
+      "creates": "G-535 Gegenprobe: sechs plural-Claim-Pfade, unveraenderte Abmeldung, genau eine Signatur und der namensgenau freigestellte auth.uid-Kompatibilitaetshelper.",
+      "depends_on": [
+        "535_auth_uid_legacy_readers"
+      ]
     }
   ]
 }
