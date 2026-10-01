@@ -38,6 +38,20 @@ export type Zielwerte = {
 
 /** Was die Formel aus dem Profil macht — inklusive Grund, wenn nicht. */
 export type Zielvorschlag = {
+  /**
+   * `[cmd]` **G-568/A3: das Ziel, zu dem diese Zahlen gehoeren.**
+   *
+   * `[cmd]` **`berechne_zielwerte` gibt es seit G-563 zurueck** —
+   * `goal_id uuid` als letzte Spalte (gemessen an
+   * `563_target_scoped_calculation.sql:31`).
+   *
+   * `[read]` **Eine Kalorienzahl ohne ihr Ziel ist bei zwei Zielen
+   * keine Aussage** — dieselbe Lehre wie der Phasenkopf aus G-564.
+   *
+   * `[read]` **`null`, solange die alte Signatur live ist** — sie
+   * fuehrt die Spalte nicht.
+   */
+  goal_id: string | null
   bmr: number | null
   tdee: number | null
   kcal: number | null
@@ -71,11 +85,19 @@ export type Zielvorschlag = {
  * `[read]` **Die Namen kommen aus der Datenbank, nicht von hier** —
  * sie muessen zeichengleich zu dem sein, was die Funktion schreibt.
  */
-export type Hindernis =
-  | 'profil_unvollstaendig'
-  | 'zielrichtung_ohne_faktor'
-  | 'keine_aktive_phase'
-  | 'phasenparameter_fehlt'
+// ── G-568/A-30: Typ und Satz stehen server-frei ────────────
+//
+// `[cmd]` **Hier standen `Hindernis` und `hindernisSatz`.** `[cmd]`
+// **Der Composition-Reiter ist `'use client'` und braucht den Satz**
+// — ein **Wert**-Import von hier zoege `createSessionClient` und
+// damit `next/headers` ins Browserbuendel (A-30, dieselbe Klasse wie
+// G-74, G-412, G-537).
+//
+// `[read]` **Beides liegt jetzt in `zielwerte-hindernis.ts`** und
+// wird hier durchgereicht — eine Quelle, zwei Seiten.
+export { hindernisSatz } from './zielwerte-hindernis'
+export type { Hindernis } from './zielwerte-hindernis'
+import type { Hindernis } from './zielwerte-hindernis'
 
 /**
  * Der Satz zum Hindernis — **was zu tun ist, nicht was schiefging.**
@@ -94,26 +116,6 @@ export type Hindernis =
  *
  * @param fehlende Nur fuer `profil_unvollstaendig` — die Feldnamen.
  */
-export function hindernisSatz(h: Hindernis, fehlende: string[] = []): string {
-  switch (h) {
-    case 'profil_unvollstaendig':
-      return fehlende.length
-        ? `Ergaenze dein Profil: ${fehlende.join(', ')} fehlt noch.`
-        : 'Ergaenze dein Profil — es fehlen noch Angaben.'
-    case 'keine_aktive_phase':
-      return 'Waehle eine Phase. Ohne sie gibt es kein Kalorienziel, '
-        + 'weil die Phase das Tempo bestimmt.'
-    case 'phasenparameter_fehlt':
-      return 'Fuer diese Phase fehlt der Kalorienwert. Trag ihn an der '
-        + 'Phase nach, dann rechnet das Ziel.'
-    case 'zielrichtung_ohne_faktor':
-      // `[read]` **Der einzige Fall, den der Nutzer NICHT aufloesen
-      // kann** — der Katalog kennt die Zielrichtung nicht. **Das
-      // sagt der Satz, statt eine Handlung vorzutaeuschen.**
-      return 'Fuer diese Zielrichtung ist noch kein Kalorienzuschlag '
-        + 'hinterlegt. Das liegt nicht an deinen Angaben.'
-  }
-}
 
 /**
  * Phasen OHNE Tagesziel — sie sind kein Hindernis, sondern ein
@@ -199,29 +201,78 @@ export async function getZielwerteAm(stichtag: string): Promise<Zielwerte | null
 }
 
 /**
+ * Erkennt die Mehrdeutigkeitsmeldung aus G-563.
+ *
+ * `[cmd]` **`ERRCODE = '23514'` und der Satz**, beides aus
+ * `563_target_scoped_calculation.sql:284`. `[read]` **Der Code
+ * allein genuegt nicht** — `23514` ist ein CHECK-Verstoss und kann
+ * auch von einer Spaltenbedingung kommen.
+ */
+function istMehrdeutig(f: { code?: string; message?: string }): boolean {
+  const t = (f.message ?? '').toLowerCase()
+  return t.includes('mehrere aktive phasen')
+    && t.includes('zielbezug fehlt')
+}
+
+/** Ein Vorschlag ohne Zahlen — je Feld `null`, nichts erfunden. */
+const LEERER_VORSCHLAG: Zielvorschlag = {
+  goal_id: null,
+  bmr: null, tdee: null, kcal: null, protein_g: null, carbs_g: null,
+  fat_g: null, fiber_g: null, linoleic_acid_g: null,
+  alpha_linolenic_acid_g: null, nutrition_goal: null,
+  kalorienfaktor: null, hindernis: null, fehlende_felder: [],
+}
+
+/**
  * Was die Formel aus dem heutigen Profil macht.
  *
  * Liefert immer eine Antwort — entweder Zahlen oder ein `hindernis`
  * mit den fehlenden Feldern. Nie beides leer.
  */
-export async function getZielwertVorschlag(stichtag: string): Promise<Zielvorschlag> {
+export async function getZielwertVorschlag(
+  stichtag: string, goalId?: string | null,
+): Promise<Zielvorschlag> {
   const { supabase, userId } = await requireSession()
+
+  // ══ G-568/A2: das Ziel wird DURCHGEREICHT, nicht geraten ═════
+  //
+  // `[cmd]` **Die neue Signatur, woertlich aus G-563:**
+  //
+  //     goals.berechne_zielwerte(
+  //       p_user_id uuid, p_goal_id uuid,
+  //       p_stichtag date DEFAULT CURRENT_DATE)
+  //
+  // `[cmd]` **Die alte Zweiparameter-Fassung bleibt und WIRFT bei
+  // mehreren aktiven Zielphasen** (`23514`):
+  // *,,nutrition_targets: mehrere aktive Phasen am Gueltigkeitstag;
+  // Zielbezug fehlt"*.
+  //
+  // `[read]` **Wo der Aufrufer ein Ziel kennt, nennt er es** — wo
+  // nicht, bleibt es offen und die Datenbank entscheidet: eine Phase
+  // geht durch, zwei werfen. **Kein geratenes Ziel** (A2).
+  const args = goalId
+    ? { p_user_id: userId, p_goal_id: goalId, p_stichtag: stichtag }
+    : { p_user_id: userId, p_stichtag: stichtag }
 
   const { data, error } = await supabase
     .schema('goals')
-    .rpc('berechne_zielwerte', { p_user_id: userId, p_stichtag: stichtag })
+    .rpc('berechne_zielwerte', args)
 
-  if (error) throw new ProfileWriteError('WRITE_FAILED', error.message)
+  if (error) {
+    // ══ G-568/A4: die Mehrdeutigkeit ist ein ZUSTAND ══════════
+    //
+    // `[cmd]` **`23514` mit dem Satz aus G-563.** `[read]` **Nicht
+    // als HTTP 500 und nicht als leeres Feld** — die Oberflaeche
+    // zeigt ihn, und `hindernis` ist der Weg, den sie schon kennt.
+    if (istMehrdeutig(error)) {
+      return { ...LEERER_VORSCHLAG, hindernis: 'mehrere_phasen' }
+    }
+    throw new ProfileWriteError('WRITE_FAILED', error.message)
+  }
   const zeile = (Array.isArray(data) ? data[0] : null) as Record<string, unknown> | null
 
   if (!zeile) {
-    return {
-      bmr: null, tdee: null, kcal: null, protein_g: null, carbs_g: null,
-      fat_g: null, fiber_g: null, linoleic_acid_g: null, alpha_linolenic_acid_g: null,
-      nutrition_goal: null, kalorienfaktor: null,
-      hindernis: 'profil_unvollstaendig',
-      fehlende_felder: [],
-    }
+    return { ...LEERER_VORSCHLAG, hindernis: 'profil_unvollstaendig' }
   }
 
   const h = text(zeile.hindernis)
@@ -243,5 +294,9 @@ export async function getZielwertVorschlag(stichtag: string): Promise<Zielvorsch
     fehlende_felder: Array.isArray(zeile.fehlende_felder)
       ? (zeile.fehlende_felder as unknown[]).filter((f): f is string => typeof f === 'string')
       : [],
+    // `[read]` **`null`, solange die alte Signatur live ist** — sie
+    // fuehrt die Spalte nicht, und eine erfundene Kennung waere
+    // schlimmer als keine.
+    goal_id: text(zeile.goal_id),
   }
 }

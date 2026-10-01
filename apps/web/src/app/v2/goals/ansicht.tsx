@@ -247,6 +247,16 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
     alter: echt.alter,
     juengsteMessung: echt.messungen.length ? echt.messungen[echt.messungen.length - 1] : null,
     stichtag: echt.stichtag,
+    // `[cmd]` **G-568/A3: erst ab zwei nennt die Anzeige das Ziel.**
+    // `[read]` **Die Zahl kommt aus `offenePhasen`** (die Tabelle),
+    // nicht aus `phasen` — dieselbe Wahl wie in G-564: die Quelle,
+    // die heute UND nach dem Einspielen stimmt.
+    laufendePhasen: echt.offenePhasen.length,
+    // `[read]` **Der Titel zum gerechneten Ziel**, wenn er in den
+    // geladenen Zielen steht — sonst `null`, kein geratener Name.
+    zielTitel: echt.vorschlag?.goal_id
+      ? echt.ziele.find(g => g.goal_id === echt.vorschlag?.goal_id)?.title ?? null
+      : null,
   }
 
   // `[cmd]` **G-513: laufend heisst `actual_end_date == null`.**

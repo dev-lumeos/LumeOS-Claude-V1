@@ -123,9 +123,24 @@ export default async function V2GoalsPage({
 
     // Die zwei Zielwert-Funktionen kommen aus dem bestehenden Lesepfad
     // (GO-03/GO-04) — nicht nachgebaut, sonst gaebe es zwei Wahrheiten.
+    //
+    // ══ G-568/A2: hier IST ein Ziel bekannt ════════════════════════
+    //
+    // `[cmd]` **`berechne_zielwerte` nimmt seit G-563 ein
+    // `p_goal_id`** — und die alte Fassung wirft bei mehreren
+    // offenen Phasen (`23514`).
+    //
+    // `[read]` **Diese Seite kennt die offenen Phasen schon** (oben
+    // geladen) — **also nennt sie das Ziel, statt es die Datenbank
+    // raten zu lassen.** `[read]` **Bei genau einer offenen Phase
+    // ist es deren Ziel; bei mehreren bleibt es offen**, und die
+    // Datenbank meldet die Mehrdeutigkeit als Zustand (A4).
+    const einzigesZiel = offenePhasen.length === 1
+      ? offenePhasen[0].goal_id
+      : null
     ;[zielwerte, vorschlag] = await Promise.all([
       getZielwerteAm(stichtag),
-      getZielwertVorschlag(stichtag),
+      getZielwertVorschlag(stichtag, einzigesZiel),
     ])
   } catch (e) {
     ladefehler = e instanceof Error ? e.message : String(e)

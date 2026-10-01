@@ -27,6 +27,9 @@ import type {
   AdaptiverTdee, Koerperzusammensetzung, Koerpermessung, ProfilEingaben,
 } from '../../../lib/goals/lesen'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
+// `[read]` **Aus der server-freien Datei** — ein Wert-Import aus
+// `zielwerte-read.ts` zoege `next/headers` ins Buendel (A-30).
+import { hindernisSatz } from '../../../lib/profile/zielwerte-hindernis'
 
 export type CompDaten = {
   navy: Koerperzusammensetzung | null
@@ -37,6 +40,13 @@ export type CompDaten = {
   alter: number | null
   juengsteMessung: Koerpermessung | null
   stichtag: string
+  /**
+   * `[cmd]` **G-568/A3: wie viele Phasen laufen.** `[read]` **Erst
+   * ab zwei nennt die Anzeige das Ziel** — bei einer waere es Laerm.
+   */
+  laufendePhasen: number
+  /** Der Titel zu `vorschlag.goal_id`, wenn er bekannt ist. */
+  zielTitel: string | null
 }
 
 function z(n: number | null | undefined, stellen = 1): string {
@@ -219,13 +229,37 @@ export function CompositionTab({ d }: { d: CompDaten }) {
             range="" note=""
           />
         </div>
+        {/* ══ G-568/A3: die Zahlen nennen ihr Ziel ═════════════
+            `[cmd]` **`berechne_zielwerte` gibt seit G-563 `goal_id`
+            zurueck.** `[read]` **Eine Kalorienzahl ohne ihr Ziel ist
+            bei zwei Zielen keine Aussage** — dieselbe Lehre wie der
+            Phasenkopf aus G-564.
+
+            `[read]` **Genannt wird es, sobald mehr als eine Phase
+            laeuft** — bei einer waere es Laerm. */}
+        {vorschlag?.goal_id && d.laufendePhasen > 1 && (
+          <div className="v2-dim" data-zielwerte-ziel={vorschlag.goal_id}
+               style={{ fontSize: 10.5, marginTop: 6, lineHeight: 1.5 }}>
+            {`Gerechnet fuer ${d.zielTitel ?? 'ein Ziel'} — es laufen `
+              + 'mehrere Phasen.'}
+          </div>
+        )}
         {vorschlag?.hindernis && (
           <>
             <div className="v2-divider" />
-            <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.5 }}>
-              {vorschlag.hindernis === 'profil_unvollstaendig'
-                ? `Die Formel rechnet nicht: im Profil fehlen ${vorschlag.fehlende_felder.join(', ') || 'Angaben'}.`
-                : 'Die Formel rechnet nicht: die Zielrichtung hat keinen Kalorienfaktor.'}
+            {/* ══ G-568/A4: je Hindernis SEIN Satz ══════════════
+                `[cmd]` **Hier standen zwei Saetze fuer inzwischen
+                fuenf Hindernisse** — alles, was nicht
+                `profil_unvollstaendig` war, bekam den Satz ueber den
+                Kalorienfaktor. **Auch `keine_aktive_phase` und
+                `mehrere_phasen`.**
+
+                `[read]` **`hindernisSatz` kennt sie alle** und ist
+                dieselbe Quelle, die der Schreibweg nutzt
+                (`zielwerte-write.ts`) — zwei Kopien driften. */}
+            <div className="v2-muted" data-zielwerte-hindernis={vorschlag.hindernis}
+                 style={{ fontSize: 11.5, lineHeight: 1.5 }}>
+              {hindernisSatz(vorschlag.hindernis, vorschlag.fehlende_felder)}
             </div>
           </>
         )}
