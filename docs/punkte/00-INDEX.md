@@ -7,8 +7,8 @@
 |---|---|
 | `todos` | 275 |
 | `laufend_codex` | 2 |
-| `erledigt` | 611 |
-| **gesamt** | **888** |
+| `erledigt` | 612 |
+| **gesamt** | **889** |
 
 ## medical — 49
 
@@ -717,9 +717,7 @@
 | `G-410` | feature | hoch | [der Kalender und das Athletendetail](erledigt/coach-g-0410-kalender-und-athletendetail.md) | erledigt | — | — |
 | `G-461` | fehler | niedrig | [ein nicht maskiertes Anfuehrungszeichen](erledigt/coach-g-0461-lint-anfuehrungszeichen.md) | erledigt | — | — |
 
-## quer — 225
-
-### beauftragbar — 224
+## quer — 226
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -763,7 +761,7 @@
 | `A-74` | befund | hoch | [die SSOT ist zwoelf Tage alt](todos/quer-a-0074-die-ssot-ist-zwoelf-tage-alt.md) | offen | — | A-75 |
 | `A-75` | befund | hoch | [Auftraege werden nicht gegen die Quellen geprueft, und nichts wird rot](todos/quer-a-0075-auftraege-werden-nicht-gegen-die-quellen-geprueft.md) | offen | — | A-78 |
 | `A-76` | befund | hoch | [die Specs beschreiben ein Repo, das es hier nicht gibt](todos/quer-a-0076-die-specs-beschreiben-das-vorgaengerrepo-als-fertig.md) | offen | — | — |
-| `A-77` | fehler | hoch | [vier Werkzeugtests liefen nirgends](laufend_codex/quer-a-0077-werkzeugtests-liefen-nirgends.md) | laeuft (codex) | — | A-86, A-87, A-88 |
+| `A-77` | fehler | hoch | [vier Werkzeugtests liefen nirgends](laufend_codex/quer-a-0077-werkzeugtests-liefen-nirgends.md) | laeuft (codex) | — | A-86, A-87, A-88, A-90 |
 | `A-78` | befund | mittel | [ein neuer Punkt wird nicht gegen den Bestand geprueft](todos/quer-a-0078-punkte-werden-nicht-gegen-den-bestand-geprueft.md) | offen | — | — |
 | `A-79` | befund | mittel | [jeder Auftrag legt 452 MiB ab, auch wenn nichts eingespielt wird](todos/quer-a-0079-jeder-auftrag-legt-452-mib-ab.md) | offen | — | — |
 | `A-80` | befund | mittel | [150 Wegwerf-Datenbanken, und 49 davon heissen "final"](todos/quer-a-0080-hundertfuenfzig-wegwerf-datenbanken.md) | offen | — | — |
@@ -771,9 +769,11 @@
 | `A-82` | befund | mittel | [Die Migrationskette prueft den Arbeitsbaum, nicht das Staging](erledigt/quer-a-0082-die-migrationskette-prueft-den-arbeitsbaum.md) | erledigt | — | A-84 |
 | `A-84` | fehler | hoch | [Der Pruefumfang haengt am Staging, nicht am Repo](erledigt/quer-a-0084-der-pruefumfang-haengt-am-staging.md) | erledigt | — | — |
 | `A-85` | fehler | mittel | [Der Zyklus wird geprueft, aber nichts fuehrt ihn aus](erledigt/quer-a-0085-der-zyklus-wird-geprueft-aber-nicht-ausgefuehrt.md) | erledigt | — | A-89 |
-| `A-86` | fehler | hoch | [Die Kette spielt die Testdaten nicht ein](laufend_codex/quer-a-0086-die-kette-spielt-die-testdaten-nicht-ein.md) | laeuft (codex) | — | — |
+| `A-86` | fehler | hoch | [Die Kette spielt die Testdaten nicht ein](erledigt/quer-a-0086-die-kette-spielt-die-testdaten-nicht-ein.md) | erledigt | — | — |
+| `A-87` | fehler | hoch | [46 Zeugen, nach Ursache gestaffelt verdrahten](todos/quer-a-0087-46-zeugen-nach-ursache-gestaffelt.md) | offen | — | — |
 | `A-88` | fehler | hoch | [31 Proben fallen still auf postgres zurueck](todos/quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md) | offen | — | — |
 | `A-89` | fehler | mittel | [zyklus-fahren scheitert an EPERM, wenn ein Agent die Datei offen hat](todos/quer-a-0089-zyklus-fahren-scheitert-an-eperm.md) | offen | — | — |
+| `A-90` | fehler | hoch | [Grunddaten als Dump, nicht als Import bei jedem Lauf](laufend_codex/quer-a-0090-grunddaten-als-dump-statt-als-import.md) | laeuft (codex) | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
 | `B-29` | feature | mittel | [21 Wegwerf-Datenbanken, 3,58 GB](todos/quer-b-0029-21-wegwerf-datenbanken-3-58-gb.md) | offen | — | — |
 | `B-30` | befund | mittel | [MSYS-`tar` kann keine `D:\`-Pfade](todos/quer-b-0030-msys-tar-kann-keine-d-pfade.md) | offen | — | — |
@@ -947,12 +947,6 @@
 | `G-555` | fehler | hoch | [Derselbe Ladefehler verschluckt zwei weitere Module](todos/quer-g-0555-derselbe-ladefehler-verschluckt-zwei-weitere-module.md) | offen | — | — |
 | `G-567` | entscheidung | hoch | [Die Tagesreferenz kennt kein Ziel](todos/quer-g-0567-die-tagesreferenz-kennt-kein-ziel.md) | offen | — | — |
 | `G-571` | fehler | mittel | [Sechs Schreibwege existieren in der Datenbank und werden von nichts benutzt](todos/quer-g-0571-sechs-schreibwege-ohne-aufrufer.md) | offen | — | — |
-
-### wartet auf Blocker — 1
-
-| Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
-|---|---|---|---|---|---|---|
-| `A-87` | fehler | hoch | [46 Zeugen, nach Ursache gestaffelt verdrahten](todos/quer-a-0087-46-zeugen-nach-ursache-gestaffelt.md) | offen | A-86 | — |
 
 ## buddy — 1
 

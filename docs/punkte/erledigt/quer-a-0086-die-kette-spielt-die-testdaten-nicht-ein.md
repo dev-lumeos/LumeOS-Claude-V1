@@ -6,6 +6,8 @@ schwere: hoch
 angelegt: 2026-10-01
 agent: codex
 beauftragt: 2026-10-01
+erledigt: 2026-10-01
+commit: 7bfd101b
 
 braucht: []
 kind_von: A-77
@@ -95,3 +97,45 @@ Wegwerf-Datenbank, mit ihrer Laufzeit · die Schrittzahl aus
 kein `db push` · nichts committen. **Der volle Lauf laeuft naechtlich,
 einmal** (00-LIESMICH.md, „Was ein Auftrag als Nachweis verlangen
 darf").
+
+
+---
+
+## Abnahme — 2026-10-01, Commit `7bfd101b`
+
+`[cmd]` **315 Schritte, selbst gezaehlt. Der Testdatenschritt steht an
+Position 305, danach folgen genau 10 Proben** — gemessen aus
+`kette.json`, nicht aus dem Bericht.
+
+`[cmd]` **Die vier Ausgangszahlen sind beantwortet:**
+
+    goals.user_goals                 5 ->     8
+    goals.goal_phases                0 ->     5
+    nutrition.meals                  0 -> 2.176
+    training.workout_sessions        0 ->    30
+
+`[read]` **A3 ist die Zeile, die zaehlt**, und er hat sie gemessen statt
+behauptet: sechs der zehn Proben schreiben in einer Transaktion und
+rollen zurueck, vier sind statisch, und nach allen Einzelaufrufen waren
+alle zwoelf Schema-Zeilenzahlen unveraendert. **Der Seed ist idempotent**
+— zweiter Lauf 9,806 s, weiterhin exakt dieselben vier Zahlen.
+
+`[cmd]` **Drei bestehende Aussagen werden durch den echten Bestand rot,
+und er hat sie NICHT angepasst:** G-558 (nutzerweiter Aufruf bei zwei
+Phasen, nach G-563), G-561 (der Seed belegt Prioritaet 1 fuer
+`test-user`), G-451/G-556 (drei erwartete Seedphasen gegen fuenf).
+**Zeugen fuer A-87.**
+
+### Was dieser Punkt ueber den Orchestrator sagt
+
+`[cmd]` **Der Testdatenschritt kostet 7,076 s. Der volle Aufbau, den mein
+Auftrag als Nachweis verlangte, kostet 1.300,7 s.** Tom hat 33 Minuten
+davor gesessen, fuer sieben Sekunden Arbeit.
+
+`[read]` **Das war keine Eigenschaft der Kette, das war eine Zeile in
+meiner Vorlage** — und sie stand in fuenf Auftraegen. Die Regel steht
+jetzt in `00-LIESMICH.md` („Was ein Auftrag als Nachweis verlangen
+darf"), und `tools/auftrag-nachweis-pruefen.mjs` zaehlt sie nach.
+`[cmd]` **Er war beim ersten Lauf rot — auf genau diesem Punkt und auf
+A-77** und hat den Commit nicht durchgelassen, bis beide berichtigt
+waren.
