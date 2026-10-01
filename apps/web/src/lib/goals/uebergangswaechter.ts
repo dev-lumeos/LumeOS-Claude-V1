@@ -3,13 +3,17 @@
 // `[cmd]` **`docs/specs/Goals/PHASE_MODELS.md:219-223`**, die
 // Guard-Tabelle, sieben Zeilen:
 //
-//     Gewichtsverlust zu schnell   >1kg/Woche bei FAT_LOSS   +150 kcal
-//     Gewichtsverlust zu langsam   <0.1kg/Woche + >85%       -100 kcal
+//     Gewichtsverlust zu schnell   >1,194 % KG/Wo bei FAT_LOSS +150 kcal
+//     Gewichtsverlust zu langsam   <0,119 % KG/Wo + >85%      -100 kcal
 //     Kraft schwindet              >10% Rueckgang            +20g Protein
 //     Uebertraining                HRV <85% Baseline, 5+ Tage  Deload
 //     Max. Phasendauer             max_duration_weeks erreicht  Transition
 //     Contest Prep kritisch        BF% <5% (M) / <10% (F)    Gesundheitswarnung
-//     Zu schnelle Masse            >0.75kg/Woche bei LEAN_BULK  -100 kcal
+//     Zu schnelle Masse            >0,896 % KG/Wo bei LEAN_BULK -100 kcal
+//
+// `[cmd]` **G-569: die drei Schwellen sind seit G-561 RELATIV.**
+// **Bei 83,74 kg dieselben Zahlen wie vorher** (1,0 / 0,1 / 0,75 kg),
+// **bei 60 kg nicht** — dort greift die erste schon bei 0,717 kg.
 //
 // **REINE FUNKTIONEN. KEINE SCHREIBT.** `[cmd]` **C-108/F-02, in
 // E-56:51 zitiert:** *,,nennen ja, bewerten nein"*.
@@ -17,6 +21,14 @@ import {
   wochenAnpassung, type Wochendaten, type Anpassungsvorschlag,
 } from './anpassung'
 import type { Phasenart } from './phase-regeln'
+// ══ G-569: die Schwellen sind relativ ══════════════════
+//
+// `[cmd]` **G-561 hat den Katalog auf Prozent umgestellt**, hier
+// standen weiter Kilogramm. **Die Umrechnung und die Texte liegen in
+// `waechter-schwellen.ts`.**
+import {
+  SCHWELLE_PCT, schwelleGreift, schwelleUnterschritten, schwellenText,
+} from './waechter-schwellen'
 
 export type Waechterkennung =
   | 'verlust_zu_schnell' | 'verlust_zu_langsam'
@@ -112,6 +124,15 @@ export function koerperfettSatz(
  */
 export function pruefeWaechter(
   lage: Waechterlage, d: Wochendaten,
+  // ══ G-569/A4: die Texte in der gewaehlten Einheit ═════════════
+  //
+  // `[cmd]` **E-83: der Nutzer waehlt die Einheit**, geladen mit
+  // `ladeEinheit()` aus `user_display_preferences` (G-565).
+  //
+  // `[read]` **Die Vorgabe ist Prozent** — das ist die Groesse, in
+  // der der Katalog seine Schwellen fuehrt, und sie gilt ohne
+  // Gewicht.
+  einheit: 'prozent' | 'kcal' = 'prozent',
 ): Waechterbefund[] {
   const raus: Waechterbefund[] = []
 
@@ -124,26 +145,44 @@ export function pruefeWaechter(
     raus.push(fehlt('verlust_zu_schnell', 'PHASE_MODELS.md:223',
       'Verlusttempo nicht geprueft.',
       'Kein Gewichtstrend — die Messreihe traegt keinen.'))
+  } else if (d.gewichtAmStichtagKg === null) {
+    // `[cmd]` **G-569/A2: fehlt das Gewicht am Stichtag, ist das ein
+    // HINDERNIS** — kein Rueckfall auf Profil- oder Startgewicht
+    // (G-561/A2, von Codex begruendet).
+    raus.push(fehlt('verlust_zu_schnell', 'PHASE_MODELS.md:223',
+      'Verlusttempo nicht geprueft.',
+      'Kein Gewicht am Stichtag — die Schwelle ist relativ zum '
+      + 'Koerpergewicht und laesst sich ohne es nicht pruefen.'))
   } else {
-    const greift = lage.art === 'fat_loss' && d.weightTrend < -1.0
+    const greift = lage.art === 'fat_loss' && d.weightTrend < 0
+      && schwelleGreift('verlustZuSchnell',
+        d.weightTrend, d.gewichtAmStichtagKg) === true
     raus.push({
       kennung: 'verlust_zu_schnell', regel: 'PHASE_MODELS.md:223', greift,
       satz: greift
         ? `Der Verlust liegt bei ${d.weightTrend} kg/Woche. Die Spec `
-          + 'sieht ab 1 kg/Woche eine Anhebung um 150 kcal vor.'
+          + `sieht ab ${schwellenText('verlustZuSchnell',
+            d.gewichtAmStichtagKg, einheit)} eine Anhebung um `
+          + '150 kcal vor.'
         : 'Das Verlusttempo liegt im vorgesehenen Rahmen.',
     })
   }
 
   // ── 2 · Gewichtsverlust zu langsam ──────────────────────────────
-  if (d.weightTrend === null || d.calorieAdherence === null) {
+  if (d.weightTrend === null || d.calorieAdherence === null
+      || d.gewichtAmStichtagKg === null) {
     raus.push(fehlt('verlust_zu_langsam', 'PHASE_MODELS.md:224',
       'Stillstand nicht geprueft.',
       d.weightTrend === null
-        ? 'Kein Gewichtstrend.' : 'Keine Kalorieneinhaltung.'))
+        ? 'Kein Gewichtstrend.'
+        : d.calorieAdherence === null
+          ? 'Keine Kalorieneinhaltung.'
+          : 'Kein Gewicht am Stichtag — die Schwelle ist relativ '
+            + 'zum Koerpergewicht.'))
   } else {
-    const greift = lage.art === 'fat_loss'
-      && d.weightTrend > -0.1 && d.calorieAdherence > 85
+    const greift = lage.art === 'fat_loss' && d.calorieAdherence > 85
+      && schwelleUnterschritten('verlustZuLangsam',
+        d.weightTrend, d.gewichtAmStichtagKg) === true
     raus.push({
       kennung: 'verlust_zu_langsam', regel: 'PHASE_MODELS.md:224', greift,
       satz: greift
@@ -241,13 +280,22 @@ export function pruefeWaechter(
   if (d.weightTrend === null) {
     raus.push(fehlt('masse_zu_schnell', 'PHASE_MODELS.md:229',
       'Zunahmetempo nicht geprueft.', 'Kein Gewichtstrend.'))
+  } else if (d.gewichtAmStichtagKg === null) {
+    // `[cmd]` **G-569/A2: ein Hindernis, keine stille Null.**
+    raus.push(fehlt('masse_zu_schnell', 'PHASE_MODELS.md:229',
+      'Zunahmetempo nicht geprueft.',
+      'Kein Gewicht am Stichtag — die Schwelle ist relativ zum '
+      + 'Koerpergewicht und laesst sich ohne es nicht pruefen.'))
   } else {
-    const greift = lage.art === 'lean_bulk' && d.weightTrend > 0.75
+    const greift = lage.art === 'lean_bulk' && d.weightTrend > 0
+      && schwelleGreift('zunahmeZuSchnell',
+        d.weightTrend, d.gewichtAmStichtagKg) === true
     raus.push({
       kennung: 'masse_zu_schnell', regel: 'PHASE_MODELS.md:229', greift,
       satz: greift
         ? `Die Zunahme liegt bei ${d.weightTrend} kg/Woche. Die Spec `
-          + 'sieht ab 0,75 kg/Woche 100 kcal weniger vor.'
+          + `sieht ab ${schwellenText('zunahmeZuSchnell',
+            d.gewichtAmStichtagKg, einheit)} 100 kcal weniger vor.`
         : 'Das Zunahmetempo liegt im vorgesehenen Rahmen.',
     })
   }

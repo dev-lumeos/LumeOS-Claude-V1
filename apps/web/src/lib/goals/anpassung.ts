@@ -35,6 +35,14 @@
 // Spec-Betrag ueber das Gewicht umgerechnet. **Derselbe kcal-Betrag
 // ist bei 45 kg eine andere Rate als bei 120 kg** — genau der Befund,
 // der zu E1 gefuehrt hat.
+// ══ G-569: die Schwellen sind relativ ══════════════════
+//
+// `[read]` **Der Katalog prueft seit G-561 in Prozent** — die
+// Anwendung zog nach. **Die Umrechnung steht in
+// `waechter-schwellen.ts` und rundet durch `rundeWieDb`.**
+import {
+  SCHWELLE_PCT, schwelleGreift, schwelleUnterschritten,
+} from './waechter-schwellen'
 import {
   RATE_MIN, RATE_MAX, RATENPFLICHT, kcalDeltaAusRate,
   type Phasenart,
@@ -50,6 +58,19 @@ export type Wochendaten = {
    * (2026-09-29).
    */
   weightTrend: number | null
+  /**
+   * `[cmd]` **G-569: das letzte gueltige Gewicht AM PRUEFSTICHTAG**
+   * — nicht das am Phasenbeginn und nicht das aus dem Profil.
+   *
+   * `[cmd]` **G-561/A2, von Codex gegen die Vorgabe des
+   * Orchestrators entschieden:** die Zielrate beschreibt die
+   * unveraenderliche Absicht der Phase, **der Waechter bewertet
+   * einen gegenwaertigen Vorgang.**
+   *
+   * `[read]` **Fehlt es, ist das ein Hindernis** — kein Rueckfall
+   * auf ein anderes Gewicht, keine stille Null.
+   */
+  gewichtAmStichtagKg: number | null
   /**
    * Prozent 0..100+.
    *
@@ -215,12 +236,21 @@ export function wochenAnpassung(
 
   // ── fat_loss, drei Regeln (:188-195) ────────────────────────────
   if (art === 'fat_loss') {
-    if (d.weightTrend !== null && d.calorieAdherence !== null
-      && d.weightTrend > -0.1 && d.calorieAdherence > 85) {
+    // `[cmd]` **G-569: relativ statt `> -0.1` kg/Woche.**
+    // `[read]` **`0,119 %` sind bei 83,74 kg genau 0,1 kg** —
+    // dieselbe Strenge, anderer Bezug.
+    if (d.calorieAdherence !== null && d.calorieAdherence > 85
+      && schwelleUnterschritten('verlustZuLangsam',
+        d.weightTrend, d.gewichtAmStichtagKg) === true) {
       return ausKcal(-100, 'PHASE_MODELS.md:189-190',
         'Das Gewicht steht trotz eingehaltener Kalorien.', 'rate_senken')
     }
-    if (d.weightTrend !== null && d.weightTrend < -1.0) {
+    // `[cmd]` **G-569: `1,194 %` statt `-1.0` kg/Woche** — bei
+    // 83,74 kg dieselbe Grenze, bei 60 kg greift sie schon bei
+    // 0,717 kg.
+    if (d.weightTrend !== null && d.weightTrend < 0
+      && schwelleGreift('verlustZuSchnell',
+        d.weightTrend, d.gewichtAmStichtagKg) === true) {
       return ausKcal(+150, 'PHASE_MODELS.md:191-192',
         'Der Verlust laeuft schneller als vorgesehen.', 'rate_heben')
     }
@@ -243,12 +273,17 @@ export function wochenAnpassung(
 
   // ── lean_bulk, zwei Regeln (:197-202) ───────────────────────────
   if (art === 'lean_bulk') {
-    if (d.weightTrend !== null && d.weightTrend > 0.75) {
+    // `[cmd]` **G-569: `0,896 %` statt `0.75` kg/Woche.**
+    if (d.weightTrend !== null && d.weightTrend > 0
+      && schwelleGreift('zunahmeZuSchnell',
+        d.weightTrend, d.gewichtAmStichtagKg) === true) {
       return ausKcal(-100, 'PHASE_MODELS.md:198-199',
         'Die Zunahme laeuft schneller als vorgesehen.', 'rate_senken')
     }
-    if (d.weightTrend !== null && d.calorieAdherence !== null
-      && d.weightTrend < 0.1 && d.calorieAdherence > 85) {
+    // `[cmd]` **G-569: `0,119 %` statt `0.1` kg/Woche.**
+    if (d.calorieAdherence !== null && d.calorieAdherence > 85
+      && schwelleUnterschritten('zunahmeZuLangsam',
+        d.weightTrend, d.gewichtAmStichtagKg) === true) {
       return ausKcal(+100, 'PHASE_MODELS.md:200-201',
         'Das Gewicht steht trotz eingehaltener Kalorien.', 'rate_heben')
     }

@@ -35,6 +35,11 @@ const HIER = dirname(fileURLToPath(import.meta.url))
 /** Alles vorhanden, nichts loest aus — je Test gezielt verstellt. */
 const RUHE: Wochendaten = {
   weightTrend: -0.5, calorieAdherence: 90,
+  // `[cmd]` **G-569: das Gewicht am Stichtag** — seit G-561 pruefen
+  // die Waechter relativ. `[read]` **83,74 kg ist der Bezug, gegen
+  // den Codex umgerechnet hat** (1,0 kg = 1,194 %), und -0,5 kg
+  // sind dort 0,597 % — unter jeder Schwelle, also Ruhe.
+  gewichtAmStichtagKg: 83.74,
   strengthTrend: 0, hrv7d: 60, hrvBaseline: 60,
 }
 const LAGE: Waechterlage = {
@@ -129,14 +134,41 @@ describe('G-520 — die sechs Regeln, Grenze von beiden Seiten', () => {
   })
 
   // ── fat_loss, zu schnell (:191) ─────────────────────────────────
-  it('fat_loss zu schnell: < -1,0 greift, -1,0 selbst nicht', () => {
+  // ══ G-569: die Grenze ist RELATIV geworden ═════════════
+  //
+  // `[cmd]` Diese Pruefung hielt fest, dass `-1,0 kg/Woche` NICHT
+  // ausloest. `[cmd]` **Seit G-561 prueft der Katalog relativ:**
+  // `1,194 % KG/Woche`, und das sind bei 83,74 kg genau 0,9999 kg.
+  // **Also loest 1,000 kg jetzt aus** — die Grenze hat sich nicht
+  // verschoben, der BEZUG hat sich geaendert.
+  //
+  // `[read]` **Die eigentliche Frage bleibt:** greift sie knapp
+  // darueber und knapp darunter? **Jetzt mit zwei Gewichten**, denn
+  // genau dort laufen absolut und relativ auseinander.
+  it('fat_loss zu schnell: die Grenze liegt bei 1,194 % KG/Woche', () => {
+    // Bei 83,74 kg ist 1,194 % = 0,9999 kg.
     const greift = wochenAnpassung('fat_loss', -1.5, 80,
-      { ...RUHE, weightTrend: -1.1 })
-    assert.equal(greift.art, 'rate_heben')
-    const grenze = wochenAnpassung('fat_loss', -1.5, 80,
-      { ...RUHE, weightTrend: -1.0 })
-    assert.notEqual(grenze.art, 'rate_heben',
-      '-1,0 loest aus — die Spec verlangt < -1,0')
+      { ...RUHE, weightTrend: -1.000, gewichtAmStichtagKg: 83.74 })
+    assert.equal(greift.art, 'rate_heben',
+      '1,000 kg bei 83,74 kg sind 1,194 % — das muss greifen')
+    const knapp = wochenAnpassung('fat_loss', -1.5, 80,
+      { ...RUHE, weightTrend: -0.999, gewichtAmStichtagKg: 83.74 })
+    assert.notEqual(knapp.art, 'rate_heben',
+      '0,999 kg bei 83,74 kg sind 1,193 % — das darf nicht greifen')
+  })
+
+  it('fat_loss zu schnell: dieselbe Strenge bei 60 kg', () => {
+    // `[read]` **Das ist die Stelle, an der absolut und relativ
+    // auseinanderlaufen** — bei 60 kg greift die relative Grenze
+    // schon bei 0,717 kg, die alte absolute erst bei 1,0.
+    const greift = wochenAnpassung('fat_loss', -1.5, 80,
+      { ...RUHE, weightTrend: -0.717, gewichtAmStichtagKg: 60 })
+    assert.equal(greift.art, 'rate_heben',
+      '0,717 kg bei 60 kg sind 1,195 % — das muss greifen')
+    const knapp = wochenAnpassung('fat_loss', -1.5, 80,
+      { ...RUHE, weightTrend: -0.716, gewichtAmStichtagKg: 60 })
+    assert.notEqual(knapp.art, 'rate_heben',
+      '0,716 kg bei 60 kg sind 1,193 % — das darf nicht greifen')
   })
 
   // ── fat_loss, Kraft (:193) ──────────────────────────────────────
@@ -154,11 +186,34 @@ describe('G-520 — die sechs Regeln, Grenze von beiden Seiten', () => {
   })
 
   // ── lean_bulk, zwei Regeln (:198, :200) ─────────────────────────
-  it('lean_bulk zu schnell: > 0,75 greift, 0,75 nicht', () => {
+  // ══ G-569: auch hier relativ ═══════════════════════
+  //
+  // `[cmd]` **0,75 kg bei 83,74 kg sind 0,8956 %** — auf drei
+  // Stellen gerundet `0,896`, also **genau die Schwelle.** `[read]`
+  // **Die Rundung folgt dem Katalog**, der die Zahlen mit drei
+  // Stellen fuehrt (`536_..._seed.sql`).
+  it('lean_bulk zu schnell: die Grenze liegt bei 0,896 % KG/Woche', () => {
     assert.equal(wochenAnpassung('lean_bulk', 0.5, 80,
-      { ...RUHE, weightTrend: 0.8 }).art, 'rate_senken')
+      { ...RUHE, weightTrend: 0.750, gewichtAmStichtagKg: 83.74 }).art,
+      'rate_senken',
+      '0,750 kg bei 83,74 kg sind 0,896 % — das muss greifen')
     assert.notEqual(wochenAnpassung('lean_bulk', 0.5, 80,
-      { ...RUHE, weightTrend: 0.75 }).art, 'rate_senken')
+      { ...RUHE, weightTrend: 0.740, gewichtAmStichtagKg: 83.74 }).art,
+      'rate_senken',
+      '0,740 kg bei 83,74 kg sind 0,884 % — das darf nicht greifen')
+  })
+
+  it('lean_bulk zu schnell: dieselbe Strenge bei 60 kg', () => {
+    // `[read]` **Bei 60 kg greift sie schon bei 0,538 kg** — die
+    // alte absolute Grenze erst bei 0,75.
+    assert.equal(wochenAnpassung('lean_bulk', 0.5, 80,
+      { ...RUHE, weightTrend: 0.538, gewichtAmStichtagKg: 60 }).art,
+      'rate_senken',
+      '0,538 kg bei 60 kg sind 0,897 % — das muss greifen')
+    assert.notEqual(wochenAnpassung('lean_bulk', 0.5, 80,
+      { ...RUHE, weightTrend: 0.537, gewichtAmStichtagKg: 60 }).art,
+      'rate_senken',
+      '0,537 kg bei 60 kg sind 0,895 % — das darf nicht greifen')
   })
 
   it('lean_bulk Stillstand: < 0,1 UND > 85 % greift', () => {
