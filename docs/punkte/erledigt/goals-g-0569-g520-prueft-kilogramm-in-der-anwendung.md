@@ -4,6 +4,8 @@ typ: fehler
 modul: goals
 schwere: hoch
 angelegt: 2026-10-01
+erledigt: 2026-10-01
+commit: daf0f217
 beauftragt: 2026-10-01
 agent: claudecode
 
@@ -135,3 +137,62 @@ Rate abgeleitet werden muss.
 zwei Gewichten · Sabotage je Waechter in beide Richtungen · Bild je
 Einheit · `pnpm gate` gruen mit Testzahl und der Aussage zu den neun
 Waechtern · nichts committen.
+
+---
+
+## Abnahme — 2026-10-01, Commit `daf0f217`
+
+**Gemessene Merkmale, keine nachgerechneten Agentenzahlen.**
+
+`[cmd]` **Die Randprobe selbst nachgerechnet**, beide Gewichte:
+
+    1,000 / 83,74 = 1,19417  -> 1,194   greift
+    0,999 / 83,74 = 1,19298  -> 1,193   greift nicht
+    0,717 / 60,00 = 1,19500  -> 1,195   greift
+    0,716 / 60,00 = 1,19333  -> 1,193   greift nicht
+
+`[cmd]` **Der Vergleich ist `>=`** (`waechter-schwellen.ts:131`), und das
+ist nicht Geschmack: 1,194 % von 83,74 kg sind 0,99966 kg. **Mit `>`
+fiele die eigene Randprobe** — der Agent hat das selbst gefunden und
+begruendet.
+
+`[cmd]` **Keine absolute Schwelle mehr in den beiden Dateien.** Was
+bleibt, sind Vorzeichenpruefungen (`weightTrend < 0`, `> 0`) in
+`anpassung.ts:251/277` und `uebergangswaechter.ts:157/290`.
+
+`[cmd]` **22 Zusicherungen** in `g569-relative-schwellen.test.ts`,
+darunter eine, die das Zahlmuster sucht statt des Textes „1.0 kg" — die
+Form, an der meine Suche bei G-561 vorbeilief.
+
+### Ein Befund, der aus der Abnahme entsteht
+
+`[cmd]` **`rateAusKcal` existiert ZWEIMAL**, exportiert, mit demselben
+Namen und verschiedener Rundung:
+
+    anpassung.ts:144          Math.round(... * 1000) / 1000
+    zielrate-einheit.ts:113   rundeWieDb(... , 3)     (G-565)
+
+`[cmd]` **`wochenAnpassung` ruft die mit `Math.round`**
+(`anpassung.ts:207`), der Einheitenschalter die andere. **Das ist die
+Fehlerklasse aus G-565 unter demselben Namen wieder eingebaut** — und
+die Probe dieses Auftrags sagt auf Zeile 78 *„keine Datei rechnet selbst
+in Prozent um"*, waehrend die Dublette 70 Zeilen darueber steht.
+
+`[cmd]` **Und der Math.round-Waechter greift nur in
+`waechter-schwellen.ts`** (Zeile 94 liest genau diese Datei), nicht in
+den beiden umgebauten. Der Bericht liest sich, als deckte er sie mit ab.
+**Das ist G-573.**
+
+`[cmd]` **Der zweite gemeldete Befund ist bestaetigt:** `pruefeWaechter`
+und `wochenAnpassung` haben keinen Aufrufer in der Oberflaeche — die
+einzigen Treffer in `apps/` sind zwei Kommentare
+(`phasen-editor-echt.tsx:534`, `editor-rechnungen.ts:227`) und der
+interne Aufruf in `uebergangswaechter.ts:312/313`. **Die Waechter
+rechnen und niemand sieht sie. Das ist G-574**, dieselbe Klasse wie
+G-571.
+
+`[read]` **Die Antwort auf die G-566-Frage ist belegt und unbequem:** der
+Bau haelt abgestufte Raten nicht aus. Der Abstand ist gemessen —
+`aggressive_bulk` 0,146 pp, `aggressive_cut` 0,194 pp unter der eigenen
+Schwelle. **Wird die Rate je Stufe angehoben, greift der Waechter beim
+vorgesehenen Tempo.** Steht in G-566.

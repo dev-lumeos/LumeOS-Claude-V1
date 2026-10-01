@@ -597,6 +597,35 @@ dieselbe Obergrenze wie ein Elite-Athlet mit 0,5.
 `[read]` **Bleibt es bei einer Rate fuer alle, entfaellt das** — und das
 ist ein Argument fuer die einfache Antwort, kein Grund, sie zu waehlen.
 
+
+## Nachtrag 2026-10-01 — der Spielraum ist gemessen
+
+`[cmd]` **Claude Code hat die Frage aus G-569 beantwortet, und die
+Antwort ist nein:** der Bau haelt abgestufte Raten nicht aus. Der Abstand
+zwischen Katalograte und eigener Waechterschwelle:
+
+    aggressive_bulk   Rate 0,75 %   Schwelle 0,896 %   Spielraum 0,146 pp
+    aggressive_cut    Rate 1,00 %   Schwelle 1,194 %   Spielraum 0,194 pp
+
+`[read]` **Wird `aggressive_bulk` je Stufe angehoben, greift der Waechter
+beim vorgesehenen Tempo** — der Nutzer tut genau das, was der Katalog ihm
+vorgibt, und bekommt eine Warnung dafuer. **Zwei Zehntel Prozentpunkt
+sind der ganze Abstand.**
+
+`[cmd]` **Die Schwellen liegen seit G-569 als Konstanten in
+`apps/web/src/lib/goals/waechter-schwellen.ts`** (`SCHWELLE_PCT`), die
+Raten im Katalog. **Zwei Orte, keine Verbindung.**
+
+`[read]` **Daraus folgt eine zweite Entscheidung, die vor dem Bau
+steht:** wird die Grenze aus der Rate abgeleitet — etwa als Faktor
+darauf, heute waeren das rund 1,19 — oder je Stufe eigens gefuehrt?
+**Ein Faktor haelt den Abstand bei jeder Abstufung konstant; eigene
+Zahlen je Stufe erlauben verschiedene Toleranz, kosten aber einen Ort
+mehr.**
+
+`[read]` **Beides ist erst zu bauen, wenn die erste Frage beantwortet
+ist** — und bleibt es bei einer Rate fuer alle, entfaellt beides.
+
 ## A-72 — eine Leser-Deklaration im Code
 
 **Modul:** quer · **angelegt:** 2026-09-08 · **Datei:** `todos/quer-a-0072-eine-leser-deklaration-im-code.md`

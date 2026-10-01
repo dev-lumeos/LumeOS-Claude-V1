@@ -2,13 +2,20 @@
 
 **Stand: 2026-10-01, 11:45**
 
+<!-- ERZEUGT:laufend-tabelle -->
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
-| Claude Code | G-569 | G-520 prueft Kilogramm in der Anwendung | **laeuft**, raus 01.10. |
-| Claude Code | A-85 | der Zyklus wird geprueft, aber nicht ausgefuehrt | **laeuft**, raus 01.10. |
-| Codex | A-77 | 114 von 120 Proben laufen in keinem Lauf | **laeuft**, raus 01.10. |
+| Claude Code | A-85 | Der Zyklus wird geprueft, aber nichts fuehrt ihn aus | **laeuft**, raus 01.10. |
+| Codex | A-77 | vier Werkzeugtests liefen nirgends | **laeuft**, raus 01.10. |
 | Claude Code | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
 | Codex | — | `next/` ist leer | **offen**: Schritt 7 des Zyklus |
+<!-- /ERZEUGT:laufend-tabelle -->
+
+`[read]` **Die Tabelle wird erzeugt, nicht gepflegt** —
+`node tools/zyklus-fahren.mjs tabelle --schreiben` (A-85). Sie ist
+vollstaendig aus dem Frontmatter von `laufend_<agent>/` ableitbar.
+**Alles ausserhalb der Markierungen bleibt Handarbeit** — und das ist
+der grosse Teil dieser Datei.
 
 ## Was am 30.09. und 01.10. abgelegt wurde
 
@@ -31,6 +38,9 @@
     G-568  f3088a98   Rueckfall auf die Zweiparameter-Fassung (Bruecke)
     G-565  bdaea479   der Nutzer waehlt die Einheit, gespeichert die Rate
     G-535  79d50c60   sechs Funktionen lesen die Sitzung ueber auth.uid()
+    G-514  309db7e1   goal_contributions (Betreff sagte goals(G-531))
+    A-81   85b62cd3   der Vierstufen-Zyklus wird im Gate erzwungen
+    G-569  daf0f217   die Waechterschwellen pruefen Prozent, 7 Vergleiche
 
 `[cmd]` **Die Kette ist wieder gruen** — der letzte volle Lauf: 310
 Schritte, Exit 0, 1.459,7 s. Damit war das Repo nach zwei Tagen wieder
@@ -191,6 +201,15 @@ gespeichert wird die Rate (E-83).
 ## Neu angelegt, noch ohne Reihenfolge
 
     G-547   der persoenliche Boden unter der Katalograte
+    G-573   rateAusKcal gibt es ZWEIMAL, mit verschiedener Rundung -
+            anpassung.ts:144 mit Math.round, zielrate-einheit.ts:113 mit
+            rundeWieDb. Die Fehlerklasse aus G-565 unter demselben Namen
+            wieder eingebaut, und kein Waechter faengt sie
+    G-574   die Waechter rechnen und niemand sieht sie: pruefeWaechter
+            und wochenAnpassung haben keinen Aufrufer in der Oberflaeche.
+            Wie sie erscheinen, ist eine Produktentscheidung (drei Formen
+            im Punkt), keine Bauentscheidung
+    G-572   der Dateikopf von ansicht.tsx nennt Phase engine als Attrappe
     G-550   Fett als g/kg Koerpergewicht statt als Prozentsatz
     G-551   das Cardio-Modul — Tom hat entschieden, dass es kommt,
             der Zeitpunkt ist offen

@@ -5,11 +5,11 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 269 |
+| `todos` | 271 |
 | `laufend_codex` | 1 |
-| `laufend_claudecode` | 2 |
-| `erledigt` | 608 |
-| **gesamt** | **880** |
+| `laufend_claudecode` | 1 |
+| `erledigt` | 609 |
+| **gesamt** | **882** |
 
 ## medical — 49
 
@@ -573,9 +573,9 @@
 | `G-450` | fehler | hoch | [der Tageswechsler aendert das Datum, nicht die Rechnung](erledigt/recovery-g-0450-tageswechsler-rechnet-nicht.md) | erledigt | — | G-456, G-457 |
 | `G-457` | befund | mittel | [die Karte zeigt Ermuedung, nicht Erholung](todos/recovery-g-0457-ermuedung-nicht-erholung.md) | offen | — | — |
 
-## goals — 67
+## goals — 69
 
-### beauftragbar — 61
+### beauftragbar — 63
 
 | Nr | Typ | Schwere | Titel | Zustand | Blocker | Kinder |
 |---|---|---|---|---|---|---|
@@ -600,7 +600,7 @@
 | `G-515` | befund | mittel | [die drei Goals-Mockups widersprechen sich achtmal in Zahlen](todos/goals-G-0515-die-drei-mockups-widersprechen-sich.md) | offen | — | — |
 | `G-516` | befund | mittel | [das Vorgaengerrepo traegt die Phasenzahlen, die uns fehlen](todos/goals-G-0516-das-vorgaengerrepo-hat-die-phasenzahlen.md) | offen | — | — |
 | `G-519` | befund | hoch | [die Phasenansicht ist gegen die falsche Quelle gebaut](erledigt/goals-g-0519-phasen-nach-der-massgeblichen-quelle.md) | erledigt | — | G-520, G-521, G-534 |
-| `G-520` | feature | hoch | [der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen](erledigt/goals-g-0520-anpassungsalgorithmus-und-uebergangswaechter.md) | erledigt | — | — |
+| `G-520` | feature | hoch | [der Anpassungsalgorithmus und die sieben Uebergangswaechter fehlen](erledigt/goals-g-0520-anpassungsalgorithmus-und-uebergangswaechter.md) | erledigt | — | G-574 |
 | `G-521` | feature | mittel | [wie modelliert man Ernaehrungsphasen, ihre Varianten und Parameter](todos/goals-g-0521-phasenmodellierung-tiefenrecherche.md) | offen | — | G-529, G-530 |
 | `G-522` | befund | hoch | [der erste USP ist nirgends gebaut](todos/goals-g-0522-cross-modul-beitraege-fehlen-vollstaendig.md) | offen | — | — |
 | `G-523` | fehler | hoch | [der adaptive TDEE glaettet nicht, er springt](erledigt/goals-g-0523-adaptive-tdee-glaettet-nicht.md) | erledigt | — | — |
@@ -635,11 +635,13 @@
 | `G-562` | entscheidung | hoch | [Die Teilphasen haben keine Zeitachse mehr](todos/goals-g-0562-die-teilphasen-haben-keine-zeitachse-mehr.md) | offen | — | — |
 | `G-563` | fehler | hoch | [`berechne_zielwerte` wählt selbst eine Phase aus](erledigt/goals-g-0563-berechne-zielwerte-waehlt-selbst-eine-phase.md) | erledigt | — | G-567, G-568 |
 | `G-564` | fehler | hoch | [`ladePhase` nimmt die erste fuer die einzige](erledigt/goals-g-0564-ladephase-nimmt-die-erste-fuer-die-einzige.md) | erledigt | — | — |
-| `G-565` | fehler | hoch | [Die Einheit ist eine Nutzerwahl, heute gibt es nur Prozent](erledigt/goals-g-0565-die-einheit-ist-eine-nutzerwahl.md) | erledigt | — | — |
+| `G-565` | fehler | hoch | [Die Einheit ist eine Nutzerwahl, heute gibt es nur Prozent](erledigt/goals-g-0565-die-einheit-ist-eine-nutzerwahl.md) | erledigt | — | G-573 |
 | `G-568` | fehler | hoch | [Die Zielwerte brauchen ihr Ziel](erledigt/goals-g-0568-die-zielwerte-brauchen-ihr-ziel.md) | erledigt | — | G-570 |
-| `G-569` | fehler | hoch | [G-520 prueft Kilogramm in der Anwendung](laufend_claudecode/goals-g-0569-g520-prueft-kilogramm-in-der-anwendung.md) | laeuft (claudecode) | — | — |
+| `G-569` | fehler | hoch | [G-520 prueft Kilogramm in der Anwendung](erledigt/goals-g-0569-g520-prueft-kilogramm-in-der-anwendung.md) | erledigt | — | — |
 | `G-570` | fehler | mittel | [Der Rueckfall auf die Zweiparameter-Fassung gehoert nach dem Einspielen weg](todos/goals-g-0570-der-rueckfall-gehoert-nach-dem-einspielen-weg.md) | offen | — | — |
 | `G-572` | fehler | mittel | [Der Dateikopf nennt Phase engine als Attrappe, und das ist seit Tagen falsch](todos/goals-g-0572-der-dateikopf-nennt-phase-engine-als-attrappe.md) | offen | — | — |
+| `G-573` | fehler | hoch | [rateAusKcal gibt es zweimal, mit verschiedener Rundung](todos/goals-g-0573-rateauskcal-gibt-es-zweimal-mit-verschiedener-rundung.md) | offen | — | — |
+| `G-574` | fehler | hoch | [Die Waechter rechnen, und niemand sieht sie](todos/goals-g-0574-die-waechter-rechnen-und-niemand-sieht-sie.md) | offen | — | — |
 
 ### wartet auf Blocker — 6
 
