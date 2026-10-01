@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 269 |
-| `laufend_codex` | 1 |
+| `todos` | 268 |
+| `laufend_codex` | 2 |
 | `laufend_claudecode` | 2 |
 | `erledigt` | 604 |
 | **gesamt** | **876** |
@@ -929,7 +929,7 @@
 | `G-501` | fehler | hoch | [der Ruecknahmeklick beim Erfahrungsgrad](erledigt/quer-g-0501-ruecknahmeklick-erfahrungsgrad.md) | erledigt | — | — |
 | `G-517` | fehler | mittel | [die Probe meldet die Zeitueberschreitung, nicht die Ursache](erledigt/quer-g-0517-probe-meldet-die-ursache-nicht.md) | erledigt | — | — |
 | `G-518` | fehler | hoch | [der Dev-Server liefert HTML ohne JavaScript](erledigt/quer-g-0518-dev-server-liefert-html-ohne-javascript.md) | erledigt | — | — |
-| `G-535` | fehler | hoch | [Sechs Funktionen lesen den alten Sitzungsnamen](todos/quer-g-0535-sechs-funktionen-lesen-den-alten-sitzungsnamen.md) | offen | — | — |
+| `G-535` | fehler | hoch | [Sechs Funktionen lesen den alten Sitzungsnamen](laufend_codex/quer-g-0535-sechs-funktionen-lesen-den-alten-sitzungsnamen.md) | laeuft (codex) | — | — |
 | `G-546` | entscheidung | hoch | [Erfassen oder empfehlen — die Grenze bei Substanzprotokollen](todos/quer-g-0546-erfassen-oder-empfehlen.md) | offen | — | — |
 | `G-551` | befund | hoch | [Cardio fehlt als Modul ganz — und damit die Hälfte der Steuerung](todos/quer-g-0551-cardio-fehlt-als-modul-ganz.md) | offen | — | — |
 | `G-552` | befund | mittel | [Training und Erholung kennen die Phase nicht](todos/quer-g-0552-phasenparameter-fuer-training-und-erholung.md) | offen | — | — |

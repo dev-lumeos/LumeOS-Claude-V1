@@ -1,10 +1,11 @@
 # Laufende Auftraege
 
-**Stand: 2026-10-01, 09:25**
+**Stand: 2026-10-01, 09:35**
 
 | Agent | Nr | Inhalt | Stand |
 |---|---|---|---|
 | Claude Code | G-565 | die Einheit ist eine Nutzerwahl | **laeuft**, raus 01.10. |
+| Codex | G-535 | sechs Funktionen lesen den alten Sitzungsnamen | **laeuft**, raus 01.10. |
 | Claude Code | G-565 | die Einheit ist eine Nutzerwahl | **bereit** in `next/` |
 | Claude Code | G-539 | der Phasen-Editor fehlt | **vorbereitet** in `next/` |
 | Codex | G-514 | die Modulverrechnung — Bau abgenommen | **offen**: nicht live eingespielt |
@@ -153,8 +154,6 @@ Phase noch nicht an** — G-558. Erst dann ist Ebene 3 eingeloest.
             der Zeitpunkt ist offen
     G-552   Trainings- und Erholungsphase
     G-555   derselbe Ladefehler in medical und nutrition (Kind von G-553)
-    G-535   sechs Funktionen lesen den alten Sitzungsnamen
-            request.jwt.claim.sub (Singular) - coach, medical, nutrition
 
 ## Was ausdruecklich wartet
 
