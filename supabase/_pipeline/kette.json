@@ -2858,6 +2858,15 @@
       ]
     },
     {
+      "id": "560_goal_programs",
+      "path": "supabase/_pipeline/11_goals/560_goal_programs.sql",
+      "kind": "sql",
+      "creates": "G-560/E-85: Zielprogramme speichern geordnete Strategiepositionen mit Nutzerwochen; die ausfuehrende Phase entsteht erst beim Start.",
+      "depends_on": [
+        "563_target_scoped_calculation"
+      ]
+    },
+    {
       "id": "514_goal_contributions_schema",
       "path": "supabase/migrations/20260929081000_g514_goal_contributions.sql",
       "kind": "sql",
@@ -2943,10 +2952,21 @@
       "creates": "A-86: reproduzierbarer Testbestand nach dem vollstaendigen Aufbau und vor jeder Kettenprobe.",
       "depends_on": [
         "563_target_scoped_calculation",
+        "560_goal_programs",
         "514_goal_contribution_backfill",
         "551_role_measurement_separation_data",
         "546_muscle_anatomy_data",
         "535_auth_uid_legacy_readers"
+      ]
+    },
+    {
+      "id": "560_goal_programs_probe",
+      "path": "supabase/_pipeline/_validierung/goals-g560-goal-programs.test.ts",
+      "kind": "tsx",
+      "creates": "G-560 Gegenprobe: RLS-geschuetztes Programm mit drei 4/7/5-Positionen, spaeter Phasenverknuepfung und unveraenderte Ein-Offen-Regel je Ziel.",
+      "depends_on": [
+        "560_goal_programs",
+        "a86_testdaten_einspielen"
       ]
     },
     {
