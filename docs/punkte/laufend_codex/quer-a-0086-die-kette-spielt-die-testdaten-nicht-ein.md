@@ -4,6 +4,8 @@ typ: fehler
 modul: quer
 schwere: hoch
 angelegt: 2026-10-01
+agent: codex
+beauftragt: 2026-10-01
 
 braucht: []
 kind_von: A-77
@@ -18,6 +20,21 @@ beruehrt:
 ---
 
 # Die Kette spielt die Testdaten nicht ein
+
+## Auftrag
+
+    AUFTRAG FUER Codex - A-86: die Kette spielt die Testdaten nicht ein
+    Bereich: supabase/_pipeline/kette.json
+             supabase/_pipeline/_testdaten/
+    Fremd:   apps/ und packages/ gehoeren Claude Code - er ist frei, aber
+             nicht hier. docs/ gehoert dem Orchestrator, auch diese
+             Punktdatei: der Bericht kommt als Antwort, nicht als Anhang
+             hier.
+    Stand:   2026-10-01
+
+**Zuerst lesen, vollstaendig:** diese Datei und die Abnahme in
+`docs/punkte/laufend_codex/quer-a-0077-werkzeugtests-liefen-nirgends.md`
+— dort steht die Inventur, aus der dieser Punkt entstanden ist.
 
 ## Der Befund
 

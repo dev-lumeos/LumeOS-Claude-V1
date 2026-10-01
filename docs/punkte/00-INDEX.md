@@ -5,8 +5,8 @@
 
 | Zustand | Punkte |
 |---|---|
-| `todos` | 276 |
-| `laufend_codex` | 1 |
+| `todos` | 275 |
+| `laufend_codex` | 2 |
 | `erledigt` | 611 |
 | **gesamt** | **888** |
 
@@ -771,7 +771,7 @@
 | `A-82` | befund | mittel | [Die Migrationskette prueft den Arbeitsbaum, nicht das Staging](erledigt/quer-a-0082-die-migrationskette-prueft-den-arbeitsbaum.md) | erledigt | — | A-84 |
 | `A-84` | fehler | hoch | [Der Pruefumfang haengt am Staging, nicht am Repo](erledigt/quer-a-0084-der-pruefumfang-haengt-am-staging.md) | erledigt | — | — |
 | `A-85` | fehler | mittel | [Der Zyklus wird geprueft, aber nichts fuehrt ihn aus](erledigt/quer-a-0085-der-zyklus-wird-geprueft-aber-nicht-ausgefuehrt.md) | erledigt | — | A-89 |
-| `A-86` | fehler | hoch | [Die Kette spielt die Testdaten nicht ein](todos/quer-a-0086-die-kette-spielt-die-testdaten-nicht-ein.md) | offen | — | — |
+| `A-86` | fehler | hoch | [Die Kette spielt die Testdaten nicht ein](laufend_codex/quer-a-0086-die-kette-spielt-die-testdaten-nicht-ein.md) | laeuft (codex) | — | — |
 | `A-88` | fehler | hoch | [31 Proben fallen still auf postgres zurueck](todos/quer-a-0088-31-proben-fallen-still-auf-postgres-zurueck.md) | offen | — | — |
 | `A-89` | fehler | mittel | [zyklus-fahren scheitert an EPERM, wenn ein Agent die Datei offen hat](todos/quer-a-0089-zyklus-fahren-scheitert-an-eperm.md) | offen | — | — |
 | `B-20` | blocker | hoch | [Codex-Pfadschutz wiederherstellen](erledigt/quer-b-0020-codex-pfadschutz-wiederherstellen.md) | erledigt | — | — |
