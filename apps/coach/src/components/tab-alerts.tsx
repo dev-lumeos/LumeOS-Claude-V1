@@ -31,7 +31,8 @@ import { Card, Empty, Pill } from '@lumeos/ui'
 import type { PortalStand } from '../lib/daten'
 // G-409: der Linkhelfer entscheidet, wohin ein Klick fuehrt.
 import { wegZuFilter, wegZuReiter, type DraftLage } from './draft/wege'
-import { alertStatusSetzen } from '../lib/aktionen'
+// `[cmd]` **G-582: der Alarm bekommt seinen Aufrufer.**
+import { alertStatusSetzen, alarmAusloesen } from '../lib/aktionen'
 import { zeitpunkt } from '../lib/format'
 
 type Filter = 'offen' | 'alle' | 'done'
@@ -62,7 +63,13 @@ export function TabAlerts({ stand, filter, lage = null }: {
   if (sortiert.length === 0) {
     return (
       <Card title="Alerts">
-        <Empty title="Keine Alerts" sub="Eintraege entstehen heute aus den Seeds; ein automatischer Erzeuger ist eigener Bauauftrag." />
+        {/* `[cmd]` **G-582: hier stand *„ein automatischer Erzeuger
+            ist eigener Bauauftrag"*** — er fehlt weiter, **aber von
+            Hand geht es jetzt.** `[read]` **Das Formular steht auch
+            im Leerzustand**, sonst waere es genau dann unerreichbar,
+            wenn man den ersten Alarm braucht. */}
+        <Empty title="Keine Alerts" sub="Eintraege entstehen heute aus den Seeds und von Hand; ein automatischer Erzeuger ist eigener Bauauftrag." />
+        <AlarmFormular stand={stand} lage={lage} />
       </Card>
     )
   }
@@ -137,6 +144,22 @@ export function TabAlerts({ stand, filter, lage = null }: {
       </div>
       )}
 
+      {/* ══ G-582: einen Alarm von Hand ausloesen ═════════════════
+          `[cmd]` **`coach.raise_alert` hatte null Aufrufer** — der
+          Reiter zeigte Alarme, erzeugen konnte sie niemand.
+
+          `[read]` **Hier und nicht am Athletendetail:** das ist die
+          Arbeitsliste, auf der ein Coach die Alarme sieht und
+          abarbeitet. **Wer einen vermisst, traegt ihn dort nach, wo
+          die anderen stehen** — und sieht ihn sofort in derselben
+          Liste.
+
+          `[cmd]` **Nur AKTIVE Klienten stehen zur Wahl** — der Rumpf
+          verlangt eine aktive eigene Beziehung und wirft sonst
+          `42501`. **Eine Auswahl, die garantiert scheitert, waere
+          schlimmer als eine kurze.** */}
+      <AlarmFormular stand={stand} lage={lage} />
+
       {/* ══ Was fehlt, und warum ═══════════════════════════════════
           `[read]` **E-72:** eine fehlende Spalte wird benannt, sonst
           sucht der naechste Leser den Fehler im Code. */}
@@ -151,5 +174,97 @@ export function TabAlerts({ stand, filter, lage = null }: {
         {' '}im Bericht zu G-402.
       </div>
     </Card>
+  )
+}
+
+/**
+ * Einen Alarm von Hand ausloesen — G-582.
+ *
+ * `[cmd]` **Die Werte kommen aus dem Rumpf von `coach.raise_alert`**
+ * (gelesen 2026-10-02), nicht aus dem Mockup: fuenf Alarmarten, fuenf
+ * Schweregrade. **Dieselben Listen stehen in `alerts_kind_ck` und
+ * `alerts_severity_ck`.**
+ *
+ * `[read]` **Kein `'use client'`** — wie der ganze Reiter. Das
+ * Formular ist ein `<form action={…}>` auf eine Server-Aktion; ein
+ * Wert-Import ueber die Client-Grenze ergaebe HTTP 500 (A-30).
+ */
+function AlarmFormular({ stand, lage }: {
+  stand: PortalStand
+  lage: DraftLage
+}) {
+  // `[cmd]` **Der Rumpf verlangt `status = 'active'`** — ein
+  // eingeladener oder beendeter Klient wirft `42501`.
+  const waehlbar = stand.klienten.filter(k => k.status === 'active')
+
+  if (waehlbar.length === 0) {
+    // `[read]` **E-72: ein benannter Leerhinweis, kein leeres
+    // Formular.** **Ohne aktive Betreuung gibt es niemanden, fuer den
+    // ein Alarm zulaessig waere** — und der Satz sagt warum.
+    return (
+      <div className="cp-fehlt" data-alarm-keine-klienten>
+        Kein Athlet in aktiver Betreuung — ein Alarm laesst sich nur
+        {' '}fuer eigene Klienten ausloesen
+        {' '}(<span className="cp-monospace">coach.relationships</span>,
+        {' '}Status <span className="cp-monospace">active</span>).
+      </div>
+    )
+  }
+
+  return (
+    <form action={alarmAusloesen} className="cp-zeile" data-alarm-formular
+          style={{ marginTop: 14, flexWrap: 'wrap', gap: 6 }}>
+      <input type="hidden" name="pfad" value={wegZuReiter(lage, 'alerts')} />
+
+      <select name="client_id" aria-label="Athlet" className="cp-feld"
+              data-alarm-klient required>
+        {waehlbar.map(k => (
+          <option key={k.client_id} value={k.client_id}>{k.display_name}</option>
+        ))}
+      </select>
+
+      {/* `[cmd]` **Fuenf Arten, aus dem Rumpf** — eine sechste wirft
+          `23514`. */}
+      <select name="kind" aria-label="Anlass" className="cp-feld"
+              data-alarm-art required>
+        {([
+          ['checkin_overdue', 'Check-in ueberfaellig'],
+          ['inactivity', 'Inaktivitaet'],
+          ['adherence_low', 'Adherence niedrig'],
+          ['progress_stagnation', 'Fortschritt stagniert'],
+          ['engagement_low', 'Engagement niedrig'],
+        ] as const).map(([w, t]) => <option key={w} value={w}>{t}</option>)}
+      </select>
+
+      <select name="severity" aria-label="Schweregrad" className="cp-feld"
+              data-alarm-grad defaultValue="medium" required>
+        {['info', 'low', 'medium', 'high', 'critical'].map(w => (
+          <option key={w} value={w}>{w}</option>
+        ))}
+      </select>
+
+      <input name="titel" aria-label="Sachverhalt" className="cp-feld"
+             data-alarm-titel required maxLength={200}
+             placeholder="Sachverhalt — was ist der Fall?"
+             style={{ flex: 1, minWidth: 220 }} />
+
+      <button className="cp-knopf" type="submit" data-alarm-ausloesen>
+        Alarm anlegen
+      </button>
+
+      {/* `[read]` **Die Entdoppelung gehoert an den Knopf**, nicht in
+          den Bericht: **die Funktion gibt den bestehenden Alarm
+          zurueck**, wenn zu Athlet und Anlass in den letzten 24
+          Stunden schon einer offen ist. **Ohne diesen Satz sieht ein
+          ausbleibender zweiter Eintrag wie ein Fehler aus.** */}
+      <div className="cp-fehlt" data-alarm-entdoppelt
+           style={{ flexBasis: '100%', marginTop: 4 }}>
+        Besteht zu Athlet und Anlass in den letzten 24 Stunden schon ein
+        {' '}offener Alarm, bleibt es bei diesem — es entsteht kein
+        {' '}zweiter. Das Modul steht auf
+        {' '}<span className="cp-monospace">general</span>: die Funktion
+        {' '}setzt es selbst, ein Fachmodul nimmt sie nicht entgegen.
+      </div>
+    </form>
   )
 }
