@@ -29,6 +29,10 @@ import {
   ereignisAnlegen, terminAnlegen, terminAendern,
   originalHochladen, originalOeffnen, originalEntfernen,
 } from './dokumente-aktionen'
+// `[cmd]` **G-578/A2: die Erkennung vormerken** — sie gehoert an den
+// Dateiweg, nicht an die Zuordnung. **`start_lab_report_ocr` verlangt
+// `file_ref IS NOT NULL`**, und der liegt genau hier vor.
+import { erkennungStartenAktion } from './laborimport-aktionen'
 
 /** Die drei Arten aus `health_events_event_type_check`. */
 const ARTEN: Array<[string, string]> = [
@@ -417,6 +421,35 @@ export function MedVerlauf({ stand }: { stand: DokumenteStand }) {
                                 else setMeldung(a.fehler ?? 'Kein Zugriff.')
                               })()}>
                         Öffnen
+                      </button>
+                      {/* ══ G-578/A2: die Erkennung vormerken ══════
+                          `[cmd]` **`medical.start_lab_report_ocr`
+                          verlangt `file_ref IS NOT NULL`** — der
+                          Knopf steht deshalb genau hier, wo ein
+                          Original vorliegt, und nirgends sonst.
+
+                          `[read]` **Die Funktion ERKENNT nichts.**
+                          Sie setzt `ocr_status = 'processing'` und
+                          merkt den Bericht vor. **Was dahinter
+                          fehlt, ist der Dienst, der die Datei
+                          liest** — das ist ein Befund, kein Grund,
+                          einen zu bauen. **Der Satz am Knopf sagt
+                          es.** */}
+                      <button type="button" className="v2-btn v2-btn-sm"
+                              data-ocr-starten={d.id}
+                              disabled={laeuft || d.ocrStatus === 'processing'}
+                              title={'Merkt den Befund zur Texterkennung vor '
+                                + '(ocr_status = processing). Der Dienst, der '
+                                + 'das Original liest, fehlt noch — G-578/A2.'}
+                              onClick={() => void (async () => {
+                                const a = await erkennungStartenAktion(d.id)
+                                setMeldung(a.ok
+                                  ? `Zur Erkennung vorgemerkt (${a.ocr_status}). `
+                                    + 'Der Erkennungsdienst fehlt noch.'
+                                  : a.text)
+                              })()}>
+                        {d.ocrStatus === 'processing'
+                          ? 'Erkennung vorgemerkt' : 'Erkennung vormerken'}
                       </button>
                       {/* `[read]` **G-381: der Gegenweg zum Hochladen.**
                           Der erste Klick stellt scharf, der zweite

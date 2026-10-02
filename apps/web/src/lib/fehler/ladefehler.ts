@@ -92,9 +92,129 @@ export function fehlerart(
   // `[cmd]` **`NO_SESSION` ist eindeutig** — die Session fehlte schon
   // vor der ersten Abfrage (`lesen.ts:43`).
   if (code === 'NO_SESSION') return 'sitzung'
+  // ══ G-578: zwei SQLSTATEs sagen es ohne Textsuche ══════════════
+  //
+  // `[cmd]` **`28000` wirft `medical.start_lab_report_ocr` und
+  // `store_lab_report_ocr_result`**, wenn `auth.uid()` leer ist;
+  // **`42501` wirft `goals.body_circumference_write`** im selben
+  // Fall. `[read]` **Beides ist eine fehlende Sitzung** — und der
+  // Text *„medical OCR: authentication required"* traegt keines der
+  // Merkmale unten. **Ohne diese Zeile stuende er als Datenfehler
+  // da, ohne Weg zur Anmeldung.**
+  if (code === '28000' || code === '42501') return 'sitzung'
   if (!text) return 'daten'
   const t = text.toLowerCase()
   return SITZUNGSMERKMALE.some(m => t.includes(m)) ? 'sitzung' : 'daten'
+}
+
+// ══ G-578/A3: FACHMELDUNGEN MIT EIGENEM TEXT ══════════════════════
+//
+// `[cmd]` **G-535 hat Meldungen erzeugt, die die Oberflaeche nicht
+// kannte.** `[cmd]` **Gezaehlt in `apps/web/src/lib` am 2026-10-01,
+// vor diesem Punkt: null Treffer auf `P0001`, null auf
+// `user mismatch`** — sie haetten als roher Postgres-Satz
+// dagestanden.
+//
+// `[read]` **Hier statt in einem medical-eigenen Zweig**, weil diese
+// Datei seit G-555 querliegt: **ein zweiter Ort fuer dieselbe Frage
+// driftet** (G-529).
+
+/**
+ * Fachmeldungen, die einen eigenen Satz bekommen.
+ *
+ * `[cmd]` **Die Texte stammen aus den Funktionsruempfen**, gelesen am
+ * 2026-10-01 aus `pg_get_functiondef`:
+ *
+ *     medical import: user mismatch        535_…:171  (P0001)
+ *     medical import: rows must be an array           (P0001)
+ *     medical import: marker_name missing             (P0001)
+ *     medical import: unit missing                    (P0001)
+ *     medical OCR: authentication required            (28000)
+ *     medical OCR: own report with original not found (P0002)
+ *     medical OCR: own processing report not found    (P0002)
+ *
+ * `[read]` **Der Satz sagt, was der Nutzer TUN kann** — „user
+ * mismatch" sagt das nicht, und eine Neuanmeldung hilft dort auch
+ * nicht.
+ */
+const FACHMELDUNGEN: Array<{ merkmal: string; satz: string }> = [
+  {
+    merkmal: 'user mismatch',
+    // `[read]` **Kein Sitzungsfehler** — die Sitzung ist gueltig, sie
+    // gehoert nur zu einer anderen Person als der Bericht. **Zur
+    // Anmeldung zu schicken waere die falsche Suche** (G-553).
+    satz: 'Dieser Befund gehoert zu einem anderen Konto. Melde dich '
+      + 'mit dem Konto an, zu dem er gehoert — uebernehmen laesst er '
+      + 'sich nur dort.',
+  },
+  {
+    merkmal: 'rows must be an array',
+    satz: 'Die Zeilenliste kam in der falschen Form an. Waehle die '
+      + 'Werte neu aus und versuche es noch einmal.',
+  },
+  {
+    merkmal: 'marker_name missing',
+    satz: 'Eine Zeile hat keinen Markernamen. Ohne Namen laesst sie '
+      + 'sich keinem Katalogeintrag zuordnen.',
+  },
+  {
+    merkmal: 'unit missing',
+    satz: 'Eine Zeile hat keine Einheit. Ein Wert ohne Einheit ist '
+      + 'keine Messung.',
+  },
+  {
+    merkmal: 'own report with original not found',
+    satz: 'Zu diesem Befund liegt kein hochgeladenes Original vor — '
+      + 'oder er gehoert einem anderen Konto. Lade das Original hoch, '
+      + 'bevor du die Erkennung startest.',
+  },
+  {
+    merkmal: 'own processing report not found',
+    satz: 'Fuer diesen Befund laeuft keine Erkennung. Starte sie, '
+      + 'bevor du ein Ergebnis speicherst.',
+  },
+  {
+    merkmal: 'medical ocr: authentication required',
+    satz: 'Die Sitzung ist nicht mehr gueltig. Melde dich neu an — '
+      + 'deine Daten sind unveraendert.',
+  },
+  // ══ G-579: der Plansprung ═══════════════════════════════════════
+  //
+  // `[cmd]` **Aus `nutrition.meal_plan_set_next_plan` gelesen**
+  // (`pg_get_functiondef`, 2026-10-02). `[cmd]` **Der vierte Fall,
+  // `Anmeldung erforderlich` mit `42501`, ist seit G-578 ueber den
+  // SQLSTATE abgedeckt** — er braucht hier keinen eigenen Eintrag.
+  {
+    merkmal: 'quelle und unterschiedlicher folgeplan',
+    satz: 'Waehle einen Folgeplan, der nicht der Plan selbst ist — '
+      + 'ein Plan kann nicht auf sich selbst folgen.',
+  },
+  {
+    merkmal: 'eigener quellplan nicht gefunden',
+    satz: 'Diesen Plan gibt es nicht mehr, oder er gehoert zu einem '
+      + 'anderen Konto. Lade die Liste neu.',
+  },
+  {
+    merkmal: 'eigener folgeplan nicht gefunden',
+    satz: 'Den gewaehlten Folgeplan gibt es nicht mehr, oder er '
+      + 'gehoert zu einem anderen Konto. Waehle einen anderen.',
+  },
+]
+
+/**
+ * Der Satz zu einer Fachmeldung, oder `null`.
+ *
+ * `[read]` **`null` heisst: dafuer gibt es keinen eigenen Text** —
+ * dann steht der technische Satz da, und das ist besser als ein
+ * erfundener. **Ein Fehler ohne Text waere schlechter als der
+ * falsche** (G-553).
+ *
+ * @param text  Die Meldung, wie die Datenbank sie geworfen hat.
+ */
+export function fachmeldung(text: string | null | undefined): string | null {
+  if (!text) return null
+  const t = text.toLowerCase()
+  return FACHMELDUNGEN.find(m => t.includes(m.merkmal))?.satz ?? null
 }
 
 /** Was die Kachel ueber dem technischen Text sagt. */

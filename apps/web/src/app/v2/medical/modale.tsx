@@ -32,6 +32,16 @@ import type { ModalZustand } from './kontext'
 // hier Attrappe ist und jenes echte Werte zeigt — dieselbe Trennung an
 // der Datei wie schon bei `marker-liste.tsx`.
 import { MarkerReihenModal } from './marker-modal'
+// `[cmd]` **G-578: der Laborimport bekommt seinen Aufrufer.**
+import { zeilenUebernehmenAktion } from './laborimport-aktionen'
+import { ergebnisSatz } from '../../../lib/medical/laborimport'
+
+/** Heute als `YYYY-MM-DD`, in Ortszeit — wie `goals/modale.tsx:59`. */
+function heuteISO(): string {
+  const d = new Date()
+  const z = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}`
+}
 
 // ── Der Rahmen ──────────────────────────────────────────────────
 // [cmd] module-medical-modals.jsx:3-18.
@@ -648,10 +658,76 @@ function MedicationDetailModal({ m, onClose }: { m: Medikament; onClose: () => v
 
 // ── OCR-Pruefung ────────────────────────────────────────────────
 // [cmd] module-medical-modals.jsx:305-355.
+// ══ G-578: DER VERMERK WAR ZUR HAELFTE UEBERHOLT ═════════════════
+//
+// `[cmd]` **Hier stand ein `InEntwicklungKnopf` mit diesem Grund:**
+// *„Der Import braucht eine Tabelle `medical.biomarker_results` — die
+// gibt es nicht. Gemessene Werte stehen in
+// `medical.lab_result_values` (280 Zeilen); ein eigener Schreibweg
+// fehlt."*
+//
+// `[cmd]` **Die erste Haelfte stimmt bis heute:**
+// `medical.biomarker_results` gibt es nicht (gemessen 2026-10-01:
+// null Zeilen in `information_schema.tables`), und
+// `lab_result_values` traegt 280 Zeilen. **Die Marke `@abwesend`
+// bleibt deshalb** — `tools/abwesenheit-pruefen.mjs` haelt sie.
+//
+// `[cmd]` **Die zweite Haelfte ist falsch:** *„ein eigener Schreibweg
+// fehlt"* — `medical.import_lab_report_rows` IST dieser Weg, gebaut
+// in `142_laborimport_matching.sql:191`, seit G-535 auf `auth.uid()`.
+// **Sie hatte null Aufrufer, nicht keine Existenz** (G-571).
+//
+// `[read]` **Dieselbe Klasse wie in G-577**, wo der Vermerk am
+// Umfangsmodal die falsche Tabelle nannte: **ein Grund altert, wenn
+// niemand ihn nachmisst** — und verhindert, dass jemand nachsieht.
+//
+// `[read]` **Was die Zeilen tragen, kommt aus der Attrappe**
+// (`OCR_EXTRACTED`) — **es gibt keinen Dienst, der echte Werte aus
+// einem Original liest.** Der Weg hinter dem Knopf ist echt, seine
+// Quelle ist es nicht; das steht am Knopf und im Bericht.
 function OCRReviewModal({ onClose }: { onClose: () => void }) {
   const auto = OCR_EXTRACTED.filter(x => x.action === 'auto')
   const review = OCR_EXTRACTED.filter(x => x.action === 'review')
   const reject = OCR_EXTRACTED.filter(x => x.action === 'reject')
+
+  // `[read]` **Die Haken waren `defaultChecked`** — unkontrolliert,
+  // also unlesbar. **Ein Knopf, der uebernimmt, muss wissen, WAS.**
+  const [gewaehlt, setGewaehlt] = React.useState<Set<string>>(
+    () => new Set(OCR_EXTRACTED.filter(x => x.action !== 'reject').map(x => x.raw)))
+  const [laeuft, setLaeuft] = React.useState(false)
+  const [fehler, setFehler] = React.useState<string | null>(null)
+  const [fertig, setFertig] = React.useState<string | null>(null)
+
+  const umschalten = (raw: string) => setGewaehlt(s => {
+    const n = new Set(s)
+    if (n.has(raw)) n.delete(raw); else n.add(raw)
+    return n
+  })
+
+  async function uebernehmen() {
+    setLaeuft(true)
+    setFehler(null)
+    const zeilen = OCR_EXTRACTED.filter(x => gewaehlt.has(x.raw)).map(x => ({
+      // `[cmd]` **`raw` ist der Markername, den die Datenbank
+      // zuordnet** — nicht `matched`: die Zuordnung macht
+      // `biomarker_marker_candidates`, und ein mitgeschickter
+      // Katalogname waere eine vorweggenommene Entscheidung.
+      marker_name: x.raw,
+      unit: x.unit,
+      value_numeric: x.value,
+    }))
+    const r = await zeilenUebernehmenAktion({
+      // `[cmd]` **Nur `report_date` und `source` sind Pflicht**
+      // (`lab_reports`, gemessen) — `lab_name` und `title` bleiben
+      // leer, statt erfunden zu werden.
+      report_date: heuteISO(),
+      source: 'photo_ocr',
+      title: 'Uebernahme aus der Erkennungspruefung',
+    }, zeilen)
+    setLaeuft(false)
+    if (r.ok) setFertig(ergebnisSatz(r.ergebnis))
+    else setFehler(r.felder.length ? r.felder[0].text : r.text)
+  }
 
   return (
     <MMod title="Review extracted values"
@@ -661,18 +737,23 @@ function OCRReviewModal({ onClose }: { onClose: () => void }) {
             <>
               <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel import</button>
               <div className="v2-spacer" />
-              <span className="v2-dim v2-mono" style={{ fontSize: 10.5, alignSelf: 'center', marginRight: 8 }}>
-                {auto.length + review.length} values will be saved
+              <span className="v2-dim v2-mono" style={{ fontSize: 10.5, alignSelf: 'center', marginRight: 8 }}
+                    data-ocr-gewaehlt={gewaehlt.size}>
+                {gewaehlt.size} values will be saved
               </span>
               {/* @abwesend medical.biomarker_results
-                  G-278: Der Import-Knopf begruendet sich damit, dass es sie nicht gibt. Kommt die Tabelle,
-                  faellt `tools/abwesenheit-pruefen.mjs` und nennt
-                  diese Zeile — statt dass der Grund still falsch
-                  wird (A-62). Gemessen 2026-08-30: FEHLT. */}
-              <InEntwicklungKnopf titel="Confirm + save" className="v2-btn v2-btn-primary"
-                                  grund="Der Import braucht eine Tabelle medical.biomarker_results — die gibt es nicht. Gemessene Werte stehen in `medical.lab_result_values` (280 Zeilen); ein eigener Schreibweg fehlt.">
-                <Icon name="check" className="v2-ic v2-ic-sm" />Confirm + save
-              </InEntwicklungKnopf>
+                  G-278: Die Marke bleibt — die Tabelle gibt es
+                  weiterhin nicht (gemessen 2026-10-01). `[read]` **Sie
+                  begruendet jetzt aber keinen gesperrten Knopf mehr**:
+                  der Import schreibt nach `lab_result_values`, und
+                  genau das sagte der alte Grund als Befund schon. */}
+              <button type="button" className="v2-btn v2-btn-primary"
+                      data-ocr-uebernehmen
+                      disabled={laeuft || gewaehlt.size === 0 || fertig !== null}
+                      onClick={() => { void uebernehmen() }}>
+                <Icon name="check" className="v2-ic v2-ic-sm" />
+                {laeuft ? 'Uebernimmt …' : 'Confirm + save'}
+              </button>
             </>
           }>
       <div className="v2-tbl-wrap">
@@ -698,7 +779,9 @@ function OCRReviewModal({ onClose }: { onClose: () => void }) {
                     : x.action === 'reject' ? 'color-mix(in oklch, var(--neg) 4%, transparent)' : undefined,
                 }}>
                   <td>
-                    <input type="checkbox" defaultChecked={x.action !== 'reject'}
+                    <input type="checkbox" checked={gewaehlt.has(x.raw)}
+                           onChange={() => umschalten(x.raw)}
+                           data-ocr-haken={x.raw}
                            aria-label={`${x.raw} uebernehmen`}
                            style={{ accentColor: 'var(--acc-medic)' }} />
                   </td>
@@ -744,6 +827,43 @@ function OCRReviewModal({ onClose }: { onClose: () => void }) {
           {reject.length} value below the 0.60 confidence floor and unmatched in the catalog ({reject.map(r => r.raw).join(', ')}). Enter manually if needed.
         </div>
       )}
+
+      {/* `[read]` **Der Satz nennt, was die DATENBANK vergeben hat** —
+          zugeordnet, mehrdeutig, unbekannt. **Eine Erfolgsmeldung
+          ohne Inhalt verschwiege, dass die Haelfte eine Pruefung
+          braucht.** */}
+      {fertig && (
+        <div data-ocr-fertig style={{
+          marginTop: 12, padding: 11, borderRadius: 6, fontSize: 11.5,
+          lineHeight: 1.55, color: 'var(--pos)',
+          background: 'color-mix(in oklch, var(--pos) 6%, var(--surface))',
+          border: '1px solid color-mix(in oklch, var(--pos) 24%, var(--border))',
+        }}>
+          {fertig}
+        </div>
+      )}
+      {fehler && (
+        <div data-ocr-fehler style={{
+          marginTop: 12, padding: 11, borderRadius: 6, fontSize: 11.5,
+          lineHeight: 1.55, color: 'var(--neg)',
+          background: 'color-mix(in oklch, var(--neg) 6%, var(--surface))',
+          border: '1px solid color-mix(in oklch, var(--neg) 24%, var(--border))',
+        }}>
+          {fehler}
+        </div>
+      )}
+
+      {/* `[cmd]` **Die Werte kommen aus `OCR_EXTRACTED`, einer
+          Attrappe** — es gibt keinen Dienst, der ein Original liest.
+          `[read]` **Der Schreibweg dahinter ist echt**, die Quelle
+          ist es nicht. **Das gehoert an den Knopf, nicht nur in den
+          Bericht** (E-68). */}
+      <div className="v2-dim" data-ocr-quellenhinweis
+           style={{ marginTop: 10, fontSize: 10.5, lineHeight: 1.5 }}>
+        Die Zeilen oben stammen aus der Entwurfsliste — ein Dienst, der
+        ein hochgeladenes Original liest, fehlt noch (G-578/A2). Die
+        Uebernahme schreibt echt nach medical.lab_result_values.
+      </div>
     </MMod>
   )
 }

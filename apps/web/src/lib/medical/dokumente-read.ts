@@ -61,6 +61,17 @@ export type Dokument = {
   /** E-75: der PFAD im Bucket, nicht die URL. */
   pfad: string | null
   quelle: string | null
+  /**
+   * G-578/A2: der Erkennungsstand aus `lab_reports.ocr_status`.
+   *
+   * `[cmd]` **`lab_reports_ocr_status_check` laesst fuenf Werte zu:**
+   * `pending`, `processing`, `completed`, `failed`, `needs_review`
+   * — und `NULL`, solange nichts vorgemerkt wurde.
+   *
+   * `[read]` **Der Knopf braucht ihn**, sonst sagt er „vormerken",
+   * wenn schon vorgemerkt ist.
+   */
+  ocrStatus: string | null
 }
 
 export type DokumenteStand = {
@@ -102,7 +113,7 @@ export async function ladeDokumente(): Promise<DokumenteStand> {
       .order('starts_at', { ascending: false })
       .limit(100),
     m.from('lab_reports')
-      .select('id, report_date, lab_name, title, file_ref, source')
+      .select('id, report_date, lab_name, title, file_ref, source, ocr_status')
       .eq('user_id', user.id)
       .order('report_date', { ascending: false })
       .limit(100),
@@ -138,6 +149,7 @@ export async function ladeDokumente(): Promise<DokumenteStand> {
       titel: txt(z.title),
       pfad: txt(z.file_ref),
       quelle: txt(z.source),
+      ocrStatus: txt(z.ocr_status),
     })),
     fehler,
   }
